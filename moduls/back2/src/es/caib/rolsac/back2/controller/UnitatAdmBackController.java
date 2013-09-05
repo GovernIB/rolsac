@@ -587,6 +587,9 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			// ¿Es posible que sobre?
 			crearOActualizarUnitatAdministrativa(unitatAdministrativa, unitatAdmPareId);
 
+			//Actualiza estadísticas
+			DelegateUtil.getEstadisticaDelegate().grabarEstadisticaUnidadAdministrativa( unitatAdministrativa.getId() );
+			
 			// Sobre escrivim la unitat administrativa de la mollapa
 			UnidadAdministrativaController.actualizarUAMigaPan(session, unitatAdministrativa);
 
@@ -871,17 +874,23 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	 * @throws DelegateException
 	 */
 	private void crearOActualizarUnitatAdministrativa(UnidadAdministrativa unitatAdministrativa, Long unitatAdmPareId) throws DelegateException	{
+		
 		UnidadAdministrativaDelegate unitatAdministrativaDelegate = DelegateUtil.getUADelegate();
-		if (unitatAdministrativa.getId() != null) {
+		if ( unitatAdministrativa.getId() != null ) {
+			
 			unitatAdministrativaDelegate.actualizarUnidadAdministrativa(unitatAdministrativa, unitatAdmPareId);
+			
 		} else {
-			Long id  ;
-			if (unitatAdmPareId != null ) {
+			
+			Long id;
+			if ( unitatAdmPareId != null ) {
 				id = unitatAdministrativaDelegate.crearUnidadAdministrativa(unitatAdministrativa, unitatAdmPareId);
 			} else {
 				id = unitatAdministrativaDelegate.crearUnidadAdministrativaRaiz(unitatAdministrativa);
 			}
+			
 			unitatAdministrativa.setId(id);
+			
 		}
 	}
 
@@ -1017,7 +1026,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 
 			//Información de paginación
 			String pagPag = "0";
-			String pagRes = "99999";    		
+			String pagRes = "99999";
 
 			resultadoBusqueda = fitxaDelegate.buscarFichas( paramMap, tradMap, ua, null, null,null, uaFilles, uaMeves, null, null, pagPag, pagRes, 0);           
 
@@ -1464,12 +1473,10 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		Map<String, Object> resultats = new HashMap<String, Object>();
 
 		// Si alguno es nulo, error.
-		if ( request.getParameter("idUA") == null 
-				|| request.getParameter("idSeccion") == null
-				|| request.getParameter("listaIdFichas") == null ) {
+		if ( request.getParameter("idUA") == null || request.getParameter("idSeccion") == null || request.getParameter("listaIdFichas") == null ) {
 
 			resultats.put("id", -2);
-			log.error("Falta alguno de los par��metros para completar el guardado de las fichas de la secci��n");
+			log.error("Falta alguno de los parámetros para completar el guardado de las fichas de la sección");
 
 			return resultats;
 

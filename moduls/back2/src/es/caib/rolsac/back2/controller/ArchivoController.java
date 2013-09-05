@@ -9,13 +9,16 @@ public abstract class ArchivoController {
     protected final void devolverArchivo(HttpServletRequest request, HttpServletResponse response)  throws Exception {
 
     	Archivo archivo = obtenerArchivo(request);
-    	if (archivo != null) {
+    	if ( archivo != null ) {
+    		
     		response.reset();
-    		response.setContentType(archivo.getMime());
-    		response.setHeader("Content-Disposition", "inline; filename=\"" + archivo.getNombre() + "\"");
-    		response.setContentLength(archivo.getDatos().length);
-    		response.getOutputStream().write(archivo.getDatos());
+    		response.setContentType( archivo.getMime() );
+    		response.setHeader( "Content-Disposition", "inline; filename=\"" + archivo.getNombre() + "\"" );
+    		response.setContentLength( archivo.getDatos().length );
+    		response.getOutputStream().write( archivo.getDatos() );
+    		
     	}
+    	
     }
        
     public abstract Archivo obtenerArchivo(HttpServletRequest request) throws Exception;    

@@ -557,8 +557,8 @@ public class NormativaBackController extends PantallaBaseController
 		
         try {
         	
-    		//Aqu� nos llegar� un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
-    		//Iremos recopilando los par�metros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
+    		//Aquí nos llegará un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
+    		//Iremos recopilando los parámetros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
     		
     		List<FileItem> items = UploadUtil.obtenerServletFileUpload().parseRequest(request);
 
@@ -622,7 +622,7 @@ public class NormativaBackController extends PantallaBaseController
         		normativa.setProcedimientos(normativaOld.getProcedimientos());
         		normativa.setId(idNorm);
         	} else {
-        		//Comprobar permisos de creaci�n
+        		//Comprobar permisos de creación
             	if (!normativaDelegate.autorizaCrearNormativa(ParseUtil.parseInt(valoresForm.get("item_validacio")))) {
     				IdNomDTO error = new IdNomDTO(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()));
     				return new ResponseEntity<String>(error.getJson(), responseHeaders, HttpStatus.CREATED);
@@ -660,7 +660,7 @@ public class NormativaBackController extends PantallaBaseController
         		//Campo comentado en Back2
         		//traNorm.setObservaciones(valoresForm.get("item_des_curta_" + idioma));     
 
-        		//Responsable s�lo en normativa externa
+        		//Responsable sólo en normativa externa
         		if (!normativaLocal) {        				
         			((TraduccionNormativaExterna)traNorm).setResponsable( RolUtil.limpiaCadena(valoresForm.get("item_responsable_" + idioma)) );
         		}
@@ -676,7 +676,7 @@ public class NormativaBackController extends PantallaBaseController
         		}
         	}
 
-        	//Obtener los dem�s campos
+        	//Obtener los demás campos
         	if (valoresForm.get("item_numero") != null && !"".equals(valoresForm.get("item_numero")))
         		normativa.setNumero(ParseUtil.parseLong(valoresForm.get("item_numero")));
 
@@ -709,11 +709,15 @@ public class NormativaBackController extends PantallaBaseController
         	}
 
         	//Guardar
+        	Long idNormativa;
         	if (normativaLocal) {
-        		normativaDelegate.grabarNormativaLocal((NormativaLocal)normativa, ua.getId());
+        		idNormativa = normativaDelegate.grabarNormativaLocal((NormativaLocal)normativa, ua.getId());
         	} else {
-        		normativaDelegate.grabarNormativaExterna((NormativaExterna)normativa);
+        		idNormativa = normativaDelegate.grabarNormativaExterna((NormativaExterna)normativa);
         	}
+        	
+        	//Actualizar estadísticas
+        	DelegateUtil.getEstadisticaDelegate().grabarEstadisticaNormativa(idNormativa);
         	
         	if (isModuloModificado("modulo_afectaciones_modificado", valoresForm)){
             	
@@ -736,14 +740,14 @@ public class NormativaBackController extends PantallaBaseController
         						break;
         					}
         				}
-        				//Si no est� en la lista nueva es que hay que eliminarla		
+        				//Si no está en la lista nueva es que hay que eliminarla		
         				if (!estaEnLaListaNueva) {    				
         					normativaDelegate.eliminarAfectacion(normativa.getId(), afectacionOld.getTipoAfectacion().getId(), afectacionOld.getNormativa().getId());
         				}
         			}
         		}
         		
-        		//A�adir afectaciones
+        		//Añadir afectaciones
     			for (AfectacionDTO afectacion : afectaciones.getListaAfectaciones()) {
     				normativaDelegate.anyadirAfectacion(afectacion.getNormaId(), afectacion.getAfectacioId(), normativa.getId());
     			}         	

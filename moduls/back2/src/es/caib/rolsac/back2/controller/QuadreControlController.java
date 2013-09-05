@@ -27,6 +27,7 @@ import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimiento;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Usuario;
+import org.ibit.rol.sac.model.dto.FechaHistoricoDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.EstadisticaDelegate;
@@ -48,9 +49,7 @@ public class QuadreControlController extends PantallaBaseController {
 	private static Log log = LogFactory.getLog(QuadreControlController.class);	
 	
 	@RequestMapping(value = "/quadreControl.do")
-	public String quadreControl(HttpSession session,
-			HttpServletRequest request, Map<String, Object> model)
-			throws ServletException, IOException {
+	public String quadreControl(HttpSession session, HttpServletRequest request, Map<String, Object> model) throws ServletException, IOException {
 
 		GregorianCalendar dataActual = new GregorianCalendar();
 		
@@ -64,11 +63,13 @@ public class QuadreControlController extends PantallaBaseController {
 		try {
 			
 	        UsuarioDelegate usuariDelegate = DelegateUtil.getUsuarioDelegate();
-	        Usuario usuari = usuariDelegate.obtenerUsuariobyUsername(request.getRemoteUser());
+	        Usuario usuari = usuariDelegate.obtenerUsuariobyUsername( request.getRemoteUser() );
 	        
 	        RolUtil rolUtil = new RolUtil(request);
 	        
 			boolean usuariSuper = rolUtil.userIsSuper(); 
+			
+			UnidadAdministrativaDelegate unitatAdministrativaDelegate = DelegateUtil.getUADelegate();
 	        
 			if (session.getAttribute("unidadAdministrativa") != null) {
 				
@@ -77,9 +78,8 @@ public class QuadreControlController extends PantallaBaseController {
 				model.put("nomUA",unitatAdministrativa.getNombreUnidadAdministrativa());
 			
 				String allNodos = request.getParameter("allUA");
-				UnidadAdministrativaDelegate unitatAdministrativaDelegate = DelegateUtil.getUADelegate();
 				
-				if (allNodos != null && !"".equals(allNodos) && unitatAdministrativa != null && unitatAdministrativa.getId() != null) {
+				if ( allNodos != null  &&  !"".equals(allNodos)  &&  unitatAdministrativa != null  &&  unitatAdministrativa.getId() != null ) {
 					
 					if ( usuari.getUnidadesAdministrativas().contains(unitatAdministrativa)  || usuariSuper )
 						llistaUnitatAdministrativaId.addAll( unitatAdministrativaDelegate.cargarArbolUnidadId(unitatAdministrativa.getId()) );
@@ -89,7 +89,7 @@ public class QuadreControlController extends PantallaBaseController {
 				} else {
 					
 					// Sólo se mostrarán datos si el usuario tiene acceso a la UA o si es administrador.
-					if (usuari.getUnidadesAdministrativas().contains(unitatAdministrativa)  || usuariSuper ) { 
+					if ( usuari.getUnidadesAdministrativas().contains(unitatAdministrativa)  || usuariSuper ) { 
 						llistaUnitatAdministrativaId.add(unitatAdministrativa.getId());
 					}
 					
@@ -97,9 +97,7 @@ public class QuadreControlController extends PantallaBaseController {
 							
 			} else {
 		        
-		        UnidadAdministrativaDelegate unitatAdministrativaDelegate = DelegateUtil.getUADelegate();
-		        
-		        // Filtrar s�lo por las UAs del usuario
+		        // Filtrar sólo por las UAs del usuario
 	            for (UnidadAdministrativa unitat: (Set<UnidadAdministrativa>)usuari.getUnidadesAdministrativas()) 
 	                llistaUnitatAdministrativaId.addAll(unitatAdministrativaDelegate.cargarArbolUnidadId(unitat.getId()));
 	            
@@ -117,33 +115,39 @@ public class QuadreControlController extends PantallaBaseController {
 			GregorianCalendar dataActualFi = new GregorianCalendar();
 			dataActualFi.add(Calendar.DATE, -7);
 
-			Map<Timestamp, Object> llistaCanvis = eDelegate.listarUltimasModificaciones(dataActualFi.getTime(), dataActual.getTime(), Parametros.NUMERO_REGISTROS, llistaUnitatAdministrativaId);
+			List<FechaHistoricoDTO> llistaCanvis = eDelegate.listarUltimasModificaciones(dataActualFi.getTime(), dataActual.getTime(), Parametros.NUMERO_REGISTROS, llistaUnitatAdministrativaId);
 			
 			String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			
-			if (idioma != null && !"".equals(idioma)) {
+			if ( idioma != null  &&  !"".equals(idioma) ) {
 				
-    			for ( Object element: llistaCanvis.values() ) {
+    			for ( FechaHistoricoDTO element: llistaCanvis ) {
     				
-    			    if (element instanceof HistoricoFicha) {
-    			        Ficha fitxa = ((HistoricoFicha) element).getFicha();
-    			        if (fitxa != null) {
-    			            ((HistoricoFicha) element).setNombre(((TraduccionFicha) fitxa.getTraduccion(idioma)).getTitulo());
+    			    if ( element.getHistorico() instanceof HistoricoFicha ) {
+    			    	
+    			        Ficha fitxa = ((HistoricoFicha) element.getHistorico()).getFicha();
+    			        if ( fitxa != null ) {
+    			            ( (HistoricoFicha) element.getHistorico() ).setNombre( ( (TraduccionFicha) fitxa.getTraduccion(idioma) ).getTitulo() );
     			        }
-    			    } else if (element instanceof HistoricoProcedimiento) {
-    			        ProcedimientoLocal procediment = ((HistoricoProcedimiento) element).getProcedimiento();
-    			        if (procediment != null) {
-    			            ((HistoricoProcedimiento) element).setNombre(((TraduccionProcedimiento) procediment.getTraduccion(idioma)).getNombre());
+    			        
+    			    } else if ( element.getHistorico() instanceof HistoricoProcedimiento ) {
+    			    	
+    			        ProcedimientoLocal procediment = ( (HistoricoProcedimiento) element.getHistorico() ).getProcedimiento();
+    			        if ( procediment != null ) {
+    			            ( (HistoricoProcedimiento) element.getHistorico() ).setNombre( ( (TraduccionProcedimiento) procediment.getTraduccion(idioma) ).getNombre() );
     			        }
+    			        
     			    } else {
-    			        Normativa normativa = ((HistoricoNormativa) element).getNormativa();
-    			        if (normativa != null) {
-    			            ((HistoricoNormativa) element).setNombre(((TraduccionNormativa) normativa.getTraduccion(idioma)).getTitulo());
+    			    	
+    			        Normativa normativa = ( (HistoricoNormativa) element.getHistorico() ).getNormativa();
+    			        if ( normativa != null ) {
+    			            ( (HistoricoNormativa) element.getHistorico() ).setNombre( ( (TraduccionNormativa) normativa.getTraduccion(idioma) ).getTitulo() );
     			        }
+    			        
     			    }    			       			    
     			}
 			}
-
+			
 			model.put("darreresModificacions", llistaCanvis);
 
 			// Nombre de continguts
@@ -171,13 +175,19 @@ public class QuadreControlController extends PantallaBaseController {
 			model.put("fitxaTotal", fitxaActiva + fitxaCaducada);
 
 		} catch (DelegateException dEx) {
+			
 			if (dEx.isSecurityException()) {
+				
 				String error = messageSource.getMessage("error.permisos", null,request.getLocale());
 				log.error(error);
+				
 			} else {
+				
 				//String error = messageSource.getMessage("error.altres", null,request.getLocale());
 				log.error(ExceptionUtils.getStackTrace(dEx));
+				
 			}
+			
 		}
 				
 		loadIndexModel (model, request);

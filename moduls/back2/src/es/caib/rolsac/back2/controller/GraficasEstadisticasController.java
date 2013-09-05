@@ -51,20 +51,30 @@ public class GraficasEstadisticasController extends ArchivoController {
 
 	@RequestMapping(value = "/grafica.do", method = GET)
     public void mostrarImagen(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        this.devolverArchivo(request, response);   
+		
+        this.devolverArchivo(request, response);
+        
     }
     
     
 	@Override
-	public Archivo obtenerArchivo(HttpServletRequest request) throws Exception {		
-        //obtener archivo concreto con el delegate
+	public Archivo obtenerArchivo(HttpServletRequest request) throws Exception {	
+
+		//TODO 05/09/2013: Internacionalizar textos.
+		//obtener archivo concreto con el delegate
         String tipus = request.getParameter("tipus");
-        if (vacio(tipus) || tipus.equals(Parametros.TIPUS_GRAFICA_QUADRE_CONTROL) ) {
+        if ( vacio(tipus) || tipus.equals( Parametros.TIPUS_GRAFICA_QUADRE_CONTROL ) ) {
+        	
         	return this.obtenerArchivoQuadreControl(request);
-        } else if (tipus.equals(Parametros.TIPUS_GRAFICA_MODUL) ) {
+        	
+        } else if ( tipus.equals( Parametros.TIPUS_GRAFICA_MODUL ) ) {
+        	
         	return this.obtenerArchivoModul(request);
+        	
         } else {
-        	throw new IllegalArgumentException ("Tipus de gràfica desconeguda");
+        	
+        	throw new IllegalArgumentException ("Tipus de grÃ¡fica desconeguda");
+        	
         }
 	}
 
@@ -101,7 +111,7 @@ public class GraficasEstadisticasController extends ArchivoController {
         	datosEstadistica = eDelegate.listarEstadisticasFicha(id, periodo.getFechaInicio(),periodo.getFechaFin(), null, null);
 
         } else {
-        	throw new IllegalArgumentException ("Tipus de gràfica desconeguda");
+        	throw new IllegalArgumentException ("Tipus de grï¿½fica desconeguda");
         }
 
        
@@ -120,74 +130,92 @@ public class GraficasEstadisticasController extends ArchivoController {
 	private Archivo obtenerArchivoQuadreControl(HttpServletRequest request) throws Exception {		
         //obtener archivo concreto con el delegate
 
-        Long idUA = new Long(request.getParameter("id"));
-        Integer tipoOperacion = new Integer(request.getParameter("tipoOperacion"));
+        Long idUA = new Long( request.getParameter("id") );
+        Integer tipoOperacion = new Integer( request.getParameter("tipoOperacion") );
         
         
         // Comprovamos si tenemos que recorrer todos los nodos
         String todoArbol = request.getParameter("allUA");
         List<Long> llistaUnitatAdministrativaId = new ArrayList<Long>();
         
-        if (todoArbol != null && !"".equals(todoArbol)) {
+        if ( todoArbol != null && !"".equals(todoArbol) ) {
+        	
         	UnidadAdministrativaDelegate unitatAdministrativaDelegate = DelegateUtil.getUADelegate();
-			llistaUnitatAdministrativaId = 	unitatAdministrativaDelegate.cargarArbolUnidadId(idUA);
+			llistaUnitatAdministrativaId = unitatAdministrativaDelegate.cargarArbolUnidadId(idUA);
+			
 		} else {
+			
 			llistaUnitatAdministrativaId.add(idUA);
+			
 		}
         
 		EstadisticaDelegate eDelegate = DelegateUtil.getEstadisticaDelegate();
 		Archivo archivo = new Archivo();
 		
-		if (Parametros.GRAFICA_ESTADISTICA.equals(tipoOperacion)) {
+		if ( Parametros.GRAFICA_ESTADISTICA.equals(tipoOperacion) ) {
+			
 			Periodo periodo = PeriodoUtil.crearPeriodoAnual();
 			
 			// Obtenim les dades 
-			List<Estadistica> datosEstadistica = eDelegate.listarEstadisticasListaUnidadAdministrativaId(llistaUnitatAdministrativaId, periodo.getFechaInicio(),periodo.getFechaFin());
+			List<Estadistica> datosEstadistica = eDelegate.listarEstadisticasListaUnidadAdministrativaId( llistaUnitatAdministrativaId , periodo.getFechaInicio() , periodo.getFechaFin() );
 			
 			// Generam la grafica
 			JFreeChart chart = Graficas.pintarGraficaSimple(datosEstadistica);
 			
-			construirArchivo(idUA, archivo, chart, "estadisticaUnitatAdministrativa", Parametros.WIDTH_ESTADISTICA_QUADRE_CONTROL, Parametros.HEIGHT_ESTADISTICA_QUADRE_CONTROL);
+			construirArchivo( idUA , archivo , chart , "estadisticaUnitatAdministrativa", Parametros.WIDTH_ESTADISTICA_QUADRE_CONTROL , Parametros.HEIGHT_ESTADISTICA_QUADRE_CONTROL );
 			
 		} else {
+			
 			GregorianCalendar dataActual = new GregorianCalendar();
 			GregorianCalendar dataActualFi = new GregorianCalendar();
 
 			// Invertim Ordre de visualitzacio
-			dataActual.add(Calendar.DATE, -Parametros.GRAFICA_RESUM_PERIODE);
-			dataActualFi.add(Calendar.DATE, -Parametros.GRAFICA_RESUM_PERIODE);
-			dataActualFi.add(Calendar.DATE, +1);
+			dataActual.add( Calendar.DATE, -Parametros.GRAFICA_RESUM_PERIODE );
+			dataActualFi.add( Calendar.DATE, -Parametros.GRAFICA_RESUM_PERIODE );
+			dataActualFi.add( Calendar.DATE, +1 );
 			
 			List<List<Integer>> datosResumen = new ArrayList();
 			String titulo = "";
 			
 			// Obtenim les dades 
-			for (int i = 0; i < Parametros.GRAFICA_RESUM_PERIODE; i++) {
-				if (Parametros.GRAFICA_RESUM_ALTA.equals(tipoOperacion)) {
-					datosResumen.add(eDelegate.resumenOperativa(dataActual.getTime(), dataActualFi.getTime(), Auditoria.INSERTAR, llistaUnitatAdministrativaId));
+			for ( int i = 0 ; i < Parametros.GRAFICA_RESUM_PERIODE ; i++ ) {
+				
+				if ( Parametros.GRAFICA_RESUM_ALTA.equals(tipoOperacion) ) {
+					
+					datosResumen.add( eDelegate.resumenOperativa( dataActual.getTime(), dataActualFi.getTime() , Auditoria.INSERTAR , llistaUnitatAdministrativaId ) );
 					titulo = "resumAlta";
-				} else if (Parametros.GRAFICA_RESUM_MODIFICACIO.equals(tipoOperacion)) {
-					datosResumen.add(eDelegate.resumenOperativa(dataActual.getTime(), dataActualFi.getTime(), Auditoria.MODIFICAR, llistaUnitatAdministrativaId));
+					
+				} else if ( Parametros.GRAFICA_RESUM_MODIFICACIO.equals(tipoOperacion) ) {
+					
+					datosResumen.add( eDelegate.resumenOperativa( dataActual.getTime(), dataActualFi.getTime() , Auditoria.MODIFICAR , llistaUnitatAdministrativaId ) );
 					titulo = "resumModificar";
-				} else if (Parametros.GRAFICA_RESUM_BAIXA.equals(tipoOperacion)) {
-					datosResumen.add(eDelegate.resumenOperativa(dataActual.getTime(), dataActualFi.getTime(), Auditoria.BORRAR, llistaUnitatAdministrativaId));
+					
+				} else if ( Parametros.GRAFICA_RESUM_BAIXA.equals(tipoOperacion) ) {
+					
+					datosResumen.add( eDelegate.resumenOperativa( dataActual.getTime(), dataActualFi.getTime(), Auditoria.BORRAR, llistaUnitatAdministrativaId ) );
 					titulo = "resumBaixa";
+					
 				}
-				dataActual.add(Calendar.DATE,+1);
-				dataActualFi.add(Calendar.DATE, +1);
+				
+				dataActual.add( Calendar.DATE, +1 );
+				dataActualFi.add( Calendar.DATE, +1 );
+				
 			}
 			
 			// Generam la grafica
 			// Invertim Ordre de visualitzacio
-			dataActual.add(Calendar.DATE, -Parametros.GRAFICA_RESUM_PERIODE);
-			JFreeChart chart = Graficas.pintarGraficaMultiple(datosResumen, dataActual);
+			dataActual.add( Calendar.DATE, -Parametros.GRAFICA_RESUM_PERIODE );
+			JFreeChart chart = Graficas.pintarGraficaMultiple( datosResumen, dataActual );
 			
-			construirArchivo(idUA, archivo, chart, titulo, Parametros.WIDTH_ESTADISTICA_QUADRE_CONTROL, Parametros.HEIGHT_ESTADISTICA_QUADRE_CONTROL);
+			this.construirArchivo( idUA, archivo, chart, titulo, Parametros.WIDTH_ESTADISTICA_QUADRE_CONTROL, Parametros.HEIGHT_ESTADISTICA_QUADRE_CONTROL );
+			
 		}
 		        		
         return archivo; 
+        
 	}
 
+	
 	/**
 	 * @param idUA
 	 * @param archivo
@@ -200,7 +228,7 @@ public class GraficasEstadisticasController extends ArchivoController {
 		BufferedImage  image = chart.createBufferedImage(ancho, alto);
 						
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		ImageIO.write(image, "png", baos );
+		ImageIO.write( image, "png", baos );
 		baos.flush();
 		byte[] imageInByte = baos.toByteArray();
 		baos.close();

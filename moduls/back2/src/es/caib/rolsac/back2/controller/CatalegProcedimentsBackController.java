@@ -80,36 +80,51 @@ import es.indra.rol.sac.integracion.traductor.Traductor;
 
 @Controller
 @RequestMapping("/catalegProcediments/")
-public class CatalegProcedimentsBackController extends PantallaBaseController
-{
+public class CatalegProcedimentsBackController extends PantallaBaseController {
+	
 	private String IDIOMA_ORIGEN_TRADUCTOR;
 	private static final String URL_PREVISUALIZACION = "es.caib.rolsac.previsualitzacio.procediment.url";
 	private static Log log = LogFactory.getLog(CatalegProcedimentsBackController.class);
 	
 	@RequestMapping(value = "/catalegProcediments.do")
-	public String pantallaProcediment(Map<String, Object> model, HttpSession session, HttpServletRequest request)
-	{
+	public String pantallaProcediment(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
+		
 		String lang;
+		
 		try {
+			
 			lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			
 		} catch (DelegateException dEx) {
+			
 			log.error("Error al recuperar el idioma por defecto.");
 			lang = "ca";
+			
 		}
+		
 		this.IDIOMA_ORIGEN_TRADUCTOR = lang;
 		
-		if (estemEnUnitatAdministrativa(session))
+		if ( estemEnUnitatAdministrativa(session) ) {
+			
 			crearModelComplert_pantalla(model, session, request, lang);
-		else
+			
+		} else {
+			
 			crearModelSencill_pantalla(model, session, request, lang);
-		
+			
+		}
+			
 		loadIndexModel (model, request);
+		
 		return "index";
+
 	}
 	
-	private boolean estemEnUnitatAdministrativa(HttpSession session)
-	{
+	
+	private boolean estemEnUnitatAdministrativa(HttpSession session) {
+		
 		return null != getUAFromSession(session);
+		
 	}
 	
 	private void crearModelComplert_pantalla(Map<String, Object> model, HttpSession session, HttpServletRequest request, String lang)
@@ -428,102 +443,78 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 		Map<String, Object> resultats = new HashMap<String, Object>();
 		
 		try {
-			
 			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-			Long id = new Long( request.getParameter("id") );
+			Long id = new Long(request.getParameter("id"));
 
 			ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
 			ProcedimientoLocal proc = procedimientoDelegate.obtenerProcedimiento(id);
 
-			resultats.put( "item_id", proc.getId() );
-            resultats.put( "item_codigo_pro", proc.getSignatura() );			
-			resultats.put( "item_estat", proc.getValidacion() );						
-			resultats.put( "item_data_actualitzacio", DateUtils.formatDate( proc.getFechaActualizacion() ) );
-			resultats.put( "item_data_publicacio", DateUtils.formatDate( proc.getFechaPublicacion() ) );
-			resultats.put( "item_data_caducitat", DateUtils.formatDate( proc.getFechaCaducidad() ) );
-			resultats.put( "item_codi", proc.getSignatura() );
-			resultats.put( "item_tramite", proc.getTramite() );
-			resultats.put( "item_url", proc.getUrl() );
-			resultats.put( "item_responsable", proc.getResponsable() );
-			resultats.put( "item_finestreta_unica", proc.esVentanillaUnica() );
-			resultats.put( "item_notes", proc.getInfo() );
+			resultats.put("item_id", proc.getId());
+            resultats.put("item_codigo_pro", proc.getSignatura());			
+			resultats.put("item_estat", proc.getValidacion());						
+			resultats.put("item_data_actualitzacio", DateUtils.formatDate(proc.getFechaActualizacion()));
+			resultats.put("item_data_publicacio", DateUtils.formatDate(proc.getFechaPublicacion()));
+			resultats.put("item_data_caducitat", DateUtils.formatDate(proc.getFechaCaducidad()));
+			resultats.put("item_codi", proc.getSignatura());
+			resultats.put("item_tramite", proc.getTramite());
+			resultats.put("item_url", proc.getUrl());
+			resultats.put("item_responsable", proc.getResponsable());
+			resultats.put("item_finestreta_unica", proc.esVentanillaUnica());
+			resultats.put("item_notes", proc.getInfo());
 			
 			// TODO: Implementar getPublico()
 			// resultats.put("item_public_objectiu", DateUtils.formatDate(proc.getPublico()));
 			
-			recuperaProcIdiomas( resultats, proc, lang );			// Recuperar los procedimientos según los idiomas
-			recuperaProcDocs( resultats, proc );					// Recuperar los documentos relacionados de un procedimiento
-			recuperaProcTramites( resultats, proc, request );		// Recuperar los trámites relacionados de un procedimiento
-			recuperaProcMaterias( resultats, proc, lang );		// Recuperar las materias asociadas a un procedimiento
-			recuperaProcPO( resultats, proc, lang );				// Recuperar los públicos objetivos asociados a un procedimiento
-			recuperaProcHechosVitales( resultats, proc, lang );	// Recuperar los hechos vitales asociados a un procedimiento
-			recuperaProcNormativas( resultats, proc, lang );		// Recuperar las normativas asociadas a un procedimiento
+			recuperaProcIdiomas(resultats, proc, lang);			// Recuperar los procedimientos según los idiomas
+			recuperaProcDocs(resultats, proc);					// Recuperar los documentos relacionados de un procedimiento
+			recuperaProcTramites(resultats, proc, request);		// Recuperar los trámites relacionados de un procedimiento
+			recuperaProcMaterias(resultats, proc, lang);		// Recuperar las materias asociadas a un procedimiento
+			recuperaProcPO(resultats, proc, lang);				// Recuperar los públicos objetivos asociados a un procedimiento
+			recuperaProcHechosVitales(resultats, proc, lang);	// Recuperar los hechos vitales asociados a un procedimiento
+			recuperaProcNormativas(resultats, proc, lang);		// Recuperar las normativas asociadas a un procedimiento
 			
-			if ( proc.getIniciacion() != null ) {
-				
+			if (proc.getIniciacion() != null) {
 				Iniciacion iniciacion = proc.getIniciacion();
-				resultats.put( "item_iniciacio", iniciacion.getId() );
-				
+				resultats.put("item_iniciacio", iniciacion.getId());
 			}
 			
-			if ( proc.getUnidadAdministrativa() != null ) {
-				
+			if (proc.getUnidadAdministrativa() != null) {
 				UnidadAdministrativa ua = proc.getUnidadAdministrativa();
-				resultats.put( "item_organ_responsable_id", ua.getId() );
-				resultats.put( "item_organ_responsable_nom", ua.getNombreUnidadAdministrativa(lang) );
-				
+				resultats.put("item_organ_responsable_id", ua.getId());
+				resultats.put("item_organ_responsable_nom", ua.getNombreUnidadAdministrativa(lang));
 			}
 			
-			if ( proc.getOrganResolutori() != null ) {
-				
+			if (proc.getOrganResolutori() != null) {
 				UnidadAdministrativa ua = proc.getOrganResolutori();
-				resultats.put( "item_organ_id", ua.getId() );
-				resultats.put( "item_organ_nom", ua.getNombreUnidadAdministrativa(lang) );
-				
+				resultats.put("item_organ_id", ua.getId());
+				resultats.put("item_organ_nom", ua.getNombreUnidadAdministrativa(lang));
 			}
 			
-			if ( proc.getFamilia() != null ) {
-				
+			if (proc.getFamilia() != null) {
 				Familia familia = proc.getFamilia();
-				resultats.put( "item_familia", familia.getId() );
-				
+				resultats.put("item_familia", familia.getId());
 			}
 			
 			if (proc.getVersion() != null)
-				resultats.put( "item_version", proc.getVersion() );
+				resultats.put("item_version", proc.getVersion());
 			
-			if ( proc.getIndicador() == null || "0".equals( proc.getIndicador() ) ) {
-				
+			if (proc.getIndicador() == null || "0".equals(proc.getIndicador()))
 				resultats.put("item_fi_vida_administrativa", false);
-				
-			} else {
-				
+			else
 				resultats.put("item_fi_vida_administrativa", true);
-				
-			}
-				
-			if ( proc.getTaxa() == null || "0".equals( proc.getTaxa() ) ) {
-				
-				resultats.put("item_taxa", false);
-				
-			} else {
-				
-				resultats.put("item_taxa", true);
-				
-			}
 			
-			if ( proc.getVentanillaUnica() == null || "0".equals( proc.getVentanillaUnica() ) ) {
-				
+			if (proc.getTaxa() == null || "0".equals(proc.getTaxa()))
+				resultats.put("item_taxa", false);
+			else
+				resultats.put("item_taxa", true);
+			
+			if (proc.getVentanillaUnica() == null || "0".equals(proc.getVentanillaUnica()))
 				resultats.put("item_finestreta_unica", false);
-				
-			} else {
-				
+			else
 				resultats.put("item_finestreta_unica", true);
-				
-			}
 			
 			// Obtención de listado de posibles hechos vitales del procedimiento
-			Set<PublicoObjetivo> listaPublicosObjetivos = proc.getPublicosObjetivo();
+			Set<PublicoObjetivo> listaPublicosObjetivos =  proc.getPublicosObjetivo();
 			if ( !listaPublicosObjetivos.isEmpty() ) {
 				
 				resultats.put( "listadoHechosVitales", LlistatUtil.llistarHechosVitales( listaPublicosObjetivos , lang ) );
@@ -533,6 +524,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 				resultats.put( "listadoHechosVitales", Collections.EMPTY_SET );
 				
 			}
+
 			
 		} catch (DelegateException dEx) {
 			
@@ -761,45 +753,61 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 	
 
 	@RequestMapping(value = "/esborrarProcediment.do", method = POST)
-	public @ResponseBody IdNomDTO esborrarProcediment(HttpServletRequest request)
-	{
+	public @ResponseBody IdNomDTO esborrarProcediment(HttpServletRequest request) {
+		
 		IdNomDTO resultatStatus = new IdNomDTO();
 		
 		try {
-			Long id = new Long(request.getParameter("id"));
+			
+			Long id = new Long( request.getParameter("id") );
 			ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
 			procedimientoDelegate.borrarProcedimiento(id);
 			
+			//Actualiza estadísticas
+			DelegateUtil.getEstadisticaDelegate().grabarEstadisticaProcedimiento(id);
+			
 			resultatStatus.setId(1l);
 			resultatStatus.setNom("correcte");
+			
 		} catch (DelegateException dEx) {
-			if (dEx.isSecurityException()) {
+			
+			if ( dEx.isSecurityException() ) {
+				
 				resultatStatus.setId(-1l);
+				
 			} else {
+				
 				resultatStatus.setId(-2l);
-				logException(log, dEx);
+				logException( log, dEx );
+				
 			}
+			
 		}
+		
 		return resultatStatus;
+		
 	}
 	
 	
 	@RequestMapping(value = "/guardar.do", method = POST)
-	public @ResponseBody IdNomDTO guardarProcediment(HttpSession session, HttpServletRequest request)
-	{
+	public @ResponseBody IdNomDTO guardarProcediment(HttpSession session, HttpServletRequest request) {
+		
 		IdNomDTO result = null;
 		String error = null;
 		
 		try {
+			
 			if ( request.getParameter("publicsObjectiu") == null || request.getParameter("publicsObjectiu").equals("") ) {
 				error = messageSource.getMessage("proc.error.falta.public", null, request.getLocale());
 				return result = new IdNomDTO(-3l, error);
 				
 			}
+			
 			ProcedimientoDelegate procedimentDelegate = DelegateUtil.getProcedimientoDelegate();
 			ProcedimientoLocal procediment = new ProcedimientoLocal();
 			ProcedimientoLocal procedimentOld;
 			boolean edicion;
+			
 			try {
 				Long id = Long.parseLong(request.getParameter("item_id"));
 				procedimentOld = procedimentDelegate.obtenerProcedimiento(id);
@@ -833,6 +841,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			procediment.setTaxa("on".equalsIgnoreCase(request.getParameter("item_taxa")) ? "1" : "0");							// Taxa
 			procediment.setIndicador("on".equalsIgnoreCase(request.getParameter("item_fi_vida_administrativa")) ? "1" : "0");	// Indicador
 			procediment.setVentanillaUnica("on".equalsIgnoreCase(request.getParameter("item_finestreta_unica")) ? "1" : "0");	// Ventanilla Única
+			
 			if (edicion) {
 				procediment.setTramite(procedimentOld.getTramite());							// Tramite
 				procediment.setUrl(procedimentOld.getUrl());									// URL
@@ -841,11 +850,16 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			}
 			
 			Long procId = procedimentDelegate.grabarProcedimiento(procediment, procediment.getUnidadAdministrativa().getId());
+			
+			//Actualiza estadísticas
+			DelegateUtil.getEstadisticaDelegate().grabarEstadisticaProcedimiento(procId);
+			
 			String ok = messageSource.getMessage("proc.guardat.correcte", null, request.getLocale());
 			result = new IdNomDTO(procId, ok);
 			
 		} catch (DelegateException dEx) {
-			if (dEx.isSecurityException()) {
+			
+			if ( dEx.isSecurityException() ) {
 				error = messageSource.getMessage("error.permisos", null, request.getLocale());
 				result = new IdNomDTO(-1l, error);
 				
@@ -855,14 +869,18 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 				logException(log, dEx);
 				
 			}
+			
 		} catch (NumberFormatException nfe) {
+			
 			result = new IdNomDTO(-3l, error);
 			
 		} catch (ParseException pe) {
+			
 			error = messageSource.getMessage(pe.getMessage(), null, request.getLocale());
 			result = new IdNomDTO(-4l, error);
 			
 		}
+		
 		return result;
 		
 	}
@@ -1366,19 +1384,22 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 	/*
 	 * Obtenemos la unidad administrativa del procedimiento.
 	 */
-	private ProcedimientoLocal guardarProcUnidadAdministrativa(HttpServletRequest request, ProcedimientoLocal procediment, String error) throws DelegateException
-	{
+	private ProcedimientoLocal guardarProcUnidadAdministrativa(HttpServletRequest request, ProcedimientoLocal procediment, String error) throws DelegateException {
+		
 		try {
+			
 			Long organRespID = Long.parseLong(request.getParameter("item_organ_responsable_id"));
 			UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
 			UnidadAdministrativa organResp = uaDelegate.obtenerUnidadAdministrativa(organRespID);
 			procediment.setUnidadAdministrativa(organResp);
 			
 		} catch (NumberFormatException e) {
+			
 			error = messageSource.getMessage("proc.error.organ.responsable.incorrecte", null, request.getLocale());
 			throw new NumberFormatException();
 			
 		}
+		
 		return procediment;
 		
 	}
@@ -1426,7 +1447,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 				paramTrad.put("idioma", idioma);
 			}
 			
-			// Información de paginación
+			//Información de paginación
 			String pagPag = request.getParameter("pagPag");
 			String pagRes = request.getParameter("pagRes");
 			

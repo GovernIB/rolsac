@@ -3,7 +3,6 @@ package es.caib.rolsac.back2.controller;
 import static es.caib.rolsac.utils.LogUtils.logException;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
-
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -15,10 +14,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.lang.StringUtils;
@@ -576,8 +573,7 @@ public class FitxaInfBackController extends PantallaBaseController
     
     
     @RequestMapping(value = "/guardar.do", method = POST)
-    public ResponseEntity<String> guardarFicha(HttpSession session, HttpServletRequest request)
-    {
+    public ResponseEntity<String> guardarFicha(HttpSession session, HttpServletRequest request) {
     	/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
 		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la petici�n.
@@ -592,6 +588,7 @@ public class FitxaInfBackController extends PantallaBaseController
 		String error = null;
 		
 		try {
+			
 			// Aqui nos llegaría un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
 			// Iremos recopilando los parametros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
 			Map<String, String> valoresForm = new HashMap<String, String>();
@@ -1096,30 +1093,35 @@ public class FitxaInfBackController extends PantallaBaseController
     /*
      * Función que asocia la ficha con la UA y las secciones
      */
-    private void guardarFitxaSecciosUA(boolean edicion, Ficha fitxaOld, Map<String, String> valoresForm, Long idFitxa) throws DelegateException
-    {
+    private void guardarFitxaSecciosUA(boolean edicion, Ficha fitxaOld, Map<String, String> valoresForm, Long idFitxa) throws DelegateException {
     	// Tiempos para trazas
     	Date startTrace;
     	long execTime;
     	
     	FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
-    	if (isModuloModificado("modulo_seccionesua_modificado", valoresForm)) {
+    	if ( isModuloModificado("modulo_seccionesua_modificado", valoresForm) ) {
+    		
     		String[] codisSeccUaNous = valoresForm.get("seccUA").split(",");
     		boolean esborrarFichaUA = true;
     		
     		if (edicion) {
-    			for (FichaUA fichaUA: fitxaOld.getFichasua()) {
+    			
+    			for ( FichaUA fichaUA : fitxaOld.getFichasua() ) {
+
     				esborrarFichaUA = true;
     				for (int i = 0; i<codisSeccUaNous.length; i++) {
+    					
     					if (codisSeccUaNous[i] != null) { //Per a no repetir cerques
+    						
     						String[] seccUA = codisSeccUaNous[i].split("#"); //En cas d'edicio es necesari verificar si les relacions anteriors se mantenen
-    						if (fichaUA.getId().equals(ParseUtil.parseLong(seccUA[0]))) {
+    						if ( fichaUA.getId().equals( ParseUtil.parseLong( seccUA[0] ) ) ) {
     							esborrarFichaUA = false;
     							codisSeccUaNous[i] = null;
     							break;
     						}
     					}
     				}
+    				
     				if (esborrarFichaUA) {
     					Long codi = fichaUA.getId();
     					log.debug("Inici de borrarFichaUA(" + codi + ")");
@@ -1128,12 +1130,15 @@ public class FitxaInfBackController extends PantallaBaseController
     					execTime = new Date().getTime() - startTrace.getTime();
     					log.debug("Temps d'execucio de borrarFichaUA(" + codi + "): " + execTime + " milisegons.");
     				}
+    				
     			}
     		}
     		
     		// Tots els que tenen id = -1, son nous i se poden afegir directament
-    		for (String codiSeccUa: codisSeccUaNous) {
-    			if (codiSeccUa != null) {
+    		for ( String codiSeccUa : codisSeccUaNous ) {
+    			
+    			if ( codiSeccUa != null ) {
+    				
     				String[] seccUA = codiSeccUa.split("#");
     				Long idSeccion = ParseUtil.parseLong(seccUA[1]);
     				Long idUA = ParseUtil.parseLong(seccUA[2]);
@@ -1144,10 +1149,15 @@ public class FitxaInfBackController extends PantallaBaseController
     				execTime = new Date().getTime() - startTrace.getTime();
     				log.debug("Temps d'execucio de crearFichaUA(" + idUA + ", " + idSeccion + ", " + idFitxa + "): " + execTime + " milisegons.");
     				
+    	            //Actualiza estadística
+    	            DelegateUtil.getEstadisticaDelegate().grabarEstadisticaFichaPorUA(idFitxa, idUA);
+    				
     				String pidip = System.getProperty("es.caib.rolsac.pidip");
-    				if (!((pidip == null) || pidip.equals("N"))) {
-    					// Si se anyade una ficha a la seccion Actualidad, se a�ade tambien a Portada Actualidad (PIDIP)
-    					if (idSeccion.longValue()== new Long(Parametros.ESDEVENIMENTS).longValue()) {   //comprobamos  antes si ya exite la ficha en actualidad  en portada en cuyo caso no la insertamos para no duplicarla.
+    				if ( !( (pidip == null) || pidip.equals("N") ) ) {
+    					
+    					// Si se anyade una ficha a la seccion Actualidad, se añade tambien a Portada Actualidad (PIDIP)
+    					if ( idSeccion.longValue()== new Long(Parametros.ESDEVENIMENTS).longValue() ) {   //comprobamos  antes si ya exite la ficha en actualidad  en portada en cuyo caso no la insertamos para no duplicarla.
+    						
     						int existe=0;
     						Long portadas = new Long(Parametros.PORTADAS_ACTUALIDAD);
     						
@@ -1159,10 +1169,12 @@ public class FitxaInfBackController extends PantallaBaseController
     						
     						Iterator iter = listac.iterator();
     						while (iter.hasNext()) {
+    							
     							Ficha ficac=(Ficha)iter.next();
     							if ((""+ficac.getId()).equals(""+idFitxa))
     								existe=1;
     						}
+    						
     						if (existe==0) {
     							log.debug("Inici de crearFichaUA(" + idUA + ", " + portadas + ", " + idFitxa + ")");
     							startTrace = new Date();
@@ -1178,7 +1190,7 @@ public class FitxaInfBackController extends PantallaBaseController
     }
     
     /*
-     * Función para controlar y guardar los enñaces de una ficha
+     * Función para controlar y guardar los enlaces de una ficha
      */
     private void guardarFitxaEnlaces(boolean edicion, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm, Long idFitxa, Set<String> enllasos) throws DelegateException
     {

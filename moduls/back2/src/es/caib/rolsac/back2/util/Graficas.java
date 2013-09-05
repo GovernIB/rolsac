@@ -39,8 +39,7 @@ public class Graficas {
 
 	public static JFreeChart pintarGraficaSimple(List<Estadistica> dadesEstadistica) {
 
-		SlidingCategoryDataset dataset = new SlidingCategoryDataset(
-				crearDatasetSimple(dadesEstadistica), 0, 12);
+		SlidingCategoryDataset dataset = new SlidingCategoryDataset( crearDatasetSimple(dadesEstadistica) , 0 , 12 );
 
 		JFreeChart chart = ChartFactory.createBarChart("", // chart title
 				"", // domain axis label
@@ -56,11 +55,14 @@ public class Graficas {
 		chart.setAntiAlias(true);
 
 		CategoryPlot plot = (CategoryPlot) chart.getPlot();
+		
 		// Color de fons
 		plot.setBackgroundAlpha(0);
+		
 		// Veure el grid
 		plot.setDomainGridlinesVisible(true);
 		plot.setRangeGridlinesVisible(true);
+		
 		// Canviar color grid
 		plot.setDomainGridlinePaint(Color.gray);
 		plot.setRangeGridlinePaint(Color.gray);
@@ -76,6 +78,7 @@ public class Graficas {
 
 		CategoryAxis domainAxis = plot.getDomainAxis();
 		domainAxis.setCategoryLabelPositions(CategoryLabelPositions.DOWN_45);
+		
 		//domainAxis.setLabelFont(new Font("SansSerif", Font.PLAIN, 8));
 		domainAxis.setMaximumCategoryLabelWidthRatio(0.8f);
 		domainAxis.setLowerMargin(0.02);
@@ -95,6 +98,7 @@ public class Graficas {
 
 		// AutoEscala
 		rangeAxis.setAutoRange(true);
+		
 		// Marge superior
 		rangeAxis.setUpperMargin(0.25);
 

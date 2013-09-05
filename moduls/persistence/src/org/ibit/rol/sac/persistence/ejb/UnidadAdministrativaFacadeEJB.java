@@ -77,18 +77,22 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 	private static final long serialVersionUID = 6954366130820517158L;
 
+	
 	/** Nom pel govern de les illes a la taula d'unitats orgàniques */
 	public static final String NOM_GOVERN_ILLES = "Govern de les Illes Balears";
 
+	
 	/** ID comodín de unidad administrativa */
 	public static final String EMPTY_ID = "-1";
 
+	
 	/**
 	 * Obtiene refer�ncia al ejb de control de Acceso.
 	 * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
 	 */
 	protected abstract AccesoManagerLocal getAccesoManager();
 
+	
 	/**
 	 * @ejb.create-method
 	 * @ejb.permission unchecked="true"
@@ -98,117 +102,196 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		super.ejbCreate();
 	}
 
+	
 	/**
-	 * Crea una Unidad Administrativa RAIZ
+	 * Crea una Unidad Administrativa raíz.
+	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission role-name="${role.system}"
+	 * 
+	 * @param unidad	Indica la unidad administrativa a crear.
+	 * 
+	 * @return Devuelve el identificador de la unidad administrativa.
 	 */
 	public Long crearUnidadAdministrativaRaiz(UnidadAdministrativa unidad) {
+		
 		Session session = getSession();
+		
 		try {
+			
 			int orden = numUnidadesRaiz(session);
 			unidad.setOrden(orden);
 			session.save(unidad);
-			addOperacion(session, unidad, Auditoria.INSERTAR);
+			addOperacion( session, unidad, Auditoria.INSERTAR );
 			session.flush();
 			Actualizador.actualizar(unidad);
+			
 			return unidad.getId();
+			
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
 
+	
 	/**
 	 * Crea una Unidad Administrativa
+	 * 
 	 * @ejb.interface-method
-	 * @ejb.permission role-name="${role.system},${role.organigrama},${role.super}"
+	 * 
+	 * @ejb.permission role-name="${role.system},${role.organigrama}"
+	 * 
+	 * @param unidad	Indica la unidad administrativa a crear.
+	 * 
+	 * @param idPadre	Identificador de la unidad adminsitrativa padre.
+	 * 
+	 * @return Devuelve el identificador de la unidad administrativa padre.
 	 */
-	public Long crearUnidadAdministrativa(UnidadAdministrativa unidad, Long padre_id) {
+	public Long crearUnidadAdministrativa(UnidadAdministrativa unidad, Long idPadre) {
+		
+		//TODO 26/08/2013: Internacionalizar textos.
 		Session session = getSession();
+		
 		try {
-			if (!getAccesoManager().tieneAccesoUnidad(padre_id, true)) {
+			
+			if ( !getAccesoManager().tieneAccesoUnidad( idPadre, true ) ) {
+				
 				throw new SecurityException("No tiene acceso a la unidad");
+				
 			}
 
-			UnidadAdministrativa padre = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, padre_id);
+			UnidadAdministrativa padre = (UnidadAdministrativa) session.load( UnidadAdministrativa.class, idPadre );
 			padre.addHijo(unidad);
 			session.save(unidad);
-			addOperacion(session, unidad, Auditoria.INSERTAR);
+			addOperacion( session, unidad, Auditoria.INSERTAR );
 			session.flush();
 			Actualizador.actualizar(unidad);
+			
 			return unidad.getId();
+			
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
 
+	
 	/**
-	 * Actualiza una Unidad Administrativa
+	 * Actualiza una Unidad Administrativa.
+	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
+	 * 
+	 * @param unidad	Indica la unidad administrativa a actualizar.
+	 * 
+	 * @param idPadre	Identificador de la unidad administrativa.
 	 */
-	public void actualizarUnidadAdministrativa(UnidadAdministrativa unidad, Long padre_id) {
+	public void actualizarUnidadAdministrativa(UnidadAdministrativa unidad, Long idPadre) {
+		
+		//TODO 26/08/2013: Internacionalizar textos.
 		Session session;
 
-		Long old_padre_id = (unidad.getPadre() == null ? null : unidad.getPadre().getId());
+		Long idPadreAntigua = ( unidad.getPadre() == null ? null : unidad.getPadre().getId() );
 
-		boolean newIsNull = (padre_id == null);
-		boolean oldIsNull = (old_padre_id == null);
+		boolean newIsNull = ( idPadre == null );
+		boolean oldIsNull = ( idPadreAntigua == null );
 
-		if (newIsNull && !userIsSystem()) {
+		if ( newIsNull && !userIsSystem() ) {
+			
 			throw new SecurityException("Solo el usuario de sistema puede crear raices.");
+			
 		}
 
-		boolean change = (newIsNull ? !oldIsNull : !padre_id.equals(old_padre_id));
+		boolean change = ( newIsNull ? !oldIsNull : !idPadre.equals(idPadreAntigua) );
 
-		if (change && !oldIsNull && !newIsNull) {
-			if (!getAccesoManager().tieneAccesoMoverOrganigrama(old_padre_id, padre_id)) {
+		if ( change && !oldIsNull && !newIsNull ) {
+			
+			if ( !getAccesoManager().tieneAccesoMoverOrganigrama( idPadreAntigua, idPadre ) ) {
+				
 				throw new SecurityException("No tiene acceso al nodo superior anterior o al actual.");
+				
 			}
+			
 		}
 
-		if (!getAccesoManager().tieneAccesoUnidad(unidad.getId(), true)) {
+		if ( !getAccesoManager().tieneAccesoUnidad( unidad.getId(), true ) ) {
+			
 			throw new SecurityException("No tiene acceso a la unidad");
+			
 		}
 
 		session = getSession();
+		
 		try {
+			
 			session.update(unidad);
+			
 			if (change) {
-				if (!oldIsNull) {
-					UnidadAdministrativa oldPadre = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, old_padre_id);
+				
+				if ( !oldIsNull ) {
+					
+					UnidadAdministrativa oldPadre = (UnidadAdministrativa) session.load( UnidadAdministrativa.class, idPadreAntigua );
 					oldPadre.removeHijo(unidad);
+					
 				}
-				if (!newIsNull) {
-					UnidadAdministrativa newPadre = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, padre_id);
+				
+				if ( !newIsNull ) {
+					
+					UnidadAdministrativa newPadre = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, idPadre);
 					newPadre.addHijo(unidad);
+					
 				}
-				if (newIsNull || oldIsNull) {
+				
+				if ( newIsNull || oldIsNull ) {
+					
 					session.flush();
 					Query query = session.getNamedQuery("unidades.root");
 					List<UnidadAdministrativa> lista = castList(UnidadAdministrativa.class, query.list() );
-					for (int i = 0; i < lista.size(); i++) {
+					
+					for ( int i = 0; i < lista.size(); i++ ) {
+						
 						UnidadAdministrativa uni = (UnidadAdministrativa) lista.get(i);
 						uni.setOrden(i);
+						
 					}
 				}
+				
 			}
-			addOperacion(session, unidad, Auditoria.MODIFICAR);
+			
+			addOperacion( session, unidad, Auditoria.MODIFICAR );
 			session.flush();
 			Actualizador.actualizar(unidad);
+			
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
 
 
 	/**
+	 *  @deprecated	No se usa
 	 * Lista los hijos de una unidad Administrativa.
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
@@ -228,33 +311,55 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		}
 	}
 
+	
 	/**
 	 * Lista los hijos de una unidad Administrativa.
+	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de la unidad administrativa.
+	 * 
+	 * @return	Devuelve <code>List<UnidadAdministrativa></code> de los hijos de la unidad administrativa solicitada.
 	 */
 	public List<UnidadAdministrativa> listarHijosUA(Long id) {
+		
 		Session session = getSession();
+		
 		try {
+			
 			UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, id);
-			Hibernate.initialize(ua.getHijos());
-
+			Hibernate.initialize( ua.getHijos() );
 			List<UnidadAdministrativa> result = new ArrayList<UnidadAdministrativa>();
-			for (int i = 0; i < ua.getHijos().size(); i++) {
+			
+			for ( int i = 0; i < ua.getHijos().size(); i++ ) {
+				
 				UnidadAdministrativa uaHijo = (UnidadAdministrativa) ua.getHijos().get(i);
 				if (uaHijo != null && visible(uaHijo)) {
+					
 					result.add(uaHijo);
+					
 				}
+				
 			}
+			
 			return result;
+			
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
 
 	/**
+	 * @deprecated	Se usa desde el back antiguo.
 	 * Lista las unidades Administrativas raiz de un usuario.
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
@@ -300,7 +405,9 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		}
 	}
 
+	
 	/**
+	 *  @deprecated	No se usa
 	 * Obtiene la primera unidad Administrativas raiz de un usuario.
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
@@ -322,34 +429,53 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		}
 	}
 
+	
 	/**
 	 * Lista las unidades Administrativas raiz de un usuario que estan publicadas o no.
+	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+	 * 
+	 * @param publicadas	Indica si las unidades administrativas están publicadas.
+	 * 
+	 * @return Devuelve <code>List<UnidadAdministrativa></code> de todas las unidades administrativas publicadas.
 	 */
 	public List<UnidadAdministrativa> listarUnidadesAdministrativasRaiz(boolean publicadas) {
+		
+		//TODO <jchuerta> 26/08/2013: Crear constantes para textos.
 		Session session = getSession();
+		
 		try {
+			
 			Usuario usu = getUsuario(session);
 
 			Criteria criteria = session.createCriteria(UnidadAdministrativa.class);
-			criteria.add(Expression.isNull("padre"));
-			criteria.add(publicadas ? Expression.isNotNull("businessKey") : Expression.isNull("businessKey"));
+			criteria.add( Expression.isNull("padre") );
+			criteria.add( publicadas ? Expression.isNotNull("businessKey") : Expression.isNull("businessKey") );
 
-			if (!userIsSystem()) {
-				criteria.createAlias("usuarios", "usu");
-				criteria.add(Expression.eq("usu.username", usu.getUsername()));
+			if ( !userIsSystem() ) {
+				
+				criteria.createAlias( "usuarios", "usu" );
+				criteria.add( Expression.eq( "usu.username", usu.getUsername() ) );
+				
 			}
 
-			return castList(UnidadAdministrativa.class, criteria.list());
+			return castList( UnidadAdministrativa.class, criteria.list() );
 
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
 
+	
 	/**
 	 * Lista las unidades Administrativas raiz que estan o no publicadas.
 	 * @ejb.interface-method
@@ -357,6 +483,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 */
 	public List<UnidadAdministrativa> listarTodasUnidadesAdministrativasRaiz() {
 
+		//TODO 26/08/2013: Crear constantes para textos.
 		Session session = getSession();
 
 		try {
@@ -376,35 +503,55 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 	}
 
+	
 	/**
 	 * Lista los padres de unidad Administrativa.
+	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de la unidad adminsitrativa solicitada.
+	 * 
+	 * @return	Devuelve <code>List<UnidadAdministrativa></code> de la unidad administrativa solicitada. 
 	 */
 	public List<UnidadAdministrativa> listarPadresUnidadAdministrativa(Long id) {
+		
 		Session session = getSession();
 		List<UnidadAdministrativa> padres = new Vector<UnidadAdministrativa>();
 
 		try {
-			UnidadAdministrativa unidadAdministrativa = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, id);
+			
+			UnidadAdministrativa unidadAdministrativa = (UnidadAdministrativa) session.load( UnidadAdministrativa.class, id );
 			padres.add(unidadAdministrativa);
 
 			UnidadAdministrativa padre = unidadAdministrativa.getPadre();
-			while (padre != null) {
+			while ( padre != null ) {
+				
 				padres.add(padre);
 				padre = padre.getPadre();
+				
 			}
+			
 			Collections.reverse(padres);
+			
 			return padres;
+			
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
 
 
 	/**
+	 * @deprecated	Se usa desde el back antiguo
 	 * Lista los padres de unidad Administrativa, comprobando el acceso.
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
@@ -424,7 +571,9 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 	}
 
+	
 	/**
+	 * @deprecated	No se usa
 	 * Listar BusinessKeys de la unidades administrativas.
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
@@ -442,7 +591,9 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		}
 	}
 
+	
 	/**
+	 *  @deprecated	Se usa en el back antiguo
 	 * Busca todas las Unidades Administrativas que cumplen los criterios de b�squeda
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
@@ -477,24 +628,42 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		}
 	}
 
+	
 	/**
 	 * Obtiene una Unidad Administrativa
+	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de la unidad administrativa.
+	 * 
+	 * @return Devuelve <code>UnidadAdministrativa</code> solicitada.
 	 */
 	public UnidadAdministrativa obtenerUnidadAdministrativa(Long id) {
+		
 		Session session = getSession();
+		
 		try {
-			return (UnidadAdministrativa) session.load(UnidadAdministrativa.class, id);
+			
+			return (UnidadAdministrativa) session.load( UnidadAdministrativa.class, id );
 
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
+	
+	
 
 	/**
+	 * @deprecated	No se usa
 	 * Obtiene una Unidad Administrativa {PORMAD}
 	 * 
 	 * @ejb.interface-method
@@ -519,25 +688,45 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 
 	/**
-	 * Dice si existe una unidad Administrativa
+	 * Dice si existe una unidad Administrativa.
+	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param	id Identificador de la unidad administrativa.
+	 * 
+	 * @return Devuelve <code>true</code> si existe la unidad adminsitrativa.
 	 */
 	public boolean existeUnidadAdministrativa(Long id) {
+		
+		//TODO: 26/08/2013: Crear constantes para textos.
 		Session session = getSession();
+		
 		try {
+			
 			Criteria criteri = session.createCriteria(UnidadAdministrativa.class);
-			criteri.add(Expression.eq("id", id));
-			UnidadAdministrativa unidad = (UnidadAdministrativa)criteri.uniqueResult();
+			criteri.add( Expression.eq( "id", id ) );
+			UnidadAdministrativa unidad = (UnidadAdministrativa) criteri.uniqueResult();
+			
 			return unidad != null;
+			
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
+	
+	
 
 	/**
+	 * @deprecated	No se usa
 	 * Obtiene la informaci�n general de una Unidad Administrativa
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
@@ -562,58 +751,55 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 
 	/**
-	 * Obtiene informacion para el front de una Unidad Administrativa
+	 * Obtiene informacion para el front de una Unidad Administrativa.
+	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de la unidad administrativa solicitada.
+	 * 
+	 * @return Devuelve <code>UnidadAdministrativa</code> solicitada.
 	 */
 	public UnidadAdministrativa consultarUnidadAdministrativaSinFichas(Long id) {
 
+		//TODO 26/08/2013: Internacionalizar textos.
 		Session session = getSession();
 
 		try {
 
-			UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, id);
+			UnidadAdministrativa ua = (UnidadAdministrativa) session.load( UnidadAdministrativa.class, id );
 
 			if ( visible(ua) ) {
 
-				Hibernate.initialize(ua.getFotop());
-				Hibernate.initialize(ua.getFotog());
-				Hibernate.initialize(ua.getLogoh());
-				Hibernate.initialize(ua.getLogov());
-				Hibernate.initialize(ua.getLogos());
-				Hibernate.initialize(ua.getLogot());
-				Hibernate.initialize(ua.getTratamiento());
-				Hibernate.initialize(ua.getEspacioTerrit());
-				Hibernate.initialize(ua.getEdificios());
-				Hibernate.initialize(ua.getUnidadesMaterias());
-				Hibernate.initialize(ua.getPadre());
-				Hibernate.initialize(ua.getHijos());
-
-				// No cargamos las fichas ya que, debido a configuraciones de lazy, se cargan 
-				// demasiados datos innecesarios para la pantalla del mantenimiento de una UA.
-				/*
-                    Hibernate.initialize(ua.getFichasUA());
-                    Hibernate.initialize(ua.getTodasfichas());
-				 */
-
-				Hibernate.initialize(ua.getProcedimientos());
-				Hibernate.initialize(ua.getPersonal());
-				Hibernate.initialize(ua.getNormativas());
-
-				//if (userIsSuper())
-				Hibernate.initialize(ua.getUsuarios());
+				Hibernate.initialize( ua.getFotop() );
+				Hibernate.initialize( ua.getFotog() );
+				Hibernate.initialize( ua.getLogoh() );
+				Hibernate.initialize( ua.getLogov() );
+				Hibernate.initialize( ua.getLogos() );
+				Hibernate.initialize( ua.getLogot() );
+				Hibernate.initialize( ua.getTratamiento() );
+				Hibernate.initialize( ua.getEspacioTerrit() );
+				Hibernate.initialize( ua.getEdificios() );
+				Hibernate.initialize( ua.getUnidadesMaterias() );
+				Hibernate.initialize( ua.getPadre() );
+				Hibernate.initialize( ua.getHijos() );
+				Hibernate.initialize( ua.getProcedimientos() );
+				Hibernate.initialize( ua.getPersonal() );
+				Hibernate.initialize( ua.getNormativas() );
+				Hibernate.initialize( ua.getUsuarios() );
 				
 				return ua;
 
 			} else {
 
-				throw new SecurityException("La unitat administrativa no ���s publica con id " + ua.getId() );
+				throw new SecurityException( "La unidad administrativa no es publica con id " + ua.getId() );
 
 			}
 
 		} catch (HibernateException he) {
 
-			throw new EJBException("No s'ha trobat la unitat administrativa sol���licitada", he);
+			throw new EJBException( "No se ha encontrado la unitat administrativa solicitada", he );
 
 		} finally {
 
@@ -622,9 +808,12 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		}
 
 	}
+	
+	
 
 
 	/**
+	 * @deprecated	No se usa.
 	 * Obtiene informacion para el front de una Unidad Administrativa (PORMAD)
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
@@ -649,55 +838,77 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	}
 
 
-
 	/**
-	 * Obtiene informacion para el front de una Unidad Administrativa
+	 * Obtiene informacion para el front de una Unidad Administrativa.
+	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de la unidad administrativa solicitada.
+	 * 
+	 * @return Devuelve <code>UnidadAdministrativa</code> solicitada.
 	 */
 	public UnidadAdministrativa consultarUnidadAdministrativa(Long id) {
+		
+		//TODO 26/08/2013: Internacionalizar textos
 		Session session = getSession();
 
 		try {
 
-			UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, id);
+			UnidadAdministrativa ua = (UnidadAdministrativa) session.load( UnidadAdministrativa.class, id );
 
-			if (visible(ua)) {
-				Hibernate.initialize(ua.getFotop());
-				Hibernate.initialize(ua.getFotog());
-				Hibernate.initialize(ua.getLogoh());
-				Hibernate.initialize(ua.getLogov());
-				Hibernate.initialize(ua.getLogos());
-				Hibernate.initialize(ua.getLogot());
-				Hibernate.initialize(ua.getTratamiento());
-				Hibernate.initialize(ua.getEspacioTerrit());
-				Hibernate.initialize(ua.getEdificios());
-				Hibernate.initialize(ua.getUnidadesMaterias());
-				Hibernate.initialize(ua.getPadre());
-				Hibernate.initialize(ua.getHijos());
-				Hibernate.initialize(ua.getFichasUA());
-				Hibernate.initialize(ua.getTodasfichas());
-				Hibernate.initialize(ua.getProcedimientos());
-				Hibernate.initialize(ua.getPersonal());
-				Hibernate.initialize(ua.getNormativas());
+			if ( visible(ua) ) {
+				
+				Hibernate.initialize( ua.getFotop() );
+				Hibernate.initialize( ua.getFotog() );
+				Hibernate.initialize( ua.getLogoh() );
+				Hibernate.initialize( ua.getLogov() );
+				Hibernate.initialize( ua.getLogos() );
+				Hibernate.initialize( ua.getLogot() );
+				Hibernate.initialize( ua.getTratamiento() );
+				Hibernate.initialize( ua.getEspacioTerrit() );
+				Hibernate.initialize( ua.getEdificios() );
+				Hibernate.initialize( ua.getUnidadesMaterias() );
+				Hibernate.initialize( ua.getPadre() );
+				Hibernate.initialize( ua.getHijos() );
+				Hibernate.initialize( ua.getFichasUA() );
+				Hibernate.initialize( ua.getTodasfichas() );
+				Hibernate.initialize( ua.getProcedimientos() );
+				Hibernate.initialize( ua.getPersonal() );
+				Hibernate.initialize( ua.getNormativas() );
 
-				if (userIsSuper()) {
-					Hibernate.initialize(ua.getUsuarios());
+				if ( userIsSuper() ) {
+					
+					Hibernate.initialize( ua.getUsuarios() );
+					
 				}
+				
 				return ua;
+				
 			} else {
-				throw new SecurityException("La unitat administrativa no �s publica con id "+ua.getId() );
+				
+				throw new SecurityException( "La unidad administrativa no se publica con id " + ua.getId() );
+				
 			}
 
 		} catch (HibernateException he) {
-			throw new EJBException("No s' ha trobat la unitat administrativa sol�licitada",he);
+			
+			throw new EJBException( "No se ha encontrado la unidad administrativa solicitada", he );
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
+	
+	
 
 
 	/**
+	 *  @deprecated	Se usa en el back antiguo
 	 * Obtiene informacion para el front de una Unidad Administrativa
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
@@ -742,8 +953,11 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			close(session);
 		}
 	}
+	
+	
 
 	/**
+	 * @deprecated	No se usa.
 	 * Obtiene informacion para el front del pormad (PORMAD)
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
@@ -770,8 +984,12 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			close(session);
 		}
 	}
+	
+	
 
+	
 	/**
+	 * @deprecated	No se usa
 	 * Repara el orden de todas las unidades administrativas(PORMAD)
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked = "true"
@@ -794,20 +1012,32 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		}
 	}
 
+	
 	private List<FichaUA> resetOrden(List<FichaUA> fichas){
+		
 		List<FichaUA> resultado = new ArrayList<FichaUA>();
 		int temp = 0;
-		for(FichaUA ficha : fichas){
-			if(ficha != null){
+		
+		for ( FichaUA ficha : fichas ) {
+			
+			if ( ficha != null ) {
+				
 				ficha.setOrden(temp);
 				temp++;
 				resultado.add(ficha);
+				
 			}
+			
 		}
+		
 		return resultado;
+		
 	}
+	
+	
 
 	/**
+	 * @deprecated	No se usa
 	 * Obtiene una Unidad Administrativa por el nombre.
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
@@ -838,188 +1068,351 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		}
 	}
 
+	
 	/**
-	 * Obtiene una Unidad Administrativa por el codigo Estandar(PORMAD)
+	 * Obtiene una Unidad Administrativa por el codigo Estandar(PORMAD).
+	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param codEstandar Indica el código estándar de una unidad administrativa.
+	 * 
+	 * @return <code>UnidadAdministrativa</code> solicitada.
 	 */
-	public UnidadAdministrativa obtenerUnidadAdministrativaPorCodEstandar(String codEst) {
+	public UnidadAdministrativa obtenerUnidadAdministrativaPorCodEstandar(String codEstandar) {
+		
+		//TODO 26/08/2013: Internacionalizar textos.
 		Session session = getSession();
+		
 		try {
-			Query query = session.createQuery("from UnidadAdministrativa as ua where ua.codigoEstandar=:codEst");
-			query.setParameter("codEst", codEst);
+			
+			Query query = session.createQuery("from UnidadAdministrativa as ua where ua.codigoEstandar = :codEst");
+			
+			query.setParameter( "codEst", codEstandar );
 			query.setMaxResults(1);
 			query.setCacheable(true);
+			
 			List<UnidadAdministrativa> result = castList(UnidadAdministrativa.class, query.list());
-			if (result.isEmpty()) {
+			
+			if ( result.isEmpty() ) {
+				
 				return null;
+				
 			}
+			
 			UnidadAdministrativa ua = (UnidadAdministrativa) result.get(0);
-			if (visible(ua)) {
-				Hibernate.initialize(ua.getFotop());
-				Hibernate.initialize(ua.getHijos());
-				Hibernate.initialize(ua.getFotog());
-				Hibernate.initialize(ua.getLogoh());
-				Hibernate.initialize(ua.getLogov());
-				Hibernate.initialize(ua.getLogos());
-				Hibernate.initialize(ua.getLogot());
-				Hibernate.initialize(ua.getTratamiento());
-				Hibernate.initialize(ua.getUnidadesMaterias());
-				Hibernate.initialize(ua.getEdificios());
+			
+			if ( visible(ua) ) {
+				
+				Hibernate.initialize( ua.getFotop() );
+				Hibernate.initialize( ua.getHijos() );
+				Hibernate.initialize( ua.getFotog() );
+				Hibernate.initialize( ua.getLogoh() );
+				Hibernate.initialize( ua.getLogov() );
+				Hibernate.initialize( ua.getLogos() );
+				Hibernate.initialize( ua.getLogot() );
+				Hibernate.initialize( ua.getTratamiento() );
+				Hibernate.initialize( ua.getUnidadesMaterias() );
+				Hibernate.initialize( ua.getEdificios() );
+				
 				return ua;
+				
 			} else {
+				
 				throw new SecurityException("El usuario no tiene el rol operador");
+				
 			}
+			
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
 
+	
 	/**
-	 * Obtiene la foto pequenya de una Unidad Administrativa
+	 * Obtiene la foto pequeña de una Unidad Administrativa.
+	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de una unidad administrativa.
+	 * 
+	 * @return	Devuelve <code>Archivo</code> que contiene la foto pequeña de la unidad administrativa solicitada.
 	 */
 	public Archivo obtenerFotoPequenyaUA(Long id) {
+		
+		//TODO <jchuerta> 26/08/2013: Internacionalizar textos.
 		Session session = getSession();
+		
 		try {
-			UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, id);
-			if (visible(ua)) {
-				Hibernate.initialize(ua.getFotop());
+			
+			UnidadAdministrativa ua = (UnidadAdministrativa) session.load( UnidadAdministrativa.class, id );
+			
+			if ( visible(ua) ) {
+				
+				Hibernate.initialize( ua.getFotop() );
+				
 				return ua.getFotop();
+				
 			} else {
+				
 				throw new SecurityException("El usuario no tiene el rol operador");
+				
 			}
+			
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
 
+	
 	/**
-	 * Obtiene la foto grande de una Unidad Administrativa
+	 * Obtiene la foto grande de una Unidad Administrativa.
+	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de la unidad administrativa.
+	 * 
+	 * @return Devuelve <code>Archivo</code> que contiene la foto grande de la unidad administrativa solcitada.
 	 */
 	public Archivo obtenerFotoGrandeUA(Long id) {
+		
+		//TODO 26/08/2013: Internacionalizar textos.
 		Session session = getSession();
+		
 		try {
+			
 			UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, id);
+			
 			if (visible(ua)) {
+				
 				Hibernate.initialize(ua.getFotog());
+				
 				return ua.getFotog();
+				
 			} else {
+				
 				throw new SecurityException("El usuario no tiene el rol operador");
+				
 			}
 
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
 
+	
 	// CODI NOU PELS LOGOS
 	/**
-	 * Obtiene la logo horitzontal de una Unidad Administrativa
+	 * Obtiene la logo horitzontal de una Unidad Administrativa.
+	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de la unidad administrativa.
+	 * 
+	 * @return Devuelve <code>Archivo</code> con el logo horizontal de la unidad administrativa.
 	 */
 	public Archivo obtenerLogoHorizontalUA(Long id) {
+		
+		//TODO 26/08/2013: Internacionalizar textos.
 		Session session = getSession();
+		
 		try {
-			UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, id);
+			
+			UnidadAdministrativa ua = (UnidadAdministrativa) session.load( UnidadAdministrativa.class, id );
+			
 			if (visible(ua)) {
-				Hibernate.initialize(ua.getLogoh());
+				
+				Hibernate.initialize( ua.getLogoh() );
+				
 				return ua.getLogoh();
+				
 			} else {
+				
 				throw new SecurityException("El usuario no tiene el rol operador");
 			}
 
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
 
 
 	// CODI NOU PELS LOGOS
 	/**
-	 * Obtiene la logo vertical de una Unidad Administrativa
+	 * Obtiene la logo vertical de una Unidad Administrativa.
+	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de la unidad administrativa.
+	 * 
+	 * @return Devuelve <code>Archivo</code> con el logo vertical de la unidad administrativa solicitada.
 	 */
 	public Archivo obtenerLogoVerticalUA(Long id) {
+		
+		//TODO 26/08/2013: Internacionalizar textos.
 		Session session = getSession();
+		
 		try {
-			UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, id);
-			if (visible(ua)) {
-				Hibernate.initialize(ua.getLogov());
+			
+			UnidadAdministrativa ua = (UnidadAdministrativa) session.load( UnidadAdministrativa.class, id );
+			
+			if ( visible(ua) ) {
+				
+				Hibernate.initialize( ua.getLogov() );
 				return ua.getLogov();
+				
 			} else {
+				
 				throw new SecurityException("El usuario no tiene el rol operador");
+				
 			}
 
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
+	
+	
 	// CODI NOU PELS LOGOS
 	/**
-	 * Obtiene la logo saludo de una Unidad Administrativa
+	 * Obtiene la logo saludo de una Unidad Administrativa.
+	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de la unidad administrativa.
+	 * 
+	 * @return Devuelve <code>Archivo</code> con el logo saludo de la unidad administrativa solicitada.
 	 */
 	public Archivo obtenerLogoSaludoUA(Long id) {
+		
+		//TODO 26/08/2013: Internacionalizar textos.
 		Session session = getSession();
+		
 		try {
-			UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, id);
-			if (visible(ua)) {
-				Hibernate.initialize(ua.getLogos());
+			
+			UnidadAdministrativa ua = (UnidadAdministrativa) session.load( UnidadAdministrativa.class, id );
+			
+			if ( visible(ua) ) {
+				
+				Hibernate.initialize( ua.getLogos() );
+				
 				return ua.getLogos();
+				
 			} else {
+				
 				throw new SecurityException("El usuario no tiene el rol operador");
+				
 			}
 
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
 
+	
 	//  CODI NOU PELS LOGOS
 	/**
-	 * Obtiene la logo saludo vertical de una Unidad Administrativa
+	 * Obtiene la logo saludo vertical de una Unidad Administrativa.
+	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id 	Identificador de la unidad administrativa.
+	 * 
+	 * @return Devuelve <code>Archivo</code> que contiene el logo saludo verticval de la unidad administrativa solicitada.
 	 */
 	public Archivo obtenerLogoSaludoVerticalUA(Long id) {
+		
+		//TODO 26/08/2013: Internacionalizar textos.
 		Session session = getSession();
+		
 		try {
-			UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, id);
-			if (visible(ua)) {
-				Hibernate.initialize(ua.getLogot());
+			
+			UnidadAdministrativa ua = (UnidadAdministrativa) session.load( UnidadAdministrativa.class, id );
+			
+			if ( visible(ua) ) {
+				
+				Hibernate.initialize( ua.getLogot() );
+				
 				return ua.getLogot();
+				
 			} else {
+				
 				throw new SecurityException("El usuario no tiene el rol operador");
+				
 			}
 
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
+	
+	
 
 
 	/**
+	 * @deprecated	No se usa
 	 * Intercambia el orden de las UA
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
@@ -1044,9 +1437,12 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			close(session);
 		}
 	}
+	
+	
 
 	/**
-	 * a�ade un nuevo edificio a la unidad administrativa
+	 * @deprecated	Se usa en el back antiguo
+	 * Añade un nuevo edificio a la unidad administrativa
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
 	 */
@@ -1074,8 +1470,12 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			close(session);
 		}
 	}
+	
+	
 
+	
 	/**
+	 *  @deprecated	Se usa en el back antiguo.
 	 * elimina un edificio del al unidad administrativa
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
@@ -1104,142 +1504,208 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 
 	/**
-	 * Descripci�n: Autorizaci�n eliminar Unidad Administrativa.Devuleve true si tiene acceso.
+	 * Autorización para eliminar una  Unidad Administrativa.
+	 * 
 	 * @ejb.interface-method
-	 * @ejb.permission role-name="${role.system},${role.organigrama}"
-	 */
-	public boolean autorizarEliminarUA(Long idUa){
-		return (getAccesoManager().tieneAccesoUnidad(idUa, true));  
-	}
-
-
-	/**
-	 * Descripcion: Comprobar si el usuario tiene privilegios para crear una UA.
-	 * @ejb.interface-method
-	 * @ejb.permission unchecked="true"
-	 */
-	public Boolean autorizarCrearUA() {
-		Boolean autorizacion;
-		try {
-			autorizacion = getAccesoManager().tieneAccesoCrearUnidad();
-		} catch (SecurityException se) {
-			autorizacion = Boolean.FALSE;
-		}
-		return autorizacion;
-	}
-
-
-	/**
-	 * Descripci�n: Eliminar una unidad administrativa. Se podra eliminar la UA, 
-	 * si no tiene elementos relacionados (Procedimientos,Normativas,etc.
-	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission role-name="${role.system},${role.organigrama}"
 	 * 
+	 * @param idUa	Identificador de la unidad administrativa.
+	 * 
+	 * @return Devuelve <code>true</code> si tiene acceso.
+	 */
+	public boolean autorizarEliminarUA(Long idUa) {
+		
+		return ( getAccesoManager().tieneAccesoUnidad( idUa, true ) );
+		
+	}
+
+
+	/**
+	 * Valida si el usuario tiene privilegios para crear una unidad administrativa.
+	 * 
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @return Devuelve <code>true</code> si tiene permisos para crear una unidad adminsitrativa.
+	 */
+	public Boolean autorizarCrearUA() {
+		
+		Boolean autorizacion;
+		
+		try {
+			
+			autorizacion = getAccesoManager().tieneAccesoCrearUnidad();
+			
+		} catch (SecurityException se) {
+			
+			autorizacion = Boolean.FALSE;
+			
+		}
+		
+		return autorizacion;
+		
+	}
+
+
+	/**
+	 * Elimina una unidad administrativa. Se podra eliminar la UA, 
+	 * si no tiene elementos relacionados (Procedimientos,Normativas,etc.
+	 * 
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission role-name="${role.system},${role.organigrama}"
+	 * 
+	 * @param idUA	Identificador de la unidad administrativa.
 	 */
 	public void eliminarUaSinRelaciones(Long idUA) {
+		
+		//TODO: Internacionalizar textos.
 		Session session = getSession();
 
 		try {
 
-			UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, idUA);
+			UnidadAdministrativa ua = (UnidadAdministrativa) session.load( UnidadAdministrativa.class, idUA );
 			Boolean isRaiz = ua.isRaiz();
 
-			if (!isRaiz) {
-				// Si no �s arrel, el pot borrar nom�s si t� acc�s a l'antecesor. 
-				if (!autorizarEliminarUA(ua.getPadre().getId()))
+			if ( !isRaiz ) {
+				
+				// Si no és arrel, el pot borrar només si té accés a l'antecesor. 
+				if ( !autorizarEliminarUA( ua.getPadre().getId() ) )
 					throw new SecurityException("No tiene acceso al antecesor de la unidad.");
+				
 			} else {
-				// Si �s arrel, nom�s si �s ADMIN o SYSTEM i t� acc�s a l'unitat.
-				if (!userIsAdmin() || !autorizarEliminarUA(ua.getId()))
+				
+				// Si és arrel, només si és ADMIN o SYSTEM i té accés a l'unitat.
+				if ( !userIsAdmin() || !autorizarEliminarUA( ua.getId() ) )
 					throw new SecurityException("No tiene acceso a la unidad.");
+				
 			}
 
-			addOperacion(session, ua, Auditoria.BORRAR);
-			getHistorico(session, ua);
+			addOperacion( session, ua, Auditoria.BORRAR );
+			getHistorico( session, ua );
 
-			session = deleteCodUaHistorico(session,ua);   
+			session = deleteCodUaHistorico( session, ua );   
 
 			ua.getEdificios().clear();
 			ua.getUsuarios().clear();
-			if (!isRaiz) {
+			
+			if ( !isRaiz ) {
+				
 				ua.getPadre().removeHijo(ua);
+				
 			}else{
+				
 				Usuario usuario = getUsuario(session);
 				usuario.getUnidadesAdministrativas().remove(ua);
+				
 			}
 
 			Long id = ua.getId();
-			if(ua instanceof UnidadAdministrativaRemota){
-				AdministracionRemota admin = ((UnidadAdministrativaRemota)ua).getAdministracionRemota();
-				if(admin!=null)
-					admin.removeUnidadAdministrativaRemota((UnidadAdministrativaRemota)ua);
+			if( ua instanceof UnidadAdministrativaRemota ) {
+				
+				AdministracionRemota admin = ( (UnidadAdministrativaRemota) ua ).getAdministracionRemota();
+				if( admin != null )
+					admin.removeUnidadAdministrativaRemota( (UnidadAdministrativaRemota) ua );
+				
 			}else{
-				Actualizador.borrar(new UnidadAdministrativa(id));
+				
+				Actualizador.borrar( new UnidadAdministrativa(id) );
+				
 			}
 
 			session.delete(ua);
 			session.flush();
 
-			if (isRaiz) {
+			if ( isRaiz ) {
+				
 				Query query = session.getNamedQuery("unidades.root");
 				List<?> lista = query.list();
-				for (int i = 0; i < lista.size(); i++) {
+				for ( int i = 0 ; i < lista.size() ; i++ ) {
 					UnidadAdministrativa uni = (UnidadAdministrativa) lista.get(i);
 					uni.setOrden(i);
 				}
+				
 				session.flush();
+				
 			}
+			
 		} catch (HibernateException he) {
+			
 			throw new EJBException("El sistema está actualizando los datos, espere unos minutos.");
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
 
+	
 	/**
 	 * Borra una unidad administrativa.
 	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission role-name="${role.system},${role.admin}"
+	 * 
+	 * @param id 	Identificador de la unidad administrativa solicitada.
 	 */
 	public void borrarUnidadAdministrativa(Long id) {
 
+		//TODO 26/08/2013: Internacionalizar textos.
 		Session session = getSession();
 
 		try {
-			UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, id);
-			if (ua.isRaiz()) {
+			
+			UnidadAdministrativa ua = (UnidadAdministrativa) session.load( UnidadAdministrativa.class, id );
+			
+			if ( ua.isRaiz() ) {
+				
 				throw new SecurityException("No puede eliminar una unidad raiz.");
+				
 			} else {
-				if (!getAccesoManager().tieneAccesoUnidad(ua.getPadre().getId(), true)) {
+				
+				if ( !getAccesoManager().tieneAccesoUnidad( ua.getPadre().getId(), true ) ) {
+					
 					throw new SecurityException("No tiene acceso al padre de la unidad");
+					
 				}
+				
 			}
 
-			Long padre_id = ua.getPadre().getId();  
-
+			Long idPadre = ua.getPadre().getId();  
 			session.update(ua);
 
-			UnidadAdministrativa uaPadre = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, padre_id);
-
+			UnidadAdministrativa uaPadre = (UnidadAdministrativa) session.load( UnidadAdministrativa.class, idPadre );
 			uaPadre.darDeBajaUA(ua);
 			ua.darDeBajaHijosUA(ua);
 
-			addOperacion(session, ua, Auditoria.BORRAR);
+			addOperacion( session, ua, Auditoria.BORRAR );
 			session.flush();
 
-			if(ua instanceof UnidadAdministrativaRemota){
-				AdministracionRemota admin = ((UnidadAdministrativaRemota)ua).getAdministracionRemota();
-				if(admin!=null)
-					admin.removeUnidadAdministrativaRemota((UnidadAdministrativaRemota)ua);
+			if ( ua instanceof UnidadAdministrativaRemota ) {
+				
+				AdministracionRemota admin = ( (UnidadAdministrativaRemota ) ua ).getAdministracionRemota();
+				if ( admin != null )
+					admin.removeUnidadAdministrativaRemota( (UnidadAdministrativaRemota) ua );
+				
 			}else{
+				
 				Actualizador.borrar(ua);
+				
 			}
 
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
 
 	}
@@ -1249,55 +1715,72 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 * Borra una unidad administrativa raiz.
 	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission role-name="${role.system},${role.admin}"
+	 * 
+	 * @param id	Identificador de la unidad administrativa
 	 */
 	public void borrarUnidadAdministrativaRaiz(Long id) {
+		
+		//TODO 26/08/2013: Internacionalizar textos.
 		Session session = getSession();
 
 		try {
-			if (!getAccesoManager().tieneAccesoUnidad(id, true)) {
+			
+			if ( !getAccesoManager().tieneAccesoUnidad( id, true ) ) {
+				
 				throw new SecurityException("No tiene acceso a la unidad");
+				
 			}
 
-			UnidadAdministrativa ua = (UnidadAdministrativa) session.load(
-					UnidadAdministrativa.class, id);
-			if (!ua.isRaiz()) {
-				throw new SecurityException(
-						"No puede eliminar una unidad que no sea raiz.");
+			UnidadAdministrativa ua = (UnidadAdministrativa) session.load( UnidadAdministrativa.class, id );
+			if ( !ua.isRaiz() ) {
+				
+				throw new SecurityException("No puede eliminar una unidad que no sea raiz.");
+				
 			}
 
-			addOperacion(session, ua, Auditoria.BORRAR);
-			Historico historico = getHistorico(session, ua);
-			((HistoricoUA) historico).setUa(null);
+			addOperacion( session, ua, Auditoria.BORRAR );
+			Historico historico = getHistorico( session, ua );
+			( (HistoricoUA) historico ).setUa(null);
 
 			ua.getEdificios().clear();
 			ua.getUsuarios().clear();
 			Usuario usuario = getUsuario(session);
 			usuario.getUnidadesAdministrativas().remove(ua);
-
 			List fichasUA = ua.getFichasUA();
-			for (Iterator iter = fichasUA.iterator(); iter.hasNext();) {
+			Iterator iter = fichasUA.iterator();
+			
+			while ( iter.hasNext() ) {
+				
 				FichaUA ficha = (FichaUA) iter.next();
-				if (ficha != null) {
+				if ( ficha != null ) {
+					
 					Seccion seccion = ficha.getSeccion();
 					seccion.removeFichaUA(ficha);
+					
 				}
+				
 			}
 
-			for (UnidadMateria uniMat : (Set<UnidadMateria>) ua
-					.getUnidadesMaterias()) {
+			Set<UnidadMateria> listaUnidadMateria = (Set<UnidadMateria>) ua.getUnidadesMaterias();
+			for ( UnidadMateria uniMat : listaUnidadMateria ) {
+				
 				uniMat.getMateria().removeUnidadMateria(uniMat);
 				session.delete(uniMat);
+				
 			}
 
-			if (ua instanceof UnidadAdministrativaRemota) {
-				AdministracionRemota admin = ((UnidadAdministrativaRemota) ua)
-						.getAdministracionRemota();
-				if (admin != null)
-					admin
-					.removeUnidadAdministrativaRemota((UnidadAdministrativaRemota) ua);
+			if ( ua instanceof UnidadAdministrativaRemota ) {
+				
+				AdministracionRemota admin = ( (UnidadAdministrativaRemota) ua ).getAdministracionRemota();
+				if ( admin != null )
+					admin.removeUnidadAdministrativaRemota( (UnidadAdministrativaRemota) ua );
+				
 			} else {
-				Actualizador.borrar(new UnidadAdministrativa(id));
+				
+				Actualizador.borrar( new UnidadAdministrativa(id) );
+				
 			}
 
 			session.delete(ua);
@@ -1305,19 +1788,31 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 			Query query = session.getNamedQuery("unidades.root");
 			List lista = query.list();
-			for (int i = 0; i < lista.size(); i++) {
+			for ( int i = 0 ; i < lista.size() ; i++ ) {
+				
 				UnidadAdministrativa uni = (UnidadAdministrativa) lista.get(i);
 				uni.setOrden(i);
+				
 			}
+			
 			session.flush();
+			
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
 
+	
+
 	/**
+	 *  @deprecated	No se usa
 	 * Obtiene una unidad administrativa por BusinessKey.
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
@@ -1341,8 +1836,11 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		}
 
 	}
+	
+	
 
 	/**
+	 * @deprecated	Se usa en el back antiguo.
 	 * Fija el BusinessKey de una Unidad Administrativa.
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin}"
@@ -1363,8 +1861,12 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			close(session);
 		}
 	}
+	
+	
 
+	
 	/**
+	 * @deprecated	Se usa en el back antiguo
 	 * Borrar el BusinessKey de una Unidad Administrativa.
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin}"
@@ -1395,9 +1897,13 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			close(session);
 		}
 	}
+	
+	
 
+	
 	/* Metode fet per el portal de salut, fet de na Marilen */
 	/**
+	 * @deprecated	No se usa.
 	 * carga el arbol de unidades Administrativas a partir de un id
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
@@ -1412,28 +1918,46 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			close(session);
 		}
 	}
-	/* Metode fet pel portal de salut, fet de na Marilen */
+	
+	
 	/**
-	 * Carga los identificadores de una unidad y de sus hijos de manera recursiva
+	 * Carga los identificadores de una unidad y de sus hijos de manera recursiva.
+	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission  unchecked="true"
+	 * 
+	 * @param id	Identificador de la unidad administrativa.
+	 * 
+	 * @return Devuelve <code>List<Long></code> con los identificadores de los hijos de la unidad administrativa solicitada.
 	 */
 	public List<Long> cargarArbolUnidadId(Long id) {
+		
 		Session sessio = getSession();
+		
 		try{
+			
 			List<Long> ids = new ArrayList<Long>();
 			ids.add(id);
-			cargarHijosUnidadId(id, ids, sessio);
+			cargarHijosUnidadId( id, ids, sessio );
+			
 			return ids;
+			
 		}catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(sessio);
+			
 		}
+		
 	}
-
+	
 
 	/**
+	 * @deprecated	No se usa
 	 * Lista las unidades Administrativas por Ambito(0:Autonomico, 1:Insular)(PORMAD)
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
@@ -1461,8 +1985,10 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			close(session);
 		}
 	}
+	
 
 	/**
+	 * @deprecated	No se usa.
 	 * Lista las unidades Administrativas por Ambito(0:Autonomico, 1:Insular)(PORMAD)
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
@@ -1500,9 +2026,10 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			close(session);
 		}
 	}
-
+	
 
 	/**
+	 *  @deprecated	No se usa
 	 * Lista las unidades Administrativas de un determiando espacio territorial (PORMAD)
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
@@ -1526,48 +2053,68 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		}
 	}
 
-
-
-
-
-
+	
 	/**
 	 * Busca todos los {@link UnidadAdministrativa} cuyo nombre contenga el String de entrada(PORMAD)
 	 *
-	 * @param busqueda
-	 * @param idioma
-	 * @return lista de {@link UnidadAdministrativa}
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param nombre	Indica el texto que se busca como nombre de unidades administrativas.
+	 * 
+	 * @param idioma	Indica el idioma en que se realiza la búsqueda.
+	 * 
+	 * @return lista de {@link UnidadAdministrativa}
 	 */
 	@SuppressWarnings("unchecked")
-	public List<UnidadAdministrativa> buscar(final String busqueda, final String idioma){
+	public List<UnidadAdministrativa> buscar(final String nombre, final String idioma) {
+		
 		List<UnidadAdministrativa> resultado;
-		if(busqueda!=null && !"".equals(busqueda.trim())){
+		if ( nombre != null && !"".equals( nombre.trim() ) ) {
+			
 			Session session = getSession();
+			
 			try {
-				Query query = session.createQuery("from UnidadAdministrativa as uni, uni.traducciones as trad " +
-						"                         where index(trad) = :idioma " +
-						"                           and upper(trad.nombre) like :busqueda" +
-						"                           and uni.validacion = :validacion" );
-				query.setString("idioma", idioma);
-				query.setString("busqueda", "%"+busqueda.trim().toUpperCase()+"%");
-				query.setInteger("validacion", Validacion.PUBLICA);
-				resultado = (List<UnidadAdministrativa>)query.list();
+				
+				Query query = session.createQuery(
+						"from UnidadAdministrativa as uni, " +
+						"	  uni.traducciones as trad " +
+								
+						"where index(trad) = :idioma " +
+						"	and upper(trad.nombre) like :busqueda" +
+						"	and uni.validacion = :validacion" );
+				
+				query.setString( "idioma", idioma );
+				query.setString( "busqueda", "%" + nombre.trim().toUpperCase() + "%" );
+				query.setInteger( "validacion", Validacion.PUBLICA );
+				
+				resultado = (List<UnidadAdministrativa>) query.list();
+				
 			} catch (HibernateException he) {
+				
 				throw new EJBException(he);
+				
 			} finally {
+				
 				close(session);
+				
 			}
-		}else{
+			
+		} else {
+			
 			resultado = Collections.emptyList();
+			
 		}
 
 		return resultado;
 	}
+	
+	
 
 
 	/**
+	 * @deprecated	No se usa
 	 * Obtiene la unidad asociada al espacio territorial y del tipo indicado(PORMAD).
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
@@ -1620,134 +2167,204 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			close(session);
 		}
 	}
+	
 
 	/**
 	 * Obtiene la unidad asociada al espacio territorial y del tipo indicado(PORMAD).
+	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
 	 *
-	 * @param idEspacio id del espacio territorial del que queremos obtener una determinada UA
-	 * @para tipo tipo de b�squeda que queremos generar (AJU - AYUNTAMIENTO, CONSELL -  CONSELLS INSULARS, GOV - GOVERN)
-	 * @para UAOpcionales. En el caso de tipo = CONSELL o GOV, puede haber m�ltipes UA para un determinado espacio territorial,
+	 * @param idEspacio	id del espacio territorial del que queremos obtener una determinada UA
+	 * 
+	 * @para tipo	tipo de búsqueda que queremos generar (AJU - AYUNTAMIENTO, CONSELL -  CONSELLS INSULARS, GOV - GOVERN)
+	 * 
+	 * @para UAOpcionales	En el caso de tipo = CONSELL o GOV, puede haber múltipes UA para un determinado espacio territorial,
 	 *                     en esta lista estan las opciones a filtrar.
-	 * @return la {@link UnidadAdministrativa} deseada
+	 *                     
+	 * @return Devuelve la {@link UnidadAdministrativa} deseada.
 	 */
 	@SuppressWarnings("unchecked")
 	public UnidadAdministrativa obtenerUnidadesAdministrativasArbreTerritorial(Long idEspacio, String tipo, List UAOpcionales) {
+		
+		//TODO 26/08/2013: Crear constantes para las cadenas de texto.
 		Session session = getSession();
+		
 		try {
+			
 			Query query = session.createQuery("");
-			if("AJU".equals(tipo)) {
+			
+			if( "AJU".equals(tipo) ) {
 
-				query = session.createQuery(" from UnidadAdministrativa as ua" +
+				query = session.createQuery(
+						" from UnidadAdministrativa as ua" +
+				
 						" where ua.espacioTerrit.id = :idEspacio" +
 						"   and ua.padre is null" +
 						"   and ua.validacion = :validacion");
 
-				query.setParameter("idEspacio", idEspacio);
-				query.setParameter("validacion", Validacion.PUBLICA);
+				query.setParameter( "idEspacio", idEspacio );
+				query.setParameter( "validacion", Validacion.PUBLICA );
 				query.setCacheable(true);
 
-			} else if("CONSELL".equals(tipo)) {
+			} else if ("CONSELL".equals(tipo) ) {
 
-				query = session.createQuery(" select ua " +
-						"   from UnidadAdministrativa as ua," +
-						"        EspacioTerritorial as espte" +
+				query = session.createQuery(
+						" select ua " +
+				
+						" from UnidadAdministrativa as ua," +
+						"      EspacioTerritorial as espte" +
+						
 						"  where espte.id = :idEspacio" +
 						"    and espte.padre.id = ua.espacioTerrit.id" +
 						"    and ua.padre is null" +
 						"    and ua.validacion = :validacion");
 
-				query.setParameter("idEspacio", idEspacio);
-				query.setParameter("validacion", Validacion.PUBLICA);
+				query.setParameter( "idEspacio", idEspacio );
+				query.setParameter( "validacion", Validacion.PUBLICA );
 				query.setCacheable(true);
-			} else if("GOV".equals(tipo)) {
+				
+			} else if ( "GOV".equals(tipo) ) {
 
-				query = session.createQuery(" select ua " +
-						"   from UnidadAdministrativa as ua, " +
-						"        EspacioTerritorial as espte " +
-						"  where espte.id = :idEspacio" +
-						"    and espte.padre.padre.id = ua.espacioTerrit.id" +
-						"    and ua.padre is null" +
-						"    and ua.validacion = :validacion");
-				query.setParameter("idEspacio", idEspacio);
-				query.setParameter("validacion", Validacion.PUBLICA);
+				query = session.createQuery(
+						" select ua " +
+						" from UnidadAdministrativa as ua, " +
+						"      EspacioTerritorial as espte " +
+						" where espte.id = :idEspacio" +
+						"   and espte.padre.padre.id = ua.espacioTerrit.id" +
+						"   and ua.padre is null" +
+						"   and ua.validacion = :validacion");
+				
+				query.setParameter( "idEspacio", idEspacio );
+				query.setParameter( "validacion", Validacion.PUBLICA );
 				query.setCacheable(true);
+				
 			}
 
-			if ("AJU".equals(tipo)) {
+			if ( "AJU".equals(tipo) ) {
+				
 				UnidadAdministrativa ua =  (UnidadAdministrativa) query.uniqueResult();
-				if (ua != null) {
+				if ( ua != null ) {
+					
 					Hibernate.initialize(ua.getUnidadesMaterias());
+					
 				}
+				
 				return  ua;
+				
 			} else {
+				
 				List unidadesAdministrativas = query.list();
+				
 				for (Iterator i = unidadesAdministrativas.iterator(); i.hasNext();) {
+					
 					UnidadAdministrativa ua = (UnidadAdministrativa) i.next();
 					if (ua.getCodigoEstandar() != null && ua.getCodigoEstandar().trim().length() != 0) {
-						for(Iterator j = UAOpcionales.iterator(); j.hasNext();) {
-							String codEstUA = (String) j.next();
-							if (ua.getCodigoEstandar().equals(codEstUA)) {
-								Hibernate.initialize(ua.getUnidadesMaterias());
+						
+						Iterator iteradorUAopcionales = UAOpcionales.iterator();
+						while ( iteradorUAopcionales.hasNext() ) {
+							
+							String codEstUA = (String) iteradorUAopcionales.next();
+							if ( ua.getCodigoEstandar().equals(codEstUA) ) {
+								
+								Hibernate.initialize( ua.getUnidadesMaterias() );
+								
 								return ua;
+								
 							}
+							
 						}
+						
 					}
+					
+					
 				}
 			}
+			
 			return null;
+			
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
 
 
 	/**
+	 * @deprecated	No se usa
 	 * Devuelve un {@link Map} que contiene 2 {@link List}, uno de {@link ProcedimientoLocal}
 	 * y el otro de {@link Ficha}, Relacionadas con el arbol de relaciones de una {@link UnidadAdministrativa},
 	 * una {@link Materia} y una {@link Seccion}.
 	 *
 	 * Los key del {@link Map} son los String "PROCEDIMIENTOS" y "FICHAS"  (PORMAD)
 	 *
-	 * @param idUA
-	 * @param idMat
-	 * @param ceSec
-	 * @return
-	 *
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param idUA	Identificador de la unidad adminsitrativa.
+	 * 
+	 * @param idMat	Identificador de la materia.
+	 * 
+	 * @param ceSec
+	 * 
+	 * @return Devuelve un {@link Map} que contiene 2 {@link List}, uno de {@link ProcedimientoLocal}
+	 * y el otro de {@link Ficha}, Relacionadas con el arbol de relaciones de una {@link UnidadAdministrativa},
+	 * una {@link Materia} y una {@link Seccion}.
 	 */
 	public Map<String,List<?>> listarProcFichSecMat(final Long idUA, final Long idMat, final String ceSec ){
+		
 		Map<String,List<?>> resultado = new HashMap<String,List<?>>();
-		if(idUA!=null && idMat!=null){
+		
+		if( idUA !=null && idMat != null ) {
+			
 			Session session = getSession();
+			
 			try {
+				
 				List<ProcedimientoLocal> procs =  new ArrayList<ProcedimientoLocal>();
 				List<Ficha> fichas = new ArrayList<Ficha>();
 
-				UnidadAdministrativa unidad = (UnidadAdministrativa)session.load(UnidadAdministrativa.class, idUA);
-				if (unidad instanceof UnidadAdministrativaRemota) {
+				UnidadAdministrativa unidad = (UnidadAdministrativa) session.load( UnidadAdministrativa.class, idUA );
+				if ( unidad instanceof UnidadAdministrativaRemota ) {
+					
 					UnidadAdministrativaRemota unidadRemota = (UnidadAdministrativaRemota) unidad;
-					listarProcFichSecMat(session, unidadRemota.getAdministracionRemota(), idMat, ceSec, procs, fichas);
+					listarProcFichSecMat( session, unidadRemota.getAdministracionRemota(), idMat, ceSec, procs, fichas );
+					
 				}else{
-					listarProcFichSecMatRecur(session, unidad, idMat, ceSec, procs, fichas);
+					
+					listarProcFichSecMatRecur( session, unidad, idMat, ceSec, procs, fichas );
 				}
-				resultado.put("PROCEDIMIENTOS", procs);
-				resultado.put("FICHAS", fichas);
+				
+				resultado.put( "PROCEDIMIENTOS", procs );
+				resultado.put( "FICHAS", fichas );
+				
 			} catch (HibernateException he) {
+				
 				throw new EJBException(he);
+				
 			} finally {
+				
 				close(session);
+				
 			}
+			
 		}else{
-			resultado.put("PROCEDIMIENTOS", Collections.emptyList());
-			resultado.put("FICHAS", Collections.emptyList());
+			
+			resultado.put( "PROCEDIMIENTOS", Collections.emptyList() );
+			resultado.put( "FICHAS", Collections.emptyList() );
+			
 		}
 
 		return resultado;
+		
 	}
 
 
@@ -1755,7 +2372,12 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 * Devuelve todas las {@link Seccion} relacionadas con una {@link UnidadAdministrativa}
 	 *
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param idUA	Identificador de la unidad admistrativa solicitada.
+	 * 
+	 * @return Devuelve <code>List<Seccion></code> de la unidad administrativa solicitada.
 	 */
 	public List<Seccion> listarSeccionesUA(final Long idUA) {
 
@@ -1769,8 +2391,14 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 				resultado = new ArrayList<Seccion>();
 
-				Query query = session.createQuery(" SELECT DISTINCT seccion FROM FichaUA AS fua, Seccion AS seccion " +
+				Query query = session.createQuery(
+						" SELECT DISTINCT seccion " +
+				
+						" FROM FichaUA AS fua, " +
+						"	   Seccion AS seccion " +
+						
 						" WHERE fua.seccion.id = seccion.id AND fua.unidadAdministrativa.id = :idUA ");
+				
 				query.setParameter("idUA", idUA);
 
 				resultado = query.list();
@@ -1782,7 +2410,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				while ( itSeccion.hasNext() ) {
 
 					Seccion seccion = itSeccion.next();
-					Hibernate.initialize(seccion.getHijos());
+					Hibernate.initialize( seccion.getHijos() );
 
 				}
 
@@ -1805,12 +2433,20 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		return resultado;
 
 	}
+	
 
 	/**
-	 * Devuelve el n��mero de {@link Ficha} relacionadas con una {@link UnidadAdministrativa} y una {@link Seccion}.
+	 * Devuelve el número de {@link Ficha} relacionadas con una {@link UnidadAdministrativa} y una {@link Seccion}.
 	 *
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param idUA Identificador de la unidad administrativa.
+	 * 
+	 * @param idSeccion	Identificador de la sección.
+	 * 
+	 * @return Devuelve el número de fichas relacionadas a una unidad administrativa y a una sección.
 	 */
 	public Long cuentaFichasSeccionUA(final Long idUA, final Long idSeccion) {
 
@@ -1822,12 +2458,18 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 			try {
 
-				Query query = session.createQuery(" SELECT COUNT(*) FROM FichaUA AS fua " +
-						" WHERE fua.unidadAdministrativa.id = :idUA AND fua.seccion.id = :idSeccion");
-				query.setParameter("idUA", idUA);
-				query.setParameter("idSeccion", idSeccion);
+				Query query = session.createQuery(
+						" SELECT COUNT(*) " +
+				
+						" FROM FichaUA AS fua " +
+						
+						" WHERE fua.unidadAdministrativa.id = :idUA " +
+						"	AND fua.seccion.id = :idSeccion");
+				
+				query.setParameter( "idUA", idUA );
+				query.setParameter( "idSeccion", idSeccion );
 
-				resultado = ((Integer)query.uniqueResult()).longValue();
+				resultado = ( (Integer) query.uniqueResult() ).longValue();
 
 			} catch (HibernateException he) {
 
@@ -1845,7 +2487,10 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 
 	}
+	
+	
 	/**
+	 *  @deprecated	Se usa desde el back antiguo
 	 * Devuelve un {@link Map} que contiene 2 {@link List}, uno de {@link ProcedimientoLocal}
 	 * y el otro de {@link Ficha}, Relacionadas con el arbol de relaciones de una {@link UnidadAdministrativa},
 	 * una {@link Materia} y una {@link Seccion}.
@@ -1891,7 +2536,9 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		return resultado;
 	}
 
+	
 	/**
+	 * @deprecated	No se usa.
 	 * Busca todos los {@link ProcedimientoLocal} que contengan la palabra de la busqueda que
 	 * esten relacionados con una {@link UnidadAdministrativa} (PORMAD)
 	 *
@@ -1927,6 +2574,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 
 	/**
+	 *  @deprecated	No se usa
 	 * Metodo que obtiene un bean con el filtro para la indexacion
 	 * 
 	 * @ejb.interface-method
@@ -2011,22 +2659,28 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 
 	/**
-	 * A�ade la ua al indice en todos los idiomas
+	 * Añade la unidad administrativa al índice en todos los idiomas
 	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param unidadAdministrativa	Indica la unidad administrativa que se va a añadir al índice en todos los idiomas.
 	 */
-	public void indexInsertaUA(UnidadAdministrativa ua,  ModelFilterObject filter)  {
+	public void indexInsertaUA(UnidadAdministrativa unidadAdministrativa,  ModelFilterObject filter)  {
 
+		//TODO 26/08/2013: Crear constantes para textos.
 		try {
 
-			if (filter==null) filter = obtenerFilterObject(ua);
+			if ( filter == null ) filter = obtenerFilterObject(unidadAdministrativa);
 
-			for (Iterator iterator = ua.getLangs().iterator(); iterator.hasNext();) {
+			Iterator iterator = unidadAdministrativa.getLangs().iterator();
+			while ( iterator.hasNext() ) {
+				
 				String idi = (String) iterator.next();
-				IndexObject io= new IndexObject();
+				IndexObject io = new IndexObject();
 
-				io.setId(Catalogo.SRVC_UO + "." + ua.getId());
+				io.setId( Catalogo.SRVC_UO + "." + unidadAdministrativa.getId() );
 				io.setClasificacion(Catalogo.SRVC_UO);
 
 				io.setMicro( filter.getMicrosite_id() ); 
@@ -2039,82 +2693,97 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				io.setPublicacion(""); 
 				io.setDescripcion("");
 
-				io.addTextLine(ua.getResponsable());
+				io.addTextLine( unidadAdministrativa.getResponsable() );
 
-				TraduccionUA trad=((TraduccionUA)ua.getTraduccion(idi));
-				if (trad!=null) {
+				TraduccionUA trad = ( (TraduccionUA) unidadAdministrativa.getTraduccion(idi) );
+				if ( trad != null ) {
 
-					io.setUrl("/govern/organigrama/area.do?coduo="+ua.getId()+"&lang="+idi);
-					io.setTituloserviciomain(filter.getTraduccion(idi).getMaintitle());
+					io.setUrl( "/govern/organigrama/area.do?coduo=" + unidadAdministrativa.getId() + "&lang=" + idi );
+					io.setTituloserviciomain( filter.getTraduccion(idi).getMaintitle() );
 
 
-					if (trad.getNombre()!=null) {
-						io.setTitulo(trad.getNombre());
+					if ( trad.getNombre() != null ) {
+						io.setTitulo( trad.getNombre() );
+						
 						//para dar mas peso al titulo
-						for (int i=0;i<5;i++) {
-							io.addTextLine(trad.getNombre());
+						for ( int i = 0 ; i < 5 ; i++ ) {
+							
+							io.addTextLine( trad.getNombre() );
+							
 						}
+						
 					}
 
-					if (trad.getPresentacion()!=null)  {
-						if (trad.getPresentacion().length()>200) io.setDescripcion(trad.getPresentacion().substring(0,199)+"...");
-						else io.setDescripcion(trad.getPresentacion());
+					if ( trad.getPresentacion() != null )  {
+						
+						if ( trad.getPresentacion().length() > 200 ) {
+							
+							io.setDescripcion( trad.getPresentacion().substring(0,199) + "..." );
+							
+						} else {
+							
+							io.setDescripcion( trad.getPresentacion() );
+							
+						}
+						
 					}
 
-					io.addTextopcionalLine(filter.getTraduccion(idi).getMateria_text());
-					io.addTextopcionalLine(filter.getTraduccion(idi).getSeccion_text());
-					io.addTextopcionalLine(filter.getTraduccion(idi).getUo_text());
-
+					io.addTextopcionalLine( filter.getTraduccion(idi).getMateria_text() );
+					io.addTextopcionalLine( filter.getTraduccion(idi).getSeccion_text() );
+					io.addTextopcionalLine( filter.getTraduccion(idi).getUo_text() );
 
 				}
 
-
-
-				if (io.getText().length()>0)
+				if ( io.getText().length() > 0 )
 					org.ibit.rol.sac.persistence.delegate.DelegateUtil.getIndexerDelegate().insertaObjeto(io, idi);
+				
 			}
-		}
-		catch (Exception ex) {
-			log.warn("[indexInsertaUA:" + ua.getId() + "] No se ha podido indexar UA. " + ex.getMessage());
+			
+		} catch (Exception ex) {
+			log.warn( "[indexInsertaUA:" + unidadAdministrativa.getId() + "] No se ha podido indexar UA. " + ex.getMessage() );
 		}
 
 	}
 
+	
 	/**
 	 * Elimina la ua en el indice en todos los idiomas
 	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de la unidad administrativa.
 	 */
 	public void indexBorraUA(Long id)  {
 
-
 		try {
 
-			List langs = DelegateUtil.getIdiomaDelegate().listarLenguajes();
-			for (int i = 0; i < langs.size(); i++) {
-				DelegateUtil.getIndexerDelegate().borrarObjeto(Catalogo.SRVC_UO + "." + id, ""+langs.get(i));
-			}
+				List langs = DelegateUtil.getIdiomaDelegate().listarLenguajes();
+				for ( int i = 0 ; i < langs.size() ; i++ )
+					DelegateUtil.getIndexerDelegate().borrarObjeto( Catalogo.SRVC_UO + "." + id, "" + langs.get(i) );
 
+		} catch (DelegateException ex) {
+			log.warn( "[indexBorraFicha:" + id + "] No se ha podido borrar del indice la ficha. " + ex.getMessage() );
 		}
-		catch (DelegateException ex) {
-			log.warn("[indexBorraFicha:" + id + "] No se ha podido borrar del indice la ficha. " + ex.getMessage());
-		}
-
 
 	}
 
 	/* ================================================ */
-	/* ==  M�TODOS PRIVADOS  ========================== */
+	/* ==  MÉTODOS PRIVADOS  ========================== */
 	/* ================================================ */
 
 	private int numUnidadesRaiz(Session session) throws HibernateException {
+		
 		Query query = session.getNamedQuery("unidades.root.count");
-		return ((Integer) query.list().get(0)).intValue();
+		
+		return ( (Integer) query.list().get(0) ).intValue();
+		
 	}
+	
 
 	/**
-	 * Construye el query de b�squeda segun los par�metros
+	 * Construye la consulta de búsqueda segun los parámetros
 	 */
 	private String populateQuery(Map parametros, Map traduccion, List params) {
 		String aux = "";
@@ -2178,8 +2847,9 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		return aux;
 	}
 
+	
 	/**
-	 * Construye el query de búsqueda multiidioma en todos los campos
+	 * Construye la consulta de búsqueda multiidioma en todos los campos
 	 */
 	private String i18nPopulateQuery(Map traducciones, List params) {
 		String aux = "";
@@ -2213,90 +2883,152 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		return aux;
 	}        
 
+	
 	/**
-	 * Carga las unidades hijas de una unidad de manera recursiva
+	 * Carga las unidades hijas de una unidad de manera recursiva.
+	 * 
+	 * @param id	Identificador de la unidad administrativa.
+	 * 
+	 * @param session	Sesión de hibernate.
+	 * 
+	 * @return Devuelve <code>UnidadAdministrativa</code>.
+	 * 
 	 * @throws HibernateException
 	 */
 	private UnidadAdministrativa cargarHijosUnidad(Long id, Session session) throws HibernateException {
-		UnidadAdministrativa unidad = (UnidadAdministrativa)session.load(UnidadAdministrativa.class, id);
-		Hibernate.initialize(unidad.getHijos());
+		
+		UnidadAdministrativa unidad = (UnidadAdministrativa) session.load( UnidadAdministrativa.class, id );
+		Hibernate.initialize( unidad.getHijos() );
 		List hijos = unidad.getHijos();
-		for(int i=0; i<hijos.size(); i++){
-			UnidadAdministrativa uni = (UnidadAdministrativa)hijos.get(i);
-			cargarHijosUnidad(uni.getId(), session);
+		
+		for( int i = 0 ; i < hijos.size() ; i++ ) {
+			
+			UnidadAdministrativa uni = (UnidadAdministrativa) hijos.get(i);
+			cargarHijosUnidad( uni.getId(), session );
+			
 		}
+		
 		return unidad;
+		
 	}
+	
 
 	/**
-	 * Carga todos los ids de las unidades hijas de una unidad de manera recursiva
+	 * Carga todos los ids de las unidades hijas de una unidad de manera recursiva.
+	 * 
+	 * @param id	Identificador de la unidad administrativa.
+	 * 
+	 * @param listaIdUAhijas	Lista con los identificadores de los hijos de una determinada unidad administrativa.
+	 * 
+	 * @param session	Sesión de hibernate.
+	 * 
 	 * @throws HibernateException
 	 */
-	private void cargarHijosUnidadId(Long id, List ids, Session session) throws HibernateException {
-		UnidadAdministrativa unidad = (UnidadAdministrativa)session.load(UnidadAdministrativa.class, id);
+	private void cargarHijosUnidadId(Long id, List listaIdUAhijas, Session session) throws HibernateException {
+		
+		UnidadAdministrativa unidad = (UnidadAdministrativa) session.load( UnidadAdministrativa.class, id );
 		List hijos = unidad.getHijos();
 
-		for(int i=0; i<hijos.size(); i++){
+		for( int i = 0 ; i < hijos.size() ; i++ ) {
 
-			UnidadAdministrativa uni = (UnidadAdministrativa)hijos.get(i);
-			if (uni != null) {
-				ids.add(uni.getId());
-				cargarHijosUnidadId(uni.getId(), ids, session);
+			UnidadAdministrativa uni = (UnidadAdministrativa) hijos.get(i);
+			if ( uni != null ) {
+				
+				listaIdUAhijas.add( uni.getId() );
+				cargarHijosUnidadId( uni.getId(), listaIdUAhijas, session );
+				
 			}
+			
 		}
 
 	}
 
+	
 	/**
-	 * Funcion recursiva que recorre todo el arbol de una {@link UnidadAdministrativa} rellenando
+	 * @deprecated Usado por un método que no se usa.
+	 * Método recursivo que recorre todo el árbol de una {@link UnidadAdministrativa} rellenando
 	 * un listado de {@link ProcedimientoLocal} asociados a las unidades una {@link Materia} y
 	 * rellenado un listado de {@link Ficha} asociadas a las unidades, a una {@link Materia} y al
 	 * CodigoEstandar de una {@link Seccion}  (PORMAD)
 	 *
-	 * @param session
-	 * @param unidad sobre la que recorrer su arbol de hijos
-	 * @param idMat,  Materia relacionada con las fichas y procedimientos
-	 * @param ceSec, CodigoEstandar de una {@link Seccion} relacionada con las Fichas
-	 * @param procs, Lista de {@link ProcedimientoLocal} a rellenar
-	 * @param fichas, Lista de {@link Ficha} a rellenar
+	 * @param session	Sesión de hinernate.
+	 * 
+	 * @param unidad 	Unidad administrativa sobre la que recorrer su árbol de hijos
+	 * 
+	 * @param idMat	Identificador de la materia relacionada con las fichas y procedimientos.
+	 * 
+	 * @param ceSec	CodigoEstandar de una {@link Seccion} relacionada con las Fichas.
+	 * 
+	 * @param listaProcedimientos Lista de {@link ProcedimientoLocal} a rellenar
+	 * 
+	 * @param listaFichas	Lista de {@link Ficha} a rellenar
+	 * 
 	 * @throws HibernateException
 	 */
 	@SuppressWarnings("unchecked")
-	private void listarProcFichSecMatRecur(Session session ,final UnidadAdministrativa unidad, final Long idMat, final String ceSec, final List<ProcedimientoLocal> procs, final List<Ficha> fichas) throws HibernateException{
-		//Navegacion por el arbol de hijos
-		for (UnidadAdministrativa hijo : unidad.getHijos()) {
-			Hibernate.initialize(hijo.getHijos());
-			if(hijo.getHijos()!=null){
-				listarProcFichSecMatRecur(session, hijo, idMat, ceSec, procs, fichas);
+	private void listarProcFichSecMatRecur(Session session ,final UnidadAdministrativa unidad, final Long idMat, final String ceSec, 
+			final List<ProcedimientoLocal> listaProcedimientos, final List<Ficha> listaFichas) throws HibernateException {
+		
+		//Navegacion por el árbol de hijos.
+		for ( UnidadAdministrativa hijo : unidad.getHijos() ) {
+			
+			Hibernate.initialize( hijo.getHijos() );
+			if( hijo.getHijos() != null ) {
+				
+				listarProcFichSecMatRecur( session, hijo, idMat, ceSec, listaProcedimientos, listaFichas );
+				
 			}
+			
 		}
 
-		//Query que retorna los procedimientos relacionados
-		Query query = session.createQuery("Select DISTINCT proc From ProcedimientoLocal as proc, Materia as mat " +
-				"where proc.unidadAdministrativa.id=:idUA AND ( proc.fechaCaducidad is null or proc.fechaCaducidad >= :fecha ) " +
-				"AND ( proc.fechaPublicacion is null or proc.fechaPublicacion < :fecha ) AND proc.validacion = :validacion " +
-				"AND mat.id=:idMat AND mat in elements(proc.materias) ");
-		query.setLong("idUA",  unidad.getId());
-		query.setLong("idMat", idMat);
-		query.setParameter("validacion", Validacion.PUBLICA);
-		query.setParameter("fecha", DateUtils.today());
-		procs.addAll(query.list());
+		//Consulta que devuelve los procedimientos relacionados.
+		Query query = session.createQuery(
+				"Select DISTINCT proc " +
+		
+				"From ProcedimientoLocal as proc, " +
+				"	  Materia as mat " +
+				
+				"Where proc.unidadAdministrativa.id = :idUA " +
+				"	AND ( proc.fechaCaducidad is null or proc.fechaCaducidad >= :fecha ) " +
+				"	AND ( proc.fechaPublicacion is null or proc.fechaPublicacion < :fecha ) " +
+				"	AND proc.validacion = :validacion " +
+				"	AND mat.id=:idMat AND mat in elements(proc.materias) ");
+		
+		query.setLong( "idUA",  unidad.getId() );
+		query.setLong( "idMat", idMat );
+		query.setParameter( "validacion", Validacion.PUBLICA );
+		query.setParameter( "fecha", DateUtils.today() );
+		
+		listaProcedimientos.addAll( query.list() );
 
-		//Query que retorna las fichas relacionadas
-		query = session.createQuery("Select DISTINCT f From FichaUA as fua, fua.ficha as f, Materia as mat " +
-				"where fua.unidadAdministrativa.id=:idUA " +
-				"AND fua.seccion.codigoEstandard=:ceSec AND f.validacion = :validacion " +
-				"AND ( f.fechaCaducidad is null or f.fechaCaducidad >= :fecha ) " +
-				"AND mat.id=:idMat AND mat in elements(f.materias) ");
-		query.setLong("idUA",  unidad.getId());
-		query.setLong("idMat", idMat);
-		query.setString("ceSec", ceSec);
-		query.setParameter("validacion", Validacion.PUBLICA);
-		query.setParameter("fecha", DateUtils.today());
-		fichas.addAll(query.list());
+		//Consulta que devuelve las fichas relacionadas.
+		query = session.createQuery(
+				"Select DISTINCT f " +
+		
+				"From FichaUA as fua," +
+				"	  fua.ficha as f, " +
+				"	  Materia as mat " +
+				
+				"Where fua.unidadAdministrativa.id = :idUA " +
+				"	AND fua.seccion.codigoEstandard = :ceSec " +
+				"	AND f.validacion = :validacion " +
+				"	AND ( f.fechaCaducidad is null or f.fechaCaducidad >= :fecha ) " +
+				"	AND mat.id = :idMat " +
+				"	AND mat in elements(f.materias) ");
+		
+		query.setLong( "idUA",  unidad.getId() );
+		query.setLong( "idMat", idMat );
+		query.setString( "ceSec", ceSec );
+		query.setParameter( "validacion", Validacion.PUBLICA );
+		query.setParameter( "fecha", DateUtils.today() );
+		
+		listaFichas.addAll( query.list() );
+		
 	}
 
+	
 	/**
+	 * @deprecated	No se usa
 	 * Rellena un listado de {@link ProcedimientoLocal} y {@link Ficha} relacionados con
 	 * una {@link AdministracionRemota}, una {@link Materia} y el codigo
 	 * estandar de una {@link Seccion}  (PORMAD)
@@ -2339,183 +3071,322 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 
 	/**
-	 * Funcion recursiva que recorre todo el arbol de una {@link UnidadAdministrativa} rellenando
+	 * @deprecated Usado por un método que no se usa.
+	 * Método recursivo que recorre todo el árbol de una {@link UnidadAdministrativa} rellenando
 	 * un listado de {@link ProcedimientoLocal} asociados a las unidades un {@link HechoVital} y
 	 * rellenado un listado de {@link Ficha} asociadas a las unidades, a un {@link HechoVital} y al
 	 * CodigoEstandar de una {@link Seccion} (PORMAD)
 	 *
-	 * @param session
-	 * @param unidad sobre la que recorrer su arbol de hijos
-	 * @param idHV,  HechoVital relacionada con las fichas y procedimientos
-	 * @param ceSec, CodigoEstandar de una {@link Seccion} relacionada con las Fichas
-	 * @param procs, Lista de {@link ProcedimientoLocal} a rellenar
-	 * @param fichas, Lista de {@link Ficha} a rellenar
+	 * @param session	Sesión de hibernate.
+	 * 
+	 * @param unidad	Unidad administrativa sobre la que recorrer su árbol de hijos.
+	 * 
+	 * @param idHechoVital	Identificador del HechoVital relacionado con las fichas y procedimientos.
+	 * 
+	 * @param codEstandar	CodigoEstandar de una {@link Seccion} relacionada con las Fichas.
+	 * 
+	 * @param listaProcedimientos	Lista de {@link ProcedimientoLocal} a rellenar.
+	 * 
+	 * @param listaFichas	Lista de {@link Ficha} a rellenar.
+	 * 
 	 * @throws HibernateException
 	 */
 	@SuppressWarnings("unchecked")
-	private void listarProcFichSecHVRecur(Session session ,final UnidadAdministrativa unidad, final Long idHV, final String ceSec, final List<ProcedimientoLocal> procs, final List<Ficha> fichas) throws HibernateException{
-		//Navegacion por el arbol de hijos
-		for (UnidadAdministrativa hijo : unidad.getHijos()) {
-			Hibernate.initialize(hijo.getHijos());
-			if(hijo.getHijos()!=null){
-				listarProcFichSecHVRecur(session, hijo, idHV, ceSec, procs, fichas);
-			}
+	private void listarProcFichSecHVRecur(Session session ,final UnidadAdministrativa unidad, final Long idHechoVital, final String codEstandar, 
+			final List<ProcedimientoLocal> listaProcedimientos, final List<Ficha> listaFichas) throws HibernateException {
+		
+		
+		//Navegacion por el árbol de hijos
+		for ( UnidadAdministrativa hijo : unidad.getHijos() ) {
+			
+			Hibernate.initialize( hijo.getHijos() );
+			if( hijo.getHijos() != null )				
+				listarProcFichSecHVRecur( session, hijo, idHechoVital, codEstandar, listaProcedimientos, listaFichas );
+			
 		}
 
+		
 		//Query que retorna los procedimientos relacionados
-		Query query = session.createQuery("Select DISTINCT proc From ProcedimientoLocal as proc, HechoVitalProcedimiento as hvproc, hvproc.hechoVital as hecho " +
-				"where proc.unidadAdministrativa.id=:idUA AND ( proc.fechaCaducidad is null or proc.fechaCaducidad >= :fecha ) " +
-				"AND ( proc.fechaPublicacion is null or proc.fechaPublicacion < :fecha ) AND proc.validacion = :validacion " +
-				"AND hecho.id=:idHV AND hvproc in elements(proc.hechosVitalesProcedimientos) ");
-		query.setLong("idUA",  unidad.getId());
-		query.setLong("idHV", idHV);
-		query.setParameter("validacion", Validacion.PUBLICA);
-		query.setParameter("fecha", DateUtils.today());
-		procs.addAll(query.list());
+		Query query = session.createQuery(
+				"Select DISTINCT proc " +
+		
+				"From ProcedimientoLocal as proc, " +
+				"	  HechoVitalProcedimiento as hvproc, " +
+				"	  hvproc.hechoVital as hecho " +
+				
+				"Where proc.unidadAdministrativa.id = :idUA " +
+				"	AND ( proc.fechaCaducidad is null or proc.fechaCaducidad >= :fecha ) " +
+				"	AND ( proc.fechaPublicacion is null or proc.fechaPublicacion < :fecha ) " +
+				"	AND proc.validacion = :validacion " +
+				"	AND hecho.id = :idHV " +
+				"	AND hvproc in elements(proc.hechosVitalesProcedimientos) ");
+		
+		query.setLong( "idUA",  unidad.getId() );
+		query.setLong( "idHV", idHechoVital );
+		query.setParameter( "validacion", Validacion.PUBLICA );
+		query.setParameter( "fecha", DateUtils.today() );
+		listaProcedimientos.addAll( query.list() );
+		
 
 		//Query que retorna las fichas relacionadas
-		query = session.createQuery("Select DISTINCT f From FichaUA as fua, fua.ficha as f, HechoVital as hecho " +
-				"where fua.unidadAdministrativa.id=:idUA " +
-				"AND fua.seccion.codigoEstandard=:ceSec AND f.validacion = :validacion " +
-				"AND ( f.fechaCaducidad is null or f.fechaCaducidad >= :fecha ) " +
-				"AND hecho.id=:idHV AND hecho in elements(f.hechosVitales) ");
-		query.setLong("idUA",  unidad.getId());
-		query.setLong("idHV", idHV);
-		query.setString("ceSec", ceSec);
-		query.setParameter("validacion", Validacion.PUBLICA);
-		query.setParameter("fecha", DateUtils.today());
-		fichas.addAll(query.list());
+		query = session.createQuery(
+				"Select DISTINCT f " +
+		
+				"From FichaUA as fua, " +
+				"	  fua.ficha as f, " +
+				"	  HechoVital as hecho " +
+				
+				"Where fua.unidadAdministrativa.id = :idUA " +
+				"	AND fua.seccion.codigoEstandard = :ceSec " +
+				"	AND f.validacion = :validacion " +
+				"	AND ( f.fechaCaducidad is null or f.fechaCaducidad >= :fecha ) " +
+				"	AND hecho.id = :idHV " +
+				"	AND hecho in elements(f.hechosVitales) ");
+		
+		query.setLong( "idUA",  unidad.getId() );
+		query.setLong( "idHV", idHechoVital );
+		query.setString( "ceSec", codEstandar );
+		query.setParameter( "validacion", Validacion.PUBLICA );
+		query.setParameter( "fecha", DateUtils.today() );
+		listaFichas.addAll( query.list() );
+		
 	}
+	
 
 	/**
+	 * @deprecated Usado por un método que no se usa.
 	 * Rellena un listado de {@link ProcedimientoLocal} y {@link Ficha} relacionados con
 	 * una {@link AdministracionRemota}, un {@link HechoVital} y el codigo
 	 * estandar de una {@link Seccion}  (PORMAD)
 	 *
-	 * @param session
-	 * @param admin AdministracionRemota
-	 * @param idHV,  HechoVital relacionada con las fichas y procedimientos
-	 * @param ceSec, CodigoEstandar de una {@link Seccion} relacionada con las Fichas
-	 * @param procs, Lista de {@link ProcedimientoLocal} a rellenar
-	 * @param fichas, Lista de {@link Ficha} a rellenar
+	 * @param session	Sesión de hibernate.
+	 * 
+	 * @param adminRemota	Indica una administración remota.
+	 * 
+	 * @param idHechoVital	HechoVital relacionada con las fichas y procedimientos.
+	 * 
+	 * @param codEstandar	CodigoEstandar de una {@link Seccion} relacionada con las Fichas.
+	 * 
+	 * @param listaProcedimientos	Lista de {@link ProcedimientoLocal} a rellenar.
+	 * 
+	 * @param listaFichas	Lista de {@link Ficha} a rellenar.
+	 * 
 	 * @throws HibernateException
 	 */
 	@SuppressWarnings("unchecked")
-	private void listarProcFichSecHV(Session session ,final AdministracionRemota admin, final Long idHV, final String ceSec, final List<ProcedimientoLocal> procs, final List<Ficha> fichas) throws HibernateException{
+	private void listarProcFichSecHV(Session session ,final AdministracionRemota adminRemota, final Long idHechoVital, final String codEstandar, 
+			final List<ProcedimientoLocal> listaProcedimientos, final List<Ficha> listaFichas) throws HibernateException{
 
+		
 		//Query que retorna los procedimientos relacionados
-		Query query = session.createQuery("Select DISTINCT proc From ProcedimientoRemoto as proc, HechoVitalProcedimiento as hvproc, hvproc.hechoVital as hecho " +
-				"where proc.administracionRemota.id=:idAdmin AND ( proc.fechaCaducidad is null or proc.fechaCaducidad >= :fecha ) " +
-				"AND ( proc.fechaPublicacion is null or proc.fechaPublicacion < :fecha ) AND proc.validacion = :validacion " +
-				"AND hecho.id=:idHV AND hvproc in elements(proc.hechosVitalesProcedimientos) ");
-		query.setLong("idAdmin",  admin.getId());
-		query.setLong("idHV", idHV);
-		query.setParameter("validacion", Validacion.PUBLICA);
-		query.setParameter("fecha", DateUtils.today());
-		procs.addAll(query.list());
+		Query query = session.createQuery(
+				"Select DISTINCT proc " +
+		
+				"From ProcedimientoRemoto as proc, " +
+				"	  HechoVitalProcedimiento as hvproc, " +
+				"	  hvproc.hechoVital as hecho " +
+				
+				"Where proc.administracionRemota.id = :idAdmin " +
+				"	AND ( proc.fechaCaducidad is null or proc.fechaCaducidad >= :fecha ) " +
+				"	AND ( proc.fechaPublicacion is null or proc.fechaPublicacion < :fecha ) " +
+				"	AND proc.validacion = :validacion " +
+				"	AND hecho.id = :idHV " +
+				"	AND hvproc in elements(proc.hechosVitalesProcedimientos) ");
+		
+		query.setLong( "idAdmin",  adminRemota.getId() );
+		query.setLong( "idHV", idHechoVital );
+		query.setParameter( "validacion", Validacion.PUBLICA );
+		query.setParameter( "fecha", DateUtils.today() );
+		listaProcedimientos.addAll( query.list() );
 
+		
 		//Query que retorna las fichas relacionadas
-		query = session.createQuery("Select DISTINCT f From FichaUA as fua, FichaRemota as f, HechoVital as hecho " +
-				"where f.administracionRemota.id=:idAdmin AND fua.ficha=f " +
-				"AND fua.seccion.codigoEstandard=:ceSec AND f.validacion = :validacion " +
-				"AND ( f.fechaCaducidad is null or f.fechaCaducidad >= :fecha ) " +
-				"AND hecho.id=:idHV AND hecho in elements(f.hechosVitales) ");
-		query.setLong("idAdmin",  admin.getId());
-		query.setLong("idHV", idHV);
-		query.setString("ceSec", ceSec);
-		query.setParameter("validacion", Validacion.PUBLICA);
-		query.setParameter("fecha", DateUtils.today());
-		fichas.addAll(query.list());
+		query = session.createQuery(
+				"Select DISTINCT f " +
+		
+				"From FichaUA as fua, " +
+				"	  FichaRemota as f, " +
+				"	  HechoVital as hecho " +
+				
+				"Where f.administracionRemota.id = :idAdmin " +
+				"	AND fua.ficha=f " +
+				"	AND fua.seccion.codigoEstandard = :ceSec " +
+				"	AND f.validacion = :validacion " +
+				"	AND ( f.fechaCaducidad is null or f.fechaCaducidad >= :fecha ) " +
+				"	AND hecho.id = :idHV " +
+				"	AND hecho in elements(f.hechosVitales) ");
+		
+		query.setLong( "idAdmin",  adminRemota.getId() );
+		query.setLong( "idHV", idHechoVital );
+		query.setString( "ceSec", codEstandar );
+		query.setParameter( "validacion", Validacion.PUBLICA );
+		query.setParameter( "fecha", DateUtils.today() );
+		
+		listaFichas.addAll(query.list());
+		
 	}
 
 
 	/**
-	 * Funcion recursiva que Busca {@link ProcedimientoLocal} relacionados con la busqueda que esten en
-	 * el arbol de una {@link UnidadAdministrativa} (PORMAD)
+	 * @deprecated Usado por un método que no se usa.
+	 * Método recursivo que Busca {@link ProcedimientoLocal} relacionados que están en
+	 * el árbol de una {@link UnidadAdministrativa} (PORMAD)
 	 *
+	 * @param session	Sesión de hibernate.
+	 * 
+	 * @param nombre	Nombre del procedimiento.
+	 * 
+	 * @param idioma	Indica el idioma en que se realiza la búsqueda.
+	 * 
+	 * @param fechaInicio	Fecha de inicio del procedimiento.
+	 * 
+	 * @param fechaFin	Fecha de finlaización de un procedimiento.
+	 * 
+	 * @param unidad	Indica una unidad administrativa relacionada al procedimiento buscado.
+	 * 
+	 * @param listaProcedimientos	Lista de procedimientos solicitados.
+	 * 
 	 * @throws HibernateException
 	 */
 	@SuppressWarnings("unchecked")
-	private void buscarProcedimientosUARecur(Session session, final String busqueda, final String idioma ,final Date dataInici, final Date dataFi,final UnidadAdministrativa unidad, final List<ProcedimientoLocal> procs) throws HibernateException{
-		System.out.println("1ejb unidad administrativa fecha Inicio: "+dataInici);
-		System.out.println("1ejb unidad administrativa fecha Fin: "+dataFi);
-		//Navegacion por el arbol de hijos
-		for (UnidadAdministrativa hijo : unidad.getHijos()) {
-			Hibernate.initialize(hijo.getHijos());
-			if(hijo.getHijos()!=null){
-				buscarProcedimientosUARecur(session, busqueda, idioma,dataInici, dataFi, hijo, procs);
-			}
+	private void buscarProcedimientosUARecur(Session session, final String nombre, final String idioma ,final Date fechaInicio, 
+			final Date fechaFin,final UnidadAdministrativa unidad, final List<ProcedimientoLocal> listaProcedimientos) throws HibernateException {
+		
+		//Navegación por el árbol de hijos
+		for ( UnidadAdministrativa hijo : unidad.getHijos() ) {
+			
+			Hibernate.initialize( hijo.getHijos() );
+			if ( hijo.getHijos() != null )
+				buscarProcedimientosUARecur( session, nombre, idioma, fechaInicio, fechaFin, hijo, listaProcedimientos );
+			
 		}
 
-		String sQuery="";
+		String sQuery = "";
+		
 		//Query que retorna los procedimientos relacionados
-		if(dataInici!=null && dataFi!=null ){
-			sQuery="Select DISTINCT proc From ProcedimientoLocal as proc, proc.traducciones as trad " +
-					"where proc.unidadAdministrativa.id=:idUA AND ( proc.fechaCaducidad is null or proc.fechaCaducidad >= :fecha ) " +
-					"AND ( proc.fechaPublicacion is null or proc.fechaPublicacion < :fecha ) AND (proc.fechaPublicacion between :dataInici and :dataFi) AND proc.validacion = :validacion " +
-					"AND index(trad) = :idioma and upper(trad.nombre) like :busqueda ";
-		}
-		else{
-			sQuery="Select DISTINCT proc From ProcedimientoLocal as proc, proc.traducciones as trad " +
-					"where proc.unidadAdministrativa.id=:idUA AND ( proc.fechaCaducidad is null or proc.fechaCaducidad >= :fecha ) " +
-					"AND ( proc.fechaPublicacion is null or proc.fechaPublicacion < :fecha ) AND proc.validacion = :validacion " +
-					"AND index(trad) = :idioma and upper(trad.nombre) like :busqueda ";
+		if ( fechaInicio != null && fechaFin != null ) {
+			
+			sQuery = "Select DISTINCT proc " +
+			
+					"From ProcedimientoLocal as proc, " +
+					"	  proc.traducciones as trad " +
+					
+					"Where proc.unidadAdministrativa.id = :idUA " +
+					"	AND ( proc.fechaCaducidad is null or proc.fechaCaducidad >= :fecha ) " +
+					"	AND ( proc.fechaPublicacion is null or proc.fechaPublicacion < :fecha ) " +
+					"	AND (proc.fechaPublicacion between :dataInici and :dataFi) " +
+					"	AND proc.validacion = :validacion " +
+					"	AND index(trad) = :idioma " +
+					"	AND upper(trad.nombre) like :busqueda ";
+		} else {
+			
+			sQuery = "Select DISTINCT proc " +
+			
+					"From ProcedimientoLocal as proc, " +
+					"	  proc.traducciones as trad " +
+					
+					"Where proc.unidadAdministrativa.id = :idUA " +
+					"	AND ( proc.fechaCaducidad is null or proc.fechaCaducidad >= :fecha ) " +
+					"	AND ( proc.fechaPublicacion is null or proc.fechaPublicacion < :fecha ) " +
+					"	AND proc.validacion = :validacion " +
+					"	AND index(trad) = :idioma " +
+					"	AND upper(trad.nombre) like :busqueda ";
 		}
 
 		Query query = session.createQuery(sQuery);
-		query.setLong("idUA",  unidad.getId());
-		query.setParameter("validacion", Validacion.PUBLICA);
-		query.setParameter("fecha", DateUtils.today());
-		query.setString("idioma", idioma);
-		if(dataInici!=null && dataFi!=null ){
-			query.setParameter("dataInici", null);
-			query.setParameter("dataFi", null);
+		query.setLong( "idUA",  unidad.getId() );
+		query.setParameter( "validacion", Validacion.PUBLICA );
+		query.setParameter( "fecha", DateUtils.today() );
+		query.setString( "idioma", idioma );
+		
+		if ( fechaInicio != null && fechaFin != null ) {
+			
+			query.setParameter( "dataInici", null );
+			query.setParameter( "dataFi", null );
+			
 		}
 
-		query.setString("busqueda", "%"+busqueda.trim().toUpperCase()+"%");
-		procs.addAll(query.list());
+		query.setString( "busqueda", "%" + nombre.trim().toUpperCase() + "%" );
+		listaProcedimientos.addAll( query.list() );
+		
 	}
+	
 
 	/**
+	 * @deprecated Usado por un método que no se usa.
 	 * Busca {@link ProcedimientoLocal} relacionados con la busqueda que esten en una
 	 * {@link AdministracionRemota} (PORMAD)
 	 *
+	 * @param session	Sesión de hibernate-
+	 * 
+	 * @param nombre	Nombre del procedimiento a buscar.	
+	 * 
+	 * @param idioma	Indica el idioma en que se realiza la búsqueda.
+	 * 
+	 * @param fechaInicio	Fecha de inicio del procedimiento.
+	 * 
+	 * @param fechaFin	Fecha de finalización del procedimiento.
+	 * 
+	 * @param adminRemoto	Indica la administración remota a la que pertenece el procedimiento
+	 * 
+	 * @param listaProcedimientos	Listado de procedimientos a rellenar.
+	 * 
 	 * @throws HibernateException
 	 */
 	@SuppressWarnings("unchecked")
-	private void buscarProcedimientosUA(Session session , final String busqueda, final String idioma,final Date dataInici,final Date dataFi, final AdministracionRemota admin, final List<ProcedimientoLocal> procs) throws HibernateException{
-		System.out.println("2ejb unidad administrativa fecha Inicio: "+dataInici);
-		System.out.println("2ejb unidad administrativa fecha Fin: "+dataFi);
-		String sQuery="";
-		if(dataInici!=null && dataFi!=null ){
-			sQuery="Select DISTINCT proc From ProcedimientoRemoto as proc, proc.traducciones as trad " +
-					"where proc.administracionRemota.id=:idAdmin AND ( proc.fechaCaducidad is null or proc.fechaCaducidad >= :fecha ) " +
-					"AND ( proc.fechaPublicacion is null or proc.fechaPublicacion < :fecha ) AND (proc.fechaPublicacion between :dataInici and :dataFi) AND proc.validacion = :validacion " +
-					"AND index(trad) = :idioma and upper(trad.nombre) like :busqueda ";
+	private void buscarProcedimientosUA(Session session , final String nombre, final String idioma, final Date fechaInicio, 
+			final Date fechaFin, final AdministracionRemota adminRemoto, final List<ProcedimientoLocal> listaProcedimientos) throws HibernateException {
+		
+		String sQuery = "";
+		if ( fechaInicio != null && fechaFin != null ) {
+			
+			sQuery = "Select DISTINCT proc " +
+			
+					"From ProcedimientoRemoto as proc, " +
+					"	  proc.traducciones as trad " +
+					
+					"Where proc.administracionRemota.id = :idAdmin " +
+					"	AND ( proc.fechaCaducidad is null or proc.fechaCaducidad >= :fecha ) " +
+					"	AND ( proc.fechaPublicacion is null or proc.fechaPublicacion < :fecha ) " +
+					"	AND ( proc.fechaPublicacion between :dataInici and :dataFi ) " +
+					"	AND proc.validacion = :validacion " +
+					"	AND index(trad) = :idioma and upper(trad.nombre) like :busqueda ";
+		} else {
+			
+			sQuery = "Select DISTINCT proc " +
+			
+					"From ProcedimientoRemoto as proc, " +
+					"	  proc.traducciones as trad " +
+					
+					"Where proc.administracionRemota.id = :idAdmin " +
+					"	AND ( proc.fechaCaducidad is null or proc.fechaCaducidad >= :fecha ) " +
+					"	AND ( proc.fechaPublicacion is null or proc.fechaPublicacion < :fecha ) " +
+					"	AND proc.validacion = :validacion " +
+					"	AND index(trad) = :idioma " +
+					"	AND upper(trad.nombre) like :busqueda ";
 		}
-		else{
-			sQuery="Select DISTINCT proc From ProcedimientoRemoto as proc, proc.traducciones as trad " +
-					"where proc.administracionRemota.id=:idAdmin AND ( proc.fechaCaducidad is null or proc.fechaCaducidad >= :fecha ) " +
-					"AND ( proc.fechaPublicacion is null or proc.fechaPublicacion < :fecha ) AND proc.validacion = :validacion " +
-					"AND index(trad) = :idioma and upper(trad.nombre) like :busqueda ";
-		}
-
 
 		Query query = session.createQuery(sQuery);
-		query.setLong("idAdmin",  admin.getId());
-		query.setParameter("validacion", Validacion.PUBLICA);
-		query.setParameter("fecha", DateUtils.today());
-		query.setString("idioma", idioma);
-		if(dataInici!=null && dataFi!=null ){
-			query.setParameter("dataInici", dataInici);
-			query.setParameter("dataFi", dataFi);
+		query.setLong( "idAdmin",  adminRemoto.getId() );
+		query.setParameter( "validacion", Validacion.PUBLICA );
+		query.setParameter( "fecha", DateUtils.today() );
+		query.setString( "idioma", idioma );
+		
+		if ( fechaInicio != null && fechaFin != null ) {
+			
+			query.setParameter( "dataInici", fechaInicio );
+			query.setParameter( "dataFi", fechaFin );
+			
 		}
 
-		query.setString("busqueda", "%"+busqueda.trim().toUpperCase()+"%");
-		procs.addAll(query.list());
+		query.setString( "busqueda", "%" + nombre.trim().toUpperCase() + "%" );
+		listaProcedimientos.addAll( query.list() );
+		
 	}
 
+	
 	/**
+	 * @deprecated No se usa
 	 * Busca todos los {@link FichaLocal} que contengan la palabra de la
 	 * busqueda que esten relacionados con una {@link UnidadAdministrativa}
 	 * (PORMAD)
@@ -2525,49 +3396,81 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 */
 	public Set<Ficha> buscarFichasUA(final String busqueda,
 			final String idioma, final Date dataInici, final Date dataFi) {
+		
 		Set<Ficha> resultado;
-		if (busqueda != null && !"".equals(busqueda.trim())) {
+		if ( busqueda != null && !"".equals( busqueda.trim() ) ) {
+			
 			Session session = getSession();
+			
 			try {
+				
 				resultado = new HashSet<Ficha>();
-
 				String sQuery = "";
-				if (dataInici != null && dataFi != null) {
-					sQuery = "Select DISTINCT fic From Ficha as fic, fic.traducciones as trad "
-							+ "where ( fic.fechaCaducidad is null or fic.fechaCaducidad >= :fecha ) "
-							+ "AND ( fic.fechaPublicacion is null or fic.fechaPublicacion < :fecha ) AND (fic.fechaPublicacion between :dataInici and :dataFi) AND fic.validacion = :validacion "
-							+ "AND index(trad) = :idioma and upper(trad.titulo) like :busqueda ";
+				
+				if ( dataInici != null && dataFi != null ) {
+					
+					sQuery = "Select DISTINCT fic " +
+					
+							" From Ficha as fic, " +
+							"	   fic.traducciones as trad " +
+							
+							" Where ( fic.fechaCaducidad is null OR fic.fechaCaducidad >= :fecha ) " +
+							"	AND ( fic.fechaPublicacion is null OR fic.fechaPublicacion < :fecha ) " +
+							"	AND ( fic.fechaPublicacion between :dataInici AND :dataFi ) " +
+							"	AND fic.validacion = :validacion " +
+							"	AND index(trad) = :idioma " +
+							"	AND upper(trad.titulo) like :busqueda ";
+					
 				} else {
-					sQuery = "Select DISTINCT fic From Ficha as fic, fic.traducciones as trad "
-							+ "where ( fic.fechaCaducidad is null or fic.fechaCaducidad >= :fecha ) "
-							+ "AND ( fic.fechaPublicacion is null or fic.fechaPublicacion < :fecha ) AND fic.validacion = :validacion "
-							+ "AND index(trad) = :idioma and upper(trad.titulo) like :busqueda ";
+					
+					sQuery = "Select DISTINCT fic " +
+					
+							" From Ficha as fic, " +
+							"	   fic.traducciones as trad " +
+							
+							" Where ( fic.fechaCaducidad is null OR fic.fechaCaducidad >= :fecha ) " +
+							"	AND ( fic.fechaPublicacion is null OR fic.fechaPublicacion < :fecha ) " +
+							"	AND fic.validacion = :validacion " +
+							"	AND index(trad) = :idioma " +
+							"	AND upper(trad.titulo) like :busqueda ";
+					
 				}
 
 				Query query = session.createQuery(sQuery);
-				query.setParameter("validacion", Validacion.PUBLICA);
-				query.setParameter("fecha", DateUtils.today());
-				query.setString("idioma", idioma);
-				if (dataInici != null && dataFi != null) {
-					query.setParameter("dataInici", dataInici);
-					query.setParameter("dataFi", dataFi);
+				query.setParameter( "validacion", Validacion.PUBLICA );
+				query.setParameter( "fecha", DateUtils.today() );
+				query.setString( "idioma", idioma );
+				
+				if ( dataInici != null && dataFi != null ) {
+					
+					query.setParameter( "dataInici", dataInici );
+					query.setParameter( "dataFi", dataFi );
+					
 				}
 
-				query.setString("busqueda", "%" + busqueda.trim().toUpperCase()
-						+ "%");
-				resultado.addAll(query.list());
+				query.setString( "busqueda", "%" + busqueda.trim().toUpperCase() + "%" );
+				resultado.addAll( query.list() );
 
 			} catch (HibernateException he) {
+				
 				throw new EJBException(he);
+				
 			} finally {
+				
 				close(session);
+				
 			}
+			
 		} else {
+			
 			resultado = Collections.emptySet();
+			
 		}
 
 		return resultado;
+		
 	}
+	
 
 	/**
 	 * MODIFICACIONS MARILEN PER ADAPTAR EL PORINF FA2
@@ -2576,6 +3479,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	/*********FICHASMATERIA*********/
 
 	/**
+	 * @deprecated	No se usa
 	 * Rellena un listado {@link Ficha} relacionados con
 	 * una {@link AdministracionRemota}, una {@link Materia} y el codigo
 	 * estandar de una {@link Seccion}  (PORINF)
@@ -2608,12 +3512,15 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	/**
 	 * Devuelve un {@link List} de {@link FichaUA}, relacionadas con una {@link UnidadAdministrativa} y una {@link Seccion}.
 	 *
-	 * @param idUA
-	 * @param idSeccion
-	 * @return
-	 *
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param	idUA	Identificador de la unidad administrativa solicitada.
+	 * 
+	 * @param	idSeccion	Identificador de la sección solicitada.
+	 * 
+	 * @return	Devuelve <code>List<FichaResumenUA></code> relacionadas con una unidad administrativa y una sección.
 	 */
 	public List<FichaResumenUA> listarFichasSeccionUA(final Long idUA, final Long idSeccion) {
 
@@ -2622,14 +3529,23 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		if ( idUA != null && idSeccion != null ) {
 
 			Session session = getSession();
-
+			
 			try {
-
-				fichas = (List<FichaResumenUA>)session.createQuery("FROM FichaResumenUA AS fichaUA " +
-						"WHERE fichaUA.idUa = :idUA AND fichaUA.idSeccio = :idSeccion ORDER BY fichaUA.orden")
-						.setParameter("idUA", idUA)
-						.setParameter("idSeccion", idSeccion)
-						.list();
+				
+				Query query = session.createQuery(
+						
+						"FROM FichaResumenUA AS fichaUA " +
+								
+						"WHERE fichaUA.idUa = :idUA " +
+						
+						"	AND fichaUA.idSeccio = :idSeccion " +
+						
+						"ORDER BY fichaUA.orden");
+				
+				query.setParameter( "idUA", idUA );
+				query.setParameter( "idSeccion", idSeccion );
+				
+				fichas = (List<FichaResumenUA>) query.list();
 
 			} catch (HibernateException he) {
 
@@ -2652,8 +3568,8 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	}
 
 
-
 	/**
+	 * @deprecated	No se usa
 	 * Devuelve un {@link List} de {@link Ficha}, Relacionadas con el arbol de relaciones de una {@link UnidadAdministrativa},
 	 * una {@link Materia} y una {@link Seccion}.
 	 *
@@ -2694,6 +3610,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 
 	/**
+	 * @deprecated Usado únicamente por un método que no se usa.
 	 * Funcion recursiva que recorre todo el arbol de una {@link UnidadAdministrativa} rellenando
 	 * listado de {@link Ficha} asociadas a las unidades, a una {@link Materia} y al
 	 * CodigoEstandar de una {@link Seccion}  (PORMAD)
@@ -2735,6 +3652,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 
 	/**
+	 *  @deprecated	No se usa
 	 * Devuelve un {@link List} de {@link ProcedimientoLocal}
 	 * Relacionados con el arbol de relaciones de una {@link UnidadAdministrativa},
 	 * una {@link Materia} y una {@link Seccion}.
@@ -2770,71 +3688,109 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		return procs;
 	}
 
+	
 	/**
-	 * Funcion recursiva que recorre todo el arbol de una {@link UnidadAdministrativa} rellenando
+	 * @deprecated Usado por un método que no se usa.
+	 * Método recursivo que recorre todo el árbol de una {@link UnidadAdministrativa} rellenando
 	 * un listado de {@link ProcedimientoLocal} asociados a las unidades una {@link Materia} y al
 	 * CodigoEstandar de una {@link Seccion}  (PORMAD)
 	 *
-	 * @param session
-	 * @param unidad sobre la que recorrer su arbol de hijos
-	 * @param idMat,  Materia relacionada con las fichas y procedimientos
-	 * @param procs, Lista de {@link ProcedimientoLocal} a rellenar
+	 * @param session	Sesión de hibernate.
+	 * 
+	 * @param unidad 	Indica la unidad administrativa sobre la que recorrer su árbol de hijos.
+	 * 
+	 * @param idMateria	Identificador de la materia relacionada con las fichas y procedimientos.
+	 * 
+	 * @param listaProcedimientos	Lista de {@link ProcedimientoLocal} a rellenar.
+	 * 
 	 * @throws HibernateException
 	 */
 	@SuppressWarnings("unchecked")
-	private void listarProcMatRecur(Session session ,final UnidadAdministrativa unidad, final Long idMat, final String[] codMat, final List<ProcedimientoLocal> procs, boolean include,boolean caducados) throws HibernateException{
-		//Navegacion por el arbol de hijos
-		for (UnidadAdministrativa hijo : unidad.getHijos()) {
-			Hibernate.initialize(hijo.getHijos());
-			if(hijo.getHijos()!=null){
-				listarProcMatRecur(session, hijo, idMat, codMat, procs, include,caducados);
+	private void listarProcMatRecur(Session session ,final UnidadAdministrativa unidad, final Long idMateria, final String[] codMat, 
+			final List<ProcedimientoLocal> listaProcedimientos, boolean include, boolean caducados) throws HibernateException {
+		
+		//Navegación por el árbol de hijos
+		for ( UnidadAdministrativa hijo : unidad.getHijos() ) {
+			
+			Hibernate.initialize( hijo.getHijos() );
+			if ( hijo.getHijos() != null ) {
+				
+				listarProcMatRecur( session, hijo, idMateria, codMat, listaProcedimientos, include, caducados );
+				
 			}
+			
 		}
+		
+		StringBuilder consulta = new StringBuilder("Select DISTINCT proc");
+		
+		consulta.append(" From ProcedimientoLocal as proc, Materia as mat ");
+		consulta.append(" Where proc.unidadAdministrativa.id = :idUA ");
+		
+		if ( !caducados )
+			consulta.append(" AND ( proc.fechaCaducidad is null OR proc.fechaCaducidad >= :fecha ) ");
+		
+		consulta.append(" AND ( proc.fechaPublicacion is null or proc.fechaPublicacion < :fecha ) ");
+		consulta.append(" AND proc.validacion = :validacion ");
+		consulta.append(" AND mat.id = :idMat AND mat in elements(proc.materias) ");
+		consulta.append( ( include ? "AND exists" : "AND not exists") );
+		consulta.append(" ( select m from proc.materias m where m.codigoEstandar in (:codigos) ) ");
+			
+			
 
 		//Query que retorna los procedimientos relacionados
-		Query query = session.createQuery("Select DISTINCT proc From ProcedimientoLocal as proc, Materia as mat " +
-				"where proc.unidadAdministrativa.id=:idUA " +
-				(!caducados ? "AND ( proc.fechaCaducidad is null or proc.fechaCaducidad >= :fecha ) " : "") +
-				"AND ( proc.fechaPublicacion is null or proc.fechaPublicacion < :fecha ) AND proc.validacion = :validacion " +
-				"AND mat.id=:idMat AND mat in elements(proc.materias) "+
-				" and " + (include?"exists":"not exists") + " (select m from proc.materias m where m.codigoEstandar in (:codigos)) ");
-		query.setLong("idUA",  unidad.getId());
-		query.setLong("idMat", idMat);
-		query.setParameter("validacion", Validacion.PUBLICA);
-		query.setParameter("fecha", DateUtils.today());
-		query.setParameterList("codigos", codMat);
-		procs.addAll(query.list());		
+		Query query = session.createQuery( consulta.toString() );
+		query.setLong( "idUA",  unidad.getId() );
+		query.setLong( "idMat", idMateria );
+		query.setParameter( "validacion", Validacion.PUBLICA );
+		query.setParameter( "fecha", DateUtils.today() );
+		query.setParameterList( "codigos", codMat );
+		listaProcedimientos.addAll( query.list() );		
+		
 	}
 
 
 	/**
+	 * @deprecated Usado por un método que no se usa.
 	 * Rellena un listado de {@link ProcedimientoLocal} relacionados con
 	 * una {@link AdministracionRemota}, una {@link Materia} y el codigo
 	 * estandar de una {@link Seccion}  (PORMAD)
 	 *
-	 * @param session
-	 * @param admin AdministracionRemota sobre la que buscar
-	 * @param idMat,  Materia relacionada con las fichas y procedimientos
+	 * @param session	Sesión de hibernate.
+	 * 
+	 * @param admin	Indica la AdministracionRemota sobre la que buscar.
+	 * 
+	 * @param idMateria	Identificador de la materia relacionada con las fichas y procedimientos.
 
-	 * @param procs, Lista de {@link ProcedimientoLocal} a rellenar
+	 * @param listaProcedimientos	Lista de {@link ProcedimientoLocal} a rellenar.
+	 * 
 	 * @throws HibernateException
 	 */
 	@SuppressWarnings("unchecked")
-	private void listarProcMat(Session session ,final AdministracionRemota admin, final Long idMat,final String[] codMat, final List<ProcedimientoLocal> procs, boolean include,boolean caducados) throws HibernateException{
+	private void listarProcMat(Session session, final AdministracionRemota admin, final Long idMat, final String[] codMat, 
+			final List<ProcedimientoLocal> procs, boolean include,boolean caducados) throws HibernateException {
 
-		//Query que retorna los procedimientos relacionados
-		Query query = session.createQuery("Select DISTINCT proc From ProcedimientoRemoto as proc, Materia as mat " +
-				"where proc.administracionRemota.id=:idAdmin " +
-				(!caducados ? "AND ( proc.fechaCaducidad is null or proc.fechaCaducidad >= :fecha ) " : "") +
-				"AND ( proc.fechaPublicacion is null or proc.fechaPublicacion < :fecha ) AND proc.validacion = :validacion " +
-				"AND mat.id=:idMat AND mat in elements(proc.materias) "+
-				" and " + (include?"exists":"not exists") + " (select m from proc.materias m where m.codigoEstandar in (:codigos)) ");
-		query.setLong("idAdmin",  admin.getId());
-		query.setLong("idMat", idMat);
-		query.setParameter("validacion", Validacion.PUBLICA);
-		query.setParameter("fecha", DateUtils.today());
-		query.setParameterList("codigos", codMat);
-		procs.addAll(query.list());
+		StringBuilder consulta = new StringBuilder(" Select DISTINCT proc ");
+		consulta.append(" From ProcedimientoRemoto as proc, Materia as mat ");
+		consulta.append(" Where proc.administracionRemota.id = :idAdmin ");
+		
+		if ( !caducados )
+			consulta.append(" AND ( proc.fechaCaducidad is null or proc.fechaCaducidad >= :fecha ) ");
+		
+		consulta.append(" AND ( proc.fechaPublicacion is null or proc.fechaPublicacion < :fecha ) "); 
+		consulta.append(" AND proc.validacion = :validacion ");
+		consulta.append( ( include ? " AND exists" : "AND not exists " ) );
+		consulta.append(" ( select m from proc.materias m where m.codigoEstandar in (:codigos) ) ");
+		
+		
+		Query query = session.createQuery( consulta.toString() );
+		query.setLong( "idAdmin",  admin.getId() );
+		query.setLong( "idMat", idMat );
+		query.setParameter( "validacion", Validacion.PUBLICA );
+		query.setParameter( "fecha", DateUtils.today() );
+		query.setParameterList( "codigos", codMat );
+		
+		procs.addAll( query.list() );
+		
 	}
 
 
@@ -2842,6 +3798,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 
 	/**
+	 * @deprecated	No se usa
 	 * Devuelve un {@link List}  de {@link Ficha}, Relacionadas con el arbol de relaciones de una {@link UnidadAdministrativa},
 	 * un {@link HechoVital} y una {@link Seccion}.
 	 *
@@ -2881,12 +3838,15 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 	}
 
+	
 	/**
+	 * @deprecated Usado por un método que no se usa.
 	 * Rellena un listado {@link Ficha} relacionados con
 	 * una {@link AdministracionRemota}, un {@link HechoVital} y el codigo
 	 * estandar de una {@link Seccion}  (PORMAD)
 	 *
-	 * @param session
+	 * @param session	Sesión de hibernate.
+	 * 
 	 * @param admin AdministracionRemota
 	 * @param idHV,  HechoVital relacionada con las fichas y procedimientos
 	 * @param ceSec, CodigoEstandar de una {@link Seccion} relacionada con las Fichas
@@ -2897,22 +3857,28 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	private void listarFichSecHV(Session session ,final AdministracionRemota admin, final Long idHV, final String ceSec, final List<Ficha> fichas,boolean caducados) throws HibernateException{
 
 
+		
 		//Query que retorna las fichas relacionadas
 		Query query = session.createQuery("Select DISTINCT f From FichaUA as fua, FichaRemota as f, HechoVital as hecho " +
 				"where f.administracionRemota.id=:idAdmin AND fua.ficha=f " +
 				"AND fua.seccion.codigoEstandard=:ceSec AND f.validacion = :validacion " +
 				(!caducados ? "AND ( f.fechaCaducidad is null or f.fechaCaducidad >= :fecha ) " : "") +
 				"AND hecho.id=:idHV AND hecho in elements(f.hechosVitales) ");
-		query.setLong("idAdmin",  admin.getId());
-		query.setLong("idHV", idHV);
-		query.setString("ceSec", ceSec);
-		query.setParameter("validacion", Validacion.PUBLICA);
-		if(!caducados){query.setParameter("fecha", DateUtils.today());}
-		fichas.addAll(query.list());
+		
+		query.setLong( "idAdmin",  admin.getId() );
+		query.setLong( "idHV", idHV );
+		query.setString( "ceSec", ceSec );
+		query.setParameter( "validacion", Validacion.PUBLICA );
+		if (!caducados) 
+			query.setParameter( "fecha", DateUtils.today() );
+		
+		fichas.addAll( query.list() );
+		
 	}
 
 
 	/**
+	 * @deprecated Usado por un método que no se usa.
 	 * Funcion recursiva que recorre todo el arbol de una {@link UnidadAdministrativa} rellenando
 	 * un listado de {@link Ficha} asociadas a las unidades, a un {@link HechoVital} y al
 	 * CodigoEstandar de una {@link Seccion} (PORMAD)
@@ -2955,6 +3921,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	/***PROCEDIMIENTOSHECHOSVITALES ***/
 
 	/**
+	 * @deprecated	No se usa
 	 * Devuelve un {@link List} de {@link Ficha}, Relacionadas con el arbol de relaciones de una {@link UnidadAdministrativa},
 	 * una {@link HechoVital} y una {@link Seccion}.
 	 *
@@ -2996,6 +3963,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	}
 
 	/**
+	 * @deprecated	Usado por un método que no se usa.
 	 * Rellena un listado de {@link ProcedimientoLocal} relacionados con
 	 * una {@link AdministracionRemota}, un {@link HechoVital} y el codigo
 	 * estandar de una {@link Seccion}  (PORMAD)
@@ -3027,6 +3995,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 
 	/**
+	 * @deprecated Usado por un método que no se usa.
 	 * Funcion recursiva que recorre todo el arbol de una {@link UnidadAdministrativa} rellenando
 	 * un listado de {@link ProcedimientoLocal} asociados a las unidades un {@link HechoVital} a un {@link HechoVital} y al
 	 * CodigoEstandar de una {@link Seccion} (PORMAD)
@@ -3064,6 +4033,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 
 	/**
+	 * @deprecated	No se usa.
 	 * Compone la miga de pan de la unidad administrativa
 	 * @param idua
 	 * @param idioma 
@@ -3097,80 +4067,90 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 	/**
 	 * Compone la miga de pan de la unidad administrativa para el sacback2
-	 * @return String 
 	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param idUA	Identificador de la unidad administrativa.
+	 * 
+	 * @param idioma Indica el idioma en que se realiza la búsqueda.
+	 * 
+	 * @param url	Indica la url de la miga de pan.
+	 * 
+	 * @param uaIdPlaceholder	??
+	 * 
+	 * @return Devuelve una cadena de texto con la miga de pan.
 	 */
-	public StringBuffer getUaMollaBack2(Long idua, String idioma, String url, String uaIdPlaceholder) {
+	public StringBuffer getUaMollaBack2(Long idUA, String idioma, String url, String uaIdPlaceholder) {
 
-		StringBuffer mollapa = new StringBuffer(" ");
+		//TODO 30/08/2013: Internacionalizar textos.
+		StringBuffer migaPan = new StringBuffer(" ");
 
 		try {
 
-			UnidadAdministrativa uniadm = obtenerUnidadAdministrativa(idua);
-			boolean tieneAcceso = getAccesoManager().tieneAccesoUnidad(uniadm.getId(), false);
+			UnidadAdministrativa uniadm = obtenerUnidadAdministrativa(idUA);
+			boolean tieneAcceso = getAccesoManager().tieneAccesoUnidad( uniadm.getId(), false );
 
 			while ( uniadm != null && tieneAcceso ) {
 
-				StringBuffer uaSbuf = new StringBuffer( ((TraduccionUA)uniadm.getTraduccion(idioma)).getNombre() );
+				StringBuffer uaSbuf = new StringBuffer( ( (TraduccionUA) uniadm.getTraduccion(idioma) ).getNombre() );
 				Cadenas.initAllTab(uaSbuf); //primera letra en mayusculas
 
-				String uaTexto = Cadenas.initTab(uaSbuf.toString()); // articulos a minusculas
-				String uaURL  = url.replaceFirst(uaIdPlaceholder, uniadm.getId().toString());
+				String uaTexto = Cadenas.initTab( uaSbuf.toString() ); // articulos a minusculas
+				String uaURL  = url.replaceFirst( uaIdPlaceholder, uniadm.getId().toString() );
 
-				StringBuffer mollaUA = new StringBuffer("<li class=\"ua");
+				StringBuffer migaPanUA = new StringBuffer("<li class=\"ua");
 
-				if (idua.equals(uniadm.getId())) {
-					mollaUA.append(" seleccionat");
-				}
+				if ( idUA.equals( uniadm.getId() ) )
+					migaPanUA.append(" seleccionat");
 
 				// Obtenemos todos los padres de la jerarquía.
-				List padres = listarPadresUnidadAdministrativa(uniadm.getId());
+				List padres = listarPadresUnidadAdministrativa( uniadm.getId() );
 				String padreUAId = "";
 
-				if (padres.size() > 1) {
+				if ( padres.size() > 1 ) {
 					// El penúltimo elemento es el padre directo de la UA
-					UnidadAdministrativa padre = (UnidadAdministrativa)padres.get( padres.size() - 2 );
-					padreUAId = Long.toString(padre.getId());
+					UnidadAdministrativa padre = (UnidadAdministrativa) padres.get( padres.size() - 2 );
+					padreUAId = Long.toString( padre.getId() );
 				}
 
-				mollaUA.append("\" data-clave_ua_padre=\"")
-				.append(padreUAId)
-				.append("\"><div><a class=\"ua\" href=\"")
-				.append(uaURL)
-				.append("\">")
-				.append(uaTexto)
-				.append("</a><a class=\"desplegar\" href=\"javascript:void(0);\"></a></div></li>");
+				migaPanUA.append("\" data-clave_ua_padre=\"");
+				migaPanUA.append(padreUAId);
+				migaPanUA.append("\"><div><a class=\"ua\" href=\"");
+				migaPanUA.append(uaURL);
+				migaPanUA.append("\">");
+				migaPanUA.append(uaTexto);
+				migaPanUA.append("</a><a class=\"desplegar\" href=\"javascript:void(0);\"></a></div></li>");
 
-				mollapa.insert(0, mollaUA);
+				migaPan.insert( 0, migaPanUA );
 
 				uniadm = uniadm.getPadre();
-				if (uniadm != null) {
-					tieneAcceso = getAccesoManager().tieneAccesoUnidad(uniadm.getId(), false);
-				}
+				if ( uniadm != null )
+					tieneAcceso = getAccesoManager().tieneAccesoUnidad( uniadm.getId(), false );
 
 			}
 
 		} catch (EJBException e) {
 
-			mollapa = new StringBuffer("&nbsp;");
+			migaPan = new StringBuffer("&nbsp;");
 
 		}
 
-		return mollapa;
+		return migaPan;
 
-	}		
+	}	
+	
 
 	/**
 	 * Devuelve las unidades administrativas que coinciden con los criterios  de búsqueda
-	 * @return ResultadoBusqueda 
 	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
 	 */	
 	public ResultadoBusqueda buscadorUnidadesAdministrativas(Map<String, Object> parametros, Map<String, String> traduccion, Long id, String idioma, boolean uaFilles, boolean uaMeves, Long materia, String pagina, String resultats) {
-
+		//TODO 26/08/2013: Refactorizar.
 		Session session = getSession();
 		List<UnidadAdministrativa> listaUnidadesAdministrativas = new ArrayList<UnidadAdministrativa>();
 
@@ -3261,28 +4241,48 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		}	
 	}	
 
+	
 	/**
 	 * Asigna a una unidad administratival un nuevo orden y reordena los elementos afectados.
-	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
+	 * 
+	 * @param id	Identificador de la unidad administrativa.
+	 * 
+	 * @param ordenNuevo	Indica el nuevo orden para la unidad administrativa.
+	 * 
+	 * @param ordenAnterior	Indica el orden anterior de la unidad administrativa.
+	 * 
+	 * @param idPadre	Identificador de la unidad administrativa padre.
 	 */	
 	public void reordenar( Long id, Integer ordenNuevo, Integer ordenAnterior, Long idPadre ) {
 
 		Session session = getSession();
 		List<UnidadAdministrativa> listaUAs = new ArrayList<UnidadAdministrativa>();
-		String where = "where ua.padre is null ";
 
 		try {
-			if (idPadre != null)
-				where = "where ua.padre = " + idPadre + " ";
+			
+			StringBuilder consulta = new StringBuilder("select ua from UnidadAdministrativa as ua ");
+			
+			if ( idPadre != null ) {
+				
+				consulta.append(" where ua.padre = :idPadre ");
+				
+			} else {
+				
+				consulta.append(" where ua.padre is null ");
+				
+			}
 
-			Query query = session.createQuery("select ua " +
-					"from UnidadAdministrativa as ua " +
-					where +
-					"order by ua.orden asc" );			        
+			consulta.append(" order by ua.orden asc ");
+			
+			Query query = session.createQuery( consulta.toString() );
+			
+			if ( idPadre != null )
+				query.setParameter("idPadre", idPadre);
 
-			listaUAs = castList(UnidadAdministrativa.class, query.list());
+			listaUAs = castList( UnidadAdministrativa.class, query.list() );
 
 			// Modificar sólo los elementos entre la posición del elemento que cambia 
 			// de orden y su nueva posición 
@@ -3293,44 +4293,58 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			// intermedios hacia arriba (-1), en caso contrario, hacia abajo (+1)
 			int incremento = ordenNuevo > ordenAnterior ? -1 : 1;        			
 
-			for (UnidadAdministrativa unidadAdministrativa: listaUAs ) {        		    
+			for ( UnidadAdministrativa unidadAdministrativa: listaUAs ) {        		    
 
 				long orden = unidadAdministrativa.getOrden();
 
-				if (orden >= ordenMenor && orden <= ordenMayor) {
+				if ( orden >= ordenMenor && orden <= ordenMayor ) {
 
 					if ( id.equals(unidadAdministrativa.getId() ) ) {
+						
 						unidadAdministrativa.setOrden( ordenNuevo );
+						
 					} else {
+						
 						unidadAdministrativa.setOrden( orden + incremento );
-					}        			
+						
+					}   
+					
 				}
 
 				// Revisamos si tiene edificios y en caso contrario lo limpiamos
-				if (unidadAdministrativa.getEdificios().size() == 0) unidadAdministrativa.setEdificios(null);
+				if ( unidadAdministrativa.getEdificios().size() == 0 ) 
+					unidadAdministrativa.setEdificios(null);
+				
 				// Revisamos si tiene materias y en caso contrario lo limpiamos
-				if (unidadAdministrativa.getUnidadesMaterias().size() == 0) unidadAdministrativa.setUnidadesMaterias(null);
+				if ( unidadAdministrativa.getUnidadesMaterias().size() == 0 ) 
+					unidadAdministrativa.setUnidadesMaterias(null);
 
 				// Actualizar todo para asegurar que no hay duplicados ni huecos
-				session.saveOrUpdate(unidadAdministrativa); 
+				session.saveOrUpdate(unidadAdministrativa);
+				
 			}
 
 			session.flush();
 
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
-		}    	    	    	
+			
+		}    	    
+		
 	}
 
 	/**
 	 * Método que devuelve una cadena csv de ids de unidades administrativas según los 
 	 * parámetros pasados.
 	 * 	 
-	 * @param ua
-	 * @param uaFilles
-	 * @param uaMeves
+	 * @param idUA	Identificador de la unidada administrativa.
+	 * @param uaHijas	Indica si la unidad administrativa tiene unidades hijas.
+	 * @param uaPropias
 	 * @param session
 	 * @return
 	 * @throws HibernateException
@@ -3339,77 +4353,83 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
-	public String obtenerCadenaFiltroUA(Long ua, boolean uaFilles, boolean uaMeves)
-			throws DelegateException {
+	public String obtenerCadenaFiltroUA(Long idUA, boolean uaHijas, boolean uaPropias)	throws DelegateException {
 
 		Set<Long> uas = new HashSet<Long>();
 		Set<Long> uasIds = new HashSet<Long>();
 
-		if ( ua != null ) {
-			uas.add(ua);
-		}
+		if ( idUA != null )
+			uas.add(idUA);
 
-		if ( uaMeves ) {
+		if ( uaPropias )
 			uas.addAll( getIdsUnidadesAdministrativasUsuario( ctx.getCallerPrincipal().getName() ) );  
-		}
 
-		if ( uaFilles ) {
+		if ( uaHijas ) {
+			
 			UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
 
-			for (Long uaActual : uas ) {
+			for ( Long uaActual : uas ) {
+				
 				uasIds.add( uaActual );
-				List<Long> idsDescendientes = castList(Long.class, uaDelegate.cargarArbolUnidadId( uaActual ) ) ;
+				List<Long> idsDescendientes = castList( Long.class, uaDelegate.cargarArbolUnidadId( uaActual ) ) ;
 				uasIds.addAll( idsDescendientes );
+				
 			}
 
 		} else {
 
-			for ( Long uaActual : uas ) {
+			for ( Long uaActual : uas )
 				uasIds.add( uaActual );
-			}				
+			
 		}
 
-		String uaQuery = "";
-		String sep = "";	
+		StringBuilder consultaUA = new StringBuilder();
+		String separador = "";
 
-		for (Long uaId : uasIds) {
-			uaQuery += sep + uaId;
-			sep = ", ";
+		for ( Long uaId : uasIds ) {
+			
+			consultaUA.append(separador).append(uaId);
+			separador = ", ";
+			
 		}
 
-		return uaQuery;			        	
+		return consultaUA.toString();
+		
 	}	
 
 
-
 	/**
-	 * Se encarga de actualizar las fichas de una secci贸n relacionada con una UA.
+	 * Se encarga de actualizar las fichas de una sección relacionada con una UA.
+	 * @ejb.interface-method
 	 * 
-	 * @param idUA
-	 * @param idSeccion
-	 * @param listaIdFichasLong
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param idUA	Identificador de la unidad administrativa.
+	 * 
+	 * @param idSeccion Identificador de la sección.
+	 * 
+	 * @param listaIdFichas	Lista que contiene los identificadores de las fichas.
 	 * 
 	 * @throws EJBException
-	 * 
-	 * @ejb.interface-method
-	 * @ejb.permission unchecked="true"
 	 */
-	public void actualizaFichasSeccionUA(Long idUA, Long idSeccion, List<Long> listaIdFichasLong) {
+	public void actualizaFichasSeccionUA(Long idUA, Long idSeccion, List<Long> listaIdFichas) {
 
 		Session session = getSession();
 
 		try {
 
 			// Primero borramos las relaciones anteriores.
-			List<FichaResumenUA> listaFichasUA = (List<FichaResumenUA>)session.createQuery("FROM FichaResumenUA AS fichaUA " +
-					"WHERE fichaUA.idUa = :idUA AND fichaUA.idSeccio = :idSeccion")
-					.setParameter("idUA", idUA)
-					.setParameter("idSeccion", idSeccion)
-					.list();
+			StringBuilder consulta = new StringBuilder("FROM FichaResumenUA AS fichaUA ");
+			consulta.append("WHERE fichaUA.idUa = :idUA AND fichaUA.idSeccio = :idSeccion");
 
-			for (FichaResumenUA fua : listaFichasUA) {  
+			Query query = session.createQuery( consulta.toString() );
+			query.setParameter("idUA", idUA);
+			query.setParameter("idSeccion", idSeccion);
+			
+			List<FichaResumenUA> listaFichasUA = query.list();
+			for ( FichaResumenUA fua : listaFichasUA ) {  
 
-				FichaResumen ficha = (FichaResumen)session.load(FichaResumen.class, fua.getFicha().getId());
+				FichaResumen ficha = (FichaResumen) session.load( FichaResumen.class, fua.getFicha().getId() );
 				ficha.removeFichaUA(fua);
 
 				session.delete(fua);
@@ -3421,9 +4441,9 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			// Creamos nuevas fichas UA/Sección y actualizamos orden a medida que se crean.
 			int orden = 5;
 
-			for (Long idFicha : listaIdFichasLong) {
+			for ( Long idFicha : listaIdFichas ) {
 
-				FichaResumen ficha = (FichaResumen)session.load(FichaResumen.class, idFicha);
+				FichaResumen ficha = (FichaResumen) session.load( FichaResumen.class, idFicha );
 
 				// Obtenemos ficha para actualizar orden, ya que el método anterior no nos deja especificarlo.
 				FichaResumenUA fichaUA = new FichaResumenUA();
@@ -3453,6 +4473,9 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	}
 
 
+	/**
+	 * @deprecated No se usa.
+	 * */
 	private String initTab(String texte) {
 
 		String[][] canvis = new String[][] { {" I "  , " i "},
@@ -3489,6 +4512,10 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		return buf.toString();
 	}        		
 
+	
+	/**
+	 * @deprecated Utiliza por un método que no se usa.
+	 * */
 	private void initAllTab (StringBuffer texte) {
 
 		final int LONG = texte.length();
@@ -3510,6 +4537,10 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		}	      
 	} 	
 
+	
+	/**
+	 * @deprecated Usado por un método que no se usa.
+	 * */
 	private void replace (String original, StringBuffer texte, String patro, String canvi) {
 
 		final int LONG_CANVI = canvi.length();
@@ -3524,22 +4555,39 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		}
 	}	
 
+	
+	/**
+	 *  Obtiene una lista de identificadores de las unidades admnistrativas que pertenecen a un usuario.
+	 * 
+	 * @param nombreUsuario	Cadena de texto que indica el nombre del usuario.
+	 * 
+	 * @return	Devuelve <code>List<Long></code> de identificadores de unidades administrativas.
+	 * */
 	private List<Long> getIdsUnidadesAdministrativasUsuario(String nombreUsuario) {
 
 		Session session = getSession();
 
 		try {
-			Query query = session.createQuery("select ua.id " +
-					"from UnidadAdministrativa as ua, ua.usuarios as uaUsu " +
-					"where uaUsu.username = '" + nombreUsuario + "'");
+			
+			StringBuilder consulta = new StringBuilder("select ua.id ");
+			consulta.append(" from UnidadAdministrativa as ua, ua.usuarios as uaUsu ");
+			consulta.append(" where uaUsu.username = :nombreUsuario ");
+			
+			Query query = session.createQuery( consulta.toString() );
+			query.setParameter( "nombreUsuario", nombreUsuario );
 
 			return query.list(); 
 
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}		
+		
 	}
 
 }

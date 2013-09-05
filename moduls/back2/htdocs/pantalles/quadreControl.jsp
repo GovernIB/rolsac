@@ -30,9 +30,9 @@
 						<ul>
 							<c:forEach items="${darreresModificacions}" var="modificacio">
 								<c:choose>
-									<c:when test="${modificacio.value.class.name == 'org.ibit.rol.sac.model.HistoricoFicha'}">
+									<c:when test="${modificacio.historico.class.name == 'org.ibit.rol.sac.model.HistoricoFicha'}">
 										<c:choose>
-											<c:when test="${modificacio.value.ficha.isVisible == false}">
+											<c:when test="${modificacio.historico.ficha.isVisible == false}">
 												<li class="fitxa_caducat">
 											</c:when>
 											<c:otherwise>
@@ -40,12 +40,12 @@
 											</c:otherwise>
 										</c:choose>
 										<span class="tipus"><spring:message code='quadreControl.fitxa'/></span>. 
-										<span class="data"><c:out value="${modificacio.key}" /> h.</span>
-										<a href="<c:url value="/fitxainf/fitxainf.do" />?itemId=<c:out value="${modificacio.value.ficha.id }" />">(<c:out value="${modificacio.value.ficha.id }" />) <c:out value="${modificacio.value.nombre }" /></a></li>
+										<span class="data"><c:out value="${modificacio.fecha}" /> h.</span>
+										<a href="<c:url value="/fitxainf/fitxainf.do" />?itemId=<c:out value="${modificacio.historico.ficha.id }" />">(<c:out value="${modificacio.historico.ficha.id }" />) <c:out value="${modificacio.historico.nombre }" /></a></li>
 									</c:when>
-									<c:when test="${modificacio.value.class.name == 'org.ibit.rol.sac.model.HistoricoProcedimiento'}">
+									<c:when test="${modificacio.historico.class.name == 'org.ibit.rol.sac.model.HistoricoProcedimiento'}">
 										<c:choose>
-											<c:when test="${modificacio.value.procedimiento.isVisible == false}">
+											<c:when test="${modificacio.historico.procedimiento.isVisible == false}">
 												<li class="procediment_caducat">
 											</c:when>
 											<c:otherwise>
@@ -53,12 +53,12 @@
 											</c:otherwise>
 										</c:choose>
 										<span class="tipus"><spring:message code='quadreControl.procediment'/></span>. 
-										<span class="data"><c:out value="${modificacio.key}" /> h.</span>
-										<a href="<c:url value="/catalegProcediments/catalegProcediments.do" />?itemId=<c:out value="${modificacio.value.procedimiento.id }" />">(<c:out value="${modificacio.value.procedimiento.id }" />) <c:out value="${modificacio.value.nombre }" /></a></li>
+										<span class="data"><c:out value="${modificacio.fecha}" /> h.</span>
+										<a href="<c:url value="/catalegProcediments/catalegProcediments.do" />?itemId=<c:out value="${modificacio.historico.procedimiento.id }" />">(<c:out value="${modificacio.historico.procedimiento.id }" />) <c:out value="${modificacio.historico.nombre }" /></a></li>
 									</c:when>
-									<c:when test="${modificacio.value.class.name == 'org.ibit.rol.sac.model.HistoricoNormativa'}">
+									<c:when test="${modificacio.historico.class.name == 'org.ibit.rol.sac.model.HistoricoNormativa'}">
 										<c:choose>
-											<c:when test="${modificacio.value.normativa.isVisible == false}">
+											<c:when test="${modificacio.historico.normativa.isVisible == false}">
 												<li class="normativa_caducat">
 											</c:when>
 											<c:otherwise>
@@ -66,8 +66,8 @@
 											</c:otherwise>
 										</c:choose>
 										<span class="tipus"><spring:message code='quadreControl.normativa'/></span>. 
-										<span class="data"><c:out value="${modificacio.key}" /> h.</span>
-										<a href="<c:url value="/normativa/normativa.do" />?itemId=<c:out value="${modificacio.value.normativa.id }" />">(<c:out value="${modificacio.value.normativa.id }" />) <c:out value="${modificacio.value.nombre }" /></a></li>
+										<span class="data"><c:out value="${modificacio.fecha}" /> h.</span>
+										<a href="<c:url value="/normativa/normativa.do" />?itemId=<c:out value="${modificacio.historico.normativa.id }" />">(<c:out value="${modificacio.historico.normativa.id }" />) <c:out value="${modificacio.historico.nombre }" /></a></li>
 									</c:when>
 								</c:choose>
 							</c:forEach>
@@ -146,27 +146,23 @@
 					        <li class="opcio actiu" id="liAlta">
 					            <a href="javascript:void(0)" id="tabAlta"><spring:message code="quadreControl.altes" /></a>
 					        </li>
-					        <%--
 					        <li class="opcio" id="liBaixa">
 					            <a href="javascript:;" id="tabBaixa"><spring:message code="quadreControl.baixes" /></a>
 					        </li>
-					        --%>
 				            <li class="opcio" id="liModificacio">
 				            	<a href="javascript:;" id="tabModificacio"><spring:message code="quadreControl.modificacions" /></a>	
 				            </li>
 				            
 					    </ul>
 					    <div id="resultats">
-					        <div class="resultats actiu" id="divAlta" style="display: block;">
+					        <div id="divAlta" class="resultats actiu">
 				            	<img alt="" src="<c:url value="/estadistiques/grafica.do?tipus=quadreControl&tipoOperacion=2&id=${idUA }${totUA }"/>" border="0" />			 				
 					        </div>
-					        <%--
 					        <div class="resultats " style="display: none;" id="divBaixa">
-					        	<img alt="" src="<c:url value="/estadistiques/grafica.do?tipus=quadreControl&tipoOperacion=3&id=${idUA }${totUA }"/>" border="0" />
-					        </div>
-					        --%> 
-					        <div class="resultats " style="display: none;" id="divModificacio">
 					        	<img alt="" src="<c:url value="/estadistiques/grafica.do?tipus=quadreControl&tipoOperacion=4&id=${idUA }${totUA }"/>" border="0" />
+					        </div>
+					        <div id="divModificacio" class="resultats ">
+					        	<img alt="" src="<c:url value="/estadistiques/grafica.do?tipus=quadreControl&tipoOperacion=3&id=${idUA }${totUA }"/>" border="0" />
 					        </div>
 					        
 					    </div>	
