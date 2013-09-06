@@ -18,7 +18,7 @@ import java.util.Map;
 public class EnlaceDelegate implements StatelessDelegate {
 
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== MÃ‰TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
     public Long grabarEnlace(Enlace enl, Long procedimiento_id, Long ficha_id) throws DelegateException {
@@ -29,6 +29,8 @@ public class EnlaceDelegate implements StatelessDelegate {
         }
     }
 
+    
+    /** @deprecated Se usa desde back antiguo */
     public Enlace obtenerEnlace(Long id) throws DelegateException {
         try {
             return getFacade().obtenerEnlace(id);
@@ -37,6 +39,7 @@ public class EnlaceDelegate implements StatelessDelegate {
         }
     }
 
+    
     public void borrarEnlace(Long id) throws DelegateException {
         try {
             getFacade().borrarEnlace(id);
@@ -45,6 +48,8 @@ public class EnlaceDelegate implements StatelessDelegate {
         }
     }
 
+    
+    /** @deprecated Se usa desde back antiguo */
     public void actualizarOrdenEnlaces(Map map) throws DelegateException {
         try {
             getFacade().actualizarOrdenEnlaces(map);

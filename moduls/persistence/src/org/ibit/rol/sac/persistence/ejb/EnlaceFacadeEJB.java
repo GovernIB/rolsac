@@ -33,11 +33,12 @@ import java.util.*;
 public abstract class EnlaceFacadeEJB extends HibernateEJB {
 
     /**
-     * Obtiene referéncia al ejb de control de Acceso.
+     * Obtiene referencia al ejb de control de Acceso.
      * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
      */
     protected abstract AccesoManagerLocal getAccesoManager();
 
+    
     /**
      * @ejb.create-method
      * @ejb.permission unchecked="true"
@@ -46,76 +47,72 @@ public abstract class EnlaceFacadeEJB extends HibernateEJB {
         super.ejbCreate();
     }
 
+    
     /**
      * Crea o actualiza un Enlace.
      * @ejb.interface-method
+     * 
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+     * 
+     * @param enlace	Indica una entidad de tipo Enlace a guardar.
+     * 
+     * @param idProcedimiento	Identificador del procedimiento. "<code>Este parÃ¡metro no se usa</code>"
+     * 
+     * @param idFicha	Identificador de una ficha.
+     * 
+     * @return Devuelve el identificador del enlace guardado.
      */
-    public Long grabarEnlace(Enlace enlace, Long procedimiento_id, Long ficha_id) {
+    public Long grabarEnlace(Enlace enlace, Long idProcedimiento, Long idFicha) {
+    	
         Session session = getSession();
+        
         try {
+        	
         	Ficha ficha = null;
-        	ProcedimientoLocal procedimiento = null;
-            if (enlace.getId() == null) {
+            if ( enlace.getId() == null ) {
 
-                if (ficha_id != null) {
-                    if (!getAccesoManager().tieneAccesoFicha(ficha_id)) {
+                if ( idFicha != null ) {
+                	
+                    if ( !getAccesoManager().tieneAccesoFicha(idFicha) ) {
+                    	
                         throw new SecurityException("No tiene acceso a la ficha.");
+                        
                     }
-                    ficha = (Ficha) session.load(Ficha.class, ficha_id);
+                    
+                    ficha = (Ficha) session.load( Ficha.class, idFicha );
                     ficha.addEnlace(enlace);                    
                 }
-                /*
-                if (procedimiento_id != null) {
-                    if (!getAccesoManager().tieneAccesoProcedimiento(procedimiento_id)) {
-                        throw new SecurityException("No tiene acceso al procedimiento.");
-                    }  
-                    procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, procedimiento_id);
-                    procedimiento.addEnlace(enlace);
-                }
-                */
-                session.save(enlace);             
+                
+                session.save(enlace);
+                
             } else {
                 
                 session.update(enlace);
+                
             }
+            
             session.flush();
-            
-            /*
-             * Si hubiera que indexar los enlaces (copiado de documentos)
-            if (ficha_id != null) {
-            	if (ficha_id != null) ficha = ficha = (Ficha) session.load(Ficha.class, ficha_id);       	           	
-                FichaDelegate ficdel = DelegateUtil.getFichaDelegate();
-                try {  
-                	ficdel.indexBorraFicha(ficha.getId());
-                	ficdel.indexInsertaFicha(ficha,null);   
-                } catch (DelegateException e) {
-                    log.error("Error indexando ficha", e);
-                }                                                        
-            }
-            if (procedimiento_id != null) {
-                if (procedimiento_id != null) procedimiento = procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, procedimiento_id);            	
-        		ProcedimientoDelegate pldel = DelegateUtil.getProcedimientoDelegate();
-                try {            	
-                	pldel.indexBorraProcedimiento(procedimiento);
-                	pldel.indexInsertaProcedimiento(procedimiento,null);   
-                } catch (DelegateException e) {
-                    log.error("Error indexando procedimiento", e);
-                }                    	                    
-            } 
-            */
-            
+                        
             return enlace.getId();
+            
         } catch (HibernateException he) {
+        	
             throw new EJBException(he);
+            
         } finally {
+        	
             close(session);
+            
         }
+        
     }
+    
 
     /**
+     * @deprecated Se usa desde back antiguo 
      * Obtiene un Enlace.
      * @ejb.interface-method
+     * 
      * @ejb.permission unchecked="true"
      */
     public Enlace obtenerEnlace(Long id) {
@@ -134,60 +131,43 @@ public abstract class EnlaceFacadeEJB extends HibernateEJB {
         }
     }
 
+    
     /**
-     * Borrar un enlace
+     * Borra un enlace.
      * @ejb.interface-method
+     * 
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+     * 
+     * @param id	Identificador del enlace a borrar.
      */
     public void borrarEnlace(Long id) {
+    	
         Session session = getSession();
+        
         try {
-        	Ficha ficha = null;
-        	ProcedimientoLocal procedimiento = null;
-        	Enlace enlace = (Enlace) session.load(Enlace.class, id);
-            if (enlace.getFicha() != null) {
-            	ficha = enlace.getFicha();            	
+        	
+        	Enlace enlace = (Enlace) session.load( Enlace.class, id );
+            if ( enlace.getFicha() != null )            	
             	enlace.getFicha().removeEnlace(enlace);
-            }
-            /*
-            if (documento.getProcedimiento() != null) {
-            	procedimiento = documento.getProcedimiento();
-                documento.getProcedimiento().removeDocumento(documento);
-            }
-            */
-
+            	
             session.delete(enlace);
             session.flush();
-            /*
-             * Si hubiera que indexar los enlaces (copiado de documentos)
-            if (ficha != null) {
-                FichaDelegate ficdel = DelegateUtil.getFichaDelegate();
-                try {           
-                	ficdel.indexBorraFicha(ficha.getId());
-                	ficdel.indexInsertaFicha(ficha,null);   
-                } catch (DelegateException e) {
-                    log.error("Error indexando ficha", e);
-                }                                                        
-            }
-            if (procedimiento != null) {
-        		ProcedimientoDelegate pldel = DelegateUtil.getProcedimientoDelegate();
-                try {  
-                	pldel.indexBorraProcedimiento(procedimiento);
-                	pldel.indexInsertaProcedimiento(procedimiento,null);   
-                } catch (DelegateException e) {
-                    log.error("Error indexando procedimiento", e);
-                }                    	                    
-            } 
-            */                           
+            
         } catch (HibernateException he) {
+        	
             throw new EJBException(he);     
+            
         } finally {
+        	
             close(session);
+            
         }
+        
     }
 
 
     /**
+     * @deprecated Se usa desde back antiguo 
      * Actualiza los ordenes de los enlaces de una Ficha
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
@@ -240,10 +220,16 @@ public abstract class EnlaceFacadeEJB extends HibernateEJB {
     }
 	
     class EnlsFichaComparator implements Comparator {
+    	
 		public int compare(Object o1, Object o2) { 
-			Long x1=new Long (((Enlace)o1).getOrden());
-			Long x2=new Long (((Enlace)o2).getOrden());
-			return x1.compareTo( x2 ); 
+			
+			Long x1 = new Long ( ( (Enlace) o1 ).getOrden() );
+			Long x2 = new Long ( ( (Enlace) o2 ).getOrden() );
+			
+			return x1.compareTo( x2 );
+			
 		}
+		
 	}
+    
 }

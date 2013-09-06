@@ -31,7 +31,7 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
 	private static final long serialVersionUID = 234459285681808474L;
 
 	/* ========================================================= */
-	/* ======================== M�TODOS DE NEGOCIO ============= */
+	/* ======================== MÉTODOS DE NEGOCIO ============= */
 	/* ========================================================= */
 
 	/* (non-Javadoc)

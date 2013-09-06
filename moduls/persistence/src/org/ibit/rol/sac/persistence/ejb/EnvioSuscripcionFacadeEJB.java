@@ -18,6 +18,7 @@ import org.ibit.rol.sac.model.EnvioSuscripcion;
 import org.ibit.rol.sac.model.GrupoSuscripcion;
 
 /**
+ * @deprecated Usado sólo desde el back antiguo
  * SessionBean para mantener y consultar envios de suscripcion.
  *
  * @ejb.bean
@@ -29,8 +30,6 @@ import org.ibit.rol.sac.model.GrupoSuscripcion;
  *
  * @ejb.transaction type="Required"
  */
-
-
 public abstract class EnvioSuscripcionFacadeEJB extends PaginatedHibernateEJB {
 
     /**
@@ -40,9 +39,10 @@ public abstract class EnvioSuscripcionFacadeEJB extends PaginatedHibernateEJB {
     public void ejbCreate() throws CreateException {
         super.ejbCreate();
     }
+  
     
     /**
-     * Inicializo los par�metros de la consulta....
+     * Inicializo los parámetros de la consulta....
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -62,8 +62,9 @@ public abstract class EnvioSuscripcionFacadeEJB extends PaginatedHibernateEJB {
     	super.npags=0;	
     }
 
+    
     /**
-     * Inicializo los par�metros de la consulta....
+     * Inicializo los parámetros de la consulta....
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -85,7 +86,7 @@ public abstract class EnvioSuscripcionFacadeEJB extends PaginatedHibernateEJB {
 
 
     /**
-     * Crea o actualiza un envio.
+     * Crea o actualiza un envío.
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
      */
@@ -102,8 +103,9 @@ public abstract class EnvioSuscripcionFacadeEJB extends PaginatedHibernateEJB {
         }
     }
 
+    
     /**
-     * Actualiza un envio como enviado.
+     * Actualiza un envío como enviado.
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -122,6 +124,7 @@ public abstract class EnvioSuscripcionFacadeEJB extends PaginatedHibernateEJB {
         }
     }
 
+  
     /**
      * Lista todos los Trabajos
      * @ejb.interface-method
@@ -130,7 +133,7 @@ public abstract class EnvioSuscripcionFacadeEJB extends PaginatedHibernateEJB {
     public List listarTrabajos() {
         Session session = getSession();
         try {
-        	parametrosCons(); // Establecemos los par�metros de la paginaci�n
+        	parametrosCons(); // Establecemos los par�metros de la paginaci�n
            	
         	Query query = session.createQuery(select+from+where+orderby);
             query.setFirstResult(cursor-1);
@@ -143,8 +146,9 @@ public abstract class EnvioSuscripcionFacadeEJB extends PaginatedHibernateEJB {
         }
     }
 
+    
      /**
-     * Lista todos los envios.
+     * Lista todos los envíos.
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -162,7 +166,7 @@ public abstract class EnvioSuscripcionFacadeEJB extends PaginatedHibernateEJB {
 
 
     /**
-     * Lista todas los envios pendientes
+     * Lista todas los envíos pendientes
      * @ejb.interface-method
      * @ejb.permission unchecked= "true"
      */
@@ -179,8 +183,9 @@ public abstract class EnvioSuscripcionFacadeEJB extends PaginatedHibernateEJB {
         }
     }
 
+    
     /**
-     * a�ade todos los grupos al envio
+     * Añade todos los grupos al envío
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
      */
@@ -205,9 +210,10 @@ public abstract class EnvioSuscripcionFacadeEJB extends PaginatedHibernateEJB {
             close(session);
         }
     }
+
     
     /**
-     * elimina una grupo del envio
+     * Elimina una grupo del envío
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
      */
@@ -249,8 +255,9 @@ public abstract class EnvioSuscripcionFacadeEJB extends PaginatedHibernateEJB {
         }
     } 
 
+    
     /**
-     * Obtiene un envio. 
+     * Obtiene un envío. 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -267,8 +274,9 @@ public abstract class EnvioSuscripcionFacadeEJB extends PaginatedHibernateEJB {
         }
     }
 
+    
     /**
-     * borra un Envio
+     * Borra un Envío
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
      */

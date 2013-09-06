@@ -157,7 +157,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 */
 	public Long crearUnidadAdministrativa(UnidadAdministrativa unidad, Long idPadre) {
 		
-		//TODO 26/08/2013: Internacionalizar textos.
 		Session session = getSession();
 		
 		try {
@@ -203,7 +202,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 */
 	public void actualizarUnidadAdministrativa(UnidadAdministrativa unidad, Long idPadre) {
 		
-		//TODO 26/08/2013: Internacionalizar textos.
 		Session session;
 
 		Long idPadreAntigua = ( unidad.getPadre() == null ? null : unidad.getPadre().getId() );
@@ -443,7 +441,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 */
 	public List<UnidadAdministrativa> listarUnidadesAdministrativasRaiz(boolean publicadas) {
 		
-		//TODO <jchuerta> 26/08/2013: Crear constantes para textos.
 		Session session = getSession();
 		
 		try {
@@ -483,7 +480,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 */
 	public List<UnidadAdministrativa> listarTodasUnidadesAdministrativasRaiz() {
 
-		//TODO 26/08/2013: Crear constantes para textos.
 		Session session = getSession();
 
 		try {
@@ -700,7 +696,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 */
 	public boolean existeUnidadAdministrativa(Long id) {
 		
-		//TODO: 26/08/2013: Crear constantes para textos.
 		Session session = getSession();
 		
 		try {
@@ -763,7 +758,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 */
 	public UnidadAdministrativa consultarUnidadAdministrativaSinFichas(Long id) {
 
-		//TODO 26/08/2013: Internacionalizar textos.
 		Session session = getSession();
 
 		try {
@@ -850,8 +844,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 * @return Devuelve <code>UnidadAdministrativa</code> solicitada.
 	 */
 	public UnidadAdministrativa consultarUnidadAdministrativa(Long id) {
-		
-		//TODO 26/08/2013: Internacionalizar textos
+
 		Session session = getSession();
 
 		try {
@@ -1082,7 +1075,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 */
 	public UnidadAdministrativa obtenerUnidadAdministrativaPorCodEstandar(String codEstandar) {
 		
-		//TODO 26/08/2013: Internacionalizar textos.
 		Session session = getSession();
 		
 		try {
@@ -1150,7 +1142,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 */
 	public Archivo obtenerFotoPequenyaUA(Long id) {
 		
-		//TODO <jchuerta> 26/08/2013: Internacionalizar textos.
 		Session session = getSession();
 		
 		try {
@@ -1195,7 +1186,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 */
 	public Archivo obtenerFotoGrandeUA(Long id) {
 		
-		//TODO 26/08/2013: Internacionalizar textos.
 		Session session = getSession();
 		
 		try {
@@ -1241,7 +1231,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 */
 	public Archivo obtenerLogoHorizontalUA(Long id) {
 		
-		//TODO 26/08/2013: Internacionalizar textos.
 		Session session = getSession();
 		
 		try {
@@ -1286,7 +1275,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 */
 	public Archivo obtenerLogoVerticalUA(Long id) {
 		
-		//TODO 26/08/2013: Internacionalizar textos.
 		Session session = getSession();
 		
 		try {
@@ -1331,7 +1319,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 */
 	public Archivo obtenerLogoSaludoUA(Long id) {
 		
-		//TODO 26/08/2013: Internacionalizar textos.
 		Session session = getSession();
 		
 		try {
@@ -1377,7 +1364,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 */
 	public Archivo obtenerLogoSaludoVerticalUA(Long id) {
 		
-		//TODO 26/08/2013: Internacionalizar textos.
 		Session session = getSession();
 		
 		try {
@@ -1561,7 +1547,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 */
 	public void eliminarUaSinRelaciones(Long idUA) {
 		
-		//TODO: Internacionalizar textos.
 		Session session = getSession();
 
 		try {
@@ -1655,7 +1640,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 */
 	public void borrarUnidadAdministrativa(Long id) {
 
-		//TODO 26/08/2013: Internacionalizar textos.
 		Session session = getSession();
 
 		try {
@@ -1722,7 +1706,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 */
 	public void borrarUnidadAdministrativaRaiz(Long id) {
 		
-		//TODO 26/08/2013: Internacionalizar textos.
 		Session session = getSession();
 
 		try {
@@ -2188,7 +2171,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	@SuppressWarnings("unchecked")
 	public UnidadAdministrativa obtenerUnidadesAdministrativasArbreTerritorial(Long idEspacio, String tipo, List UAOpcionales) {
 		
-		//TODO 26/08/2013: Crear constantes para las cadenas de texto.
 		Session session = getSession();
 		
 		try {
@@ -2669,7 +2651,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 */
 	public void indexInsertaUA(UnidadAdministrativa unidadAdministrativa,  ModelFilterObject filter)  {
 
-		//TODO 26/08/2013: Crear constantes para textos.
 		try {
 
 			if ( filter == null ) filter = obtenerFilterObject(unidadAdministrativa);
@@ -4084,7 +4065,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 */
 	public StringBuffer getUaMollaBack2(Long idUA, String idioma, String url, String uaIdPlaceholder) {
 
-		//TODO 30/08/2013: Internacionalizar textos.
 		StringBuffer migaPan = new StringBuffer(" ");
 
 		try {
@@ -4150,54 +4130,71 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 * @ejb.permission unchecked="true"
 	 */	
 	public ResultadoBusqueda buscadorUnidadesAdministrativas(Map<String, Object> parametros, Map<String, String> traduccion, Long id, String idioma, boolean uaFilles, boolean uaMeves, Long materia, String pagina, String resultats) {
+		
 		//TODO 26/08/2013: Refactorizar.
 		Session session = getSession();
 		List<UnidadAdministrativa> listaUnidadesAdministrativas = new ArrayList<UnidadAdministrativa>();
 
 		try {
 
-			if (!userIsOper()) {
+			if ( !userIsOper() )
 				parametros.put("validacion", Validacion.PUBLICA);
-			}
 
 			List params = new ArrayList();
 			String i18nQuery = "";
 
 			if ( traduccion.get("idioma") != null ) {	
+				
 				i18nQuery = populateQuery(parametros, traduccion, params);
+				
 			} else {
+				
 				String paramsQuery = populateQuery(parametros, new HashMap(), params);
-				if (paramsQuery.length() == 0) {
+				if ( paramsQuery.length() == 0 ) {
+					
 					i18nQuery += "";
+					
 				} else {
+					
 					i18nQuery += paramsQuery + " and ";
-				}				
+					
+				}	
+				
 				i18nQuery += "(" + i18nPopulateQuery(traduccion, params) + ")";
-			}			
+				
+			}	
 
 			String select   = "select new UnidadAdministrativa( unidad.id, unidad.codigoEstandar, trad.nombre, unidad.orden, index(trad) ) ";
 			String from     = "from UnidadAdministrativa as unidad, unidad.traducciones trad ";
 			String where   = "where " + i18nQuery + " and unidad.padre = " + id + " ";			
 			String orderBy = "order by unidad.orden";
 			
-			if (userIsSystem()) {
-				if (id == null) {
+			if ( userIsSystem() ) {
+				
+				if ( id == null ) {
+					
 					where =  "where " + i18nQuery + (uaFilles ? "" : " and unidad.padre is null ");
-				} else if (uaMeves && uaFilles) {
+					
+				} else if ( uaMeves && uaFilles ) {
+					
 					where   = "where " + i18nQuery;
+					
 				} else if (uaFilles) {
+					
 					where = " where " + i18nQuery + " and unidad.padre in (" + cargarArbolUnidadId(id).toString().replaceAll("\\[|\\]", "") + ")";
+					
 				}
 				
 			} else {
-				String cadenaFiltro = obtenerCadenaFiltroUA(id, uaFilles, uaMeves);
-				if (StringUtils.isEmpty(cadenaFiltro))
+				
+				String cadenaFiltro = obtenerCadenaFiltroUA( id, uaFilles, uaMeves );
+				if ( StringUtils.isEmpty(cadenaFiltro) )
 					cadenaFiltro = EMPTY_ID;
 				
 				where = where.replaceFirst("and unidad.padre = " + id, " ");
 				where += "and (unidad.id in(" + cadenaFiltro + ") " +
-						(id != null ? "or unidad.padre = " + id : "" )  + ") " +
-						(id != null ? "and unidad.id != " + id + " " : "");
+						( id != null ? "or unidad.padre = " + id : "" )  + ") " +
+						( id != null ? "and unidad.id != " + id + " " : "");
 			}
 			
 			if ( materia != null ) {
@@ -4209,36 +4206,47 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			Query query = session.createQuery( select + from + where + orderBy);
 
 			// Asignar parámetros
-			for (int i = 0; i < params.size(); i++) {
+			for ( int i = 0 ; i < params.size() ; i++ ) {
+				
 				String o = (String) params.get(i);
 				query.setString(i, o);
+				
 			}			
 
 			int resultadosMax = new Integer(resultats).intValue();
 			int primerResultado = new Integer(pagina).intValue() * resultadosMax;
 
-			listaUnidadesAdministrativas = castList(UnidadAdministrativa.class, query.list());
+			listaUnidadesAdministrativas = castList( UnidadAdministrativa.class, query.list() );
 
-			if ( resultadosMax != RESULTATS_CERCA_TOTS) {
+			if ( resultadosMax != RESULTATS_CERCA_TOTS ) {
+				
 				query.setFirstResult(primerResultado);
 				query.setMaxResults(resultadosMax);
+				
 			}				
 
 			ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
-
-			resultadoBusqueda.setListaResultados(listaUnidadesAdministrativas);
-			resultadoBusqueda.setTotalResultados(listaUnidadesAdministrativas.size());			
+			resultadoBusqueda.setListaResultados( listaUnidadesAdministrativas );
+			resultadoBusqueda.setTotalResultados( listaUnidadesAdministrativas.size() );			
 
 			return resultadoBusqueda;
 
 		} catch (DelegateException ex) {
-			log.warn("[obtenerCadenaFiltroUA: " + id + "] No se ha podido llamar al método. " + ex.getMessage());
+			
+			log.warn( "[obtenerCadenaFiltroUA: " + id + "] No se ha podido llamar al método. " + ex.getMessage() );
+			
 			throw new EJBException(ex);
+			
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
-		}	
+			
+		}
+		
 	}	
 
 	

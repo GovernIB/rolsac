@@ -13,6 +13,7 @@ import net.sf.hibernate.Transaction;
 import org.ibit.rol.sac.model.HistoricoEnvio;
 
 /**
+ * @deprecated Clase que Ãºnicamente se usa desde el back antiguo.
  * SessionBean para mantener y consultar envios de suscripcion.
  *
  * @ejb.bean
@@ -34,8 +35,10 @@ public abstract class HistoricoEnvioFacadeEJB extends PaginatedHibernateEJB {
         super.ejbCreate();
     }
     
+    
     /**
-     * Inicializo los parámetros de la consulta....
+     * @deprecated No se usa 
+     * Inicializo los parï¿½metros de la consulta....
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -55,8 +58,10 @@ public abstract class HistoricoEnvioFacadeEJB extends PaginatedHibernateEJB {
     	super.npags=0;	
     }
 
+    
     /**
-     * Inicializo los parámetros de la consulta....
+     * @deprecated No se usa 
+     * Inicializo los parï¿½metros de la consulta....
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -78,6 +83,7 @@ public abstract class HistoricoEnvioFacadeEJB extends PaginatedHibernateEJB {
 
 
     /**
+     * @deprecated No se usa
      * Crea o actualiza un envio.
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -97,6 +103,7 @@ public abstract class HistoricoEnvioFacadeEJB extends PaginatedHibernateEJB {
 
 
     /**
+     *  @deprecated No se usa 
      * Lista todos los Envios
      * @ejb.interface-method
      * @ejb.permission unchecked="true" 
@@ -104,7 +111,7 @@ public abstract class HistoricoEnvioFacadeEJB extends PaginatedHibernateEJB {
     public List listarHistoricos() {
         Session session = getSession();
         try {
-        	parametrosCons(); // Establecemos los parámetros de la paginación
+        	parametrosCons(); // Establecemos los parï¿½metros de la paginaciï¿½n
            	
         	Query query = session.createQuery(select+from+where+orderby);
             query.setFirstResult(cursor-1);
@@ -118,6 +125,7 @@ public abstract class HistoricoEnvioFacadeEJB extends PaginatedHibernateEJB {
     }
 
      /**
+      * @deprecated No se usa
      * Lista todos los envios.
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -134,9 +142,9 @@ public abstract class HistoricoEnvioFacadeEJB extends PaginatedHibernateEJB {
         }
     }
 
-    
 
     /**
+     * @deprecated No se usa
      * Obtiene un envio. 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -153,7 +161,9 @@ public abstract class HistoricoEnvioFacadeEJB extends PaginatedHibernateEJB {
         }
     }
 
+    
     /**
+     * @deprecated Se usa desde el back antiguo
      * Obtiene un envio. 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -173,7 +183,9 @@ public abstract class HistoricoEnvioFacadeEJB extends PaginatedHibernateEJB {
         }
     }
 
+    
     /**
+     * @deprecated No se usa
      * borra un Envio
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super}"

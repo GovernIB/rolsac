@@ -33,11 +33,12 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 public abstract class EspacioTerritorialFacadeEJB extends HibernateEJB{
 
      /**
-     * Obtiene refer�ncia al ejb de control de Acceso.
+     * Obtiene referéncia al ejb de control de Acceso.
      * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
      */
     protected abstract AccesoManagerLocal getAccesoManager();
 
+    
     /**
      * @ejb.create-method
      * @ejb.permission unchecked="true"
@@ -46,7 +47,9 @@ public abstract class EspacioTerritorialFacadeEJB extends HibernateEJB{
         super.ejbCreate();
     }
 
+    
     /**
+     * @deprecated  Usado desde back antiguo
      * Crea un EspacioTerritorial.
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin}"
@@ -79,7 +82,9 @@ public abstract class EspacioTerritorialFacadeEJB extends HibernateEJB{
         }
     }
 
+    
     /**
+     * @deprecated  Usado desde back antiguo
      * Actualiza un EspacioTerritorial.
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin}"
@@ -119,197 +124,364 @@ public abstract class EspacioTerritorialFacadeEJB extends HibernateEJB{
         }
     }
     
+    
     /**
      * Borra un EspacioTerritorial determinado.
      * @ejb.interface-method
+     * 
      * @ejb.permission role-name="${role.system},${role.admin}"
+     * 
+     * @param id	Identificador del espacio territorial a guardar.
      */
     public void borrarEspacioTerritorial(Long id) {
+    	
         Session session = getSession();
+        
         try {
-            EspacioTerritorial espacio = (EspacioTerritorial) session.load(EspacioTerritorial.class, id);
-            if (espacio.getPadre() != null) {
+        	
+            EspacioTerritorial espacio = (EspacioTerritorial) session.load( EspacioTerritorial.class, id );
+            if ( espacio.getPadre() != null ) {
+            	
                 espacio.getPadre().removeHijo(espacio);
                 session.delete(espacio);
+                
             } else {
+            	
                 session.delete(espacio);
+                
             }
 
             session.flush();
+            
         } catch (HibernateException he) {
+        	
             throw new EJBException(he);
+            
         } finally {
+        	
             close(session);
+            
         }
+        
     }
+    
     
     /**
      * Lista de EspacioTerritorialesraiz.
+     * 
      * @ejb.interface-method
+     * 
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+     * 
+     * @return Devuelve <code>List</code> de todos los espacios territoriales raíz.
      */
     public List listarEspacioTerritorialesRaiz() {
+    	
         Session session = getSession();
+        
         try {
+        	
             Query query = session.getNamedQuery("espacio.root");
             query.setCacheable(true);
+            
             return query.list();
+            
         } catch (HibernateException he) {
+        	
             throw new EJBException(he);
+            
         } finally {
+        	
             close(session);
+            
         }
+        
     }
+    
     
     /**
      * Lista de la raiz hasta el EspacioTerritorial indicado por el id.
+     * 
      * @ejb.interface-method
+     * 
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+     * 
+     * @param id	Identificador del espacio territorial a consultar.
+     * 
+     * @return Devuelve <code>List<EspacioTerritorial></code> de todos los espacios territoriales hijos.
      */
     public List<EspacioTerritorial> listarAntecesoresEspacioTerritorial(Long id) {
+    	
         Session session = getSession();
+        
         try {
+        	
             List<EspacioTerritorial> result = new ArrayList<EspacioTerritorial>();
-            EspacioTerritorial espacio = (EspacioTerritorial) session.load(EspacioTerritorial.class, id);
+            EspacioTerritorial espacio = (EspacioTerritorial) session.load( EspacioTerritorial.class, id );
 
             result.add(espacio);
-            while (espacio.getPadre() != null) {
-                result.add(0, espacio.getPadre());
+            while ( espacio.getPadre() != null ) {
+            	
+                result.add( 0, espacio.getPadre() );
                 espacio = espacio.getPadre();
+                
             }
 
             return result;
+            
         } catch (HibernateException he) {
+        	
             throw new EJBException(he);
+            
         } finally {
+        	
             close(session);
+            
         }
+        
     }
     
+    
     /**
-     * Lista de los hijos de una secci�n determinada.
+     * Lista de los hijos de una sección determinada.
+     * 
      * @ejb.interface-method
+     * 
      * @ejb.permission unchecked="true"
+     * 
+     * @param id	Identificador del espacio territorial raíz.
+     * 
+     * @return Devuelve <code>Collection<EspacioTerritorial></code> de los espacios territoriales hijos.
      */
     public Collection<EspacioTerritorial> listarHijosEspacioTerritorial(Long id) {
+    	
         Session session = getSession();
+        
         try {
-            EspacioTerritorial espacio = (EspacioTerritorial) session.load(EspacioTerritorial.class, id);
-            Hibernate.initialize(espacio.getHijos());
+        	
+            EspacioTerritorial espacio = (EspacioTerritorial) session.load( EspacioTerritorial.class, id );
+            Hibernate.initialize( espacio.getHijos() );
 
             return espacio.getHijos();
+            
         } catch (HibernateException he) {
+        	
             throw new EJBException(he);
+            
         } finally {
+        	
             close(session);
+            
         }
+        
     }
     
+    
     /**
-     * Obtiene un Espacio Territorial
+     * Obtiene un Espacio Territorial.
      * @ejb.interface-method
+     * 
      * @ejb.permission unchecked="true"
+     * 
+     * @param id	Identificador de un espacio territorial.
+     * 
+     * @return Devuelve <code>EspacioTerritorial</code> solicitado.
      */
     public EspacioTerritorial obtenerEspacioTerritorial(Long id) {
+    	
         Session session = getSession();
+        
         try {
-            EspacioTerritorial espacioTerritorial = (EspacioTerritorial) session.load(EspacioTerritorial.class, id);
+        	
+            EspacioTerritorial espacioTerritorial = (EspacioTerritorial) session.load( EspacioTerritorial.class, id );
             session.refresh(espacioTerritorial);
-            Hibernate.initialize(espacioTerritorial.getHijos());
-            Hibernate.initialize(espacioTerritorial.getPadre());
-            Hibernate.initialize(espacioTerritorial.getMapa());
-            Hibernate.initialize(espacioTerritorial.getLogo());
+            Hibernate.initialize( espacioTerritorial.getHijos() );
+            Hibernate.initialize( espacioTerritorial.getPadre() );
+            Hibernate.initialize( espacioTerritorial.getMapa() );
+            Hibernate.initialize( espacioTerritorial.getLogo() );
+            
             return espacioTerritorial;
+            
         } catch (HibernateException he) {
+        	
             throw new EJBException(he);
+            
         } finally {
+        	
             close(session);
+            
         }
+        
     }
+    
 
     /**
-    * Lista los espacios Territoriales
+    * Lista los espacios Territoriales.
+    * 
     * @ejb.interface-method
+    * 
     * @ejb.permission unchecked="true"
+    * 
+    * @param pagina	Indica la última página consultada.
+    * 
+    * @param resultats	Indica el número de registros por página.
+    * 
+    * @param idioma	Indica el idioma utilizado en la búsqueda.
+    * 
+    * @return Devuelve <code>ResultadoBusqueda</code> de espacios territoriales.
     */    
-    public ResultadoBusqueda listarEspaciosTerritoriales(int pagina, int resultats, String idioma ) {
-    	return listarTablaMaestraPaginada(pagina, resultats, listarTMEspaciosTerritoriales( idioma ));
+    public ResultadoBusqueda listarEspaciosTerritoriales(int pagina, int resultats, String idioma) {
+    	
+    	return listarTablaMaestraPaginada( pagina, resultats, listarTMEspaciosTerritoriales( idioma ) );
+    	
     }
+
     
      /**
      * Lista los espacios Territoriales
+     * 
      * @ejb.interface-method
+     * 
      * @ejb.permission unchecked="true"
+     *
+     * @return Devuelve <code>List<EspacioTerritorial></code> de todos los espacios territoriales.
      */
-    public List<EspacioTerritorial> listarEspaciosTerritoriales(){
+    public List<EspacioTerritorial> listarEspaciosTerritoriales() {
+    	
         Session session = getSession();
+        
         try {
+        	
             Query query = session.createQuery("from EspacioTerritorial");
+            
             return query.list();
+            
         } catch (HibernateException e) {
+        	
             throw new EJBException(e);
+            
         } finally {
+        	
             close(session);
+            
         }
+        
     }
+    
     
     /**
      * Lista los espacios territoriales (menú administración)
+     * 
+     * @param idioma	Indica el idioma en que se realiza la búsqueda.
+     * 
+     * @return	Devuelve <code>List</code> de todos los espacios territoriales.
      */
     private List listarTMEspaciosTerritoriales( String idioma ) {
+    	
     	Session session = getSession();
     	
     	try {
-    		Query query = session.createQuery("select espTer.id, trad.nombre " +
-    														"from EspacioTerritorial as espTer, espTer.traducciones as trad " +
-    														"where index(trad) = :idioma " +
-    														"order by trad.nombre asc");
+    		
+    		Query query = session.createQuery(
+    				"select espTer.id, " +
+    				"	    trad.nombre " +
+    		
+    				"from EspacioTerritorial as espTer, " +
+    				"	  espTer.traducciones as trad " +
+    						
+    				"where index(trad) = :idioma " +
+    				
+    				"order by trad.nombre asc");
     		
     		query.setParameter("idioma", idioma);
-    		return query.list();    		
+    		
+    		return query.list();   		
+    		
     	} catch (HibernateException he) {
+    		
     		throw new EJBException(he);
+    		
     	} finally {
+    		
     		close(session);
-    	}    	    	
+    		
+    	}    
+    	
     }
 
+    
      /**
-     * Obtiene el mapa de un Espacio Territorial
+     * Obtiene el mapa de un Espacio Territorial.
+     * 
      * @ejb.interface-method
+     * 
      * @ejb.permission unchecked="true"
+     * 
+     * @param id	Identificador de un espacio territorial.
+     * 
+     * @return Devuelve <code>Archivo</code> que contiene el mapa de un espacio territorial. 
      */
     public Archivo obtenerMapaEspacio(Long id) {
+    	
         Session session = getSession();
+        
         try {
-            EspacioTerritorial espacioTerritorial = (EspacioTerritorial) session.load(EspacioTerritorial.class, id);
-            Hibernate.initialize(espacioTerritorial.getMapa());
+        	
+            EspacioTerritorial espacioTerritorial = (EspacioTerritorial) session.load( EspacioTerritorial.class, id );
+            Hibernate.initialize( espacioTerritorial.getMapa() );
+            
             return espacioTerritorial.getMapa();
+            
         } catch (HibernateException e) {
+        	
             throw new EJBException(e);
+            
         } finally {
+        	
             close(session);
+            
         }
+        
     }
+    
 
     /**
-     * Obtiene el logo de un Espacio Territorial
+     * Obtiene el logo de un Espacio Territorial.
+     * 
      * @ejb.interface-method
+     * 
      * @ejb.permission unchecked="true"
+     * 
+     * @param id	Identificador de un espacio territorial.
+     * 
+     * @return Devuelve <code>Archivo</code> que contiene el logo del espacio territorial solicitado.
      */
     public Archivo obtenerLogoEspacio(Long id) {
+    	
         Session session = getSession();
+        
         try {
-            EspacioTerritorial espacioTerritorial = (EspacioTerritorial) session.load(EspacioTerritorial.class, id);
-            Hibernate.initialize(espacioTerritorial.getLogo());
+        	
+            EspacioTerritorial espacioTerritorial = (EspacioTerritorial) session.load( EspacioTerritorial.class, id );
+            Hibernate.initialize( espacioTerritorial.getLogo() );
+            
             return espacioTerritorial.getLogo();
+            
         } catch (HibernateException e) {
+        	
             throw new EJBException(e);
+            
         } finally {
+        	
             close(session);
+            
         }
+        
     }
+    
+    
    /**
+    *  @deprecated  No se usa 
     * Obtiene los Espacios Territoriales de un nivel
     * @ejb.interface-method
     * @ejb.permission unchecked="true"
@@ -331,6 +503,7 @@ public abstract class EspacioTerritorialFacadeEJB extends HibernateEJB{
 
     
     /**
+     *  @deprecated  No se usa
     * Obtiene los municipios de una isla
     * @ejb.interface-method
     * @ejb.permission unchecked="true"
@@ -350,7 +523,9 @@ public abstract class EspacioTerritorialFacadeEJB extends HibernateEJB{
         }
     }
     
+    
     /**
+     *  @deprecated  Usado por back antiguo
      * Borra un mapa de un EspacioTerritorial determinado.
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin}"
@@ -369,7 +544,9 @@ public abstract class EspacioTerritorialFacadeEJB extends HibernateEJB{
     	}
     }
     
+    
     /**
+     * @deprecated  Usado por back antiguo
      * Borra un logo de un EspacioTerritorial determinado.
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin}"
@@ -390,6 +567,7 @@ public abstract class EspacioTerritorialFacadeEJB extends HibernateEJB{
 
 
     /**
+     * @deprecated  No se usa
      * Obtiene el padre {@link EspacioTerritorial} de un {@link EspacioTerritorial}.
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -406,8 +584,9 @@ public abstract class EspacioTerritorialFacadeEJB extends HibernateEJB{
         }
     }
 
-
-    private void ajustarNivel(int nivel, final EspacioTerritorial espacio){
+    
+    /** @deprecated  Usado por un método que se usa desde el back antiguo */
+    private void ajustarNivel(int nivel, final EspacioTerritorial espacio) {
     	espacio.setNivel(nivel);
     	nivel++;
     	if(espacio.getHijos() != null) {

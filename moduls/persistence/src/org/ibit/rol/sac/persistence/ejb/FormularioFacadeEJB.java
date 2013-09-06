@@ -12,6 +12,7 @@ import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
 /**
+ * @deprecated	Ésta clase se usa únicamente desde el back antiguo
  * SessionBean para mantener y consultar Formularios.
  *
  * @ejb.bean
@@ -28,11 +29,12 @@ import javax.ejb.EJBException;
 public abstract class FormularioFacadeEJB extends HibernateEJB {
 
     /**
-     * Obtiene refer�ncia al ejb de control de Acceso.
+     * Obtiene referéncia al ejb de control de Acceso.
      * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
      */
     protected abstract AccesoManagerLocal getAccesoManager();
 
+    
     /**
      * @ejb.create-method
      * @ejb.permission unchecked="true"
@@ -41,7 +43,9 @@ public abstract class FormularioFacadeEJB extends HibernateEJB {
         super.ejbCreate();
     }
 
+    
     /**
+     * @deprecated Usado desde el back antiguo
      * Crea o actualiza un Formulario.
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
@@ -64,7 +68,9 @@ public abstract class FormularioFacadeEJB extends HibernateEJB {
         }
     }
 
+    
     /**
+     * @deprecated Usado desde el back antiguo
      * Obtiene un formulario.
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
@@ -89,7 +95,9 @@ public abstract class FormularioFacadeEJB extends HibernateEJB {
         }
     }
 
+    
     /**
+     * @deprecated Usado desde el back antiguo
      * Obtiene el archivo de un formulario.
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -107,7 +115,9 @@ public abstract class FormularioFacadeEJB extends HibernateEJB {
         }
     }
 
+    
     /**
+     * @deprecated Usado desde el back antiguo
      * Obtiene el manual de un formulario.
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -125,7 +135,9 @@ public abstract class FormularioFacadeEJB extends HibernateEJB {
         }
     }
 
+    
     /**
+     * @deprecated Usado desde el back antiguo
      * Borrar un formulario
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
