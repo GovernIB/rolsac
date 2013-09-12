@@ -17,7 +17,7 @@ public class ArchivoDelegate  implements StatelessDelegate {
         
         	
 	/* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== MÃ‰TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
 	public Archivo obtenerArchivo(Long id)  throws DelegateException {
@@ -63,7 +63,15 @@ public class ArchivoDelegate  implements StatelessDelegate {
     	} catch (RemoteException e) {
     		throw new DelegateException(e);
     	}
-    }		
+    }
+    
+    public void borrarArchivo(Long id) throws DelegateException {
+        try {
+            getFacade().borrarArchivo(id);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
 	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

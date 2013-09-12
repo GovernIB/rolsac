@@ -11,6 +11,15 @@ import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
 import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.Documento;
+import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.persistence.delegate.DelegateException;
+import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
+import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
+import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
+import org.ibit.rol.sac.persistence.ws.Actualizador;
 
 /**
  * SessionBean para obtener archivos.
@@ -112,5 +121,37 @@ public abstract class ArchivoFacadeEJB extends HibernateEJB {
     		return tmp.getNombre();
     	else
     		return "sin_nombre";
-    }        
+    }
+    
+    
+    /**
+     * Borra un archivo.
+     * 
+     * @ejb.interface-method
+     * 
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+     * 
+     * @param	id	Identificador del archivo a borrar.
+     */
+    public void borrarArchivo(Long id) {
+    	
+        Session session = getSession();
+        try {
+        	
+            Archivo archivo = (Archivo) session.load(Archivo.class, id);
+            session.delete(archivo);
+            session.flush();
+            
+        } catch (HibernateException he) {
+        	
+            throw new EJBException(he);  
+            
+        } finally {
+        	
+            close(session);
+            
+        }
+        
+    }
+    
 }
