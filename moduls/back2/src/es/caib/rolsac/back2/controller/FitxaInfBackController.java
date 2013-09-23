@@ -26,6 +26,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Documento;
+import org.ibit.rol.sac.model.DocumentoResumen;
 import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaResumen;
@@ -50,6 +51,7 @@ import org.ibit.rol.sac.model.dto.UnidadDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
+import org.ibit.rol.sac.persistence.delegate.DocumentoResumenDelegate;
 import org.ibit.rol.sac.persistence.delegate.EnlaceDelegate;
 import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
 import org.ibit.rol.sac.persistence.delegate.FichaResumenDelegate;
@@ -831,8 +833,8 @@ public class FitxaInfBackController extends PantallaBaseController {
 	            }
             }
            // Documents
-	        Documento document;
-	        DocumentoDelegate docDelegate = DelegateUtil.getDocumentoDelegate();
+	        DocumentoResumen document;
+	        DocumentoResumenDelegate docDelegate = DelegateUtil.getDocumentoResumenDelegate();
 	        List<Documento> documents = new ArrayList<Documento>();
 	        Map <String,String[]> actulitzadorMap = new HashMap<String, String[]>();
 	
@@ -845,10 +847,16 @@ public class FitxaInfBackController extends PantallaBaseController {
           	    if (idDoc != null) {
               	    log.debug("Inici de obtenerDocumento(" + idDoc + ")");
                     startTrace = new Date();
-                    document = docDelegate.obtenerDocumento(idDoc);
+                    document = docDelegate.obtenerDocumentoResumen(idDoc);
                     execTime = new Date().getTime() - startTrace.getTime();
                     log.debug("Temps d'execucio de obtenerDocumento(" + idDoc + "): " + execTime + " milisegons.");
-              	    documents.add(document);
+                    Documento doc = new Documento();
+                    doc.setId(document.getId());
+                    doc.setFicha(document.getFicha());
+                    doc.setOrden(document.getOrden());
+                    doc.setProcedimiento(document.getProcedimiento());
+                    doc.setTraduccionMap(document.getTraduccionMap());
+              	    documents.add(doc);
                     // Se coge el orden de la web. Si se quisiesen poner del 0 al x, hacer que orden valga 0 e ir incrementandolo.
                     String[] orden = {valoresForm.get("documents_orden_" + elements[2])};
                     actulitzadorMap.put("orden_doc" + idDoc, orden);
@@ -869,7 +877,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 	        if (edicion){
 	            List<Documento> docsOld = fitxaOld.getDocumentos();                                    
 	              
-	            for(Documento doc: documents){
+	            for (Documento doc: documents) {
 	                for (Iterator<Documento> it = docsOld.iterator(); it.hasNext(); ){
 	                	Documento currentDoc = it.next();
 	                    if (currentDoc != null && currentDoc.getId().equals(doc.getId())){

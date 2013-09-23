@@ -26,6 +26,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.CatalegDocuments;
 import org.ibit.rol.sac.model.Documento;
+import org.ibit.rol.sac.model.DocumentoResumen;
 import org.ibit.rol.sac.model.ExcepcioDocumentacio;
 import org.ibit.rol.sac.model.Familia;
 import org.ibit.rol.sac.model.HechoVital;
@@ -53,6 +54,7 @@ import org.ibit.rol.sac.persistence.delegate.CatalegDocumentsDelegate;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
+import org.ibit.rol.sac.persistence.delegate.DocumentoResumenDelegate;
 import org.ibit.rol.sac.persistence.delegate.ExcepcioDocumentacioDelegate;
 import org.ibit.rol.sac.persistence.delegate.FamiliaDelegate;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalDelegate;
@@ -960,8 +962,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 				// Documents
 				Enumeration<String> nomsParametres = request.getParameterNames();
-				Documento document;
-				DocumentoDelegate docDelegate = DelegateUtil.getDocumentoDelegate();
+				DocumentoResumen documentResumen;
+				DocumentoResumenDelegate docDelegate = DelegateUtil.getDocumentoResumenDelegate();
 				List<Documento> documents = new ArrayList<Documento>();
 				Map <String,String[]> actulitzadorMap = new HashMap<String, String[]>();
 
@@ -976,8 +978,14 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 						// En aquest cas, elements[2] es igual al id del document
 						Long id = ParseUtil.parseLong(request.getParameter(nomParameter));
 						if (id != null) {
-							document = docDelegate.obtenerDocumento(id);
-							documents.add(document);
+							documentResumen = docDelegate.obtenerDocumentoResumen(id);
+							Documento doc = new Documento();
+		                    doc.setId(documentResumen.getId());
+		                    doc.setFicha(documentResumen.getFicha());
+		                    doc.setOrden(documentResumen.getOrden());
+		                    doc.setProcedimiento(documentResumen.getProcedimiento());
+		                    doc.setTraduccionMap(documentResumen.getTraduccionMap());
+							documents.add(doc);
 
 							// Se coge el orden de la web. Si se quisiesen poner del 0 al x, hacer que orden valga 0 e ir incrementandolo.
 							String[] orden = {request.getParameter("documents_orden_" + elements[2])};

@@ -23,11 +23,13 @@
         <property name="cglib.use_reflection_optimizer">@hibernate.cglib@</property>
 
         <mapping resource="org/ibit/rol/sac/model/Archivo.hbm.xml" />
+        <mapping resource="org/ibit/rol/sac/model/ArchivoResumen.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/Auditoria.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/Boletin.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/Comentario.hbm.xml" />
 		<mapping resource="org/ibit/rol/sac/model/CatalegDocuments.hbm.xml" />        
         <mapping resource="org/ibit/rol/sac/model/Documento.hbm.xml" />
+        <mapping resource="org/ibit/rol/sac/model/DocumentoResumen.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/DocumentTramit.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/Edificio.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/Estadistica.hbm.xml" />

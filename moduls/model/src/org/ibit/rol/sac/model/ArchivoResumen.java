@@ -4,22 +4,20 @@ package org.ibit.rol.sac.model;
 
 import org.ibit.rol.sac.model.ws.ArchivoTransferible;
 
-public class Archivo implements ValueObject {
+public class ArchivoResumen implements ValueObject {
 
 	private Long id;
 	private String mime;
 	private String nombre;
 	private long peso;
-	private byte[] datos;
 
-	public Archivo() {
+	public ArchivoResumen() {
     }
 
-    public Archivo(Long id, String mime, String nombre, long peso) {
+    public ArchivoResumen(Long id, String mime, String nombre) {
         this.id = id;
         this.mime = mime;
         this.nombre = nombre;
-        this.peso = peso;
     }
 
     public Long getId() {
@@ -53,30 +51,22 @@ public class Archivo implements ValueObject {
     public void setPeso(long peso) {
         this.peso = peso;
     }
-
-    public byte[] getDatos() {
-        return datos;
-    }
-
-    public void setDatos(byte[] datos) {
-        this.datos = datos;
-    }
     
-    public static Archivo generar(final ArchivoTransferible archivoTransferible){
-    	Archivo archivo = null;
+    public static ArchivoResumen generar(final ArchivoTransferible archivoTransferible){
+    	ArchivoResumen archivoResumen = null;
     	
     	if(archivoTransferible!=null){
-	    	archivo = new Archivo();
-			archivo.setDatos(archivoTransferible.getDatos());
-			archivo.setMime(archivoTransferible.getMime());
-			archivo.setNombre(archivoTransferible.getNombre());
+	    	archivoResumen = new ArchivoResumen();
+//			archivoResumen.setDatos(archivoTransferible.getDatos());
+			archivoResumen.setMime(archivoTransferible.getMime());
+			archivoResumen.setNombre(archivoTransferible.getNombre());
 			if(archivoTransferible.getPeso()!=null){
-				archivo.setPeso(archivoTransferible.getPeso());
-			}else{
-				archivo.setPeso(archivoTransferible.getDatos().length);
+				archivoResumen.setPeso(archivoTransferible.getPeso());
+//			}else{
+//				archivo.setPeso(archivoTransferible.getDatos().length);
 			}
     	}
-    	return archivo;
+    	return archivoResumen;
     }
 
 	@Override

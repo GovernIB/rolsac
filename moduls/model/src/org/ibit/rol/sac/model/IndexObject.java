@@ -28,8 +28,22 @@ public class IndexObject extends ModelIndexObject {
             }
         }
     }
-
-    public String toString() {
+    
+    public void addArchivo(ArchivoResumen archivo) {
+        if (archivo != null && archivo.getPeso() > 0) {
+            Extractor extractor = ExtractorFactory.getExtractor(archivo.getMime());
+            if (extractor != null) {
+//                try {
+//                    String aText = extractor.extractText(new ByteArrayInputStream(archivo.getDatos()));
+//                    addTextLine(aText);
+//                } catch (IOException e) {
+//                    ;
+//                }
+            }
+        }
+    }
+    
+     public String toString() {
         return getClass().getName() + "@" + super.getId() + "," + super.getClasificacion();
     }
 }

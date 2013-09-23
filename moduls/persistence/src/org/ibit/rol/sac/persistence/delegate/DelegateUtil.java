@@ -125,7 +125,11 @@ public final class DelegateUtil {
     public static DocumentoDelegate getDocumentoDelegate(){
         return (DocumentoDelegate) DelegateFactory.getDelegate(DocumentoDelegate.class);
     }
-
+    
+    public static DocumentoResumenDelegate getDocumentoResumenDelegate(){
+        return (DocumentoResumenDelegate) DelegateFactory.getDelegate(DocumentoResumenDelegate.class);
+    }
+    
     public static FormularioDelegate getFormularioDelegate(){
         return (FormularioDelegate) DelegateFactory.getDelegate(FormularioDelegate.class);
     }
