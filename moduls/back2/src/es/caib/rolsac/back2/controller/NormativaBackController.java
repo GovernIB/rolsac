@@ -9,7 +9,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -492,6 +491,11 @@ public class NormativaBackController extends PantallaBaseController {
 		 * un descargable o fichero vinculado a una aplicaci�n. 
 		 * De esta forma, y devolviendo un ResponseEntity, forzaremos el Content-Type de la respuesta.
 		 */
+		/* Trazas temporales para detectar problemas del rendimiento*/
+    	log.info("1.0 Inició del guardado de una normativa");
+	    Date startTraceGeneral = new Date();
+    	/* Fin */
+	    
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
 		
@@ -526,7 +530,7 @@ public class NormativaBackController extends PantallaBaseController {
         		Long idUA = ParseUtil.parseLong(valoresForm.get("item_ua_id"));
         		ua = DelegateUtil.getUADelegate().obtenerUnidadAdministrativa(idUA);
         	}
-
+        	
     		//Determinar si la normativa a guardar tiene que ser local/externa
     		if (ua == null) {
     			normativaLocal = false;
@@ -655,8 +659,11 @@ public class NormativaBackController extends PantallaBaseController {
         		Boletin boletin = DelegateUtil.getBoletinDelegate().obtenerBoletin(ParseUtil.parseLong(valoresForm.get("item_butlleti_id")));
         		normativa.setBoletin(boletin);
         	}
-
-        	//Guardar
+        	
+    		//Guardar
+        	/* NOTA IMPORTANTE PARA EL RENDIMIENTO */
+    		normativa.setProcedimientos(null);	// Con este null evitamos que hibernate vaya a actualizar tablas innecesarias
+    		/* FIN NOTA */
         	if (normativaLocal) {
         		normativaDelegate.grabarNormativaLocal((NormativaLocal)normativa, ua.getId());
         	} else {
@@ -697,7 +704,7 @@ public class NormativaBackController extends PantallaBaseController {
     			}         	
         	
         	}
-			
+        	
 			//Finalizado correctamente
         	result = new IdNomDTO(normativa.getId(), messageSource.getMessage("normativa.guardat.correcte", null, request.getLocale()) );
         	
@@ -736,6 +743,10 @@ public class NormativaBackController extends PantallaBaseController {
 			log.error(ExceptionUtils.getStackTrace(e));
 		}
 		
+        /* Trazas temporales para detectar problemas del rendimiento*/
+        long execTime = new Date().getTime() - startTraceGeneral.getTime();
+    	log.info("1.0 Fin del guardado de una normativa, tiempo total: " + execTime + " milisegundos.");
+    	/* Fin */
 		return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
 	}
 

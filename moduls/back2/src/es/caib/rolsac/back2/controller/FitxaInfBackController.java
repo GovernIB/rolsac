@@ -532,6 +532,11 @@ public class FitxaInfBackController extends PantallaBaseController {
 		 * un descargable o fichero vinculado a una aplicaci�n. 
 		 * De esta forma, y devolviendo un ResponseEntity, forzaremos el Content-Type de la respuesta.
 		 */
+    	/* Trazas temporales para detectar problemas del rendimiento*/
+    	log.info("1.0 Inició del guardado de una ficha");
+	    Date startTraceGeneral = new Date();
+    	/* Fin */
+    	
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
 
@@ -599,11 +604,7 @@ public class FitxaInfBackController extends PantallaBaseController {
             boolean edicion;
             Long id = ParseUtil.parseLong(valoresForm.get("item_id"));
 			if (id != null) {
-			    log.debug("Inici de obtenerFicha(" + id + ")");
-			    startTrace = new Date();
 				fitxaOld = fitxaDelegate.obtenerFicha(id);
-				execTime = new Date().getTime() - startTrace.getTime();
-                log.debug("Temps d'execucio de obtenerFicha(" + id + "): " + execTime + " milisegons.");
 				edicion = true;
 			} else {									
 				fitxaOld = null;
@@ -745,11 +746,7 @@ public class FitxaInfBackController extends PantallaBaseController {
                     for (String codiMateria: codisMateriaNous){
                         if (codiMateria != null){
                             Long codi = ParseUtil.parseLong(codiMateria);
-                            log.debug("Inici de obtenerMateria(" + codi + ")");
-                            startTrace = new Date();
                             materiesNoves.add(materiaDelegate.obtenerMateria(codi));
-                            execTime = new Date().getTime() - startTrace.getTime();
-                            log.debug("Temps d'execucio de obtenerMateria(" + codi + "): " + execTime + " milisegons.");
                         }                        
                     }
                     
@@ -782,11 +779,7 @@ public class FitxaInfBackController extends PantallaBaseController {
                     for (String codiFetVital: codisFetsNous){
                         if (codiFetVital != null){
                             Long codi = ParseUtil.parseLong(codiFetVital);
-                            log.debug("Inici de obtenerHechoVital(" + codi + ")");
-                            startTrace = new Date();
                             fetsVitalsNous.add(fetVitalDelegate.obtenerHechoVital(codi));
-                            execTime = new Date().getTime() - startTrace.getTime();
-                            log.debug("Temps d'execucio de obtenerHechoVital(" + codi + "): " + execTime + " milisegons.");
                         }                        
                     }
                     
@@ -819,11 +812,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 	                for (String codiPublic: codisPublicsNous){
 	                    if (codiPublic != null){
 	                        Long codi = ParseUtil.parseLong(codiPublic);
-	                        log.debug("Inici de ObtenirPublicObjectiu(" + codi + ")");
-	                        startTrace = new Date();
 	                        publicsNous.add(publicObjDelegate.obtenerPublicoObjetivo(codi));
-	                        execTime = new Date().getTime() - startTrace.getTime();
-	                        log.debug("Temps d'execucio de ObtenirPublicObjectiu(" + codi + "): " + execTime + " milisegons.");
 	                    }                        
 	                }
 	                
@@ -845,11 +834,7 @@ public class FitxaInfBackController extends PantallaBaseController {
               
           	    Long idDoc = ParseUtil.parseLong(elements[2]);	// documents_id_xxx                	
           	    if (idDoc != null) {
-              	    log.debug("Inici de obtenerDocumento(" + idDoc + ")");
-                    startTrace = new Date();
                     document = docDelegate.obtenerDocumentoResumen(idDoc);
-                    execTime = new Date().getTime() - startTrace.getTime();
-                    log.debug("Temps d'execucio de obtenerDocumento(" + idDoc + "): " + execTime + " milisegons.");
                     Documento doc = new Documento();
                     doc.setId(document.getId());
                     doc.setFicha(document.getFicha());
@@ -866,11 +851,7 @@ public class FitxaInfBackController extends PantallaBaseController {
             }
 	          
 	        // actualitzam ordres
-            log.debug("Inici de actualizarOrdenDocs()");
-            startTrace = new Date();
 	        docDelegate.actualizarOrdenDocs(actulitzadorMap);
-	        execTime = new Date().getTime() - startTrace.getTime();
-            log.debug("Temps d'execucio de actualizarOrdenDocs(): " + execTime + " milisegons.");
 	        
 	        // assignar els documents a la fitxa i eliminar els que ja no estiguin seleccionats.
 	        fitxa.setDocumentos(documents);
@@ -889,11 +870,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 	            for (Documento doc: docsOld){
 	            	if (doc != null) {
 	            	    Long codi = doc.getId();
-	                    log.debug("Inici de borrarDocumento(" + codi + ")");
-	                    startTrace = new Date();
 	            	    docDelegate.borrarDocumento(codi);
-	            	    execTime = new Date().getTime() - startTrace.getTime();
-	                    log.debug("Temps d'execucio de borarDocumento(" + codi + "): " + execTime + " milisegons.");
 	            	}
 	            }
 	        } 
@@ -901,11 +878,10 @@ public class FitxaInfBackController extends PantallaBaseController {
             
 	        
 	        // Guardar
-	        log.debug("Inici de grabarFicha()");
-            startTrace = new Date();
+	        /* NOTA IMPORTANTE PARA EL RENDIMIENTO */
+	        fitxa.setDocumentos(null);	// Debemos ponerlo a null para que hibernate no vaya a actualizar todas la relaciones
+	        /* FIN NOTA */
             Long idFitxa = fitxaDelegate.grabarFicha(fitxa);
-            execTime = new Date().getTime() - startTrace.getTime();
-            log.debug("Temps d'execucio de grabarFicha(" + idFitxa + "): " + execTime + " milisegons.");
                 
             //Asociacion de ficha con Unidad administrativa
             
@@ -929,11 +905,7 @@ public class FitxaInfBackController extends PantallaBaseController {
                         }
                         if (esborrarFichaUA){
                             Long codi = fichaUA.getId();
-                            log.debug("Inici de borrarFichaUA(" + codi + ")");
-                            startTrace = new Date();
                             fitxaDelegate.borrarFichaUA(codi);
-                            execTime = new Date().getTime() - startTrace.getTime();
-                            log.debug("Temps d'execucio de borrarFichaUA(" + codi + "): " + execTime + " milisegons.");
                         }                            
                     }
                 }
@@ -944,13 +916,7 @@ public class FitxaInfBackController extends PantallaBaseController {
                         String[] seccUA = codiSeccUa.split("#");
                         Long idSeccion = ParseUtil.parseLong(seccUA[1]);
                         Long idUA = ParseUtil.parseLong(seccUA[2]);
-    
-                        log.debug("Inici de crearFichaUA(" + idUA + ", " + idSeccion + ", " + idFitxa + ")");
-                        startTrace = new Date();
                         fitxaDelegate.crearFichaUA(idUA, idSeccion, idFitxa);
-                        execTime = new Date().getTime() - startTrace.getTime();
-                        log.debug("Temps d'execucio de crearFichaUA(" + idUA + ", " + idSeccion + ", " + idFitxa + "): " + execTime + " milisegons.");
-    
                         String pidip = System.getProperty("es.caib.rolsac.pidip");
                         if(!((pidip == null) || pidip.equals("N"))) {
                             // Si se anyade una ficha a la seccion Actualidad, se a�ade tambien a Portada Actualidad (PIDIP)
@@ -958,12 +924,7 @@ public class FitxaInfBackController extends PantallaBaseController {
                             {   //comprobamos  antes si ya exite la ficha en actualidad  en portada en cuyo caso no la insertamos para no duplicarla.
                                 int existe=0;
                                 Long portadas = new Long(Parametros.PORTADAS_ACTUALIDAD);
-                                
-                                log.debug("Inici de listarFichasSeccionTodas(" + portadas + ")");
-                                startTrace = new Date();
                                 List listac = fitxaDelegate.listarFichasSeccionTodas(portadas);
-                                execTime = new Date().getTime() - startTrace.getTime();
-                                log.debug("Temps d'execucio de listarFichasSeccionTodas(" + portadas + "): " + execTime + " milisegons.");
                                 
                                 Iterator iter = listac.iterator();
                                 while (iter.hasNext())
@@ -973,11 +934,7 @@ public class FitxaInfBackController extends PantallaBaseController {
                                         existe=1;
                                 }
                                 if (existe==0) {
-                                    log.debug("Inici de crearFichaUA(" + idUA + ", " + portadas + ", " + idFitxa + ")");
-                                    startTrace = new Date();
                                     fitxaDelegate.crearFichaUA(idUA, portadas, idFitxa);
-                                    execTime = new Date().getTime() - startTrace.getTime();
-                                    log.debug("Temps d'execucio de crearFichaUA(" + idUA + ", " + portadas + ", " + idFitxa + "): " + execTime + " milisegons.");
                                 }
                             }
                         }                                                
@@ -1030,11 +987,7 @@ public class FitxaInfBackController extends PantallaBaseController {
                 EnlaceDelegate enllasDelegate = DelegateUtil.getEnlaceDelegate();
                 
                 for (Enlace enllas: enllassosNous){
-                    log.debug("Inici de grabarEnlace(" + enllas + ", " + null + ", " + idFitxa + ")");
-                    startTrace = new Date();
                     enllasDelegate.grabarEnlace(enllas, null, idFitxa);
-                    execTime = new Date().getTime() - startTrace.getTime();
-                    log.debug("Temps d'execucio de grabarEnlace(" + enllas + ", " + null + ", " + idFitxa + "): " + execTime + " milisegons.");
                 }                
                 
                 //Cal triar dels enllassos antics que pogues haver, quins se conserven i quins no                
@@ -1052,11 +1005,7 @@ public class FitxaInfBackController extends PantallaBaseController {
                     
                     for (Enlace enllas: enllassosEliminar){
                         Long codi = enllas.getId();
-                        log.debug("Inici de borrarEnlace(" + codi + ")");
-                        startTrace = new Date();
                         enllasDelegate.borrarEnlace(codi);
-                        execTime = new Date().getTime() - startTrace.getTime();
-                        log.debug("Temps d'execucio de borrarEnlace(" + codi + "): " + execTime + " milisegons.");
                     }                    
                 }            
             }
@@ -1092,6 +1041,10 @@ public class FitxaInfBackController extends PantallaBaseController {
 		}
 
         //return result;
+        /* Trazas temporales para detectar problemas del rendimiento*/
+        long execTime = new Date().getTime() - startTraceGeneral.getTime();
+    	log.info("1.0 Fin del guardado de una ficha, tiempo total: " + execTime + " milisegundos.");
+    	/* Fin */
         return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
     }
     
