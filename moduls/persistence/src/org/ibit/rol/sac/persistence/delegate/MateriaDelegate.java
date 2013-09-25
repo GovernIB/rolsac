@@ -1,5 +1,6 @@
 package org.ibit.rol.sac.persistence.delegate;
 
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Set;
 
@@ -126,4 +127,10 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 				throws DelegateException {
 			return impl.obtenerMateriaFichasProced(id);
 		}
+		
+		public List<Materia> obtenerMateriasPorIDs(String ids, String idioma)
+				throws DelegateException {
+			return impl.obtenerMateriasPorIDs(ids, idioma);
+		}
+		
 }

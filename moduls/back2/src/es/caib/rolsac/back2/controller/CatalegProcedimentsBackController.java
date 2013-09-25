@@ -670,8 +670,16 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 		IdNomDTO result = null;
 		String error = null;
+		
+		/* Trazas temporales para detectar problemas del rendimiento*/
+    	log.info("1.0 Inició del guardado de un procedimiento");
+	    Date startTraceGeneral = new Date();
+    	/* Fin */
+	    Date startTrace;
+	    long execTime;
 
 		try {
+			String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 
 			//			UnidadAdministrativa ua = (UnidadAdministrativa) getUAFromSession(session);
 			//			if (ua == null) {
@@ -690,9 +698,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 				ProcedimientoDelegate procedimentDelegate = DelegateUtil.getProcedimientoDelegate();
 				ProcedimientoLocal procediment = new ProcedimientoLocal();
-				ProcedimientoLocal procedimentOld;			
-
-				boolean edicion;
+				ProcedimientoLocal procedimentOld;
+				
+			    boolean edicion;
 				try {
 					Long id = Long.parseLong(request.getParameter("item_id"));
 					procedimentOld = procedimentDelegate.obtenerProcedimiento(id);
@@ -716,49 +724,25 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 					// // A los nuevos procedimientos se les asigna la UA de la miga de pan.
 					// procediment.setUnidadAdministrativa(ua);
 				}
-
-				// Materias
+				
+			    // Materias
 				/* Para hacer menos accesos a BBDD se comprueba si es edicion o no. 
 				 * En el primer caso es bastante probable que se repitan la mayoria de materias.
 				 */
-				if ( isModuloModificado("modulo_materias_modificado", request) ) {
-
-					if ( request.getParameter("materies") != null && !"".equals(request.getParameter("materies")) ) {
-
+				if (isModuloModificado("modulo_materias_modificado", request)) {
+					if (request.getParameter("materies") != null && !"".equals(request.getParameter("materies"))) {
 						MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
-						Set<Materia> materiesNoves = new HashSet<Materia>();
-						String[] codisMateriaNous = request.getParameter("materies").split(",");
-
-						if (edicion) {
-							for (int i = 0; i < codisMateriaNous.length; i++) {
-								for (Materia materia : procedimentOld.getMaterias()) {
-									if (materia.getId().equals(Long.valueOf(codisMateriaNous[i]))) { //materia ya existente
-										materiesNoves.add(materia);
-										codisMateriaNous[i] = null;
-										break;
-									}
-								}                            
-							}                         
-						}                    
-
-						for (String codiMateria: codisMateriaNous) {
-							if (codiMateria != null) {
-								materiesNoves.add(materiaDelegate.obtenerMateria(Long.valueOf(codiMateria)));
-							}                        
-						}
-
-						procediment.setMaterias(materiesNoves);
+						Set<Materia> materias = new HashSet<Materia>();
+						materias.addAll(materiaDelegate.obtenerMateriasPorIDs(request.getParameter("materies"), idioma));
+						procediment.setMaterias(materias);
 
 					} else {
-
 						procediment.setMaterias(new HashSet<Materia>());
-
 					}
-
 				}
 				// Fin Materias
-
-				// Public Objectiu
+		    	
+			    // Public Objectiu
 				/* Para hacer menos accesos a BBDD se comprueba si es edicion o no. 
 				 * En el primer caso es bastante probable que se repitan la mayoria de public objectiu.
 				 */
@@ -798,7 +782,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 				}
 				// Fin Public Objectiu
-
+		    	
 				// Actualizar la lista de Trámites
 				String tramitsProcediment = request.getParameter("tramitsProcediment");
 				TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
@@ -872,8 +856,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 				}               
 				//Fin trámites
-
-				// Hechos vitales
+		    	
+			    // Hechos vitales
 				if ( request.getParameter("fetsVitals") != null && edicion && isModuloModificado("modulo_hechos_modificado", request) ) {
 
 					String[] codisFetsVitals = request.getParameter("fetsVitals").split(",");
@@ -918,8 +902,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 				}
 				// Fin Hechos vitales
-
-				// Normativas
+		    	
+			    // Normativas
 				/* Para hacer menos accesos a BBDD se comprueba si es edicion o no. 
 				 * En el primer caso es bastante probable que se repitan la mayoria de normativas.
 				 */
@@ -959,8 +943,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 				}
 				// Fin normativas
-
-				// Documents
+		    	
+		    	// Documents
 				Enumeration<String> nomsParametres = request.getParameterNames();
 				DocumentoResumen documentResumen;
 				DocumentoResumenDelegate docDelegate = DelegateUtil.getDocumentoResumenDelegate();
@@ -1193,7 +1177,12 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				procediment.setIndicador("on".equalsIgnoreCase(request.getParameter("item_fi_vida_administrativa")) ? "1" : "0");
 				procediment.setVentanillaUnica("on".equalsIgnoreCase(request.getParameter("item_finestreta_unica")) ? "1" : "0");
 				procediment.setInfo(request.getParameter("item_notes"));
-
+				
+			    /* NOTA IMPORTANTE PARA EL RENDIMIENTO */
+				procediment.setDocumentos(null);
+				procediment.setTramites(null);
+				procediment.setHechosVitalesProcedimientos(null);
+				/* FIN NOTA */
 				Long procId = procedimentDelegate.grabarProcedimiento(procediment, procediment.getUnidadAdministrativa().getId());
 
 				String ok = messageSource.getMessage("proc.guardat.correcte", null, request.getLocale());
@@ -1222,7 +1211,11 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			result = new IdNomDTO(-4l, error);
 
 		}
-
+		
+		/* Trazas temporales para detectar problemas del rendimiento*/
+        execTime = new Date().getTime() - startTraceGeneral.getTime();
+    	log.info("1.0 Fin del guardado de una ficha, tiempo total: " + execTime + " milisegundos.");
+    	/* Fin */
 		return result;
 
 	}

@@ -1,5 +1,6 @@
 package org.ibit.rol.sac.persistence.delegate;
 
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Set;
 
@@ -62,6 +63,9 @@ public interface MateriaDelegateI {
 			final String idioma) throws DelegateException;
 
 	public abstract Materia obtenerMateriaFichasProced(Long id)
+			throws DelegateException;
+	
+	public abstract List<Materia> obtenerMateriasPorIDs(String ids, String idioma)
 			throws DelegateException;
 	
 }
