@@ -17,7 +17,7 @@ public class ArchivoDelegate  implements StatelessDelegate {
         
         	
 	/* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== MÃ‰TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
 	public Archivo obtenerArchivo(Long id)  throws DelegateException {
@@ -27,7 +27,8 @@ public class ArchivoDelegate  implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-		
+
+	/** @deprecated  No se utiliza */
     public ByteArrayOutputStream getFitxer(Long id) throws DelegateException {
     	try {
     		return getFacade().getFitxer(id);
@@ -38,6 +39,7 @@ public class ArchivoDelegate  implements StatelessDelegate {
     	
     }    
 
+    /** @deprecated  No se utiliza */
     public String getMime(Long id) throws DelegateException {    
     	try {
     		return getFacade().getMime(id);
@@ -47,7 +49,7 @@ public class ArchivoDelegate  implements StatelessDelegate {
 
     }
     
-
+    /** @deprecated  No se utiliza */
     public long getPes(Long id) throws DelegateException {       	
     	try {
     		return getFacade().getPes(id);
@@ -56,7 +58,7 @@ public class ArchivoDelegate  implements StatelessDelegate {
     	}
     }    
     
-
+    /** @deprecated  No se utiliza */
     public String getNombre(Long id) throws DelegateException {
     	try {
     		return getFacade().getNombre(id);

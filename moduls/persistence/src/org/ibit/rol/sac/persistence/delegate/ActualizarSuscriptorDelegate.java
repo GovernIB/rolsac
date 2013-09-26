@@ -18,18 +18,19 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * @deprecated Utilizado únicamente desde el back antiguo
  * Business delegate para manipular materias.
  */
 public class ActualizarSuscriptorDelegate implements StatelessDelegate {
 
     /* ========================================================= */
-    /* ======================== M�TODOS DE NEGOCIO ============= */
+    /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
 	
 
-
-    public void actualizaSuscriptor(Suscriptor sus) throws DelegateException {
+	/** @deprecated Utilizado únicamente desde el back antiguo*/
+	public void actualizaSuscriptor(Suscriptor sus) throws DelegateException {
     	try {
     		getFacade().actualizaSuscriptor(sus);
     	} catch (RemoteException e) {

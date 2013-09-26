@@ -15,14 +15,15 @@ import java.util.List;
 /**
  * Business delegate para manipular Comentarios.
  */
+//TODO: Los métodos de esta clase están deprecated, muchos no son referenciados desde ninguna parte de la aplicación y otros únicamente los utiliza el back antiguo.
 public class ComentarioDelegate implements StatelessDelegate {
 
     /* ========================================================= */
-    /* ======================== M�TODOS DE NEGOCIO ============= */
+    /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
-    public Long comentarFicha(String motivo, String titulo, String contenido, Long idFicha,String idioma)
-            throws DelegateException {
+	/** @deprecated No se usa*/
+    public Long comentarFicha(String motivo, String titulo, String contenido, Long idFicha,String idioma) throws DelegateException {
         try {
             return getFacade().comentarFicha(motivo, titulo, contenido, idFicha,idioma);
         } catch (RemoteException e) {
@@ -30,8 +31,8 @@ public class ComentarioDelegate implements StatelessDelegate {
         }
     }
 
-    public Long comentarProcedimiento(String motivo, String titulo, String contenido, Long idProc,String idioma)
-            throws DelegateException {
+    /** @deprecated No se usa*/
+   public Long comentarProcedimiento(String motivo, String titulo, String contenido, Long idProc,String idioma) throws DelegateException {
         try {
             return getFacade().comentarProcedimiento(motivo, titulo, contenido, idProc,idioma);
         } catch (RemoteException e) {
@@ -39,6 +40,7 @@ public class ComentarioDelegate implements StatelessDelegate {
         }
     }
 
+   /** @deprecated Utilizado por el back antiguo*/
     public List listarComentariosFicha(Long idFicha) throws DelegateException {
         try {
             return getFacade().listarComentariosFicha(idFicha);
@@ -47,6 +49,7 @@ public class ComentarioDelegate implements StatelessDelegate {
         }
     }
 
+    /** @deprecated No se usa*/
     public List listarComentariosFicha(Long idFicha, String motivo) throws DelegateException {
         try {
             return getFacade().listarComentariosFicha(idFicha, motivo);
@@ -55,6 +58,7 @@ public class ComentarioDelegate implements StatelessDelegate {
         }
     }
     
+    /** @deprecated No se usa*/
     public List listarComentariosFichaExceptoMotivo(Long idFicha, String motivo) throws DelegateException {
         try {
             return getFacade().listarComentariosFichaExceptoMotivo(idFicha, motivo);
@@ -63,6 +67,7 @@ public class ComentarioDelegate implements StatelessDelegate {
         }
     }
 
+    /** @deprecated Utilizado por el back antiguo*/
     public List listarComentariosProcedimiento(Long idProc) throws DelegateException {
         try {
             return getFacade().listarComentariosProcedimiento(idProc);
@@ -71,6 +76,7 @@ public class ComentarioDelegate implements StatelessDelegate {
         }
     }
 
+    /** @deprecated No se utiliza*/
     public List listarComentariosProcedimiento(Long idProc, String motivo) throws DelegateException {
         try {
             return getFacade().listarComentariosProcedimiento(idProc, motivo);
@@ -79,6 +85,7 @@ public class ComentarioDelegate implements StatelessDelegate {
         }
     }
     
+    /** @deprecated No se utiliza*/
     public List listarComentariosProcedimientoExceptoMotivo(Long idProc, String motivo) throws DelegateException {
         try {
             return getFacade().listarComentariosProcedimientoExceptoMotivo(idProc, motivo);
@@ -87,6 +94,7 @@ public class ComentarioDelegate implements StatelessDelegate {
         }
     }
 
+    /** @deprecated Utilizado por el back antiguo*/
     public Comentario obtenerComentario(Long id) throws DelegateException {
         try {
             return getFacade().obtenerComentario(id);
@@ -95,6 +103,7 @@ public class ComentarioDelegate implements StatelessDelegate {
         }
     }
 
+    /** @deprecated No se utiliza*/
     public List listarUltimosComentarios(int offset, int number) throws DelegateException {
         try {
             return getFacade().listarUltimosComentarios(offset, number);
@@ -103,6 +112,7 @@ public class ComentarioDelegate implements StatelessDelegate {
         }
     }
 
+    /** @deprecated No se utiliza*/
     public List listarUltimosComentarios(String motivo, int offset, int number) throws DelegateException {
           try {
               return getFacade().listarUltimosComentarios(motivo, offset, number);
@@ -111,6 +121,7 @@ public class ComentarioDelegate implements StatelessDelegate {
           }
     }
 
+    /** @deprecated No se utiliza*/
     public Integer numeroComentarios() throws DelegateException {
         try {
             return getFacade().numeroComentarios();
@@ -119,6 +130,7 @@ public class ComentarioDelegate implements StatelessDelegate {
         }
     }
 
+    /** @deprecated No se utiliza*/
     public Integer numeroComentarios(String motivo) throws DelegateException {
         try {
             return getFacade().numeroComentarios(motivo);
@@ -128,6 +140,7 @@ public class ComentarioDelegate implements StatelessDelegate {
     }
 
 
+    /** @deprecated Utilizado por el back antiguo*/
     public void borrarComentario(Long id) throws DelegateException {
         try {
             getFacade().borrarComentario(id);
@@ -136,6 +149,7 @@ public class ComentarioDelegate implements StatelessDelegate {
         }
     }
     
+    /** @deprecated No se utiliza*/
     public void subsanarComentario(Long id) throws DelegateException {
         try {
             getFacade().subsanarComentario(id);
@@ -143,6 +157,8 @@ public class ComentarioDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
+    /** @deprecated No se utiliza*/
     public void reportarErrorComentario(Long idFicha,String motivo, String titulo, String contenido,String idioma,String tipo) throws DelegateException {
         try {
             getFacade().reportarErrorComentario(idFicha,motivo,titulo,contenido,idioma,tipo);

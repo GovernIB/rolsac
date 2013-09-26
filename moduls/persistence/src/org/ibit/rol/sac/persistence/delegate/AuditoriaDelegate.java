@@ -16,49 +16,51 @@ import java.util.List;
  */
 public class AuditoriaDelegate implements StatelessDelegate {
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== MÃ‰TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
-    public List listarAuditoriasUnidadAdministrativa(Long unidad_id) throws DelegateException {
+    public List listarAuditoriasUnidadAdministrativa(Long idUnidad) throws DelegateException {
         try {
-            return getFacade().listarAuditoriasUnidadAdministrativa(unidad_id);
+            return getFacade().listarAuditoriasUnidadAdministrativa(idUnidad);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
 
-    public List listarAuditoriasProcedimiento(Long proc_id) throws DelegateException {
+    public List listarAuditoriasProcedimiento(Long idProcedimiento) throws DelegateException {
         try {
-            return getFacade().listarAuditoriasProcedimiento(proc_id);
+            return getFacade().listarAuditoriasProcedimiento(idProcedimiento);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
 
-    public List listarAuditoriasNormativa(Long norm_id) throws DelegateException {
+    public List listarAuditoriasNormativa(Long idNormativa) throws DelegateException {
         try {
-            return getFacade().listarAuditoriasNormativa(norm_id);
+            return getFacade().listarAuditoriasNormativa(idNormativa);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
 
-    public List listarAuditoriasFicha(Long ficha_id) throws DelegateException {
+    public List listarAuditoriasFicha(Long idFicha) throws DelegateException {
         try {
-            return getFacade().listarAuditoriasFicha(ficha_id);
+            return getFacade().listarAuditoriasFicha(idFicha);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
 
-    public List listarAuditoriasHistorico(Long historico_id) throws DelegateException {
+    /** @deprecated  No se utiliza */
+    public List listarAuditoriasHistorico(Long idHistorico) throws DelegateException {
         try {
-            return getFacade().listarAuditoriasHistorico(historico_id);
+            return getFacade().listarAuditoriasHistorico(idHistorico);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
 
+    /** @deprecated  No se utiliza */
     public List listarHistoricosAuditorias(Date fechaIni, Date fechaFin) throws DelegateException {
         try {
             return getFacade().listarHistoricosAuditorias(fechaIni, fechaFin);
@@ -67,17 +69,17 @@ public class AuditoriaDelegate implements StatelessDelegate {
         }
     }
     
-    public List listarAuditoriasProcedimientoPMA(Long proc_id) throws DelegateException {
+    public List listarAuditoriasProcedimientoPMA(Long idProcedimiento) throws DelegateException {
         try {
-            return getFacade().listarAuditoriasProcedimientoPMA(proc_id);
+            return getFacade().listarAuditoriasProcedimientoPMA(idProcedimiento);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
     
-    public List listarAuditoriasFichaPMA(Long fic_id) throws DelegateException {
+    public List listarAuditoriasFichaPMA(Long idFicha) throws DelegateException {
         try {
-            return getFacade().listarAuditoriasFichaPMA(fic_id);
+            return getFacade().listarAuditoriasFichaPMA(idFicha);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }

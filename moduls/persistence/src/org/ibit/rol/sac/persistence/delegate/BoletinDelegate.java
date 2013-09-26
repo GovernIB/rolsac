@@ -18,12 +18,12 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  * Business delegate para manipular boletines.
  */
 public class BoletinDelegate implements StatelessDelegate {
-	
+
 	private static final long serialVersionUID = -4660868505069232251L;
-	
-    /* ========================================================= */
-    /* ======================== M�TODOS DE NEGOCIO ============= */
-    /* ========================================================= */
+
+	/* ========================================================= */
+	/* ======================== M�TODOS DE NEGOCIO ============= */
+	/* ========================================================= */
 
 	public Long grabarBoletin(Boletin boletin) throws DelegateException {
         try {
@@ -33,68 +33,69 @@ public class BoletinDelegate implements StatelessDelegate {
         }
     }
 
-    public ResultadoBusqueda listarBoletines(int pagina, int resultats) throws DelegateException {
+	public ResultadoBusqueda listarBoletines(int pagina, int resultats) throws DelegateException {
         try {
             return getFacade().listarBoletines(pagina, resultats);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
-    
-    public List listarBoletines() throws DelegateException {
-        try {
-            return getFacade().listarBoletines();
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
 
-    public Boletin obtenerBoletin(Long id) throws DelegateException {
-        try {
-            return getFacade().obtenerBoletin(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
+	public List listarBoletines() throws DelegateException {
+		try {
+			return getFacade().listarBoletines();
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
 
-    public boolean tieneNormativas(Long id) throws DelegateException {
-           try {
-               return getFacade().tieneNormativas(id);
-           } catch (RemoteException e) {
-               throw new DelegateException(e);
-           }
-       }
+	public Boletin obtenerBoletin(Long id) throws DelegateException {
+		try {
+			return getFacade().obtenerBoletin(id);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+
+	/** @deprecated   utilizado por el back antiguo */
+	public boolean tieneNormativas(Long id) throws DelegateException {
+		try {
+			return getFacade().tieneNormativas(id);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
 
 
-    public void borrarBoletin(Long id) throws DelegateException {
-        try {
-            getFacade().borrarBoletin(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
+	public void borrarBoletin(Long id) throws DelegateException {
+		try {
+			getFacade().borrarBoletin(id);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
 
-    /* ========================================================= */
-    /* ======================== REFERENCIA AL FACADE  ========== */
-    /* ========================================================= */
+	/* ========================================================= */
+	/* ======================== REFERENCIA AL FACADE  ========== */
+	/* ========================================================= */
 
-    private Handle facadeHandle;
+	private Handle facadeHandle;
 
-    private BoletinFacade getFacade() throws RemoteException {
-        return (BoletinFacade) facadeHandle.getEJBObject();
-    }
+	private BoletinFacade getFacade() throws RemoteException {
+		return (BoletinFacade) facadeHandle.getEJBObject();
+	}
 
-    protected BoletinDelegate() throws DelegateException {
-        try {
-            BoletinFacadeHome home = BoletinFacadeUtil.getHome();
-            BoletinFacade remote = home.create();
-            facadeHandle = remote.getHandle();
-        } catch (NamingException e) {
-            throw new DelegateException(e);
-        } catch (CreateException e) {
-            throw new DelegateException(e);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
+	protected BoletinDelegate() throws DelegateException {
+		try {
+			BoletinFacadeHome home = BoletinFacadeUtil.getHome();
+			BoletinFacade remote = home.create();
+			facadeHandle = remote.getHandle();
+		} catch (NamingException e) {
+			throw new DelegateException(e);
+		} catch (CreateException e) {
+			throw new DelegateException(e);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
 }

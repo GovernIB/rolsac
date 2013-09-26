@@ -37,6 +37,8 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 public class TMCatalegDocumentsController extends PantallaBaseController
 {
 	private static Log log = LogFactory.getLog(TMCatalegDocumentsController.class);
+	private static String defaultLang = "ca";
+	private static String excepcionNoIdioma = "No se encontro el idioma por defecto";
 	
 	@RequestMapping(value = "/catalegDocuments.do")
 	public String pantallaCatalegDocuments(Map<String, Object> model, HttpServletRequest request)
@@ -68,86 +70,61 @@ public class TMCatalegDocumentsController extends PantallaBaseController
 	
 	
 	@RequestMapping(value = "/llistat.do")
-	public @ResponseBody Map<String, Object> llistatCataleg(HttpServletRequest request)
-	{
+	public @ResponseBody Map<String, Object> llistatCataleg(Long admresp, Long excepcio, String textes, Integer pagPag, Integer pagRes, HttpServletRequest request) {
+		
     	List<Map<String, Object>> llistaCatalegDocumentsDTO = new ArrayList<Map<String, Object>>();
     	Map<String, Object> catalegDocDTO;
     	Map<String, Object> resultats = new HashMap<String, Object>();
-    	Map<String, Object> paramMap = new HashMap<String, Object>();
-    	Map<String, String> tradMap = new HashMap<String, String>();
     	
     	String lang;
     	try {
+    		
     		lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+    		
     	} catch (DelegateException dEx) {
-    		log.error("No se encontro el idioma por defecto");
-    		lang = "ca";
+    		
+    		log.error(excepcionNoIdioma);
+    		lang = defaultLang;
+    		
     	}
-    	
-    	// Parametres de cerca
-    	
-    	Long admResp = null;
-    	String admRespString = request.getParameter("admresp");
-    	if (admRespString != null && !"".equals(admRespString)) {
-    		Scanner scanner = new Scanner(admRespString);
-    		if (scanner.hasNextLong()) {
-    			admResp = scanner.nextLong();
-    			paramMap.put("admResponsable",admResp);
-    		}
-    	}
-    	
-    	Long idExcepcio = null;
-    	String excepcioString = request.getParameter("excepcio");
-    	if (excepcioString != null) {
-    		Scanner scanner = new Scanner(excepcioString);
-    		if (scanner.hasNextLong()) {
-    			idExcepcio = scanner.nextLong();
-    		}
-    	}
-    	
-    	// Textes (en todos los campos todos los idiomas)
-    	String textes = request.getParameter("textes");
-    	if (textes != null && !"".equals(textes)) {
-    		textes = textes.toUpperCase();
-    		tradMap.put("nombre", textes);
-    		tradMap.put("descripcion", textes);
-    	} else {
-    		tradMap.put("idioma", lang);
-    	}
-    	
-    	// Información de paginación
-    	String pagPag = request.getParameter("pagPag");
-    	String pagRes = request.getParameter("pagRes");
-    	
-    	if (pagPag == null) pagPag = String.valueOf(0);
-    	if (pagRes == null) pagRes = String.valueOf(10);
     	
     	ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
     	
     	try {
+    		
     		CatalegDocumentsDelegate catalegDocumentsDelegate = DelegateUtil.getCatalegDocumentsDelegate();
-    		resultadoBusqueda = catalegDocumentsDelegate.cercarDocumentsCatalegAmbMultiidioma(paramMap,tradMap,idExcepcio,pagPag,pagRes);
-    		for (CatalegDocuments doc: castList(CatalegDocuments.class, resultadoBusqueda.getListaResultados()) ) {
-    			//for (CatalegDocuments doc: llistaCatalegDocuments) {
-    			TraduccionCatalegDocuments td = (TraduccionCatalegDocuments) doc.getTraduccion(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
+    		resultadoBusqueda = catalegDocumentsDelegate.cercarDocumentsCatalegAmbMultiidioma( textes, admresp, excepcio, pagPag, pagRes, lang );
+    		
+    		for ( CatalegDocuments doc: castList( CatalegDocuments.class , resultadoBusqueda.getListaResultados() ) ) {
+    			
+    			TraduccionCatalegDocuments td = (TraduccionCatalegDocuments) doc.getTraduccion( DelegateUtil.getIdiomaDelegate().lenguajePorDefecto() );
     			catalegDocDTO = new HashMap<String, Object>();
-    			catalegDocDTO.put("id", doc.getId());
-    			catalegDocDTO.put("nombre", td == null ? "" : td.getNombre());
-    			catalegDocDTO.put("descripcion", td == null ? "" : td.getDescripcion());
+    			catalegDocDTO.put( "id" , doc.getId() );
+    			catalegDocDTO.put( "nombre", td == null ? "" : td.getNombre() );
+    			catalegDocDTO.put( "descripcion", td == null ? "" : td.getDescripcion() );
     			llistaCatalegDocumentsDTO.add(catalegDocDTO);
+    			
     		}
+    		
     	} catch (DelegateException dEx) {
-    		if (dEx.isSecurityException()) {
-    			log.error("Permisos insuficients: " + dEx.getMessage());
+    		
+    		if ( dEx.isSecurityException() ) {
+    			
+    			log.error( "Permisos insuficients: " + dEx.getMessage() );
+    			
     		} else {
-    			log.error("Error: " + dEx.getMessage());
+    			
+    			log.error( "Error: " + dEx.getMessage() );
+    			
     		}
+    		
     	}
     	
-    	resultats.put("total", resultadoBusqueda.getTotalResultados());
-    	resultats.put("nodes", llistaCatalegDocumentsDTO);
+    	resultats.put( "total" , resultadoBusqueda.getTotalResultados() );
+    	resultats.put( "nodes", llistaCatalegDocumentsDTO );
     	
     	return resultats;
+    	
     }
     
     @RequestMapping(value = "/pagDetall.do")

@@ -1,7 +1,6 @@
 package org.ibit.rol.sac.persistence.ejb;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -36,277 +35,368 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  */
 public abstract class CatalegDocumentsFacadeEJB extends HibernateEJB {
 
-	
+
 	private static final long serialVersionUID = -2185416511499772305L;
 
+	private static final String excepcionSinDocumentoTramite = "El tipus de document está relacionat amb algun tramit";
+	private static final String defaultLang = "ca";
+
+
 	/**
-     * Obtiene refer�ncia al ejb de control d'Acc�s.
-     * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
-     */
-    protected abstract AccesoManagerLocal getAccesoManager();
+	 * Obtiene referencia al ejb de control de acceso.
+	 * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
+	 */
+	protected abstract AccesoManagerLocal getAccesoManager();
 
-    /**
-     * @ejb.create-method
-     * @ejb.permission unchecked="true"
-     */
-    public void ejbCreate() throws CreateException {
-        super.ejbCreate();
-    }
 
-    /**
-     * Crea o actualiza un Documento del Cataleg
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
-     */
-    public Long gravarDocumentCataleg(CatalegDocuments docCataleg) {
-        Session session = getSession();
-        try {
-            session.saveOrUpdate(docCataleg);
-            session.flush();
-            return docCataleg.getId();
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
+	/**
+	 * @ejb.create-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public void ejbCreate() throws CreateException {
+		super.ejbCreate();
+	}
 
-    /**
-     * Obtenir un Document del Cataleg
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public CatalegDocuments obtenirDocumentoCataleg(Long id) {
-        Session session = getSession();
-        try {
-            CatalegDocuments docCataleg = (CatalegDocuments) session.load(CatalegDocuments.class, id);
-            Hibernate.initialize(docCataleg.getExcepcioDocumentacio());
-            return docCataleg;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-    /**
-     *  Llista tots els Documents del Cataleg paginadament
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-     public ResultadoBusqueda llistarCatalegDocuments(int pagina, int resultats) {
-       return listarTablaMaestraPaginada(pagina, resultats, llistarCatalegDocuments());
-     }
-     
-    /**
-     * Llista tots els Documents del Cataleg
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-     */
-    public List<CatalegDocuments> llistarCatalegDocuments() {
-        Session session = getSession();
-        try {
-            Criteria criteri = session.createCriteria(CatalegDocuments.class);
-            return castList(CatalegDocuments.class, criteri.list());
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
 
-     /**
-     * Obtenir una llista de Documents del Cataleg
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-     */
-    public List<CatalegDocuments> cercarCatalegDocuments(Map parametros, Map traduccion) {
-        Session session = getSession();
-        try {
-            List params = new ArrayList();
-            String sQuery = populateQuery(parametros, traduccion, params);
+	/**
+	 * Crea o actualiza un catálogo de documentos.
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
+	 * 
+	 * @param documentoCatalogo	Catálogo de documentos a guardar.
+	 * 
+	 * @return Devuelve el identificador del catálogo de documentos.
+	 */
+	public Long gravarDocumentCataleg(CatalegDocuments documentoCatalogo) {
 
-            Query query = session.createQuery("from CatalegDocuments as catDoc, catDoc.traducciones as trad where " + sQuery);
-            
-            for (int i = 0; i < params.size(); i++) {
-                String o = (String)params.get(i);
-                query.setString(i, o);
-            }
-            return query.list();
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-    
-    /**
-     * Obtenir una llista de Documents del Cataleg amb multiidioma
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-     */
-    public ResultadoBusqueda cercarDocumentsCatalegAmbMultiidioma(Map parametros, Map traduccion, Long idExcepcio,String pagina, String resultats) {
-        Session session = getSession();
-        try {
-            List params = new ArrayList();
-            
-            String mainQuery ="select distinct catDoc from CatalegDocuments as catDoc, catDoc.traducciones as trad";
-            String i18nQuery = "";
-            String excepcioQuery = "";
-            
-            if (traduccion.get("idioma") != null) {
-                i18nQuery = populateQuery(parametros, traduccion, params);
-            } else {
-                String paramsQuery = populateQuery(parametros, new HashMap(), params);
-                if (paramsQuery.length() != 0) {
-                    i18nQuery += paramsQuery + " and ";
-                }
-                i18nQuery += "(" + i18nPopulateQuery(traduccion, params) + ")";
-            }
-            
-            if(idExcepcio != null){
-              mainQuery += ",catDoc.excepcioDocumentacio as ex ";  
-              excepcioQuery = " and ex.id = ? ";
-              params.add(idExcepcio);
-            } 
-                                   
-            Query query = session.createQuery(mainQuery + " where " + i18nQuery +  excepcioQuery);
-            for (int i = 0; i < params.size(); i++) {
-              Object value = params.get(i);
-              if (value instanceof String){
-                query.setString(i, (String)value);
-              }else {
-                query.setLong(i, (Long)value);
-              }
-            }
-            
-            return listarTablaMaestraPaginada(Integer.valueOf(pagina), Integer.valueOf(resultats), query.list());
-            
+		Session session = getSession();
 
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
+		try {
 
-    /**
-     * esborra un Document del Cataleg
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
-     */
-    public void esborrarDocumentCataleg(Long id) {
-        Session session = getSession();
-        try {
-            CatalegDocuments docCat = (CatalegDocuments) session.load(CatalegDocuments.class, id);
-            Set docTramit = docCat.getDoctramite();
-            if (!docTramit.isEmpty()){
-            	throw new EJBException("El tipus de document est� relacionat amb algun tramit");
-            }
-            session.delete(docCat);
-            session.flush();
-            Actualizador.borrar(docCat);
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
+			session.saveOrUpdate(documentoCatalogo);
+			session.flush();
 
-    /**
-     * Construeix la query de cerca segons els parametres
-     */
-    private String populateQuery(Map parametros, Map traduccion, List params) {
-        String aux = "";
+			return documentoCatalogo.getId();
 
-        // Tratamiento de parametros
-        for (Iterator<?> iter1 = parametros.keySet().iterator(); iter1.hasNext();) {
-            String key = (String) iter1.next();
-            Object value = parametros.get(key);
-            if (value != null) {
-                if (aux.length() > 0) aux = aux + " and ";
-                if (value instanceof String) {
-                    String sValue = (String) value;
-                    if (sValue.length() > 0) {
-                        if (sValue.startsWith("\"") && sValue.endsWith("\"")) {
-                            sValue = sValue.substring(1, (sValue.length() - 1));
-                            aux = aux + " upper( catDoc." + key + " ) like ? " ;
-                            params.add(sValue);
-                        } else {
-                            aux = aux + " upper( catDoc." + key + " ) like ? ";
-                            params.add("%"+sValue+"%");
-                        }
-                    }
-                } else {
-                    aux = aux + "catDoc." + key + " =  ? ";
-                    params.add(value);
-                }
-            }
-        }
+		} catch (HibernateException he) {
 
-        // Tratamiento de traducciones
-        if (!traduccion.isEmpty()) {
-	        if (aux.length() > 0) aux = aux + " and ";
-	        aux = aux + "index(trad) = '" + traduccion.get("idioma") + "'";
-	        traduccion.remove("idioma");
-        }
-        for (Iterator iter2 = traduccion.keySet().iterator(); iter2.hasNext();) {
-            String key = (String) iter2.next();
-            Object value = traduccion.get(key);
-            if (value != null) {
-                if (value instanceof String) {
-                    String sValue = (String) value;
-                    if (sValue.length() > 0) {
-                        if (sValue.startsWith("\"") && sValue.endsWith("\"")) {
-                            sValue = sValue.substring(1, (sValue.length() - 1));
-                            aux = aux + " and upper( trad." + key + " ) like ? ";
-                            params.add(sValue);
-                        } else {
-                            aux = aux + " and upper( trad." + key + " ) like ? ";
-                            params.add("%"+sValue+"%");
-                        }
-                    }
-                } else {
-                    aux = aux + " and trad." + key + " =  ? ";
-                    params.add(value);
-                }
-            }
-        }
+			throw new EJBException(he);
 
-        return aux;
-    }
-    
-    
-    /**
-     * Construeix la query de cerca multiidioma amb tots els camps
-     */
-    private String i18nPopulateQuery(Map traducciones, List params) {
-        String aux = "";
+		} finally {
 
-        for (Iterator iterTraducciones = traducciones.keySet().iterator(); iterTraducciones.hasNext();) {
-            String key = (String) iterTraducciones.next();
-            Object value = traducciones.get(key);
-            if (value != null) {
-                if (aux.length() > 0) aux = aux + " or ";
-                if (value instanceof String) {
-                    String sValue = (String) value;
-                    if (sValue.length() > 0) {
-                        if (sValue.startsWith("\"") && sValue.endsWith("\"")) {
-                            sValue = sValue.substring(1, (sValue.length() - 1));
-                            aux = aux + " upper( trad." + key + " ) like ? ";
-                            params.add(sValue);
-                        } else {
-                            aux = aux + " upper( trad." + key + " ) like ? ";
-                            params.add("%"+sValue+"%");
-                        }
-                    }
-                } else {
-                    aux = aux + " trad." + key + " = ? ";
-                    params.add(value);
-                }
-            }
-        }
+			close(session);
 
-        return aux;
-    }
-    
+		}
+
+	}
+
+
+	/**
+	 * Obtenir un Document del Cataleg
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador del catálogo de documentos.
+	 * 
+	 * @return Devuelve <code>CatalegDocuments</code> solcitiado.
+	 */
+	public CatalegDocuments obtenirDocumentoCataleg(Long id) {
+
+		Session session = getSession();
+
+		try {
+
+			CatalegDocuments docCataleg = (CatalegDocuments) session.load( CatalegDocuments.class , id );
+			Hibernate.initialize( docCataleg.getExcepcioDocumentacio() );
+
+			return docCataleg;
+
+		} catch (HibernateException he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+
+		}
+
+	}
+
+
+	/**
+	 *  @deprecated
+	 *  Lista todos los documentos del catálogo paginadamente.
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param pagina	Número de página actual.
+	 * 
+	 * @param resultats	Número de resultados por página.
+	 * 
+	 * @return Devuelve <code>ResultadoBusqueda</code> que contiene una lista de todos los catálogos de documentos.
+	 */
+	public ResultadoBusqueda llistarCatalegDocuments(int pagina, int resultados) {
+		return listarTablaMaestraPaginada( pagina , resultados , listarCatalogoDocumentos() );
+
+	}
+
+
+	/**
+	 * Lista todos los documentos del catálogo.
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+	 * 
+	 * @return Devuelve <code>List<CatalegDocuments></code> de todos los catálogos de documentos.
+	 */
+	public List<CatalegDocuments> listarCatalogoDocumentos() {
+
+		Session session = getSession();
+
+		try {
+
+			Criteria criteri = session.createCriteria(CatalegDocuments.class);
+
+			return castList( CatalegDocuments.class , criteri.list() );
+
+		} catch (HibernateException he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+
+		}
+
+	}
+
+
+	/**
+	 *  @deprecated
+	 * Obtiene una lista de catálogos de documentos.
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+	 *
+	 * @return Devuelve <code>List<CatalegDocuments></code> de todos los catálogos de documentos.
+	 */
+	public List<CatalegDocuments> cercarCatalegDocuments(Map parametros, Map traduccion) {
+		Session session = getSession();
+
+		try {
+
+			List params = new ArrayList();
+			String sQuery = populateQuery(parametros, traduccion, params);
+
+			Query query = session.createQuery("from CatalegDocuments as catDoc, catDoc.traducciones as trad where " + sQuery);
+
+			for ( int i = 0 ; i < params.size() ; i++ ) {
+
+				String o = (String)params.get(i);
+				query.setString(i, o);
+
+			}
+
+			return query.list();
+
+		} catch (HibernateException he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+
+		}
+
+	}
+
+
+	/**
+	 * Obtiene una lista del catálogo de documentos con multiidioma.
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+	 * 
+	 * @param descripcionBusqueda	Cadena de texto que se utiliza para buscar el catálogo de documento que contenga éste valor en su descripción o nombre.
+	 * 
+	 * @param administracionResponsable	Identidicador del responsable de administración.
+	 * 
+	 * @param excepcionDocumento	Identificador de las causas de excepción de aportación de documentación.
+	 * 
+	 * @param pagina	Indica el número de página actual del listado del catálogo de documentos.
+	 * 
+	 * @param resultados	Indica el número de resultados por página.
+	 * 
+	 * @param idioma	Indica el idioma en que se realiza la búsqueda.
+	 * 
+	 * @return Devuelve <code>ResultadoBusqueda</code> con todos los catálogos de documentos filtrados por los parámetros de búsqueda.
+	 */
+	public ResultadoBusqueda cercarDocumentsCatalegAmbMultiidioma(String descripcionBusqueda, Long administracionResponsable, Long excepcionDocumento , Integer pagina , Integer resultados, String idioma) {
+
+		Session session = getSession();
+
+		try {
+
+			StringBuilder consulta = new StringBuilder("select distinct catDoc from CatalegDocuments as catDoc, catDoc.traducciones as trad where ");
+
+			if ( idioma == null && "".equals(idioma) ) {
+				
+				consulta.append("index(trad) = 'ca' ");
+				
+			} else {
+				
+				consulta.append("index(trad) = :idioma ");
+			}
+			
+			if ( descripcionBusqueda != null && !"".equals(descripcionBusqueda) )
+				consulta.append(" and ( upper( trad.nombre ) like :descripcionBusqueda  or  upper( trad.descripcion ) like :descripcionBusqueda ) ");
+			
+			if ( administracionResponsable != null )
+				consulta.append(" and catDoc.admResponsable = :administracionResponsable ");
+			
+			if ( excepcionDocumento != null )
+				consulta.append(" and catDoc.excepcioDocumentacio.id = :excepcionDocumento ");	
+			
+
+			Query query = session.createQuery( consulta.toString() );
+			
+			if ( idioma != null && !"".equals(idioma) )
+				query.setParameter( "idioma", idioma );
+
+			if ( descripcionBusqueda != null && !"".equals(descripcionBusqueda) )
+				query.setParameter( "descripcionBusqueda", "%" + descripcionBusqueda.toUpperCase() + "%" );
+
+			if ( administracionResponsable != null )
+				query.setParameter( "administracionResponsable", administracionResponsable );
+
+			if ( excepcionDocumento != null )        		
+				query.setParameter( "excepcionDocumento", excepcionDocumento );
+
+
+			return listarTablaMaestraPaginada( pagina, resultados, query.list() );
+
+
+		} catch (HibernateException he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+
+		}
+
+	}
+
+
+	/**
+	 * Borra un catálogo de documentos.
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
+	 * 
+	 * @param id	Identificador del catálogo documentos a borrar.
+	 */
+	public void esborrarDocumentCataleg(Long id) {
+		
+		Session session = getSession();
+
+		try {
+
+			CatalegDocuments docCat = (CatalegDocuments) session.load( CatalegDocuments.class , id );
+			Set docTramit = docCat.getDoctramite();
+
+			if ( !docTramit.isEmpty() ) {
+
+				throw new EJBException(excepcionSinDocumentoTramite);
+
+			}
+
+			session.delete(docCat);
+			session.flush();
+
+			Actualizador.borrar(docCat);
+
+		} catch (HibernateException he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+
+		}
+
+	}
+
+
+	/**
+	 * Construeix la query de cerca segons els parametres
+	 */
+	private String populateQuery(Map parametros, Map traduccion, List params) {
+		String aux = "";
+
+		// Tratamiento de parametros
+		for (Iterator<?> iter1 = parametros.keySet().iterator(); iter1.hasNext();) {
+			String key = (String) iter1.next();
+			Object value = parametros.get(key);
+			if (value != null) {
+				if (aux.length() > 0) aux = aux + " and ";
+				if (value instanceof String) {
+					String sValue = (String) value;
+					if (sValue.length() > 0) {
+						if (sValue.startsWith("\"") && sValue.endsWith("\"")) {
+							sValue = sValue.substring(1, (sValue.length() - 1));
+							aux = aux + " upper( catDoc." + key + " ) like ? " ;
+							params.add(sValue);
+						} else {
+							aux = aux + " upper( catDoc." + key + " ) like ? ";
+							params.add("%"+sValue+"%");
+						}
+					}
+				} else {
+					aux = aux + "catDoc." + key + " =  ? ";
+					params.add(value);
+				}
+			}
+		}
+
+		// Tratamiento de traducciones
+		if (!traduccion.isEmpty()) {
+			if (aux.length() > 0) aux = aux + " and ";
+			aux = aux + "index(trad) = '" + traduccion.get("idioma") + "'";
+			traduccion.remove("idioma");
+		}
+		for (Iterator iter2 = traduccion.keySet().iterator(); iter2.hasNext();) {
+			String key = (String) iter2.next();
+			Object value = traduccion.get(key);
+			if (value != null) {
+				if (value instanceof String) {
+					String sValue = (String) value;
+					if (sValue.length() > 0) {
+						if (sValue.startsWith("\"") && sValue.endsWith("\"")) {
+							sValue = sValue.substring(1, (sValue.length() - 1));
+							aux = aux + " and upper( trad." + key + " ) like ? ";
+							params.add(sValue);
+						} else {
+							aux = aux + " and upper( trad." + key + " ) like ? ";
+							params.add("%"+sValue+"%");
+						}
+					}
+				} else {
+					aux = aux + " and trad." + key + " =  ? ";
+					params.add(value);
+				}
+			}
+		}
+
+		return aux;
+	}
+
 }

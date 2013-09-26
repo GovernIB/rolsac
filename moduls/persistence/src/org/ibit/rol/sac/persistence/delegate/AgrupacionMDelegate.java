@@ -20,17 +20,19 @@ import java.util.List;
 public class AgrupacionMDelegate implements StatelessDelegate {
 
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== MÃ‰TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
-    public Long grabarAgrupacionM(AgrupacionMateria mat) throws DelegateException {
+	/** @deprecated  Se utiliza desde el back antiguo */
+    public Long grabarAgrupacionM(AgrupacionMateria agrMateria) throws DelegateException {
         try {
-            return getFacade().grabarAgrupacionM(mat);
+            return getFacade().guardarAgrupacionMaterias(agrMateria);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
 
+    /** @deprecated  Se utiliza desde el back antiguo */
     @SuppressWarnings("unchecked")
 	public List<AgrupacionMateria> listarAgrupacionM() throws DelegateException {
         try {
@@ -42,12 +44,13 @@ public class AgrupacionMDelegate implements StatelessDelegate {
 
     public AgrupacionMateria obtenerAgrupacionM(Long id) throws DelegateException {
         try {
-            return getFacade().obtenerAgrupacionM(id);
+            return getFacade().obtenerAgrupacionMaterias(id);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
 
+    /** @deprecated  No se utiliza */
     public AgrupacionMateria obtenerAgrupacionMPorNombre(String nombre) throws DelegateException {
         try {
             return getFacade().obtenerAgrupacionMPorNombre(nombre);
@@ -64,6 +67,7 @@ public class AgrupacionMDelegate implements StatelessDelegate {
         }
     }
     
+    /** @deprecated  No se utiliza */
     @SuppressWarnings("unchecked")
 	public List<MateriaAgrupacionM> listarAgrupacionesMMaterias() throws DelegateException {
         try {
@@ -73,10 +77,11 @@ public class AgrupacionMDelegate implements StatelessDelegate {
         }
     }
 
+    /** @deprecated  No se utiliza */
     @SuppressWarnings("unchecked")
-    public List<AgrupacionMateria> buscar(final String busqueda, final String idioma) throws DelegateException {
-        try {
-            return getFacade().buscar(busqueda, idioma);
+    public List<AgrupacionMateria> buscar(final String nombre, final String idioma) throws DelegateException {
+    	try {
+            return getFacade().buscar(nombre, idioma);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
@@ -106,9 +111,9 @@ public class AgrupacionMDelegate implements StatelessDelegate {
         }
     }
     
-    public Long guardarAgrupacionM(AgrupacionMateria materia, List<MateriaAgrupacionM> llistaMateriesOld) throws DelegateException {
+    public Long guardarAgrupacionM(AgrupacionMateria agrMateria, List<MateriaAgrupacionM> listaMateriasAsignadas) throws DelegateException {
         try {
-            return getFacade().guardarAgrupacionM(materia, llistaMateriesOld);
+            return getFacade().guardarAgrupacionMaterias(agrMateria, listaMateriasAsignadas);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }

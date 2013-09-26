@@ -28,11 +28,10 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 public class AdministracionRemotaDelegate implements StatelessDelegate {
 
 	/* ========================================================= */
-	/* ======================== M�TODOS DE NEGOCIO ============= */
+	/* ======================== MÉTODOS DE NEGOCIO ============= */
 	/* ========================================================= */
 
-	public Long grabarAdministracionRemota(
-			AdministracionRemota administracionRemota) throws DelegateException {
+	public Long grabarAdministracionRemota(AdministracionRemota administracionRemota) throws DelegateException {
 		try {
 			return getFacade().grabarAdministracionRemota(administracionRemota);
 		} catch (RemoteException e) {
@@ -40,8 +39,7 @@ public class AdministracionRemotaDelegate implements StatelessDelegate {
 		}
 	}
 
-	public ResultadoBusqueda listarAdministracionRemota(int pagina,
-			int resultats) throws DelegateException {
+	public ResultadoBusqueda listarAdministracionRemota(int pagina,	int resultats) throws DelegateException {
 		try {
 			return getFacade().listarAdministracionRemota(pagina, resultats);
 		} catch (RemoteException e) {
@@ -49,9 +47,9 @@ public class AdministracionRemotaDelegate implements StatelessDelegate {
 		}
 	}
 
+	/** @deprecated Usado desde el back antiguo */
 	@SuppressWarnings("unchecked")
-	public List<AdministracionRemota> listarAdministracionRemota()
-			throws DelegateException {
+	public List<AdministracionRemota> listarAdministracionRemota() throws DelegateException {
 		try {
 			return getFacade().listarAdministracionRemota();
 		} catch (RemoteException e) {
@@ -153,7 +151,7 @@ public class AdministracionRemotaDelegate implements StatelessDelegate {
 	}
 
 	/**
-	 * Obtiene el logop de una {@link AdministracionRemota}
+	 *Obtiene el logop de una {@link AdministracionRemota}
 	 */
 	public Archivo obtenerLogop(Long id) throws DelegateException {
 		try {
@@ -175,6 +173,7 @@ public class AdministracionRemotaDelegate implements StatelessDelegate {
 	}
 
 	/**
+	 * @deprecated Usado desde el back antiguo
 	 * Borra un Logop de una {@link AdministracionRemota} determinado.
 	 */
 	public void borrarLogop(Long id) throws DelegateException {
@@ -186,6 +185,7 @@ public class AdministracionRemotaDelegate implements StatelessDelegate {
 	}
 
 	/**
+	 * @deprecated Usado desde el back antiguo
 	 * Borra un Logog de una {@link AdministracionRemota} determinado.
 	 */
 	public void borrarLogog(Long id) throws DelegateException {

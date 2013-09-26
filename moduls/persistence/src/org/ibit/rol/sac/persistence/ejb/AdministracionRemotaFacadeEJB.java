@@ -37,7 +37,9 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  */
 public abstract class AdministracionRemotaFacadeEJB extends HibernateEJB {
 
+
 	private static final long serialVersionUID = 1L;
+
 
 	/**
 	 * @ejb.create-method
@@ -47,144 +49,239 @@ public abstract class AdministracionRemotaFacadeEJB extends HibernateEJB {
 		super.ejbCreate();
 	}
 
-	/**
-	 * Crea o actualiza un AdministracionRemota.
-	 * 
-	 * @ejb.interface-method
-	 * @ejb.permission role-name="${role.system},${role.admin}"
-	 */
-	public Long grabarAdministracionRemota(
-			AdministracionRemota administracionRemota) {
-		Session session = getSession();
-		try {
-			session.saveOrUpdate(administracionRemota);
-			session.flush();
-			return administracionRemota.getId();
-		} catch (HibernateException he) {
-			throw new EJBException(he);
-		} finally {
-			close(session);
-		}
-	}
 
 	/**
-	 * Lista todas las Administraciones Remotas (nuevo backoffice).
-	 * 
+	 * Crea o actualiza un AdministracionRemota.
 	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission role-name="${role.system},${role.admin}"
+	 * 
+	 * @param administracionRemota Entidad administracionRemota a guardar
+	 * 
+	 * @return Identificador de la administración remota guardada.
+	 */
+	public Long grabarAdministracionRemota(AdministracionRemota administracionRemota) {
+
+		Session session = getSession();
+
+		try {
+
+			session.saveOrUpdate(administracionRemota);
+			session.flush();
+
+			return administracionRemota.getId();
+
+		} catch (HibernateException he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+
+		}
+
+	}
+
+
+	/**
+	 * Lista todas las Administraciones Remotas
+	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param pagina	Número de página actual.
+	 * 
+	 * @param resultats	Cantidad de resultados por página.
+	 * 
+	 * @return  Devuelve <code>ResultadoBusqueda</code> que contiene una lista de todas las Administraciones  remotas.
 	 */
 	public ResultadoBusqueda listarAdministracionRemota(int pagina, int resultats) {
-		return listarTablaMaestraPaginada(pagina, resultats, listarTMAdministracionRemota());
+
+		return listarTablaMaestraPaginada( pagina , resultats , listarTablaMaestraAdministracionRemota() );
+
 	}
-	
+
+
 	/**
+	 *  @deprecated Usado desde el back antiguo
 	 * Lista todas las Administraciones Remotas.
-	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @return Devuelve un <code>List<AdministracionRemota></code>  de todas las administraciones remotas almacenadas.
 	 */
 	@SuppressWarnings("unchecked")
 	public List<AdministracionRemota> listarAdministracionRemota() {
 		Session session = getSession();
+
 		try {
-			Criteria criteri = session
-					.createCriteria(AdministracionRemota.class);
-			return criteri.list();
+
+			Criteria criteria = session.createCriteria(AdministracionRemota.class);
+
+			return criteria.list();
+
 		} catch (HibernateException he) {
+
 			throw new EJBException(he);
+
 		} finally {
+
 			close(session);
+
 		}
+
 	}
 
-	/**
-	 * Lista todas las Administraciones remotas (menú Administración) 
-	 */
-	private List listarTMAdministracionRemota() {
-    	Session session = getSession();
-    	
-    	try {
-    		Query query = session.createQuery("select admRemota.id, admRemota.idRemoto, admRemota.nombre " +
-    														"from AdministracionRemota as admRemota " +
-    														"order by admRemota.nombre asc");
-    		
-    		return query.list();    		
-    	} catch (HibernateException he) {
-    		throw new EJBException(he);
-    	} finally {
-    		close(session);
-    	}    		
-	}
 
 	/**
-	 * Obtiene una AdministracionRemota
+	 * Lista todas las Administraciones remotas (menú Administración).
 	 * 
+	 * @return Devuelve un <code>List</code>.
+	 */
+	private List listarTablaMaestraAdministracionRemota() {
+
+		Session session = getSession();
+
+		try {
+
+			Query query = session.createQuery(
+					
+					"select admRemota.id, " +
+					"		admRemota.idRemoto, " +
+					"		admRemota.nombre " +
+
+    		 	  	"from AdministracionRemota as admRemota " +
+
+					"order by admRemota.nombre asc");
+
+			return query.list();    	
+
+		} catch (HibernateException he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+
+		}    	
+
+	}
+
+
+	/**
+	 * Obtiene una administración remota.
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de una administración remota.
+	 * 
+	 * @return Devuelve <code>AdministracionRemota</code>.
 	 */
 	public AdministracionRemota obtenerAdministracionRemota(Long id) {
+
 		Session session = getSession();
+		
 		try {
-			AdministracionRemota administracionRemota = (AdministracionRemota) session
-					.load(AdministracionRemota.class, id);
-			Hibernate.initialize(administracionRemota.getLogog());
-			Hibernate.initialize(administracionRemota.getLogop());
-			Hibernate.initialize(administracionRemota.getUnidadesRemotas());
 			
+			AdministracionRemota administracionRemota = (AdministracionRemota) session.load( AdministracionRemota.class , id );
+			
+			Hibernate.initialize( administracionRemota.getLogog() );
+			Hibernate.initialize( administracionRemota.getLogop() );
+			Hibernate.initialize( administracionRemota.getUnidadesRemotas() );
+
 			return administracionRemota;
-			
+
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
-	
+
+
 	/**
 	 * Obtiene una AdministracionRemota por su IdRemoto
 	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param idRemoto	Identificador de una administración remota
+	 * 
+	 * @return Devuelve <code>AdministracionRemota</code>.
 	 */
 	public AdministracionRemota obtenerAdministracionRemota(String idRemoto) {
+		
 		Session session = getSession();
+		
 		try {
-			Query query =  session.createQuery("select admin from AdministracionRemota as admin where admin.idRemoto=:idRemoto");
-			query.setString("idRemoto", idRemoto);
-			return (AdministracionRemota)query.uniqueResult();
+			
+			Query query =  session.createQuery("select admin from AdministracionRemota as admin where admin.idRemoto = :idRemoto");
+			query.setString( "idRemoto" , idRemoto );
+			
+			return (AdministracionRemota) query.uniqueResult();
+			
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
+
 
 	/**
 	 * Borra una AdministracionRemota.
 	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission role-name="${role.system},${role.admin}"
+	 * 
+	 * @param id	Identificador de una administración remota
 	 */
 	public void borrarAdministracionRemota(Long id) {
+
 		Session session = getSession();
+		
 		try {
-			AdministracionRemota administracionRemota = (AdministracionRemota) session
-					.load(AdministracionRemota.class, id);
+			
+			AdministracionRemota administracionRemota = (AdministracionRemota) session.load( AdministracionRemota.class , id );
 			session.delete(administracionRemota);
 			session.flush();
+			
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
 
+
 	/**
-	 * 
+	 *  @deprecated No se usa
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
 	public void alta() {
+		
 		Session session = getSession();
 		try {
 			FichaRemota fichaRemota = new FichaRemota();
@@ -205,250 +302,417 @@ public abstract class AdministracionRemotaFacadeEJB extends HibernateEJB {
 		}
 	}
 
+
 	/**
-	 * Lista todas las Fichas de una AR.
-	 * 
+	 * Lista todas las fichas de una administración remota.
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de una administración remota.
+	 * 
+	 * @return Devuelve <code>Set<FichaRemota></code> de todas las fichas de una administración remota almacenadas.
 	 */
 	@SuppressWarnings("unchecked")
 	public Set<FichaRemota> listarFichasRemotas(Long id) {
+		
 		Session session = getSession();
+		
 		try {
-			AdministracionRemota administracionRemota = (AdministracionRemota) session
-					.load(AdministracionRemota.class, id);
-			Hibernate.initialize(administracionRemota.getFichasRemotas());
+			
+			AdministracionRemota administracionRemota = (AdministracionRemota) session.load( AdministracionRemota.class , id );
+			Hibernate.initialize( administracionRemota.getFichasRemotas() );
+			
 			return administracionRemota.getFichasRemotas();
+			
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
 
+
 	/**
-	 * Lista todos los Procedimientos de una AR.
-	 * 
+	 * Lista todos los procedimientos de una administración remota.
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de una administración remota.
+	 * 
+	 * @return Devuelve <code>Set<ProcedimientoRemoto></code> de todos los procedimientos de una administración remota.
 	 */
 	@SuppressWarnings("unchecked")
 	public Set<ProcedimientoRemoto> listarProcedimientosRemotos(Long id) {
+		
 		Session session = getSession();
+		
 		try {
-			AdministracionRemota administracionRemota = (AdministracionRemota) session
-					.load(AdministracionRemota.class, id);
-			Hibernate.initialize(administracionRemota
-					.getProcedimientosRemotos());
+			
+			AdministracionRemota administracionRemota = (AdministracionRemota) session.load( AdministracionRemota.class , id );
+			Hibernate.initialize( administracionRemota.getProcedimientosRemotos() );
+			
 			return administracionRemota.getProcedimientosRemotos();
+			
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
-	
+
+
 	/**
-	 * Lista todos los Edificios de una AR.
-	 * 
+	 * Lista todos los edificios remotos de todos los edificios de una administración remota.
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de una administración remota.
+	 * 
+	 * @return Devuelve <code>Set<EdificioRemoto></code> de todos los edificios de una administración remota.
 	 */
 	@SuppressWarnings("unchecked")
 	public Set<EdificioRemoto> listarEdificiosRemotos(Long id) {
 
 		Session session = getSession();
+		
 		try {
 
-			AdministracionRemota administracionRemota = (AdministracionRemota) session
-					.load(AdministracionRemota.class, id);
-
-			Hibernate.initialize(administracionRemota.getEdificiosRemotos());
+			AdministracionRemota administracionRemota = (AdministracionRemota) session.load( AdministracionRemota.class , id );
+			Hibernate.initialize( administracionRemota.getEdificiosRemotos() );
 
 			return administracionRemota.getEdificiosRemotos();
+			
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
-	
+
+
 	/**
-	 * Lista todos los tramites de una AR.
-	 * 
+	 * Lista todos los trámites de una administración remota.
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de una administración remota.
+	 * 
+	 * @return Devuelve <code>Set<TramiteRemoto></code> de todos los trámites de una administración remota.
 	 */
 	@SuppressWarnings("unchecked")
 	public Set<TramiteRemoto> listarTramitesRemotos(Long id) {
+		
 		Session session = getSession();
+		
 		try {
-			AdministracionRemota administracionRemota = (AdministracionRemota) session
-					.load(AdministracionRemota.class, id);
-			Hibernate.initialize(administracionRemota.getTramitesRemotos());
+			
+			AdministracionRemota administracionRemota = (AdministracionRemota) session.load( AdministracionRemota.class , id );
+			Hibernate.initialize( administracionRemota.getTramitesRemotos() );
+			
 			return administracionRemota.getTramitesRemotos();
+			
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
 
 
-    /**
-	 * Lista todas las normativas de una AR.
-	 *
+	/**
+	 * Lista todas las normativas externas remotas.
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de una administración remota.
+	 * 
+	 * @return Devuelve <code>Set<NormativaExternaRemota></code> de normativas externas remotas.
 	 */
 	@SuppressWarnings("unchecked")
 	public Set<NormativaExternaRemota> listarNormativasExternasRemotas(Long id) {
+		
 		Session session = getSession();
+		
 		try {
-			AdministracionRemota administracionRemota = (AdministracionRemota) session
-					.load(AdministracionRemota.class, id);
-			Hibernate.initialize(administracionRemota.getNormativasExternasRemotas());
+			
+			AdministracionRemota administracionRemota = (AdministracionRemota) session.load( AdministracionRemota.class , id );
+			Hibernate.initialize( administracionRemota.getNormativasExternasRemotas() );
+			
 			return administracionRemota.getNormativasExternasRemotas();
+			
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
 
+
 	/**
-	 * Lista todos las UA de una AR.
-	 * 
+	 * Lista todas las unidades administrativas de una administración remota.
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de una administración remota.
+	 * 
+	 * @return Devuelve <code>Set<UnidadAdministrativaRemota></code> de todas las unidades administrativas de una administración remota. 
 	 */
 	@SuppressWarnings("unchecked")
 	public Set<UnidadAdministrativaRemota> listarUARemotas(Long id) {
+		
 		Session session = getSession();
+		
 		try {
-			AdministracionRemota administracionRemota = (AdministracionRemota) session
-					.load(AdministracionRemota.class, id);
-			Hibernate.initialize(administracionRemota.getUnidadesRemotas());
+			
+			AdministracionRemota administracionRemota = (AdministracionRemota) session.load( AdministracionRemota.class , id );
+			Hibernate.initialize( administracionRemota.getUnidadesRemotas() );
+			
 			return administracionRemota.getUnidadesRemotas();
+			
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
-	
+
+
 	/**
-	 * Mira la AdministracionRemota ha sido inizializada
+	 * Valida que la AdministracionRemota haya sido inizializada.
 	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de una administración remota.
+	 * 
+	 * @return Devuelve <code>true</code> si no se ha encontrado ninguna unidad remota
 	 */
 	public boolean isEmpty(Long id) {
+
 		Session session = getSession();
+		
 		try {
-			AdministracionRemota administracionRemota = (AdministracionRemota) session
-				.load(AdministracionRemota.class, id);
+			
+			AdministracionRemota administracionRemota = (AdministracionRemota) session.load( AdministracionRemota.class , id );
+			
 			return administracionRemota.getUnidadesRemotas().isEmpty();
+			
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
-	
+
+
 	/**
-	 * Mira la AdministracionRemota ha sido inizializada
+	 * Valida que la AdministracionRemota haya sido inizializada
 	 * 
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de una administración remota.
+	 * 
+	 * @return Devuelve <code>true</code> si no ha encontrado ninguna unidad remota.
 	 */
 	public boolean isEmpty(String idRemoto) {
+		
 		Session session = getSession();
+		
 		try {
-			AdministracionRemota administracionRemota = RemotoUtils.recogerAdministracionRemota(session, idRemoto);
-			if(administracionRemota==null)
-	    		throw new EJBException("No existe ninguna Administracion Remota asociada al idRemoto");
+			
+			AdministracionRemota administracionRemota = RemotoUtils.recogerAdministracionRemota( session , idRemoto );
+			
+			if( administracionRemota == null )
+				throw new EJBException("No existe ninguna Administración Remota asociada al idRemoto");
+			
 			return administracionRemota.getUnidadesRemotas().isEmpty();
+			
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
-	
+
+
 	/**
-	 * Obtiene el logop de una {@link AdministracionRemota}
+	 * Obtiene logop de una administración remota.
 	 * @ejb.interface-method
+	 * 
 	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de una administración remota.
+	 * 
+	 * @return Devuelve <code>Archivo</code> con el logop de una administración remota.
 	 */
 	public Archivo obtenerLogop(Long id) {
+
 		Session session = getSession();
+		
 		try {
-			AdministracionRemota admin = (AdministracionRemota) session.load(AdministracionRemota.class, id);
-			Hibernate.initialize(admin.getLogop());
+			
+			AdministracionRemota admin = (AdministracionRemota) session.load( AdministracionRemota.class , id );
+			Hibernate.initialize( admin.getLogop() );
+			
 			return admin.getLogop();
+			
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
-	
+
+
 	/**
-     * Obtiene el logog de una {@link AdministracionRemota}
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public Archivo obtenerLogog(Long id) {
-        Session session = getSession();
-        try {
-        	AdministracionRemota admin = (AdministracionRemota) session.load(AdministracionRemota.class, id);
-            Hibernate.initialize(admin.getLogog());
-            return admin.getLogog();
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-	
+	 * Obtiene logog de una administración remota.
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de una administración remota.
+	 * 
+	 * @return Devuelve <code>Archivo</code> con el logog de una administración remota.
+	 */
+	public Archivo obtenerLogog(Long id) {
+
+		Session session = getSession();
+		
+		try {
+			
+			AdministracionRemota admin = (AdministracionRemota) session.load( AdministracionRemota.class , id );
+			Hibernate.initialize( admin.getLogog() );
+			
+			return admin.getLogog();
+			
+		} catch (HibernateException he) {
+			
+			throw new EJBException(he);
+			
+		} finally {
+			
+			close(session);
+			
+		}
+		
+	}
+
+
 	/**
-     * Borra un Logop de una {@link AdministracionRemota} determinado.
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin}"
-     */
-    public void borrarLogop(Long id) {
-    	Session session = getSession();
-    	try {
-    		AdministracionRemota admin = (AdministracionRemota) session.load(AdministracionRemota.class, id);
-    		session.delete(admin.getLogop());
-    		admin.setLogop(null);
-    		session.flush();
-    	} catch (HibernateException e) {
-    		throw new EJBException(e);
-    	} finally {
-    		close(session);
-    	}
-    }
-    
-    /**
-     * Borra un Logog de una {@link AdministracionRemota} determinado.
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin}"
-     */
-    public void borrarLogog(Long id) {
-    	Session session = getSession();
-    	try {
-    		AdministracionRemota admin = (AdministracionRemota) session.load(AdministracionRemota.class, id);
-    		session.delete(admin.getLogog());
-    		admin.setLogog(null);
-    		session.flush();
-    	} catch (HibernateException e) {
-    		throw new EJBException(e);
-    	} finally {
-    		close(session);
-    	}
-    }
-    
-    
+	 *  @deprecated Usado desde el back antiguo
+	 * Borra un Logop de una {@link AdministracionRemota} determinado.
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission role-name="${role.system},${role.admin}"
+	 * 
+	 * @param id	Identificador administracion remota.
+	 */
+	public void borrarLogop(Long id) {
+		Session session = getSession();
+		
+		try {
+			
+			AdministracionRemota admin = (AdministracionRemota) session.load( AdministracionRemota.class , id );
+			session.delete( admin.getLogop() );
+			admin.setLogop(null);
+			session.flush();
+			
+		} catch (HibernateException e) {
+			
+			throw new EJBException(e);
+			
+		} finally {
+			
+			close(session);
+			
+		}
+		
+	}
+
+
+	/**
+	 *  @deprecated Utilizado únicamente desde el back antiguo
+	 * Borra un Logog de una {@link AdministracionRemota} determinado.
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission role-name="${role.system},${role.admin}"
+	 * 
+	 * @param id	Identificador administración remota.
+	 */
+	public void borrarLogog(Long id) {
+		Session session = getSession();
+		
+		try {
+			
+			AdministracionRemota admin = (AdministracionRemota) session.load( AdministracionRemota.class , id );
+			session.delete( admin.getLogog() );
+			admin.setLogog(null);
+			session.flush();
+			
+		} catch (HibernateException e) {
+			
+			throw new EJBException(e);
+			
+		} finally {
+			
+			close(session);
+			
+		}
+		
+	}
+
 }

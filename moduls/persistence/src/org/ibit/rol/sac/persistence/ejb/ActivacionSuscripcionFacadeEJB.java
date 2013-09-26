@@ -10,6 +10,7 @@ import net.sf.hibernate.Session;
 import org.ibit.rol.sac.model.ActivacionSuscripcion;
 
 /**
+ *  @deprecated No se utiliza
  * SessionBean para consultar claves de activacion de suscripcion.
  *
  * @ejb.bean
@@ -23,7 +24,10 @@ import org.ibit.rol.sac.model.ActivacionSuscripcion;
  */
 public abstract class ActivacionSuscripcionFacadeEJB extends PaginatedHibernateEJB {
 
-    /**
+	private static final long serialVersionUID = 1L;
+
+
+	/**
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
@@ -32,25 +36,42 @@ public abstract class ActivacionSuscripcionFacadeEJB extends PaginatedHibernateE
     }
     
 
-
     /**
-     * Obtiene Clave de Activacion
+     *  @deprecated No se utiliza
+     * Obtiene una suscripción.
      * @ejb.interface-method
+
      * @ejb.permission unchecked= "true"
+     * 
+     * @param email	<code>String</code> que contiene el email de la suscripción.
+     * 
+     * @param idImagen	Identificador de la imágen.
+     * 
+     * @return Devuelve <code>ActivacionSuscripcion</code> filtrada por email y el identificador de una imagen.
      */
     public ActivacionSuscripcion obtener(String email, String idImagen) {
-        Session session = getSession();
+
+    	Session session = getSession();
+        
         try {
+        	
             Query query = session.createQuery("from ActivacionSuscripcion as a where a.email = :email and a.idImagen = :idImagen");
-            query.setParameter("email", email);
-            query.setParameter("idImagen", idImagen);
+            
+            query.setParameter( "email" , email );
+            query.setParameter( "idImagen" , idImagen );
+            
             return (ActivacionSuscripcion) query.uniqueResult();
+            
         } catch (HibernateException he) {
+        	
             throw new EJBException(he);
+            
         } finally {
+        	
             close(session);
+            
         }
+        
     }
-    
     
 }

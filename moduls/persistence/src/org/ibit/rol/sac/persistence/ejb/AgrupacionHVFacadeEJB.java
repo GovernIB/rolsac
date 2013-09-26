@@ -35,329 +35,542 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  */
 public abstract class AgrupacionHVFacadeEJB extends HibernateEJB {
 
-    /**
-     * @ejb.create-method
-     * @ejb.permission unchecked="true"
-     */
-    public void ejbCreate() throws CreateException {
-        super.ejbCreate();
-    }
+	/**
+	 * @ejb.create-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public void ejbCreate() throws CreateException {
+		super.ejbCreate();
+	}
 
-    /**
-     * Crea o actualiza una Agrupacion Hecho Vital.
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin}"
-     */
-    public Long grabarAgrupacionHV(AgrupacionHechoVital hechov) {
-        Session session = getSession();
-        try {
-            session.saveOrUpdate(hechov);
-            session.flush();
-            return hechov.getId();
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
 
-    
-    /**
-     * Crea o actualiza una Agrupacion Hecho Vital.
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin}"
-     */
-    public Long guardarAgrupacionHV(AgrupacionHechoVital hechov, List<HechoVitalAgrupacionHV> llistaFetsVitalsOld) {
-        Session session = getSession();
-        try {
-        	
-            for (HechoVitalAgrupacionHV hechoVitalAgrupacionHV : llistaFetsVitalsOld) {
-                if (hechoVitalAgrupacionHV != null){
-                    session.delete(hechoVitalAgrupacionHV);   
-                }                    
-            }                   
-        	
-        	List<HechoVitalAgrupacionHV> listaHechoVitalAgrupacionHV = hechov.getHechosVitalesAgrupacionHV();
-        	
-        	// Seteamos el nuevo list
-        	for (HechoVitalAgrupacionHV hechoVitalAgrupacionHV : listaHechoVitalAgrupacionHV) {
+	/**
+	 *  @deprecated Usado desde el back antiguo
+	 * Crea o actualiza una Agrupacion de hechos vitales.
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission role-name="${role.system},${role.admin}"
+	 * 
+	 * @param agrHechoVital	Agrupacion de hechos vitales a guardar.
+	 * 
+	 * @return Devuelve el identificador de la agrupación del hecho vital.
+	 */
+	public Long grabarAgrupacionHV(AgrupacionHechoVital agrHechoVital) {
+		Session session = getSession();
+
+		try {
+
+			session.saveOrUpdate(agrHechoVital);
+			session.flush();
+
+			return agrHechoVital.getId();
+
+		} catch (HibernateException he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+
+		}
+
+	}
+
+
+	/**
+	 * Crea o actualiza una Agrupacion Hecho Vital.
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission role-name="${role.system},${role.admin}"
+	 * 
+	 * @param agrHechoVital	Agrupación de hechos vitales a guardar.
+	 * 
+	 * @param listaHechosVitalesAsignados	Listado de hechos vitales asignados a la agrupación de hchos vitales.
+	 * 
+	 * @return Identificador de la agrupación de hechos vitales.
+	 */
+	public Long guardarAgrupacionHV(AgrupacionHechoVital agrHechoVital, List<HechoVitalAgrupacionHV> listaHechosVitalesAsignados) {
+
+		Session session = getSession();
+
+		try {
+
+			for ( HechoVitalAgrupacionHV hechoVitalAgrupacionHV : listaHechosVitalesAsignados ) {
+
+				if ( hechoVitalAgrupacionHV != null )
+					session.delete(hechoVitalAgrupacionHV);
+
+			}                   
+
+			List<HechoVitalAgrupacionHV> listaHechoVitalAgrupacionHV = agrHechoVital.getHechosVitalesAgrupacionHV();
+
+			for ( HechoVitalAgrupacionHV hechoVitalAgrupacionHV : listaHechoVitalAgrupacionHV )
 				session.saveOrUpdate(hechoVitalAgrupacionHV);
-			}
-        	
-            session.saveOrUpdate(hechov);
-            session.flush();
-            return hechov.getId();
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-    
-    /**
-     * Lista todas las Agrupaciones Hechos Vitales (nuevo backoffice).
-     * 
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */    
-    public ResultadoBusqueda listarAgrupacionHV(int pagina, int resultats, String idioma) {
-    	return listarTablaMaestraPaginada(pagina, resultats, listarTMAgrupacionHV( idioma ));
-    }
-    
-    /**
-     * Lista todas las Agrupaciones Hechos Vitales.
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    @SuppressWarnings("unchecked")
-	public List<AgrupacionHechoVital> listarAgrupacionHV() {
-        Session session = getSession();
-        try {
-            Criteria criteri = session.createCriteria(AgrupacionHechoVital.class);
-            return criteri.list();
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-    
-    /**
-     * Lista las agrupaciones hechos vitals para el menú de administración.
-     */
-    private List listarTMAgrupacionHV( String idioma) {
-    	Session session = getSession();
-    	
-    	try {
-    		Query query = session.createQuery("select ahv.id, ahv.codigoEstandar, trad.nombre " +
-    														"from AgrupacionHechoVital as ahv, ahv.traducciones as trad " +
-    														"where index(trad) = :idioma " +
-    														"order by ahv.codigoEstandar asc");
-    		
-    		query.setParameter("idioma", idioma);
-    		return query.list();    		
-    	} catch (HibernateException he) {
-    		throw new EJBException(he);
-    	} finally {
-    		close(session);
-    	}    	
-    }
-    
-    /**
-     * Obtiene una Agrupacion hecho vital.
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public AgrupacionHechoVital obtenerAgrupacionHV(Long id) {
-        Session session = getSession();
-        try {
-            AgrupacionHechoVital hechov = (AgrupacionHechoVital) session.load(AgrupacionHechoVital.class, id);
-            Hibernate.initialize(hechov.getHechosVitalesAgrupacionHV());
-            Hibernate.initialize(hechov.getFoto());
-            Hibernate.initialize(hechov.getIcono());
-            Hibernate.initialize(hechov.getIconoGrande());
-            return hechov;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
 
-    /**
-     * Obtiene una Agrupacion hecho vital segun el nombre.
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public AgrupacionHechoVital obtenerAgrupacionHVPorNombre(String nombre) {
-        Session session = getSession();
-        try {
-            Query query = session.getNamedQuery("agrupacion.byname");
-            query.setParameter("nombre", nombre);
-            query.setMaxResults(1);
-            query.setCacheable(true);
-            List result = query.list();
-            if (result.isEmpty()) {
-                return null;
-            }
-            AgrupacionHechoVital hechov = (AgrupacionHechoVital) result.get(0);
-            Hibernate.initialize(hechov.getFoto());
-            Hibernate.initialize(hechov.getHechosVitalesAgrupacionHV());
-            return hechov;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
+			session.saveOrUpdate(agrHechoVital);
+			session.flush();
+
+			return agrHechoVital.getId();
+
+		} catch (HibernateException he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+
+		}
+
+	}
 
 
-    /**
-     * Borra una Agrupacion Hecho Vital.
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin}"
-     */
-    public void borrarAgrupacionHV(Long id) {
-        Session session = getSession();
-        try {
-            AgrupacionHechoVital agrupacion = (AgrupacionHechoVital) session.load(AgrupacionHechoVital.class, id);
+	/**
+	 * Lista todas las Agrupaciones Hechos Vitales.
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param pagina	Indica el número de página actual.
+	 * 
+	 * @param resultats	Indica la cantidad de resultados a devolver por página.
+	 * 
+	 * @param idioma	Indica el idioma.
+	 * 
+	 * @return  Devuelve <code>ResultadoBusqueda</code> que contiene una lista de todas las agrupaciones de hechos vitales.
+	 */    
+	public ResultadoBusqueda listarAgrupacionesHVHechosVitales(int pagina, int resultats, String idioma) {
 
-            List<HechoVitalAgrupacionHV> hechosa = agrupacion.getHechosVitalesAgrupacionHV();
-            for (HechoVitalAgrupacionHV hechoagru : hechosa) {
-                HechoVital hecho = hechoagru.getHechoVital();
-                hecho.removeHechoVitalAgrupacionHV(hechoagru);
-            }
+		return listarTablaMaestraPaginada( pagina , resultats , listarTablaMaestraAgrupacionHechoVital( idioma ) );
 
-            PublicoObjetivo publicoObjetivo = agrupacion.getPublico();
-            publicoObjetivo.removeAgrupacion(agrupacion);
-            
-            session.delete(agrupacion);
-            session.flush();
-            
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-    
-    /**
-     * obtiene la Foto de una AgrupacionHechoVital
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public Archivo obtenerFoto(Long id) {
-        Session session = getSession();
-        try {
-        	AgrupacionHechoVital hecho = (AgrupacionHechoVital) session.load(AgrupacionHechoVital.class, id);
-            Hibernate.initialize(hecho.getFoto());
-            return hecho.getFoto();
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-
-    /**
-        * obtiene el icono de una AgrupacionHechoVital
-        * @ejb.interface-method
-        * @ejb.permission unchecked="true"
-        */
-       public Archivo obtenerIcono(Long id) {
-           Session session = getSession();
-           try {
-               AgrupacionHechoVital hecho = (AgrupacionHechoVital) session.load(AgrupacionHechoVital.class, id);
-               Hibernate.initialize(hecho.getIcono());
-               return hecho.getIcono();
-           } catch (HibernateException he) {
-               throw new EJBException(he);
-           } finally {
-               close(session);
-           }
-       }
-
-     /**
-        * obtiene el icono grande de una AgrupacionHechoVital
-        * @ejb.interface-method
-        * @ejb.permission unchecked="true"
-        */
-       public Archivo obtenerIconoGrande(Long id) {
-           Session session = getSession();
-           try {
-               AgrupacionHechoVital hecho = (AgrupacionHechoVital) session.load(AgrupacionHechoVital.class, id);
-               Hibernate.initialize(hecho.getIconoGrande());
-               return hecho.getIconoGrande();
-           } catch (HibernateException he) {
-               throw new EJBException(he);
-           } finally {
-               close(session);
-           }
-       }
+	}
 
 
-    /**
-     * Lista todas los Hechos Vitales y sus AgrupacionesHV.
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    @SuppressWarnings("unchecked")
-	public List<HechoVitalAgrupacionHV> listarAgrupacionesHVHechosVitales() {
-        Session session = getSession();
-        try {
-            Criteria criteri = session.createCriteria(HechoVitalAgrupacionHV.class);
-            criteri.addOrder(Order.asc("orden"));
-            criteri.setCacheable(true);
-
-            List<HechoVitalAgrupacionHV> result = criteri.list();
-            for (HechoVitalAgrupacionHV agrupacion : result) {
-                Hibernate.initialize(agrupacion.getHechoVital());
-            }
-
-            return result;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-
-     /**
-     * Lista las agrupaciones Hechos Vitales de un publico objetivo
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    @SuppressWarnings("unchecked")
-	public List<HechoVitalAgrupacionHV> listarAgrupacionesHVPorPublicoObjetivo(Long idPubObj) {
-        Session session = getSession();
-        try {
-            Query query = session.createQuery("from AgrupacionHV as agrup where agrup.publico.id =: idPubObj");
-            query.setParameter("idPubObj", idPubObj);
-            query.setCacheable(true);
-
-            return query.list();
-
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-
-
-    /**
-     * Busca todos los {@link AgrupacionHechoVital} cuyo nombre contenga el String de entrada(PORMAD)
-     *
-     * @param busqueda
-     * @param idioma
-     * @return lista de {@link AgrupacionHechoVital}
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
+	/**
+	 *  @deprecated Usado desde el back antiguo
+	 * Lista todas las Agrupaciones Hechos Vitales.
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @return Devuelve <code>List<AgrupacionHechoVital></code> de todas las agrupaciones.
+	 */
 	@SuppressWarnings("unchecked")
-	public List<AgrupacionHechoVital> buscar(final String busqueda, final String idioma){
-		List<AgrupacionHechoVital> resultado;
-		if(busqueda!=null && !"".equals(busqueda.trim())){
+	public List<AgrupacionHechoVital> listarAgrupacionHV() {
+		Session session = getSession();
+
+		try {
+
+			Criteria criteri = session.createCriteria(AgrupacionHechoVital.class);
+
+			return criteri.list();
+
+		} catch (HibernateException he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+
+		}
+
+	}
+
+
+	/**
+	 * Lista las agrupaciones hechos vitals para el menú de administración.
+	 * 
+	 * @param idioma	Indica el idioma en que se realiza la búsqueda.
+	 * 
+	 * @return Devuelve <code>List</code> de agrupaciones de hechos vitales filtrado por idioma y ordenado ascendentemente por código.
+	 */
+	private List listarTablaMaestraAgrupacionHechoVital(String idioma) {
+
+		Session session = getSession();
+
+		try {
+
+			Query query = session.createQuery(
+
+					"select ahv.id, " +
+					"		ahv.codigoEstandar, " +
+					"		trad.nombre " +
+
+					"from AgrupacionHechoVital as ahv, " +
+					"	  ahv.traducciones as trad " +
+
+					"where index(trad) = :idioma " +
+
+					"order by ahv.codigoEstandar asc");
+
+			query.setParameter("idioma", idioma);
+
+			return query.list();    	
+
+		} catch (HibernateException he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+
+		}    	
+
+	}
+
+
+	/**
+	 * Obtiene una Agrupacion hecho vital.
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de una agrupación de hechos vitales.
+	 * 
+	 * @return Devuelve <code>AgrupacionHechoVital.</code> solicitada junto con su foto e iconos.
+	 */
+	public AgrupacionHechoVital obtenerAgrupacionHV(Long id) {
+		Session session = getSession();
+
+		try {
+
+			AgrupacionHechoVital agrHechoVital = (AgrupacionHechoVital) session.load( AgrupacionHechoVital.class , id );
+			Hibernate.initialize( agrHechoVital.getHechosVitalesAgrupacionHV() );
+			Hibernate.initialize (agrHechoVital.getFoto() );
+			Hibernate.initialize( agrHechoVital.getIcono() );
+			Hibernate.initialize( agrHechoVital.getIconoGrande() );
+
+			return agrHechoVital;
+
+		} catch (HibernateException he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+
+		}
+
+	}
+
+
+	/**
+	 *  @deprecated No se usa
+	 * Obtiene una Agrupacion hecho vital segun el nombre.
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param nombre	Indica el nombre de la agrupación de hechos vitales por la que se filtra la búsqueda.
+	 * 
+	 * @return Devuelve <code>AgrupacionHechoVital</code>.
+	 */
+	public AgrupacionHechoVital obtenerAgrupacionHVPorNombre(String nombre) {
+		Session session = getSession();
+
+		try {
+
+			Query query = session.getNamedQuery("agrupacion.byname");
+			query.setParameter( "nombre" , nombre );
+			query.setMaxResults(1);
+			query.setCacheable(true);
+
+			AgrupacionHechoVital agrHechoVital = null;
+			List result = query.list();
+
+			if ( !result.isEmpty() ) {
+
+				agrHechoVital = (AgrupacionHechoVital) result.get(0);
+				Hibernate.initialize( agrHechoVital.getFoto() );
+				Hibernate.initialize( agrHechoVital.getHechosVitalesAgrupacionHV() );
+
+			}
+
+			return agrHechoVital;
+
+		} catch (HibernateException he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+
+		}
+
+	}
+
+
+	/**
+	 * Borra una Agrupacion de hechos vitales.
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission role-name="${role.system},${role.admin}"
+	 * 
+	 * @param id	Identificador de agrupación de hecho vital.
+	 */
+	public void borrarAgrupacionHV(Long id) {
+		Session session = getSession();
+
+		try {
+
+			AgrupacionHechoVital agrupacion = (AgrupacionHechoVital) session.load( AgrupacionHechoVital.class , id );
+
+			List<HechoVitalAgrupacionHV> listaHechosAgr = agrupacion.getHechosVitalesAgrupacionHV();
+			for ( HechoVitalAgrupacionHV hechoAgr : listaHechosAgr ) {
+
+				HechoVital hecho = hechoAgr.getHechoVital();
+				hecho.removeHechoVitalAgrupacionHV(hechoAgr);
+
+			}
+
+			PublicoObjetivo publicoObjetivo = agrupacion.getPublico();
+			publicoObjetivo.removeAgrupacion(agrupacion);
+
+			session.delete(agrupacion);
+			session.flush();
+
+		} catch (HibernateException he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+
+		}
+
+	}
+
+
+	/**
+	 * Obtiene la Foto de una Agrupacion de hechos vitales.
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de una agrupacion de hechos vitales.
+	 * 
+	 * @return Devuelve <code>Archivo</code> con la foto de una agrupación de hechos vitales.
+	 */
+	public Archivo obtenerFoto(Long id) {
+		Session session = getSession();
+
+		try {
+
+			AgrupacionHechoVital hecho = (AgrupacionHechoVital) session.load( AgrupacionHechoVital.class , id );
+			Hibernate.initialize( hecho.getFoto() );
+
+			return hecho.getFoto();
+
+		} catch (HibernateException he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+
+		}
+
+	}
+
+
+	/**
+	 * Obtiene el icono de una Agrupacion de hechos vitales.
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de una agrupación de hechos vitales.
+	 * 
+	 * @return Devuelve <code>Archivo</code> con el icono de una agrupación de hechos vitales.
+	 */
+	public Archivo obtenerIcono(Long id) {
+		Session session = getSession();
+
+		try {
+
+			AgrupacionHechoVital hecho = (AgrupacionHechoVital) session.load( AgrupacionHechoVital.class , id );
+			Hibernate.initialize( hecho.getIcono() );
+
+			return hecho.getIcono();
+
+		} catch (HibernateException he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+
+		}
+
+	}
+
+
+	/**
+	 * Obtiene el icono grande de una Agrupacion de hechos vitales.
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de una agrupación de hechos vitales.
+	 * 
+	 * @return Devuelve <code>Archivo</code> con el icono grande de una agrupación de hechos vitales.
+	 */
+	public Archivo obtenerIconoGrande(Long id) {
+		Session session = getSession();
+
+		try {
+
+			AgrupacionHechoVital hecho = (AgrupacionHechoVital) session.load( AgrupacionHechoVital.class , id );
+			Hibernate.initialize( hecho.getIconoGrande() );
+
+			return hecho.getIconoGrande();
+
+		} catch (HibernateException he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+
+		}
+
+	}
+
+
+	/**
+	 *  @deprecated No se usa
+	 * Lista todas los Hechos Vitales y sus AgrupacionesHV.
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @return Devuelve <code>List<HechoVitalAgrupacionHV></code> de todas las agrupaciones de hechos vitales.
+	 */
+	@SuppressWarnings("unchecked")
+	public List<HechoVitalAgrupacionHV> listarAgrupacionesHVHechosVitales() {
+		Session session = getSession();
+
+		try {
+
+			Criteria criteria = session.createCriteria( HechoVitalAgrupacionHV.class );
+			criteria.addOrder( Order.asc("orden") );
+			criteria.setCacheable(true);
+
+			List<HechoVitalAgrupacionHV> result = criteria.list();
+
+			for ( HechoVitalAgrupacionHV agrupacion : result )
+				Hibernate.initialize( agrupacion.getHechoVital() );
+
+			return result;
+
+		} catch (HibernateException he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+
+		}
+
+	}
+	
+
+	/**
+	 *  @deprecated No se usa
+	 * Lista las agrupaciones Hechos Vitales de un publico objetivo
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param idPublicoObjetivo	Identificador de un público objetivo.
+	 * 
+	 * @return Devuelve <code>List<HechoVitalAgrupacionHV></code> de tidas las agrupaciones de hechos vitales de un público objetivo.
+	 */
+	@SuppressWarnings("unchecked")
+	public List<HechoVitalAgrupacionHV> listarAgrupacionesHVPorPublicoObjetivo(Long idPublicoObjetivo) {
+		Session session = getSession();
+
+		try {
+
+			Query query = session.createQuery("from AgrupacionHV as agrup where agrup.publico.id =: idPublicoObjetivo");
+			query.setParameter( "idPublicoObjetivo" , idPublicoObjetivo );
+			query.setCacheable(true);
+
+			return query.list();
+
+		} catch (HibernateException he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+
+		}
+
+	}
+
+
+	/**
+	 *  @deprecated No se usa
+	 * Busca todos los {@link AgrupacionHechoVital} cuyo nombre contenga el String de entrada(PORMAD)
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param nombre	Indica el nombre de la agrupación de hechos vitales por la que se filtra la búsqueda.
+	 *  
+	 * @param idioma	Indica el idioma en que se realiza la búsqueda.
+	 * 
+	 * @return Devuelve <code>List<AgrupacionHechoVital></code> de todas las agrupaciones de hechos vitales filtrados por idioma.
+	 */
+	@SuppressWarnings("unchecked")
+	public List<AgrupacionHechoVital> buscar(final String nombre, final String idioma){
+		List<AgrupacionHechoVital> resultado = Collections.emptyList();
+
+		if (nombre != null && !"".equals( nombre.trim() ) ) {
+
 			Session session = getSession();
-	        try {
-	        	Query query = session.createQuery("  from AgrupacionHechoVital as agrHV," +
-                                                  "       agrHV.traducciones as trad " +
-                                                  "  where index(trad) = :idioma " +
-                                                  "    and upper(trad.nombre) like :busqueda");
-	        	query.setString("idioma", idioma);
-	        	query.setString("busqueda", "%"+busqueda.trim().toUpperCase()+"%");
-	        	resultado = (List<AgrupacionHechoVital>)query.list();
-	        } catch (HibernateException he) {
-	            throw new EJBException(he);
-	        } finally {
-	            close(session);
-	        }
-		}else{
-			resultado = Collections.emptyList();
+
+			try {
+
+				Query query = session.createQuery(
+						
+						"from AgrupacionHechoVital as agrHV," +
+								"     agrHV.traducciones as trad " +
+
+						"where index(trad) = :idioma " +
+						"	and upper(trad.nombre) like :busqueda");
+
+				query.setString( "idioma" , idioma );
+				query.setString( "busqueda" , "%" + nombre.trim().toUpperCase() + "%" );
+
+				resultado = (List<AgrupacionHechoVital>) query.list();
+
+			} catch (HibernateException he) {
+
+				throw new EJBException(he);
+
+			} finally {
+
+				close(session);
+
+			}
+
 		}
 
 		return resultado;
-	}
 
+	}
 
 }

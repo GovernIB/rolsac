@@ -20,12 +20,12 @@ import java.util.Map;
 public class CatalegDocumentsDelegate implements StatelessDelegate {
 
     /* ========================================================= */
-    /* ======================== M�TODOS DE NEGOCIO ============= */
+    /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
-    public Long gravarDocumentCataleg(CatalegDocuments docCataleg) throws DelegateException {
+    public Long gravarDocumentCataleg(CatalegDocuments documentoCatalogo) throws DelegateException {
         try {
-            return getFacade().gravarDocumentCataleg(docCataleg);
+            return getFacade().gravarDocumentCataleg(documentoCatalogo);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
@@ -39,6 +39,7 @@ public class CatalegDocumentsDelegate implements StatelessDelegate {
         }
     }
     
+    /** @deprecated No se usa*/
     public ResultadoBusqueda llistarCatalegDocuments(int pagina, int resultats) throws DelegateException {
       try {
         return getFacade().llistarCatalegDocuments(pagina,resultats);
@@ -47,15 +48,16 @@ public class CatalegDocumentsDelegate implements StatelessDelegate {
       }
     }
     
-    public List<CatalegDocuments> llistarCatalegDocuments() throws DelegateException {
+   public List<CatalegDocuments> llistarCatalegDocuments() throws DelegateException {
         try {
-            return getFacade().llistarCatalegDocuments();
+            return getFacade().listarCatalogoDocumentos();
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
 
-    public List cercarCatalegDocuments(Map parametros, Map traduccion) throws DelegateException {
+   /** @deprecated No se usa*/
+   public List cercarCatalegDocuments(Map parametros, Map traduccion) throws DelegateException {
         try {
             return getFacade().cercarCatalegDocuments(parametros, traduccion);
         } catch (RemoteException e) {
@@ -71,16 +73,14 @@ public class CatalegDocumentsDelegate implements StatelessDelegate {
         }
     }
 
-   
-    
-    public ResultadoBusqueda cercarDocumentsCatalegAmbMultiidioma(Map parametros, Map traduccion, Long idExcepcio, String pagina, String resultats) throws DelegateException {
+    public ResultadoBusqueda cercarDocumentsCatalegAmbMultiidioma(String descripcionBusqueda, Long administracionResponsable, Long excepcionDocumento , Integer pagina , Integer resultados, String idioma) throws DelegateException {
         try {
-            return getFacade().cercarDocumentsCatalegAmbMultiidioma(parametros, traduccion,idExcepcio, pagina, resultats);
+            return getFacade().cercarDocumentsCatalegAmbMultiidioma(descripcionBusqueda, administracionResponsable, excepcionDocumento, pagina, resultados, idioma);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
-  
+    
     /*=========================================================*/
     /*======================== REFERENCIA AL FACADE ==============*/
     /*=========================================================*/

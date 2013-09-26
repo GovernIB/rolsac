@@ -11,16 +11,17 @@ import org.ibit.rol.sac.persistence.intf.ActivacionSuscripcionFacade;
 import org.ibit.rol.sac.persistence.intf.ActivacionSuscripcionFacadeHome;
 import org.ibit.rol.sac.persistence.util.ActivacionSuscripcionFacadeUtil;
 
-
+/** @deprecated No se utiliza*/
 public class ActivacionSuscripcionDelegate implements StatelessDelegate {
 
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== MÃ‰TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
+	/** @deprecated No se utiliza*/
     public ActivacionSuscripcion obtener(String email, String idImagen) throws DelegateException {
         try {
-        	return getFacade().obtener(email,idImagen);
+        	return getFacade().obtener(email, idImagen);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
