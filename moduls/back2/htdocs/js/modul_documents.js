@@ -17,8 +17,8 @@ jQuery(document).ready(function() {
 // Lista ordenable para elimiar/ordenar docs en la pantalla "padre"
 function CEscriptoriPare(){
 	this.extend = ListaOrdenable;
-	this.extend();		
-    
+	this.extend();
+	
     // Configuracion de la lista ordenable.
     this.configuracion = {
         nombre: "documents",
@@ -62,6 +62,7 @@ function CEscriptoriPare(){
 		var id = jQuery(item).find("input." + that.configuracion.nombre + "_id:first").val();						
 		jQuery(that.configuracion.nodoOrigen).find("input[name=" + that.configuracion.nombre + "_id_" + id + "]").parents("li").remove();
 		that.habilitarBotonGuardar();
+		$('#modulo_documents_modificado').val("1");
 	}
     
     this.habilitarBotonGuardar = function() {
@@ -139,12 +140,12 @@ function CModulDocuments(){
 	}
 
 	var that = this;
-	
+
 	this.iniciar = function() {			
         // botons        
         jQuery("#btnVolver_documents").bind("click", that.torna);
 
-        // El botón de guardar está inicialmente deshabilitado hasta que se realice un cambio en el formulario.
+        // El botï¿½n de guardar estï¿½ inicialmente deshabilitado hasta que se realice un cambio en el formulario.
     	jQuery("#formGuardarDoc input, #formGuardarDoc select, #formGuardarDoc textarea").bind("change", function(){that.modificado();});
     	
 		// idioma
@@ -167,7 +168,7 @@ function CModulDocuments(){
 			ul_idiomes_elm.bind("click", {'actualizarIdiomasModulosLaterales': false}, that.idioma);
 		}
 		
-		// Redifinimos el método que guarda porque en este caso también hacemos un upload de archivos.
+		// Redifinimos el mï¿½todo que guarda porque en este caso tambiï¿½n hacemos un upload de archivos.
 		this.guarda = this.guarda_upload;
 	}
 	
@@ -194,7 +195,7 @@ function CModulDocuments(){
         	jQuery("#fitxaId").val(jQuery("#item_id").val());
         }
 
-		//Enviamos el formulario mediante el método ajaxSubmit del plugin jquery.form
+		//Enviamos el formulario mediante el mï¿½todo ajaxSubmit del plugin jquery.form
 		$("#formGuardarDoc").ajaxSubmit({			
 			url: pagGuardarDoc,
 			dataType: 'json',
@@ -220,7 +221,7 @@ function CModulDocuments(){
 					docItem['id'] = data.id;
 					docItem['nombre'] = nom;
 					EscriptoriPare.agregaActualizaItem(docItem);
-					
+					$('#modulo_documents_modificado').val("1");
 					that.torna();
 				}
 			}
@@ -232,7 +233,7 @@ function CModulDocuments(){
 	
 	
 	this.modificado = function(){
-		// Habilitamos el botón de guardar.
+		// Habilitamos el botï¿½n de guardar.
 		jQuery("#btnGuardar_documents").unbind("click").bind("click",function(){that.guarda();}).parent().removeClass("off");
 	}
 	
@@ -245,7 +246,7 @@ function CModulDocuments(){
 		
 	
 	this.nou = function(edicion) {
-		// El botón de guardar está inicialmente deshabilitado hasta que se realice un cambio en el formulario.
+		// El botï¿½n de guardar estï¿½ inicialmente deshabilitado hasta que se realice un cambio en el formulario.
 		jQuery("#btnGuardar_documents").parent().addClass("off");
         
 		if (!edicion) {

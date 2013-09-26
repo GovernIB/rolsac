@@ -975,8 +975,8 @@
                     <div class="modul_continguts mostrat">                                  
                         <!-- modulDocuments -->
                         <%-- dsanchez: Clase "multilang" para listas multi-idioma --%>
-                        <div class="modulDocuments multilang">                            
-												
+                        <div class="modulDocuments multilang">
+                            <input id="modulo_documents_modificado" type="hidden" name="modulo_documents_modificado" value="0" />
                             <ul class="idiomes">
                                 <li class="introIdiomas"><spring:message code='txt.idioma.idioma'/>:</li>
 								

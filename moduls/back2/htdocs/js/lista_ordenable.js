@@ -25,6 +25,11 @@ function ListaOrdenable(){
 		var id;		
 		var datos;
 		var nodo;
+		
+		// Para poder controlar las modificaciones en los modulos de los documentos, ya que no se tenia pensado
+		if ($('#modulo_documents_modificado') != "undefined") {
+            $('#modulo_documents_modificado').val("1");
+        }
 					
 		if( tipo == "origen" ){
 			nodo = params.nodoOrigen;

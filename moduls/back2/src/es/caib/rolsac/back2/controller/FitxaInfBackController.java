@@ -549,7 +549,8 @@ public class FitxaInfBackController extends PantallaBaseController {
         Map<String, String> valoresForm = new HashMap<String, String>();
 		Map<String, FileItem> ficherosForm = new HashMap<String, FileItem>();
         
-        try {      
+        try {
+        	String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
         	
         	//Aqui nos llegar�a un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
     		//Iremos recopilando los parametros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
@@ -722,42 +723,18 @@ public class FitxaInfBackController extends PantallaBaseController {
 
             
             //Materies
-            
-            //Para hacer menos accesos a BBDD se comprueba si es edicion o no, en el primer caso, es bastante
-            //probable que se repitan la mayoria de materias.
             if (isModuloModificado("modulo_materias_modificado", valoresForm)) {
                 if (valoresForm.get("materies") != null && !"".equals(valoresForm.get("materies"))){
-                    MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
-                    Set<Materia> materiesNoves = new HashSet<Materia>();
-                    String[] codisMateriaNous = valoresForm.get("materies").split(",");
-                    
-                    if (edicion){
-                        for (int i = 0; i < codisMateriaNous.length; i++) {
-                            for (Materia materia : fitxaOld.getMaterias()) {
-                                if(materia.getId().equals(ParseUtil.parseLong(codisMateriaNous[i]))){//materia ya existente
-                                    materiesNoves.add(materia);
-                                    codisMateriaNous[i] = null;
-                                    break;
-                                }
-                            }                            
-                        }                         
-                    }                    
-                    
-                    for (String codiMateria: codisMateriaNous){
-                        if (codiMateria != null){
-                            Long codi = ParseUtil.parseLong(codiMateria);
-                            materiesNoves.add(materiaDelegate.obtenerMateria(codi));
-                        }                        
-                    }
-                    
-                  fitxa.setMaterias(materiesNoves);                                                 
+                	MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
+					Set<Materia> materias = new HashSet<Materia>();
+					materias.addAll(materiaDelegate.obtenerMateriasPorIDs(valoresForm.get("materies"), idioma));
+					fitxa.setMaterias(materias);                                               
                 } else {
                     fitxa.setMaterias(new HashSet<Materia>());
                 }
             }
             
             //Fets vitals
-                
             if (isModuloModificado("modulo_hechos_modificado", valoresForm)) {
                 if (valoresForm.get("fetsVitals") != null && !"".equals(valoresForm.get("fetsVitals"))){
                     HechoVitalDelegate fetVitalDelegate = DelegateUtil.getHechoVitalDelegate();
@@ -821,61 +798,63 @@ public class FitxaInfBackController extends PantallaBaseController {
 	                fitxa.setPublicosObjetivo(new HashSet<PublicoObjetivo>());
 	            }
             }
-           // Documents
-	        DocumentoResumen document;
-	        DocumentoResumenDelegate docDelegate = DelegateUtil.getDocumentoResumenDelegate();
-	        List<Documento> documents = new ArrayList<Documento>();
-	        Map <String,String[]> actulitzadorMap = new HashMap<String, String[]>();
-	
-	        // obtenim  els documents i els seus ordres
-            for (Iterator<String> iterator = docsIds.iterator(); iterator.hasNext();) {
-        	    String docParameter = (String)iterator.next();
-                String[] elements = docParameter.split("_");
-              
-          	    Long idDoc = ParseUtil.parseLong(elements[2]);	// documents_id_xxx                	
-          	    if (idDoc != null) {
-                    document = docDelegate.obtenerDocumentoResumen(idDoc);
-                    Documento doc = new Documento();
-                    doc.setId(document.getId());
-                    doc.setFicha(document.getFicha());
-                    doc.setOrden(document.getOrden());
-                    doc.setProcedimiento(document.getProcedimiento());
-                    doc.setTraduccionMap(document.getTraduccionMap());
-              	    documents.add(doc);
-                    // Se coge el orden de la web. Si se quisiesen poner del 0 al x, hacer que orden valga 0 e ir incrementandolo.
-                    String[] orden = {valoresForm.get("documents_orden_" + elements[2])};
-                    actulitzadorMap.put("orden_doc" + idDoc, orden);
-            	} else {
-            		log.warn("S'ha rebut un id de document no n�meric: " + idDoc);
-            	}
-            }
-	          
-	        // actualitzam ordres
-	        docDelegate.actualizarOrdenDocs(actulitzadorMap);
-	        
-	        // assignar els documents a la fitxa i eliminar els que ja no estiguin seleccionats.
-	        fitxa.setDocumentos(documents);
-	        if (edicion){
-	            List<Documento> docsOld = fitxaOld.getDocumentos();                                    
-	              
-	            for (Documento doc: documents) {
-	                for (Iterator<Documento> it = docsOld.iterator(); it.hasNext(); ){
-	                	Documento currentDoc = it.next();
-	                    if (currentDoc != null && currentDoc.getId().equals(doc.getId())){
-	                        it.remove();
-	                    }
-	                }
-	            }                    
-	             
-	            for (Documento doc: docsOld){
-	            	if (doc != null) {
-	            	    Long codi = doc.getId();
-	            	    docDelegate.borrarDocumento(codi);
-	            	}
-	            }
-	        } 
-	        // Fi documents 
             
+            // Documents
+            if (isModuloModificado("modulo_documents_modificado", valoresForm)) {
+            	DocumentoResumen document;
+    	        DocumentoResumenDelegate docDelegate = DelegateUtil.getDocumentoResumenDelegate();
+    	        List<Documento> documents = new ArrayList<Documento>();
+    	        Map <String,String[]> actulitzadorMap = new HashMap<String, String[]>();
+    	
+    	        // obtenim  els documents i els seus ordres
+                for (Iterator<String> iterator = docsIds.iterator(); iterator.hasNext();) {
+            	    String docParameter = (String)iterator.next();
+                    String[] elements = docParameter.split("_");
+                  
+              	    Long idDoc = ParseUtil.parseLong(elements[2]);	// documents_id_xxx                	
+              	    if (idDoc != null) {
+                        document = docDelegate.obtenerDocumentoResumen(idDoc);
+                        Documento doc = new Documento();
+                        doc.setId(document.getId());
+                        doc.setFicha(document.getFicha());
+                        doc.setOrden(document.getOrden());
+                        doc.setProcedimiento(document.getProcedimiento());
+                        doc.setTraduccionMap(document.getTraduccionMap());
+                  	    documents.add(doc);
+                        // Se coge el orden de la web. Si se quisiesen poner del 0 al x, hacer que orden valga 0 e ir incrementandolo.
+                        String[] orden = {valoresForm.get("documents_orden_" + elements[2])};
+                        actulitzadorMap.put("orden_doc" + idDoc, orden);
+                	} else {
+                		log.warn("S'ha rebut un id de document no n�meric: " + idDoc);
+                	}
+                }
+    	          
+    	        // actualitzam ordres
+    	        docDelegate.actualizarOrdenDocs(actulitzadorMap);
+    	        
+    	        // assignar els documents a la fitxa i eliminar els que ja no estiguin seleccionats.
+    	        fitxa.setDocumentos(documents);
+    	        if (edicion){
+    	            List<Documento> docsOld = fitxaOld.getDocumentos();                                    
+    	              
+    	            for (Documento doc: documents) {
+    	                for (Iterator<Documento> it = docsOld.iterator(); it.hasNext(); ){
+    	                	Documento currentDoc = it.next();
+    	                    if (currentDoc != null && currentDoc.getId().equals(doc.getId())){
+    	                        it.remove();
+    	                    }
+    	                }
+    	            }                    
+    	             
+    	            for (Documento doc: docsOld){
+    	            	if (doc != null) {
+    	            	    Long codi = doc.getId();
+    	            	    docDelegate.borrarDocumento(codi);
+    	            	}
+    	            }
+    	        }
+            }
+	        // Fi documents 
 	        
 	        // Guardar
 	        /* NOTA IMPORTANTE PARA EL RENDIMIENTO */

@@ -945,66 +945,68 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				// Fin normativas
 		    	
 		    	// Documents
-				Enumeration<String> nomsParametres = request.getParameterNames();
-				DocumentoResumen documentResumen;
-				DocumentoResumenDelegate docDelegate = DelegateUtil.getDocumentoResumenDelegate();
-				List<Documento> documents = new ArrayList<Documento>();
-				Map <String,String[]> actulitzadorMap = new HashMap<String, String[]>();
+				if (isModuloModificado("modulo_documents_modificado", request)) {
+					Enumeration<String> nomsParametres = request.getParameterNames();
+					DocumentoResumen documentResumen;
+					DocumentoResumenDelegate docDelegate = DelegateUtil.getDocumentoResumenDelegate();
+					List<Documento> documents = new ArrayList<Documento>();
+					Map <String,String[]> actulitzadorMap = new HashMap<String, String[]>();
 
-				// obtenim  els documents i els seus ordres
-				while ( nomsParametres.hasMoreElements() ) {
+					// obtenim  els documents i els seus ordres
+					while ( nomsParametres.hasMoreElements() ) {
 
-					String nomParameter = (String)nomsParametres.nextElement();                    
-					String[] elements = nomParameter.split("_");
+						String nomParameter = (String)nomsParametres.nextElement();                    
+						String[] elements = nomParameter.split("_");
 
-					if ( "documents".equals(elements[0]) && "id".equals(elements[1]) ) {
+						if ( "documents".equals(elements[0]) && "id".equals(elements[1]) ) {
 
-						// En aquest cas, elements[2] es igual al id del document
-						Long id = ParseUtil.parseLong(request.getParameter(nomParameter));
-						if (id != null) {
-							documentResumen = docDelegate.obtenerDocumentoResumen(id);
-							Documento doc = new Documento();
-		                    doc.setId(documentResumen.getId());
-		                    doc.setFicha(documentResumen.getFicha());
-		                    doc.setOrden(documentResumen.getOrden());
-		                    doc.setProcedimiento(documentResumen.getProcedimiento());
-		                    doc.setTraduccionMap(documentResumen.getTraduccionMap());
-							documents.add(doc);
+							// En aquest cas, elements[2] es igual al id del document
+							Long id = ParseUtil.parseLong(request.getParameter(nomParameter));
+							if (id != null) {
+								documentResumen = docDelegate.obtenerDocumentoResumen(id);
+								Documento doc = new Documento();
+			                    doc.setId(documentResumen.getId());
+			                    doc.setFicha(documentResumen.getFicha());
+			                    doc.setOrden(documentResumen.getOrden());
+			                    doc.setProcedimiento(documentResumen.getProcedimiento());
+			                    doc.setTraduccionMap(documentResumen.getTraduccionMap());
+								documents.add(doc);
 
-							// Se coge el orden de la web. Si se quisiesen poner del 0 al x, hacer que orden valga 0 e ir incrementandolo.
-							String[] orden = {request.getParameter("documents_orden_" + elements[2])};
-							actulitzadorMap.put("orden_doc" + id, orden);
-						} else {
-							log.warn("S'ha rebut un id de document no n�meric: " + id);
-						}
-
-					}
-
-				}
-
-				// actualitzam ordres
-				docDelegate.actualizarOrdenDocs(actulitzadorMap);
-
-				// assignar els documents al procedimient i eliminar els que ja no estiguin seleccionats.
-				procediment.setDocumentos(documents);
-				if (edicion) {
-
-					List<Documento> docsOld = procedimentOld.getDocumentos();                                    
-
-					for(Documento doc : documents){
-						for (Iterator<Documento> it = docsOld.iterator(); it.hasNext(); ){
-							Documento currentDoc = it.next();
-							if (currentDoc != null && currentDoc.getId().equals(doc.getId())){
-								it.remove();
+								// Se coge el orden de la web. Si se quisiesen poner del 0 al x, hacer que orden valga 0 e ir incrementandolo.
+								String[] orden = {request.getParameter("documents_orden_" + elements[2])};
+								actulitzadorMap.put("orden_doc" + id, orden);
+							} else {
+								log.warn("S'ha rebut un id de document no n�meric: " + id);
 							}
-						}
-					}                    
 
-					for (Documento doc: docsOld){
-						if (doc != null) docDelegate.borrarDocumento(doc.getId());
+						}
+
 					}
 
-				} 
+					// actualitzam ordres
+					docDelegate.actualizarOrdenDocs(actulitzadorMap);
+
+					// assignar els documents al procedimient i eliminar els que ja no estiguin seleccionats.
+					procediment.setDocumentos(documents);
+					if (edicion) {
+
+						List<Documento> docsOld = procedimentOld.getDocumentos();                                    
+
+						for(Documento doc : documents){
+							for (Iterator<Documento> it = docsOld.iterator(); it.hasNext(); ){
+								Documento currentDoc = it.next();
+								if (currentDoc != null && currentDoc.getId().equals(doc.getId())){
+									it.remove();
+								}
+							}
+						}                    
+
+						for (Documento doc: docsOld){
+							if (doc != null) docDelegate.borrarDocumento(doc.getId());
+						}
+
+					}
+				}
 				// Fi documents
 
 				// Idiomas
