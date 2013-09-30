@@ -331,6 +331,18 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
             throw new DelegateException(e);
         }
     }
+    
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#crearFichaUA2(java.lang.Long, java.lang.Long, java.lang.Long)
+	 */
+    public Long crearFichaUA2(Long unidad_id, Long seccion_id, Long ficha_id)
+            throws DelegateException {
+        try {
+            return getFacade().crearFichaUA2(unidad_id, seccion_id, ficha_id);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
 
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#subirFichaUA(java.lang.Long)
@@ -360,6 +372,17 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
     public void borrarFichaUA(Long id) throws DelegateException {
         try {
             getFacade().borrarFichaUA(id);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#borrarFichaUA2(java.lang.Long)
+	 */
+    public void borrarFichaUA2(Long id) throws DelegateException {
+        try {
+            getFacade().borrarFichaUA2(id);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }

@@ -50,7 +50,6 @@ import org.ibit.rol.sac.model.dto.SeccionDTO;
 import org.ibit.rol.sac.model.dto.UnidadDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
 import org.ibit.rol.sac.persistence.delegate.DocumentoResumenDelegate;
 import org.ibit.rol.sac.persistence.delegate.EnlaceDelegate;
 import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
@@ -863,7 +862,6 @@ public class FitxaInfBackController extends PantallaBaseController {
             Long idFitxa = fitxaDelegate.grabarFicha(fitxa);
                 
             //Asociacion de ficha con Unidad administrativa
-            
             if(isModuloModificado("modulo_seccionesua_modificado", valoresForm)){
             
                 String[] codisSeccUaNous = valoresForm.get("seccUA").split(",");                                      
@@ -884,18 +882,18 @@ public class FitxaInfBackController extends PantallaBaseController {
                         }
                         if (esborrarFichaUA){
                             Long codi = fichaUA.getId();
-                            fitxaDelegate.borrarFichaUA(codi);
+                            fitxaDelegate.borrarFichaUA2(codi);
                         }                            
                     }
                 }
-                    
-                //Tots els que tenen id = -1, son nous i se poden afegir directament
+                
+    		    //Tots els que tenen id = -1, son nous i se poden afegir directament
                 for (String codiSeccUa: codisSeccUaNous){
                     if (codiSeccUa != null){
                         String[] seccUA = codiSeccUa.split("#");
                         Long idSeccion = ParseUtil.parseLong(seccUA[1]);
                         Long idUA = ParseUtil.parseLong(seccUA[2]);
-                        fitxaDelegate.crearFichaUA(idUA, idSeccion, idFitxa);
+                        fitxaDelegate.crearFichaUA2(idUA, idSeccion, idFitxa);
                         String pidip = System.getProperty("es.caib.rolsac.pidip");
                         if(!((pidip == null) || pidip.equals("N"))) {
                             // Si se anyade una ficha a la seccion Actualidad, se a�ade tambien a Portada Actualidad (PIDIP)
@@ -913,17 +911,17 @@ public class FitxaInfBackController extends PantallaBaseController {
                                         existe=1;
                                 }
                                 if (existe==0) {
-                                    fitxaDelegate.crearFichaUA(idUA, portadas, idFitxa);
+                                    fitxaDelegate.crearFichaUA2(idUA, portadas, idFitxa);
                                 }
                             }
                         }                                                
                     }
                 }
+                
             }
-            
-            //Tractament d'enllassos
-            
-            if (isModuloModificado("modulo_enlaces_modificado", valoresForm)){
+	    	
+	    	// Tractament d'enllassos
+	    	if (isModuloModificado("modulo_enlaces_modificado", valoresForm)){
             
                 List<Enlace> enllassosNous = new ArrayList<Enlace>();
                 

@@ -151,6 +151,11 @@ public class FichaDelegate implements FichaDelegateI {
 			throws DelegateException {
 		return impl.crearFichaUA(unidad_id, seccion_id, ficha_id);
 	}
+	
+	public Long crearFichaUA2(Long unidad_id, Long seccion_id, Long ficha_id)
+			throws DelegateException {
+		return impl.crearFichaUA2(unidad_id, seccion_id, ficha_id);
+	}
 
 	public void subirFichaUA(Long id) throws DelegateException {
 		impl.subirFichaUA(id);
@@ -163,6 +168,10 @@ public class FichaDelegate implements FichaDelegateI {
 
 	public void borrarFichaUA(Long id) throws DelegateException {
 		impl.borrarFichaUA(id);
+	}
+	
+	public void borrarFichaUA2(Long id) throws DelegateException {
+		impl.borrarFichaUA2(id);
 	}
 
 	public List buscarFichasHechoVital(Long id) throws DelegateException {

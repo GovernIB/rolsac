@@ -90,6 +90,9 @@ public interface FichaDelegateI {
 
 	public abstract Long crearFichaUA(Long unidad_id, Long seccion_id,
 			Long ficha_id) throws DelegateException;
+	
+	public abstract Long crearFichaUA2(Long unidad_id, Long seccion_id,
+			Long ficha_id) throws DelegateException;
 
 	public abstract void subirFichaUA(Long id) throws DelegateException;
 
@@ -97,6 +100,8 @@ public interface FichaDelegateI {
 			throws DelegateException;
 
 	public abstract void borrarFichaUA(Long id) throws DelegateException;
+	
+	public abstract void borrarFichaUA2(Long id) throws DelegateException;
 
 	public abstract List buscarFichasHechoVital(Long id)
 			throws DelegateException;

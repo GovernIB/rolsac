@@ -675,8 +675,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
     	log.info("1.0 Inició del guardado de un procedimiento");
 	    Date startTraceGeneral = new Date();
     	/* Fin */
-	    Date startTrace;
-	    long execTime;
 
 		try {
 			String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
@@ -1215,7 +1213,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		}
 		
 		/* Trazas temporales para detectar problemas del rendimiento*/
-        execTime = new Date().getTime() - startTraceGeneral.getTime();
+        long execTime = new Date().getTime() - startTraceGeneral.getTime();
     	log.info("1.0 Fin del guardado de una ficha, tiempo total: " + execTime + " milisegundos.");
     	/* Fin */
 		return result;
