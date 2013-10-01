@@ -1241,7 +1241,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
-    public Long crearFichaUA2(Long unidad_id, Long seccion_id, Long ficha_id) {
+    public Long crearFichaUA2(Long unidad_id, Long seccion_id, Long ficha_id)
+    {
         Session session = getSession();
         try {
             if (!getAccesoManager().tieneAccesoFicha(ficha_id)) {
@@ -1267,10 +1268,10 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
             if (!getAccesoManager().tieneAccesoSeccion(seccion_id)) {
                 throw new SecurityException("No tiene acceso a la seccion");
             }
+            
             // Cuando se aniade una ficha a una seccion o a una seccion + ua por defecto su orden es 1
             fichaUA.setOrdenseccion(1);
-            seccion.addFichaUA(fichaUA);
-            
+            seccion.addFichaUA2(fichaUA);
 		    Ficha ficha = (Ficha) session.load(Ficha.class, ficha_id);
             ficha.addFichaUA(fichaUA);
             //session.flush();

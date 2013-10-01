@@ -89,7 +89,12 @@ public class Seccion extends Traducible implements Comparable {
         ficha.setSeccion(this);
         fichasUA.add(ficha);
     }
-
+    
+    public void addFichaUA2(FichaUA ficha) {
+        ficha.setSeccion(this);
+//        fichasUA.add(ficha);
+    }
+    
     public void removeFichaUA(FichaUA ficha) {
         fichasUA.remove(ficha);
         ficha.setSeccion(null);

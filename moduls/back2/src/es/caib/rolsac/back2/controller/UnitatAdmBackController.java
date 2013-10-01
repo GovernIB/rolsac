@@ -1239,18 +1239,24 @@ public class UnitatAdmBackController extends PantallaBaseController {
     	// Si alguno es nulo, error.
     	if ( request.getParameter("idUA") == null 
     			|| request.getParameter("idSeccion") == null
-    			|| request.getParameter("listaIdFichas") == null ) {
+    			|| request.getParameter("listaIdFichas") == null) {
     		
     		resultats.put("id", -2);
 			log.error("Falta alguno de los parámetros para completar el guardado de las fichas de la sección");
 			
     		return resultats;
-    		
     	}
     	
     	Long idUA = Long.parseLong( request.getParameter("idUA") );
     	Long idSeccion = Long.parseLong( request.getParameter("idSeccion") );
     	String[] listaIdFichas = request.getParameter("listaIdFichas").split(",");
+    	// Se debe controlar el caso en que nos devuelva "" en vez de null
+    	if (listaIdFichas.length == 1 && listaIdFichas[0].equals("")) {
+    		resultats.put("id", -2);
+			log.error("Falta alguno de los parámetros para completar el guardado de las fichas de la sección");
+    		return resultats;
+    	}
+    	
     	List<Long> listaIdFichasLong = new ArrayList<Long>();
     	
     	for ( String s : listaIdFichas )
