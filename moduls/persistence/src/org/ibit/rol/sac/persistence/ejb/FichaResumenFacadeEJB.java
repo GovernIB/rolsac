@@ -72,6 +72,9 @@ public abstract class FichaResumenFacadeEJB extends HibernateEJB {
 			String campoOrdenacion, String orden, String pagina,
 			String resultats, int campoVisible) {
 		
+		log.info("1.0 Inició de la busqueda de fichas:");
+	    Date startTraceGeneral = new Date();
+	    
         Session session = getSession();
         
         try {
@@ -203,6 +206,8 @@ public abstract class FichaResumenFacadeEJB extends HibernateEJB {
         	
 			resultadoBusqueda.setListaResultados(query.list());
 			
+			long execTime = new Date().getTime() - startTraceGeneral.getTime();
+	    	log.info("1.0 Fin de la busqueda de fichas, tiempo total: " + execTime + " milisegundos.");
             
             return resultadoBusqueda;
             
