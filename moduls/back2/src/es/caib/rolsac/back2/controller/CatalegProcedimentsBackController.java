@@ -1048,9 +1048,10 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		} else if (edicion) {
 			ProcedimientoDelegate procedimentDelegate = DelegateUtil.getProcedimientoDelegate();
 			for (Tramite tramite : procediment.getTramites() ) {
-				procedimentDelegate.eliminarTramite(tramite.getId(), procediment.getId());
-				tramiteDelegate.borrarTramite(tramite.getId());
-				
+				if (tramite != null) {
+					procedimentDelegate.eliminarTramite(tramite.getId(), procediment.getId());
+					tramiteDelegate.borrarTramite(tramite.getId());
+				}
 			}
 			procediment.setTramites(null);
 			
