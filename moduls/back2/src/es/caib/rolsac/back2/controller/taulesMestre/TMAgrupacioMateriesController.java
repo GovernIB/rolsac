@@ -3,6 +3,7 @@ package es.caib.rolsac.back2.controller.taulesMestre;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -187,7 +188,8 @@ public class TMAgrupacioMateriesController extends PantallaBaseController {
     
     
     @RequestMapping(value = "/guardar.do", method = POST)
-    public ResponseEntity<String> guardarAgrupacioMateries(HttpSession session, HttpServletRequest request) {
+    public ResponseEntity<String> guardarAgrupacioMateries(HttpSession session, HttpServletRequest request)
+    {
 		/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
 		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la petici�n.
@@ -195,6 +197,11 @@ public class TMAgrupacioMateriesController extends PantallaBaseController {
 		 * un descargable o fichero vinculado a una aplicaci�n. 
 		 * De esta forma, y devolviendo un ResponseEntity, forzaremos el Content-Type de la respuesta.
 		 */
+    	/* Trazas temporales para detectar problemas del rendimiento*/
+    	log.info("1.0 Inició del guardado de una Agrupación de materias");
+	    Date startTraceGeneral = new Date();
+    	/* Fin */
+	    
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
 
@@ -225,8 +232,8 @@ public class TMAgrupacioMateriesController extends PantallaBaseController {
             
             AgrupacionMDelegate agrupacioMDelegate = DelegateUtil.getAgrupacionMDelegate();
             SeccionDelegate seccionDelegate = DelegateUtil.getSeccionDelegate();
-    		Seccion seccion = seccionDelegate.obtenerSeccion(codiSeccio);
-            
+    		Seccion seccion = seccionDelegate.obtenerSeccionSinFichasUA(codiSeccio);
+    		
             AgrupacionMateria agrupacioMateria = new AgrupacionMateria();
             
 			Long id = ParseUtil.parseLong(valoresForm.get("item_id"));
@@ -241,9 +248,8 @@ public class TMAgrupacioMateriesController extends PantallaBaseController {
 			//Codi estandard
             String codiEstandard = valoresForm.get("item_codi_estandard");
 			agrupacioMateria.setCodigoEstandar(codiEstandard);
-
-
-            // Idiomas
+			
+		    // Idiomas
 			IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
 			List<String> langs = idiomaDelegate.listarLenguajes();
 			
@@ -256,34 +262,38 @@ public class TMAgrupacioMateriesController extends PantallaBaseController {
 			}
 			agrupacioMateria.setTraduccionMap(traduccions);
 			
-			
 			MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
 			List<MateriaAgrupacionM> materiesNew = new ArrayList<MateriaAgrupacionM>();
 			
 			List<MateriaAgrupacionM> materiesOld = agrupacioMateria.getMateriasAgrupacionM();
 			
 			if (agrupacioMateria.getMateriasAgrupacionM() != null || materiesForm.size() > 0) {
+				StringBuilder idsMateria = new StringBuilder();
 				// Recorrem el formulari
 				for (Iterator<String> iterator = materiesForm.iterator(); iterator.hasNext();) {
 					String nomParameter = (String)iterator.next();
 					String[] elements = nomParameter.split("_");
 					if (elements[0].equals("materia") && elements[1].equals("id")){
 	                    //En aquest cas, elements[2] es igual al id del fetVital
-						
-						Long idMateriaForm = ParseUtil.parseLong(elements[2]);
-
-						// Consideram totes les mat�ries com a noves perqu� borrarem les antigues.
-						MateriaAgrupacionM materiaAgrupacionM = new MateriaAgrupacionM();
-
-						materiaAgrupacionM.setAgrupacion(agrupacioMateria);
-						materiaAgrupacionM.setMateria(materiaDelegate.obtenerMateria(idMateriaForm));
-						materiaAgrupacionM.setOrden(ParseUtil.parseInt(valoresForm.get("materia_orden_" + elements[2])));
-
-						materiesNew.add(materiaAgrupacionM);
+						if (idsMateria.length() == 0) {
+							idsMateria.append(elements[2]);
+						} else {
+							idsMateria.append(", ");
+							idsMateria.append(elements[2]);
+						}
 					}
 				}
+				
+				List<Materia> materias = materiaDelegate.obtenerMateriasPorIDs(idsMateria.toString(), DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
+				
+				for (Materia materia: materias) {
+					MateriaAgrupacionM materiaAgrupacionM = new MateriaAgrupacionM();
+					materiaAgrupacionM.setAgrupacion(agrupacioMateria);
+					materiaAgrupacionM.setMateria(materia);
+					materiaAgrupacionM.setOrden(ParseUtil.parseInt(valoresForm.get("materia_orden_" + materia.getId())));
+					materiesNew.add(materiaAgrupacionM);					
+				}
 			}
-			
 			
 			// Objectiu
 			agrupacioMateria.setMateriasAgrupacionM(materiesNew);
@@ -304,6 +314,10 @@ public class TMAgrupacioMateriesController extends PantallaBaseController {
             }
         }
         
+        /* Trazas temporales para detectar problemas del rendimiento */
+        long execTime = new Date().getTime() - startTraceGeneral.getTime();
+    	log.info("1.0 Fin del guardado de una Agrupación de materias, tiempo total: " + execTime + " milisegundos.");
+    	/* Fin */
         return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
     }
     
