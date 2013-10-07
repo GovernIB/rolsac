@@ -164,7 +164,6 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB {
 	
 
 	/**
-	 * @deprecated No se usa
 	 * Crea o actualiza una Estadistica para una Ficha
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
@@ -1117,7 +1116,7 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB {
 			if ( listaUnidadAdministrativaId.size() > 0 ) {
 
 				queryProcedimiento = session.createQuery(
-						"select count(h) from Historico as h, " +
+						"select count(distinct h) from Historico as h, " +
 						"					  Auditoria as a, " +
 						"					  ProcedimientoLocal as plo " +
 				
@@ -1138,7 +1137,7 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB {
 				queryProcedimiento.setParameterList( "lId", listaUnidadAdministrativaId, Hibernate.LONG );
 
 				queryNormativa = session.createQuery(
-						"select count(h) from Historico as h, " +
+						"select count(distinct h) from Historico as h, " +
 						"					  Auditoria as a, " +
 						"					  NormativaLocal as nlo " +
 				
@@ -1159,16 +1158,17 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB {
 				queryNormativa.setParameterList( "lId", listaUnidadAdministrativaId, Hibernate.LONG );
 
 				queryFicha = session.createQuery(
-						"select count(h) " +
+						"select count(distinct h) " +
 						"from Historico as h, " +
 						"	  Auditoria as a, " +
 						"	  Ficha as fic, " +
 						"	  FichaUA as fua " +
 						
-						" where h.id = a.historico.id and h.class = HistoricoFicha " +
+						" where h.id = a.historico.id " +
+						"	and h.class = HistoricoFicha " +						
+						" 	and fua.ficha.id = fic.id " +						
 						" 	and a.fecha between :fechaInicio and :fechaFin " +
 						"	and a.codigoOperacion = :tipoOperacion " +
-						" 	and fua.ficha.id = fic.id " +
 						clausulaUsuari +
 						" 	and fua.unidadAdministrativa.id in (:lId) ");
 
@@ -1180,11 +1180,11 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB {
 					queryFicha.setParameter( "usuari", userName );
 
 				queryFicha.setParameterList( "lId", listaUnidadAdministrativaId, Hibernate.LONG );
-
+				
 			} else {
 				
 				queryProcedimiento = session.createQuery(
-						"select count(h) " +
+						"select count(distinct h) " +
 				
 						"from Historico as h, " +
 						"	  Auditoria as a " +
@@ -1203,7 +1203,7 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB {
 				queryProcedimiento.setInteger( "tipoOperacion", tipoOperacion );
 
 				queryNormativa = session.createQuery(
-						"select count(h) " +
+						"select count(distinct h) " +
 				
 						"from Historico as h, " +
 						"	  Auditoria as a " +
@@ -1222,7 +1222,7 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB {
 				queryNormativa.setInteger( "tipoOperacion", tipoOperacion );
 
 				queryFicha = session.createQuery(
-						"select count(h) " +
+						"select count(distinct h) " +
 				
 						"from Historico as h, " +
 						"	  Auditoria as a " +

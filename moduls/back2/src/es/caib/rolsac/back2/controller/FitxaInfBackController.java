@@ -48,6 +48,7 @@ import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
 import org.ibit.rol.sac.persistence.delegate.EnlaceDelegate;
+import org.ibit.rol.sac.persistence.delegate.EstadisticaDelegate;
 import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
 import org.ibit.rol.sac.persistence.delegate.FichaResumenDelegate;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalDelegate;
@@ -1076,18 +1077,25 @@ public class FitxaInfBackController extends PantallaBaseController
     /*
      * Función de grabar() la ficha
      */
-    private Long guardarFitxaGrabar(Ficha fitxa) throws DelegateException
-    {
+    private Long guardarFitxaGrabar(Ficha fitxa) throws DelegateException {
+    	
     	FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
+    	EstadisticaDelegate estadisticaDelegate = DelegateUtil.getEstadisticaDelegate();
+    	
     	// Tiempos para trazas
     	Date startTrace;
     	long execTime;
     	log.debug("Inici de grabarFicha()");
+    	
     	startTrace = new Date();
-    	Long idFitxa = fitxaDelegate.grabarFicha(fitxa);
+    	Long idFicha = fitxaDelegate.grabarFicha(fitxa);
+    	estadisticaDelegate.grabarEstadisticaFicha(idFicha);
+    	
     	execTime = new Date().getTime() - startTrace.getTime();
-    	log.debug("Temps d'execucio de grabarFicha(" + idFitxa + "): " + execTime + " milisegons.");
-    	return idFitxa;
+    	log.debug("Temps d'execucio de grabarFicha(" + idFicha + "): " + execTime + " milisegons.");
+    	
+    	return idFicha;
+    	
     }
     
     /*
@@ -1148,9 +1156,6 @@ public class FitxaInfBackController extends PantallaBaseController
     				fitxaDelegate.crearFichaUA(idUA, idSeccion, idFitxa);
     				execTime = new Date().getTime() - startTrace.getTime();
     				log.debug("Temps d'execucio de crearFichaUA(" + idUA + ", " + idSeccion + ", " + idFitxa + "): " + execTime + " milisegons.");
-    				
-    	            //Actualiza estadística
-    	            DelegateUtil.getEstadisticaDelegate().grabarEstadisticaFichaPorUA(idFitxa, idUA);
     				
     				String pidip = System.getProperty("es.caib.rolsac.pidip");
     				if ( !( (pidip == null) || pidip.equals("N") ) ) {

@@ -22,7 +22,7 @@ import org.ibit.rol.sac.persistence.util.EstadisticaFacadeUtil;
  */
 public class EstadisticaDelegate implements StatelessDelegate {
      /* ========================================================= */
-    /* ======================== M�TODOS DE NEGOCIO ============= */
+    /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
     public void grabarEstadisticaUnidadAdministrativa(Long idUnidad) throws DelegateException {
@@ -49,7 +49,6 @@ public class EstadisticaDelegate implements StatelessDelegate {
         }
     }
 
-    /** @deprecated No se usa */
     public void grabarEstadisticaFicha(Long idFicha) throws DelegateException {
         try {
             getFacade().grabarEstadisticaFicha(idFicha);

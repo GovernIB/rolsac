@@ -60,7 +60,6 @@ public class GraficasEstadisticasController extends ArchivoController {
 	@Override
 	public Archivo obtenerArchivo(HttpServletRequest request) throws Exception {	
 
-		//TODO 05/09/2013: Internacionalizar textos.
 		//obtener archivo concreto con el delegate
         String tipus = request.getParameter("tipus");
         if ( vacio(tipus) || tipus.equals( Parametros.TIPUS_GRAFICA_QUADRE_CONTROL ) ) {
