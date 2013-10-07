@@ -57,13 +57,24 @@ public class FichaResumenUA implements ValueObject, Comparable {
     public void setOrden(int orden) {
         this.orden = orden;
     }
+    
+    public UnidadAdministrativa getUnidadAdministrativa() {
+		return unidadAdministrativa;
+	}
 
-    private Long id;
+	public void setUnidadAdministrativa(UnidadAdministrativa unidadAdministrativa) {
+		this.unidadAdministrativa = unidadAdministrativa;
+	}
+
+
+
+	private Long id;
     private Long idUa;
     private FichaResumen ficha;
     private Long idSeccio;
     private int orden;
     private int ordenseccion;
+    private UnidadAdministrativa unidadAdministrativa;
     
 	public int getOrdenseccion() {
 		return ordenseccion;

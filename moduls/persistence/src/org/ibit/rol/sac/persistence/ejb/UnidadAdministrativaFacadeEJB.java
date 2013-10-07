@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,7 @@ import org.ibit.rol.sac.model.IndexObject;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.Seccion;
+import org.ibit.rol.sac.model.TraduccionHechoVital;
 import org.ibit.rol.sac.model.TraduccionMateria;
 import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -48,6 +50,7 @@ import org.ibit.rol.sac.model.UnidadAdministrativaRemota;
 import org.ibit.rol.sac.model.UnidadMateria;
 import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.Validacion;
+import org.ibit.rol.sac.model.dto.FichaDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
@@ -2615,9 +2618,9 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	  * @ejb.interface-method
 	  * @ejb.permission unchecked="true"
 	  */
-	 public List<FichaResumenUA> listarFichasSeccionUA(final Long idUA, final Long idSeccion) {
+	 public List<FichaDTO> listarFichasSeccionUA(final Long idUA, final Long idSeccion) {
 		  		  
-		 List<FichaResumenUA> fichas = new ArrayList<FichaResumenUA>();
+		 List<FichaDTO> fichas = new ArrayList<FichaDTO>();
 		 
 	     if ( idUA != null && idSeccion != null ) {
 	    	 
@@ -2625,11 +2628,23 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	         
 	         try {
 	        	 
-	        	 fichas = (List<FichaResumenUA>)session.createQuery("FROM FichaResumenUA AS fichaUA " +
-	 					"WHERE fichaUA.idUa = :idUA AND fichaUA.idSeccio = :idSeccion ORDER BY fichaUA.orden")
-	 					.setParameter("idUA", idUA)
-	 					.setParameter("idSeccion", idSeccion)
-	 					.list();
+	        	Query query = session.createQuery(
+	        				" select new org.ibit.rol.sac.model.dto.FichaDTO(fichaUA.id, trad.titulo, fichaUA.orden) " +
+	        	
+		 					" from FichaResumenUA as fichaUA, FichaResumen as fr, fr.traducciones as trad " +
+		 					
+		 					" where index(trad) = :idioma " +
+		 					"	and fichaUA.idUa = :idUA " +
+		 					"	and fichaUA.idSeccio = :idSeccion " +
+		 					"	and fichaUA.ficha.id = fr.id " +
+		 					
+		 					" order by fichaUA.orden asc, fr.fechaActualizacion desc ");
+
+	        	 query.setParameter("idUA", idUA);
+	        	 query.setParameter("idSeccion", idSeccion);
+	        	 query.setParameter("idioma", "ca");
+	        	 
+	        	 fichas = (List<FichaDTO>) query.list();
 	             
 	         } catch (HibernateException he) {
 	        	 
@@ -2705,12 +2720,12 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	   * @throws HibernateException
 	   */
 	  @SuppressWarnings("unchecked")
-	  private void listarFichSecMatRecur(Session session ,final UnidadAdministrativa unidad, final Long idMat, final String ceSec, final List<Ficha> fichas,boolean caducados) throws HibernateException{
+	  private void listarFichSecMatRecur(Session session , final UnidadAdministrativa unidad, final Long idMat, final String ceSec, final List<Ficha> fichas,boolean caducados) throws HibernateException{
 	      //Navegacion por el arbol de hijos
 	      for (UnidadAdministrativa hijo : unidad.getHijos()) {
 	          Hibernate.initialize(hijo.getHijos());
 	          if(hijo.getHijos()!=null){
-	              listarFichSecMatRecur(session, hijo, idMat, ceSec, fichas,caducados);
+	              listarFichSecMatRecur(session, hijo, idMat, ceSec, fichas, caducados);
 	          }
 	      }
 	
@@ -3380,52 +3395,60 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 * 
 	 * @param idUA
 	 * @param idSeccion
-	 * @param listaIdFichasLong
+	 * @param idFichas
 	 * 
 	 * @throws EJBException
 	 * 
 	 * @ejb.interface-method
      * @ejb.permission unchecked="true"
 	 */
-	public void actualizaFichasSeccionUA(Long idUA, Long idSeccion, List<Long> listaIdFichasLong) {
+	public void actualizaFichasSeccionUA(Long idUA, Long idSeccion, List<Long> fichasParaActualizar) {
 		
 		Session session = getSession();
 		
 		try {
 			
-			List<FichaResumenUA> listaFichasUA = (List<FichaResumenUA>)session.createQuery("FROM FichaResumenUA AS fichaUA " +
-					"WHERE fichaUA.idUa = :idUA AND fichaUA.idSeccio = :idSeccion")
-					.setParameter("idUA", idUA)
-					.setParameter("idSeccion", idSeccion)
-					.list();
-			
-			for (FichaResumenUA fua : listaFichasUA) {  
-				
-				FichaResumen ficha = (FichaResumen)session.load(FichaResumen.class, fua.getFicha().getId());
-				ficha.removeFichaUA(fua);
-				
-                session.delete(fua);
-                
-			}
-			
-			session.flush();
-			
 			// Creamos nuevas fichas UA/Sección y actualizamos orden a medida que se crean.
 			int orden = 5;
 			
-			for (Long idFicha : listaIdFichasLong) {
+			StringBuilder consulta = new StringBuilder(" SELECT ficha, fichaUA ");
+			consulta.append(" FROM FichaResumenUA AS fichaUA, FichaResumen AS ficha "); 
+			consulta.append(" WHERE fichaUA.idUa = :idUA "); 
+			consulta.append(" AND fichaUA.idSeccio = :idSeccion ");
+			consulta.append(" AND fichaUA.ficha.id = ficha.id ");
+			consulta.append(" AND fichaUA.id NOT IN (:fichas) ");
+			
+			Query query = session.createQuery( consulta.toString() );
+			query.setParameter("idUA", idUA);
+			query.setParameter("idSeccion", idSeccion);
+			query.setParameterList("fichas", fichasParaActualizar);
+			
+			List<Object[]> l = query.list();
+			if ( !l.isEmpty() ) {
 				
-				FichaResumen ficha = (FichaResumen)session.load(FichaResumen.class, idFicha);
-								
+				Hashtable<FichaResumen, FichaResumenUA> fichasParaBorrar = new Hashtable<FichaResumen, FichaResumenUA>();
+				for ( Object[] o : l )
+					fichasParaBorrar.put( (FichaResumen) o[0], (FichaResumenUA) o[1] );
+				
+				Set<FichaResumen> fichas = fichasParaBorrar.keySet();
+				for ( FichaResumen ficha : fichas ) {
+					
+					FichaResumenUA fichaUA = fichasParaBorrar.get(ficha);
+					ficha.removeFichaUA(fichaUA);
+					session.delete(fichaUA);
+					
+				}
+				
+				session.flush();
+				
+			}
+			
+			for ( Long idFicha : fichasParaActualizar ) {
+				
 				// Obtenemos ficha para actualizar orden, ya que el método anterior no nos deja especificarlo.
-				FichaResumenUA fichaUA = new FichaResumenUA();
-				fichaUA.setIdUa(idUA);	
-				fichaUA.setIdSeccio(idSeccion);
-				fichaUA.setFicha(ficha);
+				FichaResumenUA fichaUA = (FichaResumenUA) session.get(FichaResumenUA.class, idFicha);
 				fichaUA.setOrden(orden);
-				
 				session.saveOrUpdate(fichaUA);
-				
 				orden = orden + 5;
 				
 			}

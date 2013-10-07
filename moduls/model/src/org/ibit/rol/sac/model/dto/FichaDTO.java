@@ -29,7 +29,16 @@ public class FichaDTO implements ValueObject {
 		super();
 	}
 	
-	public FichaDTO(long id, String titulo, String fechaPublicacion, String fechaCaducidad, String fechaActualizacion, Boolean caducat){
+	public FichaDTO(long id, String titulo, Integer orden) {
+		
+		super();
+		
+		this.id = id;
+		this.titulo = titulo;
+		this.ordre = orden.longValue();
+	}
+	
+	public FichaDTO(long id, String titulo, String fechaPublicacion, String fechaCaducidad, String fechaActualizacion, Boolean caducat) {
 		
 		super();
 		

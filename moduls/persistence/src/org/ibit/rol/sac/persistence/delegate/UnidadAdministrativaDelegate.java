@@ -12,6 +12,7 @@ import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.dto.FichaDTO;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
@@ -371,14 +372,14 @@ public class UnidadAdministrativaDelegate {
     	return impl.cuentaFichasSeccionUA(idUA, idSeccion);
     }
     
-    public List<FichaResumenUA> listarFichasSeccionUA(Long idUA, Long idSeccion)
+    public List<FichaDTO> listarFichasSeccionUA(Long idUA, Long idSeccion)
 			throws DelegateException {
     	return impl.listarFichasSeccionUA(idUA, idSeccion);
     }
     
-    public void actualizaFichasSeccionUA(Long idUA, Long idSeccion, List<Long> listaIdFichasLong)
+    public void actualizaFichasSeccionUA(Long idUA, Long idSeccion, List<Long> fichasParaActualizar)
     		throws DelegateException {
-    	impl.actualizaFichasSeccionUA(idUA, idSeccion, listaIdFichasLong);
+    	impl.actualizaFichasSeccionUA(idUA, idSeccion, fichasParaActualizar);
     }
 
 }

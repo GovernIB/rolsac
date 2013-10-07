@@ -13,6 +13,7 @@ import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.dto.FichaDTO;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
@@ -603,13 +604,13 @@ public interface UnidadAdministrativaDelegateI {
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate#listarFichasSeccionUA(java.lang.Long, java.lang.Long)
 	 */
-    public abstract List<FichaResumenUA> listarFichasSeccionUA(final Long idUA, final Long idSeccion)
+    public abstract List<FichaDTO> listarFichasSeccionUA(final Long idUA, final Long idSeccion)
     		throws DelegateException;
     
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate#actualizaFichasSeccionUA(java.lang.Long, java.lang.Long, java.util.List)
 	 */
-    public abstract void actualizaFichasSeccionUA(Long idUA, Long idSeccion, List<Long> listaIdFichasLong)
+    public abstract void actualizaFichasSeccionUA(Long idUA, Long idSeccion, List<Long> fichasParaActualizar)
     		throws DelegateException;
 	
 }

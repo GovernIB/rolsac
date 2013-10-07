@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -21,6 +22,7 @@ import net.sf.hibernate.expression.Order;
 
 import org.apache.commons.lang.StringUtils;
 import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.model.FichaResumenUA;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -84,15 +86,21 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     public void actualizarSeccion(Seccion seccion, Long padre_id) {
         Session session = getSession();
         try {
+        	
             session.update(seccion);
             Long padreOld_id = (seccion.getPadre() != null ? seccion.getPadre().getId() : null);
             Seccion padreOld = null;
             if (padreOld_id != null)
                 padreOld = this.obtenerSeccion(padreOld_id);
+            
+            /* Actualización del orden de las fichas */
+            List<FichaResumenUA> fichasUA = seccion.getFichasResumenUA();
+            for ( FichaResumenUA fichaUA : fichasUA )
+            	session.update(fichaUA);
 
-            /* Comprova si el pare antic �s diferent del nou. Tots dos valors poden ser null. */
+            /* Comprova si el pare antic és diferent del nou. Tots dos valors poden ser null. */
             if ( (padre_id == null && padreOld_id != null) || (padre_id != null && padreOld_id == null) || (padre_id != null && padreOld_id != null && !padre_id.equals(padreOld_id))) {
-                if (padre_id == null) { //Quitamos de jerarquia i metemos en raiz.
+                if (padre_id == null) { //Quitamos de jerarquía y metemos en raiz.
                     if (padreOld != null)
                         padreOld.removeHijo(seccion);
                     seccion.setOrden(numSeccionesRaiz(session));
@@ -266,20 +274,51 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
     public Seccion obtenerSeccion(Long id) {
+    	
         Session session = getSession();
+        
         try {
+        	
             Seccion seccion = (Seccion) session.load(Seccion.class, id);
             session.refresh(seccion);
             Hibernate.initialize(seccion.getHijos());
             Hibernate.initialize(seccion.getPadre());
-            Hibernate.initialize(seccion.getFichasUA());
+            
+            StringBuilder consulta = new StringBuilder("select fichaUA, fua.unidadAdministrativa  from FichaResumenUA as fichaUA, FichaResumen as fr, FichaUA as fua ");
+            consulta.append(" where fichaUA.ficha.id = fr.id ");
+            consulta.append(" and fichaUA.id = fua.id");
+            consulta.append(" and fichaUA.idSeccio = :idSeccion ");
+            consulta.append(" order by fichaUA.ordenseccion asc, fr.fechaActualizacion desc ");
+            
+            Query query = session.createQuery( consulta.toString() );
+            query.setParameter("idSeccion", id);
+            
+            List<FichaResumenUA> fichasResumenUA = new Vector<FichaResumenUA>();
+            List<Object[]> l = query.list();
+            for ( Object[] o : l ) {
+            	
+            	FichaResumenUA fichaUA = ( (FichaResumenUA) o[0] );
+            	fichaUA.setUnidadAdministrativa( (UnidadAdministrativa) o[1] );
+            	fichasResumenUA.add(fichaUA);
+            	
+            }
+
+            seccion.setFichasResumenUA(fichasResumenUA);
+            
             return seccion;
+            
         } catch (HibernateException he) {
+        	
             throw new EJBException(he);
+            
         } finally {
+        	
             close(session);
+            
         }
+        
     }
+    
 
     /**
      * Obtiene una secci�n determinada.

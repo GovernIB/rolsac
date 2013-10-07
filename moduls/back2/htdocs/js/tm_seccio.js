@@ -382,9 +382,17 @@ function CDetall(){
         if (!that.formulariValid()) {
             return false;
         }
+        
+        /*Obtiene los identificadores de las fichas relaciondas*/
+        var fichasList = new Array();
+        $('#modul_fitxes ul li').each(function(){
+            var idFicha = $(this).find('input:first').val();
+            fichasList.push(idFicha);
+        })
 
 		$("#formGuardar").ajaxSubmit({			
 			url: pagGuardar,
+			data: { idFichas: fichasList },
 			dataType: 'json',
 			beforeSubmit: function() {
 				Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});

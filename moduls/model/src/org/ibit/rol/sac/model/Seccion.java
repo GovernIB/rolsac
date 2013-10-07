@@ -64,8 +64,16 @@ public class Seccion extends Traducible implements Comparable {
     public void setFichasUA(Set<FichaUA> fichasUA) {
         this.fichasUA = fichasUA;
     }
+    
+    public List<FichaResumenUA> getFichasResumenUA() {
+		return fichasResumenUA;
+	}
 
-    public void addHijo(Seccion hijo) {
+	public void setFichasResumenUA(List<FichaResumenUA> fichasResumenUA) {
+		this.fichasResumenUA = fichasResumenUA;
+	}
+
+	public void addHijo(Seccion hijo) {
         if (!hijos.contains(hijo)) {
             if (hijo.getPadre() != null) {
                 hijo.getPadre().removeHijo(hijo);
@@ -107,10 +115,9 @@ public class Seccion extends Traducible implements Comparable {
     private String perfil;
     private int orden;
     private Set<FichaUA> fichasUA;
+    private List<FichaResumenUA> fichasResumenUA;
 
-
-
-    public int compareTo(Object o) {
+	public int compareTo(Object o) {
         Seccion other = (Seccion) o;
         return this.getOrden() - other.getOrden();
     }

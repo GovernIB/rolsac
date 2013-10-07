@@ -18,6 +18,7 @@ import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.dto.FichaDTO;
 import org.ibit.rol.sac.persistence.intf.UnidadAdministrativaFacade;
 import org.ibit.rol.sac.persistence.intf.UnidadAdministrativaFacadeHome;
 import org.ibit.rol.sac.persistence.util.UnidadAdministrativaFacadeUtil;
@@ -1141,7 +1142,7 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
 		
 	}
 
-	public List<FichaResumenUA> listarFichasSeccionUA(Long idUA, Long idSeccion)
+	public List<FichaDTO> listarFichasSeccionUA(Long idUA, Long idSeccion)
 			throws DelegateException {
 		
 		try {
@@ -1152,11 +1153,10 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
 		
 	}
 
-	public void actualizaFichasSeccionUA(Long idUA, Long idSeccion,
-			List<Long> listaIdFichasLong) throws DelegateException {
+	public void actualizaFichasSeccionUA(Long idUA, Long idSeccion, List<Long> fichasParaActualizar) throws DelegateException {
 		
 		try {
-			getFacade().actualizaFichasSeccionUA(idUA, idSeccion, listaIdFichasLong);
+			getFacade().actualizaFichasSeccionUA(idUA, idSeccion, fichasParaActualizar);
 		} catch (RemoteException e) {
      		throw new DelegateException(e);
      	}

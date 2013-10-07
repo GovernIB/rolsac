@@ -7,7 +7,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -15,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +28,6 @@ import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.EspacioTerritorial;
 import org.ibit.rol.sac.model.Ficha;
-import org.ibit.rol.sac.model.FichaResumenUA;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Seccion;
@@ -55,7 +52,6 @@ import org.ibit.rol.sac.persistence.delegate.SeccionDelegate;
 import org.ibit.rol.sac.persistence.delegate.TratamientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadMateriaDelegate;
-import org.ibit.rol.sac.persistence.util.FichaUAFichaIds;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -93,7 +89,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	public String llistatUniAdm(Map<String, Object> model, HttpServletRequest request, HttpSession session) {	    
 		
 	    MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
-	    
 	    TratamientoDelegate tratamientoDelegate = DelegateUtil.getTratamientoDelegate();
 	    EspacioTerritorialDelegate espacioTerritorialDelegate = DelegateUtil.getEspacioTerritorialDelegate();
 	    
@@ -104,32 +99,36 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	    List<IdNomDTO> llistaTractamentsDTO = new ArrayList<IdNomDTO>();
 	    List<IdNomDTO> llistaEspaiTerritorialDTO = new ArrayList<IdNomDTO>();
 	    	    
-	    try {                                
+	    try {      
+	    	
             llistaMateries = materiaDelegate.listarMaterias();	    	            
             
-            for(Materia materia : llistaMateries){                
-                llistaMateriesDTO.add(new IdNomDTO(materia.getId(),materia.getNombreMateria(request.getLocale().getLanguage())));                
-            }
-            
+            for ( Materia materia : llistaMateries )                
+                llistaMateriesDTO.add( new IdNomDTO( materia.getId(), materia.getNombreMateria( request.getLocale().getLanguage() ) ) );                
+
             llistaTractaments = tratamientoDelegate.listarTratamientos();
             
-            for(Tratamiento tractament : llistaTractaments){                
-                llistaTractamentsDTO.add(new IdNomDTO(tractament.getId(), tractament.getNombreTratamiento(request.getLocale().getLanguage())));                
-            }                       
+            for ( Tratamiento tractament : llistaTractaments )                
+                llistaTractamentsDTO.add( new IdNomDTO( tractament.getId(), tractament.getNombreTratamiento( request.getLocale().getLanguage() ) ) );                
             
             llistaEspaiTerritorial = espacioTerritorialDelegate.listarEspaciosTerritoriales();
             
-            for(EspacioTerritorial espaiTerritorial : llistaEspaiTerritorial){                
-                llistaEspaiTerritorialDTO.add(new IdNomDTO(espaiTerritorial.getId(), espaiTerritorial.getNombreEspacioTerritorial(request.getLocale().getLanguage())));                
-            }                       
+            for ( EspacioTerritorial espaiTerritorial : llistaEspaiTerritorial )                
+                llistaEspaiTerritorialDTO.add( new IdNomDTO( espaiTerritorial.getId(), espaiTerritorial.getNombreEspacioTerritorial( request.getLocale().getLanguage() ) ) );                
             
         } catch (DelegateException dEx) {
-            if (dEx.isSecurityException()) {
-            	log.error("Error de permiso: " + ExceptionUtils.getStackTrace(dEx));
+        	
+            if ( dEx.isSecurityException() ) {
+            	
+            	log.error( "Error de permiso: " + ExceptionUtils.getStackTrace(dEx) );
+            	
             } else {
+            	
                 //model.put("error", "altres");
-            	log.error(ExceptionUtils.getStackTrace(dEx));
+            	log.error( ExceptionUtils.getStackTrace(dEx) );
+            	
             }
+            
         }
 	    
 		model.put("menu", 0);
@@ -138,20 +137,22 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		model.put("titol_escriptori", messageSource.getMessage("submenu.unitatAdm", null, request.getLocale()));
 		model.put("escriptori", "pantalles/unitatadm.jsp");
 		
-        if (session.getAttribute("unidadAdministrativa")!=null){
-            model.put("idUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getId());
-            model.put("nomUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa(request.getLocale().getLanguage()));            
+        if ( session.getAttribute("unidadAdministrativa") != null ) {
+        	
+            model.put( "idUA", ( (UnidadAdministrativa) session.getAttribute("unidadAdministrativa") ).getId() );
+            model.put( "nomUA", ( (UnidadAdministrativa) session.getAttribute("unidadAdministrativa") ).getNombreUnidadAdministrativa( request.getLocale().getLanguage() ) );
+            
         }               
         
         model.put("llistaMateries", llistaMateriesDTO);        
         model.put("llistaTractaments", llistaTractamentsDTO);
         model.put("llistaEspaiTerritorial", llistaEspaiTerritorialDTO);
-
         model.put("urlPrevisualitzacio", System.getProperty(URL_PREVISUALIZACION));
         
 		loadIndexModel (model, request);
 		return "index";
 	}
+	
 	
 	@RequestMapping(value = "/pagDetall.do", method = POST)
     public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
@@ -1155,11 +1156,11 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	public @ResponseBody Map<String, Object> llistaFitxesUASeccio(HttpServletRequest request) {
     			
 		Map<String, Object> resultats = new HashMap<String, Object>();
-				
 		UnidadAdministrativa ua = new UnidadAdministrativa();
-        if ( request.getSession().getAttribute("unidadAdministrativa") == null) {
+		
+        if ( request.getSession().getAttribute("unidadAdministrativa") == null ) {
         	
-        	resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
+        	resultats.put( "error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale() ) );
         	resultats.put("id", -2);
         	
         	log.error("Error de sessi�n: Sessi�n expirada o no inciada");
@@ -1168,10 +1169,10 @@ public class UnitatAdmBackController extends PantallaBaseController {
             
         }
         
-        Long idSeccion = Long.valueOf(request.getParameter("idseccion"));
+       Long idSeccion = Long.valueOf( request.getParameter("idseccion") );
         if ( idSeccion == null || "".equals(idSeccion) || idSeccion < 1 ) {
         	
-        	resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
+        	resultats.put( "error", messageSource.getMessage( "error.operacio_fallida", null, request.getLocale() ) );
         	resultats.put("id", -2);
         	
         	log.error("Error de session: Session expirada o no inciada");
@@ -1180,45 +1181,20 @@ public class UnitatAdmBackController extends PantallaBaseController {
         	
         }
         
-        ua = (UnidadAdministrativa)request.getSession().getAttribute("unidadAdministrativa");	
+        ua = (UnidadAdministrativa) request.getSession().getAttribute("unidadAdministrativa");	
         UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
-
         List<FichaDTO> listaFichas = new ArrayList<FichaDTO>();
         
         try {
         
-	        List<FichaResumenUA> listaFichasSeccionUA = uaDelegate.listarFichasSeccionUA(ua.getId(), idSeccion);
-			
-			if (listaFichasSeccionUA != null) {
-				
-				Iterator<FichaResumenUA> iterator2 = listaFichasSeccionUA.iterator();
-				
-				while ( iterator2.hasNext() ) {
-					
-					FichaResumenUA ficha = iterator2.next();
-					
-					if (ficha.getFicha() != null) {
-					
-						FichaDTO fichaDTO = new FichaDTO();
-						
-						fichaDTO.setId( ficha.getFicha().getId() );
-						fichaDTO.setTitulo( ( ((TraduccionFicha) ficha.getFicha().getTraduccion( request.getLocale().getLanguage())).getTitulo()).replaceAll("\\<.*?>", "") );
-						fichaDTO.setOrdre( new Long(ficha.getOrden()) );    						
-						listaFichas.add( fichaDTO );
-					
-					}
-					
-				}
-							
-			}
-				
+			listaFichas = uaDelegate.listarFichasSeccionUA( ua.getId(), idSeccion );
 			resultats.put("fitxes", listaFichas);
 		
         } catch (DelegateException e) {
         	
-        	resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
+        	resultats.put( "error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale() ) );
 			resultats.put("id", -2);
-			log.error(ExceptionUtils.getStackTrace(e));
+			log.error( ExceptionUtils.getStackTrace(e) );
         	
         }
 
@@ -1232,7 +1208,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
      * @return
      */
     @RequestMapping(value = "/guardarFitxesUASeccio.do", method = POST)
-	public @ResponseBody Map<String, Object> guardarFitxesUASeccio(HttpServletRequest request) {
+	public @ResponseBody Map<String, Object> guardarFitxesUASeccio(Long idUA, Long idSeccion, String[] listaIdFichas, HttpServletRequest request) {
     	
     	Map<String, Object> resultats = new HashMap<String, Object>();
     	
@@ -1247,9 +1223,9 @@ public class UnitatAdmBackController extends PantallaBaseController {
     		return resultats;
     	}
     	
-    	Long idUA = Long.parseLong( request.getParameter("idUA") );
-    	Long idSeccion = Long.parseLong( request.getParameter("idSeccion") );
-    	String[] listaIdFichas = request.getParameter("listaIdFichas").split(",");
+    	//Long idUA = Long.parseLong( request.getParameter("idUA") );
+    	//Long idSeccion = Long.parseLong( request.getParameter("idSeccion") );
+    	//String[] listaIdFichas = request.getParameter("listaIdFichas").split(",");
     	// Se debe controlar el caso en que nos devuelva "" en vez de null
     	if (listaIdFichas.length == 1 && listaIdFichas[0].equals("")) {
     		resultats.put("id", -2);
@@ -1258,6 +1234,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
     	}
     	
     	List<Long> listaIdFichasLong = new ArrayList<Long>();
+
     	
     	for ( String s : listaIdFichas )
     		listaIdFichasLong.add( Long.parseLong(s) );
