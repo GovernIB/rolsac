@@ -87,44 +87,30 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	private static Log log = LogFactory.getLog(CatalegProcedimentsBackController.class);
 	
 	@RequestMapping(value = "/catalegProcediments.do")
-	public String pantallaProcediment(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
-		
+	public String pantallaProcediment(Map<String, Object> model, HttpSession session, HttpServletRequest request)
+	{
 		String lang;
-		
 		try {
-			
 			lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			
 		} catch (DelegateException dEx) {
-			
 			log.error("Error al recuperar el idioma por defecto.");
 			lang = "ca";
-			
 		}
-		
 		this.IDIOMA_ORIGEN_TRADUCTOR = lang;
 		
-		if ( estemEnUnitatAdministrativa(session) ) {
-			
+		if (estemEnUnitatAdministrativa(session))
 			crearModelComplert_pantalla(model, session, request, lang);
-			
-		} else {
-			
+		else
 			crearModelSencill_pantalla(model, session, request, lang);
-			
-		}
-			
-		loadIndexModel (model, request);
 		
+		loadIndexModel (model, request);
 		return "index";
-
 	}
 	
-	
-	private boolean estemEnUnitatAdministrativa(HttpSession session) {
-		
+	private boolean estemEnUnitatAdministrativa(HttpSession session)
+	{
 		return null != getUAFromSession(session);
-		
 	}
 	
 	private void crearModelComplert_pantalla(Map<String, Object> model, HttpSession session, HttpServletRequest request, String lang)
@@ -1461,7 +1447,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 			
 			//La búsqueda de normativas no tendrá en cuenta la UA actual (idua = null)
-			resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, "local", null, false, false, campoOrdenacion, orden, pagPag, pagRes);
+			resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, "todas", null, false, false, campoOrdenacion, orden, pagPag, pagRes);
 			
 			for (Normativa normativa: castList(Normativa.class, resultadoBusqueda.getListaResultados()) ) {
 				llistaNormativesDTO.add(new ProcedimientoNormativaDTO(
