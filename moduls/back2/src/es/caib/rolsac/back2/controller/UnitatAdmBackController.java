@@ -1,5 +1,6 @@
 package es.caib.rolsac.back2.controller;
 
+import static es.caib.rolsac.utils.LogUtils.logException;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -10,6 +11,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -69,11 +71,13 @@ import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
 import es.caib.rolsac.utils.DateUtils;
 import es.caib.rolsac.utils.ResultadoBusqueda;
+import es.indra.rol.sac.integracion.traductor.Traductor;
 
 @Controller
 @RequestMapping("/unitatadm/")
-public class UnitatAdmBackController extends PantallaBaseController {
-
+public class UnitatAdmBackController extends PantallaBaseController
+{
+	private String IDIOMA_ORIGEN_TRADUCTOR;
 	private static Log log = LogFactory.getLog(UnitatAdmBackController.class);
 	private static final String URL_PREVISUALIZACION = "es.caib.rolsac.previsualitzacio.ua.url";
 
@@ -106,6 +110,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		String lang = null;
 		try {
 			lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			this.IDIOMA_ORIGEN_TRADUCTOR = lang;
 			
 			llistaMateries = materiaDelegate.listarMaterias();
 			for (Materia materia : llistaMateries)
@@ -843,22 +848,21 @@ public class UnitatAdmBackController extends PantallaBaseController {
 				
 	}
 
-	private Map<String, Traduccion> getTraduccionesFormulario(Map<String, String> valoresForm) 
-			throws DelegateException {
-		
+	private Map<String, Traduccion> getTraduccionesFormulario(Map<String, String> valoresForm) throws DelegateException
+	{
 		IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
 		List<String> langs = idiomaDelegate.listarLenguajes();
-		Map<String, Traduccion> traduccions = new HashMap(langs.size());
+		Map<String, Traduccion> traduccions = new HashMap<String, Traduccion>();
 		
 		for (String lang: langs) {
 			
 			TraduccionUA tUA = new TraduccionUA();
 			
-			tUA.setNombre( RolUtil.limpiaCadena(valoresForm.get("item_nom_"+  lang)) );
-			tUA.setPresentacion( RolUtil.limpiaCadena(valoresForm.get("item_presentacio_" + lang)) );
-			tUA.setCvResponsable( RolUtil.limpiaCadena(valoresForm.get("item_cvResponsable_" + lang)) );
-			tUA.setAbreviatura( RolUtil.limpiaCadena(valoresForm.get("item_abreviatura_" + lang)) );
-			tUA.setUrl( RolUtil.limpiaCadena(valoresForm.get("item_url_" + lang)) );
+			tUA.setNombre(RolUtil.limpiaCadena(valoresForm.get("item_nom_"+  lang)));
+			tUA.setPresentacion(RolUtil.limpiaCadena(valoresForm.get("item_presentacio_" + lang)));
+			tUA.setCvResponsable(RolUtil.limpiaCadena(valoresForm.get("item_cvResponsable_" + lang)));
+			tUA.setAbreviatura(RolUtil.limpiaCadena(valoresForm.get("item_abreviatura_" + lang)));
+			tUA.setUrl(RolUtil.limpiaCadena(valoresForm.get("item_url_" + lang)));
 			
 			traduccions.put(lang, tUA);
 			
@@ -1328,7 +1332,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	}
 
 	/**
-	 * Descripci�n: M�todo que valida si la UA puede ser eliminada.
+	 * Descripción: Método que valida si la UA puede ser eliminada.
 	 * 
 	 * @author Indra
 	 * @param  ua Unidad administrativas
@@ -1621,5 +1625,64 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	private boolean isSeccionModificada(long seccionId, Map<String, String> valoresForm) {
 		return "1".equals(valoresForm.get("seccio_modificada_" + seccionId));
 	}
-
+	
+	
+	@RequestMapping(value = "/traduir.do")
+	public @ResponseBody Map<String, Object> traduir(HttpServletRequest request)
+	{
+		Map<String, Object> resultats = new HashMap<String, Object>();
+		
+		try {
+			TraduccionUA traduccioOrigen = new TraduccionUA();
+			
+			if (StringUtils.isNotEmpty(request.getParameter("item_nom_" + IDIOMA_ORIGEN_TRADUCTOR)))
+				traduccioOrigen.setNombre(request.getParameter("item_nom_" + IDIOMA_ORIGEN_TRADUCTOR));
+			
+			if (StringUtils.isNotEmpty(request.getParameter("item_presentacio_" + IDIOMA_ORIGEN_TRADUCTOR)))
+				traduccioOrigen.setPresentacion(request.getParameter("item_presentacio_" + IDIOMA_ORIGEN_TRADUCTOR));
+			
+			if (StringUtils.isNotEmpty(request.getParameter("item_cvResponsable_" + IDIOMA_ORIGEN_TRADUCTOR)))
+				traduccioOrigen.setCvResponsable(request.getParameter("item_cvResponsable_" + IDIOMA_ORIGEN_TRADUCTOR));
+			
+			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
+			List<String> langs = traductor.getListLang();
+			Map<String, Object> traduccio;
+			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
+	        
+	        for (String lang: langs) {
+	        	if (!IDIOMA_ORIGEN_TRADUCTOR.equalsIgnoreCase(lang)) {
+	        		TraduccionUA traduccioDesti = new TraduccionUA();
+	        		traductor.setDirTraduccio(IDIOMA_ORIGEN_TRADUCTOR, lang);
+	        		if (traductor.traducir(traduccioOrigen, traduccioDesti)) {
+	        			traduccio = new HashMap<String, Object>();
+	        			traduccio.put("lang", lang);
+	        			traduccio.put("traduccio", traduccioDesti);
+	        			traduccions.add(traduccio);
+	        		} else {
+	        			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+	        			break;
+	        		}
+	        	}
+	        }
+	        	        
+			resultats.put("traduccions", traduccions);
+						
+		} catch (DelegateException dEx) {
+			logException(log, dEx);
+			if (dEx.isSecurityException()) {
+				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+			} else {
+				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+			}
+		} catch (NullPointerException npe) {
+			log.error("CatalegProcedimentBackController.traduir: El traductor no se encuentra en en contexto.");
+			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+		} catch (Exception e) {
+			log.error("CatalegProcedimentBackController.traduir: Error en al traducir procedimiento: " + e);
+			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+		}
+		
+		return resultats;
+	}
+	
 }

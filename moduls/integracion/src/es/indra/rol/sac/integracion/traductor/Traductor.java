@@ -12,6 +12,7 @@ import org.ibit.rol.sac.model.TraduccionFicha;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionTramite;
+import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
@@ -203,7 +204,7 @@ public class Traductor extends AutomaticTranslationService implements Traduccion
 	}	
 	
 	/**
-	 * M�todo que traduce las propiedades de un bean TraduccionNormativa origen
+	 * Método que traduce las propiedades de un bean TraduccionNormativa origen
 	 * y las guarda en un bean TraduccionNormativa destino
 	 * 
 	 * @param normOrigen	bean de traducci�n de normativa origen
@@ -257,9 +258,34 @@ public class Traductor extends AutomaticTranslationService implements Traduccion
 			return false;
 		}
     	return true;
-	}	
-		
-
+	}
+	
+	
+	/**
+	 * Método que traduce las propiedades de un bean TraduccionTramite origen
+	 * y las guarda en un bean TraduccionTramite destino
+	 * 
+	 * @param normOrigen	bean de traducci�n de tramite origen
+	 * @param normDesti		bean de traducci�n de tramite destino
+	 * @return boolean		devuelve verdadero si la traducci�n finaliza correctamente. Si no devuelve falso.
+	 * @throws Exception
+	 */
+	public boolean traducir(TraduccionUA unitatOrigen, TraduccionUA unitatDesti) throws Exception
+	{
+		try {
+			if (unitatOrigen.getNombre() != null)			unitatDesti.setNombre(traducir(unitatOrigen.getNombre(), MODE_TXT));
+			if (unitatOrigen.getPresentacion() != null)		unitatDesti.setPresentacion(traducir(unitatOrigen.getPresentacion(), MODE_TXT));
+			if (unitatOrigen.getCvResponsable() != null)	unitatDesti.setCvResponsable(traducir(unitatOrigen.getCvResponsable(), MODE_TXT));
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+			return false;
+		}
+		return true;
+	}
+	
+	
 	/**
 	 * Método que parametriza el traductor según el tipo de texto y envía el texto al método translate.
 	 * 

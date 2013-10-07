@@ -12,6 +12,19 @@ $(document).ready(function() {
 
 	escriptori_detall_elm = $("#escriptori_detall");
 	escriptori_previsualitza_elm = $("#escriptori_previsualitza");
+	
+	// datos traductor
+	CAMPOS_TRADUCTOR_UNIDAD_ADMINISTRATIVA = [
+        "item_nom_",
+        "item_presentacio_",
+        "item_cvResponsable_"
+    ];
+    
+    DATOS_TRADUCIDOS_UNIDAD_ADMINISTRATIVA = [
+	    "nombre",
+	    "presentacion",
+	    "cvResponsable"
+    ];
 
 	// INICIEM
 	Error = new CError();
@@ -113,10 +126,19 @@ function CDetall(soloFicha){
 		jQuery("#item_espai_territorial,#item_espai_territorial_es,#item_espai_territorial_en,#item_espai_territorial_de,#item_espai_territorial_fr").change(function(){
 			jQuery("#item_espai_territorial,#item_espai_territorial_es,#item_espai_territorial_en,#item_espai_territorial_de,#item_espai_territorial_fr").val( jQuery(this).val() );
 		});
+		
+		// boton de traducir
+        jQuery("#botoTraduirUnitatAdministrativa").unbind("click").bind("click", function() {
+            Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
+        });
 
 		// carregar
 		Detall.carregar();
 
+	}
+	
+	this.traduirWrapper = function () {
+		that.traduir(pagTraduir, CAMPOS_TRADUCTOR_UNIDAD_ADMINISTRATIVA, DATOS_TRADUCIDOS_UNIDAD_ADMINISTRATIVA);
 	}
 
 	// Sobreescribe el método guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos

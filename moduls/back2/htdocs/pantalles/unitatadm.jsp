@@ -205,8 +205,11 @@
                                         </c:when>                                       
                                     </c:choose>
                                     </a>
-                                </li>                               
+                                </li>
                                 </c:forEach>
+                                <li class="traduix btnGenerico" id="botoTraduirUnitatAdministrativa">
+                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
+                                </li>
                             </ul>
                             <div class="idiomes">                                                           
                                 <c:forEach items="${idiomes_aplicacio}" var="lang">
@@ -2104,7 +2107,8 @@
         var pagFitxes = '<c:url value="/fitxainf/llistat.do" />';
         var pagFitxesUASeccio = '<c:url value="/unitatadm/obtenirFitxesUASeccio.do" />';
         var pagGuardarFitxesUASeccio = '<c:url value="/unitatadm/guardarFitxesUASeccio.do" />';
-        var txtEsborrarCorrecte = "<spring:message code='unitatadm.esborrat.correcte'/>";        
+        var txtEsborrarCorrecte = "<spring:message code='unitatadm.esborrat.correcte'/>";  
+        var pagTraduir = '<c:url value="/unitatadm/traduir.do" />';      
         
         // URL para ordenar el listado de UA hijas. 
         var pagOrdenarUAHijas = '<c:url value="/unitatadm/reordenarUAs.do" />';
