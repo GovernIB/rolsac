@@ -28,116 +28,191 @@ import org.ibit.rol.sac.model.PerfilCiudadano;
  */
 public abstract class IconoMateriaFacadeEJB extends HibernateEJB {
 
-     /**
-     * @ejb.create-method
-     * @ejb.permission unchecked="true"
-     */
-    public void ejbCreate() throws CreateException {
-        super.ejbCreate();
-    }
+	/**
+	 * @ejb.create-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public void ejbCreate() throws CreateException {
+		super.ejbCreate();
+	}
 
-    /**
-     * Crea o actualiza un IconoMateria.
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin}"
-     */
-    public Long grabarIconoMateria(IconoMateria icono, Long materia_id, Long perfil_id) {
-        Session session = getSession();
-        try {
-            if(icono.getId()==null){
-                Materia materia = (Materia)session.load(Materia.class, materia_id);
-                PerfilCiudadano perfil = (PerfilCiudadano)session.load(PerfilCiudadano.class, perfil_id);
-                materia.addIcono(icono);
-                perfil.addIconoMateria(icono);
-            } else {
-                session.update(icono);
-            }
-            session.flush();
-            return icono.getId();
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
 
-    /**
-    * Obtiene un IconoMateria.
-    * @ejb.interface-method
-    * @ejb.permission unchecked="true"
-    */
-   public IconoMateria obtenerIconoMateria(Long id) {
-       Session session = getSession();
-       try {
-           IconoMateria icono = (IconoMateria) session.load(IconoMateria.class, id);
-           Hibernate.initialize(icono.getIcono());
-           return icono;
-       } catch (HibernateException he) {
-           throw new EJBException(he);
-       } finally {
-           close(session);
-       }
-   }
+	/**
+	 * Crea o actualiza un IconoMateria.
+	 * 
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission role-name="${role.system},${role.admin}"
+	 * 
+	 * @param icono	Indica el icono a guardar.
+	 * 
+	 * @param idMateria	Identificador de la materia asociada al icono.
+	 * 
+	 * @param idPerfil	Identificador del perfil asociado al icono.
+	 * 
+	 * @return	Devuelve el identificador del icono guardado.
+	 */
+	public Long grabarIconoMateria(IconoMateria icono, Long idMateria, Long idPerfil) {
 
-    /**
-    * Obtiene el icono de la materia.
-    * @ejb.interface-method
-    * @ejb.permission unchecked="true"
-    */
-   public Archivo obtenerIcono(Long id) {
-       Session session = getSession();
-       try {
-            IconoMateria iconoMateria = (IconoMateria) session.load(IconoMateria.class, id);
-            Hibernate.initialize(iconoMateria.getIcono());
-            return iconoMateria.getIcono();
-       } catch (HibernateException he) {
-           throw new EJBException(he);
-       } finally {
-           close(session);
-       }
-   }
+		Session session = getSession();
+		try {
 
-   /**
-     * Borra un IconoMateria.
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin}"
-     */
-    public void borrarIconoMateria(Long id) {
-        Session session = getSession();
-        try {
-            IconoMateria icono = (IconoMateria) session.load(IconoMateria.class, id);
-            icono.getMateria().removeIcono(icono);
-            icono.getPerfil().removeIconoMateria(icono);
-            session.delete(icono);
-            session.flush();
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
+			if ( icono.getId() == null ) {
 
-    /**
-     * Borra una coleccion de IconoMateria.
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin}"
-     */
-    public void borrarIconosMateria(Collection<Long> iconosABorrar) {
-        Session session = getSession();
-        IconoMateria icono;
-        try {
-            for (Long iconoId: iconosABorrar) {
-            	icono = (IconoMateria) session.load(IconoMateria.class, iconoId);
-	            icono.getMateria().removeIcono(icono);
-	            icono.getPerfil().removeIconoMateria(icono);
-	            session.delete(icono);
-            }
-            session.flush();
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-    
+				Materia materia = (Materia)session.load( Materia.class, idMateria );
+				PerfilCiudadano perfil = (PerfilCiudadano)session.load( PerfilCiudadano.class, idPerfil );
+				materia.addIcono(icono);
+				perfil.addIconoMateria(icono);
+
+			} else {
+
+				session.update(icono);
+
+			}
+
+			session.flush();
+
+			return icono.getId();
+
+		} catch (HibernateException he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+
+		}
+
+	}
+
+
+	/**
+	 * Obtiene un IconoMateria.
+	 * 
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de un icono.
+	 * 
+	 * @return	Devuelve <code>IconoMateria</code> solicitado.
+	 */
+	public IconoMateria obtenerIconoMateria(Long id) {
+		
+		Session session = getSession();
+		try {
+			
+			IconoMateria icono = (IconoMateria) session.load( IconoMateria.class, id );
+			Hibernate.initialize( icono.getIcono() );
+			
+			return icono;
+			
+		} catch (HibernateException he) {
+			
+			throw new EJBException(he);
+			
+		} finally {
+			
+			close(session);
+			
+		}
+		
+	}
+	
+
+	/**
+	 * Obtiene el icono de la materia.
+	 * 
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de un icono.
+	 * 
+	 * @return	Devuelve <code>Archivo</code> que contiene el icono solicitado.
+	 */
+	public Archivo obtenerIcono(Long id) {
+		
+		Session session = getSession();
+		try {
+			
+			IconoMateria iconoMateria = (IconoMateria) session.load( IconoMateria.class, id );
+			Hibernate.initialize( iconoMateria.getIcono() );
+			
+			return iconoMateria.getIcono();
+			
+		} catch (HibernateException he) {
+			
+			throw new EJBException(he);
+			
+		} finally {
+			
+			close(session);
+			
+		}
+		
+	}
+	
+
+	/**
+	 * @deprecated Únicamente se usa desde el back antiguo 
+	 * Borra un IconoMateria.
+	 * @ejb.interface-method
+	 * @ejb.permission role-name="${role.system},${role.admin}"
+	 */
+	public void borrarIconoMateria(Long id) {
+		Session session = getSession();
+		try {
+			IconoMateria icono = (IconoMateria) session.load(IconoMateria.class, id);
+			icono.getMateria().removeIcono(icono);
+			icono.getPerfil().removeIconoMateria(icono);
+			session.delete(icono);
+			session.flush();
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+
+	
+	/**
+	 * Borra una coleccion de IconoMateria.
+	 * 
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission role-name="${role.system},${role.admin}"
+	 * 
+	 * @param listaIconos	Listado de identificadores de iconos a borrar.
+	 */
+	public void borrarIconosMateria(Collection<Long> listaIconos) {
+		
+		Session session = getSession();
+		IconoMateria icono;
+		try {
+			
+			for ( Long iconoId : listaIconos ) {
+				
+				icono = (IconoMateria) session.load( IconoMateria.class, iconoId );
+				icono.getMateria().removeIcono(icono);
+				icono.getPerfil().removeIconoMateria(icono);
+				session.delete(icono);
+				
+			}
+			
+			session.flush();
+			
+		} catch (HibernateException he) {
+			
+			throw new EJBException(he);
+			
+		} finally {
+			
+			close(session);
+			
+		}
+		
+	}
+
 }

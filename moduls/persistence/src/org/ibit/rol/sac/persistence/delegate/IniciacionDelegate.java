@@ -17,34 +17,34 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 public class IniciacionDelegate  {
 
 	IniciacionDelegateI impl;
-    
+
 	public IniciacionDelegateI getImpl() {
 		return impl;
-    }
+	}
 
 	public void setImpl(IniciacionDelegateI impl) {
 		this.impl = impl;
-        }
+	}
 
 	public void borrarIniciacion(Long id) throws DelegateException {
 		impl.borrarIniciacion(id);
-    }
+	}
 
 	public Long grabarIniciacion(Iniciacion tipo) throws DelegateException {
 		return impl.grabarIniciacion(tipo);
-    }
- 
+	}
+
 	public ResultadoBusqueda listarIniciacion(int pagina, int resultats, String idioma) throws DelegateException {
 		return impl.listarIniciacion(pagina, resultats, idioma);
 	}
-	
+
 	public List listarIniciacion() throws DelegateException {
 		return impl.listarIniciacion();
-        }
+	}
 
 	public Iniciacion obtenerIniciacion(Long id) throws DelegateException {
 		return impl.obtenerIniciacion(id);
-    }
-    
-    
+	}
+
+
 }

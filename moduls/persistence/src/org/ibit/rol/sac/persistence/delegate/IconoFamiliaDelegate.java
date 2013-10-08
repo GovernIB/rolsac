@@ -18,7 +18,7 @@ import java.util.Collection;
 public class IconoFamiliaDelegate implements StatelessDelegate {
 
     /* ========================================================= */
-    /* ======================== M�TODOS DE NEGOCIO ============= */
+    /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
     public Long grabarIconoFamilia(IconoFamilia icono, Long familia_id, Long perfil_id) throws DelegateException {
@@ -37,6 +37,7 @@ public class IconoFamiliaDelegate implements StatelessDelegate {
         }
     }
 
+    /** @deprecated ünicamente se usa desde back antiguo. */
     public IconoFamilia obtenerIconoFamilia(Long id_perfil,Long id_fam) throws DelegateException {
         try {
             return getFacade().obtenerIconoFamilia(id_perfil,id_fam);
@@ -53,6 +54,7 @@ public class IconoFamiliaDelegate implements StatelessDelegate {
         }
     }
 
+     /** @deprecated ünicamente se usa desde back antiguo. */
      public void borrarIconoFamilia(Long id) throws DelegateException {
          try {
              getFacade().borrarIconoFamilia(id);

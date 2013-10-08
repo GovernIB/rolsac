@@ -30,144 +30,221 @@ import java.util.List;
  */
 public abstract class IconoFamiliaFacadeEJB extends HibernateEJB {
 
-     /**
-     * @ejb.create-method
-     * @ejb.permission unchecked="true"
-     */
-    public void ejbCreate() throws CreateException {
-        super.ejbCreate();
-    }
+	private static final long serialVersionUID = -5169068748031601688L;
 
-    /**
-     * Crea o actualiza un Iconofamilia.
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin}"
-     */
-    public Long grabarIconoFamilia(IconoFamilia icono, Long familia_id, Long perfil_id) {
-        Session session = getSession();
-        try {
-            if(icono.getId()==null){
-                Familia familia = (Familia)session.load(Familia.class, familia_id);
-                PerfilCiudadano perfil = (PerfilCiudadano)session.load(PerfilCiudadano.class, perfil_id);
-                familia.addIcono(icono);
-                perfil.addIconoFamilia(icono);
-            } else {
-                session.update(icono);
-            }
-            session.flush();
-            return icono.getId();
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-
-    /**
-    * Obtiene un iconofamilia.
-    * @ejb.interface-method
-    * @ejb.permission unchecked="true"
-    */
-   public IconoFamilia obtenerIconoFamilia(Long id) {
-       Session session = getSession();
-       try {
-           IconoFamilia iconoFamilia = (IconoFamilia) session.load(IconoFamilia.class, id);
-           Hibernate.initialize(iconoFamilia.getIcono());
-           return iconoFamilia;
-       } catch (HibernateException he) {
-           throw new EJBException(he);
-       } finally {
-           close(session);
-       }
-   }
-
-   /**
-    * Obtiene un iconofamilia.
-    * @ejb.interface-method
-    * @ejb.permission unchecked="true"
-    */
-   public IconoFamilia obtenerIconoFamilia(Long id_perfil,Long id_fam) {
-       Session session = getSession();
-       try {
-           Criteria criterio = session.createCriteria(IconoFamilia.class);
-           criterio.add(Expression.eq("familia.id",id_fam));
-           criterio.add(Expression.eq("perfil.id",id_perfil));
-           List list = criterio.list();
-           if (list.isEmpty()) {
-               return null;
-           }
-           IconoFamilia iconoFamilia = (IconoFamilia) list.get(0);
-           Hibernate.initialize(iconoFamilia.getIcono());
-           return iconoFamilia;
-       } catch (HibernateException he) {
-           throw new EJBException(he);
-       } finally {
-           close(session);
-       }
-   }
-
-    /**
-    * Obtiene el icono de la familia.
-    * @ejb.interface-method
-    * @ejb.permission unchecked="true"
-    */
-   public Archivo obtenerIcono(Long id) {
-       Session session = getSession();
-       try {
-            IconoFamilia iconoFamilia = (IconoFamilia) session.load(IconoFamilia.class, id);
-            Hibernate.initialize(iconoFamilia.getIcono());
-            return iconoFamilia.getIcono();
-       } catch (HibernateException he) {
-           throw new EJBException(he);
-       } finally {
-           close(session);
-       }
-   }
+	/**
+	 * @ejb.create-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public void ejbCreate() throws CreateException {
+		super.ejbCreate();
+	}
 
 
+	/**
+	 * Crea o actualiza un Iconofamilia.
+	 * 
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission role-name="${role.system},${role.admin}"
+	 * 
+	 * @param icono	Indica el icono a guardar.
+	 * 
+	 * @param idFamilia	Identificador de la familia a la que pertecene el icono.
+	 * 
+	 * @param idPerfil	Identificador del perfil al que está asociado el icono.
+	 * 
+	 * @return Devuelve el identificador del icono guardado
+	 */
+	public Long grabarIconoFamilia(IconoFamilia icono, Long idFamilia, Long idPerfil) {
 
-   /**
-     * Borra un IconoFamilia.
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin}"
-     */
-    public void borrarIconoFamilia(Long id) {
-        Session session = getSession();
-        try {
-            IconoFamilia icono = (IconoFamilia) session.load(IconoFamilia.class, id);
-            icono.getFamilia().removeIcono(icono);
-            icono.getPerfil().removeIconoFamilia(icono);
-            session.delete(icono);
-            session.flush();
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
+		Session session = getSession();
+		try {
 
-    
-    /**
-     * Borra una coleccion de IconoFamilia.
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin}"
-     */
-    public void borrarIconosFamilia(Collection<Long> iconosABorrar) {
-        Session session = getSession();
-        IconoFamilia icono;
-        try {
-            for (Long iconoId: iconosABorrar) {
-            	icono = (IconoFamilia) session.load(IconoFamilia.class, iconoId);
-	            icono.getFamilia().removeIcono(icono);
-	            icono.getPerfil().removeIconoFamilia(icono);
-	            session.delete(icono);
-            }
-            session.flush();
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-    	
+			if ( icono.getId() == null ) {
+
+				Familia familia = (Familia) session.load( Familia.class, idFamilia );
+				PerfilCiudadano perfil = (PerfilCiudadano) session.load( PerfilCiudadano.class, idPerfil );
+				familia.addIcono(icono);
+				perfil.addIconoFamilia(icono);
+
+			} else {
+
+				session.update(icono);
+
+			}
+
+			session.flush();
+
+			return icono.getId();
+
+		} catch (HibernateException he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+
+		}
+
+	}
+
+
+	/**
+	 * @deprecated únicamente se usa desde back antiguo.
+	 * Obtiene un iconofamilia.
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public IconoFamilia obtenerIconoFamilia(Long id) {
+		Session session = getSession();
+		try {
+			IconoFamilia iconoFamilia = (IconoFamilia) session.load(IconoFamilia.class, id);
+			Hibernate.initialize(iconoFamilia.getIcono());
+			return iconoFamilia;
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+
+
+	/**
+	 * Obtiene un iconofamilia.
+	 * 
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param idPerfil	Idendtificador del perfil del icono.
+	 * 
+	 * @param idFamilia	Identificador de la familia asociada al icono.
+	 * 
+	 * @return	Devuelve <code>IconoFamilia</code> solicitado.
+	 */
+	public IconoFamilia obtenerIconoFamilia(Long idPerfil,Long idFamilia) {
+		
+		Session session = getSession();
+		try {
+			
+			Criteria criterio = session.createCriteria(IconoFamilia.class);
+			criterio.add( Expression.eq( "familia.id", idFamilia ) );
+			criterio.add( Expression.eq( "perfil.id", idPerfil ) );
+			List list = criterio.list();
+			if ( list.isEmpty() )
+				return null;
+			
+			IconoFamilia iconoFamilia = (IconoFamilia) list.get(0);
+			Hibernate.initialize( iconoFamilia.getIcono() );
+			
+			return iconoFamilia;
+			
+		} catch (HibernateException he) {
+			
+			throw new EJBException(he);
+			
+		} finally {
+			
+			close(session);
+			
+		}
+		
+	}
+	
+
+	/**
+	 * Obtiene el icono de la familia.
+	 * 
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de un icono.
+	 * 
+	 * @return	Devuelve <code>Archivo</code> que contiene el icono solicitado.
+	 */
+	public Archivo obtenerIcono(Long id) {
+		
+		Session session = getSession();
+		try {
+			
+			IconoFamilia iconoFamilia = (IconoFamilia) session.load( IconoFamilia.class, id );
+			Hibernate.initialize( iconoFamilia.getIcono() );
+			
+			return iconoFamilia.getIcono();
+			
+		} catch (HibernateException he) {
+			
+			throw new EJBException(he);
+			
+		} finally {
+			
+			close(session);
+			
+		}
+		
+	}
+
+
+	/**
+	 * @deprecated únicamente se usa desde back antiguo.
+	 * Borra un IconoFamilia.
+	 * @ejb.interface-method
+	 * @ejb.permission role-name="${role.system},${role.admin}"
+	 */
+	public void borrarIconoFamilia(Long id) {
+		Session session = getSession();
+		try {
+			IconoFamilia icono = (IconoFamilia) session.load(IconoFamilia.class, id);
+			icono.getFamilia().removeIcono(icono);
+			icono.getPerfil().removeIconoFamilia(icono);
+			session.delete(icono);
+			session.flush();
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+
+
+	/**
+	 * Borra una coleccion de IconoFamilia.
+	 * 
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission role-name="${role.system},${role.admin}"
+	 * 
+	 * @param listadoIconos	Listado de identificadores de iconos para borrar.
+	 */
+	public void borrarIconosFamilia(Collection<Long> listadoIconos) {
+		
+		Session session = getSession();
+		IconoFamilia icono;
+		try {
+			
+			for ( Long iconoId : listadoIconos ) {
+				
+				icono = (IconoFamilia) session.load( IconoFamilia.class, iconoId );
+				icono.getFamilia().removeIcono(icono);
+				icono.getPerfil().removeIconoFamilia(icono);
+				session.delete(icono);
+			}
+			
+			session.flush();
+			
+		} catch (HibernateException he) {
+			
+			throw new EJBException(he);
+			
+		} finally {
+			
+			close(session);
+			
+		}
+		
+	}
+
 }

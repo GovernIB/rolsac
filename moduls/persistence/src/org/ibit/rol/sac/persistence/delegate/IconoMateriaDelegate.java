@@ -19,7 +19,7 @@ import java.util.List;
 public class IconoMateriaDelegate implements StatelessDelegate{
 
  /* ========================================================= */
-    /* ======================== M�TODOS DE NEGOCIO ============= */
+    /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
     public Long grabarIconoMateria(IconoMateria icono, Long materia_id, Long perfil_id) throws DelegateException {
@@ -47,6 +47,7 @@ public class IconoMateriaDelegate implements StatelessDelegate{
         }
     }
 
+    /** @deprecated Únicamente se usa desde el back antiguo */
     public void borrarIconoMateria(Long id) throws DelegateException {
         try {
             getFacade().borrarIconoMateria(id);

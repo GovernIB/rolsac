@@ -11,13 +11,15 @@ import javax.naming.NamingException;
 import java.rmi.RemoteException;
 
 /**
+ * @deprecated Clase que se usa únicamente desde el back antiguo.
  * Business delegate para manipular HechoVitalAgrupacionHV.
  */
 public class HechoVitalAgrupacionHVDelegate implements StatelessDelegate {
    /* ========================================================= */
-   /* ======================== M�TODOS DE NEGOCIO ============= */
+   /* ======================== MÉTODOS DE NEGOCIO ============= */
    /* ========================================================= */
 
+	/** @deprecated Usado desde el back antiguo */
    public Long grabarHechoVitalAgrupacionHV(HechoVitalAgrupacionHV hechovp, Long hecho_id, Long agrupacion_id) throws DelegateException {
        try {
            return getFacade().grabarHechoVitalAgrupacionHV(hechovp, hecho_id, agrupacion_id);
@@ -26,6 +28,7 @@ public class HechoVitalAgrupacionHVDelegate implements StatelessDelegate {
        }
    }
 
+   /** @deprecated No se usa */
    public HechoVitalAgrupacionHV obtenerHechoVitalAgrupacionHV(Long id) throws DelegateException {
        try {
            return getFacade().obtenerHechoVitalAgrupacionHV(id);
@@ -34,6 +37,7 @@ public class HechoVitalAgrupacionHVDelegate implements StatelessDelegate {
        }
    }
 
+   /** @deprecated Usado desde el back antiguo */
     public void subirOrden(Long id) throws DelegateException {
         try {
             getFacade().subirOrden(id);
@@ -42,6 +46,7 @@ public class HechoVitalAgrupacionHVDelegate implements StatelessDelegate {
         }
     }
 
+    /** @deprecated Usado desde el back antiguo */
    public void borrarHechoVitalAgrupacionHV(Long id) throws DelegateException {
        try {
            getFacade().borrarHechoVitalAgrupacionHV(id);

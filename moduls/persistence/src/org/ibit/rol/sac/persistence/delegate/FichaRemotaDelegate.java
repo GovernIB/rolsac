@@ -21,7 +21,7 @@ import java.rmi.RemoteException;
 public class FichaRemotaDelegate implements StatelessDelegate {
 
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== Mï¿½TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 	public Long grabarFichaRemota(final String idRemoto, FichaRemota fichaRemota, FichaUATransferible[] fichasUAT, String[] ceMaterias, String[] ceHechos)  throws DelegateException{
 		try {
@@ -55,6 +55,7 @@ public class FichaRemotaDelegate implements StatelessDelegate {
         }
 	}
 	
+	/** @deprecated No se usa */
 	@SuppressWarnings("unchecked")
 	public Set<FichaRemota> listarFichasRemotas(final String idRemoto) throws DelegateException{
 		try {
@@ -80,6 +81,7 @@ public class FichaRemotaDelegate implements StatelessDelegate {
         }
 	}
 
+	/** @deprecated No se usa */
     public List<FichaRemota> listarFichasRemotasSeccionUA(Long ua_id, String codEstSecc) throws DelegateException{
         try {
             return getFacade().listarFichasRemotasSeccionUA(ua_id, codEstSecc);
@@ -88,6 +90,7 @@ public class FichaRemotaDelegate implements StatelessDelegate {
         }
     }
 
+    /** @deprecated No se usa */
     public List<FichaRemota> listarFichasRemotasSeccionUAMateria(Long ua_id, String codEstSecc, String codEstMateria) throws DelegateException{
         try {
             return getFacade().listarFichasRemotasSeccionUAMateria(ua_id, codEstSecc, codEstMateria);
@@ -96,6 +99,7 @@ public class FichaRemotaDelegate implements StatelessDelegate {
         }
     }
 
+    /** @deprecated No se usa */
     public List<FichaRemota> listarFichasRemotasSeccionUAHechoVital(Long ua_id, String codEstSecc, String codEstHV) throws DelegateException{
         try {
             return getFacade().listarFichasRemotasSeccionUAHechoVital(ua_id, codEstSecc, codEstHV);
@@ -104,6 +108,7 @@ public class FichaRemotaDelegate implements StatelessDelegate {
         }
     }
 
+    /** @deprecated No se usa */
     public List listarFichasRecientes(int length,boolean caducados) throws DelegateException {
         try {
             return getFacade().listarFichasRecientes(length,caducados);
@@ -112,6 +117,7 @@ public class FichaRemotaDelegate implements StatelessDelegate {
         }
     }
 
+    /** @deprecated No se usa */
     public List listarFichasMasComentadas(int length,boolean caducados) throws DelegateException {
         try {
             return getFacade().listarFichasMasComentadas(length,caducados);
@@ -120,6 +126,7 @@ public class FichaRemotaDelegate implements StatelessDelegate {
         }
     }
 
+    /** @deprecated No se usa */
     public List listarFichasMasVisitadas(int length,boolean caducados) throws DelegateException {
         try {
             return getFacade().listarFichasMasVisitadas(length,caducados);

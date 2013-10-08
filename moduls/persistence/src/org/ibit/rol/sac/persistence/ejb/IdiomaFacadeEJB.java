@@ -28,112 +28,169 @@ public abstract class IdiomaFacadeEJB extends HibernateEJB implements IdiomaDele
 	private static final long serialVersionUID = 2372863171398481198L;
 
 	/**
-     * @ejb.create-method
-     * @ejb.permission unchecked="true"
-     */
-    public void ejbCreate() throws CreateException {
-        super.ejbCreate();
-    }
-
-    /**
-     * Devuelve una lista de {@link java.lang.String} con el codigo ISO los idiomas.
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public List<String> /* String */ listarLenguajes() {
-        Session session = getSession();
-        try {
-            Query query = session.createQuery("select idi.lang from Idioma as idi order by idi.orden");
-            query.setCacheable(true);
-            return castList(String.class, query.list());
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-
-    /**
-     * Devuelve una lista de {@link java.lang.String} con el los Ids de Idiomas del traductor.
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public List<String> listarLenguajesTraductor() {
-        Session session = getSession();
-        try {
-            Query query = session.createQuery("select idi.langTraductor from Idioma as idi order by idi.orden");
-            query.setCacheable(true);
-            return castList(String.class, query.list());
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }    
-
-    /**
-     * Obtiene el codigo ISO del lenguaje por defecto.
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public String lenguajePorDefecto() {
-        try {
-        	return System.getProperty("es.caib.rolsac.idiomaDefault");
-        } catch (java.lang.SecurityException es) {
-            throw new java.lang.SecurityException(es);}
-          catch (NullPointerException ne) {
-            throw new NullPointerException();}
-          catch (IllegalArgumentException i) {
-            throw new IllegalArgumentException(i);
-        }
-    }
+	 * @ejb.create-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public void ejbCreate() throws CreateException {
+		super.ejbCreate();
+	}
 
 
-    /**
-     * Devuelve una lista de idiomas
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public List<Idioma> listarIdiomas() {
-        Session session = getSession();
-        try {
-            Query query = session.createQuery("from Idioma");
-            query.setCacheable(true);
-            return castList(Idioma.class, query.list());
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-    
-    
-    /**
-     * Devuelve el tiempo de ejecutar una select de los idiomas
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public long testeoHql() {
-        Session session = getSession();
-        try {
-        	int _repes = 5;
-        	int _acumula = 0;
-        	for (int i=0;i<_repes;i++) {
-	            Query query = session.createQuery("Select idi.lang from Idioma as idi");
-	            query.setCacheable(false);
-	            long ini = System.currentTimeMillis();
-	            List<String> lista =  castList(String.class, query.list());
-	            long fin = System.currentTimeMillis();
-	            _acumula += (fin-ini); 
-        	}
-            return _acumula/_repes;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
+	/**
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @return Devuelve una lista de {@link java.lang.String} con el codigo ISO los idiomas.
+	 */
+	public List<String> listarLenguajes() {
+
+		Session session = getSession();
+
+		try {
+
+			Query query = session.createQuery("select idi.lang from Idioma as idi order by idi.orden");
+			query.setCacheable(true);
+
+			return castList( String.class, query.list() );
+
+		} catch (HibernateException he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+
+		}
+
+	}
 
 
-    
+	/**
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @return Devuelve una lista de {@link java.lang.String} con el los Ids de Idiomas del traductor.
+	 */
+	public List<String> listarLenguajesTraductor() {
+
+		Session session = getSession();
+
+		try {
+
+			Query query = session.createQuery("select idi.langTraductor from Idioma as idi order by idi.orden");
+			query.setCacheable(true);
+
+			return castList( String.class, query.list() );
+
+		} catch (HibernateException he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+
+		}
+
+	}  
+
+
+	/**
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @return Devuelve el código ISO del lenguaje por defecto.
+	 */
+	public String lenguajePorDefecto() {
+
+		try {
+
+			return System.getProperty("es.caib.rolsac.idiomaDefault");
+
+		} catch (java.lang.SecurityException es) {
+
+			throw new java.lang.SecurityException(es);
+			
+		} catch (NullPointerException ne) {
+
+			throw new NullPointerException();
+			
+		} catch (IllegalArgumentException i) {
+
+			throw new IllegalArgumentException(i);
+
+		}
+
+	}
+
+
+	/**
+	 * @deprecated No se usa
+	 * Devuelve una lista de idiomas
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public List<Idioma> listarIdiomas() {
+		Session session = getSession();
+		try {
+			Query query = session.createQuery("from Idioma");
+			query.setCacheable(true);
+			return castList(Idioma.class, query.list());
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+
+
+	/**
+	 * @deprecated No se usa
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @return Devuelve el tiempo de ejecutar una select de los idiomas
+	 */
+	public long testeoHql() {
+		
+		Session session = getSession();
+		
+		try {
+			
+			int repes = 5;
+			int acumula = 0;
+			
+			for ( int i = 0 ; i < repes ; i++ ) {
+				
+				Query query = session.createQuery("Select idi.lang from Idioma as idi");
+				query.setCacheable(false);
+				
+				long ini = System.currentTimeMillis();
+				
+				List<String> lista = castList( String.class, query.list() );
+				
+				long fin = System.currentTimeMillis();
+				acumula += (fin - ini);
+				
+			}
+			
+			return acumula / repes;
+			
+		} catch (HibernateException he) {
+			
+			throw new EJBException(he);
+			
+		} finally {
+			
+			close(session);
+			
+		}
+		
+	}
+
 }

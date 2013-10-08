@@ -17,9 +17,10 @@ import org.ibit.rol.sac.persistence.util.HechoVitalProcedimientoFacadeUtil;
  */
 public class HechoVitalProcedimientoDelegate implements StatelessDelegate {
    /* ========================================================= */
-   /* ======================== MÉTODOS DE NEGOCIO ============= */
+   /* ======================== Mï¿½TODOS DE NEGOCIO ============= */
    /* ========================================================= */
 
+	/** @deprecated Usado por el back antiguo */
    public Long grabarHechoVitalProcedimiento(HechoVitalProcedimiento hechovp, Long hecho_id, Long procedimiento_id) throws DelegateException {
        try {
            return getFacade().grabarHechoVitalProcedimiento(hechovp, hecho_id, procedimiento_id);
@@ -36,6 +37,7 @@ public class HechoVitalProcedimientoDelegate implements StatelessDelegate {
        }
    }
    
+   /** @deprecated No se usa */
    public HechoVitalProcedimiento obtenerHechoVitalProcedimiento(Long id) throws DelegateException {
        try {
            return getFacade().obtenerHechoVitalProcedimiento(id);
@@ -44,6 +46,7 @@ public class HechoVitalProcedimientoDelegate implements StatelessDelegate {
        }
    }
 
+   /** @deprecated Usado por el back antiguo */
     public void subirOrden(Long id) throws DelegateException {
         try {
             getFacade().subirOrden(id);
@@ -52,6 +55,7 @@ public class HechoVitalProcedimientoDelegate implements StatelessDelegate {
         }
     }
 
+    /** @deprecated Usado por el back antiguo */
     public void borrarHechoVitalProcedimiento(Long id) throws DelegateException {
         try {
             getFacade().borrarHechoVitalProcedimiento(id);

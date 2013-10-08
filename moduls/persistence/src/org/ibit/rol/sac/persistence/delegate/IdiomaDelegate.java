@@ -50,6 +50,7 @@ public class IdiomaDelegate implements StatelessDelegate {
 		return impl.lenguajePorDefecto();
 	}
 
+	/** @deprecated No se usa */
 	public List<Idioma> listarIdiomas() throws DelegateException {
 		return impl.listarIdiomas();
 	}

@@ -11,6 +11,7 @@ import javax.ejb.EJBException;
 import java.util.List;
 
 /**
+ * @deprecated Clase que se usa únicamente desde el back antiguo.
  * SessionBean para mantener y consultar Hecho Vital AgrupacionHechoVital. (PORMAD)
  *
  * @ejb.bean
@@ -24,7 +25,10 @@ import java.util.List;
  */
 public abstract class HechoVitalAgrupacionHVFacadeEJB extends HibernateEJB {
 
-    /**
+	private static final long serialVersionUID = -5074196397464022659L;
+
+	/**
+     * @deprecated Usado desde el back antiguo
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
@@ -32,7 +36,9 @@ public abstract class HechoVitalAgrupacionHVFacadeEJB extends HibernateEJB {
         super.ejbCreate();
     }
 
+    
     /**
+     * @deprecated Usado desde el back antiguo
      * Crea o actualiza un HechoVitalAgrupacionHV.
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin}"
@@ -57,7 +63,9 @@ public abstract class HechoVitalAgrupacionHVFacadeEJB extends HibernateEJB {
         }
     }
 
+    
     /**
+     * @deprecated No se usa 
      * Obtiene un HechoVitalAgrupacionHV.
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -73,7 +81,9 @@ public abstract class HechoVitalAgrupacionHVFacadeEJB extends HibernateEJB {
         }
     }
 
+    
     /**
+     * @deprecated Usado desde el back antiguo
      * Incrementa el orden de un hecho vital - agrupacion.
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin}"
@@ -104,7 +114,9 @@ public abstract class HechoVitalAgrupacionHVFacadeEJB extends HibernateEJB {
         }
     }
 
+    
     /**
+     * @deprecated Usado desde el back antiguo
      * Borra un HechoVitalAgrupacionHV.
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin}"

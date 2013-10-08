@@ -19,7 +19,7 @@ import javax.naming.NamingException;
 public class IndexerDelegate implements StatelessDelegate {
 
     /* ========================================================= */
-    /* ======================== M�TODOS DE NEGOCIO ============= */
+    /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
     public synchronized void insertaObjeto(IndexObject indexObject, String idi) throws DelegateException {
@@ -78,6 +78,7 @@ public class IndexerDelegate implements StatelessDelegate {
         }
     }     
     
+    /** @deprecated Código comentado */
     public synchronized Long[] buscarIds(String className, String text) throws DelegateException {
         try {
             return local.buscarIds(className, text);
@@ -134,6 +135,7 @@ public class IndexerDelegate implements StatelessDelegate {
         }
     }
     
+    /** @deprecated No se usa */
     public IndexResultados buscar(String idi, String cadena, boolean sugerir, boolean restringido) throws DelegateException {
         try {
             return local.buscar(idi, cadena, sugerir,restringido);

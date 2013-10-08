@@ -12,10 +12,9 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
 import org.ibit.rol.sac.model.GrupoSuscripcion;
-import org.ibit.rol.sac.model.Idioma;
-
 
 /**
+ * @deprecated Clase que se usa Ãºnicamente desde el back antiguo.
  * SessionBean para mantener y consultar envios de suscripcion.
  *
  * @ejb.bean
@@ -29,7 +28,9 @@ import org.ibit.rol.sac.model.Idioma;
  */
 public abstract class GrupoSuscripcionFacadeEJB extends PaginatedHibernateEJB {
 
-    /**
+	private static final long serialVersionUID = 3913087485747908423L;
+
+	/**
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
@@ -37,8 +38,10 @@ public abstract class GrupoSuscripcionFacadeEJB extends PaginatedHibernateEJB {
         super.ejbCreate();
     }
 
+    
     /**
-     * Inicializo los parámetros de la consulta....
+     * @deprecated No se usa
+     * Inicializo los parÃ¡metros de la consulta....
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -58,8 +61,10 @@ public abstract class GrupoSuscripcionFacadeEJB extends PaginatedHibernateEJB {
     	super.npags=0;	
     }
 
+    
     /**
-     * Inicializo los parámetros de la consulta....
+     * @deprecated Usado desde el back antiguo
+     * Inicializo los parï¿½metros de la consulta....
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -82,6 +87,7 @@ public abstract class GrupoSuscripcionFacadeEJB extends PaginatedHibernateEJB {
     
     
     /**
+     * @deprecated Usado desde el back antiguo
      * Crea o actualiza un envio.
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
@@ -99,7 +105,9 @@ public abstract class GrupoSuscripcionFacadeEJB extends PaginatedHibernateEJB {
         }
     }
 
+    
      /**
+      * @deprecated Usado desde el back antiguo
      * Lista todos los grupos.
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -107,7 +115,7 @@ public abstract class GrupoSuscripcionFacadeEJB extends PaginatedHibernateEJB {
     public List listarGrupos() {
         Session session = getSession();
         try {
-        	parametrosCons(); // Establecemos los parámetros de la paginación
+        	parametrosCons(); // Establecemos los parÃ¡metros de la paginaciÃ³n
            	
         	Query query = session.createQuery(select+from+where+orderby);
             query.setFirstResult(cursor-1);
@@ -118,8 +126,11 @@ public abstract class GrupoSuscripcionFacadeEJB extends PaginatedHibernateEJB {
         } finally {
             close(session);
         }
-    }    
+    }  
+
+    
     /**
+     * @deprecated Usado desde el back antiguo
      * Lista todas los grupos de suscripcion para usar en Combos
      * @ejb.interface-method
      * @ejb.permission unchecked="true" 
@@ -139,6 +150,7 @@ public abstract class GrupoSuscripcionFacadeEJB extends PaginatedHibernateEJB {
 
 
     /**
+     * @deprecated Usado desde el back antiguo 
      * Obtiene un grupo. 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -156,7 +168,9 @@ public abstract class GrupoSuscripcionFacadeEJB extends PaginatedHibernateEJB {
         }
     }
 
+    
     /**
+     * @deprecated Usado desde el back antiguo
      * borra un Grupo
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
