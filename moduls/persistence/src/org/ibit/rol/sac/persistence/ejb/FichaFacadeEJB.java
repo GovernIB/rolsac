@@ -1236,7 +1236,63 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-
+    
+    
+    /**
+     * Crea o actualiza una FichaUA
+     * Esta ficha sera la que tenga el orden 0 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+     */
+    public Long crearFichaUA2(Long unidad_id, Long seccion_id, Long ficha_id)
+    {
+        Session session = getSession();
+        try {
+            if (!getAccesoManager().tieneAccesoFicha(ficha_id)) {
+                throw new SecurityException("No tiene acceso a la ficha");
+            }
+            
+		    FichaUA fichaUA = new FichaUA();
+            if (unidad_id != null) {
+                UnidadAdministrativa unidad = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, unidad_id);
+                if (!getAccesoManager().tieneAccesoUnidad(unidad_id, false)) {
+                    throw new SecurityException("No tiene acceso a la ficha");
+                }
+                // Cuando se aniade una ficha a una seccion o a una seccion + ua por defecto su orden es 1
+                fichaUA.setOrden(1);
+                unidad.addFichaUA2(fichaUA);
+            } else {
+                if (!userIsSystem()) {
+                    throw new SecurityException("No puede crear fichas generales.");
+                }
+            }
+            
+		    Seccion seccion = (Seccion) session.load(Seccion.class, seccion_id);
+            if (!getAccesoManager().tieneAccesoSeccion(seccion_id)) {
+                throw new SecurityException("No tiene acceso a la seccion");
+            }
+            
+            // Cuando se aniade una ficha a una seccion o a una seccion + ua por defecto su orden es 1
+            fichaUA.setOrdenseccion(1);
+            seccion.addFichaUA2(fichaUA);
+		    Ficha ficha = (Ficha) session.load(Ficha.class, ficha_id);
+            ficha.addFichaUA(fichaUA);
+            //session.flush();
+            Ficha fichasend = obtenerFicha(ficha_id);
+            Actualizador.actualizar(fichasend);
+            indexBorraFicha(ficha.getId());
+            indexInsertaFicha(fichasend,null);
+            session.flush();
+	    	
+            return ficha.getId();
+        } catch (HibernateException e) {
+            throw new EJBException(e);
+        } finally {
+            close(session);
+        }
+    }
+    
+    
     /**
      * Subir el orden de una ficha de Unidad administrativa
      * @ejb.interface-method
@@ -1406,7 +1462,51 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-
+    
+    
+    /* Se crea este segundo método para que no influya en el resto del sistema el cambio realizado */
+    /**
+     * Borrar una ficha Unidad administrativa
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+     */
+    public void borrarFichaUA2(Long id) {
+        Session session = getSession();
+        try {
+            if (!getAccesoManager().tieneAccesoFichaUnidad(id)) {
+                throw new SecurityException("No tiene acceso a la relaci�n");
+            }
+            FichaUA fichaUA = (FichaUA) session.load(FichaUA.class, id);
+            final  Long idFicha = fichaUA.getFicha().getId();
+            final  String ceSeccion = fichaUA.getSeccion().getCodigoEstandard();
+            final  Long idUA = fichaUA.getUnidadAdministrativa().getId();
+            
+            boolean borrar = !(fichaUA.getFicha() instanceof Remoto); 
+            
+            fichaUA.getFicha().removeFichaUA(fichaUA);
+            fichaUA.getSeccion().removeFichaUA(fichaUA);
+            UnidadAdministrativa unidad = fichaUA.getUnidadAdministrativa();
+            if (unidad != null) {
+                unidad.removeFichaUA2(fichaUA);
+            }
+            
+            session.delete(fichaUA);
+            session.flush();
+            Ficha ficha = obtenerFicha(idFicha);
+            indexBorraFicha(ficha.getId());
+            indexInsertaFicha(ficha,null);
+            
+            if(borrar)
+                log.debug("Entro en borrar remoto ficha UA");
+            	//Actualizador.borrar(new FichaUATransferible(idUA,idFicha,ceSeccion));
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
+    
+    
     /**
      * Busca todas las Fichas con un texto determinado.
      * @ejb.interface-method

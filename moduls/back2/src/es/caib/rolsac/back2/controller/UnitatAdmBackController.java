@@ -1472,53 +1472,49 @@ public class UnitatAdmBackController extends PantallaBaseController
 	 * @return
 	 */
 	@RequestMapping(value = "/guardarFitxesUASeccio.do", method = POST)
-	public @ResponseBody Map<String, Object> guardarFitxesUASeccio(HttpServletRequest request) {
-
+	public @ResponseBody Map<String, Object> guardarFitxesUASeccio(HttpServletRequest request)
+	{
 		Map<String, Object> resultats = new HashMap<String, Object>();
-
+		
 		// Si alguno es nulo, error.
-		if ( request.getParameter("idUA") == null || request.getParameter("idSeccion") == null || request.getParameter("listaIdFichas") == null ) {
-
+		if (request.getParameter("idUA") == null
+				|| request.getParameter("idSeccion") == null
+				|| request.getParameter("listaIdFichas") == null) {
 			resultats.put("id", -2);
 			log.error("Falta alguno de los parámetros para completar el guardado de las fichas de la sección");
-
 			return resultats;
-
 		}
-
-		Long idUA = Long.parseLong( request.getParameter("idUA") );
-		Long idSeccion = Long.parseLong( request.getParameter("idSeccion") );
+		
+		Long idUA = Long.parseLong(request.getParameter("idUA"));
+		Long idSeccion = Long.parseLong(request.getParameter("idSeccion"));
 		String[] listaIdFichas = request.getParameter("listaIdFichas").split(",");
+		// Se debe controlar el caso en que nos devuelva "" en vez de null
+    	if (listaIdFichas.length == 1 && listaIdFichas[0].equals("")) {
+    		resultats.put("id", -2);
+			log.error("Falta alguno de los parámetros para completar el guardado de las fichas de la sección");
+    		return resultats;
+    	}
 		List<Long> listaIdFichasLong = new ArrayList<Long>();
-
+		
 		for ( String s : listaIdFichas )
 			listaIdFichasLong.add( Long.parseLong(s) );
-
+		
 		UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
-
 		try {
-
 			uaDelegate.actualizaFichasSeccionUA(idUA, idSeccion, listaIdFichasLong);
-
+			
 		} catch (DelegateException e) {
-
 			if (e.isSecurityException()) {
-
 				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
 				resultats.put("id", -1);
-
 			} else {
-
 				resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
 				resultats.put("id", -2);
 				log.error(ExceptionUtils.getStackTrace(e));
-
 			}
-
 		}
-
+		
 		return resultats;
-
 	}
 
 	/**

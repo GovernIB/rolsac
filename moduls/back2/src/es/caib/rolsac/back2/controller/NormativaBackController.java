@@ -710,6 +710,9 @@ public class NormativaBackController extends PantallaBaseController
 
         	//Guardar
         	Long idNormativa;
+        	/* NOTA IMPORTANTE PARA EL RENDIMIENTO */
+    		normativa.setProcedimientos(null);	// Con este null evitamos que hibernate vaya a actualizar tablas innecesarias
+    		/* FIN NOTA */
         	if (normativaLocal) {
         		idNormativa = normativaDelegate.grabarNormativaLocal((NormativaLocal)normativa, ua.getId());
         	} else {

@@ -483,7 +483,53 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements
 			close(session);
 		}
 	}
-
+	
+	
+	/**
+	 * @ejb.interface-method
+	 * @ejb.permission
+	 * role-name="${role.system},${role.admin},${role.super},${role.oper}"
+	 */
+	public void borrarDocumentos(Tramite tramite, List<DocumentTramit> documentos)
+	{
+		Session session = getSession();
+		try {
+			if (!getAccesoManager().tieneAccesoTramite(tramite.getId())) {
+				throw new SecurityException("No tiene acceso al documento");
+			}
+			
+			StringBuilder ids = new StringBuilder();
+			for (DocumentTramit document: documentos) {
+				document.getTramit().removeDocument(document);
+				if (ids.length() == 0) {
+					ids.append(document.getId().toString());
+				} else {
+					ids.append(", ");
+					ids.append(document.getId().toString());
+				}
+			}
+			
+			session.delete("from DocumentTramit as dt where dt.id in (" + ids + ")");
+			session.flush();
+			
+			for (int tipus = 0; tipus < 4; tipus++) {
+				List<DocumentTramit> docs = obtenirDocumentsSegonsTipus(session, tramite.getId(), tipus);
+				actualitzarDocumentsPerOrdreNatural(session, docs);
+			}
+			
+			if (null != tramite.getProcedimiento()) {
+				log.debug("Borrar Documento: Lanzo el actualizador");
+				Actualizador.actualizar(tramite,true);
+			}
+			
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+	
+	
 	/**
 	 * @ejb.interface-method
 	 * @ejb.permission 

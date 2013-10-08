@@ -1,6 +1,7 @@
 package org.ibit.rol.sac.persistence.delegate;
 
 import java.rmi.RemoteException;
+import java.util.List;
 import java.util.Map;
 
 import javax.ejb.CreateException;
@@ -25,7 +26,7 @@ import org.ibit.rol.sac.persistence.util.TramiteFacadeUtil;
 public class TramiteDelegateImpl implements StatelessDelegate, TramiteDelegateI {
 
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== Mï¿½TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
     /* (non-Javadoc)
@@ -142,6 +143,17 @@ public class TramiteDelegateImpl implements StatelessDelegate, TramiteDelegateI 
 	        } catch (RemoteException e) {
 	            throw new DelegateException(e);
 	        }	
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#borrarDocument(java.lang.Long)
+	 */
+	public void borrarDocumentos(Tramite tramite, List<DocumentTramit> documentos) throws DelegateException {
+		try {
+			getFacade().borrarDocumentos(tramite, documentos);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
 	}
 	
 	/* (non-Javadoc)

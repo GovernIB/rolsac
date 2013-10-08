@@ -258,6 +258,17 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
         }
     }
     
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.MateriaDelegateI#obtenerMateriasPorIDs(java.lang.Long)
+	 */
+    public List<Materia> obtenerMateriasPorIDs (String ids, String idioma) throws DelegateException {
+    	try {
+            return getFacade().obtenerMateriasPorIDs(ids, idioma);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
     public List<UnidadAdministrativa> listarUAsMateria(Long id)
 			throws DelegateException {
     	try {

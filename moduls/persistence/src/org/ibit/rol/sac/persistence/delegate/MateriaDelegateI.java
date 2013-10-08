@@ -65,6 +65,9 @@ public interface MateriaDelegateI {
 	public abstract Materia obtenerMateriaFichasProced(Long id)
 			throws DelegateException;
 	
+	public abstract List<Materia> obtenerMateriasPorIDs(String ids, String idioma)
+			throws DelegateException;
+	
 	public abstract List<UnidadAdministrativa> listarUAsMateria(Long id)
 			throws DelegateException;
 	

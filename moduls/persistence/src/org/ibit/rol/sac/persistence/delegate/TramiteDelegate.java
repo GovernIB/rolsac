@@ -1,5 +1,6 @@
 package org.ibit.rol.sac.persistence.delegate;
 
+import java.util.List;
 import java.util.Map;
 
 import org.ibit.rol.sac.model.DocumentTramit;
@@ -45,7 +46,11 @@ public class TramiteDelegate  {
 	public void borrarDocument(Long id) throws DelegateException {
 		impl.borrarDocument(id);
 	}
-
+	
+	public void borrarDocumentos(Tramite tramite, List<DocumentTramit> documentos) throws DelegateException {
+		impl.borrarDocumentos(tramite, documentos);
+	}
+	
 	public void borrarTaxa(Long id) throws DelegateException {
 		impl.borrarTaxa(id);
 	}

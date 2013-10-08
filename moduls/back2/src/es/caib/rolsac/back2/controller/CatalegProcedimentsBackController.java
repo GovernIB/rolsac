@@ -26,6 +26,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.CatalegDocuments;
 import org.ibit.rol.sac.model.Documento;
+import org.ibit.rol.sac.model.DocumentoResumen;
 import org.ibit.rol.sac.model.ExcepcioDocumentacio;
 import org.ibit.rol.sac.model.Familia;
 import org.ibit.rol.sac.model.HechoVital;
@@ -52,7 +53,7 @@ import org.ibit.rol.sac.model.dto.ProcedimientoNormativaDTO;
 import org.ibit.rol.sac.persistence.delegate.CatalegDocumentsDelegate;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
+import org.ibit.rol.sac.persistence.delegate.DocumentoResumenDelegate;
 import org.ibit.rol.sac.persistence.delegate.ExcepcioDocumentacioDelegate;
 import org.ibit.rol.sac.persistence.delegate.FamiliaDelegate;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalDelegate;
@@ -782,7 +783,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		String error = null;
 		
 		try {
-			
 			if ( request.getParameter("publicsObjectiu") == null || request.getParameter("publicsObjectiu").equals("") ) {
 				error = messageSource.getMessage("proc.error.falta.public", null, request.getLocale());
 				return result = new IdNomDTO(-3l, error);
@@ -835,6 +835,11 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				// Provisional, hasta que este activada la SEU --> procediment.setUrl(request.getParameter("item_url"));
 			}
 			
+			/* NOTA IMPORTANTE PARA EL RENDIMIENTO */
+			procediment.setDocumentos(null);
+			procediment.setTramites(null);
+			procediment.setHechosVitalesProcedimientos(null);
+			/* FIN NOTA */
 			Long procId = procedimentDelegate.grabarProcedimiento(procediment, procediment.getUnidadAdministrativa().getId());
 			
 			//Actualiza estadísticas
@@ -899,30 +904,13 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	 */
 	private ProcedimientoLocal guardarProcMateriar(HttpServletRequest request, boolean edicion, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld) throws NumberFormatException, DelegateException
 	{
-		if ( isModuloModificado("modulo_materias_modificado", request) ) {
-			if ( request.getParameter("materies") != null && !"".equals(request.getParameter("materies")) ) {
+		String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+		if (isModuloModificado("modulo_materias_modificado", request)) {
+			if (request.getParameter("materies") != null && !"".equals(request.getParameter("materies"))) {
 				MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
-				Set<Materia> materiesNoves = new HashSet<Materia>();
-				String[] codisMateriaNous = request.getParameter("materies").split(",");
-				
-				if (edicion) {
-					for (int i = 0; i < codisMateriaNous.length; i++) {
-						for (Materia materia : procedimentOld.getMaterias()) {
-							if (materia.getId().equals(Long.valueOf(codisMateriaNous[i]))) { //materia ya existente
-								materiesNoves.add(materia);
-								codisMateriaNous[i] = null;
-								break;
-								
-							}
-						}
-					}
-				}
-				for (String codiMateria: codisMateriaNous) {
-					if (codiMateria != null)
-						materiesNoves.add(materiaDelegate.obtenerMateria(Long.valueOf(codiMateria)));
-					
-					}
-				procediment.setMaterias(materiesNoves);
+				Set<Materia> materias = new HashSet<Materia>();
+				materias.addAll(materiaDelegate.obtenerMateriasPorIDs(request.getParameter("materies"), idioma));
+				procediment.setMaterias(materias);
 				
 			} else {
 				procediment.setMaterias(new HashSet<Materia>());
@@ -1144,51 +1132,54 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	 */
 	private ProcedimientoLocal guardarProcDocumentos(HttpServletRequest request, boolean edicion, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld) throws DelegateException
 	{
-		Enumeration<String> nomsParametres = request.getParameterNames();
-		Documento document;
-		DocumentoDelegate docDelegate = DelegateUtil.getDocumentoDelegate();
-		List<Documento> documents = new ArrayList<Documento>();
-		Map <String,String[]> actulitzadorMap = new HashMap<String, String[]>();
-		// obtenim  els documents i els seus ordres
-		while ( nomsParametres.hasMoreElements() ) {
-			String nomParameter = (String)nomsParametres.nextElement();
-			String[] elements = nomParameter.split("_");
-			if ( "documents".equals(elements[0]) && "id".equals(elements[1]) ) {
-				// En aquest cas, elements[2] es igual al id del document
-				Long id = ParseUtil.parseLong(request.getParameter(nomParameter));
-				if (id != null) {
-					document = docDelegate.obtenerDocumento(id);
-					documents.add(document);
-					// Se coge el orden de la web. Si se quisiesen poner del 0 al x, hacer que orden valga 0 e ir incrementandolo.
-					String[] orden = {request.getParameter("documents_orden_" + elements[2])};
-					actulitzadorMap.put("orden_doc" + id, orden);
-					
-				} else {
-					log.warn("S'ha rebut un id de document no n�meric: " + id);
-					
+		if (isModuloModificado("modulo_documents_modificado", request)) {
+			Enumeration<String> nomsParametres = request.getParameterNames();
+			DocumentoResumen documentResumen;
+			DocumentoResumenDelegate docDelegate = DelegateUtil.getDocumentoResumenDelegate();
+			List<Documento> documents = new ArrayList<Documento>();
+			Map <String,String[]> actulitzadorMap = new HashMap<String, String[]>();
+			// obtenim  els documents i els seus ordres
+			while ( nomsParametres.hasMoreElements() ) {
+				String nomParameter = (String)nomsParametres.nextElement();
+				String[] elements = nomParameter.split("_");
+				if ("documents".equals(elements[0]) && "id".equals(elements[1])) {
+					// En aquest cas, elements[2] es igual al id del document
+					Long id = ParseUtil.parseLong(request.getParameter(nomParameter));
+					if (id != null) {
+						documentResumen = docDelegate.obtenerDocumentoResumen(id);
+						Documento doc = new Documento();
+						doc.setId(documentResumen.getId());
+						doc.setFicha(documentResumen.getFicha());
+						doc.setOrden(documentResumen.getOrden());
+						doc.setProcedimiento(documentResumen.getProcedimiento());
+						doc.setTraduccionMap(documentResumen.getTraduccionMap());
+						documents.add(doc);
+						// Se coge el orden de la web. Si se quisiesen poner del 0 al x, hacer que orden valga 0 e ir incrementandolo.
+						String[] orden = {request.getParameter("documents_orden_" + elements[2])};
+						actulitzadorMap.put("orden_doc" + id, orden);
+					} else {
+						log.warn("S'ha rebut un id de document no n�meric: " + id);
+					}
 				}
 			}
-		}
-		// actualitzam ordres
-		docDelegate.actualizarOrdenDocs(actulitzadorMap);
-		// assignar els documents al procedimient i eliminar els que ja no estiguin seleccionats.
-		procediment.setDocumentos(documents);
-		if (edicion) {
-			List<Documento> docsOld = procedimentOld.getDocumentos();
-			for (Documento doc : documents) {
-				for (Iterator<Documento> it = docsOld.iterator(); it.hasNext(); ) {
-					Documento currentDoc = it.next();
-					if (currentDoc != null && currentDoc.getId().equals(doc.getId()))
-						it.remove();
-					
+			// actualitzam ordres
+			docDelegate.actualizarOrdenDocs(actulitzadorMap);
+			// assignar els documents al procedimient i eliminar els que ja no estiguin seleccionats.
+			procediment.setDocumentos(documents);
+			if (edicion) {
+				List<Documento> docsOld = procedimentOld.getDocumentos();
+				for (Documento doc : documents) {
+					for (Iterator<Documento> it = docsOld.iterator(); it.hasNext(); ) {
+						Documento currentDoc = it.next();
+						if (currentDoc != null && currentDoc.getId().equals(doc.getId()))
+							it.remove();
+					}
 				}
+				for (Documento doc: docsOld)
+					if (doc != null) docDelegate.borrarDocumento(doc.getId());
 			}
-			for (Documento doc: docsOld)
-				if (doc != null) docDelegate.borrarDocumento(doc.getId());
-			
 		}
 		return procediment;
-		
 	}
 	
 	/*

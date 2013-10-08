@@ -331,7 +331,28 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-
+    
+    /**
+     * Obtiene una secci�n determinada sin fichasUA.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public Seccion obtenerSeccionSinFichasUA(Long id) {
+        Session session = getSession();
+        try {
+            Seccion seccion = (Seccion) session.load(Seccion.class, id);
+            session.refresh(seccion);
+            Hibernate.initialize(seccion.getHijos());
+            Hibernate.initialize(seccion.getPadre());
+            return seccion;
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
+    
     /**
      * Lista de secciones raiz (nuevo backoffice).
      * 

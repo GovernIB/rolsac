@@ -102,7 +102,15 @@ public class SeccionDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
+    public Seccion obtenerSeccionSinFichasUA(Long id) throws DelegateException {
+        try {
+            return getFacade().obtenerSeccionSinFichasUA(id);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
     public ResultadoBusqueda listarSeccionesRaiz(int pagina, int resultats, String idioma) throws DelegateException {
     	try {
     		return getFacade().listarSeccionesRaiz(pagina, resultats, idioma);

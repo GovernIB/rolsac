@@ -195,7 +195,8 @@ public class TMAgrupacioMateriesController extends PantallaBaseController
     
     
     @RequestMapping(value = "/guardar.do", method = POST)
-    public ResponseEntity<String> guardarAgrupacioMateries(HttpSession session, HttpServletRequest request) {
+    public ResponseEntity<String> guardarAgrupacioMateries(HttpSession session, HttpServletRequest request)
+    {
 		/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
 		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la petici�n.
@@ -233,7 +234,7 @@ public class TMAgrupacioMateriesController extends PantallaBaseController
             
             AgrupacionMDelegate agrupacioMDelegate = DelegateUtil.getAgrupacionMDelegate();
             SeccionDelegate seccionDelegate = DelegateUtil.getSeccionDelegate();
-    		Seccion seccion = seccionDelegate.obtenerSeccion(codiSeccio);
+    		Seccion seccion = seccionDelegate.obtenerSeccionSinFichasUA(codiSeccio);
             
             AgrupacionMateria agrupacioMateria = new AgrupacionMateria();
             
@@ -271,27 +272,30 @@ public class TMAgrupacioMateriesController extends PantallaBaseController
 			List<MateriaAgrupacionM> materiesOld = agrupacioMateria.getMateriasAgrupacionM();
 			
 			if (agrupacioMateria.getMateriasAgrupacionM() != null || materiesForm.size() > 0) {
+				StringBuilder idsMateria = new StringBuilder();
 				// Recorrem el formulari
 				for (Iterator<String> iterator = materiesForm.iterator(); iterator.hasNext();) {
 					String nomParameter = (String)iterator.next();
 					String[] elements = nomParameter.split("_");
-					if (elements[0].equals("materia") && elements[1].equals("id")){
+					if (elements[0].equals("materia") && elements[1].equals("id")) {
 	                    //En aquest cas, elements[2] es igual al id del fetVital
-						
-						Long idMateriaForm = ParseUtil.parseLong(elements[2]);
-
-						// Consideram totes les mat�ries com a noves perqu� borrarem les antigues.
-						MateriaAgrupacionM materiaAgrupacionM = new MateriaAgrupacionM();
-
-						materiaAgrupacionM.setAgrupacion(agrupacioMateria);
-						materiaAgrupacionM.setMateria(materiaDelegate.obtenerMateria(idMateriaForm));
-						materiaAgrupacionM.setOrden(ParseUtil.parseInt(valoresForm.get("materia_orden_" + elements[2])));
-
-						materiesNew.add(materiaAgrupacionM);
+						if (idsMateria.length() == 0) {
+							idsMateria.append(elements[2]);
+						} else {
+							idsMateria.append(", ");
+							idsMateria.append(elements[2]);
+						}
 					}
 				}
+				List<Materia> materias = materiaDelegate.obtenerMateriasPorIDs(idsMateria.toString(), DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
+				for (Materia materia: materias) {
+					MateriaAgrupacionM materiaAgrupacionM = new MateriaAgrupacionM();
+					materiaAgrupacionM.setAgrupacion(agrupacioMateria);
+					materiaAgrupacionM.setMateria(materia);
+					materiaAgrupacionM.setOrden(ParseUtil.parseInt(valoresForm.get("materia_orden_" + materia.getId())));
+					materiesNew.add(materiaAgrupacionM);					
+				}
 			}
-			
 			
 			// Objectiu
 			agrupacioMateria.setMateriasAgrupacionM(materiesNew);
