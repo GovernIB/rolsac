@@ -121,9 +121,8 @@ public class DocumentBackController extends ArchivoController {
 				FileItem fileItem = ficherosForm.get("doc_arxiu_" + lang);
 				if ( fileItem != null  &&  fileItem.getSize() > 0 ) {
 
-					// nuevo fichero
-					Archivo archivo = ( docOld != null ) ? ( (TraduccionDocumento) docOld.getTraduccion(lang) ).getArchivo() : null;
-					tradDoc.setArchivo( UploadUtil.obtenerArchivo( archivo, fileItem ) );
+					// Nuevo archivo.
+					tradDoc.setArchivo(UploadUtil.obtenerArchivo(tradDoc.getArchivo(), fileItem));
 
 				} else if ( valoresForm.get("doc_arxiu_" + lang + "_delete") != null  &&  !"".equals( valoresForm.get("doc_arxiu_" + lang + "_delete") ) ) {
 
