@@ -678,7 +678,72 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         
         return procedimiento;
     }
+    
+    
+    /**
+     * Obtiene un procedimiento Local.
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public ProcedimientoLocal obtenerProcedimientoNewBack(Long id)
+    {
+    	Session session = getSession();
+    	ProcedimientoLocal procedimiento = null;
+    	try {
+    		procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, id);
+    		if (visible(procedimiento)) {
+    			Hibernate.initialize(procedimiento.getDocumentos());
+    			Hibernate.initialize(procedimiento.getMaterias());
+    			Hibernate.initialize(procedimiento.getPublicosObjetivo());
+    			Hibernate.initialize(procedimiento.getNormativas());
+    			Hibernate.initialize(procedimiento.getUnidadAdministrativa());
+    			Hibernate.initialize(procedimiento.getUnidadAdministrativa().getHijos());
+    			Hibernate.initialize(procedimiento.getOrganResolutori());
+    			if (procedimiento.getOrganResolutori() != null) {
+    				Hibernate.initialize( procedimiento.getOrganResolutori().getHijos() );
+    			}
+    			Hibernate.initialize(procedimiento.getUnidadAdministrativa().getNormativas());
+    			Hibernate.initialize(procedimiento.getUnidadAdministrativa().getEdificios());
+    			Hibernate.initialize(procedimiento.getTramites());
+    			Hibernate.initialize(procedimiento.getHechosVitalesProcedimientos());
+    			Hibernate.initialize(procedimiento.getIniciacion());
+    			Hibernate.initialize(procedimiento.getFamilia());
+    		} else {
+    			throw new SecurityException("El procedimiento no es visible");
+    		}
+    		
+    	} catch (HibernateException he) {
+    		throw new EJBException(he);
+    		
+    	} finally {
+    		close(session);
+    		
+    	}
+    	
+    	// Ordenamos los documentos por el campo orden (si nulo, ordena por el campo id)
+        List procs = new ArrayList(procedimiento.getDocumentos());
+        Collections.sort(procs, new Documento());
+	  	procedimiento.setDocumentos(procs);
         
+	    // Ordenamos las materias por el campo id
+	  	List mats = new ArrayList(procedimiento.getMaterias());
+	  	Collections.sort(mats, new Materia());
+	  	procedimiento.setMaterias(new HashSet<Materia>(mats));
+	  	
+	  	//Ordenamos las normativas por el campo id
+	  	List norms = new ArrayList(procedimiento.getNormativas());
+	  	Collections.sort(norms, new Normativa());
+	  	procedimiento.setNormativas(new HashSet<Normativa>(norms));
+	  	
+	    //Ordenamos los Hechos vitales procedimientos por el campo orden (si nulo, ordena por el campo id)
+	  	List hechosVitales = new ArrayList(procedimiento.getHechosVitalesProcedimientos());
+	  	Collections.sort(hechosVitales);
+	  	procedimiento.setHechosVitalesProcedimientos(new HashSet<HechoVitalProcedimiento>(hechosVitales));
+	  	
+	  	return procedimiento;
+    }
+    
+    
     /**
      * Obtiene un procedimiento Local.{PORMAD}
      * @ejb.interface-method

@@ -505,7 +505,6 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements
 			}
 			
 			session.delete("from DocumentTramit as dt where dt.id in (" + ids + ")");
-			session.flush();
 			
 			for (int tipus = 0; tipus < 4; tipus++) {
 				List<DocumentTramit> docs = obtenirDocumentsSegonsTipus(session, tramite.getId(), tipus);
@@ -516,6 +515,11 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements
 				log.debug("Borrar Documento: Lanzo el actualizador");
 				Actualizador.actualizar(tramite,true);
 			}
+			
+			session.flush();
+			getSessionFactory().evictCollection("org.ibit.rol.sac.model.Tramite.docsInformatius", tramite.getId());
+			getSessionFactory().evictCollection("org.ibit.rol.sac.model.Tramite.formularios", tramite.getId());
+			getSessionFactory().evictCollection("org.ibit.rol.sac.model.Tramite.docsRequerits", tramite.getId());
 			
 		} catch (HibernateException he) {
 			throw new EJBException(he);

@@ -10,6 +10,7 @@ import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
 import net.sf.hibernate.Criteria;
+import net.sf.hibernate.FetchMode;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
@@ -544,8 +545,40 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
 		
 		return resultado;
 	}
-
-    /**
+	
+	/**
+     * Busca todos los {@link HechoVital} cuyo id se encuentre en la entrada
+     * 
+     * @param busqueda
+     * @param idioma
+     * @return lista de {@link HechoVital}
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+	public List buscarPorIds(List<Long> ids)
+	{
+		List<HechoVital> resultado;
+		if (ids == null || ids.size() == 0)
+    		return Collections.EMPTY_LIST;
+    	
+    	Session session = getSession();
+    	try {
+    		Criteria criteria = session.createCriteria(HechoVital.class);
+    		criteria.setFetchMode("traducciones", FetchMode.LAZY);
+    		criteria.add(Expression.in("id", ids));
+    		resultado = criteria.list();
+    		for (HechoVital hv: resultado)
+    			Hibernate.initialize(hv.getHechosVitalesProcedimientos());
+    		
+    		return resultado; 
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+	}
+	
+	/**
      * Asigna a un hecho vital un nuevo orden y reordena los elementos afectados.
      * 
      * @ejb.interface-method

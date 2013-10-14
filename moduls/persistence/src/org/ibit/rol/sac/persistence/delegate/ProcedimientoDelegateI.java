@@ -21,7 +21,10 @@ public interface ProcedimientoDelegateI {
 
 	public abstract ProcedimientoLocal obtenerProcedimiento(Long id)
 			throws DelegateException;
-
+	
+	public abstract ProcedimientoLocal obtenerProcedimientoNewBack(Long id)
+			throws DelegateException;
+	
 	public abstract List buscarProcedimientos(Map param, Map trad)
 			throws DelegateException;
 

@@ -53,7 +53,6 @@ import org.ibit.rol.sac.model.dto.ProcedimientoNormativaDTO;
 import org.ibit.rol.sac.persistence.delegate.CatalegDocumentsDelegate;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
 import org.ibit.rol.sac.persistence.delegate.DocumentoResumenDelegate;
 import org.ibit.rol.sac.persistence.delegate.ExcepcioDocumentacioDelegate;
 import org.ibit.rol.sac.persistence.delegate.FamiliaDelegate;
@@ -401,7 +400,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			Long id = new Long(request.getParameter("id"));
 
 			ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
-			ProcedimientoLocal proc = procedimientoDelegate.obtenerProcedimiento(id);
+			ProcedimientoLocal proc = procedimientoDelegate.obtenerProcedimientoNewBack(id);
 
 			resultats.put("item_id", proc.getId());
 			resultats.put("item_codigo_pro", proc.getSignatura());			
@@ -666,34 +665,23 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	}
 
 	@RequestMapping(value = "/guardar.do", method = POST)
-	public @ResponseBody IdNomDTO guardarProcediment(HttpSession session, HttpServletRequest request) {
-
-		IdNomDTO result = null;
-		String error = null;
-		
+	public @ResponseBody IdNomDTO guardarProcediment(HttpSession session, HttpServletRequest request)
+	{
 		/* Trazas temporales para detectar problemas del rendimiento*/
     	log.info("1.0 Inició del guardado de un procedimiento");
 	    Date startTraceGeneral = new Date();
     	/* Fin */
-
+	    
+	    IdNomDTO result = null;
+		String error = null;
+		
 		try {
 			String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-
-			//			UnidadAdministrativa ua = (UnidadAdministrativa) getUAFromSession(session);
-			//			if (ua == null) {
-			//				error = messageSource.getMessage("proc.error.falta.ua", null, request.getLocale());
-			//				result = new IdNomDTO(-3l, error);
-			//			} else {
-
-			if ( request.getParameter("publicsObjectiu") == null || request.getParameter("publicsObjectiu").equals("") ) {
-
+			if (request.getParameter("publicsObjectiu") == null || request.getParameter("publicsObjectiu").equals("")) {
 				error = messageSource.getMessage("proc.error.falta.public", null, request.getLocale());
 				result = new IdNomDTO(-3l, error);
-
-			}
-
-			else {
-
+				
+			} else {
 				ProcedimientoDelegate procedimentDelegate = DelegateUtil.getProcedimientoDelegate();
 				ProcedimientoLocal procediment = new ProcedimientoLocal();
 				ProcedimientoLocal procedimentOld;
@@ -701,7 +689,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			    boolean edicion;
 				try {
 					Long id = Long.parseLong(request.getParameter("item_id"));
-					procedimentOld = procedimentDelegate.obtenerProcedimiento(id);
+					procedimentOld = procedimentDelegate.obtenerProcedimientoNewBack(id);
 					edicion = true;
 				} catch (NumberFormatException nfe) {
 					procedimentOld = null;
@@ -744,160 +732,135 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				/* Para hacer menos accesos a BBDD se comprueba si es edicion o no. 
 				 * En el primer caso es bastante probable que se repitan la mayoria de public objectiu.
 				 */
-				if ( isModuloModificado("modul_public_modificat", request) ) {
-
-					if ( request.getParameter("publicsObjectiu") != null && !"".equals(request.getParameter("publicsObjectiu")) ) {
-
+				if (isModuloModificado("modul_public_modificat", request)) {
+					if (request.getParameter("publicsObjectiu") != null && !"".equals(request.getParameter("publicsObjectiu"))) {
 						PublicoObjetivoDelegate publicObjDelegate = DelegateUtil.getPublicoObjetivoDelegate();
 						Set<PublicoObjetivo> publicsNous = new HashSet<PublicoObjetivo>();
 						String[] codisPublicsNous = request.getParameter("publicsObjectiu").split(",");
-
+						
 						if (edicion) {
 							for (int i = 0; i < codisPublicsNous.length; i++) {
-								for (PublicoObjetivo pob : procedimentOld.getPublicosObjetivo()) {
+								for (PublicoObjetivo pob: procedimentOld.getPublicosObjetivo()) {
 									if (pob.getId().equals(Long.valueOf(codisPublicsNous[i]))) { // Público objetivo ya existente
 										publicsNous.add(pob);
 										codisPublicsNous[i] = null;
 										break;
 									}
-								}                            
-							}                         
-						}                    
-
-						for (String codiPob : codisPublicsNous) {
-							if (codiPob != null){
-								publicsNous.add(publicObjDelegate.obtenerPublicoObjetivo(Long.valueOf(codiPob)));
-							}                        
+								}
+							}
 						}
-
+						for (String codiPob : codisPublicsNous) {
+							if (codiPob != null)
+								publicsNous.add(publicObjDelegate.obtenerPublicoObjetivo(Long.valueOf(codiPob)));
+						}
 						procediment.setPublicosObjetivo(publicsNous);
-
+						
 					} else {
-
 						procediment.setPublicosObjetivo(new HashSet<PublicoObjetivo>());
-
 					}
-
 				}
 				// Fin Public Objectiu
 		    	
 				// Actualizar la lista de Trámites
 				String tramitsProcediment = request.getParameter("tramitsProcediment");
 				TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
-
-				if ( !"".equals(tramitsProcediment) && edicion ) {
-
+				if (!"".equals(tramitsProcediment) && edicion) {
 					List<Long> listaTramitesBorrar = new ArrayList<Long>();
-					List<Tramite> tramitesNuevos = new ArrayList<Tramite>();                	
+					List<Tramite> tramitesNuevos = new ArrayList<Tramite>();
 					String[] codigosTramitesNuevos = tramitsProcediment.split(",");
-
 					List<Tramite> listaTramitesOld = procedimentOld.getTramites();
-
 					for (int i = 0; i < codigosTramitesNuevos.length; i++) {
-
-						for ( Tramite tramite : listaTramitesOld ) {  
-
-							if ( !"".equals(codigosTramitesNuevos[i]) && tramite != null && tramite.getId().equals(Long.valueOf(codigosTramitesNuevos[i])) ) {
+						for (Tramite tramite: listaTramitesOld) {
+							if (!"".equals(codigosTramitesNuevos[i]) && tramite != null && tramite.getId().equals(Long.valueOf(codigosTramitesNuevos[i]))) {
 								tramitesNuevos.add(tramite);
 								codigosTramitesNuevos[i] = null;
-
 								break;
 							}
-
 						}
-
 					}
-
-					//Eliminar los que se han quitado de la lista
-					for ( Tramite tramite : listaTramitesOld ) {                		
-						if (!tramitesNuevos.contains(tramite) && tramite != null)                    				
+					
+					// Eliminar los que se han quitado de la lista
+					for (Tramite tramite : listaTramitesOld) {
+						if (!tramitesNuevos.contains(tramite) && tramite != null)
 							listaTramitesBorrar.add(tramite.getId());
 					}
-
-					for (Long id : listaTramitesBorrar ) {
+					
+					for (Long id: listaTramitesBorrar) {
 						//procediment.removeTramite( tramiteDelegate.obtenerTramite(id) );
 						DelegateUtil.getProcedimientoDelegate().eliminarTramite(id, procediment.getId());
 						tramiteDelegate.borrarTramite(id);
 					}
-
-					//Crear los nuevos
+					
+					// Crear los nuevos
 					if (!"".equals(codigosTramitesNuevos)) {
-						for (String codigoTramite : codigosTramitesNuevos) {
-							if ( codigoTramite != null ) {
-								for ( Tramite tramite : procedimentOld.getTramites() ) {
-									if ( !tramitesNuevos.contains(tramite) ) 
-										tramitesNuevos.add(tramite);                					
+						for (String codigoTramite: codigosTramitesNuevos) {
+							if (codigoTramite != null) {
+								for (Tramite tramite : procedimentOld.getTramites()) {
+									if (!tramitesNuevos.contains(tramite))
+										tramitesNuevos.add(tramite);
 								}
-							} 
+							}
 						}
-					}                	                   	
-
+					}
+					
 					// Actualizamos el orden de la lista de trámites
 					HashMap<String, String[]> actualizadorTramites = new HashMap<String, String[]>();
-
-					for (Tramite tramite : tramitesNuevos ) {
+					for (Tramite tramite: tramitesNuevos) {
 						String[] orden = { request.getParameter("tramit_orden_" + tramite.getId()) };
-						actualizadorTramites.put("orden" + tramite.getId(), orden );
+						actualizadorTramites.put("orden" + tramite.getId(), orden);
 					}
-
-					DelegateUtil.getProcedimientoDelegate().actualizarOrdenTramites(actualizadorTramites);                	
+					DelegateUtil.getProcedimientoDelegate().actualizarOrdenTramites(actualizadorTramites);
 					procediment.setTramites(tramitesNuevos);
-
+					
 				} else if (edicion) {
-
-					for (Tramite tramite : procediment.getTramites() ) {
+					for (Tramite tramite: procediment.getTramites()) {
 						procedimentDelegate.eliminarTramite(tramite.getId(), procediment.getId());
 						tramiteDelegate.borrarTramite(tramite.getId());
 					}
-
 					procediment.setTramites(null);
-
-				}               
-				//Fin trámites
-		    	
+				}
+				// Fin trámites
+				
 			    // Hechos vitales
-				if ( request.getParameter("fetsVitals") != null && edicion && isModuloModificado("modulo_hechos_modificado", request) ) {
-
-					String[] codisFetsVitals = request.getParameter("fetsVitals").split(",");
-					HechoVitalDelegate hvDelegate = DelegateUtil.getHechoVitalDelegate();
-					HechoVitalProcedimientoDelegate hvpDelegate = DelegateUtil.getHechoVitalProcedimientoDelegate();
-
-					// Eliminamos los hecho vital procedimiento existentes
+			    if (request.getParameter("fetsVitals") != null && edicion && isModuloModificado("modulo_hechos_modificado", request)) {
+			    	String[] codisFetsVitals = request.getParameter("fetsVitals").split(",");
+			    	HechoVitalDelegate hvDelegate = DelegateUtil.getHechoVitalDelegate();
+			    	HechoVitalProcedimientoDelegate hvpDelegate = DelegateUtil.getHechoVitalProcedimientoDelegate();
+			    	
+			    	// Eliminamos los hecho vital procedimiento existentes
 					List<Long> hvpIds = new LinkedList<Long>();
 					if (procediment.getHechosVitalesProcedimientos() != null) {
-						for (HechoVitalProcedimiento hvp: procediment.getHechosVitalesProcedimientos()) {
+						for (HechoVitalProcedimiento hvp: procediment.getHechosVitalesProcedimientos())
 							hvpIds.add(hvp.getId());
-						}
+						
 						hvpDelegate.borrarHechoVitalProcedimientos(hvpIds);
 					}
 					procediment.setHechosVitalesProcedimientos(new HashSet<HechoVitalProcedimiento>());
-
-					// Guardamos los nuevos
+					
 					Set<HechoVitalProcedimiento> hvpsAGuardar = new HashSet<HechoVitalProcedimiento>();
-					for (int i = 0; i < codisFetsVitals.length; i++) {
-						Long hvId = ParseUtil.parseLong(codisFetsVitals[i]);
-						if (hvId != null) {
-							HechoVitalProcedimiento hvp = null;
-							HechoVital hv = hvDelegate.obtenerHechoVital(hvId);
-							hvp = new HechoVitalProcedimiento();
-							hvp.setProcedimiento(procediment);
-							hvp.setHechoVital(hv);
-							int maxOrden = 0;
-							for (HechoVitalProcedimiento hechoVitalProcedimiento: (List<HechoVitalProcedimiento>) hv.getHechosVitalesProcedimientos()) {
-								if (hechoVitalProcedimiento != null) {
-									if (maxOrden < hechoVitalProcedimiento.getOrden())
-										maxOrden = hechoVitalProcedimiento.getOrden();
-								}
+			    	List<Long> ids = new ArrayList<Long>();
+	    			for (String id: request.getParameter("fetsVitals").split(","))
+	    				ids.add(Long.parseLong(id));
+	    			
+	    			List<HechoVital> listHV = hvDelegate.buscarPorIds(ids);
+			    	for (HechoVital hv: listHV) {
+			    		HechoVitalProcedimiento hvp = new HechoVitalProcedimiento();
+			    		hvp.setProcedimiento(procediment);
+						hvp.setHechoVital(hv);
+						int maxOrden = 0;
+						for (HechoVitalProcedimiento hechoVitalProcedimiento: (List<HechoVitalProcedimiento>) hv.getHechosVitalesProcedimientos()) {
+							if (hechoVitalProcedimiento != null) {
+								if (maxOrden < hechoVitalProcedimiento.getOrden())
+									maxOrden = hechoVitalProcedimiento.getOrden();
 							}
-							maxOrden++;
-							hvp.setOrden(maxOrden);
-
-							hvpsAGuardar.add(hvp);
 						}
-					}
+						maxOrden++;
+						hvp.setOrden(maxOrden);
+						hvpsAGuardar.add(hvp);
+			    	}
+					
 					hvpDelegate.grabarHechoVitalProcedimientos(hvpsAGuardar);
-					procediment.setHechosVitalesProcedimientos(hvpsAGuardar); 
-
+					procediment.setHechosVitalesProcedimientos(hvpsAGuardar);
 				}
 				// Fin Hechos vitales
 		    	
@@ -905,42 +868,22 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				/* Para hacer menos accesos a BBDD se comprueba si es edicion o no. 
 				 * En el primer caso es bastante probable que se repitan la mayoria de normativas.
 				 */
-				if ( isModuloModificado("modulo_normativas_modificado",request) ) {
-
-					if ( request.getParameter("normatives") != null && !"".equals(request.getParameter("normatives")) ) {
-
-						NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
-						Set<Normativa> normativesNoves = new HashSet<Normativa>();
-						String[] codisNormativesNoves= request.getParameter("normatives").split(",");
-
-						if (edicion) {
-							for (int i = 0; i < codisNormativesNoves.length; i++) {
-								for (Normativa normativa: procedimentOld.getNormativas()) {
-									if (normativa.getId().equals(Long.valueOf(codisNormativesNoves[i]))) { // normativa ya existente
-										normativesNoves.add(normativa);
-										codisNormativesNoves[i] = null;
-										break;
-									}
-								}                            
-							}                         
-						}
-
-						for (String codiNormativa: codisNormativesNoves) {
-							if (codiNormativa != null) {
-								normativesNoves.add(normativaDelegate.obtenerNormativa(Long.valueOf(codiNormativa)));
-							}                        
-						}
-
-						procediment.setNormativas(normativesNoves); 
-
-					} else {
-
-						procediment.setNormativas(new HashSet<Normativa>());
-
-					}
-
-				}
-				// Fin normativas
+		    	if (isModuloModificado("modulo_normativas_modificado",request)) {
+		    		if (request.getParameter("normatives") != null && !"".equals(request.getParameter("normatives"))) {
+		    			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
+		    			Set<Normativa> normativas = new HashSet<Normativa>();
+		    			List<Long> ids = new ArrayList<Long>();
+		    			for (String id: request.getParameter("normatives").split(","))
+		    				ids.add(Long.parseLong(id));
+		    			
+		    			normativas.addAll(normativaDelegate.buscarNormativas(ids));
+		    			procediment.setNormativas(normativas);
+		    			
+		    		} else {
+		    			procediment.setNormativas(new HashSet<Normativa>());
+		    		}
+		    	}
+		    	// Fin normativas
 		    	
 		    	// Documents
 				if (isModuloModificado("modulo_documents_modificado", request)) {
@@ -951,13 +894,10 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 					Map <String,String[]> actulitzadorMap = new HashMap<String, String[]>();
 
 					// obtenim  els documents i els seus ordres
-					while ( nomsParametres.hasMoreElements() ) {
-
-						String nomParameter = (String)nomsParametres.nextElement();                    
+					while (nomsParametres.hasMoreElements()) {
+						String nomParameter = (String)nomsParametres.nextElement();
 						String[] elements = nomParameter.split("_");
-
-						if ( "documents".equals(elements[0]) && "id".equals(elements[1]) ) {
-
+						if ("documents".equals(elements[0]) && "id".equals(elements[1])) {
 							// En aquest cas, elements[2] es igual al id del document
 							Long id = ParseUtil.parseLong(request.getParameter(nomParameter));
 							if (id != null) {
@@ -976,139 +916,115 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 							} else {
 								log.warn("S'ha rebut un id de document no n�meric: " + id);
 							}
-
 						}
-
 					}
-
+					
 					// actualitzam ordres
 					docDelegate.actualizarOrdenDocs(actulitzadorMap);
-
+					
 					// assignar els documents al procedimient i eliminar els que ja no estiguin seleccionats.
 					procediment.setDocumentos(documents);
 					if (edicion) {
-
-						List<Documento> docsOld = procedimentOld.getDocumentos();                                    
-
-						for(Documento doc : documents){
-							for (Iterator<Documento> it = docsOld.iterator(); it.hasNext(); ){
+						List<Documento> docsOld = procedimentOld.getDocumentos();
+						for (Documento doc: documents) {
+							for (Iterator<Documento> it = docsOld.iterator(); it.hasNext();){
 								Documento currentDoc = it.next();
-								if (currentDoc != null && currentDoc.getId().equals(doc.getId())){
+								if (currentDoc != null && currentDoc.getId().equals(doc.getId())) {
 									it.remove();
 								}
 							}
-						}                    
-
-						for (Documento doc: docsOld){
+						}
+						for (Documento doc: docsOld) {
 							if (doc != null) docDelegate.borrarDocumento(doc.getId());
 						}
-
 					}
 				}
 				// Fi documents
-
-				// Idiomas
+				
+			    // Idiomas
 				TraduccionProcedimientoLocal tpl;
 				IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
 				List<String> langs = idiomaDelegate.listarLenguajes();
-
-				for (String lang : langs) {
-
+				for (String lang: langs) {
 					if (edicion) {
-
-						tpl = (TraduccionProcedimientoLocal)procedimentOld.getTraduccion(lang);
-						if (tpl == null) {
+						tpl = (TraduccionProcedimientoLocal) procedimentOld.getTraduccion(lang);
+						if (tpl == null)
 							tpl = new TraduccionProcedimientoLocal();
-						}
-
+						
 					} else {
-
 						tpl = new TraduccionProcedimientoLocal();
-
 					}
-
-					tpl.setNombre( RolUtil.limpiaCadena(request.getParameter("item_nom_" + lang)) );
-					tpl.setDestinatarios( RolUtil.limpiaCadena(request.getParameter("item_destinataris_" + lang)) );
-					tpl.setResumen( RolUtil.limpiaCadena(request.getParameter("item_objecte_" + lang)) );
-					tpl.setResultat( RolUtil.limpiaCadena(request.getParameter("item_resultat_" + lang)) );
-					tpl.setResolucion( RolUtil.limpiaCadena(request.getParameter("item_resolucio_" + lang)) );
-					tpl.setNotificacion( RolUtil.limpiaCadena(request.getParameter("item_notificacio_" + lang)) );
-					tpl.setSilencio( RolUtil.limpiaCadena(request.getParameter("item_silenci_" + lang)) );
-					tpl.setObservaciones( RolUtil.limpiaCadena(request.getParameter("item_observacions_" + lang)) );
-					tpl.setPlazos( RolUtil.limpiaCadena(request.getParameter("item_presentacio_" + lang)) );
-					tpl.setLugar( RolUtil.limpiaCadena(request.getParameter("item_lloc_" + lang)) );
-
+					
+					tpl.setNombre(RolUtil.limpiaCadena(request.getParameter("item_nom_" + lang)));
+					tpl.setDestinatarios(RolUtil.limpiaCadena(request.getParameter("item_destinataris_" + lang)));
+					tpl.setResumen(RolUtil.limpiaCadena(request.getParameter("item_objecte_" + lang)));
+					tpl.setResultat(RolUtil.limpiaCadena(request.getParameter("item_resultat_" + lang)));
+					tpl.setResolucion(RolUtil.limpiaCadena(request.getParameter("item_resolucio_" + lang)));
+					tpl.setNotificacion(RolUtil.limpiaCadena(request.getParameter("item_notificacio_" + lang)));
+					tpl.setSilencio(RolUtil.limpiaCadena(request.getParameter("item_silenci_" + lang)));
+					tpl.setObservaciones(RolUtil.limpiaCadena(request.getParameter("item_observacions_" + lang)));
+					tpl.setPlazos(RolUtil.limpiaCadena(request.getParameter("item_presentacio_" + lang)));
+					tpl.setLugar(RolUtil.limpiaCadena(request.getParameter("item_lloc_" + lang)));
+					
 					procediment.setTraduccion(lang, tpl);
-
 				}
 				// Fin idiomas
-
-				try {
-
-					Integer validacion = Integer.parseInt(request.getParameter("item_estat"));
+		    	
+		    	try {
+		    		Integer validacion = Integer.parseInt(request.getParameter("item_estat"));
 					// Comprobar que no se haya cambiado la validacion/estado siendo operador
 					if (request.isUserInRole("sacoper") && procedimentOld != null && !procedimentOld.getValidacion().equals(validacion)) {
 						throw new DelegateException(new SecurityException());
 					}
 					procediment.setValidacion(validacion);
-
+					
 				} catch (NumberFormatException e) {
-
 					error = messageSource.getMessage("proc.error.estat.incorrecte", null, request.getLocale());
 					throw new NumberFormatException();
-
 				}
-
-				procediment.setSignatura(request.getParameter("item_codigo_pro"));
-
-				if (!StringUtils.isEmpty(request.getParameter("item_data_publicacio"))) {
-					Date data_publicacio = DateUtils.parseDate(request.getParameter("item_data_publicacio"));
-
-					if (data_publicacio == null) 
-						throw new ParseException("error.data_publicacio", 0);
-
-					procediment.setFechaPublicacion(data_publicacio);
-				}
-
-				if (!StringUtils.isEmpty(request.getParameter("item_data_caducitat"))) {
-					Date data_caducitat = DateUtils.parseDate(request.getParameter("item_data_caducitat"));
-
-					if (data_caducitat == null) 
-						throw new ParseException("error.data_caducitat", 0);
-
-					procediment.setFechaCaducidad(data_caducitat);
-				}
-
-				// procediment.setFechaActualizacion(new Date()); // lo hace el facade automaticamente.
-
-				try {
-
+		    	
+		    	procediment.setSignatura(request.getParameter("item_codigo_pro"));
+		    	
+		    	if (!StringUtils.isEmpty(request.getParameter("item_data_publicacio"))) {
+		    		Date data_publicacio = DateUtils.parseDate(request.getParameter("item_data_publicacio"));
+		    		if (data_publicacio == null)
+		    			throw new ParseException("error.data_publicacio", 0);
+		    		
+		    		procediment.setFechaPublicacion(data_publicacio);
+		    	}
+		    	
+		    	if (!StringUtils.isEmpty(request.getParameter("item_data_caducitat"))) {
+		    		Date data_caducitat = DateUtils.parseDate(request.getParameter("item_data_caducitat"));
+		    		if (data_caducitat == null)
+		    			throw new ParseException("error.data_caducitat", 0);
+		    		
+		    		procediment.setFechaCaducidad(data_caducitat);
+		    	}
+		    	
+		    	// procediment.setFechaActualizacion(new Date()); // lo hace el facade automaticamente.
+		    	
+		    	try {
 					Long iniciacionId = Long.parseLong(request.getParameter("item_iniciacio"));
 					IniciacionDelegate iDelegate = DelegateUtil.getIniciacionDelegate();
 					Iniciacion iniciacion = iDelegate.obtenerIniciacion(iniciacionId);
 					procediment.setIniciacion(iniciacion);
-
+					
 				} catch (NumberFormatException e) {
-
 					error = messageSource.getMessage("proc.error.formaIniciacio.incorrecta", null, request.getLocale());
 					throw new NumberFormatException();
-
 				}
-
+		    	
 				try {
-
 					Long familiaId = Long.parseLong(request.getParameter("item_familia"));
 					FamiliaDelegate fDelegate = DelegateUtil.getFamiliaDelegate();
 					Familia familia = fDelegate.obtenerFamilia(familiaId);
 					procediment.setFamilia(familia);
-
+					
 				} catch (NumberFormatException e) {
-
 					error = messageSource.getMessage("proc.error.familia.incorrecte", null, request.getLocale());
 					throw new NumberFormatException();
-
 				}
-
+				
 				procediment.setResponsable(request.getParameter("item_responsable"));
 				/* Provisional, hasta que este activada la SEU */
 				//procediment.setTramite(request.getParameter("item_tramite"));
@@ -1118,62 +1034,52 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				if (procedimentOld != null)
 					procediment.setUrl(procedimentOld.getUrl());
 				/*---------------------------------------------*/
-
+				
 				// TODO: Implementar setPublico()
 				// TODO: ¿Seguro? Ya existe el método public void setPublicosObjetivo(Set<PublicoObjetivo> publicosObjetivo)
 				// procediment.setPublico(request.getParameter("item_public_objectiu"));
-
+				
 				try {
-
 					String versionStr = request.getParameter("item_version");
 					if (versionStr != null && !"".equals(versionStr)) {
 						Long version = Long.parseLong(versionStr);
 						procediment.setVersion(version);
+						
 					} else { /* Provisional, hasta que este activada la SEU */
 						if (procedimentOld != null)
 							procediment.setVersion(procedimentOld.getVersion());
 					}
-
+					
 				} catch (NumberFormatException e) {
-
 					error = messageSource.getMessage("proc.error.versio.incorrecte", null, request.getLocale());
 					throw new NumberFormatException();
-
 				}
-
+				
 				if (!"".equals(request.getParameter("item_organ_id"))) {
-
 					try {
-
 						Long organId = Long.parseLong(request.getParameter("item_organ_id"));
 						UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
 						UnidadAdministrativa organ = uaDelegate.obtenerUnidadAdministrativa(organId);
 						procediment.setOrganResolutori(organ);
-
+						
 					} catch (NumberFormatException e) {
-
 						error = messageSource.getMessage("proc.error.organ.incorrecte", null, request.getLocale());
 						throw new NumberFormatException();
-
 					}
-
 				}
-
+				
 				try {
-
 					Long organRespID = Long.parseLong(request.getParameter("item_organ_responsable_id"));
 					UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
 					UnidadAdministrativa organResp = uaDelegate.obtenerUnidadAdministrativa(organRespID);
 					procediment.setUnidadAdministrativa(organResp);
-
+					
 				} catch (NumberFormatException e) {
-
 					error = messageSource.getMessage("proc.error.organ.responsable.incorrecte", null, request.getLocale());
 					throw new NumberFormatException();
-
 				}
-
-				procediment.setTaxa("on".equalsIgnoreCase(request.getParameter("item_taxa")) ? "1" : "0");
+		    	
+		    	procediment.setTaxa("on".equalsIgnoreCase(request.getParameter("item_taxa")) ? "1" : "0");
 				procediment.setIndicador("on".equalsIgnoreCase(request.getParameter("item_fi_vida_administrativa")) ? "1" : "0");
 				procediment.setVentanillaUnica("on".equalsIgnoreCase(request.getParameter("item_finestreta_unica")) ? "1" : "0");
 				procediment.setInfo(request.getParameter("item_notes"));
@@ -1213,7 +1119,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		}
 		
 		/* Trazas temporales para detectar problemas del rendimiento*/
-        long execTime = new Date().getTime() - startTraceGeneral.getTime();
+		long execTime = new Date().getTime() - startTraceGeneral.getTime();
     	log.info("1.0 Fin del guardado de una ficha, tiempo total: " + execTime + " milisegundos.");
     	/* Fin */
 		return result;

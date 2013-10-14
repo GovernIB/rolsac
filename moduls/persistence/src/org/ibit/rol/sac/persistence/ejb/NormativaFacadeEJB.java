@@ -425,32 +425,23 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
         }
 
         return aux;
-    }    
-
+    }
+    
     /**
-     * Busca todas las Normativas con un texto determinado.
+     * Busca todas las Normativas por ids
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public List buscarNormativas(String texto) {
-        IndexerDelegate delegate = DelegateUtil.getIndexerDelegate();
-        Long[] ids;
-        try {
-            ids = delegate.buscarIds(Normativa.class.getName(), texto);
-        } catch (DelegateException e) {
-            log.error("Error buscando", e);
-            ids = new Long[0];
-        }
-
-        if (ids == null || ids.length == 0) {
-            return Collections.EMPTY_LIST;
-        }
-
-        Session session = getSession();
-        try {
-            Criteria criteria = session.createCriteria(Normativa.class);
-            criteria.setFetchMode("traducciones", FetchMode.EAGER);
-            criteria.add(Expression.in("id", ids));
+    public List buscarNormativas(List<Long> ids)
+    {
+    	if (ids == null || ids.size() == 0)
+    		return Collections.EMPTY_LIST;
+    	
+    	Session session = getSession();
+    	try {
+    		Criteria criteria = session.createCriteria(Normativa.class);
+    		criteria.setFetchMode("traducciones", FetchMode.EAGER);
+    		criteria.add(Expression.in("id", ids));
             return criteria.list();
         } catch (HibernateException he) {
             throw new EJBException(he);
