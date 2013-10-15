@@ -36,6 +36,7 @@ import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.PublicoObjetivo;
+import org.ibit.rol.sac.model.Traduccion;
 import org.ibit.rol.sac.model.TraduccionCatalegDocuments;
 import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.TraduccionExcepcioDocumentacio;
@@ -71,6 +72,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.back2.util.ComponerTraduccionUtil;
 import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.LlistatUtil;
 import es.caib.rolsac.back2.util.ParseUtil;
@@ -98,7 +100,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			log.error("Error al recuperar el idioma por defecto.");
 			lang = "ca";
 		}
-		this.IDIOMA_ORIGEN_TRADUCTOR = lang;
 		
 		if (estemEnUnitatAdministrativa(session))
 			crearModelComplert_pantalla(model, session, request, lang);
@@ -1473,68 +1474,77 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	
 	
 	@RequestMapping(value = "/traduir.do")
-	public @ResponseBody Map<String, Object> traduir(HttpServletRequest request) {
-		
+	public @ResponseBody Map<String, Object> traduir(HttpServletRequest request)
+	{
 		Map<String, Object> resultats = new HashMap<String, Object>();
 		
 		try {
+			Map<String, Object> traduccio;
+			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
+			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
+			List<String> langs = traductor.getListLang();
+			this.IDIOMA_ORIGEN_TRADUCTOR = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			
 			TraduccionProcedimientoLocal traduccioOrigen = new TraduccionProcedimientoLocal();
 			
-			if (StringUtils.isNotEmpty(request.getParameter("item_nom_" + IDIOMA_ORIGEN_TRADUCTOR))) {
-				traduccioOrigen.setNombre(request.getParameter("item_nom_" + IDIOMA_ORIGEN_TRADUCTOR));
-			}
-			if (StringUtils.isNotEmpty(request.getParameter("item_presentacio_" + IDIOMA_ORIGEN_TRADUCTOR))) {
+			if (StringUtils.isNotEmpty(request.getParameter("item_nom_" + IDIOMA_ORIGEN_TRADUCTOR)))
+				traduccioOrigen.setNombre(ComponerTraduccionUtil.montarTranslate(request.getParameter("item_nom_" + IDIOMA_ORIGEN_TRADUCTOR)));
+			
+			if (StringUtils.isNotEmpty(request.getParameter("item_objecte_" + IDIOMA_ORIGEN_TRADUCTOR)))
+				traduccioOrigen.setResumen(ComponerTraduccionUtil.montarTranslate(request.getParameter("item_objecte_" + IDIOMA_ORIGEN_TRADUCTOR)));
+			
+			if (StringUtils.isNotEmpty(request.getParameter("item_resultat_" + IDIOMA_ORIGEN_TRADUCTOR)))
+				traduccioOrigen.setResultat(ComponerTraduccionUtil.montarTranslate(request.getParameter("item_resultat_" + IDIOMA_ORIGEN_TRADUCTOR)));
+			
+			if (StringUtils.isNotEmpty(request.getParameter("item_destinataris_" + IDIOMA_ORIGEN_TRADUCTOR)))
+				traduccioOrigen.setDestinatarios(ComponerTraduccionUtil.montarTranslate(request.getParameter("item_destinataris_" + IDIOMA_ORIGEN_TRADUCTOR)));
+			
+			if (StringUtils.isNotEmpty(request.getParameter("item_resolucio_" + IDIOMA_ORIGEN_TRADUCTOR)))
+				traduccioOrigen.setResolucion(ComponerTraduccionUtil.montarTranslate(request.getParameter("item_resolucio_" + IDIOMA_ORIGEN_TRADUCTOR)));
+			
+			if (StringUtils.isNotEmpty(request.getParameter("item_notificacio_" + IDIOMA_ORIGEN_TRADUCTOR)))
+				traduccioOrigen.setNotificacion(ComponerTraduccionUtil.montarTranslate(request.getParameter("item_notificacio_" + IDIOMA_ORIGEN_TRADUCTOR)));
+			
+			if (StringUtils.isNotEmpty(request.getParameter("item_silenci_" + IDIOMA_ORIGEN_TRADUCTOR)))
+				traduccioOrigen.setSilencio(ComponerTraduccionUtil.montarTranslate(request.getParameter("item_silenci_" + IDIOMA_ORIGEN_TRADUCTOR)));
+			
+			if (StringUtils.isNotEmpty(request.getParameter("item_observacions_" + IDIOMA_ORIGEN_TRADUCTOR)))
+				traduccioOrigen.setObservaciones(ComponerTraduccionUtil.montarTranslate(request.getParameter("item_observacions_" + IDIOMA_ORIGEN_TRADUCTOR)));
+			
+			/* No es seguro que se utilizen */
+			if (StringUtils.isNotEmpty(request.getParameter("item_presentacio_" + IDIOMA_ORIGEN_TRADUCTOR)))
 				traduccioOrigen.setPlazos(request.getParameter("item_presentacio_" + IDIOMA_ORIGEN_TRADUCTOR));
-			}
-			if (StringUtils.isNotEmpty(request.getParameter("item_objecte_" + IDIOMA_ORIGEN_TRADUCTOR))) {
-				traduccioOrigen.setResumen(request.getParameter("item_objecte_" + IDIOMA_ORIGEN_TRADUCTOR));
-			}
-			if (StringUtils.isNotEmpty(request.getParameter("item_resultat_" + IDIOMA_ORIGEN_TRADUCTOR))) {
-				traduccioOrigen.setResultat(request.getParameter("item_resultat_" + IDIOMA_ORIGEN_TRADUCTOR));
-			}
-			if (StringUtils.isNotEmpty(request.getParameter("item_lloc_" + IDIOMA_ORIGEN_TRADUCTOR))) {
+			
+			if (StringUtils.isNotEmpty(request.getParameter("item_lloc_" + IDIOMA_ORIGEN_TRADUCTOR)))
 				traduccioOrigen.setLugar(request.getParameter("item_lloc_" + IDIOMA_ORIGEN_TRADUCTOR));
-			}
-			if (StringUtils.isNotEmpty(request.getParameter("item_destinataris_" + IDIOMA_ORIGEN_TRADUCTOR))) {
-				traduccioOrigen.setDestinatarios(request.getParameter("item_destinataris_" + IDIOMA_ORIGEN_TRADUCTOR));
-			}
-			if (StringUtils.isNotEmpty(request.getParameter("item_notificacio_" + IDIOMA_ORIGEN_TRADUCTOR))) {
-				traduccioOrigen.setNotificacion(request.getParameter("item_notificacio_" + IDIOMA_ORIGEN_TRADUCTOR));
-			}
-			if (StringUtils.isNotEmpty(request.getParameter("item_observacions_" + IDIOMA_ORIGEN_TRADUCTOR))) {
-				traduccioOrigen.setObservaciones(request.getParameter("item_observacions_" + IDIOMA_ORIGEN_TRADUCTOR));
-			}
-			if (StringUtils.isNotEmpty(request.getParameter("item_resolucio_" + IDIOMA_ORIGEN_TRADUCTOR))) {
-				traduccioOrigen.setResolucion(request.getParameter("item_resolucio_" + IDIOMA_ORIGEN_TRADUCTOR));
-			}
-			if (StringUtils.isNotEmpty(request.getParameter("item_silenci_" + IDIOMA_ORIGEN_TRADUCTOR))) {
-				traduccioOrigen.setSilencio(request.getParameter("item_silenci_" + IDIOMA_ORIGEN_TRADUCTOR));
+			/*------------------------------*/
+			
+			for (String lang: langs) {
+				if (!IDIOMA_ORIGEN_TRADUCTOR.equalsIgnoreCase(lang)) {
+					TraduccionProcedimientoLocal traduccioDesti = new TraduccionProcedimientoLocal();
+					traductor.setDirTraduccio(IDIOMA_ORIGEN_TRADUCTOR, lang);
+					if (traductor.traducir(traduccioOrigen, traduccioDesti)) {
+						traduccioDesti.setNombre(ComponerTraduccionUtil.desmontarTranslate(traduccioDesti.getNombre()));
+						traduccioDesti.setResumen(ComponerTraduccionUtil.desmontarTranslate(traduccioDesti.getResumen()));
+						traduccioDesti.setResultat(ComponerTraduccionUtil.desmontarTranslate(traduccioDesti.getResultat()));
+						traduccioDesti.setDestinatarios(ComponerTraduccionUtil.desmontarTranslate(traduccioDesti.getDestinatarios()));
+						traduccioDesti.setResolucion(ComponerTraduccionUtil.desmontarTranslate(traduccioDesti.getResolucion()));
+						traduccioDesti.setNotificacion(ComponerTraduccionUtil.desmontarTranslate(traduccioDesti.getNotificacion()));
+						traduccioDesti.setSilencio(ComponerTraduccionUtil.desmontarTranslate(traduccioDesti.getSilencio()));
+						traduccioDesti.setObservaciones(ComponerTraduccionUtil.desmontarTranslate(traduccioDesti.getObservaciones()));
+						traduccio = new HashMap<String, Object>();
+						traduccio.put("lang", lang);
+						traduccio.put("traduccio", traduccioDesti);
+						traduccions.add(traduccio);
+					} else {
+						resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+						break;
+					}
+				}
 			}
 			
-			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
-			List<String> langs = traductor.getListLang();
-			Map<String, Object> traduccio;
-			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
-	        
-	        for (String lang: langs) {
-	        	if (!IDIOMA_ORIGEN_TRADUCTOR.equalsIgnoreCase(lang)) {
-	        		TraduccionProcedimientoLocal traduccioDesti = new TraduccionProcedimientoLocal();
-	        		traductor.setDirTraduccio(IDIOMA_ORIGEN_TRADUCTOR, lang);
-	        		if (traductor.traducir(traduccioOrigen, traduccioDesti)) {
-	        			traduccio = new HashMap<String, Object>();
-	        			traduccio.put("lang", lang);
-	        			traduccio.put("traduccio", traduccioDesti);
-	        			traduccions.add(traduccio);
-	        		} else {
-	        			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
-	        			break;
-	        		}
-	        	}
-	        }
-	        	        
 			resultats.put("traduccions", traduccions);
-						
+			
 		} catch (DelegateException dEx) {
 			logException(log, dEx);
 			if (dEx.isSecurityException()) {
@@ -1551,7 +1561,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		}
 		
 		return resultats;
-		
 	}
 	
 	

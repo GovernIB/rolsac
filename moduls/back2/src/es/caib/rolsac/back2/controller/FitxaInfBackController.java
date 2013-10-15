@@ -68,6 +68,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.back2.util.ComponerTraduccionUtil;
 import es.caib.rolsac.back2.util.Parametros;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
@@ -1281,32 +1282,34 @@ public class FitxaInfBackController extends PantallaBaseController
     
     
     @RequestMapping(value = "/traduir.do")
-	public @ResponseBody Map<String, Object> traduir(HttpServletRequest request) {
-		Map<String, Object> resultats = new HashMap<String, Object>();
+	public @ResponseBody Map<String, Object> traduir(HttpServletRequest request)
+	{
+    	Map<String, Object> resultats = new HashMap<String, Object>();
 		
 		try {
-			TraduccionFicha traduccioOrigen = new TraduccionFicha();
-			
-			if (StringUtils.isNotEmpty(request.getParameter("item_titol_" + IDIOMA_ORIGEN_TRADUCTOR))) {
-				traduccioOrigen.setTitulo(request.getParameter("item_titol_" + IDIOMA_ORIGEN_TRADUCTOR));
-			}
-			if (StringUtils.isNotEmpty(request.getParameter("item_des_curta_" + IDIOMA_ORIGEN_TRADUCTOR))) {
-				traduccioOrigen.setDescAbr(request.getParameter("item_des_curta_" + IDIOMA_ORIGEN_TRADUCTOR));
-			}
-			if (StringUtils.isNotEmpty(request.getParameter("item_des_llarga_" + IDIOMA_ORIGEN_TRADUCTOR))) {
-				traduccioOrigen.setDescripcion(request.getParameter("item_des_llarga_" + IDIOMA_ORIGEN_TRADUCTOR));
-			}
-			
-			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");					
-			List<String> langs = traductor.getListLang();
 			Map<String, Object> traduccio;
 			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
-	        
-	        for (String lang: langs){
+			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
+			List<String> langs = traductor.getListLang();
+			this.IDIOMA_ORIGEN_TRADUCTOR = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			
+			TraduccionFicha traduccioOrigen = new TraduccionFicha();
+			
+			if (StringUtils.isNotEmpty(request.getParameter("item_titol_" + IDIOMA_ORIGEN_TRADUCTOR)))
+				traduccioOrigen.setTitulo(ComponerTraduccionUtil.montarTranslate(request.getParameter("item_titol_" + IDIOMA_ORIGEN_TRADUCTOR)));
+			
+			if (StringUtils.isNotEmpty(request.getParameter("item_des_curta_" + IDIOMA_ORIGEN_TRADUCTOR)))
+				traduccioOrigen.setDescAbr(request.getParameter("item_des_curta_" + IDIOMA_ORIGEN_TRADUCTOR));
+			
+			if (StringUtils.isNotEmpty(request.getParameter("item_des_llarga_" + IDIOMA_ORIGEN_TRADUCTOR)))
+				traduccioOrigen.setDescripcion(request.getParameter("item_des_llarga_" + IDIOMA_ORIGEN_TRADUCTOR));
+			
+			for (String lang: langs) {
 	        	if (!IDIOMA_ORIGEN_TRADUCTOR.equalsIgnoreCase(lang)) {
 	        		TraduccionFicha traduccioDesti = new TraduccionFicha();
 	        		traductor.setDirTraduccio(IDIOMA_ORIGEN_TRADUCTOR, lang);
-	        		if (traductor.traducir(traduccioOrigen, traduccioDesti)){
+	        		if (traductor.traducir(traduccioOrigen, traduccioDesti)) {
+	        			traduccioDesti.setTitulo(ComponerTraduccionUtil.desmontarTranslate(traduccioDesti.getTitulo()));
 	        			traduccio = new HashMap<String, Object>();
 	        			traduccio.put("lang", lang);
 	        			traduccio.put("traduccio", traduccioDesti);
