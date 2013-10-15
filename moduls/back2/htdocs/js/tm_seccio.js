@@ -386,7 +386,7 @@ function CDetall(){
         /*Obtiene los identificadores de las fichas relaciondas*/
         var fichasList = new Array();
         $('#modul_fitxes ul li').each(function(){
-            var idFicha = $(this).find('input:first').val();
+            var idFicha = $(this).find('input:first').attr('fichaua');
             fichasList.push(idFicha);
         })
 

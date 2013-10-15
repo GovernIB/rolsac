@@ -3,7 +3,6 @@ package es.caib.rolsac.back2.controller.taulesMestre;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -20,7 +19,6 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.FichaResumenUA;
-import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.Traduccion;
 import org.ibit.rol.sac.model.TraduccionFicha;
@@ -184,7 +182,7 @@ public class TMSeccionsController extends PantallaBaseController {
 		Map<String, Object> resultats = new HashMap<String, Object>();
 		try {
 
-			Seccion seccio = DelegateUtil.getSeccionDelegate().obtenerSeccion(id);
+			Seccion seccio = DelegateUtil.getSeccionDelegate().getSeccion(id);
 
 			omplirCampsTraduibles(resultats, seccio);
 
@@ -316,7 +314,6 @@ public class TMSeccionsController extends PantallaBaseController {
 			Set<String> fitxaForm = new HashSet<String>();
 			Iterator<String> itParams = request.getParameterMap().keySet().iterator();
 
-			request.getParameter("idFichas");
 			while ( itParams.hasNext() ) {
 
 				String key = itParams.next();
@@ -337,7 +334,7 @@ public class TMSeccionsController extends PantallaBaseController {
 			if (edicion) {
 
 				Long idSeccio = ParseUtil.parseLong( valoresForm.get("item_id") );
-				seccion = seccionDelegate.obtenerSeccion(idSeccio);
+				seccion = seccionDelegate.getSeccion(idSeccio);
 
 			}
 
@@ -398,13 +395,12 @@ public class TMSeccionsController extends PantallaBaseController {
 			}
 
 			// Fichas informativas
-
 			if ( seccion.getFichasResumenUA() != null ) {
 
 				List<FichaResumenUA> fichasUAList = seccion.getFichasResumenUA();
 				Hashtable<Long, FichaResumenUA> fichasUAHash = new Hashtable<Long, FichaResumenUA>();
 				for ( FichaResumenUA fichaUA : fichasUAList )
-					fichasUAHash.put(fichaUA.getFicha().getId(), fichaUA);
+					fichasUAHash.put(fichaUA.getId(), fichaUA);
 
 
 				if ( idFichas.length > 0 ) {
@@ -416,16 +412,16 @@ public class TMSeccionsController extends PantallaBaseController {
 						FichaResumenUA fichaUA = fichasUAHash.get(idFicha);
 						if ( fichaUA != null  &&  fichaUA.getFicha() != null ) {
 
-							orden = orden + 5;
+							orden += 5;
 							fichaUA.setOrdenseccion(orden);
 							fichasUAModificadas.add(fichaUA);
 
 						}
 
-						seccion.setFichasResumenUA(fichasUAModificadas);
-
 					}
-
+					
+					seccion.setFichasResumenUA(fichasUAModificadas);
+					
 				}
 			}
 
@@ -590,6 +586,7 @@ public class TMSeccionsController extends PantallaBaseController {
 					nombre = "";
 					idUA = "";
 					nombreUA = "";
+					
 					if ( traduccionFicha != null )
 						nombre = HtmlUtils.obtenerTituloDeEnlaceHtml( traduccionFicha.getTitulo() ); //Retirar posible enlace incrustado en titulo
 
@@ -604,9 +601,9 @@ public class TMSeccionsController extends PantallaBaseController {
 
 					}
 
-
 					map = new HashMap<String, String>(2);
 					map.put( "id", fichaUA.getFicha().getId().toString() );
+					map.put( "idFichaUA", fichaUA.getId().toString() );
 					map.put("nombre", nombre);
 					map.put( "orden", String.valueOf( fichaUA.getOrdenseccion() ) );
 					map.put("caducado", fichaUA.getFicha().isVisible().booleanValue() ? "S" : "N");

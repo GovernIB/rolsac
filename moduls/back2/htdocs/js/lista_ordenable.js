@@ -85,7 +85,17 @@ function ListaOrdenable(){
 												
 				switch( atributo ){
 					case "id":
-						html += "<input class=\"" + params.nombre + "_" + atributo + "\" id=\"" + params.nombre + "_" + atributo + "_" + item.id + "\" name=\"" + params.nombre + "_" + atributo + "_" + item.id + "\" value=\"" + valor + "\" type=\"hidden\" />";
+						
+						if ( item.idFichaUA != 'undefined') {
+							
+							html += "<input fichaUA=" + item.idFichaUA + " class=\"" + params.nombre + "_" + atributo + "\" id=\"" + params.nombre + "_" + atributo + "_" + item.id + "\" name=\"" + params.nombre + "_" + atributo + "_" + item.id + "\" value=\"" + valor + "\" type=\"hidden\" />";
+							
+						} else {
+							
+							html += "<input class=\"" + params.nombre + "_" + atributo + "\" id=\"" + params.nombre + "_" + atributo + "_" + item.id + "\" name=\"" + params.nombre + "_" + atributo + "_" + item.id + "\" value=\"" + valor + "\" type=\"hidden\" />";
+							
+						}
+						
 						break;
 						
 					case "nombre":
