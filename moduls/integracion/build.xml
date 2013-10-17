@@ -44,6 +44,7 @@
     	 </fileset>
 		<!-- agarcia: librerias comunes en 00librerias -->
 		<fileset dir="${lib.dir}/webcaib">
+			<include name="commons-lang-2.1.jar" />
 		    <include name="juddi-proxy.jar"/>
 			<include name="struts.jar"/>  <!-- vuds -->
 		</fileset>

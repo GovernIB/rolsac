@@ -36,7 +36,6 @@ import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.PublicoObjetivo;
-import org.ibit.rol.sac.model.Traduccion;
 import org.ibit.rol.sac.model.TraduccionCatalegDocuments;
 import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.TraduccionExcepcioDocumentacio;
@@ -72,7 +71,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import es.caib.rolsac.back2.util.ComponerTraduccionUtil;
 import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.LlistatUtil;
 import es.caib.rolsac.back2.util.ParseUtil;
@@ -83,9 +81,8 @@ import es.indra.rol.sac.integracion.traductor.Traductor;
 
 @Controller
 @RequestMapping("/catalegProcediments/")
-public class CatalegProcedimentsBackController extends PantallaBaseController {
-	
-	private String IDIOMA_ORIGEN_TRADUCTOR;
+public class CatalegProcedimentsBackController extends PantallaBaseController
+{
 	private static final String URL_PREVISUALIZACION = "es.caib.rolsac.previsualitzacio.procediment.url";
 	private static Log log = LogFactory.getLog(CatalegProcedimentsBackController.class);
 	
@@ -1479,69 +1476,45 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		Map<String, Object> resultats = new HashMap<String, Object>();
 		
 		try {
-			Map<String, Object> traduccio;
-			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
-			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
-			List<String> langs = traductor.getListLang();
-			this.IDIOMA_ORIGEN_TRADUCTOR = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-			
 			TraduccionProcedimientoLocal traduccioOrigen = new TraduccionProcedimientoLocal();
+			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
 			
-			if (StringUtils.isNotEmpty(request.getParameter("item_nom_" + IDIOMA_ORIGEN_TRADUCTOR)))
-				traduccioOrigen.setNombre(ComponerTraduccionUtil.montarTranslate(request.getParameter("item_nom_" + IDIOMA_ORIGEN_TRADUCTOR)));
+			String idiomaOrigenTraductor = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
 			
-			if (StringUtils.isNotEmpty(request.getParameter("item_objecte_" + IDIOMA_ORIGEN_TRADUCTOR)))
-				traduccioOrigen.setResumen(ComponerTraduccionUtil.montarTranslate(request.getParameter("item_objecte_" + IDIOMA_ORIGEN_TRADUCTOR)));
+			if (StringUtils.isNotEmpty(request.getParameter("item_nom_" + idiomaOrigenTraductor)))
+				traduccioOrigen.setNombre(request.getParameter("item_nom_" + idiomaOrigenTraductor));
 			
-			if (StringUtils.isNotEmpty(request.getParameter("item_resultat_" + IDIOMA_ORIGEN_TRADUCTOR)))
-				traduccioOrigen.setResultat(ComponerTraduccionUtil.montarTranslate(request.getParameter("item_resultat_" + IDIOMA_ORIGEN_TRADUCTOR)));
+			if (StringUtils.isNotEmpty(request.getParameter("item_objecte_" + idiomaOrigenTraductor)))
+				traduccioOrigen.setResumen(request.getParameter("item_objecte_" + idiomaOrigenTraductor));
 			
-			if (StringUtils.isNotEmpty(request.getParameter("item_destinataris_" + IDIOMA_ORIGEN_TRADUCTOR)))
-				traduccioOrigen.setDestinatarios(ComponerTraduccionUtil.montarTranslate(request.getParameter("item_destinataris_" + IDIOMA_ORIGEN_TRADUCTOR)));
+			if (StringUtils.isNotEmpty(request.getParameter("item_resultat_" + idiomaOrigenTraductor)))
+				traduccioOrigen.setResultat(request.getParameter("item_resultat_" + idiomaOrigenTraductor));
 			
-			if (StringUtils.isNotEmpty(request.getParameter("item_resolucio_" + IDIOMA_ORIGEN_TRADUCTOR)))
-				traduccioOrigen.setResolucion(ComponerTraduccionUtil.montarTranslate(request.getParameter("item_resolucio_" + IDIOMA_ORIGEN_TRADUCTOR)));
+			if (StringUtils.isNotEmpty(request.getParameter("item_destinataris_" + idiomaOrigenTraductor)))
+				traduccioOrigen.setDestinatarios(request.getParameter("item_destinataris_" + idiomaOrigenTraductor));
 			
-			if (StringUtils.isNotEmpty(request.getParameter("item_notificacio_" + IDIOMA_ORIGEN_TRADUCTOR)))
-				traduccioOrigen.setNotificacion(ComponerTraduccionUtil.montarTranslate(request.getParameter("item_notificacio_" + IDIOMA_ORIGEN_TRADUCTOR)));
+			if (StringUtils.isNotEmpty(request.getParameter("item_resolucio_" + idiomaOrigenTraductor)))
+				traduccioOrigen.setResolucion(request.getParameter("item_resolucio_" + idiomaOrigenTraductor));
 			
-			if (StringUtils.isNotEmpty(request.getParameter("item_silenci_" + IDIOMA_ORIGEN_TRADUCTOR)))
-				traduccioOrigen.setSilencio(ComponerTraduccionUtil.montarTranslate(request.getParameter("item_silenci_" + IDIOMA_ORIGEN_TRADUCTOR)));
+			if (StringUtils.isNotEmpty(request.getParameter("item_notificacio_" + idiomaOrigenTraductor)))
+				traduccioOrigen.setNotificacion(request.getParameter("item_notificacio_" + idiomaOrigenTraductor));
 			
-			if (StringUtils.isNotEmpty(request.getParameter("item_observacions_" + IDIOMA_ORIGEN_TRADUCTOR)))
-				traduccioOrigen.setObservaciones(ComponerTraduccionUtil.montarTranslate(request.getParameter("item_observacions_" + IDIOMA_ORIGEN_TRADUCTOR)));
+			if (StringUtils.isNotEmpty(request.getParameter("item_silenci_" + idiomaOrigenTraductor)))
+				traduccioOrigen.setSilencio(request.getParameter("item_silenci_" + idiomaOrigenTraductor));
+			
+			if (StringUtils.isNotEmpty(request.getParameter("item_observacions_" + idiomaOrigenTraductor)))
+				traduccioOrigen.setObservaciones(request.getParameter("item_observacions_" + idiomaOrigenTraductor));
 			
 			/* No es seguro que se utilizen */
-			if (StringUtils.isNotEmpty(request.getParameter("item_presentacio_" + IDIOMA_ORIGEN_TRADUCTOR)))
-				traduccioOrigen.setPlazos(request.getParameter("item_presentacio_" + IDIOMA_ORIGEN_TRADUCTOR));
+			if (StringUtils.isNotEmpty(request.getParameter("item_presentacio_" + idiomaOrigenTraductor)))
+				traduccioOrigen.setPlazos(request.getParameter("item_presentacio_" + idiomaOrigenTraductor));
 			
-			if (StringUtils.isNotEmpty(request.getParameter("item_lloc_" + IDIOMA_ORIGEN_TRADUCTOR)))
-				traduccioOrigen.setLugar(request.getParameter("item_lloc_" + IDIOMA_ORIGEN_TRADUCTOR));
+			if (StringUtils.isNotEmpty(request.getParameter("item_lloc_" + idiomaOrigenTraductor)))
+				traduccioOrigen.setLugar(request.getParameter("item_lloc_" + idiomaOrigenTraductor));
 			/*------------------------------*/
 			
-			for (String lang: langs) {
-				if (!IDIOMA_ORIGEN_TRADUCTOR.equalsIgnoreCase(lang)) {
-					TraduccionProcedimientoLocal traduccioDesti = new TraduccionProcedimientoLocal();
-					traductor.setDirTraduccio(IDIOMA_ORIGEN_TRADUCTOR, lang);
-					if (traductor.traducir(traduccioOrigen, traduccioDesti)) {
-						traduccioDesti.setNombre(ComponerTraduccionUtil.desmontarTranslate(traduccioDesti.getNombre()));
-						traduccioDesti.setResumen(ComponerTraduccionUtil.desmontarTranslate(traduccioDesti.getResumen()));
-						traduccioDesti.setResultat(ComponerTraduccionUtil.desmontarTranslate(traduccioDesti.getResultat()));
-						traduccioDesti.setDestinatarios(ComponerTraduccionUtil.desmontarTranslate(traduccioDesti.getDestinatarios()));
-						traduccioDesti.setResolucion(ComponerTraduccionUtil.desmontarTranslate(traduccioDesti.getResolucion()));
-						traduccioDesti.setNotificacion(ComponerTraduccionUtil.desmontarTranslate(traduccioDesti.getNotificacion()));
-						traduccioDesti.setSilencio(ComponerTraduccionUtil.desmontarTranslate(traduccioDesti.getSilencio()));
-						traduccioDesti.setObservaciones(ComponerTraduccionUtil.desmontarTranslate(traduccioDesti.getObservaciones()));
-						traduccio = new HashMap<String, Object>();
-						traduccio.put("lang", lang);
-						traduccio.put("traduccio", traduccioDesti);
-						traduccions.add(traduccio);
-					} else {
-						resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
-						break;
-					}
-				}
-			}
+			traduccions = traductor.translate(traduccioOrigen, idiomaOrigenTraductor);
 			
 			resultats.put("traduccions", traduccions);
 			

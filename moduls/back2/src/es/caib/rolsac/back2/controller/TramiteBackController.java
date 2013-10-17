@@ -597,38 +597,23 @@ public class TramiteBackController {
 
 		return resultatStatus;
 		
-	}	
+	}
+	
 	
 	@RequestMapping(value = "/traduir.do")
-	public @ResponseBody Map<String, Object> traduir(HttpServletRequest request) {
-		
+	public @ResponseBody Map<String, Object> traduir(HttpServletRequest request)
+	{
 		Map<String, Object> resultats = new HashMap<String, Object>();
 		
 		try {
-			
 			TraduccionTramite traduccioOrigen = getTraduccionOrigen(request);
-						
-			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
-			List<String> langs = traductor.getListLang();
-			Map<String, Object> traduccio;
 			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
-	        
-	        for (String lang: langs){
-	        	if (!IDIOMA_ORIGEN_TRADUCTOR.equalsIgnoreCase(lang)) {
-	        		TraduccionTramite traduccioDesti = new TraduccionTramite();
-	        		traductor.setDirTraduccio(IDIOMA_ORIGEN_TRADUCTOR, lang);
-	        		if (traductor.traducir(traduccioOrigen, traduccioDesti)){
-	        			traduccio = new HashMap<String, Object>();
-	        			traduccio.put("lang", lang);
-	        			traduccio.put("traduccio", traduccioDesti);
-	        			traduccions.add(traduccio);
-	        		} else {
-	        			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
-	        			break;
-	        		}
-	        	}
-	        }
-	        
+			
+			String idiomaOrigenTraductor = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
+			
+			traduccions = traductor.translate(traduccioOrigen, idiomaOrigenTraductor);
+			
 			resultats.put("traduccions", traduccions);
 			
 		} catch (DelegateException dEx) {

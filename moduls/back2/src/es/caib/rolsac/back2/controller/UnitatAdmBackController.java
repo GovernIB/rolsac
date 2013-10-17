@@ -66,7 +66,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.api.v1.UnidadAdministrativaDTO;
-import es.caib.rolsac.back2.util.ComponerTraduccionUtil;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
@@ -78,7 +77,6 @@ import es.indra.rol.sac.integracion.traductor.Traductor;
 @RequestMapping("/unitatadm/")
 public class UnitatAdmBackController extends PantallaBaseController
 {
-	private String IDIOMA_ORIGEN_TRADUCTOR;
 	private static Log log = LogFactory.getLog(UnitatAdmBackController.class);
 	private static final String URL_PREVISUALIZACION = "es.caib.rolsac.previsualitzacio.ua.url";
 
@@ -1629,41 +1627,24 @@ public class UnitatAdmBackController extends PantallaBaseController
 		Map<String, Object> resultats = new HashMap<String, Object>();
 		
 		try {
-			Map<String, Object> traduccio;
-			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
-			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
-			List<String> langs = traductor.getListLang();
-			this.IDIOMA_ORIGEN_TRADUCTOR = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-			
 			TraduccionUA traduccioOrigen = new TraduccionUA();
+			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
 			
-			if (StringUtils.isNotEmpty(request.getParameter("item_nom_" + IDIOMA_ORIGEN_TRADUCTOR)))
-				traduccioOrigen.setNombre(ComponerTraduccionUtil.montarTranslate(request.getParameter("item_nom_" + IDIOMA_ORIGEN_TRADUCTOR)));
+			String idiomaOrigenTraductor = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
 			
-			if (StringUtils.isNotEmpty(request.getParameter("item_presentacio_" + IDIOMA_ORIGEN_TRADUCTOR)))
-				traduccioOrigen.setPresentacion(request.getParameter("item_presentacio_" + IDIOMA_ORIGEN_TRADUCTOR));
+			if (StringUtils.isNotEmpty(request.getParameter("item_nom_" + idiomaOrigenTraductor)))
+				traduccioOrigen.setNombre(request.getParameter("item_nom_" + idiomaOrigenTraductor));
 			
-			if (StringUtils.isNotEmpty(request.getParameter("item_cvResponsable_" + IDIOMA_ORIGEN_TRADUCTOR)))
-				traduccioOrigen.setCvResponsable(request.getParameter("item_cvResponsable_" + IDIOMA_ORIGEN_TRADUCTOR));
+			if (StringUtils.isNotEmpty(request.getParameter("item_presentacio_" + idiomaOrigenTraductor)))
+				traduccioOrigen.setPresentacion(request.getParameter("item_presentacio_" + idiomaOrigenTraductor));
 			
-	        for (String lang: langs) {
-	        	if (!IDIOMA_ORIGEN_TRADUCTOR.equalsIgnoreCase(lang)) {
-	        		TraduccionUA traduccioDesti = new TraduccionUA();
-	        		traductor.setDirTraduccio(IDIOMA_ORIGEN_TRADUCTOR, lang);
-	        		if (traductor.traducir(traduccioOrigen, traduccioDesti)) {
-	        			traduccioDesti.setNombre(ComponerTraduccionUtil.desmontarTranslate(traduccioDesti.getNombre()));
-	        			traduccio = new HashMap<String, Object>();
-	        			traduccio.put("lang", lang);
-	        			traduccio.put("traduccio", traduccioDesti);
-	        			traduccions.add(traduccio);
-	        		} else {
-	        			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
-	        			break;
-	        		}
-	        	}
-	        }
-	        
-	        resultats.put("traduccions", traduccions);
+			if (StringUtils.isNotEmpty(request.getParameter("item_cvResponsable_" + idiomaOrigenTraductor)))
+				traduccioOrigen.setCvResponsable(request.getParameter("item_cvResponsable_" + idiomaOrigenTraductor));
+			
+			traduccions = traductor.translate(traduccioOrigen, idiomaOrigenTraductor);
+			
+			resultats.put("traduccions", traduccions);
 	        
 	    } catch (DelegateException dEx) {
 			logException(log, dEx);
