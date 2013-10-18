@@ -823,7 +823,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				
 			    // Hechos vitales
 			    if (request.getParameter("fetsVitals") != null && edicion && isModuloModificado("modulo_hechos_modificado", request)) {
-			    	String[] codisFetsVitals = request.getParameter("fetsVitals").split(",");
 			    	HechoVitalDelegate hvDelegate = DelegateUtil.getHechoVitalDelegate();
 			    	HechoVitalProcedimientoDelegate hvpDelegate = DelegateUtil.getHechoVitalProcedimientoDelegate();
 			    	
