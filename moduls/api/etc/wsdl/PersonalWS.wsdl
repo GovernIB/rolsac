@@ -1,68 +1,20 @@
 <wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
 	xmlns:impl="http://ws.personal.v2.api.rolsac.caib.es"
 	xmlns:intf="http://ws.personal.v2.api.rolsac.caib.es"
-	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://unitatAdministrativa.v2.api.rolsac.caib.es"
-	xmlns:tns2="http://general.v2.api.rolsac.caib.es" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:tns1="http://unitatAdministrativa.v2.api.rolsac.caib.es"
+	xmlns:tns2="http://general.v2.api.rolsac.caib.es"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://ws.personal.v2.api.rolsac.caib.es">
-	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
-		PDT) -->
+	
+	<wsdl:import namespace="urn:tns1" location="UnitatAdministrativaDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="EntitatRemota.wsdl"/>
+	
 	<wsdl:types>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://general.v2.api.rolsac.caib.es">
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType abstract="true" name="EntitatRemota">
-				<sequence>
-					<element name="administracionRemota" nillable="true" type="xsd:long" />
-					<element name="idExterno" nillable="true" type="xsd:long" />
-					<element name="urlRemota" nillable="true" type="xsd:string" />
-				</sequence>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://unitatAdministrativa.v2.api.rolsac.caib.es">
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="UnitatAdministrativaDTO">
-				<complexContent>
-					<extension base="tns2:EntitatRemota">
-						<sequence>
-							<element name="abreviatura" nillable="true" type="xsd:string" />
-							<element name="businessKey" nillable="true" type="xsd:string" />
-							<element name="claveHita" nillable="true" type="xsd:string" />
-							<element name="codigoEstandar" nillable="true" type="xsd:string" />
-							<element name="dominio" nillable="true" type="xsd:string" />
-							<element name="email" nillable="true" type="xsd:string" />
-							<element name="espacioTerrit" nillable="true" type="xsd:long" />
-							<element name="fax" nillable="true" type="xsd:string" />
-							<element name="fotog" nillable="true" type="xsd:long" />
-							<element name="fotop" nillable="true" type="xsd:long" />
-							<element name="id" nillable="true" type="xsd:long" />
-							<element name="logoh" nillable="true" type="xsd:long" />
-							<element name="logos" nillable="true" type="xsd:long" />
-							<element name="logot" nillable="true" type="xsd:long" />
-							<element name="logov" nillable="true" type="xsd:long" />
-							<element name="nombre" nillable="true" type="xsd:string" />
-							<element name="numfoto1" nillable="true" type="xsd:int" />
-							<element name="numfoto2" nillable="true" type="xsd:int" />
-							<element name="numfoto3" nillable="true" type="xsd:int" />
-							<element name="numfoto4" nillable="true" type="xsd:int" />
-							<element name="orden" type="xsd:long" />
-							<element name="padre" nillable="true" type="xsd:long" />
-							<element name="presentacion" nillable="true" type="xsd:string" />
-							<element name="responsable" nillable="true" type="xsd:string" />
-							<element name="sexoResponsable" nillable="true" type="xsd:int" />
-							<element name="telefono" nillable="true" type="xsd:string" />
-							<element name="tratamiento" nillable="true" type="xsd:long" />
-							<element name="url" nillable="true" type="xsd:string" />
-							<element name="validacion" nillable="true" type="xsd:int" />
-						</sequence>
-					</extension>
-				</complexContent>
-			</complexType>
-		</schema>
 	</wsdl:types>
+	
 	<wsdl:message name="obtenirUnitatAdministrativaResponse">
 		<wsdl:part name="obtenirUnitatAdministrativaReturn" type="tns1:UnitatAdministrativaDTO" />
 	</wsdl:message>

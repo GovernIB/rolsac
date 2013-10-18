@@ -1,108 +1,30 @@
 <wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
 	xmlns:impl="http://ws.normativa.v2.api.rolsac.caib.es"
 	xmlns:intf="http://ws.normativa.v2.api.rolsac.caib.es"
-	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://procediment.v2.api.rolsac.caib.es"
-	xmlns:tns2="http://general.v2.api.rolsac.caib.es" xmlns:tns3="http://unitatAdministrativa.v2.api.rolsac.caib.es"
-	xmlns:tns4="http://butlleti.v2.api.rolsac.caib.es" xmlns:tns5="http://arxiu.v2.api.rolsac.caib.es"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:tns1="http://procediment.v2.api.rolsac.caib.es"
+	xmlns:tns2="http://general.v2.api.rolsac.caib.es"
+	xmlns:tns3="http://unitatAdministrativa.v2.api.rolsac.caib.es"
+	xmlns:tns4="http://butlleti.v2.api.rolsac.caib.es"
+	xmlns:tns5="http://arxiu.v2.api.rolsac.caib.es"
 	xmlns:tns6="http://afectacio.v2.api.rolsac.caib.es"
-	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ws.normativa.v2.api.rolsac.caib.es">
-	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
-		PDT) -->
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://ws.normativa.v2.api.rolsac.caib.es">
+	
+	<wsdl:import namespace="urn:tns1" location="ProcedimentCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="BasicCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="EntitatRemota.wsdl"/>
+	<wsdl:import namespace="urn:tns3" location="UnitatAdministrativaDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns4" location="ButlletiDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns5" location="ArxiuDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns6" location="AfectacioDTO.wsdl"/>
+	
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://general.v2.api.rolsac.caib.es">
-			<import namespace="http://butlleti.v2.api.rolsac.caib.es" />
-			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
-			<import namespace="http://ws.normativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType abstract="true" name="BasicCriteria">
-				<sequence>
-					<element name="id" nillable="true" type="xsd:string" />
-					<element name="idioma" nillable="true" type="xsd:string" />
-					<element name="inici" nillable="true" type="xsd:string" />
-					<element name="ordenacio" nillable="true" type="xsd:string" />
-					<element name="tamany" nillable="true" type="xsd:string" />
-				</sequence>
-			</complexType>
-			<complexType abstract="true" name="EntitatRemota">
-				<sequence>
-					<element name="administracionRemota" nillable="true" type="xsd:long" />
-					<element name="idExterno" nillable="true" type="xsd:long" />
-					<element name="urlRemota" nillable="true" type="xsd:string" />
-				</sequence>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://procediment.v2.api.rolsac.caib.es">
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://butlleti.v2.api.rolsac.caib.es" />
-			<import namespace="http://ws.normativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="ProcedimentCriteria">
-				<complexContent>
-					<extension base="tns2:BasicCriteria">
-						<sequence>
-							<element name="actiu" nillable="true" type="xsd:boolean" />
-							<element name="fechaActualizacion" nillable="true"
-								type="xsd:string" />
-							<element name="fechaCaducidad" nillable="true" type="xsd:string" />
-							<element name="fechaPublicacion" nillable="true" type="xsd:string" />
-							<element name="indicador" nillable="true" type="xsd:boolean" />
-							<element name="info" nillable="true" type="xsd:string" />
-							<element name="orden" nillable="true" type="xsd:string" />
-							<element name="orden2" nillable="true" type="xsd:string" />
-							<element name="orden3" nillable="true" type="xsd:string" />
-							<element name="responsable" nillable="true" type="xsd:string" />
-							<element name="signatura" nillable="true" type="xsd:string" />
-							<element name="t_destinatarios" nillable="true" type="xsd:string" />
-							<element name="t_lugar" nillable="true" type="xsd:string" />
-							<element name="t_nombre" nillable="true" type="xsd:string" />
-							<element name="t_notificacion" nillable="true" type="xsd:string" />
-							<element name="t_observaciones" nillable="true" type="xsd:string" />
-							<element name="t_plazos" nillable="true" type="xsd:string" />
-							<element name="t_recursos" nillable="true" type="xsd:string" />
-							<element name="t_requisitos" nillable="true" type="xsd:string" />
-							<element name="t_resolucion" nillable="true" type="xsd:string" />
-							<element name="t_resultat" nillable="true" type="xsd:string" />
-							<element name="t_resumen" nillable="true" type="xsd:string" />
-							<element name="t_silencio" nillable="true" type="xsd:string" />
-							<element name="taxa" nillable="true" type="xsd:boolean" />
-							<element name="tramite" nillable="true" type="xsd:string" />
-							<element name="url" nillable="true" type="xsd:string" />
-							<element name="validacion" nillable="true" type="xsd:string" />
-							<element name="ventanillaUnica" nillable="true" type="xsd:boolean" />
-							<element name="version" nillable="true" type="xsd:string" />
-                            <element name="familia" nillable="true" type="xsd:string" />
-                            <element name="agrupacionMateria" nillable="true" type="xsd:string" />
-                            <element name="publicoObjetivo" nillable="true" type="xsd:string" />
-                            <element name="textos" nillable="true" type="xsd:string" />
-                            <element name="unidadAdministrativa" nillable="true" type="xsd:string" />
-                            <element name="agrupacionHechoVital" nillable="true" type="xsd:string" />
-                            <element name="visible" nillable="true" type="xsd:boolean" />
-                            <element name="estadoUA" nillable="true" type="xsd:string" />
-                            <element name="vigente" nillable="true" type="xsd:boolean" />
-                            <element name="telematico" nillable="true" type="xsd:boolean" />
-						</sequence>
-					</extension>
-				</complexContent>
-			</complexType>
-		</schema>
-		
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://ws.normativa.v2.api.rolsac.caib.es">
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://butlleti.v2.api.rolsac.caib.es" />
-			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="ArrayOf_xsd_anyType">
 				<complexContent>
@@ -111,7 +33,6 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
 			<!-- Per a evitar conflictes amb DTO i ArrayStoreException -->			
 			<complexType name="ArrayOfAfectacioDTO">
 				<complexContent>
@@ -120,129 +41,19 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			<!--  -->			
-			
 		</schema>
 		
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://xml.apache.org/xml-soap">
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://butlleti.v2.api.rolsac.caib.es" />
-			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
-			<import namespace="http://ws.normativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="Vector">
 				<sequence>
-					<element maxOccurs="unbounded" minOccurs="0" name="item"
-						type="xsd:anyType" />
+					<element maxOccurs="unbounded" minOccurs="0" name="item" type="xsd:anyType" />
 				</sequence>
 			</complexType>
 		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://unitatAdministrativa.v2.api.rolsac.caib.es">
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://butlleti.v2.api.rolsac.caib.es" />
-			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
-			<import namespace="http://ws.normativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="UnitatAdministrativaDTO">
-				<complexContent>
-					<extension base="tns2:EntitatRemota">
-						<sequence>
-							<element name="abreviatura" nillable="true" type="xsd:string" />
-							<element name="businessKey" nillable="true" type="xsd:string" />
-							<element name="claveHita" nillable="true" type="xsd:string" />
-							<element name="codigoEstandar" nillable="true" type="xsd:string" />
-							<element name="dominio" nillable="true" type="xsd:string" />
-							<element name="email" nillable="true" type="xsd:string" />
-							<element name="espacioTerrit" nillable="true" type="xsd:long" />
-							<element name="fax" nillable="true" type="xsd:string" />
-							<element name="fotog" nillable="true" type="xsd:long" />
-							<element name="fotop" nillable="true" type="xsd:long" />
-							<element name="id" nillable="true" type="xsd:long" />
-							<element name="logoh" nillable="true" type="xsd:long" />
-							<element name="logos" nillable="true" type="xsd:long" />
-							<element name="logot" nillable="true" type="xsd:long" />
-							<element name="logov" nillable="true" type="xsd:long" />
-							<element name="nombre" nillable="true" type="xsd:string" />
-							<element name="numfoto1" nillable="true" type="xsd:int" />
-							<element name="numfoto2" nillable="true" type="xsd:int" />
-							<element name="numfoto3" nillable="true" type="xsd:int" />
-							<element name="numfoto4" nillable="true" type="xsd:int" />
-							<element name="orden" type="xsd:long" />
-							<element name="padre" nillable="true" type="xsd:long" />
-							<element name="presentacion" nillable="true" type="xsd:string" />
-							<element name="responsable" nillable="true" type="xsd:string" />
-							<element name="sexoResponsable" nillable="true" type="xsd:int" />
-							<element name="telefono" nillable="true" type="xsd:string" />
-							<element name="tratamiento" nillable="true" type="xsd:long" />
-							<element name="url" nillable="true" type="xsd:string" />
-							<element name="validacion" nillable="true" type="xsd:int" />
-						</sequence>
-					</extension>
-				</complexContent>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://butlleti.v2.api.rolsac.caib.es">
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
-			<import namespace="http://ws.normativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="ButlletiDTO">
-				<sequence>
-					<element name="enlace" nillable="true" type="xsd:string" />
-					<element name="id" nillable="true" type="xsd:long" />
-					<element name="nombre" nillable="true" type="xsd:string" />
-				</sequence>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://arxiu.v2.api.rolsac.caib.es">
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://butlleti.v2.api.rolsac.caib.es" />
-			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
-			<import namespace="http://ws.normativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="ArxiuDTO">
-				<sequence>
-					<element name="id" type="xsd:long" />
-					<element name="mime" nillable="true" type="xsd:string" />
-					<element name="nombre" nillable="true" type="xsd:string" />
-					<element name="peso" type="xsd:long" />
-                    <element name="url" nillable="true" type="xsd:string" />
-				</sequence>
-			</complexType>
-		</schema>
-		
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://afectacio.v2.api.rolsac.caib.es">
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
-			<import namespace="http://ws.normativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="AfectacioDTO">
-				<sequence>
-					<element name="afectante" type="xsd:long" />
-					<element name="normativa" type="xsd:long" />
-					<element name="tipoAfectacion" type="xsd:long" />
-				</sequence>
-			</complexType>
-		</schema>
-		
 	</wsdl:types>
+	
 	<wsdl:message name="llistarAfectadesRequest">
 		<wsdl:part name="in0" type="xsd:long" />
 	</wsdl:message>

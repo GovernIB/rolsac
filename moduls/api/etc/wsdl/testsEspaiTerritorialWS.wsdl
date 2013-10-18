@@ -1,72 +1,26 @@
 <wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
 	xmlns:impl="http://ws.espaiTerritorial.v2.api.rolsac.caib.es"
 	xmlns:intf="http://ws.espaiTerritorial.v2.api.rolsac.caib.es"
-	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://espaiTerritorial.v2.api.rolsac.caib.es"
-	xmlns:tns2="http://general.v2.api.rolsac.caib.es" xmlns:tns3="http://unitatAdministrativa.v2.api.rolsac.caib.es"
-	xmlns:tns4="http://arxiu.v2.api.rolsac.caib.es" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:tns1="http://espaiTerritorial.v2.api.rolsac.caib.es"
+	xmlns:tns2="http://general.v2.api.rolsac.caib.es"
+	xmlns:tns3="http://unitatAdministrativa.v2.api.rolsac.caib.es"
+	xmlns:tns4="http://arxiu.v2.api.rolsac.caib.es"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://ws.espaiTerritorial.v2.api.rolsac.caib.es">
-	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
-		PDT) -->
+	
+	<wsdl:import namespace="urn:tns1" location="EspaiTerritorialCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns1" location="EspaiTerritorialDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="BasicCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns3" location="UnitatAdministrativaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns4" location="ArxiuDTO.wsdl"/>
+	
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://general.v2.api.rolsac.caib.es">
-			<import
-				namespace="http://ws.espaiTerritorial.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType abstract="true" name="BasicCriteria">
-				<sequence>
-					<element name="id" nillable="true" type="xsd:string" />
-					<element name="idioma" nillable="true" type="xsd:string" />
-					<element name="inici" nillable="true" type="xsd:string" />
-					<element name="ordenacio" nillable="true" type="xsd:string" />
-					<element name="tamany" nillable="true" type="xsd:string" />
-				</sequence>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://espaiTerritorial.v2.api.rolsac.caib.es">
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import
-				namespace="http://ws.espaiTerritorial.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="EspaiTerritorialCriteria">
-				<complexContent>
-					<extension base="tns2:BasicCriteria">
-						<sequence>
-							<element name="nivel" nillable="true" type="xsd:string" />
-							<element name="coordenadas" nillable="true" type="xsd:string" />
-							<element name="t_nombre" nillable="true" type="xsd:string" />
-						</sequence>					
-					</extension>
-				</complexContent>
-			</complexType>
-			<complexType name="EspaiTerritorialDTO">
-				<sequence>
-					<element name="coordenadas" nillable="true" type="xsd:string" />
-					<element name="id" nillable="true" type="xsd:long" />
-					<element name="logo" nillable="true" type="xsd:long" />
-					<element name="mapa" nillable="true" type="xsd:long" />
-					<element name="nivel" nillable="true" type="xsd:int" />
-					<element name="nombre" nillable="true" type="xsd:string" />
-					<element name="padre" nillable="true" type="xsd:long" />
-				</sequence>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://ws.espaiTerritorial.v2.api.rolsac.caib.es">
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="ArrayOf_xsd_anyType">
 				<complexContent>
@@ -76,75 +30,18 @@
 				</complexContent>
 			</complexType>
 		</schema>
+		
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://xml.apache.org/xml-soap">
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import
-				namespace="http://ws.espaiTerritorial.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="Vector">
 				<sequence>
-					<element maxOccurs="unbounded" minOccurs="0" name="item"
-						type="xsd:anyType" />
-				</sequence>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://unitatAdministrativa.v2.api.rolsac.caib.es">
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import
-				namespace="http://ws.espaiTerritorial.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="UnitatAdministrativaCriteria">
-				<complexContent>
-					<extension base="tns2:BasicCriteria">
-						<sequence>
-							<element name="businessKey" nillable="true" type="xsd:string" />
-							<element name="claveHita" nillable="true" type="xsd:string" />
-							<element name="dominio" nillable="true" type="xsd:string" />
-							<element name="orden" nillable="true" type="xsd:string" />
-							<element name="validacion" nillable="true" type="xsd:string" />
-							<element name="responsable" nillable="true" type="xsd:string" />
-							<element name="telefono" nillable="true" type="xsd:string" />
-							<element name="fax" nillable="true" type="xsd:string" />
-							<element name="email" nillable="true" type="xsd:string" />
-							<element name="sexoResponsable" nillable="true" type="xsd:string" />
-							<element name="codigoEstandar" nillable="true" type="xsd:string" />
-							<element name="t_nombre" nillable="true" type="xsd:string" />
-							<element name="t_presentacion" nillable="true" type="xsd:string" />
-							<element name="t_abreviatura" nillable="true" type="xsd:string" />	
-                            <element name="seccion" nillable="true" type="xsd:string" />						
-						</sequence>
-					</extension>
-				</complexContent>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://arxiu.v2.api.rolsac.caib.es">
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import
-				namespace="http://ws.espaiTerritorial.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="ArxiuDTO">
-				<sequence>
-					<element name="id" type="xsd:long" />
-					<element name="mime" nillable="true" type="xsd:string" />
-					<element name="nombre" nillable="true" type="xsd:string" />
-					<element name="peso" type="xsd:long" />
-                    <element name="url" nillable="true" type="xsd:string" />
+					<element maxOccurs="unbounded" minOccurs="0" name="item" type="xsd:anyType" />
 				</sequence>
 			</complexType>
 		</schema>
 	</wsdl:types>
+	
 	<wsdl:message name="llistarUnitatsAdministrativesResponse">
 		<wsdl:part name="llistarUnitatsAdministrativesReturn" type="impl:ArrayOf_xsd_anyType" />
 	</wsdl:message>

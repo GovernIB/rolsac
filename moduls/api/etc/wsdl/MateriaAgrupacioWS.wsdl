@@ -1,46 +1,20 @@
 <wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
 	xmlns:impl="http://ws.materiaAgrupacio.v2.api.rolsac.caib.es"
 	xmlns:intf="http://ws.materiaAgrupacio.v2.api.rolsac.caib.es"
-	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://materia.v2.api.rolsac.caib.es"
-	xmlns:tns2="http://agrupacioMateria.v2.api.rolsac.caib.es" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:tns1="http://materia.v2.api.rolsac.caib.es"
+	xmlns:tns2="http://agrupacioMateria.v2.api.rolsac.caib.es"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://ws.materiaAgrupacio.v2.api.rolsac.caib.es">
-	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
-		PDT) -->
+	
+	<wsdl:import namespace="urn:tns1" location="MateriaDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="AgrupacioMateriaDTO.wsdl"/>
+	
 	<wsdl:types>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://materia.v2.api.rolsac.caib.es">
-			<import namespace="http://agrupacioMateria.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="MateriaDTO">
-				<sequence>
-					<element name="codiHita" nillable="true" type="xsd:string" />
-					<element name="codigoEstandar" nillable="true" type="xsd:string" />
-					<element name="descripcion" nillable="true" type="xsd:string" />
-					<element name="destacada" type="xsd:boolean" />
-					<element name="foto" nillable="true" type="xsd:long" />
-					<element name="icono" nillable="true" type="xsd:long" />
-					<element name="iconoGrande" nillable="true" type="xsd:long" />
-					<element name="id" type="xsd:long" />
-					<element name="nombre" nillable="true" type="xsd:string" />
-					<element name="palabrasclave" nillable="true" type="xsd:string" />
-				</sequence>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://agrupacioMateria.v2.api.rolsac.caib.es">
-			<import namespace="http://materia.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="AgrupacioMateriaDTO">
-				<sequence>
-					<element name="codigoEstandar" nillable="true" type="xsd:string" />
-					<element name="id" nillable="true" type="xsd:long" />
-					<element name="nombre" nillable="true" type="xsd:string" />
-					<element name="seccion" nillable="true" type="xsd:long" />
-				</sequence>
-			</complexType>
-		</schema>
 	</wsdl:types>
+	
 	<wsdl:message name="obtenirAgrupacioMateriaResponse">
 		<wsdl:part name="obtenirAgrupacioMateriaReturn" type="tns2:AgrupacioMateriaDTO" />
 	</wsdl:message>

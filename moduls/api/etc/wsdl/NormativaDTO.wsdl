@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
+    xmlns:tns="http://normativa.v2.api.rolsac.caib.es"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    name="NormativaDTO"
+    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:tns2="http://general.v2.api.rolsac.caib.es"
+    targetNamespace="http://ws.normativa.v2.api.rolsac.caib.es">
+  <wsdl:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://normativa.v2.api.rolsac.caib.es">
+        <import namespace="http://general.v2.api.rolsac.caib.es" />
+        <complexType name="NormativaDTO">
+            <complexContent>
+                <extension base="tns2:EntitatRemota">
+                    <sequence>
+                        <element name="apartado" nillable="true" type="xsd:string" />
+                        <element name="archivo" nillable="true" type="xsd:long" />
+                        <element name="boletin" nillable="true" type="xsd:long" />
+                        <element name="codiVuds" nillable="true" type="xsd:string" />
+                        <element name="descCodiVuds" nillable="true" type="xsd:string" />
+                        <element name="enlace" nillable="true" type="xsd:string" />
+                        <element name="fecha" nillable="true" type="xsd:dateTime" />
+                        <element name="fechaBoletin" nillable="true" type="xsd:dateTime" />
+                        <element name="id" nillable="true" type="xsd:long" />
+                        <element name="local" type="xsd:boolean" />
+                        <element name="numero" nillable="true" type="xsd:long" />
+                        <element name="observaciones" nillable="true" type="xsd:string" />
+                        <element name="paginaFinal" nillable="true" type="xsd:int" />
+                        <element name="paginaInicial" nillable="true" type="xsd:int" />
+                        <element name="registro" nillable="true" type="xsd:long" />
+                        <element name="responsable" nillable="true" type="xsd:string" />
+                        <element name="seccion" nillable="true" type="xsd:string" />
+                        <element name="tipo" nillable="true" type="xsd:long" />
+                        <element name="titulo" nillable="true" type="xsd:string" />
+                        <element name="unidadAdministrativa" nillable="true" type="xsd:long" />
+                        <element name="validacion" nillable="true" type="xsd:int" />
+                    </sequence>
+                </extension>
+            </complexContent>
+        </complexType>
+    </schema>
+  </wsdl:types>
+</wsdl:definitions>

@@ -1,64 +1,20 @@
 <wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
-	xmlns:impl="http://ws.butlleti.v2.api.rolsac.caib.es" xmlns:intf="http://ws.butlleti.v2.api.rolsac.caib.es"
-	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://normativa.v2.api.rolsac.caib.es"
-	xmlns:tns2="http://general.v2.api.rolsac.caib.es" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:impl="http://ws.butlleti.v2.api.rolsac.caib.es"
+	xmlns:intf="http://ws.butlleti.v2.api.rolsac.caib.es"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:tns1="http://normativa.v2.api.rolsac.caib.es"
+	xmlns:tns2="http://general.v2.api.rolsac.caib.es"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://ws.butlleti.v2.api.rolsac.caib.es">
-	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
-		PDT) -->
+	
+	<wsdl:import namespace="urn:tns1" location="NormativaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="BasicCriteria.wsdl"/>
+	
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://general.v2.api.rolsac.caib.es">
-			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://ws.butlleti.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType abstract="true" name="BasicCriteria">
-				<sequence>
-					<element name="id" nillable="true" type="xsd:string" />
-					<element name="idioma" nillable="true" type="xsd:string" />
-					<element name="inici" nillable="true" type="xsd:string" />
-					<element name="ordenacio" nillable="true" type="xsd:string" />
-					<element name="tamany" nillable="true" type="xsd:string" />
-				</sequence>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://normativa.v2.api.rolsac.caib.es">
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://ws.butlleti.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="NormativaCriteria">
-				<complexContent>
-					<extension base="tns2:BasicCriteria">
-						<sequence>
-							<element name="numero" nillable="true" type="xsd:string" />
-							<element name="registro" nillable="true" type="xsd:string" />
-							<element name="ley" nillable="true" type="xsd:string" />
-							<element name="fecha" nillable="true" type="xsd:string" />
-							<element name="fechaBoletin" nillable="true" type="xsd:string" />
-							<element name="validacion" nillable="true" type="xsd:string" />
-							<element name="codiVuds" nillable="true" type="xsd:string" />
-							<element name="descCodiVuds" nillable="true" type="xsd:string" />
-							<element name="t_seccion" nillable="true" type="xsd:string" />
-							<element name="t_apartado" nillable="true" type="xsd:string" />
-							<element name="t_paginaInicial" nillable="true" type="xsd:string" />
-							<element name="t_paginaFinal" nillable="true" type="xsd:string" />
-							<element name="t_titulo" nillable="true" type="xsd:string" />
-							<element name="t_enlace" nillable="true" type="xsd:string" />
-							<element name="t_observaciones" nillable="true" type="xsd:string" />
-							<element name="t_responsable" nillable="true" type="xsd:string" />
-							<element name="incluirExternas" nillable="true" type="xsd:boolean" />
-						</sequence>
-					</extension>
-				</complexContent>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://ws.butlleti.v2.api.rolsac.caib.es">
-			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://xml.apache.org/xml-soap" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="ArrayOf_xsd_anyType">
@@ -69,20 +25,18 @@
 				</complexContent>
 			</complexType>
 		</schema>
+		
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://xml.apache.org/xml-soap">
-			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://ws.butlleti.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="Vector">
 				<sequence>
-					<element maxOccurs="unbounded" minOccurs="0" name="item"
-						type="xsd:anyType" />
+					<element maxOccurs="unbounded" minOccurs="0" name="item" type="xsd:anyType" />
 				</sequence>
 			</complexType>
 		</schema>
 	</wsdl:types>
+	
 	<wsdl:message name="llistarNormativesRequest">
 		<wsdl:part name="in0" type="xsd:long" />
 		<wsdl:part name="in1" type="tns1:NormativaCriteria" />

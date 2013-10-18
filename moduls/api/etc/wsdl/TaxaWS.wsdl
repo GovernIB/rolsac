@@ -1,64 +1,20 @@
 <wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
 	xmlns:impl="http://ws.taxa.v2.api.rolsac.caib.es"
 	xmlns:intf="http://ws.taxa.v2.api.rolsac.caib.es"
-	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://tramit.v2.api.rolsac.caib.es"
-	xmlns:tns2="http://general.v2.api.rolsac.caib.es" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:tns1="http://tramit.v2.api.rolsac.caib.es"
+	xmlns:tns2="http://general.v2.api.rolsac.caib.es"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://ws.taxa.v2.api.rolsac.caib.es">
-	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
-		PDT) -->
+	
+	<wsdl:import namespace="urn:tns1" location="TramitDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="EntitatRemota.wsdl"/>
+	
 	<wsdl:types>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://general.v2.api.rolsac.caib.es">
-			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType abstract="true" name="EntitatRemota">
-				<sequence>
-					<element name="administracionRemota" nillable="true" type="xsd:long" />
-					<element name="idExterno" nillable="true" type="xsd:long" />
-					<element name="urlRemota" nillable="true" type="xsd:string" />
-				</sequence>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://tramit.v2.api.rolsac.caib.es">
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="TramitDTO">
-				<complexContent>
-					<extension base="tns2:EntitatRemota">
-						<sequence>
-							<element name="codiVuds" nillable="true" type="xsd:string" />
-							<element name="dataActualitzacio" nillable="true" type="xsd:dateTime" />
-							<element name="dataActualitzacioVuds" nillable="true"
-								type="xsd:string" />
-							<element name="dataCaducitat" nillable="true" type="xsd:dateTime" />
-							<element name="dataPublicacio" nillable="true" type="xsd:dateTime" />
-                            <element name="dataInici" nillable="true" type="xsd:dateTime" />
-                            <element name="dataTancament" nillable="true" type="xsd:dateTime" />
-							<element name="descCodiVuds" nillable="true" type="xsd:string" />
-							<element name="descripcion" nillable="true" type="xsd:string" />
-							<element name="documentacion" nillable="true" type="xsd:string" />
-							<element name="fase" type="xsd:int" />
-							<element name="id" type="xsd:long" />
-							<element name="idTraTel" nillable="true" type="xsd:string" />
-							<element name="lugar" nillable="true" type="xsd:string" />
-							<element name="nombre" nillable="true" type="xsd:string" />
-							<element name="observaciones" nillable="true" type="xsd:string" />
-							<element name="orden" nillable="true" type="xsd:long" />
-							<element name="organCompetent" nillable="true" type="xsd:long" />
-							<element name="plazos" nillable="true" type="xsd:string" />
-							<element name="procedimiento" nillable="true" type="xsd:long" />
-							<element name="requisits" nillable="true" type="xsd:string" />
-							<element name="urlExterna" nillable="true" type="xsd:string" />
-							<element name="validacio" nillable="true" type="xsd:long" />
-							<element name="versio" nillable="true" type="xsd:int" />
-						</sequence>
-					</extension>
-				</complexContent>
-			</complexType>
-		</schema>
 	</wsdl:types>
+	
 	<wsdl:message name="obtenirTramitRequest">
 		<wsdl:part name="in0" type="xsd:long" />
 	</wsdl:message>

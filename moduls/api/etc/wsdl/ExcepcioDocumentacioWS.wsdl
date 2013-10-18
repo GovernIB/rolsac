@@ -1,60 +1,26 @@
 <wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
 	xmlns:impl="http://ws.excepcioDocumentacio.v2.api.rolsac.caib.es"
 	xmlns:intf="http://ws.excepcioDocumentacio.v2.api.rolsac.caib.es"
-	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://documentTramit.v2.api.rolsac.caib.es"
-	xmlns:tns2="http://general.v2.api.rolsac.caib.es" xmlns:tns3="http://catalegDocuments.v2.api.rolsac.caib.es"
-	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:tns1="http://documentTramit.v2.api.rolsac.caib.es"
+	xmlns:tns2="http://general.v2.api.rolsac.caib.es"
+	xmlns:tns3="http://catalegDocuments.v2.api.rolsac.caib.es"
+	xmlns:tns4="http://excepcioDocumentacio.v2.api.rolsac.caib.es"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://ws.excepcioDocumentacio.v2.api.rolsac.caib.es">
-	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
-		PDT) -->
+	
+	<wsdl:import namespace="urn:tns1" location="DocumentTramitCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="BasicCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns3" location="CatalegDocumentsCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns4" location="ExcepcioDocumentacioCriteria.wsdl"/>
+    <wsdl:import namespace="urn:tns4" location="ExcepcioDocumentacioDTO.wsdl"/>
+	
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://general.v2.api.rolsac.caib.es">
-			<import
-				namespace="http://ws.excepcioDocumentacio.v2.api.rolsac.caib.es" />
-			<import namespace="http://documentTramit.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://catalegDocuments.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType abstract="true" name="BasicCriteria">
-				<sequence>
-					<element name="id" nillable="true" type="xsd:string" />
-					<element name="idioma" nillable="true" type="xsd:string" />
-					<element name="inici" nillable="true" type="xsd:string" />
-					<element name="ordenacio" nillable="true" type="xsd:string" />
-					<element name="tamany" nillable="true" type="xsd:string" />
-				</sequence>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://documentTramit.v2.api.rolsac.caib.es">
-			<import
-				namespace="http://ws.excepcioDocumentacio.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://catalegDocuments.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="DocumentTramitCriteria">
-				<complexContent>
-					<extension base="tns2:BasicCriteria">
-						<sequence>
-							<element name="tramit" nillable="true" type="xsd:string" />
-							<element name="tipus" nillable="true" type="xsd:string" />
-							<element name="orden" nillable="true" type="xsd:string" />
-							<element name="t_titulo" nillable="true" type="xsd:string" />
-							<element name="t_descripcion" nillable="true" type="xsd:string" />
-						</sequence>
-					</extension>
-				</complexContent>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://ws.excepcioDocumentacio.v2.api.rolsac.caib.es">
-			<import namespace="http://documentTramit.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://catalegDocuments.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="ArrayOf_xsd_anyType">
 				<complexContent>
@@ -64,78 +30,18 @@
 				</complexContent>
 			</complexType>
 		</schema>
+		
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://xml.apache.org/xml-soap">
-			<import
-				namespace="http://ws.excepcioDocumentacio.v2.api.rolsac.caib.es" />
-			<import namespace="http://documentTramit.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://catalegDocuments.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="Vector">
 				<sequence>
-					<element maxOccurs="unbounded" minOccurs="0" name="item"
-						type="xsd:anyType" />
+					<element maxOccurs="unbounded" minOccurs="0" name="item" type="xsd:anyType" />
 				</sequence>
 			</complexType>
 		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://catalegDocuments.v2.api.rolsac.caib.es">
-			<import
-				namespace="http://ws.excepcioDocumentacio.v2.api.rolsac.caib.es" />
-			<import namespace="http://documentTramit.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="CatalegDocumentsCriteria">
-				<complexContent>
-					<extension base="tns2:BasicCriteria">
-						<sequence>
-							<element name="orden" nillable="true" type="xsd:string" />
-							<element name="nombre" nillable="true" type="xsd:string" />
-							<element name="descripcion" nillable="true" type="xsd:string" />
-							<element name="admResponsable" nillable="true" type="xsd:string" />
-						</sequence>
-					</extension>
-				</complexContent>
-			</complexType>
-		</schema>
-		
-		<!-- Definiciones dto y criteria de ExcepcioDocumentacio -->
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://excepcioDocumentacio.v2.api.rolsac.caib.es">
-			<import namespace="http://catalegDocuments.v2.api.rolsac.caib.es" />
-			<import namespace="http://documentTramit.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="ExcepcioDocumentacioCriteria">
-				<complexContent>
-					<extension base="tns2:BasicCriteria">
-						<sequence>
-							<element name="nombre" nillable="true" type="xsd:string" />
-							<element name="descripcion" nillable="true" type="xsd:string" />
-						</sequence>
-					</extension>
-				</complexContent>
-			</complexType>
-
-			<complexType name="ExcepcioDocumentacioDTO">
-			<import namespace="http://catalegDocuments.v2.api.rolsac.caib.es" />
-			<import namespace="http://documentTramit.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />			
-				<sequence>
-					<element name="id" nillable="true" type="xsd:long" />
-					<element name="nombre" nillable="true" type="xsd:string" />
-					<element name="descripcion" nillable="true" type="xsd:string" />
-				</sequence>
-			</complexType>
-		</schema>
-		<!-- fin definiciones dto y criteria -->
-		
 	</wsdl:types>
+	
 	<wsdl:message name="llistarCatalegsDocumentsResponse">
 		<wsdl:part name="llistarCatalegsDocumentsReturn" type="impl:ArrayOf_xsd_anyType" />
 	</wsdl:message>

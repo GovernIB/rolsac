@@ -1,251 +1,47 @@
 <wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
 	xmlns:impl="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 	xmlns:intf="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
-	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://unitatAdministrativa.v2.api.rolsac.caib.es"
-	xmlns:tns10="http://edifici.v2.api.rolsac.caib.es" xmlns:tns11="http://seccio.v2.api.rolsac.caib.es"
-	xmlns:tns12="http://tractament.v2.api.rolsac.caib.es" xmlns:tns13="http://tramit.v2.api.rolsac.caib.es"
-	xmlns:tns14="http://arxiu.v2.api.rolsac.caib.es" xmlns:tns2="http://general.v2.api.rolsac.caib.es"
-	xmlns:tns3="http://espaiTerritorial.v2.api.rolsac.caib.es" xmlns:tns4="http://procediment.v2.api.rolsac.caib.es"
-	xmlns:tns5="http://materia.v2.api.rolsac.caib.es" xmlns:tns6="http://fitxa.v2.api.rolsac.caib.es"
-	xmlns:tns7="http://normativa.v2.api.rolsac.caib.es" xmlns:tns8="http://personal.v2.api.rolsac.caib.es"
-	xmlns:tns9="http://usuari.v2.api.rolsac.caib.es" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:tns1="http://unitatAdministrativa.v2.api.rolsac.caib.es"
+	xmlns:tns2="http://general.v2.api.rolsac.caib.es"
+	xmlns:tns3="http://espaiTerritorial.v2.api.rolsac.caib.es"
+	xmlns:tns4="http://procediment.v2.api.rolsac.caib.es"
+	xmlns:tns5="http://materia.v2.api.rolsac.caib.es"
+	xmlns:tns6="http://fitxa.v2.api.rolsac.caib.es"
+	xmlns:tns7="http://normativa.v2.api.rolsac.caib.es"
+	xmlns:tns8="http://personal.v2.api.rolsac.caib.es"
+	xmlns:tns9="http://usuari.v2.api.rolsac.caib.es"
+	xmlns:tns10="http://edifici.v2.api.rolsac.caib.es"
+    xmlns:tns11="http://seccio.v2.api.rolsac.caib.es"
+    xmlns:tns12="http://tractament.v2.api.rolsac.caib.es"
+    xmlns:tns13="http://tramit.v2.api.rolsac.caib.es"
+    xmlns:tns14="http://arxiu.v2.api.rolsac.caib.es"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es">
-	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
-		PDT) -->
+	
+	<wsdl:import namespace="urn:tns1" location="UnitatAdministrativaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns1" location="UnitatAdministrativaDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="BasicCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="EntitatRemota.wsdl"/>
+	<wsdl:import namespace="urn:tns3" location="EspaiTerritorialDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns4" location="ProcedimentCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns5" location="MateriaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns6" location="FitxaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns7" location="NormativaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns8" location="PersonalCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns9" location="UsuariCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns10" location="EdificiCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns11" location="SeccioCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns12" location="TractamentDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns13" location="TramitCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns14" location="ArxiuDTO.wsdl"/>
+	
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://general.v2.api.rolsac.caib.es">
-			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="http://usuari.v2.api.rolsac.caib.es" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
-			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
-			<import
-				namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://materia.v2.api.rolsac.caib.es" />
-			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
-			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
-			<import namespace="http://personal.v2.api.rolsac.caib.es" />
-			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType abstract="true" name="EntitatRemota">
-				<sequence>
-					<element name="administracionRemota" nillable="true" type="xsd:long" />
-					<element name="idExterno" nillable="true" type="xsd:long" />
-					<element name="urlRemota" nillable="true" type="xsd:string" />
-				</sequence>
-			</complexType>
-			<complexType abstract="true" name="BasicCriteria">
-				<sequence>
-					<element name="id" nillable="true" type="xsd:string" />
-					<element name="idioma" nillable="true" type="xsd:string" />
-					<element name="inici" nillable="true" type="xsd:string" />
-					<element name="ordenacio" nillable="true" type="xsd:string" />
-					<element name="tamany" nillable="true" type="xsd:string" />
-				</sequence>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://unitatAdministrativa.v2.api.rolsac.caib.es">
-			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="http://usuari.v2.api.rolsac.caib.es" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
-			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
-			<import
-				namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://materia.v2.api.rolsac.caib.es" />
-			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
-			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
-			<import namespace="http://personal.v2.api.rolsac.caib.es" />
-			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="UnitatAdministrativaDTO">
-				<complexContent>
-					<extension base="tns2:EntitatRemota">
-						<sequence>
-							<element name="abreviatura" nillable="true" type="xsd:string" />
-							<element name="businessKey" nillable="true" type="xsd:string" />
-							<element name="claveHita" nillable="true" type="xsd:string" />
-							<element name="codigoEstandar" nillable="true" type="xsd:string" />
-							<element name="dominio" nillable="true" type="xsd:string" />
-							<element name="email" nillable="true" type="xsd:string" />
-							<element name="espacioTerrit" nillable="true" type="xsd:long" />
-							<element name="fax" nillable="true" type="xsd:string" />
-							<element name="fotog" nillable="true" type="xsd:long" />
-							<element name="fotop" nillable="true" type="xsd:long" />
-							<element name="id" nillable="true" type="xsd:long" />
-							<element name="logoh" nillable="true" type="xsd:long" />
-							<element name="logos" nillable="true" type="xsd:long" />
-							<element name="logot" nillable="true" type="xsd:long" />
-							<element name="logov" nillable="true" type="xsd:long" />
-							<element name="nombre" nillable="true" type="xsd:string" />
-							<element name="numfoto1" nillable="true" type="xsd:int" />
-							<element name="numfoto2" nillable="true" type="xsd:int" />
-							<element name="numfoto3" nillable="true" type="xsd:int" />
-							<element name="numfoto4" nillable="true" type="xsd:int" />
-							<element name="orden" type="xsd:long" />
-							<element name="padre" nillable="true" type="xsd:long" />
-							<element name="presentacion" nillable="true" type="xsd:string" />
-							<element name="responsable" nillable="true" type="xsd:string" />
-							<element name="sexoResponsable" nillable="true" type="xsd:int" />
-							<element name="telefono" nillable="true" type="xsd:string" />
-							<element name="tratamiento" nillable="true" type="xsd:long" />
-							<element name="url" nillable="true" type="xsd:string" />
-							<element name="validacion" nillable="true" type="xsd:int" />
-						</sequence>
-					</extension>
-				</complexContent>
-			</complexType>
-			<complexType name="UnitatAdministrativaCriteria">
-				<complexContent>
-					<extension base="tns2:BasicCriteria">
-						<sequence>
-							<element name="businessKey" nillable="true" type="xsd:string" />
-							<element name="claveHita" nillable="true" type="xsd:string" />
-							<element name="dominio" nillable="true" type="xsd:string" />
-							<element name="orden" nillable="true" type="xsd:string" />
-							<element name="validacion" nillable="true" type="xsd:string" />
-							<element name="responsable" nillable="true" type="xsd:string" />
-							<element name="telefono" nillable="true" type="xsd:string" />
-							<element name="fax" nillable="true" type="xsd:string" />
-							<element name="email" nillable="true" type="xsd:string" />
-							<element name="sexoResponsable" nillable="true" type="xsd:string" />
-							<element name="codigoEstandar" nillable="true" type="xsd:string" />
-							<element name="t_nombre" nillable="true" type="xsd:string" />
-							<element name="t_presentacion" nillable="true" type="xsd:string" />
-							<element name="t_abreviatura" nillable="true" type="xsd:string" />		
-                            <element name="seccion" nillable="true" type="xsd:string" />					
-						</sequence>
-					</extension>
-				</complexContent>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://espaiTerritorial.v2.api.rolsac.caib.es">
-			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="http://usuari.v2.api.rolsac.caib.es" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
-			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
-			<import
-				namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://materia.v2.api.rolsac.caib.es" />
-			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
-			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
-			<import namespace="http://personal.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="EspaiTerritorialDTO">
-				<sequence>
-					<element name="coordenadas" nillable="true" type="xsd:string" />
-					<element name="id" nillable="true" type="xsd:long" />
-					<element name="logo" nillable="true" type="xsd:long" />
-					<element name="mapa" nillable="true" type="xsd:long" />
-					<element name="nivel" nillable="true" type="xsd:int" />
-					<element name="nombre" nillable="true" type="xsd:string" />
-					<element name="padre" nillable="true" type="xsd:long" />
-				</sequence>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://procediment.v2.api.rolsac.caib.es">
-			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="http://usuari.v2.api.rolsac.caib.es" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
-			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
-			<import
-				namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://materia.v2.api.rolsac.caib.es" />
-			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
-			<import namespace="http://personal.v2.api.rolsac.caib.es" />
-			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="ProcedimentCriteria">
-				<complexContent>
-					<extension base="tns2:BasicCriteria">
-						<sequence>
-							<element name="actiu" nillable="true" type="xsd:boolean" />
-							<element name="fechaActualizacion" nillable="true"
-								type="xsd:string" />
-							<element name="fechaCaducidad" nillable="true" type="xsd:string" />
-							<element name="fechaPublicacion" nillable="true" type="xsd:string" />
-							<element name="indicador" nillable="true" type="xsd:boolean" />
-							<element name="info" nillable="true" type="xsd:string" />
-							<element name="orden" nillable="true" type="xsd:string" />
-							<element name="orden2" nillable="true" type="xsd:string" />
-							<element name="orden3" nillable="true" type="xsd:string" />
-							<element name="responsable" nillable="true" type="xsd:string" />
-							<element name="signatura" nillable="true" type="xsd:string" />
-							<element name="t_destinatarios" nillable="true" type="xsd:string" />
-							<element name="t_lugar" nillable="true" type="xsd:string" />
-							<element name="t_nombre" nillable="true" type="xsd:string" />
-							<element name="t_notificacion" nillable="true" type="xsd:string" />
-							<element name="t_observaciones" nillable="true" type="xsd:string" />
-							<element name="t_plazos" nillable="true" type="xsd:string" />
-							<element name="t_recursos" nillable="true" type="xsd:string" />
-							<element name="t_requisitos" nillable="true" type="xsd:string" />
-							<element name="t_resolucion" nillable="true" type="xsd:string" />
-							<element name="t_resultat" nillable="true" type="xsd:string" />
-							<element name="t_resumen" nillable="true" type="xsd:string" />
-							<element name="t_silencio" nillable="true" type="xsd:string" />
-							<element name="taxa" nillable="true" type="xsd:boolean" />
-							<element name="tramite" nillable="true" type="xsd:string" />
-							<element name="url" nillable="true" type="xsd:string" />
-							<element name="validacion" nillable="true" type="xsd:string" />
-							<element name="ventanillaUnica" nillable="true" type="xsd:boolean" />
-							<element name="version" nillable="true" type="xsd:string" />
-                            <element name="familia" nillable="true" type="xsd:string" />
-                            <element name="agrupacionMateria" nillable="true" type="xsd:string" />
-                            <element name="publicoObjetivo" nillable="true" type="xsd:string" />
-                            <element name="textos" nillable="true" type="xsd:string" />
-                            <element name="unidadAdministrativa" nillable="true" type="xsd:string" />
-                            <element name="agrupacionHechoVital" nillable="true" type="xsd:string" />
-                            <element name="visible" nillable="true" type="xsd:boolean" />
-                            <element name="estadoUA" nillable="true" type="xsd:string" />
-                            <element name="vigente" nillable="true" type="xsd:boolean" />
-                            <element name="telematico" nillable="true" type="xsd:boolean" />
-						</sequence>
-					</extension>
-				</complexContent>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es">
-			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="http://usuari.v2.api.rolsac.caib.es" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
-			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
-			<import namespace="http://materia.v2.api.rolsac.caib.es" />
-			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
-			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
-			<import namespace="http://personal.v2.api.rolsac.caib.es" />
-			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="ArrayOf_xsd_anyType">
 				<complexContent>
@@ -254,7 +50,6 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
 			<!-- Per a evitar conflictes amb DTO i ArrayStoreException -->
 			<complexType name="ArrayOfUnitatAdministrativaDTO">
 				<complexContent>
@@ -263,410 +58,20 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			<!--  -->			
+			<!--  -->
 		</schema>
+		
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://xml.apache.org/xml-soap">
-			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="http://usuari.v2.api.rolsac.caib.es" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
-			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
-			<import namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://materia.v2.api.rolsac.caib.es" />
-			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
-			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
-			<import namespace="http://personal.v2.api.rolsac.caib.es" />
-			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="Vector">
 				<sequence>
-					<element maxOccurs="unbounded" minOccurs="0" name="item"
-						type="xsd:anyType" />
-				</sequence>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://materia.v2.api.rolsac.caib.es">
-			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="http://usuari.v2.api.rolsac.caib.es" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
-			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
-			<import
-				namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
-			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
-			<import namespace="http://personal.v2.api.rolsac.caib.es" />
-			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="MateriaCriteria">
-				<complexContent>
-					<extension base="tns2:BasicCriteria">
-						<sequence>
-							<element name="codiHita" nillable="true" type="xsd:string" />
-							<element name="codigoEstandar" nillable="true" type="xsd:string" />							
-							<element name="destacada" nillable="true" type="xsd:boolean" />
-							<element name="t_nombre" nillable="true" type="xsd:string" />		
-							<element name="t_descripcion" nillable="true" type="xsd:string" />							
-							<element name="t_palabrasclave" nillable="true" type="xsd:string" />
-						</sequence>
-					</extension>					
-				</complexContent>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://fitxa.v2.api.rolsac.caib.es">
-			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="http://usuari.v2.api.rolsac.caib.es" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
-			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
-			<import
-				namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://materia.v2.api.rolsac.caib.es" />
-			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
-			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://personal.v2.api.rolsac.caib.es" />
-			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="FitxaCriteria">
-				<complexContent>
-					<extension base="tns2:BasicCriteria">
-						<sequence>
-							<element name="fechaActualizacion" nillable="true"
-								type="xsd:string" />
-							<element name="fechaCaducidad" nillable="true" type="xsd:string" />
-							<element name="fechaPublicacion" nillable="true" type="xsd:string" />
-							<element name="foro_tema" nillable="true" type="xsd:string" />
-							<element name="info" nillable="true" type="xsd:string" />
-							<element name="responsable" nillable="true" type="xsd:string" />
-							<element name="t_descAbr" nillable="true" type="xsd:string" />
-							<element name="t_descripcion" nillable="true" type="xsd:string" />
-							<element name="t_titulo" nillable="true" type="xsd:string" />
-							<element name="t_url" nillable="true" type="xsd:string" />
-							<element name="urlForo" nillable="true" type="xsd:string" />
-							<element name="urlVideo" nillable="true" type="xsd:string" />
-							<element name="validacion" nillable="true" type="xsd:string" />
-                            <element name="publicoObjetivo" nillable="true" type="xsd:string" />
-                            <element name="seccion" nillable="true" type="xsd:string" />
-                            <element name="visible" nillable="true" type="xsd:boolean" />
-						</sequence>
-					</extension>
-				</complexContent>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://normativa.v2.api.rolsac.caib.es">
-			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="http://usuari.v2.api.rolsac.caib.es" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
-			<import
-				namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://materia.v2.api.rolsac.caib.es" />
-			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
-			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
-			<import namespace="http://personal.v2.api.rolsac.caib.es" />
-			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="NormativaCriteria">
-				<complexContent>
-					<extension base="tns2:BasicCriteria">
-						<sequence>
-							<element name="numero" nillable="true" type="xsd:string" />
-							<element name="registro" nillable="true" type="xsd:string" />
-							<element name="ley" nillable="true" type="xsd:string" />
-							<element name="fecha" nillable="true" type="xsd:string" />
-							<element name="fechaBoletin" nillable="true" type="xsd:string" />
-							<element name="validacion" nillable="true" type="xsd:string" />
-							<element name="codiVuds" nillable="true" type="xsd:string" />
-							<element name="descCodiVuds" nillable="true" type="xsd:string" />
-							<element name="t_seccion" nillable="true" type="xsd:string" />
-							<element name="t_apartado" nillable="true" type="xsd:string" />
-							<element name="t_paginaInicial" nillable="true" type="xsd:string" />
-							<element name="t_paginaFinal" nillable="true" type="xsd:string" />
-							<element name="t_titulo" nillable="true" type="xsd:string" />
-							<element name="t_enlace" nillable="true" type="xsd:string" />
-							<element name="t_observaciones" nillable="true" type="xsd:string" />
-							<element name="t_responsable" nillable="true" type="xsd:string" />
-							<element name="incluirExternas" nillable="true" type="xsd:boolean" />
-						</sequence>
-					</extension>
-				</complexContent>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://personal.v2.api.rolsac.caib.es">
-			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="http://usuari.v2.api.rolsac.caib.es" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
-			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
-			<import
-				namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://materia.v2.api.rolsac.caib.es" />
-			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
-			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
-			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="PersonalCriteria">
-				<complexContent>
-					<extension base="tns2:BasicCriteria">
-						<sequence>
-							<element name="username" nillable="true" type="xsd:string" />
-							<element name="nombre" nillable="true" type="xsd:string" />
-							<element name="funciones" nillable="true" type="xsd:string" />
-							<element name="cargo" nillable="true" type="xsd:string" />
-							<element name="email" nillable="true" type="xsd:string" />
-							<element name="extensionPublica" nillable="true" type="xsd:string" />
-							<element name="numeroLargoPublico" nillable="true" type="xsd:string" />
-							<element name="extensionPrivada" nillable="true" type="xsd:string" />
-							<element name="numeroLargoPrivado" nillable="true" type="xsd:string" />
-							<element name="extensionMovil" nillable="true" type="xsd:string" />
-							<element name="numeroLargoMovil" nillable="true" type="xsd:string" />
-						</sequence>
-					</extension>
-				</complexContent>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://usuari.v2.api.rolsac.caib.es">
-			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
-			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
-			<import
-				namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://materia.v2.api.rolsac.caib.es" />
-			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
-			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
-			<import namespace="http://personal.v2.api.rolsac.caib.es" />
-			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="UsuariCriteria">
-				<complexContent>
-					<extension base="tns2:BasicCriteria">
-							<sequence>
-								<element name="username" nillable="true" type="xsd:string" />
-								<element name="nombre" nillable="true" type="xsd:string" />
-								<element name="observaciones" nillable="true" type="xsd:string" />
-								<element name="perfil" nillable="true" type="xsd:string" />
-								<element name="email" nillable="true" type="xsd:string" />
-							</sequence>
-					</extension>
-				</complexContent>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://edifici.v2.api.rolsac.caib.es">
-			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="http://usuari.v2.api.rolsac.caib.es" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
-			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
-			<import
-				namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://materia.v2.api.rolsac.caib.es" />
-			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
-			<import namespace="http://personal.v2.api.rolsac.caib.es" />
-			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="EdificiCriteria">
-				<complexContent>
-					<extension base="tns2:BasicCriteria">
-						<sequence>
-							<element name="direccion" nillable="true" type="xsd:string" />
-							<element name="codigoPostal" nillable="true" type="xsd:string" />							
-							<element name="poblacion" nillable="true" type="xsd:string" />
-							<element name="telefono" nillable="true" type="xsd:string" />
-							<element name="email" nillable="true" type="xsd:string" />
-							<element name="fax" nillable="true" type="xsd:string" />
-							<element name="latitud" nillable="true" type="xsd:string" />
-							<element name="longitud" nillable="true" type="xsd:string" />						
-							<element name="t_descripcion" nillable="true" type="xsd:string" />
-						</sequence>
-					</extension>
-				</complexContent>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://seccio.v2.api.rolsac.caib.es">
-			<import namespace="http://usuari.v2.api.rolsac.caib.es" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
-			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
-			<import
-				namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://materia.v2.api.rolsac.caib.es" />
-			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
-			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
-			<import namespace="http://personal.v2.api.rolsac.caib.es" />
-			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="SeccioCriteria">
-				<complexContent>
-					<extension base="tns2:BasicCriteria">
-						<sequence>
-							<element name="codigoEstandard" nillable="true" type="xsd:string" />
-							<element name="perfil" nillable="true" type="xsd:string" />							
-							<element name="orden" nillable="true" type="xsd:string" />							
-							<element name="arrel" nillable="true" type="xsd:boolean" />							
-							<element name="t_descripcion" nillable="true" type="xsd:string" />
-							<element name="t_nombre" nillable="true" type="xsd:string" />
-						</sequence>
-					</extension>
-				</complexContent>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://tractament.v2.api.rolsac.caib.es">
-			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="http://usuari.v2.api.rolsac.caib.es" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
-			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import
-				namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://materia.v2.api.rolsac.caib.es" />
-			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
-			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
-			<import namespace="http://personal.v2.api.rolsac.caib.es" />
-			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="TractamentDTO">
-				<sequence>
-					<element name="cargoF" nillable="true" type="xsd:string" />
-					<element name="cargoM" nillable="true" type="xsd:string" />
-					<element name="codigoEstandar" nillable="true" type="xsd:string" />
-					<element name="id" nillable="true" type="xsd:long" />
-					<element name="tipo" nillable="true" type="xsd:string" />
-					<element name="tratamientoF" nillable="true" type="xsd:string" />
-					<element name="tratamientoM" nillable="true" type="xsd:string" />
-				</sequence>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://tramit.v2.api.rolsac.caib.es">
-			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="http://usuari.v2.api.rolsac.caib.es" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
-			<import
-				namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://materia.v2.api.rolsac.caib.es" />
-			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
-			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
-			<import namespace="http://personal.v2.api.rolsac.caib.es" />
-			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="TramitCriteria">
-				<complexContent>
-					<extension base="tns2:BasicCriteria">
-						<sequence>
-							<element name="fase" nillable="true" type="xsd:string" />
-							<element name="orden" nillable="true" type="xsd:string" />
-							<element name="versio" nillable="true" type="xsd:string" />
-							<element name="validacio" nillable="true" type="xsd:string" />							
-							<element name="dataCaducitat" nillable="true" type="xsd:string" />
-							<element name="dataPublicacio" nillable="true" type="xsd:string" />
-							<element name="dataActualitzacio" nillable="true" type="xsd:string" />
-                            <element name="dataInici" nillable="true" type="xsd:string" />
-                            <element name="dataTancament" nillable="true" type="xsd:string" />
-							<element name="codiVuds" nillable="true" type="xsd:string" />
-							<element name="descCodiVuds" nillable="true" type="xsd:string" />
-							<element name="idTraTel" nillable="true" type="xsd:string" />
-							<element name="urlExterna" nillable="true" type="xsd:string" />
-							<element name="dataActualitzacioVuds" nillable="true" type="xsd:string" />
-							<element name="t_nombre" nillable="true" type="xsd:string" />
-							<element name="t_descripcion" nillable="true" type="xsd:string" />
-							<element name="t_documentacion" nillable="true" type="xsd:string" />
-							<element name="t_requisits" nillable="true" type="xsd:string" />
-							<element name="t_observaciones" nillable="true" type="xsd:string" />
-							<element name="t_plazos" nillable="true" type="xsd:string" />
-							<element name="t_lugar" nillable="true" type="xsd:string" />							
-						</sequence>						
-					</extension>
-				</complexContent>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://arxiu.v2.api.rolsac.caib.es">
-			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="http://usuari.v2.api.rolsac.caib.es" />
-			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
-			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
-			<import
-				namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://materia.v2.api.rolsac.caib.es" />
-			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
-			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
-			<import namespace="http://personal.v2.api.rolsac.caib.es" />
-			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="ArxiuDTO">
-				<sequence>
-					<element name="id" type="xsd:long" />
-					<element name="mime" nillable="true" type="xsd:string" />
-					<element name="nombre" nillable="true" type="xsd:string" />
-					<element name="peso" type="xsd:long" />
-                    <element name="url" nillable="true" type="xsd:string" />
+					<element maxOccurs="unbounded" minOccurs="0" name="item" type="xsd:anyType" />
 				</sequence>
 			</complexType>
 		</schema>
 	</wsdl:types>
+	
 	<wsdl:message name="getNumNormativesRequest">
 		<wsdl:part name="in0" type="xsd:long" />
 	</wsdl:message>

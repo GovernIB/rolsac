@@ -1,82 +1,34 @@
 <wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
 	xmlns:impl="http://ws.fitxa.v2.api.rolsac.caib.es"
 	xmlns:intf="http://ws.fitxa.v2.api.rolsac.caib.es"
-	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://unitatAdministrativa.v2.api.rolsac.caib.es"
-	xmlns:tns2="http://general.v2.api.rolsac.caib.es" xmlns:tns3="http://fetVital.v2.api.rolsac.caib.es"
-	xmlns:tns4="http://document.v2.api.rolsac.caib.es" xmlns:tns5="http://enllac.v2.api.rolsac.caib.es"
-	xmlns:tns6="http://seccio.v2.api.rolsac.caib.es" xmlns:tns7="http://arxiu.v2.api.rolsac.caib.es"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:tns1="http://unitatAdministrativa.v2.api.rolsac.caib.es"
+	xmlns:tns2="http://general.v2.api.rolsac.caib.es"
+	xmlns:tns3="http://fetVital.v2.api.rolsac.caib.es"
+	xmlns:tns4="http://document.v2.api.rolsac.caib.es"
+	xmlns:tns5="http://enllac.v2.api.rolsac.caib.es"
+	xmlns:tns6="http://seccio.v2.api.rolsac.caib.es"
+	xmlns:tns7="http://arxiu.v2.api.rolsac.caib.es"
     xmlns:tns8="http://publicObjectiu.v2.api.rolsac.caib.es"
-	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ws.fitxa.v2.api.rolsac.caib.es">
-	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
-		PDT) -->
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://ws.fitxa.v2.api.rolsac.caib.es">
+	
+	<wsdl:import namespace="urn:tns1" location="UnitatAdministrativaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="BasicCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns3" location="FetVitalCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns4" location="DocumentCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns5" location="EnllacCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns6" location="SeccioCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns7" location="ArxiuDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns8" location="PublicObjectiuCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns8" location="PublicObjectiuDTO.wsdl"/>
+	
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://general.v2.api.rolsac.caib.es">
-			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="http://ws.fitxa.v2.api.rolsac.caib.es" />
-			<import namespace="http://fetVital.v2.api.rolsac.caib.es" />
-			<import namespace="http://enllac.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://document.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType abstract="true" name="BasicCriteria">
-				<sequence>
-					<element name="id" nillable="true" type="xsd:string" />
-					<element name="idioma" nillable="true" type="xsd:string" />
-					<element name="inici" nillable="true" type="xsd:string" />
-					<element name="ordenacio" nillable="true" type="xsd:string" />
-					<element name="tamany" nillable="true" type="xsd:string" />
-				</sequence>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://unitatAdministrativa.v2.api.rolsac.caib.es">
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="http://ws.fitxa.v2.api.rolsac.caib.es" />
-			<import namespace="http://fetVital.v2.api.rolsac.caib.es" />
-			<import namespace="http://enllac.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://document.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="UnitatAdministrativaCriteria">
-				<complexContent>
-					<extension base="tns2:BasicCriteria">
-						<sequence>
-							<element name="businessKey" nillable="true" type="xsd:string" />
-							<element name="claveHita" nillable="true" type="xsd:string" />
-							<element name="dominio" nillable="true" type="xsd:string" />
-							<element name="orden" nillable="true" type="xsd:string" />
-							<element name="validacion" nillable="true" type="xsd:string" />
-							<element name="responsable" nillable="true" type="xsd:string" />
-							<element name="telefono" nillable="true" type="xsd:string" />
-							<element name="fax" nillable="true" type="xsd:string" />
-							<element name="email" nillable="true" type="xsd:string" />
-							<element name="sexoResponsable" nillable="true" type="xsd:string" />
-							<element name="codigoEstandar" nillable="true" type="xsd:string" />
-							<element name="t_nombre" nillable="true" type="xsd:string" />
-							<element name="t_presentacion" nillable="true" type="xsd:string" />
-							<element name="t_abreviatura" nillable="true" type="xsd:string" />	
-                            <element name="seccion" nillable="true" type="xsd:string" />						
-						</sequence>
-					</extension>
-				</complexContent>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://ws.fitxa.v2.api.rolsac.caib.es">
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="http://fetVital.v2.api.rolsac.caib.es" />
-			<import namespace="http://enllac.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://document.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="ArrayOf_xsd_anyType">
 				<complexContent>
@@ -86,204 +38,18 @@
 				</complexContent>
 			</complexType>
 		</schema>
+		
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://xml.apache.org/xml-soap">
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="http://ws.fitxa.v2.api.rolsac.caib.es" />
-			<import namespace="http://fetVital.v2.api.rolsac.caib.es" />
-			<import namespace="http://enllac.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://document.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="Vector">
 				<sequence>
-					<element maxOccurs="unbounded" minOccurs="0" name="item"
-						type="xsd:anyType" />
+					<element maxOccurs="unbounded" minOccurs="0" name="item" type="xsd:anyType" />
 				</sequence>
 			</complexType>
 		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://fetVital.v2.api.rolsac.caib.es">
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="http://ws.fitxa.v2.api.rolsac.caib.es" />
-			<import namespace="http://enllac.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://document.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="FetVitalCriteria">
-				<complexContent>
-					<extension base="tns2:BasicCriteria">
-						<sequence>
-							<element name="orden" nillable="true" type="xsd:string" />
-							<element name="codigoEstandar" nillable="true" type="xsd:string" />						
-							<element name="t_nombre" nillable="true" type="xsd:string" />
-							<element name="t_descripcion" nillable="true" type="xsd:string" />
-							<element name="t_palabrasclave" nillable="true" type="xsd:string" />
-						</sequence>
-					</extension>
-				</complexContent>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://document.v2.api.rolsac.caib.es">
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="http://ws.fitxa.v2.api.rolsac.caib.es" />
-			<import namespace="http://fetVital.v2.api.rolsac.caib.es" />
-			<import namespace="http://enllac.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="DocumentCriteria">
-				<complexContent>
-					<extension base="tns2:BasicCriteria">
-						<sequence>
-							<element name="orden" nillable="true" type="xsd:string" />
-							<element name="t_titulo" nillable="true" type="xsd:string" />
-							<element name="t_descripcion" nillable="true" type="xsd:string" />
-						</sequence>
-					</extension>
-				</complexContent>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://enllac.v2.api.rolsac.caib.es">
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="http://ws.fitxa.v2.api.rolsac.caib.es" />
-			<import namespace="http://fetVital.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://document.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="EnllacCriteria">
-				<complexContent>
-					<extension base="tns2:BasicCriteria">
-						<sequence>
-							<element name="orden" nillable="true" type="xsd:string" />
-							<element name="t_titulo" nillable="true" type="xsd:string" />
-							<element name="t_enlace" nillable="true" type="xsd:string" />
-						</sequence>
-					</extension>
-				</complexContent>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://seccio.v2.api.rolsac.caib.es">
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://ws.fitxa.v2.api.rolsac.caib.es" />
-			<import namespace="http://fetVital.v2.api.rolsac.caib.es" />
-			<import namespace="http://enllac.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://document.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="SeccioCriteria">
-				<complexContent>
-					<extension base="tns2:BasicCriteria">
-						<sequence>
-							<element name="codigoEstandard" nillable="true" type="xsd:string" />
-							<element name="perfil" nillable="true" type="xsd:string" />							
-							<element name="orden" nillable="true" type="xsd:string" />							
-							<element name="arrel" nillable="true" type="xsd:boolean" />							
-							<element name="t_descripcion" nillable="true" type="xsd:string" />
-							<element name="t_nombre" nillable="true" type="xsd:string" />
-						</sequence>
-					</extension>
-				</complexContent>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://arxiu.v2.api.rolsac.caib.es">
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="http://ws.fitxa.v2.api.rolsac.caib.es" />
-			<import namespace="http://fetVital.v2.api.rolsac.caib.es" />
-			<import namespace="http://enllac.v2.api.rolsac.caib.es" />
-			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://document.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="ArxiuDTO">
-				<sequence>
-					<element name="id" type="xsd:long" />
-					<element name="mime" nillable="true" type="xsd:string" />
-					<element name="nombre" nillable="true" type="xsd:string" />
-					<element name="peso" type="xsd:long" />
-                    <element name="url" nillable="true" type="xsd:string" />
-				</sequence>
-			</complexType>
-		</schema>
-        <schema xmlns="http://www.w3.org/2001/XMLSchema"
-            targetNamespace="http://publicObjectiu.v2.api.rolsac.caib.es">
-            <import namespace="http://tipus.v2.api.rolsac.caib.es" />
-            <import namespace="http://butlleti.v2.api.rolsac.caib.es" />
-            <import namespace="http://usuari.v2.api.rolsac.caib.es" />
-            <import namespace="http://enllac.v2.api.rolsac.caib.es" />
-            <import namespace="http://iconaMateria.v2.api.rolsac.caib.es" />
-            <import namespace="http://perfil.v2.api.rolsac.caib.es" />
-            <import namespace="http://document.v2.api.rolsac.caib.es" />
-            <import namespace="http://agrupacioMateria.v2.api.rolsac.caib.es" />
-            <import namespace="http://materia.v2.api.rolsac.caib.es" />
-            <import namespace="http://edifici.v2.api.rolsac.caib.es" />
-            <import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
-            <import namespace="http://procediment.v2.api.rolsac.caib.es" />
-            <import namespace="http://unitatMateria.v2.api.rolsac.caib.es" />
-            <import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
-            <import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
-            <import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
-            <import namespace="http://seccio.v2.api.rolsac.caib.es" />
-            <import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
-            <import namespace="http://familia.v2.api.rolsac.caib.es" />
-            <import namespace="http://tramit.v2.api.rolsac.caib.es" />
-            <import namespace="http://normativa.v2.api.rolsac.caib.es" />
-            <import namespace="http://materiaAgrupacio.v2.api.rolsac.caib.es" />
-            <import namespace="http://general.v2.api.rolsac.caib.es" />
-            <import namespace="http://fetVital.v2.api.rolsac.caib.es" />
-            <import namespace="http://documentTramit.v2.api.rolsac.caib.es" />
-            <import namespace="http://taxa.v2.api.rolsac.caib.es" />
-            <import namespace="http://formulari.v2.api.rolsac.caib.es" />
-            <import namespace="http://xml.apache.org/xml-soap" />
-            <import namespace="http://fitxa.v2.api.rolsac.caib.es" />
-            <import namespace="http://fitxaUA.v2.api.rolsac.caib.es" />
-            <import namespace="http://agrupacioFetVital.v2.api.rolsac.caib.es" />
-            <import namespace="http://personal.v2.api.rolsac.caib.es" />
-            <import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-            <complexType name="PublicObjectiuCriteria">
-                <complexContent>
-                    <extension base="tns2:BasicCriteria">
-                        <sequence>
-                            <element name="orden" nillable="true" type="xsd:string" />
-                            <element name="codigoEstandar" nillable="true" type="xsd:string" />
-                            <element name="t_titulo" nillable="true" type="xsd:string" />
-                            <element name="t_descripcion" nillable="true" type="xsd:string" />
-                            <element name="t_palabrasclave" nillable="true" type="xsd:string" />
-                            <element name="procedimiento" nillable="true" type="xsd:string" />
-                            <element name="ficha" nillable="true" type="xsd:string" />
-                        </sequence>
-                    </extension>
-                </complexContent>
-            </complexType>
-            <complexType name="PublicObjectiuDTO">
-                <sequence>
-                    <element name="codigoEstandar" nillable="true" type="xsd:string" />
-                    <element name="descripcion" nillable="true" type="xsd:string" />
-                    <element name="id" type="xsd:long" />
-                    <element name="orden" type="xsd:int" />
-                    <element name="palabrasclave" nillable="true" type="xsd:string" />
-                    <element name="titulo" nillable="true" type="xsd:string" />
-                </sequence>
-            </complexType>
-        </schema>
 	</wsdl:types>
+	
 	<wsdl:message name="getNumSeccionsRequest">
 		<wsdl:part name="in0" type="xsd:long" />
 	</wsdl:message>

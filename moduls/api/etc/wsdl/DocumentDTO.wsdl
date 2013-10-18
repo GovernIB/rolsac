@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
+    xmlns:tns="http://document.v2.api.rolsac.caib.es"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    name="DocumentDTO"
+    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:tns2="http://general.v2.api.rolsac.caib.es"
+    targetNamespace="http://ws.document.v2.api.rolsac.caib.es">
+  <wsdl:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://document.v2.api.rolsac.caib.es">
+        <import namespace="http://general.v2.api.rolsac.caib.es" />
+        <complexType name="DocumentDTO">
+            <complexContent>
+                <extension base="tns2:EntitatRemota">
+                    <sequence>
+                        <element name="archivo" nillable="true" type="xsd:long" />
+                        <element name="descripcion" nillable="true" type="xsd:string" />
+                        <element name="ficha" nillable="true" type="xsd:long" />
+                        <element name="id" nillable="true" type="xsd:long" />
+                        <element name="orden" nillable="true" type="xsd:long" />
+                        <element name="procedimiento" nillable="true" type="xsd:long" />
+                        <element name="titulo" nillable="true" type="xsd:string" />
+                    </sequence>
+                </extension>
+            </complexContent>
+        </complexType>
+    </schema>
+  </wsdl:types>
+</wsdl:definitions>

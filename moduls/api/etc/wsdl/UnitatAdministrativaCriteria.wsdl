@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
+    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:tns="http://unitatAdministrativa.v2.api.rolsac.caib.es"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    name="UnitatAdministrativaCriteria"
+    xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:tns2="http://general.v2.api.rolsac.caib.es"
+    targetNamespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es">
+  <wsdl:import namespace="urn:tns2" location="BasicCriteria.wsdl"/>
+  <wsdl:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://unitatAdministrativa.v2.api.rolsac.caib.es">
+        <import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+        <import namespace="http://general.v2.api.rolsac.caib.es" />
+        <complexType name="UnitatAdministrativaCriteria">
+            <complexContent>
+                <extension base="tns2:BasicCriteria">
+                    <sequence>
+                        <element name="businessKey" nillable="true" type="xsd:string" />
+                        <element name="claveHita" nillable="true" type="xsd:string" />
+                        <element name="dominio" nillable="true" type="xsd:string" />
+                        <element name="orden" nillable="true" type="xsd:string" />
+                        <element name="validacion" nillable="true" type="xsd:string" />
+                        <element name="responsable" nillable="true" type="xsd:string" />
+                        <element name="telefono" nillable="true" type="xsd:string" />
+                        <element name="fax" nillable="true" type="xsd:string" />
+                        <element name="email" nillable="true" type="xsd:string" />
+                        <element name="sexoResponsable" nillable="true" type="xsd:string" />
+                        <element name="codigoEstandar" nillable="true" type="xsd:string" />
+                        <element name="t_nombre" nillable="true" type="xsd:string" />
+                        <element name="t_presentacion" nillable="true" type="xsd:string" />
+                        <element name="t_abreviatura" nillable="true" type="xsd:string" />
+                        <element name="seccion" nillable="true" type="xsd:string" />
+                    </sequence>
+                </extension>
+            </complexContent>
+        </complexType>
+    </schema>
+  </wsdl:types>
+</wsdl:definitions>

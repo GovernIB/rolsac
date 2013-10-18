@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
+    xmlns:tns="http://unitatAdministrativa.v2.api.rolsac.caib.es"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    name="UnitatAdministrativaDTO"
+    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:tns2="http://general.v2.api.rolsac.caib.es"
+    targetNamespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es">
+  <wsdl:import namespace="urn:tns2" location="EntitatRemota.wsdl"/>
+  <wsdl:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://unitatAdministrativa.v2.api.rolsac.caib.es">
+        <import namespace="http://general.v2.api.rolsac.caib.es" />
+        <complexType name="UnitatAdministrativaDTO">
+            <complexContent>
+                <extension base="tns2:EntitatRemota">
+                    <sequence>
+                        <element name="abreviatura" nillable="true" type="xsd:string" />
+                        <element name="businessKey" nillable="true" type="xsd:string" />
+                        <element name="claveHita" nillable="true" type="xsd:string" />
+                        <element name="codigoEstandar" nillable="true" type="xsd:string" />
+                        <element name="dominio" nillable="true" type="xsd:string" />
+                        <element name="email" nillable="true" type="xsd:string" />
+                        <element name="espacioTerrit" nillable="true" type="xsd:long" />
+                        <element name="fax" nillable="true" type="xsd:string" />
+                        <element name="fotog" nillable="true" type="xsd:long" />
+                        <element name="fotop" nillable="true" type="xsd:long" />
+                        <element name="id" nillable="true" type="xsd:long" />
+                        <element name="logoh" nillable="true" type="xsd:long" />
+                        <element name="logos" nillable="true" type="xsd:long" />
+                        <element name="logot" nillable="true" type="xsd:long" />
+                        <element name="logov" nillable="true" type="xsd:long" />
+                        <element name="nombre" nillable="true" type="xsd:string" />
+                        <element name="numfoto1" nillable="true" type="xsd:int" />
+                        <element name="numfoto2" nillable="true" type="xsd:int" />
+                        <element name="numfoto3" nillable="true" type="xsd:int" />
+                        <element name="numfoto4" nillable="true" type="xsd:int" />
+                        <element name="orden" type="xsd:long" />
+                        <element name="padre" nillable="true" type="xsd:long" />
+                        <element name="presentacion" nillable="true" type="xsd:string" />
+                        <element name="responsable" nillable="true" type="xsd:string" />
+                        <element name="sexoResponsable" nillable="true" type="xsd:int" />
+                        <element name="telefono" nillable="true" type="xsd:string" />
+                        <element name="tratamiento" nillable="true" type="xsd:long" />
+                        <element name="url" nillable="true" type="xsd:string" />
+                        <element name="validacion" nillable="true" type="xsd:int" />
+                    </sequence>
+                </extension>
+            </complexContent>
+        </complexType>
+    </schema>
+  </wsdl:types>
+</wsdl:definitions>

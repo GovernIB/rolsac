@@ -1,57 +1,22 @@
 <wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
 	xmlns:impl="http://ws.iconaFamilia.v2.api.rolsac.caib.es"
 	xmlns:intf="http://ws.iconaFamilia.v2.api.rolsac.caib.es"
-	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://familia.v2.api.rolsac.caib.es"
-	xmlns:tns2="http://perfil.v2.api.rolsac.caib.es" xmlns:tns3="http://arxiu.v2.api.rolsac.caib.es"
-	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ws.iconaFamilia.v2.api.rolsac.caib.es">
-	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
-		PDT) -->
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:tns1="http://familia.v2.api.rolsac.caib.es"
+	xmlns:tns2="http://perfil.v2.api.rolsac.caib.es"
+	xmlns:tns3="http://arxiu.v2.api.rolsac.caib.es"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://ws.iconaFamilia.v2.api.rolsac.caib.es">
+	
+	<wsdl:import namespace="urn:tns1" location="FamiliaDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="PerfilDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns3" location="ArxiuDTO.wsdl"/>
+	
 	<wsdl:types>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://familia.v2.api.rolsac.caib.es">
-			<import namespace="http://perfil.v2.api.rolsac.caib.es" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="FamiliaDTO">
-				<sequence>
-					<element name="descripcion" nillable="true" type="xsd:string" />
-					<element name="id" nillable="true" type="xsd:long" />
-					<element name="nombre" nillable="true" type="xsd:string" />
-				</sequence>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://perfil.v2.api.rolsac.caib.es">
-			<import namespace="http://familia.v2.api.rolsac.caib.es" />
-			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="PerfilDTO">
-				<sequence>
-					<element name="codigoEstandard" nillable="true" type="xsd:string" />
-					<element name="descripcion" nillable="true" type="xsd:string" />
-					<element name="id" nillable="true" type="xsd:long" />
-					<element name="nombre" nillable="true" type="xsd:string" />
-					<element name="pathIconografia" nillable="true" type="xsd:string" />
-				</sequence>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://arxiu.v2.api.rolsac.caib.es">
-			<import namespace="http://familia.v2.api.rolsac.caib.es" />
-			<import namespace="http://perfil.v2.api.rolsac.caib.es" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="ArxiuDTO">
-				<sequence>
-					<element name="id" type="xsd:long" />
-					<element name="mime" nillable="true" type="xsd:string" />
-					<element name="nombre" nillable="true" type="xsd:string" />
-					<element name="peso" type="xsd:long" />
-                    <element name="url" nillable="true" type="xsd:string" />
-				</sequence>
-			</complexType>
-		</schema>
 	</wsdl:types>
+	
 	<wsdl:message name="obtenirPerfilRequest">
 		<wsdl:part name="in0" type="xsd:long" />
 	</wsdl:message>

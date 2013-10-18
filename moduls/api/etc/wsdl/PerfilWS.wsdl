@@ -1,50 +1,22 @@
 <wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
 	xmlns:impl="http://ws.perfil.v2.api.rolsac.caib.es"
 	xmlns:intf="http://ws.perfil.v2.api.rolsac.caib.es"
-	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://iconaFamilia.v2.api.rolsac.caib.es"
-	xmlns:tns2="http://general.v2.api.rolsac.caib.es" xmlns:tns3="http://iconaMateria.v2.api.rolsac.caib.es"
-	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ws.perfil.v2.api.rolsac.caib.es">
-	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
-		PDT) -->
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:tns1="http://iconaFamilia.v2.api.rolsac.caib.es"
+	xmlns:tns2="http://general.v2.api.rolsac.caib.es"
+	xmlns:tns3="http://iconaMateria.v2.api.rolsac.caib.es"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://ws.perfil.v2.api.rolsac.caib.es">
+	
+	<wsdl:import namespace="urn:tns1" location="IconaFamiliaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="BasicCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns3" location="IconaMateriaCriteria.wsdl"/>
+	
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://general.v2.api.rolsac.caib.es">
-			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
-			<import namespace="http://iconaMateria.v2.api.rolsac.caib.es" />
-			<import namespace="http://ws.perfil.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType abstract="true" name="BasicCriteria">
-				<sequence>
-					<element name="id" nillable="true" type="xsd:string" />
-					<element name="idioma" nillable="true" type="xsd:string" />
-					<element name="inici" nillable="true" type="xsd:string" />
-					<element name="ordenacio" nillable="true" type="xsd:string" />
-					<element name="tamany" nillable="true" type="xsd:string" />
-				</sequence>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://iconaFamilia.v2.api.rolsac.caib.es">
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://iconaMateria.v2.api.rolsac.caib.es" />
-			<import namespace="http://ws.perfil.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="IconaFamiliaCriteria">
-				<complexContent>
-					<extension base="tns2:BasicCriteria">
-						<sequence />
-					</extension>
-				</complexContent>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://ws.perfil.v2.api.rolsac.caib.es">
-			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://iconaMateria.v2.api.rolsac.caib.es" />
 			<import namespace="http://xml.apache.org/xml-soap" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="ArrayOf_xsd_anyType">
@@ -55,36 +27,18 @@
 				</complexContent>
 			</complexType>
 		</schema>
+		
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://xml.apache.org/xml-soap">
-			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://iconaMateria.v2.api.rolsac.caib.es" />
-			<import namespace="http://ws.perfil.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="Vector">
 				<sequence>
-					<element maxOccurs="unbounded" minOccurs="0" name="item"
-						type="xsd:anyType" />
+					<element maxOccurs="unbounded" minOccurs="0" name="item" type="xsd:anyType" />
 				</sequence>
 			</complexType>
 		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://iconaMateria.v2.api.rolsac.caib.es">
-			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://ws.perfil.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="IconaMateriaCriteria">
-				<complexContent>
-					<extension base="tns2:BasicCriteria">
-						<sequence />
-					</extension>
-				</complexContent>
-			</complexType>
-		</schema>
 	</wsdl:types>
+	
 	<wsdl:message name="getNumIconesFamiliaResponse">
 		<wsdl:part name="getNumIconesFamiliaReturn" type="xsd:int" />
 	</wsdl:message>

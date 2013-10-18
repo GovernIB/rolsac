@@ -1,60 +1,22 @@
 <wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
 	xmlns:impl="http://ws.agrupacioMateria.v2.api.rolsac.caib.es"
 	xmlns:intf="http://ws.agrupacioMateria.v2.api.rolsac.caib.es"
-	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://materia.v2.api.rolsac.caib.es"
-	xmlns:tns2="http://general.v2.api.rolsac.caib.es" xmlns:tns3="http://seccio.v2.api.rolsac.caib.es"
-	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:tns1="http://materia.v2.api.rolsac.caib.es"
+	xmlns:tns2="http://general.v2.api.rolsac.caib.es"
+	xmlns:tns3="http://seccio.v2.api.rolsac.caib.es"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://ws.agrupacioMateria.v2.api.rolsac.caib.es">
-	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
-		PDT) -->
+	
+	<wsdl:import namespace="urn:tns1" location="MateriaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="BasicCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns3" location="SeccioDTO.wsdl"/>
+	
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://general.v2.api.rolsac.caib.es">
-			<import
-				namespace="http://ws.agrupacioMateria.v2.api.rolsac.caib.es" />
-			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="http://materia.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType abstract="true" name="BasicCriteria">
-				<sequence>
-					<element name="id" nillable="true" type="xsd:string" />
-					<element name="idioma" nillable="true" type="xsd:string" />
-					<element name="inici" nillable="true" type="xsd:string" />
-					<element name="ordenacio" nillable="true" type="xsd:string" />
-					<element name="tamany" nillable="true" type="xsd:string" />
-				</sequence>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://materia.v2.api.rolsac.caib.es">
-			<import
-				namespace="http://ws.agrupacioMateria.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="MateriaCriteria">
-				<complexContent>
-					<extension base="tns2:BasicCriteria">
-						<sequence>
-							<element name="codiHita" nillable="true" type="xsd:string" />
-							<element name="codigoEstandar" nillable="true" type="xsd:string" />							
-							<element name="destacada" nillable="true" type="xsd:boolean" />
-							<element name="t_nombre" nillable="true" type="xsd:string" />		
-							<element name="t_descripcion" nillable="true" type="xsd:string" />							
-							<element name="t_palabrasclave" nillable="true" type="xsd:string" />
-						</sequence>
-					</extension>					
-				</complexContent>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://ws.agrupacioMateria.v2.api.rolsac.caib.es">
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="http://materia.v2.api.rolsac.caib.es" />
 			<import namespace="http://xml.apache.org/xml-soap" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="ArrayOf_xsd_anyType">
@@ -65,42 +27,18 @@
 				</complexContent>
 			</complexType>
 		</schema>
+		
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://xml.apache.org/xml-soap">
-			<import
-				namespace="http://ws.agrupacioMateria.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="http://materia.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="Vector">
 				<sequence>
-					<element maxOccurs="unbounded" minOccurs="0" name="item"
-						type="xsd:anyType" />
-				</sequence>
-			</complexType>
-		</schema>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="http://seccio.v2.api.rolsac.caib.es">
-			<import
-				namespace="http://ws.agrupacioMateria.v2.api.rolsac.caib.es" />
-			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="http://materia.v2.api.rolsac.caib.es" />
-			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-			<complexType name="SeccioDTO">
-				<sequence>
-					<element name="codigoEstandard" nillable="true" type="xsd:string" />
-					<element name="descripcion" nillable="true" type="xsd:string" />
-					<element name="id" type="xsd:long" />
-					<element name="nombre" nillable="true" type="xsd:string" />
-					<element name="orden" type="xsd:int" />
-					<element name="padre" nillable="true" type="xsd:long" />
-					<element name="perfil" nillable="true" type="xsd:string" />
+					<element maxOccurs="unbounded" minOccurs="0" name="item" type="xsd:anyType" />
 				</sequence>
 			</complexType>
 		</schema>
 	</wsdl:types>
+	
 	<wsdl:message name="llistarMateriesRequest">
 		<wsdl:part name="in0" type="xsd:long" />
 		<wsdl:part name="in1" type="tns1:MateriaCriteria" />
