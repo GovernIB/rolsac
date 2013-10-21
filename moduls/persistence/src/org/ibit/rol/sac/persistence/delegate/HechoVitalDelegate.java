@@ -205,8 +205,17 @@ public class HechoVitalDelegate implements StatelessDelegate {
 			throw new DelegateException(e);
 		}
 	}
-
-
+	
+	
+	public List buscarPorIds(List<Long> ids) throws DelegateException {
+    	try {
+            return getFacade().buscarPorIds(ids);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+	
+	
 	public void reordenar(Long id, Integer ordenNuevo, Integer ordenAnterior ) throws DelegateException {
 		try {
 			getFacade().reordenar(id, ordenNuevo, ordenAnterior);

@@ -512,194 +512,142 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public ProcedimientoLocal obtenerProcedimiento(Long id) {
-    	
-        Session session = getSession();
-        ProcedimientoLocal procedimiento = null;
-        
-        try {
-        	
-            procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, id);
-            
-            if (visible(procedimiento)) {
-            	
-            	Hibernate.initialize(procedimiento.getDocumentos());
-            	
-            	for( Documento d : procedimiento.getDocumentos() ) {
-            		
-            		if (d == null) {
-            			continue; //por alg�n motivo, en ocasiones los documentos en la colecci�n son nulos 
-            		}
-            		
-            		Map<String, Traduccion> mapaTraduccions = d.getTraduccionMap();
-                	Set<String> idiomes = mapaTraduccions.keySet();
-                	
-                	for( Iterator<String> i = idiomes.iterator(); i.hasNext(); ) {
-                		
-                		TraduccionDocumento trad = ( TraduccionDocumento )d.getTraduccion( i.next() );
-                		
-                		if (trad != null) {
-                			
-                			Hibernate.initialize( trad.getArchivo() );
-                		}
-                		
-                	}
-                	
-            	}    
-            	
-                Hibernate.initialize(procedimiento.getMaterias());
-                Hibernate.initialize(procedimiento.getPublicosObjetivo());
-                Hibernate.initialize(procedimiento.getNormativas());
-                
-                for ( Normativa n : procedimiento.getNormativas() ) {
-                	
+    public ProcedimientoLocal obtenerProcedimiento(Long id)
+    {
+    	Session session = getSession();
+    	ProcedimientoLocal procedimiento = null;
+    	try {
+    		procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, id);
+    		if (visible(procedimiento)) {
+    			Hibernate.initialize(procedimiento.getDocumentos());
+    			for (Documento d : procedimiento.getDocumentos()) {
+    				if (d == null) {
+    					continue; //por alg�n motivo, en ocasiones los documentos en la colecci�n son nulos
+    				}
+    				
+    				Map<String, Traduccion> mapaTraduccions = d.getTraduccionMap();
+    				Set<String> idiomes = mapaTraduccions.keySet();
+    				for (Iterator<String> i = idiomes.iterator(); i.hasNext();) {
+    					TraduccionDocumento trad = (TraduccionDocumento)d.getTraduccion(i.next());
+    					if (trad != null) {
+    						Hibernate.initialize( trad.getArchivo() );
+    					}
+    				}
+    			}
+    			
+    			Hibernate.initialize(procedimiento.getMaterias());
+    			Hibernate.initialize(procedimiento.getPublicosObjetivo());
+    			Hibernate.initialize(procedimiento.getNormativas());
+    			for (Normativa n : procedimiento.getNormativas()) {
+    				Map<String, Traduccion> mapaTraduccions = n.getTraduccionMap();
+    				Set<String> idiomes = mapaTraduccions.keySet();
+    				for (Iterator<String> i = idiomes.iterator(); i.hasNext();) {
+    					TraduccionNormativa trad = (TraduccionNormativa)n.getTraduccion(i.next());
+    					if (trad != null) {
+    						Hibernate.initialize( trad.getArchivo() );
+    					}
+    				}
+    			}
+    			
+    			Hibernate.initialize(procedimiento.getUnidadAdministrativa());
+    			Hibernate.initialize(procedimiento.getUnidadAdministrativa().getHijos());
+    			Hibernate.initialize(procedimiento.getOrganResolutori());
+    			if (procedimiento.getOrganResolutori() != null) {
+    				Hibernate.initialize(procedimiento.getOrganResolutori().getHijos());
+    			}
+    			
+    			Hibernate.initialize(procedimiento.getUnidadAdministrativa().getNormativas());
+                Hibernate.initialize(procedimiento.getUnidadAdministrativa().getEdificios());
+                for (Normativa n : procedimiento.getUnidadAdministrativa().getNormativas()) {
                 	Map<String, Traduccion> mapaTraduccions = n.getTraduccionMap();
                 	Set<String> idiomes = mapaTraduccions.keySet();
-                	
-                	for ( Iterator<String> i = idiomes.iterator(); i.hasNext(); ) {
-                		
-                		TraduccionNormativa trad = ( TraduccionNormativa )n.getTraduccion( i.next() );
-                		
-                		if (trad != null) {
-                			
-                			Hibernate.initialize( trad.getArchivo() );
-                		}
-                		
-                	}
-                	
-                }       
-                
-                Hibernate.initialize( procedimiento.getUnidadAdministrativa() );
-                Hibernate.initialize( procedimiento.getUnidadAdministrativa().getHijos() );
-                Hibernate.initialize( procedimiento.getOrganResolutori() );
-                
-                if (procedimiento.getOrganResolutori() != null) {
-                	
-                	Hibernate.initialize( procedimiento.getOrganResolutori().getHijos() );
-                }
-
-                Hibernate.initialize( procedimiento.getUnidadAdministrativa().getNormativas() );
-                Hibernate.initialize( procedimiento.getUnidadAdministrativa().getEdificios() );
-                
-                for ( Normativa n : procedimiento.getUnidadAdministrativa().getNormativas() ) {
-                	
-                	Map<String, Traduccion> mapaTraduccions = n.getTraduccionMap();
-                	Set<String> idiomes = mapaTraduccions.keySet();
-                	
-                	for ( Iterator<String> i = idiomes.iterator(); i.hasNext(); ) {
-                		
-                		TraduccionNormativa trad = ( TraduccionNormativa )n.getTraduccion( i.next() );
-                		
+                	for (Iterator<String> i = idiomes.iterator(); i.hasNext();) {
+                		TraduccionNormativa trad = (TraduccionNormativa)n.getTraduccion(i.next());
                 		if (trad != null)
-                			Hibernate.initialize( trad.getArchivo() );
-                		
+                			Hibernate.initialize(trad.getArchivo());
                 	}
-                	
                 }
                 
-                Hibernate.initialize( procedimiento.getTramites() );
-                
-                for ( Tramite t : procedimiento.getTramites() ) {
-                	
+                Hibernate.initialize(procedimiento.getTramites());
+                for (Tramite t : procedimiento.getTramites()) {
                 	if (t == null) continue;
                 	
-                	Hibernate.initialize( t.getFormularios() ); 
-                    Hibernate.initialize( t.getDocsInformatius() );
-                    Hibernate.initialize( t.getTaxes() );
-                    Hibernate.initialize( t.getOrganCompetent() );
-                    
-                    for( DocumentTramit dt : t.getDocsInformatius() ) {
-                    	
-                    	Hibernate.initialize( dt.getArchivo() );
-
-                    	Map<String, Traduccion> mapaTraduccions = dt.getTraduccionMap();
-                    	Set<String> idiomes = mapaTraduccions.keySet();
-                    	
-                    	for( Iterator<String> i = idiomes.iterator(); i.hasNext(); ) {
-                    		
-                    		TraduccionDocumento trad = ( TraduccionDocumento )dt.getTraduccion( i.next() );
-                    		
-                    		if (trad != null) 
-                    			Hibernate.initialize( trad.getArchivo() );
-                    		
-                    	}
-                    	
-                    }
-
-                    
-                    for ( DocumentTramit df : t.getFormularios() ) {
-                    	
-                    	Hibernate.initialize( df.getArchivo() );
-                    	Map<String, Traduccion> mapaTraduccions = df.getTraduccionMap();
-                    	Set<String> idiomes = mapaTraduccions.keySet();
-                    	
-                    	for( Iterator<String> i = idiomes.iterator(); i.hasNext(); ) {
-                    		
-                    		TraduccionDocumento trad = ( TraduccionDocumento )df.getTraduccion( i.next() );
-                    		
-                    		if (trad != null)
-                    			Hibernate.initialize( trad.getArchivo() );
-                    		
-                    	}
-                    	
-                    }
-                    
+                	Hibernate.initialize(t.getFormularios());
+                	Hibernate.initialize(t.getDocsInformatius());
+                	Hibernate.initialize(t.getTaxes());
+                	Hibernate.initialize(t.getOrganCompetent());
+                	for (DocumentTramit dt : t.getDocsInformatius()) {
+                		Hibernate.initialize(dt.getArchivo());
+                		Map<String, Traduccion> mapaTraduccions = dt.getTraduccionMap();
+                		Set<String> idiomes = mapaTraduccions.keySet();
+                		for (Iterator<String> i = idiomes.iterator(); i.hasNext();) {
+                			TraduccionDocumento trad = (TraduccionDocumento) dt.getTraduccion(i.next());
+                			if (trad != null)
+                				Hibernate.initialize(trad.getArchivo());
+                		}
+                	}
+                	
+                	for (DocumentTramit df : t.getFormularios()) {
+                		Hibernate.initialize(df.getArchivo());
+                		Map<String, Traduccion> mapaTraduccions = df.getTraduccionMap();
+                		Set<String> idiomes = mapaTraduccions.keySet();
+                		for (Iterator<String> i = idiomes.iterator(); i.hasNext();) {
+                			TraduccionDocumento trad = (TraduccionDocumento) df.getTraduccion(i.next());
+                			if (trad != null)
+                				Hibernate.initialize(trad.getArchivo());
+                		}
+                	}
                 }
                 
-                Hibernate.initialize( procedimiento.getHechosVitalesProcedimientos() );
-                Hibernate.initialize( procedimiento.getIniciacion() );
-                Hibernate.initialize( procedimiento.getFamilia() );
+                Hibernate.initialize(procedimiento.getHechosVitalesProcedimientos());
+                Hibernate.initialize(procedimiento.getIniciacion());
+                Hibernate.initialize(procedimiento.getFamilia());
                 
             } else {
-            	
-                throw new SecurityException("El procedimiento no es visible");
-                
+            	throw new SecurityException("El procedimiento no es visible");
             }
-            
-        } catch (HibernateException he) {
-        	
-            throw new EJBException(he);
-            
-        } finally {
-        	
-            close(session);
-        }
-        
-        
-   		//Esto no est� funcionando bien...
+    		
+    	} catch (HibernateException he) {
+    		throw new EJBException(he);
+    		
+    	} finally {
+    		close(session);
+    	}
+    	
+    	//Esto no est� funcionando bien...
         //----------------------------------------------------------------------
         //ArrayList listaOrdenada = new ArrayList(procedimiento.getDocumentos());
 		//Comparator comp = new DocsProcedimientoComparator();
 	  	//Collections.sort(listaOrdenada, comp);
         //----------------------------------------------------------------------
-
-        //Ordenamos los documentos por el campo orden (si nulo, ordena por el campo id)
+    	
+    	//Ordenamos los documentos por el campo orden (si nulo, ordena por el campo id)
         List procs = new ArrayList(procedimiento.getDocumentos());
-        Collections.sort(procs, new Documento()); 
-	  	procedimiento.setDocumentos(procs);   
-        
-	    //Ordenamos las materias por el campo id
+        Collections.sort(procs, new Documento());
+	  	procedimiento.setDocumentos(procs);
+	  	
+	  	//Ordenamos las materias por el campo id
 	  	List mats = new ArrayList(procedimiento.getMaterias());
-	  	Collections.sort(mats, new Materia()); 
+	  	Collections.sort(mats, new Materia());
 	  	procedimiento.setMaterias(new HashSet<Materia>(mats));
 	  	
 	  	//Ordenamos las normativas por el campo id
 	  	List norms = new ArrayList(procedimiento.getNormativas());
-	  	Collections.sort(norms, new Normativa()); 
+	  	Collections.sort(norms, new Normativa());
 	  	procedimiento.setNormativas(new HashSet<Normativa>(norms));
 	  	
 		/* TODO: error de compilaci�n tras el merge con 177
 	  	//Ordenamos los normativas por el campo id
 	  	List tramites = new ArrayList(procedimiento.getTramites());
-	  	Collections.sort(tramites, new Tramite()); 
+	  	Collections.sort(tramites, new Tramite());
 	  	procedimiento.setTramites(new HashSet<Tramite>(tramites));
 		*/
 	  	
 	    //Ordenamos los Hechos vitales procedimientos por el campo orden (si nulo, ordena por el campo id)
 	  	List hechosVitales = new ArrayList(procedimiento.getHechosVitalesProcedimientos());
-	  	Collections.sort(hechosVitales); 
+	  	Collections.sort(hechosVitales);
 	  	procedimiento.setHechosVitalesProcedimientos(new HashSet<HechoVitalProcedimiento>(hechosVitales));
-
+	  	
 //	  	log.debug("##################################################################################################");
 //	  	log.debug("ObtenerProcedimiento: " + id.intValue());
 //	  	log.debug("Id Unidad Administrativa: " + procedimiento.getUnidadAdministrativa().getId().intValue());
@@ -717,11 +665,75 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 //	  	log.debug("Url: " + procedimiento.getUrl());
 //	  	log.debug("Hechos Vitales: " + procedimiento.getHechosVitalesProcedimientos().size());
 //	  	log.debug("##################################################################################################");
-	  		  	
+	  	
+	  	return procedimiento;
+	}
+    
+    
+    /**
+     * Obtiene un procedimiento Local.
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public ProcedimientoLocal obtenerProcedimientoNewBack(Long id)
+    {
+    	Session session = getSession();
+    	ProcedimientoLocal procedimiento = null;
+    	try {
+    		procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, id);
+    		if (visible(procedimiento)) {
+    			Hibernate.initialize(procedimiento.getDocumentos());
+    			Hibernate.initialize(procedimiento.getMaterias());
+    			Hibernate.initialize(procedimiento.getPublicosObjetivo());
+    			Hibernate.initialize(procedimiento.getNormativas());
+    			Hibernate.initialize(procedimiento.getUnidadAdministrativa());
+    			Hibernate.initialize(procedimiento.getUnidadAdministrativa().getHijos());
+    			Hibernate.initialize(procedimiento.getOrganResolutori());
+    			if (procedimiento.getOrganResolutori() != null) {
+    				Hibernate.initialize( procedimiento.getOrganResolutori().getHijos() );
+    			}
+    			Hibernate.initialize(procedimiento.getUnidadAdministrativa().getNormativas());
+    			Hibernate.initialize(procedimiento.getUnidadAdministrativa().getEdificios());
+    			Hibernate.initialize(procedimiento.getTramites());
+    			Hibernate.initialize(procedimiento.getHechosVitalesProcedimientos());
+    			Hibernate.initialize(procedimiento.getIniciacion());
+    			Hibernate.initialize(procedimiento.getFamilia());
+    		} else {
+    			throw new SecurityException("El procedimiento no es visible");
+    		}
+    		
+    	} catch (HibernateException he) {
+    		throw new EJBException(he);
+    		
+    	} finally {
+    		close(session);
+    		
+    	}
+    	
+    	// Ordenamos los documentos por el campo orden (si nulo, ordena por el campo id)
+        List procs = new ArrayList(procedimiento.getDocumentos());
+        Collections.sort(procs, new Documento());
+	  	procedimiento.setDocumentos(procs);
         
-        return procedimiento;
+	    // Ordenamos las materias por el campo id
+	  	List mats = new ArrayList(procedimiento.getMaterias());
+	  	Collections.sort(mats, new Materia());
+	  	procedimiento.setMaterias(new HashSet<Materia>(mats));
+	  	
+	  	//Ordenamos las normativas por el campo id
+	  	List norms = new ArrayList(procedimiento.getNormativas());
+	  	Collections.sort(norms, new Normativa());
+	  	procedimiento.setNormativas(new HashSet<Normativa>(norms));
+	  	
+	    //Ordenamos los Hechos vitales procedimientos por el campo orden (si nulo, ordena por el campo id)
+	  	List hechosVitales = new ArrayList(procedimiento.getHechosVitalesProcedimientos());
+	  	Collections.sort(hechosVitales);
+	  	procedimiento.setHechosVitalesProcedimientos(new HashSet<HechoVitalProcedimiento>(hechosVitales));
+	  	
+	  	return procedimiento;
     }
-        
+    
+    
     /**
      * Obtiene un procedimiento Local.{PORMAD}
      * @ejb.interface-method

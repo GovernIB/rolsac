@@ -94,9 +94,9 @@ public class NormativaDelegate implements StatelessDelegate {
         }
     }    
 
-    public List buscarNormativas(String texto) throws DelegateException {
+    public List buscarNormativas(List<Long> ids) throws DelegateException {
         try {
-            return getFacade().buscarNormativas(texto);
+            return getFacade().buscarNormativas(ids);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }

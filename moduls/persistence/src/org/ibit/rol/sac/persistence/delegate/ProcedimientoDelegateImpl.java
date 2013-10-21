@@ -63,7 +63,18 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
             throw new DelegateException(e);
         }
     }
-
+    
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#obtenerProcedimientoNewBack(java.lang.Long)
+	 */
+    public ProcedimientoLocal obtenerProcedimientoNewBack(Long id) throws DelegateException {
+        try {
+            return getFacade().obtenerProcedimientoNewBack(id);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#buscarProcedimientos(java.util.Map, java.util.Map)
 	 */

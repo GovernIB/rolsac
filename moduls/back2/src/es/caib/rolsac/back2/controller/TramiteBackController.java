@@ -234,25 +234,25 @@ public class TramiteBackController {
 			String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			
 			ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
-			ProcedimientoLocal procedimiento = procedimientoDelegate.obtenerProcedimiento(idProcedimiento);
+			ProcedimientoLocal procedimiento = procedimientoDelegate.obtenerProcedimientoNewBack(idProcedimiento);
 			TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
 			
 			String idTramite = request.getParameter("id_tramit_actual"); 
 			boolean edicion = !"".equals(idTramite);
 			
 			if (!edicion) {
-				if ( !tramiteDelegate.autorizaCrearTramite(idProcedimiento) )
-					throw new SecurityException("Av�s: no t� permis per a crear el tr�mit");
+				if (!tramiteDelegate.autorizaCrearTramite(idProcedimiento))
+					throw new SecurityException("Avís: no té permis per a crear el tràmit");
 				
 				tramite = new Tramite();
 				tramite.setOperativa(Tramite.Operativa.CREA);
 				tramite.setOrden(0L);
 				
 			} else {
-				tramite = tramiteDelegate.obtenerTramite( new Long(idTramite) );
+				tramite = tramiteDelegate.obtenerTramite(new Long(idTramite));
 
-				if ( !tramiteDelegate.autorizaModificarTramite( tramite.getId() ) )				
-					throw new SecurityException("Av�s: no t� permis per a crear el tr�mit");
+				if (!tramiteDelegate.autorizaModificarTramite( tramite.getId()))				
+					throw new SecurityException("Avís: no té� permis per a crear el tràmit");
 				
 				tramite.setOperativa(Tramite.Operativa.MODIFICA);
 				
@@ -287,22 +287,26 @@ public class TramiteBackController {
 			// Traducciones.
 			tramite.setTraduccionMap(getTraduccionesTramite(request, tramite));
 						
-			Scanner scanner = new Scanner( request.getParameter("tramits_item_organ_id") );
+			Scanner scanner = new Scanner(request.getParameter("tramits_item_organ_id"));
 			if (scanner.hasNextLong()) {
 				UnidadAdministrativa unidadAdministrativa = DelegateUtil.getUADelegate().obtenerUnidadAdministrativa(scanner.nextLong());
-				tramite.setOrganCompetent(unidadAdministrativa);				
-			}								
+				tramite.setOrganCompetent(unidadAdministrativa);
+			}
 			
 			tramite.setProcedimiento(procedimiento);
 			String idOrganCompetent = request.getParameter("tramits_item_organ_id");			
 			
 			// Si no se recibe ningún valor se asigna por defecto la actual.	
+			/* NOTA IMPORTANTE: MEJORA DEL RENDIMIENTO */
+//		    tramite.setFormularios(null);
+//		    tramite.setDocsInformatius(null);
+//		    tramite.setDocsRequerits(null);
+		    /* FIN NOTA */
 			tramiteDelegate.grabarTramite(tramite, !"".equals(idOrganCompetent) ? new Long(idOrganCompetent) : procedimiento.getUnidadAdministrativa().getId());
 			
         	if (!edicion) {
         		request.setAttribute("alert", "confirmacion.alta");
         		procedimientoDelegate.anyadirTramite(tramite.getId(), idProcedimiento);
-        		
         	} else {
         		request.setAttribute("alert", "confirmacion.modificacion");
         		
@@ -310,66 +314,55 @@ public class TramiteBackController {
             	guardaTasasTramite(request, tramite, tramiteDelegate);
         		// Guardar documentos y formularios.
         		guardaDocumentosYFormularios(request, edicion, tramite, tramiteDelegate);
-
         	}
 
         	// TODO: tras la refactorización usando métodos privados como soporte a los públicos,
         	// veo que esta instrucción ya se ejecuta un par de líneas antes. Desconozco si es 
         	// código duplicado o algo necesario. ACLARAR.
-        	if ( !edicion ) 
-        		procedimientoDelegate.anyadirTramite(tramite.getId(), idProcedimiento);			 
-
-		} catch (ValidateVudsException e) {
-
-			String camps="";
-
-			for (String camp: e.getCampsSenseValidar()) 
-				camps += "\\n-" + camp;
-
-			error = messageSource.getMessage("error.validacio.tramit" + ".Camps sense validar: " + camps, null, request.getLocale());
-			result = new IdNomDTO(-2l, error);
-			log.error(ExceptionUtils.getStackTrace(e));
-
-		} catch (ActualizacionVudsException e) {
-
-			try {
-				
-				// Ha fallado la actualización pero el trámite ha sido creado correctamente, así que se añade al procedimiento.
-				ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();	    	
-				procedimientoDelegate.anyadirTramite(tramite.getId(), idProcedimiento);
-
-				error = messageSource.getMessage("error.enviament.tramit", null, request.getLocale());
-				result = new IdNomDTO(-2l, error);
-				log.error(ExceptionUtils.getStackTrace(e));
-
-				request.setAttribute("idSelect", tramite.getId());
-
-			} catch (DelegateException dEx) {
-
-				if (dEx.isSecurityException()) {
-					error = messageSource.getMessage("error.permisos", null, request.getLocale());
-					result = new IdNomDTO(-1l, error);
-				} else {
-					error = messageSource.getMessage("error.altres", null, request.getLocale());
-					result = new IdNomDTO(-2l, error);
-					log.error(ExceptionUtils.getStackTrace(dEx)); 
-				}		
-
-			}
-
-		} catch (DelegateException dEx) {
-
-			if (dEx.isSecurityException()) {
-				error = messageSource.getMessage("error.permisos", null, request.getLocale());
-				result = new IdNomDTO(-1l, error);
-			} else {
-				error = messageSource.getMessage("error.altres", null, request.getLocale());
-				result = new IdNomDTO(-2l, error);
-				log.error(ExceptionUtils.getStackTrace(dEx)); 
-			}		
-
-		}
-
+        	if (!edicion)
+        		procedimientoDelegate.anyadirTramite(tramite.getId(), idProcedimiento);
+        	
+        } catch (ValidateVudsException e) {
+        	String camps = "";
+        	for (String camp: e.getCampsSenseValidar())
+        		camps += "\\n-" + camp;
+        	
+        	error = messageSource.getMessage("error.validacio.tramit" + ".Camps sense validar: " + camps, null, request.getLocale());
+        	result = new IdNomDTO(-2l, error);
+        	log.error(ExceptionUtils.getStackTrace(e));
+        	
+        } catch (ActualizacionVudsException e) {
+        	try {
+        		// Ha fallado la actualización pero el trámite ha sido creado correctamente, así que se añade al procedimiento.
+        		ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
+        		procedimientoDelegate.anyadirTramite(tramite.getId(), idProcedimiento);
+        		error = messageSource.getMessage("error.enviament.tramit", null, request.getLocale());
+        		result = new IdNomDTO(-2l, error);
+        		log.error(ExceptionUtils.getStackTrace(e));
+        		request.setAttribute("idSelect", tramite.getId());
+        		
+        	} catch (DelegateException dEx) {
+        		if (dEx.isSecurityException()) {
+        			error = messageSource.getMessage("error.permisos", null, request.getLocale());
+        			result = new IdNomDTO(-1l, error);
+        		} else {
+        			error = messageSource.getMessage("error.altres", null, request.getLocale());
+        			result = new IdNomDTO(-2l, error);
+        			log.error(ExceptionUtils.getStackTrace(dEx));
+        		}
+        	}
+        	
+        } catch (DelegateException dEx) {
+        	if (dEx.isSecurityException()) {
+        		error = messageSource.getMessage("error.permisos", null, request.getLocale());
+        		result = new IdNomDTO(-1l, error);
+        	} else {
+        		error = messageSource.getMessage("error.altres", null, request.getLocale());
+        		result = new IdNomDTO(-2l, error);
+        		log.error(ExceptionUtils.getStackTrace(dEx));
+        	}
+        }
+		
 		if (result == null) {
 			result = new IdNomDTO();
 			result.setId(tramite.getId());
@@ -381,14 +374,14 @@ public class TramiteBackController {
 	
 	private Map<String, Traduccion> getTraduccionesTramite(HttpServletRequest request, Tramite tramite) throws DelegateException
 	{
-		TraduccionTramite traduccionTramite;			
+		TraduccionTramite traduccionTramite;
 		IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
 		List<String> langs = idiomaDelegate.listarLenguajes();
 		
 		Map traducciones = new HashMap(langs.size());
-		for (String lang: langs) {
+		for (String lang : langs) {
 			traduccionTramite = (TraduccionTramite)tramite.getTraduccion(lang);
-			if ( traduccionTramite == null )
+			if (traduccionTramite == null)
 				traduccionTramite = new TraduccionTramite();
 			
 			agregaTraduccionTramite(request, lang, traducciones, traduccionTramite);
@@ -413,7 +406,7 @@ public class TramiteBackController {
 				listaDocumentosOld.addAll(tramite.getDocsRequerits());
 				
 				// Comprobamos de que tengamos tramites desde el request
-				if ("".equals(documentosTramite)) {
+				if ("".equals(documentosTramite) && listaDocumentosOld.size() > 0) {
 					tramiteDelegate.borrarDocumentos(tramite, listaDocumentosOld);
 				} else {
 					List<DocumentTramit> documentosNuevos = new ArrayList<DocumentTramit>();
@@ -455,7 +448,7 @@ public class TramiteBackController {
 						String[] orden = { ordenDocumento };
 						actualizadorDocs.put("orden_doc" + idDoc, orden);
 					}
-					tramiteDelegate.actualizarOrdenDocs(actualizadorDocs, new Long(request.getParameter("id_tramit_actual")) );
+					tramiteDelegate.actualizarOrdenDocs(actualizadorDocs, new Long(request.getParameter("id_tramit_actual")));
 				}
 	}
 
@@ -565,38 +558,34 @@ public class TramiteBackController {
 	
 	
 	@RequestMapping(value = "/esborrarTramit.do", method = POST)	
-	public @ResponseBody IdNomDTO esborrarTramit(HttpServletRequest request) {
-		
+	public @ResponseBody IdNomDTO esborrarTramit(HttpServletRequest request)
+	{
 		IdNomDTO resultatStatus = new IdNomDTO();
 		
 		Long idTramite = new Long(request.getParameter("id"));
-		Long idProcedimiento = new Long( request.getParameter("idProcediment") );
+		Long idProcedimiento = new Long(request.getParameter("idProcediment"));
 		
 		try {
-			
 			ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
 			TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
 			
 			//Quita el tramite de la lista
-			procedimientoDelegate.eliminarTramite(idTramite, idProcedimiento);  			
+			procedimientoDelegate.eliminarTramite(idTramite, idProcedimiento);
 			tramiteDelegate.borrarTramite(idTramite);
-
+			
 			resultatStatus.setId(1l);
 			resultatStatus.setNom("correcte");
 			
 		} catch (DelegateException dEx) {
-			
 			if (dEx.isSecurityException()) {
 				resultatStatus.setId(-1l);
 			} else {
 				resultatStatus.setId(-2l);
 				logException(log, dEx);
 			}
-			
 		}
-
-		return resultatStatus;
 		
+		return resultatStatus;
 	}
 	
 	
@@ -632,11 +621,10 @@ public class TramiteBackController {
 		}
 		
 		return resultats;
-		
 	}
-
-	private TraduccionTramite getTraduccionOrigen(HttpServletRequest request) {
-		
+	
+	private TraduccionTramite getTraduccionOrigen(HttpServletRequest request)
+	{
 		TraduccionTramite traduccioOrigen = new TraduccionTramite();
 		
 		if (StringUtils.isNotEmpty(request.getParameter("item_nom_tramit_" + IDIOMA_ORIGEN_TRADUCTOR))) {
@@ -659,7 +647,6 @@ public class TramiteBackController {
 		}
 		
 		return traduccioOrigen;
-		
 	}
 	
 }

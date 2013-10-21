@@ -201,13 +201,17 @@ public class ProcedimientoDelegate {
 			throws DelegateException {
 		return impl.obtenerFilterObject(proc);
 	}
-
+	
 	public ProcedimientoLocal obtenerProcedimiento(Long id)
 			throws DelegateException {
 		return impl.obtenerProcedimiento(id);
 	}
 	
-
+	public ProcedimientoLocal obtenerProcedimientoNewBack(Long id)
+			throws DelegateException {
+		return impl.obtenerProcedimientoNewBack(id);
+	}
+	
 	public void actualizarOrdenTramites(HashMap params) 
 			throws DelegateException {
 		 impl.actualizarOrdenTramites(params);	

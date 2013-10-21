@@ -11,6 +11,7 @@ import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
 import net.sf.hibernate.Criteria;
+import net.sf.hibernate.FetchMode;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
@@ -842,118 +843,119 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
 	 * Busca todos los {@link HechoVital} cuyo nombre contenga el String de entrada
 	 * 
 	 * @ejb.interface-method
-	 * 
 	 * @ejb.permission unchecked="true"
-	 * 
 	 * @param nombre	Indica el nombre de un hecho vital.
-	 * 	
 	 * @param idioma	Indica el idioma en que se realiza la búsqueda.
-	 * 
 	 * @return lista de {@link HechoVital}
 	 */
-	public List<HechoVital> buscar(final String nombre, final String idioma) {
-		
+	public List<HechoVital> buscar(final String nombre, final String idioma)
+	{
 		List<HechoVital> resultado;
-		if ( nombre != null  &&  !"".equals( nombre.trim() ) ) {
-			
+		if (nombre != null && !"".equals(nombre.trim())) {
 			Session session = getSession();
 			
 			try {
-				
 				Query query = session.createQuery("from HechoVital as hev, hev.traducciones as trad where index(trad) = :idioma and upper(trad.nombre) like :busqueda");
-				query.setString( "idioma", idioma );
-				query.setString( "busqueda", "%" + nombre.trim().toUpperCase() + "%" );
+				query.setString("idioma", idioma);
+				query.setString("busqueda", "%" + nombre.trim().toUpperCase() + "%");
+				
 				resultado = castList( HechoVital.class, query.list() );
 				
 			} catch (HibernateException he) {
-				
 				throw new EJBException(he);
 				
 			} finally {
-				
 				close(session);
-				
 			}
 			
 		} else {
-			
 			resultado = Collections.emptyList();
-			
 		}
-
-		return resultado;
 		
+		return resultado;
 	}
-
+	
+	
+	/**
+     * Busca todos los {@link HechoVital} cuyo id se encuentre en la entrada
+     * 
+     * @param busqueda
+     * @param idioma
+     * @return lista de {@link HechoVital}
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+	public List buscarPorIds(List<Long> ids)
+	{
+		List<HechoVital> resultado;
+		if (ids == null || ids.size() == 0)
+    		return Collections.EMPTY_LIST;
+    	
+    	Session session = getSession();
+    	try {
+    		Criteria criteria = session.createCriteria(HechoVital.class);
+    		criteria.setFetchMode("traducciones", FetchMode.LAZY);
+    		criteria.add(Expression.in("id", ids));
+    		resultado = criteria.list();
+    		for (HechoVital hv: resultado)
+    			Hibernate.initialize(hv.getHechosVitalesProcedimientos());
+    		
+    		return resultado; 
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+	}
+	
 	
 	/**
 	 * Asigna a un hecho vital un nuevo orden y reordena los elementos afectados.
 	 * 
 	 * @ejb.interface-method
-	 * 
 	 * @ejb.permission role-name="${role.system},${role.admin}"
-	 * 
 	 * @param	id	Identificador de un hecho vital.
-	 * 
 	 * @param	ordenNuevo	Indica el nuevo orden del hecho vital.
-	 * 
 	 * @param	ordenAnterior	Indica el antiguo orden del hecho vital.
-	 */	
-	public void reordenar( Long id, Integer ordenNuevo, Integer ordenAnterior ) {
-		
+	 */
+	public void reordenar(Long id, Integer ordenNuevo, Integer ordenAnterior)
+	{
 		Session session = getSession();
-
+		
 		try {
-
 			Criteria criteria = session.createCriteria(HechoVital.class);
+			criteria.addOrder(Order.asc("orden"));
+			List<HechoVital> listaHechosVitales = castList(HechoVital.class, criteria.list());
 			
-			criteria.addOrder( Order.asc("orden") );
-			List<HechoVital> listaHechosVitales = castList( HechoVital.class, criteria.list() );
-
 			// Modificar sólo los elementos entre la posición del elemento que cambia 
-			// de orden y su nueva posición 
-			int ordenMayor = ( ordenNuevo > ordenAnterior ? ordenNuevo : ordenAnterior );
-			int ordenMenor = ( ordenMayor == ordenNuevo ? ordenAnterior : ordenNuevo );
-
+			// de orden y su nueva posición
+			int ordenMayor = (ordenNuevo > ordenAnterior ? ordenNuevo : ordenAnterior);
+			int ordenMenor = (ordenMayor == ordenNuevo ? ordenAnterior : ordenNuevo);
+			
 			// Si el nuevo orden es mayor que el anterior, desplazar los elementos 
 			// intermedios hacia arriba (-1), en caso contrario, hacia abajo (+1)
-			int incremento = ( ordenNuevo > ordenAnterior ? -1 : 1 );        			
-
-			for ( HechoVital hechoVital : listaHechosVitales ) {        		    
-
+			int incremento = (ordenNuevo > ordenAnterior ? -1 : 1);
+			for (HechoVital hechoVital : listaHechosVitales) {
 				int orden = hechoVital.getOrden();
-
-				if ( orden >= ordenMenor && orden <= ordenMayor ) {
-
-					if ( id.equals( hechoVital.getId() ) ) {
-						
-						hechoVital.setOrden( ordenNuevo );
-						
-					} else {
-						
-						hechoVital.setOrden( orden + incremento );
-						
-					}   
-					
+				if (orden >= ordenMenor && orden <= ordenMayor) {
+					if (id.equals(hechoVital.getId()))
+						hechoVital.setOrden(ordenNuevo);
+					else
+						hechoVital.setOrden(orden + incremento);
 				}
-
+				
 				// Actualizar todo para asegurar que no hay duplicados ni huecos
 				session.saveOrUpdate(hechoVital);
-				
 			}
-
-			session.flush();
-
-		} catch (HibernateException he) {
 			
+			session.flush();
+			
+		} catch (HibernateException he) {
 			throw new EJBException(he);
 			
 		} finally {
-			
 			close(session);
-			
-		}   
-		
+		}
 	}   
 	
 

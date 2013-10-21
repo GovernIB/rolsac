@@ -577,7 +577,8 @@ public class FitxaInfBackController extends PantallaBaseController
     
     
     @RequestMapping(value = "/guardar.do", method = POST)
-    public ResponseEntity<String> guardarFicha(HttpSession session, HttpServletRequest request) {
+    public ResponseEntity<String> guardarFicha(HttpSession session, HttpServletRequest request)
+    {
     	/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
 		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la petici�n.
@@ -592,7 +593,6 @@ public class FitxaInfBackController extends PantallaBaseController
 		String error = null;
 		
 		try {
-			
 			// Aqui nos llegaría un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
 			// Iremos recopilando los parametros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
 			Map<String, String> valoresForm = new HashMap<String, String>();
@@ -649,6 +649,9 @@ public class FitxaInfBackController extends PantallaBaseController
             fitxa.setInfo(valoresForm.get("item_notes"));									// Guardamos el campo de la información
             // Fin recuperación de los valores
             
+            /* NOTA IMPORTANTE PARA EL RENDIMIENTO */
+	        fitxa.setDocumentos(null);	// Debemos ponerlo a null para que hibernate no vaya a actualizar todas la relaciones
+	        /* FIN NOTA */
             Long idFitxa = guardarFitxaGrabar(fitxa);										// Guardar los cambios de una ficha
             
             // Guardado de las relaciones de una ficha con otras entidades
@@ -707,6 +710,7 @@ public class FitxaInfBackController extends PantallaBaseController
 			error = messageSource.getMessage("fitxes.missatge.es_necessari_public", null, request.getLocale());
 			return new IdNomDTO(-3l, error);
 		}
+		
 		return null;
 	}
     
@@ -798,7 +802,7 @@ public class FitxaInfBackController extends PantallaBaseController
 		IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
 		List<String> langs = idiomaDelegate.listarLenguajes();
 		
-		for (String lang: langs) {
+		for (String lang : langs) {
 			if (edicion) {
 				tfi = (TraduccionFicha) fitxa.getTraduccion(lang);
 				if (tfi == null)
@@ -806,11 +810,11 @@ public class FitxaInfBackController extends PantallaBaseController
 				
 			} else {
 				tfi = new TraduccionFicha();
-				
 			}
-			tfi.setTitulo( RolUtil.limpiaCadena(valoresForm.get("item_titol_" + lang)) );
-			tfi.setDescAbr( RolUtil.limpiaCadena(valoresForm.get("item_des_curta_" + lang)) );
-			tfi.setDescripcion( RolUtil.limpiaCadena(valoresForm.get("item_des_llarga_" + lang)) );
+			
+			tfi.setTitulo(RolUtil.limpiaCadena(valoresForm.get("item_titol_" + lang)));
+			tfi.setDescAbr(RolUtil.limpiaCadena(valoresForm.get("item_des_curta_" + lang)));
+			tfi.setDescripcion(RolUtil.limpiaCadena(valoresForm.get("item_des_llarga_" + lang)));
 			tfi.setUrl(valoresForm.get("item_url_" + lang));
 			fitxa.setTraduccion(lang, tfi);
 		}
@@ -886,36 +890,19 @@ public class FitxaInfBackController extends PantallaBaseController
     private Ficha guardarFitxaHechosVitales(boolean edicion, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm) throws DelegateException
     {
     	if (isModuloModificado("modulo_hechos_modificado", valoresForm)) {
-    		if (valoresForm.get("fetsVitals") != null && !"".equals(valoresForm.get("fetsVitals"))) {
-    			HechoVitalDelegate fetVitalDelegate = DelegateUtil.getHechoVitalDelegate();
-    			Set<HechoVital> fetsVitalsNous = new HashSet<HechoVital>();
-    			String[] codisFetsNous = valoresForm.get("fetsVitals").split(",");
+        	if (valoresForm.get("fetsVitals") != null && !"".equals(valoresForm.get("fetsVitals"))) {
+        		HechoVitalDelegate hvDelegate = DelegateUtil.getHechoVitalDelegate();
+        		Set<HechoVital> hechosVitales = new HashSet<HechoVital>();
+        		List<Long> ids = new ArrayList<Long>();
+    			for (String cod : valoresForm.get("fetsVitals").split(","))
+    				ids.add(Long.parseLong(cod));
     			
-    			if (edicion) {
-    				for (int i = 0; i<codisFetsNous.length; i++) {
-    					for (HechoVital fetVital: fitxaOld.getHechosVitales()) {
-    						if(fetVital.getId().equals(ParseUtil.parseLong(codisFetsNous[i]))) {
-    							fetsVitalsNous.add(fetVital);
-    							codisFetsNous[i] = null;
-    							break;
-    						}
-    					}
-    				}
-    			}
-    			
-    			for (String codiFetVital: codisFetsNous) {
-    				if (codiFetVital != null) {
-    					Long codi = ParseUtil.parseLong(codiFetVital);
-    					fetsVitalsNous.add(fetVitalDelegate.obtenerHechoVital(codi));
-    				}
-    			}
-    			fitxa.setHechosVitales(fetsVitalsNous);
-    			
-    		} else {
-    			fitxa.setHechosVitales(new HashSet<HechoVital>());
-    			
-    		}
-    	}
+    			hechosVitales.addAll(hvDelegate.buscarPorIds(ids));
+        		fitxa.setHechosVitales(hechosVitales);
+        	} else {
+        		fitxa.setHechosVitales(new HashSet<HechoVital>());
+        	}
+        }
     	return fitxa;
     }
     
@@ -1041,12 +1028,12 @@ public class FitxaInfBackController extends PantallaBaseController
     private void guardarFitxaSecciosUA(boolean edicion, Ficha fitxaOld, Map<String, String> valoresForm, Long idFitxa) throws DelegateException
     {
     	FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
-    	if ( isModuloModificado("modulo_seccionesua_modificado", valoresForm) ) {
+    	if (isModuloModificado("modulo_seccionesua_modificado", valoresForm)) {
     		String[] codisSeccUaNous = valoresForm.get("seccUA").split(",");
     		boolean esborrarFichaUA = true;
     		
     		if (edicion) {
-    			for ( FichaUA fichaUA : fitxaOld.getFichasua() ) {
+    			for (FichaUA fichaUA : fitxaOld.getFichasua()) {
     				esborrarFichaUA = true;
     				for (int i = 0; i<codisSeccUaNous.length; i++) {
     					if (codisSeccUaNous[i] != null) { //Per a no repetir cerques
@@ -1067,7 +1054,7 @@ public class FitxaInfBackController extends PantallaBaseController
     		}
     		
     		// Tots els que tenen id = -1, son nous i se poden afegir directament
-    		for (String codiSeccUa: codisSeccUaNous) {
+    		for (String codiSeccUa : codisSeccUaNous) {
     			if (codiSeccUa != null) {
     				String[] seccUA = codiSeccUa.split("#");
     				Long idSeccion = ParseUtil.parseLong(seccUA[1]);
@@ -1102,10 +1089,6 @@ public class FitxaInfBackController extends PantallaBaseController
      */
     private void guardarFitxaEnlaces(boolean edicion, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm, Long idFitxa, Set<String> enllasos) throws DelegateException
     {
-    	// Tiempos para trazas
-    	Date startTrace;
-    	long execTime;
-    	
     	IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
     	List<String> langs = idiomaDelegate.listarLenguajes();
     	if (isModuloModificado("modulo_enlaces_modificado", valoresForm)) {
@@ -1122,7 +1105,7 @@ public class FitxaInfBackController extends PantallaBaseController
     					enllas.setId(ParseUtil.parseLong(valoresForm.get(nomParameter)));
     				
     				enllas.setOrden(ParseUtil.parseLong(valoresForm.get("enllas_orden_" + elements[2])));
-    				for (String lang: langs) {
+    				for (String lang : langs) {
     					TraduccionEnlace traduccio = new TraduccionEnlace();
     					traduccio.setTitulo(valoresForm.get("enllas_nombre_" + lang + "_" + elements[2]));
     					traduccio.setEnlace(valoresForm.get("enllas_url_" + lang + "_" + elements[2]));
@@ -1134,13 +1117,8 @@ public class FitxaInfBackController extends PantallaBaseController
     			}
     		}
     		EnlaceDelegate enllasDelegate = DelegateUtil.getEnlaceDelegate();
-    		for (Enlace enllas: enllassosNous) {
-    			log.debug("Inici de grabarEnlace(" + enllas + ", " + null + ", " + idFitxa + ")");
-    			startTrace = new Date();
+    		for (Enlace enllas : enllassosNous)
     			enllasDelegate.grabarEnlace(enllas, null, idFitxa);
-    			execTime = new Date().getTime() - startTrace.getTime();
-    			log.debug("Temps d'execucio de grabarEnlace(" + enllas + ", " + null + ", " + idFitxa + "): " + execTime + " milisegons.");
-    		}
     		
     		// Cal triar dels enllassos antics que pogues haver, quins se conserven i quins no
     		if (edicion) {
@@ -1151,13 +1129,9 @@ public class FitxaInfBackController extends PantallaBaseController
     						it.remove();
     				}
     			}
-    			for (Enlace enllas: enllassosEliminar) {
+    			for (Enlace enllas : enllassosEliminar) {
     				Long codi = enllas.getId();
-    				log.debug("Inici de borrarEnlace(" + codi + ")");
-    				startTrace = new Date();
     				enllasDelegate.borrarEnlace(codi);
-    				execTime = new Date().getTime() - startTrace.getTime();
-    				log.debug("Temps d'execucio de borrarEnlace(" + codi + "): " + execTime + " milisegons.");
     			}
     		}
     	}
