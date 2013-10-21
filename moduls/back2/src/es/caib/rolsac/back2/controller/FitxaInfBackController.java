@@ -765,8 +765,6 @@ public class FitxaInfBackController extends PantallaBaseController {
 	            }
             }
             
-            log.info("1.0 Inició del guardado de una ficha");
-    	    Date startTrace = new Date();
             // Documents
             if (isModuloModificado("modulo_documents_modificado", valoresForm)) {
             	DocumentoResumen document;
@@ -823,8 +821,6 @@ public class FitxaInfBackController extends PantallaBaseController {
     	        }
             }
 	        // Fi documents
-            long execTime = new Date().getTime() - startTrace.getTime();
-        	log.info("1.0 Fin del guardado de una ficha, tiempo total: " + execTime + " milisegundos.");
 	        
 	        // Guardar
 	        /* NOTA IMPORTANTE PARA EL RENDIMIENTO */
@@ -833,62 +829,60 @@ public class FitxaInfBackController extends PantallaBaseController {
             Long idFitxa = fitxaDelegate.grabarFicha(fitxa);
                 
             //Asociacion de ficha con Unidad administrativa
-            if(isModuloModificado("modulo_seccionesua_modificado", valoresForm)){
-            
-                String[] codisSeccUaNous = valoresForm.get("seccUA").split(",");                                      
-                boolean esborrarFichaUA = true;
-                
-                if (edicion){
-                    for (FichaUA fichaUA: fitxaOld.getFichasua()){
+    	    long execTime;
+            if (isModuloModificado("modulo_seccionesua_modificado", valoresForm)) {
+            	String[] codisSeccUaNous = valoresForm.get("seccUA").split(",");
+            	boolean esborrarFichaUA = true;
+            	
+            	if (edicion) {
+                    for (FichaUA fichaUA: fitxaOld.getFichasua()) {
                         esborrarFichaUA = true;
-                        for (int i = 0; i<codisSeccUaNous.length; i++){
-                            if (codisSeccUaNous[i] != null){//Per a no repetir cerques
+                        for (int i = 0; i<codisSeccUaNous.length; i++) {
+                            if (codisSeccUaNous[i] != null) {//Per a no repetir cerques
                                 String[] seccUA = codisSeccUaNous[i].split("#"); //En cas d'edicio es necesari verificar si les relacions anteriors se mantenen
-                                if(fichaUA.getId().equals(ParseUtil.parseLong(seccUA[0]))){
+                                if (fichaUA.getId().equals(ParseUtil.parseLong(seccUA[0]))) {
                                     esborrarFichaUA = false;
                                     codisSeccUaNous[i] = null;
                                     break;
                                 }    
                             }
                         }
-                        if (esborrarFichaUA){
+                        if (esborrarFichaUA) {
                             Long codi = fichaUA.getId();
                             fitxaDelegate.borrarFichaUA2(codi);
-                        }                            
+                        }
                     }
                 }
                 
     		    //Tots els que tenen id = -1, son nous i se poden afegir directament
-                for (String codiSeccUa: codisSeccUaNous){
-                    if (codiSeccUa != null){
+                for (String codiSeccUa : codisSeccUaNous){
+                    if (codiSeccUa != null) {
                         String[] seccUA = codiSeccUa.split("#");
                         Long idSeccion = ParseUtil.parseLong(seccUA[1]);
                         Long idUA = ParseUtil.parseLong(seccUA[2]);
                         fitxaDelegate.crearFichaUA2(idUA, idSeccion, idFitxa);
                         String pidip = System.getProperty("es.caib.rolsac.pidip");
-                        if(!((pidip == null) || pidip.equals("N"))) {
+                        if (!((pidip == null) || pidip.equals("N"))) {
                             // Si se anyade una ficha a la seccion Actualidad, se a�ade tambien a Portada Actualidad (PIDIP)
-                            if (idSeccion.longValue()== new Long(Parametros.ESDEVENIMENTS).longValue())
+                            if (idSeccion.longValue() == new Long(Parametros.ESDEVENIMENTS).longValue())
                             {   //comprobamos  antes si ya exite la ficha en actualidad  en portada en cuyo caso no la insertamos para no duplicarla.
                                 int existe=0;
                                 Long portadas = new Long(Parametros.PORTADAS_ACTUALIDAD);
                                 List listac = fitxaDelegate.listarFichasSeccionTodas(portadas);
                                 
                                 Iterator iter = listac.iterator();
-                                while (iter.hasNext())
-                                {
+                                while (iter.hasNext()) {
                                     Ficha ficac=(Ficha)iter.next();
-                                    if((""+ficac.getId()).equals(""+idFitxa))
+                                    if ((""+ficac.getId()).equals(""+idFitxa))
                                         existe=1;
                                 }
-                                if (existe==0) {
+                                if (existe == 0) {
                                     fitxaDelegate.crearFichaUA2(idUA, portadas, idFitxa);
                                 }
                             }
                         }                                                
                     }
                 }
-                
             }
 	    	
 	    	// Tractament d'enllassos

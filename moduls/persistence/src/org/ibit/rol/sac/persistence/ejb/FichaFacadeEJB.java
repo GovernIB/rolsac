@@ -1480,7 +1480,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
             boolean borrar = !(fichaUA.getFicha() instanceof Remoto); 
             
             fichaUA.getFicha().removeFichaUA(fichaUA);
-            fichaUA.getSeccion().removeFichaUA(fichaUA);
+            fichaUA.getSeccion().removeFichaUA2(fichaUA);
             UnidadAdministrativa unidad = fichaUA.getUnidadAdministrativa();
             if (unidad != null) {
                 unidad.removeFichaUA2(fichaUA);
