@@ -28,6 +28,7 @@ import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
+import net.sf.hibernate.Transaction;
 import net.sf.hibernate.expression.Expression;
 import net.sf.hibernate.expression.Order;
 
@@ -50,6 +51,7 @@ import org.ibit.lucene.indra.model.TraModelFilterObject;
 import org.ibit.rol.sac.model.AdministracionRemota;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Auditoria;
+import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.Ficha;
@@ -1272,9 +1274,9 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
             // Cuando se aniade una ficha a una seccion o a una seccion + ua por defecto su orden es 1
             fichaUA.setOrdenseccion(1);
             seccion.addFichaUA2(fichaUA);
-		    Ficha ficha = (Ficha) session.load(Ficha.class, ficha_id);
+            Ficha ficha = (Ficha) session.load(Ficha.class, ficha_id);
             ficha.addFichaUA(fichaUA);
-            //session.flush();
+            
             Ficha fichasend = obtenerFicha(ficha_id);
             Actualizador.actualizar(fichasend);
             indexBorraFicha(ficha.getId());
@@ -1460,48 +1462,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
         }
     }
     
-    /* Se crea este segundo método para que no influya en el resto del sistema el cambio realizado */
-    /**
-     * Borrar una ficha Unidad administrativa
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-     */
-    public void borrarFichaUA2(Long id) {
-        Session session = getSession();
-        try {
-            if (!getAccesoManager().tieneAccesoFichaUnidad(id)) {
-                throw new SecurityException("No tiene acceso a la relaci�n");
-            }
-            FichaUA fichaUA = (FichaUA) session.load(FichaUA.class, id);
-            final  Long idFicha = fichaUA.getFicha().getId();
-            final  String ceSeccion = fichaUA.getSeccion().getCodigoEstandard();
-            final  Long idUA = fichaUA.getUnidadAdministrativa().getId();
-            
-            boolean borrar = !(fichaUA.getFicha() instanceof Remoto); 
-            
-            fichaUA.getFicha().removeFichaUA(fichaUA);
-            fichaUA.getSeccion().removeFichaUA2(fichaUA);
-            UnidadAdministrativa unidad = fichaUA.getUnidadAdministrativa();
-            if (unidad != null) {
-                unidad.removeFichaUA2(fichaUA);
-            }
-            
-            session.delete(fichaUA);
-            session.flush();
-            Ficha ficha = obtenerFicha(idFicha);
-            indexBorraFicha(ficha.getId());
-            indexInsertaFicha(ficha,null);
-            
-            if(borrar)
-                log.debug("Entro en borrar remoto ficha UA");
-            	//Actualizador.borrar(new FichaUATransferible(idUA,idFicha,ceSeccion));
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-
+    
     /**
      * Busca todas las Fichas con un texto determinado.
      * @ejb.interface-method
@@ -2784,6 +2745,48 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 				   getIdFicha().equals( ((SimpleFichaUA) o).getIdFicha() );
 		}
 		
-	} 
+	}
 	
+	
+	/**
+     * Borrar varias fichas Unidad administrativa
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+     */
+    public void borrarFichasUAdeFicha(List<FichaUA> fichasUA) {
+        Session session = getSession();
+        try {
+        	if (fichasUA.size() < 1) {
+        		return;
+        	}
+        	
+        	for (FichaUA fua : fichasUA) {
+        		if (!getAccesoManager().tieneAccesoFichaUnidad(fua.getId())) {
+        			throw new SecurityException("No tiene acceso al documento");
+        		}
+        	}
+        	
+        	StringBuilder ids = new StringBuilder();
+        	for (FichaUA fua : fichasUA) {
+        		FichaUA fichaUA = (FichaUA) session.load(FichaUA.class, fua.getId());
+        		if (ids.length() == 0) {
+        			ids.append(fichaUA.getId());
+        		} else {
+        			ids.append(",").append(fichaUA.getId());
+        		}
+        	}
+        	
+        	session.delete("from FichaUA as fua where fua.id in (" + ids.toString() + ")");
+        	session.flush();
+        	for (FichaUA fua : fichasUA) {
+        		session.refresh(fua.getFicha());
+        	}
+        	
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
+    
 }

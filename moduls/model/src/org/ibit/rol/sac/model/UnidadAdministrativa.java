@@ -402,22 +402,6 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
         todasfichas.remove(ficha);
     }
     
-    public void removeFichaUA2(FichaUA ficha)
-    {
-        int ind = fichasUA.indexOf(ficha);
-        
-        if (!(ficha == null)) ficha.setUnidadAdministrativa(null);
-        
-        if (ind > -1) {
-            fichasUA.remove(ind);
-            for (int i = ind; i < fichasUA.size(); i++) {
-                FichaUA f = (FichaUA) fichasUA.get(i);
-                if (f!=null)
-                	f.setOrden(i);
-            }
-        }
-    }
-    
     public Map getMapSeccionFichasUA() {
     	
         Map result = new TreeMap();

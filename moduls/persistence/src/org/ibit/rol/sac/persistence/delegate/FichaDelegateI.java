@@ -100,8 +100,6 @@ public interface FichaDelegateI {
 			throws DelegateException;
 
 	public abstract void borrarFichaUA(Long id) throws DelegateException;
-	
-	public abstract void borrarFichaUA2(Long id) throws DelegateException;
 
 	public abstract List buscarFichasHechoVital(Long id)
 			throws DelegateException;
@@ -164,6 +162,7 @@ public interface FichaDelegateI {
 	public int buscarFichasCaducadas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException;
 	
 	public void crearSeccionesFichas( UnidadAdministrativa ua, String[] listaSeccionesFicha ) throws DelegateException;
-		
+	
+	public void borrarFichasUAdeFicha(List<FichaUA> fichasUA) throws DelegateException;
 	
 }

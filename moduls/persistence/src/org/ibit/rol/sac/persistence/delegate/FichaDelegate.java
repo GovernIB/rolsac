@@ -169,10 +169,6 @@ public class FichaDelegate implements FichaDelegateI {
 	public void borrarFichaUA(Long id) throws DelegateException {
 		impl.borrarFichaUA(id);
 	}
-	
-	public void borrarFichaUA2(Long id) throws DelegateException {
-		impl.borrarFichaUA2(id);
-	}
 
 	public List buscarFichasHechoVital(Long id) throws DelegateException {
 		return impl.buscarFichasHechoVital(id);
@@ -254,6 +250,10 @@ public class FichaDelegate implements FichaDelegateI {
 			String orden) throws DelegateException {
 		
 		return impl.buscarFichas(parametros, traduccion, ua, idFetVital, idMateria, idPublic, uaFilles, uaMeves, campoOrdenacion, orden);
-	} 
-		
+	}
+	
+	public void borrarFichasUAdeFicha(List<FichaUA> fichasUA) throws DelegateException {
+		impl.borrarFichasUAdeFicha(fichasUA);
+	}
+	
 }
