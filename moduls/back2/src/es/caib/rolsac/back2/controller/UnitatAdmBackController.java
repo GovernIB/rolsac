@@ -440,7 +440,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			Long id = ParseUtil.parseLong(valoresForm.get("item_id"));
 			boolean edicion = id != null;
 			if (edicion) { 
-				unitatAdministrativa = unitatAdministrativaDelegate.consultarUnidadAdministrativa(id);
+				unitatAdministrativa = unitatAdministrativaDelegate.consultarUnidadAdministrativaSinFichas(id);
 			} else {									
 				unitatAdministrativa = new UnidadAdministrativa();
 			}
@@ -489,18 +489,18 @@ public class UnitatAdmBackController extends PantallaBaseController {
     		FileItem fileFotoPetita = ficherosForm.get("item_responsable_foto_petita");
     		if ( fileFotoPetita != null && fileFotoPetita.getSize() > 0 ) {
     			unitatAdministrativa.setFotop(UploadUtil.obtenerArchivo(unitatAdministrativa.getFotop(), fileFotoPetita));
-    		} else
-    		//borrar fichero si se solicita
-    		if (valoresForm.get("item_responsable_foto_petita_delete") != null && !"".equals(valoresForm.get("item_responsable_foto_petita_delete"))){
+    		} else if (valoresForm.get("item_responsable_foto_petita_delete") != null && !"".equals(valoresForm.get("item_responsable_foto_petita_delete"))) {
+    			//borrar fichero si se solicita
+    			unitatAdministrativaDelegate.eliminarFotoPetita(unitatAdministrativa.getId());
     			unitatAdministrativa.setFotop(null);
     		}
     		//FotoGran
     		FileItem fileFotoGran = ficherosForm.get("item_responsable_foto_gran");
     		if ( fileFotoGran != null && fileFotoGran.getSize() > 0 ) {
     			unitatAdministrativa.setFotog(UploadUtil.obtenerArchivo(unitatAdministrativa.getFotog(), fileFotoGran));
-    		} else
-    		//borrar fichero si se solicita
-    		if (valoresForm.get("item_responsable_foto_gran_delete") != null && !"".equals(valoresForm.get("item_responsable_foto_gran_delete"))){
+    		} else if (valoresForm.get("item_responsable_foto_gran_delete") != null && !"".equals(valoresForm.get("item_responsable_foto_gran_delete"))) {
+    			//borrar fichero si se solicita
+    			unitatAdministrativaDelegate.eliminarFotoGrande(unitatAdministrativa.getId());
     			unitatAdministrativa.setFotog(null);
     		}
 
@@ -520,36 +520,36 @@ public class UnitatAdmBackController extends PantallaBaseController {
     		FileItem fileLogoHoritzontal = ficherosForm.get("item_logo_horizontal");
     		if ( fileLogoHoritzontal != null && fileLogoHoritzontal.getSize() > 0 ) {
     			unitatAdministrativa.setLogoh(UploadUtil.obtenerArchivo(unitatAdministrativa.getLogoh(), fileLogoHoritzontal));
-    		} else
-    		//borrar fichero si se solicita
-    		if (valoresForm.get("item_logo_horizontal_delete") != null && !"".equals(valoresForm.get("item_logo_horizontal_delete"))){
+    		} else if (valoresForm.get("item_logo_horizontal_delete") != null && !"".equals(valoresForm.get("item_logo_horizontal_delete"))) {
+    			//borrar fichero si se solicita
+    			unitatAdministrativaDelegate.eliminarLogoHorizontal(unitatAdministrativa.getId());
     			unitatAdministrativa.setLogoh(null);
     		}
     		//LogoVertical
     		FileItem fileLogoVertical = ficherosForm.get("item_logo_vertical");
     		if ( fileLogoVertical != null && fileLogoVertical.getSize() > 0 ) {
     			unitatAdministrativa.setLogov(UploadUtil.obtenerArchivo(unitatAdministrativa.getLogov(), fileLogoVertical));
-    		} else
-    		//borrar fichero si se solicita
-    		if (valoresForm.get("item_logo_vertical_delete") != null && !"".equals(valoresForm.get("item_logo_vertical_delete"))){
+    		} else if (valoresForm.get("item_logo_vertical_delete") != null && !"".equals(valoresForm.get("item_logo_vertical_delete"))) {
+    			//borrar fichero si se solicita
+    			unitatAdministrativaDelegate.eliminarLogoVertical(unitatAdministrativa.getId());
     			unitatAdministrativa.setLogov(null);
     		}
     		//LogoSalutacioHoritzontal
     		FileItem fileLogoSalutacioHoritzontal = ficherosForm.get("item_logo_salutacio_horizontal");
     		if ( fileLogoSalutacioHoritzontal != null && fileLogoSalutacioHoritzontal.getSize() > 0 ) {
     			unitatAdministrativa.setLogos(UploadUtil.obtenerArchivo(unitatAdministrativa.getLogos(), fileLogoSalutacioHoritzontal));
-    		} else
-    		//borrar fichero si se solicita
-    		if (valoresForm.get("item_logo_salutacio_horizontal_delete") != null && !"".equals(valoresForm.get("item_logo_salutacio_horizontal_delete"))){
+    		} else if (valoresForm.get("item_logo_salutacio_horizontal_delete") != null && !"".equals(valoresForm.get("item_logo_salutacio_horizontal_delete"))) {
+    			//borrar fichero si se solicita
+    			unitatAdministrativaDelegate.eliminarLogoSalutacio(unitatAdministrativa.getId());
     			unitatAdministrativa.setLogos(null);
     		}
     		//LogoSalutacioVertical
     		FileItem fileLogoSalutacioVertical = ficherosForm.get("item_logo_salutacio_vertical");
     		if ( fileLogoSalutacioVertical != null && fileLogoSalutacioVertical.getSize() > 0 ) {
     			unitatAdministrativa.setLogot(UploadUtil.obtenerArchivo(unitatAdministrativa.getLogot(), fileLogoSalutacioVertical));
-    		} else
-    		//borrar fichero si se solicita
-    		if (valoresForm.get("item_logo_salutacio_vertical_delete") != null && !"".equals(valoresForm.get("item_logo_salutacio_vertical_delete"))){
+    		} else if (valoresForm.get("item_logo_salutacio_vertical_delete") != null && !"".equals(valoresForm.get("item_logo_salutacio_vertical_delete"))) {
+    			//borrar fichero si se solicita
+    			unitatAdministrativaDelegate.eliminarLogoTipos(unitatAdministrativa.getId());
     			unitatAdministrativa.setLogot(null);
     		}
     		

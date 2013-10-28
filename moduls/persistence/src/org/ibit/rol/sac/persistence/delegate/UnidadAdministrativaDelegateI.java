@@ -190,10 +190,7 @@ public interface UnidadAdministrativaDelegateI {
 	 */
 	public abstract UnidadAdministrativa consultarUnidadAdministrativaSinFichas(Long id)
 			throws DelegateException;
-
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#consultarUnidadAdministrativaPMA(java.lang.Long)
-	 */
+	
 	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#consultarUnidadAdministrativaPMA(java.lang.Long)
 	 */
@@ -612,5 +609,41 @@ public interface UnidadAdministrativaDelegateI {
 	 */
     public abstract void actualizaFichasSeccionUA(Long idUA, Long idSeccion, List<Long> fichasParaActualizar)
     		throws DelegateException;
-	
+    
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate#eliminarFotoGrande(java.lang.Long)
+	 */
+    public abstract void eliminarFotoGrande(Long idUA)
+    		throws DelegateException;
+    
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate#eliminarFotoPetita(java.lang.Long)
+	 */
+    public abstract void eliminarFotoPetita(Long idUA)
+    		throws DelegateException;
+    
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate#eliminarLogoHorizontal(java.lang.Long)
+	 */
+    public abstract void eliminarLogoHorizontal(Long idUA)
+    		throws DelegateException;
+    
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate#eliminarLogoVertical(java.lang.Long)
+	 */
+    public abstract void eliminarLogoVertical(Long idUA)
+    		throws DelegateException;
+    
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate#eliminarLogoSalutacio(java.lang.Long)
+	 */
+    public abstract void eliminarLogoSalutacio(Long idUA)
+    		throws DelegateException;
+    
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate#eliminarLogoTipos(java.lang.Long)
+	 */
+    public abstract void eliminarLogoTipos(Long idUA)
+    		throws DelegateException;
+    
 }

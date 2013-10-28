@@ -18,6 +18,7 @@ import javax.ejb.EJBException;
 import net.sf.hibernate.Criteria;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.LazyInitializationException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
@@ -148,24 +149,25 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
             close(session);
         }
     }
-
+    
+    
     /**
      * Actualiza una Unidad Administrativa
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
      */
-    public void actualizarUnidadAdministrativa(UnidadAdministrativa unidad, Long padre_id) {
-        Session session;
-
-        Long old_padre_id = (unidad.getPadre() == null ? null : unidad.getPadre().getId());
-
-        boolean newIsNull = (padre_id == null);
+    public void actualizarUnidadAdministrativa(UnidadAdministrativa unidad, Long padre_id)
+    {
+    	Session session = getSession();
+    	Long old_padre_id = (unidad.getPadre() == null ? null : unidad.getPadre().getId());
+    	
+    	boolean newIsNull = (padre_id == null);
         boolean oldIsNull = (old_padre_id == null);
-
+        
         if (newIsNull && !userIsSystem()) {
             throw new SecurityException("Solo el usuario de sistema puede crear raices.");
         }
-
+        
         boolean change = (newIsNull ? !oldIsNull : !padre_id.equals(old_padre_id));
         
         if (change && !oldIsNull && !newIsNull) {
@@ -173,19 +175,19 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
         		throw new SecurityException("No tiene acceso al nodo superior anterior o al actual.");
         	}
         }
-
+        
         if (!getAccesoManager().tieneAccesoUnidad(unidad.getId(), true)) {
             throw new SecurityException("No tiene acceso a la unidad");
         }
-
-        session = getSession();
+        
         try {
-            session.update(unidad);
-            if (change) {
-                if (!oldIsNull) {
-                    UnidadAdministrativa oldPadre = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, old_padre_id);
-                    oldPadre.removeHijo(unidad);
-                }
+        	session.update(unidad);
+        	
+        	if (change) {
+        		if (!oldIsNull) {
+        			UnidadAdministrativa oldPadre = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, old_padre_id);
+        			oldPadre.removeHijo(unidad);
+        		}
                 if (!newIsNull) {
                     UnidadAdministrativa newPadre = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, padre_id);
                     newPadre.addHijo(unidad);
@@ -193,16 +195,18 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
                 if (newIsNull || oldIsNull) {
                     session.flush();
                     Query query = session.getNamedQuery("unidades.root");
-                    List<UnidadAdministrativa> lista = castList(UnidadAdministrativa.class, query.list() );
+                    List<UnidadAdministrativa> lista = castList(UnidadAdministrativa.class, query.list());
                     for (int i = 0; i < lista.size(); i++) {
                         UnidadAdministrativa uni = (UnidadAdministrativa) lista.get(i);
                         uni.setOrden(i);
                     }
                 }
             }
+            
             addOperacion(session, unidad, Auditoria.MODIFICAR);
             session.flush();
             Actualizador.actualizar(unidad);
+            
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
@@ -698,9 +702,9 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
             close(session);
         }
     }
-
-
-      /**
+    
+    
+    /**
      * Obtiene informacion para el front de una Unidad Administrativa
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -1969,13 +1973,15 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 	    		
 	    		//OBTENER DIRECCIONES
-	    		if (ua.getEdificios()!=null) {
-		    		iter = ua.getEdificios().iterator();
+	    		try {
+	    			iter = ua.getEdificios().iterator();
 		    		while (iter.hasNext()) {
 		    			Edificio edificio = (Edificio)iter.next();
 		    			txtexto += edificio.getDireccion()+" ";
 		    			txtexto += edificio.getTelefono()+" ";
 		    		}
+	    		} catch (LazyInitializationException le) {
+	    			log.error("Error controlado: No ha sido inicializado el listado de edificios. " + le.getMessage());
 	    		}
 	    		
 	    		filter.setUo_id( (txids.length()==1) ? null: txids);
@@ -3554,6 +3560,168 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		} finally {
 			close(session);
 		}		
+	}
+	
+	
+	/**
+	 * Se encarga de eliminar el archivo foto grande
+	 * 
+	 * @param ua
+	 * @throws HibernateException 
+	 * @throws EJBException
+	 * 
+	 * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public void eliminarFotoGrande(Long idUA)
+	{
+		Session session = getSession();
+		try {
+			UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, idUA);
+			session.delete(ua.getFotog());
+			ua.setFotog(null);
+			session.flush();
+			
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+	
+	
+	/**
+	 * Se encarga de eliminar el archivo foto pequeña
+	 * 
+	 * @param ua
+	 * @throws HibernateException 
+	 * @throws EJBException
+	 * 
+	 * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public void eliminarFotoPetita(Long idUA)
+	{
+		Session session = getSession();
+		try {
+			UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, idUA);
+			session.delete(ua.getFotop());
+			ua.setFotop(null);
+			session.flush();
+			
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+	
+	
+	/**
+	 * Se encarga de eliminar el archivo logo salutación vertical
+	 * 
+	 * @param ua
+	 * @throws HibernateException 
+	 * @throws EJBException
+	 * 
+	 * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public void eliminarLogoTipos(Long idUA)
+	{
+		Session session = getSession();
+		try {
+			UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, idUA);
+			session.delete(ua.getLogot());
+			ua.setLogot(null);
+			session.flush();
+			
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+	
+	
+	/**
+	 * Se encarga de eliminar el archivo logo vertical
+	 * 
+	 * @param ua
+	 * @throws HibernateException 
+	 * @throws EJBException
+	 * 
+	 * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public void eliminarLogoVertical(Long idUA)
+	{
+		Session session = getSession();
+		try {
+			UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, idUA);
+			session.delete(ua.getLogov());
+			ua.setLogov(null);
+			session.flush();
+			
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+	
+	
+	/**
+	 * Se encarga de eliminar el archivo logo horitzontal
+	 * 
+	 * @param ua
+	 * @throws HibernateException 
+	 * @throws EJBException
+	 * 
+	 * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public void eliminarLogoHorizontal(Long idUA)
+	{
+		Session session = getSession();
+		try {
+			UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, idUA);
+			session.delete(ua.getLogoh());
+			ua.setLogoh(null);
+			session.flush();
+			
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+	
+	
+	/**
+	 * Se encarga de eliminar el archivo logo salutación horitzontal
+	 * 
+	 * @param ua
+	 * @throws HibernateException 
+	 * @throws EJBException
+	 * 
+	 * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public void eliminarLogoSalutacio(Long idUA)
+	{
+		Session session = getSession();
+		try {
+			UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, idUA);
+			session.delete(ua.getLogos());
+			ua.setLogos(null);
+			session.flush();
+			
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
 	}
 	
 }

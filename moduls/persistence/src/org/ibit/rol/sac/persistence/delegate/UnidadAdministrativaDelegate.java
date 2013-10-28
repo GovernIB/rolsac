@@ -103,8 +103,8 @@ public class UnidadAdministrativaDelegate {
 			throws DelegateException {
 		return impl.consultarUnidadAdministrativaSinFichas(id);
     }
-
-    public UnidadAdministrativa consultarUnidadAdministrativaPMA(Long id)
+	
+	public UnidadAdministrativa consultarUnidadAdministrativaPMA(Long id)
 	throws DelegateException {
 		return impl.consultarUnidadAdministrativaPMA(id);
 	}
@@ -381,5 +381,35 @@ public class UnidadAdministrativaDelegate {
     		throws DelegateException {
     	impl.actualizaFichasSeccionUA(idUA, idSeccion, fichasParaActualizar);
     }
-
+    
+    public void eliminarFotoGrande(Long idUA)
+    		throws DelegateException {
+    	impl.eliminarFotoGrande(idUA);
+    }
+    
+    public void eliminarFotoPetita(Long idUA)
+    		throws DelegateException {
+    	impl.eliminarFotoPetita(idUA);
+    }
+    
+    public void eliminarLogoHorizontal(Long idUA)
+    		throws DelegateException {
+    	impl.eliminarLogoHorizontal(idUA);
+    }
+    
+    public void eliminarLogoVertical(Long idUA)
+    		throws DelegateException {
+    	impl.eliminarLogoVertical(idUA);
+    }
+    
+    public void eliminarLogoSalutacio(Long idUA)
+    		throws DelegateException {
+    	impl.eliminarLogoSalutacio(idUA);
+    }
+    
+    public void eliminarLogoTipos(Long idUA)
+    		throws DelegateException {
+    	impl.eliminarLogoTipos(idUA);
+    }
+    
 }

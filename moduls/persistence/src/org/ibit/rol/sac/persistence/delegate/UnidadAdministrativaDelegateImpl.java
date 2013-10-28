@@ -13,8 +13,6 @@ import javax.naming.NamingException;
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Ficha;
-import org.ibit.rol.sac.model.FichaResumenUA;
-import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -1162,5 +1160,59 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
      	}
 		
 	}
-
+	
+	public void eliminarFotoGrande(Long idUA) throws DelegateException
+	{
+		try {
+			getFacade().eliminarFotoGrande(idUA);
+		} catch (RemoteException e) {
+     		throw new DelegateException(e);
+     	}
+	}
+	
+	public void eliminarFotoPetita(Long idUA) throws DelegateException
+	{
+		try {
+			getFacade().eliminarFotoPetita(idUA);
+		} catch (RemoteException e) {
+     		throw new DelegateException(e);
+     	}
+	}
+	
+	public void eliminarLogoHorizontal(Long idUA) throws DelegateException
+	{
+		try {
+			getFacade().eliminarLogoHorizontal(idUA);
+		} catch (RemoteException e) {
+     		throw new DelegateException(e);
+     	}
+	}
+	
+	public void eliminarLogoVertical(Long idUA) throws DelegateException
+	{
+		try {
+			getFacade().eliminarLogoVertical(idUA);
+		} catch (RemoteException e) {
+     		throw new DelegateException(e);
+     	}
+	}
+	
+	public void eliminarLogoSalutacio(Long idUA) throws DelegateException
+	{
+		try {
+			getFacade().eliminarLogoSalutacio(idUA);
+		} catch (RemoteException e) {
+     		throw new DelegateException(e);
+     	}
+	}
+	
+	public void eliminarLogoTipos(Long idUA) throws DelegateException
+	{
+		try {
+			getFacade().eliminarLogoTipos(idUA);
+		} catch (RemoteException e) {
+     		throw new DelegateException(e);
+     	}
+	}
+	
 }
