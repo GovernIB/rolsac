@@ -66,6 +66,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.api.v1.UnidadAdministrativaDTO;
+import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
@@ -1229,9 +1230,10 @@ public class UnitatAdmBackController extends PantallaBaseController
 			textes = textes.toUpperCase();
 
 			tradMap.put("nombre", textes);
-			tradMap.put("presentacion", textes);
 			tradMap.put("abreviatura", textes);
 			tradMap.put("url", textes);
+			textes = HtmlUtils.eliminarTagsHtml(textes);	// Filtrar los tags de Html puestos por el tiny
+			tradMap.put("presentacion", textes);
 			tradMap.put("cvResponsable", textes);
 		} else {
 			tradMap.put("idioma", lang);

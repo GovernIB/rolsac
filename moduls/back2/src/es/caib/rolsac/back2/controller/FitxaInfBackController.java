@@ -68,6 +68,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.Parametros;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
@@ -254,12 +255,13 @@ public class FitxaInfBackController extends PantallaBaseController
     	String textes = request.getParameter("textes");
     	if (textes != null && !"".equals(textes)) {
     		textes = textes.toUpperCase();
-    		if (tradMap.get("titulo") == null)
+    		if (tradMap.get("titulo") == null) {
     			tradMap.put("titulo", textes);
-    		
+    		}
+    		tradMap.put("url", textes);
+    		textes = HtmlUtils.eliminarTagsHtml(textes);
     		tradMap.put("descAbr", textes);
     		tradMap.put("descripcion", textes);
-    		tradMap.put("url", textes);
     	} else {
     		try {
     			tradMap.put("idioma", DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
