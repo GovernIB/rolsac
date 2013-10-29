@@ -1,9 +1,9 @@
 package org.ibit.rol.sac.persistence.ejb;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -53,9 +53,7 @@ import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.model.webcaib.NormativaModel;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.delegate.IndexerDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
-import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
@@ -76,6 +74,8 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  */
 public abstract class NormativaFacadeEJB extends HibernateEJB {
 
+	private static final long serialVersionUID = -1519489071805481782L;
+	
 	private static String idioma_per_defecte ="ca";
 	
     /**
@@ -762,8 +762,14 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
                         }
                     }
                 } else if (value instanceof Date) {
-                	if (aux.length() > 0) aux = aux + " and ";
-                    aux = aux + "normativa." + key + " = '" + org.ibit.rol.sac.persistence.util.DateUtils.formatearddMMyyyy((Date)value) + "'";
+                	
+                	if (aux.length() > 0) 
+                		aux = aux + " and ";
+                	
+                	Calendar cal = Calendar.getInstance();
+                	cal.setTime((Date)value);
+                    aux = aux + "normativa." + key + " = TO_DATE('" + cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DAY_OF_YEAR) + "', 'YYYY-MM-DD')";
+                    
                 } else {
                 	if (aux.length() > 0) aux = aux + " and ";
                     aux = aux + "normativa." + key + " = " + value;
@@ -1037,7 +1043,8 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			log.warn("[indexBorraNormativa:" + nor.getId() + "] No se ha podido borrar del indice la normativa. " + ex.getMessage());
 		}		        
 	}
-	 	 
+	
+	// TODO amartin 29/10/2013: no se usa. ¿se puede borrar?
 	 /**
 	  * A partir de una lista de objetos Normativa, devuelve su correspondiente lista de 
 	  * objetos NormativaModel, teniendo en cuenta el idioma de traducción.
