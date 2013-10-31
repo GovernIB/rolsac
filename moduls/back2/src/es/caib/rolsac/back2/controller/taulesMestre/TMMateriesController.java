@@ -45,7 +45,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import sun.text.Normalizer;
 import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
@@ -191,28 +190,68 @@ public class TMMateriesController extends PantallaBaseController {
             // Ordenamos las UAs por nombre, ascendente.
             Collections.sort(listaUAs, new Comparator<UnidadAdministrativa>() {
             	
-            	public int compare(UnidadAdministrativa o1, UnidadAdministrativa o2)
-            	{
+            	public int compare(UnidadAdministrativa o1, UnidadAdministrativa o2) {
+            		
             		TraduccionUA tr1 = (TraduccionUA)o1.getTraduccion();
             		TraduccionUA tr2 = (TraduccionUA)o2.getTraduccion();
             		
             		if (tr1 == null) {
+            			
             			return -1;
+            			
             		} else if (tr2 == null) {
+            			
             			return 1;
+            			
             		} else {
+            			
             			String nombre1 = tr1.getNombre();
             			String nombre2 = tr2.getNombre();
             			
+            			// TODO amartin 30/10/2013: código comentado para compatibilidad con JDK 1.6.
+            			// Habría que encontrar un modo de normalizar las cadenas de texto que sea compatible 
+            			// en JDK1.5 y 1.6 ó superior a la vez. Ahora mismo el problema es que la clase Normalizer pertenece a:
+            			// - Package java.text.Normalizer en 1.6
+            			// - Package sun.text.Normalizer en 1.5.
+            			            			
+            			/*
             			// Normalizamos y pasamos a ASCII para ordenar ignorando acentos o resto de caracteres extraños.
             			nombre1 = Normalizer.normalize(nombre1, Normalizer.DECOMP_COMPAT, 0).replaceAll("[^\\p{ASCII}]", "");
             			nombre2 = Normalizer.normalize(nombre2, Normalizer.DECOMP_COMPAT, 0).replaceAll("[^\\p{ASCII}]", "");
+            			*/
             			
+            			// Normalización básica temporal, hasta pasar definitivamente a JDK1.6 ó superior
+            			// y así poder usar la clase java.text.Normalizer.
+            			nombre1 = nombre1.replaceAll("[\u00E0\u00E1]", "a"); // áà
+    					nombre1 = nombre1.replaceAll("[\u00E8\u00E9]", "e"); // éè
+    					nombre1 = nombre1.replaceAll("[\u00ED\u00EE]", "i"); // íì
+    					nombre1 = nombre1.replaceAll("[\u00F2\u00F3]", "o"); // óò
+    					nombre1 = nombre1.replaceAll("[\u00F9\u00FA]", "u"); // úù
+    					nombre1 = nombre1.replaceAll("[\u00C0\u00C1]", "A"); // ÁÀ
+    					nombre1 = nombre1.replaceAll("[\u00C8\u00C9]", "E"); // ÉÈ
+    					nombre1 = nombre1.replaceAll("[\u00CC\u00CD]", "I"); // ÍÌ
+    					nombre1 = nombre1.replaceAll("[\u00D2\u00D3]", "O"); // ÓÒ
+    					nombre1 = nombre1.replaceAll("[\u00D9\u00DA]", "U"); // ÚÙ    					
+    					
+    					nombre2 = nombre2.replaceAll("[\u00E0\u00E1]", "a"); // áà
+    					nombre2 = nombre2.replaceAll("[\u00E8\u00E9]", "e"); // éè
+    					nombre2 = nombre2.replaceAll("[\u00ED\u00EE]", "i"); // íì
+    					nombre2 = nombre2.replaceAll("[\u00F2\u00F3]", "o"); // óò
+    					nombre2 = nombre2.replaceAll("[\u00F9\u00FA]", "u"); // úù
+    					nombre2 = nombre2.replaceAll("[\u00C0\u00C1]", "A"); // ÁÀ
+    					nombre2 = nombre2.replaceAll("[\u00C8\u00C9]", "E"); // ÉÈ
+    					nombre2 = nombre2.replaceAll("[\u00CC\u00CD]", "I"); // ÍÌ
+    					nombre2 = nombre2.replaceAll("[\u00D2\u00D3]", "O"); // ÓÒ
+    					nombre2 = nombre2.replaceAll("[\u00D9\u00DA]", "U"); // ÚÙ    					
+            			            			            			
             			return nombre1.compareToIgnoreCase(nombre2);
+            			
             		}
+            		
             	}
+            	
             });
-            
+                        
             String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
             List<Map<String, Object>> listaUAsDTO = new ArrayList<Map<String, Object>>();
             Iterator<UnidadAdministrativa> it = listaUAs.iterator();
