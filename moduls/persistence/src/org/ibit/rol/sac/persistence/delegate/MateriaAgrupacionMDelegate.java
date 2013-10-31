@@ -18,9 +18,10 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  */
 public class MateriaAgrupacionMDelegate implements StatelessDelegate {
    /* ========================================================= */
-   /* ======================== M�TODOS DE NEGOCIO ============= */
+   /* ======================== MÉTODOS DE NEGOCIO ============= */
    /* ========================================================= */
 
+	/** @deprecated Usado desde el back antiguo */
    public Long grabarMateriaAgrupacionM(MateriaAgrupacionM materiap, Long materia_id, Long agrupacion_id) throws DelegateException {
        try {
            return getFacade().grabarMateriaAgrupacionM(materiap, materia_id, agrupacion_id);
@@ -28,7 +29,8 @@ public class MateriaAgrupacionMDelegate implements StatelessDelegate {
            throw new DelegateException(e);
        }
    }
-
+   
+   /** @deprecated No se usa */
    public MateriaAgrupacionM obtenerMateriaAgrupacionM(Long id) throws DelegateException {
        try {
            return getFacade().obtenerMateriaAgrupacionM(id);
@@ -37,6 +39,7 @@ public class MateriaAgrupacionMDelegate implements StatelessDelegate {
        }
    }
 
+   /** @deprecated Usado desde el back antiguo */
     public void subirOrden(Long id) throws DelegateException {
         try {
             getFacade().subirOrden(id);
@@ -45,6 +48,7 @@ public class MateriaAgrupacionMDelegate implements StatelessDelegate {
         }
     }
 
+    /** @deprecated Usado desde el back antiguo */
    public void borrarMateriaAgrupacionM(Long id) throws DelegateException {
        try {
            getFacade().borrarMateriaAgrupacionM(id);

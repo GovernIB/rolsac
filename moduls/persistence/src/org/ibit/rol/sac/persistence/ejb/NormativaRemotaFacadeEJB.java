@@ -26,6 +26,7 @@ import javax.ejb.EJBException;
 
 
 /**
+ * @deprecated No se usa
  * SessionBean para mantener y consultar Normativa Remota.
  *
  * @ejb.bean
@@ -40,7 +41,7 @@ import javax.ejb.EJBException;
 public abstract class NormativaRemotaFacadeEJB extends HibernateEJB {
 
     /**
-     * Obtiene referéncia al ejb de control de Acceso.
+     * Obtiene referï¿½ncia al ejb de control de Acceso.
      * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
      */
     protected abstract AccesoManagerLocal getAccesoManager();

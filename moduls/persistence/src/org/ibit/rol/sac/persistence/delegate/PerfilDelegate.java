@@ -20,7 +20,7 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 public class PerfilDelegate implements StatelessDelegate {
 
     /* ========================================================= */
-    /* ======================== M�TODOS DE NEGOCIO ============= */
+    /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
     public Long grabarPerfil(PerfilCiudadano perfil) throws DelegateException {
@@ -55,6 +55,7 @@ public class PerfilDelegate implements StatelessDelegate {
         }
     }
 
+    /** @deprecated No se usa */
     public PerfilCiudadano obtenerPerfil(String codigo) throws DelegateException {
         try {
             return getFacade().obtenerPerfil(codigo);

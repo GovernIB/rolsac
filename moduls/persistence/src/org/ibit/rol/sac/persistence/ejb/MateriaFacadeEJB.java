@@ -29,7 +29,7 @@ import org.ibit.rol.sac.persistence.util.RemotoUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
- 
+
 
 /**
  * SessionBean para mantener y consultar materias.
@@ -45,471 +45,699 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  */
 public abstract class MateriaFacadeEJB extends HibernateEJB {
 
-	private static String idioma_per_defecte ="ca";
+	private static final long serialVersionUID = 3277261235228031289L;
 	
-    /**
-     * @ejb.create-method
-     * @ejb.permission unchecked="true"
-     */
-    public void ejbCreate() throws CreateException {
-        super.ejbCreate();
-    }
-
-    /**
-     * Crea o actualiza una materia.
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin}"
-     */
-    public Long grabarMateria(Materia materia) {
-        Session session = getSession();
-        try {
-            session.saveOrUpdate(materia);
-            session.flush();
-            return materia.getId();
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-
-    /**
-    * Lista todas las materias del menú de administración (nuevo backoffice).
-    * 
-    * @ejb.interface-method
-    * @ejb.permission unchecked="true"
-    */    
-    public ResultadoBusqueda listarMaterias(int pagina, int resultados, String lang) {
-    	return listarTablaMaestraPaginada(pagina, resultados, listarTMMaterias(lang));
-    }
-    
-    /**
-    * Lista todas las materias.
-    * @ejb.interface-method
-    * @ejb.permission unchecked="true"
-    */        
-    public List listarMaterias() {
-    	Session session = getSession();
-    	
-    	try {
-    		Criteria criteri = session.createCriteria(Materia.class);    		
-    		return criteri.addOrder(Order.asc("codigoEstandar")).list();
-    	} catch (HibernateException he) {
-    		throw new EJBException(he);
-    	} finally {
-    		close(session);
-    	}    	
-    }
-    
-    /**
-     * Listar las materias del menú de administración (nuevo backoffice)
-     * @return
-     */
-    private List listarTMMaterias(String lang) {
-    	Session session = getSession();
-    	
-    	try {
-    		Query query = session.createQuery("select mat.id, mat.codigoEstandar, trad.nombre " +
-    														"from Materia as mat, mat.traducciones as trad " +
-    														"where index(trad) = :idioma " +
-    														"order by mat.codigoEstandar asc");
-    		
-    		query.setParameter("idioma", lang);
-    		return query.list();    		
-    	} catch (HibernateException he) {
-    		throw new EJBException(he);
-    	} finally {
-    		close(session);
-    	}    	
-    }
-    
-     /**
-     * Lista todas las materias para el front.
-     * @ejb.interface-method
-     * @ejb.permission unchecked= "true"
-     */
-    public List<Materia> listarMateriasFront() {
-        Session session = getSession();
-        try {
-            Criteria criteri = session.createCriteria(Materia.class);
-            return criteri.list();
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-
-    /**
-     * Lista todas las materias para el front destacadas. (PORMAD) TODO: ver si hay que eliminarlo
-     * @ejb.interface-method
-     * @ejb.permission unchecked= "true"
-     */
-    public List<Materia> listarMateriasFrontDestacadas(String lang) {
-        Session session = getSession();
-        try {
-            Query query = session.createQuery("from Materia as mat, mat.traducciones as trad where index(trad) = :idioma and mat.destacada=true order by trad.nombre asc");
-            query.setString("idioma", lang);
-            List<Materia> materias = query.list();
-            return materias;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-
-    /**
-     * Obtiene una materia. (metode que s'emplea per el backoffice i el frontoffice.
-     * Hem llevat els rols (PORMAD)
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public Materia obtenerMateria(Long id) {
-        Session session = getSession();
-        try {
-            Materia materia = (Materia) session.load(Materia.class, id);
-            Hibernate.initialize(materia.getFoto());
-            Hibernate.initialize(materia.getIcono());
-            Hibernate.initialize(materia.getIconoGrande());
-            Hibernate.initialize(materia.getProcedimientosLocales());
-            for (Iterator iterator = materia.getIconos().iterator(); iterator.hasNext();) {
-                IconoMateria icono = (IconoMateria) iterator.next();
-                Hibernate.initialize(icono.getIcono());
-            }
-            for (Iterator iterator = materia.getLangs().iterator(); iterator.hasNext();) {
-                String lang = (String) iterator.next();
-                TraduccionMateria traduccion = (TraduccionMateria) materia.getTraduccion(lang);
-                if(traduccion!= null){
-                    Hibernate.initialize(traduccion.getDistribComp());
-                    Hibernate.initialize(traduccion.getNormativa());
-                    Hibernate.initialize(traduccion.getContenido());
-                }
-            }
-            return materia;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-
-
-
-    /**
-     * Nos dice si una materia tiene procedimientos o fichas
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-     */
-    public boolean tieneProcedimientosOFichas(Long id){
-        Session session = getSession();
-        try {
-            Materia materia = (Materia) session.load(Materia.class, id);
-            Set procedimientos = materia.getProcedimientosLocales();
-            Set fichas = materia.getFichas();
-            return procedimientos.size() != 0 || fichas.size() != 0;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-    
-    
 	/**
-     * Obtiene el listado de materias de una UA
-     * Se toma la Unidad administrativa principal de la materia
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-     */
+	 * @ejb.create-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public void ejbCreate() throws CreateException {
+		super.ejbCreate();
+	}
+
+
+	/**
+	 * Crea o actualiza una materia.
+	 * 
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission role-name="${role.system},${role.admin}"
+	 * 
+	 * @param materia	Indica la materia a guardar.
+	 * 
+	 * @return	Devuelve el identificador de la materia guardada.
+	 */
+	public Long grabarMateria(Materia materia) {
+
+		Session session = getSession();
+		try {
+
+			session.saveOrUpdate(materia);
+			session.flush();
+
+			return materia.getId();
+
+		} catch (HibernateException he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+
+		}
+
+	}
+
+
+	/**
+	 * Lista todas las materias del menú de administración (nuevo backoffice).
+	 * 
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param	pagina	Indica la última página visitada.
+	 * 
+	 * @param	resultados	Indica el número de resultados por página.
+	 * 
+	 * @param	idioma	Indica el idioma en que se realiza la búsqueda.
+	 * 
+	 * @return	Devuelve <code>ResultadoBusqueda</code> que contiene un listado de todas las materias.
+	 */    
+	public ResultadoBusqueda listarMaterias(int pagina, int resultados, String idioma) {
+
+		return listarTablaMaestraPaginada( pagina, resultados, listarTMMaterias(idioma) );
+
+	}
+
+
+	/**
+	 * Lista todas las materias.
+	 * 
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @return	Devuelve un listado de todas las materias.
+	 */        
+	public List listarMaterias() {
+		
+		Session session = getSession();
+
+		try {
+			
+			Criteria criteri = session.createCriteria(Materia.class);
+			
+			return criteri.addOrder( Order.asc("codigoEstandar") ).list();
+			
+		} catch (HibernateException he) {
+			
+			throw new EJBException(he);
+			
+		} finally {
+			
+			close(session);
+			
+		}   
+		
+	}
+	
+
+	/**
+	 * Listar las materias del menú de administración (nuevo backoffice)
+	 * 
+	 * @param	lang	Indica el idioam en que se realiza la búsqueda.
+	 * 
+	 * @return Devuelve un listado de materias.
+	 */
+	private List listarTMMaterias(String lang) {
+		
+		Session session = getSession();
+
+		try {
+			
+			StringBuilder consulta = new StringBuilder("select mat.id, mat.codigoEstandar, trad.nombre ");
+			consulta.append("from Materia as mat, mat.traducciones as trad ");
+			consulta.append("where index(trad) = :idioma ");
+			consulta.append("order by mat.codigoEstandar asc");
+			
+			Query query = session.createQuery( consulta.toString() );
+			query.setParameter("idioma", lang);
+			
+			return query.list();
+			
+		} catch (HibernateException he) {
+			
+			throw new EJBException(he);
+			
+		} finally {
+			
+			close(session);
+			
+		}   
+		
+	}
+
+	
+	/**
+	 *  @deprecated No se usa
+	 * Lista todas las materias para el front.
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked= "true"
+	 */
+	public List<Materia> listarMateriasFront() {
+		Session session = getSession();
+		try {
+			Criteria criteri = session.createCriteria(Materia.class);
+			return criteri.list();
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+
+	
+	/**
+	 * @deprecated No se usa
+	 * Lista todas las materias para el front destacadas. (PORMAD) TODO: ver si hay que eliminarlo
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked= "true"
+	 */
+	public List<Materia> listarMateriasFrontDestacadas(String lang) {
+		Session session = getSession();
+		try {
+			Query query = session.createQuery("from Materia as mat, mat.traducciones as trad where index(trad) = :idioma and mat.destacada=true order by trad.nombre asc");
+			query.setString("idioma", lang);
+			List<Materia> materias = query.list();
+			return materias;
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+
+	
+	/**
+	 * Obtiene una materia. (metode que s'emplea per el backoffice i el frontoffice.
+	 * Hem llevat els rols (PORMAD)
+	 * 
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de la materia.
+	 * 
+	 * @return Devuelve la materia solicitada.
+	 */
+	public Materia obtenerMateria(Long id) {
+		
+		Session session = getSession();
+		try {
+			
+			Materia materia = (Materia) session.load(Materia.class, id);
+			Hibernate.initialize( materia.getFoto() );
+			Hibernate.initialize( materia.getIcono() );
+			Hibernate.initialize( materia.getIconoGrande() );
+			Hibernate.initialize( materia.getProcedimientosLocales() );
+			
+			Iterator iteradorIconos = materia.getIconos().iterator();
+			while ( iteradorIconos.hasNext() ) {
+				
+				IconoMateria icono = (IconoMateria) iteradorIconos.next();
+				Hibernate.initialize( icono.getIcono() );
+				
+			}
+			
+			Iterator iteradorIdiomas = materia.getLangs().iterator();
+			while ( iteradorIdiomas.hasNext() ) {
+				
+				String lang = (String) iteradorIdiomas.next();
+				TraduccionMateria traduccion = (TraduccionMateria) materia.getTraduccion(lang);
+				
+				if ( traduccion != null ) {
+					
+					Hibernate.initialize( traduccion.getDistribComp() );
+					Hibernate.initialize( traduccion.getNormativa() );
+					Hibernate.initialize( traduccion.getContenido() );
+					
+				}
+				
+			}
+			
+			return materia;
+			
+		} catch (HibernateException he) {
+			
+			throw new EJBException(he);
+			
+		} finally {
+			
+			close(session);
+			
+		}
+		
+	}
+
+
+	/**
+	 * @deprecated Usado desde el back antiguo
+	 * Nos dice si una materia tiene procedimientos o fichas
+	 * @ejb.interface-method
+	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+	 */
+	public boolean tieneProcedimientosOFichas(Long id){
+		Session session = getSession();
+		try {
+			Materia materia = (Materia) session.load(Materia.class, id);
+			Set procedimientos = materia.getProcedimientosLocales();
+			Set fichas = materia.getFichas();
+			return procedimientos.size() != 0 || fichas.size() != 0;
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+
+
+	/**
+	 * @deprecated Usado desde el back antiguo
+	 * Obtiene el listado de materias de una UA
+	 * Se toma la Unidad administrativa principal de la materia
+	 * @ejb.interface-method
+	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+	 */
 	public List<Materia> listarMateriasbyUA (Long ua){
-        Session session = getSession();
-        try {
-            Query query = session.createQuery("from UnidadMateria unimat where unimat.unidadPrincipal='S' and unimat.unidad.id=:ua");
-        	//Query query = session.createQuery("from UnidadMateria unimat where unimat.unidadPrincipal='S' and unimat.unidad.id:=ua");
-            query.setLong("ua", ua);
-            query.setCacheable(true);
-            return (List<Materia>)query.list();
-            //if (result.isEmpty()) {
-              //  return null;
-            //}
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-    
+		Session session = getSession();
+		try {
+			Query query = session.createQuery("from UnidadMateria unimat where unimat.unidadPrincipal='S' and unimat.unidad.id=:ua");
+			//Query query = session.createQuery("from UnidadMateria unimat where unimat.unidadPrincipal='S' and unimat.unidad.id:=ua");
+			query.setLong("ua", ua);
+			query.setCacheable(true);
+			return (List<Materia>)query.list();
+			//if (result.isEmpty()) {
+			//  return null;
+			//}
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
 
-    /**
-     * Borra una Materia.
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin}"
-     */
-    public void borrarMateria(Long id) {
-        Session session = getSession();
-        try {
-            Materia materia = (Materia) session.load(Materia.class, id);
 
-            Set procedimientos = materia.getProcedimientosLocales();
-            Set fichas = materia.getFichas();
-            Set iconos = materia.getIconos();
-            for(Iterator iter = iconos.iterator();iter.hasNext();){
-                IconoMateria icono =(IconoMateria)iter.next();
-                PerfilCiudadano perfil = icono.getPerfil();
-                perfil.removeIconoMateria(icono);
-            }
-            if(procedimientos.size()!= 0|| fichas.size()!= 0){
-                throw new EJBException("La materia contiene registros asociados");
-            }
-            
-            addOperacion(session, materia, Auditoria.BORRAR);
-            Historico historico = getHistorico(session, materia);
-            ((HistoricoMateria) historico).setMateria(null);
-            Actualizador.borrar(materia);
-            
-            session.delete(materia);
-            session.flush();
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-    
-    /**
-     * Obtiene todos los grupos {@link MateriaAgrupacionM} a los que pertenece una determinada materia
-     * @return lista de {@link MateriaAgrupacionM}
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
+	/**
+	 * Borra una Materia.
+	 * 
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission role-name="${role.system},${role.admin}"
+	 * 
+	 * @param	id	Identificador de la materia a borrar.
+	 */
+	public void borrarMateria(Long id) {
+		
+		Session session = getSession();
+		try {
+			
+			Materia materia = (Materia) session.load(Materia.class, id);
+
+			Set procedimientos = materia.getProcedimientosLocales();
+			Set fichas = materia.getFichas();
+			Set iconos = materia.getIconos();
+			Iterator iter = iconos.iterator();
+			while ( iter.hasNext() ) {
+				
+				IconoMateria icono = (IconoMateria) iter.next();
+				PerfilCiudadano perfil = icono.getPerfil();
+				perfil.removeIconoMateria(icono);
+				
+			}
+			
+			if (procedimientos.size() != 0 || fichas.size() != 0 )
+				throw new EJBException("La materia contiene registros asociados");
+
+			addOperacion( session, materia, Auditoria.BORRAR );
+			Historico historico = getHistorico(session, materia);
+			( (HistoricoMateria) historico ).setMateria(null);
+			Actualizador.borrar(materia);
+
+			session.delete(materia);
+			session.flush();
+			
+		} catch (HibernateException he) {
+			
+			throw new EJBException(he);
+			
+		} finally {
+			
+			close(session);
+			
+		}
+		
+	}
+	
+
+	/**
+	 * @deprecated No se usa 
+	 * Obtiene todos los grupos {@link MateriaAgrupacionM} a los que pertenece una determinada materia
+	 * @return lista de {@link MateriaAgrupacionM}
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
 	@SuppressWarnings("unchecked")
-    public Set<MateriaAgrupacionM> obtenerGruposMateria(Long idmateria) {
-        Session session = getSession();
-        try {
-            Materia materia = (Materia) session.load(Materia.class, idmateria);
-            Hibernate.initialize(materia.getMateriasAgrupacionM());
-            return materia.getMateriasAgrupacionM();
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }    
-    
-    /**
-     * Obtiene el archivo distribuci�n competencial de una Materia.(PORMAD)
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public Archivo obtenerDistribComp(Long id, String lang, boolean useDefault) {
-        Session session = getSession();
-        try {
-            Materia materia = (Materia) session.load(Materia.class, id);
-            TraduccionMateria tradMateria = (TraduccionMateria) materia.getTraduccion(lang);
-            if (tradMateria == null || tradMateria.getDistribComp() == null) {
-                if (useDefault) {
-                	tradMateria = (TraduccionMateria) materia.getTraduccion();
-                } else {
-                    return null;
-                }
-            }
-            Hibernate.initialize(tradMateria.getDistribComp());
-            return tradMateria.getDistribComp();
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
+	public Set<MateriaAgrupacionM> obtenerGruposMateria(Long idmateria) {
+		Session session = getSession();
+		try {
+			Materia materia = (Materia) session.load(Materia.class, idmateria);
+			Hibernate.initialize(materia.getMateriasAgrupacionM());
+			return materia.getMateriasAgrupacionM();
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}    
 
-    /**
-     * Obtiene el archivo de normativa de una Materia.(PORMAD)
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public Archivo obtenerNormativa(Long id, String lang, boolean useDefault) {
-        Session session = getSession();
-        try {
-            Materia materia = (Materia) session.load(Materia.class, id);
-            TraduccionMateria tradMateria = (TraduccionMateria) materia.getTraduccion(lang);
-            if (tradMateria == null || tradMateria.getNormativa() == null) {
-                if (useDefault) {
-                	tradMateria = (TraduccionMateria) materia.getTraduccion();
-                } else {
-                    return null;
-                }
-            }
-            Hibernate.initialize(tradMateria.getNormativa());
-            return tradMateria.getNormativa();
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
+	
+	/**
+	 * Obtiene el archivo distribución competencial de una Materia.(PORMAD)
+	 * 
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param	id	Identificador del archivo solicitado.
+	 * 
+	 * @param	idioma	Indica el idioma en que se realiza la búsqueda.
+	 * 
+	 * @param	useDefault	Indica si se utiliza el idioma por defecto.
+	 * 
+	 * @return Devuelve <code>Archivo</code> solicitado.
+	 */
+	public Archivo obtenerDistribComp(Long id, String idioma, boolean useDefault) {
+		
+		Session session = getSession();
+		try {
+			
+			Materia materia = (Materia) session.load(Materia.class, id);
+			TraduccionMateria tradMateria = (TraduccionMateria) materia.getTraduccion(idioma);
+			if ( tradMateria == null || tradMateria.getDistribComp() == null ) {
+				
+				if ( useDefault ) {
+					
+					tradMateria = (TraduccionMateria) materia.getTraduccion();
+					
+				} else {
+					
+					return null;
+					
+				}
+				
+			}
+			
+			Hibernate.initialize( tradMateria.getDistribComp() );
+			
+			return tradMateria.getDistribComp();
+			
+		} catch (HibernateException he) {
+			
+			throw new EJBException(he);
+			
+		} finally {
+			
+			close(session);
+			
+		}
+		
+	}
 
-    /**
-     * Obtiene el archivo de contenido de una Materia. (PORMAD)
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public Archivo obtenerContenido(Long id, String lang, boolean useDefault) {
-        Session session = getSession();
-        try {
-            Materia materia = (Materia) session.load(Materia.class, id);
-            TraduccionMateria tradMateria = (TraduccionMateria) materia.getTraduccion(lang);
-            if (tradMateria == null || tradMateria.getContenido() == null) {
-                if (useDefault) {
-                	tradMateria = (TraduccionMateria) materia.getTraduccion();
-                } else {
-                    return null;
-                }
-            }
-            Hibernate.initialize(tradMateria.getContenido());
-            return tradMateria.getContenido();
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
+	
+	/**
+	 * Obtiene el archivo de normativa de una Materia.(PORMAD)
+	 * 
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param	id	Identificador del archivo solicitado.
+	 * 
+	 * @param	idioma	Indica el idioma en que se realiza la búsqueda.
+	 * 
+	 * @param	useDefault	Indica si se utiliza el idioma por defecto.
+	 * 
+	 * @return Devuelve <code>Archivo</code> solicitado.
+	 */
+	public Archivo obtenerNormativa(Long id, String lang, boolean useDefault) {
+		
+		Session session = getSession();
+		try {
+			
+			Materia materia = (Materia) session.load(Materia.class, id);
+			TraduccionMateria tradMateria = (TraduccionMateria) materia.getTraduccion(lang);
+			if ( tradMateria == null || tradMateria.getNormativa() == null ) {
+				
+				if ( useDefault ) {
+					
+					tradMateria = (TraduccionMateria) materia.getTraduccion();
+					
+				} else {
+					
+					return null;
+					
+				}
+				
+			}
+			
+			Hibernate.initialize( tradMateria.getNormativa() );
+			
+			return tradMateria.getNormativa();
+			
+		} catch (HibernateException he) {
+			
+			throw new EJBException(he);
+			
+		} finally {
+			
+			close(session);
+			
+		}
+		
+	}
 
-    /**
-     * Obtiene la foto de una Materia
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public Archivo obtenerFoto(Long id) {
-        Session session = getSession();
-        try {
-            Materia materia = (Materia) session.load(Materia.class, id);
-            Hibernate.initialize(materia.getFoto());
-            return materia.getFoto();            
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
+	
+	/**
+	 * Obtiene el archivo de contenido de una Materia. (PORMAD)
+	 * 
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param	id	Identificador del archivo solicitado.
+	 * 
+	 * @param	idioma	Indica el idioma en que se realiza la búsqueda.
+	 * 
+	 * @param	useDefault	Indica si se utiliza el idioma por defecto.
+	 * 
+	 * @return Devuelve <code>Archivo</code> con el contenido solicitado..
+	 */
+	public Archivo obtenerContenido(Long id, String lang, boolean useDefault) {
+		
+		Session session = getSession();
+		try {
+			
+			Materia materia = (Materia) session.load(Materia.class, id);
+			TraduccionMateria tradMateria = (TraduccionMateria) materia.getTraduccion(lang);
+			if ( tradMateria == null || tradMateria.getContenido() == null ) {
+				
+				if ( useDefault ) {
+					
+					tradMateria = (TraduccionMateria) materia.getTraduccion();
+					
+				} else {
+					
+					return null;
+					
+				}
+				
+			}
+			
+			Hibernate.initialize( tradMateria.getContenido() );
+			
+			return tradMateria.getContenido();
+			
+		} catch (HibernateException he) {
+			
+			throw new EJBException(he);
+			
+		} finally {
+			
+			close(session);
+			
+		}
+		
+	}
+	
 
-     /**
-     * Obtiene el icono de una Materia
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public Archivo obtenerIcono(Long id) {
-        Session session = getSession();
-        try {
-            Materia materia = (Materia) session.load(Materia.class, id);
-            Hibernate.initialize(materia.getIcono());
-            return materia.getIcono();
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
+	/**
+	 * Obtiene la foto de una Materia.
+	 * 
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de la foto solicitada.
+	 * 
+	 * @return	Devuelve <code>Archivo</code> que contiene la foto solicitada.
+	 */
+	public Archivo obtenerFoto(Long id) {
+		
+		Session session = getSession();
+		try {
+			
+			Materia materia = (Materia) session.load(Materia.class, id);
+			Hibernate.initialize( materia.getFoto() );
+			
+			return materia.getFoto();
+			
+		} catch (HibernateException he) {
+			
+			throw new EJBException(he);
+			
+		} finally {
+			
+			close(session);
+			
+		}
+		
+	}
+	
 
-     /**
-     * Obtiene el icono grande de una Materia
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public Archivo obtenerIconoGrande(Long id) {
-        Session session = getSession();
-        try {
-            Materia materia = (Materia) session.load(Materia.class, id);
-            Hibernate.initialize(materia.getIconoGrande());
-            return materia.getIconoGrande();            
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-    
-    /**
-     * A partir de un Array de Strings con los codigos
-     * estandar de las materias recojo un {@link Set} de {@link Materia} con las materias
-     * contenidas cuyo codigo Estandar este en el Array de Strings.(PORMAD)
-     * 
-     * @param ceMaterias
-     * @return Un {@link Set} de {@link Materia}
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-     */
+	/**
+	 * Obtiene el icono de una Materia.
+	 * 
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id	Identificador de la foto solicitada.
+	 * 
+	 * @return	Devuelve <code>Archivo</code> que contiene el icono solicitado.
+	 * 
+	 */
+	public Archivo obtenerIcono(Long id) {
+		
+		Session session = getSession();
+		try {
+			
+			Materia materia = (Materia) session.load(Materia.class, id);
+			Hibernate.initialize( materia.getIcono() );
+			
+			return materia.getIcono();
+			
+		} catch (HibernateException he) {
+			
+			throw new EJBException(he);
+			
+		} finally {
+			
+			close(session);
+			
+		}
+		
+	}
+	
+
+	/**
+	 *  @deprecated No se usa 
+	 * Obtiene el icono grande de una Materia
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public Archivo obtenerIconoGrande(Long id) {
+		Session session = getSession();
+		try {
+			Materia materia = (Materia) session.load(Materia.class, id);
+			Hibernate.initialize(materia.getIconoGrande());
+			return materia.getIconoGrande();            
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+
+	
+	/**
+	 * @deprecated No se usa 
+	 * A partir de un Array de Strings con los codigos
+	 * estandar de las materias recojo un {@link Set} de {@link Materia} con las materias
+	 * contenidas cuyo codigo Estandar este en el Array de Strings.(PORMAD)
+	 * 
+	 * @param ceMaterias
+	 * @return Un {@link Set} de {@link Materia}
+	 * @ejb.interface-method
+	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+	 */
 	public Set<Materia> obtenerMateriasCE(final String[] ceMaterias){
 		Session session = getSession();
-        try {
-        	Set<Materia> materias = RemotoUtils.recogerMateriasCE(session, ceMaterias);
-    		return materias;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
+		try {
+			Set<Materia> materias = RemotoUtils.recogerMateriasCE(session, ceMaterias);
+			return materias;
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
 	}
+
 	
 	/**
-     * A partir de un Strings con el codigo estandar de las materia recojo
-     * la {@link Materia} correspondiente (PORMAD)
-     * 
-     * @param codigosEstandarMateria
-     * @return {@link Materia}
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
+	 *  @deprecated Usado desde el back antiguo
+	 * A partir de un Strings con el codigo estandar de las materia recojo
+	 * la {@link Materia} correspondiente (PORMAD)
+	 * 
+	 * @param codigosEstandarMateria
+	 * @return {@link Materia}
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
 	public Materia obtenerMateriaCE(final String codigosEstandarMateria){
 		Session session = getSession();
-        try {
-        	Query query = session.createQuery("from Materia materia where materia.codigoEstandar=:codigo");
-        	query.setString("codigo", codigosEstandarMateria);
-            return (Materia)query.uniqueResult();
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
+		try {
+			Query query = session.createQuery("from Materia materia where materia.codigoEstandar=:codigo");
+			query.setString("codigo", codigosEstandarMateria);
+			return (Materia)query.uniqueResult();
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
 	}
+
 	
 	/**
-     * Busca todos los {@link Materia} cuyo nombre contenga el String de entrada(PORMAD)
-     * 
-     * @param busqueda
-     * @param idioma
-     * @return lista de {@link Materia}
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
+	 *  @deprecated Usado desde el back antiguo
+	 * Busca todos los {@link Materia} cuyo nombre contenga el String de entrada(PORMAD)
+	 * 
+	 * @param busqueda
+	 * @param idioma
+	 * @return lista de {@link Materia}
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Materia> buscar(final String busqueda, final String idioma){
 		List<Materia> resultado;
 		if(busqueda!=null && !"".equals(busqueda.trim())){
 			Session session = getSession();
-	        try {
-	        	Query query = session.createQuery("from Materia as mat, mat.traducciones as trad where index(trad) = :idioma and upper(trad.nombre) like :busqueda");
-	        	query.setString("idioma", idioma);
-	        	query.setString("busqueda", "%"+busqueda.trim().toUpperCase()+"%");
-	        	resultado = (List<Materia>)query.list();
-	        } catch (HibernateException he) {
-	            throw new EJBException(he);
-	        } finally {
-	            close(session);
-	        }
+			try {
+				Query query = session.createQuery("from Materia as mat, mat.traducciones as trad where index(trad) = :idioma and upper(trad.nombre) like :busqueda");
+				query.setString("idioma", idioma);
+				query.setString("busqueda", "%"+busqueda.trim().toUpperCase()+"%");
+				resultado = (List<Materia>)query.list();
+			} catch (HibernateException he) {
+				throw new EJBException(he);
+			} finally {
+				close(session);
+			}
 		}else{
 			resultado = Collections.emptyList();
 		}
-		
+
 		return resultado;
 	}
-	
-	
+
+
 	/**
-     * Obtiene el listado de fichas y procedimientos de la materia
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-     */
+	 * @deprecated Usado desde el back antiguo
+	 * Obtiene el listado de fichas y procedimientos de la materia
+	 * @ejb.interface-method
+	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+	 */
 	public Materia obtenerMateriaFichasProced (Long id) {
 		
         Session session = getSession();
@@ -548,51 +776,52 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
 		}
 	}
 
-	
+
 	/**
-     * Lista todas las {@link UnidadAdministrativa} relacionadas con la Materia, vía la tabla RSC_UNAMAT.
-     * 
-     * @param id de la Materia.
-     * 
-     * @return lista de {@link UnidadAdministrativa}
-     * 
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
+	 * Lista todas las {@link UnidadAdministrativa} relacionadas con la Materia, vía la tabla RSC_UNAMAT.
+	 * 
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id 	Identificador de la Materia.
+	 *  
+	 * @return lista de {@link UnidadAdministrativa}
+	 */
 	public List<UnidadAdministrativa> listarUAsMateria(Long id) {
-		
+
 		List<UnidadAdministrativa> resultado;
-		
+
 		if ( id != null ) {
-			
+
 			Session session = getSession();
-			
+
 			try {
-								
+
 				Query query = session.createQuery(" SELECT unimat.unidad FROM UnidadMateria AS unimat WHERE unimat.materia.id = :id ");
 				query.setLong("id", id);
 
-				resultado = (List<UnidadAdministrativa>)query.list();
-								
+				resultado = (List<UnidadAdministrativa>) query.list();
+
 			} catch (HibernateException he) {
-				
+
 				throw new EJBException(he);
-				
+
 			} finally {
-				
+
 				close(session);
-				
+
 			}
-			
+
 		} else {
-			
+
 			resultado = Collections.emptyList();
-			
+
 		}
-		
+
 		return resultado;
-		
+
 	}
 
-	
+
 }

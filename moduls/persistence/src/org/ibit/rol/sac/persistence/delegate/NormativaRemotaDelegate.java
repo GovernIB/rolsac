@@ -16,11 +16,12 @@ import java.util.List;
 
 
 /**
+ *  @deprecated No se usa
  * Business delegate para manipular normativas remotas.
  */
 public class NormativaRemotaDelegate implements StatelessDelegate {
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== MÃ‰TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
 
@@ -28,6 +29,7 @@ public class NormativaRemotaDelegate implements StatelessDelegate {
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
 	
+	/** @deprecated No se usa */
 	 public Long grabarNormativaRemota(final NormativaRemota normativaRemota)  throws DelegateException{
 		try {
             return getFacade().grabarNormativaRemota(normativaRemota);
@@ -36,6 +38,7 @@ public class NormativaRemotaDelegate implements StatelessDelegate {
         }
 	}
 	
+	 /** @deprecated No se usa */
     public NormativaRemota obtenerNormativaRemota(Long idExterno,Long idUaRemota) throws DelegateException {
         try {
             return getFacade().obtenerNormativaRemota(idExterno, idUaRemota);
@@ -44,6 +47,7 @@ public class NormativaRemotaDelegate implements StatelessDelegate {
         }
     }
 
+    /** @deprecated No se usa */
     public List<Normativa> obtenerNormativasProcedimiento(Long idProcedimiento) throws DelegateException{
 		try {
             return getFacade().obtenerNormativasProcedimiento(idProcedimiento);

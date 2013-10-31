@@ -22,7 +22,7 @@ import java.rmi.RemoteException;
 public class ProcedimientoRemotoDelegate implements StatelessDelegate {
 
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== MÃ‰TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 	
 	public Long grabarProcedimientoRemoto(ProcedimientoRemoto procedimientoRemoto, String[] ceMaterias, String[] ceHechos) throws DelegateException{
@@ -57,6 +57,7 @@ public class ProcedimientoRemotoDelegate implements StatelessDelegate {
         }
 	}
 	
+	/** @deprecated No se usa*/
 	@SuppressWarnings("unchecked")
 	public Set<ProcedimientoRemoto> listarProcedimientosRemotos(final String idRemoto) throws DelegateException{
 		try {
@@ -74,6 +75,7 @@ public class ProcedimientoRemotoDelegate implements StatelessDelegate {
         }
 	}
 
+	/** @deprecated No se usa */
     public List<ProcedimientoRemoto> listarProcedimientosRemotosUAMateria(Long idUA, String codEstMateria) throws DelegateException{
 		try {
             return getFacade().listarProcedimientosRemotosUAMateria(idUA,codEstMateria);
@@ -98,6 +100,7 @@ public class ProcedimientoRemotoDelegate implements StatelessDelegate {
         }
     }
 
+    /** @deprecated No se usa */
     public List listarProcedimientosRecientesMaterias(int length, String[] codigos, boolean include,boolean caducados)
 	    throws DelegateException {
 		try {
@@ -107,6 +110,7 @@ public class ProcedimientoRemotoDelegate implements StatelessDelegate {
 		}
 	}
 	
+    /** @deprecated No se usa */
 	public List listarProcedimientosMasComentadosMaterias(int length, String[] codigos, boolean include,boolean caducados)
 	    throws DelegateException {
 		try {
@@ -116,6 +120,7 @@ public class ProcedimientoRemotoDelegate implements StatelessDelegate {
 		}
 	}
 	
+	/** @deprecated No se usa */
 	public List listarProcedimientosMasVisitadosMaterias(int length, String[] codigos, boolean include,boolean caducados)
 	    throws DelegateException {
 		try {

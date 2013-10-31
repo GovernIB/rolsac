@@ -22,7 +22,7 @@ public class TipoAfectacionDelegate implements StatelessDelegate{
 	private static final long serialVersionUID = 1024572068132210759L;
 	
      /* ========================================================= */
-    /* ======================== M�TODOS DE NEGOCIO ============= */
+    /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
 	public Long grabarTipoAfectacion(TipoAfectacion tipoAfec) throws DelegateException {
@@ -57,6 +57,7 @@ public class TipoAfectacionDelegate implements StatelessDelegate{
         }
     }
 
+    /** @deprecated No se usa*/
     public boolean tieneAfectaciones(Long id) throws DelegateException {
         try {
             return getFacade().tieneAfectaciones(id);

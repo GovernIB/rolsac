@@ -39,6 +39,7 @@ public abstract class MateriaAgrupacionMFacadeEJB extends HibernateEJB {
     }
 
     /**
+     * @deprecated Usado desde el back antiguo
      * Crea o actualiza una MateriaAgrupacionM.
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin}"
@@ -63,7 +64,9 @@ public abstract class MateriaAgrupacionMFacadeEJB extends HibernateEJB {
         }
     }
 
+    
     /**
+     * @deprecated No se usa
      * Obtiene una MateriaAgrupacionM.
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -79,7 +82,9 @@ public abstract class MateriaAgrupacionMFacadeEJB extends HibernateEJB {
         }
     }
 
+    
     /**
+     * @deprecated Usado desde el back antiguo 
      * Incrementa el orden de una materia - agrupacion.
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin}"
@@ -110,7 +115,9 @@ public abstract class MateriaAgrupacionMFacadeEJB extends HibernateEJB {
         }
     }
 
+    
     /**
+     * @deprecated Usado desde el back antiguo
      * Borra un MateriaAgrupacionM.
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin}"
@@ -129,32 +136,57 @@ public abstract class MateriaAgrupacionMFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
+  
     
     /**
      * Lista todas las materias agrupadas.
      * 
      * @ejb.interface-method
+     * 
      * @ejb.permission unchecked="true"
+     * 
+     * @param pagina	Número de página actual.
+     * 
+     * @param resultats	Número de resultados por página.
+     * 
+     * @return Devuelve <code>ResultadoBusqueda</code> que contiene un listado con todas las materias agrupadas.
      */
     public ResultadoBusqueda listarAgrupacionMaterias(int pagina, int resultats) {    
-        return listarTablaMaestraPaginada(pagina, resultats, listarAgrupacionMaterias());        
+    	
+        return listarTablaMaestraPaginada( pagina, resultats, listarAgrupacionMaterias() );   
+        
     }
+    
     
     /**
      * Lista todas las materias agrupadas.
+     * 
      * @ejb.interface-method
+     * 
      * @ejb.permission unchecked="true"
+     * 
+     * @return Devuelve una lista con todas las materias agrupadas.
      */
     public List listarAgrupacionMaterias() {
+    	
         Session session = getSession();
+        
         try {
+        	
             Criteria criteri = session.createCriteria(AgrupacionMateria.class);
-            return criteri.addOrder(Order.asc("codigoEstandar")).list();
+            
+            return criteri.addOrder( Order.asc("codigoEstandar") ).list();
+            
         } catch (HibernateException he) {
+        	
             throw new EJBException(he);
+            
         } finally {
+        	
             close(session);
+            
         }
+        
     }
     
 }

@@ -24,6 +24,7 @@ import org.ibit.rol.sac.model.Suscriptor;
 
 
 /**
+ * @deprecated	Se usa Ãºnicamente desde el back antiguo
  * SessionBean para mantener y consultar envios de suscripcion.
  *
  * @ejb.bean
@@ -44,8 +45,10 @@ public abstract class SuscriptorFacadeEJB extends PaginatedHibernateEJB {
     public void ejbCreate() throws CreateException {
         super.ejbCreate();
     }
+    
     /**
-     * Inicializo los parámetros de la consulta....
+     * @deprecated No se usa
+     * Inicializo los parï¿½metros de la consulta....
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -65,7 +68,8 @@ public abstract class SuscriptorFacadeEJB extends PaginatedHibernateEJB {
     }
 
     /**
-     * Inicializo los parámetros de la consulta....
+     *  @deprecated Usado desde el back antiguo
+     * Inicializo los parï¿½metros de la consulta....
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -86,6 +90,7 @@ public abstract class SuscriptorFacadeEJB extends PaginatedHibernateEJB {
     }    
 
     /**
+     * @deprecated Usado desde el back antiguo
      * Crea o actualiza un envio.
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -104,6 +109,7 @@ public abstract class SuscriptorFacadeEJB extends PaginatedHibernateEJB {
     }
 
      /**
+      * @deprecated Usado desde el back antiguo
      * Lista todos los suscriptores.
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -111,7 +117,7 @@ public abstract class SuscriptorFacadeEJB extends PaginatedHibernateEJB {
     public List listar() {
         Session session = getSession();
         try {
-        	parametrosCons(); // Establecemos los parámetros de la paginación
+        	parametrosCons(); // Establecemos los parï¿½metros de la paginaciï¿½n
            	
         	Query query = session.createQuery(select+from+where+orderby);
             query.setFirstResult(cursor-1);
@@ -126,6 +132,7 @@ public abstract class SuscriptorFacadeEJB extends PaginatedHibernateEJB {
 
 
     /**
+     * @deprecated No se usa
      * Lista todas los suscriptores segun estado y grupo
      * @ejb.interface-method
      * @ejb.permission unchecked= "true"
@@ -148,6 +155,7 @@ public abstract class SuscriptorFacadeEJB extends PaginatedHibernateEJB {
 
 
     /**
+     *  @deprecated Usado desde el back antiguo
      * Lista todas los suscriptores segun estado,grupo y tipo de suscripcion
      * @ejb.interface-method
      * @ejb.permission unchecked= "true"
@@ -168,6 +176,7 @@ public abstract class SuscriptorFacadeEJB extends PaginatedHibernateEJB {
     }
 
     /**
+     *  @deprecated No se usa
      * Lista todas los suscriptores segun mail
      * @ejb.interface-method
      * @ejb.permission unchecked= "true"
@@ -188,6 +197,7 @@ public abstract class SuscriptorFacadeEJB extends PaginatedHibernateEJB {
 
 
     /**
+     * @deprecated Usado desde el back antiguo
      * Lista todas los suscriptores segun estado y combinacion de temas
      * @ejb.interface-method
      * @ejb.permission unchecked= "true"
@@ -209,6 +219,7 @@ public abstract class SuscriptorFacadeEJB extends PaginatedHibernateEJB {
 
 
     /**
+     * @deprecated Usado desde el back antiguo
      * Obtiene un suscriptor. 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -235,6 +246,7 @@ public abstract class SuscriptorFacadeEJB extends PaginatedHibernateEJB {
     }
 
     /**
+     *  @deprecated No se usa
      * Obtiene un suscriptor a partir del correo
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -258,6 +270,7 @@ public abstract class SuscriptorFacadeEJB extends PaginatedHibernateEJB {
     }
     
     /**
+     * @deprecated No se usa
      * Obtiene un suscriptor a partir del correo
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -303,7 +316,8 @@ public abstract class SuscriptorFacadeEJB extends PaginatedHibernateEJB {
     }
         
     /**
-     * Descripción: Devuelve una lista con todos los suscriptores de un determinado tipo
+     *  @deprecated Usado desde el back antiguo
+     * Descripciï¿½n: Devuelve una lista con todos los suscriptores de un determinado tipo
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -324,6 +338,7 @@ public abstract class SuscriptorFacadeEJB extends PaginatedHibernateEJB {
     }
     
     /**
+     * @deprecated No se usa
      * Actualiza resumen temas 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -371,6 +386,7 @@ public abstract class SuscriptorFacadeEJB extends PaginatedHibernateEJB {
     }
 
     /**
+     * @deprecated Usado desde el back antiguo
      * Recupera combinaciones 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -408,6 +424,7 @@ public abstract class SuscriptorFacadeEJB extends PaginatedHibernateEJB {
     
 
     /**
+     * @deprecated Usado desde el back antiguo 
      * borra un Suscriptor
      * @ejb.interface-method
      * @ejb.permission unchecked="true"

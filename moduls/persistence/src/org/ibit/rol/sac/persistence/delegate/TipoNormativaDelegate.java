@@ -19,7 +19,7 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  */
 public class TipoNormativaDelegate implements StatelessDelegate {
     /* ========================================================= */
-    /* ======================== M�TODOS DE NEGOCIO ============= */
+    /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
 	private static final long serialVersionUID = 986051651952144005L;
@@ -56,6 +56,7 @@ public class TipoNormativaDelegate implements StatelessDelegate {
         }
     }
 
+    /** @deprecated Se usa desde el back antiguo */
     public boolean tieneNormativas(Long id) throws DelegateException {
         try {
             return getFacade().tieneNormativas(id);

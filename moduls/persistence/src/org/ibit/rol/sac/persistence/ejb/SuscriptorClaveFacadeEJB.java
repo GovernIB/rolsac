@@ -14,6 +14,7 @@ import org.ibit.rol.sac.model.SuscriptorClave;
 
 
 /**
+ *  @deprecated Se usa Ãºnicamente desde el back antiguo.
  * SessionBean para mantener y consultar envios de suscripcion.
  *
  * @ejb.bean
@@ -28,14 +29,17 @@ import org.ibit.rol.sac.model.SuscriptorClave;
 public abstract class SuscriptorClaveFacadeEJB extends PaginatedHibernateEJB {
 
     /**
+     * @deprecated Se usa Ãºnicamente desde el back antiguo.
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
     public void ejbCreate() throws CreateException {
         super.ejbCreate();
     }
+    
     /**
-     * Inicializo los parámetros de la consulta....
+     * @deprecated No se usa 
+     * Inicializo los parï¿½metros de la consulta....
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -55,7 +59,8 @@ public abstract class SuscriptorClaveFacadeEJB extends PaginatedHibernateEJB {
     }
 
     /**
-     * Inicializo los parámetros de la consulta....
+     * @deprecated No se usa
+     * Inicializo los parï¿½metros de la consulta....
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -76,6 +81,7 @@ public abstract class SuscriptorClaveFacadeEJB extends PaginatedHibernateEJB {
     }    
 
     /**
+     * @deprecated se usa desde el back antiguo
      * Crea o actualiza un envio.
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -94,6 +100,7 @@ public abstract class SuscriptorClaveFacadeEJB extends PaginatedHibernateEJB {
     }
 
     /**
+     * @deprecated se usa desde el back antiguo
      * Obtiene la clave del suscriptor. 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -116,6 +123,7 @@ public abstract class SuscriptorClaveFacadeEJB extends PaginatedHibernateEJB {
     
     }
     /**
+     * @deprecated No se usa
      * Obtiene la clave del suscriptor. 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -137,6 +145,7 @@ public abstract class SuscriptorClaveFacadeEJB extends PaginatedHibernateEJB {
     
     }
     /**
+     * @deprecated No se usa
      * Obtiene un suscriptor. 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -154,6 +163,7 @@ public abstract class SuscriptorClaveFacadeEJB extends PaginatedHibernateEJB {
     }
 
     /**
+     * @deprecated No se usa
      * borra un Envio
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.subsc}"

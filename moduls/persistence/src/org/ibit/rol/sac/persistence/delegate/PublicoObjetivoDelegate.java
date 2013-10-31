@@ -20,7 +20,7 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 public class PublicoObjetivoDelegate implements StatelessDelegate {
 
     /* ========================================================= */
-    /* ======================== M�TODOS DE NEGOCIO ============= */
+    /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
     public Long grabarPublicoObjetivo(PublicoObjetivo hechov) throws DelegateException {
@@ -56,6 +56,7 @@ public class PublicoObjetivoDelegate implements StatelessDelegate {
         }
     }
 
+    /** @deprecated No se utiliza */
     public PublicoObjetivo obtenerPublicoObjetivoPorTitulo(String titulo) throws DelegateException {
         try {
             return getFacade().obtenerPublicoObjetivoPorTitulo(titulo);

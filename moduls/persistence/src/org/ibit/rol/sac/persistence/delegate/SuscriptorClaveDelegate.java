@@ -15,14 +15,16 @@ import org.ibit.rol.sac.persistence.intf.SuscriptorClaveFacadeHome;
 import org.ibit.rol.sac.persistence.util.SuscriptorClaveFacadeUtil;
 
 /**
+ * @deprecated Se usa únicamente desde el back antiguo.
  * Business delegate para manipular materias.
  */
 public class SuscriptorClaveDelegate implements StatelessDelegate {
 
     /* ========================================================= */
-    /* ======================== M�TODOS DE NEGOCIO ============= */
+    /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
     
+	/** @deprecated No se usa */
     public void init() throws DelegateException {
         try {
         	getFacade().init();
@@ -31,6 +33,7 @@ public class SuscriptorClaveDelegate implements StatelessDelegate {
         }
     }	
 	
+    /** @deprecated No se usa */
     public void init(Long id) throws DelegateException {
         try {
         	getFacade().init(id);
@@ -39,6 +42,7 @@ public class SuscriptorClaveDelegate implements StatelessDelegate {
         }
     }
 	
+    /** @deprecated se usa desde el back antiguo */
 	public Long grabarSuscriptorClave(SuscriptorClave suscriptor)  throws DelegateException	{
         try {
             return getFacade().grabarSuscriptorClave(suscriptor);
@@ -47,6 +51,7 @@ public class SuscriptorClaveDelegate implements StatelessDelegate {
         }
     }
 
+	/** @deprecated se usa desde el back antiguo */
 	public Long recuperarSuscriptorClave( Long tipo, String email)  throws DelegateException	 {	
         try {
             return getFacade().recuperarSuscriptorClave(tipo, email);
@@ -55,6 +60,7 @@ public class SuscriptorClaveDelegate implements StatelessDelegate {
         }
     }
 
+    /** @deprecated No se usa */
 	public boolean esSuscriptorCaib( String email, String clave)  throws DelegateException	 {	
         try {
             return getFacade().esSuscriptorCaib(email, clave);
@@ -63,6 +69,7 @@ public class SuscriptorClaveDelegate implements StatelessDelegate {
         }
     }
 	
+    /** @deprecated No se usa */
     public SuscriptorClave obtenerSuscriptor(Long id) throws DelegateException {
         try {
             return getFacade().obtenerSuscriptorClave(id);
@@ -71,6 +78,7 @@ public class SuscriptorClaveDelegate implements StatelessDelegate {
         }
     }
 
+    /** @deprecated No se usa */
     public void borrarSuscriptorClave(Long id) throws DelegateException {
         try {
         	getFacade().borrarSuscriptorClave(id);

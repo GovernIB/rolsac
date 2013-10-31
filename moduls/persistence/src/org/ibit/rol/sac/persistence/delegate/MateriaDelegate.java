@@ -48,10 +48,12 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 		return impl.listarMaterias();
 	}
 
+	/** @deprecated No se usa */
 	public List<Materia> listarMateriasFront() throws DelegateException {
 		return impl.listarMateriasFront();
 	}
 
+	/** @deprecated No se usa */
 	public List<Materia> listarMateriasFrontDestacadas(String lang)
 			throws DelegateException {
 		return impl.listarMateriasFrontDestacadas(lang);
@@ -61,16 +63,19 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 		return impl.obtenerMateria(id);
 	}
 
+	/** @deprecated Usado desde el back antiguo */
 	public boolean tieneProcedimientosOFichas(Long id)
 			throws DelegateException {
 		return impl.tieneProcedimientosOFichas(id);
 	}
-
+	
+	/** @deprecated Usado desde el back antiguo */
 	public List<Materia> listarMateriasbyUA(Long ua)
 			throws DelegateException {
 		return impl.listarMateriasbyUA(ua);
 	}
 
+	/** @deprecated No se usa */
 	public Set<MateriaAgrupacionM> obtenerGruposMateria(Long idmateria)
 			throws DelegateException {
 		return impl.obtenerGruposMateria(idmateria);
@@ -103,25 +108,30 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 		return impl.obtenerIcono(id);
 	}
 
+	/** @deprecated No se usa */
 	public Archivo obtenerIconoGrande(Long id) throws DelegateException {
 		return impl.obtenerIconoGrande(id);
 	}
 
+	/** @deprecated No se usa */
 	public Set<Materia> obtenerMateriasCE(String[] codigosEstandarMateria)
 			throws DelegateException {
 		return impl.obtenerMateriasCE(codigosEstandarMateria);
 	}
 
+	/** @deprecated Usado desde el back antiguo */
 	public Materia obtenerMateriaCE(String codigosEstandarMateria)
 			throws DelegateException {
 		return impl.obtenerMateriaCE(codigosEstandarMateria);
 	}
 
+	/** @deprecated Usado desde el back antiguo */
 	public List<Materia> buscar(String busqueda, String idioma)
 			throws DelegateException {
 		return impl.buscar(busqueda, idioma);
 	}
 
+	/** @deprecated Usado desde el back antiguo */
 	public Materia obtenerMateriaFichasProced(Long id)
 			throws DelegateException {
 		return impl.obtenerMateriaFichasProced(id);
