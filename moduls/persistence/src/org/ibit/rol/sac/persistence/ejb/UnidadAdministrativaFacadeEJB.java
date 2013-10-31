@@ -3724,4 +3724,45 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		}
 	}
 	
+	
+	/**
+	 * Se encarga de eliminar las relaciones de fichasUA de una sección relacionada con una UA.
+	 * 
+	 * @param idUA
+	 * @param idSeccion
+	 * 
+	 * @throws EJBException
+	 * 
+	 * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public void eliminarSeccionUA(Long idUA, Long idSeccion)
+	{
+		Session session = getSession();
+		try {
+			StringBuilder consulta = new StringBuilder(" SELECT fichaUA ");
+			consulta.append(" FROM FichaResumenUA AS fichaUA "); 
+			consulta.append(" WHERE fichaUA.idUa = :idUA "); 
+			consulta.append(" AND fichaUA.idSeccio = :idSeccion ");
+			
+			Query query = session.createQuery(consulta.toString());
+			query.setParameter("idUA", idUA);
+			query.setParameter("idSeccion", idSeccion);
+			
+			List<FichaResumenUA> listaFichasUA = query.list();
+			if (!listaFichasUA.isEmpty()) {
+				for (FichaResumenUA fuaResumen : listaFichasUA) {
+					fuaResumen.getFicha().removeFichaUA(fuaResumen);
+					session.delete(fuaResumen);
+				}
+				session.flush();
+			}
+			
+		} catch (HibernateException e) {
+			throw new EJBException(e);
+        } finally {
+            close(session);
+        }
+	}
+	
 }

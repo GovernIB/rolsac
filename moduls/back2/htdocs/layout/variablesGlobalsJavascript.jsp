@@ -102,6 +102,7 @@
     var txtErrorPermisos = '<spring:message code="error.permisos"/>';
     var txtErrorOperacio = '<spring:message code="error.operacio_fallida"/>';
     var txtErrorTramitIniciObligatori = '<spring:message code="error.tramit_inici_obligatori" />';
+    var txtErrorNumFicha = '<spring:message code="error.num_ficha" />';
         
     // Errores de validaci�n
     var txtMaxim = "<spring:message code='txt.maxim'/>";

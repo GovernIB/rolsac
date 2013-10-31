@@ -1215,4 +1215,12 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
      	}
 	}
 	
+	public void eliminarSeccionUA(Long idUA, Long idSeccion) throws DelegateException
+	{
+		try {
+			getFacade().eliminarSeccionUA(idUA, idSeccion);
+		} catch (RemoteException e) {
+     		throw new DelegateException(e);
+     	}
+	}
 }

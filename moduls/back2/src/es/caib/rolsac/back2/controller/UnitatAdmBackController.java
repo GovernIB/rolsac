@@ -1208,18 +1208,17 @@ public class UnitatAdmBackController extends PantallaBaseController {
      * @return
      */
     @RequestMapping(value = "/guardarFitxesUASeccio.do", method = POST)
-	public @ResponseBody Map<String, Object> guardarFitxesUASeccio(Long idUA, Long idSeccion, String[] listaIdFichas, HttpServletRequest request) {
-    	
+	public @ResponseBody Map<String, Object> guardarFitxesUASeccio(Long idUA, Long idSeccion, String[] listaIdFichas, HttpServletRequest request)
+	{
     	Map<String, Object> resultats = new HashMap<String, Object>();
     	
     	// Si alguno es nulo, error.
-    	if ( request.getParameter("idUA") == null 
+    	if (request.getParameter("idUA") == null
     			|| request.getParameter("idSeccion") == null
     			|| request.getParameter("listaIdFichas") == null) {
     		
     		resultats.put("id", -2);
-			log.error("Falta alguno de los parámetros para completar el guardado de las fichas de la sección");
-			
+    		log.error("Falta alguno de los parámetros para completar el guardado de las fichas de la sección");
     		return resultats;
     	}
     	
@@ -1234,36 +1233,30 @@ public class UnitatAdmBackController extends PantallaBaseController {
     	}
     	
     	List<Long> listaIdFichasLong = new ArrayList<Long>();
-
-    	
-    	for ( String s : listaIdFichas )
-    		listaIdFichasLong.add( Long.parseLong(s) );
-    	
-    	UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
-    	
+    	for (String s : listaIdFichas) {
+    		listaIdFichasLong.add(Long.parseLong(s));
+    	}
     	try {
+    		UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+    		if (listaIdFichasLong.size() == 0) {
+    			// Eliminar sección-UA
+    			uaDelegate.eliminarSeccionUA(idUA, idSeccion);
+    		} else {
+    			uaDelegate.actualizaFichasSeccionUA(idUA, idSeccion, listaIdFichasLong);
+    		}
     		
-			uaDelegate.actualizaFichasSeccionUA(idUA, idSeccion, listaIdFichasLong);
-			
-		} catch (DelegateException e) {
-			
-			if (e.isSecurityException()) {
-				
-                resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
-                resultats.put("id", -1);
-                
-            } else {
-            	
-            	resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
+    	} catch (DelegateException e) {
+    		if (e.isSecurityException()) {
+    			resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+    			resultats.put("id", -1);
+    		} else {
+    			resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
             	resultats.put("id", -2);
             	log.error(ExceptionUtils.getStackTrace(e));
-            	
             }
-			
 		}
     		
     	return resultats;
-    	
     }
     
 	/**
@@ -1368,5 +1361,28 @@ public class UnitatAdmBackController extends PantallaBaseController {
     private boolean isSeccionModificada(long seccionId, Map<String, String> valoresForm) {
         return "1".equals(valoresForm.get("seccio_modificada_" + seccionId));
     }
+    
+    
+    /**
+     * Método que recibe petición AJAX de consultar si la ficha no tiene más secciones, entonces se decide si se puede o no borrar
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/fitxaBorrable.do", method = POST)
+	public @ResponseBody Map<String, Object> fitxaBorrable(HttpServletRequest request, Long idFitxa)
+	{
+    	Map<String, Object> resultats = new HashMap<String, Object>();
+    	
+    	try {
+			resultats.put("num", DelegateUtil.getFichaDelegate().listFichasUA(idFitxa).size());
+			
+		} catch (DelegateException e) {
+			resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
+        	resultats.put("id", -2);
+        	log.error(ExceptionUtils.getStackTrace(e));
+		}
+    	
+    	return resultats;
+	}
     
 }

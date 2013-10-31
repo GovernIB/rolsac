@@ -412,4 +412,9 @@ public class UnidadAdministrativaDelegate {
     	impl.eliminarLogoTipos(idUA);
     }
     
+    public void eliminarSeccionUA(Long idUA, Long idSeccion)
+    		throws DelegateException {
+    	impl.eliminarSeccionUA(idUA, idSeccion);
+    }
+    
 }

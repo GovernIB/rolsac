@@ -1157,10 +1157,33 @@ function CEscriptoriSeccioFitxes() {
 			}).css({cursor:"move"});
 		}
 		
-		fitxes_seleccionats_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function(){				
+		fitxes_seleccionats_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function(){
 			var itemLista = jQuery(this).parents("li:first");
-			ModulSeccions.eliminaItem(itemLista);
-			EscriptoriSeccioFitxes.contaSeleccionats( nomSeccio );
+			// variables
+			dataVars = "idFitxa=" + jQuery(itemLista).find("input.fitxa_id:first").val();
+			// ajax
+			$.ajax({
+				type: "POST",
+				url: fitxaBorrable,
+				data: dataVars,
+				dataType: "json",
+				error: function() {
+					if (!a_enllas) {
+						// missatge
+						Missatge.llansar( { tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>" } );
+						// error
+						Error.llansar();
+					}
+				},
+				success: function(data) {
+					if (data.num > 1) {
+						ModulSeccions.eliminaItem(itemLista);
+						EscriptoriSeccioFitxes.contaSeleccionats( nomSeccio );
+					} else {
+						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorNumFicha, text: "<p></p>"});
+					}
+				}
+			});	
 		});
 	}
 		

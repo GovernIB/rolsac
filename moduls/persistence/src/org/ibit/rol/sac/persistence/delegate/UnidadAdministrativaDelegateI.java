@@ -646,4 +646,10 @@ public interface UnidadAdministrativaDelegateI {
     public abstract void eliminarLogoTipos(Long idUA)
     		throws DelegateException;
     
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate#eliminarSeccionUA(java.lang.Long, java.lang.Long)
+	 */
+    public abstract void eliminarSeccionUA(Long idUA, Long idSeccion)
+    		throws DelegateException;
+    
 }
