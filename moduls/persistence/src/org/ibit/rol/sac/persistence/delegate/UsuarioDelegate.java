@@ -18,7 +18,7 @@ import java.util.Map;
 public class UsuarioDelegate implements StatelessDelegate {
 
     /* ========================================================= */
-    /* ======================== M�TODOS DE NEGOCIO ============= */
+    /* ======================== M�TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
     public void grabarUsuario(Usuario usuario) throws DelegateException {
@@ -32,6 +32,14 @@ public class UsuarioDelegate implements StatelessDelegate {
     public List buscarUsuarios(Map parametros) throws DelegateException {
         try {
             return getFacade().buscarUsuarios(parametros);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    public List buscarUsuarios(Usuario usuario) throws DelegateException {
+        try {
+            return getFacade().buscarUsuarios(usuario);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
@@ -53,6 +61,7 @@ public class UsuarioDelegate implements StatelessDelegate {
         }
     }    
     
+    /** @deprecated Usado únicamente desde el back antiguo */
     public List listarUsuariosPerfil(String perfil) throws DelegateException {
         try {
             return getFacade().listarUsuariosPerfil(perfil);
@@ -87,6 +96,7 @@ public class UsuarioDelegate implements StatelessDelegate {
         }
     }
 
+    /** @deprecated No se usa*/
     public List listarUA(Long id) throws DelegateException {
         try {
             return getFacade().listarUA(id);
@@ -95,6 +105,7 @@ public class UsuarioDelegate implements StatelessDelegate {
         }
     }
 
+    /** @deprecated Usado únicamente desde el back antiguo */
     public void anyadirUnidad(Long unidad_id, Long edi_id) throws DelegateException {
         try {
             getFacade().anyadirUnidad(unidad_id, edi_id);
@@ -103,6 +114,7 @@ public class UsuarioDelegate implements StatelessDelegate {
         }
     }
 
+    /** @deprecated Usado únicamente desde el back antiguo */
     public void eliminarUnidad(Long unidad_id, Long edi_id) throws DelegateException {
         try {
             getFacade().eliminarUnidad(unidad_id, edi_id);

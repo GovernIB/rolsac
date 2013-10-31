@@ -72,6 +72,7 @@ public class TratamientoDelegate implements StatelessDelegate{
         }
     }
     
+    /** @deprecated No se usa */
     public Tratamiento obtenerTratamientoCE(final String codigosEstandar) throws DelegateException{
     	try {
             return getFacade().obtenerTratamientoCE(codigosEstandar);

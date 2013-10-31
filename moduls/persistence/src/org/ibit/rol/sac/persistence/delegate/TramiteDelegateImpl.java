@@ -26,7 +26,7 @@ import org.ibit.rol.sac.persistence.util.TramiteFacadeUtil;
 public class TramiteDelegateImpl implements StatelessDelegate, TramiteDelegateI {
 
     /* ========================================================= */
-    /* ======================== M�TODOS DE NEGOCIO ============= */
+    /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
     /* (non-Javadoc)

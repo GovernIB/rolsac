@@ -1,7 +1,6 @@
 package org.ibit.rol.sac.persistence.delegate;
 
 
-import org.ibit.rol.sac.model.EdificioRemoto;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.TramiteRemoto;
 import org.ibit.rol.sac.persistence.intf.TramiteRemotoFacade;
@@ -18,8 +17,13 @@ import java.util.List;
  */
 public class TramiteRemotoDelegate implements StatelessDelegate {
 
-    /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1505384693197730797L;
+
+	/* ========================================================= */
+    /* ======================== MÃ‰TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 	
 	

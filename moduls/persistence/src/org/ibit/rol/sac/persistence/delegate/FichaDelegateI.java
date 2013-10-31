@@ -31,6 +31,7 @@ public interface FichaDelegateI {
 	
 	public abstract ResultadoBusqueda buscarFichas(Map parametros, Map traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, Long idPublic, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden, String pagina, String resultats, int campoVisible) throws DelegateException;
 	
+	/** @deprecated No se usa */
 	public abstract List buscarFichas(Map parametros, String traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, Long idPublic, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden) throws DelegateException;	
 
 	public abstract List listarFichas() throws DelegateException;
@@ -96,6 +97,7 @@ public interface FichaDelegateI {
 
 	public abstract void subirFichaUA(Long id) throws DelegateException;
 
+	/** @deprecated Usado por el back antiguo */
 	public abstract void actualizarOrdenFichasUA(Enumeration params, Map valores)
 			throws DelegateException;
 

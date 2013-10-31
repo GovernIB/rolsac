@@ -18,6 +18,7 @@ import org.ibit.rol.sac.model.TipoSuscripcion;
 import org.ibit.rol.sac.model.Usuario;
 
 /**
+ * @deprecated Clase que Ãºnicamente se usa desde el back antiguo.
  * SessionBean para consultar Microsite.
  *
  * @ejb.bean
@@ -42,8 +43,8 @@ public abstract class TipoSuscripcionFacadeEJB extends PaginatedHibernateEJB
     }
 
     /**
-     * Inicializo los parámetros de la consulta de Tipo de Suscripcion....
-     * No está bien hecho debería ser Statefull
+     * Inicializo los parï¿½metros de la consulta de Tipo de Suscripcion....
+     * No estï¿½ bien hecho deberï¿½a ser Statefull
      * @ejb.interface-method
      * @ejb.permission unchecked="true" 
      */
