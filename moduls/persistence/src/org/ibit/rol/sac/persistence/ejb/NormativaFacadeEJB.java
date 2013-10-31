@@ -741,17 +741,26 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
      * Construye el query de bï¿½squeda segun los parï¿½metros
      */
     private String populateQuery(Map parametros, Map trad, List params) {
+    	
         String aux = "";
         Map traduccion = new HashMap(trad);
+        
         // Tratamiento de parametros
         for (Iterator iter1 = parametros.keySet().iterator(); iter1.hasNext();) {
+        	
             String key = (String) iter1.next();
             Object value = parametros.get(key);
+            
             if (value != null) {
+            	
                 if (value instanceof String) {
+                	
                     String sValue = (String) value;
                     if (sValue.length() > 0) {
-                    	if (aux.length() > 0) aux = aux + " and ";
+                    	
+                    	if (aux.length() > 0) 
+                    		aux = aux + " and ";
+                    	
                         if (sValue.startsWith("\"") && sValue.endsWith("\"")) {
                             sValue = sValue.substring(1, (sValue.length() - 1));
                             aux = aux + " upper( normativa." + key + " )  like ? ";
@@ -760,7 +769,9 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
                             aux = aux + " upper( normativa." + key + " )  like ? ";
                             params.add("%"+sValue+"%");
                         }
+                        
                     }
+                    
                 } else if (value instanceof Date) {
                 	
                 	if (aux.length() > 0) 
@@ -768,13 +779,19 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
                 	
                 	Calendar cal = Calendar.getInstance();
                 	cal.setTime((Date)value);
-                    aux = aux + "normativa." + key + " = TO_DATE('" + cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DAY_OF_YEAR) + "', 'YYYY-MM-DD')";
-                    
+                    aux = aux + "normativa." + key + " = TO_DATE('" + cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DAY_OF_MONTH) + "', 'YYYY-MM-DD')";
+                	                	
                 } else {
-                	if (aux.length() > 0) aux = aux + " and ";
+                	
+                	if (aux.length() > 0)
+                		aux = aux + " and ";
+                	
                     aux = aux + "normativa." + key + " = " + value;
+                    
                 }
+                
             }
+            
         }
 
         // Tratamiento de traducciones
@@ -785,12 +802,17 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
         }
 
         for (Iterator iter2 = traduccion.keySet().iterator(); iter2.hasNext();) {
+        	
             String key = (String) iter2.next();
             Object value = traduccion.get(key);
+            
             if (value != null) {
+            	
                 if (value instanceof String) {
+                	
                     String sValue = (String) value;
                     if (sValue.length() > 0) {
+                    	
                         if (sValue.startsWith("\"") && sValue.endsWith("\"")) {
                             sValue = sValue.substring(1, (sValue.length() - 1));
                             aux = aux + " and  upper( trad." + key + " )  like ? ";
@@ -799,14 +821,20 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
                             aux = aux + " and  upper( trad." + key + " )  like ? ";
                             params.add("%"+sValue+"%");
                         }
+                        
                     }
+                    
                 } else {
+                	
                     aux = aux + " and trad." + key + " = ? ";
                     params.add(value);
+                    
                 }
             }
         }
+        
         return aux;
+        
     }
     
 	
