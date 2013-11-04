@@ -560,6 +560,14 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
 			throw new DelegateException(e);
 		}
 	}
+	
+	public Ficha obtenerFichaDeFichaUA(Long idFichaUA) throws DelegateException {
+		try {
+			return getFacade().obtenerFichaDeFichaUA(idFichaUA);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
 
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

@@ -52,6 +52,7 @@ import org.ibit.rol.sac.persistence.delegate.SeccionDelegate;
 import org.ibit.rol.sac.persistence.delegate.TratamientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadMateriaDelegate;
+import org.ibit.rol.sac.persistence.util.FichaUAFichaIds;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -1374,7 +1375,10 @@ public class UnitatAdmBackController extends PantallaBaseController {
     	Map<String, Object> resultats = new HashMap<String, Object>();
     	
     	try {
-			resultats.put("num", DelegateUtil.getFichaDelegate().listFichasUA(idFitxa).size());
+    	
+    		FichaDelegate fichaDelegate = DelegateUtil.getFichaDelegate();
+    		Ficha ficha = fichaDelegate.obtenerFichaDeFichaUA(idFitxa);
+			resultats.put("num", fichaDelegate.listFichasUA(ficha.getId()).size());
 			
 		} catch (DelegateException e) {
 			resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));

@@ -165,4 +165,6 @@ public interface FichaDelegateI {
 	
 	public void borrarFichasUAdeFicha(List<FichaUA> fichasUA) throws DelegateException;
 	
+	public Ficha obtenerFichaDeFichaUA(Long idFichaUA) throws DelegateException;
+	
 }

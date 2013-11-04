@@ -256,4 +256,8 @@ public class FichaDelegate implements FichaDelegateI {
 		impl.borrarFichasUAdeFicha(fichasUA);
 	}
 	
+	public Ficha obtenerFichaDeFichaUA(Long idFichaUA) throws DelegateException {
+		return impl.obtenerFichaDeFichaUA(idFichaUA);
+	}
+	
 }

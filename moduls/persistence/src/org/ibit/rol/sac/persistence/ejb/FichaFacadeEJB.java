@@ -2258,14 +2258,11 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-	public List<FichaUA> listFichasUA(Long idFicha) {
-		
+	public List<FichaUA> listFichasUA(Long idFicha)
+	{
 		Session session = getSession();
-        
 		try {
- 
-			Query query = session.createQuery("select fichaua from FichaUA as fichaua where fichaua.ficha="+idFicha);
-           
+			Query query = session.createQuery("select fichaua from FichaUA as fichaua where fichaua.ficha=" + idFicha);
 			return query.list();
    	    
         } catch (HibernateException he) {
@@ -2273,7 +2270,6 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
         } finally {
             close(session);
         }
-		
 	}
 
 	 /**
@@ -2788,5 +2784,27 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
+    
+    
+	 /**
+     * Devuelve una ficha según una fichaUA
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+	public Ficha obtenerFichaDeFichaUA(Long idFichaUA)
+	{
+		Session session = getSession();
+		try {
+			FichaUA fichaUA = (FichaUA) session.load(FichaUA.class, idFichaUA);
+			return fichaUA.getFicha();
+			
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+		
+	}
     
 }
