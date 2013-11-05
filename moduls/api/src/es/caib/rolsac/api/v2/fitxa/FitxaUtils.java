@@ -5,7 +5,6 @@ import java.util.List;
 import es.caib.rolsac.api.v2.fitxa.co.FitxaByActivoCriteria;
 import es.caib.rolsac.api.v2.general.BasicUtils;
 import es.caib.rolsac.api.v2.general.co.CriteriaObject;
-import es.caib.rolsac.api.v2.procediment.co.ProcedimentByActivoCriteria;
 import es.caib.rolsac.api.v2.query.QueryBuilder;
 
 public class FitxaUtils {
@@ -15,7 +14,7 @@ public class FitxaUtils {
 
 		if (fitxaCriteria.getActiu() != null) {
 
-			ProcedimentByActivoCriteria c = new ProcedimentByActivoCriteria(alias);
+			FitxaByActivoCriteria c = new FitxaByActivoCriteria(alias);
 			c.parseCriteria(BasicUtils.booleanToString(fitxaCriteria.getActiu()));
 			c.extendCriteria(qb);
 			criteris.add(c);
