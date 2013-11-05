@@ -1844,54 +1844,48 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
 	 */
-	public List<Seccion> listarSeccionesUA(final Long idUA) {
-		
+	public List<Seccion> listarSeccionesUA(final Long idUA)
+	{
 		List<Seccion> resultado = null;
 		
-		if ( idUA != null ) {
-			
+		if (idUA != null) {
 			Session session = getSession();
-			
-	        try {
-	        	
+			try {
+				List<Seccion> filtroSecciones = new ArrayList<Seccion>();
 	        	resultado = new ArrayList<Seccion>();
 	        	
 	        	Query query = session.createQuery(" SELECT DISTINCT seccion FROM FichaUA AS fua, Seccion AS seccion " +
 	        			" WHERE fua.seccion.id = seccion.id AND fua.unidadAdministrativa.id = :idUA ");
 	        	query.setParameter("idUA", idUA);
 	        	
-	        	resultado = query.list();
-	        	
+	        	// Filtrado por usuario
+	        	filtroSecciones = query.list();
+	        	for (Seccion sec : filtroSecciones) {
+	        		if (getAccesoManager().tieneAccesoSeccion(sec.getId())) {
+	        			resultado.add(sec);
+	        		}
+	        	}
 	        	// Inicializamos hijos para no tener error de lazy al comprobar si el List contiene
 	        	// o no elementos, intentando saber si tiene hijos para crear correctamente el DTO
 	        	// asociado al elemento Seccion (SeccionDTO.fills).
 	        	Iterator<Seccion> itSeccion = resultado.iterator();
-	        	while ( itSeccion.hasNext() ) {
-	        		
+	        	while (itSeccion.hasNext()) {
 	        		Seccion seccion = itSeccion.next();
 	        		Hibernate.initialize(seccion.getHijos());
-	        		
 	        	}
-
+	        	
 	        } catch (HibernateException he) {
-	        	
-	            throw new EJBException(he);
-	            
+	        	throw new EJBException(he);
 	        } finally {
-	        	
-	            close(session);
-	            
+	        	close(session);
 	        }
-	        
 		} else {
-			
 			resultado = Collections.emptyList();
-			
 		}
-
-		return resultado;
 		
+		return resultado;
 	}
+	
 	
 	/**
 	 * Devuelve el número de {@link Ficha} relacionadas con una {@link UnidadAdministrativa} y una {@link Seccion}.
