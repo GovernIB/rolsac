@@ -81,47 +81,57 @@ import es.indra.rol.sac.integracion.traductor.Traductor;
 
 @Controller
 @RequestMapping("/catalegProcediments/")
-public class CatalegProcedimentsBackController extends PantallaBaseController
-{
+public class CatalegProcedimentsBackController extends PantallaBaseController {
+
 	private static final String URL_PREVISUALIZACION = "es.caib.rolsac.previsualitzacio.procediment.url";
 	private static Log log = LogFactory.getLog(CatalegProcedimentsBackController.class);
-	
+
 	@RequestMapping(value = "/catalegProcediments.do")
-	public String pantallaProcediment(Map<String, Object> model, HttpSession session, HttpServletRequest request)
-	{
+	public String pantallaProcediment(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
+
 		String lang;
+
 		try {
+
 			lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-			
+
 		} catch (DelegateException dEx) {
+
 			log.error("Error al recuperar el idioma por defecto.");
 			lang = "ca";
+
 		}
-		
+
 		if (estemEnUnitatAdministrativa(session))
 			crearModelComplert_pantalla(model, session, request, lang);
+
 		else
 			crearModelSencill_pantalla(model, session, request, lang);
-		
+
+
 		loadIndexModel (model, request);
+
 		return "index";
 	}
-	
-	private boolean estemEnUnitatAdministrativa(HttpSession session)
-	{
+
+
+	private boolean estemEnUnitatAdministrativa(HttpSession session) {
 		return null != getUAFromSession(session);
 	}
-	
-	private void crearModelComplert_pantalla(Map<String, Object> model, HttpSession session, HttpServletRequest request, String lang)
-	{
+
+
+	private void crearModelComplert_pantalla(Map<String, Object> model, HttpSession session, HttpServletRequest request, String lang) {
+
 		crearModelSencill_pantalla(model, session, request, lang);
 		model.put("idUA", getUAFromSession(session).getId());
 		model.put("nomUA", getUAFromSession(session).getNombreUnidadAdministrativa(lang));
+
 	}
-	
-	private void crearModelSencill_pantalla(Map<String, Object> model, HttpSession session, HttpServletRequest request, String lang)
-	{
+
+	private void crearModelSencill_pantalla(Map<String, Object> model, HttpSession session, HttpServletRequest request, String lang) {
+
 		try {
+
 			model.put("menu", 0);
 			model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
 			model.put("submenu_seleccionado", 2);
@@ -133,80 +143,92 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			model.put("iniciacions", LlistatUtil.llistarIniciacions(lang));
 			model.put("excepcions", llistarExcepcionsDocumentacio(lang));
 			model.put("cataleg", llistarCatalegDocuments(lang));
-			
+
 		} catch (DelegateException dEx) {
+
 			if (dEx.isSecurityException()) {
+
 				model.put("error", "permisos");
+
 			} else {
+
 				model.put("error", "altres");
 				logException(log, dEx);
+
 			}
+
 		}
+
 	}
-	
-	
+
+
 	@RequestMapping(value = "/llistat.do", method = POST)
-	public @ResponseBody Map<String, Object> llistatProcediments(HttpServletRequest request, HttpSession session)
-	{
+	public @ResponseBody Map<String, Object> llistatProcediments(HttpServletRequest request, HttpSession session) {
+
 		Map<String, Object> resultats = new HashMap<String, Object>();
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		Map<String, String> tradMap = new HashMap<String, String>();
-		
+
 		UnidadAdministrativa ua = null;
 		if (getUAFromSession(session) != null)
 			ua = (UnidadAdministrativa) getUAFromSession(session);
-		
+
 		boolean uaFilles = "1".equals(request.getParameter("uaFilles"));		// Recuperamos si se debe buscar en las UAs hijas
 		boolean uaMeves = "1".equals(request.getParameter("uaMeves"));			// Recuperamos si se debe buscar en las UAs propias
 		String enPlazo = request.getParameter("en_plazo");						// Recuperamos si se encuentra vigente
 		String telematico = request.getParameter("telematico");					// Recuperamos el campo de si es telamático
-		
+
 		// Recuperamos los ids de los parametros
 		Long materia = recuperarProcParametro(request, "materia");				// Recuperamos la materia para filtrar
-        Long fetVital = recuperarProcParametro(request, "fetVital");			// Recuperamos el hecho vital para filtrar
-        Long publicObjectiu = recuperarProcParametro(request, "publicObjectiu");// Recuperamos el público objetivo para filtrar
-        
-        //Información de paginación
-        String pagPag = recuperarProcPaginacion(request, "pagPag");				// Recuperamos la página actual
-        String pagRes = recuperarProcPaginacion(request, "pagRes");				// Recuperamos los resultados por página
-        
-        int campoVisible = recuperarProcVisibilitat(request, paramMap);			// Recuperamos la visibilidad del procedimiento
-        
-        // Recuperamos los parametros
-        recuperarProcFechas(request, "fechaCaducidad", paramMap);				// Recuperamos de fecha de caducidad
-        recuperarProcFechas(request, "fechaPublicacion", paramMap);				// Recuperamos de fecha de pulicación
-        recuperarProcFechas(request, "fechaActualizacion", paramMap);			// Recuperamos de fecha de actualización
-		
-        recuperarProcBoolean(request, "taxa", paramMap);						// Recuperamos la tasa
-        recuperarProcBoolean(request, "indicador", paramMap);					// Recuperamos el indicador
-		
-        recuperarProcParamUpperCase(request, "responsable", paramMap);			// Recuperamos el responsable del procedimiento
-        recuperarProcParamUpperCase(request, "tramit", paramMap);				// Recuperamos el trámite
-        recuperarProcParamUpperCase(request, "url", paramMap);					// Recuperamos la URL
-		
-        recuperarProcIDParametro(request, "familia", paramMap);					// Recuperamos el id de la familia
-        recuperarProcIDParametro(request, "iniciacion", paramMap);				// Recuperamos el id de iniciación
-		
-        recuperarProcOrden(request, "ordreCamp", paramMap);						// Recuperamos el parametro de ordenación por campo
-        recuperarProcOrden(request, "ordreTipus", paramMap);					// Recuperamos el parametro de ordenación por tipo
-		
+		Long fetVital = recuperarProcParametro(request, "fetVital");			// Recuperamos el hecho vital para filtrar
+		Long publicObjectiu = recuperarProcParametro(request, "publicObjectiu");// Recuperamos el público objetivo para filtrar
+
+		//Información de paginación
+		String pagPag = recuperarProcPaginacion(request, "pagPag");				// Recuperamos la página actual
+		String pagRes = recuperarProcPaginacion(request, "pagRes");				// Recuperamos los resultados por página
+
+		int campoVisible = recuperarProcVisibilitat(request, paramMap);			// Recuperamos la visibilidad del procedimiento
+
+		// Recuperamos los parametros
+		recuperarProcFechas(request, "fechaCaducidad", paramMap);				// Recuperamos de fecha de caducidad
+		recuperarProcFechas(request, "fechaPublicacion", paramMap);				// Recuperamos de fecha de pulicación
+		recuperarProcFechas(request, "fechaActualizacion", paramMap);			// Recuperamos de fecha de actualización
+
+		recuperarProcBoolean(request, "taxa", paramMap);						// Recuperamos la tasa
+		recuperarProcBoolean(request, "indicador", paramMap);					// Recuperamos el indicador
+
+		recuperarProcParamUpperCase(request, "responsable", paramMap);			// Recuperamos el responsable del procedimiento
+		recuperarProcParamUpperCase(request, "tramit", paramMap);				// Recuperamos el trámite
+		recuperarProcParamUpperCase(request, "url", paramMap);					// Recuperamos la URL
+
+		recuperarProcIDParametro(request, "familia", paramMap);					// Recuperamos el id de la familia
+		recuperarProcIDParametro(request, "iniciacion", paramMap);				// Recuperamos el id de iniciación
+
+		recuperarProcOrden(request, "ordreCamp", paramMap);						// Recuperamos el parametro de ordenación por campo
+		recuperarProcOrden(request, "ordreTipus", paramMap);					// Recuperamos el parametro de ordenación por tipo
+
 		// Recuperar el resto de parametros
-        recuperarProcCodi(request, paramMap);									// Recuperamos el parametro del código
+		recuperarProcCodi(request, paramMap);									// Recuperamos el parametro del código
 		recuperarProcVentanilla(request, paramMap);								// Recuperamos si es ventanilla única
 		recuperarProcVersion(request, paramMap);								// Recuperamos la versión
 		recuperarProcValidacion(request, paramMap);								// Recuperamos si es válido
 		recuperarProcTexto(request, paramMap, tradMap);							// Recuperamos el texto y lo buscamos en todos los idiomas
-		
+
 		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
 		List<ProcedimientoLocalDTO> llistaProcedimientoLocalDTO = new ArrayList<ProcedimientoLocalDTO>();
+
 		try {
+
 			ProcedimientoDelegate procedimientosDelegate = DelegateUtil.getProcedimientoDelegate();
+
 			// Realizamos la búsqueda de los procedimientos
 			resultadoBusqueda = procedimientosDelegate.buscadorProcedimientos(paramMap, tradMap, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu, pagPag, pagRes, campoVisible, enPlazo, telematico);
+
 			// Los transformamos en procedimientos locales DTO
 			llistaProcedimientoLocalDTO.addAll(convertirProcLocales(resultadoBusqueda, request));			
-			
+
 		} catch (DelegateException dEx) {
+
 			if (dEx.isSecurityException()) {
 				// model.put("error", "permisos");
 			} else {
@@ -214,13 +236,16 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 				logException(log, dEx);
 			}
 		}
+
+
 		//Total de registros
 		resultats.put("total", resultadoBusqueda.getTotalResultados());
 		resultats.put("nodes", llistaProcedimientoLocalDTO);
-		
+
 		return resultats;
+
 	}
-	
+
 	/*
 	 * Recuperar parametro del request
 	 */
@@ -234,7 +259,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 		}
 		return null;
 	}
-	
+
 	/*
 	 * Recuperar las fechas del request
 	 */
@@ -244,7 +269,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 		if (fecha != null)
 			paramMap.put(fechaParametro, fecha);
 	}
-	
+
 	/*
 	 * Recuperamos la visibilidad del request
 	 */
@@ -262,7 +287,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 		}
 		return 0;
 	}
-	
+
 	/*
 	 * Recuperamos booleano del request
 	 */
@@ -274,7 +299,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 		else if ("0".equals(param))
 			paramMap.put(parametro, 0);
 	}
-	
+
 	/*
 	 * Recuperamos el parametro haciendo un UpperCase
 	 */
@@ -284,7 +309,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 		if (param != null && !"".equals(param))
 			paramMap.put(parametro, param.toUpperCase());
 	}
-	
+
 	/*
 	 * Recuperamos ids de parametros
 	 */
@@ -295,10 +320,10 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			Integer id = Integer.parseInt(param);
 			if (id > 0)
 				paramMap.put(parametro + ".id", id);
-			
+
 		} catch (NumberFormatException e) {}
 	}
-	
+
 	/*
 	 * Recuperamos los parametros de ordenación
 	 */
@@ -308,7 +333,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 		if (ordre != null && !"".equals(ordre))
 			paramMap.put(parametro, ordre);
 	}
-	
+
 	/*
 	 * Recuperamos parametros de paginación
 	 */
@@ -317,9 +342,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 		String pagina = request.getParameter(parametro);
 		if (pagina == null) pagina = String.valueOf(0);
 		return pagina;
-		
+
 	}
-	
+
 	/*
 	 * Recuperamos el parametro del código
 	 */
@@ -329,10 +354,10 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 		Long id = -1l;
 		if ( idStr != null && StringUtils.isNumeric(idStr.trim()) )
 			id = ParseUtil.parseLong( idStr.trim() );
-		
+
 		paramMap.put("id", idStr != null ? id : null );
 	}
-	
+
 	/*
 	 * Recuperamos si es ventanilla única o no
 	 */
@@ -342,7 +367,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 		if ("1".equals(ventanillaUnica))
 			paramMap.put("ventanillaUnica", 1);
 	}
-	
+
 	/*
 	 * Recuperamos la versión
 	 */
@@ -355,7 +380,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 				paramMap.put("version", versionLong);
 		} catch (NumberFormatException e) {}
 	}
-	
+
 	/*
 	 * Recuperar si es válido
 	 */
@@ -371,7 +396,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			} catch (NumberFormatException e) {}
 		}
 	}
-	
+
 	/*
 	 * Recuperamos el campo text para buscarlo en todos los campos de texto y en todos los idiomas
 	 */
@@ -383,7 +408,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			textes = textes.toUpperCase();
 			if (tradMap.get("nombre") == null)
 				tradMap.put("nombre", textes);
-			
+
 			tradMap.put("resumen", textes);
 			tradMap.put("destinatarios", textes);
 			tradMap.put("requisitos", textes);
@@ -403,7 +428,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			}
 		}
 	}
-	
+
 	/*
 	 * Función para convertir a procedimientos locales los resultados
 	 */
@@ -415,18 +440,18 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 					pl.getId(), pl.getNombreProcedimiento(),
 					pl.isVisible(), DateUtils.formatDate(pl.getFechaActualizacion()),
 					pl.getNombreFamilia());
-			
+
 			llistaProcedimientoLocalDTO.add( procLocalDTO );
 		}
 		return llistaProcedimientoLocalDTO;
 	}
-	
-	
+
+
 	@RequestMapping(value = "/pagDetall.do", method = POST)
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpSession session, HttpServletRequest request)
 	{
 		Map<String, Object> resultats = new HashMap<String, Object>();
-		
+
 		try {
 			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			Long id = new Long(request.getParameter("id"));
@@ -435,7 +460,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			ProcedimientoLocal proc = procedimientoDelegate.obtenerProcedimientoNewBack(id);
 
 			resultats.put("item_id", proc.getId());
-            resultats.put("item_codigo_pro", proc.getSignatura());			
+			resultats.put("item_codigo_pro", proc.getSignatura());			
 			resultats.put("item_estat", proc.getValidacion());						
 			resultats.put("item_data_actualitzacio", DateUtils.formatDate(proc.getFechaActualizacion()));
 			resultats.put("item_data_publicacio", DateUtils.formatDate(proc.getFechaPublicacion()));
@@ -446,10 +471,10 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			resultats.put("item_responsable", proc.getResponsable());
 			resultats.put("item_finestreta_unica", proc.esVentanillaUnica());
 			resultats.put("item_notes", proc.getInfo());
-			
+
 			// TODO: Implementar getPublico()
 			// resultats.put("item_public_objectiu", DateUtils.formatDate(proc.getPublico()));
-			
+
 			recuperaProcIdiomas(resultats, proc, lang);			// Recuperar los procedimientos según los idiomas
 			recuperaProcDocs(resultats, proc);					// Recuperar los documentos relacionados de un procedimiento
 			recuperaProcTramites(resultats, proc, request);		// Recuperar los trámites relacionados de un procedimiento
@@ -457,80 +482,80 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			recuperaProcPO(resultats, proc, lang);				// Recuperar los públicos objetivos asociados a un procedimiento
 			recuperaProcHechosVitales(resultats, proc, lang);	// Recuperar los hechos vitales asociados a un procedimiento
 			recuperaProcNormativas(resultats, proc, lang);		// Recuperar las normativas asociadas a un procedimiento
-			
+
 			if (proc.getIniciacion() != null) {
 				Iniciacion iniciacion = proc.getIniciacion();
 				resultats.put("item_iniciacio", iniciacion.getId());
 			}
-			
+
 			if (proc.getUnidadAdministrativa() != null) {
 				UnidadAdministrativa ua = proc.getUnidadAdministrativa();
 				resultats.put("item_organ_responsable_id", ua.getId());
 				resultats.put("item_organ_responsable_nom", ua.getNombreUnidadAdministrativa(lang));
 			}
-			
+
 			if (proc.getOrganResolutori() != null) {
 				UnidadAdministrativa ua = proc.getOrganResolutori();
 				resultats.put("item_organ_id", ua.getId());
 				resultats.put("item_organ_nom", ua.getNombreUnidadAdministrativa(lang));
 			}
-			
+
 			if (proc.getFamilia() != null) {
 				Familia familia = proc.getFamilia();
 				resultats.put("item_familia", familia.getId());
 			}
-			
+
 			if (proc.getVersion() != null)
 				resultats.put("item_version", proc.getVersion());
-			
+
 			if (proc.getIndicador() == null || "0".equals(proc.getIndicador()))
 				resultats.put("item_fi_vida_administrativa", false);
 			else
 				resultats.put("item_fi_vida_administrativa", true);
-			
+
 			if (proc.getTaxa() == null || "0".equals(proc.getTaxa()))
 				resultats.put("item_taxa", false);
 			else
 				resultats.put("item_taxa", true);
-			
+
 			if (proc.getVentanillaUnica() == null || "0".equals(proc.getVentanillaUnica()))
 				resultats.put("item_finestreta_unica", false);
 			else
 				resultats.put("item_finestreta_unica", true);
-			
+
 			// Obtención de listado de posibles hechos vitales del procedimiento
 			Set<PublicoObjetivo> listaPublicosObjetivos =  proc.getPublicosObjetivo();
 			if ( !listaPublicosObjetivos.isEmpty() ) {
-				
+
 				resultats.put( "listadoHechosVitales", LlistatUtil.llistarHechosVitales( listaPublicosObjetivos , lang ) );
-				
+
 			} else {
-				
+
 				resultats.put( "listadoHechosVitales", Collections.EMPTY_SET );
-				
+
 			}
 
-			
+
 		} catch (DelegateException dEx) {
-			
+
 			logException(log, dEx);
-			
+
 			if ( dEx.isSecurityException() ){
-				
+
 				resultats.put( "error", messageSource.getMessage( "error.permisos", null, request.getLocale() ) );
-				
+
 			} else {
-				
+
 				resultats.put( "error", messageSource.getMessage( "error.altres", null, request.getLocale() ) );
-				
+
 			}
-			
+
 		}
-		
+
 		return resultats;
-		
+
 	}
-	
+
 	/*
 	 * Función que recupera el contenido de los procedimientos según el idioma.
 	 */
@@ -544,7 +569,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			else
 				resultats.put("ca", new TraduccionProcedimientoLocal());
 		}
-		
+
 		if (proc.getTraduccion("es") != null) {
 			resultats.put("es", (TraduccionProcedimientoLocal) proc.getTraduccion("es"));
 		} else {
@@ -553,7 +578,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			else
 				resultats.put("es", new TraduccionProcedimientoLocal());
 		}
-		
+
 		if (proc.getTraduccion("en") != null) {
 			resultats.put("en", (TraduccionProcedimientoLocal) proc.getTraduccion("en"));
 		} else {
@@ -562,7 +587,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			else
 				resultats.put("en", new TraduccionProcedimientoLocal());
 		}
-		
+
 		if (proc.getTraduccion("de") != null) {
 			resultats.put("de", (TraduccionProcedimientoLocal) proc.getTraduccion("de"));
 		} else {
@@ -571,7 +596,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			else
 				resultats.put("de", new TraduccionProcedimientoLocal());
 		}
-		
+
 		if (proc.getTraduccion("fr") != null) {
 			resultats.put("fr", (TraduccionProcedimientoLocal) proc.getTraduccion("fr"));
 		} else {
@@ -581,7 +606,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 				resultats.put("fr", new TraduccionProcedimientoLocal());
 		}
 	}
-	
+
 	/*
 	 * Función para recuperar los documentos relaciohnados con el procedimuiento.
 	 */
@@ -591,7 +616,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 		if (proc.getDocumentos() != null) {
 			Map<String, Object> mapDoc;
 			List<Map<String, Object>> llistaDocuments = new ArrayList<Map<String, Object>>();
-			
+
 			for(Documento doc: proc.getDocumentos()) {
 				if (doc != null) {
 					// Montar map solo con los campos 'titulo' de las traducciones del documento.
@@ -600,36 +625,36 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 					List<String> idiomas = idiomaDelegate.listarLenguajes();
 					String nombre;
 					TraduccionDocumento traDoc;
-					
+
 					for (String idioma: idiomas) {
 						traDoc = (TraduccionDocumento) doc.getTraduccion(idioma);
 						if (traDoc != null && traDoc.getTitulo() != null)
 							nombre = traDoc.getTitulo();
 						else
 							nombre = "";
-						
+
 						titulos.put(idioma, nombre);
 					}
-					
+
 					mapDoc = new HashMap<String, Object>(3);
 					mapDoc.put("id", doc.getId());
 					mapDoc.put("orden", doc.getOrden());
 					mapDoc.put("nombre", titulos);
-					
+
 					llistaDocuments.add(mapDoc);
 				} else {
 					log.error("El procedimient " + proc.getId() + " te un document null.");
-					
+
 				}
 			}
 			resultats.put("documents", llistaDocuments);
-			
+
 		} else {
 			resultats.put("documents", null);
-			
+
 		}
 	}
-	
+
 	/*
 	 * Función para recuperar los trámites de un procedimiento
 	 */
@@ -645,14 +670,14 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 						nombreTramite = ((TraduccionTramite) tramite.getTraduccion(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto())).getNombre();
 					else
 						nombreTramite = "void";
-					
+
 					listaTramitesDTO.add( new ListadoModuloTramiteDTO( tramite.getId(), nombreTramite, tramite.getFase() ) );
 				}
 			}
 		}
 		resultats.put("tramites", listaTramitesDTO);
 	}
-	
+
 	/*
 	 * Función para recuperar la materias de un procedimiento
 	 */
@@ -662,13 +687,13 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			List<IdNomDTO> llistaMateriesDTO = new ArrayList<IdNomDTO>();
 			for (Materia materia : proc.getMaterias())
 				llistaMateriesDTO.add(new IdNomDTO(materia.getId(), materia.getNombreMateria(lang)));
-			
+
 			resultats.put("materies", llistaMateriesDTO);
 		} else {
 			resultats.put("materies", null);
 		}
 	}
-	
+
 	/*
 	 * Función para recuperar los públicos objeticos de un procedimiento
 	 */
@@ -681,13 +706,13 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 				llistaPublicsDTO.add(new IdNomDTO(pob.getId(), tpob == null ? "" : tpob.getTitulo() ));
 			}
 			resultats.put("publicsObjectiu", llistaPublicsDTO);
-			
+
 		} else {
 			resultats.put("publicsObjectiu", null);
-			
+
 		}
 	}
-	
+
 	/*
 	 * Función para recuperar los hechos vitales de un procedimiento
 	 */
@@ -705,7 +730,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 		Collections.sort(llistaFetsDTO, new HechoVitalProcedimientoDTOComparator());
 		resultats.put("fetsVitals", llistaFetsDTO);
 	}
-	
+
 	/*
 	 * Función para recuperar las materias de un procedimiento
 	 */
@@ -716,43 +741,43 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			List<Map<String, String>> llistaNormatives = new ArrayList<Map<String, String>>();
 			TraduccionNormativa traNor;
 			String titulo;
-			
+
 			for (Normativa normativa: proc.getNormativas()) {
 				traNor = (TraduccionNormativa) normativa.getTraduccion(lang);
 				titulo = "";
 				if (traNor != null)
 					titulo = HtmlUtils.obtenerTituloDeEnlaceHtml(traNor.getTitulo()); // Retirar posible enlace incrustado en titulo
-				
+
 				map = new HashMap<String, String>(2);
 				map.put("id", normativa.getId().toString());
 				map.put("nombre", titulo);
 				llistaNormatives.add(map);
 			}
 			resultats.put("normatives", llistaNormatives);
-			
+
 		} else {
 			resultats.put("normatives", null);
-			
+
 		}
 	}
-	
+
 
 	@RequestMapping(value = "/esborrarProcediment.do", method = POST)
 	public @ResponseBody IdNomDTO esborrarProcediment(HttpServletRequest request)
 	{
 		IdNomDTO resultatStatus = new IdNomDTO();
-		
+
 		try {
 			Long id = new Long(request.getParameter("id"));
 			ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
 			procedimientoDelegate.borrarProcedimiento(id);
-			
+
 			//Actualiza estadísticas
 			DelegateUtil.getEstadisticaDelegate().grabarEstadisticaProcedimiento(id);
-			
+
 			resultatStatus.setId(1l);
 			resultatStatus.setNom("correcte");
-			
+
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
 				resultatStatus.setId(-1l);
@@ -761,28 +786,28 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 				logException( log, dEx );
 			}
 		}
-		
+
 		return resultatStatus;
 	}
-	
-	
+
+
 	@RequestMapping(value = "/guardar.do", method = POST)
 	public @ResponseBody IdNomDTO guardarProcediment(HttpSession session, HttpServletRequest request)
 	{
 		IdNomDTO result = null;
 		String error = null;
-		
+
 		try {
 			if (request.getParameter("publicsObjectiu") == null || request.getParameter("publicsObjectiu").equals("")) {
 				error = messageSource.getMessage("proc.error.falta.public", null, request.getLocale());
 				return result = new IdNomDTO(-3l, error);
-				
+
 			}
-			
+
 			ProcedimientoDelegate procedimentDelegate = DelegateUtil.getProcedimientoDelegate();
 			ProcedimientoLocal procediment = new ProcedimientoLocal();
 			ProcedimientoLocal procedimentOld;
-			
+
 			boolean edicion;
 			try {
 				Long id = Long.parseLong(request.getParameter("item_id"));
@@ -791,9 +816,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			} catch (NumberFormatException nfe) {
 				procedimentOld = null;
 				edicion = false;
-				
+
 			}
-			
+
 			procediment = guardarProcAntiguo(edicion, procediment, procedimentOld);					// Si estamos guardando un procedimiento ya existente en vez de uno nuevo
 			procediment = guardarProcMateriar(request, edicion, procediment, procedimentOld);		// Procesar Materias
 			procediment = guardarProcPublicoObjetivo(request, edicion, procediment, procedimentOld);// Procesar Público Objectivo
@@ -816,27 +841,27 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			procediment.setTaxa("on".equalsIgnoreCase(request.getParameter("item_taxa")) ? "1" : "0");							// Taxa
 			procediment.setIndicador("on".equalsIgnoreCase(request.getParameter("item_fi_vida_administrativa")) ? "1" : "0");	// Indicador
 			procediment.setVentanillaUnica("on".equalsIgnoreCase(request.getParameter("item_finestreta_unica")) ? "1" : "0");	// Ventanilla Única
-			
+
 			if (edicion) {
 				procediment.setTramite(procedimentOld.getTramite());							// Tramite
 				procediment.setUrl(procedimentOld.getUrl());									// URL
 				// Provisional, hasta que este activada la SEU --> procediment.setTramite(request.getParameter("item_tramite"));
 				// Provisional, hasta que este activada la SEU --> procediment.setUrl(request.getParameter("item_url"));
 			}
-			
+
 			/* NOTA IMPORTANTE PARA EL RENDIMIENTO */
 			procediment.setDocumentos(null);
 			procediment.setTramites(null);
 			procediment.setHechosVitalesProcedimientos(null);
 			/* FIN NOTA */
 			Long procId = procedimentDelegate.grabarProcedimiento(procediment, procediment.getUnidadAdministrativa().getId());
-			
+
 			//Actualiza estadísticas
 			DelegateUtil.getEstadisticaDelegate().grabarEstadisticaProcedimiento(procId);
-			
+
 			String ok = messageSource.getMessage("proc.guardat.correcte", null, request.getLocale());
 			result = new IdNomDTO(procId, ok);
-			
+
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
 				error = messageSource.getMessage("error.permisos", null, request.getLocale());
@@ -846,18 +871,18 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 				result = new IdNomDTO(-2l, error);
 				logException(log, dEx);
 			}
-			
+
 		} catch (NumberFormatException nfe) {
 			result = new IdNomDTO(-3l, error);
-			
+
 		} catch (ParseException pe) {
 			error = messageSource.getMessage(pe.getMessage(), null, request.getLocale());
 			result = new IdNomDTO(-4l, error);
 		}
-		
+
 		return result;
 	}
-	
+
 	/*
 	 * Guardamos el procedimiento anterior si se trata de una edición. 
 	 */
@@ -873,13 +898,13 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			procediment.setMaterias(procedimentOld.getMaterias());
 			procediment.setPublicosObjetivo(procedimentOld.getPublicosObjetivo());
 			procediment.setNormativas(procedimentOld.getNormativas());
-			
+
 		}
 		return procediment;
-		
+
 	}
-	
-	
+
+
 	/*
 	 * Para hacer menos accesos a BBDD se comprueba si es edicion o no.
 	 * En el primer caso es bastante probable que se repitan la mayoria de materias.
@@ -893,16 +918,16 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 				Set<Materia> materias = new HashSet<Materia>();
 				materias.addAll(materiaDelegate.obtenerMateriasPorIDs(request.getParameter("materies"), idioma));
 				procediment.setMaterias(materias);
-				
+
 			} else {
 				procediment.setMaterias(new HashSet<Materia>());
-				
+
 			}
 		}
 		return procediment;
-		
+
 	}
-	
+
 	/*
 	 * Para hacer menos accesos a BBDD se comprueba si es edicion o no.
 	 * En el primer caso es bastante probable que se repitan la mayoria de public objectiu.
@@ -914,7 +939,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 				PublicoObjetivoDelegate publicObjDelegate = DelegateUtil.getPublicoObjetivoDelegate();
 				Set<PublicoObjetivo> publicsNous = new HashSet<PublicoObjetivo>();
 				String[] codisPublicsNous = request.getParameter("publicsObjectiu").split(",");
-				
+
 				if (edicion) {
 					for (int i = 0; i < codisPublicsNous.length; i++) {
 						for (PublicoObjetivo pob : procedimentOld.getPublicosObjetivo()) {
@@ -931,15 +956,15 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 						publicsNous.add(publicObjDelegate.obtenerPublicoObjetivo(Long.valueOf(codiPob)));
 				}
 				procediment.setPublicosObjetivo(publicsNous);
-				
+
 			} else {
 				procediment.setPublicosObjetivo(new HashSet<PublicoObjetivo>());
 			}
 		}
-		
+
 		return procediment;
 	}
-	
+
 	/*
 	 * Controlar los trámites modificados
 	 */
@@ -947,7 +972,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 	{
 		String tramitsProcediment = request.getParameter("tramitsProcediment");
 		TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
-		
+
 		if (!"".equals(tramitsProcediment) && edicion) {
 			List<Long> listaTramitesBorrar = new ArrayList<Long>();
 			List<Tramite> tramitesNuevos = new ArrayList<Tramite>();
@@ -962,19 +987,19 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 					}
 				}
 			}
-			
+
 			// Eliminar los que se han quitado de la lista
 			for (Tramite tramite : listaTramitesOld) {
 				if (!tramitesNuevos.contains(tramite) && tramite != null)
 					listaTramitesBorrar.add(tramite.getId());
 			}
-			
+
 			for (Long id : listaTramitesBorrar) {
 				//procediment.removeTramite( tramiteDelegate.obtenerTramite(id) );
 				DelegateUtil.getProcedimientoDelegate().eliminarTramite(id, procediment.getId());
 				tramiteDelegate.borrarTramite(id);
 			}
-			
+
 			// Crear los nuevos
 			if (!"".equals(codigosTramitesNuevos)) {
 				for (String codigoTramite : codigosTramitesNuevos) {
@@ -986,7 +1011,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 					}
 				}
 			}
-			
+
 			// Actualizamos el orden de la lista de trámites
 			HashMap<String, String[]> actualizadorTramites = new HashMap<String, String[]>();
 			for (Tramite tramite : tramitesNuevos) {
@@ -995,7 +1020,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			}
 			DelegateUtil.getProcedimientoDelegate().actualizarOrdenTramites(actualizadorTramites);
 			procediment.setTramites(tramitesNuevos);
-			
+
 		} else if (edicion) {
 			ProcedimientoDelegate procedimentDelegate = DelegateUtil.getProcedimientoDelegate();
 			for (Tramite tramite : procediment.getTramites()) {
@@ -1006,10 +1031,10 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			}
 			procediment.setTramites(null);
 		}
-		
+
 		return procediment;
 	}
-	
+
 	/*
 	 * Controlamos los hechos vitales modificados.
 	 */
@@ -1018,28 +1043,28 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 		if (request.getParameter("fetsVitals") != null && edicion && isModuloModificado("modulo_hechos_modificado", request)) {
 			HechoVitalDelegate hvDelegate = DelegateUtil.getHechoVitalDelegate();
 			HechoVitalProcedimientoDelegate hvpDelegate = DelegateUtil.getHechoVitalProcedimientoDelegate();
-			
+
 			// Eliminamos los hecho vital procedimiento existentes
 			List<Long> hvpIds = new LinkedList<Long>();
 			if (procediment.getHechosVitalesProcedimientos() != null) {
 				for (HechoVitalProcedimiento hvp : procediment.getHechosVitalesProcedimientos())
 					hvpIds.add(hvp.getId());
-				
+
 				hvpDelegate.borrarHechoVitalProcedimientos(hvpIds);
 			}
 			procediment.setHechosVitalesProcedimientos(new HashSet<HechoVitalProcedimiento>());
-			
+
 			// Guardamos los nuevos
 			Set<HechoVitalProcedimiento> hvpsAGuardar = new HashSet<HechoVitalProcedimiento>();
 			List<Long> ids = new ArrayList<Long>();
 			for (String id : request.getParameter("fetsVitals").split(",")) {
 				if (id != null && !id.equals("")) ids.add(Long.parseLong(id));
 			}
-			
+
 			List<HechoVital> listHV = hvDelegate.buscarPorIds(ids);
-	    	for (HechoVital hv : listHV) {
-	    		HechoVitalProcedimiento hvp = new HechoVitalProcedimiento();
-	    		hvp.setProcedimiento(procediment);
+			for (HechoVital hv : listHV) {
+				HechoVitalProcedimiento hvp = new HechoVitalProcedimiento();
+				hvp.setProcedimiento(procediment);
 				hvp.setHechoVital(hv);
 				int maxOrden = 0;
 				for (HechoVitalProcedimiento hechoVitalProcedimiento : (List<HechoVitalProcedimiento>) hv.getHechosVitalesProcedimientos()) {
@@ -1051,12 +1076,12 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 				maxOrden++;
 				hvp.setOrden(maxOrden);
 				hvpsAGuardar.add(hvp);
-	    	}
-			
+			}
+
 			hvpDelegate.grabarHechoVitalProcedimientos(hvpsAGuardar);
 			procediment.setHechosVitalesProcedimientos(hvpsAGuardar);
 		}
-		
+
 		return procediment;
 	}
 
@@ -1072,18 +1097,18 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			List<Long> ids = new ArrayList<Long>();
 			for (String id: request.getParameter("normatives").split(","))
 				ids.add(Long.parseLong(id));
-			
+
 			normativas.addAll(normativaDelegate.buscarNormativas(ids));
 			procediment.setNormativas(normativas);
-			
+
 		} else {
 			procediment.setNormativas(new HashSet<Normativa>());
 		}
-		
+
 		return procediment;
 	}
-		
-	
+
+
 	/*
 	 * Controlamos los documentos modificados
 	 */
@@ -1138,7 +1163,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 		}
 		return procediment;
 	}
-	
+
 	/*
 	 * Traducimos al idioma deseado del procedimiento.
 	 */
@@ -1152,10 +1177,10 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 				tpl = (TraduccionProcedimientoLocal) procedimentOld.getTraduccion(lang);
 				if (tpl == null)
 					tpl = new TraduccionProcedimientoLocal();
-				
+
 			} else {
 				tpl = new TraduccionProcedimientoLocal();
-				
+
 			}
 			tpl.setNombre(RolUtil.limpiaCadena(request.getParameter("item_nom_" + lang)));
 			tpl.setDestinatarios(RolUtil.limpiaCadena(request.getParameter("item_destinataris_" + lang)));
@@ -1167,13 +1192,13 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			tpl.setObservaciones(RolUtil.limpiaCadena(request.getParameter("item_observacions_" + lang)));
 			tpl.setPlazos(RolUtil.limpiaCadena(request.getParameter("item_presentacio_" + lang)));
 			tpl.setLugar(RolUtil.limpiaCadena(request.getParameter("item_lloc_" + lang)));
-			
+
 			procediment.setTraduccion(lang, tpl);
 		}
-		
+
 		return procediment;
 	}
-	
+
 	/*
 	 * Controlamos la validación del procedimiento.
 	 */
@@ -1184,17 +1209,17 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			// Comprobar que no se haya cambiado la validacion/estado siendo operador
 			if (request.isUserInRole("sacoper") && procedimentOld != null && !procedimentOld.getValidacion().equals(validacion))
 				throw new DelegateException(new SecurityException());
-			
+
 			procediment.setValidacion(validacion);
-			
+
 		} catch (NumberFormatException e) {
 			error = messageSource.getMessage("proc.error.estat.incorrecte", null, request.getLocale());
 			throw new NumberFormatException();
-			
+
 		}
 		return procediment;
 	}
-	
+
 	/*
 	 * Controlamos el formato de la fecha de publicación.
 	 */
@@ -1204,13 +1229,13 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			Date data_publicacio = DateUtils.parseDate(request.getParameter("item_data_publicacio"));
 			if (data_publicacio == null)
 				throw new ParseException("error.data_publicacio", 0);
-			
+
 			procediment.setFechaPublicacion(data_publicacio);
 		}
 		return procediment;
-		
+
 	}
-	
+
 	/*
 	 * Controlamos el formato de la fecha de caducidad del procedimiento.
 	 */
@@ -1220,13 +1245,13 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			Date data_caducitat = DateUtils.parseDate(request.getParameter("item_data_caducitat"));
 			if (data_caducitat == null)
 				throw new ParseException("error.data_caducitat", 0);
-			
+
 			procediment.setFechaCaducidad(data_caducitat);
 		}
 		return procediment;
-		
+
 	}
-	
+
 	/*
 	 * Obtenemos la fecha de iniciación del procedimiento.
 	 */
@@ -1237,15 +1262,15 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			IniciacionDelegate iDelegate = DelegateUtil.getIniciacionDelegate();
 			Iniciacion iniciacion = iDelegate.obtenerIniciacion(iniciacionId);
 			procediment.setIniciacion(iniciacion);
-			
+
 		} catch (NumberFormatException e) {
 			error = messageSource.getMessage("proc.error.formaIniciacio.incorrecta", null, request.getLocale());
 			throw new NumberFormatException();
 		}
-		
+
 		return procediment;
 	}
-	
+
 	/*
 	 * Obtenemos las famílias de los procedimientos.
 	 */
@@ -1256,15 +1281,15 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			FamiliaDelegate fDelegate = DelegateUtil.getFamiliaDelegate();
 			Familia familia = fDelegate.obtenerFamilia(familiaId);
 			procediment.setFamilia(familia);
-			
+
 		} catch (NumberFormatException e) {
 			error = messageSource.getMessage("proc.error.familia.incorrecte", null, request.getLocale());
 			throw new NumberFormatException();
 		}
-		
+
 		return procediment;
 	}
-	
+
 	/*
 	 * Controlamos la versión del procedimiento.
 	 */
@@ -1275,20 +1300,20 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			if (versionStr != null && !"".equals(versionStr)) {
 				Long version = Long.parseLong(versionStr);
 				procediment.setVersion(version);
-				
+
 			} else { /* Provisional, hasta que este activada la SEU */
 				if (edicion)
 					procediment.setVersion(procedimentOld.getVersion());
-				
+
 			}
 		} catch (NumberFormatException e) {
 			error = messageSource.getMessage("proc.error.versio.incorrecte", null, request.getLocale());
 			throw new NumberFormatException();
 		}
-		
+
 		return procediment;
 	}
-	
+
 	/*
 	 * Obtenemos el Organo resolutorio del procedimiento.
 	 */
@@ -1300,17 +1325,17 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 				UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
 				UnidadAdministrativa organ = uaDelegate.obtenerUnidadAdministrativa(organId);
 				procediment.setOrganResolutori(organ);
-				
+
 			} catch (NumberFormatException e) {
 				error = messageSource.getMessage("proc.error.organ.incorrecte", null, request.getLocale());
 				throw new NumberFormatException();
-				
+
 			}
 		}
-		
+
 		return procediment;
 	}
-	
+
 	/*
 	 * Obtenemos la unidad administrativa del procedimiento.
 	 */
@@ -1321,50 +1346,50 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
 			UnidadAdministrativa organResp = uaDelegate.obtenerUnidadAdministrativa(organRespID);
 			procediment.setUnidadAdministrativa(organResp);
-			
+
 		} catch (NumberFormatException e) {
 			error = messageSource.getMessage("proc.error.organ.responsable.incorrecte", null, request.getLocale());
 			throw new NumberFormatException();
 		}
-		
+
 		return procediment;
 	}
-	
-	
+
+
 	@RequestMapping(value = "/cercarNormatives.do", method = POST)
-	public @ResponseBody Map<String, Object> llistatNormatives(HttpServletRequest request, HttpSession session)
-	{
+	public @ResponseBody Map<String, Object> llistatNormatives(HttpServletRequest request, HttpSession session) {
+
 		//Listar las normativas de la unidad administrativa
 		List<ProcedimientoNormativaDTO>llistaNormativesDTO= new ArrayList<ProcedimientoNormativaDTO>();
 		Map<String,Object> resultats = new HashMap<String,Object>();
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		Map<String, String> paramTrad = new HashMap<String, String>();
-		
+
 		// TODO obtener la ordenación por parámetro
-		// String campoOrdenacion = "normativa.fecha";
 		String campoOrdenacion = "fecha";
 		String orden = "desc";
-		
-		if (getUAFromSession(session) == null)
-			return resultats;	//Si no hay unidad administrativa se devuelve vac�o
-		
+
+		if (getUAFromSession(session) == null) //Si no hay unidad administrativa se devuelve vacío
+			return resultats;	
+
 		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
-		
+
 		try {
+
 			String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-			
+
 			// Obtener parámetros de búsqueda
 			if (request.getParameter("data") != null && !request.getParameter("data").equals("")) {
 				Date fecha = DateUtils.parseDate(request.getParameter("data"));
 				paramMap.put("fecha", fecha);
 			}
-			
+
 			if (request.getParameter("dataButlleti") != null && !request.getParameter("dataButlleti").equals("")) {
 				Date fechaBoletin = DateUtils.parseDate(request.getParameter("dataButlleti"));
 				paramMap.put("fechaBoletin", fechaBoletin);
 			}
-			
-			// Titol (en todos los idiomas)
+
+			// Título (en todos los idiomas)
 			String text = request.getParameter("titol");
 			if (text != null && !"".equals(text)) {
 				text = text.toUpperCase();
@@ -1372,45 +1397,51 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			} else {
 				paramTrad.put("idioma", idioma);
 			}
-			
+
 			//Información de paginación
 			String pagPag = request.getParameter("pagPag");
-			String pagRes = request.getParameter("pagRes");
+			String pagRes = request.getParameter("numeroPagina");
+
+			if (pagPag == null) 
+				pagPag = String.valueOf(0);
 			
-			if (pagPag == null) pagPag = String.valueOf(0);
-			if (pagRes == null) pagRes = String.valueOf(10);
-			
+			if (pagRes == null) 
+				pagRes = String.valueOf(10);
+
 			resultadoBusqueda = new ResultadoBusqueda();
-			
+
 			// Realizar la consulta y obtener resultados
 			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
-			
+
 			//La búsqueda de normativas no tendrá en cuenta la UA actual (idua = null)
 			resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, "todas", null, false, false, campoOrdenacion, orden, pagPag, pagRes);
-			
-			for (Normativa normativa: castList(Normativa.class, resultadoBusqueda.getListaResultados()) ) {
-				llistaNormativesDTO.add(new ProcedimientoNormativaDTO(
-						normativa.getId(),
-						HtmlUtils.obtenerTituloDeEnlaceHtml(normativa.getTraduccionTitulo()),
-						DateUtils.formatDate(normativa.getFecha()),
-						DateUtils.formatDate(normativa.getFechaBoletin()
-				)));
+
+			for (Normativa normativa : castList(Normativa.class, resultadoBusqueda.getListaResultados()) ) {
+
+				long idNormativa = normativa.getId();
+				String tituloEnlaceHTML = HtmlUtils.obtenerTituloDeEnlaceHtml( ( (TraduccionNormativa) normativa.getTraduccion("ca") ).getTitulo() );
+				String fecha = normativa.getFecha() == null  ?  " "  :  DateUtils.formatDate( normativa.getFecha() );
+				String fechaBoletin = normativa.getFechaBoletin() == null  ?  " "  :  DateUtils.formatDate( normativa.getFechaBoletin() );
+
+				llistaNormativesDTO.add( new ProcedimientoNormativaDTO( idNormativa, tituloEnlaceHTML, fecha, fechaBoletin ) );
+
 			}
-			
+
 		} catch (DelegateException dEx) {
-			if (dEx.isSecurityException()) {
-				//model.put("error", "permisos");
-			} else {
+			
+			if ( !dEx.isSecurityException() )
 				logException(log, dEx);
-			}
+			
 		}
+		
 		resultats.put("total", resultadoBusqueda.getTotalResultados());
 		resultats.put("nodes", llistaNormativesDTO);
-		
+
 		return resultats;
+		
 	}
 
-	
+
 	class HechoVitalProcedimientoDTOComparator implements Comparator<Map<String, Object>> {
 		public int compare(Map<String, Object> hvp1, Map<String, Object> hvp2) {
 			Integer orden1 = (Integer) hvp1.get("orden");
@@ -1418,56 +1449,56 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			return orden1.compareTo(orden2); 
 		}
 	}
-	
-	
+
+
 	@RequestMapping(value = "/traduir.do")
 	public @ResponseBody Map<String, Object> traduir(HttpServletRequest request)
 	{
 		Map<String, Object> resultats = new HashMap<String, Object>();
-		
+
 		try {
 			TraduccionProcedimientoLocal traduccioOrigen = new TraduccionProcedimientoLocal();
 			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
-			
+
 			String idiomaOrigenTraductor = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
-			
+
 			if (StringUtils.isNotEmpty(request.getParameter("item_nom_" + idiomaOrigenTraductor)))
 				traduccioOrigen.setNombre(request.getParameter("item_nom_" + idiomaOrigenTraductor));
-			
+
 			if (StringUtils.isNotEmpty(request.getParameter("item_objecte_" + idiomaOrigenTraductor)))
 				traduccioOrigen.setResumen(request.getParameter("item_objecte_" + idiomaOrigenTraductor));
-			
+
 			if (StringUtils.isNotEmpty(request.getParameter("item_resultat_" + idiomaOrigenTraductor)))
 				traduccioOrigen.setResultat(request.getParameter("item_resultat_" + idiomaOrigenTraductor));
-			
+
 			if (StringUtils.isNotEmpty(request.getParameter("item_destinataris_" + idiomaOrigenTraductor)))
 				traduccioOrigen.setDestinatarios(request.getParameter("item_destinataris_" + idiomaOrigenTraductor));
-			
+
 			if (StringUtils.isNotEmpty(request.getParameter("item_resolucio_" + idiomaOrigenTraductor)))
 				traduccioOrigen.setResolucion(request.getParameter("item_resolucio_" + idiomaOrigenTraductor));
-			
+
 			if (StringUtils.isNotEmpty(request.getParameter("item_notificacio_" + idiomaOrigenTraductor)))
 				traduccioOrigen.setNotificacion(request.getParameter("item_notificacio_" + idiomaOrigenTraductor));
-			
+
 			if (StringUtils.isNotEmpty(request.getParameter("item_silenci_" + idiomaOrigenTraductor)))
 				traduccioOrigen.setSilencio(request.getParameter("item_silenci_" + idiomaOrigenTraductor));
-			
+
 			if (StringUtils.isNotEmpty(request.getParameter("item_observacions_" + idiomaOrigenTraductor)))
 				traduccioOrigen.setObservaciones(request.getParameter("item_observacions_" + idiomaOrigenTraductor));
-			
+
 			/* No es seguro que se utilizen */
 			if (StringUtils.isNotEmpty(request.getParameter("item_presentacio_" + idiomaOrigenTraductor)))
 				traduccioOrigen.setPlazos(request.getParameter("item_presentacio_" + idiomaOrigenTraductor));
-			
+
 			if (StringUtils.isNotEmpty(request.getParameter("item_lloc_" + idiomaOrigenTraductor)))
 				traduccioOrigen.setLugar(request.getParameter("item_lloc_" + idiomaOrigenTraductor));
 			/*------------------------------*/
-			
+
 			traduccions = traductor.translate(traduccioOrigen, idiomaOrigenTraductor);
-			
+
 			resultats.put("traduccions", traduccions);
-			
+
 		} catch (DelegateException dEx) {
 			logException(log, dEx);
 			if (dEx.isSecurityException()) {
@@ -1482,66 +1513,66 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			log.error("CatalegProcedimentBackController.traduir: Error en al traducir procedimiento: " + e);
 			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
 		}
-		
+
 		return resultats;
 	}
-	
-	
+
+
 	/**
-     * Devuelve true si ha habido algun cambio en el modulo.
-     * 
-     * @param modulo
-     * @param request
-     * @return boolean
-     */
-    private boolean isModuloModificado(String modulo, HttpServletRequest request) {
-        return "1".equals(request.getParameter(modulo));
-    }
-    private List<IdNomDTO> llistarExcepcionsDocumentacio(String lang) throws DelegateException {
-      ExcepcioDocumentacioDelegate excepcioDelegate = DelegateUtil.getExcepcioDocumentacioDelegate();
-      List<IdNomDTO> excepcioObjDTOList = new ArrayList<IdNomDTO>();
-      List<ExcepcioDocumentacio> llistaExcepcionsDocumentacio = excepcioDelegate.llistarExcepcioDocumentacio();
-      TraduccionExcepcioDocumentacio ted;
-      for (ExcepcioDocumentacio excepcio : llistaExcepcionsDocumentacio ) {
-        ted = (TraduccionExcepcioDocumentacio) excepcio.getTraduccion(lang);
-        excepcioObjDTOList.add(new IdNomDTO(excepcio.getId(), ted.getNombre()));
-      }
-      return excepcioObjDTOList;
-    }
-    
-    
-    private List<IdNomDTO> llistarCatalegDocuments(String lang) throws DelegateException {
-      CatalegDocumentsDelegate catdocDelegate = DelegateUtil.getCatalegDocumentsDelegate();
-      List<IdNomDTO> catalegObjDTOList = new ArrayList<IdNomDTO>();
-      List<CatalegDocuments> llistaCatalegDocuments = catdocDelegate.llistarCatalegDocuments();
-      TraduccionCatalegDocuments tcd;
-      for (CatalegDocuments document : llistaCatalegDocuments ) {
-        tcd = (TraduccionCatalegDocuments) document.getTraduccion(lang);
-        catalegObjDTOList.add(new IdNomDTO(document.getId(), tcd.getNombre()));
-      }
-      return catalegObjDTOList;
-    }
-    
-    
-    @RequestMapping( value = "/listarHechosVitales.do" , method = POST)
-    public @ResponseBody Map<String, Object> listarHechosVitales(@RequestParam Set<Long> publicosObjectivosSeleccionados, HttpSession session, HttpServletRequest request)
-    {
-    	Map<String, Object> resultats = new HashMap<String, Object>();
-    	
-    	try {
-    		String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-    		resultats.put("listadoHechosVitales", LlistatUtil.llistarHechosVitales(publicosObjectivosSeleccionados, lang));
-    		
-    	} catch (DelegateException e) {
-    		logException(log, e);
-    		
-    		if (e.isSecurityException())
-    			resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
-    		else
-    			resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
-    	}
-    	
-    	return resultats;
-    }
-    
+	 * Devuelve true si ha habido algun cambio en el modulo.
+	 * 
+	 * @param modulo
+	 * @param request
+	 * @return boolean
+	 */
+	private boolean isModuloModificado(String modulo, HttpServletRequest request) {
+		return "1".equals(request.getParameter(modulo));
+	}
+	private List<IdNomDTO> llistarExcepcionsDocumentacio(String lang) throws DelegateException {
+		ExcepcioDocumentacioDelegate excepcioDelegate = DelegateUtil.getExcepcioDocumentacioDelegate();
+		List<IdNomDTO> excepcioObjDTOList = new ArrayList<IdNomDTO>();
+		List<ExcepcioDocumentacio> llistaExcepcionsDocumentacio = excepcioDelegate.llistarExcepcioDocumentacio();
+		TraduccionExcepcioDocumentacio ted;
+		for (ExcepcioDocumentacio excepcio : llistaExcepcionsDocumentacio ) {
+			ted = (TraduccionExcepcioDocumentacio) excepcio.getTraduccion(lang);
+			excepcioObjDTOList.add(new IdNomDTO(excepcio.getId(), ted.getNombre()));
+		}
+		return excepcioObjDTOList;
+	}
+
+
+	private List<IdNomDTO> llistarCatalegDocuments(String lang) throws DelegateException {
+		CatalegDocumentsDelegate catdocDelegate = DelegateUtil.getCatalegDocumentsDelegate();
+		List<IdNomDTO> catalegObjDTOList = new ArrayList<IdNomDTO>();
+		List<CatalegDocuments> llistaCatalegDocuments = catdocDelegate.llistarCatalegDocuments();
+		TraduccionCatalegDocuments tcd;
+		for (CatalegDocuments document : llistaCatalegDocuments ) {
+			tcd = (TraduccionCatalegDocuments) document.getTraduccion(lang);
+			catalegObjDTOList.add(new IdNomDTO(document.getId(), tcd.getNombre()));
+		}
+		return catalegObjDTOList;
+	}
+
+
+	@RequestMapping( value = "/listarHechosVitales.do" , method = POST)
+	public @ResponseBody Map<String, Object> listarHechosVitales(@RequestParam Set<Long> publicosObjectivosSeleccionados, HttpSession session, HttpServletRequest request)
+	{
+		Map<String, Object> resultats = new HashMap<String, Object>();
+
+		try {
+			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			resultats.put("listadoHechosVitales", LlistatUtil.llistarHechosVitales(publicosObjectivosSeleccionados, lang));
+
+		} catch (DelegateException e) {
+			logException(log, e);
+
+			if (e.isSecurityException())
+				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+			else
+				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+		}
+
+		return resultats;
+	}
+
 }
