@@ -13,83 +13,91 @@ import org.ibit.rol.sac.persistence.intf.ArchivoFacadeHome;
 import org.ibit.rol.sac.persistence.util.ArchivoFacadeUtil;
 
 public class ArchivoDelegate  implements StatelessDelegate {
-	
-        
-        	
+
+
+
 	/* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
-    /* ========================================================= */
+	/* ======================== MÉTODOS DE NEGOCIO ============= */
+	/* ========================================================= */
 
 	public Archivo obtenerArchivo(Long id)  throws DelegateException {
-        try {
-            return getFacade().obtenerArchivo(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
+		try {
+			return getFacade().obtenerArchivo(id);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+
+	public void borrarArchivo(Long id) throws DelegateException {
+		try {
+			getFacade().borrarArchivo(id);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
 
 	/** @deprecated  No se utiliza */
-    public ByteArrayOutputStream getFitxer(Long id) throws DelegateException {
-    	try {
-    		return getFacade().getFitxer(id);
-    	
-    	} catch (RemoteException e) {
-    		throw new DelegateException(e);
-    	}
-    	
-    }    
+	public ByteArrayOutputStream getFitxer(Long id) throws DelegateException {
+		try {
+			return getFacade().getFitxer(id);
 
-    /** @deprecated  No se utiliza */
-    public String getMime(Long id) throws DelegateException {    
-    	try {
-    		return getFacade().getMime(id);
-    	} catch (RemoteException e) {
-    		throw new DelegateException(e);
-    	}
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
 
-    }
-    
-    /** @deprecated  No se utiliza */
-    public long getPes(Long id) throws DelegateException {       	
-    	try {
-    		return getFacade().getPes(id);
-    	} catch (RemoteException e) {
-    		throw new DelegateException(e);
-    	}
-    }    
-    
-    /** @deprecated  No se utiliza */
-    public String getNombre(Long id) throws DelegateException {
-    	try {
-    		return getFacade().getNombre(id);
-    	} catch (RemoteException e) {
-    		throw new DelegateException(e);
-    	}
-    }		
-	
-    /* ========================================================= */
-    /* ======================== REFERENCIA AL FACADE  ========== */
-    /* ========================================================= */
+	}    
 
-    private Handle facadeHandle;
+	/** @deprecated  No se utiliza */
+	public String getMime(Long id) throws DelegateException {    
+		try {
+			return getFacade().getMime(id);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
 
-    private ArchivoFacade getFacade() throws RemoteException {
-        return (ArchivoFacade) facadeHandle.getEJBObject();
-    }
+	}
 
-    protected ArchivoDelegate() throws DelegateException {
-        try {
-        	ArchivoFacadeHome home = ArchivoFacadeUtil.getHome();
-        	ArchivoFacade remote = home.create();
-            facadeHandle = remote.getHandle();
-        } catch (NamingException e) {
-            throw new DelegateException(e);
-        } catch (CreateException e) {
-            throw new DelegateException(e);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
+	/** @deprecated  No se utiliza */
+	public long getPes(Long id) throws DelegateException {       	
+		try {
+			return getFacade().getPes(id);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}    
 
-	
+	/** @deprecated  No se utiliza */
+	public String getNombre(Long id) throws DelegateException {
+		try {
+			return getFacade().getNombre(id);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}		
+
+	/* ========================================================= */
+	/* ======================== REFERENCIA AL FACADE  ========== */
+	/* ========================================================= */
+
+	private Handle facadeHandle;
+
+	private ArchivoFacade getFacade() throws RemoteException {
+		return (ArchivoFacade) facadeHandle.getEJBObject();
+	}
+
+	protected ArchivoDelegate() throws DelegateException {
+		try {
+			ArchivoFacadeHome home = ArchivoFacadeUtil.getHome();
+			ArchivoFacade remote = home.create();
+			facadeHandle = remote.getHandle();
+		} catch (NamingException e) {
+			throw new DelegateException(e);
+		} catch (CreateException e) {
+			throw new DelegateException(e);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+
+
 }
