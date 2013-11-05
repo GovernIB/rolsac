@@ -533,6 +533,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
                     HQL_TRADUCCIONES_ALIAS);
 
             ProcedimentUtils.parseActiu(criteris, procedimentCriteria, HQL_PROCEDIMIENTO_ALIAS, qb);
+            log.info("ProcedureCriteria antes de parsearlo para la query, inicio: " + procedimentCriteria.getInici());
             criteris.addAll(BasicUtils.parseCriterias(
                     ProcedimentCriteria.class,
                     HQL_PROCEDIMIENTO_ALIAS,
@@ -540,9 +541,10 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
                     procedimentCriteria));
             
             qb.extendCriteriaObjects(criteris);
-
+            
             session = getSession();
             Query query = qb.createQuery(session);
+            
             List<ProcedimientoLocal> procedimentsResult = (List<ProcedimientoLocal>)query.list();
             
             for (ProcedimientoLocal procediment: procedimentsResult) {

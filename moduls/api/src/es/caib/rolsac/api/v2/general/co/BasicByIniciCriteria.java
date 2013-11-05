@@ -17,5 +17,10 @@ public class BasicByIniciCriteria implements CriteriaObject {
     public void extendCriteria(QueryBuilder qb) {
         qb.setFirstResult(iniciValue);
     }
+    
+    public int getIniciValue()
+    {
+    	return this.iniciValue;
+    }
 
 }
