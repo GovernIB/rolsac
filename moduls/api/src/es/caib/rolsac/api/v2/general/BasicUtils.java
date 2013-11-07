@@ -163,9 +163,7 @@ public class BasicUtils {
         }
         if (StringUtils.isNotBlank(basicCriteria.getInici())) {
             BasicByIniciCriteria criteria = new BasicByIniciCriteria();
-            log.info("Antes de convertir basic criteria a iniciCriteria: " + basicCriteria.getInici());
             criteria.parseCriteria(basicCriteria.getInici());
-            log.info("Despues de convertir basic criteria a iniciCriteria: " + criteria.getIniciValue());
             criteriaObjects.add(criteria);
         }
         if (StringUtils.isNotBlank(basicCriteria.getTamany())) {
