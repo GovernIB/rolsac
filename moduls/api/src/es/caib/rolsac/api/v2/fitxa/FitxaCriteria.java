@@ -8,6 +8,8 @@
 package es.caib.rolsac.api.v2.fitxa;
 
 public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria  implements java.io.Serializable {
+    private java.lang.Boolean actiu;
+
     private java.lang.String fechaActualizacion;
 
     private java.lang.String fechaCaducidad;
@@ -38,8 +40,6 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
 
     private java.lang.String seccion;
 
-    private java.lang.Boolean visible;
-
     public FitxaCriteria() {
     }
 
@@ -49,6 +49,7 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
            java.lang.String inici,
            java.lang.String ordenacio,
            java.lang.String tamany,
+           java.lang.Boolean actiu,
            java.lang.String fechaActualizacion,
            java.lang.String fechaCaducidad,
            java.lang.String fechaPublicacion,
@@ -63,14 +64,14 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
            java.lang.String urlVideo,
            java.lang.String validacion,
            java.lang.String publicoObjetivo,
-           java.lang.String seccion,
-           java.lang.Boolean visible) {
+           java.lang.String seccion) {
         super(
             id,
             idioma,
             inici,
             ordenacio,
             tamany);
+        this.actiu = actiu;
         this.fechaActualizacion = fechaActualizacion;
         this.fechaCaducidad = fechaCaducidad;
         this.fechaPublicacion = fechaPublicacion;
@@ -86,7 +87,26 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
         this.validacion = validacion;
         this.publicoObjetivo = publicoObjetivo;
         this.seccion = seccion;
-        this.visible = visible;
+    }
+
+
+    /**
+     * Gets the actiu value for this FitxaCriteria.
+     * 
+     * @return actiu
+     */
+    public java.lang.Boolean getActiu() {
+        return actiu;
+    }
+
+
+    /**
+     * Sets the actiu value for this FitxaCriteria.
+     * 
+     * @param actiu
+     */
+    public void setActiu(java.lang.Boolean actiu) {
+        this.actiu = actiu;
     }
 
 
@@ -389,26 +409,6 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
         this.seccion = seccion;
     }
 
-
-    /**
-     * Gets the visible value for this FitxaCriteria.
-     * 
-     * @return visible
-     */
-    public java.lang.Boolean getVisible() {
-        return visible;
-    }
-
-
-    /**
-     * Sets the visible value for this FitxaCriteria.
-     * 
-     * @param visible
-     */
-    public void setVisible(java.lang.Boolean visible) {
-        this.visible = visible;
-    }
-
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof FitxaCriteria)) return false;
@@ -421,6 +421,9 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
         __equalsCalc = obj;
         boolean _equals;
         _equals = super.equals(obj) && 
+            ((this.actiu==null && other.getActiu()==null) || 
+             (this.actiu!=null &&
+              this.actiu.equals(other.getActiu()))) &&
             ((this.fechaActualizacion==null && other.getFechaActualizacion()==null) || 
              (this.fechaActualizacion!=null &&
               this.fechaActualizacion.equals(other.getFechaActualizacion()))) &&
@@ -465,10 +468,7 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
               this.publicoObjetivo.equals(other.getPublicoObjetivo()))) &&
             ((this.seccion==null && other.getSeccion()==null) || 
              (this.seccion!=null &&
-              this.seccion.equals(other.getSeccion()))) &&
-            ((this.visible==null && other.getVisible()==null) || 
-             (this.visible!=null &&
-              this.visible.equals(other.getVisible())));
+              this.seccion.equals(other.getSeccion())));
         __equalsCalc = null;
         return _equals;
     }
@@ -480,6 +480,9 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
         }
         __hashCodeCalc = true;
         int _hashCode = super.hashCode();
+        if (getActiu() != null) {
+            _hashCode += getActiu().hashCode();
+        }
         if (getFechaActualizacion() != null) {
             _hashCode += getFechaActualizacion().hashCode();
         }
@@ -525,9 +528,6 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
         if (getSeccion() != null) {
             _hashCode += getSeccion().hashCode();
         }
-        if (getVisible() != null) {
-            _hashCode += getVisible().hashCode();
-        }
         __hashCodeCalc = false;
         return _hashCode;
     }
@@ -539,6 +539,12 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
     static {
         typeDesc.setXmlType(new javax.xml.namespace.QName("http://fitxa.v2.api.rolsac.caib.es", "FitxaCriteria"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("actiu");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "actiu"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("fechaActualizacion");
         elemField.setXmlName(new javax.xml.namespace.QName("", "fechaActualizacion"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
@@ -626,12 +632,6 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
         elemField.setFieldName("seccion");
         elemField.setXmlName(new javax.xml.namespace.QName("", "seccion"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        elemField.setNillable(true);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("visible");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "visible"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
     }

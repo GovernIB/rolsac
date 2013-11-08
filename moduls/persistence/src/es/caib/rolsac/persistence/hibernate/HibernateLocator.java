@@ -29,10 +29,14 @@ public class HibernateLocator {
 	private HibernateLocator() {
 
     	
-    	globalInterceptor =  new ChainedInterceptor(
+    	/*globalInterceptor =  new ChainedInterceptor(
     								new Interceptor[] {
     											new IndexerInterceptor(),
-    											new LobCleanUpInterceptor()} );
+    											new LobCleanUpInterceptor()} );*/
+		
+    	globalInterceptor =  new ChainedInterceptor(
+				new Interceptor[] {
+							new IndexerInterceptor()} );
     	
         sf = initSessionFactory();
     }
