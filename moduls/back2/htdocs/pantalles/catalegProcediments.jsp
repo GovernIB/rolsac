@@ -1579,10 +1579,6 @@
 									</c:choose>
 									</a></li>									
 								</c:forEach>
-								
-                                <li class="traduix btnGenerico" id="botoTraduirProcediment">
-                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
-                                </li>
                             </ul>
 									
 							<div class="idiomes">
@@ -2561,10 +2557,6 @@
 									</c:choose>
 									</a></li>									
 								</c:forEach>
-								
-                                <li class="traduix btnGenerico" id="botoTraduirProcediment">
-                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
-                                </li>
                             </ul>
 
                             <div class="idiomes">
@@ -2722,10 +2714,6 @@
 									</c:choose>
 									</a></li>									
 								</c:forEach>
-								
-                                <li class="traduix btnGenerico" id="botoTraduirProcediment">
-                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
-                                </li>
                             </ul>
 
                             <div class="idiomes">
@@ -2880,10 +2868,6 @@
 									</c:choose>
 									</a></li>									
 								</c:forEach>
-								
-                                <li class="traduix btnGenerico" id="botoTraduirProcediment">
-                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
-                                </li>
                             </ul>
                             <div class="idiomes">
                             
