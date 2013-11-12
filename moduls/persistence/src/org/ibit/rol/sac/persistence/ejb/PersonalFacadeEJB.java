@@ -70,11 +70,6 @@ public abstract class PersonalFacadeEJB extends HibernateEJB {
                     throw new SecurityException("No tiene acceso al personal");
                 }
             }
-
-            //UnidadAdministrativa unidad = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, idUA);
-            //personal.setUnidadAdministrativa(unidad);
-            //Hibernate.initialize(unidad.getPersonal());
-
             session.saveOrUpdate(personal);
             session.flush();
             
@@ -87,30 +82,6 @@ public abstract class PersonalFacadeEJB extends HibernateEJB {
 
  
     }
-
-    /*
-    Session session = getSession();
-    try {
-    	if (personal.getId() == null) {
-            if (!getAccesoManager().tieneAccesoUnidad(unidad_id, true)) {
-                throw new SecurityException("No tiene acceso a la unidad");
-            }
-            UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, unidad_id);
-            ua.addPersonal(personal);
-        } else {
-            if (!getAccesoManager().tieneAccesoPersonal(personal.getId())) {
-                throw new SecurityException("No tiene acceso al personal");
-            }
-            session.update(personal);
-        }
-        session.flush();
-        return personal.getId();
-    } catch (HibernateException he) {
-        throw new EJBException(he);
-    } finally {
-        close(session);
-    }
-    */
     
     
     /**
@@ -124,23 +95,6 @@ public abstract class PersonalFacadeEJB extends HibernateEJB {
         	Personal per = (Personal)session.load(Personal.class, id);
         	Hibernate.initialize(per.getUnidadAdministrativa());
             return per;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-
-    /**
-     * Lista el personal
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
-     */
-    public List listarPersonal(){
-         Session session = getSession();
-        try {
-            Criteria criteri = session.createCriteria(Personal.class);
-            return criteri.list();
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
@@ -203,40 +157,9 @@ public abstract class PersonalFacadeEJB extends HibernateEJB {
     		close(session);
     		
     	}
-    }    	
+    }
     
-    /**
-     * Lista el personal
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
-     */     
-    public List listarPersonalFiltro(Map parametros){
-    	 
-    	        Session session = getSession();
-    	        try {
-    	            if (!userIsOper()) {
-    	                parametros.put("validacion", Validacion.PUBLICA);
-    	            }
-
-    	            List params = new ArrayList();
-    	            String sQuery = populateQuery(parametros, params);
-    	            String sql="from Personal perso ";
-    	            if (params.size()>0) sql+=" where " + sQuery;
-    	            sql+=" order by ltrim(perso.nombre) ASC ";
-    	            Query query = session.createQuery(sql);
-    	            for (int i = 0; i < params.size(); i++) {
-    	                Object o = params.get(i);
-    	                query.setParameter(i, o);
-    	            }
-
-    	            return query.list();
-    	        } catch (HibernateException he) {
-    	            throw new EJBException(he);
-    	        } finally {
-    	            close(session);
-    	        }
-    	    }
-
+    
     /**
      * Construye el query de b�squeda segun los parametros
      */

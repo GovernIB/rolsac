@@ -15,44 +15,23 @@ import java.util.Map;
 /**
  * Business delegate para manipular Enlaces.
  */
-public class EnlaceDelegate implements StatelessDelegate {
-
-    /* ========================================================= */
+public class EnlaceDelegate implements StatelessDelegate
+{
+	/* ========================================================= */
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
-
-    public Long grabarEnlace(Enlace enl, Long procedimiento_id, Long ficha_id) throws DelegateException {
+	
+	public Long grabarEnlace(Enlace enl, Long procedimiento_id, Long ficha_id) throws DelegateException {
         try {
             return getFacade().grabarEnlace(enl,procedimiento_id, ficha_id);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
-
-    
-    /** @deprecated Se usa desde back antiguo */
-    public Enlace obtenerEnlace(Long id) throws DelegateException {
-        try {
-            return getFacade().obtenerEnlace(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    
+	
     public void borrarEnlace(Long id) throws DelegateException {
         try {
             getFacade().borrarEnlace(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    
-    /** @deprecated Se usa desde back antiguo */
-    public void actualizarOrdenEnlaces(Map map) throws DelegateException {
-        try {
-            getFacade().actualizarOrdenEnlaces(map);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
@@ -61,13 +40,13 @@ public class EnlaceDelegate implements StatelessDelegate {
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
-
+    
     private Handle facadeHandle;
-
+    
     private EnlaceFacade getFacade() throws RemoteException {
         return (EnlaceFacade) facadeHandle.getEJBObject();
     }
-
+    
     protected EnlaceDelegate() throws DelegateException {
         try {
         	EnlaceFacadeHome home = EnlaceFacadeUtil.getHome();
@@ -81,4 +60,5 @@ public class EnlaceDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
 }

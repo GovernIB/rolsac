@@ -16,65 +16,31 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 /**
  * Business delegate para manipular MateriaAgrupacionM.
  */
-public class MateriaAgrupacionMDelegate implements StatelessDelegate {
-   /* ========================================================= */
-   /* ======================== MÉTODOS DE NEGOCIO ============= */
-   /* ========================================================= */
-
-	/** @deprecated Usado desde el back antiguo */
-   public Long grabarMateriaAgrupacionM(MateriaAgrupacionM materiap, Long materia_id, Long agrupacion_id) throws DelegateException {
-       try {
-           return getFacade().grabarMateriaAgrupacionM(materiap, materia_id, agrupacion_id);
-       } catch (RemoteException e) {
-           throw new DelegateException(e);
-       }
-   }
-   
-   /** @deprecated No se usa */
-   public MateriaAgrupacionM obtenerMateriaAgrupacionM(Long id) throws DelegateException {
-       try {
-           return getFacade().obtenerMateriaAgrupacionM(id);
-       } catch (RemoteException e) {
-           throw new DelegateException(e);
-       }
-   }
-
-   /** @deprecated Usado desde el back antiguo */
-    public void subirOrden(Long id) throws DelegateException {
-        try {
-            getFacade().subirOrden(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    /** @deprecated Usado desde el back antiguo */
-   public void borrarMateriaAgrupacionM(Long id) throws DelegateException {
-       try {
-           getFacade().borrarMateriaAgrupacionM(id);
-       } catch (RemoteException e) {
-           throw new DelegateException(e);
-       }
-   }
-   
-   public ResultadoBusqueda listarAgrupacionMaterias(int pagina, int resultats) throws DelegateException {
-	   try {
-		   return getFacade().listarAgrupacionMaterias(pagina, resultats);
-	   } catch (RemoteException e) {
-		   throw new DelegateException(e);
-	   }
-   }
-   
-   /* ========================================================= */
-    /* ======================== REFERENCIA AL FACADE  ========== */
-    /* ========================================================= */
-
-    private Handle facadeHandle;
-
+public class MateriaAgrupacionMDelegate implements StatelessDelegate
+{
+	/* ========================================================= */
+	/* ======================== MÉTODOS DE NEGOCIO ============= */
+	/* ========================================================= */
+	
+	public ResultadoBusqueda listarAgrupacionMaterias(int pagina, int resultats) throws DelegateException
+	{
+		try {
+			return getFacade().listarAgrupacionMaterias(pagina, resultats);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+	
+	/* ========================================================= */
+	/* ======================== REFERENCIA AL FACADE  ========== */
+	/* ========================================================= */
+	
+	private Handle facadeHandle;
+	
     private MateriaAgrupacionMFacade getFacade() throws RemoteException {
         return (MateriaAgrupacionMFacade) facadeHandle.getEJBObject();
     }
-
+    
     protected MateriaAgrupacionMDelegate() throws DelegateException {
         try {
         	MateriaAgrupacionMFacadeHome home = MateriaAgrupacionMFacadeUtil.getHome();
@@ -88,4 +54,5 @@ public class MateriaAgrupacionMDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
 }

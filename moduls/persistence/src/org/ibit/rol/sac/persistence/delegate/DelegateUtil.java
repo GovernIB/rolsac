@@ -130,10 +130,6 @@ public final class DelegateUtil {
         return (DocumentoResumenDelegate) DelegateFactory.getDelegate(DocumentoResumenDelegate.class);
     }
     
-    public static FormularioDelegate getFormularioDelegate(){
-        return (FormularioDelegate) DelegateFactory.getDelegate(FormularioDelegate.class);
-    }
-
     public static TramiteDelegate getTramiteDelegate(){
         TramiteDelegateI impl =  (TramiteDelegateImpl)DelegateFactory.getDelegate(TramiteDelegateImpl.class);
         TramiteDelegate del = new TramiteDelegate();
@@ -155,10 +151,6 @@ public final class DelegateUtil {
     
     public static AgrupacionHVDelegate getAgrupacionHVDelegate() {
         return (AgrupacionHVDelegate) DelegateFactory.getDelegate(AgrupacionHVDelegate.class);
-    }
-    
-    public static HechoVitalAgrupacionHVDelegate getHechoVitalAgrupacionHVDelegate() {
-        return (HechoVitalAgrupacionHVDelegate) DelegateFactory.getDelegate(HechoVitalAgrupacionHVDelegate.class);
     }
     
     public static PublicoObjetivoDelegate getPublicoObjetivoDelegate() {
@@ -204,31 +196,6 @@ public final class DelegateUtil {
     public static MateriaAgrupacionMDelegate getMateriaAgrupacionMDelegate() {
         return (MateriaAgrupacionMDelegate) DelegateFactory.getDelegate(MateriaAgrupacionMDelegate.class);
     }
-
-    public static EnvioSuscripcionDelegate getEnvioSuscripcionDelegate() {
-        return (EnvioSuscripcionDelegate) DelegateFactory.getDelegate(EnvioSuscripcionDelegate.class);
-    }
-
-    public static GrupoSuscripcionDelegate getGrupoSuscripcionDelegate() {
-        return (GrupoSuscripcionDelegate) DelegateFactory.getDelegate(GrupoSuscripcionDelegate.class);
-    }
-    public static SuscriptorDelegate getSuscriptorDelegate() {
-        return (SuscriptorDelegate) DelegateFactory.getDelegate(SuscriptorDelegate.class);
-    }
-    public static SuscriptorClaveDelegate getSuscriptorClaveDelegate() {
-        return (SuscriptorClaveDelegate) DelegateFactory.getDelegate(SuscriptorClaveDelegate.class);
-    }
-    public static TipoSuscripcionDelegate getTipoSuscripcionDelegate() {
-        return (TipoSuscripcionDelegate) DelegateFactory.getDelegate(TipoSuscripcionDelegate.class);
-    }
-
-    public static ActivacionSuscripcionDelegate getActivacionSuscripcionDelegate() {
-        return (ActivacionSuscripcionDelegate) DelegateFactory.getDelegate(ActivacionSuscripcionDelegate.class);
-    }
-    
-    public static HistoricoEnvioDelegate getHistoricoEnvioDelegate() {
-        return (HistoricoEnvioDelegate) DelegateFactory.getDelegate(HistoricoEnvioDelegate.class);
-    }
     
     public static EngineJdbcDaoDelegate getEngineJdbcDaoDelegate() {
         return (EngineJdbcDaoDelegate) DelegateFactory.getDelegate(EngineJdbcDaoDelegate.class);
@@ -237,18 +204,9 @@ public final class DelegateUtil {
     public static EnlaceDelegate getEnlaceDelegate(){
         return (EnlaceDelegate) DelegateFactory.getDelegate(EnlaceDelegate.class);
     }
-
-    public static ComentarioDelegate getComentarioDelegate(){
-        return (ComentarioDelegate)  DelegateFactory.getDelegate(ComentarioDelegate.class);
-    }
     
     public static ArchivoDelegate getArchivoDelegate(){
         return (ArchivoDelegate)  DelegateFactory.getDelegate(ArchivoDelegate.class);
-    }
-    
-    
-    public static ActualizarSuscriptorDelegate getActualizarSuscriptorDelegate(){
-        return (ActualizarSuscriptorDelegate)  DelegateFactory.getDelegate(ActualizarSuscriptorDelegate.class);
     }
     
     public static TramiteRemotoDelegate getTramiteRemotoDelegate() {

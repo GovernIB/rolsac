@@ -20,9 +20,9 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 /**
  * Business delegate para manipular edificios.
  */
-public class EdificioDelegate implements StatelessDelegate {
-
-    /* ========================================================= */
+public class EdificioDelegate implements StatelessDelegate
+{
+	/* ========================================================= */
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
@@ -33,49 +33,10 @@ public class EdificioDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
     public Edificio obtenerEdificio(Long id) throws DelegateException {
         try {
             return getFacade().obtenerEdificio(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    
-    /**
-     * @deprecated	No se utiliza
-     * */
-    @Deprecated
-    public ResultadoBusqueda listarEdificios(int pagina, int resultats, String idioma) throws DelegateException {
-    	try {
-    		return getFacade().listarEdificios(pagina, resultats, idioma);
-    	} catch (RemoteException e) {
-    		throw new DelegateException(e);
-    	}
-    }
-    
-    
-    /**
-     * @deprecated	Se utiliza desde el back antiguo
-     * */
-    @Deprecated
-    public List listarEdificios() throws DelegateException {
-        try {
-            return getFacade().listarEdificios();
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    
-    /**
-     * @deprecated	Se utiliza desde el back antiguo
-     * */
-    @Deprecated
-    public List buscarEdificios(Map parametros, Map traduccion) throws DelegateException {
-        try {
-            return getFacade().buscarEdificios(parametros, traduccion);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
@@ -96,7 +57,7 @@ public class EdificioDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
     public Archivo obtenerFotoGrandeEdificio(Long id) throws DelegateException {
         try {
             return getFacade().obtenerFotoGrandeEdificio(id);
@@ -104,7 +65,7 @@ public class EdificioDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
     public Archivo obtenerPlanoEdificio(Long id) throws DelegateException {
         try {
             return getFacade().obtenerPlanoEdificio(id);
@@ -112,7 +73,7 @@ public class EdificioDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
     public void borrarEdificio(Long id) throws DelegateException {
         try {
             getFacade().borrarEdificio(id);
@@ -120,7 +81,7 @@ public class EdificioDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
     public Set listarEdificiosUnidad(Long id) throws DelegateException {
         try {
             return getFacade().listarEdificiosUnidad(id);
@@ -128,7 +89,7 @@ public class EdificioDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
     public void anyadirUnidad(Long unidad_id, Long edi_id) throws DelegateException {
         try {
             getFacade().anyadirUnidad(unidad_id, edi_id);
@@ -136,7 +97,7 @@ public class EdificioDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
     public void eliminarUnidad(Long unidad_id, Long edi_id) throws DelegateException {
         try {
             getFacade().eliminarUnidad(unidad_id, edi_id);
@@ -145,29 +106,16 @@ public class EdificioDelegate implements StatelessDelegate {
         }
     }
     
-    
-    /**
-     * @deprecated	Se utiliza desde el back antiguo
-     * */
-    @Deprecated
-    public List buscarEdificiosConMultiidioma(Map parametros, Map traduccion) throws DelegateException {
-        try {
-            return getFacade().buscarEdificiosConMultiidioma(parametros, traduccion);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-  
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
-
+    
     private Handle facadeHandle;
-
+    
     private EdificioFacade getFacade() throws RemoteException {
         return (EdificioFacade) facadeHandle.getEJBObject();
     }
-
+    
     protected EdificioDelegate() throws DelegateException {
         try {
             EdificioFacadeHome home = EdificioFacadeUtil.getHome();
@@ -181,5 +129,5 @@ public class EdificioDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
 }

@@ -50,28 +50,7 @@ public class TramiteDelegateImpl implements StatelessDelegate, TramiteDelegateI 
             throw new DelegateException(e);
         }
     }
-/*
-    @Deprecated
-    public void anyadirFormulario(Long tramite_id, Long formulario_id) throws DelegateException {
-    	
-        try {
-            getFacade().anyadirFormulario(tramite_id, formulario_id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-        
-    }
-  */  
-/*
-    @Deprecated
-    public void eliminarFormulario(Long tramite_id, Long formulario_id) throws DelegateException {
-        try {
-            getFacade().eliminarFormulario(tramite_id, formulario_id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-*/
+    
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#borrarTramite(java.lang.Long)
 	 */

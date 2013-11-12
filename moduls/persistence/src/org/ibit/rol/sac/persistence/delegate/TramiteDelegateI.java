@@ -13,29 +13,7 @@ public interface TramiteDelegateI {
 	public abstract Long grabarTramite(Tramite tramite, Long idOC) throws DelegateException;
 
 	public abstract Tramite obtenerTramite(Long id) throws DelegateException;
-
-	/*
-	    @Deprecated
-	    public void anyadirFormulario(Long tramite_id, Long formulario_id) throws DelegateException {
-	    	
-	        try {
-	            getFacade().anyadirFormulario(tramite_id, formulario_id);
-	        } catch (RemoteException e) {
-	            throw new DelegateException(e);
-	        }
-	        
-	    }
-	 */
-	/*
-	    @Deprecated
-	    public void eliminarFormulario(Long tramite_id, Long formulario_id) throws DelegateException {
-	        try {
-	            getFacade().eliminarFormulario(tramite_id, formulario_id);
-	        } catch (RemoteException e) {
-	            throw new DelegateException(e);
-	        }
-	    }
-	 */
+	
 	public abstract void borrarTramite(Long id) throws DelegateException;
 
 	public abstract Long grabarDocument(DocumentTramit doc, Long tid)

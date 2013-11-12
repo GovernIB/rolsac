@@ -108,23 +108,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
                     procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, procedimiento_id);
                     procedimiento.addDocumento(documento);
                 }
-/*                
-                if (docInftramite_id != null) {
-                    if (!getAccesoManager().tieneAccesoTramite(docInftramite_id)) {
-                        throw new SecurityException("No tiene acceso al tramite.");
-                    }  
-                    tramite = (Tramite) session.load(Tramite.class, docInftramite_id);
-                    tramite.addDocInformatiu(documento);
-                }
-                if (docPreTramite_id != null) {
-                    if (!getAccesoManager().tieneAccesoTramite(docPreTramite_id)) {
-                        throw new SecurityException("No tiene acceso al tramite.");
-                    }  
-                    tramite = (Tramite) session.load(Tramite.class, docPreTramite_id);
-                    tramite.addDocPresentar(documento);
-                }
-
-  */              
+           
                 session.save(documento);
             } else {
                 if (!getAccesoManager().tieneAccesoDocumento(documento.getId())) {
@@ -169,40 +153,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
         }
     }
     
-    public ProcedimientoLocal cargarDocumentos(ProcedimientoLocal procedimiento){
-    	try {
-    		if (visible(procedimiento)) {
-               // Hibernate.initialize(procedimiento.getDocumentos());
-                Hibernate.initialize(procedimiento.getMaterias());
-                Hibernate.initialize(procedimiento.getNormativas());
-                Hibernate.initialize(procedimiento.getTramites());
-                List<Tramite> tramites = procedimiento.getTramites();
-                for (Iterator iter = tramites.iterator(); iter.hasNext();) {
-                    Tramite tramite = (Tramite) iter.next();
-                    Hibernate.initialize(tramite.getFormularios());
-                    Hibernate.initialize(tramite.getDocsInformatius());
-                    Hibernate.initialize(tramite.getTaxes());
-                }
-	            Hibernate.initialize(procedimiento.getHechosVitalesProcedimientos());
-	    		Hibernate.initialize(procedimiento.getDocumentos());
-		    	List<Documento> docs = procedimiento.getDocumentos();
-		        for (Documento docInformatiu : procedimiento.getDocumentos()) {
-			        for (final String idioma : (Collection<String>)procedimiento.getLangs()){
-			        	log.debug("entra: "+docInformatiu.getId());
-		                final TraduccionDocumento traduccion = (TraduccionDocumento)docInformatiu.getTraduccion(idioma);
-		                 if(traduccion!=null){
-				            Hibernate.initialize(traduccion.getArchivo());
-		                 }
-		            }
-		        }
-    		}
-		} catch (HibernateException he) {
-			throw new EJBException(he);
-		}
-
-    	return procedimiento;
-    }
-
+    
     /**
      * Obtiene un Documento.
      * @ejb.interface-method

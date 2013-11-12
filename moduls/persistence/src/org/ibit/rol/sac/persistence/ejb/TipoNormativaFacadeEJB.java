@@ -188,31 +188,6 @@ public abstract class TipoNormativaFacadeEJB extends HibernateEJB {
         
     }
     
-
-    /**
-     * @deprecated	No se usa
-     * Nos dice si un tipo Normativa tiene normativas.
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public boolean tieneNormativas(Long id){
-        Session session = getSession();
-        try {
-            Tipo tiponorm = (Tipo) session.load(Tipo.class, id);
-            Set normativas = tiponorm.getNormativas();
-            if(!normativas.isEmpty()){
-               return true;
-            } else {
-               return false;
-            }
-
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-
     
     /**
      * Borra un Tipo Normativa.

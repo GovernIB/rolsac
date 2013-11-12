@@ -17,12 +17,12 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 /**
  * Business delegate para manipular boletines.
  */
-public class BoletinDelegate implements StatelessDelegate {
-
+public class BoletinDelegate implements StatelessDelegate
+{
 	private static final long serialVersionUID = -4660868505069232251L;
 
 	/* ========================================================= */
-	/* ======================== M�TODOS DE NEGOCIO ============= */
+	/* ======================== MÉTODOS DE NEGOCIO ============= */
 	/* ========================================================= */
 
 	public Long grabarBoletin(Boletin boletin) throws DelegateException {
@@ -56,17 +56,7 @@ public class BoletinDelegate implements StatelessDelegate {
 			throw new DelegateException(e);
 		}
 	}
-
-	/** @deprecated   utilizado por el back antiguo */
-	public boolean tieneNormativas(Long id) throws DelegateException {
-		try {
-			return getFacade().tieneNormativas(id);
-		} catch (RemoteException e) {
-			throw new DelegateException(e);
-		}
-	}
-
-
+	
 	public void borrarBoletin(Long id) throws DelegateException {
 		try {
 			getFacade().borrarBoletin(id);
@@ -74,7 +64,7 @@ public class BoletinDelegate implements StatelessDelegate {
 			throw new DelegateException(e);
 		}
 	}
-
+	
 	/* ========================================================= */
 	/* ======================== REFERENCIA AL FACADE  ========== */
 	/* ========================================================= */
@@ -98,4 +88,5 @@ public class BoletinDelegate implements StatelessDelegate {
 			throw new DelegateException(e);
 		}
 	}
+	
 }

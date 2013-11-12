@@ -1156,30 +1156,24 @@ public class UnitatAdmBackController extends PantallaBaseController
 	}    
 
 	@RequestMapping(value = "/llistat.do", method = POST)
-	public @ResponseBody Map<String, Object> listarUnidadesAdministrativas(HttpServletRequest request, HttpSession session) {
-
-		List<UnidadAdministrativaDTO> listaUnidadesAdministrativasDTO = new ArrayList<UnidadAdministrativaDTO>();
-
+	public @ResponseBody Map<String, Object> listarUnidadesAdministrativas(HttpServletRequest request, HttpSession session)
+	{
+		List<UnidadAdministrativa> listaUnidadesAdministrativas = new ArrayList<UnidadAdministrativa>();
 		Map<String, Object> resultats   = new HashMap<String, Object>();
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		Map<String, String> tradMap     = new HashMap<String, String>();
-
 		UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+		
 		String id = request.getParameter("codi");
-
 		int resultadosDescartados  = 0;
-
 		String espacioTerritorial = request.getParameter("espacio_territorial");
 		String tratamiento = request.getParameter("tratamiento");
-
 		if ( !"".equals(espacioTerritorial) && StringUtils.isNumeric(espacioTerritorial) ) {
 			paramMap.put("espacioTerrit", espacioTerritorial);
 		}
-
 		if ( !"".equals(tratamiento) && StringUtils.isNumeric(tratamiento) ) {
 			paramMap.put("tratamiento", tratamiento);
 		}
-		
 		String lang;
 		try {
 			lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
@@ -1189,17 +1183,15 @@ public class UnitatAdmBackController extends PantallaBaseController
 		}
 
 		if (StringUtils.isNotEmpty(id)) {
-			
 			UnidadAdministrativa uni;
 			UnidadAdministrativaDelegate unitatDelegate = DelegateUtil.getUADelegate();
-
 			try {
 				uni = unitatDelegate.consultarUnidadAdministrativa(Long.parseLong(id));
 				TraduccionUA traUA = (TraduccionUA)uni.getTraduccion(lang);
 				resultats.put("total", 1);
-				UnidadAdministrativaDTO dto = new UnidadAdministrativaDTO(uni.getId(), uni.getCodigoEstandar(), traUA.getNombre(), uni.getOrden());
-				listaUnidadesAdministrativasDTO.add(dto);
-				resultats.put("nodes", listaUnidadesAdministrativasDTO);
+				UnidadAdministrativa dto = new UnidadAdministrativa(uni.getId(), uni.getCodigoEstandar(), traUA.getNombre(), uni.getOrden(), lang);
+				listaUnidadesAdministrativas.add(dto);
+				resultats.put("nodes", listaUnidadesAdministrativas);
 			} catch (NumberFormatException e) {
 				// FIXME: aplicar tratamiento, seguramente igual al del bloque de la DelegateException que va justo después.
 				// TODO Auto-generated catch block
@@ -1210,8 +1202,6 @@ public class UnitatAdmBackController extends PantallaBaseController
 			}
 
 			return resultats;
-			//paramMap.put("id", id.toUpperCase());
-			
 		}
 
 		try {
@@ -1228,7 +1218,6 @@ public class UnitatAdmBackController extends PantallaBaseController
 		String textes = request.getParameter("textes");
 		if (textes != null && !"".equals(textes)) {
 			textes = textes.toUpperCase();
-
 			tradMap.put("nombre", textes);
 			tradMap.put("abreviatura", textes);
 			tradMap.put("url", textes);
@@ -1266,36 +1255,28 @@ public class UnitatAdmBackController extends PantallaBaseController
 
 		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
 
-		try {	
-			
+		try {
 			resultadoBusqueda = uaDelegate.buscadorUnidadesAdministrativas(paramMap, tradMap, (ua == null ? null : ua.getId()), lang, uaFilles, uaMeves, materia, pagPag, pagRes);
-
-			for ( UnidadAdministrativa uniAdm : castList(UnidadAdministrativa.class, resultadoBusqueda.getListaResultados()) ) {
-				if  ( lang.equals( uniAdm.getIdioma() )) {
-					UnidadAdministrativaDTO dto = new UnidadAdministrativaDTO( uniAdm.getId(), uniAdm.getCodigoEstandar(), 
-							uniAdm.getNombre(), uniAdm.getOrden());
-
-					listaUnidadesAdministrativasDTO.add(dto);
+			for (UnidadAdministrativa uniAdm : castList(UnidadAdministrativa.class, resultadoBusqueda.getListaResultados())) {
+				if (lang.equals(uniAdm.getIdioma())) {
+					UnidadAdministrativa dto = new UnidadAdministrativa(uniAdm.getId(), uniAdm.getCodigoEstandar(), uniAdm.getNombre(), uniAdm.getOrden(), lang);
+					listaUnidadesAdministrativas.add(dto);
 				} else {
 					resultadosDescartados++;
 				}
 			}
 
 		} catch (DelegateException dEx) {
-			
 			resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
 			resultats.put("id", -2);
 			log.error(ExceptionUtils.getStackTrace(dEx));
-			
 		} 
-
 		//Total de registros
 		resultats.put("total", resultadoBusqueda.getTotalResultados() - resultadosDescartados);
-		resultats.put("nodes", listaUnidadesAdministrativasDTO);
+		resultats.put("nodes", listaUnidadesAdministrativas);
 
-		return resultats;		
-		
-	}	
+		return resultats;
+	}
 
 	/**
 	 * Método que comprueba si hay microsites para una Unidad Orgánica

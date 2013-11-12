@@ -17,9 +17,9 @@ import java.util.Map;
 /**
  * Business delegate para manipular el catalogo de documentos
  */
-public class CatalegDocumentsDelegate implements StatelessDelegate {
-
-    /* ========================================================= */
+public class CatalegDocumentsDelegate implements StatelessDelegate
+{
+	/* ========================================================= */
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
@@ -39,32 +39,14 @@ public class CatalegDocumentsDelegate implements StatelessDelegate {
         }
     }
     
-    /** @deprecated No se usa*/
-    public ResultadoBusqueda llistarCatalegDocuments(int pagina, int resultats) throws DelegateException {
-      try {
-        return getFacade().llistarCatalegDocuments(pagina,resultats);
-      } catch (RemoteException e) {
-        throw new DelegateException(e);
-      }
+    public List<CatalegDocuments> llistarCatalegDocuments() throws DelegateException {
+    	try {
+    		return getFacade().listarCatalogoDocumentos();
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
     }
     
-   public List<CatalegDocuments> llistarCatalegDocuments() throws DelegateException {
-        try {
-            return getFacade().listarCatalogoDocumentos();
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-   /** @deprecated No se usa*/
-   public List cercarCatalegDocuments(Map parametros, Map traduccion) throws DelegateException {
-        try {
-            return getFacade().cercarCatalegDocuments(parametros, traduccion);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
     public void esborrarDocumentCataleg(Long id) throws DelegateException {
         try {
             getFacade().esborrarDocumentCataleg(id);
@@ -104,5 +86,5 @@ public class CatalegDocumentsDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
 }

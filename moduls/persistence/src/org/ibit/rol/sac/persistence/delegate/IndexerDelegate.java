@@ -16,12 +16,12 @@ import javax.naming.NamingException;
 /**
  * Business delegate para manipular el indice.
  */
-public class IndexerDelegate implements StatelessDelegate {
-
-    /* ========================================================= */
+public class IndexerDelegate implements StatelessDelegate
+{
+	/* ========================================================= */
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
-
+	
     public synchronized void insertaObjeto(IndexObject indexObject, String idi) throws DelegateException {
         try {
             local.insertaObjeto(indexObject, idi);
@@ -29,7 +29,7 @@ public class IndexerDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
     public synchronized void borrarObjeto(String id, String idi) throws DelegateException {
         try {
             local.borrarObjeto(id, idi);
@@ -44,8 +44,8 @@ public class IndexerDelegate implements StatelessDelegate {
         } catch (EJBException e) {
             throw new DelegateException(e);
         }
-    }    
-
+    }
+    
     public synchronized void indexarObjeto(Object objeto) throws DelegateException {
         try {
             local.indexarObjeto(objeto);
@@ -60,7 +60,7 @@ public class IndexerDelegate implements StatelessDelegate {
         } catch (EJBException e) {
             throw new DelegateException(e);
         }
-    }        
+    }
     
     public synchronized void optimizar(String idi) throws DelegateException {
         try {
@@ -68,7 +68,7 @@ public class IndexerDelegate implements StatelessDelegate {
         } catch (EJBException e) {
             throw new DelegateException(e);
         }
-    }  
+    }
     
     public synchronized void confeccionaDiccionario(String idi) throws DelegateException {
         try {
@@ -76,9 +76,8 @@ public class IndexerDelegate implements StatelessDelegate {
         } catch (EJBException e) {
             throw new DelegateException(e);
         }
-    }     
+    }
     
-    /** @deprecated Código comentado */
     public synchronized Long[] buscarIds(String className, String text) throws DelegateException {
         try {
             return local.buscarIds(className, text);
@@ -86,7 +85,7 @@ public class IndexerDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
     public void reindexarProcedimentos() throws DelegateException {
         try {
             local.reindexarProcedimentos();
@@ -94,7 +93,7 @@ public class IndexerDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
     public void reindexarNormativas() throws DelegateException {
         try {
             local.reindexarNormativas();
@@ -102,7 +101,7 @@ public class IndexerDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
     public void reindexarFichas() throws DelegateException {
         try {
             local.reindexarFichas();
@@ -110,7 +109,7 @@ public class IndexerDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
     public void reindexarUOs() throws DelegateException {
         try {
             local.reindexarUOs();
@@ -118,7 +117,7 @@ public class IndexerDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
     public void reindexarUOsPMA() throws DelegateException {
         try {
             local.reindexarUOsPMA();
@@ -126,7 +125,7 @@ public class IndexerDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
     public void reindexarFichasPMA() throws DelegateException {
         try {
             local.reindexarFichasPMA();
@@ -135,22 +134,13 @@ public class IndexerDelegate implements StatelessDelegate {
         }
     }
     
-    /** @deprecated No se usa */
-    public IndexResultados buscar(String idi, String cadena, boolean sugerir, boolean restringido) throws DelegateException {
-        try {
-            return local.buscar(idi, cadena, sugerir,restringido);
-        } catch (EJBException e) {
-            throw new DelegateException(e);
-        }
-    }    
-
     public IndexResultados buscaravanzado(String cerca_totes, String cerca_alguna, String cerca_frase, String cerca_cap, String tipus, String uo, String mat, Date fini, Date ffin, String ajudes, String idi, boolean sugerir, boolean restringido) throws DelegateException {
         try {
             return local.buscaravanzado(cerca_totes, cerca_alguna, cerca_frase, cerca_cap, tipus, uo, mat, fini, ffin, ajudes, idi, sugerir, restringido);
         } catch (EJBException e) {
             throw new DelegateException(e);
         }
-    } 
+    }
     
     public void envioColaCrawler(String tipo,Ficha ficha) throws DelegateException {
         try {
@@ -158,20 +148,18 @@ public class IndexerDelegate implements StatelessDelegate {
         } catch (EJBException e) {
             throw new DelegateException(e);
         }
-    } 
-
+    }
     
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
-
+    
     private IndexerFacadeLocal local;
-
+    
     protected IndexerDelegate() throws DelegateException {
         try {
             IndexerFacadeLocalHome home = IndexerFacadeUtil.getLocalHome();
             local = home.create();
-
         } catch (NamingException e) {
             throw new DelegateException(e);
         } catch (CreateException e) {
@@ -180,5 +168,5 @@ public class IndexerDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
 }

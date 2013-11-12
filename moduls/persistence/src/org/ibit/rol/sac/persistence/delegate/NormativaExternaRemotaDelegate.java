@@ -21,20 +21,16 @@ import net.sf.hibernate.HibernateException;
 /**
  * Business delegate para manipular normativas remotas.
  */
-public class NormativaExternaRemotaDelegate implements StatelessDelegate {
-    /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
-    /* ========================================================= */
-
-
-    /* ========================================================= */
-    /* ======================== REFERENCIA AL FACADE  ========== */
+public class NormativaExternaRemotaDelegate implements StatelessDelegate
+{
+	/* ========================================================= */
+    /* ======================== MÃ‰TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 	
-	 public Long grabarNormativaExternaRemota(final NormativaExternaRemota normativaRemota)  throws DelegateException{
+	public Long grabarNormativaExternaRemota(final NormativaExternaRemota normativaRemota) throws DelegateException {
 		try {
-            return getFacade().grabarNormativaExternaRemota(normativaRemota);
-        } catch (RemoteException e) {
+			return getFacade().grabarNormativaExternaRemota(normativaRemota);
+		} catch (RemoteException e) {
             throw new DelegateException(e);
         }
 	}
@@ -46,64 +42,65 @@ public class NormativaExternaRemotaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
-    public NormativaExternaRemota obtenerNormativaExternaRemota(final String idRemoto, final Long idExtNorm) throws DelegateException{
+    
+    public NormativaExternaRemota obtenerNormativaExternaRemota(final String idRemoto, final Long idExtNorm) throws DelegateException {
          try {
             return getFacade().obtenerNormativaExternaRemota(idRemoto, idExtNorm);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
-
-    public List<Normativa> obtenerNormativasProcedimiento(Long idProcedimiento) throws DelegateException{
+    
+    public List<Normativa> obtenerNormativasProcedimiento(Long idProcedimiento) throws DelegateException {
 		try {
             return getFacade().obtenerNormativasProcedimiento(idProcedimiento);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
 	}
-
-     public void anyadirProcedimiento( Long proc_id, Long norm_id) throws DelegateException{
-         try {
-             getFacade().anyadirProcedimiento(proc_id, norm_id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-     }
     
-
-     public void  borrarNormativaRemota(Long id) throws DelegateException{
-         try {
-            getFacade().borrarNormativaRemota(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-      }
-
-
-   public void borrarNormativaRemota(final String idRemoto ,final Long idExt)  throws DelegateException{
-      try {
-            getFacade().borrarNormativaRemota(idRemoto, idExt);
-      } catch (RemoteException e) {
-            throw new DelegateException(e);
-      }
-   }
-
-   public void eliminarProcNormativa(String idRemoto,Long idNorm, Long idProc) throws DelegateException{
-       try {
-            getFacade().eliminarProcNormativa(idRemoto,idNorm, idProc);
-      } catch (RemoteException e) {
-            throw new DelegateException(e);
-      }
-   }
-	
-	
+    public void anyadirProcedimiento(Long proc_id, Long norm_id) throws DelegateException {
+    	try {
+    		getFacade().anyadirProcedimiento(proc_id, norm_id);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    }
+    
+    public void  borrarNormativaRemota(Long id) throws DelegateException {
+    	try {
+    		getFacade().borrarNormativaRemota(id);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    }
+    
+    public void borrarNormativaRemota(final String idRemoto, final Long idExt)  throws DelegateException {
+    	try {
+    		getFacade().borrarNormativaRemota(idRemoto, idExt);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    }
+    
+    public void eliminarProcNormativa(String idRemoto, Long idNorm, Long idProc) throws DelegateException {
+    	try {
+    		getFacade().eliminarProcNormativa(idRemoto,idNorm, idProc);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    }
+    
+    /* ========================================================= */
+    /* ======================== REFERENCIA AL FACADE  ========== */
+    /* ========================================================= */
+    
     private Handle facadeHandle;
-
+    
     private NormativaExternaRemotaFacade getFacade() throws RemoteException {
         return (NormativaExternaRemotaFacade) facadeHandle.getEJBObject();
     }
-
+    
     protected NormativaExternaRemotaDelegate() throws DelegateException {
         try {
             NormativaExternaRemotaFacadeHome home = NormativaExternaRemotaFacadeUtil.getHome();
@@ -117,6 +114,5 @@ public class NormativaExternaRemotaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
-
+    
 }

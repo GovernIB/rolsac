@@ -20,11 +20,12 @@ import org.ibit.rol.sac.persistence.util.EstadisticaFacadeUtil;
 /**
  * Business delegate para manipular Estadisticas.
  */
-public class EstadisticaDelegate implements StatelessDelegate {
-     /* ========================================================= */
+public class EstadisticaDelegate implements StatelessDelegate
+{
+	/* ========================================================= */
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
-
+	
     public void grabarEstadisticaUnidadAdministrativa(Long idUnidad) throws DelegateException {
         try {
             getFacade().grabarEstadisticaUnidadAdministrativa(idUnidad);
@@ -32,7 +33,7 @@ public class EstadisticaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
     public void grabarEstadisticaNormativa(Long idNormativa) throws DelegateException {
         try {
             getFacade().grabarEstadisticaNormativa(idNormativa);
@@ -40,7 +41,7 @@ public class EstadisticaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
     public void grabarEstadisticaProcedimiento(Long idProcedimiento) throws DelegateException {
         try {
             getFacade().grabarEstadisticaProcedimiento(idProcedimiento);
@@ -48,7 +49,7 @@ public class EstadisticaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
     public void grabarEstadisticaFicha(Long idFicha) throws DelegateException {
         try {
             getFacade().grabarEstadisticaFicha(idFicha);
@@ -56,16 +57,7 @@ public class EstadisticaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
-    /** @deprecated No se usa */
-    public void grabarEstadisticaMateria(Long idMateria) throws DelegateException {
-        try {
-            getFacade().grabarEstadisticaMateria(idMateria);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
+    
     public List listarEstadisticasUnidad(Long idUnidad, Date fechaInicio, Date fechaFin) throws DelegateException {
         try {
             return getFacade().listarEstadisticasUnidad(idUnidad, fechaInicio, fechaFin);
@@ -73,7 +65,7 @@ public class EstadisticaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
     public List listarEstadisticasNormativa(Long idNormativa, Date fechaInicio, Date fechaFin) throws DelegateException {
         try {
             return getFacade().listarEstadisticasNormativa(idNormativa, fechaInicio, fechaFin);
@@ -81,7 +73,7 @@ public class EstadisticaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
     public List listarEstadisticasProcedimiento(Long idProcedimiento, Date fechaInicio, Date fechaFin) throws DelegateException {
         try {
             return getFacade().listarEstadisticasProcedimiento(idProcedimiento, fechaInicio, fechaFin);
@@ -89,7 +81,7 @@ public class EstadisticaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
     public List listarEstadisticasFicha(Long idFicha, Date fechaInicio, Date fechaFin, Long idMat, Long idUA) throws DelegateException {
         try {
             return getFacade().listarEstadisticasFicha(idFicha, fechaInicio, fechaFin, idMat, idUA);
@@ -97,51 +89,10 @@ public class EstadisticaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
     public List listarEstadisticasMateria(Long idMateria, Date fechaInicio, Date fechaFin) throws DelegateException {
         try {
             return getFacade().listarEstadisticasMateria(idMateria, fechaInicio, fechaFin);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    /** @deprecated No se usa */
-    public List listarNormativasMasVisitadas(Long idUnidad, Date fechaInicio, Date fechaFin) throws DelegateException {
-        try {
-            return getFacade().listarNormativasMasVisitadas(idUnidad, fechaInicio, fechaFin);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    public List listarProcedimientosMasVisitados(Long idUnidad, Date fechaInicio, Date fechaFin) throws DelegateException {
-        try {
-            return getFacade().listarProcedimientosMasVisitados(idUnidad, fechaInicio, fechaFin);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    public List listarFichasMasVisitadas(Long idUnidad, Date fechaInicio, Date fechaFin) throws DelegateException {
-        try {
-            return getFacade().listarFichasMasVisitadas(idUnidad, fechaInicio, fechaFin);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    public void grabarEstadisticaFichaPorMateria(Long idFicha, Long idMat) throws DelegateException {
-        try {
-            getFacade().grabarEstadisticaFichaPorMateria(idFicha, idMat);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    public void grabarEstadisticaFichaPorUA(Long idFicha, Long idUA) throws DelegateException {
-        try {
-            getFacade().grabarEstadisticaFichaPorUA(idFicha, idUA);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
@@ -170,17 +121,17 @@ public class EstadisticaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
-
+    
     private Handle facadeHandle;
-
+    
     private EstadisticaFacade getFacade() throws RemoteException {
         return (EstadisticaFacade) facadeHandle.getEJBObject();
     }
-
+    
     protected EstadisticaDelegate() throws DelegateException {
         try {
             EstadisticaFacadeHome home = EstadisticaFacadeUtil.getHome();
@@ -194,4 +145,5 @@ public class EstadisticaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
 }

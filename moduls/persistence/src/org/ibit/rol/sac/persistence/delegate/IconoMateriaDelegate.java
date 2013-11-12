@@ -16,12 +16,12 @@ import java.util.List;
 /**
  * Business delegate para manipular Iconos familias.
  */
-public class IconoMateriaDelegate implements StatelessDelegate{
-
- /* ========================================================= */
+public class IconoMateriaDelegate implements StatelessDelegate
+{
+	/* ========================================================= */
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
-
+	
     public Long grabarIconoMateria(IconoMateria icono, Long materia_id, Long perfil_id) throws DelegateException {
         try {
             return getFacade().grabarIconoMateria(icono, materia_id, perfil_id);
@@ -29,8 +29,7 @@ public class IconoMateriaDelegate implements StatelessDelegate{
             throw new DelegateException(e);
         }
     }
-
-
+    
     public IconoMateria obtenerIconoMateria(Long id) throws DelegateException {
         try {
             return getFacade().obtenerIconoMateria(id);
@@ -38,19 +37,10 @@ public class IconoMateriaDelegate implements StatelessDelegate{
             throw new DelegateException(e);
         }
     }
-
+    
     public Archivo obtenerIcono(Long id) throws DelegateException {
         try {
             return getFacade().obtenerIcono(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    /** @deprecated Únicamente se usa desde el back antiguo */
-    public void borrarIconoMateria(Long id) throws DelegateException {
-        try {
-            getFacade().borrarIconoMateria(id);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
@@ -63,17 +53,17 @@ public class IconoMateriaDelegate implements StatelessDelegate{
             throw new DelegateException(e);
         }
     }
-
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
-
+    
     private Handle facadeHandle;
-
+    
     private IconoMateriaFacade getFacade() throws RemoteException {
         return (IconoMateriaFacade) facadeHandle.getEJBObject();
     }
-
+    
     protected IconoMateriaDelegate() throws DelegateException {
         try {
             IconoMateriaFacadeHome home = IconoMateriaFacadeUtil.getHome();
@@ -87,5 +77,5 @@ public class IconoMateriaDelegate implements StatelessDelegate{
             throw new DelegateException(e);
         }
     }
-
+    
 }

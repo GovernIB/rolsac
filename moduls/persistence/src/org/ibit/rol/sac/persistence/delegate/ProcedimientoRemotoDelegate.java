@@ -57,77 +57,12 @@ public class ProcedimientoRemotoDelegate implements StatelessDelegate {
         }
 	}
 	
-	/** @deprecated No se usa*/
-	@SuppressWarnings("unchecked")
-	public Set<ProcedimientoRemoto> listarProcedimientosRemotos(final String idRemoto) throws DelegateException{
-		try {
-            return getFacade().listarProcedimientosRemotos(idRemoto);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-	}
-	
 	public void borrarProcedimientoRemoto(final String idRemoto, final Long idExtProcedimiento) throws DelegateException{
 		try {
             getFacade().borrarProcedimientoRemoto(idRemoto,idExtProcedimiento);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
-	}
-
-	/** @deprecated No se usa */
-    public List<ProcedimientoRemoto> listarProcedimientosRemotosUAMateria(Long idUA, String codEstMateria) throws DelegateException{
-		try {
-            return getFacade().listarProcedimientosRemotosUAMateria(idUA,codEstMateria);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-	}
-
-    public List<ProcedimientoRemoto> listarProcedimientosRemotosUAHechoVital(Long idUA, String codEstHV) throws DelegateException{
-		try {
-            return getFacade().listarProcedimientosRemotosUAHechoVital(idUA,codEstHV);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-	}
-
-    public List<ProcedimientoRemoto> buscar(final String busqueda, final String idioma) throws DelegateException {
-        try {
-            return getFacade().buscar(busqueda, idioma);
-        } catch(RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    /** @deprecated No se usa */
-    public List listarProcedimientosRecientesMaterias(int length, String[] codigos, boolean include,boolean caducados)
-	    throws DelegateException {
-		try {
-		    return getFacade().listarProcedimientosRecientesMaterias(length, codigos, include,caducados);
-		} catch (RemoteException e) {
-		    throw new DelegateException(e);
-		}
-	}
-	
-    /** @deprecated No se usa */
-	public List listarProcedimientosMasComentadosMaterias(int length, String[] codigos, boolean include,boolean caducados)
-	    throws DelegateException {
-		try {
-		    return getFacade().listarProcedimientosMasComentadosMaterias(length, codigos, include,caducados);
-		} catch (RemoteException e) {
-		    throw new DelegateException(e);
-		}
-	}
-	
-	/** @deprecated No se usa */
-	public List listarProcedimientosMasVisitadosMaterias(int length, String[] codigos, boolean include,boolean caducados)
-	    throws DelegateException {
-		try {
-		    return getFacade().listarProcedimientosMasVisitadosMaterias(length, codigos, include,caducados);
-		} catch (RemoteException e) {
-		    throw new DelegateException(e);
-		}
 	}
 	
     public void indexInsertaProcedimientoRemoto(ProcedimientoRemoto proc, ModelFilterObject filter) throws DelegateException {

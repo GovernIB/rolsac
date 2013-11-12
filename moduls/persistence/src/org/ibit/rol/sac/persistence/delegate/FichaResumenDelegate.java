@@ -6,8 +6,8 @@ import org.ibit.rol.sac.model.UnidadAdministrativa;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
-public class FichaResumenDelegate implements FichaResumenDelegateI {
-	
+public class FichaResumenDelegate implements FichaResumenDelegateI
+{
 	FichaResumenDelegateI impl;
 	
 	

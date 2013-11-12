@@ -36,37 +36,6 @@ public abstract class HechoVitalProcedimientoFacadeEJB extends HibernateEJB {
     public void ejbCreate() throws CreateException {
         super.ejbCreate();
     }
-
-    
-    /**
-     * @deprecated Usado por el back antiguo
-     * Crea o actualiza un HechoVitalProcedimiento.
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
-     */
-    public Long grabarHechoVitalProcedimiento(HechoVitalProcedimiento hvp, Long hecho_id, Long procedimiento_id) {
-        Session session = getSession();
-        try {
-            if (hvp.getId() == null) {
-                HechoVital hecho = (HechoVital) session.load(HechoVital.class, hecho_id);
-                ProcedimientoLocal proc = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, procedimiento_id);
-                Hibernate.initialize(proc.getMaterias());
-                Hibernate.initialize(proc.getHechosVitalesProcedimientos());
-                hecho.addHechoVitalProcedimiento(hvp);
-                proc.addHechoVitalProcedimiento(hvp);
-                session.flush();
-                Actualizador.actualizar(proc);
-            } else {
-                session.update(hvp);
-                session.flush();
-            }
-            return hvp.getId();
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
     
     
     /**
@@ -117,28 +86,9 @@ public abstract class HechoVitalProcedimientoFacadeEJB extends HibernateEJB {
         }
         
     }
-
+    
     
     /**
-     * @deprecated No se usa
-     * Obtiene un HechoVitalProcedimiento.
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public HechoVitalProcedimiento obtenerHechoVitalProcedimiento(Long id) {
-        Session session = getSession();
-        try {
-            return (HechoVitalProcedimiento) session.load(HechoVitalProcedimiento.class, id);
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-
-    
-    /**
-     * @deprecated Usado por el back antiguo
      * Incrementa el orden de un hecho vital - procedimiento.
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
@@ -168,33 +118,7 @@ public abstract class HechoVitalProcedimientoFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-
     
-    /**
-     * @deprecated Usado por el back antiguo
-     * Borra un HechoVitalProcedimiento.
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
-     */
-    public void borrarHechoVitalProcedimiento(Long id) {
-        Session session = getSession();
-        try {
-            HechoVitalProcedimiento hechovp = (HechoVitalProcedimiento) session.load(HechoVitalProcedimiento.class, id);
-            hechovp.getHechoVital().removeHechoVitalProcedimiento(hechovp);
-            ProcedimientoLocal procedimiento = hechovp.getProcedimiento();
-            Hibernate.initialize(procedimiento.getMaterias());
-            Hibernate.initialize(procedimiento.getHechosVitalesProcedimientos());
-            procedimiento.removeHechoVitalProcedimiento(hechovp);
-            session.delete(hechovp);
-            Actualizador.actualizar(procedimiento);
-            session.flush();
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-
     
     /**
      * Borra una coleccion de HechoVitalProcedimiento.

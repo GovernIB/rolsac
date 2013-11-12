@@ -355,39 +355,9 @@ public abstract class UARemotaFacadeEJB extends HibernateEJB {
 		return uaRemota.getId();
 
 	}
-
-
+	
+	
 	/**
-	 * Obtiene una UnidadAdministrativa Remota según su idExterno.
-	 * 
-	 * @ejb.interface-method
-	 * 
-	 * @ejb.permission unchecked="true"
-	 * 
-	 * @param idExtUA	Identificador externo de la unidad administrativa.
-	 */
-	public UnidadAdministrativaRemota obtenerUARemotaAdmin(final Long idAdmin, final Long idExtUA) {
-
-		Session session = getSession();
-		try {
-
-			return RemotoUtils.recogerUnidad(session, idExtUA, idAdmin);
-
-		} catch (HibernateException he) {
-
-			throw new EJBException(he);
-
-		} finally {
-
-			close(session);
-
-		}
-
-	}
-
-
-	/**
-	 *  @deprecated No se usa.
 	 * Obtiene una UnidadAdministrativa Remota segun su idExterno y la AdministracionRemota
 	 * que pertenezca al usuario actualmente logueado
 	 * 
@@ -484,32 +454,8 @@ public abstract class UARemotaFacadeEJB extends HibernateEJB {
 		}
 
 	}
-
-
-	/**
-	 *  @deprecated No se usa.
-	 * Lista las UnidadAdministrativa remotas
-	 * @ejb.interface-method
-	 * @ejb.permission unchecked="true"
-	 */
-	@SuppressWarnings("unchecked")
-	public Set<UnidadAdministrativaRemota> listarUARemotas(final String idRemoto){
-		Session session = getSession();
-		try {
-			AdministracionRemota admin = RemotoUtils.recogerAdministracionRemota(session, idRemoto);
-
-			if(admin==null)
-				throw new EJBException("No existe ninguna Administración Remota asociada al idRemoto");
-
-			return admin.getUnidadesRemotas();
-		} catch (HibernateException e) {
-			throw new EJBException(e);
-		} finally {
-			close(session);
-		}
-	}
-
-
+	
+	
 	/**
 	 * Borra una UnidadAdministrativa Remota segun su id.
 	 * 
@@ -660,94 +606,8 @@ public abstract class UARemotaFacadeEJB extends HibernateEJB {
 		}
 
 	}
-
-
-	/**
-	 * @deprecated No se usa.
-	 * Busca todos los {@link UnidadAdministrativaRemota} cuyo nombre contenga el String de entrada
-	 *
-	 * @param busqueda
-	 * @param idioma
-	 * @return lista de {@link UnidadAdministrativaRemota}
-	 * @ejb.interface-method
-	 * @ejb.permission unchecked="true"
-	 */
-	@SuppressWarnings("unchecked")
-	public List<UnidadAdministrativaRemota> buscar(final String busqueda, final String idioma){
-		List<UnidadAdministrativaRemota> resultado;
-
-		if (busqueda == null || "".equals(busqueda.trim())) {
-			resultado = Collections.emptyList();
-		} else {
-			Session session = getSession();
-			try {
-				Query query = session.createQuery("from UnidadAdministrativaRemota as uni, " +
-						"      uni.traducciones as trad " +
-						"where index(trad) = :idioma " +
-						"  and upper(trad.nombre) like :busqueda" +
-						"  and uni.validacion = :validacion" );
-				query.setString("idioma", idioma);
-				query.setString("busqueda", "%"+busqueda.trim().toUpperCase()+"%");
-				query.setInteger("validacion", Validacion.PUBLICA);
-				resultado = (List<UnidadAdministrativaRemota>)query.list();
-			} catch (HibernateException he) {
-				throw new EJBException(he);
-			} finally {
-				close(session);
-			}
-		}
-
-		return resultado;
-	}
-
-
-	/**
-	 * Lista las unidades Administrativas Remotas por ámbito(Autonomico, Insular)(PORMAD).
-	 * 
-	 * @ejb.interface-method
-	 * 
-	 * @ejb.permission unchecked="true"
-	 * 
-	 * @param ambito	Indica el espacio territorial de una unidad administrativa remota.
-	 * 
-	 * @return Devuelve <code>List<UnidadAdministrativaRemota></code> filtradas por el ámbito
-	 */
-	public List<UnidadAdministrativaRemota> listarUARemotasPorAmbito(Long ambito) {
-
-		Session session = getSession();
-		try {
-
-			Query query = session.createQuery(
-					" from UnidadAdministrativaRemota as ua " +
-							" where ua.validacion = :validacion " +
-					" and ua.espacioTerrit.nivel = :ambito");
-
-			query.setParameter( "validacion", Validacion.PUBLICA );
-			query.setParameter( "ambito", ambito );
-			query.setCacheable(true);
-
-			List<UnidadAdministrativaRemota> unidades = query.list();
-			for ( UnidadAdministrativaRemota unidad : unidades ) {
-
-				Hibernate.initialize( unidad.getFotop() );
-
-			}
-
-			return unidades;
-
-		} catch (HibernateException he) {
-
-			throw new EJBException(he);
-
-		} finally {
-
-			close(session);
-
-		}
-
-	}
-
-
+	
+	
 	/**
 	 * Borra una unidad administrativa raíz.
 	 * 
@@ -1408,147 +1268,6 @@ public abstract class UARemotaFacadeEJB extends HibernateEJB {
 			
 		}
 		
-	}
-	
-
-	/**
-	 *  @deprecated No se usa.
-	 * PORMAD
-	 * Lista de fichas y procedimientos remotas mas recientes
-	 * @ejb.interface-method
-	 * @ejb.permission unchecked="true"
-	 */
-	@SuppressWarnings("unchecked")
-	public List<Object> listarNovedadesPMA (int length, boolean caducados, Long idRemota) {
-		List<Object> listOrdenada = new ArrayList<Object>();
-		Session session = getSession();
-		try {
-
-			//Obtemos las fichas
-			Query queryFic = session.createQuery(
-					"Select DISTINCT f from FichaRemota as f , fua in f.fichasua " +
-							"where f.validacion = :validacion " +
-							"and f.fechaActualizacion is not null " +
-							"and fua is not null " +
-							"and f.administracionRemota.id = :idRemota " +
-							(!caducados ? "AND ( f.fechaCaducidad is null or f.fechaCaducidad >= :fecha ) " : "") +
-					"order by f.fechaActualizacion desc");
-			queryFic.setParameter("validacion", Validacion.PUBLICA);
-			queryFic.setParameter("idRemota", idRemota);
-			if(!caducados){queryFic.setParameter("fecha", DateUtils.today());}
-			queryFic.setMaxResults(length);
-			queryFic.setCacheable(true);
-			List<FichaRemota> listFicha = queryFic.list();
-			listOrdenada.addAll(listFicha); 
-
-			//Obtemos los procedimientos
-			Query queryProc = session.createQuery(
-					"Select DISTINCT p from ProcedimientoRemoto as p " +
-							"where p.fechaActualizacion is not null and p.validacion = :validacion " +
-							"and p.administracionRemota.id = :idRemota " +
-							(!caducados ? "AND ( p.fechaCaducidad is null or p.fechaCaducidad >= :fecha ) " : "") +
-					"order by p.fechaActualizacion desc");
-			queryProc.setParameter("validacion", Validacion.PUBLICA);
-			queryProc.setParameter("idRemota", idRemota);
-			if(!caducados){queryProc.setParameter("fecha", DateUtils.today());}
-			queryProc.setMaxResults(length);
-			queryProc.setCacheable(true);
-			List<ProcedimientoRemoto> listProc = queryProc.list();
-			//Ordenaci�n
-			listOrdenada.addAll(listProc);
-			Collections.sort(listOrdenada, new Comparator() {
-				public int compare(Object o1, Object o2) {
-					Date data1 = null;
-					if (o1 instanceof FichaRemota){ 
-						data1 = ((Ficha)o1).getFechaActualizacion();
-
-					}
-					else if (o1 instanceof ProcedimientoLocal){
-						data1 = ((ProcedimientoRemoto)o1).getFechaActualizacion();
-					}
-
-					Date data2 = null;
-					if (o2 instanceof FichaRemota){ 
-						data2 = ((Ficha)o2).getFechaActualizacion();
-					}
-					else if (o2 instanceof ProcedimientoLocal){
-						data2 = ((ProcedimientoRemoto)o2).getFechaActualizacion();
-					}
-					return -data1.compareTo(data2);
-				}
-			}); 
-
-			return listOrdenada;
-
-
-		} catch (HibernateException he) {
-			throw new EJBException(he);
-		} finally {
-			close(session);
-		}
-	}
-
-
-	/**
-	 *  @deprecated No se usa.
-	 * PORMAD
-	 * Lista de fichas y procedimientos remotas destacadas
-	 * @ejb.interface-method
-	 * @ejb.permission unchecked="true"
-	 */
-	@SuppressWarnings("unchecked")
-	public List<Object> listarDestacadosPMA (int length, boolean caducados, Long idRemota) {
-		List<Object> listOrdenada = new ArrayList<Object>();
-		Session session = getSession();
-		try {
-
-			Query queryFic = session.createQuery(
-					"select f from FichaRemota f, HistoricoFicha hf, Estadistica e , fua in f.fichasua " +
-							"where hf.ficha = f and e.historico = hf " +
-							"and fua is not null " +
-							"and f.validacion = :validacion " +
-							"and f.administracionRemota.id = :idRemota " +
-							(!caducados ? "AND ( f.fechaCaducidad is null or f.fechaCaducidad >= :fecha ) " : "") +
-							// "group by" ha de posar explicitament tots els camps, veure:
-							// http://opensource.atlassian.com/projects/hibernate/browse/HB-1003
-							"group by f.id, f.idExterno, f.urlRemota, f.administracionRemota, f.fechaCaducidad, " +
-							"f.icono, f.imagen, f.baner, f.validacion, f.info, f.fechaPublicacion, f.fechaActualizacion, f.urlVideo, f.urlForo, f.foro_tema, f.responsable " +
-					"order by sum(e.contador) desc");
-			queryFic.setParameter("validacion", Validacion.PUBLICA);
-			queryFic.setParameter("idRemota", idRemota);
-			if(!caducados){queryFic.setParameter("fecha", DateUtils.today());}
-			queryFic.setMaxResults(length);
-			queryFic.setCacheable(true);
-
-			List<FichaRemota> listFicha = queryFic.list();
-			listOrdenada.addAll(listFicha); 
-
-			//Obtemos los procedimientos
-			Query queryProc = session.createQuery(
-					"select p from ProcedimientoRemoto p, HistoricoProcedimiento hp, Estadistica e " +
-							"where hp.procedimiento = p and e.historico = hp and p.validacion = :validacion " +
-							"and p.administracionRemota.id = :idRemota " +
-							(!caducados ? "AND ( p.fechaCaducidad is null or p.fechaCaducidad >= :fecha ) " : "") +
-							// "group by" ha de posar explicitament tots els camps, veure:
-							// http://opensource.atlassian.com/projects/hibernate/browse/HB-1003
-							"group by p.id, p.idExterno, p.urlRemota, p.administracionRemota, p.signatura, " +
-							" p.fechaCaducidad, p.fechaPublicacion, p.fechaActualizacion, p.validacion, p.tramite, " +
-							" p.version, p.info, p.unidadAdministrativa, p.familia , p.url, p.orden, p.orden2, p.orden3,p.iniciacion, p.indicador, p.ventanillaUnica, p.info, p.responsable, p.taxa, p.organResolutori" +
-					" order by sum(e.contador) desc");
-			queryProc.setParameter("validacion", Validacion.PUBLICA);
-			queryProc.setParameter("idRemota", idRemota);
-			queryProc.setMaxResults(length);
-			if(!caducados){queryProc.setParameter("fecha", DateUtils.today());}
-			queryProc.setCacheable(true);
-			List<ProcedimientoRemoto> listProc = queryProc.list();
-			listOrdenada.addAll(listProc); 
-			return listOrdenada;
-
-		} catch (HibernateException he) {
-			throw new EJBException(he);
-		} finally {
-			close(session);
-		}
 	}
 	
 }

@@ -4,11 +4,11 @@ import javax.ejb.EJBException;
 import java.rmi.RemoteException;
 
 /**
- * Excepción producida en la capa delegate.
+ * ExcepciÃ³n producida en la capa delegate.
  */
-public class DelegateException extends Exception {
-
-    private SecurityException se = null;
+public class DelegateException extends Exception
+{
+	private SecurityException se = null;
 
     public DelegateException(Throwable cause) {
         super(cause);

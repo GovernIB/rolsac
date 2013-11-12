@@ -92,7 +92,6 @@ public abstract class IconoFamiliaFacadeEJB extends HibernateEJB {
 
 
 	/**
-	 * @deprecated únicamente se usa desde back antiguo.
 	 * Obtiene un iconofamilia.
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
@@ -109,51 +108,8 @@ public abstract class IconoFamiliaFacadeEJB extends HibernateEJB {
 			close(session);
 		}
 	}
-
-
-	/**
-	 * Obtiene un iconofamilia.
-	 * 
-	 * @ejb.interface-method
-	 * 
-	 * @ejb.permission unchecked="true"
-	 * 
-	 * @param idPerfil	Idendtificador del perfil del icono.
-	 * 
-	 * @param idFamilia	Identificador de la familia asociada al icono.
-	 * 
-	 * @return	Devuelve <code>IconoFamilia</code> solicitado.
-	 */
-	public IconoFamilia obtenerIconoFamilia(Long idPerfil,Long idFamilia) {
-		
-		Session session = getSession();
-		try {
-			
-			Criteria criterio = session.createCriteria(IconoFamilia.class);
-			criterio.add( Expression.eq( "familia.id", idFamilia ) );
-			criterio.add( Expression.eq( "perfil.id", idPerfil ) );
-			List list = criterio.list();
-			if ( list.isEmpty() )
-				return null;
-			
-			IconoFamilia iconoFamilia = (IconoFamilia) list.get(0);
-			Hibernate.initialize( iconoFamilia.getIcono() );
-			
-			return iconoFamilia;
-			
-		} catch (HibernateException he) {
-			
-			throw new EJBException(he);
-			
-		} finally {
-			
-			close(session);
-			
-		}
-		
-	}
 	
-
+	
 	/**
 	 * Obtiene el icono de la familia.
 	 * 
@@ -186,30 +142,8 @@ public abstract class IconoFamiliaFacadeEJB extends HibernateEJB {
 		}
 		
 	}
-
-
-	/**
-	 * @deprecated únicamente se usa desde back antiguo.
-	 * Borra un IconoFamilia.
-	 * @ejb.interface-method
-	 * @ejb.permission role-name="${role.system},${role.admin}"
-	 */
-	public void borrarIconoFamilia(Long id) {
-		Session session = getSession();
-		try {
-			IconoFamilia icono = (IconoFamilia) session.load(IconoFamilia.class, id);
-			icono.getFamilia().removeIcono(icono);
-			icono.getPerfil().removeIconoFamilia(icono);
-			session.delete(icono);
-			session.flush();
-		} catch (HibernateException he) {
-			throw new EJBException(he);
-		} finally {
-			close(session);
-		}
-	}
-
-
+	
+	
 	/**
 	 * Borra una coleccion de IconoFamilia.
 	 * 

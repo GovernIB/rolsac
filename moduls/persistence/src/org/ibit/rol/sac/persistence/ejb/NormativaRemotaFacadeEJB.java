@@ -38,96 +38,42 @@ import javax.ejb.EJBException;
  *
  * @ejb.transaction type="Required"
  */
-public abstract class NormativaRemotaFacadeEJB extends HibernateEJB {
-
-    /**
+public abstract class NormativaRemotaFacadeEJB extends HibernateEJB
+{
+	/**
      * Obtiene refer�ncia al ejb de control de Acceso.
      * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
      */
-    protected abstract AccesoManagerLocal getAccesoManager();
-
-    /**
+	protected abstract AccesoManagerLocal getAccesoManager();
+	
+	
+	/**
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
-    public void ejbCreate() throws CreateException {
+    public void ejbCreate() throws CreateException
+    {
         super.ejbCreate();
     }
-
     
-	/**
-	 * Crea una Normativa Remota
-	 * @throws HibernateException 
-	 * 
-	 * @ejb.interface-method
-	 * @ejb.permission unchecked="true"
-	 */
-    public Long grabarNormativaRemota(final NormativaRemota normativaRemota) {
-    	 Session session = getSession();
-	        try {     	
-	        	if( normativaRemota!=null){
-	        		if (normativaRemota.getId() != null) {
-			            session.update(normativaRemota);
-		            }
-		            else{
-			            session.save(normativaRemota);
-		            }
-		            session.flush();
-	        	}
-	            return normativaRemota.getId();
-	        } catch (HibernateException he) {
-	            throw new EJBException(he);
-	        } finally {
-	            close(session);
-	        }
-    }
-    
-    
-    /**
-     * Obtiene un Normativa Remota apartir de su id externo y su id de la UARemota
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public NormativaRemota obtenerNormativaRemota(Long idExterno,Long idUaRemota) {
-        Session session = getSession();
-        try {
-
-			Query query = session.createQuery("from NormativaRemota as nr where nr.idExterno="+idExterno+" and nr.administracionRemota.id="+idUaRemota);
-			NormativaRemota normativa = (NormativaRemota)query.uniqueResult();
-
-			if (normativa != null) {
-				Hibernate.initialize(normativa.getProcedimientos());
-			}
-
-			return normativa;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-    
-
     
     /**
      * Obtiene las Normativas de una procedimiento
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public List<Normativa> obtenerNormativasProcedimiento(Long idProcedimiento) {
+    public List<Normativa> obtenerNormativasProcedimiento(Long idProcedimiento)
+    {
         Session session = getSession();
         try {
 			Query query = session.createQuery("select elements(proc.normativas) from ProcedimientoLocal as proc where proc.id="+idProcedimiento);
-
 			return (List<Normativa>)query.list();
+			
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
             close(session);
         }
     }
- 
     
-	
-	
 }

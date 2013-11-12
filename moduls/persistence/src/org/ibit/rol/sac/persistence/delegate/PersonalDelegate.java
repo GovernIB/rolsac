@@ -19,18 +19,20 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 /**
  * Business delegate para manipular Personal.
  */
-public class PersonalDelegate implements StatelessDelegate{
+public class PersonalDelegate implements StatelessDelegate
+{
+	/* ========================================================= */
+    /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
-    /* ======================== M�TODOS DE NEGOCIO ============= */
-    /* ========================================================= */
-    public Long grabarPersonal(Personal personal, Long unidAdmin_id) throws DelegateException {
+	
+	public Long grabarPersonal(Personal personal, Long unidAdmin_id) throws DelegateException {
        try {
            return getFacade().grabarPersonal(personal, unidAdmin_id);
        } catch (RemoteException e) {
            throw new DelegateException(e);
        }
     }
-
+	
     public Personal obtenerPersonal(Long id) throws DelegateException {
        try {
            return getFacade().obtenerPersonal(id);
@@ -38,31 +40,15 @@ public class PersonalDelegate implements StatelessDelegate{
            throw new DelegateException(e);
        }
     }
-
-    public List listarPersonal() throws DelegateException {
-       try {
-           return getFacade().listarPersonal();
-       } catch (RemoteException e) {
-           throw new DelegateException(e);
-       }
-    }
-
-    public ResultadoBusqueda buscadorListarPersonal(Map parametros, int pagina, int resultados, boolean uaFilles, boolean uaMeves) throws DelegateException {
-        try {
-            return getFacade().buscadorListarPersonal(parametros, pagina, resultados, uaFilles, uaMeves);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-     }
     
-    public List listarPersonalFiltro(Map parametros) throws DelegateException {
-        try {
-            return getFacade().listarPersonalFiltro(parametros);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-     }
-
+    public ResultadoBusqueda buscadorListarPersonal(Map parametros, int pagina, int resultados, boolean uaFilles, boolean uaMeves) throws DelegateException {
+    	try {
+    		return getFacade().buscadorListarPersonal(parametros, pagina, resultados, uaFilles, uaMeves);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    }
+    
     public Set listarPersonalUA(Long unidadAdmin_id) throws DelegateException {
        try {
            return getFacade().listarPersonalUA(unidadAdmin_id);
@@ -70,7 +56,7 @@ public class PersonalDelegate implements StatelessDelegate{
            throw new DelegateException(e);
        }
     }
-
+    
     public void borrarPersonal(Long id) throws DelegateException {
        try {
            getFacade().borrarPersonal(id);
@@ -78,17 +64,17 @@ public class PersonalDelegate implements StatelessDelegate{
            throw new DelegateException(e);
        }
     }
-
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
-
-     private Handle facadeHandle;
-
+    
+    private Handle facadeHandle;
+    
     private PersonalFacade getFacade() throws RemoteException {
         return (PersonalFacade) facadeHandle.getEJBObject();
     }
-
+    
     protected PersonalDelegate() throws DelegateException {
         try {
             PersonalFacadeHome home = PersonalFacadeUtil.getHome();
@@ -102,8 +88,5 @@ public class PersonalDelegate implements StatelessDelegate{
             throw new DelegateException(e);
         }
     }
-
-
-
-
+    
 }

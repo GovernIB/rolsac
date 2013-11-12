@@ -15,7 +15,7 @@
   <service name="ExcepcioDocumentacioWS" provider="java:RPC" style="rpc" use="encoded">
       <parameter name="wsdlTargetNamespace" value="http://ws.excepcioDocumentacio.v2.api.rolsac.caib.es"/>
       <parameter name="wsdlServiceElement" value="ExcepcioDocumentacioQueryServiceEJBRemoteService"/>
-      <parameter name="schemaUnqualified" value="http://catalegDocuments.v2.api.rolsac.caib.es,http://excepcioDocumentacio.v2.api.rolsac.caib.es,http://xml.apache.org/xml-soap,http://general.v2.api.rolsac.caib.es,http://ws.excepcioDocumentacio.v2.api.rolsac.caib.es,http://documentTramit.v2.api.rolsac.caib.es"/>
+      <parameter name="schemaUnqualified" value="http://catalegDocuments.v2.api.rolsac.caib.es,http://excepcioDocumentacio.v2.api.rolsac.caib.es,http://general.v2.api.rolsac.caib.es,http://xml.apache.org/xml-soap,http://ws.excepcioDocumentacio.v2.api.rolsac.caib.es,http://documentTramit.v2.api.rolsac.caib.es"/>
       <parameter name="wsdlServicePort" value="ExcepcioDocumentacioWS"/>
       <parameter name="className" value="es.caib.rolsac.api.v2.excepcioDocumentacio.ws.ExcepcioDocumentacioWSSoapBindingImpl"/>
       <parameter name="wsdlPortType" value="ExcepcioDocumentacioQueryServiceEJBRemote"/>

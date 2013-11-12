@@ -23,31 +23,11 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  * Time: 11:57:05
  * To change this template use File | Settings | File Templates.
  */
-public class EspacioTerritorialDelegate  implements StatelessDelegate{
-
-     /* ========================================================= */
+public class EspacioTerritorialDelegate  implements StatelessDelegate
+{
+	/* ========================================================= */
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
-	
-	/** @deprecated  Usado desde back antiguo */
-	public Long crearEspacioTerritorial(EspacioTerritorial espTerr, Long idPadre) throws DelegateException {
-		try {
-            return getFacade().crearEspacioTerritorial(espTerr,idPadre);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-	}
-
-	
-	/** @deprecated  Usado desde back antiguo */
-	public void actualizarEspacioTerritorial(EspacioTerritorial espTerr, Long idPadre) throws DelegateException {
-		try {
-            getFacade().actualizarEspacioTerritorial(espTerr, idPadre);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-	}
-	
 	
 	public void borrarEspacioTerritorial(Long id) throws DelegateException {
 		try {
@@ -57,7 +37,6 @@ public class EspacioTerritorialDelegate  implements StatelessDelegate{
         }
 	}
 	
-	
 	public List<EspacioTerritorial> listarAntecesoresEspacioTerritorial(Long id) throws DelegateException{
 		try {
             return getFacade().listarAntecesoresEspacioTerritorial(id);
@@ -65,7 +44,6 @@ public class EspacioTerritorialDelegate  implements StatelessDelegate{
             throw new DelegateException(e);
         }
 	}
-
 	
 	public List<EspacioTerritorial> listarEspacioTerritorialesRaiz() throws DelegateException {
 		try {
@@ -74,7 +52,6 @@ public class EspacioTerritorialDelegate  implements StatelessDelegate{
             throw new DelegateException(e);
         }
 	}
-
 	
 	public Collection<EspacioTerritorial> listarHijosEspacioTerritorial(Long id) throws DelegateException {
 		try {
@@ -84,7 +61,6 @@ public class EspacioTerritorialDelegate  implements StatelessDelegate{
         }
 	}
 	
-	
     public EspacioTerritorial obtenerEspacioTerritorial(Long id) throws DelegateException {
         try {
             return getFacade().obtenerEspacioTerritorial(id);
@@ -93,15 +69,13 @@ public class EspacioTerritorialDelegate  implements StatelessDelegate{
         }
     }
     
-    
-    public ResultadoBusqueda listarEspaciosTerritoriales( int pagina, int resultats, String idioma ) throws DelegateException {
+    public ResultadoBusqueda listarEspaciosTerritoriales(int pagina, int resultats, String idioma) throws DelegateException {
     	try {
     		return getFacade().listarEspaciosTerritoriales(pagina, resultats, idioma);
     	} catch (RemoteException e) {
     		throw new DelegateException(e);
     	}
     }
-    
     
     @SuppressWarnings("unchecked")
     public List<EspacioTerritorial> listarEspaciosTerritoriales() throws DelegateException {
@@ -111,7 +85,6 @@ public class EspacioTerritorialDelegate  implements StatelessDelegate{
             throw new DelegateException(e);
         }
     }
-
     
     public Archivo obtenerMapaEspacio(Long id) throws DelegateException {
         try {
@@ -121,7 +94,6 @@ public class EspacioTerritorialDelegate  implements StatelessDelegate{
         }
     }
     
-
     public Archivo obtenerLogoEspacio(Long id) throws DelegateException {
         try {
             return getFacade().obtenerLogoEspacio(id);
@@ -129,65 +101,14 @@ public class EspacioTerritorialDelegate  implements StatelessDelegate{
             throw new DelegateException(e);
         }
     }
-
-    
-    /** @deprecated  No se usa */
-    @SuppressWarnings("unchecked")
-    public List<EspacioTerritorial> listarEspaciosTerritorialesNivel(Long nivel) throws DelegateException {
-        try {
-            return getFacade().listarEspaciosTerritorialesNivel(nivel);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-
-    /** @deprecated  No se usa */
-    @SuppressWarnings("unchecked")
-    public List<EspacioTerritorial> listarMunicipiosIsla(Long codIsla) throws DelegateException {
-        try {
-            return getFacade().listarMunicipiosIsla(codIsla);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    
-    /** @deprecated  Usado por back antiguo */
-    public void borrarMapa(Long id) throws DelegateException {
-    	try {
-    		getFacade().borrarMapa(id);
-    	} catch (RemoteException e) {
-    		throw new DelegateException(e);
-    	}
-    }
-    
-    
-    /** @deprecated  Usado por back antiguo */
-    public void borrarLogo(Long id) throws DelegateException {
-    	try {
-            getFacade().borrarLogo(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-
-    /** @deprecated  No se usa */
-    public EspacioTerritorial obtenerPadre(Long id) throws DelegateException {
-        try {
-            return getFacade().obtenerPadre(id);
-        } catch(RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
     
     public void grabarEspacioTerritorial(EspacioTerritorial espai, Long idPadre) throws DelegateException {
     	try {
-    		
-    		if (espai.getId() != null) getFacade().actualizarEspacioTerritorial(espai, idPadre);
-    		else getFacade().crearEspacioTerritorial(espai, idPadre);
+    		if (espai.getId() != null) {
+    			getFacade().actualizarEspacioTerritorial(espai, idPadre);
+    		} else {
+    			getFacade().crearEspacioTerritorial(espai, idPadre);
+    		}
     		
         } catch (RemoteException e) {
             throw new DelegateException(e);
@@ -197,13 +118,13 @@ public class EspacioTerritorialDelegate  implements StatelessDelegate{
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
-
+    
     private Handle facadeHandle;
-
+    
     private EspacioTerritorialFacade getFacade() throws RemoteException {
         return (EspacioTerritorialFacade) facadeHandle.getEJBObject();
     }
-
+    
     protected EspacioTerritorialDelegate() throws DelegateException {
         try {
             EspacioTerritorialFacadeHome home = EspacioTerritorialFacadeUtil.getHome();
@@ -217,5 +138,5 @@ public class EspacioTerritorialDelegate  implements StatelessDelegate{
             throw new DelegateException(e);
         }
     }
-
+    
 }

@@ -196,248 +196,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
             close(session);
         }
     }
-
-   
-	/**
-     * Actualiza los ordenes de los procedimientos de una ua por conselleria
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-     */
-    public void actualizarOrdenPros(Map map) {
-   
-    	Session session = getSession();
-        try {
-        	Long id;
-        	 
-            int valor_orden = 0; 
-            int conta =0;
-        	List pro_orden = new ArrayList();
-        	
-        	Iterator it = map.entrySet().iterator();
-        	while (it.hasNext()) {
-        		Map.Entry e = (Map.Entry)it.next();
-        	
-            	String paramName = e.getKey().toString();
-            	if (paramName.startsWith("orden_pro")) {
-            		id=  Long.valueOf(paramName.substring(9)).longValue();
-             		String[] parametros=(String[])e.getValue();
-             		if( (""+parametros[0]).equals("null")||(""+parametros[0]).equals("")||(""+parametros[0]).equals(" "))
-             		{
-             			valor_orden = 9999;
-             		}
-             		else
-             		{	
-             			conta ++;
-             			valor_orden= Integer.parseInt(parametros[0]);
-            		}
-             		//valor_orden=  Integer.parseInt(parametros[0]);
-            		if (!getAccesoManager().tieneAccesoProcedimiento(id)) { 
-            			throw new SecurityException("No tiene acceso al procedimiento");
-            		}
-            		ProcedimientoLocal procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, id);
-            		Long val = new Long(valor_orden);
-            		procedimiento.setOrden(val);
-            		pro_orden.add(procedimiento);
-            	}
-            }
-            session.flush();
-            
-            Collections.sort( pro_orden, new ProComparator() );
-            Long contador= Long.parseLong("1");
-        	
-        	Iterator itdoc=pro_orden.iterator();
-    		ProcedimientoLocal pro=null;
-    		while (itdoc.hasNext()) {
-    			pro=(ProcedimientoLocal)itdoc.next();
-    			if (contador>conta){
-    				pro.setOrden(Long.parseLong("9999"));
-    			}
-    			else 
-    			{	
-    				pro.setOrden(contador);
-    			}	
-    			contador+=1;
-    		}
-             session.flush();
-            
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-            
-    }
-    
-    class ProComparator implements Comparator {
-		public int compare(Object o1, Object o2) { 
-			Long x1=new Long (((ProcedimientoLocal)o1).getOrden());
-			Long x2=new Long (((ProcedimientoLocal)o2).getOrden());
-			return x1.compareTo( x2 ); 
-		}
-	}
     
     
-    /**
-     * Actualiza los ordenes de los procedimientos de una ua por direccion
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-     */   
-    
-    public void actualizarOrdenPros2 (Map map ){
-    	   
-    	Session session = getSession();
-        try {
-        	Long id;
-        	 
-            int valor_orden = 0; 
-            int conta =0;
-        	List pro_orden = new ArrayList();
-        	
-        	Iterator it = map.entrySet().iterator();
-        	while (it.hasNext()) {
-        		Map.Entry e = (Map.Entry)it.next();
-        	
-            	String paramName = e.getKey().toString();
-            	if (paramName.startsWith("orden_pro")) {
-            		id=  Long.valueOf(paramName.substring(9)).longValue();
-             		String[] parametros=(String[])e.getValue();
-             		if( (""+parametros[0]).equals("null")||(""+parametros[0]).equals("")||(""+parametros[0]).equals(" "))
-             		{
-             			valor_orden = 9999;
-             		}
-             		else
-             		{	
-             			conta ++;
-             			valor_orden= Integer.parseInt(parametros[0]);
-            		}
-             		         		
-             		//valor_orden=  Integer.parseInt(parametros[0]);
-            		if (!getAccesoManager().tieneAccesoProcedimiento(id)) { 
-            			throw new SecurityException("No tiene acceso al procedimiento");
-            		}
-            		ProcedimientoLocal procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, id);
-            		Long val = new Long(valor_orden);
-            		procedimiento.setOrden2(val); 
-            		pro_orden.add(procedimiento);
-            	}
-            }
-            session.flush();
-            
-          Collections.sort( pro_orden, new ProComparator2() );
-            
-            Long contador= Long.parseLong("1");
-        	
-        	Iterator itdoc=pro_orden.iterator();
-    		ProcedimientoLocal pro=null;
-    		while (itdoc.hasNext()) {
-    			 pro=(ProcedimientoLocal)itdoc.next();
-     			  
-     			if (contador>conta){
-    				pro.setOrden2(Long.parseLong("9999"));
-    			}
-    			else 
-    			{	
-    				pro.setOrden2(contador);
-    			}	
-     			contador+=1;
-    		}
-             session.flush();
-            
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-         
-       
-    }
-    class ProComparator2 implements Comparator {
-		public int compare(Object o1, Object o2) { 
-			Long x1=new Long (((ProcedimientoLocal)o1).getOrden2());
-			Long x2=new Long (((ProcedimientoLocal)o2).getOrden2());
-			return x1.compareTo( x2 ); 
-		}
-	}
- 
-    /**
-     * Actualiza los ordenes de los procedimientos de una ua por servicio
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-     */   
-    
-    public void actualizarOrdenPros3 (Map map ){
-    	   
-    	Session session = getSession();
-        try {
-        	Long id;
-        	 
-            int valor_orden = 0; 
-            int conta =0;
-        	List pro_orden = new ArrayList();
-        	
-        	Iterator it = map.entrySet().iterator();
-        	while (it.hasNext()) {
-        		Map.Entry e = (Map.Entry)it.next();
-        	
-            	String paramName = e.getKey().toString();
-            	if (paramName.startsWith("orden_pro")) {
-            		id=  Long.valueOf(paramName.substring(9)).longValue();
-              		String[] parametros=(String[])e.getValue();
-              		if( (""+parametros[0]).equals("null")||(""+parametros[0]).equals("")||(""+parametros[0]).equals(" "))
-             		{
-             			valor_orden = 9999;
-             		}
-             		else
-             		{	
-             			conta ++;
-             			valor_orden= Integer.parseInt(parametros[0]);
-            		}            		
-             		//valor_orden=  Integer.parseInt(parametros[0]);
-            		if (!getAccesoManager().tieneAccesoProcedimiento(id)) { 
-            			throw new SecurityException("No tiene acceso al procedimiento");
-            		}
-            		ProcedimientoLocal procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, id);
-            		Long val = new Long(valor_orden);
-            		procedimiento.setOrden3(val); 
-            		pro_orden.add(procedimiento);
-            	}
-            }
-            session.flush();
-            
-          Collections.sort( pro_orden, new ProComparator3() );
-            
-            Long contador= Long.parseLong("1");
-        	
-        	Iterator itdoc=pro_orden.iterator();
-    		ProcedimientoLocal pro=null;
-    		while (itdoc.hasNext()) {
-    			 pro=(ProcedimientoLocal)itdoc.next();
-    			 if (contador>conta){
-     				pro.setOrden3(Long.parseLong("9999"));
-     			 }
-     			 else 
-     			 {	
-     				pro.setOrden3(contador);
-     			 }	
-    		  	 contador+=1;
-    		}
-             session.flush();
-            
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-         
-       
-    }
-    class ProComparator3 implements Comparator {
-		public int compare(Object o1, Object o2) { 
-			Long x1=new Long (((ProcedimientoLocal)o1).getOrden3());
-			Long x2=new Long (((ProcedimientoLocal)o2).getOrden3());
-			return x1.compareTo( x2 ); 
-		}
-	}   
     /**
      * Lista todos los procedimientos.
      * @ejb.interface-method
@@ -470,7 +230,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
             close(session);
         }
     }
-
+    
     
     /**
      * Lista todos los procedimientos.
@@ -505,7 +265,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
             this.close(session);
         }
     }
-
+    
     
     /**
      * Obtiene un procedimiento Local.
@@ -735,77 +495,6 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     
     
     /**
-     * Obtiene un procedimiento Local.{PORMAD}
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public ProcedimientoLocal obtenerProcedimientoPM(Long id) {
-        Session session = getSession();
-        ProcedimientoLocal procedimiento = null;
-        try {
-            procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, id);
-            if (visible(procedimiento)) {
-            	Hibernate.initialize(procedimiento.getDocumentos());
-                Hibernate.initialize(procedimiento.getMaterias());
-                Hibernate.initialize(procedimiento.getNormativas());
-                Hibernate.initialize(procedimiento.getTramites());
-                Hibernate.initialize(procedimiento.getHechosVitalesProcedimientos());
-                Hibernate.initialize(procedimiento.getUnidadAdministrativa().getEdificios());
-            } else {
-                throw new SecurityException("El procedimiento no es visible");
-            }
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-   		ArrayList listaOrdenada = new ArrayList(procedimiento.getDocumentos());
-		Comparator comp = new DocsProcedimientoComparator();
-	  	Collections.sort(listaOrdenada, comp);
-	  	procedimiento.setDocumentos(listaOrdenada);                   
-        
-        return procedimiento;
-    }
-    
-    class DocsProcedimientoComparator implements Comparator {
-		public int compare(Object o1, Object o2) {
-			Long x1; 
-			if ((Documento)o1 == null) 
-				x1 = new Long("0");
-			else 
-				x1=new Long (((Documento)o1).getOrden());
-						
-			Long x2; 
-			if ((Documento)o2 == null) 
-				x2 = new Long("0");
-			else 
-				x2=new Long (((Documento)o2).getOrden());
-			
-			return x1.compareTo( x2 ); 
-		} 	
-    }
-  
-    /**
-     * Dice si existe un procedimiento Local.   PSALUT
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public boolean existeProcedimiento(Long id) {
-        Session session = getSession();
-        try {
-           // ProcedimientoLocal procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, id);
-            Criteria criteri = session.createCriteria(ProcedimientoLocal.class);
-            criteri.add(Expression.eq("id", id));
-            ProcedimientoLocal procedimiento = (ProcedimientoLocal)criteri.uniqueResult();
-            return procedimiento != null;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-    
-    /**
      * Dice si existe un tramite de inicio distinto a tramiteId para el procedimiento Local procId.
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -859,24 +548,6 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
             List<ProcedimientoLocal> procedimientos = query.list();
             
-/* u92770[enric] inicializar todo conlleva mucho tiempo. Solo util para el toString 
-            for(ProcedimientoLocal p:procedimientos){
-            	Set<Tramite> trams= p.getTramites();
-            	for(Iterator<Tramite> it=trams.iterator();it.hasNext();Hibernate.initialize(it.next()));
-            	
-            	List<Documento> docs= p.getDocumentos();
-            	for(Iterator<Documento> it=docs.iterator();it.hasNext();Hibernate.initialize(it.next()));
-
-            	Set<Normativa> norms= p.getNormativas();
-            	for(Iterator<Normativa> it=norms.iterator();it.hasNext();Hibernate.initialize(it.next()));
-
-            	Set<Materia> mats= p.getMaterias();
-            	for(Iterator<Materia> it=mats.iterator();it.hasNext();Hibernate.initialize(it.next()));
-
-            	Set<HechoVitalProcedimiento> hvp= p.getHechosVitalesProcedimientos();
-            	for(Iterator<HechoVitalProcedimiento> it=hvp.iterator();it.hasNext();Hibernate.initialize(it.next()));
-            }
-*/           	
             if (!userIsOper()) {
             	//Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
                 Collections.sort(procedimientos, new ProcedimientoLocal());
@@ -1099,27 +770,6 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     
     
     /**
-     * Obtiene una lista de procedimientos de la misma Familia
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public List buscarProcedimientosFamilia(Long id) {
-        Session session = getSession();
-        try {
-            String sQuery = "procedimiento.familia.id = " + id;
-            Query query = session.createQuery("from ProcedimientoLocal as procedimiento where " + sQuery);
-            List procs = new ArrayList(query.list());
-            //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
-            Collections.sort(procs, new ProcedimientoLocal());
-            return procs;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-
-    /**
      * Obtiene una lista de procedimientos de la misma Materia
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -1145,32 +795,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
             close(session);
         }
     }
-    /**
-     * Obtiene una lista de procedimientos del mismo Publico Objetivo
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public List buscarProcedimientosPublicoObjetivo(Long id) {
-        Session session = getSession();
-        try {
-            List result = new ArrayList();
-            PublicoObjetivo publico = (PublicoObjetivo) session.load(PublicoObjetivo.class, id);
-            Hibernate.initialize(publico.getProcedimientosLocales());
-            for (Iterator iter = publico.getProcedimientosLocales().iterator(); iter.hasNext();) {
-                ProcedimientoLocal procedimiento = (ProcedimientoLocal) iter.next();
-                if (publico(procedimiento)) {
-                    result.add(procedimiento);
-                }
-            }
-            //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
-            Collections.sort(result, new ProcedimientoLocal());
-            return result;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
+    
+    
     /**
      * Busca todos los Procedimientos con un texto determinado.
      * @ejb.interface-method
@@ -1348,108 +974,9 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         } finally {
             close(session);
         }
-    }    
-    /**
-     * A�ade una nueva normativa al procedimiento.
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-     */
-    public void anyadirNormativa(Long norm_id, Long proc_id) {
-        Session session = getSession();
-        try {
-            if (!getAccesoManager().tieneAccesoProcedimiento(proc_id)) {
-                throw new SecurityException("No tiene acceso al procedimiento");
-            }
-            ProcedimientoLocal procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, proc_id);
-            Normativa normativa = (Normativa) session.load(Normativa.class, norm_id);
-            procedimiento.getNormativas().add(normativa);
-
-            Actualizador.actualizar(normativa, procedimiento.getId());
-
-            session.flush();
-        } catch (HibernateException e) {
-            throw new EJBException(e);
-        } finally {
-            close(session);
-        }
     }
-
-    /**
-     * elimina una normativa del procedimiento
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-     */
-    public void eliminarNormativa(Long normativa_id, Long proc_id) {
-        Session session = getSession();
-        try {
-            if (!getAccesoManager().tieneAccesoProcedimiento(proc_id)) {
-                throw new SecurityException("No tiene acceso al procedimiento");
-            }
-            ProcedimientoLocal procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, proc_id);
-            Normativa normativa = (Normativa) session.load(Normativa.class, normativa_id);
-            procedimiento.getNormativas().remove(normativa);
-            Actualizador.borrar(normativa, procedimiento.getId());
-            session.flush();
-        } catch (HibernateException e) {
-            throw new EJBException(e);
-        } finally {
-            close(session);
-        }
-    }
-
-    /**
-     * A�ade una nueva materia al procedimiento
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-     */
-    public void anyadirMateria(Long materia_id, Long proc_id) {
-        Session session = getSession();
-        try {
-            if (!getAccesoManager().tieneAccesoProcedimiento(proc_id)) {
-                throw new SecurityException("No tiene acceso al procedimiento");
-            }
-            ProcedimientoLocal procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, proc_id);
-            Materia materia = (Materia) session.load(Materia.class, materia_id);
-            procedimiento.getMaterias().add(materia);
-            Hibernate.initialize(procedimiento.getHechosVitalesProcedimientos());
-            Actualizador.actualizar(procedimiento);
-            indexBorraProcedimiento(procedimiento);
-            indexInsertaProcedimiento(procedimiento,null);
-            session.flush();
-
-        } catch (HibernateException e) {
-            throw new EJBException(e);
-        } finally {
-            close(session);
-        }
-    }
-
-    /**
-     * elimina una materia del procedimiento
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-     */
-    public void eliminarMateria(Long materia_id, Long proc_id) {
-        Session session = getSession();
-        try {
-            if (!getAccesoManager().tieneAccesoProcedimiento(proc_id)) {
-                throw new SecurityException("No tiene acceso al procedimiento");
-            }
-            ProcedimientoLocal procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, proc_id);
-            Materia materia = (Materia) session.load(Materia.class, materia_id);
-            procedimiento.getMaterias().remove(materia);
-            Actualizador.actualizar(procedimiento);   
-            indexBorraProcedimiento(procedimiento);
-            indexInsertaProcedimiento(procedimiento,null);
-            session.flush();
-            
-        } catch (HibernateException e) {
-            throw new EJBException(e);
-        } finally {
-            close(session);
-        }
-    }
-
+    
+    
     /**
      * A�ade un nuevo tramite al procedimiento (el tramite ya existe en la base de datos)
      * @ejb.interface-method
@@ -1771,142 +1298,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     	}
     }
     
-    /*
-     * Obtiene los procedimientos publicos de una unidad administrativa (PORMAD recuperacion de datos inicial)
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    /*@SuppressWarnings("unchecked")
-	public List<ProcedimientoLocal> listarProcedimientosPublicosUAHVMateria(Long idUA, String[] codEstMat, String[] codEstHV) {
-    	Session session = getSession();
-    	try {
-    		List<ProcedimientoLocal> procsFinales;
-    		
-    		final Query query = session.createQuery(
-    				"SELECT DISTINCT proc From ProcedimientoLocal as proc " +
-    				" join proc.hechosVitalesProcedimientos as mat " +
-    				" join proc.materias as hec " +
-    				"WHERE proc.unidadAdministrativa.id=:unidad " +
-    				"  AND ((mat) in (SELECT mat FROM Materia as mat WHERE mat.codigoEstandar in (:mats)) " +
-    				"       OR (hec) in (SELECT elements(hecho.hechosVitalesProcedimientos) FROM HechoVital as hecho WHERE hecho.codigoEstandar in (:hecs))) " +
-    				"");
-    		query.setLong("unidad",idUA);
-    		query.setParameterList("mats",codEstMat,Hibernate.STRING);
-			query.setParameterList("hecs",codEstHV,Hibernate.STRING);
-    		
-			procsFinales = (List<ProcedimientoLocal>)query.list();
-			for(ProcedimientoLocal proc: procsFinales){
-				Hibernate.initialize(proc.getHechosVitalesProcedimientos());
-				Hibernate.initialize(proc.getMaterias());
-			}
-    		return procsFinales;
-    	} catch (HibernateException he) {
-    		throw new EJBException(he);
-    	} finally {
-    		close(session);
-    	}
-    }*/
-
-    /*
-     * Listar procedimientos publicos de un Hecho Vital y una Unidad Administrativa(PORMAD)
-     * @ejb.interface-method
-     * @ejb.permission unchecked= "true"
-     */
-    /*public List<ProcedimientoLocal> listarProcedimientosHechoVitalUA(Long hecho_id, Long ua_id) {
-        Session session = getSession();
-        try {
-            List<ProcedimientoLocal> result = new ArrayList();
-            HechoVital hecho = (HechoVital) session.load(HechoVital.class, hecho_id);
-
-            for (Iterator iterator = hecho.getHechosVitalesProcedimientos().iterator(); iterator.hasNext();) {
-                ProcedimientoLocal procedimiento = ((HechoVitalProcedimiento) iterator.next()).getProcedimiento();
-                if ( procedimiento.getUnidadAdministrativa().getId().equals(ua_id) && publico(procedimiento)){
-                   result.add(procedimiento);
-                }
-            }
-            return result;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }*/
-
-     /**
-     * Listar procedimientos publicos de una Materia y una Unidad Administrativa(PORMAD)
-     * @ejb.interface-method
-     * @ejb.permission unchecked= "true"
-     */
-    public List<ProcedimientoLocal> listarProcedimientosMateriaUA(Long materia_id, Long ua_id) {
-        Session session = getSession();
-        try {
-            List<ProcedimientoLocal> result = new ArrayList();
-            Materia materia = (Materia) session.load(Materia.class, materia_id);
-            for (Iterator iterator = materia.getProcedimientosLocales().iterator(); iterator.hasNext();) {
-                ProcedimientoLocal procedimiento = (ProcedimientoLocal) iterator.next();
-                if ( procedimiento.getUnidadAdministrativa().getId().equals(ua_id) && publico(procedimiento)){
-                   result.add(procedimiento);
-                }
-            }
-            return result;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-
-
-    /**
-     * Listar procedimientos Hecho Vital
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-     */
-    public List listarProcedimientosHechoVital(Long hecho_id) {
-        Session session = getSession();
-        try {
-            List result = new ArrayList();
-            HechoVital hecho = (HechoVital) session.load(HechoVital.class, hecho_id);
-            for (Iterator iterator = hecho.getHechosVitalesProcedimientos().iterator(); iterator.hasNext();) {
-                HechoVitalProcedimiento hvp = (HechoVitalProcedimiento) iterator.next();
-                if (hvp != null) {
-                    result.add(hvp.getProcedimiento());
-                }
-            }
-            //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
-            Collections.sort(result, new ProcedimientoLocal());
-            return result;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-    /**
-     * Listar procedimientos Publico Objetivo y una Unidad Administrativa
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-     */
-    public List listarProcedimientosPublicoObjetivoUA(Long publico_id, Long ua_id) {
-        Session session = getSession();
-        try {
-            List result = new ArrayList();
-            PublicoObjetivo  publico = (PublicoObjetivo) session.load(PublicoObjetivo.class, publico_id);
-            for (Iterator iterator = publico.getProcedimientosLocales().iterator(); iterator.hasNext();) {
-            	ProcedimientoLocal procedimiento = (ProcedimientoLocal) iterator.next();
-            	 if ( procedimiento.getUnidadAdministrativa().getId().equals(ua_id) && publico(procedimiento)){
-                     result.add(procedimiento);
-                  }
-            }
-            //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
-            Collections.sort(result, new ProcedimientoLocal());
-            return result;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
+    
     /**
      * Obtiene los procedimientos p�blicos de un Hecho Vital
      * @ejb.interface-method
@@ -2047,45 +1439,10 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         return visible(proc) && noCaducado && publicado;
     }
     
-    /**
-     * Busca todos los {@link ProcedimientoLocal} cuyo nombre contenga el String de entrada(PORMAD)
-     * 
-     * @param busqueda
-     * @param idioma
-     * @return lista de {@link ProcedimientoLocal}
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-	@SuppressWarnings("unchecked")
-	public List<ProcedimientoLocal> buscar(final String busqueda, final String idioma){
-		List<ProcedimientoLocal> resultado;
-		if(busqueda!=null && !"".equals(busqueda.trim())){
-			Session session = getSession();
-	        try {
-	        	Query query = session.createQuery("from ProcedimientoLocal as prc, prc.traducciones as trad where index(trad) = :idioma and upper(trad.nombre) like :busqueda");
-	        	query.setString("idioma", idioma);
-	        	query.setString("busqueda", "%"+busqueda.trim().toUpperCase()+"%");
-	        	resultado = query.list();
-	        } catch (HibernateException he) {
-	            throw new EJBException(he);
-	        } finally {
-	            close(session);
-	        }
-		}else{
-			resultado = Collections.emptyList();
-		}
-		
-		//Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
-        Collections.sort(resultado, new ProcedimientoLocal());
-		return resultado;
-	}
-
-
+    
 	/**
 	 * Metodo que obtiene un bean con el filtro para la indexacion
-	 * 
 	 * Debemos incluir las materias y los hechos vitales, la unidad administrativa de la que depende y la familia.
-	 * 
 	 * M�todo v�lido para Procedimientos los 3 tipos:
 	 * 
 	 * Procedimiento No telem�tico, los de Rolsac por defecto (sin url, ni version ni modelo)
@@ -2483,23 +1840,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		}
     	return tipo;
 	}
-		
-
-    private ProcedimientoLocal inicializaColecciones(ProcedimientoLocal procedimiento) {
-        Session session = getSession();
-        try {
-                Hibernate.initialize(procedimiento.getDocumentos());
-                Hibernate.initialize(procedimiento.getMaterias());
-                Hibernate.initialize(procedimiento.getNormativas());
-                Hibernate.initialize(procedimiento.getTramites());
-                Hibernate.initialize(procedimiento.getHechosVitalesProcedimientos());
-                return procedimiento;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
+	
 	
     class TramiteComparator implements Comparator {
 		public int compare(Object o1, Object o2) { 
@@ -2508,88 +1849,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			return x1.compareTo( x2 ); 
 		}
 	}
-	
-	private Traduccio getTraduccio ( String query, int camps, Connection dbConnection ) throws Exception {
-
-		PreparedStatement stmt = null;
-		ResultSet resultTrad = null;
-		try{
-			stmt = dbConnection.prepareStatement(query);
-
-			resultTrad = stmt.executeQuery();
-
-			if (!resultTrad.next()) {
-				//throw new Exception("No s'ha trobat traducci� per aquest idioma");
-				return null;
-			}
-
-
-			Traduccio trad = new Traduccio();
-
-			if ((resultTrad.getObject(1)!=null)&&(resultTrad.getObject(1).getClass().isPrimitive())){
-				trad.setCamp1(resultTrad.getInt(1));
-			}else{
-				trad.setCamp1(resultTrad.getString(1));
-			}
-
-			if (camps > 1){
-				if ((resultTrad.getObject(2)!=null)&&(resultTrad.getObject(2).getClass().isPrimitive())){
-					trad.setCamp2(resultTrad.getInt(2));
-				}else{
-					trad.setCamp2(resultTrad.getString(2));
-				}
-				if (camps > 2){
-					trad.setCamp3(resultTrad.getString(3));
-					if (camps > 3){
-						trad.setCamp4(resultTrad.getString(4));
-						if (camps > 4){
-							trad.setCamp5(resultTrad.getString(5));
-							if (camps > 5){
-								trad.setCamp6(resultTrad.getString(6));
-								if (camps > 6){
-									trad.setCamp7(resultTrad.getString(7));
-									if (camps > 7){
-										trad.setCamp8(resultTrad.getString(8));
-										if (camps > 8){
-											trad.setCamp9(resultTrad.getString(9));
-											if (camps > 9){
-												trad.setCamp10(resultTrad.getString(10));
-												if (camps > 10){
-													trad.setCamp11(resultTrad.getString(11));
-												}	
-											}	
-										}
-									}	
-								}	
-							}
-						}	
-					}		
-				}		
-
-			}
-
-			return trad;
-
-		} finally {
-			resultTrad.close();
-			stmt.close();
-		}
-	}   	
-	
-    /**
-     * M�tode d'utilitat per poder evitar els valors nulls
-     * (versi� amb valor per defecte expl�cit)
-     * 
-     * @param value valor que volem comprovar que no sigui null
-     * @param defaultValue valor que emprarem si value es null
-     * @return value si no es null i defaultValue si es null
-     */
-    protected String nvl (String value, String defaultValue ) {
-        if ( value == null ) {
-           return defaultValue;
-        }
-        return value;
-    }	
+    
     
     /**
      * Buscamos el numero de procedimientos activos des de la fecha actual
@@ -2617,24 +1877,13 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	        	query.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
 	        	
 	        	resultado = (Integer) query.uniqueResult();
-        	}/* else {
-        	   
-        		query = session.createQuery("select count(*) from ProcedimientoLocal as prc where prc.validacion = :validacion " +
-        				" and (prc.fechaCaducidad >= :fecha or prc.fechaCaducidad is null) " +
-						" and (prc.fechaPublicacion <= :fecha or prc.fechaPublicacion is null) ");
-        		query.setInteger("validacion", Validacion.PUBLICA);
-        		query.setDate("fecha", fechaCaducidad);
-        		
         	}
         	
-        	resultado = (Integer) query.uniqueResult();
-    		*/
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
             close(session);
         }
-	
 		
 		return resultado;
 	}
@@ -2666,23 +1915,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	        	query.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
 	        	
 	        	resultado = (Integer) query.uniqueResult();
-	        	
-        	}/* else {
-        	   
-        		query = session.createQuery("select count(*) from ProcedimientoLocal as prc where ( " +
-	        			" ( prc.validacion != :validacion ) " +
-	        			" or ( prc.validacion = :validacion and prc.fechaCaducidad < :fecha ) " +
-	        			" or ( prc.validacion = :validacion and prc.fechaCaducidad is null and prc.fechaPublicacion > :fecha ) " +
-	        			" or ( prc.validacion = :validacion and prc.fechaCaducidad >= :fecha and prc.fechaPublicacion > :fecha ) " +
-	        			" ) ");
-	        	query.setInteger("validacion", Validacion.PUBLICA);
-	        	query.setDate("fecha", fechaCaducidad);
-	        	        	    
-	        }
-	        
-	        resultado = (Integer) query.uniqueResult();
-	        */        	
-    		
+        	}
+        	
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
@@ -2691,54 +1925,5 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			
 		return resultado;
 	}
-	
-	
-	 /**
-     * Buscamos el numero de procedimientos activos des de la fecha actual
-     * 
-     * @param List<Long> listaUnidadAdministrativaId
-     * @param Date fechaCaducidad
-     * @return Booleano que indica si un procedimiento tiene asignados hechos vitales relacionados a un determinado Publico objetivo
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-	public boolean hasHechosVitalesAsignadosByPublicosObjetivo(Long idProcedimiento, Long idPublicoObjetivo) {
-
-		Session session = getSession();
-        try {
-        	
-        	String subQuery = " select hvp.hechoVital.id from HechoVitalProcedimiento as hvp where hvp.procedimiento.id = :idProcedimiento ";
-
-        	Query query = session.createQuery("select hechoVital.id " +
-        	
-    				"from HechoVital hechoVital, " +
-    				"	AgrupacionHechoVital as agrHechoVital, " +
-    				"	HechoVitalAgrupacionHV as hva, " +
-    				"	PublicoObjetivo as po  " +
-    				
-    				"where ( hva.agrupacion.id = agrHechoVital.id ) " +
-    				"	and ( hva.hechoVital.id = hechoVital.id ) and ( agrHechoVital.publico.id = po.id ) " +
-    				"	and po.id = :idPublicoObjetivo" +
-    				"	and ( hechoVital.id in ( " + subQuery + " ) ) " +
-    				
-    				"order by hechoVital.orden asc ");
-        	
-        	
-    		query.setParameter("idProcedimiento", idProcedimiento);
-    		query.setParameter("idPublicoObjetivo", idPublicoObjetivo);
-    		
-    		
-			return  query.list().size()  >  0  ?  true  :  false;			
-            
-			
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-            
-        } finally {
-        	
-            close(session);
-        }
-	}
-	
 	
 }

@@ -14,7 +14,8 @@ import java.util.List;
 /**
  * Business delegate para manipular Auditorias.
  */
-public class AuditoriaDelegate implements StatelessDelegate {
+public class AuditoriaDelegate implements StatelessDelegate
+{
     /* ========================================================= */
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
@@ -46,24 +47,6 @@ public class AuditoriaDelegate implements StatelessDelegate {
     public List listarAuditoriasFicha(Long idFicha) throws DelegateException {
         try {
             return getFacade().listarAuditoriasFicha(idFicha);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    /** @deprecated  No se utiliza */
-    public List listarAuditoriasHistorico(Long idHistorico) throws DelegateException {
-        try {
-            return getFacade().listarAuditoriasHistorico(idHistorico);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    /** @deprecated  No se utiliza */
-    public List listarHistoricosAuditorias(Date fechaIni, Date fechaFin) throws DelegateException {
-        try {
-            return getFacade().listarHistoricosAuditorias(fechaIni, fechaFin);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
@@ -108,5 +91,5 @@ public class AuditoriaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
 }

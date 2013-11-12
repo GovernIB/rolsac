@@ -228,28 +228,4 @@ public abstract class TratamientoFacadeEJB extends HibernateEJB{
 		
 	}
 	
-
-	/**
-	 * @deprecated No se usa
-	 * A partir de un String con el codigo estandar de un tratamiento recojo
-	 * un {@link Tratamiento} correspondiente
-	 * 
-	 * @param codigoEstandar
-	 * @return {@link Tratamiento}
-	 * @ejb.interface-method
-	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-	 */
-	public Tratamiento obtenerTratamientoCE(final String codigosEstandar){
-		Session session = getSession();
-		try {
-			Query query = session.createQuery("from Tratamiento as trat where trat.codigoEstandar=:codigo");
-			query.setString("codigo", codigosEstandar);
-			return (Tratamiento)query.uniqueResult();
-		} catch (HibernateException he) {
-			throw new EJBException(he);
-		} finally {
-			close(session);
-		}
-	}
-
 }

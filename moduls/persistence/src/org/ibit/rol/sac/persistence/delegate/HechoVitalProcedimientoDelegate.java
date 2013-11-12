@@ -15,54 +15,19 @@ import org.ibit.rol.sac.persistence.util.HechoVitalProcedimientoFacadeUtil;
 /**
  * Business delegate para manipular HechoVitalProcedimiento.
  */
-public class HechoVitalProcedimientoDelegate implements StatelessDelegate {
-   /* ========================================================= */
-   /* ======================== M�TODOS DE NEGOCIO ============= */
-   /* ========================================================= */
-
-	/** @deprecated Usado por el back antiguo */
-   public Long grabarHechoVitalProcedimiento(HechoVitalProcedimiento hechovp, Long hecho_id, Long procedimiento_id) throws DelegateException {
-       try {
-           return getFacade().grabarHechoVitalProcedimiento(hechovp, hecho_id, procedimiento_id);
-       } catch (RemoteException e) {
-           throw new DelegateException(e);
-       }
-   }
-
-   public void grabarHechoVitalProcedimientos(Collection<HechoVitalProcedimiento> hvpsAGrabar) throws DelegateException {
-       try {
-           getFacade().grabarHechoVitalProcedimientos(hvpsAGrabar);
-       } catch (RemoteException e) {
-           throw new DelegateException(e);
-       }
-   }
-   
-   /** @deprecated No se usa */
-   public HechoVitalProcedimiento obtenerHechoVitalProcedimiento(Long id) throws DelegateException {
-       try {
-           return getFacade().obtenerHechoVitalProcedimiento(id);
-       } catch (RemoteException e) {
-           throw new DelegateException(e);
-       }
-   }
-
-   /** @deprecated Usado por el back antiguo */
-    public void subirOrden(Long id) throws DelegateException {
-        try {
-            getFacade().subirOrden(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    /** @deprecated Usado por el back antiguo */
-    public void borrarHechoVitalProcedimiento(Long id) throws DelegateException {
-        try {
-            getFacade().borrarHechoVitalProcedimiento(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
+public class HechoVitalProcedimientoDelegate implements StatelessDelegate
+{
+	/* ========================================================= */
+	/* ======================== MÉTODOS DE NEGOCIO ============= */
+	/* ========================================================= */
+	
+	public void grabarHechoVitalProcedimientos(Collection<HechoVitalProcedimiento> hvpsAGrabar) throws DelegateException {
+		try {
+			getFacade().grabarHechoVitalProcedimientos(hvpsAGrabar);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
     
     public void borrarHechoVitalProcedimientos(Collection<Long> hvpsABorrar) throws DelegateException {
         try {
@@ -71,17 +36,17 @@ public class HechoVitalProcedimientoDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
-   /* ========================================================= */
+    
+    /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
-
+    
     private Handle facadeHandle;
-
+    
     private HechoVitalProcedimientoFacade getFacade() throws RemoteException {
         return (HechoVitalProcedimientoFacade) facadeHandle.getEJBObject();
     }
-
+    
     protected HechoVitalProcedimientoDelegate() throws DelegateException {
         try {
             HechoVitalProcedimientoFacadeHome home = HechoVitalProcedimientoFacadeUtil.getHome();
@@ -95,4 +60,5 @@ public class HechoVitalProcedimientoDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
 }

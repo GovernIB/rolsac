@@ -55,16 +55,7 @@ public class PublicoObjetivoDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
-    /** @deprecated No se utiliza */
-    public PublicoObjetivo obtenerPublicoObjetivoPorTitulo(String titulo) throws DelegateException {
-        try {
-            return getFacade().obtenerPublicoObjetivoPorTitulo(titulo);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
+    
     public void borrarPublicoObjetivo(Long id) throws DelegateException {
         try {
             getFacade().borrarPublicoObjetivo(id);

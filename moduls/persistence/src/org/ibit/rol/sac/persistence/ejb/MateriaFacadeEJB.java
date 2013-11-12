@@ -197,28 +197,7 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
 			close(session);
 		}
 	}
-
 	
-	/**
-	 * @deprecated No se usa
-	 * Lista todas las materias para el front destacadas. (PORMAD) TODO: ver si hay que eliminarlo
-	 * @ejb.interface-method
-	 * @ejb.permission unchecked= "true"
-	 */
-	public List<Materia> listarMateriasFrontDestacadas(String lang) {
-		Session session = getSession();
-		try {
-			Query query = session.createQuery("from Materia as mat, mat.traducciones as trad where index(trad) = :idioma and mat.destacada=true order by trad.nombre asc");
-			query.setString("idioma", lang);
-			List<Materia> materias = query.list();
-			return materias;
-		} catch (HibernateException he) {
-			throw new EJBException(he);
-		} finally {
-			close(session);
-		}
-	}
-
 	
 	/**
 	 * Obtiene una materia. (metode que s'emplea per el backoffice i el frontoffice.
@@ -280,55 +259,8 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
 		}
 		
 	}
-
-
-	/**
-	 * @deprecated Usado desde el back antiguo
-	 * Nos dice si una materia tiene procedimientos o fichas
-	 * @ejb.interface-method
-	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-	 */
-	public boolean tieneProcedimientosOFichas(Long id){
-		Session session = getSession();
-		try {
-			Materia materia = (Materia) session.load(Materia.class, id);
-			Set procedimientos = materia.getProcedimientosLocales();
-			Set fichas = materia.getFichas();
-			return procedimientos.size() != 0 || fichas.size() != 0;
-		} catch (HibernateException he) {
-			throw new EJBException(he);
-		} finally {
-			close(session);
-		}
-	}
-
-
-	/**
-	 * @deprecated Usado desde el back antiguo
-	 * Obtiene el listado de materias de una UA
-	 * Se toma la Unidad administrativa principal de la materia
-	 * @ejb.interface-method
-	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-	 */
-	public List<Materia> listarMateriasbyUA (Long ua){
-		Session session = getSession();
-		try {
-			Query query = session.createQuery("from UnidadMateria unimat where unimat.unidadPrincipal='S' and unimat.unidad.id=:ua");
-			//Query query = session.createQuery("from UnidadMateria unimat where unimat.unidadPrincipal='S' and unimat.unidad.id:=ua");
-			query.setLong("ua", ua);
-			query.setCacheable(true);
-			return (List<Materia>)query.list();
-			//if (result.isEmpty()) {
-			//  return null;
-			//}
-		} catch (HibernateException he) {
-			throw new EJBException(he);
-		} finally {
-			close(session);
-		}
-	}
-
-
+	
+	
 	/**
 	 * Borra una Materia.
 	 * 
@@ -380,28 +312,6 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
 		
 	}
 	
-
-	/**
-	 * @deprecated No se usa 
-	 * Obtiene todos los grupos {@link MateriaAgrupacionM} a los que pertenece una determinada materia
-	 * @return lista de {@link MateriaAgrupacionM}
-	 * @ejb.interface-method
-	 * @ejb.permission unchecked="true"
-	 */
-	@SuppressWarnings("unchecked")
-	public Set<MateriaAgrupacionM> obtenerGruposMateria(Long idmateria) {
-		Session session = getSession();
-		try {
-			Materia materia = (Materia) session.load(Materia.class, idmateria);
-			Hibernate.initialize(materia.getMateriasAgrupacionM());
-			return materia.getMateriasAgrupacionM();
-		} catch (HibernateException he) {
-			throw new EJBException(he);
-		} finally {
-			close(session);
-		}
-	}    
-
 	
 	/**
 	 * Obtiene el archivo distribución competencial de una Materia.(PORMAD)

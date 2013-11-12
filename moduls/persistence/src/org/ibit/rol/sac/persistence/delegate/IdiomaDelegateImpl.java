@@ -15,26 +15,26 @@ import org.ibit.rol.sac.model.Idioma;
 /**
  * Business delegate pera consultar idiomas.
  */
-public class IdiomaDelegateImpl extends IdiomaDelegate implements  StatelessDelegate, IdiomaDelegateI {
-
-    // Cache de lengaujes
+public class IdiomaDelegateImpl extends IdiomaDelegate implements  StatelessDelegate, IdiomaDelegateI
+{
+	// Cache de lengaujes
     private List lenguajes = null;
     private long timeLen = 0L;
-
+    
     // Cache de lenguaje por defecto
     private String porDefecto = null;
     private long timeDef = 0L;
-
+    
     private static long maxtime = 60000L; // 60 segundos
-
+    
     private boolean timeout(long time) {
         return ((System.currentTimeMillis() - time) > maxtime);
     }
-
+    
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== MÃ‰TODOS DE NEGOCIO ============= */
     /* ========================================================= */
-
+    
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.IdiomaDelegateI#listarLenguajes()
 	 */
@@ -49,7 +49,7 @@ public class IdiomaDelegateImpl extends IdiomaDelegate implements  StatelessDele
             throw new DelegateException(e);
         }
     }
-
+    
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.IdiomaDelegateI#lenguajePorDefecto()
 	 */
@@ -64,50 +64,30 @@ public class IdiomaDelegateImpl extends IdiomaDelegate implements  StatelessDele
             throw new DelegateException(e);
         }
     }
-
-     /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.IdiomaDelegateI#listarIdiomas()
-	 */
-    public List<Idioma> listarIdiomas() throws DelegateException {
-        try {
-            return getFacade().listarIdiomas();
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
+    
     @Override
     public List listarLenguajesTraductor() throws DelegateException {
-    	   try {
-               return getFacade().listarLenguajesTraductor();
-           } catch (RemoteException e) {
-               throw new DelegateException(e);
-           }
+    	try {
+    		return getFacade().listarLenguajesTraductor();
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
     }
-
-     /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.IdiomaDelegateI#testeoHql()
-	 */
-     public long testeoHql() throws DelegateException {
-         try {
-             return getFacade().testeoHql();
-         } catch (RemoteException e) {
-             throw new DelegateException(e);
-         }
-     }
-     
+    
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
-
+    
     private Handle facadeHandle;
-
+    
     private IdiomaFacade getFacade() throws RemoteException {
-        return (IdiomaFacade) facadeHandle.getEJBObject();
+    	return (IdiomaFacade) facadeHandle.getEJBObject();
     }
-
+    
     protected IdiomaDelegateImpl() throws DelegateException {
-        try {
-            IdiomaFacadeHome home = IdiomaFacadeUtil.getHome();
+    	try {
+    		IdiomaFacadeHome home = IdiomaFacadeUtil.getHome();
             IdiomaFacade remote = home.create();
             facadeHandle = remote.getHandle();
         } catch (NamingException e) {
@@ -118,5 +98,5 @@ public class IdiomaDelegateImpl extends IdiomaDelegate implements  StatelessDele
             throw new DelegateException(e);
         }
     }
-
+    
 }

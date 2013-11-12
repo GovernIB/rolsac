@@ -15,11 +15,12 @@ import java.util.Map;
 /**
  * Business delegate para manipular normativas.
  */
-public class EngineJdbcDaoDelegate implements StatelessDelegate {
+public class EngineJdbcDaoDelegate implements StatelessDelegate
+{
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== MÃ‰TODOS DE NEGOCIO ============= */
     /* ========================================================= */
-
+	
 	/**
 	 * Inicializa el EJB con un datasource determinado.
 	 * Es imprescindible inicializarlo. 
@@ -31,32 +32,12 @@ public class EngineJdbcDaoDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
     /**
-     * Método que devuelve un resultset tras realizar una operación de consulta
-     * o de modificación en BD
-     * 
-     * Si no es una consulta retorna null.
-     * 
-     * @param sql, Strning con la sentencia a ejecutar
-     * @return Resultset
-     * @throws DelegateException
-     */
-    /*
-    public ResultSet ejecuta(String sql) throws DelegateException {
-        try {
-            return getFacade().ejecuta(sql);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    */
-
-    /**
-  	 * Método para ejecutar SQL de inserción, actualización o borrado.  
-     * Devuelve el número de registros modificados o 0 en caso de error.
+  	 * MÃ©todo para ejecutar SQL de inserciï¿½n, actualizaciï¿½n o borrado.  
+     * Devuelve el nï¿½mero de registros modificados o 0 en caso de error.
      * @param sql, String con la sentencia sql
-     * @param datos, Vector con los parámetros que se meten en la sentencia.
+     * @param datos, Vector con los parï¿½metros que se meten en la sentencia.
      * @return int, numero de registros
      * @throws DelegateException
      */
@@ -67,9 +48,9 @@ public class EngineJdbcDaoDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
     /**
-     * Método que devuelve el resultado de una sentencia "select count(*)".
+     * MÃ©todo que devuelve el resultado de una sentencia "select count(*)".
      * Se debe pasar como parametro la consulta completa.
      * @param sql
      * @return String, numero resultado de ejecutar la sentencia.
@@ -82,17 +63,17 @@ public class EngineJdbcDaoDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
-
+    
     private Handle facadeHandle;
-
+    
     private EngineJdbcDaoFacade getFacade() throws RemoteException {
         return (EngineJdbcDaoFacade) facadeHandle.getEJBObject();
     }
-
+    
     protected EngineJdbcDaoDelegate() throws DelegateException {
         try {
         	EngineJdbcDaoFacadeHome home = EngineJdbcDaoFacadeUtil.getHome();
@@ -106,6 +87,5 @@ public class EngineJdbcDaoDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
-
+    
 }

@@ -37,13 +37,11 @@ public class FichaDelegate implements FichaDelegateI {
 	}
 	
 	
-	/**@deprecated Usado por back antiguo*/	
 	public boolean autorizaCrearFicha(Integer validacionNormativa) throws DelegateException {
 		return impl.autorizaCrearFicha(validacionNormativa);
 	}
 
 	
-	/**@deprecated Usado por back antiguo*/
 	public boolean autorizaModificarFicha(Long idFicha)
 			throws DelegateException {
 		return impl.autorizaModificarFicha(idFicha);
@@ -53,14 +51,7 @@ public class FichaDelegate implements FichaDelegateI {
 	public Long grabarFicha(Ficha ficha) throws DelegateException {
 		return impl.grabarFicha(ficha);
 	}
-
 	
-	/**@deprecated Usado por back antiguo*/	
-	public List buscarFichas(Map parametros, Map traduccion)
-			throws DelegateException {
-		return impl.buscarFichas(parametros, traduccion);
-	}
-
 	
 	public ResultadoBusqueda buscarFichas(Map parametros, Map traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, Long idPublic, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden, String pagina, String resultats, int campoVisible)
            throws DelegateException {
@@ -68,56 +59,10 @@ public class FichaDelegate implements FichaDelegateI {
 	}
 	
 	
-	/**@deprecated No se usa*/
-	public List buscarFichas(String texto) throws DelegateException {
-		return impl.buscarFichas(texto);
-	}
-
-	/**@deprecated No se usa*/
-	public List listarFichas() throws DelegateException {
-		return impl.listarFichas();
-	}
-
-	/**@deprecated Usado por back antiguo*/
-	public List listarFichasCrawler() throws DelegateException {
-		return impl.listarFichasCrawler();
-	}
-
-	/**@deprecated Usado por back antiguo*/
-	public List listarFichasThin() throws DelegateException {
-		return impl.listarFichasThin();
-	}
-
-	
 	public Ficha obtenerFicha(Long id) throws DelegateException {
 		return impl.obtenerFicha(id);
 	}
 	
-	
-	/**@deprecated Usado por back antiguo*/
-	public List buscarFichasMateria(Long id) throws DelegateException {
-		return impl.buscarFichasMateria(id);
-	}
-
-	
-	public List buscarFichasHuerfanas() throws DelegateException {
-		return impl.buscarFichasHuerfanas();
-	}
-
-	
-	/**@deprecated Usado por back antiguo*/
-	public void anyadirMateria(Long materia_id, Long ficha_id)
-			throws DelegateException {
-		impl.anyadirMateria(materia_id, ficha_id);
-	}
-
-	
-	/**@deprecated Usado por back antiguo*/
-	public void eliminarMateria(Long materia_id, Long ficha_id)
-			throws DelegateException {
-		impl.eliminarMateria(materia_id, ficha_id);
-	}
-
 	
 	public Archivo obtenerIconoFicha(Long id) throws DelegateException {
 		return impl.obtenerIconoFicha(id);
@@ -132,75 +77,30 @@ public class FichaDelegate implements FichaDelegateI {
 	public Archivo obtenerBanerFicha(Long id) throws DelegateException {
 		return impl.obtenerBanerFicha(id);
 	}
-
 	
-	public List listarFichasUnidad(Long unidad_id) throws DelegateException {
-		return impl.listarFichasUnidad(unidad_id);
-	}
-
 	
 	public void borrarFicha(Long id) throws DelegateException {
 		impl.borrarFicha(id);
 	}
-
 	
-	/**@deprecated No se usa*/
-	public List listarFichasSeccionUA(Long ua_id, Long seccion_id) throws DelegateException {
-		return impl.listarFichasSeccionUA(ua_id, seccion_id);
-	}
-
 	
 	public List<Ficha> listarFichasSeccionUA(Long ua_id, String codEstSecc,
 			String[] codEstHV, String[] codEstMat) throws DelegateException {
 		return impl.listarFichasSeccionUA(ua_id, codEstSecc, codEstHV,
 				codEstMat);
 	}
-
 	
-	/**@deprecated No se usa*/
-	public List listarFichasSeccionUA(Long ua_id, String codEstSecc) throws DelegateException {
-		return impl.listarFichasSeccionUA(ua_id, codEstSecc);
-	}
-
-	
-	/**@deprecated No se usa*/
-	public List listarFichasSeccion(Long id) throws DelegateException {
-		return impl.listarFichasSeccion(id);
-	}
-
 	
 	public List listarFichasSeccionTodas(Long id) throws DelegateException {
 		return impl.listarFichasSeccionTodas(id);
 	}
-
-	/**@deprecated No se usa*/
-	public List listarFichasSeccion(String codEstSecc, boolean caducados) throws DelegateException {
-		return impl.listarFichasSeccion(codEstSecc, caducados);
-	}
-
 	
-	public Long crearFichaUA(Long unidad_id, Long seccion_id, Long ficha_id)
-			throws DelegateException {
-		return impl.crearFichaUA(unidad_id, seccion_id, ficha_id);
-	}
 	
 	public Long crearFichaUA2(Long unidad_id, Long seccion_id, Long ficha_id)
 			throws DelegateException {
 		return impl.crearFichaUA2(unidad_id, seccion_id, ficha_id);
 	}
 	
-	
-	/**@deprecated usado por back antiguo*/
-	public void subirFichaUA(Long id) throws DelegateException {
-		impl.subirFichaUA(id);
-	}
-
-	
-	/**@deprecated usado por back antiguo*/
-	public void actualizarOrdenFichasUA(Enumeration params, Map valores) throws DelegateException {
-		impl.actualizarOrdenFichasUA(params, valores);
-	}
-
 	
 	public void borrarFichaUA(Long id) throws DelegateException {
 		impl.borrarFichaUA(id);
@@ -211,24 +111,6 @@ public class FichaDelegate implements FichaDelegateI {
 	}
 	
 	
-	/**@deprecated usado por back antiguo*/
-	public List buscarFichasHechoVital(Long id) throws DelegateException {
-		return impl.buscarFichasHechoVital(id);
-	}
-
-	
-	/**@deprecated usado por back antiguo*/
-	public void anyadirHechoVital(Long id, Long ficha_id) throws DelegateException {
-		impl.anyadirHechoVital(id, ficha_id);
-	}
-
-	
-	/**@deprecated usado por back antiguo*/
-	public void eliminarHechoVital(Long id, Long ficha_id) throws DelegateException {
-		impl.eliminarHechoVital(id, ficha_id);
-	}
-
-	
 	public void indexInsertaFicha(Ficha fic, ModelFilterObject filter)
 			throws DelegateException {
 		impl.indexInsertaFicha(fic, filter);
@@ -238,22 +120,7 @@ public class FichaDelegate implements FichaDelegateI {
 	public void indexBorraFicha(Long id) throws DelegateException {
 		impl.indexBorraFicha(id);
 	}
-
-	/**@deprecated No se usa*/
-	public List getFichasMicrosite(String idsite) throws DelegateException {
-		return impl.getFichasMicrosite(idsite);
-	}
-
-	/**@deprecated No se usa*/
-	public List getFichasForo(String idforo) throws DelegateException {
-		return impl.getFichasForo(idforo);
-	}
-
-	/**@deprecated No se usa*/
-	public List getFichasTema(String idtema) throws DelegateException {
-		return impl.getFichasTema(idtema);
-	}
-
+	
 	public ModelFilterObject obtenerFilterObject(Ficha ficha)
 			throws DelegateException {
 		return impl.obtenerFilterObject(ficha);
@@ -268,13 +135,6 @@ public class FichaDelegate implements FichaDelegateI {
 	public void setContenidos_web(Hashtable contenidos_web) throws DelegateException {
 		impl.setContenidos_web(contenidos_web);
 	}
-
-	/**@deprecated No se usa*/
-	public List<Ficha> buscarFichasCrawler(String busqueda, String idioma,
-			Date dataInici, Date dataFi) throws DelegateException {
-		return impl.buscarFichasCrawler(busqueda, idioma, dataInici, dataFi);
-	}
-
 	
 	public List<FichaUA> listFichasUA(Long idFicha) throws DelegateException {
            return impl.listFichasUA(idFicha);
@@ -294,21 +154,5 @@ public class FichaDelegate implements FichaDelegateI {
 	public int buscarFichasCaducadas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad )throws DelegateException {
 		return impl.buscarFichasCaducadas(listaUnidadAdministrativaId,fechaCaducidad);
 	}
-
 	
-	/**@deprecated No se usa*/
-	public void crearSeccionesFichas( UnidadAdministrativa ua, String[] listaSeccionesFicha ) throws DelegateException {
-		impl.crearSeccionesFichas(ua, listaSeccionesFicha);
-	}
-
-	
-	/** @deprecated No se usa */
-	public List buscarFichas(Map parametros, String traduccion,
-			UnidadAdministrativa ua, Long idFetVital, Long idMateria, Long idPublic,
-			boolean uaFilles, boolean uaMeves, String campoOrdenacion,
-			String orden) throws DelegateException {
-		
-		return impl.buscarFichas(parametros, traduccion, ua, idFetVital, idMateria, idPublic, uaFilles, uaMeves, campoOrdenacion, orden);
-	} 
-		
 }

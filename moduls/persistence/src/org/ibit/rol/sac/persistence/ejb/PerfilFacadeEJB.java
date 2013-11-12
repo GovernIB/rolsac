@@ -193,51 +193,8 @@ public abstract class PerfilFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-
     
-    /**
-     * Obtiene un perfil.
-     * 
-     * @ejb.interface-method
-     * 
-     * @ejb.permission unchecked="true"
-     * 
-     * @param	codigo	Indica el código estándar del perfil.
-     * 
-     * @return Devuelve <code>PerfilCiudadano</code> solicitado.
-     */
-    public PerfilCiudadano obtenerPerfil(String codigo) {
-    	
-        Session session = getSession();
-        try {
-        	
-            Criteria criteri = session.createCriteria(PerfilCiudadano.class);
-            criteri.add( Expression.eq("codigoEstandard", codigo) );
-            criteri.setCacheable(true);
-            List result = criteri.list();
-
-            if ( result.isEmpty() )
-                return null;
-
-            PerfilCiudadano perfil = (PerfilCiudadano) result.get(0);
-            Hibernate.initialize( perfil.getIconosFamilia() );
-            Hibernate.initialize( perfil.getIconosMateria() );
-
-            return perfil;
-            
-        } catch (HibernateException he) {
-        	
-            throw new EJBException(he);
-            
-        } finally {
-        	
-            close(session);
-            
-        }
-        
-    }
     
-
     /**
      * Borra un perfil de usuario.
      * 

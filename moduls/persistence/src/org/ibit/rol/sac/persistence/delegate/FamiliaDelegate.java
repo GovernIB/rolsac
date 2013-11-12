@@ -14,48 +14,37 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  * 
  */
 
-public class FamiliaDelegate  {
-
+public class FamiliaDelegate
+{
 	FamiliaDelegateI impl;
-
+	
+	
 	public FamiliaDelegateI getImpl() {
 		return impl;
 	}
-
-
+	
 	public void setImpl(FamiliaDelegateI impl) {
 		this.impl = impl;
 	}
-
-
+	
 	public void borrarFamilia(Long id) throws DelegateException {
 		impl.borrarFamilia(id);
 	}
-
-
+	
 	public Long grabarFamilia(Familia familia) throws DelegateException {
 		return impl.grabarFamilia(familia);
 	}
-
-
+	
 	public ResultadoBusqueda listarFamilias(int pagina, int resultats, String idioma) throws DelegateException {
 		return impl.listarFamilias(pagina, resultats, idioma);
 	}
-
-
+	
 	public List listarFamilias() throws DelegateException {
 		return impl.listarFamilias();
 	}
-
-
+	
 	public Familia obtenerFamilia(Long id) throws DelegateException {
 		return impl.obtenerFamilia(id);
 	}
-
-
-	/** @deprecated No se usa */
-	public boolean tieneProcedimientos(Long id) throws DelegateException {
-		return impl.tieneProcedimientos(id);
-	}
-
+	
 }

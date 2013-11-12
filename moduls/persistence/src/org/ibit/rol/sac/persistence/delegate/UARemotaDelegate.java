@@ -20,9 +20,9 @@ import java.rmi.RemoteException;
 /**
  * Business delegate para manipular fichas.
  */
-public class UARemotaDelegate implements StatelessDelegate {
-
-    /* ========================================================= */
+public class UARemotaDelegate implements StatelessDelegate
+{
+	/* ========================================================= */
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 	
@@ -34,7 +34,6 @@ public class UARemotaDelegate implements StatelessDelegate {
         }
 	}
 	
-	
 	public Long grabarUARemota(final String idRemoto, UnidadAdministrativaRemota uaRemota, Long idPadre , String ceTratamiento ,String[] ceMaterias) throws DelegateException{
 		try {
             return getFacade().grabarUARemota(idRemoto, uaRemota, idPadre, ceTratamiento,ceMaterias);
@@ -42,17 +41,6 @@ public class UARemotaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
 	}
-	
-	
-	/** @deprecated No se usa. */
-	public UnidadAdministrativaRemota obtenerUARemotaAdmin(final Long idAdmin, final Long idExtUA) throws DelegateException{
-		try {
-            return getFacade().obtenerUARemotaAdmin(idAdmin, idExtUA);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-	}
-	
 	
 	public UnidadAdministrativaRemota obtenerUARemota(final String idRemoto, final Long idExtUA) throws DelegateException{
 		try {
@@ -62,8 +50,7 @@ public class UARemotaDelegate implements StatelessDelegate {
         }
 	}
 	
-
-    public UnidadAdministrativaRemota obtenerUARemota(Long id) throws DelegateException{
+	public UnidadAdministrativaRemota obtenerUARemota(Long id) throws DelegateException{
 		try {
             return getFacade().obtenerUARemota(id);
         } catch (RemoteException e) {
@@ -80,18 +67,6 @@ public class UARemotaDelegate implements StatelessDelegate {
         }
 	}
 	
-	
-	/** @deprecated No se usa. */
-	@SuppressWarnings("unchecked")
-	public Set<UnidadAdministrativaRemota> listarUARemotas(final String idRemoto) throws DelegateException{
-		try {
-            return getFacade().listarUARemotas(idRemoto);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-	}
-
-	
 	public void borrarUARemota(final String idRemoto, final Long idExtUA) throws DelegateException{
 		try {
             getFacade().borrarUARemota(idRemoto,idExtUA);
@@ -100,38 +75,16 @@ public class UARemotaDelegate implements StatelessDelegate {
         }
 	}
 	
-
-	/** @deprecated No se usa. */
-    public List<UnidadAdministrativaRemota> buscar(final String busqueda, final String idioma) throws DelegateException {
-        try {
-            return getFacade().buscar(busqueda, idioma);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-
-    public List<UnidadAdministrativaRemota> listarUARemotasPorAmbito(Long ambito) throws DelegateException {
-        try {
-            return getFacade().listarUARemotasPorAmbito(ambito);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    
     public void borrarUnidadAdministrativaRemota(Long id) throws DelegateException {
         try {
             getFacade().borrarUnidadAdministrativaRemota(id);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         } catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
         }
     }
     
-
     public void borrarUnidadAdministrativaRaizRemota(Long id) throws DelegateException {
         try {
             getFacade().borrarUnidadAdministrativaRaizRemota(id);
@@ -139,7 +92,6 @@ public class UARemotaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-    
     
     public void indexInsertaUARemota(UnidadAdministrativa ua, ModelFilterObject filter) throws DelegateException {
         try {
@@ -149,7 +101,6 @@ public class UARemotaDelegate implements StatelessDelegate {
         }
     }
     
-     
     public EdificioRemoto obtenerEdificioRemoto(Long idExterno,Long idUaRemota) throws DelegateException {
         try {
             return getFacade().obtenerEdificioRemoto(idExterno, idUaRemota);
@@ -157,7 +108,6 @@ public class UARemotaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-    
     
     public EdificioRemoto obtenerEdificioRemoto(String idRemoto,Long idExtEdificio) throws DelegateException {
         try {
@@ -167,7 +117,6 @@ public class UARemotaDelegate implements StatelessDelegate {
         }
     }
     
-    
     public Long grabarEdificioRemoto(EdificioRemoto edificioRemoto) throws DelegateException {
         try {
             return getFacade().grabarEdificioRemoto(edificioRemoto);
@@ -176,7 +125,6 @@ public class UARemotaDelegate implements StatelessDelegate {
         }
     }
     
-    
     public List<Edificio> obtenerEdificiosUA(Long ua) throws DelegateException {
         try {
             return getFacade().obtenerEdificiosUA(ua);
@@ -184,7 +132,6 @@ public class UARemotaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-    
     
     public void borrarEdificioRemoto(Long id) throws DelegateException {
         try {
@@ -196,7 +143,6 @@ public class UARemotaDelegate implements StatelessDelegate {
         }
     }
     
-    
     public void borrarEdificioRemoto(String idRemoto,Long idExt) throws DelegateException {
         try {
             getFacade().borrarEdificioRemoto(idRemoto,idExt);
@@ -206,7 +152,6 @@ public class UARemotaDelegate implements StatelessDelegate {
 			e.printStackTrace();
         }
     }
-    
     
     public void eliminarUnidad(String idRemoto,Long idEdif, Long idUA) throws DelegateException {
         try {
@@ -218,36 +163,16 @@ public class UARemotaDelegate implements StatelessDelegate {
         }
     }
     
-    
-    /** @deprecated No se usa. */
-    public List<Object> listarNovedadesPMA(int length, boolean caducados, Long idRemota) throws DelegateException {
-        try {
-            return getFacade().listarNovedadesPMA(length, caducados, idRemota);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    
-    /** @deprecated No se usa. */
-    public List<Object> listarDestacadosPMA(int length, boolean caducados, Long idRemota) throws DelegateException {
-        try {
-            return getFacade().listarDestacadosPMA(length, caducados, idRemota);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
-
+    
     private Handle facadeHandle;
-
+    
     private UARemotaFacade getFacade() throws RemoteException {
         return (UARemotaFacade) facadeHandle.getEJBObject();
     }
-
+    
     protected UARemotaDelegate() throws DelegateException {
         try {
             UARemotaFacadeHome home = UARemotaFacadeUtil.getHome();
@@ -261,4 +186,5 @@ public class UARemotaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
 }

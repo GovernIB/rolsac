@@ -18,14 +18,15 @@ import java.rmi.RemoteException;
 /**
  * Business delegate para manipular fichas.
  */
-public class FichaRemotaDelegate implements StatelessDelegate {
-
+public class FichaRemotaDelegate implements StatelessDelegate
+{
+	/* ========================================================= */
+    /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
-    /* ======================== M�TODOS DE NEGOCIO ============= */
-    /* ========================================================= */
+	
 	public Long grabarFichaRemota(final String idRemoto, FichaRemota fichaRemota, FichaUATransferible[] fichasUAT, String[] ceMaterias, String[] ceHechos)  throws DelegateException{
 		try {
-            return getFacade().grabarFichaRemota(idRemoto,fichaRemota, fichasUAT, ceMaterias, ceHechos);
+            return getFacade().grabarFichaRemota(idRemoto, fichaRemota, fichasUAT, ceMaterias, ceHechos);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
@@ -39,7 +40,7 @@ public class FichaRemotaDelegate implements StatelessDelegate {
         }
 	}
 	
-	public FichaRemota obtenerFichaRemota(final String idRemoto, final Long idExtFicha) throws DelegateException{
+	public FichaRemota obtenerFichaRemota(final String idRemoto, final Long idExtFicha) throws DelegateException {
 		try {
             return getFacade().obtenerFichaRemota(idRemoto,idExtFicha);
         } catch (RemoteException e) {
@@ -47,19 +48,9 @@ public class FichaRemotaDelegate implements StatelessDelegate {
         }
 	}
 	
-	public FichaRemota obtenerFichaRemota(final Long idExtFicha, final Long idAdmin) throws DelegateException{
+	public FichaRemota obtenerFichaRemota(final Long idExtFicha, final Long idAdmin) throws DelegateException {
 		try {
             return getFacade().obtenerFichaRemota(idExtFicha,idAdmin);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-	}
-	
-	/** @deprecated No se usa */
-	@SuppressWarnings("unchecked")
-	public Set<FichaRemota> listarFichasRemotas(final String idRemoto) throws DelegateException{
-		try {
-            return getFacade().listarFichasRemotas(idRemoto);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
@@ -80,72 +71,17 @@ public class FichaRemotaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
 	}
-
-	/** @deprecated No se usa */
-    public List<FichaRemota> listarFichasRemotasSeccionUA(Long ua_id, String codEstSecc) throws DelegateException{
-        try {
-            return getFacade().listarFichasRemotasSeccionUA(ua_id, codEstSecc);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    /** @deprecated No se usa */
-    public List<FichaRemota> listarFichasRemotasSeccionUAMateria(Long ua_id, String codEstSecc, String codEstMateria) throws DelegateException{
-        try {
-            return getFacade().listarFichasRemotasSeccionUAMateria(ua_id, codEstSecc, codEstMateria);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    /** @deprecated No se usa */
-    public List<FichaRemota> listarFichasRemotasSeccionUAHechoVital(Long ua_id, String codEstSecc, String codEstHV) throws DelegateException{
-        try {
-            return getFacade().listarFichasRemotasSeccionUAHechoVital(ua_id, codEstSecc, codEstHV);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    /** @deprecated No se usa */
-    public List listarFichasRecientes(int length,boolean caducados) throws DelegateException {
-        try {
-            return getFacade().listarFichasRecientes(length,caducados);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    /** @deprecated No se usa */
-    public List listarFichasMasComentadas(int length,boolean caducados) throws DelegateException {
-        try {
-            return getFacade().listarFichasMasComentadas(length,caducados);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    /** @deprecated No se usa */
-    public List listarFichasMasVisitadas(int length,boolean caducados) throws DelegateException {
-        try {
-            return getFacade().listarFichasMasVisitadas(length,caducados);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-
-    /* ========================================================= */
+	
+	/* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
-
+	
     private Handle facadeHandle;
-
+    
     private FichaRemotaFacade getFacade() throws RemoteException {
         return (FichaRemotaFacade) facadeHandle.getEJBObject();
     }
-
+    
     protected FichaRemotaDelegate() throws DelegateException {
         try {
             FichaRemotaFacadeHome home = FichaRemotaFacadeUtil.getHome();
@@ -159,4 +95,5 @@ public class FichaRemotaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
 }

@@ -17,15 +17,14 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 /**
  * Business delegate para manipular familias.
  */
-public class FamiliaDelegateImpl implements StatelessDelegate, FamiliaDelegateI{
-
+public class FamiliaDelegateImpl implements StatelessDelegate, FamiliaDelegateI
+{
 	private static final long serialVersionUID = -5255731439556042563L;
 	
     /* ========================================================= */
-    /* ======================== M�TODOS DE NEGOCIO ============= */
+    /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
-
-
+	
 	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.FamiliaDelegateI#grabarFamilia(org.ibit.rol.sac.model.Familia)
 	 */
@@ -36,7 +35,7 @@ public class FamiliaDelegateImpl implements StatelessDelegate, FamiliaDelegateI{
             throw new DelegateException(e);
         }
     }
-
+    
     public ResultadoBusqueda listarFamilias(int pagina, int resultats, String idioma) throws DelegateException {
     	try {
     		return getFacade().listarFamilias(pagina, resultats, idioma);
@@ -55,7 +54,7 @@ public class FamiliaDelegateImpl implements StatelessDelegate, FamiliaDelegateI{
             throw new DelegateException(e);
         }
     }
-
+    
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.FamiliaDelegateI#obtenerFamilia(java.lang.Long)
 	 */
@@ -66,18 +65,7 @@ public class FamiliaDelegateImpl implements StatelessDelegate, FamiliaDelegateI{
             throw new DelegateException(e);
         }
     }
-
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FamiliaDelegateI#tieneProcedimientos(java.lang.Long)
-	 */
-    public boolean tieneProcedimientos(Long id) throws DelegateException {
-        try {
-            return getFacade().tieneProcedimientos(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
+    
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.FamiliaDelegateI#borrarFamilia(java.lang.Long)
 	 */
@@ -88,17 +76,17 @@ public class FamiliaDelegateImpl implements StatelessDelegate, FamiliaDelegateI{
             throw new DelegateException(e);
         }
     }
-
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
-
+    
     private Handle facadeHandle;
-
+    
     private FamiliaFacade getFacade() throws RemoteException {
         return (FamiliaFacade) facadeHandle.getEJBObject();
     }
-
+    
     protected FamiliaDelegateImpl() throws DelegateException {
         try {
             FamiliaFacadeHome home = FamiliaFacadeUtil.getHome();
@@ -112,4 +100,5 @@ public class FamiliaDelegateImpl implements StatelessDelegate, FamiliaDelegateI{
             throw new DelegateException(e);
         }
     }
+    
 }

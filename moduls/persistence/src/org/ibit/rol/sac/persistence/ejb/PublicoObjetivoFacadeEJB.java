@@ -215,35 +215,8 @@ public abstract class PublicoObjetivoFacadeEJB extends HibernateEJB {
         }
         
     }
-
     
-    /**
-     * @deprecated No se usa 
-     * Obtiene un Publico Objetivo segun el titulo.
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public PublicoObjetivo obtenerPublicoObjetivoPorTitulo(String titulo) {
-        Session session = getSession();
-        try {
-            Query query = session.getNamedQuery("publico.byname");
-            query.setParameter("titulo", titulo);
-            query.setMaxResults(1);
-            query.setCacheable(true);
-            List<PublicoObjetivo> result = castList(PublicoObjetivo.class, query.list());
-            if (result.isEmpty()) {
-                return null;
-            }
-            PublicoObjetivo publico = (PublicoObjetivo) result.get(0);
-            return publico;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-
-
+    
     /**
      * Borra un Publico Objetivo.
      * 
@@ -453,7 +426,7 @@ public abstract class PublicoObjetivoFacadeEJB extends HibernateEJB {
     	try {
     		
     		StringBuilder consulta = new StringBuilder("select pubObj.orden from PublicoObjetivo as pubObj ");
-    		consulta.append("group by pubObj.orden");
+    		consulta.append("group by pubObj.orden ");
     		consulta.append("having count(pubObj.orden) > 1");
     		
     		Query query = session.createQuery( consulta.toString() );

@@ -19,49 +19,21 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 /**
  * Business delegate para manipular Agrupaciones Hechos Vitales.
  */
-public class AgrupacionHVDelegate implements StatelessDelegate {
-
-    /* ========================================================= */
+public class AgrupacionHVDelegate implements StatelessDelegate
+{
+	/* ========================================================= */
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
-
-	/** @deprecated Utilizado únicamente en el back antiguo. */
-    public Long grabarAgrupacionHV(AgrupacionHechoVital agrHechoVital) throws DelegateException {
-        try {
-            return getFacade().grabarAgrupacionHV(agrHechoVital);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    /** @deprecated Utilizado únicamente en el back antiguo. */
-    @SuppressWarnings("unchecked")
-	public List<AgrupacionHechoVital> listarAgrupacionHV() throws DelegateException {
-        try {
-            return getFacade().listarAgrupacionHV();
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    public AgrupacionHechoVital obtenerAgrupacionHV(Long id) throws DelegateException {
+	
+	public AgrupacionHechoVital obtenerAgrupacionHV(Long id) throws DelegateException {
         try {
             return getFacade().obtenerAgrupacionHV(id);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
-
-    /** @deprecated No se usa */
-    public AgrupacionHechoVital obtenerAgrupacionHVPorNombre(String nombre) throws DelegateException {
-        try {
-            return getFacade().obtenerAgrupacionHVPorNombre(nombre);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    public void borrarAgrupacionHV(Long id) throws DelegateException {
+	
+	public void borrarAgrupacionHV(Long id) throws DelegateException {
         try {
             getFacade().borrarAgrupacionHV(id);
         } catch (RemoteException e) {
@@ -100,37 +72,7 @@ public class AgrupacionHVDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-    
-	/** @deprecated  No se utiliza */
-    @SuppressWarnings("unchecked")
-	public List<HechoVitalAgrupacionHV> listarAgrupacionesHVHechosVitales() throws DelegateException {
-        try {
-            return getFacade().listarAgrupacionesHVHechosVitales();
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    /** @deprecated  No se utiliza */
-    @SuppressWarnings("unchecked")
-	public List<HechoVitalAgrupacionHV> listarAgrupacionesHVPorPublicoObjetivo(Long idPubObj) throws DelegateException {
-        try {
-            return getFacade().listarAgrupacionesHVPorPublicoObjetivo(idPubObj);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    /** @deprecated  No se utiliza */
-    @SuppressWarnings("unchecked")
-    public List<AgrupacionHechoVital> buscar(final String nombre, final String idioma) throws DelegateException {
-        try {
-            return getFacade().buscar(nombre, idioma);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
+	
     public Long guardarAgrupacionHV(AgrupacionHechoVital hechov, List<HechoVitalAgrupacionHV> llistaFetsVitalsOld) throws DelegateException {
     	 try {
              return getFacade().guardarAgrupacionHV(hechov,llistaFetsVitalsOld);
@@ -163,5 +105,5 @@ public class AgrupacionHVDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
 }

@@ -14,9 +14,9 @@ import org.ibit.rol.sac.persistence.util.FichaResumenFacadeUtil;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
-public class FichaResumenDelegateImpl implements StatelessDelegate, FichaResumenDelegateI {
-	
-    /* ========================================================= */
+public class FichaResumenDelegateImpl implements StatelessDelegate, FichaResumenDelegateI
+{
+	/* ========================================================= */
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 	
@@ -30,18 +30,17 @@ public class FichaResumenDelegateImpl implements StatelessDelegate, FichaResumen
             throw new DelegateException(e);
         }
     }
-
     
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
-
+    
     private Handle facadeHandle;
-
+    
     private FichaResumenFacade getFacade() throws RemoteException {
         return (FichaResumenFacade) facadeHandle.getEJBObject();
     }
-
+    
     protected FichaResumenDelegateImpl() throws DelegateException {
         try {
             FichaResumenFacadeHome home = FichaResumenFacadeUtil.getHome();
@@ -55,4 +54,5 @@ public class FichaResumenDelegateImpl implements StatelessDelegate, FichaResumen
             throw new DelegateException(e);
         }
     }
+    
 }

@@ -472,7 +472,6 @@
         -->
         <antcall target="update.integracion"/>
         <antcall target="update.ws"/>
-        <antcall target="update.back"/>
         <antcall target="update.back2"/>
         <antcall target="update.traspasboib"/>
         <antcall target="update.apiws"/>

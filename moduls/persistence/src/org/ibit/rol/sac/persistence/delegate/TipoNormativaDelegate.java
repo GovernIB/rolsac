@@ -55,16 +55,7 @@ public class TipoNormativaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
-    /** @deprecated Se usa desde el back antiguo */
-    public boolean tieneNormativas(Long id) throws DelegateException {
-        try {
-            return getFacade().tieneNormativas(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
+    
     public void borrarTipoNormativa(Long id) throws DelegateException {
         try {
             getFacade().borrarTipoNormativa(id);

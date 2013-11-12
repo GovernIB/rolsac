@@ -63,29 +63,7 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
             throw new DelegateException(e);
         }
     }
-
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#buscarFichas(java.util.Map, java.util.Map)
-	 */
-    public List buscarFichas(Map parametros, Map traduccion) throws DelegateException {
-        try {
-            return getFacade().buscarFichas(parametros, traduccion);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#buscarFichas(java.lang.String)
-	 */
-    public List buscarFichas(String texto) throws DelegateException {
-        try {
-            return getFacade().buscarFichas(texto);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }  
-
+	
     /* (non-Javadoc)
      * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#buscarFichas(java.util.Map, java.util.Map, org.ibit.rol.sac.model.UnidadAdministrativa, boolean, boolean)
      */
@@ -106,41 +84,8 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
-    }              
+    }
     
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#listarFichas()
-	 */
-    public List listarFichas() throws DelegateException {
-        try {
-            return getFacade().listarFichas();
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#listarFichasCrawler()
-	 */
-    public List listarFichasCrawler() throws DelegateException {
-        try {
-            return getFacade().listarFichasCrawler();
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#listarFichasThin()
-	 */
-    public List listarFichasThin() throws DelegateException {
-        try {
-            return getFacade().listarFichasThin();
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#obtenerFicha(java.lang.Long)
 	 */
@@ -152,50 +97,6 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
         }
     }
     
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#buscarFichasMateria(java.lang.Long)
-	 */
-    public List buscarFichasMateria(Long id) throws DelegateException {
-        try {
-            return getFacade().buscarFichasMateria(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#buscarFichasHuerfanas()
-	 */
-    public List buscarFichasHuerfanas() throws DelegateException {
-        try {
-            return getFacade().buscarFichasHuerfanas();
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#anyadirMateria(java.lang.Long, java.lang.Long)
-	 */
-    public void anyadirMateria(Long materia_id, Long ficha_id) throws DelegateException {
-        try {
-            getFacade().anyadirMateria(materia_id, ficha_id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#eliminarMateria(java.lang.Long, java.lang.Long)
-	 */
-    public void eliminarMateria(Long materia_id, Long ficha_id) throws DelegateException {
-        try {
-            getFacade().eliminarMateria(materia_id, ficha_id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#obtenerIconoFicha(java.lang.Long)
 	 */
@@ -228,18 +129,7 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
             throw new DelegateException(e);
         }
     }
-
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#listarFichasUnidad(java.lang.Long)
-	 */
-    public List listarFichasUnidad(Long unidad_id) throws DelegateException {
-        try {
-            return getFacade().listarFichasUnidad(unidad_id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
+    
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#borrarFicha(java.lang.Long)
 	 */
@@ -250,18 +140,7 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
             throw new DelegateException(e);
         }
     }
-
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#listarFichasSeccionUA(java.lang.Long, java.lang.Long)
-	 */
-    public List listarFichasSeccionUA(Long ua_id, Long seccion_id) throws DelegateException {
-        try {
-            return getFacade().listarFichasSeccionUA(ua_id, seccion_id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
+    
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#listarFichasSeccionUA(java.lang.Long, java.lang.String, java.lang.String[], java.lang.String[])
 	 */
@@ -273,29 +152,6 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
             throw new DelegateException(e);
         }
     }
-
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#listarFichasSeccionUA(java.lang.Long, java.lang.String)
-	 */
-    public List listarFichasSeccionUA(Long ua_id, String codEstSecc) throws DelegateException {
-        try {
-            return getFacade().listarFichasSeccionUA(ua_id, codEstSecc);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#listarFichasSeccion(java.lang.Long)
-	 */
-    public List listarFichasSeccion(Long id) throws DelegateException {
-        try {
-            return getFacade().listarFichasSeccion(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
     
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#listarFichasSeccionTodas(java.lang.Long)
@@ -303,30 +159,6 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
     public List listarFichasSeccionTodas(Long id) throws DelegateException {
         try {
             return getFacade().listarFichasSeccionTodas(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    /*PORMAD*/
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#listarFichasSeccion(java.lang.String, boolean)
-	 */
-    public List listarFichasSeccion(String codEstSecc,boolean caducados) throws DelegateException {
-        try {
-            return getFacade().listarFichasSeccion(codEstSecc,caducados);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#crearFichaUA(java.lang.Long, java.lang.Long, java.lang.Long)
-	 */
-    public Long crearFichaUA(Long unidad_id, Long seccion_id, Long ficha_id)
-            throws DelegateException {
-        try {
-            return getFacade().crearFichaUA(unidad_id, seccion_id, ficha_id);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
@@ -339,28 +171,6 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
             throws DelegateException {
         try {
             return getFacade().crearFichaUA2(unidad_id, seccion_id, ficha_id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#subirFichaUA(java.lang.Long)
-	 */
-    public void subirFichaUA(Long id) throws DelegateException {
-        try {
-            getFacade().subirFichaUA(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#actualizarOrdenFichasUA(java.util.Enumeration, java.util.Map)
-	 */
-    public void actualizarOrdenFichasUA(Enumeration params, Map valores) throws DelegateException {
-        try {
-            getFacade().actualizarOrdenFichasUA(params, valores);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
@@ -389,39 +199,6 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
     }
     
     /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#buscarFichasHechoVital(java.lang.Long)
-	 */
-    public List buscarFichasHechoVital(Long id) throws DelegateException {
-        try {
-            return getFacade().buscarFichasHechoVital(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#anyadirHechoVital(java.lang.Long, java.lang.Long)
-	 */
-    public void anyadirHechoVital(Long id, Long ficha_id) throws DelegateException {
-        try {
-            getFacade().anyadirHechoVital(id, ficha_id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#eliminarHechoVital(java.lang.Long, java.lang.Long)
-	 */
-    public void eliminarHechoVital(Long id, Long ficha_id) throws DelegateException {
-        try {
-            getFacade().eliminarHechoVital(id, ficha_id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#indexInsertaFicha(org.ibit.rol.sac.model.Ficha, org.ibit.lucene.indra.model.ModelFilterObject)
 	 */
     public void indexInsertaFicha(Ficha fic, ModelFilterObject filter) throws DelegateException {
@@ -444,39 +221,6 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
     }
     
     /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#getFichasMicrosite(java.lang.String)
-	 */
-    public List getFichasMicrosite(String idsite) throws DelegateException {
-        try {
-            return getFacade().getFichasMicrosite(idsite);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }		
-		
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#getFichasForo(java.lang.String)
-	 */
-    public List getFichasForo(String idforo) throws DelegateException {
-        try {
-            return getFacade().getFichasForo(idforo);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#getFichasTema(java.lang.String)
-	 */
-    public List getFichasTema(String idtema) throws DelegateException {
-        try {
-            return getFacade().getFichasTema(idtema);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#obtenerFilterObject(org.ibit.rol.sac.model.Ficha)
 	 */
     public ModelFilterObject obtenerFilterObject(Ficha ficha) throws DelegateException {
@@ -485,7 +229,7 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
-    }    
+    }
     
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#getContenidos_web()
@@ -507,17 +251,6 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
          } catch (RemoteException e) {
              throw new DelegateException(e);
          }
-	}
-    
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#buscarFichasCrawler(java.lang.String, java.lang.String, java.util.Date, java.util.Date)
-	 */
-	public List<Ficha>  buscarFichasCrawler(final String busqueda, final String idioma,final Date dataInici, final Date dataFi) throws DelegateException {
-		 try {
-            return getFacade().buscarFichasCrawler(busqueda, idioma, dataInici, dataFi);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
 	}
 	
 	/* (non-Javadoc)
@@ -556,14 +289,7 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
 	       }
 	}
 	
-	public void crearSeccionesFichas( UnidadAdministrativa ua, String[] listaSeccionesFicha ) throws DelegateException {
-		try {
-	           getFacade().crearSeccionesFichas(ua, listaSeccionesFicha);
-	       } catch (RemoteException e) {
-	           throw new DelegateException(e);
-	       }
-	}
-
+	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

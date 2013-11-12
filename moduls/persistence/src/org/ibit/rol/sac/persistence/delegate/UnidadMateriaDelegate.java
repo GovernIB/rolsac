@@ -14,11 +14,12 @@ import org.ibit.rol.sac.persistence.util.UnidadMateriaFacadeUtil;
 /**
  * Business delegate para manipular Unidades Materia
  */
-public class UnidadMateriaDelegate implements StatelessDelegate{
-      /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+public class UnidadMateriaDelegate implements StatelessDelegate
+{
+	/* ========================================================= */
+    /* ======================== MÃ‰TODOS DE NEGOCIO ============= */
     /* ========================================================= */
-
+	
     public Long grabarUnidadMateria(UnidadMateria unidadMateria, Long unidad_id, Long materia_id) throws DelegateException {
         try {
             return getFacade().grabarUnidadMateria(unidadMateria, unidad_id, materia_id);
@@ -26,15 +27,7 @@ public class UnidadMateriaDelegate implements StatelessDelegate{
             throw new DelegateException(e);
         }
     }
-
-    public UnidadMateria obtenerUnidadMateria(Long id) throws DelegateException {
-        try {
-            return getFacade().obtenerUnidadMateria(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
+    
     public void borrarUnidadMateria(Long id) throws DelegateException {
         try {
             getFacade().borrarUnidadMateria(id);
@@ -42,17 +35,17 @@ public class UnidadMateriaDelegate implements StatelessDelegate{
             throw new DelegateException(e);
         }
     }
-
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
-
+    
     private Handle facadeHandle;
-
+    
     private UnidadMateriaFacade getFacade() throws RemoteException {
         return (UnidadMateriaFacade) facadeHandle.getEJBObject();
     }
-
+    
     protected UnidadMateriaDelegate() throws DelegateException {
         try {
             UnidadMateriaFacadeHome home = UnidadMateriaFacadeUtil.getHome();
@@ -66,5 +59,5 @@ public class UnidadMateriaDelegate implements StatelessDelegate{
             throw new DelegateException(e);
         }
     }
-
+    
 }

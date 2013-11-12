@@ -117,88 +117,8 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-
-    /**
-     * Actualiza los ordenes de las fichas de una seccion segun el orden de los campos del form
-     * 
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-     */
-    public void actualizarOrdenFichasSeccion(Long id, Enumeration params, Map valores) {
-
-        Session session = getSession();
-        try {
-            Seccion seccion = obtenerSeccion(id);
-            int valor_orden = 0;
-            Set<FichaUA> fichas = seccion.getFichasUA();
-            Set<FichaUA> fichas_ordenadas = new HashSet<FichaUA>();
-            while (params.hasMoreElements()) {
-                String paramName = (String) params.nextElement();
-                if (paramName.startsWith("orden_fic")) {
-                    Long id1 = new Long(paramName.substring(9));
-                    String[] parametros = (String[]) valores.get(paramName);
-                    valor_orden = Integer.parseInt(parametros[0]);
-
-                    Iterator<FichaUA> itfic = fichas.iterator();
-                    FichaUA fic = null;
-                    while (itfic.hasNext()) {
-                        fic = (FichaUA) itfic.next();
-                        if (fic.getId().longValue() == id1.longValue()) {
-                            fic.setOrdenseccion(valor_orden);
-                            fichas_ordenadas.add(fic);
-                        }
-                    }
-                }
-            }
-            seccion.setFichasUA(fichas_ordenadas);
-            session.update(seccion);
-            session.flush();
-
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-
-    /**
-     * Abre huecos en los ordenes de las fichas de una sección reordeno las fichas de 5 en 5 para dejar huecos para
-     * moverlas
-     * 
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-     */
-    public void actualizarOrdenFichasSeccionHuecos(Long id) {
-
-        Session session = getSession();
-        try {
-            Seccion seccion = obtenerSeccion(id);
-
-            // Abro huecos q permitira luego intercalar fichas
-            Set<FichaUA> fichas = seccion.getFichasUA();
-            Set<FichaUA> fichas_ordenadas = new HashSet<FichaUA>();
-
-            int contador = 5;
-
-            Iterator<FichaUA> itfic = fichas.iterator();
-            FichaUA fic = null;
-            while (itfic.hasNext()) {
-                fic = (FichaUA) itfic.next();
-                fic.setOrdenseccion(contador);
-                contador += 5;
-                fichas_ordenadas.add(fic);
-            }
-            seccion.setFichasUA(fichas_ordenadas);
-            session.update(seccion);
-            session.flush();
-
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-
+    
+    
     /**
      * Incrementa el orden de una seccion.
      * 
@@ -235,30 +155,8 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-        
-    /**
-     * Obtiene los ids de FichaUA y Ficha dada la UA y la seccion.
-     * 
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public List<FichaUAFichaIds> obtenerFichaUAFichaIds(long idUA, long idSeccion) {
-        Session session = getSession();
-        try {
-            String select = "select new org.ibit.rol.sac.persistence.util.FichaUAFichaIds(fua.id, fua.ficha.id) " +
-            		"from FichaUA fua where fua.seccion.id = :idSeccion and fua.unidadAdministrativa.id = :idUA";
-            Query query = session.createQuery(select);
-            query.setLong("idSeccion", idSeccion);
-            query.setLong("idUA", idUA);
-            List<FichaUAFichaIds> ids = castList(FichaUAFichaIds.class, query.list() );
-            return ids;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-
+    
+    
     /**
      * Obtiene una seccion determinada.
      * 
@@ -280,57 +178,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-
-    /**
-     * Obtiene una seccion determinada.
-     * 
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public Seccion obtenerSeccion(String codigo) {
-        Session session = getSession();
-        try {
-            Criteria criteri = session.createCriteria(Seccion.class);
-            criteri.add(Expression.eq("codigoEstandard", codigo));
-            List<Seccion> result = castList(Seccion.class, criteri.list());
-            
-            if (result.isEmpty()) {
-                return null;
-            }
-            return (Seccion) result.get(0);
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-
-    /**
-     * Obtiene una seccion determinada segun el nombre.
-     * 
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public Seccion obtenerSeccionPorNombre(String nombre) {
-        Session session = getSession();
-        try {
-            Query query = session.getNamedQuery("secciones.byname");
-            query.setParameter("nombre", nombre);
-            query.setMaxResults(1);
-            query.setCacheable(true);
-            List<Seccion> result = castList(Seccion.class, query.list());
-            if (result.isEmpty()) {
-                return null;
-            }
-            Seccion seccion = (Seccion) result.get(0);
-            // Hibernate.initialize(seccion.getFichasUA());
-            return seccion;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
+    
     
     /**
      * Obtiene una secci�n determinada sin fichasUA.
@@ -568,27 +416,8 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-
-    /**
-     * Lista las secciones padre de una Unidad Administrativa. TODO Fer la query cacheable.
-     * 
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public List<Seccion> listarSeccionesPadreUA(Long id_unidad) {
-        Session session = getSession();
-        try {
-            List<Seccion> secciones = castList(Seccion.class, session
-                    .find("select distinct seccion from Seccion as seccion, seccion.fichasUA as fichas where fichas.unidadAdministrativa.id=? and seccion.padre is null order by seccion.orden",
-                            id_unidad, Hibernate.LONG));
-            return secciones;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-
+    
+    
     /**
      * A partir de un String con el codigo estandar de una Seccion recojo la {@link Seccion} correspondiente
      * 

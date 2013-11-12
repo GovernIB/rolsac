@@ -283,35 +283,7 @@ public class Sincronizador {
 	 * @throws ComunicacionException
 	 */
 	private void recogerProcedimientos(final UnidadAdministrativaRemota ua) throws CapaDeDatosException, ComunicacionException{
-		/*try {
-			log.debug("Recogiendo Procedimientos relacionados");
-			final ProcedimientoTransferible[] procsTransferibles = sincInvoker.recogerProcedimientosRelacionados(ua.getIdExterno(), hechosCE, materiasCE);
-			
-			if(procsTransferibles!=null){
-				log.debug("Procedimientos recogidos");
-				
-				for(ProcedimientoTransferible procTransferible : procsTransferibles){
-					
-					ProcedimientoRemoto procRemoto = procRemotoDelegate.obtenerProcedimientoRemoto(procTransferible.getId(),adminRemota.getId());
-					if(procRemoto==null){
-						procRemoto= new ProcedimientoRemoto();
-					}
-					
-					procRemoto.rellenear(procTransferible);
-					
-					procRemoto.setUnidadAdministrativa(ua);
-                    ua.addProcedimientoLocal(procRemoto);
-					procRemoto.setAdministracionRemota(adminRemota);
-					
-					procRemotoDelegate.grabarProcedimientoRemoto(procRemoto,procTransferible.getCodigoEstandarMaterias(),procTransferible.getCodigoEstandarHV());
-					log.debug("Procedimiento guardado idExt "+ procTransferible.getId());
-				}
-			}
-		} catch (DelegateException e) {
-			throw new CapaDeDatosException(e);
-		} catch (WSInvocatorException e) {
-			throw new ComunicacionException("Fallo en la invocacion del webservice recogerProcedimientosRelacionados",e);
-		}*/
+		
 	}
 	
 	

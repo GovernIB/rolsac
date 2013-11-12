@@ -15,12 +15,12 @@ import java.util.Collection;
 /**
  * Business delegate para manipular Iconos familias.
  */
-public class IconoFamiliaDelegate implements StatelessDelegate {
-
-    /* ========================================================= */
+public class IconoFamiliaDelegate implements StatelessDelegate
+{
+	/* ========================================================= */
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
-
+	
     public Long grabarIconoFamilia(IconoFamilia icono, Long familia_id, Long perfil_id) throws DelegateException {
         try {
             return getFacade().grabarIconoFamilia(icono, familia_id, perfil_id);
@@ -28,7 +28,7 @@ public class IconoFamiliaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
     public IconoFamilia obtenerIconoFamilia(Long id) throws DelegateException {
         try {
             return getFacade().obtenerIconoFamilia(id);
@@ -36,51 +36,33 @@ public class IconoFamiliaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
-    /** @deprecated ünicamente se usa desde back antiguo. */
-    public IconoFamilia obtenerIconoFamilia(Long id_perfil,Long id_fam) throws DelegateException {
-        try {
-            return getFacade().obtenerIconoFamilia(id_perfil,id_fam);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
+    
+    public Archivo obtenerIcono(Long id) throws DelegateException {
+    	try {
+    		return getFacade().obtenerIcono(id);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
     }
-
-     public Archivo obtenerIcono(Long id) throws DelegateException {
-        try {
-            return getFacade().obtenerIcono(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
+    
+    public void borrarIconosFamilia(Collection<Long> iconosABorrar) throws DelegateException {
+    	try {
+    		getFacade().borrarIconosFamilia(iconosABorrar);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
     }
-
-     /** @deprecated ünicamente se usa desde back antiguo. */
-     public void borrarIconoFamilia(Long id) throws DelegateException {
-         try {
-             getFacade().borrarIconoFamilia(id);
-         } catch (RemoteException e) {
-             throw new DelegateException(e);
-         }
-     }
-     
-     public void borrarIconosFamilia(Collection<Long> iconosABorrar) throws DelegateException {
-         try {
-             getFacade().borrarIconosFamilia(iconosABorrar);
-         } catch (RemoteException e) {
-             throw new DelegateException(e);
-         }
-     }
-
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
-
+    
     private Handle facadeHandle;
-
+    
     private IconoFamiliaFacade getFacade() throws RemoteException {
         return (IconoFamiliaFacade) facadeHandle.getEJBObject();
     }
-
+    
     protected IconoFamiliaDelegate() throws DelegateException {
         try {
             IconoFamiliaFacadeHome home = IconoFamiliaFacadeUtil.getHome();
@@ -94,4 +76,5 @@ public class IconoFamiliaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
 }

@@ -154,28 +154,6 @@ public abstract class IconoMateriaFacadeEJB extends HibernateEJB {
 		
 	}
 	
-
-	/**
-	 * @deprecated Únicamente se usa desde el back antiguo 
-	 * Borra un IconoMateria.
-	 * @ejb.interface-method
-	 * @ejb.permission role-name="${role.system},${role.admin}"
-	 */
-	public void borrarIconoMateria(Long id) {
-		Session session = getSession();
-		try {
-			IconoMateria icono = (IconoMateria) session.load(IconoMateria.class, id);
-			icono.getMateria().removeIcono(icono);
-			icono.getPerfil().removeIconoMateria(icono);
-			session.delete(icono);
-			session.flush();
-		} catch (HibernateException he) {
-			throw new EJBException(he);
-		} finally {
-			close(session);
-		}
-	}
-
 	
 	/**
 	 * Borra una coleccion de IconoMateria.

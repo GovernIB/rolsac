@@ -40,502 +40,278 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  *
  * @ejb.transaction type="Required"
  */
-public abstract class EdificioFacadeEJB extends HibernateEJB {
-
+public abstract class EdificioFacadeEJB extends HibernateEJB
+{
 	/**
 	 * Obtiene referencia al ejb de control de Acceso.
 	 * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
 	 */
 	protected abstract AccesoManagerLocal getAccesoManager();
-
+	
 	
 	/**
 	 * @ejb.create-method
-	 * 
 	 * @ejb.permission unchecked="true"
 	 */
-	public void ejbCreate() throws CreateException {
+	public void ejbCreate() throws CreateException
+	{
 		super.ejbCreate();
 	}
-
+	
 	
 	/**
 	 * Crea o actualiza un Edificio.
+	 * 
 	 * @ejb.interface-method
-	 * 
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
-	 * 
 	 * @param edificio	Indica el edificio que se quiere guardar.
-	 * 
 	 * @return Devuelve el identificador del edificio guardado.
 	 */
-	public Long grabarEdificio(Edificio edificio) {
-		
+	public Long grabarEdificio(Edificio edificio)
+	{
 		Session session = getSession();
-		
 		try {
-			
-			if ( edificio.getId() != null ) {
-				
-				if ( !getAccesoManager().tieneAccesoEdificio( edificio.getId() ) ) {
-					
+			if (edificio.getId() != null) {
+				if (!getAccesoManager().tieneAccesoEdificio(edificio.getId())) {
 					throw new SecurityException("No tiene acceso al edificio.");
-					
 				}
-				
 			}
-			
 			session.saveOrUpdate(edificio);
 			session.flush();
-			
-			if( !edificio.getUnidadesAdministrativas().isEmpty() ) {
-				
+			if (!edificio.getUnidadesAdministrativas().isEmpty()) {
 				Actualizador.actualizar(edificio);
 			}
-			
 			return edificio.getId();
 			
 		} catch (HibernateException he) {
-			
 			throw new EJBException(he);
-			
 		} finally {
-			
 			close(session);
-			
 		}
-		
 	}
-
+	
 	
 	/**
 	 * Obtiene un Edificio.
+	 * 
 	 * @ejb.interface-method
-	 * 
 	 * @ejb.permission unchecked="true"
-	 * 
 	 * @param id	Identificador
-	 * 
 	 * @return Devuelve <code>Edificio</code> solititado.
 	 */
-	public Edificio obtenerEdificio(Long id) {
-		
+	public Edificio obtenerEdificio(Long id)
+	{
 		Session session = getSession();
-		
 		try {
-			
-			Edificio edificio = (Edificio) session.load( Edificio.class, id );
-			Hibernate.initialize( edificio.getFotoGrande() );
-			Hibernate.initialize( edificio.getFotoPequenya() );
-			Hibernate.initialize( edificio.getPlano() );
-			Hibernate.initialize( edificio.getUnidadesAdministrativas() );
+			Edificio edificio = (Edificio) session.load(Edificio.class, id);
+			Hibernate.initialize(edificio.getFotoGrande());
+			Hibernate.initialize(edificio.getFotoPequenya());
+			Hibernate.initialize(edificio.getPlano());
+			Hibernate.initialize(edificio.getUnidadesAdministrativas());
 			
 			return edificio;
 			
 		} catch (HibernateException he) {
-			
 			throw new EJBException(he);
-			
 		} finally {
-			
 			close(session);
-			
 		}
-		
 	}
-
+	
 	
 	/**
-	 *  @deprecated	Se utiliza desde el back antiguo.
+	 * Busca todos los edificios que cumplen los criterios de busqueda del nuevo back (sacback2).
 	 *  
-	 * Lista todos los Edificios
-	 * 
 	 * @ejb.interface-method
-	 * 
-	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-	 */
-	public ResultadoBusqueda listarEdificios(int pagina, int resultats, String idioma) {
-		return listarTablaMaestraPaginada(pagina, resultats, listarTMEdificios(idioma));
-	}
-
-	
-	/**
-	 * @deprecated	Se utiliza desde el back antiguo.
-	 * 
-	 * Lista todos los Edificios
-	 * 
-	 * @ejb.interface-method
-	 * 
-	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-	 */
-	public List listarEdificios() {
-		Session session = getSession();
-		try {
-			Criteria criteri = session.createCriteria(Edificio.class);
-			criteri.addOrder( Order.asc("direccion") );
-			return criteri.list();
-		} catch (HibernateException he) {
-			throw new EJBException(he);
-		} finally {
-			close(session);
-		}
-	}
-
-	/**
-	 * @deprecated	ünicamente se utiliza desde el método interno: listarEdificios.
-	 * */
-	private List listarTMEdificios(String idioma) {
-		Session session = getSession();
-
-		try {
-			Query query = session.createQuery("select edificio.id, edificio.direccion, trad.descripcion " +
-					"from Edificio as edificio, edificio.traducciones as trad " +
-					"where index(trad) = :idioma " +
-					"order by edificio.direccion asc");
-
-			query.setParameter("idioma", idioma);
-			return query.list();    		
-		} catch (HibernateException he) {
-			throw new EJBException(he);
-		} finally {
-			close(session);
-		}    	    	
-	}
-
-	
-	/**
-	 * @deprecated Se utiliza en el back antiguo.
-	 * 
-	 * Obtiene una lista de edificios
-	 * 
-	 * @ejb.interface-method
-	 * 
-	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-	 */
-	public List buscarEdificios(Map parametros, Map traduccion) {
-		Session session = getSession();
-		try {
-			List params = new ArrayList();
-			String sQuery = populateQuery(parametros, traduccion, params);
-
-			Query query = session.createQuery("from Edificio as edificio, edificio.traducciones as trad where " + sQuery);
-			for (int i = 0; i < params.size(); i++) {
-				String o = (String)params.get(i);
-				query.setString(i, o);
-			}
-			return query.list();
-		} catch (HibernateException he) {
-			throw new EJBException(he);
-		} finally {
-			close(session);
-		}
-	}
-	
-	
-	/**
-	 * @deprecated Usado en el back antiguo
-	 * Busca todos los edificios que cumplen los criterios de busqueda del nuevo back (sacback2). 
-	 * @ejb.interface-method
-	 * 
 	 * @ejb.permission unchecked="true"
 	 */
-	public ResultadoBusqueda buscarEdificios(Map parametros, Map traduccion, Long idUA, boolean uaFilles, boolean uaMeves, String pagina,String resultats) {
-		
+	public ResultadoBusqueda buscarEdificios(Map parametros, Map traduccion, Long idUA, boolean uaFilles, boolean uaMeves, String pagina,String resultats)
+	{
 		Session session = getSession();
-
-		try {           
-		
+		try {
 			List params = new ArrayList();
 			String i18nQuery = "";
-
 			String mainQuery = "select distinct edificio from Edificio as edificio , edificio.traducciones as trad, edificio.unidadesAdministrativas edua where ";
-
+			
 			if (traduccion.get("idioma") != null) {
 				i18nQuery = populateQuery(parametros, traduccion, params);
 			} else {
 				String paramsQuery = populateQuery(parametros, new HashMap(), params);
 				i18nQuery += "(" + i18nPopulateQuery(traduccion, params) + ") ";
 			}
-
-			String uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA( idUA, uaFilles, uaMeves );                        
-
-			if ( !StringUtils.isEmpty(uaQuery) )            	
+			
+			String uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(idUA, uaFilles, uaMeves);
+			
+			if (!StringUtils.isEmpty(uaQuery)) {
 				uaQuery = " and edua.id in (" + uaQuery + ") ";
-
+			}
+			
 			Query query = session.createQuery(mainQuery + i18nQuery + uaQuery);
-
 			for (int i = 0; i < params.size(); i++) {
 				Object o = params.get(i);
 				query.setParameter(i, o);
 			}
-
+			
 			int resultadosMax = new Integer(resultats).intValue();
 			int primerResultado = new Integer(pagina).intValue() * resultadosMax;
-
 			ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
-
-			resultadoBusqueda.setTotalResultados( query.list().size() );
-
-			if ( resultadosMax != RESULTATS_CERCA_TOTS) {
+			resultadoBusqueda.setTotalResultados(query.list().size());
+			
+			if (resultadosMax != RESULTATS_CERCA_TOTS) {
 				query.setFirstResult(primerResultado);
 				query.setMaxResults(resultadosMax);
-			}            
-
+			}
 			resultadoBusqueda.setListaResultados(query.list());
-
 			return resultadoBusqueda;
-
+			
 		} catch (DelegateException de) {
-			
-			throw new EJBException(de);   
-			
-		} catch (HibernateException he) {
-			
-			throw new EJBException(he);
-			
-		} finally {
-			
-			close(session);
-			
-		}
-		
-	} 
-	
-	
-	/**
-	 * @deprecated	No se utiliza
-	 * 
-	 * Obtiene una lista de edificios
-	 * 
-	 * @ejb.interface-method
-	 * 
-	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-	 */
-	public List buscarEdificiosConMultiidioma(Map parametros, Map traduccion) {
-		Session session = getSession();
-		try {
-			List params = new ArrayList();
-
-			String i18nQuery = "";
-
-			if (traduccion.get("idioma") != null) {
-				i18nQuery = populateQuery(parametros, traduccion, params);
-			} else {
-				String paramsQuery = populateQuery(parametros, new HashMap(), params);
-				if (paramsQuery.length() != 0) {
-					i18nQuery += paramsQuery + " and ";
-				}
-				i18nQuery += "(" + i18nPopulateQuery(traduccion, params) + ")";
-			}
-
-			Query query = session.createQuery("from Edificio as edificio, edificio.traducciones as trad where " + i18nQuery);
-			for (int i = 0; i < params.size(); i++) {
-				String o = (String)params.get(i);
-				query.setString(i, o);
-			}
-			return query.list();
+			throw new EJBException(de);
 		} catch (HibernateException he) {
 			throw new EJBException(he);
 		} finally {
 			close(session);
 		}
 	}
-
-
+	
+	
 	/**
 	 * Obtiene la foto pequenya del edificio.
+	 * 
 	 * @ejb.interface-method
-	 * 
 	 * @ejb.permission unchecked="true"
-	 * 
 	 * @param id	Identificador del edificio.
-	 * 
 	 * @return Devuelve <code>Archivo</code> con la foto del edificio solicitado.
 	 */
-	public Archivo obtenerFotoPequenyaEdificio(Long id) {
-
+	public Archivo obtenerFotoPequenyaEdificio(Long id)
+	{
 		Session session = getSession();
-
 		try {
-
-			Edificio edificio = (Edificio) session.load( Edificio.class, id );
-			Hibernate.initialize( edificio.getFotoPequenya() );
-
+			Edificio edificio = (Edificio) session.load(Edificio.class, id);
+			Hibernate.initialize(edificio.getFotoPequenya());
 			return edificio.getFotoPequenya();
-
+			
 		} catch (HibernateException he) {
-
 			throw new EJBException(he);
-
 		} finally {
-
 			close(session);
-
 		}
-
 	}
-
-
+	
+	
 	/**
 	 * Obtiene la foto grande del edificio.
+	 * 
 	 * @ejb.interface-method
-	 * 
 	 * @ejb.permission unchecked="true"
-	 * 
 	 * @param id	Identificador del edificio.
-	 * 
 	 * @return Devuelve <code>Archivo</code> de la foto del edificio en formato grande.
 	 */
-	public Archivo obtenerFotoGrandeEdificio(Long id) {
-		
+	public Archivo obtenerFotoGrandeEdificio(Long id)
+	{
 		Session session = getSession();
-
 		try {
-
-			Edificio edificio = (Edificio) session.load( Edificio.class, id );
-			Hibernate.initialize( edificio.getFotoGrande() );
-
+			Edificio edificio = (Edificio) session.load(Edificio.class, id);
+			Hibernate.initialize(edificio.getFotoGrande());
 			return edificio.getFotoGrande();
-
+			
 		} catch (HibernateException he) {
-
 			throw new EJBException(he);
-
 		} finally {
-
 			close(session);
-
 		}
-
 	}
 
 
 	/**
 	 * Obtiene el plano del edificio.
+	 * 
 	 * @ejb.interface-method
-	 * 
 	 * @ejb.permission unchecked="true"
-	 * 
 	 * @param id	Identificador del edificio.
-	 * 
 	 * @return Devuelve <code>Archivo</code> con el plano del edificio solicitado.
 	 */
-	public Archivo obtenerPlanoEdificio(Long id) {
-
+	public Archivo obtenerPlanoEdificio(Long id)
+	{
 		Session session = getSession();
-
 		try {
-
 			Edificio edificio = (Edificio) session.load(Edificio.class, id);
-			Hibernate.initialize( edificio.getPlano() );
-
+			Hibernate.initialize(edificio.getPlano());
 			return edificio.getPlano();
-
+			
 		} catch (HibernateException he) {
-
 			throw new EJBException(he);
-
 		} finally {
-
 			close(session);
-
 		}
-
 	}
-
-
+	
+	
 	/**
 	 * Borra un edificio.
+	 * 
 	 * @ejb.interface-method
-	 * 
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
-	 * 
 	 * @param id	Identificador del edificio a borrar.
 	 */
-	public void borrarEdificio(Long id) {
-		
+	public void borrarEdificio(Long id)
+	{
 		Session session = getSession();
-
 		try {
-
 			if (!getAccesoManager().tieneAccesoEdificio(id)) {
-
 				throw new SecurityException("No tiene acceso al edificio.");
-
 			}
-
+			
 			Edificio edificio = (Edificio) session.load(Edificio.class, id);
 			Iterator iterator = edificio.getUnidadesAdministrativas().iterator();
-			while ( iterator.hasNext() ) {
-
+			while (iterator.hasNext()) {
 				UnidadAdministrativa ua = (UnidadAdministrativa) iterator.next();
-				if ( !getAccesoManager().tieneAccesoUnidad( ua.getId(), true ) ) {
-
+				if (!getAccesoManager().tieneAccesoUnidad(ua.getId(), true)) {
 					throw new SecurityException("No tiene acceso a la unidad relacionada con el edificio.");
-
 				}
-
 				ua.getEdificios().remove(edificio);
-
 			}
-
+			
 			session.delete(edificio);
 			session.flush();
 			Actualizador.borrar(edificio);
-
+			
 		} catch (HibernateException he) {
-
 			throw new EJBException(he);
-
 		} finally {
-
 			close(session);
-
 		}
-
 	}
-
-
+	
+	
 	/**
 	 * Obtiene los edificios de una Unidad.
+	 * 
 	 * @ejb.interface-method
-	 * 
 	 * @ejb.permission unchecked="true"
-	 * 
 	 * @param id	Identificador de la unidad administrativa.
-	 * 
 	 * @return Devuelve <code>Set</code> con todos los edificios de la unidad administrativa solicitada.
 	 */
-	public Set listarEdificiosUnidad(Long id) {
-		
+	public Set listarEdificiosUnidad(Long id)
+	{
 		Session session = getSession();
-
 		try {
-
-			UnidadAdministrativa unidadAdministrativa = (UnidadAdministrativa) session.load( UnidadAdministrativa.class, id );
-			Hibernate.initialize( unidadAdministrativa.getEdificios() );
-
+			UnidadAdministrativa unidadAdministrativa = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, id);
+			Hibernate.initialize(unidadAdministrativa.getEdificios());
 			return unidadAdministrativa.getEdificios();
-
+			
 		} catch (HibernateException he) {
-
 			throw new EJBException(he);
-
 		} finally {
-
 			close(session);
-
 		}
-
 	}
-
-
-
+	
+	
 	/**
 	 * Construye el query de búsqueda segun los parametros
 	 */
-	private String populateQuery(Map parametros, Map traduccion, List params) {
-		
+	private String populateQuery(Map parametros, Map traduccion, List params)
+	{
 		String aux = "";
 
 		// Tratamiento de parametros
@@ -594,95 +370,72 @@ public abstract class EdificioFacadeEJB extends HibernateEJB {
 		}
 
 		return aux;
-		
 	}
-
-
+	
+	
 	/**
 	 * Añade una nueva unidad.
+	 * 
 	 * @ejb.interface-method
-	 * 
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-	 * 
 	 * @param idUA	Identificador de la unidad administrativa.
-	 * 
 	 * @param idEdificio	Identificador del edificio.
 	 */
-	public void anyadirUnidad(Long idUA, Long idEdificio) {
-		
+	public void anyadirUnidad(Long idUA, Long idEdificio)
+	{
 		Session session = getSession();
-
 		try {
-
-			if ( !getAccesoManager().tieneAccesoEdificio(idEdificio) ) {
-
+			if (!getAccesoManager().tieneAccesoEdificio(idEdificio)) {
 				throw new SecurityException("No tiene acceso al edificio");
-
 			}
-
-			Edificio edi = (Edificio) session.load( Edificio.class, idEdificio );
-			UnidadAdministrativa unidad = (UnidadAdministrativa) session.load( UnidadAdministrativa.class, idUA );
+			
+			Edificio edi = (Edificio) session.load(Edificio.class, idEdificio);
+			UnidadAdministrativa unidad = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, idUA);
 			edi.getUnidadesAdministrativas().add(unidad);
 			unidad.getEdificios().add(edi);
 			session.flush();
-			Actualizador.actualizar( edi, unidad.getId() );
-
+			Actualizador.actualizar(edi, unidad.getId());
+			
 		} catch (HibernateException e) {
-
 			throw new EJBException(e);
-
 		} finally {
-
 			close(session);
-
 		}
-
 	}
-
-
+	
+	
 	/**
 	 * Elimina una unidad del edificio
+	 * 
 	 * @ejb.interface-method
-	 * 
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-	 * 
 	 * @param idUA	Identificador de la unidad administrativa.
-	 * 
 	 * @param idEdificio	Identificador del edificio.
 	 */
-	public void eliminarUnidad(Long idUA, Long idEdificio) {
-		
+	public void eliminarUnidad(Long idUA, Long idEdificio)
+	{
 		Session session = getSession();
-
 		try {
-
-			if ( !getAccesoManager().tieneAccesoEdificio(idEdificio) ) {
-
+			if (!getAccesoManager().tieneAccesoEdificio(idEdificio)) {
 				throw new SecurityException("No tiene acceso al edificio");
 			}
-
-			UnidadAdministrativa unidad = (UnidadAdministrativa) session.load( UnidadAdministrativa.class, idUA );
-			Edificio edi = (Edificio) session.load( Edificio.class, idEdificio );
+			
+			UnidadAdministrativa unidad = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, idUA);
+			Edificio edi = (Edificio) session.load(Edificio.class, idEdificio);
 			edi.getUnidadesAdministrativas().remove(unidad);
 			unidad.getEdificios().remove(edi);
 			session.flush();
-			Actualizador.borrar( edi,unidad.getId() );
-
+			Actualizador.borrar(edi, unidad.getId());
+			
 		} catch (HibernateException e) {
-
 			throw new EJBException(e);
-
 		} finally {
-
 			close(session);
-
 		}
-
 	}
-
-
+	
+	
 	/**
-	 * @deprecated Usado por métodos que no se usan.
 	 * Construye el query de búsqueda multiidioma en todos los campos
 	 */
 	private String i18nPopulateQuery(Map traducciones, List params) {

@@ -169,34 +169,8 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 		}
 
 	}
-
-
-	/**
-	 * @deprecated Usar el metode borrarDocument()
-	 * Elimina un formulario del trámite
-	 * @ejb.interface-method
-	 * @ejb.permission 
-	 *                 role-name="${role.system},${role.admin},${role.super},${role.oper}"
-	 */
-	public void eliminarFormulario(Long tramite_id, Long formulario_id) {
-		Session session = getSession();
-		try {
-			if (!getAccesoManager().tieneAccesoTramite(tramite_id)) {
-				throw new SecurityException("No tiene acceso al tr�mite");
-			}
-			Tramite tramite = (Tramite) session.load(Tramite.class, tramite_id);
-			Formulario formulario = (Formulario) session.load(Formulario.class,
-					formulario_id);
-			tramite.removeFormulario(formulario);
-			session.flush();
-		} catch (HibernateException e) {
-			throw new EJBException(e);
-		} finally {
-			close(session);
-		}
-	}
-
-
+	
+	
 	/**
 	 * Borra un trámite
 	 * 

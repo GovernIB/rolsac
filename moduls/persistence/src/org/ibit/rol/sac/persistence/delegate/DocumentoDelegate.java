@@ -16,13 +16,13 @@ import java.util.Map;
 /**
  * Business delegate para manipular Documentos.
  */
-public class DocumentoDelegate implements StatelessDelegate {
-
+public class DocumentoDelegate implements StatelessDelegate
+{
+	/* ========================================================= */
+    /* ===================== MÃ‰TODOS DE NEGOCIO ================ */
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
-    /* ========================================================= */
-
-    public Long grabarDocumento(Documento documento, Long procedimiento_id, Long ficha_id) throws DelegateException {
+	
+	public Long grabarDocumento(Documento documento, Long procedimiento_id, Long ficha_id) throws DelegateException {
         try {
             return getFacade().grabarDocumento(documento,procedimiento_id, ficha_id);
             		
@@ -30,38 +30,38 @@ public class DocumentoDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
-    public Documento obtenerDocumento(Long id) throws DelegateException {
+	
+	public Documento obtenerDocumento(Long id) throws DelegateException {
         try {
             return getFacade().obtenerDocumento(id);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
-
-    public void borrarDocumento(Long id) throws DelegateException {
+	
+	public void borrarDocumento(Long id) throws DelegateException {
         try {
             getFacade().borrarDocumento(id);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
-
-    public Archivo obtenerArchivoDocumento(Long id, String lang, boolean useDefault) throws DelegateException {
-           try {
-               return getFacade().obtenerArchivoDocumento(id, lang, useDefault);
-           } catch (RemoteException e) {
-               throw new DelegateException(e);
-           }
-       }
-
-    public Archivo obtenerArchivoDocumentoTramite(Long id, String lang, boolean useDefault) throws DelegateException {
+	
+	public Archivo obtenerArchivoDocumento(Long id, String lang, boolean useDefault) throws DelegateException {
+		try {
+			return getFacade().obtenerArchivoDocumento(id, lang, useDefault);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+	
+	public Archivo obtenerArchivoDocumentoTramite(Long id, String lang, boolean useDefault) throws DelegateException {
         try {
             return getFacade().obtenerArchivoDocumentoTramite(id, lang, useDefault);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
-    }       
+    }
     
     public void actualizarOrdenDocs(Map map) throws DelegateException {
         try {
@@ -94,4 +94,5 @@ public class DocumentoDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
 }

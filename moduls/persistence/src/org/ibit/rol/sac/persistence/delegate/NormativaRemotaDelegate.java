@@ -19,50 +19,30 @@ import java.util.List;
  *  @deprecated No se usa
  * Business delegate para manipular normativas remotas.
  */
-public class NormativaRemotaDelegate implements StatelessDelegate {
-    /* ========================================================= */
+public class NormativaRemotaDelegate implements StatelessDelegate
+{
+	/* ========================================================= */
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
-
-
-    /* ========================================================= */
+	public List<Normativa> obtenerNormativasProcedimiento(Long idProcedimiento) throws DelegateException
+	{
+		try {
+			return getFacade().obtenerNormativasProcedimiento(idProcedimiento);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+	
+	/* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
 	
-	/** @deprecated No se usa */
-	 public Long grabarNormativaRemota(final NormativaRemota normativaRemota)  throws DelegateException{
-		try {
-            return getFacade().grabarNormativaRemota(normativaRemota);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-	}
+	private Handle facadeHandle;
 	
-	 /** @deprecated No se usa */
-    public NormativaRemota obtenerNormativaRemota(Long idExterno,Long idUaRemota) throws DelegateException {
-        try {
-            return getFacade().obtenerNormativaRemota(idExterno, idUaRemota);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    /** @deprecated No se usa */
-    public List<Normativa> obtenerNormativasProcedimiento(Long idProcedimiento) throws DelegateException{
-		try {
-            return getFacade().obtenerNormativasProcedimiento(idProcedimiento);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-	}
-	
-	
-    private Handle facadeHandle;
-
     private NormativaRemotaFacade getFacade() throws RemoteException {
         return (NormativaRemotaFacade) facadeHandle.getEJBObject();
     }
-
+    
     protected NormativaRemotaDelegate() throws DelegateException {
         try {
             NormativaRemotaFacadeHome home = NormativaRemotaFacadeUtil.getHome();
@@ -76,6 +56,5 @@ public class NormativaRemotaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
-
+    
 }

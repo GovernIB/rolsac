@@ -114,49 +114,8 @@ public abstract class UsuarioFacadeEJB extends HibernateEJB {
 		}
 
 	}
-
-	/**
-	 * Obtiene una lista de usuarios.
-	 * @ejb.interface-method
-	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-	 */
-	public List buscarUsuarios(Usuario usuario) {
-
-		Session session = getSession();
-
-		try {
-
-			Criteria criteri = session.createCriteria(Usuario.class);
-			
-			if ( usuario.getUsername() != null )
-				criteri.add( Expression.ilike("username", "%" + usuario.getUsername() + "%" ) );
-			
-			if ( !"".equals(usuario.getNombre()) && usuario.getNombre() != null )
-				criteri.add( Expression.ilike("nombre", "%" + usuario.getNombre() + "%") );
-			
-			if ( !"".equals(usuario.getEmail()) &&  usuario.getEmail() != null )
-				criteri.add( Expression.ilike("email", "%" + usuario.getEmail() + "%") );
-			
-			if ( !"".equals(usuario.getPerfil()) &&  usuario.getPerfil() != null )
-				criteri.add( Expression.ilike("perfil", "%" + usuario.getPerfil() + "%" ) );
-			
-			if ( !"".equals(usuario.getObservaciones()) &&  usuario.getObservaciones() != null )
-				criteri.add( Expression.ilike("observaciones", "%" + usuario.getObservaciones() + "%" ) );
-
-			return criteri.list();
-
-		} catch (HibernateException he) {
-
-			throw new EJBException(he);
-
-		} finally {
-
-			close(session);
-
-		}
-
-	}
-
+	
+	
 	/**
 	 * Obtiene un usuario.
 	 * 
@@ -227,31 +186,8 @@ public abstract class UsuarioFacadeEJB extends HibernateEJB {
 		}
 
 	}
-
-
-	/**
-	 * @deprecated Usado únicamente desde el back antiguo
-	 * Obtiene un usuario.
-	 * @ejb.interface-method
-	 * @ejb.permission role-name="${role.system},${role.admin}"
-	 */
-	public List listarUsuariosPerfil(String perfil) {
-		Session session = getSession();
-		try {
-			Criteria criteri = session.createCriteria(Usuario.class);
-			if (perfil != null) {
-				criteri.add(Expression.eq("perfil", perfil));
-			}
-
-			return criteri.list();
-		} catch (HibernateException he) {
-			throw new EJBException(he);
-		} finally {
-			close(session);
-		}
-	}
-
-
+	
+	
 	/**
 	 * Asigna la administración de una unidad a un usuario.
 	 * 
@@ -330,28 +266,8 @@ public abstract class UsuarioFacadeEJB extends HibernateEJB {
 		}
 
 	}
-
-
-	/**
-	 * @deprecated No se usa
-	 * Obtiene las unidades administrativas de un usuario
-	 * @ejb.interface-method
-	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-	 */
-	public List listarUA(Long id) {
-		Session session = getSession();
-		try {
-			Usuario usuario = (Usuario) session.load(Usuario.class, id);
-			Hibernate.initialize(usuario.getUnidadesAdministrativas());
-			return new ArrayList(usuario.getUnidadesAdministrativas());
-		} catch (HibernateException he) {
-			throw new EJBException(he);
-		} finally {
-			close(session);
-		}
-	}
-
-
+	
+	
 	/**
 	 * Borra un usuario.
 	 * 
@@ -442,52 +358,8 @@ public abstract class UsuarioFacadeEJB extends HibernateEJB {
 		}
 
 	}
-
-
-	/**
-	 * @deprecated Usado únicamente desde el back antiguo
-	 * Añade una nueva unidad
-	 * @ejb.interface-method
-	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-	 */
-	public void anyadirUnidad(Long unidad_id, Long usu_id) {
-		Session session = getSession();
-		try {
-			Usuario usu = (Usuario) session.load(Usuario.class, usu_id);
-			UnidadAdministrativa unidad = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, unidad_id);
-			usu.getUnidadesAdministrativas().add(unidad);
-			session.flush();
-
-		} catch (HibernateException e) {
-			throw new EJBException(e);
-		} finally {
-			close(session);
-		}
-	}
-
-
-	/**
-	 *  @deprecated Usado únicamente desde el back antiguo
-	 * elimina una unidad del usuario
-	 * @ejb.interface-method
-	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-	 */
-	public void eliminarUnidad(Long unidad_id, Long usu_id) {
-		Session session = getSession();
-		try {
-			UnidadAdministrativa unidad = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, unidad_id);
-			Usuario usu = (Usuario) session.load(Usuario.class, usu_id);
-			usu.getUnidadesAdministrativas().remove(unidad);
-			session.flush();
-
-		} catch (HibernateException e) {
-			throw new EJBException(e);
-		} finally {
-			close(session);
-		}
-	}
-
-
+	
+	
 	/**
 	 * PORMAD
 	 * Obtiene un usuario filtrado por el nombre de usuario

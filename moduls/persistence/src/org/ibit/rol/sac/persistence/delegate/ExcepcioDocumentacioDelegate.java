@@ -16,15 +16,14 @@ import java.util.List;
 /**
  * Business delegate per manipular excepcions de documentacio.
  */
-public class ExcepcioDocumentacioDelegate implements StatelessDelegate {
-
+public class ExcepcioDocumentacioDelegate implements StatelessDelegate
+{
 	private static final long serialVersionUID = -1542197568196968517L;
-
+	
 	/* ========================================================= */
 	/* ======================== MÉTODOS DE NEGOCIO ============= */
 	/* ========================================================= */
-
-
+	
 	public Long gravarExcepcioDocumentacio(ExcepcioDocumentacio excepcio)  throws DelegateException {
 		try {
 			return getFacade().gravarExcepcioDocumentacio(excepcio);
@@ -32,8 +31,7 @@ public class ExcepcioDocumentacioDelegate implements StatelessDelegate {
 			throw new DelegateException(e);
 		}
 	}
-
-
+	
 	public ResultadoBusqueda llistarExcepcioDocumentacio(int pagina, int resultats) throws DelegateException {
 		try {
 			return getFacade().llistarExcepcioDocumentacio(pagina,resultats);
@@ -41,8 +39,7 @@ public class ExcepcioDocumentacioDelegate implements StatelessDelegate {
 			throw new DelegateException(e);
 		}
 	}
-
-
+	
 	public List<ExcepcioDocumentacio> llistarExcepcioDocumentacio() throws DelegateException {
 		try {
 			return getFacade().llistarExcepcioDocumentacio();
@@ -50,8 +47,7 @@ public class ExcepcioDocumentacioDelegate implements StatelessDelegate {
 			throw new DelegateException(e);
 		}
 	}
-
-
+	
 	public ExcepcioDocumentacio obtenirExcepcioDocumentacio(Long id) throws DelegateException {
 		try {
 			return getFacade().obtenirExcepcioDocumentacio(id);
@@ -59,28 +55,7 @@ public class ExcepcioDocumentacioDelegate implements StatelessDelegate {
 			throw new DelegateException(e);
 		}
 	}
-
-
-	/** @deprecated No se usa */
-	public boolean teRelacioCatalegDocuments(Long id) throws DelegateException {
-		try {
-			return getFacade().teRelacioCatalegDocuments(id);
-		} catch (RemoteException e) {
-			throw new DelegateException(e);
-		}
-	}
-
-
-	/** @deprecated No se usa */
-	public boolean teRelacioDocumentTramit(Long id) throws DelegateException {
-		try {
-			return getFacade().teRelacioDocumentTramit(id);
-		} catch (RemoteException e) {
-			throw new DelegateException(e);
-		}
-	}
-
-
+	
 	public void esborrarExcepcioDocumentacio(Long id) throws DelegateException {
 		try {
 			getFacade().esborrarExcepcioDocumentacio(id);
@@ -88,17 +63,17 @@ public class ExcepcioDocumentacioDelegate implements StatelessDelegate {
 			throw new DelegateException(e);
 		}
 	}
-
+	
 	/* ========================================================= */
 	/* ======================== REFERENCIA AL FACADE  ========== */
 	/* ========================================================= */
-
+	
 	private Handle facadeHandle;
-
+	
 	private ExcepcioDocumentacioFacade getFacade() throws RemoteException {
 		return (ExcepcioDocumentacioFacade) facadeHandle.getEJBObject();
 	}
-
+	
 	protected ExcepcioDocumentacioDelegate() throws DelegateException {
 		try {
 			ExcepcioDocumentacioFacadeHome home = ExcepcioDocumentacioFacadeUtil.getHome();
@@ -112,5 +87,5 @@ public class ExcepcioDocumentacioDelegate implements StatelessDelegate {
 			throw new DelegateException(e);
 		}
 	}
-
+	
 }

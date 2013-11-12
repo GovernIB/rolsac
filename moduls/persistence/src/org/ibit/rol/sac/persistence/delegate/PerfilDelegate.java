@@ -54,16 +54,7 @@ public class PerfilDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
-    /** @deprecated No se usa */
-    public PerfilCiudadano obtenerPerfil(String codigo) throws DelegateException {
-        try {
-            return getFacade().obtenerPerfil(codigo);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
+    
     public void borrarPerfil(Long id) throws DelegateException {
         try {
             getFacade().borrarPerfil(id);

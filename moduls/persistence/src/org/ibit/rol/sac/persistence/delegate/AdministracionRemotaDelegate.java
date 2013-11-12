@@ -25,8 +25,8 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 /**
  * Business delegate para manipular Publico Objetivo.
  */
-public class AdministracionRemotaDelegate implements StatelessDelegate {
-
+public class AdministracionRemotaDelegate implements StatelessDelegate
+{
 	/* ========================================================= */
 	/* ======================== MÉTODOS DE NEGOCIO ============= */
 	/* ========================================================= */
@@ -47,15 +47,7 @@ public class AdministracionRemotaDelegate implements StatelessDelegate {
 		}
 	}
 
-	/** @deprecated Usado desde el back antiguo */
-	@SuppressWarnings("unchecked")
-	public List<AdministracionRemota> listarAdministracionRemota() throws DelegateException {
-		try {
-			return getFacade().listarAdministracionRemota();
-		} catch (RemoteException e) {
-			throw new DelegateException(e);
-		}
-	}
+
 
 	public AdministracionRemota obtenerAdministracionRemota(Long id)
 			throws DelegateException {
@@ -171,31 +163,7 @@ public class AdministracionRemotaDelegate implements StatelessDelegate {
 			throw new DelegateException(e);
 		}
 	}
-
-	/**
-	 * @deprecated Usado desde el back antiguo
-	 * Borra un Logop de una {@link AdministracionRemota} determinado.
-	 */
-	public void borrarLogop(Long id) throws DelegateException {
-		try {
-			getFacade().borrarLogop(id);
-		} catch (RemoteException e) {
-			throw new DelegateException(e);
-		}
-	}
-
-	/**
-	 * @deprecated Usado desde el back antiguo
-	 * Borra un Logog de una {@link AdministracionRemota} determinado.
-	 */
-	public void borrarLogog(Long id) throws DelegateException {
-		try {
-			getFacade().borrarLogog(id);
-		} catch (RemoteException e) {
-			throw new DelegateException(e);
-		}
-	}
-
+	
 	/* ========================================================= */
 	/* ======================== REFERENCIA AL FACADE ========== */
 	/* ========================================================= */
@@ -208,8 +176,7 @@ public class AdministracionRemotaDelegate implements StatelessDelegate {
 
 	protected AdministracionRemotaDelegate() throws DelegateException {
 		try {
-			AdministracionRemotaFacadeHome home = AdministracionRemotaFacadeUtil
-					.getHome();
+			AdministracionRemotaFacadeHome home = AdministracionRemotaFacadeUtil.getHome();
 			AdministracionRemotaFacade remote = home.create();
 			facadeHandle = remote.getHandle();
 		} catch (NamingException e) {
@@ -220,4 +187,5 @@ public class AdministracionRemotaDelegate implements StatelessDelegate {
 			throw new DelegateException(e);
 		}
 	}
+	
 }

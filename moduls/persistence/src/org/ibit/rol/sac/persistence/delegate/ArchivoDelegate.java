@@ -35,46 +35,7 @@ public class ArchivoDelegate  implements StatelessDelegate {
 			throw new DelegateException(e);
 		}
 	}
-
-	/** @deprecated  No se utiliza */
-	public ByteArrayOutputStream getFitxer(Long id) throws DelegateException {
-		try {
-			return getFacade().getFitxer(id);
-
-		} catch (RemoteException e) {
-			throw new DelegateException(e);
-		}
-
-	}    
-
-	/** @deprecated  No se utiliza */
-	public String getMime(Long id) throws DelegateException {    
-		try {
-			return getFacade().getMime(id);
-		} catch (RemoteException e) {
-			throw new DelegateException(e);
-		}
-
-	}
-
-	/** @deprecated  No se utiliza */
-	public long getPes(Long id) throws DelegateException {       	
-		try {
-			return getFacade().getPes(id);
-		} catch (RemoteException e) {
-			throw new DelegateException(e);
-		}
-	}    
-
-	/** @deprecated  No se utiliza */
-	public String getNombre(Long id) throws DelegateException {
-		try {
-			return getFacade().getNombre(id);
-		} catch (RemoteException e) {
-			throw new DelegateException(e);
-		}
-	}		
-
+	
 	/* ========================================================= */
 	/* ======================== REFERENCIA AL FACADE  ========== */
 	/* ========================================================= */

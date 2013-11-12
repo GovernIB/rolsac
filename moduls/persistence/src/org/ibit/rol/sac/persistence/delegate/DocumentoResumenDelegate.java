@@ -15,21 +15,21 @@ import org.ibit.rol.sac.persistence.util.DocumentoResumenFacadeUtil;
 /**
  * Business delegate para manipular Documentos.
  */
-public class DocumentoResumenDelegate implements StatelessDelegate {
-
+public class DocumentoResumenDelegate implements StatelessDelegate
+{
+	/* ========================================================= */
+    /* ======================== MéTODOS DE NEGOCIO ============= */
     /* ========================================================= */
-    /* ======================== M�TODOS DE NEGOCIO ============= */
-    /* ========================================================= */
-
-    public DocumentoResumen obtenerDocumentoResumen(Long id) throws DelegateException {
+	
+	public DocumentoResumen obtenerDocumentoResumen(Long id) throws DelegateException {
         try {
             return getFacade().obtenerDocumentoResumen(id);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
-
-    public void borrarDocumento(Long id) throws DelegateException {
+	
+	public void borrarDocumento(Long id) throws DelegateException {
         try {
             getFacade().borrarDocumento(id);
         } catch (RemoteException e) {
@@ -48,13 +48,13 @@ public class DocumentoResumenDelegate implements StatelessDelegate {
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
-
+    
     private Handle facadeHandle;
-
+    
     private DocumentoResumenFacade getFacade() throws RemoteException {
         return (DocumentoResumenFacade) facadeHandle.getEJBObject();
     }
-
+    
     protected DocumentoResumenDelegate() throws DelegateException {
         try {
             DocumentoResumenFacadeHome home = DocumentoResumenFacadeUtil.getHome();
@@ -68,4 +68,5 @@ public class DocumentoResumenDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
 }

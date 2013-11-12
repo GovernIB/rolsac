@@ -21,10 +21,10 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  * Time: 9:22:36
  * To change this template use File | Settings | File Templates.
  */
-public class DestinatarioDelegateImpl implements  StatelessDelegate, DestinatarioDelegateI{
-
-    /* ========================================================= */
-    /* ======================== M�TODOS DE NEGOCIO ============= */
+public class DestinatarioDelegateImpl implements  StatelessDelegate, DestinatarioDelegateI
+{
+	/* ========================================================= */
+    /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
     /* (non-Javadoc)
@@ -37,7 +37,7 @@ public class DestinatarioDelegateImpl implements  StatelessDelegate, Destinatari
             throw new DelegateException(e);
         }
     }
-
+    
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.DestinatarioDelegateI#obtenerDestinatario(java.lang.Long)
 	 */
@@ -48,7 +48,10 @@ public class DestinatarioDelegateImpl implements  StatelessDelegate, Destinatari
             throw new DelegateException(e);
         }
     }
-
+    
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.DestinatarioDelegateI#listarDestinatarios(java.lang.Integer, java.lang.Integer)
+	 */
     public ResultadoBusqueda listarDestinatarios(int pagina, int resultats) throws DelegateException {
     	try {
     		return getFacade().listarDestinatarios(pagina, resultats);
@@ -68,7 +71,7 @@ public class DestinatarioDelegateImpl implements  StatelessDelegate, Destinatari
             throw new DelegateException(e);
         }
     }
-
+    
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.DestinatarioDelegateI#borrarDestinatario(java.lang.Long)
 	 */
@@ -103,4 +106,5 @@ public class DestinatarioDelegateImpl implements  StatelessDelegate, Destinatari
             throw new DelegateException(e);
         }
     }
+    
 }
