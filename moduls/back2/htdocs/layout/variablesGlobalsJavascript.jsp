@@ -103,6 +103,7 @@
     var txtErrorOperacio = '<spring:message code="error.operacio_fallida"/>';
     var txtErrorOperacioMateries = '<spring:message code="error.operacio_fallida_materies"/>';
     var txtErrorTramitIniciObligatori = '<spring:message code="error.tramit_inici_obligatori" />';
+    var txtErrorNumFicha = '<spring:message code="error.num_ficha" />';
         
     // Errores de validaci�n
     var txtMaxim = "<spring:message code='txt.maxim'/>";

@@ -188,17 +188,6 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
     }
     
     /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#borrarFichaUA2(java.lang.Long)
-	 */
-    public void borrarFichaUA2(Long id) throws DelegateException {
-        try {
-            getFacade().borrarFichaUA2(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#indexInsertaFicha(org.ibit.rol.sac.model.Ficha, org.ibit.lucene.indra.model.ModelFilterObject)
 	 */
     public void indexInsertaFicha(Ficha fic, ModelFilterObject filter) throws DelegateException {
@@ -272,8 +261,6 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
 	       }
 	}
 	
-	
-	
 	public int buscarFichasActivas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException {
 		try {
 	           return getFacade().buscarFichasActivas(listaUnidadAdministrativaId, fechaCaducidad);
@@ -281,12 +268,29 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
 	           throw new DelegateException(e);
 	       }
 	}
+	
 	public int buscarFichasCaducadas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad )throws DelegateException {
 		try {
 	           return getFacade().buscarFichasCaducadas(listaUnidadAdministrativaId,fechaCaducidad);
 	       } catch (RemoteException e) {
 	           throw new DelegateException(e);
 	       }
+	}
+	
+	public void borrarFichasUAdeFicha(List<FichaUA> fichasUA) throws DelegateException {
+		try {
+			getFacade().borrarFichasUAdeFicha(fichasUA);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+	
+	public Ficha obtenerFichaDeFichaUA(Long idFichaUA) throws DelegateException {
+		try {
+			return getFacade().obtenerFichaDeFichaUA(idFichaUA);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
 	}
 	
 	

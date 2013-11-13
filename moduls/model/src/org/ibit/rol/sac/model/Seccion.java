@@ -98,7 +98,11 @@ public class Seccion extends Traducible implements Comparable {
         fichasUA.remove(ficha);
         ficha.setSeccion(null);
     }
-
+    
+    public void removeFichaUA2(FichaUA ficha) {
+        ficha.setSeccion(null);
+    }
+    
     private Long id;
     private String codigoEstandard;
     private Seccion padre;

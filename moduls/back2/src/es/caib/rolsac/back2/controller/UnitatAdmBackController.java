@@ -529,7 +529,7 @@ public class UnitatAdmBackController extends PantallaBaseController
 			Long id = ParseUtil.parseLong(valoresForm.get("item_id"));
 			boolean edicion = id != null;
 			if (edicion) { 
-				unitatAdministrativa = unitatAdministrativaDelegate.consultarUnidadAdministrativa(id);
+				unitatAdministrativa = unitatAdministrativaDelegate.consultarUnidadAdministrativaSinFichas(id);
 			} else {									
 				unitatAdministrativa = new UnidadAdministrativa();
 			}
@@ -751,78 +751,73 @@ public class UnitatAdmBackController extends PantallaBaseController
 		
 	}
 
-	private void guardaLogotipos(Map<String, String> valoresForm, Map<String, FileItem> ficherosForm,
-			UnidadAdministrativa unitatAdministrativa) {
+	private void guardaLogotipos(Map<String, String> valoresForm, Map<String, FileItem> ficherosForm, UnidadAdministrativa unitatAdministrativa) throws DelegateException
+	{
+		UnidadAdministrativaDelegate unitatAdministrativaDelegate = DelegateUtil.getUADelegate();
 		
 		//LogoHoritzontal
 		FileItem fileLogoHoritzontal = ficherosForm.get("item_logo_horizontal");
 		if ( fileLogoHoritzontal != null && fileLogoHoritzontal.getSize() > 0 ) {
 			unitatAdministrativa.setLogoh(UploadUtil.obtenerArchivo(unitatAdministrativa.getLogoh(), fileLogoHoritzontal));
-		} else {
-			// Borrar fichero si se solicita.
-			if (valoresForm.get("item_logo_horizontal_delete") != null && !"".equals(valoresForm.get("item_logo_horizontal_delete"))) {
-				unitatAdministrativa.setLogoh(null);
-			}
+		} else if (valoresForm.get("item_logo_horizontal_delete") != null && !"".equals(valoresForm.get("item_logo_horizontal_delete"))) {
+			//borrar fichero si se solicita
+			unitatAdministrativaDelegate.eliminarLogoHorizontal(unitatAdministrativa.getId());
+			unitatAdministrativa.setLogoh(null);
 		}
 		//LogoVertical
 		FileItem fileLogoVertical = ficherosForm.get("item_logo_vertical");
 		if ( fileLogoVertical != null && fileLogoVertical.getSize() > 0 ) {
 			unitatAdministrativa.setLogov(UploadUtil.obtenerArchivo(unitatAdministrativa.getLogov(), fileLogoVertical));
-		} else {
-			// Borrar fichero si se solicita.
-			if (valoresForm.get("item_logo_vertical_delete") != null && !"".equals(valoresForm.get("item_logo_vertical_delete"))) {
-				unitatAdministrativa.setLogov(null);
-			}
+		} else if (valoresForm.get("item_logo_vertical_delete") != null && !"".equals(valoresForm.get("item_logo_vertical_delete"))) {
+			//borrar fichero si se solicita
+			unitatAdministrativaDelegate.eliminarLogoVertical(unitatAdministrativa.getId());
+			unitatAdministrativa.setLogov(null);
 		}
 		//LogoSalutacioHoritzontal
 		FileItem fileLogoSalutacioHoritzontal = ficherosForm.get("item_logo_salutacio_horizontal");
 		if ( fileLogoSalutacioHoritzontal != null && fileLogoSalutacioHoritzontal.getSize() > 0 ) {
 			unitatAdministrativa.setLogos(UploadUtil.obtenerArchivo(unitatAdministrativa.getLogos(), fileLogoSalutacioHoritzontal));
-		} else {
-			// Borrar fichero si se solicita.
-			if (valoresForm.get("item_logo_salutacio_horizontal_delete") != null && !"".equals(valoresForm.get("item_logo_salutacio_horizontal_delete"))) {
-				unitatAdministrativa.setLogos(null);
-			}
+		} else if (valoresForm.get("item_logo_salutacio_horizontal_delete") != null && !"".equals(valoresForm.get("item_logo_salutacio_horizontal_delete"))) {
+			//borrar fichero si se solicita
+			unitatAdministrativaDelegate.eliminarLogoSalutacio(unitatAdministrativa.getId());
+			unitatAdministrativa.setLogos(null);
 		}
 		//LogoSalutacioVertical
 		FileItem fileLogoSalutacioVertical = ficherosForm.get("item_logo_salutacio_vertical");
 		if ( fileLogoSalutacioVertical != null && fileLogoSalutacioVertical.getSize() > 0 ) {
 			unitatAdministrativa.setLogot(UploadUtil.obtenerArchivo(unitatAdministrativa.getLogot(), fileLogoSalutacioVertical));
-		} else {
-			// Borrar fichero si se solicita.
-			if (valoresForm.get("item_logo_salutacio_vertical_delete") != null && !"".equals(valoresForm.get("item_logo_salutacio_vertical_delete"))) {
-				unitatAdministrativa.setLogot(null);
-			}
+		} else if (valoresForm.get("item_logo_salutacio_vertical_delete") != null && !"".equals(valoresForm.get("item_logo_salutacio_vertical_delete"))) {
+			//borrar fichero si se solicita
+			unitatAdministrativaDelegate.eliminarLogoTipos(unitatAdministrativa.getId());
+			unitatAdministrativa.setLogot(null);
 		}
 		
 	}
 
-	private void guardaResponsable(Map<String, String> valoresForm, Map<String, FileItem> ficherosForm, 
-			UnidadAdministrativa unitatAdministrativa) {
-		
+	private void guardaResponsable(Map<String, String> valoresForm, Map<String, FileItem> ficherosForm, UnidadAdministrativa unitatAdministrativa) throws DelegateException
+	{
 		unitatAdministrativa.setResponsable(valoresForm.get("item_responsable"));
 		unitatAdministrativa.setSexoResponsable(Integer.parseInt(valoresForm.get("item_responsable_sexe")));
+		UnidadAdministrativaDelegate unitatAdministrativaDelegate = DelegateUtil.getUADelegate();
 		
 		//FotoPetita
 		FileItem fileFotoPetita = ficherosForm.get("item_responsable_foto_petita");
 		if ( fileFotoPetita != null && fileFotoPetita.getSize() > 0 ) {
 			unitatAdministrativa.setFotop(UploadUtil.obtenerArchivo(unitatAdministrativa.getFotop(), fileFotoPetita));
-		} else {
-			// Borrar fichero si se solicita.
-			if (valoresForm.get("item_responsable_foto_petita_delete") != null && !"".equals(valoresForm.get("item_responsable_foto_petita_delete"))){
-				unitatAdministrativa.setFotop(null);
-			}
+		} else if (valoresForm.get("item_responsable_foto_petita_delete") != null && !"".equals(valoresForm.get("item_responsable_foto_petita_delete"))) {
+			//borrar fichero si se solicita
+			unitatAdministrativaDelegate.eliminarFotoPetita(unitatAdministrativa.getId());
+			unitatAdministrativa.setFotop(null);
 		}
 		
 		//FotoGran
 		FileItem fileFotoGran = ficherosForm.get("item_responsable_foto_gran");
 		if ( fileFotoGran != null && fileFotoGran.getSize() > 0 ) {
 			unitatAdministrativa.setFotog(UploadUtil.obtenerArchivo(unitatAdministrativa.getFotog(), fileFotoGran));
-		} else {
-			// Borrar fichero si se solicita.
-			if (valoresForm.get("item_responsable_foto_gran_delete") != null && !"".equals(valoresForm.get("item_responsable_foto_gran_delete"))) {
-				unitatAdministrativa.setFotog(null);
-			}
+		} else if (valoresForm.get("item_responsable_foto_gran_delete") != null && !"".equals(valoresForm.get("item_responsable_foto_gran_delete"))) {
+			//borrar fichero si se solicita
+			unitatAdministrativaDelegate.eliminarFotoGrande(unitatAdministrativa.getId());
+			unitatAdministrativa.setFotog(null);
 		}
 		
 	}
@@ -1461,6 +1456,7 @@ public class UnitatAdmBackController extends PantallaBaseController
 		if (request.getParameter("idUA") == null
 				|| request.getParameter("idSeccion") == null
 				|| request.getParameter("listaIdFichas") == null) {
+			
 			resultats.put("id", -2);
 			log.error("Falta alguno de los parámetros para completar el guardado de las fichas de la sección");
 			return resultats;
@@ -1475,24 +1471,29 @@ public class UnitatAdmBackController extends PantallaBaseController
 			log.error("Falta alguno de los parámetros para completar el guardado de las fichas de la sección");
     		return resultats;
     	}
-		List<Long> listaIdFichasLong = new ArrayList<Long>();
-		
-		for ( String s : listaIdFichas )
-			listaIdFichasLong.add( Long.parseLong(s) );
-		
-		UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
-		try {
-			uaDelegate.actualizaFichasSeccionUA(idUA, idSeccion, listaIdFichasLong);
-			
-		} catch (DelegateException e) {
-			if (e.isSecurityException()) {
-				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
-				resultats.put("id", -1);
-			} else {
-				resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
-				resultats.put("id", -2);
-				log.error(ExceptionUtils.getStackTrace(e));
-			}
+
+    	List<Long> listaIdFichasLong = new ArrayList<Long>();
+    	for (String s : listaIdFichas) {
+    		listaIdFichasLong.add(Long.parseLong(s));
+    	}
+    	try {
+    		UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+    		if (listaIdFichasLong.size() == 0) {
+    			// Eliminar sección-UA
+    			uaDelegate.eliminarSeccionUA(idUA, idSeccion);
+    		} else {
+    			uaDelegate.actualizaFichasSeccionUA(idUA, idSeccion, listaIdFichasLong);
+    		}
+    		
+    	} catch (DelegateException e) {
+    		if (e.isSecurityException()) {
+    			resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+    			resultats.put("id", -1);
+    		} else {
+    			resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
+            	resultats.put("id", -2);
+            	log.error(ExceptionUtils.getStackTrace(e));
+            }
 		}
 		
 		return resultats;
@@ -1645,6 +1646,29 @@ public class UnitatAdmBackController extends PantallaBaseController
 		}
 		
 		return resultats;
+	}
+	
+	
+    /**
+     * Método que recibe petición AJAX de consultar si la ficha no tiene más secciones, entonces se decide si se puede o no borrar
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/fitxaBorrable.do", method = POST)
+	public @ResponseBody Map<String, Object> fitxaBorrable(HttpServletRequest request, Long idFitxa)
+	{
+    	Map<String, Object> resultats = new HashMap<String, Object>();
+    	
+    	try {
+			resultats.put("num", DelegateUtil.getFichaDelegate().listFichasUA(idFitxa).size());
+			
+		} catch (DelegateException e) {
+			resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
+        	resultats.put("id", -2);
+        	log.error(ExceptionUtils.getStackTrace(e));
+		}
+    	
+    	return resultats;
 	}
 	
 }

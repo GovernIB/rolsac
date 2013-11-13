@@ -210,8 +210,10 @@ function CModulMateries(){
 		$("div.modulMateries div.seleccionats div.listaOrdenable input").each(function() {
 			listaMaterias += $(this).val() + ",";										
 		});
-
-		if (listaMaterias[listaMaterias.length-1] == ","){
+		
+		// Pasamos a array para evitar problemas con IE7
+		var array = listaMaterias.split(",");
+		if (array[array.length-1] == ""){
 			listaMaterias = listaMaterias.slice(0, -1);
 		}
 		

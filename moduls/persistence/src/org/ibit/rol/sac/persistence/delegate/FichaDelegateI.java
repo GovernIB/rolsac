@@ -50,8 +50,6 @@ public interface FichaDelegateI {
 	
 	public abstract void borrarFichaUA(Long id) throws DelegateException;
 	
-	public abstract void borrarFichaUA2(Long id) throws DelegateException;
-	
 	public abstract void indexInsertaFicha(Ficha fic, ModelFilterObject filter)
 			throws DelegateException;
 
@@ -73,5 +71,9 @@ public interface FichaDelegateI {
 	public int buscarFichasActivas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException;
 	   
 	public int buscarFichasCaducadas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException;
+	
+	public void borrarFichasUAdeFicha(List<FichaUA> fichasUA) throws DelegateException;
+	
+	public Ficha obtenerFichaDeFichaUA(Long idFichaUA) throws DelegateException;
 	
 }

@@ -992,187 +992,104 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 	
 	/**
 	 * Crea o actualiza una FichaUA, esta ficha será la que tenga el orden 0
-	 * 
 	 *  @param	idUA	Indentificador de una unidad administrativa
-	 *  
 	 *  @param	idSeccion	Identificador de una sección
-	 *  
 	 *  @param	idFicha	Identificador de una ficha
-	 *  
 	 *  @return Devuelve el identificador de la ficha creada
-	 *  
 	 * 	@ejb.interface-method
-	 * 
 	 * 	@ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
-	public Long crearFichaUA2(Long idUA, Long idSeccion, Long idFicha) {
-
+	public Long crearFichaUA2(Long idUA, Long idSeccion, Long idFicha)
+	{
 		Session session = getSession();
-
 		try {
-
-			if ( !getAccesoManager().tieneAccesoFicha(idFicha) )
+			if (!getAccesoManager().tieneAccesoFicha(idFicha)) {
 				throw new SecurityException("No tiene acceso a la ficha");
-
+			}
+			
 			FichaUA fichaUA = new FichaUA();
-
-			if ( idUA != null ) {
-
+			if (idUA != null) {
 				UnidadAdministrativa unidad = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, idUA);
-				if ( !getAccesoManager().tieneAccesoUnidad(idUA, false) ) 
+				if (!getAccesoManager().tieneAccesoUnidad(idUA, false)) {
 					throw new SecurityException("No tiene acceso a la ficha");
-
-
+				}
 				// Cuando se aniade una ficha a una seccion o a una seccion + ua por defecto su orden es 1
 				fichaUA.setOrden(1);
 				unidad.addFichaUA2(fichaUA);
-
 			} else if (!userIsSystem()) {
-
 				throw new SecurityException("No puede crear fichas generales.");
-
 			}
-
+			
 			Seccion seccion = (Seccion) session.load(Seccion.class, idSeccion);
-			if ( !getAccesoManager().tieneAccesoSeccion(idSeccion) )
+			if (!getAccesoManager().tieneAccesoSeccion(idSeccion)) {
 				throw new SecurityException("No tiene acceso a la seccion");
-
-
+			}
+			
 			// Cuando se añade una ficha a una sección o a una sección + ua por defecto su orden es 1
 			fichaUA.setOrdenseccion(1);
 			seccion.addFichaUA2(fichaUA);
-
 			Ficha ficha = (Ficha) session.load(Ficha.class, idFicha);
 			ficha.addFichaUA(fichaUA);
-			//session.flush();
-
+			
 			Ficha fichasend = obtenerFicha(idFicha);
 			Actualizador.actualizar(fichasend);
-			indexBorraFicha( ficha.getId()) ;
+			indexBorraFicha(ficha.getId()) ;
 			indexInsertaFicha(fichasend, null);
 			session.flush();
-
+			
 			return ficha.getId();
-
+			
 		} catch (HibernateException e) {
-
 			throw new EJBException(e);
-
 		} finally {
-
 			close(session);
-
 		}
-
 	}
 	
 	
 	/**
 	 * Borrar una ficha de Unidad administrativa
-	 * 
 	 * @param	id	Identificador de una unidad administrativa
-	 * 
 	 * @ejb.interface-method
-	 * 
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
-	public void borrarFichaUA(Long id) {
-
-		Session session = getSession();
-
-		try {
-
-			if ( !getAccesoManager().tieneAccesoFicha(id) )
-				throw new SecurityException("No tiene acceso a la relación");
-
-			FichaUA fichaUA = (FichaUA) session.load(FichaUA.class, id);
-			final  Long idFicha = fichaUA.getFicha().getId();
-
-			boolean borrar = !( fichaUA.getFicha() instanceof Remoto ); 
-
-			fichaUA.getFicha().removeFichaUA(fichaUA);
-			fichaUA.getSeccion().removeFichaUA(fichaUA);
-			UnidadAdministrativa unidad = fichaUA.getUnidadAdministrativa();
-			if ( unidad != null )
-				unidad.removeFichaUA(fichaUA);
-
-			session.delete(fichaUA);
-			session.flush();
-
-			Ficha ficha = obtenerFicha(idFicha);
-			indexBorraFicha(ficha.getId());
-			indexInsertaFicha(ficha, null);
-
-			if (borrar)
-				log.debug("Entro en borrar remoto ficha UA");
-
-		} catch (HibernateException he) {
-
-			throw new EJBException(he);
-
-		} finally {
-
-			close(session);
-
-		}
-
-	}
-
-
-	/* Se crea este segundo método para que no influya en el resto del sistema el cambio realizado */
-	/**
-	 * Borrar una ficha de Unidad administrativa
-	 * 
-	 * @param	id	Identificador de una unidad administrativa
-	 * 
-	 * @ejb.interface-method
-	 * 
-	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-	 */
-	public void borrarFichaUA2(Long id) {
-
-		Session session = getSession();
-
-		try {
-
-			if ( !getAccesoManager().tieneAccesoFicha(id) )
-				throw new SecurityException("No tiene acceso a la relación");
-
-			FichaUA fichaUA = (FichaUA) session.load(FichaUA.class, id);
-			final  Long idFicha = fichaUA.getFicha().getId();
-
-			boolean borrar = !(fichaUA.getFicha() instanceof Remoto); 
-
-			fichaUA.getFicha().removeFichaUA(fichaUA);
-			fichaUA.getSeccion().removeFichaUA(fichaUA);
-
-			UnidadAdministrativa unidad = fichaUA.getUnidadAdministrativa();
-			if ( unidad != null )
-				unidad.removeFichaUA2(fichaUA);
-
-			session.delete(fichaUA);
-			session.flush();
-
-			Ficha ficha = obtenerFicha(idFicha);
-			indexBorraFicha(ficha.getId());
-			indexInsertaFicha(ficha, null);
-
-			if (borrar)
-				log.debug("Entro en borrar remoto ficha UA");
-
-		} catch (HibernateException he) {
-
-			throw new EJBException(he);
-
-		} finally {
-
-			close(session);
-
-		}
-
-	}
-
-
+    public void borrarFichaUA(Long id) {
+        Session session = getSession();
+        try {
+            if (!getAccesoManager().tieneAccesoFichaUnidad(id)) {
+                throw new SecurityException("No tiene acceso a la relaci�n");
+            }
+            FichaUA fichaUA = (FichaUA) session.load(FichaUA.class, id);
+            final  Long idFicha = fichaUA.getFicha().getId();
+            final  String ceSeccion = fichaUA.getSeccion().getCodigoEstandard();
+            final  Long idUA = fichaUA.getUnidadAdministrativa().getId();
+            
+            boolean borrar = !(fichaUA.getFicha() instanceof Remoto); 
+            
+            fichaUA.getFicha().removeFichaUA(fichaUA);
+            fichaUA.getSeccion().removeFichaUA(fichaUA);
+            UnidadAdministrativa unidad = fichaUA.getUnidadAdministrativa();
+            if (unidad != null) {
+                unidad.removeFichaUA(fichaUA);
+            }
+            
+            session.delete(fichaUA);
+            session.flush();
+            Ficha ficha = obtenerFicha(idFicha);
+            indexBorraFicha(ficha.getId());
+            indexInsertaFicha(ficha,null);
+            
+            if(borrar)
+                log.debug("Entro en borrar remoto ficha UA");
+            	//Actualizador.borrar(new FichaUATransferible(idUA,idFicha,ceSeccion));
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
+    
+    
 	/**
 	 * @deprecated No se usa
 	 * Busca todas las Fichas con un texto determinado.
@@ -1969,33 +1886,22 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 	 * Devuelve las fichasUA de una ficha {PORMAD}
 	 * 
 	 * @param idFicha	Identificador de una ficha
-	 * 
 	 * @return Devuelve <code>List<FichaUA></code> de una determinada ficha informativa
-	 * 
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
-	public List<FichaUA> listFichasUA(Long idFicha) {
-
+	public List<FichaUA> listFichasUA(Long idFicha)
+	{
 		Session session = getSession();
-
 		try {
-
-			Query query = session.createQuery("select fichaua from FichaUA as fichaua where fichaua.ficha = :idFicha");
-			query.setParameter("idFicha", idFicha);
-
+			Query query = session.createQuery("select fichaua from FichaUA as fichaua where fichaua.ficha=" + idFicha);
 			return query.list();
-
+			
 		} catch (HibernateException he) {
-
 			throw new EJBException(he);
-
 		} finally {
-
 			close(session);
-
 		}
-
 	}
 	
 	
@@ -2358,7 +2264,69 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 
 		}
 
-	} 
-
-
+	}
+	
+	
+	/**
+     * Borrar varias fichas Unidad administrativa
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+     */
+	public void borrarFichasUAdeFicha(List<FichaUA> fichasUA)
+	{
+		Session session = getSession();
+        try {
+        	if (fichasUA.size() < 1) {
+        		return;
+        	}
+        	
+        	for (FichaUA fua : fichasUA) {
+        		if (!getAccesoManager().tieneAccesoFichaUnidad(fua.getId())) {
+        			throw new SecurityException("No tiene acceso al documento");
+        		}
+        	}
+        	
+        	StringBuilder ids = new StringBuilder();
+        	for (FichaUA fua : fichasUA) {
+        		FichaUA fichaUA = (FichaUA) session.load(FichaUA.class, fua.getId());
+        		if (ids.length() == 0) {
+        			ids.append(fichaUA.getId());
+        		} else {
+        			ids.append(",").append(fichaUA.getId());
+        		}
+        	}
+        	
+        	session.delete("from FichaUA as fua where fua.id in (" + ids.toString() + ")");
+        	session.flush();
+        	for (FichaUA fua : fichasUA) {
+        		session.refresh(fua.getFicha());
+        	}
+        	
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
+    
+    
+	/**
+     * Devuelve una ficha según una fichaUA
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+	public Ficha obtenerFichaDeFichaUA(Long idFichaUA)
+	{
+		Session session = getSession();
+		try {
+			FichaUA fichaUA = (FichaUA) session.load(FichaUA.class, idFichaUA);
+			return fichaUA.getFicha();
+			
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+	}
+	
 }

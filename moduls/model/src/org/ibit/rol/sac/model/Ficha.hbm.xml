@@ -62,7 +62,7 @@
             <many-to-many class="org.ibit.rol.sac.model.PublicoObjetivo" column="PFC_CODPOB" foreign-key="RSC_PFCPOB_FK" />
         </set>
         
-        <set name="fichasua" cascade="all" lazy="false" batch-size="200">
+        <set name="fichasua" cascade="delete" inverse="true" lazy="false" batch-size="200">
             <cache usage="read-write"/>
             <key column="FUA_CODFIC" foreign-key="RSC_FUAFIC_FK"/>
             <one-to-many class="org.ibit.rol.sac.model.FichaUA"/>

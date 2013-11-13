@@ -17,6 +17,7 @@ import javax.ejb.EJBException;
 import net.sf.hibernate.Criteria;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.LazyInitializationException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
@@ -199,7 +200,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 */
 	public void actualizarUnidadAdministrativa(UnidadAdministrativa unidad, Long idPadre)
 	{
-		Session session;
+		Session session = getSession();
 		Long idPadreAntigua = (unidad.getPadre() == null ? null : unidad.getPadre().getId());
 		boolean newIsNull = (idPadre == null);
 		boolean oldIsNull = (idPadreAntigua == null);
@@ -219,7 +220,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			throw new SecurityException("No tiene acceso a la unidad");
 		}
 		
-		session = getSession();
 		try {
 			session.update(unidad);
 			if (change) {
@@ -1252,69 +1252,53 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 * Devuelve todas las {@link Seccion} relacionadas con una {@link UnidadAdministrativa}
 	 *
 	 * @ejb.interface-method
-	 * 
 	 * @ejb.permission unchecked="true"
-	 * 
 	 * @param idUA	Identificador de la unidad admistrativa solicitada.
-	 * 
 	 * @return Devuelve <code>List<Seccion></code> de la unidad administrativa solicitada.
 	 */
-	public List<Seccion> listarSeccionesUA(final Long idUA) {
-
+	public List<Seccion> listarSeccionesUA(final Long idUA)
+	{
 		List<Seccion> resultado = null;
-
-		if ( idUA != null ) {
-
+		
+		if (idUA != null) {
 			Session session = getSession();
-
 			try {
-
+				List<Seccion> filtroSecciones = new ArrayList<Seccion>();
 				resultado = new ArrayList<Seccion>();
-
-				Query query = session.createQuery(
-						" SELECT DISTINCT seccion " +
 				
-						" FROM FichaUA AS fua, " +
-						"	   Seccion AS seccion " +
-						
-						" WHERE fua.seccion.id = seccion.id AND fua.unidadAdministrativa.id = :idUA ");
-				
-				query.setParameter("idUA", idUA);
+				Query query = session.createQuery(" SELECT DISTINCT seccion FROM FichaUA AS fua, Seccion AS seccion " +
+	        			" WHERE fua.seccion.id = seccion.id AND fua.unidadAdministrativa.id = :idUA ");
+	        	query.setParameter("idUA", idUA);
 
-				resultado = query.list();
-
-				// Inicializamos hijos para no tener error de lazy al comprobar si el List contiene
-				// o no elementos, intentando saber si tiene hijos para crear correctamente el DTO
-				// asociado al elemento Seccion (SeccionDTO.fills).
-				Iterator<Seccion> itSeccion = resultado.iterator();
-				while ( itSeccion.hasNext() ) {
-
-					Seccion seccion = itSeccion.next();
-					Hibernate.initialize( seccion.getHijos() );
-
-				}
-
+	        	// Filtrado por usuario
+	        	filtroSecciones = query.list();
+	        	for (Seccion sec : filtroSecciones) {
+	        		if (getAccesoManager().tieneAccesoSeccion(sec.getId())) {
+	        			resultado.add(sec);
+	        		}
+	        	}
+	        	// Inicializamos hijos para no tener error de lazy al comprobar si el List contiene
+	        	// o no elementos, intentando saber si tiene hijos para crear correctamente el DTO
+	        	// asociado al elemento Seccion (SeccionDTO.fills).
+	        	Iterator<Seccion> itSeccion = resultado.iterator();
+	        	while (itSeccion.hasNext()) {
+	        		Seccion seccion = itSeccion.next();
+	        		Hibernate.initialize(seccion.getHijos());
+	        	}
+	        	
 			} catch (HibernateException he) {
-
 				throw new EJBException(he);
-
 			} finally {
-
 				close(session);
-
 			}
-
 		} else {
-
 			resultado = Collections.emptyList();
-
 		}
-
+		
 		return resultado;
-
 	}
 	
-
+	
 	/**
 	 * Devuelve el número de {@link Ficha} relacionadas con una {@link UnidadAdministrativa} y una {@link Seccion}.
 	 *
@@ -1410,13 +1394,15 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 
 			//OBTENER DIRECCIONES
-			if (ua.getEdificios()!=null) {
+			try {
 				iter = ua.getEdificios().iterator();
 				while (iter.hasNext()) {
-					Edificio edificio = (Edificio)iter.next();
-					txtexto += edificio.getDireccion()+" ";
-					txtexto += edificio.getTelefono()+" ";
+					Edificio edificio = (Edificio) iter.next();
+					txtexto += edificio.getDireccion() + " ";
+					txtexto += edificio.getTelefono() + " ";
 				}
+			} catch (LazyInitializationException le) {
+    			log.error("Error controlado: No ha sido inicializado el listado de edificios. " + le.getMessage());
 			}
 
 			filter.setUo_id( (txids.length()==1) ? null: txids);
@@ -2206,36 +2192,222 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	
 	/**
 	 *  Obtiene una lista de identificadores de las unidades admnistrativas que pertenecen a un usuario.
-	 * 
 	 * @param nombreUsuario	Cadena de texto que indica el nombre del usuario.
-	 * 
 	 * @return	Devuelve <code>List<Long></code> de identificadores de unidades administrativas.
-	 * */
-	private List<Long> getIdsUnidadesAdministrativasUsuario(String nombreUsuario) {
-
+	 */
+	private List<Long> getIdsUnidadesAdministrativasUsuario(String nombreUsuario)
+	{
 		Session session = getSession();
-
 		try {
-			
 			StringBuilder consulta = new StringBuilder("select ua.id ");
 			consulta.append(" from UnidadAdministrativa as ua, ua.usuarios as uaUsu ");
 			consulta.append(" where uaUsu.username = :nombreUsuario ");
 			
-			Query query = session.createQuery( consulta.toString() );
+			Query query = session.createQuery(consulta.toString());
 			query.setParameter( "nombreUsuario", nombreUsuario );
-
-			return query.list(); 
-
+			
+			return query.list();
+			
 		} catch (HibernateException he) {
-			
 			throw new EJBException(he);
-			
 		} finally {
-			
 			close(session);
-			
-		}		
-		
+		}
 	}
-
+	
+	
+	/**
+	 * Se encarga de eliminar el archivo foto grande
+	 * 
+	 * @param ua
+	 * @throws HibernateException 
+	 * @throws EJBException
+	 * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public void eliminarFotoGrande(Long idUA)
+	{
+		Session session = getSession();
+		try {
+			UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, idUA);
+			session.delete(ua.getFotog());
+			ua.setFotog(null);
+			session.flush();
+			
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+	
+	
+	/**
+	 * Se encarga de eliminar el archivo foto pequeña
+	 * 
+	 * @param ua
+	 * @throws HibernateException 
+	 * @throws EJBException
+	 * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public void eliminarFotoPetita(Long idUA)
+	{
+		Session session = getSession();
+		try {
+			UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, idUA);
+			session.delete(ua.getFotop());
+			ua.setFotop(null);
+			session.flush();
+			
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+	
+	
+	/**
+	 * Se encarga de eliminar el archivo logo salutación vertical
+	 * 
+	 * @param ua
+	 * @throws HibernateException 
+	 * @throws EJBException
+	 * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public void eliminarLogoTipos(Long idUA)
+	{
+		Session session = getSession();
+		try {
+			UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, idUA);
+			session.delete(ua.getLogot());
+			ua.setLogot(null);
+			session.flush();
+			
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+	
+	
+	/**
+	 * Se encarga de eliminar el archivo logo vertical
+	 * 
+	 * @param ua
+	 * @throws HibernateException 
+	 * @throws EJBException
+	 * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public void eliminarLogoVertical(Long idUA)
+	{
+		Session session = getSession();
+		try {
+			UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, idUA);
+			session.delete(ua.getLogov());
+			ua.setLogov(null);
+			session.flush();
+			
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+	
+	
+	/**
+	 * Se encarga de eliminar el archivo logo horitzontal
+	 * 
+	 * @param ua
+	 * @throws HibernateException 
+	 * @throws EJBException
+	 * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public void eliminarLogoHorizontal(Long idUA)
+	{
+		Session session = getSession();
+		try {
+			UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, idUA);
+			session.delete(ua.getLogoh());
+			ua.setLogoh(null);
+			session.flush();
+			
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+	
+	
+	/**
+	 * Se encarga de eliminar el archivo logo salutación horitzontal
+	 * 
+	 * @param ua
+	 * @throws HibernateException 
+	 * @throws EJBException
+	 * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public void eliminarLogoSalutacio(Long idUA)
+	{
+		Session session = getSession();
+		try {
+			UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, idUA);
+			session.delete(ua.getLogos());
+			ua.setLogos(null);
+			session.flush();
+			
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+	
+	
+	/**
+	 * Se encarga de eliminar las relaciones de fichasUA de una sección relacionada con una UA.
+	 * 
+	 * @param idUA
+	 * @param idSeccion
+	 * @throws EJBException
+	 * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public void eliminarSeccionUA(Long idUA, Long idSeccion)
+	{
+		Session session = getSession();
+		try {
+			StringBuilder consulta = new StringBuilder(" SELECT fichaUA ");
+			consulta.append(" FROM FichaResumenUA AS fichaUA "); 
+			consulta.append(" WHERE fichaUA.idUa = :idUA "); 
+			consulta.append(" AND fichaUA.idSeccio = :idSeccion ");
+			
+			Query query = session.createQuery(consulta.toString());
+			query.setParameter("idUA", idUA);
+			query.setParameter("idSeccion", idSeccion);
+			
+			List<FichaResumenUA> listaFichasUA = query.list();
+			if (!listaFichasUA.isEmpty()) {
+				for (FichaResumenUA fuaResumen : listaFichasUA) {
+					fuaResumen.getFicha().removeFichaUA(fuaResumen);
+					session.delete(fuaResumen);
+				}
+				session.flush();
+			}
+			
+		} catch (HibernateException e) {
+			throw new EJBException(e);
+        } finally {
+            close(session);
+        }
+	}
+	
 }

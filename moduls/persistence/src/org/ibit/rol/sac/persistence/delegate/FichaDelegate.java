@@ -106,10 +106,6 @@ public class FichaDelegate implements FichaDelegateI {
 		impl.borrarFichaUA(id);
 	}
 	
-	public void borrarFichaUA2(Long id) throws DelegateException {
-		impl.borrarFichaUA2(id);
-	}
-	
 	
 	public void indexInsertaFicha(Ficha fic, ModelFilterObject filter)
 			throws DelegateException {
@@ -153,6 +149,15 @@ public class FichaDelegate implements FichaDelegateI {
     
 	public int buscarFichasCaducadas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad )throws DelegateException {
 		return impl.buscarFichasCaducadas(listaUnidadAdministrativaId,fechaCaducidad);
+	}
+	
+	
+	public void borrarFichasUAdeFicha(List<FichaUA> fichasUA) throws DelegateException {
+		impl.borrarFichasUAdeFicha(fichasUA);
+	}
+	
+	public Ficha obtenerFichaDeFichaUA(Long idFichaUA) throws DelegateException {
+		return impl.obtenerFichaDeFichaUA(idFichaUA);
 	}
 	
 }

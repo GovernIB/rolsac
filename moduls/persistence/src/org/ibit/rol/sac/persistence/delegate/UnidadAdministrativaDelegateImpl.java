@@ -371,6 +371,70 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
 		}
 	}
 	
+	public void eliminarFotoGrande(Long idUA) throws DelegateException
+	{
+		try {
+			getFacade().eliminarFotoGrande(idUA);
+		} catch (RemoteException e) {
+     		throw new DelegateException(e);
+     	}
+	}
+	
+	public void eliminarFotoPetita(Long idUA) throws DelegateException
+	{
+		try {
+			getFacade().eliminarFotoPetita(idUA);
+		} catch (RemoteException e) {
+     		throw new DelegateException(e);
+     	}
+	}
+	
+	public void eliminarLogoHorizontal(Long idUA) throws DelegateException
+	{
+		try {
+			getFacade().eliminarLogoHorizontal(idUA);
+		} catch (RemoteException e) {
+     		throw new DelegateException(e);
+     	}
+	}
+	
+	public void eliminarLogoVertical(Long idUA) throws DelegateException
+	{
+		try {
+			getFacade().eliminarLogoVertical(idUA);
+		} catch (RemoteException e) {
+     		throw new DelegateException(e);
+     	}
+	}
+	
+	public void eliminarLogoSalutacio(Long idUA) throws DelegateException
+	{
+		try {
+			getFacade().eliminarLogoSalutacio(idUA);
+		} catch (RemoteException e) {
+     		throw new DelegateException(e);
+     	}
+	}
+	
+	public void eliminarLogoTipos(Long idUA) throws DelegateException
+	{
+		try {
+			getFacade().eliminarLogoTipos(idUA);
+		} catch (RemoteException e) {
+     		throw new DelegateException(e);
+     	}
+	}
+	
+	public void eliminarSeccionUA(Long idUA, Long idSeccion) throws DelegateException
+	{
+		try {
+			getFacade().eliminarSeccionUA(idUA, idSeccion);
+		} catch (RemoteException e) {
+     		throw new DelegateException(e);
+     	}
+	}
+	
+	
 	/* ========================================================= */
 	/* ======================== REFERENCIA AL FACADE  ========== */
 	/* ========================================================= */

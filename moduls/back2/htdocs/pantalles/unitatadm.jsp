@@ -893,9 +893,11 @@
                             <div class="seleccionats">                                          
                                 <p class="info"><spring:message code='unitatadm.formulari.seccions.noInfo'/></p>
                                 <div class="listaOrdenable"></div>
+                                <!-- Comentar el botón para deshabilitarlo 
                                 <div class="btnGenerico">
                                     <a class="btn gestionaSeccions" href="javascript:;"><span><span><spring:message code='unitatadm.formulari.seccions.gestiona'/></span></span></a>                 
-                                </div>                                                                           
+                                </div>
+                                -->
                             </div>                                  
                         </div>
                         <!-- /modulSeccions -->                                 
@@ -2098,17 +2100,18 @@
         var pagEdificis = '<c:url value="/edificis/llistat.do" />';
         var pagUsuaris = '<c:url value="/usuaris/llistat.do" />';
         var pagSeccions = '<c:url value="/unitatadm/llistatSeccions.do" />';
-        var pagSeccionsFitxes = '<c:url value="/unitatadm/llistatFitxesUA.do" />'; 
+        var pagSeccionsFitxes = '<c:url value="/unitatadm/llistatFitxesUA.do" />';
         var pagGuardar = '<c:url value="/unitatadm/guardar.do" />';
         var pagEsborrar = '<c:url value="/unitatadm/esborrar.do" />';
         var pagAuditories = '<c:url value="/auditories/llistat.do" />';
         var pagEstadistiques = '<c:url value="/estadistiques/grafica.do" />';
-        var pagArrel = '<c:url value="/" />';    
+        var pagArrel = '<c:url value="/" />';
         var pagFitxes = '<c:url value="/fitxainf/llistat.do" />';
         var pagFitxesUASeccio = '<c:url value="/unitatadm/obtenirFitxesUASeccio.do" />';
         var pagGuardarFitxesUASeccio = '<c:url value="/unitatadm/guardarFitxesUASeccio.do" />';
-        var txtEsborrarCorrecte = "<spring:message code='unitatadm.esborrat.correcte'/>";  
-        var pagTraduir = '<c:url value="/unitatadm/traduir.do" />';      
+        var txtEsborrarCorrecte = "<spring:message code='unitatadm.esborrat.correcte'/>";
+        var pagTraduir = '<c:url value="/unitatadm/traduir.do" />';
+        var fitxaBorrable = '<c:url value="/unitatadm/fitxaBorrable.do" />';
         
         // URL para ordenar el listado de UA hijas. 
         var pagOrdenarUAHijas = '<c:url value="/unitatadm/reordenarUAs.do" />';

@@ -193,4 +193,39 @@ public class UnidadAdministrativaDelegate {
 		impl.actualizaFichasSeccionUA(idUA, idSeccion, listaIdFichasLong);
 	}
 	
+    public void eliminarFotoGrande(Long idUA)
+    		throws DelegateException {
+    	impl.eliminarFotoGrande(idUA);
+    }
+    
+    public void eliminarFotoPetita(Long idUA)
+    		throws DelegateException {
+    	impl.eliminarFotoPetita(idUA);
+    }
+    
+    public void eliminarLogoHorizontal(Long idUA)
+    		throws DelegateException {
+    	impl.eliminarLogoHorizontal(idUA);
+    }
+    
+    public void eliminarLogoVertical(Long idUA)
+    		throws DelegateException {
+    	impl.eliminarLogoVertical(idUA);
+    }
+    
+    public void eliminarLogoSalutacio(Long idUA)
+    		throws DelegateException {
+    	impl.eliminarLogoSalutacio(idUA);
+    }
+    
+    public void eliminarLogoTipos(Long idUA)
+    		throws DelegateException {
+    	impl.eliminarLogoTipos(idUA);
+    }
+    
+    public void eliminarSeccionUA(Long idUA, Long idSeccion)
+    		throws DelegateException {
+    	impl.eliminarSeccionUA(idUA, idSeccion);
+    }
+    
 }
