@@ -36,6 +36,11 @@ $(document).ready(function() {
 		Detall.carregar(itemACarregar);
 	}
     Llistat.iniciar();
+    
+    // Datos traductor
+	CAMPOS_TRADUCTOR_MATERIA = ["item_nom_", "item_descripcio_", "item_paraules_clau_"];
+	DATOS_TRADUCIDOS_MATERIA = ["nombre", "descripcion", "palabrasclave"];
+	
 });
 
 
@@ -294,6 +299,11 @@ function CDetall(){
         jQuery("#item_destacada,#item_destacada_es,#item_destacada_en,#item_destacada_de,#item_destacada_fr").change(function(){
             jQuery("#item_destacada,#item_destacada_es,#item_destacada_en,#item_destacada_de,#item_destacada_fr").attr("checked", jQuery(this).is(":checked"));
         });
+        
+        // boton de traducir
+        jQuery("#botoTraduirMateria").unbind("click").bind("click", function() {
+            Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
+        });
 		
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");		
@@ -301,7 +311,11 @@ function CDetall(){
 		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos
 		this.guarda = this.guarda_upload;
 	}
-
+	
+	this.traduirWrapper = function () {
+		that.traduir(pagTraduirMateria, CAMPOS_TRADUCTOR_MATERIA, DATOS_TRADUCIDOS_MATERIA);
+	}
+	
 	this.nou = function() {
 		//Ocultar paneles y campos
 		jQuery("#modul_icones").hide();

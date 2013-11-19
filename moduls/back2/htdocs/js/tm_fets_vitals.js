@@ -35,6 +35,10 @@ $(document).ready(function() {
 	if (itemACarregar > 0) {
 		Detall.carregar(itemACarregar);
 	}
+	
+	CAMPOS_TRADUCTOR_FET_VITAL = ["item_nom_", "item_descripcio_", "item_paraules_clau_"];
+	DATOS_TRADUCIDOS_FET_VITAL = ["nombre", "descripcion", "palabrasclave"];
+	
     Llistat.iniciar();
 });
 
@@ -322,11 +326,20 @@ function CDetall(){
             jQuery("#item_codi_estandard,#item_codi_estandard_es,#item_codi_estandard_en,#item_codi_estandard_de,#item_codi_estandard_fr").val( jQuery(this).val() );
         });
         
+        // boton de traducir
+        jQuery("#botoTraduirFetsVitals").unbind("click").bind("click", function() {
+            Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
+        });
+        
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");
 		
 		this.guarda = this.guarda_upload;
 		
+	}
+	
+	this.traduirWrapper = function () {
+		that.traduir(pagTraduirFetsVitals, CAMPOS_TRADUCTOR_FET_VITAL, DATOS_TRADUCIDOS_FET_VITAL);
 	}
 	
 	//Sobreescribe el m�todo guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos

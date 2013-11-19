@@ -9,6 +9,10 @@ $(document).ready(function() {
     
     EscriptoriPareTramitForm = new CEscriptoriPareTramitForm();
     EscriptoriPareTramitForm.iniciar();
+    
+    // datos traductor
+	CAMPOS_TRADUCTOR_FORMULARIO_TRAMITE = ["form_tramit_titol_", "form_tramit_descripcio_"];
+	DATOS_TRADUCIDOS_FORMULARIO_TRAMITE = ["titulo", "descripcion"];
 });
 
 // Lista ordenable para eliminar/ordenar forms en la pantalla "padre"
@@ -145,6 +149,11 @@ function CModulFormularisTramit(){
         // El botón de guardar está inicialmente deshabilitado hasta que se realice un cambio en el formulario.
     	$("#formGuardarFormTramit input, #formGuardarFormTramit select, #formGuardarFormTramit textarea").bind("change", function(){that.modificado();});
     	
+    	// boton de traducir
+        jQuery("#botoTraduirFormulariTramit").unbind("click").bind("click", function() {
+            Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
+        });
+        
 		// idioma
 		if (escriptori_formularis_tramits_elm.find("div.idiomes").size() != 0) {
 			// Esconder todos menos el primero
@@ -169,6 +178,9 @@ function CModulFormularisTramit(){
 		this.guarda = this.guarda_upload;
 	}
 	
+	this.traduirWrapper = function () {
+		that.traduir(pagTraduirDocumentTramit, CAMPOS_TRADUCTOR_FORMULARIO_TRAMITE, DATOS_TRADUCIDOS_FORMULARIO_TRAMITE);
+	}
 	
 	this.torna = function () {
 		escriptori_formularis_tramits_elm.fadeOut(300, function() {

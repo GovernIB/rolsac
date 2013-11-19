@@ -10,13 +10,17 @@ $(document).ready(function() {
     ModulDocumentsTramit.iniciar();
     
     EscriptoriPareTramit = new CEscriptoriPareTramit();
-    EscriptoriPareTramit.iniciar();        
+    EscriptoriPareTramit.iniciar();
+    
+    // datos traductor
+	CAMPOS_TRADUCTOR_DOCUMENTO_TRAMITE = ["doc_tramit_titol_", "doc_tramit_descripcio_"];
+	DATOS_TRADUCIDOS_DOCUMENTO_TRAMITE = ["titulo", "descripcion"];
 });
 
 // Lista ordenable para eliminar/ordenar docs en la pantalla "padre"
 function CEscriptoriPareTramit(){
 	this.extend = ListaOrdenable;
-	this.extend();		
+	this.extend();
     
     // Configuracion de la lista ordenable.
     this.configuracion = {
@@ -143,9 +147,14 @@ function CModulDocumentsTramit(){
         // botons        
         $("#btnVolver_documents_tramit").bind("click", that.torna);
 
-        // El botón de guardar está inicialmente deshabilitado hasta que se realice un cambio en el formulario.
+        // El botï¿½n de guardar estï¿½ inicialmente deshabilitado hasta que se realice un cambio en el formulario.
     	$("#formGuardarDocTramit input, #formGuardarDocTramit select, #formGuardarDocTramit textarea").bind("change", function(){that.modificado();});
     	
+    	// boton de traducir
+        jQuery("#botoTraduirDocumentTramit").unbind("click").bind("click", function() {
+            Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
+        });
+        
 		// idioma
 		if (escriptori_documents_tramits_elm.find("div.idiomes").size() != 0) {
 			// Esconder todos menos el primero
@@ -166,10 +175,13 @@ function CModulDocumentsTramit(){
 			ul_idiomes_elm.bind("click", {'actualizarIdiomasModulosLaterales': false}, that.idioma);
 		}
 		
-		// Redifinimos el método que guarda porque en este caso también hacemos un upload de archivos.
+		// Redifinimos el mï¿½todo que guarda porque en este caso tambiï¿½n hacemos un upload de archivos.
 		this.guarda = this.guarda_upload;
 	}
 	
+	this.traduirWrapper = function () {
+		that.traduir(pagTraduirDocumentTramit, CAMPOS_TRADUCTOR_DOCUMENTO_TRAMITE, DATOS_TRADUCIDOS_DOCUMENTO_TRAMITE);
+	}
 	
 	this.torna = function () {
 		escriptori_documents_tramits_elm.fadeOut(300, function() {
@@ -184,11 +196,11 @@ function CModulDocumentsTramit(){
             return false;
         }
         
-        // Coger el id del trámite
+        // Coger el id del trï¿½mite
         var tramitId = $("#tramitIddoc");         
         tramitId.val($("#id_tramit_actual").val());
 
-		//Enviamos el formulario mediante el método ajaxSubmit del plugin $.form
+		//Enviamos el formulario mediante el mï¿½todo ajaxSubmit del plugin $.form
 		$("#formGuardarDocTramit").ajaxSubmit({			
 			url: pagGuardarDocTramit,
 			dataType: 'json',
@@ -225,7 +237,7 @@ function CModulDocumentsTramit(){
 	}
 		
 	this.modificado = function(){
-		// Habilitamos el botón de guardar.
+		// Habilitamos el botï¿½n de guardar.
 		$("#btnGuardar_documents_tramit").unbind("click").bind("click",function(){that.guarda();}).parent().removeClass("off");
 	}
 		
@@ -240,7 +252,7 @@ function CModulDocumentsTramit(){
 		$("#tramitId").attr("value", $("#id_tramit_actual").val());		
 		$("#procId").attr("value", $("#id_procediment_tramit").val());
 		
-		// El botón de guardar está inicialmente deshabilitado hasta que se realice un cambio en el formulario.
+		// El botï¿½n de guardar estï¿½ inicialmente deshabilitado hasta que se realice un cambio en el formulario.
 		$("#btnGuardar_documents_tramit").parent().addClass("off");
         
 		if (!edicion) {
@@ -377,7 +389,7 @@ function CModulDocumentsTramit(){
 		});
 	}
 	
-	// Devuelve un string con el formato documentsTramit=n1,n2,...,nm donde n son codigos de documentos de un trámite.
+	// Devuelve un string con el formato documentsTramit=n1,n2,...,nm donde n son codigos de documentos de un trï¿½mite.
 	this.listarDocumentos = function (){
 		var listaDocumentos = "documentsTramit=";
 		var separador = "";

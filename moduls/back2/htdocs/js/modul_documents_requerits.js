@@ -9,7 +9,11 @@ $(document).ready(function() {
     ModulDocumentsRequerits.iniciar();
     
     EscriptoriPareReqTramit = new CEscriptoriPareRequerits();
-    EscriptoriPareReqTramit.iniciar();    
+    EscriptoriPareReqTramit.iniciar();
+    
+    // datos traductor
+	CAMPOS_TRADUCTOR_DOCUMENTO_REQUERIDO = ["doc_requerit_titol_", "doc_requerit_descripcio_"];
+	DATOS_TRADUCIDOS_DOCUMENTO_REQUERIDO = ["titulo", "descripcion"];
 });
 
 // Lista ordenable para eliminar/ordenar forms en la pantalla "padre"
@@ -140,7 +144,7 @@ function CModulDocumentsRequerits(){
         // botons        
         $("#btnVolver_documents_requerits").bind("click", that.torna);
 
-        // El botón de guardar está inicialmente deshabilitado hasta que se realice un cambio en el formulario.
+        // El botï¿½n de guardar estï¿½ inicialmente deshabilitado hasta que se realice un cambio en el formulario.
     	$("#formGuardarDocReq input, #formGuardarDocReq textarea, #formGuardarDocReq select").bind("change", function(){that.modificado();});
     	
 		// idioma
@@ -182,12 +186,20 @@ function CModulDocumentsRequerits(){
 	        jQuery("#item_check_excepcio_ca,#item_check_excepcio_es,#item_check_excepcio_en,#item_check_excepcio_de,#item_check_excepcio_fr").change(function(){
 	            jQuery("#item_check_excepcio_ca,#item_check_excepcio_es,#item_check_excepcio_en,#item_check_excepcio_de,#item_check_excepcio_fr").attr("checked", jQuery(this).is(":checked"));
 	        });
+	        
+	        // boton de traducir
+	        jQuery("#botoTraduirRequerit").unbind("click").bind("click", function() {
+	            Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
+	        });
 		}
 		
-		// Redifinimos el método que guarda porque en este caso también hacemos un upload de archivos.
+		// Redifinimos el mï¿½todo que guarda porque en este caso tambiï¿½n hacemos un upload de archivos.
 		this.guarda = this.guarda_upload;
 	}
 	
+	this.traduirWrapper = function () {
+		that.traduir(pagTraduirDocumentTramit, CAMPOS_TRADUCTOR_DOCUMENTO_REQUERIDO, DATOS_TRADUCIDOS_DOCUMENTO_REQUERIDO);
+	}
 	
 	this.torna = function () {
 		escriptori_documents_requerits_elm.fadeOut(300, function() {
@@ -218,11 +230,11 @@ function CModulDocumentsRequerits(){
             return false;
         }
         
-        // Coger el id del trámite
+        // Coger el id del trï¿½mite
         var docReqTramitId = $("#docReqTramitId");         
         docReqTramitId.val($("#id_tramit_actual").val());
 
-		//Enviamos el formulario mediante el método ajaxSubmit del plugin $.form
+		//Enviamos el formulario mediante el mï¿½todo ajaxSubmit del plugin $.form
 		$("#formGuardarDocReq").ajaxSubmit({			
 			url: pagGuardarDocRequerit,
 			dataType: 'json',
@@ -239,7 +251,7 @@ function CModulDocumentsRequerits(){
                     
 					
 					var nom = new Object();		
-					//COMPROVAR SI ÉS DOCUMENT ESPECIFIC O REQUERIT
+					//COMPROVAR SI ï¿½S DOCUMENT ESPECIFIC O REQUERIT
 					idioma_seleccionat=$("#formGuardarDocReq li.idioma.seleccionat span").attr("class");
 					tipusDoc = $("#item_tipdoc_" + idioma_seleccionat).val();
 					if (tipusDoc=="1"){
@@ -271,7 +283,7 @@ function CModulDocumentsRequerits(){
 	}
 	
 	this.modificado = function(){
-		// Habilitamos el botón de guardar.
+		// Habilitamos el botï¿½n de guardar.
 		$("#btnGuardar_documents_requerits").unbind("click").bind("click",function(){that.guarda();}).parent().removeClass("off");
 	}
 	
@@ -285,7 +297,7 @@ function CModulDocumentsRequerits(){
 		
 		$("#docReqTramitId").attr("value", $("#id_tramit_actual").val());		
 		
-		// El botón de guardar está inicialmente deshabilitado hasta que se realice un cambio en el formulario.
+		// El botï¿½n de guardar estï¿½ inicialmente deshabilitado hasta que se realice un cambio en el formulario.
 		$("#btnGuardar_documents_requerits").parent().addClass("off");
 		if (!edicion) {
             $("#docReqId").val("");
@@ -408,7 +420,7 @@ function CModulDocumentsRequerits(){
 		});
 	}
 	
-	// Devuelve un string con el formato documentsRequerits=n1,n2,...,nm donde n son codigos de formularios de un trámite.
+	// Devuelve un string con el formato documentsRequerits=n1,n2,...,nm donde n son codigos de formularios de un trï¿½mite.
 	this.listarDocumentosRequeridos = function (){
 		var listaDocumentos = "documentsRequerits=";
 		var separador = "";
@@ -426,7 +438,7 @@ function CModulDocumentsRequerits(){
 		for (var i in idiomas) {
 			var idioma = idiomas[i];
 			if (tipusDoc == "1"){
-				//DOCUMENT DEL CATÀLEG COMÚ
+				//DOCUMENT DEL CATï¿½LEG COMï¿½
 				jQuery("#item_excepcio_" + idioma).attr('disabled', true);
 				jQuery("#item_check_excepcio_" + idioma).prop('disabled', true);
 				jQuery("#seccio_excepcions_" + idioma + " label").addClass("disabled");
@@ -434,7 +446,7 @@ function CModulDocumentsRequerits(){
 				jQuery("#seccio_doc_cataleg_" + idioma).show();
 
 			}else{
-				//DOCUMENT ESPECÍFIC
+				//DOCUMENT ESPECï¿½FIC
 				var item_excepcio =jQuery("#item_check_excepcio_" + idioma);
 				item_excepcio.prop('disabled', false);
 				if (item_excepcio.is(':checked')){
@@ -456,10 +468,10 @@ function CModulDocumentsRequerits(){
 		for (var i in idiomas) {
 			var idioma = idiomas[i];
 			if (tipusDoc == "1"){
-				//DOCUMENT DEL CATÀLEG COMÚ
+				//DOCUMENT DEL CATï¿½LEG COMï¿½
 				jQuery("#doc_requerit_titol_" + idioma).val("");
 			}else{
-				//DOCUMENT ESPECÍFIC
+				//DOCUMENT ESPECï¿½FIC
 				jQuery("#item_cataleg_" + idioma).val("");
 				jQuery("#item_excepcio_" + idioma).val("");
 				jQuery("#item_check_excepcio_" + idioma).attr('checked', false);

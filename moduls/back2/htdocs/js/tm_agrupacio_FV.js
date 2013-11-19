@@ -35,6 +35,10 @@ $(document).ready(function() {
 	if (itemACarregar > 0) {
 		Detall.carregar(itemACarregar);
 	}
+	
+	CAMPOS_TRADUCTOR_AGRUPACIO_FET_VITAL = ["item_nom_", "item_descripcio_", "item_paraules_clau_"];
+	DATOS_TRADUCIDOS_AGRUPACIO_FET_VITAL = ["nombre", "descripcion", "palabrasclave"];
+	
     Llistat.iniciar();
 });
 
@@ -262,7 +266,7 @@ function CDetall(){
 	
     var that = this;
 
-	this.iniciar = function() {	
+	this.iniciar = function() {
 		// idioma
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {
 			// Esconder todos menos el primero
@@ -325,9 +329,18 @@ function CDetall(){
         jQuery("#item_codi_estandard,#item_codi_estandard_es,#item_codi_estandard_en,#item_codi_estandard_de,#item_codi_estandard_fr").change(function(){
             jQuery("#item_codi_estandard,#item_codi_estandard_es,#item_codi_estandard_en,#item_codi_estandard_de,#item_codi_estandard_fr").val( jQuery(this).val() );
         });
+        
+        // boton de traducir
+        jQuery("#botoTraduirAHV").unbind("click").bind("click", function() {
+            Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
+        });
 		
 		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos				
 		this.guarda = this.guarda_upload;
+	}
+	
+	this.traduirWrapper = function () {
+		that.traduir(pagTraduirAgrupacioFetsVitals, CAMPOS_TRADUCTOR_AGRUPACIO_FET_VITAL, DATOS_TRADUCIDOS_AGRUPACIO_FET_VITAL);
 	}
 	
 	//Sobreescribe el método guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos

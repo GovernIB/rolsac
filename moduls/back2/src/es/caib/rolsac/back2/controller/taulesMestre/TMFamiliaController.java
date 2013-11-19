@@ -1,5 +1,6 @@
 package es.caib.rolsac.back2.controller.taulesMestre;
 
+import static es.caib.rolsac.utils.LogUtils.logException;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,6 +39,7 @@ import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.utils.ResultadoBusqueda;
+import es.indra.rol.sac.integracion.traductor.Traductor;
 
 @Controller
 @RequestMapping("/familia/")
@@ -327,6 +330,56 @@ public class TMFamiliaController extends PantallaBaseController
 			log.error("Error: Id de familia no n�meric: " + ExceptionUtils.getStackTrace(nfEx));
 		}
 		return resultatStatus;
+	}
+    
+    
+    @RequestMapping(value = "/traduir.do")
+	public @ResponseBody Map<String, Object> traduir(HttpServletRequest request)
+	{
+		Map<String, Object> resultats = new HashMap<String, Object>();
+		
+		try {
+			String idiomaOrigenTraductor = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			
+			TraduccionFamilia traduccioOrigen = getTraduccionOrigen(request, idiomaOrigenTraductor);
+			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
+			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
+			traduccions = traductor.translate(traduccioOrigen, idiomaOrigenTraductor);
+			
+			resultats.put("traduccions", traduccions);
+	        
+	    } catch (DelegateException dEx) {
+			logException(log, dEx);
+			if (dEx.isSecurityException()) {
+				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+			} else {
+				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+			}
+		} catch (NullPointerException npe) {
+			log.error("FamiliaBackController.traduir: El traductor no se encuentra en en contexto.");
+			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+		} catch (Exception e) {
+			log.error("FamiliaBackController.traduir: Error en al traducir familia: " + e);
+			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+		}
+		
+		return resultats;
+	}
+	
+	
+    private TraduccionFamilia getTraduccionOrigen(HttpServletRequest request, String idiomaOrigenTraductor)
+	{
+    	TraduccionFamilia traduccioOrigen = new TraduccionFamilia();
+		
+		if (StringUtils.isNotEmpty(request.getParameter("item_nom_" + idiomaOrigenTraductor))) {
+			traduccioOrigen.setNombre(request.getParameter("item_nom_" + idiomaOrigenTraductor));
+		}
+		
+		if (StringUtils.isNotEmpty(request.getParameter("item_descripcio_" + idiomaOrigenTraductor))) {
+			traduccioOrigen.setDescripcion(request.getParameter("item_descripcio_" + idiomaOrigenTraductor));
+		}
+		
+		return traduccioOrigen;
 	}
     
 }

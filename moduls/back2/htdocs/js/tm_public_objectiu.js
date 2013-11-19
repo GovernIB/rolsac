@@ -35,6 +35,10 @@ $(document).ready(function() {
 	if (itemACarregar > 0) {
 		Detall.carregar(itemACarregar);
 	}
+	
+	CAMPOS_TRADUCTOR_PUBLIC_OBJECTIU = ["item_titol_", "item_descripcio_", "item_paraules_clau_"];
+	DATOS_TRADUCIDOS_PUBLIC_OBJECTIU = ["titulo", "descripcion", "palabrasclave"];
+	
     Llistat.iniciar();
 });
 
@@ -328,9 +332,17 @@ function CDetall(){
             jQuery("#item_codi_estandard,#item_codi_estandard_es,#item_codi_estandard_en,#item_codi_estandard_de,#item_codi_estandard_fr").val( jQuery(this).val() );
         });
         
+        // boton de traducir
+        jQuery("#botoTraduirPublicObjectiu").unbind("click").bind("click", function() {
+            Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
+        });
+        
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");	
-		
+	}
+	
+	this.traduirWrapper = function () {
+		that.traduir(pagTraduirPublicObjectiu, CAMPOS_TRADUCTOR_PUBLIC_OBJECTIU, DATOS_TRADUCIDOS_PUBLIC_OBJECTIU);
 	}
 
 	this.nou = function() {

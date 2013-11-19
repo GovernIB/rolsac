@@ -1,4 +1,4 @@
-// TM Catàleg de Documentes
+// TM Catï¿½leg de Documentes
 
 $(document).ready(function() {
 	// elements
@@ -37,6 +37,10 @@ $(document).ready(function() {
 	if (itemACarregar > 0) {
 		Detall.carregar(itemACarregar);
 	}
+	
+	CAMPOS_TRADUCTOR_CATALEG_DOCUMENTS = ["item_nom_", "item_descripcio_"];
+	DATOS_TRADUCIDOS_CATALEG_DOCUMENTS = ["nombre", "descripcion"];
+	
     Llistat.iniciar();
     
 });
@@ -292,13 +296,22 @@ function CDetall(){
         });
         jQuery("#item_excepcio,#item_excepcio_es,#item_excepcio_ca,#item_excepcio_en,#item_excepcio_de,#item_excepcio_fr").change(function(){
             jQuery("#item_excepcio,#item_excepcio_es,#item_excepcio_ca,#item_excepcio_en,#item_excepcio_de,#item_excepcio_fr").val( jQuery(this).val() );
-        });        
+        });
+        
+        // boton de traducir
+        jQuery("#botoTraduirCatalegDocuments").unbind("click").bind("click", function() {
+            Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
+        });
 		
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");		
 		
 	}
-
+	
+	this.traduirWrapper = function () {
+		that.traduir(pagTraduirCatalegDocuments, CAMPOS_TRADUCTOR_CATALEG_DOCUMENTS, DATOS_TRADUCIDOS_CATALEG_DOCUMENTS);
+	}
+	
 	this.nou = function() {
         $("#item_id").val("");
                

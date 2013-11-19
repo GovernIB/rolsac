@@ -35,6 +35,7 @@ import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.Traduccion;
+import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.TraduccionFicha;
 import org.ibit.rol.sac.model.TraduccionSeccion;
 import org.ibit.rol.sac.model.TraduccionUA;
@@ -1611,21 +1612,11 @@ public class UnitatAdmBackController extends PantallaBaseController
 		Map<String, Object> resultats = new HashMap<String, Object>();
 		
 		try {
-			TraduccionUA traduccioOrigen = new TraduccionUA();
-			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
-			
 			String idiomaOrigenTraductor = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			
+			TraduccionUA traduccioOrigen = getTraduccionOrigen(request, idiomaOrigenTraductor);
+			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
 			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
-			
-			if (StringUtils.isNotEmpty(request.getParameter("item_nom_" + idiomaOrigenTraductor)))
-				traduccioOrigen.setNombre(request.getParameter("item_nom_" + idiomaOrigenTraductor));
-			
-			if (StringUtils.isNotEmpty(request.getParameter("item_presentacio_" + idiomaOrigenTraductor)))
-				traduccioOrigen.setPresentacion(request.getParameter("item_presentacio_" + idiomaOrigenTraductor));
-			
-			if (StringUtils.isNotEmpty(request.getParameter("item_cvResponsable_" + idiomaOrigenTraductor)))
-				traduccioOrigen.setCvResponsable(request.getParameter("item_cvResponsable_" + idiomaOrigenTraductor));
-			
 			traduccions = traductor.translate(traduccioOrigen, idiomaOrigenTraductor);
 			
 			resultats.put("traduccions", traduccions);
@@ -1646,6 +1637,26 @@ public class UnitatAdmBackController extends PantallaBaseController
 		}
 		
 		return resultats;
+	}
+	
+	
+	private TraduccionUA getTraduccionOrigen(HttpServletRequest request, String idiomaOrigenTraductor)
+	{
+		TraduccionUA traduccioOrigen = new TraduccionUA();
+		
+		if (StringUtils.isNotEmpty(request.getParameter("item_nom_" + idiomaOrigenTraductor))) {
+			traduccioOrigen.setNombre(request.getParameter("item_nom_" + idiomaOrigenTraductor));
+		}
+		
+		if (StringUtils.isNotEmpty(request.getParameter("item_presentacio_" + idiomaOrigenTraductor))) {
+			traduccioOrigen.setPresentacion(request.getParameter("item_presentacio_" + idiomaOrigenTraductor));
+		}
+		
+		if (StringUtils.isNotEmpty(request.getParameter("item_cvResponsable_" + idiomaOrigenTraductor))) {
+			traduccioOrigen.setCvResponsable(request.getParameter("item_cvResponsable_" + idiomaOrigenTraductor));
+		}
+		
+		return traduccioOrigen;
 	}
 	
 	

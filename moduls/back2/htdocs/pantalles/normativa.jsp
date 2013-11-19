@@ -30,8 +30,9 @@
         var pagDetallBoib = '<c:url value="/normativa/detallBoib.do" />';
         var pagAuditories = '<c:url value="/auditories/llistat.do" />';
         var pagEstadistiques = '<c:url value="/estadistiques/grafica.do" />';
-        var pagArrel = '<c:url value="/" />';        
-      	var pagNormativa = '<c:url value="/normativa/cercarNormatives.do" />';             
+        var pagArrel = '<c:url value="/" />';
+      	var pagNormativa = '<c:url value="/normativa/cercarNormatives.do" />';
+      	var pagTraduirNormativa = '<c:url value="/normativa/traduir.do" />';
         
         var idUaActual = '<c:out value="${idUA}" />';
         var nomUaActual = '<c:out value="${nomUA}" />';        
@@ -1137,6 +1138,10 @@
 							</a>
 							</li>
 							</c:forEach>
+							
+							<li class="traduix btnGenerico" id="botoTraduirNormativa">
+							    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
+							</li>
                         </ul>
                         <div class="idiomes">					
 							<c:forEach items="${idiomes_aplicacio}" var="lang">

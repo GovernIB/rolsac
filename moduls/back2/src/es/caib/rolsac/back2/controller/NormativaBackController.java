@@ -1,5 +1,6 @@
 package es.caib.rolsac.back2.controller;
 
+import static es.caib.rolsac.utils.LogUtils.logException;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -11,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -39,6 +41,7 @@ import org.ibit.rol.sac.model.TraduccionNormativaExterna;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionTipo;
 import org.ibit.rol.sac.model.TraduccionTipoAfectacion;
+import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.dto.AfectacionDTO;
 import org.ibit.rol.sac.model.dto.AfectacionesDTO;
@@ -64,6 +67,7 @@ import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
 import es.caib.rolsac.utils.ResultadoBusqueda;
+import es.indra.rol.sac.integracion.traductor.Traductor;
 
 @Controller
 @RequestMapping("/normativa/")
@@ -1013,5 +1017,51 @@ public class NormativaBackController extends PantallaBaseController
     private boolean isModuloModificado(String modulo, Map<String, String> valoresForm) {
         return "1".equals(valoresForm.get(modulo));
     }
+    
+    
+    @RequestMapping(value = "/traduir.do")
+	public @ResponseBody Map<String, Object> traduir(HttpServletRequest request)
+	{
+		Map<String, Object> resultats = new HashMap<String, Object>();
+		
+		try {
+			String idiomaOrigenTraductor = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			
+			TraduccionNormativa traduccioOrigen = getTraduccionOrigen(request, idiomaOrigenTraductor);
+			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
+			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
+			traduccions = traductor.translate(traduccioOrigen, idiomaOrigenTraductor);
+			
+			resultats.put("traduccions", traduccions);
+	        
+	    } catch (DelegateException dEx) {
+			logException(log, dEx);
+			if (dEx.isSecurityException()) {
+				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+			} else {
+				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+			}
+		} catch (NullPointerException npe) {
+			log.error("NormativaBackController.traduir: El traductor no se encuentra en en contexto.");
+			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+		} catch (Exception e) {
+			log.error("NormativaBackController.traduir: Error en al traducir normativa: " + e);
+			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+		}
+		
+		return resultats;
+	}
+	
+	
+	private TraduccionNormativa getTraduccionOrigen(HttpServletRequest request, String idiomaOrigenTraductor)
+	{
+		TraduccionNormativa traduccioOrigen = new TraduccionNormativa();
+		
+		if (StringUtils.isNotEmpty(request.getParameter("item_titol_" + idiomaOrigenTraductor))) {
+			traduccioOrigen.setTitulo(request.getParameter("item_titol_" + idiomaOrigenTraductor));
+		}
+		
+		return traduccioOrigen;
+	}
     
 }

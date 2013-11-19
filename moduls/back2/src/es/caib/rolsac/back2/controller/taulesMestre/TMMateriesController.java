@@ -1,5 +1,6 @@
 package es.caib.rolsac.back2.controller.taulesMestre;
 
+import static es.caib.rolsac.utils.LogUtils.logException;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.io.UnsupportedEncodingException;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,6 +28,7 @@ import org.ibit.rol.sac.model.IconoMateria;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.PerfilCiudadano;
 import org.ibit.rol.sac.model.TraduccionMateria;
+import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionPerfilCiudadano;
 import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -50,6 +53,7 @@ import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
 import es.caib.rolsac.utils.ResultadoBusqueda;
+import es.indra.rol.sac.integracion.traductor.Traductor;
 
 @Controller
 @RequestMapping("/materies/")
@@ -612,6 +616,60 @@ public class TMMateriesController extends PantallaBaseController {
 			log.error("Error: Id de materia no n�meric: " + ExceptionUtils.getStackTrace(nfEx));
 		}
 		return resultatStatus;
+	}
+    
+    
+    @RequestMapping(value = "/traduir.do")
+	public @ResponseBody Map<String, Object> traduir(HttpServletRequest request)
+	{
+		Map<String, Object> resultats = new HashMap<String, Object>();
+		
+		try {
+			String idiomaOrigenTraductor = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			
+			TraduccionMateria traduccioOrigen = getTraduccionOrigen(request, idiomaOrigenTraductor);
+			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
+			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
+			traduccions = traductor.translate(traduccioOrigen, idiomaOrigenTraductor);
+			
+			resultats.put("traduccions", traduccions);
+	        
+	    } catch (DelegateException dEx) {
+			logException(log, dEx);
+			if (dEx.isSecurityException()) {
+				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+			} else {
+				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+			}
+		} catch (NullPointerException npe) {
+			log.error("MateriaBackController.traduir: El traductor no se encuentra en en contexto.");
+			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+		} catch (Exception e) {
+			log.error("MateriaBackController.traduir: Error en al traducir materia: " + e);
+			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+		}
+		
+		return resultats;
+	}
+	
+	
+	private TraduccionMateria getTraduccionOrigen(HttpServletRequest request, String idiomaOrigenTraductor)
+	{
+		TraduccionMateria traduccioOrigen = new TraduccionMateria();
+		
+		if (StringUtils.isNotEmpty(request.getParameter("item_nom_" + idiomaOrigenTraductor))) {
+			traduccioOrigen.setNombre(request.getParameter("item_nom_" + idiomaOrigenTraductor));
+		}
+		
+		if (StringUtils.isNotEmpty(request.getParameter("item_descripcio_" + idiomaOrigenTraductor))) {
+			traduccioOrigen.setDescripcion(request.getParameter("item_descripcio_" + idiomaOrigenTraductor));
+		}
+		
+		if (StringUtils.isNotEmpty(request.getParameter("item_paraules_clau_" + idiomaOrigenTraductor))) {
+			traduccioOrigen.setPalabrasclave(request.getParameter("item_paraules_clau_" + idiomaOrigenTraductor));
+		}
+		
+		return traduccioOrigen;
 	}
     
 }

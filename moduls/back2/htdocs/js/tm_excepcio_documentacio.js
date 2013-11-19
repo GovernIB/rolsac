@@ -35,6 +35,10 @@ $(document).ready(function() {
 	if (itemACarregar > 0) {
 		Detall.carregar(itemACarregar);
 	}
+	
+	CAMPOS_TRADUCTOR_EXCEPCIO_DOCUMENTACIO = ["item_nom_", "item_descri_"];
+	DATOS_TRADUCIDOS_EXCEPCIO_DOCUMENTACIO = ["nombre", "descripcion"];
+	
     Llistat.iniciar();
 });
 
@@ -148,7 +152,7 @@ function CLlistat(){
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
-			// Instanciamos el navegador multipágina.					
+			// Instanciamos el navegador multipï¿½gina.					
 			multipagina.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
@@ -276,10 +280,19 @@ function CDetall(){
 			ul_idiomes_elm.bind("click", that.idioma);
 		}
 		
+		// boton de traducir
+        jQuery("#botoTraduirExcepcioDocumentacio").unbind("click").bind("click", function() {
+            Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
+        });
+        
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");		
 	}
-
+	
+	this.traduirWrapper = function () {
+		that.traduir(pagTraduirExcepcioDocumentacio, CAMPOS_TRADUCTOR_EXCEPCIO_DOCUMENTACIO, DATOS_TRADUCIDOS_EXCEPCIO_DOCUMENTACIO);
+	}
+	
 	this.nou = function() {
         $("#item_id").val("");
         

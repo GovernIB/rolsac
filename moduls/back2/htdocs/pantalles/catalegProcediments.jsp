@@ -55,6 +55,8 @@
     var pagEstadistiques = '<c:url value="/estadistiques/grafica.do" />';
     var pagTraduir = '<c:url value="/catalegProcediments/traduir.do" />';
     var pagTraduirTramit = '<c:url value="/tramit/traduir.do" />';
+    var pagTraduirDocument = '<c:url value="/documents/traduir.do" />';
+    var pagTraduirDocumentTramit = '<c:url value="/documentsTramit/traduir.do" />';
     var pagListarHechosVitales = '<c:url value="/catalegProcediments/listarHechosVitales.do" />';
     var urlPrevisualizarProcedimiento = '<c:out value="${urlPrevisualitzacio}"/>';
 
@@ -1593,7 +1595,7 @@
 									</a></li>									
 								</c:forEach>
 								
-                                <li class="traduix btnGenerico" id="botoTraduirProcediment">
+                                <li class="traduix btnGenerico" id="botoTraduirDocument">
                                     <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
                                 </li>
                             </ul>
@@ -2575,7 +2577,7 @@
 									</a></li>									
 								</c:forEach>
 								
-                                <li class="traduix btnGenerico" id="botoTraduirProcediment">
+                                <li class="traduix btnGenerico" id="botoTraduirFormulariTramit">
                                     <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
                                 </li>
                             </ul>
@@ -2736,7 +2738,7 @@
 									</a></li>									
 								</c:forEach>
 								
-                                <li class="traduix btnGenerico" id="botoTraduirProcediment">
+                                <li class="traduix btnGenerico" id="botoTraduirDocumentTramit">
                                     <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
                                 </li>
                             </ul>
@@ -2894,7 +2896,7 @@
 									</a></li>									
 								</c:forEach>
 								
-                                <li class="traduix btnGenerico" id="botoTraduirProcediment">
+                                <li class="traduix btnGenerico" id="botoTraduirRequerit">
                                     <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
                                 </li>
                             </ul>

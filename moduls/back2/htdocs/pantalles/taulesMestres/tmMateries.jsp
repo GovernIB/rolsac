@@ -22,6 +22,7 @@
     var pagCarregarIcona = '<c:url value="/iconesMateria/carregarIcona.do" />';
     var pagGuardarIcona = '<c:url value="/iconesMateria/guardarIcona.do" />';
     var pagEstadistiques = '<c:url value="/estadistiques/grafica.do" />';
+    var pagTraduirMateria = '<c:url value="/materies/traduir.do" />';
 
     //texts
     var txtTria = "<spring:message code='camp.tria.opcio'/>";
@@ -193,40 +194,39 @@
                     <div class="modul_continguts mostrat">                              
                         <div class="fila">
                             <p class="introIdiomas"><spring:message code='txt.idioma.idioma'/>:</p>
-							
-							<c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">                            
-							<c:if test="${loop.first}">
 							<ul class="idiomes">
-							</c:if>							
-								<li class="idioma"><a href="javascript:;" class="<c:out value="${lang}"/>">															
-								<c:choose>
-									<c:when test="${lang eq 'ca'}">
-										<spring:message code='txt.idioma.ca'/>
-									</c:when>
-
-									<c:when test="${lang eq 'es'}">
-										<spring:message code='txt.idioma.es'/>
-									</c:when>
-
-									<c:when test="${lang eq 'en'}">
-										<spring:message code='txt.idioma.en'/>
-									</c:when>
-
-									<c:when test="${lang eq 'fr'}">
-										<spring:message code='txt.idioma.fr'/>
-									</c:when>
-
-									<c:when test="${lang eq 'de'}">
-										<spring:message code='txt.idioma.de'/>
-									</c:when>									
-								</c:choose>
-								</a></li>															
-							<c:if test="${loop.last}">
-                            </ul>
-							</c:if>							
-							</c:forEach>
-
-                            <div class="idiomes">                                
+							    <c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">
+							        <li class="idioma"><a href="javascript:;" class="<c:out value="${lang}"/>">
+							            <c:choose>
+							                <c:when test="${lang eq 'ca'}">
+							                    <spring:message code='txt.idioma.ca'/>
+							                </c:when>
+							                
+							                <c:when test="${lang eq 'es'}">
+							                    <spring:message code='txt.idioma.es'/>
+							                </c:when>
+							                
+							                <c:when test="${lang eq 'en'}">
+							                    <spring:message code='txt.idioma.en'/>
+							                </c:when>
+							                
+							                <c:when test="${lang eq 'fr'}">
+							                    <spring:message code='txt.idioma.fr'/>
+							                </c:when>
+							                
+							                <c:when test="${lang eq 'de'}">
+							                    <spring:message code='txt.idioma.de'/>
+							                </c:when>
+							            </c:choose>
+							        </a></li>
+							    </c:forEach>
+							    
+							    <li class="traduix btnGenerico" id="botoTraduirMateria">
+							        <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
+							    </li>
+							</ul>
+							
+							<div class="idiomes">                                
 								<c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">
 								<div class="idioma <c:out value="${lang}"/>">
                                     <!-- fila -->

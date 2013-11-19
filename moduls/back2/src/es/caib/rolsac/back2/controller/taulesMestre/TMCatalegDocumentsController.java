@@ -5,12 +5,14 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -18,6 +20,7 @@ import org.ibit.rol.sac.model.CatalegDocuments;
 import org.ibit.rol.sac.model.ExcepcioDocumentacio;
 import org.ibit.rol.sac.model.TraduccionCatalegDocuments;
 import org.ibit.rol.sac.model.TraduccionExcepcioDocumentacio;
+import org.ibit.rol.sac.model.TraduccionFamilia;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.CatalegDocumentsDelegate;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
@@ -31,6 +34,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.utils.ResultadoBusqueda;
+import es.indra.rol.sac.integracion.traductor.Traductor;
 
 @Controller
 @RequestMapping("/catalegDocuments/")
@@ -302,6 +306,56 @@ public class TMCatalegDocumentsController extends PantallaBaseController
 			excepcioObjDTOList.add(new IdNomDTO(excepcio.getId(), ted.getNombre()));
 		}
 		return excepcioObjDTOList;
+	}
+	
+	
+	@RequestMapping(value = "/traduir.do")
+	public @ResponseBody Map<String, Object> traduir(HttpServletRequest request)
+	{
+		Map<String, Object> resultats = new HashMap<String, Object>();
+		
+		try {
+			String idiomaOrigenTraductor = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			
+			TraduccionCatalegDocuments traduccioOrigen = getTraduccionOrigen(request, idiomaOrigenTraductor);
+			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
+			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
+			traduccions = traductor.translate(traduccioOrigen, idiomaOrigenTraductor);
+			
+			resultats.put("traduccions", traduccions);
+	        
+	    } catch (DelegateException dEx) {
+			logException(log, dEx);
+			if (dEx.isSecurityException()) {
+				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+			} else {
+				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+			}
+		} catch (NullPointerException npe) {
+			log.error("CatalegDocumentsBackController.traduir: El traductor no se encuentra en en contexto.");
+			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+		} catch (Exception e) {
+			log.error("CatalegDocumentsBackController.traduir: Error en al traducir CatalegDocuments: " + e);
+			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+		}
+		
+		return resultats;
+	}
+	
+	
+    private TraduccionCatalegDocuments getTraduccionOrigen(HttpServletRequest request, String idiomaOrigenTraductor)
+	{
+    	TraduccionCatalegDocuments traduccioOrigen = new TraduccionCatalegDocuments();
+		
+		if (StringUtils.isNotEmpty(request.getParameter("item_nom_" + idiomaOrigenTraductor))) {
+			traduccioOrigen.setNombre(request.getParameter("item_nom_" + idiomaOrigenTraductor));
+		}
+		
+		if (StringUtils.isNotEmpty(request.getParameter("item_descripcio_" + idiomaOrigenTraductor))) {
+			traduccioOrigen.setDescripcion(request.getParameter("item_descripcio_" + idiomaOrigenTraductor));
+		}
+		
+		return traduccioOrigen;
 	}
 	
 }

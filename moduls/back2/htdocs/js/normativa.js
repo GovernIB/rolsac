@@ -48,6 +48,10 @@ $(document).ready(function() {
 			$("#tipoNormativa").text(txtNormativaExterna);
 		}
 	});
+	
+	// datos traductor
+	CAMPOS_TRADUCTOR_NORMATIVA = ["item_titol_"];
+	DATOS_TRADUCIDOS_NORMATIVA = ["titulo"];
 
 	//$.suggeriments();
 });
@@ -693,6 +697,11 @@ function CDetall(){
             jQuery("#item_data_norma,#item_data_norma_es,#item_data_norma_en,#item_data_norma_de,#item_data_norma_fr").val( jQuery(this).val() );
         });
         
+        // boton de traducir
+        jQuery("#botoTraduirNormativa").unbind("click").bind("click", function() {
+            Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
+        });
+        
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");		
 		
@@ -709,7 +718,10 @@ function CDetall(){
         });
 	},
 	
-
+	this.traduirWrapper = function () {
+		that.traduir(pagTraduirNormativa, CAMPOS_TRADUCTOR_NORMATIVA, DATOS_TRADUCIDOS_NORMATIVA);
+	}
+	
 	//Sobreescribe el método guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
 	this.guarda_upload = function(e) {
 		

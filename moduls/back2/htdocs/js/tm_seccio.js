@@ -34,6 +34,10 @@ $(document).ready(function() {
 	if (itemACarregar > 0) {
 		Detall.carregar(itemACarregar);
 	}
+	
+	CAMPOS_TRADUCTOR_SECCIO = ["item_titol_", "item_descripcio_"];
+	DATOS_TRADUCIDOS_SECCIO = ["nombre", "descripcion"];
+	
 	LlistatSeccions.iniciar();
 });
 
@@ -322,13 +326,22 @@ function CDetall(){
             jQuery("#item_perfil,#item_perfil_es,#item_perfil_en,#item_perfil_de,#item_perfil_fr").val( jQuery(this).val() );
         });
         
+        // boton de traducir
+        jQuery("#botoTraduirSeccio").unbind("click").bind("click", function() {
+            Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
+        });
+        
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");
 		
 		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos
 		this.guarda = this.guarda_upload;
 	}
-
+	
+	this.traduirWrapper = function () {
+		that.traduir(pagTraduirSeccions, CAMPOS_TRADUCTOR_SECCIO, DATOS_TRADUCIDOS_SECCIO);
+	}
+	
 	this.nou = function(idPare, nomPare) {
 		//Ocultar paneles y campos
 		jQuery("#modul_seccions_relacionades").hide();

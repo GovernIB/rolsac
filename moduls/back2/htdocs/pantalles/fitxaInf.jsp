@@ -42,6 +42,7 @@
    var pagAuditories = '<c:url value="/auditories/llistat.do" />';
    var pagEstadistiques = '<c:url value="/estadistiques/grafica.do" />';
    var pagTraduir = '<c:url value="/fitxainf/traduir.do" />';
+   var pagTraduirDocument = '<c:url value="/documents/traduir.do" />';
 
    var urlPrevisualizarFicha = '<c:out value="${urlPrevisualitzacio}"/>';
    
@@ -1229,6 +1230,10 @@
 								</c:choose>
 								</a></li>
 								</c:forEach>
+								
+								<li class="traduix btnGenerico" id="botoTraduirDocument">
+                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
+                                </li>
                             </ul>
 							
                             <div class="idiomes">

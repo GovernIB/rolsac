@@ -35,6 +35,10 @@ $(document).ready(function() {
 	if (itemACarregar > 0) {
 		Detall.carregar(itemACarregar);
 	}
+	
+	CAMPOS_TRADUCTOR_PERFIL = ["item_nom_", "item_descripcio_"];
+	DATOS_TRADUCIDOS_PERFIL = ["nombre", "descripcion"];
+	
     Llistat.iniciar();
 });
 
@@ -293,10 +297,19 @@ function CDetall(){
             jQuery("#item_path_iconografia,#item_path_iconografia_es,#item_path_iconografia_en,#item_path_iconografia_de,#item_path_iconografia_fr").val( jQuery(this).val() );
         });
 		
+        // boton de traducir
+        jQuery("#botoTraduirPerfil").unbind("click").bind("click", function() {
+            Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
+        });
+        
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");		
 	}
-
+	
+	this.traduirWrapper = function () {
+		that.traduir(pagTraduirPerfil, CAMPOS_TRADUCTOR_PERFIL, DATOS_TRADUCIDOS_PERFIL);
+	}
+	
 	this.nou = function() {
         $("#item_id").val("");
         

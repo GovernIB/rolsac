@@ -11,6 +11,10 @@ jQuery(document).ready(function() {
     
     EscriptoriPare = new CEscriptoriPare();
     EscriptoriPare.iniciar();
+    
+    // datos traductor
+	CAMPOS_TRADUCTOR_DOCUMENTO = ["doc_titol_", "doc_descripcio_"];
+	DATOS_TRADUCIDOS_DOCUMENTO = ["titulo", "descripcion"];
 });
 
 
@@ -145,8 +149,13 @@ function CModulDocuments(){
         // botons        
         jQuery("#btnVolver_documents").bind("click", that.torna);
 
-        // El bot�n de guardar est� inicialmente deshabilitado hasta que se realice un cambio en el formulario.
+        // El botón de guardar est� inicialmente deshabilitado hasta que se realice un cambio en el formulario.
     	jQuery("#formGuardarDoc input, #formGuardarDoc select, #formGuardarDoc textarea").bind("change", function(){that.modificado();});
+    	
+    	// boton de traducir
+        jQuery("#botoTraduirDocument").unbind("click").bind("click", function() {
+            Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
+        });
     	
 		// idioma
 		if (escriptori_documents_elm.find("div.idiomes").size() != 0) {
@@ -172,6 +181,9 @@ function CModulDocuments(){
 		this.guarda = this.guarda_upload;
 	}
 	
+	this.traduirWrapper = function () {
+		that.traduir(pagTraduirDocument, CAMPOS_TRADUCTOR_DOCUMENTO, DATOS_TRADUCIDOS_DOCUMENTO);
+	}
 	
 	this.torna = function () {
 		escriptori_documents_elm.fadeOut(300, function() {
