@@ -35,7 +35,7 @@ $(document).ready(function() {
 		Detall.carregar(itemACarregar);
 	}
 	
-	CAMPOS_TRADUCTOR_SECCIO = ["item_titol_", "item_descripcio_"];
+	CAMPOS_TRADUCTOR_SECCIO = ["item_nom_", "item_descripcio_"];
 	DATOS_TRADUCIDOS_SECCIO = ["nombre", "descripcion"];
 	
 	LlistatSeccions.iniciar();

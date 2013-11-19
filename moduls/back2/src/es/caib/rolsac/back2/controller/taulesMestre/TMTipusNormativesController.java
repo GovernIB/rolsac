@@ -2,6 +2,7 @@ package es.caib.rolsac.back2.controller.taulesMestre;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,7 +27,9 @@ import org.ibit.rol.sac.persistence.delegate.TipoNormativaDelegate;
 import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.utils.ResultadoBusqueda;
+import es.indra.rol.sac.integracion.traductor.Traductor;
 
+import static es.caib.rolsac.utils.LogUtils.logException;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
@@ -234,5 +238,51 @@ public class TMTipusNormativesController extends PantallaBaseController {
 		}
 		return resultatStatus;
 	}
+	
+	
+	@RequestMapping(value = "/traduir.do")
+   	public @ResponseBody Map<String, Object> traduir(HttpServletRequest request)
+   	{
+   		Map<String, Object> resultats = new HashMap<String, Object>();
+   		
+   		try {
+   			String idiomaOrigenTraductor = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+   			
+   			TraduccionTipo traduccioOrigen = getTraduccionOrigen(request, idiomaOrigenTraductor);
+   			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
+   			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
+   			traduccions = traductor.translate(traduccioOrigen, idiomaOrigenTraductor);
+   			
+   			resultats.put("traduccions", traduccions);
+   	        
+   	    } catch (DelegateException dEx) {
+   			logException(log, dEx);
+   			if (dEx.isSecurityException()) {
+   				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+   			} else {
+   				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+   			}
+   		} catch (NullPointerException npe) {
+   			log.error("TipusNormativaBackController.traduir: El traductor no se encuentra en en contexto.");
+   			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+   		} catch (Exception e) {
+   			log.error("TipusNormativaBackController.traduir: Error en al traducir Tipus Normativa: " + e);
+   			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+   		}
+   		
+   		return resultats;
+   	}
+   	
+   	
+    private TraduccionTipo getTraduccionOrigen(HttpServletRequest request, String idiomaOrigenTraductor)
+   	{
+    	TraduccionTipo traduccioOrigen = new TraduccionTipo();
+   		
+   		if (StringUtils.isNotEmpty(request.getParameter("item_nom_" + idiomaOrigenTraductor))) {
+   			traduccioOrigen.setNombre(request.getParameter("item_nom_" + idiomaOrigenTraductor));
+   		}
+   		
+   		return traduccioOrigen;
+   	}
 	
 }

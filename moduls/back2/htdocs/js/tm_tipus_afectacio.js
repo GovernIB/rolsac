@@ -35,6 +35,10 @@ $(document).ready(function() {
 	if (itemACarregar > 0) {
 		Detall.carregar(itemACarregar);
 	}
+	
+	CAMPOS_TRADUCTOR_TIPUS_AFECTACIO = ["item_nom_"];
+	DATOS_TRADUCIDOS_TIPUS_AFECTACIO = ["nombre"];
+	
     Llistat.iniciar();
 });
 
@@ -275,10 +279,19 @@ function CDetall(){
 			ul_idiomes_elm.bind("click", that.idioma);
 		}
 		
+		// boton de traducir
+        jQuery("#botoTraduirTipusAfectacio").unbind("click").bind("click", function() {
+            Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
+        });
+		
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");		
 	}
-
+	
+	this.traduirWrapper = function () {
+		that.traduir(pagTraduirTipusAfectacio, CAMPOS_TRADUCTOR_TIPUS_AFECTACIO, DATOS_TRADUCIDOS_TIPUS_AFECTACIO);
+	}
+	
 	this.nou = function() {
         $("#item_id").val("");
         

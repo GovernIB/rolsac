@@ -1,17 +1,22 @@
 package es.caib.rolsac.back2.controller.taulesMestre;
 
+import static es.caib.rolsac.utils.LogUtils.logException;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.ibit.rol.sac.model.TraduccionTipo;
+import org.ibit.rol.sac.model.TraduccionTipoUA;
 import org.ibit.rol.sac.model.TraduccionTratamiento;
 import org.ibit.rol.sac.model.Tratamiento;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
@@ -26,6 +31,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.utils.ResultadoBusqueda;
+import es.indra.rol.sac.integracion.traductor.Traductor;
 
 @Controller
 @RequestMapping("/tipusUnitat/")
@@ -252,4 +258,66 @@ public class TMTipusUnitatController extends PantallaBaseController
 		}
 		return resultatStatus;
 	}
+	
+	
+	@RequestMapping(value = "/traduir.do")
+   	public @ResponseBody Map<String, Object> traduir(HttpServletRequest request)
+   	{
+   		Map<String, Object> resultats = new HashMap<String, Object>();
+   		
+   		try {
+   			String idiomaOrigenTraductor = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+   			
+   			TraduccionTipoUA traduccioOrigen = getTraduccionOrigen(request, idiomaOrigenTraductor);
+   			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
+   			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
+   			traduccions = traductor.translate(traduccioOrigen, idiomaOrigenTraductor);
+   			
+   			resultats.put("traduccions", traduccions);
+   	        
+   	    } catch (DelegateException dEx) {
+   			logException(log, dEx);
+   			if (dEx.isSecurityException()) {
+   				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+   			} else {
+   				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+   			}
+   		} catch (NullPointerException npe) {
+   			log.error("TipusNormativaBackController.traduir: El traductor no se encuentra en en contexto.");
+   			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+   		} catch (Exception e) {
+   			log.error("TipusNormativaBackController.traduir: Error en al traducir Tipus Normativa: " + e);
+   			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+   		}
+   		
+   		return resultats;
+   	}
+   	
+   	
+    private TraduccionTipoUA getTraduccionOrigen(HttpServletRequest request, String idiomaOrigenTraductor)
+   	{
+    	TraduccionTipoUA traduccioOrigen = new TraduccionTipoUA();
+   		
+   		if (StringUtils.isNotEmpty(request.getParameter("item_tipus_" + idiomaOrigenTraductor))) {
+   			traduccioOrigen.setTipo(request.getParameter("item_tipus_" + idiomaOrigenTraductor));
+   		}
+   		
+   		if (StringUtils.isNotEmpty(request.getParameter("item_carreg_masculi_" + idiomaOrigenTraductor))) {
+   			traduccioOrigen.setCargoMasculino(request.getParameter("item_carreg_masculi_" + idiomaOrigenTraductor));
+   		}
+   		
+   		if (StringUtils.isNotEmpty(request.getParameter("item_tractament_masculi_" + idiomaOrigenTraductor))) {
+   			traduccioOrigen.setTratamientoMasculino(request.getParameter("item_tractament_masculi_" + idiomaOrigenTraductor));
+   		}
+   		
+   		if (StringUtils.isNotEmpty(request.getParameter("item_carreg_femeni_" + idiomaOrigenTraductor))) {
+   			traduccioOrigen.setCargoFemenino(request.getParameter("item_carreg_femeni_" + idiomaOrigenTraductor));
+   		}
+   		
+   		if (StringUtils.isNotEmpty(request.getParameter("item_tractament_femeni_" + idiomaOrigenTraductor))) {
+   			traduccioOrigen.setTratamientoFemenino(request.getParameter("item_tractament_femeni_" + idiomaOrigenTraductor));
+   		}
+   		
+   		return traduccioOrigen;
+   	}
 }

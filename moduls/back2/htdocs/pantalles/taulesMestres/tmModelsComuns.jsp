@@ -18,6 +18,7 @@
     var pagGuardar = '<c:url value="/modelsComuns/guardar.do" />';
     var pagEsborrar = '<c:url value="/modelsComuns/esborrar.do" />';
     var pagReordenar  = '<c:url value="/modelsComuns/reordenarModelsComuns.do" />';
+    var pagTraduirModelsComuns = '<c:url value="/modelsComuns/traduir.do" />';
 
     //texts
     var txtTria = "<spring:message code='camp.tria.opcio'/>";
@@ -180,7 +181,10 @@
 									</a></li>									
 								</c:forEach>
 								
-                            </ul>
+								<li class="traduix btnGenerico" id="botoTraduirModelsComuns">
+								    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
+								</li>
+							</ul>
 
                             <div class="idiomes">
 								<c:forEach items="${idiomes_aplicacio}" var="lang">

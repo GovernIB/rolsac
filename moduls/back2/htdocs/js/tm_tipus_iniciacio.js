@@ -35,6 +35,10 @@ $(document).ready(function() {
 	if (itemACarregar > 0) {
 		Detall.carregar(itemACarregar);
 	}
+	
+	CAMPOS_TRADUCTOR_TIPUS_INICIACIO = ["item_nom_"];
+	DATOS_TRADUCIDOS_TIPUS_INICIACIO = ["nombre"];
+	
     Llistat.iniciar();
 });
 
@@ -284,12 +288,21 @@ function CDetall(){
         // Sincronizar campos sin idioma en zona multi-idioma.   
         jQuery("#item_codi_estandard,#item_codi_estandard_es,#item_codi_estandard_en,#item_codi_estandard_de,#item_codi_estandard_fr").change(function(){
             jQuery("#item_codi_estandard,#item_codi_estandard_es,#item_codi_estandard_en,#item_codi_estandard_de,#item_codi_estandard_fr").val( jQuery(this).val() );
-        });        
+        });
+        
+        // boton de traducir
+        jQuery("#botoTraduirTipusIniciacio").unbind("click").bind("click", function() {
+            Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
+        });
         
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");		
 	}
-
+	
+	this.traduirWrapper = function () {
+		that.traduir(pagTraduirTipusIniciacio, CAMPOS_TRADUCTOR_TIPUS_INICIACIO, DATOS_TRADUCIDOS_TIPUS_INICIACIO);
+	}
+	
 	this.nou = function() {
         $("#item_id").val("");
         
@@ -304,7 +317,7 @@ function CDetall(){
 		});
 
 		this.actualizaEventos();
-	}		
+	}
 	
 	this.pintar = function(dades) {
 		escriptori_detall_elm.find("a.elimina").show().end().find("h2:first").text(txtDetallTitol);

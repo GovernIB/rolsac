@@ -35,6 +35,10 @@ $(document).ready(function() {
 	if (itemACarregar > 0) {
 		Detall.carregar(itemACarregar);
 	}
+	
+	CAMPOS_TRADUCTOR_MODELS_COMUNS = ["item_titol_", "item_descripcio_"];
+	DATOS_TRADUCIDOS_MODELS_COMUNS = ["titulo", "descripcion"];
+	
     Llistat.iniciar();
 });
 
@@ -322,6 +326,11 @@ function CDetall(){
         jQuery("#item_descripcio,#item_descripcio_es,#item_descripcio_en,#item_descripcio_de,#item_descripcio_fr").change(function(){
             jQuery("#item_descripcio,#item_descripcio_es,#item_descripcio_en,#item_descripcio_de,#item_descripcio_fr").val( jQuery(this).val() );
         });
+        
+        // boton de traducir
+        jQuery("#botoTraduirModelsComuns").unbind("click").bind("click", function() {
+            Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
+        });
 		
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");		
@@ -329,7 +338,11 @@ function CDetall(){
 		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos
 		this.guarda = this.guarda_upload;
 	}
-
+	
+	this.traduirWrapper = function () {
+		that.traduir(pagTraduirModelsComuns, CAMPOS_TRADUCTOR_MODELS_COMUNS, DATOS_TRADUCIDOS_MODELS_COMUNS);
+	}
+	
 	this.nou = function() {
 		
         $("#item_id").val("");

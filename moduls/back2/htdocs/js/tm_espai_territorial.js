@@ -34,6 +34,10 @@ $(document).ready(function() {
 	if (itemACarregar > 0) {
 		Detall.carregar(itemACarregar);
 	}
+	
+	CAMPOS_TRADUCTOR_ESPAI_TERRITORIAL = ["item_nom_"];
+	DATOS_TRADUCIDOS_ESPAI_TERRITORIAL = ["nombre"];
+	
     Llistat.iniciar();
 });
 
@@ -286,6 +290,11 @@ function CDetall(){
         jQuery("#item_pare,#item_pare_es,#item_pare_en,#item_pare_de,#item_pare_de,#item_pare_fr").change(function(){
             jQuery("#item_pare,#item_pare_es,#item_pare_en,#item_pare_de,#item_pare_de,#item_pare_fr").val( jQuery(this).val() );
         });
+        
+        // boton de traducir
+        jQuery("#botoTraduirEspaiTerritorial").unbind("click").bind("click", function() {
+            Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
+        });
 		
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");
@@ -293,7 +302,11 @@ function CDetall(){
 		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos
 		this.guarda = this.guarda_upload;
 	}
-
+	
+	this.traduirWrapper = function () {
+		that.traduir(pagTraduirEspaiTerritorial, CAMPOS_TRADUCTOR_ESPAI_TERRITORIAL, DATOS_TRADUCIDOS_ESPAI_TERRITORIAL);
+	}
+	
 	this.nou = function(idPare, nomPare) {
 		//Ocultar paneles y campos
 		jQuery("#modul_espais_relacionats").hide();

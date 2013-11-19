@@ -36,6 +36,10 @@ $(document).ready(function() {
 	if (itemACarregar > 0) {
 		Detall.carregar(itemACarregar);
 	}
+	
+	CAMPOS_TRADUCTOR_AGRUPACIO_MATERIES = ["item_nom_"];
+	DATOS_TRADUCIDOS_AGRUPACIO_MATERIES = ["nombre"];
+	
     Llistat.iniciar();
 });
 
@@ -332,10 +336,19 @@ function CDetall(){
 	    	
 	    });
 		
+		// boton de traducir
+        jQuery("#botoTraduirAgrupacioMateries").unbind("click").bind("click", function() {
+            Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
+        });
+		
 		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos
 		this.guarda = this.guarda_upload;
 	}
-
+	
+	this.traduirWrapper = function () {
+		that.traduir(pagTraduirAgrupacioMateries, CAMPOS_TRADUCTOR_AGRUPACIO_MATERIES, DATOS_TRADUCIDOS_AGRUPACIO_MATERIES);
+	}
+	
 	this.nou = function() {
 		//Ocultar paneles y campos
 		jQuery("#modul_materies").hide();

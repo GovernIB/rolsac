@@ -35,6 +35,10 @@ $(document).ready(function() {
 	if (itemACarregar > 0) {
 		Detall.carregar(itemACarregar);
 	}
+	
+	CAMPOS_TRADUCTOR_EDIFICI = ["item_descripcio_"];
+	DATOS_TRADUCIDOS_EDIFICI = ["descripcion"];
+	
     Llistat.iniciar();
 });
 
@@ -324,12 +328,21 @@ function CDetall(){
         jQuery("#item_longitud,#item_longitud_es,#item_longitud_en,#item_longitud_de,#item_longitud_fr").change(function(){
             jQuery("#item_longitud,#item_longitud_es,#item_longitud_en,#item_longitud_de,#item_longitud_fr").val( jQuery(this).val() );
         });
+        
+        // boton de traducir
+        jQuery("#botoTraduirEdifici").unbind("click").bind("click", function() {
+            Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
+        });
 		
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");	
 		
 		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos				
 		this.guarda = this.guarda_upload;
+	}
+	
+	this.traduirWrapper = function () {
+		that.traduir(pagTraduirEdifici, CAMPOS_TRADUCTOR_EDIFICI, DATOS_TRADUCIDOS_EDIFICI);
 	}
 	
 	//Sobreescribe el método guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos

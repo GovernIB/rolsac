@@ -17,6 +17,7 @@
     var pagDetall = '<c:url value="/agrupacioMateries/pagDetall.do" />';
     var pagGuardar = '<c:url value="/agrupacioMateries/guardar.do" />';
     var pagEsborrar = '<c:url value="/agrupacioMateries/esborrarAgrupacioMateries.do" />';
+    var pagTraduirAgrupacioMateries = '<c:url value="/agrupacioMateries/traduir.do" />';
 
     //texts
     var txtTria = "<spring:message code='camp.tria.opcio'/>";
@@ -235,6 +236,10 @@
 								</a>
 								</li>
 								</c:forEach>
+								
+								<li class="traduix btnGenerico" id="botoTraduirAgrupacioMateries">
+								    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
+								</li>
                             </ul>
 							
                             <div class="idiomes">
