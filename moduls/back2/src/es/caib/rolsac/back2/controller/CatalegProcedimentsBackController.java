@@ -1399,8 +1399,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			}
 
 			//Información de paginación
-			String pagPag = request.getParameter("pagPag");
-			String pagRes = request.getParameter("numeroPagina");
+			String pagPag = request.getParameter("pagPagina");
+			String pagRes = request.getParameter("pagRes");
 
 			if (pagPag == null) 
 				pagPag = String.valueOf(0);
