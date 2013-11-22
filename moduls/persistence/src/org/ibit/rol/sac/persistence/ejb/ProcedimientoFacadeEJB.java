@@ -452,8 +452,6 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     			if (procedimiento.getOrganResolutori() != null) {
     				Hibernate.initialize( procedimiento.getOrganResolutori().getHijos() );
     			}
-    			Hibernate.initialize(procedimiento.getUnidadAdministrativa().getNormativas());
-    			Hibernate.initialize(procedimiento.getUnidadAdministrativa().getEdificios());
     			Hibernate.initialize(procedimiento.getTramites());
     			Hibernate.initialize(procedimiento.getHechosVitalesProcedimientos());
     			Hibernate.initialize(procedimiento.getIniciacion());
