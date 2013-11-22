@@ -411,7 +411,7 @@ public class TMFetsVitalsController extends PantallaBaseController
 	            		HechoVitalProcedimiento hvp = new HechoVitalProcedimiento();
 	            		hvp.setHechoVital(fetVitalOld);
 	            		hvp.setOrden(Integer.parseInt(valoresForm.get("procediment_orden_" + procHvId)));
-	            		hvp.setProcedimiento(procDelegate.obtenerProcedimiento(procedimientoId));
+	            		hvp.setProcedimiento(procDelegate.obtenerProcedimientoNewBack(procedimientoId));
 	            		
 	            		hvpAGrabar.add(hvp);
             		}

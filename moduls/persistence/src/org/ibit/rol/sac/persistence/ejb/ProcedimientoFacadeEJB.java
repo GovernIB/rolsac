@@ -158,7 +158,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
                 if (!getAccesoManager().tieneAccesoProcedimiento(procedimiento.getId())) {
                     throw new SecurityException("No tiene acceso al procedimiento");
                 }
-                ProcedimientoLocal procedimientoBD = obtenerProcedimiento(procedimiento.getId());
+                ProcedimientoLocal procedimientoBD = obtenerProcedimientoNewBack(procedimiento.getId());
                 FechaActualizacionBD = procedimientoBD.getFechaActualizacion();
                 this.indexBorraProcedimiento(procedimientoBD);
             }
@@ -922,7 +922,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 					Long n = Long.valueOf(str.substring((str.lastIndexOf('.')+1))).longValue();
 					
 					//Obtenemos el procedimiento, recuperamos el identificador y lo a�adimos a la lista
-					idProcs.add( obtenerProcedimiento(n).getId());
+					idProcs.add( obtenerProcedimientoNewBack(n).getId());
 				}
 			}
 			
