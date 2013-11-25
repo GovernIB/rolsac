@@ -27,13 +27,7 @@
   			<!-- BACK -->
     		<module><ejb>sac-persistence.jar</ejb></module>
     		<module><ejb>sac-micropersistence.jar</ejb></module>
-
-			<module>
-        		<web>
-    	      	<web-uri>sac-back.war</web-uri>
-        	  	<context-root>sacback</context-root>
-        		</web>
-    		</module>
+    		
 			<module>
         		<web>
     	      	<web-uri>sac-ws.war</web-uri>

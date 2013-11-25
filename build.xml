@@ -69,10 +69,8 @@
             update.XDOCLET    : update.extractor + update.model + update.persistence
             
             update.integracion: actualitza la capa d'integració
-            update.back       : actualitza el mòdul web legacy de backoffice
             update.back2      : actualitza el mòdul web de backoffice
             update.ws         : actualitza el mòdul web de webservices
-            update.traspasboib: actualitza el mòdul traspas-boib
             
             
             ****** Tasques de documentacio i control
@@ -210,15 +208,6 @@
         </ant>
     </target>
     
-    <target name="update.back" description="Actualizar el modulo web legacy de backoffice">
-        <echo>BACK</echo>
-        <ant dir="moduls/back" target="main" inheritall="false">
-            <propertyset>
-                <propertyref name="rolsac.target"/>
-            </propertyset>
-        </ant>
-    </target>
-    
     <target name="update.back2" description="Actualizar el modulo web de backoffice">
         <echo>BACK2</echo>
         <ant dir="moduls/back2" target="main" inheritall="false">
@@ -231,17 +220,6 @@
     <target name="update.ws" description="Actualitar el mdulo web de webservices">
         <echo>WS</echo>
         <ant dir="moduls/ws" target="main" inheritall="false">
-            <propertyset>
-                <propertyref name="rolsac.target"/>
-            </propertyset>
-        </ant>
-    </target>
-    
-    
-    <!--Traspas boib afegit marilen-->
-    <target name="update.traspasboib" description="Actualitar el mdulo traspas-boib">
-        <echo>TRASPASBOIB</echo>
-        <ant dir="moduls/traspas-boib" target="main" inheritall="false">
             <propertyset>
                 <propertyref name="rolsac.target"/>
             </propertyset>
@@ -302,8 +280,6 @@
                 <ant dir="moduls/oracle" target="test.unitario" inheritall="false"/>
             </then>
         </if>
-        <echo> BACK </echo>
-        <ant dir="moduls/back" target="test.unitario" inheritall="false"/>
         
     </target>
     
@@ -322,7 +298,6 @@
             <filelist dir="moduls/model"         files="appmodule.xml"/>
             <filelist dir="moduls/integracion"     files="appmodule.xml"/>
             <filelist dir="moduls/persistence"     files="appmodule.xml"/>
-            <filelist dir="moduls/traspas-boib" files="appmodule.xml"/>
             <filelist dir="moduls/utils"         files="appmodule.xml"/>
             <filelist dir="moduls/back2"         files="appmodule.xml"/>
             <filelist dir="moduls/api"          files="appmodule.xml"/>
@@ -344,7 +319,6 @@
         </concat>
         
         <replace file="${output.dir}/application.xml">
-            <replacefilter token="@context.back@" value="${context.back}"/>
             <replacefilter token="@context.back2@" value="${context.back2}"/>
             <replacefilter token="@context.ws@" value="${context.ws}"/>
             <replacefilter token="@prefix.modul@" value="${prefix.modul}"/>
@@ -383,14 +357,12 @@
                 <include name="${prefix.modul}-persistence-client.jar" />
                 <include name="${prefix.modul}-back2-persistence.jar" />
                 <include name="${prefix.modul}-back2.war" />
-                <include name="${prefix.modul}-back.war" />
                 <include name="${prefix.modul}-ws.war" />
                 <include name="${prefix.modul}-api.jar" />
                 <!-- No incluimos el jar cliente del API (comentar siguiente línea sólo
                     cuando esté corregido  problema al quitar este jar)    -->
                 <!-- include name="${prefix.modul}-api-client.jar" / -->
                 <include name="${prefix.modul}-apiws.war" />
-                <include name="traspasboib.war" />
                 <include name="${prefix.modul}-oracle.jar" if="db.oracle"/>
             </fileset>
             
@@ -472,7 +444,6 @@
         <antcall target="update.integracion"/>
         <antcall target="update.ws"/>
         <antcall target="update.back2"/>
-        <antcall target="update.traspasboib"/>
         <antcall target="update.apiws"/>
         <antcall target="update.api"/>
         
@@ -513,19 +484,16 @@
         <!-- Set modules IDs -->
         <property name="sonar.modules"
             value="
-                api,
-                back,
-                   back2,
-                   extractor,
-                   integracion,
-                   model,
-                   oracle,
-                   persistence,
-                   traspas-boib,
-                   utils,
-                   back-js,
-                   back2-js,
-               "/>
+        	   api,
+        	   back2,
+        	   extractor,
+        	   integracion,
+        	   model,
+        	   oracle,
+        	   persistence,
+        	   utils,
+        	   back2-js,
+        	"/>
         
         <!-- modul api -->
         <property name="api.sonar.projectName" value="caib:rolsac-api" />
@@ -533,13 +501,6 @@
         <property name="api.sonar.sources" value="src" />
         <property name="api.sonar.binaries" value="output/api/classes" />
         <property name="api.sonar.language" value="java"/>
-        
-        <!-- modul back -->
-        <property name="back.sonar.projectName" value="caib:rolsac-back" />
-          <property name="back.sonar.projectBaseDir" value="moduls/back" />
-        <property name="back.sonar.sources" value="src" />
-        <property name="back.sonar.binaries" value="output/back/classes" />
-        <property name="back.sonar.language" value="java"/>
         
         <!-- modul back2 -->
         <property name="back2.sonar.projectName" value="caib:rolsac-back2" />
@@ -589,19 +550,6 @@
           <property name="utils.sonar.sources" value="src" />
         <property name="utils.sonar.binaries" value="output/utils/classes" />
           <property name="utils.sonar.language" value="java"/>
-        
-        <!-- modul traspas-boib -->
-        <property name="traspas-boib.sonar.projectName" value="caib:rolsac-traspas-boib" />
-          <property name="traspas-boib.sonar.projectBaseDir" value="moduls/traspas-boib" />
-          <property name="traspas-boib.sonar.sources" value="src" />
-        <property name="traspas-boib.sonar.binaries" value="output/traspas-boib/classes" />
-          <property name="traspas-boib.sonar.language" value="java"/>
-        
-        <!-- modul back javacript -->
-        <property name="back-js.sonar.projectName" value="caib:rolsac-back-js" />
-          <property name="back-js.sonar.projectBaseDir" value="moduls/back" />
-          <property name="back-js.sonar.sources" value="htdocs" />
-          <property name="back-js.sonar.language" value="js"/>
         
         <!-- modul back2 javacript -->
           <property name="back2-js.sonar.projectName" value="caib:rolsac-back2-js" />

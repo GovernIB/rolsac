@@ -154,10 +154,6 @@
 		<ant dir="moduls/integracion" target="main" inheritall="false"/>
 	</target>
 
-	<target name="update.back" description="Actualizar el mdulo web de backoffice">
-		<ant dir="moduls/back" target="main" inheritall="false"/>
-	</target>
-
 	<target name="update.ws" description="Actualitar el mdulo web de webservices">
 		<ant dir="moduls/ws" target="main" inheritall="false"/>
 	</target>
@@ -184,8 +180,6 @@
 				<include name="integracion.jar" />
 				<include name="sac-persistence.jar" />				
 				<include name="sac-persistence-client.jar" />				
-
-				<include name="sac-back.war" />
 				<include name="sac-ws.war" />					
 			</fileset>
 
@@ -209,9 +203,7 @@
 				<include name="model.jar" />
 				<include name="integracion.jar" />
 				<include name="sac-persistence.jar" />				
-				<include name="sac-persistence-client.jar" />				
-
-				<include name="sac-back.war" />
+				<include name="sac-persistence-client.jar" />
 				<include name="sac-ws.war" />					
 			</fileset>
 			
@@ -264,7 +256,6 @@
 	  	<ant dir="moduls/persistence" target="${task}" inheritall="false"/>
 	  	<ant dir="moduls/integracion" target="${task}" inheritall="false"/>
 		<ant dir="moduls/ws" target="${task}" inheritall="false"/>
-		<ant dir="moduls/back" target="${task}" inheritall="false"/>
 	  </target>	
  	
 	

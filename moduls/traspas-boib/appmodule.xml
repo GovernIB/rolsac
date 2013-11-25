@@ -1,6 +1,0 @@
-    		<module>
-        		<web>
-            	<web-uri>traspasboib.war</web-uri>
-            	<context-root>traspasboib</context-root>
-        		</web>
-    		</module>

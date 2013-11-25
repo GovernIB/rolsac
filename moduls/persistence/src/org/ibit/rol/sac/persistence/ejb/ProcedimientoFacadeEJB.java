@@ -1575,7 +1575,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     	try {
     		if (proc.getValidacion().equals(2)) return;
     		
-    		proc = obtenerProcedimiento(proc.getId()); 
+    		proc = obtenerProcedimientoNewBack(proc.getId()); 
     		
 	    	if (filter==null) filter = obtenerFilterObject(proc);  	
 	    	String tipo = tipoProcedimiento (proc,false); 
