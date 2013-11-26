@@ -4,6 +4,7 @@
     
 	<property name="home" value="."/>
 	
+	
     <property file="${home}/build.${user.name}.properties" />
     <property file="${home}/build.${rolsac.target}.properties"/>
     <property file="${home}/default.properties"/>
@@ -293,16 +294,16 @@
         <delete file="${output.dir}/application.xml"/>
         
         <concat destfile="${output.dir}/application.xml" append="true" fixlastline="true">
-            <filelist dir="${etc.approlsac}"     files="01.application.begin.xml"/>
-            <filelist dir="moduls/extractor"     files="appmodule.xml"/>
-            <filelist dir="moduls/model"         files="appmodule.xml"/>
-            <filelist dir="moduls/integracion"     files="appmodule.xml"/>
-            <filelist dir="moduls/persistence"     files="appmodule.xml"/>
-            <filelist dir="moduls/utils"         files="appmodule.xml"/>
-            <filelist dir="moduls/back2"         files="appmodule.xml"/>
+            <filelist dir="${etc.approlsac}"    files="01.application.begin.xml"/>
+            <filelist dir="moduls/extractor"    files="appmodule.xml"/>
+            <filelist dir="moduls/model"        files="appmodule.xml"/>
+            <filelist dir="moduls/integracion"  files="appmodule.xml"/>
+            <filelist dir="moduls/persistence"  files="appmodule.xml"/>
+            <filelist dir="moduls/utils"        files="appmodule.xml"/>
+            <filelist dir="moduls/back2"        files="appmodule.xml"/>
             <filelist dir="moduls/api"          files="appmodule.xml"/>
             <filelist dir="moduls/apiws"        files="appmodule.xml"/>
-            <filelist dir="moduls/ws"             files="appmodule.xml"/>
+            <filelist dir="moduls/ws"           files="appmodule.xml"/>
         </concat>
         
         <if> <equals arg1="${db.oracle}" arg2="true" />
@@ -355,6 +356,7 @@
                 <include name="integracion.war" />
                 <include name="${prefix.modul}-persistence.jar" />
                 <include name="${prefix.modul}-persistence-client.jar" />
+            	<include name="${prefix.modul}-oracle.jar" if="db.oracle"/>
                 <include name="${prefix.modul}-back2-persistence.jar" />
                 <include name="${prefix.modul}-back2.war" />
                 <include name="${prefix.modul}-ws.war" />
@@ -363,7 +365,6 @@
                     cuando esté corregido  problema al quitar este jar)    -->
                 <!-- include name="${prefix.modul}-api-client.jar" / -->
                 <include name="${prefix.modul}-apiws.war" />
-                <include name="${prefix.modul}-oracle.jar" if="db.oracle"/>
             </fileset>
             
             <!-- No incluimos los .jar externos, solo para stand alone-->
@@ -497,65 +498,65 @@
         
         <!-- modul api -->
         <property name="api.sonar.projectName" value="caib:rolsac-api" />
-          <property name="api.sonar.projectBaseDir" value="moduls/api" />
+        <property name="api.sonar.projectBaseDir" value="moduls/api" />
         <property name="api.sonar.sources" value="src" />
         <property name="api.sonar.binaries" value="output/api/classes" />
         <property name="api.sonar.language" value="java"/>
         
         <!-- modul back2 -->
         <property name="back2.sonar.projectName" value="caib:rolsac-back2" />
-          <property name="back2.sonar.projectBaseDir" value="moduls/back2" />
+        <property name="back2.sonar.projectBaseDir" value="moduls/back2" />
         <property name="back2.sonar.sources" value="src" />
         <property name="back2.sonar.binaries" value="output/back2/classes" />
         <property name="back2.sonar.language" value="java"/>
         
         <!-- modul extractor -->
         <property name="extractor.sonar.projectName" value="caib:rolsac-extractor" />
-          <property name="extractor.sonar.projectBaseDir" value="moduls/extractor" />
-          <property name="extractor.sonar.sources" value="src" />
+        <property name="extractor.sonar.projectBaseDir" value="moduls/extractor" />
+        <property name="extractor.sonar.sources" value="src" />
         <property name="extractor.sonar.binaries" value="output/extractor/classes" />
-          <property name="extractor.sonar.language" value="java"/>
+        <property name="extractor.sonar.language" value="java"/>
         
         <!-- modul integracion -->
         <property name="integracion.sonar.projectName" value="caib:rolsac-integracion" />
-          <property name="integracion.sonar.projectBaseDir" value="moduls/integracion" />
-          <property name="integracion.sonar.sources" value="src" />
+        <property name="integracion.sonar.projectBaseDir" value="moduls/integracion" />
+        <property name="integracion.sonar.sources" value="src" />
         <property name="integracion.sonar.binaries" value="output/integracion/classes" />
           <property name="integracion.sonar.language" value="java"/>
         
         <!-- modul model -->
         <property name="model.sonar.projectName" value="caib:rolsac-model" />
-          <property name="model.sonar.projectBaseDir" value="moduls/model" />
-          <property name="model.sonar.sources" value="src" />
+        <property name="model.sonar.projectBaseDir" value="moduls/model" />
+        <property name="model.sonar.sources" value="src" />
         <property name="model.sonar.binaries" value="output/model/classes" />
           <property name="model.sonar.language" value="java"/>
         
         <!-- modul oracle -->
         <property name="oracle.sonar.projectName" value="caib:rolsac-oracle" />
-          <property name="oracle.sonar.projectBaseDir" value="moduls/oracle" />
-          <property name="oracle.sonar.sources" value="src" />
+        <property name="oracle.sonar.projectBaseDir" value="moduls/oracle" />
+        <property name="oracle.sonar.sources" value="src" />
         <property name="oracle.sonar.binaries" value="output/oracle/classes" />
-          <property name="oracle.sonar.language" value="java"/>
+        <property name="oracle.sonar.language" value="java"/>
         
         <!-- modul persistence -->
         <property name="persistence.sonar.projectName" value="caib:rolsac-persistence" />
-          <property name="persistence.sonar.projectBaseDir" value="moduls/persistence" />
-          <property name="persistence.sonar.sources" value="src" />
+        <property name="persistence.sonar.projectBaseDir" value="moduls/persistence" />
+        <property name="persistence.sonar.sources" value="src" />
         <property name="persistence.sonar.binaries" value="output/persistence/classes" />
-          <property name="persistence.sonar.language" value="java"/>
+        <property name="persistence.sonar.language" value="java"/>
         
         <!-- modul utils -->
         <property name="utils.sonar.projectName" value="caib:rolsac-utils" />
-          <property name="utils.sonar.projectBaseDir" value="moduls/utils" />
-          <property name="utils.sonar.sources" value="src" />
+        <property name="utils.sonar.projectBaseDir" value="moduls/utils" />
+        <property name="utils.sonar.sources" value="src" />
         <property name="utils.sonar.binaries" value="output/utils/classes" />
-          <property name="utils.sonar.language" value="java"/>
+        <property name="utils.sonar.language" value="java"/>
         
         <!-- modul back2 javacript -->
-          <property name="back2-js.sonar.projectName" value="caib:rolsac-back2-js" />
-          <property name="back2-js.sonar.projectBaseDir" value="moduls/back2" />
-          <property name="back2-js.sonar.sources" value="htdocs" />
-          <property name="back2-js.sonar.language" value="js"/>
+        <property name="back2-js.sonar.projectName" value="caib:rolsac-back2-js" />
+        <property name="back2-js.sonar.projectBaseDir" value="moduls/back2" />
+        <property name="back2-js.sonar.sources" value="htdocs" />
+        <property name="back2-js.sonar.language" value="js"/>
         
         <!-- Execute Sonar -->
         <taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
