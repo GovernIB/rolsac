@@ -37,7 +37,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
 
-
 @Controller
 @RequestMapping("/documents/")
 public class DocumentBackController extends ArchivoController {
@@ -68,6 +67,7 @@ public class DocumentBackController extends ArchivoController {
 		Map<String, FileItem> ficherosForm = new HashMap<String, FileItem>();
 
 		try {
+			
 			// Recuperamos los valores del request
 			recuperarForms(request, valoresForm, ficherosForm);
 			
@@ -79,164 +79,246 @@ public class DocumentBackController extends ArchivoController {
 			
 			// Actualizamos las traducciones y marcamos los archivos que deven ser eliminados
 			List<Long> archivosAborrar = new Vector<Long>();
+			
 			doc = gestionarTraducciones(valoresForm, ficherosForm, archivosAborrar, docOld, doc);
 			
 			// Guardar el documento
 			String iden = "";
-			if ( valoresForm.get("procId") != null  &&  !"".equals( valoresForm.get("procId") ) ) {
+
+			if ( valoresForm.get("procId") != null  &&  !"".equals( valoresForm.get("procId") ) )
 				iden = "procId";
-			} else if ( valoresForm.get("fitxaId") != null  &&  !"".equals(valoresForm.get("fitxaId") ) ) {
+				
+			else if ( valoresForm.get("fitxaId") != null  &&  !"".equals(valoresForm.get("fitxaId") ) )
 				iden = "fitxaId";
-			}
+			
 			jsonResult = guardarDocumento(valoresForm, iden, locale, archivosAborrar, doc);
 			
 		} catch (FileUploadException fue) {
+			
 			String error = messageSource.getMessage( "error.fitxer.tamany", null, locale );
 			jsonResult = new IdNomDTO(-3l, error).getJson();
 			log.error( error + ": " + fue.toString() );
 
 		} catch (UnsupportedEncodingException uee) {
+			
 			String error = messageSource.getMessage( "error.altres", null, locale );
 			jsonResult = new IdNomDTO(-2l, error).getJson();
 			log.error( error + ": " + uee.toString() );
 
 		} catch (NumberFormatException nfe) {
+			
 			String error = messageSource.getMessage( "error.altres", null, locale );
 			jsonResult = new IdNomDTO(-2l, error).getJson();
 			log.error( error + ": " + nfe.toString() );
 
 		} catch (DelegateException de) {
+			
 			String error = null;
+			
 			if ( de.isSecurityException() ) {
+				
 				error = messageSource.getMessage( "error.permisos", null, locale );
 				jsonResult = new IdNomDTO(-1l, error).getJson();
 
 			} else {
+				
 				error = messageSource.getMessage( "error.altres", null, locale );
 				jsonResult = new IdNomDTO(-2l, error).getJson();
 
 			}
 
 			log.error( error + ": " + de.toString() );
+			
 		}
 
 		return new ResponseEntity<String>(jsonResult, responseHeaders, HttpStatus.CREATED);
+		
 	}
 	
-	//Aquí nos llegará un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
-	//Iremos recopilando los parámetros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
-	private void recuperarForms(HttpServletRequest request, Map<String, String> valoresForm, Map<String, FileItem> ficherosForm) throws UnsupportedEncodingException, FileUploadException
-	{
+	
+	/** Aquí nos llegará un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
+	Iremos recopilando los parámetros de tipo fichero en el Map ficherosForm y el resto en valoresForm. */
+	private void recuperarForms(HttpServletRequest request, Map<String, String> valoresForm, Map<String, FileItem> ficherosForm) throws UnsupportedEncodingException, FileUploadException {
+		
 		List<FileItem> items = UploadUtil.obtenerServletFileUpload().parseRequest(request);
+		
 		for ( FileItem item : items ) {
-			if ( item.isFormField() ) {
+			
+			if ( item.isFormField() )
 				valoresForm.put( item.getFieldName(), item.getString("UTF-8") );
-			} else {
+			
+			else
 				ficherosForm.put( item.getFieldName(), item );
-			}
+			
 		}
+		
 	}
 	
-	/* Vemos si se debe recuperar el documento viejo */
-	private Documento recuperarDocOld(Map<String, String> valoresForm) throws DelegateException
-	{
+	
+	/** Vemos si se debe recuperar el documento viejo */
+	private Documento recuperarDocOld(Map<String, String> valoresForm) throws DelegateException	{
+		
 		DocumentoDelegate docDelegate = DelegateUtil.getDocumentoDelegate();
 		Documento docOld = null;
-		if ( valoresForm.get("docId") != null  &&  !"".equals(valoresForm.get("docId") ) ) {
+		
+		if ( !this.isDocumentoNuevo(valoresForm) ) {
+			
 			Long docId = Long.parseLong( valoresForm.get("docId") );
 			docOld = docDelegate.obtenerDocumento(docId);
+			
 		}
+		
 		return docOld;
+		
 	}
 	
-	/* Recuperamos la información antigua si el documento ya existia */
-	private Documento recuperarInformacionDocumento(Map<String, String> valoresForm, Documento docOld)
-	{
+	
+	/** Recuperamos la información antigua si el documento ya existia */
+	private Documento recuperarInformacionDocumento(Map<String, String> valoresForm, Documento docOld) {
+		
 		Documento doc = new Documento();
-		if ( valoresForm.get("docId") != null  &&  !"".equals(valoresForm.get("docId") ) ) {
+		
+		if ( !this.isDocumentoNuevo(valoresForm) ) {
+			
 			doc.setId( docOld.getId() );
 			doc.setArchivo( docOld.getArchivo() );  // Este atributo parece que ya no se usa. Se mantiene por si acaso.
 			doc.setFicha( docOld.getFicha() );
 			doc.setProcedimiento( docOld.getProcedimiento() );
 			doc.setOrden( docOld.getOrden() );
+			
 		}
+		
 		return doc;
+		
 	}
 	
-	/* Gestión de las traducciones y los archivos */
-	private Documento gestionarTraducciones(
-			Map<String, String> valoresForm,
-			Map<String, FileItem> ficherosForm,
-			List<Long> archivosAborrar,
-			Documento docOld,
-			Documento doc) throws DelegateException
-	{
+	
+	/** Gestión de las traducciones y los archivos */
+	private Documento gestionarTraducciones(Map<String, String> valoresForm, Map<String, FileItem> ficherosForm, 
+			List<Long> archivosAborrar, Documento docOld, Documento doc) throws DelegateException {
+		
 		TraduccionDocumento tradDoc;
-		for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
+		
+		for ( String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes() ) {
+
 			tradDoc = new TraduccionDocumento();
 			tradDoc.setTitulo( RolUtil.limpiaCadena( valoresForm.get("doc_titol_" + lang) ) );
 			tradDoc.setDescripcion( RolUtil.limpiaCadena( valoresForm.get("doc_descripcio_" + lang) ) );
+
+			FileItem fileItem = ficherosForm.get("doc_arxiu_" + lang);			// Archivo
 			
-			// Archivo
-			FileItem fileItem = ficherosForm.get("doc_arxiu_" + lang);
-			if (fileItem != null  &&  fileItem.getSize() > 0) {
-				// En caso de que el documento ya exista y se quiera cambiar el archivo adjunto
-				if (docOld != null) {
-					TraduccionDocumento traDocOld = (TraduccionDocumento) docOld.getTraduccion(lang);
-					if (traDocOld.getArchivo() != null) {
-						archivosAborrar.add( traDocOld.getArchivo().getId() );
+			if ( fileItem != null  &&  fileItem.getSize() > 0 ) {
+			
+					if ( !this.isDocumentoNuevo(valoresForm) ) {
+						
+						TraduccionDocumento traDocOld = (TraduccionDocumento) docOld.getTraduccion(lang);
+
+						if ( this.isArchivoParaBorrar(valoresForm, lang) || this.ficheroAdjuntoIsModificado(valoresForm, traDocOld) )
+							archivosAborrar.add( traDocOld.getArchivo().getId() ); 		//Se indica que hay que borrar el fichero.
+						
 					}
-				}
+
+					tradDoc.setArchivo(UploadUtil.obtenerArchivo(tradDoc.getArchivo(), fileItem)); 		//Nuevo archivo
+					
 				
-				// Nuevo archivo.
-				tradDoc.setArchivo(UploadUtil.obtenerArchivo(tradDoc.getArchivo(), fileItem));
+			} else if ( this.isArchivoParaBorrar(valoresForm, lang) ) {
 				
-			} else if ( valoresForm.get("doc_arxiu_" + lang + "_delete") != null  &&  !"".equals( valoresForm.get("doc_arxiu_" + lang + "_delete") ) ) {
 				// Indicamos a la traducción del documento que no va a tener asignado el archivo.
 				TraduccionDocumento traDocOld = (TraduccionDocumento) docOld.getTraduccion(lang);
 				archivosAborrar.add( traDocOld.getArchivo().getId() );
 				tradDoc.setArchivo(null);
 				
+				
 			} else if ( docOld != null ) {
+				
 				// mantener el fichero anterior
 				TraduccionDocumento traDocOld = (TraduccionDocumento) docOld.getTraduccion(lang);
-				if ( traDocOld != null ) {
+				
+				if ( traDocOld != null )
 					tradDoc.setArchivo( traDocOld.getArchivo() );
-				}
+				
 			}
 			
 			doc.setTraduccion(lang, tradDoc);
+			
 		}
 		
 		return doc;
+		
 	}
 	
-	/* Guardado del documento */
-	private String guardarDocumento(Map<String, String> valoresForm, String iden, Locale locale, List<Long> archivosBorrar, Documento doc) throws DelegateException
-	{
+	
+	/** Guardado del documento */
+	private String guardarDocumento(Map<String, String> valoresForm, String iden, Locale locale, List<Long> archivosBorrar, Documento doc) throws DelegateException {
+		
 		String jsonResult = null;
 		Long docId = null;
+		
 		if ( valoresForm.get(iden) != null  &&  !"".equals( valoresForm.get(iden) ) ) {
+			
 			DocumentoDelegate docDelegate = DelegateUtil.getDocumentoDelegate();
 			Long id = Long.parseLong( valoresForm.get(iden) );
-			// Seleccionamos si queremos guardar una ficha o un procedimiento
-			if (iden.equals("procId")) {
-				docId = docDelegate.grabarDocumento( doc, id, null );
-			} else if (iden.equals("fitxaId")) {
-				docId = docDelegate.grabarDocumento( doc, null, id );
-			}
 			
-			for ( Long idArchivo : archivosBorrar ) {
+			
+			if (iden.equals("procId")) 		// Seleccionamos si queremos guardar una ficha o un procedimiento
+				docId = docDelegate.grabarDocumento( doc, id, null );
+			
+			else if (iden.equals("fitxaId"))
+				docId = docDelegate.grabarDocumento( doc, null, id );
+			
+			
+			for ( Long idArchivo : archivosBorrar )
 				DelegateUtil.getArchivoDelegate().borrarArchivo(idArchivo);
-			}
+			
+			
 			jsonResult = new IdNomDTO( docId,  messageSource.getMessage( "document.guardat.correcte", null, locale ) ).getJson();
+			
+			
 		} else {
+			
 			String error = messageSource.getMessage( "error.altres", null, locale );
 			jsonResult = new IdNomDTO(-2l, error).getJson();
 			log.error("Error guardant document: No s'ha especificat id de procediment o de fitxer.");
+			
 		}
 		
 		return jsonResult;
+		
+	}
+
+
+	/**
+	 * Método que indica si el documento obtenido de la petición es un documento nuevo.
+	 * 
+	 * @param valoresForm	Estructura de datos que contiene los valores enciados por el formulario.
+	 * @return Devuelve <code>true</code> si es un documento nuevo.
+	 */
+	private boolean isDocumentoNuevo(Map<String, String> valoresForm) {
+		return ( valoresForm.get("docId") == null  ||  "".equals(valoresForm.get("docId") ) );
+	}
+
+
+	/**
+	 * Método que indica si el archivo adjunto de un documento se tiene que borrar.
+	 * 
+	 * @param valoresForm	Estructura de datos que contiene los valores enciados por el formulario.
+	 * @param lang	Indica el idioma del documento.
+	 * @return Devuelve <code>true</code> si el archivo adjunto de un documento se ha marcado para borrar.
+	 */
+	private boolean isArchivoParaBorrar(Map<String, String> valoresForm, String lang) {
+		return ( valoresForm.get("doc_arxiu_" + lang + "_delete") != null  &&  !"".equals( valoresForm.get("doc_arxiu_" + lang + "_delete") ) );
+	}
+
+
+	/**
+	 * Método que indica si se va a modificar el fichero adjunto a un documento existente.
+	 * 
+	 * @param valoresForm	Estructura de datos que contiene los valores enciados por el formulario.
+	 * @param traDocOld	Indica un documento que se va a modificar.
+	 * @return	Devuelve <code>true</code> si el fichero adjunto se va a modificar.
+	 */
+	private boolean ficheroAdjuntoIsModificado(Map<String, String> valoresForm, TraduccionDocumento traDocOld) {
+		return ( traDocOld.getArchivo() != null );
 	}
 
 
