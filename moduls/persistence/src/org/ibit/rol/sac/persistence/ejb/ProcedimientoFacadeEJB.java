@@ -631,7 +631,12 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         //----------------------------------------------------------------------
 
         //Ordenamos los documentos por el campo orden (si nulo, ordena por el campo id)
-        List procs = new ArrayList(procedimiento.getDocumentos());
+        List procs = new ArrayList(0);
+        for (Documento documento : procedimiento.getDocumentos()) {
+        	if (documento != null) {
+        		procs.add(documento);
+        	}
+        }
         Collections.sort(procs, new Documento()); 
 	  	procedimiento.setDocumentos(procs);   
         
@@ -702,8 +707,6 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     			if (procedimiento.getOrganResolutori() != null) {
     				Hibernate.initialize( procedimiento.getOrganResolutori().getHijos() );
     			}
-//    			Hibernate.initialize(procedimiento.getUnidadAdministrativa().getNormativas());
-//    			Hibernate.initialize(procedimiento.getUnidadAdministrativa().getEdificios());
     			Hibernate.initialize(procedimiento.getTramites());
     			Hibernate.initialize(procedimiento.getHechosVitalesProcedimientos());
     			Hibernate.initialize(procedimiento.getIniciacion());
@@ -727,7 +730,6 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         		procs.add(documento);
         	}
         }
-//        List procs = new ArrayList(procedimiento.getDocumentos());
         Collections.sort(procs, new Documento());
 	  	procedimiento.setDocumentos(procs);
         
