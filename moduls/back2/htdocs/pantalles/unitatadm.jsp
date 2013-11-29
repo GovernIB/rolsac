@@ -8,6 +8,7 @@
     <link href="<c:url value='/css/modul_seccions_fitxes.css'/>" rel="stylesheet" type="text/css" media="screen" />        
     <link href="<c:url value='/css/modul_edificis.css'/>" rel="stylesheet" type="text/css" media="screen" />
     <link href="<c:url value='/css/modul_usuaris.css'/>" rel="stylesheet" type="text/css" media="screen" />
+    <link href="<c:url value='/css/fitxes.css'/>" rel="stylesheet" type="text/css" media="screen" />
 
     <input type="hidden" id="rolusuario" value="<rol:printRol/>"/>  
                 
@@ -1078,74 +1079,82 @@
     <!-- /escriptori_seccions -->   
     
     <!-- escriptori_fitxes -->
-    <div id="escriptori_fitxes">    
-       <ul id="opcions">
-            <li class="opcio C actiu"><spring:message code='unitatadm.formulari.seccions.fitxes.gestio'/></li>                                 
-        </ul>
+    <div id="escriptori_fitxes">
+       <input id="idSeccion" value="" type="hidden"/>
+       
+       <div id="modulo-fichas-asignadas">
+	       <ul id="opcions">
+	            <li class="opcio L actiu"><spring:message code='tab.llistat'/></li>                                 
+	        </ul>
+	        
+			<div id="resultatsFitxes" class="escriptori_items_llistat" >            
+	            <div style="display: block;" class="resultats L actiu">
+	            
+	                <div style="display: block;" class="dades"></div>
+	                <input type="hidden" class="pagPagina" value="0">
+	                <input type="hidden" class="ordreTipus" value="DESC">
+	                <input type="hidden" class="ordreCamp" value="nom">
+	                             
+	            </div>
+	        </div>
+	        
+	        
+	        <div id="ficha-botones-form" class="cercador">
+				<div id="botonera" class="botonera">
+			   		<div class="boton btnGenerico btnVolverDetalleFichas"><a class="btn torna" href="javascript:;"><span><span><spring:message code='boto.torna_detall'/></span></span></a></div>
+			       	<div class="boton btnGenerico btnFinalizarFichas"><a class="btn finalitza important" href="javascript:;"><span><span><spring:message code='boto.guarda'/></span></span></a></div>
+			    </div>
+		    </div> 
         
-        <div id="resultatsFitxes" class="escriptori_items_llistat">            
-            <div class="resultats C actiu" style="display: block;">
-                <div id="cercador" class="escriptori_items_cercador"> 
-                    <div id="cercador_contingut">
-                        
-                        <div class="fila">                                  
-                            <div class="element t18">                               
-                                <div class="etiqueta"><label for="cerca_fitxes_nom"><spring:message code='unitatadm.formulari.seccions.fitxes.nom'/></label></div>
-                                <div class="control">
-                                    <input id="cerca_fitxes_nom" name="cerca_fitxes_nom" type="text" class="nom" />
-                                </div>
-                            </div>
-                            
-                            <div class="element t21">                               
-                                <div class="etiqueta"><label for="cerca_fitxes_codi"><spring:message code='unitatadm.formulari.seccions.fitxes.codi'/></label></div>
-                                <div class="control">
-                                    <input id="cerca_fitxes_codi" name="cerca_fitxes_codi" type="text" class="codi" />
-                                </div>
-                            </div>
-                        </div>                        
-                        
-                        <div class="botonera">
-                            <div class="boton btnGenerico"><a id="btnLimpiarFichasForm" class="btn borrar" href="javascript:;"><span><span><spring:message code='boto.borrar'/></span></span></a></div>
-                            <div class="boton btnGenerico"><a id="btnBuscarFichasForm" class="btn consulta" href="javascript:;"><span><span><spring:message code='boto.cercar'/></span></span></a></div>
-                            <div class="boton btnGenerico btnVolverDetalleFichas"><a class="btn torna" href="javascript:;"><span><span><spring:message code='boto.torna_detall'/></span></span></a></div>
-                        </div>
-                        
-                    </div>
-                    
-                </div>
-                   
-                <div class="dades"></div>
-                                       
-                <input type="hidden" value="0" class="pagPagina" />
-                <input type="hidden" value="DESC" class="ordreTipus" />
-                <input type="hidden" value="nom" class="ordreCamp" />
-                             
-            </div>
-        </div>        
+        </div>
+        
         
         <div class="modulLateral escriptori_items_seleccionats">
         
-            <div class="modul">
+            <div class="modul cercador_contingut">
                 
                 <!--<div class="interior multilang">-->
                 <div class="interior">
-                    <div class="seleccionats">
-                        <div class="seleccionat">
-                            <p class="info"><spring:message code='unitatadm.formulari.seccions.fitxes.noInfo'/></p>
-                            <div class="listaOrdenable"></div>
-                        </div>
+                    <div id="cercador" class="seleccionats">
+                        <div class="seleccionat ">
+                        
+	    					<p class="info"><strong><spring:message code='unitatadm.formulari.fichas.titulo'/></strong></p>
+	                        <div class="fila">                                  
+	                            <div class="element t18">                               
+	                                <div class="etiqueta"><label for="cerca_fitxes_nom"><spring:message code='unitatadm.formulari.seccions.fitxes.nom'/></label></div>
+	                                <div class="control">
+	                                    <input type="text" id="cerca_fitxes_nom" name="cerca_fitxes_nom" class="nom">
+	                                </div>
+	                            </div>
+	                            
+	                            <div class="element t21">                               
+	                                <div class="etiqueta"><label for="cerca_fitxes_codi"><spring:message code='unitatadm.formulari.seccions.fitxes.codi'/></label></div>
+	                                <div class="control">
+	                                    <input type="text" id="cerca_fitxes_codi" name="cerca_fitxes_codi" class="codi">
+	                                </div>
+	                            </div>
+	                        </div>                        
+                            
+						</div>
                     
-                        <p class="botonera btnGenerico">
-                            <a id="btnFinalizarFichas" href="javascript:;" class="btn finalitza important"><span><span><spring:message code='boto.finalitza'/></span></span></a>
-                        </p>  
+                        <div class="botonera">
+                            <div class="boton btnGenerico"><a href="javascript:;" class="btn borrar" id="btnLimpiarSeccionesForm"><span><span><spring:message code='boto.borrar'/></span></span></a></div>
+                            <div class="boton btnGenerico"><a href="javascript:;" class="btn consulta" id="btnBuscarSeccionesForm"><span><span><spring:message code='boto.cercar'/></span></span></a></div>
+                        </div> 
+                    </div>
+                    
+                    <div id="seleccion-fichas" class="seleccionats">
                     </div>    
                 </div>
                 
             </div>
             
         </div>
+        
+       	
         <!-- seleccionats -->                  
     </div>
+
     <!-- /escriptori_fitxes -->   
                     
     <!-- escriptori_edificis -->
@@ -2109,9 +2118,11 @@
         var pagFitxes = '<c:url value="/fitxainf/llistat.do" />';
         var pagFitxesUASeccio = '<c:url value="/unitatadm/obtenirFitxesUASeccio.do" />';
         var pagGuardarFitxesUASeccio = '<c:url value="/unitatadm/guardarFitxesUASeccio.do" />';
-        var txtEsborrarCorrecte = "<spring:message code='unitatadm.esborrat.correcte'/>";
+        var txtEsborrarCorrecte = "<spring:message code='unitatadm.esborrat.correcte'/>";  
         var pagTraduir = '<c:url value="/unitatadm/traduir.do" />';
-        var fitxaBorrable = '<c:url value="/unitatadm/fitxaBorrable.do" />';
+        var pagFitxa = '<c:url value="/fitxainf/pagDetall.do" />';
+        var pagFitxaDetall = '<c:url value="/fitxainf/fitxainf.do" />';
+        var fitxaBorrable = '<c:url value="/unitatadm/fitxaBorrable.do" />';   
         
         // URL para ordenar el listado de UA hijas. 
         var pagOrdenarUAHijas = '<c:url value="/unitatadm/reordenarUAs.do" />';
@@ -2142,6 +2153,9 @@
         var txtPer = "<spring:message code='txt.per'/>";
         var txtDel = "<spring:message code='txt.del'/>";
         var txtAl = "<spring:message code='txt.al'/>";
+		var txtSeleccionados = "<spring:message code='txt.seleccionades'/>";
+		var txtFichas = "<spring:message code='txt.fitxes_lower'/>";
+        
         // taula
         var txtNom = "<spring:message code='txt.nom'/>";
         var txtPare = "<spring:message code='txt.pare'/>";
@@ -2212,6 +2226,10 @@
         var txtNoHiHaSeccionsSeleccionades = txtNoHiHa + " " + txtSeccions + " " + txtSeleccionades.toLowerCase();
         var txtNoHiHaFitxesSeleccionades = txtNoHiHa + " " + txtFitxes + " " + txtSeleccionades.toLowerCase();
         var txtErrorSeccionsBuides = "<spring:message code='unitatadm.formulari.error.seccions_buides'/>";
+        var txtNoHiHaFitxes = "<spring:message code='unitatadm.formulari.seccions.fitxes.noInfo'/>";
+        var txtTituloCabeceraFichas = "<spring:message code='unitatadm.formulari.seccions.fitxes.titulo'/>";
+        var txtOrdenCabeceraFichas = "<spring:message code='unitatadm.formulari.seccions.fitxes.ordre'/>";
+        
         
         // modul edificis
         var txtEdifici = "<spring:message code='txt.edifici'/>";

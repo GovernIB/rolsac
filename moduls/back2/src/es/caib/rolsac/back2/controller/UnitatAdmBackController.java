@@ -3,9 +3,10 @@ package es.caib.rolsac.back2.controller;
 import static es.caib.rolsac.utils.LogUtils.logException;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
-
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -13,29 +14,29 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.EspacioTerritorial;
 import org.ibit.rol.sac.model.Ficha;
-import org.ibit.rol.sac.model.FichaResumenUA;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.Traduccion;
-import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.TraduccionFicha;
 import org.ibit.rol.sac.model.TraduccionSeccion;
 import org.ibit.rol.sac.model.TraduccionUA;
@@ -65,8 +66,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import es.caib.rolsac.api.v1.UnidadAdministrativaDTO;
 import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
@@ -77,13 +76,16 @@ import es.indra.rol.sac.integracion.traductor.Traductor;
 
 @Controller
 @RequestMapping("/unitatadm/")
-public class UnitatAdmBackController extends PantallaBaseController
-{
+public class UnitatAdmBackController extends PantallaBaseController {
+	
 	private static Log log = LogFactory.getLog(UnitatAdmBackController.class);
 	private static final String URL_PREVISUALIZACION = "es.caib.rolsac.previsualitzacio.ua.url";
+	private static final String OPERACION_FALLIDA = "Error de sessi�n: Sessi�n expirada o no inciada";
 
 	private static class TreeOrdenSeccionComparator implements Comparator {
+		
 		public int compare(Object element1, Object element2) {
+			
 			String lower1 =	 element1.toString();
 			String lower2 =	 element2.toString();
 
@@ -91,60 +93,72 @@ public class UnitatAdmBackController extends PantallaBaseController
 			lower2 = lower2.split("#")[2];
 
 			return lower1.compareTo(lower2);
+			
 		}
-	}       
+		
+	}
+	
 
 	@RequestMapping(value = "/unitatadm.do", method = GET)
-	public String llistatUniAdm(Map<String, Object> model, HttpServletRequest request, HttpSession session)
-	{
+	public String llistatUniAdm(Map<String, Object> model, HttpServletRequest request, HttpSession session) {
+		
 		MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
 		TratamientoDelegate tratamientoDelegate = DelegateUtil.getTratamientoDelegate();
 		EspacioTerritorialDelegate espacioTerritorialDelegate = DelegateUtil.getEspacioTerritorialDelegate();
-		
+
 		List<Materia> llistaMateries = new ArrayList<Materia>();
 		List<Tratamiento> llistaTractaments = new ArrayList<Tratamiento>();
 		List<EspacioTerritorial> llistaEspaiTerritorial = new ArrayList<EspacioTerritorial>();
 		List<IdNomDTO> llistaMateriesDTO = new ArrayList<IdNomDTO>();
 		List<IdNomDTO> llistaTractamentsDTO = new ArrayList<IdNomDTO>();
 		List<IdNomDTO> llistaEspaiTerritorialDTO = new ArrayList<IdNomDTO>();
-		
+
 		String lang = null;
+		
 		try {
-			lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			
+			lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			llistaMateries = materiaDelegate.listarMaterias();
+			
 			for (Materia materia : llistaMateries)
 				llistaMateriesDTO.add(new IdNomDTO(materia.getId(),materia.getNombreMateria(lang)));
+
 			
 			llistaTractaments = tratamientoDelegate.listarTratamientos();
+			
 			for (Tratamiento tractament : llistaTractaments)
 				llistaTractamentsDTO.add(new IdNomDTO(tractament.getId(), tractament.getNombreTratamiento(lang)));
+
 			
 			llistaEspaiTerritorial = espacioTerritorialDelegate.listarEspaciosTerritoriales();
+			
 			for (EspacioTerritorial espaiTerritorial : llistaEspaiTerritorial)
 				llistaEspaiTerritorialDTO.add(new IdNomDTO(espaiTerritorial.getId(), espaiTerritorial.getNombreEspacioTerritorial(lang)));
-			
+
 		} catch (DelegateException dEx) {
+			
 			if (dEx.isSecurityException())
 				log.error("Error de permiso: " + ExceptionUtils.getStackTrace(dEx));
 			else
 				log.error(ExceptionUtils.getStackTrace(dEx));
+
 			
 			if (lang == null) lang = "ca";
+			
 		}
-		
+
 		// Control de si se dan permisos extrar al rol SUPER
 		boolean accesoSuper = System.getProperty("es.caib.rolsac.permisosSuperAdicionales").equals("Y") && request.isUserInRole("sacsuper");
 		boolean accesoOtros = request.isUserInRole("sacsystem") || request.isUserInRole("sacadmin");
 		boolean acceso = (accesoSuper || accesoOtros) ? true : false;
-		
+
 		model.put("nuevaUA", acceso);
 		model.put("menu", 0);
 		model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
 		model.put("submenu_seleccionado", 1);
 		model.put("titol_escriptori", messageSource.getMessage("submenu.unitatAdm", null, request.getLocale()));
 		model.put("escriptori", "pantalles/unitatadm.jsp");
-		
+
 		if (session.getAttribute("unidadAdministrativa") != null) {
 			model.put("idUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getId());
 			model.put("nomUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa(lang));            
@@ -157,11 +171,12 @@ public class UnitatAdmBackController extends PantallaBaseController
 		model.put("urlPrevisualitzacio", System.getProperty(URL_PREVISUALIZACION));
 
 		loadIndexModel (model, request);
-		
+
 		return "index";
-		
+
 	}
 
+	
 	@RequestMapping(value = "/pagDetall.do", method = POST)
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
 
@@ -169,7 +184,7 @@ public class UnitatAdmBackController extends PantallaBaseController
 		UnidadAdministrativaDelegate unitatDelegate = DelegateUtil.getUADelegate();
 
 		if (request.getParameter("id") == null || "".equals(request.getParameter("id")) || "0".equals(request.getParameter("id"))) {
-			
+
 			try {
 				if (unitatDelegate.autorizarCrearUA()) {
 					resultats.put("id", 0); // No hay id y tiene permisos para crear una UA
@@ -177,9 +192,9 @@ public class UnitatAdmBackController extends PantallaBaseController
 					resultats.put("error", messageSource.getMessage("error.permisos.crearUA", null, request.getLocale()));
 					resultats.put("id", -1);
 				}
-				
+
 			} catch (DelegateException dEx) {
-				
+
 				if (dEx.isSecurityException()) {
 					resultats.put("error", messageSource.getMessage("error.permisos.crearUA", null, request.getLocale()));
 					resultats.put("id", -1);
@@ -188,23 +203,23 @@ public class UnitatAdmBackController extends PantallaBaseController
 					resultats.put("id", -2);
 					log.error(ExceptionUtils.getStackTrace(dEx));
 				}
-				
+
 			}
-			
+
 			return resultats;
-			
+
 		}
-		
+
 		Long idUA = new Long(request.getParameter("id"));
-		
+
 		try {
-			
+
 			UnidadAdministrativa uni = unitatDelegate.consultarUnidadAdministrativaSinFichas(idUA);
 			resultats.put("id", idUA);
-			
+
 			// Idiomas.
 			agregaTraduccionesADetalle(resultats, uni);			
-			
+
 			// Configuración/gestión.
 			//resultats.put("item_clau_hita", uni.getClaveHita());
 			resultats.put("item_codi_estandar", uni.getCodigoEstandar());
@@ -214,14 +229,14 @@ public class UnitatAdmBackController extends PantallaBaseController
 			resultats.put("item_telefon", uni.getTelefono());
 			resultats.put("item_fax", uni.getFax());
 			resultats.put("item_email", uni.getEmail());
-			
+
 			// Espacio territorial.
 			if (uni.getEspacioTerrit() != null) {
 				resultats.put("item_espai_territorial", uni.getEspacioTerrit().getId());
 			} else {
 				resultats.put("item_espai_territorial",null);
 			}
-			
+
 			// UA Padre.
 			if (uni.getPadre() != null) {
 				resultats.put("pareId", uni.getPadre().getId());
@@ -233,7 +248,7 @@ public class UnitatAdmBackController extends PantallaBaseController
 
 			// Responsable.
 			agregaResponsableADetalle(resultats, uni);
-			
+
 			// Tratamiento.
 			if (uni.getTratamiento() != null)
 				resultats.put("item_tractament", uni.getTratamiento().getId());
@@ -290,7 +305,7 @@ public class UnitatAdmBackController extends PantallaBaseController
 			resultats.put("usuaris", getLlistaUsuarisDTO(resultats, uni));			
 
 		} catch (DelegateException dEx) {
-			
+
 			if (dEx.isSecurityException()) {
 				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
 				resultats.put("id", -1);
@@ -299,11 +314,11 @@ public class UnitatAdmBackController extends PantallaBaseController
 				resultats.put("id", -2);
 				log.error(ExceptionUtils.getStackTrace(dEx));
 			}
-			
+
 		}
-		
+
 		return resultats;
-		
+
 	}
 
 	private Object getLlistaUsuarisDTO(Map<String, Object> resultats, UnidadAdministrativa uni)
@@ -318,26 +333,26 @@ public class UnitatAdmBackController extends PantallaBaseController
 		} catch (Exception ex) {
 			log.error("Error recuperando los usuarios.");
 		}
-		
+
 		return llistaUsuarisDTO;
 	}
 
 	private Object getLlistaEdificisDTO(Map<String, Object> resultats, UnidadAdministrativa uni) {
-		
+
 		List<IdNomDTO> llistaEdificisDTO = null;
-		
+
 		if (uni.getEdificios() != null) {
-			
+
 			llistaEdificisDTO = new ArrayList<IdNomDTO>();
-			
+
 			for (Object edifici : uni.getEdificios())
 				llistaEdificisDTO.add(new IdNomDTO(((Edificio)edifici).getId(), 
 						((Edificio)edifici).getDireccion()));
 
 		}
-		
+
 		return llistaEdificisDTO;
-		
+
 	}
 
 	private Object getLlistaMateriesDTO(HttpServletRequest request, Map<String, Object> resultats, UnidadAdministrativa uni, String lang)
@@ -349,15 +364,14 @@ public class UnitatAdmBackController extends PantallaBaseController
 				llistaMateriesDTO.add(new IdNomDTO(
 						unidadMateria.getMateria().getId(),
 						unidadMateria.getMateria().getNombreMateria(lang
-				)));
+								)));
 		}
-		
+
 		return llistaMateriesDTO;
 	}
 
-	private List<SeccionFichaDTO> getListaSeccionesDTO(Long idUA, UnidadAdministrativaDelegate unitatDelegate)
-			throws DelegateException {
-		
+	private List<SeccionFichaDTO> getListaSeccionesDTO(Long idUA, UnidadAdministrativaDelegate unitatDelegate) throws DelegateException {
+
 		// Obtenemos las secciones asociadas con la UA.
 		List<SeccionFichaDTO> listaSeccionesDTO = new ArrayList<SeccionFichaDTO>();
 		List<Seccion> listaSecciones = unitatDelegate.listarSeccionesUA(idUA);
@@ -372,11 +386,13 @@ public class UnitatAdmBackController extends PantallaBaseController
 			seccionFichaDTO.setNumFichas( unitatDelegate.cuentaFichasSeccionUA(idUA, seccion.getId()) );
 
 			TraduccionSeccion tr = (TraduccionSeccion)seccion.getTraduccion();
-			if (tr == null) {
+			if ( tr == null ) {
+				
 				tr = new TraduccionSeccion(); 
 				tr.setNombre("");
+				
 			}
-			
+
 			seccionFichaDTO.setNom(tr.getNombre());
 
 			listaSeccionesDTO.add(seccionFichaDTO);
@@ -385,31 +401,34 @@ public class UnitatAdmBackController extends PantallaBaseController
 
 		// Ordenamos por nombre, ascendente.
 		Comparator<SeccionFichaDTO> comparatorASC = new Comparator<SeccionFichaDTO>() {
+			
 			public int compare(SeccionFichaDTO s1, SeccionFichaDTO s2) {
-				return s1.getNom().compareTo(s2.getNom());
+				return s1.getNom().compareTo( s2.getNom() );
 			}
+			
 		};
 
 		Collections.sort(listaSeccionesDTO, comparatorASC);
-					
+
 		return listaSeccionesDTO;
-		
+
 	}
+	
 
 	private void agregaFichasPortadaADetalle(Map<String, Object> resultats, UnidadAdministrativa uni) {
-		
+
 		resultats.put("item_nivell_1", uni.getNumfoto1());
 		resultats.put("item_nivell_2", uni.getNumfoto2());
 		resultats.put("item_nivell_3", uni.getNumfoto3());
 		resultats.put("item_nivell_4", uni.getNumfoto4());
-		
+
 	}
 
 	private void agregaResponsableADetalle(Map<String, Object> resultats, UnidadAdministrativa uni) {
-		
+
 		resultats.put("item_responsable", uni.getResponsable());
 		resultats.put("item_responsable_sexe", uni.getSexoResponsable());
-		
+
 		if (uni.getFotop() != null) {
 			resultats.put("item_responsable_foto_petita_enllas_arxiu", "unitatadm/archivo.do?id=" + uni.getId() + "&tipus=1");
 			resultats.put("item_responsable_foto_petita", uni.getFotop().getNombre());
@@ -417,7 +436,7 @@ public class UnitatAdmBackController extends PantallaBaseController
 			resultats.put("item_responsable_foto_petita_enllas_arxiu", "");
 			resultats.put("item_responsable_foto_petita", "");
 		}
-		
+
 		if (uni.getFotog() != null) {
 			resultats.put("item_responsable_foto_gran_enllas_arxiu", "unitatadm/archivo.do?id=" + uni.getId() + "&tipus=2");
 			resultats.put("item_responsable_foto_gran", uni.getFotog().getNombre());
@@ -425,13 +444,13 @@ public class UnitatAdmBackController extends PantallaBaseController
 			resultats.put("item_responsable_foto_gran_enllas_arxiu", "");
 			resultats.put("item_responsable_foto_gran", "");
 		}
-		
+
 	}
 
 	private void agregaTraduccionesADetalle(Map<String, Object> resultats, UnidadAdministrativa uni) {
-		
+
 		String langDefault = System.getProperty("es.caib.rolsac.idiomaDefault");
-		
+
 		if (uni.getTraduccion("ca") != null) {
 			resultats.put("ca",(TraduccionUA)uni.getTraduccion("ca"));
 		} else {
@@ -440,7 +459,7 @@ public class UnitatAdmBackController extends PantallaBaseController
 			else
 				resultats.put("ca", new TraduccionUA());
 		}
-		
+
 		if (uni.getTraduccion("es") != null) {
 			resultats.put("es",(TraduccionUA)uni.getTraduccion("es"));
 		} else {
@@ -449,7 +468,7 @@ public class UnitatAdmBackController extends PantallaBaseController
 			else
 				resultats.put("es", new TraduccionUA());
 		}
-		
+
 		if (uni.getTraduccion("en") != null) {
 			resultats.put("en",(TraduccionUA)uni.getTraduccion("en"));
 		} else {
@@ -458,7 +477,7 @@ public class UnitatAdmBackController extends PantallaBaseController
 			else
 				resultats.put("en", new TraduccionUA());
 		}
-		
+
 		if (uni.getTraduccion("de") != null) {
 			resultats.put("de",(TraduccionUA)uni.getTraduccion("de"));
 		} else {
@@ -467,7 +486,7 @@ public class UnitatAdmBackController extends PantallaBaseController
 			else
 				resultats.put("de", new TraduccionUA());
 		}
-		
+
 		if (uni.getTraduccion("fr") != null) {
 			resultats.put("fr",(TraduccionUA)uni.getTraduccion("fr"));
 		} else {
@@ -476,12 +495,12 @@ public class UnitatAdmBackController extends PantallaBaseController
 			else
 				resultats.put("fr", new TraduccionUA());
 		}
-		
+
 	}
-	
+
 	@RequestMapping(value = "/guardar.do", method = POST)
 	public ResponseEntity<String> guardarUniAdm(HttpSession session, HttpServletRequest request) {
-		
+
 		/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
 		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la petici�n.
@@ -498,11 +517,12 @@ public class UnitatAdmBackController extends PantallaBaseController
 		Map<String, FileItem> ficherosForm = new HashMap<String, FileItem>();
 
 		try {
-			
+
 			// Aquí nos llegará un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
 			// Iremos recopilando los parámetros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
 			List<FileItem> items = UploadUtil.obtenerServletFileUpload().parseRequest(request);
 
+			//TODO: 03/10/2013: Ya no se contempla la posibilidad de enviar las fichas mediante éste método??
 			for (FileItem item : items) {
 				if (item.isFormField()) {
 					valoresForm.put(item.getFieldName(), item.getString("UTF-8"));
@@ -543,16 +563,16 @@ public class UnitatAdmBackController extends PantallaBaseController
 			unitatAdministrativa.setTelefono(valoresForm.get("item_telefon"));
 			unitatAdministrativa.setFax(valoresForm.get("item_fax"));
 			unitatAdministrativa.setEmail(valoresForm.get("item_email"));
-			
+
 			// Idiomas.
 			unitatAdministrativa.setTraduccionMap(getTraduccionesFormulario(valoresForm));
 
 			// Espai territorial.
 			unitatAdministrativa.setEspacioTerrit(getEspacioTerritorialFormulario(valoresForm));
-			
+
 			// Responsable.
 			guardaResponsable(valoresForm, ficherosForm, unitatAdministrativa);
-		
+
 			// Tratamiento.
 			Long tractamentId = ParseUtil.parseLong(valoresForm.get("item_tractament"));
 			if (tractamentId != null) {
@@ -567,16 +587,16 @@ public class UnitatAdmBackController extends PantallaBaseController
 
 			// Logotipos.
 			guardaLogotipos(valoresForm, ficherosForm, unitatAdministrativa);
-						
+
 			// Fichas de la portada web.
 			guardarFichasPortada(valoresForm, unitatAdministrativa);
-			
+
 			// Materias asociadas.
 			guardarMaterias(valoresForm, unitatAdministrativa, edicion);
 
 			// Edificios.
 			guardarEdificios(valoresForm, unitatAdministrativa, edicion);
-			
+
 			// UA Padre.
 			Long unitatAdmPareId = ParseUtil.parseLong(valoresForm.get("item_pare_id"));			
 			crearOActualizarUnitatAdministrativa(unitatAdministrativa, unitatAdmPareId);
@@ -587,14 +607,14 @@ public class UnitatAdmBackController extends PantallaBaseController
 
 			// Usuarios.
 			guardarUsuarios(valoresForm, unitatAdministrativa, edicion);
-			
+
 			// TODO: aclarar => ¿Por qué se ejecuta también esta misma llamada, líneas antes, en el guardado de la UA padre?
 			// ¿Es posible que sobre?
 			crearOActualizarUnitatAdministrativa(unitatAdministrativa, unitatAdmPareId);
 
 			//Actualiza estadísticas
 			DelegateUtil.getEstadisticaDelegate().grabarEstadisticaUnidadAdministrativa( unitatAdministrativa.getId() );
-			
+
 			// Sobre escrivim la unitat administrativa de la mollapa
 			UnidadAdministrativaController.actualizarUAMigaPan(session, unitatAdministrativa);
 
@@ -602,7 +622,7 @@ public class UnitatAdmBackController extends PantallaBaseController
 			result = new IdNomDTO(unitatAdministrativa.getId(), ok);            
 
 		} catch (DelegateException dEx) {
-			
+
 			if (dEx.isSecurityException()) {
 				String error = messageSource.getMessage("error.permisos", null, request.getLocale());
 				result = new IdNomDTO(-1l, error);
@@ -611,30 +631,30 @@ public class UnitatAdmBackController extends PantallaBaseController
 				result = new IdNomDTO(-2l, error);
 				log.error(ExceptionUtils.getStackTrace(dEx));
 			}
-			
+
 		} catch (UnsupportedEncodingException e) {
-			
+
 			String error = messageSource.getMessage("error.altres", null, request.getLocale());
 			result = new IdNomDTO(-2l, error);
 			log.error(ExceptionUtils.getStackTrace(e));
-			
+
 		} catch (FileUploadException e) {
-			
+
 			String error = messageSource.getMessage("error.fitxer.tamany", null, request.getLocale());
 			result = new IdNomDTO(-3l, error);
 			log.error(ExceptionUtils.getStackTrace(e));
-			
+
 		}
 
 		return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
-		
+
 	}
 
 	private void guardarUsuarios(Map<String, String> valoresForm, UnidadAdministrativa unitatAdministrativa, boolean edicion) 
 			throws DelegateException {
-		
+
 		if (edicion && isModuloModificado("modulo_usuario_modificado", valoresForm)) {
-			
+
 			// Recollir els usuaris actuals de la UA i borrar-los
 			UsuarioDelegate usuarioDelegate = DelegateUtil.getUsuarioDelegate();
 			if (unitatAdministrativa.getUsuarios() != null) {
@@ -650,16 +670,16 @@ public class UnitatAdmBackController extends PantallaBaseController
 				for (int i = 0; i < listaUsuarios.length; i++)
 					usuarioDelegate.asignarUnidad(new Long(listaUsuarios[i]), unitatAdministrativa.getId());
 			}
-			
+
 		}
-		
+
 	}
 
 	private void guardarEdificios(Map<String, String> valoresForm, UnidadAdministrativa unitatAdministrativa, boolean edicion)
 			throws DelegateException {
-		
+
 		if (edicion && isModuloModificado("modulo_edificios_modificado", valoresForm)) {
-			
+
 			EdificioDelegate edificioDelegate = DelegateUtil.getEdificioDelegate();			
 
 			// Recollir els edificis actuals de la UA.
@@ -677,14 +697,14 @@ public class UnitatAdmBackController extends PantallaBaseController
 				for (int i = 0; i < listaEdificios.length; i++) 
 					edificioDelegate.anyadirUnidad(unitatAdministrativa.getId(), new Long(listaEdificios[i]));
 			}
-			
+
 		}
-		
+
 	}
 
 	private void guardarMaterias(Map<String, String> valoresForm, UnidadAdministrativa unitatAdministrativa, boolean edicion) 
 			throws DelegateException {
-		
+
 		if (valoresForm.get("materies") != null && isModuloModificado("modulo_materias_modificado", valoresForm)) {
 
 			UnidadMateriaDelegate unidadMateriaDelegate = DelegateUtil.getUnidadMateriaDelegate();
@@ -724,11 +744,11 @@ public class UnitatAdmBackController extends PantallaBaseController
 				}
 			}
 		}
-		
+
 	}
 
 	private void guardarFichasPortada(Map<String, String> valoresForm, UnidadAdministrativa unitatAdministrativa) {
-		
+
 		if (valoresForm.get("item_nivell_1") != null
 				&& !"".equals(valoresForm.get("item_nivell_1"))) {
 			unitatAdministrativa.setNumfoto1(ParseUtil.parseInt(valoresForm
@@ -749,13 +769,13 @@ public class UnitatAdmBackController extends PantallaBaseController
 			unitatAdministrativa.setNumfoto4(ParseUtil.parseInt(valoresForm
 					.get("item_nivell_4")));
 		}
-		
+
 	}
 
 	private void guardaLogotipos(Map<String, String> valoresForm, Map<String, FileItem> ficherosForm, UnidadAdministrativa unitatAdministrativa) throws DelegateException
 	{
 		UnidadAdministrativaDelegate unitatAdministrativaDelegate = DelegateUtil.getUADelegate();
-		
+
 		//LogoHoritzontal
 		FileItem fileLogoHoritzontal = ficherosForm.get("item_logo_horizontal");
 		if ( fileLogoHoritzontal != null && fileLogoHoritzontal.getSize() > 0 ) {
@@ -792,109 +812,121 @@ public class UnitatAdmBackController extends PantallaBaseController
 			unitatAdministrativaDelegate.eliminarLogoTipos(unitatAdministrativa.getId());
 			unitatAdministrativa.setLogot(null);
 		}
-		
+
 	}
 
-	private void guardaResponsable(Map<String, String> valoresForm, Map<String, FileItem> ficherosForm, UnidadAdministrativa unitatAdministrativa) throws DelegateException
-	{
+	private void guardaResponsable(Map<String, String> valoresForm, Map<String, FileItem> ficherosForm, UnidadAdministrativa unitatAdministrativa) throws DelegateException {
+		
 		unitatAdministrativa.setResponsable(valoresForm.get("item_responsable"));
 		unitatAdministrativa.setSexoResponsable(Integer.parseInt(valoresForm.get("item_responsable_sexe")));
 		UnidadAdministrativaDelegate unitatAdministrativaDelegate = DelegateUtil.getUADelegate();
 		
 		//FotoPetita
 		FileItem fileFotoPetita = ficherosForm.get("item_responsable_foto_petita");
+		
 		if ( fileFotoPetita != null && fileFotoPetita.getSize() > 0 ) {
+			
 			unitatAdministrativa.setFotop(UploadUtil.obtenerArchivo(unitatAdministrativa.getFotop(), fileFotoPetita));
+			
 		} else if (valoresForm.get("item_responsable_foto_petita_delete") != null && !"".equals(valoresForm.get("item_responsable_foto_petita_delete"))) {
+			
 			//borrar fichero si se solicita
 			unitatAdministrativaDelegate.eliminarFotoPetita(unitatAdministrativa.getId());
 			unitatAdministrativa.setFotop(null);
+			
 		}
 		
 		//FotoGran
 		FileItem fileFotoGran = ficherosForm.get("item_responsable_foto_gran");
-		if ( fileFotoGran != null && fileFotoGran.getSize() > 0 ) {
-			unitatAdministrativa.setFotog(UploadUtil.obtenerArchivo(unitatAdministrativa.getFotog(), fileFotoGran));
-		} else if (valoresForm.get("item_responsable_foto_gran_delete") != null && !"".equals(valoresForm.get("item_responsable_foto_gran_delete"))) {
-			//borrar fichero si se solicita
-			unitatAdministrativaDelegate.eliminarFotoGrande(unitatAdministrativa.getId());
-			unitatAdministrativa.setFotog(null);
-		}
 		
+		if ( fileFotoGran != null && fileFotoGran.getSize() > 0 ) {
+			
+			unitatAdministrativa.setFotog( UploadUtil.obtenerArchivo( unitatAdministrativa.getFotog(), fileFotoGran ) );
+			
+		} else if (valoresForm.get("item_responsable_foto_gran_delete") != null && !"".equals(valoresForm.get("item_responsable_foto_gran_delete"))) {
+			
+			//borrar fichero si se solicita
+			unitatAdministrativaDelegate.eliminarFotoGrande( unitatAdministrativa.getId() );
+			unitatAdministrativa.setFotog(null);
+			
+		}
+
 	}
 
-	private EspacioTerritorial getEspacioTerritorialFormulario(Map<String, String> valoresForm) 
-			throws DelegateException {
-		
-		Long espaiTerritorialId = ParseUtil.parseLong(valoresForm.get("item_espai_territorial"));
-		
-		if (espaiTerritorialId != null) {
-			
+	private EspacioTerritorial getEspacioTerritorialFormulario(Map<String, String> valoresForm) throws DelegateException {
+
+		Long espaiTerritorialId = ParseUtil.parseLong( valoresForm.get("item_espai_territorial") );
+
+		if ( espaiTerritorialId != null ) {
+
 			EspacioTerritorialDelegate espacioTerritorialDelegate = DelegateUtil.getEspacioTerritorialDelegate();
 			EspacioTerritorial espacioTerritorial = espacioTerritorialDelegate.obtenerEspacioTerritorial(espaiTerritorialId);
-			
+
 			return espacioTerritorial;       
-			
+
 		} else {
-			
+
 			return null;
-			
+
 		}
-				
+
 	}
 
-	private Map<String, Traduccion> getTraduccionesFormulario(Map<String, String> valoresForm) throws DelegateException
-	{
+	private Map<String, Traduccion> getTraduccionesFormulario(Map<String, String> valoresForm) throws DelegateException {
+		
 		IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
 		List<String> langs = idiomaDelegate.listarLenguajes();
 		Map<String, Traduccion> traduccions = new HashMap<String, Traduccion>();
-		
-		for (String lang: langs) {
-			
-			TraduccionUA tUA = new TraduccionUA();
-			
-			tUA.setNombre(RolUtil.limpiaCadena(valoresForm.get("item_nom_"+  lang)));
-			tUA.setPresentacion(RolUtil.limpiaCadena(valoresForm.get("item_presentacio_" + lang)));
-			tUA.setCvResponsable(RolUtil.limpiaCadena(valoresForm.get("item_cvResponsable_" + lang)));
-			tUA.setAbreviatura(RolUtil.limpiaCadena(valoresForm.get("item_abreviatura_" + lang)));
-			tUA.setUrl(RolUtil.limpiaCadena(valoresForm.get("item_url_" + lang)));
-			
-			traduccions.put(lang, tUA);
-			
-		}
-		
-		return traduccions;
-		
-	}
 
+		for ( String lang : langs ) {
+
+			TraduccionUA tUA = new TraduccionUA();
+
+			tUA.setNombre( RolUtil.limpiaCadena( valoresForm.get( "item_nom_" +  lang ) ) );
+			tUA.setPresentacion( RolUtil.limpiaCadena( valoresForm.get("item_presentacio_" + lang ) ) );
+			tUA.setCvResponsable( RolUtil.limpiaCadena( valoresForm.get( "item_cvResponsable_" + lang ) ) );
+			tUA.setAbreviatura( RolUtil.limpiaCadena( valoresForm.get( "item_abreviatura_" + lang) ) );
+			tUA.setUrl( RolUtil.limpiaCadena( valoresForm.get( "item_url_" + lang ) ) );
+
+			traduccions.put(lang, tUA);
+
+		}
+
+		return traduccions;
+
+	}
+	
 	/**
 	 * @param unitatAdministrativa
 	 * @param unitatAdmPareId
 	 * @throws DelegateException
 	 */
 	private void crearOActualizarUnitatAdministrativa(UnidadAdministrativa unitatAdministrativa, Long unitatAdmPareId) throws DelegateException	{
-		
+
 		UnidadAdministrativaDelegate unitatAdministrativaDelegate = DelegateUtil.getUADelegate();
+		
 		if ( unitatAdministrativa.getId() != null ) {
-			
+
 			unitatAdministrativaDelegate.actualizarUnidadAdministrativa(unitatAdministrativa, unitatAdmPareId);
-			
+
 		} else {
-			
+
 			Long id;
-			if ( unitatAdmPareId != null ) {
+			if ( unitatAdmPareId != null )
 				id = unitatAdministrativaDelegate.crearUnidadAdministrativa(unitatAdministrativa, unitatAdmPareId);
-			} else {
+			
+			else
 				id = unitatAdministrativaDelegate.crearUnidadAdministrativaRaiz(unitatAdministrativa);
-			}
+
 			
 			unitatAdministrativa.setId(id);
-			
+
 		}
+		
 	}
 
 	// TODO: ¿se puede borrar?
-	
+
 	//    /**
 	//     * Método que comprueba si hay que mostrar los logos
 	//     *
@@ -913,7 +945,7 @@ public class UnitatAdmBackController extends PantallaBaseController
 		IdNomDTO resultatStatus = new IdNomDTO(); 
 
 		try {
-			
+
 			UnidadAdministrativaDelegate unidadAdministrativaDelegate = DelegateUtil.getUADelegate();
 
 			if (!hayMicrositesUA(id)) {
@@ -937,31 +969,31 @@ public class UnitatAdmBackController extends PantallaBaseController
 						edificioDelegate.eliminarUnidad(unitatAdministrativa.getId(), edificio.getId());
 
 					unidadAdministrativaDelegate.eliminarUaSinRelaciones(id);    
-					
+
 				} else {
-					
+
 					return new IdNomDTO(-1l, messageSource.getMessage(errorElementosRelacionados, null, request.getLocale()));
-					
+
 				}
 
 			} else 
 				return new IdNomDTO(id, messageSource.getMessage("unitatadm.esborrat.incorrecte.microsites", null, request.getLocale()));	    	
 
 		} catch (DelegateException dEx) {
-			
+
 			if (dEx.isSecurityException()) {
 				resultatStatus.setId(-1l);
 			} else {
 				resultatStatus.setId(-2l);              
 			}	
-			
+
 			log.error(ExceptionUtils.getStackTrace(dEx));
-			
+
 		}
 
 		request.getSession().setAttribute("unidadAdministrativa", null);	    
 		return new IdNomDTO(id, messageSource.getMessage("unitatadm.esborrat.correcte", null, request.getLocale()) );	
-		
+
 	}
 
 	@RequestMapping(value = "/llistatFitxesUA.do", method = POST)
@@ -972,7 +1004,7 @@ public class UnitatAdmBackController extends PantallaBaseController
 		Map<String, Object> resultats = new HashMap<String, Object>();
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		Map<String, Object> tradMap = new HashMap<String, Object>();
-		
+
 		// Per defecte només carregarem les fitxes de la UA actual i de les seves UAs filles.
 		boolean uaMeves = false;
 		boolean uaFilles = false;
@@ -993,20 +1025,21 @@ public class UnitatAdmBackController extends PantallaBaseController
 		ua = (UnidadAdministrativa) request.getSession().getAttribute("unidadAdministrativa");		
 
 		try {
-			
-			Long codiFitxa = ParseUtil.parseLong(request.getParameter("codiFitxa"));
+
+			Long codiFitxa = ParseUtil.parseLong(request.getParameter("idFicha"));
 			paramMap.put("id", codiFitxa);
-			
+
 		} catch (NumberFormatException e) {
-			
+
 			// FIXME: avisar de error y cancelar consulta de datos.
-			
+
 		}
-		
+
 		try {
-			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			
-			String textes = request.getParameter("texteFitxa");
+			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			String textes = request.getParameter("nombreFicha");
+			
 			if (textes != null && !"".equals(textes)) {
 				textes = textes.toUpperCase();
 				tradMap.put("titulo", textes);
@@ -1037,7 +1070,7 @@ public class UnitatAdmBackController extends PantallaBaseController
 								DateUtils.formatDate(fitxa.getFechaPublicacion()), 
 								DateUtils.formatDate(fitxa.getFechaCaducidad()),
 								DateUtils.formatDate(fitxa.getFechaActualizacion()),
-								fitxa.isVisible()));
+								!fitxa.isVisible()));
 			}
 
 		} catch (DelegateException dEx) {
@@ -1051,43 +1084,44 @@ public class UnitatAdmBackController extends PantallaBaseController
 		}
 
 		resultats.put("total", llistaFitxesDTO.size());
-		resultats.put("nodes", llistaFitxesDTO);
+		//resultats.put("nodes", llistaFitxesDTO);
+		resultats.put("fitxes", llistaFitxesDTO);
 
 		return resultats;
 
 	}
-	
-	
+
+
 	@RequestMapping(value = "/llistatSeccions.do", method = POST)
 	public @ResponseBody Map<String, Object> llistaSeccions(HttpServletRequest request)
 	{
 		Map<String,Object> resultats = new HashMap<String,Object>();
-		
+
 		try {
 			String filtreNom = request.getParameter("nomSeccio").trim();
 			SeccionDelegate secDel = DelegateUtil.getSeccionDelegate();
-			
+
 			List<Seccion> listaSecciones = secDel.listarSecciones();
 			List<SeccionDTO> listaSeccionesDTO = new ArrayList<SeccionDTO>();
-			
+
 			for (Iterator iterator = listaSecciones.iterator(); iterator.hasNext();) {
 				SeccionDTO seccionDTO = new SeccionDTO();
 				Seccion seccion = (Seccion) iterator.next();
-				
+
 				String nomSeccio = ( (TraduccionSeccion) seccion.getTraduccion(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto())).getNombre().replaceAll("\\<.*?>", "");
-				
+
 				if (toFormatComparacio(nomSeccio).contains(toFormatComparacio(filtreNom)) || "".equals(filtreNom)) {
 					seccionDTO.setId(seccion.getId());
 					seccionDTO.setNom(nomSeccio);
 					listaSeccionesDTO.add(seccionDTO);
 				}
 			}
-			
+
 			Collections.sort(listaSeccionesDTO);
-			
+
 			resultats.put("total", listaSeccionesDTO.size());
 			resultats.put("nodes", listaSeccionesDTO);
-			
+
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
 				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
@@ -1098,23 +1132,23 @@ public class UnitatAdmBackController extends PantallaBaseController
 				log.error(ExceptionUtils.getStackTrace(dEx));
 			}
 		}
-		
+
 		return resultats;
 	}
-	
-	
+
+
 	@RequestMapping(value = "/reordenarUAs.do", method = POST) 
 	public @ResponseBody IdNomDTO reordenarUAs(HttpServletRequest request) {
-		
+
 		IdNomDTO resultatStatus = new IdNomDTO();
 
 		try {
-			
+
 			// Control de si se dan permisos extrar al rol SUPER.
 			boolean accesoSuper = System.getProperty("es.caib.rolsac.permisosSuperAdicionales").equals("Y") && request.isUserInRole("sacsuper");
 			boolean accesoOtros = request.isUserInRole("sacsystem") || request.isUserInRole("sacadmin");
 			boolean acceso = (accesoSuper || accesoOtros) ? true : false;
-			
+
 			if (!acceso)
 				return resultatStatus;
 
@@ -1132,23 +1166,23 @@ public class UnitatAdmBackController extends PantallaBaseController
 			unidadAdministrativaDelegate.reordenar(id, ordenNuevo, ordenAnterior, idPadre);
 
 		} catch (DelegateException dEx) {
-			
+
 			if (dEx.isSecurityException()) {
 				resultatStatus.setId(-1l);
 			} else {
 				resultatStatus.setId(-2l);
 				log.error(ExceptionUtils.getStackTrace(dEx));
 			}
-			
+
 		} catch (NumberFormatException nfEx) {
-			
+
 			resultatStatus.setId(-3l);
 			log.error("Error: Id de UA no numèrica: " + ExceptionUtils.getStackTrace(nfEx));
-			
+
 		}
 
 		return resultatStatus;
-		
+
 	}    
 
 	@RequestMapping(value = "/llistat.do", method = POST)
@@ -1325,7 +1359,7 @@ public class UnitatAdmBackController extends PantallaBaseController
 		} catch(Exception e) {
 			return false;  
 		}
-		
+
 	}
 
 	private String validarElementosRelacionados(UnidadAdministrativa ua) {
@@ -1369,77 +1403,59 @@ public class UnitatAdmBackController extends PantallaBaseController
 
 					count++;
 				}
-				
+
 			}
 
 			if (!boolProcedIsEmpty)
 				return "unitatadm.esborrat.incorrecte.procediments";
 			else
 				return "unitatadm.esborrat.incorrecte.normatives"; 
-			
+
 		}
 
 		//return errores;
 		return "";
-		
+
 	}
-	
-	
+
+
 	/**
 	 * Solicita las fichas relacionadas con una UA y una sección.
 	 */
 	@RequestMapping(value = "/obtenirFitxesUASeccio.do", method = POST)
-	public @ResponseBody Map<String, Object> llistaFitxesUASeccio(HttpServletRequest request)
-	{
+	public @ResponseBody Map<String, Object> llistaFitxesUASeccio(Long idSeccion, HttpServletRequest request) {
+
 		Map<String, Object> resultats = new HashMap<String, Object>();
-		
+
+		if ( request.getSession().getAttribute("unidadAdministrativa") == null || !this.validarParametro(idSeccion) ) { // Si no hay unidad administrativa se devuelve vacío
+
+			this.mostrarErrorOperacionFallida(resultats, request.getLocale(), OPERACION_FALLIDA);
+
+			return resultats;
+
+		}
+
 		UnidadAdministrativa ua = new UnidadAdministrativa();
-		if (request.getSession().getAttribute("unidadAdministrativa") == null) {
-			resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
-			resultats.put("id", -2);
-			log.error("Error de sessión: Sessión expirada o no inciada");
-			
-			return resultats; // Si no hay unidad administrativa se devuelve vacio
-		}
-		
-		Long idSeccion = Long.valueOf(request.getParameter("idseccion"));
-		if (idSeccion == null || "".equals(idSeccion) || idSeccion < 1) {
-			resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
-			resultats.put("id", -2);
-			log.error("Error de sessión: Sessión expirada o no inciada");
-			
-			return resultats; // Si no hay unidad administrativa se devuelve vacio
-		}
-		
-		ua = (UnidadAdministrativa)request.getSession().getAttribute("unidadAdministrativa");
+		ua = (UnidadAdministrativa) request.getSession().getAttribute("unidadAdministrativa");	
 		UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+		List<FichaDTO> listaFichas = new ArrayList<FichaDTO>();
 
 		try {
-			List<FichaDTO> listaFichas = new ArrayList<FichaDTO>();
-			List<FichaResumenUA> listaFichasSeccionUA = uaDelegate.listarFichasSeccionUA(ua.getId(), idSeccion);
-			
-			if (listaFichasSeccionUA != null) {
-				Iterator<FichaResumenUA> iterator2 = listaFichasSeccionUA.iterator();
-				while (iterator2.hasNext()) {
-					FichaResumenUA  ficha = iterator2.next();
-					if (ficha.getFicha() != null) {
-						FichaDTO fichaDTO = new FichaDTO();
-						fichaDTO.setId(ficha.getFicha().getId());
-						fichaDTO.setTitulo( ( ((TraduccionFicha) ficha.getFicha().getTraduccion( DelegateUtil.getIdiomaDelegate().lenguajePorDefecto())).getTitulo()).replaceAll("\\<.*?>", "") );
-						fichaDTO.setOrdre(new Long(ficha.getOrden()));
-						listaFichas.add( fichaDTO );
-					}
-				}
-			}
+
+			String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+
+			listaFichas = uaDelegate.listarFichasSeccionUA(ua.getId(), idSeccion, idioma);				
+
 			resultats.put("fitxes", listaFichas);
-			
+
 		} catch (DelegateException e) {
-			resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
-			resultats.put("id", -2);
-			log.error(ExceptionUtils.getStackTrace(e));
+
+			this.mostrarErrorOperacionFallida( resultats, request.getLocale(), ExceptionUtils.getStackTrace(e) );
+
 		}
-		
+
 		return resultats;
+
 	}
 
 
@@ -1449,56 +1465,43 @@ public class UnitatAdmBackController extends PantallaBaseController
 	 * @return
 	 */
 	@RequestMapping(value = "/guardarFitxesUASeccio.do", method = POST)
-	public @ResponseBody Map<String, Object> guardarFitxesUASeccio(HttpServletRequest request)
-	{
+	public @ResponseBody Map<String, Object> guardarFitxesUASeccio(Long idUA, Long idSeccion, String listaFichas, HttpServletRequest request) {
+
 		Map<String, Object> resultats = new HashMap<String, Object>();
 		
-		// Si alguno es nulo, error.
-		if (request.getParameter("idUA") == null
-				|| request.getParameter("idSeccion") == null
-				|| request.getParameter("listaIdFichas") == null) {
-			
-			resultats.put("id", -2);
-			log.error("Falta alguno de los parámetros para completar el guardado de las fichas de la sección");
-			return resultats;
-		}
-		
-		Long idUA = Long.parseLong(request.getParameter("idUA"));
-		Long idSeccion = Long.parseLong(request.getParameter("idSeccion"));
-		String[] listaIdFichas = request.getParameter("listaIdFichas").split(",");
-		// Se debe controlar el caso en que nos devuelva "" en vez de null
-    	if (listaIdFichas.length == 1 && listaIdFichas[0].equals("")) {
-    		resultats.put("id", -2);
-			log.error("Falta alguno de los parámetros para completar el guardado de las fichas de la sección");
-    		return resultats;
-    	}
+		if ( idUA == null || idSeccion == null || !this.validarParametro(listaFichas) ) {
 
-    	List<Long> listaIdFichasLong = new ArrayList<Long>();
-    	for (String s : listaIdFichas) {
-    		listaIdFichasLong.add(Long.parseLong(s));
-    	}
-    	try {
-    		UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
-    		if (listaIdFichasLong.size() == 0) {
-    			// Eliminar sección-UA
-    			uaDelegate.eliminarSeccionUA(idUA, idSeccion);
-    		} else {
-    			uaDelegate.actualizaFichasSeccionUA(idUA, idSeccion, listaIdFichasLong);
-    		}
-    		
-    	} catch (DelegateException e) {
-    		if (e.isSecurityException()) {
-    			resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
-    			resultats.put("id", -1);
-    		} else {
-    			resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
-            	resultats.put("id", -2);
-            	log.error(ExceptionUtils.getStackTrace(e));
-            }
+			String mensaje = "Falta alguno de los parámetros para completar el guardado de las fichas de la sección";
+			this.mostrarErrorOperacionFallida(resultats, request.getLocale(), mensaje);
+
+			return resultats;
+
 		}
-		
+
+		try {
+
+			List<FichaDTO> fichas = this.castJsonListToHashTable(listaFichas);
+			UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+			uaDelegate.actualizaFichasSeccionUA(idUA, idSeccion, fichas);
+
+		} catch (DelegateException e) {
+
+			if (e.isSecurityException()) {
+
+				this.mostrarErrorPermisos(resultats, request.getLocale());
+
+			} else {
+
+				this.mostrarErrorOperacionFallida( resultats, request.getLocale(), ExceptionUtils.getStackTrace(e) );
+
+			}
+
+		}
+
 		return resultats;
+
 	}
+
 
 	/**
 	 * A partir de una lista de la entidad UnidadMateria, borra aquellos elementos que ya no pertenecer�n
@@ -1535,7 +1538,8 @@ public class UnitatAdmBackController extends PantallaBaseController
 		}
 
 		for ( Long id : listaIdUnidadMateriaObsoleta ) 
-			unidadMateriaDelegate.borrarUnidadMateria( id );	
+			unidadMateriaDelegate.borrarUnidadMateria( id );
+		
 	}
 
 	/**
@@ -1604,13 +1608,13 @@ public class UnitatAdmBackController extends PantallaBaseController
 	private boolean isSeccionModificada(long seccionId, Map<String, String> valoresForm) {
 		return "1".equals(valoresForm.get("seccio_modificada_" + seccionId));
 	}
-	
-	
+
+
 	@RequestMapping(value = "/traduir.do")
 	public @ResponseBody Map<String, Object> traduir(HttpServletRequest request)
 	{
 		Map<String, Object> resultats = new HashMap<String, Object>();
-		
+
 		try {
 			String idiomaOrigenTraductor = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			
@@ -1618,10 +1622,10 @@ public class UnitatAdmBackController extends PantallaBaseController
 			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
 			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
 			traduccions = traductor.translate(traduccioOrigen, idiomaOrigenTraductor);
-			
+
 			resultats.put("traduccions", traduccions);
-	        
-	    } catch (DelegateException dEx) {
+
+		} catch (DelegateException dEx) {
 			logException(log, dEx);
 			if (dEx.isSecurityException()) {
 				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
@@ -1635,10 +1639,77 @@ public class UnitatAdmBackController extends PantallaBaseController
 			log.error("CatalegProcedimentBackController.traduir: Error en al traducir procedimiento: " + e);
 			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
 		}
-		
+
 		return resultats;
 	}
-	
+
+
+	private void mostrarErrorOperacionFallida(Map<String, Object> resultats, Locale locale, String mensaje) {
+
+		resultats.put( "error", messageSource.getMessage("error.operacio_fallida", null, locale ) );
+		resultats.put("id", -2);
+		log.error(mensaje);
+	}
+
+	private void mostrarErrorPermisos(Map<String, Object> resultats, Locale locale)  {
+
+		resultats.put( "error", messageSource.getMessage("error.permisos", null, locale ) );
+		resultats.put("id", -1);
+
+	}
+
+
+	/**
+	 * @param parametro	Propiedad de tipo Long a evaluar
+	 * @return Devuelve <code>false</code>  si el parámetro es nulo o menor de 1
+	 */
+	private boolean validarParametro(Long parametro) {
+
+		boolean b = true;
+		if ( parametro == null || parametro < 1 )
+			b = false;
+
+		return b;
+
+	}
+
+
+	private boolean validarParametro(String parametro) {
+
+		boolean b = true;
+		if ( parametro == null || "".equals(parametro) )
+			b = false;
+
+		return b;
+		
+	}
+
+	private List<FichaDTO> castJsonListToHashTable(String jsonList) {
+
+		List<FichaDTO> lista = Collections.EMPTY_LIST;
+		
+		try {
+
+			 lista = Arrays.asList( new ObjectMapper().readValue(jsonList, FichaDTO[].class) );
+
+		} catch (JsonParseException e) {
+
+			log.error(ExceptionUtils.getStackTrace(e));
+
+		} catch (JsonMappingException e) {
+
+			log.error(ExceptionUtils.getStackTrace(e));
+
+		} catch (IOException e) {
+
+			log.error(ExceptionUtils.getStackTrace(e));
+
+		}
+
+		return lista;
+
+	}
+
 	
 	private TraduccionUA getTraduccionOrigen(HttpServletRequest request, String idiomaOrigenTraductor)
 	{
@@ -1666,20 +1737,24 @@ public class UnitatAdmBackController extends PantallaBaseController
      * @return
      */
     @RequestMapping(value = "/fitxaBorrable.do", method = POST)
-	public @ResponseBody Map<String, Object> fitxaBorrable(HttpServletRequest request, Long idFitxa)
-	{
+	public @ResponseBody Map<String, Object> fitxaBorrable(HttpServletRequest request, Long idFitxa) {
+    	
     	Map<String, Object> resultats = new HashMap<String, Object>();
     	
     	try {
+    		
 			resultats.put("num", DelegateUtil.getFichaDelegate().listFichasUA(idFitxa).size());
 			
 		} catch (DelegateException e) {
+			
 			resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
         	resultats.put("id", -2);
         	log.error(ExceptionUtils.getStackTrace(e));
+        	
 		}
     	
     	return resultats;
+    	
 	}
 	
 }

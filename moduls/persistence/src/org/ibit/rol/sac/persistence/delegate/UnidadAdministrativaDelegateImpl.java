@@ -1,30 +1,29 @@
 package org.ibit.rol.sac.persistence.delegate;
 
 import java.rmi.RemoteException;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import org.ibit.rol.sac.model.Seccion;
+
 import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
+
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.Archivo;
-import org.ibit.rol.sac.model.Ficha;
-import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.dto.FichaDTO;
 import org.ibit.rol.sac.persistence.intf.UnidadAdministrativaFacade;
 import org.ibit.rol.sac.persistence.intf.UnidadAdministrativaFacadeHome;
 import org.ibit.rol.sac.persistence.util.UnidadAdministrativaFacadeUtil;
-import org.ibit.rol.sac.model.FichaResumenUA;
+
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * Business delegate para manipular Unidades Administrativas.
  */
-public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, UnidadAdministrativaDelegateI
-{
+public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, UnidadAdministrativaDelegateI {
+	
 	private static final long serialVersionUID = 234459285681808474L;
 	
 	/* ========================================================= */
@@ -355,17 +354,17 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
 		}
 	}
 	
-	public List<FichaResumenUA> listarFichasSeccionUA(Long idUA, Long idSeccion) throws DelegateException {
+	public List<FichaDTO> listarFichasSeccionUA(Long idUA, Long idSeccion, String idioma) throws DelegateException {
 		try {
-			return getFacade().listarFichasSeccionUA(idUA, idSeccion);
+			return getFacade().listarFichasSeccionUA(idUA, idSeccion, idioma);
 		} catch (RemoteException e) {
 			throw new DelegateException(e);
 		}
 	}
 	
-	public void actualizaFichasSeccionUA(Long idUA, Long idSeccion, List<Long> listaIdFichasLong) throws DelegateException {
+	public void actualizaFichasSeccionUA(Long idUA, Long idSeccion, List<FichaDTO> fichas) throws DelegateException {
 		try {
-			getFacade().actualizaFichasSeccionUA(idUA, idSeccion, listaIdFichasLong);
+			getFacade().actualizaFichasSeccionUA(idUA, idSeccion, fichas);
 		} catch (RemoteException e) {
 			throw new DelegateException(e);
 		}

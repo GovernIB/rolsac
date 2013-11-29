@@ -77,3 +77,21 @@ legend#titolSeccio {
 	padding-bottom: 15px;
 	text-transform: uppercase;
 }
+
+#cercador .element.t21, .cercador .element.t21 {
+	width: 100%;
+}
+
+#cercador .botonera .boton:first-child, .cercador .botonera .boton:first-child{
+	margin-left: 0;
+}
+
+#escriptori_fitxes #cercador div.botonera, .cercador div.botonera {
+	float: left;
+	clear: none;
+	margin-top: 1%;
+}
+
+#cercador div.element, .cercador div.element {
+	width: 100%;
+}

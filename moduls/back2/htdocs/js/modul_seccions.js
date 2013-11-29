@@ -29,11 +29,23 @@ $(document).ready(function() {
 	multipaginaFitxes = new Multipagina();
 
 	// Evento para el boton de volver al detalle
-	jQuery(".btnVolverDetalleSecciones").bind("click",function() { EscriptoriSeccio.torna(); } );	
+	jQuery(".btnVolverDetalleSecciones").bind("click",function() { EscriptoriSeccio.torna(); } );
+
 	jQuery("#btnFinalizarSecciones").bind("click",function() { EscriptoriSeccio.finalizar(); } );
 
-	jQuery(".btnVolverDetalleFichas").bind("click",function() { EscriptoriSeccioFitxes.torna(); } );	
-	jQuery("#btnFinalizarFichas").bind("click",function() { EscriptoriSeccioFitxes.finalizar(); } );
+	jQuery(".btnVolverDetalleFichas").bind("click", function() { EscriptoriSeccioFitxes.torna(); } );
+
+	jQuery(".btnFinalizarFichas").bind("click",function() { EscriptoriSeccioFitxes.finalizar(); } );
+
+	jQuery("#escriptori_fitxes #btnBuscarSeccionesForm").bind("click", function() { 
+
+		var idSeccion = $("#idSeccion").val();
+		var nombreFicha = $("#cerca_fitxes_nom").val();
+		var idFicha = $("#cerca_fitxes_codi").val();
+
+		EscriptoriSeccioFitxes.buscarFicha(idSeccion, nombreFicha, idFicha);
+
+	});
 
 });
 
@@ -75,785 +87,741 @@ function CModulSeccio() {
 	this.mostraFitxes = function(e)  {
 
 		//Mostrar panel de fichas de la seccion actual
-
+		
+		$('#escriptori_fitxes').css('display', 'inline-block');
 		fitxes_seleccionats_elm = escriptori_fitxes_elm.find("div.escriptori_items_seleccionats:first");
 
 		// Mostrar panel de fichas de la seccion actual.
-		divFichas = $(e).next().next();
-
 		idSeccion = $(e).prev().val();
+		ulFichas = fitxes_seleccionats_elm.find(".listaOrdenable");
 
-		if ($(divFichas).is(":visible")) {
+		$("#idSeccion").val(idSeccion);
+		EscriptoriSeccioFitxes.listarFichasAsignadas(idSeccion);
 
-			divFichas.fadeOut(200);
-
-		} else {
-
-			ulFichas = $(divFichas).children('div').children('ul');
-			numFichas = $(ulFichas).children().size()
-
-			// Sólo realizamos la llamada AJAX si aún no se han obtenido las fichas.
-			if ( numFichas == 0 ) {
-
-				$.ajax({
-					type: "POST",
-					url: pagFitxesUASeccio,
-					data: "idseccion=" + idSeccion,
-					dataType: "json",
-					error: function() {
-
-						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
-						Error.llansar();
-
-					},
-					success: function(data) {
-
-						if (data.id == -1) {
-							Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
-						} else if (data.id < -1) {
-							Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
-						}
-
-						llistaFitxes = data.fitxes;
-
-						jQuery.each(llistaFitxes, function() {
-
-							paramsFicha = {
-									nombre: "fitxa",
-									nodoOrigen: "",
-									nodoDestino: fitxes_seleccionats_elm.find(".listaOrdenable"),
-									atributos: ["id", "nombre", "orden"],	// Campos que queremos que aparezcan en las listas.
-									multilang: false
-							}
-
-							codi_seccions = "";
-
-							if ( llistaFitxes != null && llistaFitxes.length > 0 ) {
-
-								for ( n = 0; n < llistaFitxes.length; n++ ) {
-									codi_seccions += "<li>";
-									codi_seccions += "<input class=\"" + paramsFicha.nombre + "_" + paramsFicha.atributos[0] + "\" type=\"hidden\" value=\"" + llistaFitxes[n].id + "\"/><span>" + llistaFitxes[n].titulo + "</span>";  
-									codi_seccions += "</li>"
-								}
-
-							}
-
-							ulFichas.html(codi_seccions);
-
-						});//end each
-
-					}//Fin success
-
-				});//Fin ajax
-
-			} //End if
-
-			divFichas.fadeIn(200);
-
-		}
+		ModulSeccions.gestionaFitxes(e);
 
 		return false;
 
 	}
 
-this.iniciarFichas = function()  {
-	// Configuramos la lista ordenable.
-	this.configurar({
-		nombre: "fitxa",
-		nodoOrigen: modul_fitxes_elm.find(".listaOrdenable"),
-		nodoDestino: modul_fitxes_elm.find(".listaOrdenable"),
-		atributos: ["id", "nombre", "orden", "caducado", "idUA", "nomUA"],	// Campos que queremos que aparezcan en las listas.
-		multilang: false
-	});
-}
+	this.iniciarFichas = function()  {
+		// Configuramos la lista ordenable.
+		this.configurar({
+			nombre: "fitxa",
+			nodoOrigen: modul_fitxes_elm.find(".listaOrdenable"),
+			nodoDestino: modul_fitxes_elm.find(".listaOrdenable"),
+			atributos: ["id", "nombre", "orden", "caducado", "idUA", "nomUA"],	// Campos que queremos que aparezcan en las listas.
+			multilang: false
+		});
+	}
 
-this.iniciarSeccion = function()  {
-	// Configuramos la lista ordenable.
-	var _atributos = ordenar_secciones ? ["id", "nombre", "orden"] : ["id", "nombre"];  // Campos que queremos que aparezcan en las listas.   
-	this.configurar({
-		nombre: "seccio",
-		nodoOrigen: modul_seccions_elm.find(".listaOrdenable"),
-		nodoDestino: modul_seccions_elm.find(".listaOrdenable"),
-		atributos: _atributos,
-		multilang: false
-	});
-}	   
-
-this.iniciar = function(dades) {
-
-	seccions_nodes = dades;		
-	seccions_nodes_size = dades.length;
-
-	seccions_llistat_elm = escriptori_seccions_elm.find("div.escriptori_items_llistat:first");
-	seccions_cercador_elm = escriptori_seccions_elm.find("div.escriptori_items_cercador:first");
-	seccions_seleccionats_elm = escriptori_seccions_elm.find("div.escriptori_items_seleccionats:first");		
-	seccions_dades_elm = seccions_llistat_elm.find("div.dades:first");
-
-	pagPagina_seccio_elm = seccions_llistat_elm.find("input.pagPagina:first");
-	ordreTipus_seccio_elm = seccions_llistat_elm.find("input.ordreTipus:first");
-	ordreCamp_seccio_elm = seccions_llistat_elm.find("input.ordreCamp:first");		
-
-	fitxes_llistat_elm = escriptori_fitxes_elm.find("div.escriptori_items_llistat:first");		
-	fitxes_cercador_elm = escriptori_fitxes_elm.find("div.escriptori_items_cercador:first");		
-	fitxes_seleccionats_elm = escriptori_fitxes_elm.find("div.escriptori_items_seleccionats:first");
-	fitxes_dades_elm = fitxes_llistat_elm.find("div.dades:first"); 		
-
-	pagPagina_fitxa_elm = fitxes_llistat_elm.find("input.pagPagina:first");
-	ordreTipus_fitxa_elm = fitxes_llistat_elm.find("input.ordreTipus:first");
-	ordreCamp_fitxa_elm = fitxes_llistat_elm.find("input.ordreCamp:first");		
-
-	/*seccions_cercador_elm.css({"border-radius": "1em", "-moz-border-radius": "1em", "-webkit-border-radius": "1em"});
-		fitxes_cercador_elm.css({"border-radius": "1em", "-moz-border-radius": "1em", "-webkit-border-radius": "1em"});*/
-
-	// enllassos
-	modul_seccions_elm.bind("click", CModulSeccio.cerca);
-
-	var _atributos = ordenar_secciones ? ["id", "nombre", "orden"] : ["id", "nombre"];  // Campos que queremos que aparezcan en las listas.
-	params = {
+	this.iniciarSeccion = function()  {
+		// Configuramos la lista ordenable.
+		var _atributos = ordenar_secciones ? ["id", "nombre", "orden"] : ["id", "nombre"];  // Campos que queremos que aparezcan en las listas.   
+		this.configurar({
 			nombre: "seccio",
-			nodoOrigen: modul_seccions_elm.find(".listaOrdenable:first"),
-			nodoDestino: seccions_seleccionats_elm.find(".listaOrdenable"),
+			nodoOrigen: modul_seccions_elm.find(".listaOrdenable"),
+			nodoDestino: modul_seccions_elm.find(".listaOrdenable"),
 			atributos: _atributos,
 			multilang: false
-	} 
+		});
+	}	   
 
-	// En el cas de les fitxes, "nodoOrigen" varia en funcio de quina seccio 
-	// s'esta� gestionant		
-	paramsFicha = {
-			nombre: "fitxa",
-			nodoOrigen: "",
-			nodoDestino: fitxes_seleccionats_elm.find(".listaOrdenable"),
-			atributos: ["id", "nombre", "orden"],	// Campos que queremos que aparezcan en las listas.
-			multilang: false
-	} 		
+	this.iniciar = function(dades) {
 
-	if (seccions_nodes_size > 0) {
+		seccions_nodes = dades;		
+		seccions_nodes_size = dades.length;
 
-		codi_seccions = "<ul>";
+		seccions_llistat_elm = escriptori_seccions_elm.find("div.escriptori_items_llistat:first");
+		seccions_cercador_elm = escriptori_seccions_elm.find("div.escriptori_items_cercador:first");
+		seccions_seleccionats_elm = escriptori_seccions_elm.find("div.escriptori_items_seleccionats:first");		
+		seccions_dades_elm = seccions_llistat_elm.find("div.dades:first");
 
-		$(seccions_nodes).each( function(index) {
+		pagPagina_seccio_elm = seccions_llistat_elm.find("input.pagPagina:first");
+		ordreTipus_seccio_elm = seccions_llistat_elm.find("input.ordreTipus:first");
+		ordreCamp_seccio_elm = seccions_llistat_elm.find("input.ordreCamp:first");		
 
-			seccio_node = this;
+		fitxes_llistat_elm = escriptori_fitxes_elm.find("div.escriptori_items_llistat:first");		
+		fitxes_cercador_elm = escriptori_fitxes_elm.find("div.escriptori_items_cercador:first");		
+		fitxes_seleccionats_elm = escriptori_fitxes_elm.find("div.escriptori_items_seleccionats:first");
+		fitxes_dades_elm = fitxes_llistat_elm.find("div.dades:first"); 		
 
-			texteFitxes = "(0 fitxes)";
+		pagPagina_fitxa_elm = fitxes_llistat_elm.find("input.pagPagina:first");
+		ordreTipus_fitxa_elm = fitxes_llistat_elm.find("input.ordreTipus:first");
+		ordreCamp_fitxa_elm = fitxes_llistat_elm.find("input.ordreCamp:first");		
 
-			numFitxes = seccio_node.numFichas;
+		/*seccions_cercador_elm.css({"border-radius": "1em", "-moz-border-radius": "1em", "-webkit-border-radius": "1em"});
+		fitxes_cercador_elm.css({"border-radius": "1em", "-moz-border-radius": "1em", "-webkit-border-radius": "1em"});*/
 
-			if (numFitxes != null)
-				texteFitxes = " (" + numFitxes  + " " + ( numFitxes > 1 ? txtFitxes : txtFitxa ) + ")";
+		// enllassos
+		modul_seccions_elm.bind("click", CModulSeccio.cerca);
+
+		var _atributos = ordenar_secciones ? ["id", "nombre", "orden"] : ["id", "nombre"];  // Campos que queremos que aparezcan en las listas.
+		params = {
+				nombre: "seccio",
+				nodoOrigen: modul_seccions_elm.find(".listaOrdenable:first"),
+				nodoDestino: seccions_seleccionats_elm.find(".listaOrdenable"),
+				atributos: _atributos,
+				multilang: false
+		} 
+
+		// En el cas de les fitxes, "nodoOrigen" varia en funcio de quina seccio 
+		// s'esta� gestionant		
+		paramsFicha = {
+				nombre: "fitxa",
+				nodoOrigen: "",
+				nodoDestino: fitxes_seleccionats_elm.find(".listaOrdenable"),
+				atributos: ["id", "nombre", "orden"],	// Campos que queremos que aparezcan en las listas.
+				multilang: false
+		} 		
+
+		if (seccions_nodes_size > 0) {
+
+			codi_seccions = "<ul>";
+
+			$(seccions_nodes).each( function(index) {
+
+				seccio_node = this;
+
+				texteFitxes = "(0 fitxes)";
+
+				numFitxes = seccio_node.numFichas;
+
+				if (numFitxes != null)
+					texteFitxes = " (" + numFitxes  + " " + ( numFitxes > 1 ? txtFitxes : txtFitxa ) + ")";
 
 
-			// crearem una llista per a cada enllass de seccio, que contindra�les fitxes que te assignades
-			codi_seccions += "<li class=\"nodoListaSecciones\">";
-			codi_seccions += '<input type="hidden" name="seccio_modificada_'+ seccio_node.id +'" value="0"/>';
-			codi_seccions += "<input class=\"seccio_orden\" id=\"seccio_orden_"+ seccio_node.id +"\" name=\"seccio_orden_" + seccio_node.id + "\" type=\"hidden\" value=\"" + (index+1) + "\" />";
-			codi_seccions += "<input class=\"seccio_id\" id=\"seccio_id_" + seccio_node.id + "\" name=\"seccio_id_" + seccio_node.id + "\"  type=\"hidden\" value=\"" + seccio_node.id + "\" /><a class=\"enllasGestioFitxa seccio_nombre\" href=\"#\">" + seccio_node.nom + "</a><span>" + texteFitxes + "</span>";
+				// crearem una llista per a cada enllass de seccio, que contindra�les fitxes que te assignades
+				codi_seccions += "<li class=\"nodoListaSecciones\">";
+				codi_seccions += '<input type="hidden" name="seccio_modificada_'+ seccio_node.id +'" value="0"/>';
+				codi_seccions += "<input class=\"seccio_orden\" id=\"seccio_orden_"+ seccio_node.id +"\" name=\"seccio_orden_" + seccio_node.id + "\" type=\"hidden\" value=\"" + (index+1) + "\" />";
+				codi_seccions += "<input class=\"seccio_id\" id=\"seccio_id_" + seccio_node.id + "\" name=\"seccio_id_" + seccio_node.id + "\"  type=\"hidden\" value=\"" + seccio_node.id + "\" /><a class=\"enllasGestioFitxa seccio_nombre\" href='javascript:;'>" + seccio_node.nom + "</a><span>" + texteFitxes + "</span>";
 
-			codi_seccions += "<div class=\"contenedorFichas\" style=\"margin-top: 10px; display:none;\">";
-			codi_seccions += "<div class=\"listaOrdenable\">";
-			codi_seccions += "<ul>";
+				codi_seccions += "<div class=\"contenedorFichas\" style=\"margin-top: 10px; display:none;\">";
+				codi_seccions += "<div class=\"listaOrdenable\">";
+				codi_seccions += "<ul>";
 
+
+				codi_seccions += "</ul>";
+				codi_seccions += "</div>";
+
+				codi_seccions += "<div class=\"btnGenerico\" style=\"float:none; width:145px;\" >";
+				codi_seccions += "<a class=\"btn gestionaFitxes\" href=\"javascript:;\"><span><span>" + txtGestioFitxes + "</span></span></a>";
+				codi_seccions += "</div>";
+
+
+				codi_seccions += "</div>";
+				codi_seccions += "</li>";
+			});
 
 			codi_seccions += "</ul>";
-			codi_seccions += "</div>";
 
-			codi_seccions += "<div class=\"btnGenerico\" style=\"float:none; width:145px;\" >";
-			codi_seccions += "<a class=\"btn gestionaFitxes\" href=\"javascript:;\"><span><span>" + txtGestioFitxes + "</span></span></a>";
-			codi_seccions += "</div>";
+			txt_seccions = (seccions_nodes.size == 1) ? txtSeccio : txtSeccions;
 
+			seccions_llistat_seccions = $("div.modulSeccions").find("div.seleccionats");		 
+			seccions_llistat_seccions.find("p.info").html( txtHiHa + "<strong> " + seccions_nodes_size + " " + txt_seccions + ""  + "</strong>");			
+			seccions_llistat_seccions.find(".listaOrdenable").html(codi_seccions);
 
-			codi_seccions += "</div>";
-			codi_seccions += "</li>";
+		}
+
+		copiaNodesOrigen = modul_seccions_elm.find(".listaOrdenable:first").html();
+
+		modul_seccions_elm.find("a.gestionaSeccions").one("click", function() { ModulSeccions.gestiona(); } );
+		modul_seccions_elm.find("a.enllasGestioFitxa").click( function() { that.mostraFitxes(this); } )
+
+	}
+
+	this.gestionaSeccio = function() {	    
+		Detall.nou($("#item_id").val(), $("#item_nom_ca").val());
+	}
+
+//	Marcar el módulo como modificado.    
+	this.modificado = function(){
+		$moduloModificado.val(1);
+	}
+
+	this.gestiona = function() {
+
+		// Guardamos el estado del campo de control de cambios.
+		$moduloModificado.data( 'oldvalue', $moduloModificado.val() );
+
+		// Cada vegada que canviem de llista (seccions o fitxes), hem de reconfigurar-la per a que 
+		// es tingui en compte els parametres corresponents 
+		this.configurar( params );
+
+		lis_size = modul_seccions_elm.find(".nodoListaSecciones").size();
+
+		if (lis_size > 0) {
+
+			this.copiaInicial();
+
+			EscriptoriSeccio.contaSeleccionats();
+
+		} else {
+
+			seccions_seleccionats_elm.find("ul").remove().end().find("p.info:first").text(txtNoHiHaSeccionsSeleccionades + ".");			
+			seccions_seleccionats_elm.find(".listaOrdenable").html("");
+		}
+
+		// animacio
+		escriptori_detall_elm.fadeOut(300, function() {			
+			escriptori_seccions_elm.fadeIn(300);			
+		});
+	}
+
+	this.gestionaFitxes = function(el) {
+
+		$subModuloModificado = $(el).closest("li").find('input[name^="seccio_modificada_"]');        
+
+		// Guarda la referència al node principal de la secció escollida
+		nodeSeccio = $(el).parent().parent(); // div.contenedorFichas        
+
+		// Guarda el total de fitxes d'aquesta secció per a la còpia
+		nomSeccio = nodeSeccio.prev().prev().html();
+
+		// Si no hi ha fitxes en aquesta secció, el seu nom el trobarem en "parent"
+		if (nomSeccio == null)
+			nomSeccio = nodeSeccio.parent().prev().html();			
+
+		lis_size = $(nodeSeccio).find("div.listaOrdenable ul").size();
+
+		// Cada vegada que canviem de llista (seccions o fitxes), hem de reconfigurar-la per a que 
+		// es tinguin en compte els parametres corresponents i actualitzar el node origen de secció.
+		paramsFicha.nodoOrigen = nodeSeccio;		
+		this.configurar( paramsFicha );
+
+		if (lis_size > 0) {			
+			this.copiaInicialFitxes();			
+		} else {			
+			fitxes_seleccionats_elm.find("ul").remove().end().find("p.info:first").text(txtNoHiHaFitxesSeleccionades + ".");			
+			fitxes_seleccionats_elm.find(".listaOrdenable").html("");			
+		}
+
+		// animacio
+		escriptori_detall_elm.fadeOut(300, function() {			
+			escriptori_fitxes_elm.fadeIn(300);			
 		});
 
-		codi_seccions += "</ul>";
+		//Asociamos la acción de limpiar el formulario de búsqueda al botón borrar
+		$("#cercador #btnLimpiarSeccionesForm").click(function() {
 
-		txt_seccions = (seccions_nodes.size == 1) ? txtSeccio : txtSeccions;
+			EscriptoriSeccioFitxes.limpiar();
 
-		seccions_llistat_seccions = $("div.modulSeccions").find("div.seleccionats");		 
-		seccions_llistat_seccions.find("p.info").html( txtHiHa + "<strong> " + seccions_nodes_size + " " + txt_seccions + ""  + "</strong>");			
-		seccions_llistat_seccions.find(".listaOrdenable").html(codi_seccions);
+		});
+	}	
+
+	this.cerca = function(e) {
+		elm = $(e.target);
+
+		if (elm.is("A")) {
+
+			seccio_ID = elm.find("input").val();
+
+			// select cercador
+			codi_select_seccions = "<select id=\"cerca_fixta_seccio\" name=\"cerca_fixta_seccio\">";
+			modul_seccions_elm.find("a").each(function() {
+				a_node = $(this);
+				a_node_val = a_node.find("input").val();
+				codi_selected = (a_node_val == seccio_ID) ? " selected=\"selected\"" : "";
+				codi_select_seccions += "<option value=\"" + a_node_val + "\"" + codi_selected + ">" + a_node.text() + "</value>";
+			});
+			codi_select_seccions += "</select>";
+
+			seccions_llistat_elm.find("label.cerca_fixta_seccio").attr("label","cerca_fixta_seccio").parents("div.element:first").find("div.control:first").html(codi_select_seccions);
+
+			// animacio
+			escriptori_detall_elm.fadeOut(300, function() {
+
+				seccions_cercador_elm.find("input, select").attr("disabled", "disabled");
+
+				escriptori_seccions_elm.fadeIn(300, function() {
+
+					codi_cercant = "<p class=\"executant\">" + txtCercantItems + "</p>";
+					seccions_dades_elm.html(codi_cercant);
+
+				});
+			});
+		}
+	}
+
+	/**
+	 * Copia les dades de la llista origen a la de destinació (mètode sobre-escrit).  
+	 * En aquest cas hem de copiar només la llista de seccions sense tenir en compte les 
+	 * seves fitxes (el mètode per defecte inclou ambues en fer ".find('li')" ).
+	 */
+	this.copiaInicial = function() {		
+		var i;
+		var html;		
+		var _this = this;
+
+		html = "<ul>";
+
+		jQuery(params.nodoOrigen).find(".nodoListaSecciones").each(function() {			
+
+			var li_elm = jQuery(this);			
+			var item = [];
+			var atributo;
+
+			for( i = 0; i < params.atributos.length; i++ ){
+
+				atributo = params.atributos[i];
+
+				if ( atributo != "nombre" ) 						
+					item[atributo] = li_elm.find( "input." + params.nombre + "_" + atributo ).val();
+				else 
+					item[atributo] = li_elm.find("a." + params.nombre + "_" + atributo ).html();					
+			}
+
+			html += _this.getHtmlItem( item, true );
+		});
+
+		html += "</ul>";
+
+		jQuery(params.nodoDestino).html(html);
+	}
+
+	/**
+	 * Copia les dades de la llista origen a la de destinació.  
+	 * En aquest cas hem de copiar només la llista de fitxes de la secció actual sense 
+	 * tenir en compte la resta d'informació.
+	 */	
+	this.copiaInicialFitxes = function() {
+
+		var i;
+		var html;
+		var _this = this;
+
+		html = "<ul>";
+
+		jQuery( paramsFicha.nodoOrigen ).find("li").each(function(index) {			
+
+			var li_elm = jQuery(this);			
+			var item = [];
+			var atributo;
+
+			for( i = 0; i < paramsFicha.atributos.length; i++ ){
+
+				atributo = paramsFicha.atributos[i];
+
+				if( atributo == "orden" ){
+					item[atributo] = index+1;                    
+				}else if ( atributo != "nombre" ){
+					item[atributo] = li_elm.find( "input." + paramsFicha.nombre + "_" + atributo ).val();                
+				}else{
+					item[atributo] = li_elm.find("span").html();					
+				}
+			}
+
+			html += _this.getHtmlItem( item, true );
+		});
+
+		html += "</ul>";
+
+		jQuery( paramsFicha.nodoDestino ).html(html);
+
+	}
+
+	/**
+	 * Sobre-escrivim tambe el metode de finalitzacio i de copia final perque no hem de 
+	 * tenir en compte els nodes fills (fitxes) en la llista de destinacio.
+	 */	
+	this.copiaFinal = function() {
+
+		html = "<ul>";
+
+		numSecciones = 0;
+
+		//Per a cada node comprovam si ha estat actualitzat i l'eliminarem o afegirem 
+		//a la nova llista, des de copiaNodesOrigen, segons correspongui.		
+		$(params.nodoDestino).find("li").each( function(i) {
+
+			numSecciones++;
+
+			idSeccioNode = $(this).find(".seccio_id").val();			
+			ordreSeccio = $(this).find(".seccio_orden").val();            
+
+			tmpSeccio = $(copiaNodesOrigen).find( "#seccio_id_" + idSeccioNode ).parent();
+
+			//Si es troba el node, l'afegim a la nova llista
+			//juntament amb les seves fitxes filles. Si no el trobem
+			//es creara un de nou amb el contenidor de fitxes corresponent
+			if ( tmpSeccio.length != 0 ) {
+
+				tmpSeccio.att
+
+				html += "<li class=\"nodoListaSecciones\">" +  tmpSeccio.html() + "</li>";
+				/*html += "<li class=\"nodoListaSecciones\">" +
+				    	"<input type=\"text\" id=\"seccio_orden_" + idSeccioNode +"\" value=\"" + ordreSeccio + "\">" + tmpSeccio.html() + 
+						"</li>";*/
+			} else  {				
+
+				html += "<li class=\"nodoListaSecciones\">" +
+				'<input type="hidden" name="seccio_modificada_'+ idSeccioNode +'" value="1"/>' +
+				"<input class=\"seccio_id\" id=\"seccio_id_" + idSeccioNode + "\" name=\"seccio_id_" + idSeccioNode + "\"  type=\"hidden\" value=\"" + idSeccioNode + "\" /> <a class=\"enllasGestioFitxa seccio_nombre\">" + 
+				$(this).find("div.seccio span").html() + 
+				"</a><span> (0 fitxes)</span>" +
+				"<div class=\"contenedorFichas\" style=\"margin-top: 10px; display:none;\">" +
+				"<div class=\"listaOrdenable\">" +
+				"<ul>" + txtNoHiHaFitxes + "</ul>" +						
+				"<div class=\"btnGenerico\" style=\"float:none; width:145px;\" >" +
+				"<a class=\"btn gestionaFitxes\" href=\"javascript:;\"><span><span>" + txtGestioFitxes + "</span></span></a>" +
+				"</div>" +
+				"</div>" +
+				"</li>";
+			}
+		});
+
+		html += "</ul>";
+		$(params.nodoOrigen).html(html);
+
+		if ( seccions_llistat_seccions != undefined )
+			seccions_llistat_seccions.find("p.info").html( txtHiHa + "<strong> " + numSecciones + " " + txt_seccions + ""  + "</strong>");
 
 		this.activaEnllasosFitxes();
 
+		modul_seccions_elm.find("a.gestionaSeccions").one("click", function() { ModulSeccions.gestiona(); } );
+		modul_seccions_elm.find("a.enllasGestioFitxa").one("click", function() { ModulSeccions.gestionaFitxes(this); } );
+
+		// Recalculamos el orden
+		jQuery(params.nodoOrigen).find("li.nodoListaSecciones input.seccio_orden").each(function(i) {				
+			jQuery(this).val(i+1);
+		});			
+
+		return numSecciones;
 	}
 
-	copiaNodesOrigen = modul_seccions_elm.find(".listaOrdenable:first").html();
+	this.copiaFinalFitxes = function() {
 
-	modul_seccions_elm.find("a.gestionaSeccions").one("click", function() { ModulSeccions.gestiona(); } );
-	modul_seccions_elm.find("a.gestionaFitxes").one("click", function() { ModulSeccions.gestionaFitxes(this); } );		
-}
+		//Actualizamos la lista de fichas de las seccion actual		
+		idSeccio = $(paramsFicha.nodoOrigen).parent().find("input").val();
 
-this.gestionaSeccio = function() {	    
-	Detall.nou($("#item_id").val(), $("#item_nom_ca").val());
-}
+		html = "<div class=\"listaOrdenable\"><ul>";
 
-//Marcar el módulo como modificado.    
-this.modificado = function(){
-	$moduloModificado.val(1);
-}
+		numFitxes = $(paramsFicha.nodoDestino).find("li").size();
 
-this.gestiona = function() {
+		$(paramsFicha.nodoDestino).find("li").each( function(index) {
 
-	// Guardamos el estado del campo de control de cambios.
-	$moduloModificado.data( 'oldvalue', $moduloModificado.val() );
+			idFitxaNode = $(this).find(".fitxa_id").val();            
 
-	// Cada vegada que canviem de llista (seccions o fitxes), hem de reconfigurar-la per a que 
-	// es tingui en compte els parametres corresponents 
-	this.configurar( params );
+			html += "<li>";			
+			html += "<input class=\"fitxa_id\" type=\"hidden\" value=\"" + idFitxaNode + "\" />";
+			html += "<span>" + $(this).find(".fitxa_nombre").val() + "</span>";
+			html += "<input class=\"fitxa_orden\" type=\"hidden\" value=\"" + (index+1) + "\" />";
+			html += "</li>";			
 
-	lis_size = modul_seccions_elm.find(".nodoListaSecciones").size();
-
-	if (lis_size > 0) {
-
-		this.copiaInicial();
-
-		EscriptoriSeccio.contaSeleccionats();
-
-	} else {
-
-		seccions_seleccionats_elm.find("ul").remove().end().find("p.info:first").text(txtNoHiHaSeccionsSeleccionades + ".");			
-		seccions_seleccionats_elm.find(".listaOrdenable").html("");
-	}
-
-	// animacio
-	escriptori_detall_elm.fadeOut(300, function() {			
-		escriptori_seccions_elm.fadeIn(300);			
-	});
-}
-
-this.gestionaFitxes = function(el) {
-
-	$subModuloModificado = $(el).closest("li").find('input[name^="seccio_modificada_"]');        
-
-	// Guarda la referència al node principal de la secció escollida
-	nodeSeccio = $(el).parent().parent(); // div.contenedorFichas        
-
-	// Guarda el total de fitxes d'aquesta secció per a la còpia
-	nomSeccio = nodeSeccio.prev().prev().html();
-
-	// Si no hi ha fitxes en aquesta secció, el seu nom el trobarem en "parent"
-	if (nomSeccio == null)
-		nomSeccio = nodeSeccio.parent().prev().html();			
-
-	lis_size = $(nodeSeccio).find("div.listaOrdenable ul").size();
-
-	// Cada vegada que canviem de llista (seccions o fitxes), hem de reconfigurar-la per a que 
-	// es tinguin en compte els parametres corresponents i actualitzar el node origen de secció.
-	paramsFicha.nodoOrigen = nodeSeccio;		
-	this.configurar( paramsFicha );
-
-	if (lis_size > 0) {			
-		this.copiaInicialFitxes();			
-	} else {			
-		fitxes_seleccionats_elm.find("ul").remove().end().find("p.info:first").text(txtNoHiHaFitxesSeleccionades + ".");			
-		fitxes_seleccionats_elm.find(".listaOrdenable").html("");			
-	}
-
-	EscriptoriSeccioFitxes.contaSeleccionats( nomSeccio );
-
-	// animacio
-	escriptori_detall_elm.fadeOut(300, function() {			
-		escriptori_fitxes_elm.fadeIn(300);			
-	});
-}	
-
-this.cerca = function(e) {
-	elm = $(e.target);
-
-	if (elm.is("A")) {
-
-		seccio_ID = elm.find("input").val();
-
-		// select cercador
-		codi_select_seccions = "<select id=\"cerca_fixta_seccio\" name=\"cerca_fixta_seccio\">";
-		modul_seccions_elm.find("a").each(function() {
-			a_node = $(this);
-			a_node_val = a_node.find("input").val();
-			codi_selected = (a_node_val == seccio_ID) ? " selected=\"selected\"" : "";
-			codi_select_seccions += "<option value=\"" + a_node_val + "\"" + codi_selected + ">" + a_node.text() + "</value>";
 		});
-		codi_select_seccions += "</select>";
 
-		seccions_llistat_elm.find("label.cerca_fixta_seccio").attr("label","cerca_fixta_seccio").parents("div.element:first").find("div.control:first").html(codi_select_seccions);
+		html += "</ul></div>";
+		html += "<div class=\"btnGenerico\" style=\"float:none; width:145px;\" >";
+		html += "<a class=\"btn gestionaFitxes\" href=\"javascript:;\"><span><span>" + txtGestioFitxes + "</span></span></a>";
+		html += "</div>";
 
-		// animacio
-		escriptori_detall_elm.fadeOut(300, function() {
+		$(paramsFicha.nodoOrigen).html(html);
 
-			seccions_cercador_elm.find("input, select").attr("disabled", "disabled");
+		// Actualizar el numero de fichas de la seccion despues de los cambios
+		texteFitxes = " (" + numFitxes + " " + ( numFitxes == 1 ? txtFitxa : txtFitxes  ) + ")";
+		$(paramsFicha.nodoOrigen).parents(".nodoListaSecciones").find("span:first").html(texteFitxes);
 
-			escriptori_seccions_elm.fadeIn(300, function() {
+		modul_seccions_elm.find("a.gestionaSeccions").one("click", function() { ModulSeccions.gestiona(); } );
+		modul_seccions_elm.find("a.enllasGestioFitxa").one("click", function() { ModulSeccions.gestionaFitxes(this); } );
 
-				codi_cercant = "<p class=\"executant\">" + txtCercantItems + "</p>";
-				seccions_dades_elm.html(codi_cercant);
+		return numFitxes;
+
+	}
+
+	this.finalizar = function(){		
+		return this.copiaFinal();		
+	}	
+
+	this.finalizarFitxes = function() {
+
+		$subModuloModificado.val(1);
+		//var numFichas = this.copiaFinalFitxes();
+		var numFichas = $("#escriptori_fitxes .tbody > div.tr").length;
+		var idSeccion = $("#idSeccion").val();
+
+		// Petición AJAX para guardar estado fichas-seccion-UA.
+		this.guardaEstadoFichasSeccionUA();
+
+		
+		return { "numFichas" : numFichas, "idSeccion" : idSeccion};
+
+	}
+
+	this.guardaEstadoFichasSeccionUA = function() {
+
+		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
+
+		// Construimos variable con los datos (idUA, idSeccion, idFicha1, idFicha2, etc.
+		var idUA = $('#item_id').val();
+		var idSeccion = $("#idSeccion").val();
+		var cantidadFichas = $("#escriptori_fitxes .tbody > div.tr").length;
+		var listaFichas = '[';
+		var contadorFichas = 0;
+
+		$('#escriptori_fitxes .tbody > div.tr').each(function() {
+
+			var id = $(this).find(".id").val();
+			var orden = $(this).find("select option:selected").val();
+			contadorFichas ++
+
+			listaFichas += '{"id": ' + id + ', "ordre":' + orden + '}';
+
+			if ( contadorFichas != cantidadFichas )
+				listaFichas += ",";
+
+		});
+
+		listaFichas += "]";
+		
+		$.ajax({
+			type: "POST",
+			url: pagGuardarFitxesUASeccio,
+			data: "idUA=" + idUA + "&idSeccion=" + idSeccion + "&listaFichas=" + listaFichas.toString(),
+			dataType: "json",
+			error: function() {
+				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+				Error.llansar();
+			},
+			success: function(data) {
+
+				Missatge.cancelar();
+
+				// Comprobar valor de retorno:
+				if (data.id == -1) {
+
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
+
+				} else if ( data.id < -1 ) {
+
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
+
+				} 
+
+			}
+
+		});
+
+	}
+
+	this.activaEnllasosFitxes = function() {	
+
+		$(".enllasGestioFitxa").each( function() {
+
+			$(this).bind("click", function() {	
+
+				return ModulSeccions.gestionaFitxes(this);
 
 			});
+
 		});
-	}
-}
-
-/**
- * Copia les dades de la llista origen a la de destinació (mètode sobre-escrit).  
- * En aquest cas hem de copiar només la llista de seccions sense tenir en compte les 
- * seves fitxes (el mètode per defecte inclou ambues en fer ".find('li')" ).
- */
-this.copiaInicial = function() {		
-	var i;
-	var html;		
-	var _this = this;
-
-	html = "<ul>";
-
-	jQuery(params.nodoOrigen).find(".nodoListaSecciones").each(function() {			
-
-		var li_elm = jQuery(this);			
-		var item = [];
-		var atributo;
-
-		for( i = 0; i < params.atributos.length; i++ ){
-
-			atributo = params.atributos[i];
-
-			if ( atributo != "nombre" ) 						
-				item[atributo] = li_elm.find( "input." + params.nombre + "_" + atributo ).val();
-			else 
-				item[atributo] = li_elm.find("a." + params.nombre + "_" + atributo ).html();					
-		}
-
-		html += _this.getHtmlItem( item, true );
-	});
-
-	html += "</ul>";
-
-	jQuery(params.nodoDestino).html(html);
-}
-
-/**
- * Copia les dades de la llista origen a la de destinació.  
- * En aquest cas hem de copiar només la llista de fitxes de la secció actual sense 
- * tenir en compte la resta d'informació.
- */	
-this.copiaInicialFitxes = function() {
-
-	var i;
-	var html;
-	var _this = this;
-
-	html = "<ul>";
-
-	jQuery( paramsFicha.nodoOrigen ).find("li").each(function(index) {			
-
-		var li_elm = jQuery(this);			
-		var item = [];
-		var atributo;
-
-		for( i = 0; i < paramsFicha.atributos.length; i++ ){
-
-			atributo = paramsFicha.atributos[i];
-
-			if( atributo == "orden" ){
-				item[atributo] = index+1;                    
-			}else if ( atributo != "nombre" ){
-				item[atributo] = li_elm.find( "input." + paramsFicha.nombre + "_" + atributo ).val();                
-			}else{
-				item[atributo] = li_elm.find("span").html();					
-			}
-		}
-
-		html += _this.getHtmlItem( item, true );
-	});
-
-	html += "</ul>";
-
-	jQuery( paramsFicha.nodoDestino ).html(html);
-
-}
-
-/**
- * Sobre-escrivim tambe el metode de finalitzacio i de copia final perque no hem de 
- * tenir en compte els nodes fills (fitxes) en la llista de destinacio.
- */	
-this.copiaFinal = function() {
-
-	html = "<ul>";
-
-	numSecciones = 0;
-
-	//Per a cada node comprovam si ha estat actualitzat i l'eliminarem o afegirem 
-	//a la nova llista, des de copiaNodesOrigen, segons correspongui.		
-	$(params.nodoDestino).find("li").each( function(i) {
-
-		numSecciones++;
-
-		idSeccioNode = $(this).find(".seccio_id").val();			
-		ordreSeccio = $(this).find(".seccio_orden").val();            
-
-		tmpSeccio = $(copiaNodesOrigen).find( "#seccio_id_" + idSeccioNode ).parent();
-
-		//Si es troba el node, l'afegim a la nova llista
-		//juntament amb les seves fitxes filles. Si no el trobem
-		//es creara un de nou amb el contenidor de fitxes corresponent
-		if ( tmpSeccio.length != 0 ) {
-
-			tmpSeccio.att
-
-			html += "<li class=\"nodoListaSecciones\">" +  tmpSeccio.html() + "</li>";
-			/*html += "<li class=\"nodoListaSecciones\">" +
-				    	"<input type=\"text\" id=\"seccio_orden_" + idSeccioNode +"\" value=\"" + ordreSeccio + "\">" + tmpSeccio.html() + 
-						"</li>";*/
-		} else  {				
-
-			html += "<li class=\"nodoListaSecciones\">" +
-			'<input type="hidden" name="seccio_modificada_'+ idSeccioNode +'" value="1"/>' +
-			"<input class=\"seccio_id\" id=\"seccio_id_" + idSeccioNode + "\" name=\"seccio_id_" + idSeccioNode + "\"  type=\"hidden\" value=\"" + idSeccioNode + "\" /> <a class=\"enllasGestioFitxa seccio_nombre\">" + 
-			$(this).find("div.seccio span").html() + 
-			"</a><span> (0 fitxes)</span>" +
-			"<div class=\"contenedorFichas\" style=\"margin-top: 10px; display:none;\">" +
-			"<div class=\"listaOrdenable\">" +
-			"<ul>" + txtNoHiHaFitxes + "</ul>" +						
-			"<div class=\"btnGenerico\" style=\"float:none; width:145px;\" >" +
-			"<a class=\"btn gestionaFitxes\" href=\"javascript:;\"><span><span>" + txtGestioFitxes + "</span></span></a>" +
-			"</div>" +
-			"</div>" +
-			"</li>";
-		}
-	});
-
-	html += "</ul>";
-	$(params.nodoOrigen).html(html);
-
-	if ( seccions_llistat_seccions != undefined )
-		seccions_llistat_seccions.find("p.info").html( txtHiHa + "<strong> " + numSecciones + " " + txt_seccions + ""  + "</strong>");
-
-	this.activaEnllasosFitxes();
-
-	modul_seccions_elm.find("a.gestionaSeccions").one("click", function() { ModulSeccions.gestiona(); } );
-	modul_seccions_elm.find("a.gestionaFitxes").one("click", function() { ModulSeccions.gestionaFitxes(this); } );
-
-	// Recalculamos el orden
-	jQuery(params.nodoOrigen).find("li.nodoListaSecciones input.seccio_orden").each(function(i) {				
-		jQuery(this).val(i+1);
-	});			
-
-	return numSecciones;
-}
-
-this.copiaFinalFitxes = function() {
-
-	//Actualizamos la lista de fichas de las seccion actual		
-	idSeccio = $(paramsFicha.nodoOrigen).parent().find("input").val();
-
-	html = "<div class=\"listaOrdenable\"><ul>";
-
-	numFitxes = $(paramsFicha.nodoDestino).find("li").size();
-
-	$(paramsFicha.nodoDestino).find("li").each( function(index) {
-
-		idFitxaNode = $(this).find(".fitxa_id").val();            
-
-		html += "<li>";			
-		html += "<input class=\"fitxa_id\" type=\"hidden\" value=\"" + idFitxaNode + "\" />";
-		html += "<span>" + $(this).find(".fitxa_nombre").val() + "</span>";
-		html += "<input class=\"fitxa_orden\" type=\"hidden\" value=\"" + (index+1) + "\" />";
-		html += "</li>";			
-
-	});
-
-	html += "</ul></div>";
-	html += "<div class=\"btnGenerico\" style=\"float:none; width:145px;\" >";
-	html += "<a class=\"btn gestionaFitxes\" href=\"javascript:;\"><span><span>" + txtGestioFitxes + "</span></span></a>";
-	html += "</div>";
-
-	$(paramsFicha.nodoOrigen).html(html);
-
-	// Actualizar el numero de fichas de la seccion despues de los cambios
-	texteFitxes = " (" + numFitxes + " " + ( numFitxes == 1 ? txtFitxa : txtFitxes  ) + ")";
-	$(paramsFicha.nodoOrigen).parents(".nodoListaSecciones").find("span:first").html(texteFitxes);
-
-	modul_seccions_elm.find("a.gestionaSeccions").one("click", function() { ModulSeccions.gestiona(); } );
-	modul_seccions_elm.find("a.gestionaFitxes").one("click", function() { ModulSeccions.gestionaFitxes(this); } );
-
-	return numFitxes;
-
-}
-
-this.finalizar = function(){		
-	return this.copiaFinal();		
-}	
-
-this.finalizarFitxes = function() {
-    
-	$subModuloModificado.val(1);
-	var numFichas = this.copiaFinalFitxes();
-
-	// Petición AJAX para guardar estado fichas-seccion-UA.
-	this.guardaEstadoFichasSeccionUA();
-
-	return numFichas;
-
-}
-
-this.guardaEstadoFichasSeccionUA = function() {
-
-	Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
-
-	// Construimos variable con los datos (idUA, idSeccion, idFicha1, idFicha2, etc.
-	var idUA = $('#item_id').val();
-	var idSeccion = $(paramsFicha.nodoOrigen.parent()).find('.seccio_id').val();
-	var arrayFichas = $(paramsFicha.nodoDestino).find('.fitxa_id');
-	var listaIdFichas = "";
-	var coma = "";
-
-	for ( var i = 0; i < arrayFichas.length; i++) {
-
-		var idFicha = $(arrayFichas[i]).val();
-		listaIdFichas += coma + idFicha;
-
-		// Actualizamos coma...
-		if (coma == "")
-			coma = ",";
 
 	}
-
-	// Obviamos parámetro de orden de la ficha. Explicación:
-	// El orden de las fichas lo establece el usuario. Al recorrer las fichas a través del DOM, no es necesario tener una variable/input
-	// que controle el orden de la ficha. El orden es en el que se obtiene leyendo desde el DOM, según ha dejado el listado el usuario.
-	$.ajax({
-		type: "POST",
-		url: pagGuardarFitxesUASeccio,
-		data: "idUA=" + idUA + "&idSeccion=" + idSeccion + "&listaIdFichas=" + listaIdFichas,
-		dataType: "json",
-		error: function() {
-			Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
-			Error.llansar();
-		},
-		success: function(data) {
-
-			Missatge.cancelar();
-
-			// Comprobar valor de retorno:
-				if (data.id == -1){
-					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
-				} else if (data.id < -1){
-					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
-				}
-
-		}
-	});
-
-}
-this.activaEnllasosFitxes = function() {		
-	$(".enllasGestioFitxa").each( function() {
-		$(this).bind("click", function() {					
-			return that.mostraFitxes( this ); 
-		});
-	});
-}
 
 ////////////***********//////////
-this.contaFitxesSeleccionades = function() {
-	seleccionats_val = modul_fitxes_elm.find(".seleccionats").find("li").size();
-	info_elm = modul_fitxes_elm.find("p.info:first");
+	this.contaFitxesSeleccionades = function() {
+		seleccionats_val = modul_fitxes_elm.find(".seleccionats").find("li").size();
+		info_elm = modul_fitxes_elm.find("p.info:first");
 
-	if (seleccionats_val == 0) {
-		modul_fitxes_elm.find("ul").remove();
-		info_elm.text(txtNoHiHaFitxes + ".");
-	} else if (seleccionats_val == 1) {
-		info_elm.html(txtSeleccionat + " <strong>" + seleccionats_val + " " + txtFitxa.toLowerCase() + "</strong>.");
-	} else {
-		info_elm.html(txtSeleccionades + " <strong>" + seleccionats_val + " " + txtFitxes.toLowerCase() + "</strong>.");
-//		if (ordenar_secciones) {
-		modul_fitxes_elm.find(".listaOrdenable ul").sortable({ 
-			axis: 'y', 
-			cursor: 'url(../img/cursor/grabbing.cur), move',
-			update: function(event, ui) {
-				ModulFitxes.calculaOrden(ui, "origen");
-				that.contaFitxesSeleccionades();
-				Detall.modificado();
-			}
-		}).css({cursor:"url(../img/cursor/grab.cur), move"});
-//		}
-	}
-
-}
-
-this.contaSeleccionats = function() {
-	seleccionats_val = modul_seccions_elm.find(".seleccionats").find("li").size();
-	info_elm = modul_seccions_elm.find("p.info:first");
-
-	if (seleccionats_val == 0) {
-		modul_seccions_elm.find("ul").remove();
-		info_elm.text(txtNoHiHaSeccionsSeleccionades + ".");
-	} else if (seleccionats_val == 1) {
-		info_elm.html(txtSeleccionat + " <strong>" + seleccionats_val + " " + txtSeccio.toLowerCase() + "</strong>.");
-	} else {
-		info_elm.html(txtSeleccionades + " <strong>" + seleccionats_val + " " + txtSeccions.toLowerCase() + "</strong>.");
-		if (ordenar_secciones) {
-			modul_seccions_elm.find(".listaOrdenable ul").sortable({ 
+		if (seleccionats_val == 0) {
+			modul_fitxes_elm.find("ul").remove();
+			info_elm.text(txtNoHiHaFitxes + ".");
+		} else if (seleccionats_val == 1) {
+			info_elm.html(txtSeleccionat + " <strong>" + seleccionats_val + " " + txtFitxa.toLowerCase() + "</strong>.");
+		} else {
+			info_elm.html(txtSeleccionades + " <strong>" + seleccionats_val + " " + txtFitxes.toLowerCase() + "</strong>.");
+//			if (ordenar_secciones) {
+			modul_fitxes_elm.find(".listaOrdenable ul").sortable({ 
 				axis: 'y', 
 				cursor: 'url(../img/cursor/grabbing.cur), move',
-				update: function(event,ui){
-					ModulSeccions.calculaOrden(ui, "origen");
-					that.contaSeleccionats();
-					Detall.modificado();                    
+				update: function(event, ui) {
+					ModulFitxes.calculaOrden(ui, "origen");
+					that.contaFitxesSeleccionades();
+					Detall.modificado();
 				}
 			}).css({cursor:"url(../img/cursor/grab.cur), move"});
+//			}
 		}
+
 	}
 
-}
+	this.contaSeleccionats = function() {
+		seleccionats_val = modul_seccions_elm.find(".seleccionats").find("li").size();
+		info_elm = modul_seccions_elm.find("p.info:first");
 
-//Actualiza la lista de fichas cuando se carga la ficha de la sección
-this.inicializarFichas = function(listaFichas){
-	modul_fitxes_elm.find(".listaOrdenable").empty();
-	if (typeof listaFichas != 'undefined' && listaFichas != null && listaFichas.length > 0) {
-		this.agregaItems(listaFichas, false);
-	}
-
-	modul_fitxes_elm.find('div.fitxa').each(function() {
-		// Añadimos imagen de OK o CADUCADO.
-		var caducado = $(this).find("input.fitxa_caducado").val() == "N";
-		var caducat_titol_class = caducado ? " fitxaCaducat" : " fitxaNoCaducat";
-
-		$(this).addClass(caducat_titol_class);
-
-		var idUA = $(this).find("input.fitxa_idUA").val();
-		var nomUA = $(this).find("input.fitxa_nomUA").val();
-
-		// Enlace Unidad Administrativa
-		var urlUA = pagUADetall  + "?itemId=" + idUA;
-		$(this).append(" [<a id=\""+idUA+"\" href=\"javascript:;\" class=\"fitxa_inf\">" + printStringFromNull(nomUA, txtSinValor) + "</a>]");
-
-		// Evento click Ficha informativa			
-		//$(this).unbind("click").bind("click", function() {
-		// dsanchez: Cambiamos para que sea clicable el span que hay dentro de la lista para acceder a la edici�n de la ficha.
-		$(this).find("span.fitxa").unbind("click").bind("click", function() {                        
-
-			//var fitxaId = $(this).find("input.fitxa_id").val();
-			var fitxaId = $(this).parent().find("input.fitxa_id").val();
-
-			Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtCarregantFitxa});
-			$.ajax({
-				type: "POST",
-				url: pagFitxa,
-				data: "id=" + fitxaId,
-				dataType: "json",
-				error: function() {
-					// Missatge.cancelar();
-					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
-					Error.llansar();
-				},
-				success: function(data) {
-					Missatge.cancelar();
-					if (data.item_id > 0) {
-						location = pagFitxaDetall + "?itemId=" + data.item_id;
-					} else if (data.item_id == -1){
-						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
-					} else if (data.item_id < -1){
-						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
+		if (seleccionats_val == 0) {
+			modul_seccions_elm.find("ul").remove();
+			info_elm.text(txtNoHiHaSeccionsSeleccionades + ".");
+		} else if (seleccionats_val == 1) {
+			info_elm.html(txtSeleccionat + " <strong>" + seleccionats_val + " " + txtSeccio.toLowerCase() + "</strong>.");
+		} else {
+			info_elm.html(txtSeleccionades + " <strong>" + seleccionats_val + " " + txtSeccions.toLowerCase() + "</strong>.");
+			if (ordenar_secciones) {
+				modul_seccions_elm.find(".listaOrdenable ul").sortable({ 
+					axis: 'y', 
+					cursor: 'url(../img/cursor/grabbing.cur), move',
+					update: function(event,ui){
+						ModulSeccions.calculaOrden(ui, "origen");
+						that.contaSeleccionats();
+						Detall.modificado();                    
 					}
-				}
+				}).css({cursor:"url(../img/cursor/grab.cur), move"});
+			}
+		}
+
+	}
+
+//	Actualiza la lista de fichas cuando se carga la ficha de la sección
+	this.inicializarFichas = function(listaFichas){
+		modul_fitxes_elm.find(".listaOrdenable").empty();
+		if (typeof listaFichas != 'undefined' && listaFichas != null && listaFichas.length > 0) {
+			this.agregaItems(listaFichas, false);
+		}
+
+		modul_fitxes_elm.find('div.fitxa').each(function() {
+			// Añadimos imagen de OK o CADUCADO.
+			var caducado = $(this).find("input.fitxa_caducado").val() == "N";
+			var caducat_titol_class = caducado ? " fitxaCaducat" : " fitxaNoCaducat";
+
+			$(this).addClass(caducat_titol_class);
+
+			var idUA = $(this).find("input.fitxa_idUA").val();
+			var nomUA = $(this).find("input.fitxa_nomUA").val();
+
+			// Enlace Unidad Administrativa
+			var urlUA = pagUADetall  + "?itemId=" + idUA;
+			$(this).append(" [<a id=\""+idUA+"\" href=\"javascript:;\" class=\"fitxa_inf\">" + printStringFromNull(nomUA, txtSinValor) + "</a>]");
+
+			// Evento click Ficha informativa			
+			//$(this).unbind("click").bind("click", function() {
+			// dsanchez: Cambiamos para que sea clicable el span que hay dentro de la lista para acceder a la edici�n de la ficha.
+			$(this).find("span.fitxa").unbind("click").bind("click", function() {                        
+
+				//var fitxaId = $(this).find("input.fitxa_id").val();
+				var fitxaId = $(this).parent().find("input.fitxa_id").val();
+
+				Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtCarregantFitxa});
+				$.ajax({
+					type: "POST",
+					url: pagFitxa,
+					data: "id=" + fitxaId,
+					dataType: "json",
+					error: function() {
+						// Missatge.cancelar();
+						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+						Error.llansar();
+					},
+					success: function(data) {
+						Missatge.cancelar();
+						if (data.item_id > 0) {
+							location = pagFitxaDetall + "?itemId=" + data.item_id;
+						} else if (data.item_id == -1){
+							Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
+						} else if (data.item_id < -1){
+							Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
+						}
+					}
+				});
 			});
 		});
-	});
 
-	modul_fitxes_elm.find('a.fitxa_inf').each(function() {
-		var urlUA = pagUADetall  + "?itemId=" + $(this).attr("id");
+		modul_fitxes_elm.find('a.fitxa_inf').each(function() {
+			var urlUA = pagUADetall  + "?itemId=" + $(this).attr("id");
 
-		$(this).unbind("click").bind("click", function(event) {
-			event.stopPropagation();
-			Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtCarregantUA});
-			location = urlUA;                
-		});
-	});
-
-	that.contaFitxesSeleccionades();
-}
-
-//Actualiza la lista de secciones seleccionadas cuando se carga una ficha
-this.inicializarSecciones = function(listaSeccions){
-	modul_seccions_elm.find(".listaOrdenable").empty();
-	if (typeof listaSeccions != 'undefined' && listaSeccions != null && listaSeccions.length > 0) {
-		that.agregaItems(listaSeccions, false);
-	}
-
-	modul_seccions_elm.find('div.seccio').each(function() {
-		$(this).unbind("click").bind("click", function() {
-			var seccioId = $(this).find("input.seccio_id").val();
-			Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtCarregantDetall});
-			$.ajax({
-				type: "GET",
-				url: pagDetall,
-				data: "id=" + seccioId,
-				dataType: "json",
-				error: function() {
-					// Missatge.cancelar();
-					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
-					Error.llansar();
-				},
-				success: function(data) {
-					Missatge.cancelar();
-					if (data.item_id > 0) {
-						Detall.pintar(data);
-					} else if (data.item_id == -1){
-						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
-					} else if (data.item_id < -1){
-						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
-					}
-				}
+			$(this).unbind("click").bind("click", function(event) {
+				event.stopPropagation();
+				Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtCarregantUA});
+				location = urlUA;                
 			});
 		});
-	});
 
-	that.contaSeleccionats();
+		that.contaFitxesSeleccionades();
+	}
 
-	modul_seccions_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function(){
-		var itemLista = jQuery(this).parents("li:first");
-		that.eliminaItem(itemLista);
+//	Actualiza la lista de secciones seleccionadas cuando se carga una ficha
+	this.inicializarSecciones = function(listaSeccions){
+		modul_seccions_elm.find(".listaOrdenable").empty();
+		if (typeof listaSeccions != 'undefined' && listaSeccions != null && listaSeccions.length > 0) {
+			that.agregaItems(listaSeccions, false);
+		}
+
+		modul_seccions_elm.find('div.seccio').each(function() {
+			$(this).unbind("click").bind("click", function() {
+				var seccioId = $(this).find("input.seccio_id").val();
+				Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtCarregantDetall});
+				$.ajax({
+					type: "GET",
+					url: pagDetall,
+					data: "id=" + seccioId,
+					dataType: "json",
+					error: function() {
+						// Missatge.cancelar();
+						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+						Error.llansar();
+					},
+					success: function(data) {
+						Missatge.cancelar();
+						if (data.item_id > 0) {
+							Detall.pintar(data);
+						} else if (data.item_id == -1){
+							Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
+						} else if (data.item_id < -1){
+							Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
+						}
+					}
+				});
+			});
+		});
+
 		that.contaSeleccionats();
-		Detall.modificado();
-	});
 
-}
+		modul_seccions_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function(){
+			var itemLista = jQuery(this).parents("li:first");
+			that.eliminaItem(itemLista);
+			that.contaSeleccionats();
+			Detall.modificado();
+		});
 
-//devuelve un string con el formato seccions=n1,n2,...,nm donde nx son codigos de secciones
-this.listaSecciones = function (){
-	var listaSecciones = "seccions=";
-
-	$("div.modulSeccions div.seleccionats div.listaOrdenable input").each(function() {
-		listaSecciones += $(this).val() + ",";										
-	});
-
-	if (listaSecciones[listaSecciones.length-1] == ","){
-		listaSecciones = listaSecciones.slice(0, -1);
 	}
 
-	return listaSecciones;
-}
+//	devuelve un string con el formato seccions=n1,n2,...,nm donde nx son codigos de secciones
+	this.listaSecciones = function () {
+		var listaSecciones = "seccions=";
 
-this.torna = function() {        
-	escriptori_detall_elm.fadeOut(300, function() {
-		escriptori_contingut_elm.fadeIn(300);
-	});
-}
+		$("div.modulSeccions div.seleccionats div.listaOrdenable input").each(function() {
+			listaSecciones += $(this).val() + ",";										
+		});
 
-/* Al acceder al formulario de creacion, limpia las listas de secciones, desmarca los checkboxes,
- * marca las secciones por defecto, econder el listado y mostrar los seleccionados.
- */
-this.nuevo = function() {
+		if (listaSecciones[listaSecciones.length-1] == ",") {
+			listaSecciones = listaSecciones.slice(0, -1);
+		}
 
-	seccions_seleccionades_elm = escriptori_detall_elm.find("div.modulSeccions div.seleccionats");
-	seccions_seleccionades_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaSeccions + ".");
-	$("div.modulSeccions div.llistat input[type=checkbox]").attr('checked', false).removeClass(seccioDefaultClass);
+		return listaSecciones;
+	}
 
-	that.mostrarSeccionesSeleccionadas();
-}
+	this.torna = function() {        
+		escriptori_detall_elm.fadeOut(300, function() {
+			escriptori_contingut_elm.fadeIn(300);
+		});
+	}
 
-//Econder el listado y mostrar los seleccionados.
-this.mostrarSeccionesSeleccionadas = function () {
-	escriptori_detall_elm.find("div.modulSeccions div.llistat").hide();
-	escriptori_detall_elm.find("div.modulSeccions div.seleccionats").show();
-}
+	/* Al acceder al formulario de creacion, limpia las listas de secciones, desmarca los checkboxes,
+	 * marca las secciones por defecto, econder el listado y mostrar los seleccionados.
+	 */
+	this.nuevo = function() {
+
+		seccions_seleccionades_elm = escriptori_detall_elm.find("div.modulSeccions div.seleccionats");
+		seccions_seleccionades_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaSeccions + ".");
+		$("div.modulSeccions div.llistat input[type=checkbox]").attr('checked', false).removeClass(seccioDefaultClass);
+
+		that.mostrarSeccionesSeleccionadas();
+	}
+
+//	Econder el listado y mostrar los seleccionados.
+	this.mostrarSeccionesSeleccionadas = function () {
+		escriptori_detall_elm.find("div.modulSeccions div.llistat").hide();
+		escriptori_detall_elm.find("div.modulSeccions div.seleccionats").show();
+	}
 };
 
 function CEscriptoriSeccio() {
@@ -1104,7 +1072,7 @@ function CEscriptoriSeccio() {
 		escriptori_seccions_elm.fadeOut(300, function() {			
 			escriptori_detall_elm.fadeIn(300, function() {
 				// activar
-				modul_seccions_elm.find("a.gestionaSeccions").one( "click", function() { ModulSeccions.gestiona(); } );				
+				modul_seccions_elm.find("a.enllasGestioFitxa").one("click", function() { ModulSeccions.gestionaFitxes(this); } );
 			});
 
 		});
@@ -1279,7 +1247,7 @@ function CEscriptoriSeccioFitxes() {
 		} else {
 
 			// no hi ha items
-			codi_final = "<p class=\"noItems\">" + txtNoHiHaFitxes + ".</p>";
+			codi_final = "<p class=\"noItems\">" + txtNoHiHaFitxes + "</p>";
 
 		}
 
@@ -1328,6 +1296,7 @@ function CEscriptoriSeccioFitxes() {
 		dataVars += "&codiFitxa=" + $("#cerca_fitxes_codi").val();
 
 		// ajax
+		//this.buscarFicha();
 		$.ajax({
 			type: "POST",
 			url: pagSeccionsFitxes,
@@ -1346,12 +1315,28 @@ function CEscriptoriSeccioFitxes() {
 			success: function(data) {
 				that.finCargaListado(data, opcions);
 			}
-		});	
+		});
 	}	
 
 	this.finalizar = function(){		
 
-		nombre_llistat = ModulSeccions.finalizarFitxes();
+		//nombre_llistat = ModulSeccions.finalizarFitxes();
+		var data = ModulSeccions.finalizarFitxes();
+		var seccion = "#seccio_id_" + data.idSeccion;
+		var texto;
+		
+		//Actualiza el número de fichas en la UA.
+		switch (data.numFichas) {
+		case 1: 
+			texto = " ($ fitxa)".replace("$", data.numFichas);
+			break;
+
+		default:
+			texto = " ($ fitxes)".replace("$", data.numFichas);
+			break;
+		}
+		
+		$(seccion).parent().find("span").html(texto);
 
 		// Marcamos el modulo como modificado.
 		ModulSeccions.modificado();
@@ -1383,12 +1368,478 @@ function CEscriptoriSeccioFitxes() {
 		// animacio
 		escriptori_fitxes_elm.fadeOut(300, function() {			
 			escriptori_detall_elm.fadeIn(300, function() {
+
 				// activar
-				modul_seccions_elm.find("a.gestionaSeccions").one( "click", function() { ModulSeccions.gestiona(); } );				
-				modul_seccions_elm.find("a.gestionaFitxes").one("click", function() { ModulSeccions.gestionaFitxes(this); } );				
+				modul_seccions_elm.find("a.gestionaSeccions").one( "click", function() { ModulSeccions.gestiona(); } );
+				modul_seccions_elm.find("a.enllasGestioFitxa").one("click", function() { ModulSeccions.gestionaFitxes(this); } );
 
 			});
 
 		});
+
 	}
+
+	this.pintarListadoAsignadas = function(data) {
+
+		var listado = "";
+		var listaFichas = data.fitxes;
+		var numFitxes = listaFichas.length;
+
+		/* Pintado cabeceras listado*/
+		listado += '<p class="info">' + txtSeleccionados + ' <strong> ' + numFitxes + ' </strong> ' + txtFichas + '</p> ';
+		listado += '<div class="table llistat" role="grid" aria-live="polite" aria-atomic="true" aria-relevant="text additions">';
+		listado += '	<div class="thead">';
+		listado += '		<div class="tr" role="rowheader">';
+		listado += '			<div class="th nom" role="columnheader">' + txtTituloCabeceraFichas + '</div>';
+		listado += '			<div class="th enllas" role="columnheader">' + txtOrdenCabeceraFichas + '</div>';
+		listado += '		</div>';
+		listado += '	</div>';
+
+		listado += '	<div class="tbody">';
+
+		/* Pintado de las filas */		
+
+		paramsFicha = {
+				nombre: "fitxa",
+				nodoOrigen: "",
+				nodoDestino: fitxes_seleccionats_elm.find(".listaOrdenable"),
+				atributos: ["id", "nombre", "orden"],	// Campos que queremos que aparezcan en las listas.
+				multilang: false
+		}
+
+		if ( listaFichas != null && numFitxes > 0 ) {
+
+			for ( n = 0 ; n < numFitxes ; n++ ) {
+
+				var idFicha = listaFichas[n].id;
+				var filaPar = ( n % 2 == 0 ? "" : "par" );
+				var fichaCaducada = ( listaFichas[n].caducat == true ? "fitxaCaducat" : "fitxa" ); 
+				var orden = listaFichas[n].ordre;
+
+				listado += "<div class='tr " + filaPar + "' role='row'>";
+
+				listado += "	<div class='td nom " + fichaCaducada + "' role='gridcell'>"
+				listado	+= "		<input type='hidden' value='" + idFicha + "' class='id'>";
+
+				listado += "		<a href='javascript:;' class='nom'>" + listaFichas[n].titulo + "</a>";
+
+				listado += "	</div>";
+
+				listado += "	<div class='td enllas' role='gridcell'>"
+					listado += "		<select class='ordenacion'>";
+
+
+				for ( var i = 1 ; i < 11 ; i++ ) {
+
+					var seleccionado = ( orden == i ) ? "selected=''" : "";
+					listado += "<option value='" + i + "' " + seleccionado + ">" + i + "</option>";
+
+				}
+
+				listado += "		</select>";
+				listado += "		<span></span>";
+				listado += "	</div>";
+
+				listado += "</div>";				
+
+			}
+
+		}
+
+		listado += '	</div>';
+		listado += '</div>';
+
+		$("#resultatsFitxes .dades").html(listado);
+
+		this.quitarFicha();
+
+	}
+
+	this.quitarFicha = function() {
+
+		var cantidad = $("#resultatsFitxes .dades > div.table > div.tbody > div.tr").length;
+		
+		$("#resultatsFitxes .dades .tbody > .tr > div.enllas > span").each(function() {
+
+			var element = $(this).parents('div.tr');
+
+			$(this).click(function() {
+
+				$(element).remove();
+
+				switch (cantidad) {
+				case 0:
+
+					$('#resultatsFitxes .dades').html( "<p class=\"noItems\">" + txtNoHiHaFitxes + "</p>" );
+					break;
+
+				default:
+
+					$("#resultatsFitxes .dades > p.info > strong").html(cantidad);
+
+					var contador = 1;
+
+					$("#resultatsFitxes .dades > div.table > div.tbody > div.tr").each(function() {
+
+						$(this).removeClass("par");
+	
+						if ( contador % 2 == 0 )
+							$(this).addClass("par");
+
+						contador += 1;
+
+					})
+					
+					break;
+
+				}
+
+			});
+
+		});
+
+	}
+	
+	this.pintarNoItems = function() {
+		return "<p class=\"noItems\">" + txtNoHiHaFitxes + ".</p>";
+	}
+
+	this.limpiar = function() {
+
+		$("#cerca_fitxes_nom").val("");
+		$("#cerca_fitxes_codi").val("")
+
+	}
+
+	//Eliminar los parametros nombreFicha e idFicha
+	this.listarFichasAsignadas = function(idSeccion) {
+
+		//Comprobar si los parámetros son nulos, vacios o indefinidos
+		var dataVars = "";
+		if ( this.validarParametro(idSeccion) )
+			dataVars += "idSeccion=" + idSeccion;
+
+		$.ajax({
+			type: "POST",
+			url: pagFitxesUASeccio,
+			data: dataVars,
+			dataType: "json",
+			error: function() {
+
+				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+				Error.llansar();
+
+			},
+			success: function(data) {
+
+				if (data.id == -1) {
+
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
+
+				} else if (data.id < -1) {
+
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
+
+				} else if (data.fitxes.length == 0) {
+
+					$("#resultatsFitxes .dades").html("<p class='noItems'>" + txtNoHiHaFitxes + "</p>");
+
+				} else {
+
+					$('#resultatsFitxes .dades').fadeOut(300, function() {
+
+						$("#cerca_fitxes_nom").attr("disabled", "disabled");
+						$("#cerca_fitxes_codi").attr("disabled", "disabled");
+
+						$(this).html("<p class=\"executant\">" + txtCercantItems + "</p>");
+
+						$(this).fadeIn(300, function() {
+
+							EscriptoriSeccioFitxes.pintarListadoAsignadas(data);
+							$("#cerca_fitxes_nom").removeAttr("disabled");
+							$("#cerca_fitxes_codi").removeAttr("disabled");
+
+
+							$("#resultatsFitxes div.fitxa").each(function() {	
+								var idFicha = $(this).find("input").val();
+
+								$(this).find("a").click(function() {
+									that.goDetalleFicha(idFicha);	
+								});								
+							});
+
+						});
+
+					});
+
+				}
+
+			} //Fin success
+
+		}); //Fin ajax
+
+	}
+
+	/*Valida que el parámetro no sea nulo, vacío o undefined*/
+	this.validarParametro = function(parametro) {
+
+		var valido = false;
+		if (parametro != null & parametro != 'undefined' & parametro != "")
+			valido = true;
+
+		return valido;
+
+	}
+
+	this.buscarFicha = function(idSeccion, nombreFicha, idFicha) {
+
+		//Comprobar si los parámetros son nulos, vacios o indefinidos
+		var dataVars = "";
+		if ( this.validarParametro(idSeccion) )
+			dataVars += "idSeccion=" + idSeccion;
+
+		if ( this.validarParametro(nombreFicha) )
+			dataVars += "&nombreFicha=" + nombreFicha;
+
+		if ( this.validarParametro(idFicha) )
+			dataVars += "&idFicha=" + idFicha;
+
+		$.ajax({
+			type: "POST",
+			url: pagSeccionsFitxes,
+			data: dataVars,
+			dataType: "json",
+			error: function() {
+
+				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+				Error.llansar();
+
+			},
+			success: function(data) {
+
+				if (data.id == -1) {
+
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
+
+				} else if (data.id < -1) {
+
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
+
+				} else if (data.fitxes.length == 0) {
+
+					$("#seleccion-fichas").css("display", "block");
+					$("#seleccion-fichas").html("<p class='noItems'>" + txtNoHiHaFitxes + "</p>");	
+
+				} else {
+
+					$('#seleccion-fichas').fadeOut(300, function() {
+
+						$("#cerca_fitxes_nom").attr("disabled", "disabled");
+						$("#cerca_fitxes_codi").attr("disabled", "disabled");
+
+						$(this).html("<p class=\"executant\">" + txtCercantItems + "</p>");
+
+						$(this).fadeIn(300, function() {
+
+							EscriptoriSeccioFitxes.pintarListado(data);
+							$("#cerca_fitxes_nom").removeAttr("disabled");
+							$("#cerca_fitxes_codi").removeAttr("disabled");
+
+							$('#seleccion-fichas ul > li > div').each(function() {
+
+								var id = $(this).find("input[type=hidden]:first").val();
+
+								$(this).find("a.asigna").click(function() {
+									that.asignarFicha(id);
+								});
+
+							});
+
+						});
+
+					});
+
+				}
+
+			} //Fin success
+
+		}); //Fin ajax
+
+	}
+
+	this.asignarFicha = function(id) {// TODO: Cuando se asigne una ficha y ya no exista el listado se debe volver a pintar el listado pasándole por parámetro la nueva ficha
+
+		var ficha;
+		var elementCaducidad = "#ficha-caducidad-" + id;
+		var caducidad = $(elementCaducidad).val();
+		var orden = 1;
+		var cantidadFichas = this.contarFichasAsignadas();
+		var nodo = "#nodo-ficha-" + id + " > div > span";
+		var titulo = $(nodo).html();
+		var existTable = $("#resultatsFitxes .dades > div.table").length;
+		
+		if (existTable) {
+		
+			ficha = this.pintarFicha(id, orden, caducidad, cantidadFichas, titulo);
+			
+			//Aumenta total registros tabla
+			$("#resultatsFitxes .dades > p.info > strong").html( cantidadFichas += 1 );
+			
+			//Añade la ficha a la tabla
+			$("#resultatsFitxes .dades > div.table > .tbody").prepend(ficha);
+			
+			this.quitarFicha(); //Registra la acción quitarFicha
+			
+		} else {
+
+			var data = { "fitxes" : [ { "id": id, "titulo" : titulo, "caducat" : caducidad, "ordre" : orden } ],  };
+			this.pintarListadoAsignadas(data);
+		}		
+		
+		this.calcularColorFilas();
+
+	}
+
+	this.calcularColorFilas = function() {
+
+		var contador = 1;
+
+		$("#resultatsFitxes .dades > div.table > div.tbody > div.tr").each(function() {
+
+			$(this).removeClass("par");
+
+			if ( contador % 2 == 0 )
+				$(this).addClass("par");
+
+			contador += 1;
+
+		})
+
+	}
+
+	this.contarFichasAsignadas = function() {
+
+		return  $("#resultatsFitxes .dades > div.table > div.tbody > div.tr").length;
+
+	}
+
+	this.pintarFicha = function(idFicha, orden, caducidad, cantidadFichas, titulo) {
+
+		cantidadFichas += 1;
+		var filaPar = ( cantidadFichas % 2 == 0 ? "par" : "" );
+		var fichaCaducada = ( caducidad == 'true' ? "fitxaCaducat" : "fitxa" ); 
+
+		var ficha = "<div class='tr " + filaPar + "' role='row'>";
+
+		ficha += "	<div class='td nom " + fichaCaducada + "' role='gridcell'>"
+		ficha	+= "		<input type='hidden' value='" + idFicha + "' class='id'>";
+
+		ficha += "		<a href='javascript:;' class='nom'>" + titulo + "</a>";
+
+		ficha += "	</div>";
+
+		ficha += "	<div class='td enllas' role='gridcell'>"
+			ficha += "		<select class='ordenacion'>";
+
+
+		for ( var i = 1 ; i < 11 ; i++ ) {
+
+			var seleccionado = ( orden == i ) ? "selected=''" : "";
+			ficha += "<option value='" + i + "' " + seleccionado + ">" + i + "</option>";
+
+		}
+
+		ficha += "		</select>";
+		ficha += "		<span></span>";
+		ficha += "	</div>";
+
+		ficha += "</div>";
+
+		return ficha;
+
+	}
+
+
+	this.goDetalleFicha = function(fitxaId) {
+
+		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtCarregant});
+		$.ajax({
+			type: "POST",
+			url: pagFitxa,
+			data: "id=" + fitxaId,
+			dataType: "json",
+			error: function() {
+				// Missatge.cancelar();
+				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+				Error.llansar();
+			},
+			success: function(data) {
+				Missatge.cancelar();
+				if (data.item_id > 0) {
+					location = pagFitxaDetall + "?itemId=" + data.item_id;
+				} else if (data.item_id == -1){
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
+				} else if (data.item_id < -1){
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
+				}
+			}
+		});
+
+
+	}
+
+	this.pintarListado = function(data) {
+
+		//Obtener el número total de fichas
+		var listado = "";
+		var listaFichas = data.fitxes;
+		var numFitxes = listaFichas.length;
+
+		/* Pintado cabeceras listado*/
+		listado += '<p class="info">' + txtSeleccionados + ' <strong> ' + numFitxes + ' </strong> ' + txtFichas + '</p> ';
+		listado += '<div class="listaOrdenable">';
+		listado += '	<ul class="ui-sortable" style="cursor: default;">';
+
+
+		/* Pintado de las filas */		
+		paramsFicha = {
+
+				nombre: "fitxa",
+				nodoOrigen: "",
+				nodoDestino: fitxes_seleccionats_elm.find(".listaOrdenable"),
+				atributos: ["id", "nombre", "orden"],	// Campos que queremos que aparezcan en las listas.
+				multilang: false
+
+		}
+
+		if ( listaFichas != null && numFitxes > 0 ) {
+
+			for ( n = 0 ; n < numFitxes ; n++ ) {
+
+				var idFicha = listaFichas[n].id;
+
+				listado += "<li id='nodo-ficha-" + idFicha + "' class='nodoListaSecciones'>";
+				listado += "	<div class=''>";
+				listado += "		<span>" + listaFichas[n].titulo + "</span>";
+				listado += "		<input id='ficha-id-" + idFicha + "' type='hidden' value='" + idFicha + "' >";
+				listado += "		<input id='ficha-caducidad-" + idFicha + "' type='hidden' value='" + listaFichas[n].caducat + "' />";
+				listado += "		<a id='btn-ficha-'" + idFicha + "' class='btn asigna' href='javascript:;'></a>";
+				listado += "			<span>";
+				listado += "				<span><span>";
+				listado += "			<span>";
+				listado += "	</div>";
+				listado += "</li>";
+
+
+			}
+
+		}
+
+		listado += '	</ul>';
+		listado += '</div>';
+
+		$("#seleccion-fichas").html(listado);
+
+	}
+
 };

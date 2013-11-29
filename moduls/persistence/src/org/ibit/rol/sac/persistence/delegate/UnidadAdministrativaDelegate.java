@@ -1,16 +1,15 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.Archivo;
-import org.ibit.rol.sac.model.Ficha;
-import org.ibit.rol.sac.model.ProcedimientoLocal;
-import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Seccion;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.dto.FichaDTO;
+
 import es.caib.rolsac.utils.ResultadoBusqueda;
-import org.ibit.rol.sac.model.FichaResumenUA;
 
 /*
  * ejaen@dgtic  - u92770
@@ -185,12 +184,13 @@ public class UnidadAdministrativaDelegate {
 		return impl.cuentaFichasSeccionUA(idUA, idSeccion);
 	}
 	
-	public List<FichaResumenUA> listarFichasSeccionUA(Long idUA, Long idSeccion) throws DelegateException {
-		return impl.listarFichasSeccionUA(idUA, idSeccion);
+	public List<FichaDTO> listarFichasSeccionUA(Long idUA, Long idSeccion, String idioma) throws DelegateException {
+		return impl.listarFichasSeccionUA(idUA, idSeccion, idioma);
 	}
 	
-	public void actualizaFichasSeccionUA(Long idUA, Long idSeccion, List<Long> listaIdFichasLong) throws DelegateException {
-		impl.actualizaFichasSeccionUA(idUA, idSeccion, listaIdFichasLong);
+
+	public void actualizaFichasSeccionUA(Long idUA, Long idSeccion, List<FichaDTO> fichas) throws DelegateException {
+		impl.actualizaFichasSeccionUA(idUA, idSeccion, fichas);
 	}
 	
     public void eliminarFotoGrande(Long idUA)

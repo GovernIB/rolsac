@@ -1,20 +1,18 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.Archivo;
-import org.ibit.rol.sac.model.Ficha;
-import org.ibit.rol.sac.model.ProcedimientoLocal;
-import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Seccion;
-import es.caib.rolsac.utils.ResultadoBusqueda;
-import org.ibit.rol.sac.model.FichaResumenUA;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.dto.FichaDTO;
 
-public interface UnidadAdministrativaDelegateI
-{
+import es.caib.rolsac.utils.ResultadoBusqueda;
+
+public interface UnidadAdministrativaDelegateI {
+	
 	public ResultadoBusqueda buscadorUnidadesAdministrativas(Map<String, Object> parametros, Map<String, String> traduccion, Long id, String idioma, boolean uaFilles, boolean uaMeves, Long materia, String pagina, String resultats)
 			throws DelegateException;
 	
@@ -193,13 +191,13 @@ public interface UnidadAdministrativaDelegateI
 	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate#listarFichasSeccionUA(java.lang.Long, java.lang.Long)
 	 */
-	public abstract List<FichaResumenUA> listarFichasSeccionUA(final Long idUA, final Long idSeccion)
+	public abstract List<FichaDTO> listarFichasSeccionUA(final Long idUA, final Long idSeccion, String idioma)
 			throws DelegateException;
 	
 	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate#actualizaFichasSeccionUA(java.lang.Long, java.lang.Long, java.util.List)
 	 */
-	public abstract void actualizaFichasSeccionUA(Long idUA, Long idSeccion, List<Long> listaIdFichasLong)
+	public abstract void actualizaFichasSeccionUA(Long idUA, Long idSeccion, List<FichaDTO> fichas)
 			throws DelegateException;
 	
 	/* (non-Javadoc)
