@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -87,19 +88,20 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
      */
     public Long grabarDocumento(Documento documento, Long procedimiento_id, Long ficha_id) {
     		//Long docInftramite_id, Long docPreTramite_id) {
+    	
         Session session = getSession();
         try {
         	Ficha ficha = null;
         	ProcedimientoLocal procedimiento = null;
         	Tramite tramite=null;
             if (documento.getId() == null) {
-
-                if (ficha_id != null) {
+            	
+            	if (ficha_id != null) {
                     if (!getAccesoManager().tieneAccesoFicha(ficha_id)) {
                         throw new SecurityException("No tiene acceso a la ficha.");
                     }
                     ficha = (Ficha) session.load(Ficha.class, ficha_id);
-                    ficha.addDocumento(documento);                    
+                    ficha.addDocumento(documento);
                 }
                 if (procedimiento_id != null) {
                     if (!getAccesoManager().tieneAccesoProcedimiento(procedimiento_id)) {
@@ -107,24 +109,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
                     }  
                     procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, procedimiento_id);
                     procedimiento.addDocumento(documento);
-                }
-/*                
-                if (docInftramite_id != null) {
-                    if (!getAccesoManager().tieneAccesoTramite(docInftramite_id)) {
-                        throw new SecurityException("No tiene acceso al tramite.");
-                    }  
-                    tramite = (Tramite) session.load(Tramite.class, docInftramite_id);
-                    tramite.addDocInformatiu(documento);
-                }
-                if (docPreTramite_id != null) {
-                    if (!getAccesoManager().tieneAccesoTramite(docPreTramite_id)) {
-                        throw new SecurityException("No tiene acceso al tramite.");
-                    }  
-                    tramite = (Tramite) session.load(Tramite.class, docPreTramite_id);
-                    tramite.addDocPresentar(documento);
-                }
-
-  */              
+                }             
                 session.save(documento);
             } else {
                 if (!getAccesoManager().tieneAccesoDocumento(documento.getId())) {
@@ -134,34 +119,39 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
                 session.update(documento);
             }
             session.flush();
+/*        	
             if (ficha_id != null) {
-            	if (ficha_id != null) ficha = ficha = (Ficha) session.load(Ficha.class, ficha_id);       	           	
+            	if (ficha_id != null) ficha = ficha = (Ficha) session.load(Ficha.class, ficha_id);
                 FichaDelegate ficdel = null!=fichDel? fichDel: DelegateUtil.getFichaDelegate();
-                try {  
+                try {
                 	ficdel.indexBorraFicha(ficha.getId());
-                	ficdel.indexInsertaFicha(ficha,null);   
+                	ficdel.indexInsertaFicha(ficha,null);
                 } catch (DelegateException e) {
                     log.error("Error indexando ficha", e);
-                }                                                        
+                }
             }
+        	
+
             if (procedimiento_id != null) {
                 if (procedimiento_id != null) procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, procedimiento_id);
         		ProcedimientoDelegate pldel = null!=procDel? procDel : DelegateUtil.getProcedimientoDelegate();
-                try {            	
+                try {
                 	pldel.indexBorraProcedimiento(procedimiento);
-                	pldel.indexInsertaProcedimiento(procedimiento,null);   
-                    log.debug("Actualizamos documento del procedimiento");
+                	
+                	Date newTime = new Date();
+                	pldel.indexInsertaProcedimiento(procedimiento,null);
+                	long execTime = new Date().getTime() - time.getTime();
+                	log.info("indexInsertaProcedimiento, tiempo total: " + execTime + " milisegundos.");
+                	
                     Actualizador.actualizar(documento, procedimiento.getId());
                 } catch (DelegateException e) {
                     log.error("Error indexando procedimiento", e);
-                }                    
-
-            }           
-            
-            
-            //TODO a�adir if para el tramite
-            
+                }
+            }
+*/        	
+        	//TODO añadir if para el tramite
             return documento.getId();
+            
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {

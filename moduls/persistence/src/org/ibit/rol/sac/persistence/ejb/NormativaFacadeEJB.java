@@ -881,7 +881,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
    		
    		while (itproc.hasNext()) {
    			// Obtenemos el procedimiento puesto que sus colecciones estan lazy
-   			pro = (ProcedimientoLocal)bdProc.obtenerProcedimiento(((ProcedimientoLocal)itproc.next()).getId());
+   			pro = (ProcedimientoLocal)bdProc.obtenerProcedimientoNewBack(((ProcedimientoLocal)itproc.next()).getId());
    			
    			if (pro.getMaterias()!=null) {
    				Iterator itmat=pro.getMaterias().iterator();

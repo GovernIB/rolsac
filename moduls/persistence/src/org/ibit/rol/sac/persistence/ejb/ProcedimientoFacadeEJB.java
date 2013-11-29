@@ -158,7 +158,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
                 if (!getAccesoManager().tieneAccesoProcedimiento(procedimiento.getId())) {
                     throw new SecurityException("No tiene acceso al procedimiento");
                 }
-                ProcedimientoLocal procedimientoBD = obtenerProcedimiento(procedimiento.getId());
+                ProcedimientoLocal procedimientoBD = obtenerProcedimientoNewBack(procedimiento.getId());
                 FechaActualizacionBD = procedimientoBD.getFechaActualizacion();
                 this.indexBorraProcedimiento(procedimientoBD);
             }
@@ -702,8 +702,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     			if (procedimiento.getOrganResolutori() != null) {
     				Hibernate.initialize( procedimiento.getOrganResolutori().getHijos() );
     			}
-    			Hibernate.initialize(procedimiento.getUnidadAdministrativa().getNormativas());
-    			Hibernate.initialize(procedimiento.getUnidadAdministrativa().getEdificios());
+//    			Hibernate.initialize(procedimiento.getUnidadAdministrativa().getNormativas());
+//    			Hibernate.initialize(procedimiento.getUnidadAdministrativa().getEdificios());
     			Hibernate.initialize(procedimiento.getTramites());
     			Hibernate.initialize(procedimiento.getHechosVitalesProcedimientos());
     			Hibernate.initialize(procedimiento.getIniciacion());
@@ -721,7 +721,13 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     	}
     	
     	// Ordenamos los documentos por el campo orden (si nulo, ordena por el campo id)
-        List procs = new ArrayList(procedimiento.getDocumentos());
+        List procs = new ArrayList(0);
+        for (Documento documento : procedimiento.getDocumentos()) {
+        	if (documento != null) {
+        		procs.add(documento);
+        	}
+        }
+//        List procs = new ArrayList(procedimiento.getDocumentos());
         Collections.sort(procs, new Documento());
 	  	procedimiento.setDocumentos(procs);
         
@@ -2210,7 +2216,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     	try {
     		if (proc.getValidacion().equals(2)) return;
     		
-    		proc = obtenerProcedimiento(proc.getId()); 
+    		proc = obtenerProcedimientoNewBack(proc.getId()); 
     		
 	    	if (filter==null) filter = obtenerFilterObject(proc);  	
 	    	String tipo = tipoProcedimiento (proc,false); 

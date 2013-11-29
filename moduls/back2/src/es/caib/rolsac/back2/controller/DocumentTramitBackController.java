@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +19,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.DocumentTramit;
+import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
@@ -129,100 +131,38 @@ public class DocumentTramitBackController extends ArchivoController {
 		Locale locale = request.getLocale();
 		String jsonResult = null;
 		
-		TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();		
-				
 		Map<String, String> valoresForm = new HashMap<String, String>();
 		Map<String, FileItem> ficherosForm = new HashMap<String, FileItem>();
 				
 		try {
+			// Recuperamos los valores del request
+			recuperarForms(request, valoresForm, ficherosForm);
 			
-			//Aqu� nos llegar� un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
-			//Iremos recopilando los par�metros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
-			List<FileItem> items = UploadUtil.obtenerServletFileUpload().parseRequest(request);
-			
-			for (FileItem item : items) {
-				if (item.isFormField()) {
-					valoresForm.put(item.getFieldName(), item.getString("UTF-8"));
-				} else {
-					ficherosForm.put(item.getFieldName(), item);    				
-				}
-			}
-						
-			DocumentTramit documentTramit = new DocumentTramit();
-			DocumentTramit documentTramitOld = null;
-			
-			Long docTramitId = null;
-			int tipoDoc = "0".equals(valoresForm.get("tipDoc")) ? DocumentTramit.DOCINFORMATIU : DocumentTramit.FORMULARI;			
-						
-			String idDocument = tipoDoc == 0 ? "docTramitId" : "formTramitId";
+			// Tags que nos identifican que tipo de documentos son
+			int tipoDoc = "0".equals(valoresForm.get("tipDoc")) ? DocumentTramit.DOCINFORMATIU : DocumentTramit.FORMULARI;
 			String tipoTag = tipoDoc == 0 ? "doc" : "form";
-			String tituloTag = tipoTag + "_tramit_titol_";
-			String descripcionTag = tipoTag + "_tramit_descripcio_";
-			String archivoTag = tipoTag + "_tramit_arxiu_";			
+			String idDocument = tipoDoc == 0 ? "docTramitId" : "formTramitId";
 			String idTag = "tramitId" + tipoTag;
 			
-			Long idTramite = new Long( valoresForm.get( idTag ) );
-			Tramite tramite = tramiteDelegate.obtenerTramite( idTramite );
+			// Recuperamos el documento antiguo en caso de que se trate de una modificación
+			DocumentTramit documentTramitOld = recuperarDocOld(valoresForm);
+//			DocumentTramit documentTramitOld = tramiteDelegate.obtenirDocument(Long.parseLong(valoresForm.get(idDocument)));
 			
-			boolean edicion = valoresForm.get(idDocument) != null && !"".equals( valoresForm.get(idDocument) );
-								
-			documentTramit.setTipus( tipoDoc );
+			// Copiamos la información deseada al nuevo documento
+			DocumentTramit documentTramit = recuperarInformacionDocumento(valoresForm, documentTramitOld, tipoDoc, idTag);
 			
-			if ( edicion ) {
-				
-				docTramitId = Long.parseLong(valoresForm.get(idDocument));
-				documentTramitOld = tramiteDelegate.obtenirDocument(docTramitId) ;
-				
-				documentTramit.setId(documentTramitOld.getId());			
-				documentTramit.setArchivo(documentTramitOld.getArchivo());  // Este atributo parece que ya no se usa. Se mantiene por si acaso.
-				documentTramit.setTramit(tramite);			
-				documentTramit.setOrden(documentTramitOld.getOrden());			
-			}
+			// Actualizamos las traducciones y marcamos los archivos que deven ser eliminados
+			List<Long> archivosBorrar = new Vector<Long>();
+			documentTramit = gestionarTraducciones(
+									valoresForm,
+									ficherosForm,
+									archivosBorrar,
+									documentTramitOld,
+									documentTramit,
+									tipoTag);
 			
-			IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
-			List<String> langs = idiomaDelegate.listarLenguajes();
-			TraduccionDocumento traduccionDocumento;
-					
-			for (String lang: langs) {
-				
-				traduccionDocumento = new TraduccionDocumento();
-				traduccionDocumento.setTitulo( RolUtil.limpiaCadena(valoresForm.get(tituloTag + lang)) );
-				traduccionDocumento.setDescripcion( RolUtil.limpiaCadena(valoresForm.get(descripcionTag + lang)) );				
-				
-				// Archivo
-				FileItem fileItem = ficherosForm.get(archivoTag + lang);
-				
-	    		if (fileItem != null && fileItem.getSize() > 0) {
-	    			// nuevo fichero
-	    			traduccionDocumento.setArchivo(UploadUtil.obtenerArchivo(traduccionDocumento.getArchivo(), fileItem));
-	    		} else if (valoresForm.get(archivoTag + lang + "_delete") != null && !"".equals(valoresForm.get(archivoTag + lang + "_delete"))) {
-	    			// borrar fichero
-	    			traduccionDocumento.setArchivo(null);
-	    		} else if (documentTramitOld != null) {
-	    			// mantener el fichero anterior
-	    			TraduccionDocumento traDocOld = (TraduccionDocumento) documentTramitOld.getTraduccion(lang);
-	    			if (traDocOld != null) {
-	    				traduccionDocumento.setArchivo(traDocOld.getArchivo());
-	    			}
-	    		}
-
-				documentTramit.setTraduccion(lang, traduccionDocumento);
-			}
-		
-		if ( valoresForm.get(idTag) != null && !"".equals(valoresForm.get(idTag)) ) {
-			
-			docTramitId = tramiteDelegate.grabarDocument(documentTramit, idTramite);
-			
-			String textoGuardadoCorrecto = "document.guardat.correcte";			
-			if (tipoDoc == 1) textoGuardadoCorrecto = "formulari.guardat.correcte";
-			
-			jsonResult = new IdNomDTO(docTramitId,  messageSource.getMessage(textoGuardadoCorrecto, null, locale)).getJson();
-			
-		} else {
-			String error = messageSource.getMessage("error.altres", null, locale);
-			jsonResult = new IdNomDTO(-2l, error).getJson();
-			log.error("Error guardant document");
-		}
+			// Guardar el documento
+			jsonResult = guardarDocumento(valoresForm, idTag, locale, archivosBorrar, documentTramit);
 		
 	} catch (FileUploadException fue) {
 		String error = messageSource.getMessage("error.fitxer.tamany", null, locale);
@@ -253,6 +193,131 @@ public class DocumentTramitBackController extends ArchivoController {
 				
 		return new ResponseEntity<String>(jsonResult, responseHeaders, HttpStatus.CREATED);
 	}
+	
+	//Aquí nos llegará un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
+	//Iremos recopilando los parámetros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
+	private void recuperarForms(HttpServletRequest request, Map<String, String> valoresForm, Map<String, FileItem> ficherosForm) throws UnsupportedEncodingException, FileUploadException
+	{
+		List<FileItem> items = UploadUtil.obtenerServletFileUpload().parseRequest(request);
+		for ( FileItem item : items ) {
+			if ( item.isFormField() ) {
+				valoresForm.put( item.getFieldName(), item.getString("UTF-8") );
+			} else {
+				ficherosForm.put( item.getFieldName(), item );
+			}
+		}
+	}
+	
+	/* Vemos si se debe recuperar el documento viejo */
+	private DocumentTramit recuperarDocOld(Map<String, String> valoresForm) throws DelegateException
+	{
+		TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
+		DocumentTramit docOld = null;
+		if (valoresForm.get("idDocument") != null  &&  !"".equals(valoresForm.get("idDocument"))) {
+			Long docId = Long.parseLong( valoresForm.get("idDocument") );
+			docOld = tramiteDelegate.obtenirDocument(docId);
+		}
+		return docOld;
+	}
+	
+	/* Recuperamos la información antigua si el documento ya existia */
+	private DocumentTramit recuperarInformacionDocumento(Map<String, String> valoresForm, DocumentTramit documentTramitOld, int tipoDoc, String idTag) throws DelegateException
+	{
+		String idDocument = tipoDoc == 0 ? "docTramitId" : "formTramitId";
+		DocumentTramit documentTramit = new DocumentTramit();
+		documentTramit.setTipus(tipoDoc);
+		
+		if (valoresForm.get(idDocument) != null && !"".equals(valoresForm.get(idDocument))) {
+			Long idTramite = new Long(valoresForm.get(idTag));
+			TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
+			Tramite tramite = tramiteDelegate.obtenerTramite( idTramite );
+			
+			documentTramit.setId(documentTramitOld.getId());
+			documentTramit.setTramit(tramite);			
+			documentTramit.setOrden(documentTramitOld.getOrden());	
+		}
+		
+		return documentTramit;
+	}
+
+	/* Gestión de las traducciones y los archivos */
+	private DocumentTramit gestionarTraducciones(
+			Map<String, String> valoresForm,
+			Map<String, FileItem> ficherosForm,
+			List<Long> archivosAborrar,
+			DocumentTramit docOld,
+			DocumentTramit doc,
+			String tipoTag) throws DelegateException
+	{
+		String tituloTag = tipoTag + "_tramit_titol_";
+		String descripcionTag = tipoTag + "_tramit_descripcio_";
+		String archivoTag = tipoTag + "_tramit_arxiu_";			
+		
+		TraduccionDocumento tradDoc;
+		for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
+			tradDoc = new TraduccionDocumento();
+			tradDoc.setTitulo( RolUtil.limpiaCadena( valoresForm.get(tituloTag + lang) ) );
+			tradDoc.setDescripcion( RolUtil.limpiaCadena( valoresForm.get(descripcionTag + lang) ) );
+			
+			// Archivo
+			FileItem fileItem = ficherosForm.get(archivoTag + lang);
+			if (fileItem != null  &&  fileItem.getSize() > 0) {
+				// En caso de que el documento ya exista y se quiera cambiar el archivo adjunto
+				if (docOld != null) {
+					TraduccionDocumento traDocOld = (TraduccionDocumento) docOld.getTraduccion(lang);
+					if (traDocOld.getArchivo() != null) {
+						archivosAborrar.add( traDocOld.getArchivo().getId() );
+					}
+				}
+				
+				// Nuevo archivo.
+				tradDoc.setArchivo(UploadUtil.obtenerArchivo(tradDoc.getArchivo(), fileItem));
+				
+			} else if ( valoresForm.get(archivoTag + lang + "_delete") != null  &&  !"".equals( valoresForm.get(archivoTag + lang + "_delete") ) ) {
+				// Indicamos a la traducción del documento que no va a tener asignado el archivo.
+				TraduccionDocumento traDocOld = (TraduccionDocumento) docOld.getTraduccion(lang);
+				archivosAborrar.add( traDocOld.getArchivo().getId() );
+				tradDoc.setArchivo(null);
+				
+			} else if ( docOld != null ) {
+				// mantener el fichero anterior
+				TraduccionDocumento traDocOld = (TraduccionDocumento) docOld.getTraduccion(lang);
+				if ( traDocOld != null ) {
+					tradDoc.setArchivo( traDocOld.getArchivo() );
+				}
+			}
+			
+			doc.setTraduccion(lang, tradDoc);
+		}
+		
+		return doc;
+	}
+	
+	/* Guardado del documento */
+	private String guardarDocumento(Map<String, String> valoresForm, String iden, Locale locale, List<Long> archivosBorrar, DocumentTramit documentTramit) throws DelegateException
+	{
+		String jsonResult = null;
+		Long docTramitId = null;
+		if (valoresForm.get(iden) != null  &&  !"".equals(valoresForm.get(iden))) {
+			TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
+			Long idTramite = Long.parseLong(valoresForm.get(iden));
+			docTramitId = tramiteDelegate.grabarDocument(documentTramit, idTramite);
+						
+			for (Long idArchivo : archivosBorrar) {
+				DelegateUtil.getArchivoDelegate().borrarArchivo(idArchivo);
+			}
+			
+			jsonResult = new IdNomDTO(docTramitId, messageSource.getMessage("document.guardat.correcte", null, locale)).getJson();
+			
+		} else {
+			String error = messageSource.getMessage( "error.altres", null, locale );
+			jsonResult = new IdNomDTO(-2l, error).getJson();
+			log.error("Error guardant document: No s'ha especificat id de procediment o de fitxer.");
+		}
+		
+		return jsonResult;
+	}
+	
 	
 	@RequestMapping(value = "/archivo.do")
     public void devolverArchivoDocumentoTramite(HttpServletRequest request, HttpServletResponse response) throws Exception {
