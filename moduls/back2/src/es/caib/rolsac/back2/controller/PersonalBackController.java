@@ -25,6 +25,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
@@ -63,28 +64,34 @@ public class PersonalBackController extends PantallaBaseController
 	
 	
 	@RequestMapping(value = "/llistat.do", method = POST)
-    public @ResponseBody Map<String, Object> llistatPersonal(HttpServletRequest request, HttpSession session) {
-    	
-    	List<PersonalDTO> llistaPersonalDTO = new ArrayList<PersonalDTO>();
-    	Map<String,Object> resultats = new HashMap<String,Object>();
+	public @ResponseBody Map<String, Object> llistatPersonal(HttpServletRequest request, HttpSession session)
+	{
+		List<PersonalDTO> llistaPersonalDTO = new ArrayList<PersonalDTO>();
+		Map<String,Object> resultats = new HashMap<String,Object>();
     	Map<String, Object> paramMap = new HashMap<String, Object>();
     	
-    	if (request.getParameter("idUA") == null || request.getParameter("idUA").equals(""))
-    		return resultats;//Si no hay unidad administrativa se devuelve vacio
+    	String codi = request.getParameter("cerca_codi"); 
+    	if (codi != null && !codi.equals("")) {
+    		paramMap.put("id", Long.parseLong(codi));
+    	}
     	
+    	paramMap.put("unidadAdministrativa", ((UnidadAdministrativa) session.getAttribute("unidadAdministrativa")).getId());
     	
-    	paramMap.put("username", request.getParameter("username"));
-    	paramMap.put("nombre", request.getParameter("nom"));
-    	paramMap.put("funciones", request.getParameter("funcions"));
-    	paramMap.put("cargo", request.getParameter("carrec"));
-    	paramMap.put("email", request.getParameter("email"));
-    	paramMap.put("extensionPublica", request.getParameter("epui"));
-    	paramMap.put("numeroLargoPublico", request.getParameter("nlpui"));
-    	paramMap.put("extensionPrivada", request.getParameter("epri"));
-    	paramMap.put("numeroLargoPrivado", request.getParameter("nlpri"));
-    	paramMap.put("extensionMovil", request.getParameter("em"));
-    	paramMap.put("numeroLargoMovil", request.getParameter("nlm"));
-    	paramMap.put("unidadAdministrativa.id", new Long(request.getParameter("idUA")));
+    	String textes = request.getParameter("cerca_text");
+    	if (textes != null && !"".equals(textes)) {
+    		textes = textes.toUpperCase();
+    		
+        	paramMap.put("nombre", textes);
+        	paramMap.put("funciones", textes);
+        	paramMap.put("cargo", textes);
+        	paramMap.put("email", textes);
+        	paramMap.put("extensionPublica", textes);
+        	paramMap.put("numeroLargoPublico", textes);
+        	paramMap.put("extensionPrivada", textes);
+        	paramMap.put("numeroLargoPrivado", textes);
+        	paramMap.put("extensionMovil", textes);
+        	paramMap.put("numeroLargoMovil", textes);
+    	}
     	
     	boolean uaFilles = "1".equals(request.getParameter("uaFilles"));
     	boolean uaMeves = "1".equals(request.getParameter("uaMeves"));
@@ -102,7 +109,7 @@ public class PersonalBackController extends PantallaBaseController
     		PersonalDelegate personalDelegate = DelegateUtil.getPersonalDelegate();
     		resultadoBusqueda = personalDelegate.buscadorListarPersonal(paramMap, Integer.parseInt(pagPag), Integer.parseInt(pagRes), uaFilles, uaMeves);
     		
-    		for ( Personal persona : (List<Personal>) resultadoBusqueda.getListaResultados() ) {
+    		for (Personal persona : (List<Personal>) resultadoBusqueda.getListaResultados()) {
     			llistaPersonalDTO.add(new PersonalDTO(
     						persona.getId(),
     						persona.getNombre(),
@@ -114,16 +121,15 @@ public class PersonalBackController extends PantallaBaseController
     		}
     		
     	} catch (DelegateException dEx) {
-    		if (dEx.isSecurityException())
+    		if (dEx.isSecurityException()) {
     			log.error("Permisos insuficients: " + dEx.getMessage());
-    		
-    		else
+    		} else {
     			log.error("Error: " + dEx.getMessage());
-    		
+    		}
     	}
     	
-    	resultats.put( "total", resultadoBusqueda.getTotalResultados() );
-    	resultats.put( "nodes", llistaPersonalDTO );
+    	resultats.put("total", resultadoBusqueda.getTotalResultados());
+    	resultats.put("nodes", llistaPersonalDTO);
     	
     	return resultats;
     }

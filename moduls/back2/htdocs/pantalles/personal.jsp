@@ -347,83 +347,19 @@
                     <div class="busquedaBasica">
                     	<h2><spring:message code='tab.cercador'/></h2>
                     	<div class="fila">
-                            <div class="element t21">
-                                <div class="etiqueta"><label for="cerca_nom"><spring:message code='camp.nom'/></label></div>
-                                <div class="control">                           
-                                    <input id="cerca_nom" name="cerca_nom" type="text" maxlength="250" class="nom" />
-                                </div>
-                            </div>                                      
-                            <div class="element t10">                    
+                    	   <div class="element t10">                    
                                 <div class="etiqueta"><label for="cerca_codi"><spring:message code='camp.codi'/></label></div>
                                 <div class="control">                                   
                                     <input id="cerca_codi" name="cerca_codi" type="text" maxlength="7" class="codi" />
                                 </div>                  
                             </div>
-                            <div class="element t21">
-                                <div class="etiqueta"><label for="cerca_ua"><spring:message code='camp.unitat_administrativa_competent'/></label></div>
-                                <div class="control">
-                                    <input id="cerca_ua" name="cerca_ua" type="text" maxlength="250" class="ua" value='<c:out value="${nomUA}" />' readonly="readonly"/>
-                                    <input id="cerca_ua_id" name="cerca_ua_id" type="hidden" value='<c:out value="${idUA}" />'/>
-                                </div>
-                            </div>
-                            <div class="element t21">
-                                <div class="etiqueta"><label for="cerca_funcions"><spring:message code='camp.funcions'/></label></div>
-                                <div class="control">                                   
-                                    <input id="cerca_funcions" name="cerca_funcions" maxlength="250" type="text" />
-                                </div>
-                            </div>
-                            <div class="element t10">
-                            <div class="etiqueta"><label for="cerca_carrec"><spring:message code='camp.carrec'/></label></div>
-                                <div class="control">                                   
-                                    <input id="cerca_carrec" name="cerca_carrec" maxlength="250" type="text" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="fila">
-                            <div class="element t16">
-                                <div class="etiqueta"><label for="cerca_epui"><spring:message code='camp.ext_publica_intra'/></label></div>
-                                <div class="control">                                   
-                                    <input id="cerca_epui" name="cerca_epui" type="text" maxlength="5" class="epui t8" />
-                                </div>
-                            </div>
-                            <div class="element t16">
-                                <div class="etiqueta"><label for="cerca_nlpui"><spring:message code='camp.num_llarg_public_intra'/></label></div>
-                                <div class="control">                                   
-                                    <input id="cerca_nlpui" name="cerca_nlpui" type="text" maxlength="9" class="nlpui t8" />
-                                </div>
-                            </div>
-                            <div class="element t16">
-                                <div class="etiqueta"><label for="cerca_epri"><spring:message code='camp.ext_privada_intra'/></label></div>
-                                <div class="control">
-                                    <input id="cerca_epri" name="cerca_epri" type="text" maxlength="5" class="epri t8" />
-                                </div>      
-                            </div>
-                            <div class="element t16">
-                                <div class="etiqueta"><label for="cerca_nlpri"><spring:message code='camp.num_llarg_provat_intra'/></label></div>
-                                    <div class="control">
-                                        <input id="cerca_nlpri" name="cerca_nlpri" type="text" maxlength="9" class="nlpri t8" />
-                                    </div>
-                            </div>
-                            <div class="element t16">                   
-                                <div class="etiqueta"><label for="cerca_em"><spring:message code='camp.extensio_mobil'/></label></div>
-                                <div class="control">
-                                    <input id="cerca_em" name="cerca_em" type="text" maxlength="5" class="em t8" />
-                                </div>
-                            </div>
-                            <div class="element t16">
-                                <div class="etiqueta"><label for="cerca_nlm"><spring:message code='camp.numero_llarg_mobil'/></label></div>
-                                <div class="control">
-                                    <input id="cerca_nlm" name="cerca_nlm" type="text" maxlength="9" class="nlm t8" />
-                                </div>
-                            </div>
-                        </div>    
-                        <div class="fila">
-                            <div class="element t21">
-                                <div class="etiqueta"><label for="cerca_email"><spring:message code='camp.email'/></label></div>
-                                <div class="control">                                   
-                                    <input id="cerca_email" name="cerca_email" type="text" maxlength="250" class="email" />
+                            <div class="element t25">
+                                <div class="etiqueta"><label for="cerca_text"><spring:message code='camp.text'/></label></div>
+                                <div class="control">                           
+                                    <input id="cerca_text" name="cerca_text" type="text" maxlength="250" class="text" />
                                 </div>
                             </div>                                      
+                            
                         </div>
                         <div class="botonera">
                             <div class="boton btnGenerico">

@@ -115,20 +115,32 @@ public abstract class PersonalFacadeEJB extends HibernateEJB {
     	ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
     	Session session = getSession();
     	try {
-    		if (!userIsOper())
+    		if (!userIsOper()) {
     			parametros.put("validacion", Validacion.PUBLICA);
+    		}
+    		
+    		String sql="from Personal perso ";
+    		
+    		Long idUA = (Long) parametros.get("unidadAdministrativa");
+    		String uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(idUA, uaFilles, uaMeves);
+    		if (!StringUtils.isEmpty(uaQuery)) {
+    			uaQuery = "where perso.unidadAdministrativa.id in (" + uaQuery + ") ";
+    			sql += uaQuery;
+    			// Se elimina para que no interfiera con los otros
+    			parametros.remove("unidadAdministrativa");
+    		}
+    		
+    		Long id = (Long) parametros.get("id");
+    		if (id != null && !id.equals("")) {
+    			sql += "and perso.id = " + id;
+    			// Se elimina para que no interfiera con los otros
+    			parametros.remove("id");
+    		}
     		
     		List params = new ArrayList();
-    		String sQuery = populateQuery(parametros, params);
-    		String sql="from Personal perso ";
-    		if ( params.size() > 0 )
-    			sql += " where " + sQuery;
-    		
-    		Long idUA = (Long) parametros.get("unidadAdministrativa.id");
-    		String uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA( idUA, uaFilles, uaMeves );
-    		if ( !StringUtils.isEmpty(uaQuery) ) {
-    			uaQuery = " or perso.unidadAdministrativa in (" + uaQuery + ") ";
-    			sql += uaQuery;
+    		String sQuery = populateQuery(parametros, params, "or");
+    		if (params.size() > 0) {
+        		sql += " and (" + sQuery + ") ";
     		}
     		
     		sql += " order by ltrim(perso.nombre) ASC ";
@@ -136,26 +148,23 @@ public abstract class PersonalFacadeEJB extends HibernateEJB {
     		for (int i = 0; i < params.size(); i++) {
     			Object o = params.get(i);
     			query.setParameter(i, o);
-    			
     		}
-    		resultadoBusqueda.setTotalResultados( query.list().size() );
-    		if ( resultadosMax != RESULTATS_CERCA_TOTS ) {
+    		
+    		resultadoBusqueda.setTotalResultados(query.list().size());
+    		if (resultadosMax != RESULTATS_CERCA_TOTS) {
     			query.setFirstResult(primerResultado);
     			query.setMaxResults(resultadosMax);
-    			
     		}
+    		
     		resultadoBusqueda.setListaResultados(query.list());
     		return resultadoBusqueda;
     		
     	} catch (DelegateException de) {
     		throw new EJBException(de);
-    		
     	} catch (HibernateException he) {
     		throw new EJBException(he);
-    		
     	} finally {
     		close(session);
-    		
     	}
     }
     
@@ -163,15 +172,15 @@ public abstract class PersonalFacadeEJB extends HibernateEJB {
     /**
      * Construye el query de b�squeda segun los parametros
      */
-    private String populateQuery(Map parametros,  List params) {
-        String aux = "";
+    private String populateQuery(Map parametros,  List params, String conector) {
+        String aux = "";	// Debe ser una AND o una OR
 
         // Tratamiento de parametros
         for (Iterator iter1 = parametros.keySet().iterator(); iter1.hasNext();) {
             String key = (String) iter1.next();
             Object value = parametros.get(key);
             if (value != null&&(!value.equals(""))) {
-                if (aux.length() > 0) aux = aux + " and ";
+                if (aux.length() > 0) aux = aux + " " + conector;
                 if (value instanceof String) {
                     String sValue = (String) value;
                     if (sValue.length() > 0) {

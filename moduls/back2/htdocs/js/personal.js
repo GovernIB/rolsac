@@ -237,30 +237,17 @@ function CLlistat(){
 			// cercador
 			var uaMevesVal = $("#cerca_uaMeves").is(':checked') ? 1 : 0;
 			var uaFillesVal = $("#cerca_uaFilles").is(':checked') ? 1 : 0;
-			dataVars_cercador = "&nom=" + $("#cerca_nom").val();
-			dataVars_cercador += "&username=" + $("#cerca_codi").val();
-			dataVars_cercador += "&idUA=" + $("#cerca_ua_id").val(); //TODO: no te sentit cercar per nom de UA, sino per codi
-			dataVars_cercador += "&funcions=" + $("#cerca_funcions").val();
-			dataVars_cercador += "&carrec=" + $("#cerca_carrec").val();
-			dataVars_cercador += "&email=" + $("#cerca_email").val();
-			dataVars_cercador += "&epui=" + $("#cerca_epui").val();
-			dataVars_cercador += "&nlpui=" + $("#cerca_nlpui").val();
-			dataVars_cercador += "&epri=" + $("#cerca_epri").val();
-			dataVars_cercador += "&nlpri=" + $("#cerca_nlpri").val();
-			dataVars_cercador += "&em=" + $("#cerca_em").val();
-			dataVars_cercador += "&nlm=" + $("#cerca_nlm").val();
+			dataVars_cercador = "&cerca_codi=" + $("#cerca_codi").val();
+			dataVars_cercador += "&cerca_text=" + $("#cerca_text").val();
 			dataVars_cercador += "&uaMeves=" + uaMevesVal;
 			dataVars_cercador += "&uaFilles=" + uaFillesVal;
 		
 		} else {
-			
 			pagPagina_elm = pagPagina_llistat_elm;
 			ordreTipus_elm = ordreTipus_llistat_elm;
 			ordreCamp_elm = ordreCamp_llistat_elm;
 			
-			// cercador
-			
-			dataVars_cercador = "&idUA=" + $("#cerca_ua_id").val();//Siempre habra una UA
+			dataVars_cercador = "";
 			
 		}
 				
@@ -274,20 +261,17 @@ function CLlistat(){
 		}
 		
 		// paginacio
-		//pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : parseInt(pagPagina_elm.val(),10);		
 		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : multipagina.getPaginaActual();
 			
 		// ordre
 		ordre_Tipus = ordreTipus_elm.val();
 		ordre_Camp = ordreCamp_elm.val();
-		/*ordre_Tipus = "";
-		ordre_Camp = "";*/
+
 			
 		// variables
 		dataVars += "pagPag=" + pag_Pag + "&pagRes=" + pag_Res + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;
 		
-		// ajax		
-		//if ( ( modoListado && !Llistat.cacheDatosListado ) || modoBuscador ){
+		// ajax
 	    if ( modoListado || modoBuscador ) {
 			$.ajax({
 				type: "POST",
