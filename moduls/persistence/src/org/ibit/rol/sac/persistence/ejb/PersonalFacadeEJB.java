@@ -130,13 +130,6 @@ public abstract class PersonalFacadeEJB extends HibernateEJB {
     			parametros.remove("unidadAdministrativa");
     		}
     		
-    		Long id = (Long) parametros.get("id");
-    		if (id != null && !id.equals("")) {
-    			sql += "and perso.id = " + id;
-    			// Se elimina para que no interfiera con los otros
-    			parametros.remove("id");
-    		}
-    		
     		List params = new ArrayList();
     		String sQuery = populateQuery(parametros, params, "or");
     		if (params.size() > 0) {
