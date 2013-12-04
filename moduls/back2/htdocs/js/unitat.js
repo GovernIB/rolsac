@@ -17,13 +17,15 @@ $(document).ready(function() {
 	CAMPOS_TRADUCTOR_UNIDAD_ADMINISTRATIVA = [
         "item_nom_",
         "item_presentacio_",
-        "item_cvResponsable_"
+        "item_cvResponsable_",
+        "item_abreviatura_"
     ];
     
     DATOS_TRADUCIDOS_UNIDAD_ADMINISTRATIVA = [
 	    "nombre",
 	    "presentacion",
-	    "cvResponsable"
+	    "cvResponsable",
+	    "abreviatura"
     ];
 
 	// INICIEM

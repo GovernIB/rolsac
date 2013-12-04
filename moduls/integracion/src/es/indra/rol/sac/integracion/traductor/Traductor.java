@@ -14,9 +14,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Traduccion;
 import org.ibit.rol.sac.model.TraduccionFicha;
-import org.ibit.rol.sac.model.TraduccionNormativa;
-import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
-import org.ibit.rol.sac.model.TraduccionTramite;
 import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
@@ -185,7 +182,67 @@ public class Traductor extends AutomaticTranslationService implements Traduccion
     
     
     /**
+     * Traductor que traduce para todos los idiomas indicandole el de origen, especial para los que contienen campos tinys
+     * @param traduccionOrigen
+     * @param langDefault
+     * @return
+     * @throws Exception
+     */
+    public List<Map<String, Object>> translateTiny(Traduccion traduccionOrigen, String langDefault) throws Exception
+    {
+		List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
+		
+		for (String lang : getListLang()) {
+			if (!langDefault.equalsIgnoreCase(lang)) {
+				this.setDirTraduccio(langDefault, lang);
+				HashMap<String, Object> traduccio = new HashMap<String, Object>();
+				
+				if (traduccionOrigen instanceof TraduccionFicha) {
+					TraduccionFicha traduccionFicha = (TraduccionFicha) traduccionOrigen;
+					TraduccionFicha traduccionDesti = new TraduccionFicha();
+					if (null != traduccionFicha.getTitulo()) {
+						traduccionDesti.setTitulo(traducir(traduccionFicha.getTitulo(), MODE_TXT));
+					}
+					if (null != traduccionFicha.getDescAbr()) {
+						traduccionDesti.setDescAbr(traducir(traduccionFicha.getDescAbr(), MODE_HTML));
+					}
+					if (null != traduccionFicha.getDescripcion()) {
+						traduccionDesti.setDescripcion(traducir(traduccionFicha.getDescripcion(), MODE_HTML));
+					}
+					traduccio.put("traduccio", traduccionDesti);
+					
+				} else if (traduccionOrigen instanceof TraduccionUA) {
+					TraduccionUA traduccionUA = (TraduccionUA) traduccionOrigen;
+					TraduccionUA traduccionDesti = new TraduccionUA();
+					if (null != traduccionUA.getNombre()) {
+						traduccionDesti.setNombre(traducir(traduccionUA.getNombre(), MODE_TXT));
+					}
+					if (null != traduccionUA.getAbreviatura()) {
+						traduccionDesti.setAbreviatura(traducir(traduccionUA.getAbreviatura(), MODE_TXT));
+					}
+					if (null != traduccionUA.getPresentacion()) {
+						traduccionDesti.setPresentacion(traducir(traduccionUA.getPresentacion(), MODE_HTML));
+					}
+					if (null != traduccionUA.getCvResponsable()) {
+						traduccionDesti.setCvResponsable(traducir(traduccionUA.getCvResponsable(), MODE_HTML));
+					}
+					traduccio.put("traduccio", traduccionDesti);
+				} else {
+					return traduccions;
+				}
+				
+				traduccio.put("lang", lang);
+				traduccions.add(traduccio);
+			}
+		}
+		
+		return traduccions;
+    }
+    
+    
+    /**
 	 * Método genérico que sustituye a todos los anteriores para realizar las traducciones
+	 * Funciona si no hay campos tiny
 	 * @param orig	bean de traducción de tramite origen
 	 * @param dest	bean de traducción de tramite destino
 	 * @return
@@ -201,7 +258,7 @@ public class Traductor extends AutomaticTranslationService implements Traduccion
 					String t = traducir((String) r, MODE_TXT);
 					String setterMethodName = m.getName().replaceFirst("get", "set");
 					for (Method mDest : c.getMethods()) {
-						if (mDest.getName().equals(setterMethodName)) { 						
+						if (mDest.getName().equals(setterMethodName)) {
 							mDest.invoke(c.cast(dest), t);
 						}
 					}
@@ -300,152 +357,5 @@ public class Traductor extends AutomaticTranslationService implements Traduccion
 	{
 		return inPut.subSequence(3, inPut.length()-4).toString();
 	}
-	
-	
-
-	/**
-	 * Método que traduce las propiedades de un bean TraduccionProcedimientoLocal origen
-	 * y las guarda en un bean TraduccionProcedimientoLocal destino
-	 * 
-	 * @param procOrigen	bean de traducción de procedimiento origen
-	 * @param procDesti		bean de traducción de procedimiento destino
-	 * @return boolean		devuelve verdadero si la traducción finaliza correctamente. Si no devuelve falso.
-	 * @throws Exception
-	 */
-	public boolean traducir(TraduccionProcedimientoLocal procOrigen, TraduccionProcedimientoLocal procDesti) throws Exception {
-		
-		try {
-
-			if (null != procOrigen.getNombre())			procDesti.setNombre(traducir(procOrigen.getNombre(), MODE_TXT));
-	    	if (null != procOrigen.getPlazos())			procDesti.setPlazos(traducir(procOrigen.getPlazos(), MODE_TXT));
-	    	if (null != procOrigen.getResumen())		procDesti.setResumen(traducir(procOrigen.getResumen(), MODE_TXT));
-	    	if (null != procOrigen.getResultat())		procDesti.setResultat(traducir(procOrigen.getResultat(), MODE_TXT));
-	    	if (null != procOrigen.getLugar())			procDesti.setLugar(traducir(procOrigen.getLugar(), MODE_TXT));
-	    	if (null != procOrigen.getDestinatarios())	procDesti.setDestinatarios(traducir(procOrigen.getDestinatarios(), MODE_TXT));
-	    	if (null != procOrigen.getNotificacion())	procDesti.setNotificacion(traducir(procOrigen.getNotificacion(), MODE_TXT));
-	    	if (null != procOrigen.getRequisitos())		procDesti.setRequisitos(traducir(procOrigen.getRequisitos(), MODE_TXT));
-	    	if (null != procOrigen.getObservaciones())	procDesti.setObservaciones(traducir(procOrigen.getObservaciones(), MODE_TXT));
-	    	if (null != procOrigen.getRecursos())		procDesti.setRecursos(traducir(procOrigen.getRecursos(), MODE_TXT));
-	    	if (null != procOrigen.getResolucion())		procDesti.setResolucion(traducir(procOrigen.getResolucion(), MODE_TXT));
-	    	if (null != procOrigen.getSilencio())		procDesti.setSilencio(traducir(procOrigen.getSilencio(), MODE_TXT));
-			
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-			log.error(e.getMessage());
-			return false;
-			
-		}
-		
-    	return true;
-    	
-	}
-	
-	/**
-	 * M�todo que traduce las propiedades de un bean TraduccionFicha origen
-	 * y las guarda en un bean TraduccionFicha destino
-	 * 
-	 * @param fichaOrigen	bean de traducci�n de ficha origen
-	 * @param fichaDesti	bean de traducci�n de ficha destino
-	 * @return boolean		devuelve verdadero si la traducci�n finaliza correctamente. Si no devuelve falso.
-	 * @throws Exception
-	 */
-	public boolean traducir(TraduccionFicha fichaOrigen, TraduccionFicha fichaDesti) throws Exception {
-		try {
-	    	if(null!=fichaOrigen.getTitulo())			fichaDesti.setTitulo(traducir(fichaOrigen.getTitulo(),MODE_TXT));
-	    	if(null!=fichaOrigen.getDescAbr())			fichaDesti.setDescAbr(traducir(fichaOrigen.getDescAbr(),MODE_HTML));
-	    	if(null!=fichaOrigen.getDescripcion())		fichaDesti.setDescripcion(traducir(fichaOrigen.getDescripcion(),MODE_HTML));
-			
-		} catch (Exception e) {
-
-			e.printStackTrace();
-			log.error(e.getMessage());
-			return false;
-		}
-    	return true;
-	}	
-	
-	/**
-	 * Método que traduce las propiedades de un bean TraduccionNormativa origen
-	 * y las guarda en un bean TraduccionNormativa destino
-	 * 
-	 * @param normOrigen	bean de traducci�n de normativa origen
-	 * @param normDesti		bean de traducci�n de normativa destino
-	 * @return boolean		devuelve verdadero si la traducci�n finaliza correctamente. Si no devuelve falso.
-	 * @throws Exception
-	 */
-	public boolean traducir(TraduccionNormativa normOrigen, TraduccionNormativa normDesti) throws Exception {
-		
-		try {
-	    	if(null!=normOrigen.getSeccion())			normDesti.setSeccion(traducir(normOrigen.getSeccion(),MODE_TXT));
-	    	if(null!=normOrigen.getApartado())			normDesti.setApartado(traducir(normOrigen.getApartado(),MODE_TXT));
-	    	if(null!=normOrigen.getTitulo())			normDesti.setTitulo(traducir(normOrigen.getTitulo(),MODE_TXT));
-	    	if(null!=normOrigen.getEnlace())			normDesti.setEnlace(traducir(normOrigen.getEnlace(),MODE_TXT));
-	    	if(null!=normOrigen.getObservaciones())		normDesti.setObservaciones(traducir(normOrigen.getObservaciones(),MODE_TXT));
-			
-		} catch (Exception e) {
-
-			e.printStackTrace();
-			log.error(e.getMessage());
-			return false;
-		}
-    	return true;
-	}
-	
-	
-	/**
-	 * M�todo que traduce las propiedades de un bean TraduccionTramite origen
-	 * y las guarda en un bean TraduccionTramite destino
-	 * 
-	 * @param normOrigen	bean de traducci�n de tramite origen
-	 * @param normDesti		bean de traducci�n de tramite destino
-	 * @return boolean		devuelve verdadero si la traducci�n finaliza correctamente. Si no devuelve falso.
-	 * @throws Exception
-	 */
-	public boolean traducir(TraduccionTramite tramOrigen, TraduccionTramite tramDesti) throws Exception {
-		
-		try {
-	    	if(null!=tramOrigen.getNombre())			tramDesti.setNombre(traducir(tramOrigen.getNombre(),MODE_TXT));
-	    	if(null!=tramOrigen.getDescripcion())		tramDesti.setDescripcion(traducir(tramOrigen.getDescripcion(),MODE_TXT));
-	    	if(null!=tramOrigen.getDocumentacion())		tramDesti.setDocumentacion(traducir(tramOrigen.getDocumentacion(),MODE_TXT));
-	    	if(null!=tramOrigen.getPlazos())			tramDesti.setPlazos(traducir(tramOrigen.getPlazos(),MODE_TXT));
-	    	if(null!=tramOrigen.getRequisits())			tramDesti.setRequisits(traducir(tramOrigen.getRequisits(),MODE_TXT));
-	    	if(null!=tramOrigen.getLugar())				tramDesti.setLugar(traducir(tramOrigen.getLugar(),MODE_TXT));
-
-	    	
-		} catch (Exception e) {
-
-			e.printStackTrace();
-			log.error(e.getMessage());
-			return false;
-		}
-    	return true;
-	}
-	
-	
-	/**
-	 * Método que traduce las propiedades de un bean TraduccionTramite origen
-	 * y las guarda en un bean TraduccionTramite destino
-	 * 
-	 * @param normOrigen	bean de traducci�n de tramite origen
-	 * @param normDesti		bean de traducci�n de tramite destino
-	 * @return boolean		devuelve verdadero si la traducci�n finaliza correctamente. Si no devuelve falso.
-	 * @throws Exception
-	 */
-	public boolean traducir(TraduccionUA unitatOrigen, TraduccionUA unitatDesti) throws Exception
-	{
-		try {
-			if (unitatOrigen.getNombre() != null)			unitatDesti.setNombre(traducir(unitatOrigen.getNombre(), MODE_TXT));
-			if (unitatOrigen.getPresentacion() != null)		unitatDesti.setPresentacion(traducir(unitatOrigen.getPresentacion(), MODE_TXT));
-			if (unitatOrigen.getCvResponsable() != null)	unitatDesti.setCvResponsable(traducir(unitatOrigen.getCvResponsable(), MODE_TXT));
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			log.error(e.getMessage());
-			return false;
-		}
-		return true;
-	}
-
 	
 }

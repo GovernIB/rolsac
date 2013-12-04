@@ -1263,22 +1263,12 @@ public class FitxaInfBackController extends PantallaBaseController
     	Map<String, Object> resultats = new HashMap<String, Object>();
 		
 		try {
-			TraduccionFicha traduccioOrigen = new TraduccionFicha();
-			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
-			
 			String idiomaOrigenTraductor = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			
+			TraduccionFicha traduccioOrigen = getTraduccionOrigen(request, idiomaOrigenTraductor);
+			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
 			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
-			
-			if (StringUtils.isNotEmpty(request.getParameter("item_titol_" + idiomaOrigenTraductor)))
-				traduccioOrigen.setTitulo(request.getParameter("item_titol_" + idiomaOrigenTraductor));
-			
-			if (StringUtils.isNotEmpty(request.getParameter("item_des_curta_" + idiomaOrigenTraductor)))
-				traduccioOrigen.setDescAbr(request.getParameter("item_des_curta_" + idiomaOrigenTraductor));
-			
-			if (StringUtils.isNotEmpty(request.getParameter("item_des_llarga_" + idiomaOrigenTraductor)))
-				traduccioOrigen.setDescripcion(request.getParameter("item_des_llarga_" + idiomaOrigenTraductor));
-			
-			traduccions = traductor.translate(traduccioOrigen, idiomaOrigenTraductor);
+			traduccions = traductor.translateTiny(traduccioOrigen, idiomaOrigenTraductor);
 			
 			resultats.put("traduccions", traduccions);
 			
@@ -1298,6 +1288,22 @@ public class FitxaInfBackController extends PantallaBaseController
 		}
 		
 		return resultats;
+	}
+    
+    private TraduccionFicha getTraduccionOrigen(HttpServletRequest request, String idiomaOrigenTraductor)
+	{
+		TraduccionFicha traduccioOrigen = new TraduccionFicha();
+		
+		if (StringUtils.isNotEmpty(request.getParameter("item_titol_" + idiomaOrigenTraductor)))
+			traduccioOrigen.setTitulo(request.getParameter("item_titol_" + idiomaOrigenTraductor));
+		
+		if (StringUtils.isNotEmpty(request.getParameter("item_des_curta_" + idiomaOrigenTraductor)))
+			traduccioOrigen.setDescAbr(request.getParameter("item_des_curta_" + idiomaOrigenTraductor));
+		
+		if (StringUtils.isNotEmpty(request.getParameter("item_des_llarga_" + idiomaOrigenTraductor)))
+			traduccioOrigen.setDescripcion(request.getParameter("item_des_llarga_" + idiomaOrigenTraductor));
+		
+		return traduccioOrigen;
 	}
     
     

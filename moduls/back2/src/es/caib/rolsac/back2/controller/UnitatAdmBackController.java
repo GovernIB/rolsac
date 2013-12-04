@@ -3,6 +3,7 @@ package es.caib.rolsac.back2.controller;
 import static es.caib.rolsac.utils.LogUtils.logException;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -19,8 +20,10 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.lang.StringUtils;
@@ -66,6 +69,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
@@ -1621,7 +1625,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			TraduccionUA traduccioOrigen = getTraduccionOrigen(request, idiomaOrigenTraductor);
 			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
 			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
-			traduccions = traductor.translate(traduccioOrigen, idiomaOrigenTraductor);
+			traduccions = traductor.translateTiny(traduccioOrigen, idiomaOrigenTraductor);
 
 			resultats.put("traduccions", traduccions);
 
@@ -1725,6 +1729,10 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		
 		if (StringUtils.isNotEmpty(request.getParameter("item_cvResponsable_" + idiomaOrigenTraductor))) {
 			traduccioOrigen.setCvResponsable(request.getParameter("item_cvResponsable_" + idiomaOrigenTraductor));
+		}
+		
+		if (StringUtils.isNotEmpty(request.getParameter("item_abreviatura_" + idiomaOrigenTraductor))) {
+			traduccioOrigen.setAbreviatura(request.getParameter("item_abreviatura_" + idiomaOrigenTraductor));
 		}
 		
 		return traduccioOrigen;
