@@ -70,6 +70,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.api.v1.UnidadAdministrativaDTO;
 import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
@@ -1192,7 +1193,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	@RequestMapping(value = "/llistat.do", method = POST)
 	public @ResponseBody Map<String, Object> listarUnidadesAdministrativas(HttpServletRequest request, HttpSession session)
 	{
-		List<UnidadAdministrativa> listaUnidadesAdministrativas = new ArrayList<UnidadAdministrativa>();
+		List<UnidadAdministrativaDTO> listaUnidadesAdministrativas = new ArrayList<UnidadAdministrativaDTO>();
 		Map<String, Object> resultats   = new HashMap<String, Object>();
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		Map<String, String> tradMap     = new HashMap<String, String>();
@@ -1223,7 +1224,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 				uni = unitatDelegate.consultarUnidadAdministrativa(Long.parseLong(id));
 				TraduccionUA traUA = (TraduccionUA)uni.getTraduccion(lang);
 				resultats.put("total", 1);
-				UnidadAdministrativa dto = new UnidadAdministrativa(uni.getId(), uni.getCodigoEstandar(), traUA.getNombre(), uni.getOrden(), lang);
+				UnidadAdministrativaDTO dto = new UnidadAdministrativaDTO(uni.getId(), uni.getCodigoEstandar(), traUA.getNombre(), uni.getOrden());
 				listaUnidadesAdministrativas.add(dto);
 				resultats.put("nodes", listaUnidadesAdministrativas);
 			} catch (NumberFormatException e) {
@@ -1293,7 +1294,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			resultadoBusqueda = uaDelegate.buscadorUnidadesAdministrativas(paramMap, tradMap, (ua == null ? null : ua.getId()), lang, uaFilles, uaMeves, materia, pagPag, pagRes);
 			for (UnidadAdministrativa uniAdm : castList(UnidadAdministrativa.class, resultadoBusqueda.getListaResultados())) {
 				if (lang.equals(uniAdm.getIdioma())) {
-					UnidadAdministrativa dto = new UnidadAdministrativa(uniAdm.getId(), uniAdm.getCodigoEstandar(), uniAdm.getNombre(), uniAdm.getOrden(), lang);
+					UnidadAdministrativaDTO dto = new UnidadAdministrativaDTO(uniAdm.getId(), uniAdm.getCodigoEstandar(), uniAdm.getNombre(), uniAdm.getOrden());
 					listaUnidadesAdministrativas.add(dto);
 				} else {
 					resultadosDescartados++;
