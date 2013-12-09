@@ -31,8 +31,7 @@ public class HibernateLocator {
     	
     	globalInterceptor =  new ChainedInterceptor(
     								new Interceptor[] {
-    											new IndexerInterceptor(),
-    											new LobCleanUpInterceptor()} );
+    											new IndexerInterceptor()} );
     	
         sf = initSessionFactory();
     }
