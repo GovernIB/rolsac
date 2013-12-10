@@ -36,6 +36,8 @@ $(document).ready(function() {
 	jQuery(".btnVolverDetalleFichas").bind("click", function() { EscriptoriSeccioFitxes.torna(); } );
 
 	jQuery(".btnFinalizarFichas").bind("click",function() { EscriptoriSeccioFitxes.finalizar(); } );
+	
+	jQuery('.submenuUA .hijas').click(function(){ $('#escriptori_fitxes').hide() })
 
 	jQuery("#escriptori_fitxes #btnBuscarSeccionesForm").bind("click", function() { 
 
