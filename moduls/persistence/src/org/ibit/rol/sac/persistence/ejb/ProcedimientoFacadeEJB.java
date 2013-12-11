@@ -382,7 +382,12 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         //----------------------------------------------------------------------
     	
     	//Ordenamos los documentos por el campo orden (si nulo, ordena por el campo id)
-        List procs = new ArrayList(procedimiento.getDocumentos());
+    	List procs = new ArrayList(0);
+        for (Documento documento : procedimiento.getDocumentos()) {
+            if (documento != null) {
+                procs.add(documento);
+            }
+        }
         Collections.sort(procs, new Documento());
 	  	procedimiento.setDocumentos(procs);
 	  	
@@ -469,7 +474,12 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     	}
     	
     	// Ordenamos los documentos por el campo orden (si nulo, ordena por el campo id)
-        List procs = new ArrayList(procedimiento.getDocumentos());
+        List procs = new ArrayList(0);
+        for (Documento documento : procedimiento.getDocumentos()) {
+        	if (documento != null) {
+        		procs.add(documento);
+        	}
+        }
         Collections.sort(procs, new Documento());
 	  	procedimiento.setDocumentos(procs);
         
