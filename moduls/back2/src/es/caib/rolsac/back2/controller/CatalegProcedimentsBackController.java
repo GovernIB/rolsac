@@ -3,6 +3,7 @@ package es.caib.rolsac.back2.controller;
 import static es.caib.rolsac.utils.LogUtils.logException;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -24,6 +26,10 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.DeserializationConfig;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.ibit.rol.sac.model.CatalegDocuments;
 import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.DocumentoResumen;
@@ -46,6 +52,7 @@ import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
 import org.ibit.rol.sac.model.TraduccionTramite;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.criteria.BuscadorProcedimientoCriteria;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.model.dto.ListadoModuloTramiteDTO;
 import org.ibit.rol.sac.model.dto.ProcedimientoLocalDTO;
@@ -67,6 +74,7 @@ import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
 import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -163,82 +171,36 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 
 	@RequestMapping(value = "/llistat.do", method = POST)
-	public @ResponseBody Map<String, Object> llistatProcediments(HttpServletRequest request, HttpSession session) {
+	public @ResponseBody Map<String, Object> llistatProcediments(String criteria, HttpServletRequest request, HttpSession session) {
 
 		Map<String, Object> resultats = new HashMap<String, Object>();
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		Map<String, String> tradMap = new HashMap<String, String>();
-
-		UnidadAdministrativa ua = null;
-		if (getUAFromSession(session) != null)
-			ua = (UnidadAdministrativa) getUAFromSession(session);
-
-		boolean uaFilles = "1".equals(request.getParameter("uaFilles"));		// Recuperamos si se debe buscar en las UAs hijas
-		boolean uaMeves = "1".equals(request.getParameter("uaMeves"));			// Recuperamos si se debe buscar en las UAs propias
-		String enPlazo = request.getParameter("en_plazo");						// Recuperamos si se encuentra vigente
-		String telematico = request.getParameter("telematico");					// Recuperamos el campo de si es telamático
-
-		// Recuperamos los ids de los parametros
-		Long materia = recuperarProcParametro(request, "materia");				// Recuperamos la materia para filtrar
-		Long fetVital = recuperarProcParametro(request, "fetVital");			// Recuperamos el hecho vital para filtrar
-		Long publicObjectiu = recuperarProcParametro(request, "publicObjectiu");// Recuperamos el público objetivo para filtrar
-
-		//Información de paginación
-		String pagPag = recuperarProcPaginacion(request, "pagPag");				// Recuperamos la página actual
-		String pagRes = recuperarProcPaginacion(request, "pagRes");				// Recuperamos los resultados por página
-
-		int campoVisible = recuperarProcVisibilitat(request, paramMap);			// Recuperamos la visibilidad del procedimiento
-
-		// Recuperamos los parametros
-		recuperarProcFechas(request, "fechaCaducidad", paramMap);				// Recuperamos de fecha de caducidad
-		recuperarProcFechas(request, "fechaPublicacion", paramMap);				// Recuperamos de fecha de pulicación
-		recuperarProcFechas(request, "fechaActualizacion", paramMap);			// Recuperamos de fecha de actualización
-
-		recuperarProcBoolean(request, "taxa", paramMap);						// Recuperamos la tasa
-		recuperarProcBoolean(request, "indicador", paramMap);					// Recuperamos el indicador
-
-		recuperarProcParamUpperCase(request, "responsable", paramMap);			// Recuperamos el responsable del procedimiento
-		recuperarProcParamUpperCase(request, "tramit", paramMap);				// Recuperamos el trámite
-		recuperarProcParamUpperCase(request, "url", paramMap);					// Recuperamos la URL
-
-		recuperarProcIDParametro(request, "familia", paramMap);					// Recuperamos el id de la familia
-		recuperarProcIDParametro(request, "iniciacion", paramMap);				// Recuperamos el id de iniciación
-
-		recuperarProcOrden(request, "ordreCamp", paramMap);						// Recuperamos el parametro de ordenación por campo
-		recuperarProcOrden(request, "ordreTipus", paramMap);					// Recuperamos el parametro de ordenación por tipo
-
-		// Recuperar el resto de parametros
-		recuperarProcCodi(request, paramMap);									// Recuperamos el parametro del código
-		recuperarProcVentanilla(request, paramMap);								// Recuperamos si es ventanilla única
-		recuperarProcVersion(request, paramMap);								// Recuperamos la versión
-		recuperarProcValidacion(request, paramMap);								// Recuperamos si es válido
-		recuperarProcTexto(request, paramMap, tradMap);							// Recuperamos el texto y lo buscamos en todos los idiomas
-
+		BuscadorProcedimientoCriteria buscadorCriteria = this.jsonToBuscadorProcedimientoCriteria(criteria);
 		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
 		List<ProcedimientoLocalDTO> llistaProcedimientoLocalDTO = new ArrayList<ProcedimientoLocalDTO>();
 
-		try {
+		if ( getUAFromSession(session) != null && buscadorCriteria != null ) {
 
-			ProcedimientoDelegate procedimientosDelegate = DelegateUtil.getProcedimientoDelegate();
+			try {
 
-			// Realizamos la búsqueda de los procedimientos
-			resultadoBusqueda = procedimientosDelegate.buscadorProcedimientos(paramMap, tradMap, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu, pagPag, pagRes, campoVisible, enPlazo, telematico);
+				UnidadAdministrativa ua = (UnidadAdministrativa) getUAFromSession(session);
+				buscadorCriteria.setUnidadAdministrativa(ua);
 
-			// Los transformamos en procedimientos locales DTO
-			llistaProcedimientoLocalDTO.addAll(convertirProcLocales(resultadoBusqueda, request));			
+				ProcedimientoDelegate procedimientosDelegate = DelegateUtil.getProcedimientoDelegate();
+				resultadoBusqueda = procedimientosDelegate.buscadorProcedimientos(buscadorCriteria);
+				llistaProcedimientoLocalDTO.addAll( convertirProcLocales(resultadoBusqueda, request) );
 
-		} catch (DelegateException dEx) {
+			} catch (DelegateException dEx) {
 
-			if (dEx.isSecurityException()) {
-				// model.put("error", "permisos");
-			} else {
-				// model.put("error", "altres");
-				logException(log, dEx);
+				if ( dEx.isSecurityException() )
+					resultats.put( "error", messageSource.getMessage( "error.permisos", null, request.getLocale() ) );
+
+				else
+					resultats.put( "error", messageSource.getMessage( "error.altres", null, request.getLocale() ) );
+
 			}
+
 		}
 
-
-		//Total de registros
 		resultats.put("total", resultadoBusqueda.getTotalResultados());
 		resultats.put("nodes", llistaProcedimientoLocalDTO);
 
@@ -246,188 +208,43 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 	}
 
-	/*
-	 * Recuperar parametro del request
-	 */
-	private Long recuperarProcParametro(HttpServletRequest request, String parametro)
-	{
-		String param = request.getParameter(parametro);
-		if (param != null) {
-			Scanner scanner = new Scanner(param);
-			if (scanner.hasNextLong())
-				return scanner.nextLong();
-		}
-		return null;
-	}
 
-	/*
-	 * Recuperar las fechas del request
-	 */
-	private void recuperarProcFechas(HttpServletRequest request, String fechaParametro, Map<String, Object> paramMap)
-	{
-		Date fecha = DateUtils.parseDate(request.getParameter(fechaParametro));
-		if (fecha != null)
-			paramMap.put(fechaParametro, fecha);
-	}
+	/** Método que se encarga de convertir un String en formato json a una instancia de BuscadorProcedimientoCriteria */
+	private BuscadorProcedimientoCriteria jsonToBuscadorProcedimientoCriteria (String criteria) { //TODO: sacar de aquí
 
-	/*
-	 * Recuperamos la visibilidad del request
-	 */
-	private int recuperarProcVisibilitat(HttpServletRequest request, Map<String, Object> paramMap)
-	{
-		String visibilitat = request.getParameter("visibilitat");
-		if (visibilitat != null) {
-			if (visibilitat.equals("1")) {
-				Integer visible = Integer.parseInt(visibilitat);
-				paramMap.put("validacion", visible);
-				return  1;
-			} else if (visibilitat.equals("2")) {
-				return 2;
-			}
-		}
-		return 0;
-	}
+		BuscadorProcedimientoCriteria buscadorCriteria = null;
 
-	/*
-	 * Recuperamos booleano del request
-	 */
-	private void recuperarProcBoolean(HttpServletRequest request, String parametro, Map<String, Object> paramMap)
-	{
-		String param = request.getParameter(parametro);
-		if ("1".equals(param))
-			paramMap.put(parametro, 1);
-		else if ("0".equals(param))
-			paramMap.put(parametro, 0);
-	}
-
-	/*
-	 * Recuperamos el parametro haciendo un UpperCase
-	 */
-	private void recuperarProcParamUpperCase(HttpServletRequest request, String parametro, Map<String, Object> paramMap)
-	{
-		String param = request.getParameter(parametro);
-		if (param != null && !"".equals(param))
-			paramMap.put(parametro, param.toUpperCase());
-	}
-
-	/*
-	 * Recuperamos ids de parametros
-	 */
-	private void recuperarProcIDParametro(HttpServletRequest request, String parametro, Map<String, Object> paramMap)
-	{
 		try {
-			String param = request.getParameter(parametro);
-			Integer id = Integer.parseInt(param);
-			if (id > 0)
-				paramMap.put(parametro + ".id", id);
 
-		} catch (NumberFormatException e) {}
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			mapper.configure(DeserializationConfig.Feature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
+
+			buscadorCriteria = mapper.readValue(criteria, BuscadorProcedimientoCriteria.class);
+			buscadorCriteria.setLocale( DelegateUtil.getIdiomaDelegate().lenguajePorDefecto() ); 
+
+		} catch (JsonParseException e) {
+
+			log.error( e.getMessage() );
+
+		} catch (JsonMappingException e) {
+
+			log.error( e.getMessage() );
+
+		} catch (IOException e) {
+
+			log.error( e.getMessage() );
+
+		} catch (DelegateException e) {
+
+			log.error( e.getMessage() );
+
+		} 
+
+		return buscadorCriteria;
+
 	}
 
-	/*
-	 * Recuperamos los parametros de ordenación
-	 */
-	private void recuperarProcOrden(HttpServletRequest request, String parametro, Map<String, Object> paramMap)
-	{
-		String ordre = request.getParameter(parametro);
-		if (ordre != null && !"".equals(ordre))
-			paramMap.put(parametro, ordre);
-	}
-
-	/*
-	 * Recuperamos parametros de paginación
-	 */
-	private String recuperarProcPaginacion(HttpServletRequest request, String parametro)
-	{
-		String pagina = request.getParameter(parametro);
-		if (pagina == null) pagina = String.valueOf(0);
-		return pagina;
-
-	}
-
-	/*
-	 * Recuperamos el parametro del código
-	 */
-	private void recuperarProcCodi(HttpServletRequest request, Map<String, Object> paramMap)
-	{
-		String idStr = request.getParameter("codi");
-		Long id = -1l;
-		if ( idStr != null && StringUtils.isNumeric(idStr.trim()) )
-			id = ParseUtil.parseLong( idStr.trim() );
-
-		paramMap.put("id", idStr != null ? id : null );
-	}
-
-	/*
-	 * Recuperamos si es ventanilla única o no
-	 */
-	private void recuperarProcVentanilla(HttpServletRequest request, Map<String, Object> paramMap)
-	{
-		String ventanillaUnica = request.getParameter("finestreta");
-		if ("1".equals(ventanillaUnica))
-			paramMap.put("ventanillaUnica", 1);
-	}
-
-	/*
-	 * Recuperamos la versión
-	 */
-	private void recuperarProcVersion(HttpServletRequest request, Map<String, Object> paramMap)
-	{
-		try {
-			String version = request.getParameter("versio");
-			Long versionLong = Long.parseLong(version);
-			if (versionLong > 0)
-				paramMap.put("version", versionLong);
-		} catch (NumberFormatException e) {}
-	}
-
-	/*
-	 * Recuperar si es válido
-	 */
-	private void recuperarProcValidacion(HttpServletRequest request, Map<String, Object> paramMap)
-	{
-		if (request.isUserInRole("sacoper")) {
-			paramMap.put("validacion", ""); // En el back antiguo estaba asi.
-		} else {
-			String estat = request.getParameter("estat");
-			try {
-				Integer validacion = Integer.parseInt(estat);
-				paramMap.put("validacion", validacion);
-			} catch (NumberFormatException e) {}
-		}
-	}
-
-	/*
-	 * Recuperamos el campo text para buscarlo en todos los campos de texto y en todos los idiomas
-	 */
-	private void recuperarProcTexto(HttpServletRequest request, Map<String, Object> paramMap, Map<String, String> tradMap)
-	{
-		// Textes (en todos los campos todos los idiomas)
-		String textes = request.getParameter("textes");
-		if (textes != null && !"".equals(textes)) {
-			textes = textes.toUpperCase();
-			if (tradMap.get("nombre") == null)
-				tradMap.put("nombre", textes);
-
-			tradMap.put("resumen", textes);
-			tradMap.put("destinatarios", textes);
-			tradMap.put("requisitos", textes);
-			tradMap.put("plazos", textes);
-			tradMap.put("resultat", textes);
-			tradMap.put("resolucion", textes);
-			tradMap.put("notificacion", textes);
-			tradMap.put("silencio", textes);
-			// tradMap.put("recursos", textes);
-			tradMap.put("observaciones", textes);
-			tradMap.put("lugar", textes);
-		} else {
-			try {
-				tradMap.put("idioma", DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
-			} catch  (DelegateException dEx) {
-				logException(log, dEx);
-			}
-		}
-	}
 
 	/*
 	 * Función para convertir a procedimientos locales los resultados
@@ -437,9 +254,14 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		List<ProcedimientoLocalDTO> llistaProcedimientoLocalDTO = new ArrayList<ProcedimientoLocalDTO>();
 		for (ProcedimientoLocal pl : castList(ProcedimientoLocal.class, resultadoBusqueda.getListaResultados())) {
 			ProcedimientoLocalDTO procLocalDTO = new ProcedimientoLocalDTO(
-					pl.getId(), pl.getNombreProcedimiento(),
-					pl.isVisible(), DateUtils.formatDate(pl.getFechaActualizacion()),
-					pl.getNombreFamilia());
+
+					pl.getId(), 
+					pl.getNombreProcedimiento(),
+					pl.isVisible(), 
+					DateUtils.formatDate(pl.getFechaActualizacion()),
+					pl.getNombreFamilia()
+
+					);
 
 			llistaProcedimientoLocalDTO.add( procLocalDTO );
 		}
@@ -968,72 +790,97 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	/*
 	 * Controlar los trámites modificados
 	 */
-	private ProcedimientoLocal guardarProcTramites(HttpServletRequest request, boolean edicion, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld) throws DelegateException
-	{
+	private ProcedimientoLocal guardarProcTramites(HttpServletRequest request, boolean edicion, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld) throws DelegateException {
+
 		String tramitsProcediment = request.getParameter("tramitsProcediment");
 		TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
 
-		if (!"".equals(tramitsProcediment) && edicion) {
-			List<Long> listaTramitesBorrar = new ArrayList<Long>();
-			List<Tramite> tramitesNuevos = new ArrayList<Tramite>();
-			String[] codigosTramitesNuevos = tramitsProcediment.split(",");
-			List<Tramite> listaTramitesOld = procedimentOld.getTramites();
-			for (int i = 0; i < codigosTramitesNuevos.length; i++) {
-				for (Tramite tramite : listaTramitesOld) {
-					if (!"".equals(codigosTramitesNuevos[i]) && tramite != null && tramite.getId().equals(Long.valueOf(codigosTramitesNuevos[i]))) {
-						tramitesNuevos.add(tramite);
-						codigosTramitesNuevos[i] = null;
-						break;
-					}
+		if ( !"".equals(tramitsProcediment) && edicion ) {
+
+			Vector<Tramite> tramitesParaCrear;
+			HashMap<Long, Tramite> hashTramitesAsignados;
+			ArrayList<Long> tramitesParaValidarLong = new ArrayList();
+			
+			
+			String[] tramitesParaValidar = tramitsProcediment.split(",");
+			for ( int i = 0 ; i < tramitesParaValidar.length ; i++ )
+				tramitesParaValidarLong.add( Long.valueOf( tramitesParaValidar[i] ) );
+			
+			
+			tramitesParaValidar = null;
+			
+			hashTramitesAsignados = new HashMap<Long, Tramite>();
+			List<Tramite> listaTramitesAsignados = procedimentOld.getTramites();
+			
+			for ( Tramite tramite : listaTramitesAsignados ) {
+				
+				if ( tramite != null )
+					hashTramitesAsignados.put(tramite.getId(), tramite);
+				
+			}
+			
+			listaTramitesAsignados = null;
+			tramitesParaCrear = new Vector<Tramite>();
+
+			for ( Long idTramite : tramitesParaValidarLong ) { //Se determina si los trámites enviados ya estaban asignados, si es así, se marcan para crear.
+
+				if ( hashTramitesAsignados.containsKey(idTramite) ) {
+
+					Tramite tramite = (Tramite) hashTramitesAsignados.get(idTramite);
+					hashTramitesAsignados.remove(tramite.getId());//Se quita de los trámites asignados.
+					tramitesParaCrear.add(tramite); //Se marca el trámite para crear.
+					
 				}
+
 			}
 
-			// Eliminar los que se han quitado de la lista
-			for (Tramite tramite : listaTramitesOld) {
-				if (!tramitesNuevos.contains(tramite) && tramite != null)
-					listaTramitesBorrar.add(tramite.getId());
-			}
+			tramitesParaValidarLong = null;
 
-			for (Long id : listaTramitesBorrar) {
-				//procediment.removeTramite( tramiteDelegate.obtenerTramite(id) );
-				DelegateUtil.getProcedimientoDelegate().eliminarTramite(id, procediment.getId());
-				tramiteDelegate.borrarTramite(id);
-			}
-
-			// Crear los nuevos
-			if (!"".equals(codigosTramitesNuevos)) {
-				for (String codigoTramite : codigosTramitesNuevos) {
-					if (codigoTramite != null) {
-						for (Tramite tramite : procedimentOld.getTramites()) {
-							if (!tramitesNuevos.contains(tramite))
-								tramitesNuevos.add(tramite);
-						}
-					}
+			if ( hashTramitesAsignados.values().size() > 0 ) {
+				
+				
+				for ( Tramite tramiteParaBorrar : hashTramitesAsignados.values() ) { //Los trámites restantes en la lista de trámites asignados son los que se han de borrar.
+					
+					Long idTramite = tramiteParaBorrar.getId();
+					DelegateUtil.getProcedimientoDelegate().eliminarTramite(idTramite, procediment.getId());
+					tramiteDelegate.borrarTramite(idTramite);
+					
 				}
-			}
 
-			// Actualizamos el orden de la lista de trámites
-			HashMap<String, String[]> actualizadorTramites = new HashMap<String, String[]>();
-			for (Tramite tramite : tramitesNuevos) {
-				String[] orden = { request.getParameter("tramit_orden_" + tramite.getId()) };
-				actualizadorTramites.put("orden" + tramite.getId(), orden);
+				
 			}
-			DelegateUtil.getProcedimientoDelegate().actualizarOrdenTramites(actualizadorTramites);
-			procediment.setTramites(tramitesNuevos);
+			
+			hashTramitesAsignados = null;
+			ArrayList<Long> tramitesParaActualizar = new ArrayList<Long>(); //Actualizamos el orden de la lista de trámites
+			
+			for ( Tramite tramite : tramitesParaCrear ) //Meter los id para crear obtener su orden y enviarlos para actualizar.
+				tramitesParaActualizar.add(tramite.getId());
+				
 
+			DelegateUtil.getProcedimientoDelegate().actualizarOrdenTramites(tramitesParaActualizar);
+			procediment.setTramites(tramitesParaCrear);
+			
+			
 		} else if (edicion) {
-			ProcedimientoDelegate procedimentDelegate = DelegateUtil.getProcedimientoDelegate();
-			for (Tramite tramite : procediment.getTramites()) {
-				if (tramite != null) {
-					procedimentDelegate.eliminarTramite(tramite.getId(), procediment.getId());
+
+			for ( Tramite tramite : procediment.getTramites() ) {
+
+				if ( tramite != null ) {
+					DelegateUtil.getProcedimientoDelegate().eliminarTramite( tramite.getId(), procediment.getId() );
 					tramiteDelegate.borrarTramite(tramite.getId());
+
 				}
+
 			}
+
 			procediment.setTramites(null);
+
 		}
 
 		return procediment;
+
 	}
+
 
 	/*
 	 * Controlamos los hechos vitales modificados.
@@ -1401,10 +1248,10 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			//Información de paginación
 			String pagPag = request.getParameter("pagPagina");
 			String pagRes = request.getParameter("pagRes");
-
+			
 			if (pagPag == null) 
 				pagPag = String.valueOf(0);
-			
+
 			if (pagRes == null) 
 				pagRes = String.valueOf(10);
 
@@ -1428,17 +1275,17 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			}
 
 		} catch (DelegateException dEx) {
-			
+
 			if ( !dEx.isSecurityException() )
 				logException(log, dEx);
-			
+
 		}
-		
+
 		resultats.put("total", resultadoBusqueda.getTotalResultados());
 		resultats.put("nodes", llistaNormativesDTO);
 
 		return resultats;
-		
+
 	}
 
 

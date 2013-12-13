@@ -1,14 +1,13 @@
 package org.ibit.rol.sac.persistence.delegate;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
-
+import org.ibit.rol.sac.model.criteria.BuscadorProcedimientoCriteria;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /*
@@ -19,8 +18,8 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  * 
  */
 
-public class ProcedimientoDelegate
-{
+public class ProcedimientoDelegate {
+	
 	ProcedimientoDelegateI impl;
 	
 	
@@ -36,6 +35,7 @@ public class ProcedimientoDelegate
         return impl.existeOtroTramiteInicioProcedimiento(procId, tramiteId);
     }
     
+    /** @deprecated Se usa desde la API v1*/
     public List buscarProcedimientosUATexto(Long idUnidad, String texto, String idioma) throws DelegateException {
         return impl.buscarProcedimientosUATexto(idUnidad, texto, idioma);
     }
@@ -52,11 +52,13 @@ public class ProcedimientoDelegate
 		return impl.buscarProcedimientos(param, trad);
 	}
 	
-	public ResultadoBusqueda buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu, String pagina, String resultats, int visible, String en_plazo, String telematico)
+	/** @deprecated No se usa */
+	public ResultadoBusqueda buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu, String pagina, String resultats, int visible, String en_plazo, String telematico) 
 			throws DelegateException {
 		return impl.buscadorProcedimientos(parametros, traduccion, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu, pagina, resultats, visible, en_plazo, telematico);
 	}
-	
+
+	/** @deprecated Se usa desde la API v1*/
 	public List buscarProcedimientosMateria(Long id) throws DelegateException {
 		return impl.buscarProcedimientosMateria(id);
 	}
@@ -89,10 +91,12 @@ public class ProcedimientoDelegate
 		impl.indexInsertaProcedimiento(proc, filter);
 	}
 	
+	/** @deprecated Se usa desde API v1 */
 	public List listarProcedimientosPublicos() throws DelegateException {
 		return impl.listarProcedimientosPublicos();
     }
 	
+	/** @deprecated Se usa desde el back antiguo */
 	public List listarProcedimientos() throws DelegateException {
 		return impl.listarProcedimientos();
 	}
@@ -105,14 +109,11 @@ public class ProcedimientoDelegate
 		return impl.listarProcedimientosPublicosUA(id);
 	}
 	
-	public List<ProcedimientoLocal> listarProcedimientosPublicosUAHVMateria(Long idUA, String[] codEstMat, String[] codEstHV) throws DelegateException {
-		return impl.listarProcedimientosPublicosUAHVMateria(idUA, codEstMat, codEstHV);
-	}
-	
 	public List<Long> listarIdsProcedimientosPublicosUAHVMateria(Long idUA, String[] codEstMat, String[] codEstHV) throws DelegateException {
 		return impl.listarIdsProcedimientosPublicosUAHVMateria(idUA, codEstMat, codEstHV);
 	}
 	
+	/** @deprecated Se usa desde el back antiguo */
 	public List listarProcedimientosUA(Long id) throws DelegateException {
 		return impl.listarProcedimientosUA(id);
 	}
@@ -133,8 +134,8 @@ public class ProcedimientoDelegate
 		return impl.obtenerProcedimientoNewBack(id);
 	}
 	
-	public void actualizarOrdenTramites(HashMap params) throws DelegateException {
-		 impl.actualizarOrdenTramites(params);	
+	public void actualizarOrdenTramites(ArrayList<Long> tramitesId) throws DelegateException {
+		 impl.actualizarOrdenTramites(tramitesId);	
 	}
     
     public int buscarProcedimientosActivos(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException {
@@ -145,4 +146,11 @@ public class ProcedimientoDelegate
     	return impl.buscarProcedimientosCaducados(listaUnidadAdministrativaId, fechaCaducidad);
     }
     
+	public List<ProcedimientoLocal> listarProcedimientosPublicosUAHVMateria(Long idUA, String[] codEstMat, String[] codEstHV) throws DelegateException {
+		return impl.listarProcedimientosPublicosUAHVMateria(idUA, codEstMat, codEstHV);
+	}
+	
+	public ResultadoBusqueda buscadorProcedimientos(BuscadorProcedimientoCriteria bc) throws DelegateException {
+		return impl.buscadorProcedimientos(bc);
+	}
 }

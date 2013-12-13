@@ -96,6 +96,7 @@ function Multipagina(datos) {
 			
 			
 			// Página siguiente
+			isUltimaPagina = ( paginaActual + 1 ) == paginasNum;
 			if ( !isUltimaPagina )
 				html += '<a class="siguiente" onclick="'+funcionPagina+'('+(paginaActual+2)+')'+'" href="javascript:void(0)" title="'+txtSiguiente+'"></a>';
 			

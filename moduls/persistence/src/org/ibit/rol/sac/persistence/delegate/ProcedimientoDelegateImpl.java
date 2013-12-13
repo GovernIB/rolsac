@@ -6,27 +6,25 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
-
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Validable;
 import org.ibit.rol.sac.model.Validacion;
+import org.ibit.rol.sac.model.criteria.BuscadorProcedimientoCriteria;
 import org.ibit.rol.sac.persistence.intf.ProcedimientoFacade;
 import org.ibit.rol.sac.persistence.intf.ProcedimientoFacadeHome;
 import org.ibit.rol.sac.persistence.util.ProcedimientoFacadeUtil;
-
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * Business delegate para manipular procedimientos.
  */
-public class ProcedimientoDelegateImpl implements StatelessDelegate, ProcedimientoDelegateI
-{
+public class ProcedimientoDelegateImpl implements StatelessDelegate, ProcedimientoDelegateI {
+	
 	/* ========================================================= */
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
@@ -253,19 +251,6 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
 	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#listarProcedimientosPublicosUAHVMateria(java.lang.Long, java.lang.String[], java.lang.String[])
 	 */
     @SuppressWarnings("unchecked")
-	public List<ProcedimientoLocal> listarProcedimientosPublicosUAHVMateria(Long idUA, String[] codEstMat, String[] codEstHV) throws DelegateException {
-        try {
-            return getFacade().listarProcedimientosPublicosUAHVMateria(idUA, codEstMat, codEstHV);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    /* PORMAD */
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#listarProcedimientosPublicosUAHVMateria(java.lang.Long, java.lang.String[], java.lang.String[])
-	 */
-    @SuppressWarnings("unchecked")
 	public List<Long> listarIdsProcedimientosPublicosUAHVMateria(Long idUA, String[] codEstMat, String[] codEstHV) throws DelegateException {
         try {
             return getFacade().listarIdsProcedimientosPublicosUAHVMateria(idUA, codEstMat, codEstHV);
@@ -318,9 +303,9 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
         }
     }
     
-    public void actualizarOrdenTramites(Map params) throws DelegateException {
+    public void actualizarOrdenTramites(ArrayList<Long> tramitesId) throws DelegateException {
     	try {
-    		getFacade().actualizarOrdenTramites(params);
+    		getFacade().actualizarOrdenTramites(tramitesId);
     	} catch (RemoteException e) {
     		throw new DelegateException(e);
     	}
@@ -356,6 +341,22 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
         }
     }
     
+	public List<ProcedimientoLocal> listarProcedimientosPublicosUAHVMateria(Long idUA, String[] codEstMat, String[] codEstHV) throws DelegateException {
+        try {
+            return getFacade().listarProcedimientosPublicosUAHVMateria(idUA, codEstMat, codEstHV);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+	}
+    
+    public ResultadoBusqueda buscadorProcedimientos(BuscadorProcedimientoCriteria bc) throws DelegateException {
+        try {
+            return getFacade().buscadorProcedimientos(bc);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
@@ -379,5 +380,6 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
             throw new DelegateException(e);
         }
     }
+
     
 }

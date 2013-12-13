@@ -4,8 +4,9 @@ package org.ibit.rol.sac.model;
 
 public class Validacion {
 
-    public final static Integer PUBLICA = new Integer(1);
-    public final static Integer INTERNA = new Integer(2);
-    public final static Integer RESERVA = new Integer(3);
-    public final static Integer BAJA = new Integer(4);
+    public final static Integer PUBLICA = 1;
+    public final static Integer INTERNA = 2;
+    public final static Integer RESERVA = 3;
+    public final static Integer BAJA = 4;
+    
 }

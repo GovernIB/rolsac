@@ -463,5 +463,19 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
 	public Boolean getIsVisible() {
 		return this.isVisible();
 	}
+
+	public void setNombreProcedimiento(String nombreProcedimiento) {
+		this.nombreProcedimiento = nombreProcedimiento;
+	}
+
+	public void setNombreFamilia(String nombreFamilia) {
+		this.nombreFamilia = nombreFamilia;
+	}
+
+	public void setIdioma(String idioma) {
+		this.idioma = idioma;
+	}
+	
+	
 	
 }
