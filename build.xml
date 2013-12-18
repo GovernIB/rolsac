@@ -577,7 +577,7 @@
     <target name="make.jboss-service.xml">
         
         <echo message="Desplegando jboss-service.xml ....."/>
-        <delete file="${output.dir}/jboss-service.xml"/>
+        <delete file="${output.dir}/01rolsac.jboss-service.xml"/>
         <echo message="Archivo antigua eliminado ....."/>
         <concat destfile="${output.dir}/01rolsac.jboss-service.xml" append="true" fixlastline="true">
             <filelist dir="${etc}"    files="01.jboss-service.begin.xml"/>
