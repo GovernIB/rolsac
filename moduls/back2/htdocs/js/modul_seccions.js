@@ -1694,7 +1694,7 @@ function CEscriptoriSeccioFitxes() {
 			
 		} else {
 
-			var data = { "fitxes" : [ { "id": id, "titulo" : titulo, "caducat" : caducidad, "ordre" : orden } ],  };
+			var data = { "fitxes" : [ { "id": id, "titulo" : titulo, "caducat" : caducidad, "ordre" : orden } ] };
 			this.pintarListadoAsignadas(data);
 		}		
 		

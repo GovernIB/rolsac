@@ -861,6 +861,8 @@ function CDetall(){
 			});
 		});
 		this.actualizaEventos();
+		
+		this.modificado(false);
 	}
 	
 	this.pintar = function(dades) {	
@@ -1004,7 +1006,10 @@ function CDetall(){
 			$("#botonBorrarUA a").hide();
 			$("#item_responsable_ca, #item_responsable_es, #item_responsable_en, #item_responsable_de, #item_responsable_fr").hide();
 			$("#item_responsable_ca, #item_responsable_es, #item_responsable_en, #item_responsable_de, #item_responsable_fr").parent().parent().hide();
-		}		
+		}
+		
+		// Marcamos el formulario como "no modificado".
+		this.modificado(false);		
 		
 	}
 	

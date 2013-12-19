@@ -472,7 +472,9 @@ function CDetall(){
 				itemID_ultim = 0;
 			});
 		});
-		this.actualizaEventos();		
+		this.actualizaEventos();
+		
+		this.modificado(false);		
 	}
 			
 	this.pintar = function(dades) {
@@ -602,6 +604,8 @@ function CDetall(){
 		
 		}
 		
+		// Marcamos el formulario como "no modificado".
+		this.modificado(false);
 	}
 	
 	this.elimina = function() {

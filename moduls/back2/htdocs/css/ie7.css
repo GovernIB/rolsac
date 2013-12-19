@@ -45,10 +45,12 @@
 }
 .escriptori_detall .grupoModulosFormulario DIV.modul{
     position: static;
+    min-height: 1px;
 }
 .escriptori_detall .grupoModulosFormulario div.modul a.modul{
+    display: none;
     position:static;
-    float: right;
+    float: right;      
 }
 
 #cercador_afectacions DIV.element{
@@ -75,6 +77,7 @@
     float:right;    
     margin-top: -18px;
 }
+
 
 /* Molla pa */
 #mollaPa ul li{

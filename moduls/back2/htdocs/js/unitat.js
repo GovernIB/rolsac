@@ -512,6 +512,8 @@ function CDetall(soloFicha){
 			Detall.array({id: dada_node.id, accio: "guarda", dades: dada_node});
 			escriptori_detall_elm.fadeIn(300);
 		});
+		
+		this.modificado(false);
 
 	}
 

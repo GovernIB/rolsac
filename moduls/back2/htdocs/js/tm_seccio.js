@@ -387,6 +387,8 @@ function CDetall(){
 		});
 		
 		this.actualizaEventos();
+		
+		this.modificado(false);
 	}		
 	
 	// Guardar haciendo upload de archivos.
@@ -487,6 +489,8 @@ function CDetall(){
     	}
 		
 		montarBreadcrumb();
+		
+		this.modificado(false);
 	}
 	
 	// Sobreescribimos este método para que nos salga el mensaje de "Cargando" correctamente.

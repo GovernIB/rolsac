@@ -367,6 +367,8 @@ function CDetall(){
 		});
 
 		this.actualizaEventos();
+		
+		this.modificado(false);
 	}		
 	
 	// Guardar haciendo upload de archivos.
@@ -448,6 +450,8 @@ function CDetall(){
 				escriptori_detall_elm.fadeIn(300);				
 			});
 		}	
+		
+		this.modificado(false);
 	}
 	
 	this.elimina = function() {

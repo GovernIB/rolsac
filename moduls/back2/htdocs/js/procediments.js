@@ -2,6 +2,7 @@
 var hechosVitalesAsignados = null;
 
 $(document).ready(function() {
+    
 	// elements
 	opcions_elm = $("#opcions");
 	escriptori_elm = $("#escriptori");
@@ -507,7 +508,7 @@ function CDetall(){
 
 	this.tipusAuditoria = 'procediment';
 	this.tipusEstadistica = 'procediment';
-
+	
 	//Se anyaden los campos que no se van a serializar directamente mediante .serialize()	
 	//this._baseGuarda = this.guarda;	
 	this.guarda = function() {
@@ -669,7 +670,7 @@ function CDetall(){
 	}
 
 	this.nou = function() {
-
+	    
 		//Ocultar paneles
 		jQuery("#modul_documents, #modul_tramits").hide();
 		jQuery("#modulAuditories, #modulEstadistiques").hide();
@@ -732,6 +733,8 @@ function CDetall(){
 		});
 
 		this.actualizaEventos();
+		
+		this.modificado(false);
 	}		
 
 	this.pintar = function(dades) {
@@ -855,7 +858,9 @@ function CDetall(){
 				escriptori_detall_elm.fadeIn(300);				
 			});
 
-		}	
+		}
+		
+		this.modificado(false);	
 	}
 
 	this.elimina = function() {

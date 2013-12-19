@@ -1,15 +1,15 @@
 jQuery(document).ready(function(){
 	LANG_TRADUCTOR = "ca";
 	
-	jQuery("#btnVolver").bind("click",function(){Detall.torna();});
+	//jQuery("#btnVolver").bind("click",function(){Detall.torna();});
 	jQuery("#btnEliminar").bind("click",function(){Detall.eliminar();});
 	jQuery("#btnPrevisualizar").bind("click",function(){Detall.previsualitza();});
 
 	// El botón de guardar está inicialmente deshabilitado hasta que se realice un cambio en el formulario (ver DetallBase.modificado)
-	jQuery("#btnGuardar").parent().addClass("off");
+	//jQuery("#btnGuardar").parent().addClass("off");
 	//jQuery("#btnGuardar").bind("click",function(){Detall.guarda();});
 
-	jQuery("#formGuardar input,#formGuardar select,#formGuardar textarea").bind("change",function(){Detall.modificado();});
+	//jQuery("#formGuardar input,#formGuardar select,#formGuardar textarea").bind("change",function(){console.log("mod 1");Detall.modificado();});
 
 	if( jQuery("textarea.rich").tinymce != undefined ){
 		$('textarea.rich').tinymce({
@@ -53,17 +53,24 @@ function DetallBase( soloFicha, reglasFormulario, identificadores ){
 	var soloFicha = soloFicha || false;
 	var ids = {
 		btnGuardar: "btnGuardar",
+		btnVolver: "btnVolver",
 		form: "formGuardar"
 	};
 	
 	if( identificadores ){
 		
-		ids.btnGuardar = identificadores.btnGuardar || "btnGuardar";
-		ids.form = identificadores.form || "formGuardar";
+		ids.btnGuardar = identificadores.btnGuardar || ids.btnGuardar;
+		ids.btnVolver = identificadores.btnVolver || ids.btnVolver;
+		ids.form = identificadores.form || ids.form;
 
 	}
+
+	// Evento del bot�n volver
+	//jQuery("#"+ids.btnVolver).bind("click",function(){console.log("Click torna");Detall.torna();});
+	//jQuery("#"+ids.btnVolver).unbind("click").bind("click",function(){that.vuelve();});
+	jQuery("#"+ids.btnVolver).bind("click",function(){that.vuelve();});
 	
-	jQuery("#"+ids.btnGuardar).parent().addClass("off");
+	//jQuery("#"+ids.btnGuardar).parent().addClass("off");
 	jQuery("#"+ids.form+" input,#"+ids.form+" select,#"+ids.form+" textarea").bind("change",function(){that.modificado();});
     
     this.idiomas = ["es","ca","en","de","fr"];
@@ -98,6 +105,10 @@ function DetallBase( soloFicha, reglasFormulario, identificadores ){
 			jQuery(this).siblings("div.modul_continguts").slideToggle(300);
 		});
 	}
+	
+	this.cambiosSinGuardar = function(){
+        return !jQuery("#"+ids.btnGuardar).parent().hasClass("off");
+    }
 
 	this.formulariValid = function () {
 		formulariComprovar.llansar();
@@ -159,9 +170,20 @@ function DetallBase( soloFicha, reglasFormulario, identificadores ){
 		that.guardaGenerico(dataVars);
 	}
 
-	this.modificado = function(){
+	this.modificado = function( marcar ){
+	    
+	    if( typeof(marcar) == "undefined" ){
+	        marcar = true;
+	    }
+	    
+	    //console.log("Modificado: " + marcar);
+	    
 		// Habilitamos el botón de guardar.
-		jQuery("#"+ids.btnGuardar).unbind("click").bind("click", function() { that.guarda(); } ).parent().removeClass("off");
+		jQuery("#"+ids.btnGuardar)
+		  .unbind("click")
+		  .bind("click", function() { that.guarda(); } )
+		  .parent()
+		  .toggleClass("off", !marcar );
 	}
 
 	this.publica = function(){
@@ -169,15 +191,31 @@ function DetallBase( soloFicha, reglasFormulario, identificadores ){
 		jQuery("#item_data_caducitat").val("");
 		this.guarda();
 	}
-
+	
 	/**
 	 * Vuelve de la ficha al listado.
 	 */
-	this.torna = function() {
-		// animacio
-		escriptori_detall_elm.fadeOut(300, function() {
-			escriptori_contingut_elm.fadeIn(300);
-		});
+	this.vuelve = function() {
+	    
+	    if( this.cambiosSinGuardar() ){
+    	    Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: txtAvisoCambiosSinGuardar, funcio: function() {
+                
+                // Volvemos
+                escriptori_detall_elm.fadeOut(300, function() {
+                    escriptori_contingut_elm.fadeIn(300);
+                });
+                
+                Missatge.cancelar();
+                
+            }});
+        }else{
+            
+            // Volvemos
+            escriptori_detall_elm.fadeOut(300, function() {
+                escriptori_contingut_elm.fadeIn(300);
+            });
+            
+        }
 	}
 
 	/**
@@ -192,7 +230,7 @@ function DetallBase( soloFicha, reglasFormulario, identificadores ){
 	this.carregar = function(itemID){
 
 		// Deshabilitamos inicialmente el botón de guardar.
-		jQuery("#"+ids.btnGuardar).unbind("click").parent().removeClass("off").addClass("off");
+		//jQuery("#"+ids.btnGuardar).unbind("click").parent().removeClass("off").addClass("off");
 
 		escriptori_detall_elm.find(".botonera li.btnEliminar,.botonera li.btnPrevisualizar").show();
 

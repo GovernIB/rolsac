@@ -18,6 +18,7 @@ $(document).ready(function() {
 	//Error = new CError();
 	NuevaUADetall = new CNuevaUADetall(false,NuevaUAFormulariDades,{
 		btnGuardar: "nuevaUA_btnGuardar",
+		btnVolver: "nuevaUA_btnVolver",
 		form: "nuevaUA_formGuardar"
 	});
 	/*Auditoria = new ModulAuditories();
@@ -42,10 +43,10 @@ function CNuevaUADetall(soloFicha,reglasFormulario,ids){
 	this.iniciar = function() {
 		
 		// Evento del bot�n de volver.		
-		jQuery("#nuevaUA_btnVolver").unbind("click").bind("click",function(){
+		/*jQuery("#nuevaUA_btnVolver").unbind("click").bind("click",function(){
 			jQuery("#escritorioNuevaUA").hide();
 			jQuery("#escritorioUnidadesHijas").show();			
-		});
+		});*/
 		
 		//redigirimos el mÃ©todo que guarda porque en este caso tambiÃ©n hacemos un upload de archivos				
 		this.guarda = this.guarda_upload;
@@ -92,6 +93,31 @@ function CNuevaUADetall(soloFicha,reglasFormulario,ids){
             jQuery("#nuevaUA_item_espai_territorial,#nuevaUA_item_espai_territorial_es,#nuevaUA_item_espai_territorial_en,#nuevaUA_item_espai_territorial_de,#nuevaUA_item_espai_territorial_fr").val( jQuery(this).val() );
         });
 	}
+	
+	this.DetallBase_vuelve = this.vuelve;
+	
+	/**
+     * Vuelve de la ficha al listado.
+     */
+    this.vuelve = function() {
+        
+        if( this.cambiosSinGuardar() ){
+            Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: txtAvisoCambiosSinGuardar, funcio: function() {
+                                
+                Missatge.cancelar();
+                
+                jQuery("#escritorioNuevaUA").hide();
+                jQuery("#escritorioUnidadesHijas").show();
+                
+                
+            }});
+        }else{
+            
+            jQuery("#escritorioNuevaUA").hide();
+            jQuery("#escritorioUnidadesHijas").show();
+            
+        }
+    }
 	
 	// Sobreescribe el método guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
 	this.guarda_upload = function(e) {    
@@ -145,6 +171,8 @@ function CNuevaUADetall(soloFicha,reglasFormulario,ids){
 		// Rellenamos el m�dulo de Relaci�n Org�nica.
 		jQuery("#nuevaUA_item_pare_id").val(idUAPadre);
 		jQuery("#nuevaUA_item_pare").val(nomUAPadre);
+		
+		this.modificado(false);
 	}
 	
 	// M�todo sobreescrito.

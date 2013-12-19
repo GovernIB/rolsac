@@ -407,6 +407,8 @@ function CDetall(){
 		});
 
 		this.actualizaEventos();
+		
+		this.modificado(false);
 	}		
 	
 	this.pintar = function(dades) {
@@ -462,6 +464,8 @@ function CDetall(){
 				escriptori_detall_elm.fadeIn(300);				
 			});
 		}	
+		
+		this.modificado(false);
 	}
 	
 	this.elimina = function() {

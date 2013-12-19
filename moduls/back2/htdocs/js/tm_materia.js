@@ -40,7 +40,6 @@ $(document).ready(function() {
     // Datos traductor
 	CAMPOS_TRADUCTOR_MATERIA = ["item_nom_", "item_descripcio_", "item_paraules_clau_"];
 	DATOS_TRADUCIDOS_MATERIA = ["nombre", "descripcion", "palabrasclave"];
-	
 });
 
 
@@ -348,6 +347,8 @@ function CDetall(){
 		});
 
 		this.actualizaEventos();
+		
+		this.modificado(false);
 	}		
 	
 	// Guardar haciendo upload de archivos.
@@ -444,7 +445,9 @@ function CDetall(){
 			escriptori_contingut_elm.fadeOut(300, function() {
 				escriptori_detall_elm.fadeIn(300);				
 			});
-		}	
+		}
+		
+		this.modificado(false);	
 	}
 	
 	this.elimina = function() {

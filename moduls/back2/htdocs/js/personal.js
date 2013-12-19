@@ -403,6 +403,8 @@ function CDetall(){
 			});
 		});
 		this.actualizaEventos();
+		
+		this.modificado(false);
 	}
 			
 	this.pintar = function(dades) {
@@ -449,6 +451,8 @@ function CDetall(){
 			});
 		
 		}
+		
+		this.modificado(false);
 		
 	}
 	
