@@ -14,6 +14,8 @@ import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaCriteria;
 import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.butlleti.ButlletiCriteria;
 import es.caib.rolsac.api.v2.butlleti.ButlletiQueryServiceAdapter;
+import es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsCriteria;
+import es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsQueryServiceAdapter;
 import es.caib.rolsac.api.v2.document.DocumentCriteria;
 import es.caib.rolsac.api.v2.document.DocumentQueryServiceAdapter;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
@@ -37,11 +39,13 @@ import es.caib.rolsac.api.v2.formulari.FormulariCriteria;
 import es.caib.rolsac.api.v2.formulari.FormulariQueryServiceAdapter;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
-import es.caib.rolsac.api.v2.general.co.ByDateCriteria;
+import es.caib.rolsac.api.v2.general.CertificadoUtil;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaCriteria;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaQueryServiceAdapter;
+import es.caib.rolsac.api.v2.iniciacio.IniciacioCriteria;
+import es.caib.rolsac.api.v2.iniciacio.IniciacioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
 import es.caib.rolsac.api.v2.materia.MateriaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.materiaAgrupacio.MateriaAgrupacioCriteria;
@@ -81,16 +85,18 @@ public class RolsacQueryServiceTest {
     @Before
     public void setup() {
         rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.WS);
+        CertificadoUtil.autentificar("contrasena", "storerolsac.jks");
     }
 
     /**
-     * Cas d'us: Es recupera 1 procediment que existeix.
+     * Cas d'us: Es crecupera 1 procediment que existeix.
      */
     @Test
     public void obtenirProcediment() {
         final String procedimentId = "9070";
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
         procedimentCriteria.setId(procedimentId);
+        procedimentCriteria.setIdioma("ca");
         ProcedimentQueryServiceAdapter procediment = null;
         try {
             procediment = rolsacQS.obtenirProcediment(procedimentCriteria);
@@ -108,6 +114,7 @@ public class RolsacQueryServiceTest {
     public void obtenirProcedimentNoExistent() {
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
         procedimentCriteria.setId("-1");
+        procedimentCriteria.setIdioma("ca");
         ProcedimentQueryServiceAdapter procediment = null;
         try {
             procediment = rolsacQS.obtenirProcediment(procedimentCriteria);
@@ -163,10 +170,13 @@ public class RolsacQueryServiceTest {
     @Test
     public void recuperarProcedimentsPerDataActualitzacio() {
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
-        Calendar c = new GregorianCalendar(2005, 6, 4);
-        //Date date = c.getTime();
-        procedimentCriteria.setFechaActualizacion(c);
+        Calendar cal = new GregorianCalendar(2013, 11, 7);
+        String fetxa = String.valueOf(cal.get(Calendar.DATE));
+        fetxa = fetxa.concat("/").concat(String.valueOf(cal.get(Calendar.MONTH)));
+        fetxa = fetxa.concat("/").concat(String.valueOf(cal.get(Calendar.YEAR)));
+        procedimentCriteria.setFechaActualizacion(fetxa);
         procedimentCriteria.setTamany("10");
+        procedimentCriteria.setIdioma("ca");
         List<ProcedimentQueryServiceAdapter> procediments = null;
         try {
             procediments = rolsacQS.llistarProcediments(procedimentCriteria);
@@ -175,10 +185,10 @@ public class RolsacQueryServiceTest {
         }
         Assert.assertTrue(procediments.size() > 0);
         for (ProcedimentQueryServiceAdapter pa: procediments) {
-            Assert.assertEquals(
-                    ByDateCriteria.DATE_CRITERIA_FORMATTER.format(pa.getFechaActualizacion().getTime()),
-                    ByDateCriteria.DATE_CRITERIA_FORMATTER.format(c.getTime())
-            );
+            String fetxaSalida = String.valueOf(pa.getFechaActualizacion().get(Calendar.DATE));
+            fetxaSalida = fetxaSalida.concat("/").concat(String.valueOf(pa.getFechaActualizacion().get(Calendar.MONTH) + 1));
+            fetxaSalida = fetxaSalida.concat("/").concat(String.valueOf(pa.getFechaActualizacion().get(Calendar.YEAR)));
+            Assert.assertEquals(fetxa, fetxaSalida);
         }
     }
     
@@ -190,6 +200,7 @@ public class RolsacQueryServiceTest {
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
         procedimentCriteria.setActiu(true);
         procedimentCriteria.setTamany("10");
+        procedimentCriteria.setIdioma("ca");
         List<ProcedimentQueryServiceAdapter> procediments = null;
         try {
             procediments = rolsacQS.llistarProcediments(procedimentCriteria);
@@ -207,6 +218,7 @@ public class RolsacQueryServiceTest {
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
         procedimentCriteria.setActiu(false);
         procedimentCriteria.setTamany("10");
+        procedimentCriteria.setIdioma("ca");
         List<ProcedimentQueryServiceAdapter> procediments = null;
         try {
             procediments = rolsacQS.llistarProcediments(procedimentCriteria);
@@ -224,14 +236,13 @@ public class RolsacQueryServiceTest {
         MateriaCriteria materiaCriteria = new MateriaCriteria();
         materiaCriteria.setDestacada(false);
         materiaCriteria.setId("5521");
-        materiaCriteria.setCodigoEstandar("AGRICULTURA");
         MateriaQueryServiceAdapter materia = null;
         try {
             materia = rolsacQS.obtenirMateria(materiaCriteria);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
-        Assert.assertNull(materia);
+        Assert.assertEquals(materia.getCodigoEstandar(), "AGRICULTURA");
     }
     
     /**
@@ -277,7 +288,8 @@ public class RolsacQueryServiceTest {
     @Test
     public void recuperarTramit() {
         TramitCriteria tramitCriteria = new TramitCriteria();
-        tramitCriteria.setId("624493");
+        tramitCriteria.setId("673798");
+        tramitCriteria.setIdioma("ca");
         TramitQueryServiceAdapter tramit = null;
         try {
             tramit = rolsacQS.obtenirTramit(tramitCriteria);
@@ -293,8 +305,9 @@ public class RolsacQueryServiceTest {
     @Test
     public void recuperarTramits() {
         TramitCriteria tramitCriteria = new TramitCriteria();
-        tramitCriteria.setT_nombre("%sol�licitud%");
+        tramitCriteria.setT_nombre("%sol·licitud%");
         tramitCriteria.setTamany("10");
+        tramitCriteria.setIdioma("ca");
         List<TramitQueryServiceAdapter> tramits = null;
         try {
             tramits = rolsacQS.llistarTramits(tramitCriteria);
@@ -304,7 +317,7 @@ public class RolsacQueryServiceTest {
         Assert.assertTrue(tramits.size() > 0);
         Assert.assertTrue(tramits.size() <= 10);
         for (TramitQueryServiceAdapter t: tramits) {
-            Assert.assertTrue(t.getNombre().toLowerCase().contains("sol�licitud"));
+            Assert.assertTrue(t.getNombre().toLowerCase().contains("sol·licitud"));
         }
     }
     
@@ -370,6 +383,7 @@ public class RolsacQueryServiceTest {
     public void llistarFetsVitals() {
         FetVitalCriteria fetVitalCriteria = new FetVitalCriteria();
         fetVitalCriteria.setT_palabrasclave("%matrimoni%");
+        fetVitalCriteria.setIdioma("ca");
         List<FetVitalQueryServiceAdapter> fetsVitals = null;
         try {
             fetsVitals = rolsacQS.llistarFetsVitals(fetVitalCriteria);
@@ -388,7 +402,8 @@ public class RolsacQueryServiceTest {
     @Test
     public void recuperarFitxa() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("206971");
+        fitxaCriteria.setId("1143961");
+        fitxaCriteria.setIdioma("ca");
         FitxaQueryServiceAdapter fitxa = null;
         try {
             fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
@@ -406,6 +421,7 @@ public class RolsacQueryServiceTest {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
         fitxaCriteria.setT_titulo("%associacio%");
         fitxaCriteria.setTamany("10");
+        fitxaCriteria.setIdioma("ca");
         List<FitxaQueryServiceAdapter> fitxes = null;
         try {
             fitxes = rolsacQS.llistarFitxes(fitxaCriteria);
@@ -420,14 +436,29 @@ public class RolsacQueryServiceTest {
     }
     
     /**
-     * Cas d'us: Recupera normativa.
+     * Cas d'us: Recupera normativa local.
      */
     @Test
-    public void recuperarNormativa() {
+    public void recuperarNormativaLocal() {
         NormativaCriteria normativaCriteria = new NormativaCriteria();
-        normativaCriteria.setId("75074"); // local
-//        normativaCriteria.setIncluirExternas(true);
-//        normativaCriteria.setId("74965"); // externa
+        normativaCriteria.setId("75074");
+        NormativaQueryServiceAdapter normativa = null;
+        try {
+            normativa = rolsacQS.obtenirNormativa(normativaCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
+        Assert.assertNotNull(normativa);
+    }
+    
+    /**
+     * Cas d'us: Recupera normativa extern.
+     */
+    @Test
+    public void recuperarNormativaExterna() {
+        NormativaCriteria normativaCriteria = new NormativaCriteria();
+        normativaCriteria.setIncluirExternas(true);
+        normativaCriteria.setId("74965");
         NormativaQueryServiceAdapter normativa = null;
         try {
             normativa = rolsacQS.obtenirNormativa(normativaCriteria);
@@ -500,7 +531,7 @@ public class RolsacQueryServiceTest {
     @Test
     public void obtenirDocumentTramit() {
         DocumentTramitCriteria documentTramitCriteria = new DocumentTramitCriteria();
-        documentTramitCriteria.setId("636328");
+        documentTramitCriteria.setId("703811");
         DocumentTramitQueryServiceAdapter docTramit = null;
         try {
             docTramit = rolsacQS.obtenirDocumentTramit(documentTramitCriteria);
@@ -516,7 +547,7 @@ public class RolsacQueryServiceTest {
     @Test
     public void llistarDocumentTramit() {
         DocumentTramitCriteria documentTramitCriteria = new DocumentTramitCriteria();
-        documentTramitCriteria.setT_titulo("%talles%");
+        documentTramitCriteria.setT_titulo("%model%");
         documentTramitCriteria.setTamany("10");
         List<DocumentTramitQueryServiceAdapter> documentsTramit = null;
         try {
@@ -526,7 +557,7 @@ public class RolsacQueryServiceTest {
         }
         Assert.assertTrue(documentsTramit.size() > 0);
         for (DocumentTramitQueryServiceAdapter d: documentsTramit) {
-            Assert.assertTrue(d.getTitulo().toLowerCase().contains("talles"));
+            Assert.assertTrue(d.getTitulo().toLowerCase().contains("model"));
         }
     }
 
@@ -536,7 +567,7 @@ public class RolsacQueryServiceTest {
     @Test
     public void recuperarUsuari() {
         UsuariCriteria usuariCriteria = new UsuariCriteria();
-        usuariCriteria.setUsername("e37336797t");
+        usuariCriteria.setUsername("e46672658t");
         UsuariQueryServiceAdapter usuari = null;
         try {
             usuari = rolsacQS.obtenirUsuari(usuariCriteria);
@@ -567,7 +598,7 @@ public class RolsacQueryServiceTest {
     }
     
     /**
-     * Cas d'us: Recupera taxa.
+     * Cas d'us: Recupera taxa inexistente.
      */
     @Test
     public void recuperarTaxa() {
@@ -579,27 +610,23 @@ public class RolsacQueryServiceTest {
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
-        Assert.assertNotNull(taxa);
+        Assert.assertNull(taxa);
     }
     
     /**
-     * Cas d'us: Recupera taxes.
+     * Cas d'us: Recuperar llista de taxes
      */
     @Test
     public void llistarTaxes() {
         TaxaCriteria taxaCriteria = new TaxaCriteria();
-        taxaCriteria.setT_descripcio("%euros%");
         taxaCriteria.setTamany("5");
-        List<TaxaQueryServiceAdapter> taxes = null;
+        List<TaxaQueryServiceAdapter> llistaTaxes = null;
         try {
-            taxes = rolsacQS.llistarTaxes(taxaCriteria);
+            llistaTaxes = rolsacQS.llistarTaxes(taxaCriteria);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
-        Assert.assertTrue(taxes.size() > 0);
-        for (TaxaQueryServiceAdapter t: taxes) {
-            Assert.assertTrue(t.getDescripcio().toLowerCase().contains("euros"));
-        }
+        Assert.assertNotNull(llistaTaxes);
     }
 
     /**
@@ -644,7 +671,7 @@ public class RolsacQueryServiceTest {
     @Test
     public void recuperarAgrupacioMateria() {
         AgrupacioMateriaCriteria amCriteria = new AgrupacioMateriaCriteria();
-        amCriteria.setId("635712");
+        amCriteria.setId("174535");
         AgrupacioMateriaQueryServiceAdapter am = null;
         try {
             am = rolsacQS.obtenirAgrupacioMateria(amCriteria);
@@ -715,7 +742,7 @@ public class RolsacQueryServiceTest {
     @Test
     public void recuperarDocument() {
         DocumentCriteria docCriteria = new DocumentCriteria();
-        docCriteria.setId("241559");
+        docCriteria.setId("999565");
         DocumentQueryServiceAdapter doc = null;
         try {
             doc = rolsacQS.obtenirDocument(docCriteria);
@@ -787,7 +814,7 @@ public class RolsacQueryServiceTest {
     @Test
     public void recuperarEnllac() {
         EnllacCriteria enllacCriteria = new EnllacCriteria();
-        enllacCriteria.setId("633923");
+        enllacCriteria.setId("1375123");
         EnllacQueryServiceAdapter doc = null;
         try {
             doc = rolsacQS.obtenirEnllac(enllacCriteria);
@@ -823,7 +850,7 @@ public class RolsacQueryServiceTest {
     @Test
     public void recuperarEspaiTerritorial() {
         EspaiTerritorialCriteria etCriteria = new EspaiTerritorialCriteria();
-        etCriteria.setId("633281");
+        etCriteria.setId("1375298");
         EspaiTerritorialQueryServiceAdapter et = null;
         try {
             et = rolsacQS.obtenirEspaiTerritorial(etCriteria);
@@ -839,7 +866,7 @@ public class RolsacQueryServiceTest {
     @Test
     public void recuperarEspaisTerritorials() {
         EspaiTerritorialCriteria etCriteria = new EspaiTerritorialCriteria();
-        etCriteria.setT_nombre("%mallorca%");
+        etCriteria.setT_nombre("%tramuntana%");
         etCriteria.setTamany("5");
         List<EspaiTerritorialQueryServiceAdapter> ets = null;
         try {
@@ -849,7 +876,7 @@ public class RolsacQueryServiceTest {
         }
         Assert.assertTrue(ets.size() > 0);
         for (EspaiTerritorialQueryServiceAdapter et: ets) {
-            Assert.assertTrue(et.getNombre().toLowerCase().contains("mallorca"));
+            Assert.assertTrue(et.getNombre().toLowerCase().contains("tramuntana"));
         }
     }
 
@@ -941,7 +968,7 @@ public class RolsacQueryServiceTest {
     @Test
     public void recuperarFamilies() {
         FamiliaCriteria familiaCriteria = new FamiliaCriteria();
-        familiaCriteria.setT_nombre("%test%");
+        familiaCriteria.setT_nombre("%sancionadors%");
         familiaCriteria.setTamany("5");
         List<FamiliaQueryServiceAdapter> families = null;
         try {
@@ -951,7 +978,7 @@ public class RolsacQueryServiceTest {
         }
         Assert.assertTrue(families.size() > 0);
         for (FamiliaQueryServiceAdapter f: families) {
-            Assert.assertTrue(f.getNombre().toLowerCase().contains("test"));
+            Assert.assertTrue(f.getNombre().toLowerCase().contains("sancionadors"));
         }
     }
     
@@ -1033,7 +1060,7 @@ public class RolsacQueryServiceTest {
     @Test
     public void recuperarIconaFamilia() {
         IconaFamiliaCriteria ifCriteria = new IconaFamiliaCriteria();
-        ifCriteria.setId("635257");
+        ifCriteria.setId("836662");
         IconaFamiliaQueryServiceAdapter iFam = null;
         try {
             iFam = rolsacQS.obtenirIconaFamilia(ifCriteria);
@@ -1065,7 +1092,7 @@ public class RolsacQueryServiceTest {
     @Test
     public void recuperarIconaMateria() {
         IconaMateriaCriteria imCriteria = new IconaMateriaCriteria();
-        imCriteria.setId("635655");
+        imCriteria.setId("44820");
         IconaMateriaQueryServiceAdapter iMat = null;
         try {
             iMat = rolsacQS.obtenirIconaMateria(imCriteria);
@@ -1097,7 +1124,7 @@ public class RolsacQueryServiceTest {
     @Test
     public void recuperarMateriaAgrupacio() {
         MateriaAgrupacioCriteria maCriteria = new MateriaAgrupacioCriteria();
-        maCriteria.setId("635948");
+        maCriteria.setId("174509");
         MateriaAgrupacioQueryServiceAdapter ma = null;
         try {
             ma = rolsacQS.obtenirMateriaAgrupacio(maCriteria);
@@ -1133,7 +1160,7 @@ public class RolsacQueryServiceTest {
     @Test
     public void recuperarPerfil() {
         PerfilCriteria perfilCriteria = new PerfilCriteria();
-        perfilCriteria.setId("634701");
+        perfilCriteria.setId("1375317");
         PerfilQueryServiceAdapter perfil = null;
         try {
             perfil = rolsacQS.obtenirPerfil(perfilCriteria);
@@ -1168,7 +1195,7 @@ public class RolsacQueryServiceTest {
     @Test
     public void recuperarSeccio() {
         SeccioCriteria seccioCriteria = new SeccioCriteria();
-        seccioCriteria.setId("631907");
+        seccioCriteria.setId("171215");
         SeccioQueryServiceAdapter seccio = null;
         try {
             seccio = rolsacQS.obtenirSeccio(seccioCriteria);
@@ -1210,7 +1237,7 @@ public class RolsacQueryServiceTest {
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
-        Assert.assertTrue(listSeccioQueryServiceAdapter.size() == 12);
+        Assert.assertTrue(listSeccioQueryServiceAdapter.size() == 10);
     }
     
     /**
@@ -1219,7 +1246,7 @@ public class RolsacQueryServiceTest {
     @Test
     public void recuperarUnitatMateria() {
         UnitatMateriaCriteria umCriteria = new UnitatMateriaCriteria();
-        umCriteria.setId("621236");
+        umCriteria.setId("1375281");
         UnitatMateriaQueryServiceAdapter um = null;
         try {
             um = rolsacQS.obtenirUnitatMateria(umCriteria);
@@ -1262,7 +1289,7 @@ public class RolsacQueryServiceTest {
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
-        Assert.assertTrue(tn.getNombre().equals("Resoluci�"));
+        Assert.assertTrue(tn.getNombre().equals("Resolució"));
     }
     
     /**
@@ -1281,5 +1308,92 @@ public class RolsacQueryServiceTest {
         }
         Assert.assertTrue(tns.size() == 3);
     }
+    
+    /**
+     * Cas d'us: Recupera una excepció d'aportació de documentació
+     */
+    @Test
+    public void obtenirCatalegDocuments() {
+        CatalegDocumentsCriteria catalegDocumentsCriteria = new CatalegDocumentsCriteria();
+        catalegDocumentsCriteria.setId("1375318");
+        catalegDocumentsCriteria.setIdioma("ca");
+        CatalegDocumentsQueryServiceAdapter catDoc = null;
+        try {
+            catDoc = rolsacQS.obtenirCatalegDocuments(catalegDocumentsCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
+        Assert.assertNotNull(catDoc);
+    }
+    
+    /**
+     * Cas d'us: Recupera tipus normativa.
+     */
+    @Test
+    public void llistarCatalegsDocuments() {
+        CatalegDocumentsCriteria catalegDocumentsCriteria = new CatalegDocumentsCriteria();
+        catalegDocumentsCriteria.setTamany("5");
+        List<CatalegDocumentsQueryServiceAdapter> llistaCatDoc = null;
+        try {
+            llistaCatDoc = rolsacQS.llistarCatalegsDocuments(catalegDocumentsCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
+        Assert.assertTrue(llistaCatDoc.size() > 0);
+    }
+    
+    /**
+     * Cas d'us: Retorna la cantidat de procediments segons un criteria
+     */
+    @Test
+    public void getNumProcediments() {
+        ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
+        procedimentCriteria.setIdioma("ca");
+        procedimentCriteria.setActiu(true);
+        procedimentCriteria.setTamany("20");
+        int num = 0;
+        try {
+            num = rolsacQS.getNumProcediments(procedimentCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
+        Assert.assertTrue(num > 0);
+    }
+    
+    /**
+     * Cas d'us: Recuperar una iniciació
+     */
+    @Test
+    public void obtenirTipusIniciacio() {
+        IniciacioCriteria iniciacioCriteria = new IniciacioCriteria();
+        iniciacioCriteria.setId("467084");
+        IniciacioQueryServiceAdapter ini = null;
+        try {
+            ini = rolsacQS.obtenirTipusIniciacio(iniciacioCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
+        Assert.assertNotNull(ini);
+    }
+    
+    /**
+     * Cas d'us: Recupera un llistat d'iniciacions
+     */
+    @Test
+    public void llistarTipusIniciacions() {
+        IniciacioCriteria iniciacioCriteria = new IniciacioCriteria();
+        iniciacioCriteria.setTamany("5");
+        List<IniciacioQueryServiceAdapter> llistaIni = null;
+        try {
+            llistaIni = rolsacQS.llistarTipusIniciacions(iniciacioCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
+        Assert.assertTrue(llistaIni.size() > 0);
+    }
+    
+    //TODO: Pendientes de implementar hasta que se creen su API
+    // obtenirExcepcioDocumentacio()
+    // llistarExcepcionsDocumentacio()
     
 }

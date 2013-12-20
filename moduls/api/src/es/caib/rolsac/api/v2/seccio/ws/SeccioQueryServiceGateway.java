@@ -63,7 +63,7 @@ public class SeccioQueryServiceGateway {
 
 	public List<SeccioDTO> llistarFilles(long id, SeccioCriteria seccioCriteria)
 			throws RemoteException {
-		return Arrays.asList(stub.llistarPares(id));		
+		return Arrays.asList(stub.llistarFilles(id, seccioCriteria));		
 	}
 
 	public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria)

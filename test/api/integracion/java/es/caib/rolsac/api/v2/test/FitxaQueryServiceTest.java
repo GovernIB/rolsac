@@ -15,9 +15,11 @@ import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalQueryServiceAdapter;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
+import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
 import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
+import es.caib.rolsac.api.v2.general.CertificadoUtil;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuQueryServiceAdapter;
 import es.caib.rolsac.api.v2.rolsac.RolsacQueryService;
@@ -32,18 +34,33 @@ public class FitxaQueryServiceTest {
 
     @Before
     public void setup() {
-        rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.EJB);
+        rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.WS);
+        CertificadoUtil.autentificar("contrasena", "storerolsac.jks");
     }
-   
+    
+    @Test
+    public void adapterTest() {
+        FitxaDTO dto = new FitxaDTO();
+        dto.setId((long) 1372158);
+        FitxaQueryServiceAdapter adapter = (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", STRATEGY.WS, dto);
+        try {
+            int num = adapter.getNumDocuments();
+            Assert.assertTrue(num > 0);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
+    }
+    
     @Test
     public void obtenirNumDocuments() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("92472");
+        fitxaCriteria.setId("1372158");
+        fitxaCriteria.setIdioma("ca");
         try {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
             Assert.assertNotNull(fitxa);
             int numElements = fitxa.getNumDocuments();
-            Assert.assertTrue(numElements == 36);
+            Assert.assertTrue(numElements > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -52,12 +69,13 @@ public class FitxaQueryServiceTest {
     @Test
     public void obtenirDocuments() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("236084");
+        fitxaCriteria.setId("1372158");
+        fitxaCriteria.setIdioma("ca");
         try {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
             Assert.assertNotNull(fitxa);
             List<DocumentQueryServiceAdapter> listQueryServiceAdapter = fitxa.llistarDocuments(new DocumentCriteria());
-            Assert.assertTrue(listQueryServiceAdapter.size() == 5);
+            Assert.assertTrue(listQueryServiceAdapter.size() > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -66,12 +84,13 @@ public class FitxaQueryServiceTest {
     @Test
     public void obtenirNumEnllacos() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("128245");
+        fitxaCriteria.setId("1372158");
+        fitxaCriteria.setIdioma("ca");
         try {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
             Assert.assertNotNull(fitxa);
             int numElements = fitxa.getNumEnllacos();
-            Assert.assertTrue(numElements == 3);
+            Assert.assertTrue(numElements > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -80,12 +99,13 @@ public class FitxaQueryServiceTest {
     @Test
     public void obtenirEnllassos() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("465200");
+        fitxaCriteria.setId("1372158");
+        fitxaCriteria.setIdioma("ca");
         try {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
             Assert.assertNotNull(fitxa);
             List<EnllacQueryServiceAdapter> listQueryServiceAdapter = fitxa.llistarEnllacos(new EnllacCriteria());
-            Assert.assertTrue(listQueryServiceAdapter.size() == 2);
+            Assert.assertTrue(listQueryServiceAdapter.size() > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -94,12 +114,13 @@ public class FitxaQueryServiceTest {
     @Test
     public void obtenirNumFetsVitals() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("635770");
+        fitxaCriteria.setId("1372158");
+        fitxaCriteria.setIdioma("ca");
         try {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
             Assert.assertNotNull(fitxa);
             int numElements = fitxa.getNumFetsVitals();
-            Assert.assertTrue(numElements == 2);
+            Assert.assertTrue(numElements > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -108,12 +129,13 @@ public class FitxaQueryServiceTest {
     @Test
     public void obtenirFetsVitals() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("530057");
+        fitxaCriteria.setId("1372158");
+        fitxaCriteria.setIdioma("ca");
         try {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
             Assert.assertNotNull(fitxa);
             List<FetVitalQueryServiceAdapter> listQueryServiceAdapter = fitxa.llistarFetsVitals(new FetVitalCriteria());
-            Assert.assertTrue(listQueryServiceAdapter.size() == 2);
+            Assert.assertTrue(listQueryServiceAdapter.size() > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -122,12 +144,13 @@ public class FitxaQueryServiceTest {
     @Test
     public void obtenirNumSeccions() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("178144");
+        fitxaCriteria.setId("1372158");
+        fitxaCriteria.setIdioma("ca");
         try {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
             Assert.assertNotNull(fitxa);
             int numElements = fitxa.getNumSeccions();
-            Assert.assertTrue(numElements == 1);
+            Assert.assertTrue(numElements > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -136,12 +159,13 @@ public class FitxaQueryServiceTest {
     @Test
     public void obtenirSeccions() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("554485");
+        fitxaCriteria.setId("1372158");
+        fitxaCriteria.setIdioma("ca");
         try {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
             Assert.assertNotNull(fitxa);
             List<SeccioQueryServiceAdapter> listQueryServiceAdapter = fitxa.llistarSeccions(new SeccioCriteria());
-            Assert.assertTrue(listQueryServiceAdapter.size() == 2);
+            Assert.assertTrue(listQueryServiceAdapter.size() > 0);
         } catch (QueryServiceException e) {
              Assert.fail(e.toString());
         }
@@ -150,12 +174,13 @@ public class FitxaQueryServiceTest {
     @Test
     public void obtenirNumUnitatsAdministratives() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("123853");
+        fitxaCriteria.setId("1372158");
+        fitxaCriteria.setIdioma("ca");
         try {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
             Assert.assertNotNull(fitxa);
             int numElements = fitxa.getNumUnitatsAdministratives();
-            Assert.assertTrue(numElements == 3);
+            Assert.assertTrue(numElements > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -164,21 +189,23 @@ public class FitxaQueryServiceTest {
     @Test
     public void obtenirUnitatsAdministratives() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("442580");
+        fitxaCriteria.setId("1372158");
+        fitxaCriteria.setIdioma("ca");
         try {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
             Assert.assertNotNull(fitxa);
             List<UnitatAdministrativaQueryServiceAdapter> listQueryServiceAdapter = fitxa.llistarUnitatsAdministratives(new UnitatAdministrativaCriteria());
-            Assert.assertTrue(listQueryServiceAdapter.size() == 3);
+            Assert.assertTrue(listQueryServiceAdapter.size() > 0);
         } catch (QueryServiceException e) {
              Assert.fail(e.toString());
         }
     }
     
     @Test
-    public void obtenirBaner(){
+    public void obtenirBaner() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("466837");
+        fitxaCriteria.setId("1372158");
+        fitxaCriteria.setIdioma("ca");
         try {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
             Assert.assertNotNull(fitxa);
@@ -190,9 +217,10 @@ public class FitxaQueryServiceTest {
     }
 
     @Test
-    public void obtenirIcona(){
+    public void obtenirIcona() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("466837");
+        fitxaCriteria.setId("1372158");
+        fitxaCriteria.setIdioma("ca");
         try {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
             Assert.assertNotNull(fitxa);
@@ -204,9 +232,10 @@ public class FitxaQueryServiceTest {
     }
     
     @Test
-    public void obtenirImatge(){
+    public void obtenirImatge() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("466837");
+        fitxaCriteria.setId("1372158");
+        fitxaCriteria.setIdioma("ca");
         try {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
             Assert.assertNotNull(fitxa);
@@ -220,12 +249,13 @@ public class FitxaQueryServiceTest {
     @Test
     public void llistarPublicsObjectius() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("206971");
+        fitxaCriteria.setId("1372158");
+        fitxaCriteria.setIdioma("ca");
         try {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
             Assert.assertNotNull(fitxa);
             List<PublicObjectiuQueryServiceAdapter> listPOQueryServiceAdapter = fitxa.llistarPublicsObjectius(new PublicObjectiuCriteria());
-            Assert.assertTrue(listPOQueryServiceAdapter.size() == 1);
+            Assert.assertTrue(listPOQueryServiceAdapter.size() == 3);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }

@@ -11,11 +11,14 @@ import es.caib.rolsac.api.v2.documentTramit.DocumentTramitQueryServiceAdapter;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
+import es.caib.rolsac.api.v2.general.CertificadoUtil;
+import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
 import es.caib.rolsac.api.v2.rolsac.RolsacQueryService;
 import es.caib.rolsac.api.v2.taxa.TaxaCriteria;
 import es.caib.rolsac.api.v2.taxa.TaxaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.tramit.TramitCriteria;
 import es.caib.rolsac.api.v2.tramit.TramitQueryServiceAdapter;
+import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
 
 public class TramitQueryServiceTest {
 
@@ -24,12 +27,13 @@ public class TramitQueryServiceTest {
     @Before
     public void setup() {
         rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.WS);
+        CertificadoUtil.autentificar("contrasena", "storerolsac.jks");
     }
 
     @Test
     public void getNumDocumentsInformatius() {
         TramitCriteria tramitCriteria = new TramitCriteria();
-        tramitCriteria.setId("627586");
+        tramitCriteria.setId("1381046");
         try {
             TramitQueryServiceAdapter tramit = rolsacQS.obtenirTramit(tramitCriteria);
             Assert.assertNotNull(tramit);
@@ -43,12 +47,12 @@ public class TramitQueryServiceTest {
     @Test
     public void getNumFormularis() {
         TramitCriteria tramitCriteria = new TramitCriteria();
-        tramitCriteria.setId("627586");
+        tramitCriteria.setId("1381046");
         try {
             TramitQueryServiceAdapter tramit = rolsacQS.obtenirTramit(tramitCriteria);
             Assert.assertNotNull(tramit);
             int numFormularis = tramit.getNumFormularis();        
-            Assert.assertTrue(numFormularis == 2);
+            Assert.assertTrue(numFormularis == 1);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -57,12 +61,12 @@ public class TramitQueryServiceTest {
     @Test
     public void getNumTaxes() {
         TramitCriteria tramitCriteria = new TramitCriteria();
-        tramitCriteria.setId("636282");
+        tramitCriteria.setId("1381046");
         try {
             TramitQueryServiceAdapter tramit = rolsacQS.obtenirTramit(tramitCriteria);
             Assert.assertNotNull(tramit);
             int numTaxes = tramit.getNumTaxes();        
-            Assert.assertTrue(numTaxes == 2);
+            Assert.assertTrue(numTaxes == 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -71,7 +75,7 @@ public class TramitQueryServiceTest {
     @Test
     public void obtenirDocumentsInformatius() {
         TramitCriteria tramitCriteria = new TramitCriteria();
-        tramitCriteria.setId("622965");
+        tramitCriteria.setId("1381046");
         try {
             TramitQueryServiceAdapter tramit = rolsacQS.obtenirTramit(tramitCriteria);
             Assert.assertNotNull(tramit);
@@ -85,12 +89,12 @@ public class TramitQueryServiceTest {
     @Test
     public void obtenirFormularis() {
         TramitCriteria tramitCriteria = new TramitCriteria();
-        tramitCriteria.setId("622965");
+        tramitCriteria.setId("1381046");
         try {
             TramitQueryServiceAdapter tramit = rolsacQS.obtenirTramit(tramitCriteria);
             Assert.assertNotNull(tramit);
             List<DocumentTramitQueryServiceAdapter> listDocumentTramitQueryServiceAdapter = tramit.llistarFormularis(new DocumentTramitCriteria());     
-            Assert.assertTrue(listDocumentTramitQueryServiceAdapter.size() == 2);
+            Assert.assertTrue(listDocumentTramitQueryServiceAdapter.size() == 1);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -99,12 +103,40 @@ public class TramitQueryServiceTest {
     @Test
     public void llistarTaxes() {
         TramitCriteria tramitCriteria = new TramitCriteria();
-        tramitCriteria.setId("627587");
+        tramitCriteria.setId("1381046");
         try {
             TramitQueryServiceAdapter tramit = rolsacQS.obtenirTramit(tramitCriteria);
             Assert.assertNotNull(tramit);
             List<TaxaQueryServiceAdapter> listTaxaQueryServiceAdapter = tramit.llistarTaxes(new TaxaCriteria());
-            Assert.assertTrue(listTaxaQueryServiceAdapter.size() == 1);
+            Assert.assertTrue(listTaxaQueryServiceAdapter.size() == 0);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
+    }
+    
+    @Test
+    public void obtenirProcediment() {
+        TramitCriteria tramitCriteria = new TramitCriteria();
+        tramitCriteria.setId("1381046");
+        try {
+            TramitQueryServiceAdapter tramit = rolsacQS.obtenirTramit(tramitCriteria);
+            Assert.assertNotNull(tramit);
+            ProcedimentQueryServiceAdapter ProcedimentQueryServiceAdapter = tramit.obtenirProcediment();
+            Assert.assertTrue(ProcedimentQueryServiceAdapter.getId() == 591289);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
+    }
+    
+    @Test
+    public void obtenirOrganCompetent() {
+        TramitCriteria tramitCriteria = new TramitCriteria();
+        tramitCriteria.setId("1381046");
+        try {
+            TramitQueryServiceAdapter tramit = rolsacQS.obtenirTramit(tramitCriteria);
+            Assert.assertNotNull(tramit);
+            UnitatAdministrativaQueryServiceAdapter unitatAdministrativaQueryServiceAdapter = tramit.obtenirOrganCompetent();
+            Assert.assertTrue(unitatAdministrativaQueryServiceAdapter.getId() == 676634);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }

@@ -8,6 +8,7 @@ import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
+import es.caib.rolsac.api.v2.general.CertificadoUtil;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaCriteria;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.materia.MateriaQueryServiceAdapter;
@@ -21,12 +22,13 @@ public class IconaMateriaQueryServiceTest {
     @Before
     public void setup() {
         rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.WS);
+        CertificadoUtil.autentificar("contrasena", "storerolsac.jks");
     }
     
     @Test
     public void obtenirMateria(){
         IconaMateriaCriteria imCriteria = new IconaMateriaCriteria();
-        imCriteria.setId("635655");
+        imCriteria.setId("44820");
         try {
             IconaMateriaQueryServiceAdapter ima = rolsacQS.obtenirIconaMateria(imCriteria);
             Assert.assertNotNull(ima);
@@ -40,7 +42,7 @@ public class IconaMateriaQueryServiceTest {
     @Test
     public void obtenirPerfil(){
         IconaMateriaCriteria imCriteria = new IconaMateriaCriteria();
-        imCriteria.setId("635655");
+        imCriteria.setId("44820");
         try {
             IconaMateriaQueryServiceAdapter ima = rolsacQS.obtenirIconaMateria(imCriteria);
             Assert.assertNotNull(ima);
@@ -54,7 +56,7 @@ public class IconaMateriaQueryServiceTest {
     @Test
     public void obtenirIcona(){
         IconaMateriaCriteria imCriteria = new IconaMateriaCriteria();
-        imCriteria.setId("635655");
+        imCriteria.setId("44820");
         try {
             IconaMateriaQueryServiceAdapter ima = rolsacQS.obtenirIconaMateria(imCriteria);
             Assert.assertNotNull(ima);

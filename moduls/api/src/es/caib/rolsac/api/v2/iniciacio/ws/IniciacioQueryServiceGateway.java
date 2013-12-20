@@ -32,7 +32,7 @@ public class IniciacioQueryServiceGateway
 		 * SI SE HA CREADO EL WS VACIO ES PARA QUE NO DE UN PETE
 		 */
 		
-		System.out.println("WS de iniciación no necesario.");
+		System.out.println("");
 	}
 	
     public List<IniciacioDTO> llistarTipusIniciacions(IniciacioCriteria iniciacioCriteria) throws RemoteException {

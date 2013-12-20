@@ -3413,8 +3413,8 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 			QueryBuilder qb = new QueryBuilder(
 					HQL_UNITAT_MATERIA_ALIAS, 
 					entities, 
-					umCriteria.getIdioma(),
-					HQL_TRADUCCIONES_ALIAS);
+					null,
+					null);
 			qb.extendCriteriaObjects(criteris);
 
 			session = getSession();

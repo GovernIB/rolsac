@@ -1,5 +1,7 @@
 package es.caib.rolsac.api.v2.enllac.ejb;
 
+import java.util.Locale;
+
 import javax.ejb.CreateException;
 
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
@@ -59,6 +61,9 @@ public class EnllacQueryServiceEJB extends HibernateEJB {
     public FitxaDTO obtenirFitxa(long idFitxa) {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
         fitxaCriteria.setId(String.valueOf(idFitxa));
+        if (fitxaCriteria.getIdioma() == null) {
+            fitxaCriteria.setIdioma(Locale.getDefault().getLanguage());
+        }
         RolsacQueryServiceEJB ejb = new RolsacQueryServiceEJB(); 
         return ejb.obtenirFitxa(fitxaCriteria);
     }

@@ -162,7 +162,7 @@ public class ProcedimentQueryServiceEJB extends HibernateEJB {
                 qb = new QueryBuilder("n", entities, null, null, true);
                 qb.extendCriteriaObjects(criteris);                            
                 query = qb.createQuery(session);
-                numResultats = getNumberResults(query);
+                numResultats = numResultats + getNumberResults(query);
             }
             if (tipus == TIPUS_NORMATIVA.TOTES.ordinal() || tipus == TIPUS_NORMATIVA.EXTERNA.ordinal()){
                 entities = new ArrayList<FromClause>();
@@ -171,7 +171,7 @@ public class ProcedimentQueryServiceEJB extends HibernateEJB {
                 qb = new QueryBuilder(HQL_NORMATIVAS_ALIAS, entities, null, null, true);
                 qb.extendCriteriaObjects(criteris);
                 query = qb.createQuery(session);
-                numResultats = getNumberResults(query);
+                numResultats = numResultats + getNumberResults(query);
             }
         } catch (HibernateException e) {
             log.error(e);

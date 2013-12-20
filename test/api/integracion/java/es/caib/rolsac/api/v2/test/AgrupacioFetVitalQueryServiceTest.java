@@ -15,6 +15,7 @@ import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalQueryServiceAdapter;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
+import es.caib.rolsac.api.v2.general.CertificadoUtil;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuQueryServiceAdapter;
 import es.caib.rolsac.api.v2.rolsac.RolsacQueryService;
 
@@ -25,6 +26,7 @@ public class AgrupacioFetVitalQueryServiceTest {
     @Before
     public void setup() {
         rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.WS);
+        CertificadoUtil.autentificar("contrasena", "storerolsac.jks");
     }
     
     @Test
@@ -71,7 +73,7 @@ public class AgrupacioFetVitalQueryServiceTest {
     @Test
     public void getFotografia(){
         AgrupacioFetVitalCriteria agrupacioFetVitalCriteria = new AgrupacioFetVitalCriteria();
-        agrupacioFetVitalCriteria.setId("635670");
+        agrupacioFetVitalCriteria.setId("203");
         try {
             AgrupacioFetVitalQueryServiceAdapter agrupacioFetVital = rolsacQS.obtenirAgrupacioFetVital(agrupacioFetVitalCriteria);
             Assert.assertNotNull(agrupacioFetVital);
@@ -85,7 +87,7 @@ public class AgrupacioFetVitalQueryServiceTest {
     @Test
     public void getIcona(){
         AgrupacioFetVitalCriteria agrupacioFetVitalCriteria = new AgrupacioFetVitalCriteria();
-        agrupacioFetVitalCriteria.setId("634786");
+        agrupacioFetVitalCriteria.setId("203");
         try {
             AgrupacioFetVitalQueryServiceAdapter agrupacioFetVital = rolsacQS.obtenirAgrupacioFetVital(agrupacioFetVitalCriteria);
             Assert.assertNotNull(agrupacioFetVital);
@@ -99,7 +101,7 @@ public class AgrupacioFetVitalQueryServiceTest {
     @Test
     public void getIconaGran(){
         AgrupacioFetVitalCriteria agrupacioFetVitalCriteria = new AgrupacioFetVitalCriteria();
-        agrupacioFetVitalCriteria.setId("634790");
+        agrupacioFetVitalCriteria.setId("203");
         try {
             AgrupacioFetVitalQueryServiceAdapter agrupacioFetVital = rolsacQS.obtenirAgrupacioFetVital(agrupacioFetVitalCriteria);
             Assert.assertNotNull(agrupacioFetVital);
@@ -113,12 +115,12 @@ public class AgrupacioFetVitalQueryServiceTest {
     @Test
     public void obtenirPublicObjectiu(){
         AgrupacioFetVitalCriteria agrupacioFetVitalCriteria = new AgrupacioFetVitalCriteria();
-        agrupacioFetVitalCriteria.setT_nombre("Conviure en família");
+        agrupacioFetVitalCriteria.setT_nombre("Conviure en famÃ­lia");
         try {
             AgrupacioFetVitalQueryServiceAdapter agrupacioFetVital = rolsacQS.obtenirAgrupacioFetVital(agrupacioFetVitalCriteria);
             Assert.assertNotNull(agrupacioFetVital);
             PublicObjectiuQueryServiceAdapter publicObjectiu = agrupacioFetVital.obtenirPublicObjectiu();
-            Assert.assertTrue(publicObjectiu.getCodigoEstandar().equals("PERSONES"));
+            Assert.assertTrue(publicObjectiu.getCodigoEstandar().equals("EMPRESES"));
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }

@@ -9,6 +9,7 @@ import org.junit.Test;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
+import es.caib.rolsac.api.v2.general.CertificadoUtil;
 import es.caib.rolsac.api.v2.normativa.NormativaCriteria;
 import es.caib.rolsac.api.v2.normativa.NormativaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.rolsac.RolsacQueryService;
@@ -22,6 +23,7 @@ public class TipusQueryServiceTest {
     @Before
     public void setup() {
         rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.WS);
+        CertificadoUtil.autentificar("contrasena", "storerolsac.jks");
     }
 
     @Test
@@ -32,7 +34,7 @@ public class TipusQueryServiceTest {
             TipusQueryServiceAdapter tipus = rolsacQS.obtenirTipus(tipusCriteria);
             Assert.assertNotNull(tipus);
             int numNormatives = tipus.getNumNormatives();        
-            Assert.assertTrue(numNormatives == 11);
+            Assert.assertTrue(numNormatives > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -41,12 +43,12 @@ public class TipusQueryServiceTest {
     @Test
     public void obtenirNumNormativaLocals() {
         TipusCriteria tipusCriteria = new TipusCriteria();
-        tipusCriteria.setId("4");
+        tipusCriteria.setId("16");
         try {
             TipusQueryServiceAdapter tipus = rolsacQS.obtenirTipus(tipusCriteria);
             Assert.assertNotNull(tipus);
             int numNormatives = tipus.getNumNormativesLocals();     
-            Assert.assertTrue(numNormatives == 361);
+            Assert.assertTrue(numNormatives == 11);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -55,12 +57,12 @@ public class TipusQueryServiceTest {
     @Test
     public void obtenirNumNormativaExternes() {
         TipusCriteria tipusCriteria = new TipusCriteria();
-        tipusCriteria.setId("3");
+        tipusCriteria.setId("16");
         try {
             TipusQueryServiceAdapter tipus = rolsacQS.obtenirTipus(tipusCriteria);
             Assert.assertNotNull(tipus);
             int numNormatives = tipus.getNumNormativesExternes();        
-            Assert.assertTrue(numNormatives == 18);
+            Assert.assertTrue(numNormatives == 1);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -74,7 +76,7 @@ public class TipusQueryServiceTest {
             TipusQueryServiceAdapter tipus = rolsacQS.obtenirTipus(tipusCriteria);
             Assert.assertNotNull(tipus);
             NormativaCriteria normativaCriteria = new NormativaCriteria();
-            normativaCriteria.setT_titulo("%Etiqueta EcolÚgica comunit‡ria%");
+            normativaCriteria.setT_titulo("%Etiqueta Ecol√≤gica comunit√†ria%");
             List<NormativaQueryServiceAdapter> listNormativaQueryServiceAdapter = tipus.llistarNormatives(normativaCriteria);
             Assert.assertTrue(listNormativaQueryServiceAdapter.size() == 1);
         } catch (QueryServiceException e) {

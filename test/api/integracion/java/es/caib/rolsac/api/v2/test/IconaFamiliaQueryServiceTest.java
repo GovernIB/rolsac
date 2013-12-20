@@ -9,6 +9,7 @@ import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.familia.FamiliaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
+import es.caib.rolsac.api.v2.general.CertificadoUtil;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.perfil.PerfilQueryServiceAdapter;
@@ -21,12 +22,13 @@ public class IconaFamiliaQueryServiceTest {
     @Before
     public void setup() {
         rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.WS);
+        CertificadoUtil.autentificar("contrasena", "storerolsac.jks");
     }
     
     @Test
-    public void obtenirFamilia(){
+    public void obtenirFamilia() {
         IconaFamiliaCriteria ifCriteria = new IconaFamiliaCriteria();
-        ifCriteria.setId("635257");
+        ifCriteria.setId("836662");
         try {
             IconaFamiliaQueryServiceAdapter ifam = rolsacQS.obtenirIconaFamilia(ifCriteria);
             Assert.assertNotNull(ifam);
@@ -38,9 +40,9 @@ public class IconaFamiliaQueryServiceTest {
     }
     
     @Test
-    public void obtenirPerfil(){
+    public void obtenirPerfil() {
         IconaFamiliaCriteria ifCriteria = new IconaFamiliaCriteria();
-        ifCriteria.setId("635257");
+        ifCriteria.setId("836662");
         try {
             IconaFamiliaQueryServiceAdapter ifam = rolsacQS.obtenirIconaFamilia(ifCriteria);
             Assert.assertNotNull(ifam);
@@ -52,9 +54,9 @@ public class IconaFamiliaQueryServiceTest {
     }
 
     @Test
-    public void obtenirIcona(){
+    public void obtenirIcona() {
         IconaFamiliaCriteria ifCriteria = new IconaFamiliaCriteria();
-        ifCriteria.setId("635257");
+        ifCriteria.setId("836662");
         try {
             IconaFamiliaQueryServiceAdapter ifam = rolsacQS.obtenirIconaFamilia(ifCriteria);
             Assert.assertNotNull(ifam);

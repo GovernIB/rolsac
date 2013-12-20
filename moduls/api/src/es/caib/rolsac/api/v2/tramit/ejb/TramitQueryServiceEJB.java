@@ -2,6 +2,7 @@ package es.caib.rolsac.api.v2.tramit.ejb;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.ejb.CreateException;
 
@@ -165,6 +166,9 @@ public class TramitQueryServiceEJB extends HibernateEJB {
     public ProcedimentDTO obtenirProcediment(long idProc) {
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
         procedimentCriteria.setId(String.valueOf(idProc));
+        if (procedimentCriteria.getIdioma() == null) {
+            procedimentCriteria.setIdioma(Locale.getDefault().getLanguage());
+        }
         RolsacQueryServiceEJB rolsacEJB = new RolsacQueryServiceEJB();
         return rolsacEJB.obtenirProcediment(procedimentCriteria);
     }

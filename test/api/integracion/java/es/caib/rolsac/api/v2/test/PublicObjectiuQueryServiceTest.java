@@ -13,6 +13,7 @@ import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
+import es.caib.rolsac.api.v2.general.CertificadoUtil;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
@@ -26,10 +27,11 @@ public class PublicObjectiuQueryServiceTest {
     @Before
     public void setup() {
         rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.WS);
+        CertificadoUtil.autentificar("contrasena", "storerolsac.jks");
     }
     
     @Test
-    public void getNumTramits() {
+    public void getNumAgrupacionsFV() {
         PublicObjectiuCriteria poCriteria = new PublicObjectiuCriteria();
         poCriteria.setId("200");
         try {
@@ -43,7 +45,7 @@ public class PublicObjectiuQueryServiceTest {
     }
     
     @Test
-    public void llistarTramits() {
+    public void llistarAgrupacionsFV() {
         PublicObjectiuCriteria poCriteria = new PublicObjectiuCriteria();
         poCriteria.setId("200");
         try {
@@ -64,7 +66,7 @@ public class PublicObjectiuQueryServiceTest {
             PublicObjectiuQueryServiceAdapter po = rolsacQS.obtenirPublicObjectiu(poCriteria);
             Assert.assertNotNull(po);
             List<ProcedimentQueryServiceAdapter> procediments = po.llistarProcediments(new ProcedimentCriteria());
-            Assert.assertTrue(procediments.size() == 3);
+            Assert.assertTrue(procediments.size() > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -77,8 +79,10 @@ public class PublicObjectiuQueryServiceTest {
         try {
             PublicObjectiuQueryServiceAdapter po = rolsacQS.obtenirPublicObjectiu(poCriteria);
             Assert.assertNotNull(po);
-            List<FitxaQueryServiceAdapter> fitxes = po.llistarFitxes(new FitxaCriteria());
-            Assert.assertTrue(fitxes.size() == 1);
+            FitxaCriteria fitxaCriteria = new FitxaCriteria();
+            fitxaCriteria.setIdioma("ca");
+            List<FitxaQueryServiceAdapter> fitxes = po.llistarFitxes(fitxaCriteria);
+            Assert.assertTrue(fitxes.size() > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }

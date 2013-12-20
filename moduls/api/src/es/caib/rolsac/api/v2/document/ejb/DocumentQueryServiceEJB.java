@@ -1,5 +1,7 @@
 package es.caib.rolsac.api.v2.document.ejb;
 
+import java.util.Locale;
+
 import javax.ejb.CreateException;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
@@ -45,6 +47,9 @@ public class DocumentQueryServiceEJB extends HibernateEJB {
     public FitxaDTO obtenirFitxa(long idFitxa) {
         FitxaCriteria criteria = new FitxaCriteria();
         criteria.setId(String.valueOf(idFitxa));
+        if (criteria.getIdioma() == null) {
+            criteria.setIdioma(Locale.getDefault().getLanguage());
+        }
         RolsacQueryServiceEJB ejb = new RolsacQueryServiceEJB(); 
         return ejb.obtenirFitxa(criteria);
     }
@@ -60,6 +65,9 @@ public class DocumentQueryServiceEJB extends HibernateEJB {
     public ProcedimentDTO obtenirProcediment(long idProc) {
         ProcedimentCriteria criteria = new ProcedimentCriteria();
         criteria.setId(String.valueOf(idProc));
+        if (criteria.getIdioma() == null) {
+            criteria.setIdioma(Locale.getDefault().getLanguage());
+        }
         RolsacQueryServiceEJB ejb = new RolsacQueryServiceEJB(); 
         return ejb.obtenirProcediment(criteria);
     }

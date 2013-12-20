@@ -11,6 +11,7 @@ import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
+import es.caib.rolsac.api.v2.general.CertificadoUtil;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
 import es.caib.rolsac.api.v2.rolsac.RolsacQueryService;
 
@@ -20,13 +21,14 @@ public class DocumentQueryServiceTest {
 
     @Before
     public void setup() {
-        rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.EJB);
+        rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.WS);
+        CertificadoUtil.autentificar("contrasena", "storerolsac.jks");
     }
     
     @Test
     public void recuperarFitxa() {
         DocumentCriteria criteria = new DocumentCriteria();
-        criteria.setId("241559");
+        criteria.setId("1380750");
         try {
             DocumentQueryServiceAdapter doc = rolsacQS.obtenirDocument(criteria);
             Assert.assertNotNull(doc);
@@ -40,7 +42,7 @@ public class DocumentQueryServiceTest {
     @Test
     public void recuperarProcediment() {
         DocumentCriteria criteria = new DocumentCriteria();
-        criteria.setId("323498");
+        criteria.setId("1381260");
         try {
             DocumentQueryServiceAdapter doc = rolsacQS.obtenirDocument(criteria);
             Assert.assertNotNull(doc);
@@ -54,7 +56,7 @@ public class DocumentQueryServiceTest {
     @Test
     public void recuperarArxiu() {
         DocumentCriteria criteria = new DocumentCriteria();
-        criteria.setId("241559");
+        criteria.setId("1381260");
         try {
             DocumentQueryServiceAdapter doc = rolsacQS.obtenirDocument(criteria);
             Assert.assertNotNull(doc);

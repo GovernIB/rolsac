@@ -1,25 +1,10 @@
 package es.caib.rolsac.back2.controller;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import org.easymock.EasyMock;
-import org.ibit.rol.sac.model.Normativa;
-import org.ibit.rol.sac.model.NormativaExterna;
-import org.ibit.rol.sac.model.NormativaLocal;
-import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.powermock.api.easymock.PowerMock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.springframework.mock.web.MockHttpServletRequest;
 
 
 @RunWith(PowerMockRunner.class)
@@ -46,8 +31,8 @@ public class NormativaBackControllerTest {
 	 * ALESHORES: es retorna
 	 * I: 
 	 */
-	@Test
-	public void llistatNormatives_run1() throws DelegateException {
+//	@Test
+//	public void llistatNormatives_run1() throws DelegateException {
 
 		//PARA testear el listado de normativas
 		
@@ -60,7 +45,7 @@ public class NormativaBackControllerTest {
 		//se llama al metodo
 		//se compara el resultado
 		
-		
+/*		
 		String[][] parametres = {
 				{"id","id_1"}, 
 				{"data","01/01/2020"},
@@ -161,7 +146,7 @@ public class NormativaBackControllerTest {
 		assertEquals(norms[0].length,llistat.get("total"));
 		
 	}
-
+*/
 	
 	
 }

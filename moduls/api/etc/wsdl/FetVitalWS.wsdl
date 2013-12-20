@@ -49,13 +49,13 @@
 	<wsdl:message name="getNumFitxesRequest">
 		<wsdl:part name="in0" type="xsd:long" />
 	</wsdl:message>
-	<wsdl:message name="getFotografiaRequest">
+	<wsdl:message name="getDistribuciCompetencialRequest">
 		<wsdl:part name="in0" type="xsd:long" />
 	</wsdl:message>
 	<wsdl:message name="getNumFitxesResponse">
 		<wsdl:part name="getNumFitxesReturn" type="xsd:int" />
 	</wsdl:message>
-	<wsdl:message name="getIconaRequest">
+	<wsdl:message name="getNormativaRequest">
 		<wsdl:part name="in0" type="xsd:long" />
 	</wsdl:message>
 	<wsdl:message name="getNumFetsVitalsAgrupacionsFVResponse">
@@ -72,8 +72,8 @@
 		<wsdl:part name="in0" type="xsd:long" />
 		<wsdl:part name="in1" type="tns5:AgrupacioFetVitalCriteria" />
 	</wsdl:message>
-	<wsdl:message name="getIconaGranResponse">
-		<wsdl:part name="getIconaGranReturn" type="tns1:ArxiuDTO" />
+	<wsdl:message name="getContingutResponse">
+		<wsdl:part name="getContingutReturn" type="tns1:ArxiuDTO" />
 	</wsdl:message>
 	<wsdl:message name="getNumProcedimentsLocalsRequest">
 		<wsdl:part name="in0" type="xsd:long" />
@@ -85,25 +85,25 @@
 	<wsdl:message name="llistarFetsVitalsAgrupacionsFVResponse">
 		<wsdl:part name="llistarFetsVitalsAgrupacionsFVReturn" type="impl:ArrayOf_xsd_anyType" />
 	</wsdl:message>
-	<wsdl:message name="getIconaGranRequest">
+	<wsdl:message name="getContingutRequest">
 		<wsdl:part name="in0" type="xsd:long" />
 	</wsdl:message>
-	<wsdl:message name="getFotografiaResponse">
-		<wsdl:part name="getFotografiaReturn" type="tns1:ArxiuDTO" />
+	<wsdl:message name="getDistribuciCompetencialResponse">
+		<wsdl:part name="getDistribuciCompetencialReturn" type="tns1:ArxiuDTO" />
 	</wsdl:message>
 	<wsdl:message name="getNumFetsVitalsAgrupacionsFVRequest">
 		<wsdl:part name="in0" type="xsd:long" />
 	</wsdl:message>
-	<wsdl:message name="getIconaResponse">
-		<wsdl:part name="getIconaReturn" type="tns1:ArxiuDTO" />
+	<wsdl:message name="getNormativaResponse">
+		<wsdl:part name="getNormativaReturn" type="tns1:ArxiuDTO" />
 	</wsdl:message>
 	<wsdl:message name="llistarProcedimentsLocalsResponse">
 		<wsdl:part name="llistarProcedimentsLocalsReturn" type="impl:ArrayOf_xsd_anyType" />
 	</wsdl:message>
 	<wsdl:portType name="FetVitalQueryServiceEJBRemote">
-		<wsdl:operation name="getIcona" parameterOrder="in0">
-			<wsdl:input message="impl:getIconaRequest" name="getIconaRequest" />
-			<wsdl:output message="impl:getIconaResponse" name="getIconaResponse" />
+		<wsdl:operation name="getNormativa" parameterOrder="in0">
+			<wsdl:input message="impl:getNormativaRequest" name="getNormativaRequest" />
+			<wsdl:output message="impl:getNormativaResponse" name="getNormativaResponse" />
 		</wsdl:operation>
 		<wsdl:operation name="llistarFitxes" parameterOrder="in0 in1">
 			<wsdl:input message="impl:llistarFitxesRequest" name="llistarFitxesRequest" />
@@ -141,25 +141,25 @@
 			<wsdl:output message="impl:getNumFetsVitalsAgrupacionsFVResponse"
 				name="getNumFetsVitalsAgrupacionsFVResponse" />
 		</wsdl:operation>
-		<wsdl:operation name="getFotografia" parameterOrder="in0">
-			<wsdl:input message="impl:getFotografiaRequest" name="getFotografiaRequest" />
-			<wsdl:output message="impl:getFotografiaResponse" name="getFotografiaResponse" />
+		<wsdl:operation name="getDistribuciCompetencial" parameterOrder="in0">
+			<wsdl:input message="impl:getDistribuciCompetencialRequest" name="getDistribuciCompetencialRequest" />
+			<wsdl:output message="impl:getDistribuciCompetencialResponse" name="getDistribuciCompetencialResponse" />
 		</wsdl:operation>
-		<wsdl:operation name="getIconaGran" parameterOrder="in0">
-			<wsdl:input message="impl:getIconaGranRequest" name="getIconaGranRequest" />
-			<wsdl:output message="impl:getIconaGranResponse" name="getIconaGranResponse" />
+		<wsdl:operation name="getContingut" parameterOrder="in0">
+			<wsdl:input message="impl:getContingutRequest" name="getContingutRequest" />
+			<wsdl:output message="impl:getContingutResponse" name="getContingutResponse" />
 		</wsdl:operation>
 	</wsdl:portType>
 	<wsdl:binding name="FetVitalWSSoapBinding" type="impl:FetVitalQueryServiceEJBRemote">
 		<wsdlsoap:binding style="rpc"
 			transport="http://schemas.xmlsoap.org/soap/http" />
-		<wsdl:operation name="getIcona">
+		<wsdl:operation name="getNormativa">
 			<wsdlsoap:operation soapAction="" />
-			<wsdl:input name="getIconaRequest">
+			<wsdl:input name="getNormativaRequest">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
 					namespace="http://intf.ejb.fetVital.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:input>
-			<wsdl:output name="getIconaResponse">
+			<wsdl:output name="getNormativaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
 					namespace="http://ws.fetVital.v2.api.rolsac.caib.es"
 					use="encoded" />
@@ -237,25 +237,25 @@
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
-		<wsdl:operation name="getFotografia">
+		<wsdl:operation name="getDistribuciCompetencial">
 			<wsdlsoap:operation soapAction="" />
-			<wsdl:input name="getFotografiaRequest">
+			<wsdl:input name="getDistribuciCompetencialRequest">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
 					namespace="http://intf.ejb.fetVital.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:input>
-			<wsdl:output name="getFotografiaResponse">
+			<wsdl:output name="getDistribuciCompetencialResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
 					namespace="http://ws.fetVital.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
-		<wsdl:operation name="getIconaGran">
+		<wsdl:operation name="getContingut">
 			<wsdlsoap:operation soapAction="" />
-			<wsdl:input name="getIconaGranRequest">
+			<wsdl:input name="getContingutRequest">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
 					namespace="http://intf.ejb.fetVital.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:input>
-			<wsdl:output name="getIconaGranResponse">
+			<wsdl:output name="getContingutResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
 					namespace="http://ws.fetVital.v2.api.rolsac.caib.es"
 					use="encoded" />

@@ -221,13 +221,16 @@ public class NormativaQueryServiceEJB extends HibernateEJB {
         try {
             session = getSession();
             
-            Query query = session.createQuery("SELECT COUNT(DISTINCT nafec) FROM NormativaLocal AS n LEFT JOIN n.afectantes AS afec LEFT JOIN afec.afectante AS nafec WHERE n.id = :id ");
+            Query query = session.createQuery("SELECT DISTINCT nafec FROM NormativaLocal AS n, n.traducciones AS trad LEFT JOIN n.afectantes AS afec LEFT JOIN afec.afectante AS nafec WHERE INDEX(trad) = :idioma and n.id = :id ");
+            query.setParameter("idioma", BasicUtils.getDefaultLanguage());
             query.setParameter("id", id);
-            numResultats = ((Integer) query.uniqueResult()).intValue();                    
-
-            query = session.createQuery("SELECT COUNT(DISTINCT nafec) FROM NormativaExterna AS n LEFT JOIN n.afectantes AS afec LEFT JOIN afec.afectante AS nafec WHERE n.id = :id ");
+            numResultats = query.list().size();   
+            
+            query = session.createQuery("SELECT DISTINCT nafec FROM NormativaExterna AS n, n.traducciones AS trad LEFT JOIN n.afectantes AS afec LEFT JOIN afec.afectante AS nafec WHERE INDEX(trad) = :idioma and n.id = :id ");
+            query.setParameter("idioma", BasicUtils.getDefaultLanguage());
             query.setParameter("id", id);
-            numResultats = getNumberResults(query);
+            numResultats = numResultats + query.list().size();
+            
         } catch (HibernateException e) {
             log.error(e);
         } finally {

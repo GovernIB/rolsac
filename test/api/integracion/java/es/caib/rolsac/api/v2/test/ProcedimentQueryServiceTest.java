@@ -13,6 +13,7 @@ import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalQueryServiceAdapter;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
+import es.caib.rolsac.api.v2.general.CertificadoUtil;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
 import es.caib.rolsac.api.v2.materia.MateriaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.normativa.NormativaCriteria;
@@ -31,13 +32,15 @@ public class ProcedimentQueryServiceTest {
 
     @Before
     public void setup() {
-        rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.EJB);
+        rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.WS);
+        CertificadoUtil.autentificar("contrasena", "storerolsac.jks");
     }
 
     @Test
     public void getNumTramits() {
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
         procedimentCriteria.setId("124506");
+        procedimentCriteria.setIdioma("ca");
         try {
             ProcedimentQueryServiceAdapter procediment = rolsacQS.obtenirProcediment(procedimentCriteria);
             Assert.assertNotNull(procediment);
@@ -51,12 +54,13 @@ public class ProcedimentQueryServiceTest {
     @Test
     public void getNumNormatives() {
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
-        procedimentCriteria.setId("627689");
+        procedimentCriteria.setId("1370539");
+        procedimentCriteria.setIdioma("ca");
         try {
             ProcedimentQueryServiceAdapter procediment = rolsacQS.obtenirProcediment(procedimentCriteria);
             Assert.assertNotNull(procediment);
             int numNormatives = procediment.getNumNormatives();
-            Assert.assertTrue(numNormatives == 3);
+            Assert.assertTrue(numNormatives > 0);
         } catch (QueryServiceException e) {
             e.printStackTrace();
             Assert.fail(e.toString());
@@ -66,12 +70,13 @@ public class ProcedimentQueryServiceTest {
     @Test
     public void getNumNormativesLocals() {
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
-        procedimentCriteria.setId("627689");
+        procedimentCriteria.setId("1370539");
+        procedimentCriteria.setIdioma("ca");
         try {
             ProcedimentQueryServiceAdapter procediment = rolsacQS.obtenirProcediment(procedimentCriteria);
             Assert.assertNotNull(procediment);
             int numNormatives = procediment.getNumNormativesLocals();
-            Assert.assertTrue(numNormatives == 2);
+            Assert.assertTrue(numNormatives > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -80,12 +85,13 @@ public class ProcedimentQueryServiceTest {
     @Test
     public void getNumNormativesExternes() {
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
-        procedimentCriteria.setId("627689");
+        procedimentCriteria.setId("1370539");
+        procedimentCriteria.setIdioma("ca");
         try {
             ProcedimentQueryServiceAdapter procediment = rolsacQS.obtenirProcediment(procedimentCriteria);
             Assert.assertNotNull(procediment);
             int numNormatives = procediment.getNumNormativesExternes();
-            Assert.assertTrue(numNormatives == 1);
+            Assert.assertTrue(numNormatives > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -95,12 +101,12 @@ public class ProcedimentQueryServiceTest {
     public void getNumMateries() {
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
         procedimentCriteria.setId("299349");
+        procedimentCriteria.setIdioma("ca");
         try {
             ProcedimentQueryServiceAdapter procediment = rolsacQS.obtenirProcediment(procedimentCriteria);
             Assert.assertNotNull(procediment);
             int numTramits = procediment.getNumMateries();
             Assert.assertTrue(numTramits == 9);
-
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -109,12 +115,13 @@ public class ProcedimentQueryServiceTest {
     @Test
     public void getNumFetsVitals() {
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
-        procedimentCriteria.setId("635901");
+        procedimentCriteria.setId("1370539");
+        procedimentCriteria.setIdioma("ca");
         try {
             ProcedimentQueryServiceAdapter procediment = rolsacQS.obtenirProcediment(procedimentCriteria);
             Assert.assertNotNull(procediment);
             int numTramits = procediment.getNumFetsVitals();
-            Assert.assertTrue(numTramits == 2);
+            Assert.assertTrue(numTramits > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -124,6 +131,7 @@ public class ProcedimentQueryServiceTest {
     public void getNumDocuments() {
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
         procedimentCriteria.setId("357915");
+        procedimentCriteria.setIdioma("ca");
         try {
             ProcedimentQueryServiceAdapter procediment = rolsacQS.obtenirProcediment(procedimentCriteria);
             Assert.assertNotNull(procediment);
@@ -138,11 +146,11 @@ public class ProcedimentQueryServiceTest {
     public void llistarTramits() {
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
         procedimentCriteria.setId("108591");
+        procedimentCriteria.setIdioma("ca");
         try {
             ProcedimentQueryServiceAdapter procediment = rolsacQS.obtenirProcediment(procedimentCriteria);
             Assert.assertNotNull(procediment);
-            List<TramitQueryServiceAdapter> listTramitQueryServiceAdapter = procediment
-                    .llistarTramits(new TramitCriteria());
+            List<TramitQueryServiceAdapter> listTramitQueryServiceAdapter = procediment.llistarTramits(new TramitCriteria());
             Assert.assertTrue(listTramitQueryServiceAdapter.size() == 3);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
@@ -152,7 +160,8 @@ public class ProcedimentQueryServiceTest {
     @Test
     public void llistarNormatives() {
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
-        procedimentCriteria.setId("471341");
+        procedimentCriteria.setId("1370539");
+        procedimentCriteria.setIdioma("ca");
         try {
             ProcedimentQueryServiceAdapter procediment = rolsacQS.obtenirProcediment(procedimentCriteria);
             Assert.assertNotNull(procediment);
@@ -169,11 +178,11 @@ public class ProcedimentQueryServiceTest {
     public void llistarMateries() {
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
         procedimentCriteria.setId("471341");
+        procedimentCriteria.setIdioma("ca");
         try {
             ProcedimentQueryServiceAdapter procediment = rolsacQS.obtenirProcediment(procedimentCriteria);
             Assert.assertNotNull(procediment);
-            List<MateriaQueryServiceAdapter> listMateriaQueryServiceAdapter = procediment
-                    .llistarMateries(new MateriaCriteria());
+            List<MateriaQueryServiceAdapter> listMateriaQueryServiceAdapter = procediment.llistarMateries(new MateriaCriteria());
             Assert.assertTrue(listMateriaQueryServiceAdapter.size() == 1);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
@@ -183,12 +192,12 @@ public class ProcedimentQueryServiceTest {
     @Test
     public void llistarFetsVitals() {
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
-        procedimentCriteria.setId("636006");
+        procedimentCriteria.setId("1370539");
+        procedimentCriteria.setIdioma("ca");
         try {
             ProcedimentQueryServiceAdapter procediment = rolsacQS.obtenirProcediment(procedimentCriteria);
             Assert.assertNotNull(procediment);
-            List<FetVitalQueryServiceAdapter> listFetVitalQueryServiceAdapter = procediment
-                    .llistarFetsVitals(new FetVitalCriteria());
+            List<FetVitalQueryServiceAdapter> listFetVitalQueryServiceAdapter = procediment.llistarFetsVitals(new FetVitalCriteria());
             Assert.assertTrue(listFetVitalQueryServiceAdapter.size() == 4);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
@@ -198,13 +207,13 @@ public class ProcedimentQueryServiceTest {
     @Test
     public void llistarDocuments() {
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
-        procedimentCriteria.setId("344958");
+        procedimentCriteria.setId("357915");
+        procedimentCriteria.setIdioma("ca");
         try {
             ProcedimentQueryServiceAdapter procediment = rolsacQS.obtenirProcediment(procedimentCriteria);
             Assert.assertNotNull(procediment);
-            List<DocumentQueryServiceAdapter> listDocumentQueryServiceAdapter = procediment
-                    .llistarDocuments(new DocumentCriteria());
-            Assert.assertTrue(listDocumentQueryServiceAdapter.size() == 5);
+            List<DocumentQueryServiceAdapter> listDocumentQueryServiceAdapter = procediment.llistarDocuments(new DocumentCriteria());
+            Assert.assertTrue(listDocumentQueryServiceAdapter.size() == 11);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -213,12 +222,13 @@ public class ProcedimentQueryServiceTest {
     @Test
     public void llistarPublicsObjectius() {
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
-        procedimentCriteria.setId("638506");
+        procedimentCriteria.setId("108591");
+        procedimentCriteria.setIdioma("ca");
         try {
             ProcedimentQueryServiceAdapter procediment = rolsacQS.obtenirProcediment(procedimentCriteria);
             Assert.assertNotNull(procediment);
             List<PublicObjectiuQueryServiceAdapter> listPOQueryServiceAdapter = procediment.llistarPublicsObjectius(new PublicObjectiuCriteria());
-            Assert.assertTrue(listPOQueryServiceAdapter.size() == 4);
+            Assert.assertTrue(listPOQueryServiceAdapter.size() > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }

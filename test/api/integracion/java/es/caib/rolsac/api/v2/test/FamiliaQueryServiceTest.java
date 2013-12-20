@@ -8,9 +8,11 @@ import org.junit.Test;
 
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.familia.FamiliaCriteria;
+import es.caib.rolsac.api.v2.familia.FamiliaDTO;
 import es.caib.rolsac.api.v2.familia.FamiliaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
+import es.caib.rolsac.api.v2.general.CertificadoUtil;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
@@ -24,6 +26,20 @@ public class FamiliaQueryServiceTest {
     @Before
     public void setup() {
         rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.WS);
+        CertificadoUtil.autentificar("contrasena", "storerolsac.jks");
+    }
+    
+    @Test
+    public void adapterTest() {
+        FamiliaDTO dto = new FamiliaDTO();
+        dto.setId((long) 11);
+        FamiliaQueryServiceAdapter adapter = (FamiliaQueryServiceAdapter) BeanUtils.getAdapter("familia", STRATEGY.WS, dto);
+        try {
+            int num = adapter.getNumIcones();
+            Assert.assertTrue(num > 0);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     @Test
@@ -57,7 +73,7 @@ public class FamiliaQueryServiceTest {
     @Test
     public void getNumIcones() {
         FamiliaCriteria fCriteria = new FamiliaCriteria();
-        fCriteria.setId("1");
+        fCriteria.setId("11");
         try {
             FamiliaQueryServiceAdapter f = rolsacQS.obtenirFamilia(fCriteria);
             Assert.assertNotNull(f);
@@ -71,7 +87,7 @@ public class FamiliaQueryServiceTest {
     @Test
     public void llistarIcones() {
         FamiliaCriteria fCriteria = new FamiliaCriteria();
-        fCriteria.setId("1");
+        fCriteria.setId("11");
         try {
             FamiliaQueryServiceAdapter f = rolsacQS.obtenirFamilia(fCriteria);
             Assert.assertNotNull(f);

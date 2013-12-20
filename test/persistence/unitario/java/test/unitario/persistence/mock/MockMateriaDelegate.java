@@ -13,7 +13,7 @@ public class MockMateriaDelegate extends MateriaDelegate {
 	public MockMateriaDelegate() {
 		super();
 	}
-
+/*
 	@Override
 	public Materia obtenerMateriaCE(String codigosEstandarMateria)
 			throws DelegateException {
@@ -46,7 +46,7 @@ public class MockMateriaDelegate extends MateriaDelegate {
 		
 		return materia;
 	}
-
+*/
 	
 	@Override
 	public List listarMaterias() throws DelegateException {

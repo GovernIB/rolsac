@@ -7,6 +7,7 @@ import org.junit.Test;
 import es.caib.rolsac.api.v2.estadistica.EstadisticaInsertService;
 import es.caib.rolsac.api.v2.exception.InsertServiceException;
 import es.caib.rolsac.api.v2.general.BeanUtils;
+import es.caib.rolsac.api.v2.general.CertificadoUtil;
 
 public class EstadisticaInsertServiceTest {
 
@@ -15,7 +16,8 @@ public class EstadisticaInsertServiceTest {
     @Before
     public void setup() {
         //service = (EstadisticaInsertService) BeanUtils.getBean("estadisticaInsertServiceEJBAdapter");
-    	service = (EstadisticaInsertService) BeanUtils.getBean("estadisticaInsertServiceWSAdapter");    	
+    	service = (EstadisticaInsertService) BeanUtils.getBean("estadisticaInsertServiceWSAdapter");
+    	CertificadoUtil.autentificar("contrasena", "storerolsac.jks");
     }
 
     /**
@@ -24,7 +26,7 @@ public class EstadisticaInsertServiceTest {
     @Test
     public void grabarEstadisticaFitxa() {
         try {
-            Assert.assertTrue(service.gravarEstadisticaFitxa(206971));
+            Assert.assertTrue(service.gravarEstadisticaFitxa(137959));
         } catch (InsertServiceException e) {
             Assert.fail(e.toString());
         }

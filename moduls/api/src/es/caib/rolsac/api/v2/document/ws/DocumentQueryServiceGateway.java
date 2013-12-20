@@ -23,7 +23,7 @@ public class DocumentQueryServiceGateway {
 			stub = new DocumentWSSoapBindingStub(
 					new URL(
 							ConfiguracioServeis
-									.getUrlServei(ConfiguracioServeis.NOM_SERVEI_AGRUPACIO_FET_VITAL)),
+									.getUrlServei(ConfiguracioServeis.NOM_SERVEI_DOCUMENT)),
 					null);
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block

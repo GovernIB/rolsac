@@ -10,6 +10,7 @@ import es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria;
 import es.caib.rolsac.api.v2.fitxaUA.FitxaUAQueryServiceAdapter;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
+import es.caib.rolsac.api.v2.general.CertificadoUtil;
 import es.caib.rolsac.api.v2.rolsac.RolsacQueryService;
 import es.caib.rolsac.api.v2.seccio.SeccioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
@@ -21,17 +22,18 @@ public class FitxaUAQueryServiceTest {
     @Before
     public void setup() {
         rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.WS);
+        CertificadoUtil.autentificar("contrasena", "storerolsac.jks");
     }
 
     @Test
     public void obtenirFitxa() {
         FitxaUACriteria fitxaUACriteria = new FitxaUACriteria();
-        fitxaUACriteria.setId("164707");
+        fitxaUACriteria.setId("1380732");
         try {
             FitxaUAQueryServiceAdapter fitxaUA = rolsacQS.obtenirFitxaUA(fitxaUACriteria);
             Assert.assertNotNull(fitxaUA);
             FitxaQueryServiceAdapter fitxa = fitxaUA.obtenirFitxa();
-            Assert.assertTrue(fitxa.getId() == 164704);
+            Assert.assertTrue(fitxa.getId() == 1376642);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }

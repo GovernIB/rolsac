@@ -10,6 +10,7 @@ import es.caib.rolsac.api.v2.formulari.FormulariCriteria;
 import es.caib.rolsac.api.v2.formulari.FormulariQueryServiceAdapter;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
+import es.caib.rolsac.api.v2.general.CertificadoUtil;
 import es.caib.rolsac.api.v2.rolsac.RolsacQueryService;
 import es.caib.rolsac.api.v2.tramit.TramitQueryServiceAdapter;
 
@@ -20,6 +21,7 @@ public class FormulariQueryServiceTest {
     @Before
     public void setup() {
         rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.WS);
+        CertificadoUtil.autentificar("contrasena", "storerolsac.jks");
     }
 
     @Test
@@ -58,7 +60,7 @@ public class FormulariQueryServiceTest {
             FormulariQueryServiceAdapter formulari = rolsacQS.obtenirFormulari(formulariCriteria);
             Assert.assertNotNull(formulari);
             TramitQueryServiceAdapter tramitQueryServiceAdapter = formulari.obtenirTramit();
-            Assert.assertTrue(tramitQueryServiceAdapter.getNombre().equals("Comunicació de nou curs"));
+            Assert.assertTrue(tramitQueryServiceAdapter.getNombre().equals("ComunicaciÃ³ de nou curs"));
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }

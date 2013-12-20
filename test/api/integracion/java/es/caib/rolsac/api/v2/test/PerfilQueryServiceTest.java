@@ -9,6 +9,7 @@ import org.junit.Test;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
+import es.caib.rolsac.api.v2.general.CertificadoUtil;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaCriteria;
@@ -24,12 +25,13 @@ public class PerfilQueryServiceTest {
     @Before
     public void setup() {
         rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.WS);
+        CertificadoUtil.autentificar("contrasena", "storerolsac.jks");
     }
 
     @Test
     public void llistarIconesFamilia() {
         PerfilCriteria pCriteria = new PerfilCriteria();
-        pCriteria.setId("634701");
+        pCriteria.setId("1375317");
         try {
             PerfilQueryServiceAdapter p = rolsacQS.obtenirPerfil(pCriteria);
             Assert.assertNotNull(p);
@@ -43,7 +45,7 @@ public class PerfilQueryServiceTest {
     @Test
     public void llistarIconesMateria() {
         PerfilCriteria pCriteria = new PerfilCriteria();
-        pCriteria.setId("634701");
+        pCriteria.setId("34380");
         try {
             PerfilQueryServiceAdapter p = rolsacQS.obtenirPerfil(pCriteria);
             Assert.assertNotNull(p);
@@ -57,7 +59,7 @@ public class PerfilQueryServiceTest {
     @Test
     public void getNumIconesFamilia() {
         PerfilCriteria pCriteria = new PerfilCriteria();
-        pCriteria.setId("634701");
+        pCriteria.setId("1375317");
         try {
             PerfilQueryServiceAdapter p = rolsacQS.obtenirPerfil(pCriteria);
             Assert.assertNotNull(p);
@@ -71,7 +73,7 @@ public class PerfilQueryServiceTest {
     @Test
     public void getNumIconesMateria() {
         PerfilCriteria pCriteria = new PerfilCriteria();
-        pCriteria.setId("634701");
+        pCriteria.setId("34380");
         try {
             PerfilQueryServiceAdapter p = rolsacQS.obtenirPerfil(pCriteria);
             Assert.assertNotNull(p);

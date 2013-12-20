@@ -12,6 +12,7 @@ import es.caib.rolsac.api.v2.butlleti.ButlletiQueryServiceAdapter;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
+import es.caib.rolsac.api.v2.general.CertificadoUtil;
 import es.caib.rolsac.api.v2.normativa.NormativaCriteria;
 import es.caib.rolsac.api.v2.normativa.NormativaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
@@ -25,7 +26,8 @@ public class NormativaQueryServiceTest {
 
     @Before
     public void setup() {
-        rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.WS);       
+        rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.WS);
+        CertificadoUtil.autentificar("contrasena", "storerolsac.jks");
     }
 
     @Test
@@ -50,7 +52,7 @@ public class NormativaQueryServiceTest {
             NormativaQueryServiceAdapter normativa = rolsacQS.obtenirNormativa(normativaCriteria);
             Assert.assertNotNull(normativa);
             int numAfectades = normativa.getNumAfectades();
-            Assert.assertTrue(numAfectades == 2);
+            Assert.assertTrue(numAfectades == 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -73,7 +75,7 @@ public class NormativaQueryServiceTest {
     @Test
     public void recuperarNumAfectants() {
         NormativaCriteria normativaCriteria = new NormativaCriteria();
-        normativaCriteria.setId("13216");
+        normativaCriteria.setId("12114");
         try {
             NormativaQueryServiceAdapter normativa = rolsacQS.obtenirNormativa(normativaCriteria);
             Assert.assertNotNull(normativa);
@@ -91,7 +93,9 @@ public class NormativaQueryServiceTest {
         try {
             NormativaQueryServiceAdapter normativa = rolsacQS.obtenirNormativa(normativaCriteria);
             Assert.assertNotNull(normativa);
-            List<ProcedimentQueryServiceAdapter> listProcedimentQueryServiceAdapter = normativa.llistarProcediments(new ProcedimentCriteria());
+            ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
+            procedimentCriteria.setVisible(false);
+            List<ProcedimentQueryServiceAdapter> listProcedimentQueryServiceAdapter = normativa.llistarProcediments(procedimentCriteria);
             Assert.assertTrue(listProcedimentQueryServiceAdapter.size() == 2);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
@@ -143,7 +147,7 @@ public class NormativaQueryServiceTest {
     @Test
     public void recuperarArxiuNormativa() {
         NormativaCriteria normativaCriteria = new NormativaCriteria();
-        normativaCriteria.setId("621620");
+        normativaCriteria.setId("1372197");
         try {
             NormativaQueryServiceAdapter normativa = rolsacQS.obtenirNormativa(normativaCriteria);
             Assert.assertNotNull(normativa);
@@ -157,12 +161,12 @@ public class NormativaQueryServiceTest {
     @Test
     public void recuperarAfectacionsAfectants() {
         NormativaCriteria normativaCriteria = new NormativaCriteria();
-        normativaCriteria.setId("75074");
+        normativaCriteria.setId("79579");
         try {
             NormativaQueryServiceAdapter normativa = rolsacQS.obtenirNormativa(normativaCriteria);
             Assert.assertNotNull(normativa);
             List<AfectacioQueryServiceAdapter> llistatAfectantsQueryServiceAdapter = normativa.llistarAfectacionsAfectants();
-            Assert.assertTrue(llistatAfectantsQueryServiceAdapter.size() == 3);
+            Assert.assertTrue(llistatAfectantsQueryServiceAdapter.size() == 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
