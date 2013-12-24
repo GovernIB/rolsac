@@ -36,7 +36,7 @@ $(document).ready(function() {
 	jQuery(".btnVolverDetalleFichas").bind("click", function() { EscriptoriSeccioFitxes.torna(); } );
 
 	jQuery(".btnFinalizarFichas").bind("click",function() { EscriptoriSeccioFitxes.finalizar(); } );
-	
+
 	jQuery('.submenuUA .hijas').click(function(){ $('#escriptori_fitxes').hide() })
 
 	jQuery("#escriptori_fitxes #btnBuscarSeccionesForm").bind("click", function() { 
@@ -89,7 +89,7 @@ function CModulSeccio() {
 	this.mostraFitxes = function(e)  {
 
 		//Mostrar panel de fichas de la seccion actual
-		
+
 		$('#escriptori_fitxes').css('display', 'inline-block');
 		fitxes_seleccionats_elm = escriptori_fitxes_elm.find("div.escriptori_items_seleccionats:first");
 
@@ -98,7 +98,7 @@ function CModulSeccio() {
 		ulFichas = fitxes_seleccionats_elm.find(".listaOrdenable");
 
 		$("#idSeccion").val(idSeccion);
-		EscriptoriSeccioFitxes.listarFichasAsignadas(idSeccion);
+		EscriptoriSeccioFitxes.listarFichasAsignadas(idSeccion, 0, 10);
 
 		ModulSeccions.gestionaFitxes(e);
 
@@ -308,6 +308,7 @@ function CModulSeccio() {
 		$("#cercador #btnLimpiarSeccionesForm").click(function() {
 
 			EscriptoriSeccioFitxes.limpiar();
+			$("#seleccion-fichas").empty();
 
 		});
 	}	
@@ -545,7 +546,7 @@ function CModulSeccio() {
 		// Petición AJAX para guardar estado fichas-seccion-UA.
 		this.guardaEstadoFichasSeccionUA();
 
-		
+
 		return { "numFichas" : numFichas, "idSeccion" : idSeccion};
 
 	}
@@ -575,7 +576,7 @@ function CModulSeccio() {
 		});
 
 		listaFichas += "]";
-		
+
 		$.ajax({
 			type: "POST",
 			url: pagGuardarFitxesUASeccio,
@@ -1326,7 +1327,7 @@ function CEscriptoriSeccioFitxes() {
 		var data = ModulSeccions.finalizarFitxes();
 		var seccion = "#seccio_id_" + data.idSeccion;
 		var texto;
-		
+
 		//Actualiza el número de fichas en la UA.
 		switch (data.numFichas) {
 		case 1: 
@@ -1335,9 +1336,9 @@ function CEscriptoriSeccioFitxes() {
 
 		default:
 			texto = " ($ fitxes)".replace("$", data.numFichas);
-			break;
+		break;
 		}
-		
+
 		$(seccion).parent().find("span").html(texto);
 
 		// Marcamos el modulo como modificado.
@@ -1372,7 +1373,7 @@ function CEscriptoriSeccioFitxes() {
 			escriptori_detall_elm.fadeIn(300, function() {
 
 				// activar
-				modul_seccions_elm.find("a.gestionaSeccions").one( "click", function() { ModulSeccions.gestiona(); } );
+				modul_seccions_elm.find("a.gestionaSeccions").one("click", function() { ModulSeccions.gestiona(); } );
 				modul_seccions_elm.find("a.enllasGestioFitxa").one("click", function() { ModulSeccions.gestionaFitxes(this); } );
 
 			});
@@ -1381,13 +1382,48 @@ function CEscriptoriSeccioFitxes() {
 
 	}
 
-	this.pintarListadoAsignadas = function(data) {
+	this.pintarListadoAsignadas = function(data, pagPag, pagRes, totalRegistros) {
+
+		resultats_total = parseInt(totalRegistros, 10);
+
+		txtT = ( resultats_total > 1 ) ? txtFitxes : txtFitxa;
+
+		ultimaPag = Math.floor(resultats_total / pagRes) - 1;
+		if ( resultats_total % pagRes > 0 )
+			ultimaPag++;
+
+		if ( pagPag > ultimaPag ) 
+			pagPag = ultimaPag;
+
+		resultatInici = ( pagPag * pagRes ) + 1;
+		resultatFinal = ( ( pagPag * pag_Res ) + pagRes > resultats_total ) ? resultats_total : ( pagPag * pagRes ) + pagRes;
+
+
+		// ordenacio
+		ordre_T = ordre_Tipus;
+		ordre_C = ordre_Camp;
+		ordre_c1 = (ordre_C == "seccio") ? " " + ordre_T : "";
+
+		txt_ordenacio = "";
+
+		if ( resultats_total > 1 ) {
+
+			txt_ordenats = (ordre_T == "ASC") ? txtOrdenats + " <em>" + txtAscendentment + "</em>" : txtOrdenats + " <em>" + txtDescendentment + "</em>";
+			txt_ordenacio += ", " + txt_ordenats + "</em>";
+
+		}
+
+
+
+		// Actualizamos el navegador multipágina.
+		multipagina.init( {total: resultats_total, itemsPorPagina: pagRes, paginaActual: pagPag, funcionPagina: "EscriptoriSeccioFitxes.cambiarPagina"} );
 
 		var listado = "";
-		var listaFichas = data.fitxes;
-		var numFitxes = listaFichas.length;
+		var numFitxes = data.length;
 
 		/* Pintado cabeceras listado*/
+		listado += "<input type='hidden' value='" + totalRegistros + "' id='totalRegistros'>";
+		listado += "<p class=\"info\">" + txtTrobades + " <strong>" + resultats_total + " " + txtT.toLowerCase() + "</strong>" + ". " + txtMostrem + resultatInici + txtMostremAl + resultatFinal + txt_ordenacio + ".</p>";
 		listado += '<p class="info">' + txtSeleccionados + ' <strong> ' + numFitxes + ' </strong> ' + txtFichas + '</p> ';
 		listado += '<div class="table llistat" role="grid" aria-live="polite" aria-atomic="true" aria-relevant="text additions">';
 		listado += '	<div class="thead">';
@@ -1409,36 +1445,28 @@ function CEscriptoriSeccioFitxes() {
 				multilang: false
 		}
 
-		if ( listaFichas != null && numFitxes > 0 ) {
+		if ( data != null && numFitxes > 0 ) {
 
-			for ( n = 0 ; n < numFitxes ; n++ ) {
+			longitud = data.length - 1;
 
-				var idFicha = listaFichas[n].id;
+			for ( n = 0 ; n <= longitud ; n++ ) {
+
+				var idFicha = data[n].id;
 				var filaPar = ( n % 2 == 0 ? "" : "par" );
-				var fichaCaducada = ( listaFichas[n].caducat == true ? "fitxaCaducat" : "fitxa" ); 
-				var orden = listaFichas[n].ordre;
+				var orden = data[n].ordre;
 
 				listado += "<div class='tr " + filaPar + "' role='row'>";
 
-				listado += "	<div class='td nom " + fichaCaducada + "' role='gridcell'>"
-				listado	+= "		<input type='hidden' value='" + idFicha + "' class='id'>";
+				listado += "	<div class='td nom fitxa' role='gridcell'>"
+					listado	+= "		<input type='hidden' value='" + idFicha + "' class='id'>";
 
-				listado += "		<a href='javascript:;' class='nom'>" + listaFichas[n].titulo + "</a>";
+				listado += "		<a href='javascript:;' class='nom'>" + data[n].titulo + "</a>";
 
 				listado += "	</div>";
 
 				listado += "	<div class='td enllas' role='gridcell'>"
-					listado += "		<select class='ordenacion'>";
 
-
-				for ( var i = 1 ; i < 11 ; i++ ) {
-
-					var seleccionado = ( orden == i ) ? "selected=''" : "";
-					listado += "<option value='" + i + "' " + seleccionado + ">" + i + "</option>";
-
-				}
-
-				listado += "		</select>";
+					listado += this.pintarSeleccionableOrdenFichas(totalRegistros, data[n].ordre);
 				listado += "		<span></span>";
 				listado += "	</div>";
 
@@ -1450,9 +1478,11 @@ function CEscriptoriSeccioFitxes() {
 
 		listado += '	</div>';
 		listado += '</div>';
+		listado += multipagina.getHtml();
 
 		$("#resultatsFitxes .dades").html(listado);
 
+		this.asignarEventoSeleccionable(pagPag);
 		this.quitarFicha();
 
 	}
@@ -1460,7 +1490,7 @@ function CEscriptoriSeccioFitxes() {
 	this.quitarFicha = function() {
 
 		var cantidad = $("#resultatsFitxes .dades > div.table > div.tbody > div.tr").length;
-		
+
 		$("#resultatsFitxes .dades .tbody > .tr > div.enllas > span").each(function() {
 
 			var element = $(this).parents('div.tr');
@@ -1479,20 +1509,20 @@ function CEscriptoriSeccioFitxes() {
 
 					$("#resultatsFitxes .dades > p.info > strong").html(cantidad);
 
-					var contador = 1;
+				var contador = 1;
 
-					$("#resultatsFitxes .dades > div.table > div.tbody > div.tr").each(function() {
+				$("#resultatsFitxes .dades > div.table > div.tbody > div.tr").each(function() {
 
-						$(this).removeClass("par");
-	
-						if ( contador % 2 == 0 )
-							$(this).addClass("par");
+					$(this).removeClass("par");
 
-						contador += 1;
+					if ( contador % 2 == 0 )
+						$(this).addClass("par");
 
-					})
-					
-					break;
+					contador += 1;
+
+				})
+
+				break;
 
 				}
 
@@ -1501,10 +1531,43 @@ function CEscriptoriSeccioFitxes() {
 		});
 
 	}
-	
+
+
+	this.asignarEventoSeleccionable = function(pagPag) {
+
+		$("#resultatsFitxes .dades .tbody > .tr > div.enllas > select").live("change", function() {
+
+
+			var orden = $(this).val();
+			var idFicha = $(this).parent().prev().children().first().val()
+			var fichas = $("#resultatsFitxes").data("fichas");
+			var auxFichas = new Array();
+
+			for ( i in fichas ) {
+
+				if ( parseInt(fichas[i].id, 10) == parseInt(idFicha, 10) )
+					fichas[i].ordre = parseInt(orden, 10);
+
+				auxFichas.push(fichas[i]);
+
+			}
+
+			fichas = auxFichas.sort(function(a,b) { return a.ordre - b.ordre; });
+
+			EscriptoriSeccioFitxes.almacenarPaginas(fichas);
+			$("#resultatsFitxes").data("fichas", fichas);
+			var data =  $("#resultatsFitxes").data("paginas")[pagPag];
+			EscriptoriSeccioFitxes.pintarListadoAsignadas(data, pagPag, 10, fichas.length)
+
+		});
+
+	}
+
+
 	this.pintarNoItems = function() {
 		return "<p class=\"noItems\">" + txtNoHiHaFitxes + ".</p>";
 	}
+
 
 	this.limpiar = function() {
 
@@ -1513,13 +1576,14 @@ function CEscriptoriSeccioFitxes() {
 
 	}
 
-	//Eliminar los parametros nombreFicha e idFicha
-	this.listarFichasAsignadas = function(idSeccion) {
 
-		//Comprobar si los parámetros son nulos, vacios o indefinidos
+	//Eliminar los parametros nombreFicha e idFicha
+	this.listarFichasAsignadas = function(idSeccion, pagPag, pagRes) {
+
 		var dataVars = "";
+
 		if ( this.validarParametro(idSeccion) )
-			dataVars += "idSeccion=" + idSeccion;
+			dataVars += "idSeccion=" + idSeccion + "&pagPag=" + pagPag + "&pagRes=" + pagRes;
 
 		$.ajax({
 			type: "POST",
@@ -1533,6 +1597,8 @@ function CEscriptoriSeccioFitxes() {
 
 			},
 			success: function(data) {
+
+				$("#seleccion-fichas").empty()
 
 				if (data.id == -1) {
 
@@ -1557,18 +1623,28 @@ function CEscriptoriSeccioFitxes() {
 
 						$(this).fadeIn(300, function() {
 
-							EscriptoriSeccioFitxes.pintarListadoAsignadas(data);
+							EscriptoriSeccioFitxes.almacenarPaginas(data.fitxes);
+							$("#resultatsFitxes").data("fichas", data.fitxes);
+
+							var datos = $("#resultatsFitxes").data("paginas")[0];
+
+							EscriptoriSeccioFitxes.pintarListadoAsignadas(datos, 0, pagRes, data.totalRegistros);
+
 							$("#cerca_fitxes_nom").removeAttr("disabled");
 							$("#cerca_fitxes_codi").removeAttr("disabled");
 
 
-							$("#resultatsFitxes div.fitxa").each(function() {	
+							$("#resultatsFitxes div.fitxa").each(function() {
+
 								var idFicha = $(this).find("input").val();
 
 								$(this).find("a").click(function() {
 									that.goDetalleFicha(idFicha);	
-								});								
+								});					
+
+
 							});
+
 
 						});
 
@@ -1611,6 +1687,20 @@ function CEscriptoriSeccioFitxes() {
 			url: pagSeccionsFitxes,
 			data: dataVars,
 			dataType: "json",
+			beforeSend: function() {
+
+				$('#seleccion-fichas').fadeOut(300, function() {
+
+					$("#cerca_fitxes_nom").attr("disabled", "disabled");
+					$("#cerca_fitxes_codi").attr("disabled", "disabled");
+
+					$(this).html("<p class=\"executant\">" + txtCercantItems + "</p>");
+
+					$(this).fadeIn(300);
+
+				});
+
+			},
 			error: function() {
 
 				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
@@ -1634,32 +1724,19 @@ function CEscriptoriSeccioFitxes() {
 
 				} else {
 
-					$('#seleccion-fichas').fadeOut(300, function() {
+					EscriptoriSeccioFitxes.pintarListado(data);
+					$("#cerca_fitxes_nom").removeAttr("disabled");
+					$("#cerca_fitxes_codi").removeAttr("disabled");
 
-						$("#cerca_fitxes_nom").attr("disabled", "disabled");
-						$("#cerca_fitxes_codi").attr("disabled", "disabled");
+					$('#seleccion-fichas ul > li > div').each(function() {
 
-						$(this).html("<p class=\"executant\">" + txtCercantItems + "</p>");
+						var id = $(this).find("input[type=hidden]:first").val();
 
-						$(this).fadeIn(300, function() {
-
-							EscriptoriSeccioFitxes.pintarListado(data);
-							$("#cerca_fitxes_nom").removeAttr("disabled");
-							$("#cerca_fitxes_codi").removeAttr("disabled");
-
-							$('#seleccion-fichas ul > li > div').each(function() {
-
-								var id = $(this).find("input[type=hidden]:first").val();
-
-								$(this).find("a.asigna").click(function() {
-									that.asignarFicha(id);
-								});
-
-							});
-
+						$(this).find("a.asigna").click(function() {
+							that.asignarFicha(id);
 						});
 
-					});
+					}); //End each
 
 				}
 
@@ -1671,7 +1748,6 @@ function CEscriptoriSeccioFitxes() {
 
 	this.asignarFicha = function(id) {// TODO: Cuando se asigne una ficha y ya no exista el listado se debe volver a pintar el listado pasándole por parámetro la nueva ficha
 
-		var ficha;
 		var elementCaducidad = "#ficha-caducidad-" + id;
 		var caducidad = $(elementCaducidad).val();
 		var orden = 1;
@@ -1679,25 +1755,27 @@ function CEscriptoriSeccioFitxes() {
 		var nodo = "#nodo-ficha-" + id + " > div > span";
 		var titulo = $(nodo).html();
 		var existTable = $("#resultatsFitxes .dades > div.table").length;
-		
-		if (existTable) {
-		
-			ficha = this.pintarFicha(id, orden, caducidad, cantidadFichas, titulo);
-			
-			//Aumenta total registros tabla
-			$("#resultatsFitxes .dades > p.info > strong").html( cantidadFichas += 1 );
-			
-			//Añade la ficha a la tabla
-			$("#resultatsFitxes .dades > div.table > .tbody").prepend(ficha);
-			
-			this.quitarFicha(); //Registra la acción quitarFicha
-			
+		var ficha = { "id":id, "titulo":titulo, "ordre":orden};
+		var fichas = $("#resultatsFitxes").data("fichas");
+
+		if ( this.validarParametro(fichas) ) {
+
+			fichas.unshift(ficha);
+
 		} else {
 
-			var data = { "fitxes" : [ { "id": id, "titulo" : titulo, "caducat" : caducidad, "ordre" : orden } ] };
-			this.pintarListadoAsignadas(data);
-		}		
-		
+			fichas = new Array();
+			fichas.push(ficha);
+
+		}
+
+
+		$("#resultatsFitxes").data("fichas", fichas);
+		EscriptoriSeccioFitxes.almacenarPaginas(fichas);
+		var paginas = $("#resultatsFitxes").data("paginas")[0];
+
+		this.pintarListadoAsignadas(paginas, 0, 10, fichas.length)
+		this.quitarFicha()
 		this.calcularColorFilas();
 
 	}
@@ -1729,12 +1807,11 @@ function CEscriptoriSeccioFitxes() {
 
 		cantidadFichas += 1;
 		var filaPar = ( cantidadFichas % 2 == 0 ? "par" : "" );
-		var fichaCaducada = ( caducidad == 'true' ? "fitxaCaducat" : "fitxa" ); 
 
 		var ficha = "<div class='tr " + filaPar + "' role='row'>";
 
-		ficha += "	<div class='td nom " + fichaCaducada + "' role='gridcell'>"
-		ficha	+= "		<input type='hidden' value='" + idFicha + "' class='id'>";
+		ficha += "	<div class='td nom fitxa' role='gridcell'>"
+			ficha	+= "		<input type='hidden' value='" + idFicha + "' class='id'>";
 
 		ficha += "		<a href='javascript:;' class='nom'>" + titulo + "</a>";
 
@@ -1843,5 +1920,61 @@ function CEscriptoriSeccioFitxes() {
 		$("#seleccion-fichas").html(listado);
 
 	}
+
+
+	this.pintarSeleccionableOrdenFichas = function(totalRegistros, ordenFicha) {
+
+		var select = "<select class='ordenacion' >";
+
+		for ( var i = 1 ; i <= totalRegistros ; i++ ) {
+
+			var seleccionado = ( ordenFicha == i ) ? "selected=''" : "";
+			select += "<option value='" + i + "' " + seleccionado + ">" + i + "</option>";
+
+		}
+
+		select += "</select>";
+
+		return select;
+
+	}
+
+
+	this.cambiarPagina = function(pagPag) {
+
+		$("#idSeccion").val(idSeccion);
+		var totalRegistros = $("#totalRegistros").val();
+		var fichas = $("#resultatsFitxes").data("paginas")[pagPag-1];
+
+		EscriptoriSeccioFitxes.pintarListadoAsignadas(fichas, pagPag-1, 10, totalRegistros);
+
+	}
+
+
+	this.almacenarPaginas = function(fichas) {
+
+		var listado = new Array();
+		var paginas = new Array();
+
+		for ( var i = 1 ; i <= fichas.length ; i++) {
+
+			listado.push( fichas[i-1] );
+
+			if ( i % 10 == 0 ) {
+
+				paginas.push(listado);
+				listado = new Array();
+
+			}
+
+		}
+
+		paginas.push(listado);
+
+		$("#resultatsFitxes").data("paginas", paginas);
+
+
+	}
+
 
 };

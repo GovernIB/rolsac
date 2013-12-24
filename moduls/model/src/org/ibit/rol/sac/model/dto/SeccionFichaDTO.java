@@ -10,15 +10,15 @@ public class SeccionFichaDTO extends IdNomDTO implements Serializable {
 	// Cuidado: esta variable no equivale al size() de listaFichas.
 	// Se usa cuando no queremos inicializar la lista de fichas por eficiencia y, aún así,
 	// conocer el número de fichas relacionadas con una UA y una sección.
-	private Long numFichas;
+	private int numFichas;
 	
 
-	public Long getNumFichas() {
+	public int getNumFichas() {
 		return numFichas;
 	}
 	
 
-	public void setNumFichas(Long numFichas) {
+	public void setNumFichas(int numFichas) {
 		this.numFichas = numFichas;
 	}
 	

@@ -12,6 +12,7 @@ import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.criteria.PaginacionCriteria;
 import org.ibit.rol.sac.model.dto.FichaDTO;
 import org.ibit.rol.sac.persistence.intf.UnidadAdministrativaFacade;
 import org.ibit.rol.sac.persistence.intf.UnidadAdministrativaFacadeHome;
@@ -346,7 +347,7 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
 		}
 	}
 	
-	public Long cuentaFichasSeccionUA(Long idUA, Long idSeccion) throws DelegateException {
+	public int cuentaFichasSeccionUA(Long idUA, Long idSeccion) throws DelegateException {
 		try {
 			return getFacade().cuentaFichasSeccionUA(idUA, idSeccion);
 		} catch (RemoteException e) {
@@ -354,9 +355,9 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
 		}
 	}
 	
-	public List<FichaDTO> listarFichasSeccionUA(Long idUA, Long idSeccion, String idioma) throws DelegateException {
+	public List<FichaDTO> listarFichasSeccionUA(Long idUA, Long idSeccion, String idioma, PaginacionCriteria paginacion) throws DelegateException {
 		try {
-			return getFacade().listarFichasSeccionUA(idUA, idSeccion, idioma);
+			return getFacade().listarFichasSeccionUA(idUA, idSeccion, idioma, paginacion);
 		} catch (RemoteException e) {
 			throw new DelegateException(e);
 		}

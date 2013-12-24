@@ -7,6 +7,7 @@ import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.criteria.PaginacionCriteria;
 import org.ibit.rol.sac.model.dto.FichaDTO;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
@@ -180,12 +181,12 @@ public class UnidadAdministrativaDelegate {
 		return impl.listarSeccionesUA(idUA);
 	}
 	
-	public Long cuentaFichasSeccionUA(final Long idUA, final Long idSeccion) throws DelegateException {
+	public int cuentaFichasSeccionUA(final Long idUA, final Long idSeccion) throws DelegateException {
 		return impl.cuentaFichasSeccionUA(idUA, idSeccion);
 	}
 	
-	public List<FichaDTO> listarFichasSeccionUA(Long idUA, Long idSeccion, String idioma) throws DelegateException {
-		return impl.listarFichasSeccionUA(idUA, idSeccion, idioma);
+	public List<FichaDTO> listarFichasSeccionUA(Long idUA, Long idSeccion, String idioma, PaginacionCriteria paginacion) throws DelegateException {
+		return impl.listarFichasSeccionUA(idUA, idSeccion, idioma, paginacion);
 	}
 	
 

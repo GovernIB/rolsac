@@ -135,6 +135,14 @@
 
     <query name="unidades.byname">
         <![CDATA[select ua from UnidadAdministrativa as ua, trad in ua.traducciones where trad.nombre = :nombre]]>
-    </query>                                                                                                        
+    </query>
+    
+	<query name="fichasBySeccionInUA">
+        <![CDATA[select new org.ibit.rol.sac.model.dto.FichaDTO(ficha.id, trad.titulo) from FichaResumenUA as fichaUA, FichaResumen as ficha, ficha.traducciones as trad  where index(trad) = :idioma and fichaUA.idUa = :idUA and fichaUA.idSeccio = :idSeccion and fichaUA.ficha.id = ficha.id and ficha.validacion = :validacion and (ficha.fechaCaducidad > sysdate or ficha.fechaCaducidad is null) and (ficha.fechaPublicacion > sysdate or ficha.fechaPublicacion is null)  order by fichaUA.orden asc, ficha.fechaActualizacion desc]]>
+    </query>
+    
+    	<query name="fichasUABySeccionInUA">
+        <![CDATA[select fichaUA from FichaResumenUA as fichaUA, FichaResumen as ficha, ficha.traducciones as trad  where index(trad) = :idioma and fichaUA.idUa = :idUA and fichaUA.idSeccio = :idSeccion and fichaUA.ficha.id = ficha.id and ficha.validacion = :validacion and (ficha.fechaCaducidad > sysdate or ficha.fechaCaducidad is null) and (ficha.fechaPublicacion > sysdate or ficha.fechaPublicacion is null)  order by fichaUA.orden asc, ficha.fechaActualizacion desc]]>
+    </query>
 
 </hibernate-mapping>

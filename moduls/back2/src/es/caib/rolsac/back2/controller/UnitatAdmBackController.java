@@ -47,6 +47,7 @@ import org.ibit.rol.sac.model.Tratamiento;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.UnidadMateria;
 import org.ibit.rol.sac.model.Usuario;
+import org.ibit.rol.sac.model.criteria.PaginacionCriteria;
 import org.ibit.rol.sac.model.dto.FichaDTO;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.model.dto.SeccionDTO;
@@ -82,15 +83,15 @@ import es.indra.rol.sac.integracion.traductor.Traductor;
 @Controller
 @RequestMapping("/unitatadm/")
 public class UnitatAdmBackController extends PantallaBaseController {
-	
+
 	private static Log log = LogFactory.getLog(UnitatAdmBackController.class);
 	private static final String URL_PREVISUALIZACION = "es.caib.rolsac.previsualitzacio.ua.url";
 	private static final String OPERACION_FALLIDA = "Error de sessi�n: Sessi�n expirada o no inciada";
 
 	private static class TreeOrdenSeccionComparator implements Comparator {
-		
+
 		public int compare(Object element1, Object element2) {
-			
+
 			String lower1 =	 element1.toString();
 			String lower2 =	 element2.toString();
 
@@ -98,15 +99,15 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			lower2 = lower2.split("#")[2];
 
 			return lower1.compareTo(lower2);
-			
+
 		}
-		
+
 	}
-	
+
 
 	@RequestMapping(value = "/unitatadm.do", method = GET)
 	public String llistatUniAdm(Map<String, Object> model, HttpServletRequest request, HttpSession session) {
-		
+
 		MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
 		TratamientoDelegate tratamientoDelegate = DelegateUtil.getTratamientoDelegate();
 		EspacioTerritorialDelegate espacioTerritorialDelegate = DelegateUtil.getEspacioTerritorialDelegate();
@@ -119,37 +120,37 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		List<IdNomDTO> llistaEspaiTerritorialDTO = new ArrayList<IdNomDTO>();
 
 		String lang = null;
-		
+
 		try {
-			
+
 			lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			llistaMateries = materiaDelegate.listarMaterias();
-			
+
 			for (Materia materia : llistaMateries)
 				llistaMateriesDTO.add(new IdNomDTO(materia.getId(),materia.getNombreMateria(lang)));
 
-			
+
 			llistaTractaments = tratamientoDelegate.listarTratamientos();
-			
+
 			for (Tratamiento tractament : llistaTractaments)
 				llistaTractamentsDTO.add(new IdNomDTO(tractament.getId(), tractament.getNombreTratamiento(lang)));
 
-			
+
 			llistaEspaiTerritorial = espacioTerritorialDelegate.listarEspaciosTerritoriales();
-			
+
 			for (EspacioTerritorial espaiTerritorial : llistaEspaiTerritorial)
 				llistaEspaiTerritorialDTO.add(new IdNomDTO(espaiTerritorial.getId(), espaiTerritorial.getNombreEspacioTerritorial(lang)));
 
 		} catch (DelegateException dEx) {
-			
+
 			if (dEx.isSecurityException())
 				log.error("Error de permiso: " + ExceptionUtils.getStackTrace(dEx));
 			else
 				log.error(ExceptionUtils.getStackTrace(dEx));
 
-			
+
 			if (lang == null) lang = "ca";
-			
+
 		}
 
 		// Control de si se dan permisos extrar al rol SUPER
@@ -181,7 +182,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 
 	}
 
-	
+
 	@RequestMapping(value = "/pagDetall.do", method = POST)
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
 
@@ -388,14 +389,15 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			SeccionFichaDTO seccionFichaDTO = new SeccionFichaDTO();
 
 			seccionFichaDTO.setId(seccion.getId());
+
 			seccionFichaDTO.setNumFichas( unitatDelegate.cuentaFichasSeccionUA(idUA, seccion.getId()) );
 
-			TraduccionSeccion tr = (TraduccionSeccion)seccion.getTraduccion();
+			TraduccionSeccion tr = (TraduccionSeccion) seccion.getTraduccion();
 			if ( tr == null ) {
-				
+
 				tr = new TraduccionSeccion(); 
 				tr.setNombre("");
-				
+
 			}
 
 			seccionFichaDTO.setNom(tr.getNombre());
@@ -406,11 +408,11 @@ public class UnitatAdmBackController extends PantallaBaseController {
 
 		// Ordenamos por nombre, ascendente.
 		Comparator<SeccionFichaDTO> comparatorASC = new Comparator<SeccionFichaDTO>() {
-			
+
 			public int compare(SeccionFichaDTO s1, SeccionFichaDTO s2) {
 				return s1.getNom().compareTo( s2.getNom() );
 			}
-			
+
 		};
 
 		Collections.sort(listaSeccionesDTO, comparatorASC);
@@ -418,7 +420,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		return listaSeccionesDTO;
 
 	}
-	
+
 
 	private void agregaFichasPortadaADetalle(Map<String, Object> resultats, UnidadAdministrativa uni) {
 
@@ -821,39 +823,39 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	}
 
 	private void guardaResponsable(Map<String, String> valoresForm, Map<String, FileItem> ficherosForm, UnidadAdministrativa unitatAdministrativa) throws DelegateException {
-		
+
 		unitatAdministrativa.setResponsable(valoresForm.get("item_responsable"));
 		unitatAdministrativa.setSexoResponsable(Integer.parseInt(valoresForm.get("item_responsable_sexe")));
 		UnidadAdministrativaDelegate unitatAdministrativaDelegate = DelegateUtil.getUADelegate();
-		
+
 		//FotoPetita
 		FileItem fileFotoPetita = ficherosForm.get("item_responsable_foto_petita");
-		
+
 		if ( fileFotoPetita != null && fileFotoPetita.getSize() > 0 ) {
-			
+
 			unitatAdministrativa.setFotop(UploadUtil.obtenerArchivo(unitatAdministrativa.getFotop(), fileFotoPetita));
-			
+
 		} else if (valoresForm.get("item_responsable_foto_petita_delete") != null && !"".equals(valoresForm.get("item_responsable_foto_petita_delete"))) {
-			
+
 			//borrar fichero si se solicita
 			unitatAdministrativaDelegate.eliminarFotoPetita(unitatAdministrativa.getId());
 			unitatAdministrativa.setFotop(null);
-			
+
 		}
-		
+
 		//FotoGran
 		FileItem fileFotoGran = ficherosForm.get("item_responsable_foto_gran");
-		
+
 		if ( fileFotoGran != null && fileFotoGran.getSize() > 0 ) {
-			
+
 			unitatAdministrativa.setFotog( UploadUtil.obtenerArchivo( unitatAdministrativa.getFotog(), fileFotoGran ) );
-			
+
 		} else if (valoresForm.get("item_responsable_foto_gran_delete") != null && !"".equals(valoresForm.get("item_responsable_foto_gran_delete"))) {
-			
+
 			//borrar fichero si se solicita
 			unitatAdministrativaDelegate.eliminarFotoGrande( unitatAdministrativa.getId() );
 			unitatAdministrativa.setFotog(null);
-			
+
 		}
 
 	}
@@ -878,7 +880,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	}
 
 	private Map<String, Traduccion> getTraduccionesFormulario(Map<String, String> valoresForm) throws DelegateException {
-		
+
 		IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
 		List<String> langs = idiomaDelegate.listarLenguajes();
 		Map<String, Traduccion> traduccions = new HashMap<String, Traduccion>();
@@ -900,7 +902,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		return traduccions;
 
 	}
-	
+
 	/**
 	 * @param unitatAdministrativa
 	 * @param unitatAdmPareId
@@ -909,7 +911,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	private void crearOActualizarUnitatAdministrativa(UnidadAdministrativa unitatAdministrativa, Long unitatAdmPareId) throws DelegateException	{
 
 		UnidadAdministrativaDelegate unitatAdministrativaDelegate = DelegateUtil.getUADelegate();
-		
+
 		if ( unitatAdministrativa.getId() != null ) {
 
 			unitatAdministrativaDelegate.actualizarUnidadAdministrativa(unitatAdministrativa, unitatAdmPareId);
@@ -919,15 +921,15 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			Long id;
 			if ( unitatAdmPareId != null )
 				id = unitatAdministrativaDelegate.crearUnidadAdministrativa(unitatAdministrativa, unitatAdmPareId);
-			
+
 			else
 				id = unitatAdministrativaDelegate.crearUnidadAdministrativaRaiz(unitatAdministrativa);
 
-			
+
 			unitatAdministrativa.setId(id);
 
 		}
-		
+
 	}
 
 	// TODO: ¿se puede borrar?
@@ -1041,10 +1043,10 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		}
 
 		try {
-			
+
 			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			String textes = request.getParameter("nombreFicha");
-			
+
 			if (textes != null && !"".equals(textes)) {
 				textes = textes.toUpperCase();
 				tradMap.put("titulo", textes);
@@ -1198,7 +1200,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		Map<String, String> tradMap     = new HashMap<String, String>();
 		UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
-		
+
 		String id = request.getParameter("codi");
 		int resultadosDescartados  = 0;
 		String espacioTerritorial = request.getParameter("espacio_territorial");
@@ -1229,7 +1231,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 				resultats.put("nodes", listaUnidadesAdministrativas);
 			} catch (NumberFormatException e) {
 				// FIXME: aplicar tratamiento, seguramente igual al del bloque de la DelegateException que va justo después.
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (DelegateException e) {
 				uni = null;
@@ -1428,7 +1429,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	 * Solicita las fichas relacionadas con una UA y una sección.
 	 */
 	@RequestMapping(value = "/obtenirFitxesUASeccio.do", method = POST)
-	public @ResponseBody Map<String, Object> llistaFitxesUASeccio(Long idSeccion, HttpServletRequest request) {
+	public @ResponseBody Map<String, Object> llistaFitxesUASeccio(Long idSeccion, Integer pagPag, Integer pagRes, HttpServletRequest request) {
 
 		Map<String, Object> resultats = new HashMap<String, Object>();
 
@@ -1436,26 +1437,32 @@ public class UnitatAdmBackController extends PantallaBaseController {
 
 			this.mostrarErrorOperacionFallida(resultats, request.getLocale(), OPERACION_FALLIDA);
 
-			return resultats;
+		} else {
 
-		}
+			UnidadAdministrativa ua = new UnidadAdministrativa();
+			ua = (UnidadAdministrativa) request.getSession().getAttribute("unidadAdministrativa");	
 
-		UnidadAdministrativa ua = new UnidadAdministrativa();
-		ua = (UnidadAdministrativa) request.getSession().getAttribute("unidadAdministrativa");	
-		UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
-		List<FichaDTO> listaFichas = new ArrayList<FichaDTO>();
+			
+			try {
 
-		try {
+				UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+				String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 
-			String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+				PaginacionCriteria paginacion = new PaginacionCriteria();
+				paginacion.setPagPag(pagPag);
+				paginacion.setPagRes(pagRes);
 
-			listaFichas = uaDelegate.listarFichasSeccionUA(ua.getId(), idSeccion, idioma);				
+				List<FichaDTO> fichas = uaDelegate.listarFichasSeccionUA(ua.getId(), idSeccion, idioma, paginacion);				
 
-			resultats.put("fitxes", listaFichas);
+				resultats.put("fitxes", fichas);
+				resultats.put("totalRegistros", fichas.size());
 
-		} catch (DelegateException e) {
+			} catch (DelegateException e) {
 
-			this.mostrarErrorOperacionFallida( resultats, request.getLocale(), ExceptionUtils.getStackTrace(e) );
+				this.mostrarErrorOperacionFallida( resultats, request.getLocale(), ExceptionUtils.getStackTrace(e) );
+
+			}
+			
 
 		}
 
@@ -1473,7 +1480,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	public @ResponseBody Map<String, Object> guardarFitxesUASeccio(Long idUA, Long idSeccion, String listaFichas, HttpServletRequest request) {
 
 		Map<String, Object> resultats = new HashMap<String, Object>();
-		
+
 		if ( idUA == null || idSeccion == null || !this.validarParametro(listaFichas) ) {
 
 			String mensaje = "Falta alguno de los parámetros para completar el guardado de las fichas de la sección";
@@ -1544,7 +1551,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 
 		for ( Long id : listaIdUnidadMateriaObsoleta ) 
 			unidadMateriaDelegate.borrarUnidadMateria( id );
-		
+
 	}
 
 	/**
@@ -1622,7 +1629,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 
 		try {
 			String idiomaOrigenTraductor = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-			
+
 			TraduccionUA traduccioOrigen = getTraduccionOrigen(request, idiomaOrigenTraductor);
 			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
 			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
@@ -1686,16 +1693,16 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			b = false;
 
 		return b;
-		
+
 	}
 
 	private List<FichaDTO> castJsonListToHashTable(String jsonList) {
 
 		List<FichaDTO> lista = Collections.EMPTY_LIST;
-		
+
 		try {
 
-			 lista = Arrays.asList( new ObjectMapper().readValue(jsonList, FichaDTO[].class) );
+			lista = Arrays.asList( new ObjectMapper().readValue(jsonList, FichaDTO[].class) );
 
 		} catch (JsonParseException e) {
 
@@ -1715,55 +1722,55 @@ public class UnitatAdmBackController extends PantallaBaseController {
 
 	}
 
-	
+
 	private TraduccionUA getTraduccionOrigen(HttpServletRequest request, String idiomaOrigenTraductor)
 	{
 		TraduccionUA traduccioOrigen = new TraduccionUA();
-		
+
 		if (StringUtils.isNotEmpty(request.getParameter("item_nom_" + idiomaOrigenTraductor))) {
 			traduccioOrigen.setNombre(request.getParameter("item_nom_" + idiomaOrigenTraductor));
 		}
-		
+
 		if (StringUtils.isNotEmpty(request.getParameter("item_presentacio_" + idiomaOrigenTraductor))) {
 			traduccioOrigen.setPresentacion(request.getParameter("item_presentacio_" + idiomaOrigenTraductor));
 		}
-		
+
 		if (StringUtils.isNotEmpty(request.getParameter("item_cvResponsable_" + idiomaOrigenTraductor))) {
 			traduccioOrigen.setCvResponsable(request.getParameter("item_cvResponsable_" + idiomaOrigenTraductor));
 		}
-		
+
 		if (StringUtils.isNotEmpty(request.getParameter("item_abreviatura_" + idiomaOrigenTraductor))) {
 			traduccioOrigen.setAbreviatura(request.getParameter("item_abreviatura_" + idiomaOrigenTraductor));
 		}
-		
+
 		return traduccioOrigen;
 	}
-	
-	
-    /**
-     * Método que recibe petición AJAX de consultar si la ficha no tiene más secciones, entonces se decide si se puede o no borrar
-     * @param request
-     * @return
-     */
-    @RequestMapping(value = "/fitxaBorrable.do", method = POST)
+
+
+	/**
+	 * Método que recibe petición AJAX de consultar si la ficha no tiene más secciones, entonces se decide si se puede o no borrar
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/fitxaBorrable.do", method = POST)
 	public @ResponseBody Map<String, Object> fitxaBorrable(HttpServletRequest request, Long idFitxa) {
-    	
-    	Map<String, Object> resultats = new HashMap<String, Object>();
-    	
-    	try {
-    		
+
+		Map<String, Object> resultats = new HashMap<String, Object>();
+
+		try {
+
 			resultats.put("num", DelegateUtil.getFichaDelegate().listFichasUA(idFitxa).size());
-			
+
 		} catch (DelegateException e) {
-			
+
 			resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
-        	resultats.put("id", -2);
-        	log.error(ExceptionUtils.getStackTrace(e));
-        	
+			resultats.put("id", -2);
+			log.error(ExceptionUtils.getStackTrace(e));
+
 		}
-    	
-    	return resultats;
-    	
+
+		return resultats;
+
 	}
-	
+
 }

@@ -36,6 +36,29 @@ public class FichaDTO implements ValueObject {
 		super();
 	}
 	
+	
+	public FichaDTO(long id, String titulo) {
+		
+		super();
+		
+		this.id = id;
+		this.titulo = titulo;
+		
+	}
+	
+	public FichaDTO(long id, Date fechaPublicacion, Date fechaCaducidad, Integer validacion) {
+		
+		super();
+		
+		this.id = id;
+
+		this.fechaCaducidad = ( fechaCaducidad!= null ) ? fechaCaducidad.toString() : null ;
+		this.fechaPublicacion = ( fechaPublicacion!= null ) ? fechaPublicacion.toString() : null;
+		this.validacion = validacion;
+		this.caducat = !this.isVisible();
+		
+	}
+	
 	public FichaDTO(long id, String titulo, Integer orden, Boolean caducat) {
 		
 		super();
@@ -56,7 +79,7 @@ public class FichaDTO implements ValueObject {
 		this.titulo = titulo;
 		this.ordre = orden.longValue();
 		this.validacion = validacion;
-		this.caducat = !this.isCaducado();
+		this.caducat = !this.isVisible();
 		
 	}
 	
@@ -82,7 +105,7 @@ public class FichaDTO implements ValueObject {
 		this.validacion = validacion;
 		this.caducidad = fechaCaducidad;
 		this.publicacion = fechaPublicacion;
-		this.caducat = !this.isCaducado();
+		this.caducat = !this.isVisible();
 		
 	}
 	
@@ -159,52 +182,22 @@ public class FichaDTO implements ValueObject {
 		this.publicacion = publicacion;
 	}
 
-	public boolean isCaducado() {
-		
-		/*GregorianCalendar dataActual = new GregorianCalendar(); 
-		Date fechaCaducidad = ( this.caducidad != null ? this.caducidad : null );
-		Date fechaPublicacion = ( this.publicacion !=  null ? this.publicacion : null );
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		boolean visible;
-
-		try {
-			
-			if ( this.getFechaCaducidad() != null )
-				fechaCaducidad = sdf.parse( this.getFechaCaducidad() );
-			
-			if ( this.getFechaPublicacion() != null )
-				fechaPublicacion = sdf.parse( this.getFechaPublicacion() );
-			
-			
-		} catch (ParseException e) {
-			
-			return false;
-			
-		}
-
-		Boolean esPublic = Validacion.PUBLICA.equals( this.getValidacion() );
-		Boolean noCaducat = ( this.getFechaCaducidad() != null && fechaCaducidad.after( dataActual.getTime() ) ) || this.getFechaCaducidad() == null;
-		Boolean esPublicat = ( this.getFechaPublicacion() != null && fechaPublicacion.before( dataActual.getTime() ) ) || this.getFechaPublicacion() == null;
-
-		if (esPublic && noCaducat && esPublicat) {
-			visible = true;
-		} else {			
-			visible = false;
-		}
-		return visible;*/
+	private boolean isVisible() {
 		
 		GregorianCalendar dataActual = new GregorianCalendar(); 
 		Boolean visible;
 
 		Boolean esPublic = Validacion.PUBLICA.equals(this.getValidacion());
-		Boolean noCaducat = (this.caducidad != null && this.caducidad.after(dataActual.getTime())) || this.caducidad == null;
-		Boolean esPublicat =  (this.publicacion != null && this.publicacion.before(dataActual.getTime())) || this.publicacion == null;
+		Boolean noCaducat = ( this.caducidad != null && this.caducidad.after(dataActual.getTime()) ) || this.caducidad == null;
+		Boolean esPublicat =  ( this.publicacion != null && this.publicacion.before(dataActual.getTime()) ) || this.publicacion == null;
 
-		if (esPublic && noCaducat && esPublicat) {
+		if ( esPublic && noCaducat && esPublicat )
 			visible = Boolean.TRUE;
-		} else {
+		
+		else
 			visible = Boolean.FALSE;
-		}
+		
+		
 		return visible;
 		
 	}
