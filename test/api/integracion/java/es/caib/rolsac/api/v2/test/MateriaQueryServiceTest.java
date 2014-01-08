@@ -187,7 +187,7 @@ public class MateriaQueryServiceTest {
             MateriaQueryServiceAdapter materia = rolsacQS.obtenirMateria(materiaCriteria);
             Assert.assertNotNull(materia);
             List<IconaMateriaQueryServiceAdapter> listIconaMateriaQueryServiceAdapter = materia.llistarIconesMateries(new IconaMateriaCriteria());
-            Assert.assertTrue(listIconaMateriaQueryServiceAdapter.size() == 3);
+            Assert.assertTrue(listIconaMateriaQueryServiceAdapter.size() > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }

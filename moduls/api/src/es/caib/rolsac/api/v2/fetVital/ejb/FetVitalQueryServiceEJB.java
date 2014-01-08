@@ -401,39 +401,39 @@ public class FetVitalQueryServiceEJB extends HibernateEJB {
 	}
 
 	/**
-	 * Obtiene la fotografia.
+	 * Obtiene la distribución competencial.
 	 * @param id
 	 * @return ArxiuDTO
 	 * 
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
-	public ArxiuDTO getFotografia(long idFoto) {
-		return getArxiuDTO(idFoto);
+	public ArxiuDTO getDistribuciCompetencial(long idDistribuciCompetencial) {
+		return getArxiuDTO(idDistribuciCompetencial);
 	}
 
 	/**
-	 * Obtiene el icono.
+	 * Obtiene el archivo de normativa.
 	 * @param id
 	 * @return ArxiuDTO
 	 * 
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
-	public ArxiuDTO getIcona(long idIcona) {
-		return getArxiuDTO(idIcona);
+	public ArxiuDTO getNormativa(long idNormativa) {
+		return getArxiuDTO(idNormativa);
 	}
 
 	/**
-	 * Obtiene el icono grande.
+	 * Obtiene el archivo de contenido.
 	 * @param id
 	 * @return ArxiuDTO
 	 * 
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
-	public ArxiuDTO getIconaGran(long idIconaGran) {
-		return getArxiuDTO(idIconaGran);
+	public ArxiuDTO getContingut(long idContingut) {
+		return getArxiuDTO(idContingut);
 	}
 
 }

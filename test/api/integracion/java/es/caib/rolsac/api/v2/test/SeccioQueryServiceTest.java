@@ -92,7 +92,7 @@ public class SeccioQueryServiceTest {
             SeccioQueryServiceAdapter seccio = rolsacQS.obtenirSeccio(seccioCriteria);
             Assert.assertNotNull(seccio);
             List<SeccioQueryServiceAdapter> listSeccioQueryServiceAdapter = seccio.llistarFilles(new SeccioCriteria());
-            Assert.assertTrue(listSeccioQueryServiceAdapter.size() == 4);
+            Assert.assertTrue(listSeccioQueryServiceAdapter.size() == 5);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }

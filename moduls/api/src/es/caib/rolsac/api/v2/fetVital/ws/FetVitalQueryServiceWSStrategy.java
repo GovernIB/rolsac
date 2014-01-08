@@ -47,25 +47,25 @@ public class FetVitalQueryServiceWSStrategy implements FetVitalQueryServiceStrat
 		}
     }	
 	
-    public ArxiuDTO getFotografia(long idFoto) throws StrategyException {
+    public ArxiuDTO getDistribuciCompetencial(long idDistribuciCompetencial) throws StrategyException {
     	try {
-			return gateway.getFotografia(idFoto);
+			return gateway.getDistribuciCompetencial(idDistribuciCompetencial);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
     }
 
-    public ArxiuDTO getIcona(long idIcona) throws StrategyException {
+    public ArxiuDTO getNormativa(long idNormativa) throws StrategyException {
         try {
-			return gateway.getIcona(idIcona);
+			return gateway.getNormativa(idNormativa);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
     }
 
-    public ArxiuDTO getIconaGran(long idIconaGran) throws StrategyException {
+    public ArxiuDTO getContingut(long idContingut) throws StrategyException {
         try {
-			return gateway.getIconaGran(idIconaGran);
+			return gateway.getContingut(idContingut);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}

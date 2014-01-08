@@ -915,7 +915,9 @@
 		  <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
 		</operation>
 		
-		<operation name="obtenirExcepcioDocumentacio" qname="operNS:obtenirExcepcioDocumentacio" xmlns:operNS="http://intf.ejb.documentTramit.v2.api.rolsac.caib.es" returnQName="obtenirExcepcioDocumentacioReturn" returnType="rtns:ExcepcioDocumentacioDTO" xmlns:rtns="http://excepcioDocumentacio.v2.api.rolsac.caib.es" soapAction="" >
+		<operation name="obtenirExcepcioDocumentacio" qname="operNS:obtenirExcepcioDocumentacio" xmlns:operNS="http://intf.ejb.documentTramit.v2.api.rolsac.caib.es"
+		  returnQName="obtenirExcepcioDocumentacioReturn" returnType="rtns:ExcepcioDocumentacioDTO" xmlns:rtns="http://excepcioDocumentacio.v2.api.rolsac.caib.es"
+		  soapAction="" >
 		  <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
 		</operation>
 		<parameter name="allowedMethods" value="obtenirCatalegDocuments obtenirTramit obtenirExcepcioDocumentacio obtenirArxiu"/>
@@ -1930,7 +1932,7 @@
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
         </operation>
         <operation name="llistarFilles" qname="operNS:llistarFilles" xmlns:operNS="http://intf.ejb.seccio.v2.api.rolsac.caib.es"
-            returnQName="llistarFillesReturn" returnType="rtns:ArrayOfSeccioDTO" xmlns:rtns="http://ws.seccio.v2.api.rolsac.caib.es"
+            returnQName="llistarFillesReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.seccio.v2.api.rolsac.caib.es"
             returnItemType="tns2:SeccioDTO" xmlns:tns2="http://seccio.v2.api.rolsac.caib.es" soapAction="">
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
             <parameter qname="in1" type="tns:SeccioCriteria" xmlns:tns="http://seccio.v2.api.rolsac.caib.es" />

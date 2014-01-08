@@ -108,31 +108,31 @@ public class FetVitalQueryServiceAdapter extends FetVitalDTO implements FetVital
         }
     }
 
-    public ArxiuQueryServiceAdapter getFotografia() throws QueryServiceException {        
+    public ArxiuQueryServiceAdapter getDistribuciCompetencial() throws QueryServiceException {        
         if (this.getFoto() == null) {return null;}
         try {
-            ArxiuDTO dto = (ArxiuDTO) fetVitalQueryServiceStrategy.getFotografia(this.getFoto());
+            ArxiuDTO dto = (ArxiuDTO) fetVitalQueryServiceStrategy.getDistribuciCompetencial(this.getFoto());
             return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
         } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "fotografia.", e);
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "distribucioCompetencial.", e);
         }
     }
 
-    public ArxiuQueryServiceAdapter getIcona() throws QueryServiceException {
+    public ArxiuQueryServiceAdapter getNormativa() throws QueryServiceException {
         if (this.getIcono() == null) {return null;}
         
         try {
-            ArxiuDTO dto = (ArxiuDTO) fetVitalQueryServiceStrategy.getIcona(this.getIcono());
+            ArxiuDTO dto = (ArxiuDTO) fetVitalQueryServiceStrategy.getNormativa(this.getIcono());
             return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "icono.", e);
         }
     }
 
-    public ArxiuQueryServiceAdapter getIconaGran() throws QueryServiceException {
+    public ArxiuQueryServiceAdapter getContingut() throws QueryServiceException {
         if (this.getIconoGrande() == null) {return null;}
         try {
-            ArxiuDTO dto = (ArxiuDTO) fetVitalQueryServiceStrategy.getIconaGran(this.getIconoGrande());
+            ArxiuDTO dto = (ArxiuDTO) fetVitalQueryServiceStrategy.getContingut(this.getIconoGrande());
             return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "icono.", e);

@@ -14,6 +14,7 @@ import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.general.BeanUtils;
+import es.caib.rolsac.api.v2.general.CertificadoUtil;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
 import es.caib.rolsac.api.v2.materia.MateriaQueryServiceAdapter;
@@ -41,17 +42,18 @@ public class UnitatAdministrativaQueryServiceTest {
     @Before
     public void setup() {        
         rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.WS);
+        CertificadoUtil.autentificar("contrasena", "storerolsac.jks");
     }
 
     @Test
     public void recuperarNumEdificis() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("632367");
+        unitatAdministrativaCriteria.setId("2");
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
             int resultat = unitatAdministrativa.getNumEdificis();
-            Assert.assertTrue(resultat == 2);
+            Assert.assertTrue(resultat > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -60,12 +62,12 @@ public class UnitatAdministrativaQueryServiceTest {
     @Test
     public void recuperarNumFilles() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("628665");
+        unitatAdministrativaCriteria.setId("2");
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
             int resultat = unitatAdministrativa.getNumFilles();
-            Assert.assertTrue(resultat == 19);
+            Assert.assertTrue(resultat > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -74,12 +76,12 @@ public class UnitatAdministrativaQueryServiceTest {
     @Test
     public void recuperarNumFitxes() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("756");
+        unitatAdministrativaCriteria.setId("2");
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
             int resultat = unitatAdministrativa.getNumFitxes();
-            Assert.assertTrue(resultat == 7);
+            Assert.assertTrue(resultat > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -88,12 +90,12 @@ public class UnitatAdministrativaQueryServiceTest {
     @Test
     public void recuperarNumSeccions() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("2064");
+        unitatAdministrativaCriteria.setId("2");
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
             int resultat = unitatAdministrativa.getNumSeccions();
-            Assert.assertTrue(resultat == 3);
+            Assert.assertTrue(resultat > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -107,7 +109,7 @@ public class UnitatAdministrativaQueryServiceTest {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
             int resultat = unitatAdministrativa.getNumMateries();
-            Assert.assertTrue(resultat == 9);
+            Assert.assertTrue(resultat > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -116,12 +118,12 @@ public class UnitatAdministrativaQueryServiceTest {
     @Test
     public void recuperarNumNormatives() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("197");
+        unitatAdministrativaCriteria.setId("3");
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
             int resultat = unitatAdministrativa.getNumNormatives();
-            Assert.assertTrue(resultat == 27);
+            Assert.assertTrue(resultat > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -130,12 +132,12 @@ public class UnitatAdministrativaQueryServiceTest {
     @Test
     public void recuperarNumPersonal() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("138318");
+        unitatAdministrativaCriteria.setId("3");
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
             int resultat = unitatAdministrativa.getNumPersonal();
-            Assert.assertTrue(resultat == 83);
+            Assert.assertTrue(resultat > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -144,12 +146,12 @@ public class UnitatAdministrativaQueryServiceTest {
     @Test
     public void recuperarNumProcediments() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("142752");
+        unitatAdministrativaCriteria.setId("6");
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
             int resultat = unitatAdministrativa.getNumProcediments();
-            Assert.assertTrue(resultat == 14);
+            Assert.assertTrue(resultat > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -158,12 +160,12 @@ public class UnitatAdministrativaQueryServiceTest {
     @Test
     public void recuperarNumTramits() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("40");
+        unitatAdministrativaCriteria.setId("6");
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
             int resultat = unitatAdministrativa.getNumTramits();
-            Assert.assertTrue(resultat == 13);
+            Assert.assertTrue(resultat > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -172,12 +174,12 @@ public class UnitatAdministrativaQueryServiceTest {
     @Test
     public void recuperarNumUsuaris() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("1464");
+        unitatAdministrativaCriteria.setId("6");
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
             int resultat = unitatAdministrativa.getNumUsuaris();
-            Assert.assertTrue(resultat == 10);
+            Assert.assertTrue(resultat > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -186,12 +188,12 @@ public class UnitatAdministrativaQueryServiceTest {
     @Test
     public void recuperarEdificis() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("628717");
+        unitatAdministrativaCriteria.setId("6");
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
             List<EdificiQueryServiceAdapter> listQueryServiceAdapter = unitatAdministrativa.llistarEdificis(new EdificiCriteria());        
-            Assert.assertTrue(listQueryServiceAdapter.size() == 3);
+            Assert.assertTrue(listQueryServiceAdapter.size() > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -200,12 +202,12 @@ public class UnitatAdministrativaQueryServiceTest {
     @Test
     public void recuperarFilles() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("52");
+        unitatAdministrativaCriteria.setId("6");
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
             List<UnitatAdministrativaQueryServiceAdapter> listQueryServiceAdapter = unitatAdministrativa.llistarFilles(new UnitatAdministrativaCriteria());
-            Assert.assertTrue(listQueryServiceAdapter.size() == 4);
+            Assert.assertTrue(listQueryServiceAdapter.size() > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -214,12 +216,14 @@ public class UnitatAdministrativaQueryServiceTest {
     @Test
     public void recuperarFitxes() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("2064");
+        unitatAdministrativaCriteria.setId("7");
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
-            List<FitxaQueryServiceAdapter> listQueryServiceAdapter = unitatAdministrativa.llistarFitxes(new FitxaCriteria());    
-            Assert.assertTrue(listQueryServiceAdapter.size() == 2);
+            FitxaCriteria fitxaCriteria = new FitxaCriteria();
+            fitxaCriteria.setIdioma("ca");
+            List<FitxaQueryServiceAdapter> listQueryServiceAdapter = unitatAdministrativa.llistarFitxes(fitxaCriteria);    
+            Assert.assertTrue(listQueryServiceAdapter.size() > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -228,12 +232,12 @@ public class UnitatAdministrativaQueryServiceTest {
     @Test
     public void recuperarSeccions() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("2064");
+        unitatAdministrativaCriteria.setId("2");
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
             List<SeccioQueryServiceAdapter> listQueryServiceAdapter = unitatAdministrativa.llistarSeccions(new SeccioCriteria());
-            Assert.assertTrue(listQueryServiceAdapter.size() == 3);
+            Assert.assertTrue(listQueryServiceAdapter.size() > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -242,12 +246,12 @@ public class UnitatAdministrativaQueryServiceTest {
     @Test
     public void recuperarMateries() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("3184");
+        unitatAdministrativaCriteria.setId("3");
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
             List<MateriaQueryServiceAdapter> listQueryServiceAdapter = unitatAdministrativa.llistarMateries(new MateriaCriteria());
-            Assert.assertTrue(listQueryServiceAdapter.size() == 3);
+            Assert.assertTrue(listQueryServiceAdapter.size() > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -256,12 +260,12 @@ public class UnitatAdministrativaQueryServiceTest {
     @Test
     public void recuperarNormatives() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("621331");
+        unitatAdministrativaCriteria.setId("3");
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
             List<NormativaQueryServiceAdapter> listQueryServiceAdapter = unitatAdministrativa.llistarNormatives(new NormativaCriteria());
-            Assert.assertTrue(listQueryServiceAdapter.size() == 5);
+            Assert.assertTrue(listQueryServiceAdapter.size() > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -270,12 +274,12 @@ public class UnitatAdministrativaQueryServiceTest {
     @Test
     public void recuperarPersonal() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("138631");
+        unitatAdministrativaCriteria.setId("3");
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
             List<PersonalQueryServiceAdapter> listQueryServiceAdapter = unitatAdministrativa.llistarPersonal(new PersonalCriteria());
-            Assert.assertTrue(listQueryServiceAdapter.size() == 5);
+            Assert.assertTrue(listQueryServiceAdapter.size() > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -284,12 +288,12 @@ public class UnitatAdministrativaQueryServiceTest {
     @Test
     public void recuperarProcediments() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("138143");
+        unitatAdministrativaCriteria.setId("3");
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
             List<ProcedimentQueryServiceAdapter> listQueryServiceAdapter = unitatAdministrativa.llistarProcediments(new ProcedimentCriteria());
-            Assert.assertTrue(listQueryServiceAdapter.size() == 5);
+            Assert.assertTrue(listQueryServiceAdapter.size() > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -298,12 +302,12 @@ public class UnitatAdministrativaQueryServiceTest {
     @Test
     public void recuperarTramits() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("233");
+        unitatAdministrativaCriteria.setId("3");
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
             List<TramitQueryServiceAdapter> listQueryServiceAdapter = unitatAdministrativa.llistarTramits(new TramitCriteria());
-            Assert.assertTrue(listQueryServiceAdapter.size() == 5);
+            Assert.assertTrue(listQueryServiceAdapter.size() > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
@@ -312,21 +316,21 @@ public class UnitatAdministrativaQueryServiceTest {
     @Test
     public void recuperarUsuaris() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("186");
+        unitatAdministrativaCriteria.setId("3");
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
             List<UsuariQueryServiceAdapter> listQueryServiceAdapter = unitatAdministrativa.llistarUsuaris(new UsuariCriteria());
-            Assert.assertTrue(listQueryServiceAdapter.size() == 4);
+            Assert.assertTrue(listQueryServiceAdapter.size() > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
     }
     
     @Test
-    public void obtenirLogoV(){
+    public void obtenirLogoV() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("628675");
+        unitatAdministrativaCriteria.setId("3");
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
@@ -338,9 +342,9 @@ public class UnitatAdministrativaQueryServiceTest {
     }
    
     @Test
-    public void obtenirLogoS(){
+    public void obtenirLogoS() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("628675");
+        unitatAdministrativaCriteria.setId("3");
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
@@ -352,10 +356,10 @@ public class UnitatAdministrativaQueryServiceTest {
     }
     
     @Test
-    public void obtenirLogoH(){
+    public void obtenirLogoH() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("628675");
-        try {        
+        unitatAdministrativaCriteria.setId("3");
+        try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
             ArxiuQueryServiceAdapter logoH = unitatAdministrativa.obtenirLogoh();
@@ -366,9 +370,9 @@ public class UnitatAdministrativaQueryServiceTest {
     }
     
     @Test
-    public void obtenirLogoT(){
+    public void obtenirLogoT() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("628675");
+        unitatAdministrativaCriteria.setId("3");
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
@@ -380,23 +384,23 @@ public class UnitatAdministrativaQueryServiceTest {
     }
     
     @Test
-    public void obtenirFotoG(){
+    public void obtenirFotoG() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("628675");
+        unitatAdministrativaCriteria.setId("3");
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
             ArxiuQueryServiceAdapter fotoG = unitatAdministrativa.obtenirFotog();
-            Assert.assertNotNull(fotoG);
+            Assert.assertNull(fotoG);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
     }
     
     @Test
-    public void obtenirFotoP(){
+    public void obtenirFotoP() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("628675");
+        unitatAdministrativaCriteria.setId("3");
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
@@ -406,10 +410,11 @@ public class UnitatAdministrativaQueryServiceTest {
             Assert.fail(e.toString());
         }
     }
+    
     @Test
-    public void obtenirEspaiTerritorial(){
+    public void obtenirEspaiTerritorial() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("633590");
+        unitatAdministrativaCriteria.setId("3");
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
@@ -419,10 +424,11 @@ public class UnitatAdministrativaQueryServiceTest {
             Assert.fail(e.toString());
         }
     }
+    
     @Test
-    public void obtenirTractament(){
+    public void obtenirTractament() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("621230");
+        unitatAdministrativaCriteria.setId("3");
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
@@ -434,9 +440,9 @@ public class UnitatAdministrativaQueryServiceTest {
     } 
     
     @Test
-    public void obtenirPare(){
+    public void obtenirPare() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("139811");
+        unitatAdministrativaCriteria.setId("3");
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
@@ -446,5 +452,18 @@ public class UnitatAdministrativaQueryServiceTest {
             Assert.fail(e.toString());
         }
     }
-
+    
+    @Test
+    public void llistarDescendents() {
+        UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
+        unitatAdministrativaCriteria.setId("3");
+        try {
+            UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
+            Assert.assertNotNull(unitatAdministrativa);
+            List<Long> listQueryServiceAdapter = unitatAdministrativa.llistarDescendents();
+            Assert.assertTrue(listQueryServiceAdapter.size() > 0);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
+    }
 }

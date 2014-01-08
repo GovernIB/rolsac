@@ -22,7 +22,6 @@
 	<wsdl:import namespace="urn:tns5" location="DocumentCriteria.wsdl"/>
 	<wsdl:import namespace="urn:tns6" location="TramitCriteria.wsdl"/>
 	<wsdl:import namespace="urn:tns7" location="PublicObjectiuCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns7" location="PublicObjectiuDTO.wsdl"/>
 	<wsdl:import namespace="urn:tns8" location="IniciacioCriteria.wsdl"/>
 	<wsdl:import namespace="urn:tns8" location="IniciacioDTO.wsdl"/>
 	

@@ -19,11 +19,11 @@ public interface FetVitalQueryService {
 
     public int getNumFetsVitalsAgrupacionsFV() throws QueryServiceException;
 
-    public ArxiuQueryServiceAdapter getFotografia() throws QueryServiceException;
+    public ArxiuQueryServiceAdapter getDistribuciCompetencial() throws QueryServiceException;
     
-    public ArxiuQueryServiceAdapter getIcona() throws QueryServiceException;
+    public ArxiuQueryServiceAdapter getNormativa() throws QueryServiceException;
     
-    public ArxiuQueryServiceAdapter getIconaGran() throws QueryServiceException;
+    public ArxiuQueryServiceAdapter getContingut() throws QueryServiceException;
     
     public List<FitxaQueryServiceAdapter> llistarFitxes(FitxaCriteria fitxaCriteria) throws QueryServiceException;
 

@@ -26,7 +26,7 @@ public class EstadisticaInsertServiceTest {
     @Test
     public void grabarEstadisticaFitxa() {
         try {
-            Assert.assertTrue(service.gravarEstadisticaFitxa(137959));
+            Assert.assertTrue(service.gravarEstadisticaFitxa(4411));
         } catch (InsertServiceException e) {
             Assert.fail(e.toString());
         }
@@ -50,7 +50,7 @@ public class EstadisticaInsertServiceTest {
     @Test
     public void gravarEstadisticaFitxaPerMateria() {
         try {
-            Assert.assertTrue(service.gravarEstadisticaFitxaPerMateria(206971, 635622));
+            Assert.assertTrue(service.gravarEstadisticaFitxaPerMateria(1372158, 34361));
         } catch (InsertServiceException e) {
             Assert.fail(e.toString());
         }
@@ -62,7 +62,7 @@ public class EstadisticaInsertServiceTest {
     @Test
     public void gravarEstadisticaFitxaPerUA() {
         try {
-            Assert.assertTrue(service.gravarEstadisticaFitxaPerUA(206971, 1));
+            Assert.assertTrue(service.gravarEstadisticaFitxaPerUA(1372158, 1));
         } catch (InsertServiceException e) {
             Assert.fail(e.toString());
         }
@@ -74,7 +74,7 @@ public class EstadisticaInsertServiceTest {
     @Test
     public void gravarEstadisticaMateria() {
         try {
-            Assert.assertTrue(service.gravarEstadisticaMateria(635622));
+            Assert.assertTrue(service.gravarEstadisticaMateria(34361));
         } catch (InsertServiceException e) {
             Assert.fail(e.toString());
         }
@@ -86,7 +86,7 @@ public class EstadisticaInsertServiceTest {
     @Test
     public void gravarEstadisticaNormativa() {
         try {
-            Assert.assertTrue(service.gravarEstadisticaNormativa(74965));
+            Assert.assertTrue(service.gravarEstadisticaNormativa(617793));
         } catch (InsertServiceException e) {
             Assert.fail(e.toString());
         }
@@ -98,14 +98,14 @@ public class EstadisticaInsertServiceTest {
     @Test
     public void gravarEstadisticaProcediment() {
         try {
-            Assert.assertTrue(service.gravarEstadisticaProcediment(460464));
+            Assert.assertTrue(service.gravarEstadisticaProcediment(591289));
         } catch (InsertServiceException e) {
             Assert.fail(e.toString());
         }
     }
     
     /**
-     * Cas d'us: Grabar una estadistica de fitxa per unitat administrativa.
+     * Cas d'us: Grabar una estadistica d'unitat administrativa.
      */
     @Test
     public void gravarEstadisticaUnitatAdministrativa() {

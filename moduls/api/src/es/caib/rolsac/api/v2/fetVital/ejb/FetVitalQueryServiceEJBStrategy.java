@@ -69,25 +69,25 @@ public class FetVitalQueryServiceEJBStrategy implements FetVitalQueryServiceStra
         }
     }
 
-    public ArxiuDTO getFotografia(long idFoto) throws StrategyException {
+    public ArxiuDTO getDistribuciCompetencial(long idDistribuciCompetencial) throws StrategyException {
         try {
-            return fetVitalQueryServiceDelegate.getFotografia(idFoto);
+            return fetVitalQueryServiceDelegate.getDistribuciCompetencial(idDistribuciCompetencial);
         } catch (DelegateException e) {
             throw new StrategyException(e);
         }
     }
     
-    public ArxiuDTO getIcona(long idIcona) throws StrategyException {
+    public ArxiuDTO getNormativa(long idNormativa) throws StrategyException {
         try {
-            return fetVitalQueryServiceDelegate.getIcona(idIcona);
+            return fetVitalQueryServiceDelegate.getNormativa(idNormativa);
         } catch (DelegateException e) {
             throw new StrategyException(e);
         }
     }
     
-    public ArxiuDTO getIconaGran(long idIconaGran) throws StrategyException {
+    public ArxiuDTO getContingut(long idContingut) throws StrategyException {
         try {
-            return fetVitalQueryServiceDelegate.getIconaGran(idIconaGran);
+            return fetVitalQueryServiceDelegate.getContingut(idContingut);
         } catch (DelegateException e) {
             throw new StrategyException(e);
         }

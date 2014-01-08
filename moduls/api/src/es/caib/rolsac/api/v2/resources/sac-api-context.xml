@@ -346,7 +346,7 @@
         <property name="excepcioDocumentacioQueryServiceStrategy" ref="excepcioDocumentacioQueryServiceWSStrategy" />
     </bean>
 
-    <bean id="excepcioQueryDocumentacioQueryServiceWSStrategy" class="es.caib.rolsac.api.v2.excepcioDocumentacio.ws.ExcepcioDocumentacioQueryServiceWSStrategy">
+    <bean id="excepcioDocumentacioQueryServiceWSStrategy" class="es.caib.rolsac.api.v2.excepcioDocumentacio.ws.ExcepcioDocumentacioQueryServiceWSStrategy">
         <property name="gateway" ref="gatewayExcepcioDocumentacio" />
     </bean>
 

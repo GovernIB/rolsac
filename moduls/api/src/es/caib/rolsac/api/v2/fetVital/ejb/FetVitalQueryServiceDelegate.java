@@ -59,10 +59,10 @@ public class FetVitalQueryServiceDelegate {
         }
     }
     
-    public ArxiuDTO getFotografia(long idFoto) throws DelegateException {
+    public ArxiuDTO getDistribuciCompetencial(long idDistribuciCompetencial) throws DelegateException {
         try {
             FetVitalQueryServiceEJBRemote ejb = fetVitalQueryServiceLocator.getFetVitalQueryServiceEJB();
-            return ejb.getFotografia(idFoto);
+            return ejb.getDistribuciCompetencial(idDistribuciCompetencial);
         } catch (LocatorException e) {
             throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
         } catch (RemoteException e) {
@@ -70,10 +70,10 @@ public class FetVitalQueryServiceDelegate {
         }
     }
 
-    public ArxiuDTO getIcona(long idIcona) throws DelegateException {
+    public ArxiuDTO getNormativa(long idNormativa) throws DelegateException {
         try {
             FetVitalQueryServiceEJBRemote ejb = fetVitalQueryServiceLocator.getFetVitalQueryServiceEJB();
-            return ejb.getIcona(idIcona);
+            return ejb.getNormativa(idNormativa);
         } catch (LocatorException e) {
             throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
         } catch (RemoteException e) {
@@ -81,10 +81,10 @@ public class FetVitalQueryServiceDelegate {
         }
     }
 
-    public ArxiuDTO getIconaGran(long idIconaGran) throws DelegateException {
+    public ArxiuDTO getContingut(long idContingut) throws DelegateException {
         try {
             FetVitalQueryServiceEJBRemote ejb = fetVitalQueryServiceLocator.getFetVitalQueryServiceEJB();
-            return ejb.getIconaGran(idIconaGran);
+            return ejb.getContingut(idContingut);
         } catch (LocatorException e) {
             throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
         } catch (RemoteException e) {

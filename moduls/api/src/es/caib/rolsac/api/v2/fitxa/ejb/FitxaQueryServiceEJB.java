@@ -649,7 +649,7 @@ public class FitxaQueryServiceEJB extends HibernateEJB {
             close(session);
         }
 
-        return poDTOList;
+        return new ArrayList<PublicObjectiuDTO>(poDTOList);
     }
     
 }

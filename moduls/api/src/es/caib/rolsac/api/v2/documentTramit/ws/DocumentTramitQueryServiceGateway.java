@@ -10,7 +10,6 @@ import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsDTO;
 import es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioDTO;
 import es.caib.rolsac.api.v2.exception.APIException;
-import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.general.ConfiguracioServeis;
 import es.caib.rolsac.api.v2.tramit.TramitDTO;
 

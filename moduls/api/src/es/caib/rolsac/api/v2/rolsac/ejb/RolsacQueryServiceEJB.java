@@ -42,6 +42,7 @@ import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.Taxa;
 import org.ibit.rol.sac.model.Tipo;
 import org.ibit.rol.sac.model.TipoAfectacion;
+import org.ibit.rol.sac.model.TraduccionHechoVital;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.UnidadMateria;
@@ -1067,7 +1068,19 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 						FetVitalDTO.class, 
 						fetVital,
 						fetVitalCriteria.getIdioma());
+				
+				TraduccionHechoVital traHV = (TraduccionHechoVital) fetVital.getTraduccion(fetVitalCriteria.getIdioma());
+				if (traHV.getDistribComp() != null) {
+				    fetVitalDTO.setFoto(traHV.getDistribComp().getId());
+				}
+				if (traHV.getNormativa() != null) {
+				    fetVitalDTO.setIcono(traHV.getNormativa().getId());
+				}
+				if (traHV.getContenido() != null) {
+				    fetVitalDTO.setIconoGrande(traHV.getContenido().getId());
+				}
 			}
+			
 		} catch (HibernateException e) {
 			log.error(e);
 			throw new EJBException(e);

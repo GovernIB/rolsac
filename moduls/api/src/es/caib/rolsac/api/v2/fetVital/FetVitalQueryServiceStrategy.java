@@ -13,11 +13,11 @@ import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 
 public interface FetVitalQueryServiceStrategy {
 
-    public ArxiuDTO getFotografia(long idFoto) throws StrategyException;
+    public ArxiuDTO getDistribuciCompetencial(long idDistribuciCompetencial) throws StrategyException;
     
-    public ArxiuDTO getIcona(long idIcona) throws StrategyException;
+    public ArxiuDTO getNormativa(long idNormativa) throws StrategyException;
     
-    public ArxiuDTO getIconaGran(long idIconaGran) throws StrategyException;
+    public ArxiuDTO getContingut(long idContingut) throws StrategyException;
     
     public int getNumFitxes(long id) throws StrategyException;
 

@@ -67,25 +67,25 @@ public class FetVitalQueryServiceGateway {
     	return numFetVitalAgrupacionsFV;
     }
 	
-    public ArxiuDTO getFotografia(long idFoto) throws RemoteException {
+    public ArxiuDTO getDistribuciCompetencial(long idDistribuciCompetencial) throws RemoteException {
     	
     	ArxiuDTO adto = null;
-    	adto = stub.getFotografia(idFoto);   
+    	adto = stub.getDistribuciCompetencial(idDistribuciCompetencial);   
     	
     	return adto;
     }    
     
-    public ArxiuDTO getIcona(long idIcona) throws RemoteException {
+    public ArxiuDTO getNormativa(long idNormativa) throws RemoteException {
     	
     	ArxiuDTO adto = null;    	
-    	adto = stub.getIcona(idIcona);
+    	adto = stub.getNormativa(idNormativa);
     	
     	return adto;
     }
     
-    public ArxiuDTO getIconaGran(long idIconaGran) throws RemoteException {
+    public ArxiuDTO getContingut(long idContingut) throws RemoteException {
     	ArxiuDTO adto = null;    	
-    	adto = stub.getIconaGran( idIconaGran);
+    	adto = stub.getContingut(idContingut);
     	
     	return adto;
     }
