@@ -147,7 +147,7 @@ function CModulUnitatAdministrativa() {
 				jQuery( params.nodoDestino ).find("ul").append(html);
 				
 				// Añado radio button de UA si estamos en el mantenimiento de Materias.
-				if ( $('#modul_detall_materies') ) {
+				if ( document.getElementById('modul_detall_materies') != null ) {
 					
 					jQuery('#unitatAdministrativa_id_' + item.id).parent().append(
 						'<p><input id="item_ua_principal_' + item.id + '" type="radio" value="' + item.id + '" name="item_ua_principal">' +
