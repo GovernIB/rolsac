@@ -148,7 +148,6 @@ public abstract class PersonalFacadeEJB extends HibernateEJB {
     
     
     /**
-     * @deprecated No se usa
      * Lista el personal (buscador del nuevo backoffice)
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
@@ -161,10 +160,9 @@ public abstract class PersonalFacadeEJB extends HibernateEJB {
     	Session session = getSession();
     	
     	try {
-    		
-    		if ( !userIsOper() )
-    			parametros.put("validacion", Validacion.PUBLICA);
-    		
+//    		if ( !userIsOper() )
+//    			parametros.put("validacion", Validacion.PUBLICA);
+//    		
     		String sql = "from Personal perso ";
     		
     		Long idUA = (Long) parametros.get("unidadAdministrativa");
@@ -197,17 +195,13 @@ public abstract class PersonalFacadeEJB extends HibernateEJB {
     		}
     		
     		resultadoBusqueda.setListaResultados( query.list() );
-    		
     		return resultadoBusqueda;
     		
     	} catch (DelegateException de) {
-    		
     		throw new EJBException(de);
     	} catch (HibernateException he) {
-    		
     		throw new EJBException(he);
     	} finally {
-    		
     		close(session);
     	}
     }
@@ -311,20 +305,14 @@ public abstract class PersonalFacadeEJB extends HibernateEJB {
     
     /**
      * Lista el personal (buscador del nuevo backoffice)
+     * 
      * @ejb.interface-method
-     * 
      * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
-     * 
      * @param personal	Indica una instancia de tipo personal a buscar.
-     * 
      * @param idUA	Identificador de la unidad administrativa consultada.
-     * 
      * @param pagina	Indica la última página consultada del listado.
-     * 
      * @param resultats	Indica el número de resultados por página.
-     * 
      * @param uaHijas	Indica si queremos añadir al rango de búsqueda las unidades administrativas hijas de la UA consultada.
-     * 
      * @param uaPropias	Indica si queremos añadir al rango de búsqueda las unidades administrativas propias de la UA consultada.
      */ 
     public ResultadoBusqueda buscadorListarPersonal(Personal personal, Long idUA, boolean uaHijas, boolean uaPropias, PaginacionCriteria paginacion) {
@@ -348,42 +336,40 @@ public abstract class PersonalFacadeEJB extends HibernateEJB {
     		
     		// Contrucción de la consulta
     		StringBuilder consulta = new StringBuilder(" from Personal perso where");
-    		
-    		if ( idUA != null )
-    			consulta.append(" perso.unidadAdministrativa.id = :idUA ");
 
-    		if ( numeroLargoPublico != null && !"".equals(numeroLargoPublico) )
-    			consulta.append(" and upper( perso.numeroLargoPublico ) like upper(:numeroLargoPublico) ");
-    		
-    		if ( numeroLargoPrivado != null && !"".equals(numeroLargoPrivado) )
-    			consulta.append(" and upper( perso.numeroLargoPrivado ) like upper(:numeroLargoPrivado) ");
-    		
-    		if ( nombre != null && !"".equals(nombre) )
-    			consulta.append(" and upper( perso.nombre ) like upper(:nombre) ");
-    		
-    		if ( funciones != null && !"".equals(funciones) )
-    			consulta.append(" and upper( perso.funciones ) like upper(:funciones) ");
-    		
-    		if ( extensionPublica != null && !"".equals(extensionPublica) )
-    			consulta.append(" and upper( perso.extensionPublica ) like upper(:extensionPublica) ");
-    		
-    		if ( numeroLargoMovil != null && !"".equals(numeroLargoMovil) )
-    			consulta.append(" and upper( perso.numeroLargoMovil ) like upper(:numeroLargoMovil) ");
-
-    		if ( username != null && !"".equals(username) )
-    			consulta.append(" and upper( perso.username ) like upper(:username) ");
-    		
-    		if ( extensionPrivada != null && !"".equals(extensionPrivada) )
-    			consulta.append(" and upper( perso.extensionPrivada ) like upper(:extensionPrivada ) ");
-    		
-    		if ( email != null && !"".equals(email) )
-    			consulta.append(" and upper( perso.email ) like upper(:email) ");
-    		
-    		if ( cargo != null && !"".equals(cargo) )
-    			consulta.append(" and upper( perso.cargo ) like upper(:cargo) ");
-    		
-    		if ( extensionMovil != null && !"".equals(extensionMovil) )
-    			consulta.append(" and upper( perso.extensionMovil ) like upper(:extensionMovil) ");
+    		if (numeroLargoPublico != null && !"".equals(numeroLargoPublico)) {
+    		    consulta.append(" or upper( perso.numeroLargoPublico ) like upper(:numeroLargoPublico) ");
+    		}
+    		if (numeroLargoPrivado != null && !"".equals(numeroLargoPrivado)) {
+    		    consulta.append(" or upper( perso.numeroLargoPrivado ) like upper(:numeroLargoPrivado) ");
+    		}
+    		if (nombre != null && !"".equals(nombre)) {
+    		    consulta.append(" or upper( perso.nombre ) like upper(:nombre) ");
+    		}
+    		if (funciones != null && !"".equals(funciones)) {
+    		    consulta.append(" or upper( perso.funciones ) like upper(:funciones) ");
+    		}
+    		if (extensionPublica != null && !"".equals(extensionPublica)) {
+    		    consulta.append(" or upper( perso.extensionPublica ) like upper(:extensionPublica) ");
+    		}
+    		if (numeroLargoMovil != null && !"".equals(numeroLargoMovil)) {
+    		    consulta.append(" or upper( perso.numeroLargoMovil ) like upper(:numeroLargoMovil) ");
+    		}
+    		if (username != null && !"".equals(username)) {
+    		    consulta.append(" or upper( perso.username ) like upper(:username) ");
+    		}
+    		if (extensionPrivada != null && !"".equals(extensionPrivada)) {
+    		    consulta.append(" or upper( perso.extensionPrivada ) like upper(:extensionPrivada ) ");
+    		}
+    		if (email != null && !"".equals(email)) {
+    		    consulta.append(" or upper( perso.email ) like upper(:email) ");
+    		}
+    		if (cargo != null && !"".equals(cargo)) {
+    		    consulta.append(" or upper( perso.cargo ) like upper(:cargo) ");
+    		}
+    		if (extensionMovil != null && !"".equals(extensionMovil)) {
+    		    consulta.append(" or upper( perso.extensionMovil ) like upper(:extensionMovil) ");
+    		}
     		
     		/*TODO 03/09/2013: Desactivada validación ya que se detectó en el algotritmo antiguo se añadía 
     		pero no existe este campo para la entidad Personal, se tiene que añadir una 'join' con su unidad 
@@ -393,55 +379,52 @@ public abstract class PersonalFacadeEJB extends HibernateEJB {
 				//parametros.put("validacion", Validacion.PUBLICA);*/
 
     		//Obtenemos los identificadores de las UAhijas y/o propias de la UA actual.
-    		String listaUA = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA( idUA, uaHijas, uaPropias );
-    		if ( !StringUtils.isEmpty(listaUA) )
-    			consulta.append(" or perso.unidadAdministrativa in (:listaUA)");
+    		String listaUA = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(idUA, uaHijas, uaPropias);
+    		if (!StringUtils.isEmpty(listaUA)) {
+    		    consulta.append(" and ( perso.unidadAdministrativa in (:listaUA))");
+    		}
     			
     		consulta.append(" order by ltrim(perso.nombre) asc ");
-    		
-    		
-    		Query query = session.createQuery( consulta.toString() );
-    		
-    		if ( idUA != null )
-    			query.setParameter("idUA", idUA);
 
-    		if ( numeroLargoPublico != null && !"".equals(numeroLargoPublico) )
-    			query.setParameter("numeroLargoPublico", "%" + numeroLargoPublico + "%");
-    		
-    		if ( numeroLargoPrivado != null && !"".equals(numeroLargoPrivado) )
-    			query.setParameter("numeroLargoPrivado", "%" + numeroLargoPrivado + "%");
-    		
-    		if ( nombre != null && !"".equals(nombre) )
-    			query.setParameter("nombre", "%" + nombre + "%");
-    		
-    		if ( funciones != null && !"".equals(funciones) )
-    			query.setParameter("funciones", "%" + funciones + "%");
-    		
-    		if ( extensionPublica != null && !"".equals(extensionPublica) )
-    			query.setParameter("extensionPublica", "%" + extensionPublica + "%");
-    		
-    		if ( numeroLargoMovil != null && !"".equals(numeroLargoMovil) )
-    			query.setParameter("numeroLargoMovil", "%" + numeroLargoMovil + "%");
+    		Query query = session.createQuery(consulta.toString());
 
-    		if ( username != null && !"".equals(username) )
-    			query.setParameter("username", "%" + username + "%");
+    		if (numeroLargoPublico != null && !"".equals(numeroLargoPublico)) {
+    		    query.setParameter("numeroLargoPublico", "%" + numeroLargoPublico + "%");
+    		}
+    		if (numeroLargoPrivado != null && !"".equals(numeroLargoPrivado)) {
+    		    query.setParameter("numeroLargoPrivado", "%" + numeroLargoPrivado + "%");
+    		}
+    		if (nombre != null && !"".equals(nombre)) {
+    		    query.setParameter("nombre", "%" + nombre + "%");
+    		}
+    		if (funciones != null && !"".equals(funciones)) {
+    		    query.setParameter("funciones", "%" + funciones + "%");
+    		}
+    		if (extensionPublica != null && !"".equals(extensionPublica)) {
+    		    query.setParameter("extensionPublica", "%" + extensionPublica + "%");
+    		}
+    		if (numeroLargoMovil != null && !"".equals(numeroLargoMovil)) {
+    		    query.setParameter("numeroLargoMovil", "%" + numeroLargoMovil + "%");
+    		}
+    		if (username != null && !"".equals(username)) {
+    		    query.setParameter("username", "%" + username + "%");
+    		}
+    		if (extensionPrivada != null && !"".equals(extensionPrivada)) {
+    		    query.setParameter("extensionPrivada", "%" +  extensionPrivada + "%");
+    		}
+    		if (email != null && !"".equals(email)) {
+    		    query.setParameter("email", "%" + email + "%");
+    		}
+    		if (cargo != null && !"".equals(cargo)) {
+    		    query.setParameter("cargo", "%" + cargo + "%");
+    		}
+    		if (extensionMovil != null && !"".equals(extensionMovil)) {
+    		    query.setParameter("extensionMovil", "%" + extensionMovil + "%");
+    		}
+    		if (!StringUtils.isEmpty(listaUA)) {query.setParameter("listaUA", listaUA);
     		
-    		if ( extensionPrivada != null && !"".equals(extensionPrivada) )
-    			query.setParameter("extensionPrivada", "%" +  extensionPrivada + "%");
-    		
-    		if ( email != null && !"".equals(email) )
-    			query.setParameter("email", "%" + email + "%");
-    		
-    		if ( cargo != null && !"".equals(cargo) )
-    			query.setParameter("cargo", "%" + cargo + "%");
-    		
-    		if ( extensionMovil != null && !"".equals(extensionMovil) )
-    			query.setParameter("extensionMovil", "%" + extensionMovil + "%");
-    		
-    		if ( !StringUtils.isEmpty(listaUA) )
-    			query.setParameter("listaUA", listaUA);
-    		
-    		
+    		}
+
     		/*TODO 03/09/2013: Desactivada validación ya que se detectó en el algotritmo antiguo se añadía 
     		pero no existe este campo para la entidad Personal, se tiene que añadir una 'join' con su unidad 
     		administrativa para filtrar por el campo validación de la UA?  
@@ -450,27 +433,17 @@ public abstract class PersonalFacadeEJB extends HibernateEJB {
     		
 
     		resultadoBusqueda.setTotalResultados( query.list().size() );
-    		
     		resultadoBusqueda = PaginatedHibernateEJB.obtenerListadoPaginado(query, paginacion);
-    		
 
-    		
-    	} catch (DelegateException de) {
-    		
+    	} catch (DelegateException de) {    		
     		throw new EJBException(de);
-    		
     	} catch (HibernateException he) {
-    		
     		throw new EJBException(he);
-    		
     	} finally {
-    		
     		close(session);
-    		
     	}
     	
 		return resultadoBusqueda;
-    	
     }
     
 }

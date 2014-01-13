@@ -68,82 +68,69 @@ public class PersonalBackController extends PantallaBaseController
 
 		List<PersonalDTO> llistaPersonalDTO = new ArrayList<PersonalDTO>();
 		Map<String,Object> resultats = new HashMap<String,Object>();
-		Personal personal = new Personal();
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+        
+        paramMap.put("username", request.getParameter("cerca_codi"));
+        paramMap.put("unidadAdministrativa", ((UnidadAdministrativa) session.getAttribute("unidadAdministrativa")).getId());
 
-		//Si no hay unidad administrativa se devuelve vacio
-		if ( getUAFromSession(session) != null ) {
-			
-			UnidadAdministrativa ua = (UnidadAdministrativa) getUAFromSession(session);
-			personal.setUsername( request.getParameter("username") );
-			personal.setNombre( request.getParameter("nom") );
-			personal.setFunciones( request.getParameter("funcions") );
-			personal.setCargo( request.getParameter("carrec") );
-			personal.setEmail( request.getParameter("email") );
-			personal.setExtensionPublica( request.getParameter("epui") );
-			personal.setNumeroLargoPublico( request.getParameter("nlpui") );
-			personal.setExtensionPrivada( request.getParameter("epri") );
-			personal.setNumeroLargoPrivado( request.getParameter("nlpri") );
-			personal.setExtensionMovil( request.getParameter("em") );
-			personal.setNumeroLargoMovil( request.getParameter("nlm") );
+        String textes = request.getParameter("cerca_text");
+        if (textes != null && !"".equals(textes)) {
+            textes = textes.toUpperCase();
 
-			boolean uaFilles = "1".equals( request.getParameter("uaFilles") );
-			boolean uaMeves = "1".equals( request.getParameter("uaMeves") );
+            paramMap.put("nombre", textes);
+            paramMap.put("funciones", textes);
+            paramMap.put("cargo", textes);
+            paramMap.put("email", textes);
+            paramMap.put("extensionPublica", textes);
+            paramMap.put("numeroLargoPublico", textes);
+            paramMap.put("extensionPrivada", textes);
+            paramMap.put("numeroLargoPrivado", textes);
+            paramMap.put("extensionMovil", textes);
+            paramMap.put("numeroLargoMovil", textes);
+        }
 
-			//Información de paginación
-			String pagPag = request.getParameter("pagPag");
-			String pagRes = request.getParameter("pagRes");
+        boolean uaFilles = "1".equals(request.getParameter("uaFilles"));
+        boolean uaMeves = "1".equals(request.getParameter("uaMeves"));
 
-			if ( pagPag == null ) 
-				pagPag = String.valueOf(0);
-			
-			if ( pagRes == null ) 
-				pagRes = String.valueOf(10);
+        // Información de paginación
+        String pagPag = request.getParameter("pagPag");
+        String pagRes = request.getParameter("pagRes");
 
-			ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
-
-			try {
-
-				PaginacionCriteria paginacion = new PaginacionCriteria();
-				paginacion.setPagPag( Integer.parseInt(pagPag) );
-				paginacion.setPagRes( Integer.parseInt(pagRes) );
-				
-				PersonalDelegate personalDelegate = DelegateUtil.getPersonalDelegate();
-				resultadoBusqueda = personalDelegate.buscadorListarPersonal( personal, ua.getId(), uaFilles, uaMeves, paginacion );
-
-				for ( Personal persona : (List<Personal>) resultadoBusqueda.getListaResultados() ) {
-
-					llistaPersonalDTO.add(new PersonalDTO(
-							persona.getId(),
-							persona.getNombre(),
-							persona.getUsername(),
-							persona.getUnidadAdministrativa().getNombreUnidadAdministrativa( DelegateUtil.getIdiomaDelegate().lenguajePorDefecto() ),
-							persona.getEmail(),
-							persona.getExtensionPublica()
-							));
-
-				}
-
-			} catch (DelegateException dEx) {
-
-				if ( dEx.isSecurityException() ) {
-
-					log.error( "Permisos insuficients: " + dEx.getMessage() );
-
-				} else {
-
-					log.error( "Error: " + dEx.getMessage() );
-
-				}
-
-			}
-
-			resultats.put( "total", resultadoBusqueda.getTotalResultados() );
-			resultats.put( "nodes", llistaPersonalDTO );
-
+        if (pagPag == null) {
+		    pagPag = String.valueOf(0);
+		}
+		if (pagRes == null) {
+		    pagRes = String.valueOf(10);
 		}
 
-		return resultats;
+		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
 
+		try {
+		    PersonalDelegate personalDelegate = DelegateUtil.getPersonalDelegate();
+		    resultadoBusqueda = personalDelegate.buscadorListarPersonal(paramMap, Integer.parseInt(pagPag), Integer.parseInt(pagRes), uaFilles, uaMeves);
+
+		    for (Personal persona : (List<Personal>) resultadoBusqueda.getListaResultados()) {
+		        llistaPersonalDTO.add(new PersonalDTO(
+		            persona.getId(),
+		            persona.getNombre(),
+		            persona.getUsername(),
+		            persona.getUnidadAdministrativa().getNombreUnidadAdministrativa(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto()),
+		            persona.getEmail(),
+		            persona.getExtensionPublica()
+		        ));
+		    }
+
+		} catch (DelegateException dEx) {
+		    if ( dEx.isSecurityException() ) {
+		        log.error("Permisos insuficients: " + dEx.getMessage());
+		    } else {
+		        log.error("Error: " + dEx.getMessage());
+		    }
+		}
+		
+		resultats.put("total", resultadoBusqueda.getTotalResultados());
+		resultats.put("nodes", llistaPersonalDTO);
+		return resultats;
 	}
 
 
