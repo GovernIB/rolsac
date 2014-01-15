@@ -79,7 +79,15 @@ public class PublicoObjetivoDelegate implements StatelessDelegate {
     		throw new DelegateException(e);
     	}
     }
-    
+
+    public List<PublicoObjetivo> obtenerPublicosObjetivoPorIDs(String ids, String idioma) throws DelegateException {
+        try {
+            return getFacade().obtenerPublicosObjetivoPorIDs(ids, idioma);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

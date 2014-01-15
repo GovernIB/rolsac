@@ -15,6 +15,7 @@ import net.sf.hibernate.expression.Expression;
 import net.sf.hibernate.expression.Order;
 
 import org.ibit.rol.sac.model.AgrupacionHechoVital;
+import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
@@ -443,6 +444,28 @@ public abstract class PublicoObjetivoFacadeEJB extends HibernateEJB {
     		
     	}   
     	
+    }
+    
+    
+    /**
+     * Obtener listado de públicos objetivo según un listado de IDs
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+     */
+    public List<PublicoObjetivo> obtenerPublicosObjetivoPorIDs(String ids, String idioma) {
+        
+        List<PublicoObjetivo> resultado;
+        Session session = getSession();
+        try {
+            Query query = session.createQuery("from PublicoObjetivo as po, po.traducciones as trad where index(trad) = :idioma and po.id in (" + ids + ") ");
+            query.setString("idioma", idioma);
+            resultado = (List<PublicoObjetivo>)query.list();
+            return resultado;
+        } catch (HibernateException he){
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
     }
     
 }

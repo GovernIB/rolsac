@@ -6,17 +6,15 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.Vector;
 
@@ -63,9 +61,7 @@ import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.DocumentoResumenDelegate;
 import org.ibit.rol.sac.persistence.delegate.ExcepcioDocumentacioDelegate;
 import org.ibit.rol.sac.persistence.delegate.FamiliaDelegate;
-import org.ibit.rol.sac.persistence.delegate.HechoVitalDelegate;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalProcedimientoDelegate;
-import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IniciacionDelegate;
 import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
 import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
@@ -74,7 +70,6 @@ import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
 import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -98,35 +93,27 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	public String pantallaProcediment(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
 
 		String lang;
-
 		try {
-
 			lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 
 		} catch (DelegateException dEx) {
-
 			log.error("Error al recuperar el idioma por defecto.");
 			lang = "ca";
-
 		}
 
-		if (estemEnUnitatAdministrativa(session))
-			crearModelComplert_pantalla(model, session, request, lang);
-
-		else
-			crearModelSencill_pantalla(model, session, request, lang);
-
+		if (estemEnUnitatAdministrativa(session)) {
+		    crearModelComplert_pantalla(model, session, request, lang);
+		} else {
+		    crearModelSencill_pantalla(model, session, request, lang);
+		}
 
 		loadIndexModel (model, request);
-
 		return "index";
 	}
-
 
 	private boolean estemEnUnitatAdministrativa(HttpSession session) {
 		return null != getUAFromSession(session);
 	}
-
 
 	private void crearModelComplert_pantalla(Map<String, Object> model, HttpSession session, HttpServletRequest request, String lang) {
 
@@ -153,21 +140,40 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			model.put("cataleg", llistarCatalegDocuments(lang));
 
 		} catch (DelegateException dEx) {
-
 			if (dEx.isSecurityException()) {
-
 				model.put("error", "permisos");
-
 			} else {
-
 				model.put("error", "altres");
 				logException(log, dEx);
-
 			}
-
 		}
-
 	}
+
+	private List<IdNomDTO> llistarExcepcionsDocumentacio(String lang) throws DelegateException {
+        ExcepcioDocumentacioDelegate excepcioDelegate = DelegateUtil.getExcepcioDocumentacioDelegate();
+        List<IdNomDTO> excepcioObjDTOList = new ArrayList<IdNomDTO>();
+        List<ExcepcioDocumentacio> llistaExcepcionsDocumentacio = excepcioDelegate.llistarExcepcioDocumentacio();
+        TraduccionExcepcioDocumentacio ted;
+        for (ExcepcioDocumentacio excepcio : llistaExcepcionsDocumentacio ) {
+            ted = (TraduccionExcepcioDocumentacio) excepcio.getTraduccion(lang);
+            excepcioObjDTOList.add(new IdNomDTO(excepcio.getId(), ted.getNombre()));
+        }
+        return excepcioObjDTOList;
+    }
+
+	private List<IdNomDTO> llistarCatalegDocuments(String lang) throws DelegateException {
+
+        CatalegDocumentsDelegate catdocDelegate = DelegateUtil.getCatalegDocumentsDelegate();
+        List<IdNomDTO> catalegObjDTOList = new ArrayList<IdNomDTO>();
+        List<CatalegDocuments> llistaCatalegDocuments = catdocDelegate.llistarCatalegDocuments();
+        TraduccionCatalegDocuments tcd;
+        for (CatalegDocuments document : llistaCatalegDocuments ) {
+            tcd = (TraduccionCatalegDocuments) document.getTraduccion(lang);
+            catalegObjDTOList.add(new IdNomDTO(document.getId(), tcd.getNombre()));
+        }
+        
+        return catalegObjDTOList;
+    }
 
 
 	@RequestMapping(value = "/llistat.do", method = POST)
@@ -178,36 +184,29 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
 		List<ProcedimientoLocalDTO> llistaProcedimientoLocalDTO = new ArrayList<ProcedimientoLocalDTO>();
 
-		if ( getUAFromSession(session) != null && buscadorCriteria != null ) {
-
+		if (getUAFromSession(session) != null && buscadorCriteria != null) {
 			try {
-
 				UnidadAdministrativa ua = (UnidadAdministrativa) getUAFromSession(session);
 				buscadorCriteria.setUnidadAdministrativa(ua);
 
 				ProcedimientoDelegate procedimientosDelegate = DelegateUtil.getProcedimientoDelegate();
 				resultadoBusqueda = procedimientosDelegate.buscadorProcedimientos(buscadorCriteria);
-				llistaProcedimientoLocalDTO.addAll( convertirProcLocales(resultadoBusqueda, request) );
+				llistaProcedimientoLocalDTO.addAll(convertirProcLocales(resultadoBusqueda, request));
 
 			} catch (DelegateException dEx) {
-
-				if ( dEx.isSecurityException() )
-					resultats.put( "error", messageSource.getMessage( "error.permisos", null, request.getLocale() ) );
-
-				else
-					resultats.put( "error", messageSource.getMessage( "error.altres", null, request.getLocale() ) );
-
+				if (dEx.isSecurityException()) {
+				    resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+				} else {
+				    resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+				}
 			}
-
 		}
 
 		resultats.put("total", resultadoBusqueda.getTotalResultados());
 		resultats.put("nodes", llistaProcedimientoLocalDTO);
 
 		return resultats;
-
 	}
-
 
 	/** Método que se encarga de convertir un String en formato json a una instancia de BuscadorProcedimientoCriteria */
 	private BuscadorProcedimientoCriteria jsonToBuscadorProcedimientoCriteria (String criteria) { //TODO: sacar de aquí
@@ -215,7 +214,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		BuscadorProcedimientoCriteria buscadorCriteria = null;
 
 		try {
-
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			mapper.configure(DeserializationConfig.Feature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
@@ -224,54 +222,43 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			buscadorCriteria.setLocale( DelegateUtil.getIdiomaDelegate().lenguajePorDefecto() ); 
 
 		} catch (JsonParseException e) {
-
-			log.error( e.getMessage() );
-
+			log.error(e.getMessage());
 		} catch (JsonMappingException e) {
-
-			log.error( e.getMessage() );
-
+			log.error(e.getMessage());
 		} catch (IOException e) {
-
-			log.error( e.getMessage() );
-
+			log.error(e.getMessage());
 		} catch (DelegateException e) {
-
-			log.error( e.getMessage() );
-
+			log.error(e.getMessage());
 		} 
 
 		return buscadorCriteria;
-
 	}
-
 
 	/*
 	 * Función para convertir a procedimientos locales los resultados
 	 */
-	private List<ProcedimientoLocalDTO> convertirProcLocales(ResultadoBusqueda resultadoBusqueda, HttpServletRequest request)
-	{
+	private List<ProcedimientoLocalDTO> convertirProcLocales(ResultadoBusqueda resultadoBusqueda, HttpServletRequest request) {
+
 		List<ProcedimientoLocalDTO> llistaProcedimientoLocalDTO = new ArrayList<ProcedimientoLocalDTO>();
 		for (ProcedimientoLocal pl : castList(ProcedimientoLocal.class, resultadoBusqueda.getListaResultados())) {
 			ProcedimientoLocalDTO procLocalDTO = new ProcedimientoLocalDTO(
+			    pl.getId(),
+			    pl.getNombreProcedimiento(),
+			    pl.isVisible(),
+			    DateUtils.formatDate(pl.getFechaActualizacion()),
+			    pl.getNombreFamilia()
+			);
 
-					pl.getId(), 
-					pl.getNombreProcedimiento(),
-					pl.isVisible(), 
-					DateUtils.formatDate(pl.getFechaActualizacion()),
-					pl.getNombreFamilia()
-
-					);
-
-			llistaProcedimientoLocalDTO.add( procLocalDTO );
+			llistaProcedimientoLocalDTO.add(procLocalDTO);
 		}
+		
 		return llistaProcedimientoLocalDTO;
 	}
 
 
 	@RequestMapping(value = "/pagDetall.do", method = POST)
-	public @ResponseBody Map<String, Object> recuperaDetall(HttpSession session, HttpServletRequest request)
-	{
+	public @ResponseBody Map<String, Object> recuperaDetall(HttpSession session, HttpServletRequest request) {
+
 		Map<String, Object> resultats = new HashMap<String, Object>();
 
 		try {
@@ -293,23 +280,22 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			resultats.put("item_responsable", proc.getResponsable());
 			resultats.put("item_finestreta_unica", proc.esVentanillaUnica());
 			resultats.put("item_notes", proc.getInfo());
-
-			// TODO: Implementar getPublico()
-			// resultats.put("item_public_objectiu", DateUtils.formatDate(proc.getPublico()));
-
-			recuperaProcIdiomas(resultats, proc, lang);			// Recuperar los procedimientos según los idiomas
-			recuperaProcDocs(resultats, proc);					// Recuperar los documentos relacionados de un procedimiento
-			recuperaProcTramites(resultats, proc, request);		// Recuperar los trámites relacionados de un procedimiento
-			recuperaProcMaterias(resultats, proc, lang);		// Recuperar las materias asociadas a un procedimiento
-			recuperaProcPO(resultats, proc, lang);				// Recuperar los públicos objetivos asociados a un procedimiento
-			recuperaProcHechosVitales(resultats, proc, lang);	// Recuperar los hechos vitales asociados a un procedimiento
-			recuperaProcNormativas(resultats, proc, lang);		// Recuperar las normativas asociadas a un procedimiento
+			resultats.put("item_fi_vida_administrativa", (proc.getIndicador() == null || "0".equals(proc.getIndicador())) ? false : true);           
+            resultats.put("item_taxa", (proc.getTaxa() == null || "0".equals(proc.getTaxa())) ? false : true);
+            resultats.put("item_finestreta_unica", (proc.getVentanillaUnica() == null || "0".equals(proc.getVentanillaUnica())) ? false : true);
 
 			if (proc.getIniciacion() != null) {
-				Iniciacion iniciacion = proc.getIniciacion();
-				resultats.put("item_iniciacio", iniciacion.getId());
+				resultats.put("item_iniciacio", proc.getIniciacion().getId());
 			}
 
+			if (proc.getFamilia() != null) {
+                resultats.put("item_familia", proc.getFamilia().getId());
+            }
+
+            if (proc.getVersion() != null) {
+                resultats.put("item_version", proc.getVersion());
+            }
+            
 			if (proc.getUnidadAdministrativa() != null) {
 				UnidadAdministrativa ua = proc.getUnidadAdministrativa();
 				resultats.put("item_organ_responsable_id", ua.getId());
@@ -322,139 +308,75 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				resultats.put("item_organ_nom", ua.getNombreUnidadAdministrativa(lang));
 			}
 
-			if (proc.getFamilia() != null) {
-				Familia familia = proc.getFamilia();
-				resultats.put("item_familia", familia.getId());
-			}
-
-			if (proc.getVersion() != null)
-				resultats.put("item_version", proc.getVersion());
-
-			if (proc.getIndicador() == null || "0".equals(proc.getIndicador()))
-				resultats.put("item_fi_vida_administrativa", false);
-			else
-				resultats.put("item_fi_vida_administrativa", true);
-
-			if (proc.getTaxa() == null || "0".equals(proc.getTaxa()))
-				resultats.put("item_taxa", false);
-			else
-				resultats.put("item_taxa", true);
-
-			if (proc.getVentanillaUnica() == null || "0".equals(proc.getVentanillaUnica()))
-				resultats.put("item_finestreta_unica", false);
-			else
-				resultats.put("item_finestreta_unica", true);
-
 			// Obtención de listado de posibles hechos vitales del procedimiento
 			Set<PublicoObjetivo> listaPublicosObjetivos =  proc.getPublicosObjetivo();
-			if ( !listaPublicosObjetivos.isEmpty() ) {
-
-				resultats.put( "listadoHechosVitales", LlistatUtil.llistarHechosVitales( listaPublicosObjetivos , lang ) );
-
+			if (!listaPublicosObjetivos.isEmpty()) {
+				resultats.put("listadoHechosVitales", LlistatUtil.llistarHechosVitales(listaPublicosObjetivos, lang));
 			} else {
-
-				resultats.put( "listadoHechosVitales", Collections.EMPTY_SET );
-
+				resultats.put("listadoHechosVitales", Collections.EMPTY_SET);
 			}
 
+			recuperaIdiomas(resultats, proc, lang);         // Recuperar los procedimientos según los idiomas
+            recuperaDocs(resultats, proc);                  // Recuperar los documentos relacionados de un procedimiento
+            recuperaTramites(resultats, proc, request);     // Recuperar los trámites relacionados de un procedimiento
+            recuperaMaterias(resultats, proc, lang);        // Recuperar las materias asociadas a un procedimiento
+            recuperaPO(resultats, proc, lang);              // Recuperar los públicos objetivos asociados a un procedimiento
+            recuperaHechosVitales(resultats, proc, lang);   // Recuperar los hechos vitales asociados a un procedimiento
+            recuperaNormativas(resultats, proc, lang);      // Recuperar las normativas asociadas a un procedimiento
 
 		} catch (DelegateException dEx) {
-
 			logException(log, dEx);
-
 			if ( dEx.isSecurityException() ){
-
 				resultats.put( "error", messageSource.getMessage( "error.permisos", null, request.getLocale() ) );
-
 			} else {
-
 				resultats.put( "error", messageSource.getMessage( "error.altres", null, request.getLocale() ) );
-
 			}
-
 		}
 
 		return resultats;
-
 	}
 
 	/*
 	 * Función que recupera el contenido de los procedimientos según el idioma.
 	 */
-	private void recuperaProcIdiomas(Map<String, Object> resultats, ProcedimientoLocal proc, String lang)
-	{
-		if (proc.getTraduccion("ca") != null) {
-			resultats.put("ca", (TraduccionProcedimientoLocal) proc.getTraduccion("ca"));
-		} else {
-			if (proc.getTraduccion(lang) != null)
-				resultats.put("ca", (TraduccionProcedimientoLocal) proc.getTraduccion(lang));
-			else
-				resultats.put("ca", new TraduccionProcedimientoLocal());
-		}
+	private void recuperaIdiomas(Map<String, Object> resultats, ProcedimientoLocal proc, String langDefault) throws DelegateException {
 
-		if (proc.getTraduccion("es") != null) {
-			resultats.put("es", (TraduccionProcedimientoLocal) proc.getTraduccion("es"));
-		} else {
-			if (proc.getTraduccion(lang) != null)
-				resultats.put("es", (TraduccionProcedimientoLocal) proc.getTraduccion(lang));
-			else
-				resultats.put("es", new TraduccionProcedimientoLocal());
-		}
-
-		if (proc.getTraduccion("en") != null) {
-			resultats.put("en", (TraduccionProcedimientoLocal) proc.getTraduccion("en"));
-		} else {
-			if (proc.getTraduccion(lang) != null)
-				resultats.put("en", (TraduccionProcedimientoLocal) proc.getTraduccion(lang));
-			else
-				resultats.put("en", new TraduccionProcedimientoLocal());
-		}
-
-		if (proc.getTraduccion("de") != null) {
-			resultats.put("de", (TraduccionProcedimientoLocal) proc.getTraduccion("de"));
-		} else {
-			if (proc.getTraduccion(lang) != null)
-				resultats.put("de", (TraduccionProcedimientoLocal) proc.getTraduccion(lang));
-			else
-				resultats.put("de", new TraduccionProcedimientoLocal());
-		}
-
-		if (proc.getTraduccion("fr") != null) {
-			resultats.put("fr", (TraduccionProcedimientoLocal) proc.getTraduccion("fr"));
-		} else {
-			if (proc.getTraduccion(lang) != null)
-				resultats.put("fr", (TraduccionProcedimientoLocal) proc.getTraduccion(lang));
-			else
-				resultats.put("fr", new TraduccionProcedimientoLocal());
-		}
+	    List<String> langs = DelegateUtil.getIdiomaDelegate().listarLenguajes();
+        for (String lang : langs) {
+            if (proc.getTraduccion(lang) != null) {
+                resultats.put(lang, (TraduccionProcedimientoLocal) proc.getTraduccion(lang));
+            } else {
+                if (proc.getTraduccion(langDefault) != null) {
+                    resultats.put(lang, (TraduccionProcedimientoLocal) proc.getTraduccion(langDefault));
+                } else {
+                    resultats.put(lang, new TraduccionProcedimientoLocal());
+                }
+            }
+        }
 	}
 
 	/*
 	 * Función para recuperar los documentos relaciohnados con el procedimuiento.
 	 */
-	private void recuperaProcDocs(Map<String, Object> resultats, ProcedimientoLocal proc) throws DelegateException
-	{
-		IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
+	private void recuperaDocs(Map<String, Object> resultats, ProcedimientoLocal proc) throws DelegateException {
+
 		if (proc.getDocumentos() != null) {
 			Map<String, Object> mapDoc;
 			List<Map<String, Object>> llistaDocuments = new ArrayList<Map<String, Object>>();
+			List<String> idiomas = DelegateUtil.getIdiomaDelegate().listarLenguajes();
 
 			for(Documento doc: proc.getDocumentos()) {
 				if (doc != null) {
+				    
 					// Montar map solo con los campos 'titulo' de las traducciones del documento.
 					Map<String, String> titulos = new HashMap<String, String>();
 					//IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
-					List<String> idiomas = idiomaDelegate.listarLenguajes();
 					String nombre;
 					TraduccionDocumento traDoc;
 
 					for (String idioma: idiomas) {
 						traDoc = (TraduccionDocumento) doc.getTraduccion(idioma);
-						if (traDoc != null && traDoc.getTitulo() != null)
-							nombre = traDoc.getTitulo();
-						else
-							nombre = "";
-
+						nombre = (traDoc != null && traDoc.getTitulo() != null) ? traDoc.getTitulo() : "";
 						titulos.put(idioma, nombre);
 					}
 
@@ -462,55 +384,57 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 					mapDoc.put("id", doc.getId());
 					mapDoc.put("orden", doc.getOrden());
 					mapDoc.put("nombre", titulos);
-
 					llistaDocuments.add(mapDoc);
+					
 				} else {
 					log.error("El procedimient " + proc.getId() + " te un document null.");
-
 				}
 			}
 			resultats.put("documents", llistaDocuments);
 
 		} else {
 			resultats.put("documents", null);
-
 		}
 	}
 
 	/*
 	 * Función para recuperar los trámites de un procedimiento
 	 */
-	private void recuperaProcTramites(Map<String, Object> resultats, ProcedimientoLocal proc, HttpServletRequest request) throws DelegateException
-	{
+	private void recuperaTramites(Map<String, Object> resultats, ProcedimientoLocal proc, HttpServletRequest request) throws DelegateException {
+
 		List<ListadoModuloTramiteDTO> listaTramitesDTO = null;
 		if (proc.getTramites() != null && proc.getTramites().size() != 0) {
 			listaTramitesDTO = new ArrayList<ListadoModuloTramiteDTO>();
+			String lenguajePorDefecto = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			for (Tramite tramite : proc.getTramites()) {
 				if (tramite != null) {
 					String nombreTramite;
-					if (tramite.getTraduccion(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto()) != null)
-						nombreTramite = ((TraduccionTramite) tramite.getTraduccion(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto())).getNombre();
-					else
-						nombreTramite = "void";
+					if (tramite.getTraduccion(lenguajePorDefecto) != null) {
+					    nombreTramite = ((TraduccionTramite) tramite.getTraduccion(lenguajePorDefecto)).getNombre();
+					} else {
+					    nombreTramite = "void";
+					}
 
-					listaTramitesDTO.add( new ListadoModuloTramiteDTO( tramite.getId(), nombreTramite, tramite.getFase() ) );
+					listaTramitesDTO.add(new ListadoModuloTramiteDTO(tramite.getId(), nombreTramite, tramite.getFase()));
 				}
 			}
 		}
+
 		resultats.put("tramites", listaTramitesDTO);
 	}
 
 	/*
 	 * Función para recuperar la materias de un procedimiento
 	 */
-	private void recuperaProcMaterias(Map<String, Object> resultats, ProcedimientoLocal proc, String lang)
-	{
+	private void recuperaMaterias(Map<String, Object> resultats, ProcedimientoLocal proc, String lang) {
+
 		if (proc.getMaterias() != null) {
 			List<IdNomDTO> llistaMateriesDTO = new ArrayList<IdNomDTO>();
-			for (Materia materia : proc.getMaterias())
-				llistaMateriesDTO.add(new IdNomDTO(materia.getId(), materia.getNombreMateria(lang)));
-
+			for (Materia materia : proc.getMaterias()) {
+			    llistaMateriesDTO.add(new IdNomDTO(materia.getId(), materia.getNombreMateria(lang)));
+			}
 			resultats.put("materies", llistaMateriesDTO);
+
 		} else {
 			resultats.put("materies", null);
 		}
@@ -519,27 +443,26 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	/*
 	 * Función para recuperar los públicos objeticos de un procedimiento
 	 */
-	private void recuperaProcPO(Map<String, Object> resultats, ProcedimientoLocal proc, String lang)
-	{
+	private void recuperaPO(Map<String, Object> resultats, ProcedimientoLocal proc, String lang) {
+
 		if (proc.getPublicosObjetivo() != null) {
 			List<IdNomDTO> llistaPublicsDTO = new ArrayList<IdNomDTO>();
 			for (PublicoObjetivo pob : proc.getPublicosObjetivo()) {
 				TraduccionPublicoObjetivo tpob = (TraduccionPublicoObjetivo) pob.getTraduccion(lang);
-				llistaPublicsDTO.add(new IdNomDTO(pob.getId(), tpob == null ? "" : tpob.getTitulo() ));
+				llistaPublicsDTO.add(new IdNomDTO(pob.getId(), tpob == null ? "" : tpob.getTitulo()));
 			}
 			resultats.put("publicsObjectiu", llistaPublicsDTO);
 
 		} else {
 			resultats.put("publicsObjectiu", null);
-
 		}
 	}
 
 	/*
 	 * Función para recuperar los hechos vitales de un procedimiento
 	 */
-	private void recuperaProcHechosVitales(Map<String, Object> resultats, ProcedimientoLocal proc, String lang)
-	{
+	private void recuperaHechosVitales(Map<String, Object> resultats, ProcedimientoLocal proc, String lang) {
+
 		List<Map<String, Object>> llistaFetsDTO = new ArrayList<Map<String, Object>>();
 		for (HechoVitalProcedimiento hechoVitalProc : proc.getHechosVitalesProcedimientos()) {
 			TraduccionHechoVital thv = (TraduccionHechoVital) hechoVitalProc.getHechoVital().getTraduccion(lang);
@@ -549,6 +472,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			hvpDTO.put("orden", hechoVitalProc.getOrden());
 			llistaFetsDTO.add(hvpDTO);
 		}
+		
 		Collections.sort(llistaFetsDTO, new HechoVitalProcedimientoDTOComparator());
 		resultats.put("fetsVitals", llistaFetsDTO);
 	}
@@ -556,8 +480,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	/*
 	 * Función para recuperar las materias de un procedimiento
 	 */
-	private void recuperaProcNormativas(Map<String, Object> resultats, ProcedimientoLocal proc, String lang)
-	{
+	private void recuperaNormativas(Map<String, Object> resultats, ProcedimientoLocal proc, String lang) {
+
 		if (proc.getNormativas() != null) {
 			Map<String, String> map;
 			List<Map<String, String>> llistaNormatives = new ArrayList<Map<String, String>>();
@@ -566,10 +490,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 			for (Normativa normativa: proc.getNormativas()) {
 				traNor = (TraduccionNormativa) normativa.getTraduccion(lang);
-				titulo = "";
-				if (traNor != null)
-					titulo = HtmlUtils.obtenerTituloDeEnlaceHtml(traNor.getTitulo()); // Retirar posible enlace incrustado en titulo
-
+				// Retirar posible enlace incrustado en titulo
+				titulo = (traNor == null) ? "" : HtmlUtils.obtenerTituloDeEnlaceHtml(traNor.getTitulo());
 				map = new HashMap<String, String>(2);
 				map.put("id", normativa.getId().toString());
 				map.put("nombre", titulo);
@@ -579,20 +501,17 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 		} else {
 			resultats.put("normatives", null);
-
 		}
 	}
 
 
 	@RequestMapping(value = "/esborrarProcediment.do", method = POST)
-	public @ResponseBody IdNomDTO esborrarProcediment(HttpServletRequest request)
-	{
+	public @ResponseBody IdNomDTO esborrarProcediment(HttpServletRequest request) {
+
 		IdNomDTO resultatStatus = new IdNomDTO();
 
 		try {
-			
 			Long id = new Long(request.getParameter("id"));
-			
 			ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
 			procedimientoDelegate.borrarProcedimiento(id);
 
@@ -600,18 +519,15 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			resultatStatus.setNom("correcte");
 
 		} catch (DelegateException dEx) {
-			
 			if (dEx.isSecurityException()) {
 				resultatStatus.setId(-1l);
 			} else {
 				resultatStatus.setId(-2l);
-				logException( log, dEx );
+				logException(log, dEx);
 			}
-			
 		}
 
 		return resultatStatus;
-		
 	}
 
 
@@ -640,28 +556,27 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			} catch (NumberFormatException nfe) {
 				procedimentOld = null;
 				edicion = false;
-
 			}
 
-			procediment = guardarProcAntiguo(edicion, procediment, procedimentOld);					// Si estamos guardando un procedimiento ya existente en vez de uno nuevo
-			procediment = guardarProcMaterias(request, edicion, procediment, procedimentOld);		// Procesar Materias
-			procediment = guardarProcPublicoObjetivo(request, edicion, procediment, procedimentOld);// Procesar Público Objectivo
-			procediment = guardarProcTramites(request, edicion, procediment, procedimentOld);		// Actualizar la lista de Trámites
-			procediment = guardarProcHechosVitales(request, edicion, procediment);					// Procesar Hechos vitales
-			procediment = guardarProcNormativas(request, edicion, procediment, procedimentOld);		// Normativas
-			procediment = guardarProcDocumentos(request, edicion, procediment, procedimentOld);		// Documentos
-			procediment = guardarProcIdioma(request, edicion, procediment, procedimentOld);			// Idiomas
-			procediment = guardarProcValidacion(request, procediment, procedimentOld, error);		// Validación
-			procediment = guardarProcFechaPublicacion(request, procediment);						// Fecha Publicación
-			procediment = guardarProcFechaCaducidad(request, procediment);							// Fecha Caducidad
-			procediment = guardarProcFechaIniciacion(request, procediment, error);					// Iniciación
-			procediment = guardarProcFamilia(request, procediment, error);							// Familia
-			procediment = guardarProcVersion(request, edicion, procediment, procedimentOld, error);	// Versión
-			procediment = guardarProcOrganResolutori(request, procediment, error);					// Organ Resolutori
-			procediment = guardarProcUnidadAdministrativa(request, procediment, error);				// Unidad Administrativa
-			procediment.setResponsable(request.getParameter("item_responsable"));					// Responsable
-			procediment.setSignatura(request.getParameter("item_codigo_pro"));						// Signatura
-			procediment.setInfo(request.getParameter("item_notes"));								// Info
+			procediment = guardarProcedimientoAntiguo(edicion, procediment, procedimentOld);	// Si estamos guardando un procedimiento ya existente en vez de uno nuevo
+			procediment = guardarMaterias(request, edicion, procediment, procedimentOld);		// Procesar Materias
+			procediment = guardarPublicoObjetivo(request, edicion, procediment, procedimentOld);// Procesar Público Objectivo
+			procediment = guardarTramites(request, edicion, procediment, procedimentOld);		// Actualizar la lista de Trámites
+			procediment = guardarHechosVitales(request, edicion, procediment);					// Procesar Hechos vitales
+			procediment = guardarNormativas(request, edicion, procediment, procedimentOld);		// Normativas
+			procediment = guardarDocumentos(request, edicion, procediment, procedimentOld);		// Documentos
+			procediment = guardarIdioma(request, procediment, procedimentOld);       			// Idiomas
+			procediment = guardarValidacion(request, procediment, procedimentOld, error);		// Validación
+			procediment = guardarFechaPublicacion(request, procediment);						// Fecha Publicación
+			procediment = guardarFechaCaducidad(request, procediment);							// Fecha Caducidad
+			procediment = guardarIniciacion(request, procediment, error);				    	// Iniciación
+			procediment = guardarFamilia(request, procediment, error);							// Familia
+			procediment = guardarVersion(request, edicion, procediment, procedimentOld, error);	// Versión
+			procediment = guardarOrganResolutori(request, procediment, error);					// Organ Resolutori
+			procediment = guardarUnidadAdministrativa(request, procediment, error);             // Unidad Administrativa
+			procediment.setResponsable(request.getParameter("item_responsable"));				// Responsable
+			procediment.setSignatura(request.getParameter("item_codigo_pro"));					// Signatura
+			procediment.setInfo(request.getParameter("item_notes"));							// Info
 			procediment.setTaxa("on".equalsIgnoreCase(request.getParameter("item_taxa")) ? "1" : "0");							// Taxa
 			procediment.setIndicador("on".equalsIgnoreCase(request.getParameter("item_fi_vida_administrativa")) ? "1" : "0");	// Indicador
 			procediment.setVentanillaUnica("on".equalsIgnoreCase(request.getParameter("item_finestreta_unica")) ? "1" : "0");	// Ventanilla Única
@@ -673,15 +588,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				// Provisional, hasta que este activada la SEU --> procediment.setUrl(request.getParameter("item_url"));
 			}
 
-			/* NOTA IMPORTANTE PARA EL RENDIMIENTO */
-			procediment.setDocumentos(null);
-			procediment.setTramites(null);
-			procediment.setHechosVitalesProcedimientos(null);
-			/* FIN NOTA */
-			Long procId = procedimentDelegate.grabarProcedimiento(procediment, procediment.getUnidadAdministrativa().getId());
-
-			//Actualiza estadísticas
-			DelegateUtil.getEstadisticaDelegate().grabarEstadisticaProcedimiento(procId);
+			Long procId = guardarGrabar(procediment);
 
 			String ok = messageSource.getMessage("proc.guardat.correcte", null, request.getLocale());
 			result = new IdNomDTO(procId, ok);
@@ -710,8 +617,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	/*
 	 * Guardamos el procedimiento anterior si se trata de una edición. 
 	 */
-	private ProcedimientoLocal guardarProcAntiguo(boolean edicion, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld)
-	{
+	private ProcedimientoLocal guardarProcedimientoAntiguo(boolean edicion, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld) {
+
 		if (edicion) {
 			// Mantenemos los valores originales que tiene el procedimiento.
 			// procediment.setUnidadAdministrativa(procedimentOld.getUnidadAdministrativa());
@@ -722,10 +629,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			procediment.setMaterias(procedimentOld.getMaterias());
 			procediment.setPublicosObjetivo(procedimentOld.getPublicosObjetivo());
 			procediment.setNormativas(procedimentOld.getNormativas());
-
 		}
+		
 		return procediment;
-
 	}
 
 
@@ -733,248 +639,172 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	 * Para hacer menos accesos a BBDD se comprueba si es edicion o no.
 	 * En el primer caso es bastante probable que se repitan la mayoria de materias.
 	 */
-	private ProcedimientoLocal guardarProcMaterias(HttpServletRequest request,
-			boolean edicion, ProcedimientoLocal procediment,
-			ProcedimientoLocal procedimentOld) throws NumberFormatException, DelegateException {
-		
-		String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-		
-		if ( isModuloModificado("modulo_materias_modificado", request) ) {
-			
-			if (request.getParameter("materies") != null && !"".equals(request.getParameter("materies"))) {
-				
-				MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
-				Set<Materia> materias = new HashSet<Materia>();
-				materias.addAll(materiaDelegate.obtenerMateriasPorIDs(request.getParameter("materies"), idioma));
-				procediment.setMaterias(materias);
+	private ProcedimientoLocal guardarMaterias(HttpServletRequest request, boolean edicion, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld) throws NumberFormatException, DelegateException {
 
-			} else {
-				
-				procediment.setMaterias(new HashSet<Materia>());
+		if (isModuloModificado("modulo_materias_modificado", request)) {
 
-			}
-		
+		    if (request.getParameter("materies") != null && !"".equals(request.getParameter("materies"))) {
+		        MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
+		        Set<Materia> materias = new HashSet<Materia>();
+		        materias.addAll(materiaDelegate.obtenerMateriasPorIDs(request.getParameter("materies"), DelegateUtil.getIdiomaDelegate().lenguajePorDefecto()));
+		        procediment.setMaterias(materias);
+
+		    } else {
+		        procediment.setMaterias(new HashSet<Materia>());
+		    }
 		}
-		
-		return procediment;
 
+		return procediment;
 	}
 
 	/*
 	 * Para hacer menos accesos a BBDD se comprueba si es edicion o no.
 	 * En el primer caso es bastante probable que se repitan la mayoria de public objectiu.
 	 */
-	private ProcedimientoLocal guardarProcPublicoObjetivo(
-			HttpServletRequest request, boolean edicion,
-			ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld)
-			throws NumberFormatException, DelegateException {
-		
-		if ( isModuloModificado("modul_public_modificat", request) ) {
-			
+	private ProcedimientoLocal guardarPublicoObjetivo(HttpServletRequest request, boolean edicion, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld) throws NumberFormatException, DelegateException {
+
+	    if (isModuloModificado("modul_public_modificat", request)) {
+
 			if (request.getParameter("publicsObjectiu") != null && !"".equals(request.getParameter("publicsObjectiu"))) {
-				
+			    String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 				PublicoObjetivoDelegate publicObjDelegate = DelegateUtil.getPublicoObjetivoDelegate();
 				Set<PublicoObjetivo> publicsNous = new HashSet<PublicoObjetivo>();
-				String[] codisPublicsNous = request.getParameter("publicsObjectiu").split(",");
-
-				if (edicion) {
-					for (int i = 0; i < codisPublicsNous.length; i++) {
-						for (PublicoObjetivo pob : procedimentOld.getPublicosObjetivo()) {
-							if (pob.getId().equals(Long.valueOf(codisPublicsNous[i]))) { // Público objetivo ya existente
-								publicsNous.add(pob);
-								codisPublicsNous[i] = null;
-								break;
-							}
-						}
-					}
-				}
-				
-				for (String codiPob : codisPublicsNous) {
-					if (codiPob != null)
-						publicsNous.add(publicObjDelegate.obtenerPublicoObjetivo(Long.valueOf(codiPob)));
-				}
-				
+				publicsNous.addAll(publicObjDelegate.obtenerPublicosObjetivoPorIDs(request.getParameter("publicsObjectiu"), idioma));
 				procediment.setPublicosObjetivo(publicsNous);
 
 			} else {
-				
 				procediment.setPublicosObjetivo(new HashSet<PublicoObjetivo>());
-				
 			}
-			
 		}
 
 		return procediment;
-		
 	}
 
 	/*
 	 * Controlar los trámites modificados
 	 */
-	private ProcedimientoLocal guardarProcTramites(HttpServletRequest request, boolean edicion, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld) throws DelegateException {
+	private ProcedimientoLocal guardarTramites(HttpServletRequest request, boolean edicion, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld) throws DelegateException {
 
-		String tramitsProcediment = request.getParameter("tramitsProcediment");
-		TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
+		if (edicion) {
+		    TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
+		    Vector<Tramite> tramitesParaCrear = new Vector<Tramite>();
+		    ArrayList<Long> tramitesParaActualizar = new ArrayList<Long>();
+		    boolean eliminarTramite;
+		    List<String> idsNuevosTramites = Arrays.asList(request.getParameter("tramitsProcediment").split(","));
+		    
+		    if (idsNuevosTramites.size() == 0) {
+		        for (String id : idsNuevosTramites) {
+		            eliminarTramite = true;
+		            for (Tramite tramite : procedimentOld.getTramites()) {
+		                if (tramite != null) {
+		                    // Se revisa si el tràmite se conserva o se debe eliminar
+		                    if (!id.contentEquals("") && Long.parseLong(id) == tramite.getId()) {
+		                        tramitesParaActualizar.add(tramite.getId());
+		                        tramitesParaCrear.add(tramite);
+		                        eliminarTramite = false;
+		                    }
+		                }
+		            }
+		            if (eliminarTramite) {
+		                DelegateUtil.getProcedimientoDelegate().eliminarTramite(Long.parseLong(id), procediment.getId());
+                        tramiteDelegate.borrarTramite(Long.parseLong(id));
+                    }
+		        }
 
-		if ( !"".equals(tramitsProcediment) && edicion ) {
+		    } else {
+		        for (Tramite tramite : procedimentOld.getTramites()) {
+		            DelegateUtil.getProcedimientoDelegate().eliminarTramite(tramite.getId(), procediment.getId());
+                    tramiteDelegate.borrarTramite(tramite.getId());
+		        }
+		    }
 
-			Vector<Tramite> tramitesParaCrear;
-			HashMap<Long, Tramite> hashTramitesAsignados;
-			ArrayList<Long> tramitesParaValidarLong = new ArrayList();
-			
-			
-			String[] tramitesParaValidar = tramitsProcediment.split(",");
-			for ( int i = 0 ; i < tramitesParaValidar.length ; i++ )
-				tramitesParaValidarLong.add( Long.valueOf( tramitesParaValidar[i] ) );
-			
-			
-			tramitesParaValidar = null;
-			
-			hashTramitesAsignados = new HashMap<Long, Tramite>();
-			List<Tramite> listaTramitesAsignados = procedimentOld.getTramites();
-			
-			for ( Tramite tramite : listaTramitesAsignados ) {
-				
-				if ( tramite != null )
-					hashTramitesAsignados.put(tramite.getId(), tramite);
-				
+			// Actualizar orden y añadir los tràmites 
+			if (tramitesParaActualizar.size() > 0) {
+			    DelegateUtil.getProcedimientoDelegate().actualizarOrdenTramites(tramitesParaActualizar);
 			}
-			
-			listaTramitesAsignados = null;
-			tramitesParaCrear = new Vector<Tramite>();
-
-			for ( Long idTramite : tramitesParaValidarLong ) { //Se determina si los trámites enviados ya estaban asignados, si es así, se marcan para crear.
-
-				if ( hashTramitesAsignados.containsKey(idTramite) ) {
-
-					Tramite tramite = (Tramite) hashTramitesAsignados.get(idTramite);
-					hashTramitesAsignados.remove(tramite.getId());//Se quita de los trámites asignados.
-					tramitesParaCrear.add(tramite); //Se marca el trámite para crear.
-					
-				}
-
-			}
-
-			tramitesParaValidarLong = null;
-
-			if ( hashTramitesAsignados.values().size() > 0 ) {
-				
-				
-				for ( Tramite tramiteParaBorrar : hashTramitesAsignados.values() ) { //Los trámites restantes en la lista de trámites asignados son los que se han de borrar.
-					
-					Long idTramite = tramiteParaBorrar.getId();
-					DelegateUtil.getProcedimientoDelegate().eliminarTramite(idTramite, procediment.getId());
-					tramiteDelegate.borrarTramite(idTramite);
-					
-				}
-
-				
-			}
-			
-			hashTramitesAsignados = null;
-			ArrayList<Long> tramitesParaActualizar = new ArrayList<Long>(); //Actualizamos el orden de la lista de trámites
-			
-			for ( Tramite tramite : tramitesParaCrear ) //Meter los id para crear obtener su orden y enviarlos para actualizar.
-				tramitesParaActualizar.add(tramite.getId());
-				
-
-			DelegateUtil.getProcedimientoDelegate().actualizarOrdenTramites(tramitesParaActualizar);
 			procediment.setTramites(tramitesParaCrear);
-			
-			
-		} else if (edicion) {
-
-			for ( Tramite tramite : procediment.getTramites() ) {
-
-				if ( tramite != null ) {
-					DelegateUtil.getProcedimientoDelegate().eliminarTramite( tramite.getId(), procediment.getId() );
-					tramiteDelegate.borrarTramite(tramite.getId());
-
-				}
-
-			}
-
-			procediment.setTramites(null);
-
 		}
 
 		return procediment;
-
 	}
 
 
 	/*
 	 * Controlamos los hechos vitales modificados.
 	 */
-	private ProcedimientoLocal guardarProcHechosVitales(HttpServletRequest request, boolean edicion, ProcedimientoLocal procediment) 
-			throws DelegateException {
-		
-		if (request.getParameter("fetsVitals") != null && edicion && isModuloModificado("modulo_hechos_modificado", request)) {
-			HechoVitalDelegate hvDelegate = DelegateUtil.getHechoVitalDelegate();
-			HechoVitalProcedimientoDelegate hvpDelegate = DelegateUtil.getHechoVitalProcedimientoDelegate();
+	private ProcedimientoLocal guardarHechosVitales(HttpServletRequest request, boolean edicion, ProcedimientoLocal procediment) throws DelegateException {
 
-			// Eliminamos los hecho vital procedimiento existentes
-			List<Long> hvpIds = new LinkedList<Long>();
-			if (procediment.getHechosVitalesProcedimientos() != null) {
-				for (HechoVitalProcedimiento hvp : procediment.getHechosVitalesProcedimientos())
-					hvpIds.add(hvp.getId());
+	    if (isModuloModificado("modulo_hechos_modificado", request)) {
 
-				hvpDelegate.borrarHechoVitalProcedimientos(hvpIds);
-			}
-			
-			procediment.setHechosVitalesProcedimientos(new HashSet<HechoVitalProcedimiento>());
+	        if (request.getParameter("fetsVitals") != null && edicion) {
 
-			// Guardamos los nuevos
-			Set<HechoVitalProcedimiento> hvpsAGuardar = new HashSet<HechoVitalProcedimiento>();
-			List<Long> ids = new ArrayList<Long>();
-			for (String id : request.getParameter("fetsVitals").split(",")) {
-				if (id != null && !id.equals("")) ids.add(Long.parseLong(id));
-			}
+	            // Eliminamos los hecho vital procedimiento existentes
+	            HechoVitalProcedimientoDelegate hvpDelegate = DelegateUtil.getHechoVitalProcedimientoDelegate();
+	            List<Long> hvpIds = new LinkedList<Long>();
+	            if (procediment.getHechosVitalesProcedimientos() != null) {
+	                for (HechoVitalProcedimiento hvp : procediment.getHechosVitalesProcedimientos()) {
+	                    hvpIds.add(hvp.getId());
+	                }
 
-			List<HechoVital> listHV = hvDelegate.buscarPorIds(ids);
-			for (HechoVital hv : listHV) {
-				HechoVitalProcedimiento hvp = new HechoVitalProcedimiento();
-				hvp.setProcedimiento(procediment);
-				hvp.setHechoVital(hv);
-				int maxOrden = 0;
-				for (HechoVitalProcedimiento hechoVitalProcedimiento : (List<HechoVitalProcedimiento>) hv.getHechosVitalesProcedimientos()) {
-					if (hechoVitalProcedimiento != null) {
-						if (maxOrden < hechoVitalProcedimiento.getOrden())
-							maxOrden = hechoVitalProcedimiento.getOrden();
-					}
-				}
-				maxOrden++;
-				hvp.setOrden(maxOrden);
-				hvpsAGuardar.add(hvp);
-			}
+	                hvpDelegate.borrarHechoVitalProcedimientos(hvpIds);
+	            }
+	            procediment.setHechosVitalesProcedimientos(new HashSet<HechoVitalProcedimiento>());
 
-			hvpDelegate.grabarHechoVitalProcedimientos(hvpsAGuardar);
-			procediment.setHechosVitalesProcedimientos(hvpsAGuardar);
-			
-		}
+	            // Guardamos los nuevos
+	            Set<HechoVitalProcedimiento> hvpsAGuardar = new HashSet<HechoVitalProcedimiento>();
+	            List<Long> ids = new ArrayList<Long>();
+	            for (String id : request.getParameter("fetsVitals").split(",")) {
+	                if (id != null && !id.equals("")) {
+	                    ids.add(Long.parseLong(id));
+	                }
+	            }
+
+	            // Añadir hecho vital a la relación hecho vital-procedimiento y añadir el orden
+	            List<HechoVital> listHV = DelegateUtil.getHechoVitalDelegate().buscarPorIds(ids);
+	            for (HechoVital hv : listHV) {
+	                HechoVitalProcedimiento hvp = new HechoVitalProcedimiento();
+	                hvp.setProcedimiento(procediment);
+	                hvp.setHechoVital(hv);
+	                int maxOrden = 0;
+	                for (HechoVitalProcedimiento hechoVitalProcedimiento : (List<HechoVitalProcedimiento>) hv.getHechosVitalesProcedimientos()) {
+	                    if (hechoVitalProcedimiento != null) {
+	                        if (maxOrden < hechoVitalProcedimiento.getOrden()) {
+	                            maxOrden = hechoVitalProcedimiento.getOrden();
+	                        }
+	                    }
+	                }
+	                maxOrden++;
+	                hvp.setOrden(maxOrden);
+	                hvpsAGuardar.add(hvp);
+	            }
+
+	            procediment.setHechosVitalesProcedimientos(hvpsAGuardar);
+	        }
+	    }
 
 		return procediment;
-		
 	}
 
 	/*
 	 * Para hacer menos accesos a BBDD se comprueba si es edicion o no.
 	 * En el primer caso es bastante probable que se repitan la mayoria de normativas.
 	 */
-	private ProcedimientoLocal guardarProcNormativas(HttpServletRequest request, boolean edicion, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld) throws DelegateException
-	{
-		if (request.getParameter("normatives") != null && !"".equals(request.getParameter("normatives"))) {
-			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
-			Set<Normativa> normativas = new HashSet<Normativa>();
-			List<Long> ids = new ArrayList<Long>();
-			for (String id: request.getParameter("normatives").split(","))
-				ids.add(Long.parseLong(id));
+	private ProcedimientoLocal guardarNormativas(HttpServletRequest request, boolean edicion, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld) throws DelegateException {
 
-			normativas.addAll(normativaDelegate.buscarNormativas(ids));
-			procediment.setNormativas(normativas);
+		if (isModuloModificado("modulo_normativas_modificado", request)) {
+		    if (request.getParameter("normatives") != null && !"".equals(request.getParameter("normatives"))) {
+		        NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
+		        Set<Normativa> normativas = new HashSet<Normativa>();
+		        List<Long> ids = new ArrayList<Long>();
+		        for (String id : request.getParameter("normatives").split(",")) {
+		            ids.add(Long.parseLong(id));
+		        }
+		        normativas.addAll(normativaDelegate.buscarNormativas(ids));
+		        procediment.setNormativas(normativas);
 
-		} else {
-			procediment.setNormativas(new HashSet<Normativa>());
+		    } else {
+		        procediment.setNormativas(new HashSet<Normativa>());
+		    }
 		}
 
 		return procediment;
@@ -984,76 +814,95 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	/*
 	 * Controlamos los documentos modificados
 	 */
-	private ProcedimientoLocal guardarProcDocumentos(HttpServletRequest request, boolean edicion, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld) throws DelegateException
-	{
-		if (isModuloModificado("modulo_documents_modificado", request)) {
-			Enumeration<String> nomsParametres = request.getParameterNames();
-			DocumentoResumen documentResumen;
-			DocumentoResumenDelegate docDelegate = DelegateUtil.getDocumentoResumenDelegate();
-			List<Documento> documents = new ArrayList<Documento>();
-			Map <String,String[]> actulitzadorMap = new HashMap<String, String[]>();
-			// obtenim  els documents i els seus ordres
-			while (nomsParametres.hasMoreElements()) {
-				String nomParameter = (String)nomsParametres.nextElement();
-				String[] elements = nomParameter.split("_");
-				if ("documents".equals(elements[0]) && "id".equals(elements[1])) {
-					// En aquest cas, elements[2] es igual al id del document
-					Long id = ParseUtil.parseLong(request.getParameter(nomParameter));
-					if (id != null) {
-						documentResumen = docDelegate.obtenerDocumentoResumen(id);
-						Documento doc = new Documento();
-						doc.setId(documentResumen.getId());
-						doc.setFicha(documentResumen.getFicha());
-						doc.setOrden(documentResumen.getOrden());
-						doc.setProcedimiento(documentResumen.getProcedimiento());
-						doc.setTraduccionMap(documentResumen.getTraduccionMap());
-						documents.add(doc);
-						// Se coge el orden de la web. Si se quisiesen poner del 0 al x, hacer que orden valga 0 e ir incrementandolo.
-						String[] orden = {request.getParameter("documents_orden_" + elements[2])};
-						actulitzadorMap.put("orden_doc" + id, orden);
-					} else {
-						log.warn("S'ha rebut un id de document no n�meric: " + id);
-					}
-				}
-			}
-			// actualitzam ordres
-			docDelegate.actualizarOrdenDocs(actulitzadorMap);
-			// assignar els documents al procedimient i eliminar els que ja no estiguin seleccionats.
-			procediment.setDocumentos(documents);
-			if (edicion) {
-				List<Documento> docsOld = procedimentOld.getDocumentos();
-				for (Documento doc : documents) {
-					for (Iterator<Documento> it = docsOld.iterator(); it.hasNext(); ) {
-						Documento currentDoc = it.next();
-						if (currentDoc != null && currentDoc.getId().equals(doc.getId()))
-							it.remove();
-					}
-				}
-				for (Documento doc : docsOld)
-					if (doc != null) docDelegate.borrarDocumento(doc.getId());
-			}
-		}
-		return procediment;
+	private ProcedimientoLocal guardarDocumentos(HttpServletRequest request, boolean edicion, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld) throws DelegateException {
+
+	    if (isModuloModificado("modulo_documents_modificado", request)) {
+	        List<String> docsIds = Collections.list(request.getParameterNames());
+
+	        HashSet<String> hashSet = new HashSet<String>(docsIds);
+            docsIds.clear();
+            docsIds.addAll(hashSet);
+
+            List<String> ids = new ArrayList<String>(docsIds.size());
+            Map<String, String> idOrden = new HashMap<String, String>();
+            for (String id : docsIds) {
+                if (id.contains("documents_id_")) {
+                    ids.add(id.split("_")[2]);
+                    String orden = request.getParameter("documents_orden_" + id.split("_")[2]);
+                    idOrden.put(id.split("_")[2], orden);
+                }
+            }
+
+	        List<Documento> documents = cuerpo(procedimentOld.getDocumentos(), ids, idOrden, edicion);
+
+	        // Assignar els documents al procedimient
+	        procediment.setDocumentos(documents);
+	    }
+
+	    return procediment;
 	}
+
+	private List<Documento> cuerpo(List<Documento> docsOld, List<String> docsIds, Map<String, String> idOrden, boolean edicion) throws DelegateException {
+
+        DocumentoResumen documentResumen;
+        DocumentoResumenDelegate docDelegate = DelegateUtil.getDocumentoResumenDelegate();
+        List<Documento> documents = new ArrayList<Documento>();
+        Map <String,String[]> actulitzadorMap = new HashMap<String, String[]>();
+
+        // Obtenim  els documents i els seus ordres
+        for (String docId : docsIds) {
+            Long idDoc = ParseUtil.parseLong(docId);
+            if (idDoc != null) {
+                documentResumen = docDelegate.obtenerDocumentoResumen(idDoc);
+                Documento doc = new Documento();
+                doc.setId(documentResumen.getId());
+                doc.setFicha(documentResumen.getFicha());
+                doc.setOrden(documentResumen.getOrden());
+                doc.setProcedimiento(documentResumen.getProcedimiento());
+                doc.setTraduccionMap(documentResumen.getTraduccionMap());
+                documents.add(doc);
+                // Se coge el orden de la web. Si se quisiesen poner del 0 al x, hacer que orden valga 0 e ir incrementandolo.
+                String[] orden = {idOrden.get(idDoc.toString())};
+                actulitzadorMap.put("orden_doc" + idDoc, orden);
+
+            } else {
+                log.warn("S'ha rebut un id de document no númeric: " + idDoc);
+            }
+        }
+
+        // Actualitzam ordres
+        docDelegate.actualizarOrdenDocs(actulitzadorMap);
+
+        if (edicion) {
+            boolean eliminarDoc;
+            for (Documento docAntiguo : docsOld) {
+                eliminarDoc = true;
+                for (Documento docNuevo : documents) {
+                    if (docAntiguo.getId().equals(docNuevo.getId())) {
+                        eliminarDoc = false;
+                    }
+                }
+                if (eliminarDoc) {
+                    docDelegate.borrarDocumento(docAntiguo.getId());
+                }
+            }
+        }
+
+        return documents;
+    }
 
 	/*
 	 * Traducimos al idioma deseado del procedimiento.
 	 */
-	private ProcedimientoLocal guardarProcIdioma(HttpServletRequest request, boolean edicion, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld) throws DelegateException
-	{
+	private ProcedimientoLocal guardarIdioma(HttpServletRequest request, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld) throws DelegateException {
+
 		TraduccionProcedimientoLocal tpl;
-		IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
-		List<String> langs = idiomaDelegate.listarLenguajes();
-		for (String lang : langs) {
-			if (edicion) {
-				tpl = (TraduccionProcedimientoLocal) procedimentOld.getTraduccion(lang);
-				if (tpl == null)
-					tpl = new TraduccionProcedimientoLocal();
-
-			} else {
-				tpl = new TraduccionProcedimientoLocal();
-
-			}
+		for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
+			tpl = (TraduccionProcedimientoLocal) ((procedimentOld != null) ? procedimentOld.getTraduccion(lang) : new TraduccionProcedimientoLocal());
+			if (tpl == null) {
+                tpl = new TraduccionProcedimientoLocal();
+            }
+			
 			tpl.setNombre(RolUtil.limpiaCadena(request.getParameter("item_nom_" + lang)));
 			tpl.setDestinatarios(RolUtil.limpiaCadena(request.getParameter("item_destinataris_" + lang)));
 			tpl.setResumen(RolUtil.limpiaCadena(request.getParameter("item_objecte_" + lang)));
@@ -1074,61 +923,64 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	/*
 	 * Controlamos la validación del procedimiento.
 	 */
-	private ProcedimientoLocal guardarProcValidacion(HttpServletRequest request, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld, String error) throws DelegateException
-	{
+	private ProcedimientoLocal guardarValidacion(HttpServletRequest request, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld, String error) throws DelegateException {
+
 		try {
 			Integer validacion = Integer.parseInt(request.getParameter("item_estat"));
 			// Comprobar que no se haya cambiado la validacion/estado siendo operador
-			if (request.isUserInRole("sacoper") && procedimentOld != null && !procedimentOld.getValidacion().equals(validacion))
-				throw new DelegateException(new SecurityException());
+			if (request.isUserInRole("sacoper") && procedimentOld != null && !procedimentOld.getValidacion().equals(validacion)) {
+			    throw new DelegateException(new SecurityException());
+			}
 
 			procediment.setValidacion(validacion);
 
 		} catch (NumberFormatException e) {
 			error = messageSource.getMessage("proc.error.estat.incorrecte", null, request.getLocale());
 			throw new NumberFormatException();
-
 		}
+
 		return procediment;
 	}
 
 	/*
 	 * Controlamos el formato de la fecha de publicación.
 	 */
-	private ProcedimientoLocal guardarProcFechaPublicacion(HttpServletRequest request, ProcedimientoLocal procediment) throws ParseException
-	{
+	private ProcedimientoLocal guardarFechaPublicacion(HttpServletRequest request, ProcedimientoLocal procediment) throws ParseException {
+
 		if (!StringUtils.isEmpty(request.getParameter("item_data_publicacio"))) {
 			Date data_publicacio = DateUtils.parseDate(request.getParameter("item_data_publicacio"));
-			if (data_publicacio == null)
-				throw new ParseException("error.data_publicacio", 0);
+			if (data_publicacio == null) {
+			    throw new ParseException("error.data_publicacio", 0);
+			}
 
 			procediment.setFechaPublicacion(data_publicacio);
 		}
-		return procediment;
 
+		return procediment;
 	}
 
 	/*
 	 * Controlamos el formato de la fecha de caducidad del procedimiento.
 	 */
-	private ProcedimientoLocal guardarProcFechaCaducidad(HttpServletRequest request, ProcedimientoLocal procediment) throws ParseException
-	{
+	private ProcedimientoLocal guardarFechaCaducidad(HttpServletRequest request, ProcedimientoLocal procediment) throws ParseException {
+
 		if (!StringUtils.isEmpty(request.getParameter("item_data_caducitat"))) {
 			Date data_caducitat = DateUtils.parseDate(request.getParameter("item_data_caducitat"));
-			if (data_caducitat == null)
-				throw new ParseException("error.data_caducitat", 0);
+			if (data_caducitat == null) {
+			    throw new ParseException("error.data_caducitat", 0);
+			}
 
 			procediment.setFechaCaducidad(data_caducitat);
 		}
-		return procediment;
 
+		return procediment;
 	}
 
 	/*
 	 * Obtenemos la fecha de iniciación del procedimiento.
 	 */
-	private ProcedimientoLocal guardarProcFechaIniciacion(HttpServletRequest request, ProcedimientoLocal procediment, String error) throws DelegateException
-	{
+	private ProcedimientoLocal guardarIniciacion(HttpServletRequest request, ProcedimientoLocal procediment, String error) throws DelegateException {
+
 		try {
 			Long iniciacionId = Long.parseLong(request.getParameter("item_iniciacio"));
 			IniciacionDelegate iDelegate = DelegateUtil.getIniciacionDelegate();
@@ -1146,8 +998,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	/*
 	 * Obtenemos las famílias de los procedimientos.
 	 */
-	private ProcedimientoLocal guardarProcFamilia(HttpServletRequest request, ProcedimientoLocal procediment, String error) throws DelegateException
-	{
+	private ProcedimientoLocal guardarFamilia(HttpServletRequest request, ProcedimientoLocal procediment, String error) throws DelegateException {
+
 		try {
 			Long familiaId = Long.parseLong(request.getParameter("item_familia"));
 			FamiliaDelegate fDelegate = DelegateUtil.getFamiliaDelegate();
@@ -1165,19 +1017,21 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	/*
 	 * Controlamos la versión del procedimiento.
 	 */
-	private ProcedimientoLocal guardarProcVersion(HttpServletRequest request, boolean edicion, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld, String error)
-	{
+	private ProcedimientoLocal guardarVersion(HttpServletRequest request, boolean edicion, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld, String error) {
+
 		try {
 			String versionStr = request.getParameter("item_version");
 			if (versionStr != null && !"".equals(versionStr)) {
 				Long version = Long.parseLong(versionStr);
 				procediment.setVersion(version);
 
-			} else { /* Provisional, hasta que este activada la SEU */
+			} else {
+			    /* Provisional, hasta que este activada la SEU */
 				if (edicion)
 					procediment.setVersion(procedimentOld.getVersion());
 
 			}
+			
 		} catch (NumberFormatException e) {
 			error = messageSource.getMessage("proc.error.versio.incorrecte", null, request.getLocale());
 			throw new NumberFormatException();
@@ -1189,8 +1043,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	/*
 	 * Obtenemos el Organo resolutorio del procedimiento.
 	 */
-	private ProcedimientoLocal guardarProcOrganResolutori(HttpServletRequest request, ProcedimientoLocal procediment, String error) throws DelegateException
-	{
+	private ProcedimientoLocal guardarOrganResolutori(HttpServletRequest request, ProcedimientoLocal procediment, String error) throws DelegateException {
+
 		if (!"".equals(request.getParameter("item_organ_id"))) {
 			try {
 				Long organId = Long.parseLong(request.getParameter("item_organ_id"));
@@ -1201,7 +1055,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			} catch (NumberFormatException e) {
 				error = messageSource.getMessage("proc.error.organ.incorrecte", null, request.getLocale());
 				throw new NumberFormatException();
-
 			}
 		}
 
@@ -1211,8 +1064,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	/*
 	 * Obtenemos la unidad administrativa del procedimiento.
 	 */
-	private ProcedimientoLocal guardarProcUnidadAdministrativa(HttpServletRequest request, ProcedimientoLocal procediment, String error) throws DelegateException
-	{
+	private ProcedimientoLocal guardarUnidadAdministrativa(HttpServletRequest request, ProcedimientoLocal procediment, String error) throws DelegateException {
+
 		try {
 			Long organRespID = Long.parseLong(request.getParameter("item_organ_responsable_id"));
 			UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
@@ -1226,6 +1079,39 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 		return procediment;
 	}
+
+	/*
+	 * Función de grabar() procedimiento
+     */
+    private Long guardarGrabar(ProcedimientoLocal procediment) throws DelegateException {
+
+        /* NOTA IMPORTANTE PARA EL RENDIMIENTO */
+        procediment.setDocumentos(null);
+        procediment.setTramites(null);
+
+        if (procediment.getHechosVitalesProcedimientos() != null) {
+            HechoVitalProcedimientoDelegate hvpDelegate = DelegateUtil.getHechoVitalProcedimientoDelegate();
+            hvpDelegate.grabarHechoVitalProcedimientos(procediment.getHechosVitalesProcedimientos());
+            procediment.setHechosVitalesProcedimientos(null);
+        }
+        /* FIN NOTA */
+        Long procId = DelegateUtil.getProcedimientoDelegate().grabarProcedimiento(procediment, procediment.getUnidadAdministrativa().getId());
+        // Actualiza estadísticas
+        DelegateUtil.getEstadisticaDelegate().grabarEstadisticaProcedimiento(procId);
+
+        return procId;
+    }
+
+	/**
+     * Devuelve true si ha habido algun cambio en el modulo.
+     * 
+     * @param modulo
+     * @param request
+     * @return boolean
+     */
+    private boolean isModuloModificado(String modulo, HttpServletRequest request) {
+        return "1".equals(request.getParameter(modulo));
+    }
 
 
 	@RequestMapping(value = "/cercarNormatives.do", method = POST)
@@ -1241,13 +1127,14 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		String campoOrdenacion = "fecha";
 		String orden = "desc";
 
-		if (getUAFromSession(session) == null) //Si no hay unidad administrativa se devuelve vacío
-			return resultats;	
+		//Si no hay unidad administrativa se devuelve vacío
+		if (getUAFromSession(session) == null) {
+		    return resultats;	
+		}
 
 		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
 
 		try {
-
 			String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 
 			// Obtener parámetros de búsqueda
@@ -1274,11 +1161,12 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			String pagPag = request.getParameter("pagPagina");
 			String pagRes = request.getParameter("pagRes");
 			
-			if (pagPag == null) 
-				pagPag = String.valueOf(0);
-
-			if (pagRes == null) 
-				pagRes = String.valueOf(10);
+			if (pagPag == null) {
+			    pagPag = String.valueOf(0);
+			}
+			if (pagRes == null) {
+			    pagRes = String.valueOf(10);
+			}
 
 			resultadoBusqueda = new ResultadoBusqueda();
 
@@ -1289,37 +1177,24 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, "todas", null, false, false, campoOrdenacion, orden, pagPag, pagRes);
 
 			for (Normativa normativa : castList(Normativa.class, resultadoBusqueda.getListaResultados()) ) {
-
 				long idNormativa = normativa.getId();
 				String tituloEnlaceHTML = HtmlUtils.obtenerTituloDeEnlaceHtml( ( (TraduccionNormativa) normativa.getTraduccion("ca") ).getTitulo() );
 				String fecha = normativa.getFecha() == null  ?  " "  :  DateUtils.formatDate( normativa.getFecha() );
 				String fechaBoletin = normativa.getFechaBoletin() == null  ?  " "  :  DateUtils.formatDate( normativa.getFechaBoletin() );
 
 				llistaNormativesDTO.add( new ProcedimientoNormativaDTO( idNormativa, tituloEnlaceHTML, fecha, fechaBoletin ) );
-
 			}
 
 		} catch (DelegateException dEx) {
-
-			if ( !dEx.isSecurityException() )
-				logException(log, dEx);
-
+			if (!dEx.isSecurityException()) {
+			    logException(log, dEx);
+			}
 		}
 
 		resultats.put("total", resultadoBusqueda.getTotalResultados());
 		resultats.put("nodes", llistaNormativesDTO);
 
 		return resultats;
-
-	}
-
-
-	class HechoVitalProcedimientoDTOComparator implements Comparator<Map<String, Object>> {
-		public int compare(Map<String, Object> hvp1, Map<String, Object> hvp2) {
-			Integer orden1 = (Integer) hvp1.get("orden");
-			Integer orden2 = (Integer) hvp2.get("orden");
-			return orden1.compareTo(orden2); 
-		}
 	}
 
 
@@ -1329,47 +1204,14 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		Map<String, Object> resultats = new HashMap<String, Object>();
 
 		try {
-			TraduccionProcedimientoLocal traduccioOrigen = new TraduccionProcedimientoLocal();
-			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
-
-			String idiomaOrigenTraductor = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
-
-			if (StringUtils.isNotEmpty(request.getParameter("item_nom_" + idiomaOrigenTraductor)))
-				traduccioOrigen.setNombre(request.getParameter("item_nom_" + idiomaOrigenTraductor));
-
-			if (StringUtils.isNotEmpty(request.getParameter("item_objecte_" + idiomaOrigenTraductor)))
-				traduccioOrigen.setResumen(request.getParameter("item_objecte_" + idiomaOrigenTraductor));
-
-			if (StringUtils.isNotEmpty(request.getParameter("item_resultat_" + idiomaOrigenTraductor)))
-				traduccioOrigen.setResultat(request.getParameter("item_resultat_" + idiomaOrigenTraductor));
-
-			if (StringUtils.isNotEmpty(request.getParameter("item_destinataris_" + idiomaOrigenTraductor)))
-				traduccioOrigen.setDestinatarios(request.getParameter("item_destinataris_" + idiomaOrigenTraductor));
-
-			if (StringUtils.isNotEmpty(request.getParameter("item_resolucio_" + idiomaOrigenTraductor)))
-				traduccioOrigen.setResolucion(request.getParameter("item_resolucio_" + idiomaOrigenTraductor));
-
-			if (StringUtils.isNotEmpty(request.getParameter("item_notificacio_" + idiomaOrigenTraductor)))
-				traduccioOrigen.setNotificacion(request.getParameter("item_notificacio_" + idiomaOrigenTraductor));
-
-			if (StringUtils.isNotEmpty(request.getParameter("item_silenci_" + idiomaOrigenTraductor)))
-				traduccioOrigen.setSilencio(request.getParameter("item_silenci_" + idiomaOrigenTraductor));
-
-			if (StringUtils.isNotEmpty(request.getParameter("item_observacions_" + idiomaOrigenTraductor)))
-				traduccioOrigen.setObservaciones(request.getParameter("item_observacions_" + idiomaOrigenTraductor));
-
-			/* No es seguro que se utilizen */
-			if (StringUtils.isNotEmpty(request.getParameter("item_presentacio_" + idiomaOrigenTraductor)))
-				traduccioOrigen.setPlazos(request.getParameter("item_presentacio_" + idiomaOrigenTraductor));
-
-			if (StringUtils.isNotEmpty(request.getParameter("item_lloc_" + idiomaOrigenTraductor)))
-				traduccioOrigen.setLugar(request.getParameter("item_lloc_" + idiomaOrigenTraductor));
-			/*------------------------------*/
-
-			traduccions = traductor.translate(traduccioOrigen, idiomaOrigenTraductor);
-
-			resultats.put("traduccions", traduccions);
+		    String idiomaOrigenTraductor = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+            
+            TraduccionProcedimientoLocal traduccioOrigen = getTraduccionOrigen(request, idiomaOrigenTraductor);
+            List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
+            Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
+            traduccions = traductor.translate(traduccioOrigen, idiomaOrigenTraductor);
+            
+            resultats.put("traduccions", traduccions);
 
 		} catch (DelegateException dEx) {
 			logException(log, dEx);
@@ -1389,62 +1231,75 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		return resultats;
 	}
 
+	private TraduccionProcedimientoLocal getTraduccionOrigen(HttpServletRequest request, String idiomaOrigenTraductor) {
 
-	/**
-	 * Devuelve true si ha habido algun cambio en el modulo.
-	 * 
-	 * @param modulo
-	 * @param request
-	 * @return boolean
-	 */
-	private boolean isModuloModificado(String modulo, HttpServletRequest request) {
-		return "1".equals(request.getParameter(modulo));
-	}
-	private List<IdNomDTO> llistarExcepcionsDocumentacio(String lang) throws DelegateException {
-		ExcepcioDocumentacioDelegate excepcioDelegate = DelegateUtil.getExcepcioDocumentacioDelegate();
-		List<IdNomDTO> excepcioObjDTOList = new ArrayList<IdNomDTO>();
-		List<ExcepcioDocumentacio> llistaExcepcionsDocumentacio = excepcioDelegate.llistarExcepcioDocumentacio();
-		TraduccionExcepcioDocumentacio ted;
-		for (ExcepcioDocumentacio excepcio : llistaExcepcionsDocumentacio ) {
-			ted = (TraduccionExcepcioDocumentacio) excepcio.getTraduccion(lang);
-			excepcioObjDTOList.add(new IdNomDTO(excepcio.getId(), ted.getNombre()));
-		}
-		return excepcioObjDTOList;
-	}
+	    TraduccionProcedimientoLocal traduccioOrigen = new TraduccionProcedimientoLocal();
 
+	    if (StringUtils.isNotEmpty(request.getParameter("item_nom_" + idiomaOrigenTraductor))) {
+	        traduccioOrigen.setNombre(request.getParameter("item_nom_" + idiomaOrigenTraductor));
+	    }
+	    if (StringUtils.isNotEmpty(request.getParameter("item_objecte_" + idiomaOrigenTraductor))) {
+	        traduccioOrigen.setResumen(request.getParameter("item_objecte_" + idiomaOrigenTraductor));
+	    }
+	    if (StringUtils.isNotEmpty(request.getParameter("item_resultat_" + idiomaOrigenTraductor))) {
+	        traduccioOrigen.setResultat(request.getParameter("item_resultat_" + idiomaOrigenTraductor));
+	    }
+	    if (StringUtils.isNotEmpty(request.getParameter("item_destinataris_" + idiomaOrigenTraductor))) {
+	        traduccioOrigen.setDestinatarios(request.getParameter("item_destinataris_" + idiomaOrigenTraductor));
+	    }
+	    if (StringUtils.isNotEmpty(request.getParameter("item_resolucio_" + idiomaOrigenTraductor))) {
+	        traduccioOrigen.setResolucion(request.getParameter("item_resolucio_" + idiomaOrigenTraductor));
+	    }
+	    if (StringUtils.isNotEmpty(request.getParameter("item_notificacio_" + idiomaOrigenTraductor))) {
+	        traduccioOrigen.setNotificacion(request.getParameter("item_notificacio_" + idiomaOrigenTraductor));
+	    }
+	    if (StringUtils.isNotEmpty(request.getParameter("item_silenci_" + idiomaOrigenTraductor))) {
+	        traduccioOrigen.setSilencio(request.getParameter("item_silenci_" + idiomaOrigenTraductor));
+	    }
+        if (StringUtils.isNotEmpty(request.getParameter("item_observacions_" + idiomaOrigenTraductor))) {
+            traduccioOrigen.setObservaciones(request.getParameter("item_observacions_" + idiomaOrigenTraductor));
+        }
 
-	private List<IdNomDTO> llistarCatalegDocuments(String lang) throws DelegateException {
-		CatalegDocumentsDelegate catdocDelegate = DelegateUtil.getCatalegDocumentsDelegate();
-		List<IdNomDTO> catalegObjDTOList = new ArrayList<IdNomDTO>();
-		List<CatalegDocuments> llistaCatalegDocuments = catdocDelegate.llistarCatalegDocuments();
-		TraduccionCatalegDocuments tcd;
-		for (CatalegDocuments document : llistaCatalegDocuments ) {
-			tcd = (TraduccionCatalegDocuments) document.getTraduccion(lang);
-			catalegObjDTOList.add(new IdNomDTO(document.getId(), tcd.getNombre()));
-		}
-		return catalegObjDTOList;
+        /* No es seguro que se utilizen */
+        if (StringUtils.isNotEmpty(request.getParameter("item_presentacio_" + idiomaOrigenTraductor))) {
+            traduccioOrigen.setPlazos(request.getParameter("item_presentacio_" + idiomaOrigenTraductor));
+        }
+        if (StringUtils.isNotEmpty(request.getParameter("item_lloc_" + idiomaOrigenTraductor))) {
+            traduccioOrigen.setLugar(request.getParameter("item_lloc_" + idiomaOrigenTraductor));
+        }
+        /*------------------------------*/
+
+        return traduccioOrigen;
 	}
 
 
 	@RequestMapping( value = "/listarHechosVitales.do" , method = POST)
-	public @ResponseBody Map<String, Object> listarHechosVitales(@RequestParam Set<Long> publicosObjectivosSeleccionados, HttpSession session, HttpServletRequest request)
-	{
+	public @ResponseBody Map<String, Object> listarHechosVitales(@RequestParam Set<Long> publicosObjectivosSeleccionados, HttpSession session, HttpServletRequest request) {
+
 		Map<String, Object> resultats = new HashMap<String, Object>();
 
 		try {
-			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-			resultats.put("listadoHechosVitales", LlistatUtil.llistarHechosVitales(publicosObjectivosSeleccionados, lang));
+			resultats.put("listadoHechosVitales", LlistatUtil.llistarHechosVitales(publicosObjectivosSeleccionados, DelegateUtil.getIdiomaDelegate().lenguajePorDefecto()));
 
 		} catch (DelegateException e) {
 			logException(log, e);
-
-			if (e.isSecurityException())
-				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
-			else
-				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+			if (e.isSecurityException()) {
+			    resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+			} else {
+			    resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+			}
 		}
 
 		return resultats;
 	}
+
+
+	class HechoVitalProcedimientoDTOComparator implements Comparator<Map<String, Object>> {
+        public int compare(Map<String, Object> hvp1, Map<String, Object> hvp2) {
+            Integer orden1 = (Integer) hvp1.get("orden");
+            Integer orden2 = (Integer) hvp2.get("orden");
+            return orden1.compareTo(orden2); 
+        }
+    }
 
 }
