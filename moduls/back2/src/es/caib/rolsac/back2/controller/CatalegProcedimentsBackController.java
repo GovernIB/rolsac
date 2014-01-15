@@ -590,26 +590,28 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		IdNomDTO resultatStatus = new IdNomDTO();
 
 		try {
+			
 			Long id = new Long(request.getParameter("id"));
+			
 			ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
 			procedimientoDelegate.borrarProcedimiento(id);
-
-			//Actualiza estadísticas
-			DelegateUtil.getEstadisticaDelegate().grabarEstadisticaProcedimiento(id);
 
 			resultatStatus.setId(1l);
 			resultatStatus.setNom("correcte");
 
 		} catch (DelegateException dEx) {
+			
 			if (dEx.isSecurityException()) {
 				resultatStatus.setId(-1l);
 			} else {
 				resultatStatus.setId(-2l);
 				logException( log, dEx );
 			}
+			
 		}
 
 		return resultatStatus;
+		
 	}
 
 
