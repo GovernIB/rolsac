@@ -112,6 +112,7 @@
 				<exclude name="servlet-api.jar"/>
 	            <exclude name="jsp-api.jar"/>
 				<exclude name="ojdbc14.jar"/>
+				<exclude name="htmllexer.jar"/>
 			</lib>
 
 			<!-- agarcia: librerias comunes en 00librerias -->
