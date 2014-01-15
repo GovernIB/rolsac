@@ -644,7 +644,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			}
 
 			procediment = guardarProcAntiguo(edicion, procediment, procedimentOld);					// Si estamos guardando un procedimiento ya existente en vez de uno nuevo
-			procediment = guardarProcMateriar(request, edicion, procediment, procedimentOld);		// Procesar Materias
+			procediment = guardarProcMaterias(request, edicion, procediment, procedimentOld);		// Procesar Materias
 			procediment = guardarProcPublicoObjetivo(request, edicion, procediment, procedimentOld);// Procesar Público Objectivo
 			procediment = guardarProcTramites(request, edicion, procediment, procedimentOld);		// Actualizar la lista de Trámites
 			procediment = guardarProcHechosVitales(request, edicion, procediment);					// Procesar Hechos vitales
@@ -733,21 +733,29 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	 * Para hacer menos accesos a BBDD se comprueba si es edicion o no.
 	 * En el primer caso es bastante probable que se repitan la mayoria de materias.
 	 */
-	private ProcedimientoLocal guardarProcMateriar(HttpServletRequest request, boolean edicion, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld) throws NumberFormatException, DelegateException
-	{
+	private ProcedimientoLocal guardarProcMaterias(HttpServletRequest request,
+			boolean edicion, ProcedimientoLocal procediment,
+			ProcedimientoLocal procedimentOld) throws NumberFormatException, DelegateException {
+		
 		String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-		if (isModuloModificado("modulo_materias_modificado", request)) {
+		
+		if ( isModuloModificado("modulo_materias_modificado", request) ) {
+			
 			if (request.getParameter("materies") != null && !"".equals(request.getParameter("materies"))) {
+				
 				MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
 				Set<Materia> materias = new HashSet<Materia>();
 				materias.addAll(materiaDelegate.obtenerMateriasPorIDs(request.getParameter("materies"), idioma));
 				procediment.setMaterias(materias);
 
 			} else {
+				
 				procediment.setMaterias(new HashSet<Materia>());
 
 			}
+		
 		}
+		
 		return procediment;
 
 	}
@@ -756,10 +764,15 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	 * Para hacer menos accesos a BBDD se comprueba si es edicion o no.
 	 * En el primer caso es bastante probable que se repitan la mayoria de public objectiu.
 	 */
-	private ProcedimientoLocal guardarProcPublicoObjetivo(HttpServletRequest request, boolean edicion, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld) throws NumberFormatException, DelegateException
-	{
-		if (isModuloModificado("modul_public_modificat", request)) {
+	private ProcedimientoLocal guardarProcPublicoObjetivo(
+			HttpServletRequest request, boolean edicion,
+			ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld)
+			throws NumberFormatException, DelegateException {
+		
+		if ( isModuloModificado("modul_public_modificat", request) ) {
+			
 			if (request.getParameter("publicsObjectiu") != null && !"".equals(request.getParameter("publicsObjectiu"))) {
+				
 				PublicoObjetivoDelegate publicObjDelegate = DelegateUtil.getPublicoObjetivoDelegate();
 				Set<PublicoObjetivo> publicsNous = new HashSet<PublicoObjetivo>();
 				String[] codisPublicsNous = request.getParameter("publicsObjectiu").split(",");
@@ -775,18 +788,24 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 						}
 					}
 				}
+				
 				for (String codiPob : codisPublicsNous) {
 					if (codiPob != null)
 						publicsNous.add(publicObjDelegate.obtenerPublicoObjetivo(Long.valueOf(codiPob)));
 				}
+				
 				procediment.setPublicosObjetivo(publicsNous);
 
 			} else {
+				
 				procediment.setPublicosObjetivo(new HashSet<PublicoObjetivo>());
+				
 			}
+			
 		}
 
 		return procediment;
+		
 	}
 
 	/*
@@ -887,8 +906,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	/*
 	 * Controlamos los hechos vitales modificados.
 	 */
-	private ProcedimientoLocal guardarProcHechosVitales(HttpServletRequest request, boolean edicion, ProcedimientoLocal procediment) throws DelegateException
-	{
+	private ProcedimientoLocal guardarProcHechosVitales(HttpServletRequest request, boolean edicion, ProcedimientoLocal procediment) 
+			throws DelegateException {
+		
 		if (request.getParameter("fetsVitals") != null && edicion && isModuloModificado("modulo_hechos_modificado", request)) {
 			HechoVitalDelegate hvDelegate = DelegateUtil.getHechoVitalDelegate();
 			HechoVitalProcedimientoDelegate hvpDelegate = DelegateUtil.getHechoVitalProcedimientoDelegate();
@@ -901,6 +921,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 				hvpDelegate.borrarHechoVitalProcedimientos(hvpIds);
 			}
+			
 			procediment.setHechosVitalesProcedimientos(new HashSet<HechoVitalProcedimiento>());
 
 			// Guardamos los nuevos
@@ -929,9 +950,11 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 			hvpDelegate.grabarHechoVitalProcedimientos(hvpsAGuardar);
 			procediment.setHechosVitalesProcedimientos(hvpsAGuardar);
+			
 		}
 
 		return procediment;
+		
 	}
 
 	/*

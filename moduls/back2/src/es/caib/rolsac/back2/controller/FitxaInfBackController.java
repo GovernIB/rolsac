@@ -869,52 +869,74 @@ public class FitxaInfBackController extends PantallaBaseController
      * Para hacer menos accesos a BBDD se comprueba si es edicion o no, en el primer caso, es bastante
      * probable que se repitan la mayoria de materias.
      */
-    private Ficha guardarFitxaMaterias(boolean edicion, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm) throws DelegateException
-    {
+    private Ficha guardarFitxaMaterias(boolean edicion, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm) 
+    		throws DelegateException {
+    	
     	String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-    	if (isModuloModificado("modulo_materias_modificado", valoresForm)) {
+    	
+    	if ( isModuloModificado("modulo_materias_modificado", valoresForm) ) {
+    		
     		if (valoresForm.get("materies") != null && !"".equals(valoresForm.get("materies"))) {
+    			
     			MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
 				Set<Materia> materias = new HashSet<Materia>();
 				materias.addAll(materiaDelegate.obtenerMateriasPorIDs(valoresForm.get("materies"), idioma));
 				fitxa.setMaterias(materias); 
+				
     		} else {
+    			
     			fitxa.setMaterias(new HashSet<Materia>());
     			
     		}
+    		
     	}
+    	
     	return fitxa;
+    
     }
     
     /*
      * Controlamos los hechos vitales modificados o incluidos
      */
-    private Ficha guardarFitxaHechosVitales(boolean edicion, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm) throws DelegateException
-    {
-    	if (isModuloModificado("modulo_hechos_modificado", valoresForm)) {
+    private Ficha guardarFitxaHechosVitales(boolean edicion, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm) 
+    		throws DelegateException {
+    	
+    	if ( isModuloModificado("modulo_hechos_modificado", valoresForm) ) {
+    		
         	if (valoresForm.get("fetsVitals") != null && !"".equals(valoresForm.get("fetsVitals"))) {
+        		
         		HechoVitalDelegate hvDelegate = DelegateUtil.getHechoVitalDelegate();
         		Set<HechoVital> hechosVitales = new HashSet<HechoVital>();
         		List<Long> ids = new ArrayList<Long>();
+        		
     			for (String cod : valoresForm.get("fetsVitals").split(","))
     				ids.add(Long.parseLong(cod));
     			
     			hechosVitales.addAll(hvDelegate.buscarPorIds(ids));
         		fitxa.setHechosVitales(hechosVitales);
+        		
         	} else {
+        		
         		fitxa.setHechosVitales(new HashSet<HechoVital>());
+        		
         	}
+        	
         }
+    	
     	return fitxa;
+    	
     }
     
     /*
      * Controlamos los públicos objetivos modificados o incluidos
      */
-    private Ficha guardarFitxaPO(boolean edicion, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm) throws DelegateException
-    {
-    	if (isModuloModificado("modul_public_modificat", valoresForm)) {
+    private Ficha guardarFitxaPO(boolean edicion, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm) 
+    		throws DelegateException {
+    	
+    	if ( isModuloModificado("modul_public_modificat", valoresForm) ) {
+    		
     		if (valoresForm.get("publicsObjectiu") != null && !"".equals(valoresForm.get("publicsObjectiu"))) {
+    			
     			PublicoObjetivoDelegate publicObjDelegate = DelegateUtil.getPublicoObjetivoDelegate();
     			Set<PublicoObjetivo> publicsNous = new HashSet<PublicoObjetivo>();
     			String[] codisPublicsNous = valoresForm.get("publicsObjectiu").split(",");
@@ -937,22 +959,28 @@ public class FitxaInfBackController extends PantallaBaseController
     					publicsNous.add(publicObjDelegate.obtenerPublicoObjetivo(codi));
     				}
     			}
+    			
     			fitxa.setPublicosObjetivo(publicsNous);
     			
     		} else {
+    			
     			fitxa.setPublicosObjetivo(new HashSet<PublicoObjetivo>());
     			
     		}
     	}
+    	
     	return fitxa;
+    	
     }
     
     /*
      * Función para recuperar y controlas los documendos asociados
      */
-    private Ficha guardarFitxaDocs(boolean edicion, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm, Set<String> docsIds) throws DelegateException
-    {
-    	if (isModuloModificado("modulo_documents_modificado", valoresForm)) {
+    private Ficha guardarFitxaDocs(boolean edicion, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm, Set<String> docsIds)
+    		throws DelegateException {
+    	
+    	if ( isModuloModificado("modulo_documents_modificado", valoresForm) ) {
+    	
     		DocumentoResumen document;
     		DocumentoResumenDelegate docDelegate = DelegateUtil.getDocumentoResumenDelegate();
     		List<Documento> documents = new ArrayList<Documento>();
@@ -960,11 +988,13 @@ public class FitxaInfBackController extends PantallaBaseController
     		
     		// Obtenim  els documents i els seus ordres
     		for (Iterator<String> iterator = docsIds.iterator(); iterator.hasNext();) {
+    			
     			String docParameter = (String)iterator.next();
     			String[] elements = docParameter.split("_");
     			
     			Long idDoc = ParseUtil.parseLong(elements[2]);	// documents_id_xxx
     			if (idDoc != null) {
+    				
     				document = docDelegate.obtenerDocumentoResumen(idDoc);
     				Documento doc = new Documento();
     				doc.setId(document.getId());
@@ -978,8 +1008,11 @@ public class FitxaInfBackController extends PantallaBaseController
     				actulitzadorMap.put("orden_doc" + idDoc, orden);
     				
     			} else {
+    				
     				log.warn("S'ha rebut un id de document no n�meric: " + idDoc);
+    				
     			}
+    			
     		}
     		
     		// Actualitzam ordres
@@ -987,6 +1020,7 @@ public class FitxaInfBackController extends PantallaBaseController
     		
     		// Assignar els documents a la fitxa i eliminar els que ja no estiguin seleccionats.
     		fitxa.setDocumentos(documents);
+    		
     		if (edicion) {
     			List<Documento> docsOld = fitxaOld.getDocumentos();
     			for (Documento doc: documents) {
@@ -1003,8 +1037,11 @@ public class FitxaInfBackController extends PantallaBaseController
     				}
     			}
     		}
+    		
     	}
+    	
     	return fitxa;
+    	
     }
     
     /*

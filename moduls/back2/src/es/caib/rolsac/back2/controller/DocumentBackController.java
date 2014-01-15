@@ -23,7 +23,6 @@ import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.TraduccionDocumento;
-import org.ibit.rol.sac.model.TraduccionTramite;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;

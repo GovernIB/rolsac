@@ -621,7 +621,7 @@ public class NormativaBackController extends PantallaBaseController {
             DelegateUtil.getEstadisticaDelegate().grabarEstadisticaNormativa(idNormativa);
 
             // Guardar afectacions
-            guardarAfectacione(valoresForm, normativa, edicion);
+            guardarAfectaciones(valoresForm, normativa, edicion);
 
             // Finalizado correctamente
             result = new IdNomDTO(normativa.getId(), messageSource.getMessage("normativa.guardat.correcte", null, request.getLocale()));
@@ -848,7 +848,7 @@ public class NormativaBackController extends PantallaBaseController {
      * @throws JsonMappingException
      * @throws IOException
      */
-    private void guardarAfectacione(Map<String, String> valoresForm, Normativa normativa, boolean edicion) throws DelegateException, JsonParseException, JsonMappingException, IOException {
+    private void guardarAfectaciones(Map<String, String> valoresForm, Normativa normativa, boolean edicion) throws DelegateException, JsonParseException, JsonMappingException, IOException {
 
         NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
         if (isModuloModificado("modulo_afectaciones_modificado", valoresForm)) {
