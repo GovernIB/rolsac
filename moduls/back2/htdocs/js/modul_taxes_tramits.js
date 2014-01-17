@@ -128,7 +128,9 @@ function CEscriptoriPareTramitTaxa(){
 function CModulTaxesTramit(){
 	this.extend = DetallBase;
 	if (typeof FormulariDadesTaxaTramit != 'undefined') {
-		this.extend(true, FormulariDadesTaxaTramit);
+		this.extend(true, FormulariDadesTaxaTramit,{
+		    btnVolver: "btnVolver_taxes_tramit" 
+		});
 	} else {
 		this.extend(true, null);
 	}
@@ -137,7 +139,7 @@ function CModulTaxesTramit(){
 	
 	this.iniciar = function() {			
         // botons        
-        $("#btnVolver_taxes_tramit").bind("click", that.torna);
+        //$("#btnVolver_taxes_tramit").bind("click", that.torna);
 
         // El botón de guardar está inicialmente deshabilitado hasta que se realice un cambio en el formulario.
     	$("#formGuardarTaxaTramit input, #formGuardarTaxaTramit textarea").bind("change", function(){that.modificado();});
@@ -167,7 +169,7 @@ function CModulTaxesTramit(){
 	}
 	
 	
-	this.torna = function () {
+	this.vuelve = function () {
 		escriptori_taxes_tramits_elm.fadeOut(300, function() {
 			escriptori_tramits_elm.fadeIn(300);
 	    });
@@ -211,7 +213,7 @@ function CModulTaxesTramit(){
 					taxaItem['nom'] = nom;
 					EscriptoriPareTramitTaxa.agregaActualizaItem(taxaItem);
 
-					that.torna();
+					that.vuelve();
 				}
 			}
 

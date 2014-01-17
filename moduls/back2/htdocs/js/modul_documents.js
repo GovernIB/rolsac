@@ -21,8 +21,8 @@ jQuery(document).ready(function() {
 // Lista ordenable para elimiar/ordenar docs en la pantalla "padre"
 function CEscriptoriPare(){
 	this.extend = ListaOrdenable;
-	this.extend();		
-    
+	this.extend();
+	
     // Configuracion de la lista ordenable.
     this.configuracion = {
         nombre: "documents",
@@ -65,14 +65,11 @@ function CEscriptoriPare(){
 	this.eliminaItem = function(item) {
 		var id = jQuery(item).find("input." + that.configuracion.nombre + "_id:first").val();						
 		jQuery(that.configuracion.nodoOrigen).find("input[name=" + that.configuracion.nombre + "_id_" + id + "]").parents("li").remove();
-		that.habilitarBotonGuardar();
+		
 		$('#modulo_documents_modificado').val("1");
+		
+		this.modificado();
 	}
-    
-    this.habilitarBotonGuardar = function() {
-        jQuery("#btnGuardar").unbind("click").bind("click",function(){Detall.guarda();}).parent().removeClass("off");
-    }
-    
     
     /**
 	 * Agrega o actualiza un item en la lista de origen.
@@ -118,7 +115,7 @@ function CEscriptoriPare(){
             ModulDocuments.inicializarDocuments();
 		}
 		
-		that.habilitarBotonGuardar();
+		ModulDocuments.modificado(false);
 		
 		return actualizar;
 	}
@@ -138,20 +135,20 @@ function CEscriptoriPare(){
 function CModulDocuments(){
 	this.extend = DetallBase;
 	if (typeof FormulariDadesDoc != 'undefined') {
-		this.extend(true, FormulariDadesDoc);
+		//this.extend(true, FormulariDadesDoc);
+		this.extend(true, FormulariDadesDoc,{
+		    form: "formGuardarDoc",
+		    btnGuardar: "btnGuardar_documents",
+		    btnVolver: "btnVolver_documents"
+		});
 	} else {
 		this.extend(true, null);
 	}
 
 	var that = this;
 	
-	this.iniciar = function() {			
-        // botons        
-        jQuery("#btnVolver_documents").bind("click", that.torna);
-
-        // El botón de guardar est� inicialmente deshabilitado hasta que se realice un cambio en el formulario.
-    	jQuery("#formGuardarDoc input, #formGuardarDoc select, #formGuardarDoc textarea").bind("change", function(){that.modificado();});
-    	
+	this.iniciar = function() {
+	    
     	// boton de traducir
         jQuery("#botoTraduirDocument").unbind("click").bind("click", function() {
             Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
@@ -185,12 +182,30 @@ function CModulDocuments(){
 		that.traduir(pagTraduirDocument, CAMPOS_TRADUCTOR_DOCUMENTO, DATOS_TRADUCIDOS_DOCUMENTO);
 	}
 	
-	this.torna = function () {
-		escriptori_documents_elm.fadeOut(300, function() {
-	        escriptori_detall_elm.fadeIn(300);
-	    });
+	this.vuelve = function () {
+	    
+	    if( this.cambiosSinGuardar() ){
+            Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: txtAvisoCambiosSinGuardar, funcio: function() {
+                
+                escriptori_documents_elm.fadeOut(300, function() {
+                    escriptori_detall_elm.fadeIn(300);
+                });
+                
+                that.modificado(false);
+                
+                Missatge.cancelar();
+                
+            }});
+        }else{
+            
+            escriptori_documents_elm.fadeOut(300, function() {
+                escriptori_detall_elm.fadeIn(300);
+            });
+            
+            this.modificado(false);
+            
+        }
 	}
-	
 	
 	// Guardar haciendo upload de archivos.
 	this.guarda_upload = function() {
@@ -234,7 +249,10 @@ function CModulDocuments(){
 					docItem['nombre'] = nom;
 					EscriptoriPare.agregaActualizaItem(docItem);
 					$('#modulo_documents_modificado').val("1");
-					that.torna();
+					
+					that.modificado(false);
+					
+					that.vuelve();
 				}
 			}
 
@@ -242,13 +260,6 @@ function CModulDocuments(){
         
 		return false;
 	}
-	
-	
-	this.modificado = function(){
-		// Habilitamos el bot�n de guardar.
-		jQuery("#btnGuardar_documents").unbind("click").bind("click",function(){that.guarda();}).parent().removeClass("off");
-	}
-	
 	
 	this.dataPublicacio = function(e) {		
 		if (jQuery(this).val() == "") {
@@ -258,9 +269,6 @@ function CModulDocuments(){
 		
 	
 	this.nou = function(edicion) {
-		// El bot�n de guardar est� inicialmente deshabilitado hasta que se realice un cambio en el formulario.
-		jQuery("#btnGuardar_documents").parent().addClass("off");
-        
 		if (!edicion) {
             jQuery("#docId").val("");
             for (var i in idiomas) {
@@ -275,6 +283,8 @@ function CModulDocuments(){
 		escriptori_detall_elm.fadeOut(300, function() {
 			escriptori_documents_elm.fadeIn(300);
 		});
+		
+		this.modificado(false);
 		
 		this.actualizaEventos();
 	}		
@@ -373,7 +383,7 @@ function CModulDocuments(){
 			axis: 'y', 
 			update: function(event,ui){
 				EscriptoriPare.calculaOrden(ui,"origen");
-				EscriptoriPare.habilitarBotonGuardar();
+				EscriptoriPare.modificado(true);
 			}
 		}).css({cursor:"move"});
 		

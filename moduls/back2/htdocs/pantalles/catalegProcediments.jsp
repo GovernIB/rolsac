@@ -2085,8 +2085,8 @@
 		                          <li class="btnVolver impar">
 		                              <a href="javascript:;"><span><span><spring:message code='boto.torna'/></span></span></a>
 		                          </li>
-		                          <li class="btnGuardar par">
-		                              <a id="btnGuardarTraimt" class="btnGuardar" href="javascript:;"><span><span><spring:message code='boto.guarda'/></span></span></a>
+		                          <li class="btnGuardar par off">
+		                              <a id="btnGuardarTramit" class="btnGuardar" href="javascript:;"><span><span><spring:message code='boto.guarda'/></span></span></a>
 		                          </li>
 		                          <li style="" class="btnEliminar impar">
 		                              <a class="btnEliminar" href="javascript:;"><span><span><spring:message code='boto.elimina'/></span></span></a>

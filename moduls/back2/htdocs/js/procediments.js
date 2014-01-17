@@ -67,8 +67,7 @@ $(document).ready(function() {
 	}
 	Llistat.iniciar();
 	// Cercador.iniciar();
-
-
+	
 	/*Listar hechos vitales al cambiar los publicos objetivos*/
 	$('.ModulPublicObjectiu .finalitza').click(function(){
 
@@ -141,7 +140,6 @@ $(document).ready(function() {
 		hechosVitalesAsignados = "";
 
 	});
-
 }); //Fin $(document).ready
 
 //idioma
@@ -500,10 +498,10 @@ var Items_arr = new Array();
 
 //detall
 function CDetall(){
-
+    
 	this.extend = DetallBase;
 	this.extend();
-
+	
 	var that = this;
 
 	this.tipusAuditoria = 'procediment';

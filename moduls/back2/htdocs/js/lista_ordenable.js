@@ -18,6 +18,12 @@ function ListaOrdenable(){
 		}
 	}
 	
+	this.modificado = function(){
+	    if( Detall ){
+	        Detall.modificado(true);
+	    }
+	}
+	
 	/**
 	 * Replica la ordenación de la lista actual al resto de listas (solo en modo multi-idioma).
 	 */
@@ -180,7 +186,9 @@ function ListaOrdenable(){
 	 */ 
 	this.eliminaItem = function( item ){		
 		var id = jQuery(item).find("input." + params.nombre + "_id:first").val();						
-		jQuery(params.nodoDestino).find("input[name=" + params.nombre + "_id_" + id + "]").parents("li").remove();				
+		jQuery(params.nodoDestino).find("input[name=" + params.nombre + "_id_" + id + "]").parents("li").remove();
+		
+		this.modificado();				
 	}
 
 	/**

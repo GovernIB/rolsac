@@ -565,8 +565,8 @@ function CDetall(soloFicha){
 
 	}
 
-	this.carregarInici = function() { window.location.replace(pagLlistat); }
-	this.carregarUA = function() { window.location.replace(pagLlistat); }
+	this.carregarInici = function() { Detall.modificado(false); window.location.replace(pagLlistat); }
+	this.carregarUA = function() { Detall.modificado(false); window.location.replace(pagLlistat); }
 }
 
 function posarValorsInput(idInput, valor)

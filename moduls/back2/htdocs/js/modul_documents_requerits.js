@@ -19,7 +19,13 @@ $(document).ready(function() {
 // Lista ordenable para eliminar/ordenar forms en la pantalla "padre"
 function CEscriptoriPareRequerits(){
 	this.extend = ListaOrdenable;
-	this.extend();		
+	this.extend();
+	
+	this.modificado = function(){
+        if( EscriptoriTramit ){
+            EscriptoriTramit.modificado();
+        }
+    }		
     
     // Configuracion de la lista ordenable.
     this.configuracion = {
@@ -63,12 +69,8 @@ function CEscriptoriPareRequerits(){
 	this.eliminaItem = function(item) {
 		var id = $(item).find("input." + that.configuracion.nombre + "_id:first").val();						
 		$(that.configuracion.nodoOrigen).find("input[name=" + that.configuracion.nombre + "_id_" + id + "]").parents("li").remove();
-		that.habilitarBotonGuardar();
+		that.modificado(true);
 	}
-    
-    this.habilitarBotonGuardar = function() {
-    	escriptori_documents_requerits_elm.find("#btnGuardar").unbind("click").bind("click",function(){this.guarda_upload();}).parent().removeClass("off");
-    }
     
     /**
 	 * Agrega o actualiza un item en la lista de origen.
@@ -114,7 +116,7 @@ function CEscriptoriPareRequerits(){
             ModulDocumentsRequerits.inicializarDocumentsRequerits();
 		}
 		
-		that.habilitarBotonGuardar();
+		ModulDocumentsRequerits.modificado(true);
 		
 		return actualizar;
 	}
@@ -133,7 +135,12 @@ function CEscriptoriPareRequerits(){
 function CModulDocumentsRequerits(){
 	this.extend = DetallBase;
 	if (typeof FormulariDadesDocRequerit != 'undefined') {
-		this.extend(true, FormulariDadesDocRequerit);
+		//this.extend(true, FormulariDadesDocRequerit);
+		this.extend(true, FormulariDadesDocRequerit,{
+		    form: "formGuardarDocReq",
+		    btnGuardar: "btnGuardar_documents_requerits",
+		    btnVolver: "btnVolver_documents_requerits"
+	    });
 	} else {
 		this.extend(true, null);
 	}
@@ -142,10 +149,10 @@ function CModulDocumentsRequerits(){
 	
 	this.iniciar = function() {			
         // botons        
-        $("#btnVolver_documents_requerits").bind("click", that.torna);
+        //$("#btnVolver_documents_requerits").bind("click", that.torna);
 
         // El bot�n de guardar est� inicialmente deshabilitado hasta que se realice un cambio en el formulario.
-    	$("#formGuardarDocReq input, #formGuardarDocReq textarea, #formGuardarDocReq select").bind("change", function(){that.modificado();});
+    	//$("#formGuardarDocReq input, #formGuardarDocReq textarea, #formGuardarDocReq select").bind("change", function(){that.modificado();});
     	
 		// idioma
 		if (escriptori_documents_requerits_elm.find("div.idiomes").size() != 0) {
@@ -201,11 +208,31 @@ function CModulDocumentsRequerits(){
 		that.traduir(pagTraduirDocumentTramit, CAMPOS_TRADUCTOR_DOCUMENTO_REQUERIDO, DATOS_TRADUCIDOS_DOCUMENTO_REQUERIDO);
 	}
 	
-	this.torna = function () {
-		escriptori_documents_requerits_elm.fadeOut(300, function() {
-			escriptori_tramits_elm.fadeIn(300);
-	    });
+	this.vuelve = function () {
+	    
+	    if( this.cambiosSinGuardar() ){
+            Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: txtAvisoCambiosSinGuardar, funcio: function() {
+                
+                escriptori_documents_requerits_elm.fadeOut(300, function() {
+                    escriptori_tramits_elm.fadeIn(300);
+                });
+                
+                Missatge.cancelar();
+                
+                that.modificado(false);
+                
+            }});
+        }else{
+            
+            escriptori_documents_requerits_elm.fadeOut(300, function() {
+                escriptori_tramits_elm.fadeIn(300);
+            });
+            
+            this.modificado(false);
+            
+        }
 	}
+	
 	this.validaTipusDocument = function(){
 		var tipDoc = $("#item_tipdoc_ca");
 		var catDoc = $("#item_cataleg_ca");
@@ -273,18 +300,15 @@ function CModulDocumentsRequerits(){
 					docItem['nom'] = nom;
 					EscriptoriPareReqTramit.agregaActualizaItem(docItem);
 
-					that.torna();
+                    that.modificado(false);
+
+					that.vuelve();
 				}
 			}
 
 		});
         
 		return false;
-	}
-	
-	this.modificado = function(){
-		// Habilitamos el bot�n de guardar.
-		$("#btnGuardar_documents_requerits").unbind("click").bind("click",function(){that.guarda();}).parent().removeClass("off");
 	}
 	
 	this.dataPublicacio = function(e) {		
@@ -409,7 +433,7 @@ function CModulDocumentsRequerits(){
 			axis: 'y', 
 			update: function(event,ui){
 				EscriptoriPareReqTramit.calculaOrden(ui,"origen");
-				EscriptoriPareReqTramit.habilitarBotonGuardar();
+				EscriptoriPareReqTramit.modificado(true);
 			}
 		}).css({cursor:"move"});
 		

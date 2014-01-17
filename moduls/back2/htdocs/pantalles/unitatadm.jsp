@@ -26,14 +26,7 @@
         </ul>
     </c:if>
     
-    <!-- Escritorio unidades hijas -->
     <div id="escritorioUnidadesHijas">
-        
-        <!--<ul class="submenuUA">
-            <li class="detalle inactivo"><a href="javascript:void(0)">Detall de la UA</a></li>
-            <li class="hijas activo"><span></span><strong>Unitats filles</strong></li>
-        </ul>-->
-        
         <ul id="opcionesUnidadesHijas" class="tabOpciones">
             <li class="opcio L actiu">
                 <a id="tabListado" href="javascript:void(0)"><spring:message code='tab.llistat'/></a>
@@ -55,7 +48,6 @@
                 <input type="hidden" value="id" class="ordreCamp" />
             </div>
             <div class="resultats C">
-                <!-- cercador -->
                 <div id="cercadorUnitatsFilles">
                     <div id="cercador_contingut_unitats_filles" class="cercador cercador_contingut">
                         <div class="opcionesBusqueda">
@@ -78,7 +70,6 @@
                                     <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
                                     <option value="1"><spring:message code='txt.validacio.publica'/></option>
                                     <option value="2"><spring:message code='txt.validacio.interna'/></option>
-                                    <!-- <option value="3"><spring:message code='txt.validacio.reserva'/></option> -->
                                 </select>
                             </div>
                         </div>                      
@@ -157,7 +148,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- /cercador -->
                 <div class="dades"></div>
                 <input type="hidden" value="0" class="pagPagina" /> 
                 <input type="hidden" value="DESC" class="ordreTipus" /> 
@@ -165,23 +155,18 @@
             </div>
         </div>
     </div>
-    <!-- /Escritorio unidades hijas --> 
     
-    <!-- escriptori_detall -->
     <div id="escriptori_detall" class="escriptori_detall">
         
         <form id="formGuardar" action="" method="post">
         <input id="item_id" name="item_id" type="hidden" value='<c:out value="${idUA}" />' />       
         <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>                    
-        <!-- modulPrincipal -->     
         <div id="modulPrincipal" class="grupoModulosFormulario modulPrincipal">            
-            <!-- modul -->
             <div class="modul">     
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                     <legend><spring:message code='txt.llegenda_dades'/></legend>
                     <div class="modul_continguts mostrat">
-                        <!-- fila -->
                         <div class="fila">
                             <p class="introIdiomas"><spring:message code='txt.idioma.idioma'/></p>
                             <ul class="idiomes">
@@ -280,19 +265,14 @@
                                 </c:forEach>
                             </div>
                         </div>
-                        <!-- /fila -->
                     </div>
-                </fieldset>
+                </fieldset>                
             </div>
-            <!-- /modul -->
-            
-            <!-- modul -->
             <div class="modul">
                 <fieldset>  
                     <a class="modul amagat"><spring:message code='txt.mostra'/></a>
                     <legend><spring:message code='unitatadm.formulari.responsable'/></legend>
                     <div class="modul_continguts"><%-- style="display:block;" hasta que funcione el jquery --%>
-                        <!-- fila -->
                         <div class="fila">
                             <div class="element t50p">
                                 <div class="etiqueta"><label for="item_responsable"><spring:message code='unitatadm.formulari.responsable.nom'/></label></div>
@@ -314,8 +294,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- /fila -->
-                        <!-- fila -->
                         <div class="fila">
                             <div class="idiomes">                                                           
                                 <c:forEach items="${idiomes_aplicacio}" var="lang">
@@ -332,8 +310,6 @@
                                 </c:forEach>
 							</div>
                         </div>
-						<!-- /fila -->
-                        <!-- fila -->
                         <div class="fila">
                             <div class="element t50p campoImagen">                                       
                                 <div class="thumbnail"></div>
@@ -354,8 +330,6 @@
                                 </div>
                             </div>                                                                                      
                         </div>
-                        <!-- /fila -->
-                        <!-- fila -->
                         <div class="fila">
                             <div class="element t50p campoImagen">
                                 <div class="thumbnail"></div>
@@ -377,15 +351,12 @@
                                 </div>
                             </div>                                                                                      
                         </div>
-                        <!-- /fila -->
-                        <!-- fila -->
                         <div class="fila">
                             <div class="element t50p">
                                 <div class="etiqueta">
                                     <label for="item_tractament"><spring:message code='unitatadm.formulari.responsable.tractament'/></label>                                    
                                 </div>
                                 <div class="control select">
-                                    <!-- input id="item_tractament" name="item_tractament" type="text" /-->
                                     <select id="item_tractament" name="item_tractament">
                                         <option value=""><spring:message code='txt.escolliu_opcio'/></option>
                                         <c:forEach items="${llistaTractaments}" var="tractament">
@@ -395,20 +366,15 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- /fila -->
                     </div>
                 </fieldset>
             </div>
-            <!-- /modul -->
-            
-            <!-- modul -->
             <div class="modul">                         
                 <fieldset>                                  
                     <a class="modul amagat"><spring:message code='txt.mostra'/></a>                             
                     <legend><spring:message code='txt.llegenda_contacte'/></legend>                              
                     <div class="modul_continguts" style="display:block;">                               
                     
-                        <!-- fila -->
                         <div class="fila">                              
                             <div class="element t50p">                                  
                                 <div class="etiqueta"><label for="item_telefon"><spring:message code='unitatadm.formulari.telefon'/></label></div>
@@ -423,9 +389,6 @@
                                 </div>                                          
                             </div>                                      
                         </div>
-                        <!-- /fila -->     
-                        
-                        <!-- fila -->
                         <div class="fila">
                             <div class="element t50p">                                      
                                 <div class="etiqueta"><label for="item_email"><spring:message code='unitatadm.formulari.email'/></label></div>
@@ -440,9 +403,6 @@
                                 </div>                                          
                             </div>
                         </div>
-                        <!-- /fila -->
-                    
-                        <!-- fila -->
                         <%--<div class="fila">                                  
                             <div class="element t50p">                                      
                                 <div class="etiqueta"><label for="item_clau_hita"><spring:message code='unitatadm.formulari.clau_hita'/></label></div>
@@ -457,8 +417,6 @@
                                 </div>                                          
                             </div>
                         </div>--%>
-                        <!-- /fila -->                                  
-                        <!-- fila -->
                         <%--<div class="fila">                                      
                             <div class="element t50p">                                      
                                 <div class="etiqueta"><label for="item_domini"><spring:message code='unitatadm.formulari.domini'/></label></div>
@@ -480,9 +438,6 @@
                                 </div>
                             </div>                                      
                         </div>--%>
-                        <!-- /fila -->                                  
-                         
-                        <!-- fila -->
                         <%--<div class="fila">                          
                             <div class="element t50p">                                      
                                 <div class="etiqueta"><label for="item_email"><spring:message code='unitatadm.formulari.email'/></label></div>
@@ -502,20 +457,14 @@
                                 </div>
                             </div>                              
                         </div>--%>
-                        <!-- /fila -->
-                        
                     </div>                              
                 </fieldset>                         
             </div>
-            <!-- /modul -->                 
-            
-            <!-- modul -->
             <div class="modul">
                 <fieldset>  
                     <a class="modul amagat"><spring:message code='txt.mostra'/></a>
                     <legend><spring:message code='unitatadm.formulari.logotipus'/></legend>
                     <div class="modul_continguts" style="display:block;">
-                        <!-- fila -->
                         <div class="fila">
                             <div class="element t50p campoImagen">                                       
                                 <div class="thumbnail"></div>                            
@@ -537,8 +486,6 @@
                                 </div>
                             </div>                                                                                      
                         </div>
-                        <!-- /fila -->
-                        <!-- fila -->
                         <div class="fila">
                             <div class="element t50p campoImagen">                                       
                                 <div class="thumbnail"></div>
@@ -560,8 +507,6 @@
                                 </div>
                             </div>                                                                                      
                         </div>
-                        <!-- /fila -->
-                        <!-- fila -->
                         <div class="fila">
                             <div class="element t50p campoImagen">                                       
                                 <div class="thumbnail"></div>
@@ -583,8 +528,6 @@
                                 </div>
                             </div>                                                                                      
                         </div>
-                        <!-- /fila -->
-                        <!-- fila -->
                         <div class="fila">
                             <div class="element t50p campoImagen">                                       
                                 <div class="thumbnail"></div>
@@ -607,8 +550,6 @@
                                 </div>
                             </div>                                                                                      
                         </div>
-                        <!-- /fila -->              
-                        <!-- fila -->
                         <%-- 
                         <div class="fila">
                             <div class="element t50p">
@@ -626,8 +567,6 @@
                             </div>
                         </div>
                         
-                        <!-- /fila -->
-                        <!-- fila -->
                         <div class="fila">
                             <div class="element t50p">
                                 <div class="etiqueta"><label for="item_logo_salutacio_horizontal"><spring:message code='unitatadm.formulari.logotipus.horitzontal.salutacio'/></label></div>
@@ -642,13 +581,10 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- /fila -->
                         --%>
                     </div>
                 </fieldset>
             </div>
-            <!-- /modul -->
-            <!-- modul -->
             <div class="modul">
                 <fieldset>
                     <a class="modul amagat"><spring:message code='txt.mostra'/></a>
@@ -683,9 +619,6 @@
                     </div>
                 </fieldset>
             </div>
-            <!-- /modul -->
-
-            <!-- modul -->
             <div id="modulEstadistiques" class="modul">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
@@ -699,10 +632,7 @@
                     </div>
                 </fieldset>
             </div>
-            <!-- /modul -->
-
               <c:if test="${rolAdmin}">
-                <!-- modul -->
                 <div id="modulAuditories" class="modul auditorias">                
                     <fieldset>
                         <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
@@ -738,16 +668,11 @@
                         </div>
                     </fieldset>
                 </div>
-                <!-- /modul -->
           </c:if>
             
             
         </div>
-        <!-- /modulPrincipal -->
-        
-        <!-- modulLateral -->
         <div class="modulLateral">
-            <!-- modul -->
             <div class="modul publicacio">
                 <fieldset>
                     <legend><spring:message code='boto.publicacio'/></legend>
@@ -775,7 +700,6 @@
                     </div>
                     
                     <div class="modul_continguts mostrat">
-                        <!-- botonera dalt -->
                         <div class="botonera dalt">
                           <ul>
                               <li class="btnGuardar impar">
@@ -790,13 +714,9 @@
                           </ul>
                         </div>
                                                 
-                        <!-- /botonera dalt -->
                     </div>
                 </fieldset>
             </div>
-            <!-- /modul -->
-            
-            <!-- modul -->
             <div class="modul modulRelacioOrganica" id="modulRelacioOrganica">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
@@ -812,7 +732,6 @@
                                 </div>                                          
                             </div>            
                         </div>
-                        <!-- Botonera -->                        
                         <div class="botonera">
                             <div class="boton btnGenerico" style="margin-left: 0px;">
                                 <a href="javascript:carregarArbreUAExpand('<c:url value="/pantalles/popArbreUAExpandir.do"/>','popUA','item_pare_id', 'item_pare');" class="btn consulta">                                
@@ -825,21 +744,15 @@
                                 </a>
                             </div>
                         </div>                        
-                        <!-- /Botonera -->
-                        
                     </div>
                 </fieldset>
             </div>
-            <!-- /modul -->
-            
-            <!-- modul -->
             <div class="modul" id="modul_materies">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                     <legend><spring:message code='unitatadm.formulari.materies'/></legend>
                     <div class="modul_continguts mostrat">
                                                                         
-                        <!-- modulMateries -->
                         <div class="modulMateries selectorChecks">
                         
                             <input name="modulo_materias_modificado" type="hidden" value="0" />
@@ -876,57 +789,32 @@
                                 </div>                                      
                             </div>                                  
                         </div>
-                        <!-- /modulMateries -->
                         
                     </div>                              
                 </fieldset>                     
             </div>
-            <!-- /modul -->                     
-            <!-- modul -->
             <div class="modul" id="modul_seccions">                 
                 <fieldset>                                  
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
                     <legend><spring:message code='unitatadm.formulari.seccions'/></legend>                               
                     <div class="modul_continguts mostrat">                                  
-                        <!-- modulSeccions -->
                         <div class="modulSeccions">                                     
                             <input name="modulo_secciones_modificado" type="hidden" value="0" />
                             <div class="seleccionats">                                          
                                 <p class="info"><spring:message code='unitatadm.formulari.seccions.noInfo'/></p>
                                 <div class="listaOrdenable"></div>
-                                <!-- Comentar el botón para deshabilitarlo 
-                                <div class="btnGenerico">
-                                    <a class="btn gestionaSeccions" href="javascript:;"><span><span><spring:message code='unitatadm.formulari.seccions.gestiona'/></span></span></a>                 
-                                </div>
-                                -->
                             </div>                                  
                         </div>
-                        <!-- /modulSeccions -->                                 
                     </div>                              
                 </fieldset>                     
             </div>
-            <!-- /modul -->                     
-            <!-- modul -->
             <div class="modul" id="modul_edificis">                     
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
                     <legend><spring:message code='unitatadm.formulari.edificis'/></legend>                               
                     <div class="modul_continguts mostrat">                                  
-                        <!-- modulEdificis -->
                         <%-- dsanchez: Clase "multilang" para listas multi-idioma --%>
-                        <!--<div class="modulEdificis multilang">-->
                         <div class="modulEdificis">
-                            
-                            <!--
-                            <ul class="idiomes">
-                                <li class="introIdiomas">Idioma:</li>
-                                <li class="ca seleccionat">ca</li>
-                                <li class="es">es</li>
-                                <li class="en">en</li>
-                                <li class="de">de</li>
-                                <li class="fr">fr</li>
-                            </ul>-->
-                            
                             <div class="seleccionats">
                             
                                 <input name="modulo_edificios_modificado" type="hidden" value="0" />
@@ -937,46 +825,19 @@
                                     <div class="listaOrdenable"></div>
                                 </div>
                                 <%-- dsanchez: multiidioma --%>
-                                <!--
-                                <div class="seleccionat cajaIdioma ca">
-                                    <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
-                                    <div class="listaOrdenable"></div>
-                                </div>
-                                <div class="es cajaIdioma">
-                                    <p class="info">No hay edificios.</p>
-                                    <div class="listaOrdenable"></div>
-                                </div>
-                                <div class="en cajaIdioma">
-                                    <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
-                                    <div class="listaOrdenable"></div>
-                                </div>                                
-                                <div class="de cajaIdioma">
-                                    <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
-                                    <div class="listaOrdenable"></div>
-                                </div>                                
-                                <div class="fr cajaIdioma">
-                                    <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
-                                    <div class="listaOrdenable"></div>
-                                </div>                                
-                                -->
-                                
                                 <div class="btnGenerico">
                                     <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='unitatadm.formulari.edificis.gestiona'/></span></span></a>
                                 </div>
                             </div>                                  
                         </div>
-                        <!-- /modulEdificis -->                                 
                     </div>                              
                 </fieldset>                     
             </div>
-            <!-- /modul -->
-            <!-- modul -->
             <div class="modul" id="modul_usuaris">
             	<fieldset>
             		<a class="modul mostrat"><spring:message code='txt.amaga'/></a>
             		<legend><spring:message code='unitatadm.formulari.usuaris'/></legend>
             		<div class="modul_continguts mostrat">
-            			<!-- modulUsuaris -->
             			<div class="modulUsuaris">
             				<div class="seleccionats">
             					<input name="modulo_usuario_modificado" type="hidden" value="0" />
@@ -991,18 +852,12 @@
             					</c:if>
             				</div>
             			</div>
-            			<!-- /modulUsuaris -->
             		</div>
             	</fieldset>
             </div>
-            <!-- /modul -->
         </div>
-        <!-- /modulLateral -->      
     </div>
     </form>
-    <!-- /escriptori_detall -->
-    
-    <!-- escriptori_previsualitza -->
     <div id="escriptori_previsualitza">
         <h2><spring:message code='unitatadm.formulari.previsualitzaFitxa'/></h2>
         <div class="boton btnGenerico clear">
@@ -1012,9 +867,6 @@
             <iframe frameborder="0" scrolling="auto"></iframe>              
         </div>              
     </div>
-    <!-- /escriptori_previsualitza -->
-                    
-    <!-- escriptori_seccions -->
     <div id="escriptori_seccions">    
        <ul id="opcions">
             <li class="opcio C actiu"><spring:message code='unitatadm.formulari.seccions.gestio'/></li>                                 
@@ -1057,7 +909,6 @@
         
             <div class="modul">
                 
-                <!--<div class="interior multilang">-->
                 <div class="interior">
                     <div class="seleccionats">
                         <div class="seleccionat">
@@ -1074,11 +925,7 @@
             </div>
             
         </div>
-        <!-- seleccionats -->                  
     </div>
-    <!-- /escriptori_seccions -->   
-    
-    <!-- escriptori_fitxes -->
     <div id="escriptori_fitxes">
        <input id="idSeccion" value="" type="hidden"/>
        
@@ -1113,7 +960,6 @@
         
             <div class="modul cercador_contingut">
                 
-                <!--<div class="interior multilang">-->
                 <div class="interior">
                     <div id="cercador" class="seleccionats">
                         <div class="seleccionat ">
@@ -1152,12 +998,8 @@
         </div>
         
        	
-        <!-- seleccionats -->                  
     </div>
 
-    <!-- /escriptori_fitxes -->   
-                    
-    <!-- escriptori_edificis -->
     <div id="escriptori_edificis">
        <ul id="opcions">
             <li class="opcio C actiu"><spring:message code='unitatadm.formulari.edificis.gestio'/></li>                                 
@@ -1218,62 +1060,17 @@
             </div>
         </div>        
         
-        <!-- seleccionats -->
-        <!--<div class="escriptori_items_seleccionats">
-            <div class="interior">
-                <h3><spring:message code='unitatadm.formulari.edificis.selecionats'/></h3>                      
-                <div class="dades">                     
-                    <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
-                </div>               
-                <div class="listaOrdenable"></div>                                                
-                <p class="botonera btnGenerico">
-                    <a id="btnFinalizar" href="javascript:;" class="btn finalitza important"><span><span><spring:message code='boto.finalitza'/></span></span></a>
-                </p>                  
-            </div>
-        </div>-->
-        
         <div class="modulLateral escriptori_items_seleccionats">
             <div class="modul">
                 
-                <!--<div class="interior multilang">-->
                 <div class="interior">
-                
-                    <!--<ul class="idiomes">
-                        <li class="introIdiomas">Idioma:</li>
-                        <li class="ca seleccionat">ca</li>
-                        <li class="es">es</li>
-                        <li class="en">en</li>
-                        <li class="de">de</li>
-                        <li class="fr">fr</li>
-                    </ul>-->
-                    
+                                        
                     <div class="seleccionats">
                     
                         <div class="seleccionat">
                             <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
                             <div class="listaOrdenable"></div>
                         </div>
-                    
-                        <!--<div class="seleccionat cajaIdioma ca">
-                            <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
-                            <div class="listaOrdenable"></div>
-                        </div>
-                        <div class="es cajaIdioma">
-                            <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
-                            <div class="listaOrdenable"></div>
-                        </div>
-                        <div class="en cajaIdioma">
-                            <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
-                            <div class="listaOrdenable"></div>
-                        </div>                                
-                        <div class="de cajaIdioma">
-                            <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
-                            <div class="listaOrdenable"></div>
-                        </div>                                
-                        <div class="fr cajaIdioma">
-                            <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
-                            <div class="listaOrdenable"></div>                      
-                        </div>-->
                         
                         <p class="botonera btnGenerico">
                             <a id="btnFinalizar" href="javascript:;" class="btn finalitza important"><span><span><spring:message code='boto.finalitza'/></span></span></a>
@@ -1282,11 +1079,8 @@
                 </div>
             </div>
         </div>
-        <!-- seleccionats -->
     </div>
-    <!-- /escriptori_edificis -->
     
-    <!-- escriptori_usuaris -->
     <div id="escriptori_usuaris">
     	<ul id="opcions">
     		<li class="opcio C actiu"><spring:message code='unitatadm.formulari.usuaris.gestio'/></li>
@@ -1381,24 +1175,18 @@
     			</div>
     		</div>
     	</div>
-    	<!-- seleccionats -->
     </div>
-    <!-- /escriptori_usuaris -->
     
-    <!-- Escritorio nueva unidad hija -->
     <div id="escritorioNuevaUA" class="escriptori_detall">
         <form id="nuevaUA_formGuardar" action="" method="post">
             <input id="nuevaUA_item_id" name="item_id" type="hidden" value='' />       
-            <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>                    
-            <!-- modulPrincipal -->     
+            <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>
             <div class="grupoModulosFormulario modulPrincipal">            
-                <!-- modul -->
                 <div class="modul">     
                     <fieldset>
                         <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                         <legend><spring:message code='txt.llegenda_dades'/></legend>
                         <div class="modul_continguts mostrat">
-                            <!-- fila -->
                             <div class="fila">
                                 <p class="introIdiomas"><spring:message code='txt.idioma.idioma'/></p>
                                 <ul class="idiomes">
@@ -1437,6 +1225,7 @@
                                                 </div>                                          
                                             </div>                                      
                                         </div>
+                                        
                                         <div class="fila">
                                             <div class="element t75p">
                                                 <div class="etiqueta">
@@ -1463,6 +1252,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        
                                         <div class="fila">
                                             <div class="element t50p">
                                                 <div class="etiqueta"><label for="nuevaUA_item_abreviatura_<c:out value='${lang}'/>"><spring:message code='unitatadm.formulari.abreviatura'/></label></div>
@@ -1494,19 +1284,14 @@
                                     </c:forEach>
                                 </div>
                             </div>
-                            <!-- /fila -->
                         </div>
                     </fieldset>
-                </div>
-                <!-- /modul -->
-                
-                <!-- modul -->
+                </div>                
                 <div class="modul">
                     <fieldset>  
                         <a class="modul amagat"><spring:message code='txt.mostra'/></a>
                         <legend><spring:message code='unitatadm.formulari.responsable'/></legend>
                         <div class="modul_continguts"><%-- style="display:block;" hasta que funcione el jquery --%>
-                            <!-- fila -->
                             <div class="fila">
                                 <div class="element t50p">
                                     <div class="etiqueta"><label for="nuevaUA_item_responsable"><spring:message code='unitatadm.formulari.responsable.nom'/></label></div>
@@ -1527,8 +1312,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- /fila -->
-                            <!-- fila -->
 	                        <div class="fila">
 	                            <div class="idiomes">                                                           
 	                                <c:forEach items="${idiomes_aplicacio}" var="lang">
@@ -1545,8 +1328,6 @@
 	                                </c:forEach>
 								</div>
 	                        </div>
-							<!-- /fila -->
-                            <!-- fila -->
                             <div class="fila">
                                 <div class="element t50p campoImagen">                                       
                                     <div class="thumbnail"></div>
@@ -1567,8 +1348,6 @@
                                     </div>
                                 </div>                                                                                      
                             </div>
-                            <!-- /fila -->
-                            <!-- fila -->
                             <div class="fila">
                                 <div class="element t50p campoImagen">
                                     <div class="thumbnail"></div>
@@ -1590,8 +1369,6 @@
                                     </div>
                                 </div>                                                                                      
                             </div>
-                            <!-- /fila -->
-                            <!-- fila -->
                             <div class="fila">
                                 <div class="element t50p">
                                     <div class="etiqueta">
@@ -1607,20 +1384,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- /fila -->
                         </div>
                     </fieldset>
                 </div>
-                <!-- /modul -->
-                
-                <!-- modul -->
                 <div class="modul">                         
                     <fieldset>                                  
                         <a class="modul amagat"><spring:message code='txt.mostra'/></a>                             
                         <legend><spring:message code='txt.llegenda_contacte'/></legend>                              
                         <div class="modul_continguts" style="display:block;">                               
                         
-                            <!-- fila -->
                             <div class="fila">                              
                                 <div class="element t50p">                                  
                                     <div class="etiqueta"><label for="nuevaUA_item_telefon"><spring:message code='unitatadm.formulari.telefon'/></label></div>
@@ -1635,9 +1407,6 @@
                                     </div>                                          
                                 </div>                                      
                             </div>
-                            <!-- /fila -->     
-                            
-                            <!-- fila -->
                             <div class="fila">
                                 <div class="element t50p">                                      
                                     <div class="etiqueta"><label for="nuevaUA_item_email"><spring:message code='unitatadm.formulari.email'/></label></div>
@@ -1652,9 +1421,6 @@
                                     </div>                                          
                                 </div>
                             </div>
-                            <!-- /fila -->
-                        
-                            <!-- fila -->
                             <%--<div class="fila">                                  
                                 <div class="element t50p">                                      
                                     <div class="etiqueta"><label for="nuevaUA_item_clau_hita"><spring:message code='unitatadm.formulari.clau_hita'/></label></div>
@@ -1669,8 +1435,6 @@
                                     </div>                                          
                                 </div>
                             </div>--%>
-                            <!-- /fila -->                                  
-                            <!-- fila -->
                             <%--<div class="fila">                                      
                                 <div class="element t50p">                                      
                                     <div class="etiqueta"><label for="nuevaUA_item_domini"><spring:message code='unitatadm.formulari.domini'/></label></div>
@@ -1692,9 +1456,6 @@
                                     </div>
                                 </div>                                      
                             </div>--%>
-                            <!-- /fila -->                                  
-                             
-                            <!-- fila -->
                             <%--<div class="fila">                          
                                 <div class="element t50p">                                      
                                     <div class="etiqueta"><label for="nuevaUA_item_email"><spring:message code='unitatadm.formulari.email'/></label></div>
@@ -1714,20 +1475,14 @@
                                     </div>
                                 </div>                              
                             </div>--%>
-                            <!-- /fila -->
-                            
                         </div>                              
                     </fieldset>                         
                 </div>
-                <!-- /modul -->                 
-                
-                <!-- modul -->
                 <div class="modul">
                     <fieldset>  
                         <a class="modul amagat"><spring:message code='txt.mostra'/></a>
                         <legend><spring:message code='unitatadm.formulari.logotipus'/></legend>
                         <div class="modul_continguts" style="display:block;">
-                            <!-- fila -->
                             <div class="fila">
                                 <div class="element t50p campoImagen">                                       
                                     <div class="thumbnail"></div>                            
@@ -1749,8 +1504,6 @@
                                     </div>
                                 </div>                                                                                      
                             </div>
-                            <!-- /fila -->
-                            <!-- fila -->
                             <div class="fila">
                                 <div class="element t50p campoImagen">                                       
                                     <div class="thumbnail"></div>
@@ -1772,8 +1525,6 @@
                                     </div>
                                 </div>                                                                                      
                             </div>
-                            <!-- /fila -->
-                            <!-- fila -->
                             <div class="fila">
                                 <div class="element t50p campoImagen">                                       
                                     <div class="thumbnail"></div>
@@ -1795,8 +1546,6 @@
                                     </div>
                                 </div>                                                                                      
                             </div>
-                            <!-- /fila -->
-                            <!-- fila -->
                             <div class="fila">
                                 <div class="element t50p campoImagen">                                       
                                     <div class="thumbnail"></div>
@@ -1817,12 +1566,9 @@
                                     </div>
                                 </div>                                                                                      
                             </div>
-                            <!-- /fila -->              
                         </div>
                     </fieldset>
                 </div>
-                <!-- /modul -->
-                <!-- modul -->
                 <div class="modul">
                     <fieldset>
                         <a class="modul amagat"><spring:message code='txt.mostra'/></a>
@@ -1857,9 +1603,6 @@
                         </div>
                     </fieldset>
                 </div>
-                <!-- /modul -->
-    
-                <!-- modul -->
                 <div id="modulEstadistiques" class="modul">
                     <fieldset>
                         <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
@@ -1867,10 +1610,7 @@
                         <div class="modul_continguts mostrat"></div>
                     </fieldset>
                 </div>
-                <!-- /modul -->
-    
                 <c:if test="${rolAdmin}">
-                    <!-- modul -->
                     <div id="modulAuditories" class="modul auditorias">                
                         <fieldset>
                             <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
@@ -1880,15 +1620,10 @@
                             </div>
                         </fieldset>
                     </div>
-                    <!-- /modul -->
                 </c:if>
                 
             </div>
-            <!-- /modulPrincipal -->
-            
-            <!-- modulLateral -->
             <div class="modulLateral">
-                <!-- modul -->
                 <div class="modul publicacio">
                     <fieldset>
                         <legend><spring:message code='boto.publicacio'/></legend>
@@ -1916,7 +1651,6 @@
                         </div>
                         
                         <div class="modul_continguts mostrat">
-                            <!-- botonera dalt -->
                             <div class="botonera dalt">
                               <ul>
                                   <li class="btnGuardar impar">
@@ -1925,21 +1659,11 @@
                                   <li class="btnVolver par">
                                       <a id="nuevaUA_btnVolver" href="javascript:;" class="btn volver"><span><span><spring:message code='boto.torna'/></span></span></a>
                                   </li>
-                                  <!--<li class="btnPrevisualizar par">
-                                      <a id="nuevaUA_btnPrevisualizar" href="javascript:;" class="btn previsualitza"><span><span><spring:message code='boto.previsualitza'/></span></span></a>
-                                  </li>
-                                  <li class="e btnEliminar impar">
-                                      <a id="nuevaUA_btnEliminar" href="javascript:;" class="btn elimina"><span><span><spring:message code='boto.elimina'/></span></span></a>
-                                  </li>-->
                               </ul>
                             </div>
-                            <!-- /botonera dalt -->
                         </div>
                     </fieldset>
                 </div>
-                <!-- /modul -->
-                
-                <!-- modul -->
                 <div id="nuevaUA_modulRelacioOrganica" class="modul modulRelacioOrganica">
                     <fieldset>
                         <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
@@ -1955,7 +1679,6 @@
                                     </div>                                          
                                 </div>            
                             </div>
-                            <!-- Botonera -->                        
                             <div class="botonera">
                                 <div class="boton btnGenerico" style="margin-left: 0px;">
                                     <a href="javascript:carregarArbreUAExpand('<c:url value="/pantalles/popArbreUAExpandir.do"/>','popUA','nuevaUA_item_pare_id', 'nuevaUA_item_pare');" class="btn consulta">                                
@@ -1968,14 +1691,10 @@
                                     </a>
                                 </div>
                             </div>                        
-                            <!-- /Botonera -->
                             
                         </div>
                     </fieldset>
                 </div>
-                <!-- /modul -->
-                
-                <!-- modul -->
                 <%--
                 <div class="modul" id="nuevaUA_modul_materies">
                     <fieldset>
@@ -1983,7 +1702,6 @@
                         <legend><spring:message code='unitatadm.formulari.materies'/></legend>
                         <div class="modul_continguts mostrat">
                                                                             
-                            <!-- modulMateries -->
                             <div class="modulMateries selectorChecks">
                             
                                 <input name="modulo_materias_modificado" type="hidden" value="0" />
@@ -2020,20 +1738,15 @@
                                     </div>                                      
                                 </div>                                  
                             </div>
-                            <!-- /modulMateries -->
                             
                         </div>                              
                     </fieldset>                     
                 </div>
-                <!-- /modul -->
-                                     
-                <!-- modul -->
                 <div class="modul" id="nuevaUA_modul_seccions">                 
                     <fieldset>                                  
                         <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
                         <legend><spring:message code='unitatadm.formulari.seccions'/></legend>                               
                         <div class="modul_continguts mostrat">                                  
-                            <!-- modulSeccions -->
                             <div class="modulSeccions">                                     
                                 <input name="modulo_secciones_modificado" type="hidden" value="0" />
                                 <div class="seleccionats">                                          
@@ -2044,19 +1757,14 @@
                                     </div>                                                                           
                                 </div>                                  
                             </div>
-                            <!-- /modulSeccions -->                                 
                         </div>                              
                     </fieldset>                     
                 </div>
-                <!-- /modul -->   
-                                  
-                <!-- modul -->
                 <div class="modul" id="nuevaUA_modul_edificis">                     
                     <fieldset>                                  
                         <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
                         <legend><spring:message code='unitatadm.formulari.edificis'/></legend>                               
                         <div class="modul_continguts mostrat">                                  
-                            <!-- modulEdificis -->
                             <div class="modulEdificis">
                                 <div class="seleccionats">
                                     <input name="modulo_edificios_modificado" type="hidden" value="0" />
@@ -2069,19 +1777,15 @@
                                     </div>
                                 </div>                                  
                             </div>
-                            <!-- /modulEdificis -->                                 
                         </div>                              
                     </fieldset>                     
                 </div>
-                <!-- /modul --> 
                 --%>
                                     
             </div>
-            <!-- /modulLateral -->      
         </div>
         </form>
     </div>
-    <!-- /Escritorio nueva unidad hija -->
     
     <script type="text/javascript" src="<c:url value='/js/tiny_mce/jquery.tinymce.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/pxem.jQuery.js'/>"></script>  

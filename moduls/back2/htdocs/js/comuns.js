@@ -16,6 +16,26 @@ if ( ! window.console ) {
     }());
 }
 
+// Aquí se guardarán los cambios en los formularios usando id => true/false.
+var avisarCambiosSinGuardar = [];
+
+// Acción a realizar antes de cerrar la ventana.
+window.onbeforeunload = function(){
+    
+    for(var i in avisarCambiosSinGuardar ){
+        if( avisarCambiosSinGuardar[i] ){
+            return txtAvisoCambiosSinGuardar;
+        }
+    }
+}
+
+/**
+ * Función para avisar de que un formulario tiene o no cambios sin guardar. 
+ */
+function CambiosSinGuardar( id, marcar ){
+    avisarCambiosSinGuardar[id] = marcar;
+}
+
 // CERRAR Y MENSAJES	
 $(document).ready(function() {
 	

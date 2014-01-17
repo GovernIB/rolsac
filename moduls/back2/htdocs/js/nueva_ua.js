@@ -185,7 +185,7 @@ function CNuevaUADetall(soloFicha,reglasFormulario,ids){
 	this.elimina = function() {}
 	this.previsualitza = function() {}
 	this.carregarInici = function() { window.location.replace(pagLlistat); }
-	this.carregarUA = function() { window.location.replace(pagLlistat); }
+	this.carregarUA = function() { this.modificado(false); window.location.replace(pagLlistat); }
 }
 
 function posarValorsInput(idInput, valor)

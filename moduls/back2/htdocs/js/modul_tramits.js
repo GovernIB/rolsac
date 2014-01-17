@@ -29,18 +29,15 @@ $(document).ready(function() {
     ];
     
     ModulTramit = new CModulTramit();
-    EscriptoriTramit = new CEscriptoriTramit();     
+    EscriptoriTramit = new CEscriptoriTramit();
     
     if (modul_tramits_elm.size() == 1) {
         ModulTramit.iniciar();
         EscriptoriTramit.iniciar();
     }
     
-    // Evento para el bot�nn de volver al detalle    
-    $("#escriptori_tramits .menuPublicacion .btnVolver").click(function(){EscriptoriTramit.torna();});    
-    
     // Evento para el botón de guardar
-    $("#escriptori_tramits .menuPublicacion a.btnGuardar").unbind("click").click(function(){EscriptoriTramit.guardar();});
+    //$("#escriptori_tramits .menuPublicacion a.btnGuardar").unbind("click").click(function(){EscriptoriTramit.guardar();});
     
     // Evento para el botón de eliminar
     $("#escriptori_tramits .menuPublicacion a.btnEliminar").unbind("click").click(function(){EscriptoriTramit.eliminar();});
@@ -57,7 +54,7 @@ function CModulTramit(){
     this.extend();      
     
     var that = this;
-           
+    
     this.iniciar = function() {
         
         $("#tramit_item_data_actualitzacio").datepicker({ dateFormat: 'dd/mm/yy' });
@@ -138,10 +135,6 @@ function CModulTramit(){
         });
     }
     
-    this.habilitarBotonGuardar = function() {        
-        $("#escriptori_tramits .menuPublicacion .btnGuardar").unbind("click").click(function(){EscriptoriTramit.guardar();}).parent().removeClass("off");
-    }
-    
     this.inicializarTramites = function( listaTramites ){
     
         // Añadimos a los nombres de los trámites el tag <a> para que enlacen
@@ -167,7 +160,7 @@ function CModulTramit(){
             axis: 'y', 
             update: function(event,ui){
                 that.calculaOrden(ui,"origen");
-                that.habilitarBotonGuardar();
+                that.modificado();
             }
         }).css({cursor:"move"});
         
@@ -211,6 +204,7 @@ function CEscriptoriTramit(){
     this.extend = DetallBase;
     this.extend(null,FormulariTramits, {
         btnGuardar: "btnGuardarTramit",
+        btnVolver: "escriptori_tramits .menuPublicacion .btnVolver",
         form: "formTramits"
     });
     
@@ -233,7 +227,7 @@ function CEscriptoriTramit(){
         that.traduir(pagTraduirTramit, CAMPOS_TRADUCTOR_TRAMITE, DATOS_TRADUCIDOS_TRAMITE);
     }
     
-    this.guardar = function (){         
+    this.guarda = function (){
         
         //Validam el formulari de tramit        
         if( !this.formulariValid() ){
@@ -295,6 +289,8 @@ function CEscriptoriTramit(){
             }
         });
         
+        this.modificado(false);
+        
         return false;
     } 
     
@@ -327,20 +323,43 @@ function CEscriptoriTramit(){
                     // Eliminamos el item de la lista ordenable.
                     modul_tramits_elm.find(".listaOrdenable input[name=tramit_id_" + idTramit + "]").parents("li").remove();        
                     that.contaSeleccionats();
-                    that.torna();
+                    that.vuelve();
                 }
             }); 
         }});
     }
     
-    this.torna = function() {       
-        // animacio
-        escriptori_tramits_elm.fadeOut(300, function() {            
-            escriptori_detall_elm.fadeIn(300, function() {
-                // activar
-                modul_tramits_elm.find("a.gestiona").one("click", function() { ModulTramit.gestiona(); });
+    this.vuelve = function() {
+        
+        
+        if( this.cambiosSinGuardar() ){
+            Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: txtAvisoCambiosSinGuardar, funcio: function() {
+                
+                // animacio
+                escriptori_tramits_elm.fadeOut(300, function() {            
+                    escriptori_detall_elm.fadeIn(300, function() {
+                        // activar
+                        modul_tramits_elm.find("a.gestiona").one("click", function() { ModulTramit.gestiona(); });
+                    });
+                });
+                
+                that.modificado(false);
+                
+                Missatge.cancelar();
+                
+            }});
+        }else{
+            
+            this.modificado(false);
+            
+            escriptori_tramits_elm.fadeOut(300, function() {            
+                escriptori_detall_elm.fadeIn(300, function() {
+                    // activar
+                    modul_tramits_elm.find("a.gestiona").one("click", function() { ModulTramit.gestiona(); });
+                });
             });
-        });     
+            
+        }
     }
     
     this.limpia = function(){
@@ -491,6 +510,8 @@ function CEscriptoriTramit(){
                 } else if (data.id < -1){
                     Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
                 }
+                
+                that.modificado(false);
             }
         });                
     }

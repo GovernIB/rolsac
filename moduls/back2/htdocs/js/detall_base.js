@@ -68,11 +68,12 @@ function DetallBase( soloFicha, reglasFormulario, identificadores ){
 	// Evento del botón volver
 	//jQuery("#"+ids.btnVolver).bind("click",function(){console.log("Click torna");Detall.torna();});
 	//jQuery("#"+ids.btnVolver).unbind("click").bind("click",function(){that.vuelve();});
+	
 	jQuery("#"+ids.btnVolver).bind("click",function(){that.vuelve();});
 	
 	//jQuery("#"+ids.btnGuardar).parent().addClass("off");
-	jQuery("#"+ids.form+" input,#"+ids.form+" select,#"+ids.form+" textarea").bind("change",function(){that.modificado();});
-    
+	jQuery("#"+ids.form+" input,#"+ids.form+" select,#"+ids.form+" textarea").bind("change",function(){ that.modificado();});
+	
     this.idiomas = ["es","ca","en","de","fr"];
     //this.idiomas = idiomas; 
 
@@ -116,7 +117,7 @@ function DetallBase( soloFicha, reglasFormulario, identificadores ){
 	}
 
 	this.guardaGenerico = function(dataVars) {
-
+	
 		// Validamos el formulario
         if (!that.formulariValid()) {
             return false;
@@ -176,7 +177,8 @@ function DetallBase( soloFicha, reglasFormulario, identificadores ){
 	        marcar = true;
 	    }
 	    
-	    //console.log("Modificado: " + marcar);
+	    // Actualizamos la variable global para controlar si hay cambios sin guardar en los formularios.
+	    CambiosSinGuardar( ids.form, marcar );
 	    
 		// Habilitamos el botÃ³n de guardar.
 		jQuery("#"+ids.btnGuardar)
@@ -193,28 +195,32 @@ function DetallBase( soloFicha, reglasFormulario, identificadores ){
 	}
 	
 	/**
+	 * Ocultamos el formulario y volvemos a mostrar el contenido general.  
+	 */
+	this.cierra = function(){
+	    
+	    this.modificado(false);
+	    
+	    escriptori_detall_elm.fadeOut(300, function() {
+            escriptori_contingut_elm.fadeIn(300);
+        });
+	}
+	
+	/**
 	 * Vuelve de la ficha al listado.
 	 */
 	this.vuelve = function() {
 	    
 	    if( this.cambiosSinGuardar() ){
     	    Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: txtAvisoCambiosSinGuardar, funcio: function() {
-                
-                // Volvemos
-                escriptori_detall_elm.fadeOut(300, function() {
-                    escriptori_contingut_elm.fadeIn(300);
-                });
-                
+
+                that.cierra();
+
                 Missatge.cancelar();
                 
             }});
         }else{
-            
-            // Volvemos
-            escriptori_detall_elm.fadeOut(300, function() {
-                escriptori_contingut_elm.fadeIn(300);
-            });
-            
+            that.cierra();
         }
 	}
 
@@ -284,6 +290,8 @@ function DetallBase( soloFicha, reglasFormulario, identificadores ){
         if (!isNaN(itemId) && itemId > 0) {
             url += "?itemId=" + itemId;
         }
+        
+        this.modificado(false);
         
         location = url;
     

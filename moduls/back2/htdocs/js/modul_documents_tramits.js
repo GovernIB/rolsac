@@ -22,6 +22,12 @@ function CEscriptoriPareTramit(){
 	this.extend = ListaOrdenable;
 	this.extend();
     
+    this.modificado = function(){
+        if( EscriptoriTramit ){
+            EscriptoriTramit.modificado();
+        }
+    }
+    
     // Configuracion de la lista ordenable.
     this.configuracion = {
         nombre: "documentsTramit",
@@ -65,12 +71,8 @@ function CEscriptoriPareTramit(){
 	this.eliminaItem = function(item) {
 		var id = $(item).find("input." + that.configuracion.nombre + "_id:first").val();						
 		$(that.configuracion.nodoOrigen).find("input[name=" + that.configuracion.nombre + "_id_" + id + "]").parents("li").remove();
-		that.habilitarBotonGuardar();
+		that.modificado(true);
 	}
-    
-    this.habilitarBotonGuardar = function() {
-    	escriptori_documents_tramits_elm.find("#btnGuardar").unbind("click").bind("click",function(){this.guarda_upload();}).parent().removeClass("off");
-    }
     
     /**
 	 * Agrega o actualiza un item en la lista de origen.
@@ -116,7 +118,7 @@ function CEscriptoriPareTramit(){
             ModulDocumentsTramit.inicializarDocuments();
 		}
 		
-		that.habilitarBotonGuardar();
+		ModulDocumentsTramit.modificado(true);
 		
 		return actualizar;
 	}
@@ -136,7 +138,12 @@ function CEscriptoriPareTramit(){
 function CModulDocumentsTramit(){
 	this.extend = DetallBase;
 	if (typeof FormulariDadesDocTramit != 'undefined') {
-		this.extend(true, FormulariDadesDocTramit);
+		//this.extend(true, FormulariDadesDocTramit);
+		this.extend(true, FormulariDadesDocTramit,{
+		    form: "formGuardarDocTramit",
+		    btnVolver: "btnVolver_documents_tramit",
+		    btnGuardar: "btnGuardar_documents_tramit"
+		});
 	} else {
 		this.extend(true, null);
 	}
@@ -145,10 +152,10 @@ function CModulDocumentsTramit(){
 	
 	this.iniciar = function() {			
         // botons        
-        $("#btnVolver_documents_tramit").bind("click", that.torna);
+        //$("#btnVolver_documents_tramit").bind("click", that.torna);
 
         // El bot�n de guardar est� inicialmente deshabilitado hasta que se realice un cambio en el formulario.
-    	$("#formGuardarDocTramit input, #formGuardarDocTramit select, #formGuardarDocTramit textarea").bind("change", function(){that.modificado();});
+    	//$("#formGuardarDocTramit input, #formGuardarDocTramit select, #formGuardarDocTramit textarea").bind("change", function(){that.modificado();});
     	
     	// boton de traducir
         jQuery("#botoTraduirDocumentTramit").unbind("click").bind("click", function() {
@@ -183,14 +190,34 @@ function CModulDocumentsTramit(){
 		that.traduir(pagTraduirDocumentTramit, CAMPOS_TRADUCTOR_DOCUMENTO_TRAMITE, DATOS_TRADUCIDOS_DOCUMENTO_TRAMITE);
 	}
 	
-	this.torna = function () {
-		escriptori_documents_tramits_elm.fadeOut(300, function() {
-			escriptori_tramits_elm.fadeIn(300);
-	    });
+	this.vuelve = function () {
+	    
+	    if( this.cambiosSinGuardar() ){
+            Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: txtAvisoCambiosSinGuardar, funcio: function() {
+                
+                escriptori_documents_tramits_elm.fadeOut(300, function() {
+                    escriptori_tramits_elm.fadeIn(300);
+                });
+                
+                that.modificado(false);
+                
+                Missatge.cancelar();
+                
+            }});
+        }else{
+            
+            this.modificado(false);
+            
+            escriptori_documents_tramits_elm.fadeOut(300, function() {
+                escriptori_tramits_elm.fadeIn(300);
+            });
+            
+        }
 	}
-		
+	
 	// Guardar haciendo upload de archivos.
 	this.guarda_upload = function() {
+	    
         // Validamos el formulario
         if (!that.formulariValid()) {
             return false;
@@ -227,18 +254,15 @@ function CModulDocumentsTramit(){
 					docItem['nom'] = nom;
 					EscriptoriPareTramit.agregaActualizaItem(docItem);
 
-					that.torna();
+                    that.modificado(false);
+
+					that.vuelve();
 				}
 			}
 
 		});
         
 		return false;
-	}
-		
-	this.modificado = function(){
-		// Habilitamos el bot�n de guardar.
-		$("#btnGuardar_documents_tramit").unbind("click").bind("click",function(){that.guarda();}).parent().removeClass("off");
 	}
 		
 	this.dataPublicacio = function(e) {		
@@ -378,7 +402,7 @@ function CModulDocumentsTramit(){
 			axis: 'y', 
 			update: function(event,ui){
 				EscriptoriPareTramit.calculaOrden(ui,"origen");
-				EscriptoriPareTramit.habilitarBotonGuardar();
+				EscriptoriPareTramit.modificado(true);
 			}
 		}).css({cursor:"move"});
 				

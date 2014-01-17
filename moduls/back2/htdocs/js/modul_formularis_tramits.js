@@ -20,6 +20,12 @@ function CEscriptoriPareTramitForm(){
 	this.extend = ListaOrdenable;
 	this.extend();		
     
+    this.modificado = function(){
+        if( EscriptoriTramit ){
+            EscriptoriTramit.modificado();
+        }
+    }
+    
     // Configuracion de la lista ordenable.
     this.configuracion = {
         nombre: "formularisTramit",
@@ -64,13 +70,13 @@ function CEscriptoriPareTramitForm(){
 	this.eliminaItem = function(item) {
 		var id = $(item).find("input." + that.configuracion.nombre + "_id:first").val();						
 		$(that.configuracion.nodoOrigen).find("input[name=" + that.configuracion.nombre + "_id_" + id + "]").parents("li").remove();
-		that.habilitarBotonGuardar();
+		that.modificado(true);
 	}
     
-    this.habilitarBotonGuardar = function() {
+    /*this.habilitarBotonGuardar = function() {
         //$("#btnGuardar").unbind("click").bind("click",function(){Detall.guarda();}).parent().removeClass("off");
     	escriptori_formularis_tramits_elm.find("#btnGuardar").unbind("click").bind("click",function(){this.guarda_upload();}).parent().removeClass("off");
-    }
+    }*/
     
     /**
 	 * Agrega o actualiza un item en la lista de origen.
@@ -116,7 +122,7 @@ function CEscriptoriPareTramitForm(){
             ModulFormularisTramit.inicializarFormularis();
 		}
 		
-		that.habilitarBotonGuardar();
+		that.modificado(true);
 		
 		return actualizar;
 	}
@@ -135,7 +141,11 @@ function CEscriptoriPareTramitForm(){
 function CModulFormularisTramit(){
 	this.extend = DetallBase;
 	if (typeof FormulariDadesFormTramit != 'undefined') {
-		this.extend(true, FormulariDadesFormTramit);
+		this.extend(true, FormulariDadesFormTramit,{
+		    form: "formGuardarFormTramit",
+		    btnVolver: "btnVolver_formularis_tramit",
+		    btnGuardar: "btnGuardar_formularis_tramit"
+		});
 	} else {
 		this.extend(true, null);
 	}
@@ -144,10 +154,10 @@ function CModulFormularisTramit(){
 	
 	this.iniciar = function() {			
         // botons        
-        $("#btnVolver_formularis_tramit").bind("click", that.torna);
+        //$("#btnVolver_formularis_tramit").bind("click", that.torna);
 
         // El botón de guardar está inicialmente deshabilitado hasta que se realice un cambio en el formulario.
-    	$("#formGuardarFormTramit input, #formGuardarFormTramit select, #formGuardarFormTramit textarea").bind("change", function(){that.modificado();});
+    	//$("#formGuardarFormTramit input, #formGuardarFormTramit select, #formGuardarFormTramit textarea").bind("change", function(){that.modificado();});
     	
     	// boton de traducir
         jQuery("#botoTraduirFormulariTramit").unbind("click").bind("click", function() {
@@ -182,10 +192,29 @@ function CModulFormularisTramit(){
 		that.traduir(pagTraduirDocumentTramit, CAMPOS_TRADUCTOR_FORMULARIO_TRAMITE, DATOS_TRADUCIDOS_FORMULARIO_TRAMITE);
 	}
 	
-	this.torna = function () {
-		escriptori_formularis_tramits_elm.fadeOut(300, function() {
-			escriptori_tramits_elm.fadeIn(300);
-	    });
+	this.vuelve = function () {
+	    
+	    if( this.cambiosSinGuardar() ){
+            Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: txtAvisoCambiosSinGuardar, funcio: function() {
+                
+                escriptori_formularis_tramits_elm.fadeOut(300, function() {
+                    escriptori_tramits_elm.fadeIn(300);
+                });
+                
+                that.modificado(false);
+                
+                Missatge.cancelar();
+                
+            }});
+        }else{
+            
+            this.modificado(false);
+            
+            escriptori_formularis_tramits_elm.fadeOut(300, function() {
+                escriptori_tramits_elm.fadeIn(300);
+            });
+            
+        }
 	}
 		
 	// Guardar haciendo upload de archivos.
@@ -226,19 +255,21 @@ function CModulFormularisTramit(){
 					docItem['nom'] = nom;
 					EscriptoriPareTramitForm.agregaActualizaItem(docItem);
 
-					that.torna();
+					that.vuelve();
 				}
 			}
 
 		});
+		
+		this.modificado(false);
         
 		return false;
 	}
 	
-	this.modificado = function(){
+	/*this.modificado = function(){
 		// Habilitamos el bot�n de guardar.
 		$("#btnGuardar_formularis_tramit").unbind("click").bind("click",function(){that.guarda();}).parent().removeClass("off");
-	}
+	}*/
 	
 	this.dataPublicacio = function(e) {		
 		if ($(this).val() == "") {
@@ -276,6 +307,8 @@ function CModulFormularisTramit(){
 		escriptori_tramits_elm.fadeOut(300, function() {
 			escriptori_formularis_tramits_elm.fadeIn(300);
 		});
+		
+		this.modificado(false);
 		
 		this.actualizaEventos();
 	}			
@@ -374,7 +407,7 @@ function CModulFormularisTramit(){
 			axis: 'y', 
 			update: function(event,ui){
 				EscriptoriPareTramitForm.calculaOrden(ui,"origen");
-				EscriptoriPareTramitForm.habilitarBotonGuardar();
+				EscriptoriPareTramitForm.modificado(true);
 			}
 		}).css({cursor:"move"});
 		
