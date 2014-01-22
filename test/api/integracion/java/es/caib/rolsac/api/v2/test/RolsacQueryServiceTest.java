@@ -57,6 +57,7 @@ import es.caib.rolsac.api.v2.perfil.PerfilQueryServiceAdapter;
 import es.caib.rolsac.api.v2.personal.PersonalCriteria;
 import es.caib.rolsac.api.v2.personal.PersonalQueryServiceAdapter;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
+import es.caib.rolsac.api.v2.procediment.ProcedimentOrdenacio;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuQueryServiceAdapter;
@@ -84,7 +85,7 @@ public class RolsacQueryServiceTest {
 
     @Before
     public void setup() {
-        rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.WS);
+        rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.EJB);
         CertificadoUtil.autentificar("contrasena", "storerolsac.jks");
     }
 
@@ -133,7 +134,9 @@ public class RolsacQueryServiceTest {
         procedimentCriteria.setIdioma("ca");
         procedimentCriteria.setInici("5");
         procedimentCriteria.setTamany("10");
-        procedimentCriteria.setOrdenacio("fechaCaducidad asc"); 
+        procedimentCriteria.setOrdenacio("fechaCaducidad asc");
+        procedimentCriteria.setOrdenar(new ProcedimentOrdenacio[] {ProcedimentOrdenacio.familia_asc, ProcedimentOrdenacio.fechaActualizacion_asc});
+
         List<ProcedimentQueryServiceAdapter> procediments = null;
         try {
             procediments = rolsacQS.llistarProcediments(procedimentCriteria);

@@ -1,6 +1,7 @@
 package es.caib.rolsac.api.v2.general;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Timestamp;
@@ -9,9 +10,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.beanutils.MethodUtils;
 import org.apache.commons.lang.StringUtils;
@@ -156,6 +155,7 @@ public class BasicUtils {
             criteria.parseCriteria(basicCriteria.getId());
             criteriaObjects.add(criteria);
         }
+        basicCriteria.setOrdenacio(controlOrdenar(basicCriteria));
         if (StringUtils.isNotBlank(basicCriteria.getOrdenacio())) {
             BasicByOrdenacioCriteria criteria = new BasicByOrdenacioCriteria(entityAlias, i18nAlias);
             criteria.parseCriteria(basicCriteria.getOrdenacio());
@@ -363,6 +363,49 @@ public class BasicUtils {
             defaultLanguage = "ca";
         }
         return defaultLanguage;
+    }
+
+    private static String controlOrdenar(BasicCriteria criteria) {
+
+        String ordenaciones = new String();
+        try {
+            Method idGetter = criteria.getClass().getMethod("getOrdenar");
+            Object[] objetos = (Object[]) idGetter.invoke(criteria);
+            for (Object objeto : objetos) {
+                ordenaciones = ordenaciones.concat(objeto.toString());
+                ordenaciones = ordenaciones.concat(",");
+            }
+            if (ordenaciones != null) {
+                ordenaciones = ordenaciones.replaceAll("_", " ");
+                ordenaciones = ordenaciones.substring(0, ordenaciones.length()-1);
+                ordenaciones = ordenaciones.toString();
+                criteria.setOrdenacio(ordenaciones);
+            }
+            Field field = criteria.getClass().getDeclaredField("ordenar");
+            field.setAccessible(true);
+            field.set(criteria, null);            
+
+        } catch (SecurityException e) {
+            e.printStackTrace();
+            ordenaciones = criteria.getOrdenacio();
+        } catch (NoSuchMethodException e) {
+            log.error(criteria.getClass() + " aún no tiene implementado Ordenar.");
+            ordenaciones = criteria.getOrdenacio();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            ordenaciones = criteria.getOrdenacio();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            ordenaciones = criteria.getOrdenacio();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+            ordenaciones = criteria.getOrdenacio();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+            ordenaciones = criteria.getOrdenacio();
+        } finally {}
+
+        return ordenaciones;
     }
 
 }
