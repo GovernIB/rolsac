@@ -16,7 +16,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -687,34 +686,38 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 		if (edicion) {
 		    TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
-		    Vector<Tramite> tramitesParaCrear = new Vector<Tramite>();
 		    ArrayList<Long> tramitesParaActualizar = new ArrayList<Long>();
-		    boolean eliminarTramite;
+		    List<Tramite> tramitesParaCrear = null;
 		    List<String> idsNuevosTramites = Arrays.asList(request.getParameter("tramitsProcediment").split(","));
-		    
-		    if (idsNuevosTramites.size() == 0) {
-		        for (String id : idsNuevosTramites) {
-		            eliminarTramite = true;
-		            for (Tramite tramite : procedimentOld.getTramites()) {
-		                if (tramite != null) {
-		                    // Se revisa si el tràmite se conserva o se debe eliminar
-		                    if (!id.contentEquals("") && Long.parseLong(id) == tramite.getId()) {
-		                        tramitesParaActualizar.add(tramite.getId());
-		                        tramitesParaCrear.add(tramite);
-		                        eliminarTramite = false;
-		                    }
-		                }
-		            }
-		            if (eliminarTramite) {
-		                DelegateUtil.getProcedimientoDelegate().eliminarTramite(Long.parseLong(id), procediment.getId());
-                        tramiteDelegate.borrarTramite(Long.parseLong(id));
-                    }
-		        }
 
-		    } else {
+		    if (idsNuevosTramites.size() == 1 && idsNuevosTramites.get(0).equals("")) {
+		        // La lista esta vacia y por tanto se pueden borrar todos
 		        for (Tramite tramite : procedimentOld.getTramites()) {
 		            DelegateUtil.getProcedimientoDelegate().eliminarTramite(tramite.getId(), procediment.getId());
                     tramiteDelegate.borrarTramite(tramite.getId());
+		        }
+
+		    } else {
+		        // La lista no esta vacia y se deben gestionar los que se han eliminado de la lista
+		        HashMap<Long, Tramite> tramitesParaEliminar = new HashMap<Long, Tramite>();
+		        for (Tramite tramite : procedimentOld.getTramites()) {
+		            if (tramite != null) {
+		                tramitesParaEliminar.put(tramite.getId(), tramite);
+		            }
+		        }
+
+		        // Lista para actualizar el orden
+		        tramitesParaCrear = new ArrayList<Tramite>();
+		        for (String id : idsNuevosTramites) {
+		            tramitesParaActualizar.add(Long.parseLong(id));
+		            tramitesParaCrear.add(tramitesParaEliminar.get(Long.parseLong(id)));
+		            tramitesParaEliminar.remove(Long.parseLong(id));
+		        }
+
+		        // Eliminar los que has sido quitados de la lista
+		        for (Tramite tramite : tramitesParaEliminar.values()) {
+		            DelegateUtil.getProcedimientoDelegate().eliminarTramite(tramite.getId(), procediment.getId());
+		            tramiteDelegate.borrarTramite(tramite.getId());
 		        }
 		    }
 
@@ -1014,7 +1017,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		return procediment;
 	}
 
-	/*
+    /*
 	 * Controlamos la versión del procedimiento.
 	 */
 	private ProcedimientoLocal guardarVersion(HttpServletRequest request, boolean edicion, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld, String error) {
