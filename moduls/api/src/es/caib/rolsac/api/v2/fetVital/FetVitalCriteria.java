@@ -18,6 +18,8 @@ public class FetVitalCriteria  extends es.caib.rolsac.api.v2.general.BasicCriter
 
     private java.lang.String t_palabrasclave;
 
+    private es.caib.rolsac.api.v2.fetVital.FetVitalOrdenacio[] ordenar;
+
     public FetVitalCriteria() {
     }
 
@@ -31,7 +33,8 @@ public class FetVitalCriteria  extends es.caib.rolsac.api.v2.general.BasicCriter
            java.lang.String codigoEstandar,
            java.lang.String t_nombre,
            java.lang.String t_descripcion,
-           java.lang.String t_palabrasclave) {
+           java.lang.String t_palabrasclave,
+           es.caib.rolsac.api.v2.fetVital.FetVitalOrdenacio[] ordenar) {
         super(
             id,
             idioma,
@@ -43,6 +46,7 @@ public class FetVitalCriteria  extends es.caib.rolsac.api.v2.general.BasicCriter
         this.t_nombre = t_nombre;
         this.t_descripcion = t_descripcion;
         this.t_palabrasclave = t_palabrasclave;
+        this.ordenar = ordenar;
     }
 
 
@@ -145,6 +149,26 @@ public class FetVitalCriteria  extends es.caib.rolsac.api.v2.general.BasicCriter
         this.t_palabrasclave = t_palabrasclave;
     }
 
+
+    /**
+     * Gets the ordenar value for this FetVitalCriteria.
+     * 
+     * @return ordenar
+     */
+    public es.caib.rolsac.api.v2.fetVital.FetVitalOrdenacio[] getOrdenar() {
+        return ordenar;
+    }
+
+
+    /**
+     * Sets the ordenar value for this FetVitalCriteria.
+     * 
+     * @param ordenar
+     */
+    public void setOrdenar(es.caib.rolsac.api.v2.fetVital.FetVitalOrdenacio[] ordenar) {
+        this.ordenar = ordenar;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof FetVitalCriteria)) return false;
@@ -171,7 +195,10 @@ public class FetVitalCriteria  extends es.caib.rolsac.api.v2.general.BasicCriter
               this.t_descripcion.equals(other.getT_descripcion()))) &&
             ((this.t_palabrasclave==null && other.getT_palabrasclave()==null) || 
              (this.t_palabrasclave!=null &&
-              this.t_palabrasclave.equals(other.getT_palabrasclave())));
+              this.t_palabrasclave.equals(other.getT_palabrasclave()))) &&
+            ((this.ordenar==null && other.getOrdenar()==null) || 
+             (this.ordenar!=null &&
+              java.util.Arrays.equals(this.ordenar, other.getOrdenar())));
         __equalsCalc = null;
         return _equals;
     }
@@ -197,6 +224,17 @@ public class FetVitalCriteria  extends es.caib.rolsac.api.v2.general.BasicCriter
         }
         if (getT_palabrasclave() != null) {
             _hashCode += getT_palabrasclave().hashCode();
+        }
+        if (getOrdenar() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getOrdenar());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getOrdenar(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -237,6 +275,13 @@ public class FetVitalCriteria  extends es.caib.rolsac.api.v2.general.BasicCriter
         elemField.setXmlName(new javax.xml.namespace.QName("", "t_palabrasclave"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("ordenar");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "ordenar"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://fetVital.v2.api.rolsac.caib.es", "FetVitalOrdenacio"));
+        elemField.setNillable(true);
+        elemField.setItemQName(new javax.xml.namespace.QName("", "listaOrdenaciones"));
         typeDesc.addFieldDesc(elemField);
     }
 

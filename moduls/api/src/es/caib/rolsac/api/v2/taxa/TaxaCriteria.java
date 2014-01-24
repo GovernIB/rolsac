@@ -18,6 +18,8 @@ public class TaxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria  
 
     private java.lang.String t_formapagament;
 
+    private es.caib.rolsac.api.v2.taxa.TaxaOrdenacio[] ordenar;
+
     public TaxaCriteria() {
     }
 
@@ -31,7 +33,8 @@ public class TaxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria  
            java.lang.String tramit,
            java.lang.String t_descripcio,
            java.lang.String t_codificacio,
-           java.lang.String t_formapagament) {
+           java.lang.String t_formapagament,
+           es.caib.rolsac.api.v2.taxa.TaxaOrdenacio[] ordenar) {
         super(
             id,
             idioma,
@@ -43,6 +46,7 @@ public class TaxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria  
         this.t_descripcio = t_descripcio;
         this.t_codificacio = t_codificacio;
         this.t_formapagament = t_formapagament;
+        this.ordenar = ordenar;
     }
 
 
@@ -145,6 +149,26 @@ public class TaxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria  
         this.t_formapagament = t_formapagament;
     }
 
+
+    /**
+     * Gets the ordenar value for this TaxaCriteria.
+     * 
+     * @return ordenar
+     */
+    public es.caib.rolsac.api.v2.taxa.TaxaOrdenacio[] getOrdenar() {
+        return ordenar;
+    }
+
+
+    /**
+     * Sets the ordenar value for this TaxaCriteria.
+     * 
+     * @param ordenar
+     */
+    public void setOrdenar(es.caib.rolsac.api.v2.taxa.TaxaOrdenacio[] ordenar) {
+        this.ordenar = ordenar;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof TaxaCriteria)) return false;
@@ -171,7 +195,10 @@ public class TaxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria  
               this.t_codificacio.equals(other.getT_codificacio()))) &&
             ((this.t_formapagament==null && other.getT_formapagament()==null) || 
              (this.t_formapagament!=null &&
-              this.t_formapagament.equals(other.getT_formapagament())));
+              this.t_formapagament.equals(other.getT_formapagament()))) &&
+            ((this.ordenar==null && other.getOrdenar()==null) || 
+             (this.ordenar!=null &&
+              java.util.Arrays.equals(this.ordenar, other.getOrdenar())));
         __equalsCalc = null;
         return _equals;
     }
@@ -197,6 +224,17 @@ public class TaxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria  
         }
         if (getT_formapagament() != null) {
             _hashCode += getT_formapagament().hashCode();
+        }
+        if (getOrdenar() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getOrdenar());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getOrdenar(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -237,6 +275,13 @@ public class TaxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria  
         elemField.setXmlName(new javax.xml.namespace.QName("", "t_formapagament"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("ordenar");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "ordenar"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://taxa.v2.api.rolsac.caib.es", "TaxaOrdenacio"));
+        elemField.setNillable(true);
+        elemField.setItemQName(new javax.xml.namespace.QName("", "listaOrdenaciones"));
         typeDesc.addFieldDesc(elemField);
     }
 

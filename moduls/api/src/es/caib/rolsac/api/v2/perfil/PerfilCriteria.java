@@ -16,6 +16,8 @@ public class PerfilCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
 
     private java.lang.String t_descripcion;
 
+    private es.caib.rolsac.api.v2.perfil.PerfilOrdenacio[] ordenar;
+
     public PerfilCriteria() {
     }
 
@@ -28,7 +30,8 @@ public class PerfilCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
            java.lang.String codigoEstandard,
            java.lang.String pathIconografia,
            java.lang.String t_nombre,
-           java.lang.String t_descripcion) {
+           java.lang.String t_descripcion,
+           es.caib.rolsac.api.v2.perfil.PerfilOrdenacio[] ordenar) {
         super(
             id,
             idioma,
@@ -39,6 +42,7 @@ public class PerfilCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
         this.pathIconografia = pathIconografia;
         this.t_nombre = t_nombre;
         this.t_descripcion = t_descripcion;
+        this.ordenar = ordenar;
     }
 
 
@@ -121,6 +125,26 @@ public class PerfilCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
         this.t_descripcion = t_descripcion;
     }
 
+
+    /**
+     * Gets the ordenar value for this PerfilCriteria.
+     * 
+     * @return ordenar
+     */
+    public es.caib.rolsac.api.v2.perfil.PerfilOrdenacio[] getOrdenar() {
+        return ordenar;
+    }
+
+
+    /**
+     * Sets the ordenar value for this PerfilCriteria.
+     * 
+     * @param ordenar
+     */
+    public void setOrdenar(es.caib.rolsac.api.v2.perfil.PerfilOrdenacio[] ordenar) {
+        this.ordenar = ordenar;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof PerfilCriteria)) return false;
@@ -144,7 +168,10 @@ public class PerfilCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
               this.t_nombre.equals(other.getT_nombre()))) &&
             ((this.t_descripcion==null && other.getT_descripcion()==null) || 
              (this.t_descripcion!=null &&
-              this.t_descripcion.equals(other.getT_descripcion())));
+              this.t_descripcion.equals(other.getT_descripcion()))) &&
+            ((this.ordenar==null && other.getOrdenar()==null) || 
+             (this.ordenar!=null &&
+              java.util.Arrays.equals(this.ordenar, other.getOrdenar())));
         __equalsCalc = null;
         return _equals;
     }
@@ -167,6 +194,17 @@ public class PerfilCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
         }
         if (getT_descripcion() != null) {
             _hashCode += getT_descripcion().hashCode();
+        }
+        if (getOrdenar() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getOrdenar());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getOrdenar(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -201,6 +239,13 @@ public class PerfilCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
         elemField.setXmlName(new javax.xml.namespace.QName("", "t_descripcion"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("ordenar");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "ordenar"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://perfil.v2.api.rolsac.caib.es", "PerfilOrdenacio"));
+        elemField.setNillable(true);
+        elemField.setItemQName(new javax.xml.namespace.QName("", "listaOrdenaciones"));
         typeDesc.addFieldDesc(elemField);
     }
 

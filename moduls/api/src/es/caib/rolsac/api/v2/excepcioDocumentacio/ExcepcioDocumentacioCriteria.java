@@ -12,6 +12,8 @@ public class ExcepcioDocumentacioCriteria  extends es.caib.rolsac.api.v2.general
 
     private java.lang.String descripcion;
 
+    private es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioOrdenacio[] ordenar;
+
     public ExcepcioDocumentacioCriteria() {
     }
 
@@ -22,7 +24,8 @@ public class ExcepcioDocumentacioCriteria  extends es.caib.rolsac.api.v2.general
            java.lang.String ordenacio,
            java.lang.String tamany,
            java.lang.String nombre,
-           java.lang.String descripcion) {
+           java.lang.String descripcion,
+           es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioOrdenacio[] ordenar) {
         super(
             id,
             idioma,
@@ -31,6 +34,7 @@ public class ExcepcioDocumentacioCriteria  extends es.caib.rolsac.api.v2.general
             tamany);
         this.nombre = nombre;
         this.descripcion = descripcion;
+        this.ordenar = ordenar;
     }
 
 
@@ -73,6 +77,26 @@ public class ExcepcioDocumentacioCriteria  extends es.caib.rolsac.api.v2.general
         this.descripcion = descripcion;
     }
 
+
+    /**
+     * Gets the ordenar value for this ExcepcioDocumentacioCriteria.
+     * 
+     * @return ordenar
+     */
+    public es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioOrdenacio[] getOrdenar() {
+        return ordenar;
+    }
+
+
+    /**
+     * Sets the ordenar value for this ExcepcioDocumentacioCriteria.
+     * 
+     * @param ordenar
+     */
+    public void setOrdenar(es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioOrdenacio[] ordenar) {
+        this.ordenar = ordenar;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof ExcepcioDocumentacioCriteria)) return false;
@@ -90,7 +114,10 @@ public class ExcepcioDocumentacioCriteria  extends es.caib.rolsac.api.v2.general
               this.nombre.equals(other.getNombre()))) &&
             ((this.descripcion==null && other.getDescripcion()==null) || 
              (this.descripcion!=null &&
-              this.descripcion.equals(other.getDescripcion())));
+              this.descripcion.equals(other.getDescripcion()))) &&
+            ((this.ordenar==null && other.getOrdenar()==null) || 
+             (this.ordenar!=null &&
+              java.util.Arrays.equals(this.ordenar, other.getOrdenar())));
         __equalsCalc = null;
         return _equals;
     }
@@ -107,6 +134,17 @@ public class ExcepcioDocumentacioCriteria  extends es.caib.rolsac.api.v2.general
         }
         if (getDescripcion() != null) {
             _hashCode += getDescripcion().hashCode();
+        }
+        if (getOrdenar() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getOrdenar());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getOrdenar(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -129,6 +167,13 @@ public class ExcepcioDocumentacioCriteria  extends es.caib.rolsac.api.v2.general
         elemField.setXmlName(new javax.xml.namespace.QName("", "descripcion"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("ordenar");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "ordenar"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://excepcioDocumentacio.v2.api.rolsac.caib.es", "ExcepcioDocumentacioOrdenacio"));
+        elemField.setNillable(true);
+        elemField.setItemQName(new javax.xml.namespace.QName("", "listaOrdenaciones"));
         typeDesc.addFieldDesc(elemField);
     }
 

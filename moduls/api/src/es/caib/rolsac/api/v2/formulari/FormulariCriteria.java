@@ -14,6 +14,8 @@ public class FormulariCriteria  extends es.caib.rolsac.api.v2.general.BasicCrite
 
     private java.lang.String urlManual;
 
+    private es.caib.rolsac.api.v2.formulari.FormulariOrdenacio[] ordenar;
+
     public FormulariCriteria() {
     }
 
@@ -25,7 +27,8 @@ public class FormulariCriteria  extends es.caib.rolsac.api.v2.general.BasicCrite
            java.lang.String tamany,
            java.lang.String nombre,
            java.lang.String url,
-           java.lang.String urlManual) {
+           java.lang.String urlManual,
+           es.caib.rolsac.api.v2.formulari.FormulariOrdenacio[] ordenar) {
         super(
             id,
             idioma,
@@ -35,6 +38,7 @@ public class FormulariCriteria  extends es.caib.rolsac.api.v2.general.BasicCrite
         this.nombre = nombre;
         this.url = url;
         this.urlManual = urlManual;
+        this.ordenar = ordenar;
     }
 
 
@@ -97,6 +101,26 @@ public class FormulariCriteria  extends es.caib.rolsac.api.v2.general.BasicCrite
         this.urlManual = urlManual;
     }
 
+
+    /**
+     * Gets the ordenar value for this FormulariCriteria.
+     * 
+     * @return ordenar
+     */
+    public es.caib.rolsac.api.v2.formulari.FormulariOrdenacio[] getOrdenar() {
+        return ordenar;
+    }
+
+
+    /**
+     * Sets the ordenar value for this FormulariCriteria.
+     * 
+     * @param ordenar
+     */
+    public void setOrdenar(es.caib.rolsac.api.v2.formulari.FormulariOrdenacio[] ordenar) {
+        this.ordenar = ordenar;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof FormulariCriteria)) return false;
@@ -117,7 +141,10 @@ public class FormulariCriteria  extends es.caib.rolsac.api.v2.general.BasicCrite
               this.url.equals(other.getUrl()))) &&
             ((this.urlManual==null && other.getUrlManual()==null) || 
              (this.urlManual!=null &&
-              this.urlManual.equals(other.getUrlManual())));
+              this.urlManual.equals(other.getUrlManual()))) &&
+            ((this.ordenar==null && other.getOrdenar()==null) || 
+             (this.ordenar!=null &&
+              java.util.Arrays.equals(this.ordenar, other.getOrdenar())));
         __equalsCalc = null;
         return _equals;
     }
@@ -137,6 +164,17 @@ public class FormulariCriteria  extends es.caib.rolsac.api.v2.general.BasicCrite
         }
         if (getUrlManual() != null) {
             _hashCode += getUrlManual().hashCode();
+        }
+        if (getOrdenar() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getOrdenar());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getOrdenar(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -165,6 +203,13 @@ public class FormulariCriteria  extends es.caib.rolsac.api.v2.general.BasicCrite
         elemField.setXmlName(new javax.xml.namespace.QName("", "urlManual"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("ordenar");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "ordenar"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://formulari.v2.api.rolsac.caib.es", "FormulariOrdenacio"));
+        elemField.setNillable(true);
+        elemField.setItemQName(new javax.xml.namespace.QName("", "listaOrdenaciones"));
         typeDesc.addFieldDesc(elemField);
     }
 

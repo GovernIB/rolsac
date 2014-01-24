@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
+    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:tns="http://tramit.v2.api.rolsac.caib.es"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    name="TramitOrdenacio"
+    xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:tns2="http://general.v2.api.rolsac.caib.es"
+    targetNamespace="http://ws.tramit.v2.api.rolsac.caib.es">
+  <wsdl:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://tramit.v2.api.rolsac.caib.es">
+        <import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+        <import namespace="http://general.v2.api.rolsac.caib.es" />
+
+        <simpleType name="TramitOrdenacio">
+            <restriction base="xsd:string">
+                <enumeration value="id_asc" />
+                <enumeration value="id_desc" />
+                <enumeration value="fase_asc" />
+                <enumeration value="fase_desc" />
+                <enumeration value="orden_asc" />
+                <enumeration value="orden_desc" />
+                <enumeration value="codiVuds_asc" />
+                <enumeration value="codiVuds_desc" />
+                <enumeration value="dataCaducitat_asc" />
+                <enumeration value="dataCaducitat_desc" />
+                <enumeration value="dataPublicacio_asc" />
+                <enumeration value="dataPublicacio_desc" />
+                <enumeration value="dataActualitzacio_asc" />
+                <enumeration value="dataActualitzacio_desc" />
+                <enumeration value="versio_asc" />
+                <enumeration value="versio_desc" />
+                <enumeration value="dataActualitzacioVuds_asc" />
+                <enumeration value="dataActualitzacioVuds_desc" />
+                <enumeration value="dataInici_asc" />
+                <enumeration value="dataInici_desc" />
+                <enumeration value="dataTancament_asc" />
+                <enumeration value="dataTancament_desc" />
+            </restriction>
+        </simpleType>
+
+    </schema>
+  </wsdl:types>
+</wsdl:definitions>

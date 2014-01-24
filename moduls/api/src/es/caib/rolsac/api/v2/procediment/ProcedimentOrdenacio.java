@@ -17,6 +17,8 @@ public class ProcedimentOrdenacio implements java.io.Serializable {
         _table_.put(_value_,this);
     }
 
+    public static final java.lang.String _id_asc = "id_asc";
+    public static final java.lang.String _id_desc = "id_desc";
     public static final java.lang.String _signatura_asc = "signatura_asc";
     public static final java.lang.String _signatura_desc = "signatura_desc";
     public static final java.lang.String _fechaCaducidad_asc = "fechaCaducidad_asc";
@@ -29,6 +31,8 @@ public class ProcedimentOrdenacio implements java.io.Serializable {
     public static final java.lang.String _version_desc = "version_desc";
     public static final java.lang.String _familia_asc = "familia_asc";
     public static final java.lang.String _familia_desc = "familia_desc";
+    public static final ProcedimentOrdenacio id_asc = new ProcedimentOrdenacio(_id_asc);
+    public static final ProcedimentOrdenacio id_desc = new ProcedimentOrdenacio(_id_desc);
     public static final ProcedimentOrdenacio signatura_asc = new ProcedimentOrdenacio(_signatura_asc);
     public static final ProcedimentOrdenacio signatura_desc = new ProcedimentOrdenacio(_signatura_desc);
     public static final ProcedimentOrdenacio fechaCaducidad_asc = new ProcedimentOrdenacio(_fechaCaducidad_asc);

@@ -8,6 +8,8 @@
 package es.caib.rolsac.api.v2.tipusAfectacio;
 
 public class TipusAfectacioCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria  implements java.io.Serializable {
+    private es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioOrdenacio[] ordenar;
+
     public TipusAfectacioCriteria() {
     }
 
@@ -16,13 +18,35 @@ public class TipusAfectacioCriteria  extends es.caib.rolsac.api.v2.general.Basic
            java.lang.String idioma,
            java.lang.String inici,
            java.lang.String ordenacio,
-           java.lang.String tamany) {
+           java.lang.String tamany,
+           es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioOrdenacio[] ordenar) {
         super(
             id,
             idioma,
             inici,
             ordenacio,
             tamany);
+        this.ordenar = ordenar;
+    }
+
+
+    /**
+     * Gets the ordenar value for this TipusAfectacioCriteria.
+     * 
+     * @return ordenar
+     */
+    public es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioOrdenacio[] getOrdenar() {
+        return ordenar;
+    }
+
+
+    /**
+     * Sets the ordenar value for this TipusAfectacioCriteria.
+     * 
+     * @param ordenar
+     */
+    public void setOrdenar(es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioOrdenacio[] ordenar) {
+        this.ordenar = ordenar;
     }
 
     private java.lang.Object __equalsCalc = null;
@@ -36,7 +60,10 @@ public class TipusAfectacioCriteria  extends es.caib.rolsac.api.v2.general.Basic
         }
         __equalsCalc = obj;
         boolean _equals;
-        _equals = super.equals(obj);
+        _equals = super.equals(obj) && 
+            ((this.ordenar==null && other.getOrdenar()==null) || 
+             (this.ordenar!=null &&
+              java.util.Arrays.equals(this.ordenar, other.getOrdenar())));
         __equalsCalc = null;
         return _equals;
     }
@@ -48,6 +75,17 @@ public class TipusAfectacioCriteria  extends es.caib.rolsac.api.v2.general.Basic
         }
         __hashCodeCalc = true;
         int _hashCode = super.hashCode();
+        if (getOrdenar() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getOrdenar());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getOrdenar(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
+        }
         __hashCodeCalc = false;
         return _hashCode;
     }
@@ -58,6 +96,13 @@ public class TipusAfectacioCriteria  extends es.caib.rolsac.api.v2.general.Basic
 
     static {
         typeDesc.setXmlType(new javax.xml.namespace.QName("http://tipusAfectacio.v2.api.rolsac.caib.es", "TipusAfectacioCriteria"));
+        org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("ordenar");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "ordenar"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://tipusAfectacio.v2.api.rolsac.caib.es", "TipusAfectacioOrdenacio"));
+        elemField.setNillable(true);
+        elemField.setItemQName(new javax.xml.namespace.QName("", "listaOrdenaciones"));
+        typeDesc.addFieldDesc(elemField);
     }
 
     /**

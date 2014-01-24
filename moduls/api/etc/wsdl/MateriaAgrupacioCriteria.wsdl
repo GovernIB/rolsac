@@ -8,20 +8,32 @@
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     xmlns:tns2="http://general.v2.api.rolsac.caib.es"
     targetNamespace="http://ws.materiaAgrupacio.v2.api.rolsac.caib.es">
+
+  <wsdl:import namespace="urn:tns4" location="MateriaAgrupacioOrdenacio.wsdl"/>
+
   <wsdl:types>
     <schema xmlns="http://www.w3.org/2001/XMLSchema"
         targetNamespace="http://materiaAgrupacio.v2.api.rolsac.caib.es">
         <import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
         <import namespace="http://general.v2.api.rolsac.caib.es" />
+
+        <complexType name="ArrayOfMateriaAgrupacioOrdenacio">
+            <sequence>
+                <element minOccurs="0" maxOccurs="unbounded" name="listaOrdenaciones" nillable="true" type="tns:MateriaAgrupacioOrdenacio" />
+            </sequence>
+        </complexType>
+
         <complexType name="MateriaAgrupacioCriteria">
             <complexContent>
                 <extension base="tns2:BasicCriteria">
                     <sequence>
                         <element name="orden" nillable="true" type="xsd:string" />
+                        <element name="ordenar" nillable="true" type="tns:ArrayOfMateriaAgrupacioOrdenacio" />
                     </sequence>
                 </extension>
             </complexContent>
         </complexType>
+
     </schema>
   </wsdl:types>
 </wsdl:definitions>

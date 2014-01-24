@@ -8,11 +8,21 @@
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     xmlns:tns2="http://general.v2.api.rolsac.caib.es"
     targetNamespace="http://ws.publicObjectiu.v2.api.rolsac.caib.es">
+
+  <wsdl:import namespace="urn:tns4" location="PublicObjectiuOrdenacio.wsdl"/>
+
   <wsdl:types>
     <schema xmlns="http://www.w3.org/2001/XMLSchema"
         targetNamespace="http://publicObjectiu.v2.api.rolsac.caib.es">
         <import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
         <import namespace="http://general.v2.api.rolsac.caib.es" />
+
+        <complexType name="ArrayOfPublicObjectiuOrdenacio">
+            <sequence>
+                <element minOccurs="0" maxOccurs="unbounded" name="listaOrdenaciones" nillable="true" type="tns:PublicObjectiuOrdenacio" />
+            </sequence>
+        </complexType>
+
         <complexType name="PublicObjectiuCriteria">
             <complexContent>
                 <extension base="tns2:BasicCriteria">
@@ -24,10 +34,12 @@
                         <element name="t_palabrasclave" nillable="true" type="xsd:string" />
                         <element name="procedimiento" nillable="true" type="xsd:string" />
                         <element name="ficha" nillable="true" type="xsd:string" />
+                        <element name="ordenar" nillable="true" type="tns:ArrayOfPublicObjectiuOrdenacio" />
                     </sequence>
                 </extension>
             </complexContent>
         </complexType>
+
     </schema>
   </wsdl:types>
 </wsdl:definitions>

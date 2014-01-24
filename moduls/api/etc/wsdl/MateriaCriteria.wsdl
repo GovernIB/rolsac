@@ -8,11 +8,21 @@
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     xmlns:tns2="http://general.v2.api.rolsac.caib.es"
     targetNamespace="http://ws.materia.v2.api.rolsac.caib.es">
+
+  <wsdl:import namespace="urn:tns4" location="MateriaOrdenacio.wsdl"/>
+
   <wsdl:types>
     <schema xmlns="http://www.w3.org/2001/XMLSchema"
         targetNamespace="http://materia.v2.api.rolsac.caib.es">
         <import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
         <import namespace="http://general.v2.api.rolsac.caib.es" />
+
+        <complexType name="ArrayOfMateriaOrdenacio">
+            <sequence>
+                <element minOccurs="0" maxOccurs="unbounded" name="listaOrdenaciones" nillable="true" type="tns:MateriaOrdenacio" />
+            </sequence>
+        </complexType>
+
         <complexType name="MateriaCriteria">
             <complexContent>
                 <extension base="tns2:BasicCriteria">
@@ -23,10 +33,12 @@
                         <element name="t_nombre" nillable="true" type="xsd:string" />
                         <element name="t_descripcion" nillable="true" type="xsd:string" />
                         <element name="t_palabrasclave" nillable="true" type="xsd:string" />
+                        <element name="ordenar" nillable="true" type="tns:ArrayOfMateriaOrdenacio" />
                     </sequence>
                 </extension>
             </complexContent>
         </complexType>
+
     </schema>
   </wsdl:types>
 </wsdl:definitions>

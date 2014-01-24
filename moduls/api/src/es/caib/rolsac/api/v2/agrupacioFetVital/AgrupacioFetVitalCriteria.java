@@ -16,6 +16,8 @@ public class AgrupacioFetVitalCriteria  extends es.caib.rolsac.api.v2.general.Ba
 
     private java.lang.String t_palabrasclave;
 
+    private es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalOrdenacio[] ordenar;
+
     public AgrupacioFetVitalCriteria() {
     }
 
@@ -28,7 +30,8 @@ public class AgrupacioFetVitalCriteria  extends es.caib.rolsac.api.v2.general.Ba
            java.lang.String codigoEstandar,
            java.lang.String t_descripcion,
            java.lang.String t_nombre,
-           java.lang.String t_palabrasclave) {
+           java.lang.String t_palabrasclave,
+           es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalOrdenacio[] ordenar) {
         super(
             id,
             idioma,
@@ -39,6 +42,7 @@ public class AgrupacioFetVitalCriteria  extends es.caib.rolsac.api.v2.general.Ba
         this.t_descripcion = t_descripcion;
         this.t_nombre = t_nombre;
         this.t_palabrasclave = t_palabrasclave;
+        this.ordenar = ordenar;
     }
 
 
@@ -121,6 +125,26 @@ public class AgrupacioFetVitalCriteria  extends es.caib.rolsac.api.v2.general.Ba
         this.t_palabrasclave = t_palabrasclave;
     }
 
+
+    /**
+     * Gets the ordenar value for this AgrupacioFetVitalCriteria.
+     * 
+     * @return ordenar
+     */
+    public es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalOrdenacio[] getOrdenar() {
+        return ordenar;
+    }
+
+
+    /**
+     * Sets the ordenar value for this AgrupacioFetVitalCriteria.
+     * 
+     * @param ordenar
+     */
+    public void setOrdenar(es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalOrdenacio[] ordenar) {
+        this.ordenar = ordenar;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof AgrupacioFetVitalCriteria)) return false;
@@ -144,7 +168,10 @@ public class AgrupacioFetVitalCriteria  extends es.caib.rolsac.api.v2.general.Ba
               this.t_nombre.equals(other.getT_nombre()))) &&
             ((this.t_palabrasclave==null && other.getT_palabrasclave()==null) || 
              (this.t_palabrasclave!=null &&
-              this.t_palabrasclave.equals(other.getT_palabrasclave())));
+              this.t_palabrasclave.equals(other.getT_palabrasclave()))) &&
+            ((this.ordenar==null && other.getOrdenar()==null) || 
+             (this.ordenar!=null &&
+              java.util.Arrays.equals(this.ordenar, other.getOrdenar())));
         __equalsCalc = null;
         return _equals;
     }
@@ -167,6 +194,17 @@ public class AgrupacioFetVitalCriteria  extends es.caib.rolsac.api.v2.general.Ba
         }
         if (getT_palabrasclave() != null) {
             _hashCode += getT_palabrasclave().hashCode();
+        }
+        if (getOrdenar() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getOrdenar());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getOrdenar(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -201,6 +239,13 @@ public class AgrupacioFetVitalCriteria  extends es.caib.rolsac.api.v2.general.Ba
         elemField.setXmlName(new javax.xml.namespace.QName("", "t_palabrasclave"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("ordenar");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "ordenar"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://agrupacioFetVital.v2.api.rolsac.caib.es", "AgrupacioFetVitalOrdenacio"));
+        elemField.setNillable(true);
+        elemField.setItemQName(new javax.xml.namespace.QName("", "listaOrdenaciones"));
         typeDesc.addFieldDesc(elemField);
     }
 

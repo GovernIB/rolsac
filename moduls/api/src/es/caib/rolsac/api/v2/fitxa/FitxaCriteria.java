@@ -40,6 +40,8 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
 
     private java.lang.String seccion;
 
+    private es.caib.rolsac.api.v2.fitxa.FitxaOrdenacio[] ordenar;
+
     public FitxaCriteria() {
     }
 
@@ -64,7 +66,8 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
            java.lang.String urlVideo,
            java.lang.String validacion,
            java.lang.String publicoObjetivo,
-           java.lang.String seccion) {
+           java.lang.String seccion,
+           es.caib.rolsac.api.v2.fitxa.FitxaOrdenacio[] ordenar) {
         super(
             id,
             idioma,
@@ -87,6 +90,7 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
         this.validacion = validacion;
         this.publicoObjetivo = publicoObjetivo;
         this.seccion = seccion;
+        this.ordenar = ordenar;
     }
 
 
@@ -409,6 +413,26 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
         this.seccion = seccion;
     }
 
+
+    /**
+     * Gets the ordenar value for this FitxaCriteria.
+     * 
+     * @return ordenar
+     */
+    public es.caib.rolsac.api.v2.fitxa.FitxaOrdenacio[] getOrdenar() {
+        return ordenar;
+    }
+
+
+    /**
+     * Sets the ordenar value for this FitxaCriteria.
+     * 
+     * @param ordenar
+     */
+    public void setOrdenar(es.caib.rolsac.api.v2.fitxa.FitxaOrdenacio[] ordenar) {
+        this.ordenar = ordenar;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof FitxaCriteria)) return false;
@@ -468,7 +492,10 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
               this.publicoObjetivo.equals(other.getPublicoObjetivo()))) &&
             ((this.seccion==null && other.getSeccion()==null) || 
              (this.seccion!=null &&
-              this.seccion.equals(other.getSeccion())));
+              this.seccion.equals(other.getSeccion()))) &&
+            ((this.ordenar==null && other.getOrdenar()==null) || 
+             (this.ordenar!=null &&
+              java.util.Arrays.equals(this.ordenar, other.getOrdenar())));
         __equalsCalc = null;
         return _equals;
     }
@@ -527,6 +554,17 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
         }
         if (getSeccion() != null) {
             _hashCode += getSeccion().hashCode();
+        }
+        if (getOrdenar() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getOrdenar());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getOrdenar(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -633,6 +671,13 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
         elemField.setXmlName(new javax.xml.namespace.QName("", "seccion"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("ordenar");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "ordenar"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://fitxa.v2.api.rolsac.caib.es", "FitxaOrdenacio"));
+        elemField.setNillable(true);
+        elemField.setItemQName(new javax.xml.namespace.QName("", "listaOrdenaciones"));
         typeDesc.addFieldDesc(elemField);
     }
 

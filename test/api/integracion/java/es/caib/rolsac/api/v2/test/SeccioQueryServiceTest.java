@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
+import es.caib.rolsac.api.v2.fitxa.FitxaOrdenacio;
 import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
@@ -107,6 +108,7 @@ public class SeccioQueryServiceTest {
             Assert.assertNotNull(seccio);
             FitxaCriteria fitxaCriteria = new FitxaCriteria();
             fitxaCriteria.setIdioma("ca");
+            fitxaCriteria.setOrdenar(new FitxaOrdenacio[] {FitxaOrdenacio.fua_ordenseccion_desc});
             List<FitxaQueryServiceAdapter> listFitxaQueryServiceAdapter = seccio.llistarFitxes(fitxaCriteria);        
             Assert.assertTrue(listFitxaQueryServiceAdapter.size() > 0);
         } catch (QueryServiceException e) {

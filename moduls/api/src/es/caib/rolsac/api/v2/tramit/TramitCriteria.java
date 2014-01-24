@@ -50,6 +50,8 @@ public class TramitCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
 
     private java.lang.String t_lugar;
 
+    private es.caib.rolsac.api.v2.tramit.TramitOrdenacio[] ordenar;
+
     public TramitCriteria() {
     }
 
@@ -79,7 +81,8 @@ public class TramitCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
            java.lang.String t_requisits,
            java.lang.String t_observaciones,
            java.lang.String t_plazos,
-           java.lang.String t_lugar) {
+           java.lang.String t_lugar,
+           es.caib.rolsac.api.v2.tramit.TramitOrdenacio[] ordenar) {
         super(
             id,
             idioma,
@@ -107,6 +110,7 @@ public class TramitCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
         this.t_observaciones = t_observaciones;
         this.t_plazos = t_plazos;
         this.t_lugar = t_lugar;
+        this.ordenar = ordenar;
     }
 
 
@@ -529,6 +533,26 @@ public class TramitCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
         this.t_lugar = t_lugar;
     }
 
+
+    /**
+     * Gets the ordenar value for this TramitCriteria.
+     * 
+     * @return ordenar
+     */
+    public es.caib.rolsac.api.v2.tramit.TramitOrdenacio[] getOrdenar() {
+        return ordenar;
+    }
+
+
+    /**
+     * Sets the ordenar value for this TramitCriteria.
+     * 
+     * @param ordenar
+     */
+    public void setOrdenar(es.caib.rolsac.api.v2.tramit.TramitOrdenacio[] ordenar) {
+        this.ordenar = ordenar;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof TramitCriteria)) return false;
@@ -603,7 +627,10 @@ public class TramitCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
               this.t_plazos.equals(other.getT_plazos()))) &&
             ((this.t_lugar==null && other.getT_lugar()==null) || 
              (this.t_lugar!=null &&
-              this.t_lugar.equals(other.getT_lugar())));
+              this.t_lugar.equals(other.getT_lugar()))) &&
+            ((this.ordenar==null && other.getOrdenar()==null) || 
+             (this.ordenar!=null &&
+              java.util.Arrays.equals(this.ordenar, other.getOrdenar())));
         __equalsCalc = null;
         return _equals;
     }
@@ -677,6 +704,17 @@ public class TramitCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
         }
         if (getT_lugar() != null) {
             _hashCode += getT_lugar().hashCode();
+        }
+        if (getOrdenar() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getOrdenar());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getOrdenar(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -813,6 +851,13 @@ public class TramitCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
         elemField.setXmlName(new javax.xml.namespace.QName("", "t_lugar"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("ordenar");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "ordenar"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://tramit.v2.api.rolsac.caib.es", "TramitOrdenacio"));
+        elemField.setNillable(true);
+        elemField.setItemQName(new javax.xml.namespace.QName("", "listaOrdenaciones"));
         typeDesc.addFieldDesc(elemField);
     }
 

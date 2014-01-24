@@ -16,6 +16,8 @@ public class CatalegDocumentsCriteria  extends es.caib.rolsac.api.v2.general.Bas
 
     private java.lang.String admResponsable;
 
+    private es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsOrdenacio[] ordenar;
+
     public CatalegDocumentsCriteria() {
     }
 
@@ -28,7 +30,8 @@ public class CatalegDocumentsCriteria  extends es.caib.rolsac.api.v2.general.Bas
            java.lang.String orden,
            java.lang.String nombre,
            java.lang.String descripcion,
-           java.lang.String admResponsable) {
+           java.lang.String admResponsable,
+           es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsOrdenacio[] ordenar) {
         super(
             id,
             idioma,
@@ -39,6 +42,7 @@ public class CatalegDocumentsCriteria  extends es.caib.rolsac.api.v2.general.Bas
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.admResponsable = admResponsable;
+        this.ordenar = ordenar;
     }
 
 
@@ -121,6 +125,26 @@ public class CatalegDocumentsCriteria  extends es.caib.rolsac.api.v2.general.Bas
         this.admResponsable = admResponsable;
     }
 
+
+    /**
+     * Gets the ordenar value for this CatalegDocumentsCriteria.
+     * 
+     * @return ordenar
+     */
+    public es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsOrdenacio[] getOrdenar() {
+        return ordenar;
+    }
+
+
+    /**
+     * Sets the ordenar value for this CatalegDocumentsCriteria.
+     * 
+     * @param ordenar
+     */
+    public void setOrdenar(es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsOrdenacio[] ordenar) {
+        this.ordenar = ordenar;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof CatalegDocumentsCriteria)) return false;
@@ -144,7 +168,10 @@ public class CatalegDocumentsCriteria  extends es.caib.rolsac.api.v2.general.Bas
               this.descripcion.equals(other.getDescripcion()))) &&
             ((this.admResponsable==null && other.getAdmResponsable()==null) || 
              (this.admResponsable!=null &&
-              this.admResponsable.equals(other.getAdmResponsable())));
+              this.admResponsable.equals(other.getAdmResponsable()))) &&
+            ((this.ordenar==null && other.getOrdenar()==null) || 
+             (this.ordenar!=null &&
+              java.util.Arrays.equals(this.ordenar, other.getOrdenar())));
         __equalsCalc = null;
         return _equals;
     }
@@ -167,6 +194,17 @@ public class CatalegDocumentsCriteria  extends es.caib.rolsac.api.v2.general.Bas
         }
         if (getAdmResponsable() != null) {
             _hashCode += getAdmResponsable().hashCode();
+        }
+        if (getOrdenar() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getOrdenar());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getOrdenar(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -201,6 +239,13 @@ public class CatalegDocumentsCriteria  extends es.caib.rolsac.api.v2.general.Bas
         elemField.setXmlName(new javax.xml.namespace.QName("", "admResponsable"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("ordenar");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "ordenar"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://catalegDocuments.v2.api.rolsac.caib.es", "CatalegDocumentsOrdenacio"));
+        elemField.setNillable(true);
+        elemField.setItemQName(new javax.xml.namespace.QName("", "listaOrdenaciones"));
         typeDesc.addFieldDesc(elemField);
     }
 

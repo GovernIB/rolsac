@@ -102,6 +102,15 @@ public class ExcepcioDocumentacioWSSoapBindingStub extends org.apache.axis.clien
             java.lang.Class simpledf = org.apache.axis.encoding.ser.SimpleDeserializerFactory.class;
             java.lang.Class simplelistsf = org.apache.axis.encoding.ser.SimpleListSerializerFactory.class;
             java.lang.Class simplelistdf = org.apache.axis.encoding.ser.SimpleListDeserializerFactory.class;
+            qName = new javax.xml.namespace.QName("http://catalegDocuments.v2.api.rolsac.caib.es", "ArrayOfCatalegDocumentsOrdenacio");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsOrdenacio[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://catalegDocuments.v2.api.rolsac.caib.es", "CatalegDocumentsOrdenacio");
+            qName2 = new javax.xml.namespace.QName("", "listaOrdenaciones");
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
             qName = new javax.xml.namespace.QName("http://catalegDocuments.v2.api.rolsac.caib.es", "CatalegDocumentsCriteria");
             cachedSerQNames.add(qName);
             cls = es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsCriteria.class;
@@ -109,12 +118,44 @@ public class ExcepcioDocumentacioWSSoapBindingStub extends org.apache.axis.clien
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
+            qName = new javax.xml.namespace.QName("http://catalegDocuments.v2.api.rolsac.caib.es", "CatalegDocumentsOrdenacio");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsOrdenacio.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(enumsf);
+            cachedDeserFactories.add(enumdf);
+
+            qName = new javax.xml.namespace.QName("http://documentTramit.v2.api.rolsac.caib.es", "ArrayOfDocumentTramitOrdenacio");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.documentTramit.DocumentTramitOrdenacio[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://documentTramit.v2.api.rolsac.caib.es", "DocumentTramitOrdenacio");
+            qName2 = new javax.xml.namespace.QName("", "listaOrdenaciones");
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
             qName = new javax.xml.namespace.QName("http://documentTramit.v2.api.rolsac.caib.es", "DocumentTramitCriteria");
             cachedSerQNames.add(qName);
             cls = es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("http://documentTramit.v2.api.rolsac.caib.es", "DocumentTramitOrdenacio");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.documentTramit.DocumentTramitOrdenacio.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(enumsf);
+            cachedDeserFactories.add(enumdf);
+
+            qName = new javax.xml.namespace.QName("http://excepcioDocumentacio.v2.api.rolsac.caib.es", "ArrayOfExcepcioDocumentacioOrdenacio");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioOrdenacio[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://excepcioDocumentacio.v2.api.rolsac.caib.es", "ExcepcioDocumentacioOrdenacio");
+            qName2 = new javax.xml.namespace.QName("", "listaOrdenaciones");
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
             qName = new javax.xml.namespace.QName("http://excepcioDocumentacio.v2.api.rolsac.caib.es", "ExcepcioDocumentacioCriteria");
             cachedSerQNames.add(qName);
@@ -129,6 +170,13 @@ public class ExcepcioDocumentacioWSSoapBindingStub extends org.apache.axis.clien
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("http://excepcioDocumentacio.v2.api.rolsac.caib.es", "ExcepcioDocumentacioOrdenacio");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioOrdenacio.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(enumsf);
+            cachedDeserFactories.add(enumdf);
 
             qName = new javax.xml.namespace.QName("http://general.v2.api.rolsac.caib.es", "BasicCriteria");
             cachedSerQNames.add(qName);

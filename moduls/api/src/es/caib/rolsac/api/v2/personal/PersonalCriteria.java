@@ -30,6 +30,8 @@ public class PersonalCriteria  extends es.caib.rolsac.api.v2.general.BasicCriter
 
     private java.lang.String numeroLargoMovil;
 
+    private es.caib.rolsac.api.v2.personal.PersonalOrdenacio[] ordenar;
+
     public PersonalCriteria() {
     }
 
@@ -49,7 +51,8 @@ public class PersonalCriteria  extends es.caib.rolsac.api.v2.general.BasicCriter
            java.lang.String extensionPrivada,
            java.lang.String numeroLargoPrivado,
            java.lang.String extensionMovil,
-           java.lang.String numeroLargoMovil) {
+           java.lang.String numeroLargoMovil,
+           es.caib.rolsac.api.v2.personal.PersonalOrdenacio[] ordenar) {
         super(
             id,
             idioma,
@@ -67,6 +70,7 @@ public class PersonalCriteria  extends es.caib.rolsac.api.v2.general.BasicCriter
         this.numeroLargoPrivado = numeroLargoPrivado;
         this.extensionMovil = extensionMovil;
         this.numeroLargoMovil = numeroLargoMovil;
+        this.ordenar = ordenar;
     }
 
 
@@ -289,6 +293,26 @@ public class PersonalCriteria  extends es.caib.rolsac.api.v2.general.BasicCriter
         this.numeroLargoMovil = numeroLargoMovil;
     }
 
+
+    /**
+     * Gets the ordenar value for this PersonalCriteria.
+     * 
+     * @return ordenar
+     */
+    public es.caib.rolsac.api.v2.personal.PersonalOrdenacio[] getOrdenar() {
+        return ordenar;
+    }
+
+
+    /**
+     * Sets the ordenar value for this PersonalCriteria.
+     * 
+     * @param ordenar
+     */
+    public void setOrdenar(es.caib.rolsac.api.v2.personal.PersonalOrdenacio[] ordenar) {
+        this.ordenar = ordenar;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof PersonalCriteria)) return false;
@@ -333,7 +357,10 @@ public class PersonalCriteria  extends es.caib.rolsac.api.v2.general.BasicCriter
               this.extensionMovil.equals(other.getExtensionMovil()))) &&
             ((this.numeroLargoMovil==null && other.getNumeroLargoMovil()==null) || 
              (this.numeroLargoMovil!=null &&
-              this.numeroLargoMovil.equals(other.getNumeroLargoMovil())));
+              this.numeroLargoMovil.equals(other.getNumeroLargoMovil()))) &&
+            ((this.ordenar==null && other.getOrdenar()==null) || 
+             (this.ordenar!=null &&
+              java.util.Arrays.equals(this.ordenar, other.getOrdenar())));
         __equalsCalc = null;
         return _equals;
     }
@@ -377,6 +404,17 @@ public class PersonalCriteria  extends es.caib.rolsac.api.v2.general.BasicCriter
         }
         if (getNumeroLargoMovil() != null) {
             _hashCode += getNumeroLargoMovil().hashCode();
+        }
+        if (getOrdenar() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getOrdenar());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getOrdenar(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -453,6 +491,13 @@ public class PersonalCriteria  extends es.caib.rolsac.api.v2.general.BasicCriter
         elemField.setXmlName(new javax.xml.namespace.QName("", "numeroLargoMovil"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("ordenar");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "ordenar"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://personal.v2.api.rolsac.caib.es", "PersonalOrdenacio"));
+        elemField.setNillable(true);
+        elemField.setItemQName(new javax.xml.namespace.QName("", "listaOrdenaciones"));
         typeDesc.addFieldDesc(elemField);
     }
 

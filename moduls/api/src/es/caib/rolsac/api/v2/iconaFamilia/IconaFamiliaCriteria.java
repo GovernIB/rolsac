@@ -8,6 +8,8 @@
 package es.caib.rolsac.api.v2.iconaFamilia;
 
 public class IconaFamiliaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria  implements java.io.Serializable {
+    private es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaOrdenacio[] ordenar;
+
     public IconaFamiliaCriteria() {
     }
 
@@ -16,13 +18,35 @@ public class IconaFamiliaCriteria  extends es.caib.rolsac.api.v2.general.BasicCr
            java.lang.String idioma,
            java.lang.String inici,
            java.lang.String ordenacio,
-           java.lang.String tamany) {
+           java.lang.String tamany,
+           es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaOrdenacio[] ordenar) {
         super(
             id,
             idioma,
             inici,
             ordenacio,
             tamany);
+        this.ordenar = ordenar;
+    }
+
+
+    /**
+     * Gets the ordenar value for this IconaFamiliaCriteria.
+     * 
+     * @return ordenar
+     */
+    public es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaOrdenacio[] getOrdenar() {
+        return ordenar;
+    }
+
+
+    /**
+     * Sets the ordenar value for this IconaFamiliaCriteria.
+     * 
+     * @param ordenar
+     */
+    public void setOrdenar(es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaOrdenacio[] ordenar) {
+        this.ordenar = ordenar;
     }
 
     private java.lang.Object __equalsCalc = null;
@@ -36,7 +60,10 @@ public class IconaFamiliaCriteria  extends es.caib.rolsac.api.v2.general.BasicCr
         }
         __equalsCalc = obj;
         boolean _equals;
-        _equals = super.equals(obj);
+        _equals = super.equals(obj) && 
+            ((this.ordenar==null && other.getOrdenar()==null) || 
+             (this.ordenar!=null &&
+              java.util.Arrays.equals(this.ordenar, other.getOrdenar())));
         __equalsCalc = null;
         return _equals;
     }
@@ -48,6 +75,17 @@ public class IconaFamiliaCriteria  extends es.caib.rolsac.api.v2.general.BasicCr
         }
         __hashCodeCalc = true;
         int _hashCode = super.hashCode();
+        if (getOrdenar() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getOrdenar());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getOrdenar(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
+        }
         __hashCodeCalc = false;
         return _hashCode;
     }
@@ -58,6 +96,13 @@ public class IconaFamiliaCriteria  extends es.caib.rolsac.api.v2.general.BasicCr
 
     static {
         typeDesc.setXmlType(new javax.xml.namespace.QName("http://iconaFamilia.v2.api.rolsac.caib.es", "IconaFamiliaCriteria"));
+        org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("ordenar");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "ordenar"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://iconaFamilia.v2.api.rolsac.caib.es", "IconaFamiliaOrdenacio"));
+        elemField.setNillable(true);
+        elemField.setItemQName(new javax.xml.namespace.QName("", "listaOrdenaciones"));
+        typeDesc.addFieldDesc(elemField);
     }
 
     /**

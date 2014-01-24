@@ -38,6 +38,8 @@ public class UnitatAdministrativaCriteria  extends es.caib.rolsac.api.v2.general
 
     private java.lang.String seccion;
 
+    private es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaOrdenacio[] ordenar;
+
     public UnitatAdministrativaCriteria() {
     }
 
@@ -61,7 +63,8 @@ public class UnitatAdministrativaCriteria  extends es.caib.rolsac.api.v2.general
            java.lang.String t_nombre,
            java.lang.String t_presentacion,
            java.lang.String t_abreviatura,
-           java.lang.String seccion) {
+           java.lang.String seccion,
+           es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaOrdenacio[] ordenar) {
         super(
             id,
             idioma,
@@ -83,6 +86,7 @@ public class UnitatAdministrativaCriteria  extends es.caib.rolsac.api.v2.general
         this.t_presentacion = t_presentacion;
         this.t_abreviatura = t_abreviatura;
         this.seccion = seccion;
+        this.ordenar = ordenar;
     }
 
 
@@ -385,6 +389,26 @@ public class UnitatAdministrativaCriteria  extends es.caib.rolsac.api.v2.general
         this.seccion = seccion;
     }
 
+
+    /**
+     * Gets the ordenar value for this UnitatAdministrativaCriteria.
+     * 
+     * @return ordenar
+     */
+    public es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaOrdenacio[] getOrdenar() {
+        return ordenar;
+    }
+
+
+    /**
+     * Sets the ordenar value for this UnitatAdministrativaCriteria.
+     * 
+     * @param ordenar
+     */
+    public void setOrdenar(es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaOrdenacio[] ordenar) {
+        this.ordenar = ordenar;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof UnitatAdministrativaCriteria)) return false;
@@ -441,7 +465,10 @@ public class UnitatAdministrativaCriteria  extends es.caib.rolsac.api.v2.general
               this.t_abreviatura.equals(other.getT_abreviatura()))) &&
             ((this.seccion==null && other.getSeccion()==null) || 
              (this.seccion!=null &&
-              this.seccion.equals(other.getSeccion())));
+              this.seccion.equals(other.getSeccion()))) &&
+            ((this.ordenar==null && other.getOrdenar()==null) || 
+             (this.ordenar!=null &&
+              java.util.Arrays.equals(this.ordenar, other.getOrdenar())));
         __equalsCalc = null;
         return _equals;
     }
@@ -497,6 +524,17 @@ public class UnitatAdministrativaCriteria  extends es.caib.rolsac.api.v2.general
         }
         if (getSeccion() != null) {
             _hashCode += getSeccion().hashCode();
+        }
+        if (getOrdenar() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getOrdenar());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getOrdenar(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -597,6 +635,13 @@ public class UnitatAdministrativaCriteria  extends es.caib.rolsac.api.v2.general
         elemField.setXmlName(new javax.xml.namespace.QName("", "seccion"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("ordenar");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "ordenar"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://unitatAdministrativa.v2.api.rolsac.caib.es", "UnitatAdministrativaOrdenacio"));
+        elemField.setNillable(true);
+        elemField.setItemQName(new javax.xml.namespace.QName("", "listaOrdenaciones"));
         typeDesc.addFieldDesc(elemField);
     }
 

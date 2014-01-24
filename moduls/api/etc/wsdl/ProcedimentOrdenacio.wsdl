@@ -16,6 +16,8 @@
 
         <simpleType name="ProcedimentOrdenacio">
             <restriction base="xsd:string">
+                <enumeration value="id_asc" />
+                <enumeration value="id_desc" />
                 <enumeration value="signatura_asc" />
                 <enumeration value="signatura_desc" />
                 <enumeration value="fechaCaducidad_asc" />

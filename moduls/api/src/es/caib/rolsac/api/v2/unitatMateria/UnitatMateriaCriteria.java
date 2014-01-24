@@ -12,6 +12,8 @@ public class UnitatMateriaCriteria  extends es.caib.rolsac.api.v2.general.BasicC
 
     private java.lang.String t_urlUnidadMateria;
 
+    private es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaOrdenacio[] ordenar;
+
     public UnitatMateriaCriteria() {
     }
 
@@ -22,7 +24,8 @@ public class UnitatMateriaCriteria  extends es.caib.rolsac.api.v2.general.BasicC
            java.lang.String ordenacio,
            java.lang.String tamany,
            java.lang.String unidadPrincipal,
-           java.lang.String t_urlUnidadMateria) {
+           java.lang.String t_urlUnidadMateria,
+           es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaOrdenacio[] ordenar) {
         super(
             id,
             idioma,
@@ -31,6 +34,7 @@ public class UnitatMateriaCriteria  extends es.caib.rolsac.api.v2.general.BasicC
             tamany);
         this.unidadPrincipal = unidadPrincipal;
         this.t_urlUnidadMateria = t_urlUnidadMateria;
+        this.ordenar = ordenar;
     }
 
 
@@ -73,6 +77,26 @@ public class UnitatMateriaCriteria  extends es.caib.rolsac.api.v2.general.BasicC
         this.t_urlUnidadMateria = t_urlUnidadMateria;
     }
 
+
+    /**
+     * Gets the ordenar value for this UnitatMateriaCriteria.
+     * 
+     * @return ordenar
+     */
+    public es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaOrdenacio[] getOrdenar() {
+        return ordenar;
+    }
+
+
+    /**
+     * Sets the ordenar value for this UnitatMateriaCriteria.
+     * 
+     * @param ordenar
+     */
+    public void setOrdenar(es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaOrdenacio[] ordenar) {
+        this.ordenar = ordenar;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof UnitatMateriaCriteria)) return false;
@@ -90,7 +114,10 @@ public class UnitatMateriaCriteria  extends es.caib.rolsac.api.v2.general.BasicC
               this.unidadPrincipal.equals(other.getUnidadPrincipal()))) &&
             ((this.t_urlUnidadMateria==null && other.getT_urlUnidadMateria()==null) || 
              (this.t_urlUnidadMateria!=null &&
-              this.t_urlUnidadMateria.equals(other.getT_urlUnidadMateria())));
+              this.t_urlUnidadMateria.equals(other.getT_urlUnidadMateria()))) &&
+            ((this.ordenar==null && other.getOrdenar()==null) || 
+             (this.ordenar!=null &&
+              java.util.Arrays.equals(this.ordenar, other.getOrdenar())));
         __equalsCalc = null;
         return _equals;
     }
@@ -107,6 +134,17 @@ public class UnitatMateriaCriteria  extends es.caib.rolsac.api.v2.general.BasicC
         }
         if (getT_urlUnidadMateria() != null) {
             _hashCode += getT_urlUnidadMateria().hashCode();
+        }
+        if (getOrdenar() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getOrdenar());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getOrdenar(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -129,6 +167,13 @@ public class UnitatMateriaCriteria  extends es.caib.rolsac.api.v2.general.BasicC
         elemField.setXmlName(new javax.xml.namespace.QName("", "t_urlUnidadMateria"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("ordenar");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "ordenar"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://unitatMateria.v2.api.rolsac.caib.es", "UnitatMateriaOrdenacio"));
+        elemField.setNillable(true);
+        elemField.setItemQName(new javax.xml.namespace.QName("", "listaOrdenaciones"));
         typeDesc.addFieldDesc(elemField);
     }
 

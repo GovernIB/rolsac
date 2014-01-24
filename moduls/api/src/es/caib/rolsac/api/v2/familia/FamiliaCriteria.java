@@ -12,6 +12,8 @@ public class FamiliaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteri
 
     private java.lang.String t_descripcion;
 
+    private es.caib.rolsac.api.v2.familia.FamiliaOrdenacio[] ordenar;
+
     public FamiliaCriteria() {
     }
 
@@ -22,7 +24,8 @@ public class FamiliaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteri
            java.lang.String ordenacio,
            java.lang.String tamany,
            java.lang.String t_nombre,
-           java.lang.String t_descripcion) {
+           java.lang.String t_descripcion,
+           es.caib.rolsac.api.v2.familia.FamiliaOrdenacio[] ordenar) {
         super(
             id,
             idioma,
@@ -31,6 +34,7 @@ public class FamiliaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteri
             tamany);
         this.t_nombre = t_nombre;
         this.t_descripcion = t_descripcion;
+        this.ordenar = ordenar;
     }
 
 
@@ -73,6 +77,26 @@ public class FamiliaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteri
         this.t_descripcion = t_descripcion;
     }
 
+
+    /**
+     * Gets the ordenar value for this FamiliaCriteria.
+     * 
+     * @return ordenar
+     */
+    public es.caib.rolsac.api.v2.familia.FamiliaOrdenacio[] getOrdenar() {
+        return ordenar;
+    }
+
+
+    /**
+     * Sets the ordenar value for this FamiliaCriteria.
+     * 
+     * @param ordenar
+     */
+    public void setOrdenar(es.caib.rolsac.api.v2.familia.FamiliaOrdenacio[] ordenar) {
+        this.ordenar = ordenar;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof FamiliaCriteria)) return false;
@@ -90,7 +114,10 @@ public class FamiliaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteri
               this.t_nombre.equals(other.getT_nombre()))) &&
             ((this.t_descripcion==null && other.getT_descripcion()==null) || 
              (this.t_descripcion!=null &&
-              this.t_descripcion.equals(other.getT_descripcion())));
+              this.t_descripcion.equals(other.getT_descripcion()))) &&
+            ((this.ordenar==null && other.getOrdenar()==null) || 
+             (this.ordenar!=null &&
+              java.util.Arrays.equals(this.ordenar, other.getOrdenar())));
         __equalsCalc = null;
         return _equals;
     }
@@ -107,6 +134,17 @@ public class FamiliaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteri
         }
         if (getT_descripcion() != null) {
             _hashCode += getT_descripcion().hashCode();
+        }
+        if (getOrdenar() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getOrdenar());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getOrdenar(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -129,6 +167,13 @@ public class FamiliaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteri
         elemField.setXmlName(new javax.xml.namespace.QName("", "t_descripcion"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("ordenar");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "ordenar"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://familia.v2.api.rolsac.caib.es", "FamiliaOrdenacio"));
+        elemField.setNillable(true);
+        elemField.setItemQName(new javax.xml.namespace.QName("", "listaOrdenaciones"));
         typeDesc.addFieldDesc(elemField);
     }
 

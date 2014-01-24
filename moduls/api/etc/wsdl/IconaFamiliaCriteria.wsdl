@@ -8,15 +8,27 @@
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     xmlns:tns2="http://general.v2.api.rolsac.caib.es"
     targetNamespace="http://ws.iconaFamilia.v2.api.rolsac.caib.es">
+
+  <wsdl:import namespace="urn:tns4" location="IconaFamiliaOrdenacio.wsdl"/>
+
   <wsdl:types>
     <schema xmlns="http://www.w3.org/2001/XMLSchema"
         targetNamespace="http://iconaFamilia.v2.api.rolsac.caib.es">
         <import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
         <import namespace="http://general.v2.api.rolsac.caib.es" />
+
+        <complexType name="ArrayOfIconaFamiliaOrdenacio">
+            <sequence>
+                <element minOccurs="0" maxOccurs="unbounded" name="listaOrdenaciones" nillable="true" type="tns:IconaFamiliaOrdenacio" />
+            </sequence>
+        </complexType>
+
         <complexType name="IconaFamiliaCriteria">
             <complexContent>
                 <extension base="tns2:BasicCriteria">
-                    <sequence />
+                    <sequence>
+                        <element name="ordenar" nillable="true" type="tns:ArrayOfIconaFamiliaOrdenacio" />
+                    </sequence>
                 </extension>
             </complexContent>
         </complexType>

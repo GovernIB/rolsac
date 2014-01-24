@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
+    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:tns="http://personal.v2.api.rolsac.caib.es"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    name="PersonalOrdenacio"
+    xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:tns2="http://general.v2.api.rolsac.caib.es"
+    targetNamespace="http://ws.personal.v2.api.rolsac.caib.es">
+  <wsdl:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://personal.v2.api.rolsac.caib.es">
+        <import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+        <import namespace="http://general.v2.api.rolsac.caib.es" />
+
+        <simpleType name="PersonalOrdenacio">
+            <restriction base="xsd:string">
+                <enumeration value="id_asc" />
+                <enumeration value="id_desc" />
+                <enumeration value="username_asc" />
+                <enumeration value="username_desc" />
+                <enumeration value="nombre_asc" />
+                <enumeration value="nombre_desc" />
+                <enumeration value="funciones_asc" />
+                <enumeration value="funciones_desc" />
+                <enumeration value="cargo_asc" />
+                <enumeration value="cargo_desc" />
+                <enumeration value="email_asc" />
+                <enumeration value="email_desc" />
+            </restriction>
+        </simpleType>
+
+    </schema>
+  </wsdl:types>
+</wsdl:definitions>

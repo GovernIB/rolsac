@@ -9,74 +9,104 @@ import org.junit.Before;
 import org.junit.Test;
 
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalCriteria;
+import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalOrdenacio;
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalQueryServiceAdapter;
 import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaCriteria;
+import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaOrdenacio;
 import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.butlleti.ButlletiCriteria;
+import es.caib.rolsac.api.v2.butlleti.ButlletiOrdenacio;
 import es.caib.rolsac.api.v2.butlleti.ButlletiQueryServiceAdapter;
 import es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsCriteria;
+import es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsOrdenacio;
 import es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsQueryServiceAdapter;
 import es.caib.rolsac.api.v2.document.DocumentCriteria;
+import es.caib.rolsac.api.v2.document.DocumentOrdenacio;
 import es.caib.rolsac.api.v2.document.DocumentQueryServiceAdapter;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
+import es.caib.rolsac.api.v2.documentTramit.DocumentTramitOrdenacio;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitQueryServiceAdapter;
 import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
+import es.caib.rolsac.api.v2.edifici.EdificiOrdenacio;
 import es.caib.rolsac.api.v2.edifici.EdificiQueryServiceAdapter;
 import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
+import es.caib.rolsac.api.v2.enllac.EnllacOrdenacio;
 import es.caib.rolsac.api.v2.enllac.EnllacQueryServiceAdapter;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
+import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialOrdenacio;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialQueryServiceAdapter;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.familia.FamiliaCriteria;
+import es.caib.rolsac.api.v2.familia.FamiliaOrdenacio;
 import es.caib.rolsac.api.v2.familia.FamiliaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
+import es.caib.rolsac.api.v2.fetVital.FetVitalOrdenacio;
 import es.caib.rolsac.api.v2.fetVital.FetVitalQueryServiceAdapter;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
+import es.caib.rolsac.api.v2.fitxa.FitxaOrdenacio;
 import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria;
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUAOrdenacio;
 import es.caib.rolsac.api.v2.fitxaUA.FitxaUAQueryServiceAdapter;
 import es.caib.rolsac.api.v2.formulari.FormulariCriteria;
+import es.caib.rolsac.api.v2.formulari.FormulariOrdenacio;
 import es.caib.rolsac.api.v2.formulari.FormulariQueryServiceAdapter;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.general.CertificadoUtil;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria;
+import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaOrdenacio;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaCriteria;
+import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaOrdenacio;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.iniciacio.IniciacioCriteria;
+import es.caib.rolsac.api.v2.iniciacio.IniciacioOrdenacio;
 import es.caib.rolsac.api.v2.iniciacio.IniciacioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
+import es.caib.rolsac.api.v2.materia.MateriaOrdenacio;
 import es.caib.rolsac.api.v2.materia.MateriaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.materiaAgrupacio.MateriaAgrupacioCriteria;
+import es.caib.rolsac.api.v2.materiaAgrupacio.MateriaAgrupacioOrdenacio;
 import es.caib.rolsac.api.v2.materiaAgrupacio.MateriaAgrupacioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.normativa.NormativaCriteria;
+import es.caib.rolsac.api.v2.normativa.NormativaOrdenacio;
 import es.caib.rolsac.api.v2.normativa.NormativaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.perfil.PerfilCriteria;
+import es.caib.rolsac.api.v2.perfil.PerfilOrdenacio;
 import es.caib.rolsac.api.v2.perfil.PerfilQueryServiceAdapter;
 import es.caib.rolsac.api.v2.personal.PersonalCriteria;
+import es.caib.rolsac.api.v2.personal.PersonalOrdenacio;
 import es.caib.rolsac.api.v2.personal.PersonalQueryServiceAdapter;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentOrdenacio;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
+import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuOrdenacio;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuQueryServiceAdapter;
 import es.caib.rolsac.api.v2.rolsac.RolsacQueryService;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
+import es.caib.rolsac.api.v2.seccio.SeccioOrdenacio;
 import es.caib.rolsac.api.v2.seccio.SeccioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.taxa.TaxaCriteria;
 import es.caib.rolsac.api.v2.taxa.TaxaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.tipus.TipusCriteria;
+import es.caib.rolsac.api.v2.tipus.TipusOrdenacio;
 import es.caib.rolsac.api.v2.tipus.TipusQueryServiceAdapter;
 import es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioCriteria;
+import es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioOrdenacio;
 import es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.tramit.TramitCriteria;
+import es.caib.rolsac.api.v2.tramit.TramitOrdenacio;
 import es.caib.rolsac.api.v2.tramit.TramitQueryServiceAdapter;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
+import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaOrdenacio;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaCriteria;
+import es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaOrdenacio;
 import es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.usuari.UsuariCriteria;
+import es.caib.rolsac.api.v2.usuari.UsuariOrdenacio;
 import es.caib.rolsac.api.v2.usuari.UsuariQueryServiceAdapter;
 
 public class RolsacQueryServiceTest {
@@ -85,7 +115,7 @@ public class RolsacQueryServiceTest {
 
     @Before
     public void setup() {
-        rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.EJB);
+        rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.WS);
         CertificadoUtil.autentificar("contrasena", "storerolsac.jks");
     }
 
@@ -134,8 +164,7 @@ public class RolsacQueryServiceTest {
         procedimentCriteria.setIdioma("ca");
         procedimentCriteria.setInici("5");
         procedimentCriteria.setTamany("10");
-        procedimentCriteria.setOrdenacio("fechaCaducidad asc");
-        procedimentCriteria.setOrdenar(new ProcedimentOrdenacio[] {ProcedimentOrdenacio.familia_asc, ProcedimentOrdenacio.fechaActualizacion_asc});
+        procedimentCriteria.setOrdenar(new ProcedimentOrdenacio[] {ProcedimentOrdenacio.version_desc});
 
         List<ProcedimentQueryServiceAdapter> procediments = null;
         try {
@@ -256,6 +285,7 @@ public class RolsacQueryServiceTest {
         MateriaCriteria materiaCriteria = new MateriaCriteria();
         materiaCriteria.setT_nombre("%recerca%");
         materiaCriteria.setTamany("10");
+        materiaCriteria.setOrdenar(new MateriaOrdenacio[] {MateriaOrdenacio.id_desc});
         List<MateriaQueryServiceAdapter> materies = null;
         try {
             materies = rolsacQS.llistarMateries(materiaCriteria);
@@ -311,6 +341,7 @@ public class RolsacQueryServiceTest {
         tramitCriteria.setT_nombre("%sol·licitud%");
         tramitCriteria.setTamany("10");
         tramitCriteria.setIdioma("ca");
+        tramitCriteria.setOrdenar(new TramitOrdenacio[] {TramitOrdenacio.orden_desc});
         List<TramitQueryServiceAdapter> tramits = null;
         try {
             tramits = rolsacQS.llistarTramits(tramitCriteria);
@@ -348,6 +379,7 @@ public class RolsacQueryServiceTest {
         UnitatAdministrativaCriteria uaCriteria = new UnitatAdministrativaCriteria();
         uaCriteria.setT_nombre("%balears%");
         uaCriteria.setTamany("10");
+        uaCriteria.setOrdenar(new UnitatAdministrativaOrdenacio[] {UnitatAdministrativaOrdenacio.telefono_asc});
         List<UnitatAdministrativaQueryServiceAdapter> uas = null;
         try {
             uas = rolsacQS.llistarUnitatsAdministratives(uaCriteria);
@@ -387,6 +419,7 @@ public class RolsacQueryServiceTest {
         FetVitalCriteria fetVitalCriteria = new FetVitalCriteria();
         fetVitalCriteria.setT_palabrasclave("%matrimoni%");
         fetVitalCriteria.setIdioma("ca");
+        fetVitalCriteria.setOrdenar(new FetVitalOrdenacio[] {FetVitalOrdenacio.codigoEstandar_asc, FetVitalOrdenacio.id_desc});
         List<FetVitalQueryServiceAdapter> fetsVitals = null;
         try {
             fetsVitals = rolsacQS.llistarFetsVitals(fetVitalCriteria);
@@ -425,6 +458,7 @@ public class RolsacQueryServiceTest {
         fitxaCriteria.setT_titulo("%associacio%");
         fitxaCriteria.setTamany("10");
         fitxaCriteria.setIdioma("ca");
+        fitxaCriteria.setOrdenar(new FitxaOrdenacio[] {FitxaOrdenacio.fechaActualizacion_desc});
         List<FitxaQueryServiceAdapter> fitxes = null;
         try {
             fitxes = rolsacQS.llistarFitxes(fitxaCriteria);
@@ -479,6 +513,7 @@ public class RolsacQueryServiceTest {
         NormativaCriteria normativaCriteria = new NormativaCriteria();
         normativaCriteria.setT_titulo("%decret%");
         normativaCriteria.setTamany("10");
+        normativaCriteria.setOrdenar(new NormativaOrdenacio[] {NormativaOrdenacio.registro_asc});
         List<NormativaQueryServiceAdapter> normatives = null;
         try {
             normatives = rolsacQS.llistarNormatives(normativaCriteria);
@@ -516,6 +551,7 @@ public class RolsacQueryServiceTest {
         PersonalCriteria personalCriteria = new PersonalCriteria();
         personalCriteria.setNombre("%maria%");
         personalCriteria.setTamany("5");
+        personalCriteria.setOrdenar(new PersonalOrdenacio[] {PersonalOrdenacio.username_asc});
         List<PersonalQueryServiceAdapter> personal = null;
         try {
             personal = rolsacQS.llistarPersonal(personalCriteria);
@@ -552,6 +588,7 @@ public class RolsacQueryServiceTest {
         DocumentTramitCriteria documentTramitCriteria = new DocumentTramitCriteria();
         documentTramitCriteria.setT_titulo("%model%");
         documentTramitCriteria.setTamany("10");
+        documentTramitCriteria.setOrdenar(new DocumentTramitOrdenacio[] {DocumentTramitOrdenacio.tipus_asc, DocumentTramitOrdenacio.orden_desc});
         List<DocumentTramitQueryServiceAdapter> documentsTramit = null;
         try {
             documentsTramit = rolsacQS.llistarDocumentTramit(documentTramitCriteria);
@@ -588,6 +625,7 @@ public class RolsacQueryServiceTest {
         UsuariCriteria usuariCriteria = new UsuariCriteria();
         usuariCriteria.setNombre("%antonio%");
         usuariCriteria.setTamany("5");
+        usuariCriteria.setOrdenar(new UsuariOrdenacio[] {UsuariOrdenacio.username_asc});
         List<UsuariQueryServiceAdapter> usuaris = null;
         try {
             usuaris = rolsacQS.llistarUsuaris(usuariCriteria);
@@ -655,7 +693,8 @@ public class RolsacQueryServiceTest {
     public void recuperarAgrupacionsFetsVitals() {
         AgrupacioFetVitalCriteria afvCriteria = new AgrupacioFetVitalCriteria();
         afvCriteria.setT_palabrasclave("%prova%");
-        afvCriteria.setTamany("5");
+        afvCriteria.setTamany("30");
+        afvCriteria.setOrdenar(new AgrupacioFetVitalOrdenacio[] {AgrupacioFetVitalOrdenacio.codigoEstandar_desc});
         List<AgrupacioFetVitalQueryServiceAdapter> afvs = null;
         try {
             afvs = rolsacQS.llistarAgrupacionsFetsVitals(afvCriteria);
@@ -692,6 +731,7 @@ public class RolsacQueryServiceTest {
         AgrupacioMateriaCriteria amCriteria = new AgrupacioMateriaCriteria();
         amCriteria.setT_nombre("%cultura%");
         amCriteria.setTamany("5");
+        amCriteria.setOrdenar(new AgrupacioMateriaOrdenacio[] {AgrupacioMateriaOrdenacio.seccion_asc});
         List<AgrupacioMateriaQueryServiceAdapter> ams = null;
         try {
             ams = rolsacQS.llistarAgrupacionsMateries(amCriteria);
@@ -727,6 +767,7 @@ public class RolsacQueryServiceTest {
     public void recuperarButlletins() {
         ButlletiCriteria butlletiCriteria = new ButlletiCriteria();
         butlletiCriteria.setEnlace("%caib%");
+        butlletiCriteria.setOrdenar(new ButlletiOrdenacio[] {ButlletiOrdenacio.nombre_desc});
         List<ButlletiQueryServiceAdapter> butlletins = null;
         try {
             butlletins = rolsacQS.llistarButlletins(butlletiCriteria);
@@ -761,8 +802,9 @@ public class RolsacQueryServiceTest {
     @Test
     public void recuperarDocuments() {
         DocumentCriteria docCriteria = new DocumentCriteria();
-        docCriteria.setT_titulo("%decret%");
-        docCriteria.setTamany("5");
+//        docCriteria.setT_titulo("%decret%");
+        docCriteria.setTamany("10");
+        docCriteria.setOrdenar(new DocumentOrdenacio[] {DocumentOrdenacio.procedimiento_desc});
         List<DocumentQueryServiceAdapter> docs = null;
         try {
             docs = rolsacQS.llistarDocuments(docCriteria);
@@ -799,6 +841,7 @@ public class RolsacQueryServiceTest {
         EdificiCriteria edificiCriteria = new EdificiCriteria();
         edificiCriteria.setDireccion("%pl%");
         edificiCriteria.setTamany("5");
+        edificiCriteria.setOrdenar(new EdificiOrdenacio[] {EdificiOrdenacio.telefono_asc});
         List<EdificiQueryServiceAdapter> edificis = null;
         try {
             edificis = rolsacQS.llistarEdificis(edificiCriteria);
@@ -835,6 +878,7 @@ public class RolsacQueryServiceTest {
         EnllacCriteria enllacCriteria = new EnllacCriteria();
         enllacCriteria.setT_enlace("%caib%");
         enllacCriteria.setTamany("5");
+        enllacCriteria.setOrdenar(new EnllacOrdenacio[] {EnllacOrdenacio.orden_desc});
         List<EnllacQueryServiceAdapter> enllacos = null;
         try {
             enllacos = rolsacQS.llistarEnllacos(enllacCriteria);
@@ -871,6 +915,7 @@ public class RolsacQueryServiceTest {
         EspaiTerritorialCriteria etCriteria = new EspaiTerritorialCriteria();
         etCriteria.setT_nombre("%tramuntana%");
         etCriteria.setTamany("5");
+        etCriteria.setOrdenar(new EspaiTerritorialOrdenacio[] {EspaiTerritorialOrdenacio.id_desc});
         List<EspaiTerritorialQueryServiceAdapter> ets = null;
         try {
             ets = rolsacQS.llistarEspaisTerritorials(etCriteria);
@@ -906,6 +951,7 @@ public class RolsacQueryServiceTest {
     public void recuperarPublicsObjectius() {
         PublicObjectiuCriteria publicObjectiuCriteria = new PublicObjectiuCriteria();
         publicObjectiuCriteria.setT_titulo("%persones%");
+        publicObjectiuCriteria.setOrdenar(new PublicObjectiuOrdenacio[] {PublicObjectiuOrdenacio.codigoEstandar_asc});
         List<PublicObjectiuQueryServiceAdapter> pos = null;
         try {
             pos = rolsacQS.llistarPublicsObjectius(publicObjectiuCriteria);
@@ -939,7 +985,8 @@ public class RolsacQueryServiceTest {
      */
     @Test
     public void recuperarTipusAfectacions() {
-        TipusAfectacioCriteria tipusAfectacioCriteria = new TipusAfectacioCriteria();        
+        TipusAfectacioCriteria tipusAfectacioCriteria = new TipusAfectacioCriteria();
+        tipusAfectacioCriteria.setOrdenar(new TipusAfectacioOrdenacio[] {TipusAfectacioOrdenacio.id_asc});
         List<TipusAfectacioQueryServiceAdapter> tas = null;
         try {
             tas = rolsacQS.llistarTipusAfectacio(tipusAfectacioCriteria);
@@ -973,6 +1020,7 @@ public class RolsacQueryServiceTest {
         FamiliaCriteria familiaCriteria = new FamiliaCriteria();
         familiaCriteria.setT_nombre("%sancionadors%");
         familiaCriteria.setTamany("5");
+        familiaCriteria.setOrdenar(new FamiliaOrdenacio[] {FamiliaOrdenacio.id_asc});
         List<FamiliaQueryServiceAdapter> families = null;
         try {
             families = rolsacQS.llistarFamilies(familiaCriteria);
@@ -1009,6 +1057,7 @@ public class RolsacQueryServiceTest {
         FitxaUACriteria fitxaUACriteria = new FitxaUACriteria();
         fitxaUACriteria.setOrden("1");
         fitxaUACriteria.setTamany("5");
+        fitxaUACriteria.setOrdenar(new FitxaUAOrdenacio[] {FitxaUAOrdenacio.orden_asc, FitxaUAOrdenacio.id_desc});
         List<FitxaUAQueryServiceAdapter> fitxesUA = null;
         try {
             fitxesUA = rolsacQS.llistarFitxesUA(fitxaUACriteria);
@@ -1045,6 +1094,7 @@ public class RolsacQueryServiceTest {
         FormulariCriteria formulariCriteria = new FormulariCriteria();
         formulariCriteria.setNombre("%Instancia%");
         formulariCriteria.setTamany("5");
+        formulariCriteria.setOrdenar(new FormulariOrdenacio[] {FormulariOrdenacio.nombre_asc, FormulariOrdenacio.id_desc});
         List<FormulariQueryServiceAdapter> forms = null;
         try {
             forms = rolsacQS.llistarFormularis(formulariCriteria);
@@ -1080,6 +1130,7 @@ public class RolsacQueryServiceTest {
     public void recuperarIconesFamilies() {
         IconaFamiliaCriteria ifCriteria = new IconaFamiliaCriteria();
         ifCriteria.setTamany("3");
+        ifCriteria.setOrdenar(new IconaFamiliaOrdenacio[] {IconaFamiliaOrdenacio.id_desc});
         List<IconaFamiliaQueryServiceAdapter> iFams = null;
         try {
             iFams = rolsacQS.llistarIconesFamilies(ifCriteria);
@@ -1112,6 +1163,7 @@ public class RolsacQueryServiceTest {
     public void recuperarIconesMateries() {
         IconaMateriaCriteria imCriteria = new IconaMateriaCriteria();
         imCriteria.setTamany("3");
+        imCriteria.setOrdenar(new IconaMateriaOrdenacio[] {IconaMateriaOrdenacio.id_asc});
         List<IconaMateriaQueryServiceAdapter> iMats = null;
         try {
             iMats = rolsacQS.llistarIconesMateries(imCriteria);
@@ -1145,6 +1197,7 @@ public class RolsacQueryServiceTest {
         MateriaAgrupacioCriteria maCriteria = new MateriaAgrupacioCriteria();
         maCriteria.setOrden("3");
         maCriteria.setTamany("3");
+        maCriteria.setOrdenar(new MateriaAgrupacioOrdenacio[] {MateriaAgrupacioOrdenacio.orden_asc, MateriaAgrupacioOrdenacio.id_desc});
         List<MateriaAgrupacioQueryServiceAdapter> mas = null;
         try {
             mas = rolsacQS.llistarMateriesAgrupacions(maCriteria);
@@ -1180,6 +1233,7 @@ public class RolsacQueryServiceTest {
     public void recuperarPerfils() {
         PerfilCriteria perfilCriteria = new PerfilCriteria();
         perfilCriteria.setPathIconografia("%prova%");
+        perfilCriteria.setOrdenar(new PerfilOrdenacio[] {PerfilOrdenacio.id_desc});
         List<PerfilQueryServiceAdapter> perfils = null;
         try {
             perfils = rolsacQS.llistarPerfils(perfilCriteria);
@@ -1215,6 +1269,7 @@ public class RolsacQueryServiceTest {
     public void recuperarSeccions() {
         SeccioCriteria seccioCriteria = new SeccioCriteria();
         seccioCriteria.setT_nombre("%irlanda%");
+        seccioCriteria.setOrdenar(new SeccioOrdenacio[] {SeccioOrdenacio.codigoEstandard_asc});
         List<SeccioQueryServiceAdapter> seccions = null;
         try {
             seccions = rolsacQS.llistarSeccions(seccioCriteria);
@@ -1267,6 +1322,7 @@ public class RolsacQueryServiceTest {
         UnitatMateriaCriteria umCriteria = new UnitatMateriaCriteria();
         umCriteria.setUnidadPrincipal("S");
         umCriteria.setTamany("5");
+        umCriteria.setOrdenar(new UnitatMateriaOrdenacio[] {UnitatMateriaOrdenacio.unidadPrincipal_asc, UnitatMateriaOrdenacio.id_desc});
         List<UnitatMateriaQueryServiceAdapter> ums = null;
         try {
             ums = rolsacQS.llistarUnitatsMateries(umCriteria);
@@ -1303,6 +1359,7 @@ public class RolsacQueryServiceTest {
         TipusCriteria tnsCriteria = new TipusCriteria();
         tnsCriteria.setTamany("5");
         tnsCriteria.setT_nombre("%Llei%");
+        tnsCriteria.setOrdenar(new TipusOrdenacio[] {TipusOrdenacio.id_desc});
         List<TipusQueryServiceAdapter> tns = null;
         try {
             tns = rolsacQS.llistarTipus(tnsCriteria);
@@ -1336,6 +1393,7 @@ public class RolsacQueryServiceTest {
     public void llistarCatalegsDocuments() {
         CatalegDocumentsCriteria catalegDocumentsCriteria = new CatalegDocumentsCriteria();
         catalegDocumentsCriteria.setTamany("5");
+        catalegDocumentsCriteria.setOrdenar(new CatalegDocumentsOrdenacio[] {CatalegDocumentsOrdenacio.admResponsable_desc, CatalegDocumentsOrdenacio.id_asc});
         List<CatalegDocumentsQueryServiceAdapter> llistaCatDoc = null;
         try {
             llistaCatDoc = rolsacQS.llistarCatalegsDocuments(catalegDocumentsCriteria);
@@ -1386,6 +1444,7 @@ public class RolsacQueryServiceTest {
     public void llistarTipusIniciacions() {
         IniciacioCriteria iniciacioCriteria = new IniciacioCriteria();
         iniciacioCriteria.setTamany("5");
+        iniciacioCriteria.setOrdenar(new IniciacioOrdenacio[] {IniciacioOrdenacio.codigoEstandar_asc});
         List<IniciacioQueryServiceAdapter> llistaIni = null;
         try {
             llistaIni = rolsacQS.llistarTipusIniciacions(iniciacioCriteria);

@@ -365,22 +365,40 @@ public class BasicUtils {
         return defaultLanguage;
     }
 
+    @SuppressWarnings("finally")
     private static String controlOrdenar(BasicCriteria criteria) {
 
         String ordenaciones = new String();
         try {
             Method idGetter = criteria.getClass().getMethod("getOrdenar");
             Object[] objetos = (Object[]) idGetter.invoke(criteria);
-            for (Object objeto : objetos) {
-                ordenaciones = ordenaciones.concat(objeto.toString());
-                ordenaciones = ordenaciones.concat(",");
+
+            if (objetos == null) {
+                ordenaciones = criteria.getOrdenacio();
             }
-            if (ordenaciones != null) {
-                ordenaciones = ordenaciones.replaceAll("_", " ");
+
+            for (Object objeto : objetos) {
+                String[] aux = objeto.toString().split("_");
+                if (aux.length == 2) {
+                    ordenaciones = ordenaciones.concat(objeto.toString());
+                    ordenaciones = ordenaciones.replaceAll("_", " ");
+                    ordenaciones = ordenaciones.concat(",");
+
+                } else if (aux.length == 3) {
+                    ordenaciones = aux[0].concat(".").concat(aux[1]).concat(" ").concat(aux[2]);
+                    ordenaciones = ordenaciones.concat(",");
+
+                } else {
+                    log.error(objeto.toString() + ": Parametro no valido.");
+                }
+            }
+            
+            if (ordenaciones.length() > 0) {
                 ordenaciones = ordenaciones.substring(0, ordenaciones.length()-1);
                 ordenaciones = ordenaciones.toString();
                 criteria.setOrdenacio(ordenaciones);
             }
+
             Field field = criteria.getClass().getDeclaredField("ordenar");
             field.setAccessible(true);
             field.set(criteria, null);            
@@ -403,9 +421,9 @@ public class BasicUtils {
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
             ordenaciones = criteria.getOrdenacio();
-        } finally {}
-
-        return ordenaciones;
+        } finally {
+            return ordenaciones;
+        }
     }
 
 }

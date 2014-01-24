@@ -26,6 +26,8 @@ public class EdificiCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteri
 
     private java.lang.String t_descripcion;
 
+    private es.caib.rolsac.api.v2.edifici.EdificiOrdenacio[] ordenar;
+
     public EdificiCriteria() {
     }
 
@@ -43,7 +45,8 @@ public class EdificiCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteri
            java.lang.String fax,
            java.lang.String latitud,
            java.lang.String longitud,
-           java.lang.String t_descripcion) {
+           java.lang.String t_descripcion,
+           es.caib.rolsac.api.v2.edifici.EdificiOrdenacio[] ordenar) {
         super(
             id,
             idioma,
@@ -59,6 +62,7 @@ public class EdificiCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteri
         this.latitud = latitud;
         this.longitud = longitud;
         this.t_descripcion = t_descripcion;
+        this.ordenar = ordenar;
     }
 
 
@@ -241,6 +245,26 @@ public class EdificiCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteri
         this.t_descripcion = t_descripcion;
     }
 
+
+    /**
+     * Gets the ordenar value for this EdificiCriteria.
+     * 
+     * @return ordenar
+     */
+    public es.caib.rolsac.api.v2.edifici.EdificiOrdenacio[] getOrdenar() {
+        return ordenar;
+    }
+
+
+    /**
+     * Sets the ordenar value for this EdificiCriteria.
+     * 
+     * @param ordenar
+     */
+    public void setOrdenar(es.caib.rolsac.api.v2.edifici.EdificiOrdenacio[] ordenar) {
+        this.ordenar = ordenar;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof EdificiCriteria)) return false;
@@ -279,7 +303,10 @@ public class EdificiCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteri
               this.longitud.equals(other.getLongitud()))) &&
             ((this.t_descripcion==null && other.getT_descripcion()==null) || 
              (this.t_descripcion!=null &&
-              this.t_descripcion.equals(other.getT_descripcion())));
+              this.t_descripcion.equals(other.getT_descripcion()))) &&
+            ((this.ordenar==null && other.getOrdenar()==null) || 
+             (this.ordenar!=null &&
+              java.util.Arrays.equals(this.ordenar, other.getOrdenar())));
         __equalsCalc = null;
         return _equals;
     }
@@ -317,6 +344,17 @@ public class EdificiCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteri
         }
         if (getT_descripcion() != null) {
             _hashCode += getT_descripcion().hashCode();
+        }
+        if (getOrdenar() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getOrdenar());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getOrdenar(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -381,6 +419,13 @@ public class EdificiCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteri
         elemField.setXmlName(new javax.xml.namespace.QName("", "t_descripcion"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("ordenar");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "ordenar"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://edifici.v2.api.rolsac.caib.es", "EdificiOrdenacio"));
+        elemField.setNillable(true);
+        elemField.setItemQName(new javax.xml.namespace.QName("", "listaOrdenaciones"));
         typeDesc.addFieldDesc(elemField);
     }
 
