@@ -1056,8 +1056,9 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
 	public void indexBorraNormativa(Normativa nor)  {
-		
+
 		try {
+		    if (true) return;
 
 			for (Iterator iterator = nor.getLangs().iterator(); iterator.hasNext();) {
 				String idi = (String) iterator.next();

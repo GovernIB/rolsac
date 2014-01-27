@@ -28,7 +28,6 @@ import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
 import net.sf.hibernate.expression.Expression;
 import net.sf.hibernate.expression.Order;
 
@@ -51,7 +50,6 @@ import org.ibit.lucene.indra.model.TraModelFilterObject;
 import org.ibit.rol.sac.model.AdministracionRemota;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Auditoria;
-import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.Ficha;
@@ -1965,9 +1963,9 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
 	public void indexBorraFicha(Long id)  {
-		
-		
+
 		try {
+		    if (true) return;
 
 			List langs = DelegateUtil.getIdiomaDelegate().listarLenguajes();
 			for (int i = 0; i < langs.size(); i++) {

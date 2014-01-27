@@ -2388,6 +2388,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	public void indexBorraProcedimiento(ProcedimientoLocal pro)  {
 
 		try {
+		    if (true) return;
 
 			for (Iterator iterator = pro.getLangs().iterator(); iterator.hasNext();) {
 				String idi = (String) iterator.next();

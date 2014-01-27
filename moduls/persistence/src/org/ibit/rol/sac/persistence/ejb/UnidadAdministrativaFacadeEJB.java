@@ -2091,9 +2091,9 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
      * @ejb.permission unchecked="true"
      */
 	public void indexBorraUA(Long id)  {
-		
-		
+
 		try {
+		    if (true) return;
 
 			List langs = DelegateUtil.getIdiomaDelegate().listarLenguajes();
 			for (int i = 0; i < langs.size(); i++) {
