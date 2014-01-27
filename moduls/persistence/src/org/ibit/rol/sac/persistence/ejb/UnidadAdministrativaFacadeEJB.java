@@ -2020,8 +2020,9 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
      * @ejb.permission unchecked="true"
      */
     public void indexInsertaUA(UnidadAdministrativa ua,  ModelFilterObject filter)  {
-		
+
     	try {
+    	    if (true) return;
 
 	    	if (filter==null) filter = obtenerFilterObject(ua);
 			

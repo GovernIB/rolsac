@@ -973,8 +973,9 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
     public void indexInsertaNormativa(Normativa norma, ModelFilterObject filter)  {
-    	
+
     	try {
+    	    if (true) return;
 
 	    	if (filter==null) filter = obtenerFilterObject(norma);
 	    	

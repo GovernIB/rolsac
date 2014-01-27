@@ -2208,14 +2208,16 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	
 	
     /**
-     * A�ade los procedimientos al indice en todos los idiomas
+     * Añaade los procedimientos al indice en todos los idiomas
      * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
     public void indexInsertaProcedimiento(ProcedimientoLocal proc, ModelFilterObject filter)  {
-    	
+
     	try {
+    	    if (true) return;
+
     		if (proc.getValidacion().equals(2)) return;
     		
     		proc = obtenerProcedimientoNewBack(proc.getId()); 

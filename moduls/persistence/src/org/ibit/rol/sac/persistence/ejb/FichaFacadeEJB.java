@@ -1805,9 +1805,10 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
     public void indexInsertaFicha(Ficha ficha,  ModelFilterObject filter)  {
-		
-    	try {
 
+    	try {
+    	    if (true) return;
+    	    
 	    	if (ficha.getValidacion().equals(2)) return;
     		
 	    	if (filter==null) filter = obtenerFilterObject(ficha);

@@ -438,30 +438,31 @@
     </jar>
 </target>
 	
-  <!-- ================================================================== -->
-  <!-- main                                                                                                                              -->
-  <!-- ================================================================== -->
-  
-	  <target name="main01ROLSAC" depends="prepare" description="Realiza todo el proceso de construccin de ROLSAC">
-
-	  	<fail unless="project.author" message="Et falta definir la propietat project.author"/>
-	  	<fail unless="deploy.dir" message="Et falta definir la propietat deploy.dir"/>
-	  	
+	<!-- ================================================================== -->
+	<!-- main                                                               -->
+	<!-- ================================================================== -->
+	
+	<target name="main01ROLSAC" depends="prepare" description="Realiza todo el proceso de construccin de ROLSAC">
+		
+		<fail unless="project.author" message="Et falta definir la propietat project.author"/>
+		<fail unless="deploy.dir" message="Et falta definir la propietat deploy.dir"/>
+		
 		<echo>
-		   Version: ${rolsac.target}
-		   Author: ${project.author}
-		   Compiler: ${java.version}
-		   Ant: ${ant.home}
+			Version: ${rolsac.target}
+			Author: ${project.author}
+			Compiler: ${java.version}
+			Ant: ${ant.home}
 		</echo>
-
-	  	
-		 <antcall target="propagate01ROLSAC">
-	          <param name="task" value="main"/>
-	       </antcall>
-	  
-	      <antcall target="assemble01ROLSAC"/>
-	      <antcall target="deploy01ROLSAC"/>
-	  </target>	
+		
+		<antcall target="clean" />
+		
+		<antcall target="propagate01ROLSAC">
+			<param name="task" value="main" />
+		</antcall>
+		
+		<antcall target="assemble01ROLSAC" />
+		<antcall target="deploy01ROLSAC" />
+	</target>	
 
   <!-- ================================================================== -->
   <!-- propagate                                                                                                                     -->
