@@ -291,7 +291,7 @@ public class Traductor extends AutomaticTranslationService implements Traduccion
 				_markAlternatives = ACTIVE;
 				
 			} else {
-				hasToAddTagsToTranslate = !textTraduccio.startsWith("<p>");
+//				hasToAddTagsToTranslate = !textTraduccio.startsWith("<p>");
 				if (hasToAddTagsToTranslate) {
 					textTraduccio = montarTranslate(textTraduccio);
 				}
