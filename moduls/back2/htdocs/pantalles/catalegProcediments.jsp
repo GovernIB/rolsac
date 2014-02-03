@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="rol" uri="/WEB-INF/rol.tld" %>
@@ -247,7 +248,7 @@
                 }
         },
 
-        // Plazo m?ximo para resoluci?n (Catal?n)
+        // Plazo máximo para resolución (Catalán)
         {
             "modo": "individual",
             "etiqueta": "id",
@@ -266,7 +267,7 @@
                 }
         },
         
-        // Plazo m?ximo para la notificaci?n (Catal?n)
+        // Plazo máximo para la notificaci?n (Catal?n)
         {
             "modo": "individual",
             "etiqueta": "id",
@@ -345,7 +346,7 @@
     
     var FormulariTramits = [                            
 		{	
-			// Nom del tr?mit 
+			// Nom del tràmit 
             "modo": "individual",
             "etiqueta": "id",
             "etiquetaValor": "item_nom_tramit_" + '<c:out value="${idiomaVal}"/>',
@@ -364,7 +365,7 @@
                 }			
 		},
 						
-        // Identificador tr?mit telem?tic
+        // Identificador tràmit telemàtic
         {
             "modo": "individual",
             "etiqueta": "id",
@@ -377,9 +378,9 @@
                 }
         },
         
-        //Validaci?
+        //Validació
 		{	
-			// Nom del tr?mit 
+			// Nom del tràmit 
             "modo": "individual",
             "etiqueta": "id",
             "etiquetaValor": "item_validacio_tramit",
@@ -632,73 +633,7 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <%--
-                        <div class="fila">                                                                                
-                            <div class="element t21">
-                                <div class="etiqueta">
-                                    <label for="cerca_versio"><spring:message code='camp.versioTramit'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="cerca_versio" name="cerca_versio" type="text"/>
-                                </div>
-                            </div>
-                            <div class="element t21">
-                                <div class="etiqueta">
-                                    <label for="cerca_url"><spring:message code='camp.urlTramitExtern'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="cerca_url" name="cerca_url" type="text"/>
-                                </div>
-                            </div>
-                            <div class="element t21">
-                                <div class="etiqueta">
-                                    <label for="cerca_taxa"><spring:message code='camp.taxa'/></label>
-                                </div>
-                                <div class="control">
-                                    <select id="cerca_taxa" name="cerca_taxa" class="t8">
-                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
-                                        <option value="0">No</option>
-                                        <option value="1">S?</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="element t21">
-                                <div class="etiqueta">
-                                    <label for="cerca_responsable"><spring:message code='unitatadm.formulari.responsable'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="cerca_responsable" name="cerca_responsable" type="text"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="fila">
-                            <div class="element t21">
-                                <div class="etiqueta">
-                                    <label for="cerca_fechaCaducidad"><spring:message code='camp.dataCaducitat'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="cerca_fechaCaducidad" name="cerca_fechaCaducidad" type="text" readonly="readonly"/>
-                                </div>
-                            </div>
-                            <div class="element t21">
-                                <div class="etiqueta">
-                                    <label for="cerca_fechaPublicacion"><spring:message code='camp.dataPublicacio'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="cerca_fechaPublicacion" name="cerca_fechaPublicacion" type="text" readonly="readonly"/>
-                                </div>
-                            </div>
-                            <div class="element t21">
-                                <div class="etiqueta">
-                                    <label for="cerca_fechaActualizacion"><spring:message code='camp.dataActualitzacio'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="cerca_fechaActualizacion" name="cerca_fechaActualizacion" type="text" readonly="readonly"/>
-                                </div>
-                            </div>                            
-                        </div>
-                        --%>                                                
+
                         <div class="fila">                            
                             <div class="botonera noClear">
                                 <div class="boton btnGenerico">

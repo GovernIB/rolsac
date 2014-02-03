@@ -424,8 +424,14 @@ public class NormativaBackController extends PantallaBaseController {
             if (normativaLocal) {
                 normativaDetall.put("tipologia", "L");
                 NormativaLocal normLoc = (NormativaLocal) normativa;
-                normativaDetall.put("idUA", normLoc.getUnidadAdministrativa().getId());
-                normativaDetall.put("nomUA", normLoc.getUnidadAdministrativa().getNombreUnidadAdministrativa());
+                if (normLoc.getUnidadAdministrativa() != null) {
+                    normativaDetall.put("idUA", normLoc.getUnidadAdministrativa().getId());
+                    normativaDetall.put("nomUA", normLoc.getUnidadAdministrativa().getNombreUnidadAdministrativa());
+                } else {
+                    normativaDetall.put("idUA", null);
+                    normativaDetall.put("nomUA", null);
+                }
+                
             } else {
                 normativaDetall.put("tipologia", "E");
                 normativaDetall.put("idUA", null);
