@@ -1967,6 +1967,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	public void indexInsertaProcedimiento(ProcedimientoLocal proc, ModelFilterObject filter)  {
 
 		try {
+		    if (true) return;
 
 			if ( proc.getValidacion().equals(2) ) 
 				return;
@@ -2219,22 +2220,18 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	public void indexBorraProcedimiento(ProcedimientoLocal procedimiento)  {
 
 		try {
+		    if (true) return;
 
 			Iterator iterator = procedimiento.getLangs().iterator();
 			while ( iterator.hasNext() ) {
-
 				String idi = (String) iterator.next();
 				DelegateUtil.getIndexerDelegate().borrarObjeto( tipoProcedimiento( procedimiento, false ) + "." + procedimiento.getId(), idi );
 				DelegateUtil.getIndexerDelegate().borrarObjetosDependientes( tipoProcedimiento( procedimiento, false ) + "." + procedimiento.getId(), idi );
-
 			}
 
 		} catch (DelegateException ex) {
-
 			log.warn( "[indexBorraProcedimiento:" + procedimiento.getId() + "] No se ha podido borrar del indice el procedimiento. " + ex.getMessage() );
-
 		}
-
 	}
 
 

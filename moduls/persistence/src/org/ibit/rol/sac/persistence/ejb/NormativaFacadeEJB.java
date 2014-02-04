@@ -968,6 +968,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	public void indexInsertaNormativa(Normativa norma, ModelFilterObject filter)  {
 
 		try {
+		    if (true) return;
 
 			if (filter==null) filter = obtenerFilterObject(norma);
 
@@ -1050,6 +1051,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	public void indexBorraNormativa(Normativa nor)  {
 
 		try {
+		    if (true) return;
 
 			for (Iterator iterator = nor.getLangs().iterator(); iterator.hasNext();) {
 				String idi = (String) iterator.next();
@@ -1058,8 +1060,8 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 				if (nor instanceof NormativaExterna) 
 					DelegateUtil.getIndexerDelegate().borrarObjeto(Catalogo.SRVC_NORMATIVA_EXTERNA + "." + nor.getId(), idi);
 			}
-
 		}
+
 		catch (DelegateException ex) {
 			log.warn("[indexBorraNormativa:" + nor.getId() + "] No se ha podido borrar del indice la normativa. " + ex.getMessage());
 		}		        

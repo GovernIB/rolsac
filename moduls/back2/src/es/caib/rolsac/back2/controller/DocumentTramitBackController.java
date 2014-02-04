@@ -44,7 +44,7 @@ import es.caib.rolsac.back2.util.UploadUtil;
 import es.indra.rol.sac.integracion.traductor.Traductor;
 
 /**
- * Servlet para la gesti�n de documentos y formularios de un tr�mite.
+ * Servlet para la gestión de documentos y formularios de un tr�mite.
  */
 @Controller
 @RequestMapping("/documentsTramit/")
@@ -54,17 +54,16 @@ public class DocumentTramitBackController extends ArchivoController {
 
     private MessageSource messageSource = null;
 
-
     @Autowired
     public void setMessageSource(MessageSource messageSource) {
+
         this.messageSource = messageSource;
     }
-
 
     @RequestMapping(value = "/carregarDocumentTramit.do")
     public @ResponseBody
     Map<String, Object> carregarDocument(HttpServletRequest request) {
-        
+
         Map<String, Object> resultats = new HashMap<String, Object>();
 
         try {
@@ -104,7 +103,7 @@ public class DocumentTramitBackController extends ArchivoController {
                     }
                 }
             }
-            
+
             mapDoc.put("item_id", doc.getId());
             resultats.put("documentTramit", mapDoc);
             resultats.put("id", doc.getId());
@@ -124,7 +123,6 @@ public class DocumentTramitBackController extends ArchivoController {
 
         return resultats;
     }
-
 
     @RequestMapping(value = "/guardarDocumentTramit.do", method = POST)
     public ResponseEntity<String> guardarDocument(HttpServletRequest request, HttpSession session) {
@@ -161,7 +159,7 @@ public class DocumentTramitBackController extends ArchivoController {
 
             // Recuperamos el documento antiguo en caso de que se trate de una
             // modificación
-            DocumentTramit documentTramitOld = recuperarDocOld(valoresForm);
+            DocumentTramit documentTramitOld = recuperarDocOld(valoresForm, idDocument);
             // DocumentTramit documentTramitOld = tramiteDelegate.obtenirDocument(Long.parseLong(valoresForm.get(idDocument)));
 
             // Copiamos la información deseada al nuevo documento
@@ -203,7 +201,6 @@ public class DocumentTramitBackController extends ArchivoController {
         }
 
         return new ResponseEntity<String>(jsonResult, responseHeaders, HttpStatus.CREATED);
-
     }
 
     /** Aquí nos llegará un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
@@ -211,7 +208,7 @@ public class DocumentTramitBackController extends ArchivoController {
      */
     private void recuperarForms(HttpServletRequest request, Map<String, String> valoresForm,
         Map<String, FileItem> ficherosForm) throws UnsupportedEncodingException, FileUploadException {
-        
+
         List<FileItem> items = UploadUtil.obtenerServletFileUpload().parseRequest(request);
         for (FileItem item : items) {
             if (item.isFormField()) {
@@ -223,22 +220,22 @@ public class DocumentTramitBackController extends ArchivoController {
     }
 
     /** Vemos si se debe recuperar el documento viejo */
-    private DocumentTramit recuperarDocOld(Map<String, String> valoresForm) throws DelegateException {
-        
+    private DocumentTramit recuperarDocOld(Map<String, String> valoresForm, String idDocument) throws DelegateException {
+
         TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
         DocumentTramit docOld = null;
-        if (valoresForm.get("idDocument") != null && !"".equals(valoresForm.get("idDocument"))) {
-            Long docId = Long.parseLong(valoresForm.get("idDocument"));
+        if (valoresForm.get(idDocument) != null && !"".equals(valoresForm.get(idDocument))) {
+            Long docId = Long.parseLong(valoresForm.get(idDocument));
             docOld = tramiteDelegate.obtenirDocument(docId);
         }
-        
+
         return docOld;
     }
 
     /** Recuperamos la información antigua si el documento ya existia */
     private DocumentTramit recuperarInformacionDocumento(Map<String, String> valoresForm,
         DocumentTramit documentTramitOld, int tipoDoc, String idTag) throws DelegateException {
-        
+
         String idDocument = tipoDoc == 0 ? "docTramitId" : "formTramitId";
         DocumentTramit documentTramit = new DocumentTramit();
         documentTramit.setTipus(tipoDoc);
@@ -259,7 +256,7 @@ public class DocumentTramitBackController extends ArchivoController {
     /** Gestión de las traducciones y los archivos */
     private DocumentTramit gestionarTraducciones(Map<String, String> valoresForm, Map<String, FileItem> ficherosForm,
         List<Long> archivosAborrar, DocumentTramit docOld, DocumentTramit doc, String tipoTag) throws DelegateException {
-        
+
         String tituloTag = tipoTag + "_tramit_titol_";
         String descripcionTag = tipoTag + "_tramit_descripcio_";
         String archivoTag = tipoTag + "_tramit_arxiu_";
@@ -276,7 +273,7 @@ public class DocumentTramitBackController extends ArchivoController {
                 // En caso de que el documento ya exista y se quiera cambiar el archivo adjunto
                 if (docOld != null) {
                     TraduccionDocumento traDocOld = (TraduccionDocumento) docOld.getTraduccion(lang);
-                    if (traDocOld.getArchivo() != null) {
+                    if (traDocOld != null && traDocOld.getArchivo() != null) {
                         archivosAborrar.add(traDocOld.getArchivo().getId());
                     }
                 }
@@ -308,7 +305,7 @@ public class DocumentTramitBackController extends ArchivoController {
     /** Guardado del documento */
     private String guardarDocumento(Map<String, String> valoresForm, String iden, Locale locale,
         List<Long> archivosBorrar, DocumentTramit documentTramit) throws DelegateException {
-        
+
         String jsonResult = null;
         Long docTramitId = null;
         if (valoresForm.get(iden) != null && !"".equals(valoresForm.get(iden))) {
@@ -331,18 +328,15 @@ public class DocumentTramitBackController extends ArchivoController {
         return jsonResult;
     }
 
-
     @RequestMapping(value = "/archivo.do")
-    public void devolverArchivoDocumentoTramite(HttpServletRequest request, HttpServletResponse response)
-        throws Exception {
-        
+    public void devolverArchivoDocumentoTramite(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
         this.devolverArchivo(request, response);
     }
 
-
     @Override
     public Archivo obtenerArchivo(HttpServletRequest request) throws Exception {
-        
+
         // obtener archivo concreto con el delegate
         Long id = new Long(request.getParameter("id"));
         String lang = request.getParameter("lang");
@@ -350,11 +344,10 @@ public class DocumentTramitBackController extends ArchivoController {
         return docDelegate.obtenerArchivoDocumentoTramite(id, lang, false);
     }
 
-
     @RequestMapping(value = "/traduir.do")
     public @ResponseBody
     Map<String, Object> traduir(HttpServletRequest request) {
-        
+
         Map<String, Object> resultats = new HashMap<String, Object>();
 
         try {
@@ -385,7 +378,6 @@ public class DocumentTramitBackController extends ArchivoController {
         return resultats;
     }
 
-
     /**
      * Recuperación de los campos de los documentos según el tipo de documento 
      * @param request
@@ -393,7 +385,7 @@ public class DocumentTramitBackController extends ArchivoController {
      * @return devuelve un traduccionDocumento
      */
     private TraduccionDocumento getTraduccionOrigen(HttpServletRequest request, String idiomaOrigenTraductor) {
-        
+
         TraduccionDocumento traduccioOrigen = new TraduccionDocumento();
 
         if (StringUtils.isNotEmpty(request.getParameter("form_tramit_titol_" + idiomaOrigenTraductor))) {

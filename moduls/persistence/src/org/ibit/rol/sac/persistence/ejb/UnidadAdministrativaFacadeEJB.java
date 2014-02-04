@@ -1506,6 +1506,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	public void indexInsertaUA(UnidadAdministrativa unidadAdministrativa,  ModelFilterObject filter)  {
 
 		try {
+		    if (true) return;
 
 			if ( filter == null ) filter = obtenerFilterObject(unidadAdministrativa);
 
@@ -1593,15 +1594,16 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	public void indexBorraUA(Long id)  {
 
 		try {
+		    if (true) return;
 
 			List langs = DelegateUtil.getIdiomaDelegate().listarLenguajes();
-			for ( int i = 0 ; i < langs.size() ; i++ )
-				DelegateUtil.getIndexerDelegate().borrarObjeto( Catalogo.SRVC_UO + "." + id, "" + langs.get(i) );
+			for (int i = 0 ; i < langs.size() ; i++) {
+			    DelegateUtil.getIndexerDelegate().borrarObjeto( Catalogo.SRVC_UO + "." + id, "" + langs.get(i) );
+			}
 
 		} catch (DelegateException ex) {
 			log.warn( "[indexBorraFicha:" + id + "] No se ha podido borrar del indice la ficha. " + ex.getMessage() );
 		}
-
 	}
 
 	/* ================================================ */

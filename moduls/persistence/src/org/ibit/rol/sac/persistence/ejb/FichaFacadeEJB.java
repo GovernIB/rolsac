@@ -1735,23 +1735,17 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     public void indexBorraFicha(Long id)  {
 
     	try {
+    	    if (true) return;
 
     		List langs = DelegateUtil.getIdiomaDelegate().listarLenguajes();
-
     		for ( int i = 0 ; i < langs.size() ; i++ ) {
-
     			DelegateUtil.getIndexerDelegate().borrarObjeto( Catalogo.SRVC_FICHAS + "." + id, "" + langs.get(i) );
     			DelegateUtil.getIndexerDelegate().borrarObjetosDependientes(Catalogo.SRVC_FICHAS + "." + id, ""+langs.get(i));
-
     		}
 
     	} catch (DelegateException ex) {
-
     		log.warn( "[indexBorraFicha:" + id + "] No se ha podido borrar del indice la ficha. " + ex.getMessage() );
-
     	}
-
-
     }
 
     /**
@@ -1764,6 +1758,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     public void indexInsertaWEB_EXTERNA(Ficha ficha,  ModelFilterObject filter, String idi)  {
 
     	try {
+    	    if (true) return;
 
     		IndexObject io= new IndexObject();
 

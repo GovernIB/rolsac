@@ -29,9 +29,9 @@
 	   es.caib.rolsac.back2.urlSortir=http://intranet.caib.es
 	   
 	   <!-- urls per les previsualitzacions -->
-	   es.caib.rolsac.previsualitzacio.procediment.url=http://www.caib.es/govern/sac/visor_proc.do
-	   es.caib.rolsac.previsualitzacio.fitxa.url=http://www.caib.es/govern/sac/fitxa.do
-	   es.caib.rolsac.previsualitzacio.ua.url=http://www.caib.es/govern/organigrama/area.do
+	   es.caib.rolsac.previsualitzacio.procediment.url=http://sdesapplin12.caib.es:28080/seucaib/__lang__/__po_id__/__po_nombre__/tramites/tramite/__id__
+       es.caib.rolsac.previsualitzacio.fitxa.url=http://sdesapplin12.caib.es:28080/seucaib/__lang__/fichainformativa/__id__
+       es.caib.rolsac.previsualitzacio.ua.url=http://sdesapplin12.caib.es:28080/seucaib/__lang__/organigrama/__id__
 	   
 	   <!-- API -->
        es.caib.rolsac.api.v2.idiomaPerDefecte=ca
