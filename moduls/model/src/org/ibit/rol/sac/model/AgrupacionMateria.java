@@ -56,5 +56,6 @@ public class AgrupacionMateria extends Traducible {
 	
 	public void setSeccion(Seccion seccion) {
 		this.seccion = seccion;
-	}	
+	}
+	
 }

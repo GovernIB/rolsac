@@ -748,7 +748,7 @@
                     </div>
                 </fieldset>
             </div>
-            <div class="modul" id="modul_materies">
+            <div class="modul invisible" id="modul_materies">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                     <legend><spring:message code='unitatadm.formulari.materies'/></legend>
@@ -809,7 +809,7 @@
                     </div>                              
                 </fieldset>                     
             </div>
-            <div class="modul" id="modul_edificis">                     
+            <div class="modul invisible" id="modul_edificis">                     
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
                     <legend><spring:message code='unitatadm.formulari.edificis'/></legend>                               
@@ -834,7 +834,7 @@
                     </div>                              
                 </fieldset>                     
             </div>
-            <div class="modul" id="modul_usuaris">
+            <div class="modul invisible" id="modul_usuaris">
             	<fieldset>
             		<a class="modul mostrat"><spring:message code='txt.amaga'/></a>
             		<legend><spring:message code='unitatadm.formulari.usuaris'/></legend>
@@ -1809,6 +1809,7 @@
         var noUnitat="<spring:message code='unitatadm.noUnitat'/>";
         var pagLlistat = '<c:url value="/unitatadm/unitatadm.do" />';
         var pagLlistat2 = '<c:url value="/unidadAdministrativa/cambiarUA.do" />';
+        var modulos = '<c:url value="/unitatadm/modulos.do" />';
         
         var pagDetall = '<c:url value="/unitatadm/pagDetall.do" />';
         var pagEdificis = '<c:url value="/edificis/llistat.do" />';

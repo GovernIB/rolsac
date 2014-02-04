@@ -44,6 +44,7 @@
    var pagEstadistiques = '<c:url value="/estadistiques/grafica.do" />';
    var pagTraduir = '<c:url value="/fitxainf/traduir.do" />';
    var pagTraduirDocument = '<c:url value="/documents/traduir.do" />';
+   var modulos = '<c:url value="/fitxainf/modulos.do" />';
 
    var urlPrevisualizarFicha = '<c:out value="${urlPrevisualitzacio}"/>';
    
@@ -870,7 +871,7 @@
             <!-- /modul -->
                                     
             <!-- modul -->
-            <div class="modul">
+            <div class="modul invisible">
             	<input type="hidden" id="llistaMateries" name="materies" value=""/>
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
@@ -920,7 +921,7 @@
             <!-- /modul -->
                                     
             <!-- modul -->
-            <div class="modul">
+            <div class="modul invisible">
             	<input type="hidden" id="llistaFetsVitals" name="fetsVitals" value=""/>
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
@@ -970,7 +971,7 @@
             <!-- /modul -->
             
             <!-- modul -->
-            <div class="modul" id="modul_documents">
+            <div class="modul invisible" id="modul_documents">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                     <legend><spring:message code='document.documentsRelacionats'/></legend>                               
@@ -1073,7 +1074,7 @@
             </div>
             <!-- /modul -->
             <!-- modul -->
-            <div class="modul">                     
+            <div class="modul invisible">                     
                 <fieldset>                                  
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
                     <legend><spring:message code='fitxes.enllasos_relacionats'/></legend>                               

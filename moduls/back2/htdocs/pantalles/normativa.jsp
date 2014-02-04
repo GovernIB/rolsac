@@ -34,6 +34,7 @@
         var pagArrel = '<c:url value="/" />';
       	var pagNormativa = '<c:url value="/normativa/cercarNormatives.do" />';
       	var pagTraduirNormativa = '<c:url value="/normativa/traduir.do" />';
+      	var modulos = '<c:url value="/normativa/modulos.do" />';
         
         var idUaActual = '<c:out value="${idUA}" />';
         var nomUaActual = '<c:out value="${nomUA}" />';        
@@ -1460,7 +1461,7 @@
         //}
         %>
         <!-- modul -->
-        <div class="modul" id="modulDocumentNormativa">
+        <div class="modul invisible" id="modulDocumentNormativa">
             <fieldset>
                 <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                 <legend><spring:message code='document.documentsRelacionats'/></legend>                               
@@ -1593,7 +1594,7 @@
         <!-- modul -->      
         <input type="hidden" id="item_tipologia" name="item_tipologia" />
         
-        <div class="modul" id="modul_procediments">
+        <div class="modul invisible" id="modul_procediments">
             <fieldset>
                 <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                 <legend><spring:message code='txt.procediments_relacionats'/></legend>
@@ -1613,7 +1614,7 @@
         </div>
         <!-- /modul -->
         <!-- modul -->
-        <div class="modul" id="modul_afectacions">
+        <div class="modul invisible" id="modul_afectacions">
             <input type="hidden" id="afectaciones" name="afectaciones" value=""/>
             <fieldset>
                 <a class="modul amagat"><spring:message code='txt.mostra'/></a>

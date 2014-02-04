@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.IconoMateria;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.MateriaAgrupacionM;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -22,6 +23,9 @@ public interface MateriaDelegateI
 			throws DelegateException;
 	
 	public abstract Materia obtenerMateria(Long id)
+			throws DelegateException;
+	
+	public abstract List<IconoMateria> obtenerIconosPerfil(Long id)
 			throws DelegateException;
 	
 	public abstract void borrarMateria(Long id)

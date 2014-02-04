@@ -23,7 +23,6 @@ import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.Traduccion;
-import org.ibit.rol.sac.model.TraduccionExcepcioDocumentacio;
 import org.ibit.rol.sac.model.TraduccionFicha;
 import org.ibit.rol.sac.model.TraduccionSeccion;
 import org.ibit.rol.sac.model.TraduccionUA;
@@ -31,7 +30,6 @@ import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
-import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
 import org.ibit.rol.sac.persistence.delegate.SeccionDelegate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -184,12 +182,12 @@ public class TMSeccionsController extends PantallaBaseController
     
     
     @RequestMapping(value = "/pagDetall.do")
-	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request)
+	public @ResponseBody Map<String, Object> recuperaDetall(Long id, HttpServletRequest request)
 	{
     	Map<String, Object> resultats = new HashMap<String, Object>();
 	    
 	    try {
-	        Long id = new Long(request.getParameter("id"));
+	    	
 	        SeccionDelegate seccionDelegate = DelegateUtil.getSeccionDelegate();
 	        Seccion seccio = seccionDelegate.obtenerSeccion(id);
 	        
@@ -216,36 +214,6 @@ public class TMSeccionsController extends PantallaBaseController
             resultats.put("item_codi_pare", idPadre);
             resultats.put("item_pare", nomPadre);
             resultats.put("item_codi_estandard", seccio.getCodigoEstandard());
-            
-            // Seccions relacionades
-            if (seccio.getHijos() != null) {
-            	Map<String, String> map;
-            	List<Map<String, String>> llistaSeccions = new ArrayList<Map<String, String>>();
-            	TraduccionSeccion traSec;
-				String nombre;
-                
-				for (Iterator<Seccion> it = seccio.getHijos().iterator(); it.hasNext();) {
-					Seccion seccion = it.next();
-					
-					if (seccion != null) {
-						traSec = (TraduccionSeccion) seccion.getTraduccion(lang);
-						nombre = "";
-	    				if (traSec != null) {
-	    					//Retirar posible enlace incrustado en titulo
-	    					nombre = HtmlUtils.obtenerTituloDeEnlaceHtml(traSec.getNombre());
-	    				}
-	    				map = new HashMap<String, String>(2);
-	    				map.put("id", seccion.getId().toString());
-	    				map.put("nombre", nombre);
-	    				map.put("orden", String.valueOf(seccion.getOrden()));
-	    				llistaSeccions.add(map);
-					}
-				}
-				resultats.put("seccionsRelacionades", llistaSeccions);
-            } else {
-                resultats.put("seccionsRelacionades", null);
-            }
-            // Fi Seccions relacionades
             
             // Fitxes informatives relacionades
             if (seccio.getFichasUA() != null) {
@@ -305,7 +273,64 @@ public class TMSeccionsController extends PantallaBaseController
 		}
 	    
         return resultats;
+        
 	}
+    
+    
+    @RequestMapping(value = "/modulos.do")
+   	public @ResponseBody Map<String, Object> recuperaModulos(Long id, HttpServletRequest request) {
+   		
+   		Map<String, Object> resultats = new HashMap<String, Object>();
+   		
+   		try {
+   			
+	        String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+	        SeccionDelegate seccionDelegate = DelegateUtil.getSeccionDelegate();
+	        Seccion seccio = seccionDelegate.obtenerSeccion(id);
+   			
+            if (seccio.getHijos() != null) {
+            	Map<String, String> map;
+            	List<Map<String, String>> llistaSeccions = new ArrayList<Map<String, String>>();
+            	TraduccionSeccion traSec;
+				String nombre;
+                
+				for (Iterator<Seccion> it = seccio.getHijos().iterator(); it.hasNext();) {
+					Seccion seccion = it.next();
+					
+					if (seccion != null) {
+						traSec = (TraduccionSeccion) seccion.getTraduccion(lang);
+						nombre = "";
+	    				if (traSec != null) {
+	    					//Retirar posible enlace incrustado en titulo
+	    					nombre = HtmlUtils.obtenerTituloDeEnlaceHtml(traSec.getNombre());
+	    				}
+	    				map = new HashMap<String, String>(2);
+	    				map.put("id", seccion.getId().toString());
+	    				map.put("nombre", nombre);
+	    				map.put("orden", String.valueOf(seccion.getOrden()));
+	    				llistaSeccions.add(map);
+					}
+				}
+				resultats.put("seccionsRelacionades", llistaSeccions);
+            } else {
+                resultats.put("seccionsRelacionades", null);
+            }
+   			
+   		} catch (DelegateException dEx) {
+
+   			log.error(ExceptionUtils.getStackTrace(dEx));
+   			
+   			if (dEx.isSecurityException())
+   				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+   			
+   			else
+   				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+   			
+   		}
+   		
+   		return resultats;
+   		
+   	}
     
     // Devuelve lista de unidades administrativas materias (id uamateria y nombre ua).  
     private List<Map<String, String>> getJSONPerfiles(HttpServletRequest request) {

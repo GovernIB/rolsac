@@ -142,19 +142,42 @@ public class TMFamiliaController extends PantallaBaseController
 	
 	
 	@RequestMapping(value = "/pagDetall.do")
-	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request)
+	public @ResponseBody Map<String, Object> recuperaDetall(Long id, HttpServletRequest request)
 	{
 		Map<String, Object> resultats = new HashMap<String, Object>();
 		
 		try {
-			Long id = new Long(request.getParameter("id"));
+
 			FamiliaDelegate familiaDelegate = DelegateUtil.getFamiliaDelegate();
 			Familia familia = familiaDelegate.obtenerFamilia(id);
 			
 			resultats.put("item_id", familia.getId());
 			omplirCampsTraduibles(resultats, familia);
 			
-			// iconos
+
+		} catch (DelegateException dEx) {
+			log.error(ExceptionUtils.getStackTrace(dEx));
+			if (dEx.isSecurityException()) {
+				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+			} else {
+				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+			}
+		}
+		
+		return resultats;
+	}
+	
+	
+	@RequestMapping(value = "/modulos.do")
+   	public @ResponseBody Map<String, Object> recuperaModulos(Long id, HttpServletRequest request) {
+   		
+   		Map<String, Object> resultats = new HashMap<String, Object>();
+   		
+   		try {
+   			
+			FamiliaDelegate familiaDelegate = DelegateUtil.getFamiliaDelegate();
+			Familia familia = familiaDelegate.obtenerFamilia(id);
+			
 			if (familia.getIconos() != null) {
 				Map<String, Object> iconaDTO;
 				List<Map<String, Object>> llistaIcones = new ArrayList<Map<String, Object>>();
@@ -174,19 +197,23 @@ public class TMFamiliaController extends PantallaBaseController
 			} else {
 				resultats.put("icones", null);
 			}
-			// fin iconos
 			
-		} catch (DelegateException dEx) {
-			log.error(ExceptionUtils.getStackTrace(dEx));
-			if (dEx.isSecurityException()) {
-				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
-			} else {
-				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
-			}
-		}
-		
-		return resultats;
-	}
+   			
+   		} catch (DelegateException dEx) {
+
+   			log.error(ExceptionUtils.getStackTrace(dEx));
+   			
+   			if (dEx.isSecurityException())
+   				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+   			
+   			else
+   				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+   			
+   		}
+   		
+   		return resultats;
+   		
+   	}
     
     private void omplirCampsTraduibles(Map<String, Object> resultats, Familia familia) throws DelegateException {
 		IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();

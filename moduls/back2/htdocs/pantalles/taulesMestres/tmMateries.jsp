@@ -23,6 +23,7 @@
     var pagGuardarIcona = '<c:url value="/iconesMateria/guardarIcona.do" />';
     var pagEstadistiques = '<c:url value="/estadistiques/grafica.do" />';
     var pagTraduirMateria = '<c:url value="/materies/traduir.do" />';
+    var modulos = '<c:url value="/materies/modulos.do" />'; 
 
     //texts
     var txtTria = "<spring:message code='camp.tria.opcio'/>";
@@ -468,7 +469,7 @@
             </div>
             <!-- /modul -->
             <!-- modul -->
-            <div class="modul" id="modul_icones">
+            <div class="modul invisible" id="modul_icones">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                     <legend><spring:message code='materia.icones_perfil'/></legend>                               
@@ -492,7 +493,7 @@
             </div>
             <!-- /modul -->
             <!-- modul -->
-            <div class="modul">
+            <div class="modul invisible">
                 <input type="hidden" id="llistaUnitatsAdministratives" name="unitatsAdministratives" value=""/>                     
                 <fieldset>                                  
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              

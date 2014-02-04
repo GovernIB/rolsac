@@ -2,7 +2,7 @@
 var hechosVitalesAsignados = null;
 
 $(document).ready(function() {
-    
+
 	// elements
 	opcions_elm = $("#opcions");
 	escriptori_elm = $("#escriptori");
@@ -60,16 +60,17 @@ $(document).ready(function() {
 	Estadistica = new ModulEstadistiques();
 
 	Detall.iniciar();
-	// Mostrar detall?
+
+	// Mostrar detall
 	var itemACarregar = itemAEditar();
-	if (itemACarregar > 0) {
+
+	if (itemACarregar > 0)
 		Detall.carregar(itemACarregar);
-	}
+
 	Llistat.iniciar();
-	// Cercador.iniciar();
 	
 	/*Listar hechos vitales al cambiar los publicos objetivos*/
-	$('.ModulPublicObjectiu .finalitza').click(function(){
+	$('.ModulPublicObjectiu .finalitza').click(function() {
 
 		var idProcedimiento = $('#item_clave_primaria').val();
 
@@ -83,11 +84,13 @@ $(document).ready(function() {
 			var cantidadPOChecked = htmlPublicosObjetivosSeleccionados.length;
 			var hechosVitalesSeleccionados = ModulFetsVitals.obtenerSeleccionados();
 
+
 			//Se realiza la petición ajax si hay algún Público Objetivo seleccionado
 			if ( cantidadPOChecked > 0 ) {
 
-				//Guarda en una array auxiliar los públicos objetivos asignados
-				for ( var int = 0; int < cantidadPOChecked; int++) {
+
+				//Guarda públicos objetivos asignados en una array auxiliar
+				for ( var int = 0 ; int < cantidadPOChecked ; int++ ) {
 
 					var htmlElement = htmlPublicosObjetivosSeleccionados[int];
 					publicosObjectivosSeleccionados.push( $(htmlElement).val() );
@@ -142,6 +145,7 @@ $(document).ready(function() {
 	});
 }); //Fin $(document).ready
 
+
 //idioma
 var pag_idioma = $("html").attr("lang");
 
@@ -157,7 +161,7 @@ var paginacio_marge = 4;
 
 //llistat
 var itemID_ultim = 0;
-function CLlistat(){
+function CLlistat() {
 	this.extend = ListadoBase;
 	this.extend();
 
@@ -169,7 +173,7 @@ function CLlistat(){
 		this.carregar({});
 	}
 
-	this.finCargaListado = function(opcions,data){
+	this.finCargaListado = function(opcions,data) {
 
 		// total
 		resultats_total = parseInt(data.total,10);
@@ -178,20 +182,23 @@ function CLlistat(){
 
 			// minim per cercador
 			if (resultats_total > numCercadorMinim) {
+
 				opcions_elm.find("li.C").animate({
 					duration: "slow", width: 'show'
 				}, 300);
+
 			}
 
 			txtT = (resultats_total > 1) ? txtLlistaItems : txtLlistaItem;
 
 			ultimaPag = Math.floor(resultats_total / pag_Res) - 1;
-			if (resultats_total % pag_Res > 0){
+			if (resultats_total % pag_Res > 0)
 				ultimaPag++;
-			}
-			if (pag_Pag > ultimaPag) {
+
+
+			if (pag_Pag > ultimaPag)
 				pag_Pag = ultimaPag;
-			}
+
 
 			resultatInici = ((pag_Pag*pag_Res)+1);
 			resultatFinal = ((pag_Pag*pag_Res) + pag_Res > resultats_total) ? resultats_total : (pag_Pag*pag_Res) + pag_Res;
@@ -209,13 +216,15 @@ function CLlistat(){
 
 				txt_ordenats = (ordre_T == "ASC") ? txtOrdenats + " <em>" + txtAscendentment + "</em>" : txtOrdenats + " <em>" + txtDescendentment + "</em>";
 
-				if (ordre_C == "id") {
+				if (ordre_C == "id")
 					txt_per = txtLlistaItem;
-				} else if (ordre_C == "familia") {
+
+				else if (ordre_C == "familia")
 					txt_per = txtFamilia;
-				} else {
+
+				else
 					txt_per = txtFechaActualizacion;
-				}
+
 
 				txt_ordenacio += ", " + txt_ordenats + " " + txtPer + " <em>" + txt_per + "</em>";
 
@@ -275,9 +284,9 @@ function CLlistat(){
 			codi_taula += "</div>";
 			codi_taula += "</div>";
 
-			if($.browser.opera) {
+			if($.browser.opera)
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
-			}
+
 
 			// Instanciamos el navegador multipágina.					
 			multipagina.init({
@@ -314,12 +323,14 @@ function CLlistat(){
 				});
 
 				// cercador
-				if (typeof opcions.cercador != "undefined" && opcions.cercador == "si") {
+				if (typeof opcions.cercador != "undefined" && opcions.cercador == "si")
 					cercador_elm.find("input, select").removeAttr("disabled");
-				}
+
 
 			});
+
 		});
+
 	}
 
 	this.carregar = function(opcions) {
@@ -506,7 +517,7 @@ function CDetall(){
 
 	this.tipusAuditoria = 'procediment';
 	this.tipusEstadistica = 'procediment';
-	
+
 	//Se anyaden los campos que no se van a serializar directamente mediante .serialize()	
 	//this._baseGuarda = this.guarda;	
 	this.guarda = function() {
@@ -668,7 +679,7 @@ function CDetall(){
 	}
 
 	this.nou = function() {
-	    
+
 		//Ocultar paneles
 		jQuery("#modul_documents, #modul_tramits").hide();
 		jQuery("#modulAuditories, #modulEstadistiques").hide();
@@ -731,7 +742,7 @@ function CDetall(){
 		});
 
 		this.actualizaEventos();
-		
+
 		this.modificado(false);
 	}		
 
@@ -828,14 +839,8 @@ function CDetall(){
 
 		$("#item_notes").val(dada_node.item_notes);
 
-		hechosVitalesAsignados = dada_node.fetsVitals;
-
 		ModulTramit.inicializarTramites(dada_node.tramites);
-		ModulDocuments.inicializarDocuments(dada_node.documents);
-		ModulMateries.inicializarMaterias(dada_node.materies);
 		ModulPublicObjectiu.inicializarPublics(dada_node.publicsObjectiu);
-		ModulFetsVitals.inicializarHechosVitales(hechosVitalesAsignados);
-		ModulNormativa.inicializarNormativas(dada_node.normatives);
 
 		// mostrem
 		$("#modulLateral li.btnEliminar").show();
@@ -857,7 +862,7 @@ function CDetall(){
 			});
 
 		}
-		
+
 		this.modificado(false);	
 	}
 
@@ -892,5 +897,26 @@ function CDetall(){
 				}
 			}
 		});
+	}
+
+	this.pintarModulos = function(dades) {
+
+		hechosVitalesAsignados = dades.fetsVitals;
+
+		ModulMateries.inicializarMaterias(dades.materies);
+		ModulDocuments.inicializarDocuments(dades.documents);
+		ModulFetsVitals.inicializarHechosVitales(hechosVitalesAsignados);
+		ModulNormativa.inicializarNormativas(dades.normatives);
+
+	}
+
+	this.ocultarModulos = function(selector) {
+
+		if ( !selector.hasClass("publicacio") && !selector.attr("id") == "modul_documents" 
+				&& !selector.children().is(".modulMateries")
+				&& !selector.children().is(".modulNormatives")
+				&& !selector.attr("id") == "fetsVitals" )
+			selector.addClass("invisible");
+
 	}
 };

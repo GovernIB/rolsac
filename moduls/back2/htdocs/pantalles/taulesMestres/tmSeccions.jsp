@@ -23,6 +23,7 @@
     var pagFitxaDetall = '<c:url value="/fitxainf/fitxainf.do" />';
     var pagUADetall = '<c:url value="/unitatadm/unitatadm.do" />';
     var pagTraduirSeccions = '<c:url value="/seccions/traduir.do" />';
+    var modulos = '<c:url value="/seccions/modulos.do" />';
     
     //texts
     var txtTria = "<spring:message code='camp.tria.opcio'/>";

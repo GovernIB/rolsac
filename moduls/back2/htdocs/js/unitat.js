@@ -12,20 +12,20 @@ $(document).ready(function() {
 
 	escriptori_detall_elm = $("#escriptori_detall");
 	escriptori_previsualitza_elm = $("#escriptori_previsualitza");
-	
+
 	// datos traductor
 	CAMPOS_TRADUCTOR_UNIDAD_ADMINISTRATIVA = [
-        "item_nom_",
-        "item_presentacio_",
-        "item_cvResponsable_",
-        "item_abreviatura_"
-    ];
-    
-    DATOS_TRADUCIDOS_UNIDAD_ADMINISTRATIVA = [
-	    "nombre",
-	    "presentacion",
-	    "cvResponsable",
-	    "abreviatura"
+	  "item_nom_",
+	  "item_presentacio_",
+	  "item_cvResponsable_",
+	  "item_abreviatura_"
+	];
+
+	DATOS_TRADUCIDOS_UNIDAD_ADMINISTRATIVA = [
+	  "nombre",
+	  "presentacion",
+	  "cvResponsable",
+	  "abreviatura"
     ];
 
 	// INICIEM
@@ -42,7 +42,7 @@ $(document).ready(function() {
 var Items_arr = new Array();
 
 //detall
-function CDetall(soloFicha){	
+function CDetall(soloFicha) {
 
 	this.extend = DetallBase;
 	this.extend(soloFicha);
@@ -75,10 +75,14 @@ function CDetall(soloFicha){
 			d = ModulMateries.listaMaterias();
 
 			if ( $("#materies").val() == undefined ) {
+				
 				htmlMaterias = "<input type='hidden' id='materies' name='materies' value='" + d.replace("materies=", "") + "'/>";
 				$("#formGuardar").append(htmlMaterias);
+				
 			} else {
+				
 				$("#materies").attr("value", d.replace("materies=", "") );
+				
 			}
 
 		}
@@ -128,17 +132,17 @@ function CDetall(soloFicha){
 		jQuery("#item_espai_territorial,#item_espai_territorial_es,#item_espai_territorial_en,#item_espai_territorial_de,#item_espai_territorial_fr").change(function(){
 			jQuery("#item_espai_territorial,#item_espai_territorial_es,#item_espai_territorial_en,#item_espai_territorial_de,#item_espai_territorial_fr").val( jQuery(this).val() );
 		});
-		
+
 		// boton de traducir
-        jQuery("#botoTraduirUnitatAdministrativa").unbind("click").bind("click", function() {
-            Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
-        });
+		jQuery("#botoTraduirUnitatAdministrativa").unbind("click").bind("click", function() {
+			Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
+		});
 
 		// carregar
 		Detall.carregar();
 
 	}
-	
+
 	this.traduirWrapper = function () {
 		that.traduir(pagTraduir, CAMPOS_TRADUCTOR_UNIDAD_ADMINISTRATIVA, DATOS_TRADUCIDOS_UNIDAD_ADMINISTRATIVA);
 	}
@@ -154,16 +158,20 @@ function CDetall(soloFicha){
 		var errorSeccionSinFichas = false;
 
 		// Validamos el formulario			
-		if(!that.formulariValid()){
+		if (!that.formulariValid()) {
 			return false;
 		}
 
 		// Preparamos una lista de edificios mas "amigable" para el controlador, con sus id's separados por comas
 		if ( !$("#llistaEdificis").length ) {
+			
 			htmlEdificios = '<input type="hidden" id="llistaEdificis" name="llistaEdificis" value="">';
 			$("#formGuardar").append(htmlEdificios);
+			
 		} else {
+			
 			$("#llistaEdificis").attr("value", "");
+			
 		}
 
 		// Obtener todos los inputs que empiezan por edifici_id_
@@ -173,11 +181,15 @@ function CDetall(soloFicha){
 
 
 		// Preparamos una lista de usuarios mas "amigable" para el controlador, con sus id's separados por comas
-		if ( !$("#llistaUsuaris").length ) {		
+		if ( !$("#llistaUsuaris").length ) {
+			
 			htmlUsuarios = '<input type="hidden" id="llistaUsuaris" name="llistaUsuaris" value="">';
 			$("#formGuardar").append(htmlUsuarios);
+			
 		} else {
-			$("#llistaUsuaris").attr("value", "");	
+			
+			$("#llistaUsuaris").attr("value", "");
+			
 		}
 
 		// Obtener todos los inputs que empiezan por usuari_id_ 
@@ -190,15 +202,21 @@ function CDetall(soloFicha){
 		// Formato: S1#F1|F2|...|Fs1n,S2#F1|F2|..|Fs2n,....,Sm#F1|F2|...|Fsmn
 		// (S = Seccion, F = Ficha)
 		if ( !$("#llistaSeccions").length ) {
+			
 			htmlSecciones = '<input type="hidden" id="llistaSeccions" name="llistaSeccions" value="">';
 			$("#formGuardar").append(htmlSecciones);
+			
 		} else {
+			
 			$("#llistaSeccions").attr("value", "");
+			
 		}
 
 		if ( errorSeccionSinFichas ) {
+			
 			Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + txtErrorSeccionsBuides + "</p>"});
 			return false;
+			
 		}
 
 		// Enviamos el formulario mediante el metodo ajaxSubmit del plugin jquery.form
@@ -228,7 +246,7 @@ function CDetall(soloFicha){
 
 	}
 
-	// MÃ©todo sobreescrito
+	// Método sobreescrito
 	this.busca = function(){
 
 		edificis_cercador_elm.find("input, select").attr("disabled", "disabled");
@@ -250,12 +268,11 @@ function CDetall(soloFicha){
 	// Método sobreescrito.
 	this.carregar = function(itemID) {
 
-		if (itemID == undefined) {
+		if (itemID == undefined)
 			itemID = itemAEditar();
-		}
-		if (itemID == 0 || itemID == "0"){
+
+		if (itemID == 0 || itemID == "0")
 			itemID = $("#item_id").val();
-		}
 
 		escriptori_detall_elm.find("a.elimina").show();
 
@@ -277,33 +294,47 @@ function CDetall(soloFicha){
 			success: function(dada) {
 
 				that.actualUA = dada;
-				if( !that.uaGeneral ){
+				if ( !that.uaGeneral )
 					that.uaGeneral = dada;	
-				}
 
+				
 				if (dada.id == -1) {
+					
 					$("#carregantDetall").fadeOut(300, function() {
 						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos, text: "<p>" + dada.error + "</p>"});
 					});
+					
 				} else if (dada.id < -1) {
+					
 					$("#carregantDetall").fadeOut(300, function() {
 						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio, text: "<p>" + dada.error + "</p>"});
 					});
+					
 				} else {
+					
 					Detall.pintar(dada);
+					Detall.cargarModulos(dada);
+					
 					if (that.tipusAuditoria != null && typeof Auditoria.busca != 'undefined') { 
+						
 						//Existe auditoria para el detalle y se ha cargado el objeto de auditorías
 						Auditoria.busca(that.tipusAuditoria, itemID);
+						
 					}
+					
 					if (that.tipusEstadistica != null && typeof Estadistica.pinta != 'undefined') { 
+						
 						//Existe auditoria para el detalle y se ha cargado el objeto de auditorías
 						Estadistica.pinta(that.tipusEstadistica, itemID);
+						
 					}
+					
 				}
 			}
 		});
 
-		this.actualizaEventos();		
+		this.actualizaEventos();
+		
 	}
 
 	this.recarregar = function() {
@@ -378,7 +409,6 @@ function CDetall(soloFicha){
 			//Responsable			
 			$("#item_responsable").val(dada_node.item_responsable);	
 			marcarOpcionSelect("item_responsable_sexe",dada_node.item_responsable_sexe);
-			//$("#item_responsable_sexe").val(dada_node.item_responsable_sexe);
 
 			//FotoPetita
 
@@ -413,81 +443,8 @@ function CDetall(soloFicha){
 			$("#item_nivell_3").val(dada_node.item_nivell_3);
 			$("#item_nivell_4").val(dada_node.item_nivell_4);		
 
-			//Materias
-			ModulMateries.inicializarMaterias(dada_node.materies);
-
 			//Seccions			
 			ModulSeccions.iniciar(dada_node.seccions);
-
-			//Edificis			
-			edi_seleccionats_elm = escriptori_detall_elm.find("div.modulEdificis div.seleccionats");
-			edi_llistat_elm = escriptori_detall_elm.find("div.modulEdificis div.llistat");
-			edificis_nodes = dada_node.edificis;
-			edificis_nodes_size = edificis_nodes.length;
-
-			edi_llistat_elm.find("input").removeAttr("checked");
-
-			if (edificis_nodes_size == 0) {
-
-				edi_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaEdificis + ".");
-
-			} else {
-
-				var itemsLista = [];
-				var i=1;
-				jQuery(edificis_nodes).each(function(){
-					edifici_node = this;
-
-					// dsanchez: Creamos la lista de elementos iniciales.
-					itemsLista.push( {
-						id:edifici_node.id, 
-						nombre: edifici_node.nom,
-						// Para listas multi-idioma pasar un objeto con los strings de cada idioma, en lugar de un solo string.
-						/*nombre:{
-							es: edifici_node.nom, 
-							en: edifici_node.nom, 
-							ca: edifici_node.nom, 
-							de: edifici_node.nom, 
-							fr: edifici_node.nom
-							},*/
-						orden: i++	// Si no hay orden, lo calculamos previamente.
-					} );
-				});				
-				ModulEdifici.agregaItems(itemsLista);
-
-				txt_edificis = (edificis_nodes_size == 1) ? txtEdifici : txtEdificis;
-				edi_seleccionats_elm.find("p.info").html(txtHiHa + " <strong>" + edificis_nodes_size + " " + txt_edificis + "</strong>.");				
-			}
-
-
-			//Usuaris
-			usu_seleccionats_elm = escriptori_detall_elm.find("div.modulUsuaris div.seleccionats");
-			usu_llistat_elm = escriptori_detall_elm.find("div.modulUsuaris div.llistat");
-			usuaris_nodes = dada_node.usuaris;
-			usuaris_nodes_size = usuaris_nodes.length;
-
-			usu_llistat_elm.find("input").removeAttr("checked");
-
-			if (usuaris_nodes_size == 0) {
-				usu_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaUsuaris + ".");
-
-			} else {
-				var itemsLista = [];
-				var i=1;
-				jQuery(usuaris_nodes).each(function() {
-					usuari_node = this;
-					// tcerda: Creamos la lista de elementos iniciales.
-					itemsLista.push( {
-						id:usuari_node.id,
-						nombre: usuari_node.nom,
-						orden: i++	// Si no hay orden, lo calculamos previamente.
-					} );
-				});
-				ModulUsuari.agregaItems(itemsLista);
-
-				txt_usuaris = (usuaris_nodes_size == 1) ? txtUsuari : txtUsuaris;
-				usu_seleccionats_elm.find("p.info").html(txtHiHa + " <strong>" + usuaris_nodes_size + " " + txt_usuaris + "</strong>.");
-			}
 
 			$("#modul_materies").show();
 			$("#modul_seccions").show();
@@ -512,7 +469,7 @@ function CDetall(soloFicha){
 			Detall.array({id: dada_node.id, accio: "guarda", dades: dada_node});
 			escriptori_detall_elm.fadeIn(300);
 		});
-		
+
 		this.modificado(false);
 
 	}
@@ -545,6 +502,7 @@ function CDetall(soloFicha){
 				Detall.array({id: dada_node.id, accio: "elimina"});				
 			}			
 		});
+		
 	}
 
 	this.previsualitza = function() {
@@ -566,10 +524,101 @@ function CDetall(soloFicha){
 	}
 
 	this.carregarInici = function() { Detall.modificado(false); window.location.replace(pagLlistat); }
+	
 	this.carregarUA = function() { Detall.modificado(false); window.location.replace(pagLlistat); }
-}
 
-function posarValorsInput(idInput, valor)
-{
-	$(idInput).val(valor);
-}
+	this.pintarModulos = function(dades) {
+
+		ModulMateries.inicializarMaterias(dades.materies);
+
+		edi_seleccionats_elm = escriptori_detall_elm.find("div.modulEdificis div.seleccionats");
+		edi_llistat_elm = escriptori_detall_elm.find("div.modulEdificis div.llistat");
+		edificis_nodes = dades.edificis;
+		edificis_nodes_size = edificis_nodes.length;
+
+		edi_llistat_elm.find("input").removeAttr("checked");
+
+		if (edificis_nodes_size == 0) {
+
+			edi_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaEdificis + ".");
+
+		} else {
+
+			var itemsLista = [];
+			var i=1;
+			jQuery(edificis_nodes).each(function(){
+				edifici_node = this;
+
+				// dsanchez: Creamos la lista de elementos iniciales.
+				itemsLista.push( {
+					id:edifici_node.id, 
+					nombre: edifici_node.nom,
+					// Para listas multi-idioma pasar un objeto con los strings de cada idioma, en lugar de un solo string.
+					/*nombre:{
+						es: edifici_node.nom, 
+						en: edifici_node.nom, 
+						ca: edifici_node.nom, 
+						de: edifici_node.nom, 
+						fr: edifici_node.nom
+						},*/
+					orden: i++	// Si no hay orden, lo calculamos previamente.
+				} );
+			});				
+			ModulEdifici.agregaItems(itemsLista);
+
+			txt_edificis = (edificis_nodes_size == 1) ? txtEdifici : txtEdificis;
+			edi_seleccionats_elm.find("p.info").html(txtHiHa + " <strong>" + edificis_nodes_size + " " + txt_edificis + "</strong>.");
+			
+		}
+
+		//Usuaris
+		usu_seleccionats_elm = escriptori_detall_elm.find("div.modulUsuaris div.seleccionats");
+		usu_llistat_elm = escriptori_detall_elm.find("div.modulUsuaris div.llistat");
+		usuaris_nodes = dades.usuaris;
+		usuaris_nodes_size = usuaris_nodes.length;
+
+		usu_llistat_elm.find("input").removeAttr("checked");
+
+		if (usuaris_nodes_size == 0) {
+			
+			usu_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaUsuaris + ".");
+
+		} else {
+			
+			var itemsLista = [];
+			var i = 1;
+			
+			jQuery(usuaris_nodes).each(function() {
+				
+				usuari_node = this;
+				// tcerda: Creamos la lista de elementos iniciales.
+				itemsLista.push( {
+					id:usuari_node.id,
+					nombre: usuari_node.nom,
+					orden: i++	// Si no hay orden, lo calculamos previamente.
+				} );
+				
+			});
+			
+			ModulUsuari.agregaItems(itemsLista);
+
+			txt_usuaris = (usuaris_nodes_size == 1) ? txtUsuari : txtUsuaris;
+			usu_seleccionats_elm.find("p.info").html(txtHiHa + " <strong>" + usuaris_nodes_size + " " + txt_usuaris + "</strong>.");
+			
+		}
+
+	}
+	
+	this.ocultarModulos = function(selector) {
+		
+		if ( !selector.hasClass("publicacio") && !selector.children().is("#llistaPublicObjectiu") 
+				&& !selector.children().is("#llistaSeccions") )
+			selector.addClass("invisible");
+		
+	}
+
+	function posarValorsInput(idInput, valor) {
+		$(idInput).val(valor);
+	}
+	
+};

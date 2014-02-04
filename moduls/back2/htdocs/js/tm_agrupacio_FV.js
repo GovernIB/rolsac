@@ -1,6 +1,7 @@
 // TM Agrupacio Fets Vitals
 
 $(document).ready(function() {
+	
 	// elements
 	opcions_elm = $("#opcions");
 	escriptori_elm = $("#escriptori");
@@ -28,18 +29,18 @@ $(document).ready(function() {
 	// INICIEM
 	Llistat = new CLlistat();
 	Detall = new CDetall();	
-	
     Detall.iniciar();
-    // Mostrar detall?
+
+    // Mostrar detall
 	var itemACarregar = itemAEditar();
-	if (itemACarregar > 0) {
+	if (itemACarregar > 0)
 		Detall.carregar(itemACarregar);
-	}
 	
 	CAMPOS_TRADUCTOR_AGRUPACIO_FET_VITAL = ["item_nom_", "item_descripcio_", "item_paraules_clau_"];
 	DATOS_TRADUCIDOS_AGRUPACIO_FET_VITAL = ["nombre", "descripcion", "palabrasclave"];
 	
     Llistat.iniciar();
+    
 });
 
 
@@ -54,7 +55,8 @@ var paginacio_marge = 4;
 
 // llistat
 var itemID_ultim = 0;
-function CLlistat(){
+function CLlistat() {
+	
 	this.extend = ListadoBase;
 	this.extend();
 	
@@ -62,28 +64,24 @@ function CLlistat(){
 		this.carregar({});
 	}
 	
-	this.finCargaListado = function(opcions,data){
-		// total
+	this.finCargaListado = function(opcions,data) {
+		
 		resultats_total = parseInt(data.total,10);
 		
 		if (resultats_total > 0) {
 			
 			// minim per cercador
-			if (resultats_total > numCercadorMinim) {
-				opcions_elm.find("li.C").animate({
-					duration: "slow", width: 'show'
-					}, 300);
-			}
+			if (resultats_total > numCercadorMinim)
+				opcions_elm.find("li.C").animate({duration: "slow", width: 'show'}, 300);
 			
 			txtT = (resultats_total > 1) ? txtLlistaItems : txtLlistaItem;
-			
 			ultimaPag = Math.floor(resultats_total / pag_Res) - 1;
-			if (resultats_total % pag_Res > 0){
+			
+			if (resultats_total % pag_Res > 0)
 				ultimaPag++;
-			}
-			if (pag_Pag > ultimaPag) {
+
+			if (pag_Pag > ultimaPag)
 				pag_Pag = ultimaPag;
-			}
 			
 			resultatInici = ((pag_Pag*pag_Res)+1);
 			resultatFinal = ((pag_Pag*pag_Res) + pag_Res > resultats_total) ? resultats_total : (pag_Pag*pag_Res) + pag_Res;
@@ -100,13 +98,14 @@ function CLlistat(){
 			
 				txt_ordenats = (ordre_T == "ASC") ? txtOrdenats + " <em>" + txtAscendentment + "</em>" : txtOrdenats + " <em>" + txtDescendentment + "</em>";
 				
-				if (ordre_C == "nom") {
+				if (ordre_C == "nom")
 					txt_per = txtLlistaItem;
-				} else if (ordre_C == "codiEstandard") {
+				
+				else if (ordre_C == "codiEstandard")
 					txt_per = txtPublicacio;
-				} else {
+				
+				else
 					txt_per = txtCaducitat;
-				}
 				
 				txt_ordenacio += ", " + txt_ordenats + " " + txtPer + " <em>" + txt_per + "</em>";
 			
@@ -115,9 +114,6 @@ function CLlistat(){
 			codi_totals = "<p class=\"info\">" + txtTrobats + " <strong>" + resultats_total + "</strong> " + txtT.toLowerCase() + ". " + txtMostrem + " " + txtDela + " " + resultatInici + " " + txtAla + " " + resultatFinal + txt_ordenacio + ".";
 			codi_totals += this.getHtmlItemsPagina();
 			codi_totals += "</p>";
-			
-			// De momento no habra ordenacion.
-// 			codi_cap1 = "<div class=\"th nom" + ordre_c1 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtLlistaItem + "</a></div>";
 			
 			codi_cap1 = "<div class=\"th agrupacioFV" + ordre_c1 + "\" role=\"columnheader\">" + txtLlistaItem + "</div>";
 			codi_cap2 = "<div class=\"th enllas" + ordre_c2 + "\" role=\"columnheader\">" + txtDescripcio + "</div>";
@@ -134,31 +130,28 @@ function CLlistat(){
 			codi_taula += "<div class=\"tbody\">";
 
 			// codi cuerpo
-			//$(data.nodes).slice(resultatInici-1,resultatFinal).each(function(i) {
-			$(data.nodes).each(function(i) {				
+			$(data.nodes).each(function(i) {
+				
 				dada_node = this;
 				parClass = (i%2) ? " par": "";
 				
 				codi_taula += "<div class=\"tr" + parClass + "\" role=\"row\">";
-
 				codi_taula += "<div class=\"td agrupacioFV\" role=\"gridcell\">";
 				codi_taula += "<input type=\"hidden\" value=\"" + dada_node.id + "\" class=\"id\" />";
 				codi_taula += "<a id=\"agrupacioFV_"+dada_node.id+"\" href=\"javascript:;\" class=\"agrupacioFV\">" + printStringFromNull(dada_node.nom, txtSinValor) + "</a>";
 				codi_taula += "</div>";				
 				codi_taula += "<div class=\"td enllas\" role=\"gridcell\">" + printStringFromNull(dada_node.codiEstandard, txtSinValor) + "</div>";
-				
 				codi_taula += "</div>";
+				
 			});
 			
 			codi_taula += "</div>";
 			codi_taula += "</div>";
 			
-			if($.browser.opera) {
+			if ($.browser.opera)
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
-			}
-			
-			// Instanciamos el navegador multipágina.
-			multipagina.init({
+
+			multipagina.init({ // Instanciamos el navegador multipágina.
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
 				paginaActual: pag_Pag,
@@ -185,47 +178,49 @@ function CLlistat(){
 			
 				// Asociamos el evento onclick a los elementos de la lista para
 				// poder ir a ver su ficha.
-				escriptori_contingut_elm.find("#resultats .llistat .tbody a").unbind("click").bind("click",function(){Llistat.ficha(this);});
+				escriptori_contingut_elm.find("#resultats .llistat .tbody a").unbind("click").bind("click", function(){ Llistat.ficha(this); });
 							
 				// cercador
-				if (typeof opcions.cercador != "undefined" && opcions.cercador == "si") {
+				if (typeof opcions.cercador != "undefined" && opcions.cercador == "si")
 					cercador_elm.find("input, select").removeAttr("disabled");
-				}
 				
 			});
+			
 		});
+		
 	}
 	
 	this.carregar = function(opcions) {
-		// opcions: cercador (si, no), ajaxPag (integer), ordreTipus (ASC,
-		// DESC), ordreCamp (tipus, carrec, tractament)
-		
+
 		dataVars = "";
 		
 		// cercador
 		if (typeof opcions.cercador != "undefined" && opcions.cercador == "si") {
+			
 			pagPagina_elm = pagPagina_cercador_elm;
 			ordreTipus_elm = ordreTipus_cercador_elm;
 			ordreCamp_elm = ordreCamp_cercador_elm;
 			
 			dataVars_cercador = "&codi=" + $("#cerca_codi").val();
 			dataVars_cercador += "&textes=" + $("#cerca_texte").val();
+			
 		} else {
+			
 			pagPagina_elm = pagPagina_llistat_elm;
 			ordreTipus_elm = ordreTipus_llistat_elm;
 			ordreCamp_elm = ordreCamp_llistat_elm;
 
 			dataVars_cercador = "";
+			
 		}
 			
 		// ordreTipus
-		if (typeof opcions.ordreTipus != "undefined") {
+		if (typeof opcions.ordreTipus != "undefined")
 			ordreTipus_elm.val(opcions.ordreTipus);
-		}
+
 		// ordreCamp
-		if (typeof opcions.ordreCamp != "undefined") {
+		if (typeof opcions.ordreCamp != "undefined")
 			ordreCamp_elm.val(opcions.ordreCamp);
-		}
 			
 		// paginacio
 		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : multipagina.getPaginaActual();
@@ -244,31 +239,36 @@ function CLlistat(){
 			data: dataVars,
 			dataType: "json",
 			error: function() {
-				if (!a_enllas) {
-					// missatge
+				
+				if (!a_enllas)
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
-				}
+				
 			},
 			success: function(data) {				
 				Llistat.finCargaListado(opcions,data);
 			}
 		});
+		
 	}
+	
 };
 
 // items array
 var Items_arr = new Array();
 
 // detall
-function CDetall(){
+function CDetall() {
+	
 	this.extend = DetallBase;
 	this.extend();
 	
     var that = this;
 
 	this.iniciar = function() {
+		
 		// idioma
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {
+			
 			// Esconder todos menos el primero
 			escriptori_detall_elm.find('div.idioma').slice(1).hide();
 			
@@ -285,42 +285,49 @@ function CDetall(){
 			var div_idiomes_elm = escriptori_detall_elm.find("div.idiomes:first");
 			div_idiomes_elm.find("div." + a_primer_elm.attr("class")).addClass("seleccionat");
 			ul_idiomes_elm.bind("click", that.idioma);
+			
 		}
 		
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");	
 		
 		// Afegir nodes a la llista de fets vitals
-		$('#afegeixFetVital').unbind("click").bind("click",function(){
+		$('#afegeixFetVital').unbind("click").bind("click", function() {
 	    	$('#popFetVital').css({display:"block"});
 	    });
 		
-		$('#tancaFetVital').unbind("click").bind("click",function(){
+		$('#tancaFetVital').unbind("click").bind("click", function() {
 	    	$('#popFetVital').css({display:"none"});
 	    });
 		
 		// Boto afegir node
-		$('#addFetVital').unbind("click").bind("click",function(){
+		$('#addFetVital').unbind("click").bind("click",function() {
+			
 	    	var id = jQuery('#item_fetVital_relacionat').val();
+	    	
 	    	if (id != '' || id > 0 ) {
+	    		
 	    		$('#popFetVital').css({display:"none"});
 	    		
 	    		var vfItem = new Object();
 		    	vfItem['id'] = jQuery('#item_fetVital_relacionat').val();
 		    	vfItem['nombre'] = jQuery('#item_fetVital_relacionat option:selected').text()
-		    	
 		    	var ordenItem = jQuery('#modul_fetsVitals ul li:last input.fetVital_orden').val();
-		    	if (typeof ordenItem == 'undefined') {
+		    	
+		    	if (typeof ordenItem == 'undefined')
 		    		vfItem['orden'] = 0;
-		    	} else {
+		    	
+		    	else
 		    		vfItem['orden'] = parseInt(ordenItem) + 1;
-		    	}
+		    	
 		    	ModulFetVital.agregaItem(vfItem);
 		    	ModulFetVital.inicializarFetsVitals();
-		    			    	
 		    	jQuery('#item_fetVital_relacionat').each(limpiarCampo);
+		    	
 	    	} else {
+	    		
 	    		Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: errorFetVital});
+	    		
 	    	} 
 	    	
 	    });
@@ -337,6 +344,7 @@ function CDetall(){
 		
 		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos				
 		this.guarda = this.guarda_upload;
+		
 	}
 	
 	this.traduirWrapper = function () {
@@ -364,12 +372,11 @@ function CDetall(){
 							
 				Llistat.cacheDatosListado = null;
 				
-				if (data.id < 0) {
+				if (data.id < 0)
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
-				} else {
-//					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});
+				
+				else
 					Detall.recarregar(data.id);
-				}										
 										
 			}
 								
@@ -379,6 +386,8 @@ function CDetall(){
 		
 	}
 
+	this.activar = 0;
+	
 	this.nou = function() {
 		
 		//Ocultar paneles
@@ -394,25 +403,26 @@ function CDetall(){
 		$("#modulPrincipal select").each(limpiarCampo);
 		
 		//Resetear upload de archivos
-		
 		limpiarArchivo("item_foto");
 		limpiarArchivo("item_icona");
 		limpiarArchivo("item_icona_gran");
 		
 		escriptori_contingut_elm.fadeOut(300, function() {
+			
 			escriptori_detall_elm.fadeIn(300, function() {
-				// activar
-				itemID_ultim = 0;
+				itemID_ultim = this.activar;
 			});
+			
 		});
 
 		this.actualizaEventos();
 		
 		this.modificado(false);
+		
 	}		
 	
 	this.pintar = function(dades) {
-		//Mostrar paneles
+		
 		jQuery("#modul_fetsVitals").show();
 		
 		escriptori_detall_elm.find("a.elimina").show().end().find("h2:first").text(txtDetallTitol);
@@ -424,59 +434,59 @@ function CDetall(){
 
 		$("#item_public_objectiu").val(dada_node.item_public_objectiu).attr('selected',true);
 		
-		//Fotos
 		//Foto
-		
 		pintarArchivo("item_foto", dada_node);							
 		
 		//Icona
-		
 		pintarArchivo("item_icona", dada_node);	
 		
 		//FotoGran
-		
 		pintarArchivo("item_icona_gran", dada_node);
 		
 		// Bloque de pestanyas de idiomas
 		for (var i in idiomas) {
+			
 			var idioma = idiomas[i];
 			$("#item_nom_" + idioma).val(printStringFromNull(dada_node[idioma]["nombre"]));
 			$("#item_descripcio_" + idioma).val(printStringFromNull(dada_node[idioma]["descripcion"]));
 			$("#item_paraules_clau_" + idioma).val(printStringFromNull(dada_node[idioma]["palabrasclave"]));
+			
 		}
 		// Fin bloque de pestanyas de idiomas
 		
-		
-		ModulFetVital.inicializarFetsVitals(dada_node.fetsVitals);
 		
         // mostrem
         $("#modulLateral li.btnEliminar").show();
         
 		if ($("#carregantDetall").size() > 0) {
+			
 			$("#carregantDetall").fadeOut(300, function() {
+				
 				$(this).remove();
-				// array
 				Detall.array({id: dada_node.item_id, accio: "guarda", dades: dada_node});
-                escriptori_detall_elm.fadeIn(300);				
+                escriptori_detall_elm.fadeIn(300);
+                
 			});
+			
 		} else {
+			
 			escriptori_contingut_elm.fadeOut(300, function() {
 				escriptori_detall_elm.fadeIn(300);				
 			});
+			
 		}	
 		
 		this.modificado(false);
+		
 	}
 	
 	this.elimina = function() {
 		
-		// missatge
 		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
 		
 		item_ID = $("#item_id").val();
 		dataVars = "id=" + item_ID;
 				
-		// ajax
 		$.ajax({
 			type: "POST",
 			url: pagEsborrar,
@@ -486,17 +496,32 @@ function CDetall(){
 				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
 			},
 			success: function(data) {
+				
 				Llistat.anulaCache();
+				
 				if (data.id > 0) {
+					
 					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtEsborrarCorrecte});
 					Detall.array({id: dada_node.item_id, accio: "elimina"});
 					Detall.recarregar();
-				} else if (data.id == -1){
+					
+				} else if (data.id == -1) {
+					
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
-				} else if (data.id < -1){
+					
+				} else if (data.id < -1) {
+					
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
+					
 				}
 			}
+			
 		});
+		
 	}
+	
+	this.pintarModulos = function(dades) {
+		ModulFetVital.inicializarFetsVitals(dades.fetsVitals);
+	}
+	
 };

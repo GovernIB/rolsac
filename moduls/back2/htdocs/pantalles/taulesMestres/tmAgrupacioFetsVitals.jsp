@@ -13,6 +13,7 @@
     var pagGuardar = '<c:url value="/agrupacioFetsVitals/guardar.do" />';
     var pagEsborrar = '<c:url value="/agrupacioFetsVitals/esborrarAgrupacioFetsVitals.do" />';
     var pagTraduirAgrupacioFetsVitals = '<c:url value="/agrupacioFetsVitals/traduir.do" />';
+    var modulos = '<c:url value="/agrupacioFetsVitals/modulos.do" />';    
 
     //texts
     var txt_per = "<spring:message code='txt.per'/>";

@@ -1,6 +1,7 @@
 // TM FETS VITALS
 
 $(document).ready(function() {
+	
 	// elements
 	opcions_elm = $("#opcions");
 	escriptori_elm = $("#escriptori");
@@ -30,16 +31,18 @@ $(document).ready(function() {
 	Detall = new CDetall();	
 	
     Detall.iniciar();
-    // Mostrar detall?
+    
+    // Mostrar detall
 	var itemACarregar = itemAEditar();
-	if (itemACarregar > 0) {
+
+	if (itemACarregar > 0)
 		Detall.carregar(itemACarregar);
-	}
 	
 	CAMPOS_TRADUCTOR_FET_VITAL = ["item_nom_", "item_descripcio_", "item_paraules_clau_"];
 	DATOS_TRADUCIDOS_FET_VITAL = ["nombre", "descripcion", "palabrasclave"];
 	
     Llistat.iniciar();
+    
 });
 
 
@@ -54,7 +57,9 @@ var paginacio_marge = 4;
 
 // llistat
 var itemID_ultim = 0;
-function CLlistat(){
+
+function CLlistat() {
+	
 	this.extend = ListadoBase;
 	this.extend();
 	
@@ -62,7 +67,7 @@ function CLlistat(){
 	
 	this.iniciar = function() {
 		
-		//redigirimos el m�todo que guarda porque en este caso tambi�n hacemos un upload de archivos			
+		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos			
 		this.carregar({});
 	}
 	
@@ -82,15 +87,16 @@ function CLlistat(){
 			txtT = (resultats_total > 1) ? txtLlistaItems : txtLlistaItem;
 			
 			ultimaPag = Math.floor(resultats_total / pag_Res) - 1;
-			if (resultats_total % pag_Res > 0){
-				ultimaPag++;
-			}
-			if (pag_Pag > ultimaPag) {
-				pag_Pag = ultimaPag;
-			}
 			
-			resultatInici = ((pag_Pag*pag_Res)+1);
-			resultatFinal = ((pag_Pag*pag_Res) + pag_Res > resultats_total) ? resultats_total : (pag_Pag*pag_Res) + pag_Res;
+			if (resultats_total % pag_Res > 0)
+				ultimaPag++;
+
+			if (pag_Pag > ultimaPag)
+				pag_Pag = ultimaPag;
+
+			
+			resultatInici = ((pag_Pag * pag_Res) + 1);
+			resultatFinal = ((pag_Pag * pag_Res) + pag_Res > resultats_total) ? resultats_total : (pag_Pag * pag_Res) + pag_Res;
 			
 			// ordenacio
 			ordre_T = ordre_Tipus;
@@ -103,16 +109,7 @@ function CLlistat(){
 			if (resultats_total > 1) {
 			
 				txt_ordenats = (ordre_T == "DESC") ? txtOrdenats + " <em>" + txtAscendentment + "</em>" : txtOrdenats + " <em>" + txtDescendentment + "</em>";
-				
-//				if (ordre_C == "ordre") {
-//					txt_per = txtLlistaItem;
-//				} else if (ordre_C == "codiEstandard") {
-//					txt_per = txtPublicacio;
-//				} else {
-//					txt_per = txtCaducitat;
-//				}
 				var txt_per = txtOrdre;
-				
 				txt_ordenacio += ", " + txt_ordenats + " " + txtPer + " <em>" + txt_per + "</em>";
 			
 			}
@@ -120,9 +117,6 @@ function CLlistat(){
 			codi_totals = "<p class=\"info\">" + txtTrobats + " <strong>" + resultats_total + "</strong> " + txtT.toLowerCase() + ". " + txtMostrem + " " + txtDela + " " + resultatInici + " " + txtAla + " " + resultatFinal + txt_ordenacio + ".";
 			codi_totals += this.getHtmlItemsPagina();
 			codi_totals += "</p>";
-			
-			// De momento no habra ordenacion.
-// 			codi_cap1 = "<div class=\"th nom" + ordre_c1 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtLlistaItem + "</a></div>";
 			
 			codi_cap1 = "<div class=\"th fetsVitals" + ordre_c1 + "\" role=\"columnheader\">" + txtLlistaItem + "</div>";
 			codi_cap2 = "<div class=\"th enllas" + ordre_c2 + "\" role=\"columnheader\">" + txtOrdre + "</div>";
@@ -140,7 +134,9 @@ function CLlistat(){
 
 			// codi cuerpo
 			$(data.nodes).each(function(i) {
+				
 				dada_node = this;
+				
 				parClass = (i%2) ? " par": "";
 				
 				codi_taula += "<div class=\"tr" + parClass + "\" role=\"row\">";
@@ -156,14 +152,15 @@ function CLlistat(){
 				codi_taula += that.getHtmlSelectorOrdenacion("fetsVitals_"+dada_node.id, dada_node.ordre, resultats_total );
 				codi_taula += "</div>";
 				codi_taula += "</div>";
+				
 			});
 			
 			codi_taula += "</div>";
 			codi_taula += "</div>";
 			
-			if($.browser.opera) {
+			if ($.browser.opera)
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
-			}
+
 			
 			// Instanciamos el navegador multip�gina.
 			multipagina.init({
@@ -187,18 +184,18 @@ function CLlistat(){
 		
 		// animacio
 		dades_elm = resultats_elm.find("div.actiu:first div.dades:first");
-		dades_elm.fadeOut(300, function() {
-			// pintem
+		dades_elm.fadeOut(300, function() { // pintem
+			
 			dades_elm.html(codi_final).fadeIn(300, function() {
 			
 				// Asociamos el evento onclick a los elementos de la lista para
 				// poder ir a ver su ficha.
-				escriptori_contingut_elm.find("#resultats .llistat .tbody a.editarFetsVitals").unbind("click").bind("click",function(){Llistat.ficha(this);});
+				escriptori_contingut_elm.find("#resultats .llistat .tbody a.editarFetsVitals").unbind("click").bind("click", function(){ Llistat.ficha(this); });
 							
 				// cercador
-				if (typeof opcions.cercador != "undefined" && opcions.cercador == "si") {
+				if (typeof opcions.cercador != "undefined" && opcions.cercador == "si")
 					cercador_elm.find("input, select").removeAttr("disabled");
-				}
+
 				
 				jQuery("#resultats .llistat .tbody select.ordenacion").bind("change").bind("change", function() {
 					
@@ -215,12 +212,14 @@ function CLlistat(){
 						url: pagReordenar,
 						data: dataVars,
 						dataType: "json",
-						error: function(){
+						error: function() {
 							Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
 						},
-						success: function(data){
+						success: function(data) {
+							
 							that.anulaCache();
 							that.carregar({});
+							
 						}
 					});
 					
@@ -230,37 +229,38 @@ function CLlistat(){
 		});
 	}
 	
+	
 	this.carregar = function(opcions) {
-		// opcions: cercador (si, no), ajaxPag (integer), ordreTipus (ASC,
-		// DESC), ordreCamp (tipus, carrec, tractament)
-		
+
 		dataVars = "";
 		
 		// cercador
 		if (typeof opcions.cercador != "undefined" && opcions.cercador == "si") {
+			
 			pagPagina_elm = pagPagina_cercador_elm;
 			ordreTipus_elm = ordreTipus_cercador_elm;
 			ordreCamp_elm = ordreCamp_cercador_elm;
 			
 			dataVars_cercador = "&codi=" + $("#cerca_codi").val();
 			dataVars_cercador += "&textes=" + $("#cerca_textes").val();
+			
 		} else {
+			
 			pagPagina_elm = pagPagina_llistat_elm;
 			ordreTipus_elm = ordreTipus_llistat_elm;
 			ordreCamp_elm = ordreCamp_llistat_elm;
-
 			dataVars_cercador = "";
+			
 		}
 			
-		// ordreTipus
-		if (typeof opcions.ordreTipus != "undefined") {
+		
+		if (typeof opcions.ordreTipus != "undefined") // ordreTipus
 			ordreTipus_elm.val(opcions.ordreTipus);
-		}
-		// ordreCamp
-		if (typeof opcions.ordreCamp != "undefined") {
+
+		if (typeof opcions.ordreCamp != "undefined") // ordreCamp
 			ordreCamp_elm.val(opcions.ordreCamp);
-		}
-			
+
+		
 		// paginacio
 		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : multipagina.getPaginaActual();
 			
@@ -278,15 +278,16 @@ function CLlistat(){
 			data: dataVars,
 			dataType: "json",
 			error: function() {
-				if (!a_enllas) {
-					// missatge
+				
+				if (!a_enllas)
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
-				}
+
 			},
 			success: function(data) {				
 				Llistat.finCargaListado(opcions,data);
 			}
 		});
+		
 	}
 };
 
@@ -294,15 +295,18 @@ function CLlistat(){
 var Items_arr = new Array();
 
 // detall
-function CDetall(){
+function CDetall() {
+	
 	this.extend = DetallBase;
 	this.extend();
 	
     var that = this;
 
-	this.iniciar = function() {	
+	this.iniciar = function() {
+		
 		// idioma
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {
+			
 			// Esconder todos menos el primero
 			escriptori_detall_elm.find('div.idioma').slice(1).hide();
 			
@@ -319,6 +323,7 @@ function CDetall(){
 			var div_idiomes_elm = escriptori_detall_elm.find("div.idiomes:first");
 			div_idiomes_elm.find("div." + a_primer_elm.attr("class")).addClass("seleccionat");
 			ul_idiomes_elm.bind("click", that.idioma);
+			
 		}
 		
         // Sincronizar campos sin idioma en zona multi-idioma.   
@@ -346,7 +351,7 @@ function CDetall(){
 	this.guarda_upload = function(e) {
 		
 		// Validamos el formulario
-		if(!that.formulariValid()){
+		if (!that.formulariValid()) {
 			return false;
 		}
 		
@@ -363,12 +368,11 @@ function CDetall(){
 							
 				Llistat.cacheDatosListado = null;
 				
-				if (data.id < 0) {
+				if (data.id < 0)
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
-				} else {
-//					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});
+				
+				else
 					Detall.recarregar(data.id);
-				}										
 										
 			}
 								
@@ -377,15 +381,17 @@ function CDetall(){
 		return false;	
 		
 	}
+	
+	this.activar = 0;
 
 	this.nou = function() {
+		
         $("#item_id").val("");
         
 		escriptori_detall_elm.find(".botonera li.btnEliminar").hide();
 		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);
 		
 		//Resetear upload de archivos
-				
 		limpiarArchivo("item_foto");
 		limpiarArchivo("item_icona");
 		limpiarArchivo("item_icona_gran");
@@ -393,25 +399,30 @@ function CDetall(){
 		// Resetear upload de achivos multidioma
 		
 		for (var i in idiomas) {
+			
 			limpiarArchivoMultiidioma("item_distribucio", idiomas[i]);
 			limpiarArchivoMultiidioma("item_normativa", idiomas[i]);
 			limpiarArchivoMultiidioma("item_contingut", idiomas[i]);
+			
 		}
 		
 		
 		escriptori_contingut_elm.fadeOut(300, function() {
+			
 			escriptori_detall_elm.fadeIn(300, function() {
-				// activar
-				itemID_ultim = 0;
+				itemID_ultim = this.activar;
 			});
+			
 		});
 
 		this.actualizaEventos();
 		
 		this.modificado(false);
+		
 	}		
 	
 	this.pintar = function(dades) {
+		
 		escriptori_detall_elm.find("a.elimina").show().end().find("h2:first").text(txtDetallTitol);
 		
 		dada_node = dades;
@@ -419,18 +430,22 @@ function CDetall(){
 		
 		// Bloque de pestanyas de idiomas
 		for (var i in idiomas) {
+			
 			var idioma = idiomas[i];
+			
 			if (dada_node[idioma]) {
+				
 				$("#item_nom_" + idioma).val(printStringFromNull(dada_node[idioma]["nombre"]));
 				$("#item_descripcio_" + idioma).val(printStringFromNull(dada_node[idioma]["descripcion"]));
 				$("#item_paraules_clau_" + idioma).val(printStringFromNull(dada_node[idioma]["palabrasclave"]));
 				
-				
+
 				// Fitxers
 				$("#item_distribucio_" + idioma).val("");
 				$("#grup_item_distribucio_" + idioma + " input").removeAttr("checked");
 				
 				if (dada_node[idioma]["distribucio"]) {
+					
 					var a = $("#grup_item_distribucio_" + idioma + " a"); 
 					a.show();					
 					a.attr("href", pagArrel + dada_node[idioma]["distribucio_enllas_arxiu"]);
@@ -440,15 +455,19 @@ function CDetall(){
 					$("#grup_item_distribucio_" + idioma + " label.eliminar").show();
 								
 				} else {
+					
 					$("#grup_item_distribucio_" + idioma + " span").show();
 					$("#grup_item_distribucio_" + idioma + " input").hide();
 					$("#grup_item_distribucio_" + idioma + " label.eliminar").hide();
-					$("#grup_item_distribucio_" + idioma + " a").hide();			
+					$("#grup_item_distribucio_" + idioma + " a").hide();
+					
 				}
 				
 				$("#item_normativa_" + idioma).val("");
 				$("#grup_item_normativa_" + idioma + " input").removeAttr("checked");
+				
 				if (dada_node[idioma]["normativa"]) {
+					
 					$("#grup_item_normativa_" + idioma + " a").show();					
 					$("#grup_item_normativa_" + idioma + " a").attr("href", pagArrel + dada_node[idioma]["normativa_enllas_arxiu"]);
 					$("#grup_item_normativa_" + idioma + " a").text(dada_node[idioma]["normativa"]);
@@ -457,15 +476,19 @@ function CDetall(){
 					$("#grup_item_normativa_" + idioma + " label.eliminar").show();
 								
 				} else {
+					
 					$("#grup_item_normativa_" + idioma + " span").show();
 					$("#grup_item_normativa_" + idioma + " input").hide();
 					$("#grup_item_normativa_" + idioma + " label.eliminar").hide();
-					$("#grup_item_normativa_" + idioma + " a").hide();			
+					$("#grup_item_normativa_" + idioma + " a").hide();
+					
 				}
 				
 				$("#item_contingut_" + idioma).val("");
 				$("#grup_item_contingut_" + idioma + " input").removeAttr("checked");
+				
 				if (dada_node[idioma]["contingut"]) {
+					
 					$("#grup_item_contingut_" + idioma + " a").show();					
 					$("#grup_item_contingut_" + idioma + " a").attr("href", pagArrel + dada_node[idioma]["contingut_enllas_arxiu"]);
 					$("#grup_item_contingut_" + idioma + " a").text(dada_node[idioma]["contingut"]);
@@ -474,61 +497,61 @@ function CDetall(){
 					$("#grup_item_contingut_" + idioma + " label.eliminar").show();
 								
 				} else {
+					
 					$("#grup_item_contingut_" + idioma + " span").show();
 					$("#grup_item_contingut_" + idioma + " input").hide();
 					$("#grup_item_contingut_" + idioma + " label.eliminar").hide();
-					$("#grup_item_contingut_" + idioma + " a").hide();			
+					$("#grup_item_contingut_" + idioma + " a").hide();
+					
 				}
 			}
 		}
+		
 		// Fin bloque de pestanyas de idiomas
 		
 		jQuery("#item_codi_estandard").val(dada_node.item_codi_estandard);
         jQuery("#item_codi_estandard").change();
 		
 		//Foto
-        
         pintarArchivo("item_foto", dada_node);
 		
 		//Icona
-		
 		pintarArchivo("item_icona", dada_node);
 		
 		//FotoGran
-		
 		pintarArchivo("item_icona_gran", dada_node);
-		
-		// Procediments
-		ModulProcediment.inicializarProcediments(dada_node.procediments);
 		
         // mostrem
         $("#modulLateral li.btnEliminar").show();
         
 		if ($("#carregantDetall").size() > 0) {
+			
 			$("#carregantDetall").fadeOut(300, function() {
+				
 				$(this).remove();
-				// array
 				Detall.array({id: dada_node.item_id, accio: "guarda", dades: dada_node});
-                escriptori_detall_elm.fadeIn(300);				
+                escriptori_detall_elm.fadeIn(300);
+                
 			});
+			
 		} else {
-			escriptori_contingut_elm.fadeOut(300, function() {
-				escriptori_detall_elm.fadeIn(300);				
-			});
+			
+			escriptori_contingut_elm.fadeOut(300, function() { escriptori_detall_elm.fadeIn(300); });
+			
 		}	
 		
 		this.modificado(false);
+		
 	}
+	
 	
 	this.elimina = function() {
 		
-		// missatge
 		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
 		
 		item_ID = $("#item_id").val();
 		dataVars = "id=" + item_ID;
 				
-		// ajax
 		$.ajax({
 			type: "POST",
 			url: pagEsborrar,
@@ -538,17 +561,32 @@ function CDetall(){
 				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
 			},
 			success: function(data) {
+				
 				Llistat.anulaCache();
+				
 				if (data.id > 0) {
+					
 					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtEsborrarCorrecte});
 					Detall.array({id: dada_node.item_id, accio: "elimina"});
 					Detall.recarregar();
-				} else if (data.id == -1){
+					
+				} else if (data.id == -1) {
+					
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
-				} else if (data.id < -1){
+					
+				} else if (data.id < -1) {
+					
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
+					
 				}
+				
 			}
+			
 		});
 	}
+	
+	this.pintarModulos = function(dades) {
+		ModulProcediment.inicializarProcediments(dades.procediments);
+	}
+	
 };

@@ -60,6 +60,7 @@
     var pagTraduirDocumentTramit = '<c:url value="/documentsTramit/traduir.do" />';
     var pagListarHechosVitales = '<c:url value="/catalegProcediments/listarHechosVitales.do" />';
     var urlPrevisualizarProcedimiento = '<c:out value="${urlPrevisualitzacio}"/>';
+    var modulos = '<c:url value="/catalegProcediments/modulos.do" />';
 
     //texts
     var txtEsborrarCorrecte = "<spring:message code='txt.procediment_esborrat_correcte'/>";
@@ -1271,7 +1272,7 @@
             </div>
             
             <!-- modul -->
-            <div class="modul" id="modul_documents">
+            <div class="modul invisible" id="modul_documents">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                     <legend><spring:message code='document.documentsRelacionats'/></legend>                               
@@ -1326,7 +1327,7 @@
             <!-- /modul -->
             
             <!-- modul -->
-            <div class="modul">
+            <div class="modul invisible">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                     <legend><spring:message code='unitatadm.formulari.materies'/></legend>
@@ -1377,7 +1378,7 @@
             <!-- /modul -->
 			
             <!-- modul -->
-            <div class="modul">                     
+            <div class="modul invisible">                     
                 <fieldset>                                  
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
                     <legend><spring:message code='txt.normativaRelacionada'/></legend>                               
@@ -1405,7 +1406,7 @@
             <!-- /modul -->  
             
             <!-- modul -->
-            <div class="modul" id="fetsVitals">
+            <div class="modul invisible" id="fetsVitals">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                     <legend><spring:message code='fitxes.fets_vitals'/></legend>

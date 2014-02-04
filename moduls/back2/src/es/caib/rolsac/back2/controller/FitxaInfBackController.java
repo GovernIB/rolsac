@@ -33,6 +33,7 @@ import org.ibit.rol.sac.model.FichaResumen;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.Materia;
+import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.TraduccionDocumento;
@@ -57,6 +58,7 @@ import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
 import org.ibit.rol.sac.persistence.delegate.FichaResumenDelegate;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalDelegate;
 import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
+import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
 import org.ibit.rol.sac.persistence.delegate.SeccionDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
@@ -307,13 +309,13 @@ public class FitxaInfBackController extends PantallaBaseController {
 
 
     @RequestMapping(value = "/pagDetall.do", method = POST)
-    public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
+    public @ResponseBody Map<String, Object> recuperaDetall(Long id, HttpServletRequest request) {
 
     	Map<String, Object> resultats = new HashMap<String, Object>();
 
     	try {
+    		
             String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-            Long id = new Long(request.getParameter("id"));
         	FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
         	Ficha fitxa = fitxaDelegate.obtenerFicha(id);
 
@@ -327,15 +329,12 @@ public class FitxaInfBackController extends PantallaBaseController {
             resultats.put("item_notes", fitxa.getInfo());
 
         	recuperaIdioma(resultats, fitxa, lang);		// Recuperar las fichas según el idioma.
-        	recuperaDocs(resultats, fitxa);				// Recuperar los documentos asociados a una ficha.
         	recuperaIcono(resultats, fitxa);			// Recuperar el icono de una ficha.
         	recuperaBanner(resultats, fitxa);			// Recuperar los banners de una ficha.
         	recuperaImatge(resultats, fitxa);			// Recuperar la imagen de una ficha.
-        	recuperaMateries(resultats, fitxa, lang);	// Recuperar las materias asociadas a una ficha.
-        	recuperaFetsVitals(resultats, fitxa, lang);	// Recuperar los hechos vitales asociados a una ficha.
         	recuperaPO(resultats, fitxa, lang);			// Recuperar los públicos objetiovs de una ficha.
         	recuperaRelacio(resultats, fitxa, lang);	// Recuperar las relaciones ficha-sección-UA
-        	recuperaEnllasos(resultats, fitxa);			// Recuperar los enlaces de una ficha.
+
 
         } catch (DelegateException dEx) {
         	log.error("Error: " + ExceptionUtils.getStackTrace(dEx));
@@ -347,6 +346,41 @@ public class FitxaInfBackController extends PantallaBaseController {
         }
     	return resultats;
     }
+    
+    
+    @RequestMapping(value = "/modulos.do")
+	public @ResponseBody Map<String, Object> recuperaModulos(Long id, HttpServletRequest request) {
+
+		Map<String, Object> resultats = new HashMap<String, Object>();
+
+		try {
+			
+            String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+        	FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
+        	Ficha fitxa = fitxaDelegate.obtenerFicha(id);
+        	
+        	recuperaMateries(resultats, fitxa, lang);	// Recuperar las materias asociadas a una ficha.        	
+        	recuperaFetsVitals(resultats, fitxa, lang);	// Recuperar los hechos vitales asociados a una ficha.
+        	recuperaDocs(resultats, fitxa);				// Recuperar los documentos asociados a una ficha.        	
+        	recuperaEnllasos(resultats, fitxa);			// Recuperar los enlaces de una ficha.
+        	
+
+		} catch (DelegateException dEx) {
+
+			log.error(ExceptionUtils.getStackTrace(dEx));
+
+			if (dEx.isSecurityException())
+				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+
+			else
+				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+
+		}
+
+		return resultats;
+
+	}
+    
 
     /*
      * Función que recupera el contenido de las fichas según el idioma

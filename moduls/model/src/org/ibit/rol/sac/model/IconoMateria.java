@@ -3,8 +3,14 @@
 package org.ibit.rol.sac.model;
 
 public class IconoMateria implements ValueObject {
+	
+	private Long id;
+    private Materia materia;
+    private PerfilCiudadano perfil;
+    private Archivo icono;
+    private String nombre;
 
-    public Long getId() {
+	public Long getId() {
         return id;
     }
 
@@ -35,10 +41,24 @@ public class IconoMateria implements ValueObject {
     public void setIcono(Archivo icono) {
         this.icono = icono;
     }
+    
+    public String getNombre() {
+		return nombre;
+	}
 
-    private Long id;
-    private Materia materia;
-    private PerfilCiudadano perfil;
-    private Archivo icono;
-
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+    
+    public IconoMateria() {
+		super();
+	}
+    
+    public IconoMateria(Long id, String nombre) {
+    	
+    	this.id = id;
+    	this.nombre = nombre;
+    	
+    }
+    
 }

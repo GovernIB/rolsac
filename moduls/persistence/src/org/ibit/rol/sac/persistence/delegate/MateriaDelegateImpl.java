@@ -9,6 +9,7 @@ import javax.ejb.Handle;
 import javax.naming.NamingException;
 
 import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.IconoMateria;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.MateriaAgrupacionM;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -76,6 +77,18 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
     public Materia obtenerMateria(Long id) throws DelegateException {
         try {
             return getFacade().obtenerMateria(id);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.MateriaDelegateI#obtenerIconoPerfil(java.lang.Long)
+	 */
+    public List<IconoMateria> obtenerIconosPerfil(Long id) throws DelegateException {
+        try {
+            return getFacade().obtenerIconosPerfil(id);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }

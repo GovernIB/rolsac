@@ -57,22 +57,25 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 	
 	// Cambia de página.
 	this.cambiaPagina = function( pag ){
-		multipagina.setPaginaActual(pag-1);
+		
+		multipagina.setPaginaActual(pag - 1);
 		pag_Pag = pag;
 		this.anar(pag);
+		
 	}
 		
 	/**
 	 * Carga la ficha de un item del listado.
 	 * @param link Objeto <A> sobre el que se realizó la acción.
 	 */
-	this.ficha = function( link ){
+	this.ficha = function( link ) {
+		
 		// Obtenemos el id del item a partir del id del enlace.
 		itemID = jQuery(link).attr("id").split("_")[1];
 		Detall.carregar(itemID);		
 		itemID_ultim = itemID;
-						
 		this.itemID = itemID;
+		
 	}
 	
 	// Limpia el formulario de búsqueda.
@@ -89,18 +92,23 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 		opcio_unitat = "L";
 		
 		// resultats		
-		resultats_elm.find("div.actiu").slideUp(300,function() {
+		resultats_elm.find("div.actiu").slideUp(300, function() {
+			
 			jQuery(this).removeClass("actiu");
-			resultats_elm.find("div.L").slideDown(300,function() {
+			
+			resultats_elm.find("div.L").slideDown(300, function() {
+				
 				jQuery(this).addClass("actiu");
-
-				resultats_actiu_elm = resultats_elm.find("div.actiu:first");				
+				resultats_actiu_elm = resultats_elm.find("div.actiu:first");
+				
 			});
+			
 		});
 	}
 	
+	
 	// Cambia a la pestaña del buscador.
-	this.tabBuscador = function(){
+	this.tabBuscador = function() {
 		
 		jQuery(idOpciones + " .actiu").removeClass("actiu");
 		jQuery(idTabBuscador).parent().addClass("actiu");
@@ -108,31 +116,34 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 		opcio_unitat = "C";
 		
 		// resultats
-		resultats_elm.find("div.actiu").slideUp(300,function() {
+		resultats_elm.find("div.actiu").slideUp(300, function() {
+			
 			jQuery(this).removeClass("actiu");
-			resultats_elm.find("div."+opcio_unitat).slideDown(300,function() {
-				jQuery(this).addClass("actiu");
+			resultats_elm.find("div."+opcio_unitat).slideDown(300, function() {
 				
-				resultats_actiu_elm = resultats_elm.find("div.actiu:first");								
+				jQuery(this).addClass("actiu");
+				resultats_actiu_elm = resultats_elm.find("div.actiu:first");
+				
 			});
 		});
+		
 	}
 	
+	
 	// Muestra el formulario para insertar una nueva ficha.
-	this.nuevaFicha = function(){		
+	this.nuevaFicha = function() {		
 		Detall.nou();
 	}
 	
 	// Realizar una búsqueda
-	this.busca = function(){		
+	this.busca = function() {		
 			
 		cercador_elm.find("input, select").attr("disabled", "disabled");
-		
 		resultats_dades_elm = resultats_elm.find("div.actiu:first").find("div.dades:first");
 		
 		// animacio
-		resultats_dades_elm.fadeOut(300, function() {
-			// pintem
+		resultats_dades_elm.fadeOut(300, function() { // pintem
+			
 			codi_cercant = "<p class=\"executant\">" + txtCercantElements + "</p>";
 			resultats_dades_elm.html(codi_cercant).fadeIn(300, function() {
 			
@@ -144,99 +155,114 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 		});	
 	}
 	
+	
 	/**
 	 * Método llamado al cambiar de página.
 	 * @param enlace_html Número de la página de destino.
 	 */
 	this.anar = function(enlace_html, carregarFunc){
 		
-		if (!carregarFunc || carregarFunc == 'undefined' ) {
+		if (!carregarFunc || carregarFunc == 'undefined' )
 			carregarFunc = that.carregar;
-		}
+
 		resultats_actiu_elm = resultats_elm.find("div.actiu:first");
-				
 		num = parseInt(enlace_html,10);
 		
 		// text cercant
 		txt = (num <= pag_Pag) ? txtCercantAnteriors : txtCercantSeguents;
 		resultats_dades_elm = resultats_elm.find("div.actiu:first div.dades:first");
-		resultats_dades_elm.fadeOut(300, function() {
-			// pintem
+		
+		resultats_dades_elm.fadeOut(300, function() { // pintem
+			
 			codi_anar = "<p class=\"executant\">" + txt + "</p>";
 			resultats_dades_elm.html(codi_anar).fadeIn(300, function() {
 				
-				//pagPagina_elm.val(num-1);
-				
-				// llancem!
-				
-				if (resultats_actiu_elm.hasClass("C")) {
-					//Llistat.carregar({pagina: num-1, cercador: "si"});
+				if (resultats_actiu_elm.hasClass("C"))
 					carregarFunc({pagina: num-1, cercador: "si"});
-				} else {
-					//Llistat.carregar({pagina: num-1});
+				
+				else
 					carregarFunc({pagina: num-1});
-				}
 				
 			});
 		});	
 	}
 	
-	this.getHtmlSelectorOrdenacion = function( id, orden, numItems ){
+	
+	this.getHtmlSelectorOrdenacion = function( id, orden, numItems ) {
+		
 		var html = '';
 		var selected;
 		html += '<select id="'+id+'" class="ordenacion">';
 		
-		for( var i=0; i<numItems; i++ ){
+		for ( var i = 0; i < numItems; i++ ) {
+			
 			selected = ( orden == i );
-			html += '<option value="'+i+'"'+ (selected ? ' selected' : '') +'>'+ (i+1) +'</option>';
+			html += '<option value="' + i + '"' + (selected ? ' selected' : '') + '>' + (i + 1) + '</option>';
+			
 		}
 		
 		html += '</select>';
 		return html;
+		
 	}
 	
-	this.getHtmlItemsPagina = function(){
+	
+	this.getHtmlItemsPagina = function() {
+		
 		var items = [10,20,50];
 		var numTodos = 99999;
-		var html = '<span class="itemsPagina">'+txtMostrar+'&nbsp;';
+		var html = '<span class="itemsPagina">' + txtMostrar + '&nbsp;';
 		
-		for(var i=0; i<items.length; i++){
-			if( pag_Res == items[i] ){
+		for (var i = 0; i < items.length; i++) {
+			
+			if ( pag_Res == items[i] )
 				html += '<strong>'+items[i]+'</strong>&nbsp;';
-			}else{
+			
+			else
 				html += '<a href="javascript:void(0);" onclick="multipagina.cambiaItemsPorPagina('+items[i]+')">'+items[i]+'</a>&nbsp;';
-			} 
+			
 		}
 		
-		if( pag_Res == numTodos ){
+		
+		if ( pag_Res == numTodos )
 			html += '<strong>'+ txtTodos +'</strong>';
-		}else{
-			html += '<a href="javascript:void(0)" onclick="multipagina.cambiaItemsPorPagina('+numTodos+')">'+ txtTodos +'</a>';	
-		}
+		
+		else
+			html += '<a href="javascript:void(0)" onclick="multipagina.cambiaItemsPorPagina('+numTodos+')">'+ txtTodos +'</a>';
+		
 		
 		html += '&nbsp;'+txtItemsPagina+'</span>';
 		
 		return html;
+		
 	}
 
+	
     /**
      * Método de ordenación.
      */
-    this.ordena = function(domObj,opciones){
+    this.ordena = function(domObj,opciones) {
+    	
         var $enlace = jQuery(domObj);
         var $header = $enlace.parent();
         var tipo = "asc";
         
         // Obtenemos el tipo de ordenación a partir de la clase del enlace.
-        if( $header.hasClass("DESC") ){            
+        if ( $header.hasClass("DESC") ) {
+        	
             $header.removeClass("DESC").addClass("ASC");
             tipo = "ASC";
-        }else if( $header.hasClass("ASC") ){
+            
+        } else if ( $header.hasClass("ASC") ) {
+        	
             $header.removeClass("ASC").addClass("DESC");
             tipo = "DESC";
-        }else{
+            
+        } else {
+        	
             $header.addClass("ASC");
             tipo = "ASC";
+            
         }
         
         // Actualizamos los campos de información de orden.
@@ -247,18 +273,21 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
         
         // Recargamos los datos.
         resultats_dades_elm = resultats_elm.find("div.actiu:first div.dades:first");
-		resultats_dades_elm.fadeOut(300, function() {            
+		resultats_dades_elm.fadeOut(300, function() {
+			
             resultats_dades_elm.html( "<p class=\"executant\">Ordenant...</p>" ).fadeIn(300, function() {
-                // Recargamos los datos.
                 that.carregar(opciones);
             });
+            
         });
     }    
 
+    
     // Bindings
-	jQuery(idTabListado).bind("click",function(){that.tabListado();});
-	jQuery(idBtnNuevo).bind("click",function(){that.nuevaFicha();});
-	jQuery(idTabBuscador).bind("click",function(){that.tabBuscador();});	
-	jQuery(idBtnBuscadorForm).bind("click",function(){that.busca();});
-	jQuery(idBtnLimpiarForm).bind("click",function(){that.limpia();});
+	jQuery(idTabListado).bind("click", function() { that.tabListado(); });
+	jQuery(idBtnNuevo).bind("click", function(){ that.nuevaFicha(); });
+	jQuery(idTabBuscador).bind("click", function() { that.tabBuscador(); });	
+	jQuery(idBtnBuscadorForm).bind("click", function() { that.busca(); });
+	jQuery(idBtnLimpiarForm).bind("click", function() { that.limpia(); });
+	
 }

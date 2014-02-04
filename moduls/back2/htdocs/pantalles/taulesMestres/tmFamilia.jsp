@@ -20,6 +20,7 @@
     var pagCarregarIcona = '<c:url value="/iconesFamilia/carregarIcona.do" />';
     var pagGuardarIcona = '<c:url value="/iconesFamilia/guardarIcona.do" />';
     var pagTraduirFamilia = '<c:url value="/familia/traduir.do" />';
+    var modulos = '<c:url value="/familia/modulos.do" />';
 
     //texts
     var txt_per = "<spring:message code='txt.per'/>";

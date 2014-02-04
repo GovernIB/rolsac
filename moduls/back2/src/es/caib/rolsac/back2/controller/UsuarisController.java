@@ -117,11 +117,12 @@ public class UsuarisController extends PantallaBaseController {
     
     
     @RequestMapping(value = "/pagDetall.do")
-    public @ResponseBody Map<String, Object> recuperaUsuari(HttpServletRequest request)
+    public @ResponseBody Map<String, Object> recuperaDetall(Long id, HttpServletRequest request)
     {
+    	
     	Map<String, Object> resultats = new HashMap<String, Object>();
+    	
     	try {
-    		Long id = new Long(request.getParameter("id"));
     		
     		UsuarioDelegate usuariDelegate = DelegateUtil.getUsuarioDelegate();
     		Usuario usuari = usuariDelegate.obtenerUsuario(id);
@@ -134,8 +135,29 @@ public class UsuarisController extends PantallaBaseController {
     		resultats.put("item_observacions", usuari.getObservaciones());
     		resultats.put("item_perfil", usuari.getPerfil());
     		
-    		// UAs relacionades
-    		if (usuari.getUnidadesAdministrativas() != null) {
+    	} catch (DelegateException dEx) {
+    		log.error(ExceptionUtils.getStackTrace(dEx));
+    		if (dEx.isSecurityException())
+    			resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+    		else
+    			resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+    	}
+    	
+    	return resultats;
+    }
+    
+    
+    @RequestMapping(value = "/modulos.do")
+   	public @ResponseBody Map<String, Object> recuperaModulos(Long id, HttpServletRequest request) {
+   		
+   		Map<String, Object> resultats = new HashMap<String, Object>();
+   		
+   		try {
+   			
+    		UsuarioDelegate usuariDelegate = DelegateUtil.getUsuarioDelegate();
+    		Usuario usuari = usuariDelegate.obtenerUsuario(id);
+   			
+   			if (usuari.getUnidadesAdministrativas() != null) {
     			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
     			Map<String, Object> uaDTO;
     			List<Map<String, Object>> llistaUAs = new ArrayList<Map<String, Object>>();
@@ -153,18 +175,22 @@ public class UsuarisController extends PantallaBaseController {
     		} else {
     			resultats.put("uas", null);
     		}
-    		// Fi UAs relacionades
-    		
-    	} catch (DelegateException dEx) {
-    		log.error(ExceptionUtils.getStackTrace(dEx));
-    		if (dEx.isSecurityException())
-    			resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
-    		else
-    			resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
-    	}
-    	
-    	return resultats;
-    }
+   			
+   		} catch (DelegateException dEx) {
+
+   			log.error(ExceptionUtils.getStackTrace(dEx));
+   			
+   			if (dEx.isSecurityException())
+   				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+   			
+   			else
+   				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+   			
+   		}
+   		
+   		return resultats;
+   		
+   	}
     
     
     @RequestMapping(value = "/esborrarUsuari.do", method = POST)

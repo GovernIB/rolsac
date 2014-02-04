@@ -2,7 +2,7 @@
 
 $(document).ready(function() {
 	
-	jQuery("#btnInsertar").bind("click",function(){Detall.modificado();});
+	jQuery("#btnInsertar").bind("click", function() { Detall.modificado(); });
 	
 	// elements
 	opcions_elm = $("#opcions");
@@ -39,14 +39,14 @@ $(document).ready(function() {
 	Error = new CError();
 	Auditoria = new ModulAuditories();
 	Estadistica = new ModulEstadistiques();
-
 	Detall.iniciar();
-    // Mostrar detall?
+	
+    // Mostrar detall
 	var itemACarregar = itemAEditar();
-	if (itemACarregar > 0) {
+	if (itemACarregar > 0)
 		Detall.carregar(itemACarregar);
-	}
-    Llistat.iniciar();
+
+	Llistat.iniciar();
 	
 	$.suggeriments();
 	
@@ -55,10 +55,7 @@ $(document).ready(function() {
 // idioma
 var pag_idioma = $("html").attr("lang");
 
-var Cercador = {
-	iniciar: function() {
-	}
-};
+var Cercador = {iniciar: function() {}};
 
 // minim cercador
 var numCercadorMinim = 0;
@@ -70,10 +67,12 @@ var paginacio_marge = 4;
 var itemID_ultim = 0;
 
 function CLlistat() {
+	
 	this.extend = ListadoBase;
 	this.extend();
 		
-	this.iniciar = function() {		
+	this.iniciar = function() {
+		
 		$("#cerca_fechaCaducidad").datepicker({ dateFormat: 'dd/mm/yy' });
 		$("#cerca_fechaPublicacion").datetimepicker({ timeFormat: 'hh:mm' });
 		$("#cerca_fechaActualizacion").datetimepicker({ timeFormat: 'hh:mm' });
@@ -82,23 +81,20 @@ function CLlistat() {
 	
 	}
 	
+	
 	this.finCargaListado = function(opcions,data){
-		// total
+		
 		resultats_total = parseInt(data.total,10);
 		
 		if (resultats_total > 0) {
 			
-			// minim per cercador
-			if (resultats_total > numCercadorMinim) {
-				opcions_elm.find("li.C").animate({
-					duration: "slow", width: 'show'
-					}, 300);
-			}
+			if (resultats_total > numCercadorMinim)
+				opcions_elm.find("li.C").animate({duration: "slow", width: 'show'}, 300);
 			
 			txtT = (resultats_total > 1) ? txtLlistaItems : txtLlistaItem;
 			
-			resultatInici = ((pag_Pag*pag_Res)+1);
-			resultatFinal = ((pag_Pag*pag_Res) + pag_Res > resultats_total) ? resultats_total : (pag_Pag*pag_Res) + pag_Res;
+			resultatInici = ((pag_Pag * pag_Res) + 1);
+			resultatFinal = ((pag_Pag * pag_Res) + pag_Res > resultats_total) ? resultats_total : (pag_Pag * pag_Res) + pag_Res;
 			
 			// ordenacio
 			ordre_T = ordre_Tipus;
@@ -114,15 +110,17 @@ function CLlistat() {
 			
 				txt_ordenats = (ordre_T == "ASC") ? txtOrdenats + " <em>" + txtAscendentment + "</em>" : txtOrdenats + " <em>" + txtDescendentment + "</em>";
 				
-				if (ordre_C == "id") {
+				if (ordre_C == "id")
 					txt_per = txtLlistaItem;
-				} else if (ordre_C == "fechaPublicacion") {
+				
+				else if (ordre_C == "fechaPublicacion")
 					txt_per = txtPublicacio;
-				} else if (ordre_C == "fechaCaducidad") {
+				
+				else if (ordre_C == "fechaCaducidad")
 					txt_per = txtCaducitat;
-				} else {
+				
+				else
 					txt_per = txtFechaModificacion;
-				}
 				
 				txt_ordenacio += ", " + txt_ordenats + " " + txtPer + " <em>" + txt_per + "</em>";
 			
@@ -157,8 +155,10 @@ function CLlistat() {
 			// codi cuerpo
 			//$(data.nodes).slice(resultatInici-1,resultatFinal).each(function(i) {
 			$(data.nodes).each(function(i) {
+				
 				dada_node = this;
 				parClass = (i%2) ? " par": "";
+				
 				caducat_titol_class = (dada_node.caducat) ? " fitxa" : " fitxaCaducat";
 				
 				codi_taula += "<div class=\"tr" + parClass + "\" role=\"row\">";
@@ -175,17 +175,17 @@ function CLlistat() {
                 codi_taula += "<div class=\"td modificacio\" role=\"gridcell\">" + printStringFromNull(dada_node.fechaActualizacion, txtSinValor) + "</div>";
 				
 				codi_taula += "</div>";
+				
 			});
 			
 			codi_taula += "</div>";
 			codi_taula += "</div>";
 			
-			if($.browser.opera) {
+			if ($.browser.opera)
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
-			}
 			
-			// Instanciamos el navegador multipágina.					
-			multipagina.init({
+								
+			multipagina.init({ // Instanciamos el navegador multipágina.
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
 				paginaActual: pag_Pag,
@@ -206,28 +206,28 @@ function CLlistat() {
 		
 		// animacio
 		dades_elm = resultats_elm.find("div.actiu:first div.dades:first");
-		dades_elm.fadeOut(300, function() {
-			// pintem
+		dades_elm.fadeOut(300, function() { // pintem
+			
 			dades_elm.html(codi_final).fadeIn(300, function() {
 			
-				escriptori_contingut_elm.find("#resultats .llistat .tbody a").unbind("click").bind("click",function(){Llistat.ficha(this);});
+				escriptori_contingut_elm.find("#resultats .llistat .tbody a").unbind("click").bind("click", function() { Llistat.ficha(this); });
                 
                 // Asociamos el evento onclick a las cabeceras del listado para que sea ordenable.
-                jQuery("#resultats .table .th a").unbind("click").click(function(){
-                    Llistat.ordena(this,opcions);
+                jQuery("#resultats .table .th a").unbind("click").click(function() {
+                    Llistat.ordena(this, opcions);
                 });                
 							
 				// cercador
-				if (typeof opcions.cercador != "undefined" && opcions.cercador == "si") {
+				if (typeof opcions.cercador != "undefined" && opcions.cercador == "si")
 					cercador_elm.find("input, select").removeAttr("disabled");
-				}
 				
 			});
 		});	
 	}
 	
+
 	this.carregar = function(opcions) {
-		// opcions: cercador (si, no), ajaxPag (integer), ordreTipus (ASC, DESC), ordreCamp (tipus, carrec, tractament)
+		
 		var modoBuscador = (typeof opcions.cercador != "undefined" && opcions.cercador == "si");
 		var modoListado = !modoBuscador;
 		
@@ -243,6 +243,7 @@ function CLlistat() {
 			// cercador		
 			var uaMevesVal = $("#cerca_uaMeves").is(':checked') ? 1 : 0;
 			var uaFillesVal = $("#cerca_uaFilles").is(':checked') ? 1 : 0;
+			
 			dataVars_cercador = "&codi=" + $("#cerca_codi").val();
 			dataVars_cercador += "&textes=" + $("#cerca_textes").val();
 			dataVars_cercador += "&visibilitat=" + $("#cerca_estat").val();
@@ -264,16 +265,14 @@ function CLlistat() {
 		}
 			
 		// ordreTipus
-		if (typeof opcions.ordreTipus != "undefined") {
+		if (typeof opcions.ordreTipus != "undefined")
 			ordreTipus_elm.val(opcions.ordreTipus);
-		}
+
 		// ordreCamp
-		if (typeof opcions.ordreCamp != "undefined") {
+		if (typeof opcions.ordreCamp != "undefined")
 			ordreCamp_elm.val(opcions.ordreCamp);
-		}
 			
 		// paginacio
-		//pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : parseInt(pagPagina_elm.val(),10);
 		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : multipagina.getPaginaActual();		
 			
 		// ordre
@@ -283,8 +282,8 @@ function CLlistat() {
 		// variables
 		dataVars += "pagPag=" + pag_Pag + "&pagRes=" + pag_Res + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;
 		
-		// ajax
 		if ( modoListado || modoBuscador ) {
+			
 			$.ajax({
 				type: "POST",
 				url: pagLlistat,
@@ -293,46 +292,60 @@ function CLlistat() {
 				error: function() {
 					
 					if (!a_enllas) {
-						// missatge
+
 						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
-						// error
 						Error.llansar();
+						
 					}
 					
 				},
-				success: function(data) {				
+				success: function(data) {
+					
 					Llistat.finCargaListado(opcions,data);
 					
-					if( modoListado ){											
+					if ( modoListado )											
 						Llistat.cacheDatosListado = data;
-					}
+					
 				}
 			});
+			
 		} else {
+			
 			Llistat.finCargaListado(opcions,Llistat.cacheDatosListado);
+			
 		}
+		
 	}
+	
 };
+
 
 // items array
 var Items_arr = new Array();
 
 // detall
-function CDetall(){	
+function CDetall() {
+	
 	this.extend = DetallBase;
 	this.extend(false, FormulariDades);
+	
 	var that = this;
+	
 	this.tipusAuditoria = 'fitxa';
 	this.tipusEstadistica = 'fitxa';
 	
 	//Se anyaden los campos que no se van a serializar directamente mediante .serialize()	
 	this.guarda = function() {
+		
 		// Omplim els camps amb els valors per enviar al formulari
 		var llistaSeccions = EscriptoriSeccionsUA.llistaSeccUa();
 		
 		if (llistaSeccions.length < 1 ) {
-            Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtCampObligatori, text: "<p>" + txtSeccUa + "</p>"});	
-		} else {		
+			
+            Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtCampObligatori, text: "<p>" + txtSeccUa + "</p>"});
+            
+		} else {
+			
 			var llista_materies = ModulMateries.listaMaterias();
 			llista_materies = llista_materies.slice(9);
 			var llista_publics = ModulPublicObjectiu.listaPublics();
@@ -343,7 +356,7 @@ function CDetall(){
 			$("#llistaPublicObjectiu").val(llista_publics);	
 			
 			// Validamos el formulario
-			if(!that.formulariValid()){
+			if(!that.formulariValid()) {
 				return false;
 			}
 					
@@ -358,28 +371,27 @@ function CDetall(){
 								
 					Llistat.cacheDatosListado = null;
 					
-					if (data.id < 0) {
+					if (data.id < 0)
 						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
-					} else {
-//						Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});
+					
+					else
 						Detall.recarregar(data.id);
-					}					
+					
 				}
+				
 			});
 
 			return false;
+			
 		}
 	}
 
 	this.urlPrevisualizar = urlPrevisualizarFicha;
 	
 	this.iniciar = function() {
-		// dates		
+
 		$('#item_data_caducitat').datetimepicker({ timeFormat: 'hh:mm'});
 		$("#item_data_publicacio").bind("blur",this.dataPublicacio).datetimepicker({ timeFormat: 'hh:mm'});
-		
-		//$("#item_data_caducitat").datepicker({ altField: '#actualDate', dateFormat: 'dd/mm/yy' });
-		//$("#item_data_publicacio").bind("blur",this.dataPublicacio).datepicker({ altField: '#actualDate', dateFormat: 'dd/mm/yy' });
 		
 		// idioma
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {
@@ -399,7 +411,8 @@ function CDetall(){
 			
 			var div_idiomes_elm = escriptori_detall_elm.find("div.idiomes:first");
 			div_idiomes_elm.find("div." + a_primer_elm.attr("class")).addClass("seleccionat");
-			ul_idiomes_elm.find("li.idioma").bind("click", {'actualizarIdiomasModulosLaterales': true, 'idPare':'#escriptori_detall'},that.idioma);			
+			ul_idiomes_elm.find("li.idioma").bind("click", {'actualizarIdiomasModulosLaterales': true, 'idPare':'#escriptori_detall'},that.idioma);
+			
 		}
 		
 		// moduls
@@ -410,10 +423,13 @@ function CDetall(){
             jQuery("#item_clave_primaria,#item_clave_primaria_es,#item_clave_primaria_en,#item_clave_primaria_de,#item_clave_primaria_fr").val( jQuery(this).val() );
         });
         
+        
         // boton de traducir
         jQuery("#botoTraduirFitxa").unbind("click").bind("click", function() {
             Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
         });
+        
+        
 	}
 
     this.traduirWrapper = function () {
@@ -425,6 +441,8 @@ function CDetall(){
 //			$(this).val(txtImmediat);
 //		}
 	}
+	
+	this.activar = 0;
 			
 	this.nou = function() {		
 		//Ocultar paneles
@@ -459,26 +477,27 @@ function CDetall(){
 	
 		ModulEnllas.nuevo();
 		
-		if (suggeriment_elm.size() != 0 && suggeriment_elm.css("display") != "none") {
+		if (suggeriment_elm.size() != 0 && suggeriment_elm.css("display") != "none")
 			suggeriment_elm.slideUp(300);
-		}
-		
-//		$("#item_data_publicacio").val(txtImmediat);
 		
 		$("#modulLateral p.baix:first").removeClass("iCaducat").removeClass("iPublicat");
 		
 		escriptori_contingut_elm.fadeOut(300, function() {
+			
 			escriptori_detall_elm.fadeIn(300, function() {				
-				itemID_ultim = 0;
+				itemID_ultim = this.activar;
 			});
 		});
+		
 		this.actualizaEventos();
 		
-		this.modificado(false);		
+		this.modificado(false);
+		
 	}
-			
+		
+	
 	this.pintar = function(dades) {
-		// Mostrar paneles
+		
 		jQuery("#modul_documents").show();        
 		jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").show();
 		
@@ -509,6 +528,7 @@ function CDetall(){
 
 		// Bloque de pestanyas de idiomas
         for (var i in idiomas) {
+        	
             var idioma = idiomas[i];
 
             $("#item_titol_" + idioma).val(printStringFromNull(dada_node[idioma].titulo));
@@ -525,18 +545,16 @@ function CDetall(){
             $("#item_des_curta_" + idioma).val(descAbr);
             $("#item_des_llarga_" + idioma).val(descripcion);
         }
+        
         // Fin bloque de pestanyas de idiomas		
 		
 		// Icona
-			
 		pintarArchivo("item_icona", dada_node);
 
 		// Banner
-		
 		pintarArchivo("item_banner", dada_node);	
 		
 		// Imatge
-		
 		pintarArchivo("item_imatge", dada_node);
 
 		$("#item_responsable").val(dada_node.item_responsable);
@@ -544,33 +562,34 @@ function CDetall(){
 		$("#item_youtube").val(dada_node.item_youtube);
 		$("#item_forum").val(dada_node.item_forum);				
 	
-		ModulMateries.inicializarMaterias(dada_node.materies);
-		
-		ModulFetsVitals.cargarHechosVitales(dada_node.fetsVitals);
-		
 		ModulPublicObjectiu.inicializarPublics(dada_node.publicsObjectiu);
 		
-		//TODO:moure a modul_seccions_ua
+		//TODO: moure a modul_seccions_ua
 		seccUA_seleccionats_elm = escriptori_detall_elm.find("div.modulSeccionsUA div.seleccionats");
 		seccUA_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaSeccioUA + ".");
 
 		seccUA_nodes = dades.seccUA;
 		seccUA_nodes_size = seccUA_nodes.length;
 
-		//mat_llistat_elm.find("input").removeAttr("checked");
 
 		if (seccUA_nodes_size == 0) {
+			
 			seccUA_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaSeccioUA + ".");
+			
 		} else {
+			
 			codi_seccUA = "<ul>";
 			$(seccUA_nodes).each(function() {
+				
 				seccUA_node = this;
 				codi_seccUA += "<li>";
 				codi_seccUA +="<input class=\"idSeccUa\" type=\"hidden\" value=\"" + seccUA_node.id + "\" /> ";
 				codi_seccUA +="<input class=\"ua\" type=\"hidden\" value=\"" + seccUA_node.idUA + "\" /> ";
 				codi_seccUA +="<input class=\"seccio\" type=\"hidden\" value=\"" + seccUA_node.idSec + "\" /> ";
-				codi_seccUA += txtLaSeccio+" <em class=\"seccio\">"+seccUA_node.nombreSec+"</em>, "+txtAmbLaUnitat+" <em class=\"ua\">" + seccUA_node.nombreUA +"</em>" + "</li>";				
+				codi_seccUA += txtLaSeccio+" <em class=\"seccio\">"+seccUA_node.nombreSec+"</em>, "+txtAmbLaUnitat+" <em class=\"ua\">" + seccUA_node.nombreUA +"</em>" + "</li>";
+				
 			});
+			
 			codi_seccUA += "</ul>";
 			txt_seccUA = (seccUA_nodes_size == 1) ? txtSeccioUA : txtSeccionsUA;			
 			seccUA_seleccionats_elm.find("p.info").html(txtHiHa + " <strong>" + seccUA_nodes_size + " " + txt_seccUA + "</strong>.");
@@ -578,22 +597,16 @@ function CDetall(){
 						
 		}	
 		
-		ModulDocuments.inicializarDocuments(dada_node.documents);
-		
-		ModulEnllas.cargarEnlaces();
 		
 		// mostrem
-
 		if ($("#carregantDetall").size() > 0) {
 
 			$("#carregantDetall").fadeOut(300, function() {
 
 				$(this).remove();
-				
-				// array
 				Detall.array({id: dada_node.id, accio: "guarda", dades: dada_node});
+				escriptori_detall_elm.fadeIn(300);
 				
-				escriptori_detall_elm.fadeIn(300);				
 			});
 			
 		} else {
@@ -606,18 +619,16 @@ function CDetall(){
 		
 		// Marcamos el formulario como "no modificado".
 		this.modificado(false);
+		
 	}
+	
 	
 	this.elimina = function() {
 
-		// missatge
 		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
-				
 		item_ID = $("#item_id").val();
-		
 		dataVars = "&id=" + item_ID;
 				
-		// ajax
 		$.ajax({
 			type: "POST",
 			url: pagEsborrar,
@@ -627,17 +638,51 @@ function CDetall(){
 				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
 			},
 			success: function(data) {
+				
 				Llistat.anulaCache();
 				if (data.id > -1) {
+					
 					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtEsborrarCorrecte});
 					Detall.array({id: dada_node.id, accio: "elimina"});
 					Detall.recarregar();
-				} else if (data.id == -1){
+					
+				} else if (data.id == -1) {
+					
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
-				} else if (data.id == -2){
+					
+				} else if (data.id == -2) {
+					
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
+					
 				}
-			}			
-		});		
+				
+			}	
+			
+		});	
+		
 	}
+	
+	
+	this.pintarModulos = function(dades) {
+
+		ModulMateries.inicializarMaterias(dades.materies);
+		
+		ModulFetsVitals.cargarHechosVitales(dades.fetsVitals);
+		
+		ModulDocuments.inicializarDocuments(dades.documents);
+		
+		ModulEnllas.cargarEnlaces();
+
+	};
+	
+	
+	this.ocultarModulos = function(selector) {
+		
+		if ( !selector.hasClass("publicacio") 
+				&& !selector.children().is("#llistaPublicObjectiu") 
+				&& !selector.children().is("#llistaSeccions") )
+			selector.addClass("invisible");
+		
+	}
+	
 }

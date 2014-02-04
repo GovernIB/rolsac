@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.IconoMateria;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.MateriaAgrupacionM;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -50,6 +51,10 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 	
 	public Materia obtenerMateria(Long id) throws DelegateException {
 		return impl.obtenerMateria(id);
+	}
+	
+	public List<IconoMateria> obtenerIconosPerfil(Long id) throws DelegateException {
+		return impl.obtenerIconosPerfil(id);
 	}
 	
 	public void borrarMateria(Long id) throws DelegateException {

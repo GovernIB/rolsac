@@ -1,17 +1,13 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import net.sf.hibernate.Criteria;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
-import net.sf.hibernate.expression.Order;
 
 import org.ibit.rol.sac.model.AgrupacionMateria;
 import org.ibit.rol.sac.model.MateriaAgrupacionM;
@@ -48,10 +44,12 @@ public abstract class AgrupacionMFacadeEJB extends HibernateEJB
 	 * @param id	Identificador de la agrupación de materias a obtener.
 	 * @return Devuelve una instancia de tipo <code>AgrupacionMateria</code>.	
 	 */
-	public AgrupacionMateria obtenerAgrupacionMaterias(Long id)
-	{
+	public AgrupacionMateria obtenerAgrupacionMaterias(Long id) {
+		
 		Session session = getSession();
+		
 		try {
+			
 			AgrupacionMateria agrMateria = (AgrupacionMateria) session.load(AgrupacionMateria.class , id);
 			Hibernate.initialize(agrMateria.getMateriasAgrupacionM());
 			

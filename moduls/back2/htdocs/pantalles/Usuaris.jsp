@@ -22,6 +22,7 @@
     var pagDetall = '<c:url value="/usuaris/pagDetall.do" />';
     var pagGuardar = '<c:url value="/usuaris/guardar.do" />';
     var pagEsborrar = '<c:url value="/usuaris/esborrarUsuari.do" />';
+    var modulos = '<c:url value="/usuaris/modulos.do" />';
     
     //texts
     var txtEsborrarCorrecte = "<spring:message code='txt.usuari_esborrat_correcte'/>";
@@ -379,7 +380,7 @@
             </div>
             <!-- /modul -->
             <!-- modul -->
-            <div class="modul">
+            <div class="modul invisible">
                 <input type="hidden" id="llistaUnitatsAdministratives" name="unitatsAdministratives" value=""/>                     
                 <fieldset>                                  
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              

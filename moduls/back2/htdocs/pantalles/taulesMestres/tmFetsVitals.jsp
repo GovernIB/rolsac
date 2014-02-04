@@ -19,6 +19,7 @@
     var pagDetallProcediment = '<c:url value="/catalegProcediments/catalegProcediments.do" />';
     var pagLlistatProcediments = '<c:url value="/catalegProcediments/llistat.do" />';
     var pagTraduirFetsVitals = '<c:url value="/fetsVitals/traduir.do" />';
+    var modulos = '<c:url value="/fetsVitals/modulos.do" />';
     
     //texts
     var txt_per = "<spring:message code='txt.per'/>";
@@ -469,7 +470,7 @@
             </div>
             <!-- /modul -->
             <!-- /modul -->
-            <div class="modul" id="modul_procediments">
+            <div class="modul invisible" id="modul_procediments">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                     <legend><spring:message code='txt.procediments_relacionats'/></legend>

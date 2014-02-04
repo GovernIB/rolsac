@@ -214,6 +214,7 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
 	public Materia obtenerMateria(Long id) {
 		
 		Session session = getSession();
+		
 		try {
 			
 			Materia materia = (Materia) session.load(Materia.class, id);
@@ -221,14 +222,6 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
 			Hibernate.initialize( materia.getIcono() );
 			Hibernate.initialize( materia.getIconoGrande() );
 			Hibernate.initialize( materia.getProcedimientosLocales() );
-			
-			Iterator iteradorIconos = materia.getIconos().iterator();
-			while ( iteradorIconos.hasNext() ) {
-				
-				IconoMateria icono = (IconoMateria) iteradorIconos.next();
-				Hibernate.initialize( icono.getIcono() );
-				
-			}
 			
 			Iterator iteradorIdiomas = materia.getLangs().iterator();
 			while ( iteradorIdiomas.hasNext() ) {
@@ -260,6 +253,45 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
 		
 	}
 	
+	
+	/**
+	 * Obtiene el icono de perfil de una materia. 
+	 * 
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param idMateria	Identificador de la materia.
+	 * 
+	 * @return Devuelve una lista de iconos de materia.
+	 */
+	public List<IconoMateria> obtenerIconosPerfil(Long idMateria) {
+		
+		Session session = getSession();
+		
+		try {
+			
+			StringBuilder consulta = new StringBuilder(" select new IconoMateria(icono.id, iconos.nombre) from IconoMateria icono ");
+			consulta.append(" inner join icono.icono as iconos ");
+			consulta.append(" where icono.materia = :id ");
+			consulta.append(" order by icono.icono.nombre desc ");
+			
+			Query query = session.createQuery(consulta.toString());
+			query.setParameter("id", idMateria);
+			
+			return (List<IconoMateria>)query.list();
+			
+		} catch (HibernateException he) {
+			
+			throw new EJBException(he);
+			
+		} finally {
+			
+			close(session);
+			
+		}
+		
+	}
 	
 	/**
 	 * Borra una Materia.

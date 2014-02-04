@@ -103,14 +103,35 @@ public class Seccion extends Traducible implements Comparable {
         ficha.setSeccion(null);
     }
     
-    private Long id;
+    public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+
+
+	private Long id;
     private String codigoEstandard;
     private Seccion padre;
     private List<Seccion> hijos;
     private String perfil;
     private int orden;
     private Set<FichaUA> fichasUA;
+    private String nombre;
 
+    public Seccion() {
+		super();
+	}
+    
+    public Seccion(Long id, String nombre) {
+    	
+    	this.id = id;
+    	this.nombre = nombre;
+    	
+	}
 
 
     public int compareTo(Object o) {

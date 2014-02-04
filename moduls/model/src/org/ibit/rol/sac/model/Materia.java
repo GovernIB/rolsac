@@ -136,9 +136,25 @@ public class Materia extends Traducible implements Comparator {
 	public void setMateriasAgrupacionM(Set<MateriaAgrupacionM> materiasAgrupacionM) {
 		this.materiasAgrupacionM = materiasAgrupacionM;
 	}
-    
+	
+    public int getOrden() {
+		return orden;
+	}
 
-    private Long id;
+	public void setOrden(int orden) {
+		this.orden = orden;
+	}
+	
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+
+	private Long id;
     private String codiHita;
     private Set procedimientosLocales;
     private Set unidadesmaterias;
@@ -149,8 +165,23 @@ public class Materia extends Traducible implements Comparator {
     private Archivo foto;
     private String codigoEstandar;
     private boolean destacada;
+    private int orden;
+    private String nombre;
     private Set<MateriaAgrupacionM> materiasAgrupacionM;
 	public static final String CE_SENSECLASSIFICAR = "SENSECLA";
+	
+	
+	public Materia(Long id, String nombre, int orden) {
+		
+		this.id = id;
+		this.nombre = nombre;
+		this.orden = orden;
+		
+	}
+	
+	public Materia() {
+		super();
+	}
 
 	public boolean equals(Object materia) {
 

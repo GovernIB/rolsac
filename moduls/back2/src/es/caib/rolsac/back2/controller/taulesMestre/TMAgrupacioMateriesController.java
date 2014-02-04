@@ -45,7 +45,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.controller.PantallaBaseController;
-import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.utils.ResultadoBusqueda;
@@ -57,22 +56,25 @@ public class TMAgrupacioMateriesController extends PantallaBaseController
 {
 	private static Log log = LogFactory.getLog(TMMateriesController.class);
 	
-	
+	private static String obtenerIdioma() throws DelegateException {
+		return DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+	}
+
 	@RequestMapping(value = "/agrupacioMateries.do")
 	public String pantallaMateria(Map<String, Object> model, HttpServletRequest request)
 	{
 		model.put("menu", 1);
 		model.put("submenu", "layout/submenu/submenuTMAgrupacioMateries.jsp");
-		
+
 		RolUtil rolUtil = new RolUtil(request);
 		if (rolUtil.userIsAdmin()) {
 			String codiEstandarSec = System.getProperty("es.caib.rolsac.codiEstandarSecGrupMat");
-			
+
 			// Listado secciones
 			SeccionDelegate seccioDelegate = DelegateUtil.getSeccionDelegate();
 			List<IdNomDTO> llistaSeccioDTO = new ArrayList<IdNomDTO>();
 			List<Seccion> llistaSeccio = new ArrayList<Seccion>();
-			
+
 			String lang = null;
 			try {
 				lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
@@ -80,7 +82,7 @@ public class TMAgrupacioMateriesController extends PantallaBaseController
 				log.error("Error al recuperar el idioma por defecto");
 				lang = "ca";
 			}
-			
+
 			try {
 				Seccion seccion = seccioDelegate.obtenerSeccionCE(codiEstandarSec);
 				if (seccion != null) {
@@ -92,7 +94,7 @@ public class TMAgrupacioMateriesController extends PantallaBaseController
 				} else {
 					log.warn("No se ha encontrado una seccion con el codigo estandar " + codiEstandarSec);
 				}
-				
+
 			} catch (DelegateException dEx) {
 				if (dEx.isSecurityException())
 					log.error("Error de permiso: " + ExceptionUtils.getStackTrace(dEx));
@@ -100,7 +102,7 @@ public class TMAgrupacioMateriesController extends PantallaBaseController
 					log.error(ExceptionUtils.getStackTrace(dEx));
 			}
 			model.put("llistaSeccio", llistaSeccioDTO);
-			
+
 			// Listado materias
 			List<IdNomDTO> llistaMateriaDTO = new ArrayList<IdNomDTO>();
 			try {
@@ -110,7 +112,7 @@ public class TMAgrupacioMateriesController extends PantallaBaseController
 					TraduccionMateria tm = (TraduccionMateria) materia.getTraduccion(lang);
 					llistaMateriaDTO.add(new IdNomDTO(materia.getId(),tm == null ? null : tm.getNombre()));
 				}
-				
+
 			} catch (DelegateException dEx) {
 				if (dEx.isSecurityException())
 					log.error("Permisos insuficients: " + dEx.getMessage());
@@ -118,7 +120,7 @@ public class TMAgrupacioMateriesController extends PantallaBaseController
 					log.error("Error: " + dEx.getMessage());
 			}
 			model.put("llistaMateries", llistaMateriaDTO);
-			
+
 			PerfilDelegate perfilDelegate = DelegateUtil.getPerfilDelegate();
 			try {
 				List<IdNomDTO> perfilesDTO = new LinkedList<IdNomDTO>();
@@ -128,7 +130,7 @@ public class TMAgrupacioMateriesController extends PantallaBaseController
 				}
 				model.put("perfils", perfilesDTO);
 				model.put("escriptori", "pantalles/taulesMestres/tmAgrupacioMateries.jsp");
-				
+
 			} catch (DelegateException dEx) {
 				if (dEx.isSecurityException()) {
 					model.put("error", "permisos");
@@ -137,19 +139,19 @@ public class TMAgrupacioMateriesController extends PantallaBaseController
 					model.put("error", "altres");
 				}
 			}
-			
+
 		} else {
 			model.put("error", "permisos");
 		}
-		
+
 		loadIndexModel(model, request);
 		return "index";
 	}
-	
-	
+
+
 	@RequestMapping(value = "/llistat.do")
 	public @ResponseBody Map<String, Object> llistatAgrupacioMateria(HttpServletRequest request) {
-	
+
 		List<Map<String, Object>> llistaAgrupacioMateriaDTO = new ArrayList<Map<String, Object>>();
 		Map<String, Object> agrupacioMateriaDTO;
 		Map<String, Object> resultats = new HashMap<String, Object>();
@@ -157,37 +159,37 @@ public class TMAgrupacioMateriesController extends PantallaBaseController
 		//Información de paginación
 		String pagPag = request.getParameter("pagPag");		
 		String pagRes = request.getParameter("pagRes");
-		
+
 		if (pagPag == null) pagPag = String.valueOf(0); 
 		if (pagRes == null) pagRes = String.valueOf(10);
-       		
+
 		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
-		
+
 		try {
-			
+
 			MateriaAgrupacionMDelegate agrupacioMateriaDelegate = DelegateUtil.getMateriaAgrupacionMDelegate();			
 			resultadoBusqueda = agrupacioMateriaDelegate.listarAgrupacionMaterias(Integer.parseInt(pagPag), Integer.parseInt(pagRes));			
-			
+
 			for (AgrupacionMateria agrupacionMateria: castList(AgrupacionMateria.class, resultadoBusqueda.getListaResultados() ) ) {
-				
+
 				TraduccionAgrupacionM tam = (TraduccionAgrupacionM) agrupacionMateria.getTraduccion(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
 				agrupacioMateriaDTO = new HashMap<String, Object>();
 				agrupacioMateriaDTO.put("id", agrupacionMateria.getId());
 				agrupacioMateriaDTO.put("nom", tam == null ? "" : tam.getNombre());
 				agrupacioMateriaDTO.put("codi_estandar", agrupacionMateria.getCodigoEstandar());
-				
+
 				llistaAgrupacioMateriaDTO.add(agrupacioMateriaDTO);
-				
+
 			}
-			
+
 		} catch (DelegateException dEx) {
-			
+
 			if (dEx.isSecurityException()) {
 				log.error("Permisos insuficients: " + dEx.getMessage());
 			} else {
 				log.error("Error: " + dEx.getMessage());
 			}
-			
+
 		}
 
 		resultats.put("total", resultadoBusqueda.getTotalResultados());
@@ -195,11 +197,11 @@ public class TMAgrupacioMateriesController extends PantallaBaseController
 
 		return resultats;
 	}
-    
-    
-    @RequestMapping(value = "/guardar.do", method = POST)
-    public ResponseEntity<String> guardarAgrupacioMateries(HttpSession session, HttpServletRequest request)
-    {
+
+
+	@RequestMapping(value = "/guardar.do", method = POST)
+	public ResponseEntity<String> guardarAgrupacioMateries(HttpSession session, HttpServletRequest request)
+	{
 		/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
 		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la petici�n.
@@ -210,70 +212,70 @@ public class TMAgrupacioMateriesController extends PantallaBaseController
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
 
-        IdNomDTO result = null;
-        
-        Map<String, String> valoresForm = new HashMap<String, String>();
-        
-        try {
-        	Set<String> materiesForm = new HashSet<String>();
-        	Iterator<String> itParams = request.getParameterMap().keySet().iterator();
-        	while (itParams.hasNext()) {
-        		String key = itParams.next();
-        		String value = request.getParameter(key);
-        		if (key.startsWith("materia_")){
-        			materiesForm.add(key);
+		IdNomDTO result = null;
+
+		Map<String, String> valoresForm = new HashMap<String, String>();
+
+		try {
+			Set<String> materiesForm = new HashSet<String>();
+			Iterator<String> itParams = request.getParameterMap().keySet().iterator();
+			while (itParams.hasNext()) {
+				String key = itParams.next();
+				String value = request.getParameter(key);
+				if (key.startsWith("materia_")){
+					materiesForm.add(key);
 				} 
-        		valoresForm.put(key, value);
-        	}
-    		
-    		//Campos obligatorios
-            Long codiSeccio = ParseUtil.parseLong(valoresForm.get("item_seccio"));
-            
-            if (codiSeccio == null) {
-                String error = messageSource.getMessage("agrupacioM.formulari.error.falten_camps", null, request.getLocale());
-                result = new IdNomDTO(-3l, error);
-                return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);                
-            }
-            
-            AgrupacionMDelegate agrupacioMDelegate = DelegateUtil.getAgrupacionMDelegate();
-            SeccionDelegate seccionDelegate = DelegateUtil.getSeccionDelegate();
-    		Seccion seccion = seccionDelegate.obtenerSeccionSinFichasUA(codiSeccio);
-            
-            AgrupacionMateria agrupacioMateria = new AgrupacionMateria();
-            
+				valoresForm.put(key, value);
+			}
+
+			//Campos obligatorios
+			Long codiSeccio = ParseUtil.parseLong(valoresForm.get("item_seccio"));
+
+			if (codiSeccio == null) {
+				String error = messageSource.getMessage("agrupacioM.formulari.error.falten_camps", null, request.getLocale());
+				result = new IdNomDTO(-3l, error);
+				return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);                
+			}
+
+			AgrupacionMDelegate agrupacioMDelegate = DelegateUtil.getAgrupacionMDelegate();
+			SeccionDelegate seccionDelegate = DelegateUtil.getSeccionDelegate();
+			Seccion seccion = seccionDelegate.obtenerSeccionSinFichasUA(codiSeccio);
+
+			AgrupacionMateria agrupacioMateria = new AgrupacionMateria();
+
 			Long id = ParseUtil.parseLong(valoresForm.get("item_id"));
 			if (id != null) { 
 				agrupacioMateria = agrupacioMDelegate.obtenerAgrupacionM(id);
 			} else {									
 				agrupacioMateria = new AgrupacionMateria();
 			}
-			
+
 			agrupacioMateria.setSeccion(seccion);
-			
+
 			//Codi estandard
-            String codiEstandard = valoresForm.get("item_codi_estandard");
+			String codiEstandard = valoresForm.get("item_codi_estandard");
 			agrupacioMateria.setCodigoEstandar(codiEstandard);
 
 
-            // Idiomas
+			// Idiomas
 			IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
 			List<String> langs = idiomaDelegate.listarLenguajes();
-			
+
 			Map traduccions = new HashMap(langs.size());
 			for (String lang: langs) {
 				TraduccionAgrupacionM tam = new TraduccionAgrupacionM();
 				tam.setNombre( RolUtil.limpiaCadena(valoresForm.get("item_nom_"+  lang )) );
-				
+
 				traduccions.put(lang, tam);
 			}
 			agrupacioMateria.setTraduccionMap(traduccions);
-			
-			
+
+
 			MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
 			List<MateriaAgrupacionM> materiesNew = new ArrayList<MateriaAgrupacionM>();
-			
+
 			List<MateriaAgrupacionM> materiesOld = agrupacioMateria.getMateriasAgrupacionM();
-			
+
 			if (agrupacioMateria.getMateriasAgrupacionM() != null || materiesForm.size() > 0) {
 				StringBuilder idsMateria = new StringBuilder();
 				// Recorrem el formulari
@@ -281,7 +283,7 @@ public class TMAgrupacioMateriesController extends PantallaBaseController
 					String nomParameter = (String)iterator.next();
 					String[] elements = nomParameter.split("_");
 					if (elements[0].equals("materia") && elements[1].equals("id")) {
-	                    //En aquest cas, elements[2] es igual al id del fetVital
+						//En aquest cas, elements[2] es igual al id del fetVital
 						if (idsMateria.length() == 0) {
 							idsMateria.append(elements[2]);
 						} else {
@@ -299,138 +301,171 @@ public class TMAgrupacioMateriesController extends PantallaBaseController
 					materiesNew.add(materiaAgrupacionM);					
 				}
 			}
-			
+
 			// Objectiu
 			agrupacioMateria.setMateriasAgrupacionM(materiesNew);
-			
-            agrupacioMDelegate.guardarAgrupacionM(agrupacioMateria, materiesOld);
-            
-            String ok = messageSource.getMessage("agrupacioM.guardat.correcte", null, request.getLocale());
-            result = new IdNomDTO(agrupacioMateria.getId(), ok);
-            
-        } catch (DelegateException dEx) {
-            if (dEx.isSecurityException()) {
-                String error = messageSource.getMessage("error.permisos", null, request.getLocale());
-                result = new IdNomDTO(-1l, error);
-            } else {
-                String error = messageSource.getMessage("error.altres", null, request.getLocale());
-                result = new IdNomDTO(-2l, error);
-                log.error(ExceptionUtils.getStackTrace(dEx));
-            }
-        }
-        
-        return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
-    }
-    
-    
-    @RequestMapping(value = "/pagDetall.do")
-	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
-	    Map<String, Object> resultats = new HashMap<String, Object>();
-	    try {
-	        Long id = new Long(request.getParameter("id"));
-	        
-	        AgrupacionMDelegate agrupacioMDelegate = DelegateUtil.getAgrupacionMDelegate();
-	        AgrupacionMateria agrupacioMateries = agrupacioMDelegate.obtenerAgrupacionM(id);	        	        
-	        
-	        resultats.put("item_id", agrupacioMateries.getId());
-	        resultats.put("item_codi_estandard", agrupacioMateries.getCodigoEstandar());
-	        
-	        String codiEstandarSec = System.getProperty("es.caib.rolsac.codiEstandarSecGrupMat");
-	        String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-	        
-            resultats.put("item_seccions", getJSONSecciones(codiEstandarSec, lang));
-            resultats.put("item_seccio", agrupacioMateries.getSeccion() != null ? agrupacioMateries.getSeccion().getId() : null);
-            
-			omplirCampsTraduibles(resultats, agrupacioMateries);
-	        
-	        
-	        // Matéries associades
-            if (agrupacioMateries.getMateriasAgrupacionM() != null) {             
-            	Map<String, String> map;
-            	List<Map<String, String>> llistaMateriesAgrupacio = new ArrayList<Map<String, String>>();            	
-            	TraduccionMateria traM;
-				String nombre;
-                
-				for (Iterator<MateriaAgrupacionM> it = agrupacioMateries.getMateriasAgrupacionM().iterator(); it.hasNext();) {
-					MateriaAgrupacionM materiaAgrupacioM = it.next();
-					
-					if (materiaAgrupacioM != null) {
-						traM = (TraduccionMateria) materiaAgrupacioM.getMateria().getTraduccion(lang);
-						nombre = "";
-	    				if (traM != null) {
-	    					//Retirar posible enlace incrustado en titulo
-	    					nombre = HtmlUtils.obtenerTituloDeEnlaceHtml(traM.getNombre());
-	    				}
-	    				map = new HashMap<String, String>(2);
-	    				map.put("id", materiaAgrupacioM.getMateria().getId().toString());
-	    				map.put("nom", nombre);
-	    				map.put("orden", Integer.toString(materiaAgrupacioM.getOrden()));
-	                    llistaMateriesAgrupacio.add(map);
-					}
-				}
-				resultats.put("materies", llistaMateriesAgrupacio);
-            } else {
-                resultats.put("materies", null);
-            } 
-            // Fi Metéries associades
-	        
-	        
-	    } catch (DelegateException dEx) {
-			log.error(ExceptionUtils.getStackTrace(dEx));
-			if (dEx.isSecurityException()) {
-				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
-			} else {
-				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
-			}
-		}
-	    
-        return resultats;
-	}
-    
-    // Devuelve lista de unidades administrativas materias (id uamateria y nombre ua).  
-    private List<IdNomDTO> getJSONSecciones(String codiEstandarSec, String lang) {
-    	SeccionDelegate seccioDelegate = DelegateUtil.getSeccionDelegate();
-		List<IdNomDTO> llistaSeccioDTO = new ArrayList<IdNomDTO>();
-		List<Seccion> llistaSeccio = new ArrayList<Seccion>();
-		
-		try {
-			Seccion seccion = seccioDelegate.obtenerSeccionCE(codiEstandarSec);
-			if (seccion != null) {
-				llistaSeccio = seccioDelegate.listarHijosSeccion(seccion.getId());
-				
-				for (Seccion seccio : llistaSeccio) {
-					TraduccionSeccion tpo = (TraduccionSeccion) seccio.getTraduccion(lang);
-					llistaSeccioDTO.add(new IdNomDTO(seccio.getId(), tpo == null ? null : tpo.getNombre()));
-				}
-			} else {
-				log.warn("No se ha encontrado una seccion con el codigo estandar " + codiEstandarSec);
-			}
+
+			agrupacioMDelegate.guardarAgrupacionM(agrupacioMateria, materiesOld);
+
+			String ok = messageSource.getMessage("agrupacioM.guardat.correcte", null, request.getLocale());
+			result = new IdNomDTO(agrupacioMateria.getId(), ok);
+
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
-				log.error("Error de permiso: " + ExceptionUtils.getStackTrace(dEx)); 
+				String error = messageSource.getMessage("error.permisos", null, request.getLocale());
+				result = new IdNomDTO(-1l, error);
 			} else {
+				String error = messageSource.getMessage("error.altres", null, request.getLocale());
+				result = new IdNomDTO(-2l, error);
 				log.error(ExceptionUtils.getStackTrace(dEx));
 			}
 		}
+
+		return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
+	}
+
+
+	@RequestMapping(value = "/pagDetall.do")
+	public @ResponseBody Map<String, Object> recuperaDetall(Long id, HttpServletRequest request) {
+
+		Map<String, Object> resultats = new HashMap<String, Object>();
+
+		try {
+
+			AgrupacionMateria agrupacioMateries = DelegateUtil.getAgrupacionMDelegate().obtenerAgrupacionM(id);
+			String codiEstandarSec = System.getProperty("es.caib.rolsac.codiEstandarSecGrupMat");
+
+			resultats.put("item_id", id);
+			resultats.put("item_codi_estandard", agrupacioMateries.getCodigoEstandar());
+			resultats.put("item_seccions", getJSONSecciones(codiEstandarSec, obtenerIdioma() ));
+
+			// XXX: No la secci�n no debería ser nula ya que el back nuevo no permite generarlo así. Se mantiene ya que es probable que se generaran valores nulos desde el back antiguo.
+			resultats.put("item_seccio", agrupacioMateries.getSeccion() != null ? agrupacioMateries.getSeccion().getId() : null);  
+
+			omplirCampsTraduibles(resultats, agrupacioMateries);
+
+		} catch (DelegateException dEx) {
+
+			log.error(ExceptionUtils.getStackTrace(dEx));
+
+			if (dEx.isSecurityException())
+				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+
+			else 
+				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+
+		}
+
+		return resultats;
+
+	}
+	
+	
+	@RequestMapping(value = "/modulos.do")
+	public @ResponseBody Map<String, Object> recuperaModulos(Long id, HttpServletRequest request) {
+		
+		Map<String, Object> resultats = new HashMap<String, Object>();
+		
+		try {
+			
+			List<Materia> materias = DelegateUtil.getMateriaAgrupacionMDelegate().obtenerMateriasRelacionadas(id, obtenerIdioma());
+			
+			if (materias.size() > 0) {
+
+				List<Map<String, String>> llistaMateriesAgrupacio = new ArrayList<Map<String, String>>(materias.size());
+				Map<String, String> map;
+
+				for (Materia materia : materias) {
+
+					map = new HashMap<String, String>();
+
+					map.put("id", String.valueOf(materia.getId()));
+					map.put("nom", materia.getNombre());
+					map.put("orden", String.valueOf( materia.getOrden()));
+					llistaMateriesAgrupacio.add(map);
+
+				}
+
+				resultats.put("materies", llistaMateriesAgrupacio);
+
+			} else {
+
+				resultats.put("materias", null);
+
+			}
+			
+			
+		} catch (DelegateException dEx) {
+
+			log.error(ExceptionUtils.getStackTrace(dEx));
+
+			if (dEx.isSecurityException())
+				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+
+			else 
+				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+		}
+		
+		return resultats;
+		
+	}
+
+	// Devuelve lista de unidades administrativas materias (id uamateria y nombre ua).  
+	private List<IdNomDTO> getJSONSecciones(String codiEstandarSec, String lang) {
+
+		SeccionDelegate seccioDelegate = DelegateUtil.getSeccionDelegate();
+		List<IdNomDTO> llistaSeccioDTO = new ArrayList<IdNomDTO>();
+		List<Seccion> llistaSeccio = new ArrayList<Seccion>();
+
+		try {
+
+			Seccion seccion = seccioDelegate.obtenerSeccionCE(codiEstandarSec);
+
+			if (seccion != null) {
+
+				llistaSeccio = seccioDelegate.listarHijosSeccion(seccion.getId());
+
+				for (Seccion seccio : llistaSeccio)
+					llistaSeccioDTO.add( new IdNomDTO(seccio.getId(), seccio.getNombre()) );
+
+
+			} else {
+
+				log.warn("No se ha encontrado una seccion con el codigo estandar " + codiEstandarSec);
+
+			}
+
+		} catch (DelegateException dEx) {
+
+			if (dEx.isSecurityException())
+				log.error("Error de permiso: " + ExceptionUtils.getStackTrace(dEx));
+
+			else
+				log.error(ExceptionUtils.getStackTrace(dEx));
+
+		}
+
 		return llistaSeccioDTO;
-    }
-    
-    private void omplirCampsTraduibles(Map<String, Object> resultats, AgrupacionMateria agrupacioM) throws DelegateException {
+
+	}
+
+	private void omplirCampsTraduibles(Map<String, Object> resultats, AgrupacionMateria agrupacioM) throws DelegateException {
 		IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
 		List<String> langs = idiomaDelegate.listarLenguajes();
+
 		
 		for (String lang: langs) {
-		    if (null != agrupacioM.getTraduccion(lang)) {
+			if (null != agrupacioM.getTraduccion(lang)) {
 				resultats.put(lang, (TraduccionAgrupacionM) agrupacioM.getTraduccion(lang));
 			} else {
 				resultats.put(lang, new TraduccionAgrupacionM());
 			}
 		}
 	}
-    
-    
-    
-    @RequestMapping(value = "/esborrarAgrupacioMateries.do", method = POST)
+
+
+
+	@RequestMapping(value = "/esborrarAgrupacioMateries.do", method = POST)
 	public @ResponseBody IdNomDTO esborrarAgrupacioMateries(HttpServletRequest request) {
 		IdNomDTO resultatStatus = new IdNomDTO();
 		try {
@@ -452,24 +487,24 @@ public class TMAgrupacioMateriesController extends PantallaBaseController
 		}
 		return resultatStatus;
 	}
-    
-    
-    @RequestMapping(value = "/traduir.do")
+
+
+	@RequestMapping(value = "/traduir.do")
 	public @ResponseBody Map<String, Object> traduir(HttpServletRequest request)
 	{
 		Map<String, Object> resultats = new HashMap<String, Object>();
-		
+
 		try {
 			String idiomaOrigenTraductor = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-			
+
 			TraduccionAgrupacionM traduccioOrigen = getTraduccionOrigen(request, idiomaOrigenTraductor);
 			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
 			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
 			traduccions = traductor.translate(traduccioOrigen, idiomaOrigenTraductor);
-			
+
 			resultats.put("traduccions", traduccions);
-	        
-	    } catch (DelegateException dEx) {
+
+		} catch (DelegateException dEx) {
 			logException(log, dEx);
 			if (dEx.isSecurityException()) {
 				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
@@ -483,20 +518,20 @@ public class TMAgrupacioMateriesController extends PantallaBaseController
 			log.error("AgrupacionMBackController.traduir: Error en al traducir Agrupacion Materies: " + e);
 			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
 		}
-		
+
 		return resultats;
 	}
-	
-	
-    private TraduccionAgrupacionM getTraduccionOrigen(HttpServletRequest request, String idiomaOrigenTraductor)
+
+
+	private TraduccionAgrupacionM getTraduccionOrigen(HttpServletRequest request, String idiomaOrigenTraductor)
 	{
-    	TraduccionAgrupacionM traduccioOrigen = new TraduccionAgrupacionM();
-		
+		TraduccionAgrupacionM traduccioOrigen = new TraduccionAgrupacionM();
+
 		if (StringUtils.isNotEmpty(request.getParameter("item_nom_" + idiomaOrigenTraductor))) {
 			traduccioOrigen.setNombre(request.getParameter("item_nom_" + idiomaOrigenTraductor));
 		}
-		
+
 		return traduccioOrigen;
 	}
-    
+
 }

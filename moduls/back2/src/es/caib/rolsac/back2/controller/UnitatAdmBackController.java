@@ -301,14 +301,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			// Secciones asociadas a la UA.
 			resultats.put("seccions", getListaSeccionesDTO(idUA, unitatDelegate));
 
-			// Materias asociadas.
-			resultats.put("materies", getLlistaMateriesDTO(request, resultats, uni, DelegateUtil.getIdiomaDelegate().lenguajePorDefecto()));
-
-			// Edificios.
-			resultats.put("edificis", getLlistaEdificisDTO(resultats, uni));			
-
-			// Usuaris.
-			resultats.put("usuaris", getLlistaUsuarisDTO(resultats, uni));			
 
 		} catch (DelegateException dEx) {
 
@@ -320,6 +312,42 @@ public class UnitatAdmBackController extends PantallaBaseController {
 				resultats.put("id", -2);
 				log.error(ExceptionUtils.getStackTrace(dEx));
 			}
+
+		}
+
+		return resultats;
+
+	}
+
+
+	@RequestMapping(value = "/modulos.do")
+	public @ResponseBody Map<String, Object> recuperaModulos(Long id, HttpServletRequest request) {
+
+		Map<String, Object> resultats = new HashMap<String, Object>();
+
+		try {
+
+			UnidadAdministrativaDelegate unitatDelegate = DelegateUtil.getUADelegate();
+			UnidadAdministrativa uni = unitatDelegate.consultarUnidadAdministrativaSinFichas(id);
+			
+			// Materias asociadas.
+			resultats.put("materies", getLlistaMateriesDTO(request, resultats, uni, DelegateUtil.getIdiomaDelegate().lenguajePorDefecto()));
+
+			// Edificios.
+			resultats.put("edificis", getLlistaEdificisDTO(resultats, uni));			
+
+			// Usuaris.
+			resultats.put("usuaris", getLlistaUsuarisDTO(resultats, uni));	
+
+		} catch (DelegateException dEx) {
+
+			log.error(ExceptionUtils.getStackTrace(dEx));
+
+			if (dEx.isSecurityException())
+				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+
+			else
+				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
 
 		}
 
@@ -1442,7 +1470,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			UnidadAdministrativa ua = new UnidadAdministrativa();
 			ua = (UnidadAdministrativa) request.getSession().getAttribute("unidadAdministrativa");	
 
-			
+
 			try {
 
 				UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
@@ -1462,7 +1490,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 				this.mostrarErrorOperacionFallida( resultats, request.getLocale(), ExceptionUtils.getStackTrace(e) );
 
 			}
-			
+
 
 		}
 

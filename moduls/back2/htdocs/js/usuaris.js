@@ -29,23 +29,22 @@ $(document).ready(function() {
 	Detall = new CDetall();	
 	
     Detall.iniciar();
-    // Mostrar detall?
+    
+    // Mostrar detall
 	var itemACarregar = itemAEditar();
-	if (itemACarregar > 0) {
+
+	if (itemACarregar > 0)
 		Detall.carregar(itemACarregar);
-	}
-    Llistat.iniciar();
-    // Cercador.iniciar();
+
+	Llistat.iniciar();
+
 });
 
 
 // idioma
 var pag_idioma = $("html").attr("lang");
 
-var Cercador = {
-	iniciar: function() {		
-	}
-};
+var Cercador = {iniciar: function() {}};
 
 // minim cercador
 var numCercadorMinim = 0;
@@ -55,6 +54,7 @@ var paginacio_marge = 4;
 
 // llistat
 var itemID_ultim = 0;
+
 function CLlistat(){
 	this.extend = ListadoBase;
 	this.extend();
@@ -64,25 +64,26 @@ function CLlistat(){
 	}
 	
 	this.finCargaListado = function(opcions,data){
-		// total
-		resultats_total = parseInt(data.total,10);
+		
+		resultats_total = parseInt(data.total,10); // total
 		
 		if (resultats_total > 0) {
 			
 			// minim per cercador
-			if (resultats_total > numCercadorMinim) {
+			if (resultats_total > numCercadorMinim)
 				opcions_elm.find("li.C").animate({duration: "slow", width: 'show'}, 300);
-			}
+
 			
 			txtT = (resultats_total > 1) ? txtLlistaItems : txtLlistaItem;
 			
 			ultimaPag = Math.floor(resultats_total / pag_Res) - 1;
-			if (resultats_total % pag_Res > 0){
+			
+			if (resultats_total % pag_Res > 0)
 				ultimaPag++;
-			}
-			if (pag_Pag > ultimaPag) {
+
+			if (pag_Pag > ultimaPag)
 				pag_Pag = ultimaPag;
-			}
+
 			
 			resultatInici = ((pag_Pag*pag_Res)+1);
 			resultatFinal = ((pag_Pag*pag_Res) + pag_Res > resultats_total) ? resultats_total : (pag_Pag*pag_Res) + pag_Res;
@@ -101,25 +102,23 @@ function CLlistat(){
 			
 				txt_ordenats = (ordre_T == "ASC") ? txtOrdenats + " <em>" + txtAscendentment + "</em>" : txtOrdenats + " <em>" + txtDescendentment + "</em>";
 				
-				if (ordre_C == "username") {
+				if (ordre_C == "username")
 					txt_per = txtUsername;
-				} else if (ordre_C == "perfil") {
+				
+				else if (ordre_C == "perfil")
 					txt_per = txtPerfil;
-				} else if (ordre_C == "email") {
+				
+				else if (ordre_C == "email")
 					txt_per = txtEmail;
-				} else {
+				
+				else
 					txt_per = txtLlistaItem;
-				}
 				
 				txt_ordenacio += ", " + txt_ordenats + " " + txtPer + " <em>" + txt_per + "</em>";
+				
 			}
 			
 			codi_totals = "<p class=\"info\">" + txtTrobats + " <strong>" + resultats_total + "</strong> " + txtT.toLowerCase() + ". " + txtMostrem + " " + txtDel + " " + resultatInici + " " + txtAl + " " + resultatFinal + txt_ordenacio + ".</p>";
-			
-			// De momento no habra ordenacion.
-//						codi_cap1 = "<div class=\"th nom" + ordre_c1 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtLlistaItem + "</a></div>";
-//						codi_cap2 = "<div class=\"th publicacio" + ordre_c2 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtPublicacio + "</a></div>";
-//						codi_cap3 = "<div class=\"th caducitat" + ordre_c3 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtCaducitat + "</a></div>";
 			
 			codi_cap1 = "<div class=\"th nom" + ordre_c1 + "\" role=\"columnheader\">" + txtNom + "</div>";
 			codi_cap2 = "<div class=\"th username" + ordre_c2 + "\" role=\"columnheader\">" + txtUsername + "</div>";
@@ -139,6 +138,7 @@ function CLlistat(){
 
 			// codi cuerpo
 			$(data.nodes).slice(resultatInici-1,resultatFinal).each(function(i) {
+				
 				dada_node = this;
 				
 				parClass = (i%2) ? " par": "";
@@ -158,16 +158,17 @@ function CLlistat(){
 				codi_taula += "<div class=\"td email\" role=\"gridcell\">" + printStringFromNull(dada_node.email) + "</div>";
 				
 				codi_taula += "</div>";
+				
 			});
 			
 			codi_taula += "</div>";
 			codi_taula += "</div>";
 			
-			if($.browser.opera) {
+			if ($.browser.opera)
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
-			}
+
 			
-			// Instanciamos el navegador multipágina.					
+			// Instanciamos el navegador multipÃ¡gina.					
 			multipagina.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
@@ -197,9 +198,8 @@ function CLlistat(){
 				escriptori_contingut_elm.find("#resultats .llistat .tbody a").unbind("click").bind("click",function(){Llistat.ficha(this);});
 							
 				// cercador
-				if (typeof opcions.cercador != "undefined" && opcions.cercador == "si") {
+				if (typeof opcions.cercador != "undefined" && opcions.cercador == "si")
 					cercador_elm.find("input, select").removeAttr("disabled");
-				}
 				
 			});
 		});
@@ -238,14 +238,14 @@ function CLlistat(){
 		}
 			
 		// ordreTipus
-		if (typeof opcions.ordreTipus != "undefined") {
+		if (typeof opcions.ordreTipus != "undefined")
 			ordreTipus_elm.val(opcions.ordreTipus);
-		}
+
 		// ordreCamp
-		if (typeof opcions.ordreCamp != "undefined") {
+		if (typeof opcions.ordreCamp != "undefined")
 			ordreCamp_elm.val(opcions.ordreCamp);
-		}
-			
+
+		
 		// paginacio
 		//pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : parseInt(pagPagina_elm.val(),10);
 		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : multipagina.getPaginaActual();
@@ -258,7 +258,8 @@ function CLlistat(){
 		dataVars += "pagPagina=" + pag_Pag + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;
 		
 		// ajax
-		if ( ( modoListado && !Llistat.cacheDatosListado ) || modoBuscador ){
+		if ( ( modoListado && !Llistat.cacheDatosListado ) || modoBuscador ) {
+			
 			$.ajax({
 				type: "POST",
 				url: pagLlistat,
@@ -282,7 +283,8 @@ function CLlistat(){
 					}
 				}
 			});
-		}else{
+			
+		} else {
 			Llistat.finCargaListado(opcions,Llistat.cacheDatosListado);
 		}
 	
@@ -293,18 +295,20 @@ function CLlistat(){
 var Items_arr = new Array();
 
 // detall
-function CDetall(){
+function CDetall() {
+	
 	this.extend = DetallBase;
 	this.extend();
+	this.activar = 0
 	
     var that = this;
     
 	this.iniciar = function() {	
-		// moduls
-		moduls_elm = escriptori_detall_elm.find("div.modul");		
+		moduls_elm = escriptori_detall_elm.find("div.modul"); // moduls		
 	}
 	
 	this.nou = function() {
+		
 		escriptori_detall_elm.find(".botonera li.btnEliminar").hide();
 		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);
 		
@@ -315,16 +319,18 @@ function CDetall(){
 		
 		escriptori_contingut_elm.fadeOut(300, function() {
 			escriptori_detall_elm.fadeIn(300, function() {
-				// activar				
-				itemID_ultim = 0;
+				itemID_ultim = this.activar;
 			});
 		});
+		
 		this.actualizaEventos();
 		
 		this.modificado(false);
+		
 	}		
 	
 	this.pintar = function(dades) {
+		
 		escriptori_detall_elm.find("a.elimina").show().end().find("h2:first").text(txtDetallTitol);
 		
 		dada_node = dades;
@@ -337,19 +343,21 @@ function CDetall(){
 		$("#item_observacions").val(dada_node.item_observacions);
 		marcarOpcionSelect("item_perfil", dada_node.item_perfil);
 		
-		ModulUnitatAdministrativa.inicializarUnidadesAdministrativas(dada_node.uas);
-		
-        // mostrem
-        $("#modulLateral li.btnEliminar").show();
+
+		$("#modulLateral li.btnEliminar").show();
         
 		if ($("#carregantDetall").size() > 0) {
+			
 			$("#carregantDetall").fadeOut(300, function() {
+				
 				$(this).remove();
-				// array
+
 				Detall.array({id: dada_node.item_id, accio: "guarda", dades: dada_node});
                 escriptori_detall_elm.fadeIn(300);				
 			});
+			
 		} else {
+			
 			escriptori_contingut_elm.fadeOut(300, function() {
 				escriptori_detall_elm.fadeIn(300);				
 			});
@@ -357,9 +365,10 @@ function CDetall(){
 		}	
 		
 		this.modificado(false);
+		
 	}
 	
-	// Redefinir la funcion guarda para anadir la lista de UAs.
+	// Redefinir la funcion guarda para agregar la lista de UAs.
 	this._guarda = this.guarda;
     this.guarda = function() {
 		$("#llistaUnitatsAdministratives").val(ModulUnitatAdministrativa.listaUnidadesAdministrativas());
@@ -384,17 +393,29 @@ function CDetall(){
 				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
 			},
 			success: function(data) {
+				
                 Llistat.anulaCache();
+                
 				if (data.id > 0) {
+					
 					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtEsborrarCorrecte});
 					Detall.array({id: dada_node.item_id, accio: "elimina"});
 					Detall.recarregar();
-				} else if (data.id == -1){
+					
+				} else if (data.id == -1) {
+
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
-				} else if (data.id < -1){
+					
+				} else if (data.id < -1) {
+					
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
+					
 				}
 			}
 		});
+	}
+	
+	this.pintarModulos = function(dades) {
+		ModulUnitatAdministrativa.inicializarUnidadesAdministrativas(dades.uas);
 	}
 };

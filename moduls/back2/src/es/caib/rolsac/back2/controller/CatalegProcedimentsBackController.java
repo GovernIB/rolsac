@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.JsonParseException;
@@ -256,13 +257,13 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 
 	@RequestMapping(value = "/pagDetall.do", method = POST)
-	public @ResponseBody Map<String, Object> recuperaDetall(HttpSession session, HttpServletRequest request) {
+	public @ResponseBody Map<String, Object> recuperaDetall(Long id, HttpSession session, HttpServletRequest request) {
 
 		Map<String, Object> resultats = new HashMap<String, Object>();
 
 		try {
+			
 			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-			Long id = new Long(request.getParameter("id"));
 
 			ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
 			ProcedimientoLocal proc = procedimientoDelegate.obtenerProcedimientoNewBack(id);
@@ -316,13 +317,10 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			}
 
 			recuperaIdiomas(resultats, proc, lang);         // Recuperar los procedimientos según los idiomas
-            recuperaDocs(resultats, proc);                  // Recuperar los documentos relacionados de un procedimiento
             recuperaTramites(resultats, proc, request);     // Recuperar los trámites relacionados de un procedimiento
-            recuperaMaterias(resultats, proc, lang);        // Recuperar las materias asociadas a un procedimiento
             recuperaPO(resultats, proc, lang);              // Recuperar los públicos objetivos asociados a un procedimiento
-            recuperaHechosVitales(resultats, proc, lang);   // Recuperar los hechos vitales asociados a un procedimiento
-            recuperaNormativas(resultats, proc, lang);      // Recuperar las normativas asociadas a un procedimiento
 
+            
 		} catch (DelegateException dEx) {
 			logException(log, dEx);
 			if ( dEx.isSecurityException() ){
@@ -334,6 +332,42 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 		return resultats;
 	}
+	
+	
+	@RequestMapping(value = "/modulos.do")
+	public @ResponseBody Map<String, Object> recuperaModulos(Long id, HttpServletRequest request) {
+
+		Map<String, Object> resultats = new HashMap<String, Object>();
+
+		try {
+			
+			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			
+			ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
+			ProcedimientoLocal proc = procedimientoDelegate.obtenerProcedimientoNewBack(id);
+			
+            recuperaMaterias(resultats, proc, lang);        // Recuperar las materias asociadas a un procedimiento
+            recuperaNormativas(resultats, proc, lang);      // Recuperar las normativas asociadas a un procedimiento
+            recuperaDocs(resultats, proc);                  // Recuperar los documentos relacionados de un procedimiento
+            recuperaHechosVitales(resultats, proc, lang);   // Recuperar los hechos vitales asociados a un procedimiento
+
+
+		} catch (DelegateException dEx) {
+
+			log.error(ExceptionUtils.getStackTrace(dEx));
+
+			if (dEx.isSecurityException())
+				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+
+			else
+				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+
+		}
+
+		return resultats;
+
+	}
+	
 
 	/*
 	 * Función que recupera el contenido de los procedimientos según el idioma.

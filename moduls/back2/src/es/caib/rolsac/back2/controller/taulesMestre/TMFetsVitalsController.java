@@ -7,12 +7,9 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -26,7 +23,6 @@ import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.HechoVitalProcedimiento;
 import org.ibit.rol.sac.model.TraduccionHechoVital;
-import org.ibit.rol.sac.model.TraduccionMateria;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.model.dto.ProcedimientoLocalDTO;
@@ -141,11 +137,10 @@ public class TMFetsVitalsController extends PantallaBaseController
     
     
     @RequestMapping(value = "/pagDetall.do")
-    public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request)
-    {
+    public @ResponseBody Map<String, Object> recuperaDetall(Long id, HttpServletRequest request) {
+    	
     	Map<String, Object> resultats = new HashMap<String, Object>();
     	try {
-    		Long id = new Long(request.getParameter("id"));
     		
     		HechoVitalDelegate fetsVitalsDelegate = DelegateUtil.getHechoVitalDelegate();
     		HechoVital fetsVitals = fetsVitalsDelegate.obtenerHechoVital(id);
@@ -182,6 +177,29 @@ public class TMFetsVitalsController extends PantallaBaseController
             
             omplirCampsTraduibles(resultats, fetsVitals);
             
+	    } catch (DelegateException dEx) {
+			log.error(ExceptionUtils.getStackTrace(dEx));
+			if (dEx.isSecurityException()) {
+				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+			} else {
+				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+			}
+		}
+	    
+        return resultats;
+	}
+    
+    
+    @RequestMapping(value = "/modulos.do")
+	public @ResponseBody Map<String, Object> recuperaModulos(Long id, HttpServletRequest request) {
+		
+		Map<String, Object> resultats = new HashMap<String, Object>();
+		
+		try {
+			
+    		HechoVitalDelegate fetsVitalsDelegate = DelegateUtil.getHechoVitalDelegate();
+    		HechoVital fetsVitals = fetsVitalsDelegate.obtenerHechoVital(id);
+    		
             //Procedimientos
 			List<ProcedimientoLocalDTO> procedimientos = new LinkedList<ProcedimientoLocalDTO>();
 	        List<HechoVitalProcedimiento> lista = castList(HechoVitalProcedimiento.class, fetsVitals.getHechosVitalesProcedimientos());
@@ -204,18 +222,24 @@ public class TMFetsVitalsController extends PantallaBaseController
 					));
 	        	}
 	        }
-	        resultats.put("procediments", procedimientos);
 	        
-	    } catch (DelegateException dEx) {
+	        resultats.put("procediments", procedimientos);
+			
+			
+		} catch (DelegateException dEx) {
+
 			log.error(ExceptionUtils.getStackTrace(dEx));
-			if (dEx.isSecurityException()) {
+			
+			if (dEx.isSecurityException())
 				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
-			} else {
+			
+			else
 				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
-			}
+			
 		}
-	    
-        return resultats;
+		
+		return resultats;
+		
 	}
     
     private void omplirCampsTraduibles(Map<String, Object> resultats, HechoVital fetsVitals) throws DelegateException {

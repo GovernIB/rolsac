@@ -5,6 +5,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -25,11 +26,14 @@ import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.AgrupacionHechoVital;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.HechoVitalAgrupacionHV;
+import org.ibit.rol.sac.model.HechoVitalProcedimiento;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.TraduccionAgrupacionHV;
 import org.ibit.rol.sac.model.TraduccionHechoVital;
+import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
+import org.ibit.rol.sac.model.dto.ProcedimientoLocalDTO;
 import org.ibit.rol.sac.persistence.delegate.AgrupacionHVDelegate;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
@@ -360,11 +364,10 @@ public class TMAgrupacioFetsVitalsController extends PantallaBaseController {
     
     
     @RequestMapping(value = "/pagDetall.do")
-	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request)
+	public @ResponseBody Map<String, Object> recuperaDetall(Long id, HttpServletRequest request)
 	{
 	    Map<String, Object> resultats = new HashMap<String, Object>();
 	    try {
-	        Long id = new Long(request.getParameter("id"));
 	        
 	        AgrupacionHVDelegate agrupacioFVDelegate = DelegateUtil.getAgrupacionHVDelegate();
 	        AgrupacionHechoVital agrupacioFetsVitals = agrupacioFVDelegate.obtenerAgrupacionHV(id);	        	        
@@ -406,8 +409,30 @@ public class TMAgrupacioFetsVitalsController extends PantallaBaseController {
 			omplirCampsTraduibles(resultats, agrupacioFetsVitals);
 	        
 	        
+	    } catch (DelegateException dEx) {
+			log.error(ExceptionUtils.getStackTrace(dEx));
+			if (dEx.isSecurityException()) {
+				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+			} else {
+				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+			}
+		}
+	    
+        return resultats;
+	}
+    
+    @RequestMapping(value = "/modulos.do")
+   	public @ResponseBody Map<String, Object> recuperaModulos(Long id, HttpServletRequest request) {
+   		
+   		Map<String, Object> resultats = new HashMap<String, Object>();
+   		
+   		try {
+   			
 	        String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-	        // Fets vitals asociats
+	        
+	        AgrupacionHVDelegate agrupacioFVDelegate = DelegateUtil.getAgrupacionHVDelegate();
+	        AgrupacionHechoVital agrupacioFetsVitals = agrupacioFVDelegate.obtenerAgrupacionHV(id);	   
+   			
             if (agrupacioFetsVitals.getHechosVitalesAgrupacionHV() != null) {             
             	Map<String, String> map;
             	List<Map<String, String>> llistaFetsVitalsAgrupacio = new ArrayList<Map<String, String>>();            	
@@ -432,24 +457,30 @@ public class TMAgrupacioFetsVitalsController extends PantallaBaseController {
 	                    llistaFetsVitalsAgrupacio.add(map);
 					}
 				}
+				
 				resultats.put("fetsVitals", llistaFetsVitalsAgrupacio);
+				
             } else {
+            	
                 resultats.put("fetsVitals", null);
+                
             } 
-            // Fi Fets vitals asociats
-	        
-	        
-	    } catch (DelegateException dEx) {
-			log.error(ExceptionUtils.getStackTrace(dEx));
-			if (dEx.isSecurityException()) {
-				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
-			} else {
-				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
-			}
-		}
-	    
-        return resultats;
-	}
+   			
+   		} catch (DelegateException dEx) {
+
+   			log.error(ExceptionUtils.getStackTrace(dEx));
+   			
+   			if (dEx.isSecurityException())
+   				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+   			
+   			else
+   				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+   			
+   		}
+   		
+   		return resultats;
+   		
+   	}
     
     private void omplirCampsTraduibles(Map<String, Object> resultats, AgrupacionHechoVital agrupacioFV) throws DelegateException {
 		IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();

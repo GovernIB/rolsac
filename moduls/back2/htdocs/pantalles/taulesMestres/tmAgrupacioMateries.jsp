@@ -18,6 +18,7 @@
     var pagGuardar = '<c:url value="/agrupacioMateries/guardar.do" />';
     var pagEsborrar = '<c:url value="/agrupacioMateries/esborrarAgrupacioMateries.do" />';
     var pagTraduirAgrupacioMateries = '<c:url value="/agrupacioMateries/traduir.do" />';
+    var modulos = '<c:url value="/agrupacioMateries/modulos.do" />';
 
     //texts
     var txtTria = "<spring:message code='camp.tria.opcio'/>";

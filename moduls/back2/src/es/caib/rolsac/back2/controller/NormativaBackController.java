@@ -408,14 +408,12 @@ public class NormativaBackController extends PantallaBaseController {
 
     @RequestMapping(value = "/pagDetall.do", method = POST)
     public @ResponseBody
-    Map<String, Object> recuperaDetall(HttpServletRequest request, Map<String, Object> model) {
+    Map<String, Object> recuperaDetall(Long id, HttpServletRequest request, Map<String, Object> model) {
 
         Map<String, Object> normativaDetall = new HashMap<String, Object>();
 
         try {
-            String idiomaUsuario = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-            Long id = ParseUtil.parseLong(request.getParameter("id"));
-
+        	
             NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
             Normativa normativa = normativaDelegate.obtenerNormativa(id);
 
@@ -456,10 +454,7 @@ public class NormativaBackController extends PantallaBaseController {
             normativaDetall.put("llei", normativa.getLey());
             normativaDetall.put("tipus", normativa.getTipo() != null ? normativa.getTipo().getId() : null);
             normativaDetall.put("validacio", normativa.getValidacion());
-            // Normativas afectadas.
-            normativaDetall.put("afectacions", getNormativasAfectadasDTO(normativa, idiomaUsuario));
-            // Procedimientos asociados a la normativa.
-            normativaDetall.put("procediments", getProcedimientosNormativaDTO(normativa, idiomaUsuario));
+
 
         } catch (DelegateException dEx) {
             log.error("Error: " + dEx.getMessage());
@@ -472,6 +467,38 @@ public class NormativaBackController extends PantallaBaseController {
 
         return normativaDetall;
     }
+    
+    
+    @RequestMapping(value = "/modulos.do")
+   	public @ResponseBody Map<String, Object> recuperaModulos(Long id, HttpServletRequest request) {
+
+   		Map<String, Object> resultats = new HashMap<String, Object>();
+
+   		try {
+   			
+            String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+            
+            NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
+            Normativa normativa = normativaDelegate.obtenerNormativa(id);
+   			
+   			resultats.put("afectacions", getNormativasAfectadasDTO(normativa, lang));
+   			resultats.put("procediments", getProcedimientosNormativaDTO(normativa, lang));
+
+   		} catch (DelegateException dEx) {
+
+   			log.error(ExceptionUtils.getStackTrace(dEx));
+
+   			if (dEx.isSecurityException())
+   				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+
+   			else
+   				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+
+   		}
+
+   		return resultats;
+
+   	}
 
     private List<ProcedimientoLocalDTO> getProcedimientosNormativaDTO(Normativa normativa, String idiomaUsuario) {
 
