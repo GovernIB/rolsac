@@ -4,7 +4,7 @@
         "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
 
 <hibernate-mapping>
-    <class name="org.ibit.rol.sac.model.Idioma" table="RSC_IDIOMA" mutable="false">
+    <class name="org.ibit.rol.sac.model.Idioma" table="RSC_IDIOMA" mutable="true">
         <id name="lang" unsaved-value="any" length="2" column="IDI_CODI" >
             <generator class="assigned"/>
         </id>

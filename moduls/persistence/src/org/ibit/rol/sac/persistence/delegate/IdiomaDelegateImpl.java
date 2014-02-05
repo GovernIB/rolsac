@@ -15,26 +15,27 @@ import org.ibit.rol.sac.model.Idioma;
 /**
  * Business delegate pera consultar idiomas.
  */
-public class IdiomaDelegateImpl extends IdiomaDelegate implements  StatelessDelegate, IdiomaDelegateI
-{
+public class IdiomaDelegateImpl extends IdiomaDelegate implements  StatelessDelegate, IdiomaDelegateI {
+
 	// Cache de lengaujes
     private List lenguajes = null;
     private long timeLen = 0L;
-    
+
     // Cache de lenguaje por defecto
     private String porDefecto = null;
     private long timeDef = 0L;
-    
+
     private static long maxtime = 60000L; // 60 segundos
-    
+
     private boolean timeout(long time) {
+
         return ((System.currentTimeMillis() - time) > maxtime);
     }
-    
+
     /* ========================================================= */
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
-    
+
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.IdiomaDelegateI#listarLenguajes()
 	 */
@@ -74,7 +75,66 @@ public class IdiomaDelegateImpl extends IdiomaDelegate implements  StatelessDele
     	}
     }
     
-    
+    /* (non-Javadoc)
+     * @see org.ibit.rol.sac.persistence.delegate.IdiomaDelegateI#listarIdiomas()
+     */
+    public List<Idioma> listarIdiomas() throws DelegateException {
+
+        try {
+            return getFacade().listarIdiomas();
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+
+    /* (non-Javadoc)
+     * @see org.ibit.rol.sac.persistence.delegate.IdiomaDelegateI#obtenerIdioma()
+     */
+    public Idioma obtenerIdioma(String lang) throws DelegateException {
+
+        try {
+            return getFacade().obtenerIdioma(lang);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+
+    /* (non-Javadoc)
+     * @see org.ibit.rol.sac.persistence.delegate.IdiomaDelegateI#grabarIdioma()
+     */
+    public void grabarIdioma(Idioma idioma) throws DelegateException {
+
+        try {
+            getFacade().grabarIdioma(idioma);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+
+    /* (non-Javadoc)
+     * @see org.ibit.rol.sac.persistence.delegate.IdiomaDelegateI#borrarIdioma()
+     */
+    public void borrarIdioma(String lang) throws DelegateException {
+
+        try {
+            getFacade().borrarIdioma(lang);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+
+    /* (non-Javadoc)
+     * @see org.ibit.rol.sac.persistence.delegate.IdiomaDelegateI#reordenar()
+     */
+    public void reordenar(String lang, Integer ordenNuevo, Integer ordenAnterior) throws DelegateException {
+
+        try {
+            getFacade().reordenar(lang, ordenNuevo, ordenAnterior);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

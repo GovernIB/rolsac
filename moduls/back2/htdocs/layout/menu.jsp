@@ -91,6 +91,9 @@
 							<li>
 								<a href="<c:url value="/administracioRemota/administracioRemota.do"/>"><spring:message code="menu.administracio_remota" /></a>
 							</li>
+							<li>
+							    <a href="<c:url value="/idiomes/idiomes.do" />"><spring:message code="menu.idiomes" /></a>
+							</li>
 						</ul>
 					</li>
 					<li>

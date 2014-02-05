@@ -11,49 +11,82 @@ import org.ibit.rol.sac.model.Idioma;
  * aplicacions corporatives que esperen una classe (produeix un IncompatibleClassChangeError). 
  * 
  */
-public class IdiomaDelegate implements StatelessDelegate
-{
+public class IdiomaDelegate implements StatelessDelegate {
+
 	private static final long serialVersionUID = -4377464442759993342L;
-	
+
 	// Cache de lengaujes
     private List<String> lenguajes = null;
     private List<String> lenguajesTraductor = null;
     private long timeLen = 0L;
-    
+
 	IdiomaDelegateI impl;
-	
+
 	private static long maxtime = 60000L; // 60 segundos
-	
+
     private boolean timeout(long time) {
+
         return ((System.currentTimeMillis() - time) > maxtime);
     }
-    
+
 	public IdiomaDelegateI getImpl() {
+
 		return impl;
 	}
-	
+
 	public void setImpl(IdiomaDelegateI impl) {
+
 		this.impl = impl;
 	}
-	
+
     public List<String> listarLenguajesTraductor() throws DelegateException {
+
     	if (lenguajesTraductor == null || timeout(timeLen)) {
     		lenguajesTraductor = impl.listarLenguajesTraductor();
     		timeLen = System.currentTimeMillis();
     	}
+
     	return lenguajesTraductor;
     }
-    
+
     public String lenguajePorDefecto() throws DelegateException {
+
 		return impl.lenguajePorDefecto();
 	}
-    
+
     public List<String> listarLenguajes() throws DelegateException {
+
     	if (lenguajes == null || timeout(timeLen)) {
     		lenguajes = impl.listarLenguajes();
     		timeLen = System.currentTimeMillis();
     	}
+
     	return lenguajes;
     }
-    
+
+    public List<Idioma> listarIdiomas() throws DelegateException {
+
+        return impl.listarIdiomas();
+    }
+
+    public Idioma obtenerIdioma(String lang) throws DelegateException {
+
+        return impl.obtenerIdioma(lang);
+    }
+
+    public void grabarIdioma(Idioma idioma) throws DelegateException {
+
+        impl.grabarIdioma(idioma);
+    }
+
+    public void borrarIdioma(String lang) throws DelegateException {
+
+        impl.borrarIdioma(lang);
+    }
+
+    public void reordenar(String lang, Integer ordenNuevo, Integer ordenAnterior) throws DelegateException {
+
+        impl.reordenar(lang, ordenNuevo, ordenAnterior);
+    }
+
 }
