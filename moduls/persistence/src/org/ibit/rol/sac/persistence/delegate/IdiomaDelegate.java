@@ -74,9 +74,9 @@ public class IdiomaDelegate implements StatelessDelegate {
         return impl.obtenerIdioma(lang);
     }
 
-    public void grabarIdioma(Idioma idioma) throws DelegateException {
+    public String grabarIdioma(Idioma idioma) throws DelegateException {
 
-        impl.grabarIdioma(idioma);
+        return impl.grabarIdioma(idioma);
     }
 
     public void borrarIdioma(String lang) throws DelegateException {

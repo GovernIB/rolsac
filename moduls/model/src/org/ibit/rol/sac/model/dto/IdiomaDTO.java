@@ -1,5 +1,9 @@
 package org.ibit.rol.sac.model.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.ibit.rol.sac.model.Idioma;
 import org.ibit.rol.sac.model.ValueObject;
 
 public class IdiomaDTO implements ValueObject {
@@ -61,4 +65,19 @@ public class IdiomaDTO implements ValueObject {
         this.langTraductor = langTraductor;
     }
 
+    public static List<IdiomaDTO> idiomaToIdomaDTO(List<Idioma> listaIdiomas) {
+
+        List<IdiomaDTO> lista = new ArrayList<IdiomaDTO>(listaIdiomas.size());
+        for (Idioma idioma : listaIdiomas) {
+            lista.add(new IdiomaDTO(
+                idioma.getLang(),
+                idioma.getCodigoEstandar(),
+                idioma.getOrden(),
+                idioma.getNombre(),
+                idioma.getLangTraductor()
+            ));
+        }
+
+        return lista;
+    }
 }

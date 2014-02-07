@@ -171,7 +171,7 @@ public abstract class IdiomaFacadeEJB extends HibernateEJB implements IdiomaDele
      * 
      * @return Devuelve el identificador del idioma guardado.
      */
-    public void grabarIdioma(Idioma idioma) {
+    public String grabarIdioma(Idioma idioma) {
 
         Session session = getSession();
         try {
@@ -194,6 +194,7 @@ public abstract class IdiomaFacadeEJB extends HibernateEJB implements IdiomaDele
             }
 
             session.flush();
+            return idioma.getLang();
 
         } catch (HibernateException he) {
             throw new EJBException(he);

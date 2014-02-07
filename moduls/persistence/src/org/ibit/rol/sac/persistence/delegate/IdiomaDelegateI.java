@@ -21,7 +21,7 @@ public interface IdiomaDelegateI {
 	public abstract Idioma obtenerIdioma(String lang)
         throws DelegateException;
 
-	public abstract void grabarIdioma(Idioma idioma)
+	public abstract String grabarIdioma(Idioma idioma)
 	    throws DelegateException;
 
 	public abstract void borrarIdioma(String lang)

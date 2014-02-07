@@ -313,7 +313,9 @@ public class Traductor extends AutomaticTranslationService implements Traduccion
 				}
 				return translation;
 			}
-			
+
+		} catch (TraductorException traEx) {
+		    throw traEx;
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			throw new Exception(e);

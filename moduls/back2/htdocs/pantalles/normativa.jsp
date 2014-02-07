@@ -1113,34 +1113,12 @@
                     <div class="fila">
                         <p class="introIdiomas"><spring:message code='txt.idioma.idioma'/>:</p>
                         <ul class="idiomes">						
-							<c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">
-							<li class="idioma">							
-							<a href="javascript:;" class="<c:out value="${lang}"/>">
-								<c:choose>
-									<c:when test="${lang eq 'ca'}">	
-									<spring:message code='txt.idioma.ca'/>
-									</c:when>
-									
-									<c:when test="${lang eq 'es'}">	
-									<spring:message code='txt.idioma.es'/>
-									</c:when>
-
-									<c:when test="${lang eq 'en'}">	
-									<spring:message code='txt.idioma.en'/>
-									</c:when>
-
-									<c:when test="${lang eq 'fr'}">	
-									<spring:message code='txt.idioma.fr'/>
-									</c:when>
-									
-									<c:when test="${lang eq 'de'}">								
-									<spring:message code='txt.idioma.de'/>
-									</c:when>
-								</c:choose>							
-							</a>
-							</li>
+							<c:forEach items="${idiomasListado}" var="llengua" varStatus="loop">
+							    <li class="idioma">
+							        <a href="javascript:;" class='<c:out value="${llengua.lang}"/>'><c:out value="${llengua.nombre}" /></a>
+							    </li>
 							</c:forEach>
-							
+
 							<li class="traduix btnGenerico" id="botoTraduirNormativa">
 							    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
 							</li>
@@ -1470,48 +1448,28 @@
                     <%-- dsanchez: Clase "multilang" para listas multi-idioma --%>
                     <div class="modulDocuments multilang">                            
                         <ul class="idiomes">
-						
+
 							<li class="introIdiomas"><spring:message code='txt.idioma.idioma'/>:</li>
-							<c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">
-							<c:if test="${loop.first}">
-							<li class="<c:out value="${lang}"/> seleccionat">
-							</c:if>							
-							<c:if test="${!loop.first}">
-							<li class="<c:out value="${lang}"/>">		
-							</c:if>														
-							<c:choose>
-								<c:when test="${lang eq 'ca'}">
-									<spring:message code='txt.idioma.ca_abr'/>							
-								</c:when>
-								
-								<c:when test="${lang eq 'es'}">
-									<spring:message code='txt.idioma.es_abr'/>							
-								</c:when>
-
-								<c:when test="${lang eq 'en'}">
-									<spring:message code='txt.idioma.en_abr'/>							
-								</c:when>
-								
-								<c:when test="${lang eq 'fr'}">
-									<spring:message code='txt.idioma.fr_abr'/>							
-								</c:when>
-
-								<c:when test="${lang eq 'de'}">
-									<spring:message code='txt.idioma.de_abr'/>							
-								</c:when>
-							</c:choose>							
-							</li>
+							<c:forEach items="${idiomasListado}" var="llengua" varStatus="loop">
+							    <c:if test="${loop.first}">
+							        <li class='<c:out value="${llengua.lang}"/> seleccionat'>
+							    </c:if>
+							    <c:if test="${!loop.first}">
+							        <li class='<c:out value="${llengua.lang}"/>'>
+							    </c:if>
+							    <c:out value="${llengua.lang}" />
+							    </li>
 							</c:forEach>						
                         </ul>
-                        
+
                         <div class="seleccionats">
-						
+
                             <c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">
-							
+
 							<c:if test="${loop.first}">
 							<div class="seleccionat cajaIdioma <c:out value="${lang}"/>">
 							</c:if>
-							
+
 							<c:if test="${!loop.first}">
 							<div class=" <c:out value="${lang}"/> cajaIdioma">
 							</c:if>	

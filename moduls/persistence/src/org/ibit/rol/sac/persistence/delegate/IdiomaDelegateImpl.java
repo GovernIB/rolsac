@@ -7,10 +7,10 @@ import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
 
+import org.ibit.rol.sac.model.Idioma;
 import org.ibit.rol.sac.persistence.intf.IdiomaFacade;
 import org.ibit.rol.sac.persistence.intf.IdiomaFacadeHome;
 import org.ibit.rol.sac.persistence.util.IdiomaFacadeUtil;
-import org.ibit.rol.sac.model.Idioma;
 
 /**
  * Business delegate pera consultar idiomas.
@@ -102,10 +102,22 @@ public class IdiomaDelegateImpl extends IdiomaDelegate implements  StatelessDele
     /* (non-Javadoc)
      * @see org.ibit.rol.sac.persistence.delegate.IdiomaDelegateI#grabarIdioma()
      */
-    public void grabarIdioma(Idioma idioma) throws DelegateException {
+    public String grabarIdioma(Idioma idioma) throws DelegateException {
 
         try {
-            getFacade().grabarIdioma(idioma);
+            String lang = getFacade().grabarIdioma(idioma);
+            boolean nuevo = true;
+            for (Object idi : lenguajes) {
+                if (idi.equals(lang)) {
+                    nuevo = false;
+                }
+            }
+            if (nuevo) {
+                lenguajes.add(lang);
+            }
+
+            return lang;
+
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
@@ -118,6 +130,8 @@ public class IdiomaDelegateImpl extends IdiomaDelegate implements  StatelessDele
 
         try {
             getFacade().borrarIdioma(lang);
+            lenguajes.remove(lang);
+
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }

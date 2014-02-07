@@ -1,5 +1,8 @@
 package es.caib.rolsac.back2.controller.taulesMestre;
 
+import static es.caib.rolsac.utils.LogUtils.logException;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -8,31 +11,25 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.ExcepcioDocumentacio;
-import org.ibit.rol.sac.model.TraduccionCatalegDocuments;
 import org.ibit.rol.sac.model.TraduccionExcepcioDocumentacio;
-
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.ExcepcioDocumentacioDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.indra.rol.sac.integracion.traductor.Traductor;
-
-import static es.caib.rolsac.utils.LogUtils.logException;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
 @RequestMapping("/excepcioDocumentacio/")
@@ -98,43 +95,25 @@ public class TMExcepcioDocumentacioController extends PantallaBaseController
     @RequestMapping(value = "/pagDetall.do")
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
 	    Map<String, Object> resultats = new HashMap<String, Object>();
-	    
+
 	    try {
 	        Long id = new Long(request.getParameter("id"));
-	        
+
 	        ExcepcioDocumentacioDelegate excepcioDelegate = DelegateUtil.getExcepcioDocumentacioDelegate();
 	        ExcepcioDocumentacio excepcio = excepcioDelegate.obtenirExcepcioDocumentacio(id);      	        
-	        
+
 	        resultats.put("item_id", excepcio.getId());
-	        
+
 	        // idiomes
-	        if (excepcio.getTraduccion("ca") != null) {
-				resultats.put("ca", (TraduccionExcepcioDocumentacio) excepcio.getTraduccion("ca"));
-			} else {
-				resultats.put("ca", new TraduccionExcepcioDocumentacio());
-			}
-	        if (excepcio.getTraduccion("es") != null) {
-				resultats.put("es", (TraduccionExcepcioDocumentacio) excepcio.getTraduccion("es"));
-			} else {
-				resultats.put("es", new TraduccionExcepcioDocumentacio());
-			}
-	        if (excepcio.getTraduccion("en") != null) {
-				resultats.put("en", (TraduccionExcepcioDocumentacio) excepcio.getTraduccion("en"));
-			} else {
-				resultats.put("en", new TraduccionExcepcioDocumentacio());
-			}
-	        if (excepcio.getTraduccion("de") != null) {
-				resultats.put("de", (TraduccionExcepcioDocumentacio) excepcio.getTraduccion("de"));
-			} else {
-				resultats.put("de", new TraduccionExcepcioDocumentacio());
-			}
-	        if (excepcio.getTraduccion("fr") != null) {
-				resultats.put("fr", (TraduccionExcepcioDocumentacio) excepcio.getTraduccion("fr"));
-			} else {
-				resultats.put("fr", new TraduccionExcepcioDocumentacio());
-			}
+	        for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
+	            if (excepcio.getTraduccion(lang) != null) {
+	                resultats.put(lang, (TraduccionExcepcioDocumentacio) excepcio.getTraduccion(lang));
+	            } else {
+	                resultats.put(lang, new TraduccionExcepcioDocumentacio());
+	            }
+            }
 	        // fi idiomes
-			
+
 	    } catch (DelegateException dEx) {
 			log.error(ExceptionUtils.getStackTrace(dEx));
 			if (dEx.isSecurityException()) {
@@ -143,7 +122,7 @@ public class TMExcepcioDocumentacioController extends PantallaBaseController
 				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
 			}
 		}
-	    
+
         return resultats;
 	}
     

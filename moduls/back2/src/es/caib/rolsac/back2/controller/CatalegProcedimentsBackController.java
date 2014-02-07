@@ -62,6 +62,7 @@ import org.ibit.rol.sac.persistence.delegate.DocumentoResumenDelegate;
 import org.ibit.rol.sac.persistence.delegate.ExcepcioDocumentacioDelegate;
 import org.ibit.rol.sac.persistence.delegate.FamiliaDelegate;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalProcedimientoDelegate;
+import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IniciacionDelegate;
 import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
 import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
@@ -81,6 +82,7 @@ import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.utils.DateUtils;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.indra.rol.sac.integracion.traductor.Traductor;
+import es.indra.rol.sac.integracion.traductor.TraductorException;
 
 @Controller
 @RequestMapping("/catalegProcediments/")
@@ -262,8 +264,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		Map<String, Object> resultats = new HashMap<String, Object>();
 
 		try {
+		    IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
 			
-			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			String lang = idiomaDelegate.lenguajePorDefecto();
 
 			ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
 			ProcedimientoLocal proc = procedimientoDelegate.obtenerProcedimientoNewBack(id);
@@ -320,7 +323,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
             recuperaTramites(resultats, proc, request);     // Recuperar los trámites relacionados de un procedimiento
             recuperaPO(resultats, proc, lang);              // Recuperar los públicos objetivos asociados a un procedimiento
 
-            
 		} catch (DelegateException dEx) {
 			logException(log, dEx);
 			if ( dEx.isSecurityException() ){
@@ -1236,18 +1238,18 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 
 	@RequestMapping(value = "/traduir.do")
-	public @ResponseBody Map<String, Object> traduir(HttpServletRequest request)
-	{
+	public @ResponseBody Map<String, Object> traduir(HttpServletRequest request) {
+
 		Map<String, Object> resultats = new HashMap<String, Object>();
 
 		try {
 		    String idiomaOrigenTraductor = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-            
+
             TraduccionProcedimientoLocal traduccioOrigen = getTraduccionOrigen(request, idiomaOrigenTraductor);
             List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
             Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
             traduccions = traductor.translate(traduccioOrigen, idiomaOrigenTraductor);
-            
+
             resultats.put("traduccions", traduccions);
 
 		} catch (DelegateException dEx) {
@@ -1257,6 +1259,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			} else {
 				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
 			}
+		} catch (TraductorException traEx) {
+		    log.error("CatalegProcedimentBackController.traduir: El traductor no puede traducir todos los idiomas");
+		    resultats.put("error", messageSource.getMessage("traductor.no_traduible", null, request.getLocale()));
 		} catch (NullPointerException npe) {
 			log.error("CatalegProcedimentBackController.traduir: El traductor no se encuentra en en contexto.");
 			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));

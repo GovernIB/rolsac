@@ -15,7 +15,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.ibit.rol.sac.model.TraduccionTipo;
 import org.ibit.rol.sac.model.TraduccionTipoUA;
 import org.ibit.rol.sac.model.TraduccionTratamiento;
 import org.ibit.rol.sac.model.Tratamiento;
@@ -108,44 +107,26 @@ public class TMTipusUnitatController extends PantallaBaseController
 	@RequestMapping(value = "/pagDetall.do")
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
 	    Map<String, Object> resultats = new HashMap<String, Object>();
-	    
+
 	    try {
 	        Long id = new Long(request.getParameter("id"));
-	        
+
 	        TratamientoDelegate unitatDelegate = DelegateUtil.getTratamientoDelegate();
 	        Tratamiento unitat = unitatDelegate.obtenerTratamiento(id);	        	        
-	        
+
 	        resultats.put("item_id", unitat.getId());
 	        resultats.put("item_codi_estandard", unitat.getCodigoEstandar());
-	        
+
 	        // idiomes
-	        if (unitat.getTraduccion("ca") != null) {
-				resultats.put("ca", (TraduccionTratamiento) unitat.getTraduccion("ca"));
-			} else {
-				resultats.put("ca", new TraduccionTratamiento());
-			}
-	        if (unitat.getTraduccion("es") != null) {
-				resultats.put("es", (TraduccionTratamiento) unitat.getTraduccion("es"));
-			} else {
-				resultats.put("es", new TraduccionTratamiento());
-			}
-	        if (unitat.getTraduccion("en") != null) {
-				resultats.put("en", (TraduccionTratamiento) unitat.getTraduccion("en"));
-			} else {
-				resultats.put("en", new TraduccionTratamiento());
-			}
-	        if (unitat.getTraduccion("de") != null) {
-				resultats.put("de", (TraduccionTratamiento) unitat.getTraduccion("de"));
-			} else {
-				resultats.put("de", new TraduccionTratamiento());
-			}
-	        if (unitat.getTraduccion("fr") != null) {
-				resultats.put("fr", (TraduccionTratamiento) unitat.getTraduccion("fr"));
-			} else {
-				resultats.put("fr", new TraduccionTratamiento());
-			}
+	        for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
+	            if (unitat.getTraduccion(lang) != null) {
+	                resultats.put(lang, (TraduccionTratamiento) unitat.getTraduccion(lang));
+	            } else {
+	                resultats.put(lang, new TraduccionTratamiento());
+	            }
+            }
 	        // fi idiomes
-			
+
 	    } catch (DelegateException dEx) {
 			log.error(ExceptionUtils.getStackTrace(dEx));
 			if (dEx.isSecurityException()) {
@@ -154,7 +135,7 @@ public class TMTipusUnitatController extends PantallaBaseController
 				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
 			}
 		}
-	    
+
         return resultats;
 	}
 	

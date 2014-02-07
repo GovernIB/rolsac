@@ -229,45 +229,25 @@
                         <div class="fila">
                             <p class="introIdiomas"><spring:message code='txt.idioma.idioma'/>:</p>
                             <ul class="idiomes">
-                                <c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">
-                                    <li class="idioma"><a href="javascript:;" class="<c:out value="${lang}"/>">
-                                        <c:choose>
-                                            <c:when test="${lang eq 'ca'}">
-                                                <spring:message code='txt.idioma.ca'/>
-                                            </c:when>
-                                            
-                                            <c:when test="${lang eq 'es'}">
-                                                <spring:message code='txt.idioma.es'/>
-                                            </c:when>
-                                            
-                                            <c:when test="${lang eq 'en'}">
-                                                <spring:message code='txt.idioma.en'/>
-                                            </c:when>
-                                            
-                                            <c:when test="${lang eq 'de'}">
-                                                <spring:message code='txt.idioma.de'/>
-                                            </c:when>
-                                            
-                                            <c:when test="${lang eq 'fr'}">
-                                                <spring:message code='txt.idioma.fr'/>
-                                            </c:when>
-                                        </c:choose>
-                                    </a></li>
+                                <c:forEach items="${idiomasListado}" var="llengua" varStatus="loop">
+                                    <li class="idioma">
+                                        <a href="javascript:;" class='<c:out value="${llengua.lang}"/>'><c:out value="${llengua.nombre}" /></a>
+                                    </li>
                                 </c:forEach>
-                                
+
                                 <li class="traduix btnGenerico" id="botoTraduirAHV">
                                     <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
                                 </li>
                             </ul>
-                            
+
                             <c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">
-							
+
 							<c:if test="${loop.first}">							
                             <div class="idiomes">
 							</c:if>
-                                
+
                                 <div class="idioma <c:out value="${lang}"/>">
-								
+
                                     <div class="fila">
                                         <div class="element t50p">
                                             <div class="etiqueta">
@@ -278,7 +258,7 @@
                                             </div>
                                         </div>
                                     </div>
-									
+
                                     <div class="fila">                              
                                         <div class="element t99p">
                                             <div class="etiqueta">
@@ -289,7 +269,7 @@
                                             </div>                                      
                                         </div>                      
                                     </div>
-									
+
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
@@ -300,7 +280,7 @@
                                             </div>
                                         </div>
                                     </div>
-									
+
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
@@ -311,7 +291,7 @@
                                             </div>
                                         </div>
                                     </div>
-									
+
                                 </div>								
 							<c:if test="${loop.last}">
                             </div>

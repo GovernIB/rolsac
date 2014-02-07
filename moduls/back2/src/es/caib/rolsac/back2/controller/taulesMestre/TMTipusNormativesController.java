@@ -1,5 +1,8 @@
 package es.caib.rolsac.back2.controller.taulesMestre;
 
+import static es.caib.rolsac.utils.LogUtils.logException;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -8,29 +11,25 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.ibit.rol.sac.model.TraduccionTipo;
 import org.ibit.rol.sac.model.Tipo;
+import org.ibit.rol.sac.model.TraduccionTipo;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.TipoNormativaDelegate;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.indra.rol.sac.integracion.traductor.Traductor;
-
-import static es.caib.rolsac.utils.LogUtils.logException;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
 @RequestMapping("/tipusNormatives/")
@@ -100,43 +99,25 @@ public class TMTipusNormativesController extends PantallaBaseController {
 	@RequestMapping(value = "/pagDetall.do")
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
 	    Map<String, Object> resultats = new HashMap<String, Object>();
-	    
+
 	    try {
 	        Long id = new Long(request.getParameter("id"));
-	        
+
 	        TipoNormativaDelegate tipoNormativaDelegate = DelegateUtil.getTipoNormativaDelegate();
 	        Tipo tipus = tipoNormativaDelegate.obtenerTipoNormativa(id);	        	        
-	        
+
 	        resultats.put("item_id", tipus.getId());
-	        
+
 	        // idiomes
-	        if (tipus.getTraduccion("ca") != null) {
-				resultats.put("ca", (TraduccionTipo) tipus.getTraduccion("ca"));
-			} else {
-				resultats.put("ca", new TraduccionTipo());
-			}
-	        if (tipus.getTraduccion("es") != null) {
-				resultats.put("es", (TraduccionTipo) tipus.getTraduccion("es"));
-			} else {
-				resultats.put("es", new TraduccionTipo());
-			}
-	        if (tipus.getTraduccion("en") != null) {
-				resultats.put("en", (TraduccionTipo) tipus.getTraduccion("en"));
-			} else {
-				resultats.put("en", new TraduccionTipo());
-			}
-	        if (tipus.getTraduccion("de") != null) {
-				resultats.put("de", (TraduccionTipo) tipus.getTraduccion("de"));
-			} else {
-				resultats.put("de", new TraduccionTipo());
-			}
-	        if (tipus.getTraduccion("fr") != null) {
-				resultats.put("fr", (TraduccionTipo) tipus.getTraduccion("fr"));
-			} else {
-				resultats.put("fr", new TraduccionTipo());
-			}
+	        for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
+	            if (tipus.getTraduccion(lang) != null) {
+	                resultats.put(lang, (TraduccionTipo) tipus.getTraduccion(lang));
+	            } else {
+	                resultats.put(lang, new TraduccionTipo());
+	            }
+            }
 	        // fi idiomes
-			
+
 	    } catch (DelegateException dEx) {
 			log.error(ExceptionUtils.getStackTrace(dEx));
 			if (dEx.isSecurityException()) {
@@ -145,7 +126,7 @@ public class TMTipusNormativesController extends PantallaBaseController {
 				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
 			}
 		}
-	    
+
         return resultats;
 	}
     

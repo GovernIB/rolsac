@@ -76,6 +76,8 @@ public class AutomaticTranslationService {
 
 			return manageColors(convertStreamToString(getOutput(params)));
 
+		} catch (TraductorException traEx) {
+		    throw traEx;
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			throw new Exception(e); 
@@ -293,8 +295,14 @@ public class AutomaticTranslationService {
      * Método que convierte el Stream de datos traducidos en un String
      * @param is	Stream de datos traducidos por el traductor Lucy
      * @return	String	texto traducido de tipo String
+     * @throws Exception 
      */
-    private String convertStreamToString(InputStream is) {
+    private String convertStreamToString(InputStream is) throws Exception {
+
+        if (is == null) {
+            log.error("Idioma no disponible en el traductor");
+            throw new TraductorException("Idioma no disponible en el traductor");
+        }
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
     	StringBuilder sb = new StringBuilder();

@@ -85,6 +85,82 @@
     var txtMesMal = "<spring:message code='txt.mes_mal'/>";
     var txtDiaMal = "<spring:message code='txt.dia_mal'/>";
     var txtNoEsCorrecte = "<spring:message code='txt.data_no_correcte'/>";
+    var txtNombreObligatorio = "<spring:message code='personal.formulari.nom.obligatori'/>";
+    var txtNombreNoSoloNumeros = "<spring:message code='personal.formulari.nom.no_nomes_numeros'/>";
+
+    // dades formularios
+    var FormulariDades = [
+        // Lang
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_lang",
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "caracters":
+                {
+                    "maxim": 2,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
+            "error":
+                {
+                    "obligatori": "<spring:message code='idioma.formulari.error.lang.obligatori'/>"
+                }
+        },
+
+        // Codi estandar
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_codi_estandard",
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "caracters":
+                {
+                    "maxim": 2,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
+            "error":
+                {
+                    "obligatori": "<spring:message code='idioma.formulari.error.codi.obligatori'/>"
+                }
+        },
+
+        // Nom
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_nom",
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "caracters":
+                {
+                    "maxim": 230,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
+            "error":
+                {
+                    "obligatori": txtNombreObligatorio,
+                    "tipus": txtNombreNoSoloNumeros
+                }
+        },
+
+        // Codi traductor
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_lang_traductor",
+            "obligatori": "si",
+            "tipus": "alfanumeric",         
+            "error":
+                {
+                    "obligatori": "<spring:message code='idioma.formulari.error.traductor.obligatori'/>"
+                }
+        }   
+    ];
 </script>
 
 <div id="escriptori_contingut"> <%-- style="display:none/block" --%>

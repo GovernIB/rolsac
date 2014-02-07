@@ -20,7 +20,6 @@ import org.ibit.rol.sac.model.IconoFamilia;
 import org.ibit.rol.sac.model.IconoMateria;
 import org.ibit.rol.sac.model.PerfilCiudadano;
 import org.ibit.rol.sac.model.TraduccionPerfilCiudadano;
-import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
@@ -115,60 +114,40 @@ public class TMPerfilsController extends PantallaBaseController {
     @RequestMapping(value = "/pagDetall.do")
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
 	    Map<String, Object> resultats = new HashMap<String, Object>();
-	    
+
 	    try {
 	        Long id = new Long(request.getParameter("id"));
-	        
+
 	        PerfilDelegate perfilDelegate = DelegateUtil.getPerfilDelegate();
 	        PerfilCiudadano perfil = perfilDelegate.obtenerPerfil(id);	        	        
-	        
+
 	        resultats.put("item_id", perfil.getId());
 	        resultats.put("item_codi_estandard", perfil.getCodigoEstandard());
 	        resultats.put("item_path_iconografia", perfil.getPathIconografia());
-	        
-	        
+
 	        // idiomes
-	        if (perfil.getTraduccion("ca") != null) {
-				resultats.put("ca", (TraduccionPerfilCiudadano) perfil.getTraduccion("ca"));
-			} else {
-				resultats.put("ca", new TraduccionPerfilCiudadano());
-			}
-	        if (perfil.getTraduccion("es") != null) {
-				resultats.put("es", (TraduccionPerfilCiudadano) perfil.getTraduccion("es"));
-			} else {
-				resultats.put("es", new TraduccionPerfilCiudadano());
-			}
-	        if (perfil.getTraduccion("en") != null) {
-				resultats.put("en", (TraduccionPerfilCiudadano) perfil.getTraduccion("en"));
-			} else {
-				resultats.put("en", new TraduccionPerfilCiudadano());
-			}
-	        if (perfil.getTraduccion("de") != null) {
-				resultats.put("de", (TraduccionPerfilCiudadano) perfil.getTraduccion("de"));
-			} else {
-				resultats.put("de", new TraduccionPerfilCiudadano());
-			}
-	        if (perfil.getTraduccion("fr") != null) {
-				resultats.put("fr", (TraduccionPerfilCiudadano) perfil.getTraduccion("fr"));
-			} else {
-				resultats.put("fr", new TraduccionPerfilCiudadano());
-			}
+	        for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
+	            if (perfil.getTraduccion(lang) != null) {
+	                resultats.put(lang, (TraduccionPerfilCiudadano) perfil.getTraduccion(lang));
+	            } else {
+	                resultats.put(lang, new TraduccionPerfilCiudadano());
+	            }
+	        }
 	        // fi idiomes
-	        
-	        
+
 	        //Icones Familia 
 	        if (perfil.getIconosFamilia() != null) {
 		        Map<String, Object> iconaDTO;
 		        List<Map<String, Object>> llistaIcones = new ArrayList<Map<String, Object>>();		        
-		        
+
 		        for(IconoFamilia iconaFamilia: (Set<IconoFamilia>) perfil.getIconosFamilia()) {
 			        if (iconaFamilia != null && iconaFamilia.getIcono() != null) {
-			        	
+
 			        	iconaDTO = new HashMap<String, Object>(3);
 				        iconaDTO.put("id", iconaFamilia.getId());
 				        iconaDTO.put("nombre", iconaFamilia.getIcono().getNombre());
 				        iconaDTO.put("url", "iconesFamilia/archivo.do?id=" + iconaFamilia.getId());
-				        
+
 				        llistaIcones.add(iconaDTO);
 			        } else {
 			        	log.error("La fam�lia " + perfil.getId() + " te una icona null o sense arxiu.");
@@ -179,8 +158,7 @@ public class TMPerfilsController extends PantallaBaseController {
 	        	resultats.put("iconesFamilia", null);
 	        }
 	        // Fi icones familia
-	        
-	        
+
 	      //Icones Materia
 	        if (perfil.getIconosMateria() != null) {
 		        Map<String, Object> iconaDTO;

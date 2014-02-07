@@ -1,5 +1,8 @@
 package es.caib.rolsac.back2.controller.taulesMestre;
 
+import static es.caib.rolsac.utils.LogUtils.logException;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -8,30 +11,25 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Iniciacion;
-import org.ibit.rol.sac.model.TraduccionEspacioTerritorial;
 import org.ibit.rol.sac.model.TraduccionIniciacion;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IniciacionDelegate;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.indra.rol.sac.integracion.traductor.Traductor;
-
-import static es.caib.rolsac.utils.LogUtils.logException;
-import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @Controller
 @RequestMapping("/tipusIniciacio/")
@@ -110,44 +108,26 @@ public class TMTipusIniciacioController extends PantallaBaseController {
 	@RequestMapping(value = "/pagDetall.do")
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
 	    Map<String, Object> resultats = new HashMap<String, Object>();
-	    
+
 	    try {
 	        Long id = new Long(request.getParameter("id"));
-	        
+
 	        IniciacionDelegate iniciacioDelegate = DelegateUtil.getIniciacionDelegate();
 	        Iniciacion iniciacion = iniciacioDelegate.obtenerIniciacion(id);	        	        
-	        
+
 	        resultats.put("item_id", iniciacion.getId());
 	        resultats.put("item_codi_estandard", iniciacion.getCodigoEstandar());
-	        
+
 	        // idiomes
-	        if (iniciacion.getTraduccion("ca") != null) {
-				resultats.put("ca", (TraduccionIniciacion) iniciacion.getTraduccion("ca"));
-			} else {
-				resultats.put("ca", new TraduccionIniciacion());
-			}
-	        if (iniciacion.getTraduccion("es") != null) {
-				resultats.put("es", (TraduccionIniciacion) iniciacion.getTraduccion("es"));
-			} else {
-				resultats.put("es", new TraduccionIniciacion());
-			}
-	        if (iniciacion.getTraduccion("en") != null) {
-				resultats.put("en", (TraduccionIniciacion) iniciacion.getTraduccion("en"));
-			} else {
-				resultats.put("en", new TraduccionIniciacion());
-			}
-	        if (iniciacion.getTraduccion("de") != null) {
-				resultats.put("de", (TraduccionIniciacion) iniciacion.getTraduccion("de"));
-			} else {
-				resultats.put("de", new TraduccionIniciacion());
-			}
-	        if (iniciacion.getTraduccion("fr") != null) {
-				resultats.put("fr", (TraduccionIniciacion) iniciacion.getTraduccion("fr"));
-			} else {
-				resultats.put("fr", new TraduccionIniciacion());
-			}
+	        for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
+	            if (iniciacion.getTraduccion(lang) != null) {
+	                resultats.put(lang, (TraduccionIniciacion) iniciacion.getTraduccion(lang));
+	            } else {
+	                resultats.put(lang, new TraduccionIniciacion());
+	            }
+            }
 	        // fi idiomes
-			
+
 	    } catch (DelegateException dEx) {
 			log.error(ExceptionUtils.getStackTrace(dEx));
 			if (dEx.isSecurityException()) {
@@ -156,7 +136,7 @@ public class TMTipusIniciacioController extends PantallaBaseController {
 				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
 			}
 		}
-	    
+
         return resultats;
 	}
 	

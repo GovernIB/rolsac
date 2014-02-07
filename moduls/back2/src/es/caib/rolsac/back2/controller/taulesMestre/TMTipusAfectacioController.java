@@ -16,7 +16,6 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.TipoAfectacion;
-import org.ibit.rol.sac.model.TraduccionEdificio;
 import org.ibit.rol.sac.model.TraduccionTipoAfectacion;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
@@ -95,46 +94,28 @@ public class TMTipusAfectacioController extends PantallaBaseController {
     
     
     @RequestMapping(value = "/pagDetall.do")
-	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request)
-	{
+	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
+
 	    Map<String, Object> resultats = new HashMap<String, Object>();
-	    
+
 	    try {
 	        Long id = new Long(request.getParameter("id"));
-	        
+
 	        TipoAfectacionDelegate tipoAfectacioDelegate = DelegateUtil.getTipoAfectacionDelegate();
 	        TipoAfectacion tipusAfectacio = tipoAfectacioDelegate.obtenerTipoAfectacion(id);	        	        
-	        
+
 	        resultats.put("item_id", tipusAfectacio.getId());
-	        
+
 	        // idiomes
-	        if (tipusAfectacio.getTraduccion("ca") != null) {
-				resultats.put("ca", (TraduccionTipoAfectacion) tipusAfectacio.getTraduccion("ca"));
-			} else {
-				resultats.put("ca", new TraduccionTipoAfectacion());
-			}
-	        if (tipusAfectacio.getTraduccion("es") != null) {
-				resultats.put("es", (TraduccionTipoAfectacion) tipusAfectacio.getTraduccion("es"));
-			} else {
-				resultats.put("es", new TraduccionTipoAfectacion());
-			}
-	        if (tipusAfectacio.getTraduccion("en") != null) {
-				resultats.put("en", (TraduccionTipoAfectacion) tipusAfectacio.getTraduccion("en"));
-			} else {
-				resultats.put("en", new TraduccionTipoAfectacion());
-			}
-	        if (tipusAfectacio.getTraduccion("de") != null) {
-				resultats.put("de", (TraduccionTipoAfectacion) tipusAfectacio.getTraduccion("de"));
-			} else {
-				resultats.put("de", new TraduccionTipoAfectacion());
-			}
-	        if (tipusAfectacio.getTraduccion("fr") != null) {
-				resultats.put("fr", (TraduccionTipoAfectacion) tipusAfectacio.getTraduccion("fr"));
-			} else {
-				resultats.put("fr", new TraduccionTipoAfectacion());
-			}
+	        for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
+	            if (tipusAfectacio.getTraduccion(lang) != null) {
+	                resultats.put(lang, (TraduccionTipoAfectacion) tipusAfectacio.getTraduccion(lang));
+	            } else {
+	                resultats.put(lang, new TraduccionTipoAfectacion());
+	            }
+            }
 	        // fi idiomes
-			
+
 	    } catch (DelegateException dEx) {
 			log.error(ExceptionUtils.getStackTrace(dEx));
 			if (dEx.isSecurityException()) {
@@ -143,11 +124,11 @@ public class TMTipusAfectacioController extends PantallaBaseController {
 				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
 			}
 		}
-	    
+
         return resultats;
 	}
-    
-	
+
+
 	@RequestMapping(value = "/guardar.do", method = POST)
 	public @ResponseBody IdNomDTO guardarProcediment(HttpServletRequest request)
 	{
