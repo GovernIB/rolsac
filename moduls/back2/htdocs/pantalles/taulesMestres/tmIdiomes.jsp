@@ -118,7 +118,7 @@
             "tipus": "alfanumeric",
             "caracters":
                 {
-                    "maxim": 2,
+                    "maxim": 128,
                     "mostrar": "no",
                     "abreviat": "no"
                 },
