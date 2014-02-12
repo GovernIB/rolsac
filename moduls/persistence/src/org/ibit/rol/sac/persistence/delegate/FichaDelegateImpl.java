@@ -433,6 +433,28 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
     }
     
     /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#indexInsertaFicha(org.ibit.rol.sac.model.Ficha, org.ibit.lucene.indra.model.ModelFilterObject)
+	 */
+    public void reindexInsertaFicha(Ficha fic, ModelFilterObject filter) throws DelegateException {
+        try {
+            getFacade().reindexInsertaFicha(fic, filter);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#indexBorraFicha(java.lang.Long)
+	 */
+    public void reindexBorraFicha(Long id) throws DelegateException {
+        try {
+            getFacade().reindexBorraFicha(id);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#getFichasMicrosite(java.lang.String)
 	 */
     public List getFichasMicrosite(String idsite) throws DelegateException {

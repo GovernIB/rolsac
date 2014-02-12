@@ -68,6 +68,9 @@
 
 		es.caib.rolsac.persistence.hibernate.sessionInterceptors = es.caib.rolsac.persistence.hibernate.ConnectionInfoInterceptor
 		es.caib.rolsac.persistence.hibernate.databaseConnectionInfoClass = es.caib.rolsac.oracle.OracleConnectionInfo
+		
+		<!-- Indexació Lucene -->
+		es.caib.rolsac.luceneIndexer.nMonths=-12
 				
 <!--
 es.caib.rolsac.codiEstandarUAArrel

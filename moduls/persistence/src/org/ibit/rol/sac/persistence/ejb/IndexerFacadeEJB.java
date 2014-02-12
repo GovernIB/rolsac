@@ -519,7 +519,39 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      * @jboss.method-attributes transaction-timeout="86400"
      */
-    public void reindexarFichas() {
+    public List getFichasReindexar(Long nMonths) {
+        Session session = getSession();
+
+        try {
+        	       	
+        	String hql="";
+        	net.sf.hibernate.Query query;
+        	
+            hql="select ficha.id from Ficha as ficha " +
+            "where (sysdate < ficha.fechaCaducidad or ficha.fechaCaducidad is null) " +
+			"and (sysdate > ficha.fechaPublicacion or ficha.fechaPublicacion is null) " +
+            "and ficha.validacion=1 ";
+			if (nMonths!=null) hql+= "and (add_months(sysdate,"+nMonths+")<=ficha.fechaActualizacion) ";
+            query = session.createQuery(hql);
+            
+            return query.list();
+           
+	        
+        } catch (HibernateException e) {
+            throw new EJBException(e);
+        } finally {
+            close(session);
+        }
+
+    }
+    
+    /**
+     * Re-indexa todas las fichas.
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     * @jboss.method-attributes transaction-timeout="86400"
+     */
+    public void reindexarFichas(long idFicha) {
         Session session = getSession();
 
         try {
@@ -527,31 +559,22 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
         	log.debug("Inicio indexacion FICHAS ");
         	
         	List langs = DelegateUtil.getIdiomaDelegate().listarLenguajes();
-        	String hql="";
-        	net.sf.hibernate.Query query;
-        	Iterator iter;
-        	
-            hql="from Ficha as fic";
-            query = session.createQuery(hql);
-            iter = query.iterate();
-            FichaDelegate fichadel = DelegateUtil.getFichaDelegate();
+        	FichaDelegate fichadel = DelegateUtil.getFichaDelegate();
             int count = 0;
 
             // Indexamos las WEB EXTERNAS por tanto adjuntamos una Hash para 
             // no repetir peticiones a URLs y agilizar el proceso
             Hashtable urls = new Hashtable(); 
 
-            while (iter.hasNext()) {
-            	Ficha fic = fichadel.obtenerFicha( ((Ficha)iter.next()).getId() );
-            	fichadel.indexBorraFicha(fic.getId());
-            	fichadel.setContenidos_web(urls);
-            	fichadel.indexInsertaFicha(fic, null);
-            	urls=fichadel.getContenidos_web();
-                if (++count % 50 == 0) {
-                    session.flush();
-                    session.clear();
-                    //session.reconnect();
-                }
+            Ficha fic = fichadel.obtenerFicha(idFicha);
+            fichadel.reindexBorraFicha(idFicha);
+            fichadel.setContenidos_web(urls);
+            fichadel.reindexInsertaFicha(fic, null);
+            urls=fichadel.getContenidos_web();
+            if (++count % 50 == 0) {
+            		session.flush();
+            		session.clear();
+            		//session.reconnect();
             }
             
             // Optimizamos el indice y diccionario

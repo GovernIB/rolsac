@@ -192,6 +192,15 @@ public class FichaDelegate implements FichaDelegateI {
 	public void indexBorraFicha(Long id) throws DelegateException {
 		impl.indexBorraFicha(id);
 	}
+	
+	public void reindexInsertaFicha(Ficha fic, ModelFilterObject filter)
+			throws DelegateException {
+		impl.reindexInsertaFicha(fic, filter);
+	}
+
+	public void reindexBorraFicha(Long id) throws DelegateException {
+		impl.reindexBorraFicha(id);
+	}
 
 	public List getFichasMicrosite(String idsite) throws DelegateException {
 		return impl.getFichasMicrosite(idsite);

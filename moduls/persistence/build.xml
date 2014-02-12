@@ -56,6 +56,7 @@
             <include name="model.jar"/>
         	<include name="micromodel.jar"/>
         	<include name="sac-micropersistence.jar"/>
+        	<include name="extractor.jar"/>
         </fileset>
      	<fileset dir="${lib.dir}/axis2-1.5">
         		<include name="**/*.jar" />

@@ -47,10 +47,13 @@ import org.ibit.lucene.analysis.InglesAnalyzer;
 import org.ibit.lucene.indra.model.Catalogo;
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.lucene.indra.model.TraModelFilterObject;
+import org.ibit.rol.sac.extractor.Extractor;
+import org.ibit.rol.sac.extractor.ExtractorFactory;
 import org.ibit.rol.sac.model.AdministracionRemota;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Auditoria;
 import org.ibit.rol.sac.model.Documento;
+import org.ibit.rol.sac.model.DocumentoResumen;
 import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaCrawler;
@@ -63,6 +66,7 @@ import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Remoto;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.TraduccionDocumento;
+import org.ibit.rol.sac.model.TraduccionDocumentoResumen;
 import org.ibit.rol.sac.model.TraduccionFicha;
 import org.ibit.rol.sac.model.TraduccionHechoVital;
 import org.ibit.rol.sac.model.TraduccionMateria;
@@ -1980,7 +1984,195 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 		
         
 	}
+    /**
+     * A�ade la ficha al indice en todos los idiomas
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public void reindexInsertaFicha(Ficha ficha,  ModelFilterObject filter)  {
 
+    	try {
+    	    
+	    	if (ficha.getValidacion().equals(2)) return;
+    		
+	    	if (filter==null) filter = obtenerFilterObject(ficha);
+			
+			for (Iterator iterator = ficha.getLangs().iterator(); iterator.hasNext();) {
+				
+				String idi = (String) iterator.next();
+				IndexObject io= new IndexObject();  	
+
+	            io.setId(Catalogo.SRVC_FICHAS + "." + ficha.getId());
+	            io.setClasificacion(Catalogo.SRVC_FICHAS);
+	            
+	            io.setMicro( filter.getMicrosite_id() ); 
+	            if ( filter.getUo_id()!=null) 		io.setUo( filter.getUo_id() );
+	            if ( filter.getMateria_id()!=null) 	io.setMateria( filter.getMateria_id() );
+	            if ( filter.getFamilia_id()!=null) 	io.setFamilia( filter.getFamilia_id() );
+				if ( filter.getSeccion_id()!=null) 	io.setSeccion( filter.getSeccion_id() );
+				
+				io.setCaducidad("");
+				if (ficha.getFechaPublicacion()!=null) io.setPublicacion(new java.text.SimpleDateFormat("yyyyMMdd").format(ficha.getFechaPublicacion())); else	io.setPublicacion("");
+				io.setDescripcion("");
+	            if (ficha.getFechaCaducidad()!=null) 
+	            	io.setCaducidad(new java.text.SimpleDateFormat("yyyyMMdd").format(ficha.getFechaCaducidad()));
+
+	            
+	            TraduccionFicha trad=((TraduccionFicha)ficha.getTraduccion(idi));
+	            
+	            if (trad!=null) {
+	            
+	            	if ( (trad.getUrl()!=null) && (trad.getUrl().length()>0) ) {
+	            		io.setUrl( "/govern/estadistica?tipus=F&codi=" + ficha.getId() + "&url=" + java.net.URLEncoder.encode(trad.getUrl(),"UTF-8") );
+	            		
+	            		if (trad.getUrl().startsWith("http") || trad.getUrl().startsWith("/") ) {
+	            			//El servidor no tiene acceso a internet para realizar esta tarea
+	            			//Toni comenta que esto no es necesario ya que con la informaci�n de la ficha es suficiente
+	            			//indexBorraWEB_EXTERNA (ficha, idi);
+	            			//indexInsertaWEB_EXTERNA (ficha, filter, idi);
+	            		}
+
+	            	}	
+	            	else 
+	            		io.setUrl( "/govern/sac/fitxa.do?lang=" + idi + "&codi=" + ficha.getId() + "&coduo="+ obtenerUO_Principal(io.getUo()) );
+	            	
+	            	io.setTituloserviciomain(filter.getTraduccion(idi).getMaintitle());
+	            	
+	            	
+	            	if (trad.getTitulo()!=null && trad.getTitulo().length() > 0) {
+	            		io.setTitulo(trad.getTitulo());
+	            		io.addTextLine(trad.getTitulo());
+	            		if (trad.getDescAbr()!=null)	io.addTextLine(trad.getDescAbr());
+	            	} else {
+	            		TraduccionFicha trad_ca=((TraduccionFicha)ficha.getTraduccion("ca"));
+	            		if (trad_ca.getTitulo()!=null) io.setTitulo(trad_ca.getTitulo());
+	            	}
+	            	
+	            	if (trad.getDescripcion()!=null)  {
+	            		io.addTextLine(trad.getDescripcion());	
+	            		//if (trad.getDescripcion().length()>200) io.setDescripcion(trad.getDescripcion().substring(0,199)+"...");
+	                	//else io.setDescripcion(trad.getDescripcion());
+	            		io.setDescripcion(trad.getDescripcion());
+	            	}
+	            	
+					io.addTextopcionalLine(filter.getTraduccion(idi).getMateria_text());
+					io.addTextopcionalLine(filter.getTraduccion(idi).getSeccion_text());
+					io.addTextopcionalLine(filter.getTraduccion(idi).getUo_text());	    
+	            	
+	            }
+
+	            //No:Se a�aden todos los documentos en todos los idiomas. 
+	            //Ahora en el idioma actual.
+	            if (ficha.getDocumentos()!=null) {            	
+		            Iterator iterdocs = ficha.getDocumentos().iterator();
+		            while (iterdocs.hasNext()) {
+		            	Documento documento = (Documento)iterdocs.next();
+		            	//documento = DelegateUtil.getDocumentoDelegate().obtenerDocumento(documento.getId());
+		            	DocumentoResumen doc = DelegateUtil.getDocumentoResumenDelegate().obtenerDocumentoResumen(documento.getId());
+		            	if (doc.getTraduccion(idi)!=null) {
+		            		io.addTextLine(((TraduccionDocumentoResumen)doc.getTraduccion(idi)).getTitulo());
+		            		io.addTextLine(((TraduccionDocumentoResumen)doc.getTraduccion(idi)).getDescripcion());
+		            	}
+				
+		            	
+		            	// Se crea la indexaci�n del documento individual y se a�ade la informaci�n 
+		            	// para la indexaci�n de la ficha.
+							IndexObject ioDoc = new IndexObject();
+			            	String textDoc = null;								
+			            	//ioDoc.addArchivo((Archivo)documento.getArchivo());
+			            	Archivo arch = new Archivo();
+			            	Extractor extractor = null;
+			            	if (doc.getArchivoResumen()!=null){
+			            		extractor=ExtractorFactory.getExtractor(doc.getArchivoResumen().getMime());
+			            	}
+			            	if (doc.getTraduccion(idi)!=null && extractor!=null) {
+			            		
+           	                 	 arch = DelegateUtil.getDocumentoDelegate().obtenerArchivoDocumento(documento.getId(), idi, true);
+			            		//arch = (Archivo)((TraduccionDocumento)documento.getTraduccion(idi)).getArchivo();
+			                    ioDoc.addArchivo(arch);
+			            	} else {
+			            		// arch = (Archivo)((TraduccionDocumento)documento.getTraduccion("ca")).getArchivo();			            		
+			            	}
+			            	
+			            	textDoc = ioDoc.getText();
+				            if (textDoc != null && textDoc.length() > 0 && doc.getArchivoResumen() != null) {	
+					            if (documento.getTraduccion(idi)!=null) {				            	
+									
+									ioDoc.setId(Catalogo.SRVC_FICHAS_DOCUMENTOS + "." + documento.getId());
+									ioDoc.setClasificacion(Catalogo.SRVC_FICHAS + "." + ficha.getId());
+									ioDoc.setCaducidad("");
+									if (ficha.getFechaPublicacion()!=null) ioDoc.setPublicacion(new java.text.SimpleDateFormat("yyyyMMdd").format(ficha.getFechaPublicacion())); else	ioDoc.setPublicacion("");									
+									ioDoc.setDescripcion("");
+						            if (ficha.getFechaCaducidad()!=null) 
+						            	ioDoc.setCaducidad(new java.text.SimpleDateFormat("yyyyMMdd").format(ficha.getFechaCaducidad()));
+					        		ioDoc.setUrl( "/fitxer/get?codi=" + doc.getArchivoResumen().getId());
+					            	ioDoc.setTituloserviciomain(io.getTitulo());  
+					            	if (((TraduccionDocumento)documento.getTraduccion(idi)).getTitulo() == null)
+					            		ioDoc.setTitulo(((TraduccionDocumento)documento.getTraduccion("ca")).getTitulo() + ", (" + doc.getArchivoResumen().getMime().toUpperCase() +")");
+					            	else
+					            		ioDoc.setTitulo(((TraduccionDocumento)documento.getTraduccion(idi)).getTitulo() + ", (" + doc.getArchivoResumen().getMime().toUpperCase() +")");  
+					            	ioDoc.setDescripcion(((TraduccionDocumento)documento.getTraduccion(idi)).getDescripcion());
+					            	ioDoc.setText(textDoc);
+					            	ioDoc.addTextLine(((TraduccionDocumento)documento.getTraduccion(idi)).getDescripcion());
+					            	ioDoc.addTextLine(doc.getArchivoResumen().getNombre());
+						            if ( io.getUo()!=null) 	ioDoc.setUo( io.getUo());
+						            if ( io.getMateria()!=null) ioDoc.setMateria( io.getMateria());
+									if ( io.getSeccion()!=null) ioDoc.setSeccion( io.getSeccion());
+									
+						            if (ioDoc.getText().length()>0 || ioDoc.getTextopcional().length()>0)
+						            	org.ibit.rol.sac.persistence.delegate.DelegateUtil.getIndexerDelegate().insertaObjeto(ioDoc, idi);								
+					            }
+				            	
+								io.addTextLine(textDoc);					            
+				            }
+
+		            	
+		            }
+	            }
+
+            	// Se crea la indexaci�n del foro como documento individual y se a�ade la informaci�n 
+            	// para la indexaci�n de la ficha.
+            	if (ficha.getUrlForo()!=null && ficha.getUrlForo().length() > 0) {
+					io.setConforo("S");
+            	} else 
+            	{
+            		io.setConforo("N");
+            	}
+	            
+	            if (io.getText().length()>0 || io.getTextopcional().length()>0)
+	            	org.ibit.rol.sac.persistence.delegate.DelegateUtil.getIndexerDelegate().insertaObjeto(io, idi);
+			}
+		}
+		catch (Exception ex) {
+			log.warn("[indexInsertaFicha:" + ficha.getId() + "] No se ha podido indexar ficha. " + ex.getMessage());
+		}
+        
+	}
+	
+	 /**
+     * Elimina la ficha en el indice en todos los idiomas
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+	public void reindexBorraFicha(Long id)  {
+
+		try {
+
+			List langs = DelegateUtil.getIdiomaDelegate().listarLenguajes();
+			for (int i = 0; i < langs.size(); i++) {
+				DelegateUtil.getIndexerDelegate().borrarObjeto(Catalogo.SRVC_FICHAS + "." + id, ""+langs.get(i));
+				DelegateUtil.getIndexerDelegate().borrarObjetosDependientes(Catalogo.SRVC_FICHAS + "." + id, ""+langs.get(i));
+			}
+
+		}
+		catch (DelegateException ex) {
+			log.warn("[indexBorraFicha:" + id + "] No se ha podido borrar del indice la ficha. " + ex.getMessage());
+		}
+		
+        
+	}
 
     /**
      * A�ade la URL externa para un idioma, obteniendola de la ficha

@@ -1,5 +1,8 @@
 package org.ibit.rol.sac.back.action.index;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -27,9 +30,20 @@ public class ReiniciarIndexFichaAction extends  Action {
                                   HttpServletResponse response) throws Exception {
 
          IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
+         
+      	Long nMonths;
+    	try {
+    		nMonths=new Long(System.getProperty("es.caib.rolsac.luceneIndexer.nMonths")+"");
+    	}catch (NumberFormatException e){
+    		nMonths=null;
+    	}
+    	List fichas = indexerDelegate.getFichasReindexar(nMonths);
+       
+     	Iterator iter = fichas.iterator(); 
 
-         indexerDelegate.reindexarFichas();
-
+         while (iter.hasNext()) {
+         	indexerDelegate.reindexarFichas((Long)iter.next());
+         }
 
          return mapping.findForward("success");
 

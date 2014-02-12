@@ -3,10 +3,11 @@ package es.caib.rolsac.back2.controller.taulesMestre;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -74,7 +75,19 @@ public class TMIndexController extends PantallaBaseController {
 	    IdNomDTO resultatStatus = new IdNomDTO(); 
 	    try {
 	    	IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
-	        indexerDelegate.reindexarFichas();
+        	Long nMonths;
+        	try {
+        		nMonths=new Long(System.getProperty("es.caib.rolsac.luceneIndexer.nMonths")+"");
+        	}catch (NumberFormatException e){
+        		nMonths=null;
+        	}
+	    	List fichas = indexerDelegate.getFichasReindexar(nMonths);
+          
+        	Iterator iter = fichas.iterator();
+
+            while (iter.hasNext()) {
+            	indexerDelegate.reindexarFichas((Long)iter.next());
+            }
 	    	
             resultatStatus.setId(1l);
             resultatStatus.setNom(messageSource.getMessage("index.missatge.fitxa_informativa.correcte", null, request.getLocale()));

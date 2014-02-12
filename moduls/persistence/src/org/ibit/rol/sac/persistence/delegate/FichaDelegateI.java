@@ -117,6 +117,12 @@ public interface FichaDelegateI {
 
 	public abstract List getFichasMicrosite(String idsite)
 			throws DelegateException;
+	
+	public abstract void reindexInsertaFicha(Ficha fic, ModelFilterObject filter)
+			throws DelegateException;
+	
+	public abstract void reindexBorraFicha(Long id) throws DelegateException;
+
 
 	/**
 	 * Devuelve las posibles fichas relacionadas con un foro.<br/>

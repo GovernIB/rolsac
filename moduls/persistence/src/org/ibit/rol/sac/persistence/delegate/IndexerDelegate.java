@@ -1,6 +1,7 @@
 package org.ibit.rol.sac.persistence.delegate;
 
 import java.util.Date;
+import java.util.List;
 
 import org.ibit.lucene.indra.model.IndexResultados;
 import org.ibit.rol.sac.model.Ficha;
@@ -101,10 +102,17 @@ public class IndexerDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
-    public void reindexarFichas() throws DelegateException {
+    public List getFichasReindexar(Long nMonths) throws DelegateException {
         try {
-            local.reindexarFichas();
+            return local.getFichasReindexar(nMonths);
+        } catch (EJBException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    public void reindexarFichas(long idFicha) throws DelegateException {
+        try {
+            local.reindexarFichas(idFicha);
         } catch (EJBException e) {
             throw new DelegateException(e);
         }
