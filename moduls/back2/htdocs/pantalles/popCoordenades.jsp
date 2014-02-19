@@ -17,7 +17,7 @@
     <script type="text/javascript" src="<c:url value='/js/detall_base.js'/>"></script>
     <jsp:include page="../layout/variablesGlobalsJavascript.jsp" flush="true"/> 
     
-    <script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=<c:out value='${googleMapKey }' />" type="text/javascript"></script>
+    <script src="http://maps.googleapis.com/maps/api/js?key=<c:out value='${googleMapKey }' />&amp;sensor=true" type="text/javascript"></script>
 
    	<script type="text/javascript">
    	<!--
@@ -27,82 +27,98 @@
         var marcadorEdificio = null;
 
         function initialize() {
-            if (GBrowserIsCompatible()) {
-		        var b_buscadireccion = true;
-		        map = new GMap2(document.getElementById("map_canvas"));
-		        var iniLat = "<c:out value='${latEdi}'/>";
-		        var iniLng = "<c:out value='${lngEdi}'/>";
+
+        	var b_buscadireccion = true;
+	        var iniLat = "<c:out value='${latEdi}'/>";
+	        var iniLng = "<c:out value='${lngEdi}'/>";
+
+	        if (iniLat.length == 0 || iniLng.length == 0) {
 		        
-		        if (iniLat.length == 0 || iniLng.length == 0) {
-		            iniLat="39.5690036";
-		            iniLng="2.6436571";
-		        } else {
-		            b_buscadireccion = false;       
-		        }
-		        $('#lat').val(iniLat);
-		        $('#lng').val(iniLng);
-      
-		        map.setCenter(new GLatLng(iniLat, iniLng), 16);
-		        geocoder = new GClientGeocoder();
+	            iniLat="39.5690036";
+	            iniLng="2.6436571";
+	            
+	        } else {
 		        
-		        map.addControl(new GSmallMapControl());
-		        var bottomLeft = new GControlPosition(G_ANCHOR_BOTTOM_LEFT, new GSize(10,10));
-		        map.addControl(new GMapTypeControl(), bottomLeft); 
-		
-		        var latlng = new GLatLng(iniLat, iniLng);
-		        creaMarker(latlng);
-		        if (b_buscadireccion){
-			        showAddress();
-		        }
-		    }
+	            b_buscadireccion = false; 
+	                  
+	        }
+	        
+        	var center = new google.maps.LatLng(iniLat, iniLng);
+        	var mapOptions = {zoom: 16, center: center};
+        	map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+
+        	creaMarker(center);
+
+	        if (b_buscadireccion)
+		        showAddress();
+    		      
 	    }
         
-	    function creaMarker(point){
-	        var marker = new GMarker(point,{draggable:true});
-	        marker.enableDragging();            
-	        map.addOverlay(marker);
-	        marker.setImage("<c:url value='/img/gps/gps_caib.png' />");
+	    function creaMarker(point) {
+		
+			var marker = new google.maps.Marker({
+				position: new google.maps.LatLng(point.lat(), point.lng()),
+				map: map,
+				icon : '<c:url value='/img/gps/gps_caib.png' />'
+			});
+
+			
 	        marcadorEdificio = marker;
 	        
-	        GEvent.addListener(marcadorEdificio , "dragend", function() {
-	            var point = marker.getPoint();
+			google.maps.event.addListener(marcadorEdificio, 'dragend', function(event) {
+
+				var point = marker.getPoint();
 
 	            $('#lat').val(point.lat());
                 $('#lng').val(point.lng());
-
-	        });
+                
+			});
+			
 	    }
 
 	    function showAddress() {
+
 	    	address = $('#address').val();
-	        
-		    if (geocoder) {
-		        geocoder.getLatLng(
-		          address,
-		          function(point) {
-		            if (!point) {
-		            	Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: "<spring:message code='coordenada.missatge.titol'/>", text: "<spring:message code='coordenada.missatge.text'/>"}); 
-		            } else {
-		            	$('#lat').val(point.lat());
-		                $('#lng').val(point.lng());
+
+	    	geocoder = new google.maps.Geocoder();
+
+
+	    	geocoder.geocode({'address': address}, function(results, status) {
+
+	    		if (status != google.maps.GeocoderStatus.OK) {
+
+		    		Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: "<spring:message code='coordenada.missatge.titol'/>", text: "<spring:message code='coordenada.missatge.text'/>"});
+		    		
+	    		} else {
+
+	    			var point = results[0].geometry.location;
+		    		map.setCenter(point);
+
+		    		$('#lat').val(point.lat());
+	                $('#lng').val(point.lng());
+	                
+	                
+	                if (marcadorEdificio == null) {
 		                
-		                map.setCenter(point, map.getZoom());
-		                if (marcadorEdificio == null) 
-		                {
-		                    creaMarker(point);
-		                } else {
-		                    var marker = marcadorEdificio;
-		                    map.setCenter(point, map.getZoom());
-		                    marker.setPoint(point);
-		                }
-		            }
-		          }
-		        );
-		    }
+	                    creaMarker(point);
+	                    
+	                } else {
+		                
+	                    var marker = marcadorEdificio;
+	                    map.setCenter(point, map.getZoom());
+	                    marker.setPosition(point);
+	                    
+	                }
+	    			
+			    }
+	    		
+		    });
+
 		}
-    
+		
+
         function centrar(){
-            marcadorEdificio.setPoint(map.getCenter());
+        	map.setCenter(marcadorEdificio.getPosition());
         }    
    
         function aceptar(){
@@ -133,7 +149,7 @@
 	</script>
 </head>
 
-<body onload="initialize()" onunload="GUnload()">
+<body onload="initialize()">
 	<div id="escript">
 	   <!-- escriptori_detall -->
 	   <div id="escriptori_detall" class="escriptori_detall" >
@@ -142,8 +158,9 @@
                     <div id="cercador" class="modul " >
                         <fieldset>
 	                        <div class="modul_continguts mostrat">
-	                            <input type="hidden" size="10" name="lat" id="lat" value="" />
-	                            <input type="hidden" size="10" name="lng" id="lng" value="" />
+	                            <input type="hidden" size="10" name="lat" id="lat" value="<c:out value='${latEdi}'/>" />
+	                            <input type="hidden" size="10" name="lng" id="lng" value="<c:out value='${lngEdi}'/>" />
+	                            <input type="hidden" size="10" name="icon" id="icon" value="<c:url value='/img/gps/gps_caib.png' />" />
 	                            <div class="fila">
 	                                <div class="element t57">
 	                                    <div class="etiqueta">
@@ -159,10 +176,10 @@
 		                                </div>
 		                                <div class="botonera">
 	                                        <div class="btnGenerico">
-	                                            <a href="javascript:showAddress(); " class="btn consulta"><span><span><spring:message code='boto.cerca_direccio'/></span></span></a>
+	                                            <a id="btn-buscar" href="javascript:showAddress(); " class="btn consulta"><span><span><spring:message code='boto.cerca_direccio'/></span></span></a>
 	                                        </div>
                                             <div class="btnGenerico">
-                                                <a href="javascript:centrar();" class="btn noIcona"><span><span><spring:message code='boto.centra_marca'/></span></span></a>
+                                                <a id="btn-centrar" href="javascript:centrar();" class="btn noIcona"><span><span><spring:message code='boto.centra_marca'/></span></span></a>
                                             </div>
                                         </div>
                                     </div>
@@ -175,13 +192,13 @@
 	                           <div class="element">
 		                            <div class="botonera">
 		                                <div class="btnGenerico">
-		                                    <a href="javascript:aceptar()" class="btn noIcona"><span><span><spring:message code='boto.acepta_coordenades'/></span></span></a>
+		                                    <a id="btn-acepta-coordenadas" href="javascript:aceptar()" class="btn noIcona"><span><span><spring:message code='boto.acepta_coordenades'/></span></span></a>
 		                                </div>
 		                                <div class="btnGenerico">
-		                                    <a href="javascript:borrar()" class="btn borrar"><span><span><spring:message code='boto.esborra_coordenades'/></span></span></a>
+		                                    <a id="btn-borra-coordenadas" href="javascript:borrar()" class="btn borrar"><span><span><spring:message code='boto.esborra_coordenades'/></span></span></a>
 		                                </div>
 		                                <div class="btnGenerico">
-		                                    <a href="javascript:borrarPopUp('popCoordenades')" class="btn torna"><span><span><spring:message code='boto.torna'/></span></span></a>
+		                                    <a id="btn-cierra-mapa" href="javascript:borrarPopUp('popCoordenades')" class="btn torna"><span><span><spring:message code='boto.torna'/></span></span></a>
 		                                </div>
 		                            </div>
 	                            </div>

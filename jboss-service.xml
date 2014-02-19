@@ -42,13 +42,15 @@
        es.caib.rolsac.api.v2.alternativesIdioma_fr=en,ca,es
        es.caib.rolsac.api.v2.urlArxius=http://localhost:8080/sacws-api/arxiu/apiArxiuServlet?id=<!-- FIXME: cambiar por la url adecuada para produccion -->
        
-	   
 	   <!-- valors sense confirmar -->
 	   	es.caib.rolsac.microsites=Y
       	es.indra.caib.rolsac.servidor=sdesweblin1.caib.es
       	es.indra.caib.rolsac.servidorPuerto=sdesweblin1.caib.es
       	es.indra.caib.rolsac.oficina=N
-      	es.indra.caib.rolsac.googleMapKey=S
+      	
+		<!-- Clave API GoogleMaps -->
+		es.indra.caib.rolsac.googleMapKey=AIzaSyCIvmOidKyhpEEb-bADWnDrNw76_oBb81A
+		
 		es.caib.webcaib.principal=N
 		
 		es.caib.rolsac.pidip
