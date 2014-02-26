@@ -186,278 +186,89 @@
         var txtMesMal = "<spring:message code='txt.mes_mal'/>";
         var txtDiaMal = "<spring:message code='txt.dia_mal'/>";
         var txtNoEsCorrecte = "<spring:message code='txt.data_no_correcte'/>";
-        
+        var idioma = '<c:out value="${idiomaVal}"/>';
+
         // dades formularios
         var FormulariDades = [
             {
                 "modo": "individual",
                 "etiqueta": "id",
-                "etiquetaValor": "item_titol_ca",
+                "etiquetaValor": "item_titol_" + '<c:out value="${idiomaVal}"/>',
                 "obligatori": "si",
                 "tipus": "alfanumeric",
                 "caracters":
-                    {
-                        "maxim": 230,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    },
+                {
+                    "maxim": 230,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
                 "error":
                     {
-                        "obligatori": "<spring:message code='normativa.formulari.titol_ca.obligatori'/>",
+                        "obligatori": "<spring:message code='normativa.formulari.titol.obligatori'/> " + '<c:out value="${idiomaVal}"/>',
                         "tipus": "<spring:message code='normativa.formulari.titol_ca.no_nomes_numeros'/>"
                     }
             },
+
             {
                 "modo": "individual",
                 "etiqueta": "id",
-                "etiquetaValor": "item_titol_es",
+                "etiquetaValor": "item_titol_" + '<c:out value="${idiomaVal}"/>',
                 "obligatori": "no",
                 "tipus": "alfanumeric",
                 "caracters":
-                    {
-                        "maxim": 230,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    }
+                {
+                    "maxim": 230,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                }
             },
+
             {
                 "modo": "individual",
                 "etiqueta": "id",
-                "etiquetaValor": "item_titol_en",
+                "etiquetaValor": "item_enllas_" + '<c:out value="${idiomaVal}"/>',
                 "obligatori": "no",
                 "tipus": "alfanumeric",
                 "caracters":
-                    {
-                        "maxim": 230,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    }
+                {
+                    "maxim": 480,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                }
             },
+
             {
                 "modo": "individual",
                 "etiqueta": "id",
-                "etiquetaValor": "item_titol_de",
+                "etiquetaValor": "item_apartat_" + '<c:out value="${idiomaVal}"/>',
                 "obligatori": "no",
                 "tipus": "alfanumeric",
                 "caracters":
-                    {
-                        "maxim": 230,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    }
+                {
+                    "maxim": 480,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                }
             },
+
             {
                 "modo": "individual",
                 "etiqueta": "id",
-                "etiquetaValor": "item_titol_fr",
+                "etiquetaValor": "item_responsable_" + '<c:out value="${idiomaVal}"/>',
                 "obligatori": "no",
                 "tipus": "alfanumeric",
                 "caracters":
-                    {
-                        "maxim": 230,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    }
+                {
+                    "maxim": 480,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                }
             },
+
             {
                 "modo": "individual",
                 "etiqueta": "id",
-                "etiquetaValor": "item_enllas_ca",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 480,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_enllas_es",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 480,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_enllas_en",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 480,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_enllas_de",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 480,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_enllas_fr",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 480,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_apartat_ca",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 480,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_apartat_es",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 480,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_apartat_en",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 480,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_apartat_de",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 480,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_apartat_fr",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 480,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_responsable_ca",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 480,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_responsable_es",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 480,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_responsable_en",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 480,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_responsable_de",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 480,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_responsable_fr",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 480,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_pagina_inicial_ca",
+                "etiquetaValor": "item_pagina_inicial_" + '<c:out value="${idiomaVal}"/>',
                 "obligatori": "no",
                 "tipus": "numeric",
                 "caracters":
@@ -471,78 +282,11 @@
                         "tipus": "<spring:message code='normativa.formulari.pagina_inicial_ca.tipus'/>"
                     }
             },
+
             {
                 "modo": "individual",
                 "etiqueta": "id",
-                "etiquetaValor": "item_pagina_inicial_es",
-                "obligatori": "no",
-                "tipus": "numeric",
-                "caracters":
-                {
-                    "maxim": 18,
-                    "mostrar": "no",
-                    "abreviat": "no"
-                },
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.pagina_inicial_es.tipus'/>"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_pagina_inicial_en",
-                "obligatori": "no",
-                "tipus": "numeric",
-                "caracters":
-                {
-                    "maxim": 18,
-                    "mostrar": "no",
-                    "abreviat": "no"
-                },
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.pagina_inicial_en.tipus'/>"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_pagina_inicial_de",
-                "obligatori": "no",
-                "tipus": "numeric",
-                "caracters":
-                {
-                    "maxim": 18,
-                    "mostrar": "no",
-                    "abreviat": "no"
-                },
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.pagina_inicial_de.tipus'/>"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_pagina_inicial_fr",
-                "obligatori": "no",
-                "tipus": "numeric",
-                "caracters":
-                {
-                    "maxim": 18,
-                    "mostrar": "no",
-                    "abreviat": "no"
-                },
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.pagina_inicial_fr.tipus'/>"
-                    }
-            },            
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_pagina_final_ca",
+                "etiquetaValor": "item_pagina_final_" + '<c:out value="${idiomaVal}"/>',
                 "obligatori": "no",
                 "tipus": "numeric",
                 "caracters":
@@ -555,75 +299,7 @@
                     {
                         "tipus": "<spring:message code='normativa.formulari.pagina_final_ca.tipus'/>"
                     }
-            },            
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_pagina_final_es",
-                "obligatori": "no",
-                "tipus": "numeric",
-                "caracters":
-                {
-                    "maxim": 18,
-                    "mostrar": "no",
-                    "abreviat": "no"
-                },
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.pagina_final_es.tipus'/>"
-                    }
-            },            
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_pagina_final_en",
-                "obligatori": "no",
-                "tipus": "numeric",
-                "caracters":
-                {
-                    "maxim": 18,
-                    "mostrar": "no",
-                    "abreviat": "no"
-                },
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.pagina_final_en.tipus'/>"
-                    }
-            },            
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_pagina_final_de",
-                "obligatori": "no",
-                "tipus": "numeric",
-                "caracters":
-                {
-                    "maxim": 18,
-                    "mostrar": "no",
-                    "abreviat": "no"
-                },
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.pagina_final_de.tipus'/>"
-                    }
-            },            
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_pagina_final_fr",
-                "obligatori": "no",
-                "tipus": "numeric",
-                "caracters":
-                {
-                    "maxim": 18,
-                    "mostrar": "no",
-                    "abreviat": "no"
-                },
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.pagina_final_fr.tipus'/>"
-                    }
-            },    
+            },
 
             // No traduibles
             {
@@ -643,7 +319,8 @@
                         "obligatori": "<spring:message code='normativa.formulari.numero.obligatori'/>",
                         "tipus": "<spring:message code='normativa.formulari.numero.tipus'/>"
                     }
-            },       
+            },
+
             /*
             {
                 "modo": "individual",
@@ -669,6 +346,7 @@
                     }
             },    
             */
+
             {
                 "modo": "individual",
                 "etiqueta": "id",
@@ -685,8 +363,8 @@
                     {
                         "tipus": "<spring:message code='normativa.formulari.registre.tipus'/>"
                     }
-            },    
-            
+            },
+
             {
                 "modo": "individual",
                 "etiqueta": "id",
@@ -699,7 +377,7 @@
                     "mostrar": "no",
                     "abreviat": "no"
                 }
-            },           
+            },
 
             {
                 "modo": "individual",
@@ -718,7 +396,6 @@
                         "obligatori": "<spring:message code='normativa.formulari.registre.estat'/>"
                     }
             }
-            
         ];
         
         <c:if test="${traspasboib == 'Y'}">
