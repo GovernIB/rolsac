@@ -41,7 +41,9 @@ public class SubscripcionsSchedulerServlet implements Servlet {
 			sched.scheduleJob(jobDetail, trigger);
 			log.debug("Job Refresco de suscripciones programado...");
 			
-			
+/* SE COMENTA PARA QUE NO SE EJECUTE Y QUEDE DESHABILITADO HASTA NUEVO AVISO
+ * TICKET 546: Desprogramar chron SubscripcionsPortalJob
+ * 
 			//JOB SUBSCRIPCIONES PORTAL
 			jobDetail =  new JobDetail("SubscripcionsPortal", "Refrescar", SubscripcionsPortalJob.class );
 			trigger = new CronTrigger("SubscripcionsPortal","Refrescar");
@@ -54,7 +56,7 @@ public class SubscripcionsSchedulerServlet implements Servlet {
 			trigger.setCronExpression( horaExecucioJobPortal );
 			sched.scheduleJob(jobDetail, trigger);
 			log.debug("Job Refresco de suscripciones del portal programado...");
-			
+*/			
 			
 		} catch (Exception ex){
 			log.error("Error al programar Job refresco de suscripciones: " + ex.getMessage(),ex);			
