@@ -1181,6 +1181,9 @@ public class NormativaBackController extends PantallaBaseController {
             for (AfectacionDTO afectacion : afectaciones.getListaAfectaciones()) {
                 normativaDelegate.anyadirAfectacion(afectacion.getNormaId(), afectacion.getAfectacioId(), normativa.getId());
             }
+            
+            // Finalizado correctamente
+            result = new IdNomDTO(normativa.getId(), messageSource.getMessage("normativa.guardat.correcte", null, request.getLocale()));
 			
 		} catch (DelegateException dEx) {
 			

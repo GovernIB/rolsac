@@ -49,9 +49,6 @@ function ListaSimple() {
 		if (debug)
 			console.log("Entrando en ListaSimple.guardar");
 		
-		console.log("element");
-		console.log(element);
-		
 		var filters = this.getFilters(element, id);
 		
 		that.prototype.guardar(url, filters);
@@ -65,9 +62,6 @@ function ListaSimple() {
 		
 		if (debug)
 			console.log("Entrando en ListaSimple.getFilters");
-		
-		console.log("element");
-		console.log(element);
 		
 		var lista = new Array();
 		var filters = "id=" + id;

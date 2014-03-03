@@ -70,11 +70,19 @@ $(document).ready(function() {
 
 });
 
-// TODO amartin: explicación de extensión de clase.
+/**
+ * (amartin) Explicación de extensión de clase:
+ * 
+ * Necesitamos extender la clase ListaSimple ya que el módulo lateral de afectaciones (modul_afectacions.js)
+ * no sólo consta de valor para el registro principal (normativa => main-item-id) y para sus N normativas
+ * afectadas (afectación => related-item-id), sino que también hay un tercer campo, que es el tipo de afcetación
+ * entre la normativa que afecta y la afectada. Con la extensión de la clase sobreescribimos los métodos para
+ * realizar el guardado y para obtener el dato adicional de tipo de afectación.
+ */
 function CListaSimple() {
 	
 	// Activa mensajes de debug.
-	var debug = true;
+	var debug = false;
 
 	this.extend = ListaSimple;
 	this.extend();
@@ -88,9 +96,6 @@ function CListaSimple() {
 		
 		if (debug)
 			console.log("Entrando en CListaSimple.guardar");
-
-		console.log("element");
-		console.log(element);
 		
 		if ( !(element == null || element == "undefined") )
 			this._guardar(element, url, id);
@@ -120,9 +125,6 @@ function CListaSimple() {
 			filters += "&tiposAfectacion=" + lista;
 			
 		}
-		
-		console.log("filters");
-		console.log(filters);
 				
 		if (debug)
 			console.log("Saliendo de CListaSimple.getFilters");
