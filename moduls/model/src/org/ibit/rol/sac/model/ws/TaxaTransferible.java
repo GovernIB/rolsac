@@ -8,7 +8,7 @@ import org.ibit.rol.sac.model.Taxa;
 import org.ibit.rol.sac.model.TraduccionTaxa;
 
 /**
- * Clase que representa la información a transferir de un Taxa
+ * Clase que representa la informaciÃ³n a transferir de un Taxa
  */
 public class TaxaTransferible implements Serializable {
 	

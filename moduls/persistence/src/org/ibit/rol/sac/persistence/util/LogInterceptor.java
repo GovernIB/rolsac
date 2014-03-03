@@ -12,7 +12,7 @@ import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Traducible;
 
 /**
- * Intercepta las llamadas a métodos y añade logs.
+ * Intercepta las llamadas a mÃ©todos y aï¿½ade logs.
  */
 public class LogInterceptor implements MethodInterceptor, Serializable {
 

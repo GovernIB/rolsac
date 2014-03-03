@@ -1,16 +1,15 @@
 package org.ibit.rol.sac.persistence.search;
 
-import net.sf.hibernate.Interceptor;
-import net.sf.hibernate.CallbackException;
-import net.sf.hibernate.type.Type;
-
 import java.io.Serializable;
 import java.util.Iterator;
+
+import net.sf.hibernate.CallbackException;
+import net.sf.hibernate.Interceptor;
+import net.sf.hibernate.type.Type;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Indexable;
-import org.ibit.rol.sac.model.IndexObject;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.IndexerDelegate;

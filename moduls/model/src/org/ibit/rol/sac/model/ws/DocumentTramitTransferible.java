@@ -8,7 +8,7 @@ import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.TraduccionDocumento;
 
 /**
- * Clase que representa la información a transferir de un DocumentTramit
+ * Clase que representa la informaciÃ³n a transferir de un DocumentTramit
  */
 public class DocumentTramitTransferible implements Serializable {
 	

@@ -17,13 +17,12 @@ import org.ibit.rol.sac.model.Validacion;
  * User: mgonzalez
  * Date: 13-jun-2007
  * Time: 15:21:25
- * Clase que representa la información traducida a transferir de una UA(PORMAD)
+ * Clase que representa la informaciÃ³n traducida a transferir de una UA(PORMAD)
  */
 public class UnidadAdministrativaTransferible extends ActuacionTransferible implements Serializable {
 
 	public static final String URL_UA = "es.caib.rolsac.model.ws.urlUnidad";
 
-	
     private UnidadMateriaTransferible[] unidadesMaterias;
     private String codigoEstandarTratamiento;
     private Long idPadre;

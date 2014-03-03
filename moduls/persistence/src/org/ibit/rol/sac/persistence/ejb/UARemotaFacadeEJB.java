@@ -1,9 +1,5 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -17,22 +13,15 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
-import org.ibit.lucene.indra.model.Catalogo;
-import org.ibit.lucene.indra.model.ModelFilterObject;
-import org.ibit.lucene.indra.model.TraModelFilterObject;
 import org.ibit.rol.sac.model.AdministracionRemota;
 import org.ibit.rol.sac.model.Auditoria;
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.EdificioRemoto;
-import org.ibit.rol.sac.model.Ficha;
-import org.ibit.rol.sac.model.FichaRemota;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.Historico;
 import org.ibit.rol.sac.model.HistoricoUA;
 import org.ibit.rol.sac.model.IndexObject;
 import org.ibit.rol.sac.model.Materia;
-import org.ibit.rol.sac.model.ProcedimientoLocal;
-import org.ibit.rol.sac.model.ProcedimientoRemoto;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.TraduccionMateria;
 import org.ibit.rol.sac.model.TraduccionUA;
@@ -41,12 +30,14 @@ import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.UnidadAdministrativaRemota;
 import org.ibit.rol.sac.model.UnidadMateria;
 import org.ibit.rol.sac.model.Usuario;
-import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
-import org.ibit.rol.sac.persistence.util.DateUtils;
 import org.ibit.rol.sac.persistence.util.RemotoUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
+
+import es.caib.rolsac.persistence.lucene.model.Catalogo;
+import es.caib.rolsac.persistence.lucene.model.ModelFilterObject;
+import es.caib.rolsac.persistence.lucene.model.TraModelFilterObject;
 
 /**
  * SessionBean para mantener y consultar Fichas Remotas (PORMAD)
@@ -883,8 +874,8 @@ public abstract class UARemotaFacadeEJB extends HibernateEJB {
 
 				}
 
-				if ( io.getText().length() > 0 )
-					DelegateUtil.getIndexerDelegate().insertaObjeto( io, idi );
+				if ( io.getText().length() > 0 ){}
+//					DelegateUtil.getIndexerDelegate().insertaObjeto( io, idi );
 				
 			}
 			

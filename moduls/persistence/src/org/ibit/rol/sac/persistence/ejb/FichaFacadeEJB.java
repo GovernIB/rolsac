@@ -2,6 +2,7 @@ package org.ibit.rol.sac.persistence.ejb;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -32,13 +33,9 @@ import net.sf.hibernate.expression.Order;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
-import org.ibit.lucene.analysis.AlemanAnalyzer;
-import org.ibit.lucene.analysis.CastellanoAnalyzer;
-import org.ibit.lucene.analysis.CatalanAnalyzer;
-import org.ibit.lucene.analysis.InglesAnalyzer;
-import org.ibit.lucene.indra.model.Catalogo;
-import org.ibit.lucene.indra.model.ModelFilterObject;
-import org.ibit.lucene.indra.model.TraModelFilterObject;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriter.MaxFieldLength;
+import org.apache.lucene.store.Directory;
 import org.ibit.rol.sac.model.AdministracionRemota;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Auditoria;
@@ -64,6 +61,7 @@ import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
 import org.ibit.rol.sac.persistence.delegate.IndexerDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
@@ -71,6 +69,13 @@ import org.ibit.rol.sac.persistence.util.Cadenas;
 import org.ibit.rol.sac.persistence.util.DateUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
+import es.caib.rolsac.persistence.lucene.analysis.AlemanAnalyzer;
+import es.caib.rolsac.persistence.lucene.analysis.CastellanoAnalyzer;
+import es.caib.rolsac.persistence.lucene.analysis.CatalanAnalyzer;
+import es.caib.rolsac.persistence.lucene.analysis.InglesAnalyzer;
+import es.caib.rolsac.persistence.lucene.model.Catalogo;
+import es.caib.rolsac.persistence.lucene.model.ModelFilterObject;
+import es.caib.rolsac.persistence.lucene.model.TraModelFilterObject;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
@@ -133,72 +138,57 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 
     /**
      * Crea o actualiza una Ficha
-     * 
      * @param	ficha	Indica la ficha a guardar
-     * 
      * @return	Devuelve el identificador de la ficha guardada
-     * 
      * @ejb.interface-method
-     * 
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
     public Long grabarFicha(Ficha ficha) {
 
 		Session session = getSession();
-	
 		try {
-	
 		    Date FechaActualizacionBD = new Date();
-	
-		    if ( ficha.getId() == null ) {
-	
-				if ( ficha.getValidacion().equals(Validacion.PUBLICA) && !userIsSuper() )
-				    throw new SecurityException("No puede crear una ficha publica");
-	
+
+		    if (ficha.getId() == null) {
+		        if (ficha.getValidacion().equals(Validacion.PUBLICA) && !userIsSuper()) {
+		            throw new SecurityException("No puede crear una ficha publica");
+		        }
+
 		    } else {
-	
-				if ( !getAccesoManager().tieneAccesoFicha(ficha.getId()) )
-				    throw new SecurityException("No tiene acceso a la ficha");
-		
-				Ficha fichaBD = obtenerFicha(ficha.getId());
-				FechaActualizacionBD = fichaBD.getFechaActualizacion();
-	
+		        if (!getAccesoManager().tieneAccesoFicha(ficha.getId())) {
+		            throw new SecurityException("No tiene acceso a la ficha");
+		        }
+		        Ficha fichaBD = obtenerFicha(ficha.getId());
+		        FechaActualizacionBD = fichaBD.getFechaActualizacion();
 		    }
-	
+
 		    /* Se alimenta la fecha de actualizacion de forma automatica si no se ha introducido dato */
-		    if ( ficha.getFechaActualizacion() == null || DateUtils.fechasIguales(FechaActualizacionBD, ficha.getFechaActualizacion()) )
-		    	ficha.setFechaActualizacion( new Date() );
-	
-		    if ( ficha.getId() == null ) {
-	
-				session.save(ficha);
-				addOperacion(session, ficha, Auditoria.INSERTAR);
-	
+		    if (ficha.getFechaActualizacion() == null || DateUtils.fechasIguales(FechaActualizacionBD, ficha.getFechaActualizacion())) {
+		        ficha.setFechaActualizacion(new Date());
+		    }
+
+		    if (ficha.getId() == null) {
+		        session.save(ficha);
+		        addOperacion(session, ficha, Auditoria.INSERTAR);
+
 		    } else {
-	
-				session.update(ficha);
-				addOperacion(session, ficha, Auditoria.MODIFICAR);
-	
-		    }   
-	
+		        session.update(ficha);
+		        addOperacion(session, ficha, Auditoria.MODIFICAR);
+		    }
+
 		    session.flush();
-	
 		    Ficha fichasend = obtenerFicha(ficha.getId());
 		    Actualizador.actualizar(fichasend);
-	
-		    return ficha.getId();
-	
-		} catch (HibernateException e) {
-	
-		    throw new EJBException(e);
-	
-		} finally {
-	
-		    close(session);
-	
-		}
 
-    }
+		    return ficha.getId();
+
+		} catch (HibernateException e) {
+		    throw new EJBException(e);
+		} finally {
+		    close(session);
+		}
+	}
+
 
     /**
      * Obtiene una Ficha
@@ -217,58 +207,44 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 
 		Session session = getSession();
 		Ficha ficha = null;
-	
 		try {
-	
 		    ficha = (Ficha) session.load(Ficha.class, id);
-	
-		    if ( visible(ficha) ) {
-	
-				Hibernate.initialize( ficha.getEnlaces() );
-				Hibernate.initialize( ficha.getMaterias() );
-				Hibernate.initialize( ficha.getHechosVitales() );
-				Hibernate.initialize( ficha.getPublicosObjetivo() );
-				Hibernate.initialize( ficha.getFichasua() );
-				Hibernate.initialize( ficha.getBaner() );
-				Hibernate.initialize( ficha.getImagen() );
-				Hibernate.initialize( ficha.getIcono() );
-		
+		    if (visible(ficha)) {
+				Hibernate.initialize(ficha.getEnlaces());
+				Hibernate.initialize(ficha.getMaterias());
+				Hibernate.initialize(ficha.getHechosVitales());
+				Hibernate.initialize(ficha.getPublicosObjetivo());
+				Hibernate.initialize(ficha.getFichasua());
+				Hibernate.initialize(ficha.getBaner());
+				Hibernate.initialize(ficha.getImagen());
+				Hibernate.initialize(ficha.getIcono());
+
 				session.clear();
-		
 				Query query = session.createQuery("from Documento doc where doc.ficha.id = :id");
 				query.setParameter("id", id);
-		
 				ficha.setDocumentos( (List<Documento>)query.list() );
-	
+
 		    } else {
-	
 		    	throw new SecurityException("El usuario no tiene el rol operador");
-	
 		    }
-	
-	
+
 		} catch (HibernateException he) {
-	
 		    throw new EJBException(he);
-	
 		} finally {
-	
 		    close(session);
-	
 		}
-	
+
 		ArrayList listaOrdenada = new ArrayList( ficha.getDocumentos() );
 		Comparator comp = new DocsFichaComparator();
 		Collections.sort(listaOrdenada, comp);
 		ficha.setDocumentos(listaOrdenada);                
-	
+
 		ArrayList listaOrdenadaEnl = new ArrayList( ficha.getEnlaces() );
 		Comparator comp_enl = new EnlacesFichaComparator();
 		Collections.sort(listaOrdenadaEnl, comp_enl);
 		ficha.setEnlaces(listaOrdenadaEnl);                 
-	
-		return ficha;
 
+		return ficha;
     }
 
 
@@ -1126,40 +1102,6 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 
     }
 
-    /**
-     * @deprecated No se usa
-     * Busca todas las Fichas con un texto determinado.
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public List buscarFichas(String texto) {
-    	
-    	IndexerDelegate delegate = DelegateUtil.getIndexerDelegate();
-    	Long[] ids;
-    	try {
-    		ids = delegate.buscarIds(Ficha.class.getName(), texto);
-    	} catch (DelegateException e) {
-    		log.error("Error buscando", e);
-    		ids = new Long[0];
-    	}
-
-    	if (ids == null || ids.length == 0) {
-    		return Collections.EMPTY_LIST;
-    	}
-
-    	Session session = getSession();
-    	try {
-    		Criteria criteria = session.createCriteria(Ficha.class);
-    		criteria.add(Expression.in("id", ids));
-    		criteria.setFetchMode("traducciones", FetchMode.EAGER);
-    		return criteria.list();
-    	} catch (HibernateException he) {
-    		throw new EJBException(he);
-    	} finally {
-    		close(session);
-    	}
-    	
-    }
 
     /**
      * Construye la consulta de búsqueda según los parámetros
@@ -1236,27 +1178,23 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 
     /**
      * Metodo que obtiene un bean con el filtro para la indexacion
-     * 
      * @ejb.interface-method
-     * 
      * @ejb.permission unchecked="true" 
      */
     public ModelFilterObject obtenerFilterObject(Ficha ficha) {
 
-    	//TODO: Ser�a conveniente optimizar este m�todo.
+    	//TODO: Sería conveniente optimizar este método.
 
     	ModelFilterObject filter = new ModelFilterObject();
     	Session session = getSession();
 
     	try {
-
     		//de momento, familia y microsites a null
     		filter.setFamilia_id(null);    	
     		filter.setMicrosite_id(null);
 
     		Iterator iterlang = ficha.getLangs().iterator();
-    		while ( iterlang.hasNext() ) {
-
+    		while (iterlang.hasNext()) {
     			String idioma = (String) iterlang.next();
     			StringBuilder txids =  new StringBuilder(Catalogo.KEY_SEPARADOR);
     			StringBuilder txtexto = new StringBuilder(" ");//espacio en blanco, que es para tokenizar
@@ -1271,482 +1209,428 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     			Hashtable hsids = new Hashtable(); //para controlar que no se repitan ids
     			Hashtable hslistapadres = new Hashtable(); //para controlar que no se repitan llamadas al delegate
 
-    			if ( ficha.getFichasua() != null ) {
-
+    			if (ficha.getFichasua() != null) {
     				iter = ficha.getFichasua().iterator();
-
-    				while ( iter.hasNext() ) {
-
+    				while (iter.hasNext()) {
     					FichaUA fichaua = (FichaUA) iter.next();
-
-    					if ( !hsids.containsKey( "" + fichaua.getUnidadAdministrativa().getId().longValue() ) ) {
-
-    						txids.append( fichaua.getUnidadAdministrativa().getId() );
+    					if (!hsids.containsKey("" + fichaua.getUnidadAdministrativa().getId().longValue())) {
+    						txids.append(fichaua.getUnidadAdministrativa().getId());
     						txids.append(Catalogo.KEY_SEPARADOR);
 
-    						if ( ( (TraduccionUA) fichaua.getUnidadAdministrativa().getTraduccion(idioma) ) != null ) {
-
-    							String nombreUA = ( (TraduccionUA) fichaua.getUnidadAdministrativa().getTraduccion(idioma)).getNombre(); 
-    							txtexto.append( nombreUA != null ? nombreUA.concat(" ") : " " ); //espacio en blanco, que es para tokenizar
-
+    						if (((TraduccionUA) fichaua.getUnidadAdministrativa().getTraduccion(idioma) ) != null) {
+    							String nombreUA = ((TraduccionUA) fichaua.getUnidadAdministrativa().getTraduccion(idioma)).getNombre();
+    							// Espacio en blanco, que es para tokenizar
+    							txtexto.append(nombreUA != null ? nombreUA.concat(" ") : " ");
     						}
 
-
-    						hsids.put( "" + fichaua.getUnidadAdministrativa().getId().longValue(), "" + fichaua.getUnidadAdministrativa().getId().longValue() );
-
+    						hsids.put("" + fichaua.getUnidadAdministrativa().getId().longValue(), "" + fichaua.getUnidadAdministrativa().getId().longValue());
     					}
 
-
-    					if ( !hslistapadres.containsKey( "" + fichaua.getUnidadAdministrativa().getId().longValue() ) ) {
-
-    						List listapadres = DelegateUtil.getUADelegate().listarPadresUnidadAdministrativa( fichaua.getUnidadAdministrativa().getId() );
+    					if (!hslistapadres.containsKey( "" + fichaua.getUnidadAdministrativa().getId().longValue())) {
+    						List listapadres = DelegateUtil.getUADelegate().listarPadresUnidadAdministrativa(fichaua.getUnidadAdministrativa().getId());
     						UnidadAdministrativa ua = null;
-
-    						for ( int x = 1 ; x < listapadres.size() ; x++ ) {
-
+    						for (int x = 1; x < listapadres.size(); x++) {
     							ua = (UnidadAdministrativa) listapadres.get(x);
-
-    							if ( !hsids.containsKey( "" + ua.getId().longValue() ) ) {
-
-    								txids.append( ua.getId() );
+    							if (!hsids.containsKey("" + ua.getId().longValue())) {
+    								txids.append(ua.getId());
     								txids.append(Catalogo.KEY_SEPARADOR);
-
-    								if ( ( (TraduccionUA) ua.getTraduccion(idioma) ) != null ) {
-
-    									String nombreUA = ( (TraduccionUA) ua.getTraduccion(idioma) ).getNombre(); 
-    									txtexto.append( nombreUA != null  ? nombreUA.concat(" ") : " " ); //espacio en blanco, que es para tokenizar
-
+    								if (((TraduccionUA) ua.getTraduccion(idioma)) != null) {
+    									String nombreUA = ((TraduccionUA) ua.getTraduccion(idioma)).getNombre();
+    									// Espacio en blanco, que es para tokenizar
+    									txtexto.append(nombreUA != null ? nombreUA.concat(" ") : " ");
     								}
 
-    								hsids.put( "" + ua.getId().longValue(), "" + ua.getId().longValue() );
-
+    								hsids.put("" + ua.getId().longValue(), "" + ua.getId().longValue());
     							}
-
     						}
 
     						hslistapadres.put("" + fichaua.getUnidadAdministrativa().getId().longValue(),"" + fichaua.getUnidadAdministrativa().getId().longValue());
-
     					}
-
     				}
     			}
 
-    			filter.setUo_id( txids.length() == 1 ? null : txids.toString() );
-    			trafilter.setUo_text( txtexto.length() == 1 ? null : txtexto.toString() );
-
+    			filter.setUo_id(txids.length() == 1 ? null : txids.toString());
+    			trafilter.setUo_text(txtexto.length() == 1 ? null : txtexto.toString());
 
     			//OBTENER LAS SECCIONES (en el caso de las fichas hay que recogerlas de la relacion con seccion. Solo ponemos la seccion propia)
     			txids = new StringBuilder(Catalogo.KEY_SEPARADOR);
     			txtexto = new StringBuilder(" ");
 
-    			if ( ficha.getFichasua() != null ) {
-
+    			if (ficha.getFichasua() != null) {
     				iter = ficha.getFichasua().iterator();
     				boolean primer = true;
-
-    				while ( iter.hasNext() ) {
-
+    				while (iter.hasNext()) {
     					FichaUA fichaua = (FichaUA) iter.next();
     					txids.append(fichaua.getSeccion().getId());
     					txids.append(Catalogo.KEY_SEPARADOR);
-
-    					if ( fichaua.getSeccion().getTraduccion(idioma) != null ) {
-
-    						String nombreSeccion = ( (TraduccionSeccion) fichaua.getSeccion().getTraduccion(idioma) ).getNombre(); 
-    						txtexto.append( nombreSeccion != null ? nombreSeccion.concat(" ") : " ");
-
+    					if (fichaua.getSeccion().getTraduccion(idioma) != null) {
+    						String nombreSeccion = ((TraduccionSeccion) fichaua.getSeccion().getTraduccion(idioma)).getNombre(); 
+    						txtexto.append(nombreSeccion != null ? nombreSeccion.concat(" ") : " ");
     					}
 
-
     					if (primer) {
-
     						//como titulo del servicio principal ponemos únicamente la primera seccion que pillamos
     						String txUA = "";
     						String txSeccion = "";
     						String txMaintitle = "";
 
-
-    						if ( fichaua.getSeccion().getTraduccion(idioma) != null ) {
-
-    							if ( ( (TraduccionUA) fichaua.getUnidadAdministrativa().getTraduccion(idioma) ) != null ) {
-
-    								String nombreUA = ( (TraduccionUA) fichaua.getUnidadAdministrativa().getTraduccion(idioma) ).getNombre();
-    								txUA = ( nombreUA != null ) ? nombreUA.concat(" ") : " ";
-
+    						if (fichaua.getSeccion().getTraduccion(idioma) != null) {
+    							if (((TraduccionUA) fichaua.getUnidadAdministrativa().getTraduccion(idioma)) != null) {
+    								String nombreUA = ((TraduccionUA) fichaua.getUnidadAdministrativa().getTraduccion(idioma)).getNombre();
+    								txUA = (nombreUA != null) ? nombreUA.concat(" ") : " ";
     							}
 
+    							String nombreSeccion = ((TraduccionSeccion) fichaua.getSeccion().getTraduccion(idioma)).getNombre(); 
+    							txSeccion = (nombreSeccion != null) ? nombreSeccion.concat(" ") : " ";
 
-    							String nombreSeccion =  ( (TraduccionSeccion) fichaua.getSeccion().getTraduccion(idioma) ).getNombre(); 
-    							txSeccion = ( nombreSeccion != null ) ? nombreSeccion.concat(" ") : " ";
-
-    							if ( txUA.length() > 1 )
-    								txMaintitle = txUA.substring(0, 1).toUpperCase() + txUA.substring(1, txUA.length() - 1 ).toLowerCase();
+    							if (txUA.length() > 1) {
+    							    txMaintitle = txUA.substring(0, 1).toUpperCase() + txUA.substring(1, txUA.length() - 1).toLowerCase();
+    							}
 
     							txMaintitle += " / ";
     							txMaintitle += txSeccion;
-    							trafilter.setMaintitle( txMaintitle );
+    							trafilter.setMaintitle(txMaintitle);
 
-    						} else if ( fichaua.getSeccion().getTraduccion(System.getProperty("es.caib.rolsac.idiomaDefault")) != null ) {
-
-    							if ( ( (TraduccionUA) fichaua.getUnidadAdministrativa().getTraduccion(idioma) ) != null ) {
-
-    								String nombreUA = ( (TraduccionUA) fichaua.getUnidadAdministrativa().getTraduccion( System.getProperty("es.caib.rolsac.idiomaDefault") ) ).getNombre(); 
-    								txUA = ( nombreUA != null ) ? nombreUA.concat(" ") : " ";
-
+    						} else if (fichaua.getSeccion().getTraduccion(System.getProperty("es.caib.rolsac.idiomaDefault")) != null) {
+    							if (((TraduccionUA) fichaua.getUnidadAdministrativa().getTraduccion(idioma)) != null) {
+    								String nombreUA = ((TraduccionUA) fichaua.getUnidadAdministrativa().getTraduccion(System.getProperty("es.caib.rolsac.idiomaDefault"))).getNombre(); 
+    								txUA = (nombreUA != null) ? nombreUA.concat(" ") : " ";
     							}
 
+    							String nombreSeccion = ((TraduccionSeccion) fichaua.getSeccion().getTraduccion(System.getProperty("es.caib.rolsac.idiomaDefault"))).getNombre();
+    							txSeccion = (nombreSeccion != null) ? nombreSeccion.concat(" ") : " ";
 
-    							String nombreSeccion =  ( (TraduccionSeccion) fichaua.getSeccion().getTraduccion( System.getProperty("es.caib.rolsac.idiomaDefault") ) ).getNombre();
-    							txSeccion = ( nombreSeccion != null ) ? nombreSeccion.concat(" ") : " ";
-
-    							if ( txUA.length() > 1 )
-    								txMaintitle = txUA.substring(0, 1).toUpperCase() + txUA.substring( 1, txUA.length() - 1 ).toLowerCase();
+    							if (txUA.length() > 1) {
+    							    txMaintitle = txUA.substring(0, 1).toUpperCase() + txUA.substring(1, txUA.length() - 1).toLowerCase();
+    							}
 
     							txMaintitle += " / ";
     							txMaintitle += txSeccion;
     							trafilter.setMaintitle(txMaintitle);
 
     						} else {
-
     							trafilter.setMaintitle("");
-
     						}
 
-    						primer=false;
-
+    						primer = false;
     					}
-
     				}
-
     			}
 
-    			filter.setSeccion_id( txids.length() == 1 ? null : txids.toString() );
-    			trafilter.setSeccion_text( ( txtexto.length() == 1 ) ? null : txtexto.toString() );
+    			filter.setSeccion_id(txids.length() == 1 ? null : txids.toString());
+    			trafilter.setSeccion_text((txtexto.length() == 1) ? null : txtexto.toString());
 
     			//OBTENER LAS MATERIAS (ademas de las materias se ponen los textos de los HECHOS VITALES)
     			txids = new StringBuilder(Catalogo.KEY_SEPARADOR);
     			txtexto = new StringBuilder(" ");
 
-    			if ( ficha.getMaterias() != null ) {
-
+    			if (ficha.getMaterias() != null) {
     				iter = ficha.getMaterias().iterator();
-
-    				while ( iter.hasNext() ) {
-
+    				while (iter.hasNext()) {
     					Materia materia = (Materia) iter.next();
     					txids.append(materia.getId());
-    					txids.append(Catalogo.KEY_SEPARADOR); //anayadir los ids (los de los hechos vitales no)
+    					// Anayadir los ids (los de los hechos vitales no)
+    					txids.append(Catalogo.KEY_SEPARADOR);
 
-    					if ( materia.getTraduccion(idioma) != null ) {
+    					if (materia.getTraduccion(idioma) != null) {
+    						String nombreMateria = ((TraduccionMateria) materia.getTraduccion(idioma)).getNombre();
+    						String descripcionMateria = ((TraduccionMateria) materia.getTraduccion(idioma)).getDescripcion();
+    						String palabrasClave = ((TraduccionMateria) materia.getTraduccion(idioma)).getPalabrasclave();
 
-    						String nombreMateria = ( (TraduccionMateria) materia.getTraduccion(idioma) ).getNombre();
-    						String descripcionMateria = ( (TraduccionMateria) materia.getTraduccion(idioma) ).getDescripcion();
-    						String palabrasClave = ( (TraduccionMateria) materia.getTraduccion(idioma) ).getPalabrasclave();
-
-    						txtexto.append( nombreMateria != null ? nombreMateria.concat(" ") : " " );
-    						txtexto.append( descripcionMateria != null ? descripcionMateria.concat(" ") : " " );
-    						txtexto.append( palabrasClave != null ? palabrasClave.concat(" ") : " " );
-
+    						txtexto.append(nombreMateria != null ? nombreMateria.concat(" ") : " ");
+    						txtexto.append(descripcionMateria != null ? descripcionMateria.concat(" ") : " ");
+    						txtexto.append(palabrasClave != null ? palabrasClave.concat(" ") : " ");
     					}
-
     				}
-
     			}
 
-    			if ( ficha.getMaterias() != null ) {
-
+    			if (ficha.getMaterias() != null) {
     				iter = ficha.getHechosVitales().iterator();
-
-    				while ( iter.hasNext() ) {
-
+    				while (iter.hasNext()) {
     					HechoVital hvital = (HechoVital) iter.next();
 
-    					if ( hvital.getTraduccion(idioma) != null ) {
+    					if (hvital.getTraduccion(idioma) != null) {
+    						String nombreHechoVital = ((TraduccionHechoVital) hvital.getTraduccion(idioma)).getNombre(); 
+    						String descripcionHechoVital = ((TraduccionHechoVital) hvital.getTraduccion(idioma)).getDescripcion();
+    						String palabrasClaveHechoVital = ((TraduccionHechoVital) hvital.getTraduccion(idioma)).getPalabrasclave();
 
-    						String nombreHechoVital = ( (TraduccionHechoVital) hvital.getTraduccion(idioma) ).getNombre(); 
-    						String descripcionHechoVital = ( (TraduccionHechoVital) hvital.getTraduccion(idioma) ).getDescripcion();
-    						String palabrasClaveHechoVital = ( (TraduccionHechoVital) hvital.getTraduccion(idioma) ).getPalabrasclave();
-
-    						txtexto.append( nombreHechoVital != null ? nombreHechoVital.concat(" ") : " " );
-    						txtexto.append( descripcionHechoVital != null ? descripcionHechoVital.concat(" ") : " " );
-    						txtexto.append( palabrasClaveHechoVital != null ? palabrasClaveHechoVital.concat(" ") : " " );
-
+    						txtexto.append(nombreHechoVital != null ? nombreHechoVital.concat(" ") : " ");
+    						txtexto.append(descripcionHechoVital != null ? descripcionHechoVital.concat(" ") : " ");
+    						txtexto.append(palabrasClaveHechoVital != null ? palabrasClaveHechoVital.concat(" ") : " ");
     					}
-
     				}
-
     			}
 
-    			filter.setMateria_id( txids.length() == 1 ? null : txids.toString() );
-    			trafilter.setMateria_text( txtexto.length() == 1 ? null : txtexto.toString() );
+    			filter.setMateria_id(txids.length() == 1 ? null : txids.toString());
+    			trafilter.setMateria_text(txtexto.length() == 1 ? null : txtexto.toString());
 
     			filter.addTraduccion(idioma, trafilter);
-
     		}
 
     	} catch (DelegateException e) {
-
     		throw new EJBException(e);
-
     	} finally {
-
     		close(session);
-
     	}
 
     	return filter;
-
-    }          
+    }
 
 
     /**
      * Añade la ficha al índice en todos los idiomas
-     * 
      * @ejb.interface-method
-     * 
      * @ejb.permission unchecked="true"
      */
     public void indexInsertaFicha(Ficha ficha,  ModelFilterObject filter)  {
 
     	try {
+    		if (filter == null) {
+    		    filter = obtenerFilterObject(ficha);
+    		}
 
-    		if ( ficha.getValidacion().equals(2) ) 
-    			return;
+    		IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
 
-    		if ( filter == null ) 
-    			filter = obtenerFilterObject(ficha);
+    		// Obtenemos los documentos de la ficha si tiene, para evitar tener que cargarlos en cada idioma
+    		List<Documento> listaDocumentos = obtenerListaDocumentos(ficha);
 
-    		Iterator iterator = ficha.getLangs().iterator();
-    		while ( iterator.hasNext() ) {
+    		Iterator<String> iterator = ficha.getLangs().iterator();
+    		while (iterator.hasNext()) {
+    			String idi = iterator.next();
 
-    			String idi = (String) iterator.next();
-    			IndexObject io = new IndexObject();  	
+    			// Configuración del writer
+    			Directory directory = indexerDelegate.getHibernateDirectory(idi);
+    			IndexWriter writer = new IndexWriter(directory, getAnalizador(idi), false, MaxFieldLength.UNLIMITED);
+    			writer.setMergeFactor(20);
+                writer.setMaxMergeDocs(Integer.MAX_VALUE);
 
-    			io.setId( Catalogo.SRVC_FICHAS + "." + ficha.getId() );
-    			io.setClasificacion(Catalogo.SRVC_FICHAS);
-    			io.setMicro( filter.getMicrosite_id() );
+    			IndexObject io = new IndexObject();
 
-    			if ( filter.getUo_id() != null ) 	
-    				io.setUo( filter.getUo_id() );
+    			io = indexarContenidos(ficha, io, filter);
 
-    			if ( filter.getMateria_id() != null ) 	
-    				io.setMateria( filter.getMateria_id() );
+    			io = indexarTraducciones(idi, ficha, io, filter);
 
-    			if ( filter.getFamilia_id() != null ) 	
-    				io.setFamilia( filter.getFamilia_id() );
+    			//No se añaden todos los documentos en todos los idiomas. Ahora en el idioma actual.
+    			io = indexarContenidosDocumentos(ficha, idi, writer, io, listaDocumentos);
 
-    			if ( filter.getSeccion_id() != null ) 	
-    				io.setSeccion( filter.getSeccion_id() );
-
-    			io.setCaducidad("");
-
-    			if ( ficha.getFechaPublicacion() != null ) {
-
-    				io.setPublicacion( new java.text.SimpleDateFormat("yyyyMMdd").format( ficha.getFechaPublicacion() ) );
-
-    			} else {
-
-    				io.setPublicacion("");
-
+    			if (io.getText().length() > 0 || io.getTextopcional().length() > 0) {
+    			    indexerDelegate.insertaObjeto(io, idi, writer);
     			}
 
-    			io.setDescripcion("");
-
-    			if ( ficha.getFechaCaducidad() != null ) 
-    				io.setCaducidad( new java.text.SimpleDateFormat("yyyyMMdd").format( ficha.getFechaCaducidad() ) );
-
-
-    			TraduccionFicha trad = ( (TraduccionFicha) ficha.getTraduccion(idi) );
-
-    			if ( trad != null ) {
-
-    				if ( ( trad.getUrl() != null ) && ( trad.getUrl().length() > 0 ) ) {
-
-    					io.setUrl( "/govern/estadistica?tipus=F&codi=" + ficha.getId() + "&url=" + java.net.URLEncoder.encode( trad.getUrl(),"UTF-8" ) );
-
-    					if ( trad.getUrl().startsWith("http") || trad.getUrl().startsWith("/") ) {
-
-    						//El servidor no tiene acceso a internet para realizar esta tarea
-    						//Toni comenta que esto no es necesario ya que con la información de la ficha es suficiente
-    						//indexBorraWEB_EXTERNA (ficha, idi);
-    						//indexInsertaWEB_EXTERNA (ficha, filter, idi);
-
-    					}
-
-    				} else {
-
-    					io.setUrl( "/govern/sac/fitxa.do?lang=" + idi + "&codi=" + ficha.getId() + "&coduo="+ obtenerUO_Principal( io.getUo() ) );
-
-    				}
-
-    				io.setTituloserviciomain( filter.getTraduccion(idi).getMaintitle() );
-
-
-    				if ( trad.getTitulo() != null && trad.getTitulo().length() > 0 ) {
-
-    					io.setTitulo( trad.getTitulo() );
-    					io.addTextLine( trad.getTitulo() );
-
-    					if ( trad.getDescAbr() != null )	
-    						io.addTextLine( trad.getDescAbr() );
-
-    				} else {
-
-    					TraduccionFicha trad_ca = ( (TraduccionFicha) ficha.getTraduccion("ca") );
-
-    					if ( trad_ca.getTitulo() != null ) 
-    						io.setTitulo( trad_ca.getTitulo() );
-
-    				}
-
-    				if ( trad.getDescripcion() != null )  {
-
-    					io.addTextLine( trad.getDescripcion() );	
-    					io.setDescripcion( trad.getDescripcion() );
-
-    				}
-
-    				io.addTextopcionalLine( filter.getTraduccion(idi).getMateria_text() );
-    				io.addTextopcionalLine( filter.getTraduccion(idi).getSeccion_text() );
-    				io.addTextopcionalLine( filter.getTraduccion(idi).getUo_text() );	    
-
-    			}
-
-    			//No:Se añaden todos los documentos en todos los idiomas. 
-    			//Ahora en el idioma actual.
-    			if ( ficha.getDocumentos() != null ) {
-
-    				Iterator iterdocs = ficha.getDocumentos().iterator();
-
-    				while ( iterdocs.hasNext() ) {
-
-    					Documento documento = (Documento) iterdocs.next();
-    					documento = DelegateUtil.getDocumentoDelegate().obtenerDocumento( documento.getId() );
-
-    					if ( documento.getTraduccion(idi) != null ) {
-
-    						io.addTextLine( ( (TraduccionDocumento) documento.getTraduccion(idi) ).getTitulo() );
-    						io.addTextLine( ( (TraduccionDocumento) documento.getTraduccion(idi) ).getDescripcion() );
-
-    					}
-
-
-    					/* Se crea la indexación del documento individual y se añade la información 
-						para la indexación de la ficha.*/
-
-    					IndexObject ioDoc = new IndexObject();
-    					String textDoc = null;								
-    					Archivo arch = new Archivo();
-
-    					if ( documento.getTraduccion(idi) != null ) {
-
-    						arch = (Archivo)((TraduccionDocumento)documento.getTraduccion(idi)).getArchivo();
-    						ioDoc.addArchivo(arch);
-
-    					}
-
-    					textDoc = ioDoc.getText();
-
-    					if ( textDoc != null && textDoc.length() > 0 && arch != null ) {
-
-    						if ( documento.getTraduccion(idi) != null ) {				            	
-
-    							ioDoc.setId( Catalogo.SRVC_FICHAS_DOCUMENTOS + "." + documento.getId() );
-    							ioDoc.setClasificacion( Catalogo.SRVC_FICHAS + "." + ficha.getId() );
-    							ioDoc.setCaducidad("");
-
-    							if ( ficha.getFechaPublicacion() != null ) 
-    								ioDoc.setPublicacion( new java.text.SimpleDateFormat("yyyyMMdd").format(ficha.getFechaPublicacion() ) ); 
-    							else	
-    								ioDoc.setPublicacion("");
-
-    							ioDoc.setDescripcion("");
-
-    							if ( ficha.getFechaCaducidad() != null ) 
-    								ioDoc.setCaducidad( new java.text.SimpleDateFormat("yyyyMMdd").format( ficha.getFechaCaducidad() ) );
-
-    							ioDoc.setUrl( "/fitxer/get?codi=" + arch.getId() );
-    							ioDoc.setTituloserviciomain( io.getTitulo() );
-
-    							if ( ( (TraduccionDocumento) documento.getTraduccion(idi) ).getTitulo() == null )
-    								ioDoc.setTitulo( ( (TraduccionDocumento) documento.getTraduccion("ca") ).getTitulo() + ", (" + arch.getMime().toUpperCase() + ")" );
-    							else
-    								ioDoc.setTitulo( ( (TraduccionDocumento) documento.getTraduccion(idi) ).getTitulo() + ", (" + arch.getMime().toUpperCase() +")" );
-
-    							ioDoc.setDescripcion( ( (TraduccionDocumento) documento.getTraduccion(idi) ).getDescripcion() );
-    							ioDoc.setText(textDoc);
-    							ioDoc.addTextLine( ( (TraduccionDocumento) documento.getTraduccion(idi) ).getDescripcion() );
-    							ioDoc.addTextLine( arch.getNombre() );
-
-    							if ( io.getUo() != null ) 	
-    								ioDoc.setUo( io.getUo() );
-
-    							if ( io.getMateria() != null ) 
-    								ioDoc.setMateria( io.getMateria() );
-
-    							if ( io.getSeccion() != null ) 
-    								ioDoc.setSeccion( io.getSeccion() );
-
-    							if ( ioDoc.getText().length() > 0 || ioDoc.getTextopcional().length() > 0 )
-    								org.ibit.rol.sac.persistence.delegate.DelegateUtil.getIndexerDelegate().insertaObjeto(ioDoc, idi);
-
-    						}
-
-    						io.addTextLine(textDoc);
-
-    					}
-
-    				}
-
-    			}
-
-
-    			// Se crea la indexación del foro como documento individual y se añade la información 
-    			// para la indexación de la ficha.
-
-    			if ( ficha.getUrlForo() != null && ficha.getUrlForo().length() > 0 )
-    				io.setConforo("S");
-    			else
-    				io.setConforo("N");
-
-
-    			if ( io.getText().length() > 0 || io.getTextopcional().length() > 0 )
-    				org.ibit.rol.sac.persistence.delegate.DelegateUtil.getIndexerDelegate().insertaObjeto(io, idi);
-
+    			writer.close();
+    			directory.close();
     		}
 
     	} catch (Exception ex) {
-
-    		log.warn( "[indexInsertaFicha:" + ficha.getId() + "] No se ha podido indexar ficha. " + ex.getMessage() );
-
+    		log.warn("[indexInsertaFicha:" + ficha.getId() + "] No se ha podido indexar ficha. " + ex.getMessage());
     	}
-
     }
+
+
+    private List<Documento> obtenerListaDocumentos(Ficha ficha) throws DelegateException {
+
+        int listaSize = 0;
+        if (ficha.getDocumentos() != null) {
+            listaSize = ficha.getDocumentos().size();
+        }
+        List<Documento> listaDocumentos = new ArrayList<Documento>(listaSize);
+        if (ficha.getDocumentos() != null) {
+            DocumentoDelegate documentoDelegate = DelegateUtil.getDocumentoDelegate();
+            for (Documento documento : ficha.getDocumentos()) {
+                Documento doc = documentoDelegate.obtenerDocumento(documento.getId());
+                listaDocumentos.add(doc);
+            }
+        }
+
+        return listaDocumentos;
+    }
+
+
+    private IndexObject indexarContenidos(Ficha ficha, IndexObject io, ModelFilterObject filter) {
+
+        io.setId(Catalogo.SRVC_FICHAS + "." + ficha.getId());
+        io.setClasificacion(Catalogo.SRVC_FICHAS);
+        io.setMicro(filter.getMicrosite_id());
+        io.setDescripcion("");
+
+        if (filter.getUo_id() != null) {
+            io.setUo(filter.getUo_id());
+        }
+
+        if (filter.getMateria_id() != null) {
+            io.setMateria(filter.getMateria_id());
+        }
+
+        if (filter.getFamilia_id() != null) {
+            io.setFamilia(filter.getFamilia_id());
+        }
+
+        if (filter.getSeccion_id() != null) {
+            io.setSeccion(filter.getSeccion_id());
+        }
+
+        io.setCaducidad("");
+        if (ficha.getFechaCaducidad() != null) {
+            io.setCaducidad(new java.text.SimpleDateFormat("yyyyMMdd").format(ficha.getFechaCaducidad()));
+        }
+
+        if (ficha.getFechaPublicacion() != null) {
+            io.setPublicacion(new java.text.SimpleDateFormat("yyyyMMdd").format(ficha.getFechaPublicacion()));
+        } else {
+            io.setPublicacion("");
+        }
+
+        // Se crea la indexación del foro como documento individual y se añade la información para la indexación de la ficha.
+        io.setConforo((ficha.getUrlForo() != null && ficha.getUrlForo().length() > 0) ? "S" : "N");
+
+        return io;
+    }
+
+
+    private IndexObject indexarTraducciones(String idioma, Ficha ficha, IndexObject io, ModelFilterObject filter) throws UnsupportedEncodingException {
+
+        TraduccionFicha trad = ((TraduccionFicha) ficha.getTraduccion(idioma));
+        if (trad != null) {
+            if ((trad.getUrl() != null ) && (trad.getUrl().length() > 0)) {
+                io.setUrl("/govern/estadistica?tipus=F&codi=" + ficha.getId() + "&url=" + java.net.URLEncoder.encode(trad.getUrl(),"UTF-8"));
+            } else {
+                io.setUrl("/govern/sac/fitxa.do?lang=" + idioma + "&codi=" + ficha.getId() + "&coduo=" + obtenerUO_Principal(io.getUo()));
+            }
+
+            io.setTituloserviciomain(filter.getTraduccion(idioma).getMaintitle());
+
+            if (trad.getTitulo() != null && trad.getTitulo().length() > 0) {
+                io.setTitulo(trad.getTitulo());
+                io.addTextLine(trad.getTitulo());
+                if (trad.getDescAbr() != null) {
+                    io.addTextLine(trad.getDescAbr());
+                }
+
+            } else {
+                TraduccionFicha trad_ca = ((TraduccionFicha) ficha.getTraduccion("ca"));
+                if (trad_ca.getTitulo() != null) {
+                    io.setTitulo(trad_ca.getTitulo());
+                }
+            }
+
+            if (trad.getDescripcion() != null) {
+                io.addTextLine(trad.getDescripcion());  
+                io.setDescripcion(trad.getDescripcion());
+            }
+
+            io.addTextopcionalLine(filter.getTraduccion(idioma).getMateria_text());
+            io.addTextopcionalLine(filter.getTraduccion(idioma).getSeccion_text());
+            io.addTextopcionalLine(filter.getTraduccion(idioma).getUo_text());
+        }
+
+        return io;
+    }
+
+
+    private IndexObject indexarContenidosDocumentos(Ficha ficha, String idioma, IndexWriter writer, IndexObject io, List<Documento> listaDocumentos) throws DelegateException {
+
+        if (ficha.getDocumentos() != null) {
+            IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
+
+            Iterator<Documento> iterdocs = listaDocumentos.iterator();
+            while (iterdocs.hasNext()) {
+                Documento documento = iterdocs.next();
+
+                /* Se crea la indexación del documento individual y se añade la información para la indexación de la ficha.*/
+                IndexObject ioDoc = new IndexObject();
+                String textDoc = null;
+                Archivo arch = new Archivo();
+
+                if (documento.getTraduccion(idioma) != null) {
+                    io.addTextLine(((TraduccionDocumento) documento.getTraduccion(idioma)).getTitulo());
+                    io.addTextLine(((TraduccionDocumento) documento.getTraduccion(idioma)).getDescripcion());
+
+                    if (((TraduccionDocumento) documento.getTraduccion(idioma)).getArchivo() != null) {
+                        arch = (Archivo) ((TraduccionDocumento) documento.getTraduccion(idioma)).getArchivo();
+                        ioDoc.addArchivo(arch);
+                    }
+                }
+
+                textDoc = ioDoc.getText();
+
+                if (textDoc != null && textDoc.length() > 0 && arch != null) {
+                    if (documento.getTraduccion(idioma) != null) {
+
+                        ioDoc.setId(Catalogo.SRVC_FICHAS_DOCUMENTOS + "." + documento.getId());
+                        ioDoc.setClasificacion(Catalogo.SRVC_FICHAS + "." + ficha.getId());
+                        ioDoc.setCaducidad("");
+                        ioDoc.setDescripcion("");
+                        ioDoc.setUrl("/fitxer/get?codi=" + arch.getId());
+                        ioDoc.setTituloserviciomain(io.getTitulo());
+                        ioDoc.setDescripcion(((TraduccionDocumento) documento.getTraduccion(idioma)).getDescripcion());
+                        ioDoc.setText(textDoc);
+
+                        ioDoc.addTextLine(((TraduccionDocumento) documento.getTraduccion(idioma)).getDescripcion());
+                        ioDoc.addTextLine(arch.getNombre());
+
+                        if (ficha.getFechaPublicacion() != null) {
+                            ioDoc.setPublicacion(new java.text.SimpleDateFormat("yyyyMMdd").format(ficha.getFechaPublicacion())); 
+                        } else {
+                            ioDoc.setPublicacion("");
+                        }
+
+                        if (((TraduccionDocumento) documento.getTraduccion(idioma)).getTitulo() == null) {
+                            ioDoc.setTitulo(((TraduccionDocumento) documento.getTraduccion("ca") ).getTitulo() + ", (" + arch.getMime().toUpperCase() + ")");
+                        } else {
+                            ioDoc.setTitulo(((TraduccionDocumento) documento.getTraduccion(idioma)).getTitulo() + ", (" + arch.getMime().toUpperCase() +")");
+                        }
+
+                        if (ficha.getFechaCaducidad() != null) {
+                            ioDoc.setCaducidad(new java.text.SimpleDateFormat("yyyyMMdd").format(ficha.getFechaCaducidad()));
+                        }
+
+                        if (io.getUo() != null) {
+                            ioDoc.setUo(io.getUo());
+                        }
+
+                        if (io.getMateria() != null) {
+                            ioDoc.setMateria(io.getMateria());
+                        }
+
+                        if (io.getSeccion() != null) {
+                            ioDoc.setSeccion( io.getSeccion() );
+                        }
+
+                        if (ioDoc.getText().length() > 0 || ioDoc.getTextopcional().length() > 0) {
+                            indexerDelegate.insertaObjeto(ioDoc, idioma, writer);
+                        }
+                    }
+
+                    io.addTextLine(textDoc);
+                }
+            }
+        }
+
+        return io;
+    }
+
 
     /**
      * Elimina la ficha en el índice en todos los idiomas
-     * 
      * @param id	Identificador de una ficha
-     * 
      * @ejb.interface-method
-     * 
      * @ejb.permission unchecked="true"
      */
     public void indexBorraFicha(Long id)  {
 
-    	try {
-    	    if (true) return;
-
-    		List langs = DelegateUtil.getIdiomaDelegate().listarLenguajes();
-    		for ( int i = 0 ; i < langs.size() ; i++ ) {
-    			DelegateUtil.getIndexerDelegate().borrarObjeto( Catalogo.SRVC_FICHAS + "." + id, "" + langs.get(i) );
-    			DelegateUtil.getIndexerDelegate().borrarObjetosDependientes(Catalogo.SRVC_FICHAS + "." + id, ""+langs.get(i));
+        try {
+            IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
+            List<String> langs = DelegateUtil.getIdiomaDelegate().listarLenguajes();
+            for (String lang : langs) {
+    		    indexerDelegate.borrarObjeto(Catalogo.SRVC_FICHAS + "." + id, "" + lang);
+    		    indexerDelegate.borrarObjetosDependientes(Catalogo.SRVC_FICHAS + "." + id, "" + lang);
     		}
 
     	} catch (DelegateException ex) {
-    		log.warn( "[indexBorraFicha:" + id + "] No se ha podido borrar del indice la ficha. " + ex.getMessage() );
+    		log.warn("[indexBorraFicha:" + id + "] No se ha podido borrar del indice la ficha. " + ex.getMessage());
     	}
     }
+
 
     /**
      * Añade la URL externa para un idioma, obteniendola de la ficha
@@ -1760,7 +1644,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     	try {
     	    if (true) return;
 
-    		IndexObject io= new IndexObject();
+    		IndexObject io = new IndexObject();
 
     		io.setId( Catalogo.SRVC_WEB_EXTERNA + "." + ficha.getId() );
     		io.setClasificacion(Catalogo.SRVC_WEB_EXTERNA);
@@ -1817,8 +1701,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     				if ( contenido instanceof Archivo )
     					io.addArchivo( (Archivo) contenido );
 
-    				if ( io.getText().length() > 0 )
-    					org.ibit.rol.sac.persistence.delegate.DelegateUtil.getIndexerDelegate().insertaObjeto(io, idi);
+    				if ( io.getText().length() > 0 ){}
+//    					org.ibit.rol.sac.persistence.delegate.DelegateUtil.getIndexerDelegate().insertaObjeto(io, idi);
 
     			}
 
@@ -1839,19 +1723,14 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public void indexBorraWEB_EXTERNA(Ficha ficha, String idi)  {
+    public void indexBorraWEB_EXTERNA(Ficha ficha, String idi) {
 
     	try {
-
-    		DelegateUtil.getIndexerDelegate().borrarObjeto( Catalogo.SRVC_WEB_EXTERNA + "." + ficha.getId(), "" + idi );
+    		DelegateUtil.getIndexerDelegate().borrarObjeto(Catalogo.SRVC_WEB_EXTERNA + "." + ficha.getId(), "" + idi);
 
     	} catch (DelegateException ex) {
-
-    		log.warn( "[indexBorraWEB_EXTERNA:" + ficha.getId() + "] No se ha podido borrar del indice la WEB_EXTERNA. " + ex.getMessage() );
-
+    		log.warn("[indexBorraWEB_EXTERNA:" + ficha.getId() + "] No se ha podido borrar del indice la WEB_EXTERNA. " + ex.getMessage());
     	}
-
-
     }
 
 
@@ -1984,25 +1863,16 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     	Analyzer analyzer;
 
     	if (idi.toLowerCase().equals("de")) {
-
     		analyzer = new AlemanAnalyzer();
-
     	} else if ( idi.toLowerCase().equals("en") ) {
-
     		analyzer = new InglesAnalyzer();
-
     	} else if ( idi.toLowerCase().equals("ca") ) {
-
     		analyzer = new CatalanAnalyzer();
-
     	} else {
-
     		analyzer = new CastellanoAnalyzer();
-
     	}
 
     	return analyzer;
-
     }
 
 

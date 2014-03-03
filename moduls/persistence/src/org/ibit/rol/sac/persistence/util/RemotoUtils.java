@@ -188,7 +188,7 @@ public class RemotoUtils {
     }
     
     /**
-     * A partir de un String con el codigo estandar de la iniciación obtengo el objeto Iniciacion
+     * A partir de un String con el codigo estandar de la iniciaciÃ³n obtengo el objeto Iniciacion
 
      * 
      * @param session

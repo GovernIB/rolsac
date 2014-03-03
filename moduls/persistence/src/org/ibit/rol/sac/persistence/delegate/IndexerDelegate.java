@@ -1,172 +1,190 @@
 package org.ibit.rol.sac.persistence.delegate;
 
+import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.Date;
-
-import org.ibit.lucene.indra.model.IndexResultados;
-import org.ibit.rol.sac.model.Ficha;
-import org.ibit.rol.sac.model.IndexObject;
-import org.ibit.rol.sac.persistence.intf.IndexerFacadeLocal;
-import org.ibit.rol.sac.persistence.intf.IndexerFacadeLocalHome;
-import org.ibit.rol.sac.persistence.util.IndexerFacadeUtil;
+import java.util.List;
 
 import javax.ejb.CreateException;
-import javax.ejb.EJBException;
+import javax.ejb.Handle;
 import javax.naming.NamingException;
+
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.store.Directory;
+import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.model.IndexObject;
+import org.ibit.rol.sac.persistence.intf.IndexerFacade;
+import org.ibit.rol.sac.persistence.intf.IndexerFacadeHome;
+import org.ibit.rol.sac.persistence.util.IndexerFacadeUtil;
+
+import es.caib.rolsac.persistence.lucene.model.IndexResultados;
 
 /**
  * Business delegate para manipular el indice.
  */
-public class IndexerDelegate implements StatelessDelegate
-{
+public class IndexerDelegate implements StatelessDelegate {
+
 	/* ========================================================= */
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
-	
-    public synchronized void insertaObjeto(IndexObject indexObject, String idi) throws DelegateException {
+
+    public synchronized void insertaObjeto(IndexObject indexObject, String idi, IndexWriter writer) throws DelegateException {
         try {
-            local.insertaObjeto(indexObject, idi);
-        } catch (EJBException e) {
+            getFacade().insertaObjeto(indexObject, idi, writer);
+        } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
-    
+
     public synchronized void borrarObjeto(String id, String idi) throws DelegateException {
         try {
-            local.borrarObjeto(id, idi);
-        } catch (EJBException e) {
+            getFacade().borrarObjeto(id, idi);
+        } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
-    
+
     public synchronized void borrarObjetosDependientes(String id, String idi) throws DelegateException {
         try {
-            local.borrarObjetosDependientes(id, idi);
-        } catch (EJBException e) {
+            getFacade().borrarObjetosDependientes(id, idi);
+        } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
-    
+
     public synchronized void indexarObjeto(Object objeto) throws DelegateException {
         try {
-            local.indexarObjeto(objeto);
-        } catch (EJBException e) {
+            getFacade().indexarObjeto(objeto);
+        } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
-    
+
     public synchronized void desindexarObjeto(Object objeto) throws DelegateException {
         try {
-            local.desindexarObjeto(objeto);
-        } catch (EJBException e) {
+            getFacade().desindexarObjeto(objeto);
+        } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
-    
-    public synchronized void optimizar(String idi) throws DelegateException {
+
+    public synchronized void optimizar(List<String> langs) throws DelegateException, IOException {
         try {
-            local.optimizar(idi);
-        } catch (EJBException e) {
+            getFacade().optimizar(langs);
+        } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
-    
+
     public synchronized void confeccionaDiccionario(String idi) throws DelegateException {
         try {
-            local.confeccionaDiccionario(idi);
-        } catch (EJBException e) {
+            getFacade().confeccionaDiccionario(idi);
+        } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
-    
+
     public synchronized Long[] buscarIds(String className, String text) throws DelegateException {
         try {
-            return local.buscarIds(className, text);
-        } catch (EJBException e) {
+            return getFacade().buscarIds(className, text);
+        } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
-    
+
     public void reindexarProcedimentos() throws DelegateException {
         try {
-            local.reindexarProcedimentos();
-        } catch (EJBException e) {
+            getFacade().reindexarProcedimentos();
+        } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
-    
+
     public void reindexarNormativas() throws DelegateException {
         try {
-            local.reindexarNormativas();
-        } catch (EJBException e) {
+            getFacade().reindexarNormativas();
+        } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
-    
+
     public void reindexarFichas() throws DelegateException {
         try {
-            local.reindexarFichas();
-        } catch (EJBException e) {
+            getFacade().reindexarFichas();
+        } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
-    
+
     public void reindexarUOs() throws DelegateException {
         try {
-            local.reindexarUOs();
-        } catch (EJBException e) {
+            getFacade().reindexarUOs();
+        } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
-    
+
     public void reindexarUOsPMA() throws DelegateException {
         try {
-            local.reindexarUOsPMA();
-        } catch (EJBException e) {
+            getFacade().reindexarUOsPMA();
+        } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
-    
+
     public void reindexarFichasPMA() throws DelegateException {
         try {
-            local.reindexarFichasPMA();
-        } catch (EJBException e) {
+            getFacade().reindexarFichasPMA();
+        } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
-    
-    public IndexResultados buscaravanzado(String cerca_totes, String cerca_alguna, String cerca_frase, String cerca_cap, String tipus, String uo, String mat, Date fini, Date ffin, String ajudes, String idi, boolean sugerir, boolean restringido) throws DelegateException {
+
+    public void envioColaCrawler(String tipo, Ficha ficha) throws DelegateException {
         try {
-            return local.buscaravanzado(cerca_totes, cerca_alguna, cerca_frase, cerca_cap, tipus, uo, mat, fini, ffin, ajudes, idi, sugerir, restringido);
-        } catch (EJBException e) {
+            getFacade().envioColaCrawler(tipo, ficha);
+        } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
-    
-    public void envioColaCrawler(String tipo,Ficha ficha) throws DelegateException {
+
+    public Directory getHibernateDirectory(String idi) throws DelegateException, IOException {
         try {
-            local.envioColaCrawler(tipo,ficha);
-        } catch (EJBException e) {
+            return getFacade().getHibernateDirectory(idi);
+        } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
-    
+
+    public IndexResultados buscarAvanzado(String buscarTodas, String buscarAlguna, String buscarFrase, String buscarNinguna, String tipos, String uo, String materia, Date fechaInicio, Date fechaFin, String ayudas, String idioma, boolean sugerir, boolean restringido) throws DelegateException {
+        try {
+            return getFacade().buscarAvanzado(buscarTodas, buscarAlguna, buscarFrase, buscarNinguna, tipos, uo, materia, fechaInicio, fechaFin, ayudas, idioma, sugerir, restringido);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
-    
-    private IndexerFacadeLocal local;
-    
+
+    private Handle facadeHandle;
+
+    private IndexerFacade getFacade() throws RemoteException {
+        return (IndexerFacade) facadeHandle.getEJBObject();
+    }
+
     protected IndexerDelegate() throws DelegateException {
         try {
-            IndexerFacadeLocalHome home = IndexerFacadeUtil.getLocalHome();
-            local = home.create();
+            IndexerFacadeHome home = IndexerFacadeUtil.getHome();
+            IndexerFacade remote = home.create();
+            facadeHandle = remote.getHandle();
         } catch (NamingException e) {
             throw new DelegateException(e);
         } catch (CreateException e) {
             throw new DelegateException(e);
-        } catch (EJBException e) {
+        } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
-    
 }

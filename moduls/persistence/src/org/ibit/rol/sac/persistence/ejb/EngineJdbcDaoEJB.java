@@ -56,8 +56,8 @@ public abstract class EngineJdbcDaoEJB extends DaoEJB {
 	
     
     /**
-     * M閠odo que devuelve un resultset tras realizar una operaci髇 de consulta
-     * o de modificaci髇 en BD
+     * M茅todo que devuelve un resultset tras realizar una operaci贸n de consulta
+     * o de modificaci贸n en BD
      * 
      * Si no es una consulta retorna null.
      * 
@@ -98,8 +98,8 @@ public abstract class EngineJdbcDaoEJB extends DaoEJB {
 
   	
   	/**
-  	 * M閠odo para ejecutar SQL de inserci髇, actualizaci髇 o borrado.  
-     * Devuelve el n鷐ero de registros modificados o 0 en caso de error.
+  	 * M茅todo para ejecutar SQL de inserci贸n, actualizaci锟絥 o borrado.  
+     * Devuelve el n煤mero de registros modificados o 0 en caso de error.
   	 * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true" 
@@ -133,8 +133,8 @@ public abstract class EngineJdbcDaoEJB extends DaoEJB {
     }
 
   	/**
-  	 * M閠odo para ejecutar SQL de inserci髇, actualizaci髇 o borrado.  
-     * Devuelve el n鷐ero de registros modificados o 0 en caso de error.
+  	 * M锟絫odo para ejecutar SQL de inserci贸n, actualizaci贸n o borrado.  
+     * Devuelve el n煤mero de registros modificados o 0 en caso de error.
   	 * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true" 

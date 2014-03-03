@@ -39,12 +39,14 @@ public class XMLExtractor implements Extractor {
 
         FileOutputStream fos = new FileOutputStream(file);
         fos.write(baos.toByteArray());
-        fos.close();
 
         SAXTextHandler handler = new SAXTextHandler(file);
 
         String content = handler.getDocumentText();
+
+        fos.close();
         file.delete();
+        baos.close();
 
         return content;
     }

@@ -24,7 +24,7 @@ import org.apache.lucene.document.*;
  * @author enric - pongo comentarios.
  * Esta clase se conecta a una pagina html,
  * lee su contenido, y lo guarda en un Nodo (del
- * Crawler) para su posterior indexación. 
+ * Crawler) para su posterior indexaciï¿½n. 
  * Si se trata de un Microsite lee unos tags 
  * determinados, o todo el contenido si no hay tags.
  * Si se trata de una pagina externa, lee
@@ -34,7 +34,7 @@ import org.apache.lucene.document.*;
 public class HTMLDocument {
 	protected  Log log = LogFactory.getLog(HTMLDocument.class);
 
-	// TODO es proposa cambiar el nom d'aquesta funció por algo asi com: prepararIndexacionPaginaHtml()
+	// TODO es proposa cambiar el nom d'aquesta funciï¿½ por algo asi com: prepararIndexacionPaginaHtml()
 	public Nodo Document(String idFicha, String url, List<Nodo> arbol,
 			int counter,boolean isMicrosite) throws IOException, InterruptedException {
 		
@@ -85,12 +85,12 @@ public class HTMLDocument {
 						// .. se indexa la  url y el instante del tiempo
 						
 						doc.add(new Field("url", url, Field.Store.YES,
-								Field.Index.UN_TOKENIZED));
+								Field.Index.toIndex(true, false)));
 
 						doc.add(new Field("timestamp", DateTools.timeToString(
 								new Date().getTime(),
 								DateTools.Resolution.MILLISECOND),
-								Field.Store.YES, Field.Index.UN_TOKENIZED));
+								Field.Store.YES, org.apache.lucene.document.Field.Index.toIndex(true, false)));
 						StringReader contenido = null;
 						Parser bParser=new Parser();
 						bParser.setResource(url);
@@ -136,7 +136,7 @@ public class HTMLDocument {
 
 						}
 						
-						//.. se indexa el título
+						//.. se indexa el tï¿½tulo
 
 						NodeFilter bFilter;
 
@@ -153,12 +153,12 @@ public class HTMLDocument {
 						
 						doc.add(new Field("contents", contenido));
 						doc.add(new Field("title", title, Field.Store.YES,
-								Field.Index.TOKENIZED));
+								Field.Index.toIndex(true, true)));
 
 						//.. se indexa el id de la ficha
 						
 						doc.add(new Field("idFicha", idFicha, Field.Store.YES,
-								Field.Index.UN_TOKENIZED));
+								Field.Index.toIndex(true, false)));
 						
 						//.. ponemos los datos a indexar en un nodo
 						hijo = new Nodo(url, counter, doc,md5);

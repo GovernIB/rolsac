@@ -40,12 +40,10 @@ public final class WordExtractor implements Extractor {
         final ArrayList text = new ArrayList();
         final POIFSFileSystem fsys = new POIFSFileSystem(in);
 
-        final DocumentEntry headerProps =
-                (DocumentEntry) fsys.getRoot().getEntry("WordDocument");
+        final DocumentEntry headerProps = (DocumentEntry) fsys.getRoot().getEntry("WordDocument");
         DocumentInputStream din = fsys.createDocumentInputStream("WordDocument");
         final byte[] header = new byte[headerProps.getSize()];
         din.read(header);
-        din.close();
 
         //Get the information we need from the header
         final int info = LittleEndian.getShort(header, 0xa);
@@ -68,7 +66,6 @@ public final class WordExtractor implements Extractor {
         din = fsys.createDocumentInputStream(tableName);
 
         din.read(tableStream);
-        din.close();
 
         final int multiple = findText(tableStream, complexOffset, text);
 
@@ -90,6 +87,11 @@ public final class WordExtractor implements Extractor {
             sb.append(toStr).append(" ");
 
         }
+
+        table.delete();
+        din.close();
+        headerProps.delete();
+
         return sb.toString();
     }
 

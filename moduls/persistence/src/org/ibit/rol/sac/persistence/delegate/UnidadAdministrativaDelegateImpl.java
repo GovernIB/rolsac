@@ -8,7 +8,6 @@ import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
 
-import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -18,6 +17,7 @@ import org.ibit.rol.sac.persistence.intf.UnidadAdministrativaFacade;
 import org.ibit.rol.sac.persistence.intf.UnidadAdministrativaFacadeHome;
 import org.ibit.rol.sac.persistence.util.UnidadAdministrativaFacadeUtil;
 
+import es.caib.rolsac.persistence.lucene.model.ModelFilterObject;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**

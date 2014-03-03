@@ -46,7 +46,7 @@
 		<fileset dir="${lib.dir}/webcaib">
 			<include name="commons-beanutils-1.8.3.jar"/>
 		    <include name="commons-lang-2.1.jar"/>
-			<include name="lucene-caib.jar"/>        	
+			<!-- <include name="lucene-caib.jar"/> -->
 		</fileset>
 
     </path>

@@ -87,11 +87,11 @@ public class AuditoriaDTO implements ValueObject, Comparable {
     private String tituloOperacion;
 
 	/**
-	 * Función de comparación para permitir la ordenación de listas de AuditoriaDTO.
+	 * FunciÃ³n de comparaciÃ³n para permitir la ordenaciÃ³n de listas de AuditoriaDTO.
 	 * 
 	 * @param o Objeto a comparar. Se espera AuditoriaDTO.
 	 * 
-	 * @return -1, 0, 1 si el objeto es menor, igual o mayor que el pasado por parámetro.
+	 * @return -1, 0, 1 si el objeto es menor, igual o mayor que el pasado por parÃ¡metro.
 	 */
 	public int compareTo(Object o) {
 		AuditoriaDTO cmp = (AuditoriaDTO)o;

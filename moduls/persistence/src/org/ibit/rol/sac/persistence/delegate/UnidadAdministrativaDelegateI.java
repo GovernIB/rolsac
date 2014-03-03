@@ -3,13 +3,13 @@ package org.ibit.rol.sac.persistence.delegate;
 import java.util.List;
 import java.util.Map;
 
-import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.criteria.PaginacionCriteria;
 import org.ibit.rol.sac.model.dto.FichaDTO;
 
+import es.caib.rolsac.persistence.lucene.model.ModelFilterObject;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
 public interface UnidadAdministrativaDelegateI {
@@ -136,7 +136,7 @@ public interface UnidadAdministrativaDelegateI {
 			throws DelegateException;
 	
 	/* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#indexInsertaUA(org.ibit.rol.sac.model.UnidadAdministrativa, org.ibit.lucene.indra.model.ModelFilterObject)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#indexInsertaUA(org.ibit.rol.sac.model.UnidadAdministrativa, es.caib.rolsac.persistence.lucene.model.ModelFilterObject)
 	 */
 	public abstract void indexInsertaUA(UnidadAdministrativa ua, ModelFilterObject filter)
 			throws DelegateException;

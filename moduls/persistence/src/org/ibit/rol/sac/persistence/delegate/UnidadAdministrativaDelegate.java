@@ -3,13 +3,13 @@ package org.ibit.rol.sac.persistence.delegate;
 import java.util.List;
 import java.util.Map;
 
-import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.criteria.PaginacionCriteria;
 import org.ibit.rol.sac.model.dto.FichaDTO;
 
+import es.caib.rolsac.persistence.lucene.model.ModelFilterObject;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /*

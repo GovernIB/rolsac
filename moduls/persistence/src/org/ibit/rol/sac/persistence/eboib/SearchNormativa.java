@@ -4,15 +4,15 @@ import java.util.List;
 
 public interface SearchNormativa {
 
-  /** método que devuelve el numero de normativas encontrados */
+  /** mÃ©todo que devuelve el numero de normativas encontrados */
   public long getNumeroNormativas();
   
-  /** método que realiza la búsqueda en el boib.
+  /** mï¿½todo que realiza la bÃºsqueda en el boib.
    */
   public void makeSearch();
 
-  /** método que realiza la búsqueda en el boib.
-   * pero pasándole el boib y el numero de registro con la certeza de que son correctos
+  /** mÃ©todo que realiza la bÃºsqueda en el boib.
+   * pero pasÃ¡ndole el boib y el numero de registro con la certeza de que son correctos
    */
   public void makeSearchFromBoibRegistro(String trcodificacion); 
 

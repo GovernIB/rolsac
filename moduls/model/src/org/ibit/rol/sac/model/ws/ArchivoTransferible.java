@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.ibit.rol.sac.model.Archivo;
 
 /**
- * Clase que representa la información a transferir de un Archivo(PORMAD)
+ * Clase que representa la informaciÃ³n a transferir de un Archivo(PORMAD)
  */
 public class ArchivoTransferible implements Serializable {
 

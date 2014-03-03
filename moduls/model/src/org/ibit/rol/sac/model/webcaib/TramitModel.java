@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * Conté informació d'un document d'una actuació
+ * Contï¿½ informaciÃ³ d'un document d'una actuaciÃ³
  */
 public class TramitModel implements java.io.Serializable {
 
@@ -43,10 +43,10 @@ public class TramitModel implements java.io.Serializable {
    /** constructor buid */
    public TramitModel () {}
    
-   /** fitxa el valor del codi de l'actuació del document */
+   /** fitxa el valor del codi de l'actuaciÃ³ del document */
    public void setCodi(int codi) { this.codi = codi; }
    
-   /** retorna el valor del codi de l'actuació del document */
+   /** retorna el valor del codi de l'actuaciÃ³ del document */
    public int getCodi () { return codi; }
    
  

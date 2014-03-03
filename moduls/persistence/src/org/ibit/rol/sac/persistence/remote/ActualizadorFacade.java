@@ -11,7 +11,7 @@ import es.caib.persistence.remote.vuds.ActualizadorVuds;
 /**
  * @author enric@dgtic
  * Definit com un facade perque entenc que aquesta classe 
- * simplifica l'accés als diferents actualitzadors  
+ * simplifica l'accÃ©s als diferents actualitzadors  
  *
  */
 public class ActualizadorFacade {

@@ -1,30 +1,56 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import net.sf.hibernate.Session;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Hibernate;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-
-import org.ibit.lucene.indra.model.Catalogo;
-import org.ibit.lucene.indra.model.ModelFilterObject;
-import org.ibit.lucene.indra.model.TraModelFilterObject;
-import org.ibit.rol.sac.model.*;
-
-import org.ibit.rol.sac.persistence.delegate.DelegateException;
-import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.util.RemotoUtils;
-import org.ibit.rol.sac.persistence.util.DateUtils;
-
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.List;
+import java.util.Set;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriter.MaxFieldLength;
+import org.apache.lucene.store.Directory;
+import org.ibit.rol.sac.model.AdministracionRemota;
+import org.ibit.rol.sac.model.DocumentoRemoto;
+import org.ibit.rol.sac.model.Familia;
+import org.ibit.rol.sac.model.FichaRemota;
+import org.ibit.rol.sac.model.HechoVital;
+import org.ibit.rol.sac.model.HechoVitalProcedimiento;
+import org.ibit.rol.sac.model.Historico;
+import org.ibit.rol.sac.model.HistoricoProcedimiento;
+import org.ibit.rol.sac.model.IndexObject;
+import org.ibit.rol.sac.model.Iniciacion;
+import org.ibit.rol.sac.model.Materia;
+import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.ProcedimientoRemoto;
+import org.ibit.rol.sac.model.TraduccionFamilia;
+import org.ibit.rol.sac.model.TraduccionHechoVital;
+import org.ibit.rol.sac.model.TraduccionMateria;
+import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
+import org.ibit.rol.sac.model.TraduccionUA;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.persistence.delegate.DelegateException;
+import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.delegate.IndexerDelegate;
+import org.ibit.rol.sac.persistence.util.RemotoUtils;
+
+import es.caib.rolsac.persistence.lucene.analysis.AlemanAnalyzer;
+import es.caib.rolsac.persistence.lucene.analysis.CastellanoAnalyzer;
+import es.caib.rolsac.persistence.lucene.analysis.CatalanAnalyzer;
+import es.caib.rolsac.persistence.lucene.analysis.InglesAnalyzer;
+import es.caib.rolsac.persistence.lucene.model.Catalogo;
+import es.caib.rolsac.persistence.lucene.model.ModelFilterObject;
+import es.caib.rolsac.persistence.lucene.model.TraModelFilterObject;
 
 /**
  * SessionBean para mantener y consultar Procedimientos Remotos (PORMAD)
@@ -381,130 +407,164 @@ public abstract class ProcedimientoRemotoFacadeEJB extends HibernateEJB {
 
 	/**
 	 * Añade los procedimientos al índice en todos los idiomas
-	 * 
 	 * @ejb.interface-method
-	 * 
 	 * @ejb.permission unchecked="true"
 	 */
 	public void indexInsertaProcedimientoRemoto(ProcedimientoRemoto proc, ModelFilterObject filter)  {
 
+		try {
+		    if (proc.getValidacion().equals(2)) {
+		        return;
+		    }
 
-		try { 
+		    proc = obtenerProcedimientoRemoto(proc.getId(), proc.getUnidadAdministrativa().getId());
 
-			if ( proc.getValidacion().equals(2) ) 
-				return;
+			if (filter == null) {
+			    filter = obtenerFilterObject(proc);  	
+			}
 
-			if ( filter == null ) 
-				filter = obtenerFilterObject(proc);  	
+			IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
 
 			String tipo = tipoProcedimiento(proc,false);
 			Iterator iterator = proc.getLangs().iterator();
-			while (  iterator.hasNext() ) {
+			while (iterator.hasNext()) {
+				String idioma = (String) iterator.next();
 
-				String idi = (String) iterator.next();
+				// Configuración del writer
+                Directory directory = indexerDelegate.getHibernateDirectory(idioma);
+                IndexWriter writer = new IndexWriter(directory, getAnalizador(idioma), false, MaxFieldLength.UNLIMITED);
+                writer.setMergeFactor(20);
+                writer.setMaxMergeDocs(Integer.MAX_VALUE);
+
 				IndexObject io = new IndexObject();
 
-				io.setId( tipo + "." + proc.getId() );
-				io.setClasificacion(tipo);
+				io = indexarContenidos(proc, io, tipo, filter);
 
-				io.setMicro( filter.getMicrosite_id() );
-				io.setUo( filter.getUo_id() );
-				io.setMateria( filter.getMateria_id() );
-				io.setFamilia( filter.getFamilia_id() );
-				io.setSeccion( filter.getSeccion_id() );
+				io = indexarTraducciones(proc, idioma, io, tipo);
 
-				io.setCaducidad("");	
-				io.setPublicacion("");
-				io.setDescripcion(""); 
-				if ( proc.getFechaCaducidad() != null )		
-					io.setCaducidad( new java.text.SimpleDateFormat("yyyyMMdd").format( proc.getFechaCaducidad() ) );
+				io = indexarContenidosLaterales(proc, idioma, io, filter);
 
-				if ( proc.getFechaPublicacion() != null )	
-					io.setPublicacion( new java.text.SimpleDateFormat("yyyyMMdd").format( proc.getFechaPublicacion() ) );
-
-				TraduccionProcedimientoLocal trad = ( (TraduccionProcedimientoLocal) proc.getTraduccion(idi) );
-				if ( trad != null ) {
-
-					io.setTituloserviciomain( trad.getNombre() );
-					io.setUrl( "/govern/sac/visor_proc.do?codi=" + proc.getId() + "&lang=" + idi + "&coduo=" + proc.getUnidadAdministrativa().getId() );
-					// Si es externo ponemos su propia URL
-					if ( tipo.equals(Catalogo.SRVC_PROCEDIMIENTOS_EXTERNO) )	
-						io.setUrl( proc.getUrl() );
-
-					if ( trad.getNombre() != null ) {
-
-						io.setTitulo( trad.getNombre() );
-						io.addTextLine( trad.getNombre() );
-						if ( trad.getResumen() != null ) {
-
-							if ( trad.getResumen().length() > 200 ) {
-
-								io.setDescripcion( trad.getResumen().substring(0,199) + "...");
-
-							} else io.setDescripcion( trad.getResumen() );
-
-						}
-
-					}
-
-					if ( trad.getDestinatarios() != null ) 	
-						io.addTextLine( trad.getDestinatarios() );
-
-					if ( trad.getLugar() != null )			
-						io.addTextLine( trad.getLugar() );
-
-					if ( trad.getObservaciones() != null )	
-						io.addTextLine( trad.getObservaciones() );
-
-					if ( trad.getPlazos() != null )			
-						io.addTextLine( trad.getPlazos() );
-
-					if ( trad.getResolucion() != null )		
-						io.addTextLine( trad.getResolucion() );
-
-					if ( trad.getNotificacion() != null )	
-						io.addTextLine( trad.getNotificacion() );
-
-					if ( trad.getRecursos() != null )		
-						io.addTextLine( trad.getRecursos() ); // No está en el mantenimiento
-
-					if ( trad.getRequisitos() != null )		
-						io.addTextLine( trad.getRequisitos() );
-
-					if ( trad.getSilencio() != null )		
-						io.addTextLine( trad.getSilencio() );
-
-
+				if (io.getText().length() > 0) {
+				    indexerDelegate.insertaObjeto(io, idioma, writer);
 				}
-
-				io.addTextopcionalLine( filter.getTraduccion(idi).getMateria_text() );
-				io.addTextopcionalLine( filter.getTraduccion(idi).getSeccion_text() );
-				io.addTextopcionalLine( filter.getTraduccion(idi).getUo_text() );
-				io.addTextopcionalLine( filter.getTraduccion(idi).getFamilia_text() );
-				if ( proc.getMaterias() != null ) {
-
-					Iterator iterador = proc.getMaterias().iterator();
-					while ( iterador.hasNext() ) {
-
-						Materia mat = (Materia) iterador.next();
-						if ( mat.getTraduccion(idi) != null )
-							io.addTextopcionalLine( ( (TraduccionMateria) mat.getTraduccion(idi) ).getNombre() );
-
-					}
-
-				}
-
-				if ( io.getText().length() > 0 )
-					org.ibit.rol.sac.persistence.delegate.DelegateUtil.getIndexerDelegate().insertaObjeto(io, idi);
-
 			}
 
 		} catch (Exception ex) {
-
 			log.warn("[indexInsertaProcedimiento:" + proc.getId() + "] No se ha podido indexar el procedimiento. " + ex.getMessage());
-
 		}
+	}
 
+
+	private IndexObject indexarContenidos(ProcedimientoRemoto proc, IndexObject io, String tipo, ModelFilterObject filter) {
+
+	    io.setId(tipo + "." + proc.getId());
+        io.setClasificacion(tipo);
+
+        io.setMicro(filter.getMicrosite_id());
+        io.setUo(filter.getUo_id());
+        io.setMateria(filter.getMateria_id());
+        io.setFamilia(filter.getFamilia_id());
+        io.setSeccion(filter.getSeccion_id());
+        io.setCaducidad("");
+        io.setPublicacion("");
+        io.setDescripcion("");
+
+        if (proc.getFechaCaducidad() != null) {
+            io.setCaducidad(new java.text.SimpleDateFormat("yyyyMMdd").format(proc.getFechaCaducidad()));
+        }
+
+        if (proc.getFechaPublicacion() != null) {
+            io.setPublicacion(new java.text.SimpleDateFormat("yyyyMMdd").format( proc.getFechaPublicacion()));
+        }
+
+        return io;
+	}
+
+
+	private IndexObject indexarTraducciones(ProcedimientoRemoto proc, String idioma, IndexObject io, String tipo) {
+
+	    TraduccionProcedimientoLocal trad = ((TraduccionProcedimientoLocal) proc.getTraduccion(idioma));
+        if (trad != null) {
+            io.setTituloserviciomain(trad.getNombre());
+            io.setUrl("/govern/sac/visor_proc.do?codi=" + proc.getId() + "&lang=" + idioma + "&coduo=" + proc.getUnidadAdministrativa().getId());
+            // Si es externo ponemos su propia URL
+            if (tipo.equals(Catalogo.SRVC_PROCEDIMIENTOS_EXTERNO)) {
+                io.setUrl(proc.getUrl());
+            }
+
+            if (trad.getNombre() != null) {
+                io.setTitulo(trad.getNombre());
+                io.addTextLine(trad.getNombre());
+
+                if (trad.getResumen() != null) {
+                    if (trad.getResumen().length() > 200) {
+                        io.setDescripcion(trad.getResumen().substring(0,199) + "...");
+                    } else {
+                        io.setDescripcion(trad.getResumen());
+                    }
+                }
+            }
+
+            if (trad.getDestinatarios() != null) {
+                io.addTextLine(trad.getDestinatarios());
+            }
+
+            if (trad.getLugar() != null) {
+                io.addTextLine(trad.getLugar());
+            }
+
+            if (trad.getObservaciones() != null) {
+                io.addTextLine(trad.getObservaciones());
+            }
+
+            if (trad.getPlazos() != null) {
+                io.addTextLine( trad.getPlazos() );
+            }
+
+            if (trad.getResolucion() != null) {
+                io.addTextLine(trad.getResolucion());
+            }
+
+            if (trad.getNotificacion() != null) {
+                io.addTextLine(trad.getNotificacion());
+            }
+
+            if (trad.getRecursos() != null) {
+                // No está en el mantenimiento
+                io.addTextLine(trad.getRecursos());
+            }
+
+            if (trad.getRequisitos() != null) {
+                io.addTextLine(trad.getRequisitos());
+            }
+
+            if (trad.getSilencio() != null) {
+                io.addTextLine(trad.getSilencio());
+            }
+        }
+
+        return io;
+	}
+
+
+	private IndexObject indexarContenidosLaterales(ProcedimientoLocal proc, String idioma, IndexObject io, ModelFilterObject filter) {
+
+	    io.addTextopcionalLine(filter.getTraduccion(idioma).getMateria_text());
+        io.addTextopcionalLine(filter.getTraduccion(idioma).getSeccion_text());
+        io.addTextopcionalLine(filter.getTraduccion(idioma).getUo_text());
+        io.addTextopcionalLine(filter.getTraduccion(idioma).getFamilia_text());
+
+        if (proc.getMaterias() != null) {
+            Iterator iterador = proc.getMaterias().iterator();
+            while (iterador.hasNext()) {
+                Materia mat = (Materia) iterador.next();
+                if (mat.getTraduccion(idioma) != null) {
+                    io.addTextopcionalLine(((TraduccionMateria) mat.getTraduccion(idioma)).getNombre());
+                }
+            }
+        }
+
+        return io;
 	}
 
 
@@ -873,17 +933,30 @@ public abstract class ProcedimientoRemotoFacadeEJB extends HibernateEJB {
 				session.flush();
 				
 			}
-			
+
 		} catch (final HibernateException he) {
-			
 			throw new EJBException(he);
-			
 		} finally {
-			
 			close(session);
-			
 		}
-		
 	}
+
+
+	private Analyzer getAnalizador(String idi) {
+
+        Analyzer analyzer;
+
+        if (idi.toLowerCase().equals("de")) {
+            analyzer = new AlemanAnalyzer();
+        } else if (idi.toLowerCase().equals("en")) {
+            analyzer = new InglesAnalyzer();
+        } else if (idi.toLowerCase().equals("ca")) {
+            analyzer = new CatalanAnalyzer();
+        } else {
+            analyzer = new CastellanoAnalyzer();
+        }
+
+        return analyzer;
+    }
 
 }

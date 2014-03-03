@@ -1,7 +1,7 @@
 package org.ibit.rol.sac.persistence.util;
 
 /*
- * Los roles de usuario són inclusivos. Los mètodos de esta clase permiten 
+ * Los roles de usuario sÃ³n inclusivos. Los mÃ©todos de esta clase permiten 
  * saber si un usuario tiene los permisos de un determinado rol, bien porque 
  * sea su rol, o porque tenga uno superior. 
  */

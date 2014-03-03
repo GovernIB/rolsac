@@ -23,9 +23,10 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
 
 import org.apache.axis.utils.StringUtils;
-import org.ibit.lucene.indra.model.Catalogo;
-import org.ibit.lucene.indra.model.ModelFilterObject;
-import org.ibit.lucene.indra.model.TraModelFilterObject;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriter.MaxFieldLength;
+import org.apache.lucene.store.Directory;
 import org.ibit.rol.sac.model.AdministracionRemota;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Auditoria;
@@ -47,12 +48,20 @@ import org.ibit.rol.sac.model.criteria.PaginacionCriteria;
 import org.ibit.rol.sac.model.dto.FichaDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.delegate.IndexerDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegateI;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.util.Cadenas;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
+import es.caib.rolsac.persistence.lucene.analysis.AlemanAnalyzer;
+import es.caib.rolsac.persistence.lucene.analysis.CastellanoAnalyzer;
+import es.caib.rolsac.persistence.lucene.analysis.CatalanAnalyzer;
+import es.caib.rolsac.persistence.lucene.analysis.InglesAnalyzer;
+import es.caib.rolsac.persistence.lucene.model.Catalogo;
+import es.caib.rolsac.persistence.lucene.model.ModelFilterObject;
+import es.caib.rolsac.persistence.lucene.model.TraModelFilterObject;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
@@ -87,7 +96,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
 	 */
 	protected abstract AccesoManagerLocal getAccesoManager();
-
 
 	/**
 	 * @ejb.create-method
@@ -1408,87 +1416,80 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 
 	/**
-	 *  @deprecated	No se usa
 	 * Metodo que obtiene un bean con el filtro para la indexacion
 	 * 
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true" 
 	 */
 	public ModelFilterObject obtenerFilterObject(UnidadAdministrativa ua) {
+
 		ModelFilterObject filter = new ModelFilterObject();
 
-
-		//de momento, familia y microsites a null
-
+		// De momento, familia y microsites a null
 		filter.setFamilia_id(null);    	
 		filter.setMicrosite_id(null);
 		filter.setSeccion_id(null);
 
-
 		Iterator iterlang = ua.getLangs().iterator();
-		while (iterlang.hasNext()){
-
+		while (iterlang.hasNext()) {
 			String idioma = (String) iterlang.next();
-			String txids=Catalogo.KEY_SEPARADOR;
-			String txtexto=" ";//espacio en blanco, que es para tokenizar
-			Iterator iter;
+			if (ua.getTraduccion(idioma) != null) {
 
-			TraModelFilterObject trafilter = new TraModelFilterObject();
+			    String txids = Catalogo.KEY_SEPARADOR;
+			    // Espacio en blanco, que es para tokenizar
+			    String txtexto = " ";
+			    Iterator iter;
 
-			//titulo		
-			trafilter.setMaintitle( ((TraduccionUA)ua.getTraduccion(idioma)).getNombre() );
+			    TraModelFilterObject trafilter = new TraModelFilterObject();
 
+			    // Titulo
+			    trafilter.setMaintitle(((TraduccionUA) ua.getTraduccion(idioma)).getNombre());
 
-			txids=Catalogo.KEY_SEPARADOR;
-			txtexto=" ";
-			txids += ua.getId()+Catalogo.KEY_SEPARADOR;
-			txtexto += ((TraduccionUA)ua.getTraduccion(idioma)).getNombre()+" ";
-			txtexto += ((TraduccionUA)ua.getTraduccion(idioma)).getAbreviatura()+" ";
-			txtexto += ((TraduccionUA)ua.getTraduccion(idioma)).getPresentacion()+" ";
+			    txids = Catalogo.KEY_SEPARADOR;
+			    txids += ua.getId() + Catalogo.KEY_SEPARADOR;
+			    txtexto += ((TraduccionUA) ua.getTraduccion(idioma)).getNombre() + " ";
+			    txtexto += ((TraduccionUA) ua.getTraduccion(idioma)).getAbreviatura() + " ";
+			    txtexto += ((TraduccionUA) ua.getTraduccion(idioma)).getPresentacion() + " ";
 
+			    // OBTENER DIRECCIONES
+			    try {
+			        iter = ua.getEdificios().iterator();
+			        while (iter.hasNext()) {
+			            Edificio edificio = (Edificio) iter.next();
+			            txtexto += edificio.getDireccion() + " ";
+			            txtexto += edificio.getTelefono() + " ";
+			        }
 
-			//OBTENER DIRECCIONES
-			try {
-				iter = ua.getEdificios().iterator();
-				while (iter.hasNext()) {
-					Edificio edificio = (Edificio) iter.next();
-					txtexto += edificio.getDireccion() + " ";
-					txtexto += edificio.getTelefono() + " ";
-				}
-			} catch (LazyInitializationException le) {
-				log.error("Error controlado: No ha sido inicializado el listado de edificios. " + le.getMessage());
+			    } catch (LazyInitializationException le) {
+			        log.error("Error controlado: No ha sido inicializado el listado de edificios. " + le.getMessage());
+			    }
+
+			    filter.setUo_id((txids.length() == 1) ? null : txids);
+			    trafilter.setUo_text((txtexto.length() == 1) ? null : txtexto);
+
+			    // OBTENER LAS MATERIAS (ademas de las materias se ponen los textos de los HECHOS VITALES)
+			    if (ua.getUnidadesMaterias() != null) {
+			        txids = Catalogo.KEY_SEPARADOR;
+			        txtexto = " ";
+			        iter = ua.getUnidadesMaterias().iterator();
+			        while (iter.hasNext()) {
+			            UnidadMateria uamat = (UnidadMateria) iter.next();
+
+			            txids += uamat.getMateria().getId() + Catalogo.KEY_SEPARADOR; 
+			            if (uamat.getMateria().getTraduccion(idioma) != null) {
+			                txtexto += ((TraduccionMateria) uamat.getMateria().getTraduccion(idioma)).getNombre() + " ";
+			                txtexto += ((TraduccionMateria) uamat.getMateria().getTraduccion(idioma)).getDescripcion() + " ";
+			                txtexto += ((TraduccionMateria) uamat.getMateria().getTraduccion(idioma)).getPalabrasclave() + " ";
+			            }
+			        }
+
+			        filter.setMateria_id( (txids.length()==1) ? null: txids);
+			        trafilter.setMateria_text( (txtexto.length()==1) ? null: txtexto);
+			    }
+
+			    filter.addTraduccion(idioma, trafilter);
 			}
-
-			filter.setUo_id( (txids.length()==1) ? null: txids);
-			trafilter.setUo_text( (txtexto.length()==1) ? null: txtexto);
-
-			//OBTENER LAS MATERIAS (ademas de las materias se ponen los textos de los HECHOS VITALES)
-			if (ua.getUnidadesMaterias()!=null) {
-				txids=Catalogo.KEY_SEPARADOR;
-				txtexto=" ";
-				iter = ua.getUnidadesMaterias().iterator();
-				while (iter.hasNext()) {
-					UnidadMateria uamat = (UnidadMateria)iter.next();
-
-
-					txids+=uamat.getMateria().getId()+Catalogo.KEY_SEPARADOR; 
-					if (uamat.getMateria().getTraduccion(idioma)!=null) {
-						txtexto+=((TraduccionMateria)uamat.getMateria().getTraduccion(idioma)).getNombre() + " ";
-						txtexto+=((TraduccionMateria)uamat.getMateria().getTraduccion(idioma)).getDescripcion() + " ";
-						txtexto+=((TraduccionMateria)uamat.getMateria().getTraduccion(idioma)).getPalabrasclave() + " ";
-					}
-
-				}
-
-				filter.setMateria_id( (txids.length()==1) ? null: txids);
-				trafilter.setMateria_text( (txtexto.length()==1) ? null: txtexto);
-			}
-
-			filter.addTraduccion(idioma, trafilter);
-
 		}
-
-
 
 		return filter;
 	}  	
@@ -1496,115 +1497,107 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 	/**
 	 * Añade la unidad administrativa al índice en todos los idiomas
-	 * 
 	 * @ejb.interface-method
-	 * 
 	 * @ejb.permission unchecked="true"
-	 * 
 	 * @param unidadAdministrativa	Indica la unidad administrativa que se va a añadir al índice en todos los idiomas.
 	 */
-	public void indexInsertaUA(UnidadAdministrativa unidadAdministrativa,  ModelFilterObject filter)  {
+	public void indexInsertaUA(UnidadAdministrativa unidadAdministrativa,  ModelFilterObject filter) {
 
 		try {
-		    if (true) return;
+			if (filter == null) {
+			    filter = obtenerFilterObject(unidadAdministrativa);
+			}
 
-			if ( filter == null ) filter = obtenerFilterObject(unidadAdministrativa);
+			IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
 
 			Iterator iterator = unidadAdministrativa.getLangs().iterator();
-			while ( iterator.hasNext() ) {
-
+			while (iterator.hasNext()) {
 				String idi = (String) iterator.next();
 				IndexObject io = new IndexObject();
 
-				io.setId( Catalogo.SRVC_UO + "." + unidadAdministrativa.getId() );
+				// Configuración del writer
+                Directory directory = indexerDelegate.getHibernateDirectory(idi);
+                IndexWriter writer = new IndexWriter(directory, getAnalizador(idi), false, MaxFieldLength.UNLIMITED);
+                writer.setMergeFactor(20);
+                writer.setMaxMergeDocs(Integer.MAX_VALUE);
+
+				io.setId(Catalogo.SRVC_UO + "." + unidadAdministrativa.getId());
 				io.setClasificacion(Catalogo.SRVC_UO);
 
-				io.setMicro( filter.getMicrosite_id() ); 
-				io.setUo( filter.getUo_id() );
-				io.setMateria( filter.getMateria_id() );
-				io.setFamilia( filter.getFamilia_id() );
-				io.setSeccion( filter.getSeccion_id() );
-
+				io.setMicro(filter.getMicrosite_id());
+				io.setUo(filter.getUo_id());
+				io.setMateria(filter.getMateria_id());
+				io.setFamilia(filter.getFamilia_id());
+				io.setSeccion(filter.getSeccion_id());
 				io.setCaducidad("");
 				io.setPublicacion(""); 
 				io.setDescripcion("");
 
-				io.addTextLine( unidadAdministrativa.getResponsable() );
+				io.addTextLine(unidadAdministrativa.getResponsable());
 
-				TraduccionUA trad = ( (TraduccionUA) unidadAdministrativa.getTraduccion(idi) );
-				if ( trad != null ) {
+				TraduccionUA trad = ((TraduccionUA) unidadAdministrativa.getTraduccion(idi));
+				if (trad != null) {
 
-					io.setUrl( "/govern/organigrama/area.do?coduo=" + unidadAdministrativa.getId() + "&lang=" + idi );
-					io.setTituloserviciomain( filter.getTraduccion(idi).getMaintitle() );
+					io.setUrl("/govern/organigrama/area.do?coduo=" + unidadAdministrativa.getId() + "&lang=" + idi);
+					io.setTituloserviciomain(filter.getTraduccion(idi).getMaintitle());
 
-
-					if ( trad.getNombre() != null ) {
-						io.setTitulo( trad.getNombre() );
+					if (trad.getNombre() != null) {
+						io.setTitulo(trad.getNombre());
 
 						//para dar mas peso al titulo
-						for ( int i = 0 ; i < 5 ; i++ ) {
-
-							io.addTextLine( trad.getNombre() );
-
+						for (int i = 0; i < 5; i++) {
+							io.addTextLine(trad.getNombre());
 						}
-
 					}
 
-					if ( trad.getPresentacion() != null )  {
-
-						if ( trad.getPresentacion().length() > 200 ) {
-
-							io.setDescripcion( trad.getPresentacion().substring(0,199) + "..." );
-
+					if (trad.getPresentacion() != null) {
+						if (trad.getPresentacion().length() > 200) {
+							io.setDescripcion(trad.getPresentacion().substring(0,199) + "...");
 						} else {
-
-							io.setDescripcion( trad.getPresentacion() );
-
+							io.setDescripcion(trad.getPresentacion());
 						}
-
 					}
 
-					io.addTextopcionalLine( filter.getTraduccion(idi).getMateria_text() );
-					io.addTextopcionalLine( filter.getTraduccion(idi).getSeccion_text() );
-					io.addTextopcionalLine( filter.getTraduccion(idi).getUo_text() );
-
+					io.addTextopcionalLine(filter.getTraduccion(idi).getMateria_text());
+					io.addTextopcionalLine(filter.getTraduccion(idi).getSeccion_text());
+					io.addTextopcionalLine(filter.getTraduccion(idi).getUo_text());
 				}
 
-				if ( io.getText().length() > 0 )
-					org.ibit.rol.sac.persistence.delegate.DelegateUtil.getIndexerDelegate().insertaObjeto(io, idi);
+				if (io.getText().length() > 0) {
+				    indexerDelegate.insertaObjeto(io, idi, writer);
+				}
 
+				writer.close();
+                directory.close();
 			}
 
 		} catch (Exception ex) {
 			log.warn( "[indexInsertaUA:" + unidadAdministrativa.getId() + "] No se ha podido indexar UA. " + ex.getMessage() );
 		}
-
 	}
 
 
 	/**
 	 * Elimina la ua en el indice en todos los idiomas
-	 * 
 	 * @ejb.interface-method
-	 * 
 	 * @ejb.permission unchecked="true"
-	 * 
 	 * @param id	Identificador de la unidad administrativa.
 	 */
 	public void indexBorraUA(Long id)  {
 
 		try {
-		    if (true) return;
-
-			List langs = DelegateUtil.getIdiomaDelegate().listarLenguajes();
-			for (int i = 0 ; i < langs.size() ; i++) {
-			    DelegateUtil.getIndexerDelegate().borrarObjeto( Catalogo.SRVC_UO + "." + id, "" + langs.get(i) );
+		    IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
+			List<String> langs = DelegateUtil.getIdiomaDelegate().listarLenguajes();
+			for (String lang : langs) {
+			    indexerDelegate.borrarObjeto(Catalogo.SRVC_UO + "." + id, "" + lang);
+			    indexerDelegate.borrarObjetosDependientes(Catalogo.SRVC_UO + "." + id, "" + lang);
 			}
 
 		} catch (DelegateException ex) {
 			log.warn( "[indexBorraFicha:" + id + "] No se ha podido borrar del indice la ficha. " + ex.getMessage() );
 		}
 	}
+
 
 	/* ================================================ */
 	/* ==  MÉTODOS PRIVADOS  ========================== */
@@ -2526,5 +2519,23 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		}
 
 	}
+
+
+	private Analyzer getAnalizador(String idi) {
+
+	    Analyzer analyzer;
+
+        if (idi.toLowerCase().equals("de")) {
+            analyzer = new AlemanAnalyzer();
+        } else if (idi.toLowerCase().equals("en")) {
+            analyzer = new InglesAnalyzer();
+        } else if (idi.toLowerCase().equals("ca")) {
+            analyzer = new CatalanAnalyzer();
+        } else {
+            analyzer = new CastellanoAnalyzer();
+        }
+
+        return analyzer;
+    }
 
 }

@@ -27,7 +27,7 @@ public class SessionInterceptorBuilder {
     	}
 
     	
-    	//Finalmente se añade el interceptor global, si lo hubiese.
+    	//Finalmente se aÃ±ade el interceptor global, si lo hubiese.
     	
 		Interceptor globalInterceptor= HibernateLocator.getGlobalInterceptor();
 		

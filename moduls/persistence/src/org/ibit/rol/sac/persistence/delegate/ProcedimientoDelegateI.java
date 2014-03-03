@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import org.ibit.lucene.indra.model.ModelFilterObject;
+
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.criteria.BuscadorProcedimientoCriteria;
+
+import es.caib.rolsac.persistence.lucene.model.ModelFilterObject;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
 public interface ProcedimientoDelegateI {
@@ -34,12 +36,6 @@ public interface ProcedimientoDelegateI {
 			throws DelegateException;
 
 	public abstract List buscarProcedimientosTexto(String texto)
-			throws DelegateException;
-
-	public abstract List buscarProcedimientosUATexto(Long idUnidad, String texto)
-			throws DelegateException;
-
-	public abstract List buscarProcedimientosUATexto(Long idUnidad, String texto, String idioma)
 			throws DelegateException;
 
 	public ResultadoBusqueda buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu, String pagina, String resultats, int visible, String en_plazo, String telematico)

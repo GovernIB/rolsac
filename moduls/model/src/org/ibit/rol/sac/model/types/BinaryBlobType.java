@@ -29,7 +29,7 @@ public class BinaryBlobType implements UserType {
         Statement statement = resultSet.getStatement();
 		String productName = getDatabaseProductName(statement);
         
-        // Codi específic per bytea de Postgresql
+        // Codi especÃ­fic per bytea de Postgresql
         return resultSet.getBytes(names[0]);
     }
 
@@ -43,7 +43,7 @@ public class BinaryBlobType implements UserType {
             return;
         }
 
-        // Codi genèric, funciona amb PostgreSQL, per exemple.
+        // Codi genÃ©ric, funciona amb PostgreSQL, per exemple.
         pst.setBytes(i, (byte[]) value);
 
     }

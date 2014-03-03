@@ -7,10 +7,9 @@ import java.io.Serializable;
  * User: mgonzalez
  * Date: 14-jun-2007
  * Time: 8:24:49
- * Clase que representa la información traducida a transferir de una UA(PORMAD)
+ * Clase que representa la informaciÃ³n traducida a transferir de una UA(PORMAD)
  */
 public class TraduccionUATransferible extends AbstractTraduccion implements Serializable {
-
 
    //TraduccionUA
     public String getNombre() {

@@ -78,8 +78,8 @@
 		    <include name="jdom.jar"/>
 			<include name="jericho-html-2.5.jar"/>        	
 			<include name="lucene-caib.jar"/>
-			<include name="lucene-core-2.2.0.jar"/>
-			<include name="lucene-spellchecker-2.2.0.jar"/>
+			<include name="lucene-core-3.6.2.jar"/>
+			<include name="lucene-spellchecker-3.6.2.jar"/>
 			<include name="rome-1.0RC2.jar"/>
 		</fileset>
 
@@ -278,7 +278,7 @@
 			<fileset dir="${lib.dir}/webcaib">
 				<include name="commons-collections-3.2.1.jar"/>
 	            <include name="dom4j.jar"/>
-	   			<include name="lucene-caib.jar"/>
+	   			<!-- <include name="lucene-caib.jar"/> -->
 	        	<include name="odmg.jar"/>
 	        </fileset>
 

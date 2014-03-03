@@ -8,11 +8,9 @@ import java.util.List;
 import org.ibit.rol.sac.model.FichaUA;
 
 /**
- * Clase que representa la información a transferir de una FichaUA(PORMAD)
+ * Clase que representa la informaciÃ³n a transferir de una FichaUA(PORMAD)
  */
 public class FichaUATransferible implements Serializable {
-
-
 
     private Long idUnidadAdministrativa;
     private Long idFicha;

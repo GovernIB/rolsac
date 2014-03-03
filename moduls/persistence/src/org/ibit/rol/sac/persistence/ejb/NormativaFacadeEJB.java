@@ -25,9 +25,10 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
 
 import org.apache.commons.lang.StringUtils;
-import org.ibit.lucene.indra.model.Catalogo;
-import org.ibit.lucene.indra.model.ModelFilterObject;
-import org.ibit.lucene.indra.model.TraModelFilterObject;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriter.MaxFieldLength;
+import org.apache.lucene.store.Directory;
 import org.ibit.rol.sac.model.Afectacion;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Auditoria;
@@ -53,10 +54,18 @@ import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.model.webcaib.NormativaModel;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.delegate.IndexerDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
+import es.caib.rolsac.persistence.lucene.analysis.AlemanAnalyzer;
+import es.caib.rolsac.persistence.lucene.analysis.CastellanoAnalyzer;
+import es.caib.rolsac.persistence.lucene.analysis.CatalanAnalyzer;
+import es.caib.rolsac.persistence.lucene.analysis.InglesAnalyzer;
+import es.caib.rolsac.persistence.lucene.model.Catalogo;
+import es.caib.rolsac.persistence.lucene.model.ModelFilterObject;
+import es.caib.rolsac.persistence.lucene.model.TraModelFilterObject;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
 
@@ -844,59 +853,71 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	 * @ejb.permission unchecked="true" 
 	 */
 	public ModelFilterObject obtenerFilterObject(Normativa norma) throws DelegateException {
-		ModelFilterObject filter = new ModelFilterObject();
 
+		ModelFilterObject filter = new ModelFilterObject();
 		Session session = getSession();
 
 		TraModelFilterObject trafilter;
 		String idioma;
 		String txids;
 		String txtexto;
-		Set procs= norma.getProcedimientos();
-		UnidadAdministrativa ua= ((NormativaLocal)norma).getUnidadAdministrativa();
+		Set procs = norma.getProcedimientos();
 		List listapadres = new ArrayList();
 
-		if (ua!=null)
-			listapadres= org.ibit.rol.sac.persistence.delegate.DelegateUtil.getUADelegate().listarPadresUnidadAdministrativa(ua.getId());
+		// Comprovación indispensable, ya que las UAs Externas no tienen UA.
+		UnidadAdministrativa ua = null;
+		if (norma.getUnidadAdministrativa() != null) {
+            ua = ((NormativaLocal) norma).getUnidadAdministrativa();
+        }
 
+		if (ua != null) {
+		    listapadres = org.ibit.rol.sac.persistence.delegate.DelegateUtil.getUADelegate().listarPadresUnidadAdministrativa(ua.getId());
+		}
 
 		filter.setFamilia_id(null);
 		filter.setMicrosite_id(null);
 		filter.setSeccion_id(null);
 
 		// Obtenemos las materias y hechos vitales partiendo de sus procedimientos
-		Iterator itproc=procs.iterator();
+		Iterator itproc = null;
+		if (procs != null) {
+		    itproc = procs.iterator();
+		}
 		ProcedimientoLocal pro;
 		Materia mat;
 		HechoVitalProcedimiento hvital;
-		Hashtable lista_materias = new Hashtable(), lista_hechos = new Hashtable();
+		Hashtable lista_materias = new Hashtable();
+		Hashtable lista_hechos = new Hashtable();
 		ProcedimientoDelegate bdProc = DelegateUtil.getProcedimientoDelegate();
 
-		while (itproc.hasNext()) {
-			// Obtenemos el procedimiento puesto que sus colecciones estan lazy
-			pro = (ProcedimientoLocal)bdProc.obtenerProcedimientoNewBack(((ProcedimientoLocal)itproc.next()).getId());
+		if (itproc != null) {
+		    while (itproc.hasNext()) {
+		        // Obtenemos el procedimiento puesto que sus colecciones estan lazy
+		        pro = (ProcedimientoLocal) bdProc.obtenerProcedimientoNewBack(((ProcedimientoLocal) itproc.next()).getId());
 
-			if (pro.getMaterias()!=null) {
-				Iterator itmat=pro.getMaterias().iterator();
-				while (itmat.hasNext()) {
-					mat=(Materia)itmat.next();
-					if (!lista_materias.containsKey(mat.getId()))
-						lista_materias.put(mat.getId(), mat);
-				}
-			}
+		        if (pro.getMaterias() != null) {
+		            Iterator itmat = pro.getMaterias().iterator();
+		            while (itmat.hasNext()) {
+		                mat = (Materia) itmat.next();
+		                if (!lista_materias.containsKey(mat.getId())) {
+		                    lista_materias.put(mat.getId(), mat);
+		                }
+		            }
+		        }
 
-			if (pro.getHechosVitalesProcedimientos()!=null) {
-				Iterator itvital=pro.getHechosVitalesProcedimientos().iterator();
-				while (itvital.hasNext()) {
-					hvital=(HechoVitalProcedimiento)itvital.next();
-					if (!lista_hechos.containsKey(hvital.getHechoVital().getId()))
-						lista_hechos.put(hvital.getHechoVital().getId(), hvital.getHechoVital());
-				}
-			}
+		        if (pro.getHechosVitalesProcedimientos() != null) {
+		            Iterator itvital = pro.getHechosVitalesProcedimientos().iterator();
+		            while (itvital.hasNext()) {
+		                hvital = (HechoVitalProcedimiento) itvital.next();
+		                if (!lista_hechos.containsKey(hvital.getHechoVital().getId())) {
+		                    lista_hechos.put(hvital.getHechoVital().getId(), hvital.getHechoVital());
+		                }
+		            }
+		        }
+		    }
 		}
 
-
-		Iterator langs= norma.getLangs().iterator();
+		Iterator langs = norma.getLangs().iterator();
 		while (langs.hasNext()) {
 			idioma = (String) langs.next();
 
@@ -904,56 +925,58 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			trafilter.setMaintitle(null); 
 
 			// Obtenemos la UA con sus padres excepto el raiz
-			if (ua!=null) {
-				txids=Catalogo.KEY_SEPARADOR;
-				txtexto=" ";
+			if (ua != null) {
+				txids = Catalogo.KEY_SEPARADOR;
+				txtexto = " ";
 
-				UnidadAdministrativa ua_padre=null;
+				UnidadAdministrativa ua_padre = null;
 				for (int x = 1; x < listapadres.size(); x++) {
-					ua_padre=(UnidadAdministrativa)listapadres.get(x);
-					txids+=ua_padre.getId()+Catalogo.KEY_SEPARADOR;
-					if (ua_padre.getTraduccion(idioma)!=null)
-						txtexto+=((TraduccionUA)ua_padre.getTraduccion(idioma)).getNombre()+" ";
+					ua_padre = (UnidadAdministrativa) listapadres.get(x);
+					txids += ua_padre.getId() + Catalogo.KEY_SEPARADOR;
+					if (ua_padre.getTraduccion(idioma) != null) {
+					    txtexto += ((TraduccionUA) ua_padre.getTraduccion(idioma)).getNombre() + " ";
+					}
 				}
 
-				filter.setUo_id( (txids.length()==1) ? null: txids);
-				trafilter.setUo_text( (txtexto.length()==1) ? null: txtexto);
+				filter.setUo_id((txids.length() == 1) ? null : txids);
+				trafilter.setUo_text((txtexto.length() == 1) ? null : txtexto);
 			}
 
 			// Obtenemos las materias y hechos vitales via sus procedimientos relacionados
-			txids=Catalogo.KEY_SEPARADOR;
-			txtexto=" ";
+			txids = Catalogo.KEY_SEPARADOR;
+			txtexto = " ";
 
-			Enumeration i=lista_materias.keys();
+			Enumeration i = lista_materias.keys();
 
 			while (i.hasMoreElements()) {
-				Materia materia = (Materia)lista_materias.get(i.nextElement());
-				txids+=materia.getId()+Catalogo.KEY_SEPARADOR; //anadir los ids (los de los hechos vitales no)
-				if (materia.getTraduccion(idioma)!=null) {
-					txtexto+=((TraduccionMateria)materia.getTraduccion(idioma)).getNombre() + " ";
-					txtexto+=((TraduccionMateria)materia.getTraduccion(idioma)).getDescripcion() + " ";
-					txtexto+=((TraduccionMateria)materia.getTraduccion(idioma)).getPalabrasclave() + " ";
+				Materia materia = (Materia) lista_materias.get(i.nextElement());
+				// Anadir los ids (los de los hechos vitales no)
+				txids += materia.getId() + Catalogo.KEY_SEPARADOR;
+				if (materia.getTraduccion(idioma) != null) {
+					txtexto += ((TraduccionMateria) materia.getTraduccion(idioma)).getNombre() + " ";
+					txtexto += ((TraduccionMateria) materia.getTraduccion(idioma)).getDescripcion() + " ";
+					txtexto += ((TraduccionMateria) materia.getTraduccion(idioma)).getPalabrasclave() + " ";
 				}
 			}
 
-			i=lista_hechos.keys();
-			HechoVital hechovital=null;
+			i = lista_hechos.keys();
+			HechoVital hechovital = null;
 
 			while (i.hasMoreElements()) {
-				hechovital = (HechoVital)lista_hechos.get(i.nextElement());
-				if (hechovital.getTraduccion(idioma)!=null) {
-					txtexto+=((TraduccionHechoVital)hechovital.getTraduccion(idioma)).getNombre() + " ";
-					txtexto+=((TraduccionHechoVital)hechovital.getTraduccion(idioma)).getDescripcion() + " ";
-					txtexto+=((TraduccionHechoVital)hechovital.getTraduccion(idioma)).getPalabrasclave() + " ";
+				hechovital = (HechoVital) lista_hechos.get(i.nextElement());
+				if (hechovital.getTraduccion(idioma) != null) {
+					txtexto += ((TraduccionHechoVital) hechovital.getTraduccion(idioma)).getNombre() + " ";
+					txtexto += ((TraduccionHechoVital) hechovital.getTraduccion(idioma)).getDescripcion() + " ";
+					txtexto += ((TraduccionHechoVital) hechovital.getTraduccion(idioma)).getPalabrasclave() + " ";
 				}
 			}
 
-			filter.setMateria_id( (txids.length()==1) ? null: txids);
-			trafilter.setMateria_text( (txtexto.length()==1) ? null: txtexto);
+			filter.setMateria_id((txids.length() == 1) ? null : txids);
+			trafilter.setMateria_text((txtexto.length() == 1) ? null : txtexto);
 
 			filter.addTraduccion(idioma, trafilter);
-
 		}
+
 		close(session);
 		return filter;
 	}        
@@ -961,20 +984,27 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 
 	/**
 	 * Añade la normativa al indice en todos los idiomas
-	 * 
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
 	public void indexInsertaNormativa(Normativa norma, ModelFilterObject filter)  {
 
 		try {
-		    if (true) return;
+			if (filter == null) {
+			    filter = obtenerFilterObject(norma);
+			}
 
-			if (filter==null) filter = obtenerFilterObject(norma);
+			IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
 
 			for (Iterator iterator = norma.getLangs().iterator(); iterator.hasNext();) {
 				String idi = (String) iterator.next();
-				IndexObject io= new IndexObject();
+				IndexObject io = new IndexObject();
+
+				// Configuración del writer
+                Directory directory = indexerDelegate.getHibernateDirectory(idi);
+                IndexWriter writer = new IndexWriter(directory, getAnalizador(idi), false, MaxFieldLength.UNLIMITED);
+                writer.setMergeFactor(20);
+                writer.setMaxMergeDocs(Integer.MAX_VALUE);
 
 				if (norma instanceof NormativaLocal) {
 					io.setId(Catalogo.SRVC_NORMATIVA_LOCAL + "." + norma.getId());
@@ -985,30 +1015,28 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 					io.setClasificacion(Catalogo.SRVC_NORMATIVA_EXTERNA);
 				}
 
-				io.setMicro( filter.getMicrosite_id() );
-				io.setUo( filter.getUo_id() );
-				io.setMateria( filter.getMateria_id() );
-				io.setFamilia( filter.getFamilia_id() );
-				io.setSeccion( filter.getSeccion_id() );
+				io.setMicro(filter.getMicrosite_id());
+				io.setUo(filter.getUo_id());
+				io.setMateria(filter.getMateria_id());
+				io.setFamilia(filter.getFamilia_id());
+				io.setSeccion(filter.getSeccion_id());
 
 				io.setCaducidad("");	// No tiene fecha de caducidad
 				io.setPublicacion(""); 	// No tiene fecha de publicacion
 				io.setDescripcion(""); 
 
-				TraduccionNormativa trad=((TraduccionNormativa)norma.getTraduccion(idi));
+				TraduccionNormativa trad = ((TraduccionNormativa) norma.getTraduccion(idi));
 
-				if (trad!=null) {
-
+				if (trad != null) {
 					io.setTituloserviciomain(trad.getSeccion());
 
-					if ( norma.getBoletin().getNombre().equals("BOIB")) {
+					if (norma.getBoletin() != null && norma.getBoletin().getNombre().equals("BOIB")) {
 						io.setUrl("/govern/estadistica?tipus=N&codi="+norma.getId()+"&mode=view&p_numero=" + norma.getNumero() + "&p_inipag="+ trad.getPaginaInicial()+ "&p_finpag=" + trad.getPaginaFinal()+ "&lang=" + idi + "&url=0");
-					}
-					else {
+					} else {
 						io.setUrl("/govern/sac/dadesnormativa.do?lang="+ idi +"&codi="+ norma.getId()+"&coduo="+ filter.getUo_id());	            	
 					}
 
-					if (trad.getTitulo()!=null) {
+					if (trad.getTitulo() != null) {
 						io.setTitulo(trad.getTitulo());
 						io.addTextLine(trad.getTitulo());
 						//if (trad.getTitulo().length()>200) io.setDescripcion(trad.getTitulo().substring(0,199)+"...");
@@ -1016,55 +1044,65 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 						io.setDescripcion(trad.getTitulo());
 					}
 
-					if (trad.getSeccion()!=null)    	io.addTextLine(trad.getSeccion());
-					if (trad.getApartado()!=null)		io.addTextLine(trad.getApartado());
-					if (trad.getObservaciones()!=null)	io.addTextLine(trad.getObservaciones());
+					if (trad.getSeccion() != null) {
+					    io.addTextLine(trad.getSeccion());
+					}
 
-					if (trad.getArchivo()!=null)       	io.addArchivo((Archivo)trad.getArchivo());
+					if (trad.getApartado() != null) {
+					    io.addTextLine(trad.getApartado());
+					}
 
+					if (trad.getObservaciones() != null) {
+					    io.addTextLine(trad.getObservaciones());
+					}
+
+					if (trad.getArchivo() != null) {
+					    io.addArchivo((Archivo)trad.getArchivo());
+					}
 				}
 
 				io.addTextopcionalLine(filter.getTraduccion(idi).getMateria_text());
 				io.addTextopcionalLine(filter.getTraduccion(idi).getSeccion_text());
-				io.addTextopcionalLine(filter.getTraduccion(idi).getUo_text());	    
+				io.addTextopcionalLine(filter.getTraduccion(idi).getUo_text());
 
+				if (io.getText().length() > 0) {
+				    indexerDelegate.insertaObjeto(io, idi, writer);
+				}
 
-				if (io.getText().length()>0)
-					org.ibit.rol.sac.persistence.delegate.DelegateUtil.getIndexerDelegate().insertaObjeto(io, idi);
-
+				writer.close();
+                directory.close();
 			}
 
-		}
-
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			log.warn("[indexInsertaNormativa:" + norma.getId() + "] No se ha podido indexar la normativa. " + ex.getMessage());
 		}
-
 	}
+
 
 	/**
 	 * Elimina la normativa en el indice en todos los idiomas
-	 * 
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
 	public void indexBorraNormativa(Normativa nor)  {
 
 		try {
-		    if (true) return;
-
+		    IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
 			for (Iterator iterator = nor.getLangs().iterator(); iterator.hasNext();) {
 				String idi = (String) iterator.next();
-				if (nor instanceof NormativaLocal) 
-					DelegateUtil.getIndexerDelegate().borrarObjeto(Catalogo.SRVC_NORMATIVA_LOCAL + "." + nor.getId(), idi);
-				if (nor instanceof NormativaExterna) 
-					DelegateUtil.getIndexerDelegate().borrarObjeto(Catalogo.SRVC_NORMATIVA_EXTERNA + "." + nor.getId(), idi);
-			}
-		}
 
-		catch (DelegateException ex) {
+				if (nor instanceof NormativaLocal) {
+				    indexerDelegate.borrarObjeto(Catalogo.SRVC_NORMATIVA_LOCAL + "." + nor.getId(), idi);
+				}
+
+				if (nor instanceof NormativaExterna) {
+				    indexerDelegate.borrarObjeto(Catalogo.SRVC_NORMATIVA_EXTERNA + "." + nor.getId(), idi);
+				}
+			}
+
+		} catch (DelegateException ex) {
 			log.warn("[indexBorraNormativa:" + nor.getId() + "] No se ha podido borrar del indice la normativa. " + ex.getMessage());
-		}		        
+		}
 	}
 
 	/**
@@ -1166,4 +1204,23 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 
 		return resultado;
 	}
+
+
+	private Analyzer getAnalizador(String idi) {
+
+	    Analyzer analyzer;
+
+	    if (idi.toLowerCase().equals("de")) {
+	        analyzer = new AlemanAnalyzer();
+	    } else if (idi.toLowerCase().equals("en")) {
+	        analyzer = new InglesAnalyzer();
+	    } else if (idi.toLowerCase().equals("ca")) {
+	        analyzer = new CatalanAnalyzer();
+	    } else {
+	        analyzer = new CastellanoAnalyzer();
+	    }
+
+	    return analyzer;
+	}
+
 }

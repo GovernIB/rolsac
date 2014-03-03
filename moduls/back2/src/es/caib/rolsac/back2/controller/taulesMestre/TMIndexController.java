@@ -6,7 +6,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -67,17 +66,19 @@ public class TMIndexController extends PantallaBaseController {
 	    
 	    return resultatStatus;
 	}
-    
+
+
     @RequestMapping(value = "/reiniciarFitxes.do", method = POST)
     public @ResponseBody IdNomDTO reiniciarIndexFitxa(HttpServletRequest request) {
-	    
+
 	    IdNomDTO resultatStatus = new IdNomDTO(); 
 	    try {
 	    	IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
 	        indexerDelegate.reindexarFichas();
-	    	
+
             resultatStatus.setId(1l);
             resultatStatus.setNom(messageSource.getMessage("index.missatge.fitxa_informativa.correcte", null, request.getLocale()));
+
         } catch (DelegateException dEx) {
             if (dEx.isSecurityException()) {
                 resultatStatus.setId(-1l);
@@ -87,10 +88,11 @@ public class TMIndexController extends PantallaBaseController {
                 log.error("Error: " + dEx.getMessage());
             }
         }
-	    
+
 	    return resultatStatus;
 	}
-    
+
+
     @RequestMapping(value = "/reiniciarNormatives.do", method = POST)
     public @ResponseBody IdNomDTO reiniciarIndexNormativa(HttpServletRequest request) {
 	    

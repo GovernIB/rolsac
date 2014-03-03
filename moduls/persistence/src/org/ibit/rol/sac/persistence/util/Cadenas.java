@@ -28,12 +28,12 @@ public class Cadenas {
            {" Amb ", " amb "},
            {" Que ", " que "},
            {" Per ", " per "},
-           {"l.L"  , "l·l"},
-           {"l·L"  , "l·l"}
+           {"l.L"  , "l.l"},
+           {"l.L"  , "l.l"}
             };
 	
 	  /** 
-	   * Este método divide el string en palabras y las pasa a un arraylist
+	   * Este mï¿½todo divide el string en palabras y las pasa a un arraylist
 	   */ 
 	  public static ArrayList getArrayListFromString(String cadena) {
 	  
@@ -49,7 +49,7 @@ public class Cadenas {
 	  }
 	  
 	  /** 
-	   * Este método divide el string en palabras y las pasa a un hashtable
+	   * Este mï¿½todo divide el string en palabras y las pasa a un hashtable
 	   */ 
 	  public static Hashtable getHashtableFromString(String cadena) {
 	    Hashtable listahash=new Hashtable();
@@ -64,7 +64,7 @@ public class Cadenas {
 	  }  	  
 	  
 	  /**
-	   * Método que pone la inicial de cada palabra en mayusculas.
+	   * Mï¿½todo que pone la inicial de cada palabra en mayusculas.
 	   * @param texte
 	   */
 	  public static void initAllTab (StringBuffer texte) {
@@ -124,9 +124,9 @@ public class Cadenas {
 		}    
 		
 		/**
-		 * Método convierte el stack trace de una excepcion en un string
+		 * Mï¿½todo convierte el stack trace de una excepcion en un string
 		 * @param mensajes, vector de "StactkTraceElement"
-		 * @param numelementos, número de elementos del vector de mensajes que se pasaran al string
+		 * @param numelementos, nï¿½mero de elementos del vector de mensajes que se pasaran al string
 		 */
 		public static String statcktrace2String(StackTraceElement[] mensajes, int numelementos) {
 		    StringBuffer stlog = new StringBuffer("");
@@ -146,8 +146,8 @@ public class Cadenas {
 		}
 		
 	    /**
-	     * Comprueba si la cadena pasada por parámetro forma parte de alguno
-	     * de los campos multi-idioma de la clase de traducción dada.
+	     * Comprueba si la cadena pasada por parï¿½metro forma parte de alguno
+	     * de los campos multi-idioma de la clase de traducciï¿½n dada.
 	     * 
 	     * @param clazz Clase que implemente Traduccion
 	     * @param cadena Cadena a buscar

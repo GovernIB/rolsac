@@ -37,6 +37,7 @@ public final class PlainExtractor implements Extractor {
         while ((n = in.read(buffer)) != -1) {
             out.write(buffer, 0, n);
         }
+        out.close();
 
         return new String(out.toByteArray());
     }

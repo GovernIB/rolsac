@@ -11,7 +11,7 @@ import java.util.ResourceBundle;
 import org.ibit.rol.sac.model.*;
 
 /**
- * Clase que representa la información a transferir de un Procedimiento(PORMAD)
+ * Clase que representa la informaciÃ³n a transferir de un Procedimiento(PORMAD)
  */
 public class ProcedimientoTransferible extends ActuacionTransferible implements Serializable {
 

@@ -3,12 +3,10 @@ package org.ibit.rol.sac.model.ws;
 import java.io.Serializable;
 
 /**
- * Clase que representa la información a transferir de la relacion HechoVitalProcedimiento(PORMAD)
+ * Clase que representa la informaciÃ³n a transferir de la relacion HechoVitalProcedimiento(PORMAD)
  */
 public class HechoVitalProcedimientoTransferible implements Serializable{
 
-
-	
     private String codigoEstandarHechoVital = null;
     private Long idProcedimiento = null;
     private Integer orden;

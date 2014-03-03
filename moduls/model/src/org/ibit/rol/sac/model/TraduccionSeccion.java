@@ -22,7 +22,7 @@ public class TraduccionSeccion implements Traduccion {
 	}
 
 	private String nombre;
-    // atributo privado introducido para poder añadir un
+    // atributo privado introducido para poder aÃ±adir un
     //texto descriptivo (opcional) en todas las secciones.
     private String descripcion;
     

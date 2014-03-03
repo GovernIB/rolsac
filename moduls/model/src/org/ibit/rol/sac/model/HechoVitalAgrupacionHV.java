@@ -4,7 +4,7 @@
 package org.ibit.rol.sac.model;
 
 /**
- * bean que contiene la información de la relacion entre HechoVital y Agrupacion HV (PORMAD)
+ * bean que contiene la informaciÃ³n de la relacion entre HechoVital y Agrupacion HV (PORMAD)
  */
 
 public class HechoVitalAgrupacionHV implements ValueObject{

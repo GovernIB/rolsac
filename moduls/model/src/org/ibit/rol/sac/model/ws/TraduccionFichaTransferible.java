@@ -7,10 +7,9 @@ import java.io.Serializable;
  * User: mgonzalez
  * Date: 13-jun-2007
  * Time: 15:17:46
- * Clase que representa la información traducida a transferir de una ficha(PORMAD)
+ * Clase que representa la informaciÃ³n traducida a transferir de una ficha(PORMAD)
  */
 public class TraduccionFichaTransferible extends AbstractTraduccion implements Serializable {
-
 
     //TRADUCCIONFICHA
 

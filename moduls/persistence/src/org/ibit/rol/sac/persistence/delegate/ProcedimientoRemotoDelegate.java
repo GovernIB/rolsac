@@ -1,20 +1,19 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import org.ibit.lucene.indra.model.ModelFilterObject;
+import java.rmi.RemoteException;
+
+import javax.ejb.CreateException;
+import javax.ejb.Handle;
+import javax.naming.NamingException;
+
+import org.ibit.rol.sac.model.DocumentoRemoto;
+import org.ibit.rol.sac.model.Iniciacion;
+import org.ibit.rol.sac.model.ProcedimientoRemoto;
 import org.ibit.rol.sac.persistence.intf.ProcedimientoRemotoFacade;
 import org.ibit.rol.sac.persistence.intf.ProcedimientoRemotoFacadeHome;
 import org.ibit.rol.sac.persistence.util.ProcedimientoRemotoFacadeUtil;
-import org.ibit.rol.sac.model.Iniciacion;
-import org.ibit.rol.sac.model.ProcedimientoRemoto;
-import org.ibit.rol.sac.model.DocumentoRemoto;
-import org.ibit.rol.sac.model.Documento;
 
-import javax.ejb.Handle;
-import javax.ejb.CreateException;
-import javax.naming.NamingException;
-import java.util.Set;
-import java.util.List;
-import java.rmi.RemoteException;
+import es.caib.rolsac.persistence.lucene.model.ModelFilterObject;
 
 /**
  * Business delegate para manipular procedimientos.

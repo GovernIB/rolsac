@@ -12,7 +12,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -24,14 +23,12 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
-import net.sf.hibernate.expression.Order;
 
 import org.apache.commons.lang.StringUtils;
-import org.ibit.lucene.indra.model.Catalogo;
-import org.ibit.lucene.indra.model.IndexEncontrado;
-import org.ibit.lucene.indra.model.IndexResultados;
-import org.ibit.lucene.indra.model.ModelFilterObject;
-import org.ibit.lucene.indra.model.TraModelFilterObject;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriter.MaxFieldLength;
+import org.apache.lucene.store.Directory;
 import org.ibit.rol.sac.model.AdministracionRemota;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Auditoria;
@@ -45,6 +42,7 @@ import org.ibit.rol.sac.model.HistoricoProcedimiento;
 import org.ibit.rol.sac.model.IndexObject;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Normativa;
+import org.ibit.rol.sac.model.NormativaExterna;
 import org.ibit.rol.sac.model.NormativaLocal;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.ProcedimientoRemoto;
@@ -65,12 +63,20 @@ import org.ibit.rol.sac.model.criteria.BuscadorProcedimientoCriteria;
 import org.ibit.rol.sac.model.criteria.PaginacionCriteria;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
 import org.ibit.rol.sac.persistence.delegate.IndexerDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.util.DateUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
+import es.caib.rolsac.persistence.lucene.analysis.AlemanAnalyzer;
+import es.caib.rolsac.persistence.lucene.analysis.CastellanoAnalyzer;
+import es.caib.rolsac.persistence.lucene.analysis.CatalanAnalyzer;
+import es.caib.rolsac.persistence.lucene.analysis.InglesAnalyzer;
+import es.caib.rolsac.persistence.lucene.model.Catalogo;
+import es.caib.rolsac.persistence.lucene.model.ModelFilterObject;
+import es.caib.rolsac.persistence.lucene.model.TraModelFilterObject;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
 
@@ -157,79 +163,63 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 		Session session = getSession();
 		try {
-
 			Date FechaActualizacionBD = new Date();
-			if ( procedimiento.getId() == null ) {
-
-				if ( procedimiento.getValidacion().equals(Validacion.PUBLICA) && !userIsSuper() ) {
-
+			if (procedimiento.getId() == null) {
+				if (procedimiento.getValidacion().equals(Validacion.PUBLICA) && !userIsSuper()) {
 					throw new SecurityException("No puede crear un procedimiento público");
-
 				}
 
 			} else {
-
-				if ( !getAccesoManager().tieneAccesoProcedimiento( procedimiento.getId() ) ) {
-
+				if (!getAccesoManager().tieneAccesoProcedimiento( procedimiento.getId())) {
 					throw new SecurityException("No tiene acceso al procedimiento");
-
 				}
 
-				ProcedimientoLocal procedimientoBD = obtenerProcedimientoNewBack( procedimiento.getId() );
+				ProcedimientoLocal procedimientoBD = obtenerProcedimientoNewBack(procedimiento.getId());
 				FechaActualizacionBD = procedimientoBD.getFechaActualizacion();
 				this.indexBorraProcedimiento(procedimientoBD);
-
 			}
 
-			if ( !getAccesoManager().tieneAccesoUnidad(idUA, false) )
-				throw new SecurityException("No tiene acceso a la unidad");
-
+			if (!getAccesoManager().tieneAccesoUnidad(idUA, false)) {
+			    throw new SecurityException("No tiene acceso a la unidad");
+			}
 
 			/* Se alimenta la fecha de actualización de forma automática si no se ha introducido dato*/                      
-			if ( procedimiento.getFechaActualizacion() == null || DateUtils.fechasIguales( FechaActualizacionBD, procedimiento.getFechaActualizacion() ) )
-				procedimiento.setFechaActualizacion( new Date() );
+			if (procedimiento.getFechaActualizacion() == null || DateUtils.fechasIguales(FechaActualizacionBD, procedimiento.getFechaActualizacion())) {
+			    procedimiento.setFechaActualizacion( new Date() );
+			}
 
-			UnidadAdministrativa unidad = (UnidadAdministrativa) session.load( UnidadAdministrativa.class, idUA );
+			UnidadAdministrativa unidad = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, idUA);
 			procedimiento.setUnidadAdministrativa(unidad);
 
-			if ( procedimiento.getId() == null ) {
-
+			if (procedimiento.getId() == null) {
 				session.save(procedimiento);
 				addOperacion(session, procedimiento, Auditoria.INSERTAR);
 
 			} else {
-
 				session.update(procedimiento);
 				addOperacion(session, procedimiento, Auditoria.MODIFICAR);
-
 			}
 
-			Hibernate.initialize( procedimiento.getTramites() );
-			Hibernate.initialize( procedimiento.getMaterias() );
-			Hibernate.initialize( procedimiento.getHechosVitalesProcedimientos() );
+			Hibernate.initialize(procedimiento.getTramites());
+			Hibernate.initialize(procedimiento.getMaterias());
+			Hibernate.initialize(procedimiento.getHechosVitalesProcedimientos());
 
 			Actualizador.actualizar(procedimiento);
 			session.flush();
 			return procedimiento.getId();
 
 		} catch (HibernateException he) {
-
 			throw new EJBException(he);
-
 		} finally {
-
 			close(session);
-
 		}
-
 	}
+
 
 	/**
 	 * Lista todos los procedimientos.
-	 * 
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
-	 * 
 	 * @return Devuelve <code>List</code> de todos los procedimientos
 	 */
 	public List listarProcedimientos() {
@@ -237,23 +227,19 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		//agarcia: antes era @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}". Pero este m�todo debe ser unchecked para permitir accesos via WS 
 		Session session = getSession();
 		try {
-
 			Criteria criteri = session.createCriteria(ProcedimientoLocal.class);
 
 			//criteri.setFetchMode("traducciones", FetchMode.EAGER);
 			criteri.setCacheable(true);
 			List procedimientosValidos= new ArrayList<ProcedimientoLocal>();
 			List procedimientos = criteri.list();
-			for ( int i = 0 ; i < procedimientos.size() ; i++ ) {
-
-				ProcedimientoLocal procedimiento =  (ProcedimientoLocal) procedimientos.get(i);
-				if ( !procedimiento.getTraduccionMap().isEmpty() ) {
-
+			for (int i = 0 ; i < procedimientos.size() ; i++) {
+				ProcedimientoLocal procedimiento = (ProcedimientoLocal) procedimientos.get(i);
+				
+				if (!procedimiento.getTraduccionMap().isEmpty()) {
 					procedimientosValidos.add(procedimiento);
-					Hibernate.initialize( procedimiento.getMaterias() );
-
+					Hibernate.initialize(procedimiento.getMaterias());
 				}
-
 			}
 
 			//Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
@@ -262,15 +248,10 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			return procedimientosValidos;
 
 		} catch (HibernateException he) {
-
 			throw new EJBException(he);
-
 		} finally {
-
 			close(session);
-
 		}
-
 	}
 
 
@@ -281,6 +262,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * @ejb.permission unchecked="true"
 	 */
 	public List listarProcedimientosPublicos() {
+	    
 		//agarcia: antes era @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 		Session session = this.getSession();
 		try {
@@ -291,8 +273,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			List procs = criteri.list();
 			for (int i = 0; i < procs.size(); i++) {
 				ProcedimientoLocal pl =  (ProcedimientoLocal)procs.get(i);
-				if(!pl.getTraduccionMap().isEmpty() && this.publico( pl ) )
-				{
+				if(!pl.getTraduccionMap().isEmpty() && this.publico(pl)) {
 					procsvalidos.add(pl);
 					Hibernate.initialize( pl.getMaterias() );//agarcia
 				}
@@ -302,6 +283,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			Collections.sort(procsvalidos, new ProcedimientoLocal());
 
 			return procsvalidos;
+
 		} catch (HibernateException he) {
 			throw new EJBException(he);
 		} finally {
@@ -311,24 +293,20 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 
 	/**
-	/**
 	 * Obtiene un procedimiento Local.
-	 * 
 	 * @ejb.interface-method
-	 * 
 	 * @ejb.permission unchecked="true"
-	 * 
 	 * @param id	Identificador del procedimiento.
-	 * 
 	 * @return Devuelve <code>ProcedimientoLocal</code> solicitado.
 	 */
-	public ProcedimientoLocal obtenerProcedimiento(Long id)
-	{
+	public ProcedimientoLocal obtenerProcedimiento(Long id) {
+
 		Session session = getSession();
 		ProcedimientoLocal procedimiento = null;
 		try {
 			procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, id);
 			if (visible(procedimiento)) {
+
 				Hibernate.initialize(procedimiento.getDocumentos());
 				for (Documento d : procedimiento.getDocumentos()) {
 					if (d == null) {
@@ -347,6 +325,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 				Hibernate.initialize(procedimiento.getMaterias());
 				Hibernate.initialize(procedimiento.getPublicosObjetivo());
+
 				Hibernate.initialize(procedimiento.getNormativas());
 				for (Normativa n : procedimiento.getNormativas()) {
 					Map<String, Traduccion> mapaTraduccions = n.getTraduccionMap();
@@ -368,6 +347,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 				Hibernate.initialize(procedimiento.getUnidadAdministrativa().getNormativas());
 				Hibernate.initialize(procedimiento.getUnidadAdministrativa().getEdificios());
+
 				for (Normativa n : procedimiento.getUnidadAdministrativa().getNormativas()) {
 					Map<String, Traduccion> mapaTraduccions = n.getTraduccionMap();
 					Set<String> idiomes = mapaTraduccions.keySet();
@@ -419,7 +399,6 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 		} catch (HibernateException he) {
 			throw new EJBException(he);
-
 		} finally {
 			close(session);
 		}
@@ -484,7 +463,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		return procedimiento;
 	}
 
-	 /**
+
+	/**
 	 * Obtiene un procedimiento Local.
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
@@ -493,46 +473,37 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     	
     	Session session = getSession();
     	ProcedimientoLocal procedimiento = null;
-    	
     	try {
-    		
     		procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, id);
     		
-    		if ( visible(procedimiento) ) {
+    		if (visible(procedimiento)) {
+    			Hibernate.initialize(procedimiento.getDocumentos());
+    			Hibernate.initialize(procedimiento.getMaterias());
+    			Hibernate.initialize(procedimiento.getPublicosObjetivo());
+    			Hibernate.initialize(procedimiento.getNormativas());
+    			Hibernate.initialize(procedimiento.getUnidadAdministrativa());
+    			Hibernate.initialize(procedimiento.getUnidadAdministrativa().getHijos());
+    			Hibernate.initialize(procedimiento.getOrganResolutori());
     			
-    			Hibernate.initialize( procedimiento.getDocumentos() );
-    			Hibernate.initialize( procedimiento.getMaterias() );
-    			Hibernate.initialize( procedimiento.getPublicosObjetivo() );
-    			Hibernate.initialize( procedimiento.getNormativas() );
-    			Hibernate.initialize( procedimiento.getUnidadAdministrativa() );
-    			Hibernate.initialize( procedimiento.getUnidadAdministrativa().getHijos() );
-    			Hibernate.initialize( procedimiento.getOrganResolutori() );
-    			
-    			if ( procedimiento.getOrganResolutori() != null )
-    				Hibernate.initialize( procedimiento.getOrganResolutori().getHijos() );
+    			if (procedimiento.getOrganResolutori() != null) {
+    			    Hibernate.initialize(procedimiento.getOrganResolutori().getHijos());
+    			}
 
-    			Hibernate.initialize( procedimiento.getTramites() );
-    			Hibernate.initialize( procedimiento.getHechosVitalesProcedimientos() );
-    			Hibernate.initialize( procedimiento.getIniciacion() );
-    			Hibernate.initialize( procedimiento.getFamilia() );
+    			Hibernate.initialize(procedimiento.getTramites());
+    			Hibernate.initialize(procedimiento.getHechosVitalesProcedimientos());
+    			Hibernate.initialize(procedimiento.getIniciacion());
+    			Hibernate.initialize(procedimiento.getFamilia());
     			
     		} else {
-    			
     			throw new SecurityException("El procedimiento no es visible");
-    			
     		}
 
     	} catch (HibernateException he) {
-    		
     		throw new EJBException(he);
-
     	} finally {
-    		
     		close(session);
-
     	}
 
-    	
     	// Ordenamos los documentos por el campo orden (si nulo, ordena por el campo id)
         List procs = new ArrayList(0);
         for (Documento documento : procedimiento.getDocumentos()) {
@@ -543,74 +514,69 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         Collections.sort(procs, new Documento());
 	  	procedimiento.setDocumentos(procs);
 
-	  	
 	    // Ordenamos las materias por el campo id
 	  	List mats = new ArrayList(procedimiento.getMaterias());
 	  	Collections.sort(mats, new Materia());
 	  	procedimiento.setMaterias(new HashSet<Materia>(mats));
 
-	  	
 	  	//Ordenamos las normativas por el campo id
 	  	List norms = new ArrayList(procedimiento.getNormativas());
 	  	Collections.sort(norms, new Normativa());
 	  	procedimiento.setNormativas(new HashSet<Normativa>(norms));
 
-	  	
 	    //Ordenamos los Hechos vitales procedimientos por el campo orden (si nulo, ordena por el campo id)
 	  	List hechosVitales = new ArrayList(procedimiento.getHechosVitalesProcedimientos());
 	  	Collections.sort(hechosVitales);
 	  	procedimiento.setHechosVitalesProcedimientos(new HashSet<HechoVitalProcedimiento>(hechosVitales));
 
+	  	// Eliminamos los nulls del ArrayList de la lista de trámites
+	  	List<Tramite> listaTramites = new ArrayList<Tramite>(0);
+	  	for (Tramite tramite : procedimiento.getTramites()) {
+	  	    if (tramite != null) {
+	  	        listaTramites.add(tramite);
+	  	    }
+	  	}
+	  	procedimiento.setTramites(listaTramites);
+
 	  	return procedimiento;
-	  	
     }
 
 
 	/**
 	 * Valida si existe un tramite de inicio distinto a tramiteId para el procedimiento Local procId.
-	 * 
 	 * @ejb.interface-method
-	 * 
 	 * @ejb.permission unchecked="true"
-	 * 
 	 * @param idProcedimiento	Identificador del procedimiento.
-	 * 
 	 * @param idTramite	Identificador del trámite.
-	 * 
 	 * @return Devuelve <code>true</code> si existe mas de un trámite con el mismo identificador asociado a un determinado procedimiento.
 	 */
 	public boolean existeOtroTramiteInicioProcedimiento(Long idProcedimiento, Long idTramite) {
 
 		Session session = getSession();
-
 		try {
-
 			StringBuilder consulta = new StringBuilder(" select count(t.id) from Tramite t where t.procedimiento.id = :idProcedimiento and t.fase = :fase ");
 
-			if ( idTramite != null )
-				consulta.append(" and t.id != :tramiteId"); 
+			if (idTramite != null) {
+			    consulta.append(" and t.id != :tramiteId"); 
+			}
 
-			Query query = session.createQuery( consulta.toString() );
+			Query query = session.createQuery(consulta.toString());
 			query.setLong("fase", 1); // 1 = fase de inicio o inicializacion.
 			query.setLong("idProcedimiento", idProcedimiento);
 
-			if ( idTramite != null )
-				query.setLong("tramiteId", idTramite);
+			if (idTramite != null) {
+			    query.setLong("tramiteId", idTramite);
+			}
 
 			Integer numTramites = (Integer) query.uniqueResult();
 
 			return numTramites > 0;
 
 		} catch (HibernateException he) {
-
 			throw new EJBException(he);
-
 		} finally {
-
 			close(session);
-
 		}
-
 	}
 
 
@@ -621,6 +587,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * @ejb.permission unchecked="true"
 	 */
 	public List buscarProcedimientos(Map parametros, Map traduccion) {
+
 		Session session = getSession();
 		try {
 			if (!userIsOper()) {
@@ -668,25 +635,23 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	/**
 	 * @deprecated No se usa
 	 * Busca todas los Procedimientos que cumplen los criterios de busqueda del nuevo back (sacback2).
-	 * 
 	 * @ejb.interface-method
-	 * 
 	 * @ejb.permission unchecked="true"
 	 */
 	public ResultadoBusqueda buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu, String pagina, String resultats, int visible, String en_plazo, String telematico) {
 
 		Session session = getSession();
-
 		try {
-
-			if ( !userIsOper() )
-				parametros.put("validacion", Validacion.PUBLICA);
+			if (!userIsOper()) {
+			    parametros.put("validacion", Validacion.PUBLICA);
+			}
 
 			List params = new ArrayList();
 			String i18nQuery = "";
 
 			if (traduccion.get("idioma") != null) {
 				i18nQuery = populateQuery(parametros, traduccion, params);
+
 			} else {
 				String paramsQuery = populateQuery(parametros, new HashMap(), params);
 				if (paramsQuery.length() == 0) {
@@ -700,26 +665,29 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			Long idUA = (ua != null) ? ua.getId() : null;			
 			String uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(idUA, uaFilles, uaMeves);
 
-			if ( !StringUtils.isEmpty(uaQuery) )            	
-				uaQuery = " and procedimiento.unidadAdministrativa.id in (" + uaQuery + ")";
+			if (!StringUtils.isEmpty(uaQuery)) {
+			    uaQuery = " and procedimiento.unidadAdministrativa.id in (" + uaQuery + ")";
+			}
 
 			String from = "from ProcedimientoLocal as procedimiento, ";
 			String where = "";
 
 			if (telematico != null && !telematico.equals("")) {
-				if (telematico.equals("1"))
+				if (telematico.equals("1")) {
 					where += "and procedimiento.id in ";
-				else if (telematico.equals("0"))
+				} else if (telematico.equals("0")) {
 					where += "and procedimiento.id not in ";
+				}
 
 				where += "( select tra.procedimiento from Tramite as tra where tra.idTraTel is not null )";
 			}
 
 			if (en_plazo != null && !en_plazo.equals("")) {
-				if (en_plazo.equals("1"))
+				if (en_plazo.equals("1")) {
 					where += "and procedimiento.id in ";
-				else if (en_plazo.equals("0"))
+				} else if (en_plazo.equals("0")) {
 					where += "and procedimiento.id not in ";
+				}
 
 				where += "( select tra.procedimiento from Tramite as tra where tra.fase = 1 ";
 				where += "and (sysdate < tra.dataTancament or tra.dataTancament is null) ";
@@ -832,20 +800,15 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 	/**
 	 * Busca todas los Procedimientos que cumplen los criterios de busqueda del nuevo back (sacback2).
-	 * 
 	 * @param criteria	Indica los criterios para la consulta.
-	 * 
 	 * @ejb.interface-method
-	 * 
 	 * @ejb.permission unchecked="true"
 	 */
 	public ResultadoBusqueda buscadorProcedimientos(BuscadorProcedimientoCriteria bc) {
 
 		Session session = getSession();
 		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
-
 		try {
-
 			PaginacionCriteria paginacion = bc.getPaginacion();
 
 			StringBuilder consulta = new StringBuilder("select new ProcedimientoLocal(procedimiento.id, trad.nombre, procedimiento.validacion, procedimiento.fechaActualizacion, ");
@@ -1162,147 +1125,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			close(session);
 
 		}
-
 	}
-
-
-	/**
-	 *  @deprecated No se usa 
-	 * Busca todos los Procedimientos con un texto determinado.
-	 * @ejb.interface-method
-	 * @ejb.permission unchecked="true"
-	 */
-	public List buscarProcedimientosUATexto(Long idUnidad, String texto) {
-		IndexerDelegate delegate = DelegateUtil.getIndexerDelegate();
-
-		// Buscar con lucene, los ids de los procedimientos que continen el texto.
-		Long[] ids;
-		try {
-			ids = delegate.buscarIds(ProcedimientoLocal.class.getName(), texto);
-		} catch (DelegateException e) {
-			log.error("Error buscando", e);
-			ids = new Long[0];
-		}
-
-		if (ids == null || ids.length == 0) {
-			return Collections.EMPTY_LIST;
-		}
-
-		Session session = getSession();
-		try {
-			// Obtener una lista de los identificadores de todo el arbol de Unidades.
-			// Habrá una consulta por nivel.
-			List idUnidades = new ArrayList();
-			List currentParents = Collections.singletonList(idUnidad);
-			while (!currentParents.isEmpty()) {
-				idUnidades.addAll(currentParents);
-				Query uaQuery = session.createQuery("select ua.id from UnidadAdministrativa ua where ua.padre.id in (:uas)");
-				uaQuery.setParameterList("uas", currentParents);
-				currentParents = uaQuery.list();
-			}
-
-			// Filtraremos por los ids obtenidos con lucene.
-			// y la lista de unidades administrativas.
-			Criteria criteria = session.createCriteria(ProcedimientoLocal.class);
-			criteria.add(Expression.in("id", ids));
-			criteria.add(Expression.in("unidadAdministrativa.id", idUnidades));
-			List result = new ArrayList();
-			for (Iterator iterator = criteria.list().iterator(); iterator.hasNext();) {
-				ProcedimientoLocal proc = (ProcedimientoLocal) iterator.next();
-				if (publico(proc)) {
-					result.add(proc);
-				}
-			}
-			//Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
-			Collections.sort(result, new ProcedimientoLocal());
-			return result;
-		} catch (HibernateException he) {
-			throw new EJBException(he);
-		} finally {
-			close(session);
-		}
-	}
-
-
-	/**
-	 *  @deprecated Se usa desde la API v1
-	 * Busca todos los Procedimientos con un texto determinado.
-	 * @ejb.interface-method
-	 * @ejb.permission unchecked="true"
-	 */
-	public List buscarProcedimientosUATexto(Long idUnidad, String texto, String idioma) {
-
-		IndexerDelegate delegate = DelegateUtil.getIndexerDelegate();
-
-		IndexResultados indexResultados;
-
-		List idProcs = new ArrayList();
-
-		try {
-			indexResultados = delegate.buscaravanzado(texto, "", "", "", "PRC", "", "", null, null, "", idioma, true, true);
-			List list = indexResultados.getLista();
-
-			log.debug("###################################### buscarProcedimientosUATexto\n RESULTADOS DE LA BUSQUEDA: " + list.size() + "\n#######################################################");
-			for (Object obj : list) {
-				if (obj instanceof IndexEncontrado) {
-					IndexEncontrado indexEncontrado = (IndexEncontrado) obj;
-					String str = indexEncontrado.getId(); //El id que devuelve no es de tipo PRC.EXTERNO.DCMTS.39
-
-					//Obtenemos el valor numerico del final
-					Long n = Long.valueOf(str.substring((str.lastIndexOf('.')+1))).longValue();
-
-					//Obtenemos el procedimiento, recuperamos el identificador y lo a�adimos a la lista
-					idProcs.add( obtenerProcedimientoNewBack(n).getId());
-				}
-			}
-
-			if (idProcs == null || idProcs.size() == 0) {
-				return Collections.EMPTY_LIST;
-			}
-
-		} catch (DelegateException e) {
-			log.error("Error buscando", e);
-			throw new EJBException(e);
-		}
-
-		Session session = getSession();
-		try {
-			// Obtener una lista de los identificadores de todo el arbol de Unidades.
-			// Habr� una consulta por nivel.
-			List idUnidades = new ArrayList();
-			List currentParents = Collections.singletonList(idUnidad);
-			while (!currentParents.isEmpty()) {
-				idUnidades.addAll(currentParents);
-				Query uaQuery = session.createQuery("select ua.id from UnidadAdministrativa ua where ua.padre.id in (:uas)");
-				uaQuery.setParameterList("uas", currentParents);
-				currentParents = uaQuery.list();
-			}
-
-			// Filtraremos por los ids obtenidos con lucene.
-			// y la lista de unidades administrativas.
-			Criteria criteria = session.createCriteria(ProcedimientoLocal.class);
-			criteria.add(Expression.in("id", idProcs));
-			criteria.add(Expression.in("unidadAdministrativa.id", idUnidades));
-			criteria.addOrder(Order.desc("tramite"));
-			List result = new ArrayList();
-
-
-			for (Iterator iterator = criteria.list().iterator(); iterator.hasNext();) {
-				ProcedimientoLocal proc = (ProcedimientoLocal) iterator.next();
-				if (publico(proc)) {
-					result.add(proc);
-				}
-			}
-
-			//Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
-			Collections.sort(result, new ProcedimientoLocal());
-			return result;
-		} catch (HibernateException he) {
-			throw new EJBException(he);
-		} finally {
-			close(session);
-		}
-	}    
 
 
 	/**
@@ -1828,7 +1651,6 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 
 	/**
-	 * @deprecated No se usa
 	 * Metodo que obtiene un bean con el filtro para la indexacion
 	 * 
 	 * Debemos incluir las materias y los hechos vitales, la unidad administrativa de la que depende y la familia.
@@ -1844,8 +1666,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * @ejb.permission unchecked="true" 
 	 */
 	public ModelFilterObject obtenerFilterObject(ProcedimientoLocal proc) throws DelegateException {
-		ModelFilterObject filter = new ModelFilterObject();
 
+		ModelFilterObject filter = new ModelFilterObject();
 		Session session = getSession();
 
 		TraModelFilterObject trafilter;
@@ -1860,379 +1682,427 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		Materia mat;
 		HechoVitalProcedimiento hvital;
 		Hashtable lista_materias = new Hashtable(), lista_hechos = new Hashtable();
-		UnidadAdministrativa ua= proc.getUnidadAdministrativa();
-		List listapadres= org.ibit.rol.sac.persistence.delegate.DelegateUtil.getUADelegate().listarPadresUnidadAdministrativa(ua.getId());
+		UnidadAdministrativa ua = proc.getUnidadAdministrativa();
+		List listapadres = org.ibit.rol.sac.persistence.delegate.DelegateUtil.getUADelegate().listarPadresUnidadAdministrativa(ua.getId());
 
-		if (proc.getMaterias()!=null) {
-			Iterator itmat=proc.getMaterias().iterator();
+		if (proc.getMaterias() != null) {
+			Iterator itmat = proc.getMaterias().iterator();
 			while (itmat.hasNext()) {
-				mat=(Materia)itmat.next();
+				mat = (Materia) itmat.next();
 				if (!lista_materias.containsKey(mat.getId()))
 					lista_materias.put(mat.getId(), mat);
 			}
 		}
 
-		if (proc.getHechosVitalesProcedimientos()!=null) {
-			Iterator itvital=proc.getHechosVitalesProcedimientos().iterator();
+		if (proc.getHechosVitalesProcedimientos() != null) {
+			Iterator itvital = proc.getHechosVitalesProcedimientos().iterator();
 			while (itvital.hasNext()) {
-				hvital=(HechoVitalProcedimiento)itvital.next();
-				if (!lista_hechos.containsKey(hvital.getHechoVital().getId()))
-					lista_hechos.put(hvital.getHechoVital().getId(), hvital.getHechoVital());
+				hvital = (HechoVitalProcedimiento) itvital.next();
+				if (!lista_hechos.containsKey(hvital.getHechoVital().getId())) {
+				    lista_hechos.put(hvital.getHechoVital().getId(), hvital.getHechoVital());
+				}
 			}
 		}
 
-		Iterator langs= proc.getLangs().iterator();
+		Iterator langs = proc.getLangs().iterator();
 		while (langs.hasNext()) {
 			idioma = (String) langs.next();
-			txids=Catalogo.KEY_SEPARADOR;
-			txtexto=" ";
+			txids = Catalogo.KEY_SEPARADOR;
+			txtexto = " ";
 
 			trafilter = new TraModelFilterObject();
 			trafilter.setMaintitle(null); 
 
 			// Obtenemos la UA con sus padres excepto el raiz
-			if (ua!=null) {
-				txids=Catalogo.KEY_SEPARADOR;
-				txtexto=" ";
+			if (ua != null) {
+				txids = Catalogo.KEY_SEPARADOR;
+				txtexto = " ";
 
-				UnidadAdministrativa ua_padre=null;
+				UnidadAdministrativa ua_padre = null;
 				for (int x = 1; x < listapadres.size(); x++) {
-					ua_padre=(UnidadAdministrativa)listapadres.get(x);
-					txids+=ua_padre.getId()+Catalogo.KEY_SEPARADOR;
-					if (ua_padre.getTraduccion(idioma)!=null)
-						txtexto+=((TraduccionUA)ua_padre.getTraduccion(idioma)).getNombre()+" ";
+					ua_padre = (UnidadAdministrativa) listapadres.get(x);
+					txids += ua_padre.getId() + Catalogo.KEY_SEPARADOR;
+					if (ua_padre.getTraduccion(idioma) != null) {
+					    txtexto += ((TraduccionUA) ua_padre.getTraduccion(idioma)).getNombre() + " ";
+					}
 				}
 
-				filter.setUo_id( (txids.length()==1) ? null: txids);
-				trafilter.setUo_text( (txtexto.length()==1) ? null: txtexto);
+				filter.setUo_id((txids.length() == 1) ? null : txids);
+				trafilter.setUo_text((txtexto.length() == 1) ? null : txtexto);
 			}
 
 			// Obtenemos su Familia
-			Familia fam= proc.getFamilia();
-			if (fam!=null) {
+			Familia fam = proc.getFamilia();
+			if (fam != null) {
 				filter.setFamilia_id(fam.getId());
-				if (fam.getTraduccion(idioma)!=null)	
-					trafilter.setFamilia_text(((TraduccionFamilia)fam.getTraduccion(idioma)).getNombre());
+				if (fam.getTraduccion(idioma) != null) {
+				    trafilter.setFamilia_text(((TraduccionFamilia) fam.getTraduccion(idioma)).getNombre());
+				}
 			}
 
 			// Obtenemos las materias y hechos vitales
-			txids=Catalogo.KEY_SEPARADOR;
-			txtexto=" ";
+			txids = Catalogo.KEY_SEPARADOR;
+			txtexto = " ";
 
-			Enumeration i=lista_materias.keys();
+			Enumeration i = lista_materias.keys();
 
 			while (i.hasMoreElements()) {
-				Materia materia = (Materia)lista_materias.get(i.nextElement());
-				txids+=materia.getId()+Catalogo.KEY_SEPARADOR; //anadir los ids (los de los hechos vitales no)
-				if (materia.getTraduccion(idioma)!=null) {
-					txtexto+=((TraduccionMateria)materia.getTraduccion(idioma)).getNombre() + " ";
-					txtexto+=((TraduccionMateria)materia.getTraduccion(idioma)).getDescripcion() + " ";
-					txtexto+=((TraduccionMateria)materia.getTraduccion(idioma)).getPalabrasclave() + " ";
+				Materia materia = (Materia) lista_materias.get(i.nextElement());
+				// Anadir los ids (los de los hechos vitales no)
+				txids += materia.getId() + Catalogo.KEY_SEPARADOR;
+				if (materia.getTraduccion(idioma) != null) {
+					txtexto += ((TraduccionMateria) materia.getTraduccion(idioma)).getNombre() + " ";
+					txtexto += ((TraduccionMateria) materia.getTraduccion(idioma)).getDescripcion() + " ";
+					txtexto += ((TraduccionMateria) materia.getTraduccion(idioma)).getPalabrasclave() + " ";
 				}
 			}
 
-			i=lista_hechos.keys();
-			HechoVital hechovital=null;
+			i = lista_hechos.keys();
+			HechoVital hechovital = null;
 
 			while (i.hasMoreElements()) {
-				hechovital = (HechoVital)lista_hechos.get(i.nextElement());
-				if (hechovital.getTraduccion(idioma)!=null) {
-					txtexto+=((TraduccionHechoVital)hechovital.getTraduccion(idioma)).getNombre() + " ";
-					txtexto+=((TraduccionHechoVital)hechovital.getTraduccion(idioma)).getDescripcion() + " ";
-					txtexto+=((TraduccionHechoVital)hechovital.getTraduccion(idioma)).getPalabrasclave() + " ";
+				hechovital = (HechoVital) lista_hechos.get(i.nextElement());
+				if (hechovital.getTraduccion(idioma) != null) {
+					txtexto += ((TraduccionHechoVital) hechovital.getTraduccion(idioma)).getNombre() + " ";
+					txtexto += ((TraduccionHechoVital) hechovital.getTraduccion(idioma)).getDescripcion() + " ";
+					txtexto += ((TraduccionHechoVital) hechovital.getTraduccion(idioma)).getPalabrasclave() + " ";
 				}
 			}
 
-			filter.setMateria_id( (txids.length()==1) ? null: txids);
-			trafilter.setMateria_text( (txtexto.length()==1) ? null: txtexto);
+			filter.setMateria_id((txids.length() == 1) ? null : txids);
+			trafilter.setMateria_text((txtexto.length() == 1) ? null : txtexto);
 
 			filter.addTraduccion(idioma, trafilter);
-
 		}
-		close(session);
 
+		close(session);
 		return filter;
-	}        
+	}
 
 
 	/**
 	 * Añade los procedimientos al índice en todos los idiomas
-	 * 
 	 * @ejb.interface-method
-	 * 
 	 * @ejb.permission unchecked="true"
-	 * 
 	 * @param proc	Indica un procedimiento.
 	 */
-	public void indexInsertaProcedimiento(ProcedimientoLocal proc, ModelFilterObject filter)  {
+	public void indexInsertaProcedimiento(ProcedimientoLocal proc, ModelFilterObject filter) {
 
 		try {
-		    if (true) return;
-
-			if ( proc.getValidacion().equals(2) ) 
-				return;
-
-			proc = obtenerProcedimientoNewBack( proc.getId()  ); 
-
-			if ( filter == null ) 
-				filter = obtenerFilterObject(proc);
-
-			String tipo = tipoProcedimiento( proc, false ); 
-			String tipoDoc = tipoProcedimiento( proc, true );
-			Iterator iterator = proc.getLangs().iterator();
-			while ( iterator.hasNext() ) {
-
-				String idioma = (String) iterator.next();
-				IndexObject io= new IndexObject();
-
-				io.setId( tipo + "." + proc.getId() );
-				io.setClasificacion(tipo);
-				io.setMicro( filter.getMicrosite_id() );
-				io.setUo( filter.getUo_id() );
-				io.setMateria( filter.getMateria_id() );
-				io.setFamilia( filter.getFamilia_id() );
-				io.setSeccion( filter.getSeccion_id() );
-				io.setCaducidad("");	
-				io.setPublicacion("");
-				io.setDescripcion(""); 
-				if ( proc.getFechaCaducidad() != null )
-					io.setCaducidad( new java.text.SimpleDateFormat("yyyyMMdd").format( proc.getFechaCaducidad() ) );
-
-				if ( proc.getFechaPublicacion() != null )	
-					io.setPublicacion( new java.text.SimpleDateFormat("yyyyMMdd").format( proc.getFechaPublicacion() ) );
-
-
-				TraduccionProcedimientoLocal trad = ( (TraduccionProcedimientoLocal) proc.getTraduccion(idioma) );
-				if ( trad != null ) {
-
-					io.setTituloserviciomain( trad.getNombre() );
-
-					io.setUrl( "/govern/sac/visor_proc.do?codi=" + proc.getId() + "&lang=" + idioma + "&coduo=" + proc.getUnidadAdministrativa().getId() );
-
-					// Si es externo ponemos su propia URL
-					if ( tipo.equals(Catalogo.SRVC_PROCEDIMIENTOS_EXTERNO) )	
-						io.setUrl( proc.getUrl() );
-
-					if ( trad.getNombre() != null ) {
-
-						io.setTitulo( trad.getNombre() );
-						io.addTextLine( trad.getNombre() );
-
-						if ( trad.getResumen() != null ) {
-
-							//if (trad.getResumen().length()>200) io.setDescripcion(trad.getResumen().substring(0,199)+"...");
-							//else io.setDescripcion(trad.getResumen());
-							io.setDescripcion( trad.getResumen() );
-
-						}
-
-					}
-
-					if ( trad.getDestinatarios() != null ) 	
-						io.addTextLine( trad.getDestinatarios() );
-
-					if ( trad.getLugar() != null )	
-						io.addTextLine( trad.getLugar() );
-
-					if ( trad.getObservaciones() != null )	
-						io.addTextLine( trad.getObservaciones() );
-
-					if ( trad.getPlazos() != null )	
-						io.addTextLine( trad.getPlazos() );
-
-					if ( trad.getResolucion() != null )
-						io.addTextLine( trad.getResolucion() );
-
-					if ( trad.getNotificacion() != null )	
-						io.addTextLine( trad.getNotificacion() );
-
-					if ( trad.getRecursos() != null )
-						io.addTextLine( trad.getRecursos() ); // No est� en el mantenimiento
-
-					if ( trad.getRequisitos() != null )	
-						io.addTextLine( trad.getRequisitos() );
-
-					if ( trad.getSilencio() != null )
-						io.addTextLine( trad.getSilencio() );
-
-				}
-
-				io.addTextopcionalLine( filter.getTraduccion(idioma).getMateria_text() );
-				io.addTextopcionalLine( filter.getTraduccion(idioma).getSeccion_text() );
-				io.addTextopcionalLine( filter.getTraduccion(idioma).getUo_text() );
-				io.addTextopcionalLine( filter.getTraduccion(idioma).getFamilia_text() );
-
-				// Añadimos colecciones pero solo títulos como opcional
-				if ( proc.getTramites() != null ) {
-
-					Iterator iteradorTramites = proc.getTramites().iterator();
-					while ( iteradorTramites.hasNext() ) {
-
-						Tramite tra = (Tramite) iteradorTramites.next();
-						if ( tra.getTraduccion(idioma) != null ) {
-
-							io.addTextopcionalLine( ( (TraduccionTramite) tra.getTraduccion(idioma) ).getNombre() );
-
-						}
-
-					}
-
-				}
-
-				if ( proc.getNormativas() != null ) {
-
-					Iterator iteradorNormativas = proc.getNormativas().iterator();
-					while ( iteradorNormativas.hasNext() ) {
-
-						NormativaLocal norm = (NormativaLocal) iteradorNormativas.next();
-						if ( norm.getTraduccion(idioma) != null ) {
-
-							io.addTextopcionalLine( ( (TraduccionNormativa) norm.getTraduccion(idioma) ).getTitulo() );
-
-						}
-
-					}
-
-				}
-
-				if ( proc.getMaterias() != null ) {
-
-					Iterator iteradorMaterias = proc.getMaterias().iterator();
-					while ( iteradorMaterias.hasNext() ) {
-
-						Materia mat = (Materia) iteradorMaterias.next();
-						if ( mat.getTraduccion(idioma) != null ) {
-
-							io.addTextopcionalLine( ( (TraduccionMateria) mat.getTraduccion(idioma) ).getNombre() );
-
-						}
-
-					}
-
-				}
-
-				//se añaden todos los documentos en todos los idiomas
-				if ( proc.getDocumentos() != null ) {
-
-					Iterator iteradorDocumentos = proc.getDocumentos().iterator();
-					while ( iteradorDocumentos.hasNext() ) {
-
-						Documento documento = (Documento) iteradorDocumentos.next();
-						documento = DelegateUtil.getDocumentoDelegate().obtenerDocumento( documento.getId() );
-						if ( documento.getTraduccion(idioma) != null ) {
-
-							io.addTextLine( ( (TraduccionDocumento) documento.getTraduccion(idioma) ).getTitulo() );
-							io.addTextLine( ( (TraduccionDocumento) documento.getTraduccion(idioma) ).getDescripcion() );
-
-						}
-
-
-						// Se crea la indexación del documento individual y se añade la información 
-						// para la indexación de la ficha.
-						IndexObject ioDoc = new IndexObject();
-						String textDoc = null;
-
-						//ioDoc.addArchivo((Archivo)documento.getArchivo());	
-						Archivo arch = new Archivo();
-						if ( documento.getTraduccion(idioma) != null ) {
-
-							arch = (Archivo) ( (TraduccionDocumento) documento.getTraduccion(idioma) ).getArchivo();
-							ioDoc.addArchivo(arch);
-
-						} 
-
-						textDoc = ioDoc.getText();
-						if ( textDoc != null && textDoc.length() > 0 ) {
-
-							if ( documento.getTraduccion(idioma) != null ) {				            	
-
-								ioDoc.setId( tipoDoc + "." + documento.getId() );
-								ioDoc.setClasificacion( tipo + "." + proc.getId() );
-								ioDoc.setCaducidad("");
-								ioDoc.setPublicacion(""); 
-								ioDoc.setDescripcion("");
-
-								if ( proc.getFechaCaducidad() != null )		
-									ioDoc.setCaducidad( new java.text.SimpleDateFormat("yyyyMMdd").format( proc.getFechaCaducidad() ) );
-
-								if ( proc.getFechaPublicacion() != null )	
-									ioDoc.setPublicacion( new java.text.SimpleDateFormat("yyyyMMdd").format( proc.getFechaPublicacion() ) );
-
-								ioDoc.setUrl( "/fitxer/get?codi=" + arch.getId() );
-								ioDoc.setTituloserviciomain( io.getTitulo() );  
-								ioDoc.setTitulo( ( (TraduccionDocumento) documento.getTraduccion(idioma) ).getTitulo() + ", (" + arch.getMime().toUpperCase() +")");  
-								ioDoc.setDescripcion( ( (TraduccionDocumento) documento.getTraduccion(idioma) ).getDescripcion() );
-								ioDoc.setText(textDoc);
-								ioDoc.addTextLine( ( (TraduccionDocumento) documento.getTraduccion(idioma) ).getDescripcion() );
-								ioDoc.addTextLine( arch.getNombre() );
-
-								if ( io.getUo() != null )
-									ioDoc.setUo( io.getUo() );
-
-								if ( io.getMateria() != null ) 
-									ioDoc.setMateria( io.getMateria() );
-
-								if ( io.getSeccion() != null ) 
-									ioDoc.setSeccion( io.getSeccion() );
-
-								if ( io.getFamilia() != null ) 
-									ioDoc.setFamilia( io.getFamilia() );
-
-								if ( ioDoc.getText().length() > 0 || ioDoc.getTextopcional().length() > 0 )
-									org.ibit.rol.sac.persistence.delegate.DelegateUtil.getIndexerDelegate().insertaObjeto(ioDoc, idioma);
-
-							}
-
-							//io.addArchivo((Archivo)documento.getArchivo());
-							io.addTextLine(textDoc);
-
-						}
-
-					}
-
-				}	
-
-				if ( io.getText().length() > 0 )
-					org.ibit.rol.sac.persistence.delegate.DelegateUtil.getIndexerDelegate().insertaObjeto(io, idioma);
-
+			if (proc.getValidacion().equals(2)) {
+			    return;
 			}
 
-			//log.warn("[indexInsertaProcedimiento:" + proc.getId() + "] INDEXADO");
+			proc = obtenerProcedimientoNewBack(proc.getId());
+
+			if (filter == null) {
+                filter = obtenerFilterObject(proc);
+            }
+
+			IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
+
+			// Obtenemos los documentos del procedimiento, si tiene, para evitar tener que cargarlos en cada idioma
+            List<Documento> listaDocumentos = obtenerListaDocumentos(proc);
+
+			String tipo = tipoProcedimiento(proc, false); 
+			Iterator iterator = proc.getLangs().iterator();
+			while (iterator.hasNext()) {
+				String idioma = (String) iterator.next();
+
+				// Configuración del writer
+                Directory directory = indexerDelegate.getHibernateDirectory(idioma);
+                IndexWriter writer = new IndexWriter(directory, getAnalizador(idioma), false, MaxFieldLength.UNLIMITED);
+                writer.setMergeFactor(20);
+                writer.setMaxMergeDocs(Integer.MAX_VALUE);
+
+				IndexObject io = new IndexObject();
+
+				io = indexarTraducciones(proc, idioma, io, tipo);
+
+				io = indexarContenidos(proc, io, tipo, filter);
+
+				io = indexarContenidosLaterales(proc, idioma, io, filter);
+
+				io = indexarContenidosDocumentos(proc, idioma, writer, io, listaDocumentos, tipo);
+
+				if (io.getText().length() > 0) {
+				    indexerDelegate.insertaObjeto(io, idioma, writer);
+				}
+
+				writer.close();
+                directory.close();
+			}
 
 		} catch (Exception ex) {
-
 			log.warn( "[indexInsertaProcedimiento:" + proc.getId() + "] No se ha podido indexar el procedimiento. " + ex.getMessage() );
-
 		}
+	}
 
+
+	private List<Documento> obtenerListaDocumentos(ProcedimientoLocal proc) throws DelegateException {
+
+        int listaSize = 0;
+        if (proc.getDocumentos() != null) {
+            listaSize = proc.getDocumentos().size();
+        }
+        List<Documento> listaDocumentos = new ArrayList<Documento>(listaSize);
+        if (proc.getDocumentos() != null) {
+            DocumentoDelegate documentoDelegate = DelegateUtil.getDocumentoDelegate();
+            for (Documento documento : proc.getDocumentos()) {
+                listaDocumentos.add(documentoDelegate.obtenerDocumento(documento.getId()));
+            }
+        }
+
+        return listaDocumentos;
+    }
+
+
+	private IndexObject indexarContenidos(ProcedimientoLocal proc, IndexObject io, String tipo, ModelFilterObject filter) {
+
+	    io.setId(tipo + "." + proc.getId());
+        io.setClasificacion(tipo);
+        io.setMicro(filter.getMicrosite_id());
+        io.setUo(filter.getUo_id());
+        io.setMateria(filter.getMateria_id());
+        io.setFamilia(filter.getFamilia_id());
+        io.setSeccion(filter.getSeccion_id());
+        io.setCaducidad("");    
+        io.setPublicacion("");
+        io.setDescripcion("");
+
+        if (proc.getFechaCaducidad() != null) {
+            io.setCaducidad(new java.text.SimpleDateFormat("yyyyMMdd").format(proc.getFechaCaducidad()));
+        }
+
+        if (proc.getFechaPublicacion() != null) {
+            io.setPublicacion(new java.text.SimpleDateFormat("yyyyMMdd").format(proc.getFechaPublicacion()));
+        }
+
+        return io;
+	}
+
+
+	private IndexObject indexarTraducciones(ProcedimientoLocal proc, String idioma, IndexObject io, String tipo) {
+
+	    TraduccionProcedimientoLocal trad = ((TraduccionProcedimientoLocal) proc.getTraduccion(idioma));
+        if (trad != null) {
+            io.setTituloserviciomain(trad.getNombre());
+            io.setUrl("/govern/sac/visor_proc.do?codi=" + proc.getId() + "&lang=" + idioma + "&coduo=" + proc.getUnidadAdministrativa().getId());
+
+            // Si es externo ponemos su propia URL
+            if (tipo.equals(Catalogo.SRVC_PROCEDIMIENTOS_EXTERNO)) {
+                io.setUrl(proc.getUrl());
+            }
+
+            if (trad.getNombre() != null) {
+                io.setTitulo(trad.getNombre());
+                io.addTextLine(trad.getNombre());
+
+                if (trad.getResumen() != null) {
+                    //if (trad.getResumen().length()>200) io.setDescripcion(trad.getResumen().substring(0,199)+"...");
+                    //else io.setDescripcion(trad.getResumen());
+                    io.setDescripcion(trad.getResumen());
+                }
+            }
+
+            if (trad.getDestinatarios() != null) {
+                io.addTextLine(trad.getDestinatarios());
+            }
+
+            if (trad.getLugar() != null) {
+                io.addTextLine(trad.getLugar());
+            }
+
+            if (trad.getObservaciones() != null) {
+                io.addTextLine(trad.getObservaciones());
+            }
+
+            if (trad.getPlazos() != null) {
+                io.addTextLine(trad.getPlazos());
+            }
+
+            if (trad.getResolucion() != null) {
+                io.addTextLine(trad.getResolucion());
+            }
+
+            if (trad.getNotificacion() != null) {
+                io.addTextLine(trad.getNotificacion());
+            }
+
+            if (trad.getRecursos() != null) {
+                // No está en el mantenimiento
+                io.addTextLine(trad.getRecursos());
+            }
+
+            if (trad.getRequisitos() != null) {
+                io.addTextLine(trad.getRequisitos());
+            }
+
+            if (trad.getSilencio() != null) {
+                io.addTextLine(trad.getSilencio());
+            }
+        }
+
+        return io;
+	}
+
+
+	private IndexObject indexarContenidosLaterales(ProcedimientoLocal proc, String idioma, IndexObject io, ModelFilterObject filter) {
+
+	    io.addTextopcionalLine(filter.getTraduccion(idioma).getMateria_text());
+        io.addTextopcionalLine(filter.getTraduccion(idioma).getSeccion_text());
+        io.addTextopcionalLine(filter.getTraduccion(idioma).getUo_text());
+        io.addTextopcionalLine(filter.getTraduccion(idioma).getFamilia_text());
+
+        // Añadimos colecciones pero solo títulos como opcional
+        if (proc.getTramites() != null) {
+            Iterator iteradorTramites = proc.getTramites().iterator();
+
+            while (iteradorTramites.hasNext()) {
+                Tramite tra = (Tramite) iteradorTramites.next();
+                if (tra.getTraduccion(idioma) != null) {
+                    io.addTextopcionalLine(((TraduccionTramite) tra.getTraduccion(idioma)).getNombre());
+                }
+            }
+        }
+
+        if (proc.getNormativas() != null) {
+            Iterator iteradorNormativas = proc.getNormativas().iterator();
+
+            while (iteradorNormativas.hasNext()) {
+                Object obj = iteradorNormativas.next();
+                Normativa norm;
+                if (obj instanceof NormativaLocal) {
+                    norm = (NormativaLocal) obj;
+                } else {
+                    norm = (NormativaExterna) obj;
+                }
+
+                if (norm.getTraduccion(idioma) != null) {
+                    io.addTextopcionalLine(((TraduccionNormativa) norm.getTraduccion(idioma)).getTitulo());
+                }
+            }
+        }
+
+        if (proc.getMaterias() != null) {
+            Iterator iteradorMaterias = proc.getMaterias().iterator();
+
+            while (iteradorMaterias.hasNext()) {
+                Materia mat = (Materia) iteradorMaterias.next();
+                if (mat.getTraduccion(idioma) != null) {
+                    io.addTextopcionalLine(((TraduccionMateria) mat.getTraduccion(idioma)).getNombre());
+                }
+            }
+        }
+
+        return io;
+	}
+
+
+	private IndexObject indexarContenidosDocumentos(ProcedimientoLocal proc, String idioma, IndexWriter writer, IndexObject io, List<Documento> listaDocumentos, String tipo) throws DelegateException {
+
+	    // Se añaden todos los documentos en todos los idiomas
+        if (proc.getDocumentos() != null) {
+            String tipoDoc = tipoProcedimiento(proc, true);
+
+            IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
+
+            Iterator<Documento> iteradorDocumentos = listaDocumentos.iterator();
+            while (iteradorDocumentos.hasNext()) {
+                Documento documento = iteradorDocumentos.next();
+
+                if (documento.getTraduccion(idioma) != null) {
+                    io.addTextLine(((TraduccionDocumento) documento.getTraduccion(idioma)).getTitulo());
+                    io.addTextLine(((TraduccionDocumento) documento.getTraduccion(idioma)).getDescripcion());
+                }
+
+                // Se crea la indexación del documento individual y se añade la información para la indexación de la ficha.
+                IndexObject ioDoc = new IndexObject();
+                String textDoc = null;
+
+                //ioDoc.addArchivo((Archivo)documento.getArchivo());
+                Archivo arch = new Archivo();
+                if (documento.getTraduccion(idioma) != null) {
+                    arch = (Archivo) ((TraduccionDocumento) documento.getTraduccion(idioma)).getArchivo();
+                    ioDoc.addArchivo(arch);
+                }
+
+                textDoc = ioDoc.getText();
+                if (textDoc != null && textDoc.length() > 0) {
+                    if (documento.getTraduccion(idioma) != null) {                              
+
+                        ioDoc.setId(tipoDoc + "." + documento.getId());
+                        ioDoc.setClasificacion(tipo + "." + proc.getId());
+                        ioDoc.setCaducidad("");
+                        ioDoc.setPublicacion(""); 
+                        ioDoc.setDescripcion("");
+                        ioDoc.setUrl("/fitxer/get?codi=" + arch.getId());
+                        ioDoc.setTituloserviciomain(io.getTitulo());
+                        ioDoc.setTitulo(((TraduccionDocumento) documento.getTraduccion(idioma)).getTitulo() + ", (" + arch.getMime().toUpperCase() + ")");
+                        ioDoc.setDescripcion(((TraduccionDocumento) documento.getTraduccion(idioma)).getDescripcion());
+                        ioDoc.setText(textDoc);
+                        ioDoc.addTextLine(((TraduccionDocumento) documento.getTraduccion(idioma)).getDescripcion());
+                        ioDoc.addTextLine(arch.getNombre());
+
+                        if (proc.getFechaCaducidad() != null) {
+                            ioDoc.setCaducidad(new java.text.SimpleDateFormat("yyyyMMdd").format(proc.getFechaCaducidad()));
+                        }
+
+                        if (proc.getFechaPublicacion() != null) {
+                            ioDoc.setPublicacion( new java.text.SimpleDateFormat("yyyyMMdd").format(proc.getFechaPublicacion()));
+                        }
+
+                        if (io.getUo() != null) {
+                            ioDoc.setUo(io.getUo());
+                        }
+
+                        if (io.getMateria() != null) {
+                            ioDoc.setMateria(io.getMateria());
+                        }
+
+                        if (io.getSeccion() != null) {
+                            ioDoc.setSeccion( io.getSeccion() );
+                        }
+
+                        if (io.getFamilia() != null) {
+                            ioDoc.setFamilia(io.getFamilia());
+                        }
+
+                        if (ioDoc.getText().length() > 0 || ioDoc.getTextopcional().length() > 0) {
+                            indexerDelegate.insertaObjeto(ioDoc, idioma, writer);
+                        }
+                    }
+
+                    io.addTextLine(textDoc);
+                }
+            }
+        }
+
+        return io;
 	}
 
 
 	/**
-	 * Elimina el procedimiento en el indice en todos los idiomas.
-	 * 
-	 * @ejb.interface-method
-	 * 
-	 * @ejb.permission unchecked="true"
-	 * 
-	 * @param procedimiento	Indica un procedimiento.
-	 */
-	public void indexBorraProcedimiento(ProcedimientoLocal procedimiento)  {
-
-		try {
-		    if (true) return;
-
-			Iterator iterator = procedimiento.getLangs().iterator();
-			while ( iterator.hasNext() ) {
-				String idi = (String) iterator.next();
-				DelegateUtil.getIndexerDelegate().borrarObjeto( tipoProcedimiento( procedimiento, false ) + "." + procedimiento.getId(), idi );
-				DelegateUtil.getIndexerDelegate().borrarObjetosDependientes( tipoProcedimiento( procedimiento, false ) + "." + procedimiento.getId(), idi );
-			}
-
-		} catch (DelegateException ex) {
-			log.warn( "[indexBorraProcedimiento:" + procedimiento.getId() + "] No se ha podido borrar del indice el procedimiento. " + ex.getMessage() );
-		}
-	}
+     * Elimina el procedimiento en el indice en todos los idiomas.
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     * @param procedimiento	Indica un procedimiento.
+     */
+    public void indexBorraProcedimiento(ProcedimientoLocal procedimiento)  {
+    
+    	try {
+    	    IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
+    		Iterator iterator = procedimiento.getLangs().iterator();
+    		while (iterator.hasNext()) {
+    			String idi = (String) iterator.next();
+    			indexerDelegate.borrarObjeto(tipoProcedimiento(procedimiento, false) + "." + procedimiento.getId(), idi);
+    			indexerDelegate.borrarObjetosDependientes(tipoProcedimiento(procedimiento, false) + "." + procedimiento.getId(), idi);
+    		}
+    
+    	} catch (DelegateException ex) {
+    		log.warn( "[indexBorraProcedimiento:" + procedimiento.getId() + "] No se ha podido borrar del indice el procedimiento. " + ex.getMessage() );
+    	}
+    }
 
 
 	/**
@@ -2251,105 +2121,70 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	public void actualizarOrdenTramites(ArrayList<Long> tramitesId) throws DelegateException {
 
 		Session session = getSession();
-
 		try {
-
-			for ( Long idTramite : tramitesId ) {
-				
-				if ( !getAccesoManager().tieneAccesoTramite(idTramite) ) //Es necesario comprobar para cada trámite??
-					throw new SecurityException("No tiene acceso al tramite");
-
+		    for (Long idTramite : tramitesId) {
+		        if (!getAccesoManager().tieneAccesoTramite(idTramite)) {
+		            //Es necesario comprobar para cada trámite??
+		            throw new SecurityException("No tiene acceso al tramite");
+		        }
 			}
 
-			
 			long orden = 0L;
-			
-			for ( Long idTramite : tramitesId ) {
-
+			for (Long idTramite : tramitesId) {
 				Tramite tramite = (Tramite) session.load(Tramite.class, idTramite);
 				tramite.setOrden(orden);
 				orden ++;
 				session.save(tramite);
-				
 			}
-			
 			session.flush();
 
-			
 		} catch (HibernateException he) {
-			
 			throw new EJBException(he);
-			
 		} finally {
-			
 			close(session);
-			
 		}
-
 	}
 
 
 	/**
 	 *  Obtiene el tipo de procedimiento 
-	 * 
 	 * @param procedimiento	Indica el procedimiento local a analizar.
-	 * 
 	 * @return Devuelve el tipo de procedimiento.
-	 * 
 	 * */
 	private String tipoProcedimiento (ProcedimientoLocal procedimiento, boolean doc) {
 
 		String tipo = "";
-
-		if ( !doc ) {
-
-			if ( procedimiento.getUrl() != null && procedimiento.getUrl().length() > 0 ) {
-
+		if (!doc) {
+			if (procedimiento.getUrl() != null && procedimiento.getUrl().length() > 0) {
 				tipo = Catalogo.SRVC_PROCEDIMIENTOS_EXTERNO;
-
-			} else if ( (procedimiento.getVersion() == null && procedimiento.getTramite() == null ) || ( procedimiento.getVersion() == null && procedimiento.getTramite() != null && procedimiento.getTramite().length() == 0 ) ) {
-
-				tipo = Catalogo.SRVC_PROCEDIMIENTOS_NOTELEMATICO;
-
+			} else if ((procedimiento.getVersion() == null && procedimiento.getTramite() == null) || (procedimiento.getVersion() == null && procedimiento.getTramite() != null && procedimiento.getTramite().length() == 0 )) {
+			    tipo = Catalogo.SRVC_PROCEDIMIENTOS_NOTELEMATICO;
 			} else {
-
 				tipo = Catalogo.SRVC_PROCEDIMIENTOS_SISTRA;
-
 			}
 
 		} else {
-
-			if ( procedimiento.getUrl() != null && procedimiento.getUrl().length() > 0 ) {
-
+			if (procedimiento.getUrl() != null && procedimiento.getUrl().length() > 0) {
 				tipo = Catalogo.SRVC_PROCEDIMIENTOS_EXTERNO_DOCUMENTOS;
-
-			} else if ( procedimiento.getVersion() == null && procedimiento.getTramite() == null ) {
-
+			} else if (procedimiento.getVersion() == null && procedimiento.getTramite() == null) {
 				tipo = Catalogo.SRVC_PROCEDIMIENTOS_NOTELEMATICO_DOCUMENTOS;
-
 			} else {
-
 				tipo = Catalogo.SRVC_PROCEDIMIENTOS_SISTRA_DOCUMENTOS;
-
 			}
-
 		}
 
 		return tipo;
-
 	}
 
 
 	/** Clase que se utiliza para comparar de trámites. */
 	class TramiteComparator implements Comparator {
 
-		public int compare(Object o1, Object o2) { 
+	    public int compare(Object o1, Object o2) {
+	        Long x1 = new Long(((Tramite) o1).getOrden());
+			Long x2 = new Long(((Tramite) o2).getOrden());
 
-			Long x1 = new Long ( ( (Tramite) o1 ).getOrden() );
-			Long x2 = new Long ( ( (Tramite) o2 ).getOrden() );
-
-			return x1.compareTo( x2 ); 
-
+			return x1.compareTo(x2);
 		}
 
 	}
@@ -2358,24 +2193,18 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	/**
 	 * Buscamos el numero de procedimientos activos des de la fecha actual
 	 * @ejb.interface-method
-	 * 
 	 * @ejb.permission unchecked="true"
-	 * 
 	 * @param listaUnidadAdministrativaId	Listado de identificadores de unidades administrativas.
-	 * 
 	 * @param fechaCaducidad	Filtro que indica el rango temporal en el que se encuentra activo un  procedimiento.
-	 * 	
 	 * @return numero de Procedimientos activos
 	 */
 	public int buscarProcedimientosActivos(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) {
 
 		Integer resultado = 0;
 		Session session = getSession();
-
 		try {
-
 			Query query = null;
-			if ( listaUnidadAdministrativaId.size() > 0 ) {
+			if (listaUnidadAdministrativaId.size() > 0) {
 
 				query = session.createQuery(
 						" select count(*) from ProcedimientoLocal as prc " +
@@ -2389,47 +2218,33 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				query.setParameterList( "lId", listaUnidadAdministrativaId, Hibernate.LONG );
 
 				resultado = (Integer) query.uniqueResult();
-
 			}
 
 		} catch (HibernateException he) {
-
 			throw new EJBException(he);
-
 		} finally {
-
 			close(session);
-
 		}
 
 		return resultado;
-
 	}
 
 
 	/**
 	 * Buscamos el numero de procedimientos activos des de la fecha actual.
-	 * 
 	 * @ejb.interface-method
-	 * 
 	 * @ejb.permission unchecked="true"
-	 * 
 	 * @param listaUnidadAdministrativaId	Listado de identificadores de unidades administrativas.
-	 * 
 	 * @param fechaCaducidad	Filtro que indica el rango temporal en el que se encuentra activo un  procedimiento.
-	 * 	
 	 * @return Devuelve el número de Procedimientos caducados
 	 */
 	public int buscarProcedimientosCaducados(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad){
 
 		Integer resultado = 0;		
 		Session session = getSession();
-
 		try {
-
 			Query query = null;
-
-			if ( listaUnidadAdministrativaId.size() > 0 ) {
+			if (listaUnidadAdministrativaId.size() > 0) {
 
 				query = session.createQuery(
 						" select count(*) from ProcedimientoLocal as prc " +
@@ -2440,27 +2255,20 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 								" 	or ( prc.validacion = :validacion and prc.fechaCaducidad >= :fecha and prc.fechaPublicacion > :fecha ) " +
 						" ) and prc.unidadAdministrativa.id in (:lId) ");
 
-
-				query.setInteger( "validacion", Validacion.PUBLICA );
-				query.setDate( "fecha", fechaCaducidad );
-				query.setParameterList( "lId", listaUnidadAdministrativaId, Hibernate.LONG );
+				query.setInteger("validacion", Validacion.PUBLICA);
+				query.setDate("fecha", fechaCaducidad);
+				query.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
 
 				resultado = (Integer) query.uniqueResult();
-
 			}
 
 		} catch (HibernateException he) {
-
 			throw new EJBException(he);
-
 		} finally {
-
 			close(session);
-
 		}
 
 		return resultado;
-
 	}
 
 
@@ -2529,5 +2337,23 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			close(session);
 		}
 	}
+
+
+	private Analyzer getAnalizador(String idi) {
+
+        Analyzer analyzer;
+
+        if (idi.toLowerCase().equals("de")) {
+            analyzer = new AlemanAnalyzer();
+        } else if (idi.toLowerCase().equals("en")) {
+            analyzer = new InglesAnalyzer();
+        } else if (idi.toLowerCase().equals("ca")) {
+            analyzer = new CatalanAnalyzer();
+        } else {
+            analyzer = new CastellanoAnalyzer();
+        }
+
+        return analyzer;
+    }
 
 }

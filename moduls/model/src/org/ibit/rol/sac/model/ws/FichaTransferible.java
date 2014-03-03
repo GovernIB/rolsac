@@ -18,7 +18,7 @@ import org.ibit.rol.sac.model.TraduccionFicha;
  * User: mgonzalez
  * Date: 13-jun-2007
  * Time: 15:02:24
- * Clase que representa la información a transferir de una Ficha(PORMAD)
+ * Clase que representa la informaciÃ³n a transferir de una Ficha(PORMAD)
  */
 public class FichaTransferible extends ActuacionTransferible implements Serializable {
 

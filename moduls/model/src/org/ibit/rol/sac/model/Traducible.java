@@ -20,11 +20,11 @@ public class Traducible implements ValueObject {
         this.traducciones = traducciones;
     }
 
-    // M閠odos publicos.
+    // M茅todos publicos.
 
     /**
-     * Conjunto de idiomas para los que hay traducci髇.
-     * @return c骴igos de idioma para los que hay traducci髇.
+     * Conjunto de idiomas para los que hay traducci贸n.
+     * @return c贸digos de idioma para los que hay traducci贸n.
      */
     public Set<String> getLangs() {
         return this.traducciones.keySet();
@@ -41,7 +41,7 @@ public class Traducible implements ValueObject {
 
     /**
      * Obtiene la traduccion en un idioma determinado o <code>null</code>.
-     * @param idioma Idioma de la traducci髇.
+     * @param idioma Idioma de la traducci贸n.
      * @return Traduccion en el idioma indicado o <code>null</code> si no existe.
      */
     public Traduccion getTraduccion(String idioma) {
@@ -50,7 +50,7 @@ public class Traducible implements ValueObject {
     
     /**
      * Obtiene la traduccion en un idioma determinado o <code>null</code>.
-     * @param idioma Idioma de la traducci髇.
+     * @param idioma Idioma de la traducci贸n.
      * @return Traduccion en el idioma indicado o <code>null</code> si no existe.
      */
     public Traduccion getTraduccionFront(String idioma) {
@@ -58,9 +58,9 @@ public class Traducible implements ValueObject {
     }
 
     /**
-     * Fija una traducci髇 en un idioma determinado, o la borra si es <code>null</code>.
-     * @param idioma Idioma de la traducci髇,
-     * @param traduccion La traducci髇 a fijar.
+     * Fija una traducci贸n en un idioma determinado, o la borra si es <code>null</code>.
+     * @param idioma Idioma de la traducci贸n,
+     * @param traduccion La traducci贸n a fijar.
      */
     public void setTraduccion(String idioma, Traduccion traduccion) {
         if (traduccion == null) {

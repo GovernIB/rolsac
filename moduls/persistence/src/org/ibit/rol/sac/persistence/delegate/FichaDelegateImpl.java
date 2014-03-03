@@ -2,7 +2,6 @@ package org.ibit.rol.sac.persistence.delegate;
 
 import java.rmi.RemoteException;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +10,6 @@ import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
 
-import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
@@ -20,6 +18,7 @@ import org.ibit.rol.sac.persistence.intf.FichaFacade;
 import org.ibit.rol.sac.persistence.intf.FichaFacadeHome;
 import org.ibit.rol.sac.persistence.util.FichaFacadeUtil;
 
+import es.caib.rolsac.persistence.lucene.model.ModelFilterObject;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
@@ -28,7 +27,7 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
 
     /* ========================================================= */
-    /* ======================== M�TODOS DE NEGOCIO ============= */
+    /* ========================MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
     /* (non-Javadoc)
@@ -188,7 +187,7 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
     }
     
     /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#indexInsertaFicha(org.ibit.rol.sac.model.Ficha, org.ibit.lucene.indra.model.ModelFilterObject)
+	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#indexInsertaFicha(org.ibit.rol.sac.model.Ficha, es.caib.rolsac.persistence.lucene.model.ModelFilterObject)
 	 */
     public void indexInsertaFicha(Ficha fic, ModelFilterObject filter) throws DelegateException {
         try {

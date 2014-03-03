@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * bean que contiene la información de un Espacio Territorial, 0:AUTONOMICO 1:INSULAR 2:MUNICIPIO(nivel)
+ * bean que contiene la informaciÃ³n de un Espacio Territorial, 0:AUTONOMICO 1:INSULAR 2:MUNICIPIO(nivel)
  * (PORMAD)
  */
 public class EspacioTerritorial extends Traducible {

@@ -50,15 +50,15 @@ public class NormativaDTO implements ValueObject, Comparable {
 	}
 
 	/**
-	 * Función de comparación para permitir la ordenación de listas de NormativaDTO.
+	 * FunciÃ³n de comparaciÃ³n para permitir la ordenaciÃ³n de listas de NormativaDTO.
 	 * 
 	 * @param o Objeto a comparar. Se espera NormativaDTO.
 	 * 
-	 * @return -1, 0, 1 si el objeto es menor, igual o mayor que el pasado por parámetro.
+	 * @return -1, 0, 1 si el objeto es menor, igual o mayor que el pasado por parï¿½metro.
 	 */
 	public int compareTo(Object o) {
 		
-		//Comparador para fecha boletín
+		//Comparador para fecha boletï¿½n
 		NormativaDTO cmp = (NormativaDTO)o;
 		if (cmp == null)
 			cmp = new NormativaDTO();

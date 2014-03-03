@@ -14,7 +14,7 @@ import org.ibit.rol.sac.model.Traducible;
 import org.jboss.security.SecurityAssociation;
 
 /**
- * Intercepta las llamadas a métodos y añade logs.
+ * Intercepta las llamadas a mÃ©todos y aÃ±ade logs.
  */
 public class DelegateLogInterceptor implements MethodInterceptor, Serializable {
 

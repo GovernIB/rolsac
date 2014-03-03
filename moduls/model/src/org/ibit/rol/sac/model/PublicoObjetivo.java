@@ -7,7 +7,7 @@ import java.util.Set;
  * User: mgonzalez
  * Date: 28-may-2007
  * Time: 14:52:21
- * Bean que representa a un público objetivo (PORMAD)
+ * Bean que representa a un pÃºblico objetivo (PORMAD)
  */
 public class PublicoObjetivo extends Traducible {
 

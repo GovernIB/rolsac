@@ -3,7 +3,7 @@ package org.ibit.rol.sac.model;
 import java.util.Date;
 
 /**
- * Bean que contiene los datos b·sicos de un comentario
+ * Bean que contiene los datos b√°sicos de un comentario
  * a una ficha o procedimiento.(PORINF)
  *
  * @author areus

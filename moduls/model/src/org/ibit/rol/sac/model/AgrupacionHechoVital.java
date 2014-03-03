@@ -7,7 +7,7 @@ import java.util.List;
  * User: mgonzalez
  * Date: 28-may-2007
  * Time: 14:52:21
- * Bean que representa los datos de una agrupación de hecho vital( es una clasificación de los hechos vitales)
+ * Bean que representa los datos de una agrupaciÃ³n de hecho vital( es una clasificaciÃ³n de los hechos vitales)
  * (PORMAD)
  */
 public class AgrupacionHechoVital extends Traducible {

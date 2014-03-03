@@ -60,7 +60,7 @@ public class LinkParser {
     private static boolean comprobarFormato(String  url)
     {
     	boolean validez = false;
-    	//faltan añadir todos los formatos
+    	//faltan aÃ±adir todos los formatos
     	String[] noValidos={"pdf","jpeg","jpg","zip","rar","gzip","gif","png"};
     	for (int i = 0; i < noValidos.length; i++) {
 			if (url.toLowerCase().endsWith("."+noValidos[i])){

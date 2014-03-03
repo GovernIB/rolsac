@@ -29,7 +29,7 @@ import org.ibit.rol.sac.persistence.ws.invoker.WSInvocatorException;
  * Los elementos actualizables son {@link Ficha}, {@link UnidadAdministrativa},
  * {@link ProcedimientoLocal} y {@link FichaUATransferible}.
  * 
- * Modificacion de VRS(2008/02/01): Se añade System.getProperty("es.indra.caib.rolsac.oficina")
+ * Modificacion de VRS(2008/02/01): Se aï¿½ade System.getProperty("es.indra.caib.rolsac.oficina")
  * para controlar que si estas en las oficinas de indra no se lance el webservices.
  * 
  * @author arodrigo
@@ -112,7 +112,7 @@ final public class Actualizador {
 		//Destinatarios a los que se les enviara la actualizacion
 		private List<Destinatario> destinatarios;
 		
-				//indentificador de la relación del elemento
+				//indentificador de la relaciÃ³n del elemento
 		private final Object[] params;
 
 		

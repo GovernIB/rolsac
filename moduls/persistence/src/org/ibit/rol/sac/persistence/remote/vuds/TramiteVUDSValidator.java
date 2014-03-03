@@ -74,10 +74,10 @@ public class TramiteVUDSValidator {
 		//validacio
 		TraduccionTramite tratra_ca = (TraduccionTramite)t_rolsac.getTraduccion("ca");
 		TraduccionProcedimientoLocal trapro_ca = (TraduccionProcedimientoLocal)t_rolsac.getProcedimiento().getTraduccion("ca");
-		if("".equals(denominacionTramite)&& null!= tratra_ca.getNombre() && !"".equals(tratra_ca.getNombre())) sinTraducir.add("nom del tràmit");
-		if("".equals(descripcionTramite) && null!= tratra_ca.getDescripcion() && !"".equals(tratra_ca.getDescripcion())) sinTraducir.add("descripció del tràmit");
-		if("".equals(plazosLegales) && null!= tratra_ca.getPlazos() && !"".equals(tratra_ca.getPlazos())) sinTraducir.add("plaç màxim de presentació");
-		if("".equals(docsPresentar) && null!= tratra_ca.getDocumentacion() && !"".equals(tratra_ca.getDocumentacion())) sinTraducir.add("documentació");
+		if("".equals(denominacionTramite)&& null!= tratra_ca.getNombre() && !"".equals(tratra_ca.getNombre())) sinTraducir.add("nom del trï¿½mit");
+		if("".equals(descripcionTramite) && null!= tratra_ca.getDescripcion() && !"".equals(tratra_ca.getDescripcion())) sinTraducir.add("descripciï¿½ del trï¿½mit");
+		if("".equals(plazosLegales) && null!= tratra_ca.getPlazos() && !"".equals(tratra_ca.getPlazos())) sinTraducir.add("plaï¿½ mï¿½xim de presentaciï¿½");
+		if("".equals(docsPresentar) && null!= tratra_ca.getDocumentacion() && !"".equals(tratra_ca.getDocumentacion())) sinTraducir.add("documentaciï¿½");
 		if("".equals(requisits) && null!= tratra_ca.getRequisits() && !"".equals(tratra_ca.getRequisits())) sinTraducir.add("requisits");
 		if("".equals(observaciones) && null!= trapro_ca.getObservaciones() && !"".equals(trapro_ca.getObservaciones())) sinTraducir.add("observacions (procediment)");
 		if("".equals(resultat) && null!= trapro_ca.getResultat() && !"".equals(trapro_ca.getResultat())) sinTraducir.add("resultat (procedimient)");
@@ -123,22 +123,22 @@ public class TramiteVUDSValidator {
 
 				//validacio
 				TraduccionTaxa tt_ca=(TraduccionTaxa)taxa.getTraduccion("ca"); 
-				if((null==tt || null==desc || "".equals(desc)) && null!=tt_ca.getDescripcio() && !"".equals(tt_ca.getDescripcio())) sinTraducir.add("descripció taxa");
+				if((null==tt || null==desc || "".equals(desc)) && null!=tt_ca.getDescripcio() && !"".equals(tt_ca.getDescripcio())) sinTraducir.add("descripciï¿½ taxa");
 				if((null==tt || null==forpag || "".equals(forpag)) && null!=tt_ca.getFormaPagament()&&!"".equals(tt_ca.getFormaPagament())) sinTraducir.add("forma de pagament taxa");
 			}
 			
-			//cas B) hi ha +1 taxa. Es posa tot en el camp descripció.
+			//cas B) hi ha +1 taxa. Es posa tot en el camp descripciï¿½.
 			else {
 				StringBuilder descMultiple = new StringBuilder();
 				while(it.hasNext()) {
 					TraduccionTaxa tt=(TraduccionTaxa)it.next().getTraduccion();
-					descMultiple.append("código: "+tt.getCodificacio()+"\n");
-					descMultiple.append("descripción: "+tt.getDescripcio()+"\n");
+					descMultiple.append("cï¿½digo: "+tt.getCodificacio()+"\n");
+					descMultiple.append("descripciï¿½n: "+tt.getDescripcio()+"\n");
 					descMultiple.append("forma de pago: "+tt.getFormaPagament()+"\n");
 					
 					//validacio
 					TraduccionTaxa tt_ca=(TraduccionTaxa)it.next().getTraduccion("ca"); 
-					if("".equals(tt.getDescripcio()) && null!=tt_ca.getDescripcio() && !"".equals(tt_ca.getDescripcio())) sinTraducir.add("descripció taxa "+tt_ca.getCodificacio());
+					if("".equals(tt.getDescripcio()) && null!=tt_ca.getDescripcio() && !"".equals(tt_ca.getDescripcio())) sinTraducir.add("descripciï¿½ taxa "+tt_ca.getCodificacio());
 					if("".equals(tt.getFormaPagament()) && null!=tt_ca.getFormaPagament() && !"".equals(tt_ca.getFormaPagament())) sinTraducir.add("forma de pagament taxa "+tt_ca.getCodificacio());
 					
 				}
@@ -182,7 +182,7 @@ public class TramiteVUDSValidator {
 			TraduccionDocumento trafor_ca =(TraduccionDocumento)rolsac_f.getTraduccion("ca"); 
 			if(null!=trafor_ca.getDescripcion() && !"".equals(trafor_ca.getDescripcion()) && 
 					(null==trafor || null!=trafor && null!=trafor.getDescripcion() && "".equals(trafor.getDescripcion()))) { 
-				sinTraducir.add("descripció formulari "+trafor_ca.getTitulo());
+				sinTraducir.add("descripciÃ³ formulari "+trafor_ca.getTitulo());
 			}
 			if(null!=trafor_ca.getArchivo() && !"".equals(trafor_ca.getArchivo()) && 
 					(null==trafor || (null!=trafor && null== trafor.getArchivo()))) {

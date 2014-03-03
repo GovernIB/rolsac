@@ -3,10 +3,10 @@ package org.ibit.rol.sac.model.webcaib;
 import java.util.Date;
 
 /**
- * <i>Value object</i> amb la informació corresponent a una normativa.
+ * <i>Value object</i> amb la informaciÃ³ corresponent a una normativa.
  * <p>
- * No te cap funcionalitat a part de contenir aquesta informació (amb métodes get/set) i 
- * una sobre-escritura adequada pel mètode toString
+ * No te cap funcionalitat a part de contenir aquesta informaciÃ³ (amb mÃ©todes get/set) i 
+ * una sobre-escritura adequada pel mÃ©tode toString
  */
 public class NormativaModel implements java.io.Serializable {
     

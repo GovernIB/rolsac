@@ -4,7 +4,7 @@ import java.util.Set;
 
 /**
  * Bean que contiene los datos basicos necesarios para recibir los datos de una
- * Administración Remota(PORMAD)
+ * AdministraciÃ³n Remota(PORMAD)
  * 
  * @author arodrigo
  *

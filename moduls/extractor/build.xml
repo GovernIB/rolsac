@@ -37,7 +37,7 @@
 			<include name="img.jar"/>
 			<include name="jericho-html-2.5.jar"/>
 			<include name="lax.jar"/>
-		    <include name="pdfbox.jar"/>
+		    <include name="pdfbox-app-1.8.4.jar"/>
 		    <include name="poi.jar"/>
 		</fileset>
 

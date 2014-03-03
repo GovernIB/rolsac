@@ -1,11 +1,7 @@
-
 /**
  * @author u92770
  */
 package org.ibit.rol.sac.model;
-
-import java.util.Iterator;
-
 
 public class TraduccionTaxa implements Traduccion {
 	

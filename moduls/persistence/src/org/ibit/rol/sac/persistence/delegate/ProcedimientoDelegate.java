@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import org.ibit.lucene.indra.model.ModelFilterObject;
+
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.criteria.BuscadorProcedimientoCriteria;
+
+import es.caib.rolsac.persistence.lucene.model.ModelFilterObject;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /*
@@ -34,12 +36,7 @@ public class ProcedimientoDelegate {
     public boolean existeOtroTramiteInicioProcedimiento(Long procId, Long tramiteId) throws DelegateException {
         return impl.existeOtroTramiteInicioProcedimiento(procId, tramiteId);
     }
-    
-    /** @deprecated Se usa desde la API v1*/
-    public List buscarProcedimientosUATexto(Long idUnidad, String texto, String idioma) throws DelegateException {
-        return impl.buscarProcedimientosUATexto(idUnidad, texto, idioma);
-    }
-    
+
 	public void anyadirTramite(Long tramiteId, Long procId) throws DelegateException {
 		impl.anyadirTramite(tramiteId, procId);
 	}
@@ -66,11 +63,7 @@ public class ProcedimientoDelegate {
 	public List buscarProcedimientosTexto(String texto) throws DelegateException {
 		return impl.buscarProcedimientosTexto(texto);
 	}
-	
-	public List buscarProcedimientosUATexto(Long idUnidad, String texto) throws DelegateException {
-		return impl.buscarProcedimientosUATexto(idUnidad, texto);
-	}
-	
+
 	public ProcedimientoLocal consultarProcedimiento(Long id) throws DelegateException {
 		return impl.consultarProcedimiento(id);
 	}

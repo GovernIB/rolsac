@@ -1,21 +1,22 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import org.ibit.lucene.indra.model.ModelFilterObject;
-import org.ibit.rol.sac.persistence.intf.UARemotaFacade;
-import org.ibit.rol.sac.persistence.intf.UARemotaFacadeHome;
-import org.ibit.rol.sac.persistence.util.UARemotaFacadeUtil;
+import java.rmi.RemoteException;
+import java.util.List;
+
+import javax.ejb.CreateException;
+import javax.ejb.Handle;
+import javax.naming.NamingException;
+
 import org.ibit.rol.sac.model.AdministracionRemota;
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.EdificioRemoto;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.UnidadAdministrativaRemota;
+import org.ibit.rol.sac.persistence.intf.UARemotaFacade;
+import org.ibit.rol.sac.persistence.intf.UARemotaFacadeHome;
+import org.ibit.rol.sac.persistence.util.UARemotaFacadeUtil;
 
-import javax.ejb.Handle;
-import javax.ejb.CreateException;
-import javax.naming.NamingException;
-import java.util.Set;
-import java.util.List;
-import java.rmi.RemoteException;
+import es.caib.rolsac.persistence.lucene.model.ModelFilterObject;
 
 /**
  * Business delegate para manipular fichas.

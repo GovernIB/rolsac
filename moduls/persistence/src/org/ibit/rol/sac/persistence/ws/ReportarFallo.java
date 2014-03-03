@@ -11,7 +11,7 @@ import org.ibit.rol.sac.persistence.util.EmailUtils;
 
 /**
  * Se encarga de gererar un informe con los datos de el objeto y de la excepcion
- * para a continuación mandarlos por email al destinatario.
+ * para a continuaciÃ³n mandarlos por email al destinatario.
  * 
  * Las propiedades pueden ser configuradas antes de compilar en el buil.properties
  * del proyecto. O una vez compilado, deltro del jar de persistence en el archivo
@@ -129,7 +129,7 @@ public class ReportarFallo {
 
 			mensaje.append("\n\nEn la Administracion Remota -> ");
 			mensaje.append(administracion);
-			mensaje.append("\n\n A continuación se mostrara la información de la Excepción:\n\n");
+			mensaje.append("\n\n A continuaciÃ³n se mostrara la informaciï¿½n de la ExcepciÃ³n:\n\n");
 			mensaje.append(exception.toString());
 
 			return mensaje.toString();

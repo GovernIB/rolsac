@@ -3,7 +3,7 @@ package org.ibit.rol.sac.model;
 
 /**
  * Bean que representa los datos de un destinatario al que hay que notificar
- * las actualizaciones de la información(PORMAD)
+ * las actualizaciones de la informaciÃ³n(PORMAD)
  * TODO hacer esta clase abstracta
  */
 public class Destinatario implements ValueObject, Comparable<Destinatario>{

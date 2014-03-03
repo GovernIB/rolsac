@@ -10,7 +10,7 @@ import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
 
 public abstract class SearchNormativaBase implements SearchNormativa {
 
-	  private List<TrListadoNormativaLocalBean> listadonormativas = new ArrayList<TrListadoNormativaLocalBean>(); //contiene el listado de normativas en caso de m·s de una encontrada
+	  private List<TrListadoNormativaLocalBean> listadonormativas = new ArrayList<TrListadoNormativaLocalBean>(); //contiene el listado de normativas en caso de m√°s de una encontrada
 
 	  public SearchNormativaBase() {
 	  }
@@ -80,7 +80,7 @@ public abstract class SearchNormativaBase implements SearchNormativa {
 	    Map tradMap = new HashMap();
 	    String TIPO_NORM = "local";
 	    
-	    // Par·metros generales
+	    // Par√°metros generales
 	    paramMap.put("numero", "" + s_numeroboib);
 	    paramMap.put("registro", "" + s_numeroregistro);
 	    

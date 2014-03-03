@@ -3,7 +3,7 @@ package org.ibit.rol.sac.model.ws;
 import java.io.Serializable;
 
 /**
- *  Clase que representa la información traducida a transferir de UnidadMateria(PORMAD)
+ *  Clase que representa la informaciÃ³n traducida a transferir de UnidadMateria(PORMAD)
  */
 public class TraduccionUnidadMateriaTransferible extends AbstractTraduccion implements Serializable {
 

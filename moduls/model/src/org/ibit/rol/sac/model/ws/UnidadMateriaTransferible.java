@@ -5,7 +5,7 @@ package org.ibit.rol.sac.model.ws;
  * User: mgonzalez
  * Date: 12-jul-2007
  * Time: 12:40:49
- * Clase que representa la información a transferir de una UnidadMateria(PORMAD)
+ * Clase que representa la informaciÃ³n a transferir de una UnidadMateria(PORMAD)
  */
 public class UnidadMateriaTransferible {
 

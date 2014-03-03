@@ -49,8 +49,8 @@ import org.ibit.rol.sac.persistence.ws.invoker.WSInvocatorException;
 
 /**
  * @author u92770
- * He escollit el patró Adapter perque cal adaptar un tramit rolsac a un tramit vuds
- * (patró Facade no seria adecuat perque cal adaptar el tramit)  
+ * He escollit el patrï¿½ Adapter perque cal adaptar un tramit rolsac a un tramit vuds
+ * (patrï¿½ Facade no seria adecuat perque cal adaptar el tramit)  
  *
  */
 public class VentanillaUnicaSender {
@@ -74,9 +74,9 @@ public class VentanillaUnicaSender {
 		/*	altres idiomes:
 		  		eu_ES Euskera	
 				gl_ES Galego
-				va_ES Valencià
+				va_ES ValenciÃ 
 				en_US English
-				fr_FR Français
+				fr_FR FranÃ§ais
 				de_DE Deutsch
 				
 		*/

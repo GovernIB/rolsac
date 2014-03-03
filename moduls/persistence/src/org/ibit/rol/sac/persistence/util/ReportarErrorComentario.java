@@ -27,7 +27,7 @@ import org.ibit.rol.sac.persistence.util.EmailUtils;
 
 /**
  * Se encarga de gererar un informe con los datos de el objeto y de la excepcion
- * para a continuación mandarlos por email al destinatario.
+ * para a continuaciï¿½n mandarlos por email al destinatario.
  * 
  * Las propiedades pueden ser configuradas antes de compilar en el buil.properties
  * del proyecto. O una vez compilado, deltro del jar de persistence en el archivo
@@ -138,10 +138,10 @@ public class ReportarErrorComentario {
 					else{log.debug("Opcion 1 : Obtenemos el E-mail del destinatario del responsable del procedimiento : "+aDestinatario.toString());}
 				}
 			}
-			//Una vez pasado por el proceso para obtener el destinatario, si lo ha encontrado mandará un mail reportanto el error, en caso contrario se le comunicará la imposibilidad de realizarlo.
+			//Una vez pasado por el proceso para obtener el destinatario, si lo ha encontrado mandarï¿½ un mail reportanto el error, en caso contrario se le comunicarï¿½ la imposibilidad de realizarlo.
 			if(aDestinatario!=null && aDestinatario.length >0 && usuario.getEmail()!=null){
 				//Construyo un Asunto
-				String asunto = "Avís del Portal de l'informador";
+				String asunto = "AvÃ­s del Portal de l'informador";
 				
 				try {
 					//Genero el EmailUtils con sus parametros necesarios
@@ -156,9 +156,9 @@ public class ReportarErrorComentario {
 			}
 			else{
 				log.warn("IMPOSIBLE COMUNICAR EL ERROR EN UNA FICHA/COMENTARIO DEL PORTAL DEL INFORMADOR VIA E-MAIL");
-				log.warn("MOTIVO: No se ha encontrado una dirección de un responsable válida ");
+				log.warn("MOTIVO: No se ha encontrado una direcciÃ³n de un responsable vÃ¡lida ");
 				
-				String asunto = "Imposible comunicar un avís en portal de l'informador";
+				String asunto = "Imposible comunicar un avï¿½s en portal de l'informador";
 				
 				try {
 					//Genero el EmailUtils con sus parametros necesarios
@@ -196,7 +196,7 @@ public class ReportarErrorComentario {
 
 			StringBuffer mensaje = new StringBuffer();
 			mensaje.append("\nHa sigut imposible reportar l'error degut a que tant la fitxa/procediment i la seva unidat administrativa no tenen el responsable correctament definit.\n");
-			mensaje.append("\n***Dades del avís*** \n\n");
+			mensaje.append("\n***Dades del avï¿½s*** \n\n");
 
 			if(object instanceof Ficha){
 				FichaRemota ficha = (FichaRemota)object;
@@ -247,11 +247,11 @@ public class ReportarErrorComentario {
 
 		StringBuffer mensaje = new StringBuffer();
 		
-		mensaje.append("\nEm complau comunicar-vos que s’ha posat en marxa una aplicació informàtica anomenada Portal de l’informador, dins el marc del projecte del web multiinstitucional, amb la finalitat de facilitar al personal  informador i a la  ciutadania la recerca de la informació administrativa de la CAIB i de les entitats locals en un sol web. En aquests moments, la primera Administració que ha format part d’aquest projecte impulsat per la Direcció General de Qualitat dels Serveis ha estat el Consell Insular de Menorca. \n");
-		mensaje.append("\nCal tenir en compte que la informació de la Comunitat Autònoma que apareix en el Portal de l’informador  s’obté directament del ROLSAC, on vosaltres heu introduït la informació. Aquesta eina, a més de facilitar la recerca d’informació, permetrà detectar errades i alhora servirà per millorar la informació que es troba al web de la CAIB. \n");
-		mensaje.append("\nÉs important que tengueu cura d’emplenar amb rigor les caselles del ROLSAC per tal que en el Portal de l’informador la informació es classifiqui de forma adequada. \n");
+		mensaje.append("\nEm complau comunicar-vos que sï¿½ha posat en marxa una aplicaciï¿½ informï¿½tica anomenada Portal de lï¿½informador, dins el marc del projecte del web multiinstitucional, amb la finalitat de facilitar al personal  informador i a la  ciutadania la recerca de la informaciï¿½ administrativa de la CAIB i de les entitats locals en un sol web. En aquests moments, la primera Administraciï¿½ que ha format part dï¿½aquest projecte impulsat per la Direcciï¿½ General de Qualitat dels Serveis ha estat el Consell Insular de Menorca. \n");
+		mensaje.append("\nCal tenir en compte que la informaciï¿½ de la Comunitat Autï¿½noma que apareix en el Portal de lï¿½informador  sï¿½obtï¿½ directament del ROLSAC, on vosaltres heu introduï¿½t la informaciï¿½. Aquesta eina, a mï¿½s de facilitar la recerca dï¿½informaciï¿½, permetrï¿½ detectar errades i alhora servirï¿½ per millorar la informaciï¿½ que es troba al web de la CAIB. \n");
+		mensaje.append("\nï¿½s important que tengueu cura dï¿½emplenar amb rigor les caselles del ROLSAC per tal que en el Portal de lï¿½informador la informaciï¿½ es classifiqui de forma adequada. \n");
 		
-		mensaje.append("\nAmb la finalitat de millorar la qualitat de la informació que es facilita a la ciutadania, el Portal de l’informador ha detectat un error de : ");
+		mensaje.append("\nAmb la finalitat de millorar la qualitat de la informaciï¿½ que es facilita a la ciutadania, el Portal de lï¿½informador ha detectat un error de : ");
 		if(object instanceof FichaRemota){
 			FichaRemota ficha = (FichaRemota)object;
 			TraduccionFicha trad=((TraduccionFicha)ficha.getTraduccion("ca"));
@@ -280,13 +280,13 @@ public class ReportarErrorComentario {
 
 		}
 
-		mensaje.append("\nConcretament, l'errada és la següent: "+StringEscapeUtils.unescapeHtml(tituloComentario)+"\n");
+		mensaje.append("\nConcretament, l'errada ï¿½s la segï¿½ent: "+StringEscapeUtils.unescapeHtml(tituloComentario)+"\n");
 		mensaje.append("\nContingut: "+StringEscapeUtils.unescapeHtml(contenidoComentario)+"\n");
 		String datosInformador1=usuario.getNombre();
-		mensaje.append("\nUs agrairé que, com més aviat millor, corregiu aquesta errada i comuniqueu a l'informador '"+datosInformador1+"' que us ha tramès aquest missatge electrònic que l’errada ha estat corregida. En el cas que no sigui una errada, també us agrairé que ho comuniqueu a l’adreça electrònica següent: "+usuario.getEmail()+" \n");
-		mensaje.append("\nGràcies per la vostra col.laboració.\n");
+		mensaje.append("\nUs agrairï¿½ que, com mï¿½s aviat millor, corregiu aquesta errada i comuniqueu a l'informador '"+datosInformador1+"' que us ha tramï¿½s aquest missatge electrï¿½nic que lï¿½errada ha estat corregida. En el cas que no sigui una errada, tambï¿½ us agrairï¿½ que ho comuniqueu a lï¿½adreï¿½a electrï¿½nica segï¿½ent: "+usuario.getEmail()+" \n");
+		mensaje.append("\nGrï¿½cies per la vostra col.laboraciï¿½.\n");
 		mensaje.append("\nAtentament, \n\n");
-		mensaje.append("P.D.: Aquest projecte està impulsat per la Direcció General de Qualitat dels Serveis del Govern de les Illes Balears. En cas de dubte, us podeu adreçar al telèfon : 971 179 576. \n");
+		mensaje.append("P.D.: Aquest projecte estï¿½ impulsat per la Direcciï¿½ General de Qualitat dels Serveis del Govern de les Illes Balears. En cas de dubte, us podeu adreï¿½ar al telï¿½fon : 971 179 576. \n");
 		return mensaje.toString();
 	}
 

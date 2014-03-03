@@ -4,9 +4,7 @@
  */
 package org.ibit.rol.sac.model;
 
-import java.util.Iterator;
 import java.util.Map;
-
 
 public class Taxa extends Ordenable {
 

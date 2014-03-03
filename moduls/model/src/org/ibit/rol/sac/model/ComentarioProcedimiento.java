@@ -8,9 +8,9 @@ package org.ibit.rol.sac.model;
 public class ComentarioProcedimiento extends Comentario {
 
     /*
-     * Lo normal seria que aquest camp fes referËncia a un Procedimiento, en lloc de a un
-     * ProcedimientoLocal. PerÚ el problema Ès que Procedimiento no est‡ mapejat com a tal, sinÛ
-     * que nomÈs est‡ mapejat ProcedimientoLocal, i ProcedimientoRemoto com a subclasse de
+     * Lo normal seria que aquest camp fes refer√©ncia a un Procedimiento, en lloc de a un
+     * ProcedimientoLocal. Per√≤ el problema √©s que Procedimiento no est√† mapejat com a tal, sin√≥
+     * que nom√©s est√† mapejat ProcedimientoLocal, i ProcedimientoRemoto com a subclasse de
      * ProcedimientoLocal
      */
     private ProcedimientoLocal procedimiento;

@@ -27,7 +27,7 @@ public class ConnectionInfoInterceptorBuilder implements InterceptorBuilder {
 	
 	public Interceptor build() {
 		
-		//Si est‡ definida la propiedad, se crea una instancia de la clase que devuelve la informacion de
+		//Si est√° definida la propiedad, se crea una instancia de la clase que devuelve la informacion de
 		//la conexion. Sino se devuelve un interceptor nulo.
     	String connInfoClassName = System.getProperty("es.caib.rolsac.persistence.hibernate.databaseConnectionInfoClass");
 

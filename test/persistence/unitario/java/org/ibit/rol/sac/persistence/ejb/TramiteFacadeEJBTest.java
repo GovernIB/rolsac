@@ -4,7 +4,6 @@ import junit.framework.TestCase;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 
-import org.easymock.EasyMock;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.persistence.dao.saver.TramiteDAOSaver;
@@ -13,12 +12,12 @@ import org.ibit.rol.sac.persistence.saver.TramiteSaver;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 import org.junit.runner.RunWith;
 import org.powermock.api.easymock.PowerMock;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
-import es.caib.test.common.LogSpy;
 import test.unitario.persistence.mock.MockTramiteFacadeEJB;
+import es.caib.test.common.LogSpy;
 
 
 @RunWith(PowerMockRunner.class)

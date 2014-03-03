@@ -4,8 +4,6 @@ package org.ibit.rol.sac.model;
 
 import java.util.Iterator;
 
-
-
  public class ElementOrdenat extends Traducible implements Indexable {
 
     private Long id;

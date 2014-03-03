@@ -1,7 +1,7 @@
 package org.ibit.rol.sac.model;
 
 /**
- * Representaci&oacute; de un idioma.A�adido nombre(PORMAD)
+ * Representación de un idioma.Añadido nombre(PORMAD)
  */
 public class Idioma implements ValueObject {
 

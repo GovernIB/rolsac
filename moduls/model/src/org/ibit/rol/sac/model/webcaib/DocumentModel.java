@@ -1,11 +1,11 @@
 package org.ibit.rol.sac.model.webcaib;
 
 /**
- * Conté informació d'un document d'una actuació
+ * ContÃ© informaciÃ³ d'un document d'una actuaciÃ³
  */
 public class DocumentModel implements java.io.Serializable {
 
-   /** codi de l'actuació al que pertany el document */
+   /** codi de l'actuaciï¿½ al que pertany el document */
    int codi;
    
    // els valors s'inicialitzen a cadenes buides per evitar que surti
@@ -26,10 +26,10 @@ public class DocumentModel implements java.io.Serializable {
    /** constructor buid */
    public DocumentModel () {}
    
-   /** fitxa el valor del codi de l'actuació del document */
+   /** fitxa el valor del codi de l'actuaciÃ³ del document */
    public void setCodi(int codi) { this.codi = codi; }
    
-   /** retorna el valor del codi de l'actuació del document */
+   /** retorna el valor del codi de l'actuaciÃ³ del document */
    public int getCodi () { return codi; }
    
    

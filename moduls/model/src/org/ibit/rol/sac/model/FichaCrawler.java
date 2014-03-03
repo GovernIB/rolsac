@@ -3,7 +3,7 @@ package org.ibit.rol.sac.model;
 import org.ibit.rol.sac.model.Ficha;
 
 /**
- * Ficha que se compone del documento retornado de la búsqueda de lucene del crawler
+ * Ficha que se compone del documento retornado de la bÃºsqueda de lucene del crawler
  *
  */
 public class FichaCrawler {

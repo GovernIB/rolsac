@@ -3,55 +3,55 @@ package org.ibit.rol.sac.model.webcaib;
 import java.sql.Date;
 
 /**
- * Classe amb la informació mínima d'una actuació
+ * Classe amb la informaciï¿½ mï¿½nima d'una actuaciï¿½
  */
 public class ActuacioMinModel implements java.io.Serializable {
 
    // els valors s'inicialitzen a cadenes buides per evitar que surti
    // el missatge null al imprimir-ho
    
-   /** codi de l'actuació */
+   /** codi de l'actuaciï¿½ */
    String codi = "";
    
-   /** nom de l'actuació */
+   /** nom de l'actuaciï¿½ */
    String nom = "";
    
-   /** resum de l'actuació */
+   /** resum de l'actuaciï¿½ */
    String resum = "";
    
-   /** destinataris de l'actuació */
+   /** destinataris de l'actuaciï¿½ */
    String destinataris = "";
    
-   /** beneficiaris de l'actuació */
+   /** beneficiaris de l'actuaciï¿½ */
    String beneficiaris = "";
    
-   /** terminis de l'actuació */
+   /** terminis de l'actuaciï¿½ */
    String terminis = "";
    
-   /** resolucion de l'actuació */
+   /** resolucion de l'actuaciï¿½ */
    String resolucion = "";
    
-   /** notificacion de l'actuació */
+   /** notificacion de l'actuaciï¿½ */
    String notificacion = "";
    
-   /** terminis de l'actuació */
+   /** terminis de l'actuaciï¿½ */
    String organismeGenerador = "";
    
 
-   /** Identificador del trámite telemático */
+   /** Identificador del trï¿½mite telemï¿½tico */
    String idTramite = "";
 
-   /** Version del trámite telemático */
+   /** Version del trï¿½mite telemï¿½tico */
    int versionTramite = 0;
    
-   /** Url externa del trámite telemático */
+   /** Url externa del trï¿½mite telemï¿½tico */
    String urlExternaTramite = "";     
    
-   /** data actualització */
+   /** data actualitzaciï¿½ */
    Date data = null;
    
    /**
-    * Constructor buid. No fica ninguna informació.
+    * Constructor buid. No fica ninguna informaciï¿½.
     */
    public ActuacioMinModel () {}
    
@@ -117,26 +117,26 @@ public class ActuacioMinModel implements java.io.Serializable {
    /** Retorna el valor del camp data */
    public Date getData() { return data; }
 
-   /** retorna el identificador del tràmit */
+   /** retorna el identificador del trÃ mit */
    public String getIdTramite() {	return idTramite;}
-  /** Fitxa el identificador del tràmit */
+  /** Fitxa el identificador del trÃ mit */
 	public void setIdTramite(String idTramite) { this.idTramite = idTramite;}
 
-	/** retorna la versio del tràmit */
+	/** retorna la versio del trÃ mit */
 	public int getVersionTramite() {	return versionTramite;}
 
-	/** Fitxa la versio del tràmit */
+	/** Fitxa la versio del trÃ mit */
 	public void setVersionTramite(int versionTramite) {	this.versionTramite = versionTramite;}   
 	
-	/** retorna la url externa del tràmit */
+	/** retorna la url externa del trÃ mit */
 	public String getUrlExternaTramite() {	return urlExternaTramite;}
    	
-	/** Fitxa la url externa del tràmit */
+	/** Fitxa la url externa del trÃ mit */
 	public void setUrlExternaTramite(String urlExternaTramite) { this.urlExternaTramite = urlExternaTramite;}   	
 
 
 	/**
-    * retorna una representació adequada en forma d'string dels valors d'aquest objecte.
+    * retorna una representaciÃ³ adequada en forma d'string dels valors d'aquest objecte.
     *
     * @return cadena representant l'estat d'aquest objecte
     */

@@ -6,10 +6,11 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
-import org.ibit.lucene.indra.model.ModelFilterObject;
+
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Validable;
@@ -18,6 +19,8 @@ import org.ibit.rol.sac.model.criteria.BuscadorProcedimientoCriteria;
 import org.ibit.rol.sac.persistence.intf.ProcedimientoFacade;
 import org.ibit.rol.sac.persistence.intf.ProcedimientoFacadeHome;
 import org.ibit.rol.sac.persistence.util.ProcedimientoFacadeUtil;
+
+import es.caib.rolsac.persistence.lucene.model.ModelFilterObject;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
@@ -116,29 +119,7 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
             throw new DelegateException(e);
         }
     }
-    
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#buscarProcedimientosUATexto(java.lang.Long, java.lang.String)
-	 */
-    public List buscarProcedimientosUATexto(Long idUnidad, String texto) throws DelegateException {
-        try {
-            return getFacade().buscarProcedimientosUATexto(idUnidad, texto);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#buscarProcedimientosUATexto(java.lang.Long, java.lang.String, java.lang.String)
-	 */
-    public List buscarProcedimientosUATexto(Long idUnidad, String texto, String idioma) throws DelegateException {
-        try {
-            return getFacade().buscarProcedimientosUATexto(idUnidad, texto, idioma);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
+
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#anyadirTramite(java.lang.Long, java.lang.Long)
 	 */
@@ -282,7 +263,7 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
     }
     
     /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#indexInsertaProcedimiento(org.ibit.rol.sac.model.ProcedimientoLocal, org.ibit.lucene.indra.model.ModelFilterObject)
+	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#indexInsertaProcedimiento(org.ibit.rol.sac.model.ProcedimientoLocal, es.caib.rolsac.persistence.lucene.model.ModelFilterObject)
 	 */
     public void indexInsertaProcedimiento(ProcedimientoLocal proc, ModelFilterObject filter) throws DelegateException {
         try {

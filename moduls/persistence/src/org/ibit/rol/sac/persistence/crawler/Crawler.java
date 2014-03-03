@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import javax.ejb.EJBException;
+
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -17,12 +19,13 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.ibit.lucene.analysis.AlemanAnalyzer;
-import org.ibit.lucene.analysis.CastellanoAnalyzer;
-import org.ibit.lucene.analysis.CatalanAnalyzer;
-import org.ibit.lucene.analysis.InglesAnalyzer;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+
+import es.caib.rolsac.persistence.lucene.analysis.AlemanAnalyzer;
+import es.caib.rolsac.persistence.lucene.analysis.CastellanoAnalyzer;
+import es.caib.rolsac.persistence.lucene.analysis.CatalanAnalyzer;
+import es.caib.rolsac.persistence.lucene.analysis.InglesAnalyzer;
 
 
 /**
@@ -31,8 +34,8 @@ import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
  * 
  * @author enric - poso comentaris.
  * Aquesta classe indexa recursivament el contingut d'un Microsite o una 
- * pàgina externa en varis idiomes,  segons s'indica en les URLs d'entrada.
- * Durant la indexació es crea un arbre temporal que contindrà el contingut per indexar. 
+ * pï¿½gina externa en varis idiomes,  segons s'indica en les URLs d'entrada.
+ * Durant la indexaciï¿½ es crea un arbre temporal que contindrï¿½ el contingut per indexar. 
  * Finalment es recorre aquest arbre i s'indexa en el directori Lucene.        
  * 
  */
@@ -58,7 +61,7 @@ public class Crawler{
     private boolean isMicrosite;
     private HTMLDocument htmlDocument=new HTMLDocument();
     
-    //METODOS INDEXACIÓN
+    //METODOS INDEXACIï¿½N
     public Crawler(String path, Long idFicha, Map<String, String> urls){
     	this.path=path;
     	this.idFicha=idFicha;
@@ -86,7 +89,7 @@ public class Crawler{
             		// .. se comprueba que la url sea una pagina de texto  
             	    if(!comprobarFormato(url)){
             	    	arbol = new ArrayList<Nodo>();
-            	    	// .. se prepara el indice de la pagina y se añade al arbol  
+            	    	// .. se prepara el indice de la pagina y se aï¿½ade al arbol  
             	    	Nodo padre = htmlDocument.Document(idFicha.toString(),url,arbol,0,isMicrosite(url));	
             	    	if(padre!=null){
         		        	arbol.add(padre);
@@ -157,9 +160,9 @@ public class Crawler{
         		//log.debug("Crawling...");
     	    	Directory directory = getHibernateDirectory(idioma);
 
-                writer = new IndexWriter(directory, getAnalizador(idioma),false);
-        	    
-        	    // .. es crea el index Lucene (analisis + segmentació) del arbol
+//                writer = new IndexWriter(directory, getAnalizador(idioma), false);
+                writer = new IndexWriter(directory, getAnalizador(idioma), false, null);
+        	    // .. es crea el index Lucene (analisis + segmentaciï¿½) del arbol
                 for (Nodo nodo : arbol) {
                 	String sDoc="NO contenido";
                 	if(nodo.getDoc()!=null){sDoc="ok";}
@@ -171,7 +174,7 @@ public class Crawler{
                 //log.debug("Optimizing...");
 
         } catch (Exception e) {
-			log.warn("[IndexInsertarFicha:" + idFicha + "] Se ha interrumpido la indexación. Cerrando indice... " + e.fillInStackTrace());
+			log.warn("[IndexInsertarFicha:" + idFicha + "] Se ha interrumpido la indexaciï¿½n. Cerrando indice... " + e.fillInStackTrace());
         }
         finally{
         	
@@ -184,7 +187,7 @@ public class Crawler{
     
 
    
-    //Función recursiva que parsea los hijos de un MS hasta una cierta profundidad
+    //Funciï¿½n recursiva que parsea los hijos de un MS hasta una cierta profundidad
 	//TODO es proposa canviar el nomindexMS per prepararIndiceHijosMS()
 
     private void indexMS(Nodo padre, int counter,String idFicha,String idioma) throws Exception {
@@ -224,7 +227,7 @@ public class Crawler{
 								}
 							}
 	
-							// se añade el contenido del microsite en la lista de indexacion. 
+							// se aï¿½ade el contenido del microsite en la lista de indexacion. 
 							if (hijo == null) {
 								hijo = htmlDocument.Document(idFicha,strEscapeHTML,arbol,counter,true);
 								
@@ -247,7 +250,7 @@ public class Crawler{
 				}
 
 			} catch (Exception e) {
-     			log.warn("[IndexInsertarFicha:" + idFicha + "] Error guardando documento en el índice crawl " + e.fillInStackTrace()+" URL Padre: "+padre.getURL()+" URL Hija: "+sHijo);
+     			log.warn("[IndexInsertarFicha:" + idFicha + "] Error guardando documento en el ï¿½ndice crawl " + e.fillInStackTrace()+" URL Padre: "+padre.getURL()+" URL Hija: "+sHijo);
 			}
 
 		}
@@ -261,7 +264,7 @@ public class Crawler{
 		// Solo se indexan los microsites
 		// que cumplan estas 3 condiciones = 1)
 		// Pertenezca al dominio de la URL inicial 2) Que contenga
-		// el valor de la clave de la URL inicial y la clave 3)Que esté en el
+		// el valor de la clave de la URL inicial y la clave 3)Que estï¿½ en el
 		// idioma de de la ficha
 		return isMicrosite(strEscapeHTML)
 			&& contieneClavesMS(strEscapeHTML)
@@ -269,7 +272,7 @@ public class Crawler{
 					"lang=" + idioma);
 	}
 	
-    //Función recursiva que parsea los hijos de una pagina basica hasta una cierta profundidad, y los añade al arbol
+    //Funciï¿½n recursiva que parsea los hijos de una pagina basica hasta una cierta profundidad, y los aï¿½ade al arbol
 	//TODO es proposa canviar el nom indexBasica per prepararIndiceHijosDePaginaBasica()
 	
     private void indexBasica(Nodo padre, int counter,String idFicha,String idioma) throws Exception {
@@ -309,7 +312,7 @@ public class Crawler{
 								}
 							}
 	
-							// .. se parsea el contenido de la pagina y se añade al arbol  
+							// .. se parsea el contenido de la pagina y se aï¿½ade al arbol  
 							if (hijo == null) {
 								hijo = htmlDocument.Document(idFicha,strEscapeHTML,arbol,counter,false);
 								if (hijo != null) {
@@ -328,7 +331,7 @@ public class Crawler{
 				}
 
 			} catch (Exception e) {
-     			log.warn("[IndexInsertarFicha:" + idFicha + "] Error guardando documento en el índice crawl " + e.fillInStackTrace()+" URL: "+padre.getURL());
+     			log.warn("[IndexInsertarFicha:" + idFicha + "] Error guardando documento en el ï¿½ndice crawl " + e.fillInStackTrace()+" URL: "+padre.getURL());
 			}
 
 		}
@@ -398,7 +401,7 @@ public class Crawler{
 		 	}
 		}
 	} catch (Exception e) {
-		log.warn("[IndexInsertarFicha:" + idFicha + "] No se ha podido capturar las claves del microsite del fichero de configuración " + e.getMessage());
+		log.warn("[IndexInsertarFicha:" + idFicha + "] No se ha podido capturar las claves del microsite del fichero de configuraciï¿½n " + e.getMessage());
 	}
 
  	return valido;
@@ -417,10 +420,12 @@ public class Crawler{
 	private  Directory getHibernateDirectory(String idi) throws IOException {
 		Directory	directory;
 		try {
-	      directory = FSDirectory.getDirectory(new File(path+"/"+idi));
+//	      directory = FSDirectory.getDirectory(new File(path+"/"+idi));
+	      directory = FSDirectory.open(new File(path + "/" + idi));
 	      if (!IndexReader.indexExists(directory)) {
 	    	    log.debug("Creado el indice crawl porque no existe: "+path+"/"+idi);
-	            new IndexWriter(directory, analyzer, true).close();
+//	            new IndexWriter(directory, analyzer, true).close();
+	            new IndexWriter(directory, analyzer, true, null);
 	       }
 		} catch (Exception e) {
 			throw new EJBException("No se ha podido cargar el indice del Crawler");
@@ -438,7 +443,8 @@ public class Crawler{
             	for (int i = 0; i < langs.size(); i++) {
             		String idioma = (String)langs.get(i);
         	    	Directory directory = getHibernateDirectory(idioma);
-                    writer = new IndexWriter(directory, getAnalizador(idioma),false);
+//                    writer = new IndexWriter(directory, getAnalizador(idioma), false);
+        	    	writer = new IndexWriter(directory, getAnalizador(idioma), false, null);
                     writer.optimize();
             	}
             log.debug("Indice Crawler optimizado...");

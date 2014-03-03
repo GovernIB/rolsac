@@ -17,7 +17,7 @@ import javax.naming.Context;
 import javax.naming.NamingException;
 
 /**
- * Bean con la funcionalidad básica para interactuar con JDBC.
+ * Bean con la funcionalidad bï¿½sica para interactuar con JDBC.
  *
  * @ejb.bean
  *  view-type="remote"
@@ -32,7 +32,7 @@ public abstract class DaoEJB  implements SessionBean {
 	   /** objecte per accedir a les conexions a base de dades */
 	   protected transient DataSource datasource;
 
-	   /** tiempo que tarda una sql en ejecutarse a partir del cual se mostrará un warning en el log */
+	   /** tiempo que tarda una sql en ejecutarse a partir del cual se mostrarï¿½ un warning en el log */
 	   protected int _timewarning = 5000; 
 
 	   /** Conexion con la BD */
@@ -60,7 +60,7 @@ public abstract class DaoEJB  implements SessionBean {
 	    * Obte l'objecte per accedir a les conexions (datasource) 
 	    * enregistrat en el servidor de noms
 	    *
-	    * @name nom JNDI del datasource que emprarà aquest DAO
+	    * @name nom JNDI del datasource que emprarï¿½ aquest DAO
 	    *
 	    * @throws SQLException si hi ha error accedint al servidor de noms.
 	    */ 
@@ -75,8 +75,8 @@ public abstract class DaoEJB  implements SessionBean {
 
 	 
 	    /**
-	     * Mètode d'utilitat per poder evitar els valors nulls
-	     * (versió amb valor per defecte explícit)
+	     * Mï¿½tode d'utilitat per poder evitar els valors nulls
+	     * (versiï¿½ amb valor per defecte explï¿½cit)
 	     * 
 	     * @param value valor que volem comprovar que no sigui null
 	     * @param defaultValue valor que emprarem si value es null
@@ -90,8 +90,8 @@ public abstract class DaoEJB  implements SessionBean {
 	    }
 
 	    /**
-	     * Mètode d'utilitat per poder evitar els valors nulls.
-	     * (versió amb valor per defecte implicit)
+	     * Mï¿½tode d'utilitat per poder evitar els valors nulls.
+	     * (versiï¿½ amb valor per defecte implicit)
 	     * 
 	     * @param value valor que volem comprovar que no sigui null
 	     * @return value si no es null i cadena buida si es null
@@ -101,10 +101,10 @@ public abstract class DaoEJB  implements SessionBean {
 	    }
 
 	    /*=====================================================
-	                  Métodes de conexions
+	                  Mï¿½todes de conexions
 	      =====================================================*/
 	 
-	   /** Obte una conexió a la base de dades */
+	   /** Obte una conexiï¿½ a la base de dades */
 	    protected Connection getDBConnection() throws SQLException {
 	    	
 	    	Connection dbConnection = null;
@@ -124,7 +124,7 @@ public abstract class DaoEJB  implements SessionBean {
 	        return dbConnection;
 	    }
 	   
-	    /** allibera una conexió a la base de dadess */
+	    /** allibera una conexiï¿½ a la base de dadess */
 	    protected void close (Connection dbConnection) throws SQLException {
 	   
 	        try {
@@ -199,15 +199,15 @@ public abstract class DaoEJB  implements SessionBean {
 	    	  String msgExcep = sqle.toString();
 
 	    	    	if (msgExcep.indexOf("ORA-00001") != -1) {
-	    	    		return sqle.toString()+"\nNo se crear el elemento. Restricción de integridad única.";
+	    	    		return sqle.toString()+"\nNo se crear el elemento. Restricciï¿½n de integridad ï¿½nica.";
 	    	    	} else if (msgExcep.indexOf("ORA-00018") != -1) {
-	    	    		return sqle.toString()+"\nSobrepasado el número máximo de sesiones."; 
+	    	    		return sqle.toString()+"\nSobrepasado el nï¿½mero mï¿½ximo de sesiones."; 
 	    	        } else if (msgExcep.indexOf("ORA-00020") != -1) {
-	    	    		return sqle.toString()+"\nSobrepasado el límite de procesos."; 
+	    	    		return sqle.toString()+"\nSobrepasado el lï¿½mite de procesos."; 
 	    	        } else if (msgExcep.indexOf("ORA-00001") != -1) {
 	    	    		return sqle.toString()+"\nClave duplicada."; 
 	    	        } else if (msgExcep.indexOf("ORA-00910") != -1) {
-	    	    		return sqle.toString()+"\nSobrepasado tamaño de campo."; 
+	    	    		return sqle.toString()+"\nSobrepasado tamaï¿½o de campo."; 
 	    	        } else if (msgExcep.indexOf("ORA-00997") != -1) {
 	    	    		return sqle.toString()+"\nUso no permitido de valor LONG."; 
 	    	        } else if (msgExcep.indexOf("ORA-01005") != -1) {
@@ -225,33 +225,33 @@ public abstract class DaoEJB  implements SessionBean {
 	    	        } else if (msgExcep.indexOf("ORA-01017") != -1) {
 	    	    		return sqle.toString()+"\nUsuario o Password incorrecto."; 
 	    	        } else if (msgExcep.indexOf("ORA-01400") != -1) {
-	    	    		return sqle.toString()+"\nValor nulo no permitido en inserción."; 
+	    	    		return sqle.toString()+"\nValor nulo no permitido en inserciï¿½n."; 
 	    	        } else if (msgExcep.indexOf("ORA-01401") != -1) {
-	    	    		return sqle.toString()+"\nSobrepasado el tamaño máximo para el campo."; 
+	    	    		return sqle.toString()+"\nSobrepasado el tamaï¿½o mï¿½ximo para el campo."; 
 	    	        } else if (msgExcep.indexOf("ORA-01407") != -1) {
-	    	    		return sqle.toString()+"\nValor nulo no permitido en actualización."; 
+	    	    		return sqle.toString()+"\nValor nulo no permitido en actualizaciï¿½n."; 
 	    	        } else if (msgExcep.indexOf("ORA-01410") != -1) {
-	    	    		return sqle.toString()+"\nRowID no válido."; 
+	    	    		return sqle.toString()+"\nRowID no vï¿½lido."; 
 	    	        } else if (msgExcep.indexOf("ORA-01438") != -1) {
-	    	    		return sqle.toString()+"\nSobrepasado el tamaño máximo para el campo."; 
+	    	    		return sqle.toString()+"\nSobrepasado el tamaÃ±o mÃ¡ximo para el campo."; 
 	    	        } else if (msgExcep.indexOf("ORA-01722") != -1) {
-	    	    		return sqle.toString()+"\nFormato númerico incorrecto."; 
+	    	    		return sqle.toString()+"\nFormato nÃºmerico incorrecto."; 
 	    	        } else if (msgExcep.indexOf("ORA-01820") != -1) {
-	    	    		return sqle.toString()+"\nFormato de fecha no válido."; 
+	    	    		return sqle.toString()+"\nFormato de fecha no vÃ¡lido."; 
 	    	        } else if (msgExcep.indexOf("ORA-01830") != -1) {
-	    	    		return sqle.toString()+"\nFormato de fecha no válido."; 
+	    	    		return sqle.toString()+"\nFormato de fecha no vÃ¡lido."; 
 	    	        } else if (msgExcep.indexOf("ORA-01821") != -1) {
-	    	    		return sqle.toString()+"\nFormato de fecha no válido."; 
+	    	    		return sqle.toString()+"\nFormato de fecha no vÃ¡lido."; 
 	    	        } else if (msgExcep.indexOf("ORA-01843") != -1) {
-	    	    		return sqle.toString()+"\nMes no válido en formato de fecha."; 
+	    	    		return sqle.toString()+"\nMes no vÃ¡lido en formato de fecha."; 
 	    	        } else if (msgExcep.indexOf("ORA-01847") != -1) {
-	    	    		return sqle.toString()+"\nDía no válido en formato de fecha."; 
+	    	    		return sqle.toString()+"\nDï¿½a no vÃ¡lido en formato de fecha."; 
 	    	        } else if (msgExcep.indexOf("ORA-01858") != -1) {
-	    	    		return sqle.toString()+"\nFormato de fecha no válido"; 
+	    	    		return sqle.toString()+"\nFormato de fecha no vÃ¡lido"; 
 	    	        } else if (msgExcep.indexOf("ORA-01841") != -1) {
-	    	    		return sqle.toString()+"\nAño no válido en formato fecha"; 
+	    	    		return sqle.toString()+"\nAï¿½o no vÃ¡lido en formato fecha"; 
 	    	        } else if (msgExcep.indexOf("ORA-02291") != -1) {
-	    	    		return sqle.toString()+"\nClave principal no encontrada. Restricción de integridad violada.";
+	    	    		return sqle.toString()+"\nClave principal no encontrada. RestricciÃ³n de integridad violada.";
 	    	    	} else if (msgExcep.indexOf("ORA-02292") != -1) {
 	    	        	return sqle.toString()+"\nNo se puede eliminar el elemento seleccionado. Tiene subelementos asociados.";
 	    	        } else {

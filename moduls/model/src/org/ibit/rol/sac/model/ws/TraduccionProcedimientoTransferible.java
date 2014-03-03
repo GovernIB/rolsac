@@ -3,11 +3,10 @@ package org.ibit.rol.sac.model.ws;
 import java.io.Serializable;
 
 /**
- * Clase que representa la información traducida a transferir de un Procedimiento(PORMAD)
+ * Clase que representa la informaciÃ³n traducida a transferir de un Procedimiento(PORMAD)
  */
 public class TraduccionProcedimientoTransferible extends AbstractTraduccion implements Serializable {
-	
-	
+
 	private String nombre;
     private String resumen; //objeto  VUDS
     private String destinatarios;

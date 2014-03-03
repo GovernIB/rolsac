@@ -58,7 +58,7 @@ public class StringClobType implements UserType {
         	return;
         }
 
-        // Codi genèric, funciona amb PostgreSQL, per exemple.
+        // Codi genÃ©ric, funciona amb PostgreSQL, per exemple.
         StringReader reader = new StringReader((String) value);
         pst.setCharacterStream(i, reader, ((String) value).length());
 

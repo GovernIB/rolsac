@@ -5,63 +5,63 @@ import java.util.Collection;
 
 
 /**
- * Classe que conte informació detallada d'una actuació
+ * Classe que conte informaciï¿½ detallada d'una actuaciï¿½
  */
 public class ActuacioModel extends ActuacioMinModel implements java.io.Serializable {
 
    // els valors s'inicialitzen a cadenes buides per evitar que surti
    // el missatge null al imprimir-ho
    
-   /** observacions de l'actuació */
+   /** observacions de l'actuaciÃ³ */
    String observacions = "";
 
    String resultat ="";
    
-   /** tramits de l'actuació */
+   /** tramits de l'actuaciÃ³ */
    @Deprecated
    String tramits = "";
    
-   /** requisits de l'actuació */
+   /** requisits de l'actuaciÃ³ */
    @Deprecated
    String requisits = ""; 
    
-   /** documents de l'actuació */
+   /** documents de l'actuaciÃ³ */
    Collection<DocumentModel> documents = new java.util.ArrayList<DocumentModel>();
    
-   /** normatives de l'actuació */
+   /** normatives de l'actuaciÃ³ */
    Collection<NormativaModel> normatives = new java.util.ArrayList<NormativaModel>();
    
-   /** organisme generador de l'actuació */
+   /** organisme generador de l'actuaciÃ³ */
    String organismeGenerador = "";
    
-   /** codi de l'organisme generador de l'actuació */
+   /** codi de l'organisme generador de l'actuaciÃ³ */
    String codiOrganismeGenerador = "";
    
-   /** organismes gestors de l'actuació */
+   /** organismes gestors de l'actuaciÃ³ */
    Collection<String> organismesGestors = new java.util.ArrayList<String>();
    
-   /** organismes resolutoris de l'actuació */
+   /** organismes resolutoris de l'actuaciÃ³ */
    Collection<String> organismesResolutoris = new java.util.ArrayList<String>();
    
-   /** tramits  de l'actuació */
+   /** tramits  de l'actuaciÃ³ */
 	Collection<TramitModel> tramit = new java.util.ArrayList<TramitModel>();
   
-   /** data de la darrera actualització de l'actuació */
+   /** data de la darrera actualitzaciï¿½ de l'actuaciï¿½ */
    Date dataActualitzacio; 
    
-   /** silenci administratiu de l'actuació */
+   /** silenci administratiu de l'actuaciï¿½ */
    String silenci = "";
    
-   /** familia a la que pertany l'actuació */
+   /** familia a la que pertany l'actuaciï¿½ */
    String familia = "";
    
-   /** iniciacion de  l'actuació */
+   /** iniciacion de  l'actuaciï¿½ */
    String iniciacion = "";
    
    /** indicador agotament */
    String indicador = "";
    
-   /** rescursos de l'actuació */
+   /** rescursos de l'actuaciï¿½ */
    String recursos = "";
    
    /** data de caducitat del procediment */
@@ -70,29 +70,29 @@ public class ActuacioModel extends ActuacioMinModel implements java.io.Serializa
    /** data de publicacio del procediment */
    Date data_publicacio = null;
    
-   /** rescursos de l'actuació */
+   /** rescursos de l'actuaciï¿½ */
    @Deprecated
    String lloc = "";
    
    
    boolean taxa;
 
-   /** origens de l'actuació */
+   /** origens de l'actuaciï¿½ */
    Collection<String> origens = new java.util.ArrayList<String>();
    
    /**
     * <p>
-    * Número d'expedients tramitats anualment.
+    * Nï¿½mero d'expedients tramitats anualment.
     * </p>
     * <p>
-    * Està com a tipus Integer en lloc del primitiu int per permetre valors nulls.
+    * Estï¿½ com a tipus Integer en lloc del primitiu int per permetre valors nulls.
     * </p>
     */
    Integer volumAnual ; /* num_exp */
    
    /**
     * <p>
-    * Centres relacionats amb l'actuació de l'actuació ( col.lecció de LlocModel )
+    * Centres relacionats amb l'actuaciï¿½ de l'actuaciï¿½ ( col.lecciï¿½ de LlocModel )
     * </p>
     * <p>
     * A la base de dades es guarda en les relacions : ACT - ACT_PRES - CENTRE
@@ -103,7 +103,7 @@ public class ActuacioModel extends ActuacioMinModel implements java.io.Serializa
    
       
    /**
-    * Constructor buid. No fica ninguna informació.
+    * Constructor buid. No fica ninguna informaciï¿½.
     */
    public ActuacioModel () {}
    
@@ -202,7 +202,7 @@ public class ActuacioModel extends ActuacioMinModel implements java.io.Serializa
     * amb JDBC a una columna que te un valor null retorna l'enter 0. En el codi, feim que si el 
     * valor enviat es 0, la referencia this.volumAnual queda a null.
     *
-    * Evidentment, això fallaria en cas de que volumActual fos efectivament 0 a la base de dades ( i no null )
+    * Evidentment, aixï¿½ fallaria en cas de que volumActual fos efectivament 0 a la base de dades ( i no null )
     * Suposam que aquest darrer cas NO es possible
     */
    public void setVolumAnual (int volumAnual) {
@@ -241,7 +241,7 @@ public void setTaxa(boolean taxa) {
 }
 
 /**
-    * retorna una representació adequada en forma d'string dels valors d'aquest objecte.
+    * retorna una representaciï¿½ adequada en forma d'string dels valors d'aquest objecte.
     *
     * @return cadena representant l'estat d'aquest objecte
     */
