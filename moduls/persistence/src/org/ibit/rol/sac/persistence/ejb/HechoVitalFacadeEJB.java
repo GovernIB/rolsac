@@ -1,6 +1,5 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -698,27 +697,37 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-	public List buscarPorIds(List<Long> ids)
-	{
+	public List buscarPorIds(Long[] ids) {
+		
 		List<HechoVital> resultado;
-		if (ids == null || ids.size() == 0)
+		
+		if (ids == null || ids.length == 0)
     		return Collections.EMPTY_LIST;
     	
     	Session session = getSession();
+    	
     	try {
+    		
     		Criteria criteria = session.createCriteria(HechoVital.class);
     		criteria.setFetchMode("traducciones", FetchMode.LAZY);
     		criteria.add(Expression.in("id", ids));
     		resultado = criteria.list();
+    		
     		for (HechoVital hv: resultado)
     			Hibernate.initialize(hv.getHechosVitalesProcedimientos());
     		
     		return resultado; 
+    		
         } catch (HibernateException he) {
+        	
             throw new EJBException(he);
+            
         } finally {
+        	
             close(session);
+            
         }
+    	
 	}
 	
 	

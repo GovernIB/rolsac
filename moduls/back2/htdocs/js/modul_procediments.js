@@ -19,19 +19,27 @@ $(document).ready(function() {
 		ModulProcediment.iniciar();
 	}
 	
-	// Evento para el bot�n de volver al detalle
-	jQuery("#btnVolverDetalle_procediment").bind("click",function(){EscriptoriProcediment.torna();});	
-	jQuery("#btnFinalizar_procediment").bind("click",function(){EscriptoriProcediment.finalizar();});
+	// Evento para el botón de volver al detalle
+	jQuery("#btnVolverDetalle_procediment").bind("click", function() { EscriptoriProcediment.torna(); });
+	jQuery("#btnFinalizar_procediment").bind("click", function() { EscriptoriProcediment.finalizar(); });
+	
 });
 
-
-function CModulProcediment(){
+function CModulProcediment() {
+	
+	// Activa mensajes de debug.
+	var debug = false;
+	
 	this.extend = ListaOrdenable;
 	this.extend();		
 	
 	var that = this;
 	
 	this.iniciar = function() {
+		
+		if (debug)
+			console.log("Entrando en CModulProcediment.iniciar");
+		
 		jQuery("#cerca_fechaCaducidad, #cerca_fechaPublicacion, #cerca_fechaActualizacion").datepicker({ dateFormat: 'dd/mm/yy' });
 
         procediments_llistat_elm = escriptori_procediments_elm.find("div.escriptori_items_llistat:first");
@@ -55,22 +63,42 @@ function CModulProcediment(){
 			nombre: "procediment",
 			nodoOrigen: modul_procediments_elm.find(".listaOrdenable"),
 			nodoDestino: procediments_seleccionats_elm.find(".listaOrdenable"),
-			atributos: ["id", "nombre", "orden", "idProcedimiento"],	// Campos que queremos que aparezcan en las listas.
+			atributos: [			// Campos que queremos que aparezcan en los elementos de las lista ordenable.
+	            "id", 
+	            "nombre", 
+	            "orden", 
+	            "idRelatedItem", 	// Campo necesario para guardado AJAX genérico de módulos laterales.
+	            "idMainItem"		// Campo necesario para guardado AJAX genérico de módulos laterales.
+            ],
 			multilang: false
 		});
 		
-		// one al bot� de gestionar
-		modul_procediments_elm.find("a.gestiona").one("click", function(){ModulProcediment.gestiona();} );
+		// one al botó de gestionar
+		modul_procediments_elm.find("a.gestiona").one("click", function() { ModulProcediment.gestiona(); });
+		
+		if (debug)
+			console.log("Saliendo de CModulProcediment.iniciar");
+		
 	}	
-			
 	
-	this.nuevo = function() {       
+	this.nuevo = function() {
+		
+		if (debug)
+			console.log("Entrando en CModulProcediment.nuevo");
+		
 		proc_seleccionats_elm = escriptori_detall_elm.find("div.modulProcediments div.seleccionats");
 		proc_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaProcediment + ".");
+		
+		if (debug)
+			console.log("Saliendo de CModulProcediment.nuevo");
+		
 	}
-	
 		
 	this.gestiona = function() {
+		
+		if (debug)
+			console.log("Entrando en CModulProcediment.gestiona");
+		
 		lis_size = modul_procediments_elm.find("li").size();
 
 		if (lis_size > 0) {
@@ -85,10 +113,17 @@ function CModulProcediment(){
 		escriptori_detall_elm.fadeOut(300, function() {			
 			escriptori_procediments_elm.fadeIn(300);			
 		});
+		
+		if (debug)
+			console.log("Saliendo de CModulProcediment.gestiona");
+		
 	}
 	
-	
-	this.contaSeleccionats = function() {		
+	this.contaSeleccionats = function() {
+		
+		if (debug)
+			console.log("Entrando en CModulProcediment.contaSeleccionats");
+		
 		seleccionats_val = modul_procediments_elm.find(".seleccionat").find("li").size();
 		info_elm = modul_procediments_elm.find("p.info:first");
 		
@@ -99,21 +134,36 @@ function CModulProcediment(){
 		} else if (seleccionats_val > 1) {
 			info_elm.html(txtSeleccionats + " <strong>" + seleccionats_val + " " + txtProcediments.toLowerCase() + "</strong>.");						
 		}
+		
+		if (debug)
+			console.log("Saliendo de CModulProcediment.contaSeleccionats");
+		
 	}
-	
 	
 	this.inicializarProcediments = function(listaProcediments) {
+		
+		if (debug)
+			console.log("Entrando en CModulProcediment.inicializarProcediments");
+		
 		var listaOrdenable = modul_procediments_elm.find(".listaOrdenable");
-		listaOrdenable.empty();		
-		if (typeof listaProcediments != 'undefined' && listaProcediments != null && listaProcediments.length > 0) {
+		listaOrdenable.empty();
+		
+		if (typeof listaProcediments != 'undefined' && listaProcediments != null && listaProcediments.length > 0)
 			that.agregaItems(listaProcediments, true);
-		}
+			
 		that.contaSeleccionats();
 		that.prepararListaProcedimientos(listaOrdenable);
+		
+		if (debug)
+			console.log("Saliendo de CModulProcediment.inicializarProcediments");
+		
 	}
-	
 
 	this.prepararListaProcedimientos = function($listaOrdenable) {
+		
+		if (debug)
+			console.log("Entrando en CModulProcediment.prepararListaProcedimientos");
+		
 		$listaOrdenable.find("ul").sortable({
 			axis: 'y', 
 			cursor: 'url(../img/cursor/grabbing.cur), move',
@@ -130,21 +180,31 @@ function CModulProcediment(){
 	        itemLista.remove(); // se elimina de la lista del NodoOrigen
 	
 			that.contaSeleccionats();
-			Detall.modificado();
+			
+			// FIXME amartin: esto ya no ha de estar si es guardado vía AJAX.
+			// Marcamos el formulario como modificado para habilitar el botón de guardar.
+			// Detall.modificado();
 		});
 		
 		// Ir a la edicion del procedimiento al hacer click sobre el.
 		$listaOrdenable.find('div.procediment').each(function() {
 	        $(this).unbind("click").bind("click", function() {
-	        	var url = pagDetallProcediment + "?itemId=" + $(this).find("input.procediment_idProcedimiento").val();
+	        	var url = pagDetallProcediment + "?itemId=" + $(this).find("input.procediment_idRelatedItem").val();
 	            document.location = url;
 	        });
 	    });
+		
+		if (debug)
+			console.log("Saliendo de CModulProcediment.prepararListaProcedimientos");
+		
 	}
 	
-	
 	// Devuelve un string con el formato procediments=n1,n2,...,nm donde n son codigos de procediments.
-	this.listaProcediments = function (){
+	this.listaProcediments = function () {
+		
+		if (debug)
+			console.log("Entrando en CModulProcediment.listaProcediments");
+		
 		var listaProcediments = "procediments=";
 		
 		modul_procediments_elm.find("div.listaOrdenable input.procediment_id").each(function() {
@@ -155,68 +215,115 @@ function CModulProcediment(){
 			listaProcediments = listaProcediments.slice(0, -1);
 		}
 		
+		if (debug)
+			console.log("Saliendo de CModulProcediment.listaProcediments");
+		
 		return listaProcediments;
+		
 	}
 	
-	
-	// Al anadir un procedimiento, al ser nuevo se le pone un id negativo. Esta variable se va decrementando cada vez que se anade uno.
+	// Al añadir un procedimiento, al ser nuevo se le pone un id negativo. Esta variable se va decrementando cada vez que se anade uno.
 	this.ultimoIdNuevo = 0;
 	
-	
-	// Devuelve tru si ya hay un procedimiento en la lista con el id "procedimientoId".
+	// Devuelve true si ya hay un procedimiento en la lista con el id "procedimientoId".
 	this.contieneProcedimiento = function (procedimientoId) {
+		
+		if (debug)
+			console.log("Entrando en CModulProcediment.contieneProcedimiento");
+		
 		var existe = false;
 		var config = that.getConfiguracion();
-		jQuery(config.nodoDestino).find("input.procediment_idProcedimiento").each(function() {				
+		
+		jQuery(config.nodoDestino).find("input.procediment_idRelatedItem").each(function() {
 			if (jQuery(this).val() == procedimientoId) {
 				existe = true;
 			}			
 		});
+		
+		if (debug)
+			console.log("Saliendo de CModulProcediment.contieneProcedimiento");
+		
 		return existe;
+		
 	}
 	
 };
 
-
-function CEscriptoriProcediment(){		
+function CEscriptoriProcediment() {
+	
+	// Activa mensajes de debug.
+	var debug = false;
+	
 	this.extend = ListadoBase;
 	this.extend("opcions_procediment", "resultats_procediments", "cercador_procediments", "cercador_procediments_contingut", "", "", "", "btnBuscarForm_procediment", "btnLimpiarForm_procediment");
 	
 	var that = this;
 	
 	this.nuevo = function() {
+		
+		if (debug)
+			console.log("Entrando en CEscriptoriProcediment.nuevo");
+		
 		that.limpia();
 		resultats_procediment_elm.find('div.dades').empty();
+		
+		if (debug)
+			console.log("Saliendo de CEscriptoriProcediment.nuevo");
+		
 	}
 	
 	/**
 	 * Agrega un item a la lista.
 	 */
-	this.agregaItem = function( itemID, titulo, procedimientoID ){	
-		if (!ModulProcediment.contieneProcedimiento(procedimientoID)) {
+	this.agregaItem = function( itemID, titulo, procedimientoID, idMainItem ) {
+		
+		if (debug)
+			console.log("Entrando en CEscriptoriProcediment.agregaItem");
+		
+		if (!ModulProcediment.contieneProcedimiento(procedimientoID) ) {
+			
 			// Componemos el item para enviar a la lista.
 			var item = {
 				id: itemID,
 				nombre: titulo,
-				idProcedimiento: procedimientoID
+				idRelatedItem: procedimientoID,	// Campo necesario para guardado AJAX genérico de módulos laterales.
+				idMainItem: idMainItem			// Campo necesario para guardado AJAX genérico de módulos laterales.
 			};
-			// Agrega el item, y si se ha a�adido correctamente (si no exist�a previamente) actualiza el mensaje de items seleccionados.
-			if( ModulProcediment.agregaItem(item)) {		
+						
+			// Agrega el item, y si se ha añadido correctamente (si no existía previamente) actualiza el mensaje de items seleccionados.
+			if ( ModulProcediment.agregaItem(item) ) {		
 				this.contaSeleccionats();		
 			}
+			
 		}
+		
+		if (debug)
+			console.log("Saliendo de CEscriptoriProcediment.agregaItem");
+		
 	}	
 	
-	// Cambia de p�gina.
-	this.cambiaPagina = function( pag ){
-		multipagina_procediment.setPaginaActual(pag-1);
+	// Cambia de página.
+	this.cambiaPagina = function(pag) {
+		
+		if (debug)
+			console.log("Entrando en CEscriptoriProcediment.cambiaPagina");
+		
+		multipagina_procediment.setPaginaActual(pag - 1);
 		pag_Pag = pag;
 		this.anar(pag);
+		
+		if (debug)
+			console.log("Saliendo de CEscriptoriProcediment.cambiaPagina");
+		
 	}
 	
-	this.finCargaListado = function(data, opcions){
+	this.finCargaListado = function(opcions, data) {
+		
+		if (debug)
+			console.log("Entrando en CEscriptoriProcediment.finCargaListado");
+		
 		// total
-		resultats_total = parseInt(data.total,10);
+		resultats_total = parseInt(data.total, 10);
 		
 		if (resultats_total > 0) {
 			
@@ -260,9 +367,11 @@ function CEscriptoriProcediment(){
 			
 			codi_totals = "<p class=\"info\">" + txtTrobats + " <strong>" + resultats_total + " " + txtT.toLowerCase() + "</strong>" + ". " + txtMostrem + resultatInici + txtMostremAl + resultatFinal + txt_ordenacio + ".</p>";
 
+// TODO amartin: ¿este bloque de código comentado puede borrarse ya?
 //			codi_cap1 = "<div class=\"th nom" + ordre_c1 + "\" role=\"columnheader\">" + txtTitol + "</a></div>";
 //			codi_cap2 = "<div class=\"th data" + ordre_c2 + "\" role=\"columnheader\">" + txtData + "</a></div>";
 //			codi_cap3 = "<div class=\"th dataButlleti" + ordre_c3 + "\" role=\"columnheader\">" + txtDataButlleti + "</a></div>";
+			
 			codi_cap1 = "<div class=\"th procediment "+ ordre_c1 +"\" role=\"columnheader\"><a href=\"javascript:void(0)\" class=\"id\">" + txtProcediment + "</a></div>";
             codi_cap2 = "<div class=\"th familia "+ ordre_c2 +"\" role=\"columnheader\"><a href=\"javascript:void(0)\" class=\"familia.id\">" + txtFamilia + "</a></div>";
 			codi_cap3 = "<div class=\"th fechaActualizacion "+ ordre_c3 +"\" role=\"columnheader\"><a href=\"javascript:void(0)\" class=\"fechaActualizacion\">" + txtFechaActualizacion + "</a></div>";
@@ -307,7 +416,7 @@ function CEscriptoriProcediment(){
 			codi_taula += "</div>";
 			codi_taula += "</div>";
 			
-			if($.browser.opera) {
+			if ($.browser.opera) {
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
@@ -336,89 +445,50 @@ function CEscriptoriProcediment(){
 			// pintem
 			procediments_dades_elm.html(codi_final).fadeIn(300, function() {
 				// Evento lanzado al hacer click en un elemento de la lista.
-				//jQuery("#resultats .llistat .tbody a").unbind("click").bind("click",function(){
-                resultats_procediment_elm.find(".llistat .tbody a").unbind("click").bind("click",function(){
+                resultats_procediment_elm.find(".llistat .tbody a").unbind("click").bind("click", function() {
+                	
 					var partesItem = jQuery(this).attr("id").split("_");
 					var itemID = --ModulProcediment.ultimoIdNuevo;
 					var procedimientoID = partesItem[1];
 					var titulo = jQuery(this).html();
-					that.agregaItem(itemID, titulo, procedimientoID);
+					var idMainItem = $('#item_id').val();
+					
+					that.agregaItem(itemID, titulo, procedimientoID, idMainItem);
+					
 				});
-				
+                				
 				// cercador
 				procediments_cercador_elm.find("input, select").removeAttr("disabled");
 				
 			});
-		});	
+		});
+		
+		if (debug)
+			console.log("Saliendo de CEscriptoriProcediment.finCargaListado");
+		
 	}
 
 	this.carregar = function(opcions) {
-		// opcions: ajaxPag (integer), ordreTipus (ASC, DESC), ordreCamp (tipus, carrec, tractament)
 		
-		// cercador
-		dataVars = "codi=" + $("#cerca_codi").val();
-		dataVars += "&estat=" + $("#cerca_estat").val();
-		dataVars += "&familia=" + $("#cerca_familia").val();
-		dataVars += "&iniciacion=" + $("#cerca_iniciacio").val();
-		dataVars += "&tramit=" + $("#cerca_tramit").val();
-		dataVars += "&versio=" + $("#cerca_versio").val();
-		dataVars += "&url=" + $("#cerca_url").val();
-		dataVars += "&indicador=" + $("#cerca_indicador").val();
-		dataVars += "&finestreta=" + $("#cerca_finestreta").val();
-		dataVars += "&taxa=" + $("#cerca_taxa").val();
-		dataVars += "&responsable=" + $("#cerca_responsable").val();
-		dataVars += "&fechaCaducidad=" + $("#cerca_fechaCaducidad").val();
-		dataVars += "&fechaPublicacion=" + $("#cerca_fechaPublicacion").val();
-		dataVars += "&fechaActualizacion=" + $("#cerca_fechaActualizacion").val();
-		dataVars += "&uaFilles=" + $("#cerca_uaFilles").val();
-		dataVars += "&textes=" + $("#cerca_textes").val();
-		dataVars += "&uaMeves=" + ($("#cerca_uaMeves").attr('checked') ? 1 : 0);
-
-		// ordreTipus
-		if (typeof opcions.ordreTipus != "undefined") {
-			ordreTipus_procediment_elm.val(opcions.ordreTipus);
-		}
-		// ordreCamp
-		if (typeof opcions.ordreCamp != "undefined") {
-			ordreCamp_procediment_elm.val(opcions.ordreCamp);
-		}
-			
-		// paginacio
-		//pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : parseInt(pagPagina_procediment_elm.val(),10);
-		//pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : multipagina.getPaginaActual();		
-			
-		// ordre
-		ordre_Tipus = ordreTipus_procediment_elm.val();
-		ordre_Camp = ordreCamp_procediment_elm.val();
-			
-		// variables
-		if (pag_Pag != 0) {
-			pag_Pag = pag_Pag - 1;
-		}
-		dataVars += "&pagPag=" + pag_Pag + "&pagRes=" + pag_Res + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp;		
+		if (debug)
+			console.log("Entrando en CEscriptoriProcediment.carregar");
 		
-		// ajax
-		$.ajax({
-			type: "POST",
-			url: pagLlistatProcediments,
-			data: dataVars,
-			dataType: "json",
-			error: function() {
-				
-				if (!a_enllas) {
-					// missatge
-					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
-					// error
-					Error.llansar();
-				}
-			},
-			success: function(data) {
-				that.finCargaListado(data, opcions);
-			}
-		});	
+		// opcions: cercador (si, no), ajaxPag (integer), ordreTipus (ASC, DESC), ordreCamp (tipus, carrec, tractament)
+		
+		Buscador = new BuscadorProcedimiento();
+		Buscador.orden.tipo = ordreTipus_procediment_elm.val();
+		Buscador.orden.campo = ordreCamp_procediment_elm.val();
+		Buscador.buscar(opcions, pagLlistatProcediments, EscriptoriProcediment);
+		
+		if (debug)
+			console.log("Saliendo de CEscriptoriProcediment.carregar");
+		
 	}
 	
-	this.finalizar = function(){		
+	this.finalizar = function() {
+		
+		if (debug)
+			console.log("Entrando en CEscriptoriProcediment.finalizar");
 								
 		nombre_llistat = ModulProcediment.finalizar(true);
 		
@@ -439,14 +509,22 @@ function CEscriptoriProcediment(){
 
 		ModulProcediment.prepararListaProcedimientos(modul_procediments_elm.find(".listaOrdenable"));
 		
-		// Marcamos el formulario como modificado para habilitar el bot�n de guardar.
-		Detall.modificado();
+		// FIXME amartin: esto ya no ha de estar si es guardado vía AJAX.
+		// Marcamos el formulario como modificado para habilitar el botón de guardar.
+		// Detall.modificado();
 		
 		this.torna();
+		
+		if (debug)
+			console.log("Saliendo de CEscriptoriProcediment.finalizar");
+		
 	}
 	
-	// M�todo sobreescrito
+	// Método sobreescrito
 	this.anar = function(enlace_html) {
+		
+		if (debug)
+			console.log("Entrando en CEscriptoriProcediment.anar");
 				
 		num = parseInt(enlace_html,10);
 		
@@ -460,12 +538,19 @@ function CEscriptoriProcediment(){
 				that.carregar({pagina: num-1});				
 			});
 		});
+		
+		if (debug)
+			console.log("Saliendo de CEscriptoriProcediment.anar");
+		
 	}
 	
 	this.torna = function() {
 		
+		if (debug)
+			console.log("Entrando en CEscriptoriProcediment.torna");
+		
 		// animacio
-		escriptori_procediments_elm.fadeOut(300, function() {			
+		escriptori_procediments_elm.fadeOut(300, function() {		
 			escriptori_detall_elm.fadeIn(300, function() {
 				// activar
 				modul_procediments_elm.find("a.gestiona").one("click", function(){
@@ -474,12 +559,17 @@ function CEscriptoriProcediment(){
 					jQuery('#cerca_fechaCaducidad, #cerca_fechaPublicacion, #cerca_fechaPublicacion, #cerca_fechaActualizacion').val('');
 				});
 			});
-			
 		});
+		
+		if (debug)
+			console.log("Saliendo de CEscriptoriProcediment.torna");
 		
 	}
 	
 	this.contaSeleccionats = function() {
+		
+		if (debug)
+			console.log("Entrando en CEscriptoriProcediment.contaSeleccionats");
 		
 		seleccionats_val = procediments_seleccionats_elm.find(".seleccionat").find("li").size();
 		info_elm = procediments_seleccionats_elm.find("p.info:first");
@@ -511,5 +601,10 @@ function CEscriptoriProcediment(){
 			ModulProcediment.eliminaItem(itemLista);
 			EscriptoriProcediment.contaSeleccionats();
 		});
+		
+		if (debug)
+			console.log("Saliendo de CEscriptoriProcediment.contaSeleccionats");
+		
 	}
+	
 };

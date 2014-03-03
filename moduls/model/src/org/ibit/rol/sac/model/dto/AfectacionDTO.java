@@ -9,13 +9,15 @@ public class AfectacionDTO implements ValueObject {
 	private long normaId;
     private String normaNom;
     private String afectacioNom;
-    private long afectacioId;
-	
+    private long afectacioId;		// PK del tipo de afectacion (nombre realmente desafortunado).
+
+    private long idRelatedItem; 	// Para guardado genérico vía AJAX: el valor de la PK de la afectación.
+	private long idMainItem;		// Para guardado genérico vía AJAX: el valor de la PK del registro con el que se encuentra relacionada la afectación.
+    
     public AfectacionDTO() {
     	super();
     }
     	
-	
 	/**
 	 * Devuelve el valor de afectacioId.
 	 *
@@ -23,6 +25,34 @@ public class AfectacionDTO implements ValueObject {
 	 */
 	public long getAfectacioId() {
 		return afectacioId;
+	}
+
+	/**
+	 * @return the idRelatedItem
+	 */
+	public long getIdRelatedItem() {
+		return idRelatedItem;
+	}
+
+	/**
+	 * @param idRelatedItem the idRelatedItem to set
+	 */
+	public void setIdRelatedItem(long idRelatedItem) {
+		this.idRelatedItem = idRelatedItem;
+	}
+
+	/**
+	 * @return the idMainItem
+	 */
+	public long getIdMainItem() {
+		return idMainItem;
+	}
+
+	/**
+	 * @param idMainItem the idMainItem to set
+	 */
+	public void setIdMainItem(long idMainItem) {
+		this.idMainItem = idMainItem;
 	}
 
 	/**
@@ -91,9 +121,5 @@ public class AfectacionDTO implements ValueObject {
 	public void setNormaNom(String normaNom) {
 		this.normaNom = normaNom;
 	}
-
-	
-	
-	
 	
 }

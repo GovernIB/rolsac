@@ -2,6 +2,19 @@
 
 $(document).ready(function() {
 	
+	// Listener para guardado de módulos laterales vía AJAX.
+	jQuery(".lista-simple").click(function() {
+		
+		var element = $(this).parent().parent().find("li");
+		var id = $('#item_id').val();
+		var url = $(this).attr('action');
+		
+		ListaSimple.guardar(element, url, id);
+		
+	});
+	
+	ListaSimple = new ListaSimple();
+    
 	// elements
 	opcions_elm = $("#opcions");
 	escriptori_elm = $("#escriptori");
@@ -45,7 +58,6 @@ $(document).ready(function() {
     
 });
 
-
 // idioma
 var pag_idioma = $("html").attr("lang");
 
@@ -60,6 +72,9 @@ var itemID_ultim = 0;
 
 function CLlistat() {
 	
+	// Activa mensajes de debug.
+	var debug = false;
+	
 	this.extend = ListadoBase;
 	this.extend();
 	
@@ -67,13 +82,23 @@ function CLlistat() {
 	
 	this.iniciar = function() {
 		
+		if (debug)
+			console.log("Entrando en CLlistat.iniciar");
+		
 		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos			
 		this.carregar({});
+		
+		if (debug)
+			console.log("Saliendo de CLlistat.iniciar");
+		
 	}
 	
-	this.finCargaListado = function(opcions,data){
-		// total
-		resultats_total = parseInt(data.total,10);
+	this.finCargaListado = function(opcions, data) {
+		
+		if (debug)
+			console.log("Entrando en CLlistat.finCargaListado");
+
+		resultats_total = parseInt(data.total, 10);
 		
 		if (resultats_total > 0) {
 			
@@ -160,9 +185,8 @@ function CLlistat() {
 			
 			if ($.browser.opera)
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
-
 			
-			// Instanciamos el navegador multip�gina.
+			// Instanciamos el navegador multipágina.
 			multipagina.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
@@ -195,7 +219,6 @@ function CLlistat() {
 				// cercador
 				if (typeof opcions.cercador != "undefined" && opcions.cercador == "si")
 					cercador_elm.find("input, select").removeAttr("disabled");
-
 				
 				jQuery("#resultats .llistat .tbody select.ordenacion").bind("change").bind("change", function() {
 					
@@ -227,10 +250,16 @@ function CLlistat() {
 				
 			});
 		});
+		
+		if (debug)
+			console.log("Saliendo de CLlistat.finCargaListado");
+		
 	}
 	
-	
 	this.carregar = function(opcions) {
+		
+		if (debug)
+			console.log("Entrando en CLlistat.carregar");
 
 		dataVars = "";
 		
@@ -252,14 +281,12 @@ function CLlistat() {
 			dataVars_cercador = "";
 			
 		}
-			
 		
 		if (typeof opcions.ordreTipus != "undefined") // ordreTipus
 			ordreTipus_elm.val(opcions.ordreTipus);
 
 		if (typeof opcions.ordreCamp != "undefined") // ordreCamp
 			ordreCamp_elm.val(opcions.ordreCamp);
-
 		
 		// paginacio
 		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : multipagina.getPaginaActual();
@@ -288,7 +315,11 @@ function CLlistat() {
 			}
 		});
 		
+		if (debug)
+			console.log("Saliendo de CLlistat.carregar");
+		
 	}
+	
 };
 
 // items array
@@ -297,12 +328,18 @@ var Items_arr = new Array();
 // detall
 function CDetall() {
 	
+	// Activa mensajes de debug.
+	var debug = false;
+	
 	this.extend = DetallBase;
 	this.extend();
 	
     var that = this;
 
 	this.iniciar = function() {
+		
+		if (debug)
+			console.log("Entrando en CDetall.iniciar");
 		
 		// idioma
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {
@@ -341,23 +378,42 @@ function CDetall() {
 		
 		this.guarda = this.guarda_upload;
 		
+		if (debug)
+			console.log("Saliendo de CDetall.iniciar");
+		
 	}
 	
 	this.traduirWrapper = function () {
+		
+		if (debug)
+			console.log("Entrando en CDetall.traduirWrapper");
+		
 		that.traduir(pagTraduirFetsVitals, CAMPOS_TRADUCTOR_FET_VITAL, DATOS_TRADUCIDOS_FET_VITAL);
+		
+		if (debug)
+			console.log("Saliendo de CDetall.traduirWrapper");
+		
 	}
 	
-	//Sobreescribe el m�todo guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
+	// Sobreescribe el método guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
 	this.guarda_upload = function(e) {
+		
+		if (debug)
+			console.log("Entrando en CDetall.guarda_upload");
 		
 		// Validamos el formulario
 		if (!that.formulariValid()) {
+			
+			if (debug)
+				console.log("Saliendo de CDetall.guarda_upload");
+			
 			return false;
+			
 		}
 		
 		ModulProcediment.calculaOrden();
 		
-		//Enviamos el formulario mediante el m�todo ajaxSubmit del plugin jquery.form
+		// Enviamos el formulario mediante el método ajaxSubmit del plugin jquery.form
 		$("#formGuardar").ajaxSubmit({	
 			url: pagGuardar,
 			dataType: 'json',
@@ -370,15 +426,17 @@ function CDetall() {
 				
 				if (data.id < 0)
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
-				
 				else
 					Detall.recarregar(data.id);
 										
 			}
 								
 		});
+		
+		if (debug)
+			console.log("Saliendo de CDetall.guarda_upload");
 
-		return false;	
+		return false;
 		
 	}
 	
@@ -386,18 +444,20 @@ function CDetall() {
 
 	this.nou = function() {
 		
+		if (debug)
+			console.log("Entrando en CDetall.nou");
+		
         $("#item_id").val("");
         
 		escriptori_detall_elm.find(".botonera li.btnEliminar").hide();
 		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);
 		
-		//Resetear upload de archivos
+		// Resetear upload de archivos
 		limpiarArchivo("item_foto");
 		limpiarArchivo("item_icona");
 		limpiarArchivo("item_icona_gran");
 		
 		// Resetear upload de achivos multidioma
-		
 		for (var i in idiomas) {
 			
 			limpiarArchivoMultiidioma("item_distribucio", idiomas[i]);
@@ -405,7 +465,6 @@ function CDetall() {
 			limpiarArchivoMultiidioma("item_contingut", idiomas[i]);
 			
 		}
-		
 		
 		escriptori_contingut_elm.fadeOut(300, function() {
 			
@@ -419,16 +478,22 @@ function CDetall() {
 		
 		this.modificado(false);
 		
+		if (debug)
+			console.log("Saliendo de CDetall.nou");
+		
 	}		
 	
 	this.pintar = function(dades) {
+		
+		if (debug)
+			console.log("Entrando en CDetall.pintar");
 		
 		escriptori_detall_elm.find("a.elimina").show().end().find("h2:first").text(txtDetallTitol);
 		
 		dada_node = dades;
 		$("#item_id").val(dada_node.item_id);
 		
-		// Bloque de pestanyas de idiomas
+		// Bloque de pestañas de idiomas
 		for (var i in idiomas) {
 			
 			var idioma = idiomas[i];
@@ -438,7 +503,6 @@ function CDetall() {
 				$("#item_nom_" + idioma).val(printStringFromNull(dada_node[idioma]["nombre"]));
 				$("#item_descripcio_" + idioma).val(printStringFromNull(dada_node[idioma]["descripcion"]));
 				$("#item_paraules_clau_" + idioma).val(printStringFromNull(dada_node[idioma]["palabrasclave"]));
-				
 
 				// Fitxers
 				$("#item_distribucio_" + idioma).val("");
@@ -504,9 +568,10 @@ function CDetall() {
 					$("#grup_item_contingut_" + idioma + " a").hide();
 					
 				}
+				
 			}
+			
 		}
-		
 		// Fin bloque de pestanyas de idiomas
 		
 		jQuery("#item_codi_estandard").val(dada_node.item_codi_estandard);
@@ -542,10 +607,15 @@ function CDetall() {
 		
 		this.modificado(false);
 		
+		if (debug)
+			console.log("Saliendo de CDetall.pintar");
+		
 	}
 	
-	
 	this.elimina = function() {
+		
+		if (debug)
+			console.log("Entrando en CDetall.elimina");
 		
 		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
 		
@@ -583,10 +653,22 @@ function CDetall() {
 			}
 			
 		});
+		
+		if (debug)
+			console.log("Saliendo de CDetall.elimina");
+		
 	}
 	
 	this.pintarModulos = function(dades) {
+		
+		if (debug)
+			console.log("Entrando en CDetall.pintarModulos");
+		
 		ModulProcediment.inicializarProcediments(dades.procediments);
+		
+		if (debug)
+			console.log("Saliendo de CDetall.pintarModulos");
+		
 	}
 	
 };

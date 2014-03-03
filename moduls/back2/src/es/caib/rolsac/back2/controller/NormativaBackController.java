@@ -4,7 +4,6 @@ import static es.caib.rolsac.utils.LogUtils.logException;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -26,9 +25,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.ibit.rol.sac.model.Afectacion;
 import org.ibit.rol.sac.model.Boletin;
 import org.ibit.rol.sac.model.Normativa;
@@ -76,6 +72,7 @@ public class NormativaBackController extends PantallaBaseController {
 
     @RequestMapping(value = "/normativa.do", method = GET)
     public String pantallaNormatives(Map<String, Object> model, HttpServletRequest request, HttpSession session) {
+    	
         model.put("menu", 0);
         model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
         model.put("submenu_seleccionado", 4);
@@ -86,7 +83,7 @@ public class NormativaBackController extends PantallaBaseController {
             model.put("idUA", ((UnidadAdministrativa) session.getAttribute("unidadAdministrativa")).getId());
             model.put("nomUA", ((UnidadAdministrativa) session.getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa());
         }
-
+        
         String traspasboib = System.getProperty("es.caib.rolsac.traspasboib");
         if (traspasboib == null) {
             traspasboib = "N";
@@ -481,7 +478,7 @@ public class NormativaBackController extends PantallaBaseController {
             NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
             Normativa normativa = normativaDelegate.obtenerNormativa(id);
    			
-   			resultats.put("afectacions", getNormativasAfectadasDTO(normativa, lang));
+   			resultats.put("afectacions", getNormativasAfectadasDTO(normativa, lang, id));
    			resultats.put("procediments", getProcedimientosNormativaDTO(normativa, lang));
 
    		} catch (DelegateException dEx) {
@@ -506,38 +503,55 @@ public class NormativaBackController extends PantallaBaseController {
         List<ProcedimientoLocalDTO> procedimientos = new ArrayList<ProcedimientoLocalDTO>();
 
         for (ProcedimientoLocal proc : listaProcedimientos) {
-            TraduccionProcedimientoLocal traProc = (TraduccionProcedimientoLocal) proc.getTraduccion(idiomaUsuario);
-            procedimientos.add(new ProcedimientoLocalDTO(proc.getId(), null, traProc != null ? traProc.getNombre() : "", null, null, null, null));
+        	
+            TraduccionProcedimientoLocal traProc = (TraduccionProcedimientoLocal)proc.getTraduccion(idiomaUsuario);
+            
+            procedimientos.add(
+        		new ProcedimientoLocalDTO(
+        			0L,
+    				proc.getId(),
+    				traProc != null ? traProc.getNombre() : "",
+    				null, null, null, null
+				)
+    		);
         }
 
         return procedimientos;
+        
     }
 
-    private List<AfectacionDTO> getNormativasAfectadasDTO(Normativa normativa, String idiomaUsuario) {
+    private List<AfectacionDTO> getNormativasAfectadasDTO(Normativa normativa, String idiomaUsuario, long id) {
 
         Set<Afectacion> listaAfectadas = normativa.getAfectadas();
         List<AfectacionDTO> afectadas = new ArrayList<AfectacionDTO>();
 
         for (Afectacion afec : listaAfectadas) {
+        	
             Normativa normativaAfectada = afec.getNormativa();
-            AfectacionDTO afeTran = new AfectacionDTO();
-            afeTran.setAfectacioId(afec.getTipoAfectacion().getId());
+            AfectacionDTO afectacion = new AfectacionDTO();
+            
+            afectacion.setAfectacioId(afec.getTipoAfectacion().getId());
 
-            TraduccionTipoAfectacion traTipAfec = (TraduccionTipoAfectacion) afec.getTipoAfectacion().getTraduccion(idiomaUsuario);
+            TraduccionTipoAfectacion traTipAfec = (TraduccionTipoAfectacion)afec.getTipoAfectacion().getTraduccion(idiomaUsuario);
             if (traTipAfec == null) {
-                traTipAfec = (TraduccionTipoAfectacion) afec.getTipoAfectacion().getTraduccion();
+                traTipAfec = (TraduccionTipoAfectacion)afec.getTipoAfectacion().getTraduccion();
             }
 
-            afeTran.setAfectacioNom(traTipAfec.getNombre());
-            afeTran.setNormaId(normativaAfectada.getId());
+            afectacion.setAfectacioNom(traTipAfec.getNombre());
+            afectacion.setNormaId(normativaAfectada.getId());
 
             TraduccionNormativa traNormAfectada = (TraduccionNormativa) normativaAfectada.getTraduccion(idiomaUsuario);
             if (traNormAfectada == null) {
                 traNormAfectada = (TraduccionNormativa) normativaAfectada.getTraduccion();
             }
 
-            afeTran.setNormaNom(traNormAfectada != null ? obtenerTituloDeEnlaceHtml(traNormAfectada.getTitulo()) : "");
-            afectadas.add(afeTran);
+            afectacion.setNormaNom(traNormAfectada != null ? obtenerTituloDeEnlaceHtml(traNormAfectada.getTitulo()) : "");
+            
+            afectacion.setIdMainItem(id);
+            afectacion.setIdRelatedItem(normativaAfectada.getId());
+            
+            afectadas.add(afectacion);
+            
         }
 
         return afectadas;
@@ -653,13 +667,11 @@ public class NormativaBackController extends PantallaBaseController {
             // Actualizar estadísticas
             DelegateUtil.getEstadisticaDelegate().grabarEstadisticaNormativa(idNormativa);
 
-            // Guardar afectacions
-            guardarAfectaciones(valoresForm, normativa, edicion);
-
             // Finalizado correctamente
             result = new IdNomDTO(normativa.getId(), messageSource.getMessage("normativa.guardat.correcte", null, request.getLocale()));
 
         } catch (DelegateException dEx) {
+        	
             if (dEx.isSecurityException()) {
                 String error = messageSource.getMessage("error.permisos", null, request.getLocale());
                 result = new IdNomDTO(-1l, error);
@@ -668,33 +680,29 @@ public class NormativaBackController extends PantallaBaseController {
                 result = new IdNomDTO(-2l, error);
                 log.error(ExceptionUtils.getStackTrace(dEx));
             }
+            
         } catch (ParseException e) {
+        	
             String error = messageSource.getMessage("error.altres", null, request.getLocale());
             result = new IdNomDTO(-2l, error);
             log.error(ExceptionUtils.getStackTrace(e));
 
         } catch (FileUploadException e) {
+        	
             String error = messageSource.getMessage("error.fitxer.tamany", null, request.getLocale());
             result = new IdNomDTO(-3l, error);
             log.error(ExceptionUtils.getStackTrace(e));
 
         } catch (UnsupportedEncodingException e) {
+        	
             String error = messageSource.getMessage("error.altres", null, request.getLocale());
             result = new IdNomDTO(-2l, error);
             log.error(ExceptionUtils.getStackTrace(e));
 
-        } catch (JsonParseException e) {
-            String error = messageSource.getMessage("error.altres", null, request.getLocale());
-            result = new IdNomDTO(-2l, error);
-            log.error(ExceptionUtils.getStackTrace(e));
-
-        } catch (IOException e) {
-            String error = messageSource.getMessage("error.altres", null, request.getLocale());
-            result = new IdNomDTO(-2l, error);
-            log.error(ExceptionUtils.getStackTrace(e));
         }
 
         return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
+        
     }
 
     /**
@@ -736,7 +744,6 @@ public class NormativaBackController extends PantallaBaseController {
      */
     private String mensajeEditable(HttpServletRequest request, Map<String, String> valoresForm, Normativa normativaOld, UnidadAdministrativa ua) throws DelegateException {
 
-        String mensaje = "";
         // Comprobar permisos para modificar normativa
         // O comprobar que no se haya cambiado la validacion siendo operador
         if (!DelegateUtil.getNormativaDelegate().autorizaModificarNormativa(normativaOld.getId())
@@ -751,6 +758,7 @@ public class NormativaBackController extends PantallaBaseController {
         }
 
         return "";
+        
     }
 
     /**
@@ -867,56 +875,6 @@ public class NormativaBackController extends PantallaBaseController {
             return normativaDelegate.grabarNormativaLocal((NormativaLocal) normativa, ua.getId());
         } else {
             return normativaDelegate.grabarNormativaExterna((NormativaExterna) normativa);
-        }
-    }
-
-    /**
-     * Guardar afectaciones de una normativa
-     * 
-     * @param valoresForm
-     * @param normativa
-     * @param edicion
-     * @throws DelegateException
-     * @throws JsonParseException
-     * @throws JsonMappingException
-     * @throws IOException
-     */
-    private void guardarAfectaciones(Map<String, String> valoresForm, Normativa normativa, boolean edicion) throws DelegateException, JsonParseException, JsonMappingException, IOException {
-
-        NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
-        if (isModuloModificado("modulo_afectaciones_modificado", valoresForm)) {
-
-            // Gestionar afectaciones
-            ObjectMapper mapper = new ObjectMapper();
-            String jsonAfectaciones = valoresForm.get("afectaciones");
-            AfectacionesDTO afectaciones = mapper.readValue(jsonAfectaciones, AfectacionesDTO.class);
-
-            // Si estamos editando comparar la lista actual de afectaciones actual con la nueva para determinar qué añadir y qué eliminar.
-            if (edicion) {
-                Set<Afectacion> listaActualAfectaciones = normativa.getAfectadas();
-                for (Afectacion afectacionOld : listaActualAfectaciones) {
-
-                    // Buscar la afectación afectacionOld en la lista nueva recibida en el post
-                    boolean estaEnLaListaNueva = false;
-                    for (AfectacionDTO afectacionNew : afectaciones.getListaAfectaciones()) {
-                        if (afectacionOld.getNormativa().getId().equals(afectacionNew.getNormaId()) && afectacionOld.getTipoAfectacion().getId().equals(afectacionNew.getAfectacioId())) {
-                            estaEnLaListaNueva = true;
-                            afectaciones.getListaAfectaciones().remove(afectacionNew);
-                            break;
-                        }
-                    }
-                    // Si no está en la lista nueva es que hay que eliminarla
-                    if (!estaEnLaListaNueva) {
-                        normativaDelegate.eliminarAfectacion(normativa.getId(), afectacionOld.getTipoAfectacion().getId(), afectacionOld.getNormativa().getId());
-                    }
-                }
-            }
-
-            // Añadir afectaciones
-            for (AfectacionDTO afectacion : afectaciones.getListaAfectaciones()) {
-                normativaDelegate.anyadirAfectacion(afectacion.getNormaId(), afectacion.getAfectacioId(), normativa.getId());
-            }
-
         }
     }
 
@@ -1103,17 +1061,6 @@ public class NormativaBackController extends PantallaBaseController {
         }
     }
 
-    /**
-     * Devuelve true si ha habido algun cambio en el modulo.
-     * 
-     * @param modulo
-     * @param valoresForm
-     * @return boolean
-     */
-    private boolean isModuloModificado(String modulo, Map<String, String> valoresForm) {
-        return "1".equals(valoresForm.get(modulo));
-    }
-
     @RequestMapping(value = "/traduir.do")
     public @ResponseBody
     Map<String, Object> traduir(HttpServletRequest request) {
@@ -1162,6 +1109,98 @@ public class NormativaBackController extends PantallaBaseController {
         }
 
         return traduccioOrigen;
+    }
+    
+    @SuppressWarnings("unchecked")
+	@RequestMapping(value = "/guardarAfectaciones.do")
+	public @ResponseBody IdNomDTO guardarAfectaciones(Long id, Long[] elementos, Long[] tiposAfectacion, HttpSession session, HttpServletRequest request) {
+    	
+    	/**
+		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
+		 * Si no se fuerza el content type, Spring lo calcula y curiosamente depende del navegador desde el que se hace la petición.
+		 * Esto se debe a que como esta petición es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
+		 * un descargable o fichero vinculado a una aplicación. 
+		 * De esta forma, y devolviendo un ResponseEntity, forzaremos el Content-Type de la respuesta.
+		 */
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+		
+		String error = null;       
+		IdNomDTO result = null;
+		
+		try {
+					
+			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
+			Normativa normativa = normativaDelegate.obtenerNormativa(id);
+			
+            Set<Afectacion> listaActualAfectaciones = normativa.getAfectadas();
+            
+            // Construimos lista de nuevas afectaciones enviadas.
+            List<AfectacionDTO> listaNuevasAfectaciones = new ArrayList<AfectacionDTO>();
+            if ( elementos != null ) {
+            	
+            	for (int i = 0; i < elementos.length; i++) {
+            		
+            		AfectacionDTO afectacion = new AfectacionDTO();
+            		afectacion.setNormaId(elementos[i]);
+            		afectacion.setAfectacioId(tiposAfectacion[i]);
+            		
+            		listaNuevasAfectaciones.add(afectacion);
+            		
+            	}
+            	
+            }
+            
+            AfectacionesDTO afectaciones = new AfectacionesDTO();
+            afectaciones.setListaAfectaciones(listaNuevasAfectaciones);
+            
+            // Comparar la lista actual de afectaciones con la nueva para determinar qué añadir y qué eliminar.
+            for (Afectacion afectacionOld : listaActualAfectaciones) {
+
+                // Buscar la afectación afectacionOld en la lista nueva recibida en el post
+                boolean estaEnLaListaNueva = false;
+                
+                for (AfectacionDTO afectacionNew : afectaciones.getListaAfectaciones()) {
+                
+                	if (afectacionOld.getNormativa().getId().equals(afectacionNew.getNormaId()) && afectacionOld.getTipoAfectacion().getId().equals(afectacionNew.getAfectacioId())) {
+                        estaEnLaListaNueva = true;
+                        afectaciones.getListaAfectaciones().remove(afectacionNew);
+                        break;
+                    }
+                
+                }
+                
+                // Si no está en la lista nueva es que hay que eliminarla
+                if (!estaEnLaListaNueva) {
+                    normativaDelegate.eliminarAfectacion(normativa.getId(), afectacionOld.getTipoAfectacion().getId(), afectacionOld.getNormativa().getId());
+                }
+                
+            }
+
+            // Añadir afectaciones
+            for (AfectacionDTO afectacion : afectaciones.getListaAfectaciones()) {
+                normativaDelegate.anyadirAfectacion(afectacion.getNormaId(), afectacion.getAfectacioId(), normativa.getId());
+            }
+			
+		} catch (DelegateException dEx) {
+			
+			if (dEx.isSecurityException()) {
+				
+				error = messageSource.getMessage("error.permisos", null, request.getLocale());
+				result = new IdNomDTO(-1l, error);
+				
+			} else {
+				
+				error = messageSource.getMessage("error.altres", null, request.getLocale());
+				result = new IdNomDTO(-2l, error);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+				
+			}
+			
+		}
+		
+		return result;
+    	
     }
 
 }

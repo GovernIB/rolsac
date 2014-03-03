@@ -7,8 +7,10 @@
 <script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery.ui.datepicker-ca.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/lista_ajax.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/tm_fets_vitals.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_procediments.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/buscador_procedimientos.js'/>"></script>
 
 <script type="text/javascript">
     var pagLlistat = '<c:url value="/fetsVitals/llistat.do" />';
@@ -463,6 +465,13 @@
                             </div>
                             <p class="btnGenerico">
                                 <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.gestiona_procediments'/></span></span></a>
+                            </p>
+                            <p/><!-- Separador -->
+                            <p class="btnGenerico">
+                                <a id="btnGuardar_procediment" href="javascript:;" class="btn guarda important lista-simple" 
+                            			action="<c:url value="/fetsVitals/guardarProcedimientos.do" />">
+                           			<span><span><spring:message code='boto.guarda'/></span></span>
+                            	</a>
                             </p>
                         </div>
                         <!-- /modulProcediments -->

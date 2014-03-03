@@ -132,7 +132,7 @@ public class HechoVitalDelegate implements StatelessDelegate
 		}
 	}
 	
-	public List buscarPorIds(List<Long> ids) throws DelegateException {
+	public List buscarPorIds(Long[] ids) throws DelegateException {
     	try {
             return getFacade().buscarPorIds(ids);
         } catch (RemoteException e) {

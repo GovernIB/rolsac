@@ -2,466 +2,474 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="rol" uri="/WEB-INF/rol.tld" %>
+
 <c:set var="rolAdmin"><rol:userIsAdmin/></c:set>
+
 <link href='<c:url value="/css/normativa.css"/>' rel="stylesheet" type="text/css" media="screen" />
 <link href='<c:url value="/css/modul_afectacions.css"/>' rel="stylesheet" type="text/css" media="screen" />
 <link href='<c:url value="/css/modul_procediments.css"/>' rel="stylesheet" type="text/css" media="screen" />
-<%-- obsoleto? borrar
-<link href='<c:url value="/css/modul_traspas.css"/>' rel="stylesheet" type="text/css" media="screen" />
- --%>
+
 <script type="text/javascript" src="<c:url value='/js/tiny_mce/jquery.tinymce.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery.form.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery.ui.datepicker-ca.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/normativa.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/lista_ajax.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/normativa.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_afectacions.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_auditories.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_estadistiques.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
 
-    <script type="text/javascript">
-    <!--
-        // pagines  
-        var pagLlistat = '<c:url value="/normativa/llistat.do" />';
-        var pagDetall = '<c:url value="/normativa/pagDetall.do" />';
-        var pagGuardar = '<c:url value="/normativa/guardar.do" />';
-        var pagEliminar = '<c:url value="/normativa/eliminar.do" />';
-        var pagCercaBoib = '<c:url value="/normativa/cercaBoib.do" />';
-        var pagDetallBoib = '<c:url value="/normativa/detallBoib.do" />';
-        var pagAuditories = '<c:url value="/auditories/llistat.do" />';
-        var pagEstadistiques = '<c:url value="/estadistiques/grafica.do" />';
-        var pagArrel = '<c:url value="/" />';
-      	var pagNormativa = '<c:url value="/normativa/cercarNormatives.do" />';
-      	var pagTraduirNormativa = '<c:url value="/normativa/traduir.do" />';
-      	var modulos = '<c:url value="/normativa/modulos.do" />';
-        
-        var idUaActual = '<c:out value="${idUA}" />';
-        var nomUaActual = '<c:out value="${nomUA}" />';        
-        
-        var txtSenseArxiu = "<spring:message code='txt.sense_arxiu'/>";
-        
-        // texts
-        var txtEspere = "<spring:message code='txt.esperi'/>";
-        var txtCarregant = "<spring:message code='txt.carregant'/>";
-        var txtSi = "<spring:message code='txt.si'/>";
-        var txtNo = "<spring:message code='txt.no'/>";
-        var txtTrobats = "<spring:message code='txt.trobats'/>";
-        var txtTrobades = "<spring:message code='txt.trobades'/>";
-        var txtLlistaItem = "<spring:message code='txt.normativa'/>";
-        var txtLlistaItems = "<spring:message code='txt.normatives'/>";
-        var txtData = "<spring:message code='txt.dataNorma'/>";
-        var txtDataButlleti = "<spring:message code='camp.data_butlleti'/>";
-        var txtPublicacio = "<spring:message code='boto.publicacio'/>";
-        var txtCaducitat = "<spring:message code='txt.caducitat'/>";
-        var txtMostrem = "<spring:message code='txt.mostrem'/>";
-        var txtDeLa = "<spring:message code='txt.de_la'/>";
-        var txtMostremAl = " <spring:message code='txt.a_la'/> ";
-        var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
-        var txtNoHiHaLlistat = txtNoHiHa + " " + txtLlistaItems.toLowerCase();
-        var txtCarregantLlistat = txtCarregant + " " + txtLlistaItems.toLowerCase() + ". " + txtEspere;        
-        var txtOrdenats = "<spring:message code='txt.ordenats'/>";
-        var txtOrdenades = "<spring:message code='txt.ordenades'/>";
-        var txtAscendentment = "<spring:message code='txt.ascendentment'/>";
-        var txtDescendentment = "<spring:message code='txt.descendentment'/>";
-        var txtPer = "<spring:message code='txt.per'/>";
-        // taula
+<script type="text/javascript">
+<!--
 
-        var txtNumero = "<spring:message code='camp.numero'/>";
-        var txtNumBoletin = "<spring:message code='camp.nombreButlleti'/>";
-        var txtTipus = "<spring:message code='camp.tipus'/>";
-        var txtTipoBoletin = "<spring:message code='camp.tipusButlleti'/>";
-        var txtBoletin = "<spring:message code='txt.butlleti'/>";
-        var txtTipologia = "<spring:message code='camp.tipologia'/>";
-        var txtTipologiaNorma = "<spring:message code='camp.tipologiaNorma'/>";
-        var txtFechaBoletin = "<spring:message code='camp.dataButlleti'/>";
-        var txtLocal = "<spring:message code='txt.local'/>";
-        var txtExterna = "<spring:message code='txt.externa'/>";
-        var txtBOIB = "<spring:message code='txt.boib'/>";
-        var txtNumRegistro = "<spring:message code='camp.registre'/>";
-        
-        
-        var txtCercant = "<spring:message code='txt.cercant'/>";
-        var txtCercantLlistat = txtCercant + " " + txtLlistaItems.toLowerCase() + ". " + txtEspere;
-        // paginacio
-        var txtTrobat = "<spring:message code='txt.sha_trobat'/>";
-        var txtSeguents = "<spring:message code='txt.seguents'/>";
-        var txtAnteriors = "<spring:message code='txt.anteriors'/>";
-        var txtInici = "<spring:message code='txt.inici'/>";
-        var txtFinal = "<spring:message code='txt.final'/>";
-        var txtPagines = "<spring:message code='txt.pagines'/>";
-        var txtCercantElements = txtCercant + " " + txtLlistaItems;
-        var txtCercantLlistatAnteriors = txtCercant + " " + txtLlistaItems.toLowerCase() + " " + txtAnteriors.toLowerCase() + ". " + txtEspere;
-        var txtCercantLlistatSeguents = txtCercant + " " + txtLlistaItems.toLowerCase() + " " + txtSeguents.toLowerCase() + ". " + txtEspere;
-        
-        var txtCercantAnteriors = txtCercantLlistatAnteriors;
-        var txtCercantSeguents = txtCercantLlistatSeguents;
-        
-        // detall
-        var txtCarregantDetall = txtCarregant + " <spring:message code='txt.detall_de_la'/> " + txtLlistaItem.toLowerCase() + ". " + txtEspere;
-        var txtNouTitol = "<spring:message code='txt.nova'/> " + txtLlistaItem.toLowerCase();
-        var txtDetallTitol = "<spring:message code='txt.detall_de_la.titol'/> " + txtLlistaItem.toLowerCase();
-        var txtItemEliminar = "<spring:message code='txt.segur_eliminar_aquest'/> " + txtLlistaItem.toLowerCase() + "?";
-        var txtEnviantDades = "<spring:message code='txt.enviant_dades_servidor'/> " + txtEspere;
-        var txtMostra = "<spring:message code='txt.mostra'/>";
-        var txtAmaga = "<spring:message code='txt.amaga'/>";
-        var txtCaducat = "<spring:message code='txt.caducat'/>";
-        var txtImmediat = "<spring:message code='txt.inmediat'/>";
-        // idioma
-        var txtDesplega = "<spring:message code='txt.desplega'/>";
-        var txtPlega = "<spring:message code='txt.plega'/>";
-        //fotos
-        var txtImatge = "<spring:message code='txt.imatge'/>";
-        var txtFoto = "<spring:message code='txt.foto'/>";
-        var txtFotos = "<spring:message code='txt.fotos'/>";
-        var txtFotoPetita = txtFoto + " <spring:message code='txt.petita'/>";
-        var txtFotoGran = txtFoto + " <spring:message code='txt.gran'/>";
-        var txtLleva = "<spring:message code='txt.lleva'/>";
-        var txtInclou = "<spring:message code='txt.inclou'/>";
-        var txtElimina = "<spring:message code='txt.elimina'/>";
-        var txtNoHiHaFotos = txtNoHiHa + " " + txtFotos.toLowerCase() + " <spring:message code='txt.associades'/>";
-        // docs
-        var txtNom = "<spring:message code='txt.nom'/>";
-        var txtArxiu = "<spring:message code='txt.arxiu'/>";
-        // enllasos
-        var txtAdresa = "<spring:message code='txt.adresa'/>";
-        // moduls
-        var txtHiHa = "<spring:message code='txt.hi_ha'/>";
-        var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
-        var txtItems = "<spring:message code='txt.items'/>";
-        var txtCarregantItems = txtCarregant + " " + txtItems.toLowerCase();
-        var txtCercantItems = txtCercant + " " + txtItems.toLowerCase();
-        var txtCercantItemsAnteriors = txtCercant + " " + txtItems.toLowerCase() + " " + txtAnteriors.toLowerCase() + ". " + txtEspere;
-        var txtCercantItemsSeguents = txtCercant + " " + txtItems.toLowerCase() + " " + txtSeguents.toLowerCase() + ". " + txtEspere;
-        // modul afectacions
-        var txtAfectacio = "<spring:message code='txt.afectacio'/>";
-        var txtAfectacions = "<spring:message code='txt.afectacions'/>";
-        var txtNoHiHaAfectacions = txtNoHiHa + " " + txtAfectacions.toLowerCase();
-        var txtSeleccionada = "<spring:message code='txt.seleccionada'/>";
-        var txtSeleccionades = "<spring:message code='txt.seleccionades'/>";
-        var txtNoHiHaAfectacionsSeleccionats = txtNoHiHa + " " + txtAfectacions.toLowerCase() + " " + txtSeleccionades.toLowerCase();
-        var txtNormativa = "<spring:message code='txt.normativa'/>";
-        var txtNormatives = "<spring:message code='txt.normatives'/>";
-        var txtAmbLaNorma = "<spring:message code='txt.amb_la_norma'/>";
-        // modul BOIB
-        var txtRegistre = "<spring:message code='txt.registre'/>";
-        var txtNoHiHaNormativaBOIB = txtNoHiHa + " " + "<spring:message code='txt.normativa_boib'/>";
-        
-        var txtNoHiHaNormatives = txtNoHiHa + " " + txtNormatives;
-        
-        var txtIntroduceBoibOFecha = "<spring:message code='normativa.formulari.traspas_eboib.introduce_boib_o_fecha'/>";
-        
-        var Afectacions_arr = [];
-        <c:forEach items="${llistaTipusAfectacio}" var="tipus">
-            Afectacions_arr.push({id : '<c:out value="${tipus.id}" />', nom : '<c:out value="${tipus.nom}" />'});        
-        </c:forEach>
-        
-                
-        // modul procediments
-        var txtProcediment = "<spring:message code='txt.procediment'/>";
-        var txtProcediments = "<spring:message code='txt.procediments'/>";
-        var txtNoHiHaProcediments = txtNoHiHa + " " + txtProcediments.toLowerCase();
-        var txtSeleccionat = "<spring:message code='txt.seleccionat'/>";
-        var txtSeleccionats = "<spring:message code='txt.seleccionats'/>";
-        var txtNoHiHaProcedimentsSeleccionats = txtNoHiHa + " " + txtProcediments.toLowerCase() + " " + txtSeleccionats.toLowerCase();        
-        
-        var txtNormativaLocal = "<spring:message code='txt.normativa_local'/>";
-        var txtNormativaExterna = "<spring:message code='txt.normativa_externa'/>";
-        
-        // suggeriments
-        /*var suggeriments = [
-            {
-                etiqueta: "id",
-                etiquetaValor: "cerca_titol",
-                pagina: "json/normativesJSON_consulta.php"
-            }
-        ];*/
-    -->
-    </script>
+	// pagines  
+	var pagLlistat = '<c:url value="/normativa/llistat.do" />';
+	var pagDetall = '<c:url value="/normativa/pagDetall.do" />';
+	var pagGuardar = '<c:url value="/normativa/guardar.do" />';
+	var pagEliminar = '<c:url value="/normativa/eliminar.do" />';
+	var pagCercaBoib = '<c:url value="/normativa/cercaBoib.do" />';
+	var pagDetallBoib = '<c:url value="/normativa/detallBoib.do" />';
+	var pagAuditories = '<c:url value="/auditories/llistat.do" />';
+	var pagEstadistiques = '<c:url value="/estadistiques/grafica.do" />';
+	var pagArrel = '<c:url value="/" />';
+ 	var pagNormativa = '<c:url value="/normativa/cercarNormatives.do" />';
+ 	var pagTraduirNormativa = '<c:url value="/normativa/traduir.do" />';
+ 	var modulos = '<c:url value="/normativa/modulos.do" />';
+      
+	var idUaActual = '<c:out value="${idUA}" />';
+	var nomUaActual = '<c:out value="${nomUA}" />';        
+	
+	var txtSenseArxiu = "<spring:message code='txt.sense_arxiu'/>";
+	
+	// texts
+	var txtEspere = "<spring:message code='txt.esperi'/>";
+	var txtCarregant = "<spring:message code='txt.carregant'/>";
+	var txtSi = "<spring:message code='txt.si'/>";
+	var txtNo = "<spring:message code='txt.no'/>";
+	var txtTrobats = "<spring:message code='txt.trobats'/>";
+	var txtTrobades = "<spring:message code='txt.trobades'/>";
+	var txtLlistaItem = "<spring:message code='txt.normativa'/>";
+	var txtLlistaItems = "<spring:message code='txt.normatives'/>";
+	var txtData = "<spring:message code='txt.dataNorma'/>";
+	var txtDataButlleti = "<spring:message code='camp.data_butlleti'/>";
+	var txtPublicacio = "<spring:message code='boto.publicacio'/>";
+	var txtCaducitat = "<spring:message code='txt.caducitat'/>";
+	var txtMostrem = "<spring:message code='txt.mostrem'/>";
+	var txtDeLa = "<spring:message code='txt.de_la'/>";
+	var txtMostremAl = " <spring:message code='txt.a_la'/> ";
+	var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
+	var txtNoHiHaLlistat = txtNoHiHa + " " + txtLlistaItems.toLowerCase();
+	var txtCarregantLlistat = txtCarregant + " " + txtLlistaItems.toLowerCase() + ". " + txtEspere;        
+	var txtOrdenats = "<spring:message code='txt.ordenats'/>";
+	var txtOrdenades = "<spring:message code='txt.ordenades'/>";
+	var txtAscendentment = "<spring:message code='txt.ascendentment'/>";
+	var txtDescendentment = "<spring:message code='txt.descendentment'/>";
+	var txtPer = "<spring:message code='txt.per'/>";
+
+	// taula
+	var txtNumero = "<spring:message code='camp.numero'/>";
+    var txtNumBoletin = "<spring:message code='camp.nombreButlleti'/>";
+    var txtTipus = "<spring:message code='camp.tipus'/>";
+    var txtTipoBoletin = "<spring:message code='camp.tipusButlleti'/>";
+    var txtBoletin = "<spring:message code='txt.butlleti'/>";
+    var txtTipologia = "<spring:message code='camp.tipologia'/>";
+    var txtTipologiaNorma = "<spring:message code='camp.tipologiaNorma'/>";
+    var txtFechaBoletin = "<spring:message code='camp.dataButlleti'/>";
+    var txtLocal = "<spring:message code='txt.local'/>";
+    var txtExterna = "<spring:message code='txt.externa'/>";
+    var txtBOIB = "<spring:message code='txt.boib'/>";
+    var txtNumRegistro = "<spring:message code='camp.registre'/>";
     
-    <script type="text/javascript">
-    <!--
-        var txtMaxim = "<spring:message code='txt.maxim'/>";
-        var txtMax = "<spring:message code='txt.max'/>";
-        var txtCaracters = "<spring:message code='txt.caracters'/>";
-        var txtCampObligatori = "<spring:message code='txt.camp_obligatori'/>";
-        var txtAnyMal = "<spring:message code='txt.any_mal'/>";
-        var txtMesMal = "<spring:message code='txt.mes_mal'/>";
-        var txtDiaMal = "<spring:message code='txt.dia_mal'/>";
-        var txtNoEsCorrecte = "<spring:message code='txt.data_no_correcte'/>";
-        
-        // dades formularios
-        var FormulariDades = [
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_titol_" + '<c:out value="${idiomaVal}"/>',
-                "obligatori": "si",
-                "tipus": "alfanumeric",
-                "caracters":
-                {
-                    "maxim": 230,
-                    "mostrar": "no",
-                    "abreviat": "no"
-                },
-                "error":
-                    {
-                        "obligatori": "<spring:message code='normativa.formulari.titol.obligatori'/> " + '<c:out value="${idiomaVal}"/>',
-                        "tipus": "<spring:message code='normativa.formulari.titol_ca.no_nomes_numeros'/>"
-                    }
-            },
-
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_titol_" + '<c:out value="${idiomaVal}"/>',
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                {
-                    "maxim": 230,
-                    "mostrar": "no",
-                    "abreviat": "no"
-                }
-            },
-
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_enllas_" + '<c:out value="${idiomaVal}"/>',
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                {
-                    "maxim": 480,
-                    "mostrar": "no",
-                    "abreviat": "no"
-                }
-            },
-
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_apartat_" + '<c:out value="${idiomaVal}"/>',
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                {
-                    "maxim": 480,
-                    "mostrar": "no",
-                    "abreviat": "no"
-                }
-            },
-
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_responsable_" + '<c:out value="${idiomaVal}"/>',
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                {
-                    "maxim": 480,
-                    "mostrar": "no",
-                    "abreviat": "no"
-                }
-            },
-
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_pagina_inicial_" + '<c:out value="${idiomaVal}"/>',
-                "obligatori": "no",
-                "tipus": "numeric",
-                "caracters":
-                {
-                    "maxim": 18,
-                    "mostrar": "no",
-                    "abreviat": "no"
-                },
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.pagina_inicial_ca.tipus'/>"
-                    }
-            },
-
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_pagina_final_" + '<c:out value="${idiomaVal}"/>',
-                "obligatori": "no",
-                "tipus": "numeric",
-                "caracters":
-                {
-                    "maxim": 18,
-                    "mostrar": "no",
-                    "abreviat": "no"
-                },
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.pagina_final_ca.tipus'/>"
-                    }
-            },
-
-            // No traduibles
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_numero",
-                "obligatori": "si",
-                "tipus": "numeric",
-                "caracters":
-                {
-                    "maxim": 18,
-                    "mostrar": "no",
-                    "abreviat": "no"
-                },
-                "error":
-                    {
-                        "obligatori": "<spring:message code='normativa.formulari.numero.obligatori'/>",
-                        "tipus": "<spring:message code='normativa.formulari.numero.tipus'/>"
-                    }
-            },
-
-            /*
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_data_norma",
-                "obligatori": "no",
-                "tipus": "data",
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.data.tipus'/>"
-                    }
-            },    
+    var txtCercant = "<spring:message code='txt.cercant'/>";
+    var txtCercantLlistat = txtCercant + " " + txtLlistaItems.toLowerCase() + ". " + txtEspere;
+    
+    // paginacio
+    var txtTrobat = "<spring:message code='txt.sha_trobat'/>";
+    var txtSeguents = "<spring:message code='txt.seguents'/>";
+    var txtAnteriors = "<spring:message code='txt.anteriors'/>";
+    var txtInici = "<spring:message code='txt.inici'/>";
+    var txtFinal = "<spring:message code='txt.final'/>";
+    var txtPagines = "<spring:message code='txt.pagines'/>";
+    var txtCercantElements = txtCercant + " " + txtLlistaItems;
+    var txtCercantLlistatAnteriors = txtCercant + " " + txtLlistaItems.toLowerCase() + " " + txtAnteriors.toLowerCase() + ". " + txtEspere;
+    var txtCercantLlistatSeguents = txtCercant + " " + txtLlistaItems.toLowerCase() + " " + txtSeguents.toLowerCase() + ". " + txtEspere;
+    
+    var txtCercantAnteriors = txtCercantLlistatAnteriors;
+    var txtCercantSeguents = txtCercantLlistatSeguents;
+    
+    // detall
+    var txtCarregantDetall = txtCarregant + " <spring:message code='txt.detall_de_la'/> " + txtLlistaItem.toLowerCase() + ". " + txtEspere;
+    var txtNouTitol = "<spring:message code='txt.nova'/> " + txtLlistaItem.toLowerCase();
+    var txtDetallTitol = "<spring:message code='txt.detall_de_la.titol'/> " + txtLlistaItem.toLowerCase();
+    var txtItemEliminar = "<spring:message code='txt.segur_eliminar_aquest'/> " + txtLlistaItem.toLowerCase() + "?";
+    var txtEnviantDades = "<spring:message code='txt.enviant_dades_servidor'/> " + txtEspere;
+    var txtMostra = "<spring:message code='txt.mostra'/>";
+    var txtAmaga = "<spring:message code='txt.amaga'/>";
+    var txtCaducat = "<spring:message code='txt.caducat'/>";
+    var txtImmediat = "<spring:message code='txt.inmediat'/>";
+    
+    // idioma
+    var txtDesplega = "<spring:message code='txt.desplega'/>";
+    var txtPlega = "<spring:message code='txt.plega'/>";
+    
+    //fotos
+    var txtImatge = "<spring:message code='txt.imatge'/>";
+    var txtFoto = "<spring:message code='txt.foto'/>";
+    var txtFotos = "<spring:message code='txt.fotos'/>";
+    var txtFotoPetita = txtFoto + " <spring:message code='txt.petita'/>";
+    var txtFotoGran = txtFoto + " <spring:message code='txt.gran'/>";
+    var txtLleva = "<spring:message code='txt.lleva'/>";
+    var txtInclou = "<spring:message code='txt.inclou'/>";
+    var txtElimina = "<spring:message code='txt.elimina'/>";
+    var txtNoHiHaFotos = txtNoHiHa + " " + txtFotos.toLowerCase() + " <spring:message code='txt.associades'/>";
+    
+    // docs
+    var txtNom = "<spring:message code='txt.nom'/>";
+    var txtArxiu = "<spring:message code='txt.arxiu'/>";
+    
+    // enllasos
+    var txtAdresa = "<spring:message code='txt.adresa'/>";
+    
+    // moduls
+    var txtHiHa = "<spring:message code='txt.hi_ha'/>";
+    var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
+    var txtItems = "<spring:message code='txt.items'/>";
+    var txtCarregantItems = txtCarregant + " " + txtItems.toLowerCase();
+    var txtCercantItems = txtCercant + " " + txtItems.toLowerCase();
+    var txtCercantItemsAnteriors = txtCercant + " " + txtItems.toLowerCase() + " " + txtAnteriors.toLowerCase() + ". " + txtEspere;
+    var txtCercantItemsSeguents = txtCercant + " " + txtItems.toLowerCase() + " " + txtSeguents.toLowerCase() + ". " + txtEspere;
+    
+    // modul afectacions
+    var txtAfectacio = "<spring:message code='txt.afectacio'/>";
+    var txtAfectacions = "<spring:message code='txt.afectacions'/>";
+    var txtNoHiHaAfectacions = txtNoHiHa + " " + txtAfectacions.toLowerCase();
+    var txtSeleccionada = "<spring:message code='txt.seleccionada'/>";
+    var txtSeleccionades = "<spring:message code='txt.seleccionades'/>";
+    var txtNoHiHaAfectacionsSeleccionats = txtNoHiHa + " " + txtAfectacions.toLowerCase() + " " + txtSeleccionades.toLowerCase();
+    var txtNormativa = "<spring:message code='txt.normativa'/>";
+    var txtNormatives = "<spring:message code='txt.normatives'/>";
+    var txtAmbLaNorma = "<spring:message code='txt.amb_la_norma'/>";
+    
+    // modul BOIB
+    var txtRegistre = "<spring:message code='txt.registre'/>";
+    var txtNoHiHaNormativaBOIB = txtNoHiHa + " " + "<spring:message code='txt.normativa_boib'/>";
+    
+    var txtNoHiHaNormatives = txtNoHiHa + " " + txtNormatives;
+    
+    var txtIntroduceBoibOFecha = "<spring:message code='normativa.formulari.traspas_eboib.introduce_boib_o_fecha'/>";
+    
+    var Afectacions_arr = [];
+    <c:forEach items="${llistaTipusAfectacio}" var="tipus">
+        Afectacions_arr.push({id : '<c:out value="${tipus.id}" />', nom : '<c:out value="${tipus.nom}" />'});        
+    </c:forEach>
             
+    // modul procediments
+    var txtProcediment = "<spring:message code='txt.procediment'/>";
+    var txtProcediments = "<spring:message code='txt.procediments'/>";
+    var txtNoHiHaProcediments = txtNoHiHa + " " + txtProcediments.toLowerCase();
+    var txtSeleccionat = "<spring:message code='txt.seleccionat'/>";
+    var txtSeleccionats = "<spring:message code='txt.seleccionats'/>";
+    var txtNoHiHaProcedimentsSeleccionats = txtNoHiHa + " " + txtProcediments.toLowerCase() + " " + txtSeleccionats.toLowerCase();        
+    
+    var txtNormativaLocal = "<spring:message code='txt.normativa_local'/>";
+    var txtNormativaExterna = "<spring:message code='txt.normativa_externa'/>";
+    
+    // suggeriments
+    /*var suggeriments = [
+        {
+            etiqueta: "id",
+            etiquetaValor: "cerca_titol",
+            pagina: "json/normativesJSON_consulta.php"
+        }
+    ];*/
+-->
+</script>
+      
+<script type="text/javascript">
+<!--
+    var txtMaxim = "<spring:message code='txt.maxim'/>";
+    var txtMax = "<spring:message code='txt.max'/>";
+    var txtCaracters = "<spring:message code='txt.caracters'/>";
+    var txtCampObligatori = "<spring:message code='txt.camp_obligatori'/>";
+    var txtAnyMal = "<spring:message code='txt.any_mal'/>";
+    var txtMesMal = "<spring:message code='txt.mes_mal'/>";
+    var txtDiaMal = "<spring:message code='txt.dia_mal'/>";
+    var txtNoEsCorrecte = "<spring:message code='txt.data_no_correcte'/>";
+    
+    // dades formularios
+    var FormulariDades = [
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_titol_" + '<c:out value="${idiomaVal}"/>',
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "caracters":
             {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_data_butlleti",
-                "obligatori": "no",
-                "tipus": "data",
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.data_butlleti.tipus'/>"
-                    }
-            },    
-            */
-
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_registre",
-                "obligatori": "no",
-                "tipus": "numeric",
-                "caracters":
-                {
-                    "maxim": 18,
-                    "mostrar": "no",
-                    "abreviat": "no"
-                },
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.registre.tipus'/>"
-                    }
+                "maxim": 230,
+                "mostrar": "no",
+                "abreviat": "no"
             },
-
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_llei",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
+            "error":
                 {
-                    "maxim": 230,
-                    "mostrar": "no",
-                    "abreviat": "no"
+                    "obligatori": "<spring:message code='normativa.formulari.titol.obligatori'/> " + '<c:out value="${idiomaVal}"/>',
+                    "tipus": "<spring:message code='normativa.formulari.titol_ca.no_nomes_numeros'/>"
                 }
-            },
+        },
 
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_titol_" + '<c:out value="${idiomaVal}"/>',
+            "obligatori": "no",
+            "tipus": "alfanumeric",
+            "caracters":
             {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_validacio",
-                "obligatori": "si",
-                "tipus": "numeric",
-                "caracters":
-                {
-                    "maxim": 10,
-                    "mostrar": "no",
-                    "abreviat": "no"
-                },
-                "error":
-                    {
-                        "obligatori": "<spring:message code='normativa.formulari.registre.estat'/>"
-                    }
+                "maxim": 230,
+                "mostrar": "no",
+                "abreviat": "no"
             }
-        ];
-        
-        <c:if test="${traspasboib == 'Y'}">
-        
-	        // Validaci�n del formulario de b�squeda de Traspaso EBOIB
-	        var FormularioBusquedaTB = [{
-	            "modo": "individual",
-	            "etiqueta": "id",
-	            "etiquetaValor": "numeroboletinTB",
-	            "obligatori": "no",
-	            "tipus": "numeric",
-	            "caracters":
-	                {
-	                    "maxim": 50,
-	                    "mostrar": "no",
-	                    "abreviat": "no"
-	                },
-	            "error":
-	                {
-	                    "obligatori": "",
-	                    "tipus": "<spring:message code='normativa.formulari.traspas_eboib.campo_boletin_numero'/>"
-	                }
-	            
-	            },{
-	            
-	            "modo": "individual",
-	            "etiqueta": "id",
-	            "etiquetaValor": "numeroregistroTB",
-	            "obligatori": "no",
-	            "tipus": "numeric",
-	            "caracters":
-	                {
-	                    "maxim": 50,
-	                    "mostrar": "no",
-	                    "abreviat": "no"
-	                },
-	            "error":
-	                {
-	                    "obligatori": "",
-	                    "tipus": "<spring:message code='normativa.formulari.traspas_eboib.campo_registro_numero'/>"
-	                }
-	            },{
-	            "modo": "individual",
-	            "etiqueta": "id",
-	            "etiquetaValor": "fechaTB",
-	            "obligatori": "no",
-	            "tipus": "data",
-	            "caracters":
-	                {
-	                    "maxim": 9,
-	                    "mostrar": "no",
-	                    "abreviat": "no"
-	                },
-	            "error":
-	                {
-	                    "obligatori": "",
-	                    "tipus": "<spring:message code='normativa.formulari.traspas_eboib.campo_data_formato'/>"
-	                }            
-	            }
-            ];
-        
-        </c:if>
-    -->
-    </script>
+        },
+
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_enllas_" + '<c:out value="${idiomaVal}"/>',
+            "obligatori": "no",
+            "tipus": "alfanumeric",
+            "caracters":
+            {
+                "maxim": 480,
+                "mostrar": "no",
+                "abreviat": "no"
+            }
+        },
+
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_apartat_" + '<c:out value="${idiomaVal}"/>',
+            "obligatori": "no",
+            "tipus": "alfanumeric",
+            "caracters":
+            {
+                "maxim": 480,
+                "mostrar": "no",
+                "abreviat": "no"
+            }
+        },
+
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_responsable_" + '<c:out value="${idiomaVal}"/>',
+            "obligatori": "no",
+            "tipus": "alfanumeric",
+            "caracters":
+            {
+                "maxim": 480,
+                "mostrar": "no",
+                "abreviat": "no"
+            }
+        },
+
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_pagina_inicial_" + '<c:out value="${idiomaVal}"/>',
+            "obligatori": "no",
+            "tipus": "numeric",
+            "caracters":
+            {
+                "maxim": 18,
+                "mostrar": "no",
+                "abreviat": "no"
+            },
+            "error":
+                {
+                    "tipus": "<spring:message code='normativa.formulari.pagina_inicial_ca.tipus'/>"
+                }
+        },
+
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_pagina_final_" + '<c:out value="${idiomaVal}"/>',
+            "obligatori": "no",
+            "tipus": "numeric",
+            "caracters":
+            {
+                "maxim": 18,
+                "mostrar": "no",
+                "abreviat": "no"
+            },
+            "error":
+                {
+                    "tipus": "<spring:message code='normativa.formulari.pagina_final_ca.tipus'/>"
+                }
+        },    
+
+          // No traduibles
+          {
+              "modo": "individual",
+              "etiqueta": "id",
+              "etiquetaValor": "item_numero",
+              "obligatori": "si",
+              "tipus": "numeric",
+              "caracters":
+              {
+                  "maxim": 18,
+                  "mostrar": "no",
+                  "abreviat": "no"
+              },
+              "error":
+                  {
+                      "obligatori": "<spring:message code='normativa.formulari.numero.obligatori'/>",
+                      "tipus": "<spring:message code='normativa.formulari.numero.tipus'/>"
+                  }
+          },
+
+          /*
+          {
+              "modo": "individual",
+              "etiqueta": "id",
+              "etiquetaValor": "item_data_norma",
+              "obligatori": "no",
+              "tipus": "data",
+              "error":
+                  {
+                      "tipus": "<spring:message code='normativa.formulari.data.tipus'/>"
+                  }
+          },    
+          
+          {
+              "modo": "individual",
+              "etiqueta": "id",
+              "etiquetaValor": "item_data_butlleti",
+              "obligatori": "no",
+              "tipus": "data",
+              "error":
+                  {
+                      "tipus": "<spring:message code='normativa.formulari.data_butlleti.tipus'/>"
+                  }
+          },    
+          */
+
+          {
+              "modo": "individual",
+              "etiqueta": "id",
+              "etiquetaValor": "item_registre",
+              "obligatori": "no",
+              "tipus": "numeric",
+              "caracters":
+              {
+                  "maxim": 18,
+                  "mostrar": "no",
+                  "abreviat": "no"
+              },
+              "error":
+                  {
+                      "tipus": "<spring:message code='normativa.formulari.registre.tipus'/>"
+                  }
+          },
+
+          {
+              "modo": "individual",
+              "etiqueta": "id",
+              "etiquetaValor": "item_llei",
+              "obligatori": "no",
+              "tipus": "alfanumeric",
+              "caracters":
+              {
+                  "maxim": 230,
+                  "mostrar": "no",
+                  "abreviat": "no"
+              }
+          },
+
+          {
+              "modo": "individual",
+              "etiqueta": "id",
+              "etiquetaValor": "item_validacio",
+              "obligatori": "si",
+              "tipus": "numeric",
+              "caracters":
+              {
+                  "maxim": 10,
+                  "mostrar": "no",
+                  "abreviat": "no"
+              },
+              "error":
+                  {
+                      "obligatori": "<spring:message code='normativa.formulari.registre.estat'/>"
+                  }
+          }
+      ];
+      
+      <c:if test="${traspasboib == 'Y'}">
+      
+       // Validación del formulario de búsqueda de Traspaso EBOIB
+       var FormularioBusquedaTB = [{
+           "modo": "individual",
+           "etiqueta": "id",
+           "etiquetaValor": "numeroboletinTB",
+           "obligatori": "no",
+           "tipus": "numeric",
+           "caracters":
+               {
+                   "maxim": 50,
+                   "mostrar": "no",
+                   "abreviat": "no"
+               },
+           "error":
+               {
+                   "obligatori": "",
+                   "tipus": "<spring:message code='normativa.formulari.traspas_eboib.campo_boletin_numero'/>"
+               }
+           
+           },{
+           
+           "modo": "individual",
+           "etiqueta": "id",
+           "etiquetaValor": "numeroregistroTB",
+           "obligatori": "no",
+           "tipus": "numeric",
+           "caracters":
+               {
+                   "maxim": 50,
+                   "mostrar": "no",
+                   "abreviat": "no"
+               },
+           "error":
+               {
+                   "obligatori": "",
+                   "tipus": "<spring:message code='normativa.formulari.traspas_eboib.campo_registro_numero'/>"
+               }
+           },{
+           "modo": "individual",
+           "etiqueta": "id",
+           "etiquetaValor": "fechaTB",
+           "obligatori": "no",
+           "tipus": "data",
+           "caracters":
+               {
+                   "maxim": 9,
+                   "mostrar": "no",
+                   "abreviat": "no"
+               },
+           "error":
+               {
+                   "obligatori": "",
+                   "tipus": "<spring:message code='normativa.formulari.traspas_eboib.campo_data_formato'/>"
+               }            
+           }
+          ];
+      
+      </c:if>
+-->
+</script>
 
 <input type="hidden" id="rolusuario" value="<rol:printRol/>"/>
 
@@ -1176,7 +1184,7 @@
                                 </div>                                                                                                                                                      														
 							</div>							
 							</c:forEach>                                                        
-                        </div>                                  
+                        </div> 
                     </div>
                     <!-- /modulDocuments -->                                 
                 </div>    
@@ -1267,7 +1275,13 @@
                             <p class="btnGenerico">
                                 <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.gestiona_afectacions'/></span></span></a>
                             </p>
-
+							<p/>
+							<p class="btnGenerico">
+                                <a id="btnGuardar_afectacions" href="javascript:;" class="btn guarda important lista-simple" 
+                            			action="<c:url value="/normativa/guardarAfectaciones.do" />">
+                           			<span><span><spring:message code='boto.guarda'/></span></span>
+                            	</a>
+                            </p>
                         </div>
                     </div>
                     <!-- /modulAfectacions -->
@@ -1361,7 +1375,7 @@
                         <div class="listaOrdenable"></div>              
                     </div>
                     <p class="botonera btnGenerico">
-                        <a id="btnFinalizar_afectacions" href="javascript:;" class="btn finalitza important"><span><span><spring:message code='boto.finalitza'/></span></span></a>
+                        <a id="btnFinalizar_afectacions" href="javascript:;" class="btn finalitza important guarda-ajax-btn"><span><span><spring:message code='boto.finalitza'/></span></span></a>
                     </p>                                    
                 </div>
             </div>

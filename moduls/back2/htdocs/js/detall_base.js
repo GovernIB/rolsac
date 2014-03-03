@@ -1,4 +1,5 @@
-jQuery(document).ready(function(){
+jQuery(document).ready(function() {
+	
 	LANG_TRADUCTOR = "ca";
 
 	//jQuery("#btnVolver").bind("click",function(){Detall.torna();});
@@ -11,7 +12,7 @@ jQuery(document).ready(function(){
 
 	//jQuery("#formGuardar input,#formGuardar select,#formGuardar textarea").bind("change",function(){console.log("mod 1");Detall.modificado();});
 
-	if( jQuery("textarea.rich").tinymce != undefined ) {
+	if ( jQuery("textarea.rich").tinymce != undefined ) {
 
 		$('textarea.rich').tinymce({ // Location of TinyMCE script
 			script_url : tinyMceUrl,
@@ -37,12 +38,12 @@ jQuery(document).ready(function(){
 
 			onchange_callback: function() { Detall.modificado(); }
 		});
+		
 	}
 
 	var Error = new CError();
 
 });
-
 
 /**
  * @param boolean soloFicha: Indica si es un asociado a un listado, por defecto no.
@@ -50,6 +51,9 @@ jQuery(document).ready(function(){
  * @param object identificadores: Identificadores de botones de acci�n, etc.
  */
 function DetallBase(soloFicha, reglasFormulario, identificadores) {
+	
+	// Activa mensajes de debug.
+	var debug = false;
 
 	var that = this;
 	var soloFicha = soloFicha || false;
@@ -92,6 +96,9 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 	formulariComprovar.iniciar();
 
 	this.actualizaEventos = function() {
+		
+		if (debug)
+			console.log("Entrando en DetallBase.actualizaEventos");
 
 		// Asociamos los eventos a los botones de plegar y desplegar.
 		jQuery("#continguts a.mostrat, #continguts a.amagat").unbind("click").bind("click", function() {
@@ -106,23 +113,42 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 			jQuery(this).siblings("div.modul_continguts").slideToggle(300);
 
 		});
+		
+		if (debug)
+			console.log("Saliendo de DetallBase.actualizaEventos");
+		
 	}
 
 	this.cambiosSinGuardar = function() {
+		
+		if (debug)
+			console.log("Entrando en DetallBase.cambiosSinGuardar");
+		
+		if (debug)
+			console.log("Saliendo de DetallBase.cambiosSinGuardar");
+		
 		return !jQuery("#" + ids.btnGuardar).parent().hasClass("off");
 	}
 
-
-	this.formulariValid = function () {
+	this.formulariValid = function() {
+		
+		if (debug)
+			console.log("Entrando en DetallBase.formulariValid");
 
 		formulariComprovar.llansar();
+		
+		if (debug)
+			console.log("Saliendo de DetallBase.formulariValid");
+		
 		return formulariComprovar.formComprovacio;
 
 	}
 
-
 	this.guardaGenerico = function(dataVars) {
-	
+		
+		if (debug)
+			console.log("Entrando en DetallBase.guardaGenerico");
+
 		if (!that.formulariValid())
 			return false;
 
@@ -132,7 +158,6 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 
 		if (typeof dataVars != 'undefined' && dataVars.length > 0)
 			dataForm += "&" + dataVars;
-
 
 		$.ajax({
 			type: "POST",
@@ -162,14 +187,28 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 			} //Fin success
 
 		});//Fin ajax
+		
+		if (debug)
+			console.log("Saliendo de DetallBase.guardaGenerico");
 
 	}
 
-	this.guarda = function (dataVars) {
+	this.guarda = function(dataVars) {
+		
+		if (debug)
+			console.log("Entrando en DetallBase.guarda");
+		
 		that.guardaGenerico(dataVars);
+		
+		if (debug)
+			console.log("Saliendo de DetallBase.guarda");
+		
 	}
 
-	this.modificado = function( marcar ) {
+	this.modificado = function(marcar) {
+		
+		if (debug)
+			console.log("Entrando en DetallBase.modificado");
 
 		if( typeof(marcar) == "undefined" )
 			marcar = true;
@@ -179,37 +218,53 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 
 		// Habilitamos el botón de guardar.
 		jQuery("#"+ids.btnGuardar).unbind("click").bind("click", function() { that.guarda(); } ).parent().toggleClass("off", !marcar);
+		
+		if (debug)
+			console.log("Saliendo de DetallBase.modificado");
 
 	}
 
-
 	this.publica = function() {
+		
+		if (debug)
+			console.log("Entrando en DetallBase.publica");
 
 		jQuery("#item_data_publicacio").val(txtImmediat);
 		jQuery("#item_data_caducitat").val("");
+		
 		this.guarda();
+		
+		if (debug)
+			console.log("Saliendo de DetallBase.publica");
 
 	}
-
 
 	/**
 	 * Ocultamos el formulario y volvemos a mostrar el contenido general.  
 	 */
 	this.cierra = function() {
+		
+		if (debug)
+			console.log("Entrando en DetallBase.cierra");
 
 		this.modificado(false);
 
 		escriptori_detall_elm.fadeOut(300, function() {
 			escriptori_contingut_elm.fadeIn(300);
 		});
+		
+		if (debug)
+			console.log("Saliendo de DetallBase.cierra");
 
 	}
-
 
 	/**
 	 * Vuelve de la ficha al listado.
 	 */
 	this.vuelve = function() {
+		
+		if (debug)
+			console.log("Entrando en DetallBase.vuelve");
 
 		if ( this.cambiosSinGuardar() ) {
 
@@ -228,32 +283,47 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 
 		$(".modulLateral > div.modul").each(function() {
 			that.ocultarModulos($(this));
-		});  
+		});
+		
+		if (debug)
+			console.log("Saliendo de DetallBase.vuelve");
 
 	}
 
-
 	this.ocultarModulos = function(selector) {
+		
+		if (debug)
+			console.log("Entrando en DetallBase.ocultarModulos");
 
 		if ( !selector.hasClass("publicacio") )
 			selector.addClass("invisible");
+		
+		if (debug)
+			console.log("Saliendo de DetallBase.ocultarModulos");
 
 	}
 
-
 	/**
-	 * Inicia la eliminaci�n de un item confirmando la operaci�n.
+	 * Inicia la eliminación de un item confirmando la operación.
 	 */
 	this.eliminar = function() {
+		
+		if (debug)
+			console.log("Entrando en DetallBase.eliminar");
 
 		Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: txtItemEliminar, funcio: function() {
 			that.elimina();
 		}});
+		
+		if (debug)
+			console.log("Saliendo de DetallBase.eliminar");
 
 	}
 
-
 	this.carregar = function(itemID) {
+		
+		if (debug)
+			console.log("Entrando en DetallBase.carregar");
 
 		escriptori_detall_elm.find(".botonera li.btnEliminar,.botonera li.btnPrevisualizar").show();
 
@@ -306,31 +376,41 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 			});
 		});
 
-		
 		this.actualizaEventos();
+		
+		if (debug)
+			console.log("Saliendo de DetallBase.carregar");
 
 	}
 
 	this.recarregar = function(itemId) {
+		
+		if (debug)
+			console.log("Entrando en DetallBase.recarregar");
 
 		var url = location.protocol + "//" + location.host + location.pathname;
 
 		var itemId = parseInt(itemId);
-		
+
 		if (!isNaN(itemId) && itemId > 0)
 			url += "?itemId=" + itemId;
 
 		this.modificado(false);
 
 		location = url;
+		
+		if (debug)
+			console.log("Saliendo de DetallBase.recarregar");
 
 	}
 
-	
 	/**
 	 * @param opcions: id (num); accio (guardar, elimina); dades: json
 	 */
 	this.array = function(opcions) {
+		
+		if (debug)
+			console.log("Entrando en DetallBase.array");
 
 		if (opcions.accio == "guarda") {
 
@@ -341,19 +421,25 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 			id_eliminat = 0;
 
 			for (i = 0; i < Items_arr.length; i++) {
-				
+
 				if (opcions.id == Items_arr[i].id)
 					id_eliminat = i;
-				
+
 			}
 
 			Items_arr.splice(id_eliminat,1);
 
 		}
+		
+		if (debug)
+			console.log("Saliendo de DetallBase.array");
+		
 	}
 
-	
 	this.idioma = function(e) {
+		
+		if (debug)
+			console.log("Entrando en DetallBase.idioma");
 
 		var elm = $(e.target);
 
@@ -361,10 +447,10 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 
 			// Determinar si hay que cambiar los modulos laterales muldiidioma (por defecto se cambian).
 			var cambiarModulosLaterales;
-			
+
 			if (typeof e.data != 'undefined' && typeof e.data.actualizarIdiomasModulosLaterales != 'undefined')
 				cambiarModulosLaterales = Boolean(e.data.actualizarIdiomasModulosLaterales);
-			
+
 			else
 				cambiarModulosLaterales = true;
 
@@ -388,10 +474,10 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 					elm.parent().addClass("seleccionat").html("<span class=\"" + a_clicat_class + "\">" + elm_text + "</span>");
 
 					div_idiomes_elm.find("div." + a_clicat_class).slideDown(300, function() {
-						
+
 						$(this).addClass("seleccionat");
 						ul_idiomes_elm.bind("click", {'actualizarIdiomasModulosLaterales': cambiarModulosLaterales}, that.idioma);
-						
+
 					});
 
 				});
@@ -416,14 +502,14 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 					modulos.find("li." + a_clicat_class).addClass("seleccionat");
 
 					modulos.find("div.seleccionats div.seleccionat").slideUp(300, function() {
-						
+
 						var $this = jQuery(this);
 						$this.removeClass("seleccionat");
 						$this.hide();
 						$this.siblings("div." + a_clicat_class).slideDown(300, function() {
 							jQuery(this).addClass("seleccionat");
 						});
-						
+
 					});
 
 				}
@@ -435,15 +521,15 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 					ul_idiomes_elm.find("li:not(.desplegar)").css("display","none");
 
 					div_idiomes_elm.find("div.idioma").each(function(i) {
-						
+
 						var text_idioma = ul_idiomes_elm.find("li:eq(" + i + ")").text();
 						var div_idioma_elm = $(this);
-						
+
 						if (i >= 1)
 							div_idioma_elm.css("border-top",".2em solid #ffecd9");
-						
+
 						div_idioma_elm.prepend("<h3>" + text_idioma + "</h3>").slideDown(300);
-						
+
 					});
 
 					elm.addClass("on").text(txtPlega);
@@ -451,14 +537,14 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 				} else {
 
 					div_idiomes_elm.find("div.idioma").each(function(i) {
-						
+
 						var div_idioma_elm = $(this);
-						
+
 						if (i >= 1)
 							div_idioma_elm.css("border-top","");
 
 						div_idioma_elm.find("h3:first").remove().end().slideUp(300);
-						
+
 					});
 
 					elm.removeClass("on").text(txtDesplega);
@@ -471,15 +557,20 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 			}
 
 		}
+		
+		if (debug)
+			console.log("Saliendo de DetallBase.idioma");
 
 	}
 
-	
 	this.previsualitza = function() {
 		
+		if (debug)
+			console.log("Entrando en DetallBase.previsualitza");
+
 		var url = this.urlPrevisualizar;
 		escriptori_detall_elm.fadeOut(300, function() {
-			
+
 			var idiomaSeleccionat = escriptori_detall_elm.find("ul.idiomes li.seleccionat span").attr("class");
 			var id = escriptori_detall_elm.find("#item_id").val();
 
@@ -488,43 +579,53 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 			escriptori_previsualitza_elm.find("iframe").attr("src", url).end().fadeIn(300, function() {
 				$(this).find("a.dePrevisualitzar").one("click", that.previsualitzaTorna);
 			});
-			
+
 		});
 		
+		if (debug)
+			console.log("Saliendo de DetallBase.previsualitza");
+
 	}
 
-	
 	this.previsualitzaTorna = function() {
 		
+		if (debug)
+			console.log("Entrando en DetallBase.previsualitzaTorna");
+
 		escriptori_previsualitza_elm.fadeOut(300, function() {
 			escriptori_detall_elm.fadeIn(300);
 		});
 		
+		if (debug)
+			console.log("Saliendo de DetallBase.previsualitzaTorna");
+
 	}
 
-	
 	this.traduir = function (url, inputs, datos) {
+		
+		if (debug)
+			console.log("Entrando en DetallBase.traduir");
 
 		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
 
 		var dataVars = "";
+		
 		for (var i in inputs) {
-			
+
 			var campo = inputs[i] + LANG_TRADUCTOR;
 			var and = (i == 0) ? "" : "&";
-			
+
 			// Escapamos cada valor de los campos a traducir con encodeURIComponent(),
 			// ya que si el texto contenía alguna "&", se consideraría ya otro campo en la llamada AJAX.
 			// Luego tocará decodificar cada campo en el servlet que reciba la petición.
 			var texto = jQuery("#" + campo).val();
-			
+
 			// TinyMCE, aún forzando a que escape a entidades numéricas, no contempla el caso del tanto por ciento %.
 			// Toca hacerlo de forma explícita antes de codificar completamente la cadena con encodeURIComponent().
 			texto = texto.replace(/%/g, "&#37;")
 			dataVars += and + campo + "=" + encodeURIComponent(texto);
-			
+
 		}
-		
 
 		$.ajax({
 			type: "POST",
@@ -535,37 +636,42 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
 			},
 			success: function(data) {
-				
+
 				if (typeof data.error != "undefined") {
-					
+
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: data.error});
-					
+
 				} else {
-					
+
 					for (var i in data.traduccions) {
-						
+
 						var traduccio = data.traduccions[i].traduccio;
 						var lang = data.traduccions[i].lang;
-						
+
 						for (var j in inputs) {
-							
+
 							var campo = inputs[j] + lang;
 							var valor = traduccio[datos[j]] || "";
 							jQuery("#" + campo).val(valor);
-							
+
 						}
 					}
-					
+
 					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtTraduccioCorrecta});
-					
+
 				}
 			}
 		});
 		
+		if (debug)
+			console.log("Saliendo de DetallBase.traduir");
+
 	}
 
-	
 	this.cargarModulos = function() {
+		
+		if (debug)
+			console.log("Entrando en DetallBase.cargarModulos");
 
 		item_ID = $("#item_id").val();
 		dataVars = "id=" + item_ID;
@@ -589,6 +695,10 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 			}
 
 		});
+		
+		if (debug)
+			console.log("Saliendo de DetallBase.cargarModulos");
 
-	}	
+	}
+
 }

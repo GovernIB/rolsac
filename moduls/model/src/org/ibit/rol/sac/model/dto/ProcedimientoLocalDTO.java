@@ -6,8 +6,12 @@ public class ProcedimientoLocalDTO implements ValueObject {
 
 	private static final long serialVersionUID = 3258125847574821172L;
 
-	private long id;
+	private long id;			// PK de la relación N-M.
 	private Long idProcedimiento;
+	
+	private long idRelatedItem; // Para guardado genérico vía AJAX: el valor de la PK del procedimiento.
+	private long idMainItem;	// Para guardado genérico vía AJAX: el valor de la PK del registro con el que se encuentra relacionado el procedimiento.
+	
 	private String nombre;
 	private String publicacio;
 	private String caducitat;
@@ -25,6 +29,18 @@ public class ProcedimientoLocalDTO implements ValueObject {
 		this.caducitat = caducitat;
 		this.caducat = caducat;
 		this.orden = orden;
+	}
+	
+	public ProcedimientoLocalDTO(long id, String nombre, String publicacio, String caducitat, Boolean caducat, Integer orden, long idRelatedItem, long idMainItem) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.publicacio = publicacio;
+		this.caducitat = caducitat;
+		this.caducat = caducat;
+		this.orden = orden;
+		this.idRelatedItem = idRelatedItem;
+		this.idMainItem = idMainItem;
 	}
 
 	public ProcedimientoLocalDTO(long id, String nombre, Boolean caducat, String fechaActualizacion, String familia) {
@@ -101,5 +117,21 @@ public class ProcedimientoLocalDTO implements ValueObject {
 	public void setFamilia(String familia) {
 		this.familia = familia;
 	}
-	
+
+	public long getIdMainItem() {
+		return idMainItem;
+	}
+
+	public void setIdMainItem(long idMainItem) {
+		this.idMainItem = idMainItem;
+	}
+
+	public long getIdRelatedItem() {
+		return idRelatedItem;
+	}
+
+	public void setIdRelatedItem(long idRelatedItem) {
+		this.idRelatedItem = idRelatedItem;
+	}	
+
 }

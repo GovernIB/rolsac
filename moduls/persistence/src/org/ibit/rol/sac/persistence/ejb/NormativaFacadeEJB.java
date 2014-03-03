@@ -585,30 +585,48 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
-	public void eliminarAfectacion(Long normativaQueAfecta_id, Long tipoAfec_id, Long normativaAeliminar_id) {
+	public void eliminarAfectacion(Long idNormativaQueAfecta, Long idTipoAfectacion, Long idNormativaAEliminar) {
+		
 		Session session = getSession();
+		
 		try {
-			if (!getAccesoManager().tieneAccesoNormativa(normativaQueAfecta_id)) {
+			
+			if (!getAccesoManager().tieneAccesoNormativa(idNormativaQueAfecta)) {
 				throw new SecurityException("No tiene acceso a la normativa");
 			}
-			Normativa normativaQueAfecta = (Normativa) session.load(Normativa.class, normativaQueAfecta_id);
-			Normativa normativaAeliminar = (Normativa) session.load(Normativa.class, normativaAeliminar_id);
+			
+			Normativa normativaQueAfecta = (Normativa)session.load(Normativa.class, idNormativaQueAfecta);
+			Normativa normativaAEliminar = (Normativa)session.load(Normativa.class, idNormativaAEliminar);
 			Set afectadas = normativaQueAfecta.getAfectadas();
 			Afectacion encontrada = new Afectacion();
-			for (Iterator iter = afectadas.iterator(); iter.hasNext();) {
+			
+			Iterator iter = afectadas.iterator();
+			
+			while ( iter.hasNext() ) {
+				
 				Afectacion afectacion = (Afectacion) iter.next();
-				if (afectacion.getNormativa().equals(normativaAeliminar)) {
+				
+				if (afectacion.getNormativa().equals(normativaAEliminar)) {
 					encontrada = afectacion;
 				}
+				
 			}
+			
 			normativaQueAfecta.getAfectadas().remove(encontrada);
-			normativaAeliminar.getAfectantes().remove(encontrada);
+			normativaAEliminar.getAfectantes().remove(encontrada);
+			
 			session.flush();
+			
 		} catch (HibernateException e) {
+			
 			throw new EJBException(e);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
 
 	/**
@@ -990,11 +1008,11 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	public void indexInsertaNormativa(Normativa norma, ModelFilterObject filter)  {
 
 		try {
-			if (filter == null) {
-			    filter = obtenerFilterObject(norma);
-			}
 
-			IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
+			if (filter == null) 
+				filter = obtenerFilterObject(norma);
+
+				IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
 
 			for (Iterator iterator = norma.getLangs().iterator(); iterator.hasNext();) {
 				String idi = (String) iterator.next();
@@ -1028,6 +1046,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 				TraduccionNormativa trad = ((TraduccionNormativa) norma.getTraduccion(idi));
 
 				if (trad != null) {
+					
 					io.setTituloserviciomain(trad.getSeccion());
 
 					if (norma.getBoletin() != null && norma.getBoletin().getNombre().equals("BOIB")) {
@@ -1059,6 +1078,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 					if (trad.getArchivo() != null) {
 					    io.addArchivo((Archivo)trad.getArchivo());
 					}
+					
 				}
 
 				io.addTextopcionalLine(filter.getTraduccion(idi).getMateria_text());
@@ -1071,13 +1091,16 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 
 				writer.close();
                 directory.close();
+                
 			}
 
 		} catch (Exception ex) {
+			
 			log.warn("[indexInsertaNormativa:" + norma.getId() + "] No se ha podido indexar la normativa. " + ex.getMessage());
+			
 		}
+		
 	}
-
 
 	/**
 	 * Elimina la normativa en el indice en todos los idiomas
@@ -1087,8 +1110,12 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	public void indexBorraNormativa(Normativa nor)  {
 
 		try {
+
 		    IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
-			for (Iterator iterator = nor.getLangs().iterator(); iterator.hasNext();) {
+		    Iterator iterator = nor.getLangs().iterator();
+		    
+			while (iterator.hasNext()) {
+				
 				String idi = (String) iterator.next();
 
 				if (nor instanceof NormativaLocal) {
@@ -1098,11 +1125,15 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 				if (nor instanceof NormativaExterna) {
 				    indexerDelegate.borrarObjeto(Catalogo.SRVC_NORMATIVA_EXTERNA + "." + nor.getId(), idi);
 				}
+				
 			}
-
+			
 		} catch (DelegateException ex) {
+
 			log.warn("[indexBorraNormativa:" + nor.getId() + "] No se ha podido borrar del indice la normativa. " + ex.getMessage());
-		}
+			
+		}	
+
 	}
 
 	/**
@@ -1114,6 +1145,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	 * @return Collection Lista de normativaModel
 	 */
 	private Collection getListaNormativaModel( List<Normativa> listaNormativa, String idioma ) {
+		
 		List<NormativaModel> listaNormativaModel = new ArrayList();		
 
 		for (Normativa normativa: listaNormativa) {
@@ -1161,6 +1193,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 		}
 
 		return listaNormativaModel;		
+		
 	} 	 
 
 	/**
@@ -1205,7 +1238,6 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 		return resultado;
 	}
 
-
 	private Analyzer getAnalizador(String idi) {
 
 	    Analyzer analyzer;
@@ -1221,6 +1253,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	    }
 
 	    return analyzer;
+	    
 	}
 
 }

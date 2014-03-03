@@ -1,33 +1,60 @@
 /**
  * Clase para manejar listas ordenables.
  */
-function ListaOrdenable(){
+function ListaOrdenable() {
+	
 	var params;
+	
+	// Activa mensajes de debug.
+	var debug = false;
 		
 	/**
 	 * Obtiene el idioma activo (solo en modo multi-idioma)
 	 */
-	this.getIdiomaActivo = function( $lista ){	
+	this.getIdiomaActivo = function( $lista ) {
+		
+		if (debug)
+			console.log("Entrando en ListaOrdenable.getIdiomaActivo");
+		
 		// Obtenemos el idioma activo.
 		var clases = $lista.parents(".cajaIdioma").attr("class");
 		clases = clases.split(" ");
-		for( var i=0; i<clases.length; i++ ){
-			if( clases[i].length == 2 ){
+		for ( var i = 0; i < clases.length; i++ ) {
+			if ( clases[i].length == 2 ) {
 				return clases[i];
 			}
 		}
+		
+		if (debug)
+			console.log("Saliendo de ListaOrdenable.getIdiomaActivo");
+		
 	}
 	
-	this.modificado = function(){
-	    if( Detall ){
+	// TODO amartin: este método al final tendrá que borrarse si todos los módulos laterales se guardan vía AJAX,
+	// ya que se encarga de marcar en azul el botón "GUARDA!" de la vista de detalle de un registro, dando a entender
+	// que se ha modificado el detalle cuando sólo se ha modificado algo en el módulo lateral.
+	this.modificado = function() {
+		
+		if (debug)
+			console.log("Entrando en ListaOrdenable.modificado");
+		
+	    if ( Detall ) {
 	        Detall.modificado(true);
 	    }
+	    
+	    if (debug)
+			console.log("Saliendo de ListaOrdenable.modificado");
+	    
 	}
 	
 	/**
 	 * Replica la ordenación de la lista actual al resto de listas (solo en modo multi-idioma).
 	 */
-	var actualizaOrden = function( claves, tipo ){		
+	var actualizaOrden = function( claves, tipo ) {
+		
+		if (debug)
+			console.log("Entrando en ListaOrdenable.actualizaOrden");
+		
 		var id;		
 		var datos;
 		var nodo;
@@ -37,13 +64,14 @@ function ListaOrdenable(){
             $('#modulo_documents_modificado').val("1");
         }
 		
-		if( tipo == "origen" ){
+		if ( tipo == "origen" ) {
 			nodo = params.nodoOrigen;
-		}else{
+		} else {
 			nodo = params.nodoDestino;
 		}
 		
-		jQuery(nodo).each(function(){						
+		jQuery(nodo).each(function() {
+			
 			datos = [];
 			
 			jQuery(this).find("li").each(function() {				
@@ -54,76 +82,94 @@ function ListaOrdenable(){
 			jQuery(this).find("li").each(function(i) {			
 				jQuery(this).html( datos[claves[i]] );
 			});
-		}); 
+			
+		});
+		
+		if (debug)
+			console.log("Saliendo de ListaOrdenable.actualizaOrden");
 		
 	}
 		
 	/**
 	 * Obtiene el html de un item de la lista.
 	 */
-	this.getHtmlItem = function( item, btnEliminar, idioma ){
+	this.getHtmlItem = function( item, btnEliminar, idioma ) {
+		
+		if (debug)
+			console.log("Entrando en ListaOrdenable.getHtmlItem");
 		
 		var sufijoIdioma = "";
 		var idiomaAtributo = "";
 		var partesAtributo;
         		
-		if( idioma ){
-			sufijoIdioma += "_"+idioma;
+		if ( idioma ) {
+			sufijoIdioma += "_" + idioma;
 		}
-                	
-		var html = "<li>";
-			html += '<div class="'+params.nombre+'">';
+        
+		var html = "<li element-id='" + item.id + "' main-item-id='" + item.idMainItem + "' related-item-id='" + item.idRelatedItem + "'>";
+		html += '<div class="' + params.nombre + '">';
 			
-			for( var i=0; i < params.atributos.length; i++ ){
-				atributo = params.atributos[i];
+		for ( var i = 0; i < params.atributos.length; i++ ) {
+			
+			atributo = params.atributos[i];
+			
+			if ( item[atributo] != undefined ) {
+			
+				if ( params.multilang && ( typeof item[atributo] == "object" ) ) {						
+					valor = item[atributo][idioma];
+				} else {										
+					valor = item[atributo];												
+				}
 				
-				if( item[atributo] != undefined ){
-				
-					if( params.multilang && ( typeof item[atributo] == "object" ) ){						
-						valor = item[atributo][idioma];
-					}else{										
-						valor = item[atributo];												
-					}
+			} else {
+				valor = 0;
+			}
+											
+			switch ( atributo ) {
+			
+				case "id":
+					html += "<input class=\"" + params.nombre + "_" + atributo + "\" id=\"" + params.nombre + "_" + atributo + "_" + item.id + "\" name=\"" + params.nombre + "_" + atributo + "_" + item.id + "\" value=\"" + valor + "\" type=\"hidden\" />";
+					break;
 					
-				}else{
-					valor = 0;
-				}
-												
-				switch( atributo ){
-					case "id":
-						html += "<input class=\"" + params.nombre + "_" + atributo + "\" id=\"" + params.nombre + "_" + atributo + "_" + item.id + "\" name=\"" + params.nombre + "_" + atributo + "_" + item.id + "\" value=\"" + valor + "\" type=\"hidden\" />";
-						break;
-						
-					case "nombre":
-                    case "nom":
-                    	// Dentro del atributo value del elemento <input> sustituimos entidades HTML del valor usando $("<div/>").html(valor).text()
-                    	// Visto en http://stackoverflow.com/questions/1147359/how-to-decode-html-entities-using-jquery
-						html += "<input class=\"" + params.nombre + "_" + atributo + sufijoIdioma + "\" id=\"" + params.nombre + "_" + atributo + sufijoIdioma + "_" + item.id + "\" name=\"" + params.nombre + "_" + atributo + sufijoIdioma + "_" + item.id + "\" value=\"" + $("<div/>").html(valor).text() + "\" type=\"hidden\" />";
-						if (jQuery.trim(valor) == "") valor = "&nbsp;";
-						html += "<span class=\"" + params.nombre + "\">" + valor + "</span>";
-						break;			
+				case "nombre":
+                case "nom":
+                	// Dentro del atributo value del elemento <input> sustituimos entidades HTML del valor usando $("<div/>").html(valor).text()
+                	// Visto en http://stackoverflow.com/questions/1147359/how-to-decode-html-entities-using-jquery
+					html += "<input class=\"" + params.nombre + "_" + atributo + sufijoIdioma + "\" id=\"" + params.nombre + "_" + atributo + sufijoIdioma + "_" + item.id + "\" name=\"" + params.nombre + "_" + atributo + sufijoIdioma + "_" + item.id + "\" value=\"" + $("<div/>").html(valor).text() + "\" type=\"hidden\" />";
+					
+					if (jQuery.trim(valor) == "")
+						valor = "&nbsp;";
+					
+					html += "<span class=\"" + params.nombre + "\">" + valor + "</span>";
+					break;			
 
-					case "url":
-						html += "<input class=\"" + params.nombre + "_" + atributo + sufijoIdioma + "\" id=\"" + params.nombre + "_" + atributo + sufijoIdioma + "_" + item.id + "\" name=\"" + params.nombre + "_" + atributo + sufijoIdioma + "_" + item.id + "\" value=\"" + valor + "\" type=\"hidden\" />";
-						break;
+				case "url":
+					html += "<input class=\"" + params.nombre + "_" + atributo + sufijoIdioma + "\" id=\"" + params.nombre + "_" + atributo + sufijoIdioma + "_" + item.id + "\" name=\"" + params.nombre + "_" + atributo + sufijoIdioma + "_" + item.id + "\" value=\"" + valor + "\" type=\"hidden\" />";
+					break;
 
-					case "orden":                        
-						html += "<input class=\"" + params.nombre + "_" + atributo + "\" id=\"" + params.nombre + "_" + atributo + "_" + item.id + "\" name=\"" + params.nombre + "_" + atributo + "_" + item.id + "\" value=\"" + valor + "\" type=\"hidden\" />";                        
-						break;															
-						
-					default:
-						html += "<input class=\"" + params.nombre + "_" + atributo + sufijoIdioma + "\" id=\"" + params.nombre + "_" + atributo + sufijoIdioma + "_" + item.id + "\" name=\"" + params.nombre + "_" + atributo + sufijoIdioma + "_" + item.id + "\" value=\"" + valor + "\" type=\"hidden\" />";
-				}
-			}
+				case "orden":                        
+					html += "<input class=\"" + params.nombre + "_" + atributo + "\" id=\"" + params.nombre + "_" + atributo + "_" + item.id + "\" name=\"" + params.nombre + "_" + atributo + "_" + item.id + "\" value=\"" + valor + "\" type=\"hidden\" />";                        
+					break;															
+					
+				default:
+					html += "<input class=\"" + params.nombre + "_" + atributo + sufijoIdioma + "\" id=\"" + params.nombre + "_" + atributo + sufijoIdioma + "_" + item.id + "\" name=\"" + params.nombre + "_" + atributo + sufijoIdioma + "_" + item.id + "\" value=\"" + valor + "\" type=\"hidden\" />";
 			
-			if( btnEliminar ){
-				html += "<a href=\"javascript:;\" class=\"btn elimina\"><span><span>" + txtElimina + "</span></span></a>";
 			}
-			
-			html += "</div>";
+		
+		}
+		
+		if ( btnEliminar ) {
+			html += "<a href=\"javascript:;\" class=\"btn elimina\"><span><span>" + txtElimina + "</span></span></a>";
+		}
+		
+		html += "</div>";
 		html += "</li>";
 		
+		if (debug)
+			console.log("Saliendo de ListaOrdenable.getHtmlItem");
+		
 		return html;
+		
 	}
 	
 	/**
@@ -136,30 +182,49 @@ function ListaOrdenable(){
 	 *	    multilang: true | false // Especifica si la lista es multiidioma.
 	 * }
  	 */
-	this.configurar = function( _params ){
+	this.configurar = function( _params ) {
+		
+		if (debug)
+			console.log("Entrando en ListaOrdenable.configurar");
+		
 		params = _params;
+		
+		if (debug)
+			console.log("Saliendo de ListaOrdenable.configurar");
+		
 	}
 	
 	/**
 	 * Devuelve los parametros de configuracion.
 	 */
 	this.getConfiguracion = function() {
+		
+		if (debug)
+			console.log("Entrando en ListaOrdenable.getConfiguracion");
+		
+		if (debug)
+			console.log("Saliendo de ListaOrdenable.getConfiguracion");
+		
 		return params;
 	}
 	
 	/**
 	 * Rellena los inputs "orden" con el orden correspondiente, tanto en la lista origen como en destino.
 	 */
-	this.calculaOrden = function( ui, tipo ){
+	this.calculaOrden = function( ui, tipo ) {
+		
+		if (debug)
+			console.log("Entrando en ListaOrdenable.calculaOrden");
+		
 		var claves = [];
 		var ordenAnterior, ordenNuevo;
 		
-		if( params.multilang ){
+		if ( params.multilang ) {
 			
-			id = jQuery( ui.item ).find( "input."+params.nombre+"_id" ).val();
+			id = jQuery( ui.item ).find( "input." + params.nombre + "_id" ).val();
 			
-			jQuery( ui.item ).parents(".seleccionat").find("li").each(function(i){				
-				id = jQuery(this).find("input."+params.nombre+"_id" ).val();
+			jQuery( ui.item ).parents(".seleccionat").find("li").each(function(i) {				
+				id = jQuery(this).find("input." + params.nombre + "_id" ).val();
 				claves.push( id );
 			});
 			
@@ -167,28 +232,40 @@ function ListaOrdenable(){
 			
 		}
 		
-		jQuery(params.nodoDestino).each(function(){						
+		jQuery(params.nodoDestino).each(function() {						
 			jQuery(this).find("li").each(function(i) {				
-				jQuery(this).find( "input." + params.nombre + "_orden" ).val(i+1);
+				jQuery(this).find( "input." + params.nombre + "_orden" ).val(i + 1);
 			});			
 		});				
 				
-		jQuery(params.nodoOrigen).each(function(){
+		jQuery(params.nodoOrigen).each(function() {
 			jQuery(this).find("li").each(function(i) {
-				jQuery(this).find( "input." + params.nombre + "_orden" ).val(i+1);
+				jQuery(this).find( "input." + params.nombre + "_orden" ).val(i + 1);
 			});
 		});
+		
+		if (debug)
+			console.log("Saliendo de ListaOrdenable.calculaOrden");
 				
 	}
 	
 	/**
 	 * Elimina un item de la lista.
 	 */ 
-	this.eliminaItem = function( item ){		
+	this.eliminaItem = function( item ) {
+		
+		if (debug)
+			console.log("Entrando en ListaOrdenable.eliminaItem");
+		
 		var id = jQuery(item).find("input." + params.nombre + "_id:first").val();						
 		jQuery(params.nodoDestino).find("input[name=" + params.nombre + "_id_" + id + "]").parents("li").remove();
 		
-		this.modificado();				
+		// FIXME amartin: esto no ha de hacerse si el guardado del módulo lateral es es vía AJAX.
+		// this.modificado();
+		
+		if (debug)
+			console.log("Saliendo de ListaOrdenable.eliminaItem");
+		
 	}
 
 	/**
@@ -196,7 +273,11 @@ function ListaOrdenable(){
 	 *
 	 * @return boolean Devuelve true si el item no se encontraba ya en la lista.
 	 */
-	this.agregaItem = function( item ){
+	this.agregaItem = function( item ) {
+		
+		if (debug)
+			console.log("Entrando en ListaOrdenable.agregaItem");
+		
 		var _this = this;
 		var tamLista = jQuery(params.nodoDestino).filter(":first").find("li").size();		
 		var itemYaExiste = false;
@@ -205,11 +286,11 @@ function ListaOrdenable(){
 						                                
 		if ( tamLista == 0) {
 						
-			jQuery(params.nodoDestino).html("<ul></ul>");
+			jQuery(params.nodoDestino).html("<ul class='guarda-ajax'></ul>");
 			
 		} else {
 			
-			jQuery(params.nodoDestino).find("input."+params.nombre+"_id").each(function() {				
+			jQuery(params.nodoDestino).find("input." + params.nombre + "_id").each(function() {				
 				
 				if ( jQuery(this).val() == item.id ) {
 					itemYaExiste = true;
@@ -218,26 +299,32 @@ function ListaOrdenable(){
 			});			
 		}
 		
-		if ( !itemYaExiste ){
+		if ( !itemYaExiste ) {
 							
-			if( params.multilang ){
+			if ( params.multilang ) {
 		
-				jQuery( params.nodoDestino ).each(function(){
+				jQuery( params.nodoDestino ).each(function() {
 					idioma = _this.getIdiomaActivo( jQuery(this) );
 					html = _this.getHtmlItem( item, true, idioma );					
 					jQuery(this).find("ul").append(html);					
 				});		
 				
-			}else{			
+			} else {			
 							
 				html = _this.getHtmlItem( item, true );				
 				jQuery( params.nodoDestino ).find("ul").append(html);			
 				
 			}
 			
+			if (debug)
+				console.log("Saliendo de ListaOrdenable.agregaItem");
+			
 			return true;
 			
 		}
+		
+		if (debug)
+			console.log("Saliendo de ListaOrdenable.agregaItem");
 		
 		return false;
 		
@@ -246,25 +333,28 @@ function ListaOrdenable(){
 	/**
 	 * Carga un array de items en la lista.
 	 */
-	this.agregaItems = function( lista, btnEliminar ){
+	this.agregaItems = function( lista, btnEliminar ) {
+		
+		if (debug)
+			console.log("Entrando en ListaOrdenable.agregaItems");
+		
         var _this = this;
-        
 		var item, idioma;		
-                		
 		var eliminar;
+		
 		if (typeof btnEliminar != "undefined") {
 			eliminar = Boolean(btnEliminar);
 		} else {
 			eliminar = false;
 		}
 		
-		if( params.multilang ){
+		if ( params.multilang ) {
 		
-			jQuery(params.nodoOrigen).each( function(){
+			jQuery(params.nodoOrigen).each( function() {
 				idioma = _this.getIdiomaActivo( jQuery(this) );
 				
-				html = "<ul>";
-				for( i in lista ){
+				html = "<ul class='guarda-ajax'>";
+				for ( i in lista ) {
 					html += _this.getHtmlItem( lista[i], eliminar, idioma );
 				}
 				html += "</ul>";
@@ -272,23 +362,33 @@ function ListaOrdenable(){
 				jQuery(this).html(html);
 			});
 			
-		}else{
+		} else {
 		
-			html = "<ul>";		
-			for( i in lista ){						
+			html = "<ul class='guarda-ajax'>";
+			
+			for ( i in lista ) {						
 				html += _this.getHtmlItem( lista[i], eliminar );
-			}			
+			}
+			
 			html += "</ul>";
 			
 			jQuery(params.nodoOrigen).html(html);
 		
 		}
+		
+		if (debug)
+			console.log("Saliendo de ListaOrdenable.agregaItems");
+		
 	}
 	
 	/**
 	 * Copia los datos de la lista origen a la de destino.
 	 */
-	this.copiaInicial = function(){		
+	this.copiaInicial = function() {
+		
+		if (debug)
+			console.log("Entrando en ListaOrdenable.copiaInicial");
+		
 		var i;
 		var html;
 		var idioma;
@@ -296,59 +396,63 @@ function ListaOrdenable(){
 		
 		var _this = this;
 		
-		if( params.multilang ){			
+		if ( params.multilang ) {			
 		
-			jQuery(params.nodoOrigen).each(function(){
+			jQuery(params.nodoOrigen).each(function() {
 								
 				idioma = _this.getIdiomaActivo( jQuery(this) );								
 				
-				html = "<ul>";
+				html = "<ul class='guarda-ajax'>";
 				
-				jQuery(this).find("li").each(function(){
+				jQuery(this).find("li").each(function() {
+					
 					var li_elm = jQuery(this);
 					var item = [];
 					var atributo;
 							
-					for( i=0; i<params.atributos.length; i++ ){
+					for ( i = 0; i < params.atributos.length; i++ ) {
+						
 						atributo = params.atributos[i];
 						
 						// id y orden no pueden ser multiidioma.
-						if( atributo == "id" || atributo == "orden" ){
+						if ( atributo == "id" || atributo == "orden" ) {
 						
 							item[atributo] = li_elm.find( "input." + params.nombre + "_" + atributo ).val();
 							
-						}else{
+						} else {
 						
 							item[atributo] = li_elm.find( "input." + params.nombre + "_" + atributo + "_" + idioma ).val();
 							
 						}
+						
 					}
 								
 					html += _this.getHtmlItem( item, true, idioma );
+					
 				});			
 				
 				html += "</ul>";
 				
-				jQuery(params.nodoDestino).each(function(){
-					if( jQuery(this).parent(".cajaIdioma").hasClass(idioma) ){					
+				jQuery(params.nodoDestino).each(function() {
+					if ( jQuery(this).parent(".cajaIdioma").hasClass(idioma) ) {					
 						jQuery(this).html(html);
 					}
 				});
 							
 			});
 					
-		}else{
+		} else {
 		
-			html = "<ul>";
+			html = "<ul class='guarda-ajax'>";
 		
 			jQuery(params.nodoOrigen).find("li").each(function() {			
 				var li_elm = jQuery(this);			
 				var item = [];
 				var atributo;
 				
-				for( i=0; i<params.atributos.length; i++ ){
+				for ( i = 0; i < params.atributos.length; i++ ) {
 					atributo = params.atributos[i];
-					item[atributo] = li_elm.find( "input."+params.nombre+"_"+atributo ).val();
+					item[atributo] = li_elm.find( "input." + params.nombre + "_" + atributo ).val();
 				}
 							
 				html += _this.getHtmlItem( item, true );
@@ -358,14 +462,22 @@ function ListaOrdenable(){
 													
 			jQuery(params.nodoDestino).html(html);
 			
-		}		
+		}
+		
+		if (debug)
+			console.log("Saliendo de ListaOrdenable.copiaInicial");
+		
 	}
 	
 	/**
 	 * Copia los datos de la lista destino a la de origen.
 	 * btnEliminar es un booleano para indicar si ha de ponerse un boton para eliminar (cruz roja). Es optativo.
 	 */
-	this.copiaFinal = function(btnEliminar){
+	this.copiaFinal = function(btnEliminar) {
+		
+		if (debug)
+			console.log("Entrando en ListaOrdenable.copiaFinal");
+		
 		var _this = this;
 		
 		var numItems;
@@ -375,38 +487,38 @@ function ListaOrdenable(){
 		
 		var eliminar = typeof btnEliminar != 'undefined' && new Boolean(btnEliminar); 
 		
-		if( params.multilang ){
+		if ( params.multilang ) {
 		
 			jQuery(params.nodoDestino).each(function(){
 			
 				numItems = 0;
 			
-				html = "<ul>";
+				html = "<ul class='guarda-ajax'>";
 		
 				idioma = _this.getIdiomaActivo( jQuery(this) );
 				
-				jQuery(this).find("li").each(function(){
+				jQuery(this).find("li").each(function() {
+					
 					var li_elm = jQuery(this);
 					var item = [];				
 					var atributo;
 								
-					for( i=0; i < params.atributos.length; i++ ){
+					for ( i = 0; i < params.atributos.length; i++ ) {
+						
 						atributo = params.atributos[i];
 						
-						if( atributo == "id" || atributo == "orden" ){
-
+						if ( atributo == "id" || atributo == "orden" ){
 							item[atributo] = li_elm.find( "input." + params.nombre + "_" + atributo ).val();
-							
-						}else{						
-						
+						} else {						
 							item[atributo] = li_elm.find( "input." + params.nombre + "_" + atributo + "_" + idioma ).val();
-							
 						}
+						
 					}			
 					
 					html += _this.getHtmlItem(item, eliminar, idioma);
 					
 					numItems++;
+					
 				});
 				
 				html += "</ul>";
@@ -420,18 +532,19 @@ function ListaOrdenable(){
 				
 			});
 		
-		}else{
+		} else {
 		
 			numItems = 0;
 		
-			html = "<ul>";
+			html = "<ul class='guarda-ajax'>";
 		
-			jQuery(params.nodoDestino).find("li").each(function(i) {								
+			jQuery(params.nodoDestino).find("li").each(function(i) {
+				
 				var li_elm = jQuery(this);
 				var item = [];
 				var atributo;
 							
-				for( i=0; i < params.atributos.length; i++ ){
+				for ( i = 0; i < params.atributos.length; i++ ) {
 					atributo = params.atributos[i];
 					item[atributo] = li_elm.find( "input." + params.nombre + "_" + atributo ).val();
 				}			
@@ -439,25 +552,39 @@ function ListaOrdenable(){
 				html += _this.getHtmlItem(item, eliminar);
 				
 				numItems++;
+				
 			});
 			
 			html += "</ul>";
 			
 			jQuery(params.nodoOrigen).html(html);
 	
-		}				
+		}
+		
+		if (debug)
+			console.log("Saliendo de ListaOrdenable.copiaFinal");
 		
 		return numItems;
+		
 	}
 	
 	/**
 	 * btnEliminar es un booleano para indicar si ha de ponerse un boton para eliminar (cruz roja). Es optativo.
 	 */
-	this.finalizar = function(btnEliminar){
+	this.finalizar = function(btnEliminar) {
+		
+		if (debug)
+			console.log("Entrando en ListaOrdenable.finalizar");
+		
 		if (typeof btnEliminar != 'undefined') {
 			return this.copiaFinal(btnEliminar);
 		} else {
 			return this.copiaFinal();
 		}
+		
+		if (debug)
+			console.log("Saliendo de ListaOrdenable.finalizar");
+		
 	}
+	
 }

@@ -16,14 +16,14 @@ $(document).ready(function() {
 		ModulAfectacions.iniciar();	
 	}
 		
-	
 	// Evento para el botón de volver al detalle
-	jQuery("#btnVolverDetalle_afectacions").bind("click",function(){EscriptoriAfectacions.torna();});	
-	jQuery("#btnFinalizar_afectacions").bind("click",function(){EscriptoriAfectacions.finalizar();});	
+	jQuery("#btnVolverDetalle_afectacions").bind("click", function() { EscriptoriAfectacions.torna(); });	
+	jQuery("#btnFinalizar_afectacions").bind("click", function() { EscriptoriAfectacions.finalizar(); });
 	
 });
 
 function CModulAfectacions() {
+	
 	this.extend = ListaOrdenable;
 	this.extend();
 	
@@ -33,6 +33,7 @@ function CModulAfectacions() {
     var $moduloModificado = modul_afectacions_elm.find('input[name="modulo_afectaciones_modificado"]');
 	
 	this.iniciar = function() {
+		
 		jQuery("#afec_cerca_data").datepicker({ dateFormat: 'dd/mm/yy' });
 		jQuery("#afec_cerca_data_butlleti").datepicker({ dateFormat: 'dd/mm/yy' });		
 		
@@ -51,7 +52,6 @@ function CModulAfectacions() {
 		});
 		
 		afectacions_llistat_elm.add(afectacions_seleccionats_elm);
-				
 		
 		// one al botó de gestionar
 		modul_afectacions_elm.find("a.gestiona").one("click", function() {ModulAfectacions.gestiona();});
@@ -61,7 +61,14 @@ function CModulAfectacions() {
 			nombre: "afectacions",
 			nodoOrigen: modul_afectacions_elm.find(".listaOrdenable"),
 			nodoDestino: afectacions_seleccionats_elm.find(".listaOrdenable"),
-			atributos: ["afectacioId", "normaId", "afectacioNom", "normaNom"],	// Campos que queremos que aparezcan en las listas.
+			atributos: [			// Campos que queremos que aparezcan en los elementos de las lista ordenable.
+    			"afectacioId", 
+    			"normaId", 
+    			"afectacioNom", 
+    			"normaNom", 
+	            "idRelatedItem", 	// Campo necesario para guardado AJAX genérico de módulos laterales.
+	            "idMainItem"		// Campo necesario para guardado AJAX genérico de módulos laterales.
+            ],
 			multilang: false
 		});
 		
@@ -73,34 +80,36 @@ function CModulAfectacions() {
 		this.copiaFinal = this.copiaFinalPropia;
 		this.copiaInicial = this.copiaInicialPropia;
 		this.eliminaItem = this.eliminaItemPropio;
+		
 	}
 	
 	/**
 	 * Obtiene el html de un item de la lista.
 	 */
-	this.getHtmlItemPropio = function( item, btnEliminar, idioma ){
+	this.getHtmlItemPropio = function( item, btnEliminar, idioma ) {
 		
 		var sufijoIdioma = "";
 		var idiomaAtributo = "";
 		var partesAtributo;
 		
-		if( idioma ){
+		if ( idioma ) {
 			sufijoIdioma += "_" + idioma;
 		}
-	
-		var html = "<li>";
+			
+		// item => org.ibit.rol.sac.model.dto.AfectacionDTO pasado vía Spring.
+		var html = "<li element-id='" + item.normaId + "' main-item-id='" + item.idMainItem + "' related-item-id='" + item.idRelatedItem + "'>";
 			html += '<div class="afectacio">';
 			
 			html += "<input type=\"hidden\" value=\"" + item.afectacioId + "\" class=\"afectacio\" />";
 			html += "<input type=\"hidden\" value=\"" + item.normaId + "\" class=\"norma\" />";
 			html += item.afectacioNom + ", " + txtAmbLaNorma + " <em>" + item.normaNom + "</em>";
 			
-			if( btnEliminar ){
+			if ( btnEliminar ) {
 				html += "<a href=\"javascript:;\" class=\"btn elimina\"><span><span>" + txtElimina + "</span></span></a>";
 			}
 			
 			html += "</div>";
-		html += "</li>";
+			html += "</li>";
 		
 		return html;
 		
@@ -115,7 +124,8 @@ function CModulAfectacions() {
 		afec_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaAfectacions + ".");
 	}	
 		
-	this.gestiona = function() {		
+	this.gestiona = function() {
+		
 		lis_size = modul_afectacions_elm.find("li").size();
 		
 		if (lis_size > 0) {
@@ -126,24 +136,23 @@ function CModulAfectacions() {
 			afectacions_seleccionats_elm.find("ul").remove().end().find("p.info:first").text(txtNoHiHaAfectacionsSeleccionats + ".");			
 			afectacions_seleccionats_elm.find(".listaOrdenable").html("");
 		}
-
 		
 		// animacio
 		escriptori_detall_elm.fadeOut(300, function() {			
 			escriptori_afectacions_elm.fadeIn(300);			
-		});		
+		});
+		
 	}
 	
 	/**
 	 * Copia los datos de la lista origen a la de destino.
 	 */
-	this.copiaInicialPropia = function(){		
+	this.copiaInicialPropia = function() {		
 
 		var i;
 		var html;
 		var idioma;
 		var clases;
-		
 
 		html = "<ul>";
 					
@@ -151,7 +160,7 @@ function CModulAfectacions() {
 			
 			li_elm = $(this);
 			
-			html += "<li>";
+			html += "<li element-id='" + li_elm.find("input.norma").val() + "' main-item-id='" + $('#item_clave_primaria').val() + "' related-item-id='" + li_elm.find("input.norma").val() + "'>";
 			html += "<div class=\"afectacio\">";
 			html += "<input type=\"hidden\" value=\"" + li_elm.find("input.norma").val() + "\" class=\"norma\" />";
 			html += "<span class=\"afectacio\">";
@@ -173,13 +182,15 @@ function CModulAfectacions() {
 		
 		html += "</ul>";
 											
-		afectacions_seleccionats_elm.find(".listaOrdenable").html(html);			
+		afectacions_seleccionats_elm.find(".listaOrdenable").html(html);
+		
 	}
 	
 	/**
 	 * Copia los datos de la lista destino a la de origen.
 	 */
-	this.copiaFinalPropia = function(){
+	this.copiaFinalPropia = function() {
+		
 		var html = "";
 		var numItems = 0;
 		
@@ -191,11 +202,11 @@ function CModulAfectacions() {
 			afectacio_select = li_elm.find("select");
 			afectacio_select_id = afectacio_select.val();
 			afectacio_select_nom = afectacio_select.find("option:selected").text();
-			
-			html += "<li>";
+						
+			html += "<li element-id='" + li_elm.find("input.norma").val() + "' main-item-id='" + $('#item_clave_primaria').val() + "' related-item-id='" + li_elm.find("input.norma").val() + "'>";
 			html += "<input type=\"hidden\" value=\"" + afectacio_select_id + "\" class=\"afectacio\" />";
 			html += "<input type=\"hidden\" value=\"" + li_elm.find("input.norma").val() + "\" class=\"norma\" />";
-			html += afectacio_select_nom + ", " + txtAmbLaNorma + "  <em>" + li_elm.find("em").text() + "</em>";
+			html += afectacio_select_nom + ", " + txtAmbLaNorma + " <em>" + li_elm.find("em").text() + "</em>";
 			html += "</li>";
 			
 			numItems++;
@@ -211,22 +222,28 @@ function CModulAfectacions() {
 		
 		return numItems;
 		
-		
 	}	
 	
 	/**
 	 * Elimina un item de la lista.
 	 */ 
 	this.eliminaItemPropio = function( item ){		
+		
 		/*
 		var id = jQuery(item).find("input." + params.nombre + "_id:first").val();						
 		jQuery(params.nodoDestino).find("input[name=" + params.nombre + "_id_" + id + "]").parents("li").remove();
 		*/
+		
 		item.remove();
-		Detall.modificado();
+		
+		// FIXME amartin: esto ya no ha de estar si es guardado vía AJAX.
+		// Marcamos el formulario como modificado para habilitar el botón de guardar.
+		// Detall.modificado();
+		
 	}
 	
-	this.contaSeleccionats = function() {		
+	this.contaSeleccionats = function() {
+		
 		seleccionats_val = modul_afectacions_elm.find(".seleccionat").find("li").size();
 		info_elm = modul_afectacions_elm.find("p.info:first");
 		
@@ -237,6 +254,7 @@ function CModulAfectacions() {
 		} else if (seleccionats_val > 1) {
 			info_elm.html(txtSeleccionades + " <strong>" + seleccionats_val + " " + txtAfectacions.toLowerCase() + "</strong>.");						
 		}
+		
 	}
 	
 	this.inicializarAfectacions = function(listaAfectacions) {
@@ -250,24 +268,28 @@ function CModulAfectacions() {
 		that.contaSeleccionats();
 	}
 	
-	this.jsonAfectacions = function (){
+	this.jsonAfectacions = function () {
+		
 		//Construir el JSON que se devuelve en el guarda_upload de normativa.js
 		
 		var listaAfectaciones = "{\"listaAfectaciones\" : [";
 		var sep = "";
+		
 		$("div.modulAfectacions").find("li").each(function() {
 			var li_elm = $(this);
 			var idNormaAfectada = li_elm.find("input.norma").val();
 			var idTipoAfectacion = li_elm.find("input.afectacio").val();
 					
 			listaAfectaciones += sep + "{ \"afectacioId\" : " + idTipoAfectacion + ", \"normaId\" : " + idNormaAfectada+ ", \"normaNom\" : \"\", \"afectacioNom\" : \"\" } ";
-			sep=",";
+			sep = ",";
 		});
+		
 		listaAfectaciones += "]}";		
 		
 		return listaAfectaciones;
-	}	
-	
+		
+	}
+		
 };
 
 function CEscriptoriAfectacions() {
@@ -285,7 +307,8 @@ function CEscriptoriAfectacions() {
 		this._limpia();
 		//$("#cercador_afectacions_contingut:input").each(limpiarCampo);				
 		$("#afec_cerca_data").val("");
-		$("#afec_cerca_data_butlleti").val("");		
+		$("#afec_cerca_data_butlleti").val("");
+		
 	}
 	
 	this.nuevo = function() {
@@ -296,10 +319,59 @@ function CEscriptoriAfectacions() {
 	/**
 	 * Agrega un item a la lista.
 	 */
-	this.agregaItem = function( itemID, titulo ){	
+	this.agregaItem = function(itemID, titulo) {
+		
+		// En este caso, itemID es la PK de la normativa que se va a asociar al registro principal en modo de afcetación.
+		// Corresponde al valor de la columna AFE_CODNOA de la tabla RSC_AFECTA.
 		
 		list_size = afectacions_seleccionats_elm.find("li").size();
 		norma_esta = false;
+		
+		if (list_size == 0) {			
+			$("<ul>").appendTo(afectacions_seleccionats_elm.find(".listaOrdenable"));			
+		} else {			
+			afectacions_seleccionats_elm.find("input.norma").each(function() {				
+				if ($(this).val() == itemID) {
+					norma_esta = true;
+				}			
+			});			
+		}
+		
+		if (!norma_esta) {
+						
+			codi_seleccionat = "<li element-id='" + itemID + "' main-item-id='" + $('#item_clave_primaria').val() + "' related-item-id='" + itemID + "'>";
+			codi_seleccionat += "<div class=\"afectacio\">";
+			codi_seleccionat += "<input type=\"hidden\" value=\"" + itemID + "\" class=\"norma\" />";
+			codi_seleccionat += "<span class=\"afectacio\">";
+			codi_seleccionat += "<select>";
+			
+			$(Afectacions_arr).each(function(i) {
+				codi_selected = (i == 0) ? "selected=\"selected\"" : "";
+				codi_seleccionat += "<option value=\"" + this.id + "\" " + codi_selected + ">" + this.nom + "</option>";
+			});
+			
+			codi_seleccionat += "</select>";
+			codi_seleccionat += "<br />";
+			codi_seleccionat += ", " + txtAmbLaNorma + " <em>" + titulo + "</em>";
+			codi_seleccionat += "</span>";
+			codi_seleccionat += "<a href=\"javascript:;\" class=\"btn elimina\"><span><span>" + txtElimina + "</span></span></a>";
+			codi_seleccionat += "</div>";
+			codi_seleccionat += "</li>";
+			
+			afectacions_seleccionats_elm.find("ul").append(codi_seleccionat);
+			
+			this.contaSeleccionats();
+			
+			// FIXME amartin: esto ya no ha de estar si es guardado vía AJAX.
+			// Marcamos el formulario como modificado para habilitar el botón de guardar.
+			// Detall.modificado();
+			
+		}
+		
+		/* FIXME amartin: demasiadas cosas mal
+		list_size = afectacions_seleccionats_elm.find("li").size();
+		norma_esta = false;
+		
 		if (list_size == 0) {			
 			$("<ul>").appendTo(afectacions_seleccionats_elm.find(".listaOrdenable"));			
 		} else {			
@@ -308,18 +380,21 @@ function CEscriptoriAfectacions() {
 					norma_esta = true;
 				}			
 			});			
-		}		
+		}
 		
-		if (!norma_esta) {			
-			codi_seleccionat = "<li>";
+		if (!norma_esta) {
+			
+			codi_seleccionat = "<li element-id=" + norma_id + " modulo-id= '" + $('#item_clave_primaria').val() + "'>";
 			codi_seleccionat += "<div class=\"afectacio\">";
 			codi_seleccionat += "<input type=\"hidden\" value=\"" + norma_id + "\" class=\"norma\" />";
 			codi_seleccionat += "<span class=\"afectacio\">";
 			codi_seleccionat += "<select>";
+			
 			$(Afectacions_arr).each(function(i) {
 				codi_selected = (i == 0) ? "selected=\"selected\"" : "";
 				codi_seleccionat += "<option value=\"" + this.id + "\" " + codi_selected + ">" + this.nom + "</option>";
 			});
+			
 			codi_seleccionat += "</select>";
 			codi_seleccionat += "<br />";
 			codi_seleccionat += ", " + txtAmbLaNorma + " <em>" + norma_titol + "</em>";
@@ -332,21 +407,23 @@ function CEscriptoriAfectacions() {
 			
 			this.contaSeleccionats();
 			
-			Detall.modificado();		
-		}		
+			Detall.modificado();
+			
+		}
+		*/
 		
 	}	
 	
 	// Cambia de página.
-	this.cambiaPagina = function( pag ){
-		multipagina_afec.setPaginaActual(pag-1);
+	this.cambiaPagina = function( pag ) {
+		multipagina_afec.setPaginaActual(pag - 1);
 		pag_Pag = pag;
 		this.anar(pag);
 	}	
 	
 	this.finCargaListado = function(data, opcions) {
 		// total
-		resultats_total = parseInt(data.total,10);
+		resultats_total = parseInt(data.total, 10);
 		
 		if (resultats_total > 0) {
 			
@@ -437,7 +514,6 @@ function CEscriptoriAfectacions() {
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
-			
 			// Instanciamos el navegador multipágina.					
 			multipagina_afec.init({
 				total: resultats_total,
@@ -465,7 +541,8 @@ function CEscriptoriAfectacions() {
 			
 				// Evento lanzado al hacer click en un elemento de la lista.
 				//jQuery("#resultats .llistat .tbody a").unbind("click").bind("click",function(){
-                resultats_afectacions_elm.find(".llistat .tbody a").unbind("click").bind("click",function(){
+                resultats_afectacions_elm.find(".llistat .tbody a").unbind("click").bind("click", function() {
+                	
                 	var elem = $(this);
                 	norma_id = elem.parent().find("input.id").val();
                 	norma_titol = elem.html();
@@ -535,7 +612,7 @@ function CEscriptoriAfectacions() {
 	
 	}
 	
-	this.finalizar = function(){		
+	this.finalizar = function() {		
 		
 		nombre_llistat = ModulAfectacions.finalizar();
 		
@@ -547,10 +624,12 @@ function CEscriptoriAfectacions() {
         // Marcamos el módulo como modificado.
         ModulAfectacions.modificado();
         
+        // FIXME amartin: esto ya no ha de estar si es guardado vía AJAX.
 		// Marcamos el formulario como modificado para habilitar el botón de guardar.
-		Detall.modificado();
+		// Detall.modificado();
 		
 		this.torna();
+		
 	}
 
 	this.anar = function(enlace_html) {
@@ -577,7 +656,7 @@ function CEscriptoriAfectacions() {
 			
 			escriptori_detall_elm.fadeIn(300, function() {
 				// activar
-				modul_afectacions_elm.find("a.gestiona").one("click", function() {ModulAfectacions.gestiona();});
+				modul_afectacions_elm.find("a.gestiona").one("click", function() { ModulAfectacions.gestiona(); });
 			});
 			
 		});
@@ -605,11 +684,12 @@ function CEscriptoriAfectacions() {
 			
 		}
 		
-		afectacions_seleccionats_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function(){				
+		afectacions_seleccionats_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function() {				
 			var itemLista = jQuery(this).parents("li:first");
 			ModulAfectacions.eliminaItem(itemLista);
 			EscriptoriAfectacions.contaSeleccionats();
 		});
 		
-	}	
+	}
+	
 };

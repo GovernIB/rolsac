@@ -1,6 +1,19 @@
 //TIPUS UNITATS ADMINISTRATIVES
 
 $(document).ready(function() {
+	
+	// Listener para guardado de módulo vía AJAX.
+	jQuery(".lista-simple").click(function() {
+		
+		var element = $(this).parent().parent().find("li");
+		var id = $('#item_id').val();
+		var url = $(this).attr('action');
+		
+		ListaSimple.guardar(element, url, id);
+		
+	});
+	
+	ListaSimple = new CListaSimple();
 
 	// elements
 	opcions_elm = $("#opcions");
@@ -57,6 +70,68 @@ $(document).ready(function() {
 
 });
 
+// TODO amartin: explicación de extensión de clase.
+function CListaSimple() {
+	
+	// Activa mensajes de debug.
+	var debug = true;
+
+	this.extend = ListaSimple;
+	this.extend();
+	
+	var that = this;
+	
+	this._guardar = this.guardar;
+	this._getFilters = this.getFilters;
+	
+	this.guardar = function(element, url, id) {
+		
+		if (debug)
+			console.log("Entrando en CListaSimple.guardar");
+
+		console.log("element");
+		console.log(element);
+		
+		if ( !(element == null || element == "undefined") )
+			this._guardar(element, url, id);
+		
+		if (debug)
+			console.log("Saliendo de CListaSimple.guardar");
+		
+	}
+	
+	this.getFilters = function(element, id) {
+		
+		if (debug)
+			console.log("Entrando en CListaSimple.getFilters");
+		
+		var lista = new Array();
+		var filters = this._getFilters(element, id);
+		
+		if (element.length > 0) {
+			
+			element.each(function() {
+				
+				var value = $(this).find('input.afectacio').val(); // Obtenemos el ID del tipo de afectación.
+				lista.push(value);
+				
+			});
+			
+			filters += "&tiposAfectacion=" + lista;
+			
+		}
+		
+		console.log("filters");
+		console.log(filters);
+				
+		if (debug)
+			console.log("Saliendo de CListaSimple.getFilters");
+		
+		return filters;
+				
+	}
+	
+};
 
 //idioma
 var pag_idioma = $("html").attr("lang");
@@ -1163,13 +1238,15 @@ function CDetall() {
 
 	}
 
-
 	this.pintarModulos = function(dades) {
 
-		ModulAfectacions.inicializarAfectacions(dada_node.afectacions);
-
+		// Inicializamos de forma normal, al ser un módulo lateral guardable vía AJAX.
+		ModulAfectacions.inicializarAfectacions(dades.afectacions);
+		
+		// En el caso de los procedimientos no inicializamos de forma normal, ya que no será una lista editable,
+		// sino una lista de elementos de "sólo lectura". Los pintamos de forma especial teniendo eso en cuenta.
 		pro_seleccionats_elm = escriptori_detall_elm.find("div.modulProcediments div.listaOrdenable");
-		pro_nodes = dada_node.procediments;
+		pro_nodes = dades.procediments;
 		pro_nodes_size = pro_nodes.length;
 
 		if (pro_nodes_size == 0) {
@@ -1184,7 +1261,7 @@ function CDetall() {
 			$(pro_nodes).each(function() {
 				
 				pro_node = this;
-				codi_pro += "<li><input type=\"hidden\" value=\"" + pro_node.id + "\" />" + pro_node.nombre + "</li>";
+				codi_pro += "<li element-id=" + pro_node.id + " modulo-id= '" + pro_node.idModulo + "' ><input type=\"hidden\" value=\"" + pro_node.id + "\" />" + pro_node.nombre + "</li>";
 				
 			});
 			
@@ -1193,17 +1270,13 @@ function CDetall() {
 			escriptori_detall_elm.find("div.modulProcediments p.info").html(txtHiHa + " <strong>" + pro_nodes_size + " " + txt_procediments + "</strong>.");
 			pro_seleccionats_elm.html(codi_pro);
 			
-			/*if (pro_nodes_size > 1) {
-				//pro_seleccionats_elm.find("ul").sortable({ axis: 'y', cursor: 'url(../img/cursor/grabbing.cur), move' }).find("li").css("cursor","url(../img/cursor/grab.cur), move");
-			}*/
-			
 		}
 
 	}
 
 	this.ocultarModulos = function(selector) {
 
-		if ( !selector.hasClass("publicacio") && !selector.attr("id") == "modulDocumentNormativa" 
+		if ( !selector.hasClass("publicacio") && !selector.attr("id") == "#modulDocumentNormativa" 
 				&& !selector.attr("id") == "modul_procediments" 
 				&& !selector.attr("id") == "modul_afectacions")
 			selector.addClass("invisible");
