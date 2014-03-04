@@ -16,7 +16,7 @@ import org.ibit.rol.sac.persistence.intf.UARemotaFacade;
 import org.ibit.rol.sac.persistence.intf.UARemotaFacadeHome;
 import org.ibit.rol.sac.persistence.util.UARemotaFacadeUtil;
 
-import es.caib.rolsac.persistence.lucene.model.ModelFilterObject;
+import es.caib.rolsac.lucene.model.ModelFilterObject;
 
 /**
  * Business delegate para manipular fichas.

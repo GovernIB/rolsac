@@ -1,4 +1,4 @@
-package es.caib.rolsac.persistence.lucene.analysis;
+package es.caib.rolsac.lucene.analysis;
 
 import java.io.Reader;
 import java.util.Set;
@@ -8,7 +8,7 @@ import org.apache.lucene.analysis.StopFilter;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
 
-import es.caib.rolsac.persistence.lucene.hibernate.Constants;
+import es.caib.rolsac.lucene.hibernate.Constants;
 
 public class InglesAnalyzer extends Analyzer {
 

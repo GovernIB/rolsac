@@ -32,6 +32,7 @@
     <path id="jar.class.path">
         <fileset dir="${jar.product}">
             <include name="extractor.jar"/>
+        	<include name="lucene.jar"/>
         </fileset>
         <fileset dir="${lib.dir}">
             <include name="commons-logging.jar"/>

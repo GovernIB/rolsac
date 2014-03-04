@@ -10,7 +10,7 @@ import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 
-import es.caib.rolsac.persistence.lucene.model.ModelFilterObject;
+import es.caib.rolsac.lucene.model.ModelFilterObject;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
 public interface FichaDelegateI {

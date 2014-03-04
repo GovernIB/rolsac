@@ -22,10 +22,10 @@ import org.apache.lucene.store.FSDirectory;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 
-import es.caib.rolsac.persistence.lucene.analysis.AlemanAnalyzer;
-import es.caib.rolsac.persistence.lucene.analysis.CastellanoAnalyzer;
-import es.caib.rolsac.persistence.lucene.analysis.CatalanAnalyzer;
-import es.caib.rolsac.persistence.lucene.analysis.InglesAnalyzer;
+import es.caib.rolsac.lucene.analysis.AlemanAnalyzer;
+import es.caib.rolsac.lucene.analysis.CastellanoAnalyzer;
+import es.caib.rolsac.lucene.analysis.CatalanAnalyzer;
+import es.caib.rolsac.lucene.analysis.InglesAnalyzer;
 
 
 /**

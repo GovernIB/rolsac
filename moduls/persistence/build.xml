@@ -54,6 +54,7 @@
             <include name="sac-utils.jar"/>        	
         	<include name="sac.jar"/>
             <include name="model.jar"/>
+        	<include name="lucene.jar"/>
         	<include name="micromodel.jar"/>
         	<include name="sac-micropersistence.jar"/>
         </fileset>
@@ -77,7 +78,7 @@
 			<include name="htmlparser.jar"/>
 		    <include name="jdom.jar"/>
 			<include name="jericho-html-2.5.jar"/>        	
-			<include name="lucene-caib.jar"/>
+			<!-- <include name="lucene-caib.jar"/> -->
 			<include name="lucene-core-3.6.2.jar"/>
 			<include name="lucene-spellchecker-3.6.2.jar"/>
 			<include name="rome-1.0RC2.jar"/>

@@ -9,7 +9,7 @@ import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.criteria.BuscadorProcedimientoCriteria;
 
-import es.caib.rolsac.persistence.lucene.model.ModelFilterObject;
+import es.caib.rolsac.lucene.model.ModelFilterObject;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /*

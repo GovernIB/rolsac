@@ -8,7 +8,7 @@ import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.extractor.Extractor;
 import org.ibit.rol.sac.extractor.ExtractorFactory;
 
-import es.caib.rolsac.persistence.lucene.model.ModelIndexObject;
+import es.caib.rolsac.lucene.model.ModelIndexObject;
 
 /**
  * Objeto que encapsula los datos a indexar.

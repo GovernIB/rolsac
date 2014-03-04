@@ -1,4 +1,4 @@
-package es.caib.rolsac.persistence.lucene.model;
+package es.caib.rolsac.lucene.model;
 
 public class IndexEncontrado {
 

@@ -55,13 +55,13 @@ import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.util.Cadenas;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
-import es.caib.rolsac.persistence.lucene.analysis.AlemanAnalyzer;
-import es.caib.rolsac.persistence.lucene.analysis.CastellanoAnalyzer;
-import es.caib.rolsac.persistence.lucene.analysis.CatalanAnalyzer;
-import es.caib.rolsac.persistence.lucene.analysis.InglesAnalyzer;
-import es.caib.rolsac.persistence.lucene.model.Catalogo;
-import es.caib.rolsac.persistence.lucene.model.ModelFilterObject;
-import es.caib.rolsac.persistence.lucene.model.TraModelFilterObject;
+import es.caib.rolsac.lucene.analysis.AlemanAnalyzer;
+import es.caib.rolsac.lucene.analysis.CastellanoAnalyzer;
+import es.caib.rolsac.lucene.analysis.CatalanAnalyzer;
+import es.caib.rolsac.lucene.analysis.InglesAnalyzer;
+import es.caib.rolsac.lucene.model.Catalogo;
+import es.caib.rolsac.lucene.model.ModelFilterObject;
+import es.caib.rolsac.lucene.model.TraModelFilterObject;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**

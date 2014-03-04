@@ -17,7 +17,7 @@
 	    <fileset dir="${lib}/webcaib">
 			<include name="commons-collections-3.2.1.jar"/>
 			<include name="dom4j.jar"/>
-			<include name="lucene-caib.jar"/>
+			<!-- <include name="lucene-caib.jar"/> -->
 			<include name="odmg.jar"/>
 	    </fileset>
 		<fileset dir="${moduls.dir}">

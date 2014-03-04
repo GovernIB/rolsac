@@ -18,7 +18,7 @@ import org.ibit.rol.sac.persistence.intf.FichaFacade;
 import org.ibit.rol.sac.persistence.intf.FichaFacadeHome;
 import org.ibit.rol.sac.persistence.util.FichaFacadeUtil;
 
-import es.caib.rolsac.persistence.lucene.model.ModelFilterObject;
+import es.caib.rolsac.lucene.model.ModelFilterObject;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
@@ -187,7 +187,7 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
     }
     
     /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#indexInsertaFicha(org.ibit.rol.sac.model.Ficha, es.caib.rolsac.persistence.lucene.model.ModelFilterObject)
+	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#indexInsertaFicha(org.ibit.rol.sac.model.Ficha, es.caib.rolsac.lucene.model.ModelFilterObject)
 	 */
     public void indexInsertaFicha(Ficha fic, ModelFilterObject filter) throws DelegateException {
         try {

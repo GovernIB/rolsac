@@ -1,4 +1,4 @@
-package es.caib.rolsac.persistence.lucene.document;
+package es.caib.rolsac.lucene.document;
 
 public class NumberField {
 

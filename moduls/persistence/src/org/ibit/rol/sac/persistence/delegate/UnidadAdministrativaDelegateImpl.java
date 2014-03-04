@@ -17,7 +17,7 @@ import org.ibit.rol.sac.persistence.intf.UnidadAdministrativaFacade;
 import org.ibit.rol.sac.persistence.intf.UnidadAdministrativaFacadeHome;
 import org.ibit.rol.sac.persistence.util.UnidadAdministrativaFacadeUtil;
 
-import es.caib.rolsac.persistence.lucene.model.ModelFilterObject;
+import es.caib.rolsac.lucene.model.ModelFilterObject;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**

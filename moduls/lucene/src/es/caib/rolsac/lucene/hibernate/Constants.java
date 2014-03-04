@@ -1,4 +1,4 @@
-package es.caib.rolsac.persistence.lucene.hibernate;
+package es.caib.rolsac.lucene.hibernate;
 
 import org.apache.lucene.util.Version;
 

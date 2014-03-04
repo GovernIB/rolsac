@@ -6,7 +6,7 @@
 
 <hibernate-mapping>
     <class
-        name="org.ibit.rol.sac.model.lucene.LuceneFile"
+        name="es.caib.rolsac.lucene.hibernate.LuceneFile"
         table="RSC_LUCFIL"
     >
 

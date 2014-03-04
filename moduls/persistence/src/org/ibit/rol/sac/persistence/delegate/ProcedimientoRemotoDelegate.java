@@ -13,7 +13,7 @@ import org.ibit.rol.sac.persistence.intf.ProcedimientoRemotoFacade;
 import org.ibit.rol.sac.persistence.intf.ProcedimientoRemotoFacadeHome;
 import org.ibit.rol.sac.persistence.util.ProcedimientoRemotoFacadeUtil;
 
-import es.caib.rolsac.persistence.lucene.model.ModelFilterObject;
+import es.caib.rolsac.lucene.model.ModelFilterObject;
 
 /**
  * Business delegate para manipular procedimientos.

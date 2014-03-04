@@ -20,7 +20,7 @@ import org.ibit.rol.sac.persistence.intf.ProcedimientoFacade;
 import org.ibit.rol.sac.persistence.intf.ProcedimientoFacadeHome;
 import org.ibit.rol.sac.persistence.util.ProcedimientoFacadeUtil;
 
-import es.caib.rolsac.persistence.lucene.model.ModelFilterObject;
+import es.caib.rolsac.lucene.model.ModelFilterObject;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
@@ -263,7 +263,7 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
     }
     
     /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#indexInsertaProcedimiento(org.ibit.rol.sac.model.ProcedimientoLocal, es.caib.rolsac.persistence.lucene.model.ModelFilterObject)
+	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#indexInsertaProcedimiento(org.ibit.rol.sac.model.ProcedimientoLocal, es.caib.rolsac.lucene.model.ModelFilterObject)
 	 */
     public void indexInsertaProcedimiento(ProcedimientoLocal proc, ModelFilterObject filter) throws DelegateException {
         try {

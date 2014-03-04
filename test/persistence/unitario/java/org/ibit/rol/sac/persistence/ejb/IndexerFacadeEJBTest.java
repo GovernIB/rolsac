@@ -11,8 +11,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import test.unitario.persistence.mock.MockIndexerFacadeEJB;
-import es.caib.rolsac.persistence.lucene.model.Catalogo;
-import es.caib.rolsac.persistence.lucene.model.IndexResultados;
+import es.caib.rolsac.lucene.model.Catalogo;
+import es.caib.rolsac.lucene.model.IndexResultados;
 
 public class IndexerFacadeEJBTest {
 

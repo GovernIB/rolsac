@@ -1,4 +1,4 @@
-package es.caib.rolsac.persistence.lucene.analysis;
+package es.caib.rolsac.lucene.analysis;
 
 import java.io.IOException;
 

@@ -17,7 +17,7 @@ import org.ibit.rol.sac.persistence.intf.IndexerFacade;
 import org.ibit.rol.sac.persistence.intf.IndexerFacadeHome;
 import org.ibit.rol.sac.persistence.util.IndexerFacadeUtil;
 
-import es.caib.rolsac.persistence.lucene.model.IndexResultados;
+import es.caib.rolsac.lucene.model.IndexResultados;
 
 /**
  * Business delegate para manipular el indice.

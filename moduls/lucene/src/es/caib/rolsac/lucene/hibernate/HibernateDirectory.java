@@ -1,4 +1,4 @@
-package es.caib.rolsac.persistence.lucene.hibernate;
+package es.caib.rolsac.lucene.hibernate;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,7 +16,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.IndexInput;
 import org.apache.lucene.store.IndexOutput;
 import org.apache.lucene.store.Lock;
-import org.ibit.rol.sac.model.lucene.LuceneFile;
+
 
 public class HibernateDirectory extends Directory {
 

@@ -35,9 +35,9 @@ import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.util.RemotoUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
-import es.caib.rolsac.persistence.lucene.model.Catalogo;
-import es.caib.rolsac.persistence.lucene.model.ModelFilterObject;
-import es.caib.rolsac.persistence.lucene.model.TraModelFilterObject;
+import es.caib.rolsac.lucene.model.ModelFilterObject;
+import es.caib.rolsac.lucene.model.TraModelFilterObject;
+import es.caib.rolsac.lucene.model.Catalogo;
 
 /**
  * SessionBean para mantener y consultar Fichas Remotas (PORMAD)

@@ -1,4 +1,4 @@
-package org.ibit.rol.sac.model.lucene;
+package es.caib.rolsac.lucene.hibernate;
 
 import java.io.Serializable;
 import java.sql.Blob;
