@@ -799,7 +799,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	            }
 
 	            // Añadir hecho vital a la relación hecho vital-procedimiento y añadir el orden
-	            List<HechoVital> listHV = DelegateUtil.getHechoVitalDelegate().buscarPorIds(ids);
+	            List<HechoVital> listHV = DelegateUtil.getHechoVitalDelegate().buscarPorIds((Long[]) ids.toArray());
 	            for (HechoVital hv : listHV) {
 	                HechoVitalProcedimiento hvp = new HechoVitalProcedimiento();
 	                hvp.setProcedimiento(procediment);

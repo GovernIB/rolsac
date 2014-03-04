@@ -910,7 +910,7 @@ public class FitxaInfBackController extends PantallaBaseController {
     			for (String cod : valoresForm.get("fetsVitals").split(",")) {
     			    ids.add(Long.parseLong(cod));
     			}
-    			hechosVitales.addAll(DelegateUtil.getHechoVitalDelegate().buscarPorIds(ids));
+    			hechosVitales.addAll(DelegateUtil.getHechoVitalDelegate().buscarPorIds((Long[]) ids.toArray()));
         		fitxa.setHechosVitales(hechosVitales);
 
         	} else {

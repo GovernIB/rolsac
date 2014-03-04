@@ -10,6 +10,7 @@ import net.sf.hibernate.Transaction;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.store.Lock;
+import org.ibit.rol.sac.model.lucene.LuceneFile;
 
 final class HibLock extends Lock {
 

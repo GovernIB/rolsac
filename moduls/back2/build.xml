@@ -76,7 +76,7 @@
 			<include name="jcommon-1.0.0.jar"/>
 			<include name="jfreechart-1.0.14.jar"/>
 			<include name="json.jar"/>
-			<include name="lucene-caib.jar"/>
+			<!-- <include name="lucene-caib.jar"/> -->
 			<include name="org.springframework.**.jar"/>
 			<include name="quartz-1.8.5.jar"/>
 		</fileset>
