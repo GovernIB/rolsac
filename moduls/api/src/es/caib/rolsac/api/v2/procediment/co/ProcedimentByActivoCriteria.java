@@ -48,19 +48,18 @@ public class ProcedimentByActivoCriteria implements CriteriaObject {
      * @param qb
      */
     private void addProcedimientosActivos(QueryBuilder qb) {
-        Date fecha = PeriodoUtil.getNextDay();
-        
+
         qb.openParenthesis(LOGIC.AND);
-        
+
         qb.addRestriction(new Restriction(alias + "validacion", OPERATION.EQ, Validacion.PUBLICA));
-        
+
         List<Restriction> restrictions = new ArrayList<Restriction>(2);
-        restrictions.add(new Restriction(LOGIC.AND, alias + "fechaCaducidad", OPERATION.GE, fecha));
+        restrictions.add(new Restriction(LOGIC.AND, alias + "fechaCaducidad", OPERATION.GE, PeriodoUtil.getYesterday()));
         restrictions.add(new Restriction(LOGIC.OR, alias + "fechaCaducidad", OPERATION.NULL));
         qb.addGroupedRestrictions(restrictions);
-        
+
         restrictions = new ArrayList<Restriction>(2);
-        restrictions.add(new Restriction(LOGIC.AND, alias + "fechaPublicacion", OPERATION.LE, fecha));
+        restrictions.add(new Restriction(LOGIC.AND, alias + "fechaPublicacion", OPERATION.LE, PeriodoUtil.getToday()));
         restrictions.add(new Restriction(LOGIC.OR, alias + "fechaPublicacion", OPERATION.NULL));
         qb.addGroupedRestrictions(restrictions);
 
