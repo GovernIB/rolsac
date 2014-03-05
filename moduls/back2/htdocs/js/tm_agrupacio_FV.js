@@ -2,6 +2,19 @@
 
 $(document).ready(function() {
 	
+	// Listener para guardado de módulos laterales vía AJAX.
+	jQuery(".lista-simple").click(function() {
+		
+		var element = $(this).parent().parent().find("li");
+		var id = $('#item_id').val();
+		var url = $(this).attr('action');
+		
+		ListaSimple.guardar(element, url, id);
+		
+	});
+	
+	ListaSimple = new ListaSimple();
+	
 	// elements
 	opcions_elm = $("#opcions");
 	escriptori_elm = $("#escriptori");
@@ -43,7 +56,6 @@ $(document).ready(function() {
     
 });
 
-
 // idioma
 var pag_idioma = $("html").attr("lang");
 
@@ -55,16 +67,31 @@ var paginacio_marge = 4;
 
 // llistat
 var itemID_ultim = 0;
+
 function CLlistat() {
+	
+	// Activa mensajes de debug.
+	var debug = false;
 	
 	this.extend = ListadoBase;
 	this.extend();
 	
 	this.iniciar = function() {
+		
+		if (debug)
+			console.log("Entrando en CLlistat.iniciar");
+		
 		this.carregar({});
+		
+		if (debug)
+			console.log("Saliendo de CLlistat.iniciar");
+		
 	}
 	
-	this.finCargaListado = function(opcions,data) {
+	this.finCargaListado = function(opcions, data) {
+		
+		if (debug)
+			console.log("Entrando en CLlistat.finCargaListado");
 		
 		resultats_total = parseInt(data.total,10);
 		
@@ -188,9 +215,15 @@ function CLlistat() {
 			
 		});
 		
+		if (debug)
+			console.log("Saliendo de CLlistat.finCargaListado");
+		
 	}
 	
 	this.carregar = function(opcions) {
+		
+		if (debug)
+			console.log("Entrando en CLlistat.carregar");
 
 		dataVars = "";
 		
@@ -249,6 +282,9 @@ function CLlistat() {
 			}
 		});
 		
+		if (debug)
+			console.log("Saliendo de CLlistat.carregar");
+		
 	}
 	
 };
@@ -259,12 +295,18 @@ var Items_arr = new Array();
 // detall
 function CDetall() {
 	
+	// Activa mensajes de debug.
+	var debug = false;
+	
 	this.extend = DetallBase;
 	this.extend();
 	
     var that = this;
 
 	this.iniciar = function() {
+		
+		if (debug)
+			console.log("Entrando en CDetall.iniciar");
 		
 		// idioma
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {
@@ -316,12 +358,17 @@ function CDetall() {
 		    	
 		    	if (typeof ordenItem == 'undefined')
 		    		vfItem['orden'] = 0;
-		    	
 		    	else
 		    		vfItem['orden'] = parseInt(ordenItem) + 1;
 		    	
+		    	// (amartin): Campos para guardado AJAX. Por algún motivo, el agregarItem no está sobreescrito en
+		    	// modul_fet_vital.js y se hizo aquí esta chapuza.
+		    	vfItem['idMainItem'] = jQuery('#item_id').val();
+		    	vfItem['idRelatedItem'] = vfItem['id'];
+		    	
 		    	ModulFetVital.agregaItem(vfItem);
 		    	ModulFetVital.inicializarFetsVitals();
+		    	
 		    	jQuery('#item_fetVital_relacionat').each(limpiarCampo);
 		    	
 	    	} else {
@@ -345,20 +392,39 @@ function CDetall() {
 		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos				
 		this.guarda = this.guarda_upload;
 		
+		if (debug)
+			console.log("Saliendo de CDetall.iniciar");
+		
 	}
 	
-	this.traduirWrapper = function () {
+	this.traduirWrapper = function() {
+		
+		if (debug)
+			console.log("Entrando en CDetall.traduirWrapper");
+		
 		that.traduir(pagTraduirAgrupacioFetsVitals, CAMPOS_TRADUCTOR_AGRUPACIO_FET_VITAL, DATOS_TRADUCIDOS_AGRUPACIO_FET_VITAL);
+		
+		if (debug)
+			console.log("Saliendo de CDetall.traduirWrapper");
+		
 	}
 	
 	//Sobreescribe el método guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
 	this.guarda_upload = function(e) {
 		
+		if (debug)
+			console.log("Entrando en CDetall.guarda_upload");
+		
 		$("#llistaFetsVitals").val(ModulFetVital.listaFetsVitals());
 		
 		// Validamos el formulario
-		if(!that.formulariValid()){
+		if (!that.formulariValid()) {
+			
+			if (debug)
+				console.log("Saliendo de CDetall.guarda_upload");
+			
 			return false;
+			
 		}
 		
 		//Enviamos el formulario mediante el método ajaxSubmit del plugin jquery.form
@@ -381,6 +447,9 @@ function CDetall() {
 			}
 								
 		});
+		
+		if (debug)
+			console.log("Saliendo de CDetall.guarda_upload");
 
 		return false;	
 		
@@ -389,6 +458,9 @@ function CDetall() {
 	this.activar = 0;
 	
 	this.nou = function() {
+		
+		if (debug)
+			console.log("Entrando en CDetall.nou");
 		
 		//Ocultar paneles
 		jQuery("#modul_fetsVitals").hide();
@@ -419,9 +491,15 @@ function CDetall() {
 		
 		this.modificado(false);
 		
+		if (debug)
+			console.log("Saliendo de CDetall.nou");
+		
 	}		
 	
 	this.pintar = function(dades) {
+		
+		if (debug)
+			console.log("Entrando en CDetall.pintar");
 		
 		jQuery("#modul_fetsVitals").show();
 		
@@ -478,9 +556,15 @@ function CDetall() {
 		
 		this.modificado(false);
 		
+		if (debug)
+			console.log("Saliendo de CDetall.pintar");
+		
 	}
 	
 	this.elimina = function() {
+		
+		if (debug)
+			console.log("Entrando en CDetall.elimina");
 		
 		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
 		
@@ -518,10 +602,21 @@ function CDetall() {
 			
 		});
 		
+		if (debug)
+			console.log("Saliendo de CDetall.elimina");
+		
 	}
 	
 	this.pintarModulos = function(dades) {
+		
+		if (debug)
+			console.log("Entrando en CDetall.pintarModulos");
+		
 		ModulFetVital.inicializarFetsVitals(dades.fetsVitals);
+		
+		if (debug)
+			console.log("Saliendo de CDetall.pintarModulos");
+		
 	}
 	
 };

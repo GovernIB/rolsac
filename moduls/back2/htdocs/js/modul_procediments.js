@@ -5,8 +5,6 @@ $(document).ready(function() {
 	// elements
 	escriptori_procediments_elm = jQuery("#escriptori_procediments");
     resultats_procediment_elm = jQuery("#resultats_procediments");
-//	resultats_actiu_procediment_elm = resultats_procediment_elm.find("div.actiu:first");
-//	cercador_procediment_elm = jQuery("#cercador_procediment");
     modul_procediments_elm = jQuery("div.modulProcediments:first");
 
 	ModulProcediment = new CModulProcediment();
@@ -72,7 +70,7 @@ function CModulProcediment() {
             ],
 			multilang: false
 		});
-		
+				
 		// one al botó de gestionar
 		modul_procediments_elm.find("a.gestiona").one("click", function() { ModulProcediment.gestiona(); });
 		
@@ -180,10 +178,6 @@ function CModulProcediment() {
 	        itemLista.remove(); // se elimina de la lista del NodoOrigen
 	
 			that.contaSeleccionats();
-			
-			// FIXME amartin: esto ya no ha de estar si es guardado vía AJAX.
-			// Marcamos el formulario como modificado para habilitar el botón de guardar.
-			// Detall.modificado();
 		});
 		
 		// Ir a la edicion del procedimiento al hacer click sobre el.
@@ -366,11 +360,6 @@ function CEscriptoriProcediment() {
 			}
 			
 			codi_totals = "<p class=\"info\">" + txtTrobats + " <strong>" + resultats_total + " " + txtT.toLowerCase() + "</strong>" + ". " + txtMostrem + resultatInici + txtMostremAl + resultatFinal + txt_ordenacio + ".</p>";
-
-// TODO amartin: ¿este bloque de código comentado puede borrarse ya?
-//			codi_cap1 = "<div class=\"th nom" + ordre_c1 + "\" role=\"columnheader\">" + txtTitol + "</a></div>";
-//			codi_cap2 = "<div class=\"th data" + ordre_c2 + "\" role=\"columnheader\">" + txtData + "</a></div>";
-//			codi_cap3 = "<div class=\"th dataButlleti" + ordre_c3 + "\" role=\"columnheader\">" + txtDataButlleti + "</a></div>";
 			
 			codi_cap1 = "<div class=\"th procediment "+ ordre_c1 +"\" role=\"columnheader\"><a href=\"javascript:void(0)\" class=\"id\">" + txtProcediment + "</a></div>";
             codi_cap2 = "<div class=\"th familia "+ ordre_c2 +"\" role=\"columnheader\"><a href=\"javascript:void(0)\" class=\"familia.id\">" + txtFamilia + "</a></div>";
@@ -508,10 +497,6 @@ function CEscriptoriProcediment() {
 		}
 
 		ModulProcediment.prepararListaProcedimientos(modul_procediments_elm.find(".listaOrdenable"));
-		
-		// FIXME amartin: esto ya no ha de estar si es guardado vía AJAX.
-		// Marcamos el formulario como modificado para habilitar el botón de guardar.
-		// Detall.modificado();
 		
 		this.torna();
 		

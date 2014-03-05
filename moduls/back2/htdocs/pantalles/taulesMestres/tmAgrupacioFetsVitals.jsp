@@ -6,6 +6,7 @@
 <script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/tm_agrupacio_FV.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/lista_ajax.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_fet_vital.js'/>"></script>
 <script type="text/javascript">
     var pagLlistat = '<c:url value="/agrupacioFetsVitals/llistat.do" />';
@@ -444,7 +445,7 @@
             </div>
             <!-- /modul -->
             <!-- modul -->
-            <div class="modul" id="modul_fetsVitals">
+            <div class="modul invisible" id="modul_fetsVitals">
                 <input type="hidden" id="llistaFetsVitals" name="fetsVitals" value=""/>                     
                 <fieldset>                                  
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
@@ -458,11 +459,18 @@
                                     <p class="info"><spring:message code='txt.noHiHaFetVitalRelacionat'/></p>
                                     <div class="listaOrdenable"></div>
                                 </div>
-                                <div class="boton btnGenerico" style="margin-left: 0px;">
+                                <div class="boton btnGenerico" style="margin-left: 0px; margin-bottom: 10px;">
                                     <a href="javascript:;" class="btn consulta" id="afegeixFetVital">
                                         <span><span><spring:message code='boto.afegeixFetVital'/></span></span>
                                     </a>
                                 </div>
+                                <p style="clear: both"/><!-- Separador -->
+	                            <div class="btnGenerico">
+	                                <a id="btnGuardar_fetsVitals" href="javascript:;" class="btn guarda important lista-simple" 
+	                            			action="<c:url value="/agrupacioFetsVitals/guardarHechosVitalesRelacionados.do" />">
+	                           			<span><span><spring:message code='boto.guarda'/></span></span>
+	                            	</a>
+	                            </div>
                             </div>                                  
                         </div>
                         <!-- /modulFetVital -->                                 
