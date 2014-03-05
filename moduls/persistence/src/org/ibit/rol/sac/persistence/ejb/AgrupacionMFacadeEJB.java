@@ -1,5 +1,6 @@
 package org.ibit.rol.sac.persistence.ejb;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.CreateException;
@@ -7,6 +8,7 @@ import javax.ejb.EJBException;
 
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
 import org.ibit.rol.sac.model.AgrupacionMateria;
@@ -24,8 +26,10 @@ import org.ibit.rol.sac.model.MateriaAgrupacionM;
  *
  * @ejb.transaction type="Required"
  */
-public abstract class AgrupacionMFacadeEJB extends HibernateEJB
-{
+public abstract class AgrupacionMFacadeEJB extends HibernateEJB {
+
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * @ejb.create-method
 	 * @ejb.permission unchecked="true"
@@ -100,13 +104,18 @@ public abstract class AgrupacionMFacadeEJB extends HibernateEJB
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin}"
 	 * @param agrMateria Entidad de tipo AgrupacionMateria a almnacenar
-	 * @param listaMateriasAsignadas	Listado de materias asignadas a la agrupación de materias.
+	 * @param listaMateriasAsignadas Listado de materias asignadas que se van a borrar. Se actualizarán las materias
+	 * relacionadas con las presentes en agrMateria.getMateriasAgrupacionM().
+	 * 
 	 * @return Devuelve el identificador de la agrupación de materias guardada.
 	 */
-	public Long guardarAgrupacionMaterias(AgrupacionMateria agrMateria, List<MateriaAgrupacionM> listaMateriasAsignadas)
-	{
+	public Long guardarAgrupacionMaterias(AgrupacionMateria agrMateria, List<MateriaAgrupacionM> listaMateriasAsignadas) {
+		
 		Session session = getSession();
+		
 		try {
+			
+			// Borramos las anteriores.
 			if (listaMateriasAsignadas != null) {
 				for (MateriaAgrupacionM materiaAgrupacionMaterias : listaMateriasAsignadas) {
 					if (materiaAgrupacionMaterias != null) {
@@ -115,6 +124,7 @@ public abstract class AgrupacionMFacadeEJB extends HibernateEJB
 				}
 			}
 			
+			// Guardamos las nuevas.
 			List<MateriaAgrupacionM> listaMateriaAgrupacionMaterias = agrMateria.getMateriasAgrupacionM();
 			for (MateriaAgrupacionM materiaAgrupacionMaterias : listaMateriaAgrupacionMaterias) {
 				session.saveOrUpdate(materiaAgrupacionMaterias);
@@ -126,10 +136,56 @@ public abstract class AgrupacionMFacadeEJB extends HibernateEJB
 			return agrMateria.getId();
 			
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
+	}
+	
+	/**
+	 * Retorna la lista de materias relacionadas con una agrupación de materias.
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission role-name="${role.system},${role.admin}"
+	 * 
+	 * @param id Clave primaria de la agrupación de materias de la cual queremos obtener sus materias relacionadas.
+	 * 
+	 * @return Devuelve la lista de materias relacionadas con la agrupación de materias especificada por parámetro.
+	 */
+	public List<MateriaAgrupacionM> obtenerMateriasAgrupacion(Long id) {
+		
+		List<MateriaAgrupacionM> resultado = new ArrayList<MateriaAgrupacionM>();
+		
+		Session session = getSession();
+
+    	try {
+    		
+    		StringBuilder consulta = new StringBuilder(" select m from MateriaAgrupacionM as m ");
+    		consulta.append(" where m.agrupacion.id = :idAgrupacion ");
+    		consulta.append(" order by m.orden asc ");
+
+    		Query query = session.createQuery( consulta.toString() );
+    		query.setParameter("idAgrupacion", id, Hibernate.LONG);
+
+    		resultado = (List<MateriaAgrupacionM>)query.list();
+
+    	} catch (HibernateException he) {
+
+    		throw new EJBException(he);
+
+    	} finally {
+
+    		close(session);
+
+    	}
+		
+		return resultado;
+		
 	}
 	
 }

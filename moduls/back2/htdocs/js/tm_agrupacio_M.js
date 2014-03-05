@@ -2,6 +2,19 @@
 
 $(document).ready(function() {
 	
+	// Listener para guardado de módulos laterales vía AJAX.
+	jQuery(".lista-simple").click(function() {
+		
+		var element = $(this).parent().parent().find("li");
+		var id = $('#item_id').val();
+		var url = $(this).attr('action');
+		
+		ListaSimple.guardar(element, url, id);
+		
+	});
+	
+	ListaSimple = new ListaSimple();
+	
 	// elements
 	opcions_elm = $("#opcions");
 	escriptori_elm = $("#escriptori");
@@ -45,7 +58,6 @@ $(document).ready(function() {
     
 });
 
-
 // idioma
 var pag_idioma = $("html").attr("lang");
 
@@ -60,16 +72,30 @@ var itemID_ultim = 0;
 
 function CLlistat() {
 	
+	// Activa mensajes de debug.
+	var debug = false;
+	
 	this.extend = ListadoBase;
 	this.extend();
 	
 	this.iniciar = function() {
+		
+		if (debug)
+			console.log("Entrando en CLlistat.iniciar");
+		
 		this.carregar({});
+		
+		if (debug)
+			console.log("Saliendo de CLlistat.iniciar");
+		
 	}
 	
-	this.finCargaListado = function(opcions,data){
+	this.finCargaListado = function(opcions, data) {
+		
+		if (debug)
+			console.log("Entrando en CLlistat.finCargaListado");
 
-		resultats_total = parseInt(data.total,10);
+		resultats_total = parseInt(data.total, 10);
 		
 		if (resultats_total > 0) {
 			
@@ -185,10 +211,15 @@ function CLlistat() {
 			
 		});
 		
+		if (debug)
+			console.log("Saliendo de CLlistat.finCargaListado");
+		
 	}
 	
-	
 	this.carregar = function(opcions) {
+		
+		if (debug)
+			console.log("Entrando en CLlistat.carregar");
 		
 		dataVars = "";
 		
@@ -220,7 +251,7 @@ function CLlistat() {
 			ordreCamp_elm.val(opcions.ordreCamp);
 			
 		// paginacio
-		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : multipagina.getPaginaActual();		
+		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag, 10) : multipagina.getPaginaActual();		
 			
 		// ordre
 		ordre_Tipus = ordreTipus_elm.val();
@@ -246,7 +277,11 @@ function CLlistat() {
 			}
 		});
 		
+		if (debug)
+			console.log("Saliendo de CLlistat.carregar");
+		
 	}
+	
 };
 
 // items array
@@ -255,12 +290,18 @@ var Items_arr = new Array();
 // detall
 function CDetall() {
 	
+	// Activa mensajes de debug.
+	var debug = false;
+	
 	this.extend = DetallBase;
 	this.extend();
 	
     var that = this;
 
 	this.iniciar = function() {
+		
+		if (debug)
+			console.log("Entrando en CDetall.iniciar");
 		
 		// idioma
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {
@@ -306,11 +347,11 @@ function CDetall() {
 	    });
 		
 		// Boto afegir node
-		$('#addMateria').unbind("click").bind("click",function() {
+		$('#addMateria').unbind("click").bind("click", function() {
 			
 	    	var id = jQuery('#item_materia_relacionada').val();
 	    	
-	    	if (id != '' || id > 0 ) {
+	    	if ( id != '' || id > 0 ) {
 	    		
 	    		$('#popMateria').css({display:"none"});
 	    		
@@ -322,9 +363,13 @@ function CDetall() {
 		    	
 		    	if (typeof ordenItem == 'undefined')
 		    		vfItem['orden'] = 0;
-		    	
 		    	else
 		    		vfItem['orden'] = parseInt(ordenItem) + 1;
+
+		    	// (amartin): Campos para guardado AJAX. Por algún motivo, el agregarItem no está sobreescrito en
+		    	// modul_materies.js y se hizo aquí esta chapuza.
+		    	vfItem['idMainItem'] = jQuery('#item_id').val();
+		    	vfItem['idRelatedItem'] = vfItem['id'];
 
 		    	ModulMateries.agregaItem(vfItem);
 		    	ModulMateries.contaSeleccionats();
@@ -334,7 +379,6 @@ function CDetall() {
 					var itemLista = jQuery(this).parents("li:first");
 					ModulMateries.eliminaItem(itemLista);
 					ModulMateries.contaSeleccionats();
-					Detall.modificado();
 					
 				});
 		    			    	
@@ -348,7 +392,6 @@ function CDetall() {
 	    	
 	    });
 		
-		
 		// boton de traducir
         jQuery("#botoTraduirAgrupacioMateries").unbind("click").bind("click", function() {
             Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
@@ -357,15 +400,29 @@ function CDetall() {
 		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos
 		this.guarda = this.guarda_upload;
 		
+		if (debug)
+			console.log("Saliendo de CDetall.iniciar");
+		
 	}
 	
 	this.traduirWrapper = function () {
+		
+		if (debug)
+			console.log("Entrando en CDetall.traduirWrapper");
+		
 		that.traduir(pagTraduirAgrupacioMateries, CAMPOS_TRADUCTOR_AGRUPACIO_MATERIES, DATOS_TRADUCIDOS_AGRUPACIO_MATERIES);
+		
+		if (debug)
+			console.log("Saliendo de CDetall.traduirWrapper");
+		
 	}
 	
 	this.activar = 0;
 	
 	this.nou = function() {
+		
+		if (debug)
+			console.log("Entrando en CDetall.nou");
 		
 		//Ocultar paneles y campos
 		jQuery("#modul_materies").hide();
@@ -388,10 +445,16 @@ function CDetall() {
 		
 		this.modificado(false);
 		
+		if (debug)
+			console.log("Saliendo de CDetall.nou");
+		
 	}		
 	
 	// Guardar haciendo upload de archivos.
 	this.guarda_upload = function() {
+		
+		if (debug)
+			console.log("Entrando en CDetall.guarda_upload");
 		
         // Validamos el formulario
         if (!that.formulariValid()) {
@@ -416,12 +479,18 @@ function CDetall() {
 			}
 
 		});
+		
+		if (debug)
+			console.log("Saliendo de CDetall.guarda_upload");
         
 		return false;
 		
 	}
 	
 	this.pintar = function(dades) {
+		
+		if (debug)
+			console.log("Entrando en CDetall.pintar");
 		
 		escriptori_detall_elm.find("a.elimina").show().end().find("h2:first").text(txtDetallTitol);
 		
@@ -483,9 +552,15 @@ function CDetall() {
 		
 		this.modificado(false);
 		
+		if (debug)
+			console.log("Saliendo de CDetall.pintar");
+		
 	}
 	
 	this.elimina = function() {
+		
+		if (debug)
+			console.log("Entrando en CDetall.elimina");
 		
 		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
 		item_ID = $("#item_id").val();
@@ -513,10 +588,21 @@ function CDetall() {
 			}
 		});
 		
+		if (debug)
+			console.log("Saliendo de CDetall.elimina");
+		
 	}
 	
 	this.pintarModulos = function(dades) {
+		
+		if (debug)
+			console.log("Entrando en CDetall.pintarModulos");
+		
 		ModulMateries.inicializarMaterias(dades.materies, true);
+		
+		if (debug)
+			console.log("Saliendo de CDetall.pintarModulos");
+		
 	}
 	
 };

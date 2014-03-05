@@ -89,7 +89,7 @@ public abstract class MateriaAgrupacionMFacadeEJB extends HibernateEJB {
 	 */
 	public List<Materia> obtenerMateriasRelacionadas(Long idAgrupacionMateria, String idioma) {
 
-		List<Materia> i = Collections.emptyList();
+		List<Materia> materias = Collections.emptyList();
 		Session session = getSession();
 
 		try {
@@ -99,21 +99,25 @@ public abstract class MateriaAgrupacionMFacadeEJB extends HibernateEJB {
 			consulta.append(" inner join mam.agrupacion as agrupacion ");
 			consulta.append(" where index(trad) = :idioma ");
 			consulta.append(" and agrupacion = :idAgrupacionMateria ");
-			consulta.append(" order by agrupacion.codigoEstandar asc ");
+			consulta.append(" order by mam.orden asc ");
 			
 			Query query = session.createQuery(consulta.toString());
 			query.setParameter("idAgrupacionMateria", idAgrupacionMateria);
 			query.setParameter("idioma", idioma);
 			
-			i = (List<Materia>)query.list();
+			materias = (List<Materia>)query.list();
 
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
 
-		return i;
+		return materias;
 
 	}
 

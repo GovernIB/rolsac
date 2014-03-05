@@ -1275,7 +1275,7 @@
                             <p class="btnGenerico">
                                 <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.gestiona_afectacions'/></span></span></a>
                             </p>
-							<p/>
+							<p class="clear"/>
 							<p class="btnGenerico">
                                 <a id="btnGuardar_afectacions" href="javascript:;" class="btn guarda important lista-simple" 
                             			action="<c:url value="/normativa/guardarAfectaciones.do" />">

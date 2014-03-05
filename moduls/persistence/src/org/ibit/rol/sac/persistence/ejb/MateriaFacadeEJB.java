@@ -717,6 +717,37 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
 			close(session);
 		}
 	}
+	
+	/**
+	 * Obtener listado de materias según un listado de IDs
+	 * @ejb.interface-method
+	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+	 */
+	public List<Materia> obtenerMateriasPorIDs(List<Long> materias, String idioma) {
+		
+		List<Materia> resultado;
+		Session session = getSession();
+		
+		try {
+			
+			Query query = session.createQuery("from Materia as mat, mat.traducciones as trad where index(trad) = :idioma and mat.id in (:materias) ");
+        	query.setParameter("idioma", idioma);
+        	query.setParameterList("materias", materias);
+        	resultado = (List<Materia>)query.list();
+        	
+			return resultado;
+			
+		} catch (HibernateException he) {
+			
+			throw new EJBException(he);
+			
+		} finally {
+			
+			close(session);
+			
+		}
+		
+	}
 
 
 	/**

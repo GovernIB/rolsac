@@ -10,7 +10,11 @@ jQuery(document).ready(function() {
 	}        
 });
 
-function CModulMateries(){
+function CModulMateries() {
+	
+	// Activa mensajes de debug.
+	var debug = false;
+	
 	this.extend = ListaOrdenable;
 	this.extend();
 	        
@@ -20,22 +24,41 @@ function CModulMateries(){
 	var that = this;
 	
 	this.iniciar = function() {
+		
+		if (debug)
+			console.log("Entrando en CModulMateries.iniciar");
+		
 		// Configuramos la lista ordenable.
 		this.configurar({
 			nombre: "materia",
 			nodoOrigen: modul_materies_elm.find(".listaOrdenable"),
 			nodoDestino: modul_materies_elm.find(".listaOrdenable"),
-			atributos: ["id", "nom", "orden"],	// Campos que queremos que aparezcan en las listas.
+			atributos: [			// Campos que queremos que aparezcan en las listas.
+	            "id", 
+	            "nom", 
+	            "orden", 
+	            "idRelatedItem", 	// Campo necesario para guardado AJAX genérico de módulos laterales.
+	            "idMainItem"		// Campo necesario para guardado AJAX genérico de módulos laterales.
+            ],	
 			multilang: false
 		});
+		
+		// Desactivamos que al cambiar un valor en este desplegable la vista se marque como modificada.
+		// Esto se hace de forma genérica para elementos de los formularios en detall_base.js, de este modo:
+		// 		jQuery("#" + ids.form + " input,#" + ids.form + " select,#" + ids.form + " textarea").bind("change", function() { that.modificado(); });
+		jQuery('#item_materia_relacionada').unbind('change');
 
         // Obtenemos el campo oculto para controlar los cambios.
         $moduloModificado = modul_materies_elm.find('input[name="modulo_materias_modificado"]');        
         
         // Controlamos los cambios sobre los elementos del módulo, poniendo el campo hidden correspondiente a 1.
-        modul_materies_elm.find("input[type=checkbox]").change(function(){
+        modul_materies_elm.find("input[type=checkbox]").change(function() {
             $moduloModificado.val(1);
-        });                
+        });
+        
+        if (debug)
+			console.log("Saliendo de CModulMateries.iniciar");
+        
 	}
 	
 	var modul_materies_elm = jQuery("div.modulMateries");
@@ -60,7 +83,11 @@ function CModulMateries(){
 		
 	}
 	
-	this.cancela = function(){
+	this.cancela = function() {
+		
+		if (debug)
+			console.log("Entrando en CModulMateries.cancela");
+		
 		mat_llistat_elm = escriptori_detall_elm.find("div.modulMateries div.llistat");
 		mat_llistat_elm.find("input[type=checkbox]").each(function() {
 			$this = jQuery(this);
@@ -76,52 +103,33 @@ function CModulMateries(){
         
         // Restauramos el estado del campo de control de cambios.
         $moduloModificado.val( $moduloModificado.data('oldvalue') );
+        
+        if (debug)
+			console.log("Saliendo de CModulMateries.cancela");
+        
 	}
 	
-	this.gestiona = function(){
+	this.gestiona = function() {
+		
+		if (debug)
+			console.log("Entrando en CModulMateries.gestiona");
     
         // Guardamos el estado del campo de control de cambios.
         $moduloModificado.data( 'oldvalue', $moduloModificado.val() );
     
 		materies_seleccionats_elm.slideUp(300);
 		materies_llistat_elm.slideDown(300);
-	}
-	
-	this.finaliza = function(){
-		nombre_llistat = 0;
-				
-		codi_llistat = "<ul>";
 		
-		materies_llistat_elm.find("li").each(function(i) {
-					
-			li_elm = $(this);
-			input_elm = li_elm.find("input");
-					
-			if (input_elm.attr("checked") == "checked") {
-				codi_llistat += "<li><input type=\"hidden\" value=\"" + input_elm.val() + "\" />" + li_elm.find("span").text() + "</li>";
-				nombre_llistat++;
-				
-				input_elm.addClass(materiaDefaultClass);
-			} else {
-				input_elm.removeClass(materiaDefaultClass);
-			}
-			
-		});
-		
-		codi_llistat += "</ul>";
-		
-		codi_materia_txt = (nombre_llistat == 1) ? txtMateria : txtMateries;
-		codi_info = (nombre_llistat == 0) ? txtNoHiHaMateries + "." : txtHiHa + " <strong>" + nombre_llistat + " " + codi_materia_txt + "</strong>.";
-		
-		materies_seleccionats_elm.find("p.info").html(codi_info);
-		materies_seleccionats_elm.find(".listaOrdenable").html(codi_llistat);		
-		
-		materies_seleccionats_elm.slideDown(300);
-		materies_llistat_elm.slideUp(300);
+		if (debug)
+			console.log("Saliendo de CModulMateries.gestiona");
 		
 	}
 	
 	this.contaSeleccionats = function() {
+		
+		if (debug)
+			console.log("Entrando en CModulMateries.contaSeleccionats");
+		
 		seleccionats_val = modul_materies_elm.find(".seleccionats").find("li").size();
 		info_elm = modul_materies_elm.find("p.info:first");
 	        
@@ -130,6 +138,7 @@ function CModulMateries(){
 		} else if (seleccionats_val == 1) {
 			info_elm.html(txtSeleccionada + " <strong>" + seleccionats_val + " " + txtMateria.toLowerCase() + "</strong>.");
 		} else if (seleccionats_val > 1) {
+			
 			info_elm.html(txtSeleccionades + " <strong>" + seleccionats_val + " " + txtMateries.toLowerCase() + "</strong>.");
 									
 			modul_materies_elm.find(".listaOrdenable ul").sortable({ 
@@ -137,35 +146,42 @@ function CModulMateries(){
 				update: function(event, ui) {
 					ModulMateries.calculaOrden(ui, "destino");
 					that.contaSeleccionats();
-					Detall.modificado();
 				}
 			}).css({cursor:"move"});
 
 		}
+		
+		if (debug)
+			console.log("Saliendo de CModulMateries.contaSeleccionats");
+		
 	}
 	
 	//Actualiza la lista de materias seleccionadas y marca los checkboxes cuando se carga una ficha
-	this.inicializarMaterias = function(listaMateries, btnEliminar){
+	this.inicializarMaterias = function(listaMateries, btnEliminar) {
+		
+		if (debug)
+			console.log("Entrando en CModulMateries.inicializarMaterias");
+		
 		modul_materies_elm.find(".listaOrdenable").empty();
 		if (typeof listaMateries != 'undefined' && listaMateries != null && listaMateries.length > 0) {
 			that.agregaItems(listaMateries, btnEliminar);
 		}
 		that.contaSeleccionats();
 		
-		modul_materies_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function(){
+		modul_materies_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function() {
 			var itemLista = jQuery(this).parents("li:first");
 			that.eliminaItem(itemLista);
 			that.contaSeleccionats();
-			Detall.modificado();
 		});
 		
-		modul_materies_elm.find(".listaOrdenable a.edita").unbind("click").bind("click", function(){
+		modul_materies_elm.find(".listaOrdenable a.edita").unbind("click").bind("click", function() {
 			var itemID = jQuery(this).parents(".materia_id").val();
 			// Mostrar datos de materia
 			Detall.carregar(itemID);
 		});
 		
 		if (!btnEliminar) {
+			
 			mat_seleccionats_elm = escriptori_detall_elm.find("div.modulMateries div.seleccionats");
 			mat_llistat_elm = escriptori_detall_elm.find("div.modulMateries div.llistat");
 			materies_nodes = listaMateries;
@@ -185,26 +201,39 @@ function CModulMateries(){
 			});
 			
 			if (materies_nodes_size == 0) {
+				
 				mat_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaMateries + ".");
+			
 			} else {
+				
 				codi_materies = "<ul>";
 				$(materies_nodes).each(function() {
 					materia_node = this;
-					codi_materies += "<li><input type=\"hidden\" value=\"" + materia_node.id + "\" />" + materia_node.nom + "</li>";
+					codi_materies += "<li element-id=" + materia_node.id + " main-item-id= '" + materia_node.idMainItem + "' related-item-id= '" + materia_node.idRelatedItem + "'><input type=\"hidden\" value=\"" + materia_node.id + "\" />" + materia_node.nom + "</li>";
 					mat_llistat_elm.find("input[value=" + materia_node.id + "]").attr("checked", "checked").addClass(materiaDefaultClass);
 				});
 				codi_materies += "<ul>";
 				txt_materies = (materies_nodes_size == 1) ? txtMateria : txtMateries;			
 				mat_seleccionats_elm.find("p.info").html(txtHiHa + " <strong>" + materies_nodes_size + " " + txt_materies + "</strong>.");
 				mat_seleccionats_elm.find(".listaOrdenable").html(codi_materies);
+			
 			}
 			
 			that.mostrarMateriasSeleccionadas();
+			
 		}
+		
+		if (debug)
+			console.log("Saliendo de CModulMateries.inicializarMaterias");
+		
 	}
 	
 	//devuelve un string con el formato materies=n1,n2,...,nm donde nx son codigos de materias
-	this.listaMaterias = function (){
+	this.listaMaterias = function () {
+		
+		if (debug)
+			console.log("Entrando en CModulMateries.listaMaterias");
+		
 		var listaMaterias = "materies=";
 		
 		$("div.modulMateries div.seleccionats div.listaOrdenable input").each(function() {
@@ -217,7 +246,11 @@ function CModulMateries(){
 			listaMaterias = listaMaterias.slice(0, -1);
 		}
 		
+		if (debug)
+			console.log("Saliendo de CModulMateries.listaMaterias");
+		
 		return listaMaterias;
+		
 	}
 	
 	/* Al acceder al formulario de creacion, limpia las listas de materias, desmarca los checkboxes,
@@ -225,16 +258,32 @@ function CModulMateries(){
 	 */
 	this.nuevo = function() {
 		
+		if (debug)
+			console.log("Entrando en CModulMateries.nuevo");
+		
 		mat_seleccionats_elm = escriptori_detall_elm.find("div.modulMateries div.seleccionats");
 		mat_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaMateries + ".");
 		$("div.modulMateries div.llistat input[type=checkbox]").attr('checked', false).removeClass(materiaDefaultClass);
 
 		that.mostrarMateriasSeleccionadas();
+		
+		if (debug)
+			console.log("Saliendo de CModulMateries.nuevo");
+		
 	}
 
 	// Econder el listado y mostrar los seleccionados.
 	this.mostrarMateriasSeleccionadas = function () {
+		
+		if (debug)
+			console.log("Entrando en CModulMateries.mostrarMateriasSeleccionadas");
+		
 		escriptori_detall_elm.find("div.modulMateries div.llistat").hide();
 		escriptori_detall_elm.find("div.modulMateries div.seleccionats").show();
+		
+		if (debug)
+			console.log("Saliendo de CModulMateries.mostrarMateriasSeleccionadas");
+		
 	}
+	
 }

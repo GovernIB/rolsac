@@ -88,13 +88,15 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 		return impl.obtenerIconoGrande(id);
 	}
 	
-	public List<Materia> obtenerMateriasPorIDs(String ids, String idioma)
-			throws DelegateException {
+	public List<Materia> obtenerMateriasPorIDs(String ids, String idioma) throws DelegateException {
 		return impl.obtenerMateriasPorIDs(ids, idioma);
 	}
 	
-	public List<UnidadAdministrativa> listarUAsMateria(Long id)
-			throws DelegateException {
+	public List<Materia> obtenerMateriasPorIDs(List<Long> materias, String idioma) throws DelegateException {
+		return impl.obtenerMateriasPorIDs(materias, idioma);
+	}
+	
+	public List<UnidadAdministrativa> listarUAsMateria(Long id) throws DelegateException {
 		return impl.listarUAsMateria(id);
 	}
 		

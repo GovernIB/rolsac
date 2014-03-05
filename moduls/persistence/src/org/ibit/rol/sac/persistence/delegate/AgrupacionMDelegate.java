@@ -17,8 +17,8 @@ import java.util.List;
 /**
  * Business delegate para manipular Agrupaciones Materias.
  */
-public class AgrupacionMDelegate implements StatelessDelegate
-{
+public class AgrupacionMDelegate implements StatelessDelegate {
+	
 	/* ========================================================= */
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
@@ -45,6 +45,16 @@ public class AgrupacionMDelegate implements StatelessDelegate
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
+    }
+    
+    public List<MateriaAgrupacionM> obtenerMateriasAgrupacion(Long id) throws DelegateException {
+    	
+    	try {
+            return getFacade().obtenerMateriasAgrupacion(id);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    	
     }
 
     /* ========================================================= */

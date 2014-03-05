@@ -8,8 +8,8 @@
 
 div.modulAfectacions { padding-bottom:1em; }
 div.modulAfectacions div.seleccionats ul li { padding-bottom:.4em; }
-div.modulAfectacions div.seleccionats p.info { margin-top:0; }
-
+div.modulAfectacions div.seleccionats p.info { margin-top: 0; }
+div.modulAfectacions div.seleccionats p.clear { clear: both !important; }
 
 /* escriptori llistat */
 
