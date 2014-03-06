@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="http://epreinf45.caib.es:8080/sacback" />
+<link rel="selenium.base" href="http://epreinf45.caib.es:8080/sacbackold" />
 <title>TestRolsac_buscaNormativaExterna</title>
 </head>
 <body>
@@ -14,7 +14,7 @@
 <!---- test que busca normatives filtrant per llei i botlleti-->
 <tr>
 	<td>open</td>
-	<td>/sacback/contenido/normativa/externa.do</td>
+	<td>/sacbackold/contenido/normativa/externa.do</td>
 	<td></td>
 </tr>
 <tr>

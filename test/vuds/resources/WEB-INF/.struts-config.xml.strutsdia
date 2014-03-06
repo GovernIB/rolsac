@@ -7,7 +7,7 @@
  <PROCESS-ITEM ID="main" NAME="forward2" PATH="/main.do"
   SHAPE="32,241,0,0" TARGET="action208" TITLE="main" TYPE="forward" model-entity="StrutsProcessItem"/>
  <PROCESS-ITEM ID="java.lang.Exception" NAME="exception0"
-  PATH="/sacback/subscripcions/error.jsp" SHAPE="32,353,0,0"
+  PATH="/sacbackold/subscripcions/error.jsp" SHAPE="32,353,0,0"
   TARGET="page2" TITLE="Exception" TYPE="exception" model-entity="StrutsProcessItem"/>
  <PROCESS-ITEM
   ID="org.ibit.rol.sac.persistence.delegate.DelegateException"
@@ -1828,7 +1828,7 @@
   SUBTYPE="tile" TITLE=".espera" TYPE="page" model-entity="StrutsProcessItem"/>
  <PROCESS-ITEM NAME="page1" PATH="/subscripcions/info.jsp"
   SHAPE="240,146,0,0" SUBTYPE="jsp" TITLE="info.jsp" TYPE="page" model-entity="StrutsProcessItem"/>
- <PROCESS-ITEM NAME="page2" PATH="/sacback/subscripcions/error.jsp"
+ <PROCESS-ITEM NAME="page2" PATH="/sacbackold/subscripcions/error.jsp"
   SHAPE="240,370,0,0" SUBTYPE="jsp" TITLE="error.jsp" TYPE="page" model-entity="StrutsProcessItem"/>
  <PROCESS-ITEM NAME="page3" PATH="/moduls/fail.jsp" SHAPE="240,482,0,0"
   SUBTYPE="jsp" TITLE="fail.jsp" TYPE="page" model-entity="StrutsProcessItem"/>

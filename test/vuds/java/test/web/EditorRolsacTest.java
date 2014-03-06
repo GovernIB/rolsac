@@ -29,8 +29,8 @@ import net.sourceforge.jwebunit.util.TestContext;
 public class EditorRolsacTest extends WebTestCase {
 	
 
-	String baseEP="http://epreinf45.caib.es:8080/sacback";
-	//String baseEndpoint="https://proves.caib.es/sacback";
+	String baseEP="http://epreinf45.caib.es:8080/sacbackold";
+	//String baseEndpoint="https://proves.caib.es/sacbackold";
 
 	String passwd="palma091";
 
@@ -60,7 +60,7 @@ public class EditorRolsacTest extends WebTestCase {
      */
  /*
     public void testCreaNouProcedimentVUDS() {
-    	beginAt("http://epreinf45.caib.es:8080/sacback");  //per defecte, catala
+    	beginAt("http://epreinf45.caib.es:8080/sacbackold");  //per defecte, catala
     	login("u92770",passwd);
     	clickLinkWithExactText("Procedimientos");
     }                           
@@ -76,7 +76,7 @@ public class EditorRolsacTest extends WebTestCase {
     	seleccionaProcediment("246");
     	
     	//inserta un tramit
-    	clickLinkWithText("Nuevo Registro", 0);  //1er enllaç = nuevo tramite
+    	clickLinkWithText("Nuevo Registro", 0);  //1er enllaï¿½ = nuevo tramite
     	//System.out.println(getPageSource());
 
     	setWorkingForm("tramiteForm");
@@ -94,7 +94,7 @@ public class EditorRolsacTest extends WebTestCase {
         clickElementByXPath(xpath);
 
         setWorkingForm("tramiteForm");
-    	assertSelectedOptionEquals("fase", "Instrucción");
+    	assertSelectedOptionEquals("fase", "Instrucciï¿½n");
     	//@deprecated assertTextFieldEquals("codiTaxa","123456");
     	assertTextFieldEquals("textoFechaCaducidad","10/02/2010");
     	assertTextFieldEquals("textoFechaPublicacion","10/12/2009");
@@ -138,7 +138,7 @@ public class EditorRolsacTest extends WebTestCase {
 		seleccionaProcediment("246");
 		
 		//inserta un tramit
-		clickLinkWithText("Nuevo Registro", 0);  //1er enllaç = nuevo tramite
+		clickLinkWithText("Nuevo Registro", 0);  //1er enllaï¿½ = nuevo tramite
 		//System.out.println(getPageSource());
 	
 		setWorkingForm("tramiteForm");
@@ -157,7 +157,7 @@ public class EditorRolsacTest extends WebTestCase {
 	    clickElementByXPath(xpath);
 	
 	    setWorkingForm("tramiteForm");
-		assertSelectedOptionEquals("fase", "Instrucción");
+		assertSelectedOptionEquals("fase", "Instrucciï¿½n");
 		assertTextFieldEquals("textoFechaCaducidad","10/02/2010");
 		assertTextFieldEquals("textoFechaPublicacion","10/12/2009");
 		assertTextFieldEquals("textoFechaActualizacion","11/12/2009");
@@ -166,9 +166,9 @@ public class EditorRolsacTest extends WebTestCase {
 	
 	
 		//_viewSource();
-		//center[1] -> enllaç a nova taxa
-		//center[2] -> enllaç a nou formularis
-		//center[3] -> enllaç a nou docs. infor
+		//center[1] -> enllaï¿½ a nova taxa
+		//center[2] -> enllaï¿½ a nou formularis
+		//center[3] -> enllaï¿½ a nou docs. infor
 		
 		//afegeix un document informatiu
 		String href=getElementAttributeByXPath("id('ccontingut')/center[3]/a", "href");
@@ -214,7 +214,7 @@ public class EditorRolsacTest extends WebTestCase {
     	seleccionaProcediment("246");
     	
     	//inserta un tramit
-    	clickLinkWithText("Nuevo Registro", 0);  //1er enllaç = nuevo tramite
+    	clickLinkWithText("Nuevo Registro", 0);  //1er enllaï¿½ = nuevo tramite
     	//System.out.println(getPageSource());
 
     	setWorkingForm("tramiteForm");
@@ -233,7 +233,7 @@ public class EditorRolsacTest extends WebTestCase {
         clickElementByXPath(xpath);
 
         setWorkingForm("tramiteForm");
-    	assertSelectedOptionEquals("fase", "Instrucción");
+    	assertSelectedOptionEquals("fase", "Instrucciï¿½n");
     	assertTextFieldEquals("codiTaxa","123456");
     	assertTextFieldEquals("textoFechaCaducidad","10/02/2010");
     	assertTextFieldEquals("textoFechaPublicacion","10/12/2009");
@@ -284,7 +284,7 @@ public class EditorRolsacTest extends WebTestCase {
     	seleccionaProcediment("246");
     	
     	//inserta un tramit
-    	clickLinkWithText("Nuevo Registro", 0);  //1er enllaç = nuevo tramite
+    	clickLinkWithText("Nuevo Registro", 0);  //1er enllaï¿½ = nuevo tramite
     	//System.out.println(getPageSource());
 
     	setWorkingForm("tramiteForm");
@@ -303,7 +303,7 @@ public class EditorRolsacTest extends WebTestCase {
         clickElementByXPath(xpath);
 
         setWorkingForm("tramiteForm");
-    	assertSelectedOptionEquals("fase", "Instrucción");
+    	assertSelectedOptionEquals("fase", "Instrucciï¿½n");
     	assertTextFieldEquals("codiTaxa","123456");
     	assertTextFieldEquals("textoFechaCaducidad","10/02/2010");
     	assertTextFieldEquals("textoFechaPublicacion","10/12/2009");
@@ -352,8 +352,8 @@ public class EditorRolsacTest extends WebTestCase {
     
     public void _testSeleccionarProcedimentNoMostraCampsEliminats() {
     	seleccionaProcediment("246");
-    	assertTextNotPresent("Identificador Trámite");
-    	assertTextNotPresent("Version Trámite");
+    	assertTextNotPresent("Identificador Trï¿½mite");
+    	assertTextNotPresent("Version Trï¿½mite");
     	assertTextNotPresent("Lugar");
     	assertTextNotPresent("Requisitos");
     }
@@ -363,19 +363,19 @@ public class EditorRolsacTest extends WebTestCase {
     public void _test05SeleccionarProcedimentMostraCampsEliminatsComReadOnly() {
     	seleccionaProcediment("246");
     	
-    	assertTextPresent("Identificador Trámite");
+    	assertTextPresent("Identificador Trï¿½mite");
     	String xpath="id('procedimientoForm')/div[1]/div[9]/input";
     	IElement e=getElementByXPath(xpath);
     	assertEquals("readonly",e.getAttribute("readonly"));
     	assertEquals("ctextReadOnly",e.getAttribute("class"));
     	
-    	assertTextPresent("Version Trámite");
+    	assertTextPresent("Version Trï¿½mite");
     	xpath="id('procedimientoForm')/div[1]/div[10]/input";
     	e=getElementByXPath(xpath);
     	assertEquals("readonly",e.getAttribute("readonly"));
     	assertEquals("ctextReadOnly",e.getAttribute("class"));
 
-    	assertTextPresent("URL Trámite Externo");
+    	assertTextPresent("URL Trï¿½mite Externo");
     	xpath="id('procedimientoForm')/div[1]/div[11]/input";
     	e=getElementByXPath(xpath);
     	assertEquals("readonly",e.getAttribute("readonly"));
@@ -410,23 +410,23 @@ public class EditorRolsacTest extends WebTestCase {
     	//selecciona document a presentar ja existent 
         xpath="id('ccontingut')/div[4]/form/div[1]/..//input[@value='Seleccionar']";
         clickElementByXPath(xpath);
-        assertTextPresent("Modificación Documento a Presentar");
+        assertTextPresent("Modificaciï¿½n Documento a Presentar");
         
         //cancel.la document
     	setWorkingForm("documentoForm");
     	submit("action","Cancelar");  //aixo torna al tramit
-    	assertTextPresent("Modificación Trámite");
+    	assertTextPresent("Modificaciï¿½n Trï¿½mite");
 
     	
     	//selecciona formulario ja existent 
         xpath="id('ccontingut')/div[2]/form/div[1]//input[@value='Seleccionar']";
         clickElementByXPath(xpath);
-        assertTextPresent("Modificación Formulario");
+        assertTextPresent("Modificaciï¿½n Formulario");
         
         //cancel.la document
     	setWorkingForm("documentoForm");
     	submit("action","Cancelar");  //aixo torna al tramit
-    	assertTextPresent("Modificación Trámite");
+    	assertTextPresent("Modificaciï¿½n Trï¿½mite");
     	
     }
 
@@ -448,7 +448,7 @@ public class EditorRolsacTest extends WebTestCase {
         setTextField("descCodiVuds", desc );
         
         //guardar modificacio
-        setExpectedJavaScriptAlert("Se ha realizado la modificación correctamente");
+        setExpectedJavaScriptAlert("Se ha realizado la modificaciï¿½n correctamente");
         System.out.println(getPageSource());
         clickButtonWithText("Modificar");
         
@@ -476,7 +476,7 @@ public class EditorRolsacTest extends WebTestCase {
     	ua="DirecciÃ³ General d\'OrdenaciÃ³ i PlanificaciÃ³";
     	
     	//inserta un tramit
-    	clickLinkWithText("Nuevo Registro", 0);  //1er enllaç = nuevo tramite
+    	clickLinkWithText("Nuevo Registro", 0);  //1er enllaï¿½ = nuevo tramite
     	//System.out.println(getPageSource());
 
     	//llegir org.competent del tramit
@@ -508,9 +508,9 @@ public class EditorRolsacTest extends WebTestCase {
     	String xpath="//div[count(*)=0 and contains(.,'"+nomTramit+"')]/..//input[@value='Seleccionar']";
         clickElementByXPath(xpath);
 	
-        assertTextPresent("Publicación Web");
+        assertTextPresent("Publicaciï¿½n Web");
         assertTextPresent("Tasa");
-        assertTextPresent("Trámite Telemático");
+        assertTextPresent("Trï¿½mite Telemï¿½tico");
     }
     
     //OK 18/01/2010
@@ -548,7 +548,7 @@ public class EditorRolsacTest extends WebTestCase {
     
 	    //OK 24.02.2010 - 25/01/2010
 	   public void _test12CreaProcediment() {
-	    	beginAt("http://epreinf45.caib.es:8080/sacback");  //per defecte, catala
+	    	beginAt("http://epreinf45.caib.es:8080/sacbackold");  //per defecte, catala
 	    	login("u92770",passwd);
 	    	clickLinkWithExactText("Procedimientos");
 	    	setWorkingForm("procedimientoForm");
@@ -557,7 +557,7 @@ public class EditorRolsacTest extends WebTestCase {
 	    	boolean vuds=true;
 	    	boolean taxa=true;
 	    	
-	    	String nomUA="Direcció General d'Ordenació i Planificació";
+	    	String nomUA="Direcciï¿½ General d'Ordenaciï¿½ i Planificaciï¿½";
 	    	setTextField("traducciones[0].nombre",nomProc);
 	    	selectOptionByValue("validacion", "1");
 	    	setHiddenField("idUA", "1");
@@ -568,7 +568,7 @@ public class EditorRolsacTest extends WebTestCase {
 	    	if(vuds) checkCheckbox("ventana");
 	    	if(taxa) checkCheckbox("taxa");
 	    	
-	    	setExpectedJavaScriptAlert("Se ha realizado la modificación correctamente");
+	    	setExpectedJavaScriptAlert("Se ha realizado la modificaciï¿½n correctamente");
 	    	submit("action","Insertar");
 
 	    	setWorkingForm("procedimientoForm");
@@ -600,11 +600,11 @@ public class EditorRolsacTest extends WebTestCase {
     	login("u92770",passwd);
     	
     	//testejar que formulari demana arxiu
-    	gotoPage("http://epreinf45.caib.es:8080/sacback/contenido/documento/form.do?idDocInfTramite=394477");
+    	gotoPage("http://epreinf45.caib.es:8080/sacbackold/contenido/documento/form.do?idDocInfTramite=394477");
     	assertTextPresent("Archivo");
     	
     	//testejar que formulari no demana arxiu
-    	gotoPage("http://epreinf45.caib.es:8080/sacback/contenido/documento/form.do?idDocInfTramite=394477&noFile");
+    	gotoPage("http://epreinf45.caib.es:8080/sacbackold/contenido/documento/form.do?idDocInfTramite=394477&noFile");
     	assertTextNotPresent("Archivo");
 
     }
@@ -613,10 +613,10 @@ public class EditorRolsacTest extends WebTestCase {
     public void _testSeleccionarProcedimentMostraCamps_es() {
     	seleccionaProcediment("246");
     	assertTextPresent("Taxa");
-    	assertTextPresent("Órgano Responsable");
+    	assertTextPresent("ï¿½rgano Responsable");
     	assertTextPresent("Resultado");
-    	assertTextPresent("Código");
-    	assertTextPresent("Validación");
+    	assertTextPresent("Cï¿½digo");
+    	assertTextPresent("Validaciï¿½n");
     }
 
     
@@ -624,7 +624,7 @@ public class EditorRolsacTest extends WebTestCase {
     public void _testCreaTramitVUDSConFormularioEnProcedimentExistent() {
     	String nomTramit="tramit de test "+new Date();
     	seleccionaProcediment("246");
-    	clickLinkWithText("Nuevo Registro", 0);  //1er enllaç = nuevo tramite
+    	clickLinkWithText("Nuevo Registro", 0);  //1er enllaï¿½ = nuevo tramite
     	//System.out.println(getPageSource());
 
     	setWorkingForm("tramiteForm");
@@ -641,7 +641,7 @@ public class EditorRolsacTest extends WebTestCase {
         clickElementByXPath(xpath);
 
         setWorkingForm("tramiteForm");
-    	assertSelectedOptionEquals("fase", "Instrucción");
+    	assertSelectedOptionEquals("fase", "Instrucciï¿½n");
     	assertTextFieldEquals("codiTaxa","123456");
     	assertTextFieldEquals("textoFechaCaducidad","10/02/2010");
     	assertTextFieldEquals("textoFechaPublicacion","10/12/2009");
@@ -676,7 +676,7 @@ public class EditorRolsacTest extends WebTestCase {
     public void _testCreaTramitVUDSSimpleEnProcedimentExistent() {
     	String nomTramit="tramit de test "+new Date();
     	seleccionaProcediment("246");
-    	clickLinkWithText("Nuevo Registro", 0);  //1er enllaç = nuevo tramite
+    	clickLinkWithText("Nuevo Registro", 0);  //1er enllaï¿½ = nuevo tramite
     	//System.out.println(getPageSource());
 
     	setWorkingForm("tramiteForm");
@@ -693,7 +693,7 @@ public class EditorRolsacTest extends WebTestCase {
         clickElementByXPath(xpath);
 
         setWorkingForm("tramiteForm");
-    	assertSelectedOptionEquals("fase", "Instrucción");
+    	assertSelectedOptionEquals("fase", "Instrucciï¿½n");
     	assertTextFieldEquals("codiTaxa","123456");
     	assertTextFieldEquals("textoFechaCaducidad","10/02/2010");
     	assertTextFieldEquals("textoFechaPublicacion","10/12/2009");
@@ -726,10 +726,10 @@ public class EditorRolsacTest extends WebTestCase {
     //OK
     public void _testValidacioFalla_CreaTramitVUDSEnProcedimentExistent() {
     	seleccionaProcediment("246");
-    	clickLinkWithText("Nuevo Registro", 0);  //1er enllaç = nuevo tramite
+    	clickLinkWithText("Nuevo Registro", 0);  //1er enllaï¿½ = nuevo tramite
     	System.out.println(getPageSource());
     	setWorkingForm("tramiteForm");
-        selectOption("fase", "Instrucción");
+        selectOption("fase", "Instrucciï¿½n");
         setTextField("textoFechaCaducidad","10/02/2010");	
         setTextField("textoFechaPublicacion","10/12/2009");
         setTextField("textoFechaActualizacion","10/12/2009");
@@ -762,7 +762,7 @@ public class EditorRolsacTest extends WebTestCase {
     	clickLinkWithExactText("Procedimientos");
     	setWorkingForm("procedimientoForm");
     	setTextField("signatura","PRO");
-    	submit("action","Búsqueda");
+    	submit("action","Bï¿½squeda");
     	List<IElement> procs = getElementsByXPath("//div[@id='ccontingut']//div[@class='component']");
     	assertEquals(42,procs.size());
     }
@@ -775,7 +775,7 @@ public class EditorRolsacTest extends WebTestCase {
     	setWorkingForm("procedimientoForm");
     	setTextField("signatura","PRO");
         setTextField("idUA","1"); //1 = "Govern de les Illes Balears");
-    	submit("action","Búsqueda");
+    	submit("action","Bï¿½squeda");
     	List<IElement> procs = getElementsByXPath("//div[@id='ccontingut']//div[@class='component']");
     	assertEquals(2,procs.size());
     }
@@ -786,7 +786,7 @@ public class EditorRolsacTest extends WebTestCase {
     	clickLinkWithExactText("Procedimientos");
     	setWorkingForm("procedimientoForm");
     	setTextField("signatura","PRO");
-    	submit("action","Búsqueda");
+    	submit("action","Bï¿½squeda");
     	List<IElement> procs = getElementsByXPath("//div[@id='ccontingut']//div[@class='component']");
     	assertEquals(0,procs.size());
     }
@@ -800,7 +800,7 @@ public class EditorRolsacTest extends WebTestCase {
     	gotoWindowByTitle("El Govern");
 
     	assertTextPresent("Reconeixement d'organitzacions de productors de fruites i hortalisses (OPFH)");
-    	assertTextPresent("Direcció General d'Agricultura");  
+    	assertTextPresent("Direcciï¿½ General d'Agricultura");  
     }
     
     //FALLA
@@ -834,7 +834,7 @@ public class EditorRolsacTest extends WebTestCase {
     	login("u92770",passwd);
     	clickLinkWithExactText("Procedimientos");
     	setWorkingForm("procedimientoForm");
-    	submit("action","Búsqueda");
+    	submit("action","Bï¿½squeda");
     	return getElementsByXPath("//div[@id='ccontingut']//div[@class='component']");
     	
     }
@@ -851,7 +851,7 @@ public class EditorRolsacTest extends WebTestCase {
     
     @Deprecated
     private void ompleTramit(String nomTramit, boolean oc) {
-    	selectOption("fase", "Instrucción");
+    	selectOption("fase", "Instrucciï¿½n");
         setTextField("textoFechaCaducidad","10/02/2010");	
         setTextField("textoFechaPublicacion","10/12/2009");
         setTextField("textoFechaActualizacion","11/12/2009");
@@ -899,7 +899,7 @@ public class EditorRolsacTest extends WebTestCase {
     
     //OK 22abr01
     private void creaProcediment(String procName,boolean vuds)  {
-    	beginAt("http://epreinf45.caib.es:8080/sacback");  //per defecte, catala
+    	beginAt("http://epreinf45.caib.es:8080/sacbackold");  //per defecte, catala
     	login("u92770",passwd);
     	clickLinkWithExactText("Procedimientos");
     	setWorkingForm("procedimientoForm");
@@ -923,7 +923,7 @@ public class EditorRolsacTest extends WebTestCase {
 
     	
     	if(vuds) checkCheckbox("ventana");
-    	setExpectedJavaScriptAlert("Se ha realizado la modificación correctamente");
+    	setExpectedJavaScriptAlert("Se ha realizado la modificaciï¿½n correctamente");
     	submit("action","Insertar");
     	//assertKeyNotPresent("org.apache.struts.action.ERROR");
     	//assertKeyNotPresent(Globals.ERROR_KEY);
@@ -955,7 +955,7 @@ public class EditorRolsacTest extends WebTestCase {
 
     			clickElementByXPath(xp);
     			setWorkingForm("procedimientoForm");
-    			setExpectedJavaScriptConfirm("¿Desea dar de baja el registro actual?", true);
+    			setExpectedJavaScriptConfirm("ï¿½Desea dar de baja el registro actual?", true);
     			setExpectedJavaScriptAlert("Se ha realizado la baja correctamente");
     			submit("action","Eliminar");
     			break;
@@ -1000,7 +1000,7 @@ public class EditorRolsacTest extends WebTestCase {
 			//IElement ee=getElementByXPath(xp);
 			clickElementByXPath(xp);
 			setWorkingForm("procedimientoForm");
-			setExpectedJavaScriptConfirm("¿Desea dar de baja el registro actual?", true);
+			setExpectedJavaScriptConfirm("ï¿½Desea dar de baja el registro actual?", true);
 			setExpectedJavaScriptAlert("Se ha realizado la baja correctamente");
 			submit("action","Eliminar");
 			break;

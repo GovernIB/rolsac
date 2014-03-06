@@ -15,8 +15,8 @@
 		<!-- Informacio de referencia -->
 		
 		<!-- css -->
-		<link rel="stylesheet" type="text/css" href="/sacback/css/estils.css" media="screen" />
-		<link rel="stylesheet" type="text/css" href="/sacback/css/estils_print.css" media="print" />				
+		<link rel="stylesheet" type="text/css" href="/sacbackold/css/estils.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="/sacbackold/css/estils_print.css" media="print" />				
 		
 		<style type="text/css">
 				body {background-color: #EBEAD3 }
@@ -35,7 +35,7 @@
   	
   		<br>
 		<br> 
-		<h4> <img src="/sacback/img/fichaNoP.gif"> Aquest és un tràmit destinat a la Finestra Unica. Falten traduir-se al castellà els camps següents: </h4>
+		<h4> <img src="/sacbackold/img/fichaNoP.gif"> Aquest és un tràmit destinat a la Finestra Unica. Falten traduir-se al castellà els camps següents: </h4>
 		<br>
 
 					<logic:present name="sinTraducir">

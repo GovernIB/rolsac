@@ -21,6 +21,8 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.mock.web.MockHttpServletRequest;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
+
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({DelegateUtil.class})
@@ -144,7 +146,9 @@ public class NormativaBackControllerTest {
 				EasyMock.anyBoolean(),
 				EasyMock.anyBoolean(),
 				EasyMock.anyObject(String.class),
-				EasyMock.anyObject(String.class))).andReturn(normativesTrobades);
+				EasyMock.anyObject(String.class),
+				"0",
+				"10")).andReturn((ResultadoBusqueda) normativesTrobades);
 				
 		PowerMock.replay(DelegateUtil.class);
 		

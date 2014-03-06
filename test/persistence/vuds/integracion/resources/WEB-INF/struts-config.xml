@@ -135,7 +135,7 @@
    key="errors.delegate" path="/moduls/fail.jsp" type="org.ibit.rol.sac.persistence.delegate.DelegateException"/>
   <exception
    handler="org.ibit.rol.sac.back.subscripcions.action.ExcepcionGlobalHandler"
-   key="errors.excepcion" path="/sacback/subscripcions/error.jsp" type="java.lang.Exception"/>
+   key="errors.excepcion" path="/sacbackold/subscripcions/error.jsp" type="java.lang.Exception"/>
  </global-exceptions>
  <!-- ========== Global Forward Definitions =================================== -->
  <global-forwards>

@@ -1,6 +1,6 @@
 <security-constraint>
     <web-resource-collection>
-        <web-resource-name>sacback</web-resource-name>
+        <web-resource-name>sacbackold</web-resource-name>
         <url-pattern>*.do</url-pattern>
         <url-pattern>*.jsp</url-pattern>
     </web-resource-collection>

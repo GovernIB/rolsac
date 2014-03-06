@@ -15,8 +15,8 @@
 		<!-- Informacio de referencia -->
 		
 		<!-- css -->
-		<link rel="stylesheet" type="text/css" href="/sacback/css/estils.css" media="screen" />
-		<link rel="stylesheet" type="text/css" href="/sacback/css/estils_print.css" media="print" />				
+		<link rel="stylesheet" type="text/css" href="/sacbackold/css/estils.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="/sacbackold/css/estils_print.css" media="print" />				
 		
 		<script type="text/javascript" src="/root/js/comuns.js"></script>
 		<!--[if lt IE 7]>

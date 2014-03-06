@@ -31,7 +31,7 @@
 			<module>
         		<web>
     	      	<web-uri>sac-back.war</web-uri>
-        	  	<context-root>sacback</context-root>
+        	  	<context-root>sacbackold</context-root>
         		</web>
     		</module>
 			<module>

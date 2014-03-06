@@ -8,7 +8,7 @@ public class EditorTraductorTest extends WebTestCase {
 	@Override
     public void setUp() throws Exception {
         super.setUp();
-       	beginAt("http://epreinf45.caib.es:8080/sacback");  //per defecte, catala
+       	beginAt("http://epreinf45.caib.es:8080/sacbackold");  //per defecte, catala
     	login("u92770","palma091");
 
 	}
@@ -31,21 +31,21 @@ public class EditorTraductorTest extends WebTestCase {
 
 
     public void _testLogin() {
-    	beginAt("http://epreinf45.caib.es:8080/sacback");
+    	beginAt("http://epreinf45.caib.es:8080/sacbackold");
     	login("u92770","palma092");
     }
 
     /*
      *
-     *<form name="procedimientoForm" method="post" action="/sacback/contenido/procedimiento/editar.do" id="procedimientoForm"> 
+     *<form name="procedimientoForm" method="post" action="/sacbackold/contenido/procedimiento/editar.do" id="procedimientoForm"> 
         
        <div id="capes"> 
         <div id="capa0" class="capa"> 
             <div class="pestanyes"> 
-                    <div class="tab">Catalán</div> 
+                    <div class="tab">Catalï¿½n</div> 
                     <div class="notab"><a href="javascript:activarCapa(1, 4)" class="notabb">Castellano</a></div> 
-                    <div class="notab"><a href="javascript:activarCapa(2, 4)" class="notabb">Inglés</a></div> 
-                    <div class="notab"><a href="javascript:activarCapa(3, 4)" class="notabb">Alemán</a></div> 
+                    <div class="notab"><a href="javascript:activarCapa(2, 4)" class="notabb">Inglï¿½s</a></div> 
+                    <div class="notab"><a href="javascript:activarCapa(3, 4)" class="notabb">Alemï¿½n</a></div> 
             </div> 
             <div class="bloc"> 
                 <div class="component"> 
@@ -62,10 +62,10 @@ public class EditorTraductorTest extends WebTestCase {
     
         <div id="capa1" class="capa"> 
             <div class="pestanyes"> 
-                    <div class="notab"><a href="javascript:activarCapa(0, 4)" class="notabb">Catalán</a></div> 
+                    <div class="notab"><a href="javascript:activarCapa(0, 4)" class="notabb">Catalï¿½n</a></div> 
                     <div class="tab">Castellano</div> 
-                    <div class="notab"><a href="javascript:activarCapa(2, 4)" class="notabb">Inglés</a></div> 
-                    <div class="notab"><a href="javascript:activarCapa(3, 4)" class="notabb">Alemán</a></div> 
+                    <div class="notab"><a href="javascript:activarCapa(2, 4)" class="notabb">Inglï¿½s</a></div> 
+                    <div class="notab"><a href="javascript:activarCapa(3, 4)" class="notabb">Alemï¿½n</a></div> 
             </div> 
             <div class="bloc"> 
                 <div class="component"> 
@@ -105,7 +105,7 @@ public class EditorTraductorTest extends WebTestCase {
 
 
     public void _testTradueixProcedimentExistent_TexteCatala() {
-    	beginAt("http://epreinf45.caib.es:8080/sacback/contenido/procedimiento/editar.do?action=Seleccionar&idSelect=390655");
+    	beginAt("http://epreinf45.caib.es:8080/sacbackold/contenido/procedimiento/editar.do?action=Seleccionar&idSelect=390655");
     	login("u92770","palma092");
     	System.out.println(getPageSource());
     	clickButtonWithText("Traduir");

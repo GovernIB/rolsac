@@ -43,7 +43,6 @@ import org.ibit.rol.sac.model.IndexObject;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.Seccion;
-import org.ibit.rol.sac.model.TraduccionHechoVital;
 import org.ibit.rol.sac.model.TraduccionMateria;
 import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -3111,7 +3110,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 	
 	/**
-	 * Compone la miga de pan de la unidad administrativa para el sacback2
+	 * Compone la miga de pan de la unidad administrativa para el rolsacback
      * @return String 
      * 
      * @ejb.interface-method

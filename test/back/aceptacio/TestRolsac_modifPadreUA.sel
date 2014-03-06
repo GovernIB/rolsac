@@ -14,7 +14,7 @@
 <!----seleccionar conselleria de proves-->
 <tr>
 	<td>open</td>
-	<td>/sacback/organigrama/navges.do</td>
+	<td>/sacbackold/organigrama/navges.do</td>
 	<td></td>
 </tr>
 <tr>

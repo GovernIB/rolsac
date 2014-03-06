@@ -12,7 +12,7 @@ public class CreaProcSimple_Sel extends TestCase {
 	Selenium selenium; 
 	
 	public void setUp() throws Exception {
-		//setUp("http://epreinf45.caib.es:8080/sacback", "*iexplore");
+		//setUp("http://epreinf45.caib.es:8080/sacbackold", "*iexplore");
 		String serverHost="epreinf45", browserStartCommand="*iexplore", 
 		//String serverHost="epreinf45", browserStartCommand="*firefox",
 		//browserURL="http://epreinf45.caib.es:8080";
@@ -27,7 +27,7 @@ public class CreaProcSimple_Sel extends TestCase {
 	}
 
 	private void login() {
-		selenium.open("/sacback/");
+		selenium.open("/sacbackold/");
 		selenium.type("//input[@id='j_username' and @name='j_username' and @type='text']", "rsanz");
 		selenium.type("//input[@id='j_password' and @name='j_password' and @type='password']", "rsanz");
 		selenium.click("formUCboton");
@@ -47,7 +47,7 @@ public class CreaProcSimple_Sel extends TestCase {
 		selenium.click("link=Procedimientos");
 		selenium.waitForPageToLoad("30000");
 		selenium.type("signatura", "codi");
-		selenium.select("validacion", "label=Público");
+		selenium.select("validacion", "label=Pï¿½blico");
 		selenium.click("boton");
 		selenium.waitForPopUp("Calendario", "30000");
 		selenium.selectWindow("name=Calendario");
@@ -115,10 +115,10 @@ public class CreaProcSimple_Sel extends TestCase {
 		selenium.selectWindow("name=Seleccionar");
 		selenium.click("action");
 		selenium.waitForPageToLoad("30000");
-		selenium.click("link=Solicitud de nombramiento de Traductor o Intérprete Jurado (con otros títulos)");
+		selenium.click("link=Solicitud de nombramiento de Traductor o Intï¿½rprete Jurado (con otros tï¿½tulos)");
 		selenium.selectWindow("title=SAC");
-		selenium.select("fase", "label=Instrucció");
-		selenium.select("validacio", "label=Pública");
+		selenium.select("fase", "label=Instrucciï¿½");
+		selenium.select("validacio", "label=Pï¿½blica");
 		selenium.click("//input[@name='boton' and @value='Seleccionar' and @type='button' and @onclick=\"abrirCalendario('textoFechaCaducidad')\"]");
 		selenium.waitForPopUp("Calendario", "30000");
 		selenium.selectWindow("name=Calendario");
@@ -138,7 +138,7 @@ public class CreaProcSimple_Sel extends TestCase {
 		selenium.type("traducciones[0].descripcion", "obj");
 		selenium.type("traducciones[0].documentacion", "doc");
 		selenium.type("traducciones[0].requisits", "requisits");
-		selenium.type("traducciones[0].plazos", "plaç presen");
+		selenium.type("traducciones[0].plazos", "plaï¿½ presen");
 		selenium.type("traducciones[0].lugar", "lloc");
 		selenium.click("action");
 		selenium.waitForPageToLoad("30000");
@@ -154,7 +154,7 @@ public class CreaProcSimple_Sel extends TestCase {
 	private void selectProc(String pid) {
 			selenium.click("link=Procedimientos");
 			selenium.waitForPageToLoad("30000");
-			selenium.click("link=Seleccionar por código");
+			selenium.click("link=Seleccionar por cï¿½digo");
 			selenium.waitForPopUp("Seleccionar", "30000");
 			selenium.selectWindow("name=Seleccionar");
 			selenium.type("idSelect", "247");

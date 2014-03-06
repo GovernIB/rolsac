@@ -234,7 +234,7 @@
 	                        </div>
 	                        <div class="filla">
 		      					<div class="botonera noClear">
-		                            <a class="btn consulta" href="javascript:carregarArbreUA('/sacback2/pantalles/popArbreUA.do','popUA','item_organ_responsable_id', 'item_organ_responsable');"></a>                       
+		                            <a class="btn consulta" href="javascript:carregarArbreUA('/rolsacback/pantalles/popArbreUA.do','popUA','item_organ_responsable_id', 'item_organ_responsable');"></a>                       
 		                      	    <div class="btnCambiar boton btnGenerico">
 		      		     	           <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','cerca_ua_id','cerca_ua');" class="btn consulta">
 		              			           	<span><span><spring:message code='boto.canviarUA'/></span></span>

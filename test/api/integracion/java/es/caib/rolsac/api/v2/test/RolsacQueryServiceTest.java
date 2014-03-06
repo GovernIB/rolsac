@@ -165,7 +165,7 @@ public class RolsacQueryServiceTest {
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
         Calendar c = new GregorianCalendar(2005, 6, 4);
         //Date date = c.getTime();
-        procedimentCriteria.setFechaActualizacion(c);
+        procedimentCriteria.setFechaActualizacion(c.toString());
         procedimentCriteria.setTamany("10");
         List<ProcedimentQueryServiceAdapter> procediments = null;
         try {
