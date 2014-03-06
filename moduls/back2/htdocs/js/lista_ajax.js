@@ -21,6 +21,7 @@ function ListaAjax() {
 					// error
 					Error.llansar();
 				}
+				
 			},
 			success: function(data) {				
 				Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});			
@@ -30,11 +31,11 @@ function ListaAjax() {
 		if (debug)
 			console.log("Saliendo de ListaAjax.guardar");
 
-	}
+	};
 	
 };
 
-/** @style: .lista-simple*/
+/** @style: .lista-simple */
 function ListaSimple() {
 	
 	// Activa mensajes de debug.
@@ -56,7 +57,7 @@ function ListaSimple() {
 		if (debug)
 			console.log("Saliendo de ListaSimple.guardar");
 		
-	}
+	};
 	
 	this.getFilters = function(element, id) {
 		
@@ -84,11 +85,11 @@ function ListaSimple() {
 		
 		return filters;
 		
-	}
+	};
 	
 };
 
-/** @style: .lista-compleja*/
+/** @style: .lista-compleja */
 function ListaCompleja() {
 	
 	// Activa mensajes de debug.
@@ -108,7 +109,7 @@ function ListaCompleja() {
 		if (debug)
 			console.log("Saliendo de ListaCompleja.guardar");
 		
-	}
+	};
 	
 	this.getFilters = function(selector) {
 		
@@ -120,6 +121,6 @@ function ListaCompleja() {
 		if (debug)
 			console.log("Saliendo de ListaCompleja.getFilters");
 		
-	}
+	};
 	
 };

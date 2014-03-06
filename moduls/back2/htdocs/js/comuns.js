@@ -16,10 +16,10 @@ if ( ! window.console ) {
     }());
 }
 
-// Aquí se guardarán los cambios en los formularios usando id => true/false.
+// Aquï¿½ se guardarï¿½n los cambios en los formularios usando id => true/false.
 var avisarCambiosSinGuardar = [];
 
-// Acción a realizar antes de cerrar la ventana.
+// Acciï¿½n a realizar antes de cerrar la ventana.
 window.onbeforeunload = function(){
     
     for(var i in avisarCambiosSinGuardar ){
@@ -30,7 +30,7 @@ window.onbeforeunload = function(){
 }
 
 /**
- * Función para avisar de que un formulario tiene o no cambios sin guardar. 
+ * Funciï¿½n para avisar de que un formulario tiene o no cambios sin guardar. 
  */
 function CambiosSinGuardar( id, marcar ){
     avisarCambiosSinGuardar[id] = marcar;
@@ -1422,8 +1422,10 @@ function limpiarArchivoMultiidioma(campo, idioma) {
 }
 
 function montarBreadcrumb() {
+	
 	item_ID = $("#item_id").val();
 	dataVars = "id=" + item_ID;
+	
 	$.ajax({
 		type: "POST",
 		url: pagBreadcrumb,
@@ -1436,11 +1438,14 @@ function montarBreadcrumb() {
 			}
 			$("#submenu .actual").before("<span class='breadItems'>");
 			$(".breadItems").append($("<a>").text(txtArrel).click(function() {
-				Detall.torna();
+				
+				Detall.vuelve();
+				
 				if ($(".breadItems").length) {
 					$(".breadItems").remove();
 					$("#submenu").removeClass("breadcrumb");
 				}
+				
 			}));
 			
 			for (var i in data.breadcrumb) {
@@ -1456,4 +1461,5 @@ function montarBreadcrumb() {
 			$("#submenu").addClass("breadcrumb");
 		}
 	});
+	
 }

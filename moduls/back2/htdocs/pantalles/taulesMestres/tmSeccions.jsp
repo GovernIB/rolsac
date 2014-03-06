@@ -9,10 +9,12 @@
 <script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
 
 <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/lista_ajax.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_seccions.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/tm_seccio.js'/>"></script>
 
 <script type="text/javascript">
+
     var pagLlistat = '<c:url value="/seccions/llistat.do" />';
     var pagDetall = '<c:url value="/seccions/pagDetall.do" />';
     var pagGuardar = '<c:url value="/seccions/guardar.do" />';
@@ -108,6 +110,7 @@
 </script>
 <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
 <script type="text/javascript">
+
     var txtMaxim = "<spring:message code='txt.maxim'/>";
     var txtMax = "<spring:message code='txt.max'/>";
     var txtCaracters = "<spring:message code='txt.caracters'/>";
@@ -134,6 +137,7 @@
                 }
         }
     ];
+    
 </script>
 
 <div id="escriptori_contingut"> <%-- style="display:none/block" --%>
@@ -343,13 +347,12 @@
             </div>
             <!-- /modul -->
             <!-- modul -->
-            <div class="modul" id="modul_seccions_relacionades">
+            <div class="modul invisible" id="modul_seccions_relacionades">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                     <legend><spring:message code='seccio.seccions_relacionades'/></legend>
                     <div class="modul_continguts mostrat">
                         <!-- modulSeccions -->
-                        <%-- dsanchez: Clase "multilang" para listas multi-idioma --%>
                         <div class="modulSeccions">
                             <div class="seleccionats">
                                 <div class="seleccionat">
@@ -359,6 +362,13 @@
                                 <div class="btnGenerico">
                                     <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.afegeixSeccio'/></span></span></a>
                                 </div>
+                                <p style="clear: both; margin-bottom: 15px;" /><!-- Separador -->
+	                            <div class="btnGenerico">
+	                                <a id="btnGuardar_seccions" href="javascript:;" class="btn guarda important lista-simple" 
+	                            			action="<c:url value="/seccions/guardarOrdenSeccionesRelacionadas.do" />">
+	                           			<span><span><spring:message code='boto.guarda'/></span></span>
+	                            	</a>
+	                            </div>
                             </div>
                         </div>
                         <!-- /modulSeccions -->
@@ -373,7 +383,6 @@
                     <legend><spring:message code='seccio.fitxes_informatives'/></legend>
                     <div class="modul_continguts mostrat">
                         <!-- modulFitxes -->
-                        <%-- dsanchez: Clase "multilang" para listas multi-idioma --%>
                         <div class="modulFitxes">
                             <div class="seleccionats">
                                 <div class="seleccionat">

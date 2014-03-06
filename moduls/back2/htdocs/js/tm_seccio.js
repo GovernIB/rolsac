@@ -1,6 +1,19 @@
 //TM seccio
 
 $(document).ready(function() {
+	
+	// Listener para guardado de módulos laterales vía AJAX.
+	jQuery(".lista-simple").click(function() {
+		
+		var element = $(this).parent().parent().find("li");
+		var id = $('#item_id').val();
+		var url = $(this).attr('action');
+		
+		ListaSimple.guardar(element, url, id);
+		
+	});
+	
+	ListaSimple = new ListaSimple();
 
 	// elements
 	opcions_elm = $("#opcions");
@@ -43,7 +56,6 @@ $(document).ready(function() {
 	
 });
 
-
 //idioma
 var pag_idioma = $("html").attr("lang");
 
@@ -58,16 +70,30 @@ var itemID_ultim = 0;
 
 function CLlistat() {
 	
+	// Activa mensajes de debug.
+	var debug = false;
+	
 	this.extend = ListadoBase;
 	this.extend();
 
 	var that = this;
 
 	this.iniciar = function() {
+		
+		if (debug)
+			console.log("Entrando en CLlistat.iniciar");
+		
 		this.carregar({});
-	}
+		
+		if (debug)
+			console.log("Saliendo de CLlistat.iniciar");
+		
+	};
 
-	this.finCargaListado = function(opcions,data) {
+	this.finCargaListado = function(opcions, data) {
+		
+		if (debug)
+			console.log("Entrando en CLlistat.finCargaListado");
 		
 		// total
 		resultats_total = parseInt(data.total,10);
@@ -76,7 +102,6 @@ function CLlistat() {
 			
 			if (resultats_total > numCercadorMinim) // minim per cercador
 				opcions_elm.find("li.C").animate({duration: "slow", width: 'show'}, 300);
-
 			
 			txtT = (resultats_total > 1) ? txtLlistaItems : txtLlistaItem;
 			ultimaPag = Math.floor(resultats_total / pag_Res) - 1;
@@ -87,8 +112,7 @@ function CLlistat() {
 			if (pag_Pag > ultimaPag)
 				pag_Pag = ultimaPag;
 
-			
-			resultatInici = ((pag_Pag*pag_Res)+1);
+			resultatInici = ((pag_Pag*pag_Res) + 1);
 			resultatFinal = ((pag_Pag*pag_Res) + pag_Res > resultats_total) ? resultats_total : (pag_Pag*pag_Res) + pag_Res;
 
 			// ordenacio
@@ -136,7 +160,7 @@ function CLlistat() {
 			$(data.nodes).each( function(i) {
 				
 				dada_node = this;
-				parClass = (i%2) ? " par": "";
+				parClass = (i % 2) ? " par": "";
 
 				codi_taula += "<div class=\"tr" + parClass + "\" role=\"row\">";
 
@@ -144,11 +168,11 @@ function CLlistat() {
 				codi_taula += "<input type=\"hidden\" value=\"" + dada_node.id + "\" class=\"id\" />";
 				codi_taula += "<span class=\"ordre\">" + (printStringFromNull(dada_node.ordre, txtSinValor)+1) + "</span>";
 
-				codi_taula += "<a id=\"seccio_"+dada_node.id+"\" href=\"javascript:;\" class=\"nom\">" + printStringFromNull(dada_node.nom, txtSinValor) + "</a>";
+				codi_taula += "<a id=\"seccio_" + dada_node.id + "\" href=\"javascript:;\" class=\"nom\">" + printStringFromNull(dada_node.nom, txtSinValor) + "</a>";
 				codi_taula += "</div>";
 				codi_taula += "<div class=\"td enllas\" role=\"gridcell\">";
 
-				codi_taula += that.getHtmlSelectorOrdenacion("seccio_"+dada_node.id, dada_node.ordre, resultats_total );
+				codi_taula += that.getHtmlSelectorOrdenacion( "seccio_" + dada_node.id, dada_node.ordre, resultats_total );
 				codi_taula += "</div>";
 				codi_taula += "</div>";
 				
@@ -158,7 +182,7 @@ function CLlistat() {
 			codi_taula += "</div>";
 
 			if ($.browser.opera)
-				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
+				escriptori_contingut_elm.find("div.table:first").css("font-size", ".85em");
 
 			// Instanciamos el navegador multipágina.
 			multipagina.init({
@@ -180,7 +204,6 @@ function CLlistat() {
 
 		}
 
-		
 		dades_elm = resultats_elm.find("div.actiu:first div.dades:first");
 		dades_elm.fadeOut(300, function() { // animacio
 			
@@ -188,20 +211,19 @@ function CLlistat() {
 
 				// Asociamos el evento onclick a los elementos de la lista para
 				// poder ir a ver su ficha.
-				escriptori_contingut_elm.find("#resultats .llistat .tbody a").unbind("click").bind("click",function(){LlistatSeccions.ficha(this);});
+				escriptori_contingut_elm.find("#resultats .llistat .tbody a").unbind("click").bind("click", function() { LlistatSeccions.ficha(this); });
 
 				// cercador
 				if (typeof opcions.cercador != "undefined" && opcions.cercador == "si")
 					cercador_elm.find("input, select").removeAttr("disabled");
-
 				
-				jQuery("#resultats .llistat .tbody select.ordenacion").unbind("change").bind("change",function(){
+				jQuery("#resultats .llistat .tbody select.ordenacion").unbind("change").bind("change", function() {
 					
 					var itemID = jQuery(this).attr("id").split("_")[1];
 					var orden = jQuery(this).val();
 
 					// Obtenemos el valor del orden anterior para saber en qué dirección reordenar los elementos
-					var ordenAnterior = jQuery("#seccio_" + itemID).prev().html() -1;					
+					var ordenAnterior = jQuery("#seccio_" + itemID).prev().html() - 1;					
 
 					var dataVars = "id=" + itemID + "&orden=" + orden + "&ordenAnterior="+ ordenAnterior;
 
@@ -221,15 +243,25 @@ function CLlistat() {
 							that.carregar({});
 						}
 					});
+					
 				});
+				
 			});
+			
 		});
 		
 		ModulSeccions.iniciar(data);
 		
-	}
+		if (debug)
+			console.log("Saliendo de CLlistat.finCargaListado");
+		
+	};
 
 	this.carregar = function(opcions) {
+		
+		if (debug)
+			console.log("Entrando en CLlistat.carregar");
+		
 		// opcions: cercador (si, no), ajaxPag (integer), ordreTipus (ASC, DESC), ordreCamp (tipus, carrec, tractament)
 		dataVars = "";
 
@@ -259,21 +291,17 @@ function CLlistat() {
 		if (typeof opcions.ordreCamp != "undefined") {
 			ordreCamp_elm.val(opcions.ordreCamp);
 		}
-
 		
 		// paginacio
 		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : multipagina.getPaginaActual();
-
 		
 		// ordre
 		ordre_Tipus = ordreTipus_elm.val();
 		ordre_Camp = ordreCamp_elm.val();
 
-		
 		// variables
 		dataVars += "pagPag=" + pag_Pag + "&pagRes=" + pag_Res + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;
 
-		
 		// ajax
 		$.ajax({
 			type: "POST",
@@ -290,7 +318,11 @@ function CLlistat() {
 				LlistatSeccions.finCargaListado(opcions,data);
 			}
 		});
-	}
+		
+		if (debug)
+			console.log("Saliendo de CLlistat.carregar");
+		
+	};
 	
 };
 
@@ -300,6 +332,9 @@ var Items_arr = new Array();
 //detall
 function CDetall() {
 	
+	// Activa mensajes de debug.
+	var debug = false;
+	
 	this.extend = DetallBase;
 	this.extend();
 	this.activar = 0;
@@ -307,6 +342,9 @@ function CDetall() {
 	var that = this;
 
 	this.iniciar = function() {
+		
+		if (debug)
+			console.log("Entrando en CDetall.iniciar");
 		
 		// idioma
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {
@@ -331,13 +369,15 @@ function CDetall() {
 		}
 
 		// Sincronizar campos sin multi-idioma en zona multi-idioma.
-		jQuery("#item_codi_estandard,#item_codi_estandard_es,#item_codi_estandard_en,#item_codi_estandard_de,#item_codi_estandard_fr").change(function(){
+		jQuery("#item_codi_estandard,#item_codi_estandard_es,#item_codi_estandard_en,#item_codi_estandard_de,#item_codi_estandard_fr").change(function() {
 			jQuery("#item_codi_estandard,#item_codi_estandard_es,#item_codi_estandard_en,#item_codi_estandard_de,#item_codi_estandard_fr").val( jQuery(this).val() );
 		});
-		jQuery("#item_pare,#item_pare_es,#item_pare_en,#item_pare_de,#item_pare_fr").change(function(){
+		
+		jQuery("#item_pare,#item_pare_es,#item_pare_en,#item_pare_de,#item_pare_fr").change(function() {
 			jQuery("#item_pare,#item_pare_es,#item_pare_en,#item_pare_de,#item_pare_fr").val( jQuery(this).val() );
 		});
-		jQuery("#item_perfil,#item_perfil_es,#item_perfil_en,#item_perfil_de,#item_perfil_fr").change(function(){
+		
+		jQuery("#item_perfil,#item_perfil_es,#item_perfil_en,#item_perfil_de,#item_perfil_fr").change(function() {
 			jQuery("#item_perfil,#item_perfil_es,#item_perfil_en,#item_perfil_de,#item_perfil_fr").val( jQuery(this).val() );
 		});
 
@@ -352,13 +392,27 @@ function CDetall() {
 		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos
 		this.guarda = this.guarda_upload;
 		
-	}
+		if (debug)
+			console.log("Saliendo de CDetall.iniciar");
+		
+	};
 
 	this.traduirWrapper = function () {
+		
+		if (debug)
+			console.log("Entrando en CDetall.traduirWrapper");
+		
 		that.traduir(pagTraduirSeccions, CAMPOS_TRADUCTOR_SECCIO, DATOS_TRADUCIDOS_SECCIO);
-	}
+		
+		if (debug)
+			console.log("Saliendo de CDetall.traduirWrapper");
+		
+	};
 
 	this.nou = function(idPare, nomPare) {
+		
+		if (debug)
+			console.log("Entrando en CDetall.nou");
 		
 		//Ocultar paneles y campos
 		jQuery("#modul_seccions_relacionades").hide();
@@ -369,14 +423,11 @@ function CDetall() {
 
 		if (typeof idPare != 'undefined' && idPare != null && idPare != '')
 			$("#item_codi_pare").val(idPare);
-		
 		else
 			$("#item_codi_pare").val("");
-
 		
 		if (typeof nomPare != 'undefined' && nomPare != null && nomPare != '')
 			$("#item_pare").val(nomPare).change();
-		
 		else
 			$("#item_pare").val(txtSeccioArrel).change();
 
@@ -385,7 +436,8 @@ function CDetall() {
 			
 			jQuery("#btnVolver").unbind("click").bind("click", function() {
 				
-				that.torna();
+				that.vuelve();
+				
 				if ($(".breadItems").length) {
 					
 					$(".breadItems").remove();
@@ -396,7 +448,6 @@ function CDetall() {
 			});
 			
 		}
-
 
 		escriptori_detall_elm.find(".botonera li.btnEliminar").hide();
 		escriptori_detall_elm.find("#modulPrincipal div#cercador").hide();
@@ -416,13 +467,23 @@ function CDetall() {
 
 		this.modificado(false);
 		
-	}		
-
+		if (debug)
+			console.log("Saliendo de CDetall.nou");
+		
+	};	
 	
 	this.guarda_upload = function() { // Guardar haciendo upload de archivos.
 		
+		if (debug)
+			console.log("Entrando en CDetall.guarda_upload");
+		
 		if (!that.formulariValid()) { // Validamos el formulario
+			
+			if (debug)
+				console.log("Saliendo de CDetall.guarda_upload");
+			
 			return false;
+		
 		}
 
 		$("#formGuardar").ajaxSubmit({			
@@ -443,12 +504,18 @@ function CDetall() {
 			}
 
 		});
+		
+		if (debug)
+			console.log("Saliendo de CDetall.guarda_upload");
 
 		return false;
 		
-	}
+	};
 
 	this.pintar = function(dades) {
+		
+		if (debug)
+			console.log("Entrando en CDetall.pintar");
 		
 		escriptori_detall_elm.find("a.elimina").show().end().find("h2:first").text(txtDetallTitol);
 
@@ -473,7 +540,6 @@ function CDetall() {
 		$("#item_pare").val(printStringFromNull(dades.item_pare)).change();
 		$("#item_codi_estandard").val(printStringFromNull(dades.item_codi_estandard)).change();
 
-
 		// Rellenar el select de perfils
 		var selected;
 		var $per_select = $('#item_perfil');
@@ -491,7 +557,6 @@ function CDetall() {
 		$per_select.change();
 
 		ModulFitxes.inicializarFichas(dades.fitxesInformatives);
-
 
 		$("#modulLateral li.btnEliminar").show();
 		$("#modulPrincipal div#cercador").show();
@@ -514,13 +579,13 @@ function CDetall() {
 
 		if (typeof dades.item_codi_pare != 'undefined' && dades.item_codi_pare != null && dades.item_codi_pare != '') {
 			
-			jQuery("#btnVolver").unbind("click").bind("click", function() {that.carregar(dades.item_codi_pare);});
+			jQuery("#btnVolver").unbind("click").bind("click", function() { that.carregar(dades.item_codi_pare); });
 			
 		} else {
 			
 			jQuery("#btnVolver").unbind("click").bind("click", function() {
 				
-				that.torna();
+				that.vuelve();
 				
 				if ($(".breadItems").length) {
 					
@@ -530,17 +595,23 @@ function CDetall() {
 				}
 				
 			});
+			
 		}
 
 		montarBreadcrumb();
 
 		this.modificado(false);
 		
-	}
-
+		if (debug)
+			console.log("Saliendo de CDetall.pintar");
+		
+	};
 	
 	// Sobreescribimos este método para que nos salga el mensaje de "Cargando" correctamente.
 	this.carregar = function(itemID) {
+		
+		if (debug)
+			console.log("Entrando en CDetall.carregar");
 
 		// Deshabilitamos inicialmente el botón de guardar.
 		jQuery("#btnGuardar").unbind("click").parent().removeClass("off").addClass("off");
@@ -590,10 +661,15 @@ function CDetall() {
 		
 		this.actualizaEventos();
 		
-	}
-
+		if (debug)
+			console.log("Saliendo de CDetall.carregar");
+		
+	};
 	
 	this.elimina = function() {
+		
+		if (debug)
+			console.log("Entrando en CDetall.elimina");
 
 		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
 
@@ -631,12 +707,22 @@ function CDetall() {
 			}
 			
 		});
-	}
-
+		
+		if (debug)
+			console.log("Saliendo de CDetall.elimina");
+		
+	};
 
 	this.pintarModulos = function(dades) {
+		
+		if (debug)
+			console.log("Entrando en CDetall.pintarModulos");
+		
 		ModulSeccions.inicializarSecciones(dades.seccionsRelacionades);
-	}
-
+		
+		if (debug)
+			console.log("Saliendo de CDetall.pintarModulos");
+		
+	};
 
 };

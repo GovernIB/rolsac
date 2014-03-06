@@ -2,11 +2,8 @@ package org.ibit.rol.sac.persistence.ejb;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.ejb.CreateException;
@@ -21,14 +18,12 @@ import net.sf.hibernate.expression.Expression;
 import net.sf.hibernate.expression.Order;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.tools.ant.util.ClasspathUtils.Delegate;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.util.FichaUAFichaIds;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
@@ -369,34 +364,39 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     public List<Seccion> listarHijosSeccion(Long id) {
     	
         Session session = getSession();
-        List<Seccion> l = Collections.emptyList();
+        List<Seccion> listaHijos = Collections.emptyList();
         
         try {
-        	//TODO: Obtener los hijos de una seccion o obtener las secciones que tengan un mismo padre especificado
+        	
+        	// TODO amartin: ¿puede borrarse el TODO justo posterior a este?
+        	// TODO: Obtener los hijos de una seccion o obtener las secciones que tengan un mismo padre especificado
+        	
         	StringBuilder consulta = new StringBuilder(" select new Seccion(seccion.id, trad.nombre) from Seccion seccion, seccion.traducciones trad ");
         	consulta.append(" where seccion.padre = :id ");
         	consulta.append(" and index(trad) = :idioma ");
+        	consulta.append(" order by seccion.orden asc ");
         	
         	Query query = session.createQuery(consulta.toString());
         	query.setParameter("id", id);
         	query.setParameter("idioma", DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
         	
-        	
-/*            Seccion seccion = (Seccion) session.load(Seccion.class, id);
-            Hibernate.initialize(seccion.getHijos());*/
-
-            //return castList(Seccion.class, seccion.getHijos());
-            l = (List<Seccion>)query.list();
+            listaHijos = (List<Seccion>)query.list();
             
         } catch (HibernateException he) {
+        	
             throw new EJBException(he);
+            
         } catch (DelegateException e) {
+        	
         	throw new EJBException(e);
+        	
 		} finally {
+			
             close(session);
+            
         }
         
-        return l;
+        return listaHijos;
         
     }
 
