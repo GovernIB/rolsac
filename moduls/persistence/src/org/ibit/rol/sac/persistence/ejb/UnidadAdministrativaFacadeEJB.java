@@ -1808,7 +1808,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 
 	/**
-	 * Compone la miga de pan de la unidad administrativa para el sacback2
+	 * Compone la miga de pan de la unidad administrativa para el rolsacback
 	 * 
 	 * @ejb.interface-method
 	 * 

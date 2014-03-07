@@ -120,7 +120,7 @@ public abstract class EdificioFacadeEJB extends HibernateEJB
 	
 	
 	/**
-	 * Busca todos los edificios que cumplen los criterios de busqueda del nuevo back (sacback2).
+	 * Busca todos los edificios que cumplen los criterios de busqueda del nuevo back (rolsacback).
 	 *  
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"

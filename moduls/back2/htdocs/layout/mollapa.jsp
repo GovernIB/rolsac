@@ -17,7 +17,7 @@
     		
     		<li class="ua">
     			<div>
-	    			<a class="ua" href="/sacback2/unidadAdministrativa/cambiarUA.do?ua=1&redirectTo=http://caibrolsac.in.at4.net:8080/sacback2/quadreControl/quadreControl.do">Govern de les Illes Balears</a>
+	    			<a class="ua" href="/rolsacback/unidadAdministrativa/cambiarUA.do?ua=1&redirectTo=http://caibrolsac.in.at4.net:8080/rolsacback/quadreControl/quadreControl.do">Govern de les Illes Balears</a>
 	    			<a class="desplegar" href="javascript:void(0)"></a>
     			</div>
 	    	</li>
@@ -26,7 +26,7 @@
                      	    	
 	    	<li class="ua seleccionat" data-clave_ua_padre="1">
 	    		<div>
-			 		<a class="ua" href="/sacback2/unidadAdministrativa/cambiarUA.do?ua=2&redirectTo=http://caibrolsac.in.at4.net:8080/sacback2/quadreControl/quadreControl.do">Presid�ncia</a>
+			 		<a class="ua" href="/rolsacback/unidadAdministrativa/cambiarUA.do?ua=2&redirectTo=http://caibrolsac.in.at4.net:8080/rolsacback/quadreControl/quadreControl.do">Presid�ncia</a>
 			 		<a class="desplegar" href="javascript:void(0)"></a>
 		 		</div>
     		</li> 

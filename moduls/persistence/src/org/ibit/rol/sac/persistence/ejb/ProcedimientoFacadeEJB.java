@@ -634,7 +634,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 	/**
 	 * @deprecated No se usa
-	 * Busca todas los Procedimientos que cumplen los criterios de busqueda del nuevo back (sacback2).
+	 * Busca todas los Procedimientos que cumplen los criterios de busqueda del nuevo back (rolsacback).
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
@@ -799,7 +799,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 
 	/**
-	 * Busca todas los Procedimientos que cumplen los criterios de busqueda del nuevo back (sacback2).
+	 * Busca todas los Procedimientos que cumplen los criterios de busqueda del nuevo back (rolsacback).
 	 * @param criteria	Indica los criterios para la consulta.
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"

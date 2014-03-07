@@ -450,7 +450,7 @@ div.informacion { background:#fff url(../img/missatge/informacion.gif) no-repeat
     background-position: 11px 50%;
     border-radius: 15px 15px 0 0;
 
-    /*behavior: url(/sacback2/js/pie/PIE.htc);    */
+    /*behavior: url(/rolsacback/js/pie/PIE.htc);    */
 }
 #opcions li a,
 .tabOpciones li a{

@@ -21,7 +21,7 @@
         <stringProp name="TestPlan.comments">Desde la pantalla de cuadro de control, selecciona la UA 1 &quot;Govern de les Illes Balears&quot;.</stringProp>
       </GenericController>
       <hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/sacback2/unidadAdministrativa/listarHijos.do" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/rolsacback/unidadAdministrativa/listarHijos.do" enabled="true">
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
             <collectionProp name="Arguments.arguments">
               <elementProp name="id" elementType="HTTPArgument">
@@ -39,7 +39,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding">UTF-8</stringProp>
-          <stringProp name="HTTPSampler.path">/sacback2/unidadAdministrativa/listarHijos.do</stringProp>
+          <stringProp name="HTTPSampler.path">/rolsacback/unidadAdministrativa/listarHijos.do</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -90,13 +90,13 @@
               </elementProp>
               <elementProp name="Referer" elementType="Header">
                 <stringProp name="Header.name">Referer</stringProp>
-                <stringProp name="Header.value">http://${SERVER-NAME}:${SERVER-PORT}/sacback2/quadreControl/quadreControl.do</stringProp>
+                <stringProp name="Header.value">http://${SERVER-NAME}:${SERVER-PORT}/rolsacback/quadreControl/quadreControl.do</stringProp>
               </elementProp>
             </collectionProp>
           </HeaderManager>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/sacback2/unidadAdministrativa/cambiarUA.do" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/rolsacback/unidadAdministrativa/cambiarUA.do" enabled="true">
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
             <collectionProp name="Arguments.arguments">
               <elementProp name="ua" elementType="HTTPArgument">
@@ -109,7 +109,7 @@
               <elementProp name="redirectTo" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.name">redirectTo</stringProp>
-                <stringProp name="Argument.value">http://${SERVER-NAME}:${SERVER-PORT}/sacback2/quadreControl/quadreControl.do</stringProp>
+                <stringProp name="Argument.value">http://${SERVER-NAME}:${SERVER-PORT}/rolsacback/quadreControl/quadreControl.do</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
               </elementProp>
@@ -121,7 +121,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/sacback2/unidadAdministrativa/cambiarUA.do</stringProp>
+          <stringProp name="HTTPSampler.path">/rolsacback/unidadAdministrativa/cambiarUA.do</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -148,7 +148,7 @@
               </elementProp>
               <elementProp name="Referer" elementType="Header">
                 <stringProp name="Header.name">Referer</stringProp>
-                <stringProp name="Header.value">http://${SERVER-NAME}:${SERVER-PORT}/sacback2/quadreControl/quadreControl.do</stringProp>
+                <stringProp name="Header.value">http://${SERVER-NAME}:${SERVER-PORT}/rolsacback/quadreControl/quadreControl.do</stringProp>
               </elementProp>
               <elementProp name="DNT" elementType="Header">
                 <stringProp name="Header.name">DNT</stringProp>
@@ -162,7 +162,7 @@
           </HeaderManager>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/sacback2/quadreControl/quadreControl.do" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/rolsacback/quadreControl/quadreControl.do" enabled="true">
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
@@ -172,7 +172,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/sacback2/quadreControl/quadreControl.do</stringProp>
+          <stringProp name="HTTPSampler.path">/rolsacback/quadreControl/quadreControl.do</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -199,7 +199,7 @@
               </elementProp>
               <elementProp name="Referer" elementType="Header">
                 <stringProp name="Header.name">Referer</stringProp>
-                <stringProp name="Header.value">http://${SERVER-NAME}:${SERVER-PORT}/sacback2/quadreControl/quadreControl.do</stringProp>
+                <stringProp name="Header.value">http://${SERVER-NAME}:${SERVER-PORT}/rolsacback/quadreControl/quadreControl.do</stringProp>
               </elementProp>
               <elementProp name="DNT" elementType="Header">
                 <stringProp name="Header.name">DNT</stringProp>
@@ -213,7 +213,7 @@
           </HeaderManager>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/sacback2/img/taula_llistat/fitxa.gif" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/rolsacback/img/taula_llistat/fitxa.gif" enabled="true">
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
@@ -223,7 +223,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/sacback2/img/taula_llistat/fitxa.gif</stringProp>
+          <stringProp name="HTTPSampler.path">/rolsacback/img/taula_llistat/fitxa.gif</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -250,7 +250,7 @@
               </elementProp>
               <elementProp name="Referer" elementType="Header">
                 <stringProp name="Header.name">Referer</stringProp>
-                <stringProp name="Header.value">http://${SERVER-NAME}:${SERVER-PORT}/sacback2/css/quadre_control.css</stringProp>
+                <stringProp name="Header.value">http://${SERVER-NAME}:${SERVER-PORT}/rolsacback/css/quadre_control.css</stringProp>
               </elementProp>
               <elementProp name="DNT" elementType="Header">
                 <stringProp name="Header.name">DNT</stringProp>
@@ -264,7 +264,7 @@
           </HeaderManager>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/sacback2/img/taula_llistat/normativa_caducada.gif" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/rolsacback/img/taula_llistat/normativa_caducada.gif" enabled="true">
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
@@ -274,7 +274,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/sacback2/img/taula_llistat/normativa_caducada.gif</stringProp>
+          <stringProp name="HTTPSampler.path">/rolsacback/img/taula_llistat/normativa_caducada.gif</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -301,7 +301,7 @@
               </elementProp>
               <elementProp name="Referer" elementType="Header">
                 <stringProp name="Header.name">Referer</stringProp>
-                <stringProp name="Header.value">http://${SERVER-NAME}:${SERVER-PORT}/sacback2/css/quadre_control.css</stringProp>
+                <stringProp name="Header.value">http://${SERVER-NAME}:${SERVER-PORT}/rolsacback/css/quadre_control.css</stringProp>
               </elementProp>
               <elementProp name="DNT" elementType="Header">
                 <stringProp name="Header.name">DNT</stringProp>
@@ -315,7 +315,7 @@
           </HeaderManager>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/sacback2/estadistiques/grafica.do" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/rolsacback/estadistiques/grafica.do" enabled="true">
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
             <collectionProp name="Arguments.arguments">
               <elementProp name="tipus" elementType="HTTPArgument">
@@ -347,7 +347,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/sacback2/estadistiques/grafica.do</stringProp>
+          <stringProp name="HTTPSampler.path">/rolsacback/estadistiques/grafica.do</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -374,7 +374,7 @@
               </elementProp>
               <elementProp name="Referer" elementType="Header">
                 <stringProp name="Header.name">Referer</stringProp>
-                <stringProp name="Header.value">http://${SERVER-NAME}:${SERVER-PORT}/sacback2/quadreControl/quadreControl.do</stringProp>
+                <stringProp name="Header.value">http://${SERVER-NAME}:${SERVER-PORT}/rolsacback/quadreControl/quadreControl.do</stringProp>
               </elementProp>
               <elementProp name="DNT" elementType="Header">
                 <stringProp name="Header.name">DNT</stringProp>
@@ -388,7 +388,7 @@
           </HeaderManager>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/sacback2/estadistiques/grafica.do" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/rolsacback/estadistiques/grafica.do" enabled="true">
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
             <collectionProp name="Arguments.arguments">
               <elementProp name="tipus" elementType="HTTPArgument">
@@ -420,7 +420,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/sacback2/estadistiques/grafica.do</stringProp>
+          <stringProp name="HTTPSampler.path">/rolsacback/estadistiques/grafica.do</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -447,7 +447,7 @@
               </elementProp>
               <elementProp name="Referer" elementType="Header">
                 <stringProp name="Header.name">Referer</stringProp>
-                <stringProp name="Header.value">http://${SERVER-NAME}:${SERVER-PORT}/sacback2/quadreControl/quadreControl.do</stringProp>
+                <stringProp name="Header.value">http://${SERVER-NAME}:${SERVER-PORT}/rolsacback/quadreControl/quadreControl.do</stringProp>
               </elementProp>
               <elementProp name="DNT" elementType="Header">
                 <stringProp name="Header.name">DNT</stringProp>
@@ -461,7 +461,7 @@
           </HeaderManager>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/sacback2/estadistiques/grafica.do" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/rolsacback/estadistiques/grafica.do" enabled="true">
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
             <collectionProp name="Arguments.arguments">
               <elementProp name="tipus" elementType="HTTPArgument">
@@ -493,7 +493,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/sacback2/estadistiques/grafica.do</stringProp>
+          <stringProp name="HTTPSampler.path">/rolsacback/estadistiques/grafica.do</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -520,7 +520,7 @@
               </elementProp>
               <elementProp name="Referer" elementType="Header">
                 <stringProp name="Header.name">Referer</stringProp>
-                <stringProp name="Header.value">http://${SERVER-NAME}:${SERVER-PORT}/sacback2/quadreControl/quadreControl.do</stringProp>
+                <stringProp name="Header.value">http://${SERVER-NAME}:${SERVER-PORT}/rolsacback/quadreControl/quadreControl.do</stringProp>
               </elementProp>
               <elementProp name="DNT" elementType="Header">
                 <stringProp name="Header.name">DNT</stringProp>
