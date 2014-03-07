@@ -371,17 +371,26 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		return llistaUsuarisDTO;
 	}
 
-	private Object getLlistaEdificisDTO(Map<String, Object> resultats, UnidadAdministrativa uni) {
+	private Object getLlistaEdificisDTO(Map<String, Object> resultats, UnidadAdministrativa ua) {
 
-		List<IdNomDTO> llistaEdificisDTO = null;
+		List<Map<String, String>> llistaEdificisDTO = null;
 
-		if (uni.getEdificios() != null) {
+		if (ua.getEdificios() != null) {
 
-			llistaEdificisDTO = new ArrayList<IdNomDTO>();
+			llistaEdificisDTO = new ArrayList<Map<String, String>>();
 
-			for (Object edifici : uni.getEdificios())
-				llistaEdificisDTO.add(new IdNomDTO(((Edificio)edifici).getId(), 
-						((Edificio)edifici).getDireccion()));
+			for (Edificio e : ua.getEdificios()) {
+				
+				Map<String, String> map = new HashMap<String, String>();
+				
+				map.put("id", e.getId().toString());
+				map.put("nom", e.getDireccion());
+				map.put("idMainItem", ua.getId().toString());
+				map.put("idRelatedItem", e.getId().toString());
+			
+				llistaEdificisDTO.add( map );
+				
+			}
 
 		}
 
@@ -638,9 +647,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			// Fichas de la portada web.
 			guardarFichasPortada(valoresForm, unitatAdministrativa);
 
-			// Edificios.
-			guardarEdificios(valoresForm, unitatAdministrativa, edicion);
-
 			// UA Padre.
 			Long unitatAdmPareId = ParseUtil.parseLong(valoresForm.get("item_pare_id"));			
 			crearOActualizarUnitatAdministrativa(unitatAdministrativa, unitatAdmPareId);
@@ -713,33 +719,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			if (!"".equals(listaUsuarios[0])) {
 				for (int i = 0; i < listaUsuarios.length; i++)
 					usuarioDelegate.asignarUnidad(new Long(listaUsuarios[i]), unitatAdministrativa.getId());
-			}
-
-		}
-
-	}
-
-	private void guardarEdificios(Map<String, String> valoresForm, UnidadAdministrativa unitatAdministrativa, boolean edicion)
-			throws DelegateException {
-
-		if (edicion && isModuloModificado("modulo_edificios_modificado", valoresForm)) {
-
-			EdificioDelegate edificioDelegate = DelegateUtil.getEdificioDelegate();			
-
-			// Recollir els edificis actuals de la UA.
-			Set<Edificio> edificiosActuales = edificioDelegate.listarEdificiosUnidad(unitatAdministrativa.getId());
-
-			// Esborrar els edificis actuals.
-			for (Edificio edificio : edificiosActuales)
-				edificioDelegate.eliminarUnidad(unitatAdministrativa.getId(), edificio.getId());
-
-			// Crear una llista amb els edificis assignats de la unitat.
-			String[] listaEdificios = valoresForm.get("llistaEdificis").replace(",", " ").trim().split(" ");		
-
-			// Grabar en la unidad cada edificio de la lista (par�metro "listaEdificios").		
-			if (!"".equals(listaEdificios[0])) {				
-				for (int i = 0; i < listaEdificios.length; i++) 
-					edificioDelegate.anyadirUnidad(unitatAdministrativa.getId(), new Long(listaEdificios[i]));
 			}
 
 		}
@@ -1732,8 +1711,63 @@ public class UnitatAdmBackController extends PantallaBaseController {
 				ua.getPadre() != null ? ua.getPadre().getId() : null
 			);
 			
-			String ok = messageSource.getMessage("fetVital.guardat.correcte", null, request.getLocale());
-			result = new IdNomDTO(ua.getId(), ok);
+			String ok = messageSource.getMessage("unitatadm.guardat.correcte", null, request.getLocale());
+			result = new IdNomDTO(ua.getId(), ok);            
+
+		} catch (DelegateException dEx) {
+			
+			if (dEx.isSecurityException()) {
+				String error = messageSource.getMessage("error.permisos", null, request.getLocale());
+				result = new IdNomDTO(-1l, error);
+			} else {
+				String error = messageSource.getMessage("error.altres", null, request.getLocale());
+				result = new IdNomDTO(-2l, error);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+			}
+			
+		}
+
+		return result;
+		
+	}
+	
+	// TODO amartin: implementar
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/guardarEdificiosRelacionados.do")
+	public @ResponseBody IdNomDTO guardarEdificiosRelacionados(Long id, Long[] elementos, HttpSession session, HttpServletRequest request) {
+		
+		IdNomDTO result = null;
+		
+		try {
+			
+			UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+			UnidadAdministrativa ua = uaDelegate.consultarUnidadAdministrativaSinFichas(id);
+			
+			EdificioDelegate edificioDelegate = DelegateUtil.getEdificioDelegate();
+			
+			// Obtener los edificios actuales de la UA.
+			Set<Edificio> edificiosActuales = edificioDelegate.listarEdificiosUnidad(ua.getId());
+
+			// Borrar los edificios actuales.
+			for (Edificio edificio : edificiosActuales)
+				edificioDelegate.eliminarUnidad(ua.getId(), edificio.getId());
+			
+			if ( elementos != null ) {
+				
+				for ( int i = 0; i < elementos.length; i++ ) {
+					
+					if ( elementos[i] != null ) {
+						
+						edificioDelegate.anyadirUnidad(ua.getId(), elementos[i]);
+						
+					}
+					
+				}
+				
+			}
+			
+			String ok = messageSource.getMessage("unitatadm.guardat.correcte", null, request.getLocale());
+			result = new IdNomDTO(ua.getId(), ok);            
 
 		} catch (DelegateException dEx) {
 			

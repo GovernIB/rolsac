@@ -554,6 +554,7 @@ function CDetall(soloFicha) {
 
 		ModulMateries.inicializarMaterias(dades.materies);
 
+		// Edificios
 		edi_seleccionats_elm = escriptori_detall_elm.find("div.modulEdificis div.seleccionats");
 		edi_llistat_elm = escriptori_detall_elm.find("div.modulEdificis div.llistat");
 		edificis_nodes = dades.edificis;
@@ -575,8 +576,10 @@ function CDetall(soloFicha) {
 
 				// dsanchez: Creamos la lista de elementos iniciales.
 				itemsLista.push({
-					id:edifici_node.id, 
+					id: edifici_node.id, 
 					nombre: edifici_node.nom,
+					idMainItem: edifici_node.idMainItem,
+					idRelatedItem: edifici_node.idRelatedItem,
 					// Para listas multi-idioma pasar un objeto con los strings de cada idioma, en lugar de un solo string.
 					/*nombre:{
 						es: edifici_node.nom, 

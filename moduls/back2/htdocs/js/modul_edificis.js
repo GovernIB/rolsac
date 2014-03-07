@@ -20,12 +20,13 @@ $(document).ready(function() {
 	}
 	
 	// Evento para el botón de volver al detalle
-	jQuery(".btnVolverDetalle").bind("click",function(){EscriptoriEdifici.torna();});	
-	jQuery("#btnFinalizar").bind("click",function(){EscriptoriEdifici.finalizar();});
+	jQuery(".btnVolverDetalle").bind("click", function() { EscriptoriEdifici.torna(); });	
+	jQuery("#btnFinalizar").bind("click", function() { EscriptoriEdifici.finalizar(); });
 	
 });
 
-function CModulEdifici(){
+function CModulEdifici() {
+	
 	this.extend = ListaOrdenable;
 	this.extend();
     
@@ -55,20 +56,26 @@ function CModulEdifici(){
 			nombre: "edifici",
 			nodoOrigen: modul_edificis_elm.find(".listaOrdenable"),
 			nodoDestino: edificis_seleccionats_elm.find(".listaOrdenable"),
-			atributos: ["id", "nombre", "orden"],	// Campos que queremos que aparezcan en las listas.
-			//multilang: true
+			atributos: [			// Campos que queremos que aparezcan en los elementos de las lista ordenable.
+	            "id", 
+	            "nombre", 
+	            "orden", 
+	            "idRelatedItem", 	// Campo necesario para guardado AJAX genérico de módulos laterales.
+	            "idMainItem"		// Campo necesario para guardado AJAX genérico de módulos laterales.
+            ],
 			multilang: false
-			});
+		});
 		
 		// one al botó de gestionar
-		modul_edificis_elm.find("a.gestiona").one("click", function(){ModulEdifici.gestiona();} );
+		modul_edificis_elm.find("a.gestiona").one("click", function() { ModulEdifici.gestiona(); });
 		EscriptoriEdifici.carregar({});
-	}
+		
+	};
     
     // Marcar el módulo como modificado.    
     this.modificado = function(){
         $moduloModificado.val(1);        
-    }
+    };
 			
 	this.gestiona = function() {
 						
@@ -90,10 +97,13 @@ function CModulEdifici(){
 		escriptori_detall_elm.fadeOut(300, function() {			
 			escriptori_edificis_elm.fadeIn(300);			
 		});
-	}
+		
+	};
+	
 };
 
-function CEscriptoriEdifici(){		
+function CEscriptoriEdifici() {
+	
 	this.extend = ListadoBase;
     this.extend("", "", "", "cercador_contingut_edificis", "", "", "", "", "btnLimpiarForm");	
 	
@@ -102,12 +112,14 @@ function CEscriptoriEdifici(){
 	/**
 	 * Agrega un item a la lista.
 	 */
-	this.agregaItem = function( itemID, titulo ){	
-					
+	this.agregaItem = function( itemID, titulo, idMainItem, idRelatedItem ) {	
+				
 		// dsanchez: Componemos el item para enviar a la lista.
 		var item = {
 			id: itemID,
-			nombre: titulo
+			nombre: titulo,
+			idMainItem: idMainItem,
+			idRelatedItem: idRelatedItem
 			// Para listas multi-idioma pasar un objeto con los strings de cada idioma, en lugar de un solo string.
 			/*nombre:{
 				es: titulo,
@@ -119,19 +131,21 @@ function CEscriptoriEdifici(){
 		};
 		
 		// Agrega el item, y si se ha añadido correctamente (si no existía previamente) actualiza el mensaje de items seleccionados.
-		if( ModulEdifici.agregaItem( item ) ){		
+		if ( ModulEdifici.agregaItem(item) ) {		
 			this.contaSeleccionats();		
-		}				
-	}	
+		}
+		
+	};
 	
 	// Cambia de página.
-	this.cambiaPagina = function( pag ){
+	this.cambiaPagina = function( pag ) {
 		multipagina.setPaginaActual(pag-1);
 		pag_Pag = pag;
 		this.anar(pag);
-	}
+	};
 	
-	this.finCargaListado = function(data,opcions){
+	this.finCargaListado = function(data,opcions) {
+		
 		// total
 		resultats_total = parseInt(data.total,10);
 		
@@ -143,6 +157,7 @@ function CEscriptoriEdifici(){
 			if (resultats_total % pag_Res > 0){
 				ultimaPag++;
 			}
+			
 			if (pag_Pag > ultimaPag) {
 				pag_Pag = ultimaPag;
 			}
@@ -219,7 +234,7 @@ function CEscriptoriEdifici(){
 			codi_taula += "</div>";
 			codi_taula += "</div>";
 			
-			if($.browser.opera) {
+			if ($.browser.opera) {
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
@@ -245,25 +260,34 @@ function CEscriptoriEdifici(){
 		
 		// animacio
 		edificis_dades_elm.fadeOut(300, function() {
+			
 			// pintem
 			edificis_dades_elm.html(codi_final).fadeIn(300, function() {
 														
 				// Evento lanzado al hacer click en un elemento de la lista.
-				jQuery("#resultats .llistat .tbody a").unbind("click").bind("click",function(){
+				jQuery("#resultats .llistat .tbody a").unbind("click").bind("click", function() {
+					
 					var partesItem = jQuery(this).attr("class").split("_");
 					var itemID = partesItem[1];
 					var titulo = jQuery(this).html();
-					that.agregaItem(itemID,titulo);
-					});
+					var idMainItem = jQuery('#item_id').val();
+					var idRelatedItem = itemID;
+					
+					that.agregaItem(itemID, titulo, idMainItem, idRelatedItem);
+				
+				});
 				
 				// cercador
 				edificis_cercador_elm.find("input, select").removeAttr("disabled");
 				
 			});
+			
 		});	
-	}
+		
+	};
 
-	this.carregar = function(opcions) {		
+	this.carregar = function(opcions) {
+		
 		// opcions: ajaxPag (integer), ordreTipus (ASC, DESC), ordreCamp (tipus, carrec, tractament)
 		
 		dataVars = "";
@@ -278,6 +302,7 @@ function CEscriptoriEdifici(){
 		if (typeof opcions.ordreTipus != "undefined") {
 			ordreTipus_edifici_elm.val(opcions.ordreTipus);
 		}
+		
 		// ordreCamp
 		if (typeof opcions.ordreCamp != "undefined") {
 			ordreCamp_edifici_elm.val(opcions.ordreCamp);
@@ -312,8 +337,9 @@ function CEscriptoriEdifici(){
 			success: function(data) {
 				that.finCargaListado(data,opcions);
 			}
-		});	
-	}
+		});
+		
+	};
 	
 	this.finalizar = function(){		
 								
@@ -339,11 +365,9 @@ function CEscriptoriEdifici(){
         // Marcamos el módulo como modificado.
         ModulEdifici.modificado();
 		
-		// Marcamos el formulario como modificado para habilitar el botón de guardar.
-		Detall.modificado();
-		
 		this.torna();
-	}
+		
+	};
 	
 	// Método sobreescrito
 	this.anar = function(enlace_html) {
@@ -352,6 +376,7 @@ function CEscriptoriEdifici(){
 		
 		// text cercant
 		txt = (num <= pag_Pag) ? txtCercantItemsAnteriors : txtCercantItemsAnteriors;
+		
 		edificis_dades_elm.fadeOut(300, function() {
 			// pintem
 			codi_anar = "<p class=\"executant\">" + txt + "</p>";
@@ -360,7 +385,8 @@ function CEscriptoriEdifici(){
 				that.carregar({pagina: num-1});				
 			});
 		});
-	}
+		
+	};
 	
 	this.torna = function() {
 		
@@ -368,12 +394,12 @@ function CEscriptoriEdifici(){
 		escriptori_edificis_elm.fadeOut(300, function() {			
 			escriptori_detall_elm.fadeIn(300, function() {
 				// activar
-				modul_edificis_elm.find("a.gestiona").one("click", function(){ModulEdifici.gestiona();});
+				modul_edificis_elm.find("a.gestiona").one("click", function() { ModulEdifici.gestiona(); });
 			});
 			
 		});
 		
-	}
+	};
 	
 	this.contaSeleccionats = function() {
 		
@@ -407,5 +433,7 @@ function CEscriptoriEdifici(){
 			ModulEdifici.eliminaItem(itemLista);
 			EscriptoriEdifici.contaSeleccionats();
 		});
-	}
+		
+	};
+	
 };
