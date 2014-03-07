@@ -1,6 +1,19 @@
 //TIPUS UNITATS ADMINISTRATIVES
 
 $(document).ready(function() {
+	
+	// Listener para guardado de módulos laterales vía AJAX.
+	jQuery(".lista-simple").click(function() {
+		
+		var element = $(this).parent().parent().find("li");
+		var id = $('#item_id').val();
+		var url = $(this).attr('action');
+		
+		ListaSimple.guardar(element, url, id);
+		
+	});
+	
+	ListaSimple = new ListaSimple();
 
 	// elements
 	opcions_elm = $("#opcions");
@@ -56,22 +69,27 @@ function CDetall(soloFicha) {
 	// Unidad administrativa general (la primera que se carga).
 	this.uaGeneral = null;
 
-	// Datos de la �ltima UA cargada.
+	// Datos de la última UA cargada.
 	this.actualUA = null;
 
 	this.iniciar = function() {
+		
+		// Desactivamos que se cambie el detalle a modificado por cambiar los checkboxes de materias relacionadas con la UA.
+		jQuery('#modul_materies .llistat li input[type=checkbox]').unbind('change');
 
 		ModulSeccions = new CModulSeccio();
 
-		//Sobreescribimos la funciÃ³n del botÃ³n finalizar para aÃ±adir a los parÃ¡metros enviados
-		//las materias seleccionadas por el usuario
+		// Sobreescribimos la función del botón finalizar para añadir a los parámetros enviados
+		// las materias seleccionadas por el usuario
 		ModulMateries.extend = CModulMateries;
+		
 		ModulMateries._finaliza = ModulMateries.finaliza;		
+		
 		ModulMateries.finaliza = function() {
 
 			ModulMateries._finaliza();
 
-			// AÃ±adir las materias a la informaciÃ³n a enviar una vez actualizada la selecciÃ³n		
+			// Añadir las materias a la información a enviar una vez actualizada la selección		
 			d = ModulMateries.listaMaterias();
 
 			if ( $("#materies").val() == undefined ) {
@@ -85,7 +103,7 @@ function CDetall(soloFicha) {
 				
 			}
 
-		}
+		};
 
 		// Redigirimos el método que guarda porque en este caso también hacemos un upload de archivos				
 		this.guarda = this.guarda_upload;
@@ -109,7 +127,6 @@ function CDetall(soloFicha) {
 			div_idiomes_elm = escriptori_detall_elm.find("div.idiomes:first");			
 			div_idiomes_elm.find("div." + a_primer_elm.attr("class")).addClass("seleccionat");
 
-
 			ul_idiomes_elm.bind("click", Detall.idioma);
 
 			// Mostramos DIV con el primer idioma en la sección de idiomas del responsable de la UA.
@@ -121,15 +138,15 @@ function CDetall(soloFicha) {
 		moduls_elm = escriptori_detall_elm.find("div.modul");		
 
 		// Sincronizar campos sin idioma en zona multi-idioma.   
-		jQuery("#item_codi_estandar,#item_codi_estandar_es,#item_codi_estandar_en,#item_codi_estandar_de,#item_codi_estandar_fr").change(function(){
+		jQuery("#item_codi_estandar,#item_codi_estandar_es,#item_codi_estandar_en,#item_codi_estandar_de,#item_codi_estandar_fr").change(function() {
 			jQuery("#item_codi_estandar,#item_codi_estandar_es,#item_codi_estandar_en,#item_codi_estandar_de,#item_codi_estandar_fr").val( jQuery(this).val() );
 		});
 
-		jQuery("#item_clave_primaria,#item_clave_primaria_es,#item_clave_primaria_en,#item_clave_primaria_de,#item_clave_primaria_fr").change(function(){
+		jQuery("#item_clave_primaria,#item_clave_primaria_es,#item_clave_primaria_en,#item_clave_primaria_de,#item_clave_primaria_fr").change(function() {
 			jQuery("#item_clave_primaria,#item_clave_primaria_es,#item_clave_primaria_en,#item_clave_primaria_de,#item_clave_primaria_fr").val( jQuery(this).val() );
 		});
 
-		jQuery("#item_espai_territorial,#item_espai_territorial_es,#item_espai_territorial_en,#item_espai_territorial_de,#item_espai_territorial_fr").change(function(){
+		jQuery("#item_espai_territorial,#item_espai_territorial_es,#item_espai_territorial_en,#item_espai_territorial_de,#item_espai_territorial_fr").change(function() {
 			jQuery("#item_espai_territorial,#item_espai_territorial_es,#item_espai_territorial_en,#item_espai_territorial_de,#item_espai_territorial_fr").val( jQuery(this).val() );
 		});
 
@@ -141,14 +158,14 @@ function CDetall(soloFicha) {
 		// carregar
 		Detall.carregar();
 
-	}
+	};
 
 	this.traduirWrapper = function () {
 		that.traduir(pagTraduir, CAMPOS_TRADUCTOR_UNIDAD_ADMINISTRATIVA, DATOS_TRADUCIDOS_UNIDAD_ADMINISTRATIVA);
-	}
+	};
 
 	// Sobreescribe el método guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
-	this.guarda_upload = function(e) {    
+	this.guarda_upload = function(e) {
 
 		escriptori_fitxes_elm = $("#escriptori_fitxes");
 		fitxes_seleccionats_elm = escriptori_fitxes_elm.find("div.escriptori_items_seleccionats:first");
@@ -179,7 +196,6 @@ function CDetall(soloFicha) {
 			$("#llistaEdificis").attr("value", $("#llistaEdificis").val() + $(this).attr("value") + ",");
 		});
 
-
 		// Preparamos una lista de usuarios mas "amigable" para el controlador, con sus id's separados por comas
 		if ( !$("#llistaUsuaris").length ) {
 			
@@ -196,7 +212,6 @@ function CDetall(soloFicha) {
 		$(".modulUsuaris input[name^='usuari_id_']").each( function() {
 			$("#llistaUsuaris").attr("value", $("#llistaUsuaris").val() + $(this).attr("value") + ",");			
 		});
-
 
 		// Preparamos la lista de secciones-ficha
 		// Formato: S1#F1|F2|...|Fs1n,S2#F1|F2|..|Fs2n,....,Sm#F1|F2|...|Fsmn
@@ -244,15 +259,16 @@ function CDetall(soloFicha) {
 
 		return false;	
 
-	}
+	};
 
 	// Método sobreescrito
-	this.busca = function(){
+	this.busca = function() {
 
 		edificis_cercador_elm.find("input, select").attr("disabled", "disabled");
 
 		// animacio
 		edificis_dades_elm.fadeOut(300, function() {
+			
 			// pintem
 			codi_cercant = "<p class=\"executant\">" + txtCercantItems + "</p>";
 			edificis_dades_elm.html(codi_cercant).fadeIn(300, function() {
@@ -262,8 +278,10 @@ function CDetall(soloFicha) {
 				EscriptoriEdifici.carregar({});
 
 			});
+			
 		});
-	}
+		
+	};
 
 	// Método sobreescrito.
 	this.carregar = function(itemID) {
@@ -296,7 +314,6 @@ function CDetall(soloFicha) {
 				that.actualUA = dada;
 				if ( !that.uaGeneral )
 					that.uaGeneral = dada;	
-
 				
 				if (dada.id == -1) {
 					
@@ -330,12 +347,14 @@ function CDetall(soloFicha) {
 					}
 					
 				}
+				
 			}
+			
 		});
 
 		this.actualizaEventos();
 		
-	}
+	};
 
 	this.recarregar = function() {
 
@@ -344,19 +363,17 @@ function CDetall(soloFicha) {
 			Detall.carregar();
 		});		
 
-	}
+	};
 
 	this.pintar = function(dades) {
 
 		dada_node = dades;
-
 
 		if (dada_node.id > 0) {							
 
 			$("#item_id").val(dada_node.id);
 
 			jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").show();
-
 
 			//Bloque de pestanyas de idiomas
 
@@ -380,7 +397,6 @@ function CDetall(soloFicha) {
 			$("#item_abreviatura_de").val(printStringFromNull(dada_node.de.abreviatura));
 			$("#item_url_de").val(printStringFromNull(dada_node.de.url));
 			$("#item_cvResponsable_de").val(printStringFromNull(dada_node.de.cvResponsable));
-
 
 			$("#item_nom_fr").val(printStringFromNull(dada_node.fr.nombre));
 			$("#item_presentacio_fr").val(printStringFromNull(dada_node.fr.presentacion));
@@ -411,30 +427,24 @@ function CDetall(soloFicha) {
 			marcarOpcionSelect("item_responsable_sexe",dada_node.item_responsable_sexe);
 
 			//FotoPetita
-
 			pintarArchivo("item_responsable_foto_petita", dada_node);
 
 			//FotoGran
-
 			pintarArchivo("item_responsable_foto_gran", dada_node);
 
 			$("#item_tractament").val(dada_node.item_tractament).attr('selected',true);			
 
 			//Logotipos
 			//LogoHoritzontal
-
 			pintarArchivo("item_logo_horizontal", dada_node);
 
 			//LogoVertical
-
 			pintarArchivo("item_logo_vertical", dada_node);
 
 			//LogoSalutacioHoritzontal
-
 			pintarArchivo("item_logo_salutacio_horizontal", dada_node);
 
 			//LogoSalutacioVertical
-
 			pintarArchivo("item_logo_salutacio_vertical", dada_node);					
 
 			//Fitxes de la portada web
@@ -452,6 +462,7 @@ function CDetall(soloFicha) {
 			$("#modul_usuaris").show();
 
 		} else {
+			
 			//No hay datos que pintar -> estamos en creaciÃ³n de UA
 			//Esconder mÃ³dulos laterales
 			$("#modul_materies").hide();
@@ -462,6 +473,7 @@ function CDetall(soloFicha) {
 			$("#btnEliminar").parent().addClass("off");
 			$("#btnEliminar").unbind("click");
 			jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").hide();
+			
 		}
 
 		$("#carregantDetall" +
@@ -472,7 +484,7 @@ function CDetall(soloFicha) {
 
 		this.modificado(false);
 
-	}
+	};
 
 	this.elimina = function() {
 
@@ -503,7 +515,7 @@ function CDetall(soloFicha) {
 			}			
 		});
 		
-	}
+	};
 
 	this.previsualitza = function() {
 
@@ -518,14 +530,25 @@ function CDetall(soloFicha) {
 
 				$(this).find("a.dePrevisualitzar").one("click", Detall.previsualitzaTorna);
 
-			});		
+			});
+			
 		});
 
-	}
+	};
 
-	this.carregarInici = function() { Detall.modificado(false); window.location.replace(pagLlistat); }
+	this.carregarInici = function() {
+		
+		Detall.modificado(false);
+		window.location.replace(pagLlistat);
+		
+	};
 	
-	this.carregarUA = function() { Detall.modificado(false); window.location.replace(pagLlistat); }
+	this.carregarUA = function() {
+		
+		Detall.modificado(false);
+		window.location.replace(pagLlistat);
+		
+	};
 
 	this.pintarModulos = function(dades) {
 
@@ -545,12 +568,13 @@ function CDetall(soloFicha) {
 		} else {
 
 			var itemsLista = [];
-			var i=1;
-			jQuery(edificis_nodes).each(function(){
+			var i = 1;
+			jQuery(edificis_nodes).each(function() {
+				
 				edifici_node = this;
 
 				// dsanchez: Creamos la lista de elementos iniciales.
-				itemsLista.push( {
+				itemsLista.push({
 					id:edifici_node.id, 
 					nombre: edifici_node.nom,
 					// Para listas multi-idioma pasar un objeto con los strings de cada idioma, en lugar de un solo string.
@@ -562,8 +586,10 @@ function CDetall(soloFicha) {
 						fr: edifici_node.nom
 						},*/
 					orden: i++	// Si no hay orden, lo calculamos previamente.
-				} );
-			});				
+				});
+				
+			});
+			
 			ModulEdifici.agregaItems(itemsLista);
 
 			txt_edificis = (edificis_nodes_size == 1) ? txtEdifici : txtEdificis;
@@ -591,6 +617,7 @@ function CDetall(soloFicha) {
 			jQuery(usuaris_nodes).each(function() {
 				
 				usuari_node = this;
+				
 				// tcerda: Creamos la lista de elementos iniciales.
 				itemsLista.push( {
 					id:usuari_node.id,
@@ -607,7 +634,7 @@ function CDetall(soloFicha) {
 			
 		}
 
-	}
+	};
 	
 	this.ocultarModulos = function(selector) {
 		
@@ -615,7 +642,7 @@ function CDetall(soloFicha) {
 				&& !selector.children().is("#llistaSeccions") )
 			selector.addClass("invisible");
 		
-	}
+	};
 
 	function posarValorsInput(idInput, valor) {
 		$(idInput).val(valor);

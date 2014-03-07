@@ -1,13 +1,15 @@
 // MODULO DE MATERIAS RELACIONADAS
 
 jQuery(document).ready(function() {
+	
 	modul_materies_elm = jQuery("div.modulMateries:first");
 
 	ModulMateries = new CModulMateries();
 	
 	if (modul_materies_elm.size() == 1) {
 		ModulMateries.iniciar();
-	}        
+	}
+	
 });
 
 function CModulMateries() {
@@ -42,12 +44,7 @@ function CModulMateries() {
             ],	
 			multilang: false
 		});
-		
-		// Desactivamos que al cambiar un valor en este desplegable la vista se marque como modificada.
-		// Esto se hace de forma genérica para elementos de los formularios en detall_base.js, de este modo:
-		// 		jQuery("#" + ids.form + " input,#" + ids.form + " select,#" + ids.form + " textarea").bind("change", function() { that.modificado(); });
-		jQuery('#item_materia_relacionada').unbind('change');
-
+				
         // Obtenemos el campo oculto para controlar los cambios.
         $moduloModificado = modul_materies_elm.find('input[name="modulo_materias_modificado"]');        
         
@@ -59,7 +56,7 @@ function CModulMateries() {
         if (debug)
 			console.log("Saliendo de CModulMateries.iniciar");
         
-	}
+	};
 	
 	var modul_materies_elm = jQuery("div.modulMateries");
 	var materies_seleccionats_elm;
@@ -68,13 +65,13 @@ function CModulMateries() {
 					 	
 	if ( modul_materies_elm.size() == 1 ) {		
 
-		modul_materies_elm.find("a.gestiona").bind("click", function(){	
+		modul_materies_elm.find("a.gestiona").bind("click", function() {	
 			that.gestiona();
 		});
-		modul_materies_elm.find("a.cancela").bind("click", function(){
+		modul_materies_elm.find("a.cancela").bind("click", function() {
 			that.cancela();
 		});
-		modul_materies_elm.find("a.finalitza").bind("click", function(){
+		modul_materies_elm.find("a.finalitza").bind("click", function() {
 			that.finaliza();
 		});
 		
@@ -107,7 +104,7 @@ function CModulMateries() {
         if (debug)
 			console.log("Saliendo de CModulMateries.cancela");
         
-	}
+	};
 	
 	this.gestiona = function() {
 		
@@ -123,7 +120,48 @@ function CModulMateries() {
 		if (debug)
 			console.log("Saliendo de CModulMateries.gestiona");
 		
-	}
+	};
+	
+	this.finaliza = function() {
+		
+		nombre_llistat = 0;
+		codi_llistat = "<ul>";
+		
+		materies_llistat_elm.find("li").each(function(i) {
+					
+			li_elm = $(this);
+			input_elm = li_elm.find("input");
+					
+			if (input_elm.attr("checked") == "checked") {
+				
+				codi_llistat += "<li item-id='" + input_elm.val() + "' main-item-id='" + jQuery('#item_id').val() + "' related-item-id='" + input_elm.val() + "'>";
+				codi_llistat += "<input type=\"hidden\" value=\"" + input_elm.val() + "\" />" + li_elm.find("span").text();
+				codi_llistat += "</li>";
+				
+				nombre_llistat++;
+				
+				input_elm.addClass(materiaDefaultClass);
+			
+			} else {
+				
+				input_elm.removeClass(materiaDefaultClass);
+				
+			}
+			
+		});
+		
+		codi_llistat += "</ul>";
+		
+		codi_materia_txt = (nombre_llistat == 1) ? txtMateria : txtMateries;
+		codi_info = (nombre_llistat == 0) ? txtNoHiHaMateries + "." : txtHiHa + " <strong>" + nombre_llistat + " " + codi_materia_txt + "</strong>.";
+		
+		materies_seleccionats_elm.find("p.info").html(codi_info);
+		materies_seleccionats_elm.find(".listaOrdenable").html(codi_llistat);		
+		
+		materies_seleccionats_elm.slideDown(300);
+		materies_llistat_elm.slideUp(300);
+		
+	};
 	
 	this.contaSeleccionats = function() {
 		
@@ -154,7 +192,7 @@ function CModulMateries() {
 		if (debug)
 			console.log("Saliendo de CModulMateries.contaSeleccionats");
 		
-	}
+	};
 	
 	//Actualiza la lista de materias seleccionadas y marca los checkboxes cuando se carga una ficha
 	this.inicializarMaterias = function(listaMateries, btnEliminar) {
@@ -226,7 +264,7 @@ function CModulMateries() {
 		if (debug)
 			console.log("Saliendo de CModulMateries.inicializarMaterias");
 		
-	}
+	};
 	
 	//devuelve un string con el formato materies=n1,n2,...,nm donde nx son codigos de materias
 	this.listaMaterias = function () {
@@ -251,10 +289,10 @@ function CModulMateries() {
 		
 		return listaMaterias;
 		
-	}
+	};
 	
 	/* Al acceder al formulario de creacion, limpia las listas de materias, desmarca los checkboxes,
-	 * marca las materias por defecto, econder el listado y mostrar los seleccionados.
+	 * marca las materias por defecto, esconde el listado y muestra los seleccionados.
 	 */
 	this.nuevo = function() {
 		
@@ -270,7 +308,7 @@ function CModulMateries() {
 		if (debug)
 			console.log("Saliendo de CModulMateries.nuevo");
 		
-	}
+	};
 
 	// Econder el listado y mostrar los seleccionados.
 	this.mostrarMateriasSeleccionadas = function () {
@@ -284,6 +322,6 @@ function CModulMateries() {
 		if (debug)
 			console.log("Saliendo de CModulMateries.mostrarMateriasSeleccionadas");
 		
-	}
+	};
 	
 }

@@ -331,7 +331,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			UnidadAdministrativa uni = unitatDelegate.consultarUnidadAdministrativaSinFichas(id);
 			
 			// Materias asociadas.
-			resultats.put("materies", getLlistaMateriesDTO(request, resultats, uni, DelegateUtil.getIdiomaDelegate().lenguajePorDefecto()));
+			resultats.put("materies", getLlistaMateriesDTO(request, uni, DelegateUtil.getIdiomaDelegate().lenguajePorDefecto()));
 
 			// Edificios.
 			resultats.put("edificis", getLlistaEdificisDTO(resultats, uni));			
@@ -389,19 +389,31 @@ public class UnitatAdmBackController extends PantallaBaseController {
 
 	}
 
-	private Object getLlistaMateriesDTO(HttpServletRequest request, Map<String, Object> resultats, UnidadAdministrativa uni, String lang)
-	{
-		List<IdNomDTO> llistaMateriesDTO = null;
+	private Object getLlistaMateriesDTO(HttpServletRequest request, UnidadAdministrativa uni, String lang) {
+		
+		List<Map<String, String>> llistaMateriesDTO = null;
+		
 		if (uni.getUnidadesMaterias() != null) {
-			llistaMateriesDTO = new ArrayList<IdNomDTO>();
-			for (UnidadMateria unidadMateria: uni.getUnidadesMaterias())
-				llistaMateriesDTO.add(new IdNomDTO(
-						unidadMateria.getMateria().getId(),
-						unidadMateria.getMateria().getNombreMateria(lang
-								)));
+			
+			llistaMateriesDTO = new ArrayList<Map<String, String>>();
+			
+			for ( UnidadMateria unidadMateria : uni.getUnidadesMaterias() ) {
+				
+				Map<String, String> map = new HashMap<String, String>();
+				
+				map.put("id", unidadMateria.getMateria().getId().toString());
+				map.put("nom", unidadMateria.getMateria().getNombreMateria(lang));
+				map.put("idMainItem", uni.getId().toString());
+				map.put("idRelatedItem", unidadMateria.getMateria().getId().toString());
+				
+				llistaMateriesDTO.add( map );
+				
+			}
+			
 		}
 
 		return llistaMateriesDTO;
+		
 	}
 
 	private List<SeccionFichaDTO> getListaSeccionesDTO(Long idUA, UnidadAdministrativaDelegate unitatDelegate) throws DelegateException {
@@ -534,7 +546,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	}
 
 	@RequestMapping(value = "/guardar.do", method = POST)
-	public ResponseEntity<String> guardarUniAdm(HttpSession session, HttpServletRequest request) {
+	public ResponseEntity<String> guardar(HttpSession session, HttpServletRequest request) {
 
 		/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
@@ -625,9 +637,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 
 			// Fichas de la portada web.
 			guardarFichasPortada(valoresForm, unitatAdministrativa);
-
-			// Materias asociadas.
-			guardarMaterias(valoresForm, unitatAdministrativa, edicion);
 
 			// Edificios.
 			guardarEdificios(valoresForm, unitatAdministrativa, edicion);
@@ -733,51 +742,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 					edificioDelegate.anyadirUnidad(unitatAdministrativa.getId(), new Long(listaEdificios[i]));
 			}
 
-		}
-
-	}
-
-	private void guardarMaterias(Map<String, String> valoresForm, UnidadAdministrativa unitatAdministrativa, boolean edicion) 
-			throws DelegateException {
-
-		if (valoresForm.get("materies") != null && isModuloModificado("modulo_materias_modificado", valoresForm)) {
-
-			UnidadMateriaDelegate unidadMateriaDelegate = DelegateUtil.getUnidadMateriaDelegate();
-			MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
-
-			Set<UnidadMateria> unidadesMateriasNuevas = new HashSet<UnidadMateria>();
-
-			String[] codisMateriesNoves = valoresForm.get("materies").split(",");				
-
-			// Si es edición sólo tendremos en cuenta las nuevas materias.
-			if (edicion) {
-
-				borrarUnidadesMateriaObsoletas(unitatAdministrativa, codisMateriesNoves );
-
-				//Saltamos este paso si se han borrado todas las materias
-				if ( !"".equals(valoresForm.get("materies")) ) {
-					for (int i = 0; i < codisMateriesNoves.length; i++) {
-						for ( UnidadMateria unidadMateria: unitatAdministrativa.getUnidadesMaterias() ) {
-							if ( unidadMateria.getMateria().getId().equals(Long.valueOf(codisMateriesNoves[i]) ) ) { //materia ya existente
-								unidadesMateriasNuevas.add(unidadMateria);
-								codisMateriesNoves[i] = null;
-								break;
-							}
-
-						}    
-					}
-				}                         					
-			}
-
-			if ( !"".equals(valoresForm.get("materies")) ) {				
-				for (String codiMateria: codisMateriesNoves) {
-					if (codiMateria != null) {                    	
-						UnidadMateria nuevaUnidadMateria = new UnidadMateria();
-						Materia materia = materiaDelegate.obtenerMateria(Long.valueOf(codiMateria));
-						unidadMateriaDelegate.grabarUnidadMateria(nuevaUnidadMateria, unitatAdministrativa.getId(), materia.getId());	                    		                    
-					}
-				}
-			}
 		}
 
 	}
@@ -960,19 +924,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 
 	}
 
-	// TODO: ¿se puede borrar?
-
-	//    /**
-	//     * Método que comprueba si hay que mostrar los logos
-	//     *
-	//     * @return boolean
-	//     */
-	//    private boolean mostrarLogosUA(){
-	//       
-	//        String value = System.getProperty("es.caib.rolsac.logos");
-	//        return !((value == null) || value.equals("N"));
-	//    }
-
 	@RequestMapping(value = "/esborrar.do", method = POST)
 	public @ResponseBody IdNomDTO esborrarUniAdm(HttpServletRequest request) {
 
@@ -983,14 +934,14 @@ public class UnitatAdmBackController extends PantallaBaseController {
 
 			UnidadAdministrativaDelegate unidadAdministrativaDelegate = DelegateUtil.getUADelegate();
 
-			if (!hayMicrositesUA(id)) {
+			if ( !hayMicrositesUA(id) ) {
 				UnidadAdministrativa unitatAdministrativa = unidadAdministrativaDelegate.consultarUnidadAdministrativa(id);
 
 				// Validamos que se pueda eliminar la UA. Se podr� eliminar si no tiene elementos relacionados. A excepci�n de 
 				// usuarios y edificios.
 				boolean esBorrable = validarPermisosEliminacionUA(unitatAdministrativa,unidadAdministrativaDelegate);
 
-				if (!esBorrable )
+				if ( !esBorrable )
 					return new IdNomDTO(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()));
 
 				String errorElementosRelacionados = validarElementosRelacionados(unitatAdministrativa);
@@ -1011,8 +962,11 @@ public class UnitatAdmBackController extends PantallaBaseController {
 
 				}
 
-			} else 
-				return new IdNomDTO(id, messageSource.getMessage("unitatadm.esborrat.incorrecte.microsites", null, request.getLocale()));	    	
+			} else {
+			
+				return new IdNomDTO(id, messageSource.getMessage("unitatadm.esborrat.incorrecte.microsites", null, request.getLocale()));
+			
+			}
 
 		} catch (DelegateException dEx) {
 
@@ -1026,8 +980,9 @@ public class UnitatAdmBackController extends PantallaBaseController {
 
 		}
 
-		request.getSession().setAttribute("unidadAdministrativa", null);	    
-		return new IdNomDTO(id, messageSource.getMessage("unitatadm.esborrat.correcte", null, request.getLocale()) );	
+		request.getSession().setAttribute("unidadAdministrativa", null);
+		
+		return new IdNomDTO(id, messageSource.getMessage("unitatadm.esborrat.correcte", null, request.getLocale()));	
 
 	}
 
@@ -1348,7 +1303,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	 * @return boolean
 	 */
 	// TODO: averiguar hasta cuándo se ha de devolver false y dejar constancia de la explicación en el código.
-	private boolean hayMicrositesUA(Long idua){
+	private boolean hayMicrositesUA(Long idua) {
 		//    	boolean retorno=false;
 		//    	try {
 		//	    	String value = System.getProperty("es.caib.rolsac.microsites");
@@ -1542,74 +1497,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 
 	}
 
-
-	/**
-	 * A partir de una lista de la entidad UnidadMateria, borra aquellos elementos que ya no pertenecer�n
-	 * a ella, seg�n los c�digos de Materia pasados por par�metro. Si la lista de c�digos est� vac�a, se 
-	 * borrar�n todas las materias de la UA. 
-	 */
-	private void borrarUnidadesMateriaObsoletas(UnidadAdministrativa unidadAdministrativa, String[] codigosMateriasNuevas) throws DelegateException {
-
-		UnidadMateriaDelegate unidadMateriaDelegate = DelegateUtil.getUnidadMateriaDelegate();
-		Set<UnidadMateria> listaUnidadMateria = unidadAdministrativa.getUnidadesMaterias();			
-		List<Long> listaIdUnidadMateriaObsoleta = new ArrayList<Long>();
-
-		if ( !"".equals(codigosMateriasNuevas[0]) ) {
-			for ( UnidadMateria unidadMateria : listaUnidadMateria ) {
-
-				Materia materia = unidadMateria.getMateria();
-				int totalMateriasNuevas = codigosMateriasNuevas.length;
-
-				int i = 0;
-				while ( i < totalMateriasNuevas && ( !materia.getId().equals(new Long(codigosMateriasNuevas[i])) ) ) 
-					i++;
-
-				//Si la materia no est� entre los codigos nuevos, significa que ha sido eliminada
-				//y, por tanto, la borraremos
-				if ( i == totalMateriasNuevas  ) 
-					listaIdUnidadMateriaObsoleta.add(new Long(unidadMateria.getId()));
-
-			}
-
-			//Si la lista de c�digos est� vac�a, significar� que hay que borrar todas las materias de la UA
-		} else {
-			for ( UnidadMateria unidadMateria : listaUnidadMateria ) 
-				listaIdUnidadMateriaObsoleta.add(new Long(unidadMateria.getId()));
-		}
-
-		for ( Long id : listaIdUnidadMateriaObsoleta ) 
-			unidadMateriaDelegate.borrarUnidadMateria( id );
-
-	}
-
-	/**
-	 * Ordena un treemap segun el key
-	 * 
-	 */
-	// TODO: ¿se puede borrar?
-	private TreeMap ordenarArbolSecciones(TreeMap arbolSecciones) {
-
-		TreeMap newtreesecciones = new TreeMap( new TreeOrdenSeccionComparator() );
-		for( Iterator it = arbolSecciones.keySet().iterator(); it.hasNext(); ) {
-			String key = (String)it.next();
-
-			//Eliminamos el código html que pueda haber en el nombre de la secci�n.
-			key = key.split("#")[0] + "#" + (key.split("#")[1]).replaceAll("\\<.*?>", "");
-
-			//Obtenemos el orden de la secci�n de cualquier FichaUA de la secci�n actual
-			//para reordenar el TreeMap original
-			if (arbolSecciones.get(key) != null){
-				int orden = ((ArrayList<FichaUA>) arbolSecciones.get(key)).get(0).getOrdenseccion();	            
-				newtreesecciones.put(orden+"#"+key, arbolSecciones.get(key));	            
-				//La lista de fichasUA se devolverá ordenada según su campo "orden"
-				Collections.sort( (ArrayList<FichaUA>) arbolSecciones.get(key) );	            
-			}	    	
-		}
-
-		return newtreesecciones;
-
-	}	
-
 	/**
 	 * Retorna una cadena que canvia les vocals amb accent o di�resi 
 	 * per vocals sense aquestes (emprat per cercar registres coincidents 
@@ -1636,19 +1523,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	private boolean isModuloModificado(String modulo, Map<String, String> valoresForm) {
 		return "1".equals(valoresForm.get(modulo));
 	}
-
-	/**
-	 * Devuelve true si ha habido algun cambio en la seccion.
-	 * 
-	 * @param seccionId
-	 * @param valoresForm
-	 * @return boolean
-	 */
-	// TODO: ¿se puede borrar?
-	private boolean isSeccionModificada(long seccionId, Map<String, String> valoresForm) {
-		return "1".equals(valoresForm.get("seccio_modificada_" + seccionId));
-	}
-
 
 	@RequestMapping(value = "/traduir.do")
 	public @ResponseBody Map<String, Object> traduir(HttpServletRequest request)
@@ -1799,6 +1673,83 @@ public class UnitatAdmBackController extends PantallaBaseController {
 
 		return resultats;
 
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/guardarMateriasRelacionadas.do")
+	public @ResponseBody IdNomDTO guardarMateriasRelacionadas(Long id, Long[] elementos, HttpSession session, HttpServletRequest request) {
+		
+		IdNomDTO result = null;
+		
+		try {
+			
+			UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+			UnidadAdministrativa ua = uaDelegate.consultarUnidadAdministrativaSinFichas(id);
+			
+			UnidadMateriaDelegate uaMateriaDelegate = DelegateUtil.getUnidadMateriaDelegate();
+						
+			Set<UnidadMateria> unidadesMateria = ua.getUnidadesMaterias();
+			Iterator<UnidadMateria> it = unidadesMateria.iterator();
+			
+			// Borramos todas las anteriores materias relacionadas con la UA.
+			while ( it.hasNext() ) {
+				
+				UnidadMateria uam = it.next();
+				if ( uam != null )
+					uaMateriaDelegate.borrarUnidadMateria(uam.getId());
+				
+			}
+			
+			// Creamos y obtenemos las actuales.
+			Set<UnidadMateria> setUnidadesMateria = new HashSet<UnidadMateria>();
+			
+			if ( elementos != null ) {
+				
+				MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
+				
+				for ( int i = 0; i < elementos.length; i++ ) {
+					
+					if ( elementos[i] != null ) {
+					
+						UnidadMateria uam = new UnidadMateria();
+						Materia materia = materiaDelegate.obtenerMateria(elementos[i]);
+						
+						uaMateriaDelegate.grabarUnidadMateria(uam, ua.getId(), materia.getId());
+						
+						setUnidadesMateria.add(uam);
+					
+					}
+					
+				}
+				
+			}
+			
+			// Las asociamos a la UA.
+			ua.setUnidadesMaterias(setUnidadesMateria);
+			
+			crearOActualizarUnitatAdministrativa(
+				ua, 
+				ua.getPadre() != null ? ua.getPadre().getId() : null
+			);
+			
+			String ok = messageSource.getMessage("fetVital.guardat.correcte", null, request.getLocale());
+			result = new IdNomDTO(ua.getId(), ok);
+
+		} catch (DelegateException dEx) {
+			
+			if (dEx.isSecurityException()) {
+				String error = messageSource.getMessage("error.permisos", null, request.getLocale());
+				result = new IdNomDTO(-1l, error);
+			} else {
+				String error = messageSource.getMessage("error.altres", null, request.getLocale());
+				result = new IdNomDTO(-2l, error);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+			}
+			
+		}
+
+		return result;
+		
 	}
 
 }

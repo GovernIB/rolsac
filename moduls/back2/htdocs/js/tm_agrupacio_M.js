@@ -303,6 +303,11 @@ function CDetall() {
 		if (debug)
 			console.log("Entrando en CDetall.iniciar");
 		
+		// Desactivamos que al cambiar un valor en este desplegable la vista se marque como modificada.
+		// Esto se hace de forma genérica para elementos de los formularios en detall_base.js, de este modo:
+		// 		jQuery("#" + ids.form + " input,#" + ids.form + " select,#" + ids.form + " textarea").bind("change", function() { that.modificado(); });
+		jQuery('#item_materia_relacionada').unbind('change');
+		
 		// idioma
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {
 			

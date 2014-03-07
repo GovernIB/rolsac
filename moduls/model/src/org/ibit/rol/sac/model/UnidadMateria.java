@@ -9,9 +9,12 @@ package org.ibit.rol.sac.model;
  */
 public class UnidadMateria extends Traducible {
 
-    private Long id;
+	private static final long serialVersionUID = 1L;
 
+	private Long id;
     private String unidadPrincipal;
+    private UnidadAdministrativa unidad;
+    private Materia materia;
     
     public Long getId() {
         return id;
@@ -21,8 +24,6 @@ public class UnidadMateria extends Traducible {
         this.id = id;
     }
 
-    private Materia materia;
-
     public Materia getMateria() {
         return materia;
     }
@@ -30,8 +31,6 @@ public class UnidadMateria extends Traducible {
     public void setMateria(Materia materia) {
         this.materia = materia;
     }
-
-    private UnidadAdministrativa unidad;
 
     public UnidadAdministrativa getUnidad() {
         return unidad;
@@ -48,4 +47,5 @@ public class UnidadMateria extends Traducible {
 	public void setUnidadPrincipal(String unidadPrincipal) {
 		this.unidadPrincipal = unidadPrincipal;
 	}
+	
 }

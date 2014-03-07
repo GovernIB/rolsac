@@ -745,7 +745,14 @@
                                 <div class="listaOrdenable"></div>
                                 <div class="btnGenerico">
                                     <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='unitatadm.formulari.materies.gestiona'/></span></span></a>                 
-                                </div>                          
+                                </div>
+                                <p style="clear: both; margin-bottom: 10px;"/><!-- Separador -->
+	                            <div class="btnGenerico">
+	                                <a id="btnGuardar_materias" href="javascript:;" class="btn guarda important lista-simple" 
+	                            			action="<c:url value="/unitatadm/guardarMateriasRelacionadas.do" />">
+	                           			<span><span><spring:message code='boto.guarda'/></span></span>
+	                            	</a>
+	                            </div>                          
                             </div>                          
                             <div class="llistat">                                       
                                 <ul>                                                        
@@ -1757,6 +1764,7 @@
     <script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/jquery.ui.datepicker-ca.js'/>"></script>  
     <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/js/lista_ajax.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/unidades_hijas.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/modul_materies.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/modul_seccions.js'/>"></script>
