@@ -15,9 +15,11 @@
 <script type="text/javascript" src="<c:url value='/js/tiny_mce/jquery.tinymce.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/usuaris.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/lista_ajax.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_unitats_adminstratives.js'/>"></script>
 
 <script type="text/javascript">
+
     var pagLlistat = '<c:url value="/usuaris/llistat.do" />';
     var pagDetall = '<c:url value="/usuaris/pagDetall.do" />';
     var pagGuardar = '<c:url value="/usuaris/guardar.do" />';
@@ -380,7 +382,7 @@
             </div>
             <!-- /modul -->
             <!-- modul -->
-            <div class="modul invisible">
+            <div class="modul invisible" id="modul_unitats_administratives">
                 <input type="hidden" id="llistaUnitatsAdministratives" name="unitatsAdministratives" value=""/>                     
                 <fieldset>                                  
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
@@ -399,6 +401,13 @@
                                         <span><span><spring:message code='boto.afegeixUnitatAdminsitrativa'/></span></span>
                                     </a>
                                 </div>
+                                <p style="clear: both; margin-bottom: 10px;"/><!-- Separador -->
+	                            <div class="btnGenerico">
+	                                <a id="btnGuardar_unidades_administrativas" href="javascript:;" class="btn guarda important lista-simple" 
+	                            			action="<c:url value="/usuaris/guardarUnidadesRelacionadas.do" />">
+	                           			<span><span><spring:message code='boto.guarda'/></span></span>
+	                            	</a>
+	                            </div>
                             </div>                                  
                         </div>
                         <!-- /modulUnitatAdministrativa -->                                 

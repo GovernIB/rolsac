@@ -29,7 +29,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 
 @Controller
@@ -40,6 +39,7 @@ public class UsuarisController extends PantallaBaseController {
 	
     @RequestMapping(value = "/usuaris.do")
     public String pantallaUsuaris(Map<String, Object> model, HttpServletRequest request) {
+    	
     	model.put("menu", 2);
 		model.put("submenu", "layout/submenu/submenuUsuaris.jsp");
         
@@ -50,10 +50,11 @@ public class UsuarisController extends PantallaBaseController {
         	model.put("error", "permisos");
         }
 
-		loadIndexModel (model, request);	
+		loadIndexModel (model, request);
+		
         return "index";
+        
     }
-
     
     @RequestMapping(value = "/llistat.do")
     public @ResponseBody Map<String, Object> llistatUsuaris(HttpServletRequest request, HttpSession session) {
@@ -102,23 +103,24 @@ public class UsuarisController extends PantallaBaseController {
     		}
     		
     	} catch (DelegateException dEx) {
+    		
     		if (dEx.isSecurityException()) {
     			log.error("Error de permisos: " + ExceptionUtils.getStackTrace(dEx));
     		} else {
     			log.error("Error: " + ExceptionUtils.getStackTrace(dEx));
     		}
+    		
     	}
     	
     	resultats.put("total", llistaUsuarisDTO.size());
     	resultats.put("nodes", llistaUsuarisDTO);
     	
     	return resultats;
+    	
     }
     
-    
     @RequestMapping(value = "/pagDetall.do")
-    public @ResponseBody Map<String, Object> recuperaDetall(Long id, HttpServletRequest request)
-    {
+    public @ResponseBody Map<String, Object> recuperaDetall(Long id, HttpServletRequest request) {
     	
     	Map<String, Object> resultats = new HashMap<String, Object>();
     	
@@ -136,16 +138,18 @@ public class UsuarisController extends PantallaBaseController {
     		resultats.put("item_perfil", usuari.getPerfil());
     		
     	} catch (DelegateException dEx) {
+    		
     		log.error(ExceptionUtils.getStackTrace(dEx));
     		if (dEx.isSecurityException())
     			resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
     		else
     			resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+    		
     	}
     	
     	return resultats;
+    	
     }
-    
     
     @RequestMapping(value = "/modulos.do")
    	public @ResponseBody Map<String, Object> recuperaModulos(Long id, HttpServletRequest request) {
@@ -158,22 +162,31 @@ public class UsuarisController extends PantallaBaseController {
     		Usuario usuari = usuariDelegate.obtenerUsuario(id);
    			
    			if (usuari.getUnidadesAdministrativas() != null) {
+   				
     			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
     			Map<String, Object> uaDTO;
     			List<Map<String, Object>> llistaUAs = new ArrayList<Map<String, Object>>();
     			
     			Iterator<UnidadAdministrativa> uasIterator = usuari.getUnidadesAdministrativas().iterator();
     			while (uasIterator.hasNext()) {
+    				
     				UnidadAdministrativa ua = uasIterator.next();
-    				uaDTO = new HashMap<String, Object>(2);
+    				uaDTO = new HashMap<String, Object>();
     				uaDTO.put("id", ua.getId());
     				uaDTO.put("nombre", ua.getNombreUnidadAdministrativa(lang));
+    				uaDTO.put("idMainItem", id);
+    				uaDTO.put("idRelatedItem", ua.getId());
+    				
     				llistaUAs.add(uaDTO);
+    				
     			}
+    			
     			resultats.put("uas", llistaUAs);
     			
     		} else {
+    			
     			resultats.put("uas", null);
+    			
     		}
    			
    		} catch (DelegateException dEx) {
@@ -192,43 +205,49 @@ public class UsuarisController extends PantallaBaseController {
    		
    	}
     
-    
     @RequestMapping(value = "/esborrarUsuari.do", method = POST)
 	public @ResponseBody IdNomDTO esborrarUsuaris(HttpServletRequest request) {
 		IdNomDTO resultatStatus = new IdNomDTO();
 
 		try {
+			
 			Long id = new Long(request.getParameter("id"));
 			UsuarioDelegate usuarisDelegate = DelegateUtil.getUsuarioDelegate();
 			usuarisDelegate.borrarUsuario(id);
 
 			resultatStatus.setId(1l);
 			resultatStatus.setNom("correcte");
+			
 		} catch (DelegateException dEx) {
+			
 			if (dEx.isSecurityException()) {
 				resultatStatus.setId(-1l);
 			} else {
 				resultatStatus.setId(-2l);
 				log.error(ExceptionUtils.getStackTrace(dEx));
 			}
+			
 		}
 
 		return resultatStatus;
+		
 	}
-
     
     @RequestMapping(value = "/guardar.do", method = POST)
-	public @ResponseBody IdNomDTO guardarUsuari(HttpSession session, HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardar(HttpSession session, HttpServletRequest request) {
 
     	IdNomDTO result = null;
 		String error = null;
 
 		try {
+			
 		    if (StringUtils.isBlank(request.getParameter("item_nom")) || 
                     StringUtils.isBlank(request.getParameter("item_username")) ||
                     StringUtils.isBlank(request.getParameter("item_password")) ||
                     StringUtils.isBlank(request.getParameter("item_perfil")) ) {
+		    	
                 throw new Exception(messageSource.getMessage("error.falten_camps", null, request.getLocale()));
+                
             }
 		    
 			UsuarioDelegate usuariDelegate = DelegateUtil.getUsuarioDelegate();
@@ -236,6 +255,7 @@ public class UsuarisController extends PantallaBaseController {
 			Usuario usuariOld;			
 			
 			boolean edicion;
+			
 			try {
 				Long id = Long.parseLong(request.getParameter("item_id"));
 				usuariOld = usuariDelegate.obtenerUsuario(id);
@@ -253,44 +273,14 @@ public class UsuarisController extends PantallaBaseController {
 			usuari.setPerfil(request.getParameter("item_perfil"));
 			usuari.setEmail(request.getParameter("item_email"));
 			usuari.setObservaciones(request.getParameter("item_observacions"));
-			
-            // UAs
-			/* Para hacer menos accesos a BBDD se comprueba si es edicion o no. 
-             * En el primer caso es bastante probable que se repitan la mayoria de UAs.
-             */
-			if (request.getParameter("unitatsAdministratives") != null && !"".equals(request.getParameter("unitatsAdministratives"))){
-				UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
-                Set<UnidadAdministrativa> uasNoves = new HashSet<UnidadAdministrativa>();
-                String[] codisUAsNoves = request.getParameter("unitatsAdministratives").split(",");
-                
-                if (edicion){
-                    for (int i = 0; i<codisUAsNoves.length; i++){
-                    	for (UnidadAdministrativa ua: (Set<UnidadAdministrativa>) usuariOld.getUnidadesAdministrativas()){
-                          if(ua.getId().equals(Long.valueOf(codisUAsNoves[i]))) { // ua ya existente
-                              uasNoves.add(ua);
-                              codisUAsNoves[i] = null;
-                              break;
-                          }
-                      }                            
-                    }                         
-                }                    
-                
-                for (String codiUA: codisUAsNoves){
-                    if (codiUA != null){
-                    	uasNoves.add(uaDelegate.obtenerUnidadAdministrativa(ParseUtil.parseLong(codiUA)));
-                    }                        
-                }
-                
-                usuari.setUnidadesAdministrativas(uasNoves);                                                 
-            }
-            // fin UAs
-            
-            
+			            
 			usuariDelegate.grabarUsuario(usuari);
+			
 			String ok = messageSource.getMessage("usuari.guardat.correcte", null, request.getLocale());
 			result = new IdNomDTO(usuari.getId(), ok);
 
 		} catch (DelegateException dEx) {
+			
 			if (dEx.isSecurityException()) {
 				error = messageSource.getMessage("error.permisos", null, request.getLocale());
 				result = new IdNomDTO(-1l, error);
@@ -299,11 +289,70 @@ public class UsuarisController extends PantallaBaseController {
 				result = new IdNomDTO(-2l, error);
 				log.error(ExceptionUtils.getStackTrace(dEx));
 			}
+			
 		} catch (Exception e) {
+			
             result = new IdNomDTO(-3l, e.getMessage());
+            
         }
 
 		return result;
+		
+	}
+    
+    @SuppressWarnings("unchecked")
+	@RequestMapping(value = "/guardarUnidadesRelacionadas.do")
+	public @ResponseBody IdNomDTO guardarUnidadesRelacionadas(Long id, Long[] elementos, HttpSession session, HttpServletRequest request) {
+		
+		IdNomDTO result = null;
+		
+		try {
+						
+			UsuarioDelegate usuarioDelegate = DelegateUtil.getUsuarioDelegate();
+			Usuario usuario = usuarioDelegate.obtenerUsuario(id);
+									
+			// Procesamos los elementos actuales.
+			if ( elementos != null ) {
+				
+				UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+				Set<UnidadAdministrativa> uasNuevas = new HashSet<UnidadAdministrativa>();
+								
+				for ( int i = 0; i < elementos.length; i++ ) {
+					
+					if ( elementos[i] != null ) {
+						
+						UnidadAdministrativa ua = uaDelegate.consultarUnidadAdministrativaSinFichas(elementos[i]);
+						uasNuevas.add(ua);
+						
+					}
+					
+				}
+				
+				usuario.setUnidadesAdministrativas(uasNuevas);
+				
+			}
+						
+			usuarioDelegate.grabarUsuario(usuario);
+						
+			String ok = messageSource.getMessage("usuari.guardat.correcte", null, request.getLocale());
+			result = new IdNomDTO(usuario.getId(), ok);
+
+		} catch (DelegateException dEx) {
+			
+			if (dEx.isSecurityException()) {
+				String error = messageSource.getMessage("error.permisos", null, request.getLocale());
+				result = new IdNomDTO(-1l, error);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+			} else {
+				String error = messageSource.getMessage("error.altres", null, request.getLocale());
+				result = new IdNomDTO(-2l, error);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+			}
+			
+		}
+
+		return result;
+		
 	}
     
 }
