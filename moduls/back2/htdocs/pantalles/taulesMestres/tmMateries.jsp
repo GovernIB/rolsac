@@ -9,6 +9,7 @@
 <script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
 
 <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/lista_ajax.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/tm_materia.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_icones.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_estadistiques.js'/>"></script>
@@ -473,7 +474,7 @@
             </div>
             <!-- /modul -->
             <!-- modul -->
-            <div class="modul invisible">
+            <div class="modul invisible" id="modul_unitats_administratives">
                 <input type="hidden" id="llistaUnitatsAdministratives" name="unitatsAdministratives" value=""/>                     
                 <fieldset>                                  
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
@@ -492,6 +493,13 @@
                                         <span><span><spring:message code='boto.afegeixUnitatAdminsitrativa'/></span></span>
                                     </a>
                                 </div>
+                                <p style="clear: both; margin-bottom: 10px;"/><!-- Separador -->
+	                            <div class="btnGenerico">
+	                                <a id="btnGuardar_unidades_administrativas" href="javascript:;" class="btn guarda important lista-simple" 
+	                            			action="<c:url value="/materies/guardarUnidadesRelacionadas.do" />">
+	                           			<span><span><spring:message code='boto.guarda'/></span></span>
+	                            	</a>
+	                            </div>
                             </div>                                  
                         </div>
                         <!-- /modulUnitatAdministrativa -->                                 

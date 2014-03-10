@@ -25,16 +25,16 @@
 
     <script type="text/javascript">
     <!--    
-        var ex=new Array;
-        var max=1000
-        var nivell=0
+        var ex = new Array;
+        var max = 1000
+        var nivell = 0
 
         function carregar(id, nombre){
 
             <c:choose>
                 <c:when test="${not empty id_input}">
                     $("#" + "<c:out value='${id_hidden}'/>", window.top.document).val(id);
-                    $("#" + "<c:out value='${id_input}'/>",window.top.document).val(nombre);
+                    $("#" + "<c:out value='${id_input}'/>", window.top.document).val(nombre);
                     
                     // Al disparar eventos hay que hacerlo directamente desde la ventana a la que corresponden.
                     window.top.jQuery("#" + "<c:out value='${id_hidden}'/>").change();
@@ -49,10 +49,9 @@
                     window.top.ModulUnitatAdministrativa.inicializarUnidadesAdministrativas();
                 </c:otherwise>
             </c:choose>
-            
-            window.top.Detall.modificado();
 
             borrarPopUp('popUA');
+            
         }
 
         function init_ex(level,opened,descripcion,carpeta,codi){

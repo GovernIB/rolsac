@@ -752,10 +752,10 @@
 	                            			action="<c:url value="/unitatadm/guardarMateriasRelacionadas.do" />">
 	                           			<span><span><spring:message code='boto.guarda'/></span></span>
 	                            	</a>
-	                            </div>                          
-                            </div>                          
-                            <div class="llistat">                                       
-                                <ul>                                                        
+	                            </div>
+                            </div>
+                            <div class="llistat">
+                                <ul>
                                     <c:forEach items="${llistaMateries}" var="materia" varStatus="i">
                                         <c:choose>
                                             <c:when test="${(i.count) % 2 == 0}">

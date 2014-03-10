@@ -2,6 +2,19 @@
 
 $(document).ready(function() {
 	
+	// Listener para guardado de módulos laterales vía AJAX.
+	jQuery(".lista-simple").click(function() {
+		
+		var element = $(this).parent().parent().find("li");
+		var id = $('#item_id').val();
+		var url = $(this).attr('action');
+		
+		ListaSimple.guardar(element, url, id);
+		
+	});
+	
+	ListaSimple = new CListaSimple();
+	
 	// elements
 	opcions_elm = $("#opcions");
 	escriptori_elm = $("#escriptori");
@@ -45,6 +58,60 @@ $(document).ready(function() {
 	
 });
 
+/**
+ * (amartin) Explicación de extensión de clase:
+ * 
+ * Necesitamos extender la clase ListaSimple ya que el módulo lateral de unidades administrativas (modul_unitats_administratives.js)
+ * dentro de la gestión de materias no sólo consta de valor para el registro principal (materia => main-item-id) y para sus N UAs
+ * asociadas (ua => related-item-id), sino que también hay un tercer campo, que es el checkbox de UA principal para esa materia.
+ * Con la extensión de la clase sobreescribimos los métodos para realizar el guardado y para obtener el dato adicional de UA principal.
+ */
+function CListaSimple() {
+	
+	// Activa mensajes de debug.
+	var debug = false;
+
+	this.extend = ListaSimple;
+	this.extend();
+	
+	var that = this;
+	
+	this._getFilters = this.getFilters;
+	
+	this.getFilters = function(elements, id) {
+		
+		if (debug)
+			console.log("Entrando en CListaSimple.getFilters");
+		
+		var filters = this._getFilters(elements, id);
+		
+		if (elements.length > 0) {
+			
+			elements.each(function() {
+				
+				// Obtenemos el radiobutton de cada UA y comprobamos si está marcado.
+				if ( $(this).find("input[type='radio']").length == 1 ) {
+				
+					var radio = $(this).find("input[type='radio']");
+					
+					// Si está seleccionado, lo pasamos por parámetro
+					if ( radio.is(':checked') )
+						filters += "&itemUAPrincipal=" + radio.val();
+				
+				}
+				
+			});
+						
+		}
+				
+		if (debug)
+			console.log("Saliendo de CListaSimple.getFilters");
+		
+		return filters;
+				
+	};
+	
+};
 
 //idioma
 var pag_idioma = $("html").attr("lang");
@@ -60,16 +127,30 @@ var itemID_ultim = 0;
 
 function CLlistat() {
 	
+	// Activa mensajes de debug.
+	var debug = false;
+	
 	this.extend = ListadoBase;
 	this.extend();
 
 	this.iniciar = function() {
+		
+		if (debug)
+			console.log("Entrando en CLlistat.iniciar");
+		
 		this.carregar({});
-	}
+		
+		if (debug)
+			console.log("Saliendo de CLlistat.iniciar");
+		
+	};
 
-	this.finCargaListado = function(opcions,data) {
+	this.finCargaListado = function(opcions, data) {
+		
+		if (debug)
+			console.log("Entrando en CLlistat.finCargaListado");
 
-		resultats_total = parseInt(data.total,10);
+		resultats_total = parseInt(data.total, 10);
 
 		if (resultats_total > 0) {
 
@@ -189,10 +270,16 @@ function CLlistat() {
 			
 		});
 		
-	}
-
+		if (debug)
+			console.log("Saliendo de CLlistat.finCargaListado");
+		
+	};
 	
 	this.carregar = function(opcions) {
+		
+		if (debug)
+			console.log("Entrando en CLlistat.carregar");
+		
 		// opcions: cercador (si, no), ajaxPag (integer), ordreTipus (ASC, DESC), ordreCamp (tipus, carrec, tractament)
 
 		dataVars = "";
@@ -223,7 +310,6 @@ function CLlistat() {
 		// ordreCamp
 		if (typeof opcions.ordreCamp != "undefined")
 			ordreCamp_elm.val(opcions.ordreCamp);
-
 		
 		// paginacio
 		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag, 10) : multipagina.getPaginaActual();
@@ -252,7 +338,11 @@ function CLlistat() {
 			}
 		});
 		
-	}
+		if (debug)
+			console.log("Saliendo de CLlistat.carregar");
+		
+	};
+	
 };
 
 //items array
@@ -260,6 +350,9 @@ var Items_arr = new Array();
 
 //detall
 function CDetall() {
+	
+	// Activa mensajes de debug.
+	var debug = false;
 	
 	this.extend = DetallBase;
 	this.extend();
@@ -270,6 +363,9 @@ function CDetall() {
 	this.tipusEstadistica = 'materia';
 
 	this.iniciar = function() {
+		
+		if (debug)
+			console.log("Entrando en CDetall.iniciar");
 		
 		// idioma
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {
@@ -290,6 +386,7 @@ function CDetall() {
 			var div_idiomes_elm = escriptori_detall_elm.find("div.idiomes:first");
 			div_idiomes_elm.find("div." + a_primer_elm.attr("class")).addClass("seleccionat");
 			ul_idiomes_elm.bind("click", that.idioma);
+			
 		}
 
 		// Sincronizar campos sin idioma en zona multi-idioma.   
@@ -316,13 +413,27 @@ function CDetall() {
 		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos
 		this.guarda = this.guarda_upload;
 		
-	}
+		if (debug)
+			console.log("Saliendo de CDetall.iniciar");
+		
+	};
 
 	this.traduirWrapper = function () {
+		
+		if (debug)
+			console.log("Entrando en CDetall.traduirWrapper");
+		
 		that.traduir(pagTraduirMateria, CAMPOS_TRADUCTOR_MATERIA, DATOS_TRADUCIDOS_MATERIA);
-	}
+		
+		if (debug)
+			console.log("Saliendo de CDetall.traduirWrapper");
+		
+	};
 
 	this.nou = function() {
+		
+		if (debug)
+			console.log("Entrando en CDetall.nou");
 		
 		//Ocultar paneles y campos
 		jQuery("#modul_icones").hide();
@@ -362,15 +473,25 @@ function CDetall() {
 
 		this.modificado(false);
 		
-	}		
-
+		if (debug)
+			console.log("Saliendo de CDetall.nou");
+		
+	};
 	
 	// Guardar haciendo upload de archivos.
 	this.guarda_upload = function() {
+		
+		if (debug)
+			console.log("Entrando en CDetall.guarda_upload");
 
 		// Validamos el formulario
 		if (!that.formulariValid()) {
+			
+			if (debug)
+				console.log("Saliendo de CDetall.guarda_upload");
+			
 			return false;
+		
 		}
 
 		// Guardamos la relación con las UAs.
@@ -394,12 +515,18 @@ function CDetall() {
 			}
 
 		});
+		
+		if (debug)
+			console.log("Saliendo de CDetall.guarda_upload");
 
 		return false;
 		
-	}
+	};
 
 	this.pintar = function(dades) {
+		
+		if (debug)
+			console.log("Entrando en CDetall.pintar");
 		
 		escriptori_detall_elm.find("a.elimina").show().end().find("h2:first").text(txtDetallTitol);
 
@@ -454,10 +581,15 @@ function CDetall() {
 
 		this.modificado(false);
 		
-	}
-
+		if (debug)
+			console.log("Saliendo de CDetall.pintar");
+		
+	};
 
 	this.elimina = function() {
+		
+		if (debug)
+			console.log("Entrando en CDetall.elimina");
 
 		// missatge
 		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
@@ -497,14 +629,21 @@ function CDetall() {
 			}
 			
 		});
-	}
-
+		
+		if (debug)
+			console.log("Saliendo de CDetall.elimina");
+		
+	};
 	
 	this.pintarModulos = function(dades) {
+		
+		if (debug)
+			console.log("Entrando en CDetall.pintarModulos");
 
 		ModulIcones.inicializarIcones(dades.icones);
 		ModulUnitatAdministrativa.inicializarUnidadesAdministrativas(dades.uas);
 
+		// Añadimos opción de marcar UA principal en el módulo lateral de UAs de este mantenimiento.
 		$('.modulUnitatAdministratives .listaOrdenable li div.unitatAdministrativa').each(function() {
 
 			var inputIdUA = $(this).find('.unitatAdministrativa_id:first');
@@ -519,7 +658,10 @@ function CDetall() {
 			$(this).append(inputRadio);
 
 		});
+		
+		if (debug)
+			console.log("Saliendo de CDetall.pintarModulos");
 
-	}
+	};
 
 };

@@ -75,6 +75,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 	jQuery("#" + ids.btnVolver).bind("click", function() { that.vuelve(); });
 
 	//jQuery("#"+ids.btnGuardar).parent().addClass("off");
+	
 	jQuery("#" + ids.form + " input,#" + ids.form + " select,#" + ids.form + " textarea").bind("change", function() { that.modificado(); });
 
 	this.idiomas = ["es","ca","en","de","fr"];
@@ -117,7 +118,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 		if (debug)
 			console.log("Saliendo de DetallBase.actualizaEventos");
 		
-	}
+	};
 
 	this.cambiosSinGuardar = function() {
 		
@@ -128,7 +129,8 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 			console.log("Saliendo de DetallBase.cambiosSinGuardar");
 		
 		return !jQuery("#" + ids.btnGuardar).parent().hasClass("off");
-	}
+		
+	};
 
 	this.formulariValid = function() {
 		
@@ -142,7 +144,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 		
 		return formulariComprovar.formComprovacio;
 
-	}
+	};
 
 	this.guardaGenerico = function(dataVars) {
 		
@@ -191,7 +193,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 		if (debug)
 			console.log("Saliendo de DetallBase.guardaGenerico");
 
-	}
+	};
 
 	this.guarda = function(dataVars) {
 		
@@ -203,7 +205,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 		if (debug)
 			console.log("Saliendo de DetallBase.guarda");
 		
-	}
+	};
 
 	this.modificado = function(marcar) {
 		
@@ -222,7 +224,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 		if (debug)
 			console.log("Saliendo de DetallBase.modificado");
 
-	}
+	};
 
 	this.publica = function() {
 		
@@ -237,7 +239,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 		if (debug)
 			console.log("Saliendo de DetallBase.publica");
 
-	}
+	};
 
 	/**
 	 * Ocultamos el formulario y volvemos a mostrar el contenido general.  
@@ -256,7 +258,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 		if (debug)
 			console.log("Saliendo de DetallBase.cierra");
 
-	}
+	};
 
 	/**
 	 * Vuelve de la ficha al listado.
@@ -288,7 +290,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 		if (debug)
 			console.log("Saliendo de DetallBase.vuelve");
 
-	}
+	};
 
 	this.ocultarModulos = function(selector) {
 		
@@ -301,7 +303,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 		if (debug)
 			console.log("Saliendo de DetallBase.ocultarModulos");
 
-	}
+	};
 
 	/**
 	 * Inicia la eliminación de un item confirmando la operación.
@@ -318,7 +320,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 		if (debug)
 			console.log("Saliendo de DetallBase.eliminar");
 
-	}
+	};
 
 	this.carregar = function(itemID) {
 		
@@ -381,7 +383,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 		if (debug)
 			console.log("Saliendo de DetallBase.carregar");
 
-	}
+	};
 
 	this.recarregar = function(itemId) {
 		
@@ -402,7 +404,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 		if (debug)
 			console.log("Saliendo de DetallBase.recarregar");
 
-	}
+	};
 
 	/**
 	 * @param opcions: id (num); accio (guardar, elimina); dades: json
@@ -434,7 +436,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 		if (debug)
 			console.log("Saliendo de DetallBase.array");
 		
-	}
+	};
 
 	this.idioma = function(e) {
 		
@@ -561,7 +563,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 		if (debug)
 			console.log("Saliendo de DetallBase.idioma");
 
-	}
+	};
 
 	this.previsualitza = function() {
 		
@@ -585,7 +587,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 		if (debug)
 			console.log("Saliendo de DetallBase.previsualitza");
 
-	}
+	};
 
 	this.previsualitzaTorna = function() {
 		
@@ -599,7 +601,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 		if (debug)
 			console.log("Saliendo de DetallBase.previsualitzaTorna");
 
-	}
+	};
 
 	this.traduir = function (url, inputs, datos) {
 		
@@ -622,7 +624,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 
 			// TinyMCE, aún forzando a que escape a entidades numéricas, no contempla el caso del tanto por ciento %.
 			// Toca hacerlo de forma explícita antes de codificar completamente la cadena con encodeURIComponent().
-			texto = texto.replace(/%/g, "&#37;")
+			texto = texto.replace(/%/g, "&#37;");
 			dataVars += and + campo + "=" + encodeURIComponent(texto);
 
 		}
@@ -666,7 +668,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 		if (debug)
 			console.log("Saliendo de DetallBase.traduir");
 
-	}
+	};
 
 	this.cargarModulos = function() {
 		
@@ -699,6 +701,6 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 		if (debug)
 			console.log("Saliendo de DetallBase.cargarModulos");
 
-	}
+	};
 
 }

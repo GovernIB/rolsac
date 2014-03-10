@@ -14,8 +14,10 @@ $(document).ready(function() {
 	
 });
 
-
 function CModulUnitatAdministrativa() {
+	
+	// Activa mensajes de debug.
+	var debug = false;
 	
 	this.extend = ListaOrdenable;
 	this.extend();		
@@ -23,6 +25,9 @@ function CModulUnitatAdministrativa() {
 	var that = this;
 	
 	this.iniciar = function() {
+		
+		if (debug)
+			console.log("Entrando en CModulUnitatAdministrativa.iniciar");
 
         unitatsAdministratives_llistat_elm = escriptori_unitatsAdministratives_elm.find("div.escriptori_items_llistat:first");
 		unitatsAdministratives_cercador_elm = escriptori_unitatsAdministratives_elm.find("div.escriptori_items_cercador:first");
@@ -37,28 +42,46 @@ function CModulUnitatAdministrativa() {
 		escriptori_unitatsAdministratives_elm.find("div.botonera").each(function() {
 			botonera_elm = $(this);		
 		});
-				
-		// unitatsAdministratives_llistat_elm.add(unitatsAdministratives_seleccionades_elm);							
-		
+						
 		// Configuramos la lista ordenable.
 		params = {
 			nombre: "unitatAdministrativa",
 			nodoOrigen: modul_unitatsAdministratives_elm.find(".listaOrdenable"),
 			nodoDestino: modul_unitatsAdministratives_elm.find(".listaOrdenable"),
-			atributos: ["id", "nombre"],	// Campos que queremos que aparezcan en las listas.
+			atributos: [			// Campos que queremos que aparezcan en los elementos de las lista ordenable.
+	            "id", 
+	            "nombre", 
+	            "idRelatedItem", 	// Campo necesario para guardado AJAX genérico de módulos laterales.
+	            "idMainItem"		// Campo necesario para guardado AJAX genérico de módulos laterales.
+            ],
 			multilang: false
-		}
+		};
 		
 		this.configurar(params);
 		
-	}	
+		if (debug)
+			console.log("Saliendo de CModulUnitatAdministrativa.iniciar");
+		
+	};
 			
-	this.nuevo = function() {       
+	this.nuevo = function() {
+		
+		if (debug)
+			console.log("Entrando en CModulUnitatAdministrativa.nuevo");
+		
 		unitatAdm_seleccionats_elm = escriptori_detall_elm.find("div.modulUnitatAdministratives div.seleccionats");
 		unitatAdm_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaUA + ".");
-	}	
 		
-	this.contaSeleccionats = function() {		
+		if (debug)
+			console.log("Saliendo de CModulUnitatAdministrativa.nuevo");
+		
+	};
+		
+	this.contaSeleccionats = function() {
+		
+		if (debug)
+			console.log("Entrando en CModulUnitatAdministrativa.contaSeleccionats");
+		
 		seleccionats_val = modul_unitatsAdministratives_elm.find(".seleccionat").find("li").size();
 		info_elm = modul_unitatsAdministratives_elm.find("p.info:first");
 		
@@ -69,25 +92,40 @@ function CModulUnitatAdministrativa() {
 		} else if (seleccionats_val > 1) {
 			info_elm.html(txtSeleccionades + " <strong>" + seleccionats_val + " " + txtUnitatsAdministratives.toLowerCase() + "</strong>.");						
 		}
-	}
-	
+		
+		if (debug)
+			console.log("Saliendo de CModulUnitatAdministrativa.contaSeleccionats");
+		
+	};
 	
 	this.inicializarUnidadesAdministrativas = function(listaUnidadesAdministrativas) {
+		
+		if (debug)
+			console.log("Entrando en CModulUnitatAdministrativa.inicializarUnidadesAdministrativas");
+		
 		if (typeof listaUnidadesAdministrativas != 'undefined' && listaUnidadesAdministrativas != null && listaUnidadesAdministrativas.length > 0) {
 			modul_unitatsAdministratives_elm.find(".listaOrdenable").empty();
 			that.agregaItems(listaUnidadesAdministrativas, true);
 		}
+		
 		that.contaSeleccionats();
 		
-		modul_unitatsAdministratives_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function(){
+		modul_unitatsAdministratives_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function() {
 			var itemLista = jQuery(this).parents("li:first");
 			that.eliminaItem(itemLista);
-			Detall.modificado();
 		});
-	}
+		
+		if (debug)
+			console.log("Saliendo de CModulUnitatAdministrativa.inicializarUnidadesAdministrativas");
+		
+	};
 	
 	// Devuelve un string con el formato unitatsAdministratives=n1,n2,...,nm donde n son codigos de unitatAdministrativas.
-	this.listaUnidadesAdministrativas = function (){
+	this.listaUnidadesAdministrativas = function () {
+		
+		if (debug)
+			console.log("Entrando en CModulUnitatAdministrativa.listaUnidadesAdministrativas");
+		
 		var listaUnidadesAdministrativas = "";
 		
 		modul_unitatsAdministratives_elm.find("div.listaOrdenable input.unitatAdministrativa_id").each(function() {
@@ -98,8 +136,12 @@ function CModulUnitatAdministrativa() {
 			listaUnidadesAdministrativas = listaUnidadesAdministrativas.slice(0, -1);
 		}
 		
+		if (debug)
+			console.log("Saliendo de CModulUnitatAdministrativa.listaUnidadesAdministrativas");
+		
 		return listaUnidadesAdministrativas;
-	}
+		
+	};
 	
 	/**
 	 * Agrega un item a la lista.
@@ -109,6 +151,9 @@ function CModulUnitatAdministrativa() {
 	 * @return boolean Devuelve true si el item no se encontraba ya en la lista.
 	 */
 	this.agregaItem = function( item ) {
+		
+		if (debug)
+			console.log("Entrando en CModulUnitatAdministrativa.agregaItem");
 				
 		var _this = this;
 		var tamLista = jQuery(params.nodoDestino).filter(":first").find("li").size();		
@@ -128,8 +173,13 @@ function CModulUnitatAdministrativa() {
 					itemYaExiste = true;
 				}			
 				
-			});			
+			});
+			
 		}
+		
+		// Valores necesarios para guardado vía AJAX.
+		item.idMainItem = jQuery('#item_id').val();
+		item.idRelatedItem = item.id;
 		
 		if ( !itemYaExiste ) {
 							
@@ -157,13 +207,19 @@ function CModulUnitatAdministrativa() {
 				}
 				
 			}
+			
+			if (debug)
+				console.log("Saliendo de CModulUnitatAdministrativa.agregaItem");
 						
 			return true;
 			
 		}
 		
+		if (debug)
+			console.log("Saliendo de CModulUnitatAdministrativa.agregaItem");
+		
 		return false;
 		
-	}
+	};
 	
 };

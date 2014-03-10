@@ -28,7 +28,7 @@ function ListaOrdenable() {
 		if (debug)
 			console.log("Saliendo de ListaOrdenable.getIdiomaActivo");
 		
-	}
+	};
 	
 	// TODO amartin: este método al final tendrá que borrarse si todos los módulos laterales se guardan vía AJAX,
 	// ya que se encarga de marcar en azul el botón "GUARDA!" de la vista de detalle de un registro, dando a entender
@@ -45,7 +45,7 @@ function ListaOrdenable() {
 	    if (debug)
 			console.log("Saliendo de ListaOrdenable.modificado");
 	    
-	}
+	};
 	
 	/**
 	 * Replica la ordenación de la lista actual al resto de listas (solo en modo multi-idioma).
@@ -88,7 +88,7 @@ function ListaOrdenable() {
 		if (debug)
 			console.log("Saliendo de ListaOrdenable.actualizaOrden");
 		
-	}
+	};
 		
 	/**
 	 * Obtiene el html de un item de la lista.
@@ -170,7 +170,7 @@ function ListaOrdenable() {
 		
 		return html;
 		
-	}
+	};
 	
 	/**
 	 * Establece los parámetros de configuración.
@@ -192,7 +192,7 @@ function ListaOrdenable() {
 		if (debug)
 			console.log("Saliendo de ListaOrdenable.configurar");
 		
-	}
+	};
 	
 	/**
 	 * Devuelve los parametros de configuracion.
@@ -206,7 +206,8 @@ function ListaOrdenable() {
 			console.log("Saliendo de ListaOrdenable.getConfiguracion");
 		
 		return params;
-	}
+		
+	};
 	
 	/**
 	 * Rellena los inputs "orden" con el orden correspondiente, tanto en la lista origen como en destino.
@@ -247,7 +248,7 @@ function ListaOrdenable() {
 		if (debug)
 			console.log("Saliendo de ListaOrdenable.calculaOrden");
 				
-	}
+	};
 	
 	/**
 	 * Elimina un item de la lista.
@@ -266,7 +267,7 @@ function ListaOrdenable() {
 		if (debug)
 			console.log("Saliendo de ListaOrdenable.eliminaItem");
 		
-	}
+	};
 
 	/**
 	 * Agrega un item a la lista.
@@ -328,7 +329,7 @@ function ListaOrdenable() {
 		
 		return false;
 		
-	}
+	};
 	
 	/**
 	 * Carga un array de items en la lista.
@@ -379,7 +380,7 @@ function ListaOrdenable() {
 		if (debug)
 			console.log("Saliendo de ListaOrdenable.agregaItems");
 		
-	}
+	};
 	
 	/**
 	 * Copia los datos de la lista origen a la de destino.
@@ -467,7 +468,7 @@ function ListaOrdenable() {
 		if (debug)
 			console.log("Saliendo de ListaOrdenable.copiaInicial");
 		
-	}
+	};
 	
 	/**
 	 * Copia los datos de la lista destino a la de origen.
@@ -566,7 +567,7 @@ function ListaOrdenable() {
 		
 		return numItems;
 		
-	}
+	};
 	
 	/**
 	 * btnEliminar es un booleano para indicar si ha de ponerse un boton para eliminar (cruz roja). Es optativo.
@@ -585,6 +586,6 @@ function ListaOrdenable() {
 		if (debug)
 			console.log("Saliendo de ListaOrdenable.finalizar");
 		
-	}
+	};
 	
 }

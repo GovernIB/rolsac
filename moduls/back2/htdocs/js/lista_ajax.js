@@ -59,7 +59,7 @@ function ListaSimple() {
 		
 	};
 	
-	this.getFilters = function(element, id) {
+	this.getFilters = function(elements, id) {
 		
 		if (debug)
 			console.log("Entrando en ListaSimple.getFilters");
@@ -67,9 +67,9 @@ function ListaSimple() {
 		var lista = new Array();
 		var filters = "id=" + id;
 		
-		if (element.length > 0) {
+		if (elements.length > 0) {
 			
-			element.each(function() {
+			elements.each(function() {
 				
 				var value = $(this).attr('related-item-id');
 				lista.push(value);

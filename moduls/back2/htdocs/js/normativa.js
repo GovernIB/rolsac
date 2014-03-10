@@ -89,33 +89,19 @@ function CListaSimple() {
 	
 	var that = this;
 	
-	this._guardar = this.guardar;
 	this._getFilters = this.getFilters;
 	
-	this.guardar = function(element, url, id) {
-		
-		if (debug)
-			console.log("Entrando en CListaSimple.guardar");
-		
-		if ( !(element == null || element == "undefined") )
-			this._guardar(element, url, id);
-		
-		if (debug)
-			console.log("Saliendo de CListaSimple.guardar");
-		
-	}
-	
-	this.getFilters = function(element, id) {
+	this.getFilters = function(elements, id) {
 		
 		if (debug)
 			console.log("Entrando en CListaSimple.getFilters");
 		
 		var lista = new Array();
-		var filters = this._getFilters(element, id);
+		var filters = this._getFilters(elements, id);
 		
-		if (element.length > 0) {
+		if (elements.length > 0) {
 			
-			element.each(function() {
+			elements.each(function() {
 				
 				var value = $(this).find('input.afectacio').val(); // Obtenemos el ID del tipo de afectación.
 				lista.push(value);
@@ -131,7 +117,7 @@ function CListaSimple() {
 		
 		return filters;
 				
-	}
+	};
 	
 };
 
@@ -170,7 +156,7 @@ function CLlistat() {
 		formulariComprovarTB = new FormulariComprovar(FormularioBusquedaTB);
 		formulariComprovarTB.iniciar();
 
-	}
+	};
 
 	this.finCargaListado = function( opcions, data ) {
 
@@ -321,7 +307,7 @@ function CLlistat() {
 
 		});
 
-	}
+	};
 
 	this.carregar = function(opcions) {
 
@@ -399,7 +385,7 @@ function CLlistat() {
 			}
 		});
 
-	}
+	};
 
 	this.busca = function() {
 
@@ -421,7 +407,7 @@ function CLlistat() {
 
 		});
 
-	}
+	};
 
 	// FUNCIONALITAT TRASPAS BOIB
 
@@ -453,12 +439,12 @@ function CLlistat() {
 
 		});
 
-	}
+	};
 
 	// Limpia el formulario de búsqueda.
 	this.limpiaTB = function() {
 		jQuery('#cercadorTB_contingut :input').each(limpiarCampo);
-	}
+	};
 
 	this.buscaTB = function() {
 
@@ -493,7 +479,7 @@ function CLlistat() {
 			});
 		});
 
-	}
+	};
 
 	this.carregarTB = function(opcions) {
 
@@ -546,7 +532,7 @@ function CLlistat() {
 			}
 		});
 
-	}
+	};
 
 	// Cambia de página.
 	this.cambiaPaginaTB = function( pag ) {
@@ -555,8 +541,7 @@ function CLlistat() {
 		pag_Pag = pag;
 		this.anar(pag, that.carregarTB);
 		
-	}
-
+	};
 
 	this.finCargaListadoTB = function( opcions, data ) {
 		
@@ -674,7 +659,6 @@ function CLlistat() {
 			codi_final = "<p class=\"noItems\">" + txtNoHiHaLlistat + ".</p>";
 
 		}
-
 		
 		// animacio
 		dades_elm = resultats_elm.find("div.actiu:first div.dades:first");
@@ -703,8 +687,7 @@ function CLlistat() {
 		if (data.errorMessage)
 			Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.errorMessage + "</p>"});
 
-	}
-
+	};
 	
 	/**
 	 * Carga la ficha de un item del listado.
@@ -716,7 +699,7 @@ function CLlistat() {
 		itemID = jQuery(link).attr("id").split("_")[1];
 		Detall.carregarTB(itemID);
 
-	}
+	};
 
 };
 
@@ -797,7 +780,7 @@ function CDetall() {
 		jQuery('a.esborraArxiu').click().unbind("click").click(function(event) {
 			
 			event.preventDefault();
-			var input = $(this).parent().prev().find('input[type=file]')
+			var input = $(this).parent().prev().find('input[type=file]');
 			var inputId = input.attr('id');
 			input.replaceWith('<input id="' + inputId + '" name="' + inputId + '" type="file" class="nou" />');
 			
@@ -807,7 +790,7 @@ function CDetall() {
 
 	this.traduirWrapper = function () {
 		that.traduir(pagTraduirNormativa, CAMPOS_TRADUCTOR_NORMATIVA, DATOS_TRADUCIDOS_NORMATIVA);
-	}
+	};
 
 	//Sobreescribe el método guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
 	this.guarda_upload = function(e) {
@@ -864,7 +847,7 @@ function CDetall() {
 		
 		return false;		
 
-	},
+	};
 
 	this.tipologia = function(e) {
 
@@ -880,13 +863,13 @@ function CDetall() {
 			
 		}
 
-	}
+	};
 
 	this.dataPublicacio = function(e) {		
 //		if ($(this).val() == "") {
 //		$(this).val(txtImmediat);
 //		}		
-	}
+	};
 	
 	this.activar = 0;
 
@@ -919,7 +902,6 @@ function CDetall() {
 		//Establecer Validación por defecto si el usuario es operador
 		if ( $("#rolusuario").val() == "RSC_OPER" )
 			$("#item_validacio").val(2);
-
 
 		//Resetear upload de archivos			
 		for (var i in idiomas) {
@@ -963,10 +945,9 @@ function CDetall() {
 
 		this.modificado(false);
 		
-	}
-
+	};
 	
-	this.pintar = function(dades) {	
+	this.pintar = function(dades) {
 
 		$("#modul_procediments, #modul_afectacions").show();
 
@@ -1052,7 +1033,6 @@ function CDetall() {
 
 		}
 
-
 		if ($("#carregantDetall").size() > 0) {
 
 			$("#carregantDetall").fadeOut(300, function() {
@@ -1094,8 +1074,7 @@ function CDetall() {
 		// Marcamos el formulario como "no modificado".
 		this.modificado(false);		
 
-	}
-
+	};
 	
 	this.elimina = function() {
 
@@ -1129,8 +1108,7 @@ function CDetall() {
 			}
 		});
 		
-	}
-
+	};
 	
 	//Métodos para traspaso BOIB
 	this.carregarTB = function(boibID) {
@@ -1178,10 +1156,9 @@ function CDetall() {
 
 		this.actualizaEventos();
 		
-	}
-
+	};
 	
-	this.pintarTB = function(dades) {	
+	this.pintarTB = function(dades) {
 
 		Detall.nou();		
 
@@ -1238,7 +1215,7 @@ function CDetall() {
 
 		}
 
-	}
+	};
 
 	this.pintarModulos = function(dades) {
 
@@ -1274,7 +1251,7 @@ function CDetall() {
 			
 		}
 
-	}
+	};
 
 	this.ocultarModulos = function(selector) {
 
@@ -1283,6 +1260,6 @@ function CDetall() {
 				&& !selector.attr("id") == "modul_afectacions")
 			selector.addClass("invisible");
 
-	}
+	};
 
 };
