@@ -623,8 +623,10 @@ function CDetall(soloFicha) {
 				
 				// tcerda: Creamos la lista de elementos iniciales.
 				itemsLista.push( {
-					id:usuari_node.id,
+					id: usuari_node.id,
 					nombre: usuari_node.nom,
+					idMainItem: usuari_node.idMainItem,
+					idRelatedItem: usuari_node.idRelatedItem,
 					orden: i++	// Si no hay orden, lo calculamos previamente.
 				} );
 				

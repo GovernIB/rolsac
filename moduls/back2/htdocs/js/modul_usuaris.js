@@ -20,8 +20,8 @@ $(document).ready(function() {
 	}
 	
 	// Evento para el botón de volver al detalle
-	jQuery(".btnVolverDetalle").bind("click",function(){EscriptoriUsuari.torna();});
-	jQuery("#btnFinalizarUsuaris").bind("click",function(){EscriptoriUsuari.finalizar();});
+	jQuery(".btnVolverDetalle").bind("click", function() { EscriptoriUsuari.torna(); });
+	jQuery("#btnFinalizarUsuaris").bind("click", function() { EscriptoriUsuari.finalizar(); });
 	
 });
 
@@ -29,6 +29,7 @@ $(document).ready(function() {
 var numCercadorMinim = 0;
 
 function CModulUsuari() {
+	
 	this.extend = ListaOrdenable;
 	this.extend();
 	
@@ -36,6 +37,7 @@ function CModulUsuari() {
 	var $moduloModificado = modul_usuaris_elm.find('input[name="modulo_usuario_modificado"]');
 	
 	this.iniciar = function() {
+		
 		usuaris_llistat_elm = escriptori_usuaris_elm.find("div.escriptori_items_llistat:first");
 		usuaris_cercador_elm = escriptori_usuaris_elm.find("div.escriptori_items_cercador:first");
 		usuaris_seleccionats_elm = escriptori_usuaris_elm.find("div.escriptori_items_seleccionats:first");
@@ -56,29 +58,38 @@ function CModulUsuari() {
 			nombre: "usuari",
 			nodoOrigen: modul_usuaris_elm.find(".listaOrdenable"),
 			nodoDestino: usuaris_seleccionats_elm.find(".listaOrdenable"),
-			atributos: ["id", "nombre", "orden"],	// Campos que queremos que aparezcan en las listas.
-			//multilang: true
+			atributos: [			// Campos que queremos que aparezcan en los elementos de las lista ordenable.
+	            "id", 
+	            "nombre", 
+	            "orden", 
+	            "idRelatedItem", 	// Campo necesario para guardado AJAX genérico de módulos laterales.
+	            "idMainItem"		// Campo necesario para guardado AJAX genérico de módulos laterales.
+            ],
 			multilang: false
 		});
 		
 		// one al botó de gestionar
-		modul_usuaris_elm.find("a.gestiona").one("click", function(){ModulUsuari.gestiona();} );
+		modul_usuaris_elm.find("a.gestiona").one("click", function() { ModulUsuari.gestiona(); });
 		EscriptoriUsuari.carregar({});
-	}
+		
+	};
 	
 	// Marcar el módulo como modificado.
 	this.modificado = function() {
 		$moduloModificado.val(1);
-	}
+	};
 	
 	this.gestiona = function() {
+		
 		lis_size = modul_usuaris_elm.find("li").size();
 		
 		if (lis_size > 0) {
+			
 			this.copiaInicial();
 			EscriptoriUsuari.contaSeleccionats();
 			
 		} else {
+			
 			usuaris_seleccionats_elm.find("ul").remove().end().find("p.info:first").text(txtNoHiHaUsuarisSeleccionats + ".");
 			usuaris_seleccionats_elm.find(".listaOrdenable").html("");
 			
@@ -88,38 +99,47 @@ function CModulUsuari() {
 		escriptori_detall_elm.fadeOut(300, function() {
 			escriptori_usuaris_elm.fadeIn(300);
 		});
-	}
+		
+	};
+	
 };
 
 function CEscriptoriUsuari() {
+	
 	this.extend = ListadoBase;
 	this.extend("", "", "", "cercador_contingut_usuaris", "", "", "", "btnBuscarUsuarisForm", "btnLimpiarFormUsuaris");
+	
 	var that = this;
 	
 	/**
 	 * Agrega un item a la lista.
 	 */
-	this.agregaItem = function( itemID, titulo ) {
+	this.agregaItem = function( itemID, titulo, idMainItem, idRelatedItem ) {
+		
 		// tcerdà: Componemos el item para enviar a la lista.
 		var item = {
-				id: itemID,
-				nombre: titulo
-			};
+			id: itemID,
+			nombre: titulo,
+			idMainItem: idMainItem,
+			idRelatedItem: idRelatedItem
+		};
 		
 		// Agrega el item, y si se ha añadido correctamente (si no existía previamente) actualiza el mensaje de items seleccionados.
 		if (ModulUsuari.agregaItem( item )) {
 			this.contaSeleccionats();
 		}
-	}
+		
+	};
 	
 	// Cambia de página.
 	this.cambiaPagina = function( pag ) {
 		multipagina.setPaginaActual(pag-1);
 		pag_Pag = pag;
 		this.anar(pag);
-	}
+	};
 	
-	this.finCargaListado = function(data,opcions) {
+	this.finCargaListado = function(data, opcions) {
+		
 		// total
 		resultats_total = parseInt(data.total,10);
 		
@@ -136,6 +156,7 @@ function CEscriptoriUsuari() {
 			if (resultats_total % pag_Res > 0){
 				ultimaPag++;
 			}
+			
 			if (pag_Pag > ultimaPag) {
 				pag_Pag = ultimaPag;
 			}
@@ -168,6 +189,7 @@ function CEscriptoriUsuari() {
 				}
 				
 				txt_ordenacio += ", " + txt_ordenats + " " + txtPer + " <em>" + txt_per + "</em>";
+				
 			}
 			
 			codi_totals = "<p class=\"info\">" + txtTrobats + " <strong>" + resultats_total + "</strong> " + txtT.toLowerCase() + ". " + txtMostrem + " " + txtDel + " " + resultatInici + " " + txtAl + " " + resultatFinal + txt_ordenacio + ".</p>";
@@ -195,6 +217,7 @@ function CEscriptoriUsuari() {
 
 			// codi cuerpo
 			$(data.nodes).slice(resultatInici-1,resultatFinal).each(function(i) {
+				
 				dada_node = this;
 				
 				parClass = (i%2) ? " par": "";
@@ -214,12 +237,13 @@ function CEscriptoriUsuari() {
 //				codi_taula += "<div class=\"td email\" role=\"gridcell\">" + printStringFromNull(dada_node.email) + "</div>";
 				
 				codi_taula += "</div>";
+				
 			});
 			
 			codi_taula += "</div>";
 			codi_taula += "</div>";
 			
-			if($.browser.opera) {
+			if ($.browser.opera) {
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
@@ -237,6 +261,7 @@ function CEscriptoriUsuari() {
 			codi_final = codi_totals + codi_taula + codi_navegacio;
 		
 		} else {
+			
 			// no hi ha items
 			codi_final = "<p class=\"noItems\">" + txtNoHiHaUsuaris + ".</p>";
 			
@@ -244,26 +269,34 @@ function CEscriptoriUsuari() {
 		
 		// animacio
 		usuaris_dades_elm.fadeOut(300, function() {
+			
 			// pintem
 			usuaris_dades_elm.html(codi_final).fadeIn(300, function() {
 														
 				// Evento lanzado al hacer click en un elemento de la lista.
-				jQuery("#resultatsUsuaris .llistat .tbody a").unbind("click").bind("click",function(){
+				jQuery("#resultatsUsuaris .llistat .tbody a").unbind("click").bind("click", function() {
+					
 					var partesItem = jQuery(this).attr("id").split("_");
 					var itemID = partesItem[1];
 					var titulo = jQuery(this).html();
-					that.agregaItem(itemID,titulo);
-					});
+					var idMainItem = jQuery('#item_id').val();
+					var idRelatedItem = itemID;
+					
+					that.agregaItem(itemID, titulo, idMainItem, idRelatedItem);
+					
+				});
 				
 				// cercador
 				edificis_cercador_elm.find("input, select").removeAttr("disabled");
 				
 			});
+			
 		});	
 		
-	}
+	};
 	
 	this.carregar = function(opcions) {
+		
 		// opcions: ajaxPag (integer), ordreTipus (ASC, DESC), ordreCamp (tipus, carrec, tractament)
 		var modoBuscador = (typeof opcions.cercador != "undefined" && opcions.cercador == "si");
 		var modoListado = !modoBuscador;		
@@ -333,14 +366,17 @@ function CEscriptoriUsuari() {
 				that.finCargaListado(data,opcions);
 			}
 		});
-	}
+		
+	};
 	
 	this.finalizar = function() {
+		
 		nombre_llistat = ModulUsuari.finalizar();
 		codi_usuaris_txt = (nombre_llistat == 1) ? txtUsuari : txtUsuaris;
 		codi_info = (nombre_llistat == 0) ? txtNoHiHaUsuaris + "." : txtHiHa + " <strong>" + nombre_llistat + " " + codi_usuaris_txt.toLowerCase() + "</strong>.";
 		
 		modul_usuaris_elm.find("p.info").html(codi_info);
+		
 		if (nombre_llistat > 1) {
 			modul_usuaris_elm.find(".listaOrdenable ul").sortable({
 				axis: 'y',
@@ -354,17 +390,17 @@ function CEscriptoriUsuari() {
 		// Marcamos el módulo como modificado.
 		ModulUsuari.modificado();
 		
-		// Marcamos el formulario como modificado para habilitar el botón de guardar.
-		Detall.modificado();
-		
 		this.torna();
-	}
+		
+	};
 	
 	// Método sobreescrito
 	this.anar = function(enlace_html) {
+		
 		num = parseInt(enlace_html,10);
 		// text cercant
 		txt = (num <= pag_Pag) ? txtCercantItemsAnteriors : txtCercantItemsAnteriors;
+		
 		usuaris_dades_elm.fadeOut(300, function() {
 			// pintem
 			codi_anar = "<p class=\"executant\">" + txt + "</p>";
@@ -373,9 +409,11 @@ function CEscriptoriUsuari() {
 				that.carregar({pagina: num-1});
 			});
 		});
-	}
+		
+	};
 	
 	this.torna = function() {
+	
 		// animacio
 		escriptori_usuaris_elm.fadeOut(300, function() {
 			escriptori_detall_elm.fadeIn(300, function() {
@@ -383,19 +421,25 @@ function CEscriptoriUsuari() {
 				modul_usuaris_elm.find("a.gestiona").one("click", function(){ModulUsuari.gestiona();});
 			});
 		});
-	}
+	
+	};
 	
 	this.contaSeleccionats = function() {
+		
 		seleccionats_val = usuaris_seleccionats_elm.find(".seleccionat").find("li").size();
 		info_elm = usuaris_seleccionats_elm.find("p.info:first");
+		
 		if (seleccionats_val == 0) {
+			
 			usuaris_seleccionats_elm.find("ul").remove();
 			info_elm.text(txtNoHiHaUsuarisSeleccionats + ".");
 			
 		} else if (seleccionats_val == 1) {
+			
 			info_elm.html(txtSeleccionat + " <strong>" + seleccionats_val + " " + txtUsuari.toLowerCase() + "</strong>.");
 			
 		} else {
+			
 			info_elm.html(txtSeleccionats + " <strong>" + seleccionats_val + " " + txtUsuaris.toLowerCase() + "</strong>.");
 			usuaris_seleccionats_elm.find(".listaOrdenable ul").sortable({
 				axis: 'y',
@@ -404,6 +448,7 @@ function CEscriptoriUsuari() {
 					EscriptoriUsuari.contaSeleccionats();
 				}
 			}).css({cursor:"move"});
+			
 		}
 		
 		usuaris_seleccionats_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function() {
@@ -411,6 +456,7 @@ function CEscriptoriUsuari() {
 			ModulUsuari.eliminaItem(itemLista);
 			EscriptoriUsuari.contaSeleccionats();
 		});
-	}
+		
+	};
 	
 };

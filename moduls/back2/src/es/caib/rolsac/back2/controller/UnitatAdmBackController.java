@@ -19,8 +19,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.TreeMap;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -36,7 +34,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.EspacioTerritorial;
 import org.ibit.rol.sac.model.Ficha;
-import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.Traduccion;
@@ -87,23 +84,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	private static Log log = LogFactory.getLog(UnitatAdmBackController.class);
 	private static final String URL_PREVISUALIZACION = "es.caib.rolsac.previsualitzacio.ua.url";
 	private static final String OPERACION_FALLIDA = "Error de sessi�n: Sessi�n expirada o no inciada";
-
-	private static class TreeOrdenSeccionComparator implements Comparator {
-
-		public int compare(Object element1, Object element2) {
-
-			String lower1 =	 element1.toString();
-			String lower2 =	 element2.toString();
-
-			lower1 = lower1.split("#")[2];
-			lower2 = lower2.split("#")[2];
-
-			return lower1.compareTo(lower2);
-
-		}
-
-	}
-
 
 	@RequestMapping(value = "/unitatadm.do", method = GET)
 	public String llistatUniAdm(Map<String, Object> model, HttpServletRequest request, HttpSession session) {
@@ -355,20 +335,40 @@ public class UnitatAdmBackController extends PantallaBaseController {
 
 	}
 
-	private Object getLlistaUsuarisDTO(Map<String, Object> resultats, UnidadAdministrativa uni)
-	{
-		List<IdNomDTO> llistaUsuarisDTO = null;
+	private Object getLlistaUsuarisDTO(Map<String, Object> resultats, UnidadAdministrativa ua) {
+		
+		List<Map<String, String>> llistaUsuarisDTO = null;
+		
 		try {
-			if (uni.getUsuarios() != null) {
-				llistaUsuarisDTO = new ArrayList<IdNomDTO>();
-				for (Object usuario: uni.getUsuarios())
-					llistaUsuarisDTO.add(new IdNomDTO(((Usuario)usuario).getId(), ((Usuario)usuario).getNombre()));
+		
+			if (ua.getUsuarios() != null) {
+				
+				llistaUsuarisDTO = new ArrayList<Map<String, String>>();
+				
+				for (Object u : ua.getUsuarios()) {
+					
+					Map<String, String> map = new HashMap<String, String>();
+					Usuario usuario = (Usuario)u;
+								
+					map.put("id", usuario.getId().toString());
+					map.put("nom", usuario.getNombre());
+					map.put("idMainItem", ua.getId().toString());
+					map.put("idRelatedItem", usuario.getId().toString());
+					
+					llistaUsuarisDTO.add(map);
+				
+				}
+			
 			}
+		
 		} catch (Exception ex) {
+		
 			log.error("Error recuperando los usuarios.");
+		
 		}
 
 		return llistaUsuarisDTO;
+		
 	}
 
 	private Object getLlistaEdificisDTO(Map<String, Object> resultats, UnidadAdministrativa ua) {
@@ -655,9 +655,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			// Funcionalidad trasladada a método guardarFitxesUASeccio().
 			// Se guarda el estado al pulsar el botón "Finalitza".
 
-			// Usuarios.
-			guardarUsuarios(valoresForm, unitatAdministrativa, edicion);
-
 			// TODO: aclarar => ¿Por qué se ejecuta también esta misma llamada, líneas antes, en el guardado de la UA padre?
 			// ¿Es posible que sobre?
 			crearOActualizarUnitatAdministrativa(unitatAdministrativa, unitatAdmPareId);
@@ -697,31 +694,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		}
 
 		return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
-
-	}
-
-	private void guardarUsuarios(Map<String, String> valoresForm, UnidadAdministrativa unitatAdministrativa, boolean edicion) 
-			throws DelegateException {
-
-		if (edicion && isModuloModificado("modulo_usuario_modificado", valoresForm)) {
-
-			// Recollir els usuaris actuals de la UA i borrar-los
-			UsuarioDelegate usuarioDelegate = DelegateUtil.getUsuarioDelegate();
-			if (unitatAdministrativa.getUsuarios() != null) {
-				for (Object usuario: unitatAdministrativa.getUsuarios())
-					usuarioDelegate.desasignarUnidad(((Usuario)usuario).getId(), unitatAdministrativa.getId());
-			}
-
-			// Crear una llista amb els edificis assignats de la unitat
-			String[] listaUsuarios = valoresForm.get("llistaUsuaris").replace(",", " ").trim().split(" ");
-
-			// Grabar en la unidad cada usuario de la lista (parámetro "listaUsuarios")
-			if (!"".equals(listaUsuarios[0])) {
-				for (int i = 0; i < listaUsuarios.length; i++)
-					usuarioDelegate.asignarUnidad(new Long(listaUsuarios[i]), unitatAdministrativa.getId());
-			}
-
-		}
 
 	}
 
@@ -1731,7 +1703,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		
 	}
 	
-	// TODO amartin: implementar
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/guardarEdificiosRelacionados.do")
 	public @ResponseBody IdNomDTO guardarEdificiosRelacionados(Long id, Long[] elementos, HttpSession session, HttpServletRequest request) {
@@ -1759,6 +1730,59 @@ public class UnitatAdmBackController extends PantallaBaseController {
 					if ( elementos[i] != null ) {
 						
 						edificioDelegate.anyadirUnidad(ua.getId(), elementos[i]);
+						
+					}
+					
+				}
+				
+			}
+			
+			String ok = messageSource.getMessage("unitatadm.guardat.correcte", null, request.getLocale());
+			result = new IdNomDTO(ua.getId(), ok);            
+
+		} catch (DelegateException dEx) {
+			
+			if (dEx.isSecurityException()) {
+				String error = messageSource.getMessage("error.permisos", null, request.getLocale());
+				result = new IdNomDTO(-1l, error);
+			} else {
+				String error = messageSource.getMessage("error.altres", null, request.getLocale());
+				result = new IdNomDTO(-2l, error);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+			}
+			
+		}
+
+		return result;
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/guardarUsuariosRelacionados.do")
+	public @ResponseBody IdNomDTO guardarUsuariosRelacionados(Long id, Long[] elementos, HttpSession session, HttpServletRequest request) {
+		
+		IdNomDTO result = null;
+		
+		try {
+			
+			UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+			UnidadAdministrativa ua = uaDelegate.consultarUnidadAdministrativaSinFichas(id);
+						
+			// Obtener los usuarios actuales de la UA y borrarlos.
+			UsuarioDelegate usuarioDelegate = DelegateUtil.getUsuarioDelegate();
+			if (ua.getUsuarios() != null) {
+				for (Object usuario : ua.getUsuarios())
+					usuarioDelegate.desasignarUnidad(((Usuario)usuario).getId(), ua.getId());
+			}
+			
+			// Asociar los actuales.
+			if ( elementos != null ) {
+				
+				for ( int i = 0; i < elementos.length; i++ ) {
+					
+					if ( elementos[i] != null ) {
+						
+						usuarioDelegate.asignarUnidad( elementos[i], ua.getId() );
 						
 					}
 					

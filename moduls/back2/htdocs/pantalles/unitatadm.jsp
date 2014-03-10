@@ -820,7 +820,7 @@
                                 </div>
                                 <p style="clear: both; margin-bottom: 10px;"/><!-- Separador -->
 	                            <div class="btnGenerico">
-	                                <a id="btnGuardar_materias" href="javascript:;" class="btn guarda important lista-simple" 
+	                                <a id="btnGuardar_edificios" href="javascript:;" class="btn guarda important lista-simple" 
 	                            			action="<c:url value="/unitatadm/guardarEdificiosRelacionados.do" />">
 	                           			<span><span><spring:message code='boto.guarda'/></span></span>
 	                            	</a>
@@ -847,6 +847,13 @@
             						<div class="btnGenerico">
             							<a class="btn gestiona" href="javascript:;"><span><span><spring:message code='unitatadm.formulari.usuaris.gestiona'/></span></span></a>
             						</div>
+            						<p style="clear: both; margin-bottom: 10px;"/><!-- Separador -->
+		                            <div class="btnGenerico">
+		                                <a id="btnGuardar_usuarios" href="javascript:;" class="btn guarda important lista-simple" 
+		                            			action="<c:url value="/unitatadm/guardarUsuariosRelacionados.do" />">
+		                           			<span><span><spring:message code='boto.guarda'/></span></span>
+		                            	</a>
+		                            </div>
             					</c:if>
             				</div>
             			</div>
