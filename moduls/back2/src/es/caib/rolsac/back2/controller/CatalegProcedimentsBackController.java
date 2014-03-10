@@ -16,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -52,6 +53,7 @@ import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.criteria.BuscadorProcedimientoCriteria;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
+import org.ibit.rol.sac.model.dto.ListaDTO;
 import org.ibit.rol.sac.model.dto.ListadoModuloTramiteDTO;
 import org.ibit.rol.sac.model.dto.ProcedimientoLocalDTO;
 import org.ibit.rol.sac.model.dto.ProcedimientoNormativaDTO;
@@ -70,6 +72,7 @@ import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
 import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -187,7 +190,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		List<ProcedimientoLocalDTO> llistaProcedimientoLocalDTO = new ArrayList<ProcedimientoLocalDTO>();
 
 		if (getUAFromSession(session) != null && buscadorCriteria != null) {
+			
 			try {
+				
 				UnidadAdministrativa ua = (UnidadAdministrativa) getUAFromSession(session);
 				buscadorCriteria.setUnidadAdministrativa(ua);
 
@@ -211,11 +216,12 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	}
 
 	/** Método que se encarga de convertir un String en formato json a una instancia de BuscadorProcedimientoCriteria */
-	private BuscadorProcedimientoCriteria jsonToBuscadorProcedimientoCriteria (String criteria) { //TODO: sacar de aquí
+	private BuscadorProcedimientoCriteria jsonToBuscadorProcedimientoCriteria (String criteria) {
 
 		BuscadorProcedimientoCriteria buscadorCriteria = null;
 
 		try {
+			
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			mapper.configure(DeserializationConfig.Feature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
@@ -348,11 +354,10 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
 			ProcedimientoLocal proc = procedimientoDelegate.obtenerProcedimientoNewBack(id);
 			
-            recuperaMaterias(resultats, proc, lang);        // Recuperar las materias asociadas a un procedimiento
-            recuperaNormativas(resultats, proc, lang);      // Recuperar las normativas asociadas a un procedimiento
+            recuperaMaterias(resultats, proc, lang, id);        // Recuperar las materias asociadas a un procedimiento
+            recuperaNormativas(resultats, proc, lang, id);      // Recuperar las normativas asociadas a un procedimiento
             recuperaDocs(resultats, proc);                  // Recuperar los documentos relacionados de un procedimiento
-            recuperaHechosVitales(resultats, proc, lang);   // Recuperar los hechos vitales asociados a un procedimiento
-
+            recuperaHechosVitales(resultats, proc, lang, id);   // Recuperar los hechos vitales asociados a un procedimiento
 
 		} catch (DelegateException dEx) {
 
@@ -461,18 +466,39 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	/*
 	 * Función para recuperar la materias de un procedimiento
 	 */
-	private void recuperaMaterias(Map<String, Object> resultats, ProcedimientoLocal proc, String lang) {
+	private void recuperaMaterias(Map<String, Object> resultats, ProcedimientoLocal proc, String lang, long idProcedimiento) {
 
 		if (proc.getMaterias() != null) {
-			List<IdNomDTO> llistaMateriesDTO = new ArrayList<IdNomDTO>();
+			
+			List<Map<String, String>> listaMateriasProcedimiento = new ArrayList<Map<String, String>>();
+			Map<String, String> map;
+			
 			for (Materia materia : proc.getMaterias()) {
-			    llistaMateriesDTO.add(new IdNomDTO(materia.getId(), materia.getNombreMateria(lang)));
+
+				map = new HashMap<String, String>();
+
+				map.put("id", String.valueOf(materia.getId()));
+				map.put("nom", materia.getNombre());
+				map.put("idMainItem", String.valueOf(proc.getId()));
+				map.put("idRelatedItem", String.valueOf(materia.getId()));
+				
+				listaMateriasProcedimiento.add(map);
+
 			}
+
+			List<ListaDTO> llistaMateriesDTO = new ArrayList<ListaDTO>();
+			for (Materia materia : proc.getMaterias()) {
+			    llistaMateriesDTO.add(new ListaDTO(materia.getId(), materia.getNombreMateria(lang), idProcedimiento));
+			}
+						
 			resultats.put("materies", llistaMateriesDTO);
 
 		} else {
+		
 			resultats.put("materies", null);
+		
 		}
+		
 	}
 
 	/*
@@ -481,41 +507,56 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	private void recuperaPO(Map<String, Object> resultats, ProcedimientoLocal proc, String lang) {
 
 		if (proc.getPublicosObjetivo() != null) {
+			
 			List<IdNomDTO> llistaPublicsDTO = new ArrayList<IdNomDTO>();
+			
 			for (PublicoObjetivo pob : proc.getPublicosObjetivo()) {
 				TraduccionPublicoObjetivo tpob = (TraduccionPublicoObjetivo) pob.getTraduccion(lang);
 				llistaPublicsDTO.add(new IdNomDTO(pob.getId(), tpob == null ? "" : tpob.getTitulo()));
 			}
+			
 			resultats.put("publicsObjectiu", llistaPublicsDTO);
 
 		} else {
+			
 			resultats.put("publicsObjectiu", null);
+			
 		}
+		
 	}
 
 	/*
 	 * Función para recuperar los hechos vitales de un procedimiento
 	 */
-	private void recuperaHechosVitales(Map<String, Object> resultats, ProcedimientoLocal proc, String lang) {
+	private void recuperaHechosVitales(Map<String, Object> resultats, ProcedimientoLocal proc, String lang, long idProcedimiento) {
 
 		List<Map<String, Object>> llistaFetsDTO = new ArrayList<Map<String, Object>>();
+		
 		for (HechoVitalProcedimiento hechoVitalProc : proc.getHechosVitalesProcedimientos()) {
+			
 			TraduccionHechoVital thv = (TraduccionHechoVital) hechoVitalProc.getHechoVital().getTraduccion(lang);
+			
 			Map<String, Object> hvpDTO = new HashMap<String, Object>();
 			hvpDTO.put("id", hechoVitalProc.getHechoVital().getId());
 			hvpDTO.put("nom", thv.getNombre());
 			hvpDTO.put("orden", hechoVitalProc.getOrden());
+			hvpDTO.put("idMainItem", idProcedimiento);
+			hvpDTO.put("idRelatedItem", hechoVitalProc.getHechoVital().getId());
+			
 			llistaFetsDTO.add(hvpDTO);
+			
 		}
 		
 		Collections.sort(llistaFetsDTO, new HechoVitalProcedimientoDTOComparator());
+		
 		resultats.put("fetsVitals", llistaFetsDTO);
+		
 	}
 
 	/*
 	 * Función para recuperar las materias de un procedimiento
 	 */
-	private void recuperaNormativas(Map<String, Object> resultats, ProcedimientoLocal proc, String lang) {
+	private void recuperaNormativas(Map<String, Object> resultats, ProcedimientoLocal proc, String lang, Long idProcedimiento) {
 
 		if (proc.getNormativas() != null) {
 			Map<String, String> map;
@@ -530,6 +571,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				map = new HashMap<String, String>(2);
 				map.put("id", normativa.getId().toString());
 				map.put("nombre", titulo);
+				map.put("idModulo", idProcedimiento.toString());
 				llistaNormatives.add(map);
 			}
 			resultats.put("normatives", llistaNormatives);
@@ -546,6 +588,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		IdNomDTO resultatStatus = new IdNomDTO();
 
 		try {
+			
 			Long id = new Long(request.getParameter("id"));
 			ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
 			procedimientoDelegate.borrarProcedimiento(id);
@@ -554,25 +597,28 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			resultatStatus.setNom("correcte");
 
 		} catch (DelegateException dEx) {
+			
 			if (dEx.isSecurityException()) {
 				resultatStatus.setId(-1l);
 			} else {
 				resultatStatus.setId(-2l);
 				logException(log, dEx);
 			}
+			
 		}
 
 		return resultatStatus;
+		
 	}
 
-
 	@RequestMapping(value = "/guardar.do", method = POST)
-	public @ResponseBody IdNomDTO guardarProcediment(HttpSession session, HttpServletRequest request)
-	{
+	public @ResponseBody IdNomDTO guardar(HttpSession session, HttpServletRequest request) {
+		
 		IdNomDTO result = null;
 		String error = null;
 
 		try {
+			
 			if (request.getParameter("publicsObjectiu") == null || request.getParameter("publicsObjectiu").equals("")) {
 				error = messageSource.getMessage("proc.error.falta.public", null, request.getLocale());
 				return result = new IdNomDTO(-3l, error);
@@ -594,11 +640,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			}
 
 			procediment = guardarProcedimientoAntiguo(edicion, procediment, procedimentOld);	// Si estamos guardando un procedimiento ya existente en vez de uno nuevo
-			procediment = guardarMaterias(request, edicion, procediment, procedimentOld);		// Procesar Materias
 			procediment = guardarPublicoObjetivo(request, edicion, procediment, procedimentOld);// Procesar Público Objectivo
 			procediment = guardarTramites(request, edicion, procediment, procedimentOld);		// Actualizar la lista de Trámites
-			procediment = guardarHechosVitales(request, edicion, procediment);					// Procesar Hechos vitales
-			procediment = guardarNormativas(request, edicion, procediment, procedimentOld);		// Normativas
+			
 			procediment = guardarDocumentos(request, edicion, procediment, procedimentOld);		// Documentos
 			procediment = guardarIdioma(request, procediment, procedimentOld);       			// Idiomas
 			procediment = guardarValidacion(request, procediment, procedimentOld, error);		// Validación
@@ -629,6 +673,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			result = new IdNomDTO(procId, ok);
 
 		} catch (DelegateException dEx) {
+			
 			if (dEx.isSecurityException()) {
 				error = messageSource.getMessage("error.permisos", null, request.getLocale());
 				result = new IdNomDTO(-1l, error);
@@ -639,14 +684,18 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			}
 
 		} catch (NumberFormatException nfe) {
+			
 			result = new IdNomDTO(-3l, error);
 
 		} catch (ParseException pe) {
+			
 			error = messageSource.getMessage(pe.getMessage(), null, request.getLocale());
 			result = new IdNomDTO(-4l, error);
+			
 		}
 
 		return result;
+		
 	}
 
 	/*
@@ -672,28 +721,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 	/*
 	 * Para hacer menos accesos a BBDD se comprueba si es edicion o no.
-	 * En el primer caso es bastante probable que se repitan la mayoria de materias.
-	 */
-	private ProcedimientoLocal guardarMaterias(HttpServletRequest request, boolean edicion, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld) throws NumberFormatException, DelegateException {
-
-		if (isModuloModificado("modulo_materias_modificado", request)) {
-
-		    if (request.getParameter("materies") != null && !"".equals(request.getParameter("materies"))) {
-		        MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
-		        Set<Materia> materias = new HashSet<Materia>();
-		        materias.addAll(materiaDelegate.obtenerMateriasPorIDs(request.getParameter("materies"), DelegateUtil.getIdiomaDelegate().lenguajePorDefecto()));
-		        procediment.setMaterias(materias);
-
-		    } else {
-		        procediment.setMaterias(new HashSet<Materia>());
-		    }
-		}
-
-		return procediment;
-	}
-
-	/*
-	 * Para hacer menos accesos a BBDD se comprueba si es edicion o no.
 	 * En el primer caso es bastante probable que se repitan la mayoria de public objectiu.
 	 */
 	private ProcedimientoLocal guardarPublicoObjetivo(HttpServletRequest request, boolean edicion, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld) throws NumberFormatException, DelegateException {
@@ -701,18 +728,23 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	    if (isModuloModificado("modul_public_modificat", request)) {
 
 			if (request.getParameter("publicsObjectiu") != null && !"".equals(request.getParameter("publicsObjectiu"))) {
-			    String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			    
+				String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 				PublicoObjetivoDelegate publicObjDelegate = DelegateUtil.getPublicoObjetivoDelegate();
 				Set<PublicoObjetivo> publicsNous = new HashSet<PublicoObjetivo>();
 				publicsNous.addAll(publicObjDelegate.obtenerPublicosObjetivoPorIDs(request.getParameter("publicsObjectiu"), idioma));
 				procediment.setPublicosObjetivo(publicsNous);
 
 			} else {
+				
 				procediment.setPublicosObjetivo(new HashSet<PublicoObjetivo>());
+				
 			}
+			
 		}
 
 		return procediment;
+		
 	}
 
 	/*
@@ -1124,7 +1156,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
      */
     private Long guardarGrabar(ProcedimientoLocal procediment) throws DelegateException {
 
-        /* NOTA IMPORTANTE PARA EL RENDIMIENTO */
+        /* XXX: NOTA IMPORTANTE PARA EL RENDIMIENTO */
         procediment.setDocumentos(null);
         procediment.setTramites(null);
 
@@ -1134,11 +1166,14 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
             procediment.setHechosVitalesProcedimientos(null);
         }
         /* FIN NOTA */
+        
         Long procId = DelegateUtil.getProcedimientoDelegate().grabarProcedimiento(procediment, procediment.getUnidadAdministrativa().getId());
+        
         // Actualiza estadísticas
         DelegateUtil.getEstadisticaDelegate().grabarEstadisticaProcedimiento(procId);
 
         return procId;
+        
     }
 
 	/**
@@ -1334,14 +1369,265 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 		return resultats;
 	}
+	
+	@RequestMapping(value = "/guardarHechosVitales.do", method = POST)
+	public @ResponseBody IdNomDTO guardarHechosVitales(Long id, Long[] elementos, HttpSession session, HttpServletRequest request) {
 
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+		
+		IdNomDTO result;
+		String error = null;
+		ProcedimientoLocal procedimiento = null;
+		
+		if (id != null) {
+			
+			try {
+				
+				procedimiento = DelegateUtil.getProcedimientoDelegate().obtenerProcedimientoNewBack(id);
+				
+				// Borramos los anteriores.
+				borrarHechosVitalesProcedimientos(procedimiento);
+				
+				if (elementos != null && elementos.length > 0) {
+					
+		            // Guardamos los nuevos.
+		            List<HechoVital> listHV = DelegateUtil.getHechoVitalDelegate().buscarPorIds(elementos);
+		            Set<HechoVitalProcedimiento> hvpsAGuardar = new HashSet<HechoVitalProcedimiento>();
+		            
+		            for (HechoVital hv : listHV) {
+		            	
+		                HechoVitalProcedimiento hvp = new HechoVitalProcedimiento();
+		                hvp.setProcedimiento(procedimiento);
+		                hvp.setHechoVital(hv);
+		               
+		                int maxOrden = 0;
+		                for (HechoVitalProcedimiento hechoVitalProcedimiento : (List<HechoVitalProcedimiento>)hv.getHechosVitalesProcedimientos()) {
+		                    if (hechoVitalProcedimiento != null) {
+		                        if (maxOrden < hechoVitalProcedimiento.getOrden()) {
+		                            maxOrden = hechoVitalProcedimiento.getOrden();
+		                        }
+		                    }
+		                }
+		                
+		                maxOrden++;
+		                hvp.setOrden(maxOrden);
+		                hvpsAGuardar.add(hvp);
+		                
+		            }
+
+		            procedimiento.setHechosVitalesProcedimientos(hvpsAGuardar);
+
+				} else {
+					
+					procedimiento.setHechosVitalesProcedimientos(new HashSet<HechoVitalProcedimiento>());
+					
+				}
+				
+				guardarGrabar(procedimiento);
+				
+				result = new IdNomDTO(procedimiento.getId(), messageSource.getMessage("proc.guardat.correcte", null, request.getLocale()));
+				
+			} catch (DelegateException dEx) {
+				
+				if (dEx.isSecurityException()) {
+					
+					error = messageSource.getMessage("error.permisos", null, request.getLocale());
+					result = new IdNomDTO(-1l, error);
+					
+				} else {
+					
+					error = messageSource.getMessage("error.altres", null, request.getLocale());
+					result = new IdNomDTO(-2l, error);
+					log.error(ExceptionUtils.getStackTrace(dEx));
+					
+				}
+				
+			}
+		
+		} else {
+			
+			error = messageSource.getMessage("error.altres", null, request.getLocale());
+			result = new IdNomDTO(-2l, error);
+			
+		}
+		
+		return result;
+
+	}
+	
+	private void borrarHechosVitalesProcedimientos(ProcedimientoLocal procedimiento) throws DelegateException {
+		
+        HechoVitalProcedimientoDelegate hvpDelegate = DelegateUtil.getHechoVitalProcedimientoDelegate();
+        List<Long> hvpIds = new LinkedList<Long>();
+        
+        if (procedimiento.getHechosVitalesProcedimientos() != null) {
+        	
+            for (HechoVitalProcedimiento hvp : procedimiento.getHechosVitalesProcedimientos())
+                hvpIds.add(hvp.getId());
+
+            hvpDelegate.borrarHechoVitalProcedimientos(hvpIds);
+            
+        }
+        
+        procedimiento.setHechosVitalesProcedimientos(new HashSet<HechoVitalProcedimiento>());
+        
+	}
+	
+	@RequestMapping(value = "/guardarMaterias.do", method = POST)
+	public @ResponseBody IdNomDTO guardarMaterias(Long id, Long[] elementos, HttpSession session, HttpServletRequest request) {
+
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+		
+		IdNomDTO result;
+		String error = null;
+		ProcedimientoLocal procedimiento = null;
+		
+		if (id != null) {
+			
+			try {
+				
+				procedimiento = DelegateUtil.getProcedimientoDelegate().obtenerProcedimientoNewBack(id);
+				
+				if (elementos != null && elementos.length > 0) {
+					
+					List<Long> materiasList = new Vector<Long>();
+					
+					MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
+					
+					for (int i = 0; i < elementos.length; i++)
+						materiasList.add(elementos[i]);
+					
+					Set<Materia> materias = new HashSet<Materia>();
+					materias.addAll(materiaDelegate.obtenerMateriasPorIDs(materiasList, DelegateUtil.getIdiomaDelegate().lenguajePorDefecto()));
+					
+					procedimiento.setMaterias(materias); 
+					
+				} else {
+					
+					procedimiento.setMaterias(new HashSet<Materia>());
+					
+				}
+
+				guardarGrabar(procedimiento);
+				
+				result = new IdNomDTO(procedimiento.getId(), messageSource.getMessage("proc.guardat.correcte", null, request.getLocale()));
+
+			} catch (DelegateException dEx) {
+				
+				if (dEx.isSecurityException()) {
+					
+					error = messageSource.getMessage("error.permisos", null, request.getLocale());
+					result = new IdNomDTO(-1l, error);
+					
+				} else {
+					
+					error = messageSource.getMessage("error.altres", null, request.getLocale());
+					result = new IdNomDTO(-2l, error);
+					log.error(ExceptionUtils.getStackTrace(dEx));
+					
+				}
+				
+			}
+			
+		} else {
+			
+			error = messageSource.getMessage("error.altres", null, request.getLocale());
+			result = new IdNomDTO(-2l, error);
+			
+		}
+
+		return result;
+
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/guardarNormativas.do", method = POST)
+	public @ResponseBody IdNomDTO guardarNormativas(Long id, Long[] elementos, HttpSession session, HttpServletRequest request) {
+
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+		
+		IdNomDTO result;
+		String error = null;
+		ProcedimientoLocal procedimiento = null;
+		
+		if (id != null) {
+			
+			try {
+				
+				procedimiento = DelegateUtil.getProcedimientoDelegate().obtenerProcedimientoNewBack(id);
+				
+				if (elementos != null && elementos.length > 0) {
+					
+
+					List<Long> normativasList = new Vector<Long>();
+					
+					NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
+					
+					for (int i = 0; i < elementos.length; i++)
+						normativasList.add(elementos[i]);
+					
+					
+					Set<Normativa> normativas = new HashSet<Normativa>();
+					normativas.addAll(normativaDelegate.buscarNormativas(normativasList));
+					
+					procedimiento.setNormativas(normativas); 
+					
+				} else {
+					
+					procedimiento.setNormativas(new HashSet<Normativa>());
+					
+				}
+				
+
+				guardarGrabar(procedimiento);
+				
+				result = new IdNomDTO(procedimiento.getId(), messageSource.getMessage("fitxes.guardat.correcte", null, request.getLocale()));
+
+			} catch (DelegateException dEx) {
+				
+				if (dEx.isSecurityException()) {
+					
+					error = messageSource.getMessage("error.permisos", null, request.getLocale());
+					result = new IdNomDTO(-1l, error);
+					
+				} else {
+					
+					error = messageSource.getMessage("error.altres", null, request.getLocale());
+					result = new IdNomDTO(-2l, error);
+					log.error(ExceptionUtils.getStackTrace(dEx));
+					
+				}
+				
+			}
+			
+		} else {
+			
+			error = messageSource.getMessage("error.altres", null, request.getLocale());
+			result = new IdNomDTO(-2l, error);
+			
+		}
+		
+
+		
+		return result;
+
+
+	}
 
 	class HechoVitalProcedimientoDTOComparator implements Comparator<Map<String, Object>> {
+		
         public int compare(Map<String, Object> hvp1, Map<String, Object> hvp2) {
-            Integer orden1 = (Integer) hvp1.get("orden");
+            
+        	Integer orden1 = (Integer) hvp1.get("orden");
             Integer orden2 = (Integer) hvp2.get("orden");
+            
             return orden1.compareTo(orden2); 
+            
         }
+        
     }
 
 }

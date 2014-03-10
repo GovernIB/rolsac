@@ -2,7 +2,19 @@
 var hechosVitalesAsignados = null;
 
 $(document).ready(function() {
+	
+	jQuery(".lista-simple").click(function() {
+		
+		var element = $(this).parent().parent().find("li");
+		var id = $('#item_clave_primaria').val();
+		var url = $(this).attr('action');
+		
+		ListaSimple.guardar(element, url, id);
+		
+	});
 
+    ListaSimple = new ListaSimple();
+	
 	// elements
 	opcions_elm = $("#opcions");
 	escriptori_elm = $("#escriptori");
@@ -31,26 +43,26 @@ $(document).ready(function() {
 
 	// datos traductor
 	CAMPOS_TRADUCTOR_PROCEDIMIENTO = [
-	                                  "item_nom_",
-	                                  "item_objecte_",
-	                                  "item_resultat_",
-	                                  "item_destinataris_",
-	                                  "item_resolucio_",
-	                                  "item_notificacio_",
-	                                  "item_silenci_",
-	                                  "item_observacions_"
-	                                  ];
+      "item_nom_",
+	  "item_objecte_",
+	  "item_resultat_",
+	  "item_destinataris_",
+	  "item_resolucio_",
+	  "item_notificacio_",
+	  "item_silenci_",
+	  "item_observacions_"
+    ];
 
 	DATOS_TRADUCIDOS_PROCEDIMIENTO = [
-	                                  "nombre",
-	                                  "resumen",
-	                                  "resultat",
-	                                  "destinatarios",
-	                                  "resolucion",
-	                                  "notificacion",
-	                                  "silencio",
-	                                  "observaciones"
-	                                  ];
+      "nombre",
+      "resumen",
+      "resultat",
+      "destinatarios",
+      "resolucion",
+      "notificacion",
+      "silencio",
+      "observaciones"
+    ];
 
 	// INICIEM
 	Llistat = new CLlistat();
@@ -79,15 +91,13 @@ $(document).ready(function() {
 		 * no debe realizar la petición de carga del listado de hechos vitales */
 		if ( idProcedimiento != "" ) {
 
-			var publicosObjectivosSeleccionados = new Array()
+			var publicosObjectivosSeleccionados = new Array();
 			var htmlPublicosObjetivosSeleccionados = $('.ModulPublicObjectiu .llistat input:checked');
 			var cantidadPOChecked = htmlPublicosObjetivosSeleccionados.length;
 			var hechosVitalesSeleccionados = ModulFetsVitals.obtenerSeleccionados();
 
-
 			//Se realiza la petición ajax si hay algún Público Objetivo seleccionado
 			if ( cantidadPOChecked > 0 ) {
-
 
 				//Guarda públicos objetivos asignados en una array auxiliar
 				for ( var int = 0 ; int < cantidadPOChecked ; int++ ) {
@@ -110,11 +120,11 @@ $(document).ready(function() {
 
 							// missatge
 							Missatge.llansar({tipus: "missatge", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
-
 							// error
 							Error.llansar();
 
 						}
+						
 					},
 					success: function(data) {				
 
@@ -143,14 +153,14 @@ $(document).ready(function() {
 		hechosVitalesAsignados = "";
 
 	});
+	
 }); //Fin $(document).ready
-
 
 //idioma
 var pag_idioma = $("html").attr("lang");
 
 var Cercador = {
-		iniciar: function() {}
+	iniciar: function() {}
 };
 
 //minim cercador
@@ -161,22 +171,26 @@ var paginacio_marge = 4;
 
 //llistat
 var itemID_ultim = 0;
+
 function CLlistat() {
+	
 	this.extend = ListadoBase;
 	this.extend();
 
 	this.iniciar = function() {
+		
 		$("#cerca_fechaCaducidad").datepicker({ dateFormat: 'dd/mm/yy' });
 		$("#cerca_fechaPublicacion").datepicker({ dateFormat: 'dd/mm/yy' });
 		$("#cerca_fechaActualizacion").datepicker({ dateFormat: 'dd/mm/yy' });
 
 		this.carregar({});
-	}
+		
+	};
 
-	this.finCargaListado = function(opcions,data) {
+	this.finCargaListado = function(opcions, data) {
 
 		// total
-		resultats_total = parseInt(data.total,10);
+		resultats_total = parseInt(data.total, 10);
 
 		if (resultats_total > 0) {
 
@@ -195,10 +209,8 @@ function CLlistat() {
 			if (resultats_total % pag_Res > 0)
 				ultimaPag++;
 
-
 			if (pag_Pag > ultimaPag)
 				pag_Pag = ultimaPag;
-
 
 			resultatInici = ((pag_Pag*pag_Res)+1);
 			resultatFinal = ((pag_Pag*pag_Res) + pag_Res > resultats_total) ? resultats_total : (pag_Pag*pag_Res) + pag_Res;
@@ -224,7 +236,6 @@ function CLlistat() {
 
 				else
 					txt_per = txtFechaActualizacion;
-
 
 				txt_ordenacio += ", " + txt_ordenats + " " + txtPer + " <em>" + txt_per + "</em>";
 
@@ -256,7 +267,8 @@ function CLlistat() {
 
 			// codi cuerpo
 			//$(data.nodes).slice(resultatInici-1,resultatFinal).each(function(i) {
-			$(data.nodes).each( function(i) {			
+			$(data.nodes).each( function(i) {
+				
 				dada_node = this;
 
 				parClass = (i%2) ? " par": "";
@@ -278,7 +290,8 @@ function CLlistat() {
 				//codi_taula += "<div class=\"td caducitat" + caducat_class + "\" role=\"gridcell\">" + printStringFromNull(dada_node.caducitat) + "</div>";
 				codi_taula += "<div class=\"td fechaActualizacion" + caducat_class + "\" role=\"gridcell\">" + printStringFromNull(dada_node.fechaActualizacion, txtSinValor) + "</div>";
 
-				codi_taula += "</div>";                
+				codi_taula += "</div>";
+				
 			});
 
 			codi_taula += "</div>";
@@ -286,7 +299,6 @@ function CLlistat() {
 
 			if($.browser.opera)
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
-
 
 			// Instanciamos el navegador multipágina.					
 			multipagina.init({
@@ -311,6 +323,7 @@ function CLlistat() {
 		// animacio
 		dades_elm = resultats_elm.find("div.actiu:first div.dades:first");
 		dades_elm.fadeOut(300, function() {
+			
 			// pintem
 			dades_elm.html(codi_final).fadeIn(300, function() {
 
@@ -331,176 +344,17 @@ function CLlistat() {
 
 		});
 
-	}
+	};
 
 	this.carregar = function(opcions) {
 		// opcions: cercador (si, no), ajaxPag (integer), ordreTipus (ASC, DESC), ordreCamp (tipus, carrec, tractament)
 
-		var procedimientoJSON = { "id" : "", "familia" : { "id" : "" }, "iniciacion" : { "id" : "" }, "tramite" : "", "indicador" : "", "ventanillaUnica" : "", "nombreProcedimiento" : "" };
-
-		var paginacionJSON = { "pagPag" : 0 , "pagRes" : 0 , "criterioOrdenacion" : "", "propiedadDeOrdenacion" : "" };
-
-		var criteria = { 
-				"procedimiento" : procedimientoJSON,
-				"uaHijas" : "",
-				"uaPropias" : "",
-				"visibilidad" : 0,
-				"idHechoVital" : "",
-				"idMateria" : "",
-				"idPublicoObjetivo" : "",
-				"enPlazo" : null,
-				"telematico" : null,
-				"paginacion" : paginacionJSON
-		};
-
-
-		dataVars = "";
-
-		// cercador
-		if (typeof opcions.cercador != "undefined" && opcions.cercador == "si") {
-
-			criteria.procedimiento.id = $("#cerca_codi").val();
-			criteria.procedimiento.familia.id = $("#cerca_familia").val();
-			criteria.procedimiento.iniciacion.id = $("#cerca_iniciacio").val();
-			criteria.procedimiento.tramite = $("#cerca_tramit").val();
-
-			switch ( $("#cerca_indicador").val() ) {
-
-			case "1":
-				criteria.procedimiento.indicador = 1;
-				break;
-
-			case "0":
-				criteria.procedimiento.indicador = 0;
-				break
-
-			default:
-				criteria.procedimiento.indicador = null;
-				break;
-
-			}
-
-
-			switch (  $("#cerca_finestreta").val() ) {
-
-			case "1":
-				criteria.procedimiento.ventanillaUnica = 1;
-				break;
-
-			case "0":
-				criteria.procedimiento.ventanillaUnica = 0;
-				break
-
-			default:
-				criteria.procedimiento.ventanillaUnica = null;
-				break;
-
-			}
-
-
-			criteria.procedimiento.nombreProcedimiento = $("#cerca_textes").val();
-
-			criteria.uaHijas = $("#cerca_uaFilles").is(':checked') ? 1 : 0;
-			criteria.uaPropias = $("#cerca_uaMeves").is(':checked') ? 1 : 0;
-			var visibilidad = $("#cerca_estat").val();
-
-			criteria.visibilidad = (visibilidad == "") ? 0 : visibilidad;
-			criteria.idHechoVital = $("#cerca_fet_vital").val();
-			criteria.idMateria = $("#cerca_materia").val();
-			criteria.idPublicoObjetivo = parseInt( $("#cerca_publicObjectiu").val() );
-
-			switch ( $("#enPlazo").val() ) {
-
-			case "1":
-				criteria.enPlazo = true;
-				break;
-
-			case "0":
-				criteria.enPlazo = false;
-				break
-
-			default:
-				criteria.enPlazo = null;
-				break;
-
-			}
-
-
-			switch ( $("#telematico").val() ) {
-
-			case "1":
-				criteria.telematico = true;
-				break;
-
-			case "0":
-				criteria.telematico = false;
-				break
-
-			default:
-				criteria.telematico = null;
-				break;
-
-			}
-
-
-			pagPagina_elm = pagPagina_cercador_elm;
-			ordreTipus_elm = ordreTipus_cercador_elm;
-			ordreCamp_elm = ordreCamp_cercador_elm;
-
-		} else {
-
-			pagPagina_elm = pagPagina_llistat_elm;
-			ordreTipus_elm = ordreTipus_llistat_elm;
-			ordreCamp_elm = ordreCamp_llistat_elm;
-
-			// cercador
-			dataVars_cercador = "";
-
-		}
-
-		// ordreTipus
-		if (typeof opcions.ordreTipus != "undefined") {
-			ordreTipus_elm.val(opcions.ordreTipus);
-		}
-		// ordreCamp
-		if (typeof opcions.ordreCamp != "undefined") {
-			ordreCamp_elm.val(opcions.ordreCamp);
-		}
-
-		// paginacio
-		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : multipagina.getPaginaActual();
-
-		// ordre
-		ordre_Tipus = ordreTipus_elm.val();
-		ordre_Camp = ordreCamp_elm.val();
-
-		criteria.paginacion.pagPag = pag_Pag;
-		criteria.paginacion.pagRes = pag_Res;
-		criteria.paginacion.criterioOrdenacion = ordre_Tipus;
-		criteria.paginacion.propiedadDeOrdenacion = ordre_Camp;
-
-		// ajax		
-		$.ajax({
-			type: "POST",
-			url: pagLlistat,
-			//data: dataVars,
-			dataType: "json",
-			data: "criteria=" + JSON.stringify(criteria),
-			error: function() {
-
-				if (!a_enllas) {
-					// missatge
-					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
-					// error
-					Error.llansar();
-				}
-			},
-			success: function(data) {				
-				Llistat.finCargaListado(opcions,data);					
-			}
-		});
-
-	}
+		Buscador = new BuscadorProcedimiento();
+		Buscador.orden.tipo = ordreTipus_llistat_elm.val();
+		Buscador.orden.campo = ordreCamp_llistat_elm.val();
+		Buscador.buscar(opcions, pagLlistat, Llistat);
+		
+	};
 
 };
 
@@ -557,7 +411,7 @@ function CDetall(){
 
 		}
 
-	}
+	};
 
 	this.urlPrevisualizar = urlPrevisualizarProcedimiento;
 
@@ -595,9 +449,10 @@ function CDetall(){
 
 		});
 
-	}
+	};
 
-	this.iniciar = function() {	
+	this.iniciar = function() {
+		
 		// dates
 		//$("#item_data_publicacio, #item_data_caducitat").mask("99/99/9999").datepicker({ altField: '#actualDate' });
 		$("#item_data_caducitat").datepicker({ altField: '#actualDate', dateFormat: 'dd/mm/yy' });
@@ -605,6 +460,7 @@ function CDetall(){
 
 		// idioma
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {
+			
 			// Esconder todos menos el primero
 			escriptori_detall_elm.find('div.idioma').slice(1).hide();
 
@@ -624,7 +480,8 @@ function CDetall(){
 
 			// Solo mostramos los idiomas activos para los campos multi-idioma.
 			escriptori_detall_elm.find(".element.multilang .campoIdioma").hide();            
-			escriptori_detall_elm.find(".element.multilang .campoIdioma:first-child").show().addClass("seleccionat");            
+			escriptori_detall_elm.find(".element.multilang .campoIdioma:first-child").show().addClass("seleccionat");
+			
 		}
 
 		// moduls
@@ -666,17 +523,18 @@ function CDetall(){
 		jQuery("#botoTraduirProcediment").unbind("click").bind("click", function() {
 			Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
 		});
-	}
+		
+	};
 
 	this.traduirWrapper = function () {
 		that.traduir(pagTraduir, CAMPOS_TRADUCTOR_PROCEDIMIENTO, DATOS_TRADUCIDOS_PROCEDIMIENTO);
-	}
+	};
 
 	this.dataPublicacio = function(e) {		
 //		if ($(this).val() == "") {
 //		$(this).val(txtImmediat);
 //		}
-	}
+	};
 
 	this.nou = function() {
 
@@ -719,17 +577,21 @@ function CDetall(){
 		$("#modulPrincipal :input").each(limpiarCampo);
 
 		if (typeof idUAMollapa == "undefined" || idUAMollapa == null || idUAMollapa == "") {
+			
 			$("#item_organ_responsable_id").val("");
 
 			//test
 			$("#item_organ_id").val("");
+			
 		} else {
+			
 			$("#item_organ_responsable_id").val(idUAMollapa);
 			$("#item_organ_responsable").val(nomUAMollapa).change();
 
 			//test
 			$("#item_organ_id").val(idUAMollapa);
 			$("#item_organ").val(nomUAMollapa).change();
+			
 		}
 
 		$("#modulLateral p.baix:first").removeClass("iCaducat").removeClass("iPublicat");
@@ -744,7 +606,8 @@ function CDetall(){
 		this.actualizaEventos();
 
 		this.modificado(false);
-	}		
+		
+	};
 
 	this.pintar = function(dades) {
 
@@ -847,6 +710,7 @@ function CDetall(){
 
 		if ($("#carregantDetall").size() > 0) {
 			$("#carregantDetall").fadeOut(300, function() {
+				
 				$(this).remove();
 
 				// array
@@ -857,14 +721,16 @@ function CDetall(){
 			});
 
 		} else {
+			
 			escriptori_contingut_elm.fadeOut(300, function() {
 				escriptori_detall_elm.fadeIn(300);				
 			});
 
 		}
 
-		this.modificado(false);	
-	}
+		this.modificado(false);
+	
+	};
 
 	this.elimina = function() {
 
@@ -897,7 +763,8 @@ function CDetall(){
 				}
 			}
 		});
-	}
+		
+	};
 
 	this.pintarModulos = function(dades) {
 
@@ -908,7 +775,7 @@ function CDetall(){
 		ModulFetsVitals.inicializarHechosVitales(hechosVitalesAsignados);
 		ModulNormativa.inicializarNormativas(dades.normatives);
 
-	}
+	};
 
 	this.ocultarModulos = function(selector) {
 
@@ -918,5 +785,6 @@ function CDetall(){
 				&& !selector.attr("id") == "fetsVitals" )
 			selector.addClass("invisible");
 
-	}
+	};
+	
 };
