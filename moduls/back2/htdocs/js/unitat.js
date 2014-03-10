@@ -67,34 +67,35 @@ function CDetall(soloFicha){
 			}
 			
 		}
-		
+
 		// Redigirimos el método que guarda porque en este caso también hacemos un upload de archivos				
 		this.guarda = this.guarda_upload;
-				
+
+		// Guardamos la cantidad de idiomas de idiomas con que se trabaja
+		var numIdiomas = escriptori_detall_elm.find("div.idiomes").size();
+
 		// Idioma
-		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {
-			
+		if (numIdiomas != 0) {
 			// Esconder todos menos el primero
 			$('div.idioma:gt(0)').hide();
-			
+
 			ul_idiomes_elm = escriptori_detall_elm.find("ul.idiomes:first");
-									
+
 			a_primer_elm = ul_idiomes_elm.find("a:first");
 			a_primer_elm.parent().addClass("seleccionat");
-			
+
 			a_primer_elm_class = a_primer_elm.attr("class");
 			a_primer_elm_text = a_primer_elm.text();
-			
+
 			a_primer_elm.parent().html("<span class=\"" + a_primer_elm_class + "\">" + a_primer_elm_text + "</span>");
-			
-			div_idiomes_elm = escriptori_detall_elm.find("div.idiomes:first");			
+
+			div_idiomes_elm = escriptori_detall_elm.find("div.idiomes:first");
 			div_idiomes_elm.find("div." + a_primer_elm.attr("class")).addClass("seleccionat");
-			
-			
+
 			ul_idiomes_elm.bind("click", Detall.idioma);
-			
+
 			// Mostramos DIV con el primer idioma en la sección de idiomas del responsable de la UA.
-			$('div.idioma:eq(5)').show();
+			$('div.idioma:eq(' + numIdiomas + ')').show();
 			
 		}
 		
