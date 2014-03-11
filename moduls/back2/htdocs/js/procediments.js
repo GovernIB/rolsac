@@ -362,7 +362,7 @@ function CLlistat() {
 var Items_arr = new Array();
 
 //detall
-function CDetall(){
+function CDetall() {
     
 	this.extend = DetallBase;
 	this.extend();
@@ -452,6 +452,9 @@ function CDetall(){
 	};
 
 	this.iniciar = function() {
+		
+		// Desactivamos que se cambie el detalle a modificado por cambiar los checkboxes de materias relacionadas con el procedimiento.
+		jQuery('#modul_materies .llistat li input[type=checkbox]').unbind('change');
 		
 		// dates
 		//$("#item_data_publicacio, #item_data_caducitat").mask("99/99/9999").datepicker({ altField: '#actualDate' });

@@ -15,6 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -33,7 +34,6 @@ import org.ibit.rol.sac.model.FichaResumen;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.Materia;
-import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.TraduccionDocumento;
@@ -58,7 +58,6 @@ import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
 import org.ibit.rol.sac.persistence.delegate.FichaResumenDelegate;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalDelegate;
 import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
-import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
 import org.ibit.rol.sac.persistence.delegate.SeccionDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
@@ -96,21 +95,21 @@ public class FitxaInfBackController extends PantallaBaseController {
 		request.setAttribute("urlPrevisualitzacio", System.getProperty(URL_PREVISUALIZACION));
 
 		try {
+			
 			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 
 			if (session.getAttribute("unidadAdministrativa") != null) {
 				model.put("idUA", ((UnidadAdministrativa) session.getAttribute("unidadAdministrativa")).getId());
 				model.put("nomUA", ((UnidadAdministrativa) session.getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa(lang));
 			}
-			
+
 			MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
 			List<Materia> llistaMateries = new ArrayList<Materia>();
 			List<IdNomDTO> llistaMateriesDTO = new ArrayList<IdNomDTO>();
 
 			llistaMateries = castList(Materia.class, materiaDelegate.listarMaterias());
-
 			for (Materia materia : llistaMateries) {
-			    llistaMateriesDTO.add(new IdNomDTO(materia.getId(), materia.getNombreMateria(lang)));
+				llistaMateriesDTO.add(new IdNomDTO(materia.getId(), materia.getNombreMateria(lang)));
 			}
 
 			model.put("llistaMateries", llistaMateriesDTO);
@@ -124,6 +123,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 				TraduccionHechoVital thv = (TraduccionHechoVital) fetVital.getTraduccion(lang);
 				llistaFetsVitalsDTO.add(new IdNomDTO(fetVital.getId(), thv == null ? null : thv.getNombre()));
 			}
+			
 			model.put("llistaFetsVitals", llistaFetsVitalsDTO);
 
 			PublicoObjetivoDelegate publicObjectiuDelegate = DelegateUtil.getPublicoObjetivoDelegate();
@@ -135,235 +135,276 @@ public class FitxaInfBackController extends PantallaBaseController {
 				TraduccionPublicoObjetivo tpo = (TraduccionPublicoObjetivo) publicObjectiu.getTraduccion(lang);
 				llistaPublicsObjectiuDTO.add(new IdNomDTO(publicObjectiu.getId(), tpo == null ? null : tpo.getTitulo()));
 			}
+			
 			model.put("llistaPublicsObjectiu", llistaPublicsObjectiuDTO);
 
 		} catch (DelegateException dEx) {
+			
 			if (dEx.isSecurityException()) {
-			    log.error("Error de permisos " + ExceptionUtils.getStackTrace(dEx));
+				log.error("Error de permisos " + ExceptionUtils.getStackTrace(dEx));
 			} else {
-			    log.error(ExceptionUtils.getStackTrace(dEx));
+				log.error(ExceptionUtils.getStackTrace(dEx));
 			}
+			
 		}
 
 		loadIndexModel(model, request);
+		
 		return "index";
+		
 	}
 
+	@RequestMapping(value = "/llistat.do", method = POST)
+	public @ResponseBody Map<String, Object> llistatFitxes(HttpServletRequest request, HttpSession session) {
 
-    @RequestMapping(value = "/llistat.do", method = POST)
-    public @ResponseBody Map<String, Object> llistatFitxes(HttpServletRequest request, HttpSession session) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		Map<String, String> tradMap = new HashMap<String, String>();
+		List<FichaDTO> llistaFitxesDTO = new ArrayList<FichaDTO>();
+		Map<String, Object> resultats = new HashMap<String, Object>();
 
-    	Map<String, Object> paramMap = new HashMap<String, Object>();
-    	Map<String, String> tradMap = new HashMap<String, String>();
-    	List<FichaDTO> llistaFitxesDTO = new ArrayList<FichaDTO>();
-    	Map<String, Object> resultats = new HashMap<String, Object>();
-    	
-    	UnidadAdministrativa ua = null;
-    	if (session.getAttribute("unidadAdministrativa") != null) {
-    	    ua = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
-    	}
+		UnidadAdministrativa ua = null;
+		if (session.getAttribute("unidadAdministrativa") != null) {
+			ua = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
+		}
 
-    	// Recuperamos los campos directamente des de el request
-    	String campoOrdenacion = request.getParameter("ordreCamp");				// Recuperamos el parametro de ordenación por campo
-    	String orden = request.getParameter("ordreTipus");						// Recuperamos el parametro de ordenación por tipo
-    	boolean uaFilles = "1".equals(request.getParameter("uaFilles"));		// Recuperamos si se debe buscar en las UAs hijas
-        boolean uaMeves = "1".equals(request.getParameter("uaMeves"));			// Recuperamos si se debe buscar en las UAs propias
+		// Recuperamos los campos directamente des de el request
+		String campoOrdenacion = request.getParameter("ordreCamp");				// Recuperamos el parametro de ordenación por campo
+		String orden = request.getParameter("ordreTipus");						// Recuperamos el parametro de ordenación por tipo
+		boolean uaFilles = "1".equals(request.getParameter("uaFilles"));		// Recuperamos si se debe buscar en las UAs hijas
+		boolean uaMeves = "1".equals(request.getParameter("uaMeves"));			// Recuperamos si se debe buscar en las UAs propias
 
-        Long materia = recuperarParametroId(request,"materia");		       		// Recuperamos el id de la materia
-        Long fetVital = recuperarParametroId(request, "fetVital");				// Recuperamos el id del hecho vital
-        Long publicObjectiu = recuperarParametroId(request, "publicObjectiu");	// Recuperamos el id del público objetivo
+		Long materia = recuperarParametroId(request,"materia");		       		// Recuperamos el id de la materia
+		Long fetVital = recuperarParametroId(request, "fetVital");				// Recuperamos el id del hecho vital
+		Long publicObjectiu = recuperarParametroId(request, "publicObjectiu");	// Recuperamos el id del público objetivo
 		String pagPag = recuperarPaginacion(request, "pagPag");			    	// Recuperamos la página actual
 		String pagRes = recuperarPaginacion(request, "pagRes");			    	// Recuperamos los resultados por página
 
 		int campoVisible = recuperarVisibilidad(request, paramMap);		     	// Recuperamos la visibilidad de la ficha
 
 		recuperarCodigo(request, paramMap);						     			// Recuperamos el parametro del código
-        recuperarTexto(request, tradMap);										// Recuperamos el texto y lo buscamos en todos los idiomas
-        recuperarValidacio(request, paramMap);									// Recuperamos si es válido
+		recuperarTexto(request, tradMap);										// Recuperamos el texto y lo buscamos en todos los idiomas
+		recuperarValidacio(request, paramMap);									// Recuperamos si es válido
 
 		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
-        try {
-        	FichaResumenDelegate fitxaResumenDelegate = DelegateUtil.getFichaResumenDelegate();
+		
+		try {
+			
+			FichaResumenDelegate fitxaResumenDelegate = DelegateUtil.getFichaResumenDelegate();
 
-        	resultadoBusqueda = fitxaResumenDelegate.buscarFichas(paramMap, tradMap, ua, fetVital, materia, publicObjectiu, uaFilles, uaMeves, campoOrdenacion, orden, pagPag, pagRes, campoVisible);
+			resultadoBusqueda = fitxaResumenDelegate.buscarFichas(paramMap, tradMap, ua, fetVital, materia, publicObjectiu, uaFilles, uaMeves, campoOrdenacion, orden, pagPag, pagRes, campoVisible);
 
-        	for (FichaResumen fitxaResumen : castList(FichaResumen.class, resultadoBusqueda.getListaResultados() ) ) {
-        		TraduccionFicha tfi = (TraduccionFicha) fitxaResumen.getTraduccion(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
-        		llistaFitxesDTO.add(new FichaDTO(
-        				fitxaResumen.getId(),
-        				tfi == null ? null : tfi.getTitulo(),
-        				DateUtils.formatDate(fitxaResumen.getFechaPublicacion()),
-        				DateUtils.formatDate(fitxaResumen.getFechaCaducidad()),
-        				DateUtils.formatDate(fitxaResumen.getFechaActualizacion()),
-        				fitxaResumen.isVisible()));
-        		}
+			for ( FichaResumen fitxaResumen : castList(FichaResumen.class, resultadoBusqueda.getListaResultados()) ) {
+				
+				TraduccionFicha tfi = (TraduccionFicha)fitxaResumen.getTraduccion(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
+				
+				llistaFitxesDTO.add(
+					new FichaDTO(
+						fitxaResumen.getId(),
+						tfi == null ? null : tfi.getTitulo(),
+						DateUtils.formatDate(fitxaResumen.getFechaPublicacion()),
+						DateUtils.formatDate(fitxaResumen.getFechaCaducidad()),
+						DateUtils.formatDate(fitxaResumen.getFechaActualizacion()),
+						fitxaResumen.isVisible()
+					)
+				);
+				
+			}
 
-        } catch (DelegateException dEx) {
-        	if (dEx.isSecurityException()) {
-        	    log.error("Error de permisos: " + ExceptionUtils.getStackTrace(dEx));
-        	} else {
-        	    log.error(ExceptionUtils.getStackTrace(dEx));
-        	}
-        }
+		} catch (DelegateException dEx) {
+			
+			if (dEx.isSecurityException()) {
+				log.error("Error de permisos: " + ExceptionUtils.getStackTrace(dEx));
+			} else {
+				log.error(ExceptionUtils.getStackTrace(dEx));
+			}
+			
+		}
 
-        resultats.put("total",  resultadoBusqueda.getTotalResultados());
-        resultats.put("nodes", llistaFitxesDTO);
+		resultats.put("total", resultadoBusqueda.getTotalResultados());
+		resultats.put("nodes", llistaFitxesDTO);
 
-        return resultats;
-    }
-    
-    /*
+		return resultats;
+		
+	}
+
+	/*
 	 * Recuperamos el campo del código
 	 */
 	private void recuperarCodigo(HttpServletRequest request, Map<String, Object> paramMap) {
 
 		String idStr = request.getParameter("codi");
 		Long id = -1l;
+		
 		if (idStr != null && StringUtils.isNumeric(idStr.trim())) {
-		    id = ParseUtil.parseLong( idStr.trim() );
+			id = ParseUtil.parseLong( idStr.trim() );
 		}
+		
 		paramMap.put("id", idStr != null ? id : null);
+		
 	}
 
-    /*
+	/*
 	 * Recuperamos el estado de la ficha para la validación
 	 */
 	private void recuperarValidacio(HttpServletRequest request, Map<String, Object> paramMap) {
 
 		if (request.isUserInRole("sacoper")) {
-		    // En el back antiguo estaba asi.
+			
+			// En el back antiguo estaba asi.
 			paramMap.put("validacion", "");
+			
 		} else {
+			
 			String estat = request.getParameter("estat");
 			try {
 				Integer validacion = Integer.parseInt(estat);
 				paramMap.put("validacion", validacion);
 			} catch (NumberFormatException e) {}
+			
 		}
+		
 	}
 
-    /*
-     * Recuperar id por parametro del request
-     */
-    private Long recuperarParametroId(HttpServletRequest request, String parametro) {
+	/*
+	 * Recuperar id por parametro del request
+	 */
+	private Long recuperarParametroId(HttpServletRequest request, String parametro) {
 
-    	try {
-    		return Long.parseLong(request.getParameter(parametro));
-    	} catch (NumberFormatException e) {
-    		return null;
-    	}
-    }
+		try {
+			return Long.parseLong(request.getParameter(parametro));
+		} catch (NumberFormatException e) {
+			return null;
+		}
+		
+	}
 
-    /*
-     * Recuperamos el campo texto para las traducciones
-     */
-    private void recuperarTexto(HttpServletRequest request, Map<String, String> tradMap) {
+	/*
+	 * Recuperamos el campo texto para las traducciones
+	 */
+	private void recuperarTexto(HttpServletRequest request, Map<String, String> tradMap) {
 
-    	String textes = request.getParameter("textes");
-    	if (textes != null && !"".equals(textes)) {
-    		textes = textes.toUpperCase();
-    		if (tradMap.get("titulo") == null) {
-    			tradMap.put("titulo", textes);
-    		}
-    		tradMap.put("url", textes);
-    		textes = HtmlUtils.eliminarTagsHtml(textes);
-    		tradMap.put("descAbr", textes);
-    		tradMap.put("descripcion", textes);
+		String textes = request.getParameter("textes");
+		
+		if (textes != null && !"".equals(textes)) {
+			
+			textes = textes.toUpperCase();
+			
+			if (tradMap.get("titulo") == null) {
+				tradMap.put("titulo", textes);
+			}
+			
+			tradMap.put("url", textes);
+			textes = HtmlUtils.eliminarTagsHtml(textes);
+			tradMap.put("descAbr", textes);
+			tradMap.put("descripcion", textes);
 
-    	} else {
-    		try {
-    			tradMap.put("idioma", DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
+		} else {
+			
+			try {
+				tradMap.put("idioma", DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
 			} catch  (DelegateException dEx) {
 				logException(log, dEx);
 			}
-    	}
-    }
+			
+		}
+		
+	}
 
-    /*
-     * Recuperamos la visibilidad del request
-     */
-    private int recuperarVisibilidad(HttpServletRequest request, Map<String, Object> paramMap) {
+	/*
+	 * Recuperamos la visibilidad del request
+	 */
+	private int recuperarVisibilidad(HttpServletRequest request, Map<String, Object> paramMap) {
 
-    	String visibilitat = request.getParameter("visibilitat");
-    	if (visibilitat != null) {
-    		if (visibilitat.equals("1")) {
-    			Integer visible = Integer.parseInt(visibilitat);
-    			paramMap.put("validacion", visible);
-    			return 1;
-    		} else if (visibilitat.equals("2")) {
-    			return 2;
-    		}
-    	}
-    	return 0;
-    }
+		String visibilitat = request.getParameter("visibilitat");
+		
+		if (visibilitat != null) {
+			
+			if (visibilitat.equals("1")) {
+				Integer visible = Integer.parseInt(visibilitat);
+				paramMap.put("validacion", visible);
+				return 1;
+			} else if (visibilitat.equals("2")) {
+				return 2;
+			}
+			
+		}
+		
+		return 0;
+		
+	}
 
-    /*
+	/*
 	 * Recuperamos parametros de paginación
 	 */
 	private String recuperarPaginacion(HttpServletRequest request, String parametro) {
 
 		String pagina = request.getParameter(parametro);
-		if (pagina == null) pagina = String.valueOf(0);
+		
+		if (pagina == null) 
+			pagina = String.valueOf(0);
+		
 		return pagina;
+		
 	}
 
+	@RequestMapping(value = "/pagDetall.do", method = POST)
+	public @ResponseBody Map<String, Object> recuperaDetall(Long id, HttpServletRequest request) {
 
-    @RequestMapping(value = "/pagDetall.do", method = POST)
-    public @ResponseBody Map<String, Object> recuperaDetall(Long id, HttpServletRequest request) {
+		Map<String, Object> resultats = new HashMap<String, Object>();
 
-    	Map<String, Object> resultats = new HashMap<String, Object>();
+		try {
 
-    	try {
-    		
-            String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-        	FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
-        	Ficha fitxa = fitxaDelegate.obtenerFicha(id);
+			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
+			Ficha fitxa = fitxaDelegate.obtenerFicha(id);
 
-        	resultats.put("item_id", fitxa.getId());
-        	resultats.put("item_estat", fitxa.getValidacion());
-        	resultats.put("item_data_publicacio", DateUtils.formatDateSimpleTime(fitxa.getFechaPublicacion()));
-        	resultats.put("item_data_caducitat", DateUtils.formatDateSimpleTime(fitxa.getFechaCaducidad()));
-        	resultats.put("item_youtube", fitxa.getUrlVideo());
-            resultats.put("item_forum", fitxa.getUrlForo());
-            resultats.put("item_responsable", fitxa.getResponsable());
-            resultats.put("item_notes", fitxa.getInfo());
+			resultats.put("item_id", fitxa.getId());
+			resultats.put("item_estat", fitxa.getValidacion());
+			resultats.put("item_data_publicacio", DateUtils.formatDateSimpleTime(fitxa.getFechaPublicacion()));
+			resultats.put("item_data_caducitat", DateUtils.formatDateSimpleTime(fitxa.getFechaCaducidad()));
+			resultats.put("item_youtube", fitxa.getUrlVideo());
+			resultats.put("item_forum", fitxa.getUrlForo());
+			resultats.put("item_responsable", fitxa.getResponsable());
+			resultats.put("item_notes", fitxa.getInfo());
 
-        	recuperaIdioma(resultats, fitxa, lang);		// Recuperar las fichas según el idioma.
-        	recuperaIcono(resultats, fitxa);			// Recuperar el icono de una ficha.
-        	recuperaBanner(resultats, fitxa);			// Recuperar los banners de una ficha.
-        	recuperaImatge(resultats, fitxa);			// Recuperar la imagen de una ficha.
-        	recuperaPO(resultats, fitxa, lang);			// Recuperar los públicos objetiovs de una ficha.
-        	recuperaRelacio(resultats, fitxa, lang);	// Recuperar las relaciones ficha-sección-UA
+			recuperaIdioma(resultats, fitxa, lang);		// Recuperar las fichas según el idioma.
+			recuperaIcono(resultats, fitxa);			// Recuperar el icono de una ficha.
+			recuperaBanner(resultats, fitxa);			// Recuperar los banners de una ficha.
+			recuperaImatge(resultats, fitxa);			// Recuperar la imagen de una ficha.
+			recuperaPO(resultats, fitxa, lang);			// Recuperar los públicos objetiovs de una ficha.
+			recuperaRelacio(resultats, fitxa, lang);	// Recuperar las relaciones ficha-sección-UA
 
+		} catch (DelegateException dEx) {
+			
+			log.error("Error: " + ExceptionUtils.getStackTrace(dEx));
+			
+			if (dEx.isSecurityException()) {
+				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+			} else {
+				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+			}
+			
+		}
+		
+		return resultats;
+		
+	}
 
-        } catch (DelegateException dEx) {
-        	log.error("Error: " + ExceptionUtils.getStackTrace(dEx));
-        	if (dEx.isSecurityException()) {
-        	    resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
-        	} else {
-        	    resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
-        	}
-        }
-    	return resultats;
-    }
-    
-    
-    @RequestMapping(value = "/modulos.do")
+	@RequestMapping(value = "/modulos.do")
 	public @ResponseBody Map<String, Object> recuperaModulos(Long id, HttpServletRequest request) {
 
 		Map<String, Object> resultats = new HashMap<String, Object>();
 
 		try {
-			
-            String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-        	FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
-        	Ficha fitxa = fitxaDelegate.obtenerFicha(id);
-        	
-        	recuperaMateries(resultats, fitxa, lang);	// Recuperar las materias asociadas a una ficha.        	
-        	recuperaFetsVitals(resultats, fitxa, lang);	// Recuperar los hechos vitales asociados a una ficha.
-        	recuperaDocs(resultats, fitxa);				// Recuperar los documentos asociados a una ficha.        	
-        	recuperaEnllasos(resultats, fitxa);			// Recuperar los enlaces de una ficha.
-        	
+
+			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
+			Ficha ficha = fitxaDelegate.obtenerFicha(id);
+
+			recuperaMateries(resultats, ficha, lang);		// Recuperar las materias asociadas a una ficha.        	
+			recuperaFetsVitals(resultats, ficha, lang);		// Recuperar los hechos vitales asociados a una ficha.
+			recuperaDocs(resultats, ficha);					// Recuperar los documentos asociados a una ficha.        	
+			recuperaEnllasos(resultats, ficha);				// Recuperar los enlaces de una ficha.
 
 		} catch (DelegateException dEx) {
 
@@ -380,38 +421,41 @@ public class FitxaInfBackController extends PantallaBaseController {
 		return resultats;
 
 	}
-    
 
-    /*
-     * Función que recupera el contenido de las fichas según el idioma
-     */
-    private void recuperaIdioma(Map<String, Object> resultats, Ficha fitxa, String langDefault) throws DelegateException {
+	/*
+	 * Función que recupera el contenido de las fichas según el idioma
+	 */
+	private void recuperaIdioma(Map<String, Object> resultats, Ficha fitxa, String langDefault) throws DelegateException {
 
-        List<String> langs = DelegateUtil.getIdiomaDelegate().listarLenguajes();
-        for (String lang : langs) {
-            if (fitxa.getTraduccion(lang) != null) {
-                resultats.put(lang, (TraduccionFicha) fitxa.getTraduccion(lang));
-            } else {
-                if (fitxa.getTraduccion(langDefault) != null) {
-                    resultats.put(lang, (TraduccionFicha) fitxa.getTraduccion(langDefault));
-                } else {
-                    resultats.put(lang, new TraduccionFicha());
-                }
-            }
-        }
-    }
+		List<String> langs = DelegateUtil.getIdiomaDelegate().listarLenguajes();
+		
+		for (String lang : langs) {
+			if (fitxa.getTraduccion(lang) != null) {
+				resultats.put(lang, (TraduccionFicha) fitxa.getTraduccion(lang));
+			} else {
+				if (fitxa.getTraduccion(langDefault) != null) {
+					resultats.put(lang, (TraduccionFicha) fitxa.getTraduccion(langDefault));
+				} else {
+					resultats.put(lang, new TraduccionFicha());
+				}
+			}
+		}
+		
+	}
 
-    /*
+	/*
 	 * Función para recuperar los documentos relaciohnados con la ficha.
 	 */
 	private void recuperaDocs(Map<String, Object> resultats, Ficha fitxa) throws DelegateException {
 
 		if (fitxa.getDocumentos() != null) {
+			
 			Map<String, Object> mapDoc;
 			List<Map<String, Object>> llistaDocuments = new ArrayList<Map<String, Object>>();
 			List<String> idiomas = DelegateUtil.getIdiomaDelegate().listarLenguajes();
 
 			for (Documento doc: fitxa.getDocumentos()) {
+				
 				if (doc != null) {
 
 					// Montar map solo con los campos 'titulo' de las traducciones del documento.
@@ -429,17 +473,25 @@ public class FitxaInfBackController extends PantallaBaseController {
 					mapDoc.put("id", doc.getId());
 					mapDoc.put("orden", doc.getOrden());
 					mapDoc.put("nombre", titulos);
+					
 					llistaDocuments.add(mapDoc);
 
 				} else {
+					
 					log.error("La fitxa " + fitxa.getId() + " te un document null.");
+					
 				}
+				
 			}
+			
 			resultats.put("documents", llistaDocuments);
 
 		} else {
+			
 			resultats.put("documents", null);
+			
 		}
+		
 	}
 
 	/*
@@ -454,6 +506,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 			resultats.put("item_icona_enllas_arxiu", "");
 			resultats.put("item_icona", "");
 		}
+		
 	}
 
 	/*
@@ -468,6 +521,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 			resultats.put("item_banner_enllas_arxiu", "");
 			resultats.put("item_banner", "");
 		}
+		
 	}
 
 	/*
@@ -482,41 +536,65 @@ public class FitxaInfBackController extends PantallaBaseController {
 			resultats.put("item_imatge_enllas_arxiu", "");
 			resultats.put("item_imatge", "");
 		}
+		
 	}
 
 	/*
 	 * Función para recuperar las materias asociadas a una ficha
 	 */
-	private void recuperaMateries(Map<String, Object> resultats, Ficha fitxa, String lang) {
-
-		List<IdNomDTO> llistaMateriesDTO = new ArrayList<IdNomDTO>();
-		if (fitxa.getMaterias() != null) {
-			for (Materia materia : fitxa.getMaterias()) {
-			    llistaMateriesDTO.add(new IdNomDTO(materia.getId(), materia.getNombreMateria(lang)));
-			}
-			resultats.put("materies", llistaMateriesDTO);
+	private void recuperaMateries(Map<String, Object> resultats, Ficha ficha, String lang) {
+		
+		if (ficha.getMaterias() != null) {
 			
+			List<Map<String, String>> listaMateriasFicha  = new ArrayList<Map<String, String>>();
+			Map<String, String> map;
+			
+			for (Materia materia : ficha.getMaterias()) {
+
+				map = new HashMap<String, String>();
+
+				map.put("id", String.valueOf(materia.getId()));
+				map.put("nom", materia.getNombreMateria(lang));
+				map.put("idMainItem", String.valueOf(ficha.getId()));
+				map.put("idRelatedItem", String.valueOf(materia.getId()));
+				
+				listaMateriasFicha.add(map);
+
+			}
+						
+			resultats.put("materies", listaMateriasFicha);
+
 		} else {
+		
 			resultats.put("materies", null);
+		
 		}
+		
 	}
 
 	/*
 	 * Función para recuperar los hechos vitales de una ficha
 	 */
-	private void recuperaFetsVitals(Map<String, Object> resultats, Ficha fitxa, String lang) {
-
-		List<IdNomDTO> llistaFetsVitalsDTO = new ArrayList<IdNomDTO>();
-		if (fitxa.getHechosVitales() != null) {
-			for (HechoVital fetVital : fitxa.getHechosVitales()) {
-				TraduccionHechoVital thv = (TraduccionHechoVital) fetVital.getTraduccion(lang);
-				llistaFetsVitalsDTO.add(new IdNomDTO(fetVital.getId(), thv == null ? "" : thv.getNombre()));
-			}
-			resultats.put("fetsVitals", llistaFetsVitalsDTO);
-
-		} else {
-			resultats.put("fetsVitals", null);
+	private void recuperaFetsVitals(Map<String, Object> resultats, Ficha ficha, String lang) {
+		
+		List<Map<String, Object>> listaHechosVitalesDTO = new ArrayList<Map<String, Object>>();
+		
+		for (HechoVital hechoVital : ficha.getHechosVitales()) {
+			
+			TraduccionHechoVital thv = (TraduccionHechoVital)hechoVital.getTraduccion(lang);
+			
+			Map<String, Object> hvpDTO = new HashMap<String, Object>();
+			hvpDTO.put("id", hechoVital.getId());
+			hvpDTO.put("nom", thv.getNombre());
+			hvpDTO.put("idMainItem", ficha.getId());
+			hvpDTO.put("idRelatedItem", hechoVital.getId());
+			
+			listaHechosVitalesDTO.add(hvpDTO);
+			
 		}
+				
+		resultats.put("fetsVitals", listaHechosVitalesDTO);
+
 	}
 
 	/*
@@ -525,16 +603,22 @@ public class FitxaInfBackController extends PantallaBaseController {
 	private void recuperaPO(Map<String, Object> resultats, Ficha fitxa, String lang) {
 
 		List<IdNomDTO> llistaPublicObjectiuDTO = new ArrayList<IdNomDTO>();
+		
 		if (fitxa.getPublicosObjetivo() != null) {
+			
 			for (PublicoObjetivo publicObj : fitxa.getPublicosObjetivo()) {
-				TraduccionPublicoObjetivo tpob = (TraduccionPublicoObjetivo) publicObj.getTraduccion(lang);
+				TraduccionPublicoObjetivo tpob = (TraduccionPublicoObjetivo)publicObj.getTraduccion(lang);
 				llistaPublicObjectiuDTO.add(new IdNomDTO(publicObj.getId(), tpob == null ? "" : tpob.getTitulo()));
 			}
-			resultats.put("publicsObjectiu", llistaPublicObjectiuDTO);
 			
+			resultats.put("publicsObjectiu", llistaPublicObjectiuDTO);
+
 		} else {
+			
 			resultats.put("publicsObjectiu", null);
+			
 		}
+		
 	}
 
 	/*
@@ -543,10 +627,15 @@ public class FitxaInfBackController extends PantallaBaseController {
 	private void recuperaRelacio(Map<String, Object> resultats, Ficha fitxa, String lang) throws DelegateException {
 
 		List<FichaUADTO> llistaFichaUADTO = new ArrayList<FichaUADTO>();
+		
 		if (fitxa.getFichasua() != null) {
+			
 			for (FichaUA fichaUA : DelegateUtil.getFichaDelegate().listFichasUA(fitxa.getId())) {
+				
 				TraduccionSeccion tse = (TraduccionSeccion) fichaUA.getSeccion().getTraduccion(lang);
-				llistaFichaUADTO.add(new FichaUADTO(
+				
+				llistaFichaUADTO.add(
+					new FichaUADTO(
 						fichaUA.getId(),
 						fichaUA.getUnidadAdministrativa().getId(),
 						fichaUA.getUnidadAdministrativa().getNombreUnidadAdministrativa(lang),
@@ -555,38 +644,63 @@ public class FitxaInfBackController extends PantallaBaseController {
 						null,
 						null,
 						fichaUA.getOrden(),
-						fichaUA.getOrdenseccion())
+						fichaUA.getOrdenseccion()
+					)
 				);
+				
 			}
-			resultats.put("seccUA", llistaFichaUADTO);
 			
+			resultats.put("seccUA", llistaFichaUADTO);
+
 		} else {
+			
 			resultats.put("seccUA", null);
+			
 		}
+		
 	}
 
 	/*
 	 * Función para recuperar los enlaces de una ficha.
 	 */
-	private void recuperaEnllasos(Map<String, Object> resultats, Ficha fitxa) {
+	private void recuperaEnllasos(Map<String, Object> resultats, Ficha ficha) {
 
-		List<EnlaceDTO> llistaEnllassosDTO = new ArrayList<EnlaceDTO>();
-		if (fitxa.getEnlaces() != null) {
-			for (Enlace enllas : fitxa.getEnlaces()) {
-				if (enllas != null)
-					llistaEnllassosDTO.add(new EnlaceDTO(enllas.getId(), enllas.getOrden(), enllas.getTraduccionMap()));
+		List<EnlaceDTO> llistaEnlacesDTO = new ArrayList<EnlaceDTO>();
+		
+		if (ficha.getEnlaces() != null) {
+			
+			for (Enlace enlace : ficha.getEnlaces()) {
+				
+				if (enlace != null) {
+				
+					llistaEnlacesDTO.add(
+						new EnlaceDTO(
+							enlace.getId(), 
+							enlace.getOrden(),
+							enlace.getTraduccionMap(), 
+							ficha.getId(),
+							enlace.getId()
+						)
+					);
+				
+				}
+				
 			}
-			resultats.put("enllassos", llistaEnllassosDTO);
+			
+			resultats.put("enllassos", llistaEnlacesDTO);
 
 		} else {
+			
 			resultats.put("enllassos", null);
+			
 		}
+		
 	}
 
-
-    @RequestMapping(value = "/guardar.do", method = POST)
-    public ResponseEntity<String> guardarFicha(HttpSession session, HttpServletRequest request) {
-    	/**
+	@RequestMapping(value = "/guardar.do", method = POST)
+	public ResponseEntity<String> guardar(HttpSession session, HttpServletRequest request) {
+		
+		/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
 		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la petici�n.
 		 * Esto se debe a que como esta petici�n es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
@@ -598,8 +712,9 @@ public class FitxaInfBackController extends PantallaBaseController {
 
 		IdNomDTO result;
 		String error = null;
-		
+
 		try {
+			
 			// Aqui nos llegaría un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
 			// Iremos recopilando los parametros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
 			Map<String, String> valoresForm = new HashMap<String, String>();
@@ -608,25 +723,33 @@ public class FitxaInfBackController extends PantallaBaseController {
 			List<String> docsIds = new ArrayList<String>();
 
 			List<FileItem> items = castList(FileItem.class, UploadUtil.obtenerServletFileUpload().parseRequest(request));
+			
 			for (FileItem item : items) {
+				
 				if (item.isFormField()) {
-					if (item.getFieldName().startsWith("enllas_")) {
-					    enllasos.add(item.getFieldName());
-					}
-					if (item.getFieldName().startsWith("documents_id_")) {
-					    docsIds.add(item.getFieldName());
-					}
-					valoresForm.put(item.getFieldName(), item.getString("UTF-8"));
 					
+					if (item.getFieldName().startsWith("enllas_")) {
+						enllasos.add(item.getFieldName());
+					}
+					
+					if (item.getFieldName().startsWith("documents_id_")) {
+						docsIds.add(item.getFieldName());
+					}
+					
+					valoresForm.put(item.getFieldName(), item.getString("UTF-8"));
+
 				} else {
+					
 					ficherosForm.put(item.getFieldName(), item);
+					
 				}
+				
 			}
 
 			// Comprovam camps obligatoris
 			result = guardarControlCampos(request, valoresForm);
 			if (result != null) {
-			    return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
+				return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
 			}
 
 			// Recuperamos la ficha antigua
@@ -636,6 +759,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 			boolean edicion = (fitxaOld != null) ? true : false;
 
 			Ficha fitxa = new Ficha();
+			
 			// Recuperación de los nuevos valores de una ficha, tanto si es edición como una ficha nueva
 			fitxa = guardarValidacion(request, fitxa, fitxaOld, valoresForm);           // Es comprova que l'estat es un estat permes i es recupera
 			fitxa = guardarAntiguo(edicion, fitxa, fitxaOld);                           // Guardamos los campos de la ficha en caso de que sea una edición y no una ficha nueva 
@@ -645,87 +769,104 @@ public class FitxaInfBackController extends PantallaBaseController {
 			fitxa = guardarIcono(fitxa, valoresForm, ficherosForm);                     // Controlamos los cambios del icono
 			fitxa = guardarBanner(fitxa, valoresForm, ficherosForm);                    // Controlamos los cambios del banner
 			fitxa = guardarImatge(fitxa, valoresForm, ficherosForm);                    // Controlamos los cambios de la imagen
-			fitxa = guardarMaterias(edicion, fitxa, fitxaOld, valoresForm);             // Controlamos las materias modificadas o incluidas
-            fitxa = guardarHechosVitales(edicion, fitxa, fitxaOld, valoresForm);        // Controlamos los hechos vitales modificados o incluidos
-            fitxa = guardarPublicoObjetivo(edicion, fitxa, fitxaOld, valoresForm);      // Controlamos los públicos objetivos modificados o incluidos
-            fitxa = guardarDocumentos(edicion, fitxa, fitxaOld, valoresForm, docsIds);  // Controlamos los documentos asociados a una ficha
+			fitxa = guardarPublicoObjetivo(edicion, fitxa, fitxaOld, valoresForm);      // Controlamos los públicos objetivos modificados o incluidos
+			fitxa = guardarDocumentos(edicion, fitxa, fitxaOld, valoresForm, docsIds);  // Controlamos los documentos asociados a una ficha
 
 			fitxa.setFechaActualizacion(new Date());									// Guardamos la fecha actual al ser la última actualización
 			fitxa.setUrlForo(valoresForm.get("item_forum"));							// Guardamos el valor de la URL del foro
-            fitxa.setUrlVideo(valoresForm.get("item_youtube"));							// Guardamos el valor de la URL del video
-            fitxa.setResponsable(valoresForm.get("item_responsable"));					// Guardamos el responsable de la ficha
-            fitxa.setInfo(valoresForm.get("item_notes"));								// Guardamos el campo de la información
-            // Fin recuperación de los valores
+			fitxa.setUrlVideo(valoresForm.get("item_youtube"));							// Guardamos el valor de la URL del video
+			fitxa.setResponsable(valoresForm.get("item_responsable"));					// Guardamos el responsable de la ficha
+			fitxa.setInfo(valoresForm.get("item_notes"));								// Guardamos el campo de la información
+			// Fin recuperación de los valores
 
-            Long idFitxa = guardarGrabar(fitxa);										// Guardar los cambios de una ficha
+			Long idFitxa = guardarGrabar(fitxa);										// Guardar los cambios de una ficha
 
-            // Guardado de las relaciones de una ficha con otras entidades
-            guardarSecciosUA(edicion, fitxaOld, valoresForm, idFitxa);					// Guardamos las relaciones de la ficha con las secciones y las UAs
-            guardarEnlaces(edicion, fitxa, fitxaOld, valoresForm, idFitxa, enllasos);	// Guardamos llas relaciones con los enlaces
-            // Fin guardado relaciones
+			// Guardado de las relaciones de una ficha con otras entidades
+			guardarSecciosUA(edicion, fitxaOld, valoresForm, idFitxa);					// Guardamos las relaciones de la ficha con las secciones y las UAs
+			guardarEnlaces(edicion, fitxa, fitxaOld, valoresForm, idFitxa, enllasos);	// Guardamos llas relaciones con los enlaces
+			// Fin guardado relaciones
 
-            // Finalitzat correctament
-            result = new IdNomDTO(fitxa.getId(), messageSource.getMessage("fitxes.guardat.correcte", null, request.getLocale()));
+			// Finalitzat correctament
+			result = new IdNomDTO(fitxa.getId(), messageSource.getMessage("fitxes.guardat.correcte", null, request.getLocale()));
 
-        } catch (DelegateException dEx) {
-        	if (dEx.isSecurityException()) {
-        		error = messageSource.getMessage("error.permisos", null, request.getLocale());
-        		result = new IdNomDTO(-1l, error);
-        	} else {
-        		error = messageSource.getMessage("error.altres", null, request.getLocale());
-        		result = new IdNomDTO(-2l, error);
-        		log.error(ExceptionUtils.getStackTrace(dEx));
-        	}
-        } catch (FileUploadException e) {
-        	error = messageSource.getMessage("error.fitxer.tamany", null, request.getLocale());
-        	result = new IdNomDTO(-3l, error);
-        	log.error(ExceptionUtils.getStackTrace(e));
-        } catch (UnsupportedEncodingException e) {
-        	error = messageSource.getMessage("error.altres", null, request.getLocale());
-        	result = new IdNomDTO(-2l, error);
-        	log.error(ExceptionUtils.getStackTrace(e));
-        } catch (NumberFormatException nfe) {
-        	error = messageSource.getMessage("proc.error.estat.incorrecte", null, request.getLocale());
-        	result = new IdNomDTO(-3l, error);
-        } catch (ParseException pe) {
-        	error = messageSource.getMessage(pe.getMessage(), null, request.getLocale());
-        	result = new IdNomDTO(-4l, error);
-        }
+		} catch (DelegateException dEx) {
+			
+			if (dEx.isSecurityException()) {
+				error = messageSource.getMessage("error.permisos", null, request.getLocale());
+				result = new IdNomDTO(-1l, error);
+			} else {
+				error = messageSource.getMessage("error.altres", null, request.getLocale());
+				result = new IdNomDTO(-2l, error);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+			}
+			
+		} catch (FileUploadException e) {
+			
+			error = messageSource.getMessage("error.fitxer.tamany", null, request.getLocale());
+			result = new IdNomDTO(-3l, error);
+			
+			log.error(ExceptionUtils.getStackTrace(e));
+			
+		} catch (UnsupportedEncodingException e) {
+			
+			error = messageSource.getMessage("error.altres", null, request.getLocale());
+			result = new IdNomDTO(-2l, error);
+			
+			log.error(ExceptionUtils.getStackTrace(e));
+			
+		} catch (NumberFormatException nfe) {
+			
+			error = messageSource.getMessage("proc.error.estat.incorrecte", null, request.getLocale());
+			result = new IdNomDTO(-3l, error);
+			
+		} catch (ParseException pe) {
+			
+			error = messageSource.getMessage(pe.getMessage(), null, request.getLocale());
+			result = new IdNomDTO(-4l, error);
+			
+		}
 
 		return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
-    }
+		
+	}
 
-    /*
+	/*
 	 * Función que comprueba los campos obligatorios
 	 */
-	private IdNomDTO guardarControlCampos(HttpServletRequest request, Map<String, String> valoresForm) throws DelegateException {
+	private IdNomDTO guardarControlCampos(HttpServletRequest request, Map<String, String> valoresForm) 
+			throws DelegateException {
 
 		String error;
 		// Se cambia el "item_titol_ca" por el "item_titol_" + idioma
 		String titolCatala = valoresForm.get("item_titol_" + DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
+		
 		if (titolCatala == null || "".equals(titolCatala)) {
 			error = messageSource.getMessage("fitxes.formulari.error.falten.camps", null, request.getLocale());
 			return new IdNomDTO(-3l, error);
 		}
+		
 		if (valoresForm.get("seccUA") == null || valoresForm.get("seccUA").split("#").length < 1) {
 			error = messageSource.getMessage("fitxes.missatge.es_necessari", null, request.getLocale());
 			return new IdNomDTO(-3l, error);
 		}
+		
 		if (valoresForm.get("publicsObjectiu") == null || valoresForm.get("publicsObjectiu").equals("")) {
 			error = messageSource.getMessage("fitxes.missatge.es_necessari_public", null, request.getLocale());
 			return new IdNomDTO(-3l, error);
 		}
 
 		return null;
+		
 	}
 
-    /*
+	/*
 	 * Controlamos si se trata de una nueva ficha o es la edición de una ya existente
 	 */
 	private Ficha guardarFitxaAntigua(Map<String, String> valoresForm) throws DelegateException {
 
 		Ficha fitxaOld = null;
 		Long id = ParseUtil.parseLong(valoresForm.get("item_id"));
+		
 		if (id != null) {
 			fitxaOld = DelegateUtil.getFichaDelegate().obtenerFicha(id);
 		} else {
@@ -733,21 +874,26 @@ public class FitxaInfBackController extends PantallaBaseController {
 		}
 
 		return fitxaOld;
+		
 	}
 
 	/*
 	 * Recuperación y comprobación de si una ficha esta en un estado valido, es decir que este en un estado permitido
 	 */
-	private Ficha guardarValidacion(HttpServletRequest request, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm) throws DelegateException {
+	private Ficha guardarValidacion(HttpServletRequest request, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm) 
+			throws DelegateException {
 
 		Integer validacion = Integer.parseInt(valoresForm.get("item_estat"));
+		
 		// Comprobar que no se haya cambiado la validacion/estado siendo operador
 		if (request.isUserInRole("sacoper") && fitxaOld != null && !fitxaOld.getValidacion().equals(validacion)) {
-		    throw new DelegateException(new SecurityException());
+			throw new DelegateException(new SecurityException());
 		}
 
 		fitxa.setValidacion(validacion);
+		
 		return fitxa;
+		
 	}
 
 	/*
@@ -756,6 +902,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 	private Ficha guardarAntiguo(boolean edicion, Ficha fitxa, Ficha fitxaOld) {
 
 		if (edicion) {
+			
 			// Mantenim els valors que te la fitxa.
 			fitxa.setId(fitxaOld.getId());
 			fitxa.setBaner(fitxaOld.getBaner());
@@ -769,9 +916,11 @@ public class FitxaInfBackController extends PantallaBaseController {
 			fitxa.setMaterias(fitxaOld.getMaterias());
 			fitxa.setHechosVitales(fitxaOld.getHechosVitales());
 			fitxa.setPublicosObjetivo(fitxaOld.getPublicosObjetivo());
+			
 		}
 
 		return fitxa;
+		
 	}
 
 	/*
@@ -780,14 +929,18 @@ public class FitxaInfBackController extends PantallaBaseController {
 	private Ficha guardarFechaPublicacion(Ficha fitxa, Map<String, String> valoresForm) throws ParseException {
 
 		if (!StringUtils.isEmpty(valoresForm.get("item_data_publicacio"))) {
+			
 			Date data_publicacio = DateUtils.parseDateSimpleTime(valoresForm.get("item_data_publicacio"));
 			if (data_publicacio == null) {
-			    throw new ParseException("error.data_publicacio", 0);
+				throw new ParseException("error.data_publicacio", 0);
 			}
+			
 			fitxa.setFechaPublicacion(data_publicacio);
+			
 		}
 
 		return fitxa;
+		
 	}
 
 	/*
@@ -796,14 +949,19 @@ public class FitxaInfBackController extends PantallaBaseController {
 	private Ficha guardarFechaCaducidad(Ficha fitxa, Map<String, String> valoresForm) throws ParseException {
 
 		if (!StringUtils.isEmpty(valoresForm.get("item_data_caducitat"))) {
+			
 			Date data_caducitat = DateUtils.parseDateSimpleTime(valoresForm.get("item_data_caducitat"));
+			
 			if (data_caducitat == null) {
-			    throw new ParseException("error.data_caducitat", 0);
+				throw new ParseException("error.data_caducitat", 0);
 			}
+			
 			fitxa.setFechaCaducidad(data_caducitat);
+			
 		}
 
 		return fitxa;
+		
 	}
 
 	/*
@@ -812,20 +970,25 @@ public class FitxaInfBackController extends PantallaBaseController {
 	private Ficha guardarIdiomas(boolean edicion, Ficha fitxa, Map<String, String> valoresForm) throws DelegateException {
 
 		TraduccionFicha tfi;
+		
 		for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
+			
 			tfi = (TraduccionFicha) ((fitxa != null) ? fitxa.getTraduccion(lang) : new TraduccionProcedimientoLocal());
-            if (tfi == null) {
-                tfi = new TraduccionFicha();
-            }
+			
+			if (tfi == null) {
+				tfi = new TraduccionFicha();
+			}
 
 			tfi.setTitulo(RolUtil.limpiaCadena(valoresForm.get("item_titol_" + lang)));
 			tfi.setDescAbr(RolUtil.limpiaCadena(valoresForm.get("item_des_curta_" + lang)));
 			tfi.setDescripcion(RolUtil.limpiaCadena(valoresForm.get("item_des_llarga_" + lang)));
 			tfi.setUrl(valoresForm.get("item_url_" + lang));
 			fitxa.setTraduccion(lang, tfi);
+			
 		}
 
 		return fitxa;
+		
 	}
 
 	/*
@@ -834,14 +997,16 @@ public class FitxaInfBackController extends PantallaBaseController {
 	private Ficha guardarIcono(Ficha fitxa, Map<String, String> valoresForm, Map<String, FileItem> ficherosForm) {
 
 		FileItem fileIcona = ficherosForm.get("item_icona");
+		
 		if (fileIcona != null && fileIcona.getSize() > 0) {
-		    fitxa.setIcono(UploadUtil.obtenerArchivo(fitxa.getIcono(), fileIcona));
+			fitxa.setIcono(UploadUtil.obtenerArchivo(fitxa.getIcono(), fileIcona));
 		} else if (valoresForm.get("item_icona_delete") != null && !"".equals(valoresForm.get("item_icona_delete"))) {
-		    // borrar fichero si se solicita
-		    fitxa.setIcono(null);
+			// borrar fichero si se solicita
+			fitxa.setIcono(null);
 		}
 
 		return fitxa;
+		
 	}
 
 	/*
@@ -850,14 +1015,16 @@ public class FitxaInfBackController extends PantallaBaseController {
 	private Ficha guardarBanner(Ficha fitxa, Map<String, String> valoresForm, Map<String, FileItem> ficherosForm) {
 
 		FileItem fileBanner = ficherosForm.get("item_banner");
+		
 		if (fileBanner != null && fileBanner.getSize() > 0) {
-		    fitxa.setBaner(UploadUtil.obtenerArchivo(fitxa.getBaner(), fileBanner));
+			fitxa.setBaner(UploadUtil.obtenerArchivo(fitxa.getBaner(), fileBanner));
 		} else if (valoresForm.get("item_banner_delete") != null && !"".equals(valoresForm.get("item_banner_delete"))) {
-		    // borrar fichero si se solicita
-		    fitxa.setBaner(null);
+			// borrar fichero si se solicita
+			fitxa.setBaner(null);
 		}
 
 		return fitxa;
+		
 	}
 
 	/*
@@ -866,413 +1033,466 @@ public class FitxaInfBackController extends PantallaBaseController {
 	private Ficha guardarImatge(Ficha fitxa, Map<String, String> valoresForm, Map<String, FileItem> ficherosForm) {
 
 		FileItem fileImatge = ficherosForm.get("item_imatge");
+		
 		if (fileImatge != null && fileImatge.getSize() > 0) {
-		    fitxa.setImagen(UploadUtil.obtenerArchivo(fitxa.getImagen(), fileImatge));
+			fitxa.setImagen(UploadUtil.obtenerArchivo(fitxa.getImagen(), fileImatge));
 		} else if (valoresForm.get("item_imatge_delete") != null && !"".equals(valoresForm.get("item_imatge_delete"))) {
-		    // borrar fichero si se solicita
-		    fitxa.setImagen(null);
+			// borrar fichero si se solicita
+			fitxa.setImagen(null);
 		}
 
 		return fitxa;
+		
 	}
 
 	/*
-     * Para hacer menos accesos a BBDD se comprueba si es edicion o no, en el primer caso, es bastante
-     * probable que se repitan la mayoria de materias.
-     */
-    private Ficha guardarMaterias(boolean edicion, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm) throws DelegateException {
+	 * Controlamos los públicos objetivos modificados o incluidos
+	 */
+	private Ficha guardarPublicoObjetivo(boolean edicion, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm) 
+			throws DelegateException {
 
-    	if (isModuloModificado("modulo_materias_modificado", valoresForm)) {
+		if (isModuloModificado("modul_public_modificat", valoresForm)) {
+			
+			if (valoresForm.get("publicsObjectiu") != null && !"".equals(valoresForm.get("publicsObjectiu"))) {
+				
+				String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+				PublicoObjetivoDelegate publicObjDelegate = DelegateUtil.getPublicoObjetivoDelegate();
+				Set<PublicoObjetivo> publicsNous = new HashSet<PublicoObjetivo>();
+				publicsNous.addAll(publicObjDelegate.obtenerPublicosObjetivoPorIDs(valoresForm.get("publicsObjectiu"), idioma));                
+				fitxa.setPublicosObjetivo(publicsNous);
 
-    		if (valoresForm.get("materies") != null && !"".equals(valoresForm.get("materies"))) {
-    			MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
-				Set<Materia> materias = new HashSet<Materia>();
-				materias.addAll(materiaDelegate.obtenerMateriasPorIDs(valoresForm.get("materies"), DelegateUtil.getIdiomaDelegate().lenguajePorDefecto()));
-				fitxa.setMaterias(materias); 
+			} else {
+				
+				fitxa.setPublicosObjetivo(new HashSet<PublicoObjetivo>());
+				
+			}
+			
+		}
 
-    		} else {
-    			fitxa.setMaterias(new HashSet<Materia>());
-    		}
-    	}
+		return fitxa;
+		
+	}
 
-    	return fitxa;
-    }
+	/*
+	 * Función para recuperar y controlar los documendos asociados
+	 */
+	private Ficha guardarDocumentos(boolean edicion, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm, List<String> docsIds)
+			throws DelegateException {
 
-    /*
-     * Controlamos los hechos vitales modificados o incluidos
-     */
-    private Ficha guardarHechosVitales(boolean edicion, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm) throws DelegateException {
+		if (isModuloModificado("modulo_documents_modificado", valoresForm)) {
 
-    	if (isModuloModificado("modulo_hechos_modificado", valoresForm)) {
-        	if (valoresForm.get("fetsVitals") != null && !"".equals(valoresForm.get("fetsVitals"))) {
-        		Set<HechoVital> hechosVitales = new HashSet<HechoVital>();
-        		List<Long> ids = new ArrayList<Long>();
-    			for (String cod : valoresForm.get("fetsVitals").split(",")) {
-    			    ids.add(Long.parseLong(cod));
-    			}
-    			hechosVitales.addAll(DelegateUtil.getHechoVitalDelegate().buscarPorIds((Long[]) ids.toArray()));
-        		fitxa.setHechosVitales(hechosVitales);
+			HashSet<String> hashSet = new HashSet<String>(docsIds);
+			docsIds.clear();
+			docsIds.addAll(hashSet);
 
-        	} else {
-        		fitxa.setHechosVitales(new HashSet<HechoVital>());
-        	}
-        }
+			List<String> ids = new ArrayList<String>(docsIds.size());
+			Map<String, String> idOrden = new HashMap<String, String>();
+			
+			for (String id : docsIds) {
+				ids.add(id.split("_")[2]);
+				String orden = valoresForm.get("documents_orden_" + id.split("_")[2]);
+				idOrden.put(id.split("_")[2], orden);
+			}
 
-    	return fitxa;
-    }
+			List<Documento> documents = cuerpo(fitxaOld.getDocumentos(), ids, idOrden, edicion);
 
-    /*
-     * Controlamos los públicos objetivos modificados o incluidos
-     */
-    private Ficha guardarPublicoObjetivo(boolean edicion, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm) throws DelegateException {
+			// Assignar els documents a la fitxa
+			fitxa.setDocumentos(documents);
+			
+		}
 
-    	if (isModuloModificado("modul_public_modificat", valoresForm)) {
-    		if (valoresForm.get("publicsObjectiu") != null && !"".equals(valoresForm.get("publicsObjectiu"))) {
-    		    String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-                PublicoObjetivoDelegate publicObjDelegate = DelegateUtil.getPublicoObjetivoDelegate();
-                Set<PublicoObjetivo> publicsNous = new HashSet<PublicoObjetivo>();
-                publicsNous.addAll(publicObjDelegate.obtenerPublicosObjetivoPorIDs(valoresForm.get("publicsObjectiu"), idioma));                
-                fitxa.setPublicosObjetivo(publicsNous);
+		return fitxa;
+		
+	}
 
-    		} else {
-                fitxa.setPublicosObjetivo(new HashSet<PublicoObjetivo>());
-            }
-        }
+	private List<Documento> cuerpo(List<Documento> docsOld, List<String> docsIds, Map<String, String> idOrden, boolean edicion) 
+			throws DelegateException {
 
-    	return fitxa;
-    }
+		DocumentoResumen documentResumen;
+		DocumentoResumenDelegate docDelegate = DelegateUtil.getDocumentoResumenDelegate();
+		List<Documento> documents = new ArrayList<Documento>();
+		Map <String,String[]> actulitzadorMap = new HashMap<String, String[]>();
 
-    /*
-     * Función para recuperar y controlas los documendos asociados
-     */
-    private Ficha guardarDocumentos(boolean edicion, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm, List<String> docsIds) throws DelegateException {
+		// Obtenim  els documents i els seus ordres
+		for (String docId : docsIds) {
+			
+			Long idDoc = ParseUtil.parseLong(docId);
+			
+			if (idDoc != null) {
+				
+				documentResumen = docDelegate.obtenerDocumentoResumen(idDoc);
+				
+				Documento doc = new Documento();
+				doc.setId(documentResumen.getId());
+				doc.setFicha(documentResumen.getFicha());
+				doc.setOrden(documentResumen.getOrden());
+				doc.setProcedimiento(documentResumen.getProcedimiento());
+				doc.setTraduccionMap(documentResumen.getTraduccionMap());
+				
+				documents.add(doc);
+				
+				// Se coge el orden de la web. Si se quisiesen poner del 0 al x, hacer que orden valga 0 e ir incrementandolo.
+				String[] orden = {idOrden.get(idDoc.toString())};
+				actulitzadorMap.put("orden_doc" + idDoc, orden);
 
-        if (isModuloModificado("modulo_documents_modificado", valoresForm)) {
+			} else {
+				
+				log.warn("S'ha rebut un id de document no númeric: " + idDoc);
+				
+			}
+			
+		}
 
-            HashSet<String> hashSet = new HashSet<String>(docsIds);
-            docsIds.clear();
-            docsIds.addAll(hashSet);
+		// Actualitzam ordres
+		docDelegate.actualizarOrdenDocs(actulitzadorMap);
 
-            List<String> ids = new ArrayList<String>(docsIds.size());
-            Map<String, String> idOrden = new HashMap<String, String>();
-            for (String id : docsIds) {
-                ids.add(id.split("_")[2]);
-                String orden = valoresForm.get("documents_orden_" + id.split("_")[2]);
-                idOrden.put(id.split("_")[2], orden);
-            }
+		if (edicion) {
+			
+			boolean eliminarDoc;
+			
+			for (Documento docAntiguo : docsOld) {
+				
+				eliminarDoc = true;
+				
+				for (Documento docNuevo : documents) {
+					if (docAntiguo.getId().equals(docNuevo.getId())) {
+						eliminarDoc = false;
+					}
+				}
+				
+				if (eliminarDoc) {
+					docDelegate.borrarDocumento(docAntiguo.getId());
+				}
+				
+			}
+			
+		}
 
-            List<Documento> documents = cuerpo(fitxaOld.getDocumentos(), ids, idOrden, edicion);
+		return documents;
+		
+	}
 
-            // Assignar els documents a la fitxa
-            fitxa.setDocumentos(documents);
-        }
+	/*
+	 * Función de grabar() la ficha
+	 */
+	private Long guardarGrabar(Ficha fitxa) throws DelegateException {
 
-        return fitxa;
-    }
+		/* XXX: NOTA IMPORTANTE PARA EL RENDIMIENTO */
+		fitxa.setDocumentos(null);	// Debemos ponerlo a null para que hibernate no vaya a actualizar todas la relaciones
+		/* FIN NOTA */
+		
+		Long idFicha = DelegateUtil.getFichaDelegate().grabarFicha(fitxa);
+		DelegateUtil.getEstadisticaDelegate().grabarEstadisticaFicha(idFicha);
 
-    private List<Documento> cuerpo(List<Documento> docsOld, List<String> docsIds, Map<String, String> idOrden, boolean edicion) throws DelegateException {
+		return idFicha;
+		
+	}
 
-        DocumentoResumen documentResumen;
-        DocumentoResumenDelegate docDelegate = DelegateUtil.getDocumentoResumenDelegate();
-        List<Documento> documents = new ArrayList<Documento>();
-        Map <String,String[]> actulitzadorMap = new HashMap<String, String[]>();
+	/*
+	 * Función que asocia la ficha con la UA y las secciones
+	 */
+	private void guardarSecciosUA(boolean edicion, Ficha fitxaOld, Map<String, String> valoresForm, Long idFitxa)
+			throws DelegateException {
 
-        // Obtenim  els documents i els seus ordres
-        for (String docId : docsIds) {
-            Long idDoc = ParseUtil.parseLong(docId);
-            if (idDoc != null) {
-                documentResumen = docDelegate.obtenerDocumentoResumen(idDoc);
-                Documento doc = new Documento();
-                doc.setId(documentResumen.getId());
-                doc.setFicha(documentResumen.getFicha());
-                doc.setOrden(documentResumen.getOrden());
-                doc.setProcedimiento(documentResumen.getProcedimiento());
-                doc.setTraduccionMap(documentResumen.getTraduccionMap());
-                documents.add(doc);
-                // Se coge el orden de la web. Si se quisiesen poner del 0 al x, hacer que orden valga 0 e ir incrementandolo.
-                String[] orden = {idOrden.get(idDoc.toString())};
-                actulitzadorMap.put("orden_doc" + idDoc, orden);
+		FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
+		
+		if (isModuloModificado("modulo_seccionesua_modificado", valoresForm)) {
+			
+			String[] codisSeccUaNous = valoresForm.get("seccUA").split(",");
 
-            } else {
-                log.warn("S'ha rebut un id de document no númeric: " + idDoc);
-            }
-        }
+			// Paso donde se eliminan las SeccionesUA que han sido eliminadas
+			if (edicion) {
+				
+				List<FichaUA> borrarFichasUA = new ArrayList<FichaUA>();
+				boolean esborrarFichaUA;
+				
+				for (FichaUA fichaUA : fitxaOld.getFichasua()) {
+					
+					esborrarFichaUA = true;
+					
+					for (int i = 0; i < codisSeccUaNous.length; i++) {
+						if (codisSeccUaNous[i] != null) { //Per a no repetir cerques
+							String[] seccUA = codisSeccUaNous[i].split("#"); //En cas d'edicio es necesari verificar si les relacions anteriors se mantenen
+							if (fichaUA.getId().equals(ParseUtil.parseLong(seccUA[0]))) {
+								esborrarFichaUA = false;
+								codisSeccUaNous[i] = null;
+								break;
+							}
+						}
+					}
+					
+					if (esborrarFichaUA) {
+						borrarFichasUA.add(fichaUA);
+					}
+					
+				}
+				
+				fitxaDelegate.borrarFichasUAdeFicha(borrarFichasUA);
+				
+			}
 
-        // Actualitzam ordres
-        docDelegate.actualizarOrdenDocs(actulitzadorMap);
+			// Paso donde se crean las nuevas SeccionesUA añadidas y que no existian
+			// Tots els que tenen id = -1, son nous i se poden afegir directament
+			for (String codiSeccUa : codisSeccUaNous) {
+				
+				if (codiSeccUa != null) {
+					
+					String[] seccUA = codiSeccUa.split("#");
+					Long idSeccion = ParseUtil.parseLong(seccUA[1]);
+					Long idUA = ParseUtil.parseLong(seccUA[2]);
+					fitxaDelegate.crearFichaUA2(idUA, idSeccion, idFitxa);
+					String pidip = System.getProperty("es.caib.rolsac.pidip");
+					
+					// Si se anyade una ficha a la seccion Actualidad, se añade tambien a Portada Actualidad (PIDIP)
+					if (!((pidip == null) || pidip.equals("N"))) {
+						
+						if (idSeccion.longValue() == new Long(Parametros.ESDEVENIMENTS).longValue()) {
+							
+							//comprobamos  antes si ya exite la ficha en actualidad  en portada en cuyo caso no la insertamos para no duplicarla.
+							boolean existe = false;
+							Long portadas = new Long(Parametros.PORTADAS_ACTUALIDAD);
+							List listac = fitxaDelegate.listarFichasSeccionTodas(portadas);
 
-        if (edicion) {
-            boolean eliminarDoc;
-            for (Documento docAntiguo : docsOld) {
-                eliminarDoc = true;
-                for (Documento docNuevo : documents) {
-                    if (docAntiguo.getId().equals(docNuevo.getId())) {
-                        eliminarDoc = false;
-                    }
-                }
-                if (eliminarDoc) {
-                    docDelegate.borrarDocumento(docAntiguo.getId());
-                }
-            }
-        }
+							Iterator iter = listac.iterator();
+							while (iter.hasNext()) {
+								Ficha ficac = (Ficha) iter.next();
+								if (("" + ficac.getId()).equals("" + idFitxa)) {
+									existe = true;
+								}
+							}
+							
+							if (!existe) {
+								fitxaDelegate.crearFichaUA2(idUA, portadas, idFitxa);
+							}
+							
+						}
+						
+					}
+					
+				}
+				
+			}
+			
+		}
+		
+	}
 
-        return documents;
-    }
+	/*
+	 * Función para controlar y guardar los enlaces de una ficha
+	 */
+	private void guardarEnlaces(boolean edicion, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm, 
+			Long idFitxa, Set<String> enllasos) throws DelegateException {
 
-    /*
-     * Función de grabar() la ficha
-     */
-    private Long guardarGrabar(Ficha fitxa) throws DelegateException {
+		if (isModuloModificado("modulo_enlaces_modificado", valoresForm)) {
+			EnlaceDelegate enllasDelegate = DelegateUtil.getEnlaceDelegate();
 
-    	/* NOTA IMPORTANTE PARA EL RENDIMIENTO */
-        fitxa.setDocumentos(null);	// Debemos ponerlo a null para que hibernate no vaya a actualizar todas la relaciones
-        /* FIN NOTA */
-    	Long idFicha = DelegateUtil.getFichaDelegate().grabarFicha(fitxa);
-    	DelegateUtil.getEstadisticaDelegate().grabarEstadisticaFicha(idFicha);
+			// Guardar los nuevos enlaces y actualizar los ya existentes.
+			List<Enlace> enllassosNous = new ArrayList<Enlace>();
+			
+			Iterator<String> iterator = enllasos.iterator();
+			while ( iterator.hasNext() ) {
+				
+				String nomParameter = (String) iterator.next();
+				String[] elements = nomParameter.split("_");
+				
+				if ( elements[0].equals("enllas") && elements[1].equals("id") ) {
+					
+					// En aquest cas, elements[2] es igual al id del enllas
+					Enlace enllas = new Enlace();
+					enllas.setId((elements[2].charAt(0) == 't') ? null : ParseUtil.parseLong(valoresForm.get(nomParameter)));
+					enllas.setOrden(ParseUtil.parseLong(valoresForm.get("enllas_orden_" + elements[2])));
+					
+					for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
+						
+						TraduccionEnlace traduccio = new TraduccionEnlace();
+						traduccio.setTitulo(valoresForm.get("enllas_nombre_" + lang + "_" + elements[2]));
+						traduccio.setEnlace(valoresForm.get("enllas_url_" + lang + "_" + elements[2]));
+						enllas.setTraduccion(lang, traduccio);
 
-    	return idFicha;
-    }
+					}
+					
+					enllas.setFicha(fitxa);
+					enllasDelegate.grabarEnlace(enllas, null, idFitxa);
+					enllassosNous.add(enllas);
+					
+				}
+				
+			}
 
-    /*
-     * Función que asocia la ficha con la UA y las secciones
-     */
-    private void guardarSecciosUA(boolean edicion, Ficha fitxaOld, Map<String, String> valoresForm, Long idFitxa) throws DelegateException {
+			// Eliminar los enlaces ya no existentes
+			if (edicion) {
+				
+				List<Enlace> enllassosAntics = fitxaOld.getEnlaces();
+				boolean eliminarEnlace;
+				
+				for (Enlace enllas: enllassosNous) {
+					
+					eliminarEnlace = true;
+					
+					for (Enlace enlace : enllassosAntics) {
+						if (enlace.getId() == enllas.getId()) {
+							eliminarEnlace = false;
+						}
+					}
+					
+					if (eliminarEnlace) {
+						enllasDelegate.borrarEnlace(enllas.getId());
+					}
+					
+				}
+				
+			}
+			
+		}
+		
+	}
 
-    	FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
-    	if (isModuloModificado("modulo_seccionesua_modificado", valoresForm)) {
-    		String[] codisSeccUaNous = valoresForm.get("seccUA").split(",");
+	/**
+	 * Devuelve true si ha habido algun cambio en el modulo.
+	 * 
+	 * @param modulo
+	 * @param valoresForm
+	 * @return boolean
+	 */
+	private boolean isModuloModificado(String modulo, Map<String, String> valoresForm) {
+		return "1".equals(valoresForm.get(modulo));
+	}
 
-    		// Paso donde se eliminan las SeccionesUA que han sido eliminadas
-    		if (edicion) {
-    			List<FichaUA> borrarFichasUA = new ArrayList<FichaUA>();
-    			boolean esborrarFichaUA;
-    			for (FichaUA fichaUA : fitxaOld.getFichasua()) {
-    				esborrarFichaUA = true;
-    				for (int i = 0; i < codisSeccUaNous.length; i++) {
-    					if (codisSeccUaNous[i] != null) { //Per a no repetir cerques
-    						String[] seccUA = codisSeccUaNous[i].split("#"); //En cas d'edicio es necesari verificar si les relacions anteriors se mantenen
-    						if (fichaUA.getId().equals(ParseUtil.parseLong(seccUA[0]))) {
-    							esborrarFichaUA = false;
-    							codisSeccUaNous[i] = null;
-    							break;
-    						}
-    					}
-    				}
-    				if (esborrarFichaUA) {
-                    	borrarFichasUA.add(fichaUA);
-                    }
-    			}
-    			fitxaDelegate.borrarFichasUAdeFicha(borrarFichasUA);
-    		}
+	@RequestMapping(value = "/seccions.do", method = POST)
+	public @ResponseBody Map<String, Object> arbreSeccions(HttpServletRequest request) {
 
-    		// Paso donde se crean las nuevas SeccionesUA añadidas y que no existian
-    		// Tots els que tenen id = -1, son nous i se poden afegir directament
-    		for (String codiSeccUa : codisSeccUaNous) {
-    			if (codiSeccUa != null) {
-    				String[] seccUA = codiSeccUa.split("#");
-    				Long idSeccion = ParseUtil.parseLong(seccUA[1]);
-    				Long idUA = ParseUtil.parseLong(seccUA[2]);
-    				fitxaDelegate.crearFichaUA2(idUA, idSeccion, idFitxa);
-    				String pidip = System.getProperty("es.caib.rolsac.pidip");
-    				// Si se anyade una ficha a la seccion Actualidad, se añade tambien a Portada Actualidad (PIDIP)
-    				if (!((pidip == null) || pidip.equals("N"))) {
-    					if (idSeccion.longValue() == new Long(Parametros.ESDEVENIMENTS).longValue()) {
-    						//comprobamos  antes si ya exite la ficha en actualidad  en portada en cuyo caso no la insertamos para no duplicarla.
-    						boolean existe = false;
-    						Long portadas = new Long(Parametros.PORTADAS_ACTUALIDAD);
-    						List listac = fitxaDelegate.listarFichasSeccionTodas(portadas);
-    						
-    						Iterator iter = listac.iterator();
-    						while (iter.hasNext()) {
-    							Ficha ficac = (Ficha) iter.next();
-    							if (("" + ficac.getId()).equals("" + idFitxa)) {
-    								existe = true;
-    							}
-    						}
-    						if (!existe) {
-    							fitxaDelegate.crearFichaUA2(idUA, portadas, idFitxa);
-    						}
-    					}
-    				}
-    			}
-    		}
-    	}
-    }
+		Map<String, Object> resultats = new HashMap<String, Object>();
+		List<Seccion> llistaSeccions = new ArrayList<Seccion>();
+		List<SeccionDTO> llistaSeccionsDTO = new ArrayList<SeccionDTO>();
 
-    /*
-     * Función para controlar y guardar los enlaces de una ficha
-     */
-    private void guardarEnlaces(boolean edicion, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm, Long idFitxa, Set<String> enllasos) throws DelegateException {
+		try {
+			
+			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			SeccionDelegate seccioDelegate = DelegateUtil.getSeccionDelegate();
 
-    	if (isModuloModificado("modulo_enlaces_modificado", valoresForm)) {
-    	    EnlaceDelegate enllasDelegate = DelegateUtil.getEnlaceDelegate();
-    	    
-    	    // Guardar los nuevos enlaces y actualizar los ya existentes.
-    		List<Enlace> enllassosNous = new ArrayList<Enlace>();
-    		for (Iterator<String> iterator = enllasos.iterator(); iterator.hasNext();) {
-    			String nomParameter = (String) iterator.next();
-    			String[] elements = nomParameter.split("_");
-    			if (elements[0].equals("enllas") && elements[1].equals("id")) {
-    				// En aquest cas, elements[2] es igual al id del enllas
-    				Enlace enllas = new Enlace();
-    				enllas.setId((elements[2].charAt(0) == 't') ? null : ParseUtil.parseLong(valoresForm.get(nomParameter)));
-    				enllas.setOrden(ParseUtil.parseLong(valoresForm.get("enllas_orden_" + elements[2])));
-    				for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
-    					TraduccionEnlace traduccio = new TraduccionEnlace();
-    					traduccio.setTitulo(valoresForm.get("enllas_nombre_" + lang + "_" + elements[2]));
-    					traduccio.setEnlace(valoresForm.get("enllas_url_" + lang + "_" + elements[2]));
-    					enllas.setTraduccion(lang, traduccio);
-    					
-    				}
-    				enllas.setFicha(fitxa);
-    				enllasDelegate.grabarEnlace(enllas, null, idFitxa);
-    				enllassosNous.add(enllas);
-    			}
-    		}
-    		
-    		// Eliminar los enlaces ya no existentes
-    		if (edicion) {
-    			List<Enlace> enllassosAntics = fitxaOld.getEnlaces();
-    			boolean eliminarEnlace;
-    			for (Enlace enllas: enllassosNous) {
-    			    eliminarEnlace = true;
-    				for (Enlace enlace : enllassosAntics) {
-    					if (enlace.getId() == enllas.getId()) {
-    					    eliminarEnlace = false;
-    					}
-    				}
-    				if (eliminarEnlace) {
-    				    enllasDelegate.borrarEnlace(enllas.getId());
-    				}
-    			}
-    		}
-    	}
-    }
+			if (request.getParameter("pare") == null || "".equals(request.getParameter("pare"))) {
+				llistaSeccions = seccioDelegate.listarSeccionesRaizPerfil();
+			} else {
+				llistaSeccions = seccioDelegate.listarHijosSeccion(ParseUtil.parseLong(request.getParameter("pare")));
+			}
 
-    /**
-     * Devuelve true si ha habido algun cambio en el modulo.
-     * 
-     * @param modulo
-     * @param valoresForm
-     * @return boolean
-     */
-    private boolean isModuloModificado(String modulo, Map<String, String> valoresForm) {
-        return "1".equals(valoresForm.get(modulo));
-    }
+			for (Seccion seccio: llistaSeccions) {
+				
+				TraduccionSeccion tse = (TraduccionSeccion)seccio.getTraduccion(lang);
+				
+				llistaSeccionsDTO.add(
+					new SeccionDTO(
+						seccio.getId(),
+						tse == null ? "" : tse.getNombre(),
+						seccio.getPadre() == null ? null : seccio.getPadre().getId(),
+						seccioDelegate.listarHijosSeccion(seccio.getId()).size() > 0 ? true : false
+					)
+				);
+				
+			}
+			
+			resultats.put("llistaSeccions", llistaSeccionsDTO);
 
+		} catch (DelegateException dEx) {
+			
+			if (dEx.isSecurityException()) {
+				log.error("Error de permisos: " + ExceptionUtils.getStackTrace(dEx));
+			} else {
+				log.error(ExceptionUtils.getStackTrace(dEx));
+			}
+			
+		}
 
-    @RequestMapping(value = "/seccions.do", method = POST)
-    public @ResponseBody Map<String, Object> arbreSeccions(HttpServletRequest request) {
+		return resultats;
+		
+	}
 
-    	Map<String, Object> resultats = new HashMap<String, Object>();
-    	List<Seccion> llistaSeccions = new ArrayList<Seccion>();
-    	List<SeccionDTO> llistaSeccionsDTO = new ArrayList<SeccionDTO>();
-    	
-    	try {
-    		String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-    		SeccionDelegate seccioDelegate = DelegateUtil.getSeccionDelegate();
+	@RequestMapping(value = "/unitats.do", method = POST)
+	public @ResponseBody Map<String, Object> arbreUnitats(HttpServletRequest request) {
 
-    		if (request.getParameter("pare") == null || "".equals(request.getParameter("pare"))) {
-    		    llistaSeccions = seccioDelegate.listarSeccionesRaizPerfil();
-    		} else {
-    		    llistaSeccions = seccioDelegate.listarHijosSeccion(ParseUtil.parseLong(request.getParameter("pare")));
-    		}
+		Map<String, Object> resultats = new HashMap<String, Object>();
+		List<UnidadAdministrativa> llistaUnitats = new ArrayList<UnidadAdministrativa>();
+		List<UnidadDTO> llistaUnitatsDTO = new ArrayList<UnidadDTO>();
 
-    		for (Seccion seccio: llistaSeccions) {
-    			TraduccionSeccion tse = (TraduccionSeccion) seccio.getTraduccion(lang);
-    			llistaSeccionsDTO.add(new SeccionDTO(
-    					seccio.getId(),
-    					tse == null ? "" : tse.getNombre(),
-    					seccio.getPadre() == null ? null : seccio.getPadre().getId(),
-    					seccioDelegate.listarHijosSeccion(seccio.getId()).size() > 0 ? true : false
-    			));
-    		}
-    		resultats.put("llistaSeccions", llistaSeccionsDTO);
+		try {
+			
+			UnidadAdministrativaDelegate unitatDelegate = DelegateUtil.getUADelegate();
+			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 
-    	} catch (DelegateException dEx) {
-    		if (dEx.isSecurityException()) {
-    		    log.error("Error de permisos: " + ExceptionUtils.getStackTrace(dEx));
-    		} else {
-    		    log.error(ExceptionUtils.getStackTrace(dEx));
-    		}
-    	}
+			if (request.getParameter("pare") == null || "".equals(request.getParameter("pare"))) {
+				llistaUnitats = unitatDelegate.listarUnidadesAdministrativasRaiz();
+			} else {
+				llistaUnitats = unitatDelegate.listarHijosUA(ParseUtil.parseLong(request.getParameter("pare")));
+			}
 
-    	return resultats;
-    }
+			for (UnidadAdministrativa unitat: llistaUnitats) {
+				
+				String nomUnitat = unitat.getNombreUnidadAdministrativa(lang);
+				String abreviatura = unitat.getAbreviaturaUnidadAdministrativa(lang);
+				
+				llistaUnitatsDTO.add(
+					new UnidadDTO(
+						unitat.getId(),
+						nomUnitat == null ? "" : nomUnitat,
+						abreviatura == null ? "" : abreviatura,
+						unitat.getPadre() == null ? null : unitat.getPadre().getId(),
+						unitatDelegate.listarHijosUA(unitat.getId()).size() > 0 ? true : false
+					)
+				);
+				
+			}
 
+			resultats.put("llistaUnitats", llistaUnitatsDTO);
 
-    @RequestMapping(value = "/unitats.do", method = POST)
-    public @ResponseBody Map<String, Object> arbreUnitats(HttpServletRequest request) {
+		} catch (DelegateException dEx) {
+			
+			if (dEx.isSecurityException()) {
+				log.error("Error de persimos: " + ExceptionUtils.getStackTrace(dEx));
+			} else {
+				log.error(ExceptionUtils.getStackTrace(dEx));
+			}
+			
+		}
 
-    	Map<String, Object> resultats = new HashMap<String, Object>();
-    	List<UnidadAdministrativa> llistaUnitats = new ArrayList<UnidadAdministrativa>();
-    	List<UnidadDTO> llistaUnitatsDTO = new ArrayList<UnidadDTO>();
-    	
-    	try {
-    		UnidadAdministrativaDelegate unitatDelegate = DelegateUtil.getUADelegate();
-    		String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+		return resultats;
+		
+	}
 
-    		if (request.getParameter("pare") == null || "".equals(request.getParameter("pare"))) {
-    		    llistaUnitats = unitatDelegate.listarUnidadesAdministrativasRaiz();
-    		} else {
-    		    llistaUnitats = unitatDelegate.listarHijosUA(ParseUtil.parseLong(request.getParameter("pare")));
-    		}
+	@RequestMapping(value = "/esborrarFitxa.do", method = POST)
+	public @ResponseBody IdNomDTO esborrarFitxa(HttpServletRequest request) {
 
-    		for (UnidadAdministrativa unitat: llistaUnitats) {
-    			String nomUnitat = unitat.getNombreUnidadAdministrativa(lang);
-    			String abreviatura = unitat.getAbreviaturaUnidadAdministrativa(lang);
-    			llistaUnitatsDTO.add(new UnidadDTO(
-    					unitat.getId(),
-    					nomUnitat == null ? "" : nomUnitat,
-    					abreviatura == null ? "" : abreviatura,
-    					unitat.getPadre() == null ? null : unitat.getPadre().getId(),
-    					unitatDelegate.listarHijosUA(unitat.getId()).size() > 0 ? true : false
-    			));
-    		}
+		IdNomDTO resultatStatus = new IdNomDTO();
+		
+		try {
+			
+			Long id = new Long(request.getParameter("id"));
+			FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
+			fitxaDelegate.borrarFicha(id);
+			resultatStatus.setId(1l);
+			resultatStatus.setNom("correcte");
 
-    		resultats.put("llistaUnitats", llistaUnitatsDTO);
+		} catch (DelegateException dEx) {
+			
+			if (dEx.isSecurityException()) {
+				resultatStatus.setId(-1l);
+			} else {
+				resultatStatus.setId(-2l);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+			}
+			
+		}
 
-    	} catch (DelegateException dEx) {
-    		if (dEx.isSecurityException()) {
-    		    log.error("Error de persimos: " + ExceptionUtils.getStackTrace(dEx));
-    		} else {
-    		    log.error(ExceptionUtils.getStackTrace(dEx));
-    		}
-    	}
+		return resultatStatus;
+		
+	}
 
-    	return resultats;
-    }
-
-
-    @RequestMapping(value = "/esborrarFitxa.do", method = POST)
-    public @ResponseBody IdNomDTO esborrarFitxa(HttpServletRequest request) {
-
-    	IdNomDTO resultatStatus = new IdNomDTO();
-        try {
-            Long id = new Long(request.getParameter("id"));
-            FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
-            fitxaDelegate.borrarFicha(id);
-            resultatStatus.setId(1l);
-            resultatStatus.setNom("correcte");
-
-        } catch (DelegateException dEx) {
-            if (dEx.isSecurityException()) {
-                resultatStatus.setId(-1l);
-            } else {
-                resultatStatus.setId(-2l);
-                log.error(ExceptionUtils.getStackTrace(dEx));
-            }
-        }
-
-        return resultatStatus;
-    }
-
-
-    @RequestMapping(value = "/traduir.do")
+	@RequestMapping(value = "/traduir.do")
 	public @ResponseBody Map<String, Object> traduir(HttpServletRequest request) {
 
-    	Map<String, Object> resultats = new HashMap<String, Object>();		
+		Map<String, Object> resultats = new HashMap<String, Object>();	
+		
 		try {
+			
 			String idiomaOrigenTraductor = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 
 			TraduccionFicha traduccioOrigen = getTraduccionOrigen(request, idiomaOrigenTraductor);
@@ -1283,38 +1503,161 @@ public class FitxaInfBackController extends PantallaBaseController {
 			resultats.put("traduccions", traduccions);
 
 		} catch (DelegateException dEx) {
+			
 			logException(log, dEx);
+			
 			if (dEx.isSecurityException()) {
 				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
 			} else {
 				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
 			}
+			
 		} catch (NullPointerException npe) {
+			
 			log.error("FitxaBackController.traduir: El traductor no se encuentra en en contexto.");
 			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+			
 		} catch (Exception e) {
+			
 			log.error("FitxaBackController.traduir: Error en al traducir ficha: " + e);
 			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+			
 		}
 
 		return resultats;
+		
 	}
 
-    private TraduccionFicha getTraduccionOrigen(HttpServletRequest request, String idiomaOrigenTraductor) {
+	private TraduccionFicha getTraduccionOrigen(HttpServletRequest request, String idiomaOrigenTraductor) {
 
 		TraduccionFicha traduccioOrigen = new TraduccionFicha();
 
 		if (StringUtils.isNotEmpty(request.getParameter("item_titol_" + idiomaOrigenTraductor))) {
-		    traduccioOrigen.setTitulo(request.getParameter("item_titol_" + idiomaOrigenTraductor));
+			traduccioOrigen.setTitulo(request.getParameter("item_titol_" + idiomaOrigenTraductor));
 		}
+		
 		if (StringUtils.isNotEmpty(request.getParameter("item_des_curta_" + idiomaOrigenTraductor))) {
-		    traduccioOrigen.setDescAbr(request.getParameter("item_des_curta_" + idiomaOrigenTraductor));
+			traduccioOrigen.setDescAbr(request.getParameter("item_des_curta_" + idiomaOrigenTraductor));
 		}
+		
 		if (StringUtils.isNotEmpty(request.getParameter("item_des_llarga_" + idiomaOrigenTraductor))) {
-		    traduccioOrigen.setDescripcion(request.getParameter("item_des_llarga_" + idiomaOrigenTraductor));
+			traduccioOrigen.setDescripcion(request.getParameter("item_des_llarga_" + idiomaOrigenTraductor));
 		}
 
 		return traduccioOrigen;
+		
+	}
+
+	@RequestMapping(value = "/guardarHechosVitales.do", method = POST)
+	public @ResponseBody IdNomDTO guardarHechosVitales(Long id, Long[] elementos, HttpSession session, HttpServletRequest request) {
+
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+		
+		IdNomDTO result;
+		String error = null;
+		Ficha ficha = null;
+		
+		try {
+			
+			ficha = DelegateUtil.getFichaDelegate().obtenerFicha(id);
+			
+			if (elementos != null && elementos.length > 0) {
+
+				Set<HechoVital> hechosVitales = new HashSet<HechoVital>();
+
+				hechosVitales.addAll(DelegateUtil.getHechoVitalDelegate().buscarPorIds(elementos));
+
+				ficha.setHechosVitales(hechosVitales);
+
+			} else {
+				
+				ficha.setHechosVitales(new HashSet<HechoVital>());
+				
+			}
+			
+			guardarGrabar(ficha);
+
+		} catch (DelegateException dEx) {
+			
+			if (dEx.isSecurityException()) {
+				
+				error = messageSource.getMessage("error.permisos", null, request.getLocale());
+				result = new IdNomDTO(-1l, error);
+				
+			} else {
+				
+				error = messageSource.getMessage("error.altres", null, request.getLocale());
+				result = new IdNomDTO(-2l, error);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+				
+			}
+			
+		}
+			
+		result = new IdNomDTO(ficha.getId(), messageSource.getMessage("fitxes.guardat.correcte", null, request.getLocale()));
+		
+		return result;
+
+	}
+	
+	@RequestMapping(value = "/guardarMaterias.do", method = POST)
+	public @ResponseBody IdNomDTO guardarMaterias(Long id, Long[] elementos, HttpSession session, HttpServletRequest request) {
+
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+		
+		IdNomDTO result;
+		String error = null;
+		Ficha ficha = null;
+					
+		try {
+			
+			ficha = DelegateUtil.getFichaDelegate().obtenerFicha(id);
+			
+			if (elementos != null && elementos.length > 0) {
+
+				List<Long> materiasList = new Vector<Long>();
+				
+				MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
+				
+				for (int i = 0; i < elementos.length; i++)
+					materiasList.add(elementos[i]);
+				
+				Set<Materia> materias = new HashSet<Materia>();
+				materias.addAll(materiaDelegate.obtenerMateriasPorIDs(materiasList, DelegateUtil.getIdiomaDelegate().lenguajePorDefecto()));
+				
+				ficha.setMaterias(materias); 
+				
+			} else {
+				
+				ficha.setMaterias(new HashSet<Materia>());
+				
+			}
+
+			guardarGrabar(ficha);
+			
+			result = new IdNomDTO(ficha.getId(), messageSource.getMessage("fitxes.guardat.correcte", null, request.getLocale()));
+
+		} catch (DelegateException dEx) {
+			
+			if (dEx.isSecurityException()) {
+				
+				error = messageSource.getMessage("error.permisos", null, request.getLocale());
+				result = new IdNomDTO(-1l, error);
+				
+			} else {
+				
+				error = messageSource.getMessage("error.altres", null, request.getLocale());
+				result = new IdNomDTO(-2l, error);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+				
+			}
+			
+		}
+		
+		return result;
+
 	}
 
 }

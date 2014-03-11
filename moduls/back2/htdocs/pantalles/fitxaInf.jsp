@@ -12,12 +12,14 @@
 <link href='<c:url value="/css/jquery-ui-timepicker-addon.css"/>' rel="stylesheet" type="text/css" media="screen" />
 
 <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/fitxes.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/pxem.jQuery.js'/>"></script>  
 <script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery.ui.datepicker-ca.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery-ui-timepicker-addon.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery.form.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/lista_ajax.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/fitxes.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_documents.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_ua_arbre.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_seccions_arbre.js'/>"></script>
@@ -25,13 +27,13 @@
 <script type="text/javascript" src="<c:url value='/js/modul_seccions_ua.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_fetsVitals.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_public_objectiu.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_enllassos.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_auditories.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_estadistiques.js'/>"></script>
 
 <script type="text/javascript">
-   // accesos
+
+// accesos
    var pagLlistat = '<c:url value="/fitxainf/llistat.do" />';
    var pagDetall = '<c:url value="/fitxainf/pagDetall.do" />';
    var pagGuardar = '<c:url value="/fitxainf/guardar.do" />';
@@ -170,8 +172,8 @@
 
 </script>
    
-   
 <script type="text/javascript">
+
    //validacio
    var txtSeccUa = "<spring:message code='fitxes.missatge.es_necessari'/>";
    var txtMaxim = "<spring:message code='txt.maxim'/>";
@@ -851,7 +853,7 @@
             <!-- /modul -->
                                     
             <!-- modul -->
-            <div class="modul invisible">
+            <div class="modul invisible" id="modul_materies">
             	<input type="hidden" id="llistaMateries" name="materies" value=""/>
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
@@ -868,6 +870,13 @@
                                 <div class="btnGenerico">
                                     <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.gestiona_materies'/></span></span></a>
                                 </div>
+                                <p style="clear: both; margin-bottom: 10px;"/><!-- Separador -->
+	                            <div class="btnGenerico">
+	                                <a id="btnGuardar_materies" href="javascript:;" class="btn guarda important lista-simple" 
+	                            			action="<c:url value="/fitxainf/guardarMaterias.do" />">
+	                           			<span><span><spring:message code='boto.guarda'/></span></span>
+	                            	</a>
+	                            </div>
                             </div>
                             <div class="llistat">
                                 <ul>
@@ -901,7 +910,7 @@
             <!-- /modul -->
                                     
             <!-- modul -->
-            <div class="modul invisible">
+            <div class="modul invisible" id="modul_fetsVitals">
             	<input type="hidden" id="llistaFetsVitals" name="fetsVitals" value=""/>
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
@@ -918,6 +927,13 @@
                                 <div class="btnGenerico">
                                     <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.gestiona_fets_vitals'/></span></span></a>
                                 </div>
+                                <p style="clear: both; margin-bottom: 10px;"/><!-- Separador -->
+	                            <div class="btnGenerico">
+	                                <a id="btnGuardar_hechosVitales" href="javascript:;" class="btn guarda important lista-simple" 
+	                            			action="<c:url value="/fitxainf/guardarHechosVitales.do" />">
+	                           			<span><span><spring:message code='boto.guarda'/></span></span>
+	                            	</a>
+	                            </div>
                             </div>
                             <div class="llistat">
                                 <ul>
@@ -1405,7 +1421,7 @@
 					</c:forEach>
 
                     <p class="botonera btnGenerico">
-                        <a id="btnFinalitzar" href="javascript:;" class="btn finalitza important"><span><span><spring:message code='boto.finalitza'/></span></span></a>
+                        <a id="btnFinalitzar" href="javascript:;" class="btn finalitza important lista-compleja" action="<c:url value="/fitxainf/guardarEnlaces.do" />"><span><span><spring:message code='boto.finalitza'/></span></span></a>
                     </p>                                    
                 </div>                                  
             </div>

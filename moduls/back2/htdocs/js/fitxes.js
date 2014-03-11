@@ -4,6 +4,21 @@ $(document).ready(function() {
 	
 	jQuery("#btnInsertar").bind("click", function() { Detall.modificado(); });
 	
+	jQuery(".lista-simple").click(function() {
+		
+		var element = $(this).parent().parent().find("li");
+		var id = $('#item_clave_primaria').val();
+		var url = $(this).attr('action');
+		
+		ListaSimple.guardar(element, url, id);
+		
+	});
+	
+	jQuery(".lista-compleja").click(function() { /* TODO: */ });
+
+    ListaSimple = new ListaSimple();
+    ListaCompleja = new ListaCompleja();
+
 	// elements
 	opcions_elm = $("#opcions");
 	escriptori_elm = $("#escriptori");
@@ -34,6 +49,7 @@ $(document).ready(function() {
     DATOS_TRADUCIDOS_FICHA = ["titulo", "descAbr", "descripcion"];
     
 	// INICIEM
+
 	Llistat = new CLlistat();
 	Detall = new CDetall();
 	Error = new CError();
@@ -79,10 +95,9 @@ function CLlistat() {
 	
 		Llistat.carregar({});
 	
-	}
+	};
 	
-	
-	this.finCargaListado = function(opcions,data){
+	this.finCargaListado = function(opcions, data) {
 		
 		resultats_total = parseInt(data.total,10);
 		
@@ -129,7 +144,6 @@ function CLlistat() {
 			codi_totals = "<p class=\"info\">" + txtTrobats + " <strong>" + resultats_total + " " + txtT.toLowerCase() + "</strong>" + ". " + txtMostrem + ' ' + resultatInici + ' ' + txtMostremAl + ' ' + resultatFinal + txt_ordenacio + '.';
 			codi_totals += this.getHtmlItemsPagina();
 			codi_totals += "</p>";
-			
 			
 			/* De moment, sense ordre
 			codi_cap1 = "<div class=\"th fitxa" + ordre_c1 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtLlistaItem + "</a></div>";
@@ -222,9 +236,10 @@ function CLlistat() {
 					cercador_elm.find("input, select").removeAttr("disabled");
 				
 			});
+			
 		});	
-	}
-	
+		
+	};
 
 	this.carregar = function(opcions) {
 		
@@ -315,10 +330,9 @@ function CLlistat() {
 			
 		}
 		
-	}
+	};
 	
 };
-
 
 // items array
 var Items_arr = new Array();
@@ -356,7 +370,7 @@ function CDetall() {
 			$("#llistaPublicObjectiu").val(llista_publics);	
 			
 			// Validamos el formulario
-			if(!that.formulariValid()) {
+			if (!that.formulariValid()) {
 				return false;
 			}
 					
@@ -384,14 +398,21 @@ function CDetall() {
 			return false;
 			
 		}
-	}
+		
+	};
 
 	this.urlPrevisualizar = urlPrevisualizarFicha;
 	
 	this.iniciar = function() {
+		
+		// Desactivamos que se cambie el detalle a modificado por cambiar los checkboxes de materias relacionadas con la ficha.
+		jQuery('#modul_materies .llistat li input[type=checkbox]').unbind('change');
+		
+		// Desactivamos que se cambie el detalle a modificado por cambiar los checkboxes de materias relacionadas con la ficha.
+		jQuery('#modul_fetsVitals .llistat li input[type=checkbox]').unbind('change');
 
-		$('#item_data_caducitat').datetimepicker({ timeFormat: 'hh:mm'});
-		$("#item_data_publicacio").bind("blur",this.dataPublicacio).datetimepicker({ timeFormat: 'hh:mm'});
+		$('#item_data_caducitat').datetimepicker({ timeFormat: 'hh:mm' });
+		$("#item_data_publicacio").bind("blur", this.dataPublicacio).datetimepicker({ timeFormat: 'hh:mm' });
 		
 		// idioma
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {
@@ -423,28 +444,27 @@ function CDetall() {
             jQuery("#item_clave_primaria,#item_clave_primaria_es,#item_clave_primaria_en,#item_clave_primaria_de,#item_clave_primaria_fr").val( jQuery(this).val() );
         });
         
-        
         // boton de traducir
         jQuery("#botoTraduirFitxa").unbind("click").bind("click", function() {
             Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
         });
         
-        
-	}
+	};
 
     this.traduirWrapper = function () {
 		that.traduir(pagTraduir, CAMPOS_TRADUCTOR_FICHA, DATOS_TRADUCIDOS_FICHA);
-	}
+	};
 	
 	this.dataPublicacio = function(e) {
 //		if ($(this).val() == "") {
 //			$(this).val(txtImmediat);
 //		}
-	}
+	};
 	
 	this.activar = 0;
 			
-	this.nou = function() {		
+	this.nou = function() {
+		
 		//Ocultar paneles
         jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").hide();
         jQuery("#modulAuditories, #modulEstadistiques").hide();
@@ -493,8 +513,7 @@ function CDetall() {
 		
 		this.modificado(false);
 		
-	}
-		
+	};
 	
 	this.pintar = function(dades) {
 		
@@ -544,6 +563,7 @@ function CDetall() {
             
             $("#item_des_curta_" + idioma).val(descAbr);
             $("#item_des_llarga_" + idioma).val(descripcion);
+            
         }
         
         // Fin bloque de pestanyas de idiomas		
@@ -571,7 +591,6 @@ function CDetall() {
 		seccUA_nodes = dades.seccUA;
 		seccUA_nodes_size = seccUA_nodes.length;
 
-
 		if (seccUA_nodes_size == 0) {
 			
 			seccUA_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaSeccioUA + ".");
@@ -579,6 +598,7 @@ function CDetall() {
 		} else {
 			
 			codi_seccUA = "<ul>";
+			
 			$(seccUA_nodes).each(function() {
 				
 				seccUA_node = this;
@@ -596,7 +616,6 @@ function CDetall() {
 			seccUA_seleccionats_elm.find(".listaOrdenable").html(codi_seccUA);
 						
 		}	
-		
 		
 		// mostrem
 		if ($("#carregantDetall").size() > 0) {
@@ -620,8 +639,7 @@ function CDetall() {
 		// Marcamos el formulario como "no modificado".
 		this.modificado(false);
 		
-	}
-	
+	};
 	
 	this.elimina = function() {
 
@@ -660,8 +678,7 @@ function CDetall() {
 			
 		});	
 		
-	}
-	
+	};
 	
 	this.pintarModulos = function(dades) {
 
@@ -671,18 +688,20 @@ function CDetall() {
 		
 		ModulDocuments.inicializarDocuments(dades.documents);
 		
-		ModulEnllas.cargarEnlaces();
+		ModulEnllas.cargarEnlaces(dades);
 
 	};
-	
 	
 	this.ocultarModulos = function(selector) {
 		
 		if ( !selector.hasClass("publicacio") 
 				&& !selector.children().is("#llistaPublicObjectiu") 
-				&& !selector.children().is("#llistaSeccions") )
+				&& !selector.children().is("#llistaSeccions") 
+				&& !selector.children().is("div.escriptori_items_seleccionats") )
 			selector.addClass("invisible");
 		
-	}
+		$("#escriptori_seccions_ua > escriptori_items_seleccionats > modul").removeClass("invisible");
+		
+	};
 	
 }

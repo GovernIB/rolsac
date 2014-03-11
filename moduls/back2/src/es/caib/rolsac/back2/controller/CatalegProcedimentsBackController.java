@@ -53,7 +53,6 @@ import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.criteria.BuscadorProcedimientoCriteria;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
-import org.ibit.rol.sac.model.dto.ListaDTO;
 import org.ibit.rol.sac.model.dto.ListadoModuloTramiteDTO;
 import org.ibit.rol.sac.model.dto.ProcedimientoLocalDTO;
 import org.ibit.rol.sac.model.dto.ProcedimientoNormativaDTO;
@@ -478,20 +477,15 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				map = new HashMap<String, String>();
 
 				map.put("id", String.valueOf(materia.getId()));
-				map.put("nom", materia.getNombre());
+				map.put("nom", materia.getNombreMateria(lang));
 				map.put("idMainItem", String.valueOf(proc.getId()));
 				map.put("idRelatedItem", String.valueOf(materia.getId()));
 				
 				listaMateriasProcedimiento.add(map);
 
 			}
-
-			List<ListaDTO> llistaMateriesDTO = new ArrayList<ListaDTO>();
-			for (Materia materia : proc.getMaterias()) {
-			    llistaMateriesDTO.add(new ListaDTO(materia.getId(), materia.getNombreMateria(lang), idProcedimiento));
-			}
 						
-			resultats.put("materies", llistaMateriesDTO);
+			resultats.put("materies", listaMateriasProcedimiento);
 
 		} else {
 		
