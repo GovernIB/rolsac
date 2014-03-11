@@ -14,9 +14,9 @@
 <script type="text/javascript" src="<c:url value='/js/autoresize.jquery.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery.ui.datepicker-ca.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/lista_ajax.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/procediments.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/lista_ajax.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_documents_tramits.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_documents_requerits.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_documents.js'/>"></script>
@@ -1241,7 +1241,7 @@
             <!-- /modul -->
 			
             <!-- modul -->
-            <div class="modul invisible">                     
+            <div class="modul invisible" id="modul_normatives">                     
                 <fieldset>                                  
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
                     <legend><spring:message code='txt.normativaRelacionada'/></legend>                               
@@ -1260,6 +1260,13 @@
                                 <div class="btnGenerico">
                                     <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.gestionaNormatives'/></span></span></a>
                                 </div>
+                                <p style="clear: both; margin-bottom: 10px;"/><!-- Separador -->
+	                            <div class="btnGenerico">
+	                                <a id="btnGuardar_normatives" href="javascript:;" class="btn guarda important lista-simple" 
+	                            			action="<c:url value="/catalegProcediments/guardarNormativas.do" />">
+	                           			<span><span><spring:message code='boto.guarda'/></span></span>
+	                            	</a>
+	                            </div>
                             </div>                                  
                         </div>
                         <!-- /modulNormatives -->                                 
@@ -1521,7 +1528,7 @@
         </div>
     </div>        
     
-    <div class="modulLateral escriptori_items_seleccionats" id="modul_normatives">
+    <div class="modulLateral escriptori_items_seleccionats">
         <div class="modul">
             <div class="interior">
                 <div class="seleccionats">
@@ -1529,12 +1536,9 @@
                         <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
                         <div class="listaOrdenable"></div>
                     </div>
-                    <div class="btnGenerico">
-                        <a id="btnGuardar_fetsVitals" href="javascript:;" class="btn guarda important lista-simple" 
-                    			action="<c:url value="/catalegProcediments/guardarNormativas.do" />">
-                   			<span><span><spring:message code='boto.guarda'/></span></span>
-                   		</a>
-                    </div>
+                    <p class="botonera btnGenerico">
+                        <a id="btnFinalizar_normativa" href="javascript:;" class="btn finalitza important"><span><span><spring:message code='boto.finalitza'/></span></span></a>
+                    </p>
                 </div>                                  
             </div>
         </div>

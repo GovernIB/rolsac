@@ -20,12 +20,13 @@ $(document).ready(function() {
 	}
 
 	// Evento para el botón de volver al detalle
-	jQuery("#btnVolverDetalle_normativa").bind("click",function(){EscriptoriNormativa.torna();});	
-	jQuery("#btnFinalizar_normativa").bind("click",function(){EscriptoriNormativa.finalizar();});
+	jQuery("#btnVolverDetalle_normativa").bind("click", function() { EscriptoriNormativa.torna(); });	
+	jQuery("#btnFinalizar_normativa").bind("click", function() { EscriptoriNormativa.finalizar(); });
+	
 });
 
-
-function CModulNormativa(){
+function CModulNormativa() {
+	
 	this.extend = ListaOrdenable;
 	this.extend();		
 
@@ -35,6 +36,7 @@ function CModulNormativa(){
 	var $moduloModificado = modul_normatives_elm.find('input[name="modulo_normativas_modificado"]');
 
 	this.iniciar = function() {
+		
 		jQuery("#cerca_normativa_data").datepicker({ dateFormat: 'dd/mm/yy' });
 		jQuery("#cerca_normativa_data_butlleti").datepicker({ dateFormat: 'dd/mm/yy' });
 
@@ -59,26 +61,33 @@ function CModulNormativa(){
 			nombre: "normativa",
 			nodoOrigen: modul_normatives_elm.find(".listaOrdenable"),
 			nodoDestino: normatives_seleccionades_elm.find(".listaOrdenable"),
-			atributos: ["id", "nombre"],	// Campos que queremos que aparezcan en las listas.
+			atributos: [			// Campos que queremos que aparezcan en las listas.
+	            "id", 
+	            "nombre", 
+	            "orden", 
+	            "idRelatedItem", 	// Campo necesario para guardado AJAX genérico de módulos laterales.
+	            "idMainItem"		// Campo necesario para guardado AJAX genérico de módulos laterales.
+            ],
 			multilang: false
 		});
 
 		// one al botó de gestionar
-		modul_normatives_elm.find("a.gestiona").one("click", function(){ModulNormativa.gestiona();} );
-	}	
+		modul_normatives_elm.find("a.gestiona").one("click", function() { ModulNormativa.gestiona(); });
+		
+	};
 
 	// Marcar el módulo como modificado.    
-	this.modificado = function(){
+	this.modificado = function() {
 		$moduloModificado.val(1);
-	}
+	};
 
 	this.nuevo = function() {       
 		norma_seleccionats_elm = escriptori_detall_elm.find("div.modulNormatives div.seleccionats");
 		norma_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaNormativa + ".");
-	}
-
+	};
 
 	this.gestiona = function() {
+		
 		lis_size = modul_normatives_elm.find("li").size();
 
 		if (lis_size > 0) {
@@ -93,10 +102,11 @@ function CModulNormativa(){
 		escriptori_detall_elm.fadeOut(300, function() {			
 			escriptori_normatives_elm.fadeIn(300);			
 		});
-	}
+		
+	};
 
-
-	this.contaSeleccionats = function() {		
+	this.contaSeleccionats = function() {
+		
 		seleccionats_val = modul_normatives_elm.find(".seleccionat").find("li").size();
 		info_elm = modul_normatives_elm.find("p.info:first");
 
@@ -107,19 +117,24 @@ function CModulNormativa(){
 		} else if (seleccionats_val > 1) {
 			info_elm.html(txtSeleccionades + " <strong>" + seleccionats_val + " " + txtNormatives.toLowerCase() + "</strong>.");						
 		}
-	}
-
+		
+	};
 
 	this.inicializarNormativas = function(listaNormativas) {
-		modul_normatives_elm.find(".listaOrdenable").empty();		
+		
+		modul_normatives_elm.find(".listaOrdenable").empty();
+		
 		if (typeof listaNormativas != 'undefined' && listaNormativas != null && listaNormativas.length > 0) {
 			that.agregaItems(listaNormativas);
 		}
+		
 		that.contaSeleccionats();
-	}
+		
+	};
 
 	// Devuelve un string con el formato normatives=n1,n2,...,nm donde n son codigos de normativas.
-	this.listaNormativas = function (){
+	this.listaNormativas = function () {
+		
 		var listaNormativas = "normatives=";
 
 		modul_normatives_elm.find("div.listaOrdenable input.normativa_id").each(function() {
@@ -131,11 +146,13 @@ function CModulNormativa(){
 		}
 
 		return listaNormativas;
-	}
+		
+	};
+	
 };
 
-
-function CEscriptoriNormativa(){		
+function CEscriptoriNormativa() {
+	
 	this.extend = ListadoBase;
 	this.extend("opcions_normativa", "resultats_normativa", "cercador_normativa", "cercador_normativa_contingut", "", "", "", "btnBuscarForm_normativa", "btnLimpiarForm_normativa");
 
@@ -144,31 +161,36 @@ function CEscriptoriNormativa(){
 	this.nuevo = function() {
 		that.limpia();
 		resultats_normativa_elm.find('div.dades').empty();
-	}
+	};
 
 	/**
 	 * Agrega un item a la lista.
 	 */
-	this.agregaItem = function( itemID, titulo ){	
+	this.agregaItem = function( itemID, titulo, idMainItem, idRelatedItem ) {	
 
 		// Componemos el item para enviar a la lista.
 		var item = {
-				id: itemID,
-				nombre: titulo
+			id: itemID,
+			nombre: titulo,
+			idMainItem: idMainItem,
+			idRelatedItem: idRelatedItem
 		};
 
 		// Agrega el item, y si se ha añadido correctamente (si no existía previamente) actualiza el mensaje de items seleccionados.
-		if( ModulNormativa.agregaItem( item ) ){		
+		if ( ModulNormativa.agregaItem( item ) ){		
 			this.contaSeleccionats();		
-		}				
-	}	
+		}
+		
+	};
 
 	// Cambia de página.
-	this.cambiaPagina = function( pag ){
-		multipagina_normativa.setPaginaActual(pag-1);
+	this.cambiaPagina = function( pag ) {
+		
+		multipagina_normativa.setPaginaActual(pag - 1);
 		pag_Pag = pag;
 		this.anar(pag);
-	}
+		
+	};
 
 	this.finCargaListado = function(data, opcions){
 
@@ -209,13 +231,10 @@ function CEscriptoriNormativa(){
 
 				if ( ordre_C == "id" )
 					txt_per = txtTitol;
-
 				else if (ordre_C == "fecha")
 					txt_per = txtData;
-
 				else
 					txt_per = txtDataButlleti;
-
 
 				txt_ordenacio += ", " + txt_ordenats + " " + txtPer + " <em>" + txt_per + "</em>";
 
@@ -245,18 +264,20 @@ function CEscriptoriNormativa(){
 
 			// codi cuerpo
 			$(data.nodes).slice().each(function(i) {
+				
 				dada_node = this;
-				parClass = (i%2) ? " par": "";
+				
+				parClass = (i % 2) ? " par": "";
 
 				codi_taula += "<div class=\"tr" + parClass + "\" role=\"row\">";
 
 				codi_taula += "<div class=\"td nom\" role=\"gridcell\">";
 				codi_taula += "<input type=\"hidden\" value=\"" + dada_node.id + "\" class=\"id\" />";
-				codi_taula += "<a class=\"normativa_"+dada_node.id+"\" href=\"javascript:;\" class=\"nom\">" + dada_node.titulo + "</a>";
+				codi_taula += "<a class=\"normativa_" + dada_node.id + "\" href=\"javascript:;\" class=\"nom\">" + dada_node.titulo + "</a>";
 				codi_taula += "</div>";
 
-				codi_taula += "<div class=\"td data\" role=\"gridcell\">" + (dada_node.fecha == null ? "" : dada_node.fecha)  + "</div>";
-				codi_taula += "<div class=\"td dataButlleti\" role=\"gridcell\">" + dada_node.fechaBoletin+ "</div>";
+				codi_taula += "<div class=\"td data\" role=\"gridcell\">" + (dada_node.fecha == null ? "" : dada_node.fecha) + "</div>";
+				codi_taula += "<div class=\"td dataButlleti\" role=\"gridcell\">" + dada_node.fechaBoletin + "</div>";
 
 				codi_taula += "</div>";
 
@@ -267,7 +288,6 @@ function CEscriptoriNormativa(){
 
 			if ( $.browser.opera )
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
-
 
 			// Actualizamos el navegador multipágina.
 			multipagina_normativa.init({
@@ -290,7 +310,6 @@ function CEscriptoriNormativa(){
 
 		}
 
-
 		// animacio
 		normatives_dades_elm.fadeOut(300, function() {
 			// pintem
@@ -298,12 +317,16 @@ function CEscriptoriNormativa(){
 
 				// Evento lanzado al hacer click en un elemento de la lista.
 				//jQuery("#resultats .llistat .tbody a").unbind("click").bind("click",function(){
-				resultats_normativa_elm.find(".llistat .tbody a").unbind("click").bind("click",function(){
+				resultats_normativa_elm.find(".llistat .tbody a").unbind("click").bind("click", function() {
 
 					var partesItem = jQuery(this).attr("class").split("_");
+					
 					var itemID = partesItem[1];
 					var titulo = jQuery(this).html();
-					that.agregaItem(itemID,titulo);
+					var idMainItem = $('#item_id').val();
+					var idRelatedItem = itemID;
+					
+					that.agregaItem(itemID, titulo, idMainItem, idRelatedItem);
 
 				});
 
@@ -314,10 +337,9 @@ function CEscriptoriNormativa(){
 			
 		});	
 		
-	}
+	};
 	
-
-	this.carregar = function(opcions) {		
+	this.carregar = function(opcions) {
 		// opcions: ajaxPag (integer), ordreTipus (ASC, DESC), ordreCamp (tipus, carrec, tractament)
 
 		dataVars = "";
@@ -331,6 +353,7 @@ function CEscriptoriNormativa(){
 		if (typeof opcions.ordreTipus != "undefined") {
 			ordreTipus_normativa_elm.val(opcions.ordreTipus);
 		}
+		
 		// ordreCamp
 		if (typeof opcions.ordreCamp != "undefined") {
 			ordreCamp_normativa_elm.val(opcions.ordreCamp);
@@ -364,10 +387,11 @@ function CEscriptoriNormativa(){
 			success: function(data) {
 				that.finCargaListado(data, opcions);
 			}
-		});	
-	}
+		});
+		
+	};
 
-	this.finalizar = function(){		
+	this.finalizar = function() {		
 
 		nombre_llistat = ModulNormativa.finalizar();
 
@@ -389,11 +413,9 @@ function CEscriptoriNormativa(){
 		// Marcamos el módulo como modificado.
 		ModulNormativa.modificado();
 
-		// Marcamos el formulario como modificado para habilitar el botón de guardar.
-		Detall.modificado();
-
 		this.torna();
-	}
+		
+	};
 
 	// Método sobreescrito
 	this.anar = function(enlace_html) {
@@ -402,15 +424,17 @@ function CEscriptoriNormativa(){
 
 		// text cercant
 		txt = (num <= pag_Pag) ? txtCercantAnteriors : txtCercantItemsSeguents;
+		
 		normatives_dades_elm.fadeOut(300, function() {
 			// pintem
 			codi_anar = "<p class=\"executant\">" + txt + "</p>";
 			normatives_dades_elm.html(codi_anar).fadeIn(300, function() {
-				pagPagina_normativa_elm.val(num-1);								
-				that.carregar({pagina: num-1});				
+				pagPagina_normativa_elm.val(num - 1);								
+				that.carregar({pagina: num - 1});				
 			});
 		});
-	}
+		
+	};
 
 	this.torna = function() {
 
@@ -418,12 +442,12 @@ function CEscriptoriNormativa(){
 		escriptori_normatives_elm.fadeOut(300, function() {			
 			escriptori_detall_elm.fadeIn(300, function() {
 				// activar
-				modul_normatives_elm.find("a.gestiona").one("click", function(){ModulNormativa.gestiona();});
+				modul_normatives_elm.find("a.gestiona").one("click", function() { ModulNormativa.gestiona(); });
 			});
 
 		});
 
-	}
+	};
 
 	this.contaSeleccionats = function() {
 
@@ -457,5 +481,7 @@ function CEscriptoriNormativa(){
 			ModulNormativa.eliminaItem(itemLista);
 			EscriptoriNormativa.contaSeleccionats();
 		});
-	}
+		
+	};
+	
 };

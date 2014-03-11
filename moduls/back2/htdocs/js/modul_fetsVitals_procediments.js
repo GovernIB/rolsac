@@ -40,7 +40,13 @@ function CModulFetsVitals() {
             nombre: "fetsVitals",
             nodoOrigen: modul_fets_elm.find(".listaOrdenable"),
             nodoDestino: [],
-            atributos: ["id", "nom", "orden"],	// Campos que queremos que aparezcan en las listas.
+            atributos: [			// Campos que queremos que aparezcan en las listas.
+	            "id", 
+	            "nom", 
+	            "orden", 
+	            "idRelatedItem", 	// Campo necesario para guardado AJAX genérico de módulos laterales.
+	            "idMainItem"		// Campo necesario para guardado AJAX genérico de módulos laterales.
+            ],
             multilang: false
         });
         
