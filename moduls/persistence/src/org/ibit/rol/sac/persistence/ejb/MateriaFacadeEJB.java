@@ -21,7 +21,6 @@ import org.ibit.rol.sac.model.Historico;
 import org.ibit.rol.sac.model.HistoricoMateria;
 import org.ibit.rol.sac.model.IconoMateria;
 import org.ibit.rol.sac.model.Materia;
-import org.ibit.rol.sac.model.MateriaAgrupacionM;
 import org.ibit.rol.sac.model.PerfilCiudadano;
 import org.ibit.rol.sac.model.TraduccionMateria;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -217,11 +216,12 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
 		
 		try {
 			
-			Materia materia = (Materia) session.load(Materia.class, id);
+			Materia materia = (Materia)session.load(Materia.class, id);
 			Hibernate.initialize( materia.getFoto() );
 			Hibernate.initialize( materia.getIcono() );
 			Hibernate.initialize( materia.getIconoGrande() );
 			Hibernate.initialize( materia.getProcedimientosLocales() );
+			Hibernate.initialize( materia.getIconos() );
 			
 			Iterator iteradorIdiomas = materia.getLangs().iterator();
 			while ( iteradorIdiomas.hasNext() ) {

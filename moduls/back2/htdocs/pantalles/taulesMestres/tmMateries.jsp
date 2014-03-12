@@ -466,6 +466,14 @@
                                 <div class="btnGenerico">
                                     <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.afegeixIcona'/></span></span></a>
                                 </div>
+                                <p style="clear: both; margin-bottom: 10px;"/><!-- Separador -->
+	                            <div class="btnGenerico">
+	                            	<%-- amartin: este botón tiene display: none porque sólo se mostrará si se marca para borrar un icono --%>
+	                                <a id="btnGuardar_iconas" href="javascript:;" class="btn guarda important lista-simple" style="display: none"
+	                            			action="<c:url value="/materies/guardarIconosRelacionados.do" />">
+	                           			<span><span><spring:message code='boto.guarda'/></span></span>
+	                            	</a>
+	                            </div>
                             </div>
                         </div>
                         <!-- /modulIcones -->                                 

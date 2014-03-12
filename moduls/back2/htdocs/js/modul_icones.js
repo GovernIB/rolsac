@@ -15,7 +15,8 @@ jQuery(document).ready(function() {
 
 
 // Lista ordenable para elimiar/ordenar icones en la pantalla "padre"
-function CEscriptoriPare(){
+function CEscriptoriPare() {
+	
 	this.extend = ListaOrdenable;
 	this.extend();		
     
@@ -23,14 +24,20 @@ function CEscriptoriPare(){
     this.configuracion = {
         nombre: "icones",
         nodoOrigen: modul_icones_elm.find(".listaOrdenable"),
-        nodoDestino: "", // icones_seleccionades_elm.find(".listaOrdenable"),
-        atributos: ["id", "nombre"],	// Campos que queremos que aparezcan en las listas.
+        nodoDestino: "",
+        atributos: [			// Campos que queremos que aparezcan en las listas.
+            "id", 
+            "nombre", 
+            "idRelatedItem", 	// Campo necesario para guardado AJAX genÃ©rico de mÃ³dulos laterales.
+            "idMainItem"		// Campo necesario para guardado AJAX genÃ©rico de mÃ³dulos laterales.
+        ],	
         multilang: false
-    }
+    };
 	
 	var that = this;
 	
 	this.iniciar = function() {
+	
 		// botons
 		modul_icones_elm.find("a.gestiona").bind("click", function(){ModulIcones.nou(false);} );
 		
@@ -42,10 +49,15 @@ function CEscriptoriPare(){
 				
 		// Configuramos la lista ordenable.
 		this.configurar(that.configuracion);
-	}	
+		
+		this.deshabilitarBotonGuardar();
+	
+	};
 
 	this.gestiona = function() {
+		
 		lis_size = modul_icones_elm.find('div.cajaIdioma:first li').length;
+		
 		if (lis_size > 0) {
 			EscriptoriEdifici.contaSeleccionats();
 		} else {
@@ -56,77 +68,100 @@ function CEscriptoriPare(){
 		escriptori_detall_elm.fadeOut(300, function() {			
 			escriptori_edificis_elm.fadeIn(300);			
 		});
-	}
+		
+	};
 	
 	this.eliminaItem = function(item) {
 		var id = jQuery(item).find("input." + that.configuracion.nombre + "_id:first").val();						
 		jQuery(that.configuracion.nodoOrigen).find("input[name=" + that.configuracion.nombre + "_id_" + id + "]").parents("li").remove();
 		that.habilitarBotonGuardar();
-	}
+	};
     
     this.habilitarBotonGuardar = function() {
-        jQuery("#btnGuardar").unbind("click").bind("click",function(){Detall.guarda();}).parent().removeClass("off");
-    }
+        jQuery("#btnGuardar_iconas").show(500);
+    };
     
+    this.deshabilitarBotonGuardar = function() {
+        jQuery("#btnGuardar_iconas").hide(500);
+    };
     
     /**
 	 * Agrega o actualiza un item en la lista de origen.
 	 * @return boolean Devuelve false si el item se agraga a la lista, true si lo actualiza.
 	 */
-	this.agregaActualizaItem = function(item){
+	this.agregaActualizaItem = function(item) {
+		
 		var listas = that.configuracion.nodoOrigen;
 		var tamLista = listas.first().find("ul:first").find("li").size();
 		var actualizar = false;
 		
 		if (tamLista == 0) {
+			
 			listas.html("<ul></ul>");
+			
 		} else {
+			
 			listas.first().find("input." + that.configuracion.nombre + "_id").each(function() {
 				if (jQuery(this).val() == item.id) {
 					actualizar = true;
 				}			
-			});			
+			});	
+			
 		}
 		
 		if (actualizar) {
+			
 			listas.find("input." + that.configuracion.nombre + "_nombre[name$=_" + item.id + "]").each(function() {
                 var $iconaInput = jQuery(this);
                 var $iconaSpan = $iconaInput.next();
                 $iconaInput.val(item["nombre"]);
                 $iconaSpan.text(item["nombre"]);
             });
+			
 		} else {
+			
             if (typeof item["orden"] != "number") {
                 item["orden"] = that.obtenerUltimoOrden(listas, tamLista) + 1;
             }
             
-			listas.each(function(){
+			listas.each(function() {
+				
                 var lista = jQuery(this);
                 // var idioma = that.getIdiomaActivo(lista);
 				var htmlCode = that.getHtmlItem(item, true/*, idioma*/);
-				lista.find("ul").append(htmlCode);					
+				lista.find("ul").append(htmlCode);	
+				
 			});
             
             ModulIcones.inicializarIcones();
+            
 		}
 		
+		that.deshabilitarBotonGuardar();
+		
 		return actualizar;
-	}
-	
+		
+	};
 
 	this.obtenerUltimoOrden = function(listas, tamLista) {
+		
 		var ultimoOrden = -1;
+		
 		if (tamLista > 0) {
 			ultimoOrden = parseInt(listas.first().find("li:last input." + that.configuracion.nombre + "_orden").val());  
 		}
+		
 		return ultimoOrden;
-	}
+		
+	};
+	
 };
 
-
 // Creacion/edicion de icones
-function CModulIcones(){
+function CModulIcones() {
+	
 	this.extend = DetallBase;
+	
 	if (typeof FormulariDadesIcona != 'undefined') {
 		this.extend(true, FormulariDadesIcona);
 	} else {
@@ -135,15 +170,18 @@ function CModulIcones(){
 
 	var that = this;
 	
-	this.iniciar = function() {			
+	this.iniciar = function() {
+		
         // botons        
         jQuery("#btnVolver_icones").bind("click", that.torna);
 
-        // El botón de guardar está inicialmente deshabilitado hasta que se realice un cambio en el formulario.
-    	jQuery("#formGuardarIcona input, #formGuardarIcona select, #formGuardarIcona textarea").bind("change", function(){that.modificado();});
+        // TODO amartin ojo con esto...
+        // El botï¿½n de guardar estï¿½ inicialmente deshabilitado hasta que se realice un cambio en el formulario.
+    	jQuery("#formGuardarIcona input, #formGuardarIcona select, #formGuardarIcona textarea").bind("change", function() { that.modificado(); });
     	
 		// idioma
 		if (escriptori_icones_elm.find("div.idiomes").size() != 0) {
+			
 			// Esconder todos menos el primero
 			escriptori_icones_elm.find('div.idioma').slice(1).hide();
 			
@@ -160,27 +198,31 @@ function CModulIcones(){
 			var div_idiomes_elm = escriptori_icones_elm.find("div.idiomes:first");
 			div_idiomes_elm.find("div." + a_primer_elm.attr("class")).addClass("seleccionat");
 			ul_idiomes_elm.bind("click", {'actualizarIdiomasModulosLaterales': false}, that.idioma);
+			
 		}
 		
-		// Redifinimos el método que guarda porque en este caso también hacemos un upload de archivos.
+		// Redifinimos el mï¿½todo que guarda porque en este caso tambiï¿½n hacemos un upload de archivos.
 		this.guarda = this.guarda_upload;
-	}
+		
+	};
 	
-	this.torna = function () {
+	this.torna = function() {
 		
 		escriptori_icones_elm.fadeOut(300, function() {
 	        escriptori_detall_elm.fadeIn(300);
 	        
-			// Los iconos del módulo de familias y el de materias utilizan "modul_icones.js" pero 
-			// los la gestión de cambios de pantalla es distinta. Para que funcione en los dos 
-			// casos debemos añadir esta línea
+			// Los iconos del mï¿½dulo de familias y el de materias utilizan "modul_icones.js" pero 
+			// los la gestiï¿½n de cambios de pantalla es distinta. Para que funcione en los dos 
+			// casos debemos aï¿½adir esta lï¿½nea
 			limpiarArchivo("icona_arxiu");
 	        
 	    });
-	}
+		
+	};
 	
 	// Guardar haciendo upload de archivos.
 	this.guarda_upload = function() {
+		
         // Validamos el formulario
         if (!that.formulariValid()) {
             return false;
@@ -188,50 +230,61 @@ function CModulIcones(){
         
         // Coger el id de la familia o de la materia (depende del mantenimiento/jsp en el que estemos).
         var familiaId = jQuery("#familiaId");
+        
+        // XXX amartin IMPORTANTE: aquÃ­ se agregarÃ­an mÃ¡s casos si este mÃ³dulo se aÃ±ade a otros mantenimientos.
+        // Guardamos la PK del registro principal con el que se relaciona el icono.
         if (familiaId.length > 0) {
         	familiaId.val(jQuery("#item_id").val());
         } else {
         	jQuery("#materiaId").val(jQuery("#item_id").val());
         }
 
-		//Enviamos el formulario mediante el método ajaxSubmit del plugin jquery.form
-		$("#formGuardarIcona").ajaxSubmit({			
+		// Enviamos el formulario mediante el mÃ©todo ajaxSubmit del plugin jquery.form.
+		$("#formGuardarIcona").ajaxSubmit({
 			url: pagGuardarIcona,
 			dataType: 'json',
 			beforeSubmit: function() {
 				Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
 			},
 			success: function(data) {
+				
 				Llistat.cacheDatosListado = null;
 				
 				if (data.id < 0) {
+					
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
-				} else {                   
+					
+				} else {
+					
 					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});
 
 					var iconaItem = new Object();
 					iconaItem['id'] = data.id;
-					iconaItem['nombre'] = jQuery('#icona_arxiu').val(); //jQuery('#grup_arxiu_actual_icona a').text();
+					iconaItem['nombre'] = jQuery('#icona_arxiu').val();
+					iconaItem['idMainItem'] = jQuery('#item_id').val();
+					iconaItem['idRelatedItem'] = data.id;
+					
 					EscriptoriPare.agregaActualizaItem(iconaItem);
 
 					that.torna();
+					
 				}
+				
 			}
-
 		});
         
 		return false;
-	}
+		
+	};
 	
-	
-	this.modificado = function(){
-		// Habilitamos el botón de guardar.
-		jQuery("#btnGuardar_icones").unbind("click").bind("click",function(){that.guarda();}).parent().removeClass("off");
-	}
-	
+	this.modificado = function() {
+		// Habilitamos el botï¿½n de guardar.
+		jQuery("#btnGuardar_icones").unbind("click").bind("click", function() { that.guarda(); }).parent().removeClass("off");
+	};
 	
 	this.nou = function(edicion) {
-		// El botón de guardar está inicialmente deshabilitado hasta que se realice un cambio en el formulario.
+		
+		// El botï¿½n de guardar estï¿½ inicialmente deshabilitado hasta que se realice un cambio en el formulario.
 		jQuery("#btnGuardar_icones").parent().addClass("off");
         
 		if (!edicion) {
@@ -246,10 +299,11 @@ function CModulIcones(){
 		});
 		
 		this.actualizaEventos();
-	}		
+		
+	};
 	
-	
-	this.pintar = function(dades) {		
+	this.pintar = function(dades) {
+		
 		dada_node = dades;
 		
 		jQuery("#iconaId").val(dada_node.item_id);
@@ -260,14 +314,19 @@ function CModulIcones(){
 		$("#grup_icona_arxiu input").removeAttr("checked");
 		var anchors = $("#grup_icona_arxiu a");
         var enllasArxiu = dada_node.enllas_arxiu;
+        
 		if (typeof enllasArxiu != "undefined" && enllasArxiu != "") {
+			
 			anchors.attr("href", pagArrel + enllasArxiu);
 			anchors.text(dada_node.nom_arxiu);
 			anchors.show();
 			$("#grup_icona_arxiu span").hide();
+			
 		} else {
+			
             $("#grup_icona_arxiu span").show();
             anchors.hide();
+            
         }
 		
         limpiarArchivo("icona_arxiu");
@@ -275,9 +334,11 @@ function CModulIcones(){
 
         // Mostrar la pantalla de edicion de iconos
 		that.nou(true);
-	}
+		
+	};
 	
-	this.contaSeleccionats = function() {		
+	this.contaSeleccionats = function() {
+		
 		var seleccionats_val = modul_icones_elm.find(".seleccionat").find("li").size();
 		var info_elms = modul_icones_elm.find("p.info");
 		
@@ -288,10 +349,11 @@ function CModulIcones(){
 		} else if (seleccionats_val > 1) {
 			info_elms.html(txtSeleccionats + " <strong>" + seleccionats_val + " " + txtIcones.toLowerCase() + "</strong>.");						
 		}
-	}
-	
+		
+	};
 	
 	this.inicializarIcones = function(listaIcones) {
+		
 		if (typeof listaIcones != 'undefined' && listaIcones != null) {
             modul_icones_elm.find(".listaOrdenable").empty();		
 			EscriptoriPare.agregaItems(listaIcones, true);
@@ -299,9 +361,13 @@ function CModulIcones(){
         
         // Editar el icono al hacer click sobre el.
         modul_icones_elm.find('div.icones').each(function() {
+        	
             $(this).unbind("click").bind("click", function() {
+            	
                 var iconaId = $(this).find("input.icones_id").val();
+                
                 Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
+                
                 $.ajax({
                     type: "GET",
                     url: pagCarregarIcona,
@@ -323,7 +389,9 @@ function CModulIcones(){
                         }
                     }
                 });
+                
             });
+            
         });
 		
 		that.contaSeleccionats();
@@ -333,5 +401,7 @@ function CModulIcones(){
 			EscriptoriPare.eliminaItem(itemLista);
 			that.contaSeleccionats();
 		});
-	}
+		
+	};
+	
 };

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -250,8 +251,7 @@ public class TMMateriesController extends PantallaBaseController {
 
 	}
 	
-	
-	private void recuperaIconoPerfil(List<IconoMateria> iconos, Long idMateria) {
+	private void recuperaIconoPerfil(List<IconoMateria> iconos, Long id) {
 		
 		if (iconos != null) {
 
@@ -265,11 +265,14 @@ public class TMMateriesController extends PantallaBaseController {
 					iconaDTO = new HashMap<String, Object>(3);
 					iconaDTO.put("id", icona.getId());
 					iconaDTO.put("nombre", icona.getNombre());
+					iconaDTO.put("idMainItem", id);
+					iconaDTO.put("idRelatedItem", icona.getId());
+					
 					llistaIcones.add(iconaDTO);
 					
 				} else {
 					
-					log.error("La materia " + idMateria + " te una icona null o sense arxiu.");
+					log.error("La materia " + id + " te una icona null o sense arxiu.");
 					
 				}
 				
@@ -486,7 +489,6 @@ public class TMMateriesController extends PantallaBaseController {
 			}
 
 			MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
-			UnidadMateriaDelegate uamDelegate = DelegateUtil.getUnidadMateriaDelegate();
 
 			boolean edicion = valoresForm.get("item_id") != null && !"".equals(valoresForm.get("item_id"));
 
@@ -545,52 +547,7 @@ public class TMMateriesController extends PantallaBaseController {
 
 			}
 
-			// Iconos: o no hay cambios o se han de eliminar algunos (las adiciones se hacen en IconaMateriaBackController).
-			if (edicion) {
-				
-				/* TODO amartin: en la gestión de iconos se produce un error por temas de inicialización lazy. Arreglar...
-				
-				IconoMateriaDelegate iconaMateriaDelegate = DelegateUtil.getIconoMateriaDelegate();
-				List<Long> codisIcones = new LinkedList<Long>();
-
-				// obtenim  els ids de les icones
-				for (String nomParametre: valoresForm.keySet()) {
-					String[] elements = nomParametre.split("_");
-					if ("icones".equals(elements[0]) && "id".equals(elements[1])) {
-						// En aquest cas, elements[2] es igual al id de la icona
-						Long id = ParseUtil.parseLong(valoresForm.get(nomParametre));
-						if (id != null) {
-							codisIcones.add(id);
-						} else {
-							log.warn("S'ha rebut un id de icona no num�ric: " + id);
-						}
-					}
-				}
-
-				// eliminar
-				Set<Long> iconesABorrar = new HashSet<Long>();
-				Boolean iconaTrobada;
-				for (IconoMateria icona: (Set<IconoMateria>) materiaOld.getIconos()) {
-					iconaTrobada = Boolean.FALSE;
-					for (Long iconaId: codisIcones) {
-						if (icona.getId().equals(iconaId)) {
-							iconaTrobada = Boolean.TRUE;
-							break;
-						}
-					}
-					if (!iconaTrobada) {
-						iconesABorrar.add(icona.getId());
-					}
-				}
-				
-				iconaMateriaDelegate.borrarIconosMateria(iconesABorrar);
-				
-				*/
-				
-			}
-			// fin Iconos
-
-			//Obtener los dem�s campos
+			//Obtener los demás campos
 			materia.setCodiHita(valoresForm.get("item_codi_hita"));
 			materia.setCodigoEstandar(valoresForm.get("item_codi_estandard"));
 			materia.setDestacada(valoresForm.get("item_destacada") != null && !"".equals(valoresForm.get("item_destacada")));
@@ -800,6 +757,67 @@ public class TMMateriesController extends PantallaBaseController {
 			
 			String ok = messageSource.getMessage("materia.guardat.correcte", null, request.getLocale());
 			result = new IdNomDTO(materia.getId(), ok);            
+
+		} catch (DelegateException dEx) {
+			
+			if (dEx.isSecurityException()) {
+				String error = messageSource.getMessage("error.permisos", null, request.getLocale());
+				result = new IdNomDTO(-1l, error);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+			} else {
+				String error = messageSource.getMessage("error.altres", null, request.getLocale());
+				result = new IdNomDTO(-2l, error);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+			}
+			
+		}
+
+		return result;
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/guardarIconosRelacionados.do")
+	public @ResponseBody IdNomDTO guardarIconosRelacionados(Long id, Long[] elementos, Long itemUAPrincipal,
+			HttpSession session, HttpServletRequest request) {
+		
+		IdNomDTO result = null;
+		
+		try {
+						
+			MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
+			Materia materia = materiaDelegate.obtenerMateria(id);
+			
+			// XXX: Iconos: o no hay cambios o se han de eliminar algunos (las adiciones se hacen en IconaMateriaBackController).
+			IconoMateriaDelegate iconaMateriaDelegate = DelegateUtil.getIconoMateriaDelegate();
+
+			// Eliminamos las que ya no están presentes.
+			Set<IconoMateria> materiasAnteriores = (Set<IconoMateria>)materia.getIconos();
+			Set<Long> iconesABorrar = new HashSet<Long>();
+			
+			Boolean iconaTrobada;
+			
+			for (IconoMateria icona : materiasAnteriores) {
+				
+				iconaTrobada = Boolean.FALSE;
+				
+				for (Long iconaId : elementos) {
+					if (icona.getId().equals(iconaId)) {
+						iconaTrobada = Boolean.TRUE;
+						break;
+					}
+				}
+				
+				if (!iconaTrobada) {
+					iconesABorrar.add(icona.getId());
+				}
+				
+			}
+			
+			iconaMateriaDelegate.borrarIconosMateria(iconesABorrar);
+			
+			String ok = messageSource.getMessage("materia.guardat.correcte", null, request.getLocale());
+			result = new IdNomDTO(materia.getId(), ok);
 
 		} catch (DelegateException dEx) {
 			

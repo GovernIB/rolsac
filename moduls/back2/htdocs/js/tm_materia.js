@@ -76,6 +76,23 @@ function CListaSimple() {
 	
 	var that = this;
 	
+	this._guardar = this.guardar;
+	
+	this.guardar = function(element, url, id) {
+		
+		this._guardar(element, url, id);
+		
+		// XXX: ocultación del botón de guardado tras solicitar guardado AJAX (si el invoker es el guardado de iconos de la materia).
+		urlIconosMateria = "/materies/guardarIconosRelacionados.do";
+		if ( url.indexOf(urlIconosMateria) != -1 ) {
+			
+			// Objeto declarado en modul_icones.js
+			EscriptoriPare.deshabilitarBotonGuardar();
+			
+		}
+		
+	};
+	
 	this._getFilters = this.getFilters;
 	
 	this.getFilters = function(elements, id) {
