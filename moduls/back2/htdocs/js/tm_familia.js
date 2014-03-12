@@ -2,6 +2,19 @@
 
 $(document).ready(function() {
 	
+	// Listener para guardado de módulos laterales vía AJAX.
+	jQuery(".lista-simple").click(function() {
+		
+		var element = $(this).parent().parent().find("li");
+		var id = $('#item_id').val();
+		var url = $(this).attr('action');
+		
+		ListaSimple.guardar(element, url, id);
+		
+	});
+	
+	ListaSimple = new CListaSimple();
+	
 	// elements
 	opcions_elm = $("#opcions");
 	escriptori_elm = $("#escriptori");
@@ -44,6 +57,40 @@ $(document).ready(function() {
     
 });
 
+/**
+ * (amartin) Explicación de extensión de clase:
+ * 
+ * Extendemos la clase para que, tras el guardado, se oculte el botón de guardado del módulo lateral de iconos.
+ */
+function CListaSimple() {
+	
+	// Activa mensajes de debug.
+	var debug = false;
+
+	this.extend = ListaSimple;
+	this.extend();
+	
+	var that = this;
+	
+	this._guardar = this.guardar;
+	
+	this.guardar = function(element, url, id) {
+		
+		this._guardar(element, url, id);
+		
+		// XXX: ocultación del botón de guardado tras solicitar guardado AJAX (si el invoker es el guardado de iconos de la familia).
+		urlGuardarIconos = "/familia/guardarIconosRelacionados.do";
+		if ( url.indexOf(urlGuardarIconos) != -1 ) {
+			
+			// Objeto declarado en modul_icones.js
+			if (typeof EscriptoriPare != 'undefined')
+				EscriptoriPare.deshabilitarBotonGuardar();
+			
+		}
+		
+	};
+	
+};
 
 // idioma
 var pag_idioma = $("html").attr("lang");
@@ -64,7 +111,7 @@ function CLlistat() {
 	
 	this.iniciar = function() {
 		this.carregar({});
-	}
+	};
 	
 	this.finCargaListado = function(opcions,data) {
 
@@ -133,7 +180,7 @@ function CLlistat() {
 			$(data.nodes).each(function(i) {
 				
 				dada_node = this;
-				parClass = (i%2) ? " par": "";
+				parClass = (i % 2) ? " par": "";
 				
 				codi_taula += "<div class=\"tr" + parClass + "\" role=\"row\">";
 				codi_taula += "<div class=\"td nom\" role=\"gridcell\">";
@@ -189,9 +236,10 @@ function CLlistat() {
 			
 		});
 		
-	}
+	};
 	
 	this.carregar = function(opcions) {
+		
 		dataVars = "";
 		
 		// cercador
@@ -222,7 +270,6 @@ function CLlistat() {
 		if (typeof opcions.ordreCamp != "undefined")
 			ordreCamp_elm.val(opcions.ordreCamp);
 
-		
 		// paginacio
 		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag, 10) : multipagina.getPaginaActual();
 			
@@ -250,7 +297,7 @@ function CLlistat() {
 			}
 		});
 		
-	}
+	};
 	
 };
 
@@ -297,11 +344,11 @@ function CDetall() {
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");
 		
-	}
+	};
 	
 	this.traduirWrapper = function () {
 		that.traduir(pagTraduirFamilia, CAMPOS_TRADUCTOR_FAMILIA, DATOS_TRADUCIDOS_FAMILIA);
-	}
+	};
 	
 	this.activar = 0;
 	
@@ -326,10 +373,11 @@ function CDetall() {
 		this.actualizaEventos();
 		
 		this.modificado(false);
-	}		
+	
+	};
 	
 	this.pintar = function(dades) {
-		
+				
 		escriptori_detall_elm.find("a.elimina").show().end().find("h2:first").text(txtDetallTitol);
 		
 		// Mostrar paneles
@@ -367,11 +415,16 @@ function CDetall() {
 				escriptori_detall_elm.fadeIn(300);				
 			});
 			
-		}	
+		}
 		
 		this.modificado(false);
 		
-	}
+		// Objeto declarado en modul_icones.js
+		if (typeof EscriptoriPare != 'undefined') {
+			EscriptoriPare.deshabilitarBotonGuardar();
+		}
+				
+	};
 	
 	this.elimina = function() {
 		
@@ -413,10 +466,10 @@ function CDetall() {
 			
 		});
 		
-	}
+	};
 	
 	this.pintarModulos = function(dades) {
 		ModulIcones.inicializarIcones(dades.icones);
-	}
+	};
 	
 };

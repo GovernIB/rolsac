@@ -2,8 +2,14 @@
 
 package org.ibit.rol.sac.model;
 
-
-public class IconoFamilia implements ValueObject{
+public class IconoFamilia implements ValueObject {
+	
+	private static final long serialVersionUID = 1L;
+	
+	private Long id;
+    private Familia familia;
+    private PerfilCiudadano perfil;
+    private Archivo icono;
 
     public Long getId() {
         return id;
@@ -36,9 +42,5 @@ public class IconoFamilia implements ValueObject{
     public void setIcono(Archivo icono) {
         this.icono = icono;
     }
-
-    private Long id;
-    private Familia familia;
-    private PerfilCiudadano perfil;
-    private Archivo icono;
+    
 }

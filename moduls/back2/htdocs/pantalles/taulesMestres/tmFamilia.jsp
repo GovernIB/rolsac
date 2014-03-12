@@ -9,10 +9,12 @@
 <script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
 
 <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/lista_ajax.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/tm_familia.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_icones.js'/>"></script>
 
 <script type="text/javascript">
+
     var pagLlistat = '<c:url value="/familia/llistat.do" />';
     var pagDetall = '<c:url value="/familia/pagDetall.do" />';
     var pagGuardar = '<c:url value="/familia/guardar.do" />';
@@ -285,6 +287,14 @@
                                 <div class="btnGenerico">
                                     <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.afegeixIcona'/></span></span></a>
                                 </div>
+                                <p style="clear: both; margin-bottom: 10px;"/><!-- Separador -->
+	                            <div class="btnGenerico">
+	                            	<%-- amartin: este botón tiene display: none porque sólo se mostrará si se marca para borrar un icono --%>
+	                                <a id="btnGuardar_iconas" href="javascript:;" class="btn guarda important lista-simple" style="display: none"
+	                            			action="<c:url value="/familia/guardarIconosRelacionados.do" />">
+	                           			<span><span><spring:message code='boto.guarda'/></span></span>
+	                            	</a>
+	                            </div>
                             </div>
                         </div>
                         <!-- /modulIcones -->                                 

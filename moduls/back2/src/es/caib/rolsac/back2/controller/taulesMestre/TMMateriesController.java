@@ -778,8 +778,7 @@ public class TMMateriesController extends PantallaBaseController {
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/guardarIconosRelacionados.do")
-	public @ResponseBody IdNomDTO guardarIconosRelacionados(Long id, Long[] elementos, Long itemUAPrincipal,
-			HttpSession session, HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardarIconosRelacionados(Long id, Long[] elementos, HttpSession session, HttpServletRequest request) {
 		
 		IdNomDTO result = null;
 		
@@ -791,13 +790,13 @@ public class TMMateriesController extends PantallaBaseController {
 			// XXX: Iconos: o no hay cambios o se han de eliminar algunos (las adiciones se hacen en IconaMateriaBackController).
 			IconoMateriaDelegate iconaMateriaDelegate = DelegateUtil.getIconoMateriaDelegate();
 
-			// Eliminamos las que ya no están presentes.
-			Set<IconoMateria> materiasAnteriores = (Set<IconoMateria>)materia.getIconos();
+			// Eliminamos los que ya no están presentes.
+			Set<IconoMateria> iconosAnteriores = (Set<IconoMateria>)materia.getIconos();
 			Set<Long> iconesABorrar = new HashSet<Long>();
 			
 			Boolean iconaTrobada;
 			
-			for (IconoMateria icona : materiasAnteriores) {
+			for (IconoMateria icona : iconosAnteriores) {
 				
 				iconaTrobada = Boolean.FALSE;
 				

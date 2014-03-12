@@ -82,7 +82,7 @@ function CEscriptoriPare() {
     };
     
     this.deshabilitarBotonGuardar = function() {
-        jQuery("#btnGuardar_iconas").hide(500);
+        jQuery("#btnGuardar_iconas").css("display", "none");
     };
     
     /**
@@ -175,8 +175,7 @@ function CModulIcones() {
         // botons        
         jQuery("#btnVolver_icones").bind("click", that.torna);
 
-        // TODO amartin ojo con esto...
-        // El bot�n de guardar est� inicialmente deshabilitado hasta que se realice un cambio en el formulario.
+        // El botón de guardar est� inicialmente deshabilitado hasta que se realice un cambio en el formulario.
     	jQuery("#formGuardarIcona input, #formGuardarIcona select, #formGuardarIcona textarea").bind("change", function() { that.modificado(); });
     	
 		// idioma

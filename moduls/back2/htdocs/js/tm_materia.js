@@ -83,11 +83,12 @@ function CListaSimple() {
 		this._guardar(element, url, id);
 		
 		// XXX: ocultación del botón de guardado tras solicitar guardado AJAX (si el invoker es el guardado de iconos de la materia).
-		urlIconosMateria = "/materies/guardarIconosRelacionados.do";
-		if ( url.indexOf(urlIconosMateria) != -1 ) {
+		urlGuardarIconos = "/materies/guardarIconosRelacionados.do";
+		if ( url.indexOf(urlGuardarIconos) != -1 ) {
 			
 			// Objeto declarado en modul_icones.js
-			EscriptoriPare.deshabilitarBotonGuardar();
+			if (typeof EscriptoriPare != 'undefined')
+				EscriptoriPare.deshabilitarBotonGuardar();
 			
 		}
 		
@@ -597,6 +598,10 @@ function CDetall() {
 		}
 
 		this.modificado(false);
+		
+		// Objeto declarado en modul_icones.js
+		if (typeof EscriptoriPare != 'undefined')
+			EscriptoriPare.deshabilitarBotonGuardar();
 		
 		if (debug)
 			console.log("Saliendo de CDetall.pintar");
