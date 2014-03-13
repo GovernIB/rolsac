@@ -72,7 +72,7 @@ function CDetall(soloFicha){
 		this.guarda = this.guarda_upload;
 
 		// Guardamos la cantidad de idiomas de idiomas con que se trabaja
-		var numIdiomas = escriptori_detall_elm.find("div.idiomes").size();
+		var numIdiomas = idiomas.length;
 
 		// Idioma
 		if (numIdiomas != 0) {
