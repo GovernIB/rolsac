@@ -6,18 +6,26 @@ $(document).ready(function() {
 	
 	jQuery(".lista-simple").click(function() {
 		
-		var element = $(this).parent().parent().find("li");
+		var elements = $(this).parent().parent().find("li"); // Con esto obtenemos los <li> que cuelgan de <div class="seleccionats">
 		var id = $('#item_clave_primaria').val();
 		var url = $(this).attr('action');
 		
-		ListaSimple.guardar(element, url, id);
+		ListaSimple.guardar(elements, url, id);
 		
 	});
 	
-	jQuery(".lista-compleja").click(function() { /* TODO: */ });
+	jQuery(".lista-multiidioma").click(function() {
+		
+		var elements = $(this).parent().parent().find("div.cajaIdioma.ca li"); // Con esto obtenemos los <li> que cuelgan de <div class="cajaIdioma ca">
+		var id = $('#item_clave_primaria').val();
+		var url = $(this).attr('action');
+		
+		ListaMultiidiomaEnlaces.guardar(elements, url, id);
+	
+	});
 
     ListaSimple = new ListaSimple();
-    ListaCompleja = new ListaCompleja();
+    ListaMultiidiomaEnlaces = new CListaMultiidiomaEnlaces();
 
 	// elements
 	opcions_elm = $("#opcions");
@@ -197,7 +205,6 @@ function CLlistat() {
 			
 			if ($.browser.opera)
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
-			
 								
 			multipagina.init({ // Instanciamos el navegador multipágina.
 				total: resultats_total,

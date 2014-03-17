@@ -3,8 +3,12 @@ package org.ibit.rol.sac.model;
 
 public class TraduccionEnlace implements Traduccion {
 
-    private String titulo;
+	private static final long serialVersionUID = 1L;
+	
+	private String titulo;
     private String enlace;
+    
+    public TraduccionEnlace() {};
     
 	public String getEnlace() {
 		return enlace;
@@ -21,6 +25,5 @@ public class TraduccionEnlace implements Traduccion {
 	public void setTitulo(String titulo) {
 		this.titulo = titulo;
 	}
-    
     
 }

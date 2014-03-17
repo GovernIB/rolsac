@@ -1018,7 +1018,7 @@
             <!-- /modul -->
             
             <!-- modul -->
-            <div class="modul">
+            <div class="modul" id="modul_seccions">
             	<input type="hidden" id="llistaSeccions" name="seccUA" value=""/>
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
@@ -1046,8 +1046,9 @@
                 </fieldset>
             </div>
             <!-- /modul -->
+            
             <!-- modul -->
-            <div class="modul invisible">                     
+            <div class="modul invisible" id="modul_enllassos">                     
                 <fieldset>                                  
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
                     <legend><spring:message code='fitxes.enllasos_relacionats'/></legend>                               
@@ -1091,6 +1092,13 @@
                                 <div class="btnGenerico">
                                     <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.gestiona_enllasos'/></span></span></a>
                                 </div>
+                                <p style="clear: both; margin-bottom: 10px;"/><!-- Separador -->
+	                            <div class="btnGenerico">
+	                                <a id="btnGuardar_enlaces" href="javascript:;" class="btn guarda important lista-multiidioma" 
+	                            			action="<c:url value="/fitxainf/guardarEnlacesRelacionados.do" />">
+	                           			<span><span><spring:message code='boto.guarda'/></span></span>
+	                            	</a>
+	                            </div>
                             </div>                                  
                         </div>
                         <!-- /modulEnllacos -->                                 

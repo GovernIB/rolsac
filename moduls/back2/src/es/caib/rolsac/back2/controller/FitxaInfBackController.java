@@ -45,6 +45,7 @@ import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
 import org.ibit.rol.sac.model.TraduccionSeccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.dto.EnlaceDTO;
+import org.ibit.rol.sac.model.dto.EnlacesFichaDTO;
 import org.ibit.rol.sac.model.dto.FichaDTO;
 import org.ibit.rol.sac.model.dto.FichaUADTO;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
@@ -65,6 +66,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -675,11 +677,11 @@ public class FitxaInfBackController extends PantallaBaseController {
 				
 					llistaEnlacesDTO.add(
 						new EnlaceDTO(
-							enlace.getId(), 
+							enlace.getId().toString(), 
 							enlace.getOrden(),
 							enlace.getTraduccionMap(), 
 							ficha.getId(),
-							enlace.getId()
+							enlace.getId().toString()
 						)
 					);
 				
@@ -783,7 +785,6 @@ public class FitxaInfBackController extends PantallaBaseController {
 
 			// Guardado de las relaciones de una ficha con otras entidades
 			guardarSecciosUA(edicion, fitxaOld, valoresForm, idFitxa);					// Guardamos las relaciones de la ficha con las secciones y las UAs
-			guardarEnlaces(edicion, fitxa, fitxaOld, valoresForm, idFitxa, enllasos);	// Guardamos llas relaciones con los enlaces
 			// Fin guardado relaciones
 
 			// Finalitzat correctament
@@ -1275,77 +1276,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 			
 		}
 		
-	}
-
-	/*
-	 * Función para controlar y guardar los enlaces de una ficha
-	 */
-	private void guardarEnlaces(boolean edicion, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm, 
-			Long idFitxa, Set<String> enllasos) throws DelegateException {
-
-		if (isModuloModificado("modulo_enlaces_modificado", valoresForm)) {
-			EnlaceDelegate enllasDelegate = DelegateUtil.getEnlaceDelegate();
-
-			// Guardar los nuevos enlaces y actualizar los ya existentes.
-			List<Enlace> enllassosNous = new ArrayList<Enlace>();
-			
-			Iterator<String> iterator = enllasos.iterator();
-			while ( iterator.hasNext() ) {
-				
-				String nomParameter = (String) iterator.next();
-				String[] elements = nomParameter.split("_");
-				
-				if ( elements[0].equals("enllas") && elements[1].equals("id") ) {
-					
-					// En aquest cas, elements[2] es igual al id del enllas
-					Enlace enllas = new Enlace();
-					enllas.setId((elements[2].charAt(0) == 't') ? null : ParseUtil.parseLong(valoresForm.get(nomParameter)));
-					enllas.setOrden(ParseUtil.parseLong(valoresForm.get("enllas_orden_" + elements[2])));
-					
-					for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
-						
-						TraduccionEnlace traduccio = new TraduccionEnlace();
-						traduccio.setTitulo(valoresForm.get("enllas_nombre_" + lang + "_" + elements[2]));
-						traduccio.setEnlace(valoresForm.get("enllas_url_" + lang + "_" + elements[2]));
-						enllas.setTraduccion(lang, traduccio);
-
-					}
-					
-					enllas.setFicha(fitxa);
-					enllasDelegate.grabarEnlace(enllas, null, idFitxa);
-					enllassosNous.add(enllas);
-					
-				}
-				
-			}
-
-			// Eliminar los enlaces ya no existentes
-			if (edicion) {
-				
-				List<Enlace> enllassosAntics = fitxaOld.getEnlaces();
-				boolean eliminarEnlace;
-				
-				for (Enlace enllas: enllassosNous) {
-					
-					eliminarEnlace = true;
-					
-					for (Enlace enlace : enllassosAntics) {
-						if (enlace.getId() == enllas.getId()) {
-							eliminarEnlace = false;
-						}
-					}
-					
-					if (eliminarEnlace) {
-						enllasDelegate.borrarEnlace(enllas.getId());
-					}
-					
-				}
-				
-			}
-			
-		}
-		
-	}
+	}	
 
 	/**
 	 * Devuelve true si ha habido algun cambio en el modulo.
@@ -1656,6 +1587,103 @@ public class FitxaInfBackController extends PantallaBaseController {
 			
 		}
 		
+		return result;
+
+	}
+	
+	@RequestMapping(value = "/guardarEnlacesRelacionados.do", method = POST)
+	public @ResponseBody IdNomDTO guardarEnlacesRelacionados(@RequestBody final EnlacesFichaDTO elementos, HttpServletRequest request) {
+
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+		
+		IdNomDTO result = null;
+		String error = null;
+		
+		try {
+			
+			Long id = elementos.getId(); // Id de la ficha.			
+			Ficha ficha = DelegateUtil.getFichaDelegate().obtenerFicha(id);
+			
+			List<String> langs = DelegateUtil.getIdiomaDelegate().listarLenguajes();
+			List<Enlace> enlacesNuevos = new ArrayList<Enlace>();
+			
+			if ( elementos.getListaEnlaces() != null ) {
+				
+				// Construimos los elementos de tipo Enlace a partir de los elementos EnlaceDTO que nos llegan del mantenimiento.
+				for ( EnlaceDTO e : elementos.getListaEnlaces() ) {
+					
+					Enlace enlace = new Enlace();
+					
+					// Tratamiendo del ID del enlace.
+					if (e.getId().startsWith("t")) // Nuevo elemento, con id temporal del tipo "tNNNNNN".
+						enlace.setId(null);
+					else
+						enlace.setId(Long.valueOf(e.getId()));
+					
+					enlace.setOrden(e.getOrden());
+					enlace.setFicha(ficha);
+					
+					for (String lang : langs) {
+    					TraduccionEnlace traduccion = (TraduccionEnlace)e.getTraduccion(lang);
+    					enlace.setTraduccion(lang, traduccion);
+    				}
+    				
+    				enlacesNuevos.add(enlace);
+					
+				}
+				
+				// Los insertamos/actualizamos en la base de datos.
+				EnlaceDelegate enllasDelegate = DelegateUtil.getEnlaceDelegate();
+	    		for (Enlace e : enlacesNuevos) {
+	    			enllasDelegate.grabarEnlace(e, null, id);
+	    		}
+	    		
+	    		// Borramos los que existían anteriormente y no nos han llegado en esta petición de guardado.
+    			List<Enlace> enlacesAEliminar = ficha.getEnlaces();
+    			for (Enlace enlace: enlacesNuevos) {
+    				
+    				Iterator<Enlace> it = enlacesAEliminar.iterator();
+    				while ( it.hasNext() ) {
+    					
+    					Enlace e = it.next();
+    					
+    					// Si el enlace coincide con alguno de los "nuevos", lo quitamos de
+    					// la lista de enlaces pendientes de eliminar.
+    					if (e != null && e.getId().equals(enlace.getId()))
+    						it.remove();
+    					
+    				}
+    				
+    			}
+    			
+    			// Eliminamos los que han quedado en la lista.
+    			for (Enlace e : enlacesAEliminar) {
+    				if (e != null)
+    					enllasDelegate.borrarEnlace(e.getId());
+    			}
+				
+			}
+										
+			result = new IdNomDTO(ficha.getId(), messageSource.getMessage("fitxes.guardat.correcte", null, request.getLocale()));
+		
+		} catch (DelegateException dEx) {
+			
+			if (dEx.isSecurityException()) {
+				
+				error = messageSource.getMessage("error.permisos", null, request.getLocale());
+				result = new IdNomDTO(-1l, error);
+				
+			} else {
+				
+				error = messageSource.getMessage("error.altres", null, request.getLocale());
+				result = new IdNomDTO(-2l, error);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+				
+			}
+			
+		}
+
 		return result;
 
 	}

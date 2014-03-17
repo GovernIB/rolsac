@@ -1,19 +1,16 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import java.util.Iterator;
-
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-import org.ibit.rol.sac.model.Enlace;
-import org.ibit.rol.sac.model.Ficha;
-import org.ibit.rol.sac.model.ProcedimientoLocal;
-import org.ibit.rol.sac.model.TraduccionEnlace;
-import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
+import java.util.Comparator;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import java.util.*;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Session;
+
+import org.ibit.rol.sac.model.Enlace;
+import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 
 /**
  * SessionBean para mantener y consultar Enlaces.
@@ -32,7 +29,9 @@ import java.util.*;
 
 public abstract class EnlaceFacadeEJB extends HibernateEJB {
 
-    /**
+	private static final long serialVersionUID = 1L;
+
+	/**
      * Obtiene referencia al ejb de control de Acceso.
      * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
      */
@@ -58,35 +57,50 @@ public abstract class EnlaceFacadeEJB extends HibernateEJB {
      * @param idFicha	Identificador de una ficha.
      * @return Devuelve el identificador del enlace guardado.
      */
-    public Long grabarEnlace(Enlace enlace, Long idProcedimiento, Long idFicha)
-    {
+    public Long grabarEnlace(Enlace enlace, Long idProcedimiento, Long idFicha) {
+    	
     	Session session = getSession();
+    	
     	try {
+    		
     		Ficha ficha = null;
+    		
     		if (enlace.getId() == null) {
+    			
     			if (idFicha != null) {
+    				
     				if (!getAccesoManager().tieneAccesoFicha(idFicha)) {
     					throw new SecurityException("No tiene acceso a la ficha.");
     				}
     				
     				ficha = (Ficha) session.load(Ficha.class, idFicha);
     				ficha.addEnlace(enlace);
+    				
     			}
+    			
     			session.save(enlace);
     			
     		} else {
+    			
     			session.update(enlace);
+    			
     		}
+    		
     		session.flush();
+    		
     		return enlace.getId();
     		
     	} catch (HibernateException he) {
+    		
     		throw new EJBException(he);
+    		
     	} finally {
+    		
     		close(session);
+    		
     	}
+    	
     }
-    
     
     /**
      * Borra un enlace.
