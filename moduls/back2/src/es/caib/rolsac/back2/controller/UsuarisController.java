@@ -250,23 +250,22 @@ public class UsuarisController extends PantallaBaseController {
                 
             }
 		    
-			UsuarioDelegate usuariDelegate = DelegateUtil.getUsuarioDelegate();
+			UsuarioDelegate usuarioDelegate = DelegateUtil.getUsuarioDelegate();
 			Usuario usuari = new Usuario();
-			Usuario usuariOld;			
-			
-			boolean edicion;
 			
 			try {
+			
+				// Edición
 				Long id = Long.parseLong(request.getParameter("item_id"));
-				usuariOld = usuariDelegate.obtenerUsuario(id);
-				// Mantenemos los valores originales que tiene el usuario.
 				usuari.setId(id);
-				edicion = true;
+				
 			} catch (NumberFormatException nfe) {
-				usuariOld = null;
-				edicion = false;
+			
+				// Creación
+				usuari.setId(null);
+				
 			}
-
+			
 			usuari.setNombre(request.getParameter("item_nom"));
 			usuari.setUsername(request.getParameter("item_username"));
 			usuari.setPassword(request.getParameter("item_password"));
@@ -274,7 +273,7 @@ public class UsuarisController extends PantallaBaseController {
 			usuari.setEmail(request.getParameter("item_email"));
 			usuari.setObservaciones(request.getParameter("item_observacions"));
 			            
-			usuariDelegate.grabarUsuario(usuari);
+			usuarioDelegate.grabarUsuario(usuari);
 			
 			String ok = messageSource.getMessage("usuari.guardat.correcte", null, request.getLocale());
 			result = new IdNomDTO(usuari.getId(), ok);
@@ -302,7 +301,7 @@ public class UsuarisController extends PantallaBaseController {
     
     @SuppressWarnings("unchecked")
 	@RequestMapping(value = "/guardarUnidadesRelacionadas.do")
-	public @ResponseBody IdNomDTO guardarUnidadesRelacionadas(Long id, Long[] elementos, HttpSession session, HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardarUnidadesRelacionadas(Long id, Long[] elementos, HttpServletRequest request) {
 		
 		IdNomDTO result = null;
 		

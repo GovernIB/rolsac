@@ -574,7 +574,7 @@ public class TMAgrupacioMateriesController extends PantallaBaseController {
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/guardarMateriasRelacionadas.do")
-	public @ResponseBody IdNomDTO guardarMateriasRelacionadas(Long id, Long[] elementos, HttpSession session, HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardarMateriasRelacionadas(Long id, Long[] elementos, HttpServletRequest request) {
 		
 		IdNomDTO result = null;
 		

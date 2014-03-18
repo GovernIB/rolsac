@@ -13,6 +13,9 @@ function ListaAjax() {
 			url: url,
 			dataType: "json",
 			data: filters,
+			beforeSend: function() {
+				Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
+			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				
 				if (debug) {
@@ -52,6 +55,9 @@ function ListaAjax() {
 			headers: { 
 		        'Accept': 'application/json' 					// XXX amartin: necesario para que el controller de SPRING acepte la petición con datos enviados en formato JSON.
 		    },
+		    beforeSend: function() {
+				Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
+			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				
 				if (debug) {
@@ -79,7 +85,6 @@ function ListaAjax() {
 	
 };
 
-/** @style: .lista-simple */
 function ListaSimple() {
 	
 	// Activa mensajes de debug.
@@ -133,7 +138,6 @@ function ListaSimple() {
 	
 };
 
-/** @style: .lista-multiidioma */
 function ListaMultiidioma() {
 	
 	// Activa mensajes de debug.

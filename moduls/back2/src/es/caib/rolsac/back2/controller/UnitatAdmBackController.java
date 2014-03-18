@@ -1628,7 +1628,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/guardarMateriasRelacionadas.do")
-	public @ResponseBody IdNomDTO guardarMateriasRelacionadas(Long id, Long[] elementos, HttpSession session, HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardarMateriasRelacionadas(Long id, Long[] elementos, HttpServletRequest request) {
 		
 		IdNomDTO result = null;
 		
@@ -1705,7 +1705,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/guardarEdificiosRelacionados.do")
-	public @ResponseBody IdNomDTO guardarEdificiosRelacionados(Long id, Long[] elementos, HttpSession session, HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardarEdificiosRelacionados(Long id, Long[] elementos, HttpServletRequest request) {
 		
 		IdNomDTO result = null;
 		
@@ -1759,7 +1759,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/guardarUsuariosRelacionados.do")
-	public @ResponseBody IdNomDTO guardarUsuariosRelacionados(Long id, Long[] elementos, HttpSession session, HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardarUsuariosRelacionados(Long id, Long[] elementos, HttpServletRequest request) {
 		
 		IdNomDTO result = null;
 		

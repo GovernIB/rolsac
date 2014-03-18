@@ -1347,7 +1347,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	}
 	
 	@RequestMapping(value = "/guardarHechosVitales.do", method = POST)
-	public @ResponseBody IdNomDTO guardarHechosVitales(Long id, Long[] elementos, HttpSession session, HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardarHechosVitales(Long id, Long[] elementos, HttpServletRequest request) {
 
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
@@ -1451,7 +1451,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	}
 	
 	@RequestMapping(value = "/guardarMaterias.do", method = POST)
-	public @ResponseBody IdNomDTO guardarMaterias(Long id, Long[] elementos, HttpSession session, HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardarMaterias(Long id, Long[] elementos, HttpServletRequest request) {
 
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
@@ -1520,7 +1520,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/guardarNormativas.do", method = POST)
-	public @ResponseBody IdNomDTO guardarNormativas(Long id, Long[] elementos, HttpSession session, HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardarNormativas(Long id, Long[] elementos, HttpServletRequest request) {
 
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", "text/html; charset=utf-8");

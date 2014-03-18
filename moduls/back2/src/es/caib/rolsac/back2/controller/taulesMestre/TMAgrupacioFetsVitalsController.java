@@ -593,7 +593,7 @@ public class TMAgrupacioFetsVitalsController extends PantallaBaseController {
     
     @SuppressWarnings("unchecked")
 	@RequestMapping(value = "/guardarHechosVitalesRelacionados.do")
-	public @ResponseBody IdNomDTO guardarHechosVitalesRelacionados(Long id, Long[] elementos, HttpSession session, HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardarHechosVitalesRelacionados(Long id, Long[] elementos, HttpServletRequest request) {
 		
 		IdNomDTO result = null;
 		

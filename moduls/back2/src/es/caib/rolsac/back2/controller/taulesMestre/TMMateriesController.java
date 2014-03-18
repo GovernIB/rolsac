@@ -710,8 +710,7 @@ public class TMMateriesController extends PantallaBaseController {
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/guardarUnidadesRelacionadas.do")
-	public @ResponseBody IdNomDTO guardarUnidadesRelacionadas(Long id, Long[] elementos, Long itemUAPrincipal,
-			HttpSession session, HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardarUnidadesRelacionadas(Long id, Long[] elementos, Long itemUAPrincipal, HttpServletRequest request) {
 		
 		IdNomDTO result = null;
 		
@@ -778,7 +777,7 @@ public class TMMateriesController extends PantallaBaseController {
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/guardarIconosRelacionados.do")
-	public @ResponseBody IdNomDTO guardarIconosRelacionados(Long id, Long[] elementos, HttpSession session, HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardarIconosRelacionados(Long id, Long[] elementos, HttpServletRequest request) {
 		
 		IdNomDTO result = null;
 		

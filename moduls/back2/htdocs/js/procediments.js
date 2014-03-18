@@ -9,11 +9,11 @@ $(document).ready(function() {
 		var id = $('#item_clave_primaria').val();
 		var url = $(this).attr('action');
 		
-		ListaSimple.guardar(element, url, id);
+		ListaSimpleGenerica.guardar(element, url, id);
 		
 	});
 
-    ListaSimple = new ListaSimple();
+	ListaSimpleGenerica = new ListaSimple();
 	
 	// elements
 	opcions_elm = $("#opcions");

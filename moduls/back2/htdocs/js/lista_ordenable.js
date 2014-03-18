@@ -30,7 +30,7 @@ function ListaOrdenable() {
 		
 	};
 	
-	// TODO amartin: este método al final tendrá que borrarse si todos los módulos laterales se guardan vía AJAX,
+	// XXX amartin: este método al final tendrá que borrarse si todos los módulos laterales se guardan vía AJAX,
 	// ya que se encarga de marcar en azul el botón "GUARDA!" de la vista de detalle de un registro, dando a entender
 	// que se ha modificado el detalle cuando sólo se ha modificado algo en el módulo lateral.
 	this.modificado = function() {
@@ -261,7 +261,7 @@ function ListaOrdenable() {
 		var id = jQuery(item).find("input." + params.nombre + "_id:first").val();						
 		jQuery(params.nodoDestino).find("input[name=" + params.nombre + "_id_" + id + "]").parents("li").remove();
 		
-		// FIXME amartin: esto no ha de hacerse si el guardado del módulo lateral es es vía AJAX.
+		// TODO amartin: esto no ha de hacerse si el guardado del módulo lateral es es vía AJAX.
 		// this.modificado();
 		
 		if (debug)

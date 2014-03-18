@@ -86,12 +86,15 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
     public Long grabarDocumento(Documento documento, Long procedimiento_id, Long ficha_id) {
-    		//Long docInftramite_id, Long docPreTramite_id) {
-        Session session = getSession();
+    	
+    	Session session = getSession();
+    	
         try {
+        	
         	Ficha ficha = null;
         	ProcedimientoLocal procedimiento = null;
-        	Tramite tramite=null;
+        	Tramite tramite = null;
+        	
             if (documento.getId() == null) {
 
                 if (ficha_id != null) {
@@ -101,6 +104,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
                     ficha = (Ficha) session.load(Ficha.class, ficha_id);
                     ficha.addDocumento(documento);                    
                 }
+                
                 if (procedimiento_id != null) {
                     if (!getAccesoManager().tieneAccesoProcedimiento(procedimiento_id)) {
                         throw new SecurityException("No tiene acceso al procedimiento.");
@@ -110,27 +114,42 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
                 }
            
                 session.save(documento);
+                
             } else {
+            	
                 if (!getAccesoManager().tieneAccesoDocumento(documento.getId())) {
                     throw new SecurityException("No tiene acceso al documento.");
                 }	
                 
                 session.update(documento);
+                
             }
+            
             session.flush();
+            
             if (ficha_id != null) {
-            	if (ficha_id != null) ficha = ficha = (Ficha) session.load(Ficha.class, ficha_id);       	           	
-                FichaDelegate ficdel = null!=fichDel? fichDel: DelegateUtil.getFichaDelegate();
+            	
+            	if (ficha_id != null) 
+            		ficha = (Ficha)session.load(Ficha.class, ficha_id);  
+            	
+                FichaDelegate ficdel = (null != fichDel) ? fichDel: DelegateUtil.getFichaDelegate();
+                
                 try {  
                 	ficdel.indexBorraFicha(ficha.getId());
                 	ficdel.indexInsertaFicha(ficha,null);   
                 } catch (DelegateException e) {
                     log.error("Error indexando ficha", e);
-                }                                                        
+                }    
+                
             }
+            
             if (procedimiento_id != null) {
-                if (procedimiento_id != null) procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, procedimiento_id);
-        		ProcedimientoDelegate pldel = null!=procDel? procDel : DelegateUtil.getProcedimientoDelegate();
+            	
+                if (procedimiento_id != null) 
+                	procedimiento = (ProcedimientoLocal)session.load(ProcedimientoLocal.class, procedimiento_id);
+                
+        		ProcedimientoDelegate pldel = (null != procDel) ? procDel : DelegateUtil.getProcedimientoDelegate();
+        		
                 try {            	
                 	pldel.indexBorraProcedimiento(procedimiento);
                 	pldel.indexInsertaProcedimiento(procedimiento,null);   
@@ -142,17 +161,21 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 
             }           
             
-            
-            //TODO a�adir if para el tramite
+            //TODO añadir if para el tramite
             
             return documento.getId();
+            
         } catch (HibernateException he) {
+        	
             throw new EJBException(he);
+            
         } finally {
+        	
             close(session);
+            
         }
+        
     }
-    
     
     /**
      * Obtiene un Documento.
@@ -312,59 +335,80 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
      */
     public void actualizarOrdenDocs(Map map) {
   
-    	
     	Session session = getSession();
+    	
         try {
+        	
         	Long id;
-        	int valor_orden=0;
+        	int valor_orden = 0;
         	List doc_orden = new ArrayList();
         	
         	Iterator it = map.entrySet().iterator();
-        	while (it.hasNext()) {
-        		Map.Entry e = (Map.Entry)it.next();
         	
+        	while ( it.hasNext() ) {
+        		
+        		Map.Entry e = (Map.Entry)it.next();
             	String paramName = e.getKey().toString();
-            	if (paramName.startsWith("orden_doc")) {
-            		id=  Long.valueOf(paramName.substring(9)).longValue();
+            	
+            	if ( paramName.startsWith("orden_doc") ) {
+            		
+            		id = Long.valueOf(paramName.substring(9)).longValue();
+            		
              		String[] parametros=(String[])e.getValue();
             		valor_orden= Integer.parseInt(parametros[0]);            		
             		
             		if (!getAccesoManager().tieneAccesoDocumento(id)) {
             			throw new SecurityException("No tiene acceso al documento");
             		}
+            		
             		Documento documento = (Documento) session.load(Documento.class, id);
             		documento.setOrden(valor_orden);
             		doc_orden.add(documento);
+            		
             	}
+            	
             }
+        	
             session.flush();
             
             Collections.sort( doc_orden, new DocsFichaComparator() );
             
-            Long contador= Long.parseLong("1");
+            Long contador = Long.parseLong("1");
         	
-        	Iterator itdoc=doc_orden.iterator();
-    		Documento doc=null;
+        	Iterator itdoc = doc_orden.iterator();
+    		Documento doc = null;
+    		
     		while (itdoc.hasNext()) {
-    			doc=(Documento)itdoc.next();
+    			doc = (Documento)itdoc.next();
     			doc.setOrden(contador);
-    			contador+=1;
+    			contador += 1;
     		}
-            session.flush();
+            
+    		session.flush();
             
         } catch (HibernateException he) {
+        	
             throw new EJBException(he);
+            
         } finally {
+        	
             close(session);
+            
         }
             
     }
 	
     class DocsFichaComparator implements Comparator {
-		public int compare(Object o1, Object o2) { 
-			Long x1=new Long (((Documento)o1).getOrden());
-			Long x2=new Long (((Documento)o2).getOrden());
+		
+    	public int compare(Object o1, Object o2) { 
+		
+			Long x1 = new Long (((Documento)o1).getOrden());
+			Long x2 = new Long (((Documento)o2).getOrden());
+			
 			return x1.compareTo( x2 ); 
+	
 		}
-	}
+	
+    }
+    
 }

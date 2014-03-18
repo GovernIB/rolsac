@@ -730,7 +730,7 @@ public class TMSeccionsController extends PantallaBaseController {
     
     @SuppressWarnings("unchecked")
 	@RequestMapping(value = "/guardarOrdenSeccionesRelacionadas.do")
-	public @ResponseBody IdNomDTO guardarOrdenSeccionesRelacionadas(Long id, Long[] elementos, HttpSession session, HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardarOrdenSeccionesRelacionadas(Long id, Long[] elementos, HttpServletRequest request) {
 		
 		IdNomDTO result = null;
 		

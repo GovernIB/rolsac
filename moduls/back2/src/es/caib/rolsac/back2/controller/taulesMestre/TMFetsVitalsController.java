@@ -613,7 +613,7 @@ public class TMFetsVitalsController extends PantallaBaseController {
 
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/guardarProcedimientos.do")
-	public @ResponseBody IdNomDTO guardarProcedimientos(Long id, Long[] elementos, HttpSession session, HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardarProcedimientos(Long id, Long[] elementos, HttpServletRequest request) {
 
 		/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.

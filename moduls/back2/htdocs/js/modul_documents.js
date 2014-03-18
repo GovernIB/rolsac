@@ -17,9 +17,9 @@ jQuery(document).ready(function() {
 	DATOS_TRADUCIDOS_DOCUMENTO = ["titulo", "descripcion"];
 });
 
-
 // Lista ordenable para elimiar/ordenar docs en la pantalla "padre"
-function CEscriptoriPare(){
+function CEscriptoriPare() {
+	
 	this.extend = ListaOrdenable;
 	this.extend();
 	
@@ -28,15 +28,16 @@ function CEscriptoriPare(){
         nombre: "documents",
         nodoOrigen: modul_documents_elm.find(".listaOrdenable"),
         nodoDestino: "", // documents_seleccionats_elm.find(".listaOrdenable"),
-        atributos: ["id", "nombre", "orden"],	// Campos que queremos que aparezcan en las listas.
+        atributos: ["id", "nombre", "orden", "idMainItem", "idRelatedItem"],	// Campos que queremos que aparezcan en las listas.
         multilang: true
-    }
+    };
 	
 	var that = this;
 	
 	this.iniciar = function() {
+		
 		// botons
-		modul_documents_elm.find("a.gestiona").bind("click", function(){ModulDocuments.nou(false);} );
+		modul_documents_elm.find("a.gestiona").bind("click", function() { ModulDocuments.nou(false); });
 		
 		documents_seleccionats_elm = escriptori_documents_elm.find("div.escriptori_items_seleccionats:first");
 		
@@ -46,10 +47,13 @@ function CEscriptoriPare(){
 				
 		// Configuramos la lista ordenable.
 		this.configurar(that.configuracion);
-	}	
+		
+	};
 
 	this.gestiona = function() {
+		
 		lis_size = modul_documents_elm.find('div.cajaIdioma:first li').length;
+		
 		if (lis_size > 0) {
 			EscriptoriEdifici.contaSeleccionats();
 		} else {
@@ -60,22 +64,25 @@ function CEscriptoriPare(){
 		escriptori_detall_elm.fadeOut(300, function() {			
 			escriptori_edificis_elm.fadeIn(300);			
 		});
-	}
+		
+	};
 	
 	this.eliminaItem = function(item) {
+	
 		var id = jQuery(item).find("input." + that.configuracion.nombre + "_id:first").val();						
+		
 		jQuery(that.configuracion.nodoOrigen).find("input[name=" + that.configuracion.nombre + "_id_" + id + "]").parents("li").remove();
 		
 		$('#modulo_documents_modificado').val("1");
 		
-		this.modificado();
-	}
+	};
     
     /**
 	 * Agrega o actualiza un item en la lista de origen.
 	 * @return boolean Devuelve false si el item se agraga a la lista, true si lo actualiza.
 	 */
-	this.agregaActualizaItem = function(item){
+	this.agregaActualizaItem = function(item) {
+				
 		var listas = that.configuracion.nodoOrigen;
 		var tamLista = listas.first().find("ul:first").find("li").size();
 		var actualizar = false;
@@ -91,16 +98,22 @@ function CEscriptoriPare(){
 		}
 		
 		if (actualizar) {
+			
 			for (var i in idiomas) {
+				
 				var idioma = idiomas[i];
+				
 				listas.find("input." + that.configuracion.nombre + "_nombre_" + idioma + "[name$=_" + item.id + "]").each(function() {
                     var $docInput = jQuery(this);
                     var $docSpan = $docInput.next();
                     $docInput.val(item["nombre"][idioma]);
                     $docSpan.text(item["nombre"][idioma]);
                 });
+				
 			}
+			
 		} else {
+			
             if (typeof item["orden"] != "number") {
                 item["orden"] = that.obtenerUltimoOrden(listas, tamLista) + 1;
             }
@@ -113,36 +126,46 @@ function CEscriptoriPare(){
 			});
             
             ModulDocuments.inicializarDocuments();
+            
 		}
 		
 		ModulDocuments.modificado(false);
 		
 		return actualizar;
-	}
-	
+		
+	};
 
 	this.obtenerUltimoOrden = function(listas, tamLista) {
+		
 		var ultimoOrden = -1;
+		
 		if (tamLista > 0) {
 			ultimoOrden = parseInt(listas.first().find("li:last input." + that.configuracion.nombre + "_orden").val());  
 		}
+		
 		return ultimoOrden;
-	}
+		
+	};
+	
 };
 
-
 // Creacion/edicion de docs
-function CModulDocuments(){
+function CModulDocuments() {
+	
 	this.extend = DetallBase;
+	
 	if (typeof FormulariDadesDoc != 'undefined') {
-		//this.extend(true, FormulariDadesDoc);
+
 		this.extend(true, FormulariDadesDoc,{
 		    form: "formGuardarDoc",
 		    btnGuardar: "btnGuardar_documents",
 		    btnVolver: "btnVolver_documents"
 		});
+		
 	} else {
+		
 		this.extend(true, null);
+		
 	}
 
 	var that = this;
@@ -174,17 +197,19 @@ function CModulDocuments(){
 			ul_idiomes_elm.bind("click", {'actualizarIdiomasModulosLaterales': false}, that.idioma);
 		}
 		
-		// Redifinimos el m�todo que guarda porque en este caso tambi�n hacemos un upload de archivos.
+		// Redifinimos el método que guarda porque en este caso también hacemos un upload de archivos.
 		this.guarda = this.guarda_upload;
-	}
+		
+	};
 	
 	this.traduirWrapper = function () {
 		that.traduir(pagTraduirDocument, CAMPOS_TRADUCTOR_DOCUMENTO, DATOS_TRADUCIDOS_DOCUMENTO);
-	}
+	};
 	
 	this.vuelve = function () {
 	    
-	    if( this.cambiosSinGuardar() ){
+	    if ( this.cambiosSinGuardar() ) {
+	    	
             Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: txtAvisoCambiosSinGuardar, funcio: function() {
                 
                 escriptori_documents_elm.fadeOut(300, function() {
@@ -196,7 +221,8 @@ function CModulDocuments(){
                 Missatge.cancelar();
                 
             }});
-        }else{
+            
+        } else {
             
             escriptori_documents_elm.fadeOut(300, function() {
                 escriptori_detall_elm.fadeIn(300);
@@ -205,16 +231,19 @@ function CModulDocuments(){
             this.modificado(false);
             
         }
-	}
+	    
+	};
 	
 	// Guardar haciendo upload de archivos.
 	this.guarda_upload = function() {
+		
         // Validamos el formulario
         if (!that.formulariValid()) {
             return false;
         }
         
         // Coger el id del procedimiento o de la ficha (depende del mantenimiento/jsp en el que estemos).
+        // XXX amartin: añadir más casos aquí si este módulo se añade a otros mantenimientos.
         var procId = jQuery("#procId");
         if (procId.length > 0) {
         	procId.val(jQuery("#item_id").val());
@@ -222,7 +251,7 @@ function CModulDocuments(){
         	jQuery("#fitxaId").val(jQuery("#item_id").val());
         }
 
-		//Enviamos el formulario mediante el m�todo ajaxSubmit del plugin jquery.form
+		// Enviamos el formulario mediante el método ajaxSubmit del plugin jquery.form
 		$("#formGuardarDoc").ajaxSubmit({			
 			url: pagGuardarDoc,
 			dataType: 'json',
@@ -230,11 +259,15 @@ function CModulDocuments(){
 				Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
 			},
 			success: function(data) {
+				
 				Llistat.cacheDatosListado = null;
 				
 				if (data.id < 0) {
+					
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
-				} else {                   
+					
+				} else {  
+					
 					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});
                     
 					var nom = new Object();
@@ -247,37 +280,47 @@ function CModulDocuments(){
 					var docItem = new Object();
 					docItem['id'] = data.id;
 					docItem['nombre'] = nom;
+					docItem['idMainItem'] = $('#item_id').val();
+					docItem['idRelatedItem'] = data.id;
+
 					EscriptoriPare.agregaActualizaItem(docItem);
+					
 					$('#modulo_documents_modificado').val("1");
 					
 					that.modificado(false);
 					
 					that.vuelve();
+					
 				}
+				
 			}
 
 		});
         
 		return false;
-	}
+		
+	};
 	
 	this.dataPublicacio = function(e) {		
 		if (jQuery(this).val() == "") {
 			jQuery(this).val(txtImmediat);
 		}
-	}
-		
+	};
 	
 	this.nou = function(edicion) {
+		
 		if (!edicion) {
+			
             jQuery("#docId").val("");
+            
             for (var i in idiomas) {
+            	
                 var idioma = idiomas[i];                
                 jQuery("#doc_descripcio_" + idioma + ", #doc_titol_" + idioma + ", #doc_arxiu_" + idioma).each(limpiarCampo);
-                
-                limpiarArchivoMultiidioma("arxiu_actual_doc", idiomas[i]);
+                limpiarArchivoMultiidioma("arxiu_actual_doc", idioma);
 
             }
+            
 		}
 		
 		escriptori_detall_elm.fadeOut(300, function() {
@@ -287,16 +330,18 @@ function CModulDocuments(){
 		this.modificado(false);
 		
 		this.actualizaEventos();
-	}		
+		
+	};
 	
-	
-	this.pintar = function(dades) {		
+	this.pintar = function(dades) {
+		
 		dada_node = dades;
 		
 		jQuery("#docId").val(dada_node.item_id);
 
 		// Bloque de pestanyas de idiomas.
 		for (var i in idiomas) {
+			
 			var idioma = idiomas[i];
             
 			jQuery("#doc_titol_" + idioma).val(printStringFromNull(dada_node["idioma_titol_" + idioma]));
@@ -305,30 +350,40 @@ function CModulDocuments(){
 			// archivos
 			$("#doc_arxiu_" + idioma).val("");
 			$("#grup_arxiu_actual_doc_" + idioma + " input").removeAttr("checked");
+			
 			var anchors = $("#grup_arxiu_actual_doc_" + idioma + " a");
-
             var enllasArxiu = dada_node["idioma_enllas_arxiu_" + idioma];
+            
 			if (typeof enllasArxiu != "undefined" && enllasArxiu != "") {
+				
 				anchors.attr("href", pagArrel + dada_node["idioma_enllas_arxiu_" + idioma]);
 				anchors.text(dada_node["idioma_nom_arxiu_" + idioma]);
 				anchors.show();
+				
 				$("#grup_arxiu_actual_doc_" + idioma + " span").hide();
 				$("#grup_arxiu_actual_doc_" + idioma + " input").show();
 				$("#grup_arxiu_actual_doc_" + idioma + " label.eliminar").show();
+				
 			} else {
+				
                 $("#grup_arxiu_actual_doc_" + idioma + " span").show();
 				$("#grup_arxiu_actual_doc_" + idioma + " input").hide();
 				$("#grup_arxiu_actual_doc_" + idioma + " label.eliminar").hide();
+				
                 anchors.hide();
+                
             }
+			
 		}
 		// Fin bloque de pestanyas de idiomas
 		
         // Mostrar la pantalla de edicion de documento
 		that.nou(true);
-	}
+		
+	};
 	
-	this.contaSeleccionats = function() {		
+	this.contaSeleccionats = function() {
+		
 		var seleccionats_val = modul_documents_elm.find(".seleccionat").find("li").size();
 		var info_elms = modul_documents_elm.find("p.info");
 		
@@ -339,10 +394,11 @@ function CModulDocuments(){
 		} else if (seleccionats_val > 1) {
 			info_elms.html(txtSeleccionats + " <strong>" + seleccionats_val + " " + txtDocuments.toLowerCase() + "</strong>.");						
 		}
-	}
-	
+		
+	};
 	
 	this.inicializarDocuments = function(listaDocuments) {
+		
 		if (typeof listaDocuments != 'undefined' && listaDocuments != null) {
             modul_documents_elm.find(".listaOrdenable").empty();		
 			EscriptoriPare.agregaItems(listaDocuments, true);
@@ -350,9 +406,12 @@ function CModulDocuments(){
         
         // Editar el documento al hacer click sobre el.
         modul_documents_elm.find('div.documents').each(function() {
+        	
             $(this).unbind("click").bind("click", function() {
+            	
                 var docId = $(this).find("input.documents_id").val();
                 Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
+                
                 $.ajax({
                     type: "GET",
                     url: pagCarregarDoc,
@@ -367,14 +426,16 @@ function CModulDocuments(){
                         Missatge.cancelar();
                         if (data.id > 0) {
                             that.pintar(data.document);
-                        } else if (data.id == -1){
+                        } else if (data.id == -1) {
                             Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
-                        } else if (data.id < -1){
+                        } else if (data.id < -1) {
                             Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
                         }
                     }
                 });
+                
             });
+            
         });
 		
 		that.contaSeleccionats();
@@ -383,7 +444,6 @@ function CModulDocuments(){
 			axis: 'y', 
 			update: function(event,ui){
 				EscriptoriPare.calculaOrden(ui,"origen");
-				EscriptoriPare.modificado(true);
 			}
 		}).css({cursor:"move"});
 		
@@ -392,5 +452,57 @@ function CModulDocuments(){
 			EscriptoriPare.eliminaItem(itemLista);
 			that.contaSeleccionats();
 		});
-	}
+		
+	};
+	
+};
+
+function CListaMultiidiomaDocumentos() {
+	
+	// Activa mensajes de debug.
+	var debug = false;
+	
+	this.extend = ListaMultiidioma;
+	this.extend();
+	
+	var that = this;
+	
+	// Método sobreescrito para obtener qué datos guardar en este caso.
+	this.getFilters = function(elements, id) {
+		
+		if (debug)
+			console.log("Entrando en CListaMultiidiomaDocumentos.getFilters");
+		
+		var lista = new Array();
+		var filters = "id=" + id;
+						
+		if (elements.length > 0) {
+			
+			// Lista de <li>.
+			elements.each(function() {
+								
+				if (elements.length > 0) {
+					
+					elements.each(function() {
+						
+						var value = $(this).attr('related-item-id');
+						lista.push(value);
+						
+					});
+					
+					filters += "&elementos=" + lista;
+					
+				}
+								
+			});
+						
+		}
+				
+		if (debug)
+			console.log("Saliendo de CListaMultiidiomaDocumentos.getFilters");
+		
+		return filters;
+		
+	};
+	
 };

@@ -9,11 +9,11 @@ $(document).ready(function() {
 		var id = $('#item_id').val();
 		var url = $(this).attr('action');
 		
-		ListaSimple.guardar(element, url, id);
+		ListaSimpleGenerica.guardar(element, url, id);
 		
 	});
 	
-	ListaSimple = new CListaSimple();
+	ListaSimpleGenerica = new CListaSimple();
 	
 	// elements
 	opcions_elm = $("#opcions");
@@ -66,6 +66,7 @@ $(document).ready(function() {
  * asociadas (ua => related-item-id), sino que también hay un tercer campo, que es el checkbox de UA principal para esa materia.
  * Con la extensión de la clase sobreescribimos los métodos para realizar el guardado y para obtener el dato adicional de UA principal.
  */
+// FIXME amartin: mover al módulo adecuado, poner nombre mejor, editar class del listener y del JSP.
 function CListaSimple() {
 	
 	// Activa mensajes de debug.

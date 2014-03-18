@@ -6,25 +6,39 @@ $(document).ready(function() {
 	
 	jQuery(".lista-simple").click(function() {
 		
-		var elements = $(this).parent().parent().find("li"); // Con esto obtenemos los <li> que cuelgan de <div class="seleccionats">
+		var elementos = $(this).parent().parent().find("li"); // Con esto obtenemos los <li> que cuelgan de <div class="seleccionats">
 		var id = $('#item_clave_primaria').val();
 		var url = $(this).attr('action');
 		
-		ListaSimple.guardar(elements, url, id);
+		ListaSimpleGenerica.guardar(elementos, url, id);
 		
 	});
 	
-	jQuery(".lista-multiidioma").click(function() {
+	// XXX amartin: creamos un listener singular para esta lista ya que el selector de elementos es diferente.
+	// Es un caso singular ya que, al ser una lista multiidioma pero sólo tener que guardar el orden de los elementos
+	// y borrar los que no están, la tratamos como una lista simple.
+	jQuery(".lista-simple-documentos").click(function() {
 		
-		var elements = $(this).parent().parent().find("div.cajaIdioma.ca li"); // Con esto obtenemos los <li> que cuelgan de <div class="cajaIdioma ca">
+		var elementos = $(this).parent().parent().find("div.cajaIdioma.ca li"); // Con esto obtenemos los <li> que cuelgan de <div class="cajaIdioma ca">
 		var id = $('#item_clave_primaria').val();
 		var url = $(this).attr('action');
 		
-		ListaMultiidiomaEnlaces.guardar(elements, url, id);
+		ListaSimpleDocumentos.guardar(elementos, url, id);
+	
+	});
+	
+	jQuery(".lista-multiidioma-enlaces").click(function() {
+		
+		var elementos = $(this).parent().parent().find("div.cajaIdioma.ca li"); // Con esto obtenemos los <li> que cuelgan de <div class="cajaIdioma ca">
+		var id = $('#item_clave_primaria').val();
+		var url = $(this).attr('action');
+		
+		ListaMultiidiomaEnlaces.guardar(elementos, url, id);
 	
 	});
 
-    ListaSimple = new ListaSimple();
+    ListaSimpleGenerica = new ListaSimple();
+    ListaSimpleDocumentos = new ListaSimple();
     ListaMultiidiomaEnlaces = new CListaMultiidiomaEnlaces();
 
 	// elements

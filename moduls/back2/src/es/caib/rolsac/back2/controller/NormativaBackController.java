@@ -1113,7 +1113,7 @@ public class NormativaBackController extends PantallaBaseController {
     
     @SuppressWarnings("unchecked")
 	@RequestMapping(value = "/guardarAfectaciones.do")
-	public @ResponseBody IdNomDTO guardarAfectaciones(Long id, Long[] elementos, Long[] tiposAfectacion, HttpSession session, HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardarAfectaciones(Long id, Long[] elementos, Long[] tiposAfectacion, HttpServletRequest request) {
     	
     	/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.

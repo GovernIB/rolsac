@@ -399,7 +399,7 @@ function CListaMultiidiomaEnlaces() {
 	this.getFilters = function(elements, id) {
 		
 		if (debug)
-			console.log("Entrando en ListaMultiidiomaEnlaces.getFilters");
+			console.log("Entrando en CListaMultiidiomaEnlaces.getFilters");
 		
 		// XXX amartin: importante. Este listado ha de coincidir con los valores devueltos por DelegateUtil.getIdiomaDelegate().listarLenguajes().
 		var langs = new Array("ca", "es", "en", "de", "fr");
@@ -443,7 +443,7 @@ function CListaMultiidiomaEnlaces() {
 		filters.listaEnlaces = lista;
 				
 		if (debug)
-			console.log("Saliendo de ListaMultiidiomaEnlaces.getFilters");
+			console.log("Saliendo de CListaMultiidiomaEnlaces.getFilters");
 		
 		return filters;
 		

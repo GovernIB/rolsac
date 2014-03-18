@@ -9,11 +9,11 @@ $(document).ready(function() {
 		var id = $('#item_id').val();
 		var url = $(this).attr('action');
 		
-		ListaSimple.guardar(element, url, id);
+		ListaSimpleGenerica.guardar(element, url, id);
 		
 	});
 	
-	ListaSimple = new CListaSimple();
+	ListaSimpleGenerica = new CListaSimple();
 	
 	// elements
 	opcions_elm = $("#opcions");
@@ -62,6 +62,7 @@ $(document).ready(function() {
  * 
  * Extendemos la clase para que, tras el guardado, se oculte el botón de guardado del módulo lateral de iconos.
  */
+// FIXME amartin: mover al módulo adecuado (modul_iconas?), dar nombre adecuado, editar listener en esta clase cambiando el class y editar JSP con nuevo class.
 function CListaSimple() {
 	
 	// Activa mensajes de debug.

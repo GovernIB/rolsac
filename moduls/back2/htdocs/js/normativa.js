@@ -9,11 +9,11 @@ $(document).ready(function() {
 		var id = $('#item_id').val();
 		var url = $(this).attr('action');
 		
-		ListaSimple.guardar(element, url, id);
+		ListaSimpleGenerica.guardar(element, url, id);
 		
 	});
 	
-	ListaSimple = new CListaSimple();
+	ListaSimpleGenerica = new CListaSimple();
 
 	// elements
 	opcions_elm = $("#opcions");
@@ -79,6 +79,7 @@ $(document).ready(function() {
  * entre la normativa que afecta y la afectada. Con la extensión de la clase sobreescribimos los métodos para
  * realizar el guardado y para obtener el dato adicional de tipo de afectación.
  */
+// FIXME amartin: mover esto al módulo de normativas y arreglar listener del principio poniendo nombre de clase propia. Editar clase del <a> en el JSP.
 function CListaSimple() {
 	
 	// Activa mensajes de debug.

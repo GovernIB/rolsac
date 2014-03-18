@@ -7,6 +7,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -53,6 +55,7 @@ import org.ibit.rol.sac.model.dto.SeccionDTO;
 import org.ibit.rol.sac.model.dto.UnidadDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
 import org.ibit.rol.sac.persistence.delegate.DocumentoResumenDelegate;
 import org.ibit.rol.sac.persistence.delegate.EnlaceDelegate;
 import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
@@ -448,15 +451,18 @@ public class FitxaInfBackController extends PantallaBaseController {
 	/*
 	 * Función para recuperar los documentos relaciohnados con la ficha.
 	 */
-	private void recuperaDocs(Map<String, Object> resultats, Ficha fitxa) throws DelegateException {
+	private void recuperaDocs(Map<String, Object> resultats, Ficha ficha) throws DelegateException {
 
-		if (fitxa.getDocumentos() != null) {
+		if (ficha.getDocumentos() != null) {
 			
 			Map<String, Object> mapDoc;
 			List<Map<String, Object>> llistaDocuments = new ArrayList<Map<String, Object>>();
 			List<String> idiomas = DelegateUtil.getIdiomaDelegate().listarLenguajes();
-
-			for (Documento doc: fitxa.getDocumentos()) {
+			
+			// Ordenamos los documentos.
+			List<Documento> documentos = ficha.getDocumentos();
+			
+			for (Documento doc : documentos) {
 				
 				if (doc != null) {
 
@@ -471,16 +477,18 @@ public class FitxaInfBackController extends PantallaBaseController {
 						titulos.put(idioma, nombre);
 					}
 
-					mapDoc = new HashMap<String, Object>(3);
+					mapDoc = new HashMap<String, Object>();
 					mapDoc.put("id", doc.getId());
 					mapDoc.put("orden", doc.getOrden());
 					mapDoc.put("nombre", titulos);
+					mapDoc.put("idMainItem", ficha.getId());
+					mapDoc.put("idRelatedItem", doc.getId());
 					
 					llistaDocuments.add(mapDoc);
 
 				} else {
 					
-					log.error("La fitxa " + fitxa.getId() + " te un document null.");
+					log.error("La fitxa " + ficha.getId() + " te un document null.");
 					
 				}
 				
@@ -1480,7 +1488,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 	}
 
 	@RequestMapping(value = "/guardarHechosVitales.do", method = POST)
-	public @ResponseBody IdNomDTO guardarHechosVitales(Long id, Long[] elementos, HttpSession session, HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardarHechosVitales(Long id, Long[] elementos, HttpServletRequest request) {
 
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
@@ -1533,7 +1541,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 	}
 	
 	@RequestMapping(value = "/guardarMaterias.do", method = POST)
-	public @ResponseBody IdNomDTO guardarMaterias(Long id, Long[] elementos, HttpSession session, HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardarMaterias(Long id, Long[] elementos, HttpServletRequest request) {
 
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
@@ -1684,6 +1692,115 @@ public class FitxaInfBackController extends PantallaBaseController {
 			
 		}
 
+		return result;
+
+	}
+	
+	@RequestMapping(value = "/guardarDocumentosRelacionados.do", method = POST)
+	public @ResponseBody IdNomDTO guardarDocumentosRelacionados(Long id, Long[] elementos, HttpServletRequest request) {
+		
+		// Guardaremos el orden y borraremos los documentos que se hayan marcado para borrar.
+		// La creación se gestiona en el controlador DocumentBackController.
+
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+		
+		IdNomDTO result;
+		String error = null;
+		Ficha ficha = null;
+		
+		try {
+			
+			ficha = DelegateUtil.getFichaDelegate().obtenerFicha(id);
+						
+			List<Documento> documentosABorrar = ficha.getDocumentos();
+			List<Documento> documentosFicha = new ArrayList<Documento>();
+			Map <String, String[]> actulitzadorMap = new HashMap<String, String[]>();
+			
+			if ( elementos != null ) {
+				
+				int orden = 1;
+				
+				for (int i = 0; i < elementos.length; i++) {
+					
+					// Buscamos el id del documento. Si está en los documentos anteriores, no hay que borrarlo.
+					Iterator<Documento> it = documentosABorrar.iterator();
+					boolean borrarDocumento = true;
+					
+					while ( it.hasNext() ) {
+						
+						Documento d = it.next();
+						
+						// Si encontramos el documento, lo quitamos de la lista y salimos del while.
+						if ( d != null && d.getId().equals(elementos[i]) ) {
+							it.remove();
+							borrarDocumento = false;
+							break;
+						}
+						
+					}
+					
+					// Si no hay que borrar el documento, lo procesamos.
+					if ( !borrarDocumento ) {
+						
+						DocumentoResumen docResumen = DelegateUtil.getDocumentoResumenDelegate().obtenerDocumentoResumen(elementos[i]);
+						
+						Documento doc = new Documento();
+						doc.setId(docResumen.getId());
+						doc.setFicha(docResumen.getFicha());
+						
+						// Aquí no ponemos el orden en función de la variable i, ya que es posible que no se entre en
+						// este bloque de código en cada iteración.
+						doc.setOrden( orden );
+						
+						String[] ordenMap = {String.valueOf(orden)};
+						actulitzadorMap.put("orden_doc" + doc.getId(), ordenMap);
+						orden++;
+						
+						doc.setProcedimiento(docResumen.getProcedimiento());
+						doc.setTraduccionMap(docResumen.getTraduccionMap());
+						
+						documentosFicha.add(doc);
+												
+					}
+					
+				}
+				
+			}
+			
+			// Borramos documentos que no hayamos encontrado en el envío.
+			for (Documento d : documentosABorrar) {
+				if (d != null)
+					DelegateUtil.getDocumentoDelegate().borrarDocumento(d.getId());
+			}
+			
+			// Guardamos documentos actuales (actualizar orden).
+			DocumentoResumenDelegate documentoResumenDelegate = DelegateUtil.getDocumentoResumenDelegate();
+			documentoResumenDelegate.actualizarOrdenDocs(actulitzadorMap);
+			
+			// Finalmente, los asignamos a la ficha y la guardamos con las nuevas relaciones de documentos.
+			ficha.setDocumentos(documentosFicha);
+			DelegateUtil.getFichaDelegate().grabarFicha(ficha);
+			
+			result = new IdNomDTO(ficha.getId(), messageSource.getMessage("fitxes.guardat.correcte", null, request.getLocale()));
+			
+		} catch (DelegateException dEx) {
+			
+			if (dEx.isSecurityException()) {
+				
+				error = messageSource.getMessage("error.permisos", null, request.getLocale());
+				result = new IdNomDTO(-1l, error);
+				
+			} else {
+				
+				error = messageSource.getMessage("error.altres", null, request.getLocale());
+				result = new IdNomDTO(-2l, error);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+				
+			}
+			
+		}		
+		
 		return result;
 
 	}

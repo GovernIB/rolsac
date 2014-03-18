@@ -437,7 +437,7 @@ public class TMFamiliaController extends PantallaBaseController {
     
     @SuppressWarnings("unchecked")
 	@RequestMapping(value = "/guardarIconosRelacionados.do")
-	public @ResponseBody IdNomDTO guardarIconosRelacionados(Long id, Long[] elementos, HttpSession session, HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardarIconosRelacionados(Long id, Long[] elementos, HttpServletRequest request) {
 		
 		IdNomDTO result = null;
 		

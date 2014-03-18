@@ -1009,6 +1009,13 @@
                                 <div class="btnGenerico">
                                     <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.afegeixDocument'/></span></span></a>
                                 </div>
+                                <p style="clear: both; margin-bottom: 10px;"/><!-- Separador -->
+	                            <div class="btnGenerico">
+	                                <a id="btnGuardar_documentos" href="javascript:;" class="btn guarda important lista-simple-documentos" 
+	                            			action="<c:url value="/fitxainf/guardarDocumentosRelacionados.do" />">
+	                           			<span><span><spring:message code='boto.guarda'/></span></span>
+	                            	</a>
+	                            </div>
                             </div>                                  
                         </div>
                         <!-- /modulDocuments -->                                 
@@ -1094,7 +1101,7 @@
                                 </div>
                                 <p style="clear: both; margin-bottom: 10px;"/><!-- Separador -->
 	                            <div class="btnGenerico">
-	                                <a id="btnGuardar_enlaces" href="javascript:;" class="btn guarda important lista-multiidioma" 
+	                                <a id="btnGuardar_enlaces" href="javascript:;" class="btn guarda important lista-multiidioma-enlaces" 
 	                            			action="<c:url value="/fitxainf/guardarEnlacesRelacionados.do" />">
 	                           			<span><span><spring:message code='boto.guarda'/></span></span>
 	                            	</a>

@@ -81,7 +81,7 @@ function CModulAfectacions() {
 		this.copiaInicial = this.copiaInicialPropia;
 		this.eliminaItem = this.eliminaItemPropio;
 		
-	}
+	};
 	
 	/**
 	 * Obtiene el html de un item de la lista.
@@ -113,16 +113,16 @@ function CModulAfectacions() {
 		
 		return html;
 		
-	}	
+	};
 		
-    this.modificado = function(){
+    this.modificado = function() {
         $moduloModificado.val(1);
-    }
+    };
         
 	this.nuevo = function() {       
 		afec_seleccionats_elm = escriptori_detall_elm.find("div.modulAfectacions div.seleccionats");
 		afec_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaAfectacions + ".");
-	}	
+	};
 		
 	this.gestiona = function() {
 		
@@ -142,7 +142,7 @@ function CModulAfectacions() {
 			escriptori_afectacions_elm.fadeIn(300);			
 		});
 		
-	}
+	};
 	
 	/**
 	 * Copia los datos de la lista origen a la de destino.
@@ -184,7 +184,7 @@ function CModulAfectacions() {
 											
 		afectacions_seleccionats_elm.find(".listaOrdenable").html(html);
 		
-	}
+	};
 	
 	/**
 	 * Copia los datos de la lista destino a la de origen.
@@ -222,25 +222,14 @@ function CModulAfectacions() {
 		
 		return numItems;
 		
-	}	
+	};
 	
 	/**
 	 * Elimina un item de la lista.
 	 */ 
-	this.eliminaItemPropio = function( item ){		
-		
-		/*
-		var id = jQuery(item).find("input." + params.nombre + "_id:first").val();						
-		jQuery(params.nodoDestino).find("input[name=" + params.nombre + "_id_" + id + "]").parents("li").remove();
-		*/
-		
+	this.eliminaItemPropio = function( item ) {		
 		item.remove();
-		
-		// FIXME amartin: esto ya no ha de estar si es guardado vía AJAX.
-		// Marcamos el formulario como modificado para habilitar el botón de guardar.
-		// Detall.modificado();
-		
-	}
+	};
 	
 	this.contaSeleccionats = function() {
 		
@@ -255,20 +244,23 @@ function CModulAfectacions() {
 			info_elm.html(txtSeleccionades + " <strong>" + seleccionats_val + " " + txtAfectacions.toLowerCase() + "</strong>.");						
 		}
 		
-	}
+	};
 	
 	this.inicializarAfectacions = function(listaAfectacions) {
     
         $moduloModificado.val(0);
         
 		modul_afectacions_elm.find(".listaOrdenable").empty();		
+		
 		if (typeof listaAfectacions != 'undefined' && listaAfectacions != null && listaAfectacions.length > 0) {
 			that.agregaItems(listaAfectacions);
 		}
+		
 		that.contaSeleccionats();
-	}
+		
+	};
 	
-	this.jsonAfectacions = function () {
+	this.jsonAfectacions = function() {
 		
 		//Construir el JSON que se devuelve en el guarda_upload de normativa.js
 		
@@ -288,7 +280,7 @@ function CModulAfectacions() {
 		
 		return listaAfectaciones;
 		
-	}
+	};
 		
 };
 
@@ -305,23 +297,22 @@ function CEscriptoriAfectacions() {
 	this.limpia = function() {
 			
 		this._limpia();
-		//$("#cercador_afectacions_contingut:input").each(limpiarCampo);				
 		$("#afec_cerca_data").val("");
 		$("#afec_cerca_data_butlleti").val("");
 		
-	}
+	};
 	
 	this.nuevo = function() {
 		this.limpiarTodo();
 		resultats_afectacions_elm.find('div.dades').empty();
-	}
+	};
 		
 	/**
 	 * Agrega un item a la lista.
 	 */
 	this.agregaItem = function(itemID, titulo) {
 		
-		// En este caso, itemID es la PK de la normativa que se va a asociar al registro principal en modo de afcetación.
+		// En este caso, itemID es la PK de la normativa que se va a asociar al registro principal en modo de afectación.
 		// Corresponde al valor de la columna AFE_CODNOA de la tabla RSC_AFECTA.
 		
 		list_size = afectacions_seleccionats_elm.find("li").size();
@@ -362,64 +353,16 @@ function CEscriptoriAfectacions() {
 			
 			this.contaSeleccionats();
 			
-			// FIXME amartin: esto ya no ha de estar si es guardado vía AJAX.
-			// Marcamos el formulario como modificado para habilitar el botón de guardar.
-			// Detall.modificado();
-			
 		}
 		
-		/* FIXME amartin: demasiadas cosas mal
-		list_size = afectacions_seleccionats_elm.find("li").size();
-		norma_esta = false;
-		
-		if (list_size == 0) {			
-			$("<ul>").appendTo(afectacions_seleccionats_elm.find(".listaOrdenable"));			
-		} else {			
-			afectacions_seleccionats_elm.find("input").each(function() {				
-				if ($(this).val() == norma_id) {
-					norma_esta = true;
-				}			
-			});			
-		}
-		
-		if (!norma_esta) {
-			
-			codi_seleccionat = "<li element-id=" + norma_id + " modulo-id= '" + $('#item_clave_primaria').val() + "'>";
-			codi_seleccionat += "<div class=\"afectacio\">";
-			codi_seleccionat += "<input type=\"hidden\" value=\"" + norma_id + "\" class=\"norma\" />";
-			codi_seleccionat += "<span class=\"afectacio\">";
-			codi_seleccionat += "<select>";
-			
-			$(Afectacions_arr).each(function(i) {
-				codi_selected = (i == 0) ? "selected=\"selected\"" : "";
-				codi_seleccionat += "<option value=\"" + this.id + "\" " + codi_selected + ">" + this.nom + "</option>";
-			});
-			
-			codi_seleccionat += "</select>";
-			codi_seleccionat += "<br />";
-			codi_seleccionat += ", " + txtAmbLaNorma + " <em>" + norma_titol + "</em>";
-			codi_seleccionat += "</span>";
-			codi_seleccionat += "<a href=\"javascript:;\" class=\"btn elimina\"><span><span>" + txtElimina + "</span></span></a>";
-			codi_seleccionat += "</div>";
-			codi_seleccionat += "</li>";
-			
-			afectacions_seleccionats_elm.find("ul").append(codi_seleccionat);
-			
-			this.contaSeleccionats();
-			
-			Detall.modificado();
-			
-		}
-		*/
-		
-	}	
+	};
 	
 	// Cambia de página.
 	this.cambiaPagina = function( pag ) {
 		multipagina_afec.setPaginaActual(pag - 1);
 		pag_Pag = pag;
 		this.anar(pag);
-	}	
+	};
 	
 	this.finCargaListado = function(data, opcions) {
 		// total
@@ -433,6 +376,7 @@ function CEscriptoriAfectacions() {
 			if (resultats_total % pag_Res > 0){
 				ultimaPag++;
 			}
+			
 			if (pag_Pag > ultimaPag) {
 				pag_Pag = ultimaPag;
 			}							
@@ -467,12 +411,6 @@ function CEscriptoriAfectacions() {
 			
 			codi_totals = "<p class=\"info\">" + txtTrobades + " <strong>" + resultats_total + " " + txtT.toLowerCase() + "</strong>" + ". " + txtMostrem + " " + txtDeLa + " " + resultatInici + txtMostremAl + resultatFinal + txt_ordenacio + ".</p>";
 			
-			/*
-			codi_cap1 = "<div class=\"th titol" + ordre_c1 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtNormativa + "</a></div>";
-			codi_cap2 = "<div class=\"th numero" + ordre_c2 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtNumero + "</a></div>";
-			codi_cap3 = "<div class=\"th data" + ordre_c3 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtData + "</a></div>";
-			*/
-			
 			codi_cap1 = "<div class=\"th titol" + ordre_c1 + "\" role=\"columnheader\">" + txtNormativa + "</div>";
 			codi_cap2 = "<div class=\"th data" + ordre_c2 + "\" role=\"columnheader\">" + txtData + "</div>";
 			codi_cap3 = "<div class=\"th data_butlleti" + ordre_c3 + "\" role=\"columnheader\">" + txtDataButlleti + "</div>";						
@@ -489,10 +427,10 @@ function CEscriptoriAfectacions() {
 			codi_taula += "<div class=\"tbody\">";
 			
 			// codi cuerpo
-			//$(data.json.data.nodes).each(function(i) {
 			$(data.nodes).slice(resultatInici-1,resultatFinal).each(function(i) {
+				
 				dada_node = this;
-				parClass = (i%2) ? " par": "";
+				parClass = (i % 2) ? " par": "";
 				
 				codi_taula += "<div class=\"tr" + parClass + "\" role=\"row\">";
 				
@@ -505,12 +443,13 @@ function CEscriptoriAfectacions() {
 				codi_taula += "<div class=\"td data_butlleti\" role=\"gridcell\">" + dada_node.fecha_boletin + "</div>";
 				
 				codi_taula += "</div>";
+				
 			});
 			
 			codi_taula += "</div>";
 			codi_taula += "</div>";
 			
-			if($.browser.opera) {
+			if ($.browser.opera) {
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
@@ -554,11 +493,13 @@ function CEscriptoriAfectacions() {
 				afectacions_cercador_elm.find("input, select").removeAttr("disabled");
 				
 			});
+			
 		});
 			
-	}
+	};
 	
 	this.carregar = function(opcions) {
+		
 		// opcions: ajaxPag (integer), ordreTipus (ASC, DESC), ordreCamp (tipus, carrec, tractament)
 		
 		dataVars = "";
@@ -610,7 +551,7 @@ function CEscriptoriAfectacions() {
 			}
 		});
 	
-	}
+	};
 	
 	this.finalizar = function() {		
 		
@@ -623,14 +564,10 @@ function CEscriptoriAfectacions() {
 		
         // Marcamos el módulo como modificado.
         ModulAfectacions.modificado();
-        
-        // FIXME amartin: esto ya no ha de estar si es guardado vía AJAX.
-		// Marcamos el formulario como modificado para habilitar el botón de guardar.
-		// Detall.modificado();
 		
 		this.torna();
 		
-	}
+	};
 
 	this.anar = function(enlace_html) {
 		
@@ -647,7 +584,7 @@ function CEscriptoriAfectacions() {
 			});
 		});
 		
-	}
+	};
 	
 	this.torna = function() {
 		
@@ -661,7 +598,7 @@ function CEscriptoriAfectacions() {
 			
 		});
 		
-	}
+	};
 	
 	this.contaSeleccionats = function() {
 		
@@ -690,6 +627,6 @@ function CEscriptoriAfectacions() {
 			EscriptoriAfectacions.contaSeleccionats();
 		});
 		
-	}
+	};
 	
 };
