@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -340,7 +341,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		return resultats;
 	}
 	
-	
 	@RequestMapping(value = "/modulos.do")
 	public @ResponseBody Map<String, Object> recuperaModulos(Long id, HttpServletRequest request) {
 
@@ -373,7 +373,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		return resultats;
 
 	}
-	
 
 	/*
 	 * Función que recupera el contenido de los procedimientos según el idioma.
@@ -397,43 +396,60 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	/*
 	 * Función para recuperar los documentos relaciohnados con el procedimuiento.
 	 */
-	private void recuperaDocs(Map<String, Object> resultats, ProcedimientoLocal proc) throws DelegateException {
+	private void recuperaDocs(Map<String, Object> resultats, ProcedimientoLocal proc) 
+			throws DelegateException {
 
 		if (proc.getDocumentos() != null) {
+			
 			Map<String, Object> mapDoc;
-			List<Map<String, Object>> llistaDocuments = new ArrayList<Map<String, Object>>();
+			List<Map<String, Object>> listaDocumentosDTO = new ArrayList<Map<String, Object>>();
+			List<Documento> listaDocumentos = proc.getDocumentos();
 			List<String> idiomas = DelegateUtil.getIdiomaDelegate().listarLenguajes();
 
-			for(Documento doc: proc.getDocumentos()) {
+			for (Documento doc : listaDocumentos) {
+				
 				if (doc != null) {
 				    
 					// Montar map solo con los campos 'titulo' de las traducciones del documento.
 					Map<String, String> titulos = new HashMap<String, String>();
-					//IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
+
 					String nombre;
 					TraduccionDocumento traDoc;
 
-					for (String idioma: idiomas) {
+					for (String idioma : idiomas) {
+						
 						traDoc = (TraduccionDocumento) doc.getTraduccion(idioma);
 						nombre = (traDoc != null && traDoc.getTitulo() != null) ? traDoc.getTitulo() : "";
+						
 						titulos.put(idioma, nombre);
+						
 					}
 
-					mapDoc = new HashMap<String, Object>(3);
+					mapDoc = new HashMap<String, Object>();
 					mapDoc.put("id", doc.getId());
 					mapDoc.put("orden", doc.getOrden());
 					mapDoc.put("nombre", titulos);
-					llistaDocuments.add(mapDoc);
+					mapDoc.put("idMainItem", proc.getId());
+					mapDoc.put("idRelatedItem", doc.getId());
+					
+					listaDocumentosDTO.add(mapDoc);
 					
 				} else {
+					
 					log.error("El procedimient " + proc.getId() + " te un document null.");
+					
 				}
+				
 			}
-			resultats.put("documents", llistaDocuments);
+			
+			resultats.put("documents", listaDocumentosDTO);
 
 		} else {
+			
 			resultats.put("documents", null);
+			
 		}
+		
 	}
 
 	/*
@@ -646,7 +662,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			procediment = guardarPublicoObjetivo(request, edicion, procediment, procedimentOld);// Procesar Público Objectivo
 			procediment = guardarTramites(request, edicion, procediment, procedimentOld);		// Actualizar la lista de Trámites
 			
-			procediment = guardarDocumentos(request, edicion, procediment, procedimentOld);		// Documentos
 			procediment = guardarIdioma(request, procediment, procedimentOld);       			// Idiomas
 			procediment = guardarValidacion(request, procediment, procedimentOld, error);		// Validación
 			procediment = guardarFechaPublicacion(request, procediment);						// Fecha Publicación
@@ -802,87 +817,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		return procediment;
 		
 	}
-
-	/*
-	 * Controlamos los documentos modificados
-	 */
-	private ProcedimientoLocal guardarDocumentos(HttpServletRequest request, boolean edicion, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld) throws DelegateException {
-
-	    if (isModuloModificado("modulo_documents_modificado", request)) {
-	        List<String> docsIds = Collections.list(request.getParameterNames());
-
-	        HashSet<String> hashSet = new HashSet<String>(docsIds);
-            docsIds.clear();
-            docsIds.addAll(hashSet);
-
-            List<String> ids = new ArrayList<String>(docsIds.size());
-            Map<String, String> idOrden = new HashMap<String, String>();
-            for (String id : docsIds) {
-                if (id.contains("documents_id_")) {
-                    ids.add(id.split("_")[2]);
-                    String orden = request.getParameter("documents_orden_" + id.split("_")[2]);
-                    idOrden.put(id.split("_")[2], orden);
-                }
-            }
-
-	        List<Documento> documents = cuerpo(procedimentOld.getDocumentos(), ids, idOrden, edicion);
-
-	        // Assignar els documents al procedimient
-	        procediment.setDocumentos(documents);
-	    }
-
-	    return procediment;
-	}
-
-	private List<Documento> cuerpo(List<Documento> docsOld, List<String> docsIds, Map<String, String> idOrden, boolean edicion) throws DelegateException {
-
-        DocumentoResumen documentResumen;
-        DocumentoResumenDelegate docDelegate = DelegateUtil.getDocumentoResumenDelegate();
-        List<Documento> documents = new ArrayList<Documento>();
-        Map <String,String[]> actulitzadorMap = new HashMap<String, String[]>();
-
-        // Obtenim  els documents i els seus ordres
-        for (String docId : docsIds) {
-            Long idDoc = ParseUtil.parseLong(docId);
-            if (idDoc != null) {
-                documentResumen = docDelegate.obtenerDocumentoResumen(idDoc);
-                Documento doc = new Documento();
-                doc.setId(documentResumen.getId());
-                doc.setFicha(documentResumen.getFicha());
-                doc.setOrden(documentResumen.getOrden());
-                doc.setProcedimiento(documentResumen.getProcedimiento());
-                doc.setTraduccionMap(documentResumen.getTraduccionMap());
-                documents.add(doc);
-                // Se coge el orden de la web. Si se quisiesen poner del 0 al x, hacer que orden valga 0 e ir incrementandolo.
-                String[] orden = {idOrden.get(idDoc.toString())};
-                actulitzadorMap.put("orden_doc" + idDoc, orden);
-
-            } else {
-                log.warn("S'ha rebut un id de document no númeric: " + idDoc);
-            }
-        }
-
-        // Actualitzam ordres
-        docDelegate.actualizarOrdenDocs(actulitzadorMap);
-
-        if (edicion) {
-            boolean eliminarDoc;
-            for (Documento docAntiguo : docsOld) {
-                eliminarDoc = true;
-                for (Documento docNuevo : documents) {
-                    if (docAntiguo.getId().equals(docNuevo.getId())) {
-                        eliminarDoc = false;
-                    }
-                }
-                if (eliminarDoc) {
-                    docDelegate.borrarDocumento(docAntiguo.getId());
-                }
-            }
-        }
-
-        return documents;
-        
-    }
 
 	/*
 	 * Traducimos al idioma deseado del procedimiento.
@@ -1582,6 +1516,118 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			
 		}
 				
+		return result;
+
+	}
+	
+	@RequestMapping(value = "/guardarDocumentosRelacionados.do", method = POST)
+	public @ResponseBody IdNomDTO guardarDocumentosRelacionados(Long id, Long[] elementos, HttpServletRequest request) {
+		
+		// Guardaremos el orden y borraremos los documentos que se hayan marcado para borrar.
+		// La creación se gestiona en el controlador DocumentBackController.
+		
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+		
+		IdNomDTO result;
+		String error = null;
+		ProcedimientoLocal procedimiento = null;
+		
+		try {
+			
+			procedimiento = DelegateUtil.getProcedimientoDelegate().obtenerProcedimientoNewBack(id);
+						
+			List<Documento> documentosABorrar = procedimiento.getDocumentos();
+			List<Documento> documentos = new ArrayList<Documento>();
+			Map <String, String[]> actualizadorMap = new HashMap<String, String[]>();
+			
+			if ( elementos != null ) {
+				
+				int orden = 1;
+				
+				for (int i = 0; i < elementos.length; i++) {
+					
+					// Buscamos el id del documento. Si está en los documentos anteriores, no hay que borrarlo.
+					Iterator<Documento> it = documentosABorrar.iterator();
+					boolean borrarDocumento = true;
+					
+					while ( it.hasNext() ) {
+						
+						Documento d = it.next();
+						
+						// Si encontramos el documento, lo quitamos de la lista y salimos del while.
+						if ( d != null && d.getId().equals(elementos[i]) ) {
+							it.remove();
+							borrarDocumento = false;
+							break;
+						}
+						
+					}
+					
+					// Si no hay que borrar el documento, lo procesamos.
+					if ( !borrarDocumento ) {
+						
+						DocumentoResumen docResumen = DelegateUtil.getDocumentoResumenDelegate().obtenerDocumentoResumen(elementos[i]);
+						
+						Documento doc = new Documento();
+						doc.setId(docResumen.getId());
+						doc.setFicha(docResumen.getFicha());
+						
+						// Aquí no ponemos el orden en función de la variable i, ya que es posible que no se entre en
+						// este bloque de código en cada iteración.
+						doc.setOrden( orden );
+						
+						String[] ordenMap = {String.valueOf(orden)};
+						actualizadorMap.put("orden_doc" + doc.getId(), ordenMap);
+						orden++;
+						
+						doc.setProcedimiento(docResumen.getProcedimiento());
+						doc.setTraduccionMap(docResumen.getTraduccionMap());
+						
+						documentos.add(doc);
+												
+					}
+					
+				}
+				
+			}
+			
+			// Borramos documentos que no hayamos encontrado en el envío.
+			for (Documento d : documentosABorrar) {
+				if (d != null)
+					DelegateUtil.getDocumentoDelegate().borrarDocumento(d.getId());
+			}
+			
+			// Guardamos documentos actuales (actualizar orden).
+			// TODO amartin: actualmente no funciona el tema de la ordenación. Con los documentos asociados a fichas funciona perfectamente
+			// y se sigue el mismo algoritmo. ¿Problema del modelo de datos?
+			// Ver comentario en método DocumentoResumenFacadeEJB.actualizarOrdenDocs().
+			DocumentoResumenDelegate documentoResumenDelegate = DelegateUtil.getDocumentoResumenDelegate();
+			documentoResumenDelegate.actualizarOrdenDocs(actualizadorMap);
+			
+			// Finalmente, los asignamos a la ficha y la guardamos con las nuevas relaciones de documentos.
+			procedimiento.setDocumentos(documentos);
+			DelegateUtil.getProcedimientoDelegate().grabarProcedimiento(procedimiento, procedimiento.getUnidadAdministrativa().getId());
+			
+			result = new IdNomDTO(procedimiento.getId(), messageSource.getMessage("proc.guardat.correcte", null, request.getLocale()));
+			
+		} catch (DelegateException dEx) {
+			
+			if (dEx.isSecurityException()) {
+				
+				error = messageSource.getMessage("error.permisos", null, request.getLocale());
+				result = new IdNomDTO(-1l, error);
+				
+			} else {
+				
+				error = messageSource.getMessage("error.altres", null, request.getLocale());
+				result = new IdNomDTO(-2l, error);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+				
+			}
+			
+		}		
+		
 		return result;
 
 	}

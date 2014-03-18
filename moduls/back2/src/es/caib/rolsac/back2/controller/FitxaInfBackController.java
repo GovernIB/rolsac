@@ -7,8 +7,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -55,7 +53,6 @@ import org.ibit.rol.sac.model.dto.SeccionDTO;
 import org.ibit.rol.sac.model.dto.UnidadDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
 import org.ibit.rol.sac.persistence.delegate.DocumentoResumenDelegate;
 import org.ibit.rol.sac.persistence.delegate.EnlaceDelegate;
 import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
@@ -780,7 +777,6 @@ public class FitxaInfBackController extends PantallaBaseController {
 			fitxa = guardarBanner(fitxa, valoresForm, ficherosForm);                    // Controlamos los cambios del banner
 			fitxa = guardarImatge(fitxa, valoresForm, ficherosForm);                    // Controlamos los cambios de la imagen
 			fitxa = guardarPublicoObjetivo(edicion, fitxa, fitxaOld, valoresForm);      // Controlamos los públicos objetivos modificados o incluidos
-			fitxa = guardarDocumentos(edicion, fitxa, fitxaOld, valoresForm, docsIds);  // Controlamos los documentos asociados a una ficha
 
 			fitxa.setFechaActualizacion(new Date());									// Guardamos la fecha actual al ser la última actualización
 			fitxa.setUrlForo(valoresForm.get("item_forum"));							// Guardamos el valor de la URL del foro
@@ -1079,105 +1075,6 @@ public class FitxaInfBackController extends PantallaBaseController {
 		}
 
 		return fitxa;
-		
-	}
-
-	/*
-	 * Función para recuperar y controlar los documendos asociados
-	 */
-	private Ficha guardarDocumentos(boolean edicion, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm, List<String> docsIds)
-			throws DelegateException {
-
-		if (isModuloModificado("modulo_documents_modificado", valoresForm)) {
-
-			HashSet<String> hashSet = new HashSet<String>(docsIds);
-			docsIds.clear();
-			docsIds.addAll(hashSet);
-
-			List<String> ids = new ArrayList<String>(docsIds.size());
-			Map<String, String> idOrden = new HashMap<String, String>();
-			
-			for (String id : docsIds) {
-				ids.add(id.split("_")[2]);
-				String orden = valoresForm.get("documents_orden_" + id.split("_")[2]);
-				idOrden.put(id.split("_")[2], orden);
-			}
-
-			List<Documento> documents = cuerpo(fitxaOld.getDocumentos(), ids, idOrden, edicion);
-
-			// Assignar els documents a la fitxa
-			fitxa.setDocumentos(documents);
-			
-		}
-
-		return fitxa;
-		
-	}
-
-	private List<Documento> cuerpo(List<Documento> docsOld, List<String> docsIds, Map<String, String> idOrden, boolean edicion) 
-			throws DelegateException {
-
-		DocumentoResumen documentResumen;
-		DocumentoResumenDelegate docDelegate = DelegateUtil.getDocumentoResumenDelegate();
-		List<Documento> documents = new ArrayList<Documento>();
-		Map <String,String[]> actulitzadorMap = new HashMap<String, String[]>();
-
-		// Obtenim  els documents i els seus ordres
-		for (String docId : docsIds) {
-			
-			Long idDoc = ParseUtil.parseLong(docId);
-			
-			if (idDoc != null) {
-				
-				documentResumen = docDelegate.obtenerDocumentoResumen(idDoc);
-				
-				Documento doc = new Documento();
-				doc.setId(documentResumen.getId());
-				doc.setFicha(documentResumen.getFicha());
-				doc.setOrden(documentResumen.getOrden());
-				doc.setProcedimiento(documentResumen.getProcedimiento());
-				doc.setTraduccionMap(documentResumen.getTraduccionMap());
-				
-				documents.add(doc);
-				
-				// Se coge el orden de la web. Si se quisiesen poner del 0 al x, hacer que orden valga 0 e ir incrementandolo.
-				String[] orden = {idOrden.get(idDoc.toString())};
-				actulitzadorMap.put("orden_doc" + idDoc, orden);
-
-			} else {
-				
-				log.warn("S'ha rebut un id de document no númeric: " + idDoc);
-				
-			}
-			
-		}
-
-		// Actualitzam ordres
-		docDelegate.actualizarOrdenDocs(actulitzadorMap);
-
-		if (edicion) {
-			
-			boolean eliminarDoc;
-			
-			for (Documento docAntiguo : docsOld) {
-				
-				eliminarDoc = true;
-				
-				for (Documento docNuevo : documents) {
-					if (docAntiguo.getId().equals(docNuevo.getId())) {
-						eliminarDoc = false;
-					}
-				}
-				
-				if (eliminarDoc) {
-					docDelegate.borrarDocumento(docAntiguo.getId());
-				}
-				
-			}
-			
-		}
-
-		return documents;
 		
 	}
 
@@ -1714,8 +1611,8 @@ public class FitxaInfBackController extends PantallaBaseController {
 			ficha = DelegateUtil.getFichaDelegate().obtenerFicha(id);
 						
 			List<Documento> documentosABorrar = ficha.getDocumentos();
-			List<Documento> documentosFicha = new ArrayList<Documento>();
-			Map <String, String[]> actulitzadorMap = new HashMap<String, String[]>();
+			List<Documento> documentos = new ArrayList<Documento>();
+			Map <String, String[]> actualizadorMap = new HashMap<String, String[]>();
 			
 			if ( elementos != null ) {
 				
@@ -1754,13 +1651,13 @@ public class FitxaInfBackController extends PantallaBaseController {
 						doc.setOrden( orden );
 						
 						String[] ordenMap = {String.valueOf(orden)};
-						actulitzadorMap.put("orden_doc" + doc.getId(), ordenMap);
+						actualizadorMap.put("orden_doc" + doc.getId(), ordenMap);
 						orden++;
 						
 						doc.setProcedimiento(docResumen.getProcedimiento());
 						doc.setTraduccionMap(docResumen.getTraduccionMap());
 						
-						documentosFicha.add(doc);
+						documentos.add(doc);
 												
 					}
 					
@@ -1776,10 +1673,10 @@ public class FitxaInfBackController extends PantallaBaseController {
 			
 			// Guardamos documentos actuales (actualizar orden).
 			DocumentoResumenDelegate documentoResumenDelegate = DelegateUtil.getDocumentoResumenDelegate();
-			documentoResumenDelegate.actualizarOrdenDocs(actulitzadorMap);
+			documentoResumenDelegate.actualizarOrdenDocs(actualizadorMap);
 			
 			// Finalmente, los asignamos a la ficha y la guardamos con las nuevas relaciones de documentos.
-			ficha.setDocumentos(documentosFicha);
+			ficha.setDocumentos(documentos);
 			DelegateUtil.getFichaDelegate().grabarFicha(ficha);
 			
 			result = new IdNomDTO(ficha.getId(), messageSource.getMessage("fitxes.guardat.correcte", null, request.getLocale()));

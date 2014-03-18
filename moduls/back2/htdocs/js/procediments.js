@@ -12,8 +12,22 @@ $(document).ready(function() {
 		ListaSimpleGenerica.guardar(element, url, id);
 		
 	});
+	
+	// XXX amartin: creamos un listener singular para esta lista ya que el selector de elementos es diferente.
+	// Es un caso singular ya que, al ser una lista multiidioma pero sólo tener que guardar el orden de los elementos
+	// y borrar los que no están, la tratamos como una lista simple.
+	jQuery(".lista-simple-documentos").click(function() {
+		
+		var elementos = $(this).parent().parent().find("div.cajaIdioma.ca li"); // Con esto obtenemos los <li> que cuelgan de <div class="cajaIdioma ca">
+		var id = $('#item_clave_primaria').val();
+		var url = $(this).attr('action');
+		
+		ListaSimpleDocumentos.guardar(elementos, url, id);
+	
+	});
 
 	ListaSimpleGenerica = new ListaSimple();
+	ListaSimpleDocumentos = new ListaSimple();
 	
 	// elements
 	opcions_elm = $("#opcions");
