@@ -3,17 +3,29 @@
 $(document).ready(function() {
 	
 	// Listener para guardado de módulos laterales vía AJAX.
-	jQuery(".lista-simple").click(function() {
+	jQuery(".lista-simple-uasMateria").click(function() {
 		
 		var element = $(this).parent().parent().find("li");
 		var id = $('#item_id').val();
 		var url = $(this).attr('action');
 		
-		ListaSimpleGenerica.guardar(element, url, id);
+		ListaSimpleUAsMateria.guardar(element, url, id);
 		
 	});
 	
-	ListaSimpleGenerica = new CListaSimple();
+	// Listener para guardado de módulos laterales vía AJAX.
+	jQuery(".lista-simple-iconos").click(function() {
+		
+		var element = $(this).parent().parent().find("li");
+		var id = $('#item_id').val();
+		var url = $(this).attr('action');
+		
+		ListaSimpleIconos.guardar(element, url, id);
+		
+	});
+	
+	ListaSimpleIconos = new CListaSimpleIconos();
+	ListaSimpleUAsMateria = new CListaSimpleUAsMateria();
 	
 	// elements
 	opcions_elm = $("#opcions");
@@ -57,80 +69,6 @@ $(document).ready(function() {
 	DATOS_TRADUCIDOS_MATERIA = ["nombre", "descripcion", "palabrasclave"];
 	
 });
-
-/**
- * (amartin) Explicación de extensión de clase:
- * 
- * Necesitamos extender la clase ListaSimple ya que el módulo lateral de unidades administrativas (modul_unitats_administratives.js)
- * dentro de la gestión de materias no sólo consta de valor para el registro principal (materia => main-item-id) y para sus N UAs
- * asociadas (ua => related-item-id), sino que también hay un tercer campo, que es el checkbox de UA principal para esa materia.
- * Con la extensión de la clase sobreescribimos los métodos para realizar el guardado y para obtener el dato adicional de UA principal.
- */
-// FIXME amartin: mover al módulo adecuado, poner nombre mejor, editar class del listener y del JSP.
-function CListaSimple() {
-	
-	// Activa mensajes de debug.
-	var debug = false;
-
-	this.extend = ListaSimple;
-	this.extend();
-	
-	var that = this;
-	
-	this._guardar = this.guardar;
-	
-	this.guardar = function(element, url, id) {
-		
-		this._guardar(element, url, id);
-		
-		// XXX: ocultación del botón de guardado tras solicitar guardado AJAX (si el invoker es el guardado de iconos de la materia).
-		urlGuardarIconos = "/materies/guardarIconosRelacionados.do";
-		if ( url.indexOf(urlGuardarIconos) != -1 ) {
-			
-			// Objeto declarado en modul_icones.js
-			if (typeof EscriptoriPare != 'undefined')
-				EscriptoriPare.deshabilitarBotonGuardar();
-			
-		}
-		
-	};
-	
-	this._getFilters = this.getFilters;
-	
-	this.getFilters = function(elements, id) {
-		
-		if (debug)
-			console.log("Entrando en CListaSimple.getFilters");
-		
-		var filters = this._getFilters(elements, id);
-		
-		if (elements.length > 0) {
-			
-			elements.each(function() {
-				
-				// Obtenemos el radiobutton de cada UA y comprobamos si está marcado.
-				if ( $(this).find("input[type='radio']").length == 1 ) {
-				
-					var radio = $(this).find("input[type='radio']");
-					
-					// Si está seleccionado, lo pasamos por parámetro
-					if ( radio.is(':checked') )
-						filters += "&itemUAPrincipal=" + radio.val();
-				
-				}
-				
-			});
-						
-		}
-				
-		if (debug)
-			console.log("Saliendo de CListaSimple.getFilters");
-		
-		return filters;
-				
-	};
-	
-};
 
 //idioma
 var pag_idioma = $("html").attr("lang");

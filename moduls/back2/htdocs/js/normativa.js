@@ -3,17 +3,17 @@
 $(document).ready(function() {
 	
 	// Listener para guardado de módulo vía AJAX.
-	jQuery(".lista-simple").click(function() {
+	jQuery(".lista-simple-afectaciones").click(function() {
 		
 		var element = $(this).parent().parent().find("li");
 		var id = $('#item_id').val();
 		var url = $(this).attr('action');
 		
-		ListaSimpleGenerica.guardar(element, url, id);
+		ListaSimpleAfectaciones.guardar(element, url, id);
 		
 	});
 	
-	ListaSimpleGenerica = new CListaSimple();
+	ListaSimpleAfectaciones = new CListaSimpleAfectaciones();
 
 	// elements
 	opcions_elm = $("#opcions");
@@ -70,62 +70,10 @@ $(document).ready(function() {
 
 });
 
-/**
- * (amartin) Explicación de extensión de clase:
- * 
- * Necesitamos extender la clase ListaSimple ya que el módulo lateral de afectaciones (modul_afectacions.js)
- * no sólo consta de valor para el registro principal (normativa => main-item-id) y para sus N normativas
- * afectadas (afectación => related-item-id), sino que también hay un tercer campo, que es el tipo de afcetación
- * entre la normativa que afecta y la afectada. Con la extensión de la clase sobreescribimos los métodos para
- * realizar el guardado y para obtener el dato adicional de tipo de afectación.
- */
-// FIXME amartin: mover esto al módulo de normativas y arreglar listener del principio poniendo nombre de clase propia. Editar clase del <a> en el JSP.
-function CListaSimple() {
-	
-	// Activa mensajes de debug.
-	var debug = false;
-
-	this.extend = ListaSimple;
-	this.extend();
-	
-	var that = this;
-	
-	this._getFilters = this.getFilters;
-	
-	this.getFilters = function(elements, id) {
-		
-		if (debug)
-			console.log("Entrando en CListaSimple.getFilters");
-		
-		var lista = new Array();
-		var filters = this._getFilters(elements, id);
-		
-		if (elements.length > 0) {
-			
-			elements.each(function() {
-				
-				var value = $(this).find('input.afectacio').val(); // Obtenemos el ID del tipo de afectación.
-				lista.push(value);
-				
-			});
-			
-			filters += "&tiposAfectacion=" + lista;
-			
-		}
-				
-		if (debug)
-			console.log("Saliendo de CListaSimple.getFilters");
-		
-		return filters;
-				
-	};
-	
-};
-
 //idioma
 var pag_idioma = $("html").attr("lang");
 
-var Cercador = {iniciar: function() {} };
+var Cercador = {iniciar: function() {}};
 
 //minim cercador
 var numCercadorMinim = 0;
@@ -803,22 +751,6 @@ function CDetall() {
 
 		//Preparar los datos de afectaciones relacionadas.
 		//Crear un JSON con la lista de afectaciones.
-		/*
-		var listaAfectaciones = "{\"listaAfectaciones\" : [";
-		var sep = "";
-		$("div.modulAfectacions").find("li").each(function() {
-			var li_elm = $(this);
-			var idNormaAfectada = li_elm.find("input.norma").val();
-			var idTipoAfectacion = li_elm.find("input.afectacio").val();
-
-			listaAfectaciones += sep + "{ \"afectacioId\" : " + idTipoAfectacion + ", \"normaId\" : " + idNormaAfectada+ ", \"normaNom\" : \"\", \"afectacioNom\" : \"\" } ";
-			sep=",";
-		});
-		listaAfectaciones += "]}";
-
-		$("#afectaciones").val(listaAfectaciones);
-		 */
-
 		$("#afectaciones").val( ModulAfectacions.jsonAfectacions() );
 
 		//Enviamos el formulario mediante el método ajaxSubmit del plugin jquery.form

@@ -630,3 +630,54 @@ function CEscriptoriAfectacions() {
 	};
 	
 };
+
+/**
+ * (amartin) Explicación de extensión de clase:
+ * 
+ * Necesitamos extender la clase ListaSimple ya que el módulo lateral de afectaciones (modul_afectacions.js)
+ * no sólo consta de valor para el registro principal (normativa => main-item-id) y para sus N normativas
+ * afectadas (afectación => related-item-id), sino que también hay un tercer campo, que es el tipo de afcetación
+ * entre la normativa que afecta y la afectada. Con la extensión de la clase sobreescribimos los métodos para
+ * realizar el guardado y para obtener el dato adicional de tipo de afectación.
+ */
+function CListaSimpleAfectaciones() {
+	
+	// Activa mensajes de debug.
+	var debug = false;
+
+	this.extend = ListaSimple;
+	this.extend();
+	
+	var that = this;
+	
+	this._getFilters = this.getFilters;
+	
+	this.getFilters = function(elements, id) {
+		
+		if (debug)
+			console.log("Entrando en CListaSimpleAfectaciones.getFilters");
+		
+		var lista = new Array();
+		var filters = this._getFilters(elements, id);
+		
+		if (elements.length > 0) {
+			
+			elements.each(function() {
+				
+				var value = $(this).find('input.afectacio').val(); // Obtenemos el ID del tipo de afectación.
+				lista.push(value);
+				
+			});
+			
+			filters += "&tiposAfectacion=" + lista;
+			
+		}
+				
+		if (debug)
+			console.log("Saliendo de CListaSimpleAfectaciones.getFilters");
+		
+		return filters;
+				
+	};
+	
+};

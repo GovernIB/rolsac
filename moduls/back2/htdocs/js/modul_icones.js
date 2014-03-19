@@ -404,3 +404,51 @@ function CModulIcones() {
 	};
 	
 };
+
+/**
+ * (amartin) Explicación de extensión de clase:
+ * 
+ * Extendemos la clase para que, tras el guardado, se oculte el botón de guardado del módulo lateral de iconos.
+ * Esto es porque la lista simple sólo gestionará iconos marcados para borrar. Al marcar uno para borrar, aparecerá el botón
+ * de guardar y al realizar la acción de guardado éste desaparecerá.
+ */
+function CListaSimpleIconos() {
+	
+	// Activa mensajes de debug.
+	var debug = false;
+
+	this.extend = ListaSimple;
+	this.extend();
+	
+	var that = this;
+	
+	this._guardar = this.guardar;
+	
+	this.guardar = function(element, url, id) {
+		
+		if (debug)
+			console.log("Entrando en CListaSimpleIconosFamilia.getFilters");
+		
+		that._guardar(element, url, id);
+		
+		// XXX amartin: ocultación del botón de guardado tras solicitar guardado AJAX
+		// (si el invoker es el guardado de iconos de familia, materia, etc).
+		// Ir añadiendo casos aquí.
+		var urlGuardarIconosFamilia = "/familia/guardarIconosRelacionados.do";
+		var urlGuardarIconosMateria = "/materies/guardarIconosRelacionados.do";
+		
+		if ( url.indexOf(urlGuardarIconosFamilia) != -1 || 
+				url.indexOf(urlGuardarIconosMateria) != -1 ) {
+			
+			// Objeto declarado en modul_icones.js
+			if (typeof EscriptoriPare != 'undefined')
+				EscriptoriPare.deshabilitarBotonGuardar();
+			
+		}
+		
+		if (debug)
+			console.log("Entrando en CListaSimpleIconosFamilia.getFilters");
+		
+	};
+	
+};

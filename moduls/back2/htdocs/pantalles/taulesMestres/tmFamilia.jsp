@@ -290,7 +290,7 @@
                                 <p style="clear: both; margin-bottom: 10px;"/><!-- Separador -->
 	                            <div class="btnGenerico">
 	                            	<%-- amartin: este botón tiene display: none porque sólo se mostrará si se marca para borrar un icono --%>
-	                                <a id="btnGuardar_iconas" href="javascript:;" class="btn guarda important lista-simple" style="display: none"
+	                                <a id="btnGuardar_iconas" href="javascript:;" class="btn guarda important lista-simple-iconos" style="display: none"
 	                            			action="<c:url value="/familia/guardarIconosRelacionados.do" />">
 	                           			<span><span><spring:message code='boto.guarda'/></span></span>
 	                            	</a>

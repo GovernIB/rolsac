@@ -223,3 +223,58 @@ function CModulUnitatAdministrativa() {
 	};
 	
 };
+
+/**
+ * (amartin) Explicación de extensión de clase:
+ * 
+ * Necesitamos extender la clase ListaSimple ya que el módulo lateral de unidades administrativas dentro de la gestión de materias 
+ * no sólo consta de valor para el registro principal (materia => main-item-id) y para sus N UAs asociadas (ua => related-item-id),
+ * sino que también hay un tercer campo, que es el checkbox de UA principal para esa materia. Con la extensión de la clase
+ * sobreescribimos el método de obtención de filtros para obtener el dato adicional de UA principal.
+ */
+function CListaSimpleUAsMateria() {
+	
+	// Activa mensajes de debug.
+	var debug = false;
+
+	this.extend = ListaSimple;
+	this.extend();
+	
+	var that = this;
+	
+	this._getFilters = this.getFilters;
+	
+	this.getFilters = function(elements, id) {
+		
+		if (debug)
+			console.log("Entrando en CListaSimple.getFilters");
+		
+		var filters = that._getFilters(elements, id);
+		
+		if (elements.length > 0) {
+			
+			elements.each(function() {
+				
+				// Obtenemos el radiobutton de cada UA y comprobamos si está marcado.
+				if ( $(this).find("input[type='radio']").length == 1 ) {
+				
+					var radio = $(this).find("input[type='radio']");
+					
+					// Si está seleccionado, lo pasamos por parámetro
+					if ( radio.is(':checked') )
+						filters += "&itemUAPrincipal=" + radio.val();
+				
+				}
+				
+			});
+						
+		}
+				
+		if (debug)
+			console.log("Saliendo de CListaSimple.getFilters");
+		
+		return filters;
+				
+	};
+	
+};

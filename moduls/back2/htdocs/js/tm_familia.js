@@ -3,17 +3,17 @@
 $(document).ready(function() {
 	
 	// Listener para guardado de módulos laterales vía AJAX.
-	jQuery(".lista-simple").click(function() {
+	jQuery(".lista-simple-iconos").click(function() {
 		
 		var element = $(this).parent().parent().find("li");
 		var id = $('#item_id').val();
 		var url = $(this).attr('action');
 		
-		ListaSimpleGenerica.guardar(element, url, id);
+		ListaSimpleIconos.guardar(element, url, id);
 		
 	});
 	
-	ListaSimpleGenerica = new CListaSimple();
+	ListaSimpleIconos = new CListaSimpleIconos();
 	
 	// elements
 	opcions_elm = $("#opcions");
@@ -56,42 +56,6 @@ $(document).ready(function() {
     Llistat.iniciar();
     
 });
-
-/**
- * (amartin) Explicación de extensión de clase:
- * 
- * Extendemos la clase para que, tras el guardado, se oculte el botón de guardado del módulo lateral de iconos.
- */
-// FIXME amartin: mover al módulo adecuado (modul_iconas?), dar nombre adecuado, editar listener en esta clase cambiando el class y editar JSP con nuevo class.
-function CListaSimple() {
-	
-	// Activa mensajes de debug.
-	var debug = false;
-
-	this.extend = ListaSimple;
-	this.extend();
-	
-	var that = this;
-	
-	this._guardar = this.guardar;
-	
-	this.guardar = function(element, url, id) {
-		
-		this._guardar(element, url, id);
-		
-		// XXX: ocultación del botón de guardado tras solicitar guardado AJAX (si el invoker es el guardado de iconos de la familia).
-		urlGuardarIconos = "/familia/guardarIconosRelacionados.do";
-		if ( url.indexOf(urlGuardarIconos) != -1 ) {
-			
-			// Objeto declarado en modul_icones.js
-			if (typeof EscriptoriPare != 'undefined')
-				EscriptoriPare.deshabilitarBotonGuardar();
-			
-		}
-		
-	};
-	
-};
 
 // idioma
 var pag_idioma = $("html").attr("lang");
