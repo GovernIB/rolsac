@@ -5,14 +5,12 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -36,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.controller.PantallaBaseController;
+import es.caib.rolsac.back2.util.GuardadoAjaxUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.indra.rol.sac.integracion.traductor.Traductor;
@@ -447,33 +446,9 @@ public class TMFamiliaController extends PantallaBaseController {
 			Familia familia = familiaDelegate.obtenerFamilia(id);
 			
 			// XXX: Iconos: o no hay cambios o se han de eliminar algunos (las adiciones se hacen en IconaMateriaBackController).
-			IconoFamiliaDelegate iconaFamiliaDelegate = DelegateUtil.getIconoFamiliaDelegate();
-
 			// Eliminamos los que ya no están presentes.
-			Set<IconoFamilia> iconosAnteriores = (Set<IconoFamilia>)familia.getIconos();
-			Set<Long> iconosABorrar = new HashSet<Long>();
-			
-			Boolean iconoEncontrado;
-			
-			for (IconoFamilia icona : iconosAnteriores) {
-				
-				iconoEncontrado = Boolean.FALSE;
-				
-				for (Long iconaId : elementos) {
-					if (icona.getId().equals(iconaId)) {
-						iconoEncontrado = Boolean.TRUE;
-						break;
-					}
-				}
-				
-				if (!iconoEncontrado) {
-					iconosABorrar.add(icona.getId());
-				}
-				
-			}
-						
-			iconaFamiliaDelegate.borrarIconosFamilia(iconosABorrar);
-						
+			GuardadoAjaxUtil.actualizarIconos(elementos, familia, null);
+												
 			String ok = messageSource.getMessage("familia.guardat.correcte", null, request.getLocale());
 			result = new IdNomDTO(familia.getId(), ok);
 

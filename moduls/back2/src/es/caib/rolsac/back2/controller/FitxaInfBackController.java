@@ -15,7 +15,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -27,7 +26,6 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Documento;
-import org.ibit.rol.sac.model.DocumentoResumen;
 import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaResumen;
@@ -53,7 +51,6 @@ import org.ibit.rol.sac.model.dto.SeccionDTO;
 import org.ibit.rol.sac.model.dto.UnidadDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.delegate.DocumentoResumenDelegate;
 import org.ibit.rol.sac.persistence.delegate.EnlaceDelegate;
 import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
 import org.ibit.rol.sac.persistence.delegate.FichaResumenDelegate;
@@ -70,6 +67,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.back2.util.GuardadoAjaxUtil;
 import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.Parametros;
 import es.caib.rolsac.back2.util.ParseUtil;
@@ -1450,26 +1448,9 @@ public class FitxaInfBackController extends PantallaBaseController {
 		try {
 			
 			ficha = DelegateUtil.getFichaDelegate().obtenerFicha(id);
-			
-			if (elementos != null && elementos.length > 0) {
-
-				List<Long> materiasList = new Vector<Long>();
 				
-				MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
-				
-				for (int i = 0; i < elementos.length; i++)
-					materiasList.add(elementos[i]);
-				
-				Set<Materia> materias = new HashSet<Materia>();
-				materias.addAll(materiaDelegate.obtenerMateriasPorIDs(materiasList, DelegateUtil.getIdiomaDelegate().lenguajePorDefecto()));
-				
-				ficha.setMaterias(materias); 
-				
-			} else {
-				
-				ficha.setMaterias(new HashSet<Materia>());
-				
-			}
+			Set<Materia> materias = GuardadoAjaxUtil.obtenerMateriasRelacionadas(elementos);
+			ficha.setMaterias(materias);
 
 			guardarGrabar(ficha);
 			
@@ -1546,7 +1527,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 	    		
 	    		// Borramos los que existían anteriormente y no nos han llegado en esta petición de guardado.
     			List<Enlace> enlacesAEliminar = ficha.getEnlaces();
-    			for (Enlace enlace: enlacesNuevos) {
+    			for (Enlace enlace : enlacesNuevos) {
     				
     				Iterator<Enlace> it = enlacesAEliminar.iterator();
     				while ( it.hasNext() ) {
@@ -1609,74 +1590,9 @@ public class FitxaInfBackController extends PantallaBaseController {
 		try {
 			
 			ficha = DelegateUtil.getFichaDelegate().obtenerFicha(id);
-						
-			List<Documento> documentosABorrar = ficha.getDocumentos();
-			List<Documento> documentos = new ArrayList<Documento>();
-			Map <String, String[]> actualizadorMap = new HashMap<String, String[]>();
-			
-			if ( elementos != null ) {
-				
-				int orden = 1;
-				
-				for (int i = 0; i < elementos.length; i++) {
-					
-					// Buscamos el id del documento. Si está en los documentos anteriores, no hay que borrarlo.
-					Iterator<Documento> it = documentosABorrar.iterator();
-					boolean borrarDocumento = true;
-					
-					while ( it.hasNext() ) {
-						
-						Documento d = it.next();
-						
-						// Si encontramos el documento, lo quitamos de la lista y salimos del while.
-						if ( d != null && d.getId().equals(elementos[i]) ) {
-							it.remove();
-							borrarDocumento = false;
-							break;
-						}
-						
-					}
-					
-					// Si no hay que borrar el documento, lo procesamos.
-					if ( !borrarDocumento ) {
-						
-						DocumentoResumen docResumen = DelegateUtil.getDocumentoResumenDelegate().obtenerDocumentoResumen(elementos[i]);
-						
-						Documento doc = new Documento();
-						doc.setId(docResumen.getId());
-						doc.setFicha(docResumen.getFicha());
-						
-						// Aquí no ponemos el orden en función de la variable i, ya que es posible que no se entre en
-						// este bloque de código en cada iteración.
-						doc.setOrden( orden );
-						
-						String[] ordenMap = {String.valueOf(orden)};
-						actualizadorMap.put("orden_doc" + doc.getId(), ordenMap);
-						orden++;
-						
-						doc.setProcedimiento(docResumen.getProcedimiento());
-						doc.setTraduccionMap(docResumen.getTraduccionMap());
-						
-						documentos.add(doc);
-												
-					}
-					
-				}
-				
-			}
-			
-			// Borramos documentos que no hayamos encontrado en el envío.
-			for (Documento d : documentosABorrar) {
-				if (d != null)
-					DelegateUtil.getDocumentoDelegate().borrarDocumento(d.getId());
-			}
-			
-			// Guardamos documentos actuales (actualizar orden).
-			DocumentoResumenDelegate documentoResumenDelegate = DelegateUtil.getDocumentoResumenDelegate();
-			documentoResumenDelegate.actualizarOrdenDocs(actualizadorMap);
-			
-			// Finalmente, los asignamos a la ficha y la guardamos con las nuevas relaciones de documentos.
+			List<Documento> documentos = GuardadoAjaxUtil.actualizarYOrdenarDocumentosRelacionados(elementos, null, ficha);
 			ficha.setDocumentos(documentos);
+			
 			DelegateUtil.getFichaDelegate().grabarFicha(ficha);
 			
 			result = new IdNomDTO(ficha.getId(), messageSource.getMessage("fitxes.guardat.correcte", null, request.getLocale()));

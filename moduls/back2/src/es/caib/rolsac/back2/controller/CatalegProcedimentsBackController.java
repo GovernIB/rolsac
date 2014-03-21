@@ -12,7 +12,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +31,6 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.ibit.rol.sac.model.CatalegDocuments;
 import org.ibit.rol.sac.model.Documento;
-import org.ibit.rol.sac.model.DocumentoResumen;
 import org.ibit.rol.sac.model.ExcepcioDocumentacio;
 import org.ibit.rol.sac.model.Familia;
 import org.ibit.rol.sac.model.HechoVital;
@@ -60,13 +58,11 @@ import org.ibit.rol.sac.model.dto.ProcedimientoNormativaDTO;
 import org.ibit.rol.sac.persistence.delegate.CatalegDocumentsDelegate;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.delegate.DocumentoResumenDelegate;
 import org.ibit.rol.sac.persistence.delegate.ExcepcioDocumentacioDelegate;
 import org.ibit.rol.sac.persistence.delegate.FamiliaDelegate;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IniciacionDelegate;
-import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
 import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
@@ -78,9 +74,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.back2.util.GuardadoAjaxUtil;
 import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.LlistatUtil;
-import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.utils.DateUtils;
 import es.caib.rolsac.utils.ResultadoBusqueda;
@@ -1289,79 +1285,70 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		IdNomDTO result;
 		String error = null;
 		ProcedimientoLocal procedimiento = null;
-		
-		if (id != null) {
+					
+		try {
 			
-			try {
+			procedimiento = DelegateUtil.getProcedimientoDelegate().obtenerProcedimientoNewBack(id);
+			
+			// Borramos los anteriores.
+			borrarHechosVitalesProcedimientos(procedimiento);
+			
+			if (elementos != null && elementos.length > 0) {
 				
-				procedimiento = DelegateUtil.getProcedimientoDelegate().obtenerProcedimientoNewBack(id);
-				
-				// Borramos los anteriores.
-				borrarHechosVitalesProcedimientos(procedimiento);
-				
-				if (elementos != null && elementos.length > 0) {
-					
-		            // Guardamos los nuevos.
-		            List<HechoVital> listHV = DelegateUtil.getHechoVitalDelegate().buscarPorIds(elementos);
-		            Set<HechoVitalProcedimiento> hvpsAGuardar = new HashSet<HechoVitalProcedimiento>();
-		            
-		            for (HechoVital hv : listHV) {
-		            	
-		                HechoVitalProcedimiento hvp = new HechoVitalProcedimiento();
-		                hvp.setProcedimiento(procedimiento);
-		                hvp.setHechoVital(hv);
-		               
-		                int maxOrden = 0;
-		                for (HechoVitalProcedimiento hechoVitalProcedimiento : (List<HechoVitalProcedimiento>)hv.getHechosVitalesProcedimientos()) {
-		                    if (hechoVitalProcedimiento != null) {
-		                        if (maxOrden < hechoVitalProcedimiento.getOrden()) {
-		                            maxOrden = hechoVitalProcedimiento.getOrden();
-		                        }
-		                    }
-		                }
-		                
-		                maxOrden++;
-		                hvp.setOrden(maxOrden);
-		                hvpsAGuardar.add(hvp);
-		                
-		            }
+	            // Guardamos los nuevos.
+	            List<HechoVital> listHV = DelegateUtil.getHechoVitalDelegate().buscarPorIds(elementos);
+	            Set<HechoVitalProcedimiento> hvpsAGuardar = new HashSet<HechoVitalProcedimiento>();
+	            
+	            for (HechoVital hv : listHV) {
+	            	
+	                HechoVitalProcedimiento hvp = new HechoVitalProcedimiento();
+	                hvp.setProcedimiento(procedimiento);
+	                hvp.setHechoVital(hv);
+	               
+	                int maxOrden = 0;
+	                for (HechoVitalProcedimiento hechoVitalProcedimiento : (List<HechoVitalProcedimiento>)hv.getHechosVitalesProcedimientos()) {
+	                    if (hechoVitalProcedimiento != null) {
+	                        if (maxOrden < hechoVitalProcedimiento.getOrden()) {
+	                            maxOrden = hechoVitalProcedimiento.getOrden();
+	                        }
+	                    }
+	                }
+	                
+	                maxOrden++;
+	                hvp.setOrden(maxOrden);
+	                hvpsAGuardar.add(hvp);
+	                
+	            }
 
-		            procedimiento.setHechosVitalesProcedimientos(hvpsAGuardar);
+	            procedimiento.setHechosVitalesProcedimientos(hvpsAGuardar);
 
-				} else {
-					
-					procedimiento.setHechosVitalesProcedimientos(new HashSet<HechoVitalProcedimiento>());
-					
-				}
+			} else {
 				
-				guardarGrabar(procedimiento);
-				
-				result = new IdNomDTO(procedimiento.getId(), messageSource.getMessage("proc.guardat.correcte", null, request.getLocale()));
-				
-			} catch (DelegateException dEx) {
-				
-				if (dEx.isSecurityException()) {
-					
-					error = messageSource.getMessage("error.permisos", null, request.getLocale());
-					result = new IdNomDTO(-1l, error);
-					
-				} else {
-					
-					error = messageSource.getMessage("error.altres", null, request.getLocale());
-					result = new IdNomDTO(-2l, error);
-					log.error(ExceptionUtils.getStackTrace(dEx));
-					
-				}
+				procedimiento.setHechosVitalesProcedimientos(new HashSet<HechoVitalProcedimiento>());
 				
 			}
-		
-		} else {
 			
-			error = messageSource.getMessage("error.altres", null, request.getLocale());
-			result = new IdNomDTO(-2l, error);
+			guardarGrabar(procedimiento);
+			
+			result = new IdNomDTO(procedimiento.getId(), messageSource.getMessage("proc.guardat.correcte", null, request.getLocale()));
+			
+		} catch (DelegateException dEx) {
+			
+			if (dEx.isSecurityException()) {
+				
+				error = messageSource.getMessage("error.permisos", null, request.getLocale());
+				result = new IdNomDTO(-1l, error);
+				
+			} else {
+				
+				error = messageSource.getMessage("error.altres", null, request.getLocale());
+				result = new IdNomDTO(-2l, error);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+				
+			}
 			
 		}
-		
+				
 		return result;
 
 	}
@@ -1393,58 +1380,32 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		IdNomDTO result;
 		String error = null;
 		ProcedimientoLocal procedimiento = null;
-		
-		if (id != null) {
+					
+		try {
 			
-			try {
-				
-				procedimiento = DelegateUtil.getProcedimientoDelegate().obtenerProcedimientoNewBack(id);
-				
-				if (elementos != null && elementos.length > 0) {
-					
-					List<Long> materiasList = new Vector<Long>();
-					
-					MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
-					
-					for (int i = 0; i < elementos.length; i++)
-						materiasList.add(elementos[i]);
-					
-					Set<Materia> materias = new HashSet<Materia>();
-					materias.addAll(materiaDelegate.obtenerMateriasPorIDs(materiasList, DelegateUtil.getIdiomaDelegate().lenguajePorDefecto()));
-					
-					procedimiento.setMaterias(materias); 
-					
-				} else {
-					
-					procedimiento.setMaterias(new HashSet<Materia>());
-					
-				}
+			procedimiento = DelegateUtil.getProcedimientoDelegate().obtenerProcedimientoNewBack(id);
+			
+			Set<Materia> materias = GuardadoAjaxUtil.obtenerMateriasRelacionadas(elementos);
+			procedimiento.setMaterias(materias); 			
 
-				guardarGrabar(procedimiento);
-				
-				result = new IdNomDTO(procedimiento.getId(), messageSource.getMessage("proc.guardat.correcte", null, request.getLocale()));
+			guardarGrabar(procedimiento);
+			
+			result = new IdNomDTO(procedimiento.getId(), messageSource.getMessage("proc.guardat.correcte", null, request.getLocale()));
 
-			} catch (DelegateException dEx) {
+		} catch (DelegateException dEx) {
+			
+			if (dEx.isSecurityException()) {
 				
-				if (dEx.isSecurityException()) {
-					
-					error = messageSource.getMessage("error.permisos", null, request.getLocale());
-					result = new IdNomDTO(-1l, error);
-					
-				} else {
-					
-					error = messageSource.getMessage("error.altres", null, request.getLocale());
-					result = new IdNomDTO(-2l, error);
-					log.error(ExceptionUtils.getStackTrace(dEx));
-					
-				}
+				error = messageSource.getMessage("error.permisos", null, request.getLocale());
+				result = new IdNomDTO(-1l, error);
+				
+			} else {
+				
+				error = messageSource.getMessage("error.altres", null, request.getLocale());
+				result = new IdNomDTO(-2l, error);
+				log.error(ExceptionUtils.getStackTrace(dEx));
 				
 			}
-			
-		} else {
-			
-			error = messageSource.getMessage("error.altres", null, request.getLocale());
-			result = new IdNomDTO(-2l, error);
 			
 		}
 
@@ -1536,77 +1497,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		try {
 			
 			procedimiento = DelegateUtil.getProcedimientoDelegate().obtenerProcedimientoNewBack(id);
-						
-			List<Documento> documentosABorrar = procedimiento.getDocumentos();
-			List<Documento> documentos = new ArrayList<Documento>();
-			Map <String, String[]> actualizadorMap = new HashMap<String, String[]>();
-			
-			if ( elementos != null ) {
-				
-				int orden = 1;
-				
-				for (int i = 0; i < elementos.length; i++) {
-					
-					// Buscamos el id del documento. Si está en los documentos anteriores, no hay que borrarlo.
-					Iterator<Documento> it = documentosABorrar.iterator();
-					boolean borrarDocumento = true;
-					
-					while ( it.hasNext() ) {
-						
-						Documento d = it.next();
-						
-						// Si encontramos el documento, lo quitamos de la lista y salimos del while.
-						if ( d != null && d.getId().equals(elementos[i]) ) {
-							it.remove();
-							borrarDocumento = false;
-							break;
-						}
-						
-					}
-					
-					// Si no hay que borrar el documento, lo procesamos.
-					if ( !borrarDocumento ) {
-						
-						DocumentoResumen docResumen = DelegateUtil.getDocumentoResumenDelegate().obtenerDocumentoResumen(elementos[i]);
-						
-						Documento doc = new Documento();
-						doc.setId(docResumen.getId());
-						doc.setFicha(docResumen.getFicha());
-						
-						// Aquí no ponemos el orden en función de la variable i, ya que es posible que no se entre en
-						// este bloque de código en cada iteración.
-						doc.setOrden( orden );
-						
-						String[] ordenMap = {String.valueOf(orden)};
-						actualizadorMap.put("orden_doc" + doc.getId(), ordenMap);
-						orden++;
-						
-						doc.setProcedimiento(docResumen.getProcedimiento());
-						doc.setTraduccionMap(docResumen.getTraduccionMap());
-						
-						documentos.add(doc);
-												
-					}
-					
-				}
-				
-			}
-			
-			// Borramos documentos que no hayamos encontrado en el envío.
-			for (Documento d : documentosABorrar) {
-				if (d != null)
-					DelegateUtil.getDocumentoDelegate().borrarDocumento(d.getId());
-			}
-			
-			// Guardamos documentos actuales (actualizar orden).
-			// TODO amartin: actualmente no funciona el tema de la ordenación. Con los documentos asociados a fichas funciona perfectamente
-			// y se sigue el mismo algoritmo. ¿Problema del modelo de datos?
-			// Ver comentario en método DocumentoResumenFacadeEJB.actualizarOrdenDocs().
-			DocumentoResumenDelegate documentoResumenDelegate = DelegateUtil.getDocumentoResumenDelegate();
-			documentoResumenDelegate.actualizarOrdenDocs(actualizadorMap);
-			
-			// Finalmente, los asignamos a la ficha y la guardamos con las nuevas relaciones de documentos.
+			List<Documento> documentos = GuardadoAjaxUtil.actualizarYOrdenarDocumentosRelacionados(elementos, procedimiento, null);
 			procedimiento.setDocumentos(documentos);
+			
 			DelegateUtil.getProcedimientoDelegate().grabarProcedimiento(procedimiento, procedimiento.getUnidadAdministrativa().getId());
 			
 			result = new IdNomDTO(procedimiento.getId(), messageSource.getMessage("proc.guardat.correcte", null, request.getLocale()));

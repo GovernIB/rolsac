@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -49,6 +48,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.controller.PantallaBaseController;
+import es.caib.rolsac.back2.util.GuardadoAjaxUtil;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
@@ -787,33 +787,9 @@ public class TMMateriesController extends PantallaBaseController {
 			Materia materia = materiaDelegate.obtenerMateria(id);
 			
 			// XXX: Iconos: o no hay cambios o se han de eliminar algunos (las adiciones se hacen en IconaMateriaBackController).
-			IconoMateriaDelegate iconaMateriaDelegate = DelegateUtil.getIconoMateriaDelegate();
-
 			// Eliminamos los que ya no están presentes.
-			Set<IconoMateria> iconosAnteriores = (Set<IconoMateria>)materia.getIconos();
-			Set<Long> iconesABorrar = new HashSet<Long>();
-			
-			Boolean iconaTrobada;
-			
-			for (IconoMateria icona : iconosAnteriores) {
-				
-				iconaTrobada = Boolean.FALSE;
-				
-				for (Long iconaId : elementos) {
-					if (icona.getId().equals(iconaId)) {
-						iconaTrobada = Boolean.TRUE;
-						break;
-					}
-				}
-				
-				if (!iconaTrobada) {
-					iconesABorrar.add(icona.getId());
-				}
-				
-			}
-			
-			iconaMateriaDelegate.borrarIconosMateria(iconesABorrar);
-			
+			GuardadoAjaxUtil.actualizarIconos(elementos, null, materia);
+									
 			String ok = messageSource.getMessage("materia.guardat.correcte", null, request.getLocale());
 			result = new IdNomDTO(materia.getId(), ok);
 
