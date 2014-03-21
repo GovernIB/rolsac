@@ -244,68 +244,7 @@ public class TMSeccionsController extends PantallaBaseController {
             resultats.put("item_codi_pare", idPadre);
             resultats.put("item_pare", nomPadre);
             resultats.put("item_codi_estandard", seccio.getCodigoEstandard());
-            
-            // Fitxes informatives relacionades
-            if (seccio.getFichasUA() != null) {
-            	
-            	Map<String, String> map;
-            	List<Map<String, String>> llistaFitxes = new ArrayList<Map<String, String>>();
-            	TraduccionFicha traF;
-            	Traduccion traUA;
-				String nombre;
-                String nombreUA;
-                String idUA;
-                
-                Iterator<FichaUA> it = seccio.getFichasUA().iterator();
-                
-				while ( it.hasNext() ) {
-					
-					FichaUA ficha = it.next();
-					
-					if (ficha != null && ficha.getFicha() != null) {
-						
-						traF = (TraduccionFicha) ficha.getFicha().getTraduccion(lang);
-						nombre = "";
-						idUA = "";
-						nombreUA = "";
-						
-	    				if (traF != null) {
-	    					//Retirar posible enlace incrustado en titulo
-	    					nombre = HtmlUtils.obtenerTituloDeEnlaceHtml(traF.getTitulo());
-	    				}
-	    				
-	    				if (ficha.getUnidadAdministrativa() != null) {
-	    				    traUA = ficha.getUnidadAdministrativa().getTraduccion(lang);
-	    				    nombreUA = traUA != null ? ((TraduccionUA)traUA).getAbreviatura() : "";
-	    					idUA = ficha.getUnidadAdministrativa().getId().toString();
-	    					if (nombreUA == null || "".equals(nombreUA)) {
-	    					    nombreUA = idUA;
-	    					}
-	    				}
-	    					    				
- 	    				map = new HashMap<String, String>(2);
-	    				map.put("id", ficha.getFicha().getId().toString());
-	    				map.put("nombre", nombre);
-	    				map.put("orden", String.valueOf(ficha.getOrdenseccion()));
-	    				map.put("caducado", ficha.getFicha().isVisible().booleanValue() ? "S" : "N");
-	    				map.put("idUA", idUA);
-	    				map.put("nomUA", nombreUA);
-	    				
-	    				llistaFitxes.add(map);
-	    				
-					}
-					
-				}
-				
-				resultats.put("fitxesInformatives", llistaFitxes);
-				
-            } else {
-            	
-                resultats.put("fitxesInformatives", null);
-                
-            }
-            // Fi Fitxes informatives relacionades
-            
+                        
 	    } catch (DelegateException dEx) {
 	    	
 			log.error(ExceptionUtils.getStackTrace(dEx));
@@ -332,62 +271,11 @@ public class TMSeccionsController extends PantallaBaseController {
 	        SeccionDelegate seccionDelegate = DelegateUtil.getSeccionDelegate();
 	        Seccion seccion = seccionDelegate.obtenerSeccion(id);
 	        
-	        List<Seccion> hijosSeccion = seccion.getHijos();
-   			
-            if (hijosSeccion != null) {
-            	
-            	// Ordenamos i.e. poner cada sección ordenada por su valor "orden" en el array.
-            	Seccion[] arraySecciones = new Seccion[hijosSeccion.size()];
-            	Iterator<Seccion> it = hijosSeccion.iterator();
-            	
-            	while ( it.hasNext() ) {
-            		
-            		Seccion s = it.next();
-            		
-            		if (s != null)
-            			arraySecciones[s.getOrden()] = s;
-            		
-            	}
-            	
-            	Map<String, String> map;
-            	List<Map<String, String>> llistaSeccions = new ArrayList<Map<String, String>>();
-            	TraduccionSeccion traSec;
-				String nombre;
-				              
-				for ( int i = 0; i < arraySecciones.length; i++ ) {
-					
-					Seccion s = arraySecciones[i];
-					
-					if (s != null) {
-						
-						traSec = (TraduccionSeccion)s.getTraduccion(lang);
-						nombre = "";
-						
-	    				if (traSec != null) {
-	    					//Retirar posible enlace incrustado en titulo
-	    					nombre = HtmlUtils.obtenerTituloDeEnlaceHtml(traSec.getNombre());
-	    				}
-	    				
-	    				map = new HashMap<String, String>(2);
-	    				map.put("id", s.getId().toString());
-	    				map.put("nombre", nombre);
-	    				map.put("orden", String.valueOf(s.getOrden()));
-	    				map.put("idMainItem", id.toString());
-	    				map.put("idRelatedItem", s.getId().toString());
-	    				
-	    				llistaSeccions.add(map);
-	    				
-					}
-					
-				}
-				
-				resultats.put("seccionsRelacionades", llistaSeccions);
-				
-            } else {
-            	
-                resultats.put("seccionsRelacionades", null);
-                
-            }
+	        // Secciones relacionadas
+	        recuperaSeccionesRelacionadas(resultats, seccion, lang);
+	        
+	        // Fichas relacionadas
+	        recuperaFichasRelacionadas(resultats, seccion, lang);
    			
    		} catch (DelegateException dEx) {
 
@@ -534,26 +422,6 @@ public class TMSeccionsController extends PantallaBaseController {
     		seccion.setPerfil(valoresForm.get("item_perfil"));
     		seccion.setCodigoEstandard(valoresForm.get("item_codi_estandard"));
                     	
-        	// Fichas informativas
-        	if (fitxaForm.size() > 0) {
-        		for (String nomParametre : fitxaForm) {
-        			String[] elements = nomParametre.split("_");
-					if (elements[1].equals("id")) {
-						Long idFitxa = ParseUtil.parseLong(elements[2]);
-						
-						if (seccion.getFichasUA() != null) {
-							for (Iterator<FichaUA> it = seccion.getFichasUA().iterator(); it.hasNext();) {
-								FichaUA ficha = it.next();
-								
-								if (ficha != null && ficha.getFicha() != null && ficha.getFicha().getId().equals(idFitxa)) {
-									ficha.setOrdenseccion(ParseUtil.parseInt(valoresForm.get("fitxa_orden_" + elements[2])));
-								}
-							}
-						}
-					}
-        		}
-        	}
-        	
     		seccionDelegate.grabarSeccion(seccion, idSeccioPare);
         	result = new IdNomDTO(seccion.getId(), messageSource.getMessage("seccio.guardat.correcte", null, request.getLocale()) );
         	
@@ -785,6 +653,190 @@ public class TMSeccionsController extends PantallaBaseController {
 		
 		return result;
 		
+    }
+    
+    private void recuperaSeccionesRelacionadas(Map<String, Object> resultats, Seccion seccion, String lang) {
+    	
+    	// Secciones relacionadas
+        List<Seccion> hijosSeccion = seccion.getHijos();
+			
+        if (hijosSeccion != null) {
+        	
+        	// Ordenamos i.e. poner cada sección ordenada por su valor "orden" en el array.
+        	Seccion[] arraySecciones = new Seccion[hijosSeccion.size()];
+        	Iterator<Seccion> it = hijosSeccion.iterator();
+        	
+        	while ( it.hasNext() ) {
+        		
+        		Seccion s = it.next();
+        		
+        		if (s != null)
+        			arraySecciones[s.getOrden()] = s;
+        		
+        	}
+        	
+        	Map<String, String> map;
+        	List<Map<String, String>> llistaSeccions = new ArrayList<Map<String, String>>();
+        	TraduccionSeccion traSec;
+			String nombre;
+			              
+			for ( int i = 0; i < arraySecciones.length; i++ ) {
+				
+				Seccion s = arraySecciones[i];
+				
+				if (s != null) {
+					
+					traSec = (TraduccionSeccion)s.getTraduccion(lang);
+					nombre = "";
+					
+    				if (traSec != null) {
+    					//Retirar posible enlace incrustado en titulo
+    					nombre = HtmlUtils.obtenerTituloDeEnlaceHtml(traSec.getNombre());
+    				}
+    				
+    				map = new HashMap<String, String>(2);
+    				map.put("id", s.getId().toString());
+    				map.put("nombre", nombre);
+    				map.put("orden", String.valueOf(s.getOrden()));
+    				map.put("idMainItem", seccion.getId().toString());
+    				map.put("idRelatedItem", s.getId().toString());
+    				
+    				llistaSeccions.add(map);
+    				
+				}
+				
+			}
+			
+			resultats.put("seccionsRelacionades", llistaSeccions);
+			
+        } else {
+        	
+            resultats.put("seccionsRelacionades", null);
+            
+        }
+    	
+    }
+    
+    @SuppressWarnings("unchecked")
+	@RequestMapping(value = "/guardarOrdenFichasRelacionadas.do")
+	public @ResponseBody IdNomDTO guardarOrdenFichasRelacionadas(Long id, Long[] elementos, HttpServletRequest request) {
+		    	
+		IdNomDTO result = null;
+		
+		try {
+			
+			// Guardamos el orden en el que se han dejado las secciones relacionadas.
+			SeccionDelegate seccionDelegate = DelegateUtil.getSeccionDelegate();
+			Seccion seccion = seccionDelegate.obtenerSeccion(id);
+			
+			if (elementos != null && seccion.getFichasUA() != null) {
+				
+				for (int i = 0; i < elementos.length; i++) {
+										
+					Iterator<FichaUA> it = seccion.getFichasUA().iterator();
+					
+					// Comprobamos que la ficha exista dentro de las asociadas a la sección y actualizamos orden.
+					while ( it.hasNext() ) {
+						
+						FichaUA ficha = it.next();
+						
+						if (ficha != null && ficha.getFicha() != null 
+								&& ficha.getFicha().getId().equals(elementos[i])) {
+							
+							ficha.setOrdenseccion(i + 1);
+							
+						}
+						
+					}
+					
+				}
+				
+			}
+			
+			seccionDelegate.grabarSeccion(seccion, seccion.getPadre() != null ? seccion.getPadre().getId() : null);
+						
+			result = new IdNomDTO(seccion.getId(), messageSource.getMessage("seccio.guardat.correcte", null, request.getLocale()) );
+			
+		} catch (DelegateException dEx) {
+			
+			if (dEx.isSecurityException()) {
+				String error = messageSource.getMessage("error.permisos", null, request.getLocale());
+				result = new IdNomDTO(-1l, error);
+			} else {
+				String error = messageSource.getMessage("error.altres", null, request.getLocale());
+				result = new IdNomDTO(-2l, error);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+			}
+			
+		}
+		
+		return result;
+		
+    }
+    
+    private void recuperaFichasRelacionadas(Map<String, Object> resultats, Seccion seccion, String lang) {
+    	
+    	if (seccion.getFichasUA() != null) {
+        	
+        	Map<String, String> map;
+        	List<Map<String, String>> llistaFitxes = new ArrayList<Map<String, String>>();
+        	TraduccionFicha traF;
+        	Traduccion traUA;
+			String nombre;
+            String nombreUA;
+            String idUA;
+            
+            Iterator<FichaUA> it = seccion.getFichasUA().iterator();
+            
+			while ( it.hasNext() ) {
+				
+				FichaUA ficha = it.next();
+				
+				if (ficha != null && ficha.getFicha() != null) {
+					
+					traF = (TraduccionFicha) ficha.getFicha().getTraduccion(lang);
+					nombre = "";
+					idUA = "";
+					nombreUA = "";
+					
+    				if (traF != null) {
+    					//Retirar posible enlace incrustado en titulo
+    					nombre = HtmlUtils.obtenerTituloDeEnlaceHtml(traF.getTitulo());
+    				}
+    				
+    				if (ficha.getUnidadAdministrativa() != null) {
+    				    traUA = ficha.getUnidadAdministrativa().getTraduccion(lang);
+    				    nombreUA = traUA != null ? ((TraduccionUA)traUA).getAbreviatura() : "";
+    					idUA = ficha.getUnidadAdministrativa().getId().toString();
+    					if (nombreUA == null || "".equals(nombreUA)) {
+    					    nombreUA = idUA;
+    					}
+    				}
+    					    				
+	    			map = new HashMap<String, String>(2);
+    				map.put("id", ficha.getFicha().getId().toString());
+    				map.put("nombre", nombre);
+    				map.put("orden", String.valueOf(ficha.getOrdenseccion()));
+    				map.put("caducado", ficha.getFicha().isVisible().booleanValue() ? "S" : "N");
+    				map.put("idUA", idUA);
+    				map.put("nomUA", nombreUA);
+    				map.put("idMainItem", seccion.getId().toString());
+    				map.put("idRelatedItem", ficha.getFicha().getId().toString());
+    				
+    				llistaFitxes.add(map);
+    				
+				}
+				
+			}
+			
+			resultats.put("fitxesInformatives", llistaFitxes);
+			
+        } else {
+        	
+            resultats.put("fitxesInformatives", null);
+            
+        }
+    	
     }
     
 }

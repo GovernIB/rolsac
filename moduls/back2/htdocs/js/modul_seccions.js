@@ -761,7 +761,6 @@ function CModulSeccio() {
 				update: function(event, ui) {
 					ModulFitxes.calculaOrden(ui, "origen");
 					that.contaFitxesSeleccionades();
-					Detall.modificado();
 				}
 			}).css({cursor:"url(../img/cursor/grab.cur), move"});
 
@@ -948,7 +947,6 @@ function CModulSeccio() {
 			var itemLista = jQuery(this).parents("li:first");
 			that.eliminaItem(itemLista);
 			that.contaSeleccionats();
-			Detall.modificado();
 
 		});
 		
@@ -1296,9 +1294,6 @@ function CEscriptoriSeccio() {
 
 		// Marcamos el modulo como modificado
 		ModulSeccions.modificado();
-
-		// Marcamos el formulario como modificado para habilitar el boton de guardar.
-		Detall.modificado();
 
 		this.torna();
 		
@@ -1660,9 +1655,6 @@ function CEscriptoriSeccioFitxes() {
 
 		// Marcamos el modulo como modificado.
 		ModulSeccions.modificado();
-
-		// Marcamos el formulario como modificado para habilitar el boton de guardar.
-		Detall.modificado();
 
 		this.torna();
 		

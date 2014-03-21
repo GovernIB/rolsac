@@ -556,8 +556,6 @@ function CDetall() {
 		$per_select.parent().parent().show();
 		$per_select.change();
 
-		ModulFitxes.inicializarFichas(dades.fitxesInformatives);
-
 		$("#modulLateral li.btnEliminar").show();
 		$("#modulPrincipal div#cercador").show();
 
@@ -719,6 +717,7 @@ function CDetall() {
 			console.log("Entrando en CDetall.pintarModulos");
 		
 		ModulSeccions.inicializarSecciones(dades.seccionsRelacionades);
+		ModulFitxes.inicializarFichas(dades.fitxesInformatives);
 		
 		if (debug)
 			console.log("Saliendo de CDetall.pintarModulos");
