@@ -14,12 +14,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import es.caib.rolsac.api.v2.rolsac.ejb.RolsacQueryServiceEJB;
-
-
 public class AxisSSLSocketFactory extends JSSESocketFactory implements SecureSocketFactory
 {
-	private static Log logger = LogFactory.getLog(RolsacQueryServiceEJB.class);
+	private static Log logger = LogFactory.getLog(AxisSSLSocketFactory.class);
 	private static String MY_KEYSTORE_PASSWORD;
 	// local keystore file (contains the self-signed certificate from the server)
 	private static String RESOURCE_PATH_TO_KEYSTORE;
