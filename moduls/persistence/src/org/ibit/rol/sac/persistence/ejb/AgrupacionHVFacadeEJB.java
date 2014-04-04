@@ -1,17 +1,14 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import net.sf.hibernate.Criteria;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
-import net.sf.hibernate.expression.Order;
 
 import org.ibit.rol.sac.model.AgrupacionHechoVital;
 import org.ibit.rol.sac.model.Archivo;
@@ -33,17 +30,46 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  *
  * @ejb.transaction type="Required"
  */
-public abstract class AgrupacionHVFacadeEJB extends HibernateEJB
-{
+public abstract class AgrupacionHVFacadeEJB extends HibernateEJB {
+	
 	/**
 	 * @ejb.create-method
 	 * @ejb.permission unchecked="true"
 	 */
-	public void ejbCreate() throws CreateException
-	{
+	public void ejbCreate() throws CreateException {
 		super.ejbCreate();
 	}
 	
+	/**
+	 * Crea o actualiza una Agrupacion Hecho Vital.
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission role-name="${role.system},${role.admin}"
+	 * @param agrHechoVital	Agrupación de hechos vitales a guardar.
+	 * @return Identificador de la agrupación de hechos vitales.
+	 */
+	public Long guardarAgrupacionHV(AgrupacionHechoVital agrHechoVital) {
+		
+		Session session = getSession();
+		
+		try {
+		
+			session.saveOrUpdate(agrHechoVital);
+			session.flush();
+			
+			return agrHechoVital.getId();
+			
+		} catch (HibernateException he) {
+			
+			throw new EJBException(he);
+			
+		} finally {
+			
+			close(session);
+			
+		}
+		
+	}
 	
 	/**
 	 * Crea o actualiza una Agrupacion Hecho Vital.
@@ -54,10 +80,12 @@ public abstract class AgrupacionHVFacadeEJB extends HibernateEJB
 	 * @param listaHechosVitalesAsignados	Listado de hechos vitales asignados a la agrupación de hchos vitales.
 	 * @return Identificador de la agrupación de hechos vitales.
 	 */
-	public Long guardarAgrupacionHV(AgrupacionHechoVital agrHechoVital, List<HechoVitalAgrupacionHV> listaHechosVitalesAsignados)
-	{
+	public Long guardarAgrupacionHV(AgrupacionHechoVital agrHechoVital, List<HechoVitalAgrupacionHV> listaHechosVitalesAsignados) {
+		
 		Session session = getSession();
+		
 		try {
+		
 			for (HechoVitalAgrupacionHV hechoVitalAgrupacionHV : listaHechosVitalesAsignados) {
 				if (hechoVitalAgrupacionHV != null) {
 					session.delete(hechoVitalAgrupacionHV);
@@ -68,16 +96,22 @@ public abstract class AgrupacionHVFacadeEJB extends HibernateEJB
 			for (HechoVitalAgrupacionHV hechoVitalAgrupacionHV : listaHechoVitalAgrupacionHV) {
 				session.saveOrUpdate(hechoVitalAgrupacionHV);
 			}
+		
 			session.saveOrUpdate(agrHechoVital);
 			session.flush();
 			
 			return agrHechoVital.getId();
 			
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
 	
 	

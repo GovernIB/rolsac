@@ -250,21 +250,15 @@ public class TMAgrupacioFetsVitalsController extends PantallaBaseController {
                 return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);                
             } 
     		
-            AgrupacionHVDelegate agrupacioVFDelegate = DelegateUtil.getAgrupacionHVDelegate();
+            AgrupacionHVDelegate agrupacionHVDelegate = DelegateUtil.getAgrupacionHVDelegate();
+            Long id = ParseUtil.parseLong(valoresForm.get("item_id"));
             
-            AgrupacionHechoVital agrupacioFetVital = new AgrupacionHechoVital();
-            
-			Long id = ParseUtil.parseLong(valoresForm.get("item_id"));
-			if (id != null) { 
-				agrupacioFetVital = agrupacioVFDelegate.obtenerAgrupacionHV(id);
-			} else {									
-				agrupacioFetVital = new AgrupacionHechoVital();
-			}
+            AgrupacionHechoVital agrupacioFetVital = (id != null) ? agrupacionHVDelegate.obtenerAgrupacionHV(id) : new AgrupacionHechoVital();
 			
 			agrupacioFetVital.setCodigoEstandar(codiEstandard);
 			
 			//Public objectiu
-			Long publicObjectiuId = ParseUtil.parseLong(valoresForm .get("item_public_objectiu"));
+			Long publicObjectiuId = ParseUtil.parseLong(valoresForm.get("item_public_objectiu"));
 			if (publicObjectiuId != null) {
 				PublicoObjetivoDelegate publicoObjectiuDelegate = DelegateUtil.getPublicoObjetivoDelegate();
 				PublicoObjetivo publicObjectiu = publicoObjectiuDelegate.obtenerPublicoObjetivo(publicObjectiuId);
@@ -315,6 +309,8 @@ public class TMAgrupacioFetsVitalsController extends PantallaBaseController {
 				traduccions.put(lang, tafv);
 			}
 			agrupacioFetVital.setTraduccionMap(traduccions);
+			
+			agrupacionHVDelegate.guardarAgrupacionHV(agrupacioFetVital);
 			            
             String ok = messageSource.getMessage("agrupacioFV.guardat.correcte", null, request.getLocale());
             result = new IdNomDTO(agrupacioFetVital.getId(), ok);

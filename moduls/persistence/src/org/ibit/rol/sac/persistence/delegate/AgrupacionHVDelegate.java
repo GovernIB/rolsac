@@ -73,13 +73,20 @@ public class AgrupacionHVDelegate implements StatelessDelegate
         }
     }
 	
+	public Long guardarAgrupacionHV(AgrupacionHechoVital hechov) throws DelegateException {
+   	 	try {
+            return getFacade().guardarAgrupacionHV(hechov);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+	}
+	
     public Long guardarAgrupacionHV(AgrupacionHechoVital hechov, List<HechoVitalAgrupacionHV> llistaFetsVitalsOld) throws DelegateException {
     	 try {
              return getFacade().guardarAgrupacionHV(hechov,llistaFetsVitalsOld);
          } catch (RemoteException e) {
              throw new DelegateException(e);
          }
-		
 	}
     
     /* ========================================================= */
