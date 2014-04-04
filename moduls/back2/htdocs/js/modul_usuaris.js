@@ -205,7 +205,7 @@ function CEscriptoriUsuari() {
 //			codi_cap4 = "<div class=\"th email" + ordre_c4 + "\" role=\"columnheader\">" + txtEmail + "</div>";
 			
 			// codi taula
-			codi_taula = "<div class=\"table llistat\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\">";
+			codi_taula = "<div class=\"table usuaris llistat\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\">";
 			
 			// codi cap + cuerpo
 			codi_taula += "<div class=\"thead\">";
