@@ -5,8 +5,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -28,13 +26,11 @@ import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.PerfilCiudadano;
 import org.ibit.rol.sac.model.TraduccionMateria;
 import org.ibit.rol.sac.model.TraduccionPerfilCiudadano;
-import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.UnidadMateria;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.delegate.IconoMateriaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
 import org.ibit.rol.sac.persistence.delegate.PerfilDelegate;
@@ -48,6 +44,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.controller.PantallaBaseController;
+import es.caib.rolsac.back2.util.CargaModulosLateralesUtil;
 import es.caib.rolsac.back2.util.GuardadoAjaxUtil;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
@@ -231,11 +228,16 @@ public class TMMateriesController extends PantallaBaseController {
 			
 			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
-
 			Materia materia = materiaDelegate.obtenerMateria(id);
-			recuperaIconoPerfil( (List<IconoMateria>)materiaDelegate.obtenerIconosPerfil(id), id );
-			recuperaUaRelacionadas( materiaDelegate.listarUAsMateria(id), materia, lang );
-
+			
+			List<IconoMateria> listaIconos = materiaDelegate.obtenerIconosPerfil(id);
+			resultats.put("icones", CargaModulosLateralesUtil.recuperaIconosRelacionados(listaIconos, IconoMateria.class, id));
+			
+			List<UnidadAdministrativa> listaUAs = materiaDelegate.listarUAsMateria(id);
+			resultats.put("uas", CargaModulosLateralesUtil.recuperaUAsRelacionadas(listaUAs, materia.getId(), lang, false));
+			resultats.put("item_ua_principal", getUAPrincipal(materia.getUnidadesmaterias()));
+			resultats.put("item_destacada", materia.isDestacada());			
+			
 		} catch (DelegateException e) {
 
 			log.error(ExceptionUtils.getStackTrace(e));
@@ -249,135 +251,6 @@ public class TMMateriesController extends PantallaBaseController {
 
 		return resultats;
 
-	}
-	
-	private void recuperaIconoPerfil(List<IconoMateria> iconos, Long id) {
-		
-		if (iconos != null) {
-
-			Map<String, Object> iconaDTO;
-			List<Map<String, Object>> llistaIcones = new ArrayList<Map<String, Object>>();
-			
-			for (IconoMateria icona : iconos) {
-				
-				if (icona != null && StringUtils.isNotEmpty(icona.getNombre()) ) {
-					
-					iconaDTO = new HashMap<String, Object>(3);
-					iconaDTO.put("id", icona.getId());
-					iconaDTO.put("nombre", icona.getNombre());
-					iconaDTO.put("idMainItem", id);
-					iconaDTO.put("idRelatedItem", icona.getId());
-					
-					llistaIcones.add(iconaDTO);
-					
-				} else {
-					
-					log.error("La materia " + id + " te una icona null o sense arxiu.");
-					
-				}
-				
-			}
-			
-			resultats.put("icones", llistaIcones);
-
-		} else {
-			
-			resultats.put("icones", null);
-
-		}
-		
-	}
-	
-	private void recuperaUaRelacionadas(List<UnidadAdministrativa> uas, Materia materia, String lang) {
-		
-		List<UnidadAdministrativa> listaUAs = uas;
-
-		// Ordenamos las UAs por nombre, ascendente.
-		Collections.sort(listaUAs, new Comparator<UnidadAdministrativa>() {
-
-			public int compare(UnidadAdministrativa o1, UnidadAdministrativa o2) {
-
-				TraduccionUA tr1 = (TraduccionUA)o1.getTraduccion();
-				TraduccionUA tr2 = (TraduccionUA)o2.getTraduccion();
-
-				if (tr1 == null) {
-
-					return -1;
-
-				} else if (tr2 == null) {
-
-					return 1;
-
-				} else {
-
-					String nombre1 = tr1.getNombre();
-					String nombre2 = tr2.getNombre();
-
-					// TODO amartin 30/10/2013: código comentado para compatibilidad con JDK 1.6.
-        			// Habría que encontrar un modo de normalizar las cadenas de texto que sea compatible 
-        			// en JDK1.5 y 1.6 ó superior a la vez. Ahora mismo el problema es que la clase Normalizer pertenece a:
-        			// - Package java.text.Normalizer en 1.6
-        			// - Package sun.text.Normalizer en 1.5.
-        			            			
-        			/*
-        			// Normalizamos y pasamos a ASCII para ordenar ignorando acentos o resto de caracteres extraños.
-        			nombre1 = Normalizer.normalize(nombre1, Normalizer.DECOMP_COMPAT, 0).replaceAll("[^\\p{ASCII}]", "");
-        			nombre2 = Normalizer.normalize(nombre2, Normalizer.DECOMP_COMPAT, 0).replaceAll("[^\\p{ASCII}]", "");
-        			*/
-        			
-        			// Normalización básica temporal, hasta pasar definitivamente a JDK1.6 ó superior
-        			// y así poder usar la clase java.text.Normalizer.
-        			nombre1 = nombre1.replaceAll("[\u00E0\u00E1]", "a"); // áà
-					nombre1 = nombre1.replaceAll("[\u00E8\u00E9]", "e"); // éè
-					nombre1 = nombre1.replaceAll("[\u00ED\u00EE]", "i"); // íì
-					nombre1 = nombre1.replaceAll("[\u00F2\u00F3]", "o"); // óò
-					nombre1 = nombre1.replaceAll("[\u00F9\u00FA]", "u"); // úù
-					nombre1 = nombre1.replaceAll("[\u00C0\u00C1]", "A"); // ÁÀ
-					nombre1 = nombre1.replaceAll("[\u00C8\u00C9]", "E"); // ÉÈ
-					nombre1 = nombre1.replaceAll("[\u00CC\u00CD]", "I"); // ÍÌ
-					nombre1 = nombre1.replaceAll("[\u00D2\u00D3]", "O"); // ÓÒ
-					nombre1 = nombre1.replaceAll("[\u00D9\u00DA]", "U"); // ÚÙ    					
-					
-					nombre2 = nombre2.replaceAll("[\u00E0\u00E1]", "a"); // áà
-					nombre2 = nombre2.replaceAll("[\u00E8\u00E9]", "e"); // éè
-					nombre2 = nombre2.replaceAll("[\u00ED\u00EE]", "i"); // íì
-					nombre2 = nombre2.replaceAll("[\u00F2\u00F3]", "o"); // óò
-					nombre2 = nombre2.replaceAll("[\u00F9\u00FA]", "u"); // úù
-					nombre2 = nombre2.replaceAll("[\u00C0\u00C1]", "A"); // ÁÀ
-					nombre2 = nombre2.replaceAll("[\u00C8\u00C9]", "E"); // ÉÈ
-					nombre2 = nombre2.replaceAll("[\u00CC\u00CD]", "I"); // ÍÌ
-					nombre2 = nombre2.replaceAll("[\u00D2\u00D3]", "O"); // ÓÒ
-					nombre2 = nombre2.replaceAll("[\u00D9\u00DA]", "U"); // ÚÙ    					
-
-					return nombre1.compareToIgnoreCase(nombre2);
-
-				}
-
-			}
-
-		});
-
-		List<Map<String, Object>> listaUAsDTO = new ArrayList<Map<String, Object>>();
-		Iterator<UnidadAdministrativa> it = listaUAs.iterator();
-		
-		while (it.hasNext()) {
-			
-			UnidadAdministrativa ua = it.next();
-			
-			Map<String, Object> uaDTO = new HashMap<String, Object>();
-			uaDTO.put("id", ua.getId());
-			uaDTO.put("nombre", ua.getNombreUnidadAdministrativa(lang));
-			uaDTO.put("idMainItem", materia.getId());
-			uaDTO.put("idRelatedItem", ua.getId());
-			
-			listaUAsDTO.add(uaDTO);
-			
-		}
-		
-		resultats.put("uas", listaUAsDTO);
-		resultats.put("item_ua_principal", getUAPrincipal(materia.getUnidadesmaterias()));
-		resultats.put("item_destacada", materia.isDestacada());
-	
 	}
 
 	private void omplirCampsTraduibles(Map<String, Object> resultats, Materia materia) throws DelegateException {

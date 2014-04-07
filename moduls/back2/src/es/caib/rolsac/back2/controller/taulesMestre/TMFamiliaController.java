@@ -26,7 +26,6 @@ import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.FamiliaDelegate;
-import org.ibit.rol.sac.persistence.delegate.IconoFamiliaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.PerfilDelegate;
 import org.springframework.stereotype.Controller;
@@ -34,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.controller.PantallaBaseController;
+import es.caib.rolsac.back2.util.CargaModulosLateralesUtil;
 import es.caib.rolsac.back2.util.GuardadoAjaxUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.utils.ResultadoBusqueda;
@@ -192,40 +192,10 @@ public class TMFamiliaController extends PantallaBaseController {
 			FamiliaDelegate familiaDelegate = DelegateUtil.getFamiliaDelegate();
 			Familia familia = familiaDelegate.obtenerFamilia(id);
 			
-			if (familia.getIconos() != null) {
-				
-				Map<String, Object> iconaDTO;
-				List<Map<String, Object>> llistaIcones = new ArrayList<Map<String, Object>>();
-				Set<IconoFamilia> iconos = (Set<IconoFamilia>)familia.getIconos();
-				
-				for (IconoFamilia icono : iconos) {
-					
-					if ( icono != null && icono.getIcono() != null ) {
-						
-						iconaDTO = new HashMap<String, Object>();
-						iconaDTO.put("id", icono.getId());
-						iconaDTO.put("nombre", icono.getIcono().getNombre());
-						iconaDTO.put("idMainItem", id);
-						iconaDTO.put("idRelatedItem", icono.getId());
-						
-						llistaIcones.add(iconaDTO);
-						
-					} else {
-						
-						log.error("La família " + familia.getId() + " te una icona null o sense arxiu.");
-						
-					}
-					
-				}
-				
-				resultats.put("icones", llistaIcones);
-				
-			} else {
-				
-				resultats.put("icones", null);
-				
-			}
-   			
+			//  Pasamos el Set de iconos relacionados a un List.
+			List<IconoFamilia> listaIconos = new ArrayList<IconoFamilia>(familia.getIconos());
+			resultats.put("icones", CargaModulosLateralesUtil.recuperaIconosRelacionados(listaIconos, IconoFamilia.class, id));
+			   			
    		} catch (DelegateException dEx) {
 
    			log.error(ExceptionUtils.getStackTrace(dEx));

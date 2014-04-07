@@ -45,6 +45,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.controller.PantallaBaseController;
+import es.caib.rolsac.back2.util.CargaModulosLateralesUtil;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.utils.ResultadoBusqueda;
@@ -387,35 +388,12 @@ public class TMAgrupacioMateriesController extends PantallaBaseController {
 		
 		try {
 			
+			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			
+			// Materias relacionadas
 			List<Materia> materias = DelegateUtil.getMateriaAgrupacionMDelegate().obtenerMateriasRelacionadas(id, obtenerIdioma());
-			
-			if (materias.size() > 0) {
-
-				List<Map<String, String>> llistaMateriesAgrupacio = new ArrayList<Map<String, String>>(materias.size());
-				Map<String, String> map;
-
-				for (Materia materia : materias) {
-
-					map = new HashMap<String, String>();
-
-					map.put("id", String.valueOf(materia.getId()));
-					map.put("nom", materia.getNombre());
-					map.put("orden", String.valueOf( materia.getOrden() ));
-					map.put("idMainItem", String.valueOf(id));
-					map.put("idRelatedItem", String.valueOf(materia.getId()));
-					
-					llistaMateriesAgrupacio.add(map);
-
-				}
-
-				resultats.put("materies", llistaMateriesAgrupacio);
-
-			} else {
-
-				resultats.put("materies", null);
-
-			}
-			
+			resultats.put("materies", CargaModulosLateralesUtil.recuperaMateriasRelacionadas(materias, id, null, true));
+						
 		} catch (DelegateException dEx) {
 
 			log.error(ExceptionUtils.getStackTrace(dEx));

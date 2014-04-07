@@ -43,7 +43,6 @@ import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.TraduccionCatalegDocuments;
 import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.TraduccionExcepcioDocumentacio;
-import org.ibit.rol.sac.model.TraduccionHechoVital;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
@@ -74,6 +73,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.back2.util.CargaModulosLateralesUtil;
 import es.caib.rolsac.back2.util.GuardadoAjaxUtil;
 import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.LlistatUtil;
@@ -345,15 +345,25 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		try {
 			
 			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			List<String> idiomas = DelegateUtil.getIdiomaDelegate().listarLenguajes();
 			
 			ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
 			ProcedimientoLocal proc = procedimientoDelegate.obtenerProcedimientoNewBack(id);
 			
-            recuperaMaterias(resultats, proc, lang, id);        // Recuperar las materias asociadas a un procedimiento
-            recuperaNormativas(resultats, proc, lang, id);      // Recuperar las normativas asociadas a un procedimiento
-            recuperaDocs(resultats, proc);                  // Recuperar los documentos relacionados de un procedimiento
-            recuperaHechosVitales(resultats, proc, lang, id);   // Recuperar los hechos vitales asociados a un procedimiento
-
+			//  Pasamos el Set de materias relacionados a un List.
+			List<Materia> listaMaterias = new ArrayList<Materia>(proc.getMaterias());
+            resultats.put("materies", CargaModulosLateralesUtil.recuperaMateriasRelacionadas(listaMaterias, id, lang, false));
+            
+            // Pasamos el Set de HHVV relacionados a un List.
+            List<HechoVitalProcedimiento> listaHechosVitales = new ArrayList<HechoVitalProcedimiento>(proc.getHechosVitalesProcedimientos());
+            resultats.put("fetsVitals", CargaModulosLateralesUtil.recuperaHechosVitalesRelacionados(listaHechosVitales, HechoVitalProcedimiento.class, id, lang, true));
+            
+			// Documentos relacionados.
+			List<Documento> listaDocumentos = proc.getDocumentos();
+			resultats.put("documents", CargaModulosLateralesUtil.recuperaDocumentosRelacionados(listaDocumentos, id, idiomas, true));
+           
+			recuperaNormativas(resultats, proc, lang, id);      // Recuperar las normativas asociadas a un procedimiento
+			
 		} catch (DelegateException dEx) {
 
 			log.error(ExceptionUtils.getStackTrace(dEx));
@@ -399,16 +409,17 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			
 			Map<String, Object> mapDoc;
 			List<Map<String, Object>> listaDocumentosDTO = new ArrayList<Map<String, Object>>();
-			List<Documento> listaDocumentos = proc.getDocumentos();
 			List<String> idiomas = DelegateUtil.getIdiomaDelegate().listarLenguajes();
 
+			// Ordenamos los documentos.
+			List<Documento> listaDocumentos = proc.getDocumentos();
+			
 			for (Documento doc : listaDocumentos) {
 				
 				if (doc != null) {
 				    
 					// Montar map solo con los campos 'titulo' de las traducciones del documento.
 					Map<String, String> titulos = new HashMap<String, String>();
-
 					String nombre;
 					TraduccionDocumento traDoc;
 
@@ -475,39 +486,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	}
 
 	/*
-	 * Función para recuperar la materias de un procedimiento
-	 */
-	private void recuperaMaterias(Map<String, Object> resultats, ProcedimientoLocal proc, String lang, long idProcedimiento) {
-
-		if (proc.getMaterias() != null) {
-			
-			List<Map<String, String>> listaMateriasProcedimiento = new ArrayList<Map<String, String>>();
-			Map<String, String> map;
-			
-			for (Materia materia : proc.getMaterias()) {
-
-				map = new HashMap<String, String>();
-
-				map.put("id", String.valueOf(materia.getId()));
-				map.put("nom", materia.getNombreMateria(lang));
-				map.put("idMainItem", String.valueOf(proc.getId()));
-				map.put("idRelatedItem", String.valueOf(materia.getId()));
-				
-				listaMateriasProcedimiento.add(map);
-
-			}
-						
-			resultats.put("materies", listaMateriasProcedimiento);
-
-		} else {
-		
-			resultats.put("materies", null);
-		
-		}
-		
-	}
-
-	/*
 	 * Función para recuperar los públicos objeticos de un procedimiento
 	 */
 	private void recuperaPO(Map<String, Object> resultats, ProcedimientoLocal proc, String lang) {
@@ -528,34 +506,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			resultats.put("publicsObjectiu", null);
 			
 		}
-		
-	}
-
-	/*
-	 * Función para recuperar los hechos vitales de un procedimiento
-	 */
-	private void recuperaHechosVitales(Map<String, Object> resultats, ProcedimientoLocal proc, String lang, long idProcedimiento) {
-
-		List<Map<String, Object>> llistaFetsDTO = new ArrayList<Map<String, Object>>();
-		
-		for (HechoVitalProcedimiento hechoVitalProc : proc.getHechosVitalesProcedimientos()) {
-			
-			TraduccionHechoVital thv = (TraduccionHechoVital) hechoVitalProc.getHechoVital().getTraduccion(lang);
-			
-			Map<String, Object> hvpDTO = new HashMap<String, Object>();
-			hvpDTO.put("id", hechoVitalProc.getHechoVital().getId());
-			hvpDTO.put("nom", thv.getNombre());
-			hvpDTO.put("orden", hechoVitalProc.getOrden());
-			hvpDTO.put("idMainItem", idProcedimiento);
-			hvpDTO.put("idRelatedItem", hechoVitalProc.getHechoVital().getId());
-			
-			llistaFetsDTO.add(hvpDTO);
-			
-		}
-		
-		Collections.sort(llistaFetsDTO, new HechoVitalProcedimientoDTOComparator());
-		
-		resultats.put("fetsVitals", llistaFetsDTO);
 		
 	}
 
@@ -637,7 +587,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			if (request.getParameter("publicsObjectiu") == null || request.getParameter("publicsObjectiu").equals("")) {
 				error = messageSource.getMessage("proc.error.falta.public", null, request.getLocale());
 				return result = new IdNomDTO(-3l, error);
-
 			}
 
 			ProcedimientoDelegate procedimentDelegate = DelegateUtil.getProcedimientoDelegate();
@@ -654,19 +603,17 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				edicion = false;
 			}
 
-			procediment = guardarProcedimientoAntiguo(edicion, procediment, procedimentOld);	// Si estamos guardando un procedimiento ya existente en vez de uno nuevo
-			procediment = guardarPublicoObjetivo(request, edicion, procediment, procedimentOld);// Procesar Público Objectivo
-			procediment = guardarTramites(request, edicion, procediment, procedimentOld);		// Actualizar la lista de Trámites
-			
+			procediment = guardarVersion(request, procediment, procedimentOld, error);			// Versión
+			procediment = guardarPublicoObjetivo(request, procediment, procedimentOld);			// Procesar Público Objectivo
 			procediment = guardarIdioma(request, procediment, procedimentOld);       			// Idiomas
 			procediment = guardarValidacion(request, procediment, procedimentOld, error);		// Validación
 			procediment = guardarFechaPublicacion(request, procediment);						// Fecha Publicación
 			procediment = guardarFechaCaducidad(request, procediment);							// Fecha Caducidad
 			procediment = guardarIniciacion(request, procediment, error);				    	// Iniciación
 			procediment = guardarFamilia(request, procediment, error);							// Familia
-			procediment = guardarVersion(request, edicion, procediment, procedimentOld, error);	// Versión
 			procediment = guardarOrganResolutori(request, procediment, error);					// Organ Resolutori
-			procediment = guardarUnidadAdministrativa(request, procediment, error);             // Unidad Administrativa
+			procediment = guardarUnidadAdministrativa(request, procediment, error);             // Unidad Administrativa			
+			
 			procediment.setResponsable(request.getParameter("item_responsable"));				// Responsable
 			procediment.setSignatura(request.getParameter("item_codigo_pro"));					// Signatura
 			procediment.setInfo(request.getParameter("item_notes"));							// Info
@@ -675,10 +622,10 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			procediment.setVentanillaUnica("on".equalsIgnoreCase(request.getParameter("item_finestreta_unica")) ? "1" : "0");	// Ventanilla Única
 
 			if (edicion) {
-				procediment.setTramite(procedimentOld.getTramite());							// Tramite
-				procediment.setUrl(procedimentOld.getUrl());									// URL
-				// Provisional, hasta que este activada la SEU --> procediment.setTramite(request.getParameter("item_tramite"));
-				// Provisional, hasta que este activada la SEU --> procediment.setUrl(request.getParameter("item_url"));
+				
+				procediment = guardarProcedimientoAntiguo(procediment, procedimentOld);		// Si estamos guardando un procedimiento ya existente en vez de uno nuevo
+				procediment = guardarTramites(request, procediment, procedimentOld);		// Actualizar la lista de Trámites
+				
 			}
 
 			Long procId = guardarGrabar(procediment);
@@ -715,29 +662,24 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	/*
 	 * Guardamos el procedimiento anterior si se trata de una edición. 
 	 */
-	private ProcedimientoLocal guardarProcedimientoAntiguo(boolean edicion, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld) {
+	private ProcedimientoLocal guardarProcedimientoAntiguo(ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld) {
 
-		if (edicion) {
-			// Mantenemos los valores originales que tiene el procedimiento.
-			// procediment.setUnidadAdministrativa(procedimentOld.getUnidadAdministrativa());
-			procediment.setId(procedimentOld.getId());
-			procediment.setHechosVitalesProcedimientos(procedimentOld.getHechosVitalesProcedimientos());
-			procediment.setTramites(procedimentOld.getTramites());
-			procediment.setOrganResolutori(procedimentOld.getOrganResolutori());
-			procediment.setMaterias(procedimentOld.getMaterias());
-			procediment.setPublicosObjetivo(procedimentOld.getPublicosObjetivo());
-			procediment.setNormativas(procedimentOld.getNormativas());
-		}
+		// Mantenemos los valores originales que tiene el procedimiento.
+		procediment.setId(procedimentOld.getId());
+		procediment.setTramites(procedimentOld.getTramites());
+		procediment.setOrganResolutori(procedimentOld.getOrganResolutori());
+		procediment.setPublicosObjetivo(procedimentOld.getPublicosObjetivo());
 		
 		return procediment;
+		
 	}
-
 
 	/*
 	 * Para hacer menos accesos a BBDD se comprueba si es edicion o no.
 	 * En el primer caso es bastante probable que se repitan la mayoria de public objectiu.
 	 */
-	private ProcedimientoLocal guardarPublicoObjetivo(HttpServletRequest request, boolean edicion, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld) throws NumberFormatException, DelegateException {
+	private ProcedimientoLocal guardarPublicoObjetivo(HttpServletRequest request, ProcedimientoLocal procediment, 
+			ProcedimientoLocal procedimentOld) throws DelegateException {
 
 	    if (isModuloModificado("modul_public_modificat", request)) {
 
@@ -764,52 +706,55 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	/*
 	 * Controlar los trámites modificados
 	 */
-	private ProcedimientoLocal guardarTramites(HttpServletRequest request, boolean edicion, ProcedimientoLocal procediment, ProcedimientoLocal procedimentOld) throws DelegateException {
+	private ProcedimientoLocal guardarTramites(HttpServletRequest request, ProcedimientoLocal procediment, 
+			ProcedimientoLocal procedimentOld) throws DelegateException {
+			
+	    TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
+	    ArrayList<Long> tramitesParaActualizar = new ArrayList<Long>();
+	    List<Tramite> tramitesParaCrear = null;
+	    List<String> idsNuevosTramites = Arrays.asList(request.getParameter("tramitsProcediment").split(","));
 
-		if (edicion) {
-		    TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
-		    ArrayList<Long> tramitesParaActualizar = new ArrayList<Long>();
-		    List<Tramite> tramitesParaCrear = null;
-		    List<String> idsNuevosTramites = Arrays.asList(request.getParameter("tramitsProcediment").split(","));
+	    if (idsNuevosTramites.size() == 1 && idsNuevosTramites.get(0).equals("")) {
+	    	
+	        // La lista esta vacia y por tanto se pueden borrar todos
+	        for (Tramite tramite : procedimentOld.getTramites()) {
+	            DelegateUtil.getProcedimientoDelegate().eliminarTramite(tramite.getId(), procediment.getId());
+                tramiteDelegate.borrarTramite(tramite.getId());
+	        }
 
-		    if (idsNuevosTramites.size() == 1 && idsNuevosTramites.get(0).equals("")) {
-		        // La lista esta vacia y por tanto se pueden borrar todos
-		        for (Tramite tramite : procedimentOld.getTramites()) {
-		            DelegateUtil.getProcedimientoDelegate().eliminarTramite(tramite.getId(), procediment.getId());
-                    tramiteDelegate.borrarTramite(tramite.getId());
-		        }
+	    } else {
+	    	
+	        // La lista no esta vacia y se deben gestionar los que se han eliminado de la lista
+	        HashMap<Long, Tramite> tramitesParaEliminar = new HashMap<Long, Tramite>();
+	        for (Tramite tramite : procedimentOld.getTramites()) {
+	            if (tramite != null) {
+	                tramitesParaEliminar.put(tramite.getId(), tramite);
+	            }
+	        }
 
-		    } else {
-		        // La lista no esta vacia y se deben gestionar los que se han eliminado de la lista
-		        HashMap<Long, Tramite> tramitesParaEliminar = new HashMap<Long, Tramite>();
-		        for (Tramite tramite : procedimentOld.getTramites()) {
-		            if (tramite != null) {
-		                tramitesParaEliminar.put(tramite.getId(), tramite);
-		            }
-		        }
+	        // Lista para actualizar el orden
+	        tramitesParaCrear = new ArrayList<Tramite>();
+	        for (String id : idsNuevosTramites) {
+	            tramitesParaActualizar.add(Long.parseLong(id));
+	            tramitesParaCrear.add(tramitesParaEliminar.get(Long.parseLong(id)));
+	            tramitesParaEliminar.remove(Long.parseLong(id));
+	        }
 
-		        // Lista para actualizar el orden
-		        tramitesParaCrear = new ArrayList<Tramite>();
-		        for (String id : idsNuevosTramites) {
-		            tramitesParaActualizar.add(Long.parseLong(id));
-		            tramitesParaCrear.add(tramitesParaEliminar.get(Long.parseLong(id)));
-		            tramitesParaEliminar.remove(Long.parseLong(id));
-		        }
+	        // Eliminar los que no han sido quitados de la lista
+	        for (Tramite tramite : tramitesParaEliminar.values()) {
+	            DelegateUtil.getProcedimientoDelegate().eliminarTramite(tramite.getId(), procediment.getId());
+	            tramiteDelegate.borrarTramite(tramite.getId());
+	        }
+	        
+	    }
 
-		        // Eliminar los que has sido quitados de la lista
-		        for (Tramite tramite : tramitesParaEliminar.values()) {
-		            DelegateUtil.getProcedimientoDelegate().eliminarTramite(tramite.getId(), procediment.getId());
-		            tramiteDelegate.borrarTramite(tramite.getId());
-		        }
-		    }
-
-			// Actualizar orden y añadir los tràmites 
-			if (tramitesParaActualizar.size() > 0) {
-			    DelegateUtil.getProcedimientoDelegate().actualizarOrdenTramites(tramitesParaActualizar);
-			}
-			procediment.setTramites(tramitesParaCrear);
+		// Actualizar orden y añadir los trámites 
+		if (tramitesParaActualizar.size() > 0) {
+		    DelegateUtil.getProcedimientoDelegate().actualizarOrdenTramites(tramitesParaActualizar);
 		}
-
+		
+		procediment.setTramites(tramitesParaCrear);
+		
 		return procediment;
 		
 	}
@@ -868,7 +813,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		} catch (NumberFormatException e) {
 			
 			error = messageSource.getMessage("proc.error.estat.incorrecte", null, request.getLocale());
-			throw new NumberFormatException();
+			throw new NumberFormatException(e.getMessage());
 			
 		}
 
@@ -936,7 +881,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		} catch (NumberFormatException e) {
 			
 			error = messageSource.getMessage("proc.error.formaIniciacio.incorrecta", null, request.getLocale());
-			throw new NumberFormatException();
+			throw new NumberFormatException(e.getMessage());
 			
 		}
 
@@ -960,7 +905,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		} catch (NumberFormatException e) {
 			
 			error = messageSource.getMessage("proc.error.familia.incorrecte", null, request.getLocale());
-			throw new NumberFormatException();
+			throw new NumberFormatException(e.getMessage());
 			
 		}
 
@@ -971,7 +916,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
     /*
 	 * Controlamos la versión del procedimiento.
 	 */
-	private ProcedimientoLocal guardarVersion(HttpServletRequest request, boolean edicion, ProcedimientoLocal procediment, 
+	private ProcedimientoLocal guardarVersion(HttpServletRequest request, ProcedimientoLocal procediment, 
 			ProcedimientoLocal procedimentOld, String error) {
 
 		try {
@@ -983,18 +928,12 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				Long version = Long.parseLong(versionStr);
 				procediment.setVersion(version);
 
-			} else {
-				
-			    /* Provisional, hasta que este activada la SEU */
-				if (edicion)
-					procediment.setVersion(procedimentOld.getVersion());
-
 			}
 			
 		} catch (NumberFormatException e) {
 			
 			error = messageSource.getMessage("proc.error.versio.incorrecte", null, request.getLocale());
-			throw new NumberFormatException();
+			throw new NumberFormatException(e.getMessage());
 			
 		}
 
@@ -1020,7 +959,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			} catch (NumberFormatException e) {
 				
 				error = messageSource.getMessage("proc.error.organ.incorrecte", null, request.getLocale());
-				throw new NumberFormatException();
+				throw new NumberFormatException(e.getMessage());
 				
 			}
 			
@@ -1046,7 +985,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		} catch (NumberFormatException e) {
 			
 			error = messageSource.getMessage("proc.error.organ.responsable.incorrecte", null, request.getLocale());
-			throw new NumberFormatException();
+			throw new NumberFormatException(e.getMessage());
 			
 		}
 
@@ -1256,24 +1195,31 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	}
 
 
+	// Actualiza los hechos vitales que se pueden seleccionar en el mantenimiento de un procedimiento,
+	// en función de los públicos objetivo seleccionados.
 	@RequestMapping( value = "/listarHechosVitales.do" , method = POST)
-	public @ResponseBody Map<String, Object> listarHechosVitales(@RequestParam Set<Long> publicosObjectivosSeleccionados, HttpSession session, HttpServletRequest request) {
+	public @ResponseBody Map<String, Object> listarHechosVitales(@RequestParam Set<Long> publicosObjectivosSeleccionados, HttpServletRequest request) {
 
 		Map<String, Object> resultats = new HashMap<String, Object>();
 
 		try {
+			
 			resultats.put("listadoHechosVitales", LlistatUtil.llistarHechosVitales(publicosObjectivosSeleccionados, DelegateUtil.getIdiomaDelegate().lenguajePorDefecto()));
 
 		} catch (DelegateException e) {
+			
 			logException(log, e);
+			
 			if (e.isSecurityException()) {
 			    resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
 			} else {
 			    resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
 			}
+			
 		}
 
 		return resultats;
+		
 	}
 	
 	@RequestMapping(value = "/guardarHechosVitales.do", method = POST)

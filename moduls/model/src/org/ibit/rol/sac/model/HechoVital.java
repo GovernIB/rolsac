@@ -7,7 +7,9 @@ import java.util.Set;
 
 public class HechoVital extends Traducible {
 
-    private Long id;
+	private static final long serialVersionUID = 1L;
+	
+	private Long id;
     private int orden;
     private Archivo icono;
     private Archivo iconoGrande;

@@ -7,7 +7,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +43,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.controller.PantallaBaseController;
-import es.caib.rolsac.back2.util.HtmlUtils;
+import es.caib.rolsac.back2.util.CargaModulosLateralesUtil;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
@@ -415,52 +414,12 @@ public class TMAgrupacioFetsVitalsController extends PantallaBaseController {
 	        String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 	        
 	        AgrupacionHVDelegate agrupacioFVDelegate = DelegateUtil.getAgrupacionHVDelegate();
-	        AgrupacionHechoVital agrupacioFetsVitals = agrupacioFVDelegate.obtenerAgrupacionHV(id);	   
-   			
-            if (agrupacioFetsVitals.getHechosVitalesAgrupacionHV() != null) {
-            	
-            	Map<String, String> map;
-            	List<Map<String, String>> llistaFetsVitalsAgrupacio = new ArrayList<Map<String, String>>();            	
-            	TraduccionHechoVital traFV;
-				String nombre;
-                
-				Iterator<HechoVitalAgrupacionHV> it = agrupacioFetsVitals.getHechosVitalesAgrupacionHV().iterator();
-				
-				while ( it.hasNext() ) {
-					
-					HechoVitalAgrupacionHV fetVitalAgrupacioFV = it.next();
-					
-					if (fetVitalAgrupacioFV != null) {
-						
-						traFV = (TraduccionHechoVital)fetVitalAgrupacioFV.getHechoVital().getTraduccion(lang);
-						nombre = "";
-						
-	    				if (traFV != null) {
-	    					//Retirar posible enlace incrustado en titulo
-	    					nombre = HtmlUtils.obtenerTituloDeEnlaceHtml(traFV.getNombre());
-	    				}
-	    				
-	    				map = new HashMap<String, String>(2);
-	    				map.put("id", fetVitalAgrupacioFV.getHechoVital().getId().toString());
-	    				map.put("nombre", nombre);
-	    				map.put("orden", Integer.toString(fetVitalAgrupacioFV.getOrden()));
-	    				map.put("idMainItem", String.valueOf(id));
-	    				map.put("idRelatedItem", fetVitalAgrupacioFV.getHechoVital().getId().toString());
-	    				
-	                    llistaFetsVitalsAgrupacio.add(map);
-	                    
-					}
-					
-				}
-				
-				resultats.put("fetsVitals", llistaFetsVitalsAgrupacio);
-				
-            } else {
-            	
-                resultats.put("fetsVitals", null);
-                
-            } 
-   			
+	        AgrupacionHechoVital agrupacioFetsVitals = agrupacioFVDelegate.obtenerAgrupacionHV(id);
+	        
+	        // Hechos vitales relacionados.
+	        List<HechoVitalAgrupacionHV> listaHechosVitales = agrupacioFetsVitals.getHechosVitalesAgrupacionHV();
+	        resultats.put("fetsVitals", CargaModulosLateralesUtil.recuperaHechosVitalesRelacionados(listaHechosVitales, HechoVitalAgrupacionHV.class, id, lang, true));
+   			   			
    		} catch (DelegateException dEx) {
 
    			log.error(ExceptionUtils.getStackTrace(dEx));

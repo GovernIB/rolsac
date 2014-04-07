@@ -5,7 +5,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,6 +28,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.back2.util.CargaModulosLateralesUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 
 @Controller
@@ -160,34 +160,16 @@ public class UsuarisController extends PantallaBaseController {
    			
     		UsuarioDelegate usuariDelegate = DelegateUtil.getUsuarioDelegate();
     		Usuario usuari = usuariDelegate.obtenerUsuario(id);
-   			
-   			if (usuari.getUnidadesAdministrativas() != null) {
-   				
-    			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-    			Map<String, Object> uaDTO;
-    			List<Map<String, Object>> llistaUAs = new ArrayList<Map<String, Object>>();
+    		
+    		String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+    		
+    		// Pasamos el Set usuari.getUnidadesAdministrativas() a un elemento List.
+    		List<UnidadAdministrativa> listaUAs = new ArrayList<UnidadAdministrativa>(usuari.getUnidadesAdministrativas());    		
     			
-    			Iterator<UnidadAdministrativa> uasIterator = usuari.getUnidadesAdministrativas().iterator();
-    			while (uasIterator.hasNext()) {
-    				
-    				UnidadAdministrativa ua = uasIterator.next();
-    				uaDTO = new HashMap<String, Object>();
-    				uaDTO.put("id", ua.getId());
-    				uaDTO.put("nombre", ua.getNombreUnidadAdministrativa(lang));
-    				uaDTO.put("idMainItem", id);
-    				uaDTO.put("idRelatedItem", ua.getId());
-    				
-    				llistaUAs.add(uaDTO);
-    				
-    			}
-    			
-    			resultats.put("uas", llistaUAs);
-    			
-    		} else {
-    			
-    			resultats.put("uas", null);
-    			
-    		}
+			// Pasamos las UAs a un DTO que "entienda" Spring.
+			List<Map<String, Object>> listaUAsDTO = CargaModulosLateralesUtil.recuperaUAsRelacionadas(listaUAs, id, lang, false);
+			
+			resultats.put("uas", listaUAsDTO);
    			
    		} catch (DelegateException dEx) {
 

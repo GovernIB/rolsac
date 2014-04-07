@@ -67,6 +67,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.back2.util.CargaModulosLateralesUtil;
 import es.caib.rolsac.back2.util.GuardadoAjaxUtil;
 import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.Parametros;
@@ -398,12 +399,23 @@ public class FitxaInfBackController extends PantallaBaseController {
 		try {
 
 			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			List<String> idiomas = DelegateUtil.getIdiomaDelegate().listarLenguajes();
+			
 			FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
 			Ficha ficha = fitxaDelegate.obtenerFicha(id);
-
-			recuperaMateries(resultats, ficha, lang);		// Recuperar las materias asociadas a una ficha.        	
-			recuperaFetsVitals(resultats, ficha, lang);		// Recuperar los hechos vitales asociados a una ficha.
-			recuperaDocs(resultats, ficha);					// Recuperar los documentos asociados a una ficha.        	
+			
+			//  Pasamos el Set de materias relacionados a un List.
+			List<Materia> listaMaterias = new ArrayList<Materia>(ficha.getMaterias());
+			resultats.put("materies", CargaModulosLateralesUtil.recuperaMateriasRelacionadas(listaMaterias, id, lang, false));
+			
+			// Pasamos el set de HHVV relacionados a un List.
+			List<HechoVital> listaHechosVitales = new ArrayList<HechoVital>(ficha.getHechosVitales());
+			resultats.put("fetsVitals", CargaModulosLateralesUtil.recuperaHechosVitalesRelacionados(listaHechosVitales, HechoVital.class, id, lang, false));
+			
+			// Documentos relacionados.
+			List<Documento> listaDocumentos = ficha.getDocumentos();
+			resultats.put("documents", CargaModulosLateralesUtil.recuperaDocumentosRelacionados(listaDocumentos, id, idiomas, true));
+			
 			recuperaEnllasos(resultats, ficha);				// Recuperar los enlaces de una ficha.
 
 		} catch (DelegateException dEx) {
@@ -446,7 +458,8 @@ public class FitxaInfBackController extends PantallaBaseController {
 	/*
 	 * Función para recuperar los documentos relaciohnados con la ficha.
 	 */
-	private void recuperaDocs(Map<String, Object> resultats, Ficha ficha) throws DelegateException {
+	private void recuperaDocs(Map<String, Object> resultats, Ficha ficha) 
+			throws DelegateException {
 
 		if (ficha.getDocumentos() != null) {
 			
@@ -467,9 +480,12 @@ public class FitxaInfBackController extends PantallaBaseController {
 					TraduccionDocumento traDoc;
 
 					for (String idioma: idiomas) {
+						
 						traDoc = (TraduccionDocumento) doc.getTraduccion(idioma);
 						nombre = (traDoc != null && traDoc.getTitulo() != null) ? traDoc.getTitulo() :  "";
+						
 						titulos.put(idioma, nombre);
+						
 					}
 
 					mapDoc = new HashMap<String, Object>();
@@ -540,39 +556,6 @@ public class FitxaInfBackController extends PantallaBaseController {
 		} else {
 			resultats.put("item_imatge_enllas_arxiu", "");
 			resultats.put("item_imatge", "");
-		}
-		
-	}
-
-	/*
-	 * Función para recuperar las materias asociadas a una ficha
-	 */
-	private void recuperaMateries(Map<String, Object> resultats, Ficha ficha, String lang) {
-		
-		if (ficha.getMaterias() != null) {
-			
-			List<Map<String, String>> listaMateriasFicha  = new ArrayList<Map<String, String>>();
-			Map<String, String> map;
-			
-			for (Materia materia : ficha.getMaterias()) {
-
-				map = new HashMap<String, String>();
-
-				map.put("id", String.valueOf(materia.getId()));
-				map.put("nom", materia.getNombreMateria(lang));
-				map.put("idMainItem", String.valueOf(ficha.getId()));
-				map.put("idRelatedItem", String.valueOf(materia.getId()));
-				
-				listaMateriasFicha.add(map);
-
-			}
-						
-			resultats.put("materies", listaMateriasFicha);
-
-		} else {
-		
-			resultats.put("materies", null);
-		
 		}
 		
 	}

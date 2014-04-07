@@ -13,7 +13,7 @@
  * @param idBtnBuscadorForm = Id del boton de busqueda.
  * @param idBtnLimpiarForm = Id del boton de limpiar formulario.
  */
-function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, idTabListado, idTabBuscador, idBtnNuevo, idBtnBuscadorForm, idBtnLimpiarForm){
+function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, idTabListado, idTabBuscador, idBtnNuevo, idBtnBuscadorForm, idBtnLimpiarForm) {
 
     // Valores por defecto por compatibilidad con implementacion anterior.
 	if (typeof idOpciones == "undefined" || idOpciones == "") idOpciones = "#opcions";
@@ -38,7 +38,6 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 	if (idBtnBuscadorForm.substring(0,1) != ID_MARK) idBtnBuscadorForm = ID_MARK + 	idBtnBuscadorForm;
 	if (idBtnLimpiarForm.substring(0,1) != ID_MARK) idBtnLimpiarForm = ID_MARK + idBtnLimpiarForm;
 	
-	
 	var that = this;
 	this.cacheDatosListado = null;
 	
@@ -51,9 +50,9 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 	/**
 	 * Marca la cache como nula para forzar a que se vuelve a actualizar.
 	 */
-	this.anulaCache = function(){
+	this.anulaCache = function() {
 		this.cacheDatosListado = null;
-	}
+	};
 	
 	// Cambia de página.
 	this.cambiaPagina = function( pag ){
@@ -62,7 +61,7 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 		pag_Pag = pag;
 		this.anar(pag);
 		
-	}
+	};
 		
 	/**
 	 * Carga la ficha de un item del listado.
@@ -76,12 +75,12 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 		itemID_ultim = itemID;
 		this.itemID = itemID;
 		
-	}
+	};
 	
 	// Limpia el formulario de búsqueda.
-	this.limpia = function(){
+	this.limpia = function() {
         jQuery(idBuscadorContenido + ' :input').each(limpiarCampo);
-	}
+	};
 	
 	// Cambia a la pestaña de listado.
 	this.tabListado = function() {
@@ -104,8 +103,8 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 			});
 			
 		});
-	}
-	
+		
+	};
 	
 	// Cambia a la pestaña del buscador.
 	this.tabBuscador = function() {
@@ -125,18 +124,18 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 				resultats_actiu_elm = resultats_elm.find("div.actiu:first");
 				
 			});
+			
 		});
 		
-	}
-	
+	};
 	
 	// Muestra el formulario para insertar una nueva ficha.
 	this.nuevaFicha = function() {		
 		Detall.nou();
-	}
+	};
 	
 	// Realizar una búsqueda
-	this.busca = function() {		
+	this.busca = function() {	
 			
 		cercador_elm.find("input, select").attr("disabled", "disabled");
 		resultats_dades_elm = resultats_elm.find("div.actiu:first").find("div.dades:first");
@@ -152,9 +151,10 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 				that.carregar({cercador: "si"});
 				
 			});
-		});	
-	}
-	
+		
+		});
+		
+	};
 	
 	/**
 	 * Método llamado al cambiar de página.
@@ -178,15 +178,16 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 			resultats_dades_elm.html(codi_anar).fadeIn(300, function() {
 				
 				if (resultats_actiu_elm.hasClass("C"))
-					carregarFunc({pagina: num-1, cercador: "si"});
+					carregarFunc({pagina: num - 1, cercador: "si"});
 				
 				else
-					carregarFunc({pagina: num-1});
+					carregarFunc({pagina: num - 1});
 				
 			});
+			
 		});	
-	}
-	
+		
+	};
 	
 	this.getHtmlSelectorOrdenacion = function( id, orden, numItems ) {
 		
@@ -204,8 +205,7 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 		html += '</select>';
 		return html;
 		
-	}
-	
+	};
 	
 	this.getHtmlItemsPagina = function() {
 		
@@ -223,7 +223,6 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 			
 		}
 		
-		
 		if ( pag_Res == numTodos )
 			html += '<strong>'+ txtTodos +'</strong>';
 		
@@ -235,13 +234,12 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 		
 		return html;
 		
-	}
-
+	};
 	
     /**
      * Método de ordenación.
      */
-    this.ordena = function(domObj,opciones) {
+    this.ordena = function(domObj, opciones) {
     	
         var $enlace = jQuery(domObj);
         var $header = $enlace.parent();
@@ -280,8 +278,8 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
             });
             
         });
-    }    
-
+		
+    };
     
     // Bindings
 	jQuery(idTabListado).bind("click", function() { that.tabListado(); });

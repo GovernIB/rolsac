@@ -27,7 +27,7 @@ import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
 /**
  * Métodos de guardado y soporte para el guardado AJAX de módulos laterales.
  * 
- * @author amartin
+ * @author e43155798r
  */
 public class GuardadoAjaxUtil {
 	
@@ -216,5 +216,5 @@ public class GuardadoAjaxUtil {
 		return documentos;
 		
 	}
-
+	
 }

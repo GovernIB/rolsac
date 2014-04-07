@@ -69,6 +69,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.api.v1.UnidadAdministrativaDTO;
+import es.caib.rolsac.back2.util.CargaModulosLateralesUtil;
 import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
@@ -311,7 +312,8 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			UnidadAdministrativa uni = unitatDelegate.consultarUnidadAdministrativaSinFichas(id);
 			
 			// Materias asociadas.
-			resultats.put("materies", getLlistaMateriesDTO(request, uni, DelegateUtil.getIdiomaDelegate().lenguajePorDefecto()));
+			List<Materia> listaMaterias = obtenerListaMateriasUA(uni); // Necesitamos obtener primero la lista de materias a partir del Set de elementos UnidadMateria.
+			resultats.put("materies", CargaModulosLateralesUtil.recuperaMateriasRelacionadas(listaMaterias, id, DelegateUtil.getIdiomaDelegate().lenguajePorDefecto(), false));
 
 			// Edificios.
 			resultats.put("edificis", getLlistaEdificisDTO(resultats, uni));			
@@ -396,6 +398,22 @@ public class UnitatAdmBackController extends PantallaBaseController {
 
 		return llistaEdificisDTO;
 
+	}
+	
+	// Devuelve un List de Materia a partir del Set de elementos UnidadMateria de la UA.
+	private List<Materia> obtenerListaMateriasUA(UnidadAdministrativa ua) {
+		
+		List<Materia> listaMaterias = new ArrayList<Materia>();
+		Set<UnidadMateria> listaUnidadesMateria = ua.getUnidadesMaterias();
+		
+		if (listaUnidadesMateria != null) {
+			for (UnidadMateria unidadMateria : listaUnidadesMateria) {
+				listaMaterias.add(unidadMateria.getMateria());
+			}
+		}
+		
+		return listaMaterias;
+		
 	}
 
 	private Object getLlistaMateriesDTO(HttpServletRequest request, UnidadAdministrativa uni, String lang) {
