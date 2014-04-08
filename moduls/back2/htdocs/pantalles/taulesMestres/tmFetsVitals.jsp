@@ -466,13 +466,6 @@
                             <p class="btnGenerico">
                                 <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.gestiona_procediments'/></span></span></a>
                             </p>
-                            <p/><!-- Separador -->
-                            <p class="btnGenerico">
-                                <a id="btnGuardar_procediment" href="javascript:;" class="btn guarda important lista-simple" 
-                            			action="<c:url value="/fetsVitals/guardarProcedimientos.do" />">
-                           			<span><span><spring:message code='boto.guarda'/></span></span>
-                            	</a>
-                            </p>
                         </div>
                         <!-- /modulProcediments -->
                     </div>
@@ -695,7 +688,7 @@
                         <div class="listaOrdenable"></div>
                     </div>
                     <p class="botonera btnGenerico">
-                        <a id="btnFinalizar_procediment" href="javascript:;" class="btn finalitza important"><span><span><spring:message code='boto.finalitza'/></span></span></a>
+                        <a id="btnFinalizar_procediment" href="javascript:;" class="btn finalitza important lista-simple" action="<c:url value="/fetsVitals/guardarProcedimientos.do" />"><span><span><spring:message code='boto.finalitza'/></span></span></a>
                     </p>                                    
                 </div>                                  
             </div>

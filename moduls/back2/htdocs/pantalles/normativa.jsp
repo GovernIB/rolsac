@@ -1275,13 +1275,6 @@
                             <p class="btnGenerico">
                                 <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.gestiona_afectacions'/></span></span></a>
                             </p>
-							<p class="clear"/>
-							<p class="btnGenerico">
-                                <a id="btnGuardar_afectacions" href="javascript:;" class="btn guarda important lista-simple-afectaciones" 
-                            			action="<c:url value="/normativa/guardarAfectaciones.do" />">
-                           			<span><span><spring:message code='boto.guarda'/></span></span>
-                            	</a>
-                            </p>
                         </div>
                     </div>
                     <!-- /modulAfectacions -->
@@ -1375,7 +1368,10 @@
                         <div class="listaOrdenable"></div>              
                     </div>
                     <p class="botonera btnGenerico">
-                        <a id="btnFinalizar_afectacions" href="javascript:;" class="btn finalitza important guarda-ajax-btn"><span><span><spring:message code='boto.finalitza'/></span></span></a>
+                        <a id="btnFinalizar_afectacions" href="javascript:;" class="btn finalitza important lista-simple-afectaciones" 
+                        		action="<c:url value="/normativa/guardarAfectaciones.do" />">
+                       		<span><span><spring:message code='boto.finalitza'/></span></span>
+                     	</a>
                     </p>                                    
                 </div>
             </div>

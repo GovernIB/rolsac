@@ -4,12 +4,12 @@ $(document).ready(function() {
 	
 	// Listener para guardado de módulo vía AJAX.
 	jQuery(".lista-simple-afectaciones").click(function() {
-		
-		var element = $(this).parent().parent().find("li");
+				
+		var elements = $(this).parent().parent().find("li");
 		var id = $('#item_id').val();
 		var url = $(this).attr('action');
 		
-		ListaSimpleAfectaciones.guardar(element, url, id);
+		ListaSimpleAfectaciones.guardar(elements, url, id);
 		
 	});
 	

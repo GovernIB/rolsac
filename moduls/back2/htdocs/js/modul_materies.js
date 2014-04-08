@@ -122,6 +122,10 @@ function CModulMateries() {
 		
 	};
 	
+	this.modificado = function() {
+        $moduloModificado.val(1);
+    };
+	
 	this.finaliza = function() {
 		
 		nombre_llistat = 0;
@@ -160,6 +164,12 @@ function CModulMateries() {
 		
 		materies_seleccionats_elm.slideDown(300);
 		materies_llistat_elm.slideUp(300);
+		
+		// Marcamos el módulo como modificado.
+        this.modificado();
+		
+		// amartin: emitimos señal de finalización, para que los guardados AJAX la detecten y procesen los nuevos elemento seleccionados.
+		modul_materies_elm.trigger("finalizaMaterias");
 		
 	};
 	

@@ -77,7 +77,7 @@ function CModulProcediment() {
 		if (debug)
 			console.log("Saliendo de CModulProcediment.iniciar");
 		
-	}	
+	};
 	
 	this.nuevo = function() {
 		
@@ -90,7 +90,7 @@ function CModulProcediment() {
 		if (debug)
 			console.log("Saliendo de CModulProcediment.nuevo");
 		
-	}
+	};
 		
 	this.gestiona = function() {
 		
@@ -115,7 +115,7 @@ function CModulProcediment() {
 		if (debug)
 			console.log("Saliendo de CModulProcediment.gestiona");
 		
-	}
+	};
 	
 	this.contaSeleccionats = function() {
 		
@@ -136,7 +136,7 @@ function CModulProcediment() {
 		if (debug)
 			console.log("Saliendo de CModulProcediment.contaSeleccionats");
 		
-	}
+	};
 	
 	this.inicializarProcediments = function(listaProcediments) {
 		
@@ -155,7 +155,7 @@ function CModulProcediment() {
 		if (debug)
 			console.log("Saliendo de CModulProcediment.inicializarProcediments");
 		
-	}
+	};
 
 	this.prepararListaProcedimientos = function($listaOrdenable) {
 		
@@ -191,7 +191,7 @@ function CModulProcediment() {
 		if (debug)
 			console.log("Saliendo de CModulProcediment.prepararListaProcedimientos");
 		
-	}
+	};
 	
 	// Devuelve un string con el formato procediments=n1,n2,...,nm donde n son codigos de procediments.
 	this.listaProcediments = function () {
@@ -214,7 +214,7 @@ function CModulProcediment() {
 		
 		return listaProcediments;
 		
-	}
+	};
 	
 	// Al añadir un procedimiento, al ser nuevo se le pone un id negativo. Esta variable se va decrementando cada vez que se anade uno.
 	this.ultimoIdNuevo = 0;
@@ -239,7 +239,7 @@ function CModulProcediment() {
 		
 		return existe;
 		
-	}
+	};
 	
 };
 
@@ -264,7 +264,7 @@ function CEscriptoriProcediment() {
 		if (debug)
 			console.log("Saliendo de CEscriptoriProcediment.nuevo");
 		
-	}
+	};
 	
 	/**
 	 * Agrega un item a la lista.
@@ -294,7 +294,7 @@ function CEscriptoriProcediment() {
 		if (debug)
 			console.log("Saliendo de CEscriptoriProcediment.agregaItem");
 		
-	}	
+	};
 	
 	// Cambia de página.
 	this.cambiaPagina = function(pag) {
@@ -309,7 +309,7 @@ function CEscriptoriProcediment() {
 		if (debug)
 			console.log("Saliendo de CEscriptoriProcediment.cambiaPagina");
 		
-	}
+	};
 	
 	this.finCargaListado = function(opcions, data) {
 		
@@ -455,7 +455,7 @@ function CEscriptoriProcediment() {
 		if (debug)
 			console.log("Saliendo de CEscriptoriProcediment.finCargaListado");
 		
-	}
+	};
 
 	this.carregar = function(opcions) {
 		
@@ -472,7 +472,7 @@ function CEscriptoriProcediment() {
 		if (debug)
 			console.log("Saliendo de CEscriptoriProcediment.carregar");
 		
-	}
+	};
 	
 	this.finalizar = function() {
 		
@@ -503,7 +503,7 @@ function CEscriptoriProcediment() {
 		if (debug)
 			console.log("Saliendo de CEscriptoriProcediment.finalizar");
 		
-	}
+	};
 	
 	// Método sobreescrito
 	this.anar = function(enlace_html) {
@@ -527,7 +527,7 @@ function CEscriptoriProcediment() {
 		if (debug)
 			console.log("Saliendo de CEscriptoriProcediment.anar");
 		
-	}
+	};
 	
 	this.torna = function() {
 		
@@ -549,7 +549,7 @@ function CEscriptoriProcediment() {
 		if (debug)
 			console.log("Saliendo de CEscriptoriProcediment.torna");
 		
-	}
+	};
 	
 	this.contaSeleccionats = function() {
 		
@@ -590,6 +590,6 @@ function CEscriptoriProcediment() {
 		if (debug)
 			console.log("Saliendo de CEscriptoriProcediment.contaSeleccionats");
 		
-	}
+	};
 	
 };

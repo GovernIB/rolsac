@@ -664,7 +664,7 @@ function CListaSimpleAfectaciones() {
 			
 			elements.each(function() {
 				
-				var value = $(this).find('input.afectacio').val(); // Obtenemos el ID del tipo de afectación.
+				var value = $(this).find('span.afectacio select').val(); // Obtenemos el ID del tipo de afectación.
 				lista.push(value);
 				
 			});

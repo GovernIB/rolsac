@@ -15,21 +15,21 @@ function CModulFetsVitals() {
     // Campo hidden para controlar los cambios sobre un módulo.
     var $moduloModificado = modul_fets_elm.find('input[name="modulo_hechos_modificado"]');
     
-    modul_fets_elm.find("input[type=checkbox]").change(function(){               
+    modul_fets_elm.find("input[type=checkbox]").change(function() {               
         $moduloModificado.val(1);
     });
 					 	
 	if ( modul_fets_elm.size() == 1 ) {		
 
-		modul_fets_elm.find("a.gestiona").bind("click", function(){	
+		modul_fets_elm.find("a.gestiona").bind("click", function() {	
 			that.gestiona();
 		});
 		
-		modul_fets_elm.find("a.cancela").bind("click", function(){
+		modul_fets_elm.find("a.cancela").bind("click", function() {
 			that.cancela();
 		});
 		
-		modul_fets_elm.find("a.finalitza").bind("click", function(){
+		modul_fets_elm.find("a.finalitza").bind("click", function() {
 			that.finaliza();
 		});
 		
@@ -106,6 +106,9 @@ function CModulFetsVitals() {
         
         // Marcamos el módulo como modificado.
         this.modificado();
+        
+        // amartin: emitimos señal de finalización, para que los guardados AJAX la detecten y procesen los nuevos elemento seleccionados.
+        modul_fets_elm.trigger("finalizaHechosVitales");
         
 	};
 	

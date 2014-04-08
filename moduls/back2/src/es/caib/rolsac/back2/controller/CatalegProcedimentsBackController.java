@@ -41,7 +41,6 @@ import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.TraduccionCatalegDocuments;
-import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.TraduccionExcepcioDocumentacio;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
@@ -82,6 +81,8 @@ import es.caib.rolsac.utils.DateUtils;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.indra.rol.sac.integracion.traductor.Traductor;
 import es.indra.rol.sac.integracion.traductor.TraductorException;
+
+@SuppressWarnings("deprecation") // amartin: debido a org.ibit.rol.sac.model.Documento
 
 @Controller
 @RequestMapping("/catalegProcediments/")
@@ -397,66 +398,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
                 }
             }
         }
-	}
-
-	/*
-	 * Función para recuperar los documentos relaciohnados con el procedimuiento.
-	 */
-	private void recuperaDocs(Map<String, Object> resultats, ProcedimientoLocal proc) 
-			throws DelegateException {
-
-		if (proc.getDocumentos() != null) {
-			
-			Map<String, Object> mapDoc;
-			List<Map<String, Object>> listaDocumentosDTO = new ArrayList<Map<String, Object>>();
-			List<String> idiomas = DelegateUtil.getIdiomaDelegate().listarLenguajes();
-
-			// Ordenamos los documentos.
-			List<Documento> listaDocumentos = proc.getDocumentos();
-			
-			for (Documento doc : listaDocumentos) {
-				
-				if (doc != null) {
-				    
-					// Montar map solo con los campos 'titulo' de las traducciones del documento.
-					Map<String, String> titulos = new HashMap<String, String>();
-					String nombre;
-					TraduccionDocumento traDoc;
-
-					for (String idioma : idiomas) {
-						
-						traDoc = (TraduccionDocumento) doc.getTraduccion(idioma);
-						nombre = (traDoc != null && traDoc.getTitulo() != null) ? traDoc.getTitulo() : "";
-						
-						titulos.put(idioma, nombre);
-						
-					}
-
-					mapDoc = new HashMap<String, Object>();
-					mapDoc.put("id", doc.getId());
-					mapDoc.put("orden", doc.getOrden());
-					mapDoc.put("nombre", titulos);
-					mapDoc.put("idMainItem", proc.getId());
-					mapDoc.put("idRelatedItem", doc.getId());
-					
-					listaDocumentosDTO.add(mapDoc);
-					
-				} else {
-					
-					log.error("El procedimient " + proc.getId() + " te un document null.");
-					
-				}
-				
-			}
-			
-			resultats.put("documents", listaDocumentosDTO);
-
-		} else {
-			
-			resultats.put("documents", null);
-			
-		}
-		
 	}
 
 	/*

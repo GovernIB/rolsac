@@ -25,9 +25,36 @@ $(document).ready(function() {
 		ListaSimpleDocumentos.guardar(elementos, url, id);
 	
 	});
+	
+	/*
+	 * amartin: casos de guardado de listas de elementos donde su gestión se ha implementado con checkboxes.
+	 * Es necesario hacerlo vía eventos personalizados, ya que el DOM es diferente y no podemos tirar de los
+	 * elementos <li> generados dentro del listado de elementos seleccionados que cuelga de <div class="seleccionats">.
+	 */
+	jQuery(".modulMateries").bind("finalizaMaterias", function() {
+		
+		var elements = $('.modulMateries .seleccionats').find('li');
+		var id = $('#item_id').val();
+		var url = $('#btnFinalizar_materias').attr('action');
+		
+		ListaSimpleMaterias.guardar(elements, url, id);
+		
+	});
+	
+	jQuery(".modulFetsVitals").bind("finalizaHechosVitales", function() {
+		
+		var elements = $('.modulFetsVitals .seleccionats').find('li');
+		var id = $('#item_id').val();
+		var url = $('#btnFinalizar_hechosVitales').attr('action');
+		
+		ListaSimpleHechosVitales.guardar(elements, url, id);
+		
+	});
 
 	ListaSimpleGenerica = new ListaSimple();
+	ListaSimpleMaterias = new ListaSimple();
 	ListaSimpleDocumentos = new ListaSimple();
+	ListaSimpleHechosVitales = new ListaSimple();
 	
 	// elements
 	opcions_elm = $("#opcions");

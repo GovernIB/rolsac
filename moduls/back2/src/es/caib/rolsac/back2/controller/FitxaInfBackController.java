@@ -34,7 +34,6 @@ import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.Seccion;
-import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.TraduccionEnlace;
 import org.ibit.rol.sac.model.TraduccionFicha;
 import org.ibit.rol.sac.model.TraduccionHechoVital;
@@ -77,6 +76,8 @@ import es.caib.rolsac.back2.util.UploadUtil;
 import es.caib.rolsac.utils.DateUtils;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.indra.rol.sac.integracion.traductor.Traductor;
+
+@SuppressWarnings("deprecation") // amartin: debido a org.ibit.rol.sac.model.Documento
 
 @Controller
 @RequestMapping("/fitxainf/")
@@ -456,66 +457,6 @@ public class FitxaInfBackController extends PantallaBaseController {
 	}
 
 	/*
-	 * Función para recuperar los documentos relaciohnados con la ficha.
-	 */
-	private void recuperaDocs(Map<String, Object> resultats, Ficha ficha) 
-			throws DelegateException {
-
-		if (ficha.getDocumentos() != null) {
-			
-			Map<String, Object> mapDoc;
-			List<Map<String, Object>> llistaDocuments = new ArrayList<Map<String, Object>>();
-			List<String> idiomas = DelegateUtil.getIdiomaDelegate().listarLenguajes();
-			
-			// Ordenamos los documentos.
-			List<Documento> documentos = ficha.getDocumentos();
-			
-			for (Documento doc : documentos) {
-				
-				if (doc != null) {
-
-					// Montar map solo con los campos 'titulo' de las traducciones del documento.
-					Map<String, String> titulos = new HashMap<String, String>();
-					String nombre;
-					TraduccionDocumento traDoc;
-
-					for (String idioma: idiomas) {
-						
-						traDoc = (TraduccionDocumento) doc.getTraduccion(idioma);
-						nombre = (traDoc != null && traDoc.getTitulo() != null) ? traDoc.getTitulo() :  "";
-						
-						titulos.put(idioma, nombre);
-						
-					}
-
-					mapDoc = new HashMap<String, Object>();
-					mapDoc.put("id", doc.getId());
-					mapDoc.put("orden", doc.getOrden());
-					mapDoc.put("nombre", titulos);
-					mapDoc.put("idMainItem", ficha.getId());
-					mapDoc.put("idRelatedItem", doc.getId());
-					
-					llistaDocuments.add(mapDoc);
-
-				} else {
-					
-					log.error("La fitxa " + ficha.getId() + " te un document null.");
-					
-				}
-				
-			}
-			
-			resultats.put("documents", llistaDocuments);
-
-		} else {
-			
-			resultats.put("documents", null);
-			
-		}
-		
-	}
-
-	/*
 	 * Función para recuperar el icono.
 	 */
 	private void recuperaIcono(Map<String, Object> resultats, Ficha fitxa) {
@@ -558,31 +499,6 @@ public class FitxaInfBackController extends PantallaBaseController {
 			resultats.put("item_imatge", "");
 		}
 		
-	}
-
-	/*
-	 * Función para recuperar los hechos vitales de una ficha
-	 */
-	private void recuperaFetsVitals(Map<String, Object> resultats, Ficha ficha, String lang) {
-		
-		List<Map<String, Object>> listaHechosVitalesDTO = new ArrayList<Map<String, Object>>();
-		
-		for (HechoVital hechoVital : ficha.getHechosVitales()) {
-			
-			TraduccionHechoVital thv = (TraduccionHechoVital)hechoVital.getTraduccion(lang);
-			
-			Map<String, Object> hvpDTO = new HashMap<String, Object>();
-			hvpDTO.put("id", hechoVital.getId());
-			hvpDTO.put("nom", thv.getNombre());
-			hvpDTO.put("idMainItem", ficha.getId());
-			hvpDTO.put("idRelatedItem", hechoVital.getId());
-			
-			listaHechosVitalesDTO.add(hvpDTO);
-			
-		}
-				
-		resultats.put("fetsVitals", listaHechosVitalesDTO);
-
 	}
 
 	/*

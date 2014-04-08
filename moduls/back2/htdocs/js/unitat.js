@@ -2,17 +2,28 @@
 
 $(document).ready(function() {
 	
-	// Listener para guardado de módulos laterales vía AJAX.
-	jQuery(".lista-simple").click(function() {
-		
-		var element = $(this).parent().parent().find("li");
+	// Listeners para guardado de módulos laterales vía AJAX.
+	jQuery(".lista-simple-materias").click(function() {
+				
+		var elements = $('.modulMateries .seleccionats').find('li');
 		var id = $('#item_id').val();
 		var url = $(this).attr('action');
 		
-		ListaSimpleGenerica.guardar(element, url, id);
+		ListaSimpleMaterias.guardar(elements, url, id);
 		
 	});
 	
+	jQuery(".lista-simple").click(function() {
+		
+		var elements = $(this).parent().parent().find("li");
+		var id = $('#item_id').val();
+		var url = $(this).attr('action');
+		
+		ListaSimpleGenerica.guardar(elements, url, id);
+		
+	});
+	
+	ListaSimpleMaterias = new ListaSimple();
 	ListaSimpleGenerica = new ListaSimple();
 
 	// elements

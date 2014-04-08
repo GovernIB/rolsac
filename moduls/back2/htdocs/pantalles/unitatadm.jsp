@@ -735,7 +735,8 @@
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                     <legend><spring:message code='unitatadm.formulari.materies'/></legend>
                     <div class="modul_continguts mostrat">
-                                                                        
+                        
+                        <!-- modulMateries -->                                           
                         <div class="modulMateries selectorChecks">
                         
                             <input name="modulo_materias_modificado" type="hidden" value="0" />
@@ -746,14 +747,8 @@
                                 <div class="btnGenerico">
                                     <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='unitatadm.formulari.materies.gestiona'/></span></span></a>                 
                                 </div>
-                                <p style="clear: both; margin-bottom: 10px;"/><!-- Separador -->
-	                            <div class="btnGenerico">
-	                                <a id="btnGuardar_materias" href="javascript:;" class="btn guarda important lista-simple" 
-	                            			action="<c:url value="/unitatadm/guardarMateriasRelacionadas.do" />">
-	                           			<span><span><spring:message code='boto.guarda'/></span></span>
-	                            	</a>
-	                            </div>
                             </div>
+                            
                             <div class="llistat">
                                 <ul>
                                     <c:forEach items="${llistaMateries}" var="materia" varStatus="i">
@@ -771,15 +766,18 @@
                                 </ul>                                           
                                 <div class="botonera">
                                     <div class="btnGenerico">
-                                       <a class="btn finalitza" href="javascript:;"><span><span><spring:message code='boto.finalitza'/></span></span></a>
+                                        <a class="btn finalitza lista-simple-materias" href="javascript:;" action="<c:url value="/unitatadm/guardarMateriasRelacionadas.do" />">
+                                            <span><span><spring:message code='boto.finalitza'/></span></span>
+                                        </a>
                                     </div>
                                     <div class="btnGenerico">
-                                       <a href="javascript:;" class="cancela"><span><span><spring:message code='boto.cancela'/></span></span></a>
+                                        <a href="javascript:;" class="cancela"><span><span><spring:message code='boto.cancela'/></span></span></a>
                                     </div>
                                 </div>                                      
-                            </div>                                  
+                            </div>
+                                                             
                         </div>
-                        
+                        <!-- /modulMateries -->
                     </div>                              
                 </fieldset>                     
             </div>
@@ -818,13 +816,6 @@
                                 <div class="btnGenerico">
                                     <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='unitatadm.formulari.edificis.gestiona'/></span></span></a>
                                 </div>
-                                <p style="clear: both; margin-bottom: 10px;"/><!-- Separador -->
-	                            <div class="btnGenerico">
-	                                <a id="btnGuardar_edificios" href="javascript:;" class="btn guarda important lista-simple" 
-	                            			action="<c:url value="/unitatadm/guardarEdificiosRelacionados.do" />">
-	                           			<span><span><spring:message code='boto.guarda'/></span></span>
-	                            	</a>
-	                            </div>
                                 
                             </div>                                  
                         </div>
@@ -847,13 +838,6 @@
             						<div class="btnGenerico">
             							<a class="btn gestiona" href="javascript:;"><span><span><spring:message code='unitatadm.formulari.usuaris.gestiona'/></span></span></a>
             						</div>
-            						<p style="clear: both; margin-bottom: 10px;"/><!-- Separador -->
-		                            <div class="btnGenerico">
-		                                <a id="btnGuardar_usuarios" href="javascript:;" class="btn guarda important lista-simple" 
-		                            			action="<c:url value="/unitatadm/guardarUsuariosRelacionados.do" />">
-		                           			<span><span><spring:message code='boto.guarda'/></span></span>
-		                            	</a>
-		                            </div>
             					</c:if>
             				</div>
             			</div>
@@ -1035,20 +1019,21 @@
                                 </div>                                  
                             </div>                              
                         </div>
-		                        <div class="fila">
-									<div class="element t75">    
-		           	               		<div class="etiqueta"><label for="item_organ"><spring:message code='camp.unitat_administrativa'/></label>    </div>
-		                           		<div class="control">
-		                               		<input id="cerca_edificis_organ_id" name="cerca_edificis_organ_id" value='<c:out value="${idUA}" />'type="hidden" />
-		                               	    <input id="cerca_edificis_organ" name="cerca_edificis_organ" value='<c:out value="${nomUA}" />'type="text" class="nou" readonly="readonly" />
-		                               	</div>
-		                            </div>                                                                                
-				                    <div class="btnCambiar boton btnGenerico" style="margin-top:15px">
-		        		                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','cerca_edificis_organ_id','cerca_edificis_organ');" class="btn consulta">
-		                		           	<span><span><spring:message code='boto.canviarUA'/></span></span>
-		                        		</a>
-		                           	</div>
-		                        </div> 
+                        
+                        <div class="fila">
+							<div class="element t75">    
+           	               		<div class="etiqueta"><label for="item_organ"><spring:message code='camp.unitat_administrativa'/></label>    </div>
+                           		<div class="control">
+                               		<input id="cerca_edificis_organ_id" name="cerca_edificis_organ_id" value='<c:out value="${idUA}" />'type="hidden" />
+                               	    <input id="cerca_edificis_organ" name="cerca_edificis_organ" value='<c:out value="${nomUA}" />'type="text" class="nou" readonly="readonly" />
+                               	</div>
+                            </div>                                                                                
+		                    <div class="btnCambiar boton btnGenerico" style="margin-top:15px">
+        		                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','cerca_edificis_organ_id','cerca_edificis_organ');" class="btn consulta">
+                		           	<span><span><spring:message code='boto.canviarUA'/></span></span>
+                        		</a>
+                           	</div>
+                        </div> 
 		                        
                         <div class="botonera">
                             <div class="boton btnGenerico"><a id="btnLimpiarForm" class="btn borrar" href="javascript:;"><span><span><spring:message code='boto.borrar'/></span></span></a></div>
@@ -1078,8 +1063,10 @@
                         </div>
                         
                         <p class="botonera btnGenerico">
-                            <a id="btnFinalizar" href="javascript:;" class="btn finalitza important"><span><span><spring:message code='boto.finalitza'/></span></span></a>
-                        </p>                                    
+                            <a id="btnFinalizar" href="javascript:;" class="btn finalitza important lista-simple" 
+	                        	action="<c:url value="/unitatadm/guardarEdificiosRelacionados.do" />"><span><span><spring:message code='boto.finalitza'/></span></span></a>
+                        </p>
+                                                         
                     </div>                                  
                 </div>
             </div>
@@ -1174,7 +1161,8 @@
     						<div class="listaOrdenable"></div>
     					</div>
     					<p class="botonera btnGenerico">
-    						<a id="btnFinalizarUsuaris" href="javascript:;" class="btn finalitza important"><span><span><spring:message code='boto.finalitza'/></span></span></a>
+    						<a id="btnFinalizarUsuaris" href="javascript:;" class="btn finalitza important lista-simple" 
+    							action="<c:url value="/unitatadm/guardarUsuariosRelacionados.do" />"><span><span><spring:message code='boto.finalitza'/></span></span></a>
     					</p>
     				</div>
     			</div>

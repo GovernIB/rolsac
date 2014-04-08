@@ -140,6 +140,9 @@ function CModulFetsVitals() {
         // Marcamos el módulo como modificado.
         this.modificado();
         
+        // amartin: emitimos señal de finalización, para que los guardados AJAX la detecten y procesen los nuevos elemento seleccionados.
+        modul_fets_elm.trigger("finalizaHechosVitales");
+        
 	};
 	
 	this.contaSeleccionats = function() {

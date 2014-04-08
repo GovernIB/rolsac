@@ -91,7 +91,7 @@ function CLlistat() {
 		if (debug)
 			console.log("Saliendo de CLlistat.iniciar");
 		
-	}
+	};
 	
 	this.finCargaListado = function(opcions, data) {
 		
@@ -254,7 +254,7 @@ function CLlistat() {
 		if (debug)
 			console.log("Saliendo de CLlistat.finCargaListado");
 		
-	}
+	};
 	
 	this.carregar = function(opcions) {
 		
@@ -318,7 +318,7 @@ function CLlistat() {
 		if (debug)
 			console.log("Saliendo de CLlistat.carregar");
 		
-	}
+	};
 	
 };
 
@@ -381,7 +381,7 @@ function CDetall() {
 		if (debug)
 			console.log("Saliendo de CDetall.iniciar");
 		
-	}
+	};
 	
 	this.traduirWrapper = function () {
 		
@@ -393,7 +393,7 @@ function CDetall() {
 		if (debug)
 			console.log("Saliendo de CDetall.traduirWrapper");
 		
-	}
+	};
 	
 	// Sobreescribe el método guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
 	this.guarda_upload = function(e) {
@@ -438,7 +438,7 @@ function CDetall() {
 
 		return false;
 		
-	}
+	};
 	
 	this.activar = 0;
 
@@ -481,7 +481,7 @@ function CDetall() {
 		if (debug)
 			console.log("Saliendo de CDetall.nou");
 		
-	}		
+	};
 	
 	this.pintar = function(dades) {
 		
@@ -610,7 +610,7 @@ function CDetall() {
 		if (debug)
 			console.log("Saliendo de CDetall.pintar");
 		
-	}
+	};
 	
 	this.elimina = function() {
 		
@@ -657,7 +657,7 @@ function CDetall() {
 		if (debug)
 			console.log("Saliendo de CDetall.elimina");
 		
-	}
+	};
 	
 	this.pintarModulos = function(dades) {
 		
@@ -669,6 +669,6 @@ function CDetall() {
 		if (debug)
 			console.log("Saliendo de CDetall.pintarModulos");
 		
-	}
+	};
 	
 };

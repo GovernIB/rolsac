@@ -870,13 +870,6 @@
                                 <div class="btnGenerico">
                                     <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.gestiona_materies'/></span></span></a>
                                 </div>
-                                <p style="clear: both; margin-bottom: 10px;"/><!-- Separador -->
-	                            <div class="btnGenerico">
-	                                <a id="btnGuardar_materies" href="javascript:;" class="btn guarda important lista-simple" 
-	                            			action="<c:url value="/fitxainf/guardarMaterias.do" />">
-	                           			<span><span><spring:message code='boto.guarda'/></span></span>
-	                            	</a>
-	                            </div>
                             </div>
                             <div class="llistat">
                                 <ul>
@@ -895,7 +888,10 @@
                                 </ul>
                                 <div class="botonera">
                                     <div class="btnGenerico">
-                                        <a class="btn finalitza" href="javascript:;"><span><span><spring:message code='boto.finalitza'/></span></span></a>
+                                        <a id="btnFinalizar_materias" class="btn finalitza" href="javascript:;" 
+                                        		action="<c:url value="/fitxainf/guardarMaterias.do" />">
+                                        	<span><span><spring:message code='boto.finalitza'/></span></span>
+                                       	</a>
                                     </div>
                                     <div class="btnGenerico">
                                         <a href="javascript:;" class="cancela"><span><span><spring:message code='boto.cancela'/></span></span></a>
@@ -927,13 +923,6 @@
                                 <div class="btnGenerico">
                                     <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.gestiona_fets_vitals'/></span></span></a>
                                 </div>
-                                <p style="clear: both; margin-bottom: 10px;"/><!-- Separador -->
-	                            <div class="btnGenerico">
-	                                <a id="btnGuardar_hechosVitales" href="javascript:;" class="btn guarda important lista-simple" 
-	                            			action="<c:url value="/fitxainf/guardarHechosVitales.do" />">
-	                           			<span><span><spring:message code='boto.guarda'/></span></span>
-	                            	</a>
-	                            </div>
                             </div>
                             <div class="llistat">
                                 <ul>
@@ -952,7 +941,10 @@
                                 </ul>
                                 <div class="botonera">
                                     <div class="btnGenerico">
-                                        <a class="btn finalitza" href="javascript:;"><span><span><spring:message code='boto.finalitza'/></span></span></a>
+                                        <a id="btnFinalizar_hechosVitales" class="btn finalitza" href="javascript:;" 
+                                        		action="<c:url value="/fitxainf/guardarHechosVitales.do" />">
+                                        	<span><span><spring:message code='boto.finalitza'/></span></span>
+                                       	</a>
                                     </div>
                                     <div class="btnGenerico">
                                         <a href="javascript:;" class="cancela"><span><span><spring:message code='boto.cancela'/></span></span></a>
@@ -1099,13 +1091,7 @@
                                 <div class="btnGenerico">
                                     <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.gestiona_enllasos'/></span></span></a>
                                 </div>
-                                <p style="clear: both; margin-bottom: 10px;"/><!-- Separador -->
-	                            <div class="btnGenerico">
-	                                <a id="btnGuardar_enlaces" href="javascript:;" class="btn guarda important lista-multiidioma-enlaces" 
-	                            			action="<c:url value="/fitxainf/guardarEnlacesRelacionados.do" />">
-	                           			<span><span><spring:message code='boto.guarda'/></span></span>
-	                            	</a>
-	                            </div>
+                                
                             </div>                                  
                         </div>
                         <!-- /modulEnllacos -->                                 
@@ -1436,8 +1422,12 @@
 					</c:forEach>
 
                     <p class="botonera btnGenerico">
-                        <a id="btnFinalitzar" href="javascript:;" class="btn finalitza important lista-compleja" action="<c:url value="/fitxainf/guardarEnlaces.do" />"><span><span><spring:message code='boto.finalitza'/></span></span></a>
-                    </p>                                    
+                        <a id="btnFinalitzar" href="javascript:;" class="btn finalitza important lista-multiidioma-enlaces" 
+	                    		action="<c:url value="/fitxainf/guardarEnlacesRelacionados.do" />">
+                       		<span><span><spring:message code='boto.finalitza'/></span></span>
+                      	</a>
+                    </p>
+                                           
                 </div>                                  
             </div>
         </div>
