@@ -49,7 +49,7 @@ public class TMAdministracioRemotaController extends PantallaBaseController
 	private static Log log = LogFactory.getLog(TMAdministracioRemotaController.class);
 	
 	@RequestMapping(value = "/administracioRemota.do")
-	public String pantallaAdministracioRemota(Map<String, Object> model, HttpServletRequest request)
+	public String pantalla(Map<String, Object> model, HttpServletRequest request)
 	{
 		model.put("menu", 1);
 		model.put("submenu", "layout/submenu/submenuTMAdministracioRemota.jsp");
@@ -87,7 +87,7 @@ public class TMAdministracioRemotaController extends PantallaBaseController
 	
 	
 	@RequestMapping(value = "/llistat.do")
-	public @ResponseBody Map<String, Object> llistatAdministracioRemota(HttpServletRequest request)
+	public @ResponseBody Map<String, Object> llistat(HttpServletRequest request)
 	{
 		List<Map<String, Object>> llistaAdiministracionsRemotesDTO = new ArrayList<Map<String, Object>>();
 		Map<String, Object> adRemotaDTO;
@@ -192,7 +192,7 @@ public class TMAdministracioRemotaController extends PantallaBaseController
 	
 
 	@RequestMapping(value = "/guardar.do", method = POST)
-	public ResponseEntity<String> guardarAdministracioRemota(HttpSession session, HttpServletRequest request) {
+	public ResponseEntity<String> guardar(HttpSession session, HttpServletRequest request) {
 		/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en
 		 * Firefox. Si no se fuerza el content type Spring lo calcula y
@@ -313,7 +313,7 @@ public class TMAdministracioRemotaController extends PantallaBaseController
 
 	
 	@RequestMapping(value = "/esborrarAdministracioRemota.do", method = POST)
-	public @ResponseBody IdNomDTO esborrarAdministracioRemota(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
 		IdNomDTO resultatStatus = new IdNomDTO();
 		try {
 			Long id = new Long(request.getParameter("id"));
@@ -342,7 +342,7 @@ public class TMAdministracioRemotaController extends PantallaBaseController
 		return resultatStatus;
 	}
 
-	// M�todes de sincronitzaci�
+	// Mètodes de sincronització
 	@RequestMapping(value="/sincronitzacio.do", method = POST)
 	public @ResponseBody IdNomDTO sincronitzaAdministracioRemota(HttpServletRequest request, HttpServletResponse response) {
 		

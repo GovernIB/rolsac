@@ -39,7 +39,7 @@ public class TMTipusUnitatController extends PantallaBaseController
 	private static Log log = LogFactory.getLog(TMTipusUnitatController.class);
     
     @RequestMapping(value = "/tipusUnitat.do")
-    public String pantallaTipusUnitat(Map<String, Object> model, HttpServletRequest request) {
+    public String pantalla(Map<String, Object> model, HttpServletRequest request) {
         model.put("menu", 1);
         model.put("submenu", "layout/submenu/submenuTMTipusUnitat.jsp");
         
@@ -56,7 +56,7 @@ public class TMTipusUnitatController extends PantallaBaseController
     
 
 	@RequestMapping(value = "/llistat.do")
-	public @ResponseBody Map<String, Object> llistatTipusUnitat(HttpServletRequest request)
+	public @ResponseBody Map<String, Object> llistat(HttpServletRequest request)
 	{
 		List<Map<String, Object>> llistaUnitatsDTO = new ArrayList<Map<String, Object>>();
 		Map<String, Object> unitatDTO;
@@ -141,7 +141,7 @@ public class TMTipusUnitatController extends PantallaBaseController
 	
 	
 	@RequestMapping(value = "/guardar.do", method = POST)
-	public @ResponseBody IdNomDTO guardarTipusUnitat(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardar(HttpServletRequest request) {
 
 		IdNomDTO result = null;
 		String error = null;
@@ -209,37 +209,46 @@ public class TMTipusUnitatController extends PantallaBaseController
 
 		return result;
 	}	
-	
 
 	@RequestMapping(value = "/esborrarTipusUnitat.do", method = POST)
-	public @ResponseBody IdNomDTO esborrarTipusUnitat(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
+		
 		IdNomDTO resultatStatus = new IdNomDTO();
+		
 		try {
+			
 			Long id = new Long(request.getParameter("id"));
-			TratamientoDelegate unitatDelegate = DelegateUtil.getTratamientoDelegate();
-			if (unitatDelegate.tieneUnidades(id)){
+			TratamientoDelegate tratamientoDelegate = DelegateUtil.getTratamientoDelegate();
+			
+			if (tratamientoDelegate.tieneUnidades(id)) {
 				resultatStatus.setId(-1l);
 				String error = messageSource.getMessage("tipusNormativa.guardat.error", null, request.getLocale());
 				resultatStatus.setNom(error);
 			} else {
-				unitatDelegate.borrarTratamiento(id);
+				tratamientoDelegate.borrarTratamiento(id);
 				resultatStatus.setId(1l);
 				resultatStatus.setNom("correcte");
 			}
+			
 		} catch (DelegateException dEx) {
+			
 			if (dEx.isSecurityException()) {
 				resultatStatus.setId(-1l);
 			} else {
 				resultatStatus.setId(-2l);
 				log.error(ExceptionUtils.getStackTrace(dEx));
 			}
+			
 		} catch (NumberFormatException nfEx) {
+			
 			resultatStatus.setId(-3l);
-			log.error("Error: Id de tipus d'iniciaci� no n�meric: " + ExceptionUtils.getStackTrace(nfEx));
+			log.error("Error: Id de tipus d'unitat no numèric: " + ExceptionUtils.getStackTrace(nfEx));
+			
 		}
+		
 		return resultatStatus;
+		
 	}
-	
 	
 	@RequestMapping(value = "/traduir.do")
    	public @ResponseBody Map<String, Object> traduir(HttpServletRequest request)

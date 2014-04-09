@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -46,7 +45,7 @@ public class TMFamiliaController extends PantallaBaseController {
 	private static Log log = LogFactory.getLog(TMFamiliaController.class);
 	
 	@RequestMapping(value = "/familia.do")
-	public String pantallaFamilia(Map<String, Object> model, HttpServletRequest request) {
+	public String pantalla(Map<String, Object> model, HttpServletRequest request) {
 		
 		model.put("menu", 1);
 		model.put("submenu", "layout/submenu/submenuTMFamilia.jsp");
@@ -99,7 +98,7 @@ public class TMFamiliaController extends PantallaBaseController {
 	}
 	
 	@RequestMapping(value = "/llistat.do")
-	public @ResponseBody Map<String, Object> llistatFamilia(HttpServletRequest request) {
+	public @ResponseBody Map<String, Object> llistat(HttpServletRequest request) {
 		
 		List<Map<String, Object>> llistaFamiliaDTO = new ArrayList<Map<String, Object>>();
 		Map<String, Object> familiaDTO;
@@ -321,7 +320,7 @@ public class TMFamiliaController extends PantallaBaseController {
 	}	
     
     @RequestMapping(value = "/esborrarFamilia.do", method = POST)
-	public @ResponseBody IdNomDTO esborrarFamilia(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
     	
 		IdNomDTO resultatStatus = new IdNomDTO();
 		

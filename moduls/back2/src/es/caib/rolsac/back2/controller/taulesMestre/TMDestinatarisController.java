@@ -33,7 +33,7 @@ public class TMDestinatarisController extends PantallaBaseController {
 	private static Log log = LogFactory.getLog(TMDestinatarisController.class);
 	
     @RequestMapping(value = "/destinataris.do")
-    public String pantallaDestinataris(Map<String, Object> model, HttpServletRequest request) {
+    public String pantalla(Map<String, Object> model, HttpServletRequest request) {
         model.put("menu", 1);
         model.put("submenu", "layout/submenu/submenuTMDestinataris.jsp");
         
@@ -49,7 +49,7 @@ public class TMDestinatarisController extends PantallaBaseController {
     }  
     
     @RequestMapping(value = "/llistat.do")
-   	public @ResponseBody Map<String, Object> llistatDestinataris(HttpServletRequest request) {
+   	public @ResponseBody Map<String, Object> llistat(HttpServletRequest request) {
    	
    		List<Map<String, Object>> llistaDestinatarisDTO = new ArrayList<Map<String, Object>>();
    		Map<String, Object> destinatariDTO;
@@ -119,22 +119,26 @@ public class TMDestinatarisController extends PantallaBaseController {
         return resultats;
 	}
     
-    
     @RequestMapping(value = "/guardar.do", method = POST)
-	public @ResponseBody IdNomDTO guardarDestinatari(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardar(HttpServletRequest request) {
 
 		IdNomDTO result = null;
 		String error = null;
 
 		try {
+			
 			DestinatarioDelegate destinatariDelegate = DelegateUtil.getDestinatarioDelegate();
 			Destinatario destinatari = new Destinatario();
 						
 			try {
+				
 				Long id = Long.parseLong(request.getParameter("item_id"));
 				destinatariDelegate.obtenerDestinatario(id);
 				destinatari.setId(id);
+				
 			} catch (NumberFormatException nfe) {
+				// Si no nos llega ID o el ID es incorrecto, se considera
+				// creación de un nuevo registro.
 			}
 			
 			destinatari.setNombre(request.getParameter("item_nom"));
@@ -148,6 +152,7 @@ public class TMDestinatarisController extends PantallaBaseController {
 			result = new IdNomDTO(tipusId, ok);
 
 		} catch (DelegateException dEx) {
+			
 			if (dEx.isSecurityException()) {
 				error = messageSource.getMessage("error.permisos", null, request.getLocale());
 				result = new IdNomDTO(-1l, error);
@@ -156,16 +161,15 @@ public class TMDestinatarisController extends PantallaBaseController {
 				result = new IdNomDTO(-2l, error);
 				log.error(ExceptionUtils.getStackTrace(dEx));
 			}
-		} catch (NumberFormatException nfe) {
-			result = new IdNomDTO(-3l, error);
+			
 		}
-
+		
 		return result;
+		
 	}
     
-    
     @RequestMapping(value = "/esborrarDestinatari.do", method = POST)
-	public @ResponseBody IdNomDTO esborrarDestinatari(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
 		IdNomDTO resultatStatus = new IdNomDTO();
 		try {
 			Long id = new Long(request.getParameter("id"));

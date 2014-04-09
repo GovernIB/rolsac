@@ -67,13 +67,13 @@ public class HechoVital extends Traducible {
         this.hechosVitalesProcedimientos = hechosVitalesProcedimientos;
     }
 
-    public void addHechoVitalProcedimiento(HechoVitalProcedimiento hpv){
+    public void addHechoVitalProcedimiento(HechoVitalProcedimiento hpv) {
         hpv.setHechoVital(this);
         hpv.setOrden(hechosVitalesProcedimientos.size());
         hechosVitalesProcedimientos.add(hpv);
     }
     
-    public void addHechoVitalProcedimientoRespetandoOrden(HechoVitalProcedimiento hpv){
+    public void addHechoVitalProcedimientoRespetandoOrden(HechoVitalProcedimiento hpv) {
         hpv.setHechoVital(this);
         hechosVitalesProcedimientos.add(hpv);
     }

@@ -5,18 +5,13 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
@@ -26,21 +21,15 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.EspacioTerritorial;
-import org.ibit.rol.sac.model.MateriaAgrupacionM;
 import org.ibit.rol.sac.model.PerfilCiudadano;
-import org.ibit.rol.sac.model.Seccion;
-import org.ibit.rol.sac.model.TraduccionAgrupacionM;
 import org.ibit.rol.sac.model.TraduccionEspacioTerritorial;
-import org.ibit.rol.sac.model.TraduccionMateria;
 import org.ibit.rol.sac.model.TraduccionPerfilCiudadano;
-import org.ibit.rol.sac.model.TraduccionSeccion;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.EspacioTerritorialDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.PerfilDelegate;
-import org.ibit.rol.sac.persistence.delegate.SeccionDelegate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -74,10 +63,9 @@ public class TMEspaiTerritorialController extends PantallaBaseController
     		if (request.getParameter("id") != null) {
     			Long id = new Long(request.getParameter("id"));
     			EspacioTerritorialDelegate espaiDelegate = DelegateUtil.getEspacioTerritorialDelegate();
-    			EspacioTerritorial espai = espaiDelegate.obtenerEspacioTerritorial(id);
     			List<EspacioTerritorial> antecesores = espaiDelegate.listarAntecesoresEspacioTerritorial(id);
-    			for (EspacioTerritorial espacio: antecesores) {
-    				TraduccionEspacioTerritorial tet = (TraduccionEspacioTerritorial) espacio.getTraduccion(request.getLocale().getLanguage());
+    			for (EspacioTerritorial espacio : antecesores) {
+    				TraduccionEspacioTerritorial tet = (TraduccionEspacioTerritorial)espacio.getTraduccion(request.getLocale().getLanguage());
     				elementoDTO = new HashMap<String, Object>();
     				elementoDTO.put("id", espacio.getId());
     				elementoDTO.put("nom", tet == null ? "" : tet.getNombre());
@@ -98,7 +86,7 @@ public class TMEspaiTerritorialController extends PantallaBaseController
 	
 	
 	@RequestMapping(value = "/espaiTerritorial.do")
-    public String pantallaEspaiTerritorial(Map<String, Object> model, HttpServletRequest request)
+    public String pantalla(Map<String, Object> model, HttpServletRequest request)
     {
         model.put("menu", 1);
         model.put("submenu", "layout/submenu/submenuTMEspaiTerritorial.jsp");
@@ -148,7 +136,7 @@ public class TMEspaiTerritorialController extends PantallaBaseController
 	
 	
 	@RequestMapping(value = "/llistat.do")
-	public @ResponseBody Map<String, Object> llistatEspaiTerritorial(HttpServletRequest request)
+	public @ResponseBody Map<String, Object> llistat(HttpServletRequest request)
 	{
 		List<Map<String, Object>> llistaEspaiDTO = new ArrayList<Map<String, Object>>();
 		Map<String, Object> espaiDTO;
@@ -439,7 +427,7 @@ public class TMEspaiTerritorialController extends PantallaBaseController
     
 
     @RequestMapping(value = "/esborrarEspaiTerritorial.do", method = POST)
-	public @ResponseBody IdNomDTO esborrarEspaiTerritorial(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
 		IdNomDTO resultatStatus = new IdNomDTO();
 		try {
 			Long id = new Long(request.getParameter("id"));

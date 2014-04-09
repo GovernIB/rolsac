@@ -97,7 +97,7 @@ public class TMSeccionsController extends PantallaBaseController {
     }
     
     @RequestMapping(value = "/seccio.do")
-    public String pantallaSeccio(Map<String, Object> model, HttpServletRequest request) {
+    public String pantalla(Map<String, Object> model, HttpServletRequest request) {
     	
         model.put("menu", 1);
         model.put("submenu", "layout/submenu/submenuTMSeccions.jsp");
@@ -155,7 +155,7 @@ public class TMSeccionsController extends PantallaBaseController {
     }
     
     @RequestMapping(value = "/llistat.do")
-	public @ResponseBody Map<String, Object> llistatSeccio(HttpServletRequest request) {
+	public @ResponseBody Map<String, Object> llistat(HttpServletRequest request) {
 	
 		List<Map<String, Object>> llistaSeccioDTO = new ArrayList<Map<String, Object>>();
 		Map<String, Object> seccioDTO;
@@ -443,7 +443,7 @@ public class TMSeccionsController extends PantallaBaseController {
 	}
     
     @RequestMapping(value = "/esborrarSeccio.do", method = POST)
-	public @ResponseBody IdNomDTO esborrarSeccio(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
     	
 		IdNomDTO resultatStatus = new IdNomDTO();
 		

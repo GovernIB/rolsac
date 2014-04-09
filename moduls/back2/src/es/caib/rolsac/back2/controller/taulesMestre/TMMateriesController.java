@@ -60,7 +60,7 @@ public class TMMateriesController extends PantallaBaseController {
 	private Map<String, Object> resultats;
 
 	@RequestMapping(value = "/materia.do")
-	public String pantallaMateria(Map<String, Object> model, HttpServletRequest request) {
+	public String pantalla(Map<String, Object> model, HttpServletRequest request) {
 		
 		model.put("menu", 1);
 		model.put("submenu", "layout/submenu/submenuTMMateries.jsp");
@@ -107,7 +107,7 @@ public class TMMateriesController extends PantallaBaseController {
 	}
 
 	@RequestMapping(value = "/llistat.do")
-	public @ResponseBody Map<String, Object> llistatMateria(HttpServletRequest request) {
+	public @ResponseBody Map<String, Object> llistat(HttpServletRequest request) {
 
 		List<Map<String, Object>> llistaMateriaDTO = new ArrayList<Map<String, Object>>();
 		Map<String, Object> materiaDTO;
@@ -489,7 +489,7 @@ public class TMMateriesController extends PantallaBaseController {
 	}
 
 	@RequestMapping(value = "/esborrarMateria.do", method = POST)
-	public @ResponseBody IdNomDTO esborrarMateria(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
 		
 		IdNomDTO resultatStatus = new IdNomDTO();
 		
@@ -584,7 +584,7 @@ public class TMMateriesController extends PantallaBaseController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/guardarUnidadesRelacionadas.do")
 	public @ResponseBody IdNomDTO guardarUnidadesRelacionadas(Long id, Long[] elementos, Long itemUAPrincipal, HttpServletRequest request) {
-		
+				
 		IdNomDTO result = null;
 		
 		try {
@@ -594,11 +594,14 @@ public class TMMateriesController extends PantallaBaseController {
 			
 			UnidadMateriaDelegate uaMateriaDelegate = DelegateUtil.getUnidadMateriaDelegate();
 			
-			// Borramos las anteriores UAs relacionadas con la materia. 
+			// Obtenemos las relaciones que borraremos primero.
 			Set<UnidadMateria> unidadesMateria = (Set<UnidadMateria>)materia.getUnidadesmaterias();
+			List<Long> unidadesMateriaABorrar = new ArrayList<Long>();
 			Iterator<UnidadMateria> it = unidadesMateria.iterator();
 			while ( it.hasNext() )
-				uaMateriaDelegate.borrarUnidadMateria( it.next().getId() );
+				unidadesMateriaABorrar.add( it.next().getId() );
+			
+			List<UnidadMateria> unidadesMateriaNuevas = new ArrayList<UnidadMateria>();
 			
 			// Procesamos los elementos actuales.
 			if ( elementos != null ) {
@@ -612,20 +615,24 @@ public class TMMateriesController extends PantallaBaseController {
 						UnidadMateria uam = new UnidadMateria();
 						UnidadAdministrativa ua = uaDelegate.consultarUnidadAdministrativaSinFichas(elementos[i]);
 						
+						uam.setMateria(materia);
+						uam.setUnidad(ua);
+						
 						// Comprobamos si es UA principal
 						if ( itemUAPrincipal != null && itemUAPrincipal.equals(elementos[i]) )
 							uam.setUnidadPrincipal("S");
 						else
 							uam.setUnidadPrincipal("N");
 						
-						// Guardamos nueva relación Materia/UA.
-						uaMateriaDelegate.grabarUnidadMateria(uam, ua.getId(), materia.getId());
-					
+						unidadesMateriaNuevas.add(uam);
+											
 					}
 					
 				}
 				
 			}
+			
+			uaMateriaDelegate.grabarUnidadesMateria(unidadesMateriaNuevas, unidadesMateriaABorrar);
 			
 			String ok = messageSource.getMessage("materia.guardat.correcte", null, request.getLocale());
 			result = new IdNomDTO(materia.getId(), ok);            

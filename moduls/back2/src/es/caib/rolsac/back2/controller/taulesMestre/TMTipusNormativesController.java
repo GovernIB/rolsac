@@ -38,7 +38,7 @@ public class TMTipusNormativesController extends PantallaBaseController {
 	private static Log log = LogFactory.getLog(TMTipusNormativesController.class);
 	
     @RequestMapping(value = "/tipusNormatives.do")
-    public String pantallaTipusNormativa(Map<String, Object> model, HttpServletRequest request) {
+    public String pantalla(Map<String, Object> model, HttpServletRequest request) {
         model.put("menu", 1);
         model.put("submenu", "layout/submenu/submenuTMTipusNormatives.jsp");
         
@@ -54,7 +54,7 @@ public class TMTipusNormativesController extends PantallaBaseController {
     }
     
     @RequestMapping(value = "/llistat.do")
-	public @ResponseBody Map<String, Object> llistatTipusNormatives(HttpServletRequest request) {
+	public @ResponseBody Map<String, Object> llistat(HttpServletRequest request) {
 
        List<IdNomDTO> llistaTipus = new ArrayList<IdNomDTO>();
        Map<String,Object> resultats = new HashMap<String,Object>();
@@ -132,7 +132,7 @@ public class TMTipusNormativesController extends PantallaBaseController {
     
 	
 	@RequestMapping(value = "/guardar.do", method = POST)
-	public @ResponseBody IdNomDTO guardarProcediment(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardar(HttpServletRequest request) {
 
 		IdNomDTO result = null;
 		String error = null;
@@ -198,7 +198,7 @@ public class TMTipusNormativesController extends PantallaBaseController {
 	
 	
 	@RequestMapping(value = "/esborrarTipusNormativa.do", method = POST)
-	public @ResponseBody IdNomDTO esborrarTipusNormativa(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
 		IdNomDTO resultatStatus = new IdNomDTO();
 		try {
 			Long id = new Long(request.getParameter("id"));

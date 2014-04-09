@@ -27,7 +27,7 @@ public class TMIndexController extends PantallaBaseController {
 	private static Log log = LogFactory.getLog(TMIndexController.class);
 	
     @RequestMapping(value = "/index.do", method = GET)
-    public String pantallaIndex(Map<String, Object> model, HttpServletRequest request) {
+    public String pantalla(Map<String, Object> model, HttpServletRequest request) {
         model.put("menu", 1);
         model.put("submenu", "layout/submenu/submenuTMIndex.jsp");
 

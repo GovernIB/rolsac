@@ -38,7 +38,7 @@ public class TMTipusAfectacioController extends PantallaBaseController {
 	private static Log log = LogFactory.getLog(TMTipusAfectacioController.class);
 	
     @RequestMapping(value = "/tipusAfectacions.do")
-    public String pantallaTipusAfectacio(Map<String, Object> model, HttpServletRequest request)
+    public String pantalla(Map<String, Object> model, HttpServletRequest request)
     {
     	model.put("menu", 1);
         model.put("submenu", "layout/submenu/submenuTMTipusAfectacio.jsp");
@@ -56,7 +56,7 @@ public class TMTipusAfectacioController extends PantallaBaseController {
     
     
     @RequestMapping(value = "/llistat.do")
-	public @ResponseBody Map<String, Object> llistatTipusAfectacions(HttpServletRequest request)
+	public @ResponseBody Map<String, Object> llistat(HttpServletRequest request)
 	{
     	List<IdNomDTO> llistaTipus = new ArrayList<IdNomDTO>();
     	Map<String,Object> resultats = new HashMap<String,Object>();
@@ -130,7 +130,7 @@ public class TMTipusAfectacioController extends PantallaBaseController {
 
 
 	@RequestMapping(value = "/guardar.do", method = POST)
-	public @ResponseBody IdNomDTO guardarProcediment(HttpServletRequest request)
+	public @ResponseBody IdNomDTO guardar(HttpServletRequest request)
 	{
 		IdNomDTO result = null;
 		String error = null;
@@ -196,7 +196,7 @@ public class TMTipusAfectacioController extends PantallaBaseController {
 	
 	
 	@RequestMapping(value = "/esborrarTipusAfectacio.do", method = POST)
-	public @ResponseBody IdNomDTO esborrarTipusAfectacio(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
 		IdNomDTO resultatStatus = new IdNomDTO();
 		try {
 			Long id = new Long(request.getParameter("id"));

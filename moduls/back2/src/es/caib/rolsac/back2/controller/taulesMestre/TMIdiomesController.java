@@ -33,7 +33,7 @@ public class TMIdiomesController extends PantallaBaseController {
 
 
     @RequestMapping(value = "/idiomes.do")
-    public String pantallaIdiomes(Map<String, Object> model, HttpServletRequest request) {
+    public String pantalla(Map<String, Object> model, HttpServletRequest request) {
 
         model.put("menu", 1);
         model.put("submenu", "layout/submenu/submenuTMIdiomes.jsp");
@@ -51,7 +51,7 @@ public class TMIdiomesController extends PantallaBaseController {
 
 
     @RequestMapping(value = "/llistat.do")
-    public @ResponseBody Map<String, Object> llistatIdiomes(HttpServletRequest request) {
+    public @ResponseBody Map<String, Object> llistat(HttpServletRequest request) {
 
         List<IdiomaDTO> llistaIdiomesDTO = new ArrayList<IdiomaDTO>();
         Map<String, Object> resultats = new HashMap<String, Object>();
@@ -78,6 +78,7 @@ public class TMIdiomesController extends PantallaBaseController {
     private List<IdiomaDTO> convertIdiomaToIdiomaDTO(List<Idioma> idiomas) {
 
         List<IdiomaDTO> idiomasDTO = new ArrayList<IdiomaDTO>();
+        
         for (Idioma idioma : idiomas) {
             idiomasDTO.add(new IdiomaDTO(
                 idioma.getLang(),
@@ -89,6 +90,7 @@ public class TMIdiomesController extends PantallaBaseController {
         }
 
         return idiomasDTO;
+        
     }
 
 
@@ -119,7 +121,7 @@ public class TMIdiomesController extends PantallaBaseController {
 
 
     @RequestMapping(value = "/guardar.do", method = POST)
-    public @ResponseBody IdNomDTO guardarIdioma(HttpServletRequest request) {
+    public @ResponseBody IdNomDTO guardar(HttpServletRequest request) {
 
         IdNomDTO result = null;
         String error = null;
@@ -160,7 +162,7 @@ public class TMIdiomesController extends PantallaBaseController {
 
 
     @RequestMapping(value = "/esborrarIdioma.do", method = POST)
-    public @ResponseBody IdNomDTO esborrarPublicObjectiu(HttpServletRequest request) {
+    public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
 
         IdNomDTO resultatStatus = new IdNomDTO();
         try {
@@ -184,7 +186,7 @@ public class TMIdiomesController extends PantallaBaseController {
 
 
     @RequestMapping(value = "/reordenarIdiomes.do", method = POST)
-    public @ResponseBody IdNomDTO reordenarPublicObjectiu(HttpServletRequest request) {
+    public @ResponseBody IdNomDTO reordenarIdiomes(HttpServletRequest request) {
 
         IdNomDTO resultatStatus = new IdNomDTO();
 

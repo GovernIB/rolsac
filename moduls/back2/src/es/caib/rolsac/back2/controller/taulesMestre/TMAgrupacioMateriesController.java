@@ -62,7 +62,7 @@ public class TMAgrupacioMateriesController extends PantallaBaseController {
 	}
 
 	@RequestMapping(value = "/agrupacioMateries.do")
-	public String pantallaMateria(Map<String, Object> model, HttpServletRequest request) {
+	public String pantalla(Map<String, Object> model, HttpServletRequest request) {
 		
 		model.put("menu", 1);
 		model.put("submenu", "layout/submenu/submenuTMAgrupacioMateries.jsp");
@@ -166,7 +166,7 @@ public class TMAgrupacioMateriesController extends PantallaBaseController {
 	}
 
 	@RequestMapping(value = "/llistat.do")
-	public @ResponseBody Map<String, Object> llistatAgrupacioMateria(HttpServletRequest request) {
+	public @ResponseBody Map<String, Object> llistat(HttpServletRequest request) {
 
 		List<Map<String, Object>> llistaAgrupacioMateriaDTO = new ArrayList<Map<String, Object>>();
 		Map<String, Object> agrupacioMateriaDTO;
@@ -387,9 +387,7 @@ public class TMAgrupacioMateriesController extends PantallaBaseController {
 		Map<String, Object> resultats = new HashMap<String, Object>();
 		
 		try {
-			
-			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-			
+						
 			// Materias relacionadas
 			List<Materia> materias = DelegateUtil.getMateriaAgrupacionMDelegate().obtenerMateriasRelacionadas(id, obtenerIdioma());
 			resultats.put("materies", CargaModulosLateralesUtil.recuperaMateriasRelacionadas(materias, id, null, true));
@@ -464,7 +462,7 @@ public class TMAgrupacioMateriesController extends PantallaBaseController {
 	}
 
 	@RequestMapping(value = "/esborrarAgrupacioMateries.do", method = POST)
-	public @ResponseBody IdNomDTO esborrarAgrupacioMateries(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
 		
 		IdNomDTO resultatStatus = new IdNomDTO();
 		

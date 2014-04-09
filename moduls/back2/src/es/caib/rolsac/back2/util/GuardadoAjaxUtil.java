@@ -29,6 +29,7 @@ import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
  * 
  * @author e43155798r
  */
+@SuppressWarnings("deprecation") // amartin: debido a la clase org.ibit.rol.sac.model.Documento
 public class GuardadoAjaxUtil {
 	
 	/**

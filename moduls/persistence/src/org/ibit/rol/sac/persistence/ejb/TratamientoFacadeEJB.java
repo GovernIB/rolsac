@@ -8,7 +8,6 @@ import javax.ejb.EJBException;
 import net.sf.hibernate.Criteria;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
 import org.ibit.rol.sac.model.Tratamiento;
@@ -206,10 +205,8 @@ public abstract class TratamientoFacadeEJB extends HibernateEJB{
 		Session session = getSession();
 		
 		try {
-			
-			List<UnidadAdministrativa> uas = castList(UnidadAdministrativa.class, session.find("from UnidadAdministrativa as ua where ua.tratamiento.id = ?", id, Hibernate.LONG));
-			
-			if ( uas.size() != 0 )
+						
+			if ( tieneUnidades(id) )
 				throw new EJBException("El tratamiento contiene Unidades Administrativas");
 			
 			Tratamiento tratamiento = (Tratamiento) session.load(Tratamiento.class, id);

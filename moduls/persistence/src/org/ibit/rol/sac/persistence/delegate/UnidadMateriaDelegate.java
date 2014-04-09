@@ -1,6 +1,7 @@
 package org.ibit.rol.sac.persistence.delegate;
 
 import java.rmi.RemoteException;
+import java.util.List;
 
 import javax.ejb.CreateException;
 import javax.ejb.Handle;
@@ -19,14 +20,24 @@ public class UnidadMateriaDelegate implements StatelessDelegate
 	/* ========================================================= */
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
-	
-    public Long grabarUnidadMateria(UnidadMateria unidadMateria, Long unidad_id, Long materia_id) throws DelegateException {
+
+	private static final long serialVersionUID = 1L;
+
+	public Long grabarUnidadMateria(UnidadMateria unidadMateria, Long unidad_id, Long materia_id) throws DelegateException {
         try {
             return getFacade().grabarUnidadMateria(unidadMateria, unidad_id, materia_id);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
+	
+	public void grabarUnidadesMateria(List<UnidadMateria> unidadesMateriaNuevas, List<Long> unidadesMateriaABorrar) throws DelegateException {
+		try {
+            getFacade().grabarUnidadesMateria(unidadesMateriaNuevas, unidadesMateriaABorrar);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+	}
     
     public void borrarUnidadMateria(Long id) throws DelegateException {
         try {

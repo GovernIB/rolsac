@@ -20,10 +20,21 @@ public class HechoVitalProcedimientoDelegate implements StatelessDelegate
 	/* ========================================================= */
 	/* ======================== MÉTODOS DE NEGOCIO ============= */
 	/* ========================================================= */
-	
+
+	private static final long serialVersionUID = 1L;
+
 	public void grabarHechoVitalProcedimientos(Collection<HechoVitalProcedimiento> hvpsAGrabar) throws DelegateException {
 		try {
 			getFacade().grabarHechoVitalProcedimientos(hvpsAGrabar);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+	
+	public void grabarHechoVitalProcedimientos(Collection<HechoVitalProcedimiento> hvpsAGrabar, 
+    		Collection<Long> hvProcIds) throws DelegateException {
+		try {
+			getFacade().grabarHechoVitalProcedimientos(hvpsAGrabar, hvProcIds);
 		} catch (RemoteException e) {
 			throw new DelegateException(e);
 		}

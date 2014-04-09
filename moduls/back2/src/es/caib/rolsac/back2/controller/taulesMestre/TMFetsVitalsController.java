@@ -54,7 +54,7 @@ public class TMFetsVitalsController extends PantallaBaseController {
 	private static Log log = LogFactory.getLog(TMFetsVitalsController.class);
 
 	@RequestMapping(value = "/fetsVitals.do")
-	public String pantallaFetsVitals(Map<String, Object> model, HttpServletRequest request) {
+	public String pantalla(Map<String, Object> model, HttpServletRequest request) {
 
 		model.put("menu", 1);
 		model.put("submenu", "layout/submenu/submenuTMFetsVitals.jsp");
@@ -94,7 +94,7 @@ public class TMFetsVitalsController extends PantallaBaseController {
 	}
 
 	@RequestMapping(value = "/llistat.do")
-	public @ResponseBody Map<String, Object> llistatFetsVitals(HttpServletRequest request) {
+	public @ResponseBody Map<String, Object> llistat(HttpServletRequest request) {
 
 		List<Map<String, Object>> llistaFetsVitalsDTO = new ArrayList<Map<String, Object>>();
 		Map<String, Object> fetVitalDTO;
@@ -482,7 +482,7 @@ public class TMFetsVitalsController extends PantallaBaseController {
 	}
 
 	@RequestMapping(value = "/esborrarFetsVitals.do", method = POST)
-	public @ResponseBody IdNomDTO esborrarFetsVitals(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
 		IdNomDTO resultatStatus = new IdNomDTO();
 		try {
 			Long id = new Long(request.getParameter("id"));
@@ -612,6 +612,8 @@ public class TMFetsVitalsController extends PantallaBaseController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/guardarProcedimientos.do")
 	public @ResponseBody IdNomDTO guardarProcedimientos(Long id, Long[] elementos, HttpServletRequest request) {
+		
+		// FIXME amartin: este proceso no es transaccional. Hay más de una llamada a EJB que no es de consulta. Corregir.
 
 		/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
@@ -637,16 +639,13 @@ public class TMFetsVitalsController extends PantallaBaseController {
 			HechoVitalDelegate fetsVitalsDelegate = DelegateUtil.getHechoVitalDelegate();
 			fetVitalOld = fetsVitalsDelegate.obtenerHechoVital(id);
 			
-			// Recogemos los id de los campos que queremos borrar y los eliminamos
-			for (HechoVitalProcedimiento hvProc : (List<HechoVitalProcedimiento>)fetVitalOld.getHechosVitalesProcedimientos()) {
-				
+			// Recogemos los id de los campos que queremos borrar.
+			List<HechoVitalProcedimiento> listaHechoVitalProcedimientos = (List<HechoVitalProcedimiento>)fetVitalOld.getHechosVitalesProcedimientos();
+			for (HechoVitalProcedimiento hvProc : listaHechoVitalProcedimientos) {
 				if (hvProc != null)
 					hvProcIds.add(hvProc.getId());
-				
 			}
-
-			hvpDelegate.borrarHechoVitalProcedimientos(hvProcIds);
-
+			
 			// Es posible que hayan vaciado de elementos el módulo. En ese caso, elementos será null.
 			if ( elementos != null ) {
 				
@@ -664,7 +663,7 @@ public class TMFetsVitalsController extends PantallaBaseController {
 	
 				}
 	
-				hvpDelegate.grabarHechoVitalProcedimientos(hvpAGrabar);
+				hvpDelegate.grabarHechoVitalProcedimientos(hvpAGrabar, hvProcIds);
 			
 			}
 

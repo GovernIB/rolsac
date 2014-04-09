@@ -13,7 +13,6 @@ import net.sf.hibernate.Session;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.HechoVitalProcedimiento;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
-import org.ibit.rol.sac.persistence.ws.Actualizador;
 
 /**
  * SessionBean para mantener y consultar Hecho Vital Procedimiento.
@@ -29,14 +28,15 @@ import org.ibit.rol.sac.persistence.ws.Actualizador;
  */
 public abstract class HechoVitalProcedimientoFacadeEJB extends HibernateEJB {
 
-    /**
+	private static final long serialVersionUID = 1L;
+
+	/**
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
     public void ejbCreate() throws CreateException {
         super.ejbCreate();
     }
-    
     
     /**
      * Crea o actualiza los HechoVitalProcedimiento de una coleccion.
@@ -87,6 +87,59 @@ public abstract class HechoVitalProcedimientoFacadeEJB extends HibernateEJB {
         
     }
     
+    /**
+     * Crea o actualiza los HechoVitalProcedimiento de una coleccion, borrando previamente los especificados, vía ID,
+     * en la colección de elementos hvProcIds.
+     * 
+     * @ejb.interface-method
+     * 
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
+     * 
+     * @param hechoVitalProcedimiento Indica el hechoVitalProcedimiento.
+     * @param hvProcIds Indica los IDs de los HechoVitalProcedimiento que se desean borrar previamente.
+     * 
+     */
+    public void grabarHechoVitalProcedimientos(Collection<HechoVitalProcedimiento> hechoVitalProcedimiento, 
+    		Collection<Long> hvProcIds) {
+    	
+        Session session = getSession();
+        
+        try {
+        	
+        	borrarHechoVitalProcedimientos(hvProcIds);
+        	
+        	for ( HechoVitalProcedimiento hvp : hechoVitalProcedimiento ) {
+        		
+	            if ( hvp.getId() == null ) {
+	            	
+	                HechoVital hecho = (HechoVital)session.load( HechoVital.class, hvp.getHechoVital().getId() );
+	                ProcedimientoLocal proc = (ProcedimientoLocal)session.load( ProcedimientoLocal.class, hvp.getProcedimiento().getId() );
+	                Hibernate.initialize( proc.getMaterias() );
+	                Hibernate.initialize( proc.getHechosVitalesProcedimientos() );
+	                hecho.addHechoVitalProcedimientoRespetandoOrden(hvp);
+	                proc.addHechoVitalProcedimiento(hvp);  // siempre respeta orden
+
+	            } else {
+	            	
+	                session.update(hvp);
+	                
+	            }
+	            
+        	}
+        	
+            session.flush();
+            
+        } catch (HibernateException he) {
+        	
+            throw new EJBException(he);
+            
+        } finally {
+        	
+            close(session);
+            
+        }
+        
+    }
     
     /**
      * Incrementa el orden de un hecho vital - procedimiento.

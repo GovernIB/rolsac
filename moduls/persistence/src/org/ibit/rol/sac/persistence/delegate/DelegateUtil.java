@@ -3,7 +3,7 @@ package org.ibit.rol.sac.persistence.delegate;
 
 
 /**
- * Define m�todos est�ticos para obtener delegates.
+ * Define métodos estáticos para obtener delegates.
  */
 public final class DelegateUtil {
 

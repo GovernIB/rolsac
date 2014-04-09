@@ -41,7 +41,7 @@ public class TMPerfilsController extends PantallaBaseController {
 	private static Log log = LogFactory.getLog(TMPerfilsController.class);
     
     @RequestMapping(value = "/perfils.do")
-    public String pantallaPerfils(Map<String, Object> model, HttpServletRequest request) {
+    public String pantalla(Map<String, Object> model, HttpServletRequest request) {
         model.put("menu", 1);
         model.put("submenu", "layout/submenu/submenuTMPerfils.jsp");
         
@@ -57,7 +57,7 @@ public class TMPerfilsController extends PantallaBaseController {
     }
     
     @RequestMapping(value = "/llistat.do")
-    public @ResponseBody Map<String, Object> llistatPerfils(HttpServletRequest request) {
+    public @ResponseBody Map<String, Object> llistat(HttpServletRequest request) {
     	
     	List<Map<String, Object>> llistaPerfilsDTO = new ArrayList<Map<String, Object>>();
 		Map<String, Object> perfilDTO;
@@ -197,7 +197,7 @@ public class TMPerfilsController extends PantallaBaseController {
     
 	
     @RequestMapping(value = "/guardar.do", method = POST)
-	public @ResponseBody IdNomDTO guardarPerfil(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardar(HttpServletRequest request) {
 
 		IdNomDTO result = null;
 		String error = null;
@@ -220,9 +220,7 @@ public class TMPerfilsController extends PantallaBaseController {
 			
 			perfil.setCodigoEstandard(request.getParameter("item_codi_estandard"));
 			perfil.setPathIconografia(request.getParameter("item_path_iconografia"));
-		
-	        // TODO Recuperar IconosFamilia y IconosMateria
-			
+					
 			// Idiomas
 			TraduccionPerfilCiudadano tp;
 			IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
@@ -267,7 +265,7 @@ public class TMPerfilsController extends PantallaBaseController {
 	
 	
 	@RequestMapping(value = "/esborrarPerfil.do", method = POST)
-	public @ResponseBody IdNomDTO esborrarTipusNormativa(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
 		IdNomDTO resultatStatus = new IdNomDTO();
 		try {
 			Long id = new Long(request.getParameter("id"));

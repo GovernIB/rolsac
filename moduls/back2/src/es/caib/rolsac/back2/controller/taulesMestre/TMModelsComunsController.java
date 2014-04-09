@@ -6,13 +6,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -25,31 +22,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Document;
 import org.ibit.rol.sac.model.DocumentTramit;
-import org.ibit.rol.sac.model.Documento;
-import org.ibit.rol.sac.model.IconoMateria;
-import org.ibit.rol.sac.model.Materia;
-import org.ibit.rol.sac.model.PerfilCiudadano;
-import org.ibit.rol.sac.model.TraduccionDocumentTramit;
 import org.ibit.rol.sac.model.TraduccionDocumento;
-import org.ibit.rol.sac.model.TraduccionMateria;
 import org.ibit.rol.sac.model.TraduccionModelsComuns;
-import org.ibit.rol.sac.model.TraduccionPerfilCiudadano;
-import org.ibit.rol.sac.model.TraduccionTipo;
-import org.ibit.rol.sac.model.TraduccionTipoAfectacion;
-import org.ibit.rol.sac.model.TraduccionUA;
-import org.ibit.rol.sac.model.Tramite;
-import org.ibit.rol.sac.model.UnidadMateria;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
-import org.ibit.rol.sac.persistence.delegate.HechoVitalDelegate;
-import org.ibit.rol.sac.persistence.delegate.IconoMateriaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
-import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
 import org.ibit.rol.sac.persistence.delegate.ModelsComunsDelegate;
-import org.ibit.rol.sac.persistence.delegate.PerfilDelegate;
-import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,7 +50,7 @@ public class TMModelsComunsController extends PantallaBaseController {
 	private static Log log = LogFactory.getLog(TMModelsComunsController.class);
 	
     @RequestMapping(value = "/modelsComuns.do")
-    public String pantallaMateria(Map<String, Object> model, HttpServletRequest request) {
+    public String pantalla(Map<String, Object> model, HttpServletRequest request) {
         model.put("menu", 1);
         model.put("submenu", "layout/submenu/submenuTMModelsComuns.jsp");
         
@@ -87,7 +66,7 @@ public class TMModelsComunsController extends PantallaBaseController {
     }
     
     @RequestMapping(value = "/llistat.do")
-  	public @ResponseBody Map<String, Object> llistatModelsComuns(HttpServletRequest request) {
+  	public @ResponseBody Map<String, Object> llistat(HttpServletRequest request) {
   	
   		List<Map<String, Object>> llistaModelsComunsDTO = new ArrayList<Map<String, Object>>();
   		Map<String, Object> modelsComunsDTO;
@@ -198,7 +177,6 @@ public class TMModelsComunsController extends PantallaBaseController {
 		DocumentTramit modelComu = new DocumentTramit();
 		DocumentTramit modelComuOld = null;
 		
-		IdNomDTO result = null;
 		String jsonResult = null;
 		Locale locale = request.getLocale();
         
@@ -300,7 +278,7 @@ public class TMModelsComunsController extends PantallaBaseController {
     
 
     @RequestMapping(value = "/esborrar.do", method = POST)
-	public @ResponseBody IdNomDTO esborrarModelComu(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
 		IdNomDTO resultatStatus = new IdNomDTO();
 		try {
 			Long id = new Long(request.getParameter("id"));

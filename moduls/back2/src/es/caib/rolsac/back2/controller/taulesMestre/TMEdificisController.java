@@ -24,7 +24,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.TraduccionEdificio;
-import org.ibit.rol.sac.model.TraduccionIniciacion;
 import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
@@ -55,7 +54,7 @@ public class TMEdificisController extends PantallaBaseController
 	private static Log log = LogFactory.getLog(TMEdificisController.class);
 	
     @RequestMapping(value = "/edifici.do")
-    public String pantallaEdifici(Map<String, Object> model, HttpServletRequest request) {
+    public String pantalla(Map<String, Object> model, HttpServletRequest request) {
         model.put("menu", 1);
         model.put("submenu", "layout/submenu/submenuTMEdificis.jsp");
         
@@ -86,7 +85,7 @@ public class TMEdificisController extends PantallaBaseController
     }
     
     @RequestMapping(value = "/llistat.do")
-	public @ResponseBody Map<String, Object> llistatEdifici(HttpServletRequest request, HttpSession session) {
+	public @ResponseBody Map<String, Object> llistat(HttpServletRequest request, HttpSession session) {
 	
 		List<Map<String, Object>> llistaEdificiDTO = new ArrayList<Map<String, Object>>();
 		Map<String, Object> edificiDTO;
@@ -298,7 +297,7 @@ public class TMEdificisController extends PantallaBaseController
 	}
     
     @RequestMapping(value = "/guardar.do", method = POST)
-    public ResponseEntity<String> guardarEdifici(HttpSession session, HttpServletRequest request)
+    public ResponseEntity<String> guardar(HttpSession session, HttpServletRequest request)
     {
     	/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
@@ -471,7 +470,7 @@ public class TMEdificisController extends PantallaBaseController
     
     
     @RequestMapping(value = "/esborrarEdifici.do", method = POST)
-	public @ResponseBody IdNomDTO esborrarEdifici(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
 		IdNomDTO resultatStatus = new IdNomDTO();
 		try {
 			Long id = new Long(request.getParameter("id"));

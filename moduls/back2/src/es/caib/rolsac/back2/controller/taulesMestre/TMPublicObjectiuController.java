@@ -38,7 +38,7 @@ public class TMPublicObjectiuController extends PantallaBaseController {
 	private static Log log = LogFactory.getLog(TMPublicObjectiuController.class);
     
     @RequestMapping(value = "/publicObjectiu.do")
-    public String pantallaPublicObjectiu(Map<String, Object> model, HttpServletRequest request) {
+    public String pantalla(Map<String, Object> model, HttpServletRequest request) {
         model.put("menu", 1);
         model.put("submenu", "layout/submenu/submenuTMPublicObjectiu.jsp");
         
@@ -54,7 +54,7 @@ public class TMPublicObjectiuController extends PantallaBaseController {
     }
     
     @RequestMapping(value = "/llistat.do")
-   	public @ResponseBody Map<String, Object> llistatPublicObjectiu(HttpServletRequest request) {
+   	public @ResponseBody Map<String, Object> llistat(HttpServletRequest request) {
    	
    		List<Map<String, Object>> llistaPublicObjectiuDTO = new ArrayList<Map<String, Object>>();
    		Map<String, Object> publicObjectiuDTO;
@@ -144,20 +144,20 @@ public class TMPublicObjectiuController extends PantallaBaseController {
 	}
     
     @RequestMapping(value = "/guardar.do", method = POST)
-	public @ResponseBody IdNomDTO guardarPublicObjectiu(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardar(HttpServletRequest request) {
 
 		IdNomDTO result = null;
 		String error = null;
 
 		try {
-			PublicoObjetivoDelegate perfilDelegate = DelegateUtil.getPublicoObjetivoDelegate();
+			PublicoObjetivoDelegate publicoObjetivolDelegate = DelegateUtil.getPublicoObjetivoDelegate();
 			PublicoObjetivo publicObjectiu = new PublicoObjetivo();
 			PublicoObjetivo publicObjectiuOld;
 			
 			boolean edicion;
 			try {
 				Long id = Long.parseLong(request.getParameter("item_id"));
-				publicObjectiuOld = perfilDelegate.obtenerPublicoObjetivo(id);
+				publicObjectiuOld = publicoObjetivolDelegate.obtenerPublicoObjetivo(id);
 				edicion = true;
 				publicObjectiu.setId(publicObjectiuOld.getId());
 				publicObjectiu.setOrden(publicObjectiuOld.getOrden());
@@ -191,7 +191,7 @@ public class TMPublicObjectiuController extends PantallaBaseController {
 			}
 			// Fin idiomas
 			
-			Long tipusId = perfilDelegate.grabarPublicoObjetivo(publicObjectiu);
+			Long tipusId = publicoObjetivolDelegate.grabarPublicoObjetivo(publicObjectiu);
 			
 			String ok = messageSource.getMessage("perfil.guardat.correcte", null, request.getLocale());
 			result = new IdNomDTO(tipusId, ok);
@@ -213,7 +213,7 @@ public class TMPublicObjectiuController extends PantallaBaseController {
 	}	
     
     @RequestMapping(value = "/esborrarPublicObjectiu.do", method = POST)
-	public @ResponseBody IdNomDTO esborrarPublicObjectiu(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
 		IdNomDTO resultatStatus = new IdNomDTO();
 		try {
 			Long id = new Long(request.getParameter("id"));
@@ -259,7 +259,7 @@ public class TMPublicObjectiuController extends PantallaBaseController {
 	}          
     
     @RequestMapping(value = "/reordenarPublicObjectiu.do", method = POST)
-    public @ResponseBody IdNomDTO reordenarPublicObjectiu(HttpServletRequest request) {
+    public @ResponseBody IdNomDTO reordenar(HttpServletRequest request) {
     	IdNomDTO resultatStatus = new IdNomDTO();
     	
 		try {

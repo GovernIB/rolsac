@@ -1,5 +1,7 @@
 package org.ibit.rol.sac.persistence.ejb;
 
+import java.util.List;
+
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
@@ -51,32 +53,104 @@ public abstract class UnidadMateriaFacadeEJB extends HibernateEJB
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin}"
      */
-	public Long grabarUnidadMateria(UnidadMateria unidadMateria, Long idUnidad, Long idMateria)
-	{
+	public Long grabarUnidadMateria(UnidadMateria unidadMateria, Long idUnidad, Long idMateria) {
+		
 		Session session = getSession();
+		
 		try {
+			
 			UnidadAdministrativa unidad = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, idUnidad);
         	Hibernate.initialize(unidad.getHijos());
+        	
         	if (unidadMateria.getId() == null) {
+        		
         		Materia materia = (Materia) session.load(Materia.class, idMateria);
         		unidad.addUnidadMateria(unidadMateria);
         		materia.addUnidadMateria(unidadMateria);
         		
         	} else {
+        		
         		session.update(unidadMateria);
+        		
         	}
+        	
         	session.flush();
+        	
         	Hibernate.initialize(unidad.getHijos());
             Actualizador.actualizar(unidad);
+            
             return unidadMateria.getId();
             
         } catch (HibernateException he) {
+        	
         	throw new EJBException(he);
+        	
         } finally {
+        	
         	close(session);
+        	
         }
+		
 	}
 	
+	/**
+     * Crea o actualiza una UnidadMateria
+     * @param unidadMateria Indica la unidad materia a guardar
+     * @param	idUnidad	Identificador de una unidad
+     * @param	idMateria	Identificador de una materia
+     * @return Devuelve el identificador  de la unidad materia guardada
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.system},${role.admin}"
+     */
+	public void grabarUnidadesMateria(List<UnidadMateria> unidadesMateriaNuevas, List<Long> unidadesMateriaABorrar) {
+		
+		Session session = getSession();
+		
+		try {
+			
+			// Primero borramos las especificadas.
+			for (Long id : unidadesMateriaABorrar)
+				borrarUnidadMateria(id);
+			
+			// Creamos/actualizamos relaciones unidad-materia.
+			for (UnidadMateria um : unidadesMateriaNuevas) {
+				
+				if (um != null) {
+					
+					if (um.getId() == null) {
+						
+						UnidadAdministrativa unidad = (UnidadAdministrativa)session.load(UnidadAdministrativa.class, um.getUnidad().getId());
+						unidad.addUnidadMateria(um);
+						
+						Materia materia = (Materia)session.load(Materia.class, um.getMateria().getId());
+						materia.addUnidadMateria(um);
+						
+						session.flush();
+						
+						Hibernate.initialize(unidad.getHijos());
+						Actualizador.actualizar(unidad);
+						
+					} else {
+						
+						session.update(um);
+						
+					}
+					
+				}
+				
+			}
+						                        
+        } catch (HibernateException he) {
+        	
+        	throw new EJBException(he);
+        	
+        } finally {
+        	
+        	close(session);
+        	
+        }
+		
+	}
 	
 	/**
      * Borra una UnidadMateria.

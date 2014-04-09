@@ -38,7 +38,7 @@ public class TMTipusIniciacioController extends PantallaBaseController {
 	private static Log log = LogFactory.getLog(TMTipusIniciacioController.class);
 	
     @RequestMapping(value = "/tipusIniciacions.do")
-    public String pantallaTipusIniciacio(Map<String, Object> model, HttpServletRequest request) {
+    public String pantalla(Map<String, Object> model, HttpServletRequest request) {
         model.put("menu", 1);
         model.put("submenu", "layout/submenu/submenuTMTipusIniciacio.jsp");
         
@@ -54,7 +54,7 @@ public class TMTipusIniciacioController extends PantallaBaseController {
     }
     
 	@RequestMapping(value = "/llistat.do")
-	public @ResponseBody Map<String, Object> llistatTipusIniciacions(HttpServletRequest request) {
+	public @ResponseBody Map<String, Object> llistat(HttpServletRequest request) {
 	
 		List<Map<String, Object>> llistaIniciacionsDTO = new ArrayList<Map<String, Object>>();
 		Map<String, Object> iniciacioDTO;
@@ -142,7 +142,7 @@ public class TMTipusIniciacioController extends PantallaBaseController {
 	
 	
 	@RequestMapping(value = "/guardar.do", method = POST)
-	public @ResponseBody IdNomDTO guardarIniciacio(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardar(HttpServletRequest request) {
 
 		IdNomDTO result = null;
 		String error = null;
@@ -207,7 +207,7 @@ public class TMTipusIniciacioController extends PantallaBaseController {
 	}	
 
 	@RequestMapping(value = "/esborrarTipusIniciacio.do", method = POST)
-	public @ResponseBody IdNomDTO esborrarTipusIniciacio(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
 		
 		IdNomDTO resultatStatus = new IdNomDTO();
 		

@@ -57,7 +57,7 @@ public class TMAgrupacioFetsVitalsController extends PantallaBaseController {
 	private static Log log = LogFactory.getLog(TMAgrupacioFetsVitalsController.class);
     
     @RequestMapping(value = "/agrupacioFetsVitals.do")
-    public String pantallaAgrupacioFetsVitals(Map<String, Object> model, HttpServletRequest request) {
+    public String pantalla(Map<String, Object> model, HttpServletRequest request) {
     	
         model.put("menu", 1);
         model.put("submenu", "layout/submenu/submenuTMAgrupacioFetsVitals.jsp");
@@ -143,7 +143,7 @@ public class TMAgrupacioFetsVitalsController extends PantallaBaseController {
     }
     
     @RequestMapping(value = "/llistat.do")
-	public @ResponseBody Map<String, Object> llistatAgrupacioVetsFitals(HttpServletRequest request) {
+	public @ResponseBody Map<String, Object> llistat(HttpServletRequest request) {
     	
     	List<Map<String, Object>> llistaAgrupacioFetsVitalsDTO = new ArrayList<Map<String, Object>>();
 		Map<String, Object> agrupacioFetsVitalsDTO;
@@ -453,7 +453,7 @@ public class TMAgrupacioFetsVitalsController extends PantallaBaseController {
 	}    
     
     @RequestMapping(value = "/esborrarAgrupacioFetsVitals.do", method = POST)
-	public @ResponseBody IdNomDTO esborrarAgrupacioFetsVitals(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
     	
 		IdNomDTO resultatStatus = new IdNomDTO();
 		

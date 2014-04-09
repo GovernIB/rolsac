@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,7 +19,6 @@ import org.ibit.rol.sac.model.CatalegDocuments;
 import org.ibit.rol.sac.model.ExcepcioDocumentacio;
 import org.ibit.rol.sac.model.TraduccionCatalegDocuments;
 import org.ibit.rol.sac.model.TraduccionExcepcioDocumentacio;
-import org.ibit.rol.sac.model.TraduccionFamilia;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.CatalegDocumentsDelegate;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
@@ -45,7 +43,7 @@ public class TMCatalegDocumentsController extends PantallaBaseController
 	private static String excepcionNoIdioma = "No se encontro el idioma por defecto";
 	
 	@RequestMapping(value = "/catalegDocuments.do")
-	public String pantallaCatalegDocuments(Map<String, Object> model, HttpServletRequest request)
+	public String pantalla(Map<String, Object> model, HttpServletRequest request)
 	{
 		model.put("menu", 1);
 		model.put("submenu", "layout/submenu/submenuTMCatalegDocuments.jsp");
@@ -74,7 +72,7 @@ public class TMCatalegDocumentsController extends PantallaBaseController
 	
 	
 	@RequestMapping(value = "/llistat.do")
-	public @ResponseBody Map<String, Object> llistatCataleg(Long admresp, Long excepcio, String textes, Integer pagPag, Integer pagRes, HttpServletRequest request) {
+	public @ResponseBody Map<String, Object> llistat(Long admresp, Long excepcio, String textes, Integer pagPag, Integer pagRes, HttpServletRequest request) {
 		
     	List<Map<String, Object>> llistaCatalegDocumentsDTO = new ArrayList<Map<String, Object>>();
     	Map<String, Object> catalegDocDTO;
@@ -182,7 +180,7 @@ public class TMCatalegDocumentsController extends PantallaBaseController
 	}
 	
 	@RequestMapping(value = "/guardar.do", method = POST)
-	public @ResponseBody IdNomDTO guardarDocumentCataleg(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardar(HttpServletRequest request) {
 
 		IdNomDTO result = null;
 		String error = null;
@@ -275,7 +273,7 @@ public class TMCatalegDocumentsController extends PantallaBaseController
 		return result;
 	}
     @RequestMapping(value = "/esborrarDocumentCataleg.do", method = POST)
-	public @ResponseBody IdNomDTO esborrarDocumentCataleg(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
 		IdNomDTO resultatStatus = new IdNomDTO();
 		try {
 			Long id = new Long(request.getParameter("id"));
