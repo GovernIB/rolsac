@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/espaisTerritorials/")
 public class ArchivoEspacioTerritorialController extends ArchivoController {
 	
-    private MessageSource messageSource = null;
+    @SuppressWarnings("unused")
+	private MessageSource messageSource = null;
     
     @Autowired
     public void setMessageSource(MessageSource messageSource){
@@ -34,12 +35,11 @@ public class ArchivoEspacioTerritorialController extends ArchivoController {
 
 		Long id = new Long(request.getParameter("id"));
 		Integer tipo = new Integer(request.getParameter("tipus"));
-		String lang = request.getParameter("lang");
 		
 		EspacioTerritorialDelegate espacioDelegate = DelegateUtil.getEspacioTerritorialDelegate();
 		Archivo archivo = null;
 		
-		//Obtener archivo según el parametro "t" (tipo)		
+		//Obtener archivo segï¿½n el parametro "t" (tipo)		
 		switch (tipo) {
 			// Mapa
 			case 1:

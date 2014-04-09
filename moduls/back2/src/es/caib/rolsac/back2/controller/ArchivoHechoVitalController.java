@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/fetsVitals/")
 public class ArchivoHechoVitalController extends ArchivoController {
 	
-    private MessageSource messageSource = null;
+    @SuppressWarnings("unused")
+	private MessageSource messageSource = null;
     
     @Autowired
     public void setMessageSource(MessageSource messageSource){
@@ -39,7 +40,7 @@ public class ArchivoHechoVitalController extends ArchivoController {
 		HechoVitalDelegate fetVitalDelegate = DelegateUtil.getHechoVitalDelegate();
 		Archivo archivo = null;
 		
-		//Obtener archivo según el parametro "t" (tipo)		
+		//Obtener archivo segï¿½n el parametro "t" (tipo)		
 		switch (tipo) {
 			//Foto
 			case 1:
@@ -73,6 +74,7 @@ public class ArchivoHechoVitalController extends ArchivoController {
 		}  
 		
 		return archivo;
+		
 	}
 	
 }

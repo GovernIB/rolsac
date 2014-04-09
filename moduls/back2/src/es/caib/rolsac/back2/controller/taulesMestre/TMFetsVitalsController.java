@@ -613,8 +613,6 @@ public class TMFetsVitalsController extends PantallaBaseController {
 	@RequestMapping(value = "/guardarProcedimientos.do")
 	public @ResponseBody IdNomDTO guardarProcedimientos(Long id, Long[] elementos, HttpServletRequest request) {
 		
-		// FIXME amartin: este proceso no es transaccional. Hay más de una llamada a EJB que no es de consulta. Corregir.
-
 		/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
 		 * Si no se fuerza el content type, Spring lo calcula y curiosamente depende del navegador desde el que se hace la petición.

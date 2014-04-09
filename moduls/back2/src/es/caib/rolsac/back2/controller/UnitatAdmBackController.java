@@ -82,7 +82,7 @@ import es.indra.rol.sac.integracion.traductor.Traductor;
 @RequestMapping("/unitatadm/")
 public class UnitatAdmBackController extends PantallaBaseController {
 
-	private static Log log = LogFactory.getLog(UnitatAdmBackController.class);
+	private static Log  log = LogFactory.getLog(UnitatAdmBackController.class);
 	private static final String URL_PREVISUALIZACION = "es.caib.rolsac.previsualitzacio.ua.url";
 	private static final String OPERACION_FALLIDA = "Error de sessi�n: Sessi�n expirada o no inciada";
 
@@ -413,33 +413,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		}
 		
 		return listaMaterias;
-		
-	}
-
-	private Object getLlistaMateriesDTO(HttpServletRequest request, UnidadAdministrativa uni, String lang) {
-		
-		List<Map<String, String>> llistaMateriesDTO = null;
-		
-		if (uni.getUnidadesMaterias() != null) {
-			
-			llistaMateriesDTO = new ArrayList<Map<String, String>>();
-			
-			for ( UnidadMateria unidadMateria : uni.getUnidadesMaterias() ) {
-				
-				Map<String, String> map = new HashMap<String, String>();
-				
-				map.put("id", unidadMateria.getMateria().getId().toString());
-				map.put("nom", unidadMateria.getMateria().getNombreMateria(lang));
-				map.put("idMainItem", uni.getId().toString());
-				map.put("idRelatedItem", unidadMateria.getMateria().getId().toString());
-				
-				llistaMateriesDTO.add( map );
-				
-			}
-			
-		}
-
-		return llistaMateriesDTO;
 		
 	}
 
@@ -1271,7 +1244,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	 * @param idua identificador de la unidad organica
 	 * @return boolean
 	 */
-	// TODO: averiguar hasta cuándo se ha de devolver false y dejar constancia de la explicación en el código.
+	// TODO amartin: averiguar hasta cuándo se ha de devolver false y dejar constancia de la explicación en el código.
 	private boolean hayMicrositesUA(Long idua) {
 		//    	boolean retorno=false;
 		//    	try {
@@ -1282,22 +1255,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		//			retorno = true; //para evitar inconsistencias
 		//		}
 		return false;
-	}
-
-	// TODO: ¿se puede borrar?
-	private boolean tieneMicrosites(Long idua) throws Exception {
-		boolean retorno = false;
-		org.ibit.rol.sac.micropersistence.delegate.MicrositeDelegate micro = org.ibit.rol.sac.micropersistence.delegate.DelegateUtil.getMicrositeDelegate();
-		List<?> micros = micro.listarMicrosites();
-		Iterator<?> iter = micros.iterator();
-		while (iter.hasNext()) {
-			org.ibit.rol.sac.micromodel.Microsite mic = (org.ibit.rol.sac.micromodel.Microsite) iter.next();
-			if (mic.getUnidadAdministrativa()==idua.intValue()) {
-				retorno=true;
-				break;
-			}
-		}
-		return retorno;
 	}
 
 	/**
@@ -1467,7 +1424,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	}
 
 	/**
-	 * Retorna una cadena que canvia les vocals amb accent o di�resi 
+	 * Retorna una cadena que canvia les vocals amb accent o dièresi 
 	 * per vocals sense aquestes (emprat per cercar registres coincidents 
 	 * de seccions).
 	 * 
@@ -1480,17 +1437,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 				.replaceAll("[���]", "i")
 				.replaceAll("[���]", "o")
 				.replaceAll("[���]", "u");		
-	}
-
-	/**
-	 * Devuelve true si ha habido algun cambio en el modulo.
-	 * 
-	 * @param modulo
-	 * @param valoresForm
-	 * @return boolean
-	 */
-	private boolean isModuloModificado(String modulo, Map<String, String> valoresForm) {
-		return "1".equals(valoresForm.get(modulo));
 	}
 
 	@RequestMapping(value = "/traduir.do")

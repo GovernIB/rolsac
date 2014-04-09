@@ -1,7 +1,6 @@
 package es.caib.rolsac.back2.controller;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;

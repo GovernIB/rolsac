@@ -29,15 +29,17 @@ public class EdificisBackController extends PantallaBaseController{
 	private static Log log = LogFactory.getLog(EdificisBackController.class);
 
 	@RequestMapping(value = "/llistat.do", method = POST)
-	public @ResponseBody Map<String, Object> llistatEdificis(HttpServletRequest request) {
+	public @ResponseBody Map<String, Object> llistat(HttpServletRequest request) {
 
 		List<EdificioDTO> llistaEdificiDTO = new ArrayList<EdificioDTO>();
+		
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		Map<String, Object> tradMap = new HashMap<String, Object>();
-		Map<String,Object> resultats = new HashMap<String,Object>();
-		Long idUABase=null;
-		Boolean uaFilles=false;
-		Boolean uaMeves=false;
+		Map<String, Object> resultats = new HashMap<String, Object>();
+		
+		Long idUABase = null;
+		Boolean uaFilles = false;
+		Boolean uaMeves = false;
 
 		if (!"".equals(request.getParameter("adresa"))){
 			paramMap.put("direccion", request.getParameter("adresa").toUpperCase());
@@ -78,6 +80,7 @@ public class EdificisBackController extends PantallaBaseController{
 
 			}
 		} catch (DelegateException dEx) {
+			
 			if (dEx.isSecurityException()) {
 				log.error("Error de permisos: " + dEx.toString());
 				resultats.put("id", -1);
@@ -85,11 +88,14 @@ public class EdificisBackController extends PantallaBaseController{
 				log.error("Error: " + dEx.toString());
 				resultats.put("id", -2);
 			}
+			
 		}
 
 		resultats.put("total", resultadoBusqueda.getTotalResultados());
 		resultats.put("nodes", llistaEdificiDTO);      
 
 		return resultats;
+		
 	}
+	
 }

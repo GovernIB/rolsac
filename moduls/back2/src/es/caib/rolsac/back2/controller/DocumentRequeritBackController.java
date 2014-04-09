@@ -151,7 +151,7 @@ public class DocumentRequeritBackController {
 	}
 
 	@RequestMapping(value = "/guardarDocumentRequerit.do", method = POST)
-	public @ResponseBody ResponseEntity<String> guardarDocumentRequerit(HttpSession session, HttpServletRequest request) {		
+	public @ResponseBody ResponseEntity<String> guardar(HttpSession session, HttpServletRequest request) {		
 
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", "text/html; charset=UTF-8");
@@ -274,7 +274,7 @@ public class DocumentRequeritBackController {
 	}
 
 	@RequestMapping(value = "/esborrarDocumentRequerit.do", method = POST)	
-	public @ResponseBody IdNomDTO esborrarDocumentRequerit(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
 		
 		IdNomDTO resultatStatus = new IdNomDTO();
 
@@ -339,31 +339,5 @@ public class DocumentRequeritBackController {
 		return resultats;    
 		
 	}
-	
-	/*
-		TODO: pendiente de confirmación para borrado.
-	*/
-	/*private Map actuailizaCampsMultiidioma (HttpServletRequest request) {
-    // Idiomas
-    TraduccionDocumento traduccionDoc;      
-    IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
-    List<String> langs = idiomaDelegate.listarLenguajes();
-
-    Map traducciones = new HashMap(langs.size());     
-
-    for (String lang: langs) {
-
-      traduccionDoc = (TraduccionDocumento) docTramit.getTraduccion(lang);
-
-      if ( traduccionDoc == null ) 
-        traduccionDoc = new TraduccionDocumento();
-
-      traduccionDoc.setTitulo(request.getParameter("doc_requerit_titol_" + lang));
-      traduccionDoc.setDescripcion(request.getParameter("doc_requerit_descripcio_" + lang));
-
-      traducciones.put(lang, traduccionDoc);
-      return traducciones;
-    }
-  }*/
 
 }

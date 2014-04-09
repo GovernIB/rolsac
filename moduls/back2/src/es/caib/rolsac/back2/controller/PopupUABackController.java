@@ -27,7 +27,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 public class PopupUABackController {
 	
 	private static Log log = LogFactory.getLog(PopupUABackController.class);
-    private MessageSource messageSource = null;
+	
+    @SuppressWarnings("unused")
+	private MessageSource messageSource = null;
+    
     private UnidadAdministrativaDelegate uaDelegate = null;
 
     @Autowired

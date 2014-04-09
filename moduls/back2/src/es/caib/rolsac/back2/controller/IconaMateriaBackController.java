@@ -37,7 +37,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.util.UploadUtil;
 
-
 @Controller
 @RequestMapping("/iconesMateria/")
 public class IconaMateriaBackController extends ArchivoController {
@@ -51,13 +50,13 @@ public class IconaMateriaBackController extends ArchivoController {
         this.messageSource = messageSource;
     }	
 	
-	
 	@RequestMapping(value = "/guardarIcona.do", method = POST)
-	public ResponseEntity<String> guardarIcona(HttpServletRequest request, HttpSession session)  {
+	public ResponseEntity<String> guardar(HttpServletRequest request, HttpSession session)  {
+		
 		/* Forzar content type en la cabecera para evitar bug en IE y en Firefox.
-		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la petición.
-		 * Esto se debe a que como esta petición es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
-		 * un descargable o fichero vinculado a una aplicación. 
+		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la peticiï¿½n.
+		 * Esto se debe a que como esta peticiï¿½n es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
+		 * un descargable o fichero vinculado a una aplicaciï¿½n. 
 		 * De esta forma, y devolviendo un ResponseEntity, forzaremos el Content-Type de la respuesta.
 		 */
 		HttpHeaders responseHeaders = new HttpHeaders();
@@ -70,8 +69,9 @@ public class IconaMateriaBackController extends ArchivoController {
 		Map<String, FileItem> ficherosForm = new HashMap<String, FileItem>();
 		
 		try {
-			//Aquí nos llegará un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
-			//Iremos recopilando los parámetros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
+			
+			//Aquï¿½ nos llegarï¿½ un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
+			//Iremos recopilando los parï¿½metros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
 			List<FileItem> items = UploadUtil.obtenerServletFileUpload().parseRequest(request);
 			for (FileItem item : items) {
 				if (item.isFormField()) {
@@ -105,7 +105,9 @@ public class IconaMateriaBackController extends ArchivoController {
     		}
 			
     		if (jsonResult == null) {
+    			
 	    		PerfilCiudadano perfil = null;
+	    		
 	    		if (valoresForm.get("icona_perfil") != null && !"".equals(valoresForm.get("icona_perfil"))) {
 					Long perfilId = Long.parseLong(valoresForm.get("icona_perfil"));
 					PerfilDelegate perfilDelegate = DelegateUtil.getPerfilDelegate();
@@ -125,24 +127,29 @@ public class IconaMateriaBackController extends ArchivoController {
 					jsonResult = new IdNomDTO(-2l, error).getJson();
 					log.error("Error guardant icona: No s'ha especificat id de materia.");
 				}
+				
     		}
 			
 		} catch (FileUploadException fue) {
+			
 			String error = messageSource.getMessage("error.fitxer.tamany", null, locale);
 			jsonResult = new IdNomDTO(-3l, error).getJson();
 			log.error(error + ": " + fue.toString());
 			
 		} catch (UnsupportedEncodingException uee) {
+			
 			String error = messageSource.getMessage("error.altres", null, locale);
 			jsonResult = new IdNomDTO(-2l, error).getJson();
 			log.error(error + ": " + uee.toString());
 			
 		} catch (NumberFormatException nfe) {
+			
 			String error = messageSource.getMessage("error.altres", null, locale);
 			jsonResult = new IdNomDTO(-2l, error).getJson();
 			log.error(error + ": " + nfe.toString());
 			
 		} catch (DelegateException de) {
+			
 			String error = null;
 			if (de.isSecurityException()) {
 				error = messageSource.getMessage("error.permisos", null, locale);
@@ -151,18 +158,21 @@ public class IconaMateriaBackController extends ArchivoController {
 				error = messageSource.getMessage("error.altres", null, locale);
 				jsonResult = new IdNomDTO(-2l, error).getJson();
 			}
+			
 			log.error(error + ": " + de.toString());
+			
 		}
 
 		return new ResponseEntity<String>(jsonResult, responseHeaders, HttpStatus.CREATED);
+		
 	}
 
-	
 	@RequestMapping(value = "/carregarIcona.do")
 	public @ResponseBody Map<String, Object> carregarIcona(HttpServletRequest request)  {
 		Map<String, Object> resultats = new HashMap<String, Object>();
 
 		try {
+			
 			Long id = new Long(request.getParameter("id"));
 			IconoMateriaDelegate iconaDelegate = DelegateUtil.getIconoMateriaDelegate();
 			IconoMateria icona = iconaDelegate.obtenerIconoMateria(id);
@@ -187,9 +197,12 @@ public class IconaMateriaBackController extends ArchivoController {
 			resultats.put("id", icona.getId());
 			
 		} catch (NumberFormatException nfe) {
-			log.error("El id de la icona no es númeric: " + nfe.toString());
+			
+			log.error("El id de la icona no es nï¿½meric: " + nfe.toString());
 			resultats.put("id", -3);
+			
 		} catch (DelegateException dEx) {
+			
 			if (dEx.isSecurityException()) {
 				log.error("Error de permisos: " + dEx.toString());
 				resultats.put("id", -1);
@@ -197,12 +210,13 @@ public class IconaMateriaBackController extends ArchivoController {
 				log.error("Error: " + dEx.toString());
 				resultats.put("id", -2);
 			}
+			
 		}
 		
 		return resultats;
+		
 	}
 	
-
 	@RequestMapping(value = "/archivo.do")
     public void devolverArchivoIcono(HttpServletRequest request, HttpServletResponse response) throws Exception {
         this.devolverArchivo(request, response);   

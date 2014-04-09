@@ -125,7 +125,7 @@ public class DocumentTramitBackController extends ArchivoController {
     }
 
     @RequestMapping(value = "/guardarDocumentTramit.do", method = POST)
-    public ResponseEntity<String> guardarDocument(HttpServletRequest request, HttpSession session) {
+    public ResponseEntity<String> guardar(HttpServletRequest request, HttpSession session) {
 
         /*
          * Forzar content type en la cabecera para evitar bug en IE y en

@@ -24,7 +24,6 @@ public class ProcedimientoDelegate {
 	
 	ProcedimientoDelegateI impl;
 	
-	
 	public ProcedimientoDelegateI getImpl() {
 		return impl;
 	}
@@ -74,6 +73,11 @@ public class ProcedimientoDelegate {
 	
 	public Long grabarProcedimiento(ProcedimientoLocal procedimiento, Long idUA) throws DelegateException {
 		return impl.grabarProcedimiento(procedimiento, idUA);
+	}
+	
+	public Long grabarProcedimientoConTramites(ProcedimientoLocal procedimiento, Long idUA, 
+			List listaTramitesParaBorrar, List listaIdsTramitesParaActualizar) throws DelegateException {
+		return impl.grabarProcedimientoConTramites(procedimiento, idUA, listaTramitesParaBorrar, listaIdsTramitesParaActualizar);
 	}
 	
 	public void indexBorraProcedimiento(ProcedimientoLocal pro) throws DelegateException {

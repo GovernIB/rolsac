@@ -17,6 +17,9 @@ public interface ProcedimientoDelegateI {
 	public abstract Long grabarProcedimiento(ProcedimientoLocal procedimiento, Long idUA)
 			throws DelegateException;
 
+	public abstract Long grabarProcedimientoConTramites(ProcedimientoLocal procedimiento, Long idUA, List listaTramitesParaBorrar, List listaIdsTramitesParaActualizar)
+			throws DelegateException;
+	
 	public abstract List listarProcedimientos()
 			throws DelegateException;
 

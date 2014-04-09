@@ -28,11 +28,13 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  */
 public class ProcedimientoDelegateImpl implements StatelessDelegate, ProcedimientoDelegateI {
 	
+	private static final long serialVersionUID = 1L;
+	
 	/* ========================================================= */
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
-	
-    /* (non-Javadoc)
+
+	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#grabarProcedimiento(org.ibit.rol.sac.model.ProcedimientoLocal, java.lang.Long)
 	 */
     public Long grabarProcedimiento(ProcedimientoLocal procedimiento, Long idUA) throws DelegateException {
@@ -42,6 +44,15 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
             throw new DelegateException(e);
         }
     }
+    
+    public Long grabarProcedimientoConTramites(ProcedimientoLocal procedimiento, Long idUA,
+			List listaTramitesParaBorrar, List listaIdsTramitesParaActualizar) throws DelegateException {
+    	try {
+            return getFacade().grabarProcedimientoConTramites(procedimiento, idUA, listaTramitesParaBorrar, listaIdsTramitesParaActualizar);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+	}
     
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#listarProcedimientos()
@@ -361,6 +372,5 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
             throw new DelegateException(e);
         }
     }
-
     
 }

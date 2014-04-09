@@ -3,7 +3,6 @@ package es.caib.rolsac.back2.controller;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -29,7 +28,8 @@ public class PopupCoordenadesBackController {
 
 	private static Log log = LogFactory.getLog(PopupCoordenadesBackController.class);
 		
-    private MessageSource messageSource = null;
+    @SuppressWarnings("unused")
+	private MessageSource messageSource = null;
 
     @Autowired
     public void setMessageSource(MessageSource messageSource) {
@@ -51,14 +51,14 @@ public class PopupCoordenadesBackController {
     	        edifici = delegate.obtenerEdificio(idEdifici);
 
     	        String lsDir = ""+ edifici.getDireccion();
-    	        lsDir = lsDir.replaceAll("nº","");
+    	        lsDir = lsDir.replaceAll("nï¿½","");
     	        lsDir = lsDir.replaceAll(",","");
     	        String lsCP = ""+ edifici.getCodigoPostal();
     	        if (lsCP.equals("null")) lsCP= "";
     	        String lsPbl = ""+ edifici.getPoblacion();
     	        if (lsPbl.equals("null")) lsPbl= "";                
     	        if (edifici.getDireccion()!= null){
-    	        	model.put("dirEdi",lsDir + " , " + lsCP + " , " + lsPbl + " , " + "España");
+    	        	model.put("dirEdi",lsDir + " , " + lsCP + " , " + lsPbl + " , " + "Espaï¿½a");
     	        }
 
     	        model.put("latEdi", edifici.getLatitud());

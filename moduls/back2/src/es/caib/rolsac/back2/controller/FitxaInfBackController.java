@@ -157,7 +157,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 	}
 
 	@RequestMapping(value = "/llistat.do", method = POST)
-	public @ResponseBody Map<String, Object> llistatFitxes(HttpServletRequest request, HttpSession session) {
+	public @ResponseBody Map<String, Object> llistat(HttpServletRequest request, HttpSession session) {
 
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		Map<String, String> tradMap = new HashMap<String, String>();
@@ -685,7 +685,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 			Long idFitxa = guardarGrabar(fitxa);										// Guardar los cambios de una ficha
 
 			// Guardado de las relaciones de una ficha con otras entidades
-			guardarSecciosUA(edicion, fitxaOld, valoresForm, idFitxa);					// Guardamos las relaciones de la ficha con las secciones y las UAs
+			guardarSeccionessUA(edicion, fitxaOld, valoresForm, idFitxa);					// Guardamos las relaciones de la ficha con las secciones y las UAs
 			// Fin guardado relaciones
 
 			// Finalitzat correctament
@@ -994,7 +994,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 	/*
 	 * Función que asocia la ficha con la UA y las secciones
 	 */
-	private void guardarSecciosUA(boolean edicion, Ficha fitxaOld, Map<String, String> valoresForm, Long idFitxa)
+	private void guardarSeccionessUA(boolean edicion, Ficha fitxaOld, Map<String, String> valoresForm, Long idFitxa)
 			throws DelegateException {
 
 		FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
@@ -1192,7 +1192,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 	}
 
 	@RequestMapping(value = "/esborrarFitxa.do", method = POST)
-	public @ResponseBody IdNomDTO esborrarFitxa(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
 
 		IdNomDTO resultatStatus = new IdNomDTO();
 		

@@ -1,4 +1,5 @@
 package es.caib.rolsac.back2.controller;
+
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/agrupacioFetsVitals/")
 public class ArchivoAgrupacionHechoVitalController extends ArchivoController {
 	
+	@SuppressWarnings("unused")
     private MessageSource messageSource = null;
     
     @Autowired
@@ -36,7 +38,7 @@ public class ArchivoAgrupacionHechoVitalController extends ArchivoController {
 		AgrupacionHVDelegate agrupacionHVDelegate = DelegateUtil.getAgrupacionHVDelegate();
 		Archivo archivo = null;
 		
-		//Obtener archivo según el parametro "t" (tipo)		
+		//Obtener archivo segï¿½n el parametro "t" (tipo)		
 		switch (tipo) {
 		
 			//Foto
@@ -57,5 +59,6 @@ public class ArchivoAgrupacionHechoVitalController extends ArchivoController {
 		
 		return archivo;
 		
-	}    
+	}
+	
 }

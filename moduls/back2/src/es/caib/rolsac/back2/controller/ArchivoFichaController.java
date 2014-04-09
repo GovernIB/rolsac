@@ -1,4 +1,5 @@
 package es.caib.rolsac.back2.controller;
+
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,7 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/fitxainf/")
 public class ArchivoFichaController extends ArchivoController {
 	
-    private MessageSource messageSource = null;
+    @SuppressWarnings("unused")
+	private MessageSource messageSource = null;
     
     @Autowired
     public void setMessageSource(MessageSource messageSource){
@@ -55,5 +57,6 @@ public class ArchivoFichaController extends ArchivoController {
 		
 		return archivo;
 		
-	}    
+	}
+	
 }

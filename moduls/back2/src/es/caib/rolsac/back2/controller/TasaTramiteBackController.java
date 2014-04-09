@@ -48,7 +48,7 @@ public class TasaTramiteBackController {
     }
         
     @RequestMapping(value = "/taxa.do", method = GET)
-    public void obtenerTramite(HttpServletRequest request, HttpServletResponse response) {}    
+    public void obtenerTasa(HttpServletRequest request, HttpServletResponse response) {}    
     
     @RequestMapping(value = "/carregarTaxaTramit.do", method = POST)
     public @ResponseBody Map<String, Object> recuperaDetall(HttpSession session, HttpServletRequest request) {    
@@ -79,6 +79,7 @@ public class TasaTramiteBackController {
     				if ( traTasa.getDescripcio() != null )
     					mapTaxa.put("idioma_descripcio_" + idioma, traTasa.getDescripcio() );
     			}
+    			
     		}
     		
     		mapTaxa.put("item_id", tasa.getId());
@@ -87,23 +88,28 @@ public class TasaTramiteBackController {
 			resultats.put("id", tasa.getId());
     		
     	} catch (DelegateException dEx) {
+    		
 			logException(log, dEx);
 
 			if (dEx.isSecurityException()) {
 				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
 			} else {
 				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
-			}            
+			}    
+			
     	} catch (NumberFormatException nFEx) {
+    		
     		logException(log, nFEx);
-    		resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));    		
+    		resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));    	
+    		
     	}
     	
-    	return resultats;    	
+    	return resultats;    
+    	
     }
     
 	@RequestMapping(value = "/guardarTaxa.do", method = POST)
-	public @ResponseBody ResponseEntity<String> guardarTasa(HttpSession session, HttpServletRequest request) {		
+	public @ResponseBody ResponseEntity<String> guardar(HttpSession session, HttpServletRequest request) {		
 		
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", "text/html; charset=UTF-8");
@@ -170,16 +176,19 @@ public class TasaTramiteBackController {
         	result.setNom( ((TraduccionTaxa) tasa.getTraduccion("ca")).getCodificacio() );        
         }
         
-		return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);		
+		return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);	
+		
 	}
 	
 	@RequestMapping(value = "/esborrarTaxa.do", method = POST)	
-	public @ResponseBody IdNomDTO esborrarTramit(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
+		
 		IdNomDTO resultatStatus = new IdNomDTO();
 		
 		Long idTasa = new Long(request.getParameter("taxaTramitId"));
 		
 		try {
+			
 			TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
 			tramiteDelegate.borrarTaxa(idTasa);
 		
@@ -187,14 +196,18 @@ public class TasaTramiteBackController {
 			resultatStatus.setNom("correcte");
 			
 		} catch (DelegateException dEx) {
+			
 			if (dEx.isSecurityException()) {
 				resultatStatus.setId(-1l);
 			} else {
 				resultatStatus.setId(-2l);
 				logException(log, dEx);
 			}
+			
 		}
 
 		return resultatStatus;
+		
 	}	
+	
 }

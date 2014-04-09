@@ -30,7 +30,8 @@ public class PopupETBackController {
 
 	private static Log log = LogFactory.getLog(PopupETBackController.class);
 		
-    private MessageSource messageSource = null;
+    @SuppressWarnings("unused")
+	private MessageSource messageSource = null;
 
     private EspacioTerritorialDelegate etDelegate = null;
 

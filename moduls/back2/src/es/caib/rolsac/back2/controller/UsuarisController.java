@@ -38,7 +38,7 @@ public class UsuarisController extends PantallaBaseController {
 	private static Log log = LogFactory.getLog(UsuarisController.class);
 	
     @RequestMapping(value = "/usuaris.do")
-    public String pantallaUsuaris(Map<String, Object> model, HttpServletRequest request) {
+    public String pantalla(Map<String, Object> model, HttpServletRequest request) {
     	
     	model.put("menu", 2);
 		model.put("submenu", "layout/submenu/submenuUsuaris.jsp");
@@ -57,7 +57,7 @@ public class UsuarisController extends PantallaBaseController {
     }
     
     @RequestMapping(value = "/llistat.do")
-    public @ResponseBody Map<String, Object> llistatUsuaris(HttpServletRequest request, HttpSession session) {
+    public @ResponseBody Map<String, Object> llistat(HttpServletRequest request, HttpSession session) {
     	
     	List<UsuariDTO> llistaUsuarisDTO = new ArrayList<UsuariDTO>();
     	Map<String, Object> resultats = new HashMap<String, Object>();
@@ -188,7 +188,7 @@ public class UsuarisController extends PantallaBaseController {
    	}
     
     @RequestMapping(value = "/esborrarUsuari.do", method = POST)
-	public @ResponseBody IdNomDTO esborrarUsuaris(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
 		IdNomDTO resultatStatus = new IdNomDTO();
 
 		try {

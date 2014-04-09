@@ -15,7 +15,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Personal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
-import org.ibit.rol.sac.model.criteria.PaginacionCriteria;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.model.dto.PersonalDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
@@ -29,15 +28,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
-
 @Controller
 @RequestMapping("/personal/")
-public class PersonalBackController extends PantallaBaseController
-{
+public class PersonalBackController extends PantallaBaseController {
+	
 	private static Log log = LogFactory.getLog(PersonalBackController.class);
 
 	@RequestMapping(value = "/personal.do", method = GET)
-	public String pantallaPersonal(Map<String, Object> model, HttpSession session, HttpServletRequest request)
+	public String pantalla(Map<String, Object> model, HttpSession session, HttpServletRequest request)
 	{
 		model.put("menu", 0);
 		model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
@@ -62,9 +60,8 @@ public class PersonalBackController extends PantallaBaseController
 		return "index";
 	}
 
-
 	@RequestMapping(value = "/llistat.do", method = POST)
-	public @ResponseBody Map<String, Object> llistatPersonal(HttpServletRequest request, HttpSession session) {
+	public @ResponseBody Map<String, Object> llistat(HttpServletRequest request, HttpSession session) {
 
 		List<PersonalDTO> llistaPersonalDTO = new ArrayList<PersonalDTO>();
 		Map<String,Object> resultats = new HashMap<String,Object>();
@@ -171,9 +168,8 @@ public class PersonalBackController extends PantallaBaseController
 		return personaDetall;
 	}
 
-
 	@RequestMapping(value = "/esborrarPersonal.do", method = POST)
-	public @ResponseBody IdNomDTO esborrarPersonal(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
 
 		IdNomDTO resultatStatus = new IdNomDTO(); 
 
@@ -198,16 +194,16 @@ public class PersonalBackController extends PantallaBaseController
 		}
 
 		return resultatStatus;
+		
 	}
 
-
 	@RequestMapping(value = "/guardar.do", method = POST)
-	public @ResponseBody IdNomDTO guardarPersonal(HttpSession session, HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardar(HttpSession session, HttpServletRequest request) {
 
 		IdNomDTO result = null;
 
 		try {
-			//        	UnidadAdministrativa ua = (UnidadAdministrativa)session.getAttribute("unidadAdministrativa");
+			
 			UnidadAdministrativa ua;
 			try {
 				Long uaId = Long.parseLong(request.getParameter("item_ua_id"));
@@ -266,6 +262,7 @@ public class PersonalBackController extends PantallaBaseController
 		}
 
 		return result;
+		
 	}
 
 }

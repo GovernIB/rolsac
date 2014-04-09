@@ -41,6 +41,8 @@ import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
 import es.indra.rol.sac.integracion.traductor.Traductor;
 
+@SuppressWarnings("deprecation")
+
 @Controller
 @RequestMapping("/documents/")
 public class DocumentBackController extends ArchivoController {
@@ -55,7 +57,7 @@ public class DocumentBackController extends ArchivoController {
     }
 
     @RequestMapping(value = "/guardarDocument.do", method = POST)
-    public ResponseEntity<String> guardarDocument(HttpServletRequest request, HttpSession session) {
+    public ResponseEntity<String> guardar(HttpServletRequest request, HttpSession session) {
         /*
          * Forzar content type en la cabecera para evitar bug en IE y en
          * Firefox. Si no se fuerza el content type Spring lo calcula y

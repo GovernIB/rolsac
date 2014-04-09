@@ -64,7 +64,6 @@ import org.ibit.rol.sac.persistence.delegate.IniciacionDelegate;
 import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
-import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
@@ -92,7 +91,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	private static Log log = LogFactory.getLog(CatalegProcedimentsBackController.class);
 
 	@RequestMapping(value = "/catalegProcediments.do")
-	public String pantallaProcediment(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
+	public String pantalla(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
 
 		String lang;
 		try {
@@ -179,7 +178,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 
 	@RequestMapping(value = "/llistat.do", method = POST)
-	public @ResponseBody Map<String, Object> llistatProcediments(String criteria, HttpServletRequest request, HttpSession session) {
+	public @ResponseBody Map<String, Object> llistat(String criteria, HttpServletRequest request, HttpSession session) {
 
 		Map<String, Object> resultats = new HashMap<String, Object>();
 		BuscadorProcedimientoCriteria buscadorCriteria = this.jsonToBuscadorProcedimientoCriteria(criteria);
@@ -489,7 +488,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	}
 
 	@RequestMapping(value = "/esborrarProcediment.do", method = POST)
-	public @ResponseBody IdNomDTO esborrarProcediment(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
 
 		IdNomDTO resultatStatus = new IdNomDTO();
 
@@ -562,14 +561,24 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			procediment.setIndicador("on".equalsIgnoreCase(request.getParameter("item_fi_vida_administrativa")) ? "1" : "0");	// Indicador
 			procediment.setVentanillaUnica("on".equalsIgnoreCase(request.getParameter("item_finestreta_unica")) ? "1" : "0");	// Ventanilla Única
 
+			List<Tramite> listaTramitesParaBorrar = null;
+			List<Long> listaIdsTramitesParaActualizar = null;
+			
 			if (edicion) {
 				
 				procediment = guardarProcedimientoAntiguo(procediment, procedimentOld);		// Si estamos guardando un procedimiento ya existente en vez de uno nuevo
-				procediment = guardarTramites(request, procediment, procedimentOld);		// Actualizar la lista de Trámites
+				
+				// Obtenemos las listas necesarias para el tratamiento de los trámites.
+				listaTramitesParaBorrar = new ArrayList<Tramite>();
+				listaIdsTramitesParaActualizar = new ArrayList<Long>();
+				
+				// Dentro de este método se asignan los nuevos trámites asociados al procedimiento
+				// y se rellenan las listas listaTramitesParaBorrar y listaIdsTramitesParaActualizar.
+				procediment = guardarTramites(procediment, procedimentOld, request, listaTramitesParaBorrar, listaIdsTramitesParaActualizar);
 				
 			}
 
-			Long procId = guardarGrabar(procediment);
+			Long procId = guardarGrabar(procediment, listaTramitesParaBorrar, listaIdsTramitesParaActualizar);
 
 			String ok = messageSource.getMessage("proc.guardat.correcte", null, request.getLocale());
 			result = new IdNomDTO(procId, ok);
@@ -597,6 +606,45 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		}
 
 		return result;
+		
+	}
+
+	private ProcedimientoLocal guardarTramites(ProcedimientoLocal procedimiento, ProcedimientoLocal procedimientoOld, 
+			HttpServletRequest request, List<Tramite> listaTramitesParaEliminar, List<Long> listaIdsTramitesParaActualizar) {
+		
+		List<String> idsNuevosTramites = Arrays.asList(request.getParameter("tramitsProcediment").split(","));
+		List<Tramite> tramitesParaCrear = null;
+		
+		if (idsNuevosTramites.size() == 1 && idsNuevosTramites.get(0).equals("")) {
+	    	
+	        // La lista esta vacía y por tanto se pueden borrar todos los anteriores.
+	        listaTramitesParaEliminar = procedimientoOld.getTramites();	        
+
+	    } else {
+	    	
+	    	// La lista no esta vacia y se deben gestionar los que se han eliminado de la lista
+	        HashMap<Long, Tramite> mapaTramitesParaEliminar = new HashMap<Long, Tramite>();
+	        for (Tramite tramite : procedimientoOld.getTramites()) {
+	            if (tramite != null) {
+	            	mapaTramitesParaEliminar.put(tramite.getId(), tramite);
+	            }
+	        }
+
+	        // Lista para actualizar el orden
+	        tramitesParaCrear = new ArrayList<Tramite>();
+	        for (String id : idsNuevosTramites) {
+	            listaIdsTramitesParaActualizar.add(Long.parseLong(id));
+	            tramitesParaCrear.add(mapaTramitesParaEliminar.get(Long.parseLong(id)));
+	            mapaTramitesParaEliminar.remove(Long.parseLong(id));
+	        }
+
+	        listaTramitesParaEliminar = new ArrayList<Tramite>(mapaTramitesParaEliminar.values());
+	        
+	    }
+	    			
+		procedimiento.setTramites(tramitesParaCrear);
+		
+		return procedimiento;
 		
 	}
 
@@ -640,62 +688,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			
 		}
 
-		return procediment;
-		
-	}
-
-	/*
-	 * Controlar los trámites modificados
-	 */
-	private ProcedimientoLocal guardarTramites(HttpServletRequest request, ProcedimientoLocal procediment, 
-			ProcedimientoLocal procedimentOld) throws DelegateException {
-			
-	    TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
-	    ArrayList<Long> tramitesParaActualizar = new ArrayList<Long>();
-	    List<Tramite> tramitesParaCrear = null;
-	    List<String> idsNuevosTramites = Arrays.asList(request.getParameter("tramitsProcediment").split(","));
-
-	    if (idsNuevosTramites.size() == 1 && idsNuevosTramites.get(0).equals("")) {
-	    	
-	        // La lista esta vacia y por tanto se pueden borrar todos
-	        for (Tramite tramite : procedimentOld.getTramites()) {
-	            DelegateUtil.getProcedimientoDelegate().eliminarTramite(tramite.getId(), procediment.getId());
-                tramiteDelegate.borrarTramite(tramite.getId());
-	        }
-
-	    } else {
-	    	
-	        // La lista no esta vacia y se deben gestionar los que se han eliminado de la lista
-	        HashMap<Long, Tramite> tramitesParaEliminar = new HashMap<Long, Tramite>();
-	        for (Tramite tramite : procedimentOld.getTramites()) {
-	            if (tramite != null) {
-	                tramitesParaEliminar.put(tramite.getId(), tramite);
-	            }
-	        }
-
-	        // Lista para actualizar el orden
-	        tramitesParaCrear = new ArrayList<Tramite>();
-	        for (String id : idsNuevosTramites) {
-	            tramitesParaActualizar.add(Long.parseLong(id));
-	            tramitesParaCrear.add(tramitesParaEliminar.get(Long.parseLong(id)));
-	            tramitesParaEliminar.remove(Long.parseLong(id));
-	        }
-
-	        // Eliminar los que no han sido quitados de la lista
-	        for (Tramite tramite : tramitesParaEliminar.values()) {
-	            DelegateUtil.getProcedimientoDelegate().eliminarTramite(tramite.getId(), procediment.getId());
-	            tramiteDelegate.borrarTramite(tramite.getId());
-	        }
-	        
-	    }
-
-		// Actualizar orden y añadir los trámites 
-		if (tramitesParaActualizar.size() > 0) {
-		    DelegateUtil.getProcedimientoDelegate().actualizarOrdenTramites(tramitesParaActualizar);
-		}
-		
-		procediment.setTramites(tramitesParaCrear);
-		
 		return procediment;
 		
 	}
@@ -942,15 +934,12 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
         /* XXX: NOTA IMPORTANTE PARA EL RENDIMIENTO */
         procediment.setDocumentos(null);
         procediment.setTramites(null);
-
-        if (procediment.getHechosVitalesProcedimientos() != null) {
-            HechoVitalProcedimientoDelegate hvpDelegate = DelegateUtil.getHechoVitalProcedimientoDelegate();
-            hvpDelegate.grabarHechoVitalProcedimientos(procediment.getHechosVitalesProcedimientos());
-            procediment.setHechosVitalesProcedimientos(null);
-        }
         /* FIN NOTA */
         
-        Long procId = DelegateUtil.getProcedimientoDelegate().grabarProcedimiento(procediment, procediment.getUnidadAdministrativa().getId());
+        Long procId = DelegateUtil.getProcedimientoDelegate().grabarProcedimiento(
+    		procediment, 
+    		procediment.getUnidadAdministrativa().getId()
+		);
         
         // Actualiza estadísticas
         DelegateUtil.getEstadisticaDelegate().grabarEstadisticaProcedimiento(procId);
@@ -958,6 +947,37 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
         return procId;
         
     }
+    
+    private Long guardarGrabar(ProcedimientoLocal procediment, List<Tramite> listaTramitesParaBorrar,
+			List<Long> listaIdsTramitesParaActualizar) throws DelegateException {
+    	
+    	// Si no hay trámites que procesar, invocamos guardado normal.
+    	if (listaTramitesParaBorrar == null && listaIdsTramitesParaActualizar == null) {
+    		
+    		return guardarGrabar(procediment);
+    	
+    	// Si no, procesamos con la actualización de los trámites.
+    	} else {
+		
+    		/* XXX: NOTA IMPORTANTE PARA EL RENDIMIENTO */
+            procediment.setDocumentos(null);
+            /* FIN NOTA */
+            
+            Long procId = DelegateUtil.getProcedimientoDelegate().grabarProcedimientoConTramites(
+        		procediment, 
+        		procediment.getUnidadAdministrativa().getId(),
+        		listaTramitesParaBorrar,
+        		listaIdsTramitesParaActualizar
+    		);
+            
+            // Actualiza estadísticas
+            DelegateUtil.getEstadisticaDelegate().grabarEstadisticaProcedimiento(procId);
+
+            return procId;
+		
+    	}
+    	
+	}
 
 	/**
      * Devuelve true si ha habido algun cambio en el modulo.
@@ -1387,7 +1407,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			List<Documento> documentos = GuardadoAjaxUtil.actualizarYOrdenarDocumentosRelacionados(elementos, procedimiento, null);
 			procedimiento.setDocumentos(documentos);
 			
-			DelegateUtil.getProcedimientoDelegate().grabarProcedimiento(procedimiento, procedimiento.getUnidadAdministrativa().getId());
+			guardarGrabar(procedimiento);
 			
 			result = new IdNomDTO(procedimiento.getId(), messageSource.getMessage("proc.guardat.correcte", null, request.getLocale()));
 			

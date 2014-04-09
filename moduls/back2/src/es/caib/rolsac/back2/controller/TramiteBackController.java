@@ -218,10 +218,9 @@ public class TramiteBackController {
 		return listaDocumentosDTO;
 	}
 	
-	
 	@RequestMapping(value = "/guardarTramit.do", method = POST)
-	public @ResponseBody ResponseEntity<String> guardarTramite(HttpSession session, HttpServletRequest request)
-	{
+	public @ResponseBody ResponseEntity<String> guardar(HttpSession session, HttpServletRequest request) {
+		
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", "text/html; charset=UTF-8");
 
@@ -231,7 +230,6 @@ public class TramiteBackController {
 		Long idProcedimiento = new Long( request.getParameter("id_procediment_tramit") );
 		
 		try {
-			String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			
 			ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
 			ProcedimientoLocal procedimiento = procedimientoDelegate.obtenerProcedimientoNewBack(idProcedimiento);
@@ -296,12 +294,6 @@ public class TramiteBackController {
 			tramite.setProcedimiento(procedimiento);
 			String idOrganCompetent = request.getParameter("tramits_item_organ_id");			
 			
-			// Si no se recibe ningún valor se asigna por defecto la actual.	
-			/* NOTA IMPORTANTE: MEJORA DEL RENDIMIENTO */
-//		    tramite.setFormularios(null);
-//		    tramite.setDocsInformatius(null);
-//		    tramite.setDocsRequerits(null);
-		    /* FIN NOTA */
 			tramiteDelegate.grabarTramite(tramite, !"".equals(idOrganCompetent) ? new Long(idOrganCompetent) : procedimiento.getUnidadAdministrativa().getId());
 			
         	if (!edicion) {
@@ -309,20 +301,20 @@ public class TramiteBackController {
         		procedimientoDelegate.anyadirTramite(tramite.getId(), idProcedimiento);
         	} else {
         		request.setAttribute("alert", "confirmacion.modificacion");
-        		
         		// Guardar tasas.
             	guardaTasasTramite(request, tramite, tramiteDelegate);
         		// Guardar documentos y formularios.
         		guardaDocumentosYFormularios(request, edicion, tramite, tramiteDelegate);
         	}
 
-        	// TODO: tras la refactorización usando métodos privados como soporte a los públicos,
+        	// TODO amartin: tras la refactorización usando métodos privados como soporte a los públicos,
         	// veo que esta instrucción ya se ejecuta un par de líneas antes. Desconozco si es 
         	// código duplicado o algo necesario. ACLARAR.
         	if (!edicion)
         		procedimientoDelegate.anyadirTramite(tramite.getId(), idProcedimiento);
         	
         } catch (ValidateVudsException e) {
+        	
         	String camps = "";
         	for (String camp: e.getCampsSenseValidar())
         		camps += "\\n-" + camp;
@@ -332,7 +324,9 @@ public class TramiteBackController {
         	log.error(ExceptionUtils.getStackTrace(e));
         	
         } catch (ActualizacionVudsException e) {
+        	
         	try {
+        		
         		// Ha fallado la actualización pero el trámite ha sido creado correctamente, así que se añade al procedimiento.
         		ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
         		procedimientoDelegate.anyadirTramite(tramite.getId(), idProcedimiento);
@@ -342,6 +336,7 @@ public class TramiteBackController {
         		request.setAttribute("idSelect", tramite.getId());
         		
         	} catch (DelegateException dEx) {
+        		
         		if (dEx.isSecurityException()) {
         			error = messageSource.getMessage("error.permisos", null, request.getLocale());
         			result = new IdNomDTO(-1l, error);
@@ -350,9 +345,11 @@ public class TramiteBackController {
         			result = new IdNomDTO(-2l, error);
         			log.error(ExceptionUtils.getStackTrace(dEx));
         		}
+        		
         	}
         	
         } catch (DelegateException dEx) {
+        	
         	if (dEx.isSecurityException()) {
         		error = messageSource.getMessage("error.permisos", null, request.getLocale());
         		result = new IdNomDTO(-1l, error);
@@ -361,6 +358,7 @@ public class TramiteBackController {
         		result = new IdNomDTO(-2l, error);
         		log.error(ExceptionUtils.getStackTrace(dEx));
         	}
+        	
         }
 		
 		if (result == null) {
@@ -370,6 +368,7 @@ public class TramiteBackController {
 		}
 		
 		return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
+		
 	}
 	
 	private Map<String, Traduccion> getTraduccionesTramite(HttpServletRequest request, Tramite tramite) throws DelegateException
@@ -558,7 +557,7 @@ public class TramiteBackController {
 	
 	
 	@RequestMapping(value = "/esborrarTramit.do", method = POST)	
-	public @ResponseBody IdNomDTO esborrarTramit(HttpServletRequest request)
+	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request)
 	{
 		IdNomDTO resultatStatus = new IdNomDTO();
 		

@@ -1,4 +1,5 @@
 package es.caib.rolsac.back2.controller;
+
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/edifici/")
 public class ArchivoEdificioController extends ArchivoController {
 	
-    private MessageSource messageSource = null;
+    @SuppressWarnings("unused")
+	private MessageSource messageSource = null;
     
     @Autowired
     public void setMessageSource(MessageSource messageSource){
@@ -36,7 +38,7 @@ public class ArchivoEdificioController extends ArchivoController {
 		EdificioDelegate edificioDelegate = DelegateUtil.getEdificioDelegate();
 		Archivo archivo = null;
 		
-		//Obtener archivo según el parametro "t" (tipo)		
+		//Obtener archivo segï¿½n el parametro "t" (tipo)		
 		switch (tipo) {
 		
 			//Foto foto pequeno
@@ -57,5 +59,6 @@ public class ArchivoEdificioController extends ArchivoController {
 		
 		return archivo;
 		
-	}    
+	}
+	
 }

@@ -30,7 +30,8 @@ public class PopupSBackController {
 
 	private static Log log = LogFactory.getLog(PopupSBackController.class);
 		
-    private MessageSource messageSource = null;
+    @SuppressWarnings("unused")
+	private MessageSource messageSource = null;
 
     private SeccionDelegate secDelegate = null;
 

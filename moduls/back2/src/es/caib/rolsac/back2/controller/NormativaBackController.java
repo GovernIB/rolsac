@@ -71,7 +71,7 @@ public class NormativaBackController extends PantallaBaseController {
     private static Log log = LogFactory.getLog(NormativaBackController.class);
 
     @RequestMapping(value = "/normativa.do", method = GET)
-    public String pantallaNormatives(Map<String, Object> model, HttpServletRequest request, HttpSession session) {
+    public String pantalla(Map<String, Object> model, HttpServletRequest request, HttpSession session) {
     	
         model.put("menu", 0);
         model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
@@ -171,7 +171,7 @@ public class NormativaBackController extends PantallaBaseController {
 
     @RequestMapping(value = "/llistat.do", method = POST)
     public @ResponseBody
-    Map<String, Object> llistatNormatives(HttpServletRequest request, HttpSession session) {
+    Map<String, Object> llistat(HttpServletRequest request, HttpSession session) {
 
         // Listar las normativas de la unidad administrativa.
         Map<String, Object> resultats = new HashMap<String, Object>();

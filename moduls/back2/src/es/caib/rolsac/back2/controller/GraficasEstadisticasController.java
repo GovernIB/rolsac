@@ -1,5 +1,6 @@
 package es.caib.rolsac.back2.controller;
 
+import static es.caib.rolsac.utils.StringUtils.vacio;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 import java.awt.image.BufferedImage;
@@ -14,7 +15,6 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static es.caib.rolsac.utils.StringUtils.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Archivo;
@@ -38,16 +38,16 @@ import es.caib.rolsac.back2.util.Parametros;
 @RequestMapping(value = "/estadistiques/")
 public class GraficasEstadisticasController extends ArchivoController {
 
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(GraficasEstadisticasController.class);	
 	
+	@SuppressWarnings("unused")
 	private MessageSource messageSource = null;
-
 	
 	@Autowired
 	public void setMessageSource(MessageSource messageSource) {
 		this.messageSource = messageSource;
 	}
-
 
 	@RequestMapping(value = "/grafica.do", method = GET)
     public void mostrarImagen(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -55,7 +55,6 @@ public class GraficasEstadisticasController extends ArchivoController {
         this.devolverArchivo(request, response);
         
     }
-    
     
 	@Override
 	public Archivo obtenerArchivo(HttpServletRequest request) throws Exception {	
@@ -76,7 +75,6 @@ public class GraficasEstadisticasController extends ArchivoController {
         	
         }
 	}
-
 	
 	private Archivo obtenerArchivoModul(HttpServletRequest request) throws Exception {		
 
@@ -113,9 +111,6 @@ public class GraficasEstadisticasController extends ArchivoController {
         	throw new IllegalArgumentException ("Tipus de gr�fica desconeguda");
         }
 
-       
-			
-			
 		// Generam la grafica
 		JFreeChart chart = Graficas.pintarGraficaSimple(datosEstadistica);
 			
@@ -124,16 +119,12 @@ public class GraficasEstadisticasController extends ArchivoController {
         return archivo; 
 	}
 
-	
-
 	private Archivo obtenerArchivoQuadreControl(HttpServletRequest request) throws Exception {		
-        //obtener archivo concreto con el delegate
 
         Long idUA = new Long( request.getParameter("id") );
         Integer tipoOperacion = new Integer( request.getParameter("tipoOperacion") );
         
-        
-        // Comprovamos si tenemos que recorrer todos los nodos
+        // Comprobamos si tenemos que recorrer todos los nodos
         String todoArbol = request.getParameter("allUA");
         List<Long> llistaUnitatAdministrativaId = new ArrayList<Long>();
         
@@ -213,7 +204,6 @@ public class GraficasEstadisticasController extends ArchivoController {
         return archivo; 
         
 	}
-
 	
 	/**
 	 * @param idUA
@@ -237,6 +227,7 @@ public class GraficasEstadisticasController extends ArchivoController {
 		archivo.setId(idUA);
 		archivo.setMime("image/png");
 		archivo.setNombre(nombreArchivo);
+		
 	}
 	
 }

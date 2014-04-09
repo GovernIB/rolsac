@@ -66,6 +66,7 @@ import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
 import org.ibit.rol.sac.persistence.delegate.IndexerDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI;
+import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.util.DateUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
@@ -78,7 +79,6 @@ import es.caib.rolsac.lucene.model.ModelFilterObject;
 import es.caib.rolsac.lucene.model.TraModelFilterObject;
 import es.caib.rolsac.lucene.model.Catalogo;
 import es.caib.rolsac.utils.ResultadoBusqueda;
-
 
 /**
  * SessionBean para mantener y consultar Procedimientos.
@@ -104,6 +104,7 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  *
  * @ejb.transaction type="Required"
  */
+@SuppressWarnings("deprecation")
 public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements ProcedimientoDelegateI {
 
 	private static final long serialVersionUID = -7754045272386270651L;
@@ -145,7 +146,6 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		return (getAccesoManager().tieneAccesoProcedimiento(idProcedimiento)); 
 	}      
 
-
 	/**
 	 * Crea o actualiza un Procedimiento.
 	 * 
@@ -153,23 +153,27 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * 
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 * 
-	 * @param	procedimiento	Indica el procedimiento a guardar.
-	 * 
-	 * @param	idUA	Identificador de la unidad administrativa a la que es asiganda el nuevo procedimiento.
+	 * @param procedimiento Indica el procedimiento a guardar.
+	 * @param idUA Identificador de la unidad administrativa a la que es asiganda el nuevo procedimiento.
 	 * 
 	 * @return	Devuelve el identificador del procedimiento guardado.
 	 */
 	public Long grabarProcedimiento(ProcedimientoLocal procedimiento, Long idUA) {
 
 		Session session = getSession();
+		
 		try {
+			
 			Date FechaActualizacionBD = new Date();
+			
 			if (procedimiento.getId() == null) {
+				
 				if (procedimiento.getValidacion().equals(Validacion.PUBLICA) && !userIsSuper()) {
 					throw new SecurityException("No puede crear un procedimiento público");
 				}
 
 			} else {
+				
 				if (!getAccesoManager().tieneAccesoProcedimiento( procedimiento.getId())) {
 					throw new SecurityException("No tiene acceso al procedimiento");
 				}
@@ -177,6 +181,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				ProcedimientoLocal procedimientoBD = obtenerProcedimientoNewBack(procedimiento.getId());
 				FechaActualizacionBD = procedimientoBD.getFechaActualizacion();
 				this.indexBorraProcedimiento(procedimientoBD);
+				
 			}
 
 			if (!getAccesoManager().tieneAccesoUnidad(idUA, false)) {
@@ -184,7 +189,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			}
 
 			/* Se alimenta la fecha de actualización de forma automática si no se ha introducido dato*/                      
-			if (procedimiento.getFechaActualizacion() == null || DateUtils.fechasIguales(FechaActualizacionBD, procedimiento.getFechaActualizacion())) {
+			if (procedimiento.getFechaActualizacion() == null 
+					|| DateUtils.fechasIguales(FechaActualizacionBD, procedimiento.getFechaActualizacion())) {
 			    procedimiento.setFechaActualizacion( new Date() );
 			}
 
@@ -192,12 +198,15 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			procedimiento.setUnidadAdministrativa(unidad);
 
 			if (procedimiento.getId() == null) {
+				
 				session.save(procedimiento);
 				addOperacion(session, procedimiento, Auditoria.INSERTAR);
 
 			} else {
+				
 				session.update(procedimiento);
 				addOperacion(session, procedimiento, Auditoria.MODIFICAR);
+				
 			}
 
 			Hibernate.initialize(procedimiento.getTramites());
@@ -205,16 +214,133 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			Hibernate.initialize(procedimiento.getHechosVitalesProcedimientos());
 
 			Actualizador.actualizar(procedimiento);
+			
 			session.flush();
+			
 			return procedimiento.getId();
 
 		} catch (HibernateException he) {
+			
 			throw new EJBException(he);
+			
 		} finally {
+			
 			close(session);
+			
 		}
+		
 	}
+	
+	// TODO amartin: ¿intentar unificar los dos métodos de guardado en uno?
+	
+	/**
+	 * Crea o actualiza un Procedimiento.
+	 * 
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+	 * 
+	 * @param procedimiento Indica el procedimiento a guardar.
+	 * @param idUA Identificador de la unidad administrativa a la que es asiganda el nuevo procedimiento.
+	 * @param listaTramitesParaBorrar
+	 * @param listaIdsTramitesParaActualizar
+	 * 
+	 * @return	Devuelve el identificador del procedimiento guardado.
+	 */
+	public Long grabarProcedimientoConTramites(ProcedimientoLocal procedimiento, Long idUA, 
+			List listaTramitesParaBorrar, List listaIdsTramitesParaActualizar) {
+		
+		Session session = getSession();
+		
+		try {
+			
+			Date FechaActualizacionBD = new Date();
+			
+			if (procedimiento.getId() == null) {
+				
+				if (procedimiento.getValidacion().equals(Validacion.PUBLICA) && !userIsSuper()) {
+					throw new SecurityException("No puede crear un procedimiento público");
+				}
 
+			} else {
+				
+				if (!getAccesoManager().tieneAccesoProcedimiento( procedimiento.getId())) {
+					throw new SecurityException("No tiene acceso al procedimiento");
+				}
+
+				ProcedimientoLocal procedimientoBD = obtenerProcedimientoNewBack(procedimiento.getId());
+				FechaActualizacionBD = procedimientoBD.getFechaActualizacion();
+				this.indexBorraProcedimiento(procedimientoBD);
+				
+			}
+
+			if (!getAccesoManager().tieneAccesoUnidad(idUA, false)) {
+			    throw new SecurityException("No tiene acceso a la unidad");
+			}
+
+			/* Se alimenta la fecha de actualización de forma automática si no se ha introducido dato*/                      
+			if (procedimiento.getFechaActualizacion() == null 
+					|| DateUtils.fechasIguales(FechaActualizacionBD, procedimiento.getFechaActualizacion())) {
+			    procedimiento.setFechaActualizacion( new Date() );
+			}
+
+			UnidadAdministrativa unidad = (UnidadAdministrativa)session.load(UnidadAdministrativa.class, idUA);
+			procedimiento.setUnidadAdministrativa(unidad);
+			
+			TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
+			
+			if (listaTramitesParaBorrar != null && listaIdsTramitesParaActualizar != null) {
+				
+				// Eliminar los que no han sido quitados de la lista
+		        for (Tramite tramite : (List<Tramite>)listaTramitesParaBorrar) {
+		            DelegateUtil.getProcedimientoDelegate().eliminarTramite(tramite.getId(), procedimiento.getId());
+		            tramiteDelegate.borrarTramite(tramite.getId());
+		        }
+	
+				// Actualizar orden y añadir los trámites 
+				if (listaIdsTramitesParaActualizar.size() > 0) {
+				    actualizarOrdenTramites(new ArrayList<Long>(listaIdsTramitesParaActualizar));
+				}
+			
+			}
+
+			if (procedimiento.getId() == null) {
+				
+				session.save(procedimiento);
+				addOperacion(session, procedimiento, Auditoria.INSERTAR);
+
+			} else {
+				
+				session.update(procedimiento);
+				addOperacion(session, procedimiento, Auditoria.MODIFICAR);
+				
+			}
+
+			Hibernate.initialize(procedimiento.getTramites());
+			Hibernate.initialize(procedimiento.getMaterias());
+			Hibernate.initialize(procedimiento.getHechosVitalesProcedimientos());
+
+			Actualizador.actualizar(procedimiento);
+			
+			session.flush();
+			
+			return procedimiento.getId();
+
+		} catch (HibernateException he) {
+			
+			throw new EJBException(he);
+			
+		} catch (DelegateException de) {
+			
+			throw new EJBException(de);
+			
+		} finally {
+			
+			close(session);
+			
+		}
+		
+	}
 
 	/**
 	 * Lista todos los procedimientos.
