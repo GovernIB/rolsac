@@ -41,9 +41,12 @@ import org.ibit.rol.sac.persistence.ws.Actualizador;
  * @ejb.transaction type="Required"
  */
 
+@SuppressWarnings("deprecation")
 public abstract class DocumentoResumenFacadeEJB extends HibernateEJB {
 
-    /**
+	private static final long serialVersionUID = 1L;
+
+	/**
      * Obtiene refer�ncia al ejb de control de Acceso.
      * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
      */
@@ -56,7 +59,6 @@ public abstract class DocumentoResumenFacadeEJB extends HibernateEJB {
     public void ejbCreate() throws CreateException {
         super.ejbCreate();
     }
-
     
     ProcedimientoDelegate procDel;
     FichaDelegate fichDel;
@@ -155,24 +157,31 @@ public abstract class DocumentoResumenFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-    
-    /**
+    	
+	/**
      * 
      * Actualiza los ordenes de los documentos de una secci�n de una Ficha
 	 * 
      * FIXME enric@dgtic: este metodo lo pondria en procedimientoFacadeEJB
      * 
      * @param Map <String,String[]>
-     * eg. key= orden_doc396279
+     * e.g. key= orden_doc396279
      * 	   value={"1"}
+     * @param documentosABorrar lista de documentos que se borrarán previamente a la ordenación.
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
-	public void actualizarOrdenDocs(Map map) {
+	public void actualizarOrdenDocs(Map map, List documentosABorrar) {
 		
 		Session session = getSession();
 		
 		try {
+			
+			// Primaremente borramos los documentos especificados.
+			for (Documento d : (List<Documento>)documentosABorrar) {
+				if (d != null)
+					borrarDocumento(d.getId());
+			}
 			
 			Long id;
 			int valor_orden = 0;

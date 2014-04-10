@@ -590,7 +590,7 @@ public class TMAgrupacioMateriesController extends PantallaBaseController {
 			agrupacioMateria.setMateriasAgrupacionM(materiesNew);
 			agrupacioMDelegate.guardarAgrupacionM(agrupacioMateria, materiesOld);
 			
-			String ok = messageSource.getMessage("fetVital.guardat.correcte", null, request.getLocale());
+			String ok = messageSource.getMessage("agrupacioM.guardat.materies.correcte", null, request.getLocale());
 			result = new IdNomDTO(agrupacioMateria.getId(), ok);
 
 		} catch (DelegateException dEx) {

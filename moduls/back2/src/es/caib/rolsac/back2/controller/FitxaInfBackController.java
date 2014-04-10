@@ -1328,7 +1328,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 			
 		}
 			
-		result = new IdNomDTO(ficha.getId(), messageSource.getMessage("fitxes.guardat.correcte", null, request.getLocale()));
+		result = new IdNomDTO(ficha.getId(), messageSource.getMessage("fitxes.guardat.fetsVitals.correcte", null, request.getLocale()));
 		
 		return result;
 
@@ -1353,7 +1353,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 
 			guardarGrabar(ficha);
 			
-			result = new IdNomDTO(ficha.getId(), messageSource.getMessage("fitxes.guardat.correcte", null, request.getLocale()));
+			result = new IdNomDTO(ficha.getId(), messageSource.getMessage("fitxes.guardat.materies.correcte", null, request.getLocale()));
 
 		} catch (DelegateException dEx) {
 			
@@ -1450,7 +1450,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 				
 			}
 										
-			result = new IdNomDTO(ficha.getId(), messageSource.getMessage("fitxes.guardat.correcte", null, request.getLocale()));
+			result = new IdNomDTO(ficha.getId(), messageSource.getMessage("fitxes.guardat.enllassos.correcte", null, request.getLocale()));
 		
 		} catch (DelegateException dEx) {
 			
@@ -1494,7 +1494,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 			
 			DelegateUtil.getFichaDelegate().grabarFicha(ficha);
 			
-			result = new IdNomDTO(ficha.getId(), messageSource.getMessage("fitxes.guardat.correcte", null, request.getLocale()));
+			result = new IdNomDTO(ficha.getId(), messageSource.getMessage("fitxes.guardat.documents.correcte", null, request.getLocale()));
 			
 		} catch (DelegateException dEx) {
 			

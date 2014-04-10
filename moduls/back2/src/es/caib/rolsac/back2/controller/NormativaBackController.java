@@ -1183,7 +1183,7 @@ public class NormativaBackController extends PantallaBaseController {
             }
             
             // Finalizado correctamente
-            result = new IdNomDTO(normativa.getId(), messageSource.getMessage("normativa.guardat.correcte", null, request.getLocale()));
+            result = new IdNomDTO(normativa.getId(), messageSource.getMessage("normativa.guardat.afectacions.correcte", null, request.getLocale()));
 			
 		} catch (DelegateException dEx) {
 			

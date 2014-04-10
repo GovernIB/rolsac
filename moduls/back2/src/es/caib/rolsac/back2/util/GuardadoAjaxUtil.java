@@ -115,13 +115,13 @@ public class GuardadoAjaxUtil {
 			}
 			
 			if (familia != null) {
-				IconoMateriaDelegate iconaMateriaDelegate = DelegateUtil.getIconoMateriaDelegate();
-				iconaMateriaDelegate.borrarIconosMateria(iconosABorrar);
+				IconoFamiliaDelegate iconaFamiliaDelegate = DelegateUtil.getIconoFamiliaDelegate();
+				iconaFamiliaDelegate.borrarIconosFamilia(iconosABorrar);
 			}
 			
 			else if (materia != null) {
-				IconoFamiliaDelegate iconaFamiliaDelegate = DelegateUtil.getIconoFamiliaDelegate();
-				iconaFamiliaDelegate.borrarIconosFamilia(iconosABorrar);
+				IconoMateriaDelegate iconaMateriaDelegate = DelegateUtil.getIconoMateriaDelegate();
+				iconaMateriaDelegate.borrarIconosMateria(iconosABorrar);
 			}
 		
 		}
@@ -201,18 +201,11 @@ public class GuardadoAjaxUtil {
 			
 		}
 		
-		// Borramos documentos que no hayamos encontrado en el envío.
-		for (Documento d : documentosABorrar) {
-			if (d != null)
-				DelegateUtil.getDocumentoDelegate().borrarDocumento(d.getId());
-		}
-		
-		// FIXME amartin: actualmente no funciona el tema de la ordenación con los documentos asociados a un procedimiento.
-		// Con los documentos asociados a fichas funciona perfectamente y se sigue el mismo algoritmo. ¿Problema del modelo de datos?
+		// FIXME amartin: actualmente no funciona el tema de la ordenación con los documentos asociados a un procedimiento o una ficha.
 		// Ver comentario en método DocumentoResumenFacadeEJB.actualizarOrdenDocs().
 		DocumentoResumenDelegate documentoResumenDelegate = DelegateUtil.getDocumentoResumenDelegate();
-		// Guardamos documentos actuales (actualizar orden).
-		documentoResumenDelegate.actualizarOrdenDocs(actualizadorMap);
+		// Guardamos documentos actuales (actualizar orden) borrando previamente los especificados por documentosABorrar.
+		documentoResumenDelegate.actualizarOrdenDocs(actualizadorMap, documentosABorrar);
 		
 		return documentos;
 		

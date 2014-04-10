@@ -1,6 +1,7 @@
 package org.ibit.rol.sac.persistence.delegate;
 
 import java.rmi.RemoteException;
+import java.util.List;
 import java.util.Map;
 
 import javax.ejb.CreateException;
@@ -15,12 +16,15 @@ import org.ibit.rol.sac.persistence.util.DocumentoResumenFacadeUtil;
 /**
  * Business delegate para manipular Documentos.
  */
+@SuppressWarnings("deprecation")
 public class DocumentoResumenDelegate implements StatelessDelegate
 {
 	/* ========================================================= */
     /* ======================== MéTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 	
+	private static final long serialVersionUID = 1L;
+
 	public DocumentoResumen obtenerDocumentoResumen(Long id) throws DelegateException {
         try {
             return getFacade().obtenerDocumentoResumen(id);
@@ -37,9 +41,9 @@ public class DocumentoResumenDelegate implements StatelessDelegate
         }
     }
     
-    public void actualizarOrdenDocs(Map map) throws DelegateException {
+    public void actualizarOrdenDocs(Map map, List documentosABorrar) throws DelegateException {
         try {
-            getFacade().actualizarOrdenDocs(map);
+            getFacade().actualizarOrdenDocs(map, documentosABorrar);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }

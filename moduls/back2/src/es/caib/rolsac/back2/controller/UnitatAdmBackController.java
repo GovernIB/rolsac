@@ -1590,6 +1590,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 
 	}
 	
+	// FIXME amartin: asegurar operación atómica.
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/guardarMateriasRelacionadas.do")
 	public @ResponseBody IdNomDTO guardarMateriasRelacionadas(Long id, Long[] elementos, HttpServletRequest request) {
@@ -1647,7 +1648,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 				ua.getPadre() != null ? ua.getPadre().getId() : null
 			);
 			
-			String ok = messageSource.getMessage("unitatadm.guardat.correcte", null, request.getLocale());
+			String ok = messageSource.getMessage("unitatadm.guardat.materies.correcte", null, request.getLocale());
 			result = new IdNomDTO(ua.getId(), ok);            
 
 		} catch (DelegateException dEx) {
@@ -1667,6 +1668,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		
 	}
 	
+	// FIXME amartin: asegurar operación atómica.
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/guardarEdificiosRelacionados.do")
 	public @ResponseBody IdNomDTO guardarEdificiosRelacionados(Long id, Long[] elementos, HttpServletRequest request) {
@@ -1701,7 +1703,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 				
 			}
 			
-			String ok = messageSource.getMessage("unitatadm.guardat.correcte", null, request.getLocale());
+			String ok = messageSource.getMessage("unitatadm.guardat.edificis.correcte", null, request.getLocale());
 			result = new IdNomDTO(ua.getId(), ok);            
 
 		} catch (DelegateException dEx) {
@@ -1721,6 +1723,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		
 	}
 	
+	// FIXME amartin: asegurar operación atómica.
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/guardarUsuariosRelacionados.do")
 	public @ResponseBody IdNomDTO guardarUsuariosRelacionados(Long id, Long[] elementos, HttpServletRequest request) {
@@ -1754,7 +1757,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 				
 			}
 			
-			String ok = messageSource.getMessage("unitatadm.guardat.correcte", null, request.getLocale());
+			String ok = messageSource.getMessage("unitatadm.guardat.usuaris.correcte", null, request.getLocale());
 			result = new IdNomDTO(ua.getId(), ok);            
 
 		} catch (DelegateException dEx) {

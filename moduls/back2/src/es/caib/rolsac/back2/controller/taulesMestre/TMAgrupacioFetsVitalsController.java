@@ -62,7 +62,7 @@ public class TMAgrupacioFetsVitalsController extends PantallaBaseController {
         model.put("menu", 1);
         model.put("submenu", "layout/submenu/submenuTMAgrupacioFetsVitals.jsp");
         
-        RolUtil rolUtil= new RolUtil(request);
+        RolUtil rolUtil = new RolUtil(request);
         
         if (rolUtil.userIsAdmin()) {
         	
@@ -586,7 +586,7 @@ public class TMAgrupacioFetsVitalsController extends PantallaBaseController {
 			agrupacionHechoVital.setHechosVitalesAgrupacionHV(hechosVitalesNuevos);
             agrupacionHVDelegate.guardarAgrupacionHV(agrupacionHechoVital, hechosVitalesOld);
                         
-            String ok = messageSource.getMessage("agrupacioFV.guardat.correcte", null, request.getLocale());
+            String ok = messageSource.getMessage("agrupacioFV.guardat.fetsVitals.correcte", null, request.getLocale());
             result = new IdNomDTO(agrupacionHechoVital.getId(), ok);
 			
 		} catch (DelegateException dEx) {

@@ -418,7 +418,7 @@ public class TMFamiliaController extends PantallaBaseController {
 			// Eliminamos los que ya no están presentes.
 			GuardadoAjaxUtil.actualizarIconos(elementos, familia, null);
 												
-			String ok = messageSource.getMessage("familia.guardat.correcte", null, request.getLocale());
+			String ok = messageSource.getMessage("familia.guardat.icones.correcte", null, request.getLocale());
 			result = new IdNomDTO(familia.getId(), ok);
 
 		} catch (DelegateException dEx) {

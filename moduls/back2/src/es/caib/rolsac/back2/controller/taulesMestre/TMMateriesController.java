@@ -634,7 +634,7 @@ public class TMMateriesController extends PantallaBaseController {
 			
 			uaMateriaDelegate.grabarUnidadesMateria(unidadesMateriaNuevas, unidadesMateriaABorrar);
 			
-			String ok = messageSource.getMessage("materia.guardat.correcte", null, request.getLocale());
+			String ok = messageSource.getMessage("materia.guardat.uas.correcte", null, request.getLocale());
 			result = new IdNomDTO(materia.getId(), ok);            
 
 		} catch (DelegateException dEx) {
@@ -670,7 +670,7 @@ public class TMMateriesController extends PantallaBaseController {
 			// Eliminamos los que ya no están presentes.
 			GuardadoAjaxUtil.actualizarIconos(elementos, null, materia);
 									
-			String ok = messageSource.getMessage("materia.guardat.correcte", null, request.getLocale());
+			String ok = messageSource.getMessage("materia.guardat.icones.correcte", null, request.getLocale());
 			result = new IdNomDTO(materia.getId(), ok);
 
 		} catch (DelegateException dEx) {

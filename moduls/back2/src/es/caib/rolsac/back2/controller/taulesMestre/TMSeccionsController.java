@@ -102,7 +102,7 @@ public class TMSeccionsController extends PantallaBaseController {
         model.put("menu", 1);
         model.put("submenu", "layout/submenu/submenuTMSeccions.jsp");
         
-        RolUtil rolUtil= new RolUtil(request);
+        RolUtil rolUtil = new RolUtil(request);
         
         if (rolUtil.userIsAdmin()) {
         	
@@ -636,7 +636,7 @@ public class TMSeccionsController extends PantallaBaseController {
 			
 			seccionDelegate.grabarSeccion(seccion, seccion.getPadre() != null ? seccion.getPadre().getId() : null);
 			
-			result = new IdNomDTO(seccion.getId(), messageSource.getMessage("seccio.guardat.correcte", null, request.getLocale()) );
+			result = new IdNomDTO(seccion.getId(), messageSource.getMessage("seccio.guardat.seccions.correcte", null, request.getLocale()) );
 			
 		} catch (DelegateException dEx) {
 			
@@ -755,7 +755,7 @@ public class TMSeccionsController extends PantallaBaseController {
 			
 			seccionDelegate.grabarSeccion(seccion, seccion.getPadre() != null ? seccion.getPadre().getId() : null);
 						
-			result = new IdNomDTO(seccion.getId(), messageSource.getMessage("seccio.guardat.correcte", null, request.getLocale()) );
+			result = new IdNomDTO(seccion.getId(), messageSource.getMessage("seccio.guardat.fitxes.correcte", null, request.getLocale()) );
 			
 		} catch (DelegateException dEx) {
 			

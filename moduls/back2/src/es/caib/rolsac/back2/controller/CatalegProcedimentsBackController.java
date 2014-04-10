@@ -1237,7 +1237,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			
 			guardarGrabar(procedimiento);
 			
-			result = new IdNomDTO(procedimiento.getId(), messageSource.getMessage("proc.guardat.correcte", null, request.getLocale()));
+			result = new IdNomDTO(procedimiento.getId(), messageSource.getMessage("proc.guardat.fetsVitals.correcte", null, request.getLocale()));
 			
 		} catch (DelegateException dEx) {
 			
@@ -1297,7 +1297,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 			guardarGrabar(procedimiento);
 			
-			result = new IdNomDTO(procedimiento.getId(), messageSource.getMessage("proc.guardat.correcte", null, request.getLocale()));
+			result = new IdNomDTO(procedimiento.getId(), messageSource.getMessage("proc.guardat.materies.correcte", null, request.getLocale()));
 
 		} catch (DelegateException dEx) {
 			
@@ -1358,7 +1358,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				
 				guardarGrabar(procedimiento);
 				
-				result = new IdNomDTO(procedimiento.getId(), messageSource.getMessage("proc.guardat.correcte", null, request.getLocale()));
+				result = new IdNomDTO(procedimiento.getId(), messageSource.getMessage("proc.guardat.normatives.correcte", null, request.getLocale()));
 
 			} catch (DelegateException dEx) {
 				
@@ -1409,7 +1409,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			
 			guardarGrabar(procedimiento);
 			
-			result = new IdNomDTO(procedimiento.getId(), messageSource.getMessage("proc.guardat.correcte", null, request.getLocale()));
+			result = new IdNomDTO(procedimiento.getId(), messageSource.getMessage("proc.guardat.documents.correcte", null, request.getLocale()));
 			
 		} catch (DelegateException dEx) {
 			

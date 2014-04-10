@@ -315,7 +315,7 @@ public class UsuarisController extends PantallaBaseController {
 						
 			usuarioDelegate.grabarUsuario(usuario);
 						
-			String ok = messageSource.getMessage("usuari.guardat.correcte", null, request.getLocale());
+			String ok = messageSource.getMessage("usuari.guardat.uas.correcte", null, request.getLocale());
 			result = new IdNomDTO(usuario.getId(), ok);
 
 		} catch (DelegateException dEx) {

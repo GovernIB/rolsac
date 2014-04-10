@@ -70,6 +70,7 @@ public class TMFetsVitalsController extends PantallaBaseController {
 				String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 				model.put("families", LlistatUtil.llistarFamilias(lang));
 				model.put("iniciacions", LlistatUtil.llistarIniciacions(lang));
+				
 			} catch (DelegateException dEx) {
 				
 				if (dEx.isSecurityException()) {
@@ -665,7 +666,7 @@ public class TMFetsVitalsController extends PantallaBaseController {
 			
 			}
 
-			result = new IdNomDTO(fetVitalOld.getId(), messageSource.getMessage("fetVital.guardat.correcte", null, request.getLocale()));
+			result = new IdNomDTO(fetVitalOld.getId(), messageSource.getMessage("fetVital.guardat.procediments.correcte", null, request.getLocale()));
 
 		} catch (DelegateException dEx) {
 			
