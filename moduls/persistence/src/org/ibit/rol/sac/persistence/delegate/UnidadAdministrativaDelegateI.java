@@ -36,6 +36,18 @@ public interface UnidadAdministrativaDelegateI {
 			throws DelegateException;
 	
 	/* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#actualizarEdificiosUnidadAdministrativa(org.ibit.rol.sac.model.UnidadAdministrativa, java.util.List<java.lang.Long>)
+	 */
+	public abstract void actualizarEdificiosUnidadAdministrativa(UnidadAdministrativa unidad, List<Long> idsNuevosEdificios)
+			throws DelegateException;
+	
+	/* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#actualizarUsuariosUnidadAdministrativa(org.ibit.rol.sac.model.UnidadAdministrativa, java.util.List<java.lang.Long>)
+	 */
+	public abstract void actualizarUsuariosUnidadAdministrativa(UnidadAdministrativa unidad, List<Long> idsNuevosUsuarios)
+			throws DelegateException;
+	
+	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#listarHijosUA(java.lang.Long)
 	 */
 	public abstract List listarHijosUA(Long id)

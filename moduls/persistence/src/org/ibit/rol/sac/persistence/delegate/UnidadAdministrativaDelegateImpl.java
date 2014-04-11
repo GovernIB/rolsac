@@ -65,6 +65,28 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
 	}
 	
 	/* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegateI#actualizarEdificiosUnidadAdministrativa(org.ibit.rol.sac.model.UnidadAdministrativa, java.util.List<java.lang.Long>)
+	 */
+	public void actualizarEdificiosUnidadAdministrativa(UnidadAdministrativa unidad, List<Long> idsNuevosEdificios) throws DelegateException {
+		try {
+			getFacade().actualizarEdificiosUnidadAdministrativa(unidad, idsNuevosEdificios);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegateI#actualizarUsuariosUnidadAdministrativa(org.ibit.rol.sac.model.UnidadAdministrativa, java.util.List<java.lang.Long>)
+	 */
+	public void actualizarUsuariosUnidadAdministrativa(UnidadAdministrativa unidad, List<Long> idsNuevosUsuarios) throws DelegateException {
+		try {
+			getFacade().actualizarUsuariosUnidadAdministrativa(unidad, idsNuevosUsuarios);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+	
+	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegateI#listarHijosUA(java.lang.Long)
 	 */
 	public List listarHijosUA(Long id) throws DelegateException {

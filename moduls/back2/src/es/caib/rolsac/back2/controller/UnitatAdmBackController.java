@@ -19,6 +19,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -1590,7 +1591,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 
 	}
 	
-	// FIXME amartin: asegurar operación atómica.
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/guardarMateriasRelacionadas.do")
 	public @ResponseBody IdNomDTO guardarMateriasRelacionadas(Long id, Long[] elementos, HttpServletRequest request) {
@@ -1600,29 +1600,22 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		try {
 			
 			UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
-			UnidadAdministrativa ua = uaDelegate.consultarUnidadAdministrativaSinFichas(id);
-			
+			MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
 			UnidadMateriaDelegate uaMateriaDelegate = DelegateUtil.getUnidadMateriaDelegate();
-						
-			Set<UnidadMateria> unidadesMateria = ua.getUnidadesMaterias();
-			Iterator<UnidadMateria> it = unidadesMateria.iterator();
 			
-			// Borramos todas las anteriores materias relacionadas con la UA.
-			while ( it.hasNext() ) {
-				
-				UnidadMateria uam = it.next();
-				if ( uam != null )
-					uaMateriaDelegate.borrarUnidadMateria(uam.getId());
-				
-			}
+			UnidadAdministrativa ua = uaDelegate.consultarUnidadAdministrativaSinFichas(id);
+			Set<UnidadMateria> setUnidadesMateriaABorrar = ua.getUnidadesMaterias();
+			
+			// Generamos una lista con los IDs de las UnidadMateria a borrar.
+			List<Long> listaIdsUnidadesMateriaABorrar = new ArrayList<Long>();
+			for (UnidadMateria um : setUnidadesMateriaABorrar)
+				listaIdsUnidadesMateriaABorrar.add(um.getId());
 			
 			// Creamos y obtenemos las actuales.
-			Set<UnidadMateria> setUnidadesMateria = new HashSet<UnidadMateria>();
+			List<UnidadMateria> unidadesMateriaNuevas = new ArrayList<UnidadMateria>();
 			
 			if ( elementos != null ) {
-				
-				MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
-				
+								
 				for ( int i = 0; i < elementos.length; i++ ) {
 					
 					if ( elementos[i] != null ) {
@@ -1630,18 +1623,21 @@ public class UnitatAdmBackController extends PantallaBaseController {
 						UnidadMateria uam = new UnidadMateria();
 						Materia materia = materiaDelegate.obtenerMateria(elementos[i]);
 						
-						uaMateriaDelegate.grabarUnidadMateria(uam, ua.getId(), materia.getId());
-						
-						setUnidadesMateria.add(uam);
+						uam.setUnidad(ua);
+						uam.setMateria(materia);
+												
+						unidadesMateriaNuevas.add(uam);
 					
 					}
 					
 				}
 				
+				uaMateriaDelegate.grabarUnidadesMateria(unidadesMateriaNuevas, listaIdsUnidadesMateriaABorrar);
+				
 			}
 			
 			// Las asociamos a la UA.
-			ua.setUnidadesMaterias(setUnidadesMateria);
+			ua.setUnidadesMaterias(new HashSet<UnidadMateria>(unidadesMateriaNuevas));
 			
 			crearOActualizarUnitatAdministrativa(
 				ua, 
@@ -1668,7 +1664,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		
 	}
 	
-	// FIXME amartin: asegurar operación atómica.
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/guardarEdificiosRelacionados.do")
 	public @ResponseBody IdNomDTO guardarEdificiosRelacionados(Long id, Long[] elementos, HttpServletRequest request) {
@@ -1680,29 +1675,9 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
 			UnidadAdministrativa ua = uaDelegate.consultarUnidadAdministrativaSinFichas(id);
 			
-			EdificioDelegate edificioDelegate = DelegateUtil.getEdificioDelegate();
-			
-			// Obtener los edificios actuales de la UA.
-			Set<Edificio> edificiosActuales = edificioDelegate.listarEdificiosUnidad(ua.getId());
-
-			// Borrar los edificios actuales.
-			for (Edificio edificio : edificiosActuales)
-				edificioDelegate.eliminarUnidad(ua.getId(), edificio.getId());
-			
-			if ( elementos != null ) {
-				
-				for ( int i = 0; i < elementos.length; i++ ) {
-					
-					if ( elementos[i] != null ) {
+			List<Long> idsNuevosEdificios = (elementos != null) ? Arrays.asList(elementos) : new ArrayList<Long>();
+			uaDelegate.actualizarEdificiosUnidadAdministrativa(ua, idsNuevosEdificios);
 						
-						edificioDelegate.anyadirUnidad(ua.getId(), elementos[i]);
-						
-					}
-					
-				}
-				
-			}
-			
 			String ok = messageSource.getMessage("unitatadm.guardat.edificis.correcte", null, request.getLocale());
 			result = new IdNomDTO(ua.getId(), ok);            
 
@@ -1723,7 +1698,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		
 	}
 	
-	// FIXME amartin: asegurar operación atómica.
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/guardarUsuariosRelacionados.do")
 	public @ResponseBody IdNomDTO guardarUsuariosRelacionados(Long id, Long[] elementos, HttpServletRequest request) {
@@ -1734,29 +1708,10 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			
 			UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
 			UnidadAdministrativa ua = uaDelegate.consultarUnidadAdministrativaSinFichas(id);
-						
-			// Obtener los usuarios actuales de la UA y borrarlos.
-			UsuarioDelegate usuarioDelegate = DelegateUtil.getUsuarioDelegate();
-			if (ua.getUsuarios() != null) {
-				for (Object usuario : ua.getUsuarios())
-					usuarioDelegate.desasignarUnidad(((Usuario)usuario).getId(), ua.getId());
-			}
 			
-			// Asociar los actuales.
-			if ( elementos != null ) {
-				
-				for ( int i = 0; i < elementos.length; i++ ) {
-					
-					if ( elementos[i] != null ) {
+			List<Long> idsNuevosUsuarios = (elementos != null) ? Arrays.asList(elementos) : new ArrayList<Long>();
+			uaDelegate.actualizarUsuariosUnidadAdministrativa(ua, idsNuevosUsuarios);
 						
-						usuarioDelegate.asignarUnidad( elementos[i], ua.getId() );
-						
-					}
-					
-				}
-				
-			}
-			
 			String ok = messageSource.getMessage("unitatadm.guardat.usuaris.correcte", null, request.getLocale());
 			result = new IdNomDTO(ua.getId(), ok);            
 

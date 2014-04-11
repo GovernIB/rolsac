@@ -48,9 +48,11 @@ import org.ibit.rol.sac.model.criteria.PaginacionCriteria;
 import org.ibit.rol.sac.model.dto.FichaDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.delegate.EdificioDelegate;
 import org.ibit.rol.sac.persistence.delegate.IndexerDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegateI;
+import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.util.Cadenas;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
@@ -78,18 +80,16 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  *
  * @ejb.transaction type="Required"
  */
+@SuppressWarnings("deprecation")
 public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB implements UnidadAdministrativaDelegateI {
 
 	private static final long serialVersionUID = 6954366130820517158L;
 
-
 	/** Nom pel govern de les illes a la taula d'unitats orgàniques */
 	public static final String NOM_GOVERN_ILLES = "Govern de les Illes Balears";
 
-
 	/** ID comodín de unidad administrativa */
 	public static final String EMPTY_ID = "-1";
-
 
 	/**
 	 * Obtiene refer�ncia al ejb de control de Acceso.
@@ -105,7 +105,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	public void ejbCreate() throws CreateException {
 		super.ejbCreate();
 	}
-
 
 	/**
 	 * Crea una Unidad Administrativa raíz.
@@ -144,7 +143,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		}
 
 	}
-
 
 	/**
 	 * Crea una Unidad Administrativa
@@ -191,7 +189,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		}
 
 	}
-
 
 	/**
 	 * Actualiza una Unidad Administrativa.
@@ -273,7 +270,81 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		}
 
 	}
-
+	
+	/**
+	 * Actualiza los edificios asociados a una Unidad Administrativa.
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
+	 * @param unidad Indica la unidad administrativa a actualizar.
+	 * @param idsNuevosEdificios Identificadores de los nuevos edificios asociados.
+	 */
+	public void actualizarEdificiosUnidadAdministrativa(UnidadAdministrativa unidad, List<Long> idsNuevosEdificios) {
+		
+		try {
+		
+			EdificioDelegate edificioDelegate = DelegateUtil.getEdificioDelegate();
+			
+			// Obtener los edificios actuales de la UA.
+			Set<Edificio> edificiosActuales = edificioDelegate.listarEdificiosUnidad(unidad.getId());
+	
+			// Borrar los edificios actuales.
+			for (Edificio edificio : edificiosActuales)
+				edificioDelegate.eliminarUnidad(unidad.getId(), edificio.getId());
+			
+			// Insertar los nuevos.
+			for ( Long id : idsNuevosEdificios ) {
+				
+				if ( id != null ) {
+					edificioDelegate.anyadirUnidad(unidad.getId(), id);
+				}
+				
+			}
+		
+		} catch (DelegateException e) {
+			
+			throw new EJBException(e);
+			
+		}
+		
+	}
+	
+	/**
+	 * Actualiza los usuarios asociados a una Unidad Administrativa.
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
+	 * @param unidad Indica la unidad administrativa a actualizar.
+	 * @param idsNuevosUsuarios Identificadores de los nuevos usuarios asociados.
+	 */
+	public void actualizarUsuariosUnidadAdministrativa(UnidadAdministrativa unidad, List<Long> idsNuevosUsuarios) {
+		
+		try {
+		
+			// Obtener los usuarios actuales de la UA y borrarlos.
+			UsuarioDelegate usuarioDelegate = DelegateUtil.getUsuarioDelegate();
+			
+			if (unidad.getUsuarios() != null) {
+				for (Usuario usuario : (Set<Usuario>)unidad.getUsuarios())
+					usuarioDelegate.desasignarUnidad(usuario.getId(), unidad.getId());
+			}
+			
+			// Asociar los actuales.
+			for ( Long id : idsNuevosUsuarios ) {
+				
+				if ( id != null ) {
+					usuarioDelegate.asignarUnidad( id, unidad.getId() );
+				}
+				
+			}
+		
+		} catch (DelegateException e) {
+			
+			throw new EJBException(e);
+			
+		}
+		
+	}
 
 	/**
 	 * Lista los hijos de una unidad Administrativa.
@@ -317,7 +388,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		}
 
 	}
-
 
 	/**
 	 * Lista las unidades Administrativas raiz de un usuario.
@@ -384,7 +454,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		}
 
 	}
-
 
 	/**
 	 * Lista las unidades Administrativas raiz de un usuario que estan publicadas o no.

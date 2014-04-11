@@ -24,7 +24,6 @@ public class UnidadAdministrativaDelegate {
 
 	UnidadAdministrativaDelegateI impl = null;
 
-
 	public UnidadAdministrativaDelegateI getImpl() {
 		return impl;
 	}
@@ -35,6 +34,14 @@ public class UnidadAdministrativaDelegate {
 	
 	public void actualizarUnidadAdministrativa(UnidadAdministrativa unidad, Long padreId) throws DelegateException {
 		impl.actualizarUnidadAdministrativa(unidad, padreId);
+	}
+	
+	public void actualizarEdificiosUnidadAdministrativa(UnidadAdministrativa unidad, List<Long> idsNuevosEdificios) throws DelegateException {
+		impl.actualizarEdificiosUnidadAdministrativa(unidad, idsNuevosEdificios);
+	}
+	
+	public void actualizarUsuariosUnidadAdministrativa(UnidadAdministrativa unidad, List<Long> idsNuevosUsuarios) throws DelegateException {
+		impl.actualizarUsuariosUnidadAdministrativa(unidad, idsNuevosUsuarios);
 	}
 	
 	public List cargarArbolUnidadId(Long id) throws DelegateException {
