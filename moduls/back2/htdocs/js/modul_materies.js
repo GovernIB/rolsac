@@ -334,4 +334,88 @@ function CModulMateries() {
 		
 	};
 	
+	this._eliminaItem = this.eliminaItem;
+	
+	this.eliminaItem = function( item ) {
+		
+		that._eliminaItem(item);
+		Detall.modificado(true);
+		this.habilitarBotonGuardar();
+		
+	};
+	
+	this._agregaItem = this.agregaItem;
+	
+	this.agregaItem = function( item ) {
+		
+		that._agregaItem(item);
+		Detall.modificado(true);
+		this.habilitarBotonGuardar();
+		
+	};
+	
+	this.existeBotonGuardar = function() {
+		return (jQuery("#btnGuardar_modul_materies").length > 0);
+	};
+	
+	this.habilitarBotonGuardar = function() {
+		if (this.existeBotonGuardar()) {
+	        jQuery("#btnGuardar_modul_materies").show(500);
+	        Detall.modificado();
+		}
+    };
+    
+    this.deshabilitarBotonGuardar = function() {
+    	if (this.existeBotonGuardar()) {
+    		jQuery("#btnGuardar_modul_materies").css("display", "none");
+    	}
+    };
+	
 }
+
+/**
+ * (amartin) Explicación de extensión de clase:
+ * 
+ * Extendemos la clase para que, tras el guardado, se oculte el botón de guardado del módulo lateral de iconos.
+ * Esto es porque la lista simple sólo gestionará iconos marcados para borrar. Al marcar uno para borrar, aparecerá el botón
+ * de guardar y al realizar la acción de guardado éste desaparecerá.
+ */
+function CListaSimpleMaterias() {
+	
+	// Activa mensajes de debug.
+	var debug = false;
+
+	this.extend = ListaSimple;
+	this.extend();
+	
+	var that = this;
+	
+	this._guardar = this.guardar;
+	
+	this.guardar = function(element, url, id) {
+		
+		if (debug)
+			console.log("Entrando en CListaSimpleMaterias.getFilters");
+		
+		that._guardar(element, url, id);
+		
+		// XXX amartin: ocultación del botón de guardado tras solicitar guardado AJAX
+		// (si el invoker es el guardado de iconos de familia, materia, etc).
+		// Ir añadiendo casos aquí.
+		var urlGuardarMateriasAgrupacion = "/agrupacioMateries/guardarMateriasRelacionadas.do";
+		
+		if ( url.indexOf(urlGuardarMateriasAgrupacion) != -1 ) {
+			
+			if (typeof ModulMateries != 'undefined')
+				ModulMateries.deshabilitarBotonGuardar();
+			
+		}
+		
+		Detall.modificado(false);
+		
+		if (debug)
+			console.log("Entrando en CListaSimpleMaterias.getFilters");
+		
+	};
+	
+};

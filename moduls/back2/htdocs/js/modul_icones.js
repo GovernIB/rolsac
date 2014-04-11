@@ -39,7 +39,7 @@ function CEscriptoriPare() {
 	this.iniciar = function() {
 	
 		// botons
-		modul_icones_elm.find("a.gestiona").bind("click", function(){ModulIcones.nou(false);} );
+		modul_icones_elm.find("a.gestiona").bind("click", function() { ModulIcones.nou(false); });
 		
 		icones_seleccionats_elm = escriptori_icones_elm.find("div.escriptori_items_seleccionats:first");
 		
@@ -78,11 +78,12 @@ function CEscriptoriPare() {
 	};
     
     this.habilitarBotonGuardar = function() {
-        jQuery("#btnGuardar_iconas").show(500);
+        jQuery("#btnGuardar_modul_icones").show(500);
+        Detall.modificado();
     };
     
     this.deshabilitarBotonGuardar = function() {
-        jQuery("#btnGuardar_iconas").css("display", "none");
+        jQuery("#btnGuardar_modul_icones").css("display", "none");
     };
     
     /**
@@ -427,7 +428,7 @@ function CListaSimpleIconos() {
 	this.guardar = function(element, url, id) {
 		
 		if (debug)
-			console.log("Entrando en CListaSimpleIconosFamilia.getFilters");
+			console.log("Entrando en CListaSimpleIconos.getFilters");
 		
 		that._guardar(element, url, id);
 		
@@ -440,14 +441,15 @@ function CListaSimpleIconos() {
 		if ( url.indexOf(urlGuardarIconosFamilia) != -1 || 
 				url.indexOf(urlGuardarIconosMateria) != -1 ) {
 			
-			// Objeto declarado en modul_icones.js
 			if (typeof EscriptoriPare != 'undefined')
 				EscriptoriPare.deshabilitarBotonGuardar();
 			
 		}
 		
+		Detall.modificado(false);
+		
 		if (debug)
-			console.log("Entrando en CListaSimpleIconosFamilia.getFilters");
+			console.log("Entrando en CListaSimpleIconos.getFilters");
 		
 	};
 	

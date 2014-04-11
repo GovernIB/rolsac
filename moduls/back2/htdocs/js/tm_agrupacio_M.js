@@ -3,17 +3,17 @@
 $(document).ready(function() {
 	
 	// Listener para guardado de módulos laterales vía AJAX.
-	jQuery(".lista-simple").click(function() {
+	jQuery(".lista-simple-materias").click(function() {
 		
 		var element = $(this).parent().parent().find("li");
 		var id = $('#item_id').val();
 		var url = $(this).attr('action');
 		
-		ListaSimpleGenerica.guardar(element, url, id);
+		ListaSimpleMaterias.guardar(element, url, id);
 		
 	});
 	
-	ListaSimpleGenerica = new ListaSimple();
+	ListaSimpleMaterias = new CListaSimpleMaterias();
 	
 	// elements
 	opcions_elm = $("#opcions");
@@ -88,7 +88,7 @@ function CLlistat() {
 		if (debug)
 			console.log("Saliendo de CLlistat.iniciar");
 		
-	}
+	};
 	
 	this.finCargaListado = function(opcions, data) {
 		
@@ -214,7 +214,7 @@ function CLlistat() {
 		if (debug)
 			console.log("Saliendo de CLlistat.finCargaListado");
 		
-	}
+	};
 	
 	this.carregar = function(opcions) {
 		
@@ -280,7 +280,7 @@ function CLlistat() {
 		if (debug)
 			console.log("Saliendo de CLlistat.carregar");
 		
-	}
+	};
 	
 };
 
@@ -362,7 +362,7 @@ function CDetall() {
 	    		
 	    		var vfItem = new Object();
 		    	vfItem['id'] = jQuery('#item_materia_relacionada').val();
-		    	vfItem['nom'] = jQuery('#item_materia_relacionada option:selected').text()
+		    	vfItem['nom'] = jQuery('#item_materia_relacionada option:selected').text();
 		    	
 		    	var ordenItem = jQuery('#modul_materies ul li:last input.materia_orden').val();
 		    	
@@ -408,7 +408,7 @@ function CDetall() {
 		if (debug)
 			console.log("Saliendo de CDetall.iniciar");
 		
-	}
+	};
 	
 	this.traduirWrapper = function () {
 		
@@ -420,7 +420,7 @@ function CDetall() {
 		if (debug)
 			console.log("Saliendo de CDetall.traduirWrapper");
 		
-	}
+	};
 	
 	this.activar = 0;
 	
@@ -453,7 +453,7 @@ function CDetall() {
 		if (debug)
 			console.log("Saliendo de CDetall.nou");
 		
-	}		
+	};
 	
 	// Guardar haciendo upload de archivos.
 	this.guarda_upload = function() {
@@ -490,7 +490,7 @@ function CDetall() {
         
 		return false;
 		
-	}
+	};
 	
 	this.pintar = function(dades) {
 		
@@ -560,7 +560,7 @@ function CDetall() {
 		if (debug)
 			console.log("Saliendo de CDetall.pintar");
 		
-	}
+	};
 	
 	this.elimina = function() {
 		
@@ -596,7 +596,7 @@ function CDetall() {
 		if (debug)
 			console.log("Saliendo de CDetall.elimina");
 		
-	}
+	};
 	
 	this.pintarModulos = function(dades) {
 		
@@ -608,6 +608,6 @@ function CDetall() {
 		if (debug)
 			console.log("Saliendo de CDetall.pintarModulos");
 		
-	}
+	};
 	
 };

@@ -366,11 +366,12 @@
                                 </div>
                                 <p style="clear: both"/><!-- Separador -->
 	                            <div class="btnGenerico">
-	                                <a id="btnGuardar_procediment" href="javascript:;" class="btn guarda important lista-simple" 
+	                                <a id="btnGuardar_modul_materies" href="javascript:;" class="btn guarda important lista-simple-materias" style="display: none"
 	                            			action="<c:url value="/agrupacioMateries/guardarMateriasRelacionadas.do" />">
 	                           			<span><span><spring:message code='boto.guarda'/></span></span>
 	                            	</a>
 	                            </div>
+	                            
                             </div>                                  
                         </div>
                         <!-- /modulMateria -->                                 
