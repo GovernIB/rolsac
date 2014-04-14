@@ -840,7 +840,6 @@ function CModulSeccio() {
 			$(this).append(" [<a id=\""+idUA+"\" href=\"javascript:;\" class=\"fitxa_inf\">" + printStringFromNull(nomUA, txtSinValor) + "</a>]");
 
 			// Evento click Ficha informativa			
-			//$(this).unbind("click").bind("click", function() {
 			// dsanchez: Cambiamos para que sea clicable el span que hay dentro de la lista para acceder a la edici�n de la ficha.
 			$(this).find("span.fitxa").unbind("click").bind("click", function() {                      
 
@@ -925,14 +924,24 @@ function CModulSeccio() {
 						Error.llansar();
 					},
 					success: function(data) {
+						
 						Missatge.cancelar();
+						
 						if (data.item_id > 0) {
+							
 							Detall.pintar(data);
-						} else if (data.item_id == -1){
+							Detall.cargarModulos();
+							
+						} else if (data.item_id == -1) {
+							
 							Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
-						} else if (data.item_id < -1){
+							
+						} else if (data.item_id < -1) {
+							
 							Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
+							
 						}
+						
 					}
 				});
 				
