@@ -25,7 +25,7 @@ $(document).ready(function() {
 	});
 	
 	ListaSimpleIconos = new CListaSimpleIconos();
-	ListaSimpleUAsMateria = new CListaSimpleUAsMateria();
+	ListaSimpleUAsMateria = new CListaSimpleUAs();
 	
 	// elements
 	opcions_elm = $("#opcions");
@@ -67,7 +67,7 @@ $(document).ready(function() {
 	// Datos traductor
 	CAMPOS_TRADUCTOR_MATERIA = ["item_nom_", "item_descripcio_", "item_paraules_clau_"];
 	DATOS_TRADUCIDOS_MATERIA = ["nombre", "descripcion", "palabrasclave"];
-	
+		
 });
 
 //idioma
@@ -369,7 +369,7 @@ function CDetall() {
 
 		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos
 		this.guarda = this.guarda_upload;
-		
+						
 		if (debug)
 			console.log("Saliendo de CDetall.iniciar");
 		
@@ -618,6 +618,11 @@ function CDetall() {
 
 			$(this).append(inputRadio);
 
+		});
+		
+		// XXX amartin: forzamos que al modificar el radio button de UA principal la página quede marcada como modificada.
+		jQuery(".modulUnitatAdministratives .listaOrdenable li").find('input[name="item_ua_principal"]').unbind("change").bind("change", function() {
+			Detall.modificado(true);
 		});
 		
 		if (debug)

@@ -13,7 +13,19 @@ $(document).ready(function() {
 		
 	});
 	
+	// Listener para guardado de módulos laterales vía AJAX.
+	jQuery(".lista-simple-uasUsuario").click(function() {
+		
+		var element = $(this).parent().parent().find("li");
+		var id = $('#item_id').val();
+		var url = $(this).attr('action');
+		
+		ListaSimpleUAsUsuario.guardar(element, url, id);
+		
+	});
+	
 	ListaSimpleGenerica = new ListaSimple();
+	ListaSimpleUAsUsuario = new CListaSimpleUAs();
 	
 	// elements
 	opcions_elm = $("#opcions");

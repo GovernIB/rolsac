@@ -76,14 +76,30 @@ function CEscriptoriPare() {
 		jQuery(that.configuracion.nodoOrigen).find("input[name=" + that.configuracion.nombre + "_id_" + id + "]").parents("li").remove();
 		that.habilitarBotonGuardar();
 	};
+	
+	this.botonGuardar = jQuery("#btnGuardar_modul_icones");
+	
+	this.existeBotonGuardar = function() {
+		return (this.botonGuardar.length > 0);
+	};
     
     this.habilitarBotonGuardar = function() {
-        jQuery("#btnGuardar_modul_icones").show(500);
-        Detall.modificado();
+    	
+    	// Si hay botón de guardado, hay que marcar la página como modificada.
+		// Si no, es que el guardado se hace vía botón "Finalizar".
+		if (this.existeBotonGuardar()) {
+			this.botonGuardar.show(500);
+	        Detall.modificado();
+		}
+		
     };
     
     this.deshabilitarBotonGuardar = function() {
-        jQuery("#btnGuardar_modul_icones").css("display", "none");
+    	
+    	if (this.existeBotonGuardar()) {
+    		this.botonGuardar.css("display", "none");
+    	}
+    	
     };
     
     /**

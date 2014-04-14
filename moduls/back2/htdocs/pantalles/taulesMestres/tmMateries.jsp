@@ -503,7 +503,7 @@
                                 </div>
                                 <p style="clear: both; margin-bottom: 10px;"/><!-- Separador -->
 	                            <div class="btnGenerico">
-	                                <a id="btnGuardar_unidades_administrativas" href="javascript:;" class="btn guarda important lista-simple-uasMateria" 
+	                                <a id="btnGuardar_modul_unitatsAdministratives" href="javascript:;" class="btn guarda important lista-simple-uasMateria" style="display: none" 
 	                            			action="<c:url value="/materies/guardarUnidadesRelacionadas.do" />">
 	                           			<span><span><spring:message code='boto.guarda'/></span></span>
 	                            	</a>

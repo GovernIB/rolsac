@@ -28,7 +28,7 @@ function CModulUnitatAdministrativa() {
 		
 		if (debug)
 			console.log("Entrando en CModulUnitatAdministrativa.iniciar");
-
+		
         unitatsAdministratives_llistat_elm = escriptori_unitatsAdministratives_elm.find("div.escriptori_items_llistat:first");
 		unitatsAdministratives_cercador_elm = escriptori_unitatsAdministratives_elm.find("div.escriptori_items_cercador:first");
 		unitatsAdministratives_seleccionades_elm = escriptori_unitatsAdministratives_elm.find("div.escriptori_items_seleccionats:first");
@@ -58,7 +58,7 @@ function CModulUnitatAdministrativa() {
 		};
 		
 		this.configurar(params);
-		
+				
 		if (debug)
 			console.log("Saliendo de CModulUnitatAdministrativa.iniciar");
 		
@@ -210,6 +210,13 @@ function CModulUnitatAdministrativa() {
 			
 			if (debug)
 				console.log("Saliendo de CModulUnitatAdministrativa.agregaItem");
+			
+			// Si hay botón de guardado, hay que marcar la página como modificada.
+			// Si no, el guardado se hace vía botón "Finalizar".
+			if (this.existeBotonGuardar()) {
+				Detall.modificado(true);
+				this.habilitarBotonGuardar();
+			}
 						
 			return true;
 			
@@ -222,6 +229,40 @@ function CModulUnitatAdministrativa() {
 		
 	};
 	
+	this.botonGuardar = jQuery("#btnGuardar_modul_unitatsAdministratives");
+	
+	this.existeBotonGuardar = function() {
+		return (this.botonGuardar.length > 0);
+	};
+	
+	this._eliminaItem = this.eliminaItem;
+	
+	this.eliminaItem = function( item ) {
+		
+		that._eliminaItem(item);
+		
+		// Si hay botón de guardado, hay que marcar la página como modificada.
+		// Si no, es que el guardado se hace vía botón "Finalizar".
+		if (this.existeBotonGuardar()) {
+			Detall.modificado(true);
+			this.habilitarBotonGuardar();
+		}
+		
+	};
+	
+	this.habilitarBotonGuardar = function() {
+		if (this.existeBotonGuardar()) {
+			this.botonGuardar.show(500);
+	        Detall.modificado();
+		}
+    };
+    
+    this.deshabilitarBotonGuardar = function() {
+    	if (this.existeBotonGuardar()) {
+    		this.botonGuardar.css("display", "none");
+    	}
+    };
+	
 };
 
 /**
@@ -232,11 +273,11 @@ function CModulUnitatAdministrativa() {
  * sino que también hay un tercer campo, que es el checkbox de UA principal para esa materia. Con la extensión de la clase
  * sobreescribimos el método de obtención de filtros para obtener el dato adicional de UA principal.
  */
-function CListaSimpleUAsMateria() {
+function CListaSimpleUAs() {
 	
 	// Activa mensajes de debug.
 	var debug = false;
-
+	
 	this.extend = ListaSimple;
 	this.extend();
 	
@@ -247,7 +288,7 @@ function CListaSimpleUAsMateria() {
 	this.getFilters = function(elements, id) {
 		
 		if (debug)
-			console.log("Entrando en CListaSimple.getFilters");
+			console.log("Entrando en CListaSimpleUAs.getFilters");
 		
 		var filters = that._getFilters(elements, id);
 		
@@ -271,10 +312,40 @@ function CListaSimpleUAsMateria() {
 		}
 				
 		if (debug)
-			console.log("Saliendo de CListaSimple.getFilters");
+			console.log("Saliendo de CListaSimpleUAs.getFilters");
 		
 		return filters;
 				
+	};
+	
+	this._guardar = this.guardar;
+	
+	this.guardar = function(element, url, id) {
+		
+		if (debug)
+			console.log("Entrando en CListaSimpleUAs.getFilters");
+		
+		that._guardar(element, url, id);
+		
+		// XXX amartin: ocultación del botón de guardado tras solicitar guardado AJAX
+		// (si el invoker es el guardado de unidades relacionadas con una materia).
+		// Ir añadiendo casos aquí.
+		var urlGuardarUnidadesMateria = "/materies/guardarUnidadesRelacionadas.do";
+		var urlGuardarUnidadesUsuario = "/usuaris/guardarUnidadesRelacionadas.do";
+		
+		if ( url.indexOf(urlGuardarUnidadesMateria) != -1 
+				|| url.indexOf(urlGuardarUnidadesUsuario) != -1 ) {
+			
+			if (typeof ModulUnitatAdministrativa != 'undefined')
+				ModulUnitatAdministrativa.deshabilitarBotonGuardar();
+			
+		}
+		
+		Detall.modificado(false);
+		
+		if (debug)
+			console.log("Entrando en CListaSimpleUAs.getFilters");
+		
 	};
 	
 };

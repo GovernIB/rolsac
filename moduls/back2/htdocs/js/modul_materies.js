@@ -334,13 +334,22 @@ function CModulMateries() {
 		
 	};
 	
+	this.existeBotonGuardar = function() {
+		return (jQuery("#btnGuardar_modul_materies").length > 0);
+	};
+	
 	this._eliminaItem = this.eliminaItem;
 	
 	this.eliminaItem = function( item ) {
-		
+
 		that._eliminaItem(item);
-		Detall.modificado(true);
-		this.habilitarBotonGuardar();
+		
+		// Si hay botón de guardado, hay que marcar la página como modificada.
+		// Si no, el guardado se hace vía botón "Finalizar".
+		if (this.existeBotonGuardar()) {
+			Detall.modificado(true);
+			this.habilitarBotonGuardar();
+		}
 		
 	};
 	
@@ -349,13 +358,14 @@ function CModulMateries() {
 	this.agregaItem = function( item ) {
 		
 		that._agregaItem(item);
-		Detall.modificado(true);
-		this.habilitarBotonGuardar();
 		
-	};
-	
-	this.existeBotonGuardar = function() {
-		return (jQuery("#btnGuardar_modul_materies").length > 0);
+		// Si hay botón de guardado, hay que marcar la página como modificada.
+		// Si no, el guardado se hace vía botón "Finalizar".
+		if (this.existeBotonGuardar()) {
+			Detall.modificado(true);
+			this.habilitarBotonGuardar();
+		}
+		
 	};
 	
 	this.habilitarBotonGuardar = function() {
