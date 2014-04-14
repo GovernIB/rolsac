@@ -13,7 +13,19 @@ $(document).ready(function() {
 		
 	});
 	
+	// Listener para guardado de módulos laterales vía AJAX.
+	jQuery(".lista-simple-hechosVitales").click(function() {
+		
+		var element = $(this).parent().parent().find("li");
+		var id = $('#item_id').val();
+		var url = $(this).attr('action');
+		
+		ListaSimpleHechosVitales.guardar(element, url, id);
+		
+	});
+	
 	ListaSimpleGenerica = new ListaSimple();
+	ListaSimpleHechosVitales = new CListaSimpleHechosVitales();
 	
 	// elements
 	opcions_elm = $("#opcions");
@@ -86,7 +98,7 @@ function CLlistat() {
 		if (debug)
 			console.log("Saliendo de CLlistat.iniciar");
 		
-	}
+	};
 	
 	this.finCargaListado = function(opcions, data) {
 		
@@ -218,7 +230,7 @@ function CLlistat() {
 		if (debug)
 			console.log("Saliendo de CLlistat.finCargaListado");
 		
-	}
+	};
 	
 	this.carregar = function(opcions) {
 		
@@ -285,7 +297,7 @@ function CLlistat() {
 		if (debug)
 			console.log("Saliendo de CLlistat.carregar");
 		
-	}
+	};
 	
 };
 
@@ -353,7 +365,7 @@ function CDetall() {
 	    		
 	    		var vfItem = new Object();
 		    	vfItem['id'] = jQuery('#item_fetVital_relacionat').val();
-		    	vfItem['nombre'] = jQuery('#item_fetVital_relacionat option:selected').text()
+		    	vfItem['nombre'] = jQuery('#item_fetVital_relacionat option:selected').text();
 		    	var ordenItem = jQuery('#modul_fetsVitals ul li:last input.fetVital_orden').val();
 		    	
 		    	if (typeof ordenItem == 'undefined')
@@ -395,7 +407,7 @@ function CDetall() {
 		if (debug)
 			console.log("Saliendo de CDetall.iniciar");
 		
-	}
+	};
 	
 	this.traduirWrapper = function() {
 		
@@ -407,7 +419,7 @@ function CDetall() {
 		if (debug)
 			console.log("Saliendo de CDetall.traduirWrapper");
 		
-	}
+	};
 	
 	//Sobreescribe el método guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
 	this.guarda_upload = function(e) {
@@ -453,7 +465,7 @@ function CDetall() {
 
 		return false;	
 		
-	}
+	};
 
 	this.activar = 0;
 	
@@ -494,7 +506,7 @@ function CDetall() {
 		if (debug)
 			console.log("Saliendo de CDetall.nou");
 		
-	}		
+	};
 	
 	this.pintar = function(dades) {
 		
@@ -559,7 +571,7 @@ function CDetall() {
 		if (debug)
 			console.log("Saliendo de CDetall.pintar");
 		
-	}
+	};
 	
 	this.elimina = function() {
 		
@@ -605,7 +617,7 @@ function CDetall() {
 		if (debug)
 			console.log("Saliendo de CDetall.elimina");
 		
-	}
+	};
 	
 	this.pintarModulos = function(dades) {
 		
@@ -617,6 +629,6 @@ function CDetall() {
 		if (debug)
 			console.log("Saliendo de CDetall.pintarModulos");
 		
-	}
+	};
 	
 };

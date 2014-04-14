@@ -334,8 +334,10 @@ function CModulMateries() {
 		
 	};
 	
+	this.botonGuardar = jQuery("#btnGuardar_modul_materies");
+	
 	this.existeBotonGuardar = function() {
-		return (jQuery("#btnGuardar_modul_materies").length > 0);
+		return (this.botonGuardar.length > 0);
 	};
 	
 	this._eliminaItem = this.eliminaItem;
@@ -370,14 +372,14 @@ function CModulMateries() {
 	
 	this.habilitarBotonGuardar = function() {
 		if (this.existeBotonGuardar()) {
-	        jQuery("#btnGuardar_modul_materies").show(500);
+			this.botonGuardar.show(500);
 	        Detall.modificado();
 		}
     };
     
     this.deshabilitarBotonGuardar = function() {
     	if (this.existeBotonGuardar()) {
-    		jQuery("#btnGuardar_modul_materies").css("display", "none");
+    		this.botonGuardar.css("display", "none");
     	}
     };
 	
@@ -386,9 +388,9 @@ function CModulMateries() {
 /**
  * (amartin) Explicación de extensión de clase:
  * 
- * Extendemos la clase para que, tras el guardado, se oculte el botón de guardado del módulo lateral de iconos.
- * Esto es porque la lista simple sólo gestionará iconos marcados para borrar. Al marcar uno para borrar, aparecerá el botón
- * de guardar y al realizar la acción de guardado éste desaparecerá.
+ * Extendemos la clase para que, tras el guardado, se oculte el botón de guardado del módulo lateral.
+ * Al marcar un elemento para ser borrado o al insertar uno nuevo, aparecerá el botón de guardar.
+ * Al realizar la acción de guardado, el botón de guardar desaparecerá.
  */
 function CListaSimpleMaterias() {
 	
@@ -405,12 +407,11 @@ function CListaSimpleMaterias() {
 	this.guardar = function(element, url, id) {
 		
 		if (debug)
-			console.log("Entrando en CListaSimpleMaterias.getFilters");
+			console.log("Entrando en CListaSimpleMaterias.guardar");
 		
 		that._guardar(element, url, id);
 		
-		// XXX amartin: ocultación del botón de guardado tras solicitar guardado AJAX
-		// (si el invoker es el guardado de iconos de familia, materia, etc).
+		// XXX amartin: ocultación del botón de guardado tras solicitar guardado AJAX.
 		// Ir añadiendo casos aquí.
 		var urlGuardarMateriasAgrupacion = "/agrupacioMateries/guardarMateriasRelacionadas.do";
 		
@@ -424,7 +425,7 @@ function CListaSimpleMaterias() {
 		Detall.modificado(false);
 		
 		if (debug)
-			console.log("Entrando en CListaSimpleMaterias.getFilters");
+			console.log("Entrando en CListaSimpleMaterias.guardar");
 		
 	};
 	

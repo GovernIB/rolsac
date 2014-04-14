@@ -466,7 +466,7 @@
                                 </div>
                                 <p style="clear: both"/><!-- Separador -->
 	                            <div class="btnGenerico">
-	                                <a id="btnGuardar_fetsVitals" href="javascript:;" class="btn guarda important lista-simple" 
+	                                <a id="btnGuardar_fetsVitals" href="javascript:;" class="btn guarda important lista-simple-hechosVitales" style="display: none" 
 	                            			action="<c:url value="/agrupacioFetsVitals/guardarHechosVitalesRelacionados.do" />">
 	                           			<span><span><spring:message code='boto.guarda'/></span></span>
 	                            	</a>

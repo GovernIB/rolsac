@@ -51,7 +51,7 @@ function CModulFetVital() {
 		if (debug)
 			console.log("Saliendo de CModulFetVital.iniciar");
 		
-	}
+	};
 			
 	this.nuevo = function() {
 		
@@ -64,7 +64,7 @@ function CModulFetVital() {
 		if (debug)
 			console.log("Saliendo de CModulFetVital.nuevo");
 		
-	}	
+	};
 		
 	this.contaSeleccionats = function() {
 		
@@ -99,7 +99,7 @@ function CModulFetVital() {
 		if (debug)
 			console.log("Saliendo de CModulFetVital.contaSeleccionats");
 		
-	}
+	};
 	
 	this.inicializarFetsVitals = function(listaFetsVitals) {
 		
@@ -122,10 +122,10 @@ function CModulFetVital() {
 		if (debug)
 			console.log("Saliendo de CModulFetVital.inicializarFetsVitals");
 		
-	}
+	};
 	
 	// Devuelve un string con el formato fetsVitals=n1,n2,...,nm on n son codis de fetsVitals.
-	this.listaFetsVitals = function () {
+	this.listaFetsVitals = function() {
 		
 		if (debug)
 			console.log("Entrando en CModulFetVital.listaFetsVitals");
@@ -145,6 +145,101 @@ function CModulFetVital() {
 		
 		return listaFetsVitals;
 		
-	}
+	};
+	
+	this.botonGuardar = jQuery("#btnGuardar_fetsVitals");
+	
+	this.existeBotonGuardar = function() {
+		return (this.botonGuardar.length > 0);
+	};
+	
+	this._eliminaItem = this.eliminaItem;
+	
+	this.eliminaItem = function( item ) {
+
+		that._eliminaItem(item);
+		
+		// Si hay botón de guardado, hay que marcar la página como modificada.
+		// Si no, el guardado se hace vía botón "Finalizar".
+		if (this.existeBotonGuardar()) {
+			Detall.modificado(true);
+			this.habilitarBotonGuardar();
+		}
+		
+	};
+	
+	this._agregaItem = this.agregaItem;
+	
+	this.agregaItem = function( item ) {
+		
+		that._agregaItem(item);
+		
+		// Si hay botón de guardado, hay que marcar la página como modificada.
+		// Si no, el guardado se hace vía botón "Finalizar".
+		if (this.existeBotonGuardar()) {
+			Detall.modificado(true);
+			this.habilitarBotonGuardar();
+		}
+		
+	};
+	
+	this.habilitarBotonGuardar = function() {
+		if (this.existeBotonGuardar()) {
+			this.botonGuardar.show(500);
+	        Detall.modificado();
+		}
+    };
+    
+    this.deshabilitarBotonGuardar = function() {
+    	if (this.existeBotonGuardar()) {
+    		this.botonGuardar.css("display", "none");
+    	}
+    };
+	
+};
+
+/**
+ * (amartin) Explicación de extensión de clase:
+ * 
+ * Extendemos la clase para que, tras el guardado, se oculte el botón de guardado del módulo lateral.
+ * Al marcar un elemento para ser borrado o al insertar uno nuevo, aparecerá el botón de guardar.
+ * Al realizar la acción de guardado, el botón de guardar desaparecerá.
+ */
+function CListaSimpleHechosVitales() {
+	
+	// Activa mensajes de debug.
+	var debug = false;
+
+	this.extend = ListaSimple;
+	this.extend();
+	
+	var that = this;
+	
+	this._guardar = this.guardar;
+	
+	this.guardar = function(element, url, id) {
+		
+		if (debug)
+			console.log("Entrando en CListaSimpleHechosVitales.guardar");
+		
+		that._guardar(element, url, id);
+		
+		// XXX amartin: ocultación del botón de guardado tras solicitar guardado AJAX
+		// Ir añadiendo casos aquí.
+		var urlGuardarHechosVitalesAgrupacion = "/agrupacioFetsVitals/guardarHechosVitalesRelacionados.do";
+		
+		if ( url.indexOf(urlGuardarHechosVitalesAgrupacion) != -1 ) {
+			
+			if (typeof ModulFetVital != 'undefined')
+				ModulFetVital.deshabilitarBotonGuardar();
+			
+		}
+		
+		Detall.modificado(false);
+		
+		if (debug)
+			console.log("Entrando en CListaSimpleHechosVitales.guardar");
+		
+	};
 	
 };

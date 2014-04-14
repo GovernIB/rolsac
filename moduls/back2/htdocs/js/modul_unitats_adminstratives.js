@@ -323,7 +323,7 @@ function CListaSimpleUAs() {
 	this.guardar = function(element, url, id) {
 		
 		if (debug)
-			console.log("Entrando en CListaSimpleUAs.getFilters");
+			console.log("Entrando en CListaSimpleUAs.guardar");
 		
 		that._guardar(element, url, id);
 		
@@ -344,7 +344,7 @@ function CListaSimpleUAs() {
 		Detall.modificado(false);
 		
 		if (debug)
-			console.log("Entrando en CListaSimpleUAs.getFilters");
+			console.log("Entrando en CListaSimpleUAs.guardar");
 		
 	};
 	
