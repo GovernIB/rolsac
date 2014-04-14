@@ -65,7 +65,7 @@ $(document).ready(function() {
     ListaSimpleGenerica = new ListaSimple();
     ListaSimpleMaterias = new ListaSimple();
     ListaSimpleHechosVitales = new ListaSimple();
-    ListaSimpleDocumentos = new ListaSimple();
+    ListaSimpleDocumentos = new CListaSimpleDocumentos();
     ListaMultiidiomaEnlaces = new CListaMultiidiomaEnlaces();
 
 	// elements

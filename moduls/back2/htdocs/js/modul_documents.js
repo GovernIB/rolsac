@@ -444,16 +444,45 @@ function CModulDocuments() {
 			axis: 'y', 
 			update: function(event,ui){
 				EscriptoriPare.calculaOrden(ui,"origen");
+				ModulDocuments.habilitarBotonGuardar();
 			}
 		}).css({cursor:"move"});
 		
-		modul_documents_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function(){				
+		modul_documents_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function() {	
+			
 			var itemLista = jQuery(this).parents("li:first");
 			EscriptoriPare.eliminaItem(itemLista);
 			that.contaSeleccionats();
+			
+			// Si hay botón de guardado, hay que marcar la página como modificada.
+			// Si no, el guardado se hace vía botón "Finalizar".
+			if (that.existeBotonGuardar()) {
+				Detall.modificado(true);
+				that.habilitarBotonGuardar();
+			}
+			
 		});
 		
 	};
+	
+	this.botonGuardar = jQuery("#btnGuardar_documentos");
+	
+	this.existeBotonGuardar = function() {
+		return (this.botonGuardar.length > 0);
+	};
+		
+	this.habilitarBotonGuardar = function() {
+		if (this.existeBotonGuardar()) {
+			this.botonGuardar.show(500);
+	        Detall.modificado();
+		}
+    };
+    
+    this.deshabilitarBotonGuardar = function() {
+    	if (this.existeBotonGuardar()) {
+    		this.botonGuardar.css("display", "none");
+    	}
+    };
 	
 };
 
@@ -502,6 +531,54 @@ function CListaMultiidiomaDocumentos() {
 			console.log("Saliendo de CListaMultiidiomaDocumentos.getFilters");
 		
 		return filters;
+		
+	};
+	
+};
+
+/**
+ * (amartin) Explicación de extensión de clase:
+ * 
+ * Extendemos la clase para que, tras el guardado, se oculte el botón de guardado del módulo lateral.
+ * Al marcar un elemento para ser borrado o al reordenar alguno, aparecerá el botón de guardar.
+ * Al realizar la acción de guardado, el botón de guardar desaparecerá.
+ */
+function CListaSimpleDocumentos() {
+	
+	// Activa mensajes de debug.
+	var debug = false;
+
+	this.extend = ListaSimple;
+	this.extend();
+	
+	var that = this;
+	
+	this._guardar = this.guardar;
+	
+	this.guardar = function(element, url, id) {
+		
+		if (debug)
+			console.log("Entrando en CListaSimpleDocumentos.guardar");
+		
+		that._guardar(element, url, id);
+		
+		// XXX amartin: ocultación del botón de guardado tras solicitar guardado AJAX.
+		// Ir añadiendo casos aquí.
+		var urlGuardarDocumentosProcedimiento = "/catalegProcediments/guardarDocumentosRelacionados.do";
+		var urlGuardarDocumentosFicha = "/fitxainf/guardarDocumentosRelacionados.do";
+		
+		if ( url.indexOf(urlGuardarDocumentosProcedimiento) != -1 
+				|| url.indexOf(urlGuardarDocumentosFicha) != -1 ) {
+			
+			if (typeof ModulDocuments != 'undefined')
+				ModulDocuments.deshabilitarBotonGuardar();
+			
+		}
+		
+		Detall.modificado(false);
+		
+		if (debug)
+			console.log("Entrando en CListaSimpleDocumentos.guardar");
 		
 	};
 	

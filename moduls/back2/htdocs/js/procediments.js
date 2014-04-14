@@ -53,8 +53,8 @@ $(document).ready(function() {
 
 	ListaSimpleGenerica = new ListaSimple();
 	ListaSimpleMaterias = new ListaSimple();
-	ListaSimpleDocumentos = new ListaSimple();
 	ListaSimpleHechosVitales = new ListaSimple();
+	ListaSimpleDocumentos = new CListaSimpleDocumentos();
 	
 	// elements
 	opcions_elm = $("#opcions");

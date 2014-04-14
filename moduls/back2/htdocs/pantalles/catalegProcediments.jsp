@@ -1177,7 +1177,7 @@
                                 <!-- TODO amartin: borrar cuando haya "solución" para el botón "Guarda" -->
                                 <p style="clear: both; margin-bottom: 10px;"/><!-- Separador -->
 	                            <div class="btnGenerico">
-	                                <a id="btnGuardar_documentos" href="javascript:;" class="btn guarda important lista-simple-documentos" 
+	                                <a id="btnGuardar_documentos" href="javascript:;" class="btn guarda important lista-simple-documentos" style="display: none"
 	                            			action="<c:url value="/catalegProcediments/guardarDocumentosRelacionados.do" />">
 	                           			<span><span><spring:message code='boto.guarda'/></span></span>
 	                            	</a>

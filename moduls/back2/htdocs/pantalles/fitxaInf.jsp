@@ -1003,7 +1003,7 @@
                                 </div>
                                 <p style="clear: both; margin-bottom: 10px;"/><!-- Separador -->
 	                            <div class="btnGenerico">
-	                                <a id="btnGuardar_documentos" href="javascript:;" class="btn guarda important lista-simple-documentos" 
+	                                <a id="btnGuardar_documentos" href="javascript:;" class="btn guarda important lista-simple-documentos" style="display: none"
 	                            			action="<c:url value="/fitxainf/guardarDocumentosRelacionados.do" />">
 	                           			<span><span><spring:message code='boto.guarda'/></span></span>
 	                            	</a>
