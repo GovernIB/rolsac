@@ -444,7 +444,7 @@ function CListaSimpleIconos() {
 	this.guardar = function(element, url, id) {
 		
 		if (debug)
-			console.log("Entrando en CListaSimpleIconos.getFilters");
+			console.log("Entrando en CListaSimpleIconos.guardar");
 		
 		that._guardar(element, url, id);
 		
@@ -465,7 +465,7 @@ function CListaSimpleIconos() {
 		Detall.modificado(false);
 		
 		if (debug)
-			console.log("Entrando en CListaSimpleIconos.getFilters");
+			console.log("Entrando en CListaSimpleIconos.guardar");
 		
 	};
 	

@@ -13,7 +13,18 @@ $(document).ready(function() {
 		
 	});
 	
+	jQuery(".lista-simple-secciones, .lista-simple-fichas").click(function() {
+		
+		var element = $(this).parent().parent().find("li");
+		var id = $('#item_id').val();
+		var url = $(this).attr('action');
+		
+		ListaSimpleSeccionesOMaterias.guardar(element, url, id);
+		
+	});
+		
 	ListaSimpleGenerica = new ListaSimple();
+	ListaSimpleSeccionesOMaterias = new CListaSimpleSeccionesOFichas();
 
 	// elements
 	opcions_elm = $("#opcions");

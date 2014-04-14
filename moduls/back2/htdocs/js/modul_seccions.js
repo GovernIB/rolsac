@@ -761,6 +761,7 @@ function CModulSeccio() {
 				update: function(event, ui) {
 					ModulFitxes.calculaOrden(ui, "origen");
 					that.contaFitxesSeleccionades();
+					that.habilitarBotonGuardarFichas();
 				}
 			}).css({cursor:"url(../img/cursor/grab.cur), move"});
 
@@ -797,10 +798,9 @@ function CModulSeccio() {
 					axis: 'y', 
 					cursor: 'url(../img/cursor/grabbing.cur), move',
 					update: function(event,ui) {
-						
 						ModulSeccions.calculaOrden(ui, "origen");
 						that.contaSeleccionats();
-
+						that.habilitarBotonGuardarSecciones();
 					}
 				}).css({cursor:"url(../img/cursor/grab.cur), move"});
 			}
@@ -1022,6 +1022,80 @@ function CModulSeccio() {
 		
 		if (debug)
 			console.log("Saliendo de CModulSeccio.mostrarSeccionesSeleccionadas");
+		
+	};
+	
+	this.botonGuardarSecciones = jQuery("#btnGuardar_seccions");
+	
+	this.existeBotonGuardarSecciones = function() {
+		return (this.botonGuardarSecciones.length > 0);
+	};
+	
+	this.habilitarBotonGuardarSecciones = function() {
+		if (this.existeBotonGuardarSecciones()) {
+			this.botonGuardarSecciones.show(500);
+	        Detall.modificado();
+		}
+    };
+    
+    this.deshabilitarBotonGuardarSecciones = function() {
+    	if (this.existeBotonGuardarSecciones()) {
+    		this.botonGuardarSecciones.css("display", "none");
+    	}
+    };
+    
+    this.botonGuardarFichas = jQuery("#btnGuardar_fitxes");
+	
+	this.existeBotonGuardarFichas = function() {
+		return (this.botonGuardarFichas.length > 0);
+	};
+	
+	this.habilitarBotonGuardarFichas = function() {
+		if (this.existeBotonGuardarFichas()) {
+			this.botonGuardarFichas.show(500);
+	        Detall.modificado();
+		}
+    };
+    
+    this.deshabilitarBotonGuardarFichas = function() {
+    	if (this.existeBotonGuardarFichas()) {
+    		this.botonGuardarFichas.css("display", "none");
+    	}
+    };
+	
+	this._eliminaItem = this.eliminaItem;
+	
+	this.eliminaItem = function( item ) {
+
+		that._eliminaItem(item);
+		
+		// Si hay botón de guardado, hay que marcar la página como modificada.
+		// Si no, el guardado se hace vía botón "Finalizar".
+		if (this.existeBotonGuardarSecciones()) {
+			Detall.modificado(true);
+			this.habilitarBotonGuardarSecciones();
+		} else if (this.existeBotonGuardarFichas()) {
+			Detall.modificado(true);
+			this.habilitarBotonGuardarFichas();
+		}
+		
+	};
+	
+	this._agregaItem = this.agregaItem;
+	
+	this.agregaItem = function( item ) {
+		
+		that._agregaItem(item);
+		
+		// Si hay botón de guardado, hay que marcar la página como modificada.
+		// Si no, el guardado se hace vía botón "Finalizar".
+		if (this.existeBotonGuardarSecciones()) {
+			Detall.modificado(true);
+			this.habilitarBotonGuardarSecciones();
+		} else if (this.existeBotonGuardarFichas()) {
+			Detall.modificado(true);
+			this.habilitarBotonGuardarFichas();
+		}
 		
 	};
 	
@@ -2372,4 +2446,64 @@ function CEscriptoriSeccioFitxes() {
 
 	};
 
+};
+
+/**
+ * (amartin) Explicación de extensión de clase:
+ * 
+ * Extendemos la clase para que, tras el guardado, se oculte el botón de guardado del módulo lateral de secciones (caso especial de secciones
+ * relacionadas con una sección). Esto es porque la lista simple sólo gestionará el orden de las secciones relacionadas. Al reordenar alguna
+ * aparecerá el botón de guardar y al realizar la acción de guardado éste desaparecerá.
+ * 
+ * Se conserva la dualidad de una clase para la gestión de Secciones o Fichas relacionadas con una gestión, como ya se hace al principio:
+ * 
+ * ModulSeccions = new CModulSeccio();
+ * ModulFitxes = new CModulSeccio();
+ * 
+ * Son de la misma clase.
+ * 
+ */
+function CListaSimpleSeccionesOFichas() {
+	
+	// Activa mensajes de debug.
+	var debug = false;
+
+	this.extend = ListaSimple;
+	this.extend();
+	
+	var that = this;
+	
+	this._guardar = this.guardar;
+	
+	this.guardar = function(element, url, id) {
+		
+		if (debug)
+			console.log("Entrando en CListaSimpleSeccionesOFichas.guardar");
+		
+		that._guardar(element, url, id);
+		
+		// XXX amartin: ocultación del botón de guardado tras solicitar guardado AJAX
+		// Ir añadiendo casos aquí.
+		var urlGuardarOrdenSecciones = "/seccions/guardarOrdenSeccionesRelacionadas.do";
+		var urlGuardarOrdenFichas = "/seccions/guardarOrdenFichasRelacionadas.do";
+		
+		if ( url.indexOf(urlGuardarOrdenSecciones) != -1 ) {
+			
+			if (typeof ModulSeccions != 'undefined')
+				ModulSeccions.deshabilitarBotonGuardarSecciones();
+			
+		} else if ( url.indexOf(urlGuardarOrdenFichas) != -1 ) {
+			
+			if (typeof ModulFitxes != 'undefined')
+				ModulFitxes.deshabilitarBotonGuardarFichas();
+			
+		}
+		
+		Detall.modificado(false);
+		
+		if (debug)
+			console.log("Entrando en CListaSimpleSeccionesOFichas.guardar");
+		
+	};
+	
 };

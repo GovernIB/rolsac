@@ -364,7 +364,7 @@
                                 </div>
                                 <p style="clear: both; margin-bottom: 10px;" /><!-- Separador -->
 	                            <div class="btnGenerico">
-	                                <a id="btnGuardar_seccions" href="javascript:;" class="btn guarda important lista-simple" 
+	                                <a id="btnGuardar_seccions" href="javascript:;" class="btn guarda important lista-simple-secciones" style="display: none"
 	                            			action="<c:url value="/seccions/guardarOrdenSeccionesRelacionadas.do" />">
 	                           			<span><span><spring:message code='boto.guarda'/></span></span>
 	                            	</a>
@@ -391,7 +391,7 @@
                                 </div>
                                 <p style="clear: both; margin-bottom: 10px;" /><!-- Separador -->
 	                            <div class="btnGenerico">
-	                                <a id="btnGuardar_seccions" href="javascript:;" class="btn guarda important lista-simple" 
+	                                <a id="btnGuardar_fitxes" href="javascript:;" class="btn guarda important lista-simple-fichas" style="display: none"
 	                            			action="<c:url value="/seccions/guardarOrdenFichasRelacionadas.do" />">
 	                           			<span><span><spring:message code='boto.guarda'/></span></span>
 	                            	</a>
