@@ -22,14 +22,25 @@ $(document).ready(function() {
 	}
 	
 	// Evento para el botón de volver al detalle
-	jQuery("#btnVolverDetalle").bind("click",function(){EscriptoriEnllas.torna();});
-	jQuery("#btnLimpiarCampos").bind("click",function(){EscriptoriEnllas.limpia();});
-	jQuery("#btnFinalitzar").bind("click",function(){EscriptoriEnllas.finalizar();});
-	jQuery("#btnInsertarEnllas").bind("click",function(){EscriptoriEnllas.guardar();});
+	jQuery("#btnVolverDetalle").bind("click", function() {
+		EscriptoriEnllas.torna();
+	});
+	jQuery("#btnLimpiarCampos").bind("click", function() {
+		EscriptoriEnllas.limpia();
+	});
+	jQuery("#btnFinalitzar").bind("click", function() {
+		EscriptoriEnllas.finalizar();
+	});
+	jQuery("#btnInsertarEnllas").bind("click", function() {
+		EscriptoriEnllas.guardar();
+	});
 	
 });
 
-function CModulEnllas() {	
+function CModulEnllas() {
+	
+	// Activa mensajes de debug.
+	var debug = false;
 	
 	this.extend = ListaOrdenable;
 	this.extend();		
@@ -40,6 +51,9 @@ function CModulEnllas() {
     var $moduloModificado = modul_enllassos_elm.find('input[name="modulo_enlaces_modificado"]');
 	
 	this.iniciar = function() {
+		
+		if (debug)
+			console.log("Entrando en CModulEnllas.iniciar");
 				                        
 		enllassos_seleccionats_elm = escriptori_enllassos_elm.find("div.escriptori_items_seleccionats:first");
 		escriptori_enllassos_elm.find("div.botonera").each(function() {
@@ -66,9 +80,7 @@ function CModulEnllas() {
 	        div_idiomes_elm.find("div." + a_primer_elm.attr("class")).addClass("seleccionat");	        	        
 	        ul_idiomes_elm.bind("click", {'actualizarIdiomasModulosLaterales': true, 'idPare':'#escriptori_enllassos'}, Detall.idioma);
 	    }
-		
-		//enllassos_llistat_elm.add(enllassos_seleccionats_elm);							
-		
+				
 		// Configuramos la lista ordenable.
 		this.configurar({
 			nombre: "enllas",
@@ -81,9 +93,15 @@ function CModulEnllas() {
 		// one al botó de gestionar
 		modul_enllassos_elm.find("a.gestiona").one("click", function() { ModulEnllas.gestiona(); });
 		
+		if (debug)
+			console.log("Saliendo de CModulEnllas.iniciar");
+		
 	};
 
 	this.gestiona = function() {
+		
+		if (debug)
+			console.log("Entrando en CModulEnllas.gestiona");
 				
 		EscriptoriEnllas.limpia();				
 		
@@ -106,20 +124,40 @@ function CModulEnllas() {
 			escriptori_enllassos_elm.fadeIn(300);			
 		});
 		
+		if (debug)
+			console.log("Saliendo de CModulEnllas.gestiona");
+		
 	};
 	
-    this.modificado = function(){
+    this.modificado = function() {
+    	
+    	if (debug)
+			console.log("Entrando en CModulEnllas.modificado");
+    	
         $moduloModificado.val(1);
+        
+        if (debug)
+			console.log("Saliendo de CModulEnllas.modificado");
+        
     };
     
 	this.nuevo = function() {
 		
+		if (debug)
+			console.log("Entrando en CModulEnllas.nuevo");
+		
 		modul_enllassos_seleccionats_elm = escriptori_detall_elm.find("div.modulEnllassos div.seleccionats");
-		modul_enllassos_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaEnllassos + ".");		
+		modul_enllassos_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaEnllassos + ".");
+		
+		if (debug)
+			console.log("Saliendo de CModulEnllas.nuevo");
 		
 	};
 
 	this.cargarEnlaces = function(dades) {
+		
+		if (debug)
+			console.log("Entrando en CModulEnllas.cargarEnlaces");
 		
         // Iniciamos el campo de control de cambios 0.
         $moduloModificado.val(0);
@@ -174,11 +212,17 @@ function CModulEnllas() {
 			
 		}
 		
+		if (debug)
+			console.log("Saliendo de CModulEnllas.cargarEnlaces");
+		
 	};
 	
 };
 
 function CEscriptoriEnllas() {
+	
+	// Activa mensajes de debug.
+	var debug = false;
 	
 	this.extend = ListaOrdenable;
 	this.extend();
@@ -189,12 +233,21 @@ function CEscriptoriEnllas() {
 	
 	this.iniciar = function() {
 		
+		if (debug)
+			console.log("Entrando en CEscriptoriEnllas.iniciar");
+		
 		formulariComprovarEnllassos = new FormulariComprovar(FormulariEnllassos);
 		formulariComprovarEnllassos.iniciar();
 		
+		if (debug)
+			console.log("Saliendo de CEscriptoriEnllas.iniciar");
+		
 	};
 		
-	this.guardar = function() {			
+	this.guardar = function() {
+		
+		if (debug)
+			console.log("Entrando en CEscriptoriEnllas.guardar");
 		
 		//Validam el formulari d'enllassos
 		formulariComprovarEnllassos.llansar();
@@ -262,7 +315,7 @@ function CEscriptoriEnllas() {
 				idRelatedItem: idTemporal
 			};		
 		
-			if (ModulEnllas.agregaItem(item)){
+			if (ModulEnllas.agregaItem(item)) {
 				EscriptoriEnllas.contaSeleccionats();
 			}
 			
@@ -270,9 +323,15 @@ function CEscriptoriEnllas() {
 		
 		EscriptoriEnllas.limpia();
 		
+		if (debug)
+			console.log("Saliendo de CEscriptoriEnllas.guardar");
+		
 	};
 	
-	this.finalizar = function() {		
+	this.finalizar = function() {
+		
+		if (debug)
+			console.log("Entrando en CEscriptoriEnllas.finalizar");
 
 		nombre_llistat = ModulEnllas.finalizar();
 		
@@ -296,9 +355,15 @@ function CEscriptoriEnllas() {
 		
 		this.torna();
 		
+		if (debug)
+			console.log("Saliendo de CEscriptoriEnllas.finalizar");
+		
 	};
 	
 	this.torna = function() {
+		
+		if (debug)
+			console.log("Entrando en CEscriptoriEnllas.torna");
 		
 		// animacio
 		escriptori_enllassos_elm.fadeOut(300, function() {			
@@ -309,16 +374,28 @@ function CEscriptoriEnllas() {
 			
 		});
 		
+		if (debug)
+			console.log("Saliendo de CEscriptoriEnllas.torna");
+		
 	};
 	
 	this.limpia = function() {
 		
+		if (debug)
+			console.log("Entrando en CEscriptoriEnllas.limpia");
+		
         jQuery('#formEnllassos :input').each(limpiarCampo);
         $("#id_enllas_actual").val(""); //Se neteja manualment ja que limpiarCampo no afecta els input hidden
+        
+        if (debug)
+			console.log("Saliendo de CEscriptoriEnllas.limpia");
         
 	};
 
 	this.contaSeleccionats = function() {
+		
+		if (debug)
+			console.log("Entrando en CEscriptoriEnllas.contaSeleccionats");
 		
 		seleccionats_val = enllassos_seleccionats_elm.find(".seleccionat").find("li").size();
 		info_elm = enllassos_seleccionats_elm.find("p.info");
@@ -357,10 +434,16 @@ function CEscriptoriEnllas() {
 			EscriptoriEnllas.editar(idItem);
 		});
 		
+		if (debug)
+			console.log("Saliendo de CEscriptoriEnllas.contaSeleccionats");
+		
 	};
 	
 	//Edicio de un enllas ja existent
-	this.editar = function (idItem){
+	this.editar = function (idItem) {
+		
+		if (debug)
+			console.log("Entrando en CEscriptoriEnllas.editar");
 		
 		//Amb el id del enllas (ja sigui temporal o definitiu) es possible recuperar tots els elements del DOM
 		
@@ -380,6 +463,9 @@ function CEscriptoriEnllas() {
 		
 		escriptori_enllassos_elm.find("#enllas_titol_fr").val(escriptori_enllassos_elm.find("#enllas_nombre_fr_" + idItem).val());
 		escriptori_enllassos_elm.find("#enllas_url_fr").val(escriptori_enllassos_elm.find("#enllas_url_fr_" + idItem).val());
+		
+		if (debug)
+			console.log("Saliendo de CEscriptoriEnllas.editar");
 		
 	};
 
@@ -426,8 +512,8 @@ function CListaMultiidiomaEnlaces() {
 					item.traduccionesEnlace[langs[i]] = new Object();
 					
 					// Asociamos valores.
-					item.traduccionesEnlace[langs[i]].titulo = $('#enllas_nombre_' + langs[i] + '_' + item.id).val();
-					item.traduccionesEnlace[langs[i]].enlace = $('#enllas_url_' + langs[i] + '_' + item.id).val();
+					item.traduccionesEnlace[langs[i]].titulo = escriptori_enllassos_elm.find('#enllas_nombre_' + langs[i] + '_' + item.id).val();
+					item.traduccionesEnlace[langs[i]].enlace = escriptori_enllassos_elm.find('#enllas_url_' + langs[i] + '_' + item.id).val();
 					
 				}
 				

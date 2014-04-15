@@ -11,6 +11,7 @@ import javax.ejb.Handle;
 import javax.naming.NamingException;
 
 import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -26,9 +27,19 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  */
 public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
 
+	private static final long serialVersionUID = 1L;
+
+	/* ========================================================= */
+    /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
-    /* ========================MÉTODOS DE NEGOCIO ============= */
-    /* ========================================================= */
+	
+	public void actualizaEnlacesFicha(Long id, List<Enlace> enlacesNuevos, List<Enlace> enlacesAEliminar) throws DelegateException {
+		try {
+            getFacade().actualizaEnlacesFicha(id, enlacesNuevos, enlacesAEliminar);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+	}
 
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#autorizaCrearFicha(java.lang.Integer)
@@ -316,6 +327,5 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
             throw new DelegateException(e);
         }
     }
-
 
 }

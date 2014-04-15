@@ -7,7 +7,7 @@ $(document).ready(function() {
 	jQuery(".lista-simple").click(function() {
 		
 		var elementos = $(this).parent().parent().find("li"); // Con esto obtenemos los <li> que cuelgan de <div class="seleccionats">
-		var id = $('#item_clave_primaria').val();
+		var id = $('#item_id').val();
 		var url = $(this).attr('action');
 		
 		ListaSimpleGenerica.guardar(elementos, url, id);
@@ -20,7 +20,7 @@ $(document).ready(function() {
 	jQuery(".lista-simple-documentos").click(function() {
 		
 		var elementos = $(this).parent().parent().find("div.cajaIdioma.ca li"); // Con esto obtenemos los <li> que cuelgan de <div class="cajaIdioma ca">
-		var id = $('#item_clave_primaria').val();
+		var id = $('#item_id').val();
 		var url = $(this).attr('action');
 		
 		ListaSimpleDocumentos.guardar(elementos, url, id);
@@ -30,7 +30,7 @@ $(document).ready(function() {
 	jQuery(".lista-multiidioma-enlaces").click(function() {
 				
 		var elementos = $(this).parent().parent().find("div.cajaIdioma.ca li"); // Con esto obtenemos los <li> que cuelgan de <div class="cajaIdioma ca">
-		var id = $('#item_clave_primaria').val();
+		var id = $('#item_id').val();
 		var url = $(this).attr('action');
 		
 		ListaMultiidiomaEnlaces.guardar(elementos, url, id);

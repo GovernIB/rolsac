@@ -62,6 +62,7 @@ import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
+import org.ibit.rol.sac.persistence.delegate.EnlaceDelegate;
 import org.ibit.rol.sac.persistence.delegate.IndexerDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
@@ -90,6 +91,7 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  * 
  * @ejb.transaction type="Required"
  */
+@SuppressWarnings("deprecation")
 public abstract class FichaFacadeEJB extends HibernateEJB {
 
     private static final long serialVersionUID = 4454278347074939459L;
@@ -2276,6 +2278,46 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     		close(session);
     	}
     	
+    }
+    
+    
+    /**
+     * Actualiza los enlaces de una ficha.
+     * 
+     * @param id Identificador de la ficha afectada.
+     * @param enlacesNuevos Lista de enlaces que se quieren asociar a la ficha.
+     * @param enlacesAEliminar Lista de enlaces anteriormente asociados a la ficha y que se quieren borrar.
+     * 
+     * @ejb.interface-method
+     * 
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
+     */
+    public void actualizaEnlacesFicha(Long id, List<Enlace> enlacesNuevos, List<Enlace> enlacesAEliminar) {
+
+    	try {
+
+    		if ( !getAccesoManager().tieneAccesoFicha(id) )
+    			throw new SecurityException("No tiene acceso a la ficha");
+
+    		EnlaceDelegate enllasDelegate = DelegateUtil.getEnlaceDelegate();
+			
+			// Los insertamos/actualizamos en la base de datos.
+    		for (Enlace e : enlacesNuevos) {
+    			enllasDelegate.grabarEnlace(e, null, id);
+    		}
+			
+			// Eliminamos los que han quedado en la lista.
+			for (Enlace e : enlacesAEliminar) {
+				if (e != null)
+					enllasDelegate.borrarEnlace(e.getId());
+			}
+
+    	} catch (DelegateException de) {
+
+    		throw new EJBException(de);
+
+    	}
+
     }
 
 }

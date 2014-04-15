@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -74,5 +75,8 @@ public interface FichaDelegateI {
 	public void borrarFichasUAdeFicha(List<FichaUA> fichasUA) throws DelegateException;
 	
 	public Ficha obtenerFichaDeFichaUA(Long idFichaUA) throws DelegateException;
+	
+	public abstract void actualizaEnlacesFicha(Long id, List<Enlace> enlacesNuevos, List<Enlace> enlacesAEliminar)
+			throws DelegateException;
 	
 }

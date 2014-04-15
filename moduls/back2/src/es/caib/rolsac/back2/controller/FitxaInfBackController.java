@@ -1387,12 +1387,13 @@ public class FitxaInfBackController extends PantallaBaseController {
 		
 		try {
 			
-			Long id = elementos.getId(); // Id de la ficha.			
-			Ficha ficha = DelegateUtil.getFichaDelegate().obtenerFicha(id);
+			Long id = elementos.getId(); // Id de la ficha.
+			FichaDelegate fichaDelegate = DelegateUtil.getFichaDelegate();
+			Ficha ficha = fichaDelegate.obtenerFicha(id);
 			
 			List<String> langs = DelegateUtil.getIdiomaDelegate().listarLenguajes();
 			List<Enlace> enlacesNuevos = new ArrayList<Enlace>();
-			
+						
 			if ( elementos.getListaEnlaces() != null ) {
 				
 				// Construimos los elementos de tipo Enlace a partir de los elementos EnlaceDTO que nos llegan del mantenimiento.
@@ -1417,14 +1418,9 @@ public class FitxaInfBackController extends PantallaBaseController {
     				enlacesNuevos.add(enlace);
 					
 				}
-				
-				// Los insertamos/actualizamos en la base de datos.
-				EnlaceDelegate enllasDelegate = DelegateUtil.getEnlaceDelegate();
-	    		for (Enlace e : enlacesNuevos) {
-	    			enllasDelegate.grabarEnlace(e, null, id);
-	    		}
-	    		
-	    		// Borramos los que existían anteriormente y no nos han llegado en esta petición de guardado.
+					    		
+	    		// Procesamos los enlaces anteriores, comparándolos con la lista de enlaces nuevos, para obtener
+				// la lista de enlaces que se han marcado para borrar.
     			List<Enlace> enlacesAEliminar = ficha.getEnlaces();
     			for (Enlace enlace : enlacesNuevos) {
     				
@@ -1442,11 +1438,7 @@ public class FitxaInfBackController extends PantallaBaseController {
     				
     			}
     			
-    			// Eliminamos los que han quedado en la lista.
-    			for (Enlace e : enlacesAEliminar) {
-    				if (e != null)
-    					enllasDelegate.borrarEnlace(e.getId());
-    			}
+    			fichaDelegate.actualizaEnlacesFicha(id, enlacesNuevos, enlacesAEliminar);
 				
 			}
 										

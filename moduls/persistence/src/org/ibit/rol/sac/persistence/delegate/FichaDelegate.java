@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -157,6 +158,11 @@ public class FichaDelegate implements FichaDelegateI {
 	
 	public Ficha obtenerFichaDeFichaUA(Long idFichaUA) throws DelegateException {
 		return impl.obtenerFichaDeFichaUA(idFichaUA);
+	}
+
+
+	public void actualizaEnlacesFicha(Long id, List<Enlace> enlacesNuevos, List<Enlace> enlacesAEliminar) throws DelegateException {
+		impl.actualizaEnlacesFicha(id, enlacesNuevos, enlacesAEliminar);
 	}
 	
 }
