@@ -160,10 +160,8 @@ public abstract class DocumentoResumenFacadeEJB extends HibernateEJB {
     	
 	/**
      * 
-     * Actualiza los ordenes de los documentos de una secci�n de una Ficha
-	 * 
-     * FIXME enric@dgtic: este metodo lo pondria en procedimientoFacadeEJB
-     * 
+     * Actualiza los ordenes de los documentos de una sección de una Ficha
+	 *
      * @param Map <String,String[]>
      * e.g. key= orden_doc396279
      * 	   value={"1"}
@@ -212,11 +210,7 @@ public abstract class DocumentoResumenFacadeEJB extends HibernateEJB {
 				}
 				
 			}
-			
-			// FIXME amartin: cuando se guardan documentos asociados a procedimientos, tras este
-			// flush sólo se realizan updates la primera vez. El resto de veces que los documentos
-			// asociados al procedimiento se modifican (vía AJAX o vía "normal"), este flush no produce updates.
-			// Desconozco el motivo.
+
 			session.flush();
 
 			Collections.sort(doc_orden, new DocsFichaComparator());
@@ -253,5 +247,66 @@ public abstract class DocumentoResumenFacadeEJB extends HibernateEJB {
 			return x1.compareTo( x2 ); 
 		}
 	}
+    
+    /**
+     * 
+     * Actualiza los ordenes de los documentos de una secci�n de una Ficha
+	 * 
+     * FIXME enric@dgtic: este metodo lo pondria en procedimientoFacadeEJB
+     * 
+     * @param Map <String,String[]>
+     * eg. key= orden_doc396279
+     * 	   value={"1"}
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+     */
+    public void actualizarOrdenDocs(Map map)
+    {
+    	Session session = getSession();
+    	try {
+        	Long id;
+        	int valor_orden=0;
+        	List doc_orden = new ArrayList();
+        	
+        	Iterator it = map.entrySet().iterator();
+        	while (it.hasNext()) {
+        		Map.Entry e = (Map.Entry)it.next();
+        		
+        		String paramName = e.getKey().toString();
+            	if (paramName.startsWith("orden_doc")) {
+            		id=  Long.valueOf(paramName.substring(9)).longValue();
+             		String[] parametros=(String[])e.getValue();
+            		valor_orden= Integer.parseInt(parametros[0]);
+            		
+            		if (!getAccesoManager().tieneAccesoDocumento(id)) {
+            			throw new SecurityException("No tiene acceso al documento");
+            		}
+            		DocumentoResumen documentoResumen = (DocumentoResumen) session.load(DocumentoResumen.class, id);
+            		documentoResumen.setOrden(valor_orden);
+            		doc_orden.add(documentoResumen);
+            		
+            		session.flush();
+            	}
+            }
+            
+            Collections.sort( doc_orden, new DocsFichaComparator() );
+            
+            Long contador= Long.parseLong("1");
+        	
+        	Iterator itdoc=doc_orden.iterator();
+    		DocumentoResumen doc = null;
+    		while (itdoc.hasNext()) {
+    			doc = (DocumentoResumen) itdoc.next();
+    			doc.setOrden(contador);
+    			contador+=1;
+    		}
+            session.flush();
+            
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
     
 }

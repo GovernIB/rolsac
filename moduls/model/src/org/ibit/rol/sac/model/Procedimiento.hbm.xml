@@ -52,7 +52,14 @@
         </list>
 
         <list name="documentos" inverse="true" lazy="true">
-            <cache usage="read-write"/>
+            <!--
+            	amartin 2014/04/25: se ha desactivado esta caché al dar problemas con la ordenación de los documentos asociados al procedimiento
+            	(al reordenar documentos los valores en la BD cambiaban correctamente pero Hibernate seguía ofreciendo valores cacheados).
+            	En Ficha.hbm.xml hay un list de documentos con esta misma configuración, con la caché activada, y no da problemas.
+            	
+            	Desconozco el motivo.
+             -->
+            <!-- <cache usage="read-write"/> -->
             <key column="DOC_CODPRO" foreign-key="RSC_DOCPRO_FK"/>
             <index column="DOC_ORDEN"/>
             <one-to-many class="org.ibit.rol.sac.model.Documento"/>

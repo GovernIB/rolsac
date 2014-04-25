@@ -201,10 +201,8 @@ public class GuardadoAjaxUtil {
 			
 		}
 		
-		// FIXME amartin: actualmente no funciona el tema de la ordenación con los documentos asociados a un procedimiento o una ficha.
-		// Ver comentario en método DocumentoResumenFacadeEJB.actualizarOrdenDocs().
-		DocumentoResumenDelegate documentoResumenDelegate = DelegateUtil.getDocumentoResumenDelegate();
 		// Guardamos documentos actuales (actualizar orden) borrando previamente los especificados por documentosABorrar.
+		DocumentoResumenDelegate documentoResumenDelegate = DelegateUtil.getDocumentoResumenDelegate();
 		documentoResumenDelegate.actualizarOrdenDocs(actualizadorMap, documentosABorrar);
 		
 		return documentos;

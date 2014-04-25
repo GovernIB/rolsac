@@ -49,6 +49,14 @@ public class DocumentoResumenDelegate implements StatelessDelegate
         }
     }
     
+    public void actualizarOrdenDocs(Map map) throws DelegateException {
+        try {
+            getFacade().actualizarOrdenDocs(map);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
