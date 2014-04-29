@@ -13,6 +13,16 @@ $(document).ready(function() {
 		
 	});
 	
+	jQuery(".lista-simple-edificios").click(function() {
+		
+		var elements = $('#escriptori_edificis .seleccionats').find('li');
+		var id = $('#item_id').val();
+		var url = $(this).attr('action');
+		
+		ListaSimpleEdificios.guardar(elements, url, id);
+		
+	});
+	
 	jQuery(".lista-simple").click(function() {
 		
 		var elements = $(this).parent().parent().find("li");
@@ -24,6 +34,7 @@ $(document).ready(function() {
 	});
 	
 	ListaSimpleMaterias = new ListaSimple();
+	ListaSimpleEdificios = new ListaSimple();
 	ListaSimpleGenerica = new ListaSimple();
 
 	// elements

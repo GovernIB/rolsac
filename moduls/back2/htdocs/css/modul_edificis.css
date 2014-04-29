@@ -6,6 +6,10 @@
     display:none; 
 }
 
+#escriptori_edificis .escriptori_detall {
+	display: block;
+}
+
 div.modulEdificis { padding-bottom:1em; }
 div.modulEdificis div.seleccionats ul li { padding-bottom:.4em; }
 div.modulEdificis div.seleccionats p.info { margin-top:0; }
@@ -88,3 +92,7 @@ div.escriptori_items_seleccionats .interior h3{
     font: bold 11px Verdana, Helvetica, Sans-serif;
     text-transform: uppercase;
 }
+
+#cercador_contingut_edificis .botonera {
+	width: 215px;
+} 

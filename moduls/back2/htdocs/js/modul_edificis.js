@@ -20,16 +20,21 @@ $(document).ready(function() {
 	}
 	
 	// Evento para el botón de volver al detalle
-	jQuery(".btnVolverDetalle").bind("click", function() { EscriptoriEdifici.torna(); });	
-	jQuery("#btnFinalizar").bind("click", function() { EscriptoriEdifici.finalizar(); });
+	jQuery("#btnVolver_edificis").bind("click", function() { EscriptoriEdifici.torna(); });	
+	jQuery("#btnGuardar_edificis").bind("click", function() { EscriptoriEdifici.finalizar(); });
 	
 });
 
 function CModulEdifici() {
 	
+	// Activa mensajes de debug.
+	var debug = false;	
+	
+	var that = this;
+	
 	this.extend = ListaOrdenable;
 	this.extend();
-    
+	    
     // Campo hidden para controlar los cambios sobre un módulo.
     var $moduloModificado = modul_edificis_elm.find('input[name="modulo_edificios_modificado"]');
 	
@@ -97,6 +102,86 @@ function CModulEdifici() {
 		escriptori_detall_elm.fadeOut(300, function() {			
 			escriptori_edificis_elm.fadeIn(300);			
 		});
+		
+		this.deshabilitarBotonGuardar();
+		
+	};
+	
+	this.botonGuardar = jQuery("#btnGuardar_edificis");
+	
+	this.existeBotonGuardar = function() {
+		
+		if (debug)
+			console.log("Entrando en CModulEdifici.existeBotonGuardar");
+		
+		if (debug)
+			console.log("Saliendo de CModulEdifici.existeBotonGuardar");
+		
+		return (this.botonGuardar.length > 0);
+		
+	};
+	
+	this.habilitarBotonGuardar = function() {
+		
+		if (debug)
+			console.log("Entrando en CModulEdifici.habilitarBotonGuardar");
+		
+		if (this.existeBotonGuardar() && this.botonGuardar.parent().hasClass("off")) {
+    		this.botonGuardar.parent().removeClass("off");
+    	}
+		
+		if (debug)
+			console.log("Saliendo de CModulEdifici.habilitarBotonGuardar");
+		
+    };
+    
+    this.deshabilitarBotonGuardar = function() {
+    	
+    	if (debug)
+			console.log("Entrando en CModulEdifici.deshabilitarBotonGuardar");
+    	
+    	if (this.existeBotonGuardar() && !this.botonGuardar.parent().hasClass("off")) {
+    		this.botonGuardar.parent().addClass("off");
+    	}
+    	
+    	if (debug)
+			console.log("Saliendo de CModulEdifici.deshabilitarBotonGuardar");
+    	
+    };
+    
+    this._eliminaItem = this.eliminaItem;
+	
+	this.eliminaItem = function( item ) {
+		
+		if (debug)
+			console.log("Entrando en CModulEdifici.eliminaItem");
+
+		that._eliminaItem(item);
+
+		if (this.existeBotonGuardar()) {
+			this.habilitarBotonGuardar();
+		}
+		
+		if (debug)
+			console.log("Saliendo de CModulEdifici.eliminaItem");
+		
+	};
+	
+	this._agregaItem = this.agregaItem;
+	
+	this.agregaItem = function( item ) {
+		
+		if (debug)
+			console.log("Entrando en CModulEdifici.agregaItem");
+		
+		that._agregaItem(item);
+
+		if (this.existeBotonGuardar()) {
+			this.habilitarBotonGuardar();
+		}
+		
+		if (debug)
+			console.log("Saliendo de CModulEdifici.agregaItem");
 		
 	};
 	
@@ -428,7 +513,7 @@ function CEscriptoriEdifici() {
 			
 		}
 		
-		edificis_seleccionats_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function(){				
+		edificis_seleccionats_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function() {				
 			var itemLista = jQuery(this).parents("li:first");
 			ModulEdifici.eliminaItem(itemLista);
 			EscriptoriEdifici.contaSeleccionats();
