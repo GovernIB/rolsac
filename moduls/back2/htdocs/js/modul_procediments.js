@@ -18,8 +18,8 @@ $(document).ready(function() {
 	}
 	
 	// Evento para el botón de volver al detalle
-	jQuery("#btnVolverDetalle_procediment").bind("click", function() { EscriptoriProcediment.torna(); });
-	jQuery("#btnFinalizar_procediment").bind("click", function() { EscriptoriProcediment.finalizar(); });
+	jQuery("#btnVolver_procediments").bind("click", function() { EscriptoriProcediment.torna(); });
+	jQuery("#btnGuardar_procediments").bind("click", function() { EscriptoriProcediment.finalizar(); });
 	
 });
 
@@ -106,6 +106,8 @@ function CModulProcediment() {
 			procediments_seleccionats_elm.find("ul").remove().end().find("p.info:first").text(txtNoHiHaProcedimentsSeleccionats+ ".");			
 			procediments_seleccionats_elm.find(".listaOrdenable").html("");
 		}
+		
+		this.deshabilitarBotonGuardar();
 		
 		// animacio
 		escriptori_detall_elm.fadeOut(300, function() {			
@@ -238,6 +240,84 @@ function CModulProcediment() {
 			console.log("Saliendo de CModulProcediment.contieneProcedimiento");
 		
 		return existe;
+		
+	};
+	
+	this.botonGuardar = jQuery("#btnGuardar_procediments");
+	
+	this.existeBotonGuardar = function() {
+		
+		if (debug)
+			console.log("Entrando en CModulProcediment.existeBotonGuardar");
+		
+		if (debug)
+			console.log("Saliendo de CModulProcediment.existeBotonGuardar");
+		
+		return (this.botonGuardar.length > 0);
+		
+	};
+	
+	this.habilitarBotonGuardar = function() {
+		
+		if (debug)
+			console.log("Entrando en CModulProcediment.habilitarBotonGuardar");
+		
+		if (this.existeBotonGuardar() && this.botonGuardar.parent().hasClass("off")) {
+    		this.botonGuardar.parent().removeClass("off");
+    	}
+		
+		if (debug)
+			console.log("Saliendo de CModulProcediment.habilitarBotonGuardar");
+		
+    };
+    
+    this.deshabilitarBotonGuardar = function() {
+    	
+    	if (debug)
+			console.log("Entrando en CModulProcediment.deshabilitarBotonGuardar");
+    	
+    	if (this.existeBotonGuardar() && !this.botonGuardar.parent().hasClass("off")) {
+    		this.botonGuardar.parent().addClass("off");
+    	}
+    	
+    	if (debug)
+			console.log("Saliendo de CModulProcediment.deshabilitarBotonGuardar");
+    	
+    };
+    
+    this._eliminaItem = this.eliminaItem;
+	
+	this.eliminaItem = function( item ) {
+		
+		if (debug)
+			console.log("Entrando en CModulProcediment.eliminaItem");
+
+		that._eliminaItem(item);
+
+		if (this.existeBotonGuardar()) {
+			this.habilitarBotonGuardar();
+		}
+		
+		if (debug)
+			console.log("Saliendo de CModulProcediment.eliminaItem");
+		
+	};
+	
+	this._agregaItem = this.agregaItem;
+	
+	this.agregaItem = function( item ) {
+		
+		if (debug)
+			console.log("Entrando en CModulProcediment.agregaItem");
+		
+		that._agregaItem(item);
+
+		if (this.existeBotonGuardar()) {
+			this.habilitarBotonGuardar();
+		}
+		
+		if (debug)
+			console.log("Saliendo de CModulProcediment.agregaItem");
 		
 	};
 	
@@ -576,12 +656,13 @@ function CEscriptoriProcediment() {
 				update: function(event,ui){
 					ModulProcediment.calculaOrden(ui,"origen");
 					EscriptoriProcediment.contaSeleccionats();
+					ModulProcediment.habilitarBotonGuardar();
 				}
 			}).css({cursor:"move"});
 			
 		}
 		
-		procediments_seleccionats_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function(){				
+		procediments_seleccionats_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function() {				
 			var itemLista = jQuery(this).parents("li:first");
 			ModulProcediment.eliminaItem(itemLista);
 			EscriptoriProcediment.contaSeleccionats();
@@ -591,5 +672,5 @@ function CEscriptoriProcediment() {
 			console.log("Saliendo de CEscriptoriProcediment.contaSeleccionats");
 		
 	};
-	
+		
 };

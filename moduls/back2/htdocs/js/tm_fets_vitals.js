@@ -5,15 +5,29 @@ $(document).ready(function() {
 	// Listener para guardado de módulos laterales vía AJAX.
 	jQuery(".lista-simple").click(function() {
 		
-		var element = $(this).parent().parent().find("li");
+		var elements = $(this).parent().parent().find('li');
 		var id = $('#item_id').val();
 		var url = $(this).attr('action');
 		
-		ListaSimpleGenerica.guardar(element, url, id);
+		ListaSimpleGenerica.guardar(elements, url, id);
 		
 	});
 	
 	ListaSimpleGenerica = new ListaSimple();
+	
+	// Listener para guardado de módulos laterales vía AJAX.
+	jQuery(".lista-simple-procedimientos").click(function() {
+		
+		var elements = $('#escriptori_procediments .modulLateral.escriptori_items_seleccionats .seleccionats').find('li');
+		var id = $('#item_id').val();
+		var url = $(this).attr('action');
+		
+		ListaSimpleProcedimientos.guardar(elements, url, id);
+		
+	});
+	
+	ListaSimpleGenerica = new ListaSimple();
+	ListaSimpleProcedimientos = new ListaSimple();
     
 	// elements
 	opcions_elm = $("#opcions");

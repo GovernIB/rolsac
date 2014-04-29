@@ -668,7 +668,6 @@
                     <div class="botonera">
                         <div class="boton btnGenerico"><a id="btnLimpiarForm_procediment" class="btn borrar" href="javascript:;"><span><span><spring:message code='boto.borrar'/></span></span></a></div>
                         <div class="boton btnGenerico"><a id="btnBuscarForm_procediment" class="btn consulta" href="javascript:;"><span><span><spring:message code='boto.cercar'/></span></span></a></div>
-                        <div class="boton btnGenerico"><a id="btnVolverDetalle_procediment" class="btn torna" href="javascript:;"><span><span><spring:message code='boto.torna_detall'/></span></span></a></div>
                     </div>
                 </div>
             </div>   
@@ -677,7 +676,36 @@
             <input type="hidden" value="DESC" class="ordreTipus" />
             <input type="hidden" value="id" class="ordreCamp" />             
         </div>
-    </div>        
+    </div>
+
+    <!-- modulLateral -->
+	<div class="escriptori_detall">
+		<div class="modulLateral">
+			<!-- modul -->
+			<div class="modul publicacio">
+				<fieldset>
+					<a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+					<legend><spring:message code='txt.accions'/></legend>
+					<div class="modul_continguts mostrat">
+						<!-- botonera dalt -->
+						<div class="botonera dalt">
+						  <ul>
+							  <li class="btnVolver impar">
+								  <a id="btnVolver_procediments" href="javascript:;" class="btn torna"><span><span><spring:message code='boto.torna'/></span></span></a>
+							  </li>
+							  <li class="btnGuardar par">
+                              <a id="btnGuardar_procediments" href="javascript:;" class="btn guarda important lista-simple-procedimientos" 
+                                  action="/rolsacback/fetsVitals/guardarProcedimientos.do"><span><span><spring:message code='boto.guarda_exclamacio'/></span></span></a>
+							  </li>
+						  </ul>
+						</div>
+						<!-- /botonera dalt -->
+					</div>
+				</fieldset>
+			</div>
+			<!-- /modul -->  
+		</div>
+	</div>
     
     <div class="modulLateral escriptori_items_seleccionats">
         <div class="modul">
@@ -687,9 +715,6 @@
                         <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
                         <div class="listaOrdenable"></div>
                     </div>
-                    <p class="botonera btnGenerico">
-                        <a id="btnFinalizar_procediment" href="javascript:;" class="btn finalitza important lista-simple" action="<c:url value="/fetsVitals/guardarProcedimientos.do" />"><span><span><spring:message code='boto.finalitza'/></span></span></a>
-                    </p>                                    
                 </div>                                  
             </div>
         </div>
