@@ -23,6 +23,16 @@ $(document).ready(function() {
 		
 	});
 	
+	jQuery(".lista-simple-usuarios").click(function() {
+		
+		var elements = $('#escriptori_usuaris .seleccionats').find('li');
+		var id = $('#item_id').val();
+		var url = $(this).attr('action');
+		
+		ListaSimpleUsuarios.guardar(elements, url, id);
+		
+	});
+	
 	jQuery(".lista-simple").click(function() {
 		
 		var elements = $(this).parent().parent().find("li");
@@ -35,6 +45,7 @@ $(document).ready(function() {
 	
 	ListaSimpleMaterias = new ListaSimple();
 	ListaSimpleEdificios = new ListaSimple();
+	ListaSimpleUsuarios = new ListaSimple();
 	ListaSimpleGenerica = new ListaSimple();
 
 	// elements
@@ -673,6 +684,6 @@ function CDetall(soloFicha) {
 
 	function posarValorsInput(idInput, valor) {
 		$(idInput).val(valor);
-	}
+	};
 	
 };

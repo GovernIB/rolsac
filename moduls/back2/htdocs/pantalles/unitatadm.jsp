@@ -1080,23 +1080,23 @@
         
         <div class="modulLateral escriptori_items_seleccionats">
 	        <div class="interior">
-	                                
 	            <div class="seleccionats">
-	            
 	                <div class="seleccionat">
 	                    <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
 	                    <div class="listaOrdenable"></div>
 	                </div>
-	                                                 
 	            </div>                                  
 	        </div>
         </div>
+        
     </div>
     
     <div id="escriptori_usuaris">
+    
     	<ul id="opcions">
     		<li class="opcio C actiu"><spring:message code='unitatadm.formulari.usuaris.gestio'/></li>
     	</ul>
+    	
     	<div id="resultatsUsuaris" class="escriptori_items_llistat">
     		<div class="resultats C actiu" style="display: block;">
     			<div id="cercador" class="escriptori_items_cercador">
@@ -1160,9 +1160,6 @@
     						<div class="boton btnGenerico">
     							<a id="btnBuscarUsuarisForm" class="btn consulta" href="javascript:;"><span><span><spring:message code='boto.cercar'/></span></span></a>
     						</div>
-    						<div class="boton btnGenerico btnVolverDetalle">
-    							<a class="btn torna" href="javascript:;"><span><span><spring:message code='boto.torna_detall'/></span></span></a>
-    						</div>
     					</div>
     				</div>
     			</div>
@@ -1172,6 +1169,36 @@
     			<input type="hidden" value="nom" class="ordreCamp" />
     		</div>
     	</div>
+    	
+    	<!-- modulLateral -->
+		<div class="escriptori_detall">
+			<div class="modulLateral">
+				<!-- modul -->
+				<div class="modul publicacio">
+					<fieldset>
+						<a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+						<legend><spring:message code='txt.accions'/></legend>
+						<div class="modul_continguts mostrat">
+							<!-- botonera dalt -->
+							<div class="botonera dalt">
+							  <ul>
+								  <li class="btnVolver impar">
+									  <a id="btnVolver_usuaris" href="javascript:;" class="btn torna"><span><span><spring:message code='boto.torna'/></span></span></a>
+								  </li>
+								  <li class="btnGuardar par">
+		                             <a id="btnGuardar_usuaris" href="javascript:;" class="btn guarda important lista-simple-usuarios" 
+	                 						action="<c:url value="/unitatadm/guardarUsuariosRelacionados.do" />"><span><span><spring:message code='boto.guarda_exclamacio'/></span></span></a>
+								  </li>
+							  </ul>
+							</div>
+							<!-- /botonera dalt -->
+						</div>
+					</fieldset>
+				</div>
+				<!-- /modul -->  
+			</div>
+		</div>
+    	
     	<div class="modulLateral escriptori_items_seleccionats">
     		<div class="modul">
     			<div class="interior">
@@ -1180,14 +1207,11 @@
     						<p class="info"><spring:message code='unitatadm.formulari.usuaris.noInfo'/></p>
     						<div class="listaOrdenable"></div>
     					</div>
-    					<p class="botonera btnGenerico">
-    						<a id="btnFinalizarUsuaris" href="javascript:;" class="btn finalitza important lista-simple" 
-    							action="<c:url value="/unitatadm/guardarUsuariosRelacionados.do" />"><span><span><spring:message code='boto.finalitza'/></span></span></a>
-    					</p>
     				</div>
     			</div>
     		</div>
     	</div>
+    	
     </div>
     
     <div id="escritorioNuevaUA" class="escriptori_detall">

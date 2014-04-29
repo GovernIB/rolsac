@@ -6,6 +6,10 @@
     display:none; 
 }
 
+#escriptori_usuaris .escriptori_detall {
+	display: block;
+}
+
 #submenu_contingut ul li.seleccionat {
     border: 0 none;
 }

@@ -20,8 +20,8 @@ $(document).ready(function() {
 	}
 	
 	// Evento para el botón de volver al detalle
-	jQuery(".btnVolverDetalle").bind("click", function() { EscriptoriUsuari.torna(); });
-	jQuery("#btnFinalizarUsuaris").bind("click", function() { EscriptoriUsuari.finalizar(); });
+	jQuery("#btnVolver_usuaris").bind("click", function() { EscriptoriUsuari.torna(); });
+	jQuery("#btnGuardar_usuaris").bind("click", function() { EscriptoriUsuari.finalizar(); });
 	
 });
 
@@ -30,8 +30,13 @@ var numCercadorMinim = 0;
 
 function CModulUsuari() {
 	
+	// Activa mensajes de debug.
+	var debug = false;
+	
 	this.extend = ListaOrdenable;
 	this.extend();
+	
+	var that = this;
 	
 	// Campo hidden para controlar los cambios sobre un módulo.
 	var $moduloModificado = modul_usuaris_elm.find('input[name="modulo_usuario_modificado"]');
@@ -99,6 +104,86 @@ function CModulUsuari() {
 		escriptori_detall_elm.fadeOut(300, function() {
 			escriptori_usuaris_elm.fadeIn(300);
 		});
+		
+		this.deshabilitarBotonGuardar();
+		
+	};
+	
+	this.botonGuardar = jQuery("#btnGuardar_usuaris");
+	
+	this.existeBotonGuardar = function() {
+		
+		if (debug)
+			console.log("Entrando en CModulProcediment.existeBotonGuardar");
+		
+		if (debug)
+			console.log("Saliendo de CModulProcediment.existeBotonGuardar");
+		
+		return (this.botonGuardar.length > 0);
+		
+	};
+	
+	this.habilitarBotonGuardar = function() {
+		
+		if (debug)
+			console.log("Entrando en CModulProcediment.habilitarBotonGuardar");
+		
+		if (this.existeBotonGuardar() && this.botonGuardar.parent().hasClass("off")) {
+    		this.botonGuardar.parent().removeClass("off");
+    	}
+		
+		if (debug)
+			console.log("Saliendo de CModulProcediment.habilitarBotonGuardar");
+		
+    };
+    
+    this.deshabilitarBotonGuardar = function() {
+    	
+    	if (debug)
+			console.log("Entrando en CModulProcediment.deshabilitarBotonGuardar");
+    	
+    	if (this.existeBotonGuardar() && !this.botonGuardar.parent().hasClass("off")) {
+    		this.botonGuardar.parent().addClass("off");
+    	}
+    	
+    	if (debug)
+			console.log("Saliendo de CModulProcediment.deshabilitarBotonGuardar");
+    	
+    };
+    
+    this._eliminaItem = this.eliminaItem;
+	
+	this.eliminaItem = function( item ) {
+		
+		if (debug)
+			console.log("Entrando en CModulProcediment.eliminaItem");
+
+		that._eliminaItem(item);
+
+		if (this.existeBotonGuardar()) {
+			this.habilitarBotonGuardar();
+		}
+		
+		if (debug)
+			console.log("Saliendo de CModulProcediment.eliminaItem");
+		
+	};
+	
+	this._agregaItem = this.agregaItem;
+	
+	this.agregaItem = function( item ) {
+		
+		if (debug)
+			console.log("Entrando en CModulProcediment.agregaItem");
+		
+		that._agregaItem(item);
+
+		if (this.existeBotonGuardar()) {
+			this.habilitarBotonGuardar();
+		}
+		
+		if (debug)
+			console.log("Saliendo de CModulProcediment.agregaItem");
 		
 	};
 	
