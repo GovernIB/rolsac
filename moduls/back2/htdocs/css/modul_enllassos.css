@@ -14,11 +14,11 @@
     font: 13px Arial, Helvetica, Sans-serif;
 }
 
-#escriptori_enllassos div.escriptori_items_seleccionats .interior{
+#escriptori_enllassos div.escriptori_items_seleccionats .interior {
     padding: 15px;
 }
 
-#escriptori_enllassos div.escriptori_items_seleccionats .interior h3{
+#escriptori_enllassos div.escriptori_items_seleccionats .interior h3 {
     font: bold 11px Verdana, Helvetica, Sans-serif;
     text-transform: uppercase;
 }
@@ -31,16 +31,20 @@
     color: Black;
 }
 
-#escriptori_enllassos h2{
+#escriptori_enllassos .escriptori_detall {
+	display: block;
+}
+
+#escriptori_enllassos h2 {
     display: none;
 }
 
-#escriptori_enllassos .grupoModulosFormulario{
+#escriptori_enllassos .grupoModulosFormulario {
     float: left;
     width: 779px;       
 }
 
-#escriptori_enllassos .grupoModulosFormulario div.modul{
+#escriptori_enllassos .grupoModulosFormulario div.modul {
     border-radius: 0 15px 15px 15px;
     border: 1px solid #D4D4D4;
     background-color: White;
@@ -49,7 +53,7 @@
     padding: 25px 21px 25px 21px;
 }
 
-#escriptori_enllassos .grupoModulosFormulario div.modul a.modul{
+#escriptori_enllassos .grupoModulosFormulario div.modul a.modul {
     position:absolute;
     right: 9px;
     top: 9px;
@@ -60,29 +64,29 @@
     background-image: url(../img/botons/desplegar.png);
 }
 
-#escriptori_enllassos .grupoModulosFormulario legend{
+#escriptori_enllassos .grupoModulosFormulario legend {
     font: bold 11px Verdana, Arial, Helvetica, Sans-serif;
     color: #333333;
     text-transform: uppercase;
     margin-bottom: 15px;
 }
 
-#escriptori_enllassos .grupoModulosFormulario .etiqueta{
+#escriptori_enllassos .grupoModulosFormulario .etiqueta {
     height: 21px;   
     overflow: hidden;
 }
 
-#escriptori_enllassos .grupoModulosFormulario .obligatori{ 
+#escriptori_enllassos .grupoModulosFormulario .obligatori { 
     color: #CC0000;
 }
 
-#escriptori_enllassos .grupoModulosFormulario .fila{
+#escriptori_enllassos .grupoModulosFormulario .fila {
     clear:both;
     margin-bottom: 20px;
     overflow: hidden;
 }
 
-#escriptori_enllassos .grupoModulosFormulario input[type=text]{    
+#escriptori_enllassos .grupoModulosFormulario input[type=text] {    
     border: 1px solid #C7DDEB;
     background-color: #ECF6FC;
     color: Black;
@@ -92,32 +96,32 @@
     border-radius: 5px 5px 5px 5px;
 }
 
-#escriptori_enllassos .grupoModulosFormulario .t99p{
+#escriptori_enllassos .grupoModulosFormulario .t99p {
     width: 99.9%;
 }
 
 /* idiomes modulPrincipal */
 
-#escriptori_enllassos .introIdiomas{
+#escriptori_enllassos .introIdiomas {
     float: left;
     margin: 0;
     padding-top: 5px;
     line-height: 15px;
 }
-#escriptori_enllassos ul.idiomes{
+#escriptori_enllassos ul.idiomes {
     list-style: none;
     height: 50px;
 }
-#escriptori_enllassos ul.idiomes li.idioma{
+#escriptori_enllassos ul.idiomes li.idioma {
     float: left;
     font-size: 13px;
     padding: 5px 12px 0 12px;
 }
-#escriptori_enllassos ul.idiomes li.seleccionat{
+#escriptori_enllassos ul.idiomes li.seleccionat {
     font-weight: bold;
     color: black;
 }
-#escriptori_enllassos ul.idiomes li.idioma a{ 
+#escriptori_enllassos ul.idiomes li.idioma a { 
     color: #0099CC;
     text-decoration: underline;
 }
@@ -125,10 +129,6 @@
 #escriptori_enllassos .grupoModulosFormulario div.botonera {
     clear: both;
     float: right;
-}
-
-#btnInsertarEnllas span span {
-    padding: 0 20px !important;
 }
 
 #escriptori_enllassos li span.enllas {

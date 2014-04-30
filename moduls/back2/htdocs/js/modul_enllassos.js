@@ -22,13 +22,13 @@ $(document).ready(function() {
 	}
 	
 	// Evento para el botón de volver al detalle
-	jQuery("#btnVolverDetalle").bind("click", function() {
+	jQuery("#btnVolver_enllassos").bind("click", function() {
 		EscriptoriEnllas.torna();
 	});
 	jQuery("#btnLimpiarCampos").bind("click", function() {
 		EscriptoriEnllas.limpia();
 	});
-	jQuery("#btnFinalitzar").bind("click", function() {
+	jQuery("#btnGuardar_enllassos").bind("click", function() {
 		EscriptoriEnllas.finalizar();
 	});
 	jQuery("#btnInsertarEnllas").bind("click", function() {
@@ -124,6 +124,8 @@ function CModulEnllas() {
 			escriptori_enllassos_elm.fadeIn(300);			
 		});
 		
+		this.deshabilitarBotonGuardar();
+		
 		if (debug)
 			console.log("Saliendo de CModulEnllas.gestiona");
 		
@@ -214,6 +216,84 @@ function CModulEnllas() {
 		
 		if (debug)
 			console.log("Saliendo de CModulEnllas.cargarEnlaces");
+		
+	};
+	
+	this.botonGuardar = jQuery("#btnGuardar_enllassos");
+	
+	this.existeBotonGuardar = function() {
+		
+		if (debug)
+			console.log("Entrando en CModulEnllas.existeBotonGuardar");
+		
+		if (debug)
+			console.log("Saliendo de CModulEnllas.existeBotonGuardar");
+		
+		return (this.botonGuardar.length > 0);
+		
+	};
+	
+	this.habilitarBotonGuardar = function() {
+		
+		if (debug)
+			console.log("Entrando en CModulEnllas.habilitarBotonGuardar");
+		
+		if (this.existeBotonGuardar() && this.botonGuardar.parent().hasClass("off")) {
+    		this.botonGuardar.parent().removeClass("off");
+    	}
+		
+		if (debug)
+			console.log("Saliendo de CModulEnllas.habilitarBotonGuardar");
+		
+    };
+    
+    this.deshabilitarBotonGuardar = function() {
+    	
+    	if (debug)
+			console.log("Entrando en CModulEnllas.deshabilitarBotonGuardar");
+    	
+    	if (this.existeBotonGuardar() && !this.botonGuardar.parent().hasClass("off")) {
+    		this.botonGuardar.parent().addClass("off");
+    	}
+    	
+    	if (debug)
+			console.log("Saliendo de CModulEnllas.deshabilitarBotonGuardar");
+    	
+    };
+    
+    this._eliminaItem = this.eliminaItem;
+	
+	this.eliminaItem = function( item ) {
+		
+		if (debug)
+			console.log("Entrando en CModulEnllas.eliminaItem");
+
+		that._eliminaItem(item);
+
+		if (this.existeBotonGuardar()) {
+			this.habilitarBotonGuardar();
+		}
+		
+		if (debug)
+			console.log("Saliendo de CModulEnllas.eliminaItem");
+		
+	};
+	
+	this._agregaItem = this.agregaItem;
+	
+	this.agregaItem = function( item ) {
+		
+		if (debug)
+			console.log("Entrando en CModulEnllas.agregaItem");
+		
+		that._agregaItem(item);
+
+		if (this.existeBotonGuardar()) {
+			this.habilitarBotonGuardar();
+		}
+		
+		if (debug)
+			console.log("Saliendo de CModulEnllas.agregaItem");
 		
 	};
 	

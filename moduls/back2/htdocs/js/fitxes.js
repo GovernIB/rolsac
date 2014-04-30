@@ -29,7 +29,7 @@ $(document).ready(function() {
 	
 	jQuery(".lista-multiidioma-enlaces").click(function() {
 				
-		var elementos = $(this).parent().parent().find("div.cajaIdioma.ca li"); // Con esto obtenemos los <li> que cuelgan de <div class="cajaIdioma ca">
+		var elementos = $('#escriptori_enllassos .escriptori_items_seleccionats .seleccionats').find("div.cajaIdioma.ca li"); // Con esto obtenemos los <li> que cuelgan de <div class="cajaIdioma ca">
 		var id = $('#item_id').val();
 		var url = $(this).attr('action');
 		

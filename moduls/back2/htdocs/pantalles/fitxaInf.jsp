@@ -1339,9 +1339,11 @@
 
 <!-- escriptori_enllassos -->
 <div id="escriptori_enllassos">
+
    <ul id="opcions">
         <li class="opcio actiu"><spring:message code='fitxes.enllasos.administracio'/></li>                                 
-    </ul>    
+    </ul>   
+     
     <form id="formEnllassos" class="grupoModulosFormulario">
     	<input id="id_enllas_actual" type="hidden"/>
 	    <div class="modul">
@@ -1399,17 +1401,44 @@
 								<span><span><spring:message code='boto.inserta'/></span></span>
 							</a>							
 						</div>
-						<div id="btnVolverDetalle" class="boton btnGenerico">
-							<a class="btn torna" href="javascript:;">
-								<span><span><spring:message code='boto.torna_detall'/></span></span>
-							</a>
-						</div>
 					</div>
 				</div>
 		        <!-- /fila -->
 			</fieldset>
 		</div>
 	</form>
+	
+	<!-- modulLateral -->
+	<div class="escriptori_detall">
+		<div class="modulLateral">
+			<!-- modul -->
+			<div class="modul publicacio">
+				<fieldset>
+					<a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+					<legend><spring:message code='txt.accions'/></legend>
+					<div class="modul_continguts mostrat">
+						<!-- botonera dalt -->
+						<div class="botonera dalt">
+						  <ul>
+							  <li class="btnVolver impar">
+								  <a id="btnVolver_enllassos" href="javascript:;" class="btn torna"><span><span><spring:message code='boto.torna'/></span></span></a>
+							  </li>
+							  <li class="btnGuardar par">
+                              		<a id="btnGuardar_enllassos" href="javascript:;" class="btn guarda important lista-multiidioma-enlaces" 
+                                  			action="<c:url value="/fitxainf/guardarEnlacesRelacionados.do" />">
+                           				<span><span><spring:message code='boto.guarda_exclamacio'/></span></span>
+                               		</a>
+							  </li>
+						  </ul>
+						</div>
+						<!-- /botonera dalt -->
+					</div>
+				</fieldset>
+			</div>
+			<!-- /modul -->  
+		</div>
+	</div>
+	
     <div class="modulLateral escriptori_items_seleccionats">
         <div class="modul">
             <div class="interior multilang">            	
@@ -1443,19 +1472,13 @@
 					<div class="listaOrdenable"></div>
 					</div>					
 					</c:forEach>
-
-                    <p class="botonera btnGenerico">
-                        <a id="btnFinalitzar" href="javascript:;" class="btn finalitza important lista-multiidioma-enlaces" 
-	                    		action="<c:url value="/fitxainf/guardarEnlacesRelacionados.do" />">
-                       		<span><span><spring:message code='boto.finalitza'/></span></span>
-                      	</a>
-                    </p>
                                            
                 </div>                                  
             </div>
         </div>
+        
     </div>
     <!-- seleccionats -->
+    
 </div>                           
-
 <!-- /escriptori_enllassos -->
