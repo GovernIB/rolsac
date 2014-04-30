@@ -17,12 +17,15 @@ $(document).ready(function() {
 	}
 		
 	// Evento para el botón de volver al detalle
-	jQuery("#btnVolverDetalle_afectacions").bind("click", function() { EscriptoriAfectacions.torna(); });	
-	jQuery("#btnFinalizar_afectacions").bind("click", function() { EscriptoriAfectacions.finalizar(); });
+	jQuery("#btnVolver_afectacions").bind("click", function() { EscriptoriAfectacions.torna(); });	
+	jQuery("#btnGuardar_afectacions").bind("click", function() { EscriptoriAfectacions.finalizar(); });
 	
 });
 
 function CModulAfectacions() {
+	
+	// Activa mensajes de debug.
+	var debug = false;
 	
 	this.extend = ListaOrdenable;
 	this.extend();
@@ -54,7 +57,7 @@ function CModulAfectacions() {
 		afectacions_llistat_elm.add(afectacions_seleccionats_elm);
 		
 		// one al botó de gestionar
-		modul_afectacions_elm.find("a.gestiona").one("click", function() {ModulAfectacions.gestiona();});
+		modul_afectacions_elm.find("a.gestiona").one("click", function() { ModulAfectacions.gestiona(); });
 		
 		// Configuramos la lista ordenable.
 		this.configurar({
@@ -79,7 +82,6 @@ function CModulAfectacions() {
 		this.getHtmlItem = this.getHtmlItemPropio;		
 		this.copiaFinal = this.copiaFinalPropia;
 		this.copiaInicial = this.copiaInicialPropia;
-		this.eliminaItem = this.eliminaItemPropio;
 		
 	};
 	
@@ -141,6 +143,8 @@ function CModulAfectacions() {
 		escriptori_detall_elm.fadeOut(300, function() {			
 			escriptori_afectacions_elm.fadeIn(300);			
 		});
+		
+		this.deshabilitarBotonGuardar();
 		
 	};
 	
@@ -281,6 +285,84 @@ function CModulAfectacions() {
 		return listaAfectaciones;
 		
 	};
+	
+	this.botonGuardar = jQuery("#btnGuardar_afectacions");
+	
+	this.existeBotonGuardar = function() {
+		
+		if (debug)
+			console.log("Entrando en CModulAfectacions.existeBotonGuardar");
+		
+		if (debug)
+			console.log("Saliendo de CModulAfectacions.existeBotonGuardar");
+		
+		return (this.botonGuardar.length > 0);
+		
+	};
+	
+	this.habilitarBotonGuardar = function() {
+		
+		if (debug)
+			console.log("Entrando en CModulAfectacions.habilitarBotonGuardar");
+		
+		if (this.existeBotonGuardar() && this.botonGuardar.parent().hasClass("off")) {
+    		this.botonGuardar.parent().removeClass("off");
+    	}
+		
+		if (debug)
+			console.log("Saliendo de CModulAfectacions.habilitarBotonGuardar");
+		
+    };
+    
+    this.deshabilitarBotonGuardar = function() {
+    	
+    	if (debug)
+			console.log("Entrando en CModulAfectacions.deshabilitarBotonGuardar");
+    	
+    	if (this.existeBotonGuardar() && !this.botonGuardar.parent().hasClass("off")) {
+    		this.botonGuardar.parent().addClass("off");
+    	}
+    	
+    	if (debug)
+			console.log("Saliendo de CModulAfectacions.deshabilitarBotonGuardar");
+    	
+    };
+    
+    this._eliminaItem = this.eliminaItemPropio;
+	
+	this.eliminaItem = function( item ) {
+		
+		if (debug)
+			console.log("Entrando en CModulAfectacions.eliminaItem");
+
+		that._eliminaItem(item);
+
+		if (this.existeBotonGuardar()) {
+			this.habilitarBotonGuardar();
+		}
+		
+		if (debug)
+			console.log("Saliendo de CModulAfectacions.eliminaItem");
+		
+	};
+	
+	this._agregaItem = this.agregaItem;
+	
+	this.agregaItem = function( item ) {
+		
+		if (debug)
+			console.log("Entrando en CModulAfectacions.agregaItem");
+		
+		that._agregaItem(item);
+
+		if (this.existeBotonGuardar()) {
+			this.habilitarBotonGuardar();
+		}
+		
+		if (debug)
+			console.log("Saliendo de CModulAfectacions.agregaItem");
+		
+	};
 		
 };
 
@@ -352,6 +434,8 @@ function CEscriptoriAfectacions() {
 			afectacions_seleccionats_elm.find("ul").append(codi_seleccionat);
 			
 			this.contaSeleccionats();
+			
+			ModulAfectacions.habilitarBotonGuardar();
 			
 		}
 		

@@ -7,7 +7,6 @@
 
 <link href='<c:url value="/css/normativa.css"/>' rel="stylesheet" type="text/css" media="screen" />
 <link href='<c:url value="/css/modul_afectacions.css"/>' rel="stylesheet" type="text/css" media="screen" />
-<link href='<c:url value="/css/modul_procediments.css"/>' rel="stylesheet" type="text/css" media="screen" />
 
 <script type="text/javascript" src="<c:url value='/js/tiny_mce/jquery.tinymce.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery.form.js'/>"></script>
@@ -1345,7 +1344,6 @@
                     <div class="botonera">
                         <div class="boton btnGenerico"><a id="btnLimpiarForm_afectacions" class="btn borrar" href="javascript:;"><span><span><spring:message code='boto.borrar'/></span></span></a></div>
                         <div class="boton btnGenerico"><a id="btnBuscarForm_afectacions" class="btn consulta" href="javascript:;"><span><span><spring:message code='boto.cercar'/></span></span></a></div>
-                        <div class="boton btnGenerico"><a id="btnVolverDetalle_afectacions" class="btn torna" href="javascript:;"><span><span><spring:message code='boto.torna_detall'/></span></span></a></div>
                     </div>  
 
                 </div>
@@ -1358,6 +1356,35 @@
             <input type="hidden" value="id" class="ordreCamp" />
         </div>
     </div>
+    
+    <!-- modulLateral -->
+	<div class="escriptori_detall">
+		<div class="modulLateral">
+			<!-- modul -->
+			<div class="modul publicacio">
+				<fieldset>
+					<a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+					<legend><spring:message code='txt.accions'/></legend>
+					<div class="modul_continguts mostrat">
+						<!-- botonera dalt -->
+						<div class="botonera dalt">
+						  <ul>
+							  <li class="btnVolver impar">
+								  <a id="btnVolver_afectacions" href="javascript:;" class="btn torna"><span><span><spring:message code='boto.torna'/></span></span></a>
+							  </li>
+							  <li class="btnGuardar par">
+                              <a id="btnGuardar_afectacions" href="javascript:;" class="btn guarda finalitza important lista-simple-afectaciones" 
+                                  action="<c:url value="/normativa/guardarAfectaciones.do" />"><span><span><spring:message code='boto.guarda_exclamacio'/></span></span></a>
+							  </li>
+						  </ul>
+						</div>
+						<!-- /botonera dalt -->
+					</div>
+				</fieldset>
+			</div>
+			<!-- /modul -->  
+		</div>
+	</div>
 
     <div class="modulLateral escriptori_items_seleccionats">
         <div class="modul">
@@ -1367,16 +1394,11 @@
                         <p class="info"><spring:message code='txt.no_afectacions'/></p>     
                         <div class="listaOrdenable"></div>              
                     </div>
-                    <p class="botonera btnGenerico">
-                        <a id="btnFinalizar_afectacions" href="javascript:;" class="btn finalitza important lista-simple-afectaciones" 
-                        		action="<c:url value="/normativa/guardarAfectaciones.do" />">
-                       		<span><span><spring:message code='boto.finalitza'/></span></span>
-                     	</a>
-                    </p>                                    
                 </div>
             </div>
         </div>        
     </div>
     <!-- seleccionats -->
+    
 </div>
 <!-- /escriptori_afectacions -->
