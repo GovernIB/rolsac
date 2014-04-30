@@ -896,10 +896,15 @@ div.table div.tbody div.td select.ordenacion{
 .cercador .botonera .btn.torna > span > span{
     background: url(../img/botons/iconos/volver.gif) 15px 50% no-repeat;
 }
+#cercador .botonera .btn.inserta > span > span,
+.cercador .botonera .btn.inserta > span > span {
+    background: url(../img/botons/afegix.gif) 15px 50% no-repeat;
+}
 #cercador .botonera .btnGenerico a span span,
 .cercador .botonera .btnGenerico a span span{
     padding-left : 35px;
 }
+
 
 /*#cercador div.rabillo { height:1em; background:transparent url(../img/botonera/rabillo_c_ccd7e2.gif) no-repeat center bottom; }*/
 

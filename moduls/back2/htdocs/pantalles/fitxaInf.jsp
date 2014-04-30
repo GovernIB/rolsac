@@ -1262,9 +1262,11 @@
 
 <!-- escriptori_seccions_ua -->
 <div id="escriptori_seccions_ua">
+
 	<ul id="opcions">
 		<li class="opcio actiu"><spring:message code='fitxes.seccions.gestio'/></li>
 	</ul>
+	
     <!-- llistat -->
     <div id="resultats" class="escriptori_items_llistat">
         <div class="escriptori_selector_seccions">
@@ -1277,17 +1279,47 @@
         </div>
         <div id="cercador">
         	<div class="botonera">
-				<div class="boton btnGenerico btnVolverDetalle">
-					<a class="btn torna" href="javascript:;">
-						<span><span><spring:message code='boto.torna_detall'/></span></span>
-					</a>
+				<div class="boton btnGenerico">
+					<a id="btnInsertar" class="btn inserta" href="javascript:;">
+						<span><span><spring:message code='boto.inserta'/></span></span>
+					</a>							
 				</div>
 			</div>
 		</div>
     </div>
     <!-- /llistat -->
-    <!-- seleccionats -->
     
+    <!-- modulLateral -->
+	<div class="escriptori_detall">
+		<div class="modulLateral">
+			<!-- modul -->
+			<div class="modul publicacio">
+				<fieldset>
+					<a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+					<legend><spring:message code='txt.accions'/></legend>
+					<div class="modul_continguts mostrat">
+						<!-- botonera dalt -->
+						<div class="botonera dalt">
+						  <ul>
+							  <li class="btnVolver impar">
+								  <a id="btnVolver_seccioUA" href="javascript:;" class="btn torna"><span><span><spring:message code='boto.torna'/></span></span></a>
+							  </li>
+							  <li class="btnGuardar par">
+	                              <a id="btnGuardar_seccioUA" href="javascript:;" class="btn guarda btn finalitza important">
+	                                  <span><span><spring:message code='boto.finalitza'/></span></span>
+	                              </a>
+							  </li>
+						  </ul>
+						</div>
+						<!-- /botonera dalt -->
+					</div>
+				</fieldset>
+			</div>
+			<!-- /modul -->  
+		</div>
+	</div>
+    
+    <!-- seleccionats -->
     <div class="modulLateral escriptori_items_seleccionats">
 		<div class="modul">
 			<div class="interior">
@@ -1296,24 +1328,15 @@
 						<p class="info"><spring:message code='fitxes.seccions.no_hi_ha'/></p>
 						<div class="listaOrdenable"></div>
 					</div>
-					<div class="botonera">
-						<p class="botonera btnGenerico">
-							<a id="btnInsertar" class="btn inserta important" href="javascript:;">
-								<span><span><spring:message code='boto.inserta'/></span></span>
-							</a>							
-						</p>
-						<p class="botonera btnGenerico">
-							<a id="btnFinalizar" class="btn finalitza important" href="javascript:;">
-								<span><span><spring:message code='boto.finalitza'/></span></span>
-							</a>
-						</p>
-					</div>					
 				</div>
 			</div>
 		</div>
 	</div>
+	<!-- /seleccionats -->
+	
 </div>
 <!-- /escriptori_seccions_ua -->
+
 <!-- escriptori_enllassos -->
 <div id="escriptori_enllassos">
    <ul id="opcions">

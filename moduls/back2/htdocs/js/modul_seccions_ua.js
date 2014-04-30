@@ -17,7 +17,8 @@ $(document).ready(function() {
 	
 });
 
-function CModulSeccionsUA(){
+function CModulSeccionsUA() {
+	
     var that = this;
     
     // Campo hidden para controlar los cambios sobre un módulo.
@@ -42,10 +43,11 @@ function CModulSeccionsUA(){
 			}
 		});				
 		
-		// one al botÃ³ de gestionar
+		// one al botó de gestionar
 		modul_seccions_ua_elm.find("a.gestiona").one("click", ModulSeccionsUA.gestiona);
 		
-	}
+	};
+	
 	this.gestiona = function() {
 		
 		lis_size = modul_seccions_ua_elm.find("li").size();
@@ -114,15 +116,17 @@ function CModulSeccionsUA(){
 				escriptori_seccions_ua_elm.bind("click",EscriptoriSeccionsUA.llansar);
 			});
 			
-		});		
-	}
+		});	
+		
+	};
     
-    this.modificado = function(){
+    this.modificado = function() {
         $moduloModificado.val(1);
-    }
+    };
+    
 };
 
-function CEscriptoriSeccionsUA(){
+function CEscriptoriSeccionsUA() {
 	
     this.llansar = function(e) {
 		
@@ -136,7 +140,7 @@ function CEscriptoriSeccionsUA(){
 
 			if (a_elm.hasClass("torna")) {
 				
-				escriptori_seccions_ua_elm.unbind("click",EscriptoriSeccionsUA.llansar);
+				escriptori_seccions_ua_elm.unbind("click", EscriptoriSeccionsUA.llansar);
 				
 				EscriptoriSeccionsUA.torna();
 				
@@ -154,7 +158,7 @@ function CEscriptoriSeccionsUA(){
 				ua_ID = ua_pare_div_elm.find("input.id").val();
 				ua_NOM = ua_pare_div_elm.find("a.selecciona").text();
 				
-				// La realció que es vol inserir conté una secció i una UA 							
+				// La relació que es vol inserir conté una secció i una UA 							
 				if ( secc_ID == undefined || ua_ID == undefined ) {
 					Missatge.llansar({tipus: "alerta", modo:"error", fundit: "si", titol: txtGenericError, text: "<p>" + txtErrorRelacioBuida + "</p>"});					
 				} else {								
@@ -166,13 +170,14 @@ function CEscriptoriSeccionsUA(){
                 // Marcamos el módulo como modificado.
                 ModulSeccionsUA.modificado();
                 
-				escriptori_seccions_ua_elm.unbind("click",EscriptoriSeccionsUA.llansar);
+				escriptori_seccions_ua_elm.unbind("click", EscriptoriSeccionsUA.llansar);
 				
 				nombre_llistat = 0;
 				
 				codi_llistat = "<ul>";
 				
 				seccions_ua_seleccionats_elm.find("li").each(function(i) {
+					
 					li_elm = $(this);
 					input_elm = li_elm.find("input");
 					codi_llistat += "<li>";
@@ -199,14 +204,16 @@ function CEscriptoriSeccionsUA(){
 			}
 			
 		}
+		
 		if (elm.hasClass("btn elimina")){
 			
 			elm.parents("li:first").remove();
+			EscriptoriSeccionsUA.contaSeleccionats();
 			
-			EscriptoriSeccionsUA.contaSeleccionats();			
-		}
+		};
 		
-	}
+	};
+	
 	this.torna = function() {
 		
 		// animacio
@@ -219,7 +226,8 @@ function CEscriptoriSeccionsUA(){
 			
 		});
 		
-	}
+	};
+	
 	this.contaSeleccionats = function() {
 		
 		seleccionats_val = seccions_ua_seleccionats_elm.find("li").size();
@@ -240,7 +248,9 @@ function CEscriptoriSeccionsUA(){
 			seccions_ua_seleccionats_elm.find("ul").sortable({ axis: 'y', cursor: 'url(../img/cursor/grabbing.cur), move' }).find("li").css("cursor","url(../img/cursor/grab.cur), move");
 			
 		}
-	},
+	
+	};
+	
 	this.afegir = function(dades) {
 		
 		seccio_id = dades.idSecc;
@@ -249,7 +259,8 @@ function CEscriptoriSeccionsUA(){
 		ua_id = dades.idUA;
 		ua_titol = dades.nomUA;
 
-		if ($("#escriptori_seccions_ua li input.seccio[type=hidden][value="+seccio_id+"]+input.ua[type=hidden][value="+ua_id+"]").size() == 0) {
+		if ($("#escriptori_seccions_ua li input.seccio[type=hidden][value="+seccio_id+"]+input.ua[type=hidden][value=" + ua_id + "]").size() == 0) {
+			
 			codi_seleccionat = "<li>";
 			codi_seleccionat += "<div class=\"se_ua\">";
 			codi_seleccionat += "<input type=\"hidden\" value=\"-1\" class=\"idSeccUa\" />";
@@ -271,9 +282,13 @@ function CEscriptoriSeccionsUA(){
 			}					
 			
 			EscriptoriSeccionsUA.contaSeleccionats();
+			
 		}
-	}
-	this.llistaSeccUa = function(){
+		
+	};
+	
+	this.llistaSeccUa = function() {
+		
 		//Retorna una llista de parelles idSecc, idUA.
 		
 		var listaSeccUa = "";
@@ -282,11 +297,12 @@ function CEscriptoriSeccionsUA(){
 			listaSeccUa += $(this).find("input.idSeccUa[type=hidden]").val() + "#" + $(this).find("input.seccio[type=hidden]").val() + "#" + $(this).find("input.ua[type=hidden]").val() + ",";										
 		});
 
-		if (listaSeccUa[listaSeccUa.length-1] == ","){
+		if (listaSeccUa[listaSeccUa.length-1] == ",") {
 			listaSeccUa = listaSeccUa.slice(0, -1);
 		}		
 		
 		return listaSeccUa;
 		
-	}
+	};
+	
 };
