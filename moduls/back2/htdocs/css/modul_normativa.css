@@ -6,10 +6,21 @@
     display:none; 
 }
 
+#escriptori_normatives .escriptori_detall {
+	display: block;
+}
+
+#escriptori_normatives .escriptori_detall .publicacio {
+	margin-bottom: 4px;
+}
+
+#escriptori_normatives .escriptori_items_seleccionats {
+	margin-top: 29px;
+}
+
 div.modulNormatives { padding-bottom:1em; }
 div.modulNormatives div.seleccionats ul li { padding-bottom:.4em; }
 div.modulNormatives div.seleccionats p.info { margin-top:0; }
-
 
 /* escriptori llistat */
 

@@ -5,8 +5,6 @@ $(document).ready(function() {
 	// elements
 	escriptori_normatives_elm = jQuery("#escriptori_normatives");
 	resultats_normativa_elm = jQuery("#resultats_normativa");
-//	resultats_actiu_normativa_elm = resultats_normativa_elm.find("div.actiu:first");
-//	cercador_normativa_elm = jQuery("#cercador_normativa");
 	modul_normatives_elm = jQuery("div.modulNormatives:first");
 
 	ModulNormativa = new CModulNormativa();
@@ -20,12 +18,15 @@ $(document).ready(function() {
 	}
 
 	// Evento para el botón de volver al detalle
-	jQuery("#btnVolverDetalle_normativa").bind("click", function() { EscriptoriNormativa.torna(); });	
-	jQuery("#btnFinalizar_normativa").bind("click", function() { EscriptoriNormativa.finalizar(); });
+	jQuery("#btnVolver_normatives").bind("click", function() { EscriptoriNormativa.torna(); });	
+	jQuery("#btnGuardar_normatives").bind("click", function() { EscriptoriNormativa.finalizar(); });
 	
 });
 
 function CModulNormativa() {
+	
+	// Activa mensajes de debug.
+	var debug = false;
 	
 	this.extend = ListaOrdenable;
 	this.extend();		
@@ -94,7 +95,7 @@ function CModulNormativa() {
 			this.copiaInicial();
 			EscriptoriNormativa.contaSeleccionats();
 		} else {
-			normatives_seleccionades_elm.find("ul").remove().end().find("p.info:first").text(txtNoHiHaNormativesSeleccionades+ ".");			
+			normatives_seleccionades_elm.find("ul").remove().end().find("p.info:first").text(txtNoHiHaNormativesSeleccionades + ".");			
 			normatives_seleccionades_elm.find(".listaOrdenable").html("");
 		}
 
@@ -102,6 +103,8 @@ function CModulNormativa() {
 		escriptori_detall_elm.fadeOut(300, function() {			
 			escriptori_normatives_elm.fadeIn(300);			
 		});
+		
+		this.deshabilitarBotonGuardar();
 		
 	};
 
@@ -146,6 +149,84 @@ function CModulNormativa() {
 		}
 
 		return listaNormativas;
+		
+	};
+	
+	this.botonGuardar = jQuery("#btnGuardar_normatives");
+	
+	this.existeBotonGuardar = function() {
+		
+		if (debug)
+			console.log("Entrando en CModulNormativa.existeBotonGuardar");
+		
+		if (debug)
+			console.log("Saliendo de CModulNormativa.existeBotonGuardar");
+		
+		return (this.botonGuardar.length > 0);
+		
+	};
+	
+	this.habilitarBotonGuardar = function() {
+		
+		if (debug)
+			console.log("Entrando en CModulNormativa.habilitarBotonGuardar");
+		
+		if (this.existeBotonGuardar() && this.botonGuardar.parent().hasClass("off")) {
+    		this.botonGuardar.parent().removeClass("off");
+    	}
+		
+		if (debug)
+			console.log("Saliendo de CModulNormativa.habilitarBotonGuardar");
+		
+    };
+    
+    this.deshabilitarBotonGuardar = function() {
+    	
+    	if (debug)
+			console.log("Entrando en CModulNormativa.deshabilitarBotonGuardar");
+    	
+    	if (this.existeBotonGuardar() && !this.botonGuardar.parent().hasClass("off")) {
+    		this.botonGuardar.parent().addClass("off");
+    	}
+    	
+    	if (debug)
+			console.log("Saliendo de CModulNormativa.deshabilitarBotonGuardar");
+    	
+    };
+    
+    this._eliminaItem = this.eliminaItem;
+	
+	this.eliminaItem = function( item ) {
+		
+		if (debug)
+			console.log("Entrando en CModulNormativa.eliminaItem");
+
+		that._eliminaItem(item);
+
+		if (this.existeBotonGuardar()) {
+			this.habilitarBotonGuardar();
+		}
+		
+		if (debug)
+			console.log("Saliendo de CModulNormativa.eliminaItem");
+		
+	};
+	
+	this._agregaItem = this.agregaItem;
+	
+	this.agregaItem = function( item ) {
+		
+		if (debug)
+			console.log("Entrando en CModulNormativa.agregaItem");
+		
+		that._agregaItem(item);
+
+		if (this.existeBotonGuardar()) {
+			this.habilitarBotonGuardar();
+		}
+		
+		if (debug)
+			console.log("Saliendo de CModulNormativa.agregaItem");
 		
 	};
 	
@@ -476,9 +557,10 @@ function CEscriptoriNormativa() {
 
 		}
 
-		normatives_seleccionades_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function(){				
+		normatives_seleccionades_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function() {				
 			var itemLista = jQuery(this).parents("li:first");
 			ModulNormativa.eliminaItem(itemLista);
+			ModulNormativa.habilitarBotonGuardar();
 			EscriptoriNormativa.contaSeleccionats();
 		});
 		

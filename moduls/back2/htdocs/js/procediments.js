@@ -5,11 +5,11 @@ $(document).ready(function() {
 	
 	jQuery(".lista-simple").click(function() {
 		
-		var element = $(this).parent().parent().find("li");
-		var id = $('#item_clave_primaria').val();
+		var elements = $(this).parent().parent().find("li");
+		var id = $('#item_id').val();
 		var url = $(this).attr('action');
 		
-		ListaSimpleGenerica.guardar(element, url, id);
+		ListaSimpleGenerica.guardar(elements, url, id);
 		
 	});
 	
@@ -18,12 +18,22 @@ $(document).ready(function() {
 	// y borrar los que no están, la tratamos como una lista simple.
 	jQuery(".lista-simple-documentos").click(function() {
 		
-		var elementos = $(this).parent().parent().find("div.cajaIdioma.ca li"); // Con esto obtenemos los <li> que cuelgan de <div class="cajaIdioma ca">
-		var id = $('#item_clave_primaria').val();
+		var elements = $(this).parent().parent().find("div.cajaIdioma.ca li"); // Con esto obtenemos los <li> que cuelgan de <div class="cajaIdioma ca">
+		var id = $('#item_id').val();
 		var url = $(this).attr('action');
 		
-		ListaSimpleDocumentos.guardar(elementos, url, id);
+		ListaSimpleDocumentos.guardar(elements, url, id);
 	
+	});
+	
+	jQuery(".lista-simple-normativas").click(function() {
+		
+		var elements = $('#escriptori_normatives .seleccionats').find("li");
+		var id = $('#item_id').val();
+		var url = $(this).attr('action');
+		
+		ListaSimpleNormativas.guardar(elements, url, id);
+		
 	});
 	
 	/*
@@ -54,6 +64,7 @@ $(document).ready(function() {
 	ListaSimpleGenerica = new ListaSimple();
 	ListaSimpleMaterias = new ListaSimple();
 	ListaSimpleHechosVitales = new ListaSimple();
+	ListaSimpleNormativas = new ListaSimple();
 	ListaSimpleDocumentos = new CListaSimpleDocumentos();
 	
 	// elements
