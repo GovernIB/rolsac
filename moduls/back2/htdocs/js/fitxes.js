@@ -731,11 +731,8 @@ function CDetall() {
 	this.pintarModulos = function(dades) {
 
 		ModulMateries.inicializarMaterias(dades.materies);
-		
 		ModulFetsVitals.cargarHechosVitales(dades.fetsVitals);
-		
 		ModulDocuments.inicializarDocuments(dades.documents);
-		
 		ModulEnllas.cargarEnlaces(dades);
 
 	};
@@ -748,7 +745,7 @@ function CDetall() {
 				&& !selector.children().is("div.escriptori_items_seleccionats") )
 			selector.addClass("invisible");
 		
-		$("#escriptori_seccions_ua > escriptori_items_seleccionats > modul").removeClass("invisible");
+		$("#escriptori_seccions_ua > .escriptori_items_seleccionats > .modul").removeClass("invisible");
 		
 	};
 	

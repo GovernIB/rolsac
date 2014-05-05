@@ -364,31 +364,25 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     public List<Seccion> listarHijosSeccion(Long id) {
     	
         Session session = getSession();
-        List<Seccion> listaHijos = Collections.emptyList();
+        List<Seccion> listaHijas = new ArrayList<Seccion>();
         
         try {
         	
-        	// TODO amartin: ¿puede borrarse el TODO justo posterior a este?
-        	// TODO: Obtener los hijos de una seccion o obtener las secciones que tengan un mismo padre especificado
+        	Seccion seccion = (Seccion)session.load(Seccion.class, id);
+        	Hibernate.initialize(seccion.getHijos());
         	
-        	StringBuilder consulta = new StringBuilder(" select new Seccion(seccion.id, trad.nombre) from Seccion seccion, seccion.traducciones trad ");
-        	consulta.append(" where seccion.padre = :id ");
-        	consulta.append(" and index(trad) = :idioma ");
-        	consulta.append(" order by seccion.orden asc ");
+        	for ( int i = 0; i < seccion.getHijos().size(); i++ ) {
+        		
+        		Seccion secHija = (Seccion)seccion.getHijos().get(i);
+        		
+        		if (secHija != null)
+        			listaHijas.add(secHija);
+        		
+        	}
         	
-        	Query query = session.createQuery(consulta.toString());
-        	query.setParameter("id", id);
-        	query.setParameter("idioma", DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
-        	
-            listaHijos = (List<Seccion>)query.list();
-            
         } catch (HibernateException he) {
         	
             throw new EJBException(he);
-            
-        } catch (DelegateException e) {
-        	
-        	throw new EJBException(e);
         	
 		} finally {
 			
@@ -396,7 +390,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
             
         }
         
-        return listaHijos;
+        return listaHijas;
         
     }
 
