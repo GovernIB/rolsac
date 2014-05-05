@@ -1,23 +1,22 @@
 package org.ibit.rol.sac.persistence.ejb;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+
 import net.sf.hibernate.Criteria;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
 
+import org.ibit.rol.sac.model.Comentario;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Usuario;
-import org.ibit.rol.sac.model.Comentario;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 /**
  * SessionBean para gestionar usuarios.
@@ -32,6 +31,8 @@ import java.util.Map;
  * @ejb.transaction type="Required"
  */
 public abstract class UsuarioFacadeEJB extends HibernateEJB {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Obtiene referéncia al ejb de control de Acceso.

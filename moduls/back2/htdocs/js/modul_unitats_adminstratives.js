@@ -211,12 +211,7 @@ function CModulUnitatAdministrativa() {
 			if (debug)
 				console.log("Saliendo de CModulUnitatAdministrativa.agregaItem");
 			
-			// Si hay botón de guardado, hay que marcar la página como modificada.
-			// Si no, el guardado se hace vía botón "Finalizar".
-			if (this.existeBotonGuardar()) {
-				Detall.modificado(true);
-				this.habilitarBotonGuardar();
-			}
+			this.habilitarBotonGuardar();
 						
 			return true;
 			
@@ -240,20 +235,13 @@ function CModulUnitatAdministrativa() {
 	this.eliminaItem = function( item ) {
 		
 		that._eliminaItem(item);
-		
-		// Si hay botón de guardado, hay que marcar la página como modificada.
-		// Si no, es que el guardado se hace vía botón "Finalizar".
-		if (this.existeBotonGuardar()) {
-			Detall.modificado(true);
-			this.habilitarBotonGuardar();
-		}
+		this.habilitarBotonGuardar();
 		
 	};
 	
 	this.habilitarBotonGuardar = function() {
 		if (this.existeBotonGuardar()) {
 			this.botonGuardar.show(500);
-	        Detall.modificado();
 		}
     };
     
@@ -340,9 +328,7 @@ function CListaSimpleUAs() {
 				ModulUnitatAdministrativa.deshabilitarBotonGuardar();
 			
 		}
-		
-		Detall.modificado(false);
-		
+				
 		if (debug)
 			console.log("Entrando en CListaSimpleUAs.guardar");
 		

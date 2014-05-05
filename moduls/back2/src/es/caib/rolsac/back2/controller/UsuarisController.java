@@ -239,7 +239,11 @@ public class UsuarisController extends PantallaBaseController {
 			
 				// Edición
 				Long id = Long.parseLong(request.getParameter("item_id"));
+				Usuario usuarioOld = usuarioDelegate.obtenerUsuario(id);
+				
+				// Conservamos ID y anteriores relaciones que se guardan de forma independiente.
 				usuari.setId(id);
+				usuari.setUnidadesAdministrativas(usuarioOld.getUnidadesAdministrativas());
 				
 			} catch (NumberFormatException nfe) {
 			
