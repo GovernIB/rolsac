@@ -89,11 +89,15 @@ var Items_arr = new Array();
 
 //detall
 function CDetall(soloFicha) {
+	
+	// Activa mensajes de debug.
+	var debug = false;
 
 	this.extend = DetallBase;
 	this.extend(soloFicha);
 
 	var that = this;
+	
 	this.tipusAuditoria = 'unitat';
 	this.tipusEstadistica = 'unitat';
 
@@ -106,6 +110,9 @@ function CDetall(soloFicha) {
 	this.actualUA = null;
 
 	this.iniciar = function() {
+		
+		if (debug)
+			console.log("Entrando en CDetall.iniciar");
 		
 		// Desactivamos que se cambie el detalle a modificado por cambiar los checkboxes de materias relacionadas con la UA.
 		jQuery('#modul_materies .llistat li input[type=checkbox]').unbind('change');
@@ -190,15 +197,29 @@ function CDetall(soloFicha) {
 
 		// carregar
 		Detall.carregar();
+		
+		if (debug)
+			console.log("Saliendo de CDetall.iniciar");
 
 	};
 
-	this.traduirWrapper = function () {
+	this.traduirWrapper = function() {
+		
+		if (debug)
+			console.log("Entrando en CDetall.traduirWrapper");
+		
 		that.traduir(pagTraduir, CAMPOS_TRADUCTOR_UNIDAD_ADMINISTRATIVA, DATOS_TRADUCIDOS_UNIDAD_ADMINISTRATIVA);
+		
+		if (debug)
+			console.log("Saliendo de CDetall.traduirWrapper");
+		
 	};
 
 	// Sobreescribe el método guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
 	this.guarda_upload = function(e) {
+		
+		if (debug)
+			console.log("Entrando en CDetall.guarda_upload");
 
 		escriptori_fitxes_elm = $("#escriptori_fitxes");
 		fitxes_seleccionats_elm = escriptori_fitxes_elm.find("div.escriptori_items_seleccionats:first");
@@ -209,7 +230,12 @@ function CDetall(soloFicha) {
 
 		// Validamos el formulario			
 		if (!that.formulariValid()) {
+			
+			if (debug)
+				console.log("Saliendo de CDetall.guarda_upload");
+			
 			return false;
+			
 		}
 
 		// Preparamos una lista de edificios mas "amigable" para el controlador, con sus id's separados por comas
@@ -263,6 +289,10 @@ function CDetall(soloFicha) {
 		if ( errorSeccionSinFichas ) {
 			
 			Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + txtErrorSeccionsBuides + "</p>"});
+			
+			if (debug)
+				console.log("Saliendo de CDetall.guarda_upload");
+			
 			return false;
 			
 		}
@@ -289,6 +319,9 @@ function CDetall(soloFicha) {
 			}
 
 		});
+		
+		if (debug)
+			console.log("Saliendo de CDetall.guarda_upload");
 
 		return false;	
 
@@ -296,6 +329,9 @@ function CDetall(soloFicha) {
 
 	// Método sobreescrito
 	this.busca = function() {
+		
+		if (debug)
+			console.log("Entrando en CDetall.busca");
 
 		edificis_cercador_elm.find("input, select").attr("disabled", "disabled");
 
@@ -314,10 +350,16 @@ function CDetall(soloFicha) {
 			
 		});
 		
+		if (debug)
+			console.log("Saliendo de CDetall.busca");
+		
 	};
 
 	// Método sobreescrito.
 	this.carregar = function(itemID) {
+		
+		if (debug)
+			console.log("Entrando en CDetall.carregar");
 
 		if (itemID == undefined)
 			itemID = itemAEditar();
@@ -387,18 +429,30 @@ function CDetall(soloFicha) {
 
 		this.actualizaEventos();
 		
+		if (debug)
+			console.log("Saliendo de CDetall.carregar");
+		
 	};
 
 	this.recarregar = function() {
+		
+		if (debug)
+			console.log("Entrando en CDetall.recarregar");
 
 		// animacio
 		escriptori_detall_elm.fadeOut(300, function() {
 			Detall.carregar();
-		});		
+		});
+		
+		if (debug)
+			console.log("Saliendo de CDetall.recarregar");
 
 	};
 
 	this.pintar = function(dades) {
+		
+		if (debug)
+			console.log("Entrando en CDetall.pintar");
 
 		dada_node = dades;
 
@@ -516,10 +570,16 @@ function CDetall(soloFicha) {
 		});
 
 		this.modificado(false);
+		
+		if (debug)
+			console.log("Saliendo de CDetall.pintar");
 
 	};
 
 	this.elimina = function() {
+		
+		if (debug)
+			console.log("Entrando en CDetall.elimina");
 
 		// missatge
 		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
@@ -548,9 +608,15 @@ function CDetall(soloFicha) {
 			}			
 		});
 		
+		if (debug)
+			console.log("Saliendo de CDetall.elimina");
+		
 	};
 
 	this.previsualitza = function() {
+		
+		if (debug)
+			console.log("Entrando en CDetall.previsualitza");
 
 		escriptori_detall_elm.fadeOut(300, function() {
 
@@ -566,24 +632,42 @@ function CDetall(soloFicha) {
 			});
 			
 		});
+		
+		if (debug)
+			console.log("Saliendo de CDetall.previsualitza");
 
 	};
 
 	this.carregarInici = function() {
 		
+		if (debug)
+			console.log("Entrando en CDetall.carregarInici");
+		
 		Detall.modificado(false);
 		window.location.replace(pagLlistat);
+		
+		if (debug)
+			console.log("Saliendo de CDetall.carregarInici");
 		
 	};
 	
 	this.carregarUA = function() {
 		
+		if (debug)
+			console.log("Entrando en CDetall.carregarUA");
+		
 		Detall.modificado(false);
 		window.location.replace(pagLlistat);
+		
+		if (debug)
+			console.log("Saliendo de CDetall.carregarUA");
 		
 	};
 
 	this.pintarModulos = function(dades) {
+		
+		if (debug)
+			console.log("Entrando en CDetall.pintarModulos");
 
 		ModulMateries.inicializarMaterias(dades.materies);
 
@@ -671,19 +755,36 @@ function CDetall(soloFicha) {
 			usu_seleccionats_elm.find("p.info").html(txtHiHa + " <strong>" + usuaris_nodes_size + " " + txt_usuaris + "</strong>.");
 			
 		}
+		
+		if (debug)
+			console.log("Saliendo de CDetall.pintarModulos");
 
 	};
 	
 	this.ocultarModulos = function(selector) {
 		
+		if (debug)
+			console.log("Entrando en CDetall.ocultarModulos");
+		
 		if ( !selector.hasClass("publicacio") && !selector.children().is("#llistaPublicObjectiu") 
 				&& !selector.children().is("#llistaSeccions") )
 			selector.addClass("invisible");
 		
+		if (debug)
+			console.log("Saliendo de CDetall.ocultarModulos");
+		
 	};
 
 	function posarValorsInput(idInput, valor) {
+		
+		if (debug)
+			console.log("Entrando en CDetall.posarValorsInput");
+		
 		$(idInput).val(valor);
+		
+		if (debug)
+			console.log("Saliendo de CDetall.posarValorsInput");
+		
 	};
 	
 };

@@ -29,10 +29,13 @@ $(document).ready(function() {
 });
 
 // detall
-function CNuevaUADetall(soloFicha,reglasFormulario,ids){	
+function CNuevaUADetall(soloFicha, reglasFormulario, ids) {
+	
+	// Activa mensajes de debug.
+	var debug = false;
 		
 	this.extend = DetallBase;
-	this.extend(soloFicha,reglasFormulario,ids);
+	this.extend(soloFicha, reglasFormulario, ids);
 
 	var that = this;
 	this.tipusAuditoria = 'unitat';
@@ -41,6 +44,9 @@ function CNuevaUADetall(soloFicha,reglasFormulario,ids){
 	var materias = "";
 	
 	this.iniciar = function() {
+		
+		if (debug)
+			console.log("Entrando en CNuevaUADetall.iniciar");
 		
 		// Evento del bot�n de volver.		
 		/*jQuery("#nuevaUA_btnVolver").unbind("click").bind("click",function(){
@@ -92,7 +98,11 @@ function CNuevaUADetall(soloFicha,reglasFormulario,ids){
         jQuery("#nuevaUA_item_espai_territorial,#nuevaUA_item_espai_territorial_es,#nuevaUA_item_espai_territorial_en,#nuevaUA_item_espai_territorial_de,#nuevaUA_item_espai_territorial_fr").change(function(){
             jQuery("#nuevaUA_item_espai_territorial,#nuevaUA_item_espai_territorial_es,#nuevaUA_item_espai_territorial_en,#nuevaUA_item_espai_territorial_de,#nuevaUA_item_espai_territorial_fr").val( jQuery(this).val() );
         });
-	}
+        
+        if (debug)
+			console.log("Saliendo de CNuevaUADetall.iniciar");
+        
+	};
 	
 	this.DetallBase_vuelve = this.vuelve;
 	
@@ -100,9 +110,13 @@ function CNuevaUADetall(soloFicha,reglasFormulario,ids){
      * Vuelve de la ficha al listado.
      */
     this.vuelve = function() {
+    	
+    	if (debug)
+			console.log("Entrando en CNuevaUADetall.vuelve");
         
-        if( this.cambiosSinGuardar() ){
-            Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: txtAvisoCambiosSinGuardar, funcio: function() {
+        if ( this.cambiosSinGuardar() ) {
+            
+        	Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: txtAvisoCambiosSinGuardar, funcio: function() {
                                 
                 Missatge.cancelar();
                 
@@ -111,20 +125,33 @@ function CNuevaUADetall(soloFicha,reglasFormulario,ids){
                 
                 
             }});
-        }else{
+        	
+        } else {
             
             jQuery("#escritorioNuevaUA").hide();
             jQuery("#escritorioUnidadesHijas").show();
             
         }
-    }
+        
+        if (debug)
+			console.log("Saliendo de CNuevaUADetall.vuelve");
+        
+    };
 	
 	// Sobreescribe el método guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
-	this.guarda_upload = function(e) {    
+	this.guarda_upload = function(e) {
+		
+		if (debug)
+			console.log("Entrando en CNuevaUADetall.guarda_upload");
 		
 		// Validamos el formulario			
-		if(!that.formulariValid()){
+		if (!that.formulariValid()) {
+			
+			if (debug)
+				console.log("Saliendo de CNuevaUADetall.guarda_upload");
+			
 			return false;
+		
 		}
 		
 		// Enviamos el formulario mediante el metodo ajaxSubmit del plugin jquery.form
@@ -139,33 +166,43 @@ function CNuevaUADetall(soloFicha,reglasFormulario,ids){
 				Llistat.cacheDatosListado = null;
 				LlistatSeccioFitxes.cacheDatosListado = null;
 				
+				NuevaUADetall.modificado(false);
+				
 				if (data.id < 0) {
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
 				} else {
 					// recarregam per actualitzar la molla de pa
                     Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom, funcio: Detall.carregarUA } );
-				}										
-
+				}
+				
 			}
 
 		});
+		
+		if (debug)
+			console.log("Saliendo de CNuevaUADetall.guarda_upload");
 
 		return false;	
 		
-	}
+	};
 	
-	// M�todo para iniciar el formulario para crear una nueva UA hija.
-	this.nuevaUAHija = function(){
+	// Método para iniciar el formulario para crear una nueva UA hija.
+	this.nuevaUAHija = function() {
+		
+		if (debug)
+			console.log("Entrando en CNuevaUADetall.nuevaUAHija");
+		
 		var nomUAPadre = "";
 		var idUAPadre = null;
 		
 		// Obtenemos los datos de la UA padre del objeto Detalle.
-		if( Detall.uaGeneral && Detall.uaGeneral.id != 0 ){
-			idUAPadre = Detall.uaGeneral.id;
+		if ( Detall.uaGeneral && Detall.uaGeneral.id != 0 ) {
 			
-			// @todo De momento sacamos el nombre de la UA padre del texto en catal�n, pero lo suyo es que al cargar una UA, venga 
+			idUAPadre = Detall.uaGeneral.id;
+			// TODO: De momento sacamos el nombre de la UA padre del texto en catalán, pero lo suyo es que al cargar una UA, venga 
 			// un campo con el nombre del idioma actual.
 			nomUAPadre = Detall.uaGeneral.ca.nombre;
+			
 		}
 		
 		// Rellenamos el m�dulo de Relaci�n Org�nica.
@@ -173,22 +210,49 @@ function CNuevaUADetall(soloFicha,reglasFormulario,ids){
 		jQuery("#nuevaUA_item_pare").val(nomUAPadre);
 		
 		this.modificado(false);
-	}
+		
+		if (debug)
+			console.log("Saliendo de CNuevaUADetall.nuevaUAHija");
+		
+	};
 	
-	// M�todo sobreescrito.
-	this.busca = function(){}
+	// Método sobreescrito.
+	this.busca = function() {};
 			
-	// M�todo sobreescrito.
-	this.carregar = function(itemID) {}
-	this.recarregar = function() {}
-	this.pintar = function(dades) {}
-	this.elimina = function() {}
-	this.previsualitza = function() {}
-	this.carregarInici = function() { window.location.replace(pagLlistat); }
-	this.carregarUA = function() { this.modificado(false); window.location.replace(pagLlistat); }
+	// Método sobreescrito.
+	this.carregar = function(itemID) {};
+	this.recarregar = function() {};
+	this.pintar = function(dades) {};
+	this.elimina = function() {};
+	this.previsualitza = function() {};
+	
+	this.carregarInici = function() {
+		
+		if (debug)
+			console.log("Entrando en CNuevaUADetall.carregarInici");
+		
+		window.location.replace(pagLlistat);
+		
+		if (debug)
+			console.log("Saliendo de CNuevaUADetall.carregarInici");
+		
+	};
+	
+	this.carregarUA = function() {
+		
+		if (debug)
+			console.log("Entrando en CNuevaUADetall.carregarUA");
+		
+		this.modificado(false);
+		window.location.replace(pagLlistat);
+		
+		if (debug)
+			console.log("Saliendo de CNuevaUADetall.carregarUA");
+		
+	};
+	
 }
 
-function posarValorsInput(idInput, valor)
-{
+function posarValorsInput(idInput, valor) {
 	$(idInput).val(valor);
 }

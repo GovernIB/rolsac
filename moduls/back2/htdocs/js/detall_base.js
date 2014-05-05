@@ -214,6 +214,9 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 
 		if( typeof(marcar) == "undefined" )
 			marcar = true;
+		
+		if (debug)
+			console.log("\tCon atributo 'marcar' = " + marcar);
 
 		// Actualizamos la variable global para controlar si hay cambios sin guardar en los formularios.
 		CambiosSinGuardar(ids.form, marcar);

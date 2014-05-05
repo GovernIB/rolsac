@@ -1,26 +1,27 @@
-// M�dulo de unidades hijas.
+// Módulo de unidades hijas.
 $(document).ready(function() {
     
-    // Acci�n para mostrar la ficha de UA
-    jQuery(".submenuUA .detalle").click(function(){
+    // Acción para mostrar la ficha de UA
+    jQuery(".submenuUA .detalle").click(function() {
         
-        if( !jQuery(this).hasClass("activo") ){
+        if( !jQuery(this).hasClass("activo") ) {
             jQuery("#escritorioUnidadesHijas").hide();
             jQuery("#escritorioNuevaUA").hide();
             jQuery("#escriptori_detall").show();
         
-            jQuery(".submenuUA .hijas").toggleClass("activo",false);
-            jQuery(".submenuUA .detalle").toggleClass("activo",true);
+            jQuery(".submenuUA .hijas").toggleClass("activo", false);
+            jQuery(".submenuUA .detalle").toggleClass("activo", true);
         }
     });
     
-    // Acci�n para mostrar las unidades hijas
-    jQuery(".submenuUA .hijas").click(function(){
+    // Acción para mostrar las unidades hijas
+    jQuery(".submenuUA .hijas").click(function() {
         
-        if( !jQuery(this).hasClass("activo") ){
+        if ( !jQuery(this).hasClass("activo") ){
             
             // Comprobamos si hay cambios sin guardar
-            if( Detall.cambiosSinGuardar() ){
+            if ( Detall.cambiosSinGuardar() ) {
+            	
                 Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: txtAvisoCambiosSinGuardar, funcio: function() {
 
                     Missatge.cancelar();
@@ -32,34 +33,42 @@ $(document).ready(function() {
                     jQuery("#escritorioNuevaUA").hide();
                     jQuery("#escriptori_detall").hide();
                     
-                    jQuery(".submenuUA .hijas").toggleClass("activo",true);
-                    jQuery(".submenuUA .detalle").toggleClass("activo",false);
+                    jQuery(".submenuUA .hijas").toggleClass("activo", true);
+                    jQuery(".submenuUA .detalle").toggleClass("activo", false);
                     
                     controlEscritorioUnidadesHijas.inicia();
                     
                 }});
-            }else{
+                
+            } else {
                 
                 // Cambiamos al formulario de unidades hijas.
                 jQuery("#escritorioUnidadesHijas").show();
                 jQuery("#escritorioNuevaUA").hide();
                 jQuery("#escriptori_detall").hide();
                 
-                jQuery(".submenuUA .hijas").toggleClass("activo",true);
-                jQuery(".submenuUA .detalle").toggleClass("activo",false);
+                jQuery(".submenuUA .hijas").toggleClass("activo", true);
+                jQuery(".submenuUA .detalle").toggleClass("activo", false);
                 
                 controlEscritorioUnidadesHijas.inicia();
                 
             }
+            
         }
+        
     });
       
     controlEscritorioUnidadesHijas = new CEscritorioUnidadesHijas();
     
     multipagina = new Multipagina();
+    
 });
 
-function CEscritorioUnidadesHijas() {       
+function CEscritorioUnidadesHijas() {
+	
+	// Activa mensajes de debug.
+	var debug = false;
+	
     this.extend = ListadoBase;
     this.extend("opcionesUnidadesHijas", "resultadosUnidadesHijas", "", "cercador_contingut_unitats_filles", "", "", "btnNuevaUAhija", "btnBuscarUnidadesHijasForm", "btnLimpiarUnidadesHijasForm");
     
@@ -70,20 +79,39 @@ function CEscritorioUnidadesHijas() {
     this.tipoOrden = "DESC";
     this.campoOrden = "nombre";
     
-    this.inicia = function(){
+    this.inicia = function() {
+    	
+    	if (debug)
+			console.log("Entrando en CEscritorioUnidadesHijas.inicia");
+    	
         $obj = jQuery("#escritorioUnidadesHijas");
-    
         this.carregar({});
-    }
+        
+        if (debug)
+			console.log("Saliendo de CEscritorioUnidadesHijas.inicia");
+        
+    };
     
-    // Cambia de p�gina.
-    this.cambiaPagina = function( pag ){
-        multipagina.setPaginaActual(pag-1);
+    // Cambia de página.
+    this.cambiaPagina = function( pag ) {
+    	
+    	if (debug)
+			console.log("Entrando en CEscritorioUnidadesHijas.cambiaPagina");
+    	
+        multipagina.setPaginaActual(pag - 1);
         pag_Pag = pag;
         this.anar(pag);
-    }
+        
+        if (debug)
+			console.log("Saliendo de CEscritorioUnidadesHijas.cambiaPagina");
+        
+    };
     
-    this.finCargaListado = function(opcions,data){
+    this.finCargaListado = function(opcions, data) {
+    	
+    	if (debug)
+			console.log("Entrando en CEscritorioUnidadesHijas.finCargaListado");
+    	
         var modoBuscador = (typeof opcions.cercador != "undefined" && opcions.cercador == "si");    
         
         // total
@@ -128,11 +156,11 @@ function CEscritorioUnidadesHijas() {
 
             codi_cap1 = "<div class=\"th nom" + ordre_c1 + "\" role=\"columnheader\">" + txtNombre + "</a></div>";
             
-            if( !modoBuscador ){
-                codi_cap2 = "<div class=\"th orden\" role=\"columnheader\">" + txtOrdre + "</a></div>"; 
-            }else{
-                codi_cap2 = '';
-            }
+			if (!modoBuscador) {
+				codi_cap2 = "<div class=\"th orden\" role=\"columnheader\">" + txtOrdre + "</a></div>";
+			} else {
+				codi_cap2 = '';
+			}
             
             // codi taula
             codi_taula = "<div class=\"table llistat uahijas\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\">";
@@ -145,30 +173,30 @@ function CEscritorioUnidadesHijas() {
             codi_taula += "</div>";
             codi_taula += "<div class=\"tbody\">";
             
-                // codi cuerpo
-                $(data.nodes).slice(resultatInici-1,resultatFinal).each(function(i) {
-                    dada_node = this;
-                    parClass = (i%2) ? " par": "";
+            // codi cuerpo
+            $(data.nodes).slice(resultatInici-1,resultatFinal).each(function(i) {
+                dada_node = this;
+                parClass = (i%2) ? " par": "";
+                
+                codi_taula += "<div class=\"tr" + parClass + "\" role=\"row\">";
+                
+                codi_taula += "<div class=\"td nom\" role=\"gridcell\">";
+                    codi_taula += "<input type=\"hidden\" value=\"" + dada_node.id + "\" class=\"id\" />";
+                    codi_taula += "<span style='visibility: hidden;' class=\"ordre\">" + (printStringFromNull(dada_node.orden, txtSinValor) + 1) + "</span>";                       
+                    codi_taula += "<a id=\"uahija_" + dada_node.id  + "\" class=\"uahija_" + dada_node.id + "\" href=\"javascript:;\" class=\"nom\">" + dada_node.nombre + "</a>";
+                codi_taula += "</div>";
+                
+                if ( !modoBuscador ) {
                     
-                    codi_taula += "<div class=\"tr" + parClass + "\" role=\"row\">";
-                    
-                    codi_taula += "<div class=\"td nom\" role=\"gridcell\">";
-                        codi_taula += "<input type=\"hidden\" value=\"" + dada_node.id + "\" class=\"id\" />";
-                        codi_taula += "<span style='visibility: hidden;' class=\"ordre\">" + (printStringFromNull(dada_node.orden, txtSinValor) + 1) + "</span>";                       
-                        codi_taula += "<a id=\"uahija_" + dada_node.id  + "\" class=\"uahija_" + dada_node.id + "\" href=\"javascript:;\" class=\"nom\">" + dada_node.nombre + "</a>";
+                    codi_taula += "<div class=\"td orden\" role=\"gridcell\">";
+                    codi_taula += that.getHtmlSelectorOrdenacion("uaHija_" + dada_node.id, dada_node.orden, resultats_total );
                     codi_taula += "</div>";
                     
-                    if( !modoBuscador ) {
-                        
-                        codi_taula += "<div class=\"td orden\" role=\"gridcell\">";
-                        codi_taula += that.getHtmlSelectorOrdenacion("uaHija_"+dada_node.id, dada_node.orden, resultats_total );
-                        codi_taula += "</div>";
-                        
-                    }
-                    
-                    codi_taula += "</div>";
+                }
+                
+                codi_taula += "</div>";
 
-                });
+            });
             
             codi_taula += "</div>";
             codi_taula += "</div>";
@@ -202,15 +230,16 @@ function CEscritorioUnidadesHijas() {
         }
         
         dades_elm = $obj.find("#resultadosUnidadesHijas div.actiu:first div.dades:first");
+        
         dades_elm.fadeOut(300, function() {
             // pintem
             dades_elm.html(codi_final).fadeIn(300, function() {
             
-                $obj.find(".resultats .llistat .tbody a").unbind("click").bind("click",function(){
+                $obj.find(".resultats .llistat .tbody a").unbind("click").bind("click",function() {
                     controlEscritorioUnidadesHijas.ficha(this);
                     jQuery("#escritorioUnidadesHijas").hide();
-                    jQuery(".submenuUA .hijas").toggleClass("activo",false);
-                    jQuery(".submenuUA .detalle").toggleClass("activo",true);
+                    jQuery(".submenuUA .hijas").toggleClass("activo", false);
+                    jQuery(".submenuUA .detalle").toggleClass("activo", true);
                 });
                 
                 // Asociamos el evento onclick a las cabeceras del listado para que sea ordenable.
@@ -223,14 +252,14 @@ function CEscritorioUnidadesHijas() {
                     $obj.find("#cercador_contingut_unitats_filles").find("input, select").removeAttr("disabled");
                 }
                 
-                jQuery("#resultadosUnidadesHijas .llistat .tbody select.ordenacion").bind("change").bind("change",function(){
+                jQuery("#resultadosUnidadesHijas .llistat .tbody select.ordenacion").bind("change").bind("change",function() {
                     
                     var itemID = jQuery(this).attr("id").split("_")[1];
                     var orden = jQuery(this).val();
                     var idPadre = $("#formGuardar #item_id").val();
                                         
                     // Obtenemos el valor del orden anterior para saber en qué dirección reordenar los elementos
-                    var ordenAnterior = jQuery(".uahija_" + itemID).prev().html() -1;                   
+                    var ordenAnterior = jQuery(".uahija_" + itemID).prev().html() - 1;                   
                     
                     var dataVars = "id=" + itemID+"&orden="+orden+ "&ordenAnterior=" + ordenAnterior +"&idPadre=" + (idPadre == undefined ? "" : idPadre);                                      
                     
@@ -252,17 +281,26 @@ function CEscritorioUnidadesHijas() {
                 });
                 
             });
+            
         });
-    }
+        
+        if (debug)
+			console.log("Saliendo de CEscritorioUnidadesHijas.finCargaListado");
+        
+    };
 
-    this.carregar = function(opcions) {     
+    this.carregar = function(opcions) {
+    	
+    	if (debug)
+			console.log("Entrando en CEscritorioUnidadesHijas.carregar");
+    	
         // opcions: ajaxPag (integer), ordreTipus (ASC, DESC), ordreCamp (tipus, carrec, tractament)        
         var $inputPagPagina, $inputOrdreTipus, $inputOrdreCamp;
         
         dataVars = "";
         
         // cercador
-        dataVars_cercador="";
+        dataVars_cercador = "";
         
         // cercador
         if (typeof opcions.cercador != "undefined" && opcions.cercador == "si") {
@@ -331,23 +369,44 @@ function CEscritorioUnidadesHijas() {
                 that.finCargaListado(opcions,data);             
             }
         });
-    }
+        
+        if (debug)
+			console.log("Saliendo de CEscritorioUnidadesHijas.carregar");
+        
+    };
     
-    // M�todo sobreescrito.
-    this.nuevaFicha = function(){
-        jQuery("#escritorioUnidadesHijas").hide();
+    // Método sobreescrito.
+    this.nuevaFicha = function() {
+    	
+    	if (debug)
+			console.log("Entrando en CEscritorioUnidadesHijas.nuevaFicha");
+    
+    	jQuery("#escritorioUnidadesHijas").hide();
         jQuery("#escritorioNuevaUA").hide();
         jQuery("#escritorioNuevaUA").show();
         
         NuevaUADetall.nuevaUAHija();
-    }
+        
+        if (debug)
+			console.log("Saliendo de CEscritorioUnidadesHijas.nuevaFicha");
+    
+    };
     
     /**
-     * M�todo sobreescrito.
+     * Método sobreescrito.
      */
-    this.ficha = function( link ){
+    this.ficha = function( link ) {
+    	
+    	if (debug)
+			console.log("Entrando en CEscritorioUnidadesHijas.ficha");
+    	
         // Obtenemos el id del item a partir del id del enlace.
         var id = jQuery(link).attr("id").split("_")[1];
         location.href = pagLlistat2 + "?ua=" + id + "&redirectTo=" + document.location.href.split('?', 1)[0];
-    }
+        
+        if (debug)
+			console.log("Saliendo de CEscritorioUnidadesHijas.ficha");
+        
+    };
+    
 };
