@@ -660,11 +660,16 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 							jQuery("#" + campo).val(valor);
 
 						}
+						
 					}
+					
+					// Si todo ha ido bien, marcamos el detalle como modificado.
+					that.modificado(true);
 
 					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtTraduccioCorrecta});
-
+					
 				}
+				
 			}
 		});
 		
