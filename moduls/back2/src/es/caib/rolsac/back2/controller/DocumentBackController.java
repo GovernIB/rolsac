@@ -194,36 +194,53 @@ public class DocumentBackController extends ArchivoController {
             FileItem fileItem = ficherosForm.get("doc_arxiu_" + lang); // Archivo
 
             if (fileItem != null && fileItem.getSize() > 0) {
+            	
                 if (!this.isDocumentoNuevo(valoresForm)) {
-                    TraduccionDocumento traDocOld = (TraduccionDocumento) docOld.getTraduccion(lang);
-                    if (this.isArchivoParaBorrar(valoresForm, lang)
-                        || this.ficheroAdjuntoIsModificado(valoresForm, traDocOld)) {
-                        // Se indica que hay que borrar el fichero.
-                        archivosAborrar.add(traDocOld.getArchivo().getId());
+                	
+                    TraduccionDocumento traDocOld = (TraduccionDocumento)docOld.getTraduccion(lang);
+                    
+                    // Si aún no hay traducción asociada es que no toca procesar el archivo adjunto.
+                    if (traDocOld != null) {
+                    
+	                    if (this.isArchivoParaBorrar(valoresForm, lang) 
+	                    		|| this.ficheroAdjuntoIsModificado(valoresForm, traDocOld)) {
+	                    	
+	                        // Se indica que hay que borrar el fichero.
+	                        archivosAborrar.add(traDocOld.getArchivo().getId());
+	                        
+	                    }
+                    
                     }
+                    
                 }
+                
                 // Nuevo archivo
                 tradDoc.setArchivo(UploadUtil.obtenerArchivo(tradDoc.getArchivo(), fileItem));
 
             } else if (this.isArchivoParaBorrar(valoresForm, lang)) {
+            	
                 // Indicamos a la traducción del documento que no va a tener
                 // asignado el archivo.
-                TraduccionDocumento traDocOld = (TraduccionDocumento) docOld.getTraduccion(lang);
+                TraduccionDocumento traDocOld = (TraduccionDocumento)docOld.getTraduccion(lang);
                 archivosAborrar.add(traDocOld.getArchivo().getId());
                 tradDoc.setArchivo(null);
 
             } else if (docOld != null) {
+            	
                 // mantener el fichero anterior
-                TraduccionDocumento traDocOld = (TraduccionDocumento) docOld.getTraduccion(lang);
+                TraduccionDocumento traDocOld = (TraduccionDocumento)docOld.getTraduccion(lang);
                 if (traDocOld != null) {
                     tradDoc.setArchivo(traDocOld.getArchivo());
                 }
+                
             }
 
             doc.setTraduccion(lang, tradDoc);
+            
         }
 
         return doc;
+        
     }
 
     /** Guardado del documento */
