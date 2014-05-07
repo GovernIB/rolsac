@@ -147,9 +147,12 @@ function CDetall(soloFicha) {
 
 		// Redigirimos el método que guarda porque en este caso también hacemos un upload de archivos				
 		this.guarda = this.guarda_upload;
+		
+		// Guardamos la cantidad de idiomas con la que se trabaja.
+		var numIdiomas = idiomas.length;
 
 		// Idioma
-		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {
+		if (numIdiomas != 0) {
 
 			// Esconder todos menos el primero
 			$('div.idioma:gt(0)').hide();
@@ -170,7 +173,7 @@ function CDetall(soloFicha) {
 			ul_idiomes_elm.bind("click", Detall.idioma);
 
 			// Mostramos DIV con el primer idioma en la sección de idiomas del responsable de la UA.
-			$('div.idioma:eq(5)').show();
+			$('div.idioma:eq(' + numIdiomas + ')').show();
 
 		}
 
