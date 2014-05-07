@@ -242,10 +242,20 @@
                         </div>
                         <div class="element t30">
                             <div class="etiqueta">
-                                <label for="cerca_bservacions"><spring:message code='camp.observacions'/></label>
+                                <label for="cerca_observacions"><spring:message code='camp.observacions'/></label>
                             </div>
                             <div class="control">
                                 <input id="cerca_observacions" name="cerca_observacions" type="text" />
+                            </div>
+                        </div>
+                        <div class="element t30">
+                            <div class="etiqueta">
+                                <label for="cerca_unitat_administrativa_nom"><spring:message code='camp.unitat_administrativa'/></label>
+                            </div>
+                            <div class="control">
+                                <input id="cerca_unitat_administrativa_nom" name="cerca_unitat_administrativa_nom" type="text"
+                                		onfocus="carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA', 'cerca_unitat_administrativa_id', 'cerca_unitat_administrativa_nom')" />
+                                <input id="cerca_unitat_administrativa_id" name="cerca_unitat_administrativa_id" type="hidden" />
                             </div>
                         </div>
                     </div>

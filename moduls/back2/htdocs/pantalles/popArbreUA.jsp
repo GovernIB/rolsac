@@ -1,8 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@ page language="java" contentType="text/html; charset=ISO-8859-15" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
     <title><spring:message code='arbreUA.arbre'/></title>
@@ -12,7 +12,7 @@
     <link href="<c:url value='/css/arbreUA.css'/>" rel="stylesheet" type="text/css" media="screen" />
     
 	<!-- Para evitar error de idiomas en esta pantalla -->
-    <script>
+    <script type="text/javascript">
     var idiomesAplicacio = "<c:out value='${idiomes_aplicacio_string}'/>";
     </script>	
     
@@ -24,15 +24,17 @@
     <script type="text/javascript" src="<c:url value='/js/detall_base.js'/>"></script>    
 
     <script type="text/javascript">
-    <!--    
+    //<![CDATA[
+    
         var ex = new Array;
-        var max = 1000
-        var nivell = 0
+        var max = 1000;
+        var nivell = 0;
 
         function carregar(id, nombre){
 
             <c:choose>
                 <c:when test="${not empty id_input}">
+                
                     $("#" + "<c:out value='${id_hidden}'/>", window.top.document).val(id);
                     $("#" + "<c:out value='${id_input}'/>", window.top.document).val(nombre);
                     
@@ -42,11 +44,13 @@
                     
                 </c:when>
                 <c:otherwise>
+                
                     var uaItem = new Object();
                     uaItem['id'] = id;
                     uaItem['nombre'] = nombre;                    
                     window.top.ModulUnitatAdministrativa.agregaItem(uaItem);
                     window.top.ModulUnitatAdministrativa.inicializarUnidadesAdministrativas();
+                    
                 </c:otherwise>
             </c:choose>
 
@@ -54,12 +58,12 @@
             
         }
 
-        function init_ex(level,opened,descripcion,carpeta,codi){
-            this.level=level;
-            this.opened=opened;
-            this.descripcion=descripcion;
-            this.carpeta=carpeta;
-            this.codi=codi;
+        function init_ex(level, opened, descripcion, carpeta, codi) {
+            this.level = level;
+            this.opened = opened;
+            this.descripcion = descripcion;
+            this.carpeta = carpeta;
+            this.codi = codi;
         }
         
         <c:if test='${not empty raizOptions}'>
@@ -108,26 +112,31 @@
             </c:forEach>
             ex.push(new init_ex(-1,"","","",""));
         </c:if>
-     
         
-        function print_explorador(){
-            var i=0
-            document.write("<ul style='list-style: none outside none;'>")
-            while (ex[i].level!=-1){
-                if (ex[i].level<=max){
-                    if (ex[i].carpeta==true){
-                            excarpeta(i)
+        function print_explorador() {
+
+        	var i = 0;
+
+            document.write("<ul style='list-style: none outside none;'>");
+
+            while (ex[i].level != -1) {
+                if (ex[i].level <= max) {
+                    if (ex[i].carpeta == true){
+                    	excarpeta(i);
                     } else {
-                            exarchivo(i)
+                    	exarchivo(i);
                     }
                 }
-                i++
+                i++;
             }
-            document.write("</ul>")
+
+            document.write("</ul>");
+
         }
 
-        function excarpeta(i){
-            switch (nivell-ex[i].level){
+        function excarpeta(i) {
+
+            switch (nivell-ex[i].level) {
                 case 1:
                     document.write("</ul></li>");
                     break;
@@ -138,23 +147,27 @@
                     document.write("</ul></li></ul></li></ul></li>");
                     break;
             }
-            if (ex[i].opened==false){
-                document.write("<li style='font-size: 13px; padding: 5px 12px 0;'><a href='javascript:open(" + i + ")'><img src='../img/botons/mostra.gif' width=12 height=12 border=0></a><a id='" + ex[i].codi + "' style='color: #0099CC; text-decoration: none;' href='javascript:carregar(\"" + ex[i].codi + "\",\"" + ex[i].descripcion + "\")'>" + ex[i].descripcion + "</a></li>")
-                max=ex[i].level
+            
+            if (ex[i].opened == false) {
+                document.write("<li style='font-size: 13px; padding: 5px 12px 0;'><a href='javascript:open(" + i + ")'><img src='../img/botons/mostra.gif' width=12 height=12 border=0></a><a id='" + ex[i].codi + "' style='color: #0099CC; text-decoration: none;' href='javascript:carregar(\"" + ex[i].codi + "\",\"" + ex[i].descripcion + "\")'>" + ex[i].descripcion + "</a></li>");
+                max = ex[i].level;
             } else {
                 document.write("<li style='font-size: 13px; padding: 5px 12px 0;'><a href='javascript:unopen(" + i + ")'><img src='../img/botons/amaga.gif' width=12 height=12 border=0></a><a id='" + ex[i].codi + "' style='color: #0099CC; text-decoration: none;' href='javascript:carregar(\"" + ex[i].codi + "\",\"" + ex[i].descripcion + "\")'>" + ex[i].descripcion + "</a>");
-                max=1000
-                if (ex[i].level<ex[i+1].level){
-                    document.write("<ul style='list-style: none outside none;'>")
-                    } else {
-                    document.write("</li>")
+                max = 1000;
+                if (ex[i].level < ex[i+1].level) {
+                    document.write("<ul style='list-style: none outside none;'>");
+                } else {
+                    document.write("</li>");
                 }
             }
-            nivell=ex[i].level
+
+            nivell = ex[i].level;
+            
         }
 
-        function exarchivo(i){
-            switch (nivell-ex[i].level){
+        function exarchivo(i) {
+            
+            switch (nivell - ex[i].level) {
                 case 1:
                     document.write("</ul></li>");
                     break;
@@ -165,19 +178,21 @@
                     document.write("</ul></li></ul></li></ul></li>");
                     break;
             }
-            document.write("<li style='font-size: 13px; padding: 5px 12px 0;'><img src='../img/cercador/mesDades_off.gif' width=12 height=12><a style='color: #0099CC; text-decoration: none;' href='javascript:carregar(\"" + ex[i].codi +"\",\"" + ex[i].descripcion + "\")'>" + ex[i].descripcion +"</a></li>")
-            nivell=ex[i].level
+            
+            document.write("<li style='font-size: 13px; padding: 5px 12px 0;'><img src='../img/cercador/mesDades_off.gif' width=12 height=12><a style='color: #0099CC; text-decoration: none;' href='javascript:carregar(\"" + ex[i].codi +"\",\"" + ex[i].descripcion + "\")'>" + ex[i].descripcion +"</a></li>");
+            nivell = ex[i].level;
+            
         }
 
         function unopen(nr){
             window.location = "<c:url value='popArbreUAContreure.do' />?idUA=<c:out value='${idUA}' />&idSelect=" + ex[nr].codi + "&idHidden=<c:out value='${id_hidden}' />&idInput=<c:out value='${id_input}' />&totes=<c:out value='${totes}' />";
         }
-
         
         function open(nr){
             window.location = "<c:url value='popArbreUAExpandir.do' />?idUA=<c:out value='${idUA}' />&idSelect=" + ex[nr].codi + "&idHidden=<c:out value='${id_hidden}' />&idInput=<c:out value='${id_input}' />&totes=<c:out value='${totes}' />";
         }
-     -->   
+
+    //]]>
     </script>
 </head>
 
@@ -192,10 +207,10 @@
                     <legend><spring:message code='arbreUA.llistat'/></legend>
                     <div class="modul_continguts mostrat">      
                         <c:if test='${not empty raizOptions}'>
-                            <script language="JavaScript1.2" type="text/javascript">
-                            <!--
+                            <script type="text/javascript">
+                          	//<![CDATA[
                                     print_explorador();
-                            -->     
+                            //]]> 
                             </script>
                             <form action='<c:url value="/pantalles/popArbreUA.do"/>' id="padreForm" method="post" >
                                 <input type="hidden" name="action" value='Expandir' />

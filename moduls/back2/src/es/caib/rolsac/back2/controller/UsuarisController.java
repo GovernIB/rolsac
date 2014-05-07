@@ -88,7 +88,13 @@ public class UsuarisController extends PantallaBaseController {
     		paramMap.put("observaciones", observacions.toUpperCase());
     	}
     	
+    	Long idUA = (request.getParameter("idUA") != null) ? Long.valueOf(request.getParameter("idUA")) : null;
+    	if (idUA != null) {
+    		paramMap.put("idUA", idUA);
+    	}
+    	
     	try {
+    		
     		UsuarioDelegate usuarisDelegate = DelegateUtil.getUsuarioDelegate();
     		List<Usuario> llistaUsuaris = usuarisDelegate.buscarUsuarios(paramMap);
     		

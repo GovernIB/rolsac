@@ -20,17 +20,18 @@ if ( ! window.console ) {
 var avisarCambiosSinGuardar = [];
 
 // Acci�n a realizar antes de cerrar la ventana.
-window.onbeforeunload = function(){
-    
-    for(var i in avisarCambiosSinGuardar ){
-        if( avisarCambiosSinGuardar[i] ){
-            return txtAvisoCambiosSinGuardar;
-        }
-    }
-}
+window.onbeforeunload = function() {
+
+	for ( var i in avisarCambiosSinGuardar) {
+		if (avisarCambiosSinGuardar[i]) {
+			return txtAvisoCambiosSinGuardar;
+		}
+	}
+
+};
 
 /**
- * Funci�n para avisar de que un formulario tiene o no cambios sin guardar. 
+ * Funci�n para avisar de que un formulario tiene o no cambios sin guardar.
  */
 function CambiosSinGuardar( id, marcar ){
     avisarCambiosSinGuardar[id] = marcar;
@@ -38,13 +39,12 @@ function CambiosSinGuardar( id, marcar ){
 
 // CERRAR Y MENSAJES	
 $(document).ready(function() {
-	
-	$(window).bind('resize',function(e){
-	    if ($('.falsePopUp').length > 0) {
-	        $('.falsePopUp').css('left',$(window).width() / 2 - 275);
-	    }
-	});
 
+	$(window).bind('resize', function(e) {
+		if ($('.falsePopUp').length > 0) {
+			$('.falsePopUp').css('left', $(window).width() / 2 - 275);
+		}
+	});
 	
    idiomas = idiomesAplicacio.split(",");
   
@@ -179,7 +179,7 @@ var MollaPa = {
 		// dsanchez: Esto es solo provisional mientras se termina el ticket 305 pero no afecta.
 		if (!elm.length) { elm = $target; }
 		
-		uas_elm.html("<li><span class=\"carregant\">" + txtCarregantMollaFills + "</span></li>")
+		uas_elm.html("<li><span class=\"carregant\">" + txtCarregantMollaFills + "</span></li>");
 				
 		a_T = elm.position().top - 3;
 		a_L = elm.parents("li").position().left;
@@ -748,7 +748,7 @@ function esAnyDeTraspas(any) {
 				success: function(data) {
 					
 					// estat json
-					json_estat = data.estat
+					json_estat = data.estat;
 					json_mode = (json_estat == "CORRECTE") ? "correcte" : (json_estat == "WARNING") ? "atencio" : (json_estat == "ERROR") ? "error" : "fatal";
 					if (json_estat == "FATAL") {
 						
@@ -1248,7 +1248,7 @@ function carregarArbreTotesUAExpand(url, idDiv, id_ua, id_ua_texte) {
 	
 }
 
-function carregarArbreUA (url, idDiv, id_ua, id_ua_texte, llocOnPintar ){
+function carregarArbreUA(url, idDiv, id_ua, id_ua_texte, llocOnPintar) {
 	
 	// Aseguram que no estigui creat
 	if ($('#' + idDiv).length == 0 ) {

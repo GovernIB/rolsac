@@ -66,7 +66,6 @@ $(document).ready(function() {
 
 });
 
-
 // idioma
 var pag_idioma = $("html").attr("lang");
 
@@ -250,6 +249,7 @@ function CLlistat() {
 			dataVars_cercador += "&email=" + $("#cerca_email").val();
 			dataVars_cercador += "&perfil=" + $("#cerca_perfil").val();
 			dataVars_cercador += "&observacions=" + $("#cerca_observacions").val();
+			dataVars_cercador += "&idUA=" + $("#cerca_unitat_administrativa_id").val();
 			
 		} else {
 
@@ -301,18 +301,18 @@ function CLlistat() {
 				},
 				success: function(data) {
 					
-					Llistat.finCargaListado(opcions,data);
-					
-					if ( modoListado ){											
+					Llistat.finCargaListado(opcions, data);
+					if ( modoListado ) {											
 						Llistat.cacheDatosListado = data;
 					}
+					
 				}
 				
 			});
 			
 		} else {
 			
-			Llistat.finCargaListado(opcions,Llistat.cacheDatosListado);
+			Llistat.finCargaListado(opcions, Llistat.cacheDatosListado);
 			
 		}
 	

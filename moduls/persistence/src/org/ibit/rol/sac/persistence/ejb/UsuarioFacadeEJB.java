@@ -88,7 +88,6 @@ public abstract class UsuarioFacadeEJB extends HibernateEJB {
 
 
 	/**
-	 * @deprecated Usado únicamente desde el back antiguo
 	 * Obtiene una lista de usuarios.
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
@@ -99,10 +98,10 @@ public abstract class UsuarioFacadeEJB extends HibernateEJB {
 
 		try {
 
-			Criteria criteri = session.createCriteria(Usuario.class);
-			populateCriteria(criteri, parametros);
+			Criteria criteria = session.createCriteria(Usuario.class);
+			populateCriteria(criteria, parametros);
 
-			return criteri.list();
+			return criteria.list();
 
 		} catch (HibernateException he) {
 
@@ -325,10 +324,20 @@ public abstract class UsuarioFacadeEJB extends HibernateEJB {
 	}
 
 
-	private void populateCriteria(Criteria criteri, Map parametros) {
+	private void populateCriteria(Criteria criteria, Map parametros) throws HibernateException {
 
 		parametros.remove("id");
-
+		
+		// Si se especifica el id de una UA como filtro, toca hacer un JOIN, así que no
+		// se puede procesar directamente. Guardaremos el id y lo procesaremos al salir del bucle.
+		boolean hayIdUA = parametros.containsKey("idUA");
+		Long idUA = null;
+		
+		if (hayIdUA) {
+			idUA = (Long)parametros.get("idUA");
+			parametros.remove("idUA");
+		}
+		
 		Iterator iterator = parametros.keySet().iterator(); 
 		while ( iterator.hasNext() ) {
 
@@ -344,18 +353,25 @@ public abstract class UsuarioFacadeEJB extends HibernateEJB {
 					if ( sValue.length() > 0 ) {
 
 						String valor = "%" + sValue + "%";
-						criteri.add( Expression.ilike(key, valor) );
+						criteria.add( Expression.ilike(key, valor) );
 
 					}
 
 				} else {
 
-					criteri.add( Expression.eq(key, value) );
+					criteria.add( Expression.eq(key, value) );
 
 				}
 
 			}
 
+		}
+		
+		// Procesamos el id de la UA solicitada como filtro dentro del objeto criteria.
+		if (hayIdUA) {
+						
+			criteria = criteria.createCriteria("unidadesAdministrativas").add(Expression.eq("id", idUA));
+			
 		}
 
 	}
