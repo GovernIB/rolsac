@@ -88,7 +88,8 @@ public class UsuarisController extends PantallaBaseController {
     		paramMap.put("observaciones", observacions.toUpperCase());
     	}
     	
-    	Long idUA = (request.getParameter("idUA") != null) ? Long.valueOf(request.getParameter("idUA")) : null;
+    	String paramIdUA = request.getParameter("idUA");
+    	Long idUA = (paramIdUA != null && !StringUtils.isBlank(paramIdUA)) ? Long.valueOf(request.getParameter("idUA")) : null;
     	if (idUA != null) {
     		paramMap.put("idUA", idUA);
     	}
