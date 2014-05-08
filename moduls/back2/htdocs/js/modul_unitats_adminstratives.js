@@ -234,7 +234,8 @@ function CModulUnitatAdministrativa() {
 	
 	this.eliminaItem = function( item ) {
 		
-		that._eliminaItem(item);
+		this._eliminaItem(item);
+		this.contaSeleccionats();
 		this.habilitarBotonGuardar();
 		
 	};
