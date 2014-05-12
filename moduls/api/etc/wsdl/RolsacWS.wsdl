@@ -109,6 +109,8 @@
 	<wsdl:import namespace="urn:tns33" location="ExcepcioDocumentacioDTO.wsdl"/>
 	<wsdl:import namespace="urn:tns50" location="IniciacioCriteria.wsdl"/>
 	<wsdl:import namespace="urn:tns50" location="IniciacioDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns51" location="IdiomaDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns51" location="IdiomaCriteria.wsdl"/>
 	
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"

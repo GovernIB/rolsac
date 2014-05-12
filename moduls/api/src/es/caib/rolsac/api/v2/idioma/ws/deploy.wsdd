@@ -1,0 +1,25 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from IdiomaQueryServiceEJBRemoteService WSDL service -->
+
+  <service name="IdiomaWS" provider="java:RPC" style="rpc" use="encoded">
+      <parameter name="wsdlTargetNamespace" value="http://ws.idioma.v2.api.rolsac.caib.es"/>
+      <parameter name="wsdlServiceElement" value="IdiomaQueryServiceEJBRemoteService"/>
+      <parameter name="wsdlServicePort" value="IdiomaWS"/>
+      <parameter name="className" value="es.caib.rolsac.api.v2.idioma.ws.IdiomaWSSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="IdiomaQueryServiceEJBRemote"/>
+      <parameter name="typeMappingVersion" value="1.1"/>
+      <parameter name="allowedMethods" value="*"/>
+
+  </service>
+</deployment>

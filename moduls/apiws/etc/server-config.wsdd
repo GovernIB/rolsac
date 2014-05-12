@@ -1439,6 +1439,17 @@
             type="java:es.caib.rolsac.api.v2.materia.MateriaDTO" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
             deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
     </service>
+    
+    <service name="IdiomaWS" provider="java:EJB">
+        <parameter name="beanJndiName" value="es.caib.rolsac.api.v2.idioma.ejb.IdiomaQueryServiceEJB" />
+        <parameter name="homeInterfaceName" value="es.caib.rolsac.api.v2.idioma.ejb.intf.IdiomaQueryServiceEJBHome" />
+        <parameter name="remoteInterfaceName" value="es.caib.rolsac.api.v2.idioma.ejb.intf.IdiomaQueryServiceEJBRemote" />
+        <parameter name="allowedMethods" value="*" />
+        <parameter name="jndiurl" value="https://localhost:8443" />
+        <parameter name="jndiContextClass" value="org.jnp.interfaces.NamingContextFactory" />
+        <parameter name="typeMappingVersion" value="1.1" />
+        <!-- TODO amartin agregar operations y demas... -->
+    </service>
 
     <service name="MateriaAgrupacioWS" provider="java:EJB">
         <parameter name="beanJndiName" value="es.caib.rolsac.api.v2.materiaAgrupacio.ejb.MateriaAgrupacioQueryServiceEJB" />
