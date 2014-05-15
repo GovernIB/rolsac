@@ -70,7 +70,9 @@
             debug="${javac.debug}"
             deprecation="${javac.deprecation}"
             optimize="${javac.optimize}"
-        	encoding="${javac.encoding}"            	
+        	encoding="${javac.encoding}"
+			source="${javac.source}"
+			target="${javac.target}"            	
             >
             <src path="${jar.src}"/>
         </javac>

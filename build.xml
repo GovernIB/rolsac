@@ -572,7 +572,7 @@
         <property name="utils.sonar.binaries" value="output/utils/classes" />
         <property name="utils.sonar.language" value="java" />
 
-        <!-- modul back2 javacript -->
+        <!-- modul back2 javascript -->
         <property name="back2-js.sonar.projectName" value="caib:rolsac-back2-js" />
         <property name="back2-js.sonar.projectBaseDir" value="moduls/back2" />
         <property name="back2-js.sonar.sources" value="htdocs" />

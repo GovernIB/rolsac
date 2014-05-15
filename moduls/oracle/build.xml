@@ -56,7 +56,15 @@
 	</target>
 
 	<target name="jar.compile" depends="jar.gen.all">
-		<javac destdir="${jar.classes}" classpathref="jar.class.path" debug="${javac.debug}" deprecation="${javac.deprecation}" optimize="${javac.optimize}" encoding="${javac.encoding}" >
+		<javac destdir="${jar.classes}" 
+				classpathref="jar.class.path" 
+				debug="${javac.debug}" 
+				deprecation="${javac.deprecation}" 
+				optimize="${javac.optimize}" 
+				encoding="${javac.encoding}"
+				source="${javac.source}"
+				target="${javac.target}"
+				>
 			<src path="${jar.src}"/>
 		</javac>
 	</target>

@@ -57,6 +57,8 @@
             deprecation="${javac.deprecation}"
             optimize="${javac.optimize}"
         	encoding="${javac.encoding}"
+			source="${javac.source}"
+			target="${javac.target}"
             >
             <src path="${jar.src}"/>
         </javac>

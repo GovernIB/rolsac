@@ -61,7 +61,10 @@
 	            debug="${javac.debug}"
 	            deprecation="${javac.deprecation}"
 	            optimize="${javac.optimize}"
-	        	encoding="${javac.encoding}">
+	        	encoding="${javac.encoding}"
+				source="${javac.source}"
+				target="${javac.target}"
+				>
 	            <src path="${test.unitario.src.dir}"/>
 	        </javac>
 	</target>
@@ -73,7 +76,10 @@
 		            debug="${javac.debug}"
 		            deprecation="${javac.deprecation}"
 		            optimize="${javac.optimize}"
-		        	encoding="${javac.encoding}">
+		        	encoding="${javac.encoding}"
+					source="${javac.source}"
+					target="${javac.target}"
+					>
 		            <src path="${test.integracion.src.dir}"/>
 		        </javac>
 		</target>

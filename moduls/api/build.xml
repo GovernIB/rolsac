@@ -251,7 +251,9 @@
             debug="${javac.debug}"
             deprecation="${javac.deprecation}"
             optimize="${javac.optimize}"
-        	encoding="${javac.encoding}">
+        	encoding="${javac.encoding}"
+			source="${javac.source}"
+			target="${javac.target}">
             <src path="${ejb.src}"/>
             <src path="${ejb.gen.src}"/>
         </javac>
@@ -301,7 +303,9 @@
             debug="${javac.debug}"
             deprecation="${javac.deprecation}"
             optimize="${javac.optimize}"
-        	encoding="${javac.encoding}"           
+        	encoding="${javac.encoding}"
+			source="${javac.source}"
+			target="${javac.target}"           
             >
             <src path="${jar.src}"/>
         </javac>

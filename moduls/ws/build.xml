@@ -136,7 +136,9 @@
             debug="${javac.debug}"
             deprecation="${javac.deprecation}"
             optimize="${javac.optimize}"
-        	encoding="${javac.encoding}"            	
+        	encoding="${javac.encoding}"
+			source="${javac.source}"
+			target="${javac.target}"            	
             >
             <src path="${web.src}"/>
         </javac>
@@ -180,7 +182,9 @@
             debug="${javac.debug}"
             deprecation="${javac.deprecation}"
             optimize="${javac.optimize}"
-        	encoding="${javac.encoding}"            	
+        	encoding="${javac.encoding}"
+			source="${javac.source}"
+			target="${javac.target}"            	
         />
         <loadfile property="jspc.mappings" srcfile="${web.gen.etc}/webinc.xml"/>
         <replace file="${web.gen.etc}/web.xml">
