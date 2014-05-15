@@ -85,6 +85,8 @@ function CLlistat() {
 	this.extend = ListadoBase;
 	this.extend();
 	
+	var that = this;
+	
 	this.iniciar = function() {
 		this.carregar({});
 	};
@@ -316,6 +318,15 @@ function CLlistat() {
 			
 		}
 	
+	};
+	
+	this._limpia = this.limpia;
+	
+	this.limpia = function() {
+		
+		that._limpia();
+		jQuery('#cerca_unitat_administrativa_id').val('');
+		
 	};
 	
 };
