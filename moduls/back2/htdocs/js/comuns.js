@@ -19,16 +19,47 @@ if ( ! window.console ) {
 // Aqu� se guardar�n los cambios en los formularios usando id => true/false.
 var avisarCambiosSinGuardar = [];
 
-// Acci�n a realizar antes de cerrar la ventana.
-window.onbeforeunload = function() {
-
-	for ( var i in avisarCambiosSinGuardar) {
-		if (avisarCambiosSinGuardar[i]) {
-			return txtAvisoCambiosSinGuardar;
+// Acción a realizar antes de cerrar la ventana.
+// Caso especial para IE8, el cual no dispara este evento como se esperaba: $(window).bind('beforeunload', function() { ... });
+if ($.browser.msie && $.browser.version == "8.0") {
+	
+	$(window).unload(function() {
+		
+		console.log('Lanzando evento window.unload');
+	
+		for ( var i in avisarCambiosSinGuardar) {
+			
+			console.log(i + ": " + avisarCambiosSinGuardar[i]);
+			
+			if (avisarCambiosSinGuardar[i]) {
+				return txtAvisoCambiosSinGuardar;
+			}
 		}
-	}
+		
+		console.log('Fin window.unload');
+		
+	});
+	
+} else {
+	
+	$(window).bind('beforeunload', function() {
+		
+		console.log('Lanzando evento beforeunload');
+	
+		for ( var i in avisarCambiosSinGuardar) {
+			
+			console.log(i + ": " + avisarCambiosSinGuardar[i]);
+			
+			if (avisarCambiosSinGuardar[i]) {
+				return txtAvisoCambiosSinGuardar;
+			}
+		}
+		
+		console.log('Fin beforeunload');
+		
+	});
 
-};
+}
 
 /**
  * Funci�n para avisar de que un formulario tiene o no cambios sin guardar.
