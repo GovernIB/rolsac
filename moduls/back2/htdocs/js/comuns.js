@@ -24,39 +24,25 @@ var avisarCambiosSinGuardar = [];
 if ($.browser.msie && $.browser.version == "8.0") {
 	
 	$(window).unload(function() {
-		
-		console.log('Lanzando evento window.unload');
-	
+			
 		for ( var i in avisarCambiosSinGuardar) {
-			
-			console.log(i + ": " + avisarCambiosSinGuardar[i]);
-			
 			if (avisarCambiosSinGuardar[i]) {
 				return txtAvisoCambiosSinGuardar;
 			}
 		}
-		
-		console.log('Fin window.unload');
-		
+				
 	});
 	
 } else {
 	
 	$(window).bind('beforeunload', function() {
-		
-		console.log('Lanzando evento beforeunload');
-	
-		for ( var i in avisarCambiosSinGuardar) {
 			
-			console.log(i + ": " + avisarCambiosSinGuardar[i]);
-			
+		for ( var i in avisarCambiosSinGuardar) {			
 			if (avisarCambiosSinGuardar[i]) {
 				return txtAvisoCambiosSinGuardar;
 			}
 		}
-		
-		console.log('Fin beforeunload');
-		
+				
 	});
 
 }
