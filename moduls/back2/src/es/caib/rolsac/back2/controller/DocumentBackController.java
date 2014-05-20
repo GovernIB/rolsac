@@ -209,16 +209,21 @@ public class DocumentBackController extends ArchivoController {
 			
 			if ( fileItem != null  &&  fileItem.getSize() > 0 ) {
 			
-					if ( !this.isDocumentoNuevo(valoresForm) ) {
-						
-						TraduccionDocumento traDocOld = (TraduccionDocumento) docOld.getTraduccion(lang);
+				if ( !this.isDocumentoNuevo(valoresForm) ) {
+					
+					TraduccionDocumento traDocOld = (TraduccionDocumento) docOld.getTraduccion(lang);
+					
+					// Si aún no hay traducción asociada es que no toca procesar el archivo adjunto.
+                    if (traDocOld != null) {
 
 						if ( this.isArchivoParaBorrar(valoresForm, lang) || this.ficheroAdjuntoIsModificado(valoresForm, traDocOld) )
 							archivosAborrar.add( traDocOld.getArchivo().getId() ); 		//Se indica que hay que borrar el fichero.
 						
-					}
+                    }
+					
+				}
 
-					tradDoc.setArchivo(UploadUtil.obtenerArchivo(tradDoc.getArchivo(), fileItem)); 		//Nuevo archivo
+				tradDoc.setArchivo(UploadUtil.obtenerArchivo(tradDoc.getArchivo(), fileItem)); 		//Nuevo archivo
 					
 				
 			} else if ( this.isArchivoParaBorrar(valoresForm, lang) ) {
