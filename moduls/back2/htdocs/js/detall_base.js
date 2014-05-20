@@ -10,7 +10,7 @@ jQuery(document).ready(function() {
 	//jQuery("#btnGuardar").parent().addClass("off");
 	//jQuery("#btnGuardar").bind("click",function(){Detall.guarda();});
 
-	//jQuery("#formGuardar input,#formGuardar select,#formGuardar textarea").bind("change",function(){console.log("mod 1");Detall.modificado();});
+	//jQuery("#formGuardar input,#formGuardar select,#formGuardar textarea").bind("change",function(){DebugJS.debug("mod 1");Detall.modificado();});
 
 	if ( jQuery("textarea.rich").tinymce != undefined ) {
 
@@ -51,9 +51,6 @@ jQuery(document).ready(function() {
  * @param object identificadores: Identificadores de botones de acci�n, etc.
  */
 function DetallBase(soloFicha, reglasFormulario, identificadores) {
-	
-	// Activa mensajes de debug.
-	var debug = false;
 
 	var that = this;
 	var soloFicha = soloFicha || false;
@@ -69,7 +66,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 	}
 
 	// Evento del botón volver
-	//jQuery("#"+ids.btnVolver).bind("click",function(){console.log("Click torna");Detall.torna();});
+	//jQuery("#"+ids.btnVolver).bind("click",function(){DebugJS.debug("Click torna");Detall.torna();});
 	//jQuery("#"+ids.btnVolver).unbind("click").bind("click",function(){that.vuelve();});
 
 	jQuery("#" + ids.btnVolver).bind("click", function() { that.vuelve(); });
@@ -98,8 +95,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 
 	this.actualizaEventos = function() {
 		
-		if (debug)
-			console.log("Entrando en DetallBase.actualizaEventos");
+		DebugJS.debug("Entrando en DetallBase.actualizaEventos");
 
 		// Asociamos los eventos a los botones de plegar y desplegar.
 		jQuery("#continguts a.mostrat, #continguts a.amagat").unbind("click").bind("click", function() {
@@ -115,18 +111,15 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 
 		});
 		
-		if (debug)
-			console.log("Saliendo de DetallBase.actualizaEventos");
+		DebugJS.debug("Saliendo de DetallBase.actualizaEventos");
 		
 	};
 
 	this.cambiosSinGuardar = function() {
 		
-		if (debug)
-			console.log("Entrando en DetallBase.cambiosSinGuardar");
+		DebugJS.debug("Entrando en DetallBase.cambiosSinGuardar");
 		
-		if (debug)
-			console.log("Saliendo de DetallBase.cambiosSinGuardar");
+		DebugJS.debug("Saliendo de DetallBase.cambiosSinGuardar");
 		
 		return !jQuery("#" + ids.btnGuardar).parent().hasClass("off");
 		
@@ -134,13 +127,11 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 
 	this.formulariValid = function() {
 		
-		if (debug)
-			console.log("Entrando en DetallBase.formulariValid");
+		DebugJS.debug("Entrando en DetallBase.formulariValid");
 
 		formulariComprovar.llansar();
 		
-		if (debug)
-			console.log("Saliendo de DetallBase.formulariValid");
+		DebugJS.debug("Saliendo de DetallBase.formulariValid");
 		
 		return formulariComprovar.formComprovacio;
 
@@ -148,11 +139,12 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 
 	this.guardaGenerico = function(dataVars) {
 		
-		if (debug)
-			console.log("Entrando en DetallBase.guardaGenerico");
+		DebugJS.debug("Entrando en DetallBase.guardaGenerico");
 
-		if (!that.formulariValid())
+		if (!that.formulariValid()) {
+			DebugJS.debug("Saliendo de DetallBase.guardaGenerico");
 			return false;
+		}
 
 		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
 
@@ -190,33 +182,28 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 
 		});//Fin ajax
 		
-		if (debug)
-			console.log("Saliendo de DetallBase.guardaGenerico");
+		DebugJS.debug("Saliendo de DetallBase.guardaGenerico");
 
 	};
 
 	this.guarda = function(dataVars) {
 		
-		if (debug)
-			console.log("Entrando en DetallBase.guarda");
+		DebugJS.debug("Entrando en DetallBase.guarda");
 		
 		that.guardaGenerico(dataVars);
 		
-		if (debug)
-			console.log("Saliendo de DetallBase.guarda");
+		DebugJS.debug("Saliendo de DetallBase.guarda");
 		
 	};
 
 	this.modificado = function(marcar) {
 		
-		if (debug)
-			console.log("Entrando en DetallBase.modificado");
+		DebugJS.debug("Entrando en DetallBase.modificado");
 
 		if( typeof(marcar) == "undefined" )
 			marcar = true;
 		
-		if (debug)
-			console.log("\tCon atributo 'marcar' = " + marcar);
+		DebugJS.debug("\tCon atributo 'marcar' = " + marcar);
 
 		// Actualizamos la variable global para controlar si hay cambios sin guardar en los formularios.
 		CambiosSinGuardar(ids.form, marcar);
@@ -224,23 +211,20 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 		// Habilitamos el botón de guardar.
 		jQuery("#"+ids.btnGuardar).unbind("click").bind("click", function() { that.guarda(); } ).parent().toggleClass("off", !marcar);
 		
-		if (debug)
-			console.log("Saliendo de DetallBase.modificado");
+		DebugJS.debug("Saliendo de DetallBase.modificado");
 
 	};
 
 	this.publica = function() {
 		
-		if (debug)
-			console.log("Entrando en DetallBase.publica");
+		DebugJS.debug("Entrando en DetallBase.publica");
 
 		jQuery("#item_data_publicacio").val(txtImmediat);
 		jQuery("#item_data_caducitat").val("");
 		
 		this.guarda();
 		
-		if (debug)
-			console.log("Saliendo de DetallBase.publica");
+		DebugJS.debug("Saliendo de DetallBase.publica");
 
 	};
 
@@ -249,8 +233,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 	 */
 	this.cierra = function() {
 		
-		if (debug)
-			console.log("Entrando en DetallBase.cierra");
+		DebugJS.debug("Entrando en DetallBase.cierra");
 
 		this.modificado(false);
 
@@ -258,8 +241,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 			escriptori_contingut_elm.fadeIn(300);
 		});
 		
-		if (debug)
-			console.log("Saliendo de DetallBase.cierra");
+		DebugJS.debug("Saliendo de DetallBase.cierra");
 
 	};
 
@@ -268,8 +250,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 	 */
 	this.vuelve = function() {
 		
-		if (debug)
-			console.log("Entrando en DetallBase.vuelve");
+		DebugJS.debug("Entrando en DetallBase.vuelve");
 
 		if ( this.cambiosSinGuardar() ) {
 
@@ -290,21 +271,18 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 			that.ocultarModulos($(this));
 		});
 		
-		if (debug)
-			console.log("Saliendo de DetallBase.vuelve");
+		DebugJS.debug("Saliendo de DetallBase.vuelve");
 
 	};
 
 	this.ocultarModulos = function(selector) {
 		
-		if (debug)
-			console.log("Entrando en DetallBase.ocultarModulos");
+		DebugJS.debug("Entrando en DetallBase.ocultarModulos");
 
 		if ( !selector.hasClass("publicacio") )
 			selector.addClass("invisible");
 		
-		if (debug)
-			console.log("Saliendo de DetallBase.ocultarModulos");
+		DebugJS.debug("Saliendo de DetallBase.ocultarModulos");
 
 	};
 
@@ -313,22 +291,19 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 	 */
 	this.eliminar = function() {
 		
-		if (debug)
-			console.log("Entrando en DetallBase.eliminar");
+		DebugJS.debug("Entrando en DetallBase.eliminar");
 
 		Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: txtItemEliminar, funcio: function() {
 			that.elimina();
 		}});
 		
-		if (debug)
-			console.log("Saliendo de DetallBase.eliminar");
+		DebugJS.debug("Saliendo de DetallBase.eliminar");
 
 	};
 
 	this.carregar = function(itemID) {
 		
-		if (debug)
-			console.log("Entrando en DetallBase.carregar");
+		DebugJS.debug("Entrando en DetallBase.carregar");
 
 		escriptori_detall_elm.find(".botonera li.btnEliminar,.botonera li.btnPrevisualizar").show();
 
@@ -383,15 +358,13 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 
 		this.actualizaEventos();
 		
-		if (debug)
-			console.log("Saliendo de DetallBase.carregar");
+		DebugJS.debug("Saliendo de DetallBase.carregar");
 
 	};
 
 	this.recarregar = function(itemId) {
 		
-		if (debug)
-			console.log("Entrando en DetallBase.recarregar");
+		DebugJS.debug("Entrando en DetallBase.recarregar");
 
 		var url = location.protocol + "//" + location.host + location.pathname;
 
@@ -404,8 +377,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 
 		location = url;
 		
-		if (debug)
-			console.log("Saliendo de DetallBase.recarregar");
+		DebugJS.debug("Saliendo de DetallBase.recarregar");
 
 	};
 
@@ -414,8 +386,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 	 */
 	this.array = function(opcions) {
 		
-		if (debug)
-			console.log("Entrando en DetallBase.array");
+		DebugJS.debug("Entrando en DetallBase.array");
 
 		if (opcions.accio == "guarda") {
 
@@ -436,15 +407,13 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 
 		}
 		
-		if (debug)
-			console.log("Saliendo de DetallBase.array");
+		DebugJS.debug("Saliendo de DetallBase.array");
 		
 	};
 
 	this.idioma = function(e) {
 		
-		if (debug)
-			console.log("Entrando en DetallBase.idioma");
+		DebugJS.debug("Entrando en DetallBase.idioma");
 
 		var elm = $(e.target);
 
@@ -462,7 +431,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 			var ul_idiomes_elm = elm.parent().parent();
 			ul_idiomes_elm.unbind("click");
 			var div_idiomes_elm = ul_idiomes_elm.next();
-
+						
 			if (!elm.hasClass("desplegar")) {
 
 				var a_clicat_class = elm.attr("class");
@@ -507,13 +476,34 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 					modulos.find("li." + a_clicat_class).addClass("seleccionat");
 
 					modulos.find("div.seleccionats div.seleccionat").slideUp(300, function() {
-
+												
 						var $this = jQuery(this);
-						$this.removeClass("seleccionat");
-						$this.hide();
-						$this.siblings("div." + a_clicat_class).slideDown(300, function() {
-							jQuery(this).addClass("seleccionat");
-						});
+						
+						// Si no hay hermanos que cumplan la condición, es que se ha seleccionado el mismo idioma
+						// que el idioma principal en algún otro escritorio del mantenimiento, así que volvemos a mostrar
+						// el anterior elemento afectado.
+						DebugJS.debug('Mostrando $this.siblings("div.' + a_clicat_class + '")');
+						DebugJS.debug($this.siblings("div." + a_clicat_class));
+						
+						if ($this.siblings("div." + a_clicat_class).length > 0) {
+						
+							$this.removeClass("seleccionat");
+							$this.hide();
+						
+							$this.siblings("div." + a_clicat_class).slideDown(300, function() {
+								jQuery(this).addClass("seleccionat");
+							});
+							
+						} else {
+							
+							// Volvemos a añadir la clase seleccionat y a mostrar el objeto, por si se
+							// ha ocultado previamente desde el menú principal de selección de idioma
+							// (el menú de selección de idioma del mantenimiento, no el de selección de
+							// idioma de un escritorio asociado).
+							$this.addClass("seleccionat");
+							$this.show();
+							
+						}
 
 					});
 
@@ -560,18 +550,16 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 				ul_idiomes_elm.bind("click", {'actualizarIdiomasModulosLaterales': cambiarModulosLaterales}, that.idioma);
 
 			}
-
+			
 		}
 		
-		if (debug)
-			console.log("Saliendo de DetallBase.idioma");
+		DebugJS.debug("Saliendo de DetallBase.idioma");
 
 	};
 
 	this.previsualitza = function() {
 		
-		if (debug)
-			console.log("Entrando en DetallBase.previsualitza");
+		DebugJS.debug("Entrando en DetallBase.previsualitza");
 
 		var url = this.urlPrevisualizar;
 		escriptori_detall_elm.fadeOut(300, function() {
@@ -587,29 +575,25 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 
 		});
 		
-		if (debug)
-			console.log("Saliendo de DetallBase.previsualitza");
+		DebugJS.debug("Saliendo de DetallBase.previsualitza");
 
 	};
 
 	this.previsualitzaTorna = function() {
 		
-		if (debug)
-			console.log("Entrando en DetallBase.previsualitzaTorna");
+		DebugJS.debug("Entrando en DetallBase.previsualitzaTorna");
 
 		escriptori_previsualitza_elm.fadeOut(300, function() {
 			escriptori_detall_elm.fadeIn(300);
 		});
 		
-		if (debug)
-			console.log("Saliendo de DetallBase.previsualitzaTorna");
+		DebugJS.debug("Saliendo de DetallBase.previsualitzaTorna");
 
 	};
 
 	this.traduir = function (url, inputs, datos) {
 		
-		if (debug)
-			console.log("Entrando en DetallBase.traduir");
+		DebugJS.debug("Entrando en DetallBase.traduir");
 
 		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
 
@@ -673,15 +657,13 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 			}
 		});
 		
-		if (debug)
-			console.log("Saliendo de DetallBase.traduir");
+		DebugJS.debug("Saliendo de DetallBase.traduir");
 
 	};
 
 	this.cargarModulos = function() {
 		
-		if (debug)
-			console.log("Entrando en DetallBase.cargarModulos");
+		DebugJS.debug("Entrando en DetallBase.cargarModulos");
 
 		item_ID = $("#item_id").val();
 		dataVars = "id=" + item_ID;
@@ -706,8 +688,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 
 		});
 		
-		if (debug)
-			console.log("Saliendo de DetallBase.cargarModulos");
+		DebugJS.debug("Saliendo de DetallBase.cargarModulos");
 
 	};
 

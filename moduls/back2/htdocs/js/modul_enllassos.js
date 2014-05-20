@@ -39,9 +39,6 @@ $(document).ready(function() {
 
 function CModulEnllas() {
 	
-	// Activa mensajes de debug.
-	var debug = false;
-	
 	this.extend = ListaOrdenable;
 	this.extend();		
 	
@@ -52,8 +49,7 @@ function CModulEnllas() {
 	
 	this.iniciar = function() {
 		
-		if (debug)
-			console.log("Entrando en CModulEnllas.iniciar");
+		DebugJS.debug("Entrando en CModulEnllas.iniciar");
 				                        
 		enllassos_seleccionats_elm = escriptori_enllassos_elm.find("div.escriptori_items_seleccionats:first");
 		escriptori_enllassos_elm.find("div.botonera").each(function() {
@@ -93,15 +89,13 @@ function CModulEnllas() {
 		// one al botó de gestionar
 		modul_enllassos_elm.find("a.gestiona").one("click", function() { ModulEnllas.gestiona(); });
 		
-		if (debug)
-			console.log("Saliendo de CModulEnllas.iniciar");
+		DebugJS.debug("Saliendo de CModulEnllas.iniciar");
 		
 	};
 
 	this.gestiona = function() {
 		
-		if (debug)
-			console.log("Entrando en CModulEnllas.gestiona");
+		DebugJS.debug("Entrando en CModulEnllas.gestiona");
 				
 		EscriptoriEnllas.limpia();				
 		
@@ -126,40 +120,34 @@ function CModulEnllas() {
 		
 		this.deshabilitarBotonGuardar();
 		
-		if (debug)
-			console.log("Saliendo de CModulEnllas.gestiona");
+		DebugJS.debug("Saliendo de CModulEnllas.gestiona");
 		
 	};
 	
     this.modificado = function() {
     	
-    	if (debug)
-			console.log("Entrando en CModulEnllas.modificado");
+		DebugJS.debug("Entrando en CModulEnllas.modificado");
     	
         $moduloModificado.val(1);
         
-        if (debug)
-			console.log("Saliendo de CModulEnllas.modificado");
+		DebugJS.debug("Saliendo de CModulEnllas.modificado");
         
     };
     
 	this.nuevo = function() {
 		
-		if (debug)
-			console.log("Entrando en CModulEnllas.nuevo");
+		DebugJS.debug("Entrando en CModulEnllas.nuevo");
 		
 		modul_enllassos_seleccionats_elm = escriptori_detall_elm.find("div.modulEnllassos div.seleccionats");
 		modul_enllassos_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaEnllassos + ".");
 		
-		if (debug)
-			console.log("Saliendo de CModulEnllas.nuevo");
+		DebugJS.debug("Saliendo de CModulEnllas.nuevo");
 		
 	};
 
 	this.cargarEnlaces = function(dades) {
 		
-		if (debug)
-			console.log("Entrando en CModulEnllas.cargarEnlaces");
+		DebugJS.debug("Entrando en CModulEnllas.cargarEnlaces");
 		
         // Iniciamos el campo de control de cambios 0.
         $moduloModificado.val(0);
@@ -214,8 +202,7 @@ function CModulEnllas() {
 			
 		}
 		
-		if (debug)
-			console.log("Saliendo de CModulEnllas.cargarEnlaces");
+		DebugJS.debug("Saliendo de CModulEnllas.cargarEnlaces");
 		
 	};
 	
@@ -223,11 +210,9 @@ function CModulEnllas() {
 	
 	this.existeBotonGuardar = function() {
 		
-		if (debug)
-			console.log("Entrando en CModulEnllas.existeBotonGuardar");
+		DebugJS.debug("Entrando en CModulEnllas.existeBotonGuardar");
 		
-		if (debug)
-			console.log("Saliendo de CModulEnllas.existeBotonGuardar");
+		DebugJS.debug("Saliendo de CModulEnllas.existeBotonGuardar");
 		
 		return (this.botonGuardar.length > 0);
 		
@@ -235,29 +220,25 @@ function CModulEnllas() {
 	
 	this.habilitarBotonGuardar = function() {
 		
-		if (debug)
-			console.log("Entrando en CModulEnllas.habilitarBotonGuardar");
+		DebugJS.debug("Entrando en CModulEnllas.habilitarBotonGuardar");
 		
 		if (this.existeBotonGuardar() && this.botonGuardar.parent().hasClass("off")) {
     		this.botonGuardar.parent().removeClass("off");
     	}
 		
-		if (debug)
-			console.log("Saliendo de CModulEnllas.habilitarBotonGuardar");
+		DebugJS.debug("Saliendo de CModulEnllas.habilitarBotonGuardar");
 		
     };
     
     this.deshabilitarBotonGuardar = function() {
     	
-    	if (debug)
-			console.log("Entrando en CModulEnllas.deshabilitarBotonGuardar");
+    	DebugJS.debug("Entrando en CModulEnllas.deshabilitarBotonGuardar");
     	
     	if (this.existeBotonGuardar() && !this.botonGuardar.parent().hasClass("off")) {
     		this.botonGuardar.parent().addClass("off");
     	}
     	
-    	if (debug)
-			console.log("Saliendo de CModulEnllas.deshabilitarBotonGuardar");
+    	DebugJS.debug("Saliendo de CModulEnllas.deshabilitarBotonGuardar");
     	
     };
     
@@ -265,8 +246,7 @@ function CModulEnllas() {
 	
 	this.eliminaItem = function( item ) {
 		
-		if (debug)
-			console.log("Entrando en CModulEnllas.eliminaItem");
+		DebugJS.debug("Entrando en CModulEnllas.eliminaItem");
 
 		that._eliminaItem(item);
 
@@ -274,8 +254,7 @@ function CModulEnllas() {
 			this.habilitarBotonGuardar();
 		}
 		
-		if (debug)
-			console.log("Saliendo de CModulEnllas.eliminaItem");
+		DebugJS.debug("Saliendo de CModulEnllas.eliminaItem");
 		
 	};
 	
@@ -283,8 +262,7 @@ function CModulEnllas() {
 	
 	this.agregaItem = function( item ) {
 		
-		if (debug)
-			console.log("Entrando en CModulEnllas.agregaItem");
+		DebugJS.debug("Entrando en CModulEnllas.agregaItem");
 		
 		that._agregaItem(item);
 
@@ -292,8 +270,7 @@ function CModulEnllas() {
 			this.habilitarBotonGuardar();
 		}
 		
-		if (debug)
-			console.log("Saliendo de CModulEnllas.agregaItem");
+		DebugJS.debug("Saliendo de CModulEnllas.agregaItem");
 		
 	};
 	
@@ -313,21 +290,18 @@ function CEscriptoriEnllas() {
 	
 	this.iniciar = function() {
 		
-		if (debug)
-			console.log("Entrando en CEscriptoriEnllas.iniciar");
+		DebugJS.debug("Entrando en CEscriptoriEnllas.iniciar");
 		
 		formulariComprovarEnllassos = new FormulariComprovar(FormulariEnllassos);
 		formulariComprovarEnllassos.iniciar();
 		
-		if (debug)
-			console.log("Saliendo de CEscriptoriEnllas.iniciar");
+		DebugJS.debug("Saliendo de CEscriptoriEnllas.iniciar");
 		
 	};
 		
 	this.guardar = function() {
 		
-		if (debug)
-			console.log("Entrando en CEscriptoriEnllas.guardar");
+		DebugJS.debug("Entrando en CEscriptoriEnllas.guardar");
 		
 		//Validam el formulari d'enllassos
 		formulariComprovarEnllassos.llansar();
@@ -403,15 +377,13 @@ function CEscriptoriEnllas() {
 		
 		EscriptoriEnllas.limpia();
 		
-		if (debug)
-			console.log("Saliendo de CEscriptoriEnllas.guardar");
+		DebugJS.debug("Saliendo de CEscriptoriEnllas.guardar");
 		
 	};
 	
 	this.finalizar = function() {
 		
-		if (debug)
-			console.log("Entrando en CEscriptoriEnllas.finalizar");
+		DebugJS.debug("Entrando en CEscriptoriEnllas.finalizar");
 
 		nombre_llistat = ModulEnllas.finalizar();
 		
@@ -435,15 +407,13 @@ function CEscriptoriEnllas() {
 		
 		this.torna();
 		
-		if (debug)
-			console.log("Saliendo de CEscriptoriEnllas.finalizar");
+		DebugJS.debug("Saliendo de CEscriptoriEnllas.finalizar");
 		
 	};
 	
 	this.torna = function() {
 		
-		if (debug)
-			console.log("Entrando en CEscriptoriEnllas.torna");
+		DebugJS.debug("Entrando en CEscriptoriEnllas.torna");
 		
 		// animacio
 		escriptori_enllassos_elm.fadeOut(300, function() {			
@@ -454,28 +424,24 @@ function CEscriptoriEnllas() {
 			
 		});
 		
-		if (debug)
-			console.log("Saliendo de CEscriptoriEnllas.torna");
+		DebugJS.debug("Saliendo de CEscriptoriEnllas.torna");
 		
 	};
 	
 	this.limpia = function() {
 		
-		if (debug)
-			console.log("Entrando en CEscriptoriEnllas.limpia");
+		DebugJS.debug("Entrando en CEscriptoriEnllas.limpia");
 		
         jQuery('#formEnllassos :input').each(limpiarCampo);
         $("#id_enllas_actual").val(""); //Se neteja manualment ja que limpiarCampo no afecta els input hidden
         
-        if (debug)
-			console.log("Saliendo de CEscriptoriEnllas.limpia");
+        DebugJS.debug("Saliendo de CEscriptoriEnllas.limpia");
         
 	};
 
 	this.contaSeleccionats = function() {
 		
-		if (debug)
-			console.log("Entrando en CEscriptoriEnllas.contaSeleccionats");
+		DebugJS.debug("Entrando en CEscriptoriEnllas.contaSeleccionats");
 		
 		seleccionats_val = enllassos_seleccionats_elm.find(".seleccionat").find("li").size();
 		info_elm = enllassos_seleccionats_elm.find("p.info");
@@ -514,16 +480,14 @@ function CEscriptoriEnllas() {
 			EscriptoriEnllas.editar(idItem);
 		});
 		
-		if (debug)
-			console.log("Saliendo de CEscriptoriEnllas.contaSeleccionats");
+		DebugJS.debug("Saliendo de CEscriptoriEnllas.contaSeleccionats");
 		
 	};
 	
 	//Edicio de un enllas ja existent
 	this.editar = function (idItem) {
 		
-		if (debug)
-			console.log("Entrando en CEscriptoriEnllas.editar");
+		DebugJS.debug("Entrando en CEscriptoriEnllas.editar");
 		
 		//Amb el id del enllas (ja sigui temporal o definitiu) es possible recuperar tots els elements del DOM
 		
@@ -544,17 +508,13 @@ function CEscriptoriEnllas() {
 		escriptori_enllassos_elm.find("#enllas_titol_fr").val(escriptori_enllassos_elm.find("#enllas_nombre_fr_" + idItem).val());
 		escriptori_enllassos_elm.find("#enllas_url_fr").val(escriptori_enllassos_elm.find("#enllas_url_fr_" + idItem).val());
 		
-		if (debug)
-			console.log("Saliendo de CEscriptoriEnllas.editar");
+		DebugJS.debug("Saliendo de CEscriptoriEnllas.editar");
 		
 	};
 
 };
 
 function CListaMultiidiomaEnlaces() {
-	
-	// Activa mensajes de debug.
-	var debug = false;
 	
 	this.extend = ListaMultiidioma;
 	this.extend();
@@ -564,8 +524,7 @@ function CListaMultiidiomaEnlaces() {
 	// Método sobreescrito para obtener qué datos guardar en este caso.
 	this.getFilters = function(elements, id) {
 		
-		if (debug)
-			console.log("Entrando en CListaMultiidiomaEnlaces.getFilters");
+		DebugJS.debug("Entrando en CListaMultiidiomaEnlaces.getFilters");
 		
 		// XXX amartin: importante. Este listado ha de coincidir con los valores devueltos por DelegateUtil.getIdiomaDelegate().listarLenguajes().
 		var langs = new Array("ca", "es", "en", "de", "fr");
@@ -608,8 +567,7 @@ function CListaMultiidiomaEnlaces() {
 		filters.id = id;
 		filters.listaEnlaces = lista;
 				
-		if (debug)
-			console.log("Saliendo de CListaMultiidiomaEnlaces.getFilters");
+		DebugJS.debug("Saliendo de CListaMultiidiomaEnlaces.getFilters");
 		
 		return filters;
 		

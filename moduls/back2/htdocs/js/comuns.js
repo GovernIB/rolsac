@@ -1480,3 +1480,21 @@ function montarBreadcrumb() {
 	});
 	
 }
+
+// Des/Activación debug JavaScript.
+var DEBUG_ACTIVO = true;
+
+/**
+ * Clase para hacer debug JavaScript.
+ */
+var DebugJS = {
+		
+	debugActivo: DEBUG_ACTIVO,			
+	debug: function(e) {
+		
+		if (this.debugActivo)
+			console.log(e);
+		
+	}
+
+};
