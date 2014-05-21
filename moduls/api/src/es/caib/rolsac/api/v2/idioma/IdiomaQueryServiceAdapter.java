@@ -1,14 +1,9 @@
 package es.caib.rolsac.api.v2.idioma;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.beanutils.PropertyUtils;
 
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
-import es.caib.rolsac.api.v2.exception.StrategyException;
-import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.idioma.ejb.IdiomaQueryServiceEJBStrategy;
 
@@ -34,25 +29,4 @@ public class IdiomaQueryServiceAdapter extends IdiomaDTO implements IdiomaQueryS
         return idiomaQueryServiceStrategy instanceof IdiomaQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
 	
-	public List<IdiomaQueryServiceAdapter> llistarIdiomes(IdiomaCriteria idiomaCriteria) throws QueryServiceException {
-		
-		try {
-			
-            List<IdiomaDTO> llistaDTO = idiomaQueryServiceStrategy.llistarIdiomes(idiomaCriteria);
-            List<IdiomaQueryServiceAdapter> idiomes = new ArrayList<IdiomaQueryServiceAdapter>();
-            
-            for (IdiomaDTO pDTO : llistaDTO) {
-                idiomes.add((IdiomaQueryServiceAdapter) BeanUtils.getAdapter("idioma", getStrategy(), pDTO));
-            }
-            
-            return idiomes;
-            
-        } catch (StrategyException e) {
-        	
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "iconos.", e);
-            
-        }
-		
-	}
-
 }

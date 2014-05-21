@@ -1475,9 +1475,6 @@
         <parameter name="jndiContextClass" value="org.jnp.interfaces.NamingContextFactory" />
         <parameter name="typeMappingVersion" value="1.1" />
         <parameter name="allowedMethods" value="*" />
-        <operation name="llistarIdiomes" qname="operNS:llistarIdiomes" xmlns:operNS="http://intf.ejb.idioma.v2.api.rolsac.caib.es" returnQName="llistarIdiomesReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.idioma.v2.api.rolsac.caib.es" returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="" >
-	        <parameter qname="in0" type="tns:IdiomaCriteria" xmlns:tns="http://idioma.v2.api.rolsac.caib.es"/>
-	    </operation>
     </service>
 
     <service name="MateriaAgrupacioWS" provider="java:EJB">
