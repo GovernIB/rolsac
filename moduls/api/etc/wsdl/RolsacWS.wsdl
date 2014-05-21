@@ -39,6 +39,7 @@
 	xmlns:tns32="http://catalegDocuments.v2.api.rolsac.caib.es"
 	xmlns:tns33="http://excepcioDocumentacio.v2.api.rolsac.caib.es"
 	xmlns:tns50="http://iniciacio.v2.api.rolsac.caib.es" 
+	xmlns:tns51="http://idioma.v2.api.rolsac.caib.es" 
 	targetNamespace="http://ws.rolsac.v2.api.rolsac.caib.es">
 	
 	<wsdl:import namespace="urn:tns1" location="UnitatAdministrativaCriteria.wsdl"/>
@@ -138,6 +139,14 @@
 				<complexContent>
 					<restriction base="soapenc:Array">
 						<attribute ref="soapenc:arrayType" wsdl:arrayType="tns50:IniciacioDTO[]" />
+					</restriction>
+				</complexContent>
+			</complexType>
+			
+			<complexType name="ArrayOfIdiomaDTO">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="tns51:IdiomaDTO[]" />
 					</restriction>
 				</complexContent>
 			</complexType>
@@ -811,6 +820,20 @@
 	<wsdl:message name="llistarTipusIniciacionsResponse">
 		<wsdl:part name="llistarTipusIniciacionsReturn" type="impl:ArrayOfIniciacioDTO" />
 	</wsdl:message>
+	
+	<wsdl:message name="obtenirIdiomaRequest">
+		<wsdl:part name="in0" type="tns51:IdiomaCriteria" />
+	</wsdl:message>			
+	<wsdl:message name="obtenirIdiomaResponse">
+		<wsdl:part name="obtenirIdiomaReturn" type="tns51:IdiomaDTO" />
+	</wsdl:message>
+	
+	<wsdl:message name="llistarIdiomesRequest">
+		<wsdl:part name="in0" type="tns51:IdiomaCriteria" />
+	</wsdl:message>
+	<wsdl:message name="llistarIdiomesResponse">
+		<wsdl:part name="llistarIdiomesReturn" type="impl:ArrayOfIdiomaDTO" />
+	</wsdl:message>
 
 	<wsdl:portType name="RolsacQueryServiceEJBRemote">
 		<wsdl:operation name="llistarUnitatsAdministratives"
@@ -1189,6 +1212,16 @@
 				name="llistarTipusIniciacionsRequest" />
 			<wsdl:output message="intf:llistarTipusIniciacionsResponse"
 				name="llistarTipusIniciacionsResponse" />
+		</wsdl:operation>
+		
+		<wsdl:operation name="obtenirIdioma" parameterOrder="in0">
+			<wsdl:input message="intf:obtenirIdiomaRequest" name="obtenirIdiomaRequest" />
+			<wsdl:output message="intf:obtenirIdiomaResponse" name="obtenirIdiomaResponse" />
+		</wsdl:operation>
+		
+		<wsdl:operation name="llistarIdiomes" parameterOrder="in0">
+			<wsdl:input message="intf:llistarIdiomesRequest" name="llistarIdiomesRequest" />
+			<wsdl:output message="intf:llistarIdiomesResponse" name="llistarIdiomesResponse" />
 		</wsdl:operation>
 			
 	</wsdl:portType>
@@ -1937,9 +1970,32 @@
 					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
+		
+		<wsdl:operation name="llistarIdiomes">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarIdiomesRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarIdiomesResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="obtenirIdioma">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirIdiomaRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirIdiomaResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
 
 	</wsdl:binding>
-	
 	
 	<wsdl:service name="RolsacQueryServiceEJBRemoteService">
 		<wsdl:port binding="intf:RolsacWSSoapBinding" name="RolsacWS">
@@ -1947,4 +2003,5 @@
 				location="https://localhost:8443/sacws-api/services/RolsacWS" />
 		</wsdl:port>
 	</wsdl:service>
+	
 </wsdl:definitions>

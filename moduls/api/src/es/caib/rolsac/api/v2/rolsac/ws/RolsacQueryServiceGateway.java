@@ -45,6 +45,8 @@ import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaDTO;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaCriteria;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaDTO;
+import es.caib.rolsac.api.v2.idioma.IdiomaCriteria;
+import es.caib.rolsac.api.v2.idioma.IdiomaDTO;
 import es.caib.rolsac.api.v2.iniciacio.IniciacioCriteria;
 import es.caib.rolsac.api.v2.iniciacio.IniciacioDTO;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
@@ -83,21 +85,20 @@ public class RolsacQueryServiceGateway {
 	RolsacWSSoapBindingStub stub;
 
 	public RolsacQueryServiceGateway() {
+		
 		try {
 			stub = new RolsacWSSoapBindingStub(
-					new URL(
-							ConfiguracioServeis
-									.getUrlServei(ConfiguracioServeis.NOM_SERVEI_ROLSAC)),
-					null);
+				new URL(ConfiguracioServeis.getUrlServei(ConfiguracioServeis.NOM_SERVEI_ROLSAC)),
+				null
+			);
 		} catch (AxisFault e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (APIException e) {
 			e.printStackTrace();
 		}
+		
 	}
 
 	public UsuariDTO obtenirUsuari(UsuariCriteria usuariCriteria)
@@ -602,6 +603,22 @@ public class RolsacQueryServiceGateway {
 			throws QueryServiceException, RemoteException {
 		
 		return Arrays.asList(stub.llistarUsuaris(usuariCriteria));
+	}
+	
+	public IdiomaDTO obtenirIdioma(IdiomaCriteria idiomaCriteria)
+			throws QueryServiceException, RemoteException {
+
+		IdiomaDTO idiomaDTO = new IdiomaDTO();
+		idiomaDTO = stub.obtenirIdioma(idiomaCriteria);
+
+		return idiomaDTO;
+	}
+	
+	public List<IdiomaDTO> llistarIdiomes(IdiomaCriteria idiomaCriteria)
+			throws QueryServiceException, RemoteException {
+		
+		List<IdiomaDTO> listaIdiomas = Arrays.asList(stub.llistarIdiomes(idiomaCriteria));
+		return listaIdiomas;
 	}
 
 	public List<TipusDTO> llistarTipus(TipusCriteria tipusCriteria)

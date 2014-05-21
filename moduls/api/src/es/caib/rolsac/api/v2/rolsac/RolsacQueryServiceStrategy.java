@@ -37,6 +37,8 @@ import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaDTO;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaCriteria;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaDTO;
+import es.caib.rolsac.api.v2.idioma.IdiomaCriteria;
+import es.caib.rolsac.api.v2.idioma.IdiomaDTO;
 import es.caib.rolsac.api.v2.iniciacio.IniciacioCriteria;
 import es.caib.rolsac.api.v2.iniciacio.IniciacioDTO;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
@@ -190,9 +192,13 @@ public interface RolsacQueryServiceStrategy {
 
     List<UnitatMateriaDTO> llistarUnitatsMateries(UnitatMateriaCriteria unitatMateriaCriteria) throws StrategyException;
 
-    UsuariDTO obtenirUsuari(UsuariCriteria ususariCriteria) throws StrategyException;
+    UsuariDTO obtenirUsuari(UsuariCriteria usuariCriteria) throws StrategyException;
 
     List<UsuariDTO> llistarUsuaris(UsuariCriteria usuariCriteria) throws StrategyException;
+    
+    IdiomaDTO obtenirIdioma(IdiomaCriteria idiomaCriteria) throws StrategyException;
+    
+    List<IdiomaDTO> llistarIdiomes(IdiomaCriteria idiomaCriteria) throws StrategyException;
 
     TipusDTO obtenirTipus(TipusCriteria tipusCriteria) throws StrategyException;
 

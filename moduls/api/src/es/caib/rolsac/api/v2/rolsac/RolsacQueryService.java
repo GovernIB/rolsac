@@ -37,6 +37,8 @@ import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaCriteria;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaQueryServiceAdapter;
+import es.caib.rolsac.api.v2.idioma.IdiomaCriteria;
+import es.caib.rolsac.api.v2.idioma.IdiomaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.iniciacio.IniciacioCriteria;
 import es.caib.rolsac.api.v2.iniciacio.IniciacioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
@@ -198,9 +200,13 @@ public interface RolsacQueryService {
 
     List<UnitatMateriaQueryServiceAdapter> llistarUnitatsMateries(UnitatMateriaCriteria unitatMateriaCriteria) throws QueryServiceException;
 
-    UsuariQueryServiceAdapter obtenirUsuari(UsuariCriteria ususariCriteria) throws QueryServiceException;
+    UsuariQueryServiceAdapter obtenirUsuari(UsuariCriteria usuariCriteria) throws QueryServiceException;
 
     List<UsuariQueryServiceAdapter> llistarUsuaris(UsuariCriteria usuariCriteria) throws QueryServiceException;
+    
+    IdiomaQueryServiceAdapter obtenirIdioma(IdiomaCriteria idiomaCriteria) throws QueryServiceException;
+    
+    List<IdiomaQueryServiceAdapter> llistarIdiomes(IdiomaCriteria idiomaCriteria) throws QueryServiceException;
     
     //AfectacioQueryServiceAdapter obtenirAfectacio(AfectacioCriteria afectacioCriteria) throws QueryServiceException;
     

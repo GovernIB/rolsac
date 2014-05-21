@@ -1,95 +1,140 @@
+/**
+ * IdiomaDTO.java
+ *
+ * This file was auto-generated from WSDL
+ * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
+ */
+
 package es.caib.rolsac.api.v2.idioma;
 
-public class IdiomaDTO implements java.io.Serializable {
+public class IdiomaDTO  implements java.io.Serializable {
+    private java.lang.String lang;
 
-	private static final long serialVersionUID = 1L;
-	
-	private String lang;
-    private String codigoEstandar;
-    private long orden;
-    private String nombre;
-    private String langTraductor;
-    
-    public IdiomaDTO() {}
-        
-	/**
-	 * @param lang
-	 * @param codigoEstandar
-	 * @param orden
-	 * @param nombre
-	 * @param langTraductor
-	 */
-	public IdiomaDTO(String lang, String codigoEstandar, Long orden,
-			String nombre, String langTraductor) {
-		this.lang = lang;
-		this.codigoEstandar = codigoEstandar;
-		this.orden = orden;
-		this.nombre = nombre;
-		this.langTraductor = langTraductor;
-	}
+    private java.lang.String codigoEstandar;
 
-	/**
-	 * @return the lang
-	 */
-	public String getLang() {
-		return lang;
-	}
-	/**
-	 * @param lang the lang to set
-	 */
-	public void setLang(String lang) {
-		this.lang = lang;
-	}
-	/**
-	 * @return the codigoEstandar
-	 */
-	public String getCodigoEstandar() {
-		return codigoEstandar;
-	}
-	/**
-	 * @param codigoEstandar the codigoEstandar to set
-	 */
-	public void setCodigoEstandar(String codigoEstandar) {
-		this.codigoEstandar = codigoEstandar;
-	}
-	/**
-	 * @return the orden
-	 */
-	public long getOrden() {
-		return orden;
-	}
-	/**
-	 * @param orden the orden to set
-	 */
-	public void setOrden(long orden) {
-		this.orden = orden;
-	}
-	/**
-	 * @return the nombre
-	 */
-	public String getNombre() {
-		return nombre;
-	}
-	/**
-	 * @param nombre the nombre to set
-	 */
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-	/**
-	 * @return the langTraductor
-	 */
-	public String getLangTraductor() {
-		return langTraductor;
-	}
-	/**
-	 * @param langTraductor the langTraductor to set
-	 */
-	public void setLangTraductor(String langTraductor) {
-		this.langTraductor = langTraductor;
-	}
-	
-	private java.lang.Object __equalsCalc = null;
+    private java.lang.Integer orden;
+
+    private java.lang.String nombre;
+
+    private java.lang.String langTraductor;
+
+    public IdiomaDTO() {
+    }
+
+    public IdiomaDTO(
+           java.lang.String lang,
+           java.lang.String codigoEstandar,
+           java.lang.Integer orden,
+           java.lang.String nombre,
+           java.lang.String langTraductor) {
+           this.lang = lang;
+           this.codigoEstandar = codigoEstandar;
+           this.orden = orden;
+           this.nombre = nombre;
+           this.langTraductor = langTraductor;
+    }
+
+
+    /**
+     * Gets the lang value for this IdiomaDTO.
+     * 
+     * @return lang
+     */
+    public java.lang.String getLang() {
+        return lang;
+    }
+
+
+    /**
+     * Sets the lang value for this IdiomaDTO.
+     * 
+     * @param lang
+     */
+    public void setLang(java.lang.String lang) {
+        this.lang = lang;
+    }
+
+
+    /**
+     * Gets the codigoEstandar value for this IdiomaDTO.
+     * 
+     * @return codigoEstandar
+     */
+    public java.lang.String getCodigoEstandar() {
+        return codigoEstandar;
+    }
+
+
+    /**
+     * Sets the codigoEstandar value for this IdiomaDTO.
+     * 
+     * @param codigoEstandar
+     */
+    public void setCodigoEstandar(java.lang.String codigoEstandar) {
+        this.codigoEstandar = codigoEstandar;
+    }
+
+
+    /**
+     * Gets the orden value for this IdiomaDTO.
+     * 
+     * @return orden
+     */
+    public java.lang.Integer getOrden() {
+        return orden;
+    }
+
+
+    /**
+     * Sets the orden value for this IdiomaDTO.
+     * 
+     * @param orden
+     */
+    public void setOrden(java.lang.Integer orden) {
+        this.orden = orden;
+    }
+
+
+    /**
+     * Gets the nombre value for this IdiomaDTO.
+     * 
+     * @return nombre
+     */
+    public java.lang.String getNombre() {
+        return nombre;
+    }
+
+
+    /**
+     * Sets the nombre value for this IdiomaDTO.
+     * 
+     * @param nombre
+     */
+    public void setNombre(java.lang.String nombre) {
+        this.nombre = nombre;
+    }
+
+
+    /**
+     * Gets the langTraductor value for this IdiomaDTO.
+     * 
+     * @return langTraductor
+     */
+    public java.lang.String getLangTraductor() {
+        return langTraductor;
+    }
+
+
+    /**
+     * Sets the langTraductor value for this IdiomaDTO.
+     * 
+     * @param langTraductor
+     */
+    public void setLangTraductor(java.lang.String langTraductor) {
+        this.langTraductor = langTraductor;
+    }
+
+    private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof IdiomaDTO)) return false;
         IdiomaDTO other = (IdiomaDTO) obj;
@@ -107,7 +152,9 @@ public class IdiomaDTO implements java.io.Serializable {
             ((this.codigoEstandar==null && other.getCodigoEstandar()==null) || 
              (this.codigoEstandar!=null &&
               this.codigoEstandar.equals(other.getCodigoEstandar()))) &&
-            this.orden == other.getOrden() &&
+            ((this.orden==null && other.getOrden()==null) || 
+             (this.orden!=null &&
+              this.orden.equals(other.getOrden()))) &&
             ((this.nombre==null && other.getNombre()==null) || 
              (this.nombre!=null &&
               this.nombre.equals(other.getNombre()))) &&
@@ -117,8 +164,8 @@ public class IdiomaDTO implements java.io.Serializable {
         __equalsCalc = null;
         return _equals;
     }
-    
-	private boolean __hashCodeCalc = false;
+
+    private boolean __hashCodeCalc = false;
     public synchronized int hashCode() {
         if (__hashCodeCalc) {
             return 0;
@@ -131,7 +178,9 @@ public class IdiomaDTO implements java.io.Serializable {
         if (getCodigoEstandar() != null) {
             _hashCode += getCodigoEstandar().hashCode();
         }
-        _hashCode += new Long(getOrden()).hashCode();
+        if (getOrden() != null) {
+            _hashCode += getOrden().hashCode();
+        }
         if (getNombre() != null) {
             _hashCode += getNombre().hashCode();
         }
@@ -141,11 +190,11 @@ public class IdiomaDTO implements java.io.Serializable {
         __hashCodeCalc = false;
         return _hashCode;
     }
-    
+
     // Type metadata
     private static org.apache.axis.description.TypeDesc typeDesc =
         new org.apache.axis.description.TypeDesc(IdiomaDTO.class, true);
-    
+
     static {
         typeDesc.setXmlType(new javax.xml.namespace.QName("http://idioma.v2.api.rolsac.caib.es", "IdiomaDTO"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
@@ -163,8 +212,8 @@ public class IdiomaDTO implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("orden");
         elemField.setXmlName(new javax.xml.namespace.QName("", "orden"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "long"));
-        elemField.setNillable(false);
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("nombre");
@@ -176,10 +225,10 @@ public class IdiomaDTO implements java.io.Serializable {
         elemField.setFieldName("langTraductor");
         elemField.setXmlName(new javax.xml.namespace.QName("", "langTraductor"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        elemField.setNillable(false);
+        elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
     }
-    
+
     /**
      * Return type metadata object
      */
@@ -210,5 +259,5 @@ public class IdiomaDTO implements java.io.Serializable {
           new  org.apache.axis.encoding.ser.BeanDeserializer(
             _javaType, _xmlType, typeDesc);
     }
-    
+
 }

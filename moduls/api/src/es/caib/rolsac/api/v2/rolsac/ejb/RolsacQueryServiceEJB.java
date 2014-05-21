@@ -29,6 +29,7 @@ import org.ibit.rol.sac.model.Formulario;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.IconoFamilia;
 import org.ibit.rol.sac.model.IconoMateria;
+import org.ibit.rol.sac.model.Idioma;
 import org.ibit.rol.sac.model.Iniciacion;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.MateriaAgrupacionM;
@@ -87,6 +88,8 @@ import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaDTO;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaCriteria;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaDTO;
+import es.caib.rolsac.api.v2.idioma.IdiomaCriteria;
+import es.caib.rolsac.api.v2.idioma.IdiomaDTO;
 import es.caib.rolsac.api.v2.iniciacio.IniciacioCriteria;
 import es.caib.rolsac.api.v2.iniciacio.IniciacioDTO;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
@@ -212,6 +215,8 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 	private static final String HQL_UNITAT_MATERIA_ALIAS = "um";
 	private static final String HQL_INICIACIO_CLASS = "Iniciacion";
 	private static final String HQL_INICIACIO_ALIAS = "inici";
+	private static final String HQL_IDIOMA_CLASS = "Idioma";
+    private static final String HQL_IDIOMA_ALIAS = "idi";
 
 	/**
 	 * @ejb.create-method
@@ -1715,6 +1720,136 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 		}
 
 		return usuariDTOList;
+	}
+	
+	/**
+	 * Obtiene idiomas.
+	 * @param idiomaCriteria
+	 * @return List<IdiomaDTO>
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public List<IdiomaDTO> llistarIdiomes(IdiomaCriteria idiomaCriteria) {
+		
+		List<CriteriaObject> criteris;
+		List<IdiomaDTO> idiomaDTOList = new ArrayList<IdiomaDTO>();
+		Session session = null;
+
+		try {
+
+			criteris = BasicUtils.parseCriterias(
+				IdiomaCriteria.class,
+				HQL_IDIOMA_ALIAS,
+				idiomaCriteria
+			);
+
+			List<FromClause> entities = new ArrayList<FromClause>();
+			entities.add(new FromClause(HQL_IDIOMA_CLASS, HQL_IDIOMA_ALIAS));
+
+			QueryBuilder qb = new QueryBuilder(
+				HQL_IDIOMA_ALIAS, 
+				entities, 
+				"",
+				""
+			);
+			qb.extendCriteriaObjects(criteris);
+
+			session = getSession();
+			Query query = qb.createQuery(session);
+			List<Idioma> idiomaResult = (List<Idioma>) query.list();
+			for (Idioma f: idiomaResult) {
+				idiomaDTOList.add((IdiomaDTO)BasicUtils.entityToDTO(IdiomaDTO.class, f, idiomaCriteria.getIdioma()));
+			}
+			
+		} catch (HibernateException e) {
+			
+			log.error(e);
+			throw new EJBException(e);
+			
+		} catch (CriteriaObjectParseException e) {
+			
+			log.error(e);
+			throw new EJBException(e);
+			
+		} catch (QueryBuilderException e) {
+			
+			log.error(e);
+			throw new EJBException(e);
+			
+		} finally {
+			
+			close(session);
+			
+		}
+
+		return idiomaDTOList;
+		
+	}
+	
+	/**
+	 * Obtiene un idioma.
+	 * @param idiomaCriteria
+	 * @return IdiomaDTO
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public IdiomaDTO obtenirIdioma(IdiomaCriteria idiomaCriteria) {
+		
+		List<CriteriaObject> criteris;
+		IdiomaDTO idiomaDTO = null;
+		Session session = null;
+
+		try {
+			
+			criteris = BasicUtils.parseCriterias(
+				IdiomaCriteria.class,
+				HQL_IDIOMA_ALIAS,
+				idiomaCriteria
+			);
+
+			List<FromClause> entities = new ArrayList<FromClause>();
+			entities.add(new FromClause(HQL_IDIOMA_CLASS, HQL_IDIOMA_ALIAS));
+
+			QueryBuilder qb = new QueryBuilder(
+				HQL_IDIOMA_ALIAS, 
+				entities, 
+				"",
+				""
+			);
+			qb.extendCriteriaObjects(criteris);
+
+			session = getSession();
+			Query query = qb.createQuery(session);
+			Idioma idioma = (Idioma)query.uniqueResult();
+			if (idioma != null) {
+				idiomaDTO = (IdiomaDTO)BasicUtils.entityToDTO(IdiomaDTO.class, idioma, idiomaCriteria.getIdioma());
+			}
+			
+		} catch (HibernateException e) {
+			
+			log.error(e);
+			throw new EJBException(e);
+			
+		} catch (CriteriaObjectParseException e) {
+			
+			log.error(e);
+			throw new EJBException(e);
+			
+		} catch (QueryBuilderException e) {
+			
+			log.error(e);
+			throw new EJBException(e);
+			
+		} finally {
+			
+			close(session);
+			
+		}
+
+		return idiomaDTO;
+		
 	}
 
 	/**

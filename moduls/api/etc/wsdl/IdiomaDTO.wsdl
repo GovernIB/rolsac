@@ -16,7 +16,7 @@
             <sequence>
                 <element name="lang" nillable="true" type="xsd:string" />
                 <element name="codigoEstandar" nillable="true" type="xsd:string" />
-                <element name="orden" nillable="true" type="xsd:long" />
+                <element name="orden" nillable="true" type="xsd:int" />
                 <element name="nombre" nillable="true" type="xsd:string" />
                 <element name="langTraductor" nillable="true" type="xsd:string" />
             </sequence>

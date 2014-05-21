@@ -25,19 +25,17 @@ public class FamiliaQueryServiceGateway {
 
 		try {
 			stub = new FamiliaWSSoapBindingStub(
-					new URL(
-							ConfiguracioServeis
-									.getUrlServei(ConfiguracioServeis.NOM_SERVEI_FAMILIA)),
-					null);
+				new URL(ConfiguracioServeis.getUrlServei(ConfiguracioServeis.NOM_SERVEI_FAMILIA)),
+				null
+			);
 		} catch (AxisFault e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (APIException e) {
 			e.printStackTrace();
 		}
+		
 	}
 		
 	public int getNumProcedimentsLocals(long id) throws RemoteException {

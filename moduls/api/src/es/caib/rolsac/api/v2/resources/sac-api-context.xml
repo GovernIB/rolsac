@@ -1025,5 +1025,33 @@
 
 	<bean id="gatewayIniciacio" class="es.caib.rolsac.api.v2.iniciacio.ws.IniciacioQueryServiceGateway" />
     <!-- IniciacioQueryService beans -->
+    
+    <!-- IdiomaQueryService beans -->
+    <!-- EJB -->
+    <bean id="idiomaQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.idioma.IdiomaQueryServiceAdapter" scope="prototype">
+        <property name="idiomaQueryServiceStrategy" ref="idiomaQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="idiomaQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.idioma.ejb.IdiomaQueryServiceEJBStrategy">
+        <property name="idiomaQueryServiceDelegate" ref="idiomaQueryServiceDelegate" />
+    </bean>
+
+    <bean id="idiomaQueryServiceDelegate" class="es.caib.rolsac.api.v2.idioma.ejb.IdiomaQueryServiceDelegate">
+        <property name="idiomaQueryServiceLocator" ref="idiomaQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="idiomaQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.idioma.ejb.IdiomaQueryServiceEJBLocator" />
+    
+	<!-- WS -->
+	<bean id="idiomaQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.idioma.IdiomaQueryServiceAdapter" scope="prototype">
+        <property name="idiomaQueryServiceStrategy" ref="idiomaQueryServiceWSStrategy" />
+    </bean>
+
+    <bean id="idiomaQueryServiceWSStrategy" class="es.caib.rolsac.api.v2.idioma.ws.IdiomaQueryServiceWSStrategy">
+        <property name="gateway" ref="gatewayIdioma" />
+    </bean>
+
+	<bean id="gatewayIdioma" class="es.caib.rolsac.api.v2.idioma.ws.IdiomaQueryServiceGateway" />
+    <!-- IdiomaQueryService beans -->
 
 </beans>

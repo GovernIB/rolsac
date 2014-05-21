@@ -59,6 +59,9 @@ import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaCriteria;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaDTO;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaQueryServiceAdapter;
+import es.caib.rolsac.api.v2.idioma.IdiomaCriteria;
+import es.caib.rolsac.api.v2.idioma.IdiomaDTO;
+import es.caib.rolsac.api.v2.idioma.IdiomaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.iniciacio.IniciacioCriteria;
 import es.caib.rolsac.api.v2.iniciacio.IniciacioDTO;
 import es.caib.rolsac.api.v2.iniciacio.IniciacioQueryServiceAdapter;
@@ -873,5 +876,27 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
         }
     	
     }
+    
+    public IdiomaQueryServiceAdapter obtenirIdioma(IdiomaCriteria idiomaCriteria) throws QueryServiceException {
+        try {
+            IdiomaDTO dto = rolsacQueryServiceStrategy.obtenirIdioma(idiomaCriteria);
+            return (IdiomaQueryServiceAdapter) BeanUtils.getAdapter("idioma", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "idioma.", e);
+        }
+    }
+
+	public List<IdiomaQueryServiceAdapter> llistarIdiomes(IdiomaCriteria idiomaCriteria) throws QueryServiceException {
+		try {
+            List<IdiomaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarIdiomes(idiomaCriteria);
+            List<IdiomaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<IdiomaQueryServiceAdapter>();
+            for (IdiomaDTO uDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((IdiomaQueryServiceAdapter) BeanUtils.getAdapter("idioma", getStrategy(), uDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "idiomas.", e);
+        }
+	}
 
 }

@@ -40,6 +40,8 @@ import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaDTO;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaCriteria;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaDTO;
+import es.caib.rolsac.api.v2.idioma.IdiomaCriteria;
+import es.caib.rolsac.api.v2.idioma.IdiomaDTO;
 import es.caib.rolsac.api.v2.iniciacio.IniciacioCriteria;
 import es.caib.rolsac.api.v2.iniciacio.IniciacioDTO;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
@@ -363,6 +365,28 @@ public class RolsacQueryServiceDelegate {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
             return ejb.llistarUsuaris(usuariCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
+    public IdiomaDTO obtenirIdioma(IdiomaCriteria idiomaCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirIdioma(idiomaCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
+    public List<IdiomaDTO> llistarIdiomes(IdiomaCriteria idiomaCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarIdiomes(idiomaCriteria);
         } catch (LocatorException e) {
             throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
         } catch (RemoteException e) {
