@@ -2224,11 +2224,13 @@
             soapAction="">
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
         </operation>
-        <operation name="obtenirTractament" qname="operNS:obtenirTractament" xmlns:operNS="http://intf.ejb.unitatAdministrativa.v2.api.rolsac.caib.es"
-            returnQName="obtenirTractamentReturn" returnType="rtns:TractamentDTO" xmlns:rtns="http://tractament.v2.api.rolsac.caib.es"
-            soapAction="">
-            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
-        </operation>
+        <operation name="obtenirTractament" qname="operNS:obtenirTractament"
+			xmlns:operNS="http://intf.ejb.unitatAdministrativa.v2.api.rolsac.caib.es"
+			returnQName="obtenirTractamentReturn" returnType="rtns:TractamentDTO"
+			xmlns:rtns="http://tractament.v2.api.rolsac.caib.es" soapAction="">
+			<parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+			<parameter qname="in1" type="tns:TractamentCriteria" xmlns:tns="http://tractament.v2.api.rolsac.caib.es" />
+		</operation>
         <operation name="llistarFilles" qname="operNS:llistarFilles" xmlns:operNS="http://intf.ejb.unitatAdministrativa.v2.api.rolsac.caib.es"
             returnQName="llistarFillesReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
             returnItemType="tns2:UnitatAdministrativaDTO" xmlns:tns2="http://unitatAdministrativa.v2.api.rolsac.caib.es"
@@ -2241,7 +2243,7 @@
         	returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema"
         	soapAction="">
         	<parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
-      </operation>
+        </operation>
         <operation name="llistarTramits" qname="operNS:llistarTramits" xmlns:operNS="http://intf.ejb.unitatAdministrativa.v2.api.rolsac.caib.es"
             returnQName="llistarTramitsReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
             returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="">

@@ -19,6 +19,7 @@ import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioQueryServiceAdapter;
+import es.caib.rolsac.api.v2.tractament.TractamentCriteria;
 import es.caib.rolsac.api.v2.tractament.TractamentQueryServiceAdapter;
 import es.caib.rolsac.api.v2.tramit.TramitCriteria;
 import es.caib.rolsac.api.v2.tramit.TramitQueryServiceAdapter;
@@ -31,7 +32,7 @@ public interface UnitatAdministrativaQueryService {
 
     public EspaiTerritorialQueryServiceAdapter obtenirEspaiTerritorial() throws QueryServiceException;
 
-    public TractamentQueryServiceAdapter obtenirTractament() throws QueryServiceException;
+    public TractamentQueryServiceAdapter obtenirTractament(TractamentCriteria tractamentCriteria) throws QueryServiceException;
     
     public List<UnitatAdministrativaQueryServiceAdapter> llistarFilles(UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws QueryServiceException;
     

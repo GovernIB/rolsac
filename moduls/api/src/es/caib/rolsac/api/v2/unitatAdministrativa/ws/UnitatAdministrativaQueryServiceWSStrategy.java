@@ -22,6 +22,7 @@ import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
+import es.caib.rolsac.api.v2.tractament.TractamentCriteria;
 import es.caib.rolsac.api.v2.tractament.TractamentDTO;
 import es.caib.rolsac.api.v2.tramit.TramitCriteria;
 import es.caib.rolsac.api.v2.tramit.TramitDTO;
@@ -55,9 +56,9 @@ public class UnitatAdministrativaQueryServiceWSStrategy implements UnitatAdminis
     	}
     }
 
-    public TractamentDTO obtenirTractament(long idTract) throws StrategyException {
+    public TractamentDTO obtenirTractament(long idTract, TractamentCriteria tractamentCriteria) throws StrategyException {
     	try {
-    		return gateway.obtenirTractament(idTract);
+    		return gateway.obtenirTractament(idTract, tractamentCriteria);
     	} catch (RemoteException e) {
     		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
     	}    	

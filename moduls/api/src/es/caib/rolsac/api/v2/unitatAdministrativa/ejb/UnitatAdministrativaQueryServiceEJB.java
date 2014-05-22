@@ -157,37 +157,51 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
-	public TractamentDTO obtenirTractament(long idTract) {
+	public TractamentDTO obtenirTractament(long idTract, TractamentCriteria tractamentCriteria) {
+		
 		List<CriteriaObject> criteris;
 		TractamentDTO tractDTO = null;
-		TractamentCriteria tractamentCriteria = new TractamentCriteria();
 		Session session = null;
 
 		try {
+			
 			tractamentCriteria.setId(String.valueOf(idTract));
 			criteris = BasicUtils.parseCriterias(TractamentCriteria.class, HQL_TRATAMIENTO_ALIAS, HQL_TRADUCCIONES_ALIAS, tractamentCriteria);
+			
 			List<FromClause> entities = new ArrayList<FromClause>();
 			entities.add(new FromClause(HQL_TRATAMIENTO_CLASS, HQL_TRATAMIENTO_ALIAS));
+			
 			QueryBuilder qb = new QueryBuilder(HQL_TRATAMIENTO_ALIAS, entities, tractamentCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
 			qb.extendCriteriaObjects(criteris);
 
 			session = getSession();
+			
 			Query query = qb.createQuery(session);
 			Tratamiento tractament = (Tratamiento) query.uniqueResult();
 			if (tractament != null) {
-				tractDTO = (TractamentDTO) BasicUtils.entityToDTO(TractamentDTO.class, tractament, tractamentCriteria.getIdioma());
+				tractDTO = (TractamentDTO)BasicUtils.entityToDTO(TractamentDTO.class, tractament, tractamentCriteria.getIdioma());
 			}
+			
 		} catch (HibernateException e) {
+			
 			log.error(e);
+			
 		} catch (CriteriaObjectParseException e) {
+			
 			log.error(e);
+			
 		} catch (QueryBuilderException e) {
+			
 			log.error(e);
+			
 		} finally {
+			
 			close(session);
+			
 		}
-
+		
 		return tractDTO;
+		
 	}
 
 	/**

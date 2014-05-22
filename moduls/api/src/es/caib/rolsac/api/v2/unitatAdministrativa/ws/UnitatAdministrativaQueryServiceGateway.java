@@ -26,6 +26,7 @@ import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
+import es.caib.rolsac.api.v2.tractament.TractamentCriteria;
 import es.caib.rolsac.api.v2.tractament.TractamentDTO;
 import es.caib.rolsac.api.v2.tramit.TramitCriteria;
 import es.caib.rolsac.api.v2.tramit.TramitDTO;
@@ -138,8 +139,9 @@ public class UnitatAdministrativaQueryServiceGateway {
 		return stub.obtenirEspaiTerritorial(idEt);
 	}
 
-	public TractamentDTO obtenirTractament(long idTract) throws RemoteException {
-		return stub.obtenirTractament(idTract);
+	public TractamentDTO obtenirTractament(long idTract, TractamentCriteria tractamentCriteria) 
+			throws RemoteException {
+		return stub.obtenirTractament(idTract, tractamentCriteria);
 	}
 
 	public List<UnitatAdministrativaDTO> llistarFilles(long id,

@@ -35,6 +35,7 @@
 	<wsdl:import namespace="urn:tns10" location="EdificiCriteria.wsdl"/>
 	<wsdl:import namespace="urn:tns11" location="SeccioCriteria.wsdl"/>
 	<wsdl:import namespace="urn:tns12" location="TractamentDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns12" location="TractamentCriteria.wsdl"/>
 	<wsdl:import namespace="urn:tns13" location="TramitCriteria.wsdl"/>
 	<wsdl:import namespace="urn:tns14" location="ArxiuDTO.wsdl"/>
 	
@@ -111,6 +112,7 @@
 	</wsdl:message>
 	<wsdl:message name="obtenirTractamentRequest">
 		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in1" type="tns12:TractamentCriteria" />
 	</wsdl:message>
 	<wsdl:message name="getNumProcedimentsResponse">
 		<wsdl:part name="getNumProcedimentsReturn" type="xsd:int" />
@@ -321,7 +323,7 @@
 				name="getNumNormativesResponse" />
 		</wsdl:operation>
 		<wsdl:operation name="obtenirTractament"
-			parameterOrder="in0">
+			parameterOrder="in0 in1">
 			<wsdl:input message="impl:obtenirTractamentRequest" name="obtenirTractamentRequest" />
 			<wsdl:output message="impl:obtenirTractamentResponse"
 				name="obtenirTractamentResponse" />

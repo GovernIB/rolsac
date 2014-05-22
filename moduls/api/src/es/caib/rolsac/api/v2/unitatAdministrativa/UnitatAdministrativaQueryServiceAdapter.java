@@ -33,6 +33,7 @@ import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
 import es.caib.rolsac.api.v2.seccio.SeccioQueryServiceAdapter;
+import es.caib.rolsac.api.v2.tractament.TractamentCriteria;
 import es.caib.rolsac.api.v2.tractament.TractamentQueryServiceAdapter;
 import es.caib.rolsac.api.v2.tramit.TramitCriteria;
 import es.caib.rolsac.api.v2.tramit.TramitDTO;
@@ -84,10 +85,10 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
 
     }
 
-    public TractamentQueryServiceAdapter obtenirTractament() throws QueryServiceException {
+    public TractamentQueryServiceAdapter obtenirTractament(TractamentCriteria tractamentCriteria) throws QueryServiceException {
         if (this.getTratamiento() == null) {return null;}
         try {
-            return (TractamentQueryServiceAdapter) BeanUtils.getAdapter("tractament", getStrategy(), unitatAdministrativaQueryServiceStrategy.obtenirTractament(this.getTratamiento()));
+            return (TractamentQueryServiceAdapter) BeanUtils.getAdapter("tractament", getStrategy(), unitatAdministrativaQueryServiceStrategy.obtenirTractament(this.getTratamiento(), tractamentCriteria));
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "tratamiento.", e);
         }

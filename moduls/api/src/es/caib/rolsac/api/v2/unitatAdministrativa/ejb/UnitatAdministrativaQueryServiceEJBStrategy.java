@@ -20,6 +20,7 @@ import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
+import es.caib.rolsac.api.v2.tractament.TractamentCriteria;
 import es.caib.rolsac.api.v2.tractament.TractamentDTO;
 import es.caib.rolsac.api.v2.tramit.TramitCriteria;
 import es.caib.rolsac.api.v2.tramit.TramitDTO;
@@ -53,9 +54,9 @@ public class UnitatAdministrativaQueryServiceEJBStrategy implements UnitatAdmini
         }
     }
 
-    public TractamentDTO obtenirTractament(long idTract) throws StrategyException {
+    public TractamentDTO obtenirTractament(long idTract, TractamentCriteria tractamentCriteria) throws StrategyException {
         try {
-            return unitatAdministrativaQueryServiceDelegate.obtenirTractament(idTract);
+            return unitatAdministrativaQueryServiceDelegate.obtenirTractament(idTract, tractamentCriteria);
         } catch (DelegateException e) {
             throw new StrategyException(e);
         }
