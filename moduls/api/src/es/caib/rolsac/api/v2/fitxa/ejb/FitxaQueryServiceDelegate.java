@@ -14,6 +14,8 @@ import es.caib.rolsac.api.v2.exception.LocatorException;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalDTO;
 import es.caib.rolsac.api.v2.fitxa.ejb.intf.FitxaQueryServiceEJBRemote;
+import es.caib.rolsac.api.v2.materia.MateriaCriteria;
+import es.caib.rolsac.api.v2.materia.MateriaDTO;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
@@ -34,6 +36,17 @@ public class FitxaQueryServiceDelegate {
         try {
             FitxaQueryServiceEJBRemote ejb = fitxaQueryServiceLocator.getFitxaQueryServiceEJB();
             return ejb.llistarEnllacos(id, enllacCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
+    public List<MateriaDTO> llistarMateries(long id, MateriaCriteria materiaCriteria) throws DelegateException {
+        try {
+            FitxaQueryServiceEJBRemote ejb = fitxaQueryServiceLocator.getFitxaQueryServiceEJB();
+            return ejb.llistarMateries(id, materiaCriteria);
         } catch (LocatorException e) {
             throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
         } catch (RemoteException e) {
@@ -113,6 +126,17 @@ public class FitxaQueryServiceDelegate {
         try {
             FitxaQueryServiceEJBRemote ejb = fitxaQueryServiceLocator.getFitxaQueryServiceEJB();
             return ejb.getNumSeccions(id);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
+    public int getNumMateries(long id) throws DelegateException {
+        try {
+            FitxaQueryServiceEJBRemote ejb = fitxaQueryServiceLocator.getFitxaQueryServiceEJB();
+            return ejb.getNumMateries(id);
         } catch (LocatorException e) {
             throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
         } catch (RemoteException e) {

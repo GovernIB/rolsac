@@ -10,6 +10,7 @@
 	xmlns:tns6="http://seccio.v2.api.rolsac.caib.es"
 	xmlns:tns7="http://arxiu.v2.api.rolsac.caib.es"
     xmlns:tns8="http://publicObjectiu.v2.api.rolsac.caib.es"
+    xmlns:tns9="http://materia.v2.api.rolsac.caib.es"
 	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
 	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -23,6 +24,7 @@
 	<wsdl:import namespace="urn:tns6" location="SeccioCriteria.wsdl"/>
 	<wsdl:import namespace="urn:tns7" location="ArxiuDTO.wsdl"/>
 	<wsdl:import namespace="urn:tns8" location="PublicObjectiuCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns9" location="MateriaCriteria.wsdl"/>
 	
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
@@ -139,6 +141,19 @@
 	<wsdl:message name="llistarDocumentsResponse">
 		<wsdl:part name="llistarDocumentsReturn" type="impl:ArrayOf_xsd_anyType" />
 	</wsdl:message>
+	<wsdl:message name="getNumMateriesRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="getNumMateriesResponse">
+		<wsdl:part name="getNumMateriesReturn" type="xsd:int" />
+	</wsdl:message>
+	<wsdl:message name="llistarMateriesRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in1" type="tns9:MateriaCriteria" />
+	</wsdl:message>
+	<wsdl:message name="llistarMateriesResponse">
+		<wsdl:part name="llistarMateriesReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
 	<wsdl:portType name="FitxaQueryServiceEJBRemote">
 		<wsdl:operation name="getNumUnitatsAdministratives"
 			parameterOrder="in0">
@@ -205,6 +220,14 @@
 		<wsdl:operation name="obtenirBaner" parameterOrder="in0">
 			<wsdl:input message="impl:obtenirBanerRequest" name="obtenirBanerRequest" />
 			<wsdl:output message="impl:obtenirBanerResponse" name="obtenirBanerResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getNumMateries" parameterOrder="in0">
+			<wsdl:input message="impl:getNumMateriesRequest" name="getNumMateriesRequest" />
+			<wsdl:output message="impl:getNumMateriesResponse" name="getNumMateriesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="llistarMateries" parameterOrder="in0 in1">
+			<wsdl:input message="impl:llistarMateriesRequest" name="llistarMateriesRequest" />
+			<wsdl:output message="impl:llistarMateriesResponse" name="llistarMateriesResponse" />
 		</wsdl:operation>
 	</wsdl:portType>
 	<wsdl:binding name="FitxaWSSoapBinding" type="impl:FitxaQueryServiceEJBRemote">
@@ -364,6 +387,28 @@
 					namespace="http://ws.fitxa.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
+		<wsdl:operation name="getNumMateries">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="getNumMateriesRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.fitxa.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="getNumMateriesResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.fitxa.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="llistarMateries">
+            <wsdlsoap:operation soapAction="" />
+            <wsdl:input name="llistarMateriesRequest">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="http://intf.ejb.fitxa.v2.api.rolsac.caib.es" use="encoded" />
+            </wsdl:input>
+            <wsdl:output name="llistarMateriesResponse">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="http://ws.fitxa.v2.api.rolsac.caib.es" use="encoded" />
+            </wsdl:output>
+        </wsdl:operation>
 	</wsdl:binding>
 	<wsdl:service name="FitxaQueryServiceEJBRemoteService">
 		<wsdl:port binding="impl:FitxaWSSoapBinding" name="FitxaWS">

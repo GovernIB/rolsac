@@ -10,6 +10,8 @@ import es.caib.rolsac.api.v2.enllac.EnllacQueryServiceAdapter;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalQueryServiceAdapter;
+import es.caib.rolsac.api.v2.materia.MateriaCriteria;
+import es.caib.rolsac.api.v2.materia.MateriaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuQueryServiceAdapter;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
@@ -28,6 +30,10 @@ public interface FitxaQueryService {
     public int getNumUnitatsAdministratives() throws QueryServiceException;
 
     public int getNumSeccions() throws QueryServiceException;
+    
+    public int getNumMateries() throws QueryServiceException;
+    
+    public List<MateriaQueryServiceAdapter> llistarMateries(MateriaCriteria materiaCriteria) throws QueryServiceException;
     
     public List<EnllacQueryServiceAdapter> llistarEnllacos(EnllacCriteria enllacCriteria) throws QueryServiceException;
 

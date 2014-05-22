@@ -16,6 +16,7 @@ import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.HechoVital;
+import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -32,6 +33,8 @@ import es.caib.rolsac.api.v2.general.BasicUtils;
 import es.caib.rolsac.api.v2.general.HibernateEJB;
 import es.caib.rolsac.api.v2.general.co.CriteriaObject;
 import es.caib.rolsac.api.v2.general.co.CriteriaObjectParseException;
+import es.caib.rolsac.api.v2.materia.MateriaCriteria;
+import es.caib.rolsac.api.v2.materia.MateriaDTO;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.query.FromClause;
@@ -78,6 +81,8 @@ public class FitxaQueryServiceEJB extends HibernateEJB {
     private static final String HQL_TRADUCCIONES_ALIAS = "trad";
     private static final String HQL_PUBLICO_OBJETIVO_CLASS = HQL_FICHA_ALIAS + ".publicosObjetivo";
     private static final String HQL_PUBLICO_OBJETIVO_ALIAS = "po";
+    private static final String HQL_MATERIAS_CLASS = HQL_FICHA_ALIAS + ".materias";
+    private static final String HQL_MATERIAS_ALIAS = "mat";
     
     /**
      * @ejb.create-method
@@ -620,6 +625,7 @@ public class FitxaQueryServiceEJB extends HibernateEJB {
         Session session = null;
 
         try {
+        	        	        	
             criteris = BasicUtils.parseCriterias(PublicObjectiuCriteria.class, HQL_PUBLICO_OBJETIVO_ALIAS, HQL_TRADUCCIONES_ALIAS, poCriteria);
             List<FromClause> entities = new ArrayList<FromClause>();
             entities.add(new FromClause(HQL_FICHA_CLASS, HQL_FICHA_ALIAS));
@@ -650,6 +656,123 @@ public class FitxaQueryServiceEJB extends HibernateEJB {
         }
 
         return new ArrayList<PublicObjectiuDTO>(poDTOList);
+    }
+    
+    /**
+     * Obtiene listado de materias.
+     * @param id
+     * @param materiaCriteria
+     * @return List<EnllacDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public List<MateriaDTO> llistarMateries(long id, MateriaCriteria materiaCriteria) {
+    	
+        List<MateriaDTO> materiasDTOList = new ArrayList<MateriaDTO>();
+        List<CriteriaObject> criterios;
+        Session session = null;
+        
+        try {         
+            
+            criterios = BasicUtils.parseCriterias(MateriaCriteria.class, HQL_MATERIAS_ALIAS, HQL_TRADUCCIONES_ALIAS, materiaCriteria);
+            
+            List<FromClause> entities = new ArrayList<FromClause>();
+            entities.add(new FromClause(HQL_FICHA_CLASS, HQL_FICHA_ALIAS));
+            entities.add(new FromClause(HQL_MATERIAS_CLASS, HQL_MATERIAS_ALIAS));
+            
+            QueryBuilder qb = new QueryBuilder(HQL_MATERIAS_ALIAS, entities, materiaCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
+            qb.extendCriteriaObjects(criterios);
+            
+            FitxaCriteria fc = new FitxaCriteria();
+            fc.setId(String.valueOf(id));
+            criterios = BasicUtils.parseCriterias(FitxaCriteria.class, HQL_FICHA_ALIAS, fc);
+            qb.extendCriteriaObjects(criterios);
+
+            session = getSession();
+            Query query = qb.createQuery(session);
+            List<Materia> materiasResult = (List<Materia>)query.list();
+            for (Materia enllac : materiasResult) {
+                materiasDTOList.add((MateriaDTO)BasicUtils.entityToDTO(MateriaDTO.class,  enllac, materiaCriteria.getIdioma()));
+            }
+            
+        } catch (HibernateException e) {
+        	
+            log.error(e);
+            
+        } catch (CriteriaObjectParseException e) {
+        	
+            log.error(e);
+            
+        } catch (QueryBuilderException e) {
+        	
+            log.error(e);
+            
+        } finally {
+        	
+            close(session);
+            
+        }
+
+        return materiasDTOList;
+        
+    }
+    
+    /**
+     * Obtiene el numero de enlaces.
+     * @param id
+     * @return int
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public int getNumMateries(long id) {
+    	
+        List<CriteriaObject> criteris;
+        Session session = null;
+        int numResultats = 0;
+        
+        try {   
+        	
+            criteris = BasicUtils.parseCriterias(MateriaCriteria.class, HQL_MATERIAS_ALIAS, new MateriaCriteria());
+            
+            List<FromClause> entities = new ArrayList<FromClause>();
+            entities.add(new FromClause(HQL_FICHA_CLASS, HQL_FICHA_ALIAS));
+            entities.add(new FromClause(HQL_MATERIAS_CLASS, HQL_MATERIAS_ALIAS));
+            
+            QueryBuilder qb = new QueryBuilder(HQL_MATERIAS_ALIAS, entities, null, null, true);
+            qb.extendCriteriaObjects(criteris);
+            
+            FitxaCriteria fc = new FitxaCriteria();
+            fc.setId(String.valueOf(id));
+            criteris = BasicUtils.parseCriterias(FitxaCriteria.class, HQL_FICHA_ALIAS, fc);
+            qb.extendCriteriaObjects(criteris);
+            
+            session = getSession();
+            
+            Query query = qb.createQuery(session);
+            numResultats = getNumberResults(query);
+            
+        } catch (HibernateException e) {
+        	
+            log.error(e);
+            
+        } catch (CriteriaObjectParseException e) {
+        	
+            log.error(e);
+            
+        } catch (QueryBuilderException e) {
+        	
+            log.error(e);
+            
+        } finally {
+        	
+            close(session);
+            
+        }
+
+        return numResultats;
+        
     }
     
 }

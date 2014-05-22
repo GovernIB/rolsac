@@ -10,6 +10,8 @@ import es.caib.rolsac.api.v2.enllac.EnllacDTO;
 import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalDTO;
+import es.caib.rolsac.api.v2.materia.MateriaCriteria;
+import es.caib.rolsac.api.v2.materia.MateriaDTO;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
@@ -28,6 +30,10 @@ public interface FitxaQueryServiceStrategy {
     public int getNumUnitatsAdministratives(long id) throws StrategyException;
     
     public int getNumSeccions(long id) throws StrategyException;
+    
+    public int getNumMateries(long id) throws StrategyException;
+    
+    public List<MateriaDTO> llistarMateries(long id, MateriaCriteria materiaCriteria) throws StrategyException;
     
     public List<EnllacDTO> llistarEnllacos(long id, EnllacCriteria enllacCriteria) throws StrategyException;
 

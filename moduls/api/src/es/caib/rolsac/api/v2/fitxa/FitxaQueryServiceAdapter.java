@@ -21,6 +21,9 @@ import es.caib.rolsac.api.v2.fetVital.FetVitalQueryServiceAdapter;
 import es.caib.rolsac.api.v2.fitxa.ejb.FitxaQueryServiceEJBStrategy;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
+import es.caib.rolsac.api.v2.materia.MateriaCriteria;
+import es.caib.rolsac.api.v2.materia.MateriaDTO;
+import es.caib.rolsac.api.v2.materia.MateriaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuQueryServiceAdapter;
@@ -50,6 +53,14 @@ public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryServ
             PropertyUtils.copyProperties(this, dto);
         } catch (Exception e) {
             throw new QueryServiceException(ExceptionMessages.ADAPTER_CONSTRUCTOR, e);
+        }
+    }
+    
+    public int getNumMateries() throws QueryServiceException {
+        try {
+            return fitxaQueryServiceStrategy.getNumMateries(getId());
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de materias.", e);
         }
     }
 
@@ -90,6 +101,19 @@ public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryServ
             return fitxaQueryServiceStrategy.getNumSeccions(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de seccions.", e);
+        }
+    }
+    
+    public List<MateriaQueryServiceAdapter> llistarMateries(MateriaCriteria materiaCriteria) throws QueryServiceException {
+        try {
+            List<MateriaDTO> llistaDTO = fitxaQueryServiceStrategy.llistarMateries(getId(), materiaCriteria);
+            List<MateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<MateriaQueryServiceAdapter>();
+            for (MateriaDTO materiaDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), materiaDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "materias.", e);
         }
     }
     
