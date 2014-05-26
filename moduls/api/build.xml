@@ -19,14 +19,12 @@
 
     <property name="jar.src" location="${basedir}/src"/>
     <property name="jar.etc" location="${basedir}/etc"/>
-    <property name="jar.doc" location="${basedir}/doc"/>
 	<property name="jar.gen.src" location="${modul.output.dir}/gen-src"/>
 	<property name="jar.gen.etc" location="${modul.output.dir}/gen-etc"/>
 
     <property name="jar.classes" location="${modul.output.dir}/classes"/>
 
     <property name="doc" location="${output.dir}/doc"/>
-    <property name="jar.doc.api" location="${doc}/api/${modul}"/>
     <property name="jar.product" location="${output.dir}/moduls"/>	
 
 	
@@ -42,7 +40,9 @@
     <property name="ejb.classes" location="${modul.output.dir}/classes"/>
 	
 	<property name="xdoclet.dir" location="${lib.dir}/xdoclet123"/>
-    <property name="ejb.doc.api" location="${doc}/api/${modul}"/>
+    <property name="ejb.doc.api" location="${doc}/api/${modul}/developer"/>
+    <property name="nonjava.doc.api" location="${doc}/api/${modul}/integrator-nonjava"/>
+    <property name="java.doc.api" location="${doc}/api/${modul}/integrator-java"/>
 	<property name="ejb.product" location="${output.dir}/moduls"/>
 	
     <path id="doclet.class.path">
@@ -133,6 +133,8 @@
         <delete dir="${ejb.gen.etc}" failonerror="false" />
         <delete dir="${ejb.classes}" failonerror="false" />
         <delete dir="${ejb.doc.api}" failonerror="false" />
+    	<delete dir="${nonjava.doc.api}" failonerror="false" />
+		<delete dir="${java.doc.api}" failonerror="false" />
     	<delete dir="${jar.src}">
     		<include name="**/ws/*QueryServiceEJBRemote*"/>
     		<include name="**/ws/*QueryServiceEJBRemoteService*"/>
@@ -148,9 +150,9 @@
         <mkdir dir="${ejb.gen.etc}"/>
         <mkdir dir="${ejb.classes}"/>
         <mkdir dir="${ejb.doc.api}"/>
+	    <mkdir dir="${nonjava.doc.api}"/>
+    	<mkdir dir="${java.doc.api}"/>
         <mkdir dir="${ejb.product}"/>
-    	
-    <!-- FIN TAREAS ROLSAC ORIGINAL -->	
     	
     	<mkdir dir="${jar.gen.etc}"/>
         <mkdir dir="${jar.classes}"/>
@@ -185,6 +187,64 @@
         </fileset>
     	
     </path>			
+	
+	
+    <target name="ejb.javadoc" depends="ejb.gen.all">
+        <javadoc
+            destdir="${ejb.doc.api}"
+            classpathref="ejb.class.path"
+            packagenames="${package}.*"
+            overview="${ejb.doc}/overview.html"
+            windowtitle="API del componente ${modul}"
+            doctitle="API del componente ${modul}">
+            <sourcepath>
+                <pathelement path="${ejb.gen.src}"/>
+                <pathelement path="${ejb.src}"/>
+            </sourcepath>
+            <link href="http://java.sun.com/j2se/1.4.1/docs/api/"/>
+            <link href="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/"/>
+            <link href="http://hibernate.bluemars.net/hib_docs/api/"/>
+        </javadoc>
+    </target>
+
+    <target name="nonjava.javadoc">
+        <javadoc
+            destdir="${nonjava.doc.api}"
+            classpathref="ejb.class.path"
+			nodeprecated="false" 
+			nodeprecatedlist="false" 
+			noindex="false" 
+			nonavbar="false" 
+			notree="false" 
+			source="${javac.source}"
+			encoding="${javac.encoding}"
+			splitindex="false" 
+			use="true" 
+			version="true"
+			overview="${ejb.doc}/overview-nonjava.html"
+			Windowtitle="API ROLSAC per integradors no java"
+			>
+			<doctitle><![CDATA[<h1>API ROLSAC per integradors no java</h1>]]></doctitle>
+			<sourcefiles>
+				<fileset dir="${ejb.src}">
+					<include name="**/*/*DTO.java"/>
+					<include name="**/*/*Criteria.java"/>
+					<include name="**/*/*QueryServiceStrategy.java"/>
+					<include name="**/*/*Ordenacio.java"/>
+					<include name="**/*/ConfiguracioServeis.java"/>
+					<include name="**/*/StrategyException.java"/>
+		
+					<exclude name="**/co/*"/>
+				</fileset>
+		
+			</sourcefiles>
+        </javadoc>
+		
+		<copy file="${ejb.doc}/instruccions-nonjava.html" todir="${nonjava.doc.api}" overwrite="true"/>
+	
+    </target>
+	
+    <target name="doc" depends="ejb.javadoc,nonjava.javadoc" description="Realiza las tareas de documentación"/>
 	
 	<!-- EJB -->	
 	<target name="ejb.gen.all" depends="prepare,init,stub.gen.all">

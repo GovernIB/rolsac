@@ -35,7 +35,6 @@
     <property name="web.webapp" location="${modul.output.dir}/webapp"/>
 
     <property name="doc" location="${output.dir}/doc"/>
-    <property name="web.doc.api" location="${doc}/api/${modul}"/>
     <property name="web.product" location="${output.dir}/moduls"/>
 
     <path id="web.class.path">
@@ -82,7 +81,6 @@
         <mkdir dir="${web.gen.etc}"/>
         <mkdir dir="${web.classes}"/>
         <mkdir dir="${web.webapp}"/>
-        <mkdir dir="${web.doc.api}"/>
         <mkdir dir="${web.product}"/>
     </target>
 
@@ -201,28 +199,6 @@
         </war>
     </target>
 
-    <target name="web.javadoc" depends="web.gen.all">
-        <javadoc
-            destdir="${web.doc.api}"
-            classpathref="web.class.path"
-            packagenames="${package}.*"
-            overview="${web.doc}/overview.html"
-            windowtitle="API del componente web ${modul}"
-            doctitle="API del componente web ${modul}"
-            bottom="Fundació Ibit">
-
-            <sourcepath>
-                <pathelement path="${web.gen.src}"/>
-                <pathelement path="${web.src}"/>
-            </sourcepath>
-
-            <link href="http://java.sun.com/j2se/1.4.1/docs/api/"/>
-            <link href="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/"/>
-            <link href="http://jakarta.apache.org/struts/api/"/>
-        </javadoc>
-    </target>
-
-    <target name="doc" depends="web.javadoc" description="Realiza las tareas de documentación "/>
     <target name="main" depends="web.war" description="Construeye el war"/>
 
 	

@@ -2,7 +2,7 @@
 <project name="back2" basedir="." default="main">
 
     <property name="modul" value="back2"/>
-    <property name="package" value="es.caib.rolsac.back2"/>
+    <property name="package" value="es.caib.rolsac.${modul}"/>
 	<property name="home.dir" location="${basedir}/../.."/>
 	<property file="${home.dir}/build.${user.name}.properties" />
 	<property file="${home.dir}/build.${rolsac.target}.properties"/>
@@ -15,6 +15,8 @@
     <property name="output.dir" location="${home.dir}/output"/>
     <property name="modul.output.dir" location="${output.dir}/${modul}"/>
 	<property name="web.htdocs" value="${basedir}/htdocs"/>
+    <property name="doc" location="${output.dir}/doc"/>
+    <property name="web.doc.api" location="${doc}/api/${modul}"/>
 	<property name="web.product" location="${output.dir}/moduls"/>
 
     <property name="web.gen.etc" location="${modul.output.dir}/gen-etc"/>
@@ -136,6 +138,29 @@
 		</copydir>
     </target>
 
+    <target name="web.javadoc">
+        <javadoc
+            destdir="${web.doc.api}"
+            classpathref="web.class.path"
+            packagenames="${package}.*"
+            overview="${web.doc}/overview.html"
+            windowtitle="API del componente web ${modul}"
+            doctitle="API del componente web ${modul}">
+
+            <sourcepath>
+                <pathelement path="${web.dir}"/>
+            </sourcepath>
+
+            <link href="http://java.sun.com/j2se/1.4.1/docs/api/"/>
+            <link href="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/"/>
+            <link href="http://jakarta.apache.org/struts/api/"/>
+        </javadoc>
+
+    </target>
+	
+	
+    <target name="doc" depends="web.javadoc" description="Realiza las tareas de documentación "/>
+	
 	<target name="webGeneration" description="web_back">
 		<taskdef name="webdoclet" classname="xdoclet.modules.web.WebDocletTask" classpathref="xdoclet.classpath" />
 		<webdoclet destDir="${web.gen.etc}" mergeDir="${web.merge.web}">

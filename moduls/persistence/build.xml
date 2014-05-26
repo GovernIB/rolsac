@@ -256,8 +256,7 @@
             packagenames="${package}.*"
             overview="${ejb.doc}/overview.html"
             windowtitle="API del componente ${modul}"
-            doctitle="API del componente ${modul}"
-            bottom="Fundaci� Ibit">
+            doctitle="API del componente ${modul}">
             <sourcepath>
                 <pathelement path="${ejb.gen.src}"/>
                 <pathelement path="${ejb.src}"/>

@@ -115,8 +115,7 @@
             packagenames="${package}.*"
             overview="${jar.doc}/overview.html"
             windowtitle="API del componente ${modul}"
-            doctitle="API del componente ${modul}"
-            bottom="Fundació Ibit">
+            doctitle="API del componente ${modul}">
             <sourcepath>
                 <pathelement path="${jar.src}"/>
             </sourcepath>

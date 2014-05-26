@@ -3,7 +3,7 @@
 <project name="sac.oracle" default="main" basedir=".">
 
 	<property name="modul" value="oracle" />
-	<property name="package" value="es.caib.rol.sac.${modul}" />
+	<property name="package" value="es.caib.rolsac.${modul}" />
 
 	<property name="home.dir" location="${basedir}/../.." />
 	<property file="${home.dir}/build.${user.name}.properties" />
@@ -84,7 +84,12 @@
 	
 	
 	<target name="jar.javadoc" depends="jar.gen.all">
-		<javadoc destdir="${jar.doc.api}" classpathref="jar.class.path" packagenames="${package}.*" overview="${jar.doc}/overview.html" windowtitle="API del componente ${modul}" doctitle="API del componente ${modul}" bottom="Fundació Ibit">
+		<javadoc destdir="${jar.doc.api}" 
+			classpathref="jar.class.path" 
+			packagenames="${package}.*" 
+			overview="${jar.doc}/overview.html" 
+			windowtitle="API del componente ${modul}" 
+			doctitle="API del componente ${modul}">
 			<sourcepath>
 				<pathelement path="${jar.src}" />
 			</sourcepath>
