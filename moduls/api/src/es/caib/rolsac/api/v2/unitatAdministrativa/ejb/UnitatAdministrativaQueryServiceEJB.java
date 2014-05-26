@@ -16,6 +16,7 @@ import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.Materia;
+import org.ibit.rol.sac.model.NormativaExterna;
 import org.ibit.rol.sac.model.NormativaLocal;
 import org.ibit.rol.sac.model.Personal;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
@@ -89,7 +90,9 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 	private static final String HQL_PERSONAL_CLASS = HQL_UA_ALIAS + ".personal";
 	private static final String HQL_PERSONAL_ALIAS = "per";
 	private static final String HQL_NORMATIVA_LOCAL_CLASS = "NormativaLocal";
-	private static final String HQL_NORMATIVA_ALIAS = "n";
+	private static final String HQL_NORMATIVA_LOCAL_ALIAS = "nl";
+	private static final String HQL_NORMATIVA_EXTERNA_CLASS = "NormativaExterna";
+	private static final String HQL_NORMATIVA_EXTERNA_ALIAS = "ne";
 	private static final String HQL_PROCEDIMIENTO_CLASS = HQL_UA_ALIAS + ".procedimientos";
 	private static final String HQL_PROCEDIMIENTO_ALIAS = "p";
 	private static final String HQL_TRAMIT_CLASS = HQL_UA_ALIAS + ".tramites";
@@ -386,21 +389,30 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<NormativaDTO> llistarNormatives(long id, NormativaCriteria normativaCriteria) {
+		
 		List<NormativaDTO> normativaDTOList = new ArrayList<NormativaDTO>();
 		List<FromClause> entities = new ArrayList<FromClause>();
 		List<CriteriaObject> criteris;
 		Session session = null;
+		
+		Boolean incluirExternas = false;
+		
 		try {
+		
 			session = getSession();
+			
+			// Guardamos el valor de este parámetro y lo ponemos a null para que no dé un error siendo procesado por BasicUtils.parseCriterias().
+			incluirExternas = normativaCriteria.getIncluirExternas() != null ? normativaCriteria.getIncluirExternas() : Boolean.FALSE;
+			normativaCriteria.setIncluirExternas(null);
 
-			criteris = BasicUtils.parseCriterias(NormativaCriteria.class, HQL_NORMATIVA_ALIAS, HQL_TRADUCCIONES_ALIAS, normativaCriteria);
+			criteris = BasicUtils.parseCriterias(NormativaCriteria.class, HQL_NORMATIVA_LOCAL_ALIAS, HQL_TRADUCCIONES_ALIAS, normativaCriteria);
 			CriteriaObject normativaByUACO = new NormativaByUnitatAdministrativaCriteria(HQL_UA_ALIAS);
 			normativaByUACO.parseCriteria(String.valueOf(id));
 			criteris.add(normativaByUACO);
 
-			entities.add(new FromClause(HQL_NORMATIVA_LOCAL_CLASS, HQL_NORMATIVA_ALIAS));
-			entities.add(new FromClause(HQL_NORMATIVA_ALIAS + ".unidadAdministrativa", HQL_UA_ALIAS));  
-			QueryBuilder qb = new QueryBuilder(HQL_NORMATIVA_ALIAS, entities, normativaCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
+			entities.add(new FromClause(HQL_NORMATIVA_LOCAL_CLASS, HQL_NORMATIVA_LOCAL_ALIAS));
+			entities.add(new FromClause(HQL_NORMATIVA_LOCAL_ALIAS + ".unidadAdministrativa", HQL_UA_ALIAS));  
+			QueryBuilder qb = new QueryBuilder(HQL_NORMATIVA_LOCAL_ALIAS, entities, normativaCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
 			qb.extendCriteriaObjects(criteris);
 
 			UnitatAdministrativaCriteria uac = new UnitatAdministrativaCriteria();
@@ -409,25 +421,68 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 			qb.extendCriteriaObjects(criteris);
 
 			Query query = qb.createQuery(session);
-			List<NormativaLocal> normativasLocalesResult = (List<NormativaLocal>) query.list();
-
+			
+			List<NormativaLocal> listaNormativasLocales = (List<NormativaLocal>)query.list();
+			
+			// Añadimos las locales a la lista de DTOs que retornaremos.
 			NormativaDTO dto;
-			for (NormativaLocal normativa : normativasLocalesResult) {
-				dto = (NormativaDTO) BasicUtils.entityToDTO(NormativaDTO.class, normativa, normativaCriteria.getIdioma());
+			for (NormativaLocal normativa : listaNormativasLocales) {
+				dto = (NormativaDTO)BasicUtils.entityToDTO(NormativaDTO.class, normativa, normativaCriteria.getIdioma());
 				dto.setLocal(true);
 				normativaDTOList.add(dto);
 			}
+			
+			// Si nos solicitan incluir las externas, nos toca hacer otra consulta y seguir añadiendo normativas a la lista de DTOs.
+			// Se duplica algo de código, pero no parece quedar más remedio al ser dos subclases de org.ibit.rol.sac.model.Normativa
+			if (incluirExternas) {
+
+				List<CriteriaObject> criterisExternas = BasicUtils.parseCriterias(NormativaCriteria.class, HQL_NORMATIVA_EXTERNA_ALIAS, HQL_TRADUCCIONES_ALIAS, normativaCriteria);
+				normativaByUACO = new NormativaByUnitatAdministrativaCriteria(HQL_UA_ALIAS);
+				normativaByUACO.parseCriteria(String.valueOf(id));
+				criterisExternas.add(normativaByUACO);
+
+				List<FromClause> entitiesExternas = new ArrayList<FromClause>();
+				entitiesExternas.add(new FromClause(HQL_NORMATIVA_EXTERNA_CLASS, HQL_NORMATIVA_EXTERNA_ALIAS));
+				entitiesExternas.add(new FromClause(HQL_NORMATIVA_EXTERNA_ALIAS + ".unidadAdministrativa", HQL_UA_ALIAS));  
+				qb = new QueryBuilder(HQL_NORMATIVA_EXTERNA_ALIAS, entitiesExternas, normativaCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
+				qb.extendCriteriaObjects(criterisExternas);
+
+				criterisExternas = BasicUtils.parseCriterias(UnitatAdministrativaCriteria.class, HQL_UA_ALIAS, uac);
+				qb.extendCriteriaObjects(criterisExternas);
+
+				query = qb.createQuery(session);
+				
+				List<NormativaExterna> listaNormativasExternas = (List<NormativaExterna>)query.list();
+
+				// Añadimos las externas a la lista de DTOs que retornaremos.
+				for (NormativaExterna normativa : listaNormativasExternas) {
+					dto = (NormativaDTO)BasicUtils.entityToDTO(NormativaDTO.class, normativa, normativaCriteria.getIdioma());
+					dto.setLocal(true);
+					normativaDTOList.add(dto);
+				}
+				
+			}
+			
 		} catch (HibernateException e) {
+			
 			log.error(e);
+			
 		} catch (CriteriaObjectParseException e) {
+			
 			log.error(e);
+			
 		} catch (QueryBuilderException e) {
+			
 			log.error(e);
+			
 		} finally {
+			
 			close(session);
+			
 		}
 
 		return normativaDTOList;
+		
 	}
 
 	/**
@@ -1034,14 +1089,14 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 		try {            
 			session = getSession();
 
-			criteris = BasicUtils.parseCriterias(NormativaCriteria.class, HQL_NORMATIVA_ALIAS, new NormativaCriteria());
+			criteris = BasicUtils.parseCriterias(NormativaCriteria.class, HQL_NORMATIVA_LOCAL_ALIAS, new NormativaCriteria());
 			CriteriaObject normativaByUACO = new NormativaByUnitatAdministrativaCriteria(HQL_UA_ALIAS);
 			normativaByUACO.parseCriteria(String.valueOf(id));
 			criteris.add(normativaByUACO);
-			entities.add(new FromClause(HQL_NORMATIVA_LOCAL_CLASS, HQL_NORMATIVA_ALIAS));
-			entities.add(new FromClause(HQL_NORMATIVA_ALIAS + ".unidadAdministrativa", HQL_UA_ALIAS));  
+			entities.add(new FromClause(HQL_NORMATIVA_LOCAL_CLASS, HQL_NORMATIVA_LOCAL_ALIAS));
+			entities.add(new FromClause(HQL_NORMATIVA_LOCAL_ALIAS + ".unidadAdministrativa", HQL_UA_ALIAS));  
 
-			QueryBuilder qb = new QueryBuilder(HQL_NORMATIVA_ALIAS, entities, null, null, true);
+			QueryBuilder qb = new QueryBuilder(HQL_NORMATIVA_LOCAL_ALIAS, entities, null, null, true);
 			qb.extendCriteriaObjects(criteris);
 			Query query = qb.createQuery(session);
 			numResultats = getNumberResults(query);

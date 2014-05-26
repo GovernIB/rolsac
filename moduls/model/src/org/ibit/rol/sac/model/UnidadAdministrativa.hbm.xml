@@ -64,7 +64,7 @@
         <set name="normativas" cascade="none" inverse="true" lazy="true" order-by="NOR_FECHA">
             <cache usage="read-write"/>
             <key column="NOR_CODUNA" foreign-key="RSC_NORUNA_FK"/>
-            <one-to-many class="org.ibit.rol.sac.model.NormativaLocal"/>
+            <one-to-many class="org.ibit.rol.sac.model.Normativa"/>
         </set>
 
         <set name="procedimientos" cascade="none" inverse="true" lazy="true">
