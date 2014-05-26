@@ -23,13 +23,10 @@ public class EnllacQueryServiceGateway {
 			        ConfiguracioServeis.getUrlServei(ConfiguracioServeis.NOM_SERVEI_ENLLAC)), null);
 			        
 		} catch (AxisFault e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (APIException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 	}

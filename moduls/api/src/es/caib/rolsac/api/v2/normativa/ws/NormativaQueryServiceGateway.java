@@ -33,10 +33,8 @@ public class NormativaQueryServiceGateway {
 									.getUrlServei(ConfiguracioServeis.NOM_SERVEI_NORMATIVA)),
 					null);
 		} catch (AxisFault e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (APIException e) {
 			e.printStackTrace();

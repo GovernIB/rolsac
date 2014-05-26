@@ -26,10 +26,8 @@ public class IconaFamiliaQueryServiceGateway {
 									.getUrlServei(ConfiguracioServeis.NOM_SERVEI_ICONA_FAMILIA)),
 					null);
 		} catch (AxisFault e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (APIException e) {
 			e.printStackTrace();

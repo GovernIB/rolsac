@@ -32,10 +32,8 @@ public class TramitQueryServiceGateway {
 									.getUrlServei(ConfiguracioServeis.NOM_SERVEI_TRAMIT)),
 					null);
 		} catch (AxisFault e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (APIException e) {
 			e.printStackTrace();

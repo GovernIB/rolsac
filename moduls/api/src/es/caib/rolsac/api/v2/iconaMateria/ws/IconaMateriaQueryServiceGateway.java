@@ -25,10 +25,8 @@ public class IconaMateriaQueryServiceGateway {
 									.getUrlServei(ConfiguracioServeis.NOM_SERVEI_ICONA_MATERIA)),
 					null);
 		} catch (AxisFault e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (APIException e) {
 			e.printStackTrace();
