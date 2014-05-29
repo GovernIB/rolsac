@@ -39,6 +39,8 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  */
 public abstract class FichaResumenFacadeEJB extends HibernateEJB {
 
+	private static final long serialVersionUID = 1L;
+	
 	protected Hashtable contenidos_web; // contiene url y su contenido para agilizar el proceso de indexacion de fichas
 	
     /**
@@ -66,15 +68,14 @@ public abstract class FichaResumenFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-	public ResultadoBusqueda buscarFichas(Map parametros, Map traduccion,
-			UnidadAdministrativa ua, Long idFetVital, Long idMateria,
-			Long idPublic, boolean uaFilles, boolean uaMeves,
-			String campoOrdenacion, String orden, String pagina,
-			String resultats, int campoVisible) {
+    public ResultadoBusqueda buscarFichas(Map parametros, Map traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria,
+			Long idPublic, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden, String pagina, String resultats, 
+			int campoVisible) {
 		
         Session session = getSession();
         
         try {
+        	
             if (!userIsOper()) {
                 parametros.put("validacion", Validacion.PUBLICA);
             }
@@ -84,21 +85,53 @@ public abstract class FichaResumenFacadeEJB extends HibernateEJB {
             String fetVitalQuery = "";            
             String materiaQuery = "";
             String publicQuery = "";
+            String camposVariosQuery = "";
             String selectResults = "select distinct ficha ";
             String selectCount = "select count (distinct ficha) ";
             String mainQuery = "from FichaResumen as ficha, ficha.traducciones as trad, ficha.fichasua as fsua ";
             
-            if (traduccion.get("idioma") != null) {
-                i18nQuery = populateQuery(parametros, traduccion, params);
-            } else {
+            // Contemplamos los campos urlVideo, urlForo, foro_tema, info, responsable junto a los campos traducibles.
+            String[] camposVarios = {"urlVideo", "urlForo", "foro_tema", "info", "responsable"};
+            
+            // Guardamos valor del texto de búsqueda si éste existe. Lo borramos del mapa de parámetros para que la lógica
+            // de construcción de i18nQuery siga funcionando sin problemas.
+            String textoBusqueda = null;
+            if (parametros.get("textes") != null) {
+            	
+            	textoBusqueda = (String)parametros.get("textes");
+            	parametros.remove("textes");
+            	
+            	if (textoBusqueda != null) {
+                	
+    	            camposVariosQuery = " (";
+    	            String or = "";
+    	            
+    	            for (String campo : camposVarios) {
+    	            
+    	            	camposVariosQuery += or + " upper(ficha." + campo + ") like upper('%" + textoBusqueda + "%') ";
+    	            	
+    	            	if ("".equals(or))
+    	            		or = " or ";
+    	
+    	            }
+    	            
+    	            camposVariosQuery += ") ";
+    	                            
+                }
+            	
+            }
+            
+			if (traduccion.get("idioma") != null) {
+				i18nQuery = populateQuery(parametros, traduccion, params);
+			} else {
 				String paramsQuery = populateQuery(parametros, new HashMap(), params);
 				if (paramsQuery.length() == 0) {
 					i18nQuery += " where ";
 				} else {
 					i18nQuery += paramsQuery + " and ";
 				}
-				i18nQuery += "(" + i18nPopulateQuery(traduccion, params) + ") ";
-            }
+				i18nQuery += "(" + i18nPopulateQuery(traduccion, params, camposVariosQuery) + ") ";
+			}
             
             if (campoVisible == 1) {
             	i18nQuery += " and (sysdate < ficha.fechaCaducidad or ficha.fechaCaducidad is null) ";
@@ -108,7 +141,8 @@ public abstract class FichaResumenFacadeEJB extends HibernateEJB {
 			}
             
             String orderBy = "";
-            if (campoOrdenacion != null && orden != null) orderBy = " order by ficha." + campoOrdenacion + " " + orden;
+            if (campoOrdenacion != null && orden != null) 
+            	orderBy = " order by ficha." + campoOrdenacion + " " + orden;
             
 			Long idUA = (ua != null) ? ua.getId() : null;
             String uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA( idUA, uaFilles, uaMeves );
@@ -116,7 +150,6 @@ public abstract class FichaResumenFacadeEJB extends HibernateEJB {
             if ( !StringUtils.isEmpty(uaQuery) ) {
             	uaQuery = " and fsua.idUa in (" + uaQuery + ") ";
             }
-            
             
             if ( idFetVital != null ) {
             	mainQuery += ",ficha.hechosVitales as hec ";
@@ -178,6 +211,7 @@ public abstract class FichaResumenFacadeEJB extends HibernateEJB {
 		            }
 		            
 				}
+				
             }
             
             Query query = session.createQuery(selectResults + mainQuery + i18nQuery + uaQuery + accesoQuery + fetVitalQuery + materiaQuery + publicQuery + orderBy);
@@ -207,114 +241,185 @@ public abstract class FichaResumenFacadeEJB extends HibernateEJB {
             return resultadoBusqueda;
             
 		} catch (DelegateException de) {
+			
 			throw new EJBException(de);
+			
         } catch (HibernateException he) {
+        	
             throw new EJBException(he);
+            
         } finally {
+        	
             close(session);
+            
         }
+        
     }
-	
 	
     /**
      * Construye el query de búsqueda segun los parametros
      */
-    private String populateQuery(Map parametros, Map traduccion, List params) {
-        String aux = "";
+	private String populateQuery(Map parametros, Map traduccion, List params) {
+		
+		String aux = "";
 
-        for (Iterator iter1 = parametros.keySet().iterator(); iter1.hasNext();) {
-            String key = (String) iter1.next();
-            Object value = parametros.get(key);
-            if (!key.startsWith("ordre") && value != null) {
-                if (value instanceof String) {
-                    String sValue = (String) value;
-                    if (sValue.length() > 0) {
-                        if (aux.length() > 0) aux = aux + " and ";
-                        if (sValue.startsWith("\"") && sValue.endsWith("\"")) {
-                            sValue = sValue.substring(1, (sValue.length() - 1));
-                            aux = aux + " upper( ficha." + key + " ) like ? ";
-                            params.add(sValue);
-                        } else {
-                            aux = aux + " upper( ficha." + key + " ) like ? ";
-                            params.add("%"+sValue+"%");
-                        }
-                    }
-                } else if (value instanceof Date) {
-                    if (aux.length() > 0) aux = aux + " and ";
-                    aux = aux + "ficha." + key + " = '" + value + "'";
-                } else {
-                    if (aux.length() > 0) aux = aux + " and ";
-                    aux = aux + "ficha." + key + " = " + value;
-                }
-            }
-        }
+		Iterator iter1 = parametros.keySet().iterator();
+		
+		while ( iter1.hasNext() ) {
+			
+			String key = (String) iter1.next();
+			Object value = parametros.get(key);
+			
+			if (!key.startsWith("ordre") && value != null) {
+				
+				if (value instanceof String) {
+					
+					String sValue = (String)value;
+					
+					if (sValue.length() > 0) {
+						if (aux.length() > 0)
+							aux = aux + " and ";
+						if (sValue.startsWith("\"") && sValue.endsWith("\"")) {
+							sValue = sValue.substring(1, (sValue.length() - 1));
+							aux = aux + " upper( ficha." + key + " ) like ? ";
+							params.add(sValue);
+						} else {
+							aux = aux + " upper( ficha." + key + " ) like ? ";
+							params.add("%" + sValue + "%");
+						}
+					}
+					
+				} else if (value instanceof Date) {
+					
+					if (aux.length() > 0)
+						aux = aux + " and ";
+					
+					aux = aux + "ficha." + key + " = '" + value + "'";
+					
+				} else {
+					
+					if (aux.length() > 0)
+						aux = aux + " and ";
+					
+					aux = aux + "ficha." + key + " = " + value;
+					
+				}
+				
+			}
+			
+		}
 
-        // Tratamiento de traducciones
-        if (!traduccion.isEmpty()) {
-            if (aux.length() > 0) aux = aux + " and ";
-            aux = aux + "index(trad) = '" + traduccion.get("idioma") + "'";
-            traduccion.remove("idioma");
-        }
-        for (Iterator iter2 = traduccion.keySet().iterator(); iter2.hasNext();) {
-            String key = (String) iter2.next();
-            Object value = traduccion.get(key);
-            if (value != null) {
-                if (value instanceof String) {
-                    String sValue = (String) value;
-                    if (sValue.length() > 0) {
-                        if (sValue.startsWith("\"") && sValue.endsWith("\"")) {
-                            sValue = sValue.substring(1, (sValue.length() - 1));
-                            aux = aux + " and upper( trad." + key + " ) like ? ";
-                            params.add(sValue);
-                        } else {
-                            aux = aux + " and upper( trad." + key + " ) like ? ";
-                            params.add("%"+sValue+"%");
-                        }
-                    }
-                } else {
-                    aux = aux + " and trad." + key + " = ? ";
-                    params.add(value);
-                }
-            }
-        }
+		// Tratamiento de traducciones
+		if (!traduccion.isEmpty()) {
+			
+			if (aux.length() > 0)
+				aux = aux + " and ";
+			
+			aux = aux + "index(trad) = '" + traduccion.get("idioma") + "'";
+			traduccion.remove("idioma");
+			
+		}
+		
+		Iterator iter2 = traduccion.keySet().iterator();
+		
+		while ( iter2.hasNext() ) {
+			
+			String key = (String) iter2.next();
+			Object value = traduccion.get(key);
+			
+			if (value != null) {
+				
+				if (value instanceof String) {
+					
+					String sValue = (String)value;
+					
+					if (sValue.length() > 0) {
+						if (sValue.startsWith("\"") && sValue.endsWith("\"")) {
+							sValue = sValue.substring(1, (sValue.length() - 1));
+							aux = aux + " and upper( trad." + key
+									+ " ) like ? ";
+							params.add(sValue);
+						} else {
+							aux = aux + " and upper( trad." + key
+									+ " ) like ? ";
+							params.add("%" + sValue + "%");
+						}
+					}
+					
+				} else {
+					
+					aux = aux + " and trad." + key + " = ? ";
+					params.add(value);
+					
+				}
+				
+			}
+			
+		}
 
-        if (aux.length() > 0) {
-            aux = "where " + aux;
-        }
-        return aux;
-    }
+		if (aux.length() > 0) {
+			aux = "where " + aux;
+		}
+		
+		return aux;
+		
+	}
     
 	 /**
      * Construye el query de búsqueda multiidioma en todos los campos
      */
-    private String i18nPopulateQuery(Map traducciones, List params) {
+    private String i18nPopulateQuery(Map traducciones, List params, String camposVariosQuery) {
+    	
         String aux = "";
+        
+        // amartin: Añadimos estas condiciones a la query de idiomas, ya que por cómo se construye, es lo más rápido y
+        // limpio que podemos concatenar.
+		if (camposVariosQuery != null && !"".equals(camposVariosQuery)) {
+			
+			aux += camposVariosQuery;
+			
+		}
 
-        for (Iterator iterTraducciones = traducciones.keySet().iterator(); iterTraducciones.hasNext();) {
-            String key = (String) iterTraducciones.next();
-            Object value = traducciones.get(key);
-            if (value != null) {
-                if (aux.length() > 0) aux = aux + " or ";
-                if (value instanceof String) {
-                    String sValue = (String) value;
-                    if (sValue.length() > 0) {
-                        if (sValue.startsWith("\"") && sValue.endsWith("\"")) {
-                            sValue = sValue.substring(1, (sValue.length() - 1));
-                            aux = aux + " upper( trad." + key + " ) like ? ";
-                            params.add(sValue);
-                        } else {
-                            aux = aux + " upper( trad." + key + " ) like ? ";
-                            params.add("%"+sValue+"%");
-                        }
-                    }
-                } else {
-                    aux = aux + " trad." + key + " = ? ";
-                    params.add(value);
-                }
-            }
-        }
+		Iterator iterTraducciones = traducciones.keySet().iterator(); 
+		
+		while ( iterTraducciones.hasNext() ) {
+			
+			String key = (String) iterTraducciones.next();
+			Object value = traducciones.get(key);
+			
+			if (value != null) {
+				
+				if (aux.length() > 0)
+					aux = aux + " or ";
+				
+				if (value instanceof String) {
+					
+					String sValue = (String) value;
+					
+					if (sValue.length() > 0) {
+						if (sValue.startsWith("\"") && sValue.endsWith("\"")) {
+							sValue = sValue.substring(1, (sValue.length() - 1));
+							aux = aux + " upper( trad." + key + " ) like ? ";
+							params.add(sValue);
+						} else {
+							aux = aux + " upper( trad." + key + " ) like ? ";
+							params.add("%" + sValue + "%");
+						}
+					}
+					
+				} else {
+					
+					aux = aux + " trad." + key + " = ? ";
+					params.add(value);
+					
+				}
+				
+			}
+			
+		}
 
-        return aux;
-    }
+		return aux;
+		
+	}
 
 }

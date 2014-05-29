@@ -183,7 +183,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 		int campoVisible = recuperarVisibilidad(request, paramMap);		     	// Recuperamos la visibilidad de la ficha
 
 		recuperarCodigo(request, paramMap);						     			// Recuperamos el parametro del código
-		recuperarTexto(request, tradMap);										// Recuperamos el texto y lo buscamos en todos los idiomas
+		recuperarTexto(request, tradMap, paramMap);								// Recuperamos el texto y lo buscamos en todos los idiomas
 		recuperarValidacio(request, paramMap);									// Recuperamos si es válido
 
 		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
@@ -282,11 +282,13 @@ public class FitxaInfBackController extends PantallaBaseController {
 	/*
 	 * Recuperamos el campo texto para las traducciones
 	 */
-	private void recuperarTexto(HttpServletRequest request, Map<String, String> tradMap) {
+	private void recuperarTexto(HttpServletRequest request, Map<String, String> tradMap, Map<String, Object> paramMap) {
 
 		String textes = request.getParameter("textes");
 		
 		if (textes != null && !"".equals(textes)) {
+			
+			paramMap.put("textes", textes);
 			
 			textes = textes.toUpperCase();
 			
