@@ -186,7 +186,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 			id = ParseUtil.parseLong( idStr.trim() );
 		
 		paramMap.put("id", idStr != null ? id : null );
-        
+		        
         if (request.isUserInRole("sacoper")) {
             paramMap.put("validacion", ""); // En el back antiguo estaba asi.
         } else {
@@ -218,6 +218,8 @@ public class FitxaInfBackController extends PantallaBaseController {
         
         if ( textes != null && !"".equals(textes) ) {
         	
+        	paramMap.put("textes", textes);
+        	
             textes = textes.toUpperCase();
             
             if (tradMap.get("titulo") == null) {
@@ -229,7 +231,9 @@ public class FitxaInfBackController extends PantallaBaseController {
             tradMap.put("url", textes);
             
         } else {
+        	
             tradMap.put("idioma", lang);
+            
         }
         
         String visibilitat = request.getParameter("visibilitat");
