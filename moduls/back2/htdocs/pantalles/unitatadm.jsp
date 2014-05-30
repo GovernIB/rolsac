@@ -3,7 +3,9 @@
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="rol" uri="/WEB-INF/rol.tld" %>
-<c:set var="rolAdmin"><rol:userIsAdmin/></c:set>
+	
+	<c:set var="rolAdmin"><rol:userIsAdmin/></c:set>
+
     <link href="<c:url value='/css/unitat.css'/>" rel="stylesheet" type="text/css" media="screen" />
     <link href="<c:url value='/css/modul_seccions.css'/>" rel="stylesheet" type="text/css" media="screen" />
     <link href="<c:url value='/css/modul_seccions_fitxes.css'/>" rel="stylesheet" type="text/css" media="screen" />        
@@ -176,9 +178,12 @@
                                         <a href="javascript:;" class='<c:out value="${llengua.lang}"/>'><c:out value="${llengua.nombre}" /></a>
                                     </li>
                                 </c:forEach>
-                                <li class="traduix btnGenerico" id="botoTraduirUnitatAdministrativa">
-                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
-                                </li>
+                                
+                                <c:if test="${traductorActivo}">
+	                                <li class="traduix btnGenerico" id="botoTraduirUnitatAdministrativa">
+	                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
+	                                </li>
+                                </c:if>
                             </ul>
                             <div class="idiomes">                                                           
                                 <c:forEach items="${idiomes_aplicacio}" var="lang">

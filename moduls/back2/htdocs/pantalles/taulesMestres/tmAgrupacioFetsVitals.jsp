@@ -236,9 +236,11 @@
                                     </li>
                                 </c:forEach>
 
-                                <li class="traduix btnGenerico" id="botoTraduirAHV">
-                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
-                                </li>
+                                <c:if test="${traductorActivo}">
+	                                <li class="traduix btnGenerico" id="botoTraduirAHV">
+	                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
+	                                </li>
+                                </c:if>
                             </ul>
 
                             <c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">

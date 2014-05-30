@@ -43,11 +43,15 @@ public abstract class PantallaBaseController {
 
 		HttpSession session = request.getSession();
 
-		String nomLlinatges = (String) session.getAttribute("capNomLlinatges");
+		String nomLlinatges = (String)session.getAttribute("capNomLlinatges");
+		
 		if (nomLlinatges == null) {
+			
 	    	String username = request.getRemoteUser();
 	    	nomLlinatges = username; 
+	    	
 		    try {
+		    	
 		    	model.put("idiomaVal", DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
 		    	
 		    	UsuarioDelegate usuariDelegate = DelegateUtil.getUsuarioDelegate();
@@ -55,18 +59,32 @@ public abstract class PantallaBaseController {
 		    	if (usuari != null && !StringUtils.isEmpty(usuari.getNombre())) {
 		    		nomLlinatges = usuari.getNombre();
 		    	}
+		    	
 		    	session.setAttribute("nomLlinatges", nomLlinatges);
 	        
 		    } catch (DelegateException dEx) {
+		    	
 				log.error(ExceptionUtils.getStackTrace(dEx));
+				
 			}
+		    
 		}
-	    
+			    
 	    model.put("capNomLlinatges", nomLlinatges);
 	    model.put("capUrlSortir", System.getProperty("es.caib.rolsac.back2.urlSortir"));
 	    
-	    String permisosSuperAddicionals = ""+System.getProperty("es.caib.rolsac.permisosSuperAddicionals");
-	    model.put("permisosSuperAddicionals", permisosSuperAddicionals.equalsIgnoreCase("Y"));
+	    String permisosSuperAddicionals = System.getProperty("es.caib.rolsac.permisosSuperAddicionals");
+	    model.put("permisosSuperAddicionals", "Y".equalsIgnoreCase(permisosSuperAddicionals));
+	    
+	    // Comprobamos si hay que mostrar la opción de traducir:
+ 		Boolean traductorActivo = Boolean.FALSE;
+ 		
+ 		if (System.getProperty("es.caib.rolsac.integracion.traductor") != null) {
+ 			traductorActivo = Boolean.valueOf("S".equalsIgnoreCase(System.getProperty("es.caib.rolsac.integracion.traductor")));
+ 		}
+ 			
+ 		request.setAttribute("traductorActivo", traductorActivo);
+	    
 	}
 
 	

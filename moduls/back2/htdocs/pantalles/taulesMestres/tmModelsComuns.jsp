@@ -2,7 +2,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/jquery-ui.css"/>" />
-<!-- <link href='<c:url value="/css/tm_materia.css"/>' rel="stylesheet" type="text/css" media="screen" /> -->
 <link href='<c:url value="/css/tm_models_comuns.css"/>' rel="stylesheet" type="text/css" media="screen" />
 
 <script type="text/javascript" src="<c:url value='/js/jquery-1.6.4.min.js'/>"></script>
@@ -160,9 +159,11 @@
                                     </li>
                                 </c:forEach>
 
-								<li class="traduix btnGenerico" id="botoTraduirModelsComuns">
-								    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
-								</li>
+								<c:if test="${traductorActivo}">
+									<li class="traduix btnGenerico" id="botoTraduirModelsComuns">
+									    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
+									</li>
+								</c:if>
 							</ul>
 
                             <div class="idiomes">

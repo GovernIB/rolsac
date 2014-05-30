@@ -2,7 +2,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="rol" uri="/WEB-INF/rol.tld" %>
+
 <c:set var="rolAdmin"><rol:userIsAdmin/></c:set>
+
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/cataleg_procediments.css"/>" media="screen" />
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/modul_documents.css"/>" media="screen" />
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/modul_normativa.css"/>" media="screen" />
@@ -686,9 +688,11 @@
                                     </li>
                                 </c:forEach>
 
-                                <li class="traduix btnGenerico" id="botoTraduirProcediment">
-                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
-                                </li>
+                                <c:if test="${traductorActivo}">
+	                                <li class="traduix btnGenerico" id="botoTraduirProcediment">
+	                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
+	                                </li>
+                                </c:if>
                             </ul>                            
 
                             <div class="idiomes">
@@ -1380,9 +1384,11 @@
                                     </li>
                                 </c:forEach>
 								
-                                <li class="traduix btnGenerico" id="botoTraduirDocument">
-                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
-                                </li>
+                                <c:if test="${traductorActivo}">
+	                                <li class="traduix btnGenerico" id="botoTraduirDocument">
+	                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
+	                                </li>
+                                </c:if>
                             </ul>
 									
 							<div class="idiomes">
@@ -1599,9 +1605,11 @@
                                     </li>
                                 </c:forEach>
 								
-                                <li class="traduix btnGenerico" id="botoTraduirTramit">
-                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
-                                </li>
+                                <c:if test="${traductorActivo}">
+	                                <li class="traduix btnGenerico" id="botoTraduirTramit">
+	                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
+	                                </li>
+                                </c:if>
                             </ul>
 							
 				            <div class="idiomes">
@@ -2123,9 +2131,11 @@
                                     </li>
                                 </c:forEach>
 								
-                                <li class="traduix btnGenerico" id="botoTraduirProcediment">
-                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
-                                </li>
+								<c:if test="${traductorActivo}">
+	                                <li class="traduix btnGenerico" id="botoTraduirProcediment">
+	                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
+	                                </li>
+                                </c:if>
                             </ul>                            
 
                             <div class="idiomes">
@@ -2258,9 +2268,11 @@
                                     </li>
                                 </c:forEach>
 								
-                                <li class="traduix btnGenerico" id="botoTraduirFormulariTramit">
-                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
-                                </li>
+                                <c:if test="${traductorActivo}">
+	                                <li class="traduix btnGenerico" id="botoTraduirFormulariTramit">
+	                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
+	                                </li>
+                                </c:if>
                             </ul>
 
                             <div class="idiomes">
@@ -2398,9 +2410,11 @@
                                     </li>
                                 </c:forEach>
 								
-                                <li class="traduix btnGenerico" id="botoTraduirDocumentTramit">
-                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
-                                </li>
+								<c:if test="${traductorActivo}">
+	                                <li class="traduix btnGenerico" id="botoTraduirDocumentTramit">
+	                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
+	                                </li>
+                                </c:if>
                             </ul>
 
                             <div class="idiomes">
@@ -2535,9 +2549,11 @@
                                     </li>
                                 </c:forEach>
 								
-                                <li class="traduix btnGenerico" id="botoTraduirRequerit">
-                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
-                                </li>
+								<c:if test="${traductorActivo}">
+	                                <li class="traduix btnGenerico" id="botoTraduirRequerit">
+	                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
+	                                </li>
+                                </c:if>
                             </ul>
                             <div class="idiomes">
                             

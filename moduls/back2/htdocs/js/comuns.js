@@ -1482,7 +1482,7 @@ function montarBreadcrumb() {
 }
 
 // Des/Activación debug JavaScript.
-var DEBUG_ACTIVO = true;
+var DEBUG_ACTIVO = false;
 
 /**
  * Clase para hacer debug JavaScript.

@@ -2,7 +2,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="rol" uri="/WEB-INF/rol.tld" %>
+
 <c:set var="rolAdmin"><rol:userIsAdmin/></c:set>
+
 <link href='<c:url value="/css/fitxes.css"/>' rel="stylesheet" type="text/css" media="screen" />    
 <link href='<c:url value="/css/modul_seccions_ua.css"/>' rel="stylesheet" type="text/css" media="screen" />
 <link href='<c:url value="/css/modul_ua_arbre.css"/>' rel="stylesheet" type="text/css" media="screen" />
@@ -466,9 +468,11 @@
                                     </li>
                                 </c:forEach>
 
-                                <li class="traduix btnGenerico" id="botoTraduirFitxa">
-                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='boto.traduix'/></span></span></a>
-                                </li>								
+                                <c:if test="${traductorActivo}">
+	                                <li class="traduix btnGenerico" id="botoTraduirFitxa">
+	                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='boto.traduix'/></span></span></a>
+	                                </li>								
+                                </c:if>
 							</ul>		
 
                             <div class="idiomes">
@@ -1167,9 +1171,11 @@
                                     </li>
                                 </c:forEach>
 
-								<li class="traduix btnGenerico" id="botoTraduirDocument">
-                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
-                                </li>
+								<c:if test="${traductorActivo}">
+									<li class="traduix btnGenerico" id="botoTraduirDocument">
+	                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
+	                                </li>
+                                </c:if>
                             </ul>
 							
                             <div class="idiomes">
