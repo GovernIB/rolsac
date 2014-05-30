@@ -68,7 +68,9 @@ public class PersonalBackController extends PantallaBaseController {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
         
         paramMap.put("username", request.getParameter("cerca_codi"));
-        paramMap.put("unidadAdministrativa", ((UnidadAdministrativa) session.getAttribute("unidadAdministrativa")).getId());
+        
+        Long idUA = (session.getAttribute("unidadAdministrativa") != null) ? ((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getId() : null;
+        paramMap.put("unidadAdministrativa", idUA);
 
         String textes = request.getParameter("cerca_text");
         if (textes != null && !"".equals(textes)) {
