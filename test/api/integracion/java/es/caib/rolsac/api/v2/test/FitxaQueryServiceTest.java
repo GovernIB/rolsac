@@ -16,6 +16,7 @@ import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalQueryServiceAdapter;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
+import es.caib.rolsac.api.v2.fitxa.FitxaOrdenacio;
 import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
@@ -260,5 +261,25 @@ public class FitxaQueryServiceTest {
             Assert.fail(e.toString());
         }
     }
+    
+    @Test
+    public void llistarFitxesSeccio(){
+        FitxaCriteria fitxaCriteria = new FitxaCriteria();
+        fitxaCriteria.setSeccion("1121799");
+        fitxaCriteria.setIdioma("ca");
+        fitxaCriteria.setActiu(true);
+        fitxaCriteria.setTamany("1");
+        FitxaOrdenacio[] ordenacio = {
+                FitxaOrdenacio.fua_ordenseccion_asc
+        };
+        fitxaCriteria.setOrdenar(ordenacio);
+        List<FitxaQueryServiceAdapter> fitxes;
+        try {
+            fitxes = rolsacQS.llistarFitxes(fitxaCriteria);
+            Assert.assertTrue(fitxes.size() > 0);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
+    }    
     
 }

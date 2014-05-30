@@ -175,6 +175,23 @@ public class RolsacQueryServiceTest {
         Assert.assertTrue(procediments.size() <= 10);
     }
 
+    @Test
+    public void recuperar10ProcedimentsCatalaOrdreDataCaducitatDataActualitzacio() {
+        ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
+        procedimentCriteria.setIdioma("ca");
+        procedimentCriteria.setInici("5");
+        procedimentCriteria.setTamany("10");
+        procedimentCriteria.setOrdenar(new ProcedimentOrdenacio[] {ProcedimentOrdenacio.version_desc, ProcedimentOrdenacio.fechaActualizacion_asc});
+
+        List<ProcedimentQueryServiceAdapter> procediments = null;
+        try {
+            procediments = rolsacQS.llistarProcediments(procedimentCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
+        Assert.assertTrue(procediments.size() <= 10);
+    }
+
     /**
      * Cas d'us: Es recuperen 10 procediments que contenguin un nom concret en catala.
      */
