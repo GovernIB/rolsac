@@ -65,10 +65,19 @@ public abstract class PantallaBaseController {
 	    model.put("capNomLlinatges", nomLlinatges);
 	    model.put("capUrlSortir", System.getProperty("es.caib.rolsac.back2.urlSortir"));
 	    
-	    String permisosSuperAddicionals = ""+System.getProperty("es.caib.rolsac.permisosSuperAddicionals");
-	    model.put("permisosSuperAddicionals", permisosSuperAddicionals.equalsIgnoreCase("Y"));
+	    String permisosSuperAddicionals = System.getProperty("es.caib.rolsac.permisosSuperAddicionals");
+	    model.put("permisosSuperAddicionals", "Y".equalsIgnoreCase(permisosSuperAddicionals));
+	    
+	    // Comprobamos si hay que mostrar la opción de traducir:
+ 		Boolean traductorActivo = Boolean.FALSE;
+ 		
+ 		if (System.getProperty("es.caib.rolsac.integracion.traductor") != null) {
+ 			traductorActivo = Boolean.valueOf("S".equalsIgnoreCase(System.getProperty("es.caib.rolsac.integracion.traductor")));
+ 		}
+ 			
+ 		request.setAttribute("traductorActivo", traductorActivo);
+	    
 	}
-
 	
 	/**
 	 * Devuelve el idioma actual.

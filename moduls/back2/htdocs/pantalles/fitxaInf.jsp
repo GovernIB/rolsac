@@ -481,9 +481,11 @@
 								</a></li>								
 								</c:forEach>
 								
-                                <li class="traduix btnGenerico" id="botoTraduirFitxa">
-                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='boto.traduix'/></span></span></a>
-                                </li>								
+								<c:if test="${traductorActivo}">
+	                                <li class="traduix btnGenerico" id="botoTraduirFitxa">
+	                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='boto.traduix'/></span></span></a>
+	                                </li>
+                                </c:if>							
 							</ul>		
 							
                             <div class="idiomes">
