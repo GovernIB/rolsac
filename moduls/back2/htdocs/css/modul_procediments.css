@@ -4,6 +4,10 @@
     display:none; 
 }
 
+#escriptori_procediments .escriptori_detall {
+    display: block;
+}
+
 /* modul lateral procediments */
 
 div.modulprocediments { padding-bottom:1em; }
