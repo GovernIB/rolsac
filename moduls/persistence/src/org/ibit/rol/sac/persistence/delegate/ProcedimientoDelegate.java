@@ -150,4 +150,9 @@ public class ProcedimientoDelegate {
 	public ResultadoBusqueda buscadorProcedimientos(BuscadorProcedimientoCriteria bc) throws DelegateException {
 		return impl.buscadorProcedimientos(bc);
 	}
+	
+	public boolean isProcedimientoConEstadoPublicacionPublica(Long idProcedimiento) throws DelegateException {
+        return impl.isProcedimientoConEstadoPublicacionPublica(idProcedimiento);
+	}
+	
 }

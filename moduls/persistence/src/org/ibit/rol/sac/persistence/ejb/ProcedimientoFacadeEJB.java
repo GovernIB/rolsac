@@ -44,6 +44,7 @@ import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.NormativaExterna;
 import org.ibit.rol.sac.model.NormativaLocal;
+import org.ibit.rol.sac.model.Procedimiento;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.ProcedimientoRemoto;
 import org.ibit.rol.sac.model.Traduccion;
@@ -293,8 +294,15 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				
 				// Eliminar los que no han sido quitados de la lista
 		        for (Tramite tramite : (List<Tramite>)listaTramitesParaBorrar) {
-		            DelegateUtil.getProcedimientoDelegate().eliminarTramite(tramite.getId(), procedimiento.getId());
+		        
+		            	// Si se va a borrar un trámite de iniciación con el estado del procedimiento "público", 
+		        		// lo impedimos y generamos una excepción.
+		            	if (Procedimiento.ESTADO_PUBLICACION_PUBLICA.equals(procedimiento.getValidacion()) && tramite.getFase() == Tramite.INICIACION)
+		            		throw new EJBException("No se puede borrar el trámite de iniciación cuando el estado del procedimiento es público");
+		        	
+		        	DelegateUtil.getProcedimientoDelegate().eliminarTramite(tramite.getId(), procedimiento.getId());
 		            tramiteDelegate.borrarTramite(tramite.getId());
+		        
 		        }
 	
 				// Actualizar orden y añadir los trámites 
@@ -665,6 +673,35 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	  	procedimiento.setTramites(listaTramites);
 
 	  	return procedimiento;
+    }
+    
+    /**
+	 * Comprueba si un procedimiento tiene como estado de publicación org.ibit.rol.sac.model.Procedimiento.ESTADO_PUBLICACION_PUBLICA.
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+    public boolean isProcedimientoConEstadoPublicacionPublica(Long idProcedimiento) {
+    	
+    	Session session = getSession();
+    	ProcedimientoLocal procedimiento = null;
+    	
+    	try {
+    		
+    		procedimiento = (ProcedimientoLocal)session.load(ProcedimientoLocal.class, idProcedimiento);
+    		
+    		return Procedimiento.ESTADO_PUBLICACION_PUBLICA.equals(procedimiento.getValidacion());
+
+    	} catch (HibernateException he) {
+    		
+    		throw new EJBException(he);
+    		
+    	} finally {
+    		
+    		close(session);
+    		
+    	}
+    	
     }
 
 
@@ -1311,13 +1348,21 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	public void eliminarTramite(Long idTramite, Long idProcedimiento) {
 
 		Session session = getSession();
+		
 		try {
 
 			if ( !getAccesoManager().tieneAccesoProcedimiento(idProcedimiento) )
 				throw new SecurityException("No tiene acceso al procedimiento");
 
-			ProcedimientoLocal procedimiento = (ProcedimientoLocal) session.load( ProcedimientoLocal.class, idProcedimiento );
-			Tramite tramite = (Tramite) session.load( Tramite.class, idTramite );
+			ProcedimientoLocal procedimiento = (ProcedimientoLocal)session.load( ProcedimientoLocal.class, idProcedimiento );
+			Tramite tramite = (Tramite)session.load( Tramite.class, idTramite );
+			
+			if (isProcedimientoConEstadoPublicacionPublica(procedimiento.getId())) {
+				// Comprobamos si el trámite es de iniciación. Si lo es, impedimos su borrado.
+				if (tramite.getFase() == Tramite.INICIACION)
+					throw new IllegalStateException("No se puede borrar el trámite de iniciación cuando el estado del procedimiento es público");
+			}
+			
 			procedimiento.removeTramite(tramite);
 			session.flush();
 

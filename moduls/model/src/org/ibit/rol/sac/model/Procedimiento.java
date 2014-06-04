@@ -5,6 +5,10 @@ package org.ibit.rol.sac.model;
 import java.util.Date;
 
 public interface Procedimiento extends ValueObject {
+	
+	public static final Integer ESTADO_PUBLICACION_PUBLICA = 1;
+	public static final Integer ESTADO_PUBLICACION_INTERNA = 2;
+	public static final Integer ESTADO_PUBLICACION_RESERVA = 3;
 
     String getSignatura();
 

@@ -38,6 +38,7 @@ import org.ibit.rol.sac.model.HechoVitalProcedimiento;
 import org.ibit.rol.sac.model.Iniciacion;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Normativa;
+import org.ibit.rol.sac.model.Procedimiento;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.TraduccionCatalegDocuments;
@@ -94,9 +95,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	public String pantalla(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
 
 		String lang;
+		
 		try {
 			lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-
 		} catch (DelegateException dEx) {
 			log.error("Error al recuperar el idioma por defecto.");
 			lang = "ca";
@@ -109,7 +110,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		}
 
 		loadIndexModel (model, request);
+		
 		return "index";
+		
 	}
 
 	private boolean estemEnUnitatAdministrativa(HttpSession session) {
@@ -141,25 +144,32 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			model.put("cataleg", llistarCatalegDocuments(lang));
 
 		} catch (DelegateException dEx) {
+			
 			if (dEx.isSecurityException()) {
 				model.put("error", "permisos");
 			} else {
 				model.put("error", "altres");
 				logException(log, dEx);
 			}
+			
 		}
+		
 	}
 
 	private List<IdNomDTO> llistarExcepcionsDocumentacio(String lang) throws DelegateException {
+		
         ExcepcioDocumentacioDelegate excepcioDelegate = DelegateUtil.getExcepcioDocumentacioDelegate();
         List<IdNomDTO> excepcioObjDTOList = new ArrayList<IdNomDTO>();
         List<ExcepcioDocumentacio> llistaExcepcionsDocumentacio = excepcioDelegate.llistarExcepcioDocumentacio();
         TraduccionExcepcioDocumentacio ted;
+        
         for (ExcepcioDocumentacio excepcio : llistaExcepcionsDocumentacio ) {
             ted = (TraduccionExcepcioDocumentacio) excepcio.getTraduccion(lang);
             excepcioObjDTOList.add(new IdNomDTO(excepcio.getId(), ted.getNombre()));
         }
+        
         return excepcioObjDTOList;
+        
     }
 
 	private List<IdNomDTO> llistarCatalegDocuments(String lang) throws DelegateException {
@@ -168,12 +178,14 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
         List<IdNomDTO> catalegObjDTOList = new ArrayList<IdNomDTO>();
         List<CatalegDocuments> llistaCatalegDocuments = catdocDelegate.llistarCatalegDocuments();
         TraduccionCatalegDocuments tcd;
+        
         for (CatalegDocuments document : llistaCatalegDocuments ) {
             tcd = (TraduccionCatalegDocuments) document.getTraduccion(lang);
             catalegObjDTOList.add(new IdNomDTO(document.getId(), tcd.getNombre()));
         }
         
         return catalegObjDTOList;
+        
     }
 
 
@@ -197,18 +209,22 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				llistaProcedimientoLocalDTO.addAll(convertirProcLocales(resultadoBusqueda, request));
 
 			} catch (DelegateException dEx) {
+				
 				if (dEx.isSecurityException()) {
 				    resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
 				} else {
 				    resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
 				}
+				
 			}
+			
 		}
 
 		resultats.put("total", resultadoBusqueda.getTotalResultados());
 		resultats.put("nodes", llistaProcedimientoLocalDTO);
 
 		return resultats;
+		
 	}
 
 	/** Método que se encarga de convertir un String en formato json a una instancia de BuscadorProcedimientoCriteria */
@@ -236,6 +252,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		} 
 
 		return buscadorCriteria;
+		
 	}
 
 	/*
@@ -245,6 +262,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 		List<ProcedimientoLocalDTO> llistaProcedimientoLocalDTO = new ArrayList<ProcedimientoLocalDTO>();
 		for (ProcedimientoLocal pl : castList(ProcedimientoLocal.class, resultadoBusqueda.getListaResultados())) {
+			
 			ProcedimientoLocalDTO procLocalDTO = new ProcedimientoLocalDTO(
 			    pl.getId(),
 			    pl.getNombreProcedimiento(),
@@ -254,9 +272,11 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			);
 
 			llistaProcedimientoLocalDTO.add(procLocalDTO);
+			
 		}
 		
 		return llistaProcedimientoLocalDTO;
+		
 	}
 
 
@@ -266,6 +286,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		Map<String, Object> resultats = new HashMap<String, Object>();
 
 		try {
+			
 		    IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
 			
 			String lang = idiomaDelegate.lenguajePorDefecto();
@@ -326,15 +347,19 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
             recuperaPO(resultats, proc, lang);              // Recuperar los públicos objetivos asociados a un procedimiento
 
 		} catch (DelegateException dEx) {
+			
 			logException(log, dEx);
+			
 			if ( dEx.isSecurityException() ){
 				resultats.put( "error", messageSource.getMessage( "error.permisos", null, request.getLocale() ) );
 			} else {
 				resultats.put( "error", messageSource.getMessage( "error.altres", null, request.getLocale() ) );
 			}
+			
 		}
 
 		return resultats;
+		
 	}
 	
 	@RequestMapping(value = "/modulos.do")
@@ -386,6 +411,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	private void recuperaIdiomas(Map<String, Object> resultats, ProcedimientoLocal proc, String langDefault) throws DelegateException {
 
 	    List<String> langs = DelegateUtil.getIdiomaDelegate().listarLenguajes();
+	    
         for (String lang : langs) {
             if (proc.getTraduccion(lang) != null) {
                 resultats.put(lang, (TraduccionProcedimientoLocal) proc.getTraduccion(lang));
@@ -397,6 +423,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
                 }
             }
         }
+        
 	}
 
 	/*
@@ -405,9 +432,12 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	private void recuperaTramites(Map<String, Object> resultats, ProcedimientoLocal proc, HttpServletRequest request) throws DelegateException {
 
 		List<ListadoModuloTramiteDTO> listaTramitesDTO = null;
+		
 		if (proc.getTramites() != null && proc.getTramites().size() != 0) {
+			
 			listaTramitesDTO = new ArrayList<ListadoModuloTramiteDTO>();
 			String lenguajePorDefecto = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			
 			for (Tramite tramite : proc.getTramites()) {
 				if (tramite != null) {
 					String nombreTramite;
@@ -420,9 +450,11 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 					listaTramitesDTO.add(new ListadoModuloTramiteDTO(tramite.getId(), nombreTramite, tramite.getFase()));
 				}
 			}
+			
 		}
 
 		resultats.put("tramites", listaTramitesDTO);
+		
 	}
 
 	/*
@@ -435,7 +467,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			List<IdNomDTO> llistaPublicsDTO = new ArrayList<IdNomDTO>();
 			
 			for (PublicoObjetivo pob : proc.getPublicosObjetivo()) {
-				TraduccionPublicoObjetivo tpob = (TraduccionPublicoObjetivo) pob.getTraduccion(lang);
+				TraduccionPublicoObjetivo tpob = (TraduccionPublicoObjetivo)pob.getTraduccion(lang);
 				llistaPublicsDTO.add(new IdNomDTO(pob.getId(), tpob == null ? "" : tpob.getTitulo()));
 			}
 			
@@ -563,7 +595,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 			List<Tramite> listaTramitesParaBorrar = null;
 			List<Long> listaIdsTramitesParaActualizar = null;
-			
+
 			if (edicion) {
 				
 				procediment = guardarProcedimientoAntiguo(procediment, procedimentOld);		// Si estamos guardando un procedimiento ya existente en vez de uno nuevo
@@ -576,6 +608,31 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				// y se rellenan las listas listaTramitesParaBorrar y listaIdsTramitesParaActualizar.
 				procediment = guardarTramites(procediment, procedimentOld, request, listaTramitesParaBorrar, listaIdsTramitesParaActualizar);
 				
+				// Comprobamos cambio de estado del procedimiento a estado "público". 
+				// Si es así, comprobar lo siguiente: se avisará de si falta un trámite de inicio o de si se posee más de uno de ese tipo.
+				if (Procedimiento.ESTADO_PUBLICACION_PUBLICA.equals(procediment.getValidacion()) 
+						&& !procedimentOld.getValidacion().equals(procediment.getValidacion())) {
+					
+					// Comprobar que haya al menos un trámite de inicio y comprobar si hay más de un trámite de inicio.
+					boolean hayTramiteDeIniciacion = false;
+					int numTramitesIniciacion = 0;
+					
+					for (Long id : listaIdsTramitesParaActualizar) {
+						Tramite tramite = DelegateUtil.getTramiteDelegate().obtenerTramite(id);
+						if (tramite.getFase() == Tramite.INICIACION) {
+							hayTramiteDeIniciacion = true;
+							numTramitesIniciacion++;
+						}
+					}
+					
+					if (!hayTramiteDeIniciacion)
+						throw new IllegalStateException("error_no_tramite_iniciacion");
+					
+					if (numTramitesIniciacion > 1)
+						throw new IllegalStateException("error_mas_de_un_tramite_de_iniciacion");
+
+				}
+				
 			}
 
 			Long procId = guardarGrabar(procediment, listaTramitesParaBorrar, listaIdsTramitesParaActualizar);
@@ -586,22 +643,40 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		} catch (DelegateException dEx) {
 			
 			if (dEx.isSecurityException()) {
+				
 				error = messageSource.getMessage("error.permisos", null, request.getLocale());
 				result = new IdNomDTO(-1l, error);
+				
 			} else {
+				
 				error = messageSource.getMessage("error.altres", null, request.getLocale());
 				result = new IdNomDTO(-2l, error);
 				logException(log, dEx);
+				
 			}
 
 		} catch (NumberFormatException nfe) {
 			
+			error = nfe.getMessage();
 			result = new IdNomDTO(-3l, error);
 
 		} catch (ParseException pe) {
 			
-			error = messageSource.getMessage(pe.getMessage(), null, request.getLocale());
+			error = pe.getMessage();
 			result = new IdNomDTO(-4l, error);
+			
+		} catch (IllegalStateException ise) {
+			
+			if ("error_no_tramite_iniciacion".equals(ise.getMessage()))
+				error = messageSource.getMessage("error.procediment_sense_tramit_iniciacio", null, request.getLocale());
+			
+			else if ("error_mas_de_un_tramite_de_iniciacion".equals(ise.getMessage()))
+				error = messageSource.getMessage("error.procediment_multiples_tramits_iniciacio", null, request.getLocale());
+			
+			else
+				error = ise.getMessage();
+			
+			result = new IdNomDTO(-5l, error);
 			
 		}
 
@@ -618,7 +693,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		if (idsNuevosTramites.size() == 1 && idsNuevosTramites.get(0).equals("")) {
 	    	
 	        // La lista esta vacía y por tanto se pueden borrar todos los anteriores.
-	        listaTramitesParaEliminar = procedimientoOld.getTramites();	        
+	        listaTramitesParaEliminar.addAll(procedimientoOld.getTramites());	        
 
 	    } else {
 	    	
@@ -638,7 +713,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	            mapaTramitesParaEliminar.remove(Long.parseLong(id));
 	        }
 
-	        listaTramitesParaEliminar = new ArrayList<Tramite>(mapaTramitesParaEliminar.values());
+	        listaTramitesParaEliminar.addAll(mapaTramitesParaEliminar.values());
 	        
 	    }
 	    			
@@ -736,9 +811,13 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		try {
 			
 			Integer validacion = Integer.parseInt(request.getParameter("item_estat"));
-			// Comprobar que no se haya cambiado la validacion/estado siendo operador
-			if (request.isUserInRole("sacoper") && procedimentOld != null && !procedimentOld.getValidacion().equals(validacion)) {
-			    throw new DelegateException(new SecurityException());
+			
+			// Si es superusuario no haremos ninguna comprobación.
+			if (!request.isUserInRole("sacsystem")) {
+				// Comprobar que no se haya cambiado la validacion/estado siendo operador.
+				if (request.isUserInRole("sacoper") && procedimentOld != null && !procedimentOld.getValidacion().equals(validacion)) {
+				    throw new DelegateException(new SecurityException());
+				}
 			}
 
 			procediment.setValidacion(validacion);
@@ -990,7 +1069,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
         return "1".equals(request.getParameter(modulo));
     }
 
-
 	@RequestMapping(value = "/cercarNormatives.do", method = POST)
 	public @ResponseBody Map<String, Object> llistatNormatives(HttpServletRequest request, HttpSession session) {
 
@@ -1084,6 +1162,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		Map<String, Object> resultats = new HashMap<String, Object>();
 
 		try {
+			
 		    String idiomaOrigenTraductor = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 
             TraduccionProcedimientoLocal traduccioOrigen = getTraduccionOrigen(request, idiomaOrigenTraductor);
@@ -1094,24 +1173,33 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
             resultats.put("traduccions", traduccions);
 
 		} catch (DelegateException dEx) {
+			
 			logException(log, dEx);
 			if (dEx.isSecurityException()) {
 				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
 			} else {
 				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
 			}
+			
 		} catch (TraductorException traEx) {
+			
 		    log.error("CatalegProcedimentBackController.traduir: El traductor no puede traducir todos los idiomas");
 		    resultats.put("error", messageSource.getMessage("traductor.no_traduible", null, request.getLocale()));
+		    
 		} catch (NullPointerException npe) {
+			
 			log.error("CatalegProcedimentBackController.traduir: El traductor no se encuentra en en contexto.");
 			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+			
 		} catch (Exception e) {
+			
 			log.error("CatalegProcedimentBackController.traduir: Error en al traducir procedimiento: " + e);
 			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+			
 		}
 
 		return resultats;
+		
 	}
 
 	private TraduccionProcedimientoLocal getTraduccionOrigen(HttpServletRequest request, String idiomaOrigenTraductor) {
@@ -1153,6 +1241,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
         /*------------------------------*/
 
         return traduccioOrigen;
+        
 	}
 
 

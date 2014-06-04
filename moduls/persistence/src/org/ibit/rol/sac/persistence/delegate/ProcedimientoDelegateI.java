@@ -93,6 +93,9 @@ public interface ProcedimientoDelegateI {
 
 	public int buscarProcedimientosCaducados(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad)
 			throws DelegateException;
+	
+	public boolean isProcedimientoConEstadoPublicacionPublica(Long idProcedimiento)
+			throws DelegateException;
 
 	/* PORMAD */
 	@SuppressWarnings("unchecked")

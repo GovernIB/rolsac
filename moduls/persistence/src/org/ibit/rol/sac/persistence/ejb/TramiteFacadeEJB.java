@@ -19,7 +19,6 @@ import net.sf.hibernate.Session;
 
 import org.apache.commons.lang.StringUtils;
 import org.ibit.rol.sac.model.DocumentTramit;
-import org.ibit.rol.sac.model.Formulario;
 import org.ibit.rol.sac.model.Taxa;
 import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.Tramite;
@@ -43,11 +42,11 @@ import org.ibit.rol.sac.persistence.ws.Actualizador;
  */
 public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDelegateI {
 
-
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 15377941969351981L;
+	
 	DestinatarioDelegate destDelegate;  
 
 	public DestinatarioDelegate getDestDelegate() {
@@ -189,7 +188,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			if ( !getAccesoManager().tieneAccesoTramite(id) )
 				throw new SecurityException("No tiene acceso al tr�mite");
 
-			Tramite tramite = (Tramite) session.load(Tramite.class, id);
+			Tramite tramite = (Tramite)session.load(Tramite.class, id);
 			session.delete(tramite);
 			session.flush();
 

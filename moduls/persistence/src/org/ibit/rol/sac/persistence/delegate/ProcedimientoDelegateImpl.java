@@ -349,6 +349,14 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
         }
     }
     
+    public boolean isProcedimientoConEstadoPublicacionPublica(Long idProcedimiento) throws DelegateException {
+    	try {
+            return getFacade().isProcedimientoConEstadoPublicacionPublica(idProcedimiento);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+	}
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

@@ -43,12 +43,13 @@ $(document).ready(function() {
     $("#escriptori_tramits .menuPublicacion a.btnEliminar").unbind("click").click(function(){EscriptoriTramit.eliminar();});
     
     // Sincronizar campos sin idioma en zona multi-idioma.   
-    $("#tramits_item_organ, #tramits_item_organ_es, #tramits_item_organ_ca, #tramits_item_organ_en, #tramits_item_organ_de, #tramits_item_organ_fr").change(function(){        
+    $("#tramits_item_organ, #tramits_item_organ_es, #tramits_item_organ_ca, #tramits_item_organ_en, #tramits_item_organ_de, #tramits_item_organ_fr").change(function() {        
         $("#tramits_item_organ, #tramits_item_organ_es, #tramits_item_organ_ca, #tramits_item_organ_en, #tramits_item_organ_de, #tramits_item_organ_fr").val( $(this).val() );        
-    });    
+    });
+    
 });
 
-function CModulTramit(){    
+function CModulTramit() {    
     
     this.extend = ListaOrdenable;
     this.extend();      
@@ -86,7 +87,7 @@ function CModulTramit(){
             
             var div_idiomes_elm = escriptori_tramits_elm.find("div.idiomes:first");
             div_idiomes_elm.find("div." + a_primer_elm.attr("class")).addClass("seleccionat");                      
-            ul_idiomes_elm.bind("click", {'actualizarIdiomasModulosLaterales': true, 'idPare':'#escriptori_tramits'},Detall.idioma);
+            ul_idiomes_elm.bind("click", {'actualizarIdiomasModulosLaterales': true, 'idPare':'#escriptori_tramits'}, Detall.idioma);
         }   
                 
         // Configuramos la lista ordenable.
@@ -96,11 +97,12 @@ function CModulTramit(){
             nodoDestino: modul_tramits_elm.find(".listaOrdenable"),
             atributos: ["id", "nom", "orden", "moment"],  // Campos que queremos que aparezcan en las listas.
             multilang: false
-            });
+        });
         
         // one al botó de gestionar
-        modul_tramits_elm.find("a.gestiona").one("click", function() { ModulTramit.gestiona(); } );     
-    }   
+        modul_tramits_elm.find("a.gestiona").one("click", function() { ModulTramit.gestiona(); });
+        
+    };
     
     this.gestiona = function() {
                         
@@ -122,7 +124,7 @@ function CModulTramit(){
         $("#tramits_item_organ_fr").val($("#item_organ").val());
         
         // animacio
-        escriptori_detall_elm.fadeOut(300, function() {         
+        escriptori_detall_elm.fadeOut(300, function() {
             escriptori_tramits_elm.fadeIn(300, function() {
                 //Ocultar el botón "eliminar" en la creación
                 // y los módulos de documentos y formularios
@@ -133,9 +135,10 @@ function CModulTramit(){
                 escriptori_tramits_elm.find("div#modul_taxes_tramits").hide();              
             });         
         });
-    }
+        
+    };
     
-    this.inicializarTramites = function( listaTramites ){
+    this.inicializarTramites = function( listaTramites ) {
     
         // Añadimos a los nombres de los trámites el tag <a> para que enlacen
         // a la edición del trámite en cuestión.
@@ -148,31 +151,33 @@ function CModulTramit(){
         }               
         
         // Editar el tramite al hacer click sobre el.                
-        modul_tramits_elm.find('div.tramit').each(function() {          
-            $(this).unbind("click").bind("click", function() {               
+        modul_tramits_elm.find('div.tramit').each(function() {
+            $(this).unbind("click").bind("click", function() {
                 EscriptoriTramit.editarTramit(this, null);
             });
         });
         
         EscriptoriTramit.contaSeleccionats();
         
-        modul_tramits_elm.find(".listaOrdenable ul").sortable({ 
+        modul_tramits_elm.find(".listaOrdenable ul").sortable({
             axis: 'y', 
-            update: function(event,ui){
-                that.calculaOrden(ui,"origen");
+            update: function(event, ui) {
+                that.calculaOrden(ui, "origen");
                 that.modificado();
             }
-        }).css({cursor:"move"});
+        }).css({cursor: "move"});
         
-        modul_tramits_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function(){               
+        modul_tramits_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function() {               
             var itemLista = $(this).parents("li:first");
             ModulTramit.eliminaItem(itemLista);
             EscriptoriTramit.contaSeleccionats();
         });
-    }
+        
+    };
     
     // Devuelve un string con el formato tramitsProcediment=n1,n2,...,nm donde n son codigos de tr�mites.
-    this.listaTramites = function (){
+    this.listaTramites = function() {
+    	
         var listaTramites = "tramitsProcediment=";
         var separador = "";
         
@@ -182,55 +187,66 @@ function CModulTramit(){
         });
         
         return listaTramites;
-    }
+        
+    };
     
-    this.hayTramiteInicializacion = function (){
+    this.hayTramiteInicializacion = function () {
         return modul_tramits_elm.find('div.listaOrdenable input.tramit_moment[value="1"]').length > 0;
-    }
+    };
     
     // Actualiza el nombre.
     this.actualitzaNomTramit = function(tramit) {
-        var tramitInput = jQuery("#tramit_nom_" + tramit.id)
+    	
+        var tramitInput = jQuery("#tramit_nom_" + tramit.id);
+        
         tramitInput.val("<a href='#' class='tramit_id'>" + tramit.nom + "</a>");
         tramitInput.next().children().first().text($("<div/>").html(tramit.nom).text());
         
         if (tramit["moment"] != undefined) {
             jQuery("#tramit_moment_" + tramit.id).val(tramit.moment);
         }
-    }
+        
+    };
+    
+    this._eliminaItem = this.eliminaItem;
+    
+    this.eliminaItem = function(item) {
+    	
+    	that._eliminaItem(item);
+    	Detall.modificado(true);
+    	
+    };
+    
 };
 
-function CEscriptoriTramit(){   
+function CEscriptoriTramit() {
+	
     this.extend = DetallBase;
-    this.extend(null,FormulariTramits, {
+    
+    this.extend(null, FormulariTramits, {
         btnGuardar: "btnGuardarTramit",
         btnVolver: "escriptori_tramits .menuPublicacion .btnVolver",
         form: "formTramits"
     });
     
     var that = this;    
-    
-    //var formulariComprovarTramits;
-    
-    this.iniciar = function () {
         
-        /*  formulariComprovarTramits = new FormulariComprovar(FormulariTramits);       
-        formulariComprovarTramits.iniciar();*/
-        // boton de traducir
+    this.iniciar = function() {
         
         jQuery("#botoTraduirTramit").unbind("click").bind("click", function() {
             Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
         });
-    }
+    
+    };
 
     this.traduirWrapper = function () {
         that.traduir(pagTraduirTramit, CAMPOS_TRADUCTOR_TRAMITE, DATOS_TRADUCIDOS_TRAMITE);
-    }
+    };
     
-    this.guarda = function (){
+    this.guarda = function() {
         
-        //Validam el formulari de tramit        
-        if( !this.formulariValid() ){
+        // Validam el formulari de tramit        
+        if (!this.formulariValid()) {
             return false;
         }
         
@@ -243,7 +259,7 @@ function CEscriptoriTramit(){
         }
 
         var moment = $('#item_moment_tramit');
-        moment = moment.length > 0 ? moment.val() : undefined; 
+        moment = moment.length > 0 ? moment.val() : undefined;
         
         var paramsUrl = "?" + ModulDocumentsTramit.listarDocumentos() + 
                         "&" + ModulFormularisTramit.listarFormularios() +
@@ -279,7 +295,7 @@ function CEscriptoriTramit(){
                         });
                         // Asignamos la funci�n de edici�n al nuevo enlace creado
                         nouTramit = $("#" + idTramit).parent().parent();
-                        nouTramit.unbind("click").bind("click", function() {that.editarTramit(nouTramit, null)});
+                        nouTramit.unbind("click").bind("click", function() { that.editarTramit(nouTramit, null); });
                         
                         that.contaSeleccionats();
                     }
@@ -292,9 +308,10 @@ function CEscriptoriTramit(){
         this.modificado(false);
         
         return false;
-    } 
+        
+    };
     
-    this.eliminar = function(){
+    this.eliminar = function() {
         
         var idTramit = $("#id_tramit_actual").val();
         var idProcediment = $("#id_procediment_tramit").val();
@@ -311,28 +328,37 @@ function CEscriptoriTramit(){
                 url: pagEsborrarTramit,
                 data: dataVars,            
                 dataType: 'json',
-                success: function(data) {                
+                success: function(data) {
+                	
                     if (data.id > 0) {
                         Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtEsborrarTramitCorrecte});
-                    } else if (data.id == -1){
+                    } else if (data.id == -1) {
                         Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
-                    } else if (data.id == -2){
+                    } else if (data.id == -2) {
                         Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
-                    }                       
-                        
+                    } else if (data.id == -3) {
+                        Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorTramitIniciacio});
+                    }
+                                        
                     // Eliminamos el item de la lista ordenable.
-                    modul_tramits_elm.find(".listaOrdenable input[name=tramit_id_" + idTramit + "]").parents("li").remove();        
-                    that.contaSeleccionats();
-                    that.vuelve();
+                    if (data.id > 0) {
+	                    modul_tramits_elm.find(".listaOrdenable input[name=tramit_id_" + idTramit + "]").parents("li").remove();        
+	                    that.contaSeleccionats();
+	                    that.vuelve();
+                    }
+                    
                 }
-            }); 
+            
+            });
+            
         }});
-    }
+        
+    };
     
     this.vuelve = function() {
         
-        
-        if( this.cambiosSinGuardar() ){
+        if ( this.cambiosSinGuardar() ) {
+        	
             Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: txtAvisoCambiosSinGuardar, funcio: function() {
                 
                 // animacio
@@ -344,11 +370,11 @@ function CEscriptoriTramit(){
                 });
                 
                 that.modificado(false);
-                
                 Missatge.cancelar();
                 
             }});
-        }else{
+            
+        } else {
             
             this.modificado(false);
             
@@ -360,12 +386,13 @@ function CEscriptoriTramit(){
             });
             
         }
-    }
+        
+    };
     
-    this.limpia = function(){
+    this.limpia = function() {
         $("#formTramits :input").each(limpiarCampo);        
         $("#id_tramit_actual").val(""); //Se neteja manualment ja que limpiarCampo no afecta els input hidden
-    }
+    };
     
     this.contaSeleccionats = function() {
         
@@ -394,18 +421,17 @@ function CEscriptoriTramit(){
             
         }
         
-        modul_tramits_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function(){               
+        modul_tramits_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function() {               
             var itemLista = $(this).parents("li:first");
             ModulTramit.eliminaItem(itemLista);
             EscriptoriTramit.contaSeleccionats();
         });
-    }
+        
+    };
     
-    this.pintar = function( datos ){    
+    this.pintar = function( datos ) {    
         
         // Importante mantener el id del trámite que estamos mostrando.
-//        $("#id_tramit_actual").val(datos.idTramit);
-                         
         $("#id_tramit_actual").val(datos.id_tramit_actual);
         $("#id_procediment_tramit").val(datos.id_procediment_tramit);
         $("#nom_procediment_tramit").text(datos.nom_procediment_tramit);        
@@ -429,6 +455,7 @@ function CEscriptoriTramit(){
         idiomas = datos.idiomas;
         
         for (var i in idiomas) {
+        	
             var idioma = idiomas[i];
             var idiomaUA = "ua_" + idioma;
             
@@ -443,7 +470,8 @@ function CEscriptoriTramit(){
             }
                             
             if (datos[idiomaUA] != null) 
-                $("#tramits_item_organ_" + idioma).val(printStringFromNull(datos[idiomaUA]));           
+                $("#tramits_item_organ_" + idioma).val(printStringFromNull(datos[idiomaUA]));
+            
         }       
         // Fin bloque de pestañas de idiomas
         
@@ -463,8 +491,9 @@ function CEscriptoriTramit(){
         ModulDocumentsRequerits.inicializarDocumentsRequerits(datos.docRequeritsTramite);
         ModulDocumentsTramit.inicializarDocuments(datos.documentosTramite);
         ModulFormularisTramit.inicializarFormularis(datos.formulariosTramite);              
-        ModulTaxesTramit.inicializarTaxes(datos.tasasTramite);      
-    }
+        ModulTaxesTramit.inicializarTaxes(datos.tasasTramite);
+        
+    };
     
     this.editarTramit = function( el, id ) {
 
@@ -513,6 +542,8 @@ function CEscriptoriTramit(){
                 
                 that.modificado(false);
             }
-        });                
-    }
+        });
+        
+    };
+    
 };

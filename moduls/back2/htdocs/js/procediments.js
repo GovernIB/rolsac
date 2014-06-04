@@ -380,17 +380,16 @@ function CLlistat() {
 			dades_elm.html(codi_final).fadeIn(300, function() {
 
 				// Asociamos el evento onclick a los elementos de la lista para poder ir a ver su ficha.
-				escriptori_contingut_elm.find("#resultats .llistat .tbody a").unbind("click").bind("click",function(){Llistat.ficha(this);});
+				escriptori_contingut_elm.find("#resultats .llistat .tbody a").unbind("click").bind("click", function() { Llistat.ficha(this); });
 
 				// Asociamos el evento onclick a las cabeceras del listado para que sea ordenable.
-				jQuery("#resultats .table .th a").unbind("click").click(function(){
-					Llistat.ordena(this,opcions);
+				jQuery("#resultats .table .th a").unbind("click").click(function() {
+					Llistat.ordena(this, opcions);
 				});
 
-				// cercador
+				// Cercador
 				if (typeof opcions.cercador != "undefined" && opcions.cercador == "si")
 					cercador_elm.find("input, select").removeAttr("disabled");
-
 
 			});
 
@@ -456,7 +455,7 @@ function CDetall() {
 
 			that.guardaGenerico(urlParams);
 
-			// Si no hay trámite de inicialización con estado de publicación 1, lanzamos mensaje de error.
+		// Si no hay trámite de inicialización con estado de publicación 1, lanzamos mensaje de error.
 		} else {
 
 			Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + txtErrorTramitIniciObligatori + "</p>"});

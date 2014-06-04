@@ -86,7 +86,7 @@ public class TramiteBackController {
 			IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
 			List<String> idiomas = idiomaDelegate.listarLenguajes();			
     		Tramite tramite = DelegateUtil.getTramiteDelegate().obtenerTramite(idTramite);
-    		
+    		    		
     		ProcedimientoLocal procedimiento = tramite.getProcedimiento();
     		resultats.put("idiomas", idiomas);
     		resultats.put("idTramit", tramite.getId());
@@ -247,6 +247,7 @@ public class TramiteBackController {
 				tramite.setOrden(0L);
 				
 			} else {
+				
 				tramite = tramiteDelegate.obtenerTramite(new Long(idTramite));
 
 				if (!tramiteDelegate.autorizaModificarTramite( tramite.getId()))				
@@ -265,12 +266,41 @@ public class TramiteBackController {
 			// 2 - Instrucción
 			// 3 - Finalización
 			int fase = Integer.parseInt(request.getParameter("item_moment_tramit"));
-			if (fase == 1 && procedimientoDelegate.existeOtroTramiteInicioProcedimiento(idProcedimiento, tramite.getId())) {
+			boolean isProcedimientoConEstadoPublicacionPublica = DelegateUtil.getProcedimientoDelegate().isProcedimientoConEstadoPublicacionPublica(idProcedimiento);
+			
+			// Si se cambia el estado del trámite de iniciación a otro tipo y el procedimiento
+			// al cual está asociado tiene como estado de publicación público, impedimos esta
+			// edición, ya que en ese estado el procedimiento no puede quedarse sin trámite
+			// de iniciación.
+			if (edicion) {
+				
+				int faseAnterior = tramite.getFase();
+			
+				if (faseAnterior == Tramite.INICIACION && fase != faseAnterior && isProcedimientoConEstadoPublicacionPublica) {
+					
+					error = messageSource.getMessage("error.tramit_inici_no_es_pot_canviar_tipus", null, request.getLocale());
+		            result = new IdNomDTO(-2l, error);
+		            
+		            return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.ACCEPTED);
+					
+				}
+			
+			}
+			
+			// Si el estado de publicación del procedimiento es público, valideremos que se intente
+			// añadir de nuevo otro trámite de iniciación, lo cual impediremos si es el caso.
+			if (fase == Tramite.INICIACION && procedimientoDelegate.existeOtroTramiteInicioProcedimiento(idProcedimiento, tramite.getId()) 
+					&& isProcedimientoConEstadoPublicacionPublica) {
+				
 			    error = messageSource.getMessage("error.tramit_inici_ja_existeix", null, request.getLocale());
 	            result = new IdNomDTO(-2l, error);
+	            
 	            return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.ACCEPTED);
+	            
 			} else {
-			    tramite.setFase( Integer.parseInt(request.getParameter("item_moment_tramit")) );
+				
+			    tramite.setFase(fase);
+			    
 			}
 			
 			// 1 - Pública
@@ -392,63 +422,74 @@ public class TramiteBackController {
 	private void guardaDocumentosYFormularios(HttpServletRequest request, boolean edicion, Tramite tramite, TramiteDelegate tramiteDelegate) throws NumberFormatException, DelegateException
 	{
 		// Recuperamos todos los documentos del request
-				String documentosTramite = request.getParameter("documentsTramit");
-				String separador = (!"".equals(documentosTramite))? "," : "";
-				documentosTramite += (!"".equals(request.getParameter("formularisTramit"))? separador + request.getParameter("formularisTramit") :"");
-				separador = (!"".equals(documentosTramite))? "," : "";
-				documentosTramite += (!"".equals(request.getParameter("documentsRequerits"))? separador + request.getParameter("documentsRequerits") :"");
+		String documentosTramite = request.getParameter("documentsTramit");
+		String separador = (!"".equals(documentosTramite))? "," : "";
+		documentosTramite += (!"".equals(request.getParameter("formularisTramit"))? separador + request.getParameter("formularisTramit") :"");
+		separador = (!"".equals(documentosTramite))? "," : "";
+		documentosTramite += (!"".equals(request.getParameter("documentsRequerits"))? separador + request.getParameter("documentsRequerits") :"");
+		
+		// Unimos todos los documentos en un solo Set
+		List<DocumentTramit> listaDocumentosOld = new ArrayList<DocumentTramit>();
+		listaDocumentosOld.addAll(tramite.getDocsInformatius());
+		listaDocumentosOld.addAll(tramite.getFormularios());
+		listaDocumentosOld.addAll(tramite.getDocsRequerits());
+		
+		// Comprobamos de que tengamos tramites desde el request
+		if ("".equals(documentosTramite) && listaDocumentosOld.size() > 0) {
+			
+			tramiteDelegate.borrarDocumentos(tramite, listaDocumentosOld);
+			
+		} else {
+			
+			List<DocumentTramit> documentosNuevos = new ArrayList<DocumentTramit>();
+			String[] codigosDocumentosNuevos = documentosTramite.split(",");
+			List<DocumentTramit> listaDocumentosBorrar = new ArrayList<DocumentTramit>();
+			if (edicion) {
 				
-				// Unimos todos los documentos en un solo Set
-				List<DocumentTramit> listaDocumentosOld = new ArrayList<DocumentTramit>();
-				listaDocumentosOld.addAll(tramite.getDocsInformatius());
-				listaDocumentosOld.addAll(tramite.getFormularios());
-				listaDocumentosOld.addAll(tramite.getDocsRequerits());
-				
-				// Comprobamos de que tengamos tramites desde el request
-				if ("".equals(documentosTramite) && listaDocumentosOld.size() > 0) {
-					tramiteDelegate.borrarDocumentos(tramite, listaDocumentosOld);
-				} else {
-					List<DocumentTramit> documentosNuevos = new ArrayList<DocumentTramit>();
-					String[] codigosDocumentosNuevos = documentosTramite.split(",");
-					List<DocumentTramit> listaDocumentosBorrar = new ArrayList<DocumentTramit>();
-					if (edicion) {
-						for (DocumentTramit documentoTramite: listaDocumentosOld) {
-							int i = 0;
-							while (i < codigosDocumentosNuevos.length) {
-								if (!"".equals(codigosDocumentosNuevos[i]) && documentoTramite.getId().equals(Long.valueOf(codigosDocumentosNuevos[i]))) {
-									documentosNuevos.add(documentoTramite);
-									i = codigosDocumentosNuevos.length;
-								}
-								i++;
-							}
-							// Eliminar los que se han quitado de la lista.
-							if (!documentosNuevos.contains(documentoTramite)) {
-								tramite.removeDocument(documentoTramite);
-								listaDocumentosBorrar.add(documentoTramite);
-							}
+				for (DocumentTramit documentoTramite: listaDocumentosOld) {
+					
+					int i = 0;
+					while (i < codigosDocumentosNuevos.length) {
+						if (!"".equals(codigosDocumentosNuevos[i]) && documentoTramite.getId().equals(Long.valueOf(codigosDocumentosNuevos[i]))) {
+							documentosNuevos.add(documentoTramite);
+							i = codigosDocumentosNuevos.length;
 						}
-						if (listaDocumentosBorrar.size() > 0)
-							tramiteDelegate.borrarDocumentos(tramite, listaDocumentosBorrar);
+						i++;
 					}
 					
-					// Actualizar el orden de la lista de documentos.
-					HashMap<String,String[]> actualizadorDocs = new HashMap<String, String[]>();
-					for (DocumentTramit documentTramit: documentosNuevos) {
-						Long idDoc = documentTramit.getId();
-						String ordenDocumento = "";
-						
-						if (documentTramit.getTipus() == 0)
-							ordenDocumento = request.getParameter("documentsTramit_orden_" + idDoc);
-						else if (documentTramit.getTipus() == 1)
-							ordenDocumento = request.getParameter("formularisTramit_orden_" + idDoc);
-						else
-							ordenDocumento = request.getParameter("documentsRequerits_orden_" + idDoc);
-						
-						String[] orden = { ordenDocumento };
-						actualizadorDocs.put("orden_doc" + idDoc, orden);
+					// Eliminar los que se han quitado de la lista.
+					if (!documentosNuevos.contains(documentoTramite)) {
+						tramite.removeDocument(documentoTramite);
+						listaDocumentosBorrar.add(documentoTramite);
 					}
-					tramiteDelegate.actualizarOrdenDocs(actualizadorDocs, new Long(request.getParameter("id_tramit_actual")));
 				}
+				
+				if (listaDocumentosBorrar.size() > 0)
+					tramiteDelegate.borrarDocumentos(tramite, listaDocumentosBorrar);
+				
+			}
+			
+			// Actualizar el orden de la lista de documentos.
+			HashMap<String,String[]> actualizadorDocs = new HashMap<String, String[]>();
+			for (DocumentTramit documentTramit: documentosNuevos) {
+				Long idDoc = documentTramit.getId();
+				String ordenDocumento = "";
+				
+				if (documentTramit.getTipus() == 0)
+					ordenDocumento = request.getParameter("documentsTramit_orden_" + idDoc);
+				else if (documentTramit.getTipus() == 1)
+					ordenDocumento = request.getParameter("formularisTramit_orden_" + idDoc);
+				else
+					ordenDocumento = request.getParameter("documentsRequerits_orden_" + idDoc);
+				
+				String[] orden = { ordenDocumento };
+				actualizadorDocs.put("orden_doc" + idDoc, orden);
+			}
+			
+			tramiteDelegate.actualizarOrdenDocs(actualizadorDocs, new Long(request.getParameter("id_tramit_actual")));
+			
+		}
+		
 	}
 
 	private void guardaTasasTramite(HttpServletRequest request, Tramite tramite, TramiteDelegate tramiteDelegate) throws DelegateException
@@ -464,13 +505,13 @@ public class TramiteBackController {
 			
 			for ( int i = 0; i < codigosTasasNuevas.length; i++ ) {        				
 				for ( Taxa tasa : listaTasasOld ) {
-					if ( !"".equals(codigosTasasNuevas[i]) && tasa.getId()
-							.equals(Long.valueOf(codigosTasasNuevas[i])) ) {
+					if ( !"".equals(codigosTasasNuevas[i]) && tasa.getId().equals(Long.valueOf(codigosTasasNuevas[i])) ) {
 						
 						tasasNuevas.add( tasa );
 						codigosTasasNuevas[i] = null;
 						
 						break;
+						
 					}
 				}
 			}
@@ -502,7 +543,7 @@ public class TramiteBackController {
 			HashMap<String, String[]> actualizadorTasas = new HashMap<String, String[]>();
 			
 			for ( Taxa tasa : tasasNuevas ) {
-				String[] orden = { request.getParameter("taxesTramit_orden_" + tasa.getId() ) }; 
+				String[] orden = { request.getParameter("taxesTramit_orden_" + tasa.getId()) }; 
 				actualizadorTasas.put("orden_taxa" + tasa.getId(), orden);
 			}
 			
@@ -510,12 +551,13 @@ public class TramiteBackController {
 
 		} else {
 			
-			for (Taxa taxa : listaTasasOld ) {        				
+			for ( Taxa taxa : listaTasasOld ) {        				
 				tramite.removeTaxa(taxa);
 				tramiteDelegate.borrarTaxa(taxa.getId());
 			}
 			
 		}
+		
 	}
 
 	private void procesarFechasTramite(HttpServletRequest request, Tramite tramite)
@@ -536,7 +578,7 @@ public class TramiteBackController {
 		tramite.setDataCaducitat(fechaCaducidad);
 		
 		Date fechaVUDS = DateUtils.parseDate(request.getParameter("tramit_item_data_vuds"));
-		String fechaActualizacionVUDS  = fechaVUDS != null ? new SimpleDateFormat("dd/MM/yyyy").format(fechaVUDS) : "";			
+		String fechaActualizacionVUDS = (fechaVUDS != null) ? new SimpleDateFormat("dd/MM/yyyy").format(fechaVUDS) : "";			
 		tramite.setDataActualitzacioVuds( fechaActualizacionVUDS );			
 	}
 
@@ -555,19 +597,19 @@ public class TramiteBackController {
 		traducciones.put(lang, traduccionTramite);
 	}
 	
-	
 	@RequestMapping(value = "/esborrarTramit.do", method = POST)	
-	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request)
-	{
+	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
+		
 		IdNomDTO resultatStatus = new IdNomDTO();
 		
 		Long idTramite = new Long(request.getParameter("id"));
 		Long idProcedimiento = new Long(request.getParameter("idProcediment"));
 		
 		try {
+			
 			ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
 			TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
-			
+			    					
 			//Quita el tramite de la lista
 			procedimientoDelegate.eliminarTramite(idTramite, idProcedimiento);
 			tramiteDelegate.borrarTramite(idTramite);
@@ -576,24 +618,30 @@ public class TramiteBackController {
 			resultatStatus.setNom("correcte");
 			
 		} catch (DelegateException dEx) {
+			
 			if (dEx.isSecurityException()) {
 				resultatStatus.setId(-1l);
+			} else if (dEx.isIllegalStateException()) {
+				resultatStatus.setId(-3l);
+				logException(log, dEx);
 			} else {
 				resultatStatus.setId(-2l);
 				logException(log, dEx);
 			}
+			
 		}
 		
 		return resultatStatus;
+		
 	}
 	
-	
 	@RequestMapping(value = "/traduir.do")
-	public @ResponseBody Map<String, Object> traduir(HttpServletRequest request)
-	{
+	public @ResponseBody Map<String, Object> traduir(HttpServletRequest request) {
+		
 		Map<String, Object> resultats = new HashMap<String, Object>();
 		
 		try {
+			
 			TraduccionTramite traduccioOrigen = getTraduccionOrigen(request);
 			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
 			
@@ -605,25 +653,33 @@ public class TramiteBackController {
 			resultats.put("traduccions", traduccions);
 			
 		} catch (DelegateException dEx) {
+			
 			logException(log, dEx);
+			
 			if (dEx.isSecurityException()) {
 				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
 			} else {
 				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
 			}
+			
 		} catch (NullPointerException npe) {
+			
 			log.error("tramiteBackController.traduir: El traductor no se encuentra en en contexto.");
 			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+			
 		} catch (Exception e) {
+			
 			log.error("TramiteBackController.traduir: Error en al traducir tramite: " + e);
 			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+			
 		}
 		
 		return resultats;
+		
 	}
 	
-	private TraduccionTramite getTraduccionOrigen(HttpServletRequest request)
-	{
+	private TraduccionTramite getTraduccionOrigen(HttpServletRequest request) {
+		
 		TraduccionTramite traduccioOrigen = new TraduccionTramite();
 		
 		if (StringUtils.isNotEmpty(request.getParameter("item_nom_tramit_" + IDIOMA_ORIGEN_TRADUCTOR))) {
@@ -646,6 +702,7 @@ public class TramiteBackController {
 		}
 		
 		return traduccioOrigen;
+		
 	}
 	
 }
