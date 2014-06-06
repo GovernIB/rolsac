@@ -78,8 +78,6 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
 
     private java.lang.String agrupacionHechoVital;
 
-    private java.lang.Boolean visible;
-
     private java.lang.String estadoUA;
 
     private java.lang.Boolean vigente;
@@ -132,7 +130,6 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
            java.lang.String textos,
            java.lang.String unidadAdministrativa,
            java.lang.String agrupacionHechoVital,
-           java.lang.Boolean visible,
            java.lang.String estadoUA,
            java.lang.Boolean vigente,
            java.lang.Boolean telematico,
@@ -178,7 +175,6 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
         this.textos = textos;
         this.unidadAdministrativa = unidadAdministrativa;
         this.agrupacionHechoVital = agrupacionHechoVital;
-        this.visible = visible;
         this.estadoUA = estadoUA;
         this.vigente = vigente;
         this.telematico = telematico;
@@ -887,26 +883,6 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
 
 
     /**
-     * Gets the visible value for this ProcedimentCriteria.
-     * 
-     * @return visible
-     */
-    public java.lang.Boolean getVisible() {
-        return visible;
-    }
-
-
-    /**
-     * Sets the visible value for this ProcedimentCriteria.
-     * 
-     * @param visible
-     */
-    public void setVisible(java.lang.Boolean visible) {
-        this.visible = visible;
-    }
-
-
-    /**
      * Gets the estadoUA value for this ProcedimentCriteria.
      * 
      * @return estadoUA
@@ -1102,9 +1078,6 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
             ((this.agrupacionHechoVital==null && other.getAgrupacionHechoVital()==null) || 
              (this.agrupacionHechoVital!=null &&
               this.agrupacionHechoVital.equals(other.getAgrupacionHechoVital()))) &&
-            ((this.visible==null && other.getVisible()==null) || 
-             (this.visible!=null &&
-              this.visible.equals(other.getVisible()))) &&
             ((this.estadoUA==null && other.getEstadoUA()==null) || 
              (this.estadoUA!=null &&
               this.estadoUA.equals(other.getEstadoUA()))) &&
@@ -1232,9 +1205,6 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
         }
         if (getAgrupacionHechoVital() != null) {
             _hashCode += getAgrupacionHechoVital().hashCode();
-        }
-        if (getVisible() != null) {
-            _hashCode += getVisible().hashCode();
         }
         if (getEstadoUA() != null) {
             _hashCode += getEstadoUA().hashCode();
@@ -1474,12 +1444,6 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
         elemField.setFieldName("agrupacionHechoVital");
         elemField.setXmlName(new javax.xml.namespace.QName("", "agrupacionHechoVital"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        elemField.setNillable(true);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("visible");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "visible"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();

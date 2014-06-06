@@ -34,16 +34,6 @@ public class ProcedimentUtils {
 		}
 	}
 
-	/** @deprecated*/
-	public static boolean parseVisible(ProcedimentCriteria pc) {
-		// Comprobamos si solicitan registros visibles.
-		// Si el campo no se especifica, mostramos sólo visibles por defecto.
-		boolean soloRegistrosVisibles = ( pc.getVisible() == null ) || ( pc.getVisible() != null && pc.getVisible().booleanValue() );
-		// Ponemos campo a null para que no se procese como Criteria para la consulta HQL (i.e. para que no lo parsee BasicUtils.parseCriterias()).
-		pc.setVisible(null);
-		return soloRegistrosVisibles;
-	}
-
 	public static Integer parseEstadoUA(ProcedimentCriteria pc) {
 		if (pc.getEstadoUA() != null) {
 			Integer estadoUA = Integer.parseInt(pc.getEstadoUA());

@@ -13,7 +13,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 /**
  * Modificado para (PORMAD)
  */
- 
+@SuppressWarnings("deprecation")
 public class ProcedimientoLocal extends Classificable implements Procedimiento, Indexable, Validable, Comparator {
 
 	private static final long serialVersionUID = 1L;
@@ -21,7 +21,7 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
 	private Long id;
     private String signatura;
     private List<Tramite> tramites;
-    private List<Documento> documentos;
+	private List<Documento> documentos;
     private Set<Normativa> normativas;
     private Date fechaCaducidad;
     private Date fechaPublicacion;
@@ -459,7 +459,7 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
 		return visible;
 	}
 	
-	// Metode creat per poder ser cridad des de la JSP atraves de jstl
+	// Mètode creat per poder ser cridat des de la JSP a través de JSTL
 	public Boolean getIsVisible() {
 		return this.isVisible();
 	}
