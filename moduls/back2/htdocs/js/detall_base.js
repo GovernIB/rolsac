@@ -410,23 +410,18 @@ function DetallBase( soloFicha, reglasFormulario, identificadores ){
 	}
 
 	this.previsualitza = function() {
+		
 		var url = this.urlPrevisualizar;
-		escriptori_detall_elm.fadeOut(300, function() {
-			var idiomaSeleccionat = escriptori_detall_elm.find("ul.idiomes li.seleccionat span").attr("class");
-			var id = escriptori_detall_elm.find("#item_id").val();
+		
+		var idiomaSeleccionat = escriptori_detall_elm.find("ul.idiomes li.seleccionat span").attr("class");
+		var id = escriptori_detall_elm.find("#item_id").val();
 
-			url += "?lang=" + idiomaSeleccionat + "&codi=" + id + "&previ=s";
-
-			escriptori_previsualitza_elm.find("iframe").attr("src", url).end().fadeIn(300, function() {
-				$(this).find("a.dePrevisualitzar").one("click", that.previsualitzaTorna);
-			});
-		});
-	}
-
-	this.previsualitzaTorna = function() {
-		escriptori_previsualitza_elm.fadeOut(300, function() {
-			escriptori_detall_elm.fadeIn(300);
-		});
+		url += "?lang=" + idiomaSeleccionat + "&codi=" + id + "&previ=s";
+				
+		var ancho = 1024;
+		var alto = 768;
+		window.open(url, 'ventanaPrevisualizar', "width=" + ancho + ", height=" + alto);
+						
 	}
 	
 	this.traduir = function (url, inputs, datos) {

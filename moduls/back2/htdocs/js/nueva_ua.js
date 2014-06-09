@@ -12,7 +12,6 @@ $(document).ready(function() {
 	*/
 				
 	nuevaUA_escriptori_detall_elm = $("#escritorioNuevaUA");
-	nuevaUA_escriptori_previsualitza_elm = $("#escriptori_previsualitza");
 			
 	// INICIEM
 	//Error = new CError();

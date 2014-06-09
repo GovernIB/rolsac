@@ -11,7 +11,6 @@ $(document).ready(function() {
 	resultats_llistat_elm = resultats_elm.find("div.L");
 				
 	escriptori_detall_elm = $("#escriptori_detall");
-	escriptori_previsualitza_elm = $("#escriptori_previsualitza");
 			
 	// INICIEM
 	Error = new CError();
@@ -475,20 +474,15 @@ function CDetall(soloFicha){
 	}
 	
 	this.previsualitza = function() {
+					
+		fitxa_idiomaSeleccionat = escriptori_detall_elm.find("ul.idiomes li.seleccionat span").attr("class");
+		fitxa_ID = escriptori_detall_elm.find("#item_id").val();
 		
-		escriptori_detall_elm.fadeOut(300, function() {
-			
-			fitxa_idiomaSeleccionat = escriptori_detall_elm.find("ul.idiomes li.seleccionat span").attr("class");
-			fitxa_ID = escriptori_detall_elm.find("#item_id").val();
-			
-			previsualitza_url = urlPrevisualizarUA + "?lang=" + fitxa_idiomaSeleccionat + "&coduo=" + fitxa_ID;
-			
-			escriptori_previsualitza_elm.find("iframe").attr("src", previsualitza_url).end().fadeIn(300, function() {
-			
-				$(this).find("a.dePrevisualitzar").one("click", Detall.previsualitzaTorna);
-			
-			});		
-		});
+		previsualitza_url = urlPrevisualizarUA + "?lang=" + fitxa_idiomaSeleccionat + "&coduo=" + fitxa_ID;
+		
+		var ancho = 1024;
+		var alto = 768;
+		window.open(previsualitza_url, 'ventanaPrevisualizarUA', "width=" + ancho + ", height=" + alto);
 		
 	}
 	

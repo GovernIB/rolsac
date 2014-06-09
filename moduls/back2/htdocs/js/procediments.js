@@ -23,7 +23,6 @@ $(document).ready(function() {
 	ordreCamp_cercador_elm = resultats_cercador_elm.find("input.ordreCamp");
 	
 	escriptori_detall_elm = $("#escriptori_detall");
-	escriptori_previsualitza_elm = $("#escriptori_previsualitza");
 
 	escriptori_tramits_elm = $("#escriptori_tramits");
 	
@@ -394,32 +393,27 @@ function CDetall(){
 	this.previsualitza = function() {
 		
 		var url = this.urlPrevisualizar;
-				
-		escriptori_detall_elm.fadeOut(300, function() {
-			
-			var idiomaSeleccionat = escriptori_detall_elm.find("ul.idiomes li.seleccionat span").attr("class");
-			var id = escriptori_detall_elm.find("#item_id").val();
-			
-			// Si la URL tiene parámetros separamos por &amp;, pasamos las entidades a &.
-			url = url.replace(/&amp;/g, "&");
-			
-			// Obtenemos público objetivo, por si hay que mostrar previsualización en la SEU.
-			var codigoPO = $(".ModulPublicObjectiu .seleccionats .listaOrdenable ul li:first-child input[type=hidden]").val();
-			var nombrePO = $(".ModulPublicObjectiu .seleccionats .listaOrdenable ul li:first-child").text().toLowerCase();
-			
-			// Después, sustituimos el resto de parámetros.
-			url = url.replace("__lang__", idiomaSeleccionat);
-			url = url.replace("__id__", id);
-			url = url.replace("__previ__", "s");
-			url = url.replace("__po_id__", codigoPO);
-			url = url.replace("__po_nombre__", nombrePO);
-
-			escriptori_previsualitza_elm.find("iframe").attr("src", url).end().fadeIn(300, function() {
-				$(this).find("a.dePrevisualitzar").one("click", that.previsualitzaTorna);
-			});
-			
-		});
+		var idiomaSeleccionat = escriptori_detall_elm.find("ul.idiomes li.seleccionat span").attr("class");
+		var id = escriptori_detall_elm.find("#item_id").val();
 		
+		// Si la URL tiene parámetros separamos por &amp;, pasamos las entidades a &.
+		url = url.replace(/&amp;/g, "&");
+		
+		// Obtenemos público objetivo, por si hay que mostrar previsualización en la SEU.
+		var codigoPO = $(".ModulPublicObjectiu .seleccionats .listaOrdenable ul li:first-child input[type=hidden]").val();
+		var nombrePO = $(".ModulPublicObjectiu .seleccionats .listaOrdenable ul li:first-child").text().toLowerCase();
+		
+		// Después, sustituimos el resto de parámetros.
+		url = url.replace("__lang__", idiomaSeleccionat);
+		url = url.replace("__id__", id);
+		url = url.replace("__previ__", "s");
+		url = url.replace("__po_id__", codigoPO);
+		url = url.replace("__po_nombre__", nombrePO);
+
+		var ancho = 1024;
+		var alto = 768;
+		window.open(url, 'ventanaPrevisualizarProcedimiento', "width=" + ancho + ", height=" + alto);
+					
 	}
 
 	this.iniciar = function() {	

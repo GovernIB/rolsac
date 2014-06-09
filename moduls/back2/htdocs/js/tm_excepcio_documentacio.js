@@ -23,7 +23,6 @@ $(document).ready(function() {
 	ordreCamp_cercador_elm = resultats_cercador_elm.find("input.ordreCamp");
 	
 	escriptori_detall_elm = $("#escriptori_detall");
-	escriptori_previsualitza_elm = $("#escriptori_previsualitza");
 
 	// INICIEM
 	Llistat = new CLlistat();
@@ -148,7 +147,7 @@ function CLlistat(){
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
-			// Instanciamos el navegador multipágina.					
+			// Instanciamos el navegador multipï¿½gina.					
 			multipagina.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,

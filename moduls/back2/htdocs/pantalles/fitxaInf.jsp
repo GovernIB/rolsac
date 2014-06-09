@@ -1149,19 +1149,6 @@
     </form>
 </div>
 <!-- /escriptori_detall -->
-<!-- escriptori_previsualitza -->
-<div id="escriptori_previsualitza">
-    <h2><spring:message code='fitxes.previsualitzant'/></h2>
-    <div class="boton btnGenerico clear">
-        <a href="javascript:;" class="btn torna dePrevisualitzar">
-        	<span><span><spring:message code='boto.torna'/></span></span>
-        </a>
-    </div>
-    <div class="previsualitzacio">
-        <iframe frameborder="0" scrolling="auto"></iframe>
-    </div>
-</div>
-<!-- /escriptori_previsualitza -->
 
 <!-- escriptori_documents -->
 <div id="escriptori_documents" class="escriptori_detall">
