@@ -1290,19 +1290,6 @@
     </form>
 </div>
 <!-- /escriptori_detall -->
-<!-- escriptori_previsualitza -->
-<!-- div id="escriptori_previsualitza">
-    <h2><spring:message code='txt.previsualitzant_normativa'/></h2>
-    <p>
-        <a href="javascript:;" class="btn torna dePrevisualitzar"><span><span><spring:message code='boto.torna'/></span>
-        </span>
-        </a>
-    </p>
-    <div class="previsualitzacio">
-        <iframe frameborder="0" scrolling="auto"></iframe>
-    </div>
-</div-->
-<!-- /escriptori_previsualitza -->
 
 <!-- escriptori_afectacions -->
 <div id="escriptori_afectacions">

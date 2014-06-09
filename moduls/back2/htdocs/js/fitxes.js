@@ -91,7 +91,6 @@ $(document).ready(function() {
 	ordreCamp_cercador_elm = resultats_cercador_elm.find("input.ordreCamp");
 	
 	escriptori_detall_elm = $("#escriptori_detall");
-	escriptori_previsualitza_elm = $("#escriptori_previsualitza");
 	
 	// Datos traductor
 	CAMPOS_TRADUCTOR_FICHA = ["item_titol_", "item_des_curta_", "item_des_llarga_"];

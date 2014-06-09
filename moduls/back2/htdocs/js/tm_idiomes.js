@@ -23,7 +23,6 @@ $(document).ready(function() {
 	ordreCamp_cercador_elm = resultats_cercador_elm.find("input.ordreCamp");
 
 	escriptori_detall_elm = $("#escriptori_detall");
-	escriptori_previsualitza_elm = $("#escriptori_previsualitza");
 
 	// INICIEM
 	Llistat = new CLlistat();

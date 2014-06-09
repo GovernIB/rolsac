@@ -852,15 +852,7 @@
         </div>
     </div>
     </form>
-    <div id="escriptori_previsualitza">
-        <h2><spring:message code='unitatadm.formulari.previsualitzaFitxa'/></h2>
-        <div class="boton btnGenerico clear">
-            <a href="javascript:;" class="btn torna dePrevisualitzar"><span><span><spring:message code='boto.torna'/></span></span></a>
-        </div>                    
-        <div class="previsualitzacio">                      
-            <iframe frameborder="0" scrolling="auto"></iframe>              
-        </div>              
-    </div>
+
     <div id="escriptori_seccions">    
        <ul id="opcions">
             <li class="opcio C actiu"><spring:message code='unitatadm.formulari.seccions.gestio'/></li>                                 
