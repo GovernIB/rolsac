@@ -10,9 +10,9 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://ws.iconaMateria.v2.api.rolsac.caib.es">
 	
-	<wsdl:import namespace="urn:tns1" location="MateriaDTO.wsdl"/>
-	<wsdl:import namespace="urn:tns2" location="PerfilDTO.wsdl"/>
-	<wsdl:import namespace="urn:tns3" location="ArxiuDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns1" location="dto/MateriaDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="dto/PerfilDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns3" location="dto/ArxiuDTO.wsdl"/>
 	
 	<wsdl:types>
 	</wsdl:types>

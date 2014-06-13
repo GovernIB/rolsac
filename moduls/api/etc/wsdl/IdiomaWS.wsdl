@@ -10,8 +10,8 @@
 	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" 
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 	
-	<wsdl:import namespace="urn:tns1" location="IdiomaCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns2" location="BasicCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns1" location="dto/IdiomaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="dto/BasicCriteria.wsdl"/>
 	
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"

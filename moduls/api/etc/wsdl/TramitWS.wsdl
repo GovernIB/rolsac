@@ -12,12 +12,12 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://ws.tramit.v2.api.rolsac.caib.es">
 	
-	<wsdl:import namespace="urn:tns1" location="ProcedimentDTO.wsdl"/>
-	<wsdl:import namespace="urn:tns2" location="BasicCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns2" location="EntitatRemota.wsdl"/>
-	<wsdl:import namespace="urn:tns3" location="TaxaCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns4" location="DocumentTramitCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns5" location="UnitatAdministrativaDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns1" location="dto/ProcedimentDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="dto/BasicCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="dto/EntitatRemota.wsdl"/>
+	<wsdl:import namespace="urn:tns3" location="dto/TaxaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns4" location="dto/DocumentTramitCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns5" location="dto/UnitatAdministrativaDTO.wsdl"/>
 	
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"

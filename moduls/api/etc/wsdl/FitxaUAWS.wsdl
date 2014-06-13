@@ -11,10 +11,10 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://ws.fitxaUA.v2.api.rolsac.caib.es">
 	
-	<wsdl:import namespace="urn:tns1" location="UnitatAdministrativaDTO.wsdl"/>
-	<wsdl:import namespace="urn:tns2" location="EntitatRemota.wsdl"/>
-	<wsdl:import namespace="urn:tns3" location="FitxaDTO.wsdl"/>
-	<wsdl:import namespace="urn:tns4" location="SeccioDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns1" location="dto/UnitatAdministrativaDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="dto/EntitatRemota.wsdl"/>
+	<wsdl:import namespace="urn:tns3" location="dto/FitxaDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns4" location="dto/SeccioDTO.wsdl"/>
 	
 	<wsdl:types>
 	</wsdl:types>

@@ -10,9 +10,9 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://ws.formulari.v2.api.rolsac.caib.es">
 	
-	<wsdl:import namespace="urn:tns1" location="TramitDTO.wsdl"/>
-	<wsdl:import namespace="urn:tns2" location="EntitatRemota.wsdl"/>
-	<wsdl:import namespace="urn:tns3" location="ArxiuDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns1" location="dto/TramitDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="dto/EntitatRemota.wsdl"/>
+	<wsdl:import namespace="urn:tns3" location="dto/ArxiuDTO.wsdl"/>
 	
 	<wsdl:types>
 	</wsdl:types>

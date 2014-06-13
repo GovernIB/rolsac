@@ -12,11 +12,11 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://ws.fetVital.v2.api.rolsac.caib.es">
 	
-	<wsdl:import namespace="urn:tns1" location="ArxiuDTO.wsdl"/>
-	<wsdl:import namespace="urn:tns2" location="FitxaCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns3" location="BasicCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns4" location="ProcedimentCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns5" location="AgrupacioFetVitalCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns1" location="dto/ArxiuDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="dto/FitxaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns3" location="dto/BasicCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns4" location="dto/ProcedimentCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns5" location="dto/AgrupacioFetVitalCriteria.wsdl"/>
 	
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"

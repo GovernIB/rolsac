@@ -10,9 +10,9 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://ws.unitatMateria.v2.api.rolsac.caib.es">
 	
-	<wsdl:import namespace="urn:tns1" location="MateriaDTO.wsdl"/>
-	<wsdl:import namespace="urn:tns2" location="UnitatAdministrativaDTO.wsdl"/>
-	<wsdl:import namespace="urn:tns3" location="EntitatRemota.wsdl"/>
+	<wsdl:import namespace="urn:tns1" location="dto/MateriaDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="dto/UnitatAdministrativaDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns3" location="dto/EntitatRemota.wsdl"/>
 	
 	<wsdl:types>
 	</wsdl:types>

@@ -13,13 +13,13 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://ws.normativa.v2.api.rolsac.caib.es">
 	
-	<wsdl:import namespace="urn:tns1" location="ProcedimentCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns2" location="BasicCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns2" location="EntitatRemota.wsdl"/>
-	<wsdl:import namespace="urn:tns3" location="UnitatAdministrativaDTO.wsdl"/>
-	<wsdl:import namespace="urn:tns4" location="ButlletiDTO.wsdl"/>
-	<wsdl:import namespace="urn:tns5" location="ArxiuDTO.wsdl"/>
-	<wsdl:import namespace="urn:tns6" location="AfectacioDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns1" location="dto/ProcedimentCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="dto/BasicCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="dto/EntitatRemota.wsdl"/>
+	<wsdl:import namespace="urn:tns3" location="dto/UnitatAdministrativaDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns4" location="dto/ButlletiDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns5" location="dto/ArxiuDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns6" location="dto/AfectacioDTO.wsdl"/>
 	
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"

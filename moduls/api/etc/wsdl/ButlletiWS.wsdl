@@ -9,8 +9,8 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://ws.butlleti.v2.api.rolsac.caib.es">
 	
-	<wsdl:import namespace="urn:tns1" location="NormativaCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns2" location="BasicCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns1" location="dto/NormativaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="dto/BasicCriteria.wsdl"/>
 	
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"

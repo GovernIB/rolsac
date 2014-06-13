@@ -10,9 +10,9 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://ws.perfil.v2.api.rolsac.caib.es">
 	
-	<wsdl:import namespace="urn:tns1" location="IconaFamiliaCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns2" location="BasicCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns3" location="IconaMateriaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns1" location="dto/IconaFamiliaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="dto/BasicCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns3" location="dto/IconaMateriaCriteria.wsdl"/>
 	
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"

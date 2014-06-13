@@ -21,23 +21,23 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es">
 	
-	<wsdl:import namespace="urn:tns1" location="UnitatAdministrativaCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns1" location="UnitatAdministrativaDTO.wsdl"/>
-	<wsdl:import namespace="urn:tns2" location="BasicCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns2" location="EntitatRemota.wsdl"/>
-	<wsdl:import namespace="urn:tns3" location="EspaiTerritorialDTO.wsdl"/>
-	<wsdl:import namespace="urn:tns4" location="ProcedimentCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns5" location="MateriaCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns6" location="FitxaCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns7" location="NormativaCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns8" location="PersonalCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns9" location="UsuariCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns10" location="EdificiCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns11" location="SeccioCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns12" location="TractamentDTO.wsdl"/>
-	<wsdl:import namespace="urn:tns12" location="TractamentCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns13" location="TramitCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns14" location="ArxiuDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns1" location="dto/UnitatAdministrativaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns1" location="dto/UnitatAdministrativaDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="dto/BasicCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="dto/EntitatRemota.wsdl"/>
+	<wsdl:import namespace="urn:tns3" location="dto/EspaiTerritorialDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns4" location="dto/ProcedimentCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns5" location="dto/MateriaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns6" location="dto/FitxaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns7" location="dto/NormativaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns8" location="dto/PersonalCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns9" location="dto/UsuariCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns10" location="dto/EdificiCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns11" location="dto/SeccioCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns12" location="dto/TractamentDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns12" location="dto/TractamentCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns13" location="dto/TramitCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns14" location="dto/ArxiuDTO.wsdl"/>
 	
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"

@@ -9,10 +9,10 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://ws.catalegDocuments.v2.api.rolsac.caib.es">
 	
-	<wsdl:import namespace="urn:tns1" location="DocumentTramitCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns2" location="BasicCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns3" location="CatalegDocumentsCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns4" location="CatalegDocumentsDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns1" location="dto/DocumentTramitCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="dto/BasicCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns3" location="dto/CatalegDocumentsCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns4" location="dto/CatalegDocumentsDTO.wsdl"/>
 	
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"

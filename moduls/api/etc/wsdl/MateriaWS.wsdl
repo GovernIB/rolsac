@@ -15,14 +15,14 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://ws.materia.v2.api.rolsac.caib.es">
 	
-	<wsdl:import namespace="urn:tns1" location="UnitatAdministrativaCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns2" location="BasicCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns3" location="FitxaCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns4" location="IconaMateriaCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns5" location="ProcedimentCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns6" location="ArxiuDTO.wsdl"/>
-	<wsdl:import namespace="urn:tns7" location="AgrupacioMateriaCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns8" location="UnitatMateriaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns1" location="dto/UnitatAdministrativaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="dto/BasicCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns3" location="dto/FitxaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns4" location="dto/IconaMateriaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns5" location="dto/ProcedimentCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns6" location="dto/ArxiuDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns7" location="dto/AgrupacioMateriaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns8" location="dto/UnitatMateriaCriteria.wsdl"/>
 	
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"

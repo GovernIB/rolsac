@@ -12,11 +12,11 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://ws.documentTramit.v2.api.rolsac.caib.es">
 	
-	<wsdl:import namespace="urn:tns1" location="TramitDTO.wsdl"/>
-	<wsdl:import namespace="urn:tns2" location="EntitatRemota.wsdl"/>
-	<wsdl:import namespace="urn:tns3" location="ArxiuDTO.wsdl"/>
-	<wsdl:import namespace="urn:tns4" location="CatalegDocumentsDTO.wsdl"/>
-	<wsdl:import namespace="urn:tns5" location="ExcepcioDocumentacioDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns1" location="dto/TramitDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="dto/EntitatRemota.wsdl"/>
+	<wsdl:import namespace="urn:tns3" location="dto/ArxiuDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns4" location="dto/CatalegDocumentsDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns5" location="dto/ExcepcioDocumentacioDTO.wsdl"/>
 	
 	<wsdl:types>
 	</wsdl:types>
