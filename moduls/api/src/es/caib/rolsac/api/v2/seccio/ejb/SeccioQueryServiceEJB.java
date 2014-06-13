@@ -317,7 +317,7 @@ public class SeccioQueryServiceEJB extends HibernateEJB {
 
 			QueryBuilder qb = new QueryBuilder(HQL_FITXA_ALIAS, entities, fitxaCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
 			FitxaUtils.parseActiu(criteris, fitxaCriteria, HQL_FITXA_ALIAS, qb);
-			criteris = BasicUtils.parseCriterias(FitxaCriteria.class, HQL_FILLES_ALIAS, HQL_TRADUCCIONES_ALIAS, fitxaCriteria);
+			criteris = BasicUtils.parseCriterias(FitxaCriteria.class, HQL_FITXA_ALIAS, HQL_TRADUCCIONES_ALIAS, fitxaCriteria);
 			qb.extendCriteriaObjects(criteris);
 
 			SeccioCriteria sc = new SeccioCriteria();
