@@ -29,6 +29,7 @@
 	<classpathentry kind="src" path="test/integracion/unitario/java"/>
 	<classpathentry kind="src" path="test/integracion/unitario/resources"/>
 	<classpathentry kind="src" path="moduls/lucene/src"/>
+	<classpathentry kind="src" path="output/api/wsdl-src"/>
 	<classpathentry kind="lib" path="output/moduls/model.jar"/>
 	<classpathentry kind="lib" path="lib/boib.jar"/>
 	<classpathentry kind="lib" path="lib/cglib2.jar"/>
