@@ -1,6 +1,7 @@
 package es.caib.rolsac.api.v2.query;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,6 +17,7 @@ import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Periodo;
 
 import es.caib.rolsac.api.v2.general.co.CriteriaObject;
+import es.caib.rolsac.api.v2.query.Order.DIRECTION;
 import es.caib.rolsac.api.v2.query.Restriction.LOGIC;
 
 public class QueryBuilder {
@@ -101,9 +103,32 @@ public class QueryBuilder {
         if (countFlag) {
             hql.append("COUNT(");
         }
-        if (StringUtils.isBlank(orderBy)){
-            hql.append("DISTINCT ");            
+        
+        boolean puedoHacerDistinct = true;
+    	// Si no hay joins, podemos hacer un distinct de forma segura
+       	// Si no hay orderBy, también podemos hacer el distinct de forma segura        	
+        if (fromClauses.size() > 1 && StringUtils.isNotBlank(orderBy)) {
+        	//Si hay orderBy y joins, hay que evaluar los orderBy para ver si podemos eliminar las tablas con el distinct
+            List<String> ordres = Arrays.asList(orderBy.split(","));
+            String[] tokens;
+            for (String ordre : ordres) {
+                tokens = ordre.split(" ");
+                if (tokens[0].contains(".")){
+                    String[] fieldParts = tokens[0].split("\\.");
+                    if ( !fieldParts[0].equals(selectAlias) ) {
+                    	//Estamos ordenando por un campo en una tabla diferente
+                    	puedoHacerDistinct = false;
+                    }
+                }
+            }
+        	
         }
+        
+        if (puedoHacerDistinct) {
+            hql.append("DISTINCT ");
+        	
+        }
+        
         hql.append(selectAlias);
         if (countFlag) {
             hql.append(")");

@@ -94,7 +94,7 @@ public class NormativaQueryServiceTest {
             NormativaQueryServiceAdapter normativa = rolsacQS.obtenirNormativa(normativaCriteria);
             Assert.assertNotNull(normativa);
             ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
-            procedimentCriteria.setVisible(false);
+            procedimentCriteria.setActiu(false);
             List<ProcedimentQueryServiceAdapter> listProcedimentQueryServiceAdapter = normativa.llistarProcediments(procedimentCriteria);
             Assert.assertTrue(listProcedimentQueryServiceAdapter.size() == 2);
         } catch (QueryServiceException e) {

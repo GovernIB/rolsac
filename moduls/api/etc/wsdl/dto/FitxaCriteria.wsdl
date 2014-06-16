@@ -43,6 +43,8 @@
                         <element name="validacion" nillable="true" type="xsd:string" />
                         <element name="publicoObjetivo" nillable="true" type="xsd:string" />
                         <element name="seccion" nillable="true" type="xsd:string" />
+                        <element name="textos" nillable="true" type="xsd:string" />
+                        <element name="unidadAdministrativa" nillable="true" type="xsd:string" />
                         <element name="ordenar" nillable="true" type="tns:ArrayOfFitxaOrdenacio" />
                     </sequence>
                 </extension>

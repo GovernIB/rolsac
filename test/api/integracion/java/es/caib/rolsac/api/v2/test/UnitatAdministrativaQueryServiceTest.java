@@ -27,6 +27,7 @@ import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
 import es.caib.rolsac.api.v2.rolsac.RolsacQueryService;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioQueryServiceAdapter;
+import es.caib.rolsac.api.v2.tractament.TractamentCriteria;
 import es.caib.rolsac.api.v2.tractament.TractamentQueryServiceAdapter;
 import es.caib.rolsac.api.v2.tramit.TramitCriteria;
 import es.caib.rolsac.api.v2.tramit.TramitQueryServiceAdapter;
@@ -432,7 +433,7 @@ public class UnitatAdministrativaQueryServiceTest {
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);
-            TractamentQueryServiceAdapter tractament = unitatAdministrativa.obtenirTractament();
+            TractamentQueryServiceAdapter tractament = unitatAdministrativa.obtenirTractament(new TractamentCriteria());
             Assert.assertNotNull(tractament);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());

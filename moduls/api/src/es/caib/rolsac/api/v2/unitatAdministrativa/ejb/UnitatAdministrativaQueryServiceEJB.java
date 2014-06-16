@@ -672,6 +672,7 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 			entities.add( new FromClause(HQL_UA_CLASS, HQL_UA_ALIAS) );
 			entities.add( new FromClause(HQL_FITXA_UA_CLASS, HQL_FITXA_UA_ALIAS) );
 			entities.add( new FromClause(HQL_FITXA_CLASS, HQL_FITXA_ALIAS) );
+			
 			QueryBuilder qb = new QueryBuilder( HQL_FITXA_ALIAS, entities, fitxaCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS );
 			FitxaUtils.parseActiu( criteris, fitxaCriteria, HQL_FITXA_ALIAS, qb );
 			criteris = BasicUtils.parseCriterias( FitxaCriteria.class, HQL_FITXA_ALIAS, HQL_TRADUCCIONES_ALIAS, fitxaCriteria );

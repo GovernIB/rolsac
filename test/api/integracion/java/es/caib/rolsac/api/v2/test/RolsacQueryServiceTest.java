@@ -333,6 +333,33 @@ public class RolsacQueryServiceTest {
         Assert.assertNotNull(unitatAdministrativa);
     }
     
+    
+    /**
+     * Cas d'us: Recupera unitats administratives per tractament
+     */
+    @Test
+    public void recuperarUnitatsAdministrativesPerTractament() {
+    	String idTratamiento = "1";
+        UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
+        unitatAdministrativaCriteria.setTratamiento(idTratamiento);
+        unitatAdministrativaCriteria.setTamany("10");
+        unitatAdministrativaCriteria.setIdioma("ca");
+        unitatAdministrativaCriteria.setOrdenar(new UnitatAdministrativaOrdenacio[] {UnitatAdministrativaOrdenacio.orden_desc});
+        List<UnitatAdministrativaQueryServiceAdapter> unitats = null;
+        try {
+        	unitats = rolsacQS.llistarUnitatsAdministratives(unitatAdministrativaCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
+        Assert.assertTrue(unitats.size() > 0);
+        Assert.assertTrue(unitats.size() <= 10);
+        for (UnitatAdministrativaQueryServiceAdapter t: unitats) {
+            Assert.assertTrue( t.getTratamiento().toString().equals(idTratamiento));
+        }
+    }
+    
+    
+    
     /**
      * Cas d'us: Recupera tramit.
      */
@@ -356,7 +383,7 @@ public class RolsacQueryServiceTest {
     @Test
     public void recuperarTramits() {
         TramitCriteria tramitCriteria = new TramitCriteria();
-        tramitCriteria.setT_nombre("%solÂ·licitud%");
+        tramitCriteria.setT_nombre("%sol·licitud%");
         tramitCriteria.setTamany("10");
         tramitCriteria.setIdioma("ca");
         tramitCriteria.setOrdenar(new TramitOrdenacio[] {TramitOrdenacio.orden_desc});
@@ -369,7 +396,7 @@ public class RolsacQueryServiceTest {
         Assert.assertTrue(tramits.size() > 0);
         Assert.assertTrue(tramits.size() <= 10);
         for (TramitQueryServiceAdapter t: tramits) {
-            Assert.assertTrue(t.getNombre().toLowerCase().contains("solÂ·licitud"));
+            Assert.assertTrue(t.getNombre().toLowerCase().contains("sol·licitud"));
         }
     }
     
@@ -514,6 +541,32 @@ public class RolsacQueryServiceTest {
         }
     }    
 
+
+    /**
+     * Cas d'us: cerca fitxes per UA, textos i dates 
+     */
+    @Test
+    public void cercarFitxes() {
+        FitxaCriteria fitxaCriteria = new FitxaCriteria();
+        fitxaCriteria.setTextos("%associacio%");
+        fitxaCriteria.setTamany("10");
+        fitxaCriteria.setIdioma("ca");
+        fitxaCriteria.setFechaActualizacion("01/01/2012-31/12/2013");
+        fitxaCriteria.setUnidadAdministrativa("2");
+        fitxaCriteria.setOrdenar(new FitxaOrdenacio[] {FitxaOrdenacio.fechaActualizacion_desc});
+        List<FitxaQueryServiceAdapter> fitxes = null;
+        try {
+            fitxes = rolsacQS.llistarFitxes(fitxaCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
+        Assert.assertTrue(fitxes.size() > 0);
+        Assert.assertTrue(fitxes.size() <= 10);
+    }
+    
+    
+    
+    
     /**
      * Cas d'us: Recupera normativa local.
      */

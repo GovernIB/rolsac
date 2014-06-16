@@ -43,6 +43,7 @@
                         <element name="t_presentacion" nillable="true" type="xsd:string" />
                         <element name="t_abreviatura" nillable="true" type="xsd:string" />
                         <element name="seccion" nillable="true" type="xsd:string" />
+                        <element name="tratamiento" nillable="true" type="xsd:string" />
                         <element name="ordenar" nillable="true" type="tns:ArrayOfUnitatAdministrativaOrdenacio" />
                     </sequence>
                 </extension>

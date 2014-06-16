@@ -31,7 +31,7 @@ import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServi
 
 public class FitxaQueryServiceTest {
 
-    RolsacQueryService rolsacQS;
+	RolsacQueryService rolsacQS;
 
     @Before
     public void setup() {
@@ -42,7 +42,7 @@ public class FitxaQueryServiceTest {
     @Test
     public void adapterTest() {
         FitxaDTO dto = new FitxaDTO();
-        dto.setId((long) 1372158);
+        dto.setId(Long.valueOf(Constants.ID_FITXA_EXISTENT));
         FitxaQueryServiceAdapter adapter = (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", STRATEGY.WS, dto);
         try {
             int num = adapter.getNumDocuments();
@@ -55,7 +55,7 @@ public class FitxaQueryServiceTest {
     @Test
     public void obtenirNumDocuments() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("1372158");
+        fitxaCriteria.setId(Constants.ID_FITXA_EXISTENT);
         fitxaCriteria.setIdioma("ca");
         try {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
@@ -70,7 +70,7 @@ public class FitxaQueryServiceTest {
     @Test
     public void obtenirDocuments() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("1372158");
+        fitxaCriteria.setId(Constants.ID_FITXA_EXISTENT);
         fitxaCriteria.setIdioma("ca");
         try {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
@@ -85,7 +85,7 @@ public class FitxaQueryServiceTest {
     @Test
     public void obtenirNumEnllacos() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("1372158");
+        fitxaCriteria.setId(Constants.ID_FITXA_EXISTENT);
         fitxaCriteria.setIdioma("ca");
         try {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
@@ -100,7 +100,7 @@ public class FitxaQueryServiceTest {
     @Test
     public void obtenirEnllassos() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("1372158");
+        fitxaCriteria.setId(Constants.ID_FITXA_EXISTENT);
         fitxaCriteria.setIdioma("ca");
         try {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
@@ -115,7 +115,7 @@ public class FitxaQueryServiceTest {
     @Test
     public void obtenirNumFetsVitals() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("1372158");
+        fitxaCriteria.setId(Constants.ID_FITXA_EXISTENT);
         fitxaCriteria.setIdioma("ca");
         try {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
@@ -130,7 +130,7 @@ public class FitxaQueryServiceTest {
     @Test
     public void obtenirFetsVitals() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("1372158");
+        fitxaCriteria.setId(Constants.ID_FITXA_EXISTENT);
         fitxaCriteria.setIdioma("ca");
         try {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
@@ -145,7 +145,7 @@ public class FitxaQueryServiceTest {
     @Test
     public void obtenirNumSeccions() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("1372158");
+        fitxaCriteria.setId(Constants.ID_FITXA_EXISTENT);
         fitxaCriteria.setIdioma("ca");
         try {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
@@ -160,7 +160,7 @@ public class FitxaQueryServiceTest {
     @Test
     public void obtenirSeccions() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("1372158");
+        fitxaCriteria.setId(Constants.ID_FITXA_EXISTENT);
         fitxaCriteria.setIdioma("ca");
         try {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
@@ -175,7 +175,7 @@ public class FitxaQueryServiceTest {
     @Test
     public void obtenirNumUnitatsAdministratives() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("1372158");
+        fitxaCriteria.setId(Constants.ID_FITXA_EXISTENT);
         fitxaCriteria.setIdioma("ca");
         try {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
@@ -190,7 +190,7 @@ public class FitxaQueryServiceTest {
     @Test
     public void obtenirUnitatsAdministratives() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("1372158");
+        fitxaCriteria.setId(Constants.ID_FITXA_EXISTENT);
         fitxaCriteria.setIdioma("ca");
         try {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
@@ -205,7 +205,7 @@ public class FitxaQueryServiceTest {
     @Test
     public void obtenirBaner() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("1372158");
+        fitxaCriteria.setId(Constants.ID_FITXA_EXISTENT);
         fitxaCriteria.setIdioma("ca");
         try {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
@@ -220,7 +220,7 @@ public class FitxaQueryServiceTest {
     @Test
     public void obtenirIcona() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("1372158");
+        fitxaCriteria.setId(Constants.ID_FITXA_EXISTENT);
         fitxaCriteria.setIdioma("ca");
         try {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
@@ -235,7 +235,7 @@ public class FitxaQueryServiceTest {
     @Test
     public void obtenirImatge() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("1372158");
+        fitxaCriteria.setId(Constants.ID_FITXA_EXISTENT);
         fitxaCriteria.setIdioma("ca");
         try {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
@@ -250,7 +250,7 @@ public class FitxaQueryServiceTest {
     @Test
     public void llistarPublicsObjectius() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId("1372158");
+        fitxaCriteria.setId(Constants.ID_FITXA_EXISTENT);
         fitxaCriteria.setIdioma("ca");
         try {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
