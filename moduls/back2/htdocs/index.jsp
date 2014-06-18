@@ -3,15 +3,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-	
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
 <title><%
 String appTitol = System.getProperty("entitat.aplicacio.titol");
 if (appTitol==null) {
 %><spring:message code='aplicacio.titol'/><% 
 } else { 
 %><%=appTitol%><% } %>
-    </title>
+</title>
+
     <jsp:include page="layout/favicon.jsp" flush="true"/>
     <link href="<c:url value='/css/comuns.css'/>" rel="stylesheet" type="text/css" media="screen" />
     <link href="<c:url value='/css/comuns_amplaria1.css'/>" rel="stylesheet" type="text/css" media="screen" />  
