@@ -11,7 +11,7 @@ import java.sql.*;
 import org.apache.commons.lang.ObjectUtils;
 
 /**
- * Implementació d'un tipus de dades BLOB per Oracle THIN.
+ * Implementacio d'un tipus de dades BLOB per Oracle THIN.
  * @deprecated see {@link BinaryBlobType}
  */
 public class OracleBlobType implements UserType {

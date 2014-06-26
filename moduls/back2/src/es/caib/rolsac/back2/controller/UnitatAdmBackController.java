@@ -136,7 +136,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		}
 
 		// Control de si se dan permisos extrar al rol SUPER
-		boolean accesoSuper = System.getProperty("es.caib.rolsac.permisosSuperAdicionales").equals("Y") && request.isUserInRole("sacsuper");
+		boolean accesoSuper = System.getProperty("es.caib.rolsac.permisosSuperAdicionales") != null && System.getProperty("es.caib.rolsac.permisosSuperAdicionales").equals("Y") && request.isUserInRole("sacsuper");
 		boolean accesoOtros = request.isUserInRole("sacsystem") || request.isUserInRole("sacadmin");
 		boolean acceso = (accesoSuper || accesoOtros) ? true : false;
 

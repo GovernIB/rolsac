@@ -54,8 +54,8 @@ public class BinaryBlobType implements UserType {
 			Object value,
 			PreparedStatement pst) throws SQLException {
 		
-		//Es crea un BLOB temporal. Per la documentació (*) entenc que en el contexte de
-		//una operació INSERT, aquest BLOB temporal es fa permanent. 
+		//Es crea un BLOB temporal. Per la documentacio (*) entenc que en el contexte de
+		//una operaciol INSERT, aquest BLOB temporal es fa permanent. 
 		
 		// (*) http://docs.oracle.com/cd/A97630_01/appdev.920/a96584/oci07lob.htm#433719
 	    // To make a temporary LOB permanent, the application can use OCILobCopy() 

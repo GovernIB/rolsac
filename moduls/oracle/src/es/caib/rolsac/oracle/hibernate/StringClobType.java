@@ -33,7 +33,7 @@ public class StringClobType implements UserType {
     	if(!"Oracle".equals(productName))
     		return null;
     	
-    	// Codi específic per Clobs
+    	// Codi especific per Clobs
     	Clob clob = resultSet.getClob(names[0]);
     	if (clob == null) return null;
     	if (clob.length() == 0) return null;
