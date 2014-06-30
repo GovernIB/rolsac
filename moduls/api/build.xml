@@ -222,7 +222,6 @@
 			splitindex="false" 
 			use="true" 
 			version="true"
-			overview="${ejb.doc}/overview-nonjava.html"
 			Windowtitle="API ROLSAC per integradors no java"
 			>
 			<doctitle><![CDATA[<h1>API ROLSAC per integradors no java</h1>]]></doctitle>
@@ -247,7 +246,41 @@
 	
     </target>
 	
-    <target name="doc" depends="ejb.javadoc,nonjava.javadoc" description="Realiza las tareas de documentación"/>
+	
+    <target name="java.javadoc">
+        <javadoc
+            destdir="${java.doc.api}"
+            classpathref="ejb.class.path"
+			nodeprecated="false" 
+			nodeprecatedlist="false" 
+			noindex="false" 
+			nonavbar="false" 
+			notree="false" 
+			source="${javac.source}"
+			encoding="${javac.encoding}"
+			splitindex="false" 
+			use="true" 
+			version="true"
+			Windowtitle="API ROLSAC per integradors java"
+			>
+			<doctitle><![CDATA[<h1>API ROLSAC per integradors java</h1>]]></doctitle>
+			<sourcefiles>
+				<fileset dir="${wsdl.gen.src}">
+					<include name="**/*/*DTO.java"/>
+					<include name="**/*/*Criteria.java"/>
+					<include name="**/*/*Ordenacio.java"/>
+				</fileset>
+				<fileset dir="${ejb.src}">
+					<include name="**/*/*QueryService.java"/>
+					<include name="**/*/*QueryServiceAdapter.java"/>
+					<include name="**/*/*QueryServiceStrategy.java"/>
+					<include name="**/*/ConfiguracioServeis.java"/>
+				</fileset>
+			</sourcefiles>
+        </javadoc>
+		
+    </target>	
+    <target name="doc" depends="ejb.javadoc,nonjava.javadoc,java.javadoc" description="Realiza las tareas de documentación"/>
 	
 	<!-- EJB -->	
 	<target name="ejb.gen.all" depends="prepare,init,stub.gen.all">
