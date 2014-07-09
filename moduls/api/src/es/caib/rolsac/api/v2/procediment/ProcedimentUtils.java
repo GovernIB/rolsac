@@ -34,6 +34,7 @@ public class ProcedimentUtils {
 		}
 	}
 
+	/*
 	public static Integer parseEstadoUA(ProcedimentCriteria pc) {
 		if (pc.getEstadoUA() != null) {
 			Integer estadoUA = Integer.parseInt(pc.getEstadoUA());
@@ -42,6 +43,7 @@ public class ProcedimentUtils {
 		}
 		return null;
 	}
+	*/
 
 	private static String parseTelematico(ProcedimentCriteria pc, String where) {
 		if (pc.getTelematico() != null && pc.getTelematico()) {

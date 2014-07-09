@@ -17,6 +17,8 @@ import es.caib.rolsac.api.v2.enllac.EnllacDTO;
 import es.caib.rolsac.api.v2.exception.APIException;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalDTO;
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria;
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUADTO;
 import es.caib.rolsac.api.v2.general.ConfiguracioServeis;
 import es.caib.rolsac.api.v2.general.DTOUtil;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
@@ -173,6 +175,24 @@ public class FitxaQueryServiceGateway {
 		}
 		
 		return llistaSeccions;		
+		
+	}
+	
+	public List<FitxaUADTO> llistarFitxesUA(long id,
+			FitxaUACriteria fitxaUACriteria) throws RemoteException, APIException {
+		
+		Object[] tmpLlista = null;
+		List<FitxaUADTO> llistaFitxes = null;
+		
+		tmpLlista = stub.llistarFitxesUA(id, fitxaUACriteria);
+		llistaFitxes = new ArrayList<FitxaUADTO>( Arrays.asList(tmpLlista).size() );
+			
+		for ( Object o : tmpLlista ) {
+			FitxaUADTO sdto = (FitxaUADTO) DTOUtil.object2DTO(o, FitxaUADTO.class);
+			llistaFitxes.add(sdto);
+		}
+		
+		return llistaFitxes;		
 		
 	}
 	

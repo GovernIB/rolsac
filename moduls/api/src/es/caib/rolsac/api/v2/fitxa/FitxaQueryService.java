@@ -10,6 +10,8 @@ import es.caib.rolsac.api.v2.enllac.EnllacQueryServiceAdapter;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalQueryServiceAdapter;
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria;
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUAQueryServiceAdapter;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
 import es.caib.rolsac.api.v2.materia.MateriaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
@@ -45,6 +47,8 @@ public interface FitxaQueryService {
     
     public List<SeccioQueryServiceAdapter> llistarSeccions(SeccioCriteria seccioCriteria) throws QueryServiceException;
     
+    public List<FitxaUAQueryServiceAdapter> llistarFitxesUA(FitxaUACriteria fitxaUACriteria) throws QueryServiceException;
+
     public List<PublicObjectiuQueryServiceAdapter> llistarPublicsObjectius(PublicObjectiuCriteria poCriteria) throws QueryServiceException;
     
     public ArxiuQueryServiceAdapter obtenirIcona() throws QueryServiceException;

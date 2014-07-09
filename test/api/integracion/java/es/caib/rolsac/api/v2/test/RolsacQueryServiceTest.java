@@ -119,6 +119,20 @@ public class RolsacQueryServiceTest {
         CertificadoUtil.autentificar("contrasena", "storerolsac.jks");
     }
 
+    @Test
+    public void llistarProcediments() {
+    	ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
+    	procedimentCriteria.setUnidadAdministrativa("11");
+    	procedimentCriteria.setIdioma("ca");
+    	procedimentCriteria.setValidacion("1");
+    	try {
+			List procediments = rolsacQS.llistarProcediments(procedimentCriteria);
+				Assert.assertTrue(procediments.size() > 0);
+    	} catch (QueryServiceException e) {
+    		Assert.fail(e.toString());
+    	}
+    }
+    
     /**
      * Cas d'us: Es crecupera 1 procediment que existeix.
      */
@@ -1506,7 +1520,6 @@ public class RolsacQueryServiceTest {
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
         procedimentCriteria.setIdioma("ca");
         procedimentCriteria.setActiu(true);
-        procedimentCriteria.setTamany("20");
         int num = 0;
         try {
             num = rolsacQS.getNumProcediments(procedimentCriteria);

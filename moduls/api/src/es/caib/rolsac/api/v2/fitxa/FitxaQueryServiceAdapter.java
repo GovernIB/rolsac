@@ -19,6 +19,9 @@ import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalDTO;
 import es.caib.rolsac.api.v2.fetVital.FetVitalQueryServiceAdapter;
 import es.caib.rolsac.api.v2.fitxa.ejb.FitxaQueryServiceEJBStrategy;
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria;
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUADTO;
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUAQueryServiceAdapter;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
@@ -153,6 +156,19 @@ public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryServ
             return llistaQueryServiceAdapter;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "secciones.", e);
+        }
+    }
+    
+    public List<FitxaUAQueryServiceAdapter> llistarFitxesUA(FitxaUACriteria fitxaUACriteria) throws QueryServiceException {
+        try {
+            List<FitxaUADTO> llistaDTO = fitxaQueryServiceStrategy.llistarFitxesUA(getId(), fitxaUACriteria);
+            List<FitxaUAQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FitxaUAQueryServiceAdapter>();
+            for (FitxaUADTO fixtaUADTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((FitxaUAQueryServiceAdapter) BeanUtils.getAdapter("fitxaUA", getStrategy(),  fixtaUADTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "fixes UA.", e);
         }
     }
     

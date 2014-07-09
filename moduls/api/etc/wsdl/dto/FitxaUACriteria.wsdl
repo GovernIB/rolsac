@@ -29,7 +29,9 @@
                     <sequence>
                         <element name="orden" nillable="true" type="xsd:string" />
                         <element name="ordenSeccion" nillable="true" type="xsd:string" />
+                        <element name="fitxa" nillable="true" type="xsd:string" />
                         <element name="seccion" nillable="true" type="xsd:string" />
+                        <element name="unidadAdministrativa" nillable="true" type="xsd:string" />
                         <element name="ordenar" nillable="true" type="tns:ArrayOfFitxaUAOrdenacio" />
                     </sequence>
                 </extension>

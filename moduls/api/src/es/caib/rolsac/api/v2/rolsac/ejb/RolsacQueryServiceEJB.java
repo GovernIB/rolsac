@@ -536,17 +536,6 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 		List<CriteriaObject> criteris = new ArrayList<CriteriaObject>();
 		Session session = null;
 
-		// Guardamos el tamanyo a consultar para realizar el filtrado posterior
-		int tamany = Integer.parseInt(procedimentCriteria.getTamany());
-		procedimentCriteria.setTamany(null);
-
-		// Guardamos el inicio de la consulta
-		int inicio = 0;
-		if (procedimentCriteria.getInici() != null)
-			inicio = Integer.parseInt(procedimentCriteria.getInici());
-
-		procedimentCriteria.setInici(null);
-
 		try {
 
 			List<FromClause> entities = new ArrayList<FromClause>();
@@ -558,7 +547,6 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 					procedimentCriteria.getIdioma(),
 					HQL_TRADUCCIONES_ALIAS);
 
-			Integer estadoUA = ProcedimentUtils.parseEstadoUA(procedimentCriteria);
 			Restriction telematicoVigente = ProcedimentUtils.ParseTelematicoVigente(procedimentCriteria, HQL_PROCEDIMIENTO_ALIAS);
 
 			if (telematicoVigente != null)
@@ -578,23 +566,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 			Query query = qb.createQuery(session);
 			List<ProcedimientoLocal> procedimentsResult = (List<ProcedimientoLocal>) query.list();
 
-			List<ProcedimientoLocal> procedimentsBons = new ArrayList<ProcedimientoLocal>();
-			for (ProcedimientoLocal procediment: procedimentsResult) {
-
-				//TODO: Creo que esta validación se debería realizar directamente en la consulta de la BBDD.
-				if (estadoUA == null || procediment.getUnidadAdministrativa().getValidacion().equals(estadoUA))
-					procedimentsBons.add(procediment);
-
-			}
-
-			int count = inicio;
-			ProcedimientoLocal procediment;
-			if (procedimentsBons.size() > 0)
-				procediment  = procedimentsBons.get(count);
-
-			while ((count < inicio + tamany) && (count < procedimentsBons.size())) {
-
-				procediment  = procedimentsBons.get(count);
+			for (ProcedimientoLocal procediment : procedimentsResult) {
 				procedimentDTOList.add(
 						(ProcedimentDTO)BasicUtils.entityToDTO(
 								ProcedimentDTO.class, 
@@ -602,7 +574,6 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 								procedimentCriteria.getIdioma()
 								)
 						);
-				count++;
 			}
 
 		} catch (HibernateException e) {
@@ -654,9 +625,8 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 					entities, 
 					procedimentCriteria.getIdioma(),
 					HQL_TRADUCCIONES_ALIAS, 
-					false);
+					true);
 
-			Integer estadoUA = ProcedimentUtils.parseEstadoUA(procedimentCriteria);
 			Restriction telematicoVigente = ProcedimentUtils.ParseTelematicoVigente(procedimentCriteria, HQL_PROCEDIMIENTO_ALIAS);
 
 			if ( telematicoVigente != null )
@@ -674,20 +644,8 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<ProcedimientoLocal> procedimentsResult = (List<ProcedimientoLocal>) query.list();
-
-			int cont = 0;
-			for (ProcedimientoLocal procediment : procedimentsResult) {
-
-				//TODO: Creo que esta validación se debería realizar directamente en la consulta de la BBDD.
-				if (estadoUA == null || procediment.getUnidadAdministrativa().getValidacion().equals(estadoUA)) {
-					cont++;
-				}
-
-			}
-
-			numResultats = new Integer(cont);
-
+			numResultats = ((Integer) query.uniqueResult()).intValue();
+			
 		} catch (HibernateException e) {
 
 			log.error(e);

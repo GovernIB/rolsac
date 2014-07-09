@@ -15,6 +15,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.Enlace;
+import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.PublicoObjetivo;
@@ -29,6 +30,8 @@ import es.caib.rolsac.api.v2.enllac.EnllacDTO;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalDTO;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria;
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUADTO;
 import es.caib.rolsac.api.v2.general.BasicUtils;
 import es.caib.rolsac.api.v2.general.HibernateEJB;
 import es.caib.rolsac.api.v2.general.co.CriteriaObject;
@@ -361,6 +364,69 @@ public class FitxaQueryServiceEJB extends HibernateEJB {
         }
 
         return new ArrayList<SeccioDTO>(seccioDTOList);
+        
+    }
+    
+    /**
+     * Obtiene listado de fichas UA.
+     * @param id
+     * @param fitchaUACriteria
+     * @return List<FitxaUADTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
+    public List<FitxaUADTO> llistarFitxesUA(long id, FitxaUACriteria fitxaUACriteria) {
+    	
+        List<FitxaUADTO> fichaDTOList = new Vector<FitxaUADTO>();
+        List<CriteriaObject> criteris;
+        Session session = null;
+        
+        try {
+        	
+            criteris = BasicUtils.parseCriterias(FitxaUACriteria.class, HQL_FICHASUA_ALIAS, HQL_TRADUCCIONES_ALIAS, fitxaUACriteria);
+            List<FromClause> entities = new ArrayList<FromClause>();
+            entities.add(new FromClause(HQL_FICHA_CLASS, HQL_FICHA_ALIAS));
+            entities.add(new FromClause(HQL_FICHASUA_CLASS, HQL_FICHASUA_ALIAS));
+            QueryBuilder qb = new QueryBuilder(HQL_FICHA_ALIAS, entities, fitxaUACriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
+            qb.extendCriteriaObjects(criteris);
+            
+            FitxaCriteria fc = new FitxaCriteria();
+            fc.setId(String.valueOf(id));
+            criteris = BasicUtils.parseCriterias(FitxaCriteria.class, HQL_FICHA_ALIAS, fc);
+            qb.extendCriteriaObjects(criteris);
+
+            session = getSession();
+            Query query = qb.createQuery(session);
+            List<FichaUA> fichaResult = (List<FichaUA>) query.list();
+            for (FichaUA fichaUA : fichaResult) {
+                fichaDTOList.add((FitxaUADTO)BasicUtils.entityToDTO(
+                		FitxaUADTO.class,  
+                		fichaUA, 
+                		fitxaUACriteria.getIdioma())
+        		);
+            }
+            
+        } catch (HibernateException e) {
+        	
+            log.error(e);
+            
+        } catch (CriteriaObjectParseException e) {
+        	
+            log.error(e);
+            
+        } catch (QueryBuilderException e) {
+        	
+            log.error(e);
+            
+        } finally {
+        	
+            close(session);
+            
+        }
+
+        return new ArrayList<FitxaUADTO>(fichaDTOList);
         
     }
     

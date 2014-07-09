@@ -14,6 +14,8 @@ import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalDTO;
 import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceStrategy;
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria;
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUADTO;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
 import es.caib.rolsac.api.v2.materia.MateriaDTO;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
@@ -143,6 +145,17 @@ public class FitxaQueryServiceWSStrategy implements FitxaQueryServiceStrategy {
 			SeccioCriteria seccioCriteria) throws StrategyException {
 		try {
 			return gateway.llistarSeccions(id, seccioCriteria);			
+		} catch (RemoteException e) {
+			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+		}
+	}
+
+	public List<FitxaUADTO> llistarFitxesUA(long id,
+			FitxaUACriteria fitxaUACriteria) throws StrategyException {
+		try {
+			return gateway.llistarFitxesUA(id, fitxaUACriteria);			
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		} catch (APIException e) {

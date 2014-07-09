@@ -18,6 +18,8 @@ import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
 import es.caib.rolsac.api.v2.fitxa.FitxaOrdenacio;
 import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter;
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria;
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUAQueryServiceAdapter;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.general.CertificadoUtil;
@@ -166,6 +168,21 @@ public class FitxaQueryServiceTest {
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
             Assert.assertNotNull(fitxa);
             List<SeccioQueryServiceAdapter> listQueryServiceAdapter = fitxa.llistarSeccions(new SeccioCriteria());
+            Assert.assertTrue(listQueryServiceAdapter.size() > 0);
+        } catch (QueryServiceException e) {
+             Assert.fail(e.toString());
+        }
+    }
+    
+    @Test
+    public void obtenirFitxesUA() {
+        FitxaCriteria fitxaCriteria = new FitxaCriteria();
+        fitxaCriteria.setId(Constants.ID_FITXA_EXISTENT);
+        fitxaCriteria.setIdioma("ca");
+        try {
+            FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
+            Assert.assertNotNull(fitxa);
+            List<FitxaUAQueryServiceAdapter> listQueryServiceAdapter = fitxa.llistarFitxesUA(new FitxaUACriteria());
             Assert.assertTrue(listQueryServiceAdapter.size() > 0);
         } catch (QueryServiceException e) {
              Assert.fail(e.toString());

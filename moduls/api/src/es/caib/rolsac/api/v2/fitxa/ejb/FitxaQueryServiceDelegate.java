@@ -14,6 +14,8 @@ import es.caib.rolsac.api.v2.exception.LocatorException;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalDTO;
 import es.caib.rolsac.api.v2.fitxa.ejb.intf.FitxaQueryServiceEJBRemote;
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria;
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUADTO;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
 import es.caib.rolsac.api.v2.materia.MateriaDTO;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
@@ -161,6 +163,18 @@ public class FitxaQueryServiceDelegate {
         try {
             FitxaQueryServiceEJBRemote ejb = fitxaQueryServiceLocator.getFitxaQueryServiceEJB();
             return ejb.llistarSeccions(id, seccioCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<FitxaUADTO> llistarFitxesUA(long id, FitxaUACriteria fitxaUACriteria) throws DelegateException {
+        try {
+            FitxaQueryServiceEJBRemote ejb = fitxaQueryServiceLocator.getFitxaQueryServiceEJB();
+            return ejb.llistarFitxesUA(id, fitxaUACriteria);
         } catch (LocatorException e) {
             throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
         } catch (RemoteException e) {
