@@ -1,0 +1,711 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="sac.api" default="main" basedir=".">
+	
+    <property name="modul" value="api"/>
+	<property name="package.dir" value="es/caib/rolsac/api/v2"/>	
+    <property name="package" value="es.caib.rolsac.api"/>
+
+    <property name="home.dir" location="${basedir}/../.."/>
+	<property file="${home.dir}/build.${user.name}.properties" />
+	<property file="${home.dir}/build.${rolsac.target}.properties"/>
+	<property file="${home.dir}/default.properties"/>
+    <property file="${basedir}/build.properties"/>
+	
+    <property name="output.dir" location="${home.dir}/output"/>
+    <property name="modul.output.dir" location="${output.dir}/${modul}"/>
+
+    <property name="lib.dir" location="${home.dir}/lib"/>
+
+    <property name="jar.src" location="${basedir}/src"/>
+    <property name="jar.etc" location="${basedir}/etc"/>
+	<property name="wsdl.gen.src" location="${modul.output.dir}/wsdl-src"/>
+
+    <property name="jar.classes" location="${modul.output.dir}/classes"/>
+
+    <property name="doc" location="${output.dir}/doc"/>
+    <property name="jar.product" location="${output.dir}/moduls"/>	
+
+	
+	<!-- ROLSAC ORIGINAL -->
+
+    <property name="ejb.src" location="${basedir}/src"/>
+    <property name="ejb.etc" location="${basedir}/etc"/>
+    <property name="ejb.doc" location="${basedir}/doc"/>
+    <property name="ejb.merge.jboss" location="${ejb.etc}/merge/jboss-${jboss.version}"/>
+
+    <property name="ejb.gen.src" location="${modul.output.dir}/gen-src"/>
+    <property name="ejb.gen.etc" location="${modul.output.dir}/gen-etc"/>
+    <property name="ejb.classes" location="${modul.output.dir}/classes"/>
+	
+	<property name="xdoclet.dir" location="${lib.dir}/xdoclet123"/>
+    <property name="ejb.doc.api" location="${doc}/api/${modul}/developer"/>
+    <property name="nonjava.doc.api" location="${doc}/api/${modul}/integrator-nonjava"/>
+    <property name="java.doc.api" location="${doc}/api/${modul}/integrator-java"/>
+	<property name="ejb.product" location="${output.dir}/moduls"/>
+	
+    <path id="doclet.class.path">
+        <path refid="ejb.class.path"/>
+		<fileset dir="${lib.dir}/webcaib">
+			<include name="commons-collections-3.2.1.jar"/>
+        </fileset>
+        <fileset dir="${xdoclet.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>	
+	
+	<path id="ejb.class.path">
+        <fileset dir="${lib.dir}">
+	    	<include name="hibernate2.jar"/>
+            <include name="cglib2.jar"/>
+            <include name="ejb-2_0.jar"/>
+        	<include name="jaxrpc.jar"/>
+        	<include name="commons-logging.jar"/>
+        </fileset>
+        <fileset dir="${ejb.product}">
+            <include name="sac.jar"/>        	
+            <include name="model.jar"/>
+        	<include name="micromodel.jar"/>
+        	<include name="sac-micropersistence.jar"/>
+        </fileset>
+
+    	<fileset dir="${lib.dir}/axis-1.4">
+    	     <include name="**/*.jar" />
+    	 </fileset>
+		
+		<!-- agarcia: librerias comunes en 00librerias -->
+    	<fileset dir="${lib.dir}/webcaib">
+		 	<include name="commons-lang-2.1.jar"/>
+			<include name="commons-beanutils-1.8.3.jar"/>
+		    <include name="dom4j.jar"/>
+			<include name="htmlparser.jar"/>
+		    <include name="jdom.jar"/>
+    		<include name="*springframework*.jar"/>
+		</fileset>
+		
+		<fileset dir="${lib.dir}/jboss">
+            <include name="jbossall-client.jar" />
+        </fileset>
+    </path>
+	
+	<path id="doclet.class.path">
+		<path refid="ejb.class.path"/>
+		<fileset dir="${lib.dir}/webcaib">
+			<include name="commons-collections-3.2.1.jar"/>
+		</fileset>
+		<fileset dir="${xdoclet.dir}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+
+	
+	<path id="ws.class.path">
+        <fileset dir="${lib.dir}">
+	    	<include name="hibernate2.jar"/>
+            <include name="ejb-2_0.jar"/>
+        </fileset>
+	</path>
+	
+	<target name="init">
+		<taskdef
+			name="ejbdoclet"
+		    classname="xdoclet.modules.ejb.EjbDocletTask"
+		    classpathref="doclet.class.path"
+		    />
+		<tstamp>
+			<format property="TODAY" pattern="dd-MM-yy"/>
+		</tstamp>
+	
+		<fail unless="persistence.auth.domain" message="Revise los ficheros ${home.dir}/*.properties"/>
+		<fail unless="persistence.auth.principal" message="Revise los ficheros ${home.dir}/*.properties"/>
+		<fail unless="datasource.jndi" message="Revise los ficheros ${home.dir}/*.properties"/>
+		<fail unless="hibernate.dialect" message="Revise los ficheros ${home.dir}/*.properties"/>
+		<fail unless="hibernate.show_sql" message="Revise los ficheros ${home.dir}/*.properties"/>
+		<fail unless="hibernate.cglib" message="Revise los ficheros ${home.dir}/*.properties"/>
+		<fail unless="hibernate.cache.provider_class" message="Revise los ficheros ${home.dir}/*.properties"/>
+		<fail unless="hibernate.cache.jar" message="Revise los ficheros ${home.dir}/*.properties"/>
+	</target>	
+		
+	<!-- Netetja tots els directoris de treball del API-->
+	<target name="clean">
+	    <delete dir="${wsdl.gen.etc}" failonerror="false" />
+        <delete dir="${ejb.gen.src}" failonerror="false" />
+        <delete dir="${ejb.gen.etc}" failonerror="false" />
+        <delete dir="${ejb.classes}" failonerror="false" />
+        <delete dir="${ejb.doc.api}" failonerror="false" />
+    	<delete dir="${nonjava.doc.api}" failonerror="false" />
+		<delete dir="${java.doc.api}" failonerror="false" />
+    	<delete dir="${jar.src}">
+    		<include name="**/ws/*QueryServiceEJBRemote*"/>
+    		<include name="**/ws/*QueryServiceEJBRemoteService*"/>
+    		<include name="**/ws/*QueryServiceEJBRemoteServiceLocator*"/>
+    		<include name="**/ws/*WSSoapBindingImpl*"/>
+    		<include name="**/ws/*WSSoapBindingStub*"/>
+    	</delete>
+    </target>
+	
+    <!-- Crea tots els directoris de treball necessaris -->
+    <target name="prepare">
+        <mkdir dir="${wsdl.gen.src}"/>
+	    <mkdir dir="${ejb.gen.src}"/>
+        <mkdir dir="${ejb.gen.etc}"/>
+        <mkdir dir="${ejb.classes}"/>
+        <mkdir dir="${ejb.doc.api}"/>
+	    <mkdir dir="${nonjava.doc.api}"/>
+    	<mkdir dir="${java.doc.api}"/>
+        <mkdir dir="${ejb.product}"/>
+    	
+        <mkdir dir="${jar.classes}"/>
+        <mkdir dir="${jar.product}"/>
+    </target>	
+	
+    <path id="jar.class.path">
+        <fileset dir="${jar.product}">
+            <include name="extractor.jar"/>
+        </fileset>
+        <fileset dir="${lib.dir}">
+            <include name="commons-logging.jar"/>
+            <include name="hibernate2.jar"/>
+		    <include name="ojdbc14.jar"/>
+			<include name="jaxrpc.jar"/>
+        	<include name="ejb-2_0.jar"/>
+        </fileset>
+    	<fileset dir="${lib.dir}/axis-1.4">
+    	     <include name="**/*.jar" />
+    	 </fileset>
+		<!-- agarcia: librerias comunes en 00librerias -->
+		<fileset dir="${lib.dir}/webcaib">
+			<include name="commons-beanutils-1.8.3.jar"/>
+		    <include name="commons-lang-2.1.jar"/>
+			<!-- <include name="lucene-caib.jar"/> -->      
+			<include name="commons-discovery-0.5.jar"/>  
+			<include name="org.springframework.*"/>
+		</fileset>
+    	    	
+        <fileset dir="${jar.product}">
+            <include name="sac-${modul}-client.jar"/>        	
+        </fileset>
+    	
+    </path>			
+	
+	
+    <target name="ejb.javadoc" depends="ejb.gen.all">
+        <javadoc
+            destdir="${ejb.doc.api}"
+            classpathref="ejb.class.path"
+            packagenames="${package}.*"
+            overview="${ejb.doc}/overview.html"
+            windowtitle="API del componente ${modul}"
+            doctitle="API del componente ${modul}">
+            <sourcepath>
+				<pathelement path="${wsdl.gen.src}"/>
+				<pathelement path="${ejb.gen.src}"/>
+                <pathelement path="${ejb.src}"/>
+			</sourcepath>
+            <link href="http://java.sun.com/j2se/1.4.1/docs/api/"/>
+            <link href="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/"/>
+            <link href="http://hibernate.bluemars.net/hib_docs/api/"/>
+        </javadoc>
+    </target>
+
+    <target name="nonjava.javadoc">
+        <javadoc
+            destdir="${nonjava.doc.api}"
+            classpathref="ejb.class.path"
+			nodeprecated="false" 
+			nodeprecatedlist="false" 
+			noindex="false" 
+			nonavbar="false" 
+			notree="false" 
+			source="${javac.source}"
+			encoding="${javac.encoding}"
+			splitindex="false" 
+			use="true" 
+			version="true"
+			Windowtitle="API ROLSAC per integradors no java"
+			>
+			<doctitle><![CDATA[<h1>API ROLSAC per integradors no java</h1>]]></doctitle>
+			<sourcefiles>
+				<fileset dir="${wsdl.gen.src}">
+					<include name="**/*/*DTO.java"/>
+					<include name="**/*/*Criteria.java"/>
+					<include name="**/*/*Ordenacio.java"/>
+					<include name="**/*/*QueryServiceStrategy.java"/>
+				</fileset>
+				<fileset dir="${ejb.src}">
+					<include name="**/*/*QueryServiceStrategy.java"/>
+					<include name="**/*/ConfiguracioServeis.java"/>
+					<include name="**/*/StrategyException.java"/>
+					<exclude name="**/co/*"/>
+				</fileset>
+		
+			</sourcefiles>
+        </javadoc>
+		
+		<copy file="${ejb.doc}/instruccions-nonjava.html" todir="${nonjava.doc.api}" overwrite="true"/>
+	
+    </target>
+	
+	
+    <target name="java.javadoc">
+        <javadoc
+            destdir="${java.doc.api}"
+            classpathref="ejb.class.path"
+			nodeprecated="false" 
+			nodeprecatedlist="false" 
+			noindex="false" 
+			nonavbar="false" 
+			notree="false" 
+			source="${javac.source}"
+			encoding="${javac.encoding}"
+			splitindex="false" 
+			use="true" 
+			version="true"
+			Windowtitle="API ROLSAC per integradors java"
+			>
+			<doctitle><![CDATA[<h1>API ROLSAC per integradors java</h1>]]></doctitle>
+			<sourcefiles>
+				<fileset dir="${wsdl.gen.src}">
+					<include name="**/*/*DTO.java"/>
+					<include name="**/*/*Criteria.java"/>
+					<include name="**/*/*Ordenacio.java"/>
+				</fileset>
+				<fileset dir="${ejb.src}">
+					<include name="**/*/*QueryService.java"/>
+					<include name="**/*/*QueryServiceAdapter.java"/>
+					<include name="**/*/*QueryServiceStrategy.java"/>
+					<include name="**/*/ConfiguracioServeis.java"/>
+				</fileset>
+			</sourcefiles>
+        </javadoc>
+		
+    </target>	
+    <target name="doc" depends="ejb.javadoc,nonjava.javadoc,java.javadoc" description="Realiza las tareas de documentación"/>
+	
+	<!-- EJB -->	
+	<target name="ejb.gen.all" depends="prepare,init,stub.gen.all">
+		<!-- http://xdoclet.sourceforge.net/xdoclet/ant/xdoclet/modules/ejb/EjbDocletTask.html -->
+	    <ejbdoclet
+	        destdir="${ejb.gen.src}"
+	        excludedtags="@version,@author"
+	        ejbspec="2.0"
+	        force="false"
+	        verbose="true"
+	        >
+			
+	        <fileset dir="${ejb.src}">
+	            <include name="**/*EJB.java"/>
+	        </fileset>			
+	    	
+	        <packageSubstitution packages="ejb" substituteWith="ejb.intf"/>
+	        <localinterface pattern="{0}Local"/>
+	        <localhomeinterface pattern="{0}LocalHome"/>
+	        <remoteinterface pattern="{0}Remote"/>
+	        <homeinterface pattern="{0}Home"/>
+	        <session/>
+	
+	        <utilobject cacheHomes="true" kind="physical">
+	            <packageSubstitution packages="ejb" substituteWith="ejb.util"/>
+	        </utilobject>
+	
+	        <deploymentdescriptor
+	            clientjar="sac-${modul}-client.jar"
+	            xmlencoding="UTF-8"
+	            destdir="${ejb.gen.etc}"
+	            validatexml="true"
+	            />
+	
+	        <jboss
+	            version="${jboss.version}"
+	            xmlencoding="UTF-8"
+	            destdir="${ejb.gen.etc}"
+	            mergedir="${ejb.merge.jboss}"
+	            validatexml="true"
+	            securityDomain="${persistence.auth.domain}"
+	            unauthenticatedPrincipal="${persistence.auth.principal}"
+	            />
+	    </ejbdoclet>
+	    	
+	    <copy file="${ejb.etc}/hibernate.cfg.xml" todir="${ejb.gen.etc}" overwrite="true"/>
+		
+	    <replace file="${ejb.gen.etc}/hibernate.cfg.xml">
+	        <replacefilter token="@hibernate.jndi@" value="${hibernate.jndi}"/>
+	        <replacefilter token="@datasource.jndi@" value="${datasource.jndi}"/>
+	        <replacefilter token="@hibernate.dialect@" value="${hibernate.dialect}"/>            
+	        <replacefilter token="@hibernate.cache.provider_class@" value="${hibernate.cache.provider_class}"/>
+	       	<replacefilter token="@hibernate.query.substitutions@" value="${hibernate.query.substitutions}"/>        	
+	        <replacefilter token="@hibernate.show_sql@" value="${hibernate.show_sql}"/>
+	        <replacefilter token="@hibernate.cglib@" value="${hibernate.cglib}"/>
+	    </replace>
+	</target>	
+	
+    <target name="ejb.compile" depends="ejb.gen.all">
+        <javac
+            destdir="${ejb.classes}"
+            classpathref="ejb.class.path"
+        	excludes="**/ArxiuServlet.java"
+            debug="${javac.debug}"
+            deprecation="${javac.deprecation}"
+            optimize="${javac.optimize}"
+        	encoding="${javac.encoding}"
+			source="${javac.source}"
+			target="${javac.target}">
+            <src path="${ejb.src}"/>
+		    <src path="${wsdl.gen.src}"/>
+            <src path="${ejb.gen.src}"/>
+        </javac>
+    	<copy todir="${ejb.classes}/${package.dir}/resources" overwrite="true">
+    	    <fileset dir="${ejb.src}/${package.dir}/resources"/>
+        </copy>
+    </target>
+		
+	<!-- EJBs (servidor) -->
+    <target name="ejb.server" depends="ejb.compile">
+        <delete file="${ejb.product}/sac-${modul}.jar" quiet="yes"/>
+        <jar jarfile="${ejb.product}/sac-${modul}.jar" basedir="${ejb.classes}"
+        	excludes="**/ArxiuServlet.class">
+            <manifest>
+                <attribute name="Created-By" value="UTE"/>
+            	<attribute name="Class-Path" value="lib/axis.jar"/>
+            </manifest>
+            <metainf dir="${ejb.gen.etc}" includes="*.xml" excludes="hibernate.cfg.xml"/>
+            <fileset dir="${ejb.gen.etc}" includes="hibernate.cfg.xml"/>
+            <fileset dir="${ejb.etc}" includes="ehcache.xml" />
+        </jar>
+    </target>
+		
+	<!-- EJBs + clases WS (cliente) -->
+    <target name="ejb.client" depends="ejb.compile">
+        <delete file="${ejb.product}/sac-${modul}-client.jar" quiet="yes"/>
+        <jar jarfile="${ejb.product}/sac-${modul}-client.jar" basedir="${ejb.classes}" 
+            	includes="**/resources/, **/*.class" 
+            	excludes="**/*EJB.class, **/*EJBSession.class, **/EJBUtils.class, **/BasicUtils.class, **/ArxiuServlet.class, **/query/, **/co/*.class">
+            <manifest>
+                <attribute name="Created-By" value="UTE"/>
+            </manifest>
+        </jar>
+    </target>			
+	
+	
+    <target name="jar.compile" depends="stub.gen.all">	
+        <javac
+            destdir="${jar.classes}"
+            classpathref="jar.class.path"
+            debug="${javac.debug}"
+            deprecation="${javac.deprecation}"
+            optimize="${javac.optimize}"
+        	encoding="${javac.encoding}"
+			source="${javac.source}"
+			target="${javac.target}"           
+            >
+            <src path="${jar.src}"/>
+    		<src path="${wsdl.gen.src}"/>
+        </javac>
+    </target>
+	
+	<!-- <target name="main" depends="jar.jar" description="Construye el jar"/> -->
+	<target name="main" depends="ejb.client, ejb.server" description="Construye el jar"/>	
+
+	
+	<!-- Tasques i configuracio del client de WS -->
+	<property name="ws.etc.wsdl" value="${jar.etc}/wsdl"/>
+	
+	<!-- <property name="gen-namespace-fetVital" value="http://es.caib.rolsac.api.v2.ws.fetVital"/>
+	<property name="gen-package-fetVital" value="es.caib.rolsac.api.v2.fetVital.ws"/>	
+	<property name="beans-namespace-fetVital" value="http://es.caib.rolsac.api.v2.fetVital.ws/beans"/>
+	<property name="beans-package-fetVital" value="es.caib.rolsac.api.v2.fetvital.ws.beans"/>
+	
+	<property name="gen-namespace-rolsac" value="http://es.caib.rolsac.api.v2.ws.rolsac"/>
+	<property name="gen-package-rolsac" value="es.caib.rolsac.api.v2.rolsac.ws"/>
+	<property name="beans-namespace-rolsac" value="http://es.caib.rolsac.api.v2.rolsac.ws/beans"/>
+	<property name="beans-package-rolsac" value="es.caib.rolsac.api.v2.rolsac.ws.beans"/> -->
+	
+	<taskdef resource="axis-tasks.properties" 
+		classpathref="jar.class.path" /> <!-- ruta definida dins axis-ant.jar -->
+
+    <target name="stub.gen.all">
+
+		<axis-wsdl2java url="${ws.etc.wsdl}/CatalegDocumentsWS.wsdl"
+	        output="${wsdl.gen.src}"
+	        typemappingversion="1.1"
+		    testcase="false"
+	    	verbose="true"
+	    	serverside="true">	    	
+		</axis-wsdl2java>
+
+	    <axis-wsdl2java url="${ws.etc.wsdl}/PerfilWS.wsdl"
+	                     output="${wsdl.gen.src}"
+	                     typemappingversion="1.1"
+	                     testcase="false"
+	                     verbose="true"
+	    				 serverside="true">
+	    </axis-wsdl2java>    	
+
+	    <axis-wsdl2java url="${ws.etc.wsdl}/FamiliaWS.wsdl"
+	                     output="${wsdl.gen.src}"
+	                     typemappingversion="1.1"
+	                     testcase="false"
+	                     verbose="true"
+	    				 serverside="true">
+	    </axis-wsdl2java>    	
+
+	    <axis-wsdl2java url="${ws.etc.wsdl}/EspaiTerritorialWS.wsdl"
+	                     output="${wsdl.gen.src}"
+	                     typemappingversion="1.1"
+	                     testcase="false"
+	                     verbose="true"
+	    				 serverside="true">
+	    </axis-wsdl2java>
+    	    
+	    <axis-wsdl2java url="${ws.etc.wsdl}/EnllacWS.wsdl"
+	                     output="${wsdl.gen.src}"
+	                     typemappingversion="1.1"
+	                     testcase="false"
+	                     verbose="true"
+	    				 serverside="true">
+	    </axis-wsdl2java>
+    	
+	    <axis-wsdl2java url="${ws.etc.wsdl}/EdificiWS.wsdl"
+	                     output="${wsdl.gen.src}"
+	                     typemappingversion="1.1"
+	                     testcase="false"
+	                     verbose="true"
+	    				 serverside="true">
+	    </axis-wsdl2java>
+
+	    <axis-wsdl2java url="${ws.etc.wsdl}/ExcepcioDocumentacioWS.wsdl"
+	                     output="${wsdl.gen.src}"
+	                     typemappingversion="1.1"
+	                     testcase="false"
+	                     verbose="true"
+	    				 serverside="true">
+	    </axis-wsdl2java>
+	    	
+    	
+	    <axis-wsdl2java url="${ws.etc.wsdl}/DocumentTramitWS.wsdl"
+	                     output="${wsdl.gen.src}"
+	                     typemappingversion="1.1"
+	                     testcase="false"
+	                     verbose="true"
+	    				 serverside="true">
+	    </axis-wsdl2java>
+    	
+	    <axis-wsdl2java url="${ws.etc.wsdl}/DocumentWS.wsdl"
+	                     output="${wsdl.gen.src}"
+	                     typemappingversion="1.1"
+	                     testcase="false"
+	                     verbose="true"
+	    				 serverside="true">
+	    </axis-wsdl2java>    	
+    	
+	    <axis-wsdl2java url="${ws.etc.wsdl}/ButlletiWS.wsdl"
+	                     output="${wsdl.gen.src}"
+	                     typemappingversion="1.1"
+	                     testcase="false"
+	                     verbose="true"
+	    				 serverside="true">
+	    </axis-wsdl2java>    	
+    	
+	    <axis-wsdl2java url="${ws.etc.wsdl}/RolsacWS.wsdl"
+	                     output="${wsdl.gen.src}"
+	                     typemappingversion="1.1"
+	                     testcase="false"
+	                     verbose="true"
+	    				 serverside="true">
+	    </axis-wsdl2java>
+
+    	<axis-wsdl2java url="${ws.etc.wsdl}/AgrupacioFetVitalWS.wsdl"
+            output="${wsdl.gen.src}"
+	        typemappingversion="1.1"
+    	    testcase="false"
+        	verbose="true"
+        	serverside="true">	    	
+    	</axis-wsdl2java>
+    	
+    	<axis-wsdl2java url="${ws.etc.wsdl}/AgrupacioMateriaWS.wsdl"
+            output="${wsdl.gen.src}"
+	        typemappingversion="1.1"
+    	    testcase="false"
+        	verbose="true"
+        	serverside="true">	    	
+    	</axis-wsdl2java>
+    	
+        <axis-wsdl2java url="${ws.etc.wsdl}/FetVitalWS.wsdl"
+                         output="${wsdl.gen.src}"
+                         typemappingversion="1.1"        				 
+                         testcase="false"
+                         verbose="true"
+        				 serverside="true">
+        </axis-wsdl2java>    	
+    	
+	    <axis-wsdl2java url="${ws.etc.wsdl}/FitxaWS.wsdl"
+	                     output="${wsdl.gen.src}"
+	                     typemappingversion="1.1"
+	                     testcase="false"
+	                     verbose="true"
+	    				 serverside="true">
+	    </axis-wsdl2java>    	
+
+	    <axis-wsdl2java url="${ws.etc.wsdl}/FitxaUAWS.wsdl"
+	                     output="${wsdl.gen.src}"
+	                     typemappingversion="1.1"
+	                     testcase="false"
+	                     verbose="true"
+	    				 serverside="true">
+	    </axis-wsdl2java>
+    	
+	    <axis-wsdl2java url="${ws.etc.wsdl}/FormulariWS.wsdl"
+	                     output="${wsdl.gen.src}"
+	                     typemappingversion="1.1"
+	                     testcase="false"
+	                     verbose="true"
+	    				 serverside="true">
+	    </axis-wsdl2java>    	    	
+
+	    <axis-wsdl2java url="${ws.etc.wsdl}/IconaFamiliaWS.wsdl"
+	                     output="${wsdl.gen.src}"
+	                     typemappingversion="1.1"
+	                     testcase="false"
+	                     verbose="true"
+	    				 serverside="true">
+	    </axis-wsdl2java>
+    	
+	    <axis-wsdl2java url="${ws.etc.wsdl}/IconaMateriaWS.wsdl"
+	                     output="${wsdl.gen.src}"
+	                     typemappingversion="1.1"
+	                     testcase="false"
+	                     verbose="true"
+	    				 serverside="true">
+	    </axis-wsdl2java>
+
+
+	    <axis-wsdl2java url="${ws.etc.wsdl}/MateriaAgrupacioWS.wsdl"
+	                     output="${wsdl.gen.src}"
+	                     typemappingversion="1.1"
+	                     testcase="false"
+	                     verbose="true"
+	    				 serverside="true">
+	    </axis-wsdl2java>    	
+
+    	
+	    <axis-wsdl2java url="${ws.etc.wsdl}/MateriaWS.wsdl"
+	                     output="${wsdl.gen.src}"
+	                     typemappingversion="1.1"
+	                     testcase="false"
+	                     verbose="true"
+	    				 serverside="true">
+	    </axis-wsdl2java>
+
+	    <axis-wsdl2java url="${ws.etc.wsdl}/NormativaWS.wsdl"
+	                     output="${wsdl.gen.src}"
+	                     typemappingversion="1.1"
+	                     testcase="false"
+	                     verbose="true"
+	    				 serverside="true">
+	    </axis-wsdl2java>
+    	
+    	<axis-wsdl2java url="${ws.etc.wsdl}/PersonalWS.wsdl"
+            output="${wsdl.gen.src}"
+	        typemappingversion="1.1"
+    	    testcase="false"
+        	verbose="true"
+        	serverside="true">	    	
+    	</axis-wsdl2java>
+
+    	<axis-wsdl2java url="${ws.etc.wsdl}/ProcedimentWS.wsdl"
+            output="${wsdl.gen.src}"
+	        typemappingversion="1.1"
+    	    testcase="false"
+        	verbose="true"
+        	serverside="true">	    	
+    	</axis-wsdl2java>
+
+    	<axis-wsdl2java url="${ws.etc.wsdl}/PublicObjectiuWS.wsdl"
+            output="${wsdl.gen.src}"
+	        typemappingversion="1.1"
+    	    testcase="false"
+        	verbose="true"
+        	serverside="true">	    	
+    	</axis-wsdl2java>
+    	
+    	<axis-wsdl2java url="${ws.etc.wsdl}/SeccioWS.wsdl"
+            output="${wsdl.gen.src}"
+	        typemappingversion="1.1"
+    	    testcase="false"
+        	verbose="true"
+        	serverside="true">	    	
+    	</axis-wsdl2java>
+    	
+    	<axis-wsdl2java url="${ws.etc.wsdl}/TaxaWS.wsdl"
+            output="${wsdl.gen.src}"
+	        typemappingversion="1.1"
+    	    testcase="false"
+        	verbose="true"
+        	serverside="true">	    	
+    	</axis-wsdl2java>
+
+    	<axis-wsdl2java url="${ws.etc.wsdl}/TipusWS.wsdl"
+            output="${wsdl.gen.src}"
+	        typemappingversion="1.1"
+    	    testcase="false"
+        	verbose="true"
+        	serverside="true">	    	
+    	</axis-wsdl2java>
+    	
+		<axis-wsdl2java url="${ws.etc.wsdl}/TramitWS.wsdl"
+	        output="${wsdl.gen.src}"
+	        typemappingversion="1.1"
+		    testcase="false"
+	    	verbose="true"
+	    	serverside="true">	    	
+		</axis-wsdl2java>
+
+		<axis-wsdl2java url="${ws.etc.wsdl}/UnitatAdministrativaWS.wsdl"
+	        output="${wsdl.gen.src}"
+	        typemappingversion="1.1"
+		    testcase="false"
+	    	verbose="true"
+	    	serverside="true">	    	
+		</axis-wsdl2java>    	
+    	
+		<axis-wsdl2java url="${ws.etc.wsdl}/UnitatMateriaWS.wsdl"
+	        output="${wsdl.gen.src}"
+	        typemappingversion="1.1"
+		    testcase="false"
+	    	verbose="true"
+	    	serverside="true">	    	
+		</axis-wsdl2java>
+
+		<axis-wsdl2java url="${ws.etc.wsdl}/UsuariWS.wsdl"
+	        output="${wsdl.gen.src}"
+	        typemappingversion="1.1"
+		    testcase="false"
+	    	verbose="true"
+	    	serverside="true">	    	
+		</axis-wsdl2java>	
+
+		<axis-wsdl2java url="${ws.etc.wsdl}/EstadisticaWS.wsdl"
+	        output="${wsdl.gen.src}"
+	        typemappingversion="1.1"
+		    testcase="false"
+	    	verbose="true"
+	    	serverside="true">	    	
+		</axis-wsdl2java>	
+    	
+    	<axis-wsdl2java url="${ws.etc.wsdl}/IdiomaWS.wsdl"
+	        output="${wsdl.gen.src}"
+	        typemappingversion="1.1"
+		    testcase="false"
+	    	verbose="true"
+	    	serverside="true">	    	
+		</axis-wsdl2java>
+    	
+    </target>    
+	
+	<target name="module.package" depends="ejb.client, ejb.server"/>
+	<path id="module.classpath" refid="jar.class.path"/>
+	<property name="module.classes"  location="${jar.classes}"/>
+
+	<import file="../build_test.xml"/>
+	
+</project>

@@ -1,0 +1,82 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from AgrupacioMateriaQueryServiceEJBRemoteService WSDL service -->
+
+  <service name="AgrupacioMateriaWS" provider="java:RPC" style="rpc" use="encoded">
+      <parameter name="wsdlTargetNamespace" value="http://ws.agrupacioMateria.v2.api.rolsac.caib.es"/>
+      <parameter name="wsdlServiceElement" value="AgrupacioMateriaQueryServiceEJBRemoteService"/>
+      <parameter name="schemaUnqualified" value="http://seccio.v2.api.rolsac.caib.es,http://ws.agrupacioMateria.v2.api.rolsac.caib.es,http://materia.v2.api.rolsac.caib.es,http://general.v2.api.rolsac.caib.es,http://xml.apache.org/xml-soap"/>
+      <parameter name="wsdlServicePort" value="AgrupacioMateriaWS"/>
+      <parameter name="className" value="es.caib.rolsac.api.v2.agrupacioMateria.ws.AgrupacioMateriaWSSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="AgrupacioMateriaQueryServiceEJBRemote"/>
+      <parameter name="typeMappingVersion" value="1.1"/>
+      <operation name="llistarMateries" qname="operNS:llistarMateries" xmlns:operNS="http://intf.ejb.agrupacioMateria.v2.api.rolsac.caib.es" returnQName="llistarMateriesReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.agrupacioMateria.v2.api.rolsac.caib.es" returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="in1" type="tns:MateriaCriteria" xmlns:tns="http://materia.v2.api.rolsac.caib.es"/>
+      </operation>
+      <operation name="obtenirSeccio" qname="operNS:obtenirSeccio" xmlns:operNS="http://intf.ejb.agrupacioMateria.v2.api.rolsac.caib.es" returnQName="obtenirSeccioReturn" returnType="rtns:SeccioDTO" xmlns:rtns="http://seccio.v2.api.rolsac.caib.es" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getNumMateries" qname="operNS:getNumMateries" xmlns:operNS="http://intf.ejb.agrupacioMateria.v2.api.rolsac.caib.es" returnQName="getNumMateriesReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <parameter name="allowedMethods" value="obtenirSeccio getNumMateries llistarMateries"/>
+
+      <typeMapping
+        xmlns:ns="http://seccio.v2.api.rolsac.caib.es"
+        qname="ns:SeccioDTO"
+        type="java:es.caib.rolsac.api.v2.seccio.SeccioDTO"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://materia.v2.api.rolsac.caib.es"
+        qname="ns:MateriaCriteria"
+        type="java:es.caib.rolsac.api.v2.materia.MateriaCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://materia.v2.api.rolsac.caib.es"
+        qname="ns:MateriaOrdenacio"
+        type="java:es.caib.rolsac.api.v2.materia.MateriaOrdenacio"
+        serializer="org.apache.axis.encoding.ser.EnumSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.EnumDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://general.v2.api.rolsac.caib.es"
+        qname="ns:BasicCriteria"
+        type="java:es.caib.rolsac.api.v2.general.BasicCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <arrayMapping
+        xmlns:ns="http://materia.v2.api.rolsac.caib.es"
+        qname="ns:ArrayOfMateriaOrdenacio"
+        type="java:es.caib.rolsac.api.v2.materia.MateriaOrdenacio[]"
+        innerType="cmp-ns:MateriaOrdenacio" xmlns:cmp-ns="http://materia.v2.api.rolsac.caib.es"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <arrayMapping
+        xmlns:ns="http://ws.agrupacioMateria.v2.api.rolsac.caib.es"
+        qname="ns:ArrayOf_xsd_anyType"
+        type="java:java.lang.Object[]"
+        innerType="cmp-ns:anyType" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+  </service>
+</deployment>

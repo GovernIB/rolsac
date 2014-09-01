@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
+    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:tns="http://fitxaUA.v2.api.rolsac.caib.es"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    name="FitxaUACriteria"
+    xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:tns2="http://general.v2.api.rolsac.caib.es"
+    targetNamespace="http://ws.fitxaUA.v2.api.rolsac.caib.es">
+
+  <wsdl:import namespace="urn:tns4" location="FitxaUAOrdenacio.wsdl"/>
+
+  <wsdl:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://fitxaUA.v2.api.rolsac.caib.es">
+        <import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+        <import namespace="http://general.v2.api.rolsac.caib.es" />
+
+        <complexType name="ArrayOfFitxaUAOrdenacio">
+            <sequence>
+                <element minOccurs="0" maxOccurs="unbounded" name="listaOrdenaciones" nillable="true" type="tns:FitxaUAOrdenacio" />
+            </sequence>
+        </complexType>
+
+        <complexType name="FitxaUACriteria">
+            <complexContent>
+                <extension base="tns2:BasicCriteria">
+                    <sequence>
+                        <element name="orden" nillable="true" type="xsd:string" />
+                        <element name="ordenSeccion" nillable="true" type="xsd:string" />
+                        <element name="fitxa" nillable="true" type="xsd:string" />
+                        <element name="seccion" nillable="true" type="xsd:string" />
+                        <element name="unidadAdministrativa" nillable="true" type="xsd:string" />
+                        <element name="ordenar" nillable="true" type="tns:ArrayOfFitxaUAOrdenacio" />
+                    </sequence>
+                </extension>
+            </complexContent>
+        </complexType>
+
+    </schema>
+  </wsdl:types>
+</wsdl:definitions>

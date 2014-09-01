@@ -1,0 +1,102 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from CatalegDocumentsQueryServiceEJBRemoteService WSDL service -->
+
+  <service name="CatalegDocumentsWS" provider="java:RPC" style="rpc" use="encoded">
+      <parameter name="wsdlTargetNamespace" value="http://ws.catalegDocuments.v2.api.rolsac.caib.es"/>
+      <parameter name="wsdlServiceElement" value="CatalegDocumentsQueryServiceEJBRemoteService"/>
+      <parameter name="schemaUnqualified" value="http://catalegDocuments.v2.api.rolsac.caib.es,http://ws.catalegDocuments.v2.api.rolsac.caib.es,http://general.v2.api.rolsac.caib.es,http://xml.apache.org/xml-soap,http://documentTramit.v2.api.rolsac.caib.es"/>
+      <parameter name="wsdlServicePort" value="CatalegDocumentsWS"/>
+      <parameter name="className" value="es.caib.rolsac.api.v2.catalegDocuments.ws.CatalegDocumentsWSSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="CatalegDocumentsQueryServiceEJBRemote"/>
+      <parameter name="typeMappingVersion" value="1.1"/>
+      <operation name="getNumDocumentsTramit" qname="operNS:getNumDocumentsTramit" xmlns:operNS="http://intf.ejb.catalegDocuments.v2.api.rolsac.caib.es" returnQName="getNumDocumentsTramitReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="llistarDocumentsTramits" qname="operNS:llistarDocumentsTramits" xmlns:operNS="http://intf.ejb.catalegDocuments.v2.api.rolsac.caib.es" returnQName="llistarDocumentsTramitsReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.catalegDocuments.v2.api.rolsac.caib.es" returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="in1" type="tns:DocumentTramitCriteria" xmlns:tns="http://documentTramit.v2.api.rolsac.caib.es"/>
+      </operation>
+      <parameter name="allowedMethods" value="llistarDocumentsTramits getNumDocumentsTramit"/>
+
+      <arrayMapping
+        xmlns:ns="http://ws.catalegDocuments.v2.api.rolsac.caib.es"
+        qname="ns:ArrayOf_xsd_anyType"
+        type="java:java.lang.Object[]"
+        innerType="cmp-ns:anyType" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <arrayMapping
+        xmlns:ns="http://documentTramit.v2.api.rolsac.caib.es"
+        qname="ns:ArrayOfDocumentTramitOrdenacio"
+        type="java:es.caib.rolsac.api.v2.documentTramit.DocumentTramitOrdenacio[]"
+        innerType="cmp-ns:DocumentTramitOrdenacio" xmlns:cmp-ns="http://documentTramit.v2.api.rolsac.caib.es"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://catalegDocuments.v2.api.rolsac.caib.es"
+        qname="ns:CatalegDocumentsDTO"
+        type="java:es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsDTO"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://catalegDocuments.v2.api.rolsac.caib.es"
+        qname="ns:CatalegDocumentsOrdenacio"
+        type="java:es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsOrdenacio"
+        serializer="org.apache.axis.encoding.ser.EnumSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.EnumDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://documentTramit.v2.api.rolsac.caib.es"
+        qname="ns:DocumentTramitOrdenacio"
+        type="java:es.caib.rolsac.api.v2.documentTramit.DocumentTramitOrdenacio"
+        serializer="org.apache.axis.encoding.ser.EnumSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.EnumDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://general.v2.api.rolsac.caib.es"
+        qname="ns:BasicCriteria"
+        type="java:es.caib.rolsac.api.v2.general.BasicCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://documentTramit.v2.api.rolsac.caib.es"
+        qname="ns:DocumentTramitCriteria"
+        type="java:es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://catalegDocuments.v2.api.rolsac.caib.es"
+        qname="ns:CatalegDocumentsCriteria"
+        type="java:es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <arrayMapping
+        xmlns:ns="http://catalegDocuments.v2.api.rolsac.caib.es"
+        qname="ns:ArrayOfCatalegDocumentsOrdenacio"
+        type="java:es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsOrdenacio[]"
+        innerType="cmp-ns:CatalegDocumentsOrdenacio" xmlns:cmp-ns="http://catalegDocuments.v2.api.rolsac.caib.es"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+  </service>
+</deployment>

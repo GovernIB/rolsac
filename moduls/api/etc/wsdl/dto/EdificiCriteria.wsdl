@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
+    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:tns="http://edifici.v2.api.rolsac.caib.es"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    name="EdificiCriteria"
+    xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:tns2="http://general.v2.api.rolsac.caib.es"
+    targetNamespace="http://ws.edifici.v2.api.rolsac.caib.es">
+
+  <wsdl:import namespace="urn:tns4" location="EdificiOrdenacio.wsdl"/>
+
+  <wsdl:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://edifici.v2.api.rolsac.caib.es">
+        <import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+        <import namespace="http://general.v2.api.rolsac.caib.es" />
+
+        <complexType name="ArrayOfEdificiOrdenacio">
+            <sequence>
+                <element minOccurs="0" maxOccurs="unbounded" name="listaOrdenaciones" nillable="true" type="tns:EdificiOrdenacio" />
+            </sequence>
+        </complexType>
+
+        <complexType name="EdificiCriteria">
+            <complexContent>
+                <extension base="tns2:BasicCriteria">
+                    <sequence>
+                        <element name="direccion" nillable="true" type="xsd:string" />
+                        <element name="codigoPostal" nillable="true" type="xsd:string" />                           
+                        <element name="poblacion" nillable="true" type="xsd:string" />
+                        <element name="telefono" nillable="true" type="xsd:string" />
+                        <element name="email" nillable="true" type="xsd:string" />
+                        <element name="fax" nillable="true" type="xsd:string" />
+                        <element name="latitud" nillable="true" type="xsd:string" />
+                        <element name="longitud" nillable="true" type="xsd:string" />                       
+                        <element name="t_descripcion" nillable="true" type="xsd:string" />
+                        <element name="ordenar" nillable="true" type="tns:ArrayOfEdificiOrdenacio" />
+                    </sequence>
+                </extension>
+            </complexContent>
+        </complexType>
+    </schema>
+  </wsdl:types>
+</wsdl:definitions>

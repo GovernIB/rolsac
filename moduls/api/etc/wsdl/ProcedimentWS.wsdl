@@ -1,0 +1,322 @@
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
+	xmlns:impl="http://ws.procediment.v2.api.rolsac.caib.es"
+	xmlns:intf="http://ws.procediment.v2.api.rolsac.caib.es"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:tns1="http://materia.v2.api.rolsac.caib.es"
+	xmlns:tns2="http://general.v2.api.rolsac.caib.es"
+	xmlns:tns3="http://fetVital.v2.api.rolsac.caib.es"
+	xmlns:tns4="http://normativa.v2.api.rolsac.caib.es"
+	xmlns:tns5="http://document.v2.api.rolsac.caib.es"
+	xmlns:tns6="http://tramit.v2.api.rolsac.caib.es"
+	xmlns:tns7="http://publicObjectiu.v2.api.rolsac.caib.es"
+	xmlns:tns8="http://iniciacio.v2.api.rolsac.caib.es" 
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://ws.procediment.v2.api.rolsac.caib.es">
+	
+	<wsdl:import namespace="urn:tns1" location="dto/MateriaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="dto/BasicCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns3" location="dto/FetVitalCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns4" location="dto/NormativaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns5" location="dto/DocumentCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns6" location="dto/TramitCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns7" location="dto/PublicObjectiuCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns8" location="dto/IniciacioCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns8" location="dto/IniciacioDTO.wsdl"/>
+	
+	<wsdl:types>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://ws.procediment.v2.api.rolsac.caib.es">
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="ArrayOf_xsd_anyType">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:anyType[]" />
+					</restriction>
+				</complexContent>
+			</complexType>
+		</schema>
+		
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://xml.apache.org/xml-soap">
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="Vector">
+				<sequence>
+					<element maxOccurs="unbounded" minOccurs="0" name="item" type="xsd:anyType" />
+				</sequence>
+			</complexType>
+		</schema>
+	</wsdl:types>
+	
+	<wsdl:message name="getNumMateriesRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="llistarTramitsRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in1" type="tns6:TramitCriteria" />
+	</wsdl:message>
+	<wsdl:message name="getNumDocumentsResponse">
+		<wsdl:part name="getNumDocumentsReturn" type="xsd:int" />
+	</wsdl:message>
+	<wsdl:message name="llistarNormativesRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in1" type="tns4:NormativaCriteria" />
+	</wsdl:message>
+	<wsdl:message name="getNumDocumentsRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="getNumTramitsRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="getNumNormativesRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in1" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="llistarNormativesResponse">
+		<wsdl:part name="llistarNormativesReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
+	<wsdl:message name="llistarDocumentsRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in1" type="tns5:DocumentCriteria" />
+	</wsdl:message>
+    <wsdl:message name="llistarPublicsObjectiusRequest">
+        <wsdl:part name="in0" type="xsd:long" />
+        <wsdl:part name="in1" type="tns7:PublicObjectiuCriteria" />
+    </wsdl:message>
+	<wsdl:message name="getNumNormativesResponse">
+		<wsdl:part name="getNumNormativesReturn" type="xsd:int" />
+	</wsdl:message>
+	<wsdl:message name="getNumMateriesResponse">
+		<wsdl:part name="getNumMateriesReturn" type="xsd:int" />
+	</wsdl:message>
+	<wsdl:message name="getNumTramitsResponse">
+		<wsdl:part name="getNumTramitsReturn" type="xsd:int" />
+	</wsdl:message>
+	<wsdl:message name="getNumFetsVitalsRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="llistarDocumentsResponse">
+		<wsdl:part name="llistarDocumentsReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
+    <wsdl:message name="llistarPublicsObjectiusResponse">
+        <wsdl:part name="llistarPublicsObjectiusReturn" type="impl:ArrayOf_xsd_anyType" />
+    </wsdl:message>
+	<wsdl:message name="getNumFetsVitalsResponse">
+		<wsdl:part name="getNumFetsVitalsReturn" type="xsd:int" />
+	</wsdl:message>
+	<wsdl:message name="llistarMateriesResponse">
+		<wsdl:part name="llistarMateriesReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
+	<wsdl:message name="llistarMateriesRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in1" type="tns1:MateriaCriteria" />
+	</wsdl:message>
+	<wsdl:message name="llistarFetsVitalsRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in1" type="tns3:FetVitalCriteria" />
+	</wsdl:message>
+	<wsdl:message name="llistarTramitsResponse">
+		<wsdl:part name="llistarTramitsReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
+	<wsdl:message name="llistarFetsVitalsResponse">
+		<wsdl:part name="llistarFetsVitalsReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
+	<wsdl:portType name="ProcedimentQueryServiceEJBRemote">
+		<wsdl:operation name="llistarMateries" parameterOrder="in0 in1">
+			<wsdl:input message="impl:llistarMateriesRequest" name="llistarMateriesRequest" />
+			<wsdl:output message="impl:llistarMateriesResponse" name="llistarMateriesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="llistarFetsVitals"
+			parameterOrder="in0 in1">
+			<wsdl:input message="impl:llistarFetsVitalsRequest" name="llistarFetsVitalsRequest" />
+			<wsdl:output message="impl:llistarFetsVitalsResponse"
+				name="llistarFetsVitalsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="llistarNormatives"
+			parameterOrder="in0 in1">
+			<wsdl:input message="impl:llistarNormativesRequest" name="llistarNormativesRequest" />
+			<wsdl:output message="impl:llistarNormativesResponse"
+				name="llistarNormativesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="llistarDocuments" parameterOrder="in0 in1">
+			<wsdl:input message="impl:llistarDocumentsRequest" name="llistarDocumentsRequest" />
+			<wsdl:output message="impl:llistarDocumentsResponse"
+				name="llistarDocumentsResponse" />
+		</wsdl:operation>
+        <wsdl:operation name="llistarPublicsObjectius" parameterOrder="in0 in1">
+            <wsdl:input message="impl:llistarPublicsObjectiusRequest" name="llistarPublicsObjectiusRequest" />
+            <wsdl:output message="impl:llistarPublicsObjectiusResponse"
+                name="llistarPublicsObjectiusResponse" />
+        </wsdl:operation>
+		<wsdl:operation name="getNumNormatives" parameterOrder="in0 in1">
+			<wsdl:input message="impl:getNumNormativesRequest" name="getNumNormativesRequest" />
+			<wsdl:output message="impl:getNumNormativesResponse"
+				name="getNumNormativesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getNumFetsVitals" parameterOrder="in0">
+			<wsdl:input message="impl:getNumFetsVitalsRequest" name="getNumFetsVitalsRequest" />
+			<wsdl:output message="impl:getNumFetsVitalsResponse"
+				name="getNumFetsVitalsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="llistarTramits" parameterOrder="in0 in1">
+			<wsdl:input message="impl:llistarTramitsRequest" name="llistarTramitsRequest" />
+			<wsdl:output message="impl:llistarTramitsResponse" name="llistarTramitsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getNumTramits" parameterOrder="in0">
+			<wsdl:input message="impl:getNumTramitsRequest" name="getNumTramitsRequest" />
+			<wsdl:output message="impl:getNumTramitsResponse" name="getNumTramitsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getNumMateries" parameterOrder="in0">
+			<wsdl:input message="impl:getNumMateriesRequest" name="getNumMateriesRequest" />
+			<wsdl:output message="impl:getNumMateriesResponse" name="getNumMateriesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getNumDocuments" parameterOrder="in0">
+			<wsdl:input message="impl:getNumDocumentsRequest" name="getNumDocumentsRequest" />
+			<wsdl:output message="impl:getNumDocumentsResponse" name="getNumDocumentsResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="ProcedimentWSSoapBinding" type="impl:ProcedimentQueryServiceEJBRemote">
+		<wsdlsoap:binding style="rpc"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="llistarMateries">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarMateriesRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.procediment.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarMateriesResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.procediment.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="llistarFetsVitals">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarFetsVitalsRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.procediment.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarFetsVitalsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.procediment.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="llistarNormatives">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarNormativesRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.procediment.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarNormativesResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.procediment.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="llistarDocuments">
+            <wsdlsoap:operation soapAction="" />
+            <wsdl:input name="llistarDocumentsRequest">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="http://intf.ejb.procediment.v2.api.rolsac.caib.es" use="encoded" />
+            </wsdl:input>
+            <wsdl:output name="llistarDocumentsResponse">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="http://ws.procediment.v2.api.rolsac.caib.es"
+                    use="encoded" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="llistarPublicsObjectius">
+            <wsdlsoap:operation soapAction="" />
+            <wsdl:input name="llistarPublicsObjectiusRequest">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="http://intf.ejb.procediment.v2.api.rolsac.caib.es" use="encoded" />
+            </wsdl:input>
+            <wsdl:output name="llistarPublicsObjectiusResponse">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="http://ws.procediment.v2.api.rolsac.caib.es"
+                    use="encoded" />
+            </wsdl:output>
+        </wsdl:operation>
+		<wsdl:operation name="getNumNormatives">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="getNumNormativesRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.procediment.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="getNumNormativesResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.procediment.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getNumFetsVitals">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="getNumFetsVitalsRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.procediment.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="getNumFetsVitalsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.procediment.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="llistarTramits">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarTramitsRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.procediment.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarTramitsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.procediment.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getNumTramits">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="getNumTramitsRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.procediment.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="getNumTramitsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.procediment.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getNumMateries">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="getNumMateriesRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.procediment.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="getNumMateriesResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.procediment.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getNumDocuments">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="getNumDocumentsRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.procediment.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="getNumDocumentsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.procediment.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="ProcedimentQueryServiceEJBRemoteService">
+		<wsdl:port binding="impl:ProcedimentWSSoapBinding" name="ProcedimentWS">
+			<wsdlsoap:address
+				location="https://localhost:8443/sacws-api/services/ProcedimentWS" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

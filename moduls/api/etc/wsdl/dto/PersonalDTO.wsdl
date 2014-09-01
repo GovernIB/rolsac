@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
+    xmlns:tns="http://personal.v2.api.rolsac.caib.es"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    name="PersonalDTO"
+    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:tns2="http://general.v2.api.rolsac.caib.es"
+    targetNamespace="http://ws.personal.v2.api.rolsac.caib.es">
+  <wsdl:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://personal.v2.api.rolsac.caib.es">
+        <import namespace="http://general.v2.api.rolsac.caib.es" />
+        <complexType name="PersonalDTO">
+            <sequence>
+                <element name="cargo" nillable="true" type="xsd:string" />
+                <element name="email" nillable="true" type="xsd:string" />
+                <element name="extensionMovil" nillable="true" type="xsd:string" />
+                <element name="extensionPrivada" nillable="true" type="xsd:string" />
+                <element name="extensionPublica" nillable="true" type="xsd:string" />
+                <element name="funciones" nillable="true" type="xsd:string" />
+                <element name="id" nillable="true" type="xsd:long" />
+                <element name="nombre" nillable="true" type="xsd:string" />
+                <element name="numeroLargoMovil" nillable="true" type="xsd:string" />
+                <element name="numeroLargoPrivado" nillable="true" type="xsd:string" />
+                <element name="numeroLargoPublico" nillable="true" type="xsd:string" />
+                <element name="unidadAdministrativa" nillable="true" type="xsd:long" />
+                <element name="username" nillable="true" type="xsd:string" />
+            </sequence>
+        </complexType>
+    </schema>
+  </wsdl:types>
+</wsdl:definitions>

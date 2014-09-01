@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
+    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:tns="http://procediment.v2.api.rolsac.caib.es"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    name="ProcedimentCriteria"
+    xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:tns2="http://general.v2.api.rolsac.caib.es"
+    targetNamespace="http://ws.procediment.v2.api.rolsac.caib.es">
+
+  <wsdl:import namespace="urn:tns4" location="ProcedimentOrdenacio.wsdl"/>
+
+  <wsdl:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://procediment.v2.api.rolsac.caib.es">
+        <import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+        <import namespace="http://general.v2.api.rolsac.caib.es" />
+
+        <complexType name="ArrayOfProcedimentOrdenacio">
+            <sequence>
+                <element minOccurs="0" maxOccurs="unbounded" name="listaOrdenaciones" nillable="true" type="tns:ProcedimentOrdenacio" />
+            </sequence>
+        </complexType>
+
+        <complexType name="ProcedimentCriteria">
+            <complexContent>
+                <extension base="tns2:BasicCriteria">
+                    <sequence>
+                        <element name="actiu" nillable="true" type="xsd:boolean" />
+                        <element name="fechaActualizacion" nillable="true" type="xsd:string" />
+                        <element name="fechaCaducidad" nillable="true" type="xsd:string" />
+                        <element name="fechaPublicacion" nillable="true" type="xsd:string" />
+                        <element name="indicador" nillable="true" type="xsd:boolean" />
+                        <element name="info" nillable="true" type="xsd:string" />
+                        <element name="responsable" nillable="true" type="xsd:string" />
+                        <element name="signatura" nillable="true" type="xsd:string" />
+                        <element name="t_destinatarios" nillable="true" type="xsd:string" />
+                        <element name="t_lugar" nillable="true" type="xsd:string" />
+                        <element name="t_nombre" nillable="true" type="xsd:string" />
+                        <element name="t_notificacion" nillable="true" type="xsd:string" />
+                        <element name="t_observaciones" nillable="true" type="xsd:string" />
+                        <element name="t_plazos" nillable="true" type="xsd:string" />
+                        <element name="t_recursos" nillable="true" type="xsd:string" />
+                        <element name="t_requisitos" nillable="true" type="xsd:string" />
+                        <element name="t_resolucion" nillable="true" type="xsd:string" />
+                        <element name="t_resultat" nillable="true" type="xsd:string" />
+                        <element name="t_resumen" nillable="true" type="xsd:string" />
+                        <element name="t_silencio" nillable="true" type="xsd:string" />
+                        <element name="taxa" nillable="true" type="xsd:boolean" />
+                        <element name="tramite" nillable="true" type="xsd:string" />
+                        <element name="url" nillable="true" type="xsd:string" />
+                        <element name="validacion" nillable="true" type="xsd:string" />
+                        <element name="ventanillaUnica" nillable="true" type="xsd:boolean" />
+                        <element name="version" nillable="true" type="xsd:string" />
+                        <element name="familia" nillable="true" type="xsd:string" />
+                        <element name="agrupacionMateria" nillable="true" type="xsd:string" />
+                        <element name="publicoObjetivo" nillable="true" type="xsd:string" />
+                        <element name="textos" nillable="true" type="xsd:string" />
+                        <element name="unidadAdministrativa" nillable="true" type="xsd:string" />
+                        <element name="agrupacionHechoVital" nillable="true" type="xsd:string" />
+                        <element name="estadoUA" nillable="true" type="xsd:string" />
+                        <element name="vigente" nillable="true" type="xsd:boolean" />
+                        <element name="telematico" nillable="true" type="xsd:boolean" />
+                        <element name="ordenar" nillable="true" type="tns:ArrayOfProcedimentOrdenacio" />
+                    </sequence>
+                </extension>
+            </complexContent>
+        </complexType>
+    </schema>
+  </wsdl:types>
+</wsdl:definitions>

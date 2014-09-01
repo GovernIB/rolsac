@@ -1,0 +1,101 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from PerfilQueryServiceEJBRemoteService WSDL service -->
+
+  <service name="PerfilWS" provider="java:RPC" style="rpc" use="encoded">
+      <parameter name="wsdlTargetNamespace" value="http://ws.perfil.v2.api.rolsac.caib.es"/>
+      <parameter name="wsdlServiceElement" value="PerfilQueryServiceEJBRemoteService"/>
+      <parameter name="schemaUnqualified" value="http://general.v2.api.rolsac.caib.es,http://xml.apache.org/xml-soap,http://ws.perfil.v2.api.rolsac.caib.es,http://iconaFamilia.v2.api.rolsac.caib.es,http://iconaMateria.v2.api.rolsac.caib.es"/>
+      <parameter name="wsdlServicePort" value="PerfilWS"/>
+      <parameter name="className" value="es.caib.rolsac.api.v2.perfil.ws.PerfilWSSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="PerfilQueryServiceEJBRemote"/>
+      <parameter name="typeMappingVersion" value="1.1"/>
+      <operation name="llistarIconesFamilia" qname="operNS:llistarIconesFamilia" xmlns:operNS="http://intf.ejb.perfil.v2.api.rolsac.caib.es" returnQName="llistarIconesFamiliaReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.perfil.v2.api.rolsac.caib.es" returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="in1" type="tns:IconaFamiliaCriteria" xmlns:tns="http://iconaFamilia.v2.api.rolsac.caib.es"/>
+      </operation>
+      <operation name="llistarIconesMateria" qname="operNS:llistarIconesMateria" xmlns:operNS="http://intf.ejb.perfil.v2.api.rolsac.caib.es" returnQName="llistarIconesMateriaReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.perfil.v2.api.rolsac.caib.es" returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="in1" type="tns:IconaMateriaCriteria" xmlns:tns="http://iconaMateria.v2.api.rolsac.caib.es"/>
+      </operation>
+      <operation name="getNumIconesFamilia" qname="operNS:getNumIconesFamilia" xmlns:operNS="http://intf.ejb.perfil.v2.api.rolsac.caib.es" returnQName="getNumIconesFamiliaReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getNumIconesMateria" qname="operNS:getNumIconesMateria" xmlns:operNS="http://intf.ejb.perfil.v2.api.rolsac.caib.es" returnQName="getNumIconesMateriaReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <parameter name="allowedMethods" value="getNumIconesMateria getNumIconesFamilia llistarIconesMateria llistarIconesFamilia"/>
+
+      <typeMapping
+        xmlns:ns="http://iconaFamilia.v2.api.rolsac.caib.es"
+        qname="ns:IconaFamiliaOrdenacio"
+        type="java:es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaOrdenacio"
+        serializer="org.apache.axis.encoding.ser.EnumSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.EnumDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://iconaMateria.v2.api.rolsac.caib.es"
+        qname="ns:IconaMateriaCriteria"
+        type="java:es.caib.rolsac.api.v2.iconaMateria.IconaMateriaCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://iconaMateria.v2.api.rolsac.caib.es"
+        qname="ns:IconaMateriaOrdenacio"
+        type="java:es.caib.rolsac.api.v2.iconaMateria.IconaMateriaOrdenacio"
+        serializer="org.apache.axis.encoding.ser.EnumSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.EnumDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://iconaFamilia.v2.api.rolsac.caib.es"
+        qname="ns:IconaFamiliaCriteria"
+        type="java:es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <arrayMapping
+        xmlns:ns="http://iconaMateria.v2.api.rolsac.caib.es"
+        qname="ns:ArrayOfIconaMateriaOrdenacio"
+        type="java:es.caib.rolsac.api.v2.iconaMateria.IconaMateriaOrdenacio[]"
+        innerType="cmp-ns:IconaMateriaOrdenacio" xmlns:cmp-ns="http://iconaMateria.v2.api.rolsac.caib.es"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://general.v2.api.rolsac.caib.es"
+        qname="ns:BasicCriteria"
+        type="java:es.caib.rolsac.api.v2.general.BasicCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <arrayMapping
+        xmlns:ns="http://iconaFamilia.v2.api.rolsac.caib.es"
+        qname="ns:ArrayOfIconaFamiliaOrdenacio"
+        type="java:es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaOrdenacio[]"
+        innerType="cmp-ns:IconaFamiliaOrdenacio" xmlns:cmp-ns="http://iconaFamilia.v2.api.rolsac.caib.es"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <arrayMapping
+        xmlns:ns="http://ws.perfil.v2.api.rolsac.caib.es"
+        qname="ns:ArrayOf_xsd_anyType"
+        type="java:java.lang.Object[]"
+        innerType="cmp-ns:anyType" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+  </service>
+</deployment>

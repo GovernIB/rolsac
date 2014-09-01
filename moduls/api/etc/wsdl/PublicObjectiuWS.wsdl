@@ -1,0 +1,141 @@
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
+    xmlns:impl="http://ws.publicObjectiu.v2.api.rolsac.caib.es"
+    xmlns:intf="http://ws.publicObjectiu.v2.api.rolsac.caib.es"
+    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:tns1="http://agrupacioFetVital.v2.api.rolsac.caib.es"
+    xmlns:tns2="http://general.v2.api.rolsac.caib.es"
+    xmlns:tns3="http://procediment.v2.api.rolsac.caib.es"
+    xmlns:tns4="http://fitxa.v2.api.rolsac.caib.es"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://ws.publicObjectiu.v2.api.rolsac.caib.es">
+    
+    <wsdl:import namespace="urn:tns1" location="dto/AgrupacioFetVitalCriteria.wsdl"/>
+    <wsdl:import namespace="urn:tns2" location="dto/BasicCriteria.wsdl"/>
+    <wsdl:import namespace="urn:tns3" location="dto/ProcedimentCriteria.wsdl"/>
+    <wsdl:import namespace="urn:tns4" location="dto/FitxaCriteria.wsdl"/>
+    
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://ws.publicObjectiu.v2.api.rolsac.caib.es">
+            <import namespace="http://xml.apache.org/xml-soap" />
+            <import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+            <complexType name="ArrayOf_xsd_anyType">
+                <complexContent>
+                    <restriction base="soapenc:Array">
+                        <attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:anyType[]" />
+                    </restriction>
+                </complexContent>
+            </complexType>
+        </schema>
+        
+        <schema xmlns="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://xml.apache.org/xml-soap">
+            <import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+            <complexType name="Vector">
+                <sequence>
+                    <element maxOccurs="unbounded" minOccurs="0" name="item" type="xsd:anyType" />
+                </sequence>
+            </complexType>
+        </schema>
+    </wsdl:types>
+    
+    <wsdl:message name="llistarAgrupacionsResponse">
+        <wsdl:part name="llistarAgrupacionsReturn" type="impl:ArrayOf_xsd_anyType" />
+    </wsdl:message>
+    <wsdl:message name="llistarProcedimentsResponse">
+        <wsdl:part name="llistarProcedimentsReturn" type="impl:ArrayOf_xsd_anyType" />
+    </wsdl:message>
+    <wsdl:message name="llistarFitxesResponse">
+        <wsdl:part name="llistarFitxesReturn" type="impl:ArrayOf_xsd_anyType" />
+    </wsdl:message>
+    <wsdl:message name="getNumAgrupacionsResponse">
+        <wsdl:part name="getNumAgrupacionsReturn" type="xsd:int" />
+    </wsdl:message>
+    <wsdl:message name="getNumAgrupacionsRequest">
+        <wsdl:part name="in0" type="xsd:long" />
+    </wsdl:message>
+    <wsdl:message name="llistarAgrupacionsRequest">
+        <wsdl:part name="in0" type="xsd:long" />
+        <wsdl:part name="in1" type="tns1:AgrupacioFetVitalCriteria" />
+    </wsdl:message>
+    <wsdl:message name="llistarProcedimentsRequest">
+        <wsdl:part name="in0" type="xsd:long" />
+        <wsdl:part name="in1" type="tns3:ProcedimentCriteria" />
+    </wsdl:message>
+    <wsdl:message name="llistarFitxesRequest">
+        <wsdl:part name="in0" type="xsd:long" />
+        <wsdl:part name="in1" type="tns4:FitxaCriteria" />
+    </wsdl:message>
+    <wsdl:portType name="PublicObjectiuQueryServiceEJBRemote">
+        <wsdl:operation name="getNumAgrupacions" parameterOrder="in0">
+            <wsdl:input message="impl:getNumAgrupacionsRequest" name="getNumAgrupacionsRequest" />
+            <wsdl:output message="impl:getNumAgrupacionsResponse" name="getNumAgrupacionsResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="llistarAgrupacions" parameterOrder="in0 in1">
+            <wsdl:input message="impl:llistarAgrupacionsRequest" name="llistarAgrupacionsRequest" />
+            <wsdl:output message="impl:llistarAgrupacionsResponse" name="llistarAgrupacionsResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="llistarProcediments" parameterOrder="in0 in1">
+            <wsdl:input message="impl:llistarProcedimentsRequest" name="llistarProcedimentsRequest" />
+            <wsdl:output message="impl:llistarProcedimentsResponse" name="llistarProcedimentsResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="llistarFitxes" parameterOrder="in0 in1">
+            <wsdl:input message="impl:llistarFitxesRequest" name="llistarFitxesRequest" />
+            <wsdl:output message="impl:llistarFitxesResponse" name="llistarFitxesResponse" />
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="PublicObjectiuWSSoapBinding" type="impl:PublicObjectiuQueryServiceEJBRemote">
+        <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />
+        <wsdl:operation name="getNumAgrupacions">
+            <wsdlsoap:operation soapAction="" />
+            <wsdl:input name="getNumAgrupacionsRequest">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://intf.ejb.publicObjectiu.v2.api.rolsac.caib.es"
+                    use="encoded" />
+            </wsdl:input>
+            <wsdl:output name="getNumAgrupacionsResponse">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.publicObjectiu.v2.api.rolsac.caib.es"
+                    use="encoded" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="llistarAgrupacions">
+            <wsdlsoap:operation soapAction="" />
+            <wsdl:input name="llistarAgrupacionsRequest">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://intf.ejb.publicObjectiu.v2.api.rolsac.caib.es"
+                    use="encoded" />
+            </wsdl:input>
+            <wsdl:output name="llistarAgrupacionsResponse">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.publicObjectiu.v2.api.rolsac.caib.es"
+                    use="encoded" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="llistarProcediments">
+            <wsdlsoap:operation soapAction="" />
+            <wsdl:input name="llistarProcedimentsRequest">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://intf.ejb.publicObjectiu.v2.api.rolsac.caib.es"
+                    use="encoded" />
+            </wsdl:input>
+            <wsdl:output name="llistarProcedimentsResponse">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.publicObjectiu.v2.api.rolsac.caib.es"
+                    use="encoded" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="llistarFitxes">
+            <wsdlsoap:operation soapAction="" />
+            <wsdl:input name="llistarFitxesRequest">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://intf.ejb.publicObjectiu.v2.api.rolsac.caib.es"
+                    use="encoded" />
+            </wsdl:input>
+            <wsdl:output name="llistarFitxesResponse">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.publicObjectiu.v2.api.rolsac.caib.es"
+                    use="encoded" />
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="PublicObjectiuQueryServiceEJBRemoteService">
+        <wsdl:port binding="impl:PublicObjectiuWSSoapBinding" name="PublicObjectiuWS">
+            <wsdlsoap:address location="https://localhost:8443/sacws-api/services/PublicObjectiuWS" />
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

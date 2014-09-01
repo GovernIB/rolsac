@@ -1,0 +1,48 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from MateriaAgrupacioQueryServiceEJBRemoteService WSDL service -->
+
+  <service name="MateriaAgrupacioWS" provider="java:RPC" style="rpc" use="encoded">
+      <parameter name="wsdlTargetNamespace" value="http://ws.materiaAgrupacio.v2.api.rolsac.caib.es"/>
+      <parameter name="wsdlServiceElement" value="MateriaAgrupacioQueryServiceEJBRemoteService"/>
+      <parameter name="schemaUnqualified" value="http://agrupacioMateria.v2.api.rolsac.caib.es,http://materia.v2.api.rolsac.caib.es"/>
+      <parameter name="wsdlServicePort" value="MateriaAgrupacioWS"/>
+      <parameter name="className" value="es.caib.rolsac.api.v2.materiaAgrupacio.ws.MateriaAgrupacioWSSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="MateriaAgrupacioQueryServiceEJBRemote"/>
+      <parameter name="typeMappingVersion" value="1.1"/>
+      <operation name="obtenirMateria" qname="operNS:obtenirMateria" xmlns:operNS="http://intf.ejb.materiaAgrupacio.v2.api.rolsac.caib.es" returnQName="obtenirMateriaReturn" returnType="rtns:MateriaDTO" xmlns:rtns="http://materia.v2.api.rolsac.caib.es" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="obtenirAgrupacioMateria" qname="operNS:obtenirAgrupacioMateria" xmlns:operNS="http://intf.ejb.materiaAgrupacio.v2.api.rolsac.caib.es" returnQName="obtenirAgrupacioMateriaReturn" returnType="rtns:AgrupacioMateriaDTO" xmlns:rtns="http://agrupacioMateria.v2.api.rolsac.caib.es" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <parameter name="allowedMethods" value="obtenirMateria obtenirAgrupacioMateria"/>
+
+      <typeMapping
+        xmlns:ns="http://materia.v2.api.rolsac.caib.es"
+        qname="ns:MateriaDTO"
+        type="java:es.caib.rolsac.api.v2.materia.MateriaDTO"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://agrupacioMateria.v2.api.rolsac.caib.es"
+        qname="ns:AgrupacioMateriaDTO"
+        type="java:es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaDTO"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+  </service>
+</deployment>

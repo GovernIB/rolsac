@@ -1,0 +1,98 @@
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
+	xmlns:impl="http://ws.formulari.v2.api.rolsac.caib.es"
+	xmlns:intf="http://ws.formulari.v2.api.rolsac.caib.es"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:tns1="http://tramit.v2.api.rolsac.caib.es"
+	xmlns:tns2="http://general.v2.api.rolsac.caib.es"
+	xmlns:tns3="http://arxiu.v2.api.rolsac.caib.es"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://ws.formulari.v2.api.rolsac.caib.es">
+	
+	<wsdl:import namespace="urn:tns1" location="dto/TramitDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="dto/EntitatRemota.wsdl"/>
+	<wsdl:import namespace="urn:tns3" location="dto/ArxiuDTO.wsdl"/>
+	
+	<wsdl:types>
+	</wsdl:types>
+	
+	<wsdl:message name="obtenirManualRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="obtenirTramitRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="obtenirManualResponse">
+		<wsdl:part name="obtenirManualReturn" type="tns3:ArxiuDTO" />
+	</wsdl:message>
+	<wsdl:message name="obtenirArchivoRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="obtenirTramitResponse">
+		<wsdl:part name="obtenirTramitReturn" type="tns1:TramitDTO" />
+	</wsdl:message>
+	<wsdl:message name="obtenirArchivoResponse">
+		<wsdl:part name="obtenirArchivoReturn" type="tns3:ArxiuDTO" />
+	</wsdl:message>
+	<wsdl:portType name="FormulariQueryServiceEJBRemote">
+		<wsdl:operation name="obtenirTramit" parameterOrder="in0">
+			<wsdl:input message="impl:obtenirTramitRequest" name="obtenirTramitRequest" />
+			<wsdl:output message="impl:obtenirTramitResponse" name="obtenirTramitResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="obtenirArchivo" parameterOrder="in0">
+			<wsdl:input message="impl:obtenirArchivoRequest" name="obtenirArchivoRequest" />
+			<wsdl:output message="impl:obtenirArchivoResponse" name="obtenirArchivoResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="obtenirManual" parameterOrder="in0">
+			<wsdl:input message="impl:obtenirManualRequest" name="obtenirManualRequest" />
+			<wsdl:output message="impl:obtenirManualResponse" name="obtenirManualResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="FormulariWSSoapBinding" type="impl:FormulariQueryServiceEJBRemote">
+		<wsdlsoap:binding style="rpc"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="obtenirTramit">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirTramitRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.formulari.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirTramitResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.formulari.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="obtenirArchivo">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirArchivoRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.formulari.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirArchivoResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.formulari.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="obtenirManual">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirManualRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.formulari.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirManualResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.formulari.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="FormulariQueryServiceEJBRemoteService">
+		<wsdl:port binding="impl:FormulariWSSoapBinding" name="FormulariWS">
+			<wsdlsoap:address
+				location="https://localhost:8443/sacws-api/services/FormulariWS" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

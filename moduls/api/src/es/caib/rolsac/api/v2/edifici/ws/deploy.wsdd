@@ -1,0 +1,88 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from EdificiQueryServiceEJBRemoteService WSDL service -->
+
+  <service name="EdificiWS" provider="java:RPC" style="rpc" use="encoded">
+      <parameter name="wsdlTargetNamespace" value="http://ws.edifici.v2.api.rolsac.caib.es"/>
+      <parameter name="wsdlServiceElement" value="EdificiQueryServiceEJBRemoteService"/>
+      <parameter name="schemaUnqualified" value="http://ws.edifici.v2.api.rolsac.caib.es,http://general.v2.api.rolsac.caib.es,http://xml.apache.org/xml-soap,http://unitatAdministrativa.v2.api.rolsac.caib.es,http://arxiu.v2.api.rolsac.caib.es"/>
+      <parameter name="wsdlServicePort" value="EdificiWS"/>
+      <parameter name="className" value="es.caib.rolsac.api.v2.edifici.ws.EdificiWSSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="EdificiQueryServiceEJBRemote"/>
+      <parameter name="typeMappingVersion" value="1.1"/>
+      <operation name="getNumUnitatsAdministratives" qname="operNS:getNumUnitatsAdministratives" xmlns:operNS="http://intf.ejb.edifici.v2.api.rolsac.caib.es" returnQName="getNumUnitatsAdministrativesReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="llistarUnitatsAdministratives" qname="operNS:llistarUnitatsAdministratives" xmlns:operNS="http://intf.ejb.edifici.v2.api.rolsac.caib.es" returnQName="llistarUnitatsAdministrativesReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.edifici.v2.api.rolsac.caib.es" returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="in1" type="tns:UnitatAdministrativaCriteria" xmlns:tns="http://unitatAdministrativa.v2.api.rolsac.caib.es"/>
+      </operation>
+      <operation name="obtenirFotoPequenya" qname="operNS:obtenirFotoPequenya" xmlns:operNS="http://intf.ejb.edifici.v2.api.rolsac.caib.es" returnQName="obtenirFotoPequenyaReturn" returnType="rtns:ArxiuDTO" xmlns:rtns="http://arxiu.v2.api.rolsac.caib.es" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="obtenirFotoGrande" qname="operNS:obtenirFotoGrande" xmlns:operNS="http://intf.ejb.edifici.v2.api.rolsac.caib.es" returnQName="obtenirFotoGrandeReturn" returnType="rtns:ArxiuDTO" xmlns:rtns="http://arxiu.v2.api.rolsac.caib.es" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="obtenirPlano" qname="operNS:obtenirPlano" xmlns:operNS="http://intf.ejb.edifici.v2.api.rolsac.caib.es" returnQName="obtenirPlanoReturn" returnType="rtns:ArxiuDTO" xmlns:rtns="http://arxiu.v2.api.rolsac.caib.es" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <parameter name="allowedMethods" value="obtenirFotoGrande llistarUnitatsAdministratives getNumUnitatsAdministratives obtenirPlano obtenirFotoPequenya"/>
+
+      <arrayMapping
+        xmlns:ns="http://ws.edifici.v2.api.rolsac.caib.es"
+        qname="ns:ArrayOf_xsd_anyType"
+        type="java:java.lang.Object[]"
+        innerType="cmp-ns:anyType" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://unitatAdministrativa.v2.api.rolsac.caib.es"
+        qname="ns:UnitatAdministrativaOrdenacio"
+        type="java:es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaOrdenacio"
+        serializer="org.apache.axis.encoding.ser.EnumSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.EnumDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <arrayMapping
+        xmlns:ns="http://unitatAdministrativa.v2.api.rolsac.caib.es"
+        qname="ns:ArrayOfUnitatAdministrativaOrdenacio"
+        type="java:es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaOrdenacio[]"
+        innerType="cmp-ns:UnitatAdministrativaOrdenacio" xmlns:cmp-ns="http://unitatAdministrativa.v2.api.rolsac.caib.es"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://unitatAdministrativa.v2.api.rolsac.caib.es"
+        qname="ns:UnitatAdministrativaCriteria"
+        type="java:es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://general.v2.api.rolsac.caib.es"
+        qname="ns:BasicCriteria"
+        type="java:es.caib.rolsac.api.v2.general.BasicCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://arxiu.v2.api.rolsac.caib.es"
+        qname="ns:ArxiuDTO"
+        type="java:es.caib.rolsac.api.v2.arxiu.ArxiuDTO"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+  </service>
+</deployment>

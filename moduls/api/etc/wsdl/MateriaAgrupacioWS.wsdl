@@ -1,0 +1,81 @@
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
+	xmlns:impl="http://ws.materiaAgrupacio.v2.api.rolsac.caib.es"
+	xmlns:intf="http://ws.materiaAgrupacio.v2.api.rolsac.caib.es"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:tns1="http://materia.v2.api.rolsac.caib.es"
+	xmlns:tns2="http://agrupacioMateria.v2.api.rolsac.caib.es"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://ws.materiaAgrupacio.v2.api.rolsac.caib.es">
+	
+	<wsdl:import namespace="urn:tns1" location="dto/MateriaDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="dto/AgrupacioMateriaDTO.wsdl"/>
+	
+	<wsdl:types>
+	</wsdl:types>
+	
+	<wsdl:message name="obtenirAgrupacioMateriaResponse">
+		<wsdl:part name="obtenirAgrupacioMateriaReturn" type="tns2:AgrupacioMateriaDTO" />
+	</wsdl:message>
+	<wsdl:message name="obtenirMateriaResponse">
+		<wsdl:part name="obtenirMateriaReturn" type="tns1:MateriaDTO" />
+	</wsdl:message>
+	<wsdl:message name="obtenirAgrupacioMateriaRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="obtenirMateriaRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:portType name="MateriaAgrupacioQueryServiceEJBRemote">
+		<wsdl:operation name="obtenirMateria" parameterOrder="in0">
+			<wsdl:input message="impl:obtenirMateriaRequest" name="obtenirMateriaRequest" />
+			<wsdl:output message="impl:obtenirMateriaResponse" name="obtenirMateriaResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="obtenirAgrupacioMateria"
+			parameterOrder="in0">
+			<wsdl:input message="impl:obtenirAgrupacioMateriaRequest"
+				name="obtenirAgrupacioMateriaRequest" />
+			<wsdl:output message="impl:obtenirAgrupacioMateriaResponse"
+				name="obtenirAgrupacioMateriaResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="MateriaAgrupacioWSSoapBinding"
+		type="impl:MateriaAgrupacioQueryServiceEJBRemote">
+		<wsdlsoap:binding style="rpc"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="obtenirMateria">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirMateriaRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.materiaAgrupacio.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirMateriaResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.materiaAgrupacio.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="obtenirAgrupacioMateria">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirAgrupacioMateriaRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.materiaAgrupacio.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirAgrupacioMateriaResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.materiaAgrupacio.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="MateriaAgrupacioQueryServiceEJBRemoteService">
+		<wsdl:port binding="impl:MateriaAgrupacioWSSoapBinding"
+			name="MateriaAgrupacioWS">
+			<wsdlsoap:address
+				location="https://localhost:8443/sacws-api/services/MateriaAgrupacioWS" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

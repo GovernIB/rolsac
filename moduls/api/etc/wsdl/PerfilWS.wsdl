@@ -1,0 +1,152 @@
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
+	xmlns:impl="http://ws.perfil.v2.api.rolsac.caib.es"
+	xmlns:intf="http://ws.perfil.v2.api.rolsac.caib.es"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:tns1="http://iconaFamilia.v2.api.rolsac.caib.es"
+	xmlns:tns2="http://general.v2.api.rolsac.caib.es"
+	xmlns:tns3="http://iconaMateria.v2.api.rolsac.caib.es"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://ws.perfil.v2.api.rolsac.caib.es">
+	
+	<wsdl:import namespace="urn:tns1" location="dto/IconaFamiliaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="dto/BasicCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns3" location="dto/IconaMateriaCriteria.wsdl"/>
+	
+	<wsdl:types>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://ws.perfil.v2.api.rolsac.caib.es">
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="ArrayOf_xsd_anyType">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:anyType[]" />
+					</restriction>
+				</complexContent>
+			</complexType>
+		</schema>
+		
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://xml.apache.org/xml-soap">
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="Vector">
+				<sequence>
+					<element maxOccurs="unbounded" minOccurs="0" name="item" type="xsd:anyType" />
+				</sequence>
+			</complexType>
+		</schema>
+	</wsdl:types>
+	
+	<wsdl:message name="getNumIconesFamiliaResponse">
+		<wsdl:part name="getNumIconesFamiliaReturn" type="xsd:int" />
+	</wsdl:message>
+	<wsdl:message name="llistarIconesMateriaResponse">
+		<wsdl:part name="llistarIconesMateriaReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
+	<wsdl:message name="llistarIconesFamiliaResponse">
+		<wsdl:part name="llistarIconesFamiliaReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
+	<wsdl:message name="getNumIconesMateriaResponse">
+		<wsdl:part name="getNumIconesMateriaReturn" type="xsd:int" />
+	</wsdl:message>
+	<wsdl:message name="getNumIconesMateriaRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="getNumIconesFamiliaRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="llistarIconesMateriaRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in1" type="tns3:IconaMateriaCriteria" />
+	</wsdl:message>
+	<wsdl:message name="llistarIconesFamiliaRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in1" type="tns1:IconaFamiliaCriteria" />
+	</wsdl:message>
+	<wsdl:portType name="PerfilQueryServiceEJBRemote">
+		<wsdl:operation name="llistarIconesFamilia"
+			parameterOrder="in0 in1">
+			<wsdl:input message="impl:llistarIconesFamiliaRequest"
+				name="llistarIconesFamiliaRequest" />
+			<wsdl:output message="impl:llistarIconesFamiliaResponse"
+				name="llistarIconesFamiliaResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="llistarIconesMateria"
+			parameterOrder="in0 in1">
+			<wsdl:input message="impl:llistarIconesMateriaRequest"
+				name="llistarIconesMateriaRequest" />
+			<wsdl:output message="impl:llistarIconesMateriaResponse"
+				name="llistarIconesMateriaResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getNumIconesFamilia"
+			parameterOrder="in0">
+			<wsdl:input message="impl:getNumIconesFamiliaRequest"
+				name="getNumIconesFamiliaRequest" />
+			<wsdl:output message="impl:getNumIconesFamiliaResponse"
+				name="getNumIconesFamiliaResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getNumIconesMateria"
+			parameterOrder="in0">
+			<wsdl:input message="impl:getNumIconesMateriaRequest"
+				name="getNumIconesMateriaRequest" />
+			<wsdl:output message="impl:getNumIconesMateriaResponse"
+				name="getNumIconesMateriaResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="PerfilWSSoapBinding" type="impl:PerfilQueryServiceEJBRemote">
+		<wsdlsoap:binding style="rpc"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="llistarIconesFamilia">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarIconesFamiliaRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.perfil.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarIconesFamiliaResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.perfil.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="llistarIconesMateria">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarIconesMateriaRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.perfil.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarIconesMateriaResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.perfil.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getNumIconesFamilia">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="getNumIconesFamiliaRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.perfil.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="getNumIconesFamiliaResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.perfil.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getNumIconesMateria">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="getNumIconesMateriaRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.perfil.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="getNumIconesMateriaResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.perfil.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="PerfilQueryServiceEJBRemoteService">
+		<wsdl:port binding="impl:PerfilWSSoapBinding" name="PerfilWS">
+			<wsdlsoap:address
+				location="https://localhost:8443/sacws-api/services/PerfilWS" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
