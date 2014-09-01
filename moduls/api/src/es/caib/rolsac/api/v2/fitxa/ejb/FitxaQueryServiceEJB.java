@@ -6,6 +6,7 @@ import java.util.Vector;
 
 import javax.ejb.CreateException;
 
+import es.caib.rolsac.api.v2.enllac.EnllacOrdenacio;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
@@ -110,9 +111,9 @@ public class FitxaQueryServiceEJB extends HibernateEJB {
         List<EnllacDTO> enllassosDTOList = new ArrayList<EnllacDTO>();
         List<CriteriaObject> criteris;
         Session session = null;
-        try {            
-            if (StringUtils.isBlank(enllacCriteria.getOrdenacio())) {
-                enllacCriteria.setOrdenacio(HQL_ENLACES_ALIAS + ".orden");
+        try {
+            if (StringUtils.isBlank(BasicUtils.controlOrdenar(enllacCriteria))) {
+                enllacCriteria.setOrdenar(new EnllacOrdenacio[] {EnllacOrdenacio.orden_asc});
             }
             
             criteris = BasicUtils.parseCriterias(EnllacCriteria.class, HQL_ENLACES_ALIAS, HQL_TRADUCCIONES_ALIAS, enllacCriteria);
@@ -370,7 +371,7 @@ public class FitxaQueryServiceEJB extends HibernateEJB {
     /**
      * Obtiene listado de fichas UA.
      * @param id
-     * @param fitchaUACriteria
+     * @param fitxaUACriteria
      * @return List<FitxaUADTO>
      * 
      * @ejb.interface-method
@@ -384,12 +385,12 @@ public class FitxaQueryServiceEJB extends HibernateEJB {
         Session session = null;
         
         try {
-        	
+        	fitxaUACriteria.setFitxa(String.valueOf(id));
             criteris = BasicUtils.parseCriterias(FitxaUACriteria.class, HQL_FICHASUA_ALIAS, HQL_TRADUCCIONES_ALIAS, fitxaUACriteria);
             List<FromClause> entities = new ArrayList<FromClause>();
             entities.add(new FromClause(HQL_FICHA_CLASS, HQL_FICHA_ALIAS));
             entities.add(new FromClause(HQL_FICHASUA_CLASS, HQL_FICHASUA_ALIAS));
-            QueryBuilder qb = new QueryBuilder(HQL_FICHA_ALIAS, entities, fitxaUACriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
+            QueryBuilder qb = new QueryBuilder(HQL_FICHASUA_ALIAS, entities, null, null);
             qb.extendCriteriaObjects(criteris);
             
             FitxaCriteria fc = new FitxaCriteria();
@@ -409,25 +410,16 @@ public class FitxaQueryServiceEJB extends HibernateEJB {
             }
             
         } catch (HibernateException e) {
-        	
             log.error(e);
-            
         } catch (CriteriaObjectParseException e) {
-        	
             log.error(e);
-            
         } catch (QueryBuilderException e) {
-        	
             log.error(e);
-            
         } finally {
-        	
             close(session);
-            
         }
 
         return new ArrayList<FitxaUADTO>(fichaDTOList);
-        
     }
     
     /**

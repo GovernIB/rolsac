@@ -9,6 +9,7 @@ import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
 import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
 import es.caib.rolsac.api.v2.materia.MateriaDTO;
 import es.caib.rolsac.api.v2.normativa.NormativaCriteria;
@@ -50,7 +51,7 @@ public interface UnitatAdministrativaQueryServiceStrategy {
 
     public List<UsuariDTO> llistarUsuaris(long id, UsuariCriteria usuariCriteria) throws StrategyException;
 
-    public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria) throws StrategyException;
+    public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria, FitxaUACriteria fitxaUACriteria) throws StrategyException;
     
     public List<SeccioDTO> llistarSeccions(long id, SeccioCriteria seccioCriteria) throws StrategyException;
 

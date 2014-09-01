@@ -17,7 +17,6 @@
                 <element name="id" nillable="true" type="xsd:string" />
                 <element name="idioma" nillable="true" type="xsd:string" />
                 <element name="inici" nillable="true" type="xsd:string" />
-                <element name="ordenacio" nillable="true" type="xsd:string" />
                 <element name="tamany" nillable="true" type="xsd:string" />
             </sequence>
         </complexType>

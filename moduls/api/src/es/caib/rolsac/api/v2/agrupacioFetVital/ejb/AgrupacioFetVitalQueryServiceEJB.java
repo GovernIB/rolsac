@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.ejb.CreateException;
 
+import es.caib.rolsac.api.v2.fetVital.FetVitalOrdenacio;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
@@ -172,12 +173,14 @@ public class AgrupacioFetVitalQueryServiceEJB extends HibernateEJB {
      */   
     @SuppressWarnings("unchecked")
     public List<FetVitalDTO> llistarFetsVitals(long id, FetVitalCriteria fetVitalCriteria) {
+
         List<FetVitalDTO> fetVitalDTOList = new ArrayList<FetVitalDTO>();
         List<CriteriaObject> criteris;
         Session session = null;
-        if (StringUtils.isBlank(fetVitalCriteria.getOrdenacio())) {
-            fetVitalCriteria.setOrdenacio(HQL_FET_VITAL_AGRUPACIO_ALIAS + ".orden");
+        if (StringUtils.isBlank(BasicUtils.controlOrdenar(fetVitalCriteria))) {
+            fetVitalCriteria.setOrdenar(new FetVitalOrdenacio[] { FetVitalOrdenacio.orden_asc });
         }
+
         try {            
             criteris = BasicUtils.parseCriterias(FetVitalCriteria.class, HQL_FET_VITAL_ALIAS, HQL_TRADUCCIONES_ALIAS, fetVitalCriteria);
             List<FromClause> entities = new ArrayList<FromClause>();
@@ -199,6 +202,7 @@ public class AgrupacioFetVitalQueryServiceEJB extends HibernateEJB {
             for (HechoVital fetVital : fetsVitalsResult) {
                 fetVitalDTOList.add((FetVitalDTO) BasicUtils.entityToDTO(FetVitalDTO.class,  fetVital, fetVitalCriteria.getIdioma()));
             }
+
         } catch (HibernateException e) {
             log.error(e);
         } catch (CriteriaObjectParseException e) {

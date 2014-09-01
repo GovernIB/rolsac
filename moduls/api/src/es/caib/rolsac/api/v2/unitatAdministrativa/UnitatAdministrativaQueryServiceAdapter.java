@@ -3,6 +3,7 @@ package es.caib.rolsac.api.v2.unitatAdministrativa;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria;
 import org.apache.commons.beanutils.PropertyUtils;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
@@ -197,9 +198,9 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
         }
     }
 
-    public List<FitxaQueryServiceAdapter> llistarFitxes(FitxaCriteria fitxaCriteria) throws QueryServiceException {
+    public List<FitxaQueryServiceAdapter> llistarFitxes(FitxaCriteria fitxaCriteria, FitxaUACriteria fitxaUACriteria) throws QueryServiceException {
         try {
-            List<FitxaDTO> llistaDTO = unitatAdministrativaQueryServiceStrategy.llistarFitxes(getId(), fitxaCriteria);
+            List<FitxaDTO> llistaDTO = unitatAdministrativaQueryServiceStrategy.llistarFitxes(getId(), fitxaCriteria, fitxaUACriteria);
             List<FitxaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FitxaQueryServiceAdapter>();
             for (FitxaDTO fitxaDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), fitxaDTO));

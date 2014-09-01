@@ -155,10 +155,10 @@ public class BasicUtils {
             criteria.parseCriteria(basicCriteria.getId());
             criteriaObjects.add(criteria);
         }
-        basicCriteria.setOrdenacio(controlOrdenar(basicCriteria));
-        if (StringUtils.isNotBlank(basicCriteria.getOrdenacio())) {
+        String ordenar = controlOrdenar(basicCriteria);
+        if (StringUtils.isNotBlank(ordenar)) {
             BasicByOrdenacioCriteria criteria = new BasicByOrdenacioCriteria(entityAlias, i18nAlias);
-            criteria.parseCriteria(basicCriteria.getOrdenacio());
+            criteria.parseCriteria(ordenar);
             criteriaObjects.add(criteria);
         }
         if (StringUtils.isNotBlank(basicCriteria.getInici())) {
@@ -366,7 +366,7 @@ public class BasicUtils {
     }
 
     @SuppressWarnings("finally")
-    private static String controlOrdenar(BasicCriteria criteria) {
+    public static String controlOrdenar(BasicCriteria criteria) {
 
         String ordenaciones = new String();
         try {
@@ -374,7 +374,7 @@ public class BasicUtils {
             Object[] objetos = (Object[]) idGetter.invoke(criteria);
 
             if (objetos == null) {
-                ordenaciones = criteria.getOrdenacio();
+                ordenaciones = "";
             }
 
             for (Object objeto : objetos) {
@@ -394,9 +394,8 @@ public class BasicUtils {
             }
             
             if (ordenaciones.length() > 0) {
-                ordenaciones = ordenaciones.substring(0, ordenaciones.length()-1);
+                ordenaciones = ordenaciones.substring(0, ordenaciones.length() - 1);
                 ordenaciones = ordenaciones.toString();
-                criteria.setOrdenacio(ordenaciones);
             }
 
             Field field = criteria.getClass().getDeclaredField("ordenar");
@@ -405,22 +404,22 @@ public class BasicUtils {
 
         } catch (SecurityException e) {
             e.printStackTrace();
-            ordenaciones = criteria.getOrdenacio();
+            ordenaciones = "";
         } catch (NoSuchMethodException e) {
             log.error(criteria.getClass() + " aún no tiene implementado Ordenar.");
-            ordenaciones = criteria.getOrdenacio();
+            ordenaciones = "";
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
-            ordenaciones = criteria.getOrdenacio();
+            ordenaciones = "";
         } catch (IllegalAccessException e) {
             e.printStackTrace();
-            ordenaciones = criteria.getOrdenacio();
+            ordenaciones = "";
         } catch (InvocationTargetException e) {
             e.printStackTrace();
-            ordenaciones = criteria.getOrdenacio();
+            ordenaciones = "";
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
-            ordenaciones = criteria.getOrdenacio();
+            ordenaciones = "";
         } finally {
             return ordenaciones;
         }

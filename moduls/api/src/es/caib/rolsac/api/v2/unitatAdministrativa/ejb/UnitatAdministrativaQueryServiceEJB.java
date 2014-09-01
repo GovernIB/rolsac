@@ -6,11 +6,11 @@ import java.util.Vector;
 
 import javax.ejb.CreateException;
 
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Edificio;
@@ -255,14 +255,14 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 
 	/**
 	 * Obtiene los ids de todos los descendientes de una UA
-	 * @param id
+	 * @param uaId
 	 * @return List<Long>
 	 * 
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
-	public List<UnitatAdministrativaDTO> llistarDescendents(long uaId)
-	{
+	public List<UnitatAdministrativaDTO> llistarDescendents(long uaId) {
+
 		List<UnitatAdministrativaDTO> uasList = new ArrayList<UnitatAdministrativaDTO>();
 		try {
 			UnitatAdministrativaCriteria uaCriteria = new UnitatAdministrativaCriteria();
@@ -656,18 +656,13 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 	 * @ejb.permission unchecked="true"
 	 */
 	@SuppressWarnings("unchecked")
-	public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria) {
+	public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria, FitxaUACriteria fitxaUACriteria) {
 
 		List<FitxaDTO> fitxesDTOList = new ArrayList<FitxaDTO>();
 		List<CriteriaObject> criteris = new ArrayList<CriteriaObject>();
 		Session session = null;
 
 		try {
-
-			if ( StringUtils.isBlank( fitxaCriteria.getOrdenacio() ) ) {
-				fitxaCriteria.setOrdenacio(HQL_FITXA_UA_ALIAS + ".orden");
-			}
-
 			List<FromClause> entities = new ArrayList<FromClause>();
 			entities.add( new FromClause(HQL_UA_CLASS, HQL_UA_ALIAS) );
 			entities.add( new FromClause(HQL_FITXA_UA_CLASS, HQL_FITXA_UA_ALIAS) );
@@ -683,12 +678,14 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 			criteris = BasicUtils.parseCriterias( UnitatAdministrativaCriteria.class, HQL_UA_ALIAS, uac );
 			qb.extendCriteriaObjects(criteris);
 
+            criteris = BasicUtils.parseCriterias(FitxaUACriteria.class, HQL_FITXA_UA_ALIAS, fitxaUACriteria);
+            qb.extendCriteriaObjects(criteris);
+
 			session = getSession();
 			Query query = qb.createQuery(session);
 			List<Ficha> fitxesResult = (List<Ficha>) query.list();
 
 			for ( Ficha fitxa : fitxesResult ) {
-
 				fitxesDTOList.add(
 						(FitxaDTO) BasicUtils.entityToDTO(
 								FitxaDTO.class,  
@@ -696,30 +693,19 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 								fitxaCriteria.getIdioma()
 								)
 						);
-
-
 			}
 
 		} catch (HibernateException e) {
-
 			log.error(e);
-
 		} catch (CriteriaObjectParseException e) {
-
 			log.error(e);
-
 		} catch (QueryBuilderException e) {
-
 			log.error(e);
-
 		} finally {
-
 			close(session);
-
 		}
 
 		return fitxesDTOList;
-
 	}
 
 	/**
@@ -739,11 +725,6 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 		Session session = null;
 
 		try {
-
-			if (StringUtils.isBlank(seccioCriteria.getOrdenacio())) {
-				seccioCriteria.setOrdenacio(HQL_FITXA_UA_ALIAS + ".ordenseccion");
-			}
-
 			criteris = BasicUtils.parseCriterias(SeccioCriteria.class, HQL_SECCION_ALIAS, HQL_TRADUCCIONES_ALIAS, seccioCriteria);
 			List<FromClause> entities = new ArrayList<FromClause>();
 			entities.add(new FromClause(HQL_UA_CLASS, HQL_UA_ALIAS));

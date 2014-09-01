@@ -10,6 +10,7 @@ import java.util.List;
 import es.caib.rolsac.api.v2.exception.APIException;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria;
 import es.caib.rolsac.api.v2.general.ConfiguracioServeis;
 import es.caib.rolsac.api.v2.general.DTOUtil;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
@@ -66,13 +67,13 @@ public class SeccioQueryServiceGateway {
 		return Arrays.asList(stub.llistarFilles(id, seccioCriteria));		
 	}
 
-	public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria)
+	public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria, FitxaUACriteria fitxaUACriteria)
 			throws RemoteException, APIException {
 
 		Object[] tmpLlista = null;
 		List<FitxaDTO> llistaFitxes = null;
 		
-		tmpLlista = stub.llistarFitxes(id, fitxaCriteria);
+		tmpLlista = stub.llistarFitxes(id, fitxaCriteria, fitxaUACriteria);
 		llistaFitxes = new ArrayList<FitxaDTO>( Arrays.asList(tmpLlista).size() );
 		
 		for (Object o : tmpLlista) { 				
@@ -84,13 +85,14 @@ public class SeccioQueryServiceGateway {
 	}
 
 	public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id,
-			UnitatAdministrativaCriteria unitatAdministrativaCriteria)
+			UnitatAdministrativaCriteria unitatAdministrativaCriteria,
+            FitxaUACriteria fitxaUACriteria)
 			throws RemoteException, APIException {
 		
 		Object[] tmpLlista = null;
 		List<UnitatAdministrativaDTO> llistaUnitatsAdministratives = null;
 		
-		tmpLlista = stub.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
+		tmpLlista = stub.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria, fitxaUACriteria);
 		llistaUnitatsAdministratives = new ArrayList<UnitatAdministrativaDTO>( Arrays.asList(tmpLlista).size() );
 		
 		for (Object o : tmpLlista) { 				

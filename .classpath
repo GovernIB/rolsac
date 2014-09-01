@@ -4,6 +4,7 @@
 	<classpathentry kind="src" path="moduls/extractor/src"/>
 	<classpathentry kind="src" path="moduls/integracion/src"/>
 	<classpathentry kind="src" path="moduls/model/src"/>
+	<classpathentry kind="src" path="moduls/lucene/src"/>
 	<classpathentry kind="src" path="moduls/persistence/src"/>
 	<classpathentry kind="src" path="moduls/ws/src"/>
 	<classpathentry kind="src" path="output/persistence/gen-src"/>
@@ -28,7 +29,6 @@
 	<classpathentry kind="src" path="test/traductor/resources"/>
 	<classpathentry kind="src" path="test/integracion/unitario/java"/>
 	<classpathentry kind="src" path="test/integracion/unitario/resources"/>
-	<classpathentry kind="src" path="moduls/lucene/src"/>
 	<classpathentry kind="src" path="output/api/wsdl-src"/>
 	<classpathentry kind="lib" path="output/moduls/model.jar"/>
 	<classpathentry kind="lib" path="lib/boib.jar"/>

@@ -29,9 +29,6 @@
                         <element name="nombre" nillable="true" type="xsd:string" />
                         <element name="notificacion" nillable="true" type="xsd:string" />
                         <element name="observaciones" nillable="true" type="xsd:string" />
-                        <element name="orden" nillable="true" type="xsd:long" />
-                        <element name="orden2" nillable="true" type="xsd:long" />
-                        <element name="orden3" nillable="true" type="xsd:long" />
                         <element name="organResolutori" nillable="true" type="xsd:long" />
                         <element name="plazos" nillable="true" type="xsd:string" />
                         <element name="recursos" nillable="true" type="xsd:string" />

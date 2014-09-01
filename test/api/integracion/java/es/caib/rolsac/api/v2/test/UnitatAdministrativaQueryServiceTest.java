@@ -2,6 +2,8 @@ package es.caib.rolsac.api.v2.test;
 
 import java.util.List;
 
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria;
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUAOrdenacio;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -223,7 +225,14 @@ public class UnitatAdministrativaQueryServiceTest {
             Assert.assertNotNull(unitatAdministrativa);
             FitxaCriteria fitxaCriteria = new FitxaCriteria();
             fitxaCriteria.setIdioma("ca");
-            List<FitxaQueryServiceAdapter> listQueryServiceAdapter = unitatAdministrativa.llistarFitxes(fitxaCriteria);    
+
+            FitxaUACriteria fitxaUACriteria = new FitxaUACriteria();
+            FitxaUAOrdenacio[] fitxaUAOrdenacio = new FitxaUAOrdenacio[] {
+                    FitxaUAOrdenacio.ordenseccion_asc
+            };
+            fitxaUACriteria.setOrdenar(fitxaUAOrdenacio);
+
+            List<FitxaQueryServiceAdapter> listQueryServiceAdapter = unitatAdministrativa.llistarFitxes(fitxaCriteria, fitxaUACriteria);
             Assert.assertTrue(listQueryServiceAdapter.size() > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());

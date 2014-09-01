@@ -2,6 +2,8 @@ package es.caib.rolsac.api.v2.test;
 
 import java.util.List;
 
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria;
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUAOrdenacio;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -92,7 +94,8 @@ public class SeccioQueryServiceTest {
         try {
             SeccioQueryServiceAdapter seccio = rolsacQS.obtenirSeccio(seccioCriteria);
             Assert.assertNotNull(seccio);
-            List<SeccioQueryServiceAdapter> listSeccioQueryServiceAdapter = seccio.llistarFilles(new SeccioCriteria());
+            seccioCriteria.setId("174499");
+            List<SeccioQueryServiceAdapter> listSeccioQueryServiceAdapter = seccio.llistarFilles(seccioCriteria);
             Assert.assertTrue(listSeccioQueryServiceAdapter.size() == 5);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
@@ -108,8 +111,14 @@ public class SeccioQueryServiceTest {
             Assert.assertNotNull(seccio);
             FitxaCriteria fitxaCriteria = new FitxaCriteria();
             fitxaCriteria.setIdioma("ca");
-            fitxaCriteria.setOrdenar(new FitxaOrdenacio[] {FitxaOrdenacio.fua_ordenseccion_desc});
-            List<FitxaQueryServiceAdapter> listFitxaQueryServiceAdapter = seccio.llistarFitxes(fitxaCriteria);        
+
+            FitxaUACriteria fitxaUACriteria = new FitxaUACriteria();
+            FitxaUAOrdenacio[] fitxaUAOrdenacio = new FitxaUAOrdenacio[] {
+                    FitxaUAOrdenacio.ordenseccion_desc
+            };
+            fitxaUACriteria.setOrdenar(fitxaUAOrdenacio);
+
+            List<FitxaQueryServiceAdapter> listFitxaQueryServiceAdapter = seccio.llistarFitxes(fitxaCriteria, fitxaUACriteria);
             Assert.assertTrue(listFitxaQueryServiceAdapter.size() > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
@@ -125,13 +134,11 @@ public class SeccioQueryServiceTest {
             Assert.assertNotNull(seccio);
             FitxaCriteria fitxaCriteria = new FitxaCriteria();
             fitxaCriteria.setIdioma("ca");
-            //fitxaCriteria.setOrdenar(new FitxaOrdenacio[] {FitxaOrdenacio.fua_ordenseccion_desc});
             FitxaOrdenacio[] ordenacio = {
-                    FitxaOrdenacio.fua_ordenseccion_asc,
                     FitxaOrdenacio.fechaActualizacion_asc
             };
             fitxaCriteria.setOrdenar(ordenacio);
-            List<FitxaQueryServiceAdapter> listFitxaQueryServiceAdapter = seccio.llistarFitxes(fitxaCriteria);
+            List<FitxaQueryServiceAdapter> listFitxaQueryServiceAdapter = seccio.llistarFitxes(fitxaCriteria, new FitxaUACriteria());
             Assert.assertTrue(listFitxaQueryServiceAdapter.size() > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
@@ -174,8 +181,15 @@ public class SeccioQueryServiceTest {
         try {
             SeccioQueryServiceAdapter seccio = rolsacQS.obtenirSeccio(seccioCriteria);
             Assert.assertNotNull(seccio);
-            List<UnitatAdministrativaQueryServiceAdapter> listUaQueryServiceAdapter = seccio.llistarUnitatsAdministratives(new UnitatAdministrativaCriteria());
-            Assert.assertTrue(listUaQueryServiceAdapter.size() == 2);
+
+            FitxaUACriteria fitxaUACriteria = new FitxaUACriteria();
+            FitxaUAOrdenacio[] fitxaUAOrdenacio = new FitxaUAOrdenacio[] {
+                    FitxaUAOrdenacio.ordenseccion_desc
+            };
+            fitxaUACriteria.setOrdenar(fitxaUAOrdenacio);
+
+            List<UnitatAdministrativaQueryServiceAdapter> listUaQueryServiceAdapter = seccio.llistarUnitatsAdministratives(new UnitatAdministrativaCriteria(), fitxaUACriteria);
+            Assert.assertTrue(listUaQueryServiceAdapter.size() > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }

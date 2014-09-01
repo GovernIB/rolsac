@@ -3,6 +3,7 @@ package es.caib.rolsac.api.v2.seccio;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria;
 import org.apache.commons.beanutils.PropertyUtils;
 
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
@@ -90,9 +91,9 @@ public class SeccioQueryServiceAdapter extends SeccioDTO implements SeccioQueryS
         }
     }
 
-    public List<FitxaQueryServiceAdapter> llistarFitxes(FitxaCriteria fitxaCriteria) throws QueryServiceException {
+    public List<FitxaQueryServiceAdapter> llistarFitxes(FitxaCriteria fitxaCriteria, FitxaUACriteria fitxaUACriteria) throws QueryServiceException {
         try{ 
-            List<FitxaDTO> llistaDTO = seccioQueryServiceStrategy.llistarFitxes(getId(), fitxaCriteria);
+            List<FitxaDTO> llistaDTO = seccioQueryServiceStrategy.llistarFitxes(getId(), fitxaCriteria, fitxaUACriteria);
             List<FitxaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FitxaQueryServiceAdapter>();
             for (FitxaDTO fitxaDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), fitxaDTO));
@@ -117,9 +118,9 @@ public class SeccioQueryServiceAdapter extends SeccioDTO implements SeccioQueryS
         }
     }
     
-    public List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws QueryServiceException {
+    public List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria, FitxaUACriteria fitxaUACriteria) throws QueryServiceException {
         try {
-            List<UnitatAdministrativaDTO> llistaDTO = seccioQueryServiceStrategy.llistarUnitatsAdministratives(getId(), unitatAdministrativaCriteria);
+            List<UnitatAdministrativaDTO> llistaDTO = seccioQueryServiceStrategy.llistarUnitatsAdministratives(getId(), unitatAdministrativaCriteria, fitxaUACriteria);
             List<UnitatAdministrativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
             for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO));

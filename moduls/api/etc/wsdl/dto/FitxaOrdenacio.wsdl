@@ -26,8 +26,6 @@
                 <enumeration value="fechaActualizacion_desc" />
                 <enumeration value="responsable_asc" />
                 <enumeration value="responsable_desc" />
-                <enumeration value="fua_ordenseccion_asc" />
-                <enumeration value="fua_ordenseccion_desc" />
             </restriction>
         </simpleType>
 

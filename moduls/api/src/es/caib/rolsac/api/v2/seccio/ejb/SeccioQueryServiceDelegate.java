@@ -8,6 +8,7 @@ import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.exception.LocatorException;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
 import es.caib.rolsac.api.v2.seccio.ejb.intf.SeccioQueryServiceEJBRemote;
@@ -92,10 +93,10 @@ public class SeccioQueryServiceDelegate {
     }
 
     @SuppressWarnings("unchecked")
-    public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria) throws DelegateException {
+    public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria, FitxaUACriteria fitxaUACriteria) throws DelegateException {
         try {
             SeccioQueryServiceEJBRemote ejb = seccioQueryServiceLocator.getSeccioQueryServiceEJB();
-            return ejb.llistarFitxes(id, fitxaCriteria);
+            return ejb.llistarFitxes(id, fitxaCriteria, fitxaUACriteria);
         } catch (LocatorException e) {
             throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
         } catch (RemoteException e) {
@@ -104,10 +105,10 @@ public class SeccioQueryServiceDelegate {
     }
 
     @SuppressWarnings("unchecked")
-    public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws DelegateException {
+    public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria, FitxaUACriteria fitxaUACriteria) throws DelegateException {
         try {
             SeccioQueryServiceEJBRemote ejb = seccioQueryServiceLocator.getSeccioQueryServiceEJB();
-            return ejb.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
+            return ejb.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria, fitxaUACriteria);
         } catch (LocatorException e) {
             throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
         } catch (RemoteException e) {

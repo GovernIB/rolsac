@@ -16,6 +16,7 @@
     xmlns:tns12="http://tractament.v2.api.rolsac.caib.es"
     xmlns:tns13="http://tramit.v2.api.rolsac.caib.es"
     xmlns:tns14="http://arxiu.v2.api.rolsac.caib.es"
+    xmlns:tns15="http://fitxaUA.v2.api.rolsac.caib.es"
 	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
 	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -38,6 +39,7 @@
 	<wsdl:import namespace="urn:tns12" location="dto/TractamentCriteria.wsdl"/>
 	<wsdl:import namespace="urn:tns13" location="dto/TramitCriteria.wsdl"/>
 	<wsdl:import namespace="urn:tns14" location="dto/ArxiuDTO.wsdl"/>
+    <wsdl:import namespace="urn:tns15" location="dto/FitxaUACriteria.wsdl"/>
 	
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
@@ -97,6 +99,7 @@
 	<wsdl:message name="llistarFitxesRequest">
 		<wsdl:part name="in0" type="xsd:long" />
 		<wsdl:part name="in1" type="tns6:FitxaCriteria" />
+        <wsdl:part name="in2" type="tns15:FitxaUACriteria" />
 	</wsdl:message>
 	<wsdl:message name="getNumPersonalRequest">
 		<wsdl:part name="in0" type="xsd:long" />
@@ -287,7 +290,7 @@
 			<wsdl:input message="impl:llistarMateriesRequest" name="llistarMateriesRequest" />
 			<wsdl:output message="impl:llistarMateriesResponse" name="llistarMateriesResponse" />
 		</wsdl:operation>
-		<wsdl:operation name="llistarFitxes" parameterOrder="in0 in1">
+		<wsdl:operation name="llistarFitxes" parameterOrder="in0 in1 in2">
 			<wsdl:input message="impl:llistarFitxesRequest" name="llistarFitxesRequest" />
 			<wsdl:output message="impl:llistarFitxesResponse" name="llistarFitxesResponse" />
 		</wsdl:operation>

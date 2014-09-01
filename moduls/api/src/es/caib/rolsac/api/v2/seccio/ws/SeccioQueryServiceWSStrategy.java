@@ -8,6 +8,7 @@ import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
 import es.caib.rolsac.api.v2.seccio.SeccioQueryServiceStrategy;
@@ -81,10 +82,10 @@ public class SeccioQueryServiceWSStrategy implements SeccioQueryServiceStrategy 
 		}		
 	}
 
-	public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria)
+	public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria, FitxaUACriteria fitxaUACriteria)
 			throws StrategyException {
 		try {
-			return gateway.llistarFitxes(id, fitxaCriteria);		
+			return gateway.llistarFitxes(id, fitxaCriteria, fitxaUACriteria);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		} catch (APIException e) {
@@ -93,10 +94,11 @@ public class SeccioQueryServiceWSStrategy implements SeccioQueryServiceStrategy 
 	}
 
 	public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id,
-			UnitatAdministrativaCriteria unitatAdministrativaCriteria)
+			UnitatAdministrativaCriteria unitatAdministrativaCriteria,
+            FitxaUACriteria fitxaUACriteria)
 			throws StrategyException {
 		try {
-			return gateway.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);		
+			return gateway.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria, fitxaUACriteria);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		} catch (APIException e) {

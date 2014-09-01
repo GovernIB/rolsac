@@ -9,7 +9,6 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Materia;
@@ -93,10 +92,6 @@ public class AgrupacioMateriaQueryServiceEJB extends HibernateEJB {
         List<CriteriaObject> criteris;
         Session session = null;
 
-        if (StringUtils.isBlank(materiaCriteria.getOrdenacio())) {
-            materiaCriteria.setOrdenacio(HQL_MATERIA_AGRUPACION_ALIAS + ".orden");
-            }
-      
         try {            
             criteris = BasicUtils.parseCriterias(MateriaCriteria.class, HQL_MATERIA_ALIAS, HQL_TRADUCCIONES_ALIAS, materiaCriteria);
             List<FromClause> entities = new ArrayList<FromClause>();

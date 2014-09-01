@@ -14,6 +14,7 @@ import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
 import es.caib.rolsac.api.v2.exception.APIException;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria;
 import es.caib.rolsac.api.v2.general.ConfiguracioServeis;
 import es.caib.rolsac.api.v2.general.DTOUtil;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
@@ -271,13 +272,13 @@ public class UnitatAdministrativaQueryServiceGateway {
 		return llistaUsuaris;
 	}
 
-	public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria)
+	public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria, FitxaUACriteria fitxaUACriteria)
 			throws RemoteException, APIException {
 
 		Object[] tmpLlista = null;
 		List<FitxaDTO> llistaFitxes = null;
 
-		tmpLlista = stub.llistarFitxes(id, fitxaCriteria);
+		tmpLlista = stub.llistarFitxes(id, fitxaCriteria, fitxaUACriteria);
 		llistaFitxes = new ArrayList<FitxaDTO>(Arrays.asList(tmpLlista).size());
 
 		for (Object o : tmpLlista) {

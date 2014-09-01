@@ -10,6 +10,7 @@ import es.caib.rolsac.api.v2.exception.DelegateException;
 import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
+import es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
 import es.caib.rolsac.api.v2.materia.MateriaDTO;
 import es.caib.rolsac.api.v2.normativa.NormativaCriteria;
@@ -127,9 +128,9 @@ public class UnitatAdministrativaQueryServiceEJBStrategy implements UnitatAdmini
         }
     }
 
-    public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria) throws StrategyException {
+    public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria, FitxaUACriteria fitxaUACriteria) throws StrategyException {
         try {
-            return unitatAdministrativaQueryServiceDelegate.llistarFitxes(id, fitxaCriteria);
+            return unitatAdministrativaQueryServiceDelegate.llistarFitxes(id, fitxaCriteria, fitxaUACriteria);
         } catch (DelegateException e) {
             throw new StrategyException(e);
         }

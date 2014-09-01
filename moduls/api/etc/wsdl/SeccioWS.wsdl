@@ -6,6 +6,7 @@
 	xmlns:tns2="http://general.v2.api.rolsac.caib.es"
 	xmlns:tns3="http://seccio.v2.api.rolsac.caib.es"
 	xmlns:tns4="http://fitxa.v2.api.rolsac.caib.es"
+    xmlns:tns5="http://fitxaUA.v2.api.rolsac.caib.es"
 	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
 	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -16,6 +17,7 @@
 	<wsdl:import namespace="urn:tns3" location="dto/SeccioCriteria.wsdl"/>
 	<wsdl:import namespace="urn:tns3" location="dto/SeccioDTO.wsdl"/>
 	<wsdl:import namespace="urn:tns4" location="dto/FitxaCriteria.wsdl"/>
+    <wsdl:import namespace="urn:tns5" location="dto/FitxaUACriteria.wsdl"/>
 	
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
@@ -54,6 +56,7 @@
 	<wsdl:message name="llistarUnitatsAdministrativesRequest">
 		<wsdl:part name="in0" type="xsd:long" />
 		<wsdl:part name="in1" type="tns1:UnitatAdministrativaCriteria" />
+        <wsdl:part name="in2" type="tns5:FitxaUACriteria" />
 	</wsdl:message>
 	<wsdl:message name="llistarUnitatsAdministrativesResponse">
 		<wsdl:part name="llistarUnitatsAdministrativesReturn" type="impl:ArrayOf_xsd_anyType" />
@@ -73,6 +76,7 @@
 	<wsdl:message name="llistarFitxesRequest">
 		<wsdl:part name="in0" type="xsd:long" />
 		<wsdl:part name="in1" type="tns4:FitxaCriteria" />
+        <wsdl:part name="in2" type="tns5:FitxaUACriteria" />
 	</wsdl:message>
 	<wsdl:message name="llistarParesRequest">
 		<wsdl:part name="in0" type="xsd:long" />
@@ -116,8 +120,7 @@
 			<wsdl:output message="impl:getNumUnitatsAdministrativesResponse"
 				name="getNumUnitatsAdministrativesResponse" />
 		</wsdl:operation>
-		<wsdl:operation name="llistarUnitatsAdministratives"
-			parameterOrder="in0 in1">
+		<wsdl:operation name="llistarUnitatsAdministratives" parameterOrder="in0 in1 in2">
 			<wsdl:input message="impl:llistarUnitatsAdministrativesRequest"
 				name="llistarUnitatsAdministrativesRequest" />
 			<wsdl:output message="impl:llistarUnitatsAdministrativesResponse"
@@ -127,7 +130,7 @@
 			<wsdl:input message="impl:obtenirPareRequest" name="obtenirPareRequest" />
 			<wsdl:output message="impl:obtenirPareResponse" name="obtenirPareResponse" />
 		</wsdl:operation>
-		<wsdl:operation name="llistarFitxes" parameterOrder="in0 in1">
+		<wsdl:operation name="llistarFitxes" parameterOrder="in0 in1 in2">
 			<wsdl:input message="impl:llistarFitxesRequest" name="llistarFitxesRequest" />
 			<wsdl:output message="impl:llistarFitxesResponse" name="llistarFitxesResponse" />
 		</wsdl:operation>
