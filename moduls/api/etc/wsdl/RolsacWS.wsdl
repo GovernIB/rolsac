@@ -564,8 +564,11 @@
 	</wsdl:message>
     <wsdl:message name="getNumProcedimentsResponse">
         <wsdl:part name="getNumProcedimentsReturn" type="xsd:int" />
-    </wsdl:message>    
-	<wsdl:message name="llistarUnitatsAdministrativesResponse">
+    </wsdl:message>
+    <wsdl:message name="getNumFitxesResponse">
+        <wsdl:part name="getNumFitxesReturn" type="xsd:int" />
+    </wsdl:message>
+    <wsdl:message name="llistarUnitatsAdministrativesResponse">
 		<wsdl:part name="llistarUnitatsAdministrativesReturn" type="impl:ArrayOfUnitatAdministrativaDTO" />
 	</wsdl:message>
 	<wsdl:message name="llistarUsuarisRequest">
@@ -687,7 +690,10 @@
 	</wsdl:message>
     <wsdl:message name="getNumProcedimentsRequest">
         <wsdl:part name="in0" type="tns4:ProcedimentCriteria" />
-    </wsdl:message>    
+    </wsdl:message>
+    <wsdl:message name="getNumFitxesRequest">
+        <wsdl:part name="in0" type="tns8:FitxaCriteria" />
+    </wsdl:message>
 	<wsdl:message name="obtenirFetVitalResponse">
 		<wsdl:part name="obtenirFetVitalReturn" type="tns7:FetVitalDTO" />
 	</wsdl:message>
@@ -863,12 +869,13 @@
             <wsdl:output message="intf:llistarProcedimentsResponse"
                 name="llistarProcedimentsResponse" />
         </wsdl:operation>
-        <wsdl:operation name="getNumProcediments"
-            parameterOrder="in0">
-            <wsdl:input message="intf:getNumProcedimentsRequest"
-                name="getNumProcedimentsRequest" />
-            <wsdl:output message="intf:getNumProcedimentsResponse"
-                name="getNumProcedimentsResponse" />
+        <wsdl:operation name="getNumProcediments" parameterOrder="in0">
+            <wsdl:input message="intf:getNumProcedimentsRequest" name="getNumProcedimentsRequest" />
+            <wsdl:output message="intf:getNumProcedimentsResponse" name="getNumProcedimentsResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="getNumFitxes" parameterOrder="in0">
+            <wsdl:input message="intf:getNumFitxesRequest" name="getNumFitxesRequest" />
+            <wsdl:output message="intf:getNumFitxesResponse" name="getNumFitxesResponse" />
         </wsdl:operation>
 		<wsdl:operation name="obtenirMateria" parameterOrder="in0">
 			<wsdl:input message="intf:obtenirMateriaRequest" name="obtenirMateriaRequest" />
@@ -1283,6 +1290,17 @@
             <wsdl:output name="getNumProcedimentsResponse">
                 <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
                     namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getNumFitxes">
+            <wsdlsoap:operation soapAction="" />
+            <wsdl:input name="getNumFitxesRequest">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                               namespace="http://intf.ejb.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+            </wsdl:input>
+            <wsdl:output name="getNumFitxesResponse">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                               namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
             </wsdl:output>
         </wsdl:operation>
 		<wsdl:operation name="obtenirMateria">
@@ -2000,7 +2018,7 @@
 	<wsdl:service name="RolsacQueryServiceEJBRemoteService">
 		<wsdl:port binding="intf:RolsacWSSoapBinding" name="RolsacWS">
 			<wsdlsoap:address
-				location="https://localhost:8443/sacws-api/services/RolsacWS" />
+				location="https://192.168.80.146:8443/sacws-api/services/RolsacWS" />
 		</wsdl:port>
 	</wsdl:service>
 	

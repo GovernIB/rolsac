@@ -634,4 +634,12 @@ public class RolsacQueryServiceEJBStrategy implements RolsacQueryServiceStrategy
         }
     }
 
+    public Integer getNumFitxes(FitxaCriteria fitxaCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.getNumFitxes(fitxaCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
+    }
+
 }

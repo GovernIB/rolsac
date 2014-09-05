@@ -213,5 +213,6 @@ public interface RolsacQueryService {
     IniciacioQueryServiceAdapter obtenirTipusIniciacio(IniciacioCriteria iniciacioCriteria) throws QueryServiceException;
     
     List<IniciacioQueryServiceAdapter> llistarTipusIniciacions(IniciacioCriteria iniciacioCriteria) throws QueryServiceException;
-    
+
+    int getNumFitxes(FitxaCriteria fitxaCriteria) throws QueryServiceException;
 }

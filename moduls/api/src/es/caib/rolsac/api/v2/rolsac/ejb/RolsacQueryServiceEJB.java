@@ -3957,4 +3957,59 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 	}
 
+    /**
+     * Cuenta fitxas.
+     * @param fitxaCriteria
+     * @return int
+     *
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public int getNumFitxes(FitxaCriteria fitxaCriteria) {
+
+        Integer numResultats = -1;
+        List<CriteriaObject> criteris = new ArrayList<CriteriaObject>();
+        Session session = null;
+
+        try {
+            List<FromClause> entities = new ArrayList<FromClause>();
+            entities.add(new FromClause(HQL_FITXA_CLASS, HQL_FITXA_ALIAS));
+
+            QueryBuilder qb = new QueryBuilder(
+                    HQL_FITXA_ALIAS,
+                    entities,
+                    fitxaCriteria.getIdioma(),
+                    HQL_TRADUCCIONES_ALIAS,
+                    true);
+
+            FitxaUtils.parseActiu(criteris, fitxaCriteria, HQL_FITXA_ALIAS, qb);
+
+            criteris.addAll(BasicUtils.parseCriterias(
+                    FitxaCriteria.class,
+                    HQL_FITXA_ALIAS,
+                    HQL_TRADUCCIONES_ALIAS,
+                    fitxaCriteria));
+
+            qb.extendCriteriaObjects(criteris);
+
+            session = getSession();
+            Query query = qb.createQuery(session);
+            numResultats = ((Integer) query.uniqueResult()).intValue();
+
+        } catch (HibernateException e) {
+            log.error(e);
+            throw new EJBException(e);
+        }  catch (QueryBuilderException e) {
+            log.error(e);
+            throw new EJBException(e);
+        } catch (CriteriaObjectParseException e) {
+            log.error(e);
+            throw new EJBException(e);
+        } finally {
+            close(session);
+        }
+
+        return numResultats;
+    }
+
 }

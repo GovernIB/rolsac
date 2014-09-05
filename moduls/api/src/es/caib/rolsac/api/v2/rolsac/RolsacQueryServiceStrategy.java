@@ -212,4 +212,6 @@ public interface RolsacQueryServiceStrategy {
     
     List<IniciacioDTO> llistarTipusIniciacions(IniciacioCriteria iniciacioCriteria) throws StrategyException;
 
+    Integer getNumFitxes(FitxaCriteria fitxaCriteria) throws StrategyException;
+
 }

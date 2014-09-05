@@ -1,5 +1,6 @@
 package es.caib.rolsac.api.v2.test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
@@ -16,7 +17,6 @@ import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalQueryServiceAdapter;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
-import es.caib.rolsac.api.v2.fitxa.FitxaOrdenacio;
 import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria;
 import es.caib.rolsac.api.v2.fitxaUA.FitxaUAQueryServiceAdapter;
@@ -255,14 +255,32 @@ public class FitxaQueryServiceTest {
     
     @Test
     public void obtenirImatge() {
+
+        List<String> lista = new ArrayList<String>();
+        lista.add(Constants.ID_FITXA_EXISTENT);
+        lista.add("1143969");
+        lista.add("1144071");
+        lista.add("1144276");
+        lista.add("1144639");
+        lista.add("1144659");
+
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
-        fitxaCriteria.setId(Constants.ID_FITXA_EXISTENT);
+//        fitxaCriteria.setId(Constants.ID_FITXA_EXISTENT);
         fitxaCriteria.setIdioma("ca");
         try {
+            for (String l : lista) {
+                fitxaCriteria.setId(l);
+                FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
+                Assert.assertNotNull(fitxa);
+                ArxiuQueryServiceAdapter imatge = fitxa.obtenirImatge();
+                Assert.assertNotNull(imatge);
+            }
+            fitxaCriteria.setId("1143961");
             FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
             Assert.assertNotNull(fitxa);
             ArxiuQueryServiceAdapter imatge = fitxa.obtenirImatge();
             Assert.assertNotNull(imatge);
+
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }

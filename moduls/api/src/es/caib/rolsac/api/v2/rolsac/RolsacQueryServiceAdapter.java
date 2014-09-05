@@ -899,4 +899,13 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
         }
 	}
 
+    public int getNumFitxes(FitxaCriteria fitxaCriteria) throws QueryServiceException {
+        try {
+            Integer num = rolsacQueryServiceStrategy.getNumFitxes(fitxaCriteria);
+            return num;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.COUNT_GETTER + "fitxas.", e);
+        }
+    }
+
 }

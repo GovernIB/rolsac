@@ -969,7 +969,17 @@ public class RolsacQueryServiceWSStrategy implements RolsacQueryServiceStrategy 
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
-		
 	}
+
+    public Integer getNumFitxes(FitxaCriteria fitxaCriteria) throws StrategyException {
+
+        try {
+            return gateway.getNumFitxes(fitxaCriteria);
+        } catch (QueryServiceException qse) {
+            throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
 	
 }

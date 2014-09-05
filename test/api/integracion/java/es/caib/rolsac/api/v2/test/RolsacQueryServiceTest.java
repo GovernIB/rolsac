@@ -397,7 +397,7 @@ public class RolsacQueryServiceTest {
     @Test
     public void recuperarTramits() {
         TramitCriteria tramitCriteria = new TramitCriteria();
-        tramitCriteria.setT_nombre("%sol·licitud%");
+        tramitCriteria.setT_nombre("%solï¿½licitud%");
         tramitCriteria.setTamany("10");
         tramitCriteria.setIdioma("ca");
         tramitCriteria.setOrdenar(new TramitOrdenacio[] {TramitOrdenacio.orden_desc});
@@ -410,7 +410,7 @@ public class RolsacQueryServiceTest {
         Assert.assertTrue(tramits.size() > 0);
         Assert.assertTrue(tramits.size() <= 10);
         for (TramitQueryServiceAdapter t: tramits) {
-            Assert.assertTrue(t.getNombre().toLowerCase().contains("sol·licitud"));
+            Assert.assertTrue(t.getNombre().toLowerCase().contains("solï¿½licitud"));
         }
     }
     
@@ -1565,5 +1565,23 @@ public class RolsacQueryServiceTest {
     //TODO: Pendientes de implementar hasta que se creen su API
     // obtenirExcepcioDocumentacio()
     // llistarExcepcionsDocumentacio()
+
+    /**
+     * Cas d'us: Retorna la cantidat de procediments segons un criteria
+     */
+    @Test
+    public void getNumFitxes() {
+
+        FitxaCriteria fitxaCriteria = new FitxaCriteria();
+        fitxaCriteria.setIdioma("ca");
+        fitxaCriteria.setActiu(true);
+        int num = 0;
+        try {
+            num = rolsacQS.getNumFitxes(fitxaCriteria);
+            Assert.assertTrue(num > 0);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
+    }
     
 }

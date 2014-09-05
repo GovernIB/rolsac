@@ -466,7 +466,7 @@ public class UnitatAdministrativaQueryServiceTest {
     @Test
     public void llistarDescendents() {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("3");
+        unitatAdministrativaCriteria.setId("1");
         try {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             Assert.assertNotNull(unitatAdministrativa);

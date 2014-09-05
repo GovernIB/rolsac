@@ -877,5 +877,18 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
+
+    @SuppressWarnings("unchecked")
+    public int getNumFitxes(FitxaCriteria fitxaCriteria) throws DelegateException {
+
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.getNumFitxes(fitxaCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
     
 }

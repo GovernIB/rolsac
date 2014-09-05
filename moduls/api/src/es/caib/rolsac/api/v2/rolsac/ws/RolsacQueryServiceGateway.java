@@ -654,5 +654,12 @@ public class RolsacQueryServiceGateway {
 		
 		return Arrays.asList(stub.llistarTipusIniciacions(iniciacioCriteria));
 	}
+
+    public int getNumFitxes(
+            FitxaCriteria fitxaCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return stub.getNumFitxes(fitxaCriteria);
+    }
 	
 }

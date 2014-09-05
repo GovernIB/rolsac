@@ -48,6 +48,11 @@
             soapAction="">
             <parameter qname="in0" type="tns:ProcedimentCriteria" xmlns:tns="http://procediment.v2.api.rolsac.caib.es" />
         </operation>
+        <operation name="getNumFitxes" qname="operNS:getNumFitxes" xmlns:operNS="http://intf.ejb.rolsac.v2.api.rolsac.caib.es"
+                   returnQName="getNumFitxesReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema"
+                   soapAction="">
+            <parameter qname="in0" type="tns:FitxaCriteria" xmlns:tns="http://fitxa.v2.api.rolsac.caib.es" />
+        </operation>
         <operation name="obtenirMateria" qname="operNS:obtenirMateria" xmlns:operNS="http://intf.ejb.rolsac.v2.api.rolsac.caib.es"
             returnQName="obtenirMateriaReturn" returnType="rtns:MateriaDTO" xmlns:rtns="http://materia.v2.api.rolsac.caib.es"
             soapAction="">
@@ -368,7 +373,7 @@
 		</operation>
 		
         <parameter name="allowedMethods"
-            value="getNumProcediments obtenirNormativa obtenirDocumentTramit obtenirDocument llistarPerfils llistarDocuments llistarMateries obtenirEnllac obtenirProcediment llistarTramit llistarDocumentTramit obtenirFamilia llistarFormularis obtenirEdifici llistarUnitatsMateries llistarPersonal llistarTaxes obtenirMateria obtenirMateriaAgrupacio obtenirFitxa llistarPublicsObjectius llistarEspaisTerritorials obtenirTaxa llistarButlletins llistarFitxes obtenirSeccio llistarIconesMateries obtenirPersonal llistarTipus obtenirPerfil obtenirEspaiTerritorial llistarTipusAfectacio llistarProcediments obtenirFormulari llistarNormatives obtenirButlleti llistarEnllacos obtenirIconaMateria obtenirAgrupacioFetVital llistarMateriesAgrupacions obtenirUnitatMateria obtenirTipusAfectacio llistarFamilies obtenirPublicObjectiu obtenirUsuari llistarEdificis obtenirAgrupacioMateria llistarIconesFamilies llistarAgrupacionsFetsVitals obtenirFetVital obtenirUnitatAdministrativa llistarUnitatsAdministratives llistarAgrupacionsMateries llistarSeccions obtenirTipus llistarFetsVitals obtenirFitxaUA llistarFitxesUA obtenirTramit obtenirIconaFamilia llistarUsuaris llistarTipusIniciacions obtenirTipusIniciacio obtenirCatalegDocuments llistarCatalegsDocuments obtenirIdioma llistarIdiomes" />
+            value="getNumProcediments getNumFitxes obtenirNormativa obtenirDocumentTramit obtenirDocument llistarPerfils llistarDocuments llistarMateries obtenirEnllac obtenirProcediment llistarTramit llistarDocumentTramit obtenirFamilia llistarFormularis obtenirEdifici llistarUnitatsMateries llistarPersonal llistarTaxes obtenirMateria obtenirMateriaAgrupacio obtenirFitxa llistarPublicsObjectius llistarEspaisTerritorials obtenirTaxa llistarButlletins llistarFitxes obtenirSeccio llistarIconesMateries obtenirPersonal llistarTipus obtenirPerfil obtenirEspaiTerritorial llistarTipusAfectacio llistarProcediments obtenirFormulari llistarNormatives obtenirButlleti llistarEnllacos obtenirIconaMateria obtenirAgrupacioFetVital llistarMateriesAgrupacions obtenirUnitatMateria obtenirTipusAfectacio llistarFamilies obtenirPublicObjectiu obtenirUsuari llistarEdificis obtenirAgrupacioMateria llistarIconesFamilies llistarAgrupacionsFetsVitals obtenirFetVital obtenirUnitatAdministrativa llistarUnitatsAdministratives llistarAgrupacionsMateries llistarSeccions obtenirTipus llistarFetsVitals obtenirFitxaUA llistarFitxesUA obtenirTramit obtenirIconaFamilia llistarUsuaris llistarTipusIniciacions obtenirTipusIniciacio obtenirCatalegDocuments llistarCatalegsDocuments obtenirIdioma llistarIdiomes" />
 
         <arrayMapping xmlns:ns="http://ws.rolsac.v2.api.rolsac.caib.es" qname="ns:ArrayOfPerfilDTO"
             type="java:es.caib.rolsac.api.v2.perfil.PerfilDTO[]" innerType="cmp-ns:PerfilDTO" xmlns:cmp-ns="http://perfil.v2.api.rolsac.caib.es"
