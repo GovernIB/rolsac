@@ -4,6 +4,7 @@ import java.util.List;
 
 import es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria;
 import es.caib.rolsac.api.v2.fitxaUA.FitxaUAOrdenacio;
+import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaOrdenacio;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -143,8 +144,37 @@ public class SeccioQueryServiceTest {
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
-    }    
-    
+    }
+
+    @Test
+    public void llistarOrdenarFitxes2() {
+
+        SeccioCriteria seccioCriteria = new SeccioCriteria();
+        seccioCriteria.setId("171215");
+        try {
+            SeccioQueryServiceAdapter seccio = rolsacQS.obtenirSeccio(seccioCriteria);
+            Assert.assertNotNull(seccio);
+
+            FitxaCriteria fitxaCriteria = new FitxaCriteria();
+            fitxaCriteria.setIdioma("ca");
+            FitxaOrdenacio[] ordenacio = {
+                    FitxaOrdenacio.fechaActualizacion_asc
+            };
+            fitxaCriteria.setOrdenar(ordenacio);
+
+            FitxaUACriteria fitxaUACriteria = new FitxaUACriteria();
+            FitxaUAOrdenacio[] fitxaUAOrdenacio = new FitxaUAOrdenacio[] {
+                    FitxaUAOrdenacio.ordenseccion_desc
+            };
+            fitxaUACriteria.setOrdenar(fitxaUAOrdenacio);
+
+            List<FitxaQueryServiceAdapter> listFitxaQueryServiceAdapter = seccio.llistarFitxes(fitxaCriteria, fitxaUACriteria);
+            Assert.assertTrue(listFitxaQueryServiceAdapter.size() > 0);
+
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
+    }
     
     @Test
     public void llistarPares() {
@@ -182,13 +212,18 @@ public class SeccioQueryServiceTest {
             SeccioQueryServiceAdapter seccio = rolsacQS.obtenirSeccio(seccioCriteria);
             Assert.assertNotNull(seccio);
 
+            UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
+            UnitatAdministrativaOrdenacio[] unitatAdministrativaOrdenacio = new UnitatAdministrativaOrdenacio[] {
+                    UnitatAdministrativaOrdenacio.responsable_asc
+            };
+            unitatAdministrativaCriteria.setOrdenar(unitatAdministrativaOrdenacio);
             FitxaUACriteria fitxaUACriteria = new FitxaUACriteria();
             FitxaUAOrdenacio[] fitxaUAOrdenacio = new FitxaUAOrdenacio[] {
                     FitxaUAOrdenacio.ordenseccion_desc
             };
             fitxaUACriteria.setOrdenar(fitxaUAOrdenacio);
 
-            List<UnitatAdministrativaQueryServiceAdapter> listUaQueryServiceAdapter = seccio.llistarUnitatsAdministratives(new UnitatAdministrativaCriteria(), fitxaUACriteria);
+            List<UnitatAdministrativaQueryServiceAdapter> listUaQueryServiceAdapter = seccio.llistarUnitatsAdministratives(unitatAdministrativaCriteria, fitxaUACriteria);
             Assert.assertTrue(listUaQueryServiceAdapter.size() > 0);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());

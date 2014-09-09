@@ -17,7 +17,6 @@ import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Periodo;
 
 import es.caib.rolsac.api.v2.general.co.CriteriaObject;
-import es.caib.rolsac.api.v2.query.Order.DIRECTION;
 import es.caib.rolsac.api.v2.query.Restriction.LOGIC;
 
 public class QueryBuilder {
@@ -35,6 +34,7 @@ public class QueryBuilder {
     private int maxResults;
     private int firstResult;
     private HashMap<String, Object> namedParameters;
+    private boolean distinct = true;
 
     /**
      * Use case:
@@ -92,21 +92,28 @@ public class QueryBuilder {
     }
 
     public Query createQuery(Session session) throws HibernateException {
-        Query query = session.createQuery(getHQL());
+        Query query = session.createQuery(getHQL(true));
         prepareQuery(query);
         log.debug(this.toString());
         return query;
     }
 
-    private String getHQL() {
+    public Query createQuery(Session session, boolean distinct) throws HibernateException {
+        this.distinct = distinct;
+        Query query = session.createQuery(getHQL(distinct));
+        prepareQuery(query);
+        log.debug(this.toString());
+        return query;
+    }
+
+    private String getHQL(boolean puedoHacerDistinct) {
         StringBuilder hql = new StringBuilder("SELECT ");
         if (countFlag) {
             hql.append("COUNT(");
         }
-        
-        boolean puedoHacerDistinct = true;
+
     	// Si no hay joins, podemos hacer un distinct de forma segura
-       	// Si no hay orderBy, también podemos hacer el distinct de forma segura        	
+       	// Si no hay orderBy, tambiï¿½n podemos hacer el distinct de forma segura        	
         if (fromClauses.size() > 1 && StringUtils.isNotBlank(orderBy)) {
         	//Si hay orderBy y joins, hay que evaluar los orderBy para ver si podemos eliminar las tablas con el distinct
             List<String> ordres = Arrays.asList(orderBy.split(","));
@@ -354,7 +361,7 @@ public class QueryBuilder {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("HQL: ").append(getHQL()).append("\nParameters:\n");
+        StringBuilder sb = new StringBuilder("HQL: ").append(getHQL(this.distinct)).append("\nParameters:\n");
         for (String key : namedParameters.keySet()) {
             sb.append("\tkey: " + key + ", value: " + namedParameters.get(key) + "\n");
         }

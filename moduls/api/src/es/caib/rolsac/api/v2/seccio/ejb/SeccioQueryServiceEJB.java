@@ -26,7 +26,6 @@ import es.caib.rolsac.api.v2.general.BasicUtils;
 import es.caib.rolsac.api.v2.general.HibernateEJB;
 import es.caib.rolsac.api.v2.general.co.CriteriaObject;
 import es.caib.rolsac.api.v2.general.co.CriteriaObjectParseException;
-import es.caib.rolsac.api.v2.materia.ejb.MateriaQueryServiceEJB;
 import es.caib.rolsac.api.v2.query.FromClause;
 import es.caib.rolsac.api.v2.query.QueryBuilder;
 import es.caib.rolsac.api.v2.query.QueryBuilderException;
@@ -61,7 +60,7 @@ public class SeccioQueryServiceEJB extends HibernateEJB {
 	private static final String HQL_FITXA_CLASS = HQL_SECCIO_FITXA_ALIAS + ".ficha";
 	private static final String HQL_FITXA_ALIAS = "f";
 	private static final String HQL_UA_CLASS = HQL_SECCIO_FITXA_ALIAS + ".unidadAdministrativa";
-	private static final String HQL_UA_ALIAS = "f";
+	private static final String HQL_UA_ALIAS = "ua";
 	private static final String HQL_FILLES_CLASS = HQL_SECCIO_ALIAS + ".hijos";
 	private static final String HQL_FILLES_ALIAS = "sf";
 	private static final String HQL_TRADUCCIONES_ALIAS = "trad";
@@ -333,25 +332,27 @@ public class SeccioQueryServiceEJB extends HibernateEJB {
             qb.extendCriteriaObjects(criteris);
 
 			session = getSession();
-			Query query = qb.createQuery(session);
+			Query query = qb.createQuery(session, false);
 			List<Ficha> fitxesResult = (List<Ficha>) query.list();
 
 			for (Ficha fitxa : fitxesResult) {
-					fitxesDTOList.add(
-							(FitxaDTO)BasicUtils.entityToDTO(
-									FitxaDTO.class,  
-									fitxa, 
-									fitxaCriteria.getIdioma()
-									)
-							);
-			}
+                fitxesDTOList.add(
+                        (FitxaDTO) BasicUtils.entityToDTO(
+                                FitxaDTO.class,
+                                fitxa,
+                                fitxaCriteria.getIdioma()
+                        )
+                );
+            }
 
 		} catch (HibernateException e) {
 			log.error(e);
 		} catch (CriteriaObjectParseException e) {
 			log.error(e);
 		} catch (QueryBuilderException e) {
-			log.error(e);
+            log.error(e);
+        } catch (Exception e) {
+            log.error(e);
 		} finally {
 			close(session);
 		}
@@ -376,7 +377,7 @@ public class SeccioQueryServiceEJB extends HibernateEJB {
 		Session session = null;
 
 		try {
-			criteris = BasicUtils.parseCriterias(UnitatAdministrativaCriteria.class, HQL_FILLES_ALIAS, HQL_TRADUCCIONES_ALIAS, unitatAdministrativaCriteria);
+			criteris = BasicUtils.parseCriterias(UnitatAdministrativaCriteria.class, HQL_UA_ALIAS, HQL_TRADUCCIONES_ALIAS, unitatAdministrativaCriteria);
 			List<FromClause> entities = new ArrayList<FromClause>();
 			entities.add(new FromClause(HQL_SECCIO_CLASS, HQL_SECCIO_ALIAS));
 			entities.add(new FromClause(HQL_SECCIO_FITXA_CLASS, HQL_SECCIO_FITXA_ALIAS));
@@ -393,7 +394,7 @@ public class SeccioQueryServiceEJB extends HibernateEJB {
             qb.extendCriteriaObjects(criteris);
 
 			session = getSession();
-			Query query = qb.createQuery(session);
+			Query query = qb.createQuery(session, false);
 			List<UnidadAdministrativa> uaResult = (List<UnidadAdministrativa>) query.list();
 			for (UnidadAdministrativa unitatAdministrativa : uaResult) {
 				uaDTOList.add((UnitatAdministrativaDTO)BasicUtils.entityToDTO(

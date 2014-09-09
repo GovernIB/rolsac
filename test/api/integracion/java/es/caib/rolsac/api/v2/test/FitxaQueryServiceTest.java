@@ -263,6 +263,18 @@ public class FitxaQueryServiceTest {
         lista.add("1144276");
         lista.add("1144639");
         lista.add("1144659");
+        lista.add("1144891");
+        lista.add("1145195");
+        lista.add("1145304");
+        lista.add("1146032");
+        lista.add("1146148");
+        lista.add("1146444");
+        lista.add("1147224");
+        lista.add("1147463");
+        lista.add("1147830");
+        lista.add("1148429");
+        lista.add("1148469");
+        lista.add("1148722");
 
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
 //        fitxaCriteria.setId(Constants.ID_FITXA_EXISTENT);
@@ -275,11 +287,6 @@ public class FitxaQueryServiceTest {
                 ArxiuQueryServiceAdapter imatge = fitxa.obtenirImatge();
                 Assert.assertNotNull(imatge);
             }
-            fitxaCriteria.setId("1143961");
-            FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
-            Assert.assertNotNull(fitxa);
-            ArxiuQueryServiceAdapter imatge = fitxa.obtenirImatge();
-            Assert.assertNotNull(imatge);
 
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());

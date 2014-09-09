@@ -465,13 +465,19 @@ public class UnitatAdministrativaQueryServiceTest {
     
     @Test
     public void llistarDescendents() {
+
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-        unitatAdministrativaCriteria.setId("1");
         try {
-            UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
-            Assert.assertNotNull(unitatAdministrativa);
-            List<Long> listQueryServiceAdapter = unitatAdministrativa.llistarDescendents();
-            Assert.assertTrue(listQueryServiceAdapter.size() > 0);
+            for (int i = 1; i < 20000; i++) {
+                unitatAdministrativaCriteria.setId(String.valueOf(i));
+                UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
+                if (unitatAdministrativa != null) {
+                    Assert.assertNotNull(unitatAdministrativa);
+                    List<Long> listQueryServiceAdapter = unitatAdministrativa.llistarDescendents();
+                    Assert.assertTrue(listQueryServiceAdapter.size() > 0);
+                }
+            }
+
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }

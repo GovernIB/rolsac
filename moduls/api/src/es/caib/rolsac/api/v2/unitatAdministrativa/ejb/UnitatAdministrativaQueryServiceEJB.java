@@ -682,7 +682,7 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
             qb.extendCriteriaObjects(criteris);
 
 			session = getSession();
-			Query query = qb.createQuery(session);
+			Query query = qb.createQuery(session, false);
 			List<Ficha> fitxesResult = (List<Ficha>) query.list();
 
 			for ( Ficha fitxa : fitxesResult ) {
@@ -700,7 +700,9 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 		} catch (CriteriaObjectParseException e) {
 			log.error(e);
 		} catch (QueryBuilderException e) {
-			log.error(e);
+            log.error(e);
+        } catch (Exception e) {
+            log.error(e);
 		} finally {
 			close(session);
 		}
