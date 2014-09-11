@@ -39,6 +39,8 @@ public interface UnitatAdministrativaQueryService {
     
     public List<Long> llistarDescendents() throws QueryServiceException;
 
+    public List<Long> llistarIdsDescendents() throws QueryServiceException;
+
     public List<EdificiQueryServiceAdapter> llistarEdificis(EdificiCriteria edificiCriteria) throws QueryServiceException;
 
     public List<PersonalQueryServiceAdapter> llistarPersonal(PersonalCriteria personalCriteria) throws QueryServiceException;

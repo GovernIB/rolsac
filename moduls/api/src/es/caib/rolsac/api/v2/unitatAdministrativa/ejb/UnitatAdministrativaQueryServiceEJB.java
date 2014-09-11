@@ -85,6 +85,7 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 	private static final String HQL_UA_ALIAS = "ua";
 	private static final String HQL_UA_HIJOS_CLASS = HQL_UA_ALIAS + ".hijos";
 	private static final String HQL_UA_HIJOS_ALIAS = "hua";
+    private static final String HQL_UA_HIJOS_ID_ALIAS = HQL_UA_HIJOS_ALIAS + ".id";
 	private static final String HQL_EDIFICI_CLASS = HQL_UA_ALIAS + ".edificios";
 	private static final String HQL_EDIFICI_ALIAS = "ed";
 	private static final String HQL_PERSONAL_CLASS = HQL_UA_ALIAS + ".personal";
@@ -285,6 +286,87 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 			obtenirDescendents(uaDto, descendientes);
 		}
 	}
+
+    /**
+     * Obtiene los ids de todos los descendientes de una UA
+     * @param uaId
+     * @return List<Long>
+     *
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public Long[] llistarIdsDescendents(long uaId) {
+
+        Long[] uasArray = new Long[0];
+        try {
+            List<Long> uasList = new ArrayList<Long>();
+            UnitatAdministrativaCriteria uaCriteria = new UnitatAdministrativaCriteria();
+            uaCriteria.setId(String.valueOf(uaId));
+            RolsacQueryServiceEJB ejb = new RolsacQueryServiceEJB();
+            UnitatAdministrativaDTO uaDto = ejb.obtenirUnitatAdministrativa(uaCriteria);
+            obtenirIdsDescendents(uaDto.getId(), uasList);
+            uasArray = new Long[uasList.size()];
+            int i = 0;
+            for (Long ua : uasList) {
+                uasArray[i] = ua;
+                i++;
+            }
+
+        } catch (QueryServiceException e) {
+            log.error(e);
+        }
+
+        return uasArray;
+    }
+
+    // Obtiene recursivamente los descendientes de la UA
+    private void obtenirIdsDescendents(Long ua, List<Long> descendientes) throws QueryServiceException {
+
+        if (ua != null) {
+            descendientes.add(ua);
+            List<Long> uas = llistarIdsFilles(ua, new UnitatAdministrativaCriteria());
+            for (Long uaDto : uas) {
+                obtenirIdsDescendents(uaDto, descendientes);
+            }
+        }
+    }
+
+    private List<Long> llistarIdsFilles(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria) {
+
+        List<Long> unitatAdministrativaResult = new ArrayList<Long>();
+        List<CriteriaObject> criteris;
+        Session session = null;
+        try {
+            criteris = BasicUtils.parseCriterias(UnitatAdministrativaCriteria.class, HQL_UA_HIJOS_ALIAS, HQL_TRADUCCIONES_ALIAS, unitatAdministrativaCriteria);
+            List<FromClause> entities = new ArrayList<FromClause>();
+            entities.add(new FromClause(HQL_UA_CLASS, HQL_UA_ALIAS));
+            entities.add(new FromClause(HQL_UA_HIJOS_CLASS, HQL_UA_HIJOS_ALIAS));
+            QueryBuilder qb = new QueryBuilder(HQL_UA_HIJOS_ID_ALIAS, entities, null, null);
+            qb.extendCriteriaObjects(criteris);
+
+            UnitatAdministrativaCriteria uac = new UnitatAdministrativaCriteria();
+            uac.setId(String.valueOf(id));
+            criteris = BasicUtils.parseCriterias(UnitatAdministrativaCriteria.class, HQL_UA_ALIAS, uac);
+            qb.extendCriteriaObjects(criteris);
+
+            session = getSession();
+            Query query = qb.createQuery(session);
+            unitatAdministrativaResult = (List<Long>) query.list();
+
+        } catch (HibernateException e) {
+            log.error(e);
+        } catch (CriteriaObjectParseException e) {
+            log.error(e);
+        } catch (QueryBuilderException e) {
+            log.error(e);
+        } catch (Exception e) {
+            log.error(e);
+        } finally {
+            close(session);
+        }
+
+        return unitatAdministrativaResult;
+    }
 
 	/**
 	 * Obtiene listado de edificios.

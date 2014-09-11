@@ -134,6 +134,9 @@
     <wsdl:message name="llistarDescendentsRequest">
         <wsdl:part name="in0" type="xsd:long" />
     </wsdl:message>
+    <wsdl:message name="llistarIdsDescendentsRequest">
+        <wsdl:part name="in0" type="xsd:long" />
+    </wsdl:message>
 	<wsdl:message name="llistarPersonalResponse">
 		<wsdl:part name="llistarPersonalReturn" type="impl:ArrayOf_xsd_anyType" />
 	</wsdl:message>
@@ -218,6 +221,9 @@
 	</wsdl:message>
     <wsdl:message name="llistarDescendentsResponse">
         <wsdl:part name="llistarDescendentsReturn" type="impl:ArrayOfUnitatAdministrativaDTO" />
+    </wsdl:message>
+    <wsdl:message name="llistarIdsDescendentsResponse">
+        <wsdl:part name="llistarIdsDescendentsReturn" type="impl:ArrayOf_xsd_anyType" />
     </wsdl:message>
 	<wsdl:message name="obtenirLogosRequest">
 		<wsdl:part name="in0" type="xsd:long" />
@@ -325,20 +331,24 @@
 			<wsdl:output message="impl:getNumNormativesResponse"
 				name="getNumNormativesResponse" />
 		</wsdl:operation>
-		<wsdl:operation name="obtenirTractament"
+        <wsdl:operation name="llistarDescendents" parameterOrder="in0">
+            <wsdl:input message="impl:llistarDescendentsRequest" name="llistarDescendentsRequest" />
+            <wsdl:output message="impl:llistarDescendentsResponse" name="llistarDescendentsResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="llistarIdsDescendents" parameterOrder="in0">
+            <wsdl:input message="impl:llistarIdsDescendentsRequest" name="llistarIdsDescendentsRequest" />
+            <wsdl:output message="impl:llistarIdsDescendentsResponse" name="llistarIdsDescendentsResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="obtenirTractament"
 			parameterOrder="in0 in1">
 			<wsdl:input message="impl:obtenirTractamentRequest" name="obtenirTractamentRequest" />
 			<wsdl:output message="impl:obtenirTractamentResponse"
 				name="obtenirTractamentResponse" />
 		</wsdl:operation>
-		<wsdl:operation name="llistarFilles" parameterOrder="in0 in1">
+        <wsdl:operation name="llistarFilles" parameterOrder="in0 in1">
 			<wsdl:input message="impl:llistarFillesRequest" name="llistarFillesRequest" />
 			<wsdl:output message="impl:llistarFillesResponse" name="llistarFillesResponse" />
 		</wsdl:operation>
-        <wsdl:operation name="llistarDescendents" parameterOrder="in0">
-            <wsdl:input message="impl:llistarDescendentsRequest" name="llistarDescendentsRequest" />
-            <wsdl:output message="impl:llistarDescendentsResponse" name="llistarDescendentsResponse" />
-        </wsdl:operation>
 		<wsdl:operation name="llistarTramits" parameterOrder="in0 in1">
 			<wsdl:input message="impl:llistarTramitsRequest" name="llistarTramitsRequest" />
 			<wsdl:output message="impl:llistarTramitsResponse" name="llistarTramitsResponse" />
@@ -599,6 +609,19 @@
                 <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
                     namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
                     use="encoded" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="llistarIdsDescendents">
+            <wsdlsoap:operation soapAction="" />
+            <wsdl:input name="llistarIdsDescendentsRequest">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                               namespace="http://intf.ejb.unitatAdministrativa.v2.api.rolsac.caib.es"
+                               use="encoded" />
+            </wsdl:input>
+            <wsdl:output name="llistarIdsDescendentsResponse">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                               namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
+                               use="encoded" />
             </wsdl:output>
         </wsdl:operation>
 		<wsdl:operation name="llistarTramits">

@@ -160,6 +160,14 @@ public class UnitatAdministrativaQueryServiceGateway {
         return descendents;
     }
 
+    public List<Long> llistarIdsDescendents(Long uaId) throws RemoteException, APIException {
+        List<Long> descendents = new ArrayList<Long>();
+        for (Object o: stub.llistarIdsDescendents(uaId)) {
+            descendents.add((Long) o);
+        }
+        return descendents;
+    }
+
 	public List<EdificiDTO> llistarEdificis(long id,
 			EdificiCriteria edificiCriteria) throws RemoteException, APIException {
 

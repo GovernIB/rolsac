@@ -2346,6 +2346,12 @@
         	soapAction="">
         	<parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
         </operation>
+        <operation name="llistarIdsDescendents" qname="operNS:llistarIdsDescendents" xmlns:operNS="http://intf.ejb.unitatAdministrativa.v2.api.rolsac.caib.es"
+                   returnQName="llistarIdsDescendentsReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
+                   returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema"
+                   soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        </operation>
         <operation name="llistarTramits" qname="operNS:llistarTramits" xmlns:operNS="http://intf.ejb.unitatAdministrativa.v2.api.rolsac.caib.es"
             returnQName="llistarTramitsReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
             returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="">
@@ -2423,7 +2429,7 @@
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
         </operation>
         <parameter name="allowedMethods"
-            value="getNumPersonal obtenirEspaiTerritorial obtenirTractament llistarProcediments llistarFilles getNumTramits llistarNormatives getNumMateries getNumProcediments llistarMateries getNumEdificis llistarEdificis getNumFilles getNumNormatives obtenirFotog obtenirLogov llistarPersonal llistarSeccions obtenirFotop llistarTramits obtenirLogos obtenirLogot getNumSeccions obtenirLogoh llistarFitxes obtenirPare getNumFitxes getNumUsuaris llistarUsuaris llistarDescendents" />
+            value="getNumPersonal obtenirEspaiTerritorial obtenirTractament llistarProcediments llistarFilles getNumTramits llistarNormatives getNumMateries getNumProcediments llistarMateries getNumEdificis llistarEdificis getNumFilles getNumNormatives obtenirFotog obtenirLogov llistarPersonal llistarSeccions obtenirFotop llistarTramits obtenirLogos obtenirLogot getNumSeccions obtenirLogoh llistarFitxes obtenirPare getNumFitxes getNumUsuaris llistarUsuaris llistarDescendents llistarIdsDescendents" />
 
         <typeMapping xmlns:ns="http://usuari.v2.api.rolsac.caib.es" qname="ns:UsuariCriteria"
             type="java:es.caib.rolsac.api.v2.usuari.UsuariCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"

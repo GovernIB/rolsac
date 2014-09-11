@@ -1,6 +1,7 @@
 package es.caib.rolsac.api.v2.unitatAdministrativa.ejb;
 
 import java.rmi.RemoteException;
+import java.util.Arrays;
 import java.util.List;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
@@ -91,6 +92,18 @@ public class UnitatAdministrativaQueryServiceDelegate {
         try {
             UnitatAdministrativaQueryServiceEJBRemote ejb = unitatAdministrativaQueryServiceLocator.getUnitatAdministrativaQueryServiceEJB();
             return ejb.llistarDescendents(uaId);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Long> llistarIdsDescendents(long uaId) throws DelegateException {
+        try {
+            UnitatAdministrativaQueryServiceEJBRemote ejb = unitatAdministrativaQueryServiceLocator.getUnitatAdministrativaQueryServiceEJB();
+            return Arrays.asList(ejb.llistarIdsDescendents(uaId));
         } catch (LocatorException e) {
             throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
         } catch (RemoteException e) {
