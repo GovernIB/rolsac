@@ -751,6 +751,10 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 			entities.add( new FromClause(HQL_FITXA_CLASS, HQL_FITXA_ALIAS) );
 			
 			QueryBuilder qb = new QueryBuilder( HQL_FITXA_ALIAS, entities, fitxaCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS );
+
+            criteris = BasicUtils.parseCriterias(FitxaUACriteria.class, HQL_FITXA_UA_ALIAS, fitxaUACriteria);
+            qb.extendCriteriaObjects(criteris);
+
 			FitxaUtils.parseActiu( criteris, fitxaCriteria, HQL_FITXA_ALIAS, qb );
 			criteris = BasicUtils.parseCriterias( FitxaCriteria.class, HQL_FITXA_ALIAS, HQL_TRADUCCIONES_ALIAS, fitxaCriteria );
 			qb.extendCriteriaObjects(criteris);
@@ -759,9 +763,6 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 			uac.setId(String.valueOf(id));
 			criteris = BasicUtils.parseCriterias( UnitatAdministrativaCriteria.class, HQL_UA_ALIAS, uac );
 			qb.extendCriteriaObjects(criteris);
-
-            criteris = BasicUtils.parseCriterias(FitxaUACriteria.class, HQL_FITXA_UA_ALIAS, fitxaUACriteria);
-            qb.extendCriteriaObjects(criteris);
 
 			session = getSession();
 			Query query = qb.createQuery(session, false);
