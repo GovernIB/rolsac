@@ -86,10 +86,10 @@ public interface RolsacQueryServiceStrategy {
 
     List<ButlletiDTO> llistarButlletins(ButlletiCriteria butlletiCriteria) throws StrategyException;
 
-    CatalegDocumentsDTO obtenirCatalegDocuments(CatalegDocumentsCriteria catalegDocumentsCriteria) throws StrategyException; 
-    
+    CatalegDocumentsDTO obtenirCatalegDocuments(CatalegDocumentsCriteria catalegDocumentsCriteria) throws StrategyException;
+
     List<CatalegDocumentsDTO> llistarCatalegsDocuments(CatalegDocumentsCriteria catalegDocumentsCriteria) throws StrategyException;
-    
+
     DocumentDTO obtenirDocument(DocumentCriteria documentCriteria) throws StrategyException;
 
     List<DocumentDTO> llistarDocuments(DocumentCriteria documentCriteria) throws StrategyException;
@@ -111,9 +111,9 @@ public interface RolsacQueryServiceStrategy {
     List<EspaiTerritorialDTO> llistarEspaisTerritorials(EspaiTerritorialCriteria espaiTerritorialCriteria) throws StrategyException;
 
     ExcepcioDocumentacioDTO obtenirExcepcioDocumentacio(ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria) throws StrategyException;
-    
+
     List<ExcepcioDocumentacioDTO> llistarExcepcionsDocumentacio(ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria) throws StrategyException;
-    
+
     FamiliaDTO obtenirFamilia(FamiliaCriteria familiaCriteria) throws StrategyException;
 
     List<FamiliaDTO> llistarFamilies(FamiliaCriteria familiaCriteria) throws StrategyException;
@@ -165,7 +165,7 @@ public interface RolsacQueryServiceStrategy {
     ProcedimentDTO obtenirProcediment(ProcedimentCriteria procedimentCriteria) throws StrategyException;
 
     List<ProcedimentDTO> llistarProcediments(ProcedimentCriteria procedimentCriteria) throws StrategyException;
-    
+
     Integer getNumProcediments(ProcedimentCriteria procedimentCriteria) throws StrategyException;
 
     PublicObjectiuDTO obtenirPublicObjectiu(PublicObjectiuCriteria publicObjectiuCriteria) throws StrategyException;
@@ -195,9 +195,9 @@ public interface RolsacQueryServiceStrategy {
     UsuariDTO obtenirUsuari(UsuariCriteria usuariCriteria) throws StrategyException;
 
     List<UsuariDTO> llistarUsuaris(UsuariCriteria usuariCriteria) throws StrategyException;
-    
+
     IdiomaDTO obtenirIdioma(IdiomaCriteria idiomaCriteria) throws StrategyException;
-    
+
     List<IdiomaDTO> llistarIdiomes(IdiomaCriteria idiomaCriteria) throws StrategyException;
 
     TipusDTO obtenirTipus(TipusCriteria tipusCriteria) throws StrategyException;
@@ -207,9 +207,11 @@ public interface RolsacQueryServiceStrategy {
     TipusAfectacioDTO obtenirTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria) throws StrategyException;
 
     List<TipusAfectacioDTO> llistarTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria) throws StrategyException;
-    
+
     IniciacioDTO obtenirTipusIniciacio(IniciacioCriteria iniciacioCriteria) throws StrategyException;
-    
+
     List<IniciacioDTO> llistarTipusIniciacions(IniciacioCriteria iniciacioCriteria) throws StrategyException;
+
+    Integer getNumFitxes(FitxaCriteria fitxaCriteria) throws StrategyException;
 
 }

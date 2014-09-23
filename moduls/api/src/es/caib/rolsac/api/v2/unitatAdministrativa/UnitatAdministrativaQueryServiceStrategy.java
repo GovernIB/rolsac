@@ -36,8 +36,8 @@ public interface UnitatAdministrativaQueryServiceStrategy {
     public TractamentDTO obtenirTractament(long idTract, TractamentCriteria tractamentCriteria) throws StrategyException;
 
     public List<UnitatAdministrativaDTO> llistarFilles(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws StrategyException;
-    
-    public List<UnitatAdministrativaDTO> llistarDescendents(long uaId) throws StrategyException;
+
+    public List<Long> llistarDescendents(long uaId) throws StrategyException;
 
     public List<EdificiDTO> llistarEdificis(long id, EdificiCriteria edificiCriteria) throws StrategyException;
 
@@ -52,7 +52,7 @@ public interface UnitatAdministrativaQueryServiceStrategy {
     public List<UsuariDTO> llistarUsuaris(long id, UsuariCriteria usuariCriteria) throws StrategyException;
 
     public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria, FitxaUACriteria fitxaUACriteria) throws StrategyException;
-    
+
     public List<SeccioDTO> llistarSeccions(long id, SeccioCriteria seccioCriteria) throws StrategyException;
 
     public List<MateriaDTO> llistarMateries(long id, MateriaCriteria materiaCriteria) throws StrategyException;

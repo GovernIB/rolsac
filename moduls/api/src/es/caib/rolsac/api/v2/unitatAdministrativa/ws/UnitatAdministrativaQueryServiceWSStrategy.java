@@ -38,35 +38,35 @@ public class UnitatAdministrativaQueryServiceWSStrategy implements UnitatAdminis
     UnitatAdministrativaQueryServiceGateway gateway;
 
     public void setGateway(UnitatAdministrativaQueryServiceGateway gateway) {
-    	this.gateway = gateway;
+        this.gateway = gateway;
     }
-    
+
     public UnitatAdministrativaDTO obtenirPare(long idPare) throws StrategyException {
-    	try {
-    		return gateway.obtenirPare(idPare);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}
+        try {
+            return gateway.obtenirPare(idPare);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
     public EspaiTerritorialDTO obtenirEspaiTerritorial(long idEt) throws StrategyException {
-    	try {
-    		return gateway.obtenirEspaiTerritorial(idEt);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}
+        try {
+            return gateway.obtenirEspaiTerritorial(idEt);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
     public TractamentDTO obtenirTractament(long idTract, TractamentCriteria tractamentCriteria) throws StrategyException {
-    	try {
-    		return gateway.obtenirTractament(idTract, tractamentCriteria);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}    	
+        try {
+            return gateway.obtenirTractament(idTract, tractamentCriteria);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
     public List<UnitatAdministrativaDTO> llistarFilles(long id,
-            UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws StrategyException {
+                                                       UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws StrategyException {
         try {
             return gateway.llistarFilles(id, unitatAdministrativaCriteria);
         } catch (RemoteException e) {
@@ -75,8 +75,8 @@ public class UnitatAdministrativaQueryServiceWSStrategy implements UnitatAdminis
             throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
         }
     }
-    
-    public List<UnitatAdministrativaDTO> llistarDescendents(long uaId) throws StrategyException {
+
+    public List<Long> llistarDescendents(long uaId) throws StrategyException {
         try {
             return gateway.llistarDescendents(uaId);
         } catch (RemoteException e) {
@@ -87,63 +87,63 @@ public class UnitatAdministrativaQueryServiceWSStrategy implements UnitatAdminis
     }
 
     public List<EdificiDTO> llistarEdificis(long id, EdificiCriteria edificiCriteria) throws StrategyException {
-    	try {
-    		return gateway.llistarEdificis(id, edificiCriteria);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		} catch (APIException e) {
-			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
-		}
+        try {
+            return gateway.llistarEdificis(id, edificiCriteria);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        } catch (APIException e) {
+            throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+        }
     }
 
     public List<PersonalDTO> llistarPersonal(long id, PersonalCriteria personalCriteria) throws StrategyException {
-    	try {
-    		return gateway.llistarPersonal(id, personalCriteria);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		} catch (APIException e) {
-			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
-		}
+        try {
+            return gateway.llistarPersonal(id, personalCriteria);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        } catch (APIException e) {
+            throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+        }
     }
 
     public List<NormativaDTO> llistarNormatives(long id, NormativaCriteria normativaCriteria) throws StrategyException {
-    	try {
-    		return gateway.llistarNormatives(id, normativaCriteria);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		} catch (APIException e) {
-			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
-		}
+        try {
+            return gateway.llistarNormatives(id, normativaCriteria);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        } catch (APIException e) {
+            throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+        }
     }
 
     public List<ProcedimentDTO> llistarProcediments(long id, ProcedimentCriteria procedimentCriteria) throws StrategyException {
-    	try {
-    		return gateway.llistarProcediments(id, procedimentCriteria);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		} catch (APIException e) {
-			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
-		}
+        try {
+            return gateway.llistarProcediments(id, procedimentCriteria);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        } catch (APIException e) {
+            throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+        }
     }
 
     public List<TramitDTO> llistarTramits(long id, TramitCriteria tramitCriteria) throws StrategyException {
-    	try {
-    		return gateway.llistarTramits(id, tramitCriteria);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		} catch (APIException e) {
-			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
-		}    	
+        try {
+            return gateway.llistarTramits(id, tramitCriteria);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        } catch (APIException e) {
+            throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+        }
     }
 
     public List<UsuariDTO> llistarUsuaris(long id, UsuariCriteria usuariCriteria) throws StrategyException {
-    	try {
-    		return gateway.llistarUsuaris(id, usuariCriteria);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		} catch (APIException e) {
-			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
-		}    	
+        try {
+            return gateway.llistarUsuaris(id, usuariCriteria);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        } catch (APIException e) {
+            throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+        }
     }
 
 //    public List<FitxaUADTO> llistarTotesFitxes(long id, FitxaUACriteria fitxaUACriteria) throws StrategyException {
@@ -155,160 +155,160 @@ public class UnitatAdministrativaQueryServiceWSStrategy implements UnitatAdminis
 //    }
 
     public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria, FitxaUACriteria fitxaUACriteria) throws StrategyException {
-    	try {
-    		return gateway.llistarFitxes(id, fitxaCriteria, fitxaUACriteria);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		} catch (APIException e) {
-			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
-		}    	
+        try {
+            return gateway.llistarFitxes(id, fitxaCriteria, fitxaUACriteria);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        } catch (APIException e) {
+            throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+        }
     }
 
     public List<SeccioDTO> llistarSeccions(long id, SeccioCriteria seccioCriteria) throws StrategyException {
-    	try {
-    		return gateway.llistarSeccions(id, seccioCriteria);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		} catch (APIException e) {
-			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
-		}
+        try {
+            return gateway.llistarSeccions(id, seccioCriteria);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        } catch (APIException e) {
+            throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+        }
     }
 
     public List<MateriaDTO> llistarMateries(long id, MateriaCriteria materiaCriteria) throws StrategyException {
-    	try {
-    		return gateway.llistarMateries(id, materiaCriteria);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		} catch (APIException e) {
-			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
-		}
+        try {
+            return gateway.llistarMateries(id, materiaCriteria);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        } catch (APIException e) {
+            throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+        }
     }
 
     public ArxiuDTO obtenirFotop(Long fotop) throws StrategyException {
-    	try {
-    		return gateway.obtenirFotop(fotop);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}
+        try {
+            return gateway.obtenirFotop(fotop);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
     public ArxiuDTO obtenirFotog(Long fotog) throws StrategyException {
-    	try {
-    		return gateway.obtenirFotog(fotog);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		} 
+        try {
+            return gateway.obtenirFotog(fotog);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
     public ArxiuDTO obtenirLogoh(Long logoh) throws StrategyException {
-    	try {
-    		return gateway.obtenirLogoh(logoh);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}
+        try {
+            return gateway.obtenirLogoh(logoh);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
     public ArxiuDTO obtenirLogov(Long logov) throws StrategyException {
-    	try {
-    		return gateway.obtenirLogov(logov);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}
+        try {
+            return gateway.obtenirLogov(logov);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
     public ArxiuDTO obtenirLogos(Long logos) throws StrategyException {
-    	try {
-    		return gateway.obtenirLogos(logos);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}
+        try {
+            return gateway.obtenirLogos(logos);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
     public ArxiuDTO obtenirLogot(Long logot) throws StrategyException {
-    	try {
-    		return gateway.obtenirLogot(logot);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}
+        try {
+            return gateway.obtenirLogot(logot);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
     public int getNumFilles(Long id) throws StrategyException {
-    	try {
-    		return gateway.getNumFilles(id);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}
+        try {
+            return gateway.getNumFilles(id);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
     public int getNumEdificis(Long id) throws StrategyException {
-    	try {
-    		return gateway.getNumEdificis(id);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}
+        try {
+            return gateway.getNumEdificis(id);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
     public int getNumPersonal(Long id) throws StrategyException {
-    	try {
-    		return gateway.getNumPersonal(id);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}
+        try {
+            return gateway.getNumPersonal(id);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
     public int getNumNormatives(Long id) throws StrategyException {
-    	try {
-    		return gateway.getNumNormatives(id);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}
+        try {
+            return gateway.getNumNormatives(id);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
     public int getNumProcediments(Long id) throws StrategyException {
-    	try {
-    		return gateway.getNumProcediments(id);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}
+        try {
+            return gateway.getNumProcediments(id);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
     public int getNumTramits(Long id) throws StrategyException {
-    	try {
-    		return gateway.getNumTramits(id);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}
+        try {
+            return gateway.getNumTramits(id);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
     public int getNumUsuaris(Long id) throws StrategyException {
-    	try {
-    		return gateway.getNumUsuaris(id);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}
+        try {
+            return gateway.getNumUsuaris(id);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
     public int getNumFitxes(Long id) throws StrategyException {
-    	try {
-    		return gateway.getNumFitxes(id);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}
+        try {
+            return gateway.getNumFitxes(id);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
     public int getNumSeccions(Long id) throws StrategyException {
-    	try {
-    		return gateway.getNumSeccions(id);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}    	
+        try {
+            return gateway.getNumSeccions(id);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
     public int getNumMateries(Long id) throws StrategyException {
-    	try {
-    		return gateway.getNumMateries(id);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}
+        try {
+            return gateway.getNumMateries(id);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 }

@@ -129,39 +129,39 @@ public class RolsacQueryServiceEJBStrategy implements RolsacQueryServiceStrategy
             throw new StrategyException(e);
         }
     }
-    
+
     public CatalegDocumentsDTO obtenirCatalegDocuments(CatalegDocumentsCriteria catalegDocumentsCriteria) throws StrategyException {
-    	try {
-    		return rolsacQueryServiceDelegate.obtenirCatalegDocuments(catalegDocumentsCriteria);    		
-    	} catch (DelegateException e) {
-    		throw new StrategyException(e);
-    	}
+        try {
+            return rolsacQueryServiceDelegate.obtenirCatalegDocuments(catalegDocumentsCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
-    
+
     public List<CatalegDocumentsDTO> llistarCatalegsDocuments(CatalegDocumentsCriteria catalegDocumentsCriteria) throws StrategyException {
-    	try {
-    		return rolsacQueryServiceDelegate.llistarCatalegsDocuments(catalegDocumentsCriteria);
-    	} catch (DelegateException e) {
-    		throw new StrategyException(e);
-    	}
+        try {
+            return rolsacQueryServiceDelegate.llistarCatalegsDocuments(catalegDocumentsCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
     public ExcepcioDocumentacioDTO obtenirExcepcioDocumentacio(ExcepcioDocumentacioCriteria catalegDocumentsCriteria) throws StrategyException {
-    	try {
-    		return rolsacQueryServiceDelegate.obtenirExcepcioDocumentacio(catalegDocumentsCriteria);    		
-    	} catch (DelegateException e) {
-    		throw new StrategyException(e);
-    	}
+        try {
+            return rolsacQueryServiceDelegate.obtenirExcepcioDocumentacio(catalegDocumentsCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
-    
+
     public List<ExcepcioDocumentacioDTO> llistarExcepcionsDocumentacio(ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria) throws StrategyException {
-    	try {
-    		return rolsacQueryServiceDelegate.llistarExcepcionsDocumentacio(excepcioDocumentacioCriteria);
-    	} catch (DelegateException e) {
-    		throw new StrategyException(e);
-    	}
+        try {
+            return rolsacQueryServiceDelegate.llistarExcepcionsDocumentacio(excepcioDocumentacioCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
-    
+
     public DocumentDTO obtenirDocument(DocumentCriteria documentCriteria) throws StrategyException {
         try {
             return rolsacQueryServiceDelegate.obtenirDocument(documentCriteria);
@@ -449,7 +449,7 @@ public class RolsacQueryServiceEJBStrategy implements RolsacQueryServiceStrategy
             throw new StrategyException(e);
         }
     }
-    
+
     public Integer getNumProcediments(ProcedimentCriteria procedimentCriteria) throws StrategyException {
         try {
             return rolsacQueryServiceDelegate.getNumProcediments(procedimentCriteria);
@@ -569,7 +569,7 @@ public class RolsacQueryServiceEJBStrategy implements RolsacQueryServiceStrategy
             throw new StrategyException(e);
         }
     }
-    
+
     public IdiomaDTO obtenirIdioma(IdiomaCriteria idiomaCriteria) throws StrategyException {
         try {
             return rolsacQueryServiceDelegate.obtenirIdioma(idiomaCriteria);
@@ -577,7 +577,7 @@ public class RolsacQueryServiceEJBStrategy implements RolsacQueryServiceStrategy
             throw new StrategyException(e);
         }
     }
-    
+
     public List<IdiomaDTO> llistarIdiomes(IdiomaCriteria idiomaCriteria) throws StrategyException {
         try {
             return rolsacQueryServiceDelegate.llistarIdiomes(idiomaCriteria);
@@ -629,6 +629,14 @@ public class RolsacQueryServiceEJBStrategy implements RolsacQueryServiceStrategy
     public List<IniciacioDTO> llistarTipusIniciacions(IniciacioCriteria iniciacioCriteria) throws StrategyException {
         try {
             return rolsacQueryServiceDelegate.llistarTipusIniciacions(iniciacioCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
+    }
+
+    public Integer getNumFitxes(FitxaCriteria fitxaCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.getNumFitxes(fitxaCriteria);
         } catch (DelegateException e) {
             throw new StrategyException(e);
         }

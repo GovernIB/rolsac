@@ -17,7 +17,6 @@ import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Periodo;
 
 import es.caib.rolsac.api.v2.general.co.CriteriaObject;
-import es.caib.rolsac.api.v2.query.Order.DIRECTION;
 import es.caib.rolsac.api.v2.query.Restriction.LOGIC;
 
 public class QueryBuilder {
@@ -35,10 +34,11 @@ public class QueryBuilder {
     private int maxResults;
     private int firstResult;
     private HashMap<String, Object> namedParameters;
+    private boolean distinct = true;
 
     /**
      * Use case:
-     * 
+     *
      * select distinct n
      * from ProcedimientoLocal as p left join p.normativas as n, n.traducciones as t
      * where p.id = 1234
@@ -46,12 +46,12 @@ public class QueryBuilder {
      *     and index(t) = 'ca'
      *     and t.titulo like "%test%"
      * order by n.numero desc, n.id asc;
-     * 
+     *
      * @param selectAlias n
      * @param fromClauses [{ProcedimientoLocal, p}, {p.normativas, n}]
      * @param i18nLang ca
      * @param i18nAlias t
-     * 
+     *
      * @throws QueryBuilderException
      */
     public QueryBuilder(String selectAlias, List<FromClause> fromClauses, String i18nLang, String i18nAlias, boolean countFlag)
@@ -81,34 +81,41 @@ public class QueryBuilder {
         } else {
             this.where = "";
         }
-        
+
         this.orderBy = "";
         this.countFlag = countFlag;
     }
-    
+
     public QueryBuilder(String selectAlias, List<FromClause> fromClauses, String i18nLang, String i18nAlias)
             throws QueryBuilderException {
         this(selectAlias, fromClauses, i18nLang, i18nAlias, false);
     }
 
     public Query createQuery(Session session) throws HibernateException {
-        Query query = session.createQuery(getHQL());
+        Query query = session.createQuery(getHQL(true));
         prepareQuery(query);
         log.debug(this.toString());
         return query;
     }
 
-    private String getHQL() {
+    public Query createQuery(Session session, boolean distinct) throws HibernateException {
+        this.distinct = distinct;
+        Query query = session.createQuery(getHQL(distinct));
+        prepareQuery(query);
+        log.debug(this.toString());
+        return query;
+    }
+
+    private String getHQL(boolean puedoHacerDistinct) {
         StringBuilder hql = new StringBuilder("SELECT ");
         if (countFlag) {
             hql.append("COUNT(");
         }
-        
-        boolean puedoHacerDistinct = true;
-    	// Si no hay joins, podemos hacer un distinct de forma segura
-       	// Si no hay orderBy, también podemos hacer el distinct de forma segura        	
+
+        // Si no hay joins, podemos hacer un distinct de forma segura
+        // Si no hay orderBy, tambiï¿½n podemos hacer el distinct de forma segura
         if (fromClauses.size() > 1 && StringUtils.isNotBlank(orderBy)) {
-        	//Si hay orderBy y joins, hay que evaluar los orderBy para ver si podemos eliminar las tablas con el distinct
+            //Si hay orderBy y joins, hay que evaluar los orderBy para ver si podemos eliminar las tablas con el distinct
             List<String> ordres = Arrays.asList(orderBy.split(","));
             String[] tokens;
             for (String ordre : ordres) {
@@ -116,25 +123,25 @@ public class QueryBuilder {
                 if (tokens[0].contains(".")){
                     String[] fieldParts = tokens[0].split("\\.");
                     if ( !fieldParts[0].equals(selectAlias) ) {
-                    	//Estamos ordenando por un campo en una tabla diferente
-                    	puedoHacerDistinct = false;
+                        //Estamos ordenando por un campo en una tabla diferente
+                        puedoHacerDistinct = false;
                     }
                 }
             }
-        	
+
         }
-        
+
         if (puedoHacerDistinct) {
             hql.append("DISTINCT ");
-        	
+
         }
-        
+
         hql.append(selectAlias);
         if (countFlag) {
             hql.append(")");
         }
 
-        hql.append(" FROM ");        
+        hql.append(" FROM ");
         Iterator<FromClause> fcIterator = fromClauses.iterator();
         while (fcIterator.hasNext()) {
             FromClause fc = fcIterator.next();
@@ -162,76 +169,76 @@ public class QueryBuilder {
     private void addOperation(Restriction r) {
         String field = caseInsensitiveField(r.getParameter(), r.getValue());
         switch (r.getOperation()) {
-        
-        case EQ:
-            where += field + " = :" + r.getParameter();
-            namedParameters.put(r.getParameter(), caseInsensitiveValue(r.getValue()));
-            break;
-       
-        case NEQ:
-            where += field + " != :" + r.getParameter();
-            namedParameters.put(r.getParameter(), caseInsensitiveValue(r.getValue()));
-            break;
-        
-        case IN:
-            where += field + " IN (:" + r.getParameter() + ")";
-            namedParameters.put(r.getParameter(), caseInsensitiveValue(r.getValue()));
-            break;
-        
-        case IN_SELECT:  // IN_SELECT is case sensitive.
-            where += r.getParameter() + " IN (" + r.getValue() + ")";
-            break;
-        
-        case LIKE:
-            where += field + " LIKE :" + r.getParameter();
-            namedParameters.put(r.getParameter(), caseInsensitiveValue(r.getValue()));
-            break;
-        
-        case LT:
-            where += field + " < :" + r.getParameter();
-            namedParameters.put(r.getParameter(), caseInsensitiveValue(r.getValue()));
-            break;
-        
-        case GT:
-            where += field + " > :" + r.getParameter();
-            namedParameters.put(r.getParameter(), caseInsensitiveValue(r.getValue()));
-            break;
-        
-        case LE:
-            where += field + " <= :" + r.getParameter();
-            namedParameters.put(r.getParameter(), caseInsensitiveValue(r.getValue()));
-            break;
-        
-        case GE:
-            where += field + " >= :" + r.getParameter();
-            namedParameters.put(r.getParameter(), caseInsensitiveValue(r.getValue()));
-            break;
-        
-        case DATE:
-            Periodo periodo = (Periodo) r.getValue();
-            where += "(";
-            if (periodo.getFechaInicio() != null) {
+
+            case EQ:
+                where += field + " = :" + r.getParameter();
+                namedParameters.put(r.getParameter(), caseInsensitiveValue(r.getValue()));
+                break;
+
+            case NEQ:
+                where += field + " != :" + r.getParameter();
+                namedParameters.put(r.getParameter(), caseInsensitiveValue(r.getValue()));
+                break;
+
+            case IN:
+                where += field + " IN (:" + r.getParameter() + ")";
+                namedParameters.put(r.getParameter(), caseInsensitiveValue(r.getValue()));
+                break;
+
+            case IN_SELECT:  // IN_SELECT is case sensitive.
+                where += r.getParameter() + " IN (" + r.getValue() + ")";
+                break;
+
+            case LIKE:
+                where += field + " LIKE :" + r.getParameter();
+                namedParameters.put(r.getParameter(), caseInsensitiveValue(r.getValue()));
+                break;
+
+            case LT:
+                where += field + " < :" + r.getParameter();
+                namedParameters.put(r.getParameter(), caseInsensitiveValue(r.getValue()));
+                break;
+
+            case GT:
+                where += field + " > :" + r.getParameter();
+                namedParameters.put(r.getParameter(), caseInsensitiveValue(r.getValue()));
+                break;
+
+            case LE:
+                where += field + " <= :" + r.getParameter();
+                namedParameters.put(r.getParameter(), caseInsensitiveValue(r.getValue()));
+                break;
+
+            case GE:
                 where += field + " >= :" + r.getParameter();
-                namedParameters.put(r.getParameter(), periodo.getFechaInicio());
-            }
-            if (periodo.getFechaFin() != null) {
-                if (periodo.getFechaInicio() != null) { where += " AND "; };
-                where += field + " < :" + r.getParameter() + "_";
-                namedParameters.put(r.getParameter() + "_", periodo.getFechaFin());
-            }
-            where += ")";
-            break;
-        
-        case NULL:
-            where += field + " IS NULL";
-            break;
-        
-        case NOT_NULL:
-            where += field + " IS NOT NULL";
-            break;
+                namedParameters.put(r.getParameter(), caseInsensitiveValue(r.getValue()));
+                break;
+
+            case DATE:
+                Periodo periodo = (Periodo) r.getValue();
+                where += "(";
+                if (periodo.getFechaInicio() != null) {
+                    where += field + " >= :" + r.getParameter();
+                    namedParameters.put(r.getParameter(), periodo.getFechaInicio());
+                }
+                if (periodo.getFechaFin() != null) {
+                    if (periodo.getFechaInicio() != null) { where += " AND "; };
+                    where += field + " < :" + r.getParameter() + "_";
+                    namedParameters.put(r.getParameter() + "_", periodo.getFechaFin());
+                }
+                where += ")";
+                break;
+
+            case NULL:
+                where += field + " IS NULL";
+                break;
+
+            case NOT_NULL:
+                where += field + " IS NOT NULL";
+                break;
         }
     }
-    
+
     public void addRestriction(Restriction r) {
         if (logicMustBeAdded()) {where += " " + r.getLogic() + " ";}
         addOperation(r);
@@ -240,7 +247,7 @@ public class QueryBuilder {
     public void addGroupedRestrictions(Collection<Restriction> restrictions) {
         addGroupedRestrictions(restrictions.toArray(new Restriction[0]));
     }
-    
+
     public void addGroupedRestrictions(Restriction... restrictions) {
         for (int i = 0; i < restrictions.length; i++) {
             if (i == 0) {
@@ -258,24 +265,24 @@ public class QueryBuilder {
         if (logicMustBeAdded()) {where += " " + logic + " ";}
         where += "(";
     }
-    
+
     public void closeParenthesis() {
         if (StringUtils.isNotBlank(where)) {where += ")";}
     }
-    
+
     private boolean logicMustBeAdded() {
         return StringUtils.isNotBlank(where) && !where.trim().endsWith("(");
     }
-    
+
     public void addOrder(Collection<Order> orders) {
         addOrder(orders.toArray(new Order[0]));
     }
-    
+
     public void addOrder(Order... orders) {
         for (Order o: orders) {
             if (StringUtils.isNotBlank(orderBy)) {orderBy += ", ";}
             orderBy += o.getField() + " " + o.getDirection();
-        }        
+        }
     }
 
     public void extendCriteriaObject(CriteriaObject co) {
@@ -354,7 +361,7 @@ public class QueryBuilder {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("HQL: ").append(getHQL()).append("\nParameters:\n");
+        StringBuilder sb = new StringBuilder("HQL: ").append(getHQL(this.distinct)).append("\nParameters:\n");
         for (String key : namedParameters.keySet()) {
             sb.append("\tkey: " + key + ", value: " + namedParameters.get(key) + "\n");
         }

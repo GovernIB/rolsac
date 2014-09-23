@@ -34,9 +34,9 @@ public interface UnitatAdministrativaQueryService {
     public EspaiTerritorialQueryServiceAdapter obtenirEspaiTerritorial() throws QueryServiceException;
 
     public TractamentQueryServiceAdapter obtenirTractament(TractamentCriteria tractamentCriteria) throws QueryServiceException;
-    
+
     public List<UnitatAdministrativaQueryServiceAdapter> llistarFilles(UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws QueryServiceException;
-    
+
     public List<Long> llistarDescendents() throws QueryServiceException;
 
     public List<EdificiQueryServiceAdapter> llistarEdificis(EdificiCriteria edificiCriteria) throws QueryServiceException;
@@ -52,41 +52,41 @@ public interface UnitatAdministrativaQueryService {
     public List<UsuariQueryServiceAdapter> llistarUsuaris(UsuariCriteria usuariCriteria) throws QueryServiceException;
 
     public List<FitxaQueryServiceAdapter> llistarFitxes(FitxaCriteria fitxaCriteria, FitxaUACriteria fitxaUACriteria) throws QueryServiceException;
-    
+
     public List<SeccioQueryServiceAdapter> llistarSeccions(SeccioCriteria seccioCriteria) throws QueryServiceException;
 
     public List<MateriaQueryServiceAdapter> llistarMateries(MateriaCriteria materiaCriteria) throws QueryServiceException;
 
     public int getNumFilles() throws QueryServiceException;
-    
+
     public int getNumEdificis() throws QueryServiceException;
-    
+
     public int getNumPersonal() throws QueryServiceException;
-    
+
     public int getNumNormatives() throws QueryServiceException;
-    
+
     public int getNumProcediments() throws QueryServiceException;
-    
+
     public int getNumTramits() throws QueryServiceException;
-    
+
     public int getNumUsuaris() throws QueryServiceException;
-    
+
     public int getNumFitxes() throws QueryServiceException;
-    
+
     public int getNumSeccions() throws QueryServiceException;
-    
+
     public int getNumMateries() throws QueryServiceException;
-    
+
     public ArxiuQueryServiceAdapter obtenirFotop() throws QueryServiceException;
-    
+
     public ArxiuQueryServiceAdapter obtenirFotog() throws QueryServiceException;
-    
+
     public ArxiuQueryServiceAdapter obtenirLogoh() throws QueryServiceException;
-    
+
     public ArxiuQueryServiceAdapter obtenirLogov() throws QueryServiceException;
-    
+
     public ArxiuQueryServiceAdapter obtenirLogos() throws QueryServiceException;
-    
+
     public ArxiuQueryServiceAdapter obtenirLogot() throws QueryServiceException;
-    
+
 }

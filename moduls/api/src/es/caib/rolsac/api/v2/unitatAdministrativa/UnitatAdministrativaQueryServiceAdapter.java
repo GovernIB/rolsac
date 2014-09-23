@@ -58,14 +58,14 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
         return unitatAdministrativaQueryServiceStrategy instanceof UnitatAdministrativaQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
 
-    public UnitatAdministrativaQueryServiceAdapter(UnitatAdministrativaDTO dto) throws QueryServiceException {    
+    public UnitatAdministrativaQueryServiceAdapter(UnitatAdministrativaDTO dto) throws QueryServiceException {
         try {
             PropertyUtils.copyProperties(this, dto);
         } catch (Exception e) {
             throw new QueryServiceException(ExceptionMessages.ADAPTER_CONSTRUCTOR, e);
         }
     }
-    
+
     public UnitatAdministrativaQueryServiceAdapter obtenirPare() throws QueryServiceException {
         if (this.getPadre() == null) {return null;}
         try {
@@ -73,7 +73,7 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "padre.", e);
         }
-       
+
     }
 
     public EspaiTerritorialQueryServiceAdapter obtenirEspaiTerritorial() throws QueryServiceException {
@@ -107,14 +107,10 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
             throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "hijas.", e);
         }
     }
-    
+
     public List<Long> llistarDescendents() throws QueryServiceException {
         try {
-        	List<Long> lista = new ArrayList<Long>();
-            for (UnitatAdministrativaDTO uaDTO: unitatAdministrativaQueryServiceStrategy.llistarDescendents(getId()))
-            	lista.add(uaDTO.getId());
-            	
-            return lista;
+            return unitatAdministrativaQueryServiceStrategy.llistarDescendents(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "descendientes.", e);
         }
@@ -223,7 +219,7 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
             throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "secciones.", e);
         }
     }
-    
+
     public List<MateriaQueryServiceAdapter> llistarMateries(MateriaCriteria materiaCriteria) throws QueryServiceException {
         try {
             List<MateriaDTO> llistaDTO = unitatAdministrativaQueryServiceStrategy.llistarMateries(getId(), materiaCriteria);
@@ -308,7 +304,7 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de secciones.", e);
         }
     }
-    
+
     public int getNumMateries() throws QueryServiceException {
         try {
             return unitatAdministrativaQueryServiceStrategy.getNumMateries(getId());
@@ -332,7 +328,7 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
             return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), unitatAdministrativaQueryServiceStrategy.obtenirFotog(this.getFotog()));
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "foto grande.", e);
-        }        
+        }
     }
 
     public ArxiuQueryServiceAdapter obtenirLogoh() throws QueryServiceException {
@@ -341,7 +337,7 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
             return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), unitatAdministrativaQueryServiceStrategy.obtenirLogoh(this.getLogoh()));
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "logo horizontal.", e);
-        }        
+        }
     }
 
     public ArxiuQueryServiceAdapter obtenirLogov() throws QueryServiceException {

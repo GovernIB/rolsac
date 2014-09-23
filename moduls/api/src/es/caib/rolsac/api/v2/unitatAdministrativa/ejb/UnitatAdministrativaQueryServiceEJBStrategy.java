@@ -33,8 +33,8 @@ import es.caib.rolsac.api.v2.usuari.UsuariDTO;
 
 public class UnitatAdministrativaQueryServiceEJBStrategy implements UnitatAdministrativaQueryServiceStrategy {
 
-    private UnitatAdministrativaQueryServiceDelegate unitatAdministrativaQueryServiceDelegate;    
-    
+    private UnitatAdministrativaQueryServiceDelegate unitatAdministrativaQueryServiceDelegate;
+
     public void setUnitatAdministrativaQueryServiceDelegate(UnitatAdministrativaQueryServiceDelegate unitatAdministrativaQueryServiceDelegate) {
         this.unitatAdministrativaQueryServiceDelegate = unitatAdministrativaQueryServiceDelegate;
     }
@@ -71,15 +71,14 @@ public class UnitatAdministrativaQueryServiceEJBStrategy implements UnitatAdmini
         }
     }
 
-    public List<UnitatAdministrativaDTO> llistarDescendents(long uaId) throws StrategyException {
+    public List<Long> llistarDescendents(long uaId) throws StrategyException {
         try {
             return unitatAdministrativaQueryServiceDelegate.llistarDescendents(uaId);
         } catch (DelegateException e) {
             throw new StrategyException(e);
         }
     }
-    
-    
+
     public List<EdificiDTO> llistarEdificis(long id, EdificiCriteria edificiCriteria) throws StrategyException {
         try {
             return unitatAdministrativaQueryServiceDelegate.llistarEdificis(id, edificiCriteria);
@@ -143,7 +142,7 @@ public class UnitatAdministrativaQueryServiceEJBStrategy implements UnitatAdmini
             throw new StrategyException(e);
         }
     }
-    
+
     public List<MateriaDTO> llistarMateries(long id, MateriaCriteria materiaCriteria) throws StrategyException {
         try {
             return unitatAdministrativaQueryServiceDelegate.llistarMateries(id, materiaCriteria);

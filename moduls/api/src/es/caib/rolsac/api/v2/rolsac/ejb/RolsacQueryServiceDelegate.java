@@ -83,7 +83,7 @@ public class RolsacQueryServiceDelegate {
     public void setRolsacQueryServiceLocator(RolsacQueryServiceEJBLocator rolsacQueryServiceLocator) {
         this.rolsacQueryServiceLocator = rolsacQueryServiceLocator;
     }
-    
+
     public CatalegDocumentsDTO obtenirCatalegDocuments(CatalegDocumentsCriteria catalegDocumentsCriteria) throws DelegateException {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
@@ -129,8 +129,8 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
-    
+
+
     public ProcedimentDTO obtenirProcediment(ProcedimentCriteria procedimentCriteria) throws DelegateException {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
@@ -153,7 +153,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     public int getNumProcediments(ProcedimentCriteria procedimentCriteria) throws DelegateException {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
@@ -164,7 +164,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     public MateriaDTO obtenirMateria(MateriaCriteria materiaCriteria) throws DelegateException {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
@@ -175,7 +175,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<MateriaDTO> llistarMateries(MateriaCriteria materiaCriteria) throws DelegateException {
         try {
@@ -187,7 +187,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     public TramitDTO obtenirTramit(TramitCriteria tramitCriteria) throws DelegateException {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
@@ -198,7 +198,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<TramitDTO> llistarTramits(TramitCriteria tramitCriteria) throws DelegateException {
         try {
@@ -210,7 +210,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     public UnitatAdministrativaDTO obtenirUnitatAdministrativa(UnitatAdministrativaCriteria uaCriteria) throws DelegateException {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
@@ -221,7 +221,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(UnitatAdministrativaCriteria uaCriteria) throws DelegateException {
         try {
@@ -244,7 +244,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<FetVitalDTO> llistarFetsVitals(FetVitalCriteria fetVitalCriteria) throws DelegateException {
         try {
@@ -256,7 +256,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     public FitxaDTO obtenirFitxa(FitxaCriteria fitxaCriteria) throws DelegateException {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
@@ -267,7 +267,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<FitxaDTO> llistarFitxes(FitxaCriteria fitxaCriteria) throws DelegateException {
         try {
@@ -279,7 +279,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     public NormativaDTO obtenirNormativa(NormativaCriteria normativaCriteria) throws DelegateException {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
@@ -290,7 +290,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<NormativaDTO> llistarNormatives(NormativaCriteria normativaCriteria) throws DelegateException {
         try {
@@ -302,7 +302,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     public PersonalDTO obtenirPersonal(PersonalCriteria personalCriteria) throws DelegateException {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
@@ -313,7 +313,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<PersonalDTO> llistarPersonal(PersonalCriteria personalCriteria) throws DelegateException {
         try {
@@ -325,7 +325,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     public DocumentTramitDTO obtenirDocumentTramit(DocumentTramitCriteria documentTramitCriteria) throws DelegateException {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
@@ -336,7 +336,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<DocumentTramitDTO> llistarDocumentTramit(DocumentTramitCriteria documentTramitCriteria) throws DelegateException {
         try {
@@ -348,7 +348,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     public UsuariDTO obtenirUsuari(UsuariCriteria usuariCriteria) throws DelegateException {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
@@ -359,7 +359,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<UsuariDTO> llistarUsuaris(UsuariCriteria usuariCriteria) throws DelegateException {
         try {
@@ -371,7 +371,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     public IdiomaDTO obtenirIdioma(IdiomaCriteria idiomaCriteria) throws DelegateException {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
@@ -382,7 +382,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     public List<IdiomaDTO> llistarIdiomes(IdiomaCriteria idiomaCriteria) throws DelegateException {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
@@ -393,7 +393,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     public TaxaDTO obtenirTaxa(TaxaCriteria taxaCriteria) throws DelegateException {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
@@ -404,7 +404,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<TaxaDTO> llistarTaxes(TaxaCriteria taxaCriteria) throws DelegateException {
         try {
@@ -427,7 +427,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<AgrupacioFetVitalDTO> llistarAgrupacionsFetsVitals(AgrupacioFetVitalCriteria afvCriteria) throws DelegateException {
         try {
@@ -450,7 +450,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<AgrupacioMateriaDTO> llistarAgrupacionsMateries(AgrupacioMateriaCriteria amCriteria) throws DelegateException {
         try {
@@ -462,7 +462,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     public ButlletiDTO obtenirButlleti(ButlletiCriteria butlletiCriteria) throws DelegateException {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
@@ -473,7 +473,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<ButlletiDTO> llistarButlletins(ButlletiCriteria butlletiCriteria) throws DelegateException {
         try {
@@ -485,7 +485,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     public DocumentDTO obtenirDocument(DocumentCriteria docCriteria) throws DelegateException {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
@@ -496,7 +496,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<DocumentDTO> llistarDocuments(DocumentCriteria docCriteria) throws DelegateException {
         try {
@@ -508,7 +508,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     public EdificiDTO obtenirEdifici(EdificiCriteria edificiCriteria) throws DelegateException {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
@@ -519,7 +519,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<EdificiDTO> llistarEdificis(EdificiCriteria edificiCriteria) throws DelegateException {
         try {
@@ -531,7 +531,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     public EnllacDTO obtenirEnllac(EnllacCriteria enllacCriteria) throws DelegateException {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
@@ -542,7 +542,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<EnllacDTO> llistarEnllacos(EnllacCriteria enllacCriteria) throws DelegateException {
         try {
@@ -554,7 +554,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     public EspaiTerritorialDTO obtenirEspaiTerritorial(EspaiTerritorialCriteria etCriteria) throws DelegateException {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
@@ -565,7 +565,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<EspaiTerritorialDTO> llistarEspaisTerritorials(EspaiTerritorialCriteria etCriteria) throws DelegateException {
         try {
@@ -577,7 +577,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     public FamiliaDTO obtenirFamilia(FamiliaCriteria familiaCriteria) throws DelegateException {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
@@ -588,7 +588,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<FamiliaDTO> llistarFamilies(FamiliaCriteria familiaCriteria) throws DelegateException {
         try {
@@ -600,7 +600,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     public PublicObjectiuDTO obtenirPublicObjectiu(PublicObjectiuCriteria publicObjectiuCriteria) throws DelegateException {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
@@ -611,7 +611,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<PublicObjectiuDTO> llistarPublicsObjectius(PublicObjectiuCriteria publicObjectiuCriteria) throws DelegateException {
         try {
@@ -623,7 +623,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-   
+
     public FitxaUADTO obtenirFitxaUA(FitxaUACriteria fitxaUACriteria) throws DelegateException {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
@@ -634,7 +634,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<FitxaUADTO> llistarFitxesUA(FitxaUACriteria fitxaUACriteria) throws DelegateException {
         try {
@@ -657,7 +657,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<FormulariDTO> llistarFormularis(FormulariCriteria formulariCriteria) throws DelegateException {
         try {
@@ -669,7 +669,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     public IconaFamiliaDTO obtenirIconaFamilia(IconaFamiliaCriteria ifCriteria) throws DelegateException {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
@@ -680,7 +680,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<IconaFamiliaDTO> llistarIconesFamilies(IconaFamiliaCriteria ifCriteria) throws DelegateException {
         try {
@@ -692,7 +692,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     public IconaMateriaDTO obtenirIconaMateria(IconaMateriaCriteria imCriteria) throws DelegateException {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
@@ -703,7 +703,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<IconaMateriaDTO> llistarIconesMateries(IconaMateriaCriteria imCriteria) throws DelegateException {
         try {
@@ -715,7 +715,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     public MateriaAgrupacioDTO obtenirMateriaAgrupacio(MateriaAgrupacioCriteria maCriteria) throws DelegateException {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
@@ -726,7 +726,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<MateriaAgrupacioDTO> llistarMateriesAgrupacions(MateriaAgrupacioCriteria maCriteria) throws DelegateException {
         try {
@@ -738,7 +738,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     public PerfilDTO obtenirPerfil(PerfilCriteria perfilCriteria) throws DelegateException {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
@@ -749,7 +749,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<PerfilDTO> llistarPerfils(PerfilCriteria perfilCriteria) throws DelegateException {
         try {
@@ -761,7 +761,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     public SeccioDTO obtenirSeccio(SeccioCriteria seccioCriteria) throws DelegateException {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
@@ -772,7 +772,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<SeccioDTO> llistarSeccions(SeccioCriteria seccioCriteria) throws DelegateException {
         try {
@@ -784,7 +784,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     public UnitatMateriaDTO obtenirUnitatMateria(UnitatMateriaCriteria umCriteria) throws DelegateException {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
@@ -795,7 +795,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<UnitatMateriaDTO> llistarUnitatsMateries(UnitatMateriaCriteria umCriteria) throws DelegateException {
         try {
@@ -853,7 +853,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<IniciacioDTO> llistarTipusIniciacions(IniciacioCriteria iniciacioCriteria) throws DelegateException {
         try {
@@ -865,7 +865,7 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public IniciacioDTO obtenirTipusIniciacio(IniciacioCriteria iniciacioCriteria) throws DelegateException {
         try {
@@ -877,5 +877,18 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
+    @SuppressWarnings("unchecked")
+    public int getNumFitxes(FitxaCriteria fitxaCriteria) throws DelegateException {
+
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.getNumFitxes(fitxaCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+
 }

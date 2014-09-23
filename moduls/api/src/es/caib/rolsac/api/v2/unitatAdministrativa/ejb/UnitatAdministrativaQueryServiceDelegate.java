@@ -1,6 +1,7 @@
 package es.caib.rolsac.api.v2.unitatAdministrativa.ejb;
 
 import java.rmi.RemoteException;
+import java.util.Arrays;
 import java.util.List;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
@@ -40,7 +41,7 @@ public class UnitatAdministrativaQueryServiceDelegate {
     public void setUnitatAdministrativaQueryServiceLocator(UnitatAdministrativaQueryServiceEJBLocator unitatAdministrativaQueryServiceLocator) {
         this.unitatAdministrativaQueryServiceLocator = unitatAdministrativaQueryServiceLocator;
     }
-    
+
     public UnitatAdministrativaDTO obtenirPare(long idPare) throws DelegateException {
         try {
             UnitatAdministrativaQueryServiceEJBRemote ejb = unitatAdministrativaQueryServiceLocator.getUnitatAdministrativaQueryServiceEJB();
@@ -85,12 +86,12 @@ public class UnitatAdministrativaQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
-    public List<UnitatAdministrativaDTO> llistarDescendents(long uaId) throws DelegateException {
+    public List<Long> llistarDescendents(long uaId) throws DelegateException {
         try {
             UnitatAdministrativaQueryServiceEJBRemote ejb = unitatAdministrativaQueryServiceLocator.getUnitatAdministrativaQueryServiceEJB();
-            return ejb.llistarDescendents(uaId);
+            return Arrays.asList(ejb.llistarDescendents(uaId));
         } catch (LocatorException e) {
             throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
         } catch (RemoteException e) {
@@ -193,7 +194,7 @@ public class UnitatAdministrativaQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<MateriaDTO> llistarMateries(long id, MateriaCriteria materiaCriteria) throws DelegateException {
         try {

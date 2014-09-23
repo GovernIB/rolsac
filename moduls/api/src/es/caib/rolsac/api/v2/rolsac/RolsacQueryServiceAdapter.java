@@ -115,7 +115,7 @@ import es.caib.rolsac.api.v2.usuari.UsuariQueryServiceAdapter;
 public class RolsacQueryServiceAdapter implements RolsacQueryService {
 
     private RolsacQueryServiceStrategy rolsacQueryServiceStrategy;
-    
+
     public void setRolsacQueryServiceStrategy(RolsacQueryServiceStrategy rolsacQueryServiceStrategy) {
         this.rolsacQueryServiceStrategy = rolsacQueryServiceStrategy;
     }
@@ -123,7 +123,7 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
     private STRATEGY getStrategy() {
         return rolsacQueryServiceStrategy instanceof RolsacQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
-    
+
     public ProcedimentQueryServiceAdapter obtenirProcediment(ProcedimentCriteria procedimentCriteria) throws QueryServiceException {
         try {
             ProcedimentDTO dto = rolsacQueryServiceStrategy.obtenirProcediment(procedimentCriteria);
@@ -131,8 +131,8 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "procedimiento.", e);
         }
-    }    
-    
+    }
+
     public List<ProcedimentQueryServiceAdapter> llistarProcediments(ProcedimentCriteria procedimentCriteria) throws QueryServiceException {
         try {
             List<ProcedimentDTO> llistaDTO = rolsacQueryServiceStrategy.llistarProcediments(procedimentCriteria);
@@ -145,16 +145,16 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
             throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "procedimientos.", e);
         }
     }
-    
+
     public CatalegDocumentsQueryServiceAdapter obtenirCatalegDocuments(CatalegDocumentsCriteria catalegDocumentsCriteria) throws QueryServiceException {
-    	try {
-    		CatalegDocumentsDTO dto = rolsacQueryServiceStrategy.obtenirCatalegDocuments(catalegDocumentsCriteria);
-    		return (CatalegDocumentsQueryServiceAdapter) BeanUtils.getAdapter("catalegDocuments", getStrategy(), dto);
-    	} catch (StrategyException e) {
-    		throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "catálogo de documentos.", e);
-    	}
+        try {
+            CatalegDocumentsDTO dto = rolsacQueryServiceStrategy.obtenirCatalegDocuments(catalegDocumentsCriteria);
+            return (CatalegDocumentsQueryServiceAdapter) BeanUtils.getAdapter("catalegDocuments", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "catálogo de documentos.", e);
+        }
     }
-    
+
     public List<CatalegDocumentsQueryServiceAdapter> llistarCatalegsDocuments(CatalegDocumentsCriteria catalegDocumentsCriteria) throws QueryServiceException {
         try {
             List<CatalegDocumentsDTO> llistaDTO = rolsacQueryServiceStrategy.llistarCatalegsDocuments(catalegDocumentsCriteria);
@@ -166,17 +166,17 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "catálogos de documentos.", e);
         }
-    }    
-    
-    public ExcepcioDocumentacioQueryServiceAdapter obtenirExcepcioDocumentacio(ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria) throws QueryServiceException {
-    	try {
-    		ExcepcioDocumentacioDTO dto = rolsacQueryServiceStrategy.obtenirExcepcioDocumentacio(excepcioDocumentacioCriteria);
-    		return (ExcepcioDocumentacioQueryServiceAdapter) BeanUtils.getAdapter("excepcioDocumentacio", getStrategy(), dto);
-    	} catch (StrategyException e) {
-    		throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "excepción de documentación.", e);
-    	}
     }
-    
+
+    public ExcepcioDocumentacioQueryServiceAdapter obtenirExcepcioDocumentacio(ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria) throws QueryServiceException {
+        try {
+            ExcepcioDocumentacioDTO dto = rolsacQueryServiceStrategy.obtenirExcepcioDocumentacio(excepcioDocumentacioCriteria);
+            return (ExcepcioDocumentacioQueryServiceAdapter) BeanUtils.getAdapter("excepcioDocumentacio", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "excepción de documentación.", e);
+        }
+    }
+
     public List<ExcepcioDocumentacioQueryServiceAdapter> llistarExcepcionsDocumentacio(ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria) throws QueryServiceException {
         try {
             List<ExcepcioDocumentacioDTO> llistaDTO = rolsacQueryServiceStrategy.llistarExcepcionsDocumentacio(excepcioDocumentacioCriteria);
@@ -188,8 +188,8 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "excepciones de documentación.", e);
         }
-    }    
-    
+    }
+
     public int getNumProcediments(ProcedimentCriteria procedimentCriteria) throws QueryServiceException {
         try {
             Integer num = rolsacQueryServiceStrategy.getNumProcediments(procedimentCriteria);
@@ -228,7 +228,7 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "agrupacion materia.", e);
         }
-        
+
     }
 
     public List<AgrupacioMateriaQueryServiceAdapter> llistarAgrupacionsMateries(AgrupacioMateriaCriteria agrupacioMateriaCriteria) throws QueryServiceException {
@@ -484,7 +484,7 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "formularios.", e);
         }
-        
+
     }
 
     public IconaFamiliaQueryServiceAdapter obtenirIconaFamilia(IconaFamiliaCriteria iconaFamiliaCriteria) throws QueryServiceException {
@@ -671,7 +671,7 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "tipo afectacion.", e);
         }
     }
-    
+
     public List<TipusAfectacioQueryServiceAdapter> llistarTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria) throws QueryServiceException {
         try {
             List<TipusAfectacioDTO> llistaDTO = rolsacQueryServiceStrategy.llistarTipusAfectacio(tipusAfectacioCriteria);
@@ -684,7 +684,7 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
             throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "tipos de afectaciones.", e);
         }
     }
-    
+
     public SeccioQueryServiceAdapter obtenirSeccio(SeccioCriteria seccioCriteria) throws QueryServiceException {
         try {
             SeccioDTO dto = rolsacQueryServiceStrategy.obtenirSeccio(seccioCriteria);
@@ -751,7 +751,7 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
             throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "tipos.", e);
         }
     }
-    
+
     public TramitQueryServiceAdapter obtenirTramit(TramitCriteria tramitCriteria) throws QueryServiceException {
         try {
             TramitDTO dto = rolsacQueryServiceStrategy.obtenirTramit(tramitCriteria);
@@ -840,43 +840,43 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
             throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "usuarios.", e);
         }
     }
-    
+
     public IniciacioQueryServiceAdapter obtenirTipusIniciacio(IniciacioCriteria iniciacioCriteria) throws QueryServiceException {
-    	
-    	try {
-    		
+
+        try {
+
             IniciacioDTO dto = rolsacQueryServiceStrategy.obtenirTipusIniciacio(iniciacioCriteria);
             return (IniciacioQueryServiceAdapter)BeanUtils.getAdapter("iniciacio", getStrategy(), dto);
-            
+
         } catch (StrategyException e) {
-        	
+
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "iniciacion.", e);
-            
+
         }
-    	
+
     }
-    
+
     public List<IniciacioQueryServiceAdapter> llistarTipusIniciacions(IniciacioCriteria iniciacioCriteria) throws QueryServiceException {
-    	
-    	try {
-    		
+
+        try {
+
             List<IniciacioDTO> llistaDTO = rolsacQueryServiceStrategy.llistarTipusIniciacions(iniciacioCriteria);
             List<IniciacioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<IniciacioQueryServiceAdapter>();
-            
+
             for (IniciacioDTO uDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((IniciacioQueryServiceAdapter)BeanUtils.getAdapter("iniciacio", getStrategy(), uDTO));
             }
-            
+
             return llistaQueryServiceAdapter;
-            
+
         } catch (StrategyException e) {
-        	
+
             throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "usuarios.", e);
-            
+
         }
-    	
+
     }
-    
+
     public IdiomaQueryServiceAdapter obtenirIdioma(IdiomaCriteria idiomaCriteria) throws QueryServiceException {
         try {
             IdiomaDTO dto = rolsacQueryServiceStrategy.obtenirIdioma(idiomaCriteria);
@@ -886,8 +886,8 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
         }
     }
 
-	public List<IdiomaQueryServiceAdapter> llistarIdiomes(IdiomaCriteria idiomaCriteria) throws QueryServiceException {
-		try {
+    public List<IdiomaQueryServiceAdapter> llistarIdiomes(IdiomaCriteria idiomaCriteria) throws QueryServiceException {
+        try {
             List<IdiomaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarIdiomes(idiomaCriteria);
             List<IdiomaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<IdiomaQueryServiceAdapter>();
             for (IdiomaDTO uDTO : llistaDTO) {
@@ -897,6 +897,15 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "idiomas.", e);
         }
-	}
+    }
+
+    public int getNumFitxes(FitxaCriteria fitxaCriteria) throws QueryServiceException {
+        try {
+            Integer num = rolsacQueryServiceStrategy.getNumFitxes(fitxaCriteria);
+            return num;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.COUNT_GETTER + "fitxas.", e);
+        }
+    }
 
 }

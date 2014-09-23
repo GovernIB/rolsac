@@ -82,577 +82,584 @@ import es.caib.rolsac.api.v2.usuari.UsuariDTO;
 
 public class RolsacQueryServiceGateway {
 
-	RolsacWSSoapBindingStub stub;
+    RolsacWSSoapBindingStub stub;
 
-	public RolsacQueryServiceGateway() {
-		
-		try {
-			stub = new RolsacWSSoapBindingStub(
-				new URL(ConfiguracioServeis.getUrlServei(ConfiguracioServeis.NOM_SERVEI_ROLSAC)),
-				null
-			);
-		} catch (AxisFault e) {
-			e.printStackTrace();
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (APIException e) {
-			e.printStackTrace();
-		}
-		
-	}
+    public RolsacQueryServiceGateway() {
 
-	public UsuariDTO obtenirUsuari(UsuariCriteria usuariCriteria)
-			throws QueryServiceException, RemoteException {
+        try {
+            stub = new RolsacWSSoapBindingStub(
+                    new URL(ConfiguracioServeis.getUrlServei(ConfiguracioServeis.NOM_SERVEI_ROLSAC)),
+                    null
+            );
+        } catch (AxisFault e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (APIException e) {
+            e.printStackTrace();
+        }
 
-		UsuariDTO usuariDTO = new UsuariDTO();
-		usuariDTO = stub.obtenirUsuari(usuariCriteria);
+    }
 
-		return usuariDTO;
-	}
+    public UsuariDTO obtenirUsuari(UsuariCriteria usuariCriteria)
+            throws QueryServiceException, RemoteException {
 
-	public TipusAfectacioDTO obtenirTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria)
-			throws QueryServiceException, RemoteException {
+        UsuariDTO usuariDTO = new UsuariDTO();
+        usuariDTO = stub.obtenirUsuari(usuariCriteria);
 
-		TipusAfectacioDTO tipusAfectacioDTO = new TipusAfectacioDTO();
-		tipusAfectacioDTO = stub.obtenirTipusAfectacio(tipusAfectacioCriteria);
+        return usuariDTO;
+    }
 
-		return tipusAfectacioDTO;
-	}
-	
-	public UnitatMateriaDTO obtenirUnitatMateria(
-			UnitatMateriaCriteria unitatMateriaCriteria)
-			throws QueryServiceException, RemoteException {
+    public TipusAfectacioDTO obtenirTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria)
+            throws QueryServiceException, RemoteException {
 
-		UnitatMateriaDTO unitatMateriaDTO = new UnitatMateriaDTO();
-		unitatMateriaDTO = stub.obtenirUnitatMateria(unitatMateriaCriteria);
+        TipusAfectacioDTO tipusAfectacioDTO = new TipusAfectacioDTO();
+        tipusAfectacioDTO = stub.obtenirTipusAfectacio(tipusAfectacioCriteria);
 
-		return unitatMateriaDTO;
-	}
+        return tipusAfectacioDTO;
+    }
 
-	public UnitatAdministrativaDTO obtenirUnitatAdministrativa(
-			UnitatAdministrativaCriteria unitatAdministrativaCriteria)
-			throws QueryServiceException, RemoteException {
+    public UnitatMateriaDTO obtenirUnitatMateria(
+            UnitatMateriaCriteria unitatMateriaCriteria)
+            throws QueryServiceException, RemoteException {
 
-		UnitatAdministrativaDTO unitatAdministrativaDTO = new UnitatAdministrativaDTO();
-		unitatAdministrativaDTO = stub
-				.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
+        UnitatMateriaDTO unitatMateriaDTO = new UnitatMateriaDTO();
+        unitatMateriaDTO = stub.obtenirUnitatMateria(unitatMateriaCriteria);
 
-		return unitatAdministrativaDTO;
-	}
+        return unitatMateriaDTO;
+    }
 
-	public TramitDTO obtenirTramit(TramitCriteria tramitCriteria)
-			throws QueryServiceException, RemoteException {
+    public UnitatAdministrativaDTO obtenirUnitatAdministrativa(
+            UnitatAdministrativaCriteria unitatAdministrativaCriteria)
+            throws QueryServiceException, RemoteException {
 
-		TramitDTO tramitDTO = new TramitDTO();
-		tramitDTO = stub.obtenirTramit(tramitCriteria);
+        UnitatAdministrativaDTO unitatAdministrativaDTO = new UnitatAdministrativaDTO();
+        unitatAdministrativaDTO = stub
+                .obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
 
-		return tramitDTO;
-	}
+        return unitatAdministrativaDTO;
+    }
 
-	public TipusDTO obtenirTipus(TipusCriteria tipusCriteria)
-			throws QueryServiceException, RemoteException {
+    public TramitDTO obtenirTramit(TramitCriteria tramitCriteria)
+            throws QueryServiceException, RemoteException {
 
-		TipusDTO tipusDTO = new TipusDTO();
-		tipusDTO = stub.obtenirTipus(tipusCriteria);
+        TramitDTO tramitDTO = new TramitDTO();
+        tramitDTO = stub.obtenirTramit(tramitCriteria);
 
-		return tipusDTO;
-	}
+        return tramitDTO;
+    }
 
-	public SeccioDTO obtenirSeccio(SeccioCriteria seccioCriteria)
-			throws QueryServiceException, RemoteException {
+    public TipusDTO obtenirTipus(TipusCriteria tipusCriteria)
+            throws QueryServiceException, RemoteException {
 
-		SeccioDTO seccioDTO = new SeccioDTO();
-		seccioDTO = stub.obtenirSeccio(seccioCriteria);
+        TipusDTO tipusDTO = new TipusDTO();
+        tipusDTO = stub.obtenirTipus(tipusCriteria);
 
-		return seccioDTO;
-	}
+        return tipusDTO;
+    }
 
-	public PublicObjectiuDTO obtenirPublicObjectiu(
-			PublicObjectiuCriteria publicObjectiuCriteria)
-			throws QueryServiceException, RemoteException {
+    public SeccioDTO obtenirSeccio(SeccioCriteria seccioCriteria)
+            throws QueryServiceException, RemoteException {
 
-		PublicObjectiuDTO publicObjectiuDTO = new PublicObjectiuDTO();
-		publicObjectiuDTO = stub.obtenirPublicObjectiu(publicObjectiuCriteria);
+        SeccioDTO seccioDTO = new SeccioDTO();
+        seccioDTO = stub.obtenirSeccio(seccioCriteria);
 
-		return publicObjectiuDTO;
-	}
+        return seccioDTO;
+    }
 
-	public ProcedimentDTO obtenirProcediment(
-			ProcedimentCriteria procedimentCriteria)
-			throws QueryServiceException, RemoteException {
+    public PublicObjectiuDTO obtenirPublicObjectiu(
+            PublicObjectiuCriteria publicObjectiuCriteria)
+            throws QueryServiceException, RemoteException {
 
-		ProcedimentDTO procedimentDTO = new ProcedimentDTO();
-		procedimentDTO = stub.obtenirProcediment(procedimentCriteria);
+        PublicObjectiuDTO publicObjectiuDTO = new PublicObjectiuDTO();
+        publicObjectiuDTO = stub.obtenirPublicObjectiu(publicObjectiuCriteria);
 
-		return procedimentDTO;
-	}
+        return publicObjectiuDTO;
+    }
 
-	public PersonalDTO obtenirPersonal(PersonalCriteria personalCriteria)
-			throws QueryServiceException, RemoteException {
-
-		PersonalDTO personalDTO = new PersonalDTO();
-		personalDTO = stub.obtenirPersonal(personalCriteria);
-
-		return personalDTO;
-	}
-
-	public PerfilDTO obtenirPerfil(PerfilCriteria perfilCriteria)
-			throws QueryServiceException, RemoteException {
-
-		PerfilDTO perfilDTO = new PerfilDTO();
-		perfilDTO = stub.obtenirPerfil(perfilCriteria);
-
-		return perfilDTO;
-	}
-
-	public NormativaDTO obtenirNormativa(NormativaCriteria normativaCriteria)
-			throws QueryServiceException, RemoteException {
-
-		NormativaDTO normativaDTO = new NormativaDTO();
-		normativaDTO = stub.obtenirNormativa(normativaCriteria);
-
-		return normativaDTO;
-	}
-
-	public MateriaDTO obtenirMateria(MateriaCriteria materiaCriteria)
-			throws QueryServiceException, RemoteException {
-
-		MateriaDTO materiaDTO = new MateriaDTO();
-		materiaDTO = stub.obtenirMateria(materiaCriteria);
-
-		return materiaDTO;
-	}
-
-	public MateriaAgrupacioDTO obtenirMateriaAgrupacio(
-			MateriaAgrupacioCriteria materiaAgrupacioCriteria)
-			throws QueryServiceException, RemoteException {
-
-		MateriaAgrupacioDTO materiaAgrupacioDTO = new MateriaAgrupacioDTO();
-		materiaAgrupacioDTO = stub
-				.obtenirMateriaAgrupacio(materiaAgrupacioCriteria);
-
-		return materiaAgrupacioDTO;
-	}
-
-	public IconaMateriaDTO obtenirIconaMateria(
-			IconaMateriaCriteria iconaMateriaCriteria)
-			throws QueryServiceException, RemoteException {
-
-		IconaMateriaDTO iconaMateriaDTO = new IconaMateriaDTO();
-		iconaMateriaDTO = stub.obtenirIconaMateria(iconaMateriaCriteria);
-
-		return iconaMateriaDTO;
-	}
-
-	public IconaFamiliaDTO obtenirIconaFamilia(
-			IconaFamiliaCriteria iconaFamiliaCritera)
-			throws QueryServiceException, RemoteException {
-
-		IconaFamiliaDTO iconaFamiliaDTO = new IconaFamiliaDTO();
-		iconaFamiliaDTO = stub.obtenirIconaFamilia(iconaFamiliaCritera);
-
-		return iconaFamiliaDTO;
-	}
-
-	public FetVitalDTO obtenirFetVital(FetVitalCriteria fetVitalCriteria)
-			throws QueryServiceException, RemoteException {
-
-		FetVitalDTO fetVitalDTO = new FetVitalDTO();
-		fetVitalDTO = stub.obtenirFetVital(fetVitalCriteria);
-
-		return fetVitalDTO;
-	}
-
-	public AgrupacioFetVitalDTO obtenirAgrupacioFetVital(
-			AgrupacioFetVitalCriteria agrupacioFetVitalCriteria)
-			throws QueryServiceException, RemoteException {
-
-		AgrupacioFetVitalDTO agrupacioFetVitalDTO = new AgrupacioFetVitalDTO();
-		agrupacioFetVitalDTO = stub
-				.obtenirAgrupacioFetVital(agrupacioFetVitalCriteria);
-
-		return agrupacioFetVitalDTO;
-	}
-
-	public AgrupacioMateriaDTO obtenirAgrupacioMateria(
-			AgrupacioMateriaCriteria agrupacioMateriaCriteria)
-			throws QueryServiceException, RemoteException {
-
-		AgrupacioMateriaDTO agrupacioMateriaDTO = new AgrupacioMateriaDTO();
-		agrupacioMateriaDTO = stub
-				.obtenirAgrupacioMateria(agrupacioMateriaCriteria);
-
-		return agrupacioMateriaDTO;
-	}
-
-	public ButlletiDTO obtenirButlleti(ButlletiCriteria butlletiCriteria)
-			throws QueryServiceException, RemoteException {
-
-		ButlletiDTO butlletiDTO = new ButlletiDTO();
-		butlletiDTO = stub.obtenirButlleti(butlletiCriteria);
-
-		return butlletiDTO;
-	}
-
-	public DocumentDTO obtenirDocument(DocumentCriteria documentCriteria)
-			throws QueryServiceException, RemoteException {
-
-		DocumentDTO documentDTO = new DocumentDTO();
-		documentDTO = stub.obtenirDocument(documentCriteria);
-
-		return documentDTO;
-	}
-
-	public DocumentTramitDTO obtenirDocumentTramit(
-			DocumentTramitCriteria documentTramitCriteria)
-			throws QueryServiceException, RemoteException {
-
-		DocumentTramitDTO documentTramitDTO = new DocumentTramitDTO();
-		documentTramitDTO = stub.obtenirDocumentTramit(documentTramitCriteria);
-
-		return documentTramitDTO;
-	}
-
-	public EdificiDTO obtenirEdifici(EdificiCriteria edificiCriteria)
-			throws QueryServiceException, RemoteException {
-
-		EdificiDTO edificiDTO = new EdificiDTO();
-		edificiDTO = stub.obtenirEdifici(edificiCriteria);
-
-		return edificiDTO;
-	}
-
-	public EnllacDTO obtenirEnllac(EnllacCriteria enllacCriteria)
-			throws QueryServiceException, RemoteException {
-
-		EnllacDTO enllacDTO = new EnllacDTO();
-		enllacDTO = stub.obtenirEnllac(enllacCriteria);
-
-		return enllacDTO;
-	}
-
-	public EspaiTerritorialDTO obtenirEspaiTerritorial(
-			EspaiTerritorialCriteria espaiTerritorialCriteria)
-			throws QueryServiceException, RemoteException {
-
-		EspaiTerritorialDTO espaiTerritorialDTO = new EspaiTerritorialDTO();
-		espaiTerritorialDTO = stub
-				.obtenirEspaiTerritorial(espaiTerritorialCriteria);
-
-		return espaiTerritorialDTO;
-	}
-
-	public FamiliaDTO obtenirFamilia(FamiliaCriteria familiaCriteria)
-			throws QueryServiceException, RemoteException {
-
-		FamiliaDTO familiaDTO = new FamiliaDTO();
-		familiaDTO = stub.obtenirFamilia(familiaCriteria);
-
-		return familiaDTO;
-	}
-
-	public FitxaDTO obtenirFitxa(FitxaCriteria fitxaCriteria)
-			throws QueryServiceException, RemoteException {
-
-		FitxaDTO fitxaDTO = new FitxaDTO();
-		fitxaDTO = stub.obtenirFitxa(fitxaCriteria);
-
-		return fitxaDTO;
-	}
-
-	public FitxaUADTO obtenirFitxaUA(FitxaUACriteria fitxaUACriteria)
-			throws QueryServiceException, RemoteException {
-
-		FitxaUADTO fitxaUADTO = new FitxaUADTO();
-		fitxaUADTO = stub.obtenirFitxaUA(fitxaUACriteria);
-
-		return fitxaUADTO;
-	}
-
-	public FormulariDTO obtenirFormulari(FormulariCriteria formulariCriteria)
-			throws QueryServiceException, RemoteException {
-
-		FormulariDTO formulariDTO = new FormulariDTO();
-		formulariDTO = stub.obtenirFormulari(formulariCriteria);
-
-		return formulariDTO;
-	}
-
-	public TaxaDTO obtenirTaxa(TaxaCriteria taxaCriteria)
-			throws QueryServiceException, RemoteException {
-
-		TaxaDTO taxaDTO = new TaxaDTO();
-		taxaDTO = stub.obtenirTaxa(taxaCriteria);
-
-		return taxaDTO;
-	}
-
-	public CatalegDocumentsDTO obtenirCatalegDocuments(CatalegDocumentsCriteria catalegDocumentsCriteria )
-			throws QueryServiceException, RemoteException {
-
-		CatalegDocumentsDTO catalegDocumentsDTO = new CatalegDocumentsDTO();
-		catalegDocumentsDTO = stub.obtenirCatalegDocuments(catalegDocumentsCriteria);
-
-		return catalegDocumentsDTO;
-	}
-	
-	public ExcepcioDocumentacioDTO obtenirExcepcioDocumentacioDTO(ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria )
-			throws QueryServiceException, RemoteException {
-
-		ExcepcioDocumentacioDTO excepcioDocumentacioDTO = new ExcepcioDocumentacioDTO();
-		excepcioDocumentacioDTO = stub.obtenirExcepcioDocumentacio(excepcioDocumentacioCriteria);
-
-		return excepcioDocumentacioDTO;
-	}
-	
-	public IniciacioDTO obtenirTipusIniciacio(IniciacioCriteria iniciacioCriteria)
-			throws QueryServiceException, RemoteException {
-
-		IniciacioDTO iniciacioDTO = new IniciacioDTO();
-		iniciacioDTO = stub.obtenirTipusIniciacio(iniciacioCriteria);
-
-		return iniciacioDTO;
-	}
-
-	public List<AgrupacioFetVitalDTO> llistarAgrupacionsFetsVitals(
-			AgrupacioFetVitalCriteria agrupacioFetVitalCriteria)
-			throws QueryServiceException, RemoteException {
-
-		return Arrays.asList(stub.llistarAgrupacionsFetsVitals(agrupacioFetVitalCriteria));
-	}
-
-	public List<AgrupacioMateriaDTO> llistarAgrupacionsMateries(
-			AgrupacioMateriaCriteria agrupacioMateriaCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		return Arrays.asList(stub.llistarAgrupacionsMateries(agrupacioMateriaCriteria));
-	}
-
-	public List<ButlletiDTO> llistarButlletins(ButlletiCriteria butlletiCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		return Arrays.asList(stub.llistarButlletins(butlletiCriteria));
-	}
-
-	public List<DocumentDTO> llistarDocuments(DocumentCriteria documentCriteria)
-			throws QueryServiceException, RemoteException {
-
-		return Arrays.asList(stub.llistarDocuments(documentCriteria));
-	}
-
-	public List<DocumentTramitDTO> llistarDocumentTramit(
-			DocumentTramitCriteria documentTramitCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		return Arrays.asList(stub.llistarDocumentTramit(documentTramitCriteria));
-	}
-
-	public List<EdificiDTO> llistarEdificis(EdificiCriteria edificCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		return Arrays.asList(stub.llistarEdificis(edificCriteria));
-	}
-
-	public List<EnllacDTO> llistarEnllacos(EnllacCriteria enllacCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		return Arrays.asList(stub.llistarEnllacos(enllacCriteria));
-	}
-
-	public List<EspaiTerritorialDTO> llistarEspaisTerritorials(
-			EspaiTerritorialCriteria espaiTerritorialCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		return Arrays.asList(stub.llistarEspaisTerritorials(espaiTerritorialCriteria));
-	}
-
-	public List<FamiliaDTO> llistarFamilies(FamiliaCriteria familiaCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		return Arrays.asList(stub.llistarFamilies(familiaCriteria));
-	}
-
-	public List<FetVitalDTO> llistarFetsVitals(FetVitalCriteria fetVitalCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		return Arrays.asList(stub.llistarFetsVitals(fetVitalCriteria));
-	}
-
-	public List<FitxaDTO> llistarFitxes(FitxaCriteria fitxaCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		return Arrays.asList(stub.llistarFitxes(fitxaCriteria));
-	}
-
-	public List<FitxaUADTO> llistarFitxesUA(FitxaUACriteria fitxaUACriteria)
-			throws QueryServiceException, RemoteException {
-	
-		return Arrays.asList(stub.llistarFitxesUA(fitxaUACriteria));
-	}
-
-	public List<FormulariDTO> llistarFormularis(
-			FormulariCriteria formulariCriteria) throws QueryServiceException,
-			RemoteException {
-		
-		return Arrays.asList(stub.llistarFormularis(formulariCriteria));
-	}
-
-	public List<IconaFamiliaDTO> llistarIconesFamilies(
-			IconaFamiliaCriteria iconaFamiliaCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		return Arrays.asList(stub.llistarIconesFamilies(iconaFamiliaCriteria));
-	}
-
-	public List<IconaMateriaDTO> llistarIconesMateries(
-			IconaMateriaCriteria iconaMateriaCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		return Arrays.asList(stub.llistarIconesMateries(iconaMateriaCriteria));
-		
-	}
-
-	public List<MateriaDTO> llistarMateries(MateriaCriteria materiaCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		return Arrays.asList(stub.llistarMateries(materiaCriteria));
-		
-	}
-
-	public List<MateriaAgrupacioDTO> llistarMateriesAgrupacions(
-			MateriaAgrupacioCriteria materiaAgrupacioCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		return Arrays.asList(stub.llistarMateriesAgrupacions(materiaAgrupacioCriteria));
-	}
-
-	public List<NormativaDTO> llistarNormatives(
-			NormativaCriteria normativaCriteria) throws QueryServiceException,
-			RemoteException {
-		
-		return Arrays.asList(stub.llistarNormatives(normativaCriteria));
-	}
-
-	public List<PerfilDTO> llistarPerfils(PerfilCriteria perfilCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		return Arrays.asList(stub.llistarPerfils(perfilCriteria));
-	}
-
-	public List<PersonalDTO> llistarPersonal(PersonalCriteria personalCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		return Arrays.asList(stub.llistarPersonal(personalCriteria));
-	}
-
-	public List<ProcedimentDTO> llistarProcediments(
-			ProcedimentCriteria procedimentCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		return Arrays.asList(stub.llistarProcediments(procedimentCriteria));	
-	}
-
-	public int getNumProcediments(
+    public ProcedimentDTO obtenirProcediment(
             ProcedimentCriteria procedimentCriteria)
             throws QueryServiceException, RemoteException {
-        
-        return stub.getNumProcediments(procedimentCriteria);    
+
+        ProcedimentDTO procedimentDTO = new ProcedimentDTO();
+        procedimentDTO = stub.obtenirProcediment(procedimentCriteria);
+
+        return procedimentDTO;
     }
-	
-	public List<PublicObjectiuDTO> llistarPublicsObjectius(
-			PublicObjectiuCriteria publicObjectiuCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		return Arrays.asList(stub.llistarPublicsObjectius(publicObjectiuCriteria));
-		
-	}
 
-	public List<SeccioDTO> llistarSeccions(SeccioCriteria seccioCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		return Arrays.asList(stub.llistarSeccions(seccioCriteria));
-	}
+    public PersonalDTO obtenirPersonal(PersonalCriteria personalCriteria)
+            throws QueryServiceException, RemoteException {
 
-	public List<TaxaDTO> llistarTaxes(TaxaCriteria taxaCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		return Arrays.asList(stub.llistarTaxes(taxaCriteria));
-	}
+        PersonalDTO personalDTO = new PersonalDTO();
+        personalDTO = stub.obtenirPersonal(personalCriteria);
 
-	public List<TramitDTO> llistarTramits(TramitCriteria tramitCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		return Arrays.asList(stub.llistarTramit(tramitCriteria));
-	}
+        return personalDTO;
+    }
 
-	public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(
-			UnitatAdministrativaCriteria unitatAdministrativaCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		return Arrays.asList(stub.llistarUnitatsAdministratives(unitatAdministrativaCriteria));
-	}
+    public PerfilDTO obtenirPerfil(PerfilCriteria perfilCriteria)
+            throws QueryServiceException, RemoteException {
 
-	public List<UnitatMateriaDTO> llistarUnitatsMateries(
-			UnitatMateriaCriteria unitatMateriaCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		return Arrays.asList(stub.llistarUnitatsMateries(unitatMateriaCriteria));
-	}
+        PerfilDTO perfilDTO = new PerfilDTO();
+        perfilDTO = stub.obtenirPerfil(perfilCriteria);
 
-	public List<UsuariDTO> llistarUsuaris(UsuariCriteria usuariCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		return Arrays.asList(stub.llistarUsuaris(usuariCriteria));
-	}
-	
-	public IdiomaDTO obtenirIdioma(IdiomaCriteria idiomaCriteria)
-			throws QueryServiceException, RemoteException {
+        return perfilDTO;
+    }
 
-		IdiomaDTO idiomaDTO = new IdiomaDTO();
-		idiomaDTO = stub.obtenirIdioma(idiomaCriteria);
+    public NormativaDTO obtenirNormativa(NormativaCriteria normativaCriteria)
+            throws QueryServiceException, RemoteException {
 
-		return idiomaDTO;
-	}
-	
-	public List<IdiomaDTO> llistarIdiomes(IdiomaCriteria idiomaCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		List<IdiomaDTO> listaIdiomas = Arrays.asList(stub.llistarIdiomes(idiomaCriteria));
-		return listaIdiomas;
-	}
+        NormativaDTO normativaDTO = new NormativaDTO();
+        normativaDTO = stub.obtenirNormativa(normativaCriteria);
 
-	public List<TipusDTO> llistarTipus(TipusCriteria tipusCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		return Arrays.asList(stub.llistarTipus(tipusCriteria));
-	}
+        return normativaDTO;
+    }
 
-	public List<TipusAfectacioDTO> llistarTipusAfectacio(
-			TipusAfectacioCriteria tipusAfectacioCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		return Arrays.asList(stub.llistarTipusAfectacio(tipusAfectacioCriteria));
-	}
-	
-	public List<ExcepcioDocumentacioDTO> llistarExcepcionsDocumentacio(
-			ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		return Arrays.asList(stub.llistarExcepcionsDocumentacio(excepcioDocumentacioCriteria));
-	}
-	
-	public List<CatalegDocumentsDTO> llistarCatalegsDocuments(
-			CatalegDocumentsCriteria catalegDocumentsCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		return Arrays.asList(stub.llistarCatalegsDocuments(catalegDocumentsCriteria));
-	}
-	
-	public List<IniciacioDTO> llistarTipusIniciacions(
-			IniciacioCriteria iniciacioCriteria)
-			throws QueryServiceException, RemoteException {
-		
-		return Arrays.asList(stub.llistarTipusIniciacions(iniciacioCriteria));
-	}
-	
+    public MateriaDTO obtenirMateria(MateriaCriteria materiaCriteria)
+            throws QueryServiceException, RemoteException {
+
+        MateriaDTO materiaDTO = new MateriaDTO();
+        materiaDTO = stub.obtenirMateria(materiaCriteria);
+
+        return materiaDTO;
+    }
+
+    public MateriaAgrupacioDTO obtenirMateriaAgrupacio(
+            MateriaAgrupacioCriteria materiaAgrupacioCriteria)
+            throws QueryServiceException, RemoteException {
+
+        MateriaAgrupacioDTO materiaAgrupacioDTO = new MateriaAgrupacioDTO();
+        materiaAgrupacioDTO = stub
+                .obtenirMateriaAgrupacio(materiaAgrupacioCriteria);
+
+        return materiaAgrupacioDTO;
+    }
+
+    public IconaMateriaDTO obtenirIconaMateria(
+            IconaMateriaCriteria iconaMateriaCriteria)
+            throws QueryServiceException, RemoteException {
+
+        IconaMateriaDTO iconaMateriaDTO = new IconaMateriaDTO();
+        iconaMateriaDTO = stub.obtenirIconaMateria(iconaMateriaCriteria);
+
+        return iconaMateriaDTO;
+    }
+
+    public IconaFamiliaDTO obtenirIconaFamilia(
+            IconaFamiliaCriteria iconaFamiliaCritera)
+            throws QueryServiceException, RemoteException {
+
+        IconaFamiliaDTO iconaFamiliaDTO = new IconaFamiliaDTO();
+        iconaFamiliaDTO = stub.obtenirIconaFamilia(iconaFamiliaCritera);
+
+        return iconaFamiliaDTO;
+    }
+
+    public FetVitalDTO obtenirFetVital(FetVitalCriteria fetVitalCriteria)
+            throws QueryServiceException, RemoteException {
+
+        FetVitalDTO fetVitalDTO = new FetVitalDTO();
+        fetVitalDTO = stub.obtenirFetVital(fetVitalCriteria);
+
+        return fetVitalDTO;
+    }
+
+    public AgrupacioFetVitalDTO obtenirAgrupacioFetVital(
+            AgrupacioFetVitalCriteria agrupacioFetVitalCriteria)
+            throws QueryServiceException, RemoteException {
+
+        AgrupacioFetVitalDTO agrupacioFetVitalDTO = new AgrupacioFetVitalDTO();
+        agrupacioFetVitalDTO = stub
+                .obtenirAgrupacioFetVital(agrupacioFetVitalCriteria);
+
+        return agrupacioFetVitalDTO;
+    }
+
+    public AgrupacioMateriaDTO obtenirAgrupacioMateria(
+            AgrupacioMateriaCriteria agrupacioMateriaCriteria)
+            throws QueryServiceException, RemoteException {
+
+        AgrupacioMateriaDTO agrupacioMateriaDTO = new AgrupacioMateriaDTO();
+        agrupacioMateriaDTO = stub
+                .obtenirAgrupacioMateria(agrupacioMateriaCriteria);
+
+        return agrupacioMateriaDTO;
+    }
+
+    public ButlletiDTO obtenirButlleti(ButlletiCriteria butlletiCriteria)
+            throws QueryServiceException, RemoteException {
+
+        ButlletiDTO butlletiDTO = new ButlletiDTO();
+        butlletiDTO = stub.obtenirButlleti(butlletiCriteria);
+
+        return butlletiDTO;
+    }
+
+    public DocumentDTO obtenirDocument(DocumentCriteria documentCriteria)
+            throws QueryServiceException, RemoteException {
+
+        DocumentDTO documentDTO = new DocumentDTO();
+        documentDTO = stub.obtenirDocument(documentCriteria);
+
+        return documentDTO;
+    }
+
+    public DocumentTramitDTO obtenirDocumentTramit(
+            DocumentTramitCriteria documentTramitCriteria)
+            throws QueryServiceException, RemoteException {
+
+        DocumentTramitDTO documentTramitDTO = new DocumentTramitDTO();
+        documentTramitDTO = stub.obtenirDocumentTramit(documentTramitCriteria);
+
+        return documentTramitDTO;
+    }
+
+    public EdificiDTO obtenirEdifici(EdificiCriteria edificiCriteria)
+            throws QueryServiceException, RemoteException {
+
+        EdificiDTO edificiDTO = new EdificiDTO();
+        edificiDTO = stub.obtenirEdifici(edificiCriteria);
+
+        return edificiDTO;
+    }
+
+    public EnllacDTO obtenirEnllac(EnllacCriteria enllacCriteria)
+            throws QueryServiceException, RemoteException {
+
+        EnllacDTO enllacDTO = new EnllacDTO();
+        enllacDTO = stub.obtenirEnllac(enllacCriteria);
+
+        return enllacDTO;
+    }
+
+    public EspaiTerritorialDTO obtenirEspaiTerritorial(
+            EspaiTerritorialCriteria espaiTerritorialCriteria)
+            throws QueryServiceException, RemoteException {
+
+        EspaiTerritorialDTO espaiTerritorialDTO = new EspaiTerritorialDTO();
+        espaiTerritorialDTO = stub
+                .obtenirEspaiTerritorial(espaiTerritorialCriteria);
+
+        return espaiTerritorialDTO;
+    }
+
+    public FamiliaDTO obtenirFamilia(FamiliaCriteria familiaCriteria)
+            throws QueryServiceException, RemoteException {
+
+        FamiliaDTO familiaDTO = new FamiliaDTO();
+        familiaDTO = stub.obtenirFamilia(familiaCriteria);
+
+        return familiaDTO;
+    }
+
+    public FitxaDTO obtenirFitxa(FitxaCriteria fitxaCriteria)
+            throws QueryServiceException, RemoteException {
+
+        FitxaDTO fitxaDTO = new FitxaDTO();
+        fitxaDTO = stub.obtenirFitxa(fitxaCriteria);
+
+        return fitxaDTO;
+    }
+
+    public FitxaUADTO obtenirFitxaUA(FitxaUACriteria fitxaUACriteria)
+            throws QueryServiceException, RemoteException {
+
+        FitxaUADTO fitxaUADTO = new FitxaUADTO();
+        fitxaUADTO = stub.obtenirFitxaUA(fitxaUACriteria);
+
+        return fitxaUADTO;
+    }
+
+    public FormulariDTO obtenirFormulari(FormulariCriteria formulariCriteria)
+            throws QueryServiceException, RemoteException {
+
+        FormulariDTO formulariDTO = new FormulariDTO();
+        formulariDTO = stub.obtenirFormulari(formulariCriteria);
+
+        return formulariDTO;
+    }
+
+    public TaxaDTO obtenirTaxa(TaxaCriteria taxaCriteria)
+            throws QueryServiceException, RemoteException {
+
+        TaxaDTO taxaDTO = new TaxaDTO();
+        taxaDTO = stub.obtenirTaxa(taxaCriteria);
+
+        return taxaDTO;
+    }
+
+    public CatalegDocumentsDTO obtenirCatalegDocuments(CatalegDocumentsCriteria catalegDocumentsCriteria )
+            throws QueryServiceException, RemoteException {
+
+        CatalegDocumentsDTO catalegDocumentsDTO = new CatalegDocumentsDTO();
+        catalegDocumentsDTO = stub.obtenirCatalegDocuments(catalegDocumentsCriteria);
+
+        return catalegDocumentsDTO;
+    }
+
+    public ExcepcioDocumentacioDTO obtenirExcepcioDocumentacioDTO(ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria )
+            throws QueryServiceException, RemoteException {
+
+        ExcepcioDocumentacioDTO excepcioDocumentacioDTO = new ExcepcioDocumentacioDTO();
+        excepcioDocumentacioDTO = stub.obtenirExcepcioDocumentacio(excepcioDocumentacioCriteria);
+
+        return excepcioDocumentacioDTO;
+    }
+
+    public IniciacioDTO obtenirTipusIniciacio(IniciacioCriteria iniciacioCriteria)
+            throws QueryServiceException, RemoteException {
+
+        IniciacioDTO iniciacioDTO = new IniciacioDTO();
+        iniciacioDTO = stub.obtenirTipusIniciacio(iniciacioCriteria);
+
+        return iniciacioDTO;
+    }
+
+    public List<AgrupacioFetVitalDTO> llistarAgrupacionsFetsVitals(
+            AgrupacioFetVitalCriteria agrupacioFetVitalCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarAgrupacionsFetsVitals(agrupacioFetVitalCriteria));
+    }
+
+    public List<AgrupacioMateriaDTO> llistarAgrupacionsMateries(
+            AgrupacioMateriaCriteria agrupacioMateriaCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarAgrupacionsMateries(agrupacioMateriaCriteria));
+    }
+
+    public List<ButlletiDTO> llistarButlletins(ButlletiCriteria butlletiCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarButlletins(butlletiCriteria));
+    }
+
+    public List<DocumentDTO> llistarDocuments(DocumentCriteria documentCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarDocuments(documentCriteria));
+    }
+
+    public List<DocumentTramitDTO> llistarDocumentTramit(
+            DocumentTramitCriteria documentTramitCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarDocumentTramit(documentTramitCriteria));
+    }
+
+    public List<EdificiDTO> llistarEdificis(EdificiCriteria edificCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarEdificis(edificCriteria));
+    }
+
+    public List<EnllacDTO> llistarEnllacos(EnllacCriteria enllacCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarEnllacos(enllacCriteria));
+    }
+
+    public List<EspaiTerritorialDTO> llistarEspaisTerritorials(
+            EspaiTerritorialCriteria espaiTerritorialCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarEspaisTerritorials(espaiTerritorialCriteria));
+    }
+
+    public List<FamiliaDTO> llistarFamilies(FamiliaCriteria familiaCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarFamilies(familiaCriteria));
+    }
+
+    public List<FetVitalDTO> llistarFetsVitals(FetVitalCriteria fetVitalCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarFetsVitals(fetVitalCriteria));
+    }
+
+    public List<FitxaDTO> llistarFitxes(FitxaCriteria fitxaCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarFitxes(fitxaCriteria));
+    }
+
+    public List<FitxaUADTO> llistarFitxesUA(FitxaUACriteria fitxaUACriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarFitxesUA(fitxaUACriteria));
+    }
+
+    public List<FormulariDTO> llistarFormularis(
+            FormulariCriteria formulariCriteria) throws QueryServiceException,
+            RemoteException {
+
+        return Arrays.asList(stub.llistarFormularis(formulariCriteria));
+    }
+
+    public List<IconaFamiliaDTO> llistarIconesFamilies(
+            IconaFamiliaCriteria iconaFamiliaCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarIconesFamilies(iconaFamiliaCriteria));
+    }
+
+    public List<IconaMateriaDTO> llistarIconesMateries(
+            IconaMateriaCriteria iconaMateriaCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarIconesMateries(iconaMateriaCriteria));
+
+    }
+
+    public List<MateriaDTO> llistarMateries(MateriaCriteria materiaCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarMateries(materiaCriteria));
+
+    }
+
+    public List<MateriaAgrupacioDTO> llistarMateriesAgrupacions(
+            MateriaAgrupacioCriteria materiaAgrupacioCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarMateriesAgrupacions(materiaAgrupacioCriteria));
+    }
+
+    public List<NormativaDTO> llistarNormatives(
+            NormativaCriteria normativaCriteria) throws QueryServiceException,
+            RemoteException {
+
+        return Arrays.asList(stub.llistarNormatives(normativaCriteria));
+    }
+
+    public List<PerfilDTO> llistarPerfils(PerfilCriteria perfilCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarPerfils(perfilCriteria));
+    }
+
+    public List<PersonalDTO> llistarPersonal(PersonalCriteria personalCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarPersonal(personalCriteria));
+    }
+
+    public List<ProcedimentDTO> llistarProcediments(
+            ProcedimentCriteria procedimentCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarProcediments(procedimentCriteria));
+    }
+
+    public int getNumProcediments(
+            ProcedimentCriteria procedimentCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return stub.getNumProcediments(procedimentCriteria);
+    }
+
+    public List<PublicObjectiuDTO> llistarPublicsObjectius(
+            PublicObjectiuCriteria publicObjectiuCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarPublicsObjectius(publicObjectiuCriteria));
+
+    }
+
+    public List<SeccioDTO> llistarSeccions(SeccioCriteria seccioCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarSeccions(seccioCriteria));
+    }
+
+    public List<TaxaDTO> llistarTaxes(TaxaCriteria taxaCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarTaxes(taxaCriteria));
+    }
+
+    public List<TramitDTO> llistarTramits(TramitCriteria tramitCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarTramit(tramitCriteria));
+    }
+
+    public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(
+            UnitatAdministrativaCriteria unitatAdministrativaCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarUnitatsAdministratives(unitatAdministrativaCriteria));
+    }
+
+    public List<UnitatMateriaDTO> llistarUnitatsMateries(
+            UnitatMateriaCriteria unitatMateriaCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarUnitatsMateries(unitatMateriaCriteria));
+    }
+
+    public List<UsuariDTO> llistarUsuaris(UsuariCriteria usuariCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarUsuaris(usuariCriteria));
+    }
+
+    public IdiomaDTO obtenirIdioma(IdiomaCriteria idiomaCriteria)
+            throws QueryServiceException, RemoteException {
+
+        IdiomaDTO idiomaDTO = new IdiomaDTO();
+        idiomaDTO = stub.obtenirIdioma(idiomaCriteria);
+
+        return idiomaDTO;
+    }
+
+    public List<IdiomaDTO> llistarIdiomes(IdiomaCriteria idiomaCriteria)
+            throws QueryServiceException, RemoteException {
+
+        List<IdiomaDTO> listaIdiomas = Arrays.asList(stub.llistarIdiomes(idiomaCriteria));
+        return listaIdiomas;
+    }
+
+    public List<TipusDTO> llistarTipus(TipusCriteria tipusCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarTipus(tipusCriteria));
+    }
+
+    public List<TipusAfectacioDTO> llistarTipusAfectacio(
+            TipusAfectacioCriteria tipusAfectacioCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarTipusAfectacio(tipusAfectacioCriteria));
+    }
+
+    public List<ExcepcioDocumentacioDTO> llistarExcepcionsDocumentacio(
+            ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarExcepcionsDocumentacio(excepcioDocumentacioCriteria));
+    }
+
+    public List<CatalegDocumentsDTO> llistarCatalegsDocuments(
+            CatalegDocumentsCriteria catalegDocumentsCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarCatalegsDocuments(catalegDocumentsCriteria));
+    }
+
+    public List<IniciacioDTO> llistarTipusIniciacions(
+            IniciacioCriteria iniciacioCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return Arrays.asList(stub.llistarTipusIniciacions(iniciacioCriteria));
+    }
+
+    public int getNumFitxes(
+            FitxaCriteria fitxaCriteria)
+            throws QueryServiceException, RemoteException {
+
+        return stub.getNumFitxes(fitxaCriteria);
+    }
+
 }
