@@ -472,7 +472,7 @@ public class UnitatAdministrativaQueryServiceTest {
             UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
             if (unitatAdministrativa != null) {
                 Assert.assertNotNull(unitatAdministrativa);
-                List<Long> listQueryServiceAdapter = unitatAdministrativa.llistarIdsDescendents();
+                List<Long> listQueryServiceAdapter = unitatAdministrativa.llistarDescendents();
                 Assert.assertTrue(listQueryServiceAdapter.size() > 0);
             }
 

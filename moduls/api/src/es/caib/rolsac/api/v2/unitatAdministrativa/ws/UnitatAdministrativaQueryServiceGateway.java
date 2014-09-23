@@ -151,18 +151,10 @@ public class UnitatAdministrativaQueryServiceGateway {
 
         return Arrays.asList( stub.llistarFilles(id, unitatAdministrativaCriteria));
     }
-	
-	public List<UnitatAdministrativaDTO> llistarDescendents(Long uaId) throws RemoteException, APIException {
-	    List<UnitatAdministrativaDTO> descendents = new ArrayList<UnitatAdministrativaDTO>();
-	    for (Object o: stub.llistarDescendents(uaId)) {
-	        descendents.add((UnitatAdministrativaDTO) o);
-	    }
-        return descendents;
-    }
 
-    public List<Long> llistarIdsDescendents(Long uaId) throws RemoteException, APIException {
+    public List<Long> llistarDescendents(Long uaId) throws RemoteException, APIException {
         List<Long> descendents = new ArrayList<Long>();
-        for (Object o: stub.llistarIdsDescendents(uaId)) {
+        for (Object o: stub.llistarDescendents(uaId)) {
             descendents.add((Long) o);
         }
         return descendents;

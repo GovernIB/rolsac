@@ -18,7 +18,7 @@ import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServi
 public class TheardTest {
 
     RolsacQueryService rolsacQS;
-    private static int NUMPROCS = 50;
+    private static int NUMPROCS = 60;
 
     @Before
     public void setup() {
@@ -36,7 +36,7 @@ public class TheardTest {
                     unitatAdministrativaCriteria.setId("1");
                     UnitatAdministrativaQueryServiceAdapter unitatAdministrativa;
                     unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
-                    List<Long> uaHijas = unitatAdministrativa.llistarIdsDescendents();
+                    List<Long> uaHijas = unitatAdministrativa.llistarDescendents();
                     System.out.println("PID:" + Thread.currentThread().getId() + " -Num. Descendents:" + uaHijas.size());
 
                 } catch (QueryServiceException e) {

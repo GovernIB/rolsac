@@ -71,17 +71,9 @@ public class UnitatAdministrativaQueryServiceEJBStrategy implements UnitatAdmini
         }
     }
 
-    public List<UnitatAdministrativaDTO> llistarDescendents(long uaId) throws StrategyException {
+    public List<Long> llistarDescendents(long uaId) throws StrategyException {
         try {
             return unitatAdministrativaQueryServiceDelegate.llistarDescendents(uaId);
-        } catch (DelegateException e) {
-            throw new StrategyException(e);
-        }
-    }
-
-    public List<Long> llistarIdsDescendents(long uaId) throws StrategyException {
-        try {
-            return unitatAdministrativaQueryServiceDelegate.llistarIdsDescendents(uaId);
         } catch (DelegateException e) {
             throw new StrategyException(e);
         }

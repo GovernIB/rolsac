@@ -254,39 +254,6 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 		return unitatAdministrativaDTOList;
 	}
 
-	/**
-	 * Obtiene los ids de todos los descendientes de una UA
-	 * @param uaId
-	 * @return List<Long>
-	 * 
-	 * @ejb.interface-method
-	 * @ejb.permission unchecked="true"
-	 */
-	public List<UnitatAdministrativaDTO> llistarDescendents(long uaId) {
-
-		List<UnitatAdministrativaDTO> uasList = new ArrayList<UnitatAdministrativaDTO>();
-		try {
-			UnitatAdministrativaCriteria uaCriteria = new UnitatAdministrativaCriteria();
-			uaCriteria.setId(String.valueOf(uaId));
-			RolsacQueryServiceEJB ejb = new RolsacQueryServiceEJB();
-			UnitatAdministrativaDTO uaDto = ejb.obtenirUnitatAdministrativa(uaCriteria);
-			obtenirDescendents(uaDto, uasList);
-
-		} catch (QueryServiceException e) {
-			log.error(e);
-		}
-		return uasList;
-	}
-
-	// Obtiene recursivamente los descendientes de la UA
-	private void obtenirDescendents(UnitatAdministrativaDTO ua, List<UnitatAdministrativaDTO> descendientes) throws QueryServiceException {
-		descendientes.add(ua);
-		List<UnitatAdministrativaDTO> uas = llistarFilles(ua.getId(), new UnitatAdministrativaCriteria());
-		for (UnitatAdministrativaDTO uaDto: uas) {
-			obtenirDescendents(uaDto, descendientes);
-		}
-	}
-
     /**
      * Obtiene los ids de todos los descendientes de una UA
      * @param uaId
@@ -295,7 +262,7 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public Long[] llistarIdsDescendents(long uaId) {
+    public Long[] llistarDescendents(long uaId) {
 
         Long[] uasArray = new Long[0];
         try {
