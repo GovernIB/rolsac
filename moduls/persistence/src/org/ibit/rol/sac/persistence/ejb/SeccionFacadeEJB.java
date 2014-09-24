@@ -747,46 +747,46 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     public Seccion getSeccion(Long id) {
     	
         Session session = getSession();
-        
         try {
-        	
             Seccion seccion = (Seccion) session.load(Seccion.class, id);
             session.refresh(seccion);
             Hibernate.initialize(seccion.getHijos());
             Hibernate.initialize(seccion.getPadre());
             
             StringBuilder consulta = new StringBuilder("select fichaUA, fua.unidadAdministrativa  from FichaResumenUA as fichaUA, FichaResumen as fr, FichaUA as fua ");
-            consulta.append(" where fichaUA.ficha.id = fr.id ");
-            consulta.append(" and fichaUA.id = fua.id");
-            consulta.append(" and fichaUA.idSeccio = :idSeccion ");
-            consulta.append(" order by fichaUA.ordenseccion asc, fr.fechaActualizacion desc ");
+            consulta.append("where fichaUA.ficha.id = fr.id ");
+            consulta.append("and fichaUA.id = fua.id ");
+            consulta.append("and fichaUA.idSeccio = :idSeccion ");
+            consulta.append("order by fichaUA.ordenseccion asc, fr.fechaActualizacion desc ");
             
             Query query = session.createQuery( consulta.toString() );
             query.setParameter("idSeccion", id);
             
             List<FichaResumenUA> fichasResumenUA = new Vector<FichaResumenUA>();
+
             List<Object[]> l = query.list();
-            for ( Object[] o : l ) {
-            	
+            for (Object[] o : l) {
             	FichaResumenUA fichaUA = ( (FichaResumenUA) o[0] );
             	fichaUA.setUnidadAdministrativa( (UnidadAdministrativa) o[1] );
             	fichasResumenUA.add(fichaUA);
-            	
             }
 
             seccion.setFichasResumenUA(fichasResumenUA);
-            
+
+            // Hibernate nos devuelve un list con el primer elemento a null y se debe limpiar
+            List<Seccion> secciones = new ArrayList<Seccion>();
+            for (Seccion sec : seccion.getHijos()) {
+                if (sec != null) {
+                    secciones.add(sec);
+                }
+            }
+            seccion.setHijos(secciones);
             return seccion;
             
         } catch (HibernateException he) {
-        	
             throw new EJBException(he);
-            
         } finally {
-        	
             close(session);
-            
         }
-        
     }
 }

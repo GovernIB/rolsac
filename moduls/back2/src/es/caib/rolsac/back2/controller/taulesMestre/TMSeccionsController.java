@@ -306,7 +306,6 @@ public class TMSeccionsController extends PantallaBaseController {
 		IdNomDTO result = null;
 		Map<String, String> valoresForm = new HashMap<String, String>();
 		try {
-
 			//Aquí nos llegará un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
 			//Iremos recopilando los parámetros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
 
@@ -314,142 +313,113 @@ public class TMSeccionsController extends PantallaBaseController {
 			Set<String> fitxaForm = new HashSet<String>();
 			Iterator<String> itParams = request.getParameterMap().keySet().iterator();
 
-			while ( itParams.hasNext() ) {
-
+			while (itParams.hasNext()) {
 				String key = itParams.next();
 				String value = request.getParameter(key);
-				if ( key.startsWith("seccio_") )
-					seccioForm.add(key);
+				if (key.startsWith("seccio_")) {
+                    seccioForm.add(key);
+                }
 
-				if ( key.startsWith("fitxa_") )
-					fitxaForm.add(key);
+				if (key.startsWith("fitxa_")) {
+                    fitxaForm.add(key);
+                }
 
 				valoresForm.put(key, value);
-
 			}
 
 			SeccionDelegate seccionDelegate = DelegateUtil.getSeccionDelegate();
 
-			boolean edicion = valoresForm.get("item_id") != null && !"".equals( valoresForm.get("item_id") );
+			boolean edicion = (valoresForm.get("item_id") != null) && !"".equals(valoresForm.get("item_id"));
 			if (edicion) {
-
-				Long idSeccio = ParseUtil.parseLong( valoresForm.get("item_id") );
+				Long idSeccio = ParseUtil.parseLong(valoresForm.get("item_id"));
 				seccion = seccionDelegate.getSeccion(idSeccio);
-
 			}
 
 			// Obtener campos por idioma
 			List<String> idiomas = DelegateUtil.getIdiomaDelegate().listarLenguajes();
-
-			Map traduccions = new HashMap( idiomas.size() );
-			for ( String idioma : idiomas ) {
-
+			Map traduccions = new HashMap(idiomas.size());
+			for (String idioma : idiomas) {
 				TraduccionSeccion traduccionSeccion = new TraduccionSeccion();
 				traduccionSeccion.setNombre( RolUtil.limpiaCadena( valoresForm.get("item_nom_" + idioma) ) );
 				traduccionSeccion.setDescripcion( RolUtil.limpiaCadena( valoresForm.get("item_descripcio_" + idioma) ) );
 
 				traduccions.put(idioma, traduccionSeccion);
-
 			}
-
 			seccion.setTraduccionMap(traduccions);
 
-			//Obtener los demás campos
+			// Obtener los demás campos
 			Long idSeccioPare = null;
-			if ( valoresForm.get("item_codi_pare") != null  &&  !"".equals( valoresForm.get("item_codi_pare") ) )
-				idSeccioPare = ParseUtil.parseLong(valoresForm.get("item_codi_pare"));
+			if ((valoresForm.get("item_codi_pare") != null) && !"".equals(valoresForm.get("item_codi_pare"))) {
+                idSeccioPare = ParseUtil.parseLong(valoresForm.get("item_codi_pare"));
+            }
 
-			seccion.setPerfil( valoresForm.get("item_perfil") );
-			seccion.setCodigoEstandard( valoresForm.get("item_codi_estandard") );
+			seccion.setPerfil(valoresForm.get("item_perfil"));
+			seccion.setCodigoEstandard(valoresForm.get("item_codi_estandard"));
 
 			// Secciones relacionadas
-			if ( valoresForm.size() > 0 ) {
-
+			if (valoresForm.size() > 0) {
 				// Recorrem el formulari
-				for ( String nomParametre : valoresForm.keySet() ) {
+				for (String nomParametre : valoresForm.keySet()) {
 
 					String[] elements = nomParametre.split("_");
-					if ( elements[0].equals("seccio")  &&  elements[1].equals("id") ) {
-
+					if (elements[0].equals("seccio") && elements[1].equals("id")) {
 						//En aquest cas, elements[2] es igual al id del fetVital
 						Long idSeccioRel = ParseUtil.parseLong(elements[2]);
 
 						// Cercam seccio relacionada i camviam l'ordre per si ha canviat
-						if ( seccion.getHijos() != null ) {
-
-							Iterator<Seccion> it = seccion.getHijos().iterator();
-							while ( it.hasNext() ) {
-
-								Seccion secHijo = it.next();
-								if ( idSeccioRel.equals( secHijo.getId() ) )
-									secHijo.setOrden( ParseUtil.parseInt( valoresForm.get("seccio_orden_" + elements[2]) ) );
-
-							}
-
+						if (seccion.getHijos() != null) {
+                            for (Seccion sec : seccion.getHijos()) {
+                                if (idSeccioRel.equals(sec.getId())) {
+                                    sec.setOrden(ParseUtil.parseInt( valoresForm.get("seccio_orden_" + elements[2]) ));
+                                }
+                            }
 						}
-
 					}
-
 				}
-
 			}
 
 			// Fichas informativas
-			if ( seccion.getFichasResumenUA() != null ) {
+			if (seccion.getFichasResumenUA() != null) {
 
 				List<FichaResumenUA> fichasUAList = seccion.getFichasResumenUA();
 				Hashtable<Long, FichaResumenUA> fichasUAHash = new Hashtable<Long, FichaResumenUA>();
-				for ( FichaResumenUA fichaUA : fichasUAList )
-					fichasUAHash.put(fichaUA.getId(), fichaUA);
+				for (FichaResumenUA fichaUA : fichasUAList) {
+                    fichasUAHash.put(fichaUA.getId(), fichaUA);
+                }
 
-
-				if ( idFichas.length > 0 ) {
-
+				if (idFichas.length > 0) {
 					int orden = 0;
 					List<FichaResumenUA> fichasUAModificadas = new Vector<FichaResumenUA>();
-					for ( Long idFicha : idFichas ) {
+					for (Long idFicha : idFichas) {
 
 						FichaResumenUA fichaUA = fichasUAHash.get(idFicha);
-						if ( fichaUA != null  &&  fichaUA.getFicha() != null ) {
-
+						if (fichaUA != null && fichaUA.getFicha() != null) {
 							orden += 5;
 							fichaUA.setOrdenseccion(orden);
 							fichasUAModificadas.add(fichaUA);
-
 						}
-
 					}
 					
 					seccion.setFichasResumenUA(fichasUAModificadas);
-					
 				}
 			}
 
-
 			seccionDelegate.grabarSeccion(seccion, idSeccioPare);
-			result = new IdNomDTO( seccion.getId(), messageSource.getMessage( "seccio.guardat.correcte", null, request.getLocale() ) );
+			result = new IdNomDTO(seccion.getId(), messageSource.getMessage("seccio.guardat.correcte", null, request.getLocale()));
 
 		} catch (DelegateException dEx) {
-
 			if ( dEx.isSecurityException() ) {
-
-				String error = messageSource.getMessage( "error.permisos", null, request.getLocale() );
+				String error = messageSource.getMessage("error.permisos", null, request.getLocale());
 				result = new IdNomDTO(-1l, error);
-
 			} else {
-
-				String error = messageSource.getMessage( "error.altres", null, request.getLocale() );
+				String error = messageSource.getMessage("error.altres", null, request.getLocale());
 				result = new IdNomDTO(-2l, error);
-				log.error( ExceptionUtils.getStackTrace(dEx) );
-
+				log.error(ExceptionUtils.getStackTrace(dEx));
 			}
-
 		}
 
 		return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
-
 	}
-
 
 	@RequestMapping(value = "/esborrarSeccio.do", method = POST)
 	public @ResponseBody IdNomDTO esborrarSeccio(HttpServletRequest request) {
