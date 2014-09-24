@@ -1142,7 +1142,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 		String idioma = getRequestLanguage(request);
 
-		if ( getUAFromSession(session) == null ) {
+		if (getUAFromSession(session) == null) {
 			return resultats;//Si no hay unidad administrativa se devuelve vacío
 		}
 
@@ -1150,13 +1150,12 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 		try {
 			//Obtener parámetros de búsqueda
-
-			if (request.getParameter("data") != null && !request.getParameter("data").equals("")) {
+			if ((request.getParameter("data") != null) && !request.getParameter("data").equals("")) {
 				Date fecha = DateUtils.parseDate(request.getParameter("data"));
 				paramMap.put("fecha", fecha);
 			}			
 
-			if (request.getParameter("dataButlleti") != null && !request.getParameter("dataButlleti").equals("")) {
+			if ((request.getParameter("dataButlleti") != null) && !request.getParameter("dataButlleti").equals("")) {
 				Date fechaBoletin = DateUtils.parseDate(request.getParameter("dataButlleti"));
 				paramMap.put("fechaBoletin", fechaBoletin);
 			}
@@ -1183,33 +1182,28 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 
 			//La búsqueda de normativas no tendrá en cuenta la UA actual (idua = null)
-			resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap,paramTrad, "local", null, false, false, campoOrdenacion,orden, pagPag, pagRes);		
+			resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap,paramTrad, "todas", null, false, false, campoOrdenacion,orden, pagPag, pagRes);
 
-			for ( Normativa normativa : castList( Normativa.class , resultadoBusqueda.getListaResultados() ) ) {
-				
+			for (Normativa normativa : castList( Normativa.class , resultadoBusqueda.getListaResultados())) {
 				long idNormativa = normativa.getId();
-				String tituloEnlaceHTML = HtmlUtils.obtenerTituloDeEnlaceHtml( ( (TraduccionNormativa) normativa.getTraduccion("ca") ).getTitulo() );
-				String fecha = normativa.getFecha() == null  ?  " "  :  DateUtils.formatDate( normativa.getFecha() );
-				String fechaBoletin = normativa.getFechaBoletin() == null  ?  " "  :  DateUtils.formatDate( normativa.getFechaBoletin() );
+				String tituloEnlaceHTML = HtmlUtils.obtenerTituloDeEnlaceHtml(((TraduccionNormativa) normativa.getTraduccion("ca")).getTitulo());
+				String fecha = (normativa.getFecha() == null) ? " " : DateUtils.formatDate( normativa.getFecha());
+				String fechaBoletin = (normativa.getFechaBoletin() == null) ? " " : DateUtils.formatDate(normativa.getFechaBoletin());
 				
-				llistaNormativesDTO.add( new ProcedimientoNormativaDTO( idNormativa, tituloEnlaceHTML, fecha, fechaBoletin ) );
-				
+				llistaNormativesDTO.add(new ProcedimientoNormativaDTO(idNormativa, tituloEnlaceHTML, fecha, fechaBoletin));
 			}
 
 		} catch (DelegateException dEx) {
-
-			if ( !dEx.isSecurityException() ) {
+			if (!dEx.isSecurityException()) {
 				logException(log, dEx);
-			} 
-			
+			}
 		}
 
-		resultats.put("total", resultadoBusqueda.getTotalResultados() );
+		resultats.put("total", resultadoBusqueda.getTotalResultados());
 		resultats.put("nodes", llistaNormativesDTO);
 
 		return resultats;
 	}
-
 
 	class HechoVitalProcedimientoDTOComparator implements Comparator<Map<String, Object>> {
 		public int compare(Map<String, Object> hvp1, Map<String, Object> hvp2) {
