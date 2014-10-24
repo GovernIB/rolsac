@@ -1,6 +1,5 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,8 +9,6 @@ import javax.ejb.EJBException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-
 
 /**
  * SessionBean para consultar a traves de JDBC

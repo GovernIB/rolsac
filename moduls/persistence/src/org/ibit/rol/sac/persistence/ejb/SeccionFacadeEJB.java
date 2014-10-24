@@ -1,7 +1,6 @@
 package org.ibit.rol.sac.persistence.ejb;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -23,7 +22,6 @@ import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
-import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 

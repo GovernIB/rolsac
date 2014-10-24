@@ -1,7 +1,5 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import java.io.ByteArrayOutputStream;
-
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 

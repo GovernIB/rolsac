@@ -29,7 +29,6 @@ import org.ibit.rol.sac.persistence.ws.Actualizador;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
-
 /**
  * SessionBean para mantener y consultar materias.
  *

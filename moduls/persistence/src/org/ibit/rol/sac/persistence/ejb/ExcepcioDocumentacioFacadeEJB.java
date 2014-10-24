@@ -14,7 +14,6 @@ import org.ibit.rol.sac.model.ExcepcioDocumentacio;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
-
 /**
  * SessionBean per mantenir i consultar Excepcions de Doumentació.
  *

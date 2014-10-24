@@ -1,7 +1,6 @@
 package org.ibit.rol.sac.persistence.ejb;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.ejb.CreateException;
@@ -12,12 +11,9 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Order;
-import net.sf.hibernate.mapping.Collection;
 
 import org.ibit.rol.sac.model.AgrupacionMateria;
 import org.ibit.rol.sac.model.Materia;
-import org.ibit.rol.sac.persistence.delegate.DelegateException;
-import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 

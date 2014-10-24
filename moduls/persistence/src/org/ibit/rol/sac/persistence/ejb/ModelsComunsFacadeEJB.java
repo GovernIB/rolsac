@@ -16,7 +16,6 @@ import net.sf.hibernate.expression.Order;
 
 import org.ibit.rol.sac.model.Document;
 import org.ibit.rol.sac.model.DocumentTramit;
-import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 

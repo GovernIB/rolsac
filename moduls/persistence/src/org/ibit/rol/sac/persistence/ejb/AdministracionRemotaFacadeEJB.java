@@ -1,13 +1,11 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import net.sf.hibernate.Criteria;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
@@ -19,7 +17,6 @@ import org.ibit.rol.sac.model.EdificioRemoto;
 import org.ibit.rol.sac.model.FichaRemota;
 import org.ibit.rol.sac.model.NormativaExternaRemota;
 import org.ibit.rol.sac.model.ProcedimientoRemoto;
-import org.ibit.rol.sac.model.TraduccionFichaRemota;
 import org.ibit.rol.sac.model.TramiteRemoto;
 import org.ibit.rol.sac.model.UnidadAdministrativaRemota;
 import org.ibit.rol.sac.persistence.util.RemotoUtils;

@@ -189,7 +189,6 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
 		} finally {
 		    try {
 		        reader.close();
-
             } catch (IOException e) {
                 e.printStackTrace();
                 throw new EJBException(e);
@@ -205,15 +204,24 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
 	 */
 	public void borrarObjetosDependientes(String id, String idi) {
 
-		try {
+        IndexReader reader = null;
+        try {
 			Directory directory = getHibernateDirectory(idi);
-			IndexReader reader = IndexReader.open(directory, false);
+			reader = IndexReader.open(directory, false);
 			reader.deleteDocuments(new Term(Catalogo.DESCRIPTOR_CLASIFICACION, id));
-			reader.close();
 
 		} catch (IOException e) {
 			throw new EJBException(e);
-		}
+		} catch (Exception ex) {
+            log.error("No se ha podido borrar la entrada en el indice.");
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new EJBException(e);
+            }
+        }
 	}
 
 
@@ -382,20 +390,32 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */    
-	public void optimizar(List<String> langs) throws DelegateException, IOException {
+	public void optimizar(List<String> langs) throws DelegateException {
 
-	    IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
+        Directory directory = null;
+        IndexWriter writer = null;
+        IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
 	    for (String lang : langs) {
-            Directory directory = indexerDelegate.getHibernateDirectory(lang);
-//            IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Constants.LUCENE_VERSION, getAnalizador(lang));
-//            IndexWriter writer = new IndexWriter(directory, indexWriterConfig);
-//            writer.setMaxFieldLength(MaxFieldLength.UNLIMITED.getLimit());
-            IndexWriter writer = new IndexWriter(directory, getAnalizador(lang), MaxFieldLength.UNLIMITED);
-            writer.setMergeFactor(20);
-            writer.setMaxMergeDocs(Integer.MAX_VALUE);
-            optimizarIndice(writer);
-            writer.close();
-            directory.close();
+            try {
+                directory = indexerDelegate.getHibernateDirectory(lang);
+                writer = new IndexWriter(directory, getAnalizador(lang), MaxFieldLength.UNLIMITED);
+                writer.setMergeFactor(20);
+                writer.setMaxMergeDocs(Integer.MAX_VALUE);
+                optimizarIndice(writer);
+
+            } catch (IOException e) {
+                throw new EJBException(e);
+            } catch (Exception ex) {
+                log.error("No se ha podido borrar la entrada en el indice.");
+            } finally {
+                try {
+                    writer.close();
+                    directory.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw new EJBException(e);
+                }
+            }
         }
 	}
 
@@ -474,8 +494,6 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
 			throw new EJBException(e);
 		} catch (HibernateException e) {
 			throw new EJBException(e);
-		} catch (IOException e) {
-		    throw new EJBException(e);
         } finally {
 			close(session);
 		}
@@ -544,8 +562,6 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
 			throw new EJBException(e);
 		} catch (HibernateException e) {
 			throw new EJBException(e);
-		} catch (IOException e) {
-		    throw new EJBException(e);
         } finally {
 			close(session);
 		}
@@ -602,8 +618,6 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
 			throw new EJBException(e);
 		} catch (HibernateException e) {
 			throw new EJBException(e);
-		} catch (IOException e) {
-            throw new EJBException(e);
         } finally {
 			close(session);
 		}
@@ -663,8 +677,6 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
 			throw new EJBException(e);
 		} catch (HibernateException e) {
 			throw new EJBException(e);
-		} catch (IOException e) {
-		    throw new EJBException(e);
         } finally {
 			close(session);
 		}
@@ -718,8 +730,6 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
     		throw new EJBException(e);
     	} catch (HibernateException e) {
     		throw new EJBException(e);
-    	} catch (IOException e) {
-    	    throw new EJBException(e);
         } finally {
     		close(session);
     	}
@@ -775,8 +785,6 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
 			throw new EJBException(e);
 		} catch (HibernateException e) {
 			throw new EJBException(e);
-		} catch (IOException e) {
-		    throw new EJBException(e);
         } finally {
 			close(session);
 		}
@@ -1000,7 +1008,6 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
         return buscarAvanzado(buscarTodas, buscarAlguna, buscarFrase, buscarNinguna, tipos, uo, materia, fechaInicio, fechaFin, ayudas, idioma, sugerir, restringido);
     }
 
-
     /**
      * Busca documentos para un idioma concreto, con opción de sugerir
      * en caso de haber encontrado nada interesante.
@@ -1026,13 +1033,15 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
 
         long startTime = System.currentTimeMillis();
 
+        IndexReader reader = null;
+        IndexSearcher searcher = null;
         try {
             idioma = idioma.toLowerCase();
             if (directory == null) {
                 directory = getHibernateDirectory(idioma);
             }
-            IndexReader reader = IndexReader.open(directory);
-            IndexSearcher searcher = new IndexSearcher(reader);
+            reader = IndexReader.open(directory);
+            searcher = new IndexSearcher(reader);
 
             // Montar la query para consultar en el indice de lucene
             Query query = querySearchAdv(idioma, buscarTodas, buscarAlguna, buscarFrase, buscarNinguna, tipos, uo, materia, fechaInicio, fechaFin, ayudas, restringido);
@@ -1058,11 +1067,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
             endTime = System.currentTimeMillis();
             IndexResultados res = new IndexResultados(extractHits(hits, idioma, directory), hits.totalHits, (endTime - startTime), buscarTodas, cadenaSugerida, saltos);
 
-            searcher.close();
-            reader.close();
-            directory.close();
-
-            return res;            
+            return res;
 
         } catch (IOException e) {
             log.error( e.getMessage() );
@@ -1070,9 +1075,17 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
         } catch (ParseException e) {
             log.error( e.getMessage() );
             return null;
+        } finally {
+            try {
+                searcher.close();
+                reader.close();
+                directory.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new EJBException(e);
+            }
         }
     }
-
 
     private Query querySearchAdv(
                     String idioma,

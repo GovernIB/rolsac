@@ -7,8 +7,6 @@ import org.ibit.rol.sac.model.criteria.PaginacionCriteria;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
-
-
 /**
  * Bean con la funcionalidad b�sica para interactuar con HIBERNATE de forma paginada.
  *
@@ -20,7 +18,6 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  * @ejb.security-role-ref role-name="sacsuper" role-link="${role.super}"
  * @ejb.security-role-ref role-name="sacoper" role-link="${role.oper}"
  */
-
 public class PaginatedHibernateEJB {
 
 	private static int RESULTATS_CERCA_TOTS = 99999;

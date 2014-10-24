@@ -1,8 +1,5 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Iterator;
 
@@ -16,7 +13,6 @@ import org.ibit.rol.sac.persistence.util.RemotoUtils;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
-
 
 /**
  * SessionBean para mantener y consultar Normativa Remota.

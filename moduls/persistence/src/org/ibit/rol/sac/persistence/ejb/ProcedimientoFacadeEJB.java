@@ -963,7 +963,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 	/**
 	 * Busca todas los Procedimientos que cumplen los criterios de busqueda del nuevo back (rolsacback).
-	 * @param criteria	Indica los criterios para la consulta.
+	 * @param bc	Indica los criterios para la consulta.
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
@@ -1950,7 +1950,6 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		return filter;
 	}
 
-
 	/**
 	 * Añade los procedimientos al índice en todos los idiomas
 	 * @ejb.interface-method
@@ -1959,56 +1958,52 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 */
 	public void indexInsertaProcedimiento(ProcedimientoLocal proc, ModelFilterObject filter) {
 
-		try {
-			if (proc.getValidacion().equals(2)) {
-			    return;
-			}
+        try {
+            if (proc.getValidacion().equals(2)) {
+                return;
+            }
 
-			proc = obtenerProcedimientoNewBack(proc.getId());
-
-			if (filter == null) {
+            proc = obtenerProcedimientoNewBack(proc.getId());
+            if (filter == null) {
                 filter = obtenerFilterObject(proc);
             }
 
-			IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
-
-			// Obtenemos los documentos del procedimiento, si tiene, para evitar tener que cargarlos en cada idioma
+            IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
+            // Obtenemos los documentos del procedimiento, si tiene, para evitar tener que cargarlos en cada idioma
             List<Documento> listaDocumentos = obtenerListaDocumentos(proc);
 
-			String tipo = tipoProcedimiento(proc, false); 
-			Iterator iterator = proc.getLangs().iterator();
-			while (iterator.hasNext()) {
-				String idioma = (String) iterator.next();
+            String tipo = tipoProcedimiento(proc, false);
+            Iterator iterator = proc.getLangs().iterator();
+            while (iterator.hasNext()) {
+                String idioma = (String) iterator.next();
 
-				// Configuración del writer
+                // Configuración del writer
                 Directory directory = indexerDelegate.getHibernateDirectory(idioma);
                 IndexWriter writer = new IndexWriter(directory, getAnalizador(idioma), false, MaxFieldLength.UNLIMITED);
                 writer.setMergeFactor(20);
                 writer.setMaxMergeDocs(Integer.MAX_VALUE);
 
-				IndexObject io = new IndexObject();
+                try {
+                    IndexObject io = new IndexObject();
+                    io = indexarTraducciones(proc, idioma, io, tipo);
+                    io = indexarContenidos(proc, io, tipo, filter);
+                    io = indexarContenidosLaterales(proc, idioma, io, filter);
+                    io = indexarContenidosDocumentos(proc, idioma, writer, io, listaDocumentos, tipo);
+                    if (io.getText().length() > 0) {
+                        indexerDelegate.insertaObjeto(io, idioma, writer);
+                    }
 
-				io = indexarTraducciones(proc, idioma, io, tipo);
-
-				io = indexarContenidos(proc, io, tipo, filter);
-
-				io = indexarContenidosLaterales(proc, idioma, io, filter);
-
-				io = indexarContenidosDocumentos(proc, idioma, writer, io, listaDocumentos, tipo);
-
-				if (io.getText().length() > 0) {
-				    indexerDelegate.insertaObjeto(io, idioma, writer);
-				}
-
-				writer.close();
-                directory.close();
+                } catch (Exception e) {
+                    log.warn("[indexInsertaProcedimiento:" + proc.getId() + "] No se ha podido indexar el procedimiento para el idioma: " + idioma + ". msg: " + e.getMessage());
+                } finally {
+                    writer.close();
+                    directory.close();
+                }
 			}
-
 		} catch (Exception ex) {
-			log.warn( "[indexInsertaProcedimiento:" + proc.getId() + "] No se ha podido indexar el procedimiento. " + ex.getMessage() );
+			log.warn("[indexInsertaProcedimiento:" + proc.getId() + "] No se ha podido indexar el procedimiento. " + ex.getMessage());
 		}
 	}
-
 
 	private List<Documento> obtenerListaDocumentos(ProcedimientoLocal proc) throws DelegateException {
 

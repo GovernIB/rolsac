@@ -3,8 +3,6 @@ package org.ibit.rol.sac.persistence.ejb;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
-import net.sf.hibernate.Criteria;
-import net.sf.hibernate.expression.Expression;
 import org.ibit.rol.sac.model.Familia;
 import org.ibit.rol.sac.model.IconoFamilia;
 import org.ibit.rol.sac.model.PerfilCiudadano;
@@ -14,7 +12,6 @@ import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * SessionBean para mantener y consultar IconoFamilia.

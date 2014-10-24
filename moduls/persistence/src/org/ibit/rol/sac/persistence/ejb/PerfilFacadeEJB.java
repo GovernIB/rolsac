@@ -12,7 +12,6 @@ import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
-import net.sf.hibernate.expression.Expression;
 
 import org.ibit.rol.sac.model.Familia;
 import org.ibit.rol.sac.model.IconoFamilia;

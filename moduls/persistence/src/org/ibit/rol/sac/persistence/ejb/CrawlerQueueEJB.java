@@ -9,7 +9,6 @@ import javax.jms.ObjectMessage;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.persistence.crawler.Crawler;
 import org.ibit.rol.sac.persistence.crawler.OperacionCrawler;
 

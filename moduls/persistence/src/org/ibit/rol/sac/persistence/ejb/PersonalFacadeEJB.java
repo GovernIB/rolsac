@@ -8,7 +8,6 @@ import net.sf.hibernate.Session;
 import org.apache.commons.lang.StringUtils;
 import org.ibit.rol.sac.model.Personal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
-import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.model.criteria.PaginacionCriteria;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;

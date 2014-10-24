@@ -12,7 +12,6 @@ import org.ibit.rol.sac.model.*;
 import org.ibit.rol.sac.model.ws.FichaUATransferible;
 
 import org.ibit.rol.sac.persistence.util.RemotoUtils;
-import org.ibit.rol.sac.persistence.util.DateUtils;
 
 import java.util.Collections;
 import java.util.HashSet;

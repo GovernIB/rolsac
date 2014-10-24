@@ -1561,27 +1561,25 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		}
 
 		return filter;
-	}  	
+	}
 
-
-	/**
+    /**
 	 * Añade la unidad administrativa al índice en todos los idiomas
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 * @param unidadAdministrativa	Indica la unidad administrativa que se va a añadir al índice en todos los idiomas.
 	 */
-	public void indexInsertaUA(UnidadAdministrativa unidadAdministrativa,  ModelFilterObject filter) {
+    public void indexInsertaUA(UnidadAdministrativa unidadAdministrativa,  ModelFilterObject filter) {
 
-		try {
-			if (filter == null) {
-			    filter = obtenerFilterObject(unidadAdministrativa);
+        try {
+            if (filter == null) {
+                filter = obtenerFilterObject(unidadAdministrativa);
 			}
 
-			IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
-
-			Iterator iterator = unidadAdministrativa.getLangs().iterator();
-			while (iterator.hasNext()) {
-				String idi = (String) iterator.next();
+            IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
+            Iterator iterator = unidadAdministrativa.getLangs().iterator();
+            while (iterator.hasNext()) {
+                String idi = (String) iterator.next();
 				IndexObject io = new IndexObject();
 
 				// Configuración del writer
@@ -1590,61 +1588,65 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
                 writer.setMergeFactor(20);
                 writer.setMaxMergeDocs(Integer.MAX_VALUE);
 
-				io.setId(Catalogo.SRVC_UO + "." + unidadAdministrativa.getId());
-				io.setClasificacion(Catalogo.SRVC_UO);
+                try {
+                    io.setId(Catalogo.SRVC_UO + "." + unidadAdministrativa.getId());
+                    io.setClasificacion(Catalogo.SRVC_UO);
 
-				io.setMicro(filter.getMicrosite_id());
-				io.setUo(filter.getUo_id());
-				io.setMateria(filter.getMateria_id());
-				io.setFamilia(filter.getFamilia_id());
-				io.setSeccion(filter.getSeccion_id());
-				io.setCaducidad("");
-				io.setPublicacion(""); 
-				io.setDescripcion("");
+                    io.setMicro(filter.getMicrosite_id());
+                    io.setUo(filter.getUo_id());
+                    io.setMateria(filter.getMateria_id());
+                    io.setFamilia(filter.getFamilia_id());
+                    io.setSeccion(filter.getSeccion_id());
+                    io.setCaducidad("");
+                    io.setPublicacion("");
+                    io.setDescripcion("");
 
-				io.addTextLine(unidadAdministrativa.getResponsable());
+                    io.addTextLine(unidadAdministrativa.getResponsable());
 
-				TraduccionUA trad = ((TraduccionUA) unidadAdministrativa.getTraduccion(idi));
-				if (trad != null) {
+                    TraduccionUA trad = ((TraduccionUA) unidadAdministrativa.getTraduccion(idi));
+                    if (trad != null) {
 
-					io.setUrl("/govern/organigrama/area.do?coduo=" + unidadAdministrativa.getId() + "&lang=" + idi);
-					io.setTituloserviciomain(filter.getTraduccion(idi).getMaintitle());
+                        io.setUrl("/govern/organigrama/area.do?coduo=" + unidadAdministrativa.getId() + "&lang=" + idi);
+                        io.setTituloserviciomain(filter.getTraduccion(idi).getMaintitle());
 
-					if (trad.getNombre() != null) {
-						io.setTitulo(trad.getNombre());
+                        if (trad.getNombre() != null) {
+                            io.setTitulo(trad.getNombre());
 
-						//para dar mas peso al titulo
-						for (int i = 0; i < 5; i++) {
-							io.addTextLine(trad.getNombre());
-						}
-					}
+                            //para dar mas peso al titulo
+                            for (int i = 0; i < 5; i++) {
+                                io.addTextLine(trad.getNombre());
+                            }
+                        }
 
-					if (trad.getPresentacion() != null) {
-						if (trad.getPresentacion().length() > 200) {
-							io.setDescripcion(trad.getPresentacion().substring(0,199) + "...");
-						} else {
-							io.setDescripcion(trad.getPresentacion());
-						}
-					}
+                        if (trad.getPresentacion() != null) {
+                            if (trad.getPresentacion().length() > 200) {
+                                io.setDescripcion(trad.getPresentacion().substring(0, 199) + "...");
+                            } else {
+                                io.setDescripcion(trad.getPresentacion());
+                            }
+                        }
 
-					io.addTextopcionalLine(filter.getTraduccion(idi).getMateria_text());
-					io.addTextopcionalLine(filter.getTraduccion(idi).getSeccion_text());
-					io.addTextopcionalLine(filter.getTraduccion(idi).getUo_text());
-				}
+                        io.addTextopcionalLine(filter.getTraduccion(idi).getMateria_text());
+                        io.addTextopcionalLine(filter.getTraduccion(idi).getSeccion_text());
+                        io.addTextopcionalLine(filter.getTraduccion(idi).getUo_text());
+                    }
 
-				if (io.getText().length() > 0) {
-				    indexerDelegate.insertaObjeto(io, idi, writer);
-				}
+                    if (io.getText().length() > 0) {
+                        indexerDelegate.insertaObjeto(io, idi, writer);
+                    }
 
-				writer.close();
-                directory.close();
+                } catch (Exception e) {
+                    log.warn("[indexInsertaUA:" + unidadAdministrativa.getId() + "] No se ha podido indexar UA para el idioma: " + idi + ". msg: " + e.getMessage());
+                } finally {
+                    writer.close();
+                    directory.close();
+                }
 			}
 
 		} catch (Exception ex) {
-			log.warn( "[indexInsertaUA:" + unidadAdministrativa.getId() + "] No se ha podido indexar UA. " + ex.getMessage() );
+			log.warn("[indexInsertaUA:" + unidadAdministrativa.getId() + "] No se ha podido indexar UA. " + ex.getMessage());
 		}
 	}
-
 
 	/**
 	 * Elimina la ua en el indice en todos los idiomas
@@ -2183,7 +2185,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 * @param idUA	Identificador de la unidada administrativa.
 	 * @param uaHijas	Indica si la unidad administrativa tiene unidades hijas.
 	 * @param uaPropias
-	 * @param session
 	 * @return
 	 * @throws HibernateException
 	 * @throws DelegateException
@@ -2344,7 +2345,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	/**
 	 * Se encarga de eliminar el archivo foto grande
 	 * 
-	 * @param ua
+	 * @param idUA
 	 * @throws HibernateException 
 	 * @throws EJBException
 	 * @ejb.interface-method
@@ -2377,7 +2378,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	/**
 	 * Se encarga de eliminar el archivo foto pequeña
 	 * 
-	 * @param ua
+	 * @param idUA
 	 * @throws HibernateException 
 	 * @throws EJBException
 	 * @ejb.interface-method
@@ -2410,7 +2411,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	/**
 	 * Se encarga de eliminar el archivo logo salutación vertical
 	 * 
-	 * @param ua
+	 * @param idUA
 	 * @throws HibernateException 
 	 * @throws EJBException
 	 * @ejb.interface-method
@@ -2443,7 +2444,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	/**
 	 * Se encarga de eliminar el archivo logo vertical
 	 * 
-	 * @param ua
+	 * @param idUA
 	 * @throws HibernateException 
 	 * @throws EJBException
 	 * @ejb.interface-method
@@ -2476,7 +2477,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	/**
 	 * Se encarga de eliminar el archivo logo horitzontal
 	 * 
-	 * @param ua
+	 * @param idUA
 	 * @throws HibernateException 
 	 * @throws EJBException
 	 * @ejb.interface-method
@@ -2509,7 +2510,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	/**
 	 * Se encarga de eliminar el archivo logo salutación horitzontal
 	 * 
-	 * @param ua
+	 * @param idUA
 	 * @throws HibernateException 
 	 * @throws EJBException
 	 * @ejb.interface-method

@@ -6,7 +6,6 @@ import org.ibit.rol.sac.model.*;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
-import java.util.Iterator;
 
 /**
  * SessionBean para controlar si los usuarios tienen acceso o no.

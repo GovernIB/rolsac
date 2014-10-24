@@ -68,7 +68,6 @@ import es.caib.rolsac.lucene.model.TraModelFilterObject;
 import es.caib.rolsac.lucene.model.Catalogo;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
-
 /**
  * SessionBean para mantener y consultar Normativa.
  *
@@ -999,7 +998,6 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 		return filter;
 	}        
 
-
 	/**
 	 * Añade la normativa al indice en todos los idiomas
 	 * @ejb.interface-method
@@ -1007,102 +1005,95 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	 */
 	public void indexInsertaNormativa(Normativa norma, ModelFilterObject filter)  {
 
-		try {
+        try {
+            if (filter == null) {
+                filter = obtenerFilterObject(norma);
+            }
 
-			if (filter == null) 
-				filter = obtenerFilterObject(norma);
+            IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
+            for (Iterator iterator = norma.getLangs().iterator(); iterator.hasNext();) {
+                String idi = (String) iterator.next();
+                IndexObject io = new IndexObject();
 
-				IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
-
-			for (Iterator iterator = norma.getLangs().iterator(); iterator.hasNext();) {
-				String idi = (String) iterator.next();
-				IndexObject io = new IndexObject();
-
-				// Configuración del writer
+                // Configuración del writer
                 Directory directory = indexerDelegate.getHibernateDirectory(idi);
                 IndexWriter writer = new IndexWriter(directory, getAnalizador(idi), false, MaxFieldLength.UNLIMITED);
                 writer.setMergeFactor(20);
                 writer.setMaxMergeDocs(Integer.MAX_VALUE);
 
-				if (norma instanceof NormativaLocal) {
-					io.setId(Catalogo.SRVC_NORMATIVA_LOCAL + "." + norma.getId());
-					io.setClasificacion(Catalogo.SRVC_NORMATIVA_LOCAL);
-				}
-				if (norma instanceof NormativaExterna) {
-					io.setId(Catalogo.SRVC_NORMATIVA_EXTERNA + "." + norma.getId());
-					io.setClasificacion(Catalogo.SRVC_NORMATIVA_EXTERNA);
-				}
+                try {
+                    if (norma instanceof NormativaLocal) {
+                        io.setId(Catalogo.SRVC_NORMATIVA_LOCAL + "." + norma.getId());
+                        io.setClasificacion(Catalogo.SRVC_NORMATIVA_LOCAL);
+                    }
+                    if (norma instanceof NormativaExterna) {
+                        io.setId(Catalogo.SRVC_NORMATIVA_EXTERNA + "." + norma.getId());
+                        io.setClasificacion(Catalogo.SRVC_NORMATIVA_EXTERNA);
+                    }
 
-				io.setMicro(filter.getMicrosite_id());
-				io.setUo(filter.getUo_id());
-				io.setMateria(filter.getMateria_id());
-				io.setFamilia(filter.getFamilia_id());
-				io.setSeccion(filter.getSeccion_id());
+                    io.setMicro(filter.getMicrosite_id());
+                    io.setUo(filter.getUo_id());
+                    io.setMateria(filter.getMateria_id());
+                    io.setFamilia(filter.getFamilia_id());
+                    io.setSeccion(filter.getSeccion_id());
+                    io.setCaducidad("");	// No tiene fecha de caducidad
+                    io.setPublicacion(""); 	// No tiene fecha de publicacion
+                    io.setDescripcion("");
 
-				io.setCaducidad("");	// No tiene fecha de caducidad
-				io.setPublicacion(""); 	// No tiene fecha de publicacion
-				io.setDescripcion(""); 
+                    TraduccionNormativa trad = ((TraduccionNormativa) norma.getTraduccion(idi));
+                    if (trad != null) {
+                        io.setTituloserviciomain(trad.getSeccion());
 
-				TraduccionNormativa trad = ((TraduccionNormativa) norma.getTraduccion(idi));
+                        if (norma.getBoletin() != null && norma.getBoletin().getNombre().equals("BOIB")) {
+                            io.setUrl("/govern/estadistica?tipus=N&codi=" + norma.getId() + "&mode=view&p_numero=" + norma.getNumero() + "&p_inipag=" + trad.getPaginaInicial() + "&p_finpag=" + trad.getPaginaFinal() + "&lang=" + idi + "&url=0");
+                        } else {
+                            io.setUrl("/govern/sac/dadesnormativa.do?lang=" + idi + "&codi=" + norma.getId() + "&coduo=" + filter.getUo_id());
+                        }
 
-				if (trad != null) {
-					
-					io.setTituloserviciomain(trad.getSeccion());
+                        if (trad.getTitulo() != null) {
+                            io.setTitulo(trad.getTitulo());
+                            io.addTextLine(trad.getTitulo());
+                            io.setDescripcion(trad.getTitulo());
+                        }
 
-					if (norma.getBoletin() != null && norma.getBoletin().getNombre().equals("BOIB")) {
-						io.setUrl("/govern/estadistica?tipus=N&codi="+norma.getId()+"&mode=view&p_numero=" + norma.getNumero() + "&p_inipag="+ trad.getPaginaInicial()+ "&p_finpag=" + trad.getPaginaFinal()+ "&lang=" + idi + "&url=0");
-					} else {
-						io.setUrl("/govern/sac/dadesnormativa.do?lang="+ idi +"&codi="+ norma.getId()+"&coduo="+ filter.getUo_id());	            	
-					}
+                        if (trad.getSeccion() != null) {
+                            io.addTextLine(trad.getSeccion());
+                        }
 
-					if (trad.getTitulo() != null) {
-						io.setTitulo(trad.getTitulo());
-						io.addTextLine(trad.getTitulo());
-						//if (trad.getTitulo().length()>200) io.setDescripcion(trad.getTitulo().substring(0,199)+"...");
-						//else io.setDescripcion(trad.getTitulo());
-						io.setDescripcion(trad.getTitulo());
-					}
+                        if (trad.getApartado() != null) {
+                            io.addTextLine(trad.getApartado());
+                        }
 
-					if (trad.getSeccion() != null) {
-					    io.addTextLine(trad.getSeccion());
-					}
+                        if (trad.getObservaciones() != null) {
+                            io.addTextLine(trad.getObservaciones());
+                        }
 
-					if (trad.getApartado() != null) {
-					    io.addTextLine(trad.getApartado());
-					}
+                        if (trad.getArchivo() != null) {
+                            io.addArchivo((Archivo) trad.getArchivo());
+                        }
+                    }
 
-					if (trad.getObservaciones() != null) {
-					    io.addTextLine(trad.getObservaciones());
-					}
+                    io.addTextopcionalLine(filter.getTraduccion(idi).getMateria_text());
+                    io.addTextopcionalLine(filter.getTraduccion(idi).getSeccion_text());
+                    io.addTextopcionalLine(filter.getTraduccion(idi).getUo_text());
 
-					if (trad.getArchivo() != null) {
-					    io.addArchivo((Archivo)trad.getArchivo());
-					}
-					
-				}
+                    if (io.getText().length() > 0) {
+                        indexerDelegate.insertaObjeto(io, idi, writer);
+                    }
 
-				io.addTextopcionalLine(filter.getTraduccion(idi).getMateria_text());
-				io.addTextopcionalLine(filter.getTraduccion(idi).getSeccion_text());
-				io.addTextopcionalLine(filter.getTraduccion(idi).getUo_text());
-
-				if (io.getText().length() > 0) {
-				    indexerDelegate.insertaObjeto(io, idi, writer);
-				}
-
-				writer.close();
-                directory.close();
-                
+                } catch (Exception e) {
+                    log.warn("[indexInsertaNormativa:" + norma.getId() + "] No se ha podido indexar la normativa para el idioma: " + idi + ". msg: " + e.getMessage());
+                } finally {
+                    writer.close();
+                    directory.close();
+                }
 			}
+        } catch (Exception ex) {
+            log.warn("[indexInsertaNormativa:" + norma.getId() + "] No se ha podido indexar la normativa. " + ex.getMessage());
+        }
+    }
 
-		} catch (Exception ex) {
-			
-			log.warn("[indexInsertaNormativa:" + norma.getId() + "] No se ha podido indexar la normativa. " + ex.getMessage());
-			
-		}
-		
-	}
-
-	/**
+    /**
 	 * Elimina la normativa en el indice en todos los idiomas
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"

@@ -10,12 +10,10 @@ import java.util.Set;
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import net.sf.hibernate.Criteria;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
-import net.sf.hibernate.expression.Order;
 
 import org.apache.commons.lang.StringUtils;
 import org.ibit.rol.sac.model.Archivo;

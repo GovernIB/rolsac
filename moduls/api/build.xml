@@ -115,7 +115,7 @@
 		<tstamp>
 			<format property="TODAY" pattern="dd-MM-yy"/>
 		</tstamp>
-	
+
 		<fail unless="persistence.auth.domain" message="Revise los ficheros ${home.dir}/*.properties"/>
 		<fail unless="persistence.auth.principal" message="Revise los ficheros ${home.dir}/*.properties"/>
 		<fail unless="datasource.jndi" message="Revise los ficheros ${home.dir}/*.properties"/>
@@ -124,7 +124,7 @@
 		<fail unless="hibernate.cglib" message="Revise los ficheros ${home.dir}/*.properties"/>
 		<fail unless="hibernate.cache.provider_class" message="Revise los ficheros ${home.dir}/*.properties"/>
 		<fail unless="hibernate.cache.jar" message="Revise los ficheros ${home.dir}/*.properties"/>
-	</target>	
+	</target>
 		
 	<!-- Netetja tots els directoris de treball del API-->
 	<target name="clean">

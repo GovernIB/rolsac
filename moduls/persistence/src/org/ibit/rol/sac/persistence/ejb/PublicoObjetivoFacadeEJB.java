@@ -15,7 +15,6 @@ import net.sf.hibernate.expression.Expression;
 import net.sf.hibernate.expression.Order;
 
 import org.ibit.rol.sac.model.AgrupacionHechoVital;
-import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;

@@ -1378,7 +1378,6 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     	return filter;
     }
 
-
     /**
      * Añade la ficha al índice en todos los idiomas
      * @ejb.interface-method
@@ -1406,28 +1405,28 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     			writer.setMergeFactor(20);
                 writer.setMaxMergeDocs(Integer.MAX_VALUE);
 
-    			IndexObject io = new IndexObject();
+                try {
+                    IndexObject io = new IndexObject();
+                    io = indexarContenidos(ficha, io, filter);
+                    io = indexarTraducciones(idi, ficha, io, filter);
+                    //No se añaden todos los documentos en todos los idiomas. Ahora en el idioma actual.
+                    io = indexarContenidosDocumentos(ficha, idi, writer, io, listaDocumentos);
+                    if (io.getText().length() > 0 || io.getTextopcional().length() > 0) {
+                        indexerDelegate.insertaObjeto(io, idi, writer);
+                    }
 
-    			io = indexarContenidos(ficha, io, filter);
-
-    			io = indexarTraducciones(idi, ficha, io, filter);
-
-    			//No se añaden todos los documentos en todos los idiomas. Ahora en el idioma actual.
-    			io = indexarContenidosDocumentos(ficha, idi, writer, io, listaDocumentos);
-
-    			if (io.getText().length() > 0 || io.getTextopcional().length() > 0) {
-    			    indexerDelegate.insertaObjeto(io, idi, writer);
-    			}
-
-    			writer.close();
-    			directory.close();
+                } catch (Exception e) {
+                    log.warn("[indexInsertaFicha:" + ficha.getId() + "] No se ha podido indexar ficha para el idioma: " + idi + ". msg: " + e.getMessage());
+                } finally {
+                    writer.close();
+                    directory.close();
+                }
     		}
 
     	} catch (Exception ex) {
     		log.warn("[indexInsertaFicha:" + ficha.getId() + "] No se ha podido indexar ficha. " + ex.getMessage());
     	}
     }
-
 
     private List<Documento> obtenerListaDocumentos(Ficha ficha) throws DelegateException {
 
