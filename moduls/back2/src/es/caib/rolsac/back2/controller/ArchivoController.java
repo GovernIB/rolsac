@@ -10,15 +10,13 @@ public abstract class ArchivoController {
 
     	Archivo archivo = obtenerArchivo(request);
     	if ( archivo != null ) {
-    		
     		response.reset();
     		response.setContentType( archivo.getMime() );
-    		response.setHeader( "Content-Disposition", "inline; filename=\"" + archivo.getNombre() + "\"" );
+    		response.setHeader("Content-Disposition", "inline; filename=\"" + archivo.getNombre() + "\"");
+            response.addHeader("cache-response-directive", "no-cache");
     		response.setContentLength( archivo.getDatos().length );
     		response.getOutputStream().write( archivo.getDatos() );
-    		
     	}
-    	
     }
        
     public abstract Archivo obtenerArchivo(HttpServletRequest request) throws Exception;    

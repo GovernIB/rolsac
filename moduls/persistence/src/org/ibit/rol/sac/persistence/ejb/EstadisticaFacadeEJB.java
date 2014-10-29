@@ -20,17 +20,7 @@ import net.sf.hibernate.expression.Expression;
 import net.sf.hibernate.expression.Order;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.ibit.rol.sac.model.Auditoria;
-import org.ibit.rol.sac.model.Estadistica;
-import org.ibit.rol.sac.model.Ficha;
-import org.ibit.rol.sac.model.Historico;
-import org.ibit.rol.sac.model.HistoricoFicha;
-import org.ibit.rol.sac.model.Materia;
-import org.ibit.rol.sac.model.Normativa;
-import org.ibit.rol.sac.model.Periodo;
-import org.ibit.rol.sac.model.ProcedimientoLocal;
-import org.ibit.rol.sac.model.TraduccionFicha;
-import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.*;
 import org.ibit.rol.sac.model.dto.FechaHistoricoDTO;
 import org.ibit.rol.sac.persistence.util.PeriodoUtil;
 
@@ -527,8 +517,7 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB
 		
 		return hficha;
 	}
-	
-	
+
 	/**
 	 * Lista las ultimas modificaciones para Procedimientos, Normativas y Fichas.
 	 * 
@@ -540,8 +529,8 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB
 	 * @param listaUnidadAdministrativaId	Listado de identificadores de unidades administrativas.
 	 * @return Devuelve <code>List<FechaHistoricoDTO></code> de las últimas modificaciones de procedimientos, normativas, y fichas.
 	 */
-	public List<FechaHistoricoDTO> listarUltimasModificaciones(Date fechaInicio, Date fechaFin, Integer numeroRegistros, List<Long> listaUnidadAdministrativaId)
-	{
+	public List<FechaHistoricoDTO> listarUltimasModificaciones(Date fechaInicio, Date fechaFin, Integer numeroRegistros, List<Long> listaUnidadAdministrativaId) {
+
 		Session session = getSession();
 		try {
 			if (listaUnidadAdministrativaId.isEmpty()) {
@@ -554,83 +543,90 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB
 			if (userIsSuper()) {
 				clausulaUsuari = "";
 			}
-			
+
+            // Tipos de auditorias que queremos recuperar
+            List<Integer> tiposAuditorias = new ArrayList<Integer>();
+            tiposAuditorias.add(Auditoria.MODIFICAR);
+            tiposAuditorias.add(Auditoria.INSERTAR);
+
 			// Lanzamos 3 query porque una solo hacia que el tiempo de respuesta fuese exponencial
 			Query queryProcedimiento = null;
 			Query queryNormativa = null;
 			Query queryFicha = null;
 			
 			/* Consulta de auditorías de procedimientos */
-			queryProcedimiento = session.createQuery("select a.fecha, hp " +
-													"from HistoricoProcedimiento as hp, " +
-													"	   Auditoria as a, " +
-													"	   ProcedimientoLocal as pl " +
-													"where ( hp.id = a.historico.id ) " +
-													"	and ( hp.procedimiento.id = pl.id )" +
-													"	and ( a.codigoOperacion = :codOperacion ) " +
-													"	and ( pl.unidadAdministrativa.id in (:idUA) ) " +
-													"	and ( a.fecha between :fechaInicio and :fechaFin ) " +
-													clausulaUsuari +
-													"order by a.fecha desc");
+			queryProcedimiento = session.createQuery(
+                    "select distinct hp" +
+                    ", pl.fechaActualizacion" +
+                    " from Auditoria as a" +
+                    ", HistoricoProcedimiento as hp" +
+                    ", ProcedimientoLocal as pl" +
+                    " where ( hp.id = a.historico.id )" +
+                    " and ( hp.procedimiento.id = pl.id )" +
+                    " and ( a.codigoOperacion in (:codOperacion) )" +
+                    " and ( pl.unidadAdministrativa.id in (:idUA) )" +
+                    " and ( a.fecha between :fechaInicio and :fechaFin )" +
+                    clausulaUsuari +
+                    " order by pl.fechaActualizacion desc");
 			
-			queryProcedimiento.setParameter("codOperacion", Auditoria.MODIFICAR);
+			queryProcedimiento.setParameterList("codOperacion", tiposAuditorias);
 			queryProcedimiento.setParameterList("idUA", listaUnidadAdministrativaId);
 			queryProcedimiento.setParameter("fechaInicio", fechaInicio);
 			queryProcedimiento.setParameter("fechaFin", fechaFin);
-			
 			if (!"".equals(clausulaUsuari)) {
 				queryProcedimiento.setParameter("usuari", userName);
 			}
-			
 			queryProcedimiento.setMaxResults(numeroRegistros);
+
 			/* Consulta de auditorías de normativas */
-			queryNormativa = session.createQuery("select a.fecha, hn " +
-												"from HistoricoNormativa as hn, " +
-												"	   Auditoria as a, " +
-												"	   NormativaLocal as nl " +
-												"where ( hn.id = a.historico.id ) " +
-												"	and ( hn.normativa.id = nl.id )" +
-												"	and ( a.codigoOperacion = :codOperacion ) " +
-												"	and ( nl.unidadAdministrativa.id in (:idUA) ) " +
-												"	and ( a.fecha between :fechaInicio and :fechaFin ) " +
-												clausulaUsuari +
-												"order by a.fecha desc");
+			queryNormativa = session.createQuery(
+                    "select distinct hn" +
+                    " from Auditoria as a" +
+                    ", HistoricoNormativa as hn" +
+                    ", NormativaLocal as nl" +
+                    " where ( hn.id = a.historico.id )" +
+                    " and ( hn.normativa.id = nl.id )" +
+                    " and ( a.codigoOperacion in (:codOperacion) )" +
+                    " and ( nl.unidadAdministrativa.id in (:idUA) )" +
+                    " and ( a.fecha between :fechaInicio and :fechaFin )" +
+                    clausulaUsuari);
 			
-			queryNormativa.setParameter("codOperacion", Auditoria.MODIFICAR);
+			queryNormativa.setParameterList("codOperacion", tiposAuditorias);
 			queryNormativa.setParameterList("idUA", listaUnidadAdministrativaId);
 			queryNormativa.setParameter("fechaInicio", fechaInicio);
 			queryNormativa.setParameter("fechaFin", fechaFin);
-			
 			if (!"".equals(clausulaUsuari)) {
 				queryNormativa.setParameter("usuari", userName);
 			}
-			
-			queryNormativa.setMaxResults(numeroRegistros);
+//			queryNormativa.setMaxResults(numeroRegistros);
+
 			/* Consulta de auditorías de fichas informativas */
-			queryFicha = session.createQuery("select a.fecha, hf " +
-											"from HistoricoFicha as hf, " +
-											"	   Auditoria as a, " +
-											"	   Ficha as f," +
-											"     FichaUA as fua " +
-											"where ( hf.id = a.historico.id ) " +
-											"	and ( hf.ficha.id = f.id ) " +
-											"	and ( fua.ficha.id = f.id ) " +
-											"	and ( a.codigoOperacion = :codOperacion ) " +
-											"	and ( fua.unidadAdministrativa.id in (:idUA) ) " +
-											"	and ( a.fecha between :fechaInicio and :fechaFin ) " +
-											clausulaUsuari +
-											"order by a.fecha desc");
+			queryFicha = session.createQuery(
+                    "select distinct hf" +
+                    ", f.fechaActualizacion" +
+                    " from Auditoria as a" +
+                    ", HistoricoFicha as hf" +
+                    ", Ficha as f" +
+                    ", FichaUA as fua" +
+                    " where ( hf.id = a.historico.id )" +
+                    " and ( hf.ficha.id = f.id )" +
+					" and ( fua.ficha.id = f.id )" +
+                    " and ( a.codigoOperacion in (:codOperacion) )" +
+                    " and ( fua.unidadAdministrativa.id in (:idUA) )" +
+					" and ( a.fecha between :fechaInicio and :fechaFin )" +
+					clausulaUsuari +
+                    " order by f.fechaActualizacion desc");
 			
-			queryFicha.setParameter("codOperacion", Auditoria.MODIFICAR);
+			queryFicha.setParameterList("codOperacion", tiposAuditorias);
 			queryFicha.setParameterList("idUA", listaUnidadAdministrativaId);
 			queryFicha.setParameter("fechaInicio", fechaInicio);
 			queryFicha.setParameter("fechaFin", fechaFin);
-			
 			if (!"".equals(clausulaUsuari)) {
 				queryFicha.setParameter("usuari", userName);
 			}
 			queryFicha.setMaxResults(numeroRegistros);
-			List<FechaHistoricoDTO> historicoOrdenado = ordenarLista(queryProcedimiento, queryNormativa, queryFicha, numeroRegistros);
+
+			List<FechaHistoricoDTO> historicoOrdenado = ordenarLista(queryProcedimiento, queryNormativa, queryFicha, numeroRegistros, session);
 			return historicoOrdenado;
 			
 		} catch (HibernateException he) {
@@ -639,8 +635,71 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB
 			close(session);
 		}
 	}
-	
-	
+
+    /**
+     * Ordena la lista.
+     *
+     * @param queryProcedimiento	Indica la consulta de procedimientos.
+     * @param queryNormativa	Indica la consulta de normativas.
+     * @param queryFicha	Indica la consulta de fichas.
+     * @return	Devuelve <code>List<FechaHistoricoDTO></code> solicitada.
+     * @throws HibernateException
+     */
+    private List<FechaHistoricoDTO> ordenarLista(Query queryProcedimiento, Query queryNormativa, Query queryFicha, Integer numeroRegistros, Session session) throws HibernateException {
+
+        // Tratamiento de la query
+        List<Object[]> lQueryProcedimiento = queryProcedimiento.list();
+        List<HistoricoNormativa> lQueryNormativa = queryNormativa.list();
+        List<Object[]> lQueryFicha = queryFicha.list();
+
+        Map<Date, Object> historico = new HashMap<Date, Object>();
+
+        for (Object[] obj : lQueryProcedimiento) {
+			historico.put((Timestamp) obj[1], obj[0]);
+        }
+
+        for (HistoricoNormativa obj : lQueryNormativa) {
+            Query queryAuditoriaNor = session.createQuery(
+                    "select a" +
+                    " from Auditoria as a" +
+                    ", HistoricoNormativa as hn" +
+                    " where hn.normativa.id = :codNor" +
+                    " and hn.id = a.historico.id" +
+                    " order by a.fecha desc");
+            queryAuditoriaNor.setParameter("codNor", obj.getNormativa().getId());
+            queryAuditoriaNor.setMaxResults(1);
+            List<Auditoria> auditoria = queryAuditoriaNor.list();
+
+            historico.put(auditoria.get(0).getFecha(), obj);
+        }
+
+        for (Object[] obj : lQueryFicha) {
+			historico.put((Timestamp) obj[1], obj[0]);
+        }
+
+        Object[] key = historico.keySet().toArray();
+        Arrays.sort(key, new Comparator() {
+            public int compare(Object o1, Object o2) {
+
+                Timestamp primeraFecha = (Timestamp) o1;
+                Timestamp segundaFecha = (Timestamp) o2;
+                return segundaFecha.compareTo(primeraFecha);
+            }
+        });
+
+        Vector<FechaHistoricoDTO> historicoOrdenado = new Vector<FechaHistoricoDTO>();
+        int numReg = numeroRegistros;
+        if (key.length < numeroRegistros) {
+            numReg = key.length;
+        }
+
+        for (int i = 0 ; i < numReg ; i++) {
+            historicoOrdenado.add(new FechaHistoricoDTO((Timestamp) key[i] , (Historico) historico.get(key[i])));
+        }
+
+        return historicoOrdenado;
+    }
+
 	/**
 	 * Lista las ultimas modificaciones para Procedimientos, Normativas y Fichas.
 	 * 
@@ -800,61 +859,6 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB
 		} finally {
 			close(session);
 		}
-	}
-	
-	
-	/**
-	 * Ordena la lista.
-	 * 
-	 * @param queryProcedimiento	Indica la consulta de procedimientos.
-	 * @param queryNormativa	Indica la consulta de normativas.
-	 * @param queryFicha	Indica la consulta de fichas.
-	 * @return	Devuelve <code>List<FechaHistoricoDTO></code> solicitada.
-	 * @throws HibernateException
-	 */
-	private List<FechaHistoricoDTO> ordenarLista(Query queryProcedimiento, Query queryNormativa, Query queryFicha, Integer numeroRegistros) throws HibernateException
-	{
-		//Tratamiento de la query
-		//TODO  02/08/2013: Revisar la ordenación
-		List<Object[]> lQueryProcedimiento = queryProcedimiento.list();
-		List<Object[]> lQueryNormativa = queryNormativa.list();
-		List<Object[]> lQueryFicha = queryFicha.list();
-		
-		Map<Date, Object> historico = new HashMap<Date, Object>();
-		
-		for (Object[] obj : lQueryProcedimiento) {
-			historico.put((Timestamp) obj[0], obj[1]);
-		}
-		
-		for (Object[] obj : lQueryNormativa) {
-			historico.put((Timestamp) obj[0], obj[1]);
-		}
-		
-		for (Object[] obj : lQueryFicha) {
-			historico.put((Timestamp) obj[0], obj[1]);
-		}
-		
-		Object[] key = historico.keySet().toArray();
-		Arrays.sort(key, new Comparator() {
-			public int compare(Object o1, Object o2) {
-				
-				Timestamp primeraFecha = (Timestamp) o1;
-				Timestamp segundaFecha = (Timestamp) o2;
-				return segundaFecha.compareTo(primeraFecha);
-			}
-		});
-		
-		Vector<FechaHistoricoDTO> historicoOrdenado = new Vector<FechaHistoricoDTO>();
-		int numReg = numeroRegistros;
-		if (key.length < numeroRegistros) {
-			numReg = key.length;
-		}
-		
-		for (int i = 0 ; i < numReg ; i++) {
-			historicoOrdenado.add(new FechaHistoricoDTO((Timestamp) key[i] , (Historico) historico.get(key[i])));
-		}
-		
-		return historicoOrdenado;
 	}
 	
 }
