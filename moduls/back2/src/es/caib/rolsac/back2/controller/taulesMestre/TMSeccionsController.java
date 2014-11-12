@@ -387,7 +387,7 @@ public class TMSeccionsController extends PantallaBaseController {
                     fichasUAHash.put(fichaUA.getId(), fichaUA);
                 }
 
-				if (idFichas.length > 0) {
+				if (idFichas!=null && idFichas.length > 0) {
 					int orden = 0;
 					List<FichaResumenUA> fichasUAModificadas = new Vector<FichaResumenUA>();
 					for (Long idFicha : idFichas) {
