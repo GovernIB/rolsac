@@ -42,12 +42,12 @@ public class FitxaByActivoCriteria implements CriteriaObject {
 		qb.addRestriction(new Restriction(alias + "validacion", OPERATION.EQ, Validacion.PUBLICA));
 
 		List<Restriction> restrictions = new ArrayList<Restriction>(2);
-		restrictions.add(new Restriction(LOGIC.AND, alias + "fechaCaducidad", OPERATION.GE, PeriodoUtil.getNextDay()));
+		restrictions.add(new Restriction(LOGIC.AND, alias + "fechaCaducidad", OPERATION.GE, PeriodoUtil.getNow()));
 		restrictions.add(new Restriction(LOGIC.OR, alias + "fechaCaducidad", OPERATION.NULL));
 		qb.addGroupedRestrictions(restrictions);
 
 		restrictions = new ArrayList<Restriction>(2);
-		restrictions.add(new Restriction(LOGIC.AND, alias + "fechaPublicacion", OPERATION.LE, PeriodoUtil.getToday()));
+		restrictions.add(new Restriction(LOGIC.AND, alias + "fechaPublicacion", OPERATION.LE, PeriodoUtil.getNow()));
 		restrictions.add(new Restriction(LOGIC.OR, alias + "fechaPublicacion", OPERATION.NULL));
 		qb.addGroupedRestrictions(restrictions);
 
