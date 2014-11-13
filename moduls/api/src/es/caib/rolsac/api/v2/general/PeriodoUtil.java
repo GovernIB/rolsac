@@ -126,4 +126,9 @@ public class PeriodoUtil {
         return cal.getTime();
     }
 
+    public static Date getNow() {
+        Calendar cal = Calendar.getInstance();
+        return cal.getTime();
+    }
+
 }
