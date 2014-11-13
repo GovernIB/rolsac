@@ -526,17 +526,28 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
     public List<Seccion> listarHijosSeccion(Long id) {
+
         Session session = getSession();
+        List<Seccion> listaHijas = new ArrayList<Seccion>();
+
         try {
-            Seccion seccion = (Seccion) session.load(Seccion.class, id);
+            Seccion seccion = (Seccion)session.load(Seccion.class, id);
             Hibernate.initialize(seccion.getHijos());
 
-            return castList(Seccion.class, seccion.getHijos());
+            for (int i = 0; i < seccion.getHijos().size(); i++) {
+                Seccion secHija = (Seccion) seccion.getHijos().get(i);
+                if (secHija != null) {
+                    listaHijas.add(secHija);
+                }
+            }
+
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
             close(session);
         }
+
+        return listaHijas;
     }
 
     /**
