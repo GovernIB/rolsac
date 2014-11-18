@@ -19,11 +19,11 @@
         <many-to-one name="padre" cascade="all" column="SEC_CODSEC" foreign-key="RSC_SECSEC_FK"/>
 
 
-        <list name="hijos" cascade="all" inverse="true" lazy="true">
+        <bag name="hijos" cascade="all" inverse="true" lazy="true" order-by="SEC_ORDEN">
             <key column="SEC_CODSEC" foreign-key="RSC_SECSEC_FK"/>
-            <index column="SEC_ORDEN"/>
+            <!--<index column="SEC_ORDEN"/>-->
             <one-to-many class="org.ibit.rol.sac.model.Seccion"/>
-        </list>
+        </bag>
 
         <set name="fichasUA" cascade="all" inverse="true" lazy="true" order-by="FUA_ORDSEC">
             <cache usage="read-write"/>

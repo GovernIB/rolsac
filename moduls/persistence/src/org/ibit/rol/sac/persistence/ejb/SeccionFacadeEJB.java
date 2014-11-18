@@ -362,34 +362,16 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     public List<Seccion> listarHijosSeccion(Long id) {
     	
         Session session = getSession();
-        List<Seccion> listaHijas = new ArrayList<Seccion>();
-        
         try {
-        	
         	Seccion seccion = (Seccion)session.load(Seccion.class, id);
         	Hibernate.initialize(seccion.getHijos());
-        	
-        	for ( int i = 0; i < seccion.getHijos().size(); i++ ) {
-        		
-        		Seccion secHija = (Seccion)seccion.getHijos().get(i);
-        		
-        		if (secHija != null)
-        			listaHijas.add(secHija);
-        		
-        	}
-        	
+            return seccion.getHijos();
+
         } catch (HibernateException he) {
-        	
             throw new EJBException(he);
-        	
 		} finally {
-			
             close(session);
-            
         }
-        
-        return listaHijas;
-        
     }
 
     /**
@@ -436,7 +418,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     /**
      * A partir de un String con el codigo estandar de una Seccion recojo la {@link Seccion} correspondiente
      * 
-     * @param codigoEstandar
+     * @param codigosEstandar
      * @return {@link Seccion}
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
