@@ -292,6 +292,60 @@ public class RolsacQueryServiceTest {
     }
 
     /**
+     * Cas d'us: Recupera procediments per agrupacioMateria.
+     */
+    @Test
+    public void recuperarProcedimentsPerAgrupacioMateria() {
+
+        ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
+        procedimentCriteria.setIdioma("ca");
+        procedimentCriteria.setAgrupacionMateria("1377959");
+        List<ProcedimentQueryServiceAdapter> procediments = null;
+        try {
+            procediments = rolsacQS.llistarProcediments(procedimentCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
+        Assert.assertEquals(procediments.size(), 38);
+    }
+
+    /**
+     * Cas d'us: Recupera procediments per materia.
+     */
+    @Test
+    public void recuperarProcedimentsPerMateria() {
+
+        ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
+        procedimentCriteria.setIdioma("ca");
+        procedimentCriteria.setMateria("5261");
+        List<ProcedimentQueryServiceAdapter> procediments = null;
+        try {
+            procediments = rolsacQS.llistarProcediments(procedimentCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
+        Assert.assertEquals(procediments.size(), 74);
+    }
+
+    /**
+     * Cas d'us: Recupera procediments per materia.
+     */
+    @Test
+    public void recuperarProcedimentsPerFetsVitals() {
+
+        ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
+        procedimentCriteria.setIdioma("ca");
+        procedimentCriteria.setHechoVital("221");
+        List<ProcedimentQueryServiceAdapter> procediments = null;
+        try {
+            procediments = rolsacQS.llistarProcediments(procedimentCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
+        Assert.assertEquals(procediments.size(), 10);
+    }
+
+    /**
      * Cas d'us: Recupera materia destacada.
      */
     @Test
@@ -555,7 +609,6 @@ public class RolsacQueryServiceTest {
         }
     }    
 
-
     /**
      * Cas d'us: cerca fitxes per UA, textos i dates 
      */
@@ -577,10 +630,43 @@ public class RolsacQueryServiceTest {
         Assert.assertTrue(fitxes.size() > 0);
         Assert.assertTrue(fitxes.size() <= 10);
     }
-    
-    
-    
-    
+
+    /**
+     * Cas d'us: cerca fitxes per materia
+     */
+    @Test
+    public void cercarFitxesPerMateria() {
+
+        FitxaCriteria fitxaCriteria = new FitxaCriteria();
+        fitxaCriteria.setIdioma("ca");
+        fitxaCriteria.setMateria("5261");
+        List<FitxaQueryServiceAdapter> fitxes = null;
+        try {
+            fitxes = rolsacQS.llistarFitxes(fitxaCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
+        Assert.assertTrue(fitxes.size() == 107);
+    }
+
+    /**
+     * Cas d'us: cerca fitxes per fetVital
+     */
+    @Test
+    public void cercarFitxesPerFetVital() {
+
+        FitxaCriteria fitxaCriteria = new FitxaCriteria();
+        fitxaCriteria.setIdioma("ca");
+        fitxaCriteria.setHechoVital("221");
+        List<FitxaQueryServiceAdapter> fitxes = null;
+        try {
+            fitxes = rolsacQS.llistarFitxes(fitxaCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
+        Assert.assertTrue(fitxes.size() == 4);
+    }
+
     /**
      * Cas d'us: Recupera normativa local.
      */
@@ -1550,6 +1636,7 @@ public class RolsacQueryServiceTest {
      */
     @Test
     public void llistarTipusIniciacions() {
+
         IniciacioCriteria iniciacioCriteria = new IniciacioCriteria();
         iniciacioCriteria.setTamany("5");
         iniciacioCriteria.setOrdenar(new IniciacioOrdenacio[] {IniciacioOrdenacio.codigoEstandar_asc});
