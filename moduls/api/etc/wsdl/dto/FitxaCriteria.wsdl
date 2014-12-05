@@ -27,25 +27,27 @@
             <complexContent>
                 <extension base="tns2:BasicCriteria">
                     <sequence>
-                        <element name="actiu" nillable="true" type="xsd:boolean" />                    
+                        <element name="actiu" nillable="true" type="xsd:boolean" />
                         <element name="fechaActualizacion" nillable="true" type="xsd:string" />
                         <element name="fechaCaducidad" nillable="true" type="xsd:string" />
                         <element name="fechaPublicacion" nillable="true" type="xsd:string" />
                         <element name="foro_tema" nillable="true" type="xsd:string" />
+                        <element name="hechoVital" nillable="true" type="xsd:string" />
                         <element name="info" nillable="true" type="xsd:string" />
+                        <element name="materia" nillable="true" type="xsd:string" />
+                        <element name="ordenar" nillable="true" type="tns:ArrayOfFitxaOrdenacio" />
+                        <element name="publicoObjetivo" nillable="true" type="xsd:string" />
                         <element name="responsable" nillable="true" type="xsd:string" />
+                        <element name="seccion" nillable="true" type="xsd:string" />
+                        <element name="textos" nillable="true" type="xsd:string" />
                         <element name="t_descAbr" nillable="true" type="xsd:string" />
                         <element name="t_descripcion" nillable="true" type="xsd:string" />
                         <element name="t_titulo" nillable="true" type="xsd:string" />
                         <element name="t_url" nillable="true" type="xsd:string" />
+                        <element name="unidadAdministrativa" nillable="true" type="xsd:string" />
                         <element name="urlForo" nillable="true" type="xsd:string" />
                         <element name="urlVideo" nillable="true" type="xsd:string" />
                         <element name="validacion" nillable="true" type="xsd:string" />
-                        <element name="publicoObjetivo" nillable="true" type="xsd:string" />
-                        <element name="seccion" nillable="true" type="xsd:string" />
-                        <element name="textos" nillable="true" type="xsd:string" />
-                        <element name="unidadAdministrativa" nillable="true" type="xsd:string" />
-                        <element name="ordenar" nillable="true" type="tns:ArrayOfFitxaOrdenacio" />
                     </sequence>
                 </extension>
             </complexContent>

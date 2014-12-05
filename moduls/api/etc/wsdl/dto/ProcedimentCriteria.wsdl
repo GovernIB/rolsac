@@ -28,11 +28,19 @@
                 <extension base="tns2:BasicCriteria">
                     <sequence>
                         <element name="actiu" nillable="true" type="xsd:boolean" />
+                        <element name="agrupacionHechoVital" nillable="true" type="xsd:string" />
+                        <element name="agrupacionMateria" nillable="true" type="xsd:string" />
+                        <element name="estadoUA" nillable="true" type="xsd:string" />
+                        <element name="familia" nillable="true" type="xsd:string" />
                         <element name="fechaActualizacion" nillable="true" type="xsd:string" />
                         <element name="fechaCaducidad" nillable="true" type="xsd:string" />
                         <element name="fechaPublicacion" nillable="true" type="xsd:string" />
+                        <element name="hechoVital" nillable="true" type="xsd:string" />
                         <element name="indicador" nillable="true" type="xsd:boolean" />
                         <element name="info" nillable="true" type="xsd:string" />
+                        <element name="materia" nillable="true" type="xsd:string" />
+                        <element name="ordenar" nillable="true" type="tns:ArrayOfProcedimentOrdenacio" />
+                        <element name="publicoObjetivo" nillable="true" type="xsd:string" />
                         <element name="responsable" nillable="true" type="xsd:string" />
                         <element name="signatura" nillable="true" type="xsd:string" />
                         <element name="t_destinatarios" nillable="true" type="xsd:string" />
@@ -48,21 +56,15 @@
                         <element name="t_resumen" nillable="true" type="xsd:string" />
                         <element name="t_silencio" nillable="true" type="xsd:string" />
                         <element name="taxa" nillable="true" type="xsd:boolean" />
+                        <element name="telematico" nillable="true" type="xsd:boolean" />
+                        <element name="textos" nillable="true" type="xsd:string" />
                         <element name="tramite" nillable="true" type="xsd:string" />
                         <element name="url" nillable="true" type="xsd:string" />
                         <element name="validacion" nillable="true" type="xsd:string" />
                         <element name="ventanillaUnica" nillable="true" type="xsd:boolean" />
                         <element name="version" nillable="true" type="xsd:string" />
-                        <element name="familia" nillable="true" type="xsd:string" />
-                        <element name="agrupacionMateria" nillable="true" type="xsd:string" />
-                        <element name="publicoObjetivo" nillable="true" type="xsd:string" />
-                        <element name="textos" nillable="true" type="xsd:string" />
-                        <element name="unidadAdministrativa" nillable="true" type="xsd:string" />
-                        <element name="agrupacionHechoVital" nillable="true" type="xsd:string" />
-                        <element name="estadoUA" nillable="true" type="xsd:string" />
                         <element name="vigente" nillable="true" type="xsd:boolean" />
-                        <element name="telematico" nillable="true" type="xsd:boolean" />
-                        <element name="ordenar" nillable="true" type="tns:ArrayOfProcedimentOrdenacio" />
+                        <element name="unidadAdministrativa" nillable="true" type="xsd:string" />
                     </sequence>
                 </extension>
             </complexContent>
