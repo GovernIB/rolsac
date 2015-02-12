@@ -137,5 +137,6 @@
 	<classpathentry kind="lib" path="test/lib/spring/spring-webmvc-struts.jar"/>
 	<classpathentry kind="lib" path="test/lib/struts/spring-webmvc-struts.jar"/>
 	<classpathentry kind="lib" path="test/lib/struts/strutstest-2.0.0.jar"/>
+	<classpathentry kind="lib" path="output/moduls/sac-api.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
