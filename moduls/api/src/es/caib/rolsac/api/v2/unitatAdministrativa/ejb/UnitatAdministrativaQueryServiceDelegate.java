@@ -42,10 +42,10 @@ public class UnitatAdministrativaQueryServiceDelegate {
         this.unitatAdministrativaQueryServiceLocator = unitatAdministrativaQueryServiceLocator;
     }
     
-    public UnitatAdministrativaDTO obtenirPare(long idPare) throws DelegateException {
+    public UnitatAdministrativaDTO obtenirPare(long idPare, String idioma) throws DelegateException {
         try {
             UnitatAdministrativaQueryServiceEJBRemote ejb = unitatAdministrativaQueryServiceLocator.getUnitatAdministrativaQueryServiceEJB();
-            return ejb.obtenirPare(idPare);
+            return ejb.obtenirPare(idPare, idioma);
         } catch (LocatorException e) {
             throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
         } catch (RemoteException e) {

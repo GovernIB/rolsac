@@ -39,9 +39,9 @@ public class UnitatAdministrativaQueryServiceEJBStrategy implements UnitatAdmini
         this.unitatAdministrativaQueryServiceDelegate = unitatAdministrativaQueryServiceDelegate;
     }
 
-    public UnitatAdministrativaDTO obtenirPare(long idPare) throws StrategyException {
+    public UnitatAdministrativaDTO obtenirPare(long idPare, String idioma) throws StrategyException {
         try {
-            return unitatAdministrativaQueryServiceDelegate.obtenirPare(idPare);
+            return unitatAdministrativaQueryServiceDelegate.obtenirPare(idPare, idioma);
         } catch (DelegateException e) {
             throw new StrategyException(e);
         }

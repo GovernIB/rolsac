@@ -67,9 +67,9 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
     }
     
     public UnitatAdministrativaQueryServiceAdapter obtenirPare() throws QueryServiceException {
-        if (this.getPadre() == null) {return null;}
+        if (this.getPadre() == null || this.getIdioma() == null) {return null;}
         try {
-            return (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaQueryServiceStrategy.obtenirPare(this.getPadre()));
+            return (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaQueryServiceStrategy.obtenirPare(this.getPadre(), this.getIdioma()));
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "padre.", e);
         }

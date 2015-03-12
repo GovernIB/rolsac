@@ -2260,6 +2260,7 @@
             returnQName="obtenirPareReturn" returnType="rtns:UnitatAdministrativaDTO" xmlns:rtns="http://unitatAdministrativa.v2.api.rolsac.caib.es"
             soapAction="">
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+            <parameter qname="in1" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
         </operation>
         <operation name="obtenirEspaiTerritorial" qname="operNS:obtenirEspaiTerritorial"
             xmlns:operNS="http://intf.ejb.unitatAdministrativa.v2.api.rolsac.caib.es" returnQName="obtenirEspaiTerritorialReturn"

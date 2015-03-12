@@ -190,6 +190,7 @@
 	</wsdl:message>
 	<wsdl:message name="obtenirPareRequest">
 		<wsdl:part name="in0" type="xsd:long" />
+        <wsdl:part name="in1" type="xsd:string" />
 	</wsdl:message>
 	<wsdl:message name="obtenirFotogResponse">
 		<wsdl:part name="obtenirFotogReturn" type="tns14:ArxiuDTO" />
@@ -268,7 +269,7 @@
 		<wsdl:part name="obtenirLogovReturn" type="tns14:ArxiuDTO" />
 	</wsdl:message>
 	<wsdl:portType name="UnitatAdministrativaQueryServiceEJBRemote">
-		<wsdl:operation name="obtenirPare" parameterOrder="in0">
+		<wsdl:operation name="obtenirPare" parameterOrder="in0 in1">
 			<wsdl:input message="impl:obtenirPareRequest" name="obtenirPareRequest" />
 			<wsdl:output message="impl:obtenirPareResponse" name="obtenirPareResponse" />
 		</wsdl:operation>
