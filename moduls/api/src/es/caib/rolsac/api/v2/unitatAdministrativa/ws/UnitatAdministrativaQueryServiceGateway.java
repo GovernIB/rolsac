@@ -130,9 +130,9 @@ public class UnitatAdministrativaQueryServiceGateway {
 
     }
 
-    public UnitatAdministrativaDTO obtenirPare(long idPare)
+    public UnitatAdministrativaDTO obtenirPare(long idPare, String idioma)
             throws RemoteException {
-        return stub.obtenirPare(idPare);
+        return stub.obtenirPare(idPare, idioma);
     }
 
     public EspaiTerritorialDTO obtenirEspaiTerritorial(long idEt)

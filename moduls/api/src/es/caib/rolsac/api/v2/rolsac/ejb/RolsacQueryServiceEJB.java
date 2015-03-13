@@ -922,6 +922,8 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
                         UnitatAdministrativaDTO.class,
                         ua,
                         uaCriteria.getIdioma());
+
+                uaDTO.setIdioma(uaCriteria.getIdioma());
             }
         } catch (HibernateException e) {
             log.error(e);

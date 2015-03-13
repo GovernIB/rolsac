@@ -41,9 +41,9 @@ public class UnitatAdministrativaQueryServiceWSStrategy implements UnitatAdminis
         this.gateway = gateway;
     }
 
-    public UnitatAdministrativaDTO obtenirPare(long idPare) throws StrategyException {
+    public UnitatAdministrativaDTO obtenirPare(long idPare, String idioma) throws StrategyException {
         try {
-            return gateway.obtenirPare(idPare);
+            return gateway.obtenirPare(idPare, idioma);
         } catch (RemoteException e) {
             throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
         }

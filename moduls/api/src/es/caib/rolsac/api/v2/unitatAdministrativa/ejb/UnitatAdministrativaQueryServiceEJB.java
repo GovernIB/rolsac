@@ -131,9 +131,10 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public UnitatAdministrativaDTO obtenirPare(long idPare) {
+    public UnitatAdministrativaDTO obtenirPare(long idPare, String idioma) {
         UnitatAdministrativaCriteria uaCriteria = new UnitatAdministrativaCriteria();
         uaCriteria.setId(String.valueOf(idPare));
+        uaCriteria.setIdioma(idioma);
         RolsacQueryServiceEJB ejb = new RolsacQueryServiceEJB();
         return ejb.obtenirUnitatAdministrativa(uaCriteria);
     }
