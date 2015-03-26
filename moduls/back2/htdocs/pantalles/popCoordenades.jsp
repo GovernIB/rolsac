@@ -17,10 +17,9 @@
     <script type="text/javascript" src="<c:url value='/js/detall_base.js'/>"></script>
     <jsp:include page="../layout/variablesGlobalsJavascript.jsp" flush="true"/> 
     
-    <script src="http://maps.googleapis.com/maps/api/js?key=<c:out value='${googleMapKey }' />&amp;sensor=true" type="text/javascript"></script>
+    <script src="//maps.googleapis.com/maps/api/js?key=<c:out value='${googleMapKey }' />&amp;sensor=true" type="text/javascript"></script>
 
    	<script type="text/javascript">
-   	<!--
 
 	    var map = null;
 	    var geocoder = null;
@@ -59,6 +58,7 @@
 			var marker = new google.maps.Marker({
 				position: new google.maps.LatLng(point.lat(), point.lng()),
 				map: map,
+				draggable: true,
 				icon : '<c:url value='/img/gps/gps_caib.png' />'
 			});
 
@@ -67,7 +67,7 @@
 	        
 			google.maps.event.addListener(marcadorEdificio, 'dragend', function(event) {
 
-				var point = marker.getPoint();
+				var point = marker.getPosition();
 
 	            $('#lat').val(point.lat());
                 $('#lng').val(point.lng());
@@ -145,7 +145,6 @@
         	borrarPopUp('popCoordenades');
         }         
 
-     -->   
 	</script>
 </head>
 

@@ -51,14 +51,14 @@ public class PopupCoordenadesBackController {
     	        edifici = delegate.obtenerEdificio(idEdifici);
 
     	        String lsDir = ""+ edifici.getDireccion();
-    	        lsDir = lsDir.replaceAll("nº","");
+    	        lsDir = lsDir.replaceAll("nÂº","");
     	        lsDir = lsDir.replaceAll(",","");
     	        String lsCP = ""+ edifici.getCodigoPostal();
     	        if (lsCP.equals("null")) lsCP= "";
     	        String lsPbl = ""+ edifici.getPoblacion();
     	        if (lsPbl.equals("null")) lsPbl= "";                
     	        if (edifici.getDireccion()!= null){
-    	        	model.put("dirEdi",lsDir + " , " + lsCP + " , " + lsPbl + " , " + "España");
+    	        	model.put("dirEdi",lsDir + " , " + lsCP + " , " + lsPbl + " , " + "Espa\u00F1a");
     	        }
 
     	        model.put("latEdi", edifici.getLatitud());
