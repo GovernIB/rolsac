@@ -648,30 +648,30 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 	this.cargarModulos = function() {
 		
 		DebugJS.debug("Entrando en DetallBase.cargarModulos");
-
-		item_ID = $("#item_id").val();
-		dataVars = "id=" + item_ID;
-
-		$.ajax({
-			type: "POST",
-			url: modulos,
-			data: dataVars,
-			dataType: "json",
-			error: function() {
-				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
-			},
-			success: function(data) {
-
-				$("div.invisible").each(function() {
-					$(this).removeClass("invisible");
-				});
-
-				that.pintarModulos(data);
-
-			}
-
-		});
-		
+		if (typeof modulos != 'undefined'){
+			item_ID = $("#item_id").val();
+			dataVars = "id=" + item_ID;
+	
+			$.ajax({
+				type: "POST",
+				url: modulos,
+				data: dataVars,
+				dataType: "json",
+				error: function() {
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+				},
+				success: function(data) {
+	
+					$("div.invisible").each(function() {
+						$(this).removeClass("invisible");
+					});
+	
+					that.pintarModulos(data);
+	
+				}
+	
+			});
+		}
 		DebugJS.debug("Saliendo de DetallBase.cargarModulos");
 
 	};

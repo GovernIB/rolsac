@@ -344,6 +344,11 @@ function CDetall(){
 		that.traduir(pagTraduirEdifici, CAMPOS_TRADUCTOR_EDIFICI, DATOS_TRADUCIDOS_EDIFICI);
 	}
 	
+	this.refreshCoordenadas = function (lat,lng) {
+        jQuery("#item_latitud,#item_latitud_es,#item_latitud_en,#item_latitud_de,#item_latitud_fr").val(lat);
+        jQuery("#item_longitud,#item_longitud_es,#item_longitud_en,#item_longitud_de,#item_longitud_fr").val(lng);
+	}
+	
 	//Sobreescribe el método guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
 	this.guarda_upload = function(e) {
 				

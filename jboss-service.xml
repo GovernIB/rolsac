@@ -48,7 +48,7 @@
       	es.indra.caib.rolsac.servidor=sdesweblin1.caib.es
       	es.indra.caib.rolsac.servidorPuerto=sdesweblin1.caib.es
       	es.indra.caib.rolsac.oficina=N
-      	es.indra.caib.rolsac.googleMapKey=S
+      	es.indra.caib.rolsac.googleMapKey=AIzaSyCIvmOidKyhpEEb-bADWnDrNw76_oBb81A
 		es.caib.webcaib.principal=N
 		
 		es.caib.rolsac.pidip
