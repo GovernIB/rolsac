@@ -13,6 +13,7 @@
         </id>
         <property name="orden" column="PEG_ORDEN"/>
         <property name="codigoEstandar" column="PEG_CODEST"/>
+        <property name="duplica" column="PEG_DUPLIC"/>
         
         <set name="seccions" table="RSC_PEGSEC" inverse="false" lazy="true">
         	<cache usage="read-write"/>

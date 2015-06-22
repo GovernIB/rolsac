@@ -185,7 +185,7 @@ public abstract class PerfilGestorFacadeEJB extends HibernateEJB {
     	
     	try {
     		
-    		StringBuilder consulta = new StringBuilder(" select p.id, p.codigoEstandar, trad.nombre, trad.descripcion ");
+    		StringBuilder consulta = new StringBuilder(" select p.id, p.codigoEstandar, p.duplica, trad.nombre, trad.descripcion ");
     		consulta.append(" from PerfilGestor as p, p.traducciones as trad ");
     		consulta.append(" where index(trad) = :idioma ");
     		consulta.append(" order by p.codigoEstandar asc ");

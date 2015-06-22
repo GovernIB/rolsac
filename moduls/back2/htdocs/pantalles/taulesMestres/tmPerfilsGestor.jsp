@@ -110,6 +110,7 @@
     var txtCaducat = "<spring:message code='txt.caducat'/>";
     var txtCaducitat = "<spring:message code='txt.caducitat'/>";
     var txtPublicacio = "<spring:message code='boto.publicacio'/>";
+    var txtDuplica = "<spring:message code='camp.duplica'/>";
 
     //idioma
     var txtDesplega = "<spring:message code='txt.desplega'/>";
@@ -269,6 +270,16 @@
                                                 <textarea id="item_descripcio_<c:out value="${lang}"/>" name="item_descripcio_<c:out value="${lang}"/>" cols="70" rows="3" class="nou"></textarea>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="fila">
+                                    	<div class="element checkbox">
+                                            <div class="control">
+                                                <input id="item_duplica" name="item_duplica" type="checkbox" value="on" class="nou" />
+                                            </div>
+                                            <div class="etiqueta">
+                                                <label for="item_duplica"><spring:message code='camp.duplica'/></label>
+                                            </div>                                            
+                                        </div> 
                                     </div>
                                 </div>
 								

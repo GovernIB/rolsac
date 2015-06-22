@@ -88,13 +88,15 @@ public class TMPerfilsGestorController extends PantallaBaseController {
 				
 				Long id = (Long) ((Object[]) o)[0];
 				String codiEstandard = (String) ((Object[]) o)[1];
-				String nom = (String) ((Object[]) o)[2];
-				String descripcio = (String) ((Object[]) o)[3];
+				String duplica = (String) ((Object[]) o)[2];
+				String nom = (String) ((Object[]) o)[3];
+				String descripcio = (String) ((Object[]) o)[4];
 				
 				perfilDTO = new HashMap<String, Object>();
 				
 				perfilDTO.put("id", id);
 				perfilDTO.put("codi_estandard", codiEstandard);
+				perfilDTO.put("duplica", (duplica == null || "0".equals(duplica)) ? false : true);
 				perfilDTO.put("nom", nom == null ? "" : nom);
 				perfilDTO.put("descripcio", descripcio == null? "" : descripcio);
 				
@@ -127,6 +129,7 @@ public class TMPerfilsGestorController extends PantallaBaseController {
 
 	        resultats.put("item_id", perfilGestor.getId());
 	        resultats.put("item_codi_estandard", perfilGestor.getCodigoEstandar());
+	        resultats.put("item_duplica", (perfilGestor.getDuplica() == null || "0".equals(perfilGestor.getDuplica())) ? false : true);
 
 	        // idiomes
 	        for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
@@ -195,6 +198,7 @@ public class TMPerfilsGestorController extends PantallaBaseController {
 			}
 			
 			perfil.setCodigoEstandar(request.getParameter("item_codi_estandard"));
+			perfil.setDuplica("on".equalsIgnoreCase(request.getParameter("item_duplica")) ? "1" : "0");	
 					
 			// Idiomas
 			TraduccionPerfilGestor tp;
@@ -396,6 +400,7 @@ public class TMPerfilsGestorController extends PantallaBaseController {
 				perfilGestorOld = perfilDelegate.obtenerPerfilGestor(id);
 				perfilGestor.setId(perfilGestorOld.getId());
 				perfilGestor.setCodigoEstandar(perfilGestorOld.getCodigoEstandar());
+				perfilGestor.setDuplica(perfilGestorOld.getDuplica());
 		        for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
 		            perfilGestor.setTraduccion(lang, perfilGestorOld.getTraduccion(lang));
 

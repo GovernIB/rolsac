@@ -1290,6 +1290,26 @@ div.table div.tbody div.td select.ordenacion{
     background: url(../img/botons/iconos/previsualizar.png) 13px 50% no-repeat;  
 }
 
+/* Boton duplicar */
+
+.escriptori_detall .botonera ul li.btnDuplicar,
+.menuPublicacion .botonera ul li.btnDuplicar{
+    background-image: url(../img/botons/opcion2/cen.gif);
+}
+.escriptori_detall .botonera ul li.btnDuplicar a,
+.menuPublicacion .botonera ul li.btnDuplicar a{  
+    background-image: url(../img/botons/opcion2/izq.gif);    
+}
+.escriptori_detall .botonera ul li.btnDuplicar a > span,
+.menuPublicacion .botonera ul li.btnDuplicar a > span{
+    background-image: url(../img/botons/opcion2/der.gif);    
+}
+
+.escriptori_detall .botonera ul li.btnDuplicar a span span,
+.menuPublicacion .botonera ul li.btnDuplicar a span span{
+    background: url(../img/botons/iconos/duplicar.png) 13px 50% no-repeat;  
+}
+
 
 /* Boton volver */
 

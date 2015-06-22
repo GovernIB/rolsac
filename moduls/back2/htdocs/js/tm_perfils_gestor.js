@@ -8,7 +8,7 @@ $(document).ready(function() {
 		
 		var elements = $(this).parent().parent().find('li');
 		var id = $('#item_id').val();
-		var url = $(this).attr('action');
+		var url = $(thsinis).attr('action');
 		
 		ListaSimpleGenerica.guardar(elements, url, id);
 		
@@ -327,6 +327,9 @@ function CDetall(){
        // jQuery("#item_path_iconografia,#item_path_iconografia_es,#item_path_iconografia_en,#item_path_iconografia_de,#item_path_iconografia_fr").change(function(){
        //     jQuery("#item_path_iconografia,#item_path_iconografia_es,#item_path_iconografia_en,#item_path_iconografia_de,#item_path_iconografia_fr").val( jQuery(this).val() );
         //});
+        jQuery("#item_duplica,#item_duplica_es,#item_duplica_en,#item_duplica_de,#item_duplica_fr").change(function(){
+            jQuery("#item_duplica,#item_duplica_es,#item_duplica_en,#item_duplica_de,#item_duplica_fr").attr("checked", jQuery(this).is(":checked"));
+        }); 
 		
         // boton de traducir
         jQuery("#botoTraduirPerfil").unbind("click").bind("click", function() {
@@ -416,7 +419,12 @@ function CDetall(){
 		dada_node = dades;
 		jQuery("#item_id").val(dada_node.item_id);
 		jQuery("#item_codi_estandard").val(dada_node.item_codi_estandard);
-        jQuery("#item_codi_estandard").change();        		
+        jQuery("#item_codi_estandard").change();  
+        
+		if (dada_node.item_duplica != undefined) {
+			jQuery('#item_duplica').attr('checked', dada_node.item_duplica);                        
+			jQuery("#item_duplica").change();
+		}
 		
 		// Bloque de pestanyas de idiomas
 		for (var i in idiomas) {

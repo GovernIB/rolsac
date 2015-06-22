@@ -797,7 +797,10 @@
                               </li>
                               <li class="btnPrevisualizar par">
                                   <a id="btnPrevisualizar" href="javascript:;" class="btn previsualitza"><span><span><spring:message code='boto.previsualitza'/></span></span></a>
-                              </li>                              
+                              </li>   
+                              <li class="btnDuplicar par">
+                                  <a id="btnDuplicar" href="javascript:;" class="btn duplica"><span><span><spring:message code='boto.duplica'/></span></span></a>
+                              </li>                                  
                           </ul>
                         </div>                                                
                         <!-- /botonera baix -->

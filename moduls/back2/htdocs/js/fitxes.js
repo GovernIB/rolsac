@@ -52,6 +52,8 @@ $(document).ready(function() {
 		
 	});
 	
+	jQuery("#btnDuplicar").bind("click", function() { Detall.duplicar(); });
+	
 	jQuery(".modulFetsVitals").bind("finalizaHechosVitales", function() {
 		
 		var elements = $('.modulFetsVitals .seleccionats').find('li');
@@ -522,7 +524,7 @@ function CDetall() {
 		
 		jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").hide();
 		
-		escriptori_detall_elm.find(".btnPrevisualizar,.btnEliminar").hide();
+		escriptori_detall_elm.find(".btnPrevisualizar,.btnEliminar,.btnDuplicar").hide();
 		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);
 		
 		doc_seleccionats_elm = escriptori_detall_elm.find("div.modulDocuments div.seleccionats");
@@ -562,6 +564,54 @@ function CDetall() {
 		
 	};
 	
+	this.duplicar = function() {
+		
+		//Ocultar paneles
+        jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").hide();
+        jQuery("#modulAuditories, #modulEstadistiques").hide();
+		
+		$("#item_id").val("");
+		
+		jQuery("#modul_documents").hide();
+		
+		jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").hide();
+		
+		escriptori_detall_elm.find(".btnPrevisualizar,.btnEliminar,.btnDuplicar").hide();
+		
+		doc_seleccionats_elm = escriptori_detall_elm.find("div.modulDocuments div.seleccionats");
+		doc_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaDocuments + ".");
+
+		
+		ModulMateries.nuevo();
+	
+		ModulFetsVitals.nuevo();
+		
+		ModulPublicObjectiu.nuevo();
+		
+		ModulEnllas.nuevo();
+		
+		//TODO: moure a modul_seccion_ua.js
+		secc_ua_seleccionats_elm = escriptori_detall_elm.find("div.modulSeccionsUA div.seleccionats");
+		secc_ua_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaSeccioUA + ".");
+		
+		if (suggeriment_elm.size() != 0 && suggeriment_elm.css("display") != "none")
+			suggeriment_elm.slideUp(300);
+		
+		$("#modulLateral p.baix:first").removeClass("iCaducat").removeClass("iPublicat");
+		
+		escriptori_contingut_elm.fadeOut(300, function() {
+			
+			escriptori_detall_elm.fadeIn(300, function() {				
+				itemID_ultim = this.activar;
+			});
+		});
+		
+		this.actualizaEventos();
+		
+		this.modificado(true);
+		
+	};
+	
 	this.pintar = function(dades) {
 		
 		jQuery("#modul_documents").show();        
@@ -569,6 +619,12 @@ function CDetall() {
 		
 		escriptori_detall_elm.find("h2:first").text(txtDetallTitol);
 		escriptori_detall_elm.find(".btnPrevisualizar,.btnEliminar").show();
+		
+		if (dades.permisDuplicacio){
+			escriptori_detall_elm.find(".btnDuplicar").show();
+		}else{
+			escriptori_detall_elm.find(".btnDuplicar").hide();
+		}
 		
 		dada_node = dades;
 							

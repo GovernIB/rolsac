@@ -32,6 +32,7 @@ import org.ibit.rol.sac.model.FichaResumen;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.Materia;
+import org.ibit.rol.sac.model.PerfilGestor;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.TraduccionEnlace;
@@ -41,6 +42,7 @@ import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
 import org.ibit.rol.sac.model.TraduccionSeccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.dto.EnlaceDTO;
 import org.ibit.rol.sac.model.dto.EnlacesFichaDTO;
 import org.ibit.rol.sac.model.dto.FichaDTO;
@@ -57,6 +59,7 @@ import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
 import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
 import org.ibit.rol.sac.persistence.delegate.SeccionDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
+import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -376,6 +379,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 			recuperaImatge(resultats, fitxa);			// Recuperar la imagen de una ficha.
 			recuperaPO(resultats, fitxa, lang);			// Recuperar los públicos objetiovs de una ficha.
 			recuperaRelacio(resultats, fitxa, lang);	// Recuperar las relaciones ficha-sección-UA
+			permisDuplicacio(resultats,request);		// Determina si l'usuari pot duplicar la fitxa
 
 		} catch (DelegateException dEx) {
 			
@@ -524,6 +528,24 @@ public class FitxaInfBackController extends PantallaBaseController {
 			
 		}
 		
+	}
+	
+	/*
+	 * Función para recuperar si el usuario puede duplicar la ficha
+	 */
+	private void permisDuplicacio(Map<String, Object> resultats, HttpServletRequest request) throws DelegateException {
+		
+		UsuarioDelegate usuariDelegate = DelegateUtil.getUsuarioDelegate();
+		boolean permis = false;
+		Usuario usuari = usuariDelegate.obtenerUsuariobyUsername(request.getRemoteUser());
+		List<PerfilGestor> listaPerfilGestor = new ArrayList<PerfilGestor>();
+		for (PerfilGestor perfil:usuari.getPerfilsGestor()){
+			if (perfil.getDuplica()!=null && perfil.getDuplica().equals("1")){
+				permis=true;
+			}
+		}
+			
+		resultats.put("permisDuplicacio", permis);
 	}
 
 	/*

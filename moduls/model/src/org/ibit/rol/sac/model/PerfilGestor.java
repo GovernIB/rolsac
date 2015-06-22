@@ -9,6 +9,7 @@ public class PerfilGestor extends Traducible {
     private Long id;
     private int orden;
     private String codigoEstandar;
+    private String duplica;
     private Set<Seccion> seccions = new HashSet();
     private Set<Usuario> usuaris = new HashSet(); 
 	
@@ -30,6 +31,14 @@ public class PerfilGestor extends Traducible {
 
 	public String getCodigoEstandar() {
 		return codigoEstandar;
+	}
+	
+	public String getDuplica() {
+		return duplica;
+	}
+
+	public void setDuplica(String duplica) {
+		this.duplica = duplica;
 	}
 
 	public void setCodigoEstandar(String codigoEstandar) {

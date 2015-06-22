@@ -2,7 +2,8 @@ CREATE TABLE rsc_perges
 (
   peg_codi   bigint NOT NULL,
   peg_orden  integer,
-  peg_codest character varying(256)
+  peg_codest character varying(256),
+  peg_duplic  character varying(1)
 );
 
 ALTER TABLE public.rsc_perges OWNER TO rolsac;

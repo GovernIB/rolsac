@@ -173,6 +173,7 @@ public abstract class UsuarioFacadeEJB extends HibernateEJB {
 			criteri.add( Expression.eq("username", username) );
 			Usuario usu = (Usuario) criteri.uniqueResult();
 			Hibernate.initialize( usu.getUnidadesAdministrativas() );
+			Hibernate.initialize( usu.getPerfilsGestor() );
 
 			return usu;
 
