@@ -10,6 +10,7 @@
 
 <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/lista_ajax.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_perfils_gestor.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_seccions.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/tm_seccio.js'/>"></script>
 
@@ -57,7 +58,7 @@
     var txtSeccions = "<spring:message code='txt.seccions'/>";
     var txtFitxes = "<spring:message code='txt.fitxes'/>";
     var txtFitxa = "<spring:message code='txt.fitxa'/>";
-    var txtNoHiHaSeccions = txtNoHiHa + " " + txtSeccions;
+    var txtNoHiHaSeccions = txtNoHiHa + " " + txtSeccions.toLowerCase();
     var txtNoHiHaFitxes = txtNoHiHa + " " + txtFitxes;
     var txtSeleccionats = "<spring:message code='txt.seleccionats'/>";
     var txtSeleccionades = "<spring:message code='txt.seleccionades'/>";
@@ -106,6 +107,18 @@
 
     var txtElimina = "<spring:message code='txt.elimina'/>";
     var txtEdita = "<spring:message code='txt.edita'/>";
+    
+    // moduls
+    var txtHiHa = "<spring:message code='txt.hi_ha'/>";
+    var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
+    var txtSeleccionat = "<spring:message code='txt.seleccionat'/>";
+    var txtSeleccionats = "<spring:message code='txt.seleccionats'/>";
+    
+    // modul Perfils Gestor
+    var txtPerfilGestor = "<spring:message code='txt.perfil_gestor'/>";
+    var txtPerfilsGestor = "<spring:message code='txt.perfils_gestor'/>";
+    var txtNoHiHaPerfilsGestor = txtNoHiHa + " " + txtPerfilsGestor;
+    var txtNoHiHaPerfilsGestorSeleccionats = "<spring:message code='txt.noHiHaPerfilsGestorRelacionats'/>";
 
 </script>
 <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
@@ -288,24 +301,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- /Botonera -->
-                                    <!-- fila -->
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_perfil"><spring:message code='camp.perfil'/></label>
-                                            </div>
-                                            <div class="control select">                                                
-                                                <select id="item_perfil" name="item_perfil">
-                                                    <option value=""><spring:message code='txt.escolliu_opcio'/></option>
-                                                    <c:forEach items="${llistaPerfil}" var="perfil">
-                                                        <option value='<c:out value="${perfil.id}" />'><c:out value="${perfil.nom}" /></option>
-                                                    </c:forEach>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /fila -->                                    
+                                    <!-- /Botonera -->                                  
                                 </div>
                                 
 							<c:if test="${loop.last}">
@@ -344,6 +340,58 @@
                             </ul>
                         </div>
                         <!-- /botonera dalt -->
+                    </div>
+                </fieldset>
+            </div>
+            <!-- /modul -->
+            <!-- modul -->
+            <div class="modul invisible" id="modul_perfils_gestor">
+            	<input type="hidden" id="llistaPerfilsGestor" name="materies" value=""/>
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='seccio.perfils_gestor_relacionats'/></legend>
+                    <div class="modul_continguts mostrat">                    
+                        <!-- modulPerfilsGestor -->
+                        <div class="modulPerfilsGestor selectorChecks">
+                        
+                         	<input type="hidden" name="modulo_perfils_gestor_modificado" value="0">
+                        
+                            <div class="seleccionats">
+                                <p class="info"><spring:message code='seccio.no_hi_ha_perfils_gestor'/></p>
+                                <div class="listaOrdenable"></div>
+                                <div class="btnGenerico">
+                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.gestiona_perfils_gestor'/></span></span></a>
+                                </div>
+                            </div>
+                            <div class="llistat">
+                                <ul>
+                                    <c:forEach items="${llistaPerfilsGestor}" var="perfil" varStatus="i">
+                                        <c:choose>
+                                            <c:when test="${(i.count) % 2 == 0}">
+                                                <li class="par">
+                                            </c:when>
+                                            <c:otherwise>
+                                               <li class="impar">
+                                            </c:otherwise>
+                                        </c:choose>                                     
+                                          <label><span><c:out value="${perfil.nom}" /></span><input type="checkbox" value="<c:out value='${perfil.id}' />" /></label>
+                                        </li>                                                                                                               
+                                    </c:forEach>
+                                </ul>
+                                <div class="botonera">
+                                    <div class="btnGenerico">
+                                        <a id="btnFinalizar_perfils_gestor" class="btn finalitza" href="javascript:;" 
+                                        		action="<c:url value="/seccions/guardarPerfilsGestor.do" />">
+                                        	<span><span><spring:message code='boto.finalitza'/></span></span>
+                                       	</a>
+                                    </div>
+                                    <div class="btnGenerico">
+                                        <a href="javascript:;" class="cancela"><span><span><spring:message code='boto.cancela'/></span></span></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /modulPerfilsGestor -->                        
                     </div>
                 </fieldset>
             </div>

@@ -18,6 +18,7 @@ import org.ibit.rol.sac.model.HechoVitalProcedimiento;
 import org.ibit.rol.sac.model.IconoFamilia;
 import org.ibit.rol.sac.model.IconoMateria;
 import org.ibit.rol.sac.model.Materia;
+import org.ibit.rol.sac.model.PerfilGestor;
 import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.TraduccionHechoVital;
 import org.ibit.rol.sac.model.TraduccionUA;
@@ -345,6 +346,42 @@ public class CargaModulosLateralesUtil {
 		
 	}
 	
+	/**
+	 * Devuelve una lista con los perfiles gestores relacionados con el registro con clave primaria id.
+	 * 
+	 * @param listaPerfilGestor
+	 * @param id
+	 * @param lang
+	 * @param ordenable
+	 * @return
+	 */
+	public static List<Map<String, Object>> recuperaPerfilesGestorRelacionados(List<PerfilGestor> listaPerfilGestor, Long id, 
+			String lang, boolean ordenable) {
+		
+		List<Map<String, Object>> listaPerfilGestorDTO = new ArrayList<Map<String, Object>>();
+		
+		if (listaPerfilGestor != null && listaPerfilGestor.size() > 0) {
+
+			Map<String, Object> map;
+
+			for (PerfilGestor perfil : listaPerfilGestor) {
+
+				map = new HashMap<String, Object>();
+
+				map.put("id", perfil.getId());
+				map.put("nom", perfil.getNombrePerfilGestor(lang));
+				map.put("idMainItem", id);
+				map.put("idRelatedItem", perfil.getId());
+				
+				listaPerfilGestorDTO.add(map);
+
+			}
+
+		}
+		
+		return listaPerfilGestorDTO;
+		
+	}
 	/**
 	 * Devuelve una lista con las UAs relacionadas con el registro con clave primaria id.
 	 * 

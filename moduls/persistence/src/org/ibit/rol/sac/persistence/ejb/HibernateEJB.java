@@ -57,6 +57,7 @@ import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.Validable;
 import org.ibit.rol.sac.model.Validacion;
+import org.ibit.rol.sac.model.PerfilGestor;
 
 import es.caib.rolsac.persistence.hibernate.HibernateLocator;
 import es.caib.rolsac.persistence.hibernate.SessionInterceptor;
@@ -457,12 +458,34 @@ public abstract class HibernateEJB implements SessionBean {
         return userIsSystem()
                 || ( (!modificacion || userIsSuper()) && usuario.hasAccess(unidad));
     }
+    
+    
+    /**
+     * Comprueba si un usuario puede modificar una seccion.
+     * El parámetro modificacion indica el nivel de acceso, si solo a efectos de relacionar informacion (false)
+     *  o tambien de modificacion (true).
+     */
+    protected boolean tieneAcceso(Usuario usuario, PerfilGestor perfil, boolean modificacion) {
+        return userIsSystem()
+                || ( (!modificacion || userIsSuper()) && usuario.hasAccess(perfil));
+    }
 
     /**
      * Comprueba si un usuario puede modificar los contenidos de una seccion.
      */
     protected boolean tieneAcceso(Usuario usuario, Seccion seccion) {
-        return (userIsSystem() || userIs(seccion.getPerfil()));
+	    /*if (seccion.getPerfilsGestor().isEmpty()) {
+	        return true;
+	    }*/
+	
+	    for (Iterator iterator = seccion.getPerfilsGestor().iterator(); iterator.hasNext();) {
+	        PerfilGestor perfilGestor = (PerfilGestor) iterator.next();
+	        if (tieneAcceso(usuario, perfilGestor, true)) {
+	            return true;
+	        }
+	    }
+	    return false;
+
     }
 
     /**

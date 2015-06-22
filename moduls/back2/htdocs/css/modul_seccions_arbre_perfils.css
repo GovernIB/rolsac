@@ -1,0 +1,53 @@
+@charset "utf-8";
+
+/* arbre */
+
+div.escriptori_seccions_arbre { padding-top:1.5em; }
+
+div.seccions_arbre ul.mollaPa { list-style:none; padding-left:.5em; margin-bottom:1em; background-color:#f7f7f7; }
+div.seccions_arbre ul.mollaPa li { display:inline; padding-right:1.2em; padding-left:.8em; background:transparent url(../img/botons/mollaPa.gif) no-repeat right center; }
+
+div.seccions_arbre div.nivells { 
+    /*height:3em;*/ 
+    white-space:nowrap; 
+    /*border-right:1px solid #ccc; border-left:1px solid #ccc; */
+    overflow: hidden;    
+    position: relative;
+}
+div.seccions_arbre div.nivells_contingut { position:relative; left:0; width:10000em; }
+
+div.seccions_arbre div.nivells ul.nivell { 
+	float:left; 
+	width:46em; 
+	padding-left: 1em;
+	padding-right: 1em;
+	list-style:none;
+	border-bottom:0;
+}
+div.seccions_arbre div.nivells ul.nivell li div { 
+	overflow:hidden; 
+	width:100%; 
+	min-height:1.8em; 
+	padding:.5em 0;
+}
+div.seccions_arbre div.nivells ul.nivell li a { 
+	display:block; 
+	float:left;
+}
+div.seccions_arbre div.nivells ul.nivell li a.selecciona {
+	width: 89.9%; 
+	/*padding-left:1em;*/
+}
+div.seccions_arbre a.triat { color: #F47900; }
+div.seccions_arbre div.nivells ul.nivell li a.fills {
+	background: url(../img/mollaPa/flecha.gif) 100% 50% no-repeat; 
+	/*width: 9px;*/
+	width: 9.9%; 
+	height: 14px; 
+	display:block; 
+	float:right; 
+}
+
+div.seccions_arbre div.nivells ul.nivell span.afegit { font-weight:bold; padding-left:1.8em; margin-left:7em; background:transparent url(../img/botons/afegit.gif) no-repeat left center; }
+
+div.seccions_arbre div.nivells ul.nivell li div.carregant { display:none; width:27.8em; font-style:italic; padding:1em 0 1em 3em; background:#fff url(../img/executant.gif) no-repeat 1em 50%; }

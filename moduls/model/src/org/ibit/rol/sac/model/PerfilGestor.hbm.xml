@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.PerfilGestor" table="RSC_PERGES">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="PEG_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+        <property name="orden" column="PEG_ORDEN"/>
+        <property name="codigoEstandar" column="PEG_CODEST"/>
+        
+        <set name="seccions" table="RSC_PEGSEC" inverse="false" lazy="true">
+        	<cache usage="read-write"/>
+            <key column="PGS_CODPEG" foreign-key="RSC_PGSPEG_FK"/>
+            <many-to-many class="org.ibit.rol.sac.model.Seccion" column="PGS_CODSEC" foreign-key="RSC_PGSSEC_FK" />
+        </set>
+        
+        
+        <set name="usuaris" table="RSC_USUPEG" inverse="true" lazy="true" cascade="none">
+	        <cache usage="read-write"/>
+            <key column="USP_CODPEG" foreign-key="RSC_USPPGS_FK"/>
+            <many-to-many class="org.ibit.rol.sac.model.Usuario" column="USP_CODUSU" foreign-key="RSC_USPUSU_FK" />
+        </set>
+        
+        <map name="traducciones" cascade="all" table="RSC_TRAPEG" batch-size="50">
+            <cache usage="read-write"/>
+            <key column="TPG_CODPEG" foreign-key="RSC_TPGPEG_FK"/>
+            <index column="TPG_CODIDI" type="string" length="2"/>
+            <composite-element class="org.ibit.rol.sac.model.TraduccionPerfilGestor">
+            	<property name="nombre" length="256" column="TPG_NOMBRE"/>
+                <property name="descripcion" length="4000" column="TPG_DESCRI"/>
+            </composite-element>
+        </map>
+    </class>
+</hibernate-mapping>

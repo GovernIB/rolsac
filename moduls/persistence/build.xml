@@ -286,6 +286,7 @@
 
 			<fileset dir="${output.dir}/moduls">
 				<include name="model.jar"/>
+				<include name="lucene.jar"/>
 			</fileset>
 	    </path>
 
@@ -293,7 +294,12 @@
 	<target name="schemaexport">
 		<taskdef name="schemaexport"
 			classname="net.sf.hibernate.tool.hbm2ddl.SchemaExportTask"
-			classpathref="hbm2ddl.class.path"/>
+			classpathref="hbm2ddl.class.path"
+		/>
+		<replace dir="${hbm.dir}" includes="*.hbm.xml">			
+			<replacefilter token="@blob.type@" value="${blob.type}"/>
+			<replacefilter token="@clob.type@" value="${clob.type}"/>
+		</replace>
 		<schemaexport
 			properties="etc/hibernate.properties"
 			quiet="no"
@@ -303,7 +309,6 @@
 			output="schema-export.sql">
 			<fileset dir="${hbm.dir}">
 				<include name="*.hbm.xml"/>
-				<exclude name="Archivo.hbm.xml"/>
 			</fileset>
 		</schemaexport>
 	</target>

@@ -23,6 +23,12 @@
             <key column="UNU_CODUSU" foreign-key="RSC_UNUUSU_FK"/>
             <many-to-many class="org.ibit.rol.sac.model.UnidadAdministrativa" column="UNU_CODUNA" foreign-key="RSC_UNUUNA_FK"/>
         </set>
-
+        
+        <set name="perfilsGestor" inverse="false" table="RSC_USUPEG" lazy="true">
+	        <cache usage="read-write"/>
+            <key column="USP_CODUSU" foreign-key="RSC_USPUSU_FK"/>
+            <many-to-many class="org.ibit.rol.sac.model.PerfilGestor" column="USP_CODPEG" foreign-key="RSC_USPPGS_FK" />
+        </set>
+        
     </class>
 </hibernate-mapping>

@@ -76,7 +76,7 @@
                 <property name="titulo" length="256" column="TFI_TITULO"/>
                 <property name="url" length="512" column="TFI_URL"/>
                 <property name="descAbr" type="text" column="TFI_DESABR"/>
-                <property name="descripcion" type="@clob.type@" column="TFI_DESCRI"/>
+                <property name="descripcion" type="text" column="TFI_DESCRI"/>
             </composite-element>
         </map>
 

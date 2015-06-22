@@ -66,6 +66,10 @@ public class Usuario implements ValueObject {
     public boolean hasAccess(UnidadAdministrativa ua) {
         return unidadesAdministrativas.contains(ua) || (!ua.isRaiz() && hasAccess(ua.getPadre()));
     }
+    
+    public boolean hasAccess(PerfilGestor perfilGestor) {
+        return perfilsGestor.contains(perfilGestor);
+    }
 
     public boolean hasRaizAccess() {
         for (Iterator iter = unidadesAdministrativas.iterator(); iter.hasNext();) {
@@ -86,6 +90,21 @@ public class Usuario implements ValueObject {
 		this.email = email;
 	}
 
+	public Set<PerfilGestor> getPerfilsGestor() {
+		return perfilsGestor;
+	}
+
+	public void setPerfilsGestor(Set perfilsGestor) {
+		this.perfilsGestor = perfilsGestor;
+	}
+
+	public void addPerfilsGestor(PerfilGestor perfilGestor) {
+		this.perfilsGestor.add(perfilGestor);
+	}
+
+	public void removePerfilsGestor(PerfilGestor perfilGestor) {
+		this.perfilsGestor.remove(perfilGestor);
+	}
 
     private Long id;
     private String username;
@@ -95,5 +114,6 @@ public class Usuario implements ValueObject {
     private String perfil;
     private Set unidadesAdministrativas;
     private String email;
+    private Set perfilsGestor;
 
 }

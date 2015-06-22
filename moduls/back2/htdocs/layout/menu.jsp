@@ -83,7 +83,10 @@
 								<a href="<c:url value="/espaisTerritorials/espaiTerritorial.do"/>"><spring:message code="menu.espais_territorials" /></a>
 							</li>
 							<li>
-								<a href="<c:url value="/perfils/perfils.do"/>"><spring:message code="menu.perfils" /></a>
+			 					<a href="<c:url value="/perfils/perfils.do"/>"><spring:message code="menu.perfils"/></a>
+							</li>
+							<li>
+								<a href="<c:url value="/perfilsGestor/perfilsGestor.do"/>"><spring:message code="menu.perfils_gestor" /></a>
 							</li>
 							<li>
 								<a href="<c:url value="/destinataris/destinataris.do"/>"><spring:message code="menu.destinatari" /></a>

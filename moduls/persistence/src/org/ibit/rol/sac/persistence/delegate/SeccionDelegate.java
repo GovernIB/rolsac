@@ -106,6 +106,14 @@ public class SeccionDelegate implements StatelessDelegate
         }
     }
     
+    public List listarDescendienteSeccion(Long id) throws DelegateException {
+	    try {
+	        return getFacade().listarDescendienteSeccion(id);
+	    } catch (RemoteException e) {
+	        throw new DelegateException(e);
+	    }
+	}
+
     public void borrarSeccion(Long id) throws DelegateException {
         try {
             getFacade().borrarSeccion(id);
@@ -149,6 +157,22 @@ public class SeccionDelegate implements StatelessDelegate
     		throw new DelegateException(e);
     	}
     }
+    
+   public Seccion actualizarPerfilesGestorSeccion(Seccion seccion, List<Long> idsNuevosPerfiles) throws DelegateException {
+     	try {
+    		return getFacade().actualizarPerfilesGestorSeccion(seccion, idsNuevosPerfiles);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    }
+   
+   public List<Seccion> listarSeccionesRaizPerfilGestor(Long idSeccio) throws DelegateException {
+    	try {
+   		return getFacade().listarSeccionesRaizPerfilGestor(idSeccio);
+   	} catch (RemoteException e) {
+   		throw new DelegateException(e);
+   	}
+   }
     
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

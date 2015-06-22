@@ -24,6 +24,16 @@ $(document).ready(function() {
 		
 	});
 	
+	jQuery(".modulPerfilsGestor").bind("finalizaPerfilsGestor", function() {
+		
+		var elements = $('.modulPerfilsGestor .seleccionats').find('li');
+		var id = $('#item_id').val();
+		var url = $('#btnFinalizar_perfils_gestor').attr('action');
+		
+		ListaSimpleGenerica.guardar(elements, url, id);
+		Detall.modificado(false);
+		
+	});
 	ListaSimpleGenerica = new ListaSimple();
 	ListaSimpleUAsUsuario = new CListaSimpleUAs();
 	
@@ -252,6 +262,7 @@ function CLlistat() {
 			dataVars_cercador += "&perfil=" + $("#cerca_perfil").val();
 			dataVars_cercador += "&observacions=" + $("#cerca_observacions").val();
 			dataVars_cercador += "&idUA=" + $("#cerca_unitat_administrativa_id").val();
+			dataVars_cercador += "&idPerfilGestor=" + $("#cerca_perfilGestor").val();
 			
 		} else {
 
@@ -352,6 +363,7 @@ function CDetall() {
 		escriptori_detall_elm.find(".botonera li.btnEliminar").hide();
 		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);
 		
+		ModulPerfilsGestor.nuevo();
 		ModulUnitatAdministrativa.nuevo();
 
 		$("#item_id").val("");
@@ -457,6 +469,7 @@ function CDetall() {
 	};
 	
 	this.pintarModulos = function(dades) {
+		ModulPerfilsGestor.inicializarPerfilsGestor(dades.perfilsGestor);
 		ModulUnitatAdministrativa.inicializarUnidadesAdministrativas(dades.uas);
 	};
 	

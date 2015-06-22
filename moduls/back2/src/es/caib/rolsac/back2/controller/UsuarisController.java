@@ -16,12 +16,14 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.ibit.rol.sac.model.PerfilGestor;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.model.dto.UsuariDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.delegate.PerfilGestorDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
 import org.springframework.stereotype.Controller;
@@ -46,6 +48,30 @@ public class UsuarisController extends PantallaBaseController {
         RolUtil rolUtil= new RolUtil(request);
         if (rolUtil.userIsAdmin()) {
         	model.put("escriptori", "pantalles/Usuaris.jsp");
+    		try {
+    	       	String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+            	
+        		// Perfil Gestor
+        		PerfilGestorDelegate perfilDelegate = DelegateUtil.getPerfilGestorDelegate();
+        		List<PerfilGestor> llistaPerfilsGestor = new ArrayList<PerfilGestor>();
+        		List<IdNomDTO> llistaPerfilsGestorDTO = new ArrayList<IdNomDTO>();
+				llistaPerfilsGestor = castList(PerfilGestor.class, perfilDelegate.listarPerfilesGestor());
+	    		for (PerfilGestor perfil : llistaPerfilsGestor) {
+	    			llistaPerfilsGestorDTO.add(new IdNomDTO(perfil.getId(), perfil.getNombrePerfilGestor(lang)));
+	    		}
+	    		model.put("llistaPerfilsGestor", llistaPerfilsGestorDTO);
+	    		
+			}catch (DelegateException dEx) {
+        		
+    			if (dEx.isSecurityException()) {
+    				model.put("error", "permisos");
+    			} else {
+    				log.error("Error: " + dEx.getMessage());
+    				model.put("error", "altres");
+    			}
+    			
+    		}
+	
         } else {
         	model.put("error", "permisos");
         }
@@ -77,7 +103,7 @@ public class UsuarisController extends PantallaBaseController {
     	if (perfil != null && !"".equals(perfil)) {
     		paramMap.put("perfil", perfil.toUpperCase());
     	}
-    	
+    	    	
     	String email = request.getParameter("email");
     	if (email != null && !"".equals(email)) {
     		paramMap.put("email", email.toUpperCase());
@@ -92,6 +118,12 @@ public class UsuarisController extends PantallaBaseController {
     	Long idUA = (paramIdUA != null && !StringUtils.isBlank(paramIdUA)) ? Long.valueOf(request.getParameter("idUA")) : null;
     	if (idUA != null) {
     		paramMap.put("idUA", idUA);
+    	}
+    	
+    	String paramIdPerfilGestor = request.getParameter("idPerfilGestor");
+    	Long idPerfilGestor = (paramIdPerfilGestor != null && !StringUtils.isBlank(paramIdPerfilGestor)) ? Long.valueOf(request.getParameter("idPerfilGestor")) : null;
+    	if (idPerfilGestor != null) {
+    		paramMap.put("idPerfilGestor", idPerfilGestor);
     	}
     	
     	try {
@@ -169,6 +201,13 @@ public class UsuarisController extends PantallaBaseController {
     		Usuario usuari = usuariDelegate.obtenerUsuario(id);
     		
     		String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+    		
+	        //Perfils Gestor
+    		List<PerfilGestor> listaPerfilGestor = new ArrayList<PerfilGestor>();
+    		if (usuari.getPerfilsGestor()!=null){
+    			listaPerfilGestor.addAll(usuari.getPerfilsGestor());
+    		}
+			resultats.put("perfilsGestor", CargaModulosLateralesUtil.recuperaPerfilesGestorRelacionados(listaPerfilGestor, id, lang, false));
     		
     		// Pasamos el Set usuari.getUnidadesAdministrativas() a un elemento List.
     		List<UnidadAdministrativa> listaUAs = new ArrayList<UnidadAdministrativa>(usuari.getUnidadesAdministrativas());    		
@@ -250,6 +289,7 @@ public class UsuarisController extends PantallaBaseController {
 				
 				// Conservamos ID y anteriores relaciones que se guardan de forma independiente.
 				usuari.setId(id);
+				usuari.setPerfilsGestor(usuarioOld.getPerfilsGestor());
 				usuari.setUnidadesAdministrativas(usuarioOld.getUnidadesAdministrativas());
 				
 			} catch (NumberFormatException nfe) {
@@ -327,6 +367,61 @@ public class UsuarisController extends PantallaBaseController {
 			usuarioDelegate.grabarUsuario(usuario);
 						
 			String ok = messageSource.getMessage("usuari.guardat.uas.correcte", null, request.getLocale());
+			result = new IdNomDTO(usuario.getId(), ok);
+
+		} catch (DelegateException dEx) {
+			
+			if (dEx.isSecurityException()) {
+				String error = messageSource.getMessage("error.permisos", null, request.getLocale());
+				result = new IdNomDTO(-1l, error);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+			} else {
+				String error = messageSource.getMessage("error.altres", null, request.getLocale());
+				result = new IdNomDTO(-2l, error);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+			}
+			
+		}
+
+		return result;
+		
+	}
+    
+    @SuppressWarnings("unchecked")
+	@RequestMapping(value = "/guardarPerfilsGestorRelacionats.do")
+	public @ResponseBody IdNomDTO guardarPerfilsGestorRelacionats(Long id, Long[] elementos, HttpServletRequest request) {
+		
+		IdNomDTO result = null;
+		
+		try {
+						
+			UsuarioDelegate usuarioDelegate = DelegateUtil.getUsuarioDelegate();
+			Usuario usuario = usuarioDelegate.obtenerUsuario(id);
+									
+			// Procesamos los elementos actuales.
+			if ( elementos != null ) {
+				
+				PerfilGestorDelegate perfilDelegate = DelegateUtil.getPerfilGestorDelegate();
+				Set<PerfilGestor> perfilesNuevos = new HashSet<PerfilGestor>();
+								
+				for ( int i = 0; i < elementos.length; i++ ) {
+					
+					if ( elementos[i] != null ) {
+						
+						PerfilGestor perfil = perfilDelegate.obtenerPerfilGestor(elementos[i]);
+						perfilesNuevos.add(perfil);
+						
+					}
+					
+				}
+				
+				usuario.setPerfilsGestor(perfilesNuevos);
+				
+			}
+						
+			usuarioDelegate.grabarUsuario(usuario);
+						
+			String ok = messageSource.getMessage("perfil.guardat.correcte", null, request.getLocale());
 			result = new IdNomDTO(usuario.getId(), ok);
 
 		} catch (DelegateException dEx) {

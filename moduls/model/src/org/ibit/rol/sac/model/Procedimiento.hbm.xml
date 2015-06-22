@@ -92,13 +92,13 @@
                 <property name="resolucion" type="text" column="TPR_RESOLUCION"/>
                 <property name="notificacion" type="text" column="TPR_NOTIFICACION"/>
                 <property name="resultat" type="text" column="TPR_RESULT"/>
-                <property name="resumen"  type="@clob.type@" column="TPR_RESUME"/>
-                <property name="destinatarios" type="@clob.type@" column="TPR_DESTIN"/>
-                <property name="requisitos" type="@clob.type@" column="TPR_REQUIS"/>
+                <property name="resumen"  type="text" column="TPR_RESUME"/>
+                <property name="destinatarios" type="text" column="TPR_DESTIN"/>
+                <property name="requisitos" type="text" column="TPR_REQUIS"/>
                 <property name="plazos" type="text" column="TPR_PLAZOS"/>
                 <property name="silencio" type="text" column="TPR_SILEN"/>
                 <property name="recursos" type="text" column="TPR_RECURS"/>
-                <property name="observaciones" type="@clob.type@" column="TPR_OBSERV"/>
+                <property name="observaciones" type="text" column="TPR_OBSERV"/>
                 <property name="lugar"  type="text" column="TPR_LUGAR"/>
             </composite-element>
         </map>

@@ -13,6 +13,17 @@ $(document).ready(function() {
 		
 	});
 	
+	jQuery(".modulPerfilsGestor").bind("finalizaPerfilsGestor", function() {
+		
+		var elements = $('.modulPerfilsGestor .seleccionats').find('li');
+		var id = $('#item_id').val();
+		var url = $('#btnFinalizar_perfils_gestor').attr('action');
+		
+		ListaSimpleGenerica.guardar(elements, url, id);
+		Detall.modificado(false);
+		
+	});
+	
 	jQuery(".lista-simple-secciones, .lista-simple-fichas").click(function() {
 		
 		var element = $(this).parent().parent().find("li");
@@ -388,10 +399,6 @@ function CDetall() {
 			jQuery("#item_pare,#item_pare_es,#item_pare_en,#item_pare_de,#item_pare_fr").val( jQuery(this).val() );
 		});
 		
-		jQuery("#item_perfil,#item_perfil_es,#item_perfil_en,#item_perfil_de,#item_perfil_fr").change(function() {
-			jQuery("#item_perfil,#item_perfil_es,#item_perfil_en,#item_perfil_de,#item_perfil_fr").val( jQuery(this).val() );
-		});
-
 		// boton de traducir
 		jQuery("#botoTraduirSeccio").unbind("click").bind("click", function() {
 			Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
@@ -429,7 +436,6 @@ function CDetall() {
 		jQuery("#modul_seccions_relacionades").hide();
 
 		$("#item_id").val("");
-		$("#item_perfil").val("");
 		$('#formGuardar input, #formGuardar textarea').each(limpiarCampo);
 
 		if (typeof idPare != 'undefined' && idPare != null && idPare != '')
@@ -465,6 +471,7 @@ function CDetall() {
 		//escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);
 
 		ModulFitxes.inicializarFichas();
+		ModulPerfilsGestor.nuevo();
 
 		escriptori_contingut_elm.fadeOut(300, function() {
 			
@@ -550,22 +557,6 @@ function CDetall() {
 		$("#item_codi_pare").val(printStringFromNull(dades.item_codi_pare));
 		$("#item_pare").val(printStringFromNull(dades.item_pare)).change();
 		$("#item_codi_estandard").val(printStringFromNull(dades.item_codi_estandard)).change();
-
-		// Rellenar el select de perfils
-		var selected;
-		var $per_select = $('#item_perfil');
-		$per_select.find('option').remove();
-		$per_select.append('<option value="0">' + txtTria + '</option>');
-		
-		for (var i in dades.item_perfils) {
-			
-			selected = dades.item_perfil == dades.item_perfils[i].id ? ' selected="selected"' : '';
-			$per_select.append('<option value="' + dades.item_perfils[i].id + '"' + selected + '>' + dades.item_perfils[i].nom + '</option>');
-			
-		}
-		
-		$per_select.parent().parent().show();
-		$per_select.change();
 
 		$("#modulLateral li.btnEliminar").show();
 		$("#modulPrincipal div#cercador").show();
@@ -727,6 +718,7 @@ function CDetall() {
 		if (debug)
 			console.log("Entrando en CDetall.pintarModulos");
 		
+		ModulPerfilsGestor.inicializarPerfilsGestor(dades.perfilsGestor);
 		ModulSeccions.inicializarSecciones(dades.seccionsRelacionades);
 		ModulFitxes.inicializarFichas(dades.fitxesInformatives);
 		

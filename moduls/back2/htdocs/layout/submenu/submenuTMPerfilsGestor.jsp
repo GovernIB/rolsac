@@ -4,9 +4,9 @@
 	<div id="submenu_contingut">
 		<ul>
 	        <li class="seleccionat">
-	            <span><spring:message code="submenu.perfils_ciutada" /></span>
+	            <span><spring:message code="submenu.perfils_gestor" /></span>
 	            <span class="actual"></span>
 	        </li>
         </ul>			
-	</div>
+	</div>		
 </div>

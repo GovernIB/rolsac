@@ -30,7 +30,13 @@
             <key column="FUA_CODSEC" foreign-key="RSC_FUASEC_FK"/>
             <one-to-many class="org.ibit.rol.sac.model.FichaUA"/>
         </set>
-
+        
+       <set name="perfilsGestor" cascade="none" inverse="true" table="RSC_PEGSEC" lazy="true">
+       		<cache usage="read-write"/>
+            <key column="PGS_CODSEC" foreign-key="RSC_PGSSEC_FK"/>
+            <many-to-many class="org.ibit.rol.sac.model.PerfilGestor" column="PGS_CODPEG" foreign-key="RSC_PGSPEG_FK" />
+        </set>
+        
         <map name="traducciones" cascade="all" table="RSC_TRASEC">
             <cache usage="read-write"/>
             <key column="TSE_CODSEC" foreign-key="RSC_TSESEC_FK"/>

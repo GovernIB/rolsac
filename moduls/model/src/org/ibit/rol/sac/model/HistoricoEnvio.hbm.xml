@@ -23,7 +23,7 @@
             <key column="HEN_COD" foreign-key="FK_RSC_ENVT_REFERENCE_RSC_HISE"/>
             <composite-element class="org.ibit.rol.sac.model.RegistroTemaEnvio">
                 <property name="idMateria" column="MAT_CODI"/>
-                <property name="html" column="HEN_HTML" type="@clob.type@"/>
+                <property name="html" column="HEN_HTML" type="text"/>
                 <property name="activo" column="HEN_ACTIVO"/>
             </composite-element>
         </set>

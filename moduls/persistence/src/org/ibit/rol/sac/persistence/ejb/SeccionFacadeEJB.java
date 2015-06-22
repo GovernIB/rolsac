@@ -1,6 +1,7 @@
 package org.ibit.rol.sac.persistence.ejb;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -16,12 +17,23 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
 import net.sf.hibernate.expression.Order;
 
+
+
+
+
+
+
 import org.apache.commons.lang.StringUtils;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
+import org.ibit.rol.sac.model.PerfilGestor;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.Usuario;
+import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
+import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.delegate.PerfilGestorDelegate;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
@@ -167,6 +179,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
             Hibernate.initialize(seccion.getHijos());
             Hibernate.initialize(seccion.getPadre());
             Hibernate.initialize(seccion.getFichasUA());
+            Hibernate.initialize(seccion.getPerfilsGestor());
             return seccion;
         } catch (HibernateException he) {
             throw new EJBException(he);
@@ -189,6 +202,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
             session.refresh(seccion);
             Hibernate.initialize(seccion.getHijos());
             Hibernate.initialize(seccion.getPadre());
+            Hibernate.initialize(seccion.getPerfilsGestor());
             return seccion;
         } catch (HibernateException he) {
             throw new EJBException(he);
@@ -197,6 +211,53 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
         }
     }
     
+    /**
+     * Lista de secciones filtrado por perfil gestor.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+     */
+	public List<Seccion> listarSeccionesRaizPerfilGestor(Long idSeccio) {
+ 		Session session = getSession();
+ 		List<Seccion> secciones = new ArrayList<Seccion>();
+ 		
+ 		try {
+ 		     if (userIsSystem()) {
+ 		    	// SI L'USUARI TÉ ROL SYSTEM ES MOSTREN TOTES LES SECCIONS
+ 		    	secciones  = (idSeccio!=null)? listarHijosSeccion(idSeccio) : listarSeccionesRaiz();
+             }else {
+            	// EN CAS CONTRARI CERCAM SECCIONS PARES D'ENTRE LES SECCIONS GESTIONABLES PER L'USUARI 
+	 			Usuario usuario = getUsuario(session);
+	 			if (usuario != null) {
+	 				Query query = session
+	 						.createQuery("select distinct sec from Seccion as sec inner join sec.perfilsGestor as peg inner join peg.usuaris usu "
+	 						+"where usu.id = :usuari_id ");
+	 				query.setParameter("usuari_id", usuario.getId(), Hibernate.LONG);
+	 				query.setCacheable(false);
+	 				List<Seccion> result = castList(Seccion.class, query.list());
+	 				Set<Seccion> seccionesRaizPG = new HashSet<Seccion>();
+	 				for (Seccion sec: result){	 				
+	 					Boolean trobat = false;
+	 					while (!trobat && sec!=null) { 
+	 						if ((sec.getPadre()==null && idSeccio==null) || (sec.getPadre()!=null && sec.getPadre().getId().equals(idSeccio))) {
+	 							seccionesRaizPG.add(sec);
+	 							trobat = true;
+	 						} else{
+	 							sec=sec.getPadre();
+	 						}
+		 				}
+	 				}
+	 				secciones = new ArrayList<Seccion>(seccionesRaizPG);
+	 			}
+             }
+ 		} catch (HibernateException he) {
+ 			throw new EJBException(he);
+ 		} finally {
+ 			close(session);
+ 		}
+ 		return secciones;
+ 	}
+
     /**
      * Lista de secciones raiz (nuevo backoffice).
      * 
@@ -307,14 +368,15 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
 	 */
 	public String obtenerCadenaFiltroSeccion()
 			throws DelegateException {
-	
-		List<String> roles = this.getUserRoles();
-		String rolesStr = "'" + StringUtils.join(roles.toArray(), "','") + "'";
 		
-        Session session = getSession();
+		Session session = getSession();		
+       
         try {
-            String select = "select s.id from Seccion as s where s.perfil in ( '0', "+ rolesStr +")";
-            Query query = session.createQuery(select);
+        	Usuario user = this.getUsuario(session);
+    		StringBuilder consulta = new StringBuilder("select s.id from Seccion as s, pg in s.perfilsGestor, u in pg.usuaris ");
+    		consulta.append("where u.id = :userId");
+            Query query = session.createQuery(consulta.toString());
+            query.setParameter("userId",user.getId(),Hibernate.LONG);
             List ids = query.list();
             return StringUtils.join(ids.toArray(), ",");
         } catch (HibernateException he) {
@@ -324,8 +386,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
         }
 
 	}	
-	
-    
+	   
 
     /**
      * Lista de la raiz hasta la seccion indicada por el id.
@@ -373,7 +434,39 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
+    
+    /**
+     * Llista les seccions depenedents d'una secció donada de manera recursiva
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public List<Seccion> listarDescendienteSeccion(Long id) {
+        Session session = getSession();
+        List<Seccion> descendientes = new ArrayList<Seccion>();
+        try {
+        	cargarDescendientesSeccion(id, descendientes, session);
+        } 
+        catch (HibernateException he) {	
+            throw new EJBException(he);
+		} 
+        finally {
+            close(session);
+        }
+        return descendientes;
+    }
 
+    private void cargarDescendientesSeccion(Long id, List<Seccion> descendientes, Session session) throws HibernateException  {
+    	Seccion seccion = (Seccion)session.load(Seccion.class, id);
+    	Hibernate.initialize(seccion.getHijos());
+    	for (int i = 0; i < seccion.getHijos().size(); i++ ) {
+    		Seccion secHija = (Seccion)seccion.getHijos().get(i);
+    		if (secHija != null){
+    			descendientes.add(secHija);
+    			cargarDescendientesSeccion(secHija.getId(), descendientes, session);
+    		}     		
+    	}
+    }
     /**
      * Borra una seccion determinada.
      * 
@@ -554,5 +647,38 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     	} finally {
     		close(session);
     	}    	
-    }    
+    } 
+    
+    /** Actualitza les seccions associades a un Perfil Gestor
+    * @ejb.interface-method
+    * @ejb.permission role-name="${role.system},${role.admin}"
+    */	
+    
+    public Seccion actualizarPerfilesGestorSeccion(Seccion seccion, List<Long> idsNuevosPerfiles) {
+		
+		try {
+		
+			PerfilGestorDelegate perfilDelegate = DelegateUtil.getPerfilGestorDelegate();
+	
+			// Borrar los edificios actuales.
+			for (PerfilGestor perfilActual : seccion.getPerfilsGestor())
+				perfilDelegate.eliminarSeccionPerfilGestor(seccion.getId(), perfilActual.getId());
+			
+			// Insertar los nuevos.
+			for ( Long id : idsNuevosPerfiles ) {
+				if ( id != null ) {
+					perfilDelegate.anyadirSeccionPerfilGestor(seccion.getId(), id);
+				}
+			}
+			
+			return seccion;
+		
+		} catch (DelegateException e) {
+			
+			throw new EJBException(e);
+			
+		}
+		
+	}
+	
 }

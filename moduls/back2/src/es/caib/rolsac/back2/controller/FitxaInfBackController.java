@@ -1103,12 +1103,8 @@ public class FitxaInfBackController extends PantallaBaseController {
 			
 			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			SeccionDelegate seccioDelegate = DelegateUtil.getSeccionDelegate();
-
-			if (request.getParameter("pare") == null || "".equals(request.getParameter("pare"))) {
-				llistaSeccions = seccioDelegate.listarSeccionesRaizPerfil();
-			} else {
-				llistaSeccions = seccioDelegate.listarHijosSeccion(ParseUtil.parseLong(request.getParameter("pare")));
-			}
+			
+			llistaSeccions = seccioDelegate.listarSeccionesRaizPerfilGestor(ParseUtil.parseLong(request.getParameter("pare")));
 
 			for (Seccion seccio: llistaSeccions) {
 				

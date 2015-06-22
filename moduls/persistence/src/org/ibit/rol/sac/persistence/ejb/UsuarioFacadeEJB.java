@@ -135,6 +135,7 @@ public abstract class UsuarioFacadeEJB extends HibernateEJB {
 
 			Usuario usuario = (Usuario) session.load(Usuario.class, id);
 			Hibernate.initialize( usuario.getUnidadesAdministrativas() );
+			Hibernate.initialize( usuario.getPerfilsGestor() );
 
 			return usuario;
 
@@ -331,11 +332,18 @@ public abstract class UsuarioFacadeEJB extends HibernateEJB {
 		// Si se especifica el id de una UA como filtro, toca hacer un JOIN, así que no
 		// se puede procesar directamente. Guardaremos el id y lo procesaremos al salir del bucle.
 		boolean hayIdUA = parametros.containsKey("idUA");
+		boolean hayIdPerfilGestor = parametros.containsKey("idPerfilGestor");
 		Long idUA = null;
+		Long idPerfilGestor = null;
+
 		
 		if (hayIdUA) {
 			idUA = (Long)parametros.get("idUA");
 			parametros.remove("idUA");
+		}
+		if (hayIdPerfilGestor) {
+			idPerfilGestor = (Long)parametros.get("idPerfilGestor");
+			parametros.remove("idPerfilGestor");
 		}
 		
 		Iterator iterator = parametros.keySet().iterator(); 
@@ -368,10 +376,12 @@ public abstract class UsuarioFacadeEJB extends HibernateEJB {
 		}
 		
 		// Procesamos el id de la UA solicitada como filtro dentro del objeto criteria.
-		if (hayIdUA) {
-						
+		if (hayIdUA) {	
 			criteria = criteria.createCriteria("unidadesAdministrativas").add(Expression.eq("id", idUA));
-			
+		}
+		
+		if (hayIdPerfilGestor) {
+			criteria = criteria.createCriteria("perfilsGestor").add(Expression.eq("id", idPerfilGestor));
 		}
 
 	}
@@ -412,6 +422,5 @@ public abstract class UsuarioFacadeEJB extends HibernateEJB {
 		}
 
 	}
-
 
 }

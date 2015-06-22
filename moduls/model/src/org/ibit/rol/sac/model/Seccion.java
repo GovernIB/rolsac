@@ -111,6 +111,21 @@ public class Seccion extends Traducible implements Comparable {
 		this.nombre = nombre;
 	}
 
+	public Set<PerfilGestor> getPerfilsGestor() {
+		return perfilsGestor;
+	}
+
+	public void setPerfilsGestor(Set perfilsGestor) {
+		this.perfilsGestor = perfilsGestor;
+	}
+
+    public void addPerfilsGestor(PerfilGestor perfilGestor) {
+        this.perfilsGestor.add(perfilGestor);
+    }
+
+    public void removePerfilsGestor(PerfilGestor perfilGestor) {
+    	this.perfilsGestor.remove(perfilGestor);
+    }
 
 
 	private Long id;
@@ -121,6 +136,7 @@ public class Seccion extends Traducible implements Comparable {
     private int orden;
     private Set<FichaUA> fichasUA;
     private String nombre;
+    private Set perfilsGestor;
 
     public Seccion() {
 		super();

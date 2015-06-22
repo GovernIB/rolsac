@@ -900,9 +900,14 @@ div.table div.tbody div.td select.ordenacion{
 .cercador .botonera .btn.inserta > span > span {
     background: url(../img/botons/afegix.gif) 15px 50% no-repeat;
 }
+
+#cercador .botonera .btn.insertaDesc > span > span,
+.cercador .botonera .btn.insertaDesc > span > span {
+    background: url(../img/botons/afegeixDesc.gif) 5px 50% no-repeat;
+}
 #cercador .botonera .btnGenerico a span span,
 .cercador .botonera .btnGenerico a span span{
-    padding-left : 35px;
+    padding-left : 40px;
 }
 
 
@@ -1339,6 +1344,10 @@ div.table div.tbody div.td select.ordenacion{
     float:right;
 }
 
+.escriptori_detall .botonera ul li.off,
+.menuPublicacion .botonera ul li.off{ 
+    background-image: url(../img/botons/opcion_off/cen.gif); 
+}
 
 /* Módulo lateral */
 

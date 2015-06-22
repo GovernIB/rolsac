@@ -50,6 +50,7 @@
         <mapping resource="org/ibit/rol/sac/model/UnidadMateria.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/Normativa.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/PerfilCiudadano.hbm.xml" />
+        <mapping resource="org/ibit/rol/sac/model/PerfilGestor.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/Personal.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/Procedimiento.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/Seccion.hbm.xml" />

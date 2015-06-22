@@ -4,6 +4,7 @@ import static es.caib.rolsac.utils.LogUtils.logException;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -20,6 +21,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.FichaUA;
+import org.ibit.rol.sac.model.PerfilGestor;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.Traduccion;
 import org.ibit.rol.sac.model.TraduccionFicha;
@@ -29,6 +31,7 @@ import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
+import org.ibit.rol.sac.persistence.delegate.PerfilGestorDelegate;
 import org.ibit.rol.sac.persistence.delegate.SeccionDelegate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -38,6 +41,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.controller.PantallaBaseController;
+import es.caib.rolsac.back2.util.CargaModulosLateralesUtil;
 import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
@@ -108,8 +112,9 @@ public class TMSeccionsController extends PantallaBaseController {
         	
         	try {
         		
-				model.put("llistaPerfil", getJSONPerfiles(request));
 				model.put("escriptori", "pantalles/taulesMestres/tmSeccions.jsp");
+				
+				 String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 				
 				// Listado padres
 	    		List<Map<String, Object>> llistaSeccioDTO = new ArrayList<Map<String, Object>>();
@@ -130,6 +135,18 @@ public class TMSeccionsController extends PantallaBaseController {
 				}
 				
 	    		model.put("llistaPares", llistaSeccioDTO);
+	    		
+	    		// Perfil Gestor
+				PerfilGestorDelegate perfilDelegate = DelegateUtil.getPerfilGestorDelegate();
+				List<PerfilGestor> llistaPerfilsGestor = new ArrayList<PerfilGestor>();
+				List<IdNomDTO> llistaPerfilsGestorDTO = new ArrayList<IdNomDTO>();
+
+				llistaPerfilsGestor = castList(PerfilGestor.class, perfilDelegate.listarPerfilesGestor());
+				for (PerfilGestor perfil : llistaPerfilsGestor) {
+					llistaPerfilsGestorDTO.add(new IdNomDTO(perfil.getId(), perfil.getNombrePerfilGestor(lang)));
+				}
+
+				model.put("llistaPerfilsGestor", llistaPerfilsGestorDTO);
 	    		
         	} catch (DelegateException dEx) {
         		
@@ -224,11 +241,7 @@ public class TMSeccionsController extends PantallaBaseController {
 	        resultats.put("item_id", seccio.getId());
 
 	        String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-	        
-	        // Perfil
-            resultats.put("item_perfils", getJSONPerfiles(request));
-            resultats.put("item_perfil", seccio.getPerfil() != null ? seccio.getPerfil() : null);
-            
+	                    
             Long idPadre = null;
             String nomPadre = "";
             TraduccionSeccion traS;
@@ -271,6 +284,10 @@ public class TMSeccionsController extends PantallaBaseController {
 	        SeccionDelegate seccionDelegate = DelegateUtil.getSeccionDelegate();
 	        Seccion seccion = seccionDelegate.obtenerSeccion(id);
 	        
+	        //Perfils Gestor
+			List<PerfilGestor> listaPerfilGestor = new ArrayList<PerfilGestor>(seccion.getPerfilsGestor());
+			resultats.put("perfilsGestor", CargaModulosLateralesUtil.recuperaPerfilesGestorRelacionados(listaPerfilGestor, id, lang, false));
+	        
 	        // Secciones relacionadas
 	        recuperaSeccionesRelacionadas(resultats, seccion, lang);
 	        
@@ -292,31 +309,6 @@ public class TMSeccionsController extends PantallaBaseController {
    		return resultats;
    		
    	}
-    
-    // Devuelve lista de unidades administrativas materias (id uamateria y nombre ua).  
-    private List<Map<String, String>> getJSONPerfiles(HttpServletRequest request) {
-    	
-		List<Map<String, String>> perfiles = new ArrayList<Map<String, String>>();
-		Map<String, String> perfil;
-		
-		perfil = new HashMap<String, String>();
-        perfil.put("id", "sacadmin");
-        perfil.put("nom", messageSource.getMessage("usuari.sacadmin", null, request.getLocale()));
-        perfiles.add(perfil);
-        
-        perfil = new HashMap<String, String>();
-        perfil.put("id", "sacsuper");
-        perfil.put("nom", messageSource.getMessage("usuari.sacsuper", null, request.getLocale()));
-        perfiles.add(perfil);
-        
-        perfil = new HashMap<String, String>();
-        perfil.put("id", "sacoper");
-        perfil.put("nom", messageSource.getMessage("usuari.sacoper", null, request.getLocale()));
-        perfiles.add(perfil);
-
-		return perfiles;
-		
-    }
     
     private void omplirCampsTraduibles(Map<String, Object> resultats, Seccion seccio) 
     		throws DelegateException {
@@ -419,7 +411,6 @@ public class TMSeccionsController extends PantallaBaseController {
         		idSeccioPare = ParseUtil.parseLong(valoresForm.get("item_codi_pare"));
         	}
         	
-    		seccion.setPerfil(valoresForm.get("item_perfil"));
     		seccion.setCodigoEstandard(valoresForm.get("item_codi_estandard"));
                     	
     		seccionDelegate.grabarSeccion(seccion, idSeccioPare);
@@ -654,6 +645,47 @@ public class TMSeccionsController extends PantallaBaseController {
 		return result;
 		
     }
+    
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "/guardarPerfilsGestor.do", method = POST)
+	public @ResponseBody IdNomDTO guardarPerfilsGestorRelacionats(Long id, Long[] elementos, HttpServletRequest request) {
+
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+		
+		IdNomDTO result;
+		String error = null;
+					
+		try {
+			SeccionDelegate seccioDelegate = DelegateUtil.getSeccionDelegate();
+			Seccion seccio = seccioDelegate.obtenerSeccion(id);
+			
+			List<Long> idsNuevosPerfiles = (elementos != null) ? Arrays.asList(elementos) : new ArrayList<Long>();
+			seccioDelegate.actualizarPerfilesGestorSeccion(seccio, idsNuevosPerfiles);
+
+			result = new IdNomDTO(seccio.getId(), messageSource.getMessage("perfil.guardat.correcte", null, request.getLocale()));
+
+		} catch (DelegateException dEx) {
+			
+			if (dEx.isSecurityException()) {
+				
+				error = messageSource.getMessage("error.permisos", null, request.getLocale());
+				result = new IdNomDTO(-1l, error);
+				
+			} else {
+				
+				error = messageSource.getMessage("error.altres", null, request.getLocale());
+				result = new IdNomDTO(-2l, error);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+				
+			}
+			
+		}
+		
+		return result;
+
+	}
+	
     
     private void recuperaSeccionesRelacionadas(Map<String, Object> resultats, Seccion seccion, String lang) {
     	

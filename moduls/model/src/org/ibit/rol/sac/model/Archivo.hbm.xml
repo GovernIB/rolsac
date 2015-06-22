@@ -18,7 +18,7 @@
         <property name="nombre" length="128" not-null="true" column="ARC_NOMBRE"/>
         <property name="mime" length="128" not-null="true" column="ARC_MIME"/>
         <property name="peso" not-null="true" column="ARC_PESO"/>
-        <property name="datos" type="@blob.type@" column="ARC_DATOS"/>
+        <property name="datos" type="binary" column="ARC_DATOS"/>
     </class>
 
 </hibernate-mapping>

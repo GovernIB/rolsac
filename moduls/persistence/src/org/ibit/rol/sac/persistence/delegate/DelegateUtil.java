@@ -17,7 +17,11 @@ public final class DelegateUtil {
     public static UsuarioDelegate getUsuarioDelegate() {
         return (UsuarioDelegate) DelegateFactory.getDelegate(UsuarioDelegate.class);
     }
-
+    
+    public static PerfilGestorDelegate getPerfilGestorDelegate() {
+        return (PerfilGestorDelegate) DelegateFactory.getDelegate(PerfilGestorDelegate.class);
+    }
+    
     public static IdiomaDelegate getIdiomaDelegate() {
     	IdiomaDelegateI impl = (IdiomaDelegateImpl) DelegateFactory.getDelegate(IdiomaDelegateImpl.class);
     	IdiomaDelegate del = new IdiomaDelegate();
