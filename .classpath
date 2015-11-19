@@ -84,7 +84,6 @@
 	<classpathentry kind="lib" path="lib/ojdbc14.jar"/>
 	<classpathentry kind="lib" path="lib/sac-micropersistence.jar"/>
 	<classpathentry kind="lib" path="lib/servlet-api.jar"/>
-	<classpathentry kind="lib" path="lib/seyconsession-common.jar"/>
 	<classpathentry kind="lib" path="lib/webcaib/chartbuilder.jar"/>
 	<classpathentry kind="lib" path="lib/webcaib/commons-beanutils-1.8.3.jar"/>
 	<classpathentry kind="lib" path="lib/webcaib/commons-collections-3.2.1.jar"/>
