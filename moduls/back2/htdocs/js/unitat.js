@@ -310,14 +310,14 @@ function CDetall(soloFicha){
 				                    tinyMCE.get("item_cvResponsable_" + idioma).setContent(cvResponsable);                               
 				             }                                       
 				       }else{
-				              console.log("item_presentacio_" + idioma + " no tiene cargado tinyMCE - unitat.js - 313");
+				              console.log("item_cvResponsable_" + idioma + " no tiene cargado tinyMCE - unitat.js - 313");
 				       }    
-				       if(tinyMCE.get("item_cvResponsable_" + idioma) != null){
+				       if(tinyMCE.get("item_presentacio_" + idioma) != null){
 				              if(document.getElementById("item_presentacio_" + idioma).value != tinyMCE.get("item_presentacio_" + idioma).getContent()){
-				                     tinyMCE.get("item_presentacio_" + idioma).setContent(cvResponsable);             
+				                     tinyMCE.get("item_presentacio_" + idioma).setContent(presentacion);             
 				             }      
 				       }else{
-				             console.log("item_cvResponsable_" + idioma + " no tiene cargado tinyMCE - unitat.js - 321");
+				             console.log("item_presentacio_" + idioma + " no tiene cargado tinyMCE - unitat.js - 321");
 				       }
 			}
 						
