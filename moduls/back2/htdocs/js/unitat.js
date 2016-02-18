@@ -465,33 +465,39 @@ function CDetall(soloFicha) {
 			jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").show();
 
 			//Bloque de pestanyas de idiomas
-
-			$("#item_nom_ca").val(printStringFromNull(dada_node.ca.nombre));
-			$("#item_presentacio_ca").val(printStringFromNull(dada_node.ca.presentacion));
-			$("#item_abreviatura_ca").val(printStringFromNull(dada_node.ca.abreviatura));
-			$("#item_cvResponsable_ca").val(printStringFromNull(dada_node.ca.cvResponsable));
-
-			$("#item_nom_es").val(printStringFromNull(dada_node.es.nombre));
-			$("#item_presentacio_es").val(printStringFromNull(dada_node.es.presentacion));
-			$("#item_abreviatura_es").val(printStringFromNull(dada_node.es.abreviatura));
-			$("#item_cvResponsable_es").val(printStringFromNull(dada_node.es.cvResponsable));
-
-			$("#item_nom_en").val(printStringFromNull(dada_node.en.nombre));
-			$("#item_presentacio_en").val(printStringFromNull(dada_node.en.presentacion));
-			$("#item_abreviatura_en").val(printStringFromNull(dada_node.en.abreviatura));
-			$("#item_cvResponsable_en").val(printStringFromNull(dada_node.en.cvResponsable));
-
-			$("#item_nom_de").val(printStringFromNull(dada_node.de.nombre));
-			$("#item_presentacio_de").val(printStringFromNull(dada_node.de.presentacion));
-			$("#item_abreviatura_de").val(printStringFromNull(dada_node.de.abreviatura));
-			$("#item_url_de").val(printStringFromNull(dada_node.de.url));
-			$("#item_cvResponsable_de").val(printStringFromNull(dada_node.de.cvResponsable));
-
-			$("#item_nom_fr").val(printStringFromNull(dada_node.fr.nombre));
-			$("#item_presentacio_fr").val(printStringFromNull(dada_node.fr.presentacion));
-			$("#item_abreviatura_fr").val(printStringFromNull(dada_node.fr.abreviatura));
-			$("#item_cvResponsable_fr").val(printStringFromNull(dada_node.fr.cvResponsable));
-
+			
+			for (var i in idiomas) {
+	            var idioma = idiomas[i];
+	            	            
+	        	$("#item_nom_" + idioma).val(printStringFromNull(dada_node[idioma].nombre));
+				$("#item_abreviatura_" + idioma).val(printStringFromNull(dada_node[idioma].abreviatura));
+				
+				// El plugin de JQuery para TinyMCE parece que tiene un bug y a veces y en segun que navegador 
+	            // no carga bien el contenido ni en el textarea ni en el editor.
+	            var cvResponsable = printStringFromNull(dada_node[idioma].cvResponsable);
+				document.getElementById("item_cvResponsable_" + idioma).value = cvResponsable;
+				
+			    var presentacion = printStringFromNull(dada_node[idioma].presentacion);
+				document.getElementById("item_presentacio_" + idioma).value = presentacion;
+				
+				if(tinyMCE.get("item_cvResponsable_" + idioma) != null){
+				       //verificamos que coincida el contenido del textArea y tinyMCE                                
+					if(document.getElementById("item_cvResponsable_" + idioma).value != tinyMCE.get("item_cvResponsable_" + idioma).getContent()){
+				    	  tinyMCE.get("item_cvResponsable_" + idioma).setContent(cvResponsable);                               
+				    }                                       
+				}else{
+					console.log("item_cvResponsable_" + idioma + " no tiene cargado tinyMCE - unitat.js - 313");
+				}    
+				if(tinyMCE.get("item_presentacio_" + idioma) != null){
+					if(document.getElementById("item_presentacio_" + idioma).value != tinyMCE.get("item_presentacio_" + idioma).getContent()){
+						tinyMCE.get("item_presentacio_" + idioma).setContent(presentacion);             
+					}      
+				}else{
+				      console.log("item_presentacio_" + idioma + " no tiene cargado tinyMCE - unitat.js - 321");
+				}
+			}
+			
+			
 			//Configuracion / gestion
 
 			//$("#item_clau_hita").val(dada_node.item_clau_hita);
