@@ -7,7 +7,7 @@ Per instal·lar-les seguiu aquestes dependències s'ha de fer el següent:
 Baixar el fitxer ojdbc14.jar de http://www.oracle.com/technology/software/tech/java/sqlj_jdbc/htdocs/jdbc_10201.html
 (classes for use with JDK 1.4 and 1.5), i copiar-lo a lib/ojdbc14.jar
 
-La versió vàlida és a partir de la 10.2.0.5.0 (és la que transforma clobs a string correctament)  
+La versió vàlida és a partir de la 10.2.0.5.0 (és la que transforma clobs a string correctament)
 
 
 2. Oracle Chart Builder
