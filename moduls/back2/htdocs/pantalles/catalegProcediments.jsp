@@ -919,7 +919,7 @@
                         <div class="fila">
                             <div class="element t99p">
                                 <div class="etiqueta">
-                                    <label for="item_responsable"><spring:message code='unitatadm.formulari.responsable'/></label>
+                                    <label for="item_responsable"><spring:message code='camp.responsable.procediment'/></label>
                                 </div>
                                 <div class="control">
                                     <input id="item_responsable" name="item_responsable" type="text" class="nou" />
@@ -1128,10 +1128,10 @@
             
             <div class="modul">
                 <fieldset>                    
-                    <legend><spring:message code='camp.familia'/></legend>                               
+                    <legend><spring:message code='camp.tipo.procedimiento'/></legend>                               
                     <div class="element">     
                     	<div class="etiqueta">
-                            <label for="item_familia"><spring:message code='camp.familia'/></label>
+                            <label for="item_familia"><spring:message code='camp.tipo.procedimiento'/></label>
                         </div>                   
                         <div class="control select">
                             <select id="item_familia" name="item_familia" class="nou">
