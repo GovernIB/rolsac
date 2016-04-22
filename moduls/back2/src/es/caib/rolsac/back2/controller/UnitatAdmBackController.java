@@ -1635,8 +1635,8 @@ public class UnitatAdmBackController extends PantallaBaseController {
 					
 				}
 				
-				uaMateriaDelegate.grabarUnidadesMateria(unidadesMateriaNuevas, listaIdsUnidadesMateriaABorrar);
 			}
+			uaMateriaDelegate.grabarUnidadesMateria(unidadesMateriaNuevas, listaIdsUnidadesMateriaABorrar);
 			
 			// Las asociamos a la UA.
 			ua.setUnidadesMaterias(new HashSet<UnidadMateria>(unidadesMateriaNuevas));
