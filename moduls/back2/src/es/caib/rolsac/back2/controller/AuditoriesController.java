@@ -9,12 +9,17 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import net.sf.hibernate.HibernateException;
+
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Auditoria;
+import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.dto.AuditoriaDTO;
+import org.ibit.rol.sac.model.dto.UsuariDTO;
 import org.ibit.rol.sac.persistence.delegate.AuditoriaDelegate;
+import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +42,8 @@ public class AuditoriesController {
     public void setMessageSource(MessageSource messageSource){
         this.messageSource = messageSource;
     }
+    
+    public  UsuarioDelegate usuarioDelegate;
 
     @RequestMapping(value = "/llistat.do")
 	public @ResponseBody Map<String, Object> llistat(HttpServletRequest request, HttpSession session) {
@@ -61,9 +68,17 @@ public class AuditoriesController {
 			} 
 			
 			for (Auditoria auditoria : llista) {
+				UsuarioDelegate usuarioDelegate = DelegateUtil.getUsuarioDelegate();
+								
+				Usuario usuario = usuarioDelegate.obtenerUsuariobyUsernamePMA(auditoria.getUsuario());
+				UsuariDTO usuarioDTO = null;
+				if (usuario != null){									
+				     usuarioDTO = new UsuariDTO(usuario.getId(), usuario.getNombre(), usuario.getUsername(), usuario.getPerfil(), usuario.getEmail());
+				}
+															
 				llistaDTO.add(new AuditoriaDTO(
 						auditoria.getId(),
-						auditoria.getUsuario(),
+						usuarioDTO,
 						auditoria.getCodigoOperacion(),
 						messageSource.getMessage("op."+auditoria.getCodigoOperacion(), null, request.getLocale()),
 						auditoria.getFecha()

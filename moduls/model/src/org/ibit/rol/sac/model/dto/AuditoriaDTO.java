@@ -14,7 +14,7 @@ public class AuditoriaDTO implements ValueObject, Comparable {
 	 */
 	private static final long serialVersionUID = -6947594123395033731L;
 
-	public AuditoriaDTO(Long id, String usuario, int codigoOperacion, String tituloOperacion, Date fecha) {
+	public AuditoriaDTO(Long id, UsuariDTO usuario, int codigoOperacion, String tituloOperacion, Date fecha) {
 		super();
 	    DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 	    
@@ -39,11 +39,11 @@ public class AuditoriaDTO implements ValueObject, Comparable {
         this.id = id;
     }
 
-    public String getUsuario() {
+    public UsuariDTO getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(String usuario) {
+    public void setUsuario(UsuariDTO usuario) {
         this.usuario = usuario;
     }
 
@@ -80,7 +80,7 @@ public class AuditoriaDTO implements ValueObject, Comparable {
 	}
 
 	private Long id;
-    private String usuario;
+    private UsuariDTO usuario;
     private String fecha;
     private Date fechaDate;
     private int codigoOperacion;

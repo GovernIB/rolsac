@@ -53,6 +53,7 @@ public class UsuarioDelegate implements StatelessDelegate {
         }
     }
     
+  
     public void asignarUnidad(Long usuario_id, Long ua_id)
             throws DelegateException {
         try {

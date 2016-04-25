@@ -1625,18 +1625,16 @@
                         <legend><spring:message code='txt.ESTADISTIQUES'/></legend> 
                         <div class="modul_continguts mostrat"></div>
                     </fieldset>
-                </div>
-                <c:if test="${rolAdmin}">
-                    <div id="modulAuditories" class="modul auditorias">                
-                        <fieldset>
-                            <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                            <legend><spring:message code='txt.AUDITORIES'/></legend>
-                            <div class="modul_continguts amagat">
-                               <p class="executant"><spring:message code='txt.carregant'/></p>
-                            </div>
-                        </fieldset>
-                    </div>
-                </c:if>
+                </div>                
+                <div id="modulAuditories" class="modul auditorias">                
+                     <fieldset>
+                         <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                         <legend><spring:message code='txt.AUDITORIES'/></legend>
+                         <div class="modul_continguts amagat">
+                            <p class="executant"><spring:message code='txt.carregant'/></p>
+                         </div>
+                     </fieldset>
+                </div>                
                 
             </div>
             <div class="modulLateral">

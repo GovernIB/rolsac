@@ -190,6 +190,7 @@ public abstract class UsuarioFacadeEJB extends HibernateEJB {
 	}
 	
 	
+	
 	/**
 	 * Asigna la administración de una unidad a un usuario.
 	 * 
