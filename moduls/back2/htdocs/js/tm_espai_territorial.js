@@ -290,6 +290,9 @@ function CDetall(){
         jQuery("#item_pare,#item_pare_es,#item_pare_en,#item_pare_de,#item_pare_de,#item_pare_fr").change(function(){
             jQuery("#item_pare,#item_pare_es,#item_pare_en,#item_pare_de,#item_pare_de,#item_pare_fr").val( jQuery(this).val() );
         });
+        jQuery("#item_codi_pare,#item_codi_pare_es,#item_codi_pare_en,#item_codi_pare_de,#item_codi_pare_de,#item_codi_pare_fr").change(function(){
+            jQuery("#item_codi_pare,#item_codi_pare_es,#item_codi_pare_en,#item_codi_pare_de,#item_codi_pare_de,#item_codi_pare_fr").val( jQuery(this).val() );
+        });
         
         // boton de traducir
         jQuery("#botoTraduirEspaiTerritorial").unbind("click").bind("click", function() {
@@ -317,9 +320,9 @@ function CDetall(){
         $('#formGuardar input').each(limpiarCampo);
         
         if (typeof idPare != 'undefined' && idPare != null && idPare != '') {
-        	$("#item_codi_pare").val(idPare);
+        	$("#item_codi_pare").val(idPare).change();
         } else {
-        	$("#item_codi_pare").val("");
+        	$("#item_codi_pare").val("").change();
         }
         if (typeof nomPare != 'undefined' && nomPare != null && nomPare != '') {
         	$("#item_pare").val(nomPare).change();
@@ -401,7 +404,7 @@ function CDetall(){
 		}
 		// Fin bloque de pestanyas de idiomas
 		
-		$("#item_codi_pare").val(printStringFromNull(dades.item_codi_pare));
+		$("#item_codi_pare").val(printStringFromNull(dades.item_codi_pare)).change();
 		$("#item_pare").val(printStringFromNull(dades.item_pare)).change();
 		$("#item_coordenades").val(printStringFromNull(dades.item_coordenades)).change();
 		

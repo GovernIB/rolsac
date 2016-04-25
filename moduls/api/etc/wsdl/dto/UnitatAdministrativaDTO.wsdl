@@ -41,6 +41,7 @@
                         <element name="padre" nillable="true" type="xsd:long" />
                         <element name="presentacion" nillable="true" type="xsd:string" />
                         <element name="responsable" nillable="true" type="xsd:string" />
+                        <element name="responsableEmail" nillable="true" type="xsd:string" />
                         <element name="sexoResponsable" nillable="true" type="xsd:int" />
                         <element name="cvResponsable" nillable="true" type="xsd:string" />
                         <element name="telefono" nillable="true" type="xsd:string" />

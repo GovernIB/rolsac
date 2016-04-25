@@ -527,7 +527,8 @@ function CDetall(soloFicha) {
 			//FotoGran
 			pintarArchivo("item_responsable_foto_gran", dada_node);
 
-			$("#item_tractament").val(dada_node.item_tractament).attr('selected',true);			
+			$("#item_tractament").val(dada_node.item_tractament).attr('selected',true);	
+			$("#item_responsable_email").val(dada_node.item_responsable_email);
 
 			//Logotipos
 			//LogoHoritzontal

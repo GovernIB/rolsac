@@ -22,6 +22,7 @@
         <property name="orden" column="UNA_ORDEN"/>
         <property name="validacion" column="UNA_VALIDA"/>
         <property name="responsable" length="256" column="UNA_RESPON"/>
+        <property name="responsableEmail" length="256" column="UNA_EMAILR"/>
         <property name="telefono" length="64" column="UNA_TELEFO"/>
         <property name="fax" length="64" column="UNA_FAX"/>
         <property name="email" length="256" column="UNA_EMAIL"/>

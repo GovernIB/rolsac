@@ -29,6 +29,7 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
     private long orden;
     private Integer validacion;
     private String responsable;
+    private String responsableEmail;
     private String telefono;
     private String fax;
     private String email;
@@ -651,6 +652,14 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
         TraduccionUA tua = (TraduccionUA) getTraduccion();
         return tua == null ? null : tua.getAbreviatura();
     }
+
+	public String getResponsableEmail() {
+		return responsableEmail;
+	}
+
+	public void setResponsableEmail(String responsableEmail) {
+		this.responsableEmail = responsableEmail;
+	}
  
  
 /*

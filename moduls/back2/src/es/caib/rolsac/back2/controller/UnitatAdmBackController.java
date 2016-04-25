@@ -61,7 +61,6 @@ import org.ibit.rol.sac.persistence.delegate.SeccionDelegate;
 import org.ibit.rol.sac.persistence.delegate.TratamientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadMateriaDelegate;
-import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -476,6 +475,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 
 		resultats.put("item_responsable", uni.getResponsable());
 		resultats.put("item_responsable_sexe", uni.getSexoResponsable());
+		resultats.put("item_responsable_email", uni.getResponsableEmail());
 
 		if (uni.getFotop() != null) {
 			resultats.put("item_responsable_foto_petita_enllas_arxiu", "unitatadm/archivo.do?id=" + uni.getId() + "&tipus=1");
@@ -495,7 +495,8 @@ public class UnitatAdmBackController extends PantallaBaseController {
 
 	}
 
-	private void agregaTraduccionesADetalle(Map<String, Object> resultats, UnidadAdministrativa uni) {
+	private void agregaTraduccionesADetalle(Map<String,
+			Object> resultats, UnidadAdministrativa uni) {
 
 		String langDefault = System.getProperty("es.caib.rolsac.idiomaDefault");
 
@@ -761,6 +762,8 @@ public class UnitatAdmBackController extends PantallaBaseController {
 
 		unitatAdministrativa.setResponsable(valoresForm.get("item_responsable"));
 		unitatAdministrativa.setSexoResponsable(Integer.parseInt(valoresForm.get("item_responsable_sexe")));
+		unitatAdministrativa.setResponsableEmail(valoresForm.get("item_responsable_email"));
+		
 		UnidadAdministrativaDelegate unitatAdministrativaDelegate = DelegateUtil.getUADelegate();
 
 		//FotoPetita
@@ -1632,9 +1635,8 @@ public class UnitatAdmBackController extends PantallaBaseController {
 					
 				}
 				
-				uaMateriaDelegate.grabarUnidadesMateria(unidadesMateriaNuevas, listaIdsUnidadesMateriaABorrar);
-				
 			}
+			uaMateriaDelegate.grabarUnidadesMateria(unidadesMateriaNuevas, listaIdsUnidadesMateriaABorrar);
 			
 			// Las asociamos a la UA.
 			ua.setUnidadesMaterias(new HashSet<UnidadMateria>(unidadesMateriaNuevas));
