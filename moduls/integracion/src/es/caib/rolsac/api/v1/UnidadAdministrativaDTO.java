@@ -22,6 +22,7 @@ import org.ibit.rol.sac.model.UnidadAdministrativa;
 		private long orden;
 		private Integer validacion;
 		private String responsable;
+		private String responsableEmail;
 		private String telefono;
 		private String fax;
 		private String email;
@@ -68,6 +69,7 @@ import org.ibit.rol.sac.model.UnidadAdministrativa;
 			this.orden = ua.getOrden();
 			this.validacion = ua.getValidacion();
 			this.responsable = ua.getResponsable();
+			this.responsableEmail = ua.getResponsableEmail();
 			this.telefono = ua.getTelefono();
 			this.fax = ua.getFax();
 			this.email = ua.getEmail();
@@ -298,5 +300,9 @@ import org.ibit.rol.sac.model.UnidadAdministrativa;
 		
 		public String getUrl() {
 			return url;
+		}
+
+		public String getResponsableEmail() {
+			return responsableEmail;
 		}
 	}

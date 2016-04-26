@@ -1051,8 +1051,6 @@
             </div>
             <!-- /modul -->
             
-		  <c:if test="${rolAdmin}">
-	        <!-- modul -->
 	        <div id="modulAuditories" class="modul auditorias">                
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
@@ -1062,8 +1060,7 @@
                     </div>
                 </fieldset>
 	        </div>            
-	        <!-- /modul -->
-	      </c:if>
+	   
             
         </div>
         <!-- /modulPrincipal -->

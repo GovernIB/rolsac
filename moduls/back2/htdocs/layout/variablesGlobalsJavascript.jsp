@@ -26,6 +26,7 @@
     var txtHiha = '<spring:message code="txt.hi_ha"/>';
     var txtNoHiHaAuditoriesRegistrades ='<spring:message code="txt.no_hi_ha_auditories_registrades"/>';     
     var txtAvisoCambiosSinGuardar = '<spring:message code="txt.tiene_cambios_sin_guardar"/>';
+    var txtUsuarioBaja = '<spring:message code="usuari.baja"/>';
     
     // cap
     var txtAmagar = '<spring:message code="cap.amagar"/>';
