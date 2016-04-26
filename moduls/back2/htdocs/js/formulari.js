@@ -66,11 +66,22 @@ function FormulariComprovar(reglesValidacio) {
 	this.llansar = function() {
 		
 		$(reglesValidacio).each(function() {
-		
 			dada = this;
 			
+			//Se va a añadir un campo condicional
+			//Este campo sirve para cuando un dato sólo es obligatorio 
+			// si otro campo está relleno.
+			if (dada.condicional != null) {
+				//Comprobamos si el elemento condicional esta relleno.
+				if ($("#"+dada.condicional_elemento).val() == null) {
+					return;
+				}
+				if ($("#"+dada.condicional_elemento).val() == null || $("#"+dada.condicional_elemento).val() == '') {
+					return;
+				}
+			}
+			
 			if (dada.modo == "individual" && dada.etiqueta == "id") {
-				
 				dada_elm = $("#" + dada.etiquetaValor);
 				dada_val = dada_elm.val();
 				
@@ -95,12 +106,24 @@ function FormulariComprovar(reglesValidacio) {
 					
 				}
 				
+				if (dada.tipus == "checkbox") {
+					if ($("#"+dada.etiquetaValor).is(":checked") == false) {
+						that.error({error: dada.error.obligatori, camp: dada_elm});
+						return false;
+					} 
+				}
+				
 			} else if (dada.modo == "llistat") {
 				
 				et_valor = dada.etiquetaValor.split(",");
 				
 				if(dada.minim) {
-					
+					if ($("#"+dada.etiquetaValor) == null || $("#"+dada.etiquetaValor).find(".listaOrdenable ul li") == null || $("#"+dada.etiquetaValor).find(".listaOrdenable ul li").length < dada.minim) {
+						that.error({error: dada.error.tipus, camp: dada.etiquetaValor});
+						return false;
+					}
+					/**
+					 * SE HA COMENTADO EL SIGUIENTE CÓDIGO PORQUE NO QUEDA MUY CLARO EL OBJETIVO NI TAMPOCO PARA QUE ALGO TAN COMPLEJO.
 					et_num = $("form input[name=" + et_valor[0] + "]").size();
 					
 					if (et_num < dada.minim) {
@@ -118,6 +141,8 @@ function FormulariComprovar(reglesValidacio) {
 						
 						err = false;
 						
+						
+					
 						$(et_valor).each(function(i) {
 						
 							et_valor_name = $.trim(this);
@@ -136,7 +161,7 @@ function FormulariComprovar(reglesValidacio) {
 									return err;
 								}
 								
-								if ($.trim(tipus_valor[i]) != "numeric" && et_valor_name_val.val() != "" && !isNaN(et_valor_name_val.val())) {
+								if ($.trim(tipus_valor[i]) == "numeric" && et_valor_name_val.val() != "" && !isNaN(et_valor_name_val.val())) {
 									that.error({error: $.trim(tipus_error_valor[i]), camp: et_valor_name_val});
 									err = true;
 									return err;
@@ -152,10 +177,10 @@ function FormulariComprovar(reglesValidacio) {
 						
 						if (err) {
 							return false;
-						}
+						
 						
 					}
-					
+					**/
 				} else if(dada.conjunt) {
 					
 					dependiente_valor = dada.dependiente.split(",");

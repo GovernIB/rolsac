@@ -194,6 +194,30 @@
 
     // dades formularios
     var FormulariDades = [
+        
+        //Valor que 
+        {
+            "modo": "llistat",
+            "etiqueta": "id",
+            "etiquetaValor": "modul_normatives",
+            "minim": 1,
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "condicional": "si",
+            "condicional_elemento": "item_id",
+            /*"caracters":
+                {
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },*/
+            "error":
+                {
+          	  		"obligatori": "<spring:message code='proc.formulari.error.normativa.obligatori'/>",
+          	  		"tipus":"<spring:message code='proc.formulari.error.normativa.obligatori'/>"
+          	    }
+               
+        }, 
+        
         // Nombre (Catalan)
         {
             "modo": "individual",
@@ -210,7 +234,7 @@
             "error":
                 {
                     "obligatori": txtNombreObligatorio,
-                    "tipus": txtNombreNoSoloNumeros
+                    "tipus": "<spring:message code='personal.formulari_document.titol.no_nomes_numeros'/>"
                 }
         },
         
@@ -224,6 +248,74 @@
             "error":
                 {
                     "obligatori": "<spring:message code='proc.formulari.error.estat.obligatori'/>"
+                }
+        },
+
+     // Objecte
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_objecte_" + '<c:out value="${idiomaVal}"/>',
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "error":
+                {
+                    "obligatori": "<spring:message code='proc.formulari.error.objecte.obligatori'/>"
+                }
+        },
+        
+
+        // Destinataris
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_destinataris_" + '<c:out value="${idiomaVal}"/>',
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "error":
+                {
+                    "obligatori": "<spring:message code='proc.formulari.error.destinataris.obligatori'/>"
+                }
+        },
+        
+        
+     	// Fin de la via administrativa
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_fi_vida_administrativa",
+            "obligatori": "si",
+            "tipus": "checkbox",         
+            "error":
+                {
+                    "obligatori": "<spring:message code='proc.formulari.error.viaadministrativa.obligatori'/>"
+                }
+        },
+        
+        
+        // Fecha publicacion
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_data_publicacio",
+            "obligatori": "si",
+            "tipus": "alfanumeric",         
+            "error":
+                {
+                    "obligatori": "<spring:message code='proc.formulari.error.fechapublicacion.obligatori'/>"
+                }
+        },
+        
+        // Responsable
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_responsable",
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "error":
+                {
+                    "obligatori": "<spring:message code='proc.formulari.error.responsable.obligatori'/>"
                 }
         },
         
@@ -252,6 +344,7 @@
                     "obligatori": "<spring:message code='proc.formulari.error.familia.obligatori'/>"
                 }
         },
+        
 
         // Plazo máximo para resolución (Catalán)
         {
@@ -347,6 +440,8 @@
                     "tipus": "<spring:message code='proc.formulari.error.silenciAdministratiu.no_nomes_numeros'/>"
                 }
         }        
+           
+       
     ];
     
     var FormulariTramits = [                            
@@ -415,6 +510,9 @@
                 }			
 		}		
     ];
+    
+    
+    
 -->
 </script>
 
