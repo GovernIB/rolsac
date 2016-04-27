@@ -83,6 +83,7 @@
                 <property name="plazos" type="string" length="4000" column="TPR_PLAZOS"/>
                 <property name="silencio" type="string" length="4000" column="TPR_SILEN"/>
                 <property name="resolucion" length="4000" column="TPR_RESOLUCION"/>
+                <!--El campo notificación queda obsoleto se ha eliminado del back #8 y que no se elimina para permitir compatibilidad entre la version 1.2 y 1.3  -->
                 <property name="notificacion" length="4000" column="TPR_NOTIFICACION"/>
                 <property name="recursos" type="string" length="4000" column="TPR_RECURS"/>
                 <property name="observaciones" type="string" length="4000" column="TPR_OBSERV"/>

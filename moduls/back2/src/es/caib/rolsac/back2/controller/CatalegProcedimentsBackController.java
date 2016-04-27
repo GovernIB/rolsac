@@ -788,6 +788,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			tpl.setResumen(RolUtil.limpiaCadena(request.getParameter("item_objecte_" + lang)));
 			tpl.setResultat(RolUtil.limpiaCadena(request.getParameter("item_resultat_" + lang)));
 			tpl.setResolucion(RolUtil.limpiaCadena(request.getParameter("item_resolucio_" + lang)));
+			//El campo notificación queda obsoleto se ha eliminado del back #8 y que no se elimina para permitir compatibilidad entre la version 1.2 y 1.3
 			tpl.setNotificacion(RolUtil.limpiaCadena(request.getParameter("item_notificacio_" + lang)));
 			tpl.setSilencio(RolUtil.limpiaCadena(request.getParameter("item_silenci_" + lang)));
 			tpl.setObservaciones(RolUtil.limpiaCadena(request.getParameter("item_observacions_" + lang)));
@@ -1221,6 +1222,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	    if (StringUtils.isNotEmpty(request.getParameter("item_resolucio_" + idiomaOrigenTraductor))) {
 	        traduccioOrigen.setResolucion(request.getParameter("item_resolucio_" + idiomaOrigenTraductor));
 	    }
+		//El campo notificación queda obsoleto se ha eliminado del back #8 y que no se elimina para permitir compatibilidad entre la version 1.2 y 1.3
 	    if (StringUtils.isNotEmpty(request.getParameter("item_notificacio_" + idiomaOrigenTraductor))) {
 	        traduccioOrigen.setNotificacion(request.getParameter("item_notificacio_" + idiomaOrigenTraductor));
 	    }

@@ -205,7 +205,8 @@
             "tipus": "alfanumeric",
             "condicional": "si",
             "condicional_elemento": "item_id",
-            /*"caracters":
+            /*
+            "caracters":
                 {
                     "mostrar": "no",
                     "abreviat": "no"
@@ -346,7 +347,7 @@
         },
         
 
-        // Plazo máximo para resolución (Catalán)
+        // Termini per resoldre i notificar (Catalán)
         {
             "modo": "individual",
             "etiqueta": "id",
@@ -365,24 +366,7 @@
                 }
         },
         
-        // Plazo máximo para la notificaci?n (Catal?n)
-        {
-            "modo": "individual",
-            "etiqueta": "id",
-            "etiquetaValor": "item_notificacio_" + '<c:out value="${idiomaVal}"/>',
-            "obligatori": "si",
-            "tipus": "alfanumeric",
-            /*"caracters":
-                {
-                    "mostrar": "no",
-                    "abreviat": "no"
-                },*/
-            "error":
-                {
-                	"obligatori": "<spring:message code='proc.formulari.error.terminiMaximNotificacio.obligatori'/>",
-                    "tipus": "<spring:message code='proc.formulari.error.terminiMaximNotificacio.no_nomes_numeros'/>"
-                }
-        },
+
         
         // Organisme responsable 
         {   
@@ -443,6 +427,7 @@
            
        
     ];
+    
     
     var FormulariTramits = [                            
 		{	
@@ -861,25 +846,14 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_resolucio_<c:out value="${lang}" />"><spring:message code='camp.terminiMaximResolucio'/></label>
+                                                <label for="item_resolucio_<c:out value="${lang}" />"><spring:message code='camp.termini.resoldre.notificar'/></label>
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_resolucio_<c:out value="${lang}" />" name="item_resolucio_<c:out value="${lang}" />"
                                                     cols="50" rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_notificacio_<c:out value="${lang}" />"><spring:message code='camp.terminiMaximNotificacio'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <textarea id="item_notificacio_<c:out value="${lang}" />" name="item_notificacio_<c:out value="${lang}" />"
-                                                    cols="50" rows="2" class="nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </div>                                    
                                     <div class="fila">
                                         <div class="element organoResponsable">
                                             <div class="etiqueta">

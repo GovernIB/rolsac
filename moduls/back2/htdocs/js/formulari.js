@@ -73,9 +73,6 @@ function FormulariComprovar(reglesValidacio) {
 			// si otro campo está relleno.
 			if (dada.condicional != null) {
 				//Comprobamos si el elemento condicional esta relleno.
-				if ($("#"+dada.condicional_elemento).val() == null) {
-					return;
-				}
 				if ($("#"+dada.condicional_elemento).val() == null || $("#"+dada.condicional_elemento).val() == '') {
 					return;
 				}
