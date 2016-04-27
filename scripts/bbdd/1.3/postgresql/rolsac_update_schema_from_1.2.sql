@@ -63,5 +63,3 @@ ALTER TABLE ONLY rsc_usupeg
 	
 ALTER TABLE rsc_edific ALTER COLUMN edi_lat TYPE character varying(64);
 ALTER TABLE rsc_edific ALTER COLUMN edi_lng TYPE character varying(64);
-
-ALTER TABLE RSC_UNIADM ADD UNA_EMAILR character varying(256);

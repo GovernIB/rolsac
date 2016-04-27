@@ -1819,7 +1819,8 @@ CREATE TABLE rsc_uniadm (
     una_codtrt bigint,
     unr_idexte bigint,
     unr_urlrem character varying(512),
-    unr_codadm bigint
+    unr_codadm bigint,
+    una_emailr character varying(256)
 );
 
 
