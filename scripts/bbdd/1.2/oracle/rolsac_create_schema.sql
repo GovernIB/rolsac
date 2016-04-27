@@ -936,6 +936,7 @@ create table RSC_UNIADM (
    UNR_IDEXTE number(19,0),
    UNR_URLREM varchar2(512),
    UNR_CODADM number(19,0),
+   UNA_EMAILR varchar2(256),
    primary key (UNA_CODI)
 );
 create table RSC_TRAMIT (

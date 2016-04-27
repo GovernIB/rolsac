@@ -390,6 +390,14 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="element t50p">
+                                <div class="etiqueta">
+                                    <label for="item_responsable_email"><spring:message code='unitatadm.formulari.responsable.email'/></label>                                    
+                                </div>
+                                <div class="control">
+                                    <input id="item_responsable_email" name="item_responsable_email" type="text" />
+                                </div>
+                            </div>
                         </div>
                         <!-- /fila -->
                     </div>
@@ -1457,6 +1465,14 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="element t50p">
+                                	<div class="etiqueta">
+                                    	<label for="nuevaUA_item_responsable_email"><spring:message code='unitatadm.formulari.responsable.email'/></label>                                    
+                               	 	</div>
+                                	<div class="control">
+                                    	<input id="nuevaUA_item_responsable_email" name="item_responsable_email" type="text" />
+                                	</div>
+                               </div>
                             </div>
                             <!-- /fila -->
                         </div>
@@ -2234,6 +2250,16 @@
                     {
                         "tipus": "<spring:message code='unitatadm.formulari.tipus.responsable'/>"
                     }
+            },{ // Email responsable
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_responsable_email",
+                "obligatori": "no",
+                "tipus": "email",
+                "error":
+                    {
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.responsable.email'/>"
+                    }
             },{ // nivell 1
                 "modo": "individual",
                 "etiqueta": "id",
@@ -2413,6 +2439,16 @@
                 "error":
                     {
                         "tipus": "<spring:message code='unitatadm.formulari.tipus.responsable'/>"
+                    }
+            },{ // Email responsable
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "nuevaUA_item_responsable_email",
+                "obligatori": "no",
+                "tipus": "email",
+                "error":
+                    {
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.responsable.email'/>"
                     }
             },{ // nivell 1
                 "modo": "individual",

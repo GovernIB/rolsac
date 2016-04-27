@@ -254,6 +254,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
             
             resultats.put("item_responsable", uni.getResponsable());
             resultats.put("item_responsable_sexe", uni.getSexoResponsable());
+            resultats.put("item_responsable_email", uni.getResponsableEmail());
             
             if (uni.getFotop() != null){
 
@@ -485,6 +486,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			//Responsable
 			unitatAdministrativa.setResponsable(valoresForm.get("item_responsable"));
 			unitatAdministrativa.setSexoResponsable(Integer.parseInt(valoresForm.get("item_responsable_sexe")));
+			unitatAdministrativa.setResponsableEmail(valoresForm.get("item_responsable_email"));
 			
 			//FotoPetita
     		FileItem fileFotoPetita = ficherosForm.get("item_responsable_foto_petita");
