@@ -65,7 +65,7 @@ function ModulAuditories(idModuloAuditorias){
 		// codi taula
 		codi_taula_audit = '<table>';
 		codi_taula_audit +=' <thead>';
-		codi_taula_audit +='  <th class="usuario"><div>USUARI</div></th>';
+		codi_taula_audit +='  <th class="usuariocode"><div>USUARI</div></th>';
 		codi_taula_audit +='  <th class="nombre"><div>NOMBRE</div></th>';
 		codi_taula_audit +='  <th class="fecha"><div>DATA</div></th>';
 		codi_taula_audit +='  <th class="operacion"><div>OPERACI&Oacute;</div></th>';
@@ -79,12 +79,12 @@ function ModulAuditories(idModuloAuditorias){
 
 				codi_taula_audit += '<tr>';				
 				if (dada_node.usuario != null){
-					codi_taula_audit += ' <td class="usuario"><div>' + dada_node.usuario.username + '</div></td>';
-					codi_taula_audit += ' <td class="usuario"><div>' + dada_node.usuario.nombre + '</div></td>';
+					codi_taula_audit += ' <td class="usuariocode"><div>' + dada_node.usuario.username + '</div></td>';
+					codi_taula_audit += ' <td class="nombre"><div>' + dada_node.usuario.nombre + '</div></td>';
 				}
 				if (dada_node.usuario == null){
-					codi_taula_audit += ' <td class="usuario"><div>' + txtUsuarioBaja + '</div></td>';
-					codi_taula_audit += ' <td class="usuario"><div>' + "" + '</div></td>';
+					codi_taula_audit += ' <td class="usuariocode"><div>' + txtUsuarioBaja + '</div></td>';
+					codi_taula_audit += ' <td class="nombre"><div>' + "" + '</div></td>';
 				}					
 				codi_taula_audit += ' <td class="fecha"><div>' + dada_node.fecha + '</div></td>';
 				codi_taula_audit += ' <td class="operacion"><div>' + dada_node.tituloOperacion + '</div></td>';

@@ -1055,6 +1055,12 @@ div.table div.tbody div.td select.ordenacion{
 .escriptori_detall .grupoModulosFormulario div.modul.auditorias table tbody tr{
     background-color: #F9F8F2;    
 }
+.escriptori_detall .grupoModulosFormulario div.modul.auditorias table .usuariocode{
+    width: 25%;
+}
+.escriptori_detall .grupoModulosFormulario div.modul.auditorias table .nombre{
+    width: 40%;
+}
 .escriptori_detall .grupoModulosFormulario div.modul.auditorias table .usuario{
     width: 60%;
 }
