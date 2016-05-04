@@ -107,6 +107,7 @@
     var txtErrorTramitIniciObligatori = '<spring:message code="error.tramit_inici_obligatori" />';
     var txtErrorTramitIniciacio = '<spring:message code="error.tramit_inici_no_es_pot_esborrar" />';
     var txtErrorNumFicha = '<spring:message code="error.num_ficha" />';
+    var txtErrorNormativaObligatoria = '<spring:message code="error.normativa_obligatoria" />';
         
     // Errores de validaci�n
     var txtMaxim = "<spring:message code='txt.maxim'/>";

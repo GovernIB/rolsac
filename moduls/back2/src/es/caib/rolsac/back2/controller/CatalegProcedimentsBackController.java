@@ -306,7 +306,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			resultats.put("item_responsable", proc.getResponsable());
 			resultats.put("item_finestreta_unica", proc.esVentanillaUnica());
 			resultats.put("item_notes", proc.getInfo());
-			resultats.put("item_fi_vida_administrativa", (proc.getIndicador() == null || "0".equals(proc.getIndicador())) ? false : true);           
+			resultats.put("item_fi_vida_administrativa", proc.getIndicador() == null  ? "" : (proc.getIndicador()));           
             resultats.put("item_taxa", (proc.getTaxa() == null || "0".equals(proc.getTaxa())) ? false : true);
             resultats.put("item_finestreta_unica", (proc.getVentanillaUnica() == null || "0".equals(proc.getVentanillaUnica())) ? false : true);
 
@@ -560,6 +560,10 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				error = messageSource.getMessage("proc.error.falta.public", null, request.getLocale());
 				return result = new IdNomDTO(-3l, error);
 			}
+			if (request.getParameter("materies") == null || request.getParameter("materies").equals("")) {
+				error = messageSource.getMessage("proc.error.falta.materia", null, request.getLocale());
+				return result = new IdNomDTO(-4l, error);
+			}
 
 			ProcedimientoDelegate procedimentDelegate = DelegateUtil.getProcedimientoDelegate();
 			ProcedimientoLocal procediment = new ProcedimientoLocal();
@@ -590,7 +594,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			procediment.setSignatura(request.getParameter("item_codigo_pro"));					// Signatura
 			procediment.setInfo(request.getParameter("item_notes"));							// Info
 			procediment.setTaxa("on".equalsIgnoreCase(request.getParameter("item_taxa")) ? "1" : "0");							// Taxa
-			procediment.setIndicador("on".equalsIgnoreCase(request.getParameter("item_fi_vida_administrativa")) ? "1" : "0");	// Indicador
+			procediment.setIndicador(Long.parseLong(request.getParameter("item_fi_vida_administrativa")) == 1 ? "1" : "0");	// Indicador
 			procediment.setVentanillaUnica("on".equalsIgnoreCase(request.getParameter("item_finestreta_unica")) ? "1" : "0");	// Ventanilla Única
 
 			List<Tramite> listaTramitesParaBorrar = null;
@@ -733,6 +737,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		procediment.setTramites(procedimentOld.getTramites());
 		procediment.setOrganResolutori(procedimentOld.getOrganResolutori());
 		procediment.setPublicosObjetivo(procedimentOld.getPublicosObjetivo());
+		procediment.setMaterias(procedimentOld.getMaterias());
+		procediment.setNormativas(procedimentOld.getNormativas());
 		
 		return procediment;
 		

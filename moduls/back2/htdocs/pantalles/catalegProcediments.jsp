@@ -195,30 +195,6 @@
     // dades formularios
     var FormulariDades = [
         
-        //Valor que 
-        {
-            "modo": "llistat",
-            "etiqueta": "id",
-            "etiquetaValor": "modul_normatives",
-            "minim": 1,
-            "obligatori": "si",
-            "tipus": "alfanumeric",
-            "condicional": "si",
-            "condicional_elemento": "item_id",
-            /*
-            "caracters":
-                {
-                    "mostrar": "no",
-                    "abreviat": "no"
-                },*/
-            "error":
-                {
-          	  		"obligatori": "<spring:message code='proc.formulari.error.normativa.obligatori'/>",
-          	  		"tipus":"<spring:message code='proc.formulari.error.normativa.obligatori'/>"
-          	    }
-               
-        }, 
-        
         // Nombre (Catalan)
         {
             "modo": "individual",
@@ -286,7 +262,7 @@
             "etiqueta": "id",
             "etiquetaValor": "item_fi_vida_administrativa",
             "obligatori": "si",
-            "tipus": "checkbox",         
+            "tipus": "numeric",         
             "error":
                 {
                     "obligatori": "<spring:message code='proc.formulari.error.viaadministrativa.obligatori'/>"
@@ -934,13 +910,20 @@
                                     </div>
                                                                         
                                     <div class="fila">
-                                        <div class="element checkbox">
-                                            <div class="control">
-                                                <input id="item_fi_vida_administrativa" name="item_fi_vida_administrativa" type="checkbox" value="on" class="nou" />
-                                            </div>
+                                        <div class="element t50p">
+<!--                                             <div class="control"> -->
+<!--                                                 <input id="item_fi_vida_administrativa" name="item_fi_vida_administrativa" type="checkbox" value="on" class="nou" /> -->
+<!--                                             </div> -->
                                             <div class="etiqueta">
                                                 <label for="item_fi_vida_administrativa"><spring:message code='camp.fiViaAdministrativa'/></label>
-                                            </div>                                            
+                                            </div>  
+                                            <div class="control select">
+                                                <select id="item_fi_vida_administrativa" name="item_fi_vida_administrativa" class="nou">
+                                                    <option value=""><spring:message code='camp.nsnc'/></option>
+                                                    <option value="1" ><spring:message code='camp.si'/></option>
+                                                    <option value="0" ><spring:message code='camp.no'/></option>
+                                                </select>
+                                            </div>                                          
                                         </div>
                                         <div class="element checkbox">
                                             <div class="control">

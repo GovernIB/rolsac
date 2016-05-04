@@ -151,6 +151,9 @@ function CModulNormativa() {
 		return listaNormativas;
 		
 	};
+	this.hayNormativaSeleccionada = function () {
+        return modul_normatives_elm.find('div.listaOrdenable input.normativa_id').length > 0;
+    };
 	
 	this.botonGuardar = jQuery("#btnGuardar_normatives");
 	
@@ -565,5 +568,5 @@ function CEscriptoriNormativa() {
 		});
 		
 	};
-	
+	    
 };

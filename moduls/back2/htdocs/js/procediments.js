@@ -444,7 +444,7 @@ function CDetall() {
 		// en el if. Si todo está OK, ejecutamos el mismo código anterior (lo dejo duplicado
 		// porque considero que ha de estar comentado de este modo para que el próximo que
 		// tenga que mantener esto lo entienda.
-		else if ( ($('#item_estat').val() == 1 && ModulTramit.hayTramiteInicializacion()) ) {
+		else if ( $('#item_estat').val() == 1 && ModulTramit.hayTramiteInicializacion() && ModulNormativa.hayNormativaSeleccionada() ) {
 
 			urlParams = ModulNormativa.listaNormativas();
 			urlParams += "&" + ModulMateries.listaMaterias();
@@ -457,7 +457,11 @@ function CDetall() {
 		// Si no hay trámite de inicialización con estado de publicación 1, lanzamos mensaje de error.
 		} else {
 
-			Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + txtErrorTramitIniciObligatori + "</p>"});
+			if (!ModulTramit.hayTramiteInicializacion()){
+				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + txtErrorTramitIniciObligatori + "</p>"});
+			}else{
+				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + txtErrorNormativaObligatoria + "</p>"});
+			}
 
 		}
 
@@ -541,7 +545,7 @@ function CDetall() {
 			jQuery("#item_codigo_pro,#item_codigo_pro_es,#item_codigo_pro_en,#item_codigo_pro_de,#item_codigo_pro_fr").val( jQuery(this).val() );
 		});
 		jQuery("#item_fi_vida_administrativa,#item_fi_vida_administrativa_es,#item_fi_vida_administrativa_en,#item_fi_vida_administrativa_de,#item_fi_vida_administrativa_fr").change(function(){
-			jQuery("#item_fi_vida_administrativa,#item_fi_vida_administrativa_es,#item_fi_vida_administrativa_en,#item_fi_vida_administrativa_de,#item_fi_vida_administrativa_fr").attr("checked", jQuery(this).is(":checked"));
+			jQuery("#item_fi_vida_administrativa,#item_fi_vida_administrativa_es,#item_fi_vida_administrativa_en,#item_fi_vida_administrativa_de,#item_fi_vida_administrativa_fr").val( jQuery(this).val());
 		});
 
 		jQuery("#item_taxa,#item_taxa_es,#item_taxa_en,#item_taxa_de,#item_taxa_fr").change(function(){
@@ -734,7 +738,7 @@ function CDetall() {
 		}
 
 		if (dada_node.item_fi_vida_administrativa != undefined) {
-			jQuery('#item_fi_vida_administrativa').attr('checked', dada_node.item_fi_vida_administrativa);                        
+			jQuery('#item_fi_vida_administrativa').val(dada_node.item_fi_vida_administrativa);                        
 			jQuery("#item_fi_vida_administrativa").change();
 		}
 
