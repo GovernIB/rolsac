@@ -444,7 +444,7 @@ function CDetall() {
 		// en el if. Si todo está OK, ejecutamos el mismo código anterior (lo dejo duplicado
 		// porque considero que ha de estar comentado de este modo para que el próximo que
 		// tenga que mantener esto lo entienda.
-		else if ( $('#item_estat').val() == 1 && ModulTramit.hayTramiteInicializacion() && ModulNormativa.hayNormativaSeleccionada() ) {
+		else if ( $('#item_estat').val() == 1 && ModulTramit.hayTramiteInicializacion() && ModulNormativa.hayNormativaSeleccionada($('#item_clave_primaria').val()) ) {
 
 			urlParams = ModulNormativa.listaNormativas();
 			urlParams += "&" + ModulMateries.listaMaterias();

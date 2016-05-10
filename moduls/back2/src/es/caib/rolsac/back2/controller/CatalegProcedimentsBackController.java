@@ -560,10 +560,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				error = messageSource.getMessage("proc.error.falta.public", null, request.getLocale());
 				return result = new IdNomDTO(-3l, error);
 			}
-			if (request.getParameter("materies") == null || request.getParameter("materies").equals("")) {
-				error = messageSource.getMessage("proc.error.falta.materia", null, request.getLocale());
-				return result = new IdNomDTO(-4l, error);
-			}
+			
 
 			ProcedimientoDelegate procedimentDelegate = DelegateUtil.getProcedimientoDelegate();
 			ProcedimientoLocal procediment = new ProcedimientoLocal();
@@ -579,6 +576,13 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				edicion = false;
 			}
 
+			//Sólo si es edición es obligado tener materias
+			if (edicion &&  (request.getParameter("materies") == null || request.getParameter("materies").equals(""))) {
+				error = messageSource.getMessage("proc.error.falta.materia", null, request.getLocale());
+				return result = new IdNomDTO(-4l, error);
+			} 
+				
+			
 			procediment = guardarVersion(request, procediment, procedimentOld, error);			// VersiÃ³n
 			procediment = guardarPublicoObjetivo(request, procediment, procedimentOld);			// Procesar PÃºblico Objectivo
 			procediment = guardarIdioma(request, procediment, procedimentOld);       			// Idiomas
@@ -1391,9 +1395,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			
 			Set<Materia> materias = GuardadoAjaxUtil.obtenerMateriasRelacionadas(elementos);
 			procedimiento.setMaterias(materias); 			
-
 			guardarGrabar(procedimiento);
-			
 			result = new IdNomDTO(procedimiento.getId(), messageSource.getMessage("proc.guardat.materies.correcte", null, request.getLocale()));
 
 		} catch (DelegateException dEx) {

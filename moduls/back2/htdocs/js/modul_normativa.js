@@ -151,8 +151,9 @@ function CModulNormativa() {
 		return listaNormativas;
 		
 	};
-	this.hayNormativaSeleccionada = function () {
-        return modul_normatives_elm.find('div.listaOrdenable input.normativa_id').length > 0;
+	this.hayNormativaSeleccionada = function (idProc) {
+		//Si es alta no se valida que haya normativa seleccionada
+        return (idProc == "" || idProc == null) ? true : modul_normatives_elm.find('div.listaOrdenable input.normativa_id').length > 0;
     };
 	
 	this.botonGuardar = jQuery("#btnGuardar_normatives");
