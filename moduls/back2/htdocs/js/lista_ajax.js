@@ -31,8 +31,14 @@ function ListaAjax() {
 				}
 				
 			},
-			success: function(data) {				
-				Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});			
+			success: function(data) {	
+				//Cuando el id del mensaje es -6 se quiere pintar en rojo
+				if (data.id == -6){
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: data.nom});			
+
+				}else{
+					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});		
+				}	
 			}
 		});
 		
@@ -73,8 +79,10 @@ function ListaAjax() {
 				}
 				
 			},
-			success: function(data) {				
-				Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});			
+			success: function(data) {	
+				
+					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});			
+				
 			}
 		});
 		

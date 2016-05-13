@@ -1394,12 +1394,16 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			procedimiento = DelegateUtil.getProcedimientoDelegate().obtenerProcedimientoNewBack(id);
 			
 			Set<Materia> materias = GuardadoAjaxUtil.obtenerMateriasRelacionadas(elementos);
+			if (procedimiento.getValidacion() == 1 && materias.isEmpty()){
+				error = messageSource.getMessage("proc.error.falta.materia", null, request.getLocale());
+				return result = new IdNomDTO(-6l, error);
+				
+			}
 			procedimiento.setMaterias(materias); 			
 			guardarGrabar(procedimiento);
 			result = new IdNomDTO(procedimiento.getId(), messageSource.getMessage("proc.guardat.materies.correcte", null, request.getLocale()));
 
 		} catch (DelegateException dEx) {
-			
 			if (dEx.isSecurityException()) {
 				
 				error = messageSource.getMessage("error.permisos", null, request.getLocale());
@@ -1429,6 +1433,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		IdNomDTO result;
 		String error = null;
 		ProcedimientoLocal procedimiento = null;
+		Set<Normativa> normativas = new HashSet<Normativa>();
 		
 		if (id != null) {
 			
@@ -1444,12 +1449,16 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 					for (int i = 0; i < elementos.length; i++)
 						normativasList.add(elementos[i]);
 					
-					Set<Normativa> normativas = new HashSet<Normativa>();
+					
 					normativas.addAll(normativaDelegate.buscarNormativas(normativasList));
 					
 					procedimiento.setNormativas(normativas); 
 					
 				} else {
+					if (procedimiento.getValidacion() == 1 && normativas.isEmpty()){
+						error = messageSource.getMessage("proc.error.falta.normativa", null, request.getLocale());
+						return result = new IdNomDTO(-6l, error);
+					}
 					
 					procedimiento.setNormativas(new HashSet<Normativa>());
 					
