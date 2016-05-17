@@ -284,7 +284,7 @@ public class TramiteBackController {
 		            return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.ACCEPTED);
 					
 				}
-			
+				
 			}
 			
 			// Si el estado de publicación del procedimiento es público, valideremos que se intente
@@ -303,6 +303,16 @@ public class TramiteBackController {
 			    
 			}
 			
+			//#4 si el tramite tiene momento=ini, el procedimiento es p�blico debe tener modelo solicitud obligatoriamente
+			if (edicion && isProcedimientoConEstadoPublicacionPublica && fase == 1 &&
+					(request.getParameter("formularisTramit") == null || request.getParameter("formularisTramit").equals(""))) {
+				
+				error = messageSource.getMessage("error.tramit_inici_sin_model", null, request.getLocale());
+	            result = new IdNomDTO(-3l, error);
+	            
+	            return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.ACCEPTED);
+				
+			}
 			// 1 - Pública
 			// 2 - Interna
 			// 3 - Reserva

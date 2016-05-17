@@ -8,6 +8,7 @@ $(document).ready(function() {
     resultats_actiu_elm = resultats_elm.find("div.actiu:first");
     escriptori_tramits_elm = $("#escriptori_tramits");  
     cercador_elm = $("#cercador");
+    eliminaCancelar = false;
     
     // datos traductor
     CAMPOS_TRADUCTOR_TRAMITE = [
@@ -54,6 +55,7 @@ function CModulTramit() {
     this.extend = ListaOrdenable;
     this.extend();      
     
+    this.bolTramiteInicio = false;
     var that = this;
     
     this.iniciar = function() {
@@ -191,7 +193,13 @@ function CModulTramit() {
     };
     
     this.hayTramiteInicializacion = function () {
-        return modul_tramits_elm.find('div.listaOrdenable input.tramit_moment[value="1"]').length > 0;
+    	this.bolTramiteInicio = false;  //#4 Se valida que hay modelo de solicitud seleccionado en el trámite de inicialización
+    	if(modul_tramits_elm.find('div.listaOrdenable input.tramit_moment[value="1"]').length > 0 ){
+    		this.bolTramiteInicio = true;
+    	}
+    	
+        return modul_tramits_elm.find('div.listaOrdenable input.tramit_moment[value="1"]').length > 0 
+        		&& modul_formularis_tramits_elm.find('div.listaOrdenable input.formularisTramit_id').length > 0;
     };
     
     // Actualiza el nombre.
@@ -265,6 +273,7 @@ function CEscriptoriTramit() {
                         "&" + ModulFormularisTramit.listarFormularios() +
                         "&" + ModulDocumentsRequerits.listarDocumentosRequeridos() +
                         "&" + ModulTaxesTramit.listarTasas();           
+       
         
         //Enviamos el formulario mediante el mï¿½todo ajaxSubmit del plugin $.form
         $("#formTramits").ajaxSubmit({
@@ -274,18 +283,18 @@ function CEscriptoriTramit() {
             beforeSubmit: function() {
                 Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
             },
-            success: function(data) {                    
-                
+            success: function(data) {    
+            	var mensaje = "";
                 if (data.id < 0) {
                     Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
                 } else {        
                     data.moment = moment;
                     var idTramit = $("#id_tramit_actual").val();                    
                     if (idTramit != "" && idTramit != undefined) {
-                        Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtTramitModificatCorrecte});
+                    	mensaje = txtTramitModificatCorrecte;                        
                         ModulTramit.actualitzaNomTramit(data);
-                    } else {
-                        Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtTramitCreatCorrecte});
+                    } else {                    	 
+                    	mensaje = txtTramitCreatCorrecte;                      
                         var idTramit = "nou_tramit_" + data.id;
                         ModulTramit.agregaItem({
                             id:  data.id, 
@@ -300,7 +309,10 @@ function CEscriptoriTramit() {
                         that.contaSeleccionats();
                     }
                     
+                    //#4 no se muestra mensaje "Correcto"
+                    eliminaCancelar=true;
                     that.editarTramit(null, data.id); 
+                    Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: mensaje});
                 }
             }
         });
@@ -515,7 +527,14 @@ function CEscriptoriTramit() {
                 Error.llansar();
             },
             success: function(data) {
-                Missatge.cancelar();
+            	if(!eliminaCancelar){
+            		//#4 no se muestra mensaje "Correcto"
+            		//casuistica especifica al guardar (TODO: buscar solución alternativa)
+            		Missatge.cancelar();            		
+            	}else{
+            		eliminaCancelar = false;
+            	}
+                
                 if (data.idTramit > 0) {
                     
                     escriptori_detall_elm.fadeOut(300, function() {
