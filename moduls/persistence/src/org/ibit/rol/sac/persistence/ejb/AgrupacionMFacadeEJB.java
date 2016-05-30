@@ -12,6 +12,7 @@ import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
 import org.ibit.rol.sac.model.AgrupacionMateria;
+import org.ibit.rol.sac.model.EspacioTerritorial;
 import org.ibit.rol.sac.model.MateriaAgrupacionM;
 
 /**
@@ -50,11 +51,13 @@ public abstract class AgrupacionMFacadeEJB extends HibernateEJB {
 	 */
 	public AgrupacionMateria obtenerAgrupacionMaterias(Long id) {
 		
-		Session session = getSession();
+		
+		Session session = getSession();		
 		
 		try {
 			
 			AgrupacionMateria agrMateria = (AgrupacionMateria) session.load(AgrupacionMateria.class , id);
+			session.refresh(agrMateria);
 			Hibernate.initialize(agrMateria.getMateriasAgrupacionM());
 			
 			return agrMateria;
@@ -66,6 +69,7 @@ public abstract class AgrupacionMFacadeEJB extends HibernateEJB {
 		}
 	}
 	
+
 	
 	/**
 	 * Borra una Agrupacion de materias.
