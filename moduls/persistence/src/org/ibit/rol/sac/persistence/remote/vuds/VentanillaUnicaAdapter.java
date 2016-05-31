@@ -140,7 +140,8 @@ public class VentanillaUnicaAdapter {
 
 		if(null!=tratra) {
 		if (null!=tratra.getNombre()) denominacionTramite = tratra.getNombre();
-		if (null!=tratra.getDescripcion())	descripcionTramite =  tratra.getDescripcion();
+		//if (null!=tratra.getDescripcion())	descripcionTramite =  tratra.getDescripcion();
+		if (null!=tratra.getObservaciones())	descripcionTramite =  tratra.getObservaciones();
 		if (null!=tratra.getPlazos()) plazosLegales = tratra.getPlazos();
 		if (null!=tratra.getDocumentacion()) docsPresentar=tratra.getDocumentacion();
 		if (null!=tratra.getRequisits())  requisits =tratra.getRequisits();
@@ -155,7 +156,9 @@ public class VentanillaUnicaAdapter {
 		TraduccionTramite tratra_ca = (TraduccionTramite)t_rolsac.getTraduccion("ca");
 		TraduccionProcedimientoLocal trapro_ca = (TraduccionProcedimientoLocal)t_rolsac.getProcedimiento().getTraduccion("ca");
 		if("".equals(denominacionTramite)&& null!= tratra_ca.getNombre() && !"".equals(tratra_ca.getNombre())) sinTraducir.add("nom del tr�mit");
-		if("".equals(descripcionTramite) && null!= tratra_ca.getDescripcion() && !"".equals(tratra_ca.getDescripcion())) sinTraducir.add("descripció del tràmit");
+		//#351 se cambia descripción por observaciones
+		//if("".equals(descripcionTramite) && null!= tratra_ca.getDescripcion() && !"".equals(tratra_ca.getDescripcion())) sinTraducir.add("descripció del tràmit");
+		if("".equals(descripcionTramite) && null!= tratra_ca.getObservaciones() && !"".equals(tratra_ca.getObservaciones())) sinTraducir.add("descripció del tràmit");
 		if("".equals(plazosLegales) && null!= tratra_ca.getPlazos() && !"".equals(tratra_ca.getPlazos())) sinTraducir.add("pla� m�xim de presentaci�");
 		if("".equals(docsPresentar) && null!= tratra_ca.getDocumentacion() && !"".equals(tratra_ca.getDocumentacion())) sinTraducir.add("documentaci�");
 		if("".equals(requisits) && null!= tratra_ca.getRequisits() && !"".equals(tratra_ca.getRequisits())) sinTraducir.add("requisits");

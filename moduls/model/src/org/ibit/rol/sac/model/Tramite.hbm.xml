@@ -26,7 +26,8 @@
             <index column="TTR_CODIDI" type="string" length="2"/>
             <composite-element class="org.ibit.rol.sac.model.TraduccionTramite">
                 <property name="nombre" length="256" column="TTR_NOMBRE"/>
-                <property name="descripcion" type="text" column="TTR_DESCRI"/>
+<!--                 #351 se cambia descripción por observaciones -->
+                <property name="observaciones" type="text" column="TTR_DESCRI"/>
                 <property name="documentacion" type="text" column="TTR_DOCUME"/>
                 <property name="requisits" type="text" column="TTR_REQUI"/>
                 <property name="plazos" length="512" column="TTR_PLAZOS"/>
