@@ -45,6 +45,7 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
     private Set<PublicoObjetivo> publicosObjetivo;
 	private String taxa;
     private UnidadAdministrativa organResolutori;
+    private UnidadAdministrativa servicioResponsable;
     
     //---------------------------------------------
     //Campos especiales para optimizar la búsqueda
@@ -474,6 +475,14 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
 
 	public void setIdioma(String idioma) {
 		this.idioma = idioma;
+	}
+
+	public UnidadAdministrativa getServicioResponsable() {
+		return servicioResponsable;
+	}
+
+	public void setServicioResponsable(UnidadAdministrativa servicioResponsable) {
+		this.servicioResponsable = servicioResponsable;
 	}
 	
 	

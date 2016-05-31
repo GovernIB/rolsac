@@ -37,6 +37,7 @@
         <many-to-one name="unidadAdministrativa" column="PRO_CODUNA" foreign-key="RSC_PROUNA_FK"/>
         <many-to-one name="familia" column="PRO_CODFAM" foreign-key="RSC_PROFAM_FK"/>
 	    <many-to-one  class="org.ibit.rol.sac.model.Iniciacion" name="iniciacion"  column="PRO_CODINI" foreign-key="RSC_PROINI_FK"/>
+	    <many-to-one name="servicioResponsable" column="PRO_CODUNA_SERV" foreign-key="RSC_PROUNA_FK"/>
         
         <set name="normativas" cascade="none" table="RSC_PRONOR" lazy="true">
             <cache usage="read-write"/>
