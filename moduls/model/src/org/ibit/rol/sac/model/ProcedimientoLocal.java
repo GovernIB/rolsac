@@ -39,13 +39,16 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
     private Iniciacion iniciacion;
     private String indicador;
     private String ventanillaUnica;
-    private String info;
+    
+    //#351 se cambia info por dirElectronica
+//    private String info;
     private String responsable;
     private Set<HechoVitalProcedimiento> hechosVitalesProcedimientos;
     private Set<PublicoObjetivo> publicosObjetivo;
 	private String taxa;
     private UnidadAdministrativa organResolutori;
     private UnidadAdministrativa servicioResponsable;
+    private String dirElectronica;
     
     //---------------------------------------------
     //Campos especiales para optimizar la búsqueda
@@ -161,13 +164,14 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
             d.setOrden(i);
         }
     }
-    public String getInfo() {
-        return info;
-    }
-
-    public void setInfo(String info) {
-        this.info = info;
-    }
+  //#351 se cambia info por dirElectronica
+//    public String getInfo() {
+//        return info;
+//    }
+//
+//    public void setInfo(String info) {
+//        this.info = info;
+//    }
 
     public Set<Normativa> getNormativas() {
         return normativas;
@@ -483,6 +487,14 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
 
 	public void setServicioResponsable(UnidadAdministrativa servicioResponsable) {
 		this.servicioResponsable = servicioResponsable;
+	}
+
+	public String getDirElectronica() {
+		return dirElectronica;
+	}
+
+	public void setDirElectronica(String dirElectronica) {
+		this.dirElectronica = dirElectronica;
 	}
 	
 	

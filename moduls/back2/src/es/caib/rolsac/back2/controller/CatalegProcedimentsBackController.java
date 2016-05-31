@@ -305,7 +305,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			resultats.put("item_url", proc.getUrl());
 			resultats.put("item_responsable", proc.getResponsable());
 			resultats.put("item_finestreta_unica", proc.esVentanillaUnica());
-			resultats.put("item_notes", proc.getInfo());
+			//#351cambio info por dir electrÃ³nica
+			//resultats.put("item_notes", proc.getInfo());
+			resultats.put("item_notes", proc.getDirElectronica());
 			resultats.put("item_fi_vida_administrativa", proc.getIndicador() == null  ? "" : (proc.getIndicador()));           
             resultats.put("item_taxa", (proc.getTaxa() == null || "0".equals(proc.getTaxa())) ? false : true);
             resultats.put("item_finestreta_unica", (proc.getVentanillaUnica() == null || "0".equals(proc.getVentanillaUnica())) ? false : true);
@@ -576,7 +578,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				edicion = false;
 			}
 
-			//Sólo si es edición es obligado tener materias
+			//Sï¿½lo si es ediciï¿½n es obligado tener materias
 			if (edicion &&  (request.getParameter("materies") == null || request.getParameter("materies").equals(""))) {
 				error = messageSource.getMessage("proc.error.falta.materia", null, request.getLocale());
 				return result = new IdNomDTO(-4l, error);
@@ -596,7 +598,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			
 			procediment.setResponsable(request.getParameter("item_responsable"));				// Responsable
 			procediment.setSignatura(request.getParameter("item_codigo_pro"));					// Signatura
-			procediment.setInfo(request.getParameter("item_notes"));							// Info
+			//#351cambio info por dir electrÃ³nica
+			//procediment.setInfo(request.getParameter("item_notes"));							// Info
+			procediment.setDirElectronica(request.getParameter("item_notes"));					// AdreÃ§a elec.
 			procediment.setTaxa("on".equalsIgnoreCase(request.getParameter("item_taxa")) ? "1" : "0");							// Taxa
 			procediment.setIndicador(Long.parseLong(request.getParameter("item_fi_vida_administrativa")) == 1 ? "1" : "0");	// Indicador
 			procediment.setVentanillaUnica("on".equalsIgnoreCase(request.getParameter("item_finestreta_unica")) ? "1" : "0");	// Ventanilla Ãšnica
@@ -798,7 +802,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			tpl.setResumen(RolUtil.limpiaCadena(request.getParameter("item_objecte_" + lang)));
 			tpl.setResultat(RolUtil.limpiaCadena(request.getParameter("item_resultat_" + lang)));
 			tpl.setResolucion(RolUtil.limpiaCadena(request.getParameter("item_resolucio_" + lang)));
-			//El campo notificación queda obsoleto se ha eliminado del back #8 y que no se elimina para permitir compatibilidad entre la version 1.2 y 1.3
+			//El campo notificaciï¿½n queda obsoleto se ha eliminado del back #8 y que no se elimina para permitir compatibilidad entre la version 1.2 y 1.3
 			tpl.setNotificacion(RolUtil.limpiaCadena(request.getParameter("item_notificacio_" + lang)));
 			tpl.setSilencio(RolUtil.limpiaCadena(request.getParameter("item_silenci_" + lang)));
 			tpl.setObservaciones(RolUtil.limpiaCadena(request.getParameter("item_observacions_" + lang)));
@@ -1232,7 +1236,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	    if (StringUtils.isNotEmpty(request.getParameter("item_resolucio_" + idiomaOrigenTraductor))) {
 	        traduccioOrigen.setResolucion(request.getParameter("item_resolucio_" + idiomaOrigenTraductor));
 	    }
-		//El campo notificación queda obsoleto se ha eliminado del back #8 y que no se elimina para permitir compatibilidad entre la version 1.2 y 1.3
+		//El campo notificaciï¿½n queda obsoleto se ha eliminado del back #8 y que no se elimina para permitir compatibilidad entre la version 1.2 y 1.3
 	    if (StringUtils.isNotEmpty(request.getParameter("item_notificacio_" + idiomaOrigenTraductor))) {
 	        traduccioOrigen.setNotificacion(request.getParameter("item_notificacio_" + idiomaOrigenTraductor));
 	    }
