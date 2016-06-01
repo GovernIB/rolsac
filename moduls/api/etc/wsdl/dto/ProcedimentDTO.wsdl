@@ -23,7 +23,8 @@
                         <element name="fechaPublicacion" nillable="true" type="xsd:dateTime" />
                         <element name="id" nillable="true" type="xsd:long" />
                         <element name="indicador" type="xsd:boolean" />
-                        <element name="info" nillable="true" type="xsd:string" />
+<!-- #351cambio info por dir electrónica <element name="info" nillable="true" type="xsd:string" /> -->
+                        <element name="dirElectronica" nillable="true" type="xsd:string" />
                         <element name="iniciacion" nillable="true" type="xsd:long" />
                         <element name="lugar" nillable="true" type="xsd:string" />
                         <element name="nombre" nillable="true" type="xsd:string" />
@@ -46,6 +47,7 @@
                         <element name="validacion" nillable="true" type="xsd:int" />
                         <element name="ventanillaUnica" type="xsd:boolean" />
                         <element name="version" nillable="true" type="xsd:long" />
+                        <element name="servicioResponsable" nillable="true" type="xsd:long" />
                     </sequence>
                 </extension>
             </complexContent>

@@ -24,7 +24,7 @@
                         <element name="dataInici" nillable="true" type="xsd:dateTime" />
                         <element name="dataTancament" nillable="true" type="xsd:dateTime" />
                         <element name="descCodiVuds" nillable="true" type="xsd:string" />
-                        <element name="descripcion" nillable="true" type="xsd:string" />
+<!-- #351 se cambia descripción por observaciones    <element name="descripcion" nillable="true" type="xsd:string" /> -->
                         <element name="documentacion" nillable="true" type="xsd:string" />
                         <element name="fase" type="xsd:int" />
                         <element name="id" type="xsd:long" />

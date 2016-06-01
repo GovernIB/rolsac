@@ -6,7 +6,8 @@ package org.ibit.rol.sac.model;
 public class TraduccionTramite implements Traduccion {
 
 	private String nombre;
-    private String descripcion;
+	//#351 se cambia descripción por observaciones
+    //private String descripcion;
     private String documentacion;
     private String requisits;
     private String plazos;
@@ -21,13 +22,14 @@ public class TraduccionTramite implements Traduccion {
         this.nombre = nombre;
     }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
+//    public String getDescripcion() {
+//        return "";
+//    }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
+//    public void setDescripcion(String descripcion) {
+//        this.descripcion = descripcion;
+//        this.observaciones = descripcion;
+//    }
 
     public String getDocumentacion() {
         return documentacion;
@@ -71,7 +73,7 @@ public class TraduccionTramite implements Traduccion {
 
 	@Override
 	public String toString() {
-		return "TraduccionTramite [descripcion=" + descripcion
+		return "TraduccionTramite [descripcion=" + observaciones
 				+ ", documentacion=" + documentacion + ", nombre=" + nombre
 				+ ", observaciones=" + observaciones + ", plazos=" + plazos
 				+ "]";

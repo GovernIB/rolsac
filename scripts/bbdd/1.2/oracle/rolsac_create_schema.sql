@@ -142,6 +142,7 @@ alter table RSC_FICHEV drop constraint RSC_FIHHEV_FK;
 alter table RSC_TRATAX drop constraint RSC_TRATAX_FK;
 alter table RSC_PROCED drop constraint RSC_PROUNA_FK;
 alter table RSC_PROCED drop constraint RSC_PRO_CODUNA_RESOL_FK;
+alter table RSC_PROCED drop constraint RSC_PRO_CODUNA_SERV_FK; --#351 añadir servicio responsable
 alter table RSC_PROCED drop constraint RSC_PROFAM_FK;
 alter table RSC_PROCED drop constraint RSC_PROINI_FK;
 alter table RSC_PROCED drop constraint RSC_PRRADM_FK;
@@ -1020,6 +1021,7 @@ create table RSC_PROCED (
    PRR_IDEXTE number(19,0),
    PRR_URLREM varchar2(512),
    PRR_CODADM number(19,0),
+   PRO_CODUNA_SERV number(19,0), --#351 añadir servicio responsable
    primary key (PRO_CODI)
 );
 create table RSC_SCRENV (
@@ -1270,6 +1272,7 @@ alter table RSC_PROCED add constraint RSC_PRO_CODUNA_RESOL_FK foreign key (PRO_C
 alter table RSC_PROCED add constraint RSC_PROFAM_FK foreign key (PRO_CODFAM) references RSC_FAMILI;
 alter table RSC_PROCED add constraint RSC_PROINI_FK foreign key (PRO_CODINI) references RSC_INICI;
 alter table RSC_PROCED add constraint RSC_PRRADM_FK foreign key (PRR_CODADM) references RSC_ADMREM;
+alter table RSC_PROCED add constraint RSC_PRO_CODUNA_SERV_FK foreign key (PRO_CODUNA_SERV) references RSC_UNIADM;  --#351 añadir servicio responsable
 alter table RSC_SCRENV add constraint RSC_STPSENV_FK foreign key (SEN_STPCOD) references RSC_SCRTIP;
 alter table RSC_UNAEDI add constraint RSC_UNEUNA_FK foreign key (UNE_CODUNA) references RSC_UNIADM;
 alter table RSC_UNAEDI add constraint RSC_UNEEDI_FK foreign key (UNE_CODEDI) references RSC_EDIFIC;

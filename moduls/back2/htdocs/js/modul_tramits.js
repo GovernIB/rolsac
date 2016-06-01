@@ -480,12 +480,12 @@ function CEscriptoriTramit() {
             
             if (datos[idioma] != null) {
                 $("#item_nom_tramit_" + idioma).val(printStringFromNull(datos[idioma]["nombre"]));
-                $("#item_descripcio_tramit_" + idioma).val(printStringFromNull(datos[idioma]["descripcion"]));
+                $("#item_descripcio_tramit_" + idioma).val(printStringFromNull(datos[idioma]["observaciones"]));
                 $("#item_requisits_tramit_" + idioma).val(printStringFromNull(datos[idioma]["requisits"]));
                 $("#item_documentacio_tramit_" + idioma).val(printStringFromNull(datos[idioma]["documentacion"]));
                 $("#item_termini_tramit_" + idioma).val(printStringFromNull(datos[idioma]["plazos"]));
                 $("#item_lloc_tramit_" + idioma).val(printStringFromNull(datos[idioma]["lugar"]));
-                $("#item_observacions_tramit_" + idioma).val(printStringFromNull(datos[idioma]["observaciones"]));                              
+                //$("#item_observacions_tramit_" + idioma).val(printStringFromNull(datos[idioma]["observaciones"]));                              
             }
                             
             if (datos[idiomaUA] != null) 

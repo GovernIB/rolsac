@@ -134,7 +134,9 @@ public class TramiteRemoto  extends Tramite implements Remoto{
                 if (traduccion != null) {
                     final TraduccionTramite temp =  new TraduccionTramite();
                     temp.setNombre(traduccion.getNombre());
-                    temp.setDescripcion(traduccion.getDescripcion());
+                    //#351 se cambia descripción por observaciones
+                    //temp.setDescripcion(traduccion.getDescripcion());
+                    temp.setObservaciones(traduccion.getDescripcion());
                     temp.setDocumentacion(traduccion.getDocumentacion());
                     temp.setRequisits(traduccion.getRequisits());
                     temp.setPlazos(traduccion.getPlazos());
