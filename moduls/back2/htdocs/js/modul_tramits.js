@@ -60,12 +60,19 @@ function CModulTramit() {
     
     this.iniciar = function() {
         
-        $("#tramit_item_data_actualitzacio").datepicker({ dateFormat: 'dd/mm/yy' });
-        $("#tramit_item_data_publicacio").datepicker({ dateFormat: 'dd/mm/yy' });       
-        $("#tramit_item_data_caducitat").datepicker({ dateFormat: 'dd/mm/yy' });
-        $("#tramit_item_data_vuds").datepicker({ dateFormat: 'dd/mm/yy' });             
-        $("#tramit_item_data_inici").datepicker({ dateFormat: 'dd/mm/yy' });
-        $("#tramit_item_data_tancament").datepicker({ dateFormat: 'dd/mm/yy' });
+        //$("#tramit_item_data_actualitzacio").datepicker({ dateFormat: 'dd/mm/yy' });
+    	$("#tramit_item_data_actualitzacio").datetimepicker({ timeFormat: 'hh:mm' });
+        //$("#tramit_item_data_publicacio").datepicker({ dateFormat: 'dd/mm/yy' });
+        $("#tramit_item_data_publicacio").datetimepicker({ timeFormat: 'hh:mm' });
+        //$("#tramit_item_data_caducitat").datepicker({ dateFormat: 'dd/mm/yy' });
+        $("#tramit_item_data_caducitat").datetimepicker({ timeFormat: 'hh:mm' });
+        $("#tramit_item_data_vuds").datetimepicker({ timeFormat: 'hh:mm' });            
+        $("#tramit_item_data_inici").datetimepicker({ timeFormat: 'hh:mm' });
+        var today = new Date();
+        
+        //$("#publication_datepicker").datetimepicker( "option", "disabled", false ).attr('value', $.datepicker.formatDate('dd-m-yy HH:mm', new Date()));`
+        $("#tramit_item_data_tancament").datetimepicker({ format: 'yyyy/MM/dd HH:mm' , setDate: new Date() });
+        //$("#tramit_item_data_tancament").datetimepicker({ timeFormat: 'hh:mm' });
         
         tramits_seleccionats_elm = escriptori_tramits_elm.find("div.escriptori_items_seleccionats:first");
         escriptori_tramits_elm.find("div.botonera").each(function() {

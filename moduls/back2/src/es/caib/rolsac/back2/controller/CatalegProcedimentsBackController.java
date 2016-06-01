@@ -303,9 +303,11 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			resultats.put("item_codi", proc.getSignatura());
 			resultats.put("item_tramite", proc.getTramite());
 			resultats.put("item_url", proc.getUrl());
-			resultats.put("item_responsable", proc.getResponsable());
+			resultats.put("item_responsable", proc.getResponsable());			
 			resultats.put("item_finestreta_unica", proc.esVentanillaUnica());
-			resultats.put("item_notes", proc.getInfo());
+			//#351cambio info por dir electrónica
+			//resultats.put("item_notes", proc.getInfo());
+			resultats.put("item_notes", proc.getDirElectronica());
 			resultats.put("item_fi_vida_administrativa", proc.getIndicador() == null  ? "" : (proc.getIndicador()));           
             resultats.put("item_taxa", (proc.getTaxa() == null || "0".equals(proc.getTaxa())) ? false : true);
             resultats.put("item_finestreta_unica", (proc.getVentanillaUnica() == null || "0".equals(proc.getVentanillaUnica())) ? false : true);
@@ -332,6 +334,12 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				UnidadAdministrativa ua = proc.getOrganResolutori();
 				resultats.put("item_organ_id", ua.getId());
 				resultats.put("item_organ_nom", ua.getNombreUnidadAdministrativa(lang));
+			}
+			//Cambiar
+			if (proc.getServicioResponsable() != null) {
+				UnidadAdministrativa ua = proc.getServicioResponsable();
+				resultats.put("item_servei_responsable_id", ua.getId());
+				resultats.put("item_servei_responsable_nom", ua.getNombreUnidadAdministrativa(lang));
 			}
 
 			// Obtención de listado de posibles hechos vitales del procedimiento
@@ -592,6 +600,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			procediment = guardarIniciacion(request, procediment, error);				    	// Iniciación
 			procediment = guardarFamilia(request, procediment, error);							// Familia
 			procediment = guardarOrganResolutori(request, procediment, error);					// Organ Resolutori
+			procediment = guardarServeiResponsable(request, procediment, error);				// Servei Responsable
+			
 			procediment = guardarUnidadAdministrativa(request, procediment, error);             // Unidad Administrativa			
 			
 			procediment.setResponsable(request.getParameter("item_responsable"));				// Responsable
@@ -978,6 +988,34 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
 				UnidadAdministrativa organ = uaDelegate.obtenerUnidadAdministrativa(organId);
 				procediment.setOrganResolutori(organ);
+
+			} catch (NumberFormatException e) {
+				
+				error = messageSource.getMessage("proc.error.organ.incorrecte", null, request.getLocale());
+				throw new NumberFormatException(e.getMessage());
+				
+			}
+			
+		}
+
+		return procediment;
+		
+	}
+	
+	/*
+	 * Obtenemos el Servei del responsable del procedimiento.
+	 */
+	private ProcedimientoLocal guardarServeiResponsable(HttpServletRequest request, ProcedimientoLocal procediment, String error) 
+			throws DelegateException {
+
+		if (!"".equals(request.getParameter("item_servei_responsable_id"))) {
+			
+			try {
+				
+				Long organId = Long.parseLong(request.getParameter("item_servei_responsable_id"));
+				UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+				UnidadAdministrativa organ = uaDelegate.obtenerUnidadAdministrativa(organId);
+				procediment.setServicioResponsable(organ);
 
 			} catch (NumberFormatException e) {
 				
