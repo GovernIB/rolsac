@@ -788,8 +788,7 @@ CREATE TABLE rsc_proced (
     pro_codini bigint,
     prr_idexte bigint,
     prr_urlrem character varying(512),
-    prr_codadm bigint,
-    pro_coduna_serv bigint
+    prr_codadm bigint
 );
 
 
@@ -3715,16 +3714,6 @@ ALTER TABLE ONLY rsc_pronor
 ALTER TABLE ONLY rsc_proced
     ADD CONSTRAINT rsc_pro_coduna_resol_fk FOREIGN KEY (pro_coduna_resol) REFERENCES rsc_uniadm(una_codi);
     
---
--- TOC entry 2525 (class 2606 OID 18965)
--- Dependencies: 2352 222 216
--- Name: rsc_pro_coduna_serv_fk; Type: FK CONSTRAINT; Schema: public; Owner: rolsac
---
---#351 añadir servicio responsable
-ALTER TABLE ONLY rsc_proced
-    ADD CONSTRAINT rsc_pro_coduna_serv_fk FOREIGN KEY (pro_coduna_serv) REFERENCES rsc_uniadm(una_codi);
-    
-
 --
 -- TOC entry 2526 (class 2606 OID 18970)
 -- Dependencies: 210 222 2342
