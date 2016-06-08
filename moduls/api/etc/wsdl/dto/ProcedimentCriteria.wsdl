@@ -37,7 +37,8 @@
                         <element name="fechaPublicacion" nillable="true" type="xsd:string" />
                         <element name="hechoVital" nillable="true" type="xsd:string" />
                         <element name="indicador" nillable="true" type="xsd:boolean" />
-                        <element name="info" nillable="true" type="xsd:string" />
+<!--                         #351 Cambio info por dirElectronica-->
+                        <element name="dirElectronica" nillable="true" type="xsd:string" />
                         <element name="materia" nillable="true" type="xsd:string" />
                         <element name="ordenar" nillable="true" type="tns:ArrayOfProcedimentOrdenacio" />
                         <element name="publicoObjetivo" nillable="true" type="xsd:string" />

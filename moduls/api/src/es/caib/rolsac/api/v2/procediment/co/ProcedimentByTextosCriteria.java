@@ -20,7 +20,7 @@ public class ProcedimentByTextosCriteria implements CriteriaObject {
      * Los campos que empizan por I18N_PREFIX son traducibles.
      */
     private static final String[] TEXT_FIELDS = {
-        "info", "responsable", "tramite", "url", "signatura",
+        "dirElectronica", "responsable", "tramite", "url", "signatura",
         I18N_PREFIX + "destinatarios",
         I18N_PREFIX + "lugar",
         I18N_PREFIX + "nombre", 
