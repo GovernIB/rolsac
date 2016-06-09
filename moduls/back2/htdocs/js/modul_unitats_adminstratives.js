@@ -106,7 +106,12 @@ function CModulUnitatAdministrativa() {
 		if (typeof listaUnidadesAdministrativas != 'undefined' && listaUnidadesAdministrativas != null && listaUnidadesAdministrativas.length > 0) {
 			modul_unitatsAdministratives_elm.find(".listaOrdenable").empty();
 			that.agregaItems(listaUnidadesAdministrativas, true);
-		}
+		}		
+		else {
+			 if ( listaUnidadesAdministrativas.length == 0 ){
+				 modul_unitatsAdministratives_elm.find(".listaOrdenable").empty();
+			 }  				 
+		} 
 		
 		that.contaSeleccionats();
 		

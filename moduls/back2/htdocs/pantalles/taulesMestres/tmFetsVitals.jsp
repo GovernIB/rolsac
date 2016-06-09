@@ -538,7 +538,7 @@
                         </div>
                         <div class="element t15">
                             <div class="etiqueta">
-                                <label for="cerca_iniciacio"><spring:message code='camp.iniciacio'/></label>
+                                <label for="cerca_iniciacio"><spring:message code='camp.inici'/></label>
                             </div>
                             <div class="control">
                                 <select id="cerca_iniciacio" name="cerca_iniciacio">

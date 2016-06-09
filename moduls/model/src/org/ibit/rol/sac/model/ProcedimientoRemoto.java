@@ -63,7 +63,8 @@ public class ProcedimientoRemoto extends ProcedimientoLocal implements Remoto{
 		this.setSignatura(procTransferible.getSignatura());
 		this.setFechaCaducidad(procTransferible.getFechaCaducidad());
 		this.setFechaPublicacion(procTransferible.getFechaPublicacion());
-    	this.setInfo(procTransferible.getInfo());
+		//#351cambio info por dir electrónica
+    	this.setDirElectronica(procTransferible.getInfo());
 		this.setFechaActualizacion(procTransferible.getFechaActualizacion());
 		this.setTramite(procTransferible.getTramite());
 		this.setVersion(procTransferible.getVersion());

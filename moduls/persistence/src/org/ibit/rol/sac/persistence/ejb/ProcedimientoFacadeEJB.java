@@ -478,6 +478,12 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				if (procedimiento.getOrganResolutori() != null) {
 					Hibernate.initialize(procedimiento.getOrganResolutori().getHijos());
 				}
+							
+				
+				Hibernate.initialize(procedimiento.getServicioResponsable());
+				if (procedimiento.getServicioResponsable() != null) {
+					Hibernate.initialize(procedimiento.getServicioResponsable().getHijos());
+				}
 
 				Hibernate.initialize(procedimiento.getUnidadAdministrativa().getNormativas());
 				Hibernate.initialize(procedimiento.getUnidadAdministrativa().getEdificios());
@@ -618,9 +624,15 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     			Hibernate.initialize(procedimiento.getUnidadAdministrativa());
     			Hibernate.initialize(procedimiento.getUnidadAdministrativa().getHijos());
     			Hibernate.initialize(procedimiento.getOrganResolutori());
+    			Hibernate.initialize(procedimiento.getServicioResponsable());
+    			
     			
     			if (procedimiento.getOrganResolutori() != null) {
     			    Hibernate.initialize(procedimiento.getOrganResolutori().getHijos());
+    			}
+    			
+    			if (procedimiento.getServicioResponsable() != null) {
+    			    Hibernate.initialize(procedimiento.getServicioResponsable().getHijos());
     			}
 
     			Hibernate.initialize(procedimiento.getTramites());

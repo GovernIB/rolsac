@@ -303,9 +303,11 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			resultats.put("item_codi", proc.getSignatura());
 			resultats.put("item_tramite", proc.getTramite());
 			resultats.put("item_url", proc.getUrl());
-			resultats.put("item_responsable", proc.getResponsable());
+			resultats.put("item_responsable", proc.getResponsable());			
 			resultats.put("item_finestreta_unica", proc.esVentanillaUnica());
-			resultats.put("item_notes", proc.getInfo());
+			//#351cambio info por dir electrónica
+			//resultats.put("item_notes", proc.getInfo());
+			resultats.put("item_notes", proc.getDirElectronica());
 			resultats.put("item_fi_vida_administrativa", proc.getIndicador() == null  ? "" : (proc.getIndicador()));           
             resultats.put("item_taxa", (proc.getTaxa() == null || "0".equals(proc.getTaxa())) ? false : true);
             resultats.put("item_finestreta_unica", (proc.getVentanillaUnica() == null || "0".equals(proc.getVentanillaUnica())) ? false : true);
@@ -332,6 +334,12 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				UnidadAdministrativa ua = proc.getOrganResolutori();
 				resultats.put("item_organ_id", ua.getId());
 				resultats.put("item_organ_nom", ua.getNombreUnidadAdministrativa(lang));
+			}
+			//Cambiar
+			if (proc.getServicioResponsable() != null) {
+				UnidadAdministrativa ua = proc.getServicioResponsable();
+				resultats.put("item_servei_responsable_id", ua.getId());
+				resultats.put("item_servei_responsable_nom", ua.getNombreUnidadAdministrativa(lang));
 			}
 
 			// Obtención de listado de posibles hechos vitales del procedimiento
@@ -576,7 +584,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				edicion = false;
 			}
 
-			//S�lo si es edici�n es obligado tener materias
+			//S�lo si es edici�n es obligado tener materias
 			if (edicion &&  (request.getParameter("materies") == null || request.getParameter("materies").equals(""))) {
 				error = messageSource.getMessage("proc.error.falta.materia", null, request.getLocale());
 				return result = new IdNomDTO(-4l, error);
@@ -592,11 +600,15 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			procediment = guardarIniciacion(request, procediment, error);				    	// Iniciación
 			procediment = guardarFamilia(request, procediment, error);							// Familia
 			procediment = guardarOrganResolutori(request, procediment, error);					// Organ Resolutori
+			procediment = guardarServeiResponsable(request, procediment, error);				// Servei Responsable
+			
 			procediment = guardarUnidadAdministrativa(request, procediment, error);             // Unidad Administrativa			
 			
 			procediment.setResponsable(request.getParameter("item_responsable"));				// Responsable
 			procediment.setSignatura(request.getParameter("item_codigo_pro"));					// Signatura
-			procediment.setInfo(request.getParameter("item_notes"));							// Info
+			//#351cambio info por dir electrónica
+			//procediment.setInfo(request.getParameter("item_notes"));							// Info
+			procediment.setDirElectronica(request.getParameter("item_notes"));					// Adreça elec.
 			procediment.setTaxa("on".equalsIgnoreCase(request.getParameter("item_taxa")) ? "1" : "0");							// Taxa
 			procediment.setIndicador(Long.parseLong(request.getParameter("item_fi_vida_administrativa")) == 1 ? "1" : "0");	// Indicador
 			procediment.setVentanillaUnica("on".equalsIgnoreCase(request.getParameter("item_finestreta_unica")) ? "1" : "0");	// Ventanilla Única
@@ -798,7 +810,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			tpl.setResumen(RolUtil.limpiaCadena(request.getParameter("item_objecte_" + lang)));
 			tpl.setResultat(RolUtil.limpiaCadena(request.getParameter("item_resultat_" + lang)));
 			tpl.setResolucion(RolUtil.limpiaCadena(request.getParameter("item_resolucio_" + lang)));
-			//El campo notificaci�n queda obsoleto se ha eliminado del back #8 y que no se elimina para permitir compatibilidad entre la version 1.2 y 1.3
+			//El campo notificaci�n queda obsoleto se ha eliminado del back #8 y que no se elimina para permitir compatibilidad entre la version 1.2 y 1.3
 			tpl.setNotificacion(RolUtil.limpiaCadena(request.getParameter("item_notificacio_" + lang)));
 			tpl.setSilencio(RolUtil.limpiaCadena(request.getParameter("item_silenci_" + lang)));
 			tpl.setObservaciones(RolUtil.limpiaCadena(request.getParameter("item_observacions_" + lang)));
@@ -978,6 +990,34 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
 				UnidadAdministrativa organ = uaDelegate.obtenerUnidadAdministrativa(organId);
 				procediment.setOrganResolutori(organ);
+
+			} catch (NumberFormatException e) {
+				
+				error = messageSource.getMessage("proc.error.organ.incorrecte", null, request.getLocale());
+				throw new NumberFormatException(e.getMessage());
+				
+			}
+			
+		}
+
+		return procediment;
+		
+	}
+	
+	/*
+	 * Obtenemos el Servei del responsable del procedimiento.
+	 */
+	private ProcedimientoLocal guardarServeiResponsable(HttpServletRequest request, ProcedimientoLocal procediment, String error) 
+			throws DelegateException {
+
+		if (!"".equals(request.getParameter("item_servei_responsable_id"))) {
+			
+			try {
+				
+				Long organId = Long.parseLong(request.getParameter("item_servei_responsable_id"));
+				UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+				UnidadAdministrativa organ = uaDelegate.obtenerUnidadAdministrativa(organId);
+				procediment.setServicioResponsable(organ);
 
 			} catch (NumberFormatException e) {
 				
@@ -1232,7 +1272,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	    if (StringUtils.isNotEmpty(request.getParameter("item_resolucio_" + idiomaOrigenTraductor))) {
 	        traduccioOrigen.setResolucion(request.getParameter("item_resolucio_" + idiomaOrigenTraductor));
 	    }
-		//El campo notificaci�n queda obsoleto se ha eliminado del back #8 y que no se elimina para permitir compatibilidad entre la version 1.2 y 1.3
+		//El campo notificaci�n queda obsoleto se ha eliminado del back #8 y que no se elimina para permitir compatibilidad entre la version 1.2 y 1.3
 	    if (StringUtils.isNotEmpty(request.getParameter("item_notificacio_" + idiomaOrigenTraductor))) {
 	        traduccioOrigen.setNotificacion(request.getParameter("item_notificacio_" + idiomaOrigenTraductor));
 	    }
