@@ -292,7 +292,8 @@ public class TMAgrupacioMateriesController extends PantallaBaseController {
 			List<MateriaAgrupacionM> materiesNew = new ArrayList<MateriaAgrupacionM>();
 			List<MateriaAgrupacionM> materiesOld = agrupacioMateria.getMateriasAgrupacionM();
 
-			if (agrupacioMateria.getMateriasAgrupacionM() != null || materiesForm.size() > 0) {
+			if ((agrupacioMateria.getMateriasAgrupacionM() != null && !agrupacioMateria.getMateriasAgrupacionM().isEmpty()) 
+					|| materiesForm.size() > 0) {
 				
 				StringBuilder idsMateria = new StringBuilder();
 				

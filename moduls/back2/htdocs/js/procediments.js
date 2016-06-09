@@ -458,7 +458,11 @@ function CDetall() {
 		} else {
 
 			if (!ModulTramit.hayTramiteInicializacion()){
-				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + txtErrorTramitIniciObligatori + "</p>"});
+				var mensaje = txtErrorTramitIniciObligatori;  //#4 Si no hay modelo de solicitud seleccionado en el trámite de inicialización se muestra
+				if (ModulTramit.bolTramiteInicio){		      //el error 
+					mensaje = txtErrorModelSolicitudObligatori;
+				}
+				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + mensaje + "</p>"});
 			}else{
 				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + txtErrorNormativaObligatoria + "</p>"});
 			}
@@ -559,6 +563,9 @@ function CDetall() {
 		jQuery("#item_organ_responsable, #item_organ_responsable_es, #item_organ_responsable_ca, #item_organ_responsable_en, #item_organ_responsable_de, #item_organ_responsable_fr").change(function(){        
 			jQuery("#item_organ_responsable, #item_organ_responsable_es, #item_organ_responsable_ca, #item_organ_responsable_en, #item_organ_responsable_de, #item_organ_responsable_fr").val( jQuery(this).val() );        
 		});
+		jQuery("#item_servei_responsable, #item_servei_responsable_es, #item_servei_responsable_ca, #item_servei_responsable_en, #item_servei_responsable_de, #item_servei_responsable_fr").change(function(){        
+			jQuery("#item_servei_responsable, #item_servei_responsable_es, #item_servei_responsable_ca, #item_servei_responsable_en, #item_servei_responsable_de, #item_servei_responsable_fr").val( jQuery(this).val() );        
+		});
 
 		jQuery("#item_organ, #item_organ_es, #item_organ_ca, #item_organ_en, #item_organ_de, #item_organ_fr").change(function(){        
 			jQuery("#item_organ, #item_organ_es, #item_organ_ca, #item_organ_en, #item_organ_de, #item_organ_fr").val( jQuery(this).val() );        
@@ -632,6 +639,7 @@ function CDetall() {
 		if (typeof idUAMollapa == "undefined" || idUAMollapa == null || idUAMollapa == "") {
 			
 			$("#item_organ_responsable_id").val("");
+			$("#item_servei_responsable_id").val("");
 
 			//test
 			$("#item_organ_id").val("");
@@ -644,6 +652,10 @@ function CDetall() {
 			//test
 			$("#item_organ_id").val(idUAMollapa);
 			$("#item_organ").val(nomUAMollapa).change();
+			
+			
+			$("#item_servei_responsable_id").val(idUAMollapa);
+			$("#item_servei_responsable").val(nomUAMollapa).change();
 			
 		}
 
@@ -721,6 +733,11 @@ function CDetall() {
 		if (dada_node.item_organ_responsable_id != undefined) {
 			$("#item_organ_responsable_id").val(dada_node.item_organ_responsable_id);
 			$("#item_organ_responsable").val(dada_node.item_organ_responsable_nom).change();
+		}
+		
+		if (dada_node.item_servei_responsable_id != undefined) {
+			$("#item_servei_responsable_id").val(dada_node.item_servei_responsable_id);
+			$("#item_servei_responsable").val(dada_node.item_servei_responsable_nom).change();
 		}
 
 		if (dada_node.item_organ_id != undefined) {
