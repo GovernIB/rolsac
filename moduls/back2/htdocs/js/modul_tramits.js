@@ -260,10 +260,16 @@ function CEscriptoriTramit() {
     
     this.guarda = function() {
         
+    	var idTramit = $("#id_tramit_actual").val(); 
         // Validam el formulari de tramit        
         if (!this.formulariValid()) {
             return false;
         }
+        //Controlamos que haya un modelo seleccionado
+        if (modul_formularis_tramits_elm.find('div.listaOrdenable input.formularisTramit_id').length == 0 && idTramit != "" ){
+    		Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtModelObligatori, text: ""});
+    		return false;
+    	}
         
         // Coger el id del procedimiento o de la ficha (depende del mantenimiento/jsp en el que estemos).
         var procId = $("#procId");
