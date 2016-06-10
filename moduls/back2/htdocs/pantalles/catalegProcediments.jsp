@@ -200,7 +200,6 @@
     var txtRequisitsObligatori = "<spring:message code= 'tramit.formulari.requisits.obligatori'/>";
     var txtTerminiObligatori   = "<spring:message code= 'tramit.formulari.termini.obligatori'/>";
     var txtModelObligatori   = "<spring:message code= 'tramit.formulari.models.obligatori'/>";
-
     // dades formularios
     var FormulariDades = [
         
