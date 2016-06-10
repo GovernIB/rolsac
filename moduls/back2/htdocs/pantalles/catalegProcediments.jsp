@@ -2087,7 +2087,7 @@
 	            <div class="modul" id="modul_formularis_tramits">
 	                <fieldset>
 	                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-	                    <legend><spring:message code='document.formularis'/></legend>                               
+	                    <legend><spring:message code='document.formularis'/>*</legend>                               
 	                    <div class="modul_continguts mostrat">                                  
 	                        <!-- modulFormularis -->
 	                        <%-- dsanchez: Clase "multilang" para listas multi-idioma --%>
