@@ -65,10 +65,10 @@ function ModulAuditories(idModuloAuditorias){
 		// codi taula
 		codi_taula_audit = '<table>';
 		codi_taula_audit +=' <thead>';
-		codi_taula_audit +='  <th class="usuariocode"><div>USUARI</div></th>';
-		codi_taula_audit +='  <th class="nombre"><div>NOMBRE</div></th>';
-		codi_taula_audit +='  <th class="fecha"><div>DATA</div></th>';
-		codi_taula_audit +='  <th class="operacion"><div>OPERACI&Oacute;</div></th>';
+		codi_taula_audit +='  <th class="usuariocode"><div>'+txtColUsuario+'</div></th>';
+		codi_taula_audit +='  <th class="nombre"><div>'+txtColNombre+'</div></th>';
+		codi_taula_audit +='  <th class="fecha"><div>'+txtColFecha+'</div></th>';
+		codi_taula_audit +='  <th class="operacion"><div>'+txtColOperacion+'</div></th>';
 		codi_taula_audit +=' </thead>';                    
 		codi_taula_audit +=' <tbody>';
 		
