@@ -303,7 +303,9 @@ public class TramiteBackController {
 			    
 			}
 			
-			//#4 si el tramite tiene momento=ini, el procedimiento es pï¿½blico debe tener modelo solicitud obligatoriamente
+
+			//#4 si el tramite tiene momento=ini, el procedimiento es público debe tener modelo solicitud obligatoriamente
+
 			if (edicion && isProcedimientoConEstadoPublicacionPublica && fase == 1 &&
 					(request.getParameter("formularisTramit") == null || request.getParameter("formularisTramit").equals(""))) {
 				

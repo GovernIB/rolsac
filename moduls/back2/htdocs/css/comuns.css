@@ -1785,3 +1785,11 @@ div.modulLateral div.seleccionat ul {
     background: url(../img/botons/iconos/borrar.png) 15px 50% no-repeat;
     padding-left : 35px;
 }
+
+/*#349 modificación pantalla proc */
+#item_familia{
+    width: 80% !important;
+}
+#labelFamilia .obligatori{
+	display:none;
+}

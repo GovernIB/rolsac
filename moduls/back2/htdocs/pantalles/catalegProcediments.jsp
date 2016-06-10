@@ -175,6 +175,11 @@
     var txtCercantSeguents = txtCercant + " " + txtLlistaItems.toLowerCase() + " " + txtSeguents.toLowerCase() + ". " + txtEspere;
     var txtCercantElements = txtCercant + " <spring:message code='txt.elements'/>" + ". " + txtEspere;
     
+    var txtColUsuario = "<spring:message code='txt.auditoria.usu'/>";
+    var txtColNombre = "<spring:message code='txt.auditoria.nombre'/>";
+    var txtColFecha = "<spring:message code='txt.auditoria.fecha'/>";
+    var txtColOperacion = "<spring:message code='txt.auditoria.operacion'/>";
+    
 </script>
 <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
 <script type="text/javascript">
@@ -194,6 +199,7 @@
     var txtOrganoResponsableObligatorio = "<spring:message code='personal.formulari.organ.responsable.obligatori'/>";
     var txtRequisitsObligatori = "<spring:message code= 'tramit.formulari.requisits.obligatori'/>";
     var txtTerminiObligatori   = "<spring:message code= 'tramit.formulari.termini.obligatori'/>";
+    var txtModelObligatori   = "<spring:message code= 'tramit.formulari.models.obligatori'/>";
 
     // dades formularios
     var FormulariDades = [
@@ -965,7 +971,7 @@
                                                     </div>
                                                     <div class="boton btnGenerico">                                    
                                                         <a href="javascript:EliminaArbreUA('item_organ', 'item_organ_id');" class="btn borrar">
-                                                            <span><span><spring:message code='boto.borrar'/></span></span>
+                                                            <span><span><spring:message code='boto.esborrar'/></span></span>
                                                         </a>
                                                     </div>
                                                 </div>
@@ -998,6 +1004,18 @@
                                         </div>
                                     </div>
                                     
+<!--                                     #349 -->
+                                     <div class="fila">
+				                            <div class="element t99p">
+				                                <div class="etiqueta">
+				                                    <label for="item_observacions_<c:out value="${lang}" />"><spring:message code='camp.observacions'/></label>
+				                                </div>
+				                                <div class="control">
+				                                    <textarea id="item_observacions_<c:out value="${lang}" />"
+				                                        name="item_observacions_<c:out value="${lang}" />" cols="50" rows="2" class="nou"></textarea>
+				                                </div>
+				                            </div>
+				                       </div>
                                                                        
                                     
                                 							
@@ -1063,17 +1081,7 @@
                                 
                             </div>
                         </div>                        
-                        <div class="fila">
-                            <div class="element t99p">
-                                <div class="etiqueta">
-                                    <label for="item_observacions_<c:out value="${lang}" />"><spring:message code='camp.observacions'/></label>
-                                </div>
-                                <div class="control">
-                                    <textarea id="item_observacions_<c:out value="${lang}" />"
-                                        name="item_observacions_<c:out value="${lang}" />" cols="50" rows="2" class="nou"></textarea>
-                                </div>
-                            </div>
-                        </div>
+                       
                     </div> 
                 </fieldset>
             </div>
@@ -1230,45 +1238,17 @@
                     </div>
                 </fieldset>
             </div>
-            <!-- modul -->   
-                     
-            <div id="modul_tramits" class="modul destacado">                               
-                <div class="dec1"></div>
-                <div class="dec2"></div>
-                
-                <div class="interior">                    
-                    <fieldset>                                  
-                        <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
-                        <legend><spring:message code='txt.TRAMITS'/></legend>                               
-                        <div class="modul_continguts mostrat">                                  
-                            <!-- modulTramits -->
-                            <div class="modulTramits">
-                                <div class="seleccionats">                                
-                                    <div class="seleccionat">
-                                        <p class="info"><spring:message code='txt.noHiHaTramitsRelacionats'/></p>
-                                        <div class="listaOrdenable"></div>
-                                    </div>
-                                    <div class="btnGenerico">
-                                        <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='txt.gestiona_tramits'/></span></span></a>
-                                    </div>
-                                </div>                                  
-                            </div>
-                            <!-- /modulTramits -->                                 
-                        </div>                              
-                    </fieldset>                     
-                </div>
-            </div>            
-            <!-- /modul -->              
+           
             
             <div class="modul">
                 <fieldset>                    
-                    <legend><spring:message code='camp.tipo.procedimiento'/></legend>                               
+                    <legend><spring:message code='camp.tipo.procedimiento'/> <span class="obligatori">*</span></legend>                               
                     <div class="element">     
-                    	<div class="etiqueta">
+                    	<div class="etiqueta" id="labelFamilia">
                             <label for="item_familia"><spring:message code='camp.tipo.procedimiento'/></label>
                         </div>                   
                         <div class="control select">
-                            <select id="item_familia" name="item_familia" class="nou">
+                            <select id="item_familia" name="item_familia" class="nou tipoProCombo" >
                                 <option value="" selected="selected"><spring:message code='camp.cap'/></option>
                                 <c:forEach items="${families}" var="familia">
                                     <option value="<c:out value="${familia.id}"/>"><c:out value="${familia.nom}"/></option>
@@ -1285,7 +1265,7 @@
             <div class="modul invisible" id="modul_materies">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend><spring:message code='unitatadm.formulari.materies'/></legend>
+                    <legend><spring:message code='unitatadm.formulari.materies'/> <span class="obligatori">*</span></legend>
                     <div class="modul_continguts mostrat">
                         
                         <!-- modulMateries -->
@@ -1365,14 +1345,12 @@
             <!-- /modul -->  
             
              <!-- modul -->
-            <div class="modul invisible" id="modul_documents">
-                <fieldset>
-                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-<%--                     <legend><spring:message code='document.documentsRelacionats'/></legend>                                --%>
-                    <legend><spring:message code='proc.documents.relacionats'/>
+              <div class="modul invisible" id="modul_documents">                     
+                <fieldset>                                  
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
+                    <legend><spring:message code='proc.documents.relacionats'/> </legend>                               
                     <div class="modul_continguts mostrat">                                  
                         <!-- modulDocuments -->
-                        <%-- dsanchez: Clase "multilang" para listas multi-idioma --%>
                         <div class="modulDocuments multilang">
                             <input id="modulo_documents_modificado" type="hidden" name="modulo_documents_modificado" value="0" />
                             <ul class="idiomes">
@@ -1405,16 +1383,17 @@
 	                           			<span><span><spring:message code='boto.guarda'/></span></span>
 	                            	</a>
 	                            </div>
-                            </div>                                  
-                        </div>
+                            </div>                            
                         <!-- /modulDocuments -->                                 
-                    </div>    
-                </fieldset>
+                    </div>                              
+                </fieldset>                     
             </div>
+             
             <!-- /modul -->
             
             <!-- modul -->
-            <div class="modul invisible" id="fetsVitals" style="display:none;">
+            <div style="display: none">
+            <div class="modul invisible" id="fetsVitals" >
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                     <legend><spring:message code='fitxes.fets_vitals'/></legend>
@@ -1450,7 +1429,62 @@
                     </div>
                 </fieldset>
             </div>
+            </div>
             <!-- /modul -->
+            
+<!--             #349 Mover al final de los modulos laterales-->
+             <!-- modul -->   
+             
+             <div id="modul_tramits" class="modul">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='txt.TRAMITS'/> </legend>
+                   <div class="modul_continguts mostrat">                                  
+                            <!-- modulTramits -->
+                            <div class="modulTramits">
+                                <div class="seleccionats">                                
+                                    <div class="seleccionat">
+                                        <p class="info"><spring:message code='txt.noHiHaTramitsRelacionats'/></p>
+                                        <div class="listaOrdenable"></div>
+                                    </div>
+                                    <div class="btnGenerico">
+                                        <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='txt.gestiona_tramits'/></span></span></a>
+                                    </div>
+                                </div>                                  
+                            </div>
+                            <!-- /modulTramits -->                                 
+                        </div>        
+                </fieldset>
+            </div>
+                  
+                     
+<!--             <div id="modul_tramits" class="modul destacado">                                -->
+<!--                 <div class="dec1"></div> -->
+<!--                 <div class="dec2"></div> -->
+                
+<!--                 <div class="interior">                     -->
+<!--                     <fieldset>                                   -->
+<%--                         <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                               --%>
+<%--                         <legend><spring:message code='txt.TRAMITS'/></legend>                                --%>
+<!--                         <div class="modul_continguts mostrat">                                   -->
+<!--                             modulTramits -->
+<!--                             <div class="modulTramits"> -->
+<!--                                 <div class="seleccionats">                                 -->
+<!--                                     <div class="seleccionat"> -->
+<%--                                         <p class="info"><spring:message code='txt.noHiHaTramitsRelacionats'/></p> --%>
+<!--                                         <div class="listaOrdenable"></div> -->
+<!--                                     </div> -->
+<!--                                     <div class="btnGenerico"> -->
+<%--                                         <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='txt.gestiona_tramits'/></span></span></a> --%>
+<!--                                     </div> -->
+<!--                                 </div>                                   -->
+<!--                             </div> -->
+<!--                             /modulTramits                                  -->
+<!--                         </div>                               -->
+<!--                     </fieldset>                      -->
+<!--                 </div> -->
+<!--             </div>             -->
+            <!-- /modul -->              
             
         </div>
         <!-- /modulLateral -->
@@ -2116,24 +2150,24 @@
 		                            <div class="seleccionats">	                                
 										<c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">									
 										<c:if test="${loop.first}">
-		                                <div class='seleccionat cajaIdioma <c:out value="${lang}"/>'>
+		                                	<div class='seleccionat cajaIdioma <c:out value="${lang}"/>'>
 										</c:if>									
 										<c:if test="${!loop.first}">
 										<div class='<c:out value="${lang}"/> cajaIdioma'>
 										</c:if>										
 		                                    <p class="info"><spring:message code='txt.noHiHaDocumentsRelacionats'/>.</p>
 		                                    <div class="listaOrdenable"></div>									
+										</c:forEach>									
 									</div>																		
-									</c:forEach>									
 	                                <div class="btnGenerico">
 	                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.afegeixDocument'/></span></span></a>
 	                                </div>
 	                            </div>								
 	                        </div>
 	                        <!-- /modulDocuments -->                                 
-	                    </div>    
 	                </fieldset>
-	            </div>
+	            </div>    
+<!-- 	            </div> -->
 	            <!-- /modul -->    
 		        <!-- Documentacio Requerida -->
 <!-- 		        <div class="modul" id="modul_documents_requerits" style="display:none !important"> -->
