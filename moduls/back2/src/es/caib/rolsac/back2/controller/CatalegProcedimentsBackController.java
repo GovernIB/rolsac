@@ -593,6 +593,12 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			
 			procediment = guardarVersion(request, procediment, procedimentOld, error);			// Versión
 			procediment = guardarPublicoObjetivo(request, procediment, procedimentOld);			// Procesar Público Objectivo
+			///Actualizamos lo que viene de pantalla para procediment Publico Objetivo en procedimentOld para que 
+			///en guardarProcedimientoAntiguo no lo machaque en modo edicion
+			if (edicion) {
+				procedimentOld.setPublicosObjetivo(procediment.getPublicosObjetivo());		        // Procesar Público Objectivo				
+			}			
+			///
 			procediment = guardarIdioma(request, procediment, procedimentOld);       			// Idiomas
 			procediment = guardarValidacion(request, procediment, procedimentOld, error);		// Validación
 			procediment = guardarFechaPublicacion(request, procediment);						// Fecha Publicación
@@ -752,7 +758,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		procediment.setId(procedimentOld.getId());
 		procediment.setTramites(procedimentOld.getTramites());
 		procediment.setOrganResolutori(procedimentOld.getOrganResolutori());
-		procediment.setPublicosObjetivo(procedimentOld.getPublicosObjetivo());
+		//procediment.setPublicosObjetivo(procedimentOld.getPublicosObjetivo());
 		procediment.setMaterias(procedimentOld.getMaterias());
 		procediment.setNormativas(procedimentOld.getNormativas());
 		
