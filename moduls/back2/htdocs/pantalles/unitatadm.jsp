@@ -2005,6 +2005,11 @@
         var txtNoEsCorrecte = "<spring:message code='txt.data_no_correcte'/>";
 
         var txtItemEliminar= "<spring:message code='txt.eliminar'/> <spring:message code='txt.item'/>";
+        
+        var txtColUsuario = "<spring:message code='txt.auditoria.usu'/>";
+        var txtColNombre = "<spring:message code='txt.auditoria.nombre'/>";
+        var txtColFecha = "<spring:message code='txt.auditoria.fecha'/>";
+        var txtColOperacion = "<spring:message code='txt.auditoria.operacion'/>";
     </script>
     
     <script type="text/javascript">

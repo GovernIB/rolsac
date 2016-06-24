@@ -76,9 +76,9 @@ import es.caib.rolsac.lucene.analysis.AlemanAnalyzer;
 import es.caib.rolsac.lucene.analysis.CastellanoAnalyzer;
 import es.caib.rolsac.lucene.analysis.CatalanAnalyzer;
 import es.caib.rolsac.lucene.analysis.InglesAnalyzer;
+import es.caib.rolsac.lucene.model.Catalogo;
 import es.caib.rolsac.lucene.model.ModelFilterObject;
 import es.caib.rolsac.lucene.model.TraModelFilterObject;
-import es.caib.rolsac.lucene.model.Catalogo;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
@@ -1078,6 +1078,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 				where.append(" and (sysdate < procedimiento.fechaCaducidad or procedimiento.fechaCaducidad is null) ");
 				where.append(" and (sysdate > procedimiento.fechaPublicacion or procedimiento.fechaPublicacion is null) ");
+				where.append(" and (procedimiento.validacion <> 2 and procedimiento.validacion <> 3) "); //#355 devolvía no visibles
 
 			} else if ( bc.getVisibilidad() == Validacion.INTERNA ) {
 
