@@ -175,6 +175,11 @@
     var txtNormativaLocal = "<spring:message code='txt.normativa_local'/>";
     var txtNormativaExterna = "<spring:message code='txt.normativa_externa'/>";
     
+    var txtColUsuario = "<spring:message code='txt.auditoria.usu'/>";
+    var txtColNombre = "<spring:message code='txt.auditoria.nombre'/>";
+    var txtColFecha = "<spring:message code='txt.auditoria.fecha'/>";
+    var txtColOperacion = "<spring:message code='txt.auditoria.operacion'/>";
+    
     // suggeriments
     /*var suggeriments = [
         {
