@@ -108,7 +108,7 @@ function CModulUnitatAdministrativa() {
 			that.agregaItems(listaUnidadesAdministrativas, true);
 		}		
 		else {
-			 if ( listaUnidadesAdministrativas.length == 0 ){
+			 if ( typeof listaUnidadesAdministrativas != 'undefined' && listaUnidadesAdministrativas.length == 0 ){
 				 modul_unitatsAdministratives_elm.find(".listaOrdenable").empty();
 			 }  				 
 		} 
