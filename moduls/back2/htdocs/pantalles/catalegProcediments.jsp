@@ -1958,7 +1958,7 @@
 		                		               
 	    	</div>
 	    	
-		    <!-- Menú de publicación -->
+		    <!-- Menú de publicación   -->
 		    <div class="modulLateral menuPublicacion">
 		        <div class="modul publicacio">
 		            <fieldset>
