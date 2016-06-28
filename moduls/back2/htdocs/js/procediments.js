@@ -458,11 +458,11 @@ function CDetall() {
 		} else {
 
 			if (!ModulTramit.hayTramiteInicializacion()){
-				var mensaje = txtErrorTramitIniciObligatori;  //#4 Si no hay modelo de solicitud seleccionado en el trámite de inicialización se muestra
-				if (ModulTramit.bolTramiteInicio){		      //el error 
-					mensaje = txtErrorModelSolicitudObligatori;
-				}
-				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + mensaje + "</p>"});
+				//var mensaje = txtErrorTramitIniciObligatori;  //#4 Si no hay modelo de solicitud seleccionado en el trámite de inicialización se muestra
+			//if (ModulTramit.bolTramiteInicio){		      //el error 
+			//		mensaje = txtErrorModelSolicitudObligatori;
+			//	}
+				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + txtErrorTramitIniciObligatori + "</p>"});
 			}else{
 				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + txtErrorNormativaObligatoria + "</p>"});
 			}
