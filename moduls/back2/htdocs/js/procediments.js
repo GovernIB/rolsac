@@ -463,6 +463,8 @@ function CDetall() {
 			//		mensaje = txtErrorModelSolicitudObligatori;
 			//	}
 				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + txtErrorTramitIniciObligatori + "</p>"});
+
+				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + mensaje + "</p>"});
 			}else{
 				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + txtErrorNormativaObligatoria + "</p>"});
 			}
