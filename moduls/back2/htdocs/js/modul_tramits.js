@@ -71,7 +71,8 @@ function CModulTramit() {
         var today = new Date();
         
         //$("#publication_datepicker").datetimepicker( "option", "disabled", false ).attr('value', $.datepicker.formatDate('dd-m-yy HH:mm', new Date()));`
-        $("#tramit_item_data_tancament").datetimepicker({ format: 'yyyy/MM/dd HH:mm' , setDate: new Date() });
+        $("#tramit_item_data_tancament").datetimepicker({ format: 'yyyy/MM/dd HH:mm' , setDate: new Date(),hour:'23', minute:'59' });
+       
         //$("#tramit_item_data_tancament").datetimepicker({ timeFormat: 'hh:mm' });
         
         tramits_seleccionats_elm = escriptori_tramits_elm.find("div.escriptori_items_seleccionats:first");

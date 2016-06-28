@@ -1958,12 +1958,12 @@
 		                		               
 	    	</div>
 	    	
-		    <!-- Men? de publicaci?n -->
+		    <!-- Menú de publicación -->
 		    <div class="modulLateral menuPublicacion">
 		        <div class="modul publicacio">
 		            <fieldset>
 		                <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-		                <legend>Publicaci?</legend>
+		                <legend><spring:message code='txt.publicacio'/></legend>
 		                <div class="modul_continguts mostrat">
 		                    <!-- fila -->
 		                    <div class="fila" >
