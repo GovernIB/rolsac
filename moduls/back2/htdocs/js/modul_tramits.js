@@ -55,7 +55,7 @@ function CModulTramit() {
     this.extend = ListaOrdenable;
     this.extend();      
     
-    this.bolTramiteInicio = false;
+  //  this.bolTramiteInicio = false;
     var that = this;
     
     this.iniciar = function() {
@@ -200,13 +200,15 @@ function CModulTramit() {
     };
     
     this.hayTramiteInicializacion = function () {
-    	this.bolTramiteInicio = false;  //#4 Se valida que hay modelo de solicitud seleccionado en el trámite de inicialización
-    	if(modul_tramits_elm.find('div.listaOrdenable input.tramit_moment[value="1"]').length > 0 ){
-    		this.bolTramiteInicio = true;
-    	}
+    	//this.bolTramiteInicio = false;  //#4 Se valida que hay modelo de solicitud seleccionado en el trámite de inicialización
+//    	if(modul_tramits_elm.find('div.listaOrdenable input.tramit_moment[value="1"]').length > 0 ){
+//    		this.bolTramiteInicio = true;
+//    	}
     	
-        return modul_tramits_elm.find('div.listaOrdenable input.tramit_moment[value="1"]').length > 0 
-        		&& modul_formularis_tramits_elm.find('div.listaOrdenable input.formularisTramit_id').length > 0;
+//        return modul_tramits_elm.find('div.listaOrdenable input.tramit_moment[value="1"]').length > 0 
+//        		&& modul_formularis_tramits_elm.find('div.listaOrdenable input.formularisTramit_id').length > 0;
+        		
+        return modul_tramits_elm.find('div.listaOrdenable input.tramit_moment[value="1"]').length > 0;
     };
     
     // Actualiza el nombre.
