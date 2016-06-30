@@ -40,20 +40,14 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 public abstract class FichaResumenFacadeEJB extends HibernateEJB {
 
 	private static final long serialVersionUID = 1L;
-	
-	protected Hashtable contenidos_web; // contiene url y su contenido para agilizar el proceso de indexacion de fichas
-	
+		
     /**
      * Obtiene referéncia al ejb de control de Acceso.
      * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
      */
     protected abstract AccesoManagerLocal getAccesoManager();
 
-    /**
-     * Ubicació del directori de Lucene a emprar.
-     * @ejb.env-entry value="${index.crawler.location}"
-     */
-    protected String indexCrawlerLocation;
+ 
     
     /**
      * @ejb.create-method

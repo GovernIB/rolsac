@@ -71,17 +71,15 @@
 				
 <!--
 es.caib.rolsac.codiEstandarUAArrel
-es.caib.rolsac.crawler.responsable.errorReIndexacion
-es.caib.rolsac.crawler.tiempoReIndexacion
-es.caib.rolsac.crawler.profundidadMS
-es.caib.rolsac.crawler.profundidadBasica
-es.caib.rolsac.crawler.dominioMS
-es.caib.rolsac.crawler.clavesMS
-es.caib.rolsac.crawler.tagsIndexacionMS
-es.caib.rolsac.crawler.indexLocation
 es.caib.rolsac.microsites
 es.caib.rolsac.subscripcions 
 -->		
+	<!-- indexar solr -->
+	   es.caib.rolsac.solr.index=caib
+	   es.caib.rolsac.solr.url=localhost:8983/solr
+	   es.caib.rolsac.solr.user=admin
+	   es.caib.rolsac.solr.pass=password
+	   es.caib.rolsac.solr.jobpendientes=0 0 10 * *
     </attribute>
             
 </mbean>

@@ -1784,9 +1784,10 @@ div.modulLateral div.seleccionat ul {
 .modulRelacioOrganica  .botonera .btn.borrar > span > span{
     background: url(../img/botons/iconos/borrar.png) 15px 50% no-repeat;
     padding-left : 35px;
+
 }
 
-/*#349 modificación pantalla proc */
+/*#349 modificacion pantalla proc */
 #item_familia{
     width: 80% !important;
 }

@@ -66,3 +66,17 @@ ALTER TABLE rsc_edific ALTER COLUMN edi_lng TYPE character varying(64);
 
 --ISSUE #351
 ALTER TABLE rsc_proced ADD pro_coduna_serv bigint;
+
+-- TAULA RSC_SOLRPD
+CREATE TABLE RSC_SOLRPD
+  (
+    SLP_ID   integer NOT NULL,
+    SLP_TIPO character varying(128),
+    SLP_IDELEM integer,
+    SLP_ACCION integer,
+    SLP_FECCRE date,
+    SLP_FECIDX date,
+    SLP_RESULT smallint,
+    SLP_TXTERR character varying(128)  
+         
+  );

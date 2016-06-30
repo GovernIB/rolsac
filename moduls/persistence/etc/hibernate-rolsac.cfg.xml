@@ -70,9 +70,6 @@
         <mapping resource="org/ibit/rol/sac/model/MateriaAgrupacionM.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/Enlace.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/ExcepcioDocumentacio.hbm.xml" />
-        
-        <mapping resource="org/ibit/rol/sac/model/lucene/LuceneFile.hbm.xml"/>
-        
         <mapping resource="org/ibit/rol/sac/model/GrupoSuscripcion.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/TipoSuscripcion.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/Suscriptor.hbm.xml" />
@@ -82,7 +79,8 @@
         <mapping resource="org/ibit/rol/sac/model/GrupoGenericoSuscripcion.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/HistoricoEnvio.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/Taxa.hbm.xml" />
-        
+        <mapping resource="org/ibit/rol/sac/model/SolrPendiente.hbm.xml" />
+		<mapping resource="org/ibit/rol/sac/model/SolrPendienteJob.hbm.xml" />
 
     </session-factory>
 

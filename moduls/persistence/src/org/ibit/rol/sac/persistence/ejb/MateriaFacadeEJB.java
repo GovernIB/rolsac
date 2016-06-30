@@ -24,10 +24,14 @@ import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.PerfilCiudadano;
 import org.ibit.rol.sac.model.TraduccionMateria;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.persistence.delegate.DelegateException;
+import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegate;
 import org.ibit.rol.sac.persistence.util.RemotoUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
+import es.caib.solr.api.model.types.EnumCategoria;
 
 /**
  * SessionBean para mantener y consultar materias.
@@ -73,6 +77,7 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
 			session.saveOrUpdate(materia);
 			session.flush();
 
+			generarSolrPendiente(materia.getId());
 			return materia.getId();
 
 		} catch (HibernateException he) {
@@ -328,6 +333,8 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
 			( (HistoricoMateria) historico ).setMateria(null);
 			Actualizador.borrar(materia);
 
+			generarSolrPendiente(materia.getId());
+			
 			session.delete(materia);
 			session.flush();
 			
@@ -796,4 +803,51 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
 	}
 
 
+	/**
+	 * Método que busca todos los elementos que se relacionana con la materia y les marca la accion.
+	 * @param idMateria
+	 */
+	private void generarSolrPendiente(final Long idMateria) {
+
+		//Primero las fichas que se relacionan con el hechovital.
+		Session session = getSession();
+		//La acción es indexar (porque habrá que actualizar la información)
+		final Long accion = 1l;
+		try {
+			SolrPendienteDelegate solrPendienteDelegate = DelegateUtil.getSolrPendienteDelegate();
+			//Primero busca las fichas relacionadas.
+			StringBuilder consulta = new StringBuilder("select fic.id from Materia materia left join materia.fichas fic where materia.id = "+idMateria);					
+			Query query = session.createQuery( consulta.toString() );
+			query.setCacheable(true);
+			final List<Long> idFichas =  castList(Long.class,query.list());
+			for(Long idFicha : idFichas) {
+				solrPendienteDelegate.grabarSolrPendiente(EnumCategoria.ROLSAC_FICHA.toString(), idFicha, accion);
+			}
+			
+			//Luego los procedimientos
+			consulta = new StringBuilder("select proc.id from Materia materia left join materia.procedimientosLocales proc where materia.id = "+idMateria);					
+			query = session.createQuery( consulta.toString() );
+			query.setCacheable(true);			
+			final List<Long> idProcedimientos =  castList(Long.class, query.list());
+			for(Long idProcedimiento : idProcedimientos) {
+				solrPendienteDelegate.grabarSolrPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO.toString(), idProcedimiento, accion);
+			}
+			
+			//Luego los procedimientos
+			consulta = new StringBuilder("select ua.id from UnidadAdministrativa ua left join ua.unidadesMaterias umat where umat.id = " + idMateria);
+			query = session.createQuery( consulta.toString() );
+			query.setCacheable(true);
+			final List<Long> idUAs =  castList(Long.class, query.list());
+			for(Long idUA : idUAs) {
+				solrPendienteDelegate.grabarSolrPendiente(EnumCategoria.ROLSAC_UNIDAD_ADMINISTRATIVA.toString(), idUA, accion);
+			}
+			
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} catch (DelegateException e) {
+			throw new EJBException(e);
+		} finally {
+			close(session);
+		}
+	}
 }

@@ -17,26 +17,25 @@ import javax.ejb.EJBException;
 import net.sf.hibernate.Criteria;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.LazyInitializationException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
 
 import org.apache.axis.utils.StringUtils;
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriter.MaxFieldLength;
-import org.apache.lucene.store.Directory;
 import org.ibit.rol.sac.model.AdministracionRemota;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Auditoria;
+import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaResumen;
 import org.ibit.rol.sac.model.FichaResumenUA;
 import org.ibit.rol.sac.model.FichaUA;
-import org.ibit.rol.sac.model.IndexObject;
 import org.ibit.rol.sac.model.Seccion;
+import org.ibit.rol.sac.model.SolrPendiente;
+import org.ibit.rol.sac.model.SolrPendienteResultado;
+import org.ibit.rol.sac.model.Traduccion;
+import org.ibit.rol.sac.model.TraduccionEdificio;
 import org.ibit.rol.sac.model.TraduccionMateria;
 import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -46,10 +45,11 @@ import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.model.criteria.PaginacionCriteria;
 import org.ibit.rol.sac.model.dto.FichaDTO;
+import org.ibit.rol.sac.model.ws.TraduccionEdificioTransferible;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.EdificioDelegate;
-import org.ibit.rol.sac.persistence.delegate.IndexerDelegate;
+import org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegateI;
 import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
@@ -57,14 +57,14 @@ import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.util.Cadenas;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
-import es.caib.rolsac.lucene.analysis.AlemanAnalyzer;
-import es.caib.rolsac.lucene.analysis.CastellanoAnalyzer;
-import es.caib.rolsac.lucene.analysis.CatalanAnalyzer;
-import es.caib.rolsac.lucene.analysis.InglesAnalyzer;
-import es.caib.rolsac.lucene.model.Catalogo;
-import es.caib.rolsac.lucene.model.ModelFilterObject;
-import es.caib.rolsac.lucene.model.TraModelFilterObject;
 import es.caib.rolsac.utils.ResultadoBusqueda;
+import es.caib.solr.api.SolrIndexer;
+import es.caib.solr.api.model.IndexData;
+import es.caib.solr.api.model.MultilangLiteral;
+import es.caib.solr.api.model.PathUO;
+import es.caib.solr.api.model.types.EnumAplicacionId;
+import es.caib.solr.api.model.types.EnumCategoria;
+import es.caib.solr.api.model.types.EnumIdiomas;
 
 /**
  * SessionBean para mantener y consultar Unidades Administrativas.
@@ -92,7 +92,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	public static final String EMPTY_ID = "-1";
 
 	/**
-	 * Obtiene refer�ncia al ejb de control de Acceso.
+	 * Obtiene referencia al ejb de control de Acceso.
 	 * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
 	 */
 	protected abstract AccesoManagerLocal getAccesoManager();
@@ -116,8 +116,9 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 * @param unidad	Indica la unidad administrativa a crear.
 	 * 
 	 * @return Devuelve el identificador de la unidad administrativa.
+	 * @throws DelegateException 
 	 */
-	public Long crearUnidadAdministrativaRaiz(UnidadAdministrativa unidad) {
+	public Long crearUnidadAdministrativaRaiz(UnidadAdministrativa unidad) throws DelegateException {
 
 		Session session = getSession();
 
@@ -130,6 +131,12 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			session.flush();
 			Actualizador.actualizar(unidad);
 
+			//SOLR Indexar unidad administrativa
+			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
+		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_UNIDAD_ADMINISTRATIVA.toString(), unidad.getId(), 1l);
+		    session.flush();
+		    
+		    generarSolrPendiente(unidad.getId());
 			return unidad.getId();
 
 		} catch (HibernateException he) {
@@ -156,8 +163,9 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 * @param idPadre	Identificador de la unidad adminsitrativa padre.
 	 * 
 	 * @return Devuelve el identificador de la unidad administrativa padre.
+	 * @throws DelegateException 
 	 */
-	public Long crearUnidadAdministrativa(UnidadAdministrativa unidad, Long idPadre) {
+	public Long crearUnidadAdministrativa(UnidadAdministrativa unidad, Long idPadre) throws DelegateException {
 
 		Session session = getSession();
 
@@ -176,6 +184,12 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			session.flush();
 			Actualizador.actualizar(unidad);
 
+			//SOLR Indexar unidad administrativa
+			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
+		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_UNIDAD_ADMINISTRATIVA.toString(), unidad.getId(), 1l);
+		    session.flush();
+		    
+		    generarSolrPendiente(unidad.getId());
 			return unidad.getId();
 
 		} catch (HibernateException he) {
@@ -259,6 +273,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			session.flush();
 			Actualizador.actualizar(unidad);
 
+			
 		} catch (HibernateException he) {
 
 			throw new EJBException(he);
@@ -1168,8 +1183,9 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 * @ejb.permission role-name="${role.system},${role.organigrama}"
 	 * 
 	 * @param idUA	Identificador de la unidad administrativa.
+	 * @throws DelegateException 
 	 */
-	public void eliminarUaSinRelaciones(Long idUA) {
+	public void eliminarUaSinRelaciones(Long idUA) throws DelegateException {
 
 		Session session = getSession();
 
@@ -1223,9 +1239,17 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				Actualizador.borrar( new UnidadAdministrativa(id) );
 
 			}
+			
+			//SOLR Desindexar unidad administrativa
+			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
+		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_UNIDAD_ADMINISTRATIVA.toString(), ua.getId(), 2l);
+		    generarSolrPendiente(idUA);
 
 			session.delete(ua);
 			session.flush();
+			
+			
+		    session.flush();
 
 			if ( isRaiz ) {
 
@@ -1484,190 +1508,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	}
 
 
-	/**
-	 * Metodo que obtiene un bean con el filtro para la indexacion
-	 * 
-	 * @ejb.interface-method
-	 * @ejb.permission unchecked="true" 
-	 */
-	public ModelFilterObject obtenerFilterObject(UnidadAdministrativa ua) {
 
-		ModelFilterObject filter = new ModelFilterObject();
-
-		// De momento, familia y microsites a null
-		filter.setFamilia_id(null);    	
-		filter.setMicrosite_id(null);
-		filter.setSeccion_id(null);
-
-		Iterator iterlang = ua.getLangs().iterator();
-		while (iterlang.hasNext()) {
-			String idioma = (String) iterlang.next();
-			if (ua.getTraduccion(idioma) != null) {
-
-			    String txids = Catalogo.KEY_SEPARADOR;
-			    // Espacio en blanco, que es para tokenizar
-			    String txtexto = " ";
-			    Iterator iter;
-
-			    TraModelFilterObject trafilter = new TraModelFilterObject();
-
-			    // Titulo
-			    trafilter.setMaintitle(((TraduccionUA) ua.getTraduccion(idioma)).getNombre());
-
-			    txids = Catalogo.KEY_SEPARADOR;
-			    txids += ua.getId() + Catalogo.KEY_SEPARADOR;
-			    txtexto += ((TraduccionUA) ua.getTraduccion(idioma)).getNombre() + " ";
-			    txtexto += ((TraduccionUA) ua.getTraduccion(idioma)).getAbreviatura() + " ";
-			    txtexto += ((TraduccionUA) ua.getTraduccion(idioma)).getPresentacion() + " ";
-
-			    // OBTENER DIRECCIONES
-			    try {
-			        iter = ua.getEdificios().iterator();
-			        while (iter.hasNext()) {
-			            Edificio edificio = (Edificio) iter.next();
-			            txtexto += edificio.getDireccion() + " ";
-			            txtexto += edificio.getTelefono() + " ";
-			        }
-
-			    } catch (LazyInitializationException le) {
-			        log.error("Error controlado: No ha sido inicializado el listado de edificios. " + le.getMessage());
-			    }
-
-			    filter.setUo_id((txids.length() == 1) ? null : txids);
-			    trafilter.setUo_text((txtexto.length() == 1) ? null : txtexto);
-
-			    // OBTENER LAS MATERIAS (ademas de las materias se ponen los textos de los HECHOS VITALES)
-			    if (ua.getUnidadesMaterias() != null) {
-			        txids = Catalogo.KEY_SEPARADOR;
-			        txtexto = " ";
-			        iter = ua.getUnidadesMaterias().iterator();
-			        while (iter.hasNext()) {
-			            UnidadMateria uamat = (UnidadMateria) iter.next();
-
-			            txids += uamat.getMateria().getId() + Catalogo.KEY_SEPARADOR; 
-			            if (uamat.getMateria().getTraduccion(idioma) != null) {
-			                txtexto += ((TraduccionMateria) uamat.getMateria().getTraduccion(idioma)).getNombre() + " ";
-			                txtexto += ((TraduccionMateria) uamat.getMateria().getTraduccion(idioma)).getDescripcion() + " ";
-			                txtexto += ((TraduccionMateria) uamat.getMateria().getTraduccion(idioma)).getPalabrasclave() + " ";
-			            }
-			        }
-
-			        filter.setMateria_id( (txids.length()==1) ? null: txids);
-			        trafilter.setMateria_text( (txtexto.length()==1) ? null: txtexto);
-			    }
-
-			    filter.addTraduccion(idioma, trafilter);
-			}
-		}
-
-		return filter;
-	}
-
-    /**
-	 * Añade la unidad administrativa al índice en todos los idiomas
-	 * @ejb.interface-method
-	 * @ejb.permission unchecked="true"
-	 * @param unidadAdministrativa	Indica la unidad administrativa que se va a añadir al índice en todos los idiomas.
-	 */
-    public void indexInsertaUA(UnidadAdministrativa unidadAdministrativa,  ModelFilterObject filter) {
-
-        try {
-            if (filter == null) {
-                filter = obtenerFilterObject(unidadAdministrativa);
-			}
-
-            IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
-            Iterator iterator = unidadAdministrativa.getLangs().iterator();
-            while (iterator.hasNext()) {
-                String idi = (String) iterator.next();
-				IndexObject io = new IndexObject();
-
-				// Configuración del writer
-                Directory directory = indexerDelegate.getHibernateDirectory(idi);
-                IndexWriter writer = new IndexWriter(directory, getAnalizador(idi), false, MaxFieldLength.UNLIMITED);
-                writer.setMergeFactor(20);
-                writer.setMaxMergeDocs(Integer.MAX_VALUE);
-
-                try {
-                    io.setId(Catalogo.SRVC_UO + "." + unidadAdministrativa.getId());
-                    io.setClasificacion(Catalogo.SRVC_UO);
-
-                    io.setMicro(filter.getMicrosite_id());
-                    io.setUo(filter.getUo_id());
-                    io.setMateria(filter.getMateria_id());
-                    io.setFamilia(filter.getFamilia_id());
-                    io.setSeccion(filter.getSeccion_id());
-                    io.setCaducidad("");
-                    io.setPublicacion("");
-                    io.setDescripcion("");
-
-                    io.addTextLine(unidadAdministrativa.getResponsable());
-
-                    TraduccionUA trad = ((TraduccionUA) unidadAdministrativa.getTraduccion(idi));
-                    if (trad != null) {
-
-                        io.setUrl("/govern/organigrama/area.do?coduo=" + unidadAdministrativa.getId() + "&lang=" + idi);
-                        io.setTituloserviciomain(filter.getTraduccion(idi).getMaintitle());
-
-                        if (trad.getNombre() != null) {
-                            io.setTitulo(trad.getNombre());
-
-                            //para dar mas peso al titulo
-                            for (int i = 0; i < 5; i++) {
-                                io.addTextLine(trad.getNombre());
-                            }
-                        }
-
-                        if (trad.getPresentacion() != null) {
-                            if (trad.getPresentacion().length() > 200) {
-                                io.setDescripcion(trad.getPresentacion().substring(0, 199) + "...");
-                            } else {
-                                io.setDescripcion(trad.getPresentacion());
-                            }
-                        }
-
-                        io.addTextopcionalLine(filter.getTraduccion(idi).getMateria_text());
-                        io.addTextopcionalLine(filter.getTraduccion(idi).getSeccion_text());
-                        io.addTextopcionalLine(filter.getTraduccion(idi).getUo_text());
-                    }
-
-                    if (io.getText().length() > 0) {
-                        indexerDelegate.insertaObjeto(io, idi, writer);
-                    }
-
-                } catch (Exception e) {
-                    log.warn("[indexInsertaUA:" + unidadAdministrativa.getId() + "] No se ha podido indexar UA para el idioma: " + idi + ". msg: " + e.getMessage());
-                } finally {
-                    writer.close();
-                    directory.close();
-                }
-			}
-
-		} catch (Exception ex) {
-			log.warn("[indexInsertaUA:" + unidadAdministrativa.getId() + "] No se ha podido indexar UA. " + ex.getMessage());
-		}
-	}
-
-	/**
-	 * Elimina la ua en el indice en todos los idiomas
-	 * @ejb.interface-method
-	 * @ejb.permission unchecked="true"
-	 * @param id	Identificador de la unidad administrativa.
-	 */
-	public void indexBorraUA(Long id)  {
-
-		try {
-		    IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
-			List<String> langs = DelegateUtil.getIdiomaDelegate().listarLenguajes();
-			for (String lang : langs) {
-			    indexerDelegate.borrarObjeto(Catalogo.SRVC_UO + "." + id, "" + lang);
-			    indexerDelegate.borrarObjetosDependientes(Catalogo.SRVC_UO + "." + id, "" + lang);
-			}
-
-		} catch (DelegateException ex) {
-			log.warn( "[indexBorraFicha:" + id + "] No se ha podido borrar del indice la ficha. " + ex.getMessage() );
-		}
-	}
 
 
 	/* ================================================ */
@@ -1874,57 +1715,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		}
 		
 		return listaFichasConOrden;
-
-	}
-	
-	/**
-	 * Devuelve un {@link List} de {@link FichaUA}, relacionadas con una {@link UnidadAdministrativa} y una {@link Seccion}.
-	 *
-	 * @ejb.interface-method
-	 * 
-	 * @ejb.permission unchecked="true"
-	 * 
-	 * @param	idUA	Identificador de la unidad administrativa solicitada.
-	 * 
-	 * @param	idSeccion	Identificador de la secci�n solicitada.
-	 * 
-	 * @return	Devuelve <code>List<FichaDTO></code> relacionadas con una unidad administrativa y una secci�n.
-	 */
-	public List<FichaDTO> listarFichasSeccionUASinPaginacion(Long idUA, Long idSeccion, String idioma) {
-
-		List<FichaDTO> listaFichas = new ArrayList<FichaDTO>();
-		
-		if ( idUA != null && idSeccion != null ) {
-
-			Session session = getSession();
-
-			try {
-				
-				Query query = session.getNamedQuery("fichasBySeccionInUA");
-				query.setParameter("idUA", idUA);
-				query.setParameter("idSeccion", idSeccion);
-				query.setParameter("idioma", idioma);
-				query.setParameter("validacion", Validacion.PUBLICA);
-				
-				
-				/* 16/12/2013: Se genera un orden en lugar de recuperar el orden real debido a que se ha cambiado el mecanismo que establece el orden de las fichas.
-				 Los datos antiguos generan valores que no coinciden con los generados por el nuevo mecanismo.*/
-				listaFichas = (ArrayList<FichaDTO>) query.list();
-																			
-				
-			} catch (HibernateException he) {
-
-				throw new EJBException(he);
-
-			} finally {
-
-				close(session);
-
-			}
-
-		}
-		
-		return listaFichas;
 
 	}
 
@@ -2146,8 +1936,9 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 * @param ordenAnterior	Indica el orden anterior de la unidad administrativa.
 	 * 
 	 * @param idPadre	Identificador de la unidad administrativa padre.
+	 * @throws DelegateException 
 	 */	
-	public void reordenar( Long id, Integer ordenNuevo, Integer ordenAnterior, Long idPadre ) {
+	public void reordenar( Long id, Integer ordenNuevo, Integer ordenAnterior, Long idPadre ) throws DelegateException {
 
 		Session session = getSession();
 		List<UnidadAdministrativa> listaUAs = new ArrayList<UnidadAdministrativa>();
@@ -2213,6 +2004,10 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				// Actualizar todo para asegurar que no hay duplicados ni huecos
 				session.saveOrUpdate(unidadAdministrativa);
 
+				//SOLR Indexar unidad administrativa
+				SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
+			    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_UNIDAD_ADMINISTRATIVA.toString(), unidadAdministrativa.getId(), 1l);
+			    session.flush();
 			}
 
 			session.flush();
@@ -2322,7 +2117,12 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				FichaResumen ficha = (FichaResumen) session.get( FichaResumen.class, fua.getFicha().getId() );
 				
 				ficha.removeFichaUA(fua);
-
+				
+				//SOLR Indexar ficha
+				SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
+			    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_FICHA.toString(), fua.getId(), 1l);
+			    session.flush();
+			    
 				session.delete(fua);
 
 			}
@@ -2343,6 +2143,10 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				
 				session.save(fichaUA);
 				
+				//SOLR Indexar ficha
+				SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
+			    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_FICHA.toString(), fichaUA.getFicha().getId(), 1l);
+			    
 			}
 			
 			session.flush();
@@ -2621,7 +2425,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				for ( FichaResumenUA fuaResumen : listaFichasUA ) {
 
 					fuaResumen.getFicha().removeFichaUA(fuaResumen);
-					session.delete(fuaResumen);
+					session.delete(fuaResumen);					
 
 				}
 
@@ -2642,21 +2446,281 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	}
 
 
-	private Analyzer getAnalizador(String idi) {
+	/**
+	 * Comprueba si es indexable un tramite.
+	 * 
+	 * @return
+	 */
+	private boolean isIndexable(final UnidadAdministrativa unidadAdministrativa) {
+		boolean indexable = true;
+		if (unidadAdministrativa.getValidacion() != 1 ) {
+			indexable = false;
+		}
+		
+		return indexable;
+	}
 
-	    Analyzer analyzer;
+	 /**
+	 * Metodo para indexar un solrPendiente.
+	 * @param solrPendiente
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente)   {
+		return indexarSolr(solrIndexer, solrPendiente.getIdElemento(), EnumCategoria.fromString(solrPendiente.getTipo()));
+	}	
+			
+	 /**
+	 * Metodo para indexar un solrPendiente.
+	 * @param solrPe.ndiente
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final Long idElemento, final EnumCategoria categoria)   {
+		log.debug("UnidadAdministrativaFacadeEJB.indexarSolr. idElemento:" + idElemento +" categoria:"+categoria);
+		
+		try {
+			//Paso 0. Obtenemos la ficha y comprobamos si se puede indexar.
+			final UnidadAdministrativa unidadAdministrativa = obtenerUnidadAdministrativaIndexar(idElemento);
+			boolean isIndexable = this.isIndexable(unidadAdministrativa);
+			if (!isIndexable) {
+				return new SolrPendienteResultado(true, "No se puede indexar");
+			}
+			
+			//Preparamos la información básica: id elemento, aplicacionID = ROLSAC y la categoria de tipo normativa.
+			final IndexData indexData = new IndexData();
+			indexData.setCategoria(categoria);
+			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
+			indexData.setElementoId(idElemento.toString());
+			
+			
+			//Iteramos las traducciones
+			final Map<String, Traduccion> traducciones = unidadAdministrativa.getTraduccionMap();
+			final MultilangLiteral titulo = new MultilangLiteral();
+			final MultilangLiteral descripcion = new MultilangLiteral();
+			final MultilangLiteral urls = new MultilangLiteral();
+			final MultilangLiteral searchText = new MultilangLiteral();
+			final MultilangLiteral searchTextOptional = new MultilangLiteral();
+			final List<EnumIdiomas> idiomas = new ArrayList<EnumIdiomas>();
+			
+			//Recorremos las traducciones
+			for (String keyIdioma : unidadAdministrativa.getTraduccionMap().keySet()) {
+				final EnumIdiomas enumIdioma = EnumIdiomas.fromString(keyIdioma);
+				final TraduccionUA traduccion = (TraduccionUA)traducciones.get(keyIdioma);
+				
+				if (traduccion != null && enumIdioma != null) {
+					//Anyadimos idioma al enumerado.
+					idiomas.add(enumIdioma);
+					
+					//Seteamos los primeros campos multiidiomas: Titulo, Descripción y el search text.
+					titulo.addIdioma(enumIdioma, traduccion.getNombre());
+			    	descripcion.addIdioma(enumIdioma, traduccion.getPresentacion());
+			    	searchText.addIdioma(enumIdioma, traduccion.getNombre()+ " " + unidadAdministrativa.getResponsable());
+			    	
+			    	final StringBuffer textoOptional = new StringBuffer();
+					
+			    	//materia
+			    	for(UnidadMateria materia : unidadAdministrativa.getUnidadesMaterias()) {
+			    		TraduccionMateria traduccionMateria = (TraduccionMateria) materia.getMateria().getTraduccion(keyIdioma);
+			    		if (traduccionMateria != null) {
+							textoOptional.append(" ");
+							textoOptional.append(traduccionMateria.getNombre());
+							textoOptional.append(" ");
+							textoOptional.append(traduccionMateria.getDescripcion());
+							textoOptional.append(" ");
+							textoOptional.append(traduccionMateria.getPalabrasclave());
+			    		}
+					}
+			    	
+			    	/*textoOptional.append(" ");
+					textoOptional.append(traduccion.getNombre());
+					textoOptional.append(" ");
+					textoOptional.append(traduccion.getAbreviatura());
+					textoOptional.append(" ");
+					textoOptional.append(traduccion.getPresentacion());
+			    	*/
+			    	//edificios
+			    	for(Edificio edificio : unidadAdministrativa.getEdificios()) { 
+			    		TraduccionEdificio traduccionEdificio = (TraduccionEdificio) edificio.getTraduccion(keyIdioma);
+			    		if (traduccionEdificio != null) {
+				    		textoOptional.append(" ");
+							textoOptional.append(traduccionEdificio.getDescripcion());
+			    		}
+					}
+					
+					
+					//Unidades administrativas de las fichas.
+					List<PathUO> uos = new ArrayList<PathUO>();
+					PathUO uo = new PathUO();
+					List<String> path = new ArrayList<String>();
+					
+					//Hay que extraer la id de los predecesores y luego el de uno mismo
+					Set<UnidadAdministrativa> predecesores = unidadAdministrativa.getPredecesores();
+					for(UnidadAdministrativa predecesor : predecesores) {
+						TraduccionUA tradUA = (TraduccionUA) predecesor.getTraduccion(keyIdioma);
+						path.add(predecesor.getId().toString());
+						if (tradUA != null) {
+							textoOptional.append(" ");
+					    	textoOptional.append(predecesor.getNombre());
+						}
+					}
+					path.add( unidadAdministrativa.getId().toString());
+					textoOptional.append(" ");
+			    	textoOptional.append(unidadAdministrativa.getNombre());	
+					uo.setPath(path);
+					uos.add(uo);
+					indexData.setUos(uos);
+				
+					
+			    	searchTextOptional.addIdioma(enumIdioma, textoOptional.toString());
+			    	urls.addIdioma(enumIdioma, "/govern/organigrama/area.do?lang="+keyIdioma+"&coduo="+unidadAdministrativa.getId());
+				}
+			}
+			
+			indexData.setTitulo(titulo);
+			indexData.setDescripcion(descripcion);
+			indexData.setUrl(urls);
+			indexData.setSearchText(searchText);
+			indexData.setSearchTextOptional(searchTextOptional);
+			indexData.setIdiomas(idiomas);
+			
+			//Fechas
+			indexData.setFechaActualizacion(unidadAdministrativa.getFechaUltimaActualizacion());
+			
+	    	solrIndexer.indexarContenido(indexData);
+	    	return new SolrPendienteResultado(true);
+		} catch(Exception exception) {
+			log.error("Error en unidadadministrativa intentando indexar.", exception);
+			String mensajeError;
+			if (exception.getMessage() == null) {
+				mensajeError = exception.toString();
+			} else {
+				mensajeError = exception.getMessage();
+			}
+			return new SolrPendienteResultado(false, mensajeError);
+		}
+	}
+	
+	/**
+	 * Obtener UA para solr y tener las relaciones.
+	 * @param idUA
+	 * @return
+	 */
+	private UnidadAdministrativa obtenerUnidadAdministrativaIndexar(final Long idUA) {
+			Session session = getSession();
+			UnidadAdministrativa ua = null;
+			try {
+			    ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, idUA);
+		    	Hibernate.initialize(ua.getEdificios());
+				Hibernate.initialize(ua.getUnidadesMaterias());
+				session.clear();
+			} catch (HibernateException he) {
+			    log.error("Error cargano unidad administrativa con id " + idUA, he);
+			} finally {
+			    close(session);
+			}
+			return ua;
+	}
 
-        if (idi.toLowerCase().equals("de")) {
-            analyzer = new AlemanAnalyzer();
-        } else if (idi.toLowerCase().equals("en")) {
-            analyzer = new InglesAnalyzer();
-        } else if (idi.toLowerCase().equals("ca")) {
-            analyzer = new CatalanAnalyzer();
-        } else {
-            analyzer = new CastellanoAnalyzer();
-        }
+	/**
+	 * Metodo para indexar un solrPendiente.
+	 * @param solrPendiente
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public SolrPendienteResultado desindexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente)   {
+		try {
+			solrIndexer.desindexar(solrPendiente.getIdElemento().toString(), EnumCategoria.ROLSAC_UNIDAD_ADMINISTRATIVA);
+			return new SolrPendienteResultado(true);
+		} catch(Exception exception) {
+			log.error("Error en unidadadministrativa intentando desindexar.", exception);
+			String mensajeError;
+			if (exception.getMessage() == null) {
+				mensajeError = exception.toString();
+			} else {
+				mensajeError = exception.getMessage();
+			}
+			return new SolrPendienteResultado(false, mensajeError);
+		}
+	}
+	
+	/**
+	 * Busca los ids de las unidades administrativas
+	 * 
+	 * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	 public List<Long> buscarIdsUas(){
+		 Session session = getSession();
+			try {
 
-        return analyzer;
-    }
+	    		StringBuilder consulta = new StringBuilder("select u.id from UnidadAdministrativa as u ");
+	    		
+	    		Query query = session.createQuery( consulta.toString() );
+	    		query.setCacheable(true);
 
+	    		return query.list();
+
+	    	} catch (HibernateException he) {
+
+	    		throw new EJBException(he);
+
+	    	} finally {
+
+	    		close(session);
+
+	    	} 
+	 }
+
+	 /**
+		 * Método que busca todos los elementos que se relacionana con la unidad administrativa y les marca la accion.
+		 * @param idHechoVital
+		 * @param accion
+		 * @throws DelegateException 
+		 */
+		private void generarSolrPendiente(final Long idUnidadAdministrativa) {
+
+			//Primero las fichas que se relacionan con el hechovital.
+			Session session = getSession();
+			//La acción es indexar (porque habrá que actualizar la información)
+			final Long accion = 1l;
+			try {
+				SolrPendienteDelegate solrPendienteDelegate = DelegateUtil.getSolrPendienteDelegate();
+				//Primero busca las fichas relacionadas.
+				StringBuilder consulta = new StringBuilder("select ficha.id from Ficha ficha left join ficha.fichasua fua left join fua.unidadAdministrativa uad  where uad.id = " + idUnidadAdministrativa);
+				Query query = session.createQuery( consulta.toString() );
+				query.setCacheable(true);
+				final List<Long> idFichas =  castList(Long.class,query.list());
+				for(Long idFicha : idFichas) {
+					solrPendienteDelegate.grabarSolrPendiente(EnumCategoria.ROLSAC_FICHA.toString(), idFicha, accion);
+				}
+				
+				
+				
+				//Luego los procedimientos
+				consulta = new StringBuilder("select proc.id from ProcedimientoLocal proc left join proc.unidadAdministrativa uad where uad.id = " + idUnidadAdministrativa);
+				query = session.createQuery( consulta.toString() );
+				query.setCacheable(true);
+				final List<Long> idProcedimientos =  castList(Long.class, query.list());
+				for(Long idProcedimiento : idProcedimientos) {
+					solrPendienteDelegate.grabarSolrPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO.toString(), idProcedimiento, accion);
+				}
+				
+				//Luego las normativas
+				consulta = new StringBuilder("select nor.id from Normativa nor left join nor.unidadAdministrativa uad where uad.id = " + idUnidadAdministrativa);
+				query = session.createQuery( consulta.toString() );
+				query.setCacheable(true);
+				final List<Long> idNormativas =  castList(Long.class, query.list());
+				for(Long idNormativa : idNormativas) {
+					solrPendienteDelegate.grabarSolrPendiente(EnumCategoria.ROLSAC_NORMATIVA.toString(), idNormativa, accion);
+				}
+				
+			} catch (HibernateException he) {
+				throw new EJBException(he);
+			} catch (DelegateException e) {
+				throw new EJBException(e);
+			} finally {
+				close(session);
+			}
+		}
 }

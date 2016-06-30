@@ -42,7 +42,7 @@
 
     <path id="web.class.path">
         <fileset dir="${lib.dir}">
-            <include name="servlet-api.jar"/>
+        	<include name="servlet-api.jar"/>
             <include name="jsp-api.jar"/>
             <include name="hibernate2.jar"/>
             <include name="commons-logging.jar"/>
@@ -69,20 +69,21 @@
         </fileset>
 		<!-- agarcia: librerias comunes en 00librerias -->
 		<fileset dir="${lib.dir}/webcaib">
-    		<include name="chartbuilder.jar"/>
-	 	 	<include name="commons-collections-3.2.1.jar"/>
+			<include name="aopalliance-1.0.jar" />
+			<include name="chartbuilder.jar"/>
+			<include name="commons-codec-1.5.jar"/>
+			<include name="commons-collections-3.2.1.jar"/>
 	 	 	<include name="commons-beanutils-1.8.3.jar"/>
 			<include name="commons-fileupload-1.2.2.jar"/>
 			<include name="commons-lang-2.1.jar"/>
 			<include name="dom4j.jar"/>
 			<include name="jcommon-1.0.0.jar"/>
 			<include name="jfreechart-1.0.14.jar"/>
-			<include name="json.jar"/>
-			<!-- <include name="lucene-caib.jar"/> -->
+			<include name="json.jar"/>			
 			<include name="org.springframework.**.jar"/>
-			<include name="quartz-1.8.5.jar"/>
+			<include name="quartz-2.1.7.jar"/>
 		</fileset>
-
+ 
 	</path>
 
 	<target name="prepare">
@@ -107,23 +108,22 @@
             </fileset>
 
 			<lib dir="${home.dir}/lib">
-				<include name="*.jar"/>
-				<exclude name="boib.jar"/>
-				<exclude name="micromodel.jar"/>
-				<exclude name="sac-micropersistence.jar"/>
-				<exclude name="servlet-api.jar"/>
-	            <exclude name="jsp-api.jar"/>
-				<exclude name="ojdbc14.jar"/>
-				<exclude name="htmllexer.jar"/>
+				<include name="micromodel.jar"/>
+				<include name="jackson-all-1.8.5.jar"/>
 			</lib>
 
 			<!-- agarcia: librerias comunes en 00librerias -->
 			<lib dir="${home.dir}/lib/webcaib">
-				<include name="org.springframework.*.jar"/>
+				<include name="aopalliance-1.0.jar" />
+				<include name="org.springframework.*.jar" />
+				<include name="struts.jar" />
+				<!-- se necesita porque el quartz se queja de esto -->
+				<include name="commons-codec-1.5.jar" />
 			</lib>
 
 			<lib dir="${lib.dir}/jstl">
-           		<include name="**/*.jar" />
+				<include name="jstl.jar" />
+				<include name="standard.jar" />   
         	</lib>	
         </war>
     </target>

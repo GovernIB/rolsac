@@ -1,16 +1,20 @@
 package org.ibit.rol.sac.persistence.delegate;
 
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
 
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Seccion;
+import org.ibit.rol.sac.model.SolrPendiente;
+import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.criteria.PaginacionCriteria;
 import org.ibit.rol.sac.model.dto.FichaDTO;
 
-import es.caib.rolsac.lucene.model.ModelFilterObject;
 import es.caib.rolsac.utils.ResultadoBusqueda;
+import es.caib.solr.api.SolrIndexer;
+import es.caib.solr.api.model.types.EnumCategoria;
 
 /*
  * ejaen@dgtic  - u92770
@@ -83,14 +87,6 @@ public class UnidadAdministrativaDelegate {
 		return impl.hashCode();
 	}
 	
-	public void indexBorraUA(Long id) throws DelegateException {
-		impl.indexBorraUA(id);
-	}
-	
-	public void indexInsertaUA(UnidadAdministrativa ua, ModelFilterObject filter) throws DelegateException {
-		impl.indexInsertaUA(ua, filter);
-	}
-	
 	public List listarHijosUA(Long id) throws DelegateException {
 		return impl.listarHijosUA(id);
 	}
@@ -128,11 +124,7 @@ public class UnidadAdministrativaDelegate {
 	public void eliminarUaSinRelaciones(Long idUA) throws DelegateException {
 		impl.eliminarUaSinRelaciones(idUA);
 	}
-	
-	public ModelFilterObject obtenerFilterObject(UnidadAdministrativa ua)
-			throws DelegateException {
-		return impl.obtenerFilterObject(ua);
-	}
+		
 	
 	public Archivo obtenerFotoGrandeUA(Long id) throws DelegateException {
 		return impl.obtenerFotoGrandeUA(id);
@@ -196,10 +188,6 @@ public class UnidadAdministrativaDelegate {
 		return impl.listarFichasSeccionUA(idUA, idSeccion, idioma, paginacion);
 	}
 	
-	public List<FichaDTO> listarFichasSeccionUASinPaginacion(Long idUA, Long idSeccion, String idioma) throws DelegateException {
-		return impl.listarFichasSeccionUASinPaginacion(idUA, idSeccion, idioma);
-	}
-	
 
 	public void actualizaFichasSeccionUA(Long idUA, Long idSeccion, List<FichaDTO> fichas) throws DelegateException {
 		impl.actualizaFichasSeccionUA(idUA, idSeccion, fichas);
@@ -239,5 +227,21 @@ public class UnidadAdministrativaDelegate {
     		throws DelegateException {
     	impl.eliminarSeccionUA(idUA, idSeccion);
     }
+    
+    public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer,final SolrPendiente solrPendiente) throws DelegateException {
+    	return impl.indexarSolr(solrIndexer, solrPendiente);        
+    }
+    
+    public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final Long idElemento, final EnumCategoria categoria) throws DelegateException {
+    	return impl.indexarSolr(solrIndexer, idElemento, categoria);        
+    }
+    
+    public SolrPendienteResultado desindexarSolr(final SolrIndexer solrIndexer,final SolrPendiente solrPendiente) throws DelegateException {
+    	return impl.desindexarSolr(solrIndexer, solrPendiente);    
+    }
+
+	public List<Long> buscarIdsUas() throws DelegateException{
+		return impl.buscarIdsUas();
+	}
     
 }

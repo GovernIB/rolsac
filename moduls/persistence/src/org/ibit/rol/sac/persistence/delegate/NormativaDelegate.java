@@ -12,12 +12,15 @@ import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.NormativaExterna;
 import org.ibit.rol.sac.model.NormativaLocal;
+import org.ibit.rol.sac.model.SolrPendiente;
+import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.persistence.intf.NormativaFacade;
 import org.ibit.rol.sac.persistence.intf.NormativaFacadeHome;
 import org.ibit.rol.sac.persistence.util.NormativaFacadeUtil;
 
-import es.caib.rolsac.lucene.model.ModelFilterObject;
 import es.caib.rolsac.utils.ResultadoBusqueda;
+import es.caib.solr.api.SolrIndexer;
+import es.caib.solr.api.model.types.EnumCategoria;
 
 /**
  * Business delegate para manipular normativas.
@@ -132,29 +135,6 @@ public class NormativaDelegate implements StatelessDelegate
         }
     }
     
-	public ModelFilterObject obtenerFilterObject(Normativa norma) throws DelegateException {
-		try {
-            return getFacade().obtenerFilterObject(norma);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-	
-    public void indexBorraNormativa(Normativa nor) throws DelegateException {
-		try {
-            getFacade().indexBorraNormativa(nor);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-   	public void indexInsertaNormativa(Normativa norma, ModelFilterObject filter) throws DelegateException {   
-		try {
-            getFacade().indexInsertaNormativa(norma, filter);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
    	
    	public int buscarNormativasActivas(List<Long> llistaUnitatAdministrativaId) throws DelegateException {
    		try {
@@ -163,6 +143,64 @@ public class NormativaDelegate implements StatelessDelegate
    			throw new DelegateException(e);
    		}
    	}
+   	
+    /**
+     * Método para indexar en solr.
+     * @param solrPendiente
+     * @param solrIndexer
+     * @throws DelegateException
+     */
+    public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente) throws DelegateException {
+    	try {
+            return getFacade().indexarSolr(solrIndexer, solrPendiente);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    /**
+     * Método para indexar normativa documento en solr.
+     * @param solrPendiente
+     * @param solrIndexer
+     * @throws DelegateException
+     */
+    public SolrPendienteResultado indexarSolrNormativaDocumento(SolrIndexer solrIndexer, Long idElemento, EnumCategoria categoria) throws DelegateException {
+    	try {
+            return getFacade().indexarSolrNormativaDocumento(solrIndexer, idElemento, categoria);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    /** 
+     * Método para indexar normativa documento en solr.
+     * @param solrIndexer
+     * @param idElemento
+     * @param categoria
+     * @throws DelegateException
+     */
+    public SolrPendienteResultado indexarSolrNormativa(final SolrIndexer solrIndexer, final Long idElemento, final EnumCategoria categoria) throws DelegateException {
+    	try {
+            return getFacade().indexarSolrNormativa(solrIndexer, idElemento, categoria);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    /**
+     * Método para indexar en solr.
+     * @param solrPendiente
+     * @param solrIndexer
+     * @throws DelegateException
+     */
+    public SolrPendienteResultado desindexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente) throws DelegateException {
+    	try {
+            return getFacade().desindexarSolr(solrIndexer, solrPendiente);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+
    	
    	/* ========================================================= */
    	/* ======================== REFERENCIA AL FACADE  ========== */
@@ -187,5 +225,13 @@ public class NormativaDelegate implements StatelessDelegate
             throw new DelegateException(e);
         }
     }
+
+	public List<Long> buscarIdsNormativas() throws DelegateException{
+		try {
+			return getFacade().buscarIdsNormativas();
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
     
 }

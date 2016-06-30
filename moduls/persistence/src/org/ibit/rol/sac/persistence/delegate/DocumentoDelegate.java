@@ -1,98 +1,74 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import org.ibit.rol.sac.model.Documento;
-import org.ibit.rol.sac.model.Archivo;
-import org.ibit.rol.sac.persistence.intf.DocumentoFacade;
-import org.ibit.rol.sac.persistence.intf.DocumentoFacadeHome;
-import org.ibit.rol.sac.persistence.util.DocumentoFacadeUtil;
-
-import javax.ejb.CreateException;
-import javax.ejb.Handle;
-import javax.naming.NamingException;
-
-import java.rmi.RemoteException;
+import java.util.List;
 import java.util.Map;
 
-/**
- * Business delegate para manipular Documentos.
- */
-public class DocumentoDelegate implements StatelessDelegate
+import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.Documento;
+import org.ibit.rol.sac.model.SolrPendiente;
+import org.ibit.rol.sac.model.SolrPendienteResultado;
+
+import es.caib.solr.api.SolrIndexer;
+import es.caib.solr.api.model.types.EnumCategoria;
+
+public class DocumentoDelegate  implements DocumentoDelegateI 
 {
-	/* ========================================================= */
-    /* ===================== MÉTODOS DE NEGOCIO ================ */
-    /* ========================================================= */
+	DocumentoDelegateI impl;
+
+	public DocumentoDelegateI getImpl() {
+		return impl;
+	}
 	
+	public void setImpl(DocumentoDelegateI impl) {
+		this.impl = impl;
+    }
+	    
 	public Long grabarDocumento(Documento documento, Long procedimiento_id, Long ficha_id) throws DelegateException {
-        try {
-            return getFacade().grabarDocumento(documento,procedimiento_id, ficha_id);
-            		
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
+		return impl.grabarDocumento(documento,procedimiento_id, ficha_id);        
     }
 	
 	public Documento obtenerDocumento(Long id) throws DelegateException {
-        try {
-            return getFacade().obtenerDocumento(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
+		return impl.obtenerDocumento(id);
     }
 	
 	public void borrarDocumento(Long id) throws DelegateException {
-        try {
-            getFacade().borrarDocumento(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
+         impl.borrarDocumento(id);        
     }
 	
 	public Archivo obtenerArchivoDocumento(Long id, String lang, boolean useDefault) throws DelegateException {
-		try {
-			return getFacade().obtenerArchivoDocumento(id, lang, useDefault);
-		} catch (RemoteException e) {
-			throw new DelegateException(e);
-		}
+		return impl.obtenerArchivoDocumento(id, lang, useDefault);		
 	}
 	
 	public Archivo obtenerArchivoDocumentoTramite(Long id, String lang, boolean useDefault) throws DelegateException {
-        try {
-            return getFacade().obtenerArchivoDocumentoTramite(id, lang, useDefault);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
+		return impl.obtenerArchivoDocumentoTramite(id, lang, useDefault);        
     }
     
-    public void actualizarOrdenDocs(Map map) throws DelegateException {
-        try {
-            getFacade().actualizarOrdenDocs(map);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
+	public void actualizarOrdenDocs(Map map) throws DelegateException {
+		impl.actualizarOrdenDocs(map);        
+    }	
+
+    public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente) throws DelegateException {
+        return impl.indexarSolr(solrIndexer, solrPendiente);        
     }
     
-    /* ========================================================= */
-    /* ======================== REFERENCIA AL FACADE  ========== */
-    /* ========================================================= */
-
-    private Handle facadeHandle;
-
-    private DocumentoFacade getFacade() throws RemoteException {
-        return (DocumentoFacade) facadeHandle.getEJBObject();
-    }
-
-    protected DocumentoDelegate() throws DelegateException {
-        try {
-            DocumentoFacadeHome home = DocumentoFacadeUtil.getHome();
-            DocumentoFacade remote = home.create();
-            facadeHandle = remote.getHandle();
-        } catch (NamingException e) {
-            throw new DelegateException(e);
-        } catch (CreateException e) {
-            throw new DelegateException(e);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
+    public SolrPendienteResultado indexarSolrProcedimientoDoc(final SolrIndexer solrIndexer, final Long idElemento, final EnumCategoria categoria) throws DelegateException {
+    	return impl.indexarSolrProcedimientoDoc(solrIndexer, idElemento, categoria);        
     }
     
+    public SolrPendienteResultado indexarSolrFichaDoc(final SolrIndexer solrIndexer, final Long idElemento, final EnumCategoria categoria) throws DelegateException {
+    	return impl.indexarSolrFichaDoc(solrIndexer, idElemento, categoria);        
+    }
+    
+
+    public SolrPendienteResultado desindexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente) throws DelegateException {
+        return impl.desindexarSolr(solrIndexer, solrPendiente);        
+    }
+
+	public List<Long> obtenerDocumentosFichaSolr(Long idFicha) throws DelegateException {
+		 return impl.obtenerDocumentosFichaSolr(idFicha);        
+	}
+	
+	public List<Long> obtenerDocumentosProcedimientoSolr(Long idProcedimiento) throws DelegateException {
+		 return impl.obtenerDocumentosProcedimientoSolr(idProcedimiento);        
+	}
 }

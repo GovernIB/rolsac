@@ -5,9 +5,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -25,48 +23,43 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriter.MaxFieldLength;
-import org.apache.lucene.store.Directory;
 import org.ibit.rol.sac.model.Afectacion;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Auditoria;
 import org.ibit.rol.sac.model.Boletin;
-import org.ibit.rol.sac.model.HechoVital;
-import org.ibit.rol.sac.model.HechoVitalProcedimiento;
 import org.ibit.rol.sac.model.Historico;
 import org.ibit.rol.sac.model.HistoricoNormativa;
-import org.ibit.rol.sac.model.IndexObject;
-import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.NormativaExterna;
 import org.ibit.rol.sac.model.NormativaLocal;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.SolrPendiente;
+import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.TipoAfectacion;
-import org.ibit.rol.sac.model.TraduccionHechoVital;
-import org.ibit.rol.sac.model.TraduccionMateria;
+import org.ibit.rol.sac.model.Traduccion;
 import org.ibit.rol.sac.model.TraduccionNormativa;
-import org.ibit.rol.sac.model.TraduccionUA;
+import org.ibit.rol.sac.model.TraduccionTipo;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.model.webcaib.NormativaModel;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.delegate.IndexerDelegate;
-import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
+import org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
-import es.caib.rolsac.lucene.analysis.AlemanAnalyzer;
-import es.caib.rolsac.lucene.analysis.CastellanoAnalyzer;
-import es.caib.rolsac.lucene.analysis.CatalanAnalyzer;
-import es.caib.rolsac.lucene.analysis.InglesAnalyzer;
-import es.caib.rolsac.lucene.model.ModelFilterObject;
-import es.caib.rolsac.lucene.model.TraModelFilterObject;
-import es.caib.rolsac.lucene.model.Catalogo;
 import es.caib.rolsac.utils.ResultadoBusqueda;
+import es.caib.solr.api.SolrFactory;
+import es.caib.solr.api.SolrIndexer;
+import es.caib.solr.api.model.IndexData;
+import es.caib.solr.api.model.IndexFile;
+import es.caib.solr.api.model.MultilangLiteral;
+import es.caib.solr.api.model.PathUO;
+import es.caib.solr.api.model.types.EnumAplicacionId;
+import es.caib.solr.api.model.types.EnumCategoria;
+import es.caib.solr.api.model.types.EnumIdiomas;
+
 
 /**
  * SessionBean para mantener y consultar Normativa.
@@ -122,10 +115,11 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 
 	/**
 	 * Crea o actualiza una Normativa local.
+	 * @throws DelegateException 
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
-	public Long grabarNormativaLocal(NormativaLocal normativa, Long idUA) {
+	public Long grabarNormativaLocal(NormativaLocal normativa, Long idUA) throws DelegateException {
 		Session session = getSession();
 		try {
 			if (normativa.getId() == null) {
@@ -154,6 +148,12 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 				addOperacion(session, normativa, Auditoria.MODIFICAR);
 			}
 			session.flush();
+			
+			//SOLR Indexar normativa
+			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
+		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_NORMATIVA.toString(), normativa.getId(), 1l);
+		    session.flush();
+		    
 			return normativa.getId();
 		} catch (HibernateException he) {
 			throw new EJBException(he);
@@ -164,10 +164,11 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 
 	/**
 	 * Crea o actualiza una Normativa.
+	 * @throws DelegateException 
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
-	public Long grabarNormativaExterna(NormativaExterna normativa) {
+	public Long grabarNormativaExterna(NormativaExterna normativa) throws DelegateException {
 		Session session = getSession();
 		try {
 			if (normativa.getId() == null) {
@@ -184,6 +185,12 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 				addOperacion(session, normativa, Auditoria.MODIFICAR);
 			}
 			session.flush();
+			
+			//SOLR Indexar normativa
+			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
+		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_NORMATIVA.toString(), normativa.getId(), 1l);
+		    session.flush();
+		    
 			return normativa.getId();
 		} catch (HibernateException he) {
 			throw new EJBException(he);
@@ -700,10 +707,11 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 
 	/**
 	 * Borra una Normativa.
+	 * @throws DelegateException 
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
-	public void borrarNormativa(Long id) {
+	public void borrarNormativa(Long id) throws DelegateException {
 		Session session = getSession();
 		try {
 			if (!getAccesoManager().tieneAccesoNormativa(id)) {
@@ -725,6 +733,11 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 				afectante.getAfectadas().remove(afectacion);
 			}
 			normativa.getAfectantes().clear();
+			
+			//SOLR Desndexar normativa
+			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
+		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_NORMATIVA.toString(), normativa.getId(), 2l);
+		    
 			Actualizador.borrar(normativa);
 			session.delete(normativa);
 			session.flush();
@@ -858,276 +871,6 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 
 
 	/**
-	 * Metodo que obtiene un bean con el filtro para la indexacion
-	 * 
-	 * Debemos incluir las materias a través de los procedimientos relacionados
-	 * con esa normativa y la unidad administrativa de la que depende.
-	 * 
-	 * Método válido para Normativas locales y externas
-	 * @throws DelegateException 
-	 * 
-	 * @ejb.interface-method
-	 * @ejb.permission unchecked="true" 
-	 */
-	public ModelFilterObject obtenerFilterObject(Normativa norma) throws DelegateException {
-
-		ModelFilterObject filter = new ModelFilterObject();
-		Session session = getSession();
-
-		TraModelFilterObject trafilter;
-		String idioma;
-		String txids;
-		String txtexto;
-		Set procs = norma.getProcedimientos();
-		List listapadres = new ArrayList();
-
-		// Comprovación indispensable, ya que las UAs Externas no tienen UA.
-		UnidadAdministrativa ua = null;
-		if (norma.getUnidadAdministrativa() != null) {
-            ua = ((NormativaLocal) norma).getUnidadAdministrativa();
-        }
-
-		if (ua != null) {
-		    listapadres = org.ibit.rol.sac.persistence.delegate.DelegateUtil.getUADelegate().listarPadresUnidadAdministrativa(ua.getId());
-		}
-
-		filter.setFamilia_id(null);
-		filter.setMicrosite_id(null);
-		filter.setSeccion_id(null);
-
-		// Obtenemos las materias y hechos vitales partiendo de sus procedimientos
-		Iterator itproc = null;
-		if (procs != null) {
-		    itproc = procs.iterator();
-		}
-		ProcedimientoLocal pro;
-		Materia mat;
-		HechoVitalProcedimiento hvital;
-		Hashtable lista_materias = new Hashtable();
-		Hashtable lista_hechos = new Hashtable();
-		ProcedimientoDelegate bdProc = DelegateUtil.getProcedimientoDelegate();
-
-		if (itproc != null) {
-		    while (itproc.hasNext()) {
-		        // Obtenemos el procedimiento puesto que sus colecciones estan lazy
-		        pro = (ProcedimientoLocal) bdProc.obtenerProcedimientoNewBack(((ProcedimientoLocal) itproc.next()).getId());
-
-		        if (pro.getMaterias() != null) {
-		            Iterator itmat = pro.getMaterias().iterator();
-		            while (itmat.hasNext()) {
-		                mat = (Materia) itmat.next();
-		                if (!lista_materias.containsKey(mat.getId())) {
-		                    lista_materias.put(mat.getId(), mat);
-		                }
-		            }
-		        }
-
-		        if (pro.getHechosVitalesProcedimientos() != null) {
-		            Iterator itvital = pro.getHechosVitalesProcedimientos().iterator();
-		            while (itvital.hasNext()) {
-		                hvital = (HechoVitalProcedimiento) itvital.next();
-		                if (!lista_hechos.containsKey(hvital.getHechoVital().getId())) {
-		                    lista_hechos.put(hvital.getHechoVital().getId(), hvital.getHechoVital());
-		                }
-		            }
-		        }
-		    }
-		}
-
-		Iterator langs = norma.getLangs().iterator();
-		while (langs.hasNext()) {
-			idioma = (String) langs.next();
-
-			trafilter = new TraModelFilterObject();
-			trafilter.setMaintitle(null); 
-
-			// Obtenemos la UA con sus padres excepto el raiz
-			if (ua != null) {
-				txids = Catalogo.KEY_SEPARADOR;
-				txtexto = " ";
-
-				UnidadAdministrativa ua_padre = null;
-				for (int x = 1; x < listapadres.size(); x++) {
-					ua_padre = (UnidadAdministrativa) listapadres.get(x);
-					txids += ua_padre.getId() + Catalogo.KEY_SEPARADOR;
-					if (ua_padre.getTraduccion(idioma) != null) {
-					    txtexto += ((TraduccionUA) ua_padre.getTraduccion(idioma)).getNombre() + " ";
-					}
-				}
-
-				filter.setUo_id((txids.length() == 1) ? null : txids);
-				trafilter.setUo_text((txtexto.length() == 1) ? null : txtexto);
-			}
-
-			// Obtenemos las materias y hechos vitales via sus procedimientos relacionados
-			txids = Catalogo.KEY_SEPARADOR;
-			txtexto = " ";
-
-			Enumeration i = lista_materias.keys();
-
-			while (i.hasMoreElements()) {
-				Materia materia = (Materia) lista_materias.get(i.nextElement());
-				// Anadir los ids (los de los hechos vitales no)
-				txids += materia.getId() + Catalogo.KEY_SEPARADOR;
-				if (materia.getTraduccion(idioma) != null) {
-					txtexto += ((TraduccionMateria) materia.getTraduccion(idioma)).getNombre() + " ";
-					txtexto += ((TraduccionMateria) materia.getTraduccion(idioma)).getDescripcion() + " ";
-					txtexto += ((TraduccionMateria) materia.getTraduccion(idioma)).getPalabrasclave() + " ";
-				}
-			}
-
-			i = lista_hechos.keys();
-			HechoVital hechovital = null;
-
-			while (i.hasMoreElements()) {
-				hechovital = (HechoVital) lista_hechos.get(i.nextElement());
-				if (hechovital.getTraduccion(idioma) != null) {
-					txtexto += ((TraduccionHechoVital) hechovital.getTraduccion(idioma)).getNombre() + " ";
-					txtexto += ((TraduccionHechoVital) hechovital.getTraduccion(idioma)).getDescripcion() + " ";
-					txtexto += ((TraduccionHechoVital) hechovital.getTraduccion(idioma)).getPalabrasclave() + " ";
-				}
-			}
-
-			filter.setMateria_id((txids.length() == 1) ? null : txids);
-			trafilter.setMateria_text((txtexto.length() == 1) ? null : txtexto);
-
-			filter.addTraduccion(idioma, trafilter);
-		}
-
-		close(session);
-		return filter;
-	}        
-
-	/**
-	 * Añade la normativa al indice en todos los idiomas
-	 * @ejb.interface-method
-	 * @ejb.permission unchecked="true"
-	 */
-	public void indexInsertaNormativa(Normativa norma, ModelFilterObject filter)  {
-
-        try {
-            if (filter == null) {
-                filter = obtenerFilterObject(norma);
-            }
-
-            IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
-            for (Iterator iterator = norma.getLangs().iterator(); iterator.hasNext();) {
-                String idi = (String) iterator.next();
-                IndexObject io = new IndexObject();
-
-                // Configuración del writer
-                Directory directory = indexerDelegate.getHibernateDirectory(idi);
-                IndexWriter writer = new IndexWriter(directory, getAnalizador(idi), false, MaxFieldLength.UNLIMITED);
-                writer.setMergeFactor(20);
-                writer.setMaxMergeDocs(Integer.MAX_VALUE);
-
-                try {
-                    if (norma instanceof NormativaLocal) {
-                        io.setId(Catalogo.SRVC_NORMATIVA_LOCAL + "." + norma.getId());
-                        io.setClasificacion(Catalogo.SRVC_NORMATIVA_LOCAL);
-                    }
-                    if (norma instanceof NormativaExterna) {
-                        io.setId(Catalogo.SRVC_NORMATIVA_EXTERNA + "." + norma.getId());
-                        io.setClasificacion(Catalogo.SRVC_NORMATIVA_EXTERNA);
-                    }
-
-                    io.setMicro(filter.getMicrosite_id());
-                    io.setUo(filter.getUo_id());
-                    io.setMateria(filter.getMateria_id());
-                    io.setFamilia(filter.getFamilia_id());
-                    io.setSeccion(filter.getSeccion_id());
-                    io.setCaducidad("");	// No tiene fecha de caducidad
-                    io.setPublicacion(""); 	// No tiene fecha de publicacion
-                    io.setDescripcion("");
-
-                    TraduccionNormativa trad = ((TraduccionNormativa) norma.getTraduccion(idi));
-                    if (trad != null) {
-                        io.setTituloserviciomain(trad.getSeccion());
-
-                        if (norma.getBoletin() != null && norma.getBoletin().getNombre().equals("BOIB")) {
-                            io.setUrl("/govern/estadistica?tipus=N&codi=" + norma.getId() + "&mode=view&p_numero=" + norma.getNumero() + "&p_inipag=" + trad.getPaginaInicial() + "&p_finpag=" + trad.getPaginaFinal() + "&lang=" + idi + "&url=0");
-                        } else {
-                            io.setUrl("/govern/sac/dadesnormativa.do?lang=" + idi + "&codi=" + norma.getId() + "&coduo=" + filter.getUo_id());
-                        }
-
-                        if (trad.getTitulo() != null) {
-                            io.setTitulo(trad.getTitulo());
-                            io.addTextLine(trad.getTitulo());
-                            io.setDescripcion(trad.getTitulo());
-                        }
-
-                        if (trad.getSeccion() != null) {
-                            io.addTextLine(trad.getSeccion());
-                        }
-
-                        if (trad.getApartado() != null) {
-                            io.addTextLine(trad.getApartado());
-                        }
-
-                        if (trad.getObservaciones() != null) {
-                            io.addTextLine(trad.getObservaciones());
-                        }
-
-                        if (trad.getArchivo() != null) {
-                            io.addArchivo((Archivo) trad.getArchivo());
-                        }
-                    }
-
-                    io.addTextopcionalLine(filter.getTraduccion(idi).getMateria_text());
-                    io.addTextopcionalLine(filter.getTraduccion(idi).getSeccion_text());
-                    io.addTextopcionalLine(filter.getTraduccion(idi).getUo_text());
-
-                    if (io.getText().length() > 0) {
-                        indexerDelegate.insertaObjeto(io, idi, writer);
-                    }
-
-                } catch (Exception e) {
-                    log.warn("[indexInsertaNormativa:" + norma.getId() + "] No se ha podido indexar la normativa para el idioma: " + idi + ". msg: " + e.getMessage());
-                } finally {
-                    writer.close();
-                    directory.close();
-                }
-			}
-        } catch (Exception ex) {
-            log.warn("[indexInsertaNormativa:" + norma.getId() + "] No se ha podido indexar la normativa. " + ex.getMessage());
-        }
-    }
-
-    /**
-	 * Elimina la normativa en el indice en todos los idiomas
-	 * @ejb.interface-method
-	 * @ejb.permission unchecked="true"
-	 */
-	public void indexBorraNormativa(Normativa nor)  {
-
-		try {
-
-		    IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
-		    Iterator iterator = nor.getLangs().iterator();
-		    
-			while (iterator.hasNext()) {
-				
-				String idi = (String) iterator.next();
-
-				if (nor instanceof NormativaLocal) {
-				    indexerDelegate.borrarObjeto(Catalogo.SRVC_NORMATIVA_LOCAL + "." + nor.getId(), idi);
-				}
-
-				if (nor instanceof NormativaExterna) {
-				    indexerDelegate.borrarObjeto(Catalogo.SRVC_NORMATIVA_EXTERNA + "." + nor.getId(), idi);
-				}
-				
-			}
-			
-		} catch (DelegateException ex) {
-
-			log.warn("[indexBorraNormativa:" + nor.getId() + "] No se ha podido borrar del indice la normativa. " + ex.getMessage());
-			
-		}	
-
-	}
-
-	/**
 	 * A partir de una lista de objetos Normativa, devuelve su correspondiente lista de 
 	 * objetos NormativaModel, teniendo en cuenta el idioma de traducción.
 	 * 
@@ -1229,22 +972,356 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 		return resultado;
 	}
 
-	private Analyzer getAnalizador(String idi) {
 
-	    Analyzer analyzer;
-
-	    if (idi.toLowerCase().equals("de")) {
-	        analyzer = new AlemanAnalyzer();
-	    } else if (idi.toLowerCase().equals("en")) {
-	        analyzer = new InglesAnalyzer();
-	    } else if (idi.toLowerCase().equals("ca")) {
-	        analyzer = new CatalanAnalyzer();
-	    } else {
-	        analyzer = new CastellanoAnalyzer();
-	    }
-
-	    return analyzer;
-	    
+	/**
+	 * Comprueba si es indexable un tramite.
+	 * 
+	 * @return
+	 */
+	private boolean isIndexable(final Normativa normativa) {
+		boolean indexable = true;
+		if (normativa.getValidacion() != 1 ) {
+			indexable = false;
+		}
+		
+		return indexable;
 	}
 
+	 /**
+	 * Metodo para indexar un solrPendiente.
+	 * @param solrPendiente
+	 * @param solrIndexer
+	 * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente) {
+		EnumCategoria categoria = EnumCategoria.fromString(solrPendiente.getTipo());
+		if (categoria == EnumCategoria.ROLSAC_NORMATIVA) {
+			return indexarSolrNormativa(solrIndexer, solrPendiente.getId(), EnumCategoria.ROLSAC_NORMATIVA);
+		} else if (categoria == EnumCategoria.ROLSAC_NORMATIVA_DOCUMENTO) {
+			return indexarSolrNormativaDocumento(solrIndexer, solrPendiente.getId(), EnumCategoria.ROLSAC_NORMATIVA_DOCUMENTO);
+		} else {
+			return null;  
+		}
+	}
+	
+	/**
+	 * Obtiene una normativa segun id para solr.
+	 * @param id
+	 * @return
+	 */
+	 
+	public Normativa obtenerNormativaParaSolr(Long id) {
+		Session session = getSession();
+		Normativa normativa = null;
+		try {
+			 normativa = (Normativa) session.load(Normativa.class, id);
+			for (Iterator iterator = normativa.getLangs().iterator(); iterator.hasNext();) {
+				String lang = (String) iterator.next();
+				TraduccionNormativa traduccion = (TraduccionNormativa) normativa.getTraduccion(lang);
+				if (traduccion!=null)  Hibernate.initialize(traduccion.getArchivo());
+			}
+			Hibernate.initialize(normativa.getAfectadas());
+			Hibernate.initialize(normativa.getAfectantes());
+			Hibernate.initialize(normativa.getProcedimientos());
+			
+		} catch (HibernateException he) {
+			log.error("Error obteniendo la normativa con id " + id, he);
+		} finally {
+			close(session);
+		}
+		return normativa;
+	}
+	
+	 /**
+	  * Metodo para indexar un solrPendiente.
+	  * @param solrIndexer
+	  * @param idElemento
+	  * @param categoria
+	  * @ejb.interface-method
+      * @ejb.permission unchecked="true"
+	  */	 
+	public SolrPendienteResultado indexarSolrNormativa(final SolrIndexer solrIndexer, final Long idElemento, final EnumCategoria categoria) {
+		log.debug("NormativaFacadeEJB.indexarNormativaSolr. idElemento:" + idElemento +" categoria:"+categoria);
+		
+		try {
+			//Paso 0. Obtenemos la ficha y comprobamos si se puede indexar.
+			final Normativa normativa = obtenerNormativaParaSolr(idElemento);
+			if (normativa == null) {
+				return new SolrPendienteResultado(false, "Error obteniendo la normativa");
+			}
+			
+			boolean isIndexable = this.isIndexable(normativa);
+			if (!isIndexable) {
+				return new SolrPendienteResultado(true, "No se puede indexar");
+			}
+			
+			//Preparamos la información básica: id elemento, aplicacionID = ROLSAC y la categoria de tipo normativa.
+			final IndexData indexData = new IndexData();
+			indexData.setCategoria(categoria);
+			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
+			indexData.setElementoId(idElemento.toString());
+			
+			//Iteramos las traducciones
+			final Map<String, Traduccion> traducciones = normativa.getTraduccionMap();
+			final MultilangLiteral titulo = new MultilangLiteral();
+			final MultilangLiteral descripcion = new MultilangLiteral();
+			final MultilangLiteral urls = new MultilangLiteral();
+			final MultilangLiteral searchText = new MultilangLiteral();
+			final MultilangLiteral searchTextOptional = new MultilangLiteral();
+			final List<EnumIdiomas> idiomas = new ArrayList<EnumIdiomas>();
+			
+			//Recorremos las traducciones
+			for (String keyIdioma : normativa.getTraduccionMap().keySet()) {
+				final TraduccionNormativa traduccion = (TraduccionNormativa)traducciones.get(keyIdioma);
+				final EnumIdiomas enumIdioma = EnumIdiomas.fromString(keyIdioma);
+				
+				if (traduccion != null && enumIdioma != null) {
+					//Anyadimos idioma al enumerado.
+					idiomas.add(enumIdioma);
+					
+					//Seteamos los primeros campos multiidiomas: Titulo, Descripción y el search text.
+					titulo.addIdioma(enumIdioma, traduccion.getTitulo());
+					descripcion.addIdioma(enumIdioma, traduccion.getTitulo());
+			    	String tipoNormativaNombre = "";
+			    	if ( normativa.getTipo().getTraduccion(keyIdioma) != null) {
+			    		 TraduccionTipo tipo = (TraduccionTipo) normativa.getTipo().getTraduccion(keyIdioma);
+			    		 tipoNormativaNombre = tipo.getNombre();
+			    	}
+			    	searchText.addIdioma(enumIdioma, traduccion.getTitulo()+ " " + traduccion.getApartado() + " " + tipoNormativaNombre);
+			    	
+			    	final StringBuffer textoOptional = new StringBuffer();
+			    	textoOptional.append(" ");
+			    	textoOptional.append(traduccion.getObservaciones());
+			    	
+					//Unidades administrativas de las fichas.
+					UnidadAdministrativa unidadAdministrativa = normativa.getUnidadAdministrativa();
+					if (unidadAdministrativa != null) {
+						List<PathUO> uos = new ArrayList<PathUO>();
+						PathUO uo = new PathUO();
+						List<String> path = new ArrayList<String>();
+						
+						//Hay que extraer la id de los predecesores y luego el de uno mismo
+						Set<UnidadAdministrativa> predecesores = unidadAdministrativa.getPredecesores();
+						for(UnidadAdministrativa predecesor : predecesores) {
+							path.add(predecesor.getId().toString());
+							textoOptional.append(" ");
+					    	textoOptional.append(predecesor.getNombre());			    	
+						}
+						path.add( unidadAdministrativa.getId().toString());
+						textoOptional.append(" ");
+				    	textoOptional.append(unidadAdministrativa.getNombre());
+				    	
+						uo.setPath(path);
+						uos.add(uo);
+						indexData.setUos(uos);
+					}
+					
+					
+			    	searchTextOptional.addIdioma(enumIdioma, textoOptional.toString());
+			    	if (normativa.getBoletin() == null && (traduccion.getEnlace() == null || traduccion.getEnlace().isEmpty())) {
+			    		Calendar calendar = Calendar.getInstance();
+			    		calendar.setTime(normativa.getFecha());
+			    		
+			    		urls.addIdioma(enumIdioma,"/eboibfront/VisPdf?action=VisHistoric&p_any="+calendar.get(Calendar.YEAR)+"&p_numero="+normativa.getNumero()+"&p_finpag="+traduccion.getPaginaFinal()+"&p_inipag="+traduccion.getPaginaInicial()+"&idDocument="+normativa.getId()+"&lang="+keyIdioma);
+			    	} else if (normativa.getBoletin() == null && (traduccion.getEnlace() == null || traduccion.getEnlace().isEmpty())) {
+			    		urls.addIdioma(enumIdioma, traduccion.getEnlace());
+			    	} else {
+			    		urls.addIdioma(enumIdioma, "/govern/dadesNormativa.do?lang="+keyIdioma+"&codi="+normativa.getId()+"&coduo="+normativa.getUnidadAdministrativa().getId());
+		
+			    	}
+			    	
+				}
+		    	
+			}
+			
+			//Seteamos datos multidioma.
+			indexData.setTitulo(titulo);
+			indexData.setDescripcion(descripcion);
+			indexData.setUrl(urls);
+			indexData.setSearchText(searchText);
+			indexData.setSearchTextOptional(searchTextOptional);
+			indexData.setIdiomas(idiomas);
+						
+			//Fechas
+			indexData.setFechaPublicacion(normativa.getFechaBoletin());
+			
+			solrIndexer.indexarContenido(indexData);
+			return new SolrPendienteResultado(true);
+		} catch(Exception exception) {
+			log.error("Error en normativafacade intentando indexar.", exception);
+			String mensajeError;
+			if (exception.getMessage() == null) {
+				mensajeError = exception.toString();
+			} else {
+				mensajeError = exception.getMessage();
+			}
+			return new SolrPendienteResultado(false, mensajeError);
+		}
+
+	}
+	
+	 /** 
+	  * Metodo para indexar un solrPendiente.
+	  * @param solrIndexer
+	  * @param idElemento
+	  * @param categoria
+	  * 
+	  * @ejb.interface-method
+      * @ejb.permission unchecked="true"
+	  */
+	 
+	public SolrPendienteResultado indexarSolrNormativaDocumento(final SolrIndexer solrIndexer, final Long idElemento, final EnumCategoria categoria) {
+		log.debug("NormativaFacadeEJB.indexarNormativaDocumentoSolr. idElemento:" + idElemento +" categoria:"+categoria);
+		try {
+			//Paso 0. Obtenemos la ficha y comprobamos si se puede indexar.
+			final Normativa normativa = obtenerNormativaSegunArchivo(idElemento);
+			if (normativa == null) {
+				return new SolrPendienteResultado(false, "Error obteniendo la normativa");
+			}
+			
+			boolean isIndexable = this.isIndexable(normativa);
+			if (!isIndexable) {
+				return new SolrPendienteResultado(true, "No se puede indexar");
+			}
+			
+			//Preparamos la información básica: id elemento, aplicacionID = ROLSAC y la categoria ( y padre) de tipo documento normativa.
+			final IndexFile indexData = new IndexFile();
+			indexData.setCategoria(categoria);
+			indexData.setCategoriaPadre(EnumCategoria.ROLSAC_NORMATIVA);
+			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
+			indexData.setElementoId(idElemento.toString());
+			
+			//Iteramos las traducciones
+			final Map<String, Traduccion> traducciones = normativa.getTraduccionMap();
+			final MultilangLiteral titulo = new MultilangLiteral();
+			final MultilangLiteral descripcion = new MultilangLiteral();
+			final MultilangLiteral descripcionPadre = new MultilangLiteral();
+			final MultilangLiteral urls = new MultilangLiteral();
+			final MultilangLiteral urlsPadre = new MultilangLiteral();
+			
+			//Recorremos las traducciones
+			for (String keyIdioma : normativa.getTraduccionMap().keySet()) {
+				final EnumIdiomas enumIdioma = EnumIdiomas.fromString(keyIdioma);
+				final TraduccionNormativa traduccion = (TraduccionNormativa)traducciones.get(keyIdioma);
+				
+				if (traduccion != null && enumIdioma != null) {
+					
+					//Seteamos los primeros campos multiidiomas: Titulo y Descripción (y padre).
+					titulo.addIdioma(enumIdioma, traduccion.getArchivo().getNombre());
+					descripcion.addIdioma(enumIdioma, traduccion.getArchivo().getMime());
+					descripcionPadre.addIdioma(enumIdioma, traduccion.getTitulo());
+					
+					urls.addIdioma(enumIdioma, "/normativa/archivo.do?id=" + traduccion.getArchivo().getId() + "&lang=" + keyIdioma);
+					if (normativa.getBoletin() == null && (traduccion.getEnlace() == null || traduccion.getEnlace().isEmpty())) {
+			    		Calendar calendar = Calendar.getInstance();
+			    		calendar.setTime(normativa.getFechaBoletin());
+			    		urlsPadre.addIdioma(enumIdioma,"/eboibfront/VisPdf?action=VisHistoric&p_any="+calendar.get(Calendar.YEAR)+"&p_numero="+normativa.getNumero()+"&p_finpag="+traduccion.getPaginaFinal()+"&p_inipag="+traduccion.getPaginaInicial()+"&idDocument="+normativa.getId()+"&lang="+keyIdioma);
+			    	} else if (normativa.getBoletin() == null && (traduccion.getEnlace() == null || traduccion.getEnlace().isEmpty())) {
+			    		urlsPadre.addIdioma(enumIdioma, traduccion.getEnlace());
+			    	} else {
+			    		urlsPadre.addIdioma(enumIdioma, "/govern/dadesNormativa.do?lang="+keyIdioma+"&codi="+normativa.getId()+"&coduo="+normativa.getUnidadAdministrativa().getId());
+		
+			    	}
+					indexData.setFileContent(traduccion.getArchivo().getDatos());
+					indexData.setIdioma(enumIdioma);
+				}
+			}
+			
+			//Seteamos datos multidioma.
+			indexData.setTitulo(titulo);
+			indexData.setDescripcion(descripcion);
+			indexData.setDescripcionPadre(descripcionPadre);
+			indexData.setUrl(urls);
+			indexData.setUrlPadre(urlsPadre);
+			
+			//Fechas
+			indexData.setFechaPublicacion(normativa.getFechaBoletin());
+			solrIndexer.indexarFichero(indexData);
+			return new SolrPendienteResultado(true);
+		} catch(Exception exception) {
+			log.error("Error en normativafacade intentando indexar.", exception);
+			String mensajeError;
+			if (exception.getMessage() == null) {
+				mensajeError = exception.toString();
+			} else {
+				mensajeError = exception.getMessage();
+			}
+			return new SolrPendienteResultado(false, mensajeError);
+		}
+
+	}
+	
+	/**
+	 * Devuelve la normativa, con sólo una traducción y su archivo.
+	 * @param idElemento
+	 * @return
+	 */
+	private Normativa obtenerNormativaSegunArchivo(Long idElemento) {
+		Session session = getSession();
+		Normativa normativa = null;
+		try {
+			Criteria criteria = session.createCriteria(Normativa.class);
+			criteria.setFetchMode("traducciones", FetchMode.EAGER);
+			criteria.add(Expression.eqProperty("traducciones.archivo.id", idElemento.toString()));
+			normativa = (Normativa) criteria.uniqueResult();
+		} catch (HibernateException he) {
+			log.error("Error obteniendo normativa según archivo con id " + idElemento, he);
+		} finally {
+			close(session);
+		}
+		return normativa;
+	}
+
+	/**
+	 * Metodo para indexar un solrPendiente.
+	 * @param solrPendiente
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public SolrPendienteResultado desindexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente)  {
+		try {
+			solrIndexer.desindexar(solrPendiente.getIdElemento().toString(), EnumCategoria.ROLSAC_NORMATIVA);
+			return new SolrPendienteResultado(true);
+		} catch(Exception exception) {
+			log.error("Error en normativafacade intentando desindexar.", exception);
+			String mensajeError;
+			if (exception.getMessage() == null) {
+				mensajeError = exception.toString();
+			} else {
+				mensajeError = exception.getMessage();
+			}
+			return new SolrPendienteResultado(false, mensajeError);
+		}
+	}
+
+	/**
+	 * Devuelve los ids de las normativas.
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public List<Long> buscarIdsNormativas()  {
+		Session session = getSession();
+		
+		try {
+
+    		StringBuilder consulta = new StringBuilder("select normativa.id from NormativaLocal as normativa ");
+    		
+    		Query query = session.createQuery( consulta.toString() );
+    		query.setCacheable(true);
+
+    		return query.list();
+
+    	} catch (HibernateException he) {
+
+    		throw new EJBException(he);
+
+    	} finally {
+
+    		close(session);
+
+    	}
+		
+	}
 }

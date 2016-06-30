@@ -43,7 +43,6 @@ public class TramiteSaver {
 		
 		Tramite tramiteBD = tramiteFacadeEJB.obtenerTramite(tramite.getId());
 		fechaActualizacionBD = tramiteBD.getDataActualitzacio();
-		//FIXME ejaen@dgtic this.indexBorraProcedimiento(procedimientoBD);
 
 		//Se alimenta la fecha de actualizaci�n de forma autom�tica si  no se ha introducido dato 
 		if (tramite.getDataActualitzacio() == null || 

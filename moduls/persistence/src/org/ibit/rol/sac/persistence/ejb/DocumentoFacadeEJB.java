@@ -1,32 +1,62 @@
 package org.ibit.rol.sac.persistence.ejb;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.model.FichaUA;
+import org.ibit.rol.sac.model.HechoVitalProcedimiento;
+import org.ibit.rol.sac.model.Materia;
+import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.PublicoObjetivo;
+import org.ibit.rol.sac.model.SolrPendiente;
+import org.ibit.rol.sac.model.SolrPendienteResultado;
+import org.ibit.rol.sac.model.Traduccion;
 import org.ibit.rol.sac.model.TraduccionDocumento;
+import org.ibit.rol.sac.model.TraduccionFicha;
+import org.ibit.rol.sac.model.TraduccionHechoVital;
+import org.ibit.rol.sac.model.TraduccionMateria;
+import org.ibit.rol.sac.model.TraduccionNormativa;
+import org.ibit.rol.sac.model.TraduccionProcedimiento;
+import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
+import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.Tramite;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
+import org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
+
+import es.caib.solr.api.SolrIndexer;
+import es.caib.solr.api.exception.ExcepcionSolrApi;
+import es.caib.solr.api.model.IndexData;
+import es.caib.solr.api.model.MultilangLiteral;
+import es.caib.solr.api.model.PathUO;
+import es.caib.solr.api.model.types.EnumAplicacionId;
+import es.caib.solr.api.model.types.EnumCategoria;
+import es.caib.solr.api.model.types.EnumIdiomas;
 
 /**
  * SessionBean para mantener y consultar Documentos.
@@ -46,7 +76,12 @@ import org.ibit.rol.sac.persistence.ws.Actualizador;
 public abstract class DocumentoFacadeEJB extends HibernateEJB {
 
     /**
-     * Obtiene refer�ncia al ejb de control de Acceso.
+	 * serial version UID.
+	 */
+	private static final long serialVersionUID = 4454278347074939666L;
+
+	/**
+     * Obtiene referencia al ejb de control de Acceso.
      * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
      */
     protected abstract AccesoManagerLocal getAccesoManager();
@@ -133,13 +168,9 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
             	
                 FichaDelegate ficdel = (null != fichDel) ? fichDel: DelegateUtil.getFichaDelegate();
                 
-                try {  
-                	ficdel.indexBorraFicha(ficha.getId());
-                	ficdel.indexInsertaFicha(ficha,null);   
-                } catch (DelegateException e) {
-                    log.error("Error indexando ficha", e);
-                }    
-                
+                //SOLR Indexar ficha documento.
+    			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
+                solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_FICHA_DOCUMENTO.toString(), documento.getId(), 1l);
             }
             
             if (procedimiento_id != null) {
@@ -149,17 +180,14 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
                 
         		ProcedimientoDelegate pldel = (null != procDel) ? procDel : DelegateUtil.getProcedimientoDelegate();
         		
-                try {            	
-                	pldel.indexBorraProcedimiento(procedimiento);
-                	pldel.indexInsertaProcedimiento(procedimiento,null);   
-                    log.debug("Actualizamos documento del procedimiento");
-                    Actualizador.actualizar(documento, procedimiento.getId());
-                } catch (DelegateException e) {
-                    log.error("Error indexando procedimiento", e);
-                }                    
-
+                log.debug("Actualizamos documento del procedimiento");
+                Actualizador.actualizar(documento, procedimiento.getId());
+                                   
+                //SOLR Desindexar procedimiento documento.
+    			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
+                solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO_DOCUMENTO.toString(), documento.getId(), 1l);
             }           
-            
+            session.flush();
             //TODO añadir if para el tramite
             
             return documento.getId();
@@ -168,7 +196,9 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
         	
             throw new EJBException(he);
             
-        } finally {
+        } catch (DelegateException e) {
+        	throw new EJBException(e);
+		} finally {
         	
             close(session);
             
@@ -242,28 +272,32 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 
             session.delete(documento);
             session.flush();
-            if (ficha != null) {
-                FichaDelegate ficdel = DelegateUtil.getFichaDelegate();
-                try {           
-                	ficdel.indexBorraFicha(ficha.getId());
-                	ficdel.indexInsertaFicha(ficha,null);   
-                } catch (DelegateException e) {
-                    log.error("Error indexando ficha", e);
-                }                                                        
+            
+            //SOLR Desindexar ficha documento.
+			if (ficha != null) {
+            	SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
+            	solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_FICHA_DOCUMENTO.toString(), documento.getId(), 2l);
             }
+            
+            //SOLR Desindexar procedimiento documento.
+			if (procedimiento != null) {
+            	SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
+            	solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO_DOCUMENTO.toString(), documento.getId(), 2l);
+            }
+            
+		    
             if (procedimiento != null) {
         		ProcedimientoDelegate pldel = DelegateUtil.getProcedimientoDelegate();
-                try {  
-                	pldel.indexBorraProcedimiento(procedimiento);
-                	pldel.indexInsertaProcedimiento(procedimiento,null);
-                    Actualizador.borrar(documento, procedimiento.getId());
-                } catch (DelegateException e) {
-                    log.error("Error indexando procedimiento", e);
-                }                    	                    
-            }                            
+                                  	                	
+                Actualizador.borrar(documento, procedimiento.getId());
+                                    	                    
+            } 
+            session.flush();
         } catch (HibernateException he) {
             throw new EJBException(he);     
-        } finally {
+        } catch (DelegateException e) {
+        	throw new EJBException(e);
+		} finally {
             close(session);
         }
     }
@@ -295,7 +329,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
     }
     
     /**
-     * Obtiene el archivo de un documento de tr�mite.
+     * Obtiene el archivo de un documento de tramite.
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -322,7 +356,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
     
     /**
      * 
-     * Actualiza los ordenes de los documentos de una secci�n de una Ficha
+     * Actualiza los ordenes de los documentos de una sección de una Ficha
 	 *
      * FIXME enric@dgtic: este metodo lo pondria en procedimientoFacadeEJB 
      *  
@@ -410,4 +444,462 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 	
     }
     
+    /**
+	 * Comprueba si es indexable una ficha.
+	 * @return
+	 */
+	private boolean isIndexable(final Ficha ficha) {
+		boolean indexable = true;
+		if (ficha.getValidacion() != 1 ) {
+			indexable = false;
+		}
+		
+		if (ficha.getFechaCaducidad() != null && Calendar.getInstance().getTime().before(ficha.getFechaCaducidad())) {
+			indexable = false;
+		}
+		return indexable;
+	}
+	
+	 /**
+	 * Comprueba si es indexable un procedimiento local.
+	 * @param procedimiento
+	 * @return
+	 */
+	private boolean isIndexable(final ProcedimientoLocal procedimiento) {
+		boolean indexable = true;
+		if (procedimiento.getValidacion() != 1 ) {
+			indexable = false;
+		}
+		
+		if (procedimiento.getFechaCaducidad() != null && Calendar.getInstance().getTime().before(procedimiento.getFechaCaducidad())) {
+			indexable = false;
+		}
+		return indexable;
+	}
+	
+	
+	/**
+	 * Metodo para indexar un solrPendiente.
+	 * @param solrPendiente
+	 * @param solrIndexer
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente) {
+		final EnumCategoria categoria = EnumCategoria.fromString(solrPendiente.getTipo()); 
+		if (EnumCategoria.ROLSAC_FICHA_DOCUMENTO == categoria) {
+			return indexarSolrFichaDoc(solrIndexer, solrPendiente.getIdElemento(), EnumCategoria.ROLSAC_FICHA_DOCUMENTO);
+		} else if(EnumCategoria.ROLSAC_PROCEDIMIENTO_DOCUMENTO == categoria) {
+			return indexarSolrProcedimientoDoc(solrIndexer, solrPendiente.getIdElemento(), EnumCategoria.ROLSAC_PROCEDIMIENTO_DOCUMENTO);
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Metodo para indexar un solrPendiente.
+	 * 
+	 * @param solrIndexer
+	 * @param idElemento
+	 * @param categoria
+	 * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	@SuppressWarnings("deprecation")
+	public SolrPendienteResultado indexarSolrProcedimientoDoc(final SolrIndexer solrIndexer, final Long idElemento, final EnumCategoria categoria) {
+		log.debug("DocumentoFacadeEJB.indexarSolrProcedimientoDoc. idElemento:" + idElemento+" categoria:"+ categoria);
+		
+		try {
+			//Paso 0. Obtenemos la ficha y comprobamos si se puede indexar.
+			final Documento documento = obtenerDocumento(idElemento);
+			boolean isIndexable = this.isIndexable(documento.getProcedimiento());
+			if (!isIndexable) {
+				return new SolrPendienteResultado(true, "No se puede indexar");
+			}
+			
+			//Obtenemos el procedimiento por separado porque daba un error de lazy hibernate
+			ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
+			ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimiento(documento.getProcedimiento().getId());
+			
+			//Preparamos la información básica: id elemento, aplicacionID = ROLSAC y la categoria de tipo ficha.
+			final IndexData indexData = new IndexData();
+			indexData.setCategoria(categoria);
+			indexData.setCategoriaPadre(EnumCategoria.ROLSAC_PROCEDIMIENTO);
+			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
+			indexData.setElementoId(idElemento.toString());
+			
+			//Iteramos las traducciones
+			final Map<String, Traduccion> traducciones = documento.getTraduccionMap();
+			final MultilangLiteral titulo = new MultilangLiteral();
+			final MultilangLiteral descripcion = new MultilangLiteral();
+			final MultilangLiteral descripcionPadre = new MultilangLiteral();
+			final MultilangLiteral urls = new MultilangLiteral();
+			final MultilangLiteral urlsPadres = new MultilangLiteral();		
+			final MultilangLiteral searchText = new MultilangLiteral();
+			final MultilangLiteral extension = new MultilangLiteral();
+			final List<EnumIdiomas> idiomas = new ArrayList<EnumIdiomas>();
+			
+			final String nomUnidadAministrativa;
+			if (procedimiento.getUnidadAdministrativa() == null) {
+				nomUnidadAministrativa = "";
+			} else {
+				nomUnidadAministrativa = procedimiento.getUnidadAdministrativa().getNombre();
+			}
+			
+			//Recorremos las traducciones
+			for (String keyIdioma : traducciones.keySet()) {
+				final EnumIdiomas enumIdioma = EnumIdiomas.fromString(keyIdioma);
+				final TraduccionDocumento traduccion = (TraduccionDocumento)traducciones.get(keyIdioma);
+				final TraduccionProcedimiento traduccionProc = (TraduccionProcedimiento)procedimiento.getTraduccion(keyIdioma);
+		    	
+				if (traduccion != null && enumIdioma != null) {
+					//Anyadimos idioma al enumerado.
+					idiomas.add(enumIdioma);
+					
+					//Seteamos los primeros campos multiidiomas: Titulo, Descripción y el search text.
+					titulo.addIdioma(enumIdioma, traduccion.getTitulo());
+					descripcion.addIdioma(enumIdioma, traduccion.getDescripcion());
+					if (traduccionProc != null) {
+						descripcionPadre.addIdioma(enumIdioma, traduccionProc.getNombre());
+					}
+				    searchText.addIdioma(enumIdioma, traduccion.getTitulo()+ " "+ documento.getArchivo().getNombre()+ " "+ traduccion.getDescripcion());
+			    	
+			    	//La entensión del archivo por mime
+			    	if (documento.getArchivo() != null) {
+			    		extension.addIdioma(enumIdioma, documento.getArchivo().getMime());
+			    	}
+			    	
+			    	final StringBuffer textoOptional = new StringBuffer();
+					
+			    	//materia
+			    	for(Materia materia : procedimiento.getMaterias()) {
+			    		final TraduccionMateria traduccionMateria = (TraduccionMateria) materia.getTraduccion(keyIdioma);
+			    		if (traduccionMateria != null) {
+							textoOptional.append(" ");
+							textoOptional.append(traduccionMateria.getNombre());
+							textoOptional.append(" ");
+							textoOptional.append(traduccionMateria.getDescripcion());
+							textoOptional.append(" ");
+							textoOptional.append(traduccionMateria.getPalabrasclave());
+			    		}
+					}
+			    	
+			    	//hechos vitales
+					for(HechoVitalProcedimiento hecho : procedimiento.getHechosVitalesProcedimientos()) {
+						final TraduccionHechoVital traduccionHechoVital =  (TraduccionHechoVital) hecho.getHechoVital().getTraduccionFront(keyIdioma);
+						if (traduccionHechoVital != null) {
+							textoOptional.append(" ");
+							textoOptional.append(traduccionHechoVital.getNombre());
+							textoOptional.append(" ");
+							textoOptional.append(traduccionHechoVital.getDescripcion());
+							textoOptional.append(" ");
+							textoOptional.append(traduccionHechoVital.getPalabrasclave());
+						}
+					}
+					
+					//Publico objetivo, para añadirlo como id y para extraer el titulo para la url
+					String nombrePubObjetivo = "";
+					for( PublicoObjetivo publicoObjectivo :  procedimiento.getPublicosObjetivo()) {
+						final TraduccionPublicoObjetivo traduccionPO = (TraduccionPublicoObjetivo) publicoObjectivo.getTraduccion(keyIdioma);
+						if (traduccionPO != null) {
+							nombrePubObjetivo = traduccionPO.getTitulo();
+						}
+					}
+					
+					
+					//UO
+					textoOptional.append(" ");
+					textoOptional.append(nomUnidadAministrativa);
+					
+			    	//Nombre familia
+					textoOptional.append(procedimiento.getNombreFamilia());
+					
+					//Normativa asociadas
+					for(Normativa normativa : procedimiento.getNormativas()) {
+						final TraduccionNormativa traduccionNormativa = (TraduccionNormativa) normativa.getTraduccion(keyIdioma);
+						if (traduccionNormativa != null) {
+							textoOptional.append(traduccionNormativa.getTitulo());
+							textoOptional.append(" ");
+						}
+					}
+			    	urlsPadres.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+nombrePubObjetivo+"/tramites/tramite/"+procedimiento.getId());
+			    	urls.addIdioma(enumIdioma, "govern/rest/arxiu/" + documento.getId());
+				}
+			}
+			
+			//Seteamos datos multidioma.
+			indexData.setTitulo(titulo);
+			indexData.setDescripcion(descripcion);
+			indexData.setDescripcionPadre(descripcionPadre);
+			indexData.setUrl(urls);
+			indexData.setUrlPadre(urlsPadres);
+			indexData.setSearchText(searchText);
+			indexData.setIdiomas(idiomas);
+			
+			
+			//materia
+			final List<String> materiasId = new ArrayList<String>();		
+			for(Materia materia : procedimiento.getMaterias()) {
+	    		materiasId.add(materia.getId().toString());
+			}
+			indexData.setMateriaId(materiasId);
+			
+			//Publico Objetivo
+			final List<String> publicoObjetivoId = new ArrayList<String>();		
+			for( PublicoObjetivo publicoObjectivo :  procedimiento.getPublicosObjetivo()) {
+	    		publicoObjetivoId.add(publicoObjectivo.getId().toString());
+			}
+			indexData.setPublicoId(publicoObjetivoId);
+			
+			//Fechas
+			indexData.setFechaActualizacion(procedimiento.getFechaActualizacion());
+			indexData.setFechaPublicacion(procedimiento.getFechaPublicacion());
+			indexData.setFechaCaducidad(procedimiento.getFechaCaducidad());
+			
+			//UA
+			UnidadAdministrativa unitatAdministrativa =procedimiento.getUnidadAdministrativa();
+			if (unitatAdministrativa != null) {
+				List<PathUO> uos = new ArrayList<PathUO>();
+				PathUO uo = new PathUO();
+				List<String> path = new ArrayList<String>();
+				
+				//Hay que extraer la id de los predecesores y luego el de uno mismo
+				Set<UnidadAdministrativa> predecesores = unitatAdministrativa.getPredecesores();
+				for(UnidadAdministrativa predecesor : predecesores) {
+					path.add(predecesor.getId().toString());
+				}
+				path.add(unitatAdministrativa.getId().toString());
+				
+				uo.setPath(path);
+				uos.add(uo);
+				indexData.setUos(uos);
+			}
+			
+			for(Tramite tramite : procedimiento.getTramites()) {
+				if (tramite.getIdTraTel() != null && !"".equals(tramite.getIdTraTel())) {
+					indexData.setTelematico(true);
+				}
+			}
+			
+		
+			solrIndexer.indexarContenido(indexData);
+			return new SolrPendienteResultado(true);
+		} catch(Exception exception) {
+			log.error("Error en documentofacade intentando indexar.", exception);
+			String mensajeError;
+			if (exception.getMessage() == null) {
+				mensajeError = exception.toString();
+			} else {
+				mensajeError = exception.getMessage();
+			}
+			return new SolrPendienteResultado(false, mensajeError);
+		}
+	}
+	
+	/**
+	 * Indexa ficha documento.
+	 * @param solrPendiente
+	 * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	@SuppressWarnings("deprecation")
+	public SolrPendienteResultado indexarSolrFichaDoc(final SolrIndexer solrIndexer, final Long idElemento, final EnumCategoria categoria) {
+		log.debug("DocumentoFacadeEJB.indexarSolrFichaDoc. idElemento:" + idElemento+" categoria:"+ categoria);
+		
+		try {
+			//Paso 0. Obtenemos la ficha documento y vemos si es indexable.
+			final Documento documento = obtenerDocumento(idElemento);
+			boolean isIndexable = this.isIndexable(documento.getFicha());
+			if (!isIndexable) {
+				return new SolrPendienteResultado(true, "No se puede indexar");
+			}
+			
+			//Obtenemos la ficha por separado porque daba un error de lazy hibernate
+			FichaDelegate fichaDelegate = DelegateUtil.getFichaDelegate();
+			Ficha ficha = fichaDelegate.obtenerFicha(documento.getFicha().getId());
+
+			//Preparamos la información básica: id elemento, aplicacionID = ROLSAC, la categoria de tipo ficha documento, la categoria del padre de tipo ficha.
+			final IndexData indexData = new IndexData();
+			indexData.setCategoria(categoria);
+			indexData.setCategoriaPadre(EnumCategoria.ROLSAC_FICHA);
+			indexData.setElementoId(idElemento.toString());
+			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
+			
+			//Iteramos las traducciones
+			final MultilangLiteral titulo = new MultilangLiteral();
+			final MultilangLiteral descripcion = new MultilangLiteral();
+			final MultilangLiteral descripcionPadre = new MultilangLiteral();		
+			final MultilangLiteral urls = new MultilangLiteral();
+			final MultilangLiteral urlsPadre = new MultilangLiteral();
+			final MultilangLiteral searchText = new MultilangLiteral();
+			final MultilangLiteral searchTextOptional = new MultilangLiteral();
+			final List<EnumIdiomas> idiomas = new ArrayList<EnumIdiomas>();
+					
+			//Recorremos las traducciones
+			for (String keyIdioma : documento.getTraduccionMap().keySet()) {
+				final EnumIdiomas enumIdioma = EnumIdiomas.fromString(keyIdioma);
+				final TraduccionDocumento traduccionDocumento = (TraduccionDocumento) documento.getTraduccion(keyIdioma);
+				final TraduccionFicha traduccionFicha = (TraduccionFicha) ficha.getTraduccion(keyIdioma);
+				
+				if (traduccionDocumento != null && enumIdioma != null) {
+					//Anyadimos idioma al enumerado.
+					idiomas.add(enumIdioma);
+					
+					//Seteamos los primeros campos multiidiomas: Titulo, Descripción (y padre) y el search text.
+					titulo.addIdioma(enumIdioma, traduccionDocumento.getTitulo());
+					descripcion.addIdioma(enumIdioma, traduccionDocumento.getDescripcion());
+			    	if (traduccionFicha != null) {
+						descripcionPadre.addIdioma(enumIdioma, traduccionFicha.getTitulo());
+					}
+			    	searchText.addIdioma(enumIdioma, traduccionDocumento.getTitulo()+ " "+ traduccionDocumento.getDescripcion() + " "+ documento.getArchivo().getNombre());
+			    	
+			    	//StringBuffer que tendrá el contenido a agregar en textOptional
+			    	final StringBuffer textoOptional = new StringBuffer();
+					
+			    	String fichaUAId = "";
+					//Unidades administrativas de las fichas.
+					for (FichaUA fichaUA : ficha.getFichasua()) {
+						if (fichaUAId.isEmpty()) {
+							fichaUAId = fichaUA.getId().toString();
+						}
+						
+						TraduccionUA traduccionUA = ((TraduccionUA)fichaUA.getUnidadAdministrativa().getTraduccion(keyIdioma));
+						if (traduccionUA != null) {
+							textoOptional.append(traduccionUA.getNombre());
+							textoOptional.append(" ");
+						}
+						
+						List<PathUO> uos = new ArrayList<PathUO>();
+						PathUO uo = new PathUO();
+						List<String> path = new ArrayList<String>();
+						
+						//Hay que extraer la id de los predecesores y luego el de uno mismo
+						Set<UnidadAdministrativa> predecesores = fichaUA.getUnidadAdministrativa().getPredecesores();
+						for(UnidadAdministrativa predecesor : predecesores) {
+							path.add(predecesor.getId().toString());
+						}
+						path.add( fichaUA.getUnidadAdministrativa().getId().toString());
+						
+						uo.setPath(path);
+						uos.add(uo);
+						indexData.setUos(uos);
+					}
+								
+			    	urls.addIdioma(enumIdioma, "govern/rest/arxiu/" + documento.getArchivo().getId());
+			    	if (traduccionFicha == null || (traduccionFicha.getUrl() == null || traduccionFicha.getUrl().isEmpty())) {
+			    		urlsPadre.addIdioma(enumIdioma, "/govern/sac/fitxaRedirect.do?codi="+ficha.getId()+"&lang="+keyIdioma);
+			    	} else {
+			    		String idUA = "{#UA:"+fichaUAId+"}";
+			    		urlsPadre.addIdioma(enumIdioma, "/govern/sac/fitxa.do?codi="+ documento.getId() + "&coduo=" + idUA + "&lang=" + keyIdioma);
+			    	}
+				}
+			}
+			
+			//Seteamos datos multidioma.
+			indexData.setTitulo(titulo);
+			indexData.setDescripcion(descripcion);
+			indexData.setDescripcionPadre(descripcionPadre);
+			indexData.setUrl(urls);
+			indexData.setUrlPadre(urlsPadre);
+			indexData.setSearchText(searchText);
+			indexData.setSearchTextOptional(searchTextOptional);
+			indexData.setIdiomas(idiomas);
+			
+			//Datos de ids Materia
+			final List<String> materiasId = new ArrayList<String>();		
+			for(Materia materia : ficha.getMaterias()) {
+				materiasId.add(materia.getId().toString());
+			}
+	    	indexData.setMateriaId(materiasId);
+			
+			//Datos de ids Publico objetivo
+	    	final List<String> publicoObjetivoId = new ArrayList<String>();		
+			for( PublicoObjetivo publicoObjectivo :  ficha.getPublicosObjetivo()) {
+				publicoObjetivoId.add(publicoObjectivo.getId().toString());
+			}
+			indexData.setPublicoId(publicoObjetivoId);
+			
+			
+			//Fechas
+			indexData.setFechaActualizacion(ficha.getFechaActualizacion());
+			indexData.setFechaPublicacion(ficha.getFechaPublicacion());
+			indexData.setFechaCaducidad(ficha.getFechaCaducidad());
+			indexData.setInterno(false);
+		
+			solrIndexer.indexarContenido(indexData);
+			return new SolrPendienteResultado(true);
+		} catch(Exception exception) {
+			log.error("Error en documentofacade intentando indexar.", exception);
+			String mensajeError;
+			if (exception.getMessage() == null) {
+				mensajeError = exception.toString();
+			} else {
+				mensajeError = exception.getMessage();
+			}
+			return new SolrPendienteResultado(false, mensajeError);
+		}
+	}
+	
+	/**
+	 * Metodo para indexar un solrPendiente.
+	 * @param solrPendiente
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public SolrPendienteResultado desindexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente) {
+		try {
+			solrIndexer.desindexar(solrPendiente.getIdElemento().toString(), EnumCategoria.fromString(solrPendiente.getTipo()));
+			return new SolrPendienteResultado(true);
+		} catch(Exception exception) {
+			log.error("Error en documentoFacade intentando desindexar.", exception);
+			return new SolrPendienteResultado(false, exception.getMessage());
+		}
+	}
+
+	/**
+	 * Metodo para obtener las ids de los documentos asociados a la id ficha.
+	 * @param idFicha
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 * @return
+	 */
+	public List<Long> obtenerDocumentosFichaSolr(final Long idFicha) {
+		final Session session = getSession();
+    	try {
+    		return this.castList(Long.class, session.createQuery("select doc.id from Documento doc where doc.ficha.id = "+idFicha).list());
+    	} catch(HibernateException he) {
+    		log.error("Error obteniendo los documentos asociados a la idFicha:"+idFicha, he);
+    		return new ArrayList<Long>();
+    	} finally{
+    		try {
+				session.close();
+			} catch (HibernateException e) {
+				log.error("Error cerrando en obteniendo los documentos asociados a la idFicha:"+idFicha, e);
+			}
+    	}
+	}
+
+	/**
+	 *  Metodo para obtener las ids de los documentos asociados a la id procedimiento. 
+	 * @param idProcedimiento
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     * 
+	 * @return
+	 */
+	public List<Long> obtenerDocumentosProcedimientoSolr(final Long idProcedimiento)	{
+		final Session session = getSession();
+    	try {
+    		return this.castList(Long.class, session.createQuery("select doc.* from Documento doc where doc.procedimiento.id = "+idProcedimiento).list());
+    	} catch(HibernateException he) {
+    		log.error("Error obteniendo los documentos asociados a la idProcedimiento:"+idProcedimiento, he);
+    		return new ArrayList<Long>();
+    	} finally{
+    		try {
+				session.close();
+			} catch (HibernateException e) {
+				log.error("Error cerrando en obteniendo los documentos asociados a la idProcedimiento:"+idProcedimiento, e);
+			}
+    	}
+	}
 }

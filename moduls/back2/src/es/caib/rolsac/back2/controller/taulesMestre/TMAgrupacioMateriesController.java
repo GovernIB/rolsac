@@ -294,7 +294,7 @@ public class TMAgrupacioMateriesController extends PantallaBaseController {
 
 			if ((agrupacioMateria.getMateriasAgrupacionM() != null && !agrupacioMateria.getMateriasAgrupacionM().isEmpty()) 
 					|| materiesForm.size() > 0) {
-				
+						
 				StringBuilder idsMateria = new StringBuilder();
 				
 				// Recorrem el formulari

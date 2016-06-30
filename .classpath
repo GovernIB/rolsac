@@ -4,7 +4,6 @@
 	<classpathentry kind="src" path="moduls/extractor/src"/>
 	<classpathentry kind="src" path="moduls/integracion/src"/>
 	<classpathentry kind="src" path="moduls/model/src"/>
-	<classpathentry kind="src" path="moduls/lucene/src"/>
 	<classpathentry kind="src" path="moduls/persistence/src"/>
 	<classpathentry kind="src" path="moduls/ws/src"/>
 	<classpathentry kind="src" path="output/persistence/gen-src"/>
@@ -100,10 +99,8 @@
 	<classpathentry kind="lib" path="test/lib/struts/spring-webmvc-struts.jar"/>
 	<classpathentry kind="lib" path="test/lib/struts/strutstest-2.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/commons-validator.jar"/>
-	<classpathentry kind="lib" path="lib/webcaib/lucene-spellchecker-3.6.2.jar"/>
-	<classpathentry kind="lib" path="lib/webcaib/lucene-core-3.6.2.jar"/>
 	<classpathentry kind="lib" path="lib/webcaib/pdfbox-app-1.8.4.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/jasper/ant.jar"/>
 	<classpathentry kind="lib" path="lib/jasper/commons-el.jar"/>
 	<classpathentry kind="lib" path="lib/jasper/jasper-compiler.jar"/>
@@ -133,5 +130,8 @@
 	<classpathentry kind="lib" path="lib/webcaib/commons-discovery-0.5.jar"/>
 	<classpathentry kind="lib" path="lib/axis-1.4/axis.jar"/>
 	<classpathentry kind="lib" path="lib/jboss/jbossall-client.jar"/>
+	<classpathentry kind="lib" path="lib/solr/solrapi.jar" sourcepath="/solrapi"/>
+	<classpathentry kind="lib" path="lib/webcaib/commons-codec-1.5.jar"/>
+	<classpathentry kind="src" path="/solrapi"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

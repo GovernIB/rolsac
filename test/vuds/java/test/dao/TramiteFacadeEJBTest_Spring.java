@@ -113,9 +113,7 @@ AbstractTransactionalSpringContextTests {
 		FichaDelegate fichDelegate=	EasyMock.createMock(FichaDelegate.class);
 		
 		ProcedimientoLocal proc=new ProcedimientoLocal();
-		proc.setId(246L);
-		procDelegate.indexBorraProcedimiento(proc);
-		procDelegate.indexInsertaProcedimiento(proc, null);
+		proc.setId(246L);				
 		EasyMock.replay(procDelegate);
 		
 		tramiteBean.setAccesoManager(accesoManager);

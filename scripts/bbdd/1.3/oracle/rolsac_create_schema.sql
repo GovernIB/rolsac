@@ -142,7 +142,7 @@ alter table RSC_FICHEV drop constraint RSC_FIHHEV_FK;
 alter table RSC_TRATAX drop constraint RSC_TRATAX_FK;
 alter table RSC_PROCED drop constraint RSC_PROUNA_FK;
 alter table RSC_PROCED drop constraint RSC_PRO_CODUNA_RESOL_FK;
-alter table RSC_PROCED drop constraint RSC_PRO_CODUNA_SERV_FK; --#351 añadir servicio responsable
+alter table RSC_PROCED drop constraint RSC_PRO_CODUNA_SERV_FK; --#351 aÃ±adir servicio responsable
 alter table RSC_PROCED drop constraint RSC_PROFAM_FK;
 alter table RSC_PROCED drop constraint RSC_PROINI_FK;
 alter table RSC_PROCED drop constraint RSC_PRRADM_FK;
@@ -258,6 +258,8 @@ drop table RCS_PERGES cascade constraints;
 drop table RCS_TRAPEG cascade constraints;
 drop table RCS_PEGSEC cascade constraints;
 drop table RCS_USUPEG cascade constraints;
+drop table RSC_SOLRPD cascade constraints;
+
 drop sequence RSC_SEQ_COM;
 drop sequence RSC_SEQ_ALL;
 drop sequence RSC_SEQSEN;
@@ -1025,7 +1027,7 @@ create table RSC_PROCED (
    PRR_IDEXTE number(19,0),
    PRR_URLREM varchar2(512),
    PRR_CODADM number(19,0),
-   PRO_CODUNA_SERV number(19,0), --#351 añadir servicio responsable
+   PRO_CODUNA_SERV number(19,0), --#351 aÃ±adir servicio responsable
    primary key (PRO_CODI)
 );
 create table RSC_SCRENV (

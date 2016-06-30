@@ -303,9 +303,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			resultats.put("item_codi", proc.getSignatura());
 			resultats.put("item_tramite", proc.getTramite());
 			resultats.put("item_url", proc.getUrl());
-			resultats.put("item_responsable", proc.getResponsable());			
+			resultats.put("item_responsable", proc.getResponsable());
 			resultats.put("item_finestreta_unica", proc.esVentanillaUnica());
-			//#351cambio info por dir electrónica
+			//#351cambio info por dir electrÃ³nica
 			//resultats.put("item_notes", proc.getInfo());
 			resultats.put("item_notes", proc.getDirElectronica());
 			resultats.put("item_fi_vida_administrativa", proc.getIndicador() == null  ? "" : (proc.getIndicador()));           
@@ -334,12 +334,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				UnidadAdministrativa ua = proc.getOrganResolutori();
 				resultats.put("item_organ_id", ua.getId());
 				resultats.put("item_organ_nom", ua.getNombreUnidadAdministrativa(lang));
-			}
-			//Cambiar
-			if (proc.getServicioResponsable() != null) {
-				UnidadAdministrativa ua = proc.getServicioResponsable();
-				resultats.put("item_servei_responsable_id", ua.getId());
-				resultats.put("item_servei_responsable_nom", ua.getNombreUnidadAdministrativa(lang));
 			}
 
 			// Obtención de listado de posibles hechos vitales del procedimiento
@@ -584,7 +578,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				edicion = false;
 			}
 
-			//S�lo si es edici�n es obligado tener materias
+			//Solo si es edicion, es obligado tener materias
 			if (edicion &&  (request.getParameter("materies") == null || request.getParameter("materies").equals(""))) {
 				error = messageSource.getMessage("proc.error.falta.materia", null, request.getLocale());
 				return result = new IdNomDTO(-4l, error);
@@ -593,12 +587,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			
 			procediment = guardarVersion(request, procediment, procedimentOld, error);			// Versión
 			procediment = guardarPublicoObjetivo(request, procediment, procedimentOld);			// Procesar Público Objectivo
-			///Actualizamos lo que viene de pantalla para procediment Publico Objetivo en procedimentOld para que 
-			///en guardarProcedimientoAntiguo no lo machaque en modo edicion
-			if (edicion) {
-				procedimentOld.setPublicosObjetivo(procediment.getPublicosObjetivo());		        // Procesar Público Objectivo				
-			}			
-			///
 			procediment = guardarIdioma(request, procediment, procedimentOld);       			// Idiomas
 			procediment = guardarValidacion(request, procediment, procedimentOld, error);		// Validación
 			procediment = guardarFechaPublicacion(request, procediment);						// Fecha Publicación
@@ -606,15 +594,14 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			procediment = guardarIniciacion(request, procediment, error);				    	// Iniciación
 			procediment = guardarFamilia(request, procediment, error);							// Familia
 			procediment = guardarOrganResolutori(request, procediment, error);					// Organ Resolutori
-			procediment = guardarServeiResponsable(request, procediment, error);				// Servei Responsable
-			
 			procediment = guardarUnidadAdministrativa(request, procediment, error);             // Unidad Administrativa			
+			procediment = guardarServeiResponsable(request, procediment, error);				// Servei Responsable
 			
 			procediment.setResponsable(request.getParameter("item_responsable"));				// Responsable
 			procediment.setSignatura(request.getParameter("item_codigo_pro"));					// Signatura
-			//#351cambio info por dir electrónica
+			//#351 cambio info por dir electronica
 			//procediment.setInfo(request.getParameter("item_notes"));							// Info
-			procediment.setDirElectronica(request.getParameter("item_notes"));					// Adreça elec.
+			procediment.setDirElectronica(request.getParameter("item_notes"));
 			procediment.setTaxa("on".equalsIgnoreCase(request.getParameter("item_taxa")) ? "1" : "0");							// Taxa
 			procediment.setIndicador(Long.parseLong(request.getParameter("item_fi_vida_administrativa")) == 1 ? "1" : "0");	// Indicador
 			procediment.setVentanillaUnica("on".equalsIgnoreCase(request.getParameter("item_finestreta_unica")) ? "1" : "0");	// Ventanilla Única
@@ -642,18 +629,12 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 					// Comprobar que haya al menos un trámite de inicio y comprobar si hay más de un trámite de inicio.
 					boolean hayTramiteDeIniciacion = false;
 					int numTramitesIniciacion = 0;
-					boolean hayTramiteSinModelo = false;
 					
 					for (Long id : listaIdsTramitesParaActualizar) {
 						Tramite tramite = DelegateUtil.getTramiteDelegate().obtenerTramite(id);
 						if (tramite.getFase() == Tramite.INICIACION) {
 							hayTramiteDeIniciacion = true;
 							numTramitesIniciacion++;
-							//#349 si el tramite de ini no tiene modelo solicitud
-							if(tramite.getFormularios() == null || tramite.getFormularios().size() == 0){
-								hayTramiteSinModelo = true;
-								
-							}
 						}
 					}
 					
@@ -662,10 +643,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 					
 					if (numTramitesIniciacion > 1)
 						throw new IllegalStateException("error_mas_de_un_tramite_de_iniciacion");
-					if(hayTramiteSinModelo){
-						error = messageSource.getMessage("error.model_sol_obligatori", null, request.getLocale());
-						return new IdNomDTO(-1l, error);
-					}
 
 				}
 				
@@ -767,8 +744,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		// Mantenemos los valores originales que tiene el procedimiento.
 		procediment.setId(procedimentOld.getId());
 		procediment.setTramites(procedimentOld.getTramites());
-		//#349procediment.setOrganResolutori(procedimentOld.getOrganResolutori());
-		//procediment.setPublicosObjetivo(procedimentOld.getPublicosObjetivo());
+		procediment.setOrganResolutori(procedimentOld.getOrganResolutori());
+		procediment.setPublicosObjetivo(procedimentOld.getPublicosObjetivo());
 		procediment.setMaterias(procedimentOld.getMaterias());
 		procediment.setNormativas(procedimentOld.getNormativas());
 		
@@ -799,9 +776,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				
 			}
 			
-		}else{
-			//#349
-			procediment.setPublicosObjetivo(procedimentOld.getPublicosObjetivo());
 		}
 
 		return procediment;
@@ -829,7 +803,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			tpl.setResumen(RolUtil.limpiaCadena(request.getParameter("item_objecte_" + lang)));
 			tpl.setResultat(RolUtil.limpiaCadena(request.getParameter("item_resultat_" + lang)));
 			tpl.setResolucion(RolUtil.limpiaCadena(request.getParameter("item_resolucio_" + lang)));
-			//El campo notificaci�n queda obsoleto se ha eliminado del back #8 y que no se elimina para permitir compatibilidad entre la version 1.2 y 1.3
+			//El campo notificacion queda obsoleto se ha eliminado del back #8 y que no se elimina para permitir compatibilidad entre la version 1.2 y 1.3
 			tpl.setNotificacion(RolUtil.limpiaCadena(request.getParameter("item_notificacio_" + lang)));
 			tpl.setSilencio(RolUtil.limpiaCadena(request.getParameter("item_silenci_" + lang)));
 			tpl.setObservaciones(RolUtil.limpiaCadena(request.getParameter("item_observacions_" + lang)));
@@ -1291,7 +1265,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	    if (StringUtils.isNotEmpty(request.getParameter("item_resolucio_" + idiomaOrigenTraductor))) {
 	        traduccioOrigen.setResolucion(request.getParameter("item_resolucio_" + idiomaOrigenTraductor));
 	    }
-		//El campo notificaci�n queda obsoleto se ha eliminado del back #8 y que no se elimina para permitir compatibilidad entre la version 1.2 y 1.3
+		//El campo notificacion queda obsoleto se ha eliminado del back #8 y que no se elimina para permitir compatibilidad entre la version 1.2 y 1.3
 	    if (StringUtils.isNotEmpty(request.getParameter("item_notificacio_" + idiomaOrigenTraductor))) {
 	        traduccioOrigen.setNotificacion(request.getParameter("item_notificacio_" + idiomaOrigenTraductor));
 	    }

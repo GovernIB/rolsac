@@ -19,11 +19,6 @@ public class Taxa extends Ordenable {
 		this.tramit = tramit;
 	}
 
-	
-	public IndexObject indexObject() {
-		//TODO u93770 
-		return null;
-    }
 
 
 	@Override

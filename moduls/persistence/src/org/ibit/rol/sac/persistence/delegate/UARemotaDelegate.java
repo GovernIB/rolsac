@@ -16,8 +16,6 @@ import org.ibit.rol.sac.persistence.intf.UARemotaFacade;
 import org.ibit.rol.sac.persistence.intf.UARemotaFacadeHome;
 import org.ibit.rol.sac.persistence.util.UARemotaFacadeUtil;
 
-import es.caib.rolsac.lucene.model.ModelFilterObject;
-
 /**
  * Business delegate para manipular fichas.
  */
@@ -94,13 +92,7 @@ public class UARemotaDelegate implements StatelessDelegate
         }
     }
     
-    public void indexInsertaUARemota(UnidadAdministrativa ua, ModelFilterObject filter) throws DelegateException {
-        try {
-            getFacade().indexInsertaUARemota(ua, filter);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
+ 
     
     public EdificioRemoto obtenerEdificioRemoto(Long idExterno,Long idUaRemota) throws DelegateException {
         try {

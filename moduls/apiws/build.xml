@@ -41,7 +41,7 @@
 
     <path id="web.class.path">
         <fileset dir="${lib.dir}">
-            <include name="servlet-api.jar"/>
+        	<include name="servlet-api.jar"/>
             <include name="commons-logging.jar"/>
         	<include name="hibernate2.jar"/>
         </fileset>
@@ -167,7 +167,9 @@
             <classes dir="${web.classes}"/>
             <classes dir="${web.resources}" includes="*.properties"/>
 
-        	<lib dir="${web.lib}"/>
+        	<lib dir="${web.lib}">
+        		<exclude name="commons-logging.jar" />
+        	</lib>
             	
             <webinf dir="${web.etc}" includes="*.wsdd"/>
             <webinf dir="${web.gen.etc}" includes="*.xml" excludes="web.xml,webinc.xml"/>

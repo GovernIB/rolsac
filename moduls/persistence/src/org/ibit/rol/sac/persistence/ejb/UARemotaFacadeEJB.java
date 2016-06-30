@@ -20,7 +20,6 @@ import org.ibit.rol.sac.model.EdificioRemoto;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.Historico;
 import org.ibit.rol.sac.model.HistoricoUA;
-import org.ibit.rol.sac.model.IndexObject;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.TraduccionMateria;
@@ -34,10 +33,6 @@ import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.util.RemotoUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
-
-import es.caib.rolsac.lucene.model.ModelFilterObject;
-import es.caib.rolsac.lucene.model.TraModelFilterObject;
-import es.caib.rolsac.lucene.model.Catalogo;
 
 /**
  * SessionBean para mantener y consultar Fichas Remotas (PORMAD)
@@ -799,179 +794,6 @@ public abstract class UARemotaFacadeEJB extends HibernateEJB {
 
 		}
 
-	}
-
-
-	/**
-	 * Añade la ua al índice en todos los idiomas.
-	 * 
-	 * @ejb.interface-method
-	 * 
-	 * @ejb.permission unchecked="true"
-	 * 
-	 * @param ua	Indica la unidad administrativa.
-	 * 
-	 * @param filter	Indica <code>ModelFilterObject</code>.
-	 */
-	public void indexInsertaUARemota(UnidadAdministrativa ua,  ModelFilterObject filter)  {
-		
-		try {
-
-			if ( filter == null ) 
-				filter = obtenerFilterObject(ua);
-
-			Iterator iterator = ua.getLangs().iterator();
-			while ( iterator.hasNext() ) {
-				
-				String idi = (String) iterator.next();
-				IndexObject io = new IndexObject();
-
-				io.setId( Catalogo.SRVC_UO + "." + ua.getId() );
-				io.setClasificacion(Catalogo.SRVC_UO);
-
-				io.setMicro( filter.getMicrosite_id() ); 
-				io.setUo( filter.getUo_id() );
-				io.setMateria( filter.getMateria_id() );
-				io.setFamilia( filter.getFamilia_id() );
-				io.setSeccion( filter.getSeccion_id() );
-				io.setCaducidad("");
-				io.setPublicacion(""); 
-				io.setDescripcion("");
-				io.addTextLine( ua.getResponsable() );
-
-				TraduccionUA trad = ( (TraduccionUA) ua.getTraduccion(idi) );
-				if ( trad != null ) {
-
-					io.setUrl( "/govern/organigrama/area.do?coduo=" + ua.getId() + "&lang=" + idi );
-					io.setTituloserviciomain( filter.getTraduccion(idi).getMaintitle() );
-
-
-					if ( trad.getNombre() != null ) {
-						
-						io.setTitulo( trad.getNombre() ); //para dar mas peso al titulo
-						for ( int i = 0 ; i < 5 ; i++ )
-							io.addTextLine( trad.getNombre() );
-						
-					}
-
-					if ( trad.getPresentacion() != null )  {
-						
-						if ( trad.getPresentacion().length() > 200 ) {
-							
-							io.setDescripcion( trad.getPresentacion().substring(0,199) + "..." );
-							
-						} else {
-							
-							io.setDescripcion( trad.getPresentacion() );
-							
-						}
-						
-					}
-
-					io.addTextopcionalLine( filter.getTraduccion(idi).getMateria_text() );
-					io.addTextopcionalLine( filter.getTraduccion(idi).getSeccion_text() );
-					io.addTextopcionalLine( filter.getTraduccion(idi).getUo_text() );
-
-				}
-
-				if ( io.getText().length() > 0 ){}
-//					DelegateUtil.getIndexerDelegate().insertaObjeto( io, idi );
-				
-			}
-			
-		} catch (Exception ex) {
-			
-			log.warn( "[indexInsertaUA:" + ua.getId() + "] No se ha podido indexar UA. " + ex.getMessage() );
-			
-		}
-
-	}
-
-
-	/**
-	 * Método que obtiene un bean con el filtro para la indexación.
-	 * 
-	 * @param ua	Indica la unidad administrativa.
-	 * 
-	 * @return Devuelve <code>ModelFilterObject</code>
-	 */
-	private ModelFilterObject obtenerFilterObject(UnidadAdministrativa ua) {
-		
-		ModelFilterObject filter = new ModelFilterObject();
-
-		//de momento, familia y microsites a null
-		filter.setFamilia_id(null);    	
-		filter.setMicrosite_id(null);
-		filter.setSeccion_id(null);
-
-		Iterator iterlang = ua.getLangs().iterator();
-		while ( iterlang.hasNext() ) {
-
-			String idioma = (String) iterlang.next();
-			String txids = Catalogo.KEY_SEPARADOR;
-			String txtexto = " ";//espacio en blanco, que es para tokenizar
-			Iterator iter;
-
-			TraModelFilterObject trafilter = new TraModelFilterObject();
-
-			//titulo		
-			trafilter.setMaintitle( ( (TraduccionUA) ua.getTraduccion(idioma) ).getNombre() );
-
-			txids = Catalogo.KEY_SEPARADOR;
-			txtexto = " ";
-			txids += ua.getId() + Catalogo.KEY_SEPARADOR;
-			txtexto += ( (TraduccionUA) ua.getTraduccion(idioma) ).getNombre() + " ";
-			txtexto += ( (TraduccionUA) ua.getTraduccion(idioma) ).getAbreviatura() + " ";
-			txtexto += ( (TraduccionUA) ua.getTraduccion(idioma) ).getPresentacion() + " ";
-
-			//OBTENER DIRECCIONES
-			if ( ua.getEdificios() != null ) {
-				
-				iter = ua.getEdificios().iterator();
-				while ( iter.hasNext() ) {
-					
-					Edificio edificio = (Edificio) iter.next();
-					txtexto += edificio.getDireccion() + " ";
-					txtexto += edificio.getTelefono() + " ";
-					
-				}
-				
-			}
-			
-			filter.setUo_id( ( txids.length() == 1 ) ? null : txids );
-			trafilter.setUo_text( ( txtexto.length() == 1 ) ? null : txtexto );
-			
-			//OBTENER LAS MATERIAS (además de las materias se ponen los textos de los HECHOS VITALES)
-			if ( ua.getUnidadesMaterias() != null ) {
-				
-				txids = Catalogo.KEY_SEPARADOR;
-				txtexto = " ";
-				iter = ua.getUnidadesMaterias().iterator();
-				while ( iter.hasNext() ) {
-					UnidadMateria uamat = (UnidadMateria) iter.next();
-
-					txids += uamat.getMateria().getId() + Catalogo.KEY_SEPARADOR; 
-					if ( uamat.getMateria().getTraduccion(idioma) != null ) {
-						
-						txtexto += ( (TraduccionMateria) uamat.getMateria().getTraduccion(idioma) ).getNombre() + " ";
-						txtexto+=( (TraduccionMateria) uamat.getMateria().getTraduccion(idioma) ).getDescripcion() + " ";
-						txtexto+=( (TraduccionMateria) uamat.getMateria().getTraduccion(idioma) ).getPalabrasclave() + " ";
-						
-					}
-
-				}
-				
-				filter.setMateria_id( ( txids.length() == 1 ) ? null : txids );
-				trafilter.setMateria_text( ( txtexto.length() == 1 ) ? null : txtexto );
-				
-			}
-
-			filter.addTraduccion(idioma, trafilter);
-
-		}
-		
-		return filter;
-		
 	}
 
 	

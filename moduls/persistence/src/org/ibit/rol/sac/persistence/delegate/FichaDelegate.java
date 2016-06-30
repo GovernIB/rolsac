@@ -9,10 +9,13 @@ import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
+import org.ibit.rol.sac.model.SolrPendiente;
+import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 
-import es.caib.rolsac.lucene.model.ModelFilterObject;
 import es.caib.rolsac.utils.ResultadoBusqueda;
+import es.caib.solr.api.SolrIndexer;
+import es.caib.solr.api.model.types.EnumCategoria;
 
 /**
  * Business delegate para manipular fichas.
@@ -106,21 +109,7 @@ public class FichaDelegate implements FichaDelegateI {
 		impl.borrarFichaUA(id);
 	}
 	
-	
-	public void indexInsertaFicha(Ficha fic, ModelFilterObject filter)
-			throws DelegateException {
-		impl.indexInsertaFicha(fic, filter);
-	}
 
-	
-	public void indexBorraFicha(Long id) throws DelegateException {
-		impl.indexBorraFicha(id);
-	}
-	
-	public ModelFilterObject obtenerFilterObject(Ficha ficha)
-			throws DelegateException {
-		return impl.obtenerFilterObject(ficha);
-	}
 
 	
 	public Hashtable getContenidos_web() throws DelegateException {
@@ -164,5 +153,24 @@ public class FichaDelegate implements FichaDelegateI {
 	public void actualizaEnlacesFicha(Long id, List<Enlace> enlacesNuevos, List<Enlace> enlacesAEliminar) throws DelegateException {
 		impl.actualizaEnlacesFicha(id, enlacesNuevos, enlacesAEliminar);
 	}
+
+	public SolrPendienteResultado indexarSolr(SolrIndexer solrIndexer, SolrPendiente solrPendiente) throws DelegateException {
+    	return impl.indexarSolr(solrIndexer, solrPendiente);        
+    }
+    
+	public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final Long idElemento, final EnumCategoria categoria) throws DelegateException {
+		return impl.indexarSolr(solrIndexer, idElemento, categoria);        
+	}
 	
+    public SolrPendienteResultado desindexarSolr(SolrIndexer solrIndexer, SolrPendiente solrPendiente) throws DelegateException {
+    	return impl.desindexarSolr(solrIndexer, solrPendiente);    
+    }
+
+
+	public List<Long> buscarIdsFichas() throws DelegateException {
+		return impl.buscarIdsFichas();
+	}
+    
+    
+
 }

@@ -24,7 +24,7 @@
         <property name="tramite" column="PRO_TRAMIT"/>
         <property name="version" column="PRO_VERSIO"/>
         <!-- Nuevo campo INFO para informadores -->  
-        <!-- #351cambio info por dir electrónica -->
+        <!-- #351cambio info por dir electronica -->
         <property name="dirElectronica" column="PRO_INFO" length="4000"/>      
         <property name="url" length="1024" column="PRO_URLEXT"/>
         <property name="orden" length="1024" column="PRO_ORDCON"/>
@@ -38,7 +38,7 @@
         <many-to-one name="unidadAdministrativa" column="PRO_CODUNA" foreign-key="RSC_PROUNA_FK"/>
         <many-to-one name="familia" column="PRO_CODFAM" foreign-key="RSC_PROFAM_FK"/>
 	    <many-to-one  class="org.ibit.rol.sac.model.Iniciacion" name="iniciacion"  column="PRO_CODINI" foreign-key="RSC_PROINI_FK"/>
-	    <many-to-one name="servicioResponsable" column="PRO_CODUNA_SERV" foreign-key="RSC_PRO_CODUNA_SERV_FK"/>
+        <many-to-one name="servicioResponsable" column="PRO_CODUNA_SERV" foreign-key="RSC_PRO_CODUNA_SERV_FK"/>
         
         <set name="normativas" cascade="none" table="RSC_PRONOR" lazy="true">
             <cache usage="read-write"/>

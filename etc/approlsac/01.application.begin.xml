@@ -5,3 +5,29 @@
 <application>
 	<display-name>ROLSAC</display-name>
   	<description/>
+  		<module><java>commons-codec-1.5.jar</java></module>
+  		<module><java>commons-discovery-0.5.jar</java></module>
+		<module><java>ehcache.jar</java></module>
+		<module><java>commons-lang-2.1.jar</java></module>
+		<module><java>commons-fileupload-1.2.2.jar</java></module>
+		<module><java>jfreechart-1.0.14.jar</java></module>
+		<module><java>jcommon-1.0.0.jar</java></module>		
+		<module><java>jfreechart-1.0.14.jar</java></module>
+		<module><java>jcommon-1.0.0.jar</java></module>
+		<module><java>quartz-2.1.7.jar</java></module>
+		<module><java>slf4j-api-1.6.4.jar</java></module>
+		<module><java>slf4j-log4j12-1.6.4.jar</java></module>
+		
+		
+		<!-- SOLRJ -->
+		<module><java>commons-io-2.4.jar</java></module>
+		<module><java>noggit-0.6.jar</java></module>
+		<module><java>stax2-api-3.1.4.jar</java></module>
+		<module><java>zookeeper-3.4.6.jar</java></module>
+		<module><java>httpcore-4.4.1.jar</java></module>
+		<module><java>httpmime-4.4.1.jar</java></module>
+		<module><java>httpclient-4.4.1.jar</java></module>
+		<module><java>solr-solrj-5.5.1.jar</java></module>
+		<module><java>solrapi.jar</java></module>
+	
+	

@@ -28,22 +28,7 @@ import java.util.Iterator;
         this.orden = orden;
     }
 
-    
-    
-    public IndexObject indexObject() {
-        final IndexObject io = new IndexObject();
-    //    io.setId(id);
-    //    io.setClassName(Documento.class.getName());
-        for (Iterator iterator = getTraducciones().values().iterator(); iterator.hasNext();) {
-            TraduccionElementOrdenat tr = (TraduccionElementOrdenat) iterator.next();
-            if (tr != null) {
-                io.addTextLine(tr.getTitulo());
-                io.addTextLine(tr.getDescripcion());
-            }
-        }
 
-        return io;
-    } 
 
     @Override
     public boolean equals(Object obj) {

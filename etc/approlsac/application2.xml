@@ -5,8 +5,8 @@
 <application>
 	<display-name>ROLSAC</display-name>
   	<description/>
-
-	     	<module><java>extractor.jar</java></module>
+			<module><java>solrapi.jar</java></module>
+    		<module><java>extractor.jar</java></module>
     		<module><java>model.jar</java></module>
     		
     		<module>

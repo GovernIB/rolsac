@@ -12,6 +12,8 @@ import javax.ejb.Handle;
 import javax.naming.NamingException;
 
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.SolrPendiente;
+import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Validable;
 import org.ibit.rol.sac.model.Validacion;
@@ -20,9 +22,9 @@ import org.ibit.rol.sac.persistence.intf.ProcedimientoFacade;
 import org.ibit.rol.sac.persistence.intf.ProcedimientoFacadeHome;
 import org.ibit.rol.sac.persistence.util.ProcedimientoFacadeUtil;
 
-import es.caib.rolsac.lucene.model.ModelFilterObject;
 import es.caib.rolsac.utils.ResultadoBusqueda;
-
+import es.caib.solr.api.SolrIndexer;
+import es.caib.solr.api.model.types.EnumCategoria;
 /**
  * Business delegate para manipular procedimientos.
  */
@@ -120,16 +122,6 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
         }
     }
     
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#buscarProcedimientosTexto(java.lang.String)
-	 */
-    public List buscarProcedimientosTexto(String texto) throws DelegateException {
-        try {
-            return getFacade().buscarProcedimientosTexto(texto);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
 
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#anyadirTramite(java.lang.Long, java.lang.Long)
@@ -261,39 +253,7 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
             throw new DelegateException(e);
         }
     }
-    
-	/* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#obtenerFilterObject(org.ibit.rol.sac.model.ProcedimientoLocal)
-	 */
-	public ModelFilterObject obtenerFilterObject(ProcedimientoLocal proc) throws DelegateException {   
-		try {
-            return getFacade().obtenerFilterObject( proc );
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#indexInsertaProcedimiento(org.ibit.rol.sac.model.ProcedimientoLocal, es.caib.rolsac.lucene.model.ModelFilterObject)
-	 */
-    public void indexInsertaProcedimiento(ProcedimientoLocal proc, ModelFilterObject filter) throws DelegateException {
-        try {
-            getFacade().indexInsertaProcedimiento(proc, filter);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#indexBorraProcedimiento(org.ibit.rol.sac.model.ProcedimientoLocal)
-	 */
-    public void indexBorraProcedimiento(ProcedimientoLocal pro) throws DelegateException {
-        try {
-            getFacade().indexBorraProcedimiento(pro);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
+
     
     public void actualizarOrdenTramites(ArrayList<Long> tramitesId) throws DelegateException {
     	try {
@@ -357,6 +317,30 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
         }
 	}
     
+    public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente) throws DelegateException {
+    	try {
+            return getFacade().indexarSolr(solrIndexer, solrPendiente);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final Long idElemento, final EnumCategoria categoria) throws DelegateException {
+    	try {
+            return getFacade().indexarSolr(solrIndexer, idElemento, categoria);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    public SolrPendienteResultado desindexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente) throws DelegateException {
+    	try {
+            return getFacade().desindexarSolr(solrIndexer, solrPendiente);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
@@ -380,5 +364,13 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
             throw new DelegateException(e);
         }
     }
+
+	public List<Long> buscarIdsProcedimientos() throws DelegateException {
+		try {
+            return getFacade().buscarIdsProcedimientos();
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+	}
     
 }

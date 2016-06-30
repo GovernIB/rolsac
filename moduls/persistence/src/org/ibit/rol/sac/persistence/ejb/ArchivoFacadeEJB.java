@@ -10,6 +10,7 @@ import net.sf.hibernate.Session;
 
 import org.ibit.rol.sac.model.Archivo;
 
+
 /**
  * SessionBean para obtener archivos.
  *
@@ -106,4 +107,6 @@ public abstract class ArchivoFacadeEJB extends HibernateEJB {
 
 	}  
 
+	
+	
 }

@@ -39,9 +39,8 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
     private Iniciacion iniciacion;
     private String indicador;
     private String ventanillaUnica;
-    
     //#351 se cambia info por dirElectronica
-//    private String info;
+	//private String info;
     private String responsable;
     private Set<HechoVitalProcedimiento> hechosVitalesProcedimientos;
     private Set<PublicoObjetivo> publicosObjetivo;
@@ -49,7 +48,7 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
     private UnidadAdministrativa organResolutori;
     private UnidadAdministrativa servicioResponsable;
     private String dirElectronica;
-    
+	
     //---------------------------------------------
     //Campos especiales para optimizar la búsqueda
     private String nombreProcedimiento;
@@ -164,15 +163,7 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
             d.setOrden(i);
         }
     }
-  //#351 se cambia info por dirElectronica
-//    public String getInfo() {
-//        return info;
-//    }
-//
-//    public void setInfo(String info) {
-//        this.info = info;
-//    }
-
+    
     public Set<Normativa> getNormativas() {
         return normativas;
     }
@@ -255,29 +246,6 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
     }
 
     
-    public IndexObject indexObject() {
-        final IndexObject io = new IndexObject();
-        // io.setId(getId());
-        // io.setClassName(ProcedimientoLocal.class.getName());
-        for (Iterator iterator = getTraducciones().values().iterator(); iterator.hasNext();) {
-            TraduccionProcedimientoLocal tr = (TraduccionProcedimientoLocal) iterator.next();
-            if (tr != null) {
-                io.addTextLine(tr.getDestinatarios());
-                io.addTextLine(tr.getLugar());
-                io.addTextLine(tr.getNombre());
-                io.addTextLine(tr.getObservaciones());
-                io.addTextLine(tr.getPlazos());
-                io.addTextLine(tr.getPlazos());
-                io.addTextLine(tr.getResolucion());
-                io.addTextLine(tr.getNotificacion());
-                io.addTextLine(tr.getRecursos());
-                io.addTextLine(tr.getRequisitos());
-                io.addTextLine(tr.getResumen());
-                io.addTextLine(tr.getSilencio());
-            }
-        }
-        return io;
-    }
 
     public ProcedimientoRemotoAntiguo crearRemoto() {
         ProcedimientoRemotoAntiguo remoto = new ProcedimientoRemotoAntiguo();
@@ -480,7 +448,7 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
 	public void setIdioma(String idioma) {
 		this.idioma = idioma;
 	}
-
+	
 	public UnidadAdministrativa getServicioResponsable() {
 		return servicioResponsable;
 	}
@@ -495,8 +463,6 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
 
 	public void setDirElectronica(String dirElectronica) {
 		this.dirElectronica = dirElectronica;
-	}
-	
-	
+	}	
 	
 }

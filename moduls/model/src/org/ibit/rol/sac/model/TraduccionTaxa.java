@@ -8,11 +8,7 @@ public class TraduccionTaxa implements Traduccion {
 	String descripcio;
 	String codificacio;
 	String formaPagament;
-	
-	public IndexObject indexObject() {
-		//TODO u93770 
-		return null;
-    }
+
 
 	public String getDescripcio() {
 		return descripcio;

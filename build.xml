@@ -31,7 +31,6 @@
         <contains string="${hibernate.dialect}" substring="oracle" casesensitive="false"/>
     </condition>
     
-	
     <!-- se incluyen targets de ant-contrib -->
     <taskdef resource="net/sf/antcontrib/antcontrib.properties">
         <classpath>
@@ -63,8 +62,7 @@
             
             
             ****** Tasques d'actualització de components :
-            
-        	update.lucene     : actualitza el modul lucene de la caib
+                    	
             update.extractor  : actualitza eines de text
             update.model      : actualitza el model de dades
             update.persistence: actualitza la capa de persistencia
@@ -147,8 +145,7 @@
     <!-- ================================================================== -->
     
     <!-- enric@dgtic donat que en els update el inheritall es false, cal pasar rolsac.target explicitament -->
-    <target name="update.XDOCLET" description="Actualiza los módulos que generan clases con XDOCLET.">
-    	<antcall target="update.lucene"/>
+    <target name="update.XDOCLET" description="Actualiza los módulos que generan clases con XDOCLET.">    	
         <antcall target="update.extractor"/>
         <antcall target="update.model"/>
         <antcall target="update.persistence"/>
@@ -165,14 +162,7 @@
         </ant>
     </target>
 
-	<target name="update.lucene" description="Actualizar la libreria interna de la caib para hacer funcionar Lucene">
-		<echo>LUCENE</echo>
-		<ant dir="moduls/lucene" target="main" inheritall="false">
-			<propertyset>
-				<propertyref name="rolsac.target"/>
-			</propertyset>
-		</ant>
-	</target>
+
 
     <target name="update.extractor" description="Actualizar herramientas de texto">
         <echo>EXTRACTOR</echo>
@@ -261,7 +251,6 @@
     <!-- ================================================================== -->
     <target name="doc" depends="prepare" description="Genera la documentación">
 	    <antcall target="doc.utils"/>
-		<antcall target="doc.lucene"/>
 	    <antcall target="doc.extractor"/>
 	    <antcall target="doc.model"/>
 	    <antcall target="doc.persistence"/>
@@ -282,14 +271,6 @@
         </ant>
     </target>
 
-	<target name="doc.lucene" description="Generar documentación de la libreria interna de la caib para hacer funcionar Lucene">
-		<echo>LUCENE</echo>
-		<ant dir="moduls/lucene" target="doc" inheritall="false">
-			<propertyset>
-				<propertyref name="rolsac.target"/>
-			</propertyset>
-		</ant>
-	</target>
 
     <target name="doc.extractor" description="Generar documentación de herramientas de texto">
         <echo>EXTRACTOR</echo>
@@ -395,7 +376,6 @@
         
         <concat destfile="${output.dir}/application.xml" append="true" fixlastline="true">
             <filelist dir="${etc.approlsac}"    files="01.application.begin.xml"/>
-        	<filelist dir="moduls/lucene"       files="appmodule.xml"/>
             <filelist dir="moduls/extractor"    files="appmodule.xml"/>
             <filelist dir="moduls/model"        files="appmodule.xml"/>
             <filelist dir="moduls/integracion"  files="appmodule.xml"/>
@@ -450,8 +430,7 @@
             
             <!-- Incluimos los .war y .jar generados con la aplicacin para rolsac-->
             <fileset dir="${moduls.dir}">
-                <include name="${prefix.modul}-utils.jar" />
-            	<include name="lucene.jar" />
+            	<include name="${prefix.modul}-utils.jar" />            	
                 <include name="extractor.jar" />
                 <include name="model.jar" />
                 <include name="integracion.war" />
@@ -481,11 +460,39 @@
             <fileset dir="${lib}">
                 <include name="hibernate2.jar" />
                 <include name="ehcache.jar" />
+            	<include name="commons-logging.jar" />
+            	<include name="jcl-over-slf4j-1.6.4.jar" />
+            	<include name="slf4j-api-1.6.4.jar" />
+        	 	<include name="slf4j-log4j12-1.6.4.jar" />            	    
             </fileset>
+        	
+        	<fileset dir="${lib}/webcaib">
+        	      	<include name="commons-codec-1.5.jar" />
+        		  	<include name="commons-discovery-0.5.jar" />
+        			<include name="ehcache.jar" />
+        			<include name="commons-lang-2.1.jar" />
+        			<include name="commons-fileupload-1.2.2.jar" />
+        			<include name="jfreechart-1.0.14.jar" />
+        			<include name="jcommon-1.0.0.jar" />
+        			<include name="quartz-2.1.7.jar" />
+        	</fileset>
             
             <zipfileset dir="${lib}/axis-1.4" prefix="lib">
                 <include name="axis.jar" />
             </zipfileset>
+        	
+        	<zipfileset dir="${lib}/solr">
+                <include name="commons-io-2.4.jar" />
+        		<include name="noggit-0.6.jar" />
+	        	<include name="stax2-api-3.1.4.jar" />
+	        	<include name="zookeeper-3.4.6.jar" />
+	        	<include name="httpcore-4.4.1.jar" />
+	        	<include name="httpmime-4.4.1.jar" />
+	        	<include name="httpclient-4.4.1.jar" />
+	        	<include name="solr-solrj-5.5.1.jar" />
+	        	<include name="solrapi.jar" />
+            </zipfileset>
+        	
         </ear>
         
     </target>
@@ -528,8 +535,7 @@
     <!-- ================================================================== -->
     <target name="update.all">
         
-        <antcall target="update.utils"/>
-    	<antcall target="update.lucene"/>
+        <antcall target="update.utils"/>    	
         <antcall target="update.extractor"/>
         <antcall target="update.model"/>
         <antcall target="update.persistence"/>
@@ -579,7 +585,6 @@
             value="
         	   api,
         	   back2,
-        	   lucene,
         	   extractor,
         	   integracion,
         	   model,
@@ -602,13 +607,7 @@
         <property name="back2.sonar.sources" value="src" />
         <property name="back2.sonar.binaries" value="output/back2/classes" />
         <property name="back2.sonar.language" value="java" />
-
-    	<!-- modul lucene -->
-    	<property name="lucene.sonar.projectName" value="caib:rolsac-lucene" />
-    	<property name="lucene.sonar.projectBaseDir" value="moduls/lucene" />
-    	<property name="lucene.sonar.sources" value="src" />
-    	<property name="lucene.sonar.binaries" value="output/lucene/classes" />
-    	<property name="lucene.sonar.language" value="java" />
+    	
 
         <!-- modul extractor -->
         <property name="extractor.sonar.projectName" value="caib:rolsac-extractor" />

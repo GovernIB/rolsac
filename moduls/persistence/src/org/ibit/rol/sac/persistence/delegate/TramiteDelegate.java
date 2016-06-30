@@ -4,10 +4,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.ibit.rol.sac.model.DocumentTramit;
+import org.ibit.rol.sac.model.SolrPendiente;
+import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.Taxa;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.persistence.remote.vuds.ActualizacionVudsException;
 import org.ibit.rol.sac.persistence.remote.vuds.ValidateVudsException;
+
+import es.caib.solr.api.SolrIndexer;
+import es.caib.solr.api.model.types.EnumCategoria;
 
 /**
  * Business delegate para manipular Tramites.
@@ -84,5 +89,20 @@ public class TramiteDelegate  {
 	public Taxa obtenirTaxa(Long docId) throws DelegateException {
 		return impl.obtenirTaxa(docId);
 	}
+
+	public SolrPendienteResultado indexarSolr(SolrIndexer solrIndexer, SolrPendiente solrPendiente) throws DelegateException {
+    	return impl.indexarSolr(solrIndexer, solrPendiente);        
+    }
 	
+	public SolrPendienteResultado indexarSolr(SolrIndexer solrIndexer, Long idAplicacion, EnumCategoria categoria) throws DelegateException {
+    	return impl.indexarSolr(solrIndexer, idAplicacion, categoria);        
+    }
+    
+    public SolrPendienteResultado desindexarSolr(SolrIndexer solrIndexer,  SolrPendiente solrPendiente) throws DelegateException {
+    	return impl.desindexarSolr(solrIndexer, solrPendiente);    
+    }
+
+	public List<Long> buscarIdsTramites() throws DelegateException{
+		return impl.buscarIdsTramites();
+	}
 }

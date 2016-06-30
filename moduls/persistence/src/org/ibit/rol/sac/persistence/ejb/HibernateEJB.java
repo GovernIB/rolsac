@@ -44,6 +44,7 @@ import org.ibit.rol.sac.model.HistoricoUA;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.NormativaLocal;
+import org.ibit.rol.sac.model.PerfilGestor;
 import org.ibit.rol.sac.model.Personal;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.Seccion;
@@ -57,7 +58,6 @@ import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.Validable;
 import org.ibit.rol.sac.model.Validacion;
-import org.ibit.rol.sac.model.PerfilGestor;
 
 import es.caib.rolsac.persistence.hibernate.HibernateLocator;
 import es.caib.rolsac.persistence.hibernate.SessionInterceptor;

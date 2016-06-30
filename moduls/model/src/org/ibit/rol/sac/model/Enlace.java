@@ -39,24 +39,4 @@ public class Enlace extends Traducible {
 	public void setOrden(long orden) {
 		this.orden = orden;
 	}
-
-
-	public IndexObject indexObject() {
-        final IndexObject io = new IndexObject();
-    //    io.setId(id);
-    //    io.setClassName(Documento.class.getName());
-    //      io.addArchivo(archivo);
-        /*
-        for (Iterator iterator = getTraducciones().values().iterator(); iterator.hasNext();) {
-            TraduccionDocumento tr = (TraduccionDocumento) iterator.next();
-            if (tr != null) {
-                io.addTextLine(tr.getTitulo());
-                io.addTextLine(tr.getDescripcion());
-                io.addArchivo(tr.getArchivo());
-            }
-        }
-        */
-
-        return io;
-    }
 }

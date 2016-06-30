@@ -580,7 +580,7 @@ public class EditorRolsacTest extends WebTestCase {
 	    	
 	    }
 
-	   //OK 22.03.2010 (pero da error al indexar)  12.03.2010 
+	   
 	    public void _test12CreaBorraProcediment() {
 	    	String procedimentName="prova test "+new Date();
 	    	int before=busquedaProcediments().size();

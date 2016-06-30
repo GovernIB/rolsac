@@ -6,11 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.SolrPendiente;
+import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.criteria.BuscadorProcedimientoCriteria;
 
-import es.caib.rolsac.lucene.model.ModelFilterObject;
 import es.caib.rolsac.utils.ResultadoBusqueda;
+import es.caib.solr.api.SolrIndexer;
+import es.caib.solr.api.model.types.EnumCategoria;
 
 public interface ProcedimientoDelegateI {
 
@@ -36,9 +39,6 @@ public interface ProcedimientoDelegateI {
 			throws DelegateException;
 
 	public abstract List buscarProcedimientosMateria(Long id)
-			throws DelegateException;
-
-	public abstract List buscarProcedimientosTexto(String texto)
 			throws DelegateException;
 
 	public ResultadoBusqueda buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu, String pagina, String resultats, int visible, String en_plazo, String telematico)
@@ -76,15 +76,6 @@ public interface ProcedimientoDelegateI {
 	public abstract ProcedimientoLocal consultarProcedimiento(Long id)
 			throws DelegateException;
 
-	public abstract ModelFilterObject obtenerFilterObject(ProcedimientoLocal proc)
-			throws DelegateException;
-
-	public abstract void indexInsertaProcedimiento(ProcedimientoLocal proc, ModelFilterObject filter)
-			throws DelegateException;
-
-	public abstract void indexBorraProcedimiento(ProcedimientoLocal pro)
-			throws DelegateException;
-
 	public void actualizarOrdenTramites(ArrayList<Long> tramites)
 			throws DelegateException;
 
@@ -104,5 +95,13 @@ public interface ProcedimientoDelegateI {
 
 	public ResultadoBusqueda buscadorProcedimientos(BuscadorProcedimientoCriteria bc)
 			throws DelegateException;
+
+	public abstract SolrPendienteResultado indexarSolr(SolrIndexer solrIndexer, SolrPendiente solrPendiente) throws DelegateException;
+        
+	public abstract SolrPendienteResultado indexarSolr(SolrIndexer solrIndexer, Long idElemento, EnumCategoria categoria) throws DelegateException;
+	
+    public abstract SolrPendienteResultado desindexarSolr(SolrIndexer solrIndexer, SolrPendiente solrPendiente) throws DelegateException;
+
+	public abstract List<Long> buscarIdsProcedimientos() throws DelegateException;
 
 }

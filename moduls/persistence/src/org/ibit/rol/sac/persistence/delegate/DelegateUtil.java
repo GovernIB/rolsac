@@ -127,7 +127,10 @@ public final class DelegateUtil {
     }
 
     public static DocumentoDelegate getDocumentoDelegate(){
-        return (DocumentoDelegate) DelegateFactory.getDelegate(DocumentoDelegate.class);
+    	DocumentoDelegateI impl= (DocumentoDelegateImpl) DelegateFactory.getDelegate(DocumentoDelegateImpl.class);
+    	DocumentoDelegate del = new DocumentoDelegate();
+      	del.setImpl(impl);
+      	return del;
     }
     
     public static DocumentoResumenDelegate getDocumentoResumenDelegate(){
@@ -144,10 +147,7 @@ public final class DelegateUtil {
     public static AuditoriaDelegate getAuditoriaDelegate(){
         return (AuditoriaDelegate) DelegateFactory.getDelegate(AuditoriaDelegate.class);
     }
-
-    public static IndexerDelegate getIndexerDelegate() {
-        return (IndexerDelegate) DelegateFactory.getDelegate(IndexerDelegate.class);
-    }
+ 
 
     public static EstadisticaDelegate getEstadisticaDelegate() {
         return (EstadisticaDelegate) DelegateFactory.getDelegate(EstadisticaDelegate.class);
@@ -230,4 +230,18 @@ public final class DelegateUtil {
     public static ModelsComunsDelegate geModelsComunsDelegate() {
         return (ModelsComunsDelegate) DelegateFactory.getDelegate(ModelsComunsDelegate.class);
       }
+    
+    public static SolrPendienteDelegate getSolrPendienteDelegate() {
+    	SolrPendienteDelegateI impl = (SolrPendienteDelegateImpl) DelegateFactory.getDelegate(SolrPendienteDelegateImpl.class);
+    	SolrPendienteDelegate del = new SolrPendienteDelegate();
+        del.setImpl(impl);
+        return del;
+    }
+    
+    public static SolrPendienteJobDelegate getSolrPendienteJobDelegate() {
+    	SolrPendienteJobDelegateI impl = (SolrPendienteJobDelegateImpl) DelegateFactory.getDelegate(SolrPendienteJobDelegateImpl.class);
+    	SolrPendienteJobDelegate del = new SolrPendienteJobDelegate();
+        del.setImpl(impl);
+        return del;
+    }
 }

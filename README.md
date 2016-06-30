@@ -15,7 +15,6 @@ Per tal motiu, defineix un conjunt de punts de connexió amb gestors de contingu
 * Suport de contingut multiadministratiu.
 * Facilitat d'integració amb gestors de continguts externs.
 * Integració amb el portal EUGO.
-* Indexació de continguts mitjançant Lucene.
 * Possibilitat d'integració amb plataformes de traducció automàtica de continguts.
 * Suport multiidioma.
 * Estadístiques d'ús i auditories accés.

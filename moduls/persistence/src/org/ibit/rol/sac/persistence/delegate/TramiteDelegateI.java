@@ -4,9 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.ibit.rol.sac.model.DocumentTramit;
+import org.ibit.rol.sac.model.SolrPendiente;
+import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.Taxa;
 import org.ibit.rol.sac.model.Tramite;
 
+import es.caib.solr.api.SolrIndexer;
+import es.caib.solr.api.model.types.EnumCategoria;
 
 public interface TramiteDelegateI {
 
@@ -43,5 +47,13 @@ public interface TramiteDelegateI {
 	public abstract boolean autorizaCrearTramite(Long idProcedimiento) throws DelegateException;
 
 	public abstract boolean autorizaModificarTramite(Long idTramite) throws DelegateException;
+
+	public abstract SolrPendienteResultado indexarSolr(SolrIndexer solrIndexer, SolrPendiente solrPendiente) throws DelegateException;
+        
+	public abstract SolrPendienteResultado indexarSolr(SolrIndexer solrIndexer, Long idAplicacion, EnumCategoria categoria) throws DelegateException;
+	
+    public abstract SolrPendienteResultado desindexarSolr(SolrIndexer solrIndexer, SolrPendiente solrPendiente) throws DelegateException;
+
+	public abstract List<Long> buscarIdsTramites() throws DelegateException;
 
 }

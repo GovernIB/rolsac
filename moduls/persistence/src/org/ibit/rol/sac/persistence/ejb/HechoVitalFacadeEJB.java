@@ -26,8 +26,12 @@ import org.ibit.rol.sac.model.HechoVitalAgrupacionHV;
 import org.ibit.rol.sac.model.HechoVitalProcedimiento;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionHechoVital;
+import org.ibit.rol.sac.persistence.delegate.DelegateException;
+import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegate;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
+import es.caib.solr.api.model.types.EnumCategoria;
 
 /**
  * SessionBean para mantener y consultar Hechos Vitales.
@@ -92,6 +96,8 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
 			session.saveOrUpdate(hechoVital);
 			session.flush();
 
+			generarSolrPendiente(hechoVital.getId());
+			
 			return hechoVital.getId();
 
 		} catch (HibernateException he) {
@@ -510,8 +516,11 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
 				
 			}
 
+			generarSolrPendiente(hechoVital.getId());
+			
 			session.delete(hechoVital);
 			session.flush();
+			
 			
 		} catch (HibernateException he) {
 			
@@ -924,4 +933,44 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
 
 	}
 
+	/**
+	 * Método que busca todos los elementos que se relacionana con el hecho vital y les marca la accion.
+	 * @param idHechoVital
+	 */
+	private void generarSolrPendiente(final Long idHechoVital) {
+
+		//Primero las fichas que se relacionan con el hechovital.
+		final Session session = getSession();
+		//La acción es indexar (porque habrá que actualizar la información)
+		final Long accion = 1l;
+		try {
+			SolrPendienteDelegate solrPendienteDelegate = DelegateUtil.getSolrPendienteDelegate();
+			//Primero busca las fichas relacionadas.
+			StringBuilder consulta = new StringBuilder("select ficha.id from Ficha ficha left join ficha.hechosVitales hv where hv.id = " + idHechoVital);
+			Query query = session.createQuery( consulta.toString() );
+			query.setCacheable(true);  
+			final List<Long> idFichas =  castList(Long.class,query.list());
+			for(Long idFicha : idFichas) {
+				solrPendienteDelegate.grabarSolrPendiente(EnumCategoria.ROLSAC_FICHA.toString(), idFicha, accion);
+			}
+			
+			/* Con el ultimo cambio, esto sobra..
+			//Luego los procedimientos
+			consulta = new StringBuilder("select proc.id from ProcedimientoLocal proc left join proc.hechosVitalesProcedimientos hvp left join hvp.hechoVital hv where hv.id = " + idHechoVital);
+			query = session.createQuery( consulta.toString() );
+			query.setCacheable(true);
+			final List<Long> idProcedimientos =  castList(Long.class, query.list());
+			for(Long idProcedimiento : idProcedimientos) {
+				solrPendienteDelegate.grabarSolrPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO.toString(), idProcedimiento, accion);
+			}**/
+			
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} catch (DelegateException e) {
+			throw new EJBException(e);
+		} finally {
+			close(session);
+		}
+
+	}
 }

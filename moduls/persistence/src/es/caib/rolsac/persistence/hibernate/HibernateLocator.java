@@ -3,13 +3,13 @@ package es.caib.rolsac.persistence.hibernate;
 import java.net.URL;
 
 import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.SessionFactory;
 import net.sf.hibernate.Interceptor;
+import net.sf.hibernate.SessionFactory;
 import net.sf.hibernate.cfg.Configuration;
 import net.sf.hibernate.cfg.Environment;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.ibit.rol.sac.persistence.search.IndexerInterceptor;
 
 /**
  * TODO: Corregir double checked locking
@@ -31,7 +31,8 @@ public class HibernateLocator {
     	
     	globalInterceptor =  new ChainedInterceptor(
     								new Interceptor[] {
-    											new IndexerInterceptor()} );
+    										
+    								} );
     	
         sf = initSessionFactory();
     }

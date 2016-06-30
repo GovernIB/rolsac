@@ -2,11 +2,12 @@ package org.ibit.rol.sac.persistence.ejb;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -17,7 +18,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -32,10 +32,6 @@ import net.sf.hibernate.expression.Expression;
 import net.sf.hibernate.expression.Order;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriter.MaxFieldLength;
-import org.apache.lucene.store.Directory;
 import org.ibit.rol.sac.model.AdministracionRemota;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Auditoria;
@@ -46,15 +42,15 @@ import org.ibit.rol.sac.model.FichaRemota;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.HistoricoFicha;
-import org.ibit.rol.sac.model.IndexObject;
 import org.ibit.rol.sac.model.Materia;
+import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.Remoto;
 import org.ibit.rol.sac.model.Seccion;
-import org.ibit.rol.sac.model.TraduccionDocumento;
+import org.ibit.rol.sac.model.SolrPendiente;
+import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.TraduccionFicha;
 import org.ibit.rol.sac.model.TraduccionHechoVital;
 import org.ibit.rol.sac.model.TraduccionMateria;
-import org.ibit.rol.sac.model.TraduccionSeccion;
 import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Usuario;
@@ -63,21 +59,22 @@ import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
 import org.ibit.rol.sac.persistence.delegate.EnlaceDelegate;
-import org.ibit.rol.sac.persistence.delegate.IndexerDelegate;
+import org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.util.Cadenas;
 import org.ibit.rol.sac.persistence.util.DateUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
-import es.caib.rolsac.lucene.analysis.AlemanAnalyzer;
-import es.caib.rolsac.lucene.analysis.CastellanoAnalyzer;
-import es.caib.rolsac.lucene.analysis.CatalanAnalyzer;
-import es.caib.rolsac.lucene.analysis.InglesAnalyzer;
-import es.caib.rolsac.lucene.model.ModelFilterObject;
-import es.caib.rolsac.lucene.model.TraModelFilterObject;
-import es.caib.rolsac.lucene.model.Catalogo;
 import es.caib.rolsac.utils.ResultadoBusqueda;
+import es.caib.solr.api.SolrFactory;
+import es.caib.solr.api.SolrIndexer;
+import es.caib.solr.api.model.IndexData;
+import es.caib.solr.api.model.MultilangLiteral;
+import es.caib.solr.api.model.PathUO;
+import es.caib.solr.api.model.types.EnumAplicacionId;
+import es.caib.solr.api.model.types.EnumCategoria;
+import es.caib.solr.api.model.types.EnumIdiomas;
 
 /**
  * SessionBean para mantener y consultar Fichas (PORMAD)
@@ -103,12 +100,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
      * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
      */
     protected abstract AccesoManagerLocal getAccesoManager();
-
-    /**
-     * Ubicación del directorio de Lucene a utilizar.
-     * @ejb.env-entry value="${index.crawler.location}"
-     */
-    protected String indexCrawlerLocation;
+  
 
     /**
      * @ejb.create-method
@@ -119,7 +111,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Autoriza la creaci�n de una ficha
+     * Autoriza la creacion de una ficha
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
@@ -129,7 +121,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 
 
     /**
-     * Autoriza la modificaci�n ficha
+     * Autoriza la modificacion ficha
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
@@ -142,10 +134,11 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
      * Crea o actualiza una Ficha
      * @param	ficha	Indica la ficha a guardar
      * @return	Devuelve el identificador de la ficha guardada
+     * @throws Exception 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
-    public Long grabarFicha(Ficha ficha) {
+    public Long grabarFicha(Ficha ficha) throws DelegateException {
 
 		Session session = getSession();
 		try {
@@ -181,7 +174,12 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 		    session.flush();
 		    Ficha fichasend = obtenerFicha(ficha.getId());
 		    Actualizador.actualizar(fichasend);
-
+		    
+		    //SOLR Indexar ficha.
+			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
+		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_FICHA.toString(), ficha.getId(), 1l);
+		 
+		    session.flush();
 		    return ficha.getId();
 
 		} catch (HibernateException e) {
@@ -770,12 +768,13 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
      * Borra una Ficha
      * 
      * @param id	Identificador de la ficha a borrar.
+     * @throws DelegateException 
      * 
      * @ejb.interface-method
      * 
      * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
      */
-    public void borrarFicha(Long id) {
+    public void borrarFicha(Long id) throws DelegateException {
 
     	Session session = getSession();
 
@@ -820,7 +819,12 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 
     		}
 
+    		//SOLR Desindexar ficha.
+			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
+		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_FICHA.toString(), ficha.getId(), 2l);
+		    
     		session.delete(ficha);
+    		
     		session.flush();
 
     	} catch (HibernateException he) {
@@ -995,10 +999,11 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
      *  @param	idSeccion	Identificador de una sección
      *  @param	idFicha	Identificador de una ficha
      *  @return Devuelve el identificador de la ficha creada
+     * @throws DelegateException 
      * 	@ejb.interface-method
      * 	@ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
-    public Long crearFichaUA2(Long idUA, Long idSeccion, Long idFicha) {
+    public Long crearFichaUA2(Long idUA, Long idSeccion, Long idFicha) throws DelegateException {
 
     	Session session = getSession();
 
@@ -1034,10 +1039,14 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 
     		Ficha fichasend = obtenerFicha(idFicha);
     		Actualizador.actualizar(fichasend);
-    		indexBorraFicha(ficha.getId()) ;
-    		indexInsertaFicha(fichasend, null);
+    		    		
     		session.flush();
 
+    		//SOLR Indexar ficha.
+			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
+		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_FICHA.toString(), ficha.getId(), 1l);
+		    
+		    session.flush();
     		return ficha.getId();
 
     	} catch (HibernateException e) {
@@ -1055,17 +1064,18 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     /**
      * Borrar una ficha de Unidad administrativa
      * @param	id	Identificador de una unidad administrativa
+     * @throws DelegateException 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
-    public void borrarFichaUA(Long id) {
+    public void borrarFichaUA(Long id) throws DelegateException {
 
     	Session session = getSession();
 
     	try {
 
     		if (!getAccesoManager().tieneAccesoFichaUnidad(id)) {
-    			throw new SecurityException("No tiene acceso a la relaci�n");
+    			throw new SecurityException("No tiene acceso a la relacion");
     		}
 
     		FichaUA fichaUA = (FichaUA) session.load(FichaUA.class, id);
@@ -1085,11 +1095,15 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     		session.delete(fichaUA);
     		session.flush();
     		Ficha ficha = obtenerFicha(idFicha);
-    		indexBorraFicha(ficha.getId());
-    		indexInsertaFicha(ficha,null);
 
     		if(borrar)
     			log.debug("Entro en borrar remoto ficha UA");
+    		
+    		//SOLR Indexar ficha.
+			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
+		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_FICHA.toString(), ficha.getId(), 1l);
+		    
+		    session.flush();
     		//Actualizador.borrar(new FichaUATransferible(idUA,idFicha,ceSeccion));
 
     	} catch (HibernateException he) {
@@ -1178,256 +1192,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     }
 
 
-    /**
-     * Metodo que obtiene un bean con el filtro para la indexacion
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true" 
-     */
-    public ModelFilterObject obtenerFilterObject(Ficha ficha) {
-
-    	//TODO: Sería conveniente optimizar este método.
-
-    	ModelFilterObject filter = new ModelFilterObject();
-    	Session session = getSession();
-
-    	try {
-    		//de momento, familia y microsites a null
-    		filter.setFamilia_id(null);    	
-    		filter.setMicrosite_id(null);
-
-    		Iterator iterlang = ficha.getLangs().iterator();
-    		while (iterlang.hasNext()) {
-    			String idioma = (String) iterlang.next();
-    			StringBuilder txids =  new StringBuilder(Catalogo.KEY_SEPARADOR);
-    			StringBuilder txtexto = new StringBuilder(" ");//espacio en blanco, que es para tokenizar
-    			Iterator iter;
-
-    			TraModelFilterObject trafilter = new TraModelFilterObject();
-
-    			//titulo, de momento vacio			
-    			trafilter.setMaintitle(null);
-
-    			//OBTENER LAS UO (en el caso de las fichas hay que recogerlas de la relacion con seccion)
-    			Hashtable hsids = new Hashtable(); //para controlar que no se repitan ids
-    			Hashtable hslistapadres = new Hashtable(); //para controlar que no se repitan llamadas al delegate
-
-    			if (ficha.getFichasua() != null) {
-    				iter = ficha.getFichasua().iterator();
-    				while (iter.hasNext()) {
-    					FichaUA fichaua = (FichaUA) iter.next();
-    					if (!hsids.containsKey("" + fichaua.getUnidadAdministrativa().getId().longValue())) {
-    						txids.append(fichaua.getUnidadAdministrativa().getId());
-    						txids.append(Catalogo.KEY_SEPARADOR);
-
-    						if (((TraduccionUA) fichaua.getUnidadAdministrativa().getTraduccion(idioma) ) != null) {
-    							String nombreUA = ((TraduccionUA) fichaua.getUnidadAdministrativa().getTraduccion(idioma)).getNombre();
-    							// Espacio en blanco, que es para tokenizar
-    							txtexto.append(nombreUA != null ? nombreUA.concat(" ") : " ");
-    						}
-
-    						hsids.put("" + fichaua.getUnidadAdministrativa().getId().longValue(), "" + fichaua.getUnidadAdministrativa().getId().longValue());
-    					}
-
-    					if (!hslistapadres.containsKey( "" + fichaua.getUnidadAdministrativa().getId().longValue())) {
-    						List listapadres = DelegateUtil.getUADelegate().listarPadresUnidadAdministrativa(fichaua.getUnidadAdministrativa().getId());
-    						UnidadAdministrativa ua = null;
-    						for (int x = 1; x < listapadres.size(); x++) {
-    							ua = (UnidadAdministrativa) listapadres.get(x);
-    							if (!hsids.containsKey("" + ua.getId().longValue())) {
-    								txids.append(ua.getId());
-    								txids.append(Catalogo.KEY_SEPARADOR);
-    								if (((TraduccionUA) ua.getTraduccion(idioma)) != null) {
-    									String nombreUA = ((TraduccionUA) ua.getTraduccion(idioma)).getNombre();
-    									// Espacio en blanco, que es para tokenizar
-    									txtexto.append(nombreUA != null ? nombreUA.concat(" ") : " ");
-    								}
-
-    								hsids.put("" + ua.getId().longValue(), "" + ua.getId().longValue());
-    							}
-    						}
-
-    						hslistapadres.put("" + fichaua.getUnidadAdministrativa().getId().longValue(),"" + fichaua.getUnidadAdministrativa().getId().longValue());
-    					}
-    				}
-    			}
-
-    			filter.setUo_id(txids.length() == 1 ? null : txids.toString());
-    			trafilter.setUo_text(txtexto.length() == 1 ? null : txtexto.toString());
-
-    			//OBTENER LAS SECCIONES (en el caso de las fichas hay que recogerlas de la relacion con seccion. Solo ponemos la seccion propia)
-    			txids = new StringBuilder(Catalogo.KEY_SEPARADOR);
-    			txtexto = new StringBuilder(" ");
-
-    			if (ficha.getFichasua() != null) {
-    				iter = ficha.getFichasua().iterator();
-    				boolean primer = true;
-    				while (iter.hasNext()) {
-    					FichaUA fichaua = (FichaUA) iter.next();
-    					txids.append(fichaua.getSeccion().getId());
-    					txids.append(Catalogo.KEY_SEPARADOR);
-    					if (fichaua.getSeccion().getTraduccion(idioma) != null) {
-    						String nombreSeccion = ((TraduccionSeccion) fichaua.getSeccion().getTraduccion(idioma)).getNombre(); 
-    						txtexto.append(nombreSeccion != null ? nombreSeccion.concat(" ") : " ");
-    					}
-
-    					if (primer) {
-    						//como titulo del servicio principal ponemos únicamente la primera seccion que pillamos
-    						String txUA = "";
-    						String txSeccion = "";
-    						String txMaintitle = "";
-
-    						if (fichaua.getSeccion().getTraduccion(idioma) != null) {
-    							if (((TraduccionUA) fichaua.getUnidadAdministrativa().getTraduccion(idioma)) != null) {
-    								String nombreUA = ((TraduccionUA) fichaua.getUnidadAdministrativa().getTraduccion(idioma)).getNombre();
-    								txUA = (nombreUA != null) ? nombreUA.concat(" ") : " ";
-    							}
-
-    							String nombreSeccion = ((TraduccionSeccion) fichaua.getSeccion().getTraduccion(idioma)).getNombre(); 
-    							txSeccion = (nombreSeccion != null) ? nombreSeccion.concat(" ") : " ";
-
-    							if (txUA.length() > 1) {
-    							    txMaintitle = txUA.substring(0, 1).toUpperCase() + txUA.substring(1, txUA.length() - 1).toLowerCase();
-    							}
-
-    							txMaintitle += " / ";
-    							txMaintitle += txSeccion;
-    							trafilter.setMaintitle(txMaintitle);
-
-    						} else if (fichaua.getSeccion().getTraduccion(System.getProperty("es.caib.rolsac.idiomaDefault")) != null) {
-    							if (((TraduccionUA) fichaua.getUnidadAdministrativa().getTraduccion(idioma)) != null) {
-    								String nombreUA = ((TraduccionUA) fichaua.getUnidadAdministrativa().getTraduccion(System.getProperty("es.caib.rolsac.idiomaDefault"))).getNombre(); 
-    								txUA = (nombreUA != null) ? nombreUA.concat(" ") : " ";
-    							}
-
-    							String nombreSeccion = ((TraduccionSeccion) fichaua.getSeccion().getTraduccion(System.getProperty("es.caib.rolsac.idiomaDefault"))).getNombre();
-    							txSeccion = (nombreSeccion != null) ? nombreSeccion.concat(" ") : " ";
-
-    							if (txUA.length() > 1) {
-    							    txMaintitle = txUA.substring(0, 1).toUpperCase() + txUA.substring(1, txUA.length() - 1).toLowerCase();
-    							}
-
-    							txMaintitle += " / ";
-    							txMaintitle += txSeccion;
-    							trafilter.setMaintitle(txMaintitle);
-
-    						} else {
-    							trafilter.setMaintitle("");
-    						}
-
-    						primer = false;
-    					}
-    				}
-    			}
-
-    			filter.setSeccion_id(txids.length() == 1 ? null : txids.toString());
-    			trafilter.setSeccion_text((txtexto.length() == 1) ? null : txtexto.toString());
-
-    			//OBTENER LAS MATERIAS (ademas de las materias se ponen los textos de los HECHOS VITALES)
-    			txids = new StringBuilder(Catalogo.KEY_SEPARADOR);
-    			txtexto = new StringBuilder(" ");
-
-    			if (ficha.getMaterias() != null) {
-    				iter = ficha.getMaterias().iterator();
-    				while (iter.hasNext()) {
-    					Materia materia = (Materia) iter.next();
-    					txids.append(materia.getId());
-    					// Anayadir los ids (los de los hechos vitales no)
-    					txids.append(Catalogo.KEY_SEPARADOR);
-
-    					if (materia.getTraduccion(idioma) != null) {
-    						String nombreMateria = ((TraduccionMateria) materia.getTraduccion(idioma)).getNombre();
-    						String descripcionMateria = ((TraduccionMateria) materia.getTraduccion(idioma)).getDescripcion();
-    						String palabrasClave = ((TraduccionMateria) materia.getTraduccion(idioma)).getPalabrasclave();
-
-    						txtexto.append(nombreMateria != null ? nombreMateria.concat(" ") : " ");
-    						txtexto.append(descripcionMateria != null ? descripcionMateria.concat(" ") : " ");
-    						txtexto.append(palabrasClave != null ? palabrasClave.concat(" ") : " ");
-    					}
-    				}
-    			}
-
-    			if (ficha.getMaterias() != null) {
-    				iter = ficha.getHechosVitales().iterator();
-    				while (iter.hasNext()) {
-    					HechoVital hvital = (HechoVital) iter.next();
-
-    					if (hvital.getTraduccion(idioma) != null) {
-    						String nombreHechoVital = ((TraduccionHechoVital) hvital.getTraduccion(idioma)).getNombre(); 
-    						String descripcionHechoVital = ((TraduccionHechoVital) hvital.getTraduccion(idioma)).getDescripcion();
-    						String palabrasClaveHechoVital = ((TraduccionHechoVital) hvital.getTraduccion(idioma)).getPalabrasclave();
-
-    						txtexto.append(nombreHechoVital != null ? nombreHechoVital.concat(" ") : " ");
-    						txtexto.append(descripcionHechoVital != null ? descripcionHechoVital.concat(" ") : " ");
-    						txtexto.append(palabrasClaveHechoVital != null ? palabrasClaveHechoVital.concat(" ") : " ");
-    					}
-    				}
-    			}
-
-    			filter.setMateria_id(txids.length() == 1 ? null : txids.toString());
-    			trafilter.setMateria_text(txtexto.length() == 1 ? null : txtexto.toString());
-
-    			filter.addTraduccion(idioma, trafilter);
-    		}
-
-    	} catch (DelegateException e) {
-    		throw new EJBException(e);
-    	} finally {
-    		close(session);
-    	}
-
-    	return filter;
-    }
-
-    /**
-     * Añade la ficha al índice en todos los idiomas
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public void indexInsertaFicha(Ficha ficha,  ModelFilterObject filter)  {
-
-    	try {
-    		if (filter == null) {
-    		    filter = obtenerFilterObject(ficha);
-    		}
-
-    		IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
-
-    		// Obtenemos los documentos de la ficha si tiene, para evitar tener que cargarlos en cada idioma
-    		List<Documento> listaDocumentos = obtenerListaDocumentos(ficha);
-
-    		Iterator<String> iterator = ficha.getLangs().iterator();
-    		while (iterator.hasNext()) {
-    			String idi = iterator.next();
-
-    			// Configuración del writer
-    			Directory directory = indexerDelegate.getHibernateDirectory(idi);
-    			IndexWriter writer = new IndexWriter(directory, getAnalizador(idi), false, MaxFieldLength.UNLIMITED);
-    			writer.setMergeFactor(20);
-                writer.setMaxMergeDocs(Integer.MAX_VALUE);
-
-                try {
-                    IndexObject io = new IndexObject();
-                    io = indexarContenidos(ficha, io, filter);
-                    io = indexarTraducciones(idi, ficha, io, filter);
-                    //No se añaden todos los documentos en todos los idiomas. Ahora en el idioma actual.
-                    io = indexarContenidosDocumentos(ficha, idi, writer, io, listaDocumentos);
-                    if (io.getText().length() > 0 || io.getTextopcional().length() > 0) {
-                        indexerDelegate.insertaObjeto(io, idi, writer);
-                    }
-
-                } catch (Exception e) {
-                    log.warn("[indexInsertaFicha:" + ficha.getId() + "] No se ha podido indexar ficha para el idioma: " + idi + ". msg: " + e.getMessage());
-                } finally {
-                    writer.close();
-                    directory.close();
-                }
-    		}
-
-    	} catch (Exception ex) {
-    		log.warn("[indexInsertaFicha:" + ficha.getId() + "] No se ha podido indexar ficha. " + ex.getMessage());
-    	}
-    }
-
+  
+    
     private List<Documento> obtenerListaDocumentos(Ficha ficha) throws DelegateException {
 
         int listaSize = 0;
@@ -1447,292 +1213,6 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     }
 
 
-    private IndexObject indexarContenidos(Ficha ficha, IndexObject io, ModelFilterObject filter) {
-
-        io.setId(Catalogo.SRVC_FICHAS + "." + ficha.getId());
-        io.setClasificacion(Catalogo.SRVC_FICHAS);
-        io.setMicro(filter.getMicrosite_id());
-        io.setDescripcion("");
-
-        if (filter.getUo_id() != null) {
-            io.setUo(filter.getUo_id());
-        }
-
-        if (filter.getMateria_id() != null) {
-            io.setMateria(filter.getMateria_id());
-        }
-
-        if (filter.getFamilia_id() != null) {
-            io.setFamilia(filter.getFamilia_id());
-        }
-
-        if (filter.getSeccion_id() != null) {
-            io.setSeccion(filter.getSeccion_id());
-        }
-
-        io.setCaducidad("");
-        if (ficha.getFechaCaducidad() != null) {
-            io.setCaducidad(new java.text.SimpleDateFormat("yyyyMMdd").format(ficha.getFechaCaducidad()));
-        }
-
-        if (ficha.getFechaPublicacion() != null) {
-            io.setPublicacion(new java.text.SimpleDateFormat("yyyyMMdd").format(ficha.getFechaPublicacion()));
-        } else {
-            io.setPublicacion("");
-        }
-
-        // Se crea la indexación del foro como documento individual y se añade la información para la indexación de la ficha.
-        io.setConforo((ficha.getUrlForo() != null && ficha.getUrlForo().length() > 0) ? "S" : "N");
-
-        return io;
-    }
-
-
-    private IndexObject indexarTraducciones(String idioma, Ficha ficha, IndexObject io, ModelFilterObject filter) throws UnsupportedEncodingException {
-
-        TraduccionFicha trad = ((TraduccionFicha) ficha.getTraduccion(idioma));
-        if (trad != null) {
-            if ((trad.getUrl() != null ) && (trad.getUrl().length() > 0)) {
-                io.setUrl("/govern/estadistica?tipus=F&codi=" + ficha.getId() + "&url=" + java.net.URLEncoder.encode(trad.getUrl(),"UTF-8"));
-            } else {
-                io.setUrl("/govern/sac/fitxa.do?lang=" + idioma + "&codi=" + ficha.getId() + "&coduo=" + obtenerUO_Principal(io.getUo()));
-            }
-
-            io.setTituloserviciomain(filter.getTraduccion(idioma).getMaintitle());
-
-            if (trad.getTitulo() != null && trad.getTitulo().length() > 0) {
-                io.setTitulo(trad.getTitulo());
-                io.addTextLine(trad.getTitulo());
-                if (trad.getDescAbr() != null) {
-                    io.addTextLine(trad.getDescAbr());
-                }
-
-            } else {
-                TraduccionFicha trad_ca = ((TraduccionFicha) ficha.getTraduccion("ca"));
-                if (trad_ca.getTitulo() != null) {
-                    io.setTitulo(trad_ca.getTitulo());
-                }
-            }
-
-            if (trad.getDescripcion() != null) {
-                io.addTextLine(trad.getDescripcion());  
-                io.setDescripcion(trad.getDescripcion());
-            }
-
-            io.addTextopcionalLine(filter.getTraduccion(idioma).getMateria_text());
-            io.addTextopcionalLine(filter.getTraduccion(idioma).getSeccion_text());
-            io.addTextopcionalLine(filter.getTraduccion(idioma).getUo_text());
-        }
-
-        return io;
-    }
-
-
-    private IndexObject indexarContenidosDocumentos(Ficha ficha, String idioma, IndexWriter writer, IndexObject io, List<Documento> listaDocumentos) throws DelegateException {
-
-        if (ficha.getDocumentos() != null) {
-            IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
-
-            Iterator<Documento> iterdocs = listaDocumentos.iterator();
-            while (iterdocs.hasNext()) {
-                Documento documento = iterdocs.next();
-
-                /* Se crea la indexación del documento individual y se añade la información para la indexación de la ficha.*/
-                IndexObject ioDoc = new IndexObject();
-                String textDoc = null;
-                Archivo arch = new Archivo();
-
-                if (documento.getTraduccion(idioma) != null) {
-                    io.addTextLine(((TraduccionDocumento) documento.getTraduccion(idioma)).getTitulo());
-                    io.addTextLine(((TraduccionDocumento) documento.getTraduccion(idioma)).getDescripcion());
-
-                    if (((TraduccionDocumento) documento.getTraduccion(idioma)).getArchivo() != null) {
-                        arch = (Archivo) ((TraduccionDocumento) documento.getTraduccion(idioma)).getArchivo();
-                        ioDoc.addArchivo(arch);
-                    }
-                }
-
-                textDoc = ioDoc.getText();
-
-                if (textDoc != null && textDoc.length() > 0 && arch != null) {
-                    if (documento.getTraduccion(idioma) != null) {
-
-                        ioDoc.setId(Catalogo.SRVC_FICHAS_DOCUMENTOS + "." + documento.getId());
-                        ioDoc.setClasificacion(Catalogo.SRVC_FICHAS + "." + ficha.getId());
-                        ioDoc.setCaducidad("");
-                        ioDoc.setDescripcion("");
-                        ioDoc.setUrl("/fitxer/get?codi=" + arch.getId());
-                        ioDoc.setTituloserviciomain(io.getTitulo());
-                        ioDoc.setDescripcion(((TraduccionDocumento) documento.getTraduccion(idioma)).getDescripcion());
-                        ioDoc.setText(textDoc);
-
-                        ioDoc.addTextLine(((TraduccionDocumento) documento.getTraduccion(idioma)).getDescripcion());
-                        ioDoc.addTextLine(arch.getNombre());
-
-                        if (ficha.getFechaPublicacion() != null) {
-                            ioDoc.setPublicacion(new java.text.SimpleDateFormat("yyyyMMdd").format(ficha.getFechaPublicacion())); 
-                        } else {
-                            ioDoc.setPublicacion("");
-                        }
-
-                        if (((TraduccionDocumento) documento.getTraduccion(idioma)).getTitulo() == null) {
-                            ioDoc.setTitulo(((TraduccionDocumento) documento.getTraduccion("ca") ).getTitulo() + ", (" + arch.getMime().toUpperCase() + ")");
-                        } else {
-                            ioDoc.setTitulo(((TraduccionDocumento) documento.getTraduccion(idioma)).getTitulo() + ", (" + arch.getMime().toUpperCase() +")");
-                        }
-
-                        if (ficha.getFechaCaducidad() != null) {
-                            ioDoc.setCaducidad(new java.text.SimpleDateFormat("yyyyMMdd").format(ficha.getFechaCaducidad()));
-                        }
-
-                        if (io.getUo() != null) {
-                            ioDoc.setUo(io.getUo());
-                        }
-
-                        if (io.getMateria() != null) {
-                            ioDoc.setMateria(io.getMateria());
-                        }
-
-                        if (io.getSeccion() != null) {
-                            ioDoc.setSeccion( io.getSeccion() );
-                        }
-
-                        if (ioDoc.getText().length() > 0 || ioDoc.getTextopcional().length() > 0) {
-                            indexerDelegate.insertaObjeto(ioDoc, idioma, writer);
-                        }
-                    }
-
-                    io.addTextLine(textDoc);
-                }
-            }
-        }
-
-        return io;
-    }
-
-
-    /**
-     * Elimina la ficha en el índice en todos los idiomas
-     * @param id	Identificador de una ficha
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public void indexBorraFicha(Long id)  {
-
-        try {
-            IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
-            List<String> langs = DelegateUtil.getIdiomaDelegate().listarLenguajes();
-            for (String lang : langs) {
-    		    indexerDelegate.borrarObjeto(Catalogo.SRVC_FICHAS + "." + id, "" + lang);
-    		    indexerDelegate.borrarObjetosDependientes(Catalogo.SRVC_FICHAS + "." + id, "" + lang);
-    		}
-
-    	} catch (DelegateException ex) {
-    		log.warn("[indexBorraFicha:" + id + "] No se ha podido borrar del indice la ficha. " + ex.getMessage());
-    	}
-    }
-
-
-    /**
-     * Añade la URL externa para un idioma, obteniendola de la ficha
-     * El id de la URL será el id de la ficha
-     * 
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public void indexInsertaWEB_EXTERNA(Ficha ficha,  ModelFilterObject filter, String idi)  {
-
-    	try {
-    	    if (true) return;
-
-    		IndexObject io = new IndexObject();
-
-    		io.setId( Catalogo.SRVC_WEB_EXTERNA + "." + ficha.getId() );
-    		io.setClasificacion(Catalogo.SRVC_WEB_EXTERNA);
-
-    		io.setMicro( filter.getMicrosite_id() ); 
-    		io.setUo( filter.getUo_id() );
-    		io.setMateria( filter.getMateria_id() );
-    		io.setFamilia( filter.getFamilia_id() );
-    		io.setSeccion( filter.getSeccion_id() );
-    		io.setCaducidad("");
-
-    		if ( ficha.getFechaPublicacion() != null ) 
-    			io.setPublicacion( new java.text.SimpleDateFormat("yyyyMMdd").format( ficha.getFechaPublicacion() ) ); 
-    		else	
-    			io.setPublicacion("");
-
-    		io.setDescripcion("");
-
-    		if ( ficha.getFechaCaducidad() != null ) 
-    			io.setCaducidad( new java.text.SimpleDateFormat("yyyyMMdd").format( ficha.getFechaCaducidad() ) );
-
-    		TraduccionFicha trad = ( (TraduccionFicha) ficha.getTraduccion(idi) );
-
-    		if ( trad != null ) {
-
-    			if ( (trad.getUrl()!=null) && (trad.getUrl().length()>0) ) {
-    				io.setUrl( trad.getUrl() );
-
-    				if ( trad.getTitulo() != null ) {
-
-    					io.setTitulo( trad.getTitulo() );
-    					io.addTextLine( trad.getTitulo() );
-
-    				}
-
-    				if ( trad.getDescAbr() != null )	
-    					io.addTextLine( trad.getDescAbr() );
-
-
-    				if ( trad.getDescripcion() != null )  {
-
-    					io.addTextLine( trad.getDescripcion() );	
-    					io.setDescripcion( trad.getDescripcion() );
-
-    				}
-
-    				io.addTextopcionalLine( filter.getTraduccion(idi).getMateria_text() );
-    				io.addTextopcionalLine( filter.getTraduccion(idi).getSeccion_text() );
-    				io.addTextopcionalLine( filter.getTraduccion(idi).getUo_text() );	
-
-    				getWEB_EXTERNA ( trad.getUrl() );
-    				Object contenido=contenidos_web.get( trad.getUrl() );
-
-    				if ( contenido instanceof Archivo )
-    					io.addArchivo( (Archivo) contenido );
-
-    				if ( io.getText().length() > 0 ){}
-//    					org.ibit.rol.sac.persistence.delegate.DelegateUtil.getIndexerDelegate().insertaObjeto(io, idi);
-
-    			}
-
-    		}
-
-    	} catch (Exception ex) {
-
-    		log.warn( "[indexInsertaWEB_EXTERNA:" + ficha.getId() + "] No se ha podido indexar la WEB_EXTERNA. " + ex.getMessage() );
-
-    	}
-
-    }
-
-
-    /**
-     * Elimina la URL Externa en el índice para un idioma
-     * 
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public void indexBorraWEB_EXTERNA(Ficha ficha, String idi) {
-
-    	try {
-    		DelegateUtil.getIndexerDelegate().borrarObjeto(Catalogo.SRVC_WEB_EXTERNA + "." + ficha.getId(), "" + idi);
-
-    	} catch (DelegateException ex) {
-    		log.warn("[indexBorraWEB_EXTERNA:" + ficha.getId() + "] No se ha podido borrar del indice la WEB_EXTERNA. " + ex.getMessage());
-    	}
-    }
 
 
     private void getWEB_EXTERNA (String url) {
@@ -1799,27 +1279,6 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     }
 
 
-    /** Contienen el listado separado por # de las UO que contienen la ficha
-	Debe devolver la primera de la lista*/
-    private String obtenerUO_Principal(String listaUOs) {
-
-    	if ( listaUOs == null ) 
-    		return "";
-
-    	if ( listaUOs.length() == 0 ) 
-    		return "";
-
-    	StringTokenizer uos = new StringTokenizer(listaUOs, Catalogo.KEY_SEPARADOR);
-    	String primeraUA = "1";
-
-    	if ( uos.hasMoreTokens() )
-    		primeraUA = uos.nextToken();
-
-    	return primeraUA;
-
-    }
-
-
     class FichaUAComparator implements Comparator {
 
     	public int compare(Object o1, Object o2) { 
@@ -1858,23 +1317,6 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 	
     }
 
-
-    private static Analyzer getAnalizador(String idi) {
-
-    	Analyzer analyzer;
-
-    	if (idi.toLowerCase().equals("de")) {
-    		analyzer = new AlemanAnalyzer();
-    	} else if ( idi.toLowerCase().equals("en") ) {
-    		analyzer = new InglesAnalyzer();
-    	} else if ( idi.toLowerCase().equals("ca") ) {
-    		analyzer = new CatalanAnalyzer();
-    	} else {
-    		analyzer = new CastellanoAnalyzer();
-    	}
-
-    	return analyzer;
-    }
 
 
     /**
@@ -2063,7 +1505,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     			query.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
 
     			resultado = (Integer) query.uniqueResult();
-
+    			
     		}
 
     	} catch (HibernateException he) {
@@ -2081,7 +1523,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     }
 
 
-    private void actualizaSeccionesFichaUA( UnidadAdministrativa ua, List<Long> listaBorrar, List<SimpleFichaUA> listaNuevas ) {
+    private void actualizaSeccionesFichaUA( UnidadAdministrativa ua, List<Long> listaBorrar, List<SimpleFichaUA> listaNuevas ) throws DelegateException {
 
     	Session session = null;
 
@@ -2102,8 +1544,15 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     			if ( ua != null ) 
     				ua.removeFichaUA(fichaUA);                
 
+    			//SOLR Indexar ficha.
+    			if (fichaUA.getFicha() != null) {
+    				SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
+        			solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_FICHA.toString(), fichaUA.getFicha().getId(), 1l);
+    			}
+    			
     			session.delete(fichaUA);
 
+    			
     			if (borrar) 
     				log.debug("Entro en borrar remoto ficha UA");
 
@@ -2136,7 +1585,12 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 
     			Ficha fichasend = obtenerFicha( simpleFichaUA.getIdFicha() );
     			Actualizador.actualizar(fichasend);
+    			
+    			//SOLR Indexar ficha.
+    			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
+    		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_FICHA.toString(), ficha.getId(), 1l);
 
+    		    
     		}
 
     		if ( session != null ) {
@@ -2216,10 +1670,11 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 
     /**
      * Borrar varias fichas Unidad administrativa
+     * @throws DelegateException 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
-    public void borrarFichasUAdeFicha(List<FichaUA> fichasUA) {
+    public void borrarFichasUAdeFicha(List<FichaUA> fichasUA) throws DelegateException {
 
     	Session session = getSession();
 
@@ -2247,6 +1702,10 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     		session.delete("from FichaUA as fua where fua.id in (" + ids.toString() + ")");
     		session.flush();
     		for (FichaUA fua : fichasUA) {
+    			//SOLR Indexar ficha.
+    			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
+    		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_FICHA.toString(), fua.getFicha().getId(), 1l);
+    		    
     			session.refresh(fua.getFicha());
     		}
 
@@ -2318,5 +1777,312 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     	}
 
     }
+    
+	/**
+	 * Comprueba si es indexable un procedimiento.
+	 * @return
+	 */
+	private boolean isIndexable(final Ficha ficha) {
+		boolean indexable = true;
+		if (ficha.getValidacion() != 1 ) {
+			indexable = false;
+		}
+		
+		if (ficha.getFechaCaducidad() != null && Calendar.getInstance().getTime().before(ficha.getFechaCaducidad())) {
+			indexable = false;
+		}
+		return indexable;
+	}
+
+
+	
+    /**
+	 * Metodo para indexar un solrPendiente. Según la documentación, se almacena lo siguiente: <br /><br />
+	 * <table style="border: 1px solid black;">
+	 * 	<tr><td>Campo    			</td><td> Valor</td></tr>
+	 * 	<tr><td>Id 					</td><td> FCH + Ficha.id</td></tr>
+	 * 	<tr><td>Categoria			</td><td> FCH</td></tr>
+	 * 	<tr><td>AplicacionId		</td><td> ROLSAC</td></tr>
+	 * 	<tr><td>Titulo				</td><td> Ficha.traduccion.titulo</td></tr>
+	 * 	<tr><td>Descripcion			</td><td> Ficha.traduccion.descripcion</td></tr>
+	 * 	<tr><td>Url					</td><td> Si Ficha.traduccion .url  no es nulo:  "/govern/sac/fitxaRedirect.do?codi="+idFicha+"&lang="+idioma
+	 * 			Si Ficha.traduccion .url  es nulo: 
+	 * 			"/govern/sac/fitxa.do?codi="+ idFicha + "&coduo=" + idUA + "&lang=" + idioma
+	 * 			idUA : se usará placeholder de forma que se establecerá valor por defecto (UA primera sección). A la hora de devolver el resultado se buscará en los campos PathUo si hay algún match con la UA especificada en el filtro. Si hubiese match, se sustituirá placeholder por la UA del filtro. Este tratamiento del placeholder se realizará en el API intermedia, siendo transparente a la aplicación.</td></tr>
+	 * 	<tr><td>PadreCategoria		</td><td> </td></tr>
+	 * 	<tr><td>PadreDescripcion	</td><td> </td></tr>
+	 * 	<tr><td>PadreUrl			</td><td> </td></tr>
+	 * 	<tr><td>FechaActualizacion	</td><td> Ficha.fechaActualizacion</td></tr>
+	 * 	<tr><td>FechaPublicacion	</td><td> Ficha.fechaPublicacion</td></tr>
+	 * 	<tr><td>FechaCaducidad		</td><td> Ficha.fechaCaducidad</td></tr>
+	 * 	<tr><td>FechaPlazoIni		</td><td> </td></tr>
+	 * 	<tr><td>FechaPlazoFin		</td><td> </td></tr>
+	 * 	<tr><td>FotoUrl				</td><td> "/govern/rest/arxiu/" + Ficha.imagen</td></tr>
+	 * 	<tr><td>Extension			</td><td> </td></tr>
+	 * 	<tr><td>PathUo				</td><td> Path Unidades Administrativas de las secciones asociadas  (múltiple)</td></tr>
+	 * 	<tr><td>FamiliaId			</td><td> </td></tr>
+	 * 	<tr><td>MateriaId			</td><td> Id materia asociada (múltiple)</td></tr>
+	 * 	<tr><td>PublicoId			</td><td> Id publico objetivo (múltiple)</td></tr>
+	 * 	<tr><td>Telemático			</td><td> </td></tr>
+	 * 	<tr><td>MicrositeId			</td><td> </td></tr>
+	 * 	<tr><td>Interno				</td><td> </td></tr>
+	 * 	<tr><td>SearchText 			</td><td> Ficha.traduccion.titulo + Ficha.traduccion.descAbr  + Ficha.traduccion.descripcion</td></tr>
+	 * 	<tr><td>SearchTextOptional	</td><td> materias / hechos vitales (nombre, descripción y palabras clave) + uo’s (nombres descendientes)</td></tr>
+	 * </table>
+	 * @param solrPendiente
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente) {
+		return indexarSolr(solrIndexer, solrPendiente.getIdElemento(), EnumCategoria.ROLSAC_FICHA);
+	}
+	
+	/**
+	 * Obtener ficha con lo mínimo imprescindible para solr.
+	 * @param id
+	 * @return
+	 */
+	private Ficha obtenerFichaParaSOLR(Long id) {
+
+		Session session = getSession();
+		Ficha ficha = null;
+		try {
+		    ficha = (Ficha) session.get(Ficha.class, id);
+		    if (ficha != null) {
+				Hibernate.initialize(ficha.getMaterias());
+				Hibernate.initialize(ficha.getHechosVitales());
+				Hibernate.initialize(ficha.getPublicosObjetivo());
+				Hibernate.initialize(ficha.getFichasua());
+				
+				session.clear();
+				
+		    }
+
+		} catch (HibernateException he) {
+		    log.error("Error cargando info de la ficha con id " + id, he);
+		} finally {
+		    close(session);
+		}
+
+		return ficha;
+    }
+	
+	/**
+	 * Método para indexar según la id y la categoria. 
+	 * @param solrIndexer
+	 * @param idElemento
+	 * @param categoria
+	 * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final Long idElemento, final EnumCategoria categoria) {
+		log.debug("FichafacadeEJB.indexarSolr. idElemento:" + idElemento +" categoria:"+categoria);
+		
+		try {
+			//Paso 0. Obtenemos la ficha y comprobamos si se puede indexar.
+			final Ficha ficha = obtenerFichaParaSOLR(idElemento);
+			if (ficha == null) {
+				return new SolrPendienteResultado(false, "Da problema al cargar la info de la ficha.");
+			}
+			
+			boolean isIndexable = this.isIndexable(ficha);
+			if (!isIndexable) {
+				return new SolrPendienteResultado(true, "No se puede indexar");
+			}
+			
+			//Preparamos la información básica: id elemento, aplicacionID = ROLSAC y la categoria de tipo ficha.
+			final IndexData indexData = new IndexData();
+			indexData.setCategoria(categoria);
+			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
+			indexData.setElementoId(idElemento.toString());
+			
+			//Iteramos las traducciones
+			final MultilangLiteral titulo = new MultilangLiteral();
+			final MultilangLiteral descripcion = new MultilangLiteral();
+			final MultilangLiteral urls = new MultilangLiteral();
+			final MultilangLiteral searchText = new MultilangLiteral();
+			final MultilangLiteral searchTextOptional = new MultilangLiteral();
+			final List<EnumIdiomas> idiomas = new ArrayList<EnumIdiomas>();
+			
+			//Recorremos las traducciones
+			for (String keyIdioma : ficha.getTraduccionMap().keySet()) {
+				final EnumIdiomas enumIdioma = EnumIdiomas.fromString(keyIdioma);
+				final TraduccionFicha traduccion = (TraduccionFicha) ficha.getTraduccion(keyIdioma);
+		    	
+				if (traduccion != null && enumIdioma != null) {
+					//Anyadimos idioma al enumerado.
+					idiomas.add(enumIdioma);
+					
+					//Seteamos los primeros campos multiidiomas: Titulo, Descripción y el search text.
+					titulo.addIdioma(enumIdioma, traduccion.getTitulo());
+			    	descripcion.addIdioma(enumIdioma, traduccion.getDescripcion());
+			    	searchText.addIdioma(enumIdioma, traduccion.getTitulo()+ " "+ traduccion.getDescAbr() + " "+ traduccion.getDescripcion());
+			    	
+			    	//StringBuffer que tendrá el contenido a agregar en textOptional
+			    	final StringBuffer textoOptional = new StringBuffer();
+					
+			    	//Materia
+			    	for(Materia materia : ficha.getMaterias()) {
+						TraduccionMateria traduccionMateria = (TraduccionMateria) materia.getTraduccion(keyIdioma);
+						if (traduccionMateria != null) {
+							textoOptional.append(" ");
+							textoOptional.append(traduccionMateria.getNombre());
+							textoOptional.append(" ");
+							textoOptional.append(traduccionMateria.getDescripcion());
+							textoOptional.append(" ");
+							textoOptional.append(traduccionMateria.getPalabrasclave());
+						}
+					}
+			    	
+			    	//hechos vitales
+					for(HechoVital hecho : ficha.getHechosVitales()) {
+						final TraduccionHechoVital traduccionHechoVital =  (TraduccionHechoVital) hecho.getTraduccion(keyIdioma);
+						if (traduccionHechoVital != null) {
+							textoOptional.append(" ");
+							textoOptional.append(traduccionHechoVital.getNombre());
+							textoOptional.append(" ");
+							textoOptional.append(traduccionHechoVital.getDescripcion());
+							textoOptional.append(" ");
+							textoOptional.append(traduccionHechoVital.getPalabrasclave());
+						}
+					}
+					
+					String fichaUAId = "";
+					//Unidades administrativas de las fichas.
+					for (FichaUA fichaUA : ficha.getFichasua()) {
+						if (fichaUAId.isEmpty()) {
+							fichaUAId = fichaUA.getId().toString();
+						}
+						
+						TraduccionUA traduccionUA = ((TraduccionUA)fichaUA.getUnidadAdministrativa().getTraduccion(keyIdioma));
+						if (traduccionUA != null) {
+							textoOptional.append(traduccionUA.getNombre());
+							textoOptional.append(" ");
+						}
+						
+						List<PathUO> uos = new ArrayList<PathUO>();
+						PathUO uo = new PathUO();
+						List<String> path = new ArrayList<String>();
+						
+						//Hay que extraer la id de los predecesores y luego el de uno mismo
+						Set<UnidadAdministrativa> predecesores = fichaUA.getUnidadAdministrativa().getPredecesores();
+						for(UnidadAdministrativa predecesor : predecesores) {
+							path.add(predecesor.getId().toString());
+						}
+						path.add( fichaUA.getUnidadAdministrativa().getId().toString());
+						
+						uo.setPath(path);
+						uos.add(uo);
+						indexData.setUos(uos);
+					}
+					
+			    	searchTextOptional.addIdioma(enumIdioma, textoOptional.toString());	    	
+			    	if (traduccion.getUrl() == null || traduccion.getUrl().isEmpty()) {
+			    		String idUA = "{#UA:"+fichaUAId+"}";
+			    		urls.addIdioma(enumIdioma, "/govern/sac/fitxa.do?codi="+ ficha.getId() + "&coduo=" + idUA + "&lang=" + keyIdioma);	    		
+			    	} else {
+			    		urls.addIdioma(enumIdioma, "/govern/sac/fitxaRedirect.do?codi="+ficha.getId()+"&lang="+keyIdioma);
+			    	}
+				}
+			}
+			
+			//Seteamos datos multidioma.
+			indexData.setTitulo(titulo);
+			indexData.setDescripcion(descripcion);
+			indexData.setUrl(urls);
+			indexData.setSearchText(searchText);
+			indexData.setSearchTextOptional(searchTextOptional);
+			indexData.setIdiomas(idiomas);
+			
+			//Datos IDs materias.
+			final List<String> materiasId = new ArrayList<String>();		
+			for(Materia materia : ficha.getMaterias()) {
+				materiasId.add(materia.getId().toString());
+			}
+			indexData.setMateriaId(materiasId);
+			
+			//Datos IDs publico Objetivos.
+	    	final List<String> publicoObjetivoId = new ArrayList<String>();		
+			for( PublicoObjetivo publicoObjectivo :  ficha.getPublicosObjetivo()) {
+				publicoObjetivoId.add(publicoObjectivo.getId().toString());
+			}
+			indexData.setPublicoId(publicoObjetivoId);
+			
+			//Datos extras
+			if (ficha.getImagen() != null) {
+				indexData.setUrlFoto("/govern/rest/arxiu/" + ficha.getImagen().getId());
+			}
+			
+			//Fechas
+			indexData.setFechaActualizacion(ficha.getFechaActualizacion());
+			indexData.setFechaPublicacion(ficha.getFechaPublicacion());
+			indexData.setFechaCaducidad(ficha.getFechaCaducidad());
+			indexData.setInterno(false);
+			
+			solrIndexer.indexarContenido(indexData);
+			return new SolrPendienteResultado(true);
+		} catch(Exception exception) {
+			log.error("Error en fichafacade intentando indexar.", exception);
+			String mensajeError;
+			if (exception.getMessage() == null) {
+				mensajeError = exception.toString();
+			} else {
+				mensajeError = exception.getMessage();
+			}
+			return new SolrPendienteResultado(false, mensajeError);
+		}
+	}
+	
+	/**
+	 * Metodo para indexar un solrPendiente.
+	 * @param solrPendiente
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public SolrPendienteResultado desindexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente) {
+		try {
+			solrIndexer.desindexar(solrPendiente.getIdElemento().toString(), EnumCategoria.fromString(solrPendiente.getTipo()));
+			return new SolrPendienteResultado(true);
+		} catch(Exception exception) {
+			log.error("Error en fichafacade intentando desindexar.", exception);
+			String mensajeError;
+			if (exception.getMessage() == null) {
+				mensajeError = exception.toString();
+			} else {
+				mensajeError = exception.getMessage();
+			}
+			return new SolrPendienteResultado(false, mensajeError);
+		}
+	}
+	
+	/**
+	 * Busca los ids de las fichas
+	 * 
+	 * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 * @return
+	 */
+	public List<Long> buscarIdsFichas() {
+		Session session = getSession();
+
+    	try {
+
+    		StringBuilder consulta = new StringBuilder("select ficha.id from Ficha as ficha ");
+    		
+    		Query query = session.createQuery( consulta.toString() );
+    		query.setCacheable(true);
+
+    		return query.list();
+
+    	} catch (HibernateException he) {
+
+    		throw new EJBException(he);
+
+    	} finally {
+
+    		close(session);
+
+    	}
+	}
 
 }

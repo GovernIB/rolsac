@@ -4,4 +4,5 @@
 
 <jboss-app>
     <loader-repository>org.ibit.rol.sac:loader=rolsac.ear</loader-repository>
+    <loader-repository-config>java2ParentDelegation=false</loader-repository-config>
 </jboss-app>

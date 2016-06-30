@@ -20,24 +20,6 @@ public abstract class Document extends Ordenable {
 	int tipus;
 
 
-	public IndexObject indexObject() {
-        final IndexObject io = new IndexObject();
-    //    io.setId(id);
-    //    io.setClassName(Documento.class.getName());
-          io.addArchivo(archivo);
-        for (Iterator iterator = getTraducciones().values().iterator(); iterator.hasNext();) {
-            TraduccionDocumentTramit tr = (TraduccionDocumentTramit) iterator.next();
-            if (tr != null) {
-                io.addTextLine(tr.getTitulo());
-                io.addTextLine(tr.getDescripcion());
-                io.addArchivo(tr.getArchivo());
-            }
-        }
-
-        return io;
-    }
-
-
     public Archivo getArchivo() {
         return archivo;
     }

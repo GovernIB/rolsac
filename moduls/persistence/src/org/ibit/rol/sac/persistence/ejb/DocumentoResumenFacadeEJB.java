@@ -132,24 +132,12 @@ public abstract class DocumentoResumenFacadeEJB extends HibernateEJB {
             
             session.delete(documento);
             session.flush();
-            if (ficha != null) {
-                FichaDelegate ficdel = DelegateUtil.getFichaDelegate();
-                try {
-                	ficdel.indexBorraFicha(ficha.getId());
-                	ficdel.indexInsertaFicha(ficha,null);
-                } catch (DelegateException e) {
-                    log.error("Error indexando ficha", e);
-                }
-            }
+            
             if (procedimiento != null) {
         		ProcedimientoDelegate pldel = DelegateUtil.getProcedimientoDelegate();
-                try {
-                	pldel.indexBorraProcedimiento(procedimiento);
-                	pldel.indexInsertaProcedimiento(procedimiento,null);
-                    Actualizador.borrar(documento, procedimiento.getId());
-                } catch (DelegateException e) {
-                    log.error("Error indexando procedimiento", e);
-                }
+                             	                	
+                Actualizador.borrar(documento, procedimiento.getId());
+                
             }
         } catch (HibernateException he) {
             throw new EJBException(he);

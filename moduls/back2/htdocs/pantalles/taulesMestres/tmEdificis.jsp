@@ -12,7 +12,6 @@
     var pagGuardar = '<c:url value="/edifici/guardar.do" />';
     var pagEsborrar = '<c:url value="/edifici/esborrarEdifici.do" />';
     var pagTraduirEdifici = '<c:url value="/edifici/traduir.do" />';
-    var modulos = '<c:url value="/edifici/modulos.do" />';
 
     //texts
     var txt_per = "<spring:message code='txt.per'/>";
@@ -522,7 +521,7 @@
             </div>
             <!-- /modul -->
             <!-- modul -->
-            <div class="modul" id="modul_unitats_administratives">
+            <div class="modul">
             	<input type="hidden" id="llistaUnitatsAdministratives" name="unitatsAdministratives" value=""/>                     
                 <fieldset>                                  
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              

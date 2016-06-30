@@ -3,7 +3,6 @@
 package org.ibit.rol.sac.model;
 
 import java.util.Comparator;
-import java.util.Iterator;
 
 
 /**
@@ -78,27 +77,7 @@ public class DocumentoResumen extends Traducible implements Indexable, Comparato
 	    DocumentoResumen u2 = (DocumentoResumen) o2;
 	    return Long.valueOf(u1.getOrden()).intValue() - Long.valueOf(u2.getOrden()).intValue();
 	}
-        
-    
-	public IndexObject indexObject() {
-        final IndexObject io = new IndexObject();
-    //    io.setId(id);
-    //    io.setClassName(Documento.class.getName());
-          io.addArchivo(archivoResumen);
-        for (Iterator iterator = getTraducciones().values().iterator(); iterator.hasNext();) {
-            TraduccionDocumentoResumen tr = (TraduccionDocumentoResumen) iterator.next();
-            if (tr != null) {
-                io.addTextLine(tr.getTitulo());
-                io.addTextLine(tr.getDescripcion());
-//                io.addArchivo(tr.getArchivo());
-            }
-        }
-
-        return io;
-    }
-
-
-
+       
 
 	@Override
 	public String toString() {

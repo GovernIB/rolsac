@@ -31,8 +31,7 @@
 
     <path id="jar.class.path">
         <fileset dir="${jar.product}">
-            <include name="extractor.jar"/>
-        	<include name="lucene.jar"/>
+            <include name="extractor.jar"/>        	
         </fileset>
         <fileset dir="${lib.dir}">
             <include name="commons-logging.jar"/>
@@ -46,8 +45,7 @@
 		<!-- agarcia: librerias comunes en 00librerias -->
 		<fileset dir="${lib.dir}/webcaib">
 			<include name="commons-beanutils-1.8.3.jar"/>
-		    <include name="commons-lang-2.1.jar"/>
-			<!-- <include name="lucene-caib.jar"/> -->
+		    <include name="commons-lang-2.1.jar"/>			
 		</fileset>
 
     </path>

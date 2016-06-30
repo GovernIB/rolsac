@@ -55,7 +55,7 @@ function CModulTramit() {
     this.extend = ListaOrdenable;
     this.extend();      
     
-  //  this.bolTramiteInicio = false;
+    this.bolTramiteInicio = false;
     var that = this;
     
     this.iniciar = function() {
@@ -71,7 +71,7 @@ function CModulTramit() {
         var today = new Date();
         
         //$("#publication_datepicker").datetimepicker( "option", "disabled", false ).attr('value', $.datepicker.formatDate('dd-m-yy HH:mm', new Date()));`
-        $("#tramit_item_data_tancament").datetimepicker({ format: 'yyyy/MM/dd HH:mm' , setDate: new Date(),hour:'23', minute:'59' });
+        $("#tramit_item_data_tancament").datetimepicker({ format: 'yyyy/MM/dd HH:mm' , setDate: new Date() });
         //$("#tramit_item_data_tancament").datetimepicker({ timeFormat: 'hh:mm' });
         
         tramits_seleccionats_elm = escriptori_tramits_elm.find("div.escriptori_items_seleccionats:first");
@@ -200,15 +200,13 @@ function CModulTramit() {
     };
     
     this.hayTramiteInicializacion = function () {
-    	//this.bolTramiteInicio = false;  //#4 Se valida que hay modelo de solicitud seleccionado en el trámite de inicialización
-//    	if(modul_tramits_elm.find('div.listaOrdenable input.tramit_moment[value="1"]').length > 0 ){
-//    		this.bolTramiteInicio = true;
-//    	}
+    	this.bolTramiteInicio = false;  //#4 Se valida que hay modelo de solicitud seleccionado en el trámite de inicialización
+    	if(modul_tramits_elm.find('div.listaOrdenable input.tramit_moment[value="1"]').length > 0 ){
+    		this.bolTramiteInicio = true;
+    	}
     	
-//        return modul_tramits_elm.find('div.listaOrdenable input.tramit_moment[value="1"]').length > 0 
-//        		&& modul_formularis_tramits_elm.find('div.listaOrdenable input.formularisTramit_id').length > 0;
-        		
-        return modul_tramits_elm.find('div.listaOrdenable input.tramit_moment[value="1"]').length > 0;
+        return modul_tramits_elm.find('div.listaOrdenable input.tramit_moment[value="1"]').length > 0 
+        		&& modul_formularis_tramits_elm.find('div.listaOrdenable input.formularisTramit_id').length > 0;
     };
     
     // Actualiza el nombre.
@@ -262,7 +260,7 @@ function CEscriptoriTramit() {
     
     this.guarda = function() {
         
-    	var idTramit = $("#id_tramit_actual").val(); 
+        var idTramit = $("#id_tramit_actual").val(); 
         // Validam el formulari de tramit        
         if (!this.formulariValid()) {
             return false;

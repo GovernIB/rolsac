@@ -21,12 +21,12 @@
 
 
         <map name="traducciones" cascade="all" table="RSC_TRATRA">
-            <cache usage="read-write"/>
+            <cache usage="read-write"/> 
             <key column="TTR_CODTTR" foreign-key="RSC_TTRTRA_FK"/>
             <index column="TTR_CODIDI" type="string" length="2"/>
             <composite-element class="org.ibit.rol.sac.model.TraduccionTramite">
                 <property name="nombre" length="256" column="TTR_NOMBRE"/>
-<!--                 #351 se cambia descripción por observaciones -->
+                <!--                 #351 se cambia descripción por observaciones -->
                 <property name="observaciones" type="text" column="TTR_DESCRI"/>
                 <property name="documentacion" type="text" column="TTR_DOCUME"/>
                 <property name="requisits" type="text" column="TTR_REQUI"/>

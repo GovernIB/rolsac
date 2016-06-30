@@ -14,13 +14,16 @@ import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
+import org.ibit.rol.sac.model.SolrPendiente;
+import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.persistence.intf.FichaFacade;
 import org.ibit.rol.sac.persistence.intf.FichaFacadeHome;
 import org.ibit.rol.sac.persistence.util.FichaFacadeUtil;
 
-import es.caib.rolsac.lucene.model.ModelFilterObject;
 import es.caib.rolsac.utils.ResultadoBusqueda;
+import es.caib.solr.api.SolrIndexer;
+import es.caib.solr.api.model.types.EnumCategoria;
 
 /**
  * Business delegate para manipular fichas.
@@ -197,38 +200,8 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
         }
     }
     
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#indexInsertaFicha(org.ibit.rol.sac.model.Ficha, es.caib.rolsac.lucene.model.ModelFilterObject)
-	 */
-    public void indexInsertaFicha(Ficha fic, ModelFilterObject filter) throws DelegateException {
-        try {
-            getFacade().indexInsertaFicha(fic, filter);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#indexBorraFicha(java.lang.Long)
-	 */
-    public void indexBorraFicha(Long id) throws DelegateException {
-        try {
-            getFacade().indexBorraFicha(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#obtenerFilterObject(org.ibit.rol.sac.model.Ficha)
-	 */
-    public ModelFilterObject obtenerFilterObject(Ficha ficha) throws DelegateException {
-        try {
-            return getFacade().obtenerFilterObject(ficha);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
+
+ 
     
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#getContenidos_web()
@@ -303,6 +276,30 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
 		}
 	}
 	
+	public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente) throws DelegateException {
+    	try {
+            return getFacade().indexarSolr(solrIndexer, solrPendiente);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+	
+	public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final Long idElemento, final EnumCategoria categoria) throws DelegateException {
+    	try {
+    		return getFacade().indexarSolr(solrIndexer, idElemento, categoria);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    public SolrPendienteResultado desindexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente) throws DelegateException {
+    	try {
+    		return getFacade().desindexarSolr(solrIndexer, solrPendiente);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+	
 	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
@@ -327,5 +324,13 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
             throw new DelegateException(e);
         }
     }
+
+	public List<Long> buscarIdsFichas() throws DelegateException {
+		try {
+            return getFacade().buscarIdsFichas();
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+	}
 
 }

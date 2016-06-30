@@ -11,8 +11,8 @@ public abstract class EJBLocator {
     protected static final String JNDI_NAME_PREFIX = "es.caib.rolsac.api.v2.";
 
     protected Object getRemoteReference(String jndiName) throws NamingException {
-//        Context jndiContext = getPropertiesContext();
-        Context jndiContext = getJBossContext();
+ //       Context jndiContext = getPropertiesContext();
+       Context jndiContext = getJBossContext();
         Object lookupContext = jndiContext.lookup(jndiName);
         return lookupContext;
     }

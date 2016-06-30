@@ -10,6 +10,8 @@ import javax.naming.NamingException;
 
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Seccion;
+import org.ibit.rol.sac.model.SolrPendiente;
+import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.criteria.PaginacionCriteria;
 import org.ibit.rol.sac.model.dto.FichaDTO;
@@ -17,8 +19,9 @@ import org.ibit.rol.sac.persistence.intf.UnidadAdministrativaFacade;
 import org.ibit.rol.sac.persistence.intf.UnidadAdministrativaFacadeHome;
 import org.ibit.rol.sac.persistence.util.UnidadAdministrativaFacadeUtil;
 
-import es.caib.rolsac.lucene.model.ModelFilterObject;
 import es.caib.rolsac.utils.ResultadoBusqueda;
+import es.caib.solr.api.SolrIndexer;
+import es.caib.solr.api.model.types.EnumCategoria;
 
 /**
  * Business delegate para manipular Unidades Administrativas.
@@ -255,41 +258,7 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
 		}
 	}
 	
-	/**
-	 * Metodo que indexa una unidad administrativa
-	 * @param ua Unidad administrativa
-	 * @param filter filtro
-	 * @throws DelegateException
-	 */
-	public void indexInsertaUA(UnidadAdministrativa ua, ModelFilterObject filter) throws DelegateException {
-		try {
-			getFacade().indexInsertaUA(ua, filter);
-		} catch (RemoteException e) {
-			throw new DelegateException(e);
-		}
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegateI#indexBorraUA(java.lang.Long)
-	 */
-	public void indexBorraUA(Long id) throws DelegateException {
-		try {
-			getFacade().indexBorraUA(id);
-		} catch (RemoteException e) {
-			throw new DelegateException(e);
-		}
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegateI#obtenerFilterObject(org.ibit.rol.sac.model.UnidadAdministrativa)
-	 */
-	public ModelFilterObject obtenerFilterObject(UnidadAdministrativa ua) throws DelegateException {
-		try {
-			return getFacade().obtenerFilterObject(ua);
-		} catch (RemoteException e) {
-			throw new DelegateException(e);
-		}
-	}
+
 	
 	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegateI#getUaMollaBack2(java.lang.Long, java.lang.String, java.lang.String, java.lang.String)
@@ -384,13 +353,6 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
 			throw new DelegateException(e);
 		}
 	}
-	public List<FichaDTO> listarFichasSeccionUASinPaginacion(Long idUA, Long idSeccion, String idioma) throws DelegateException {
-		try {
-			return getFacade().listarFichasSeccionUASinPaginacion(idUA, idSeccion, idioma);
-		} catch (RemoteException e) {
-			throw new DelegateException(e);
-		}
-	}
 	
 	public void actualizaFichasSeccionUA(Long idUA, Long idSeccion, List<FichaDTO> fichas) throws DelegateException {
 		try {
@@ -463,7 +425,30 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
      	}
 	}
 	
+
+	public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente) throws DelegateException {
+    	try {
+            return getFacade().indexarSolr(solrIndexer, solrPendiente);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
 	
+	public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final Long idElemento, final EnumCategoria categoria) throws DelegateException {
+    	try {
+    		return getFacade().indexarSolr(solrIndexer , idElemento, categoria);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    public SolrPendienteResultado desindexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente) throws DelegateException {
+    	try {
+    		return getFacade().desindexarSolr(solrIndexer, solrPendiente);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
 	/* ========================================================= */
 	/* ======================== REFERENCIA AL FACADE  ========== */
 	/* ========================================================= */
@@ -486,6 +471,14 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
 		} catch (RemoteException e) {
 			throw new DelegateException(e);
 		}
+	}
+
+	public List<Long> buscarIdsUas() throws DelegateException {
+		try {
+            return getFacade().buscarIdsUas();
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
 	}
 	
 }

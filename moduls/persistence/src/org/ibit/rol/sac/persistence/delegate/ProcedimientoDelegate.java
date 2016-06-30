@@ -6,11 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.SolrPendiente;
+import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.criteria.BuscadorProcedimientoCriteria;
 
-import es.caib.rolsac.lucene.model.ModelFilterObject;
 import es.caib.rolsac.utils.ResultadoBusqueda;
+import es.caib.solr.api.SolrIndexer;
+import es.caib.solr.api.model.types.EnumCategoria;
 
 /*
  * ejaen@dgtic  - u92770
@@ -57,11 +60,7 @@ public class ProcedimientoDelegate {
 	/** @deprecated Se usa desde la API v1*/
 	public List buscarProcedimientosMateria(Long id) throws DelegateException {
 		return impl.buscarProcedimientosMateria(id);
-	}
-	
-	public List buscarProcedimientosTexto(String texto) throws DelegateException {
-		return impl.buscarProcedimientosTexto(texto);
-	}
+	}	
 
 	public ProcedimientoLocal consultarProcedimiento(Long id) throws DelegateException {
 		return impl.consultarProcedimiento(id);
@@ -80,13 +79,6 @@ public class ProcedimientoDelegate {
 		return impl.grabarProcedimientoConTramites(procedimiento, idUA, listaTramitesParaBorrar, listaIdsTramitesParaActualizar);
 	}
 	
-	public void indexBorraProcedimiento(ProcedimientoLocal pro) throws DelegateException {
-		impl.indexBorraProcedimiento(pro);
-	}
-	
-	public void indexInsertaProcedimiento(ProcedimientoLocal proc, ModelFilterObject filter) throws DelegateException {
-		impl.indexInsertaProcedimiento(proc, filter);
-	}
 	
 	/** @deprecated Se usa desde API v1 */
 	public List listarProcedimientosPublicos() throws DelegateException {
@@ -119,9 +111,6 @@ public class ProcedimientoDelegate {
 		return impl.listarProcedimientosUO(id, conse);
 	}
 	
-	public ModelFilterObject obtenerFilterObject(ProcedimientoLocal proc) throws DelegateException {
-		return impl.obtenerFilterObject(proc);
-	}
 	
 	public ProcedimientoLocal obtenerProcedimiento(Long id) throws DelegateException {
 		return impl.obtenerProcedimiento(id);
@@ -154,5 +143,21 @@ public class ProcedimientoDelegate {
 	public boolean isProcedimientoConEstadoPublicacionPublica(Long idProcedimiento) throws DelegateException {
         return impl.isProcedimientoConEstadoPublicacionPublica(idProcedimiento);
 	}
+
+	public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, SolrPendiente solrPendiente) throws DelegateException {
+    	return impl.indexarSolr(solrIndexer, solrPendiente);        
+    }
 	
+	public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, Long idElemento, EnumCategoria categoria) throws DelegateException {
+		return impl.indexarSolr(solrIndexer, idElemento, categoria);        
+    }
+    
+    public SolrPendienteResultado desindexarSolr(final SolrIndexer solrIndexer, SolrPendiente solrPendiente) throws DelegateException {
+    	return impl.desindexarSolr(solrIndexer, solrPendiente);    
+    }
+
+	public List<Long> buscarIdsProcedimientos() throws DelegateException{
+		return impl.buscarIdsProcedimientos();
+	}
+
 }

@@ -33,9 +33,11 @@
         <fileset dir="${jar.product}">
             <include name="extractor.jar"/>
         </fileset>
-        <fileset dir="${lib.dir}">
+
+		<fileset dir="${lib.dir}">
             <include name="commons-logging.jar"/>
         </fileset>
+		
     	<!-- agarcia: librerías comunes en 00librerias -->
 		<fileset dir="${lib.dir}/webcaib">
 			<include name="commons-lang-2.1.jar"/>

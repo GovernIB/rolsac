@@ -5,12 +5,15 @@ import java.util.Map;
 
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Seccion;
+import org.ibit.rol.sac.model.SolrPendiente;
+import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.criteria.PaginacionCriteria;
 import org.ibit.rol.sac.model.dto.FichaDTO;
 
-import es.caib.rolsac.lucene.model.ModelFilterObject;
 import es.caib.rolsac.utils.ResultadoBusqueda;
+import es.caib.solr.api.SolrIndexer;
+import es.caib.solr.api.model.types.EnumCategoria;
 
 public interface UnidadAdministrativaDelegateI {
 	
@@ -147,23 +150,7 @@ public interface UnidadAdministrativaDelegateI {
 	public abstract List cargarArbolUnidadId(Long id)
 			throws DelegateException;
 	
-	/* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#indexInsertaUA(org.ibit.rol.sac.model.UnidadAdministrativa, es.caib.rolsac.lucene.model.ModelFilterObject)
-	 */
-	public abstract void indexInsertaUA(UnidadAdministrativa ua, ModelFilterObject filter)
-			throws DelegateException;
-	
-	/* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#indexBorraUA(java.lang.Long)
-	 */
-	public abstract void indexBorraUA(Long id)
-			throws DelegateException;
-	
-	/* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#obtenerFilterObject(org.ibit.rol.sac.model.UnidadAdministrativa)
-	 */
-	public abstract ModelFilterObject obtenerFilterObject(UnidadAdministrativa ua)
-			throws DelegateException;
+
 	
 	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#getUaMollaBack2(java.lang.Long, java.lang.String, java.lang.String, java.lang.String)
@@ -205,10 +192,6 @@ public interface UnidadAdministrativaDelegateI {
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate#listarFichasSeccionUA(java.lang.Long, java.lang.Long)
 	 */
 	public abstract List<FichaDTO> listarFichasSeccionUA(final Long idUA, final Long idSeccion, String idioma, PaginacionCriteria paginacion)
-			throws DelegateException;
-	
-	
-	public abstract List<FichaDTO> listarFichasSeccionUASinPaginacion(final Long idUA, final Long idSeccion, String idioma)
 			throws DelegateException;
 	
 	/* (non-Javadoc)
@@ -259,5 +242,21 @@ public interface UnidadAdministrativaDelegateI {
     public abstract void eliminarSeccionUA(Long idUA, Long idSeccion)
     		throws DelegateException;
     
-	
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate#eliminarSeccionUA(java.lang.Long, java.lang.Long)
+	 */
+    public abstract SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, SolrPendiente solrPendiente) throws DelegateException;
+    
+    /* (non-Javadoc)
+   	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate#eliminarSeccionUA(java.lang.Long, java.lang.Long)
+   	 */
+       public abstract SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final Long idElemento, final EnumCategoria categoria) throws DelegateException;
+        
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate#eliminarSeccionUA(java.lang.Long, java.lang.Long)
+	 */
+    public abstract SolrPendienteResultado desindexarSolr(final SolrIndexer solrIndexer, SolrPendiente solrPendiente) throws DelegateException;
+
+	public abstract List<Long> buscarIdsUas() throws DelegateException;
+
 }

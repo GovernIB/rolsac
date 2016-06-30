@@ -111,6 +111,7 @@
         <value> org/ibit/rol/sac/model/ActivacionSuscripcion.hbm.xml </value>
         <value> org/ibit/rol/sac/model/GrupoGenericoSuscripcion.hbm.xml </value>
         <value> org/ibit/rol/sac/model/HistoricoEnvio.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/SolrPendiente.hbm.xml </value>
    
       </list>
     </property>

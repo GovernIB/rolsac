@@ -303,9 +303,7 @@ public class TramiteBackController {
 			    
 			}
 			
-
 			//#4 si el tramite tiene momento=ini, el procedimiento es p�blico debe tener modelo solicitud obligatoriamente
-
 			if (edicion && isProcedimientoConEstadoPublicacionPublica && fase == 1 &&
 					(request.getParameter("formularisTramit") == null || request.getParameter("formularisTramit").equals(""))) {
 				
@@ -321,7 +319,7 @@ public class TramiteBackController {
 			if ( !"".equals(request.getParameter("item_validacio_tramit"))){
 				tramite.setValidacio( new Long(request.getParameter("item_validacio_tramit")) );	
 			}
-						
+			
 			// Parsear fechas en request y asignarlas al trámite.
 			procesarFechasTramite(request, tramite);
 			// Rellenar los campos
@@ -599,14 +597,14 @@ public class TramiteBackController {
 	private void agregaTraduccionTramite(HttpServletRequest request, String lang, Map traducciones, TraduccionTramite traduccionTramite)
 	{
 		traduccionTramite.setNombre( RolUtil.limpiaCadena(request.getParameter("item_nom_tramit_" + lang)) );
-		//#351 se cambia descripción por observaciones
+		//#351 se cambia descripcion por observaciones
 		//traduccionTramite.setDescripcion( RolUtil.limpiaCadena(request.getParameter("item_descripcio_tramit_" + lang)) );
 		traduccionTramite.setRequisits( RolUtil.limpiaCadena(request.getParameter("item_requisits_tramit_" + lang)) );
 		traduccionTramite.setDocumentacion( RolUtil.limpiaCadena(request.getParameter("item_documentacio_tramit_" + lang)) );				
 		traduccionTramite.setPlazos( RolUtil.limpiaCadena(request.getParameter("item_termini_tramit_" + lang)) );
 		traduccionTramite.setLugar( RolUtil.limpiaCadena(request.getParameter("item_lloc_tramit_" + lang)) );
 		
-		//TODO Este campo no existe en la tabla pero se deja por si se añade en futuras implementaciones.
+		//TODO Este campo no existe en la tabla pero se deja por si se anyade en futuras implementaciones.
 		traduccionTramite.setObservaciones( request.getParameter("item_descripcio_tramit_" + lang) );
 		
 		traducciones.put(lang, traduccionTramite);
@@ -701,7 +699,7 @@ public class TramiteBackController {
 			traduccioOrigen.setNombre(request.getParameter("item_nom_tramit_" + IDIOMA_ORIGEN_TRADUCTOR));
 		}
 		if (StringUtils.isNotEmpty(request.getParameter("item_descripcio_tramit_" + IDIOMA_ORIGEN_TRADUCTOR))) {
-			//#351 se cambia descripción por observaciones
+			//#351 se cambia descripcion por observaciones
 			//traduccioOrigen.setDescripcion(request.getParameter("item_descripcio_tramit_" + IDIOMA_ORIGEN_TRADUCTOR));
 			traduccioOrigen.setObservaciones(request.getParameter("item_descripcio_tramit_" + IDIOMA_ORIGEN_TRADUCTOR));
 		}

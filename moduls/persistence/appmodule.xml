@@ -1,2 +1,3 @@
    		<module><ejb>@prefix.modul@-persistence.jar</ejb></module>
     	<module><java>hibernate2.jar</java></module>
+    	<module><java>solrapi.jar</java></module>

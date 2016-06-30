@@ -15,7 +15,7 @@ public class TramiteDTO implements  Serializable {
 	private Date fechaPublicacion;
 	
 	private String nombre;
-	//#351 se cambia descripción por observaciones
+	//#351 se cambia descripcion por observaciones
 	//private String descripcion;
 	private String requisitos;
 	private String documentacion;
@@ -58,12 +58,12 @@ public class TramiteDTO implements  Serializable {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-//	public String getDescripcion() {
-//		return descripcion;
-//	}
-//	public void setDescripcion(String descripcion) {
-//		this.descripcion = descripcion;
-//	}
+	//public String getDescripcion() {
+	//	return descripcion;
+	//}
+	//public void setDescripcion(String descripcion) {
+	//	this.descripcion = descripcion;
+	//}
 	public String getRequisitos() {
 		return requisitos;
 	}

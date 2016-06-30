@@ -9,11 +9,16 @@ import javax.ejb.Handle;
 import javax.naming.NamingException;
 
 import org.ibit.rol.sac.model.DocumentTramit;
+import org.ibit.rol.sac.model.SolrPendiente;
+import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.Taxa;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.persistence.intf.TramiteFacade;
 import org.ibit.rol.sac.persistence.intf.TramiteFacadeHome;
 import org.ibit.rol.sac.persistence.util.TramiteFacadeUtil;
+
+import es.caib.solr.api.SolrIndexer;
+import es.caib.solr.api.model.types.EnumCategoria;
 
 /*
  * ejaen@dgtic  - u92770
@@ -206,6 +211,38 @@ public class TramiteDelegateImpl implements StatelessDelegate, TramiteDelegateI 
 	public boolean autorizaModificarTramite(Long idTramite) throws DelegateException {
 		 try {
              return getFacade().autorizaModificarTramite(idTramite);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+	}
+	
+	public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente) throws DelegateException {
+    	try {
+            return getFacade().indexarSolr(solrIndexer, solrPendiente);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+	public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, Long idAplicacion, EnumCategoria categoria) throws DelegateException {
+    	try {
+    		return getFacade().indexarSolr(solrIndexer, idAplicacion, categoria);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+	
+    public SolrPendienteResultado desindexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente) throws DelegateException {
+    	try {
+    		return getFacade().desindexarSolr(solrIndexer, solrPendiente);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+
+	public List<Long> buscarIdsTramites() throws DelegateException {
+		try {
+            return getFacade().buscarIdsTramites();
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }

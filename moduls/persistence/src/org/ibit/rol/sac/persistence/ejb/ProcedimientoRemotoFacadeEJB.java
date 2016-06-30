@@ -1,11 +1,7 @@
 package org.ibit.rol.sac.persistence.ejb;
 
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import javax.ejb.CreateException;
@@ -16,41 +12,20 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriter.MaxFieldLength;
-import org.apache.lucene.store.Directory;
 import org.ibit.rol.sac.model.AdministracionRemota;
 import org.ibit.rol.sac.model.DocumentoRemoto;
-import org.ibit.rol.sac.model.Familia;
 import org.ibit.rol.sac.model.FichaRemota;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.HechoVitalProcedimiento;
 import org.ibit.rol.sac.model.Historico;
 import org.ibit.rol.sac.model.HistoricoProcedimiento;
-import org.ibit.rol.sac.model.IndexObject;
 import org.ibit.rol.sac.model.Iniciacion;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.ProcedimientoRemoto;
-import org.ibit.rol.sac.model.TraduccionFamilia;
-import org.ibit.rol.sac.model.TraduccionHechoVital;
-import org.ibit.rol.sac.model.TraduccionMateria;
-import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
-import org.ibit.rol.sac.model.TraduccionUA;
-import org.ibit.rol.sac.model.UnidadAdministrativa;
-import org.ibit.rol.sac.persistence.delegate.DelegateException;
-import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.delegate.IndexerDelegate;
 import org.ibit.rol.sac.persistence.util.RemotoUtils;
 
-import es.caib.rolsac.lucene.analysis.AlemanAnalyzer;
-import es.caib.rolsac.lucene.analysis.CastellanoAnalyzer;
-import es.caib.rolsac.lucene.analysis.CatalanAnalyzer;
-import es.caib.rolsac.lucene.analysis.InglesAnalyzer;
-import es.caib.rolsac.lucene.model.Catalogo;
-import es.caib.rolsac.lucene.model.ModelFilterObject;
-import es.caib.rolsac.lucene.model.TraModelFilterObject;
+
 
 /**
  * SessionBean para mantener y consultar Procedimientos Remotos (PORMAD)
@@ -273,341 +248,6 @@ public abstract class ProcedimientoRemotoFacadeEJB extends HibernateEJB {
 
 	}
 
-
-	private ModelFilterObject obtenerFilterObject(ProcedimientoRemoto procedimiento) throws DelegateException {
-
-		ModelFilterObject filter = new ModelFilterObject();
-		TraModelFilterObject trafilter;
-		String idioma;
-		String txids;
-		String txtexto;
-
-		filter.setMicrosite_id(null);
-		filter.setSeccion_id(null);
-
-		// Obtenemos las materias y hechos vitales
-		Materia mat;
-		HechoVitalProcedimiento hvital;
-		Hashtable listaMaterias = new Hashtable();
-		Hashtable listaHechosVitales = new Hashtable();
-		UnidadAdministrativa ua = procedimiento.getUnidadAdministrativa();
-		List listaPadres = DelegateUtil.getUADelegate().listarPadresUnidadAdministrativa( ua.getId() );
-
-		if ( procedimiento.getMaterias() != null ) {
-
-			Iterator itmat = procedimiento.getMaterias().iterator();
-			while ( itmat.hasNext() ) {
-
-				mat = (Materia) itmat.next();
-				if ( !listaMaterias.containsKey(mat.getId() ) )
-					listaMaterias.put( mat.getId(), mat );
-			}
-
-		}
-
-		if ( procedimiento.getHechosVitalesProcedimientos() != null ) {
-
-			Iterator iteradorHechosVitales = procedimiento.getHechosVitalesProcedimientos().iterator();
-			while ( iteradorHechosVitales.hasNext() ) {
-
-				hvital = (HechoVitalProcedimiento) iteradorHechosVitales.next();
-				if ( !listaHechosVitales.containsKey( hvital.getHechoVital().getId() ) )
-					listaHechosVitales.put( hvital.getHechoVital().getId(), hvital.getHechoVital() );
-
-			}
-
-		}
-
-		Iterator langs = procedimiento.getLangs().iterator();
-		while ( langs.hasNext() ) {
-
-			idioma = (String) langs.next();
-			txids = Catalogo.KEY_SEPARADOR;
-			txtexto = " ";
-			trafilter = new TraModelFilterObject();
-			trafilter.setMaintitle(null); 
-
-			// Obtenemos la UA con sus padres excepto el raiz
-			if ( ua != null ) {
-
-				txids = Catalogo.KEY_SEPARADOR;
-				txtexto = " ";
-				UnidadAdministrativa uaPadre = null;
-				for ( int x = 1 ; x < listaPadres.size() ; x++ ) {
-
-					uaPadre = (UnidadAdministrativa) listaPadres.get(x);
-					txids += uaPadre.getId() + Catalogo.KEY_SEPARADOR;
-					if ( uaPadre.getTraduccion(idioma) != null )
-						txtexto += ( (TraduccionUA) uaPadre.getTraduccion(idioma) ).getNombre() + " ";
-
-				}
-
-				filter.setUo_id( ( txids.length() == 1 ) ? null: txids );
-				trafilter.setUo_text( ( txtexto.length() == 1 ) ? null : txtexto );
-
-			}
-
-			// Obtenemos su Familia
-			Familia familia = procedimiento.getFamilia();
-			if ( familia != null ) {
-
-				filter.setFamilia_id( familia.getId() );
-				if ( familia.getTraduccion(idioma) != null )	
-					trafilter.setFamilia_text( ( (TraduccionFamilia) familia.getTraduccion(idioma) ).getNombre() );
-
-			}
-
-			// Obtenemos las materias y hechos vitales
-			txids = Catalogo.KEY_SEPARADOR;
-			txtexto = " ";
-
-			Enumeration i = listaMaterias.keys();
-
-			while ( i.hasMoreElements() ) {
-
-				Materia materia = (Materia) listaMaterias.get( i.nextElement() );
-				txids += materia.getId() + Catalogo.KEY_SEPARADOR; //anadir los ids (los de los hechos vitales no)
-				if ( materia.getTraduccion(idioma) != null ) {
-
-					txtexto += ( (TraduccionMateria) materia.getTraduccion(idioma) ).getNombre() + " ";
-					txtexto += ( (TraduccionMateria) materia.getTraduccion(idioma) ).getDescripcion() + " ";
-					txtexto += ( (TraduccionMateria) materia.getTraduccion(idioma) ).getPalabrasclave() + " ";
-
-				}
-
-			}
-
-			i = listaHechosVitales.keys();
-			HechoVital hechovital = null;
-
-			while ( i.hasMoreElements() ) {
-
-				hechovital = (HechoVital) listaHechosVitales.get( i.nextElement() );
-				if ( hechovital.getTraduccion(idioma) != null ) {
-
-					txtexto += ( (TraduccionHechoVital) hechovital.getTraduccion(idioma) ).getNombre() + " ";
-					txtexto += ( (TraduccionHechoVital) hechovital.getTraduccion(idioma) ).getDescripcion() + " ";
-					txtexto += ( (TraduccionHechoVital) hechovital.getTraduccion(idioma) ).getPalabrasclave() + " ";
-
-				}
-
-			}
-
-			filter.setMateria_id( ( txids.length() == 1 ) ? null : txids );
-			trafilter.setMateria_text( ( txtexto.length() == 1 ) ? null : txtexto );
-
-			filter.addTraduccion(idioma, trafilter);
-
-		}
-
-		return filter;
-
-	}
-
-
-	/**
-	 * Añade los procedimientos al índice en todos los idiomas
-	 * @ejb.interface-method
-	 * @ejb.permission unchecked="true"
-	 */
-	public void indexInsertaProcedimientoRemoto(ProcedimientoRemoto proc, ModelFilterObject filter)  {
-
-		try {
-		    if (proc.getValidacion().equals(2)) {
-		        return;
-		    }
-
-		    proc = obtenerProcedimientoRemoto(proc.getId(), proc.getUnidadAdministrativa().getId());
-
-			if (filter == null) {
-			    filter = obtenerFilterObject(proc);  	
-			}
-
-			IndexerDelegate indexerDelegate = DelegateUtil.getIndexerDelegate();
-
-			String tipo = tipoProcedimiento(proc,false);
-			Iterator iterator = proc.getLangs().iterator();
-			while (iterator.hasNext()) {
-				String idioma = (String) iterator.next();
-
-				// Configuración del writer
-                Directory directory = indexerDelegate.getHibernateDirectory(idioma);
-                IndexWriter writer = new IndexWriter(directory, getAnalizador(idioma), false, MaxFieldLength.UNLIMITED);
-                writer.setMergeFactor(20);
-                writer.setMaxMergeDocs(Integer.MAX_VALUE);
-
-				IndexObject io = new IndexObject();
-
-				io = indexarContenidos(proc, io, tipo, filter);
-
-				io = indexarTraducciones(proc, idioma, io, tipo);
-
-				io = indexarContenidosLaterales(proc, idioma, io, filter);
-
-				if (io.getText().length() > 0) {
-				    indexerDelegate.insertaObjeto(io, idioma, writer);
-				}
-			}
-
-		} catch (Exception ex) {
-			log.warn("[indexInsertaProcedimiento:" + proc.getId() + "] No se ha podido indexar el procedimiento. " + ex.getMessage());
-		}
-	}
-
-
-	private IndexObject indexarContenidos(ProcedimientoRemoto proc, IndexObject io, String tipo, ModelFilterObject filter) {
-
-	    io.setId(tipo + "." + proc.getId());
-        io.setClasificacion(tipo);
-
-        io.setMicro(filter.getMicrosite_id());
-        io.setUo(filter.getUo_id());
-        io.setMateria(filter.getMateria_id());
-        io.setFamilia(filter.getFamilia_id());
-        io.setSeccion(filter.getSeccion_id());
-        io.setCaducidad("");
-        io.setPublicacion("");
-        io.setDescripcion("");
-
-        if (proc.getFechaCaducidad() != null) {
-            io.setCaducidad(new java.text.SimpleDateFormat("yyyyMMdd").format(proc.getFechaCaducidad()));
-        }
-
-        if (proc.getFechaPublicacion() != null) {
-            io.setPublicacion(new java.text.SimpleDateFormat("yyyyMMdd").format( proc.getFechaPublicacion()));
-        }
-
-        return io;
-	}
-
-
-	private IndexObject indexarTraducciones(ProcedimientoRemoto proc, String idioma, IndexObject io, String tipo) {
-
-	    TraduccionProcedimientoLocal trad = ((TraduccionProcedimientoLocal) proc.getTraduccion(idioma));
-        if (trad != null) {
-            io.setTituloserviciomain(trad.getNombre());
-            io.setUrl("/govern/sac/visor_proc.do?codi=" + proc.getId() + "&lang=" + idioma + "&coduo=" + proc.getUnidadAdministrativa().getId());
-            // Si es externo ponemos su propia URL
-            if (tipo.equals(Catalogo.SRVC_PROCEDIMIENTOS_EXTERNO)) {
-                io.setUrl(proc.getUrl());
-            }
-
-            if (trad.getNombre() != null) {
-                io.setTitulo(trad.getNombre());
-                io.addTextLine(trad.getNombre());
-
-                if (trad.getResumen() != null) {
-                    if (trad.getResumen().length() > 200) {
-                        io.setDescripcion(trad.getResumen().substring(0,199) + "...");
-                    } else {
-                        io.setDescripcion(trad.getResumen());
-                    }
-                }
-            }
-
-            if (trad.getDestinatarios() != null) {
-                io.addTextLine(trad.getDestinatarios());
-            }
-
-            if (trad.getLugar() != null) {
-                io.addTextLine(trad.getLugar());
-            }
-
-            if (trad.getObservaciones() != null) {
-                io.addTextLine(trad.getObservaciones());
-            }
-
-            if (trad.getPlazos() != null) {
-                io.addTextLine( trad.getPlazos() );
-            }
-
-            if (trad.getResolucion() != null) {
-                io.addTextLine(trad.getResolucion());
-            }
-
-            if (trad.getNotificacion() != null) {
-                io.addTextLine(trad.getNotificacion());
-            }
-
-            if (trad.getRecursos() != null) {
-                // No está en el mantenimiento
-                io.addTextLine(trad.getRecursos());
-            }
-
-            if (trad.getRequisitos() != null) {
-                io.addTextLine(trad.getRequisitos());
-            }
-
-            if (trad.getSilencio() != null) {
-                io.addTextLine(trad.getSilencio());
-            }
-        }
-
-        return io;
-	}
-
-
-	private IndexObject indexarContenidosLaterales(ProcedimientoLocal proc, String idioma, IndexObject io, ModelFilterObject filter) {
-
-	    io.addTextopcionalLine(filter.getTraduccion(idioma).getMateria_text());
-        io.addTextopcionalLine(filter.getTraduccion(idioma).getSeccion_text());
-        io.addTextopcionalLine(filter.getTraduccion(idioma).getUo_text());
-        io.addTextopcionalLine(filter.getTraduccion(idioma).getFamilia_text());
-
-        if (proc.getMaterias() != null) {
-            Iterator iterador = proc.getMaterias().iterator();
-            while (iterador.hasNext()) {
-                Materia mat = (Materia) iterador.next();
-                if (mat.getTraduccion(idioma) != null) {
-                    io.addTextopcionalLine(((TraduccionMateria) mat.getTraduccion(idioma)).getNombre());
-                }
-            }
-        }
-
-        return io;
-	}
-
-
-	private String tipoProcedimiento (ProcedimientoLocal proc, boolean doc) {
-
-		String tipo = "";
-
-		if ( !doc ) {
-
-			if ( proc.getUrl() != null  &&  proc.getUrl().length() > 0 ) {
-
-				tipo = Catalogo.SRVC_PROCEDIMIENTOS_EXTERNO;
-
-			} else if ( ( proc.getVersion() == null  &&  proc.getTramite() == null ) || ( proc.getVersion() == null && proc.getTramite() != null && proc.getTramite().length() == 0 ) ) {
-
-				tipo = Catalogo.SRVC_PROCEDIMIENTOS_NOTELEMATICO;
-
-			} else {
-
-				tipo = Catalogo.SRVC_PROCEDIMIENTOS_SISTRA;
-			}
-
-		} else {
-
-			if ( proc.getUrl() != null && proc.getUrl().length() > 0 )  {
-
-				tipo = Catalogo.SRVC_PROCEDIMIENTOS_EXTERNO_DOCUMENTOS;
-
-			} else if ( proc.getVersion() == null && proc.getTramite() == null ) 	{
-
-				tipo = Catalogo.SRVC_PROCEDIMIENTOS_NOTELEMATICO_DOCUMENTOS;
-
-			} else {
-
-				tipo = Catalogo.SRVC_PROCEDIMIENTOS_SISTRA_DOCUMENTOS;
-
-			}
-
-		}
-
-		return tipo;
-
-	}
 
 
 	/**
@@ -942,21 +582,5 @@ public abstract class ProcedimientoRemotoFacadeEJB extends HibernateEJB {
 	}
 
 
-	private Analyzer getAnalizador(String idi) {
-
-        Analyzer analyzer;
-
-        if (idi.toLowerCase().equals("de")) {
-            analyzer = new AlemanAnalyzer();
-        } else if (idi.toLowerCase().equals("en")) {
-            analyzer = new InglesAnalyzer();
-        } else if (idi.toLowerCase().equals("ca")) {
-            analyzer = new CatalanAnalyzer();
-        } else {
-            analyzer = new CastellanoAnalyzer();
-        }
-
-        return analyzer;
-    }
 
 }

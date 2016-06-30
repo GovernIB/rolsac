@@ -228,7 +228,7 @@ public class ProcedimientoTransferible extends ActuacionTransferible implements 
 		this.setTramite(proc.getTramite());
 		this.setVersion(proc.getVersion());
 		this.setValidacion(proc.getValidacion());
-		//#351cambio info por dir electrónica
+        //#351cambio info por dir electronica
         this.setInfo(proc.getDirElectronica());
         this.setTaxa(proc.getTaxa());
         this.setUrl(proc.getUrl());

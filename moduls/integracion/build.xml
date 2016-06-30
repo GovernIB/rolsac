@@ -78,9 +78,10 @@
             jarfile="${jar.product}/${modul}.jar"
             basedir="${jar.classes}">
             <manifest>
-                <attribute name="Created-By" value="Fundació IBIT"/>
+                <attribute name="Created-By" value="Fundació IBIT."/>
             </manifest>
-            <fileset dir="${jar.etc}">
+        	
+			<fileset dir="${jar.etc}">
                 <include name="*.properties"/>
             </fileset>
         </jar>
@@ -100,18 +101,23 @@
 	         <include name="${modul}.jar"/>
     		</lib>
         	
+        	<!--
+        	<lib dir="${lib.dir}">
+        		<include name="commons-logging.jar" />
+        	</lib> -->
+        	
         	<lib dir="${lib.dir}/axis2-1.5">
-        	  <include name="*jar" />
-        	   <exclude name="commons-logging-1.1.1.jar"/>
+        	  <include name="axis2*jar" />        	   
 			</lib>
 
+        	<!--
         	<lib dir="${lib.dir}/webcaib">
 				<include name="commons-collections-3.2.1.jar"/>
         	</lib>
 
         	<lib dir="${lib.dir}/jboss">
         	  <include name="commons-httpclient-3.1.jar" />
-        	</lib>
+        	</lib> -->
         </war>
 
     </target>

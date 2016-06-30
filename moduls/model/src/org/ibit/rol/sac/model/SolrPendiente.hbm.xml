@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.SolrPendiente" table="RSC_SOLRPD" mutable="true">
+        <id name="id" unsaved-value="null" column="SLP_ID">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+        <property name="tipo"            column="SLP_TIPO" />
+        <property name="idElemento"      column="SLP_IDELEM" />
+        <property name="accion"          column="SLP_ACCION"/>
+        <property name="fechaCreacion"   column="SLP_FECCRE" />
+        <property name="fechaIndexacion" column="SLP_FECIDX" />
+        <property name="resultado"       column="SLP_RESULT" />
+        <property name="mensajeError"    length="300"  column="SLP_TXTERR" />
+    </class>
+</hibernate-mapping>

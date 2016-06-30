@@ -1,29 +1,19 @@
 package org.ibit.rol.sac.persistence.util;
 
-import java.util.List;
 import java.util.ResourceBundle;
+
 import javax.mail.MessagingException;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.ibit.rol.sac.model.Auditoria;
 import org.ibit.rol.sac.model.Destinatario;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaRemota;
-import org.ibit.rol.sac.model.Procedimiento;
-import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.ProcedimientoRemoto;
 import org.ibit.rol.sac.model.TraduccionFicha;
-import org.ibit.rol.sac.model.TraduccionProcedimiento;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
-import org.ibit.rol.sac.model.TraduccionProcedimientoRemoto;
 import org.ibit.rol.sac.model.Usuario;
-import org.ibit.rol.sac.persistence.delegate.AuditoriaDelegate;
-import org.ibit.rol.sac.persistence.delegate.DelegateException;
-import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
-import org.ibit.rol.sac.persistence.util.EmailUtils;
 
 /**
  * Se encarga de gererar un informe con los datos de el objeto y de la excepcion

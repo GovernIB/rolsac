@@ -9,10 +9,13 @@ import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
+import org.ibit.rol.sac.model.SolrPendiente;
+import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 
-import es.caib.rolsac.lucene.model.ModelFilterObject;
 import es.caib.rolsac.utils.ResultadoBusqueda;
+import es.caib.solr.api.SolrIndexer;
+import es.caib.solr.api.model.types.EnumCategoria;
 
 public interface FichaDelegateI {
 
@@ -50,13 +53,6 @@ public interface FichaDelegateI {
 	
 	public abstract void borrarFichaUA(Long id) throws DelegateException;
 	
-	public abstract void indexInsertaFicha(Ficha fic, ModelFilterObject filter)
-			throws DelegateException;
-
-	public abstract void indexBorraFicha(Long id) throws DelegateException;
-	
-	public abstract ModelFilterObject obtenerFilterObject(Ficha ficha)
-			throws DelegateException;
 
 	public abstract Hashtable getContenidos_web() throws DelegateException;
 
@@ -78,5 +74,13 @@ public interface FichaDelegateI {
 	
 	public abstract void actualizaEnlacesFicha(Long id, List<Enlace> enlacesNuevos, List<Enlace> enlacesAEliminar)
 			throws DelegateException;
+
+	public abstract SolrPendienteResultado indexarSolr(SolrIndexer solrIndexer,SolrPendiente solrPendiente) throws DelegateException;
+    
+	public abstract SolrPendienteResultado indexarSolr(SolrIndexer solrIndexer, Long idElemento, EnumCategoria categoria) throws DelegateException;
 	
+    public abstract SolrPendienteResultado desindexarSolr(SolrIndexer solrIndexer,SolrPendiente solrPendiente) throws DelegateException;
+
+	public abstract List<Long> buscarIdsFichas() throws DelegateException;
+
 }

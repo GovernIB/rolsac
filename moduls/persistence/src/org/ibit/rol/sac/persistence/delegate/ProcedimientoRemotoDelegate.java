@@ -13,8 +13,6 @@ import org.ibit.rol.sac.persistence.intf.ProcedimientoRemotoFacade;
 import org.ibit.rol.sac.persistence.intf.ProcedimientoRemotoFacadeHome;
 import org.ibit.rol.sac.persistence.util.ProcedimientoRemotoFacadeUtil;
 
-import es.caib.rolsac.lucene.model.ModelFilterObject;
-
 /**
  * Business delegate para manipular procedimientos.
  */
@@ -64,13 +62,7 @@ public class ProcedimientoRemotoDelegate implements StatelessDelegate {
         }
 	}
 	
-    public void indexInsertaProcedimientoRemoto(ProcedimientoRemoto proc, ModelFilterObject filter) throws DelegateException {
-        try {
-            getFacade().indexInsertaProcedimientoRemoto(proc, filter);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
+ 
     
 	public Iniciacion obtenerIniciacion(final String ceIniciacion)
     throws DelegateException {
