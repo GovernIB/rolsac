@@ -87,7 +87,6 @@
 			<include name="rome-1.0RC2.jar"/>
     		<include name="org.springframework.*.jar" />
 		</fileset>
-
    	
     	<!-- enric: per posar traces de transaacions  -->
      	<fileset dir="${lib.dir}/jboss">
