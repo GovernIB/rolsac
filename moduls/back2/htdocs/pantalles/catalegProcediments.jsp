@@ -1017,7 +1017,7 @@
 				                       </div>
                                                                        
                                     
-                                							
+                                	</div>						
                                 <!-- /ca -->
 								</c:forEach>
                             </div>
