@@ -77,7 +77,7 @@
     	
 		<!-- agarcia: librerias comunes en 00librerias -->
     	<fileset dir="${lib.dir}/webcaib">
-    		<include name="quartz-1.8.5.jar" />
+    		<include name="quartz-1.8.5.jar"  /> 
     		<include name="commons-lang-2.1.jar"/>
 			<include name="commons-beanutils-1.8.3.jar"/>
 		    <include name="dom4j.jar"/>

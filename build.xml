@@ -474,7 +474,7 @@
         			<include name="commons-fileupload-1.2.2.jar" />
         			<include name="jfreechart-1.0.14.jar" />
         			<include name="jcommon-1.0.0.jar" />
-        			<include name="quartz-1.8.5.jar" />
+        			<include name="quartz-1.8.5.jar"  />
         	</fileset>
             
             <zipfileset dir="${lib}/axis-1.4" prefix="lib">
