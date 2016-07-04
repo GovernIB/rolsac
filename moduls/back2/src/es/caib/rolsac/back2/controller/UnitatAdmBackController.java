@@ -1408,14 +1408,19 @@ public class UnitatAdmBackController extends PantallaBaseController {
 
 			List<FichaDTO> fichas = this.castJsonListToHashTable(listaFichas);
 			
+			//Si ahora hay 0 es porque se está borrando, comprobamos si era la última comparando con el total de las que tiene la ua
 			if (fichas.size() == 0 ){
-				//Busco las fichas que habia anteriormente y si es mayor que 0 entonces no dejamos borrar
 				UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
-				String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			
+				List<SeccionFichaDTO> listaFichasActuales = getListaSeccionesDTO(idUA, uaDelegate);
+				int numFichas = 0;
+				for (SeccionFichaDTO seccionFichaDTO : listaFichasActuales) {
+					numFichas = numFichas + seccionFichaDTO.getNumFichas();
+				}
+				//descontamos la ficha que se esta intentando borrar
+				numFichas--;
 				
-				List<FichaDTO> fichasOld = uaDelegate.listarFichasSeccionUASinPaginacion(idUA, idSeccion, idioma);
-				
-				if (fichasOld.size()> 0){
+				if (numFichas <= 0){ //No quedan fichas para la ua
 					resultats.put( "error", messageSource.getMessage("error.seccio", null, request.getLocale() ) );
 					resultats.put("id", -3);
 					return resultats;
