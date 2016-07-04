@@ -478,8 +478,12 @@
         	</fileset>
             
             <zipfileset dir="${lib}/axis-1.4" prefix="lib">
-                <include name="axis.jar" />
+                <include name="axis.jar" />            	
             </zipfileset>
+        	
+        	<zipfileset dir="${lib}/axis-1.4">
+        		<include name="wsdl4j-1.5.1.jar" />
+        	</zipfileset>
         	
         	<zipfileset dir="${lib}/solr">
                 <include name="commons-io-2.4.jar" />
