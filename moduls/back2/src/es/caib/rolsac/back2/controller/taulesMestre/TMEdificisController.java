@@ -52,6 +52,7 @@ import es.indra.rol.sac.integracion.traductor.Traductor;
 public class TMEdificisController extends PantallaBaseController
 {
 	private static Log log = LogFactory.getLog(TMEdificisController.class);
+	private Map<String, Object> resultats;
 	
     @RequestMapping(value = "/edifici.do")
     public String pantalla(Map<String, Object> model, HttpServletRequest request) {
@@ -245,31 +246,31 @@ public class TMEdificisController extends PantallaBaseController
             
             omplirCampsTraduibles(resultats, edifici);
             
-            String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-            // Unitats Administratives asociadas
-            if (edifici.getUnidadesAdministrativas() != null) {
-            	Map<String, String> map;
-            	List<Map<String, String>> llistaUnitatsAdministratives = new ArrayList<Map<String, String>>();
-            	TraduccionUA traUA;
-				String nombre;
-				
-				for (Iterator it = edifici.getUnidadesAdministrativas().iterator(); it.hasNext();) {
-					UnidadAdministrativa unitatAdministrativa = (UnidadAdministrativa) it.next();
-					traUA = (TraduccionUA) unitatAdministrativa.getTraduccion(lang);
-					nombre = "";
-    				if (traUA != null) {
-    					//Retirar posible enlace incrustado en titulo
-    					nombre = HtmlUtils.obtenerTituloDeEnlaceHtml(traUA.getNombre());
-    				}
-    				map = new HashMap<String, String>(2);
-    				map.put("id", unitatAdministrativa.getId().toString());
-    				map.put("nombre", nombre);
-                    llistaUnitatsAdministratives.add(map);
-				}
-				resultats.put("unitatsAdm", llistaUnitatsAdministratives);
-            } else {
-                resultats.put("unitatsAdm", null);
-            }
+//          String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+//          Unitats Administratives asociadas
+//          if (edifici.getUnidadesAdministrativas() != null) {
+//          	Map<String, String> map;
+//          	List<Map<String, String>> llistaUnitatsAdministratives = new ArrayList<Map<String, String>>();
+//          	TraduccionUA traUA;
+//				String nombre;
+//				
+//				for (Iterator it = edifici.getUnidadesAdministrativas().iterator(); it.hasNext();) {
+//					UnidadAdministrativa unitatAdministrativa = (UnidadAdministrativa) it.next();
+//					traUA = (TraduccionUA) unitatAdministrativa.getTraduccion(lang);
+//					nombre = "";
+//  				if (traUA != null) {
+//  					//Retirar posible enlace incrustado en titulo
+//  					nombre = HtmlUtils.obtenerTituloDeEnlaceHtml(traUA.getNombre());
+//  				}
+//  				map = new HashMap<String, String>(2);
+//  				map.put("id", unitatAdministrativa.getId().toString());
+//  				map.put("nombre", nombre);
+//                  llistaUnitatsAdministratives.add(map);
+//				}
+//				resultats.put("unitatsAdm", llistaUnitatsAdministratives);
+//          } else {
+//              resultats.put("unitatsAdm", null);
+//          }
             // Fin unitatsAdm asociadas
             
         } catch (DelegateException dEx) {
@@ -538,8 +539,57 @@ public class TMEdificisController extends PantallaBaseController
 		return traduccioOrigen;
 	}
     
+	@RequestMapping(value = "/modulos.do")
+	public @ResponseBody Map<String, Object> recuperaModulos(Long id, HttpServletRequest request) {
+	
+		resultats = new HashMap<String, Object>();
+		try {
+			
+			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+		        
+		     EdificioDelegate edificiDelegate = DelegateUtil.getEdificioDelegate();
+		     Edificio edifici = edificiDelegate.obtenerEdificio(id);
+	        // Unitats Administratives asociadas
+	        if (edifici.getUnidadesAdministrativas() != null) {
+	        	Map<String, String> map;
+	        	List<Map<String, String>> llistaUnitatsAdministratives = new ArrayList<Map<String, String>>();
+	        	TraduccionUA traUA;
+				String nombre;
+				
+				for (Iterator it = edifici.getUnidadesAdministrativas().iterator(); it.hasNext();) {
+					UnidadAdministrativa unitatAdministrativa = (UnidadAdministrativa) it.next();
+					traUA = (TraduccionUA) unitatAdministrativa.getTraduccion(lang);
+					nombre = "";
+					if (traUA != null) {
+						//Retirar posible enlace incrustado en titulo
+						nombre = HtmlUtils.obtenerTituloDeEnlaceHtml(traUA.getNombre());
+					}
+					map = new HashMap<String, String>(2);
+					map.put("id", unitatAdministrativa.getId().toString());
+					map.put("nombre", nombre);
+	                llistaUnitatsAdministratives.add(map);
+				}
+				resultats.put("unitatsAdm", llistaUnitatsAdministratives);
+	        } else {
+	            resultats.put("unitatsAdm", null);
+	        }
+	        // Fin unitatsAdm asociadas
+			
+		} catch (DelegateException e) {
+	
+			log.error(ExceptionUtils.getStackTrace(e));
+	
+			if (e.isSecurityException())
+				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+			else
+				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+	
+		}
+	
+		return resultats;
+	
+	}
 }
-
 //public ActionForward unidades(ActionMapping mapping, ActionForm form,
 //        HttpServletRequest request, HttpServletResponse response) throws Exception {
 //

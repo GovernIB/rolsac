@@ -309,7 +309,7 @@ function CDetall(){
 			var div_idiomes_elm = escriptori_detall_elm.find("div.idiomes:first");
 			div_idiomes_elm.find("div." + a_primer_elm.attr("class")).addClass("seleccionat");
 			ul_idiomes_elm.bind("click", that.idioma);
-		}
+		};
         
         // Sincronizar campos sin idioma en zona multi-idioma.   
         jQuery("#item_direccio,#item_direccio_es,#item_direccio_en,#item_direccio_de,#item_direccio_fr").change(function(){
@@ -338,16 +338,16 @@ function CDetall(){
 		
 		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos				
 		this.guarda = this.guarda_upload;
-	}
+	};
 	
 	this.traduirWrapper = function () {
 		that.traduir(pagTraduirEdifici, CAMPOS_TRADUCTOR_EDIFICI, DATOS_TRADUCIDOS_EDIFICI);
-	}
+	};
 	
 	this.refreshCoordenadas = function (lat,lng) {
         jQuery("#item_latitud,#item_latitud_es,#item_latitud_en,#item_latitud_de,#item_latitud_fr").val(lat);
         jQuery("#item_longitud,#item_longitud_es,#item_longitud_en,#item_longitud_de,#item_longitud_fr").val(lng);
-	}
+	};
 	
 	//Sobreescribe el método guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
 	this.guarda_upload = function(e) {
@@ -383,13 +383,21 @@ function CDetall(){
 
 		return false;	
 		
-	}
+	};
 
 	this.nou = function() {
         $("#item_id").val("");
         
         ModulUnitatAdministrativa.nuevo();
         
+        //#356 tras pulsar el botón volver se pone el modulo con el class a invisible, como pintarModulos necesita dades
+        // $("#modul_unitats_administratives").removeClass("invisible");
+         
+        //         	var miObjeto = new Object();
+        //         miObjeto.unitatsAdm = new Array();
+        //         this.pintarModulos(miObjeto);
+        this.mostrarModulos();
+         
 		escriptori_detall_elm.find(".botonera li.btnEliminar").hide();
 		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);
 		
@@ -409,7 +417,7 @@ function CDetall(){
 		this.actualizaEventos();
 		
 		this.modificado(false);
-	}		
+	};
 	
 	this.pintar = function(dades) {
 		escriptori_detall_elm.find("a.elimina").show().end().find("h2:first").text(txtDetallTitol);
@@ -433,6 +441,10 @@ function CDetall(){
         jQuery("#item_latitud").change();
 		
 		
+//      jQuery("#modul_unitats_administratives").show();
+//      if (jQuery("#modul_unitats_administratives")  ){        	
+//      	addClass("invisible");
+//      }
 		//Fotos
 		//FotoPetita
         
@@ -452,7 +464,7 @@ function CDetall(){
 		// Fin bloque de pestanyas de idiomas
 		
 		
-		ModulUnitatAdministrativa.inicializarUnidadesAdministrativas(dada_node.unitatsAdm);
+		//ModulUnitatAdministrativa.inicializarUnidadesAdministrativas(dada_node.unitatsAdm);
 		
 		
         // mostrem
@@ -472,7 +484,7 @@ function CDetall(){
 		}
 		
 		this.modificado(false);	
-	}
+	};
 	
 	this.elimina = function() {
 		
@@ -504,5 +516,17 @@ function CDetall(){
 				}
 			}
 		});
-	}
+	};
+	
+	this.pintarModulos = function(dades) {
+		ModulUnitatAdministrativa.inicializarUnidadesAdministrativas(dades.unitatsAdm);
+	};
+	
+	//Muestra tras haberse ocultado los modulos
+	this.mostrarModulos = function(){
+		//modul lateral invisible #modul invisible
+		$("div.invisible").each(function() {
+			$(this).removeClass("invisible");
+		});
+	};
 };
