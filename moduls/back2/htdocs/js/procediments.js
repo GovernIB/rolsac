@@ -514,8 +514,12 @@ function CDetall() {
 		
 		// dates
 		//$("#item_data_publicacio, #item_data_caducitat").mask("99/99/9999").datepicker({ altField: '#actualDate' });
-		$("#item_data_caducitat").datepicker({ altField: '#actualDate', dateFormat: 'dd/mm/yy' });
-		$("#item_data_publicacio").bind("blur",Detall.dataPublicacio).datepicker({ altField: '#actualDate', dateFormat: 'dd/mm/yy' });
+		//$("#item_data_caducitat").datepicker({ altField: '#actualDate', dateFormat: 'dd/mm/yy'});
+		
+		$("#item_data_caducitat").datetimepicker({ format: 'yyyy/MM/dd HH:mm' , setDate: new Date(),hour:'23', minute:'59' });
+		//$("#item_data_publicacio").bind("blur",Detall.dataPublicacio).datepicker({ altField: '#actualDate', dateFormat: 'dd/mm/yy' });
+		$("#item_data_publicacio").bind("blur",Detall.dataPublicacio).datetimepicker({ timeFormat: 'hh:mm' });
+		
 
 		// idioma
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {

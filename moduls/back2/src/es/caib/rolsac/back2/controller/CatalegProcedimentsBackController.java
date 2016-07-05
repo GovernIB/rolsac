@@ -298,8 +298,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			resultats.put("item_codigo_pro", proc.getSignatura());			
 			resultats.put("item_estat", proc.getValidacion());						
 			resultats.put("item_data_actualitzacio", DateUtils.formatDate(proc.getFechaActualizacion()));
-			resultats.put("item_data_publicacio", DateUtils.formatDate(proc.getFechaPublicacion()));
-			resultats.put("item_data_caducitat", DateUtils.formatDate(proc.getFechaCaducidad()));
+			resultats.put("item_data_publicacio", DateUtils.formatDateSimpleTime(proc.getFechaPublicacion()));
+			resultats.put("item_data_caducitat", DateUtils.formatDateSimpleTime(proc.getFechaCaducidad()));
 			resultats.put("item_codi", proc.getSignatura());
 			resultats.put("item_tramite", proc.getTramite());
 			resultats.put("item_url", proc.getUrl());
@@ -883,7 +883,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 		if (!StringUtils.isEmpty(request.getParameter("item_data_publicacio"))) {
 			
-			Date data_publicacio = DateUtils.parseDate(request.getParameter("item_data_publicacio"));
+			Date data_publicacio = DateUtils.parseDateSimpleTime(request.getParameter("item_data_publicacio"));
 			
 			if (data_publicacio == null) {
 			    throw new ParseException("error.data_publicacio", 0);
@@ -905,7 +905,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 		if (!StringUtils.isEmpty(request.getParameter("item_data_caducitat"))) {
 			
-			Date data_caducitat = DateUtils.parseDate(request.getParameter("item_data_caducitat"));
+			Date data_caducitat = DateUtils.parseDateSimpleTime(request.getParameter("item_data_caducitat"));
 			
 			if (data_caducitat == null) {
 			    throw new ParseException("error.data_caducitat", 0);

@@ -94,10 +94,10 @@ public class TramiteBackController {
     		resultats.put("id_procediment_tramit", procedimiento.getId());
     		resultats.put("nom_procediment_tramit", ((TraduccionProcedimiento) procedimiento.getTraduccion(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto())).getNombre());
     		resultats.put("tramit_item_data_actualitzacio", DateUtils.formatDate(tramite.getDataActualitzacio()));
-    		resultats.put("tramit_item_data_publicacio", DateUtils.formatDate(tramite.getDataPublicacio()));
+    		resultats.put("tramit_item_data_publicacio", DateUtils.formatDateSimpleTime(tramite.getDataPublicacio()));
     		resultats.put("tramit_item_data_caducitat", DateUtils.formatDate(tramite.getDataCaducitat()));
-    		resultats.put("tramit_item_data_inici", DateUtils.formatDate(tramite.getDataInici()));
-    		resultats.put("tramit_item_data_tancament", DateUtils.formatDate(tramite.getDataTancament()));
+    		resultats.put("tramit_item_data_inici", DateUtils.formatDateSimpleTime(tramite.getDataInici()));
+    		resultats.put("tramit_item_data_tancament", DateUtils.formatDateSimpleTime(tramite.getDataTancament()));
     		resultats.put("item_moment_tramit", tramite.getFase());
     		resultats.put("item_validacio_tramit", tramite.getValidacio());
     		resultats.put("item_url_tramit", tramite.getUrlExterna());
@@ -304,7 +304,7 @@ public class TramiteBackController {
 			}
 			
 
-			//#4 si el tramite tiene momento=ini, el procedimiento es público debe tener modelo solicitud obligatoriamente
+			//#4 si el tramite tiene momento=ini, el procedimiento es pï¿½blico debe tener modelo solicitud obligatoriamente
 
 			if (edicion && isProcedimientoConEstadoPublicacionPublica && fase == 1 &&
 					(request.getParameter("formularisTramit") == null || request.getParameter("formularisTramit").equals(""))) {
@@ -576,13 +576,13 @@ public class TramiteBackController {
 
 	private void procesarFechasTramite(HttpServletRequest request, Tramite tramite)
 	{
-		Date fechaInicio = DateUtils.parseDate(request.getParameter("tramit_item_data_inici"));
+		Date fechaInicio = DateUtils.parseDateSimpleTime(request.getParameter("tramit_item_data_inici"));
         tramite.setDataInici(fechaInicio);
         
-        Date fechaCierre= DateUtils.parseDate(request.getParameter("tramit_item_data_tancament"));
+        Date fechaCierre= DateUtils.parseDateSimpleTime(request.getParameter("tramit_item_data_tancament"));
         tramite.setDataTancament(fechaCierre);
         
-		Date fechaPublicacion = DateUtils.parseDate(request.getParameter("tramit_item_data_publicacio"));
+		Date fechaPublicacion = DateUtils.parseDateSimpleTime(request.getParameter("tramit_item_data_publicacio"));
 		tramite.setDataPublicacio(fechaPublicacion);
 		
 		Date fechaActualizacion = DateUtils.parseDate(request.getParameter("tramit_item_data_actualitzacio"));
