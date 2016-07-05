@@ -129,7 +129,7 @@ public abstract class EdificioFacadeEJB extends HibernateEJB
 		try {
 			List params = new ArrayList();
 			String i18nQuery = "";
-			String mainQuery = "select distinct edificio from Edificio as edificio , edificio.traducciones as trad, edificio.unidadesAdministrativas edua where ";
+			String mainQuery = "select distinct edificio from Edificio as edificio , edificio.traducciones as trad left outer join edificio.unidadesAdministrativas edua where ";
 			
 			if (traduccion.get("idioma") != null) {
 				i18nQuery = populateQuery(parametros, traduccion, params);
