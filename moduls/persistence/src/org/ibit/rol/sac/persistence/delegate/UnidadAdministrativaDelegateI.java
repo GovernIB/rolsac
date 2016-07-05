@@ -194,6 +194,9 @@ public interface UnidadAdministrativaDelegateI {
 	public abstract List<FichaDTO> listarFichasSeccionUA(final Long idUA, final Long idSeccion, String idioma, PaginacionCriteria paginacion)
 			throws DelegateException;
 	
+	public abstract List<FichaDTO> listarFichasSeccionUASinPaginacion(final Long idUA, final Long idSeccion, String idioma)
+			throws DelegateException;
+	
 	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate#actualizaFichasSeccionUA(java.lang.Long, java.lang.Long, java.util.List)
 	 */

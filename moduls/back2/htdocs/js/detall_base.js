@@ -595,7 +595,11 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 
 			// TinyMCE, aún forzando a que escape a entidades numéricas, no contempla el caso del tanto por ciento %.
 			// Toca hacerlo de forma explícita antes de codificar completamente la cadena con encodeURIComponent().
-			texto = texto.replace(/%/g, "&#37;");
+			if (typeof texto != 'undefined'){				
+				texto = texto.replace(/%/g, "&#37;");
+			} else {
+				texto = "";
+			}
 			dataVars += and + campo + "=" + encodeURIComponent(texto);
 
 		}

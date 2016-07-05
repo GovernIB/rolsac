@@ -172,6 +172,10 @@
    // suggeriments
    var suggeriments = "";
 
+   var txtColUsuario = "<spring:message code='txt.auditoria.usu'/>";
+   var txtColNombre = "<spring:message code='txt.auditoria.nombre'/>";
+   var txtColFecha = "<spring:message code='txt.auditoria.fecha'/>";
+   var txtColOperacion = "<spring:message code='txt.auditoria.operacion'/>";
 </script>
    
 <script type="text/javascript">

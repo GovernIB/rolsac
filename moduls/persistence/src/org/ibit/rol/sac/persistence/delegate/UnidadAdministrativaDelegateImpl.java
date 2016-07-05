@@ -354,6 +354,14 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
 		}
 	}
 	
+	public List<FichaDTO> listarFichasSeccionUASinPaginacion(Long idUA, Long idSeccion, String idioma) throws DelegateException {
+		try {
+			return getFacade().listarFichasSeccionUASinPaginacion(idUA, idSeccion, idioma);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+	
 	public void actualizaFichasSeccionUA(Long idUA, Long idSeccion, List<FichaDTO> fichas) throws DelegateException {
 		try {
 			getFacade().actualizaFichasSeccionUA(idUA, idSeccion, fichas);

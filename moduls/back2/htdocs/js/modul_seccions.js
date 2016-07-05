@@ -90,6 +90,7 @@ function CModulSeccio() {
 		if (debug)
 			console.log("Entrando en CModulSeccio.mostraFitxes");
 
+		txtTituloCabeceraFichas = e.innerText;
 		//Mostrar panel de fichas de la seccion actual
 
 		$('#escriptori_fitxes').css('display', 'inline-block');
@@ -189,7 +190,7 @@ function CModulSeccio() {
 		};
 
 		// En el cas de les fitxes, "nodoOrigen" varia en funcio de quina seccio 
-		// s'esta� gestionant		
+		// s'estan gestionant		
 		paramsFicha = {
 				nombre: "fitxa",
 				nodoOrigen: "",
@@ -213,7 +214,7 @@ function CModulSeccio() {
 				if (numFitxes != null)
 					texteFitxes = " (" + numFitxes  + " " + ( numFitxes > 1 ? txtFitxes : txtFitxa ) + ")";
 
-				// crearem una llista per a cada enllass de seccio, que contindra�les fitxes que te assignades
+				// crearem una llista per a cada enllass de seccio, que contindra les fitxes que te assignades
 				codi_seccions += "<li class=\"nodoListaSecciones\">";
 				codi_seccions += '<input type="hidden" name="seccio_modificada_'+ seccio_node.id +'" value="0"/>';
 				codi_seccions += "<input class=\"seccio_orden\" id=\"seccio_orden_"+ seccio_node.id +"\" name=\"seccio_orden_" + seccio_node.id + "\" type=\"hidden\" value=\"" + (index+1) + "\" />";
@@ -640,7 +641,7 @@ function CModulSeccio() {
 		$subModuloModificado.val(1);
 		
 		//var numFichas = this.copiaFinalFitxes();
-		var numFichas = $("#escriptori_fitxes .tbody > div.tr").length;
+		var numFichas = $("#resultatsFitxes").data("fichas").length;//$("#escriptori_fitxes .tbody > div.tr").length;
 		var idSeccion = $("#idSeccion").val();
 
 		// Petición AJAX para guardar estado fichas-seccion-UA.
@@ -658,19 +659,24 @@ function CModulSeccio() {
 		if (debug)
 			console.log("Entrando en CModulSeccio.guardaEstadoFichasSeccionUA");
 
-		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
+		//Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
 
 		// Construimos variable con los datos (idUA, idSeccion, idFicha1, idFicha2, etc.
 		var idUA = $('#item_id').val();
 		var idSeccion = $("#idSeccion").val();
-		var cantidadFichas = $("#escriptori_fitxes .tbody > div.tr").length;
+		var cantidadFichas = $("#resultatsFitxes").data("fichas").length;
+		var listaTotal = $("#resultatsFitxes").data("fichas");
+		//Comprobamos si se ha borrado alguna línea
+		var listaPantalla = $('#escriptori_fitxes .tbody > div.tr').length;
+		
 		var listaFichas = '[';
 		var contadorFichas = 0;
 
-		$('#escriptori_fitxes .tbody > div.tr').each(function() {
-
-			var id = $(this).find(".id").val();
-			var orden = $(this).find("select option:selected").val();
+		//$('#escriptori_fitxes .tbody > div.tr').each(function() {
+		for (var i=0; i<listaTotal.length; i++) {
+			//var id = $(this).find(".id").val();
+		    var id =  listaTotal[i].id;
+			var orden = listaTotal[i].ordre;//$(this).find("select option:selected").val();
 			contadorFichas++;
 
 			listaFichas += '{"id": ' + id + ', "ordre":' + orden + '}';
@@ -678,7 +684,7 @@ function CModulSeccio() {
 			if ( contadorFichas != cantidadFichas )
 				listaFichas += ",";
 
-		});
+		};
 
 		listaFichas += "]";
 
@@ -693,17 +699,17 @@ function CModulSeccio() {
 			},
 			success: function(data) {
 
-				Missatge.cancelar();
+				//Missatge.cancelar();
 
 				// Comprobar valor de retorno:
 				if (data.id == -1) {
 
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
 
-				} else if ( data.id < -1 ) {
-
+				} else if ( data.id == -3 ) {
+    				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: data.error});
+    			} else if ( data.id < -1 ) {
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
-
 				} 
 
 			}
@@ -1904,7 +1910,7 @@ function CEscriptoriSeccioFitxes() {
 			var element = $(this).parents('div.tr');
 
 			$(this).click(function() {
-
+				var id = $(element).find(".id").val();
 				$(element).remove();
 
 				switch (cantidad) {
@@ -1930,6 +1936,18 @@ function CEscriptoriSeccioFitxes() {
 						});
 
 				}
+				
+				//Borramos el valor de la lista de fitxas devueltas, para que al guardar no se guarden los valores borrados.
+				var listaTotal = $("#resultatsFitxes").data("fichas");
+				 
+				for (var i=0; i<listaTotal.length; i++) {
+					if (listaTotal[i].id == id){
+						listaTotal.splice(i,1);
+					}
+				}
+				
+				$("#resultatsFitxes").data("fichas", listaTotal);
+
 
 			});
 

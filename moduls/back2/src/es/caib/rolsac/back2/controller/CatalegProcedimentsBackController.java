@@ -635,21 +635,33 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 					// Comprobar que haya al menos un trámite de inicio y comprobar si hay más de un trámite de inicio.
 					boolean hayTramiteDeIniciacion = false;
 					int numTramitesIniciacion = 0;
+					boolean hayTramiteSinModelo = false;
 					
 					for (Long id : listaIdsTramitesParaActualizar) {
 						Tramite tramite = DelegateUtil.getTramiteDelegate().obtenerTramite(id);
 						if (tramite.getFase() == Tramite.INICIACION) {
 							hayTramiteDeIniciacion = true;
 							numTramitesIniciacion++;
+							//#349 si el tramite de ini no tiene modelo solicitud
+							if(tramite.getFormularios() == null || tramite.getFormularios().size() == 0){
+								hayTramiteSinModelo = true;
+								
+							}
 						}
 					}
 					
-					if (!hayTramiteDeIniciacion)
+					if (!hayTramiteDeIniciacion) {
 						throw new IllegalStateException("error_no_tramite_iniciacion");
+					}
 					
-					if (numTramitesIniciacion > 1)
+					if (numTramitesIniciacion > 1) {
 						throw new IllegalStateException("error_mas_de_un_tramite_de_iniciacion");
-
+					}
+					
+					if(hayTramiteSinModelo) {
+						error = messageSource.getMessage("error.model_sol_obligatori", null, request.getLocale());
+						return new IdNomDTO(-1l, error);
+					}
 				}
 				
 			}
@@ -750,7 +762,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		// Mantenemos los valores originales que tiene el procedimiento.
 		procediment.setId(procedimentOld.getId());
 		procediment.setTramites(procedimentOld.getTramites());
-		procediment.setOrganResolutori(procedimentOld.getOrganResolutori());
+		//#349 procediment.setOrganResolutori(procedimentOld.getOrganResolutori());
 		procediment.setPublicosObjetivo(procedimentOld.getPublicosObjetivo());
 		procediment.setMaterias(procedimentOld.getMaterias());
 		procediment.setNormativas(procedimentOld.getNormativas());
@@ -775,17 +787,15 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				Set<PublicoObjetivo> publicsNous = new HashSet<PublicoObjetivo>();
 				publicsNous.addAll(publicObjDelegate.obtenerPublicosObjetivoPorIDs(request.getParameter("publicsObjectiu"), idioma));
 				procediment.setPublicosObjetivo(publicsNous);
-
 			} else {
-				
 				procediment.setPublicosObjetivo(new HashSet<PublicoObjetivo>());
-				
 			}
 			
+		}else{
+			//#349
+			procediment.setPublicosObjetivo(procedimentOld.getPublicosObjetivo());
 		}
-
 		return procediment;
-		
 	}
 
 	/*

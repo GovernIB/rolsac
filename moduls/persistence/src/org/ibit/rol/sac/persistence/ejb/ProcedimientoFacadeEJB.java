@@ -1100,14 +1100,11 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 
 			if ( bc.getVisibilidad() == Validacion.PUBLICA ) {
-
 				where.append(" and (sysdate < procedimiento.fechaCaducidad or procedimiento.fechaCaducidad is null) ");
 				where.append(" and (sysdate > procedimiento.fechaPublicacion or procedimiento.fechaPublicacion is null) ");
-
+				where.append(" and (procedimiento.validacion <> "+Validacion.INTERNA+" and procedimiento.validacion <> "+Validacion.RESERVA+") "); //#355 devolvia no visibles
 			} else if ( bc.getVisibilidad() == Validacion.INTERNA ) {
-
-				where.append(" and (sysdate > procedimiento.fechaCaducidad or sysdate < procedimiento.fechaPublicacion or procedimiento.validacion = 2 or procedimiento.validacion = 3) ");
-
+				where.append(" and (sysdate > procedimiento.fechaCaducidad or sysdate < procedimiento.fechaPublicacion or procedimiento.validacion = "+Validacion.INTERNA+" or procedimiento.validacion = "+Validacion.RESERVA+") ");
 			}
 
 

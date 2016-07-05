@@ -1387,10 +1387,11 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	/**
 	 * Método que recibe petición AJAX de guardado del estado de las fichasUA de la UA.
 	 * @param request
+	 * @throws DelegateException 
 	 * @return
 	 */
 	@RequestMapping(value = "/guardarFitxesUASeccio.do", method = POST)
-	public @ResponseBody Map<String, Object> guardarFitxesUASeccio(Long idUA, Long idSeccion, String listaFichas, HttpServletRequest request) {
+	public @ResponseBody Map<String, Object> guardarFitxesUASeccio(Long idUA, Long idSeccion, String listaFichas, HttpServletRequest request) throws DelegateException {
 
 		Map<String, Object> resultats = new HashMap<String, Object>();
 
@@ -1402,10 +1403,24 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			return resultats;
 
 		}
-
+		
 		try {
 
 			List<FichaDTO> fichas = this.castJsonListToHashTable(listaFichas);
+			
+			if (fichas.size() == 0 ){
+				//Busco las fichas que habia anteriormente y si es mayor que 0 entonces no dejamos borrar
+				UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+				String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+				
+				List<FichaDTO> fichasOld = uaDelegate.listarFichasSeccionUASinPaginacion(idUA, idSeccion, idioma);
+				
+				if (fichasOld.size()> 0){
+					resultats.put( "error", messageSource.getMessage("error.seccio", null, request.getLocale() ) );
+					resultats.put("id", -3);
+					return resultats;
+				}
+			}
 			UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
 			uaDelegate.actualizaFichasSeccionUA(idUA, idSeccion, fichas);
 

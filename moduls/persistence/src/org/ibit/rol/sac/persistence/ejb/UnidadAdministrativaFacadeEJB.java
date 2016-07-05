@@ -1718,6 +1718,56 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 	}
 
+	/**
+	 * Devuelve un {@link List} de {@link FichaUA}, relacionadas con una {@link UnidadAdministrativa} y una {@link Seccion}.
+	 *
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param	idUA	Identificador de la unidad administrativa solicitada.
+	 * 
+	 * @param	idSeccion	Identificador de la sección solicitada.
+	 * 
+	 * @return	Devuelve <code>List<FichaDTO></code> relacionadas con una unidad administrativa y una sección.
+	 */
+	public List<FichaDTO> listarFichasSeccionUASinPaginacion(Long idUA, Long idSeccion, String idioma) {
+
+		List<FichaDTO> listaFichas = new ArrayList<FichaDTO>();
+		
+		if ( idUA != null && idSeccion != null ) {
+
+			Session session = getSession();
+
+			try {
+				
+				Query query = session.getNamedQuery("fichasBySeccionInUA");
+				query.setParameter("idUA", idUA);
+				query.setParameter("idSeccion", idSeccion);
+				query.setParameter("idioma", idioma);
+				query.setParameter("validacion", Validacion.PUBLICA);
+				
+				
+				/* 16/12/2013: Se genera un orden en lugar de recuperar el orden real debido a que se ha cambiado el mecanismo que establece el orden de las fichas.
+				 Los datos antiguos generan valores que no coinciden con los generados por el nuevo mecanismo.*/
+				listaFichas = (ArrayList<FichaDTO>) query.list();
+																			
+				
+			} catch (HibernateException he) {
+
+				throw new EJBException(he);
+
+			} finally {
+
+				close(session);
+
+			}
+
+		}
+		
+		return listaFichas;
+
+	}
 
 	/**
 	 * Compone la miga de pan de la unidad administrativa para el rolsacback

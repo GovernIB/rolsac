@@ -188,7 +188,10 @@ public class UnidadAdministrativaDelegate {
 		return impl.listarFichasSeccionUA(idUA, idSeccion, idioma, paginacion);
 	}
 	
-
+	public List<FichaDTO> listarFichasSeccionUASinPaginacion(Long idUA, Long idSeccion, String idioma) throws DelegateException {
+		return impl.listarFichasSeccionUASinPaginacion(idUA, idSeccion, idioma);
+	}
+	
 	public void actualizaFichasSeccionUA(Long idUA, Long idSeccion, List<FichaDTO> fichas) throws DelegateException {
 		impl.actualizaFichasSeccionUA(idUA, idSeccion, fichas);
 	}
