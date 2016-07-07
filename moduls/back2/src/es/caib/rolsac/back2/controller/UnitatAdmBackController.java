@@ -1408,24 +1408,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 
 			List<FichaDTO> fichas = this.castJsonListToHashTable(listaFichas);
 			
-			//Si ahora hay 0 es porque se está borrando, comprobamos si era la última comparando con el total de las que tiene la ua
-			if (fichas.size() == 0 ){
-				UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
-			
-				List<SeccionFichaDTO> listaFichasActuales = getListaSeccionesDTO(idUA, uaDelegate);
-				int numFichas = 0;
-				for (SeccionFichaDTO seccionFichaDTO : listaFichasActuales) {
-					numFichas = numFichas + seccionFichaDTO.getNumFichas();
-				}
-				//descontamos la ficha que se esta intentando borrar
-				numFichas--;
-				
-				if (numFichas <= 0){ //No quedan fichas para la ua
-					resultats.put( "error", messageSource.getMessage("error.seccio", null, request.getLocale() ) );
-					resultats.put("id", -3);
-					return resultats;
-				}
-			}
 			UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
 			uaDelegate.actualizaFichasSeccionUA(idUA, idSeccion, fichas);
 
@@ -1753,5 +1735,37 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		return result;
 		
 	}
+	
+	
+	/**
+	 * Método que recibe petición AJAX de consultar si la ficha no tiene más secciones, entonces se decide si se puede o no borrar
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/validarBorrar.do", method = POST)
+	public @ResponseBody IdNomDTO validarBorrar(HttpServletRequest request, Long idFitxa) {
 
+		String ok = messageSource.getMessage("unitatadm.guardat.usuaris.correcte", null, request.getLocale());
+		  
+		IdNomDTO result = new IdNomDTO(1L, ok);
+
+		try {
+
+			 Integer numRelaciones= DelegateUtil.getFichaDelegate().comprobarRelacionFicha(idFitxa);
+			 
+			 if(numRelaciones <= 1){
+				 String error = messageSource.getMessage("error.seccio", null, request.getLocale());
+				 return	result = new IdNomDTO(-1l, error);
+			 }
+
+		} catch (DelegateException e) {
+
+			String error = messageSource.getMessage("error.altres", null, request.getLocale());
+			result = new IdNomDTO(-1l, error);
+
+		}
+
+		return result;
+
+	}
 }

@@ -78,5 +78,5 @@ public interface FichaDelegateI {
 	
 	public abstract void actualizaEnlacesFicha(Long id, List<Enlace> enlacesNuevos, List<Enlace> enlacesAEliminar)
 			throws DelegateException;
-	
+	public Integer comprobarRelacionFicha(Long idFitxa) throws DelegateException;
 }

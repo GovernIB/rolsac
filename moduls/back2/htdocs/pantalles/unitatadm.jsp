@@ -1859,6 +1859,7 @@
         var pagFitxa = '<c:url value="/fitxainf/pagDetall.do" />';
         var pagFitxaDetall = '<c:url value="/fitxainf/fitxainf.do" />';
         var fitxaBorrable = '<c:url value="/unitatadm/fitxaBorrable.do" />';   
+        var validarBorrar = '<c:url value="/unitatadm/validarBorrar.do" />';
         
         // URL para ordenar el listado de UA hijas. 
         var pagOrdenarUAHijas = '<c:url value="/unitatadm/reordenarUAs.do" />';

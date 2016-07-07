@@ -665,7 +665,7 @@ function CModulSeccio() {
 		var idSeccion = $("#idSeccion").val();
 		var cantidadFichas = $("#resultatsFitxes").data("fichas").length;
 		var listaTotal = $("#resultatsFitxes").data("fichas");
-		//Comprobamos si se ha borrado alguna línea
+		//Comprobamos si se ha borrado alguna lï¿½nea
 		var listaPantalla = $('#escriptori_fitxes .tbody > div.tr').length;
 		
 		
@@ -1922,43 +1922,74 @@ function CEscriptoriSeccioFitxes() {
 			$(this).click(function() {
 
 				var id = $(element).find(".id").val();
-				$(element).remove();
+				var dataVars = "idFitxa=" + id;
 				
-
-				switch (cantidad) {
 				
-					case 0:
-						$('#resultatsFitxes .dades').html( "<p class=\"noItems\">" + txtNoHiHaFitxes + "</p>" );
-						break;
-	
-					default:
-						$("#resultatsFitxes .dades > p.info > strong").html(cantidad);
-	
-						var contador = 1;
-		
-						$("#resultatsFitxes .dades > div.table > div.tbody > div.tr").each(function() {
-		
-							$(this).removeClass("par");
-		
-							if ( contador % 2 == 0 )
-								$(this).addClass("par");
-		
-							contador += 1;
-		
-						});
+				$.ajax({
+					type: "POST",
+					url: validarBorrar,
+					data: dataVars,
+					dataType: "json",
+					error: function(data) {
+							// missatge
+							Missatge.llansar( { tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: data.error } );
+							// error
+							Error.llansar();
+					},
+					success: function(data) {
+						
+						if (data.id <= 0) {
 
-				}
-				//Borramos el valor de la lista de fitxas devueltas, para que al guardar no se guarden los valores borrados.
+							Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: data.nom});
+
+						}else{
+							
+							$(element).remove();
+							
+							switch (cantidad) {
+							
+							case 0:
+								$('#resultatsFitxes .dades').html( "<p class=\"noItems\">" + txtNoHiHaFitxes + "</p>" );
+								break;
 								
-				var listaTotal = $("#resultatsFitxes").data("fichas");
-				
-				for (var i=0; i<listaTotal.length; i++) {
-					if (listaTotal[i].id == id){
-						listaTotal.splice(i,1);
+							default:
+								$("#resultatsFitxes .dades > p.info > strong").html(cantidad);
+							
+							var contador = 1;
+							
+							$("#resultatsFitxes .dades > div.table > div.tbody > div.tr").each(function() {
+								
+								$(this).removeClass("par");
+								
+								if ( contador % 2 == 0 )
+									$(this).addClass("par");
+								
+								contador += 1;
+								
+							});
+							
+							}
+							//Borramos el valor de la lista de fitxas devueltas, para que al guardar no se guarden los valores borrados.
+							
+							var listaTotal = $("#resultatsFitxes").data("fichas");
+							
+							for (var i=0; i<listaTotal.length; i++) {
+								if (listaTotal[i].id == id){
+									listaTotal.splice(i,1);
+								}
+							}
+							
+							$("#resultatsFitxes").data("fichas", listaTotal);
+							
+						}
+						
+						
+						
 					}
-				}
+				});
 				
-				$("#resultatsFitxes").data("fichas", listaTotal);
+				
+				
 
 			});
 

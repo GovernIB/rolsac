@@ -2318,5 +2318,42 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     	}
 
     }
+    
+    /**
+     * Calcula el número de relaciones ficha-ua
+     *  @param	idFicha	Identificador de una ficha
+     *  @return Número de relaciones ficha-ua
+     * 	@ejb.interface-method
+     * 	@ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+     */
+    public Integer comprobarRelacionFicha(Long idFicha) {
+
+    	Session session = getSession();
+    	Integer numRelaciones = 0;
+
+    	try {
+    		
+    		StringBuilder consulta = new StringBuilder("select count( ficUA.ficha ) from  FichaUA as ficUA  where ficUA.ficha= :id");
+			
+
+			Query query = session.createQuery( consulta.toString() );
+			query.setParameter("id", idFicha);
+			
+			numRelaciones = (Integer) query.uniqueResult();
+    		
+
+    		return numRelaciones;
+
+    	} catch (HibernateException e) {
+    		
+    		throw new EJBException(e);
+    		
+    	} finally {
+    		
+    		close(session);
+    		
+    	}
+    	
+    }
 
 }

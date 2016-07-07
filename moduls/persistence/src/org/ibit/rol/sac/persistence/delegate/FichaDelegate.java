@@ -164,5 +164,10 @@ public class FichaDelegate implements FichaDelegateI {
 	public void actualizaEnlacesFicha(Long id, List<Enlace> enlacesNuevos, List<Enlace> enlacesAEliminar) throws DelegateException {
 		impl.actualizaEnlacesFicha(id, enlacesNuevos, enlacesAEliminar);
 	}
+
+
+	public Integer comprobarRelacionFicha(Long idFitxa) throws DelegateException{
+		return impl.comprobarRelacionFicha(idFitxa);
+	}
 	
 }
