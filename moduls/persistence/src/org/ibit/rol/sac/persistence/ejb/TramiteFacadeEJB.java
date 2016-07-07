@@ -1059,6 +1059,13 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 					Hibernate.initialize(documentTramit.getTramit().getProcedimiento().getUnidadAdministrativa());
 					Hibernate.initialize(documentTramit.getTramit().getProcedimiento().getMaterias());
 					Hibernate.initialize(documentTramit.getTramit().getProcedimiento().getPublicosObjetivo());
+					Hibernate.initialize(documentTramit.getTraduccionMap());
+					for (String keyIdioma : documentTramit.getTraduccionMap().keySet()) {
+						TraduccionDocumento trad  = (TraduccionDocumento) documentTramit.getTraduccion(keyIdioma);
+						if (trad != null) {
+							Hibernate.initialize(trad.getArchivo());
+						}
+					}
 				}
 			} catch (HibernateException he) {
 				log.error("Error obteniendo document tramite según archivo con id " + idDocumentTramit, he);
@@ -1273,7 +1280,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			//Recorremos las traducciones
 			for (String keyIdioma : docTramite.getTraduccionMap().keySet()) {
 				final EnumIdiomas enumIdioma = EnumIdiomas.fromString(keyIdioma);
-				final TraduccionDocumentTramit traduccion = (TraduccionDocumentTramit)traducciones.get(keyIdioma);
+				final TraduccionDocumento traduccion = (TraduccionDocumento)traducciones.get(keyIdioma);
 				
 				if (traduccion != null && enumIdioma != null) {
 					//Anyadimos idioma al enumerado.
@@ -1287,9 +1294,14 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			    	if (tramite.getTraduccion(keyIdioma) != null) {
 			    		descripcionPadre.addIdioma(enumIdioma, ((TraduccionTramite) tramite.getTraduccion(keyIdioma)).getNombre());
 			    	}
-			    	searchText.addIdioma(enumIdioma, traduccion.getTitulo()+ " " + traduccion.getDescripcion() +" " + traduccion.getArchivo().getNombre());
-			    	urls.addIdioma(enumIdioma, "/govern/rest/arxiu/"+docTramite.getArchivo().getId());
-			    	extension.addIdioma(enumIdioma, docTramite.getArchivo().getMime());
+			    	
+			    	if (traduccion.getArchivo() == null) {
+			    		searchText.addIdioma(enumIdioma, traduccion.getTitulo()+ " " + traduccion.getDescripcion());
+			    	} else {
+			    		searchText.addIdioma(enumIdioma, traduccion.getTitulo()+ " " + traduccion.getDescripcion() +" " + traduccion.getArchivo().getNombre());
+			    		urls.addIdioma(enumIdioma, "/govern/rest/arxiu/"+traduccion.getArchivo().getId());
+				    	extension.addIdioma(enumIdioma, traduccion.getArchivo().getMime());
+				    }
 			    	
 			    	//Unidades administrativas de las fichas.
 					UnidadAdministrativa unidadAdministrativa = procedimiento.getUnidadAdministrativa();

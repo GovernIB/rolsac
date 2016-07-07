@@ -378,7 +378,7 @@ function CLlistat(){
 					txtSolrDescripcionTipo = txtSolrDescripcionTipoTra + " " + dada_node.idElemento;
 				}else if(dada_node.tipo == "DFC "){
 					txtSolrDescripcionTipo = txtSolrDescripcionTipoFichaDoc + " " + dada_node.idElemento;
-				} else if(data_node.tipo == "DTR") {
+				} else if(dada_node.tipo == "DTR") {
 					txtSolrDescripcionTipo = txtSolrDescripcionTipoTraDoc + " " + dada_node.idElemento;
 				} else {
 					txtSolrDescripcionTipo = "Elemento:"+ " "+ dada_node.idElemento ;

@@ -425,6 +425,7 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
 							}
 	        				break;
 	        			case ROLSAC_TRAMITE:
+	        			case ROLSAC_TRAMITE_DOCUMENTO:
 							if (solrpendiente.getAccion() == 1) {
 								solrPendienteResultado= tramDelegate.indexarSolr(solrIndexer, solrpendiente);
 							} else if (solrpendiente.getAccion() == 2) {
@@ -475,6 +476,7 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
 	    	 if (solrPendienteResultado != null) {
 	    		if (solrPendienteResultado.isCorrecto()) {
 					solrpendiente.setResultado(1);
+					solrpendiente.setMensajeError(solrPendienteResultado.getMensaje());
 					solrpendiente.setFechaIndexacion(new Date());
 					session.update(solrpendiente);
 					session.flush();
