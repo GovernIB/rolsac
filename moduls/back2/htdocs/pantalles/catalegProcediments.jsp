@@ -1917,42 +1917,44 @@
 		        <!-- /modul -->		
 		        
 		        <!-- modul -->
-		        <div class="modul modulFinestretaUnica">
-		            <fieldset>
-		                <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-		                <legend><spring:message code='camp.finestretaUnica'/></legend>
-		                <div class="modul_continguts mostrat">		                    
-		                    <div class="fila">
-		                        <div class="element t50p">											                       
-		                            <div class="etiqueta">
-		                                <label for="item_codivuds_tramit"><spring:message code='camp.codiVUDS'/></label>
-		                            </div>
-		                            <div class="control">
-		                            	<input id="item_id_codivuds_tramit" name="item_id_codivuds_tramit" type="hidden" />
-		                            	<div class="campo">
-		                                	<input id="item_codivuds_tramit" name="item_codivuds_tramit" type="text" class="nou" readonly="readonly" />
-		                                </div>
-                                        <div class="botones">
-                                            <div class="btnCambiar boton btnGenerico">
-                                                <a href="#" class="btn consulta">
-                                                    <span><span><spring:message code='boto.seleccionarVUDS'/></span></span>
-                                                </a>
-                                            </div>
-                                        </div>		                                
-		                            </div>
-		                        </div>
-		                        
-		                        <div class="element t50p">
-		                            <div class="etiqueta">
-		                                <label for="tramit_item_data_vuds"><spring:message code='camp.dataEnviamentVUDS'/></label>
-		                            </div>		                            
-		                            <div class="control">
-		                                <input id="tramit_item_data_vuds" name="tramit_item_data_vuds" type="text" class="nou" />
-		                            </div>
-		                        </div>
-		                    </div>		                    
-		                </div>
-		            </fieldset>
+		        <div>
+			        <div class="modul modulFinestretaUnica invisible" style="display:none">
+			            <fieldset>
+			                <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+			                <legend><spring:message code='camp.finestretaUnica'/></legend>
+			                <div class="modul_continguts mostrat">		                    
+			                    <div class="fila">
+			                        <div class="element t50p">											                       
+			                            <div class="etiqueta">
+			                                <label for="item_codivuds_tramit"><spring:message code='camp.codiVUDS'/></label>
+			                            </div>
+			                            <div class="control">
+			                            	<input id="item_id_codivuds_tramit" name="item_id_codivuds_tramit" type="hidden" />
+			                            	<div class="campo">
+			                                	<input id="item_codivuds_tramit" name="item_codivuds_tramit" type="text" class="nou" readonly="readonly" />
+			                                </div>
+	                                        <div class="botones">
+	                                            <div class="btnCambiar boton btnGenerico">
+	                                                <a href="#" class="btn consulta">
+	                                                    <span><span><spring:message code='boto.seleccionarVUDS'/></span></span>
+	                                                </a>
+	                                            </div>
+	                                        </div>		                                
+			                            </div>
+			                        </div>
+			                        
+			                        <div class="element t50p">
+			                            <div class="etiqueta">
+			                                <label for="tramit_item_data_vuds"><spring:message code='camp.dataEnviamentVUDS'/></label>
+			                            </div>		                            
+			                            <div class="control">
+			                                <input id="tramit_item_data_vuds" name="tramit_item_data_vuds" type="text" class="nou" />
+			                            </div>
+			                        </div>
+			                    </div>		                    
+			                </div>
+			            </fieldset>
+			        </div>
 		        </div>
 		        <!-- /modul -->		        		               
 		                		               

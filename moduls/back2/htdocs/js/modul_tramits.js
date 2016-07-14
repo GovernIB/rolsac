@@ -200,7 +200,7 @@ function CModulTramit() {
     };
     
     this.hayTramiteInicializacion = function () {
-    	//this.bolTramiteInicio = false;  //#4 Se valida que hay modelo de solicitud seleccionado en el tr�mite de inicializaci�n
+    	//this.bolTramiteInicio = false;  //#4 Se valida que hay modelo de solicitud seleccionado en el tr�mite de inicializaci�n
 //    	if(modul_tramits_elm.find('div.listaOrdenable input.tramit_moment[value="1"]').length > 0 ){
 //    		this.bolTramiteInicio = true;
 //    	}
@@ -502,11 +502,13 @@ function CEscriptoriTramit() {
         }       
         // Fin bloque de pestañas de idiomas
         
+        //#350 Pidieron que siempre se viese oculta.
+        escriptori_tramits_elm.find(".modulFinestretaUnica").hide();
         // Mostrar bloque de ventanilla �nica según la información del procedimiento
-        if (datos.item_finestreta_unica == "1")
-            escriptori_tramits_elm.find(".modulFinestretaUnica").show();
-        else
-            escriptori_tramits_elm.find(".modulFinestretaUnica").hide();        
+        //if (datos.item_finestreta_unica == "1")
+         //   escriptori_tramits_elm.find(".modulFinestretaUnica").show();
+        //else
+        //    escriptori_tramits_elm.find(".modulFinestretaUnica").hide();        
             
         // Mostrar módulo de tasas según la información del procedimiento
 //      if (datos.item_taxes == "1")
@@ -544,7 +546,7 @@ function CEscriptoriTramit() {
             success: function(data) {
             	if(!eliminaCancelar){
             		//#4 no se muestra mensaje "Correcto"
-            		//casuistica especifica al guardar (TODO: buscar soluci�n alternativa)
+            		//casuistica especifica al guardar (TODO: buscar soluci�n alternativa)
             		Missatge.cancelar();            		
             	}else{
             		eliminaCancelar = false;
