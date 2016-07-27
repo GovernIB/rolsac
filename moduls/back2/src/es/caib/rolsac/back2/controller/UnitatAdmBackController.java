@@ -71,6 +71,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import es.caib.rolsac.api.v1.UnidadAdministrativaDTO;
 import es.caib.rolsac.back2.util.CargaModulosLateralesUtil;
 import es.caib.rolsac.back2.util.HtmlUtils;
+import es.caib.rolsac.back2.util.LlistatUtil;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
@@ -89,14 +90,13 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	@RequestMapping(value = "/unitatadm.do", method = GET)
 	public String llistatUniAdm(Map<String, Object> model, HttpServletRequest request, HttpSession session) {
 
-		MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
+		
 		TratamientoDelegate tratamientoDelegate = DelegateUtil.getTratamientoDelegate();
 		EspacioTerritorialDelegate espacioTerritorialDelegate = DelegateUtil.getEspacioTerritorialDelegate();
 
-		List<Materia> llistaMateries = new ArrayList<Materia>();
 		List<Tratamiento> llistaTractaments = new ArrayList<Tratamiento>();
 		List<EspacioTerritorial> llistaEspaiTerritorial = new ArrayList<EspacioTerritorial>();
-		List<IdNomDTO> llistaMateriesDTO = new ArrayList<IdNomDTO>();
+	
 		List<IdNomDTO> llistaTractamentsDTO = new ArrayList<IdNomDTO>();
 		List<IdNomDTO> llistaEspaiTerritorialDTO = new ArrayList<IdNomDTO>();
 
@@ -105,11 +105,9 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		try {
 
 			lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-			llistaMateries = materiaDelegate.listarMaterias();
+			
 
-			for (Materia materia : llistaMateries)
-				llistaMateriesDTO.add(new IdNomDTO(materia.getId(),materia.getNombreMateria(lang)));
-
+			model.put("llistaMateries", LlistatUtil.llistarMaterias(lang));        
 
 			llistaTractaments = tratamientoDelegate.listarTratamientos();
 
@@ -151,7 +149,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			model.put("nomUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa(lang));            
 		}               
 
-		model.put("llistaMateries", llistaMateriesDTO);        
 		model.put("llistaTractaments", llistaTractamentsDTO);
 		model.put("llistaEspaiTerritorial", llistaEspaiTerritorialDTO);
 
