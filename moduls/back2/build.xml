@@ -125,6 +125,7 @@
 			<lib dir="${lib.dir}/jstl">
            		<include name="**/*.jar" />
         	</lib>	
+        	<classes dir="${web.product}" includes="version.properties" />
         </war>
     </target>
 
@@ -136,6 +137,7 @@
 		<copydir dest="${web.classes}" src="${web.resources}">
 			<include name="**/*.properties"/> 
 		</copydir>
+		
     </target>
 
     <target name="web.javadoc">
