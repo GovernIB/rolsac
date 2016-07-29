@@ -101,7 +101,8 @@
     var txtAmaga = "<spring:message code='txt.amaga'/>";
     var txtCaducat = "<spring:message code='txt.caducat'/>";
     var txtCaducitat = "<spring:message code='txt.caducitat'/>";
-    var txtFamilia = "<spring:message code='txt.familia'/>";
+    //var txtFamilia = "<spring:message code='txt.familia'/>";
+    var txtFamilia = "<spring:message code='camp.tipo.procedimiento'/>";
     var txtFechaActualizacion = "<spring:message code='camp.dataActualitzacio'/>";
     var txtSeleccionats = "<spring:message code='txt.seleccionats'/>";
     var txtSeleccionat = "<spring:message code='txt.seleccionat'/>";
@@ -692,6 +693,7 @@
                                     </select>
                                 </div>
                             </div>
+                            <!-- 
                              <div class="element t25"> 
                                  <div class="etiqueta"> 
                                     <label for="cerca_fet_vital"><spring:message code='fitxes.llistat.fet_vital'/></label>
@@ -704,10 +706,10 @@
                                         </c:forEach>
                                      </select> 
                                  </div> 
-                             </div> 
+                             </div> --> 
 							<div class="element t25">
                                 <div class="etiqueta">
-                                    <label for="cerca_familia"><spring:message code='camp.familia'/></label>
+                                    <label for="cerca_familia"><spring:message code='camp.tipo.procedimiento'/></label>
                                 </div>
                                 <div class="control">
                                     <select id="cerca_familia" name="cerca_familia">
@@ -745,6 +747,7 @@
                                     </select>
                                 </div>
                             </div>
+                            <!-- 
                             <div class="element t25">
                                 <div class="etiqueta">
                                     <label for="cerca_finestreta"><spring:message code='camp.finestraUnica'/></label>
@@ -756,7 +759,7 @@
                                         <option value="1"><spring:message code='txt.si'/></option>
                                     </select>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
 
                         <div class="fila">                            
