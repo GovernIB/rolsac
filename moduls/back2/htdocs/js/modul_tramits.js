@@ -304,10 +304,15 @@ function CEscriptoriTramit() {
                     Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
                 } else {        
                     data.moment = moment;
-                    var idTramit = $("#id_tramit_actual").val();                    
+                    var idTramit = $("#id_tramit_actual").val();   
+                    var edita = false;
                     if (idTramit != "" && idTramit != undefined) {
                     	mensaje = txtTramitModificatCorrecte;                        
                         ModulTramit.actualitzaNomTramit(data);
+                      //#358 Cuando es modificación se quiere volver a la pantalla del procedimiento
+                  //      Missatge.cancelar();
+                   //     that.vuelve();
+                        edita = true;
                     } else {                    	 
                     	mensaje = txtTramitCreatCorrecte;                      
                         var idTramit = "nou_tramit_" + data.id;
@@ -323,17 +328,31 @@ function CEscriptoriTramit() {
                         
                         that.contaSeleccionats();
                     }
-                    
                     //#4 no se muestra mensaje "Correcto"
                     eliminaCancelar=true;
                     that.editarTramit(null, data.id); 
+                    
+                    //#358 Cuando es modificación se quiere volver a la pantalla del procedimiento
+                    if(edita){
+                    	 escriptori_tramits_elm.fadeOut(300, function() {            
+                             escriptori_detall_elm.fadeIn(300, function() {
+                                 // activar
+                                 modul_tramits_elm.find("a.gestiona").one("click", function() { ModulTramit.gestiona(); });
+                             });
+                         });
+                    	Detall.carregar($("#id_procediment_tramit").val());
+                    }
+                                 	
+                    
                     Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: mensaje});
+                    
                 }
             }
         });
         
         this.modificado(false);
         
+      
         return false;
         
     };
