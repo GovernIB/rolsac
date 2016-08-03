@@ -1456,7 +1456,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				consulta.append(" and fua.idSeccio = :idSeccion ");
 				consulta.append(" and ficha.validacion = :validacion " );
 				consulta.append(" and (ficha.fechaCaducidad > sysdate or ficha.fechaCaducidad is null) ");
-				consulta.append(" and (ficha.fechaPublicacion > sysdate or ficha.fechaPublicacion is null) ");
+				consulta.append(" and (ficha.fechaPublicacion <= sysdate or ficha.fechaPublicacion is null) ");
 
 				Query query = session.createQuery( consulta.toString() );
 
@@ -1886,9 +1886,9 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 * 
 	 * @param	idUA	Identificador de la unidad administrativa solicitada.
 	 * 
-	 * @param	idSeccion	Identificador de la sección solicitada.
+	 * @param	idSeccion	Identificador de la secciï¿½n solicitada.
 	 * 
-	 * @return	Devuelve <code>List<FichaDTO></code> relacionadas con una unidad administrativa y una sección.
+	 * @return	Devuelve <code>List<FichaDTO></code> relacionadas con una unidad administrativa y una secciï¿½n.
 	 */
 	public List<FichaDTO> listarFichasSeccionUASinPaginacion(Long idUA, Long idSeccion, String idioma) {
 
