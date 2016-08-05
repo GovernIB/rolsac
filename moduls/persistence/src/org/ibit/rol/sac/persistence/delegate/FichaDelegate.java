@@ -154,12 +154,17 @@ public class FichaDelegate implements FichaDelegateI {
 		impl.actualizaEnlacesFicha(id, enlacesNuevos, enlacesAEliminar);
 	}
 
+
 	public SolrPendienteResultado indexarSolr(SolrIndexer solrIndexer, SolrPendiente solrPendiente) throws DelegateException {
     	return impl.indexarSolr(solrIndexer, solrPendiente);        
     }
     
 	public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final Long idElemento, final EnumCategoria categoria) throws DelegateException {
 		return impl.indexarSolr(solrIndexer, idElemento, categoria);        
+	}
+	
+	public Integer comprobarRelacionFicha(Long idFitxa) throws DelegateException{
+		return impl.comprobarRelacionFicha(idFitxa);
 	}
 	
     public SolrPendienteResultado desindexarSolr(SolrIndexer solrIndexer, SolrPendiente solrPendiente) throws DelegateException {

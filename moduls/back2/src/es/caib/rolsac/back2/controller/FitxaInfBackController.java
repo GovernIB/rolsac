@@ -71,6 +71,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import es.caib.rolsac.back2.util.CargaModulosLateralesUtil;
 import es.caib.rolsac.back2.util.GuardadoAjaxUtil;
 import es.caib.rolsac.back2.util.HtmlUtils;
+import es.caib.rolsac.back2.util.LlistatUtil;
 import es.caib.rolsac.back2.util.Parametros;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
@@ -107,16 +108,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 				model.put("nomUA", ((UnidadAdministrativa) session.getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa(lang));
 			}
 
-			MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
-			List<Materia> llistaMateries = new ArrayList<Materia>();
-			List<IdNomDTO> llistaMateriesDTO = new ArrayList<IdNomDTO>();
-
-			llistaMateries = castList(Materia.class, materiaDelegate.listarMaterias());
-			for (Materia materia : llistaMateries) {
-				llistaMateriesDTO.add(new IdNomDTO(materia.getId(), materia.getNombreMateria(lang)));
-			}
-
-			model.put("llistaMateries", llistaMateriesDTO);
+			model.put("llistaMateries", LlistatUtil.llistarMaterias(lang));
 
 			HechoVitalDelegate fetVitalDelegate = DelegateUtil.getHechoVitalDelegate();
 			List<HechoVital> llistaFetsVitals = new ArrayList<HechoVital>();

@@ -200,7 +200,7 @@ function CModulTramit() {
     };
     
     this.hayTramiteInicializacion = function () {
-    	//this.bolTramiteInicio = false;  //#4 Se valida que hay modelo de solicitud seleccionado en el trámite de inicialización
+    	//this.bolTramiteInicio = false;  //#4 Se valida que hay modelo de solicitud seleccionado en el tramite de inicialización
 //    	if(modul_tramits_elm.find('div.listaOrdenable input.tramit_moment[value="1"]').length > 0 ){
 //    		this.bolTramiteInicio = true;
 //    	}
@@ -304,10 +304,15 @@ function CEscriptoriTramit() {
                     Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
                 } else {        
                     data.moment = moment;
-                    var idTramit = $("#id_tramit_actual").val();                    
+                    var idTramit = $("#id_tramit_actual").val();   
+                    var edita = false;
                     if (idTramit != "" && idTramit != undefined) {
                     	mensaje = txtTramitModificatCorrecte;                        
                         ModulTramit.actualitzaNomTramit(data);
+                      //#358 Cuando es modificación se quiere volver a la pantalla del procedimiento
+                  //      Missatge.cancelar();
+                   //     that.vuelve();
+                        edita = true;
                     } else {                    	 
                     	mensaje = txtTramitCreatCorrecte;                      
                         var idTramit = "nou_tramit_" + data.id;
@@ -323,17 +328,31 @@ function CEscriptoriTramit() {
                         
                         that.contaSeleccionats();
                     }
-                    
                     //#4 no se muestra mensaje "Correcto"
                     eliminaCancelar=true;
                     that.editarTramit(null, data.id); 
+                    
+                    //#358 Cuando es modificación se quiere volver a la pantalla del procedimiento
+                    if(edita){
+                    	 escriptori_tramits_elm.fadeOut(300, function() {            
+                             escriptori_detall_elm.fadeIn(300, function() {
+                                 // activar
+                                 modul_tramits_elm.find("a.gestiona").one("click", function() { ModulTramit.gestiona(); });
+                             });
+                         });
+                    	Detall.carregar($("#id_procediment_tramit").val());
+                    }
+                                 	
+                    
                     Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: mensaje});
+                    
                 }
             }
         });
         
         this.modificado(false);
         
+      
         return false;
         
     };
@@ -502,11 +521,13 @@ function CEscriptoriTramit() {
         }       
         // Fin bloque de pestañas de idiomas
         
+        //#350 Pidieron que siempre se viese oculta.
+        escriptori_tramits_elm.find(".modulFinestretaUnica").hide();
         // Mostrar bloque de ventanilla �nica según la información del procedimiento
-        if (datos.item_finestreta_unica == "1")
-            escriptori_tramits_elm.find(".modulFinestretaUnica").show();
-        else
-            escriptori_tramits_elm.find(".modulFinestretaUnica").hide();        
+        //if (datos.item_finestreta_unica == "1")
+         //   escriptori_tramits_elm.find(".modulFinestretaUnica").show();
+        //else
+        //    escriptori_tramits_elm.find(".modulFinestretaUnica").hide();        
             
         // Mostrar módulo de tasas según la información del procedimiento
 //      if (datos.item_taxes == "1")

@@ -71,6 +71,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import es.caib.rolsac.api.v1.UnidadAdministrativaDTO;
 import es.caib.rolsac.back2.util.CargaModulosLateralesUtil;
 import es.caib.rolsac.back2.util.HtmlUtils;
+import es.caib.rolsac.back2.util.LlistatUtil;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
@@ -89,14 +90,13 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	@RequestMapping(value = "/unitatadm.do", method = GET)
 	public String llistatUniAdm(Map<String, Object> model, HttpServletRequest request, HttpSession session) {
 
-		MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
+		
 		TratamientoDelegate tratamientoDelegate = DelegateUtil.getTratamientoDelegate();
 		EspacioTerritorialDelegate espacioTerritorialDelegate = DelegateUtil.getEspacioTerritorialDelegate();
 
-		List<Materia> llistaMateries = new ArrayList<Materia>();
 		List<Tratamiento> llistaTractaments = new ArrayList<Tratamiento>();
 		List<EspacioTerritorial> llistaEspaiTerritorial = new ArrayList<EspacioTerritorial>();
-		List<IdNomDTO> llistaMateriesDTO = new ArrayList<IdNomDTO>();
+	
 		List<IdNomDTO> llistaTractamentsDTO = new ArrayList<IdNomDTO>();
 		List<IdNomDTO> llistaEspaiTerritorialDTO = new ArrayList<IdNomDTO>();
 
@@ -105,11 +105,9 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		try {
 
 			lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-			llistaMateries = materiaDelegate.listarMaterias();
+			
 
-			for (Materia materia : llistaMateries)
-				llistaMateriesDTO.add(new IdNomDTO(materia.getId(),materia.getNombreMateria(lang)));
-
+			model.put("llistaMateries", LlistatUtil.llistarMaterias(lang));        
 
 			llistaTractaments = tratamientoDelegate.listarTratamientos();
 
@@ -151,7 +149,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			model.put("nomUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa(lang));            
 		}               
 
-		model.put("llistaMateries", llistaMateriesDTO);        
 		model.put("llistaTractaments", llistaTractamentsDTO);
 		model.put("llistaEspaiTerritorial", llistaEspaiTerritorialDTO);
 
@@ -1408,19 +1405,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 
 			List<FichaDTO> fichas = this.castJsonListToHashTable(listaFichas);
 			
-			if (fichas.size() == 0 ){
-				//Busco las fichas que habia anteriormente y si es mayor que 0 entonces no dejamos borrar
-				UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
-				String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-				
-				List<FichaDTO> fichasOld = uaDelegate.listarFichasSeccionUASinPaginacion(idUA, idSeccion, idioma);
-				
-				if (fichasOld.size()> 0){
-					resultats.put( "error", messageSource.getMessage("error.seccio", null, request.getLocale() ) );
-					resultats.put("id", -3);
-					return resultats;
-				}
-			}
 			UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
 			uaDelegate.actualizaFichasSeccionUA(idUA, idSeccion, fichas);
 
@@ -1748,5 +1732,37 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		return result;
 		
 	}
+	
+	
+	/**
+	 * Método que recibe petición AJAX de consultar si la ficha no tiene más secciones, entonces se decide si se puede o no borrar
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/validarBorrar.do", method = POST)
+	public @ResponseBody IdNomDTO validarBorrar(HttpServletRequest request, Long idFitxa) {
 
+		String ok = messageSource.getMessage("unitatadm.guardat.usuaris.correcte", null, request.getLocale());
+		  
+		IdNomDTO result = new IdNomDTO(1L, ok);
+
+		try {
+
+			 Integer numRelaciones= DelegateUtil.getFichaDelegate().comprobarRelacionFicha(idFitxa);
+			 
+			 if(numRelaciones <= 1){
+				 String error = messageSource.getMessage("error.seccio", null, request.getLocale());
+				 return	result = new IdNomDTO(-1l, error);
+			 }
+
+		} catch (DelegateException e) {
+
+			String error = messageSource.getMessage("error.altres", null, request.getLocale());
+			result = new IdNomDTO(-1l, error);
+
+		}
+
+		return result;
+
+	}
 }

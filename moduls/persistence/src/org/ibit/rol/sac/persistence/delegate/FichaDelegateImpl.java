@@ -300,6 +300,13 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
         }
     }
 	
+	public Integer comprobarRelacionFicha(Long idFitxa) throws DelegateException {
+		try {
+			return getFacade().comprobarRelacionFicha(idFitxa);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
 	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

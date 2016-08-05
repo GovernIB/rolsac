@@ -101,7 +101,8 @@
     var txtAmaga = "<spring:message code='txt.amaga'/>";
     var txtCaducat = "<spring:message code='txt.caducat'/>";
     var txtCaducitat = "<spring:message code='txt.caducitat'/>";
-    var txtFamilia = "<spring:message code='txt.familia'/>";
+    //var txtFamilia = "<spring:message code='txt.familia'/>";
+    var txtFamilia = "<spring:message code='camp.tipo.procedimiento'/>";
     var txtFechaActualizacion = "<spring:message code='camp.dataActualitzacio'/>";
     var txtSeleccionats = "<spring:message code='txt.seleccionats'/>";
     var txtSeleccionat = "<spring:message code='txt.seleccionat'/>";
@@ -692,6 +693,7 @@
                                     </select>
                                 </div>
                             </div>
+                            <!-- 
                              <div class="element t25"> 
                                  <div class="etiqueta"> 
                                     <label for="cerca_fet_vital"><spring:message code='fitxes.llistat.fet_vital'/></label>
@@ -704,10 +706,10 @@
                                         </c:forEach>
                                      </select> 
                                  </div> 
-                             </div> 
+                             </div> --> 
 							<div class="element t25">
                                 <div class="etiqueta">
-                                    <label for="cerca_familia"><spring:message code='camp.familia'/></label>
+                                    <label for="cerca_familia"><spring:message code='camp.tipo.procedimiento'/></label>
                                 </div>
                                 <div class="control">
                                     <select id="cerca_familia" name="cerca_familia">
@@ -745,6 +747,7 @@
                                     </select>
                                 </div>
                             </div>
+                            <!-- 
                             <div class="element t25">
                                 <div class="etiqueta">
                                     <label for="cerca_finestreta"><spring:message code='camp.finestraUnica'/></label>
@@ -756,7 +759,7 @@
                                         <option value="1"><spring:message code='txt.si'/></option>
                                     </select>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
 
                         <div class="fila">                            
@@ -1017,7 +1020,7 @@
 				                       </div>
                                                                        
                                     
-                                							
+                                	</div>						
                                 <!-- /ca -->
 								</c:forEach>
                             </div>
@@ -1917,42 +1920,44 @@
 		        <!-- /modul -->		
 		        
 		        <!-- modul -->
-		        <div class="modul modulFinestretaUnica">
-		            <fieldset>
-		                <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-		                <legend><spring:message code='camp.finestretaUnica'/></legend>
-		                <div class="modul_continguts mostrat">		                    
-		                    <div class="fila">
-		                        <div class="element t50p">											                       
-		                            <div class="etiqueta">
-		                                <label for="item_codivuds_tramit"><spring:message code='camp.codiVUDS'/></label>
-		                            </div>
-		                            <div class="control">
-		                            	<input id="item_id_codivuds_tramit" name="item_id_codivuds_tramit" type="hidden" />
-		                            	<div class="campo">
-		                                	<input id="item_codivuds_tramit" name="item_codivuds_tramit" type="text" class="nou" readonly="readonly" />
-		                                </div>
-                                        <div class="botones">
-                                            <div class="btnCambiar boton btnGenerico">
-                                                <a href="#" class="btn consulta">
-                                                    <span><span><spring:message code='boto.seleccionarVUDS'/></span></span>
-                                                </a>
-                                            </div>
-                                        </div>		                                
-		                            </div>
-		                        </div>
-		                        
-		                        <div class="element t50p">
-		                            <div class="etiqueta">
-		                                <label for="tramit_item_data_vuds"><spring:message code='camp.dataEnviamentVUDS'/></label>
-		                            </div>		                            
-		                            <div class="control">
-		                                <input id="tramit_item_data_vuds" name="tramit_item_data_vuds" type="text" class="nou" />
-		                            </div>
-		                        </div>
-		                    </div>		                    
-		                </div>
-		            </fieldset>
+		        <div>
+			        <div class="modul modulFinestretaUnica invisible" style="display:none">
+			            <fieldset>
+			                <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+			                <legend><spring:message code='camp.finestretaUnica'/></legend>
+			                <div class="modul_continguts mostrat">		                    
+			                    <div class="fila">
+			                        <div class="element t50p">											                       
+			                            <div class="etiqueta">
+			                                <label for="item_codivuds_tramit"><spring:message code='camp.codiVUDS'/></label>
+			                            </div>
+			                            <div class="control">
+			                            	<input id="item_id_codivuds_tramit" name="item_id_codivuds_tramit" type="hidden" />
+			                            	<div class="campo">
+			                                	<input id="item_codivuds_tramit" name="item_codivuds_tramit" type="text" class="nou" readonly="readonly" />
+			                                </div>
+	                                        <div class="botones">
+	                                            <div class="btnCambiar boton btnGenerico">
+	                                                <a href="#" class="btn consulta">
+	                                                    <span><span><spring:message code='boto.seleccionarVUDS'/></span></span>
+	                                                </a>
+	                                            </div>
+	                                        </div>		                                
+			                            </div>
+			                        </div>
+			                        
+			                        <div class="element t50p">
+			                            <div class="etiqueta">
+			                                <label for="tramit_item_data_vuds"><spring:message code='camp.dataEnviamentVUDS'/></label>
+			                            </div>		                            
+			                            <div class="control">
+			                                <input id="tramit_item_data_vuds" name="tramit_item_data_vuds" type="text" class="nou" />
+			                            </div>
+			                        </div>
+			                    </div>		                    
+			                </div>
+			            </fieldset>
+			        </div>
 		        </div>
 		        <!-- /modul -->		        		               
 		                		               

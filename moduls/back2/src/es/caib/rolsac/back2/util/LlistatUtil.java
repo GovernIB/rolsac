@@ -1,6 +1,8 @@
 package es.caib.rolsac.back2.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -56,9 +58,25 @@ public class LlistatUtil {
 		for (Materia materia : llistaMateries) {
 			materiesDTOList.add(new IdNomDTO(materia.getId(), materia.getNombreMateria(lang)));
 		}
+		//Ordenamos por nombreMateria
+		Collections.sort(materiesDTOList, new ComparatorNombreMateriaASC());
+		
 		return materiesDTOList;
 	}
 	
+	 private static class ComparatorNombreMateriaASC implements Comparator<IdNomDTO> {
+			
+
+			public int compare(IdNomDTO o1, IdNomDTO o2) {
+				int comparacion = 0;
+				if ((o1 != null) && (o2 != null)) {
+					comparacion =  o1.getNom().toUpperCase().compareTo(o2.getNom().toUpperCase());
+				}
+				return comparacion;
+			}
+		
+	    }
+
 	public static List<IdNomDTO> llistarHechosVitales(String lang) throws DelegateException {
 		HechoVitalDelegate hechoVitalDelegate = DelegateUtil.getHechoVitalDelegate();
 		List<IdNomDTO> fetsDTOList = new ArrayList<IdNomDTO>();

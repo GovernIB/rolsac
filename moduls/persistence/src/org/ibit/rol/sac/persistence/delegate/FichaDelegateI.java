@@ -75,6 +75,7 @@ public interface FichaDelegateI {
 	public abstract void actualizaEnlacesFicha(Long id, List<Enlace> enlacesNuevos, List<Enlace> enlacesAEliminar)
 			throws DelegateException;
 
+
 	public abstract SolrPendienteResultado indexarSolr(SolrIndexer solrIndexer,SolrPendiente solrPendiente) throws DelegateException;
     
 	public abstract SolrPendienteResultado indexarSolr(SolrIndexer solrIndexer, Long idElemento, EnumCategoria categoria) throws DelegateException;
@@ -82,5 +83,7 @@ public interface FichaDelegateI {
     public abstract SolrPendienteResultado desindexarSolr(SolrIndexer solrIndexer,SolrPendiente solrPendiente) throws DelegateException;
 
 	public abstract List<Long> buscarIdsFichas() throws DelegateException;
+
+	public Integer comprobarRelacionFicha(Long idFitxa) throws DelegateException;
 
 }

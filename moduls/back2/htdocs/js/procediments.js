@@ -458,7 +458,7 @@ function CDetall() {
 		} else {
 
 			if (!ModulTramit.hayTramiteInicializacion()){
-				//var mensaje = txtErrorTramitIniciObligatori;  //#4 Si no hay modelo de solicitud seleccionado en el trámite de inicialización se muestra
+				//var mensaje = txtErrorTramitIniciObligatori;  //#4 Si no hay modelo de solicitud seleccionado en el trámite de inicializacion se muestra
 			//if (ModulTramit.bolTramiteInicio){		      //el error 
 			//		mensaje = txtErrorModelSolicitudObligatori;
 			//	}
@@ -512,8 +512,12 @@ function CDetall() {
 		
 		// dates
 		//$("#item_data_publicacio, #item_data_caducitat").mask("99/99/9999").datepicker({ altField: '#actualDate' });
-		$("#item_data_caducitat").datepicker({ altField: '#actualDate', dateFormat: 'dd/mm/yy' });
-		$("#item_data_publicacio").bind("blur",Detall.dataPublicacio).datepicker({ altField: '#actualDate', dateFormat: 'dd/mm/yy' });
+		//$("#item_data_caducitat").datepicker({ altField: '#actualDate', dateFormat: 'dd/mm/yy'});
+		
+		$("#item_data_caducitat").datetimepicker({ format: 'yyyy/MM/dd HH:mm' , setDate: new Date(),hour:'23', minute:'59' });
+		//$("#item_data_publicacio").bind("blur",Detall.dataPublicacio).datepicker({ altField: '#actualDate', dateFormat: 'dd/mm/yy' });
+		$("#item_data_publicacio").bind("blur",Detall.dataPublicacio).datetimepicker({ timeFormat: 'hh:mm' });
+		
 
 		// idioma
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {
@@ -854,6 +858,11 @@ function CDetall() {
 				&& !selector.children().is(".modulNormatives")
 				&& !selector.attr("id") == "fetsVitals" )
 			selector.addClass("invisible");
+		
+		//#349 si entramos en detalle y volvemos a nuevo se mostraban los modulos
+		if (selector.attr("id") == "modul_materies" || selector.attr("id") == "modul_normatives"){
+			selector.addClass("invisible");
+		}
 
 	};
 	

@@ -9,11 +9,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.Document;
+import org.ibit.rol.sac.model.DocumentTramit;
+import org.ibit.rol.sac.model.Documento;
+import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.model.Historico;
+import org.ibit.rol.sac.model.TraduccionDocumentTramit;
+import org.ibit.rol.sac.model.TraduccionTramite;
+import org.ibit.rol.sac.model.Tramite;
 
 import es.caib.rolsac.api.v2.query.HibernateUtils;
 
@@ -35,11 +44,40 @@ public class ArxiuServlet extends HttpServlet {
             Archivo archivo = (Archivo) session.get(Archivo.class, id);
             
             if (archivo == null) {
-                log.error("El id " + idParam + " no existe.");
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-                return;
+            	log.error("El id " + idParam + " no existe.");
+            	response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            	return;
             }
+            
+            //Obtenemos el documento, si es null es que el archivo no pertenece a un documento
+            Documento docu = getDocumentArchiu(session, id);
+            //Docu proc
+            if(docu != null && docu.getProcedimiento() !=null && !docu.getProcedimiento().isVisible()){
+            	log.error("El archivo " + idParam + " no es de contingut públic.");
+            	response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            	return;
+            }
+            
+            
+            Documento docuFicha = getDocumentFitxaArchiu(session, id);
+            //Docu ficha
+            if(docuFicha != null && docuFicha.getFicha() !=null && !docuFicha.getFicha().isVisible() ){       		
+        		log.error("El archivo " + idParam + " no es de contingut públic.");
+        		response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        		return;
 
+            }
+            
+            DocumentTramit docuTramit = getDocumentTramitArchiu(session, id);
+            
+            //Docu tramit
+            if(docuTramit != null && docuTramit.getTramit() !=null && docuTramit.getTramit().getProcedimiento() != null 
+            		&& (!docuTramit.getTramit().esPublico() ||!docuTramit.getTramit().getProcedimiento().isVisible())){
+            	log.error("El archivo " + idParam + " no es de contingut públic.");
+        		response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        		return;
+            }
+            
             response.setContentType(archivo.getMime());
             response.setHeader("Content-Disposition", "attachment;filename=" + archivo.getNombre());
             response.setIntHeader("Content-Length", (int) archivo.getDatos().length);
@@ -67,5 +105,60 @@ public class ArxiuServlet extends HttpServlet {
             }
         }
     }
+
+    /**
+     * Se obtiene el documento a partir del archivo
+     * 
+     * @param session
+     * @param id
+     * @return
+     * @throws HibernateException
+     */
+	private Documento getDocumentArchiu(Session session, long id) throws HibernateException {
+		
+        Query query = session.createQuery("from Documento as docu where docu.archivo.id=:code");
+        query.setParameter("code", id);
+        Documento archivo = (Documento) query.uniqueResult();
+           
+        return archivo;
+		
+	}
     
+	
+	 /**
+     * Se obtiene el documento trámite a partir del archivo
+     * 
+     * @param session
+     * @param id
+     * @return
+     * @throws HibernateException
+     */
+	private DocumentTramit getDocumentTramitArchiu(Session session, long id) throws HibernateException {
+		
+        Query query = session.createQuery("from DocumentTramit docu join docu.traducciones as tradDocu where tradDocu.archivo.id=:code");
+        query.setParameter("code", id);
+        DocumentTramit archivo = (DocumentTramit) query.uniqueResult();
+           
+        return archivo;
+		
+	}
+	
+
+	 /**
+    * Se obtiene el documento ficha a partir del archivo
+    * 
+    * @param session
+    * @param id
+    * @return
+    * @throws HibernateException
+    */
+	private Documento getDocumentFitxaArchiu(Session session, long id) throws HibernateException {
+		
+       Query query = session.createQuery("from Documento docu join docu.traducciones as tradDocu where tradDocu.archivo.id=:code");
+       query.setParameter("code", id);
+       Documento archivo = (Documento) query.uniqueResult();
+          
+       return archivo;
+		
+	}
 }

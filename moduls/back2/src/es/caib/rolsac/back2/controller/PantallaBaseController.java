@@ -1,9 +1,11 @@
 package es.caib.rolsac.back2.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -83,7 +85,17 @@ public abstract class PantallaBaseController {
  			traductorActivo = Boolean.valueOf("S".equalsIgnoreCase(System.getProperty("es.caib.rolsac.integracion.traductor")));
  		}
  			
- 		request.setAttribute("traductorActivo", traductorActivo);
+ 		try {
+			Properties versionsProperties = new Properties();
+			versionsProperties.load(PantallaBaseController.class.getClassLoader().getResourceAsStream("version.properties"));
+			
+			model.put("rolsac_einaversion",  " v" + versionsProperties.getProperty("rolsac.version") + " build: " + versionsProperties.getProperty("rolsac.build"));
+	    	model.put("rolsac_einarevision","("+ versionsProperties.getProperty("git.revision") +")");
+	    	model.put("rolsac_urlrevision", versionsProperties.getProperty("rolsac.urlrevision").replace("{0}",versionsProperties.getProperty("git.revision")));
+		} catch (IOException e) {
+			log.error(ExceptionUtils.getStackTrace(e));
+		}
+		request.setAttribute("traductorActivo", traductorActivo);
 	    
 	}
 
