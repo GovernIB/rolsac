@@ -23,6 +23,7 @@ import org.ibit.rol.sac.model.Historico;
 import org.ibit.rol.sac.model.TraduccionDocumentTramit;
 import org.ibit.rol.sac.model.TraduccionTramite;
 import org.ibit.rol.sac.model.Tramite;
+import org.ibit.rol.sac.model.Validacion;
 
 import es.caib.rolsac.api.v2.query.HibernateUtils;
 
@@ -53,7 +54,7 @@ public class ArxiuServlet extends HttpServlet {
             Documento docu = getDocumentArchiu(session, id);
             //Docu proc
             if(docu != null && docu.getProcedimiento() !=null && !docu.getProcedimiento().isVisible()){
-            	log.error("El archivo " + idParam + " no es de contingut públic.");
+            	log.error("El archivo " + idParam + " no es de contingut públic (procedimiento no visible 1).");
             	response.sendError(HttpServletResponse.SC_NOT_FOUND);
             	return;
             }
@@ -62,8 +63,8 @@ public class ArxiuServlet extends HttpServlet {
             Documento docuFicha = getDocumentFitxaArchiu(session, id);
             //Docu ficha
             if(docuFicha != null && docuFicha.getFicha() !=null && !docuFicha.getFicha().isVisible() ){       		
-        		log.error("El archivo " + idParam + " no es de contingut públic.");
-        		response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        		log.error("El archivo " + idParam + " no es de contingut públic (ficha no visible 2).");
+        		response.sendError(HttpServletResponse.SC_NOT_FOUND); 
         		return;
 
             }
@@ -72,12 +73,28 @@ public class ArxiuServlet extends HttpServlet {
             
             //Docu tramit
             if(docuTramit != null && docuTramit.getTramit() !=null && docuTramit.getTramit().getProcedimiento() != null 
-            		&& (!docuTramit.getTramit().esPublico() ||!docuTramit.getTramit().getProcedimiento().isVisible())){
+            		&& (!docuTramit.getTramit().esPublico() || !docuTramit.getTramit().getProcedimiento().isVisible())){
             	log.error("El archivo " + idParam + " no es de contingut públic.");
-        		response.sendError(HttpServletResponse.SC_NOT_FOUND);
-        		return;
+            	if (!docuTramit.getTramit().esPublico()) {
+            		log.error(" - El tramite no es visible");
+            		log.error(" - Datos tramiteId:" + docuTramit.getTramit().getId() 
+            						+ "fechaCad:" +docuTramit.getTramit().getDataCaducitat() 
+            				        + " fechaPub:"+docuTramit.getTramit().getDataPublicacio()
+            					    + " validacion:"+ docuTramit.getTramit().getValidacio());            		
+            	}
+            	
+            	if (!docuTramit.getTramit().getProcedimiento().isVisible()) {
+            		log.error(" - El procedimiento no es visible");
+            		log.error(" - Datos procedId:" + docuTramit.getTramit().getProcedimiento().getId() 
+            				+ " fechaCad:"+docuTramit.getTramit().getProcedimiento().getFechaCaducidad() 
+    				        + " fechaPub:"+docuTramit.getTramit().getProcedimiento().getFechaPublicacion() 
+    					    + " validacion:"+ docuTramit.getTramit().getProcedimiento().getValidacion());   
+            	}
+            	
+            	response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            	return;
             }
-            
+
             response.setContentType(archivo.getMime());
             response.setHeader("Content-Disposition", "attachment;filename=" + archivo.getNombre());
             response.setIntHeader("Content-Length", (int) archivo.getDatos().length);
@@ -92,6 +109,9 @@ public class ArxiuServlet extends HttpServlet {
         } catch (HibernateException e) {
             log.error("Error obteniendo session de Hibernate.");
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        } catch (Exception e) { 
+        	log.error(e);
+        	response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         } finally {
             if (session != null && session.isOpen()) {
                 try {
