@@ -2559,6 +2559,12 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				final TraduccionUA traduccion = (TraduccionUA)traducciones.get(keyIdioma);
 				
 				if (traduccion != null && enumIdioma != null) {
+					
+					//Lo que hace es saltarse el idioma que no tiene nombre.
+					if ((traduccion.getNombre() == null || traduccion.getNombre().isEmpty())  && enumIdioma != EnumIdiomas.CATALA) {
+						continue;
+					}
+					
 					//Anyadimos idioma al enumerado.
 					idiomas.add(enumIdioma);
 					

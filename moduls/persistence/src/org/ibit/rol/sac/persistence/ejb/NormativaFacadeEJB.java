@@ -1077,6 +1077,12 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 				final EnumIdiomas enumIdioma = EnumIdiomas.fromString(keyIdioma);
 				
 				if (traduccion != null && enumIdioma != null) {
+					
+					//Para saltarse los idiomas sin titulo.
+					if ((traduccion.getTitulo() == null || traduccion.getTitulo().isEmpty())  && enumIdioma != EnumIdiomas.CATALA) {
+						continue;
+					}
+					
 					//Anyadimos idioma al enumerado.
 					idiomas.add(enumIdioma);
 					
@@ -1084,7 +1090,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 					titulo.addIdioma(enumIdioma, traduccion.getTitulo());
 					descripcion.addIdioma(enumIdioma, traduccion.getTitulo());
 			    	String tipoNormativaNombre = "";
-			    	if ( normativa.getTipo().getTraduccion(keyIdioma) != null) {
+			    	if ( normativa.getTipo() != null && normativa.getTipo().getTraduccion(keyIdioma) != null) {
 			    		 TraduccionTipo tipo = (TraduccionTipo) normativa.getTipo().getTraduccion(keyIdioma);
 			    		 tipoNormativaNombre = tipo.getNombre();
 			    	}
@@ -1119,7 +1125,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 					
 					
 			    	searchTextOptional.addIdioma(enumIdioma, textoOptional.toString());
-			    	if (normativa.getBoletin() == null && (traduccion.getEnlace() == null || traduccion.getEnlace().isEmpty())) {
+			    	if (normativa.getBoletin() == null && normativa.getFecha() != null &&(traduccion.getEnlace() == null || traduccion.getEnlace().isEmpty())) {
 			    		Calendar calendar = Calendar.getInstance();
 			    		calendar.setTime(normativa.getFecha());
 			    		
@@ -1206,6 +1212,11 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 				final TraduccionNormativa traduccion = (TraduccionNormativa)traducciones.get(keyIdioma);
 				
 				if (traduccion != null && enumIdioma != null) {
+					
+					//Para saltarse los idiomas sin titulo.
+					if (traduccion.getArchivo().getNombre() == null || traduccion.getArchivo().getNombre().isEmpty()) {
+						continue;
+					}
 					
 					//Seteamos los primeros campos multiidiomas: Titulo y Descripción (y padre).
 					titulo.addIdioma(enumIdioma, traduccion.getArchivo().getNombre());

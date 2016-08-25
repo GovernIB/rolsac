@@ -1788,7 +1788,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			indexable = false;
 		}
 		
-		if (ficha.getFechaCaducidad() != null && Calendar.getInstance().getTime().before(ficha.getFechaCaducidad())) {
+		if (ficha.getFechaCaducidad() != null && Calendar.getInstance().getTime().after(ficha.getFechaCaducidad())) {
 			indexable = false;
 		}
 		return indexable;
@@ -1910,6 +1910,12 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 				final TraduccionFicha traduccion = (TraduccionFicha) ficha.getTraduccion(keyIdioma);
 		    	
 				if (traduccion != null && enumIdioma != null) {
+					
+					//Para saltarse los idiomas sin titulo.
+					if ((traduccion.getTitulo() == null || traduccion.getTitulo().isEmpty())  && enumIdioma != EnumIdiomas.CATALA) {
+						continue;
+					}
+					
 					//Anyadimos idioma al enumerado.
 					idiomas.add(enumIdioma);
 					

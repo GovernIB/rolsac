@@ -553,6 +553,12 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 				final TraduccionProcedimiento traduccionProc = (TraduccionProcedimiento)procedimiento.getTraduccion(keyIdioma);
 		    	
 				if (traduccion != null && enumIdioma != null) {
+					
+					//Para saltarse los idiomas sin titulo.
+					if ((traduccion.getTitulo() == null || traduccion.getTitulo().isEmpty())  && enumIdioma != EnumIdiomas.CATALA) {
+						continue;
+					}
+					
 					//Anyadimos idioma al enumerado.
 					idiomas.add(enumIdioma);
 					
@@ -742,6 +748,12 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 				final TraduccionFicha traduccionFicha = (TraduccionFicha) ficha.getTraduccion(keyIdioma);
 				
 				if (traduccionDocumento != null && enumIdioma != null) {
+					
+					//Para saltarse los idiomas sin titulo.
+					if (traduccionDocumento.getTitulo() == null || traduccionDocumento.getTitulo().isEmpty()) {
+						continue;
+					}
+					
 					//Anyadimos idioma al enumerado.
 					idiomas.add(enumIdioma);
 					
@@ -751,9 +763,14 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 			    	if (traduccionFicha != null) {
 						descripcionPadre.addIdioma(enumIdioma, traduccionFicha.getTitulo());
 					}
-			    	searchText.addIdioma(enumIdioma, traduccionDocumento.getTitulo()+ " "+ traduccionDocumento.getDescripcion() + " "+ documento.getArchivo().getNombre());
 			    	
-			    	//StringBuffer que tendrá el contenido a agregar en textOptional
+			    	if (documento.getArchivo() == null) {
+			    		searchText.addIdioma(enumIdioma, traduccionDocumento.getTitulo()+ " "+ traduccionDocumento.getDescripcion() );
+				    }  else {
+			    		searchText.addIdioma(enumIdioma, traduccionDocumento.getTitulo()+ " "+ traduccionDocumento.getDescripcion() + " "+ documento.getArchivo().getNombre());
+			    	}
+			    	
+			    	//StringBuffer que tendra el contenido a agregar en textOptional
 			    	final StringBuffer textoOptional = new StringBuffer();
 					
 			    	String fichaUAId = "";
@@ -784,8 +801,11 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 						uos.add(uo);
 						indexData.setUos(uos);
 					}
-								
-			    	urls.addIdioma(enumIdioma, "govern/rest/arxiu/" + documento.getArchivo().getId());
+					
+					if (documento.getArchivo() != null) {
+						urls.addIdioma(enumIdioma, "govern/rest/arxiu/" + documento.getArchivo().getId());
+					}
+					
 			    	if (traduccionFicha == null || (traduccionFicha.getUrl() == null || traduccionFicha.getUrl().isEmpty())) {
 			    		urlsPadre.addIdioma(enumIdioma, "/govern/sac/fitxaRedirect.do?codi="+ficha.getId()+"&lang="+keyIdioma);
 			    	} else {

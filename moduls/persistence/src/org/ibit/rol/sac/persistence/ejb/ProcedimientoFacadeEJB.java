@@ -2068,11 +2068,11 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			indexable = false;
 		}
 		
-		if (procedimiento.getFechaCaducidad() != null && Calendar.getInstance().getTime().before(procedimiento.getFechaCaducidad())) {
+		if (procedimiento.getFechaCaducidad() != null && Calendar.getInstance().getTime().after(procedimiento.getFechaCaducidad())) {
 			indexable = false;
 		}
 		
-		if (procedimiento.getFechaPublicacion() != null && Calendar.getInstance().getTime().after(procedimiento.getFechaPublicacion())) {
+		if (procedimiento.getFechaPublicacion() != null && Calendar.getInstance().getTime().before(procedimiento.getFechaPublicacion())) {
 			indexable = false;
 		}
 		
