@@ -4,7 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegate;
+import org.ibit.rol.sac.persistence.delegate.SolrPendienteProcesoDelegate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +25,7 @@ public class TaskIndexacion {
 	public void ejecutarJobInternal() {
 		
 		log.error("Job noctura que se ejecuta para la Indexacion pendiente.");	
-		SolrPendienteDelegate solrDelegate = DelegateUtil.getSolrPendienteDelegate();
+		SolrPendienteProcesoDelegate solrDelegate = DelegateUtil.getSolrPendienteProcesoDelegate();
     	try { 
     		solrDelegate.indexarPendientes();
     	} catch (DelegateException e) { log.error("Error indexando pendientes", e); }

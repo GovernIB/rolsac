@@ -987,12 +987,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 		if (tramite.getProcedimiento() != null) {
 			if (tramite.getProcedimiento().getValidacion() != 1 ) {
 				indexable = false;
-			}
-			
-			if (tramite.getProcedimiento().getFechaCaducidad() != null && Calendar.getInstance().getTime().after(tramite.getProcedimiento().getFechaCaducidad())) {
-				indexable = false;
-			}
-			
+			}			
 		}
 		return indexable;
 	}

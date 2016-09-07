@@ -244,4 +244,11 @@ public final class DelegateUtil {
         del.setImpl(impl);
         return del;
     }
+
+    public static SolrPendienteProcesoDelegate getSolrPendienteProcesoDelegate() {
+		SolrPendienteProcesoDelegateI impl = (SolrPendienteProcesoDelegateImpl) DelegateFactory.getDelegate(SolrPendienteProcesoDelegateImpl.class);
+		SolrPendienteProcesoDelegate del = new SolrPendienteProcesoDelegate();
+        del.setImpl(impl);
+        return del;
+	}
 }

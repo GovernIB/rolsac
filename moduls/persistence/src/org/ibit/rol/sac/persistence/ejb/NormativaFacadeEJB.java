@@ -1011,15 +1011,36 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	 * @return
 	 */
 	 
-	public Normativa obtenerNormativaParaSolr(Long id) {
+	public Normativa obtenerNormativaParaSolr(Long id, Long idArchivo) {
+		log.error("Normativa con id:" + id);
 		Session session = getSession();
 		Normativa normativa = null;
 		try {
-			 normativa = (Normativa) session.load(Normativa.class, id);
+			log.error("  ---  Probamos con normativa.");
+			try {
+				normativa = (Normativa) session.load(Normativa.class, id);
+			} catch (Exception e) {
+				log.error("  ---  Error casteando a normativa. ERROR: " + e.getMessage());
+			}
+			
+			if (normativa == null) {
+				log.error("  ---  Probamos con normativa local.");
+				normativa = (NormativaLocal) session.load(NormativaLocal.class, id);
+			} 
+			
 			for (Iterator iterator = normativa.getLangs().iterator(); iterator.hasNext();) {
+				
 				String lang = (String) iterator.next();
 				TraduccionNormativa traduccion = (TraduccionNormativa) normativa.getTraduccion(lang);
 				if (traduccion!=null)  Hibernate.initialize(traduccion.getArchivo());
+				
+				//Si es distinto de null, entonces habrá que extraer los documentos de aquellos que no 
+				//   concuerden con la id.
+				if (idArchivo != null) {
+					if (idArchivo != traduccion.getArchivo().getId()) {
+						normativa.setTraduccion(lang, null);
+					}
+				}
 			}
 			Hibernate.initialize(normativa.getAfectadas());
 			Hibernate.initialize(normativa.getAfectantes());
@@ -1027,6 +1048,8 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			
 		} catch (HibernateException he) {
 			log.error("Error obteniendo la normativa con id " + id, he);
+		} catch (Exception e) {
+			log.error("Error obteniendo la normativa con id " + id, e);
 		} finally {
 			close(session);
 		}
@@ -1046,7 +1069,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 		
 		try {
 			//Paso 0. Obtenemos la ficha y comprobamos si se puede indexar.
-			final Normativa normativa = obtenerNormativaParaSolr(idElemento);
+			final Normativa normativa = obtenerNormativaParaSolr(idElemento, null);
 			if (normativa == null) {
 				return new SolrPendienteResultado(false, "Error obteniendo la normativa");
 			}
@@ -1110,14 +1133,21 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 						//Hay que extraer la id de los predecesores y luego el de uno mismo
 						Set<UnidadAdministrativa> predecesores = unidadAdministrativa.getPredecesores();
 						for(UnidadAdministrativa predecesor : predecesores) {
-							path.add(predecesor.getId().toString());
-							textoOptional.append(" ");
-					    	textoOptional.append(predecesor.getNombre());			    	
+							if (predecesor != null && predecesor.getId() != null) {
+								path.add(predecesor.getId().toString());
+								if (predecesor.getNombre() != null) {
+									textoOptional.append(" ");
+									textoOptional.append(predecesor.getNombre());
+								}
+							}
 						}
+						
 						path.add( unidadAdministrativa.getId().toString());
-						textoOptional.append(" ");
-				    	textoOptional.append(unidadAdministrativa.getNombre());
-				    	
+						if (unidadAdministrativa.getNombre() != null) {
+							textoOptional.append(" ");
+				    		textoOptional.append(unidadAdministrativa.getNombre());
+						}
+						
 						uo.setPath(path);
 						uos.add(uo);
 						indexData.setUos(uos);
@@ -1125,16 +1155,14 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 					
 					
 			    	searchTextOptional.addIdioma(enumIdioma, textoOptional.toString());
-			    	if (normativa.getBoletin() == null && normativa.getFecha() != null &&(traduccion.getEnlace() == null || traduccion.getEnlace().isEmpty())) {
+			    	if (normativa.getBoletin() == null && normativa.getFecha() != null && (traduccion.getEnlace() == null || traduccion.getEnlace().isEmpty())) {
 			    		Calendar calendar = Calendar.getInstance();
 			    		calendar.setTime(normativa.getFecha());
-			    		
 			    		urls.addIdioma(enumIdioma,"/eboibfront/VisPdf?action=VisHistoric&p_any="+calendar.get(Calendar.YEAR)+"&p_numero="+normativa.getNumero()+"&p_finpag="+traduccion.getPaginaFinal()+"&p_inipag="+traduccion.getPaginaInicial()+"&idDocument="+normativa.getId()+"&lang="+keyIdioma);
-			    	} else if (normativa.getBoletin() == null && (traduccion.getEnlace() == null || traduccion.getEnlace().isEmpty())) {
+			    	} else if (normativa.getBoletin() == null && traduccion.getEnlace() != null && traduccion.getEnlace().isEmpty()) {
 			    		urls.addIdioma(enumIdioma, traduccion.getEnlace());
 			    	} else {
 			    		urls.addIdioma(enumIdioma, "/govern/dadesNormativa.do?lang="+keyIdioma+"&codi="+normativa.getId()+"&coduo="+normativa.getUnidadAdministrativa().getId());
-		
 			    	}
 			    	
 				}
@@ -1228,11 +1256,10 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			    		Calendar calendar = Calendar.getInstance();
 			    		calendar.setTime(normativa.getFechaBoletin());
 			    		urlsPadre.addIdioma(enumIdioma,"/eboibfront/VisPdf?action=VisHistoric&p_any="+calendar.get(Calendar.YEAR)+"&p_numero="+normativa.getNumero()+"&p_finpag="+traduccion.getPaginaFinal()+"&p_inipag="+traduccion.getPaginaInicial()+"&idDocument="+normativa.getId()+"&lang="+keyIdioma);
-			    	} else if (normativa.getBoletin() == null && (traduccion.getEnlace() == null || traduccion.getEnlace().isEmpty())) {
+			    	} else if (normativa.getBoletin() == null && traduccion.getEnlace() != null && !traduccion.getEnlace().isEmpty()) {
 			    		urlsPadre.addIdioma(enumIdioma, traduccion.getEnlace());
 			    	} else {
 			    		urlsPadre.addIdioma(enumIdioma, "/govern/dadesNormativa.do?lang="+keyIdioma+"&codi="+normativa.getId()+"&coduo="+normativa.getUnidadAdministrativa().getId());
-		
 			    	}
 					indexData.setFileContent(traduccion.getArchivo().getDatos());
 					indexData.setIdioma(enumIdioma);
@@ -1269,16 +1296,27 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	 * @return
 	 */
 	private Normativa obtenerNormativaSegunArchivo(Long idElemento) {
-		Session session = getSession();
+		Session session = getSession(); 
 		Normativa normativa = null;
 		try {
-			Criteria criteria = session.createCriteria(Normativa.class);
-			criteria.setFetchMode("traducciones", FetchMode.EAGER);
-			criteria.add(Expression.eqProperty("traducciones.archivo.id", idElemento.toString()));
-			normativa = (Normativa) criteria.uniqueResult();
+			Long idNormativa = null;
+			try {
+				final Query sqlQuery = session.createQuery("select normativa.id from Normativa normativa inner join normativa.traduccionesCombinadas trad inner join trad.archivo arc where arc.id = " + idElemento);
+				idNormativa = Long.valueOf(sqlQuery.uniqueResult().toString());
+			} catch (Exception exception) {
+				log.error("Error intentando extraer la id, se va a proceder con NormativaLocal");
+			} 
+			
+			if (idNormativa == null) {
+				final Query sqlQuery = session.createQuery("select normativa.id from NormativaLocal normativa inner join normativa.traduccionesCombinadas trad inner join trad.archivo arc where arc.id = " + idElemento);
+				idNormativa = Long.valueOf(sqlQuery.uniqueResult().toString());
+			}
+			normativa = this.obtenerNormativaParaSolr(idNormativa, idElemento);			
 		} catch (HibernateException he) {
 			log.error("Error obteniendo normativa según archivo con id " + idElemento, he);
-		} finally {
+		} catch (Exception e) {
+			log.error("Error e obteniendo normativa según archivo con id " + idElemento, e);
+		}finally {
 			close(session);
 		}
 		return normativa;
@@ -1289,7 +1327,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	 * @param solrPendiente
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
-	 */
+	 */ 
 	public SolrPendienteResultado desindexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente)  {
 		try {
 			solrIndexer.desindexar(solrPendiente.getIdElemento().toString(), EnumCategoria.ROLSAC_NORMATIVA);
@@ -1313,13 +1351,13 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
 	 */
 	public List<Long> buscarIdsNormativas()  {
-		Session session = getSession();
+		final Session session = getSession();
 		
 		try {
 
-    		StringBuilder consulta = new StringBuilder("select normativa.id from NormativaLocal as normativa ");
+    		final StringBuilder consulta = new StringBuilder("select normativa.id from Normativa as normativa ");
     		
-    		Query query = session.createQuery( consulta.toString() );
+    		final Query query = session.createQuery( consulta.toString() );
     		query.setCacheable(true);
 
     		return query.list();
