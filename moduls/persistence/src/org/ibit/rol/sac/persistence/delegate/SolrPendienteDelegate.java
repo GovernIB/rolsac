@@ -48,30 +48,6 @@ public class SolrPendienteDelegate implements StatelessDelegate {
     public void crearJob(String tipoIndexacion) throws DelegateException {
          impl.crearJob(tipoIndexacion);
     }
-    
-    public void indexarTodoFicha(final SolrPendienteJob solrPendienteJob) throws DelegateException {
-        impl.indexarTodoFicha(solrPendienteJob);
-    }
-    
-    public void indexarTodoProcedimiento(final SolrPendienteJob solrPendienteJob) throws DelegateException {
-        impl.indexarTodoProcedimiento(solrPendienteJob);
-    }
-    
-    public void indexarTodoNormativa(final SolrPendienteJob solrPendienteJob) throws DelegateException {
-        impl.indexarTodoNormativa(solrPendienteJob);
-    }
-    
-    public void indexarTodoTramite(final SolrPendienteJob solrPendienteJob) throws DelegateException {
-        impl.indexarTodoTramite(solrPendienteJob);
-    }
-    
-    public void indexarTodoUA(final SolrPendienteJob solrPendienteJob) throws DelegateException {
-        impl.indexarTodoUA(solrPendienteJob);
-    }
-
-    public Boolean indexarPendientes() throws DelegateException {
-        return impl.indexarPendientes();
-    }
 
     public Boolean borrarCaducadas() throws DelegateException {
 

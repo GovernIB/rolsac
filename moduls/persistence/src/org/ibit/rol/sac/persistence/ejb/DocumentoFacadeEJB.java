@@ -246,6 +246,35 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
+    
+    
+    /**
+     * Obtiene un Documento segun solr sin producir un ejbexception.
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public Documento obtenerDocumentoSolr(Long id) {
+        Session session = getSession();
+        try {
+            Documento doc =  (Documento) session.load(Documento.class, id);
+            Hibernate.initialize(doc.getArchivo());
+            for (Iterator iterator = doc.getLangs().iterator(); iterator.hasNext();) {
+                String lang = (String) iterator.next();
+                TraduccionDocumento traduccion = (TraduccionDocumento) doc.getTraduccion(lang);
+                if(traduccion != null){
+                    Hibernate.initialize(traduccion.getArchivo());
+                }
+            }
+            
+            return doc;
+        } catch (HibernateException he) {
+            return null;
+        } catch (Exception e) {
+        	return null;
+        } finally {
+            close(session);
+        }
+    }
 
     /**
      * Borrar un documento
@@ -454,9 +483,6 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 			indexable = false;
 		}
 		
-		if (ficha.getFechaCaducidad() != null && Calendar.getInstance().getTime().before(ficha.getFechaCaducidad())) {
-			indexable = false;
-		}
 		return indexable;
 	}
 	
@@ -470,10 +496,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 		if (procedimiento.getValidacion() != 1 ) {
 			indexable = false;
 		}
-		
-		if (procedimiento.getFechaCaducidad() != null && Calendar.getInstance().getTime().before(procedimiento.getFechaCaducidad())) {
-			indexable = false;
-		}
+				
 		return indexable;
 	}
 	
@@ -511,7 +534,11 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 		
 		try {
 			//Paso 0. Obtenemos la ficha y comprobamos si se puede indexar.
-			final Documento documento = obtenerDocumento(idElemento);
+			final Documento documento = obtenerDocumentoSolr(idElemento);
+			if (documento == null) {
+				return new SolrPendienteResultado(false, "Da problema al cargar la info del documento procedimiento.");
+			}
+			
 			boolean isIndexable = this.isIndexable(documento.getProcedimiento());
 			if (!isIndexable) {
 				return new SolrPendienteResultado(true, "No se puede indexar");
@@ -714,7 +741,11 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 		
 		try {
 			//Paso 0. Obtenemos la ficha documento y vemos si es indexable.
-			final Documento documento = obtenerDocumento(idElemento);
+			final Documento documento = obtenerDocumentoSolr(idElemento);
+			if (documento == null) {
+				return new SolrPendienteResultado(false, "Da problema al cargar la info del documento ficha.");
+			}
+			
 			boolean isIndexable = this.isIndexable(documento.getFicha());
 			if (!isIndexable) {
 				return new SolrPendienteResultado(true, "No se puede indexar");
@@ -802,7 +833,9 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 						indexData.setUos(uos);
 					}
 					
-					if (documento.getArchivo() != null) {
+					if (documento.getArchivo() == null) {
+						urls.addIdioma(enumIdioma, "govern/rest/arxiu/" + documento.getId());
+					} else {
 						urls.addIdioma(enumIdioma, "govern/rest/arxiu/" + documento.getArchivo().getId());
 					}
 					
