@@ -1011,7 +1011,11 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	 * @return
 	 */
 	 
+<<<<<<< HEAD
 	public Normativa obtenerNormativaParaSolr(Long id, Long idArchivo) {
+=======
+	public Normativa obtenerNormativaParaSolr(Long id) {
+>>>>>>> branch 'rolsac-1.4' of https://github.com/GovernIB/rolsac.git
 		log.error("Normativa con id:" + id);
 		Session session = getSession();
 		Normativa normativa = null;

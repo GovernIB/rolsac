@@ -135,5 +135,50 @@
 	<classpathentry kind="src" path="/solrapi"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="lib" path="lib/axis-1.4/axis-ant.jar"/>
+	<classpathentry kind="lib" path="lib/ant-contrib-0.6.jar"/>
+	<classpathentry kind="lib" path="lib/icu4j-3.4.4.jar"/>
+	<classpathentry kind="lib" path="lib/iri-0.8.jar"/>
+	<classpathentry kind="lib" path="lib/javassist-3.10.0.GA.jar"/>
+	<classpathentry kind="lib" path="lib/jdom.jar"/>
+	<classpathentry kind="lib" path="lib/readme.txt"/>
+	<classpathentry kind="lib" path="lib/rome-1.0RC2.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.6.4.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.6.4.jar"/>
+	<classpathentry kind="lib" path="lib/sonar-ant-task-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/struts.jar"/>
+	<classpathentry kind="lib" path="lib/axis2-1.5/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/axis2-1.5/wsdl4j-1.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/jasper/xml-apis.jar"/>
+	<classpathentry kind="lib" path="lib/solr/commons-io-2.4.jar"/>
+	<classpathentry kind="lib" path="lib/solr/httpclient-4.4.1.jar"/>
+	<classpathentry kind="lib" path="lib/solr/httpcore-4.4.1.jar"/>
+	<classpathentry kind="lib" path="lib/solr/httpmime-4.4.1.jar"/>
+	<classpathentry kind="lib" path="lib/solr/noggit-0.6.jar"/>
+	<classpathentry kind="lib" path="lib/solr/solr-solrj-5.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/solr/stax2-api-3.1.4.jar"/>
+	<classpathentry kind="lib" path="lib/solr/zookeeper-3.4.6.jar"/>
+	<classpathentry kind="lib" path="lib/jboss/commons-httpclient-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/jboss/odmg-3.0.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/aclibico.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/aopalliance-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/caib-utilities.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/commons-betwixt-0.8.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/commons-validator-1.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/Filters.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/img.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/jakarta-oro.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/junit.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/lax.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/org.springframework.batch-core-3.0.5.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/org.springframework.batch-infrastructure-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/saaj.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/slf4j-api-1.6.0.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/slf4j-log4j12-1.6.0.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/snowball.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/taw.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/Tidy.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/wai.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/wsdl4j.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
