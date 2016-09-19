@@ -246,20 +246,7 @@ public final class DelegateUtil {
         del.setImpl(impl);
         return del;
     }
-<<<<<<< HEAD
-    public static SolrPendienteProcesoDelegate getSolrPendienteProcesoDelegate() {
-		SolrPendienteProcesoDelegateI impl = (SolrPendienteProcesoDelegateImpl) DelegateFactory.getDelegate(SolrPendienteProcesoDelegateImpl.class);
-		SolrPendienteProcesoDelegate del = new SolrPendienteProcesoDelegate();
-        del.setImpl(impl);
-        return del;
-	}
-    public static SilencioAdmDelegate getSilencioAdmDelegate() {
-    	SilencioAdmDelegateI impl= (SilencioAdmDelegateImpl) DelegateFactory.getDelegate(SilencioAdmDelegateImpl.class);
-    	SilencioAdmDelegate del = new SilencioAdmDelegate();
-    	del.setImpl(impl);
-    	return del;
-    }
-=======
+
 
     public static SolrPendienteProcesoDelegate getSolrPendienteProcesoDelegate() {
 		SolrPendienteProcesoDelegateI impl = (SolrPendienteProcesoDelegateImpl) DelegateFactory.getDelegate(SolrPendienteProcesoDelegateImpl.class);
@@ -267,5 +254,11 @@ public final class DelegateUtil {
         del.setImpl(impl);
         return del;
 	}
->>>>>>> branch 'rolsac-1.4' of https://github.com/GovernIB/rolsac.git
+    
+    public static SilencioAdmDelegate getSilencioAdmDelegate() {
+    	SilencioAdmDelegateI impl= (SilencioAdmDelegateImpl) DelegateFactory.getDelegate(SilencioAdmDelegateImpl.class);
+    	SilencioAdmDelegate del = new SilencioAdmDelegate();
+    	del.setImpl(impl);
+    	return del;
+    }
 }

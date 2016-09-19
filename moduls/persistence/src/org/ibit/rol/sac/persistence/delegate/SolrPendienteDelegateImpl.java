@@ -22,7 +22,7 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  */
 public class SolrPendienteDelegateImpl extends SolrPendienteDelegate implements  StatelessDelegate, SolrPendienteDelegateI {
 
-	
+	 
     private long timeLen = 0L;
 
     // Cache de lenguaje por defecto
@@ -74,20 +74,6 @@ public class SolrPendienteDelegateImpl extends SolrPendienteDelegate implements 
     }
     
     
-    public void crearJob(final String tipoIndexacion)  throws DelegateException {
-    	 try {
-             getFacade().crearJob(tipoIndexacion);
-         } catch (RemoteException e) {
-             throw new DelegateException(e);
-         } catch (SchedulerException e) {
-        	 throw new DelegateException(e);
-		 }catch (Exception e) {
-       	  throw new DelegateException(e);
-		 }
-    }
-	
-
-
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegateI#getPendientes()
 	 */
@@ -145,5 +131,15 @@ public class SolrPendienteDelegateImpl extends SolrPendienteDelegate implements 
               throw new DelegateException(e);
           }
   	 }
+      
+      
+      public boolean checkJobsActivos() throws DelegateException {
+    	  try {
+              return getFacade().checkJobsActivos();
+          } catch (RemoteException e) {
+              throw new DelegateException(e);
+          }
+      }
+
     
 }

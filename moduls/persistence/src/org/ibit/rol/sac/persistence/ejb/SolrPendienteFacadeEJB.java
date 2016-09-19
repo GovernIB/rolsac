@@ -143,34 +143,25 @@ public abstract class SolrPendienteFacadeEJB extends HibernateEJB {
     
     
     
-    
     /**
-     *  Crea el job.
-     * @param tipoIndexacion
-     * @throws SchedulerException 
-     *  
+     * Revisa si se está ejecutando algún job.
+     * 
    	 * @ejb.interface-method
    	 * @ejb.permission unchecked="true"
-     */
-
-    public void crearJob(final String tipoIndexacion) throws Exception  {
-    	
+   	 * 
+   	 * @return Booleano True si hay algo activo y false si no lo está.  
+   	 */
+    public boolean checkJobsActivos() {
+    	boolean retorno = false;
     	//Se ha simplificado, se verán los últimos jobs ejecutados y, si alguno de ellos está sin fecha fin
     	//  se da por hecho que se está ejecutando.
     	List<SolrPendienteJob> jobs = getListJobs(5);
     	for(SolrPendienteJob job : jobs) {
     		if (job.getFechaFin() == null) {
-    			throw new Exception("Se está ejecutando un job, intentelo más tarde");
+    			retorno = true;
     		}
     	}
-    	
-    	Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler(); 
-    	scheduler.start(); 
-    	JobDetail jobDetail = new JobDetail("IndexacionJob", Scheduler.DEFAULT_GROUP, IndexacionJob.class);
-    	Trigger trigger = TriggerUtils.makeImmediateTrigger(0, 0); 
-    	scheduler.getContext().put("tipoindexacion", tipoIndexacion);
-        trigger.setName("FireOnceNowTrigger");  
-    	scheduler.scheduleJob(jobDetail, trigger);
+    	return retorno;
     }
     
     /**

@@ -18,11 +18,18 @@ import org.ibit.rol.sac.model.dto.SolrPendienteDTO;
 import org.ibit.rol.sac.model.dto.SolrPendienteJobDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.Trigger;
+import org.quartz.TriggerUtils;
+import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.controller.PantallaBaseController;
+import es.caib.rolsac.back2.util.IndexacionJob;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
@@ -115,21 +122,24 @@ public class TMIndexController extends PantallaBaseController {
 
     	final Map<String, Object> resultats = new HashMap<String, Object>();
         try {
-              DelegateUtil.getSolrPendienteDelegate().crearJob("todo");   
-        } catch (DelegateException dEx) {
-            if (dEx.isSecurityException()) {
-                log.error("Permisos insuficients: " + dEx.getMessage());
-            } else {
-                log.error("Error: " + dEx.getMessage());
-            }
-
+        	//Paso 1. Comprobar si hay algo creado.
+          	if ( DelegateUtil.getSolrPendienteDelegate().checkJobsActivos()) {
+          		resultats.put("error", "Hi ha tasques en execució");
+          	} else {
+          		//Paso 2. Si todo correcto, ejecutar job 
+          		ejecutarJob("todo");
+          	}
+        } catch (SchedulerException exception) {
+        	log.error("Error: " + exception.getMessage());
+            resultats.put("error", "No es pot generar el job");
+        } catch (Exception dEx) {
+           log.error("Error: " + dEx.getMessage());
             if (dEx.getCause() == null) {
             	resultats.put("error", dEx.getMessage());
             } else {
             	resultats.put("error", dEx.getCause().getMessage());
             }
         }
-
         return resultats; 
     }
     
@@ -196,19 +206,41 @@ public class TMIndexController extends PantallaBaseController {
                 
     }
     
+    /**
+     * Se ejecuta y crea un job con un tipo de indexacion.
+     * 
+     * @param tipoIndexacion
+     * @throws SchedulerException 
+     */
+    private void ejecutarJob(final String tipoIndexacion) throws SchedulerException {
+      	//Se ha simplificado, se verán los últimos jobs ejecutados y, si alguno de ellos está sin fecha fin
+      	//  se da por hecho que se está ejecutando.
+      	Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler(); 
+      	scheduler.start(); 
+      	JobDetail jobDetail = new JobDetail("IndexacionJob", Scheduler.DEFAULT_GROUP, IndexacionJob.class);
+      	Trigger trigger = TriggerUtils.makeImmediateTrigger(0, 0); 
+      	scheduler.getContext().put("tipoindexacion", tipoIndexacion);
+        trigger.setName("FireOnceNowTrigger");  
+      	scheduler.scheduleJob(jobDetail, trigger);
+    }
     
     @RequestMapping(value = "/indexarTodoFicha.do")
     public @ResponseBody Map<String, Object> indexarTodoFicha(HttpServletRequest request) {
 
     	final Map<String, Object> resultats = new HashMap<String, Object>();
         try {
-              DelegateUtil.getSolrPendienteDelegate().crearJob("ficha");   
-        } catch (DelegateException dEx) {
-            if (dEx.isSecurityException()) {
-                log.error("Permisos insuficients: " + dEx.getMessage());
-            } else {
-                log.error("Error: " + dEx.getMessage());
-            }
+        	//Paso 1. Comprobar si hay algo creado.
+          	if ( DelegateUtil.getSolrPendienteDelegate().checkJobsActivos()) {
+          		resultats.put("error", "Hi ha tasques en execució");
+          	} else {
+          		//Paso 2. Si todo correcto, ejecutar job 
+          		ejecutarJob("ficha");
+          	}    
+        } catch (SchedulerException exception) {
+        	log.error("Error: " + exception.getMessage());
+            resultats.put("error", "No es pot generar el job");
+        } catch (Exception dEx) {
+           log.error("Error: " + dEx.getMessage());
             if (dEx.getCause() == null) {
             	resultats.put("error", dEx.getMessage());
             } else {
@@ -224,13 +256,18 @@ public class TMIndexController extends PantallaBaseController {
 
     	final Map<String, Object> resultats = new HashMap<String, Object>();
          try {
-              DelegateUtil.getSolrPendienteDelegate().crearJob("procedimiento");    
-        } catch (DelegateException dEx) {
-            if (dEx.isSecurityException()) {
-                log.error("Permisos insuficients: " + dEx.getMessage());
-            } else {
-                log.error("Error: " + dEx.getMessage());
-            }
+        	//Paso 1. Comprobar si hay algo creado.
+          	if ( DelegateUtil.getSolrPendienteDelegate().checkJobsActivos()) {
+          		resultats.put("error", "Hi ha tasques en execució");
+          	} else {
+          		//Paso 2. Si todo correcto, ejecutar job 
+          		ejecutarJob("procedimiento");
+          	}    
+        } catch (SchedulerException exception) {
+        	log.error("Error: " + exception.getMessage());
+            resultats.put("error", "No es pot generar el job");
+        } catch (Exception dEx) {
+           log.error("Error: " + dEx.getMessage());
             if (dEx.getCause() == null) {
             	resultats.put("error", dEx.getMessage());
             } else {
@@ -245,14 +282,18 @@ public class TMIndexController extends PantallaBaseController {
 
     	final Map<String, Object> resultats = new HashMap<String, Object>();
         try {
-              DelegateUtil.getSolrPendienteDelegate().crearJob("normativa");    
-        } catch (DelegateException dEx) {
-            if (dEx.isSecurityException()) {
-                log.error("Permisos insuficients: " + dEx.getMessage());
-            } else {
-                log.error("Error: " + dEx.getMessage());
-            }
-
+        	//Paso 1. Comprobar si hay algo creado.
+         	if ( DelegateUtil.getSolrPendienteDelegate().checkJobsActivos()) {
+         		resultats.put("error", "Hi ha tasques en execució");
+         	} else {
+         		//Paso 2. Si todo correcto, ejecutar job 
+         		ejecutarJob("normativa");
+         	}    
+        } catch (SchedulerException exception) {
+        	log.error("Error: " + exception.getMessage());
+            resultats.put("error", "No es pot generar el job");
+        } catch (Exception dEx) {
+           log.error("Error: " + dEx.getMessage());
             if (dEx.getCause() == null) {
             	resultats.put("error", dEx.getMessage());
             } else {
@@ -267,14 +308,18 @@ public class TMIndexController extends PantallaBaseController {
 
     	final Map<String, Object> resultats = new HashMap<String, Object>();
          try {
-              DelegateUtil.getSolrPendienteDelegate().crearJob("tramite");    
-        } catch (DelegateException dEx) {
-            if (dEx.isSecurityException()) {
-                log.error("Permisos insuficients: " + dEx.getMessage());
-            } else {
-                log.error("Error: " + dEx.getMessage());
-            }
-
+        	//Paso 1. Comprobar si hay algo creado.
+         	if ( DelegateUtil.getSolrPendienteDelegate().checkJobsActivos()) {
+         		resultats.put("error", "Hi ha tasques en execució");
+         	} else {
+         		//Paso 2. Si todo correcto, ejecutar job 
+         		ejecutarJob("tramite");
+         	}  
+        } catch (SchedulerException exception) {
+        	log.error("Error: " + exception.getMessage());
+            resultats.put("error", "No es pot generar el job");
+        } catch (Exception dEx) {
+           log.error("Error: " + dEx.getMessage());
             if (dEx.getCause() == null) {
             	resultats.put("error", dEx.getMessage());
             } else {
@@ -289,14 +334,20 @@ public class TMIndexController extends PantallaBaseController {
 
     	final Map<String, Object> resultats = new HashMap<String, Object>();
         try {
-              DelegateUtil.getSolrPendienteDelegate().crearJob("ua");    
-        } catch (DelegateException dEx) {
-            if (dEx.isSecurityException()) {
-                log.error("Permisos insuficients: " + dEx.getMessage());
-            } else {
-                log.error("Error: " + dEx.getMessage());
-            }
-
+              
+            //Paso 1. Comprobar si hay algo creado.
+          	if ( DelegateUtil.getSolrPendienteDelegate().checkJobsActivos()) {
+          		resultats.put("error", "Hi ha tasques en execució");
+          	} else {
+          		//Paso 2. Si todo correcto, ejecutar job
+          		ejecutarJob("ua");
+          	}
+          	
+        } catch (SchedulerException exception) {
+        	log.error("Error: " + exception.getMessage());
+            resultats.put("error", "No es pot generar el job");
+        } catch (Exception dEx) {
+           log.error("Error: " + dEx.getMessage());
             if (dEx.getCause() == null) {
             	resultats.put("error", dEx.getMessage());
             } else {
@@ -313,15 +364,20 @@ public class TMIndexController extends PantallaBaseController {
     	final Map<String, Object> resultats = new HashMap<String, Object>();     
 
         try {
-             DelegateUtil.getSolrPendienteDelegate().crearJob("pendientes");            
-
-        } catch (DelegateException dEx) {
-            if (dEx.isSecurityException()) {
-                log.error("Permisos insuficients: " + dEx.getMessage());
-            } else {
-                log.error("Error: " + dEx.getMessage());
-            }
-
+        	
+        	//Paso 1. Comprobar si hay algo creado.
+        	if ( DelegateUtil.getSolrPendienteDelegate().checkJobsActivos()) {
+        		resultats.put("error", "Hi ha tasques en execució");
+        	} else {
+        		//Paso 2. Si todo correcto, ejecutar job 
+        		ejecutarJob("pendientes");
+        	}
+        	
+        } catch (SchedulerException exception) {
+        	log.error("Error: " + exception.getMessage());
+            resultats.put("error", "No es pot generar el job");
+        } catch (Exception dEx) {
+           log.error("Error: " + dEx.getMessage());
             if (dEx.getCause() == null) {
             	resultats.put("error", dEx.getMessage());
             } else {

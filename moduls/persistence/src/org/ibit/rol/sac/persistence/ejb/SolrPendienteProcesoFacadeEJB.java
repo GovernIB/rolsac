@@ -60,7 +60,7 @@ import es.caib.solr.api.model.types.EnumCategoria;
  *  view-type="remote"
  *  transaction-type="Container"
  *
- * @ejb.transaction type="NotSupported "
+ * @ejb.transaction type="NotSupported"
  */
 public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 
@@ -131,9 +131,7 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 		int iFicha = 0;
     	for (Long idFicha : listFicha) {
     		iFicha++;
-    		if (idFicha == 86389l) {
-    			iFicha++;
-    		}
+    		
     		solrPendienteJob.setTotalFicha( Float.valueOf( iFicha * 100/ totalFichas ));
     		solrPendienteJob.setTotalFichaDoc(Float.valueOf( iFicha * 100/ totalFichas ));
     		try {

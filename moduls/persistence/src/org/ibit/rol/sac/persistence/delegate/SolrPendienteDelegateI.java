@@ -28,9 +28,9 @@ public interface SolrPendienteDelegateI {
 	    
 	public void cerrarSorlPendienteJob(SolrPendienteJob solrpendienteJob) throws DelegateException;
 	    
-	public void crearJob(String tipoIndexacion)  throws DelegateException;
-
 	public List<SolrPendienteJob> getListJobs(int cuantos) throws DelegateException;
+
+	public boolean checkJobsActivos() throws DelegateException;
 
 	
 		

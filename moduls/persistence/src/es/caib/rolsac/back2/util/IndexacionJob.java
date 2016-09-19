@@ -1,4 +1,4 @@
-package org.ibit.rol.sac.persistence.job;
+package es.caib.rolsac.back2.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -12,8 +12,6 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.SchedulerContext;
 import org.quartz.SchedulerException;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.scheduling.quartz.QuartzJobBean;
 
 
 /***

@@ -50,6 +50,7 @@ import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
+import es.caib.solr.api.SolrFactory;
 import es.caib.solr.api.SolrIndexer;
 import es.caib.solr.api.model.IndexData;
 import es.caib.solr.api.model.IndexFile;
@@ -1010,33 +1011,24 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	 * @return
 	 */
 	 
-<<<<<<< HEAD
-
 	public Normativa obtenerNormativaParaSolr(Long id, Long idArchivo) {
-
-=======
-<<<<<<< HEAD
-	public Normativa obtenerNormativaParaSolr(Long id, Long idArchivo) {
-=======
-	public Normativa obtenerNormativaParaSolr(Long id) {
->>>>>>> branch 'rolsac-1.4' of https://github.com/GovernIB/rolsac.git
->>>>>>> branch 'rolsac-1.4' of https://github.com/GovernIB/rolsac.git
-		log.error("Normativa con id:" + id);
 		Session session = getSession();
 		Normativa normativa = null;
 		try {
-			log.error("  ---  Probamos con normativa.");
 			try {
 				normativa = (Normativa) session.load(Normativa.class, id);
-			} catch (Exception e) {
-				log.error("  ---  Error casteando a normativa. ERROR: " + e.getMessage());
+			} catch (Exception e) { //No ponemos error para poder depurar.
 			}
 			
 			if (normativa == null) {
-				log.error("  ---  Probamos con normativa local.");
 				normativa = (NormativaLocal) session.load(NormativaLocal.class, id);
 			} 
 			
+			Hibernate.initialize(normativa.getAfectadas());
+			Hibernate.initialize(normativa.getAfectantes());
+			Hibernate.initialize(normativa.getProcedimientos());
+			
+			Map<String, Traduccion> traduccionCorrecta = null;
 			for (Iterator iterator = normativa.getLangs().iterator(); iterator.hasNext();) {
 				
 				String lang = (String) iterator.next();
@@ -1046,14 +1038,19 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 				//Si es distinto de null, entonces habrá que extraer los documentos de aquellos que no 
 				//   concuerden con la id.
 				if (idArchivo != null) {
-					if (idArchivo != traduccion.getArchivo().getId()) {
-						normativa.setTraduccion(lang, null);
+					if (traduccion != null && traduccion.getArchivo() != null && idArchivo.compareTo(traduccion.getArchivo().getId()) == 0) {
+						//normativa.setTraduccion(lang, null);
+						traduccionCorrecta = new HashMap<String, Traduccion>();
+						traduccionCorrecta.put(lang,  traduccion);
+						break;
 					}
 				}
 			}
-			Hibernate.initialize(normativa.getAfectadas());
-			Hibernate.initialize(normativa.getAfectantes());
-			Hibernate.initialize(normativa.getProcedimientos());
+			
+			//Para que sólo tenga una traducción.
+			if (idArchivo != null) {
+				normativa.setTraduccionMap(traduccionCorrecta);
+			}
 			
 		} catch (HibernateException he) {
 			log.error("Error obteniendo la normativa con id " + id, he);
@@ -1255,6 +1252,10 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 						continue;
 					}
 					
+					if (traduccion.getArchivo() == null || traduccion.getArchivo().getId().compareTo(idElemento) != 0) {
+						continue;
+					}
+					
 					//Seteamos los primeros campos multiidiomas: Titulo y Descripción (y padre).
 					titulo.addIdioma(enumIdioma, traduccion.getArchivo().getNombre());
 					descripcion.addIdioma(enumIdioma, traduccion.getArchivo().getMime());
@@ -1272,6 +1273,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			    	}
 					indexData.setFileContent(traduccion.getArchivo().getDatos());
 					indexData.setIdioma(enumIdioma);
+					break;
 				}
 			}
 			
@@ -1320,6 +1322,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 				final Query sqlQuery = session.createQuery("select normativa.id from NormativaLocal normativa inner join normativa.traduccionesCombinadas trad inner join trad.archivo arc where arc.id = " + idElemento);
 				idNormativa = Long.valueOf(sqlQuery.uniqueResult().toString());
 			}
+			
 			normativa = this.obtenerNormativaParaSolr(idNormativa, idElemento);			
 		} catch (HibernateException he) {
 			log.error("Error obteniendo normativa según archivo con id " + idElemento, he);
@@ -1351,7 +1354,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			}
 			return new SolrPendienteResultado(false, mensajeError);
 		}
-	}
+	} 
 
 	/**
 	 * Devuelve los ids de las normativas.

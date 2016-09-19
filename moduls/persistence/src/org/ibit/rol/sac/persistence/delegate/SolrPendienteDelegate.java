@@ -45,10 +45,6 @@ public class SolrPendienteDelegate implements StatelessDelegate {
     	 impl.cerrarSorlPendienteJob(solrpendienteJob);
     }
 
-    public void crearJob(String tipoIndexacion) throws DelegateException {
-         impl.crearJob(tipoIndexacion);
-    }
-
     public Boolean borrarCaducadas() throws DelegateException {
 
         return impl.borrarCaducadas();
@@ -65,6 +61,13 @@ public class SolrPendienteDelegate implements StatelessDelegate {
 
 	public List<SolrPendienteJob> getListJobs(int cuantos) throws DelegateException{
 		return impl.getListJobs(cuantos);
+	}
+
+	/**
+	 * Comprueba si hay algun job pendiente.
+	 */
+	public boolean checkJobsActivos() throws DelegateException {
+		return impl.checkJobsActivos();
 	}
     
 
