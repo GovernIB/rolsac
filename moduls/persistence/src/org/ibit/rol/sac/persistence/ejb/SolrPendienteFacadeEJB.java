@@ -2,10 +2,7 @@ package org.ibit.rol.sac.persistence.ejb;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -13,40 +10,18 @@ import javax.ejb.EJBException;
 import net.sf.hibernate.Criteria;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
-import net.sf.hibernate.expression.Criterion;
 import net.sf.hibernate.expression.Expression;
 import net.sf.hibernate.expression.Order;
 
-import org.ibit.rol.sac.model.Archivo;
-import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteJob;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
-import org.ibit.rol.sac.model.Traduccion;
-import org.ibit.rol.sac.model.TraduccionNormativa;
-import org.ibit.rol.sac.persistence.delegate.DelegateException;
-import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
-import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
-import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
-import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
-import org.ibit.rol.sac.persistence.delegate.SolrPendienteJobDelegate;
-import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
-import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
-import org.ibit.rol.sac.persistence.job.IndexacionJob;
-import org.quartz.JobDetail;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.Trigger;
-import org.quartz.TriggerUtils;
-import org.quartz.impl.StdSchedulerFactory;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.caib.solr.api.SolrFactory;
 import es.caib.solr.api.SolrIndexer;
 import es.caib.solr.api.exception.ExcepcionSolrApi;
 import es.caib.solr.api.model.types.EnumAplicacionId;
-import es.caib.solr.api.model.types.EnumCategoria;
 
 
 /**
