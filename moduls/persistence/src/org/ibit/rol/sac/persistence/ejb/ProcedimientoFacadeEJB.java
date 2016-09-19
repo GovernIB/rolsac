@@ -2067,15 +2067,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		if (procedimiento.getValidacion() != 1 ) {
 			indexable = false;
 		}
-		
-		if (procedimiento.getFechaCaducidad() != null && Calendar.getInstance().getTime().after(procedimiento.getFechaCaducidad())) {
-			indexable = false;
-		}
-		
-		if (procedimiento.getFechaPublicacion() != null && Calendar.getInstance().getTime().before(procedimiento.getFechaPublicacion())) {
-			indexable = false;
-		}
-		
+				
 		return indexable;
 	}
 	
@@ -2322,7 +2314,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			//Revisar si el tramite es telematico
 			indexData.setTelematico(false);
 			for(Tramite tramite : procedimiento.getTramites()) {
-				if (tramite.getIdTraTel() != null && !"".equals(tramite.getIdTraTel())) {
+				if (tramite != null && tramite.getIdTraTel() != null && !"".equals(tramite.getIdTraTel())) {
 					indexData.setTelematico(true);
 					break;
 				}

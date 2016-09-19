@@ -1,0 +1,85 @@
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
+	xmlns:impl="http://ws.silencio.v2.api.rolsac.caib.es"
+	xmlns:intf="http://ws.silencio.v2.api.rolsac.caib.es"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:tns1="http://silencio.v2.api.rolsac.caib.es"
+	xmlns:tns2="http://general.v2.api.rolsac.caib.es"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://ws.silencio.v2.api.rolsac.caib.es">
+	
+	<wsdl:import namespace="urn:tns1" location="dto/SilencioDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="dto/BasicCriteria.wsdl"/>
+	
+	
+	<wsdl:types>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://ws.silencio.v2.api.rolsac.caib.es">
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="ArrayOf_xsd_anyType">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:anyType[]" />
+					</restriction>
+				</complexContent>
+			</complexType>
+		</schema>
+		
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://xml.apache.org/xml-soap">
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="Vector">
+				<sequence>
+					<element maxOccurs="unbounded" minOccurs="0" name="item" type="xsd:anyType" />
+				</sequence>
+			</complexType>
+		</schema>
+	</wsdl:types>
+	
+	<wsdl:message name="obtenirSilenciRequest">
+		<wsdl:part name="in0" type="xsd:string" />
+		<wsdl:part name="in1" type="xsd:string" />
+	</wsdl:message>
+	<wsdl:message name="obtenirSilenciResponse">
+		<wsdl:part name="obtenirSilenciReturn" type="tns1:SilencioDTO" />
+	</wsdl:message>
+	
+	
+	<wsdl:portType name="SilencioQueryServiceEJBRemote">
+		
+		<wsdl:operation name="obtenirSilenci" parameterOrder="in0 in1">
+			<wsdl:input message="impl:obtenirSilenciRequest" name="obtenirSilenciRequest" />
+			<wsdl:output message="impl:obtenirSilenciResponse" name="obtenirSilenciResponse" />
+		</wsdl:operation>
+		
+	</wsdl:portType>
+	
+	<wsdl:binding name="SilencioWSSoapBinding" type="impl:SilencioQueryServiceEJBRemote">
+		<wsdlsoap:binding style="rpc"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		
+		
+		<wsdl:operation name="obtenirSilenci">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirSilenciRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.silencio.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirSilenciResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.silencio.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+		
+	</wsdl:binding>
+	<wsdl:service name="SilencioQueryServiceEJBRemoteService">
+		<wsdl:port binding="impl:SilencioWSSoapBinding" name="SilencioWS">
+			<wsdlsoap:address
+				location="https://localhost:8443/sacws-api/services/SilencioWS" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

@@ -208,6 +208,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			//resultats.put("item_clau_hita", uni.getClaveHita());
 			resultats.put("item_codi_estandar", uni.getCodigoEstandar());
 			resultats.put("item_clave_primaria", idUA);
+			resultats.put("item_cod_DIR3", uni.getCodigoDIR3()); //#366 se añade DIR3
 			resultats.put("item_domini", uni.getDominio());
 			resultats.put("item_validacio", uni.getValidacion());
 			resultats.put("item_telefon", uni.getTelefono());

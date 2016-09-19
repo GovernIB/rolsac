@@ -101,72 +101,7 @@ public class SolrPendienteDelegateImpl extends SolrPendienteDelegate implements 
     }
 
     
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegateI#indexarTodo()
-	 */
-    public void indexarTodoFicha(final SolrPendienteJob solrPendienteJob) throws DelegateException {
-    	try {
-             getFacade().indexarTodoFicha(solrPendienteJob);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegateI#indexarTodo()
-	 */
-    public void indexarTodoProcedimiento(final SolrPendienteJob solrPendienteJob) throws DelegateException {
-    	try {
-             getFacade().indexarTodoProcedimiento(solrPendienteJob);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegateI#indexarTodo()
-	 */
-    public void indexarTodoNormativa(final SolrPendienteJob solrPendienteJob) throws DelegateException {
-    	try {
-             getFacade().indexarTodoNormativa(solrPendienteJob);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegateI#indexarTodo()
-	 */
-    public void indexarTodoTramite(final SolrPendienteJob solrPendienteJob) throws DelegateException {
-    	try {
-             getFacade().indexarTodoTramite(solrPendienteJob);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegateI#indexarTodo()
-	 */
-    public void indexarTodoUA(final SolrPendienteJob solrPendienteJob) throws DelegateException {
-    	try {
-             getFacade().indexarTodoUA(solrPendienteJob);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegateI#indexarPendientes()
-	 */
-    public Boolean indexarPendientes() throws DelegateException {
-
-        try {
-            return getFacade().indexarPendientes();
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
+   
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegateI#borrarCaducadas()
 	 */

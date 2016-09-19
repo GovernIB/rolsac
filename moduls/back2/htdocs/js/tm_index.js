@@ -31,6 +31,7 @@ $(document).ready(function() {
    
 	//LLAMAMOS AL LISTADO DE JOBS.
 	Llistat.inicializarJobs();
+	
 });
 
 
@@ -274,8 +275,8 @@ function CLlistat(){
 		jQuery("li.opcio, li.actiu").removeClass("actiu");
 		jQuery("#tabBuscador").parent().addClass("actiu");
 		
-		
 		opcio_unitat = "C";
+		
 		that.carregar({});
 		
 		// resultats
@@ -289,6 +290,7 @@ function CLlistat(){
 			});
 			
 		});
+		
 		
 	};
 	

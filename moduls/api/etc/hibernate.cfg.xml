@@ -78,7 +78,7 @@
         <mapping resource="org/ibit/rol/sac/model/Taxa.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/SolrPendiente.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/SolrPendienteJob.hbm.xml" />
-       
+        <mapping resource="org/ibit/rol/sac/model/SilencioAdm.hbm.xml" />
         
     </session-factory>
 

@@ -100,7 +100,7 @@ $(document).ready(function() {
 	  "item_destinataris_",
 	  "item_resolucio_",
 	  "item_notificacio_",
-	  "item_silenci_",
+	  //"item_silenci_",
 	  "item_observacions_"
     ];
 
@@ -111,7 +111,7 @@ $(document).ready(function() {
       "destinatarios",
       "resolucion",
       "notificacion",
-      "silencio",
+     // "silencio",
       "observaciones"
     ];
 
@@ -552,6 +552,15 @@ function CDetall() {
 		jQuery("#item_codigo_pro,#item_codigo_pro_es,#item_codigo_pro_en,#item_codigo_pro_de,#item_codigo_pro_fr").change(function(){
 			jQuery("#item_codigo_pro,#item_codigo_pro_es,#item_codigo_pro_en,#item_codigo_pro_de,#item_codigo_pro_fr").val( jQuery(this).val() );
 		});
+		//#366 se añade SIA
+		jQuery("#item_codigo_sia,#item_codigo_sia_es,#item_codigo_sia_en,#item_codigo_sia_de,#item_codigo_sia_fr").change(function(){
+			jQuery("#item_codigo_sia,#item_codigo_sia_es,#item_codigo_sia_en,#item_codigo_sia_de,#item_codigo_sia_fr").val( jQuery(this).val() );
+		});
+		
+		jQuery("#item_codigo_sia,#item_codigo_sia_es,#item_codigo_sia_en,#item_codigo_sia_de,#item_codigo_sia_fr").change(function(){
+			jQuery("#item_codigo_sia,#item_codigo_sia_es,#item_codigo_sia_en,#item_codigo_sia_de,#item_codigo_sia_fr").val( jQuery(this).val() );
+		});
+		
 		jQuery("#item_fi_vida_administrativa,#item_fi_vida_administrativa_es,#item_fi_vida_administrativa_en,#item_fi_vida_administrativa_de,#item_fi_vida_administrativa_fr").change(function(){
 			jQuery("#item_fi_vida_administrativa,#item_fi_vida_administrativa_es,#item_fi_vida_administrativa_en,#item_fi_vida_administrativa_de,#item_fi_vida_administrativa_fr").val( jQuery(this).val());
 		});
@@ -582,6 +591,7 @@ function CDetall() {
 		jQuery("#item_finestreta_unica").change(function() { 
 			$("#item_finestreta_unica").attr("checked", jQuery(this).is(":checked")); 
 		});
+		
 
 		// boton de traducir
 		jQuery("#botoTraduirProcediment").unbind("click").bind("click", function() {
@@ -606,7 +616,9 @@ function CDetall() {
 		jQuery("#modul_documents, #modul_tramits").hide();
 		jQuery("#modulAuditories, #modulEstadistiques").hide();
 		jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").hide();
-
+		//#366 se añade sia
+		jQuery("#caja_item_codigo_sia, #caja_item_codigo_sia_es, #caja_item_codigo_sia_en, #caja_item_codigo_sia_de, #caja_item_codigo_sia_fr").hide();
+		
 		// Borrar del desplegable de estado de publicación las opciones no válidas al crear un nuevo procedimiento:
 		// (1 = Pública, 3 = Reserva).
 		$("#item_estat option[value=]").remove(); // Opción por defecto, sin valor. La borramos también.
@@ -683,7 +695,10 @@ function CDetall() {
 		jQuery("#modul_documents").show();
 		jQuery("#modul_tramits").show();
 		jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").show();        
-
+		//#366 se añade SIA
+		jQuery("#caja_item_codigo_sia, #caja_item_codigo_sia_es, #caja_item_codigo_sia_en, #caja_item_codigo_sia_de, #caja_item_codigo_sia_fr").show();        
+		
+		
 		escriptori_detall_elm.find("a.elimina, a.previsualitza").show().end().find("h2:first").text(txtDetallTitol);
 
 		dada_node = dades;
@@ -704,7 +719,7 @@ function CDetall() {
 			$("#item_resolucio_" + idioma).val(printStringFromNull(dada_node[idioma]["resolucion"]));
 			//El campo notificaci�n queda obsoleto se ha eliminado del back #8 y que no se elimina para permitir compatibilidad entre la version 1.2 y 1.3 
 			$("#item_notificacio_" + idioma).val(printStringFromNull(dada_node[idioma]["notificacion"]));
-			$("#item_silenci_" + idioma).val(printStringFromNull(dada_node[idioma]["silencio"]));
+			//$("#item_silenci_" + idioma).val(printStringFromNull(dada_node[idioma]["silencio"]));
 			$("#item_observacions_" + idioma).val(printStringFromNull(dada_node[idioma]["observaciones"]));
 
 		}
@@ -716,7 +731,14 @@ function CDetall() {
 			jQuery("#item_codigo_pro").val(dada_node.item_codigo_pro);
 			jQuery("#item_codigo_pro").change();
 		}
-
+		//#366 se añade SIA
+		if (dada_node.item_codigo_sia != undefined) {
+			jQuery("#item_codigo_sia").val(dada_node.item_codigo_sia);
+			jQuery("#item_codigo_sia").change();
+		}
+		jQuery("#item_silenci_combo").val(dada_node.item_silenci_combo);
+		
+		
 		$("#item_clave_primaria").val(dada_node.item_id);
 		$("#item_clave_primaria").change();
 

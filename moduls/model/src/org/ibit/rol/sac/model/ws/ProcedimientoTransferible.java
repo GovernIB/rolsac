@@ -274,6 +274,8 @@ public class ProcedimientoTransferible extends ActuacionTransferible implements 
 		
 		this.setUrlRemota(establecerIdEnUrl(proc.getId().toString(), obtenerUrl(URL_PROC)));
 		
+		
+		
         //Relleno las traducciones
 		final List<TraduccionProcedimientoTransferible> traducciones = new ArrayList<TraduccionProcedimientoTransferible>(); 
 		for (final String idioma : (Collection<String>)proc.getLangs()){
@@ -285,7 +287,7 @@ public class ProcedimientoTransferible extends ActuacionTransferible implements 
                 temp.setDestinatarios(traduccion.getDestinatarios());
                 temp.setRequisitos(traduccion.getRequisitos());
                 temp.setPlazos(traduccion.getPlazos());
-                temp.setSilencio(traduccion.getSilencio());
+                //#366temp.setSilencio(traduccion.getSilencio());
                 temp.setRecursos(traduccion.getRecursos());
                 temp.setObservaciones(traduccion.getObservaciones());
                 temp.setLugar(traduccion.getLugar());

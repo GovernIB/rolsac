@@ -65,6 +65,7 @@ import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
+import es.caib.rolsac.api.v2.silencio.SilencioDTO;
 import es.caib.rolsac.api.v2.taxa.TaxaCriteria;
 import es.caib.rolsac.api.v2.taxa.TaxaDTO;
 import es.caib.rolsac.api.v2.tipus.TipusCriteria;
@@ -661,5 +662,10 @@ public class RolsacQueryServiceGateway {
 
         return stub.getNumFitxes(fitxaCriteria);
     }
+
+	public SilencioDTO obtenirSilenci(String codSilencio, String idioma)  throws QueryServiceException, RemoteException {
+		
+		return stub.obtenirSilenci(codSilencio, idioma);
+	}
 	
 }

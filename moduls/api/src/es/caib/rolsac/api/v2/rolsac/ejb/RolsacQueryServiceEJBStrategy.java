@@ -59,6 +59,7 @@ import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.rolsac.RolsacQueryServiceStrategy;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
+import es.caib.rolsac.api.v2.silencio.SilencioDTO;
 import es.caib.rolsac.api.v2.taxa.TaxaCriteria;
 import es.caib.rolsac.api.v2.taxa.TaxaDTO;
 import es.caib.rolsac.api.v2.tipus.TipusCriteria;
@@ -641,5 +642,14 @@ public class RolsacQueryServiceEJBStrategy implements RolsacQueryServiceStrategy
             throw new StrategyException(e);
         }
     }
+
+	public SilencioDTO obtenirSilenci(String codSilencio, String idioma)
+			throws StrategyException {
+		try {
+            return rolsacQueryServiceDelegate.obtenirSilenci(codSilencio, idioma);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
+	}
 
 }

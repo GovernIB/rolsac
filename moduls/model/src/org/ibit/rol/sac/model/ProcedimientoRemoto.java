@@ -78,6 +78,9 @@ public class ProcedimientoRemoto extends ProcedimientoLocal implements Remoto{
         this.setVentanillaUnica(procTransferible.getVentanillaUnica());
         this.setTaxa(procTransferible.getTaxa());
         this.setUrl(procTransferible.getUrl());
+        
+        //366
+        
 
         //Relleno las traducciones
 		final Map<String, Traduccion> traducciones = new HashMap<String, Traduccion>();
@@ -90,7 +93,7 @@ public class ProcedimientoRemoto extends ProcedimientoLocal implements Remoto{
                     temp.setDestinatarios(traduccion.getDestinatarios());
                     temp.setRequisitos(traduccion.getRequisitos());
                     temp.setPlazos(traduccion.getPlazos());
-                    temp.setSilencio(traduccion.getSilencio());
+                    //#366temp.setSilencio(traduccion.getSilencio());
                     temp.setRecursos(traduccion.getRecursos());
                     temp.setObservaciones(traduccion.getObservaciones());
                     temp.setLugar(traduccion.getLugar());

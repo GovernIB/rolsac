@@ -1,5 +1,7 @@
 package org.ibit.rol.sac.persistence.delegate;
 
+import org.ibit.rol.sac.model.SilencioAdm;
+
 
 
 /**
@@ -243,5 +245,17 @@ public final class DelegateUtil {
     	SolrPendienteJobDelegate del = new SolrPendienteJobDelegate();
         del.setImpl(impl);
         return del;
+    }
+    public static SolrPendienteProcesoDelegate getSolrPendienteProcesoDelegate() {
+		SolrPendienteProcesoDelegateI impl = (SolrPendienteProcesoDelegateImpl) DelegateFactory.getDelegate(SolrPendienteProcesoDelegateImpl.class);
+		SolrPendienteProcesoDelegate del = new SolrPendienteProcesoDelegate();
+        del.setImpl(impl);
+        return del;
+	}
+    public static SilencioAdmDelegate getSilencioAdmDelegate() {
+    	SilencioAdmDelegateI impl= (SilencioAdmDelegateImpl) DelegateFactory.getDelegate(SilencioAdmDelegateImpl.class);
+    	SilencioAdmDelegate del = new SilencioAdmDelegate();
+    	del.setImpl(impl);
+    	return del;
     }
 }

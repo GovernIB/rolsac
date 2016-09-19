@@ -1787,10 +1787,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 		if (ficha.getValidacion() != 1 ) {
 			indexable = false;
 		}
-		
-		if (ficha.getFechaCaducidad() != null && Calendar.getInstance().getTime().after(ficha.getFechaCaducidad())) {
-			indexable = false;
-		}
+				
 		return indexable;
 	}
 

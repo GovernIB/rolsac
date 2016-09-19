@@ -48,7 +48,9 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
     private UnidadAdministrativa organResolutori;
     private UnidadAdministrativa servicioResponsable;
     private String dirElectronica;
-	
+    private String codigoSIA;
+    private SilencioAdm silencio;
+    
     //---------------------------------------------
     //Campos especiales para optimizar la búsqueda
     private String nombreProcedimiento;
@@ -463,6 +465,22 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
 
 	public void setDirElectronica(String dirElectronica) {
 		this.dirElectronica = dirElectronica;
+	}
+
+	public String getCodigoSIA() {
+		return codigoSIA;
+	}
+
+	public void setCodigoSIA(String codigoSIA) {
+		this.codigoSIA = codigoSIA;
+	}
+
+	public SilencioAdm getSilencio() {
+		return silencio;
+	}
+
+	public void setSilencio(SilencioAdm silencio) {
+		this.silencio = silencio;
 	}	
 	
 }

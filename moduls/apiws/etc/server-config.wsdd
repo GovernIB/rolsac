@@ -371,9 +371,17 @@
 			xmlns:tns2="http://idioma.v2.api.rolsac.caib.es" soapAction="">
 			<parameter qname="in0" type="tns:IdiomaCriteria" xmlns:tns="http://idioma.v2.api.rolsac.caib.es" />
 		</operation>
+		<operation name="obtenirSilenci" qname="operNS:obtenirSilenci" 
+			xmlns:operNS="http://intf.ejb.rolsac.v2.api.rolsac.caib.es"
+            returnQName="obtenirSilenciReturn" returnType="rtns:SilencioDTO" 
+            xmlns:rtns="http://silencio.v2.api.rolsac.caib.es"
+            soapAction="">
+            <parameter qname="in0" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+            <parameter qname="in1" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+        </operation>
 		
         <parameter name="allowedMethods"
-            value="getNumProcediments getNumFitxes obtenirNormativa obtenirDocumentTramit obtenirDocument llistarPerfils llistarDocuments llistarMateries obtenirEnllac obtenirProcediment llistarTramit llistarDocumentTramit obtenirFamilia llistarFormularis obtenirEdifici llistarUnitatsMateries llistarPersonal llistarTaxes obtenirMateria obtenirMateriaAgrupacio obtenirFitxa llistarPublicsObjectius llistarEspaisTerritorials obtenirTaxa llistarButlletins llistarFitxes obtenirSeccio llistarIconesMateries obtenirPersonal llistarTipus obtenirPerfil obtenirEspaiTerritorial llistarTipusAfectacio llistarProcediments obtenirFormulari llistarNormatives obtenirButlleti llistarEnllacos obtenirIconaMateria obtenirAgrupacioFetVital llistarMateriesAgrupacions obtenirUnitatMateria obtenirTipusAfectacio llistarFamilies obtenirPublicObjectiu obtenirUsuari llistarEdificis obtenirAgrupacioMateria llistarIconesFamilies llistarAgrupacionsFetsVitals obtenirFetVital obtenirUnitatAdministrativa llistarUnitatsAdministratives llistarAgrupacionsMateries llistarSeccions obtenirTipus llistarFetsVitals obtenirFitxaUA llistarFitxesUA obtenirTramit obtenirIconaFamilia llistarUsuaris llistarTipusIniciacions obtenirTipusIniciacio obtenirCatalegDocuments llistarCatalegsDocuments obtenirIdioma llistarIdiomes" />
+            value="getNumProcediments getNumFitxes obtenirNormativa obtenirDocumentTramit obtenirDocument llistarPerfils llistarDocuments llistarMateries obtenirEnllac obtenirProcediment llistarTramit llistarDocumentTramit obtenirFamilia llistarFormularis obtenirEdifici llistarUnitatsMateries llistarPersonal llistarTaxes obtenirMateria obtenirMateriaAgrupacio obtenirFitxa llistarPublicsObjectius llistarEspaisTerritorials obtenirTaxa llistarButlletins llistarFitxes obtenirSeccio llistarIconesMateries obtenirPersonal llistarTipus obtenirPerfil obtenirEspaiTerritorial llistarTipusAfectacio llistarProcediments obtenirFormulari llistarNormatives obtenirButlleti llistarEnllacos obtenirIconaMateria obtenirAgrupacioFetVital llistarMateriesAgrupacions obtenirUnitatMateria obtenirTipusAfectacio llistarFamilies obtenirPublicObjectiu obtenirUsuari llistarEdificis obtenirAgrupacioMateria llistarIconesFamilies llistarAgrupacionsFetsVitals obtenirFetVital obtenirUnitatAdministrativa llistarUnitatsAdministratives llistarAgrupacionsMateries llistarSeccions obtenirTipus llistarFetsVitals obtenirFitxaUA llistarFitxesUA obtenirTramit obtenirIconaFamilia llistarUsuaris llistarTipusIniciacions obtenirTipusIniciacio obtenirCatalegDocuments llistarCatalegsDocuments obtenirIdioma llistarIdiomes obtenirSilenci" />
 
         <arrayMapping xmlns:ns="http://ws.rolsac.v2.api.rolsac.caib.es" qname="ns:ArrayOfPerfilDTO"
             type="java:es.caib.rolsac.api.v2.perfil.PerfilDTO[]" innerType="cmp-ns:PerfilDTO" xmlns:cmp-ns="http://perfil.v2.api.rolsac.caib.es"
@@ -2717,6 +2725,33 @@
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />        
 	</service>
+	
+	<service name="SilencioWS" provider="java:EJB">
+        <parameter name="beanJndiName" value="es.caib.rolsac.api.v2.silencio.ejb.SilencioQueryServiceEJB" />
+        <parameter name="homeInterfaceName" value="es.caib.rolsac.api.v2.silencio.ejb.intf.SilencioQueryServiceEJBHome" />
+        <parameter name="remoteInterfaceName" value="es.caib.rolsac.api.v2.silencio.ejb.intf.SilencioQueryServiceEJBRemote" />
+        <parameter name="jndiurl" value="https://localhost:8443" />
+        <parameter name="jndiContextClass" value="org.jnp.interfaces.NamingContextFactory" />
+        <parameter name="typeMappingVersion" value="1.1" />
+        
+        
+         <operation name="obtenirSilenci" qname="operNS:obtenirSilenci" xmlns:operNS="http://intf.ejb.silencio.v2.api.rolsac.caib.es"
+            returnQName="obtenirSilenciReturn" returnType="rtns:SilencioDTO" xmlns:rtns="http://silencio.v2.api.rolsac.caib.es"
+            soapAction="">
+            <parameter qname="in0" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+            <parameter qname="in1" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+        </operation>
+
+        <parameter name="allowedMethods" value="obtenirSilenci" />
+
+        <typeMapping xmlns:ns="http://silencio.v2.api.rolsac.caib.es" qname="ns:SilencioDTO"
+            type="java:es.caib.rolsac.api.v2.silencio.SilencioDTO" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+            deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+     
+        <typeMapping xmlns:ns="http://general.v2.api.rolsac.caib.es" qname="ns:BasicCriteria"
+            type="java:es.caib.rolsac.api.v2.general.BasicCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+            deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    </service>
 
     <transport name="http">
         <requestFlow>

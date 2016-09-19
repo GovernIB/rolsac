@@ -22,6 +22,7 @@ import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
 import es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioCriteria;
 import es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioDTO;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.familia.FamiliaCriteria;
 import es.caib.rolsac.api.v2.familia.FamiliaDTO;
@@ -57,6 +58,7 @@ import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
+import es.caib.rolsac.api.v2.silencio.SilencioDTO;
 import es.caib.rolsac.api.v2.taxa.TaxaCriteria;
 import es.caib.rolsac.api.v2.taxa.TaxaDTO;
 import es.caib.rolsac.api.v2.tipus.TipusCriteria;
@@ -213,5 +215,7 @@ public interface RolsacQueryServiceStrategy {
     List<IniciacioDTO> llistarTipusIniciacions(IniciacioCriteria iniciacioCriteria) throws StrategyException;
 
     Integer getNumFitxes(FitxaCriteria fitxaCriteria) throws StrategyException;
+    
+    SilencioDTO obtenirSilenci(String codSilencio, String idioma) throws StrategyException, QueryServiceException;
 
 }

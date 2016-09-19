@@ -300,7 +300,7 @@
         {
             "modo": "individual",
             "etiqueta": "id",
-            "etiquetaValor": "item_silenci_" + '<c:out value="${idiomaVal}"/>',
+            "etiquetaValor": "item_silenci_combo",
             "obligatori": "si",
             "tipus": "alfanumeric",
             /*"caracters":
@@ -831,6 +831,14 @@
                                                 <input id="item_codigo_pro" name="item_codigo_pro" type="text" value=""/>
                                             </div>
                                         </div>
+                                         <div id="caja_item_codigo_sia" class="element t25p">
+                                            <div class="etiqueta">
+                                                <label for="item_codigo_sia"><spring:message code='camp.codi_sia'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_codigo_sia" name="item_codigo_sia" type="text" class="nou" readonly="readonly" />
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="fila">
                                         <div class="element t75p">
@@ -911,18 +919,23 @@
                                         </div>
                                     </div>       
                                     <div class="fila">
-                                        <div class="element t99p">
+                                        <div class="element t50p">
                                             <div class="etiqueta">
-                                                <label for="item_silenci_<c:out value="${lang}" />"><spring:message code='camp.silenciAdministratiu'/></label>
+<%--                                                 <label for="item_silenci_<c:out value="${lang}" />"><spring:message code='camp.silenciAdministratiu'/></label> --%>
+                                            	 <label for="item_silenci_combo"><spring:message code='camp.silenciAdministratiu'/></label>
+                                         
                                             </div>
-                                            <div class="control">
-                                                <textarea id="item_silenci_<c:out value="${lang}" />" name="item_silenci_<c:out value="${lang}" />"
-                                                    cols="50" rows="2" class="nou"></textarea>
+                                            <div class="control select">
+<%--                                                 <textarea id="item_silenci_<c:out value="${lang}" />" name="item_silenci_<c:out value="${lang}" />" --%>
+<!--                                                     cols="50" rows="2" class="nou"></textarea> -->
+                                                <select id="item_silenci_combo" name="item_silenci_combo">	
+		                                			<c:forEach items="${llistaSilenci}" var="sil">
+		                                    			<option value='<c:out value="${sil.codigo}" />'><c:out value="${sil.nom}" /></option>
+		                               				 </c:forEach>
+		                           				 </select> 
                                             </div>
                                         </div>
-                                    </div>                             
-                                   
-                                                                        
+                                    </div>                                                          
                                     <div class="fila">
                                         <div class="element t50p">
                                             <div class="etiqueta">

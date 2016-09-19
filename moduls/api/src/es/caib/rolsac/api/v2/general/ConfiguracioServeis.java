@@ -41,6 +41,7 @@ public final class ConfiguracioServeis {
 	public static final String NOM_SERVEI_UNITAT_ADMINISTRATIVA = "UnitatAdministrativaWS";
 	public static final String NOM_SERVEI_UNITAT_MATERIA = "UnitatMateriaWS";
 	public static final String NOM_SERVEI_USUARI = "UsuariWS";
+	public static final String NOM_SERVEI_SILENCI = "SilencioWS";
 	
 	public static String getUrlServei(String nomServei) throws APIException {
 		
