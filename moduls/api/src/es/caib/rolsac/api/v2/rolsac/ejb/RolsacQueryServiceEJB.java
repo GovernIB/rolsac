@@ -4053,7 +4053,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 				silencioDTO = (SilencioDTO)BasicUtils.entityToDTO(
 						SilencioDTO.class, 
 						silencio,
-						"ca"//silencioCriteria.getIdioma()
+						idioma
 				);
             	
             }
