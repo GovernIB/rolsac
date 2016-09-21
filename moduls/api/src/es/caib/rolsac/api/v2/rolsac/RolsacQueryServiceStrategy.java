@@ -216,6 +216,6 @@ public interface RolsacQueryServiceStrategy {
 
     Integer getNumFitxes(FitxaCriteria fitxaCriteria) throws StrategyException;
     
-    SilencioDTO obtenirSilenci(String codSilencio, String idioma) throws StrategyException, QueryServiceException;
+    SilencioDTO obtenirSilenci(Long codSilencio, String idioma) throws StrategyException, QueryServiceException;
 
 }

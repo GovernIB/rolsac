@@ -28,7 +28,7 @@ public class SilencioAdmDelegateImpl implements StatelessDelegate, SilencioAdmDe
 	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.SilencioAdmDelegateI#grabarSilencioAdm(org.ibit.rol.sac.model.SilencioAdm)
 	 */
-    public String grabarSilencioAdm(SilencioAdm silencio, boolean editar) throws DelegateException {
+    public Long grabarSilencioAdm(SilencioAdm silencio, boolean editar) throws DelegateException {
         try {
             return getFacade().grabarSilencioAdm(silencio, editar);
         } catch (RemoteException e) {
@@ -58,7 +58,7 @@ public class SilencioAdmDelegateImpl implements StatelessDelegate, SilencioAdmDe
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.SilencioAdmDelegateI#obtenerSilencioAdm(java.lang.String)
 	 */
-    public SilencioAdm obtenerSilencioAdm(String codigo) throws DelegateException {
+    public SilencioAdm obtenerSilencioAdm(Long codigo) throws DelegateException {
         try {
             return getFacade().obtenerSilencioAdm(codigo);
         } catch (RemoteException e) {
@@ -69,7 +69,7 @@ public class SilencioAdmDelegateImpl implements StatelessDelegate, SilencioAdmDe
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.SilencioAdmDelegateI#borrarSilencioAdm(java.lang.String)
 	 */
-    public void borrarSilencioAdm(String codigo) throws DelegateException {
+    public void borrarSilencioAdm(Long codigo) throws DelegateException {
         try {
             getFacade().borrarSilencioAdm(codigo);
         } catch (RemoteException e) {
@@ -99,5 +99,15 @@ public class SilencioAdmDelegateImpl implements StatelessDelegate, SilencioAdmDe
             throw new DelegateException(e);
         }
     }
+
+	@Override
+	public int cuantosProcedimientosConSilencio(Long id)
+			throws DelegateException {
+		 try {
+            return getFacade().cuantosProcedimientosConSilencio(id);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+	}
     
 }

@@ -53,7 +53,7 @@ public abstract class SilencioAdmFacadeEJB extends HibernateEJB implements Silen
      * @return Devuelve el identificador del silencio guardado.
      * @throws DelegateException 
      */
-    public String grabarSilencioAdm(SilencioAdm silencio, boolean editar) throws DelegateException
+    public Long grabarSilencioAdm(SilencioAdm silencio, boolean editar) throws DelegateException
     {
     	Session session = getSession();
     	try {
@@ -114,6 +114,35 @@ public abstract class SilencioAdmFacadeEJB extends HibernateEJB implements Silen
     
     
     /**
+     * Devuelve el total de procedimientos con dicho silencio administrativo.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     * 
+     * @return Devuelve <code>List</code> de todas los silencios.
+     */
+    public int cuantosProcedimientosConSilencio(Long id)
+    {
+    	final Session session = getSession();
+    	int cuantos = 0;
+    	try {
+    		final StringBuilder consulta = new StringBuilder("select count(proc) ");
+			consulta.append("from ProcedimientoLocal proc ");
+			consulta.append("where proc.silencio.id = ");
+			consulta.append(id);
+					
+			final Query query = session.createQuery( consulta.toString() );
+			cuantos = Integer.valueOf(query.uniqueResult().toString());
+    	} catch (HibernateException he) {
+    		throw new EJBException(he);
+    	} finally {
+    		close(session);
+    	}
+    	return cuantos;
+    }
+    
+    
+    /**
      *  Lista todos los silencios (menú Administración).
      *  
      *  @param idioma Indica el idioma en que se realiza la búsqueda.
@@ -150,7 +179,7 @@ public abstract class SilencioAdmFacadeEJB extends HibernateEJB implements Silen
      * @param codigo	Identificador del silencio.
      * @return Devuelve <code>SilencioAdm</code> solicitada.
      */
-    public SilencioAdm obtenerSilencioAdm(String codigo)
+    public SilencioAdm obtenerSilencioAdm(Long codigo)
     {
     	Session session = getSession();
     	try {
@@ -172,7 +201,7 @@ public abstract class SilencioAdmFacadeEJB extends HibernateEJB implements Silen
      * @ejb.permission role-name="${role.system},${role.admin}"
      * @param codigo	Identificador del silencio a borrar.
      */
-    public void borrarSilencioAdm(String codigo)
+    public void borrarSilencioAdm(Long codigo)
     {
     	Session session = getSession();
     	try {

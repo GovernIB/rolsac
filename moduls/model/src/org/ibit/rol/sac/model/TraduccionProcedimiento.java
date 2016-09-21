@@ -32,10 +32,6 @@ public interface TraduccionProcedimiento extends Traduccion {
 
     void setNotificacion(String notificacion);
 
-//    String getSilencio();
-//
-//    void setSilencio(String silencio);
-
     String getRecursos();
 
     void setRecursos(String recursos);

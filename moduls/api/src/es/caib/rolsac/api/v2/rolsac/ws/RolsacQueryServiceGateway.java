@@ -663,7 +663,7 @@ public class RolsacQueryServiceGateway {
         return stub.getNumFitxes(fitxaCriteria);
     }
 
-	public SilencioDTO obtenirSilenci(String codSilencio, String idioma)  throws QueryServiceException, RemoteException {
+	public SilencioDTO obtenirSilenci(Long codSilencio, String idioma)  throws QueryServiceException, RemoteException {
 		
 		return stub.obtenirSilenci(codSilencio, idioma);
 	}

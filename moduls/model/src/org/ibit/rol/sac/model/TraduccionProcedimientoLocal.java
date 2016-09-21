@@ -16,7 +16,6 @@ public class TraduccionProcedimientoLocal implements TraduccionProcedimiento {
     private String plazos;
     private String resolucion;
     private String notificacion;
-    //private String silencio;
     private String recursos;
     private String observaciones;
     @Deprecated
@@ -76,14 +75,7 @@ public class TraduccionProcedimientoLocal implements TraduccionProcedimiento {
 	public void setNotificacion(String notificacion) {
 		this.notificacion = notificacion;
 	}
-//    public String getSilencio() {
-//        return silencio;
-//    }
-//
-//    public void setSilencio(String silencio) {
-//        this.silencio = silencio;
-//    }
-
+	
     public String getRecursos() {
         return recursos;
     }
@@ -125,7 +117,6 @@ public class TraduccionProcedimientoLocal implements TraduccionProcedimiento {
 				+ notificacion + ", observaciones=" + observaciones
 				+ ", plazos=" + plazos + ", recursos=" + recursos
 				+ ", requisitos=" + requisitos + ", resolucion=" + resolucion
-				//+ ", resumen=" + resumen + ", silencio=" + silencio 
 				+ "]";
 	}
 

@@ -5,7 +5,7 @@ import java.util.Collection;
 
 
 /**
- * Classe que conte informaci� detallada d'una actuaci�
+ * Classe que conte informacio detallada d'una actuacio
  */
 public class ActuacioModel extends ActuacioMinModel implements java.io.Serializable {
 
@@ -46,22 +46,22 @@ public class ActuacioModel extends ActuacioMinModel implements java.io.Serializa
    /** tramits  de l'actuació */
 	Collection<TramitModel> tramit = new java.util.ArrayList<TramitModel>();
   
-   /** data de la darrera actualitzaci� de l'actuaci� */
+   /** data de la darrera actualitzacio de l'actuacio */
    Date dataActualitzacio; 
    
-   /** silenci administratiu de l'actuaci� */
+   /** silenci administratiu de l'actuacio */
    String silenci = "";
    
-   /** familia a la que pertany l'actuaci� */
+   /** familia a la que pertany l'actuacio */
    String familia = "";
    
-   /** iniciacion de  l'actuaci� */
+   /** iniciacion de  l'actuacio */
    String iniciacion = "";
    
    /** indicador agotament */
    String indicador = "";
    
-   /** rescursos de l'actuaci� */
+   /** rescursos de l'actuacio */
    String recursos = "";
    
    /** data de caducitat del procediment */
@@ -70,14 +70,14 @@ public class ActuacioModel extends ActuacioMinModel implements java.io.Serializa
    /** data de publicacio del procediment */
    Date data_publicacio = null;
    
-   /** rescursos de l'actuaci� */
+   /** rescursos de l'actuacio */
    @Deprecated
    String lloc = "";
    
    
    boolean taxa;
 
-   /** origens de l'actuaci� */
+   /** origens de l'actuacio */
    Collection<String> origens = new java.util.ArrayList<String>();
    
    /**

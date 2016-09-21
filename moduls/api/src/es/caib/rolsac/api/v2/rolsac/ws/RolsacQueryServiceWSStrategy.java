@@ -984,7 +984,7 @@ public class RolsacQueryServiceWSStrategy implements RolsacQueryServiceStrategy 
         }
     }
 
-	public SilencioDTO obtenirSilenci(String codSilencio, String idioma)
+	public SilencioDTO obtenirSilenci(Long codSilencio, String idioma)
 			throws StrategyException, QueryServiceException {
 		
         try {

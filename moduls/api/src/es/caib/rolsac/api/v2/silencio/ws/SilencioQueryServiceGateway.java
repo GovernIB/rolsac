@@ -32,7 +32,7 @@ public class SilencioQueryServiceGateway
 	
   
 
-    public SilencioDTO obtenirSilenci(String codSilencio, String idioma) throws RemoteException {
+    public SilencioDTO obtenirSilenci(Long codSilencio, String idioma) throws RemoteException {
     	return stub.obtenirSilenci(codSilencio, idioma);
     }
     

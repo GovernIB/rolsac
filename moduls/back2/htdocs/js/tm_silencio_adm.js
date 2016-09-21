@@ -466,6 +466,8 @@ function CDetall(){
 					Detall.recarregar();
 				} else if (data.id == -1){
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
+				} else if (data.id == -4){
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: "Hi ha procediments amb el silenci administratiu"});
 				} else if (data.id < -1){
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
 				}

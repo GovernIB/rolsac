@@ -4,6 +4,6 @@ import es.caib.rolsac.api.v2.exception.StrategyException;
 
 public interface SilencioQueryServiceStrategy {
 	
-	public SilencioDTO obtenirSilenci(String codSilencio, String idioma) throws StrategyException;
+	public SilencioDTO obtenirSilenci(Long codSilencio, String idioma) throws StrategyException;
 
 }

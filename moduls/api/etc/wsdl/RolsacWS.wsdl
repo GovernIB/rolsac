@@ -700,7 +700,7 @@
         <wsdl:part name="in0" type="tns8:FitxaCriteria" />
     </wsdl:message>
     <wsdl:message name="obtenirSilenciRequest">
-		<wsdl:part name="in0" type="xsd:string" />
+		<wsdl:part name="in0" type="xsd:long" />
 		<wsdl:part name="in1" type="xsd:string" />
 	</wsdl:message>
 	<wsdl:message name="obtenirFetVitalResponse">

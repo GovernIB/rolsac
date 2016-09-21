@@ -91,24 +91,6 @@
 		{
             "modo": "individual",
             "etiqueta": "id",
-            "etiquetaValor": "item_id",
-            "obligatori": "si",
-            "tipus": "alfanumeric",
-            "caracters":
-                {
-                    "maxim": 12,
-                    "mostrar": "no",
-                    "abreviat": "no"
-                },
-            "error":
-                {
-                    "obligatori": "<spring:message code='silencio.formulari.codigo.obligatori'/>",
-                    "tipus": "<spring:message code='silencio.formulari.codigo.no_nomes_numeros'/>"
-                }
-        },
-        {
-            "modo": "individual",
-            "etiqueta": "id",
             "etiquetaValor": "item_nombre_" + '<c:out value="${idiomaVal}"/>',
             "obligatori": "si",
             "tipus": "alfanumeric",
@@ -158,7 +140,7 @@
 
 <div id="escriptori_detall" class="escriptori_detall">
     <form id="formGuardar" action="" method="POST">
-     	
+     	<input id="item_id" name="item_id" type="hidden" value="" class="nou" />
      	<input id="item_idAnt" name="item_idAnt" type="hidden" value="" class="nou" />
         <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>
         <!-- modulPrincipal -->
@@ -186,16 +168,6 @@
 								</c:if>
 							</ul>
 
-                            <div class="fila">
-                                <div class="element t99p">
-                                    <div class="etiqueta">
-                                        <label for="item_id"><spring:message code='camp.codi'/></label>
-                                    </div>
-                                    <div class="control">
-                                        <input id="item_id" name="item_id" type="text" class="nou" readonly="readonly" />
-                                    </div>
-                                </div>
-                            </div>
                             <div class="idiomes">
 								<c:forEach items="${idiomes_aplicacio}" var="lang">
                                 <div class="idioma <c:out value='${lang}'/>">

@@ -910,7 +910,7 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
         }
     }
 
-	public SilencioQueryServiceAdapter obtenirSilencio(String codSilencio, String idioma) throws QueryServiceException {
+	public SilencioQueryServiceAdapter obtenirSilencio(Long codSilencio, String idioma) throws QueryServiceException {
 		 try {
 	            
 			SilencioDTO dto = rolsacQueryServiceStrategy.obtenirSilenci(codSilencio, idioma);
