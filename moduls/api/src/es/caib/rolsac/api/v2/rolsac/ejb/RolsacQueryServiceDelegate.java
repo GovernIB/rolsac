@@ -61,6 +61,7 @@ import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.rolsac.ejb.intf.RolsacQueryServiceEJBRemote;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
+import es.caib.rolsac.api.v2.silencio.SilencioDTO;
 import es.caib.rolsac.api.v2.taxa.TaxaCriteria;
 import es.caib.rolsac.api.v2.taxa.TaxaDTO;
 import es.caib.rolsac.api.v2.tipus.TipusCriteria;
@@ -890,5 +891,16 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
+
+	public SilencioDTO obtenirSilenci(Long codSilencio, String idioma) throws DelegateException {
+		 try {
+	            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+	            return ejb.obtenirSilenci(codSilencio,idioma);
+	        } catch (LocatorException e) {
+	            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+	        } catch (RemoteException e) {
+	            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+	        }
+	}
     
 }

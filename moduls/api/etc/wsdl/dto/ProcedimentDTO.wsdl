@@ -39,7 +39,6 @@
                         <element name="resultat" nillable="true" type="xsd:string" />
                         <element name="resumen" nillable="true" type="xsd:string" />
                         <element name="signatura" nillable="true" type="xsd:string" />
-                        <element name="silencio" nillable="true" type="xsd:string" />
                         <element name="taxa" type="xsd:boolean" />
                         <element name="tramite" nillable="true" type="xsd:string" />
                         <element name="unidadAdministrativa" nillable="true" type="xsd:long" />
@@ -48,6 +47,7 @@
                         <element name="ventanillaUnica" type="xsd:boolean" />
                         <element name="version" nillable="true" type="xsd:long" />
                         <element name="servicioResponsable" nillable="true" type="xsd:long" />
+                        <element name="silencio" nillable="true" type="xsd:long" />
                     </sequence>
                 </extension>
             </complexContent>

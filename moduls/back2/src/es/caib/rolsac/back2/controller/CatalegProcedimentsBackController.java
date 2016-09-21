@@ -31,6 +31,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.ibit.rol.sac.model.CatalegDocuments;
 import org.ibit.rol.sac.model.Documento;
+import org.ibit.rol.sac.model.EspacioTerritorial;
 import org.ibit.rol.sac.model.ExcepcioDocumentacio;
 import org.ibit.rol.sac.model.Familia;
 import org.ibit.rol.sac.model.HechoVital;
@@ -41,6 +42,7 @@ import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.Procedimiento;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.PublicoObjetivo;
+import org.ibit.rol.sac.model.SilencioAdm;
 import org.ibit.rol.sac.model.TraduccionCatalegDocuments;
 import org.ibit.rol.sac.model.TraduccionExcepcioDocumentacio;
 import org.ibit.rol.sac.model.TraduccionNormativa;
@@ -50,6 +52,7 @@ import org.ibit.rol.sac.model.TraduccionTramite;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.criteria.BuscadorProcedimientoCriteria;
+import org.ibit.rol.sac.model.dto.CodNomDTO;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.model.dto.ListadoModuloTramiteDTO;
 import org.ibit.rol.sac.model.dto.ProcedimientoLocalDTO;
@@ -57,6 +60,7 @@ import org.ibit.rol.sac.model.dto.ProcedimientoNormativaDTO;
 import org.ibit.rol.sac.persistence.delegate.CatalegDocumentsDelegate;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.delegate.EspacioTerritorialDelegate;
 import org.ibit.rol.sac.persistence.delegate.ExcepcioDocumentacioDelegate;
 import org.ibit.rol.sac.persistence.delegate.FamiliaDelegate;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalProcedimientoDelegate;
@@ -65,6 +69,7 @@ import org.ibit.rol.sac.persistence.delegate.IniciacionDelegate;
 import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
+import org.ibit.rol.sac.persistence.delegate.SilencioAdmDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
@@ -140,6 +145,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			model.put("llistaPublicsObjectiu", LlistatUtil.llistarPublicObjectius(lang));
 			model.put("families", LlistatUtil.llistarFamilias(lang));
 			model.put("iniciacions", LlistatUtil.llistarIniciacions(lang));
+			model.put("llistaSilenci", llistarSilenci(lang));
 			model.put("excepcions", llistarExcepcionsDocumentacio(lang));
 			model.put("cataleg", llistarCatalegDocuments(lang));
 
@@ -154,6 +160,22 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			
 		}
 		
+	}
+
+	private List<CodNomDTO> llistarSilenci(String lang) throws DelegateException {
+		//#366 se carga el combo silencio adm y su selección
+        SilencioAdmDelegate silencioDelegate = DelegateUtil.getSilencioAdmDelegate();
+		List<CodNomDTO> llistaSilencioDTO = new ArrayList<CodNomDTO>();
+		List<SilencioAdm> llistaSilencio = new ArrayList<SilencioAdm>();
+		
+		llistaSilencio = silencioDelegate.listarSilencioAdm();
+		for (SilencioAdm silAdm : llistaSilencio) {
+			llistaSilencioDTO.add(new CodNomDTO(
+					silAdm.getId().toString(),
+					silAdm.getNombreSilencio(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto())
+			));
+		}
+		return llistaSilencioDTO;
 	}
 
 	private List<IdNomDTO> llistarExcepcionsDocumentacio(String lang) throws DelegateException {
@@ -295,7 +317,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			ProcedimientoLocal proc = procedimientoDelegate.obtenerProcedimientoNewBack(id);
 
 			resultats.put("item_id", proc.getId());
-			resultats.put("item_codigo_pro", proc.getSignatura());			
+			resultats.put("item_codigo_pro", proc.getSignatura());
+			resultats.put("item_codigo_sia", proc.getCodigoSIA()); //#366 Se añade SIA
 			resultats.put("item_estat", proc.getValidacion());						
 			resultats.put("item_data_actualitzacio", DateUtils.formatDate(proc.getFechaActualizacion()));
 			resultats.put("item_data_publicacio", DateUtils.formatDateSimpleTime(proc.getFechaPublicacion()));
@@ -303,9 +326,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			resultats.put("item_codi", proc.getSignatura());
 			resultats.put("item_tramite", proc.getTramite());
 			resultats.put("item_url", proc.getUrl());
-			resultats.put("item_responsable", proc.getResponsable());			
+			resultats.put("item_responsable", proc.getResponsable());
 			resultats.put("item_finestreta_unica", proc.esVentanillaUnica());
-			//#351cambio info por dir electrónica
+			//#351cambio info por dir electrÃ³nica
 			//resultats.put("item_notes", proc.getInfo());
 			resultats.put("item_notes", proc.getDirElectronica());
 			resultats.put("item_fi_vida_administrativa", proc.getIndicador() == null  ? "" : (proc.getIndicador()));           
@@ -335,12 +358,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				resultats.put("item_organ_id", ua.getId());
 				resultats.put("item_organ_nom", ua.getNombreUnidadAdministrativa(lang));
 			}
-			//Cambiar
-			if (proc.getServicioResponsable() != null) {
-				UnidadAdministrativa ua = proc.getServicioResponsable();
-				resultats.put("item_servei_responsable_id", ua.getId());
-				resultats.put("item_servei_responsable_nom", ua.getNombreUnidadAdministrativa(lang));
-			}
 
 			// Obtención de listado de posibles hechos vitales del procedimiento
 			Set<PublicoObjetivo> listaPublicosObjetivos =  proc.getPublicosObjetivo();
@@ -353,6 +370,12 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			recuperaIdiomas(resultats, proc, lang);         // Recuperar los procedimientos según los idiomas
             recuperaTramites(resultats, proc, request);     // Recuperar los trámites relacionados de un procedimiento
             recuperaPO(resultats, proc, lang);              // Recuperar los públicos objetivos asociados a un procedimiento
+            
+            //#366 se carga el combo silencio adm y su selección
+            if (proc.getSilencio() != null) {
+				resultats.put("item_silenci_combo", proc.getSilencio().getId());
+			}
+            
 
 		} catch (DelegateException dEx) {
 			
@@ -584,7 +607,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				edicion = false;
 			}
 
-			//S�lo si es edici�n es obligado tener materias
+			//Solo si es edicion, es obligado tener materias
 			if (edicion &&  (request.getParameter("materies") == null || request.getParameter("materies").equals(""))) {
 				error = messageSource.getMessage("proc.error.falta.materia", null, request.getLocale());
 				return result = new IdNomDTO(-4l, error);
@@ -606,15 +629,18 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			procediment = guardarIniciacion(request, procediment, error);				    	// Iniciación
 			procediment = guardarFamilia(request, procediment, error);							// Familia
 			procediment = guardarOrganResolutori(request, procediment, error);					// Organ Resolutori
-			procediment = guardarServeiResponsable(request, procediment, error);				// Servei Responsable
-			
 			procediment = guardarUnidadAdministrativa(request, procediment, error);             // Unidad Administrativa			
+			procediment = guardarServeiResponsable(request, procediment, error);				// Servei Responsable
 			
 			procediment.setResponsable(request.getParameter("item_responsable"));				// Responsable
 			procediment.setSignatura(request.getParameter("item_codigo_pro"));					// Signatura
-			//#351cambio info por dir electrónica
+			//#366 se añade SIA
+			procediment.setCodigoSIA(request.getParameter("item_codigo_sia"));					// Código SIA
+			procediment = guardarSilencio(request, procediment, error); 						// SILENCIO
+			
+			//#351 cambio info por dir electronica
 			//procediment.setInfo(request.getParameter("item_notes"));							// Info
-			procediment.setDirElectronica(request.getParameter("item_notes"));					// Adreça elec.
+			procediment.setDirElectronica(request.getParameter("item_notes"));
 			procediment.setTaxa("on".equalsIgnoreCase(request.getParameter("item_taxa")) ? "1" : "0");							// Taxa
 			procediment.setIndicador(Long.parseLong(request.getParameter("item_fi_vida_administrativa")) == 1 ? "1" : "0");	// Indicador
 			procediment.setVentanillaUnica("on".equalsIgnoreCase(request.getParameter("item_finestreta_unica")) ? "1" : "0");	// Ventanilla Única
@@ -657,16 +683,18 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 						}
 					}
 					
-					if (!hayTramiteDeIniciacion)
+					if (!hayTramiteDeIniciacion) {
 						throw new IllegalStateException("error_no_tramite_iniciacion");
+					}
 					
-					if (numTramitesIniciacion > 1)
+					if (numTramitesIniciacion > 1) {
 						throw new IllegalStateException("error_mas_de_un_tramite_de_iniciacion");
-					if(hayTramiteSinModelo){
+					}
+					
+					if(hayTramiteSinModelo) {
 						error = messageSource.getMessage("error.model_sol_obligatori", null, request.getLocale());
 						return new IdNomDTO(-1l, error);
 					}
-
 				}
 				
 			}
@@ -720,6 +748,27 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		
 	}
 
+	private ProcedimientoLocal guardarSilencio(HttpServletRequest request,ProcedimientoLocal procediment, String error) throws DelegateException {
+			try {
+				if (request.getParameter("item_silenci_combo").isEmpty()) {
+					procediment.setSilencio(null);
+				} else {
+					final Long codigo = Long.valueOf(request.getParameter("item_silenci_combo"));
+					SilencioAdmDelegate silencioDelegate = DelegateUtil.getSilencioAdmDelegate();
+					SilencioAdm silencio = silencioDelegate.obtenerSilencioAdm(codigo);
+					procediment.setSilencio(silencio);
+				}
+
+		} catch (NumberFormatException e) {
+			
+			error = messageSource.getMessage("proc.error.formaIniciacio.incorrecta", null, request.getLocale());
+			throw new NumberFormatException(e.getMessage());
+			
+		}
+
+		return procediment;
+	}
+
 	private ProcedimientoLocal guardarTramites(ProcedimientoLocal procedimiento, ProcedimientoLocal procedimientoOld, 
 			HttpServletRequest request, List<Tramite> listaTramitesParaEliminar, List<Long> listaIdsTramitesParaActualizar) {
 		
@@ -767,8 +816,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		// Mantenemos los valores originales que tiene el procedimiento.
 		procediment.setId(procedimentOld.getId());
 		procediment.setTramites(procedimentOld.getTramites());
-		//#349procediment.setOrganResolutori(procedimentOld.getOrganResolutori());
-		//procediment.setPublicosObjetivo(procedimentOld.getPublicosObjetivo());
+		//#349 procediment.setOrganResolutori(procedimentOld.getOrganResolutori());
+		procediment.setPublicosObjetivo(procedimentOld.getPublicosObjetivo());
 		procediment.setMaterias(procedimentOld.getMaterias());
 		procediment.setNormativas(procedimentOld.getNormativas());
 		
@@ -792,20 +841,15 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				Set<PublicoObjetivo> publicsNous = new HashSet<PublicoObjetivo>();
 				publicsNous.addAll(publicObjDelegate.obtenerPublicosObjetivoPorIDs(request.getParameter("publicsObjectiu"), idioma));
 				procediment.setPublicosObjetivo(publicsNous);
-
 			} else {
-				
 				procediment.setPublicosObjetivo(new HashSet<PublicoObjetivo>());
-				
 			}
 			
 		}else{
 			//#349
 			procediment.setPublicosObjetivo(procedimentOld.getPublicosObjetivo());
 		}
-
 		return procediment;
-		
 	}
 
 	/*
@@ -829,9 +873,10 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			tpl.setResumen(RolUtil.limpiaCadena(request.getParameter("item_objecte_" + lang)));
 			tpl.setResultat(RolUtil.limpiaCadena(request.getParameter("item_resultat_" + lang)));
 			tpl.setResolucion(RolUtil.limpiaCadena(request.getParameter("item_resolucio_" + lang)));
-			//El campo notificaci�n queda obsoleto se ha eliminado del back #8 y que no se elimina para permitir compatibilidad entre la version 1.2 y 1.3
+			//El campo notificacion queda obsoleto se ha eliminado del back #8 y que no se elimina para permitir compatibilidad entre la version 1.2 y 1.3
 			tpl.setNotificacion(RolUtil.limpiaCadena(request.getParameter("item_notificacio_" + lang)));
-			tpl.setSilencio(RolUtil.limpiaCadena(request.getParameter("item_silenci_" + lang)));
+			//#366
+//			tpl.setSilencio(RolUtil.limpiaCadena(request.getParameter("item_silenci_" + lang)));
 			tpl.setObservaciones(RolUtil.limpiaCadena(request.getParameter("item_observacions_" + lang)));
 			tpl.setPlazos(RolUtil.limpiaCadena(request.getParameter("item_presentacio_" + lang)));
 			tpl.setLugar(RolUtil.limpiaCadena(request.getParameter("item_lloc_" + lang)));
@@ -1291,13 +1336,14 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	    if (StringUtils.isNotEmpty(request.getParameter("item_resolucio_" + idiomaOrigenTraductor))) {
 	        traduccioOrigen.setResolucion(request.getParameter("item_resolucio_" + idiomaOrigenTraductor));
 	    }
-		//El campo notificaci�n queda obsoleto se ha eliminado del back #8 y que no se elimina para permitir compatibilidad entre la version 1.2 y 1.3
+		//El campo notificacion queda obsoleto se ha eliminado del back #8 y que no se elimina para permitir compatibilidad entre la version 1.2 y 1.3
 	    if (StringUtils.isNotEmpty(request.getParameter("item_notificacio_" + idiomaOrigenTraductor))) {
 	        traduccioOrigen.setNotificacion(request.getParameter("item_notificacio_" + idiomaOrigenTraductor));
 	    }
-	    if (StringUtils.isNotEmpty(request.getParameter("item_silenci_" + idiomaOrigenTraductor))) {
-	        traduccioOrigen.setSilencio(request.getParameter("item_silenci_" + idiomaOrigenTraductor));
-	    }
+	    //#366
+//	    if (StringUtils.isNotEmpty(request.getParameter("item_silenci_" + idiomaOrigenTraductor))) {
+//	        traduccioOrigen.setSilencio(request.getParameter("item_silenci_" + idiomaOrigenTraductor));
+//	    }
         if (StringUtils.isNotEmpty(request.getParameter("item_observacions_" + idiomaOrigenTraductor))) {
             traduccioOrigen.setObservaciones(request.getParameter("item_observacions_" + idiomaOrigenTraductor));
         }

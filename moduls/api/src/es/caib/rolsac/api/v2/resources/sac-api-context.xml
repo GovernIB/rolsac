@@ -1055,5 +1055,33 @@
 
 	<bean id="gatewayIdioma" class="es.caib.rolsac.api.v2.idioma.ws.IdiomaQueryServiceGateway" />
     <!-- IdiomaQueryService beans -->
+	
+	 <!-- SilencioQueryService beans -->
+    <!-- EJB -->
+    <bean id="silencioQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.silencio.SilencioQueryServiceAdapter" scope="prototype">
+        <property name="silencioQueryServiceStrategy" ref="silencioQueryServiceEJBStrategy" />
+    </bean>
 
+    <bean id="silencioQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.silencio.ejb.SilencioQueryServiceEJBStrategy">
+        <property name="silencioQueryServiceDelegate" ref="silecioQueryServiceDelegate" />
+    </bean>
+
+    <bean id="silencioQueryServiceDelegate" class="es.caib.rolsac.api.v2.silencio.ejb.SilencioQueryServiceDelegate">
+        <property name="silencioQueryServiceLocator" ref="silencioQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="silencioQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.silencio.ejb.SilencioQueryServiceEJBLocator" />
+    
+	<!-- WS -->
+	<!-- Esta funcionalidad la proporciona RolsacWS -->
+	<bean id="silencioQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.silencio.SilencioQueryServiceAdapter" scope="prototype">
+        <property name="silencioQueryServiceStrategy" ref="silencioQueryServiceWSStrategy" />
+    </bean>
+
+    <bean id="silencioQueryServiceWSStrategy" class="es.caib.rolsac.api.v2.silencio.ws.SilencioQueryServiceWSStrategy">
+        <property name="gateway" ref="gatewaySilencio" />
+    </bean>
+
+	<bean id="gatewaySilencio" class="es.caib.rolsac.api.v2.silencio.ws.SilencioQueryServiceGateway" />
+    <!-- SilencioQueryService beans -->
 </beans>

@@ -40,6 +40,7 @@
 	xmlns:tns33="http://excepcioDocumentacio.v2.api.rolsac.caib.es"
 	xmlns:tns50="http://iniciacio.v2.api.rolsac.caib.es" 
 	xmlns:tns51="http://idioma.v2.api.rolsac.caib.es" 
+	xmlns:tns52="http://silencio.v2.api.rolsac.caib.es"
 	targetNamespace="http://ws.rolsac.v2.api.rolsac.caib.es">
 	
 	<wsdl:import namespace="urn:tns1" location="dto/UnitatAdministrativaCriteria.wsdl"/>
@@ -112,6 +113,7 @@
 	<wsdl:import namespace="urn:tns50" location="dto/IniciacioDTO.wsdl"/>
 	<wsdl:import namespace="urn:tns51" location="dto/IdiomaDTO.wsdl"/>
 	<wsdl:import namespace="urn:tns51" location="dto/IdiomaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns52" location="dto/SilencioDTO.wsdl"/>
 	
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
@@ -568,6 +570,9 @@
     <wsdl:message name="getNumFitxesResponse">
         <wsdl:part name="getNumFitxesReturn" type="xsd:int" />
     </wsdl:message>
+    <wsdl:message name="obtenirSilenciResponse">
+		<wsdl:part name="obtenirSilenciReturn" type="tns52:SilencioDTO" />
+	</wsdl:message>
     <wsdl:message name="llistarUnitatsAdministrativesResponse">
 		<wsdl:part name="llistarUnitatsAdministrativesReturn" type="impl:ArrayOfUnitatAdministrativaDTO" />
 	</wsdl:message>
@@ -694,6 +699,10 @@
     <wsdl:message name="getNumFitxesRequest">
         <wsdl:part name="in0" type="tns8:FitxaCriteria" />
     </wsdl:message>
+    <wsdl:message name="obtenirSilenciRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in1" type="xsd:string" />
+	</wsdl:message>
 	<wsdl:message name="obtenirFetVitalResponse">
 		<wsdl:part name="obtenirFetVitalReturn" type="tns7:FetVitalDTO" />
 	</wsdl:message>
@@ -877,6 +886,10 @@
             <wsdl:input message="intf:getNumFitxesRequest" name="getNumFitxesRequest" />
             <wsdl:output message="intf:getNumFitxesResponse" name="getNumFitxesResponse" />
         </wsdl:operation>
+        <wsdl:operation name="obtenirSilenci" parameterOrder="in0 in1">
+			<wsdl:input message="impl:obtenirSilenciRequest" name="obtenirSilenciRequest" />
+			<wsdl:output message="impl:obtenirSilenciResponse" name="obtenirSilenciResponse" />
+		</wsdl:operation>
 		<wsdl:operation name="obtenirMateria" parameterOrder="in0">
 			<wsdl:input message="intf:obtenirMateriaRequest" name="obtenirMateriaRequest" />
 			<wsdl:output message="intf:obtenirMateriaResponse" name="obtenirMateriaResponse" />
@@ -1303,6 +1316,20 @@
                                namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
             </wsdl:output>
         </wsdl:operation>
+        
+        <wsdl:operation name="obtenirSilenci">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirSilenciRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.silencio.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirSilenciResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.silencio.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		
 		<wsdl:operation name="obtenirMateria">
 			<wsdlsoap:operation soapAction="" />
 			<wsdl:input name="obtenirMateriaRequest">

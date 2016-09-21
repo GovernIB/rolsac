@@ -230,4 +230,11 @@ public final class DelegateUtil {
     public static ModelsComunsDelegate geModelsComunsDelegate() {
         return (ModelsComunsDelegate) DelegateFactory.getDelegate(ModelsComunsDelegate.class);
       }
+	  
+	   public static SilencioAdmDelegate getSilencioAdmDelegate() {
+    	SilencioAdmDelegateI impl= (SilencioAdmDelegateImpl) DelegateFactory.getDelegate(SilencioAdmDelegateImpl.class);
+    	SilencioAdmDelegate del = new SilencioAdmDelegate();
+    	del.setImpl(impl);
+    	return del;
+    }
 }

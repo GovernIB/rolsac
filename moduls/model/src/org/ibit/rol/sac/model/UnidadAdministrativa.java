@@ -45,6 +45,7 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
     private Archivo logos;
     private Archivo logot;
     private String codigoEstandar;
+    private String codigoDIR3;
 
     private UnidadAdministrativa padre;
     private List<UnidadAdministrativa> hijos;
@@ -659,6 +660,14 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
 
 	public void setResponsableEmail(String responsableEmail) {
 		this.responsableEmail = responsableEmail;
+	}
+
+	public String getCodigoDIR3() {
+		return codigoDIR3;
+	}
+
+	public void setCodigoDIR3(String codigoDIR3) {
+		this.codigoDIR3 = codigoDIR3;
 	}
  
  

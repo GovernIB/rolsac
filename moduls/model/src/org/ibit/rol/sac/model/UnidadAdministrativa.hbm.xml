@@ -31,7 +31,8 @@
         <property name="numfoto1" column="UNA_NFOTO1"/>
         <property name="numfoto2" column="UNA_NFOTO2"/>
         <property name="numfoto3" column="UNA_NFOTO3"/>
-        <property name="numfoto4" column="UNA_NFOTO4"/>                
+        <property name="numfoto4" column="UNA_NFOTO4"/> 
+        <property name="codigoDIR3" length="12" column="UNA_CODDR3"/>               
 	    <many-to-one name="fotop" cascade="all" column="UNA_FOTOP" foreign-key="RSC_UNAFOP_FK"/>
         <many-to-one name="fotog" cascade="all" column="UNA_FOTOG" foreign-key="RSC_UNAFOG_FK"/>
         <many-to-one name="logoh" cascade="all" column="UNA_LOGOH" foreign-key="RSC_UNALOH_FK"/>
