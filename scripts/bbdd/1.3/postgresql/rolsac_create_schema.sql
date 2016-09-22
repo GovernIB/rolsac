@@ -3772,7 +3772,7 @@ ALTER TABLE ONLY rsc_proced
 ALTER TABLE ONLY rsc_proced
     ADD CONSTRAINT rsc_pro_coduna_serv_fk FOREIGN KEY (pro_coduna_serv) REFERENCES rsc_uniadm(una_codi);
    
-    
+   
 --
 -- TOC entry 2526 (class 2606 OID 18970)
 -- Dependencies: 210 222 2342
@@ -4457,7 +4457,6 @@ ALTER TABLE ONLY rsc_usupeg
 ALTER TABLE ONLY rsc_usupeg
 	ADD CONSTRAINT rsc_usppgs_fk FOREIGN KEY (usp_codpeg) REFERENCES rsc_perges (peg_codi);
 
-
 --
 -- TOC entry 2553 (class 0 OID 0)
 -- Dependencies: 5
@@ -4468,11 +4467,3 @@ REVOKE ALL ON SCHEMA public FROM PUBLIC;
 REVOKE ALL ON SCHEMA public FROM postgres;
 GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
-
-
--- Completed on 2014-01-07 14:39:47 CET
-
---
--- PostgreSQL database dump complete
---
-

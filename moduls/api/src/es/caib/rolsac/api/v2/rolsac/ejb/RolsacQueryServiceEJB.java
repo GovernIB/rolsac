@@ -40,6 +40,7 @@ import org.ibit.rol.sac.model.Personal;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.Seccion;
+import org.ibit.rol.sac.model.SilencioAdm;
 import org.ibit.rol.sac.model.Taxa;
 import org.ibit.rol.sac.model.Tipo;
 import org.ibit.rol.sac.model.TipoAfectacion;
@@ -113,6 +114,7 @@ import es.caib.rolsac.api.v2.query.QueryBuilderException;
 import es.caib.rolsac.api.v2.query.Restriction;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
+import es.caib.rolsac.api.v2.silencio.SilencioDTO;
 import es.caib.rolsac.api.v2.taxa.TaxaCriteria;
 import es.caib.rolsac.api.v2.taxa.TaxaDTO;
 import es.caib.rolsac.api.v2.tipus.TipusCriteria;
@@ -4013,6 +4015,62 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
         }
 
         return numResultats;
+    }
+    
+    /**
+     * Obtiene un silencio administrativo.
+     * @param codSilencio
+     * @param idioma
+     * @return SilencioDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+ 
+    public SilencioDTO obtenirSilenci(Long codSilencio, String idioma) {
+    	
+        SilencioDTO silencioDTO = null;
+        Session session = null;
+      
+        try {
+        
+            session = getSession();
+            StringBuilder consulta = new StringBuilder("select sil ");
+			consulta.append("from SilencioAdm as sil, sil.traducciones as trad ");
+			consulta.append("where index(trad) = :idioma ");
+			consulta.append(" and sil.id = :codSilencio");
+			consulta.append(" order by trad.nombre asc");
+			
+            Query query = session.createQuery(consulta.toString());
+            query.setParameter("idioma", idioma);
+            query.setParameter("codSilencio", codSilencio);
+    		
+            
+            SilencioAdm silencio = (SilencioAdm)query.uniqueResult();
+            
+            if (silencio != null) {
+            	
+				silencioDTO = (SilencioDTO)BasicUtils.entityToDTO(
+						SilencioDTO.class, 
+						silencio,
+						idioma
+				);
+            	
+            }
+            
+        } catch (HibernateException e) {
+        	
+            log.error(e);
+            throw new EJBException(e);
+            
+        } finally {
+        	
+            close(session);
+            
+        }
+
+        return silencioDTO;
+        
     }
 
 }

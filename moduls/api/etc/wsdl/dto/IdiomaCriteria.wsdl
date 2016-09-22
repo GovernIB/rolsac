@@ -9,7 +9,7 @@
     xmlns:tns2="http://general.v2.api.rolsac.caib.es"
     targetNamespace="http://ws.idioma.v2.api.rolsac.caib.es">
 
-  <!-- TODO amartin pendiente de implementar ordenación: <wsdl:import namespace="urn:tns4" location="IdiomaOrdenacio.wsdl"/>  -->
+  <wsdl:import namespace="urn:tns4" location="IdiomaOrdenacio.wsdl"/> 
 
   <wsdl:types>
     <schema xmlns="http://www.w3.org/2001/XMLSchema"
@@ -17,12 +17,19 @@
         <import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
         <import namespace="http://general.v2.api.rolsac.caib.es" />
 
+		<complexType name="ArrayOfIdiomaOrdenacio">
+            <sequence>
+                <element minOccurs="0" maxOccurs="unbounded" name="listaOrdenaciones" nillable="true" type="tns:IdiomaOrdenacio" />
+            </sequence>
+        </complexType>
+        
         <complexType name="IdiomaCriteria">
             <complexContent>
                 <extension base="tns2:BasicCriteria">
                     <sequence>
                         <element name="nombre" nillable="true" type="xsd:string" />
                         <element name="codigoEstandar" nillable="true" type="xsd:string" />
+                        <element name="ordenar" nillable="true" type="tns:ArrayOfIdiomaOrdenacio" />
                     </sequence>                 
                 </extension>
             </complexContent>

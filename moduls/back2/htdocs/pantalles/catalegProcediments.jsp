@@ -296,25 +296,6 @@
                     "tipus": "<spring:message code='proc.formulari.error.terminiMaximResolucio.no_nomes_numeros'/>"
                 }
         },
-        // Silencio administrativo
-        {
-            "modo": "individual",
-            "etiqueta": "id",
-            "etiquetaValor": "item_silenci_" + '<c:out value="${idiomaVal}"/>',
-            "obligatori": "si",
-            "tipus": "alfanumeric",
-            /*"caracters":
-                {
-                    "mostrar": "no",
-                    "abreviat": "no"
-                },*/
-            "error":
-                {
-                	"obligatori": "<spring:message code='proc.formulari.error.silenciAdministratiu.obligatori'/>",
-                    "tipus": "<spring:message code='proc.formulari.error.silenciAdministratiu.no_nomes_numeros'/>"
-                }
-        }
-        ,
         
         // Fin de la via administrativa
         {
@@ -831,6 +812,14 @@
                                                 <input id="item_codigo_pro" name="item_codigo_pro" type="text" value=""/>
                                             </div>
                                         </div>
+                                         <div id="caja_item_codigo_sia" class="element t25p">
+                                            <div class="etiqueta">
+                                                <label for="item_codigo_sia"><spring:message code='camp.codi_sia'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_codigo_sia" name="item_codigo_sia" type="text" class="nou" readonly="readonly" />
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="fila">
                                         <div class="element t75p">
@@ -911,18 +900,24 @@
                                         </div>
                                     </div>       
                                     <div class="fila">
-                                        <div class="element t99p">
+                                        <div class="element t50p">
                                             <div class="etiqueta">
-                                                <label for="item_silenci_<c:out value="${lang}" />"><spring:message code='camp.silenciAdministratiu'/></label>
+<%--                                                 <label for="item_silenci_<c:out value="${lang}" />"><spring:message code='camp.silenciAdministratiu'/></label> --%>
+                                            	 <label for="item_silenci_combo"><spring:message code='camp.silenciAdministratiu'/></label>
+                                         
                                             </div>
-                                            <div class="control">
-                                                <textarea id="item_silenci_<c:out value="${lang}" />" name="item_silenci_<c:out value="${lang}" />"
-                                                    cols="50" rows="2" class="nou"></textarea>
+                                            <div class="control select">
+<%--                                                 <textarea id="item_silenci_<c:out value="${lang}" />" name="item_silenci_<c:out value="${lang}" />" --%>
+<!--                                                     cols="50" rows="2" class="nou"></textarea> -->
+                                                <select id="item_silenci_combo" name="item_silenci_combo">
+                                                	<option selected="selected" value="">Cap</option>	
+		                                			<c:forEach items="${llistaSilenci}" var="sil">
+		                                    			<option value='<c:out value="${sil.codigo}" />'><c:out value="${sil.nom}" /></option>
+		                               				 </c:forEach>
+		                           				 </select> 
                                             </div>
                                         </div>
-                                    </div>                             
-                                   
-                                                                        
+                                    </div>                                                          
                                     <div class="fila">
                                         <div class="element t50p">
                                             <div class="etiqueta">
@@ -930,7 +925,7 @@
                                             </div>  
                                             <div class="control select">
                                                 <select id="item_fi_vida_administrativa" name="item_fi_vida_administrativa" class="nou">
-                                                    <option value=""><spring:message code='camp.nsnc'/></option>
+                                                    <option value=""><spring:message code='camp.cap'/></option>
                                                     <option value="1" ><spring:message code='camp.si'/></option>
                                                     <option value="0" ><spring:message code='camp.no'/></option>
                                                 </select>
@@ -1963,7 +1958,7 @@
 		                		               
 	    	</div>
 	    	
-		    <!-- Menú de publicación   -->
+		    <!-- Menu de publicacion -->
 		    <div class="modulLateral menuPublicacion">
 		        <div class="modul publicacio">
 		            <fieldset>

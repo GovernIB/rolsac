@@ -90,6 +90,8 @@ import es.caib.rolsac.api.v2.rolsac.ejb.RolsacQueryServiceEJBStrategy;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
 import es.caib.rolsac.api.v2.seccio.SeccioQueryServiceAdapter;
+import es.caib.rolsac.api.v2.silencio.SilencioDTO;
+import es.caib.rolsac.api.v2.silencio.SilencioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.taxa.TaxaCriteria;
 import es.caib.rolsac.api.v2.taxa.TaxaDTO;
 import es.caib.rolsac.api.v2.taxa.TaxaQueryServiceAdapter;
@@ -907,5 +909,15 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
             throw new QueryServiceException(ExceptionMessages.COUNT_GETTER + "fitxas.", e);
         }
     }
+
+	public SilencioQueryServiceAdapter obtenirSilencio(Long codSilencio, String idioma) throws QueryServiceException {
+		 try {
+	            
+			SilencioDTO dto = rolsacQueryServiceStrategy.obtenirSilenci(codSilencio, idioma);
+	            return (SilencioQueryServiceAdapter) BeanUtils.getAdapter("silencio", getStrategy(), dto);
+	        } catch (StrategyException e) {
+	            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "silencio.", e);
+	        }
+	}
 
 }

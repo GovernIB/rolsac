@@ -3713,7 +3713,8 @@ ALTER TABLE ONLY rsc_pronor
 
 ALTER TABLE ONLY rsc_proced
     ADD CONSTRAINT rsc_pro_coduna_resol_fk FOREIGN KEY (pro_coduna_resol) REFERENCES rsc_uniadm(una_codi);
-    
+
+
 --
 -- TOC entry 2526 (class 2606 OID 18970)
 -- Dependencies: 210 222 2342

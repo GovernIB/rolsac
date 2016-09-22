@@ -194,6 +194,14 @@
                                             <div class="control">
                                                 <input id="item_codi_estandar" name="item_codi_estandar" type="text" />
                                             </div>                                          
+                                        </div>
+                                        <div id="caja_item_cod_DIR3" class="element t25p">
+                                            <div class="etiqueta">
+                                                <label for="item_cod_DIR3"><spring:message code='camp.codi_dir3'/></label>                                                
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_cod_DIR3" name="item_cod_DIR3" type="text" readonly="readonly"/>
+                                            </div>
                                         </div>                                      
                                     </div>
                                     <div class="fila">
@@ -2011,6 +2019,7 @@
         var txtColNombre = "<spring:message code='txt.auditoria.nombre'/>";
         var txtColFecha = "<spring:message code='txt.auditoria.fecha'/>";
         var txtColOperacion = "<spring:message code='txt.auditoria.operacion'/>";
+ 
     </script>
     
     <script type="text/javascript">

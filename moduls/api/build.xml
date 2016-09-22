@@ -56,7 +56,7 @@
 	
 	<path id="ejb.class.path">
         <fileset dir="${lib.dir}">
-	    	<include name="hibernate2.jar"/>
+        	<include name="hibernate2.jar"/>
             <include name="cglib2.jar"/>
             <include name="ejb-2_0.jar"/>
         	<include name="jaxrpc.jar"/>
@@ -176,8 +176,7 @@
 		<!-- agarcia: librerias comunes en 00librerias -->
 		<fileset dir="${lib.dir}/webcaib">
 			<include name="commons-beanutils-1.8.3.jar"/>
-		    <include name="commons-lang-2.1.jar"/>
-			<!-- <include name="lucene-caib.jar"/> -->      
+		    <include name="commons-lang-2.1.jar"/>      
 			<include name="commons-discovery-0.5.jar"/>  
 			<include name="org.springframework.*"/>
 		</fileset>
@@ -699,6 +698,14 @@
 	    	verbose="true"
 	    	serverside="true">	    	
 		</axis-wsdl2java>
+    	
+    	<axis-wsdl2java url="${ws.etc.wsdl}/SilencioWS.wsdl"
+	         output="${wsdl.gen.src}"
+	         typemappingversion="1.1"
+	         testcase="false"
+	         verbose="true"
+			 serverside="true">
+	    </axis-wsdl2java> 
     	
     </target>    
 	

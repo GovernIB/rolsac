@@ -187,6 +187,12 @@ function CDetall(soloFicha) {
 		jQuery("#item_clave_primaria,#item_clave_primaria_es,#item_clave_primaria_en,#item_clave_primaria_de,#item_clave_primaria_fr").change(function() {
 			jQuery("#item_clave_primaria,#item_clave_primaria_es,#item_clave_primaria_en,#item_clave_primaria_de,#item_clave_primaria_fr").val( jQuery(this).val() );
 		});
+		
+		//#366 se añade campo DIR3
+		jQuery("#item_cod_DIR3,#item_cod_DIR3_es,#item__cod_DIR3_en,#item_cod_DIR3_de,#item_cod_DIR3_fr").change(function() {
+			jQuery("#item_cod_DIR3,#item_cod_DIR3_es,#item_cod_DIR3_en,#item_cod_DIR3_de,#item_cod_DIR3_fr").val( jQuery(this).val() );
+		});
+		
 
 		jQuery("#item_espai_territorial,#item_espai_territorial_es,#item_espai_territorial_en,#item_espai_territorial_de,#item_espai_territorial_fr").change(function() {
 			jQuery("#item_espai_territorial,#item_espai_territorial_es,#item_espai_territorial_en,#item_espai_territorial_de,#item_espai_territorial_fr").val( jQuery(this).val() );
@@ -463,7 +469,9 @@ function CDetall(soloFicha) {
 			$("#item_id").val(dada_node.id);
 
 			jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").show();
-
+			jQuery("#caja_item_cod_DIR3, #caja_item_cod_DIR3_es, #caja_item_cod_DIR3_en, #caja_item_cod_DIR3_de, #caja_item_cod_DIR3_fr").show(); //#366 se añade DIR3
+			
+			
 			//Bloque de pestanyas de idiomas
 			
 			for (var i in idiomas) {
@@ -505,6 +513,9 @@ function CDetall(soloFicha) {
 			jQuery("#item_codi_estandar").change();
 			$("#item_clave_primaria").val(dada_node.id);
 			$("#item_clave_primaria").change();
+			$("#item_cod_DIR3").val(dada_node.item_cod_DIR3); //#366 se añade campo
+			$("#item_cod_DIR3").change();
+			
 			$("#item_domini").val(dada_node.item_domini);
 			marcarOpcionSelect("item_validacio",dada_node.item_validacio);
 			//$("#item_validacio").val(dada_node.item_validacio);
@@ -569,6 +580,8 @@ function CDetall(soloFicha) {
 			$("#btnEliminar").parent().addClass("off");
 			$("#btnEliminar").unbind("click");
 			jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").hide();
+			jQuery("#caja_item_cod_DIR3, #caja_item_cod_DIR3_es, #caja_item_cod_DIR3_en, #caja_item_cod_DIR3_de, #caja_item_cod_DIR3_fr").hide(); //#366 se añade campo DIR3
+			
 			
 		}
 

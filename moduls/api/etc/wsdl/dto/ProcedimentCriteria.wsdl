@@ -55,7 +55,6 @@
                         <element name="t_resolucion" nillable="true" type="xsd:string" />
                         <element name="t_resultat" nillable="true" type="xsd:string" />
                         <element name="t_resumen" nillable="true" type="xsd:string" />
-                        <element name="t_silencio" nillable="true" type="xsd:string" />
                         <element name="taxa" nillable="true" type="xsd:boolean" />
                         <element name="telematico" nillable="true" type="xsd:boolean" />
                         <element name="textos" nillable="true" type="xsd:string" />

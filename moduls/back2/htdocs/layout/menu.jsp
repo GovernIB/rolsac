@@ -117,6 +117,9 @@
 							<li>
 								<a href="<c:url value="/modelsComuns/modelsComuns.do"/>"><spring:message code="menu.models_comuns" /></a>
 							</li>
+							<li>
+								<a href="<c:url value="/silenciAdm/silenciAdm.do"/>"><spring:message code="menu.silenci_adm" /></a>
+							</li>
 						</ul>
 					</li>
 					<li>

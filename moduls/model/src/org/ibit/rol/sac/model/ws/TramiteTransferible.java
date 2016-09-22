@@ -244,8 +244,7 @@ public class TramiteTransferible  extends ActuacionTransferible implements Seria
             if(traduccion!=null){
                 final TraduccionTramiteTransferible temp =  new TraduccionTramiteTransferible();
                 temp.setNombre(traduccion.getNombre());
-                //#351 se cambia descripción por observaciones
-                //temp.setDescripcion(traduccion.getDescripcion());
+                 //#351 se cambia descripcion por observaciones
                 temp.setDescripcion(traduccion.getObservaciones());
                 temp.setDocumentacion(traduccion.getDocumentacion());
                 temp.setRequisits(traduccion.getRequisits());

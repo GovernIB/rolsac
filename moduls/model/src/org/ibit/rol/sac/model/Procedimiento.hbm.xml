@@ -39,6 +39,7 @@
         <many-to-one name="familia" column="PRO_CODFAM" foreign-key="RSC_PROFAM_FK"/>
 	    <many-to-one  class="org.ibit.rol.sac.model.Iniciacion" name="iniciacion"  column="PRO_CODINI" foreign-key="RSC_PROINI_FK"/>
 	    <many-to-one name="servicioResponsable" column="PRO_CODUNA_SERV" foreign-key="RSC_PRO_CODUNA_SERV_FK"/>
+        <many-to-one class="org.ibit.rol.sac.model.SilencioAdm" name="silencio" column="PRO_CODSIL" foreign-key="RSC_PRO_CODSIL_FK"/>
         
         <set name="normativas" cascade="none" table="RSC_PRONOR" lazy="true">
             <cache usage="read-write"/>
@@ -98,7 +99,6 @@
                 <property name="destinatarios" type="text" column="TPR_DESTIN"/>
                 <property name="requisitos" type="text" column="TPR_REQUIS"/>
                 <property name="plazos" type="text" column="TPR_PLAZOS"/>
-                <property name="silencio" type="text" column="TPR_SILEN"/>
                 <property name="recursos" type="text" column="TPR_RECURS"/>
                 <property name="observaciones" type="text" column="TPR_OBSERV"/>
                 <property name="lugar"  type="text" column="TPR_LUGAR"/>

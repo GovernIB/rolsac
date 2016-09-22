@@ -208,6 +208,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			//resultats.put("item_clau_hita", uni.getClaveHita());
 			resultats.put("item_codi_estandar", uni.getCodigoEstandar());
 			resultats.put("item_clave_primaria", idUA);
+			resultats.put("item_cod_DIR3", uni.getCodigoDIR3()); //#366 se añade DIR3
 			resultats.put("item_domini", uni.getDominio());
 			resultats.put("item_validacio", uni.getValidacion());
 			resultats.put("item_telefon", uni.getTelefono());
@@ -1384,8 +1385,8 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	/**
 	 * Método que recibe petición AJAX de guardado del estado de las fichasUA de la UA.
 	 * @param request
-	 * @return
 	 * @throws DelegateException 
+	 * @return
 	 */
 	@RequestMapping(value = "/guardarFitxesUASeccio.do", method = POST)
 	public @ResponseBody Map<String, Object> guardarFitxesUASeccio(Long idUA, Long idSeccion, String listaFichas, HttpServletRequest request) throws DelegateException {
