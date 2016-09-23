@@ -387,6 +387,19 @@
                     "obligatori": "<spring:message code='proc.formulari.error.servei.responsable.obligatori'/>"
                 }
         },
+        
+    	 // Servei Responsable
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_servei_responsable_id",
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "error":
+                {
+                    "obligatori": "<spring:message code='proc.formulari.error.servei.responsable.obligatori'/>"
+                }
+        },
        
         
         // Responsable

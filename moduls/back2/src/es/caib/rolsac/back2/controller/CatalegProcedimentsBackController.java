@@ -353,6 +353,12 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				resultats.put("item_organ_responsable_nom", ua.getNombreUnidadAdministrativa(lang));
 			}
 
+			if (proc.getServicioResponsable() != null) {
+				UnidadAdministrativa ua = proc.getServicioResponsable();
+				resultats.put("item_servei_responsable_id", ua.getId());
+				resultats.put("item_servei_responsable_nom", ua.getNombreUnidadAdministrativa(lang));
+			}
+
 			if (proc.getOrganResolutori() != null) {
 				UnidadAdministrativa ua = proc.getOrganResolutori();
 				resultats.put("item_organ_id", ua.getId());
