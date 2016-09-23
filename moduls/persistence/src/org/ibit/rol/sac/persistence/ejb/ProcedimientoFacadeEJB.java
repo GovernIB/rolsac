@@ -2117,9 +2117,6 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
                 io.addTextLine(trad.getRequisitos());
             }
 
-            if (trad.getSilencio() != null) {
-                io.addTextLine(trad.getSilencio());
-            }
         }
 
         return io;

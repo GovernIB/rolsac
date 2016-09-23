@@ -276,6 +276,25 @@
                     "obligatori": "<spring:message code='proc.formulari.error.formaIniciacio.obligatori'/>"
                 }
         },
+        
+     // Silencio administrativo
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_silenci_combo",
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            /*"caracters":
+                {
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },*/
+            "error":
+                {
+                	"obligatori": "<spring:message code='proc.formulari.error.silenciAdministratiu.obligatori'/>",
+                    "tipus": "<spring:message code='proc.formulari.error.silenciAdministratiu.no_nomes_numeros'/>"
+                }
+        },
              	
         
        // Termini per resoldre i notificar (Catalán)

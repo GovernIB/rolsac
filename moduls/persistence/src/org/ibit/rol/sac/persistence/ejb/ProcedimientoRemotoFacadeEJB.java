@@ -538,9 +538,6 @@ public abstract class ProcedimientoRemotoFacadeEJB extends HibernateEJB {
                 io.addTextLine(trad.getRequisitos());
             }
 
-            if (trad.getSilencio() != null) {
-                io.addTextLine(trad.getSilencio());
-            }
         }
 
         return io;
