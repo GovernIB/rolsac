@@ -108,5 +108,21 @@ public abstract class ArchivoFacadeEJB extends HibernateEJB {
 	}  
 
 	
-	
+	/**
+	 * Devuelve true/false dependiendo de si cumple el mínimo exigido ene l fichero.
+	 * @param archivo
+	 * @return
+	 */
+	public boolean isIndexableSolr(final Archivo archivo) {
+		boolean retorno = true;
+		final String tamanyoMaximo = System.getProperty("es.caib.rolsac.solr.tamanyomaximo");
+		final String ficheroPermitidos = System.getProperty("es.caib.rolsac.solr.ficheros");
+		if (archivo.getPeso() < Long.valueOf(tamanyoMaximo)) {
+			retorno = false;
+		} else {
+			//Si no lo contiene, dará false.
+			retorno = ficheroPermitidos.contains(archivo.getMime());
+		}
+		return retorno;
+	}
 }

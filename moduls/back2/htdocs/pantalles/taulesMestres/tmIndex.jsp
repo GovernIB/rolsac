@@ -16,7 +16,8 @@
     var pagIndexarPendientes = '<c:url value="/index/indexarPendientes.do" />';
     var pagBorrarCaducadas = '<c:url value="/index/borrarCaducadas.do" />';
     var pagGrabarPendientes = '<c:url value="/index/grabarSolrPendiente.do" />';
-
+	var pagCerrarJobs =  '<c:url value="/index/cerrarJobs.do" />';
+    
     //texts
     var txt_per = "<spring:message code='txt.per'/>";
     var txtEsborrarCorrecte = "<spring:message code='txt.usuari_esborrat_correcte'/>";
@@ -53,7 +54,7 @@
     var txtSolrDescripcionTipoTraDoc=  "<spring:message code='index.descripcio.tipo.DTR'/>";
     var txtSolrDescripcionTipoFichaDoc=  "<spring:message code='index.descripcio.tipo.DFC'/>";
     var txtEnviantDades="<spring:message code='index.missatge.enviant_dades'/>" ;
-
+	
     //taula    
     var txtNou = "<spring:message code='txt.afegir_nova'/> "; + txtLlistaItem.toLowerCase();
     var txtCodi = "<spring:message code='txt.codi'/>";
@@ -74,8 +75,8 @@
     var txtCercantElements = txtCercant + " <spring:message code='txt.elements'/>" + ". " + txtEspere;
 
     //Botones
-  
     var txtEnviantDades="<spring:message code='index.missatge.enviant_dades'/>" ;
+    var txtCerrantJobs="<spring:message code='index.missatge.cerrando_jobs'/>" ;
     var txtBotonContinuar = "<spring:message code='boto.continuar'/>";
     
 
@@ -145,9 +146,17 @@
             Unidad administrativa : 
             <span class="btnGenerico">
                  <a href="javascript:;" class="btn unitatOrganica" id = "btnIndexarUA"><span><span><spring:message code='boto.continuar'/></span></span></a>
-            </span>         
+            </span> 
+            <br /><br />
+            <p>
+            	Cerrar jobs:            
+            <span class="btnGenerico">
+                 <a href="javascript:;" class="btn unitatOrganica" id = "btnCerrarJobs"><span><span><spring:message code='boto.continuar'/></span></span></a>
+            </span> 
+            </p>
           </div>            
         </div>
+        
         <div class="resultats C">
                                             
             <div class="dades">

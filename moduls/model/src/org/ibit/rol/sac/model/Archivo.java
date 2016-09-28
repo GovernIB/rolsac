@@ -84,6 +84,5 @@ public class Archivo implements ValueObject {
 		return "Archivo [id=" + id + ", mime=" + mime + ", nombre=" + nombre
 				+ ", peso=" + peso + "]";
 	}
-
     
 }

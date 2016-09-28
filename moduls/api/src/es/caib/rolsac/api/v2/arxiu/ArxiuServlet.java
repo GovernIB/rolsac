@@ -115,9 +115,9 @@ public class ArxiuServlet extends HttpServlet {
         } finally {
             if (session != null && session.isOpen()) {
                 try {
-                    if (session.isDirty()) {
+                    /*if (session.isDirty()) {
                         log.warn("Cerrando sesion sucia!");
-                    }
+                    }*/
                     session.close();
                 } catch (HibernateException e) {
                     log.error(e);

@@ -1,12 +1,11 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,9 +14,9 @@ import javax.ejb.EJBException;
 
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
+import org.apache.commons.io.FilenameUtils;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.Documento;
@@ -47,10 +46,10 @@ import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
+import org.ibit.rol.sac.persistence.util.ArchivoUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
 import es.caib.solr.api.SolrIndexer;
-import es.caib.solr.api.exception.ExcepcionSolrApi;
 import es.caib.solr.api.model.IndexData;
 import es.caib.solr.api.model.MultilangLiteral;
 import es.caib.solr.api.model.PathUO;
@@ -544,6 +543,14 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 				return new SolrPendienteResultado(true, "No se puede indexar");
 			}
 			
+
+			if (ArchivoUtils.isIndexableSolr(documento.getArchivo())) {
+				log.debug("Es indexable con mime:" + documento.getArchivo().getMime()+" y tamanyo:" + documento.getArchivo().getPeso());
+			} else {
+				log.debug("NO Es indexable con mime:" + documento.getArchivo().getMime()+" y tamanyo:" + documento.getArchivo().getPeso());
+				return new SolrPendienteResultado(true, "El documento no cumple los requisitos.");
+			}
+			
 			//Obtenemos el procedimiento por separado porque daba un error de lazy hibernate
 			ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
 			ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimiento(documento.getProcedimiento().getId());
@@ -742,6 +749,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 		try {
 			//Paso 0. Obtenemos la ficha documento y vemos si es indexable.
 			final Documento documento = obtenerDocumentoSolr(idElemento);
+			
 			if (documento == null) {
 				return new SolrPendienteResultado(false, "Da problema al cargar la info del documento ficha.");
 			}
@@ -749,6 +757,14 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 			boolean isIndexable = this.isIndexable(documento.getFicha());
 			if (!isIndexable) {
 				return new SolrPendienteResultado(true, "No se puede indexar");
+			}
+			
+
+			if (ArchivoUtils.isIndexableSolr(documento.getArchivo())) {
+				log.debug("Es indexable con mime:" + documento.getArchivo().getMime()+" y tamanyo:" + documento.getArchivo().getPeso());
+			} else {
+				log.debug("NO Es indexable con mime:" + documento.getArchivo().getMime()+" y tamanyo:" + documento.getArchivo().getPeso());
+				return new SolrPendienteResultado(true, "El documento no cumple los requisitos.");
 			}
 			
 			//Obtenemos la ficha por separado porque daba un error de lazy hibernate
@@ -955,4 +971,6 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 			}
     	}
 	}
+	
+	
 }

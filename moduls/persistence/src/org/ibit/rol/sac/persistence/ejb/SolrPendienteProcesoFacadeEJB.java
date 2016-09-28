@@ -90,7 +90,6 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 	 */
 	public void indexarTodoFicha(final SolrPendienteJob solrPendienteJob)  {
 		log.debug("INDEXAR TODO FICHA");
-		log.error("INDEXAR TODO FICHA.");
 		SolrIndexer solrIndexer = null;
 		try {
 			solrIndexer = obtenerParamIndexer();
@@ -166,7 +165,6 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 	 */
 	public void indexarTodoProcedimiento(final SolrPendienteJob solrPendienteJob)  {
 		log.debug("INDEXAR TODO PROCEDIMIENTO");
-		log.error("INDEXAR TODO PROCEDIMIENTO.");
 		SolrIndexer solrIndexer = null;
 		try {
 			solrIndexer = obtenerParamIndexer();
@@ -241,7 +239,6 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 	 */
 	public void indexarTodoNormativa(final SolrPendienteJob solrPendienteJob) {
 		log.debug("INDEXAR TODO NORMATIVA");
-		log.error("INDEXAR TODO NORMATIVA.");
 		SolrIndexer solrIndexer = null;
 		try {
 			solrIndexer = obtenerParamIndexer();
@@ -320,7 +317,6 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 	 */
 	public  void indexarTodoTramite(final SolrPendienteJob solrPendienteJob)  {
 		log.debug("INDEXAR TODO NORMATIVA");
-		log.error("INDEXAR TODO NORMATIVA.");
 		SolrIndexer solrIndexer  = null;
 		try {
 			solrIndexer = obtenerParamIndexer();
@@ -379,7 +375,6 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 	 */
 	public void indexarTodoUA(final SolrPendienteJob solrPendienteJob)  {
 		log.debug("INDEXAR TODO UA");
-		log.error("INDEXAR TODO UA.");
 		SolrIndexer solrIndexer = null;
 		try {
 			solrIndexer = obtenerParamIndexer();

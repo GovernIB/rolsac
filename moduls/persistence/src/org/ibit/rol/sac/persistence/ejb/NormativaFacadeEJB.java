@@ -47,6 +47,7 @@ import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
+import org.ibit.rol.sac.persistence.util.ArchivoUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
@@ -1256,6 +1257,14 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 						continue;
 					}
 					
+
+					if (ArchivoUtils.isIndexableSolr(traduccion.getArchivo())) {
+						log.debug("Es indexable con mime:" + traduccion.getArchivo().getMime()+" y tamanyo:" + traduccion.getArchivo().getPeso());
+					} else {
+						log.debug("NO Es indexable con mime:" + traduccion.getArchivo().getMime()+" y tamanyo:" + traduccion.getArchivo().getPeso());
+						return new SolrPendienteResultado(true, "El documento no cumple los requisitos.");
+					}
+					
 					//Seteamos los primeros campos multiidiomas: Titulo y Descripción (y padre).
 					titulo.addIdioma(enumIdioma, traduccion.getArchivo().getNombre());
 					descripcion.addIdioma(enumIdioma, traduccion.getArchivo().getMime());
@@ -1385,4 +1394,5 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
     	}
 		
 	}
+	
 }

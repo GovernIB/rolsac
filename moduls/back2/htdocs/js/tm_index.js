@@ -216,6 +216,35 @@ function inicializarBtn() {
             }
         });
 	});
+	
+	
+	jQuery("#btnCerrarJobs").unbind("click").bind("click", function() {
+		var $btn = jQuery(this);
+        var url;        
+
+		if ($btn.hasClass('unitatOrganica')) {
+            url = pagCerrarJobs;
+		} 
+        
+        $.ajax({
+            type: "POST",
+            url: url, 
+            dataType: "json",
+            error: function() {					
+                // missatge
+                Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+                
+            },
+            success: function(data) {
+            	 if (data.error == null || data.error == "") {
+                  	Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtCerrantJobs});			
+                  } else {
+                      Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: data.error});					
+                  }
+            }
+        });
+	});
+	
 }
 
 
@@ -262,6 +291,9 @@ var numCercadorMinim = 0;
 // paginacio
 var paginacio_marge = 4;
 
+// Cllistat
+var claseCllistat;
+
 // llistat
 var itemID_ultim = 0;
 function CLlistat(){
@@ -269,6 +301,7 @@ function CLlistat(){
 	this.extend();
 
 	var that = this;
+	
 
 	// Cambia a la pestaña del buscador.
 	this.tabBuscador = function() {
@@ -277,7 +310,8 @@ function CLlistat(){
 		
 		opcio_unitat = "C";
 		
-		that.carregar({});
+		//that.carregar({});
+		claseCllistat = that;
 		
 		// resultats
 		resultats_elm.find("div.actiu").slideUp(300, function() {			
@@ -286,6 +320,7 @@ function CLlistat(){
 				
 				jQuery(this).addClass("actiu");
 				resultats_actiu_elm = resultats_elm.find("div.actiu:first");
+				claseCllistat.carregar({});
                
 			});
 			
