@@ -104,13 +104,13 @@ COMMENT ON COLUMN RSC_PROCED.PRO_CODSIA IS 'CODI SIA';
 
  --Crear tabla silenci
 CREATE TABLE RSC_SILADM (
-  SIL_CODI character varying(12) NOT NULL ENABLE,
+  SIL_CODI integer NOT NULL ENABLE,
   primary key (SIL_CODI)
 );
 COMMENT ON COLUMN RSC_SILADM.SIL_CODI IS 'CODI SILENCI ADM';
 
 create table RSC_TRASIL (
-   TSI_CODSIL character varying(12) not null,
+   TSI_CODSIL integer not null,
    TSI_NOMBRE character varying(256),
    TSI_DESCRI character varying(4000),
    TSI_CODIDI character varying(2) not null,
@@ -119,7 +119,7 @@ create table RSC_TRASIL (
 alter table RSC_TRASIL add constraint RSC_TSISIL_FK foreign key (TSI_CODSIL) references RSC_SILADM;
 
  --AFEGIR CAMP PER SILENCI
-ALTER TABLE RSC_PROCED ADD PRO_CODSIL VARCHAR2(12 CHAR);
+ALTER TABLE RSC_PROCED ADD PRO_CODSIL integer;
 COMMENT ON COLUMN RSC_PROCED.PRO_CODSIL IS 'CODI SILENCI';
 alter table RSC_PROCED add constraint RSC_PRO_CODSIL_SERV_FK foreign key (PRO_CODSIL) references RSC_SILADM;
   

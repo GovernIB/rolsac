@@ -57,7 +57,7 @@ public class SilencioQueryServiceEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
     @SuppressWarnings("unchecked")
-    public SilencioDTO obtenirSilenci(String codSilencio, String idioma) {
+    public SilencioDTO obtenirSilenci(Long codSilencio, String idioma) {
     	
         SilencioDTO silencioDTO = null;
         Session session = null;

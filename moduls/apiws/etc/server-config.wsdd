@@ -376,7 +376,7 @@
             returnQName="obtenirSilenciReturn" returnType="rtns:SilencioDTO" 
             xmlns:rtns="http://silencio.v2.api.rolsac.caib.es"
             soapAction="">
-            <parameter qname="in0" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
             <parameter qname="in1" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
         </operation>
 		

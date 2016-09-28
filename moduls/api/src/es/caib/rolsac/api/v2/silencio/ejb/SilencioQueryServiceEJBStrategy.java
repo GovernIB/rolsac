@@ -15,7 +15,7 @@ public class SilencioQueryServiceEJBStrategy implements SilencioQueryServiceStra
 
 	
 
-	public SilencioDTO obtenirSilenci(String codSilencio, String idioma) throws StrategyException {
+	public SilencioDTO obtenirSilenci(Long codSilencio, String idioma) throws StrategyException {
 		
 		try {
 			

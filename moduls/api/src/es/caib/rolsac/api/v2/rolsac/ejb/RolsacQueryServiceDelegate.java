@@ -892,7 +892,7 @@ public class RolsacQueryServiceDelegate {
         }
     }
 
-	public SilencioDTO obtenirSilenci(String codSilencio, String idioma) throws DelegateException {
+	public SilencioDTO obtenirSilenci(Long codSilencio, String idioma) throws DelegateException {
 		 try {
 	            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
 	            return ejb.obtenirSilenci(codSilencio,idioma);

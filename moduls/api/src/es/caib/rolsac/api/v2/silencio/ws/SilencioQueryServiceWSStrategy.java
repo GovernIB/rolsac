@@ -16,7 +16,7 @@ public class SilencioQueryServiceWSStrategy implements SilencioQueryServiceStrat
     	this.gateway = gateway;
     }
 	
-	public SilencioDTO obtenirSilenci(String silencio, String idioma) throws StrategyException
+	public SilencioDTO obtenirSilenci(Long silencio, String idioma) throws StrategyException
 	{
 		try {
 			return gateway.obtenirSilenci(silencio, idioma);

@@ -27,11 +27,11 @@ public class SilencioAdmDelegate
 		this.impl = impl;
 	}
 	
-	public void borrarSilencioAdm(String codigo) throws DelegateException {
+	public void borrarSilencioAdm(Long codigo) throws DelegateException {
 		impl.borrarSilencioAdm(codigo);
 	}
 	
-	public String grabarSilencioAdm(SilencioAdm silencio, boolean edicion) throws DelegateException {
+	public Long grabarSilencioAdm(SilencioAdm silencio, boolean edicion) throws DelegateException {
 		return impl.grabarSilencioAdm(silencio, edicion);
 	}
 	
@@ -43,8 +43,12 @@ public class SilencioAdmDelegate
 		return impl.listarSilencioAdm();
 	}
 	
-	public SilencioAdm obtenerSilencioAdm(String codigo) throws DelegateException {
+	public SilencioAdm obtenerSilencioAdm(Long codigo) throws DelegateException {
 		return impl.obtenerSilencioAdm(codigo);
+	}
+
+	public int cuantosProcedimientosConSilencio(Long id) throws DelegateException {
+		return impl.cuantosProcedimientosConSilencio(id);
 	}
 
 	

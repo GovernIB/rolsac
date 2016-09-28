@@ -217,6 +217,6 @@ public interface RolsacQueryService {
 
     int getNumFitxes(FitxaCriteria fitxaCriteria) throws QueryServiceException;
     
-    SilencioQueryServiceAdapter obtenirSilencio(String codSilencio, String idioma) throws QueryServiceException;
+    SilencioQueryServiceAdapter obtenirSilencio(Long codSilencio, String idioma) throws QueryServiceException;
 
 }

@@ -7,7 +7,9 @@
     <class name="org.ibit.rol.sac.model.SilencioAdm" table="RSC_SILADM">
         <cache usage="read-write"/>
         <id name="id" unsaved-value="null" column="SIL_CODI">
-			<generator class="assigned" />
+			<generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
         </id>
 
         <map name="traducciones" cascade="all" table="RSC_TRASIL">

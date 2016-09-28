@@ -54,7 +54,7 @@ public class IndexacionJob implements Job  {
 			}
     	}
 		
-    	log.error("Ejecutando el indexacion job con tipoIndexacion:" + tipoIndexacion);
+    	log.debug("Ejecutando el indexacion job con tipoIndexacion:" + tipoIndexacion);
     	
     	//PASO 2. EJECUTAR LA INDEXACION.
         switch(tipoIndexacion) {
@@ -84,7 +84,7 @@ public class IndexacionJob implements Job  {
         		try { solrProceso.indexarPendientes(); } catch (DelegateException e) { log.error("Error indexando pendientes", e); } log.debug("Finalizado indexacion pendientes");
         		break;
         	default:
-        		log.debug("NO HAY TIPO DE INDEXACION!!!"); 
+        		log.error("NO HAY TIPO DE INDEXACION!!!"); 
         		break;
         }
      

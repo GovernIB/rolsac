@@ -643,7 +643,7 @@ public class RolsacQueryServiceEJBStrategy implements RolsacQueryServiceStrategy
         }
     }
 
-	public SilencioDTO obtenirSilenci(String codSilencio, String idioma)
+	public SilencioDTO obtenirSilenci(Long codSilencio, String idioma)
 			throws StrategyException {
 		try {
             return rolsacQueryServiceDelegate.obtenirSilenci(codSilencio, idioma);

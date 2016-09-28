@@ -18,7 +18,6 @@ import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.PerfilCiudadano;
 import org.ibit.rol.sac.model.SilencioAdm;
 import org.ibit.rol.sac.model.Traduccion;
-import org.ibit.rol.sac.model.TraduccionMateria;
 import org.ibit.rol.sac.model.TraduccionPerfilCiudadano;
 import org.ibit.rol.sac.model.TraduccionSilencio;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
@@ -32,7 +31,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.controller.PantallaBaseController;
-import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.indra.rol.sac.integracion.traductor.Traductor;
@@ -44,12 +42,12 @@ public class TMSilenciController extends PantallaBaseController {
 	private static Log log = LogFactory.getLog(TMSilenciController.class);
 	
 	@RequestMapping(value = "/silenciAdm.do")
-	public String pantalla(Map<String, Object> model, HttpServletRequest request) {
+	public String pantalla(final Map<String, Object> model, final HttpServletRequest request) {
 		
 		model.put("menu", 1);
 		model.put("submenu", "layout/submenu/submenuTMSilencio.jsp");
 		
-		RolUtil rolUtil= new RolUtil(request);
+		final RolUtil rolUtil= new RolUtil(request);
 		
 		if (rolUtil.userIsAdmin()) {
 			
@@ -57,15 +55,15 @@ public class TMSilenciController extends PantallaBaseController {
 			
 			// afegir llista de perfils
 			String nombrePerfil;
-			List<IdNomDTO> perfilsDTO = new LinkedList<IdNomDTO>();
-			PerfilDelegate perfilDelegate = DelegateUtil.getPerfilDelegate();
+			final List<IdNomDTO> perfilsDTO = new LinkedList<IdNomDTO>();
+			final PerfilDelegate perfilDelegate = DelegateUtil.getPerfilDelegate();
 			
 			try {
 				
 				String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 				
 				for (PerfilCiudadano perfil: (List<PerfilCiudadano>) perfilDelegate.listarPerfiles()) {
-					Traduccion traPerfil = perfil.getTraduccion(lang);
+					final Traduccion traPerfil = perfil.getTraduccion(lang);
 					nombrePerfil = traPerfil == null ? "" : ((TraduccionPerfilCiudadano) traPerfil).getNombre();
 					perfilsDTO.add(new IdNomDTO(perfil.getId(), nombrePerfil));
 				}
@@ -97,11 +95,11 @@ public class TMSilenciController extends PantallaBaseController {
 	}
 	
 	@RequestMapping(value = "/llistat.do")
-	public @ResponseBody Map<String, Object> llistat(HttpServletRequest request) {
+	public @ResponseBody Map<String, Object> llistat(final HttpServletRequest request) {
 		
-		List<Map<String, Object>> llistaSilencioDTO = new ArrayList<Map<String, Object>>();
+		final List<Map<String, Object>> llistaSilencioDTO = new ArrayList<Map<String, Object>>();
 		Map<String, Object> silencioDTO;
-		Map<String, Object> resultats = new HashMap<String, Object>();
+		final Map<String, Object> resultats = new HashMap<String, Object>();
 		
 		//Información de paginación
 		String pagPag = request.getParameter("pagPag");
@@ -114,16 +112,16 @@ public class TMSilenciController extends PantallaBaseController {
 		
 		try {
 			
-			SilencioAdmDelegate silencioDelegate = DelegateUtil.getSilencioAdmDelegate();
-			String idiomaPorDefecto = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			final SilencioAdmDelegate silencioDelegate = DelegateUtil.getSilencioAdmDelegate();
+			final String idiomaPorDefecto = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			
 			resultadoBusqueda = silencioDelegate.listarSilencioAdm(Integer.parseInt(pagPag), Integer.parseInt(pagRes), idiomaPorDefecto);
 			
 			for (Object o : resultadoBusqueda.getListaResultados() ) {
 				
-				String codigo = (String) ((Object[]) o)[0];
-				String nom = ((Object[]) o)[1] == null ? "" : (String) ((Object[]) o)[1];
-				String descripcio = ((Object[]) o)[2] == null ? "" : (String) ((Object[]) o)[2];
+				final Long codigo = (Long) ((Object[]) o)[0];
+				final String nom = ((Object[]) o)[1] == null ? "" : (String) ((Object[]) o)[1];
+				final String descripcio = ((Object[]) o)[2] == null ? "" : (String) ((Object[]) o)[2];
 				
 				silencioDTO = new HashMap<String, Object>();
 				silencioDTO.put("id", codigo);//366
@@ -146,21 +144,19 @@ public class TMSilenciController extends PantallaBaseController {
 
 		resultats.put("total", resultadoBusqueda.getTotalResultados());
 		resultats.put("nodes", llistaSilencioDTO);
-
 		return resultats;
 		
 	}
 	
 	@RequestMapping(value = "/pagDetall.do")
-	public @ResponseBody Map<String, Object> recuperaDetall(String id, HttpServletRequest request) {
+	public @ResponseBody Map<String, Object> recuperaDetall(final String id, final HttpServletRequest request) {
 		
-		Map<String, Object> resultats = new HashMap<String, Object>();
+		final Map<String, Object> resultats = new HashMap<String, Object>();
 		
 		try {
 
-			SilencioAdmDelegate silencioDelegate = DelegateUtil.getSilencioAdmDelegate();
-			SilencioAdm silencio = silencioDelegate.obtenerSilencioAdm(id);
-			
+			final SilencioAdmDelegate silencioDelegate = DelegateUtil.getSilencioAdmDelegate();
+			final SilencioAdm silencio = silencioDelegate.obtenerSilencioAdm(Long.valueOf(id));
 			resultats.put("item_id", silencio.getId());
 			omplirCampsTraduibles(resultats, silencio);
 
@@ -180,25 +176,23 @@ public class TMSilenciController extends PantallaBaseController {
 		
 	}
 	
-    private void omplirCampsTraduibles(Map<String, Object> resultats, SilencioAdm silencio)
+    private void omplirCampsTraduibles(final Map<String, Object> resultats, final SilencioAdm silencio)
     		throws DelegateException {
     	
-		IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
-		List<String> langs = idiomaDelegate.listarLenguajes();
+    	final IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
+    	final List<String> langs = idiomaDelegate.listarLenguajes();
 		
 		for (String lang : langs) {
 			
 		    if (null != silencio.getTraduccion(lang)) {
-		    	HashMap<String, String> traduccionDTO = new HashMap<String, String>();
-		    	TraduccionSilencio tm = (TraduccionSilencio) silencio.getTraduccion(lang);
+		    	final HashMap<String, String> traduccionDTO = new HashMap<String, String>();
+		    	final TraduccionSilencio tm = (TraduccionSilencio) silencio.getTraduccion(lang);
 
-				traduccionDTO.put("item_nombre", tm.getNombre());
+		    	traduccionDTO.put("item_nombre", tm.getNombre());
 				traduccionDTO.put("item_descripcio", tm.getDescripcion());
 				
 				resultats.put(lang, traduccionDTO);
-		  
 		    	
-				//resultats.put(lang, (TraduccionSilencio)silencio.getTraduccion(lang));
 			} else {
 				resultats.put(lang, new TraduccionSilencio());
 			}
@@ -208,35 +202,37 @@ public class TMSilenciController extends PantallaBaseController {
 	}
     
     @RequestMapping(value = "/guardar.do", method = POST)
-	public @ResponseBody Map<String, Object> guardar(HttpServletRequest request) {
+	public @ResponseBody Map<String, Object> guardar(final HttpServletRequest request) {
 
-		IdNomDTO result = null;
-		Map<String, Object> resultats = new HashMap<String, Object>();
-		String error = null;
+    	IdNomDTO result = null;
+    	final Map<String, Object> resultats = new HashMap<String, Object>();
+    	String error = null;
 
 		try {
 			
-			SilencioAdmDelegate silencioDelegate = DelegateUtil.getSilencioAdmDelegate();
-			SilencioAdm silencio = new SilencioAdm();
+			final SilencioAdmDelegate silencioDelegate = DelegateUtil.getSilencioAdmDelegate();
+			final SilencioAdm silencio = new SilencioAdm();
 			SilencioAdm silencioOld = null;
 			boolean edicion;
 			
 		
 			edicion = request.getParameter("item_idAnt") != null && !"".equals(request.getParameter("item_idAnt"));
-			String id = request.getParameter("item_id");
-			silencio.setId(id);
+			Long id = null;
+			if (  request.getParameter("item_id") != null &&  !request.getParameter("item_id").isEmpty()) {
+				id = Long.valueOf(request.getParameter("item_id"));
+				silencio.setId(id);
+			}
+			
 				
 			if (edicion) {
-
 				silencioOld = silencioDelegate.obtenerSilencioAdm(id);
-
 			}
 			
 			
 			// Idiomas
 			TraduccionSilencio tf;
-			IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
-			List<String> langs = idiomaDelegate.listarLenguajes();
+			final IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
+			final List<String> langs = idiomaDelegate.listarLenguajes();
 
 			for (String lang : langs) {
 				
@@ -263,7 +259,7 @@ public class TMSilenciController extends PantallaBaseController {
 			
 			silencioDelegate.grabarSilencioAdm(silencio, edicion);
 			
-			String ok = messageSource.getMessage("silencio.guardat.correcte", null, request.getLocale());
+			final String ok = messageSource.getMessage("silencio.guardat.correcte", null, request.getLocale());
 			//result = new IdNomDTO(silencioId, ok);
 			result = new IdNomDTO(1L, ok);
 			resultats.put("nodo", result);
@@ -299,15 +295,23 @@ public class TMSilenciController extends PantallaBaseController {
 	}	
     
     @RequestMapping(value = "/esborrarSilencioAdm.do", method = POST)
-	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO esborrar(final HttpServletRequest request) {
     	
-		IdNomDTO resultatStatus = new IdNomDTO();
+    	final IdNomDTO resultatStatus = new IdNomDTO();
 		
 		try {
-			String id = request.getParameter("id");
-			SilencioAdmDelegate silencioDelegate = DelegateUtil.getSilencioAdmDelegate();
-			silencioDelegate.borrarSilencioAdm(id);
-			resultatStatus.setId(1l);
+			final Long id = Long.valueOf(request.getParameter("id"));
+			final SilencioAdmDelegate silencioDelegate = DelegateUtil.getSilencioAdmDelegate();
+			
+			final int cuantos = silencioDelegate.cuantosProcedimientosConSilencio(id);
+			if (cuantos == 0) {
+				silencioDelegate.borrarSilencioAdm(id);
+				resultatStatus.setId(1l);
+			} else {
+				resultatStatus.setId(-4l);
+				resultatStatus.setNom("Error: Hi ha procediments amb aquest silenci administratiu.");
+				log.error("Error: Hi ha procediments amb aquest silenci administratiu.");
+			}
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
 				resultatStatus.setId(-1l);
@@ -317,7 +321,7 @@ public class TMSilenciController extends PantallaBaseController {
 			}
 		} catch (NumberFormatException nfEx) {
 			resultatStatus.setId(-3l);
-			log.error("Error: Código de silencio no n�meric: " + ExceptionUtils.getStackTrace(nfEx));
+			log.error("Error: Código de silencio no numeric: " + ExceptionUtils.getStackTrace(nfEx));
 		}
 		
 		return resultatStatus;
@@ -325,17 +329,17 @@ public class TMSilenciController extends PantallaBaseController {
 	}
     
     @RequestMapping(value = "/traduir.do")
-	public @ResponseBody Map<String, Object> traduir(HttpServletRequest request) {
+	public @ResponseBody Map<String, Object> traduir(final HttpServletRequest request) {
     	
-		Map<String, Object> resultats = new HashMap<String, Object>();
+    	final Map<String, Object> resultats = new HashMap<String, Object>();
 		
 		try {
-			
+			final 
 			String idiomaOrigenTraductor = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			
-			TraduccionSilencio traduccioOrigen = getTraduccionOrigen(request, idiomaOrigenTraductor);
+			final TraduccionSilencio traduccioOrigen = getTraduccionOrigen(request, idiomaOrigenTraductor);
 			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
-			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
+			final Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
 			traduccions = traductor.translate(traduccioOrigen, idiomaOrigenTraductor);
 			
 			resultats.put("traduccions", traduccions);
@@ -366,9 +370,9 @@ public class TMSilenciController extends PantallaBaseController {
 		
 	}
 	
-    private TraduccionSilencio getTraduccionOrigen(HttpServletRequest request, String idiomaOrigenTraductor) {
+    private TraduccionSilencio getTraduccionOrigen(final HttpServletRequest request, final String idiomaOrigenTraductor) {
     	
-    	TraduccionSilencio traduccioOrigen = new TraduccionSilencio();
+    	final TraduccionSilencio traduccioOrigen = new TraduccionSilencio();
 		
 		if (StringUtils.isNotEmpty(request.getParameter("item_nombre_" + idiomaOrigenTraductor))) {
 			traduccioOrigen.setNombre(request.getParameter("item_nombre_" + idiomaOrigenTraductor));

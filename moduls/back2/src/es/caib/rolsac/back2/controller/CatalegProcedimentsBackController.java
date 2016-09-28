@@ -171,7 +171,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		llistaSilencio = silencioDelegate.listarSilencioAdm();
 		for (SilencioAdm silAdm : llistaSilencio) {
 			llistaSilencioDTO.add(new CodNomDTO(
-					silAdm.getId(),
+					silAdm.getId().toString(),
 					silAdm.getNombreSilencio(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto())
 			));
 		}
@@ -351,6 +351,12 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				UnidadAdministrativa ua = proc.getUnidadAdministrativa();
 				resultats.put("item_organ_responsable_id", ua.getId());
 				resultats.put("item_organ_responsable_nom", ua.getNombreUnidadAdministrativa(lang));
+			}
+
+			if (proc.getServicioResponsable() != null) {
+				UnidadAdministrativa ua = proc.getServicioResponsable();
+				resultats.put("item_servei_responsable_id", ua.getId());
+				resultats.put("item_servei_responsable_nom", ua.getNombreUnidadAdministrativa(lang));
 			}
 
 			if (proc.getOrganResolutori() != null) {
@@ -636,8 +642,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			procediment.setSignatura(request.getParameter("item_codigo_pro"));					// Signatura
 			//#366 se añade SIA
 			procediment.setCodigoSIA(request.getParameter("item_codigo_sia"));					// Código SIA
-			procediment = guardarSilencio(request, procediment, error);
-			
+			procediment = guardarSilencio(request, procediment, error); 						// SILENCIO
 			
 			//#351 cambio info por dir electronica
 			//procediment.setInfo(request.getParameter("item_notes"));							// Info
@@ -751,11 +756,14 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 	private ProcedimientoLocal guardarSilencio(HttpServletRequest request,ProcedimientoLocal procediment, String error) throws DelegateException {
 			try {
-			
-			String codigo = request.getParameter("item_silenci_combo");
-			SilencioAdmDelegate silencioDelegate = DelegateUtil.getSilencioAdmDelegate();
-			SilencioAdm silencio = silencioDelegate.obtenerSilencioAdm(codigo);
-			procediment.setSilencio(silencio);
+				if (request.getParameter("item_silenci_combo").isEmpty()) {
+					procediment.setSilencio(null);
+				} else {
+					final Long codigo = Long.valueOf(request.getParameter("item_silenci_combo"));
+					SilencioAdmDelegate silencioDelegate = DelegateUtil.getSilencioAdmDelegate();
+					SilencioAdm silencio = silencioDelegate.obtenerSilencioAdm(codigo);
+					procediment.setSilencio(silencio);
+				}
 
 		} catch (NumberFormatException e) {
 			

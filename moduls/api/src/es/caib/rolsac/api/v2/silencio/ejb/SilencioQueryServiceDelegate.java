@@ -16,7 +16,7 @@ public class SilencioQueryServiceDelegate {
         this.silencioQueryServiceLocator = silencioQueryServiceLocator;
     }
     
-    public SilencioDTO obtenirSilenci(String codSilencio, String idioma) throws DelegateException {
+    public SilencioDTO obtenirSilenci(Long codSilencio, String idioma) throws DelegateException {
     	
         try {
         	

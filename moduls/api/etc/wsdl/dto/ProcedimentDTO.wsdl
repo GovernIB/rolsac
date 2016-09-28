@@ -47,7 +47,7 @@
                         <element name="ventanillaUnica" type="xsd:boolean" />
                         <element name="version" nillable="true" type="xsd:long" />
                         <element name="servicioResponsable" nillable="true" type="xsd:long" />
-                        <element name="silencio" nillable="true" type="xsd:string" />
+                        <element name="silencio" nillable="true" type="xsd:long" />
                     </sequence>
                 </extension>
             </complexContent>

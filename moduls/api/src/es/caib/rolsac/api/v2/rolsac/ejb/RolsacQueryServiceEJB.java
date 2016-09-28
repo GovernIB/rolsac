@@ -4027,7 +4027,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
  
-    public SilencioDTO obtenirSilenci(String codSilencio, String idioma) {
+    public SilencioDTO obtenirSilenci(Long codSilencio, String idioma) {
     	
         SilencioDTO silencioDTO = null;
         Session session = null;

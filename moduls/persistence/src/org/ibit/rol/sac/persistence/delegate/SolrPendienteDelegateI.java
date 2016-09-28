@@ -32,6 +32,8 @@ public interface SolrPendienteDelegateI {
 
 	public boolean checkJobsActivos() throws DelegateException;
 
+	public Boolean cerrarJobs() throws DelegateException;
+
 	
 		
 }

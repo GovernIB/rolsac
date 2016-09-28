@@ -41,7 +41,7 @@ public class SilencioQueryServiceAdapter extends SilencioDTO implements Silencio
 
 	
 
-	public SilencioQueryServiceAdapter obtenirSilencio(String codSilencio, String idioma) throws QueryServiceException {
+	public SilencioQueryServiceAdapter obtenirSilencio(Long codSilencio, String idioma) throws QueryServiceException {
 		try {
 				
 				SilencioDTO dto = silencioQueryServiceStrategy.obtenirSilenci(codSilencio, idioma);

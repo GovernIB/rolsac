@@ -56,6 +56,25 @@ public class TMIndexController extends PantallaBaseController {
         return "index";
     }
     
+    @RequestMapping(value = "/cerrarJobs.do")
+    public @ResponseBody Map<String, Object> cerrarJobs(HttpServletRequest request) {
+    	final Map<String, Object> resultats = new HashMap<String, Object>();
+        try {
+	    	Boolean retorno = DelegateUtil.getSolrPendienteDelegate().cerrarJobs();
+	    	if (retorno) {
+	    		log.debug("Todo correcto, se ha cerrado los jobs.");
+	    	} else  {
+	    		log.debug("Mal, no es pot cerrar els jobs.");
+	    		resultats.put("error", "No es pot cerrar los jobs.");
+	    	}
+        } catch (Exception exception) {
+            log.error("Error cerrando jobs." + exception.getMessage(), exception);
+            resultats.put("error", exception.getCause().getMessage());
+        }
+    	
+        return resultats;
+    }
+    
     
     @RequestMapping(value = "/llistat.do")
     public @ResponseBody Map<String, Object> llistat(HttpServletRequest request) {
