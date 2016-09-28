@@ -5,10 +5,20 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Archivo;
 
+/**
+ * Clase de utiles para tratar los archivos.
+ * @author slromero
+ *
+ */
 public class ArchivoUtils {
 
+	/** LOG. **/
+	protected final static Log log = LogFactory.getLog(ArchivoUtils.class);
+	
 	/** Extensiones. **/
 	private static Map<String, String> extensiones = null;
 	
@@ -19,9 +29,15 @@ public class ArchivoUtils {
 	 */
 	public static boolean isIndexableSolr(final Archivo archivo) {
 		boolean retorno = true;
-		final String tamanyoMaximo = System.getProperty("es.caib.rolsac.solr.tamanyomaximo");
+		final String sTamanyoMaximo = System.getProperty("es.caib.rolsac.solr.tamanyomaximo");
+		Long tamanyoMaximo = 10l;
+		try {
+			tamanyoMaximo = Long.valueOf(sTamanyoMaximo.trim());
+		} catch (Exception e) {
+			log.error("Error tratanto de convertir a long el tamanyoMaximo"+sTamanyoMaximo, e);
+		}
 		
-		if (archivo.getPeso() > Long.valueOf(tamanyoMaximo)*1024l*1024l) {
+		if (archivo.getPeso() > tamanyoMaximo*1024l*1024l) {
 			retorno = false;
 		} else {
 			//Preparamos la variable extensiones si está a null.
@@ -35,16 +51,21 @@ public class ArchivoUtils {
 				}
 			}
 			
-			//Extraemos la extensión.
-			final String extension = FilenameUtils.getExtension(archivo.getNombre()).trim().toLowerCase(Locale.ITALIAN);
-			
-			//Comprobamos si 
-			if (extension == null || extension.isEmpty()) {
+			//Si el nombre esta vacío, entonces se da por incorrecto.
+			if (archivo.getNombre() == null || archivo.getNombre().isEmpty()) {
 				retorno = false;
-			} else if (!extensiones.containsKey(extension)) {
+			} else {
+				//Extraemos la extensión.
+				final String extension = FilenameUtils.getExtension(archivo.getNombre()).trim().toLowerCase(Locale.ITALIAN);
+				
+				//Comprobamos si 
+				if (extension == null || extension.isEmpty()) {
 					retorno = false;
-			}			
+				} else if (!extensiones.containsKey(extension)) {
+						retorno = false;
+				}			
 			
+			}
 		}
 		return retorno;
 	}
