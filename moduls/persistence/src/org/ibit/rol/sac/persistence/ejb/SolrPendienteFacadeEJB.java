@@ -9,6 +9,7 @@ import javax.ejb.EJBException;
 
 import net.sf.hibernate.Criteria;
 import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
 import net.sf.hibernate.expression.Order;
@@ -182,6 +183,35 @@ public abstract class SolrPendienteFacadeEJB extends HibernateEJB {
 		}
     }
     
+    
+	/**
+	 * Cerrando todos los jobs.
+	 * 
+   	 * @ejb.interface-method
+   	 * @ejb.permission unchecked="true"
+   	 *   
+   	 */
+    public Boolean cerrarJobs()  {
+    	Session session = null;
+    	try
+    	{
+    		session = getSession();
+    		final Query query = getSession().createQuery("from SolrPendienteJob solrJob where solrJob.fechaFin is null");
+    		List<SolrPendienteJob> jobs =  query.list();
+    		for(SolrPendienteJob job : jobs) {
+    			job.setFechaFin(new Date());
+    			session.update(job);
+    		} 
+    		session.flush();
+			return true;
+	    } catch(Exception exception) {
+			throw new EJBException(exception);
+		} finally {
+			if (session != null) {
+				close(session); 
+			}
+		}
+    }
 	
     
     /**

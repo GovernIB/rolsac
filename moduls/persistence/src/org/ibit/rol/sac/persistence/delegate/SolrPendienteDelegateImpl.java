@@ -141,5 +141,12 @@ public class SolrPendienteDelegateImpl extends SolrPendienteDelegate implements 
           }
       }
 
+      public Boolean cerrarJobs() throws DelegateException {
+    	  try {
+              return getFacade().cerrarJobs();
+          } catch (RemoteException e) {
+              throw new DelegateException(e);
+          }
+      }
     
 }

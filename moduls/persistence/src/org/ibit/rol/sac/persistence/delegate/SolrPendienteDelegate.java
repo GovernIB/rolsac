@@ -69,6 +69,14 @@ public class SolrPendienteDelegate implements StatelessDelegate {
 	public boolean checkJobsActivos() throws DelegateException {
 		return impl.checkJobsActivos();
 	}
+
+	/**
+	 * Cierra todos los jobs
+	 * @return
+	 */
+	public Boolean cerrarJobs()  throws DelegateException {
+		return impl.cerrarJobs();
+	}
     
 
 
