@@ -129,9 +129,10 @@ span.sep { margin:0 1.5em; }
     width:150px; 
 }
 #cap .logos .caib_logo {        
-    height: 35px;
-    margin-top: 15px;
+    height: 80px;
+   /* margin-top: 15px;*/
     background:transparent url(../img/cap/logo.png) 0 0 no-repeat;
+    background-size:30%;
 }
 #cap .aplicacio { 
     display:block; 
