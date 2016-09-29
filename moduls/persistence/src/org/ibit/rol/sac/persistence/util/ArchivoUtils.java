@@ -32,7 +32,7 @@ public class ArchivoUtils {
 		final String sTamanyoMaximo = System.getProperty("es.caib.rolsac.solr.tamanyomaximo");
 		Long tamanyoMaximo = 10l;
 		try {
-			tamanyoMaximo = Long.valueOf(sTamanyoMaximo.trim());
+			tamanyoMaximo = Long.valueOf(sTamanyoMaximo.trim()); 
 		} catch (Exception e) {
 			log.error("Error tratanto de convertir a long el tamanyoMaximo"+sTamanyoMaximo, e);
 		}
@@ -56,7 +56,7 @@ public class ArchivoUtils {
 				retorno = false;
 			} else {
 				//Extraemos la extensión.
-				final String extension = FilenameUtils.getExtension(archivo.getNombre()).trim().toLowerCase(Locale.ITALIAN);
+				final String extension = FilenameUtils.getExtension(archivo.getNombre().trim()).toLowerCase(Locale.ITALIAN);
 				
 				//Comprobamos si 
 				if (extension == null || extension.isEmpty()) {
