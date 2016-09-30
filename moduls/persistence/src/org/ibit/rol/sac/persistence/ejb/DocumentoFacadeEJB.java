@@ -617,7 +617,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 				final TraduccionDocumento traduccion = (TraduccionDocumento)traducciones.get(keyIdioma);
 				final TraduccionProcedimiento traduccionProc = (TraduccionProcedimiento)procedimiento.getTraduccion(keyIdioma);
 		    	
-				if (traduccion != null && enumIdioma != null) {
+				if (traduccion != null && enumIdioma != null && traduccion.getArchivo() != null) {
 					
 					//Para saltarse los idiomas sin titulo.
 					if ((traduccion.getTitulo() == null || traduccion.getTitulo().isEmpty())  && enumIdioma != EnumIdiomas.CATALA) {
@@ -625,9 +625,9 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 					}
 					
 					if (ArchivoUtils.isIndexableSolr(traduccion.getArchivo())) {
-						log.debug("Es indexable con mime:" + documento.getArchivo().getMime()+" y tamanyo:" + documento.getArchivo().getPeso());
+						log.debug("Es indexable con mime:" + traduccion.getArchivo().getMime()+" y tamanyo:" + traduccion.getArchivo().getPeso());
 					} else {
-						log.debug("NO Es indexable con mime:" + documento.getArchivo().getMime()+" y tamanyo:" + documento.getArchivo().getPeso());
+						log.debug("NO Es indexable con mime:" + traduccion.getArchivo().getMime()+" y tamanyo:" + traduccion.getArchivo().getPeso());
 						continue;
 					}
 					
@@ -652,10 +652,8 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 						}
 					    
 				    	
-				    	//La entensión del archivo por mime
-				    	if (documento.getArchivo() != null) {
-				    		extension.addIdioma(enumIdioma, documento.getArchivo().getMime());
-				    	}
+				    	extension.addIdioma(enumIdioma, traduccion.getArchivo().getMime());
+				    	
 				    	
 				    	final StringBuffer textoOptional = new StringBuffer();
 						
@@ -711,7 +709,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 							}
 						}
 				    	urlsPadres.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+nombrePubObjetivo+"/tramites/tramite/"+procedimiento.getId());
-				    	urls.addIdioma(enumIdioma, "govern/rest/arxiu/" + documento.getId());
+				    	urls.addIdioma(enumIdioma, "govern/rest/arxiu/" + traduccion.getArchivo().getId());
 				    	
 				    	//Seteamos datos multidioma.
 						indexData.setTitulo(titulo);
@@ -720,10 +718,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 						indexData.setUrl(urls);
 						indexData.setUrlPadre(urlsPadres);
 						
-						TraduccionProcedimientoLocal traduccionTramite = (TraduccionProcedimientoLocal) procedimiento.getTraduccion(enumIdioma.toString());
-						if (traduccionTramite != null) {
-							searchTextOptional.addIdioma(enumIdioma, traduccionTramite.getNombre() + " " + traduccion.getArchivo().getId() + " "+ traduccionTramite.getResumen());
-						}
+						searchTextOptional.addIdioma(enumIdioma, traduccion.getTitulo()+ " "+ traduccion.getDescripcion() + " "+ traduccion.getArchivo().getNombre());
 						indexData.setSearchTextOptional(searchTextOptional);
 						indexData.setFileContent(traduccion.getArchivo().getDatos());
 						solrIndexer.indexarFichero(indexData);
@@ -816,7 +811,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 				final TraduccionDocumento traduccionDocumento = (TraduccionDocumento) documento.getTraduccion(keyIdioma);
 				final TraduccionFicha traduccionFicha = (TraduccionFicha) ficha.getTraduccion(keyIdioma);
 					
-				if (traduccionDocumento != null && enumIdioma != null) {
+				if (traduccionDocumento != null && enumIdioma != null && traduccionDocumento.getArchivo() != null) {
 						
 					//Para saltarse los idiomas sin titulo.
 					if (traduccionDocumento.getTitulo() == null || traduccionDocumento.getTitulo().isEmpty()) {
@@ -824,9 +819,9 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 					}
 						
 					if (ArchivoUtils.isIndexableSolr(traduccionDocumento.getArchivo())) {
-						log.debug("Es indexable tradDoc Ficha con id:" + traduccionDocumento.getArchivo().getId()+" y tamanyo:" + documento.getArchivo().getPeso());
+						log.debug("Es indexable tradDoc Ficha con id:" + traduccionDocumento.getArchivo().getId()+" y tamanyo:" + traduccionDocumento.getArchivo().getPeso());
 					} else {
-						log.debug("NO Es indexable tradDoc Ficha con id:" + traduccionDocumento.getArchivo().getId()+" y tamanyo:" + documento.getArchivo().getPeso());
+						log.debug("NO Es indexable tradDoc Ficha con id:" + traduccionDocumento.getArchivo().getId()+" y tamanyo:" + traduccionDocumento.getArchivo().getPeso());
 						continue;
 					}
 					
@@ -837,7 +832,6 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 						final MultilangLiteral descripcionPadre = new MultilangLiteral();		
 						final MultilangLiteral urls = new MultilangLiteral();
 						final MultilangLiteral urlsPadre = new MultilangLiteral();
-						final MultilangLiteral searchText = new MultilangLiteral();
 						final MultilangLiteral searchTextOptional = new MultilangLiteral();
 						
 						//Anyadimos idioma al enumerado.
@@ -849,12 +843,6 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 				    	if (traduccionFicha != null) {
 							descripcionPadre.addIdioma(enumIdioma, traduccionFicha.getTitulo());
 						}
-				    	
-				    	if (documento.getArchivo() == null) {
-				    		searchText.addIdioma(enumIdioma, traduccionDocumento.getTitulo()+ " "+ traduccionDocumento.getDescripcion() );
-					    }  else {
-				    		searchText.addIdioma(enumIdioma, traduccionDocumento.getTitulo()+ " "+ traduccionDocumento.getDescripcion() + " "+ documento.getArchivo().getNombre());
-				    	}
 				    	
 				    	//StringBuffer que tendra el contenido a agregar en textOptional
 				    	final StringBuffer textoOptional = new StringBuffer();
@@ -888,11 +876,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 							indexData.setUos(uos);
 						}
 						
-						if (documento.getArchivo() == null) {
-							urls.addIdioma(enumIdioma, "govern/rest/arxiu/" + documento.getId());
-						} else {
-							urls.addIdioma(enumIdioma, "govern/rest/arxiu/" + documento.getArchivo().getId());
-						}
+						urls.addIdioma(enumIdioma, "govern/rest/arxiu/" + traduccionDocumento.getArchivo().getId());						
 						
 				    	if (traduccionFicha == null || (traduccionFicha.getUrl() == null || traduccionFicha.getUrl().isEmpty())) {
 				    		urlsPadre.addIdioma(enumIdioma, "/govern/sac/fitxaRedirect.do?codi="+ficha.getId()+"&lang="+keyIdioma);
@@ -907,10 +891,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 						indexData.setDescripcionPadre(descripcionPadre);
 						indexData.setUrl(urls);
 						indexData.setUrlPadre(urlsPadre);
-						TraduccionFicha traducionTramite = (TraduccionFicha) ficha.getTraduccion(enumIdioma.toString());
-						if (traducionTramite != null) {
-							searchTextOptional.addIdioma(enumIdioma, traducionTramite.getTitulo()+ " "+ traducionTramite.getDescAbr() + " "+ traducionTramite.getDescripcion());
-						}
+						searchTextOptional.addIdioma(enumIdioma, traduccionDocumento.getTitulo()+ " "+ traduccionDocumento.getDescripcion() + " "+ traduccionDocumento.getArchivo().getNombre());
 						indexData.setSearchTextOptional(searchTextOptional);
 						
 						indexData.setFileContent(traduccionDocumento.getArchivo().getDatos());
