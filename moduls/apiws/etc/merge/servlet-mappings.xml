@@ -36,5 +36,11 @@
 
 <servlet-mapping>
     <servlet-name>apiArxiuServlet</servlet-name>
-    <url-pattern>/arxiu/*</url-pattern>
+    <url-pattern>/arxiu/apiArxiuServlet</url-pattern>
 </servlet-mapping> 
+
+<servlet-mapping>
+    <servlet-name>apiArxiuInternServlet</servlet-name>
+    <url-pattern>/arxiu/apiArxiuInternServlet</url-pattern>
+</servlet-mapping> 
+

@@ -134,7 +134,7 @@
         <javac destdir="${web.classes}"
             classpathref="web.class.path"
         	srcdir="${home.dir}/moduls/api/src"
-        	includes="**/ArxiuServlet.java, **/HibernateUtils.java"
+        	includes="**/Arxiu*Servlet.java, **/HibernateUtils.java"
             debug="${javac.debug}"
             deprecation="${javac.deprecation}"
             optimize="${javac.optimize}"

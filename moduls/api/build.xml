@@ -343,7 +343,7 @@
         <javac
             destdir="${ejb.classes}"
             classpathref="ejb.class.path"
-        	excludes="**/ArxiuServlet.java"
+        	excludes="**/Arxiu*Servlet.java"
             debug="${javac.debug}"
             deprecation="${javac.deprecation}"
             optimize="${javac.optimize}"
@@ -363,7 +363,7 @@
     <target name="ejb.server" depends="ejb.compile">
         <delete file="${ejb.product}/sac-${modul}.jar" quiet="yes"/>
         <jar jarfile="${ejb.product}/sac-${modul}.jar" basedir="${ejb.classes}"
-        	excludes="**/ArxiuServlet.class">
+        	excludes="**/Arxiu*Servlet.class">
             <manifest>
                 <attribute name="Created-By" value="UTE"/>
             	<attribute name="Class-Path" value="lib/axis.jar"/>
@@ -379,7 +379,7 @@
         <delete file="${ejb.product}/sac-${modul}-client.jar" quiet="yes"/>
         <jar jarfile="${ejb.product}/sac-${modul}-client.jar" basedir="${ejb.classes}" 
             	includes="**/resources/, **/*.class" 
-            	excludes="**/*EJB.class, **/*EJBSession.class, **/EJBUtils.class, **/BasicUtils.class, **/ArxiuServlet.class, **/query/, **/co/*.class">
+            	excludes="**/*EJB.class, **/*EJBSession.class, **/EJBUtils.class, **/BasicUtils.class, **/Arxiu*Servlet.class, **/query/, **/co/*.class">
             <manifest>
                 <attribute name="Created-By" value="UTE"/>
             </manifest>
