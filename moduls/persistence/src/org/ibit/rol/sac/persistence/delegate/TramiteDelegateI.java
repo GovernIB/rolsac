@@ -52,8 +52,11 @@ public interface TramiteDelegateI {
         
 	public abstract SolrPendienteResultado indexarSolr(SolrIndexer solrIndexer, Long idAplicacion, EnumCategoria categoria) throws DelegateException;
 	
+	public abstract SolrPendienteResultado indexarDocSolr(SolrIndexer solrIndexer, Long idAplicacion, EnumCategoria categoria) throws DelegateException;
+	
     public abstract SolrPendienteResultado desindexarSolr(SolrIndexer solrIndexer, SolrPendiente solrPendiente) throws DelegateException;
 
 	public abstract List<Long> buscarIdsTramites() throws DelegateException;
 
+	
 }

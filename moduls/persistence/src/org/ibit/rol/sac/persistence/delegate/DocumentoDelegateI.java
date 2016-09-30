@@ -37,4 +37,7 @@ public interface DocumentoDelegateI
 	public abstract List<Long> obtenerDocumentosFichaSolr(Long idFicha) throws DelegateException;
 	
 	public abstract List<Long> obtenerDocumentosProcedimientoSolr(Long idProcedimiento) throws DelegateException;
+	
+	public abstract List<Long> obtenerDocumentosTramiteSolr(Long idTramite) throws DelegateException;
+
 }

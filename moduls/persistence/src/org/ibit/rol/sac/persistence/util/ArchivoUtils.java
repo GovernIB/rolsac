@@ -29,42 +29,48 @@ public class ArchivoUtils {
 	 */
 	public static boolean isIndexableSolr(final Archivo archivo) {
 		boolean retorno = true;
-		final String sTamanyoMaximo = System.getProperty("es.caib.rolsac.solr.tamanyomaximo");
-		Long tamanyoMaximo = 10l;
-		try {
-			tamanyoMaximo = Long.valueOf(sTamanyoMaximo.trim()); 
-		} catch (Exception e) {
-			log.error("Error tratanto de convertir a long el tamanyoMaximo"+sTamanyoMaximo, e);
-		}
 		
-		if (archivo.getPeso() > tamanyoMaximo*1024l*1024l) {
+		//Si archivo es nulo, no intentar indexar.
+		if (archivo == null || archivo.getDatos() == null) {
 			retorno = false;
 		} else {
-			//Preparamos la variable extensiones si está a null.
-			if (ArchivoUtils.extensiones == null) {
-				final String ficheroPermitidos = System.getProperty("es.caib.rolsac.solr.ficheros");
-				ArchivoUtils.extensiones = new HashMap<String, String>();
-				String[] extensionesSplit = ficheroPermitidos.split(",");
-				for(String extensionSplit : extensionesSplit) {
-					//Se limpian las extensiones.
-					extensiones.put(extensionSplit.trim().toLowerCase(Locale.ITALIAN), extensionSplit);
-				}
+			final String sTamanyoMaximo = System.getProperty("es.caib.rolsac.solr.tamanyomaximo");
+			Long tamanyoMaximo = 10l;
+			try {
+				tamanyoMaximo = Long.valueOf(sTamanyoMaximo.trim()); 
+			} catch (Exception e) {
+				log.error("Error tratanto de convertir a long el tamanyoMaximo"+sTamanyoMaximo, e);
 			}
 			
-			//Si el nombre esta vacío, entonces se da por incorrecto.
-			if (archivo.getNombre() == null || archivo.getNombre().isEmpty()) {
+			if (archivo.getPeso() > tamanyoMaximo*1024l*1024l) {
 				retorno = false;
 			} else {
-				//Extraemos la extensión.
-				final String extension = FilenameUtils.getExtension(archivo.getNombre().trim()).toLowerCase(Locale.ITALIAN);
+				//Preparamos la variable extensiones si está a null.
+				if (ArchivoUtils.extensiones == null) {
+					final String ficheroPermitidos = System.getProperty("es.caib.rolsac.solr.ficheros");
+					ArchivoUtils.extensiones = new HashMap<String, String>();
+					String[] extensionesSplit = ficheroPermitidos.split(",");
+					for(String extensionSplit : extensionesSplit) {
+						//Se limpian las extensiones.
+						extensiones.put(extensionSplit.trim().toLowerCase(Locale.ITALIAN), extensionSplit);
+					}
+				}
 				
-				//Comprobamos si 
-				if (extension == null || extension.isEmpty()) {
+				//Si el nombre esta vacío, entonces se da por incorrecto.
+				if (archivo.getNombre() == null || archivo.getNombre().isEmpty()) {
 					retorno = false;
-				} else if (!extensiones.containsKey(extension)) {
+				} else {
+					//Extraemos la extensión.
+					final String extension = FilenameUtils.getExtension(archivo.getNombre().trim()).toLowerCase(Locale.ITALIAN);
+					
+					//Comprobamos si 
+					if (extension == null || extension.isEmpty()) {
 						retorno = false;
-				}			
-			
+					} else if (!extensiones.containsKey(extension)) {
+							retorno = false;
+					}			
+				
+				}
 			}
 		}
 		return retorno;

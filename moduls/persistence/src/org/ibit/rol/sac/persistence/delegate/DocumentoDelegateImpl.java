@@ -168,7 +168,13 @@ public class DocumentoDelegateImpl implements  StatelessDelegate, DocumentoDeleg
         throw new DelegateException(e);
     }
 	}
-
-	
+ 
+	public List<Long> obtenerDocumentosTramiteSolr(final Long idTramite) throws DelegateException {
+		try {
+            return getFacade().obtenerDocumentosTramiteSolr(idTramite);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+	}	
     
 }

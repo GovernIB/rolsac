@@ -98,6 +98,11 @@ public class TramiteDelegate  {
     	return impl.indexarSolr(solrIndexer, idAplicacion, categoria);        
     }
     
+	public SolrPendienteResultado indexarDocSolr(SolrIndexer solrIndexer, Long idAplicacion, EnumCategoria categoria) throws DelegateException {
+    	return impl.indexarDocSolr(solrIndexer, idAplicacion, categoria);        
+    }
+	
+	
     public SolrPendienteResultado desindexarSolr(SolrIndexer solrIndexer,  SolrPendiente solrPendiente) throws DelegateException {
     	return impl.desindexarSolr(solrIndexer, solrPendiente);    
     }
@@ -105,4 +110,5 @@ public class TramiteDelegate  {
 	public List<Long> buscarIdsTramites() throws DelegateException{
 		return impl.buscarIdsTramites();
 	}
+
 }

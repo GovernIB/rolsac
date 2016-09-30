@@ -243,6 +243,7 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 		try {
 			solrIndexer = obtenerParamIndexer();
 			solrIndexer.desindexarAplicacion(EnumCategoria.ROLSAC_NORMATIVA);
+			solrIndexer.desindexarAplicacion(EnumCategoria.ROLSAC_NORMATIVA_DOCUMENTO);
 		} catch (Exception e) {
 			log.debug("Error en indexarTodoNormativa cuando se desindexa", e);
 			return;
@@ -316,19 +317,22 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 	 * @throws ExcepcionSolrApi
 	 */
 	public  void indexarTodoTramite(final SolrPendienteJob solrPendienteJob)  {
-		log.debug("INDEXAR TODO NORMATIVA");
+		log.debug("INDEXAR TODO TRAMITE");
 		SolrIndexer solrIndexer  = null;
 		try {
 			solrIndexer = obtenerParamIndexer();
 			solrIndexer.desindexarAplicacion(EnumCategoria.ROLSAC_TRAMITE);
+			solrIndexer.desindexarAplicacion(EnumCategoria.ROLSAC_TRAMITE_DOCUMENTO);
 		} catch (Exception e) {
 			log.debug("Error en indexarTodoTramite cuando se desindexa", e);
 			return;
 		}
 		
 		final TramiteDelegate tramDelegate = DelegateUtil.getTramiteDelegate();
+		final DocumentoDelegate docuDelegate = DelegateUtil.getDocumentoDelegate();
 		final SolrPendienteJobDelegate solrDelegate = DelegateUtil.getSolrPendienteJobDelegate();
-    	//Obtiene los trámites
+    	
+		//Obtiene los trámites
     	List<Long> listTram = null; 
 		try {
 			listTram = tramDelegate.buscarIdsTramites();
@@ -345,6 +349,14 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
     		solrPendienteJob.setTotalTramite( Float.valueOf( iTram * 100/ totalTram ));
     		try {
     			solrDelegate.indexarPendiente(solrIndexer, tramDelegate, idTramite, EnumCategoria.ROLSAC_TRAMITE, solrPendienteJob);
+    			List<Long> idDocumentos = docuDelegate.obtenerDocumentosTramiteSolr(idTramite);
+        		for (Long idDocumento : idDocumentos) {
+        			try{
+        				solrDelegate.indexarPendiente(solrIndexer, tramDelegate, idDocumento, EnumCategoria.ROLSAC_TRAMITE_DOCUMENTO, solrPendienteJob);	        				
+	        		} catch (Exception e) {
+    					log.error("Se ha producido un error en documento procedimiento con id " + idDocumento);
+    				}
+				}
 			} catch (Exception e) {
 				log.error("Se ha producido un error en el trámite con id " + idTramite);
 			}

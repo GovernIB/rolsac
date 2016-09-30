@@ -232,6 +232,14 @@ public class TramiteDelegateImpl implements StatelessDelegate, TramiteDelegateI 
         }
     }
 	
+	public SolrPendienteResultado indexarDocSolr(final SolrIndexer solrIndexer, Long idAplicacion, EnumCategoria categoria) throws DelegateException {
+    	try {
+    		return getFacade().indexarDocSolr(solrIndexer, idAplicacion, categoria);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+	
     public SolrPendienteResultado desindexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente) throws DelegateException {
     	try {
     		return getFacade().desindexarSolr(solrIndexer, solrPendiente);
@@ -247,4 +255,5 @@ public class TramiteDelegateImpl implements StatelessDelegate, TramiteDelegateI 
             throw new DelegateException(e);
         }
 	}
+	
 }

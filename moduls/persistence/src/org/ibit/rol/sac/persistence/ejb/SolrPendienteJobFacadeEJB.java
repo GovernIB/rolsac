@@ -190,7 +190,11 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
     	
     	try
     	{
-    		delegate.indexarSolr(solrIndexer,idElemento, categoria);
+    		if (categoria == EnumCategoria.ROLSAC_TRAMITE) {
+    			delegate.indexarSolr(solrIndexer,idElemento, categoria);
+    		} else if (categoria == EnumCategoria.ROLSAC_TRAMITE_DOCUMENTO) {
+    			delegate.indexarDocSolr(solrIndexer, idElemento, categoria);
+    		}  
 			if (sorlPendienteJob.isTotalTramiteActualizable()) {
     			actualizarJob(sorlPendienteJob);
 			}

@@ -60,6 +60,7 @@ import es.caib.solr.api.model.PathUO;
 import es.caib.solr.api.model.types.EnumAplicacionId;
 import es.caib.solr.api.model.types.EnumCategoria;
 import es.caib.solr.api.model.types.EnumIdiomas;
+import es.caib.solr.api.util.Utilidades;
 
 
 /**
@@ -1268,7 +1269,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 					//Seteamos los primeros campos multiidiomas: Titulo y Descripción (y padre).
 					titulo.addIdioma(enumIdioma, traduccion.getArchivo().getNombre());
 					descripcion.addIdioma(enumIdioma, traduccion.getArchivo().getMime());
-					descripcionPadre.addIdioma(enumIdioma, traduccion.getTitulo());
+					descripcionPadre.addIdioma(enumIdioma, Utilidades.sanitizarTexto(traduccion.getTitulo()));
 					
 					urls.addIdioma(enumIdioma, "/normativa/archivo.do?id=" + traduccion.getArchivo().getId() + "&lang=" + keyIdioma);
 					if (normativa.getBoletin() == null && (traduccion.getEnlace() == null || traduccion.getEnlace().isEmpty())) {
@@ -1286,6 +1287,26 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 				}
 			}
 			
+			//Unidades administrativas de las fichas.
+			UnidadAdministrativa unidadAdministrativa = normativa.getUnidadAdministrativa();
+			if (unidadAdministrativa != null) {
+				List<PathUO> uos = new ArrayList<PathUO>();
+				PathUO uo = new PathUO();
+				List<String> path = new ArrayList<String>();
+				
+				//Hay que extraer la id de los predecesores y luego el de uno mismo
+				Set<UnidadAdministrativa> predecesores = unidadAdministrativa.getPredecesores();
+				for(UnidadAdministrativa predecesor : predecesores) {
+					if (predecesor != null && predecesor.getId() != null) {
+						path.add(predecesor.getId().toString());
+					}
+				}
+				
+				uo.setPath(path);
+				uos.add(uo);
+				indexData.setUos(uos);
+			}
+			
 			//Seteamos datos multidioma.
 			indexData.setTitulo(titulo);
 			indexData.setDescripcion(descripcion);
@@ -1299,7 +1320,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			return new SolrPendienteResultado(true);
 		} catch(Exception exception) {
 			log.error("Error en normativafacade intentando indexar.", exception);
-			String mensajeError;
+			String mensajeError; 
 			if (exception.getMessage() == null) {
 				mensajeError = exception.toString();
 			} else {

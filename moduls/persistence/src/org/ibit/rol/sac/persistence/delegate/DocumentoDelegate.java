@@ -71,4 +71,8 @@ public class DocumentoDelegate  implements DocumentoDelegateI
 	public List<Long> obtenerDocumentosProcedimientoSolr(Long idProcedimiento) throws DelegateException {
 		 return impl.obtenerDocumentosProcedimientoSolr(idProcedimiento);        
 	}
+	
+	public List<Long> obtenerDocumentosTramiteSolr(Long idTramite) throws DelegateException{
+		return impl.obtenerDocumentosTramiteSolr(idTramite);
+	}
 }

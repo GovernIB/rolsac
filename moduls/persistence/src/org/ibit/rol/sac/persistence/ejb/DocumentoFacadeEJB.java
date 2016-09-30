@@ -36,7 +36,9 @@ import org.ibit.rol.sac.model.TraduccionHechoVital;
 import org.ibit.rol.sac.model.TraduccionMateria;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimiento;
+import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
+import org.ibit.rol.sac.model.TraduccionTramite;
 import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -51,6 +53,7 @@ import org.ibit.rol.sac.persistence.ws.Actualizador;
 
 import es.caib.solr.api.SolrIndexer;
 import es.caib.solr.api.model.IndexData;
+import es.caib.solr.api.model.IndexFile;
 import es.caib.solr.api.model.MultilangLiteral;
 import es.caib.solr.api.model.PathUO;
 import es.caib.solr.api.model.types.EnumAplicacionId;
@@ -530,7 +533,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 	@SuppressWarnings("deprecation")
 	public SolrPendienteResultado indexarSolrProcedimientoDoc(final SolrIndexer solrIndexer, final Long idElemento, final EnumCategoria categoria) {
 		log.debug("DocumentoFacadeEJB.indexarSolrProcedimientoDoc. idElemento:" + idElemento+" categoria:"+ categoria);
-		
+		boolean indexacion = false;
 		try {
 			//Paso 0. Obtenemos la ficha y comprobamos si se puede indexar.
 			final Documento documento = obtenerDocumentoSolr(idElemento);
@@ -542,140 +545,17 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 			if (!isIndexable) {
 				return new SolrPendienteResultado(true, "No se puede indexar");
 			}
-			
-
-			if (ArchivoUtils.isIndexableSolr(documento.getArchivo())) {
-				log.debug("Es indexable con mime:" + documento.getArchivo().getMime()+" y tamanyo:" + documento.getArchivo().getPeso());
-			} else {
-				log.debug("NO Es indexable con mime:" + documento.getArchivo().getMime()+" y tamanyo:" + documento.getArchivo().getPeso());
-				return new SolrPendienteResultado(true, "El documento no cumple los requisitos.");
-			}
-			
+						
 			//Obtenemos el procedimiento por separado porque daba un error de lazy hibernate
 			ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
 			ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimiento(documento.getProcedimiento().getId());
 			
 			//Preparamos la información básica: id elemento, aplicacionID = ROLSAC y la categoria de tipo ficha.
-			final IndexData indexData = new IndexData();
+			final IndexFile indexData = new IndexFile();
 			indexData.setCategoria(categoria);
 			indexData.setCategoriaPadre(EnumCategoria.ROLSAC_PROCEDIMIENTO);
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
 			indexData.setElementoId(idElemento.toString());
-			
-			//Iteramos las traducciones
-			final Map<String, Traduccion> traducciones = documento.getTraduccionMap();
-			final MultilangLiteral titulo = new MultilangLiteral();
-			final MultilangLiteral descripcion = new MultilangLiteral();
-			final MultilangLiteral descripcionPadre = new MultilangLiteral();
-			final MultilangLiteral urls = new MultilangLiteral();
-			final MultilangLiteral urlsPadres = new MultilangLiteral();		
-			final MultilangLiteral searchText = new MultilangLiteral();
-			final MultilangLiteral extension = new MultilangLiteral();
-			final List<EnumIdiomas> idiomas = new ArrayList<EnumIdiomas>();
-			
-			final String nomUnidadAministrativa;
-			if (procedimiento.getUnidadAdministrativa() == null) {
-				nomUnidadAministrativa = "";
-			} else {
-				nomUnidadAministrativa = procedimiento.getUnidadAdministrativa().getNombre();
-			}
-			
-			//Recorremos las traducciones
-			for (String keyIdioma : traducciones.keySet()) {
-				final EnumIdiomas enumIdioma = EnumIdiomas.fromString(keyIdioma);
-				final TraduccionDocumento traduccion = (TraduccionDocumento)traducciones.get(keyIdioma);
-				final TraduccionProcedimiento traduccionProc = (TraduccionProcedimiento)procedimiento.getTraduccion(keyIdioma);
-		    	
-				if (traduccion != null && enumIdioma != null) {
-					
-					//Para saltarse los idiomas sin titulo.
-					if ((traduccion.getTitulo() == null || traduccion.getTitulo().isEmpty())  && enumIdioma != EnumIdiomas.CATALA) {
-						continue;
-					}
-					
-					//Anyadimos idioma al enumerado.
-					idiomas.add(enumIdioma);
-					
-					//Seteamos los primeros campos multiidiomas: Titulo, Descripción y el search text.
-					titulo.addIdioma(enumIdioma, traduccion.getTitulo());
-					descripcion.addIdioma(enumIdioma, traduccion.getDescripcion());
-					if (traduccionProc != null) {
-						descripcionPadre.addIdioma(enumIdioma, traduccionProc.getNombre());
-					}
-				    searchText.addIdioma(enumIdioma, traduccion.getTitulo()+ " "+ documento.getArchivo().getNombre()+ " "+ traduccion.getDescripcion());
-			    	
-			    	//La entensión del archivo por mime
-			    	if (documento.getArchivo() != null) {
-			    		extension.addIdioma(enumIdioma, documento.getArchivo().getMime());
-			    	}
-			    	
-			    	final StringBuffer textoOptional = new StringBuffer();
-					
-			    	//materia
-			    	for(Materia materia : procedimiento.getMaterias()) {
-			    		final TraduccionMateria traduccionMateria = (TraduccionMateria) materia.getTraduccion(keyIdioma);
-			    		if (traduccionMateria != null) {
-							textoOptional.append(" ");
-							textoOptional.append(traduccionMateria.getNombre());
-							textoOptional.append(" ");
-							textoOptional.append(traduccionMateria.getDescripcion());
-							textoOptional.append(" ");
-							textoOptional.append(traduccionMateria.getPalabrasclave());
-			    		}
-					}
-			    	
-			    	//hechos vitales
-					for(HechoVitalProcedimiento hecho : procedimiento.getHechosVitalesProcedimientos()) {
-						final TraduccionHechoVital traduccionHechoVital =  (TraduccionHechoVital) hecho.getHechoVital().getTraduccionFront(keyIdioma);
-						if (traduccionHechoVital != null) {
-							textoOptional.append(" ");
-							textoOptional.append(traduccionHechoVital.getNombre());
-							textoOptional.append(" ");
-							textoOptional.append(traduccionHechoVital.getDescripcion());
-							textoOptional.append(" ");
-							textoOptional.append(traduccionHechoVital.getPalabrasclave());
-						}
-					}
-					
-					//Publico objetivo, para añadirlo como id y para extraer el titulo para la url
-					String nombrePubObjetivo = "";
-					for( PublicoObjetivo publicoObjectivo :  procedimiento.getPublicosObjetivo()) {
-						final TraduccionPublicoObjetivo traduccionPO = (TraduccionPublicoObjetivo) publicoObjectivo.getTraduccion(keyIdioma);
-						if (traduccionPO != null) {
-							nombrePubObjetivo = traduccionPO.getTitulo();
-						}
-					}
-					
-					
-					//UO
-					textoOptional.append(" ");
-					textoOptional.append(nomUnidadAministrativa);
-					
-			    	//Nombre familia
-					textoOptional.append(procedimiento.getNombreFamilia());
-					
-					//Normativa asociadas
-					for(Normativa normativa : procedimiento.getNormativas()) {
-						final TraduccionNormativa traduccionNormativa = (TraduccionNormativa) normativa.getTraduccion(keyIdioma);
-						if (traduccionNormativa != null) {
-							textoOptional.append(traduccionNormativa.getTitulo());
-							textoOptional.append(" ");
-						}
-					}
-			    	urlsPadres.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+nombrePubObjetivo+"/tramites/tramite/"+procedimiento.getId());
-			    	urls.addIdioma(enumIdioma, "govern/rest/arxiu/" + documento.getId());
-				}
-			}
-			
-			//Seteamos datos multidioma.
-			indexData.setTitulo(titulo);
-			indexData.setDescripcion(descripcion);
-			indexData.setDescripcionPadre(descripcionPadre);
-			indexData.setUrl(urls);
-			indexData.setUrlPadre(urlsPadres);
-			indexData.setSearchText(searchText);
-			indexData.setIdiomas(idiomas);
-			
 			
 			//materia
 			final List<String> materiasId = new ArrayList<String>();		
@@ -721,9 +601,147 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 				}
 			}
 			
+			final String nomUnidadAministrativa;
+			if (procedimiento.getUnidadAdministrativa() == null) {
+				nomUnidadAministrativa = "";
+			} else {
+				nomUnidadAministrativa = procedimiento.getUnidadAdministrativa().getNombre();
+			}
+			
+			//Traducciones
+			final Map<String, Traduccion> traducciones = documento.getTraduccionMap();
+			
+			//Recorremos las traducciones
+			for (String keyIdioma : traducciones.keySet()) {
+				final EnumIdiomas enumIdioma = EnumIdiomas.fromString(keyIdioma);
+				final TraduccionDocumento traduccion = (TraduccionDocumento)traducciones.get(keyIdioma);
+				final TraduccionProcedimiento traduccionProc = (TraduccionProcedimiento)procedimiento.getTraduccion(keyIdioma);
+		    	
+				if (traduccion != null && enumIdioma != null) {
+					
+					//Para saltarse los idiomas sin titulo.
+					if ((traduccion.getTitulo() == null || traduccion.getTitulo().isEmpty())  && enumIdioma != EnumIdiomas.CATALA) {
+						continue;
+					}
+					
+					if (ArchivoUtils.isIndexableSolr(traduccion.getArchivo())) {
+						log.debug("Es indexable con mime:" + documento.getArchivo().getMime()+" y tamanyo:" + documento.getArchivo().getPeso());
+					} else {
+						log.debug("NO Es indexable con mime:" + documento.getArchivo().getMime()+" y tamanyo:" + documento.getArchivo().getPeso());
+						continue;
+					}
+					
+					try {
+						//Anyadimos idioma al enumerado.
+						indexData.setIdioma(enumIdioma);
+						
+						final MultilangLiteral titulo = new MultilangLiteral();
+						final MultilangLiteral descripcion = new MultilangLiteral();
+						final MultilangLiteral descripcionPadre = new MultilangLiteral();
+						final MultilangLiteral urls = new MultilangLiteral();
+						final MultilangLiteral urlsPadres = new MultilangLiteral();		
+						final MultilangLiteral searchTextOptional = new MultilangLiteral();
+						
+						final MultilangLiteral extension = new MultilangLiteral();
+						
+						//Seteamos los primeros campos multiidiomas: Titulo, Descripción y el search text.
+						titulo.addIdioma(enumIdioma, traduccion.getTitulo());
+						descripcion.addIdioma(enumIdioma, traduccion.getDescripcion());
+						if (traduccionProc != null) {
+							descripcionPadre.addIdioma(enumIdioma, traduccionProc.getNombre());
+						}
+					    
+				    	
+				    	//La entensión del archivo por mime
+				    	if (documento.getArchivo() != null) {
+				    		extension.addIdioma(enumIdioma, documento.getArchivo().getMime());
+				    	}
+				    	
+				    	final StringBuffer textoOptional = new StringBuffer();
+						
+				    	//materia
+				    	for(Materia materia : procedimiento.getMaterias()) {
+				    		final TraduccionMateria traduccionMateria = (TraduccionMateria) materia.getTraduccion(keyIdioma);
+				    		if (traduccionMateria != null) {
+								textoOptional.append(" ");
+								textoOptional.append(traduccionMateria.getNombre());
+								textoOptional.append(" ");
+								textoOptional.append(traduccionMateria.getDescripcion());
+								textoOptional.append(" ");
+								textoOptional.append(traduccionMateria.getPalabrasclave());
+				    		}
+						}
+				    	
+				    	//hechos vitales
+						for(HechoVitalProcedimiento hecho : procedimiento.getHechosVitalesProcedimientos()) {
+							final TraduccionHechoVital traduccionHechoVital =  (TraduccionHechoVital) hecho.getHechoVital().getTraduccionFront(keyIdioma);
+							if (traduccionHechoVital != null) {
+								textoOptional.append(" ");
+								textoOptional.append(traduccionHechoVital.getNombre());
+								textoOptional.append(" ");
+								textoOptional.append(traduccionHechoVital.getDescripcion());
+								textoOptional.append(" ");
+								textoOptional.append(traduccionHechoVital.getPalabrasclave());
+							}
+						}
+						
+						//Publico objetivo, para añadirlo como id y para extraer el titulo para la url
+						String nombrePubObjetivo = "";
+						for( PublicoObjetivo publicoObjectivo :  procedimiento.getPublicosObjetivo()) {
+							final TraduccionPublicoObjetivo traduccionPO = (TraduccionPublicoObjetivo) publicoObjectivo.getTraduccion(keyIdioma);
+							if (traduccionPO != null) {
+								nombrePubObjetivo = traduccionPO.getTitulo();
+							}
+						}
+						
+						
+						//UO
+						textoOptional.append(" ");
+						textoOptional.append(nomUnidadAministrativa);
+						
+				    	//Nombre familia
+						textoOptional.append(procedimiento.getNombreFamilia());
+						
+						//Normativa asociadas
+						for(Normativa normativa : procedimiento.getNormativas()) {
+							final TraduccionNormativa traduccionNormativa = (TraduccionNormativa) normativa.getTraduccion(keyIdioma);
+							if (traduccionNormativa != null) {
+								textoOptional.append(traduccionNormativa.getTitulo());
+								textoOptional.append(" ");
+							}
+						}
+				    	urlsPadres.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+nombrePubObjetivo+"/tramites/tramite/"+procedimiento.getId());
+				    	urls.addIdioma(enumIdioma, "govern/rest/arxiu/" + documento.getId());
+				    	
+				    	//Seteamos datos multidioma.
+						indexData.setTitulo(titulo);
+						indexData.setDescripcion(descripcion);
+						indexData.setDescripcionPadre(descripcionPadre);
+						indexData.setUrl(urls);
+						indexData.setUrlPadre(urlsPadres);
+						
+						TraduccionProcedimientoLocal traduccionTramite = (TraduccionProcedimientoLocal) procedimiento.getTraduccion(enumIdioma.toString());
+						if (traduccionTramite != null) {
+							searchTextOptional.addIdioma(enumIdioma, traduccionTramite.getNombre() + " " + traduccion.getArchivo().getId() + " "+ traduccionTramite.getResumen());
+						}
+						indexData.setSearchTextOptional(searchTextOptional);
+						indexData.setFileContent(traduccion.getArchivo().getDatos());
+						solrIndexer.indexarFichero(indexData);
+						indexacion = true;	
+						
+					} catch(Exception exceptionSolr) {
+						log.error("Error indexando un documento de procedimiento. DocID:" + documento.getId()+" Idioma:" + enumIdioma, exceptionSolr);
+					}
+				}
+			}
+			
+			
+			
+			
+			
+			
 		
-			solrIndexer.indexarContenido(indexData);
-			return new SolrPendienteResultado(true);
+			return new SolrPendienteResultado(indexacion);
 		} catch(Exception exception) {
 			log.error("Error en documentofacade intentando indexar.", exception);
 			String mensajeError;
@@ -745,7 +763,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 	@SuppressWarnings("deprecation")
 	public SolrPendienteResultado indexarSolrFichaDoc(final SolrIndexer solrIndexer, final Long idElemento, final EnumCategoria categoria) {
 		log.debug("DocumentoFacadeEJB.indexarSolrFichaDoc. idElemento:" + idElemento+" categoria:"+ categoria);
-		
+		boolean indexacion = false;
 		try {
 			//Paso 0. Obtenemos la ficha documento y vemos si es indexable.
 			final Documento documento = obtenerDocumentoSolr(idElemento);
@@ -759,120 +777,17 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 				return new SolrPendienteResultado(true, "No se puede indexar");
 			}
 			
-
-			if (ArchivoUtils.isIndexableSolr(documento.getArchivo())) {
-				log.debug("Es indexable con mime:" + documento.getArchivo().getMime()+" y tamanyo:" + documento.getArchivo().getPeso());
-			} else {
-				log.debug("NO Es indexable con mime:" + documento.getArchivo().getMime()+" y tamanyo:" + documento.getArchivo().getPeso());
-				return new SolrPendienteResultado(true, "El documento no cumple los requisitos.");
-			}
 			
 			//Obtenemos la ficha por separado porque daba un error de lazy hibernate
 			FichaDelegate fichaDelegate = DelegateUtil.getFichaDelegate();
 			Ficha ficha = fichaDelegate.obtenerFicha(documento.getFicha().getId());
 
 			//Preparamos la información básica: id elemento, aplicacionID = ROLSAC, la categoria de tipo ficha documento, la categoria del padre de tipo ficha.
-			final IndexData indexData = new IndexData();
+			final IndexFile indexData = new IndexFile();
 			indexData.setCategoria(categoria);
 			indexData.setCategoriaPadre(EnumCategoria.ROLSAC_FICHA);
 			indexData.setElementoId(idElemento.toString());
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
-			
-			//Iteramos las traducciones
-			final MultilangLiteral titulo = new MultilangLiteral();
-			final MultilangLiteral descripcion = new MultilangLiteral();
-			final MultilangLiteral descripcionPadre = new MultilangLiteral();		
-			final MultilangLiteral urls = new MultilangLiteral();
-			final MultilangLiteral urlsPadre = new MultilangLiteral();
-			final MultilangLiteral searchText = new MultilangLiteral();
-			final MultilangLiteral searchTextOptional = new MultilangLiteral();
-			final List<EnumIdiomas> idiomas = new ArrayList<EnumIdiomas>();
-					
-			//Recorremos las traducciones
-			for (String keyIdioma : documento.getTraduccionMap().keySet()) {
-				final EnumIdiomas enumIdioma = EnumIdiomas.fromString(keyIdioma);
-				final TraduccionDocumento traduccionDocumento = (TraduccionDocumento) documento.getTraduccion(keyIdioma);
-				final TraduccionFicha traduccionFicha = (TraduccionFicha) ficha.getTraduccion(keyIdioma);
-				
-				if (traduccionDocumento != null && enumIdioma != null) {
-					
-					//Para saltarse los idiomas sin titulo.
-					if (traduccionDocumento.getTitulo() == null || traduccionDocumento.getTitulo().isEmpty()) {
-						continue;
-					}
-					
-					//Anyadimos idioma al enumerado.
-					idiomas.add(enumIdioma);
-					
-					//Seteamos los primeros campos multiidiomas: Titulo, Descripción (y padre) y el search text.
-					titulo.addIdioma(enumIdioma, traduccionDocumento.getTitulo());
-					descripcion.addIdioma(enumIdioma, traduccionDocumento.getDescripcion());
-			    	if (traduccionFicha != null) {
-						descripcionPadre.addIdioma(enumIdioma, traduccionFicha.getTitulo());
-					}
-			    	
-			    	if (documento.getArchivo() == null) {
-			    		searchText.addIdioma(enumIdioma, traduccionDocumento.getTitulo()+ " "+ traduccionDocumento.getDescripcion() );
-				    }  else {
-			    		searchText.addIdioma(enumIdioma, traduccionDocumento.getTitulo()+ " "+ traduccionDocumento.getDescripcion() + " "+ documento.getArchivo().getNombre());
-			    	}
-			    	
-			    	//StringBuffer que tendra el contenido a agregar en textOptional
-			    	final StringBuffer textoOptional = new StringBuffer();
-					
-			    	String fichaUAId = "";
-					//Unidades administrativas de las fichas.
-					for (FichaUA fichaUA : ficha.getFichasua()) {
-						if (fichaUAId.isEmpty()) {
-							fichaUAId = fichaUA.getId().toString();
-						}
-						
-						TraduccionUA traduccionUA = ((TraduccionUA)fichaUA.getUnidadAdministrativa().getTraduccion(keyIdioma));
-						if (traduccionUA != null) {
-							textoOptional.append(traduccionUA.getNombre());
-							textoOptional.append(" ");
-						}
-						
-						List<PathUO> uos = new ArrayList<PathUO>();
-						PathUO uo = new PathUO();
-						List<String> path = new ArrayList<String>();
-						
-						//Hay que extraer la id de los predecesores y luego el de uno mismo
-						Set<UnidadAdministrativa> predecesores = fichaUA.getUnidadAdministrativa().getPredecesores();
-						for(UnidadAdministrativa predecesor : predecesores) {
-							path.add(predecesor.getId().toString());
-						}
-						path.add( fichaUA.getUnidadAdministrativa().getId().toString());
-						
-						uo.setPath(path);
-						uos.add(uo);
-						indexData.setUos(uos);
-					}
-					
-					if (documento.getArchivo() == null) {
-						urls.addIdioma(enumIdioma, "govern/rest/arxiu/" + documento.getId());
-					} else {
-						urls.addIdioma(enumIdioma, "govern/rest/arxiu/" + documento.getArchivo().getId());
-					}
-					
-			    	if (traduccionFicha == null || (traduccionFicha.getUrl() == null || traduccionFicha.getUrl().isEmpty())) {
-			    		urlsPadre.addIdioma(enumIdioma, "/govern/sac/fitxaRedirect.do?codi="+ficha.getId()+"&lang="+keyIdioma);
-			    	} else {
-			    		String idUA = "{#UA:"+fichaUAId+"}";
-			    		urlsPadre.addIdioma(enumIdioma, "/govern/sac/fitxa.do?codi="+ documento.getId() + "&coduo=" + idUA + "&lang=" + keyIdioma);
-			    	}
-				}
-			}
-			
-			//Seteamos datos multidioma.
-			indexData.setTitulo(titulo);
-			indexData.setDescripcion(descripcion);
-			indexData.setDescripcionPadre(descripcionPadre);
-			indexData.setUrl(urls);
-			indexData.setUrlPadre(urlsPadre);
-			indexData.setSearchText(searchText);
-			indexData.setSearchTextOptional(searchTextOptional);
-			indexData.setIdiomas(idiomas);
 			
 			//Datos de ids Materia
 			final List<String> materiasId = new ArrayList<String>();		
@@ -894,9 +809,122 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 			indexData.setFechaPublicacion(ficha.getFechaPublicacion());
 			indexData.setFechaCaducidad(ficha.getFechaCaducidad());
 			indexData.setInterno(false);
+					
+			//Recorremos las traducciones
+			for (String keyIdioma : documento.getTraduccionMap().keySet()) {
+				final EnumIdiomas enumIdioma = EnumIdiomas.fromString(keyIdioma);
+				final TraduccionDocumento traduccionDocumento = (TraduccionDocumento) documento.getTraduccion(keyIdioma);
+				final TraduccionFicha traduccionFicha = (TraduccionFicha) ficha.getTraduccion(keyIdioma);
+					
+				if (traduccionDocumento != null && enumIdioma != null) {
+						
+					//Para saltarse los idiomas sin titulo.
+					if (traduccionDocumento.getTitulo() == null || traduccionDocumento.getTitulo().isEmpty()) {
+						continue;
+					}
+						
+					if (ArchivoUtils.isIndexableSolr(traduccionDocumento.getArchivo())) {
+						log.debug("Es indexable tradDoc Ficha con id:" + traduccionDocumento.getArchivo().getId()+" y tamanyo:" + documento.getArchivo().getPeso());
+					} else {
+						log.debug("NO Es indexable tradDoc Ficha con id:" + traduccionDocumento.getArchivo().getId()+" y tamanyo:" + documento.getArchivo().getPeso());
+						continue;
+					}
+					
+					try {						
+						//Iteramos las traducciones
+						final MultilangLiteral titulo = new MultilangLiteral();
+						final MultilangLiteral descripcion = new MultilangLiteral();
+						final MultilangLiteral descripcionPadre = new MultilangLiteral();		
+						final MultilangLiteral urls = new MultilangLiteral();
+						final MultilangLiteral urlsPadre = new MultilangLiteral();
+						final MultilangLiteral searchText = new MultilangLiteral();
+						final MultilangLiteral searchTextOptional = new MultilangLiteral();
+						
+						//Anyadimos idioma al enumerado.
+						indexData.setIdioma(enumIdioma);
+						
+						//Seteamos los primeros campos multiidiomas: Titulo, Descripción (y padre) y el search text.
+						titulo.addIdioma(enumIdioma, traduccionDocumento.getTitulo());
+						descripcion.addIdioma(enumIdioma, traduccionDocumento.getDescripcion());
+				    	if (traduccionFicha != null) {
+							descripcionPadre.addIdioma(enumIdioma, traduccionFicha.getTitulo());
+						}
+				    	
+				    	if (documento.getArchivo() == null) {
+				    		searchText.addIdioma(enumIdioma, traduccionDocumento.getTitulo()+ " "+ traduccionDocumento.getDescripcion() );
+					    }  else {
+				    		searchText.addIdioma(enumIdioma, traduccionDocumento.getTitulo()+ " "+ traduccionDocumento.getDescripcion() + " "+ documento.getArchivo().getNombre());
+				    	}
+				    	
+				    	//StringBuffer que tendra el contenido a agregar en textOptional
+				    	final StringBuffer textoOptional = new StringBuffer();
+						
+				    	String fichaUAId = "";
+						//Unidades administrativas de las fichas.
+						for (FichaUA fichaUA : ficha.getFichasua()) {
+							if (fichaUAId.isEmpty()) {
+								fichaUAId = fichaUA.getId().toString();
+							}
+							
+							TraduccionUA traduccionUA = ((TraduccionUA)fichaUA.getUnidadAdministrativa().getTraduccion(keyIdioma));
+							if (traduccionUA != null) {
+								textoOptional.append(traduccionUA.getNombre());
+								textoOptional.append(" ");
+							}
+							
+							List<PathUO> uos = new ArrayList<PathUO>();
+							PathUO uo = new PathUO();
+							List<String> path = new ArrayList<String>();
+							
+							//Hay que extraer la id de los predecesores y luego el de uno mismo
+							Set<UnidadAdministrativa> predecesores = fichaUA.getUnidadAdministrativa().getPredecesores();
+							for(UnidadAdministrativa predecesor : predecesores) {
+								path.add(predecesor.getId().toString());
+							}
+							path.add( fichaUA.getUnidadAdministrativa().getId().toString());
+							
+							uo.setPath(path);
+							uos.add(uo);
+							indexData.setUos(uos);
+						}
+						
+						if (documento.getArchivo() == null) {
+							urls.addIdioma(enumIdioma, "govern/rest/arxiu/" + documento.getId());
+						} else {
+							urls.addIdioma(enumIdioma, "govern/rest/arxiu/" + documento.getArchivo().getId());
+						}
+						
+				    	if (traduccionFicha == null || (traduccionFicha.getUrl() == null || traduccionFicha.getUrl().isEmpty())) {
+				    		urlsPadre.addIdioma(enumIdioma, "/govern/sac/fitxaRedirect.do?codi="+ficha.getId()+"&lang="+keyIdioma);
+				    	} else {
+				    		String idUA = "{#UA:"+fichaUAId+"}";
+				    		urlsPadre.addIdioma(enumIdioma, "/govern/sac/fitxa.do?codi="+ documento.getId() + "&coduo=" + idUA + "&lang=" + keyIdioma);
+				    	}
+				    	
+				    	//Seteamos datos multidioma.
+						indexData.setTitulo(titulo);
+						indexData.setDescripcion(descripcion);
+						indexData.setDescripcionPadre(descripcionPadre);
+						indexData.setUrl(urls);
+						indexData.setUrlPadre(urlsPadre);
+						TraduccionFicha traducionTramite = (TraduccionFicha) ficha.getTraduccion(enumIdioma.toString());
+						if (traducionTramite != null) {
+							searchTextOptional.addIdioma(enumIdioma, traducionTramite.getTitulo()+ " "+ traducionTramite.getDescAbr() + " "+ traducionTramite.getDescripcion());
+						}
+						indexData.setSearchTextOptional(searchTextOptional);
+						
+						indexData.setFileContent(traduccionDocumento.getArchivo().getDatos());
+						solrIndexer.indexarFichero(indexData);
+						indexacion = true;	
+					} catch(Exception exceptionSolr) {
+						log.error("Error indexando un documento de ficha. DocID:" + documento.getId()+" Idioma:" + enumIdioma, exceptionSolr);
+					}
+				}
+			}
 		
-			solrIndexer.indexarContenido(indexData);
-			return new SolrPendienteResultado(true);
+			
+			
+			return new SolrPendienteResultado(indexacion);
 		} catch(Exception exception) {
 			log.error("Error en documentofacade intentando indexar.", exception);
 			String mensajeError;
@@ -959,7 +987,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 	public List<Long> obtenerDocumentosProcedimientoSolr(final Long idProcedimiento)	{
 		final Session session = getSession();
     	try {
-    		return this.castList(Long.class, session.createQuery("select doc.* from Documento doc where doc.procedimiento.id = "+idProcedimiento).list());
+    		return this.castList(Long.class, session.createQuery("select doc.id from Documento doc where doc.procedimiento.id = "+idProcedimiento).list());
     	} catch(HibernateException he) {
     		log.error("Error obteniendo los documentos asociados a la idProcedimiento:"+idProcedimiento, he);
     		return new ArrayList<Long>();
@@ -972,5 +1000,29 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
     	}
 	}
 	
+	
+	/**
+	 *  Metodo para obtener las ids de los documentos asociados a la id procedimiento. 
+	 * @param idProcedimiento
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     * 
+	 * @return
+	 */
+	public List<Long> obtenerDocumentosTramiteSolr(final Long idTramite)	{
+		final Session session = getSession();
+    	try {
+    		return this.castList(Long.class, session.createQuery("select doc.id from DocumentTramit doc where doc.tramit.id = "+idTramite).list());
+    	} catch(HibernateException he) {
+    		log.error("Error obteniendo los documentos asociados a la idTramite:"+idTramite, he);
+    		return new ArrayList<Long>();
+    	} finally{
+    		try {
+				session.close();
+			} catch (HibernateException e) {
+				log.error("Error cerrando en obteniendo los documentos asociados a la idTramite:"+idTramite, e);
+			}
+    	}
+	}	
 	
 }
