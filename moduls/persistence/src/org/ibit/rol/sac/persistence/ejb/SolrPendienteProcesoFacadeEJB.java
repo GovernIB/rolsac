@@ -186,7 +186,7 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 			log.debug("Error en indexarTodoProcedimiento cuando se busca id procedimiento", e);
 			return;
 		}
-		
+		 
 		//Recorremos la lista
     	final int totalDoc = listProc.size();
     	int iDoc = 0;

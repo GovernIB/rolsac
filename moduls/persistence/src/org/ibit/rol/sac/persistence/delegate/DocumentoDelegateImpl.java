@@ -163,7 +163,7 @@ public class DocumentoDelegateImpl implements  StatelessDelegate, DocumentoDeleg
 			final Long idProcedimiento)	throws DelegateException {
 		
 	try {
-		return getFacade().obtenerDocumentosFichaSolr(idProcedimiento);		
+		return getFacade().obtenerDocumentosProcedimientoSolr(idProcedimiento);		
     } catch (RemoteException e) {
         throw new DelegateException(e);
     }

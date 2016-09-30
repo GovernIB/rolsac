@@ -1262,7 +1262,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			final IndexFile indexData = new IndexFile();
 			indexData.setCategoria(categoria);
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
-			indexData.setCategoriaPadre(EnumCategoria.ROLSAC_TRAMITE_DOCUMENTO);
+			indexData.setCategoriaPadre(EnumCategoria.ROLSAC_TRAMITE);
 			indexData.setElementoId(idElemento.toString());
 			
 			//Datos Id materia
