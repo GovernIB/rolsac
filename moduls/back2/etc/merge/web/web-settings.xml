@@ -2,7 +2,8 @@
    		<param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
    		<param-value>sac-back2-tags</param-value>
 	</context-param-->
+	
 	<context-param>
-	    <param-name>contextConfigLocation</param-name>
-	    <param-value>/WEB-INF/rolsacmvc-servlet.xml</param-value>
-	</context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/rolsacmvc-procesos.xml</param-value>
+	</context-param>	

@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import es.caib.rolsac.back2.controller.ApplicationContextProvider;
+
 
 import es.caib.rolsac.back2.util.RolUtil;
 
@@ -75,7 +77,11 @@ public class UnidadAdministrativaController {
 			
 		} catch (DelegateException dEx) {
 			
+			/*
 			MessageSource messages = WebApplicationContextUtils.getRequiredWebApplicationContext(session.getServletContext());
+			*/
+			MessageSource messages = ApplicationContextProvider.getApplicationContext();
+			
 			if (dEx.isSecurityException()) {
 				String error = messages.getMessage("error.permisos", null, locale);
 				uaHijosJSON.add(new IdNomDTO(-1l, error));
