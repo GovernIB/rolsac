@@ -100,6 +100,7 @@
             <classes dir="${web.classes}" />
 
 			<webinf dir="${web.etc}" includes="*-servlet.xml"/>
+        	<webinf dir="${web.etc}" includes="*-procesos.xml"/>
 			<webinf dir="${web.etc}" includes="*.tld"/>
 			<webinf dir="${web.gen.etc}" includes="jboss-web.xml"/>
 			<fileset dir="${web.htdocs}">

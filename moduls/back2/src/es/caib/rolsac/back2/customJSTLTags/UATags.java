@@ -14,6 +14,7 @@ import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.springframework.context.MessageSource;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import es.caib.rolsac.back2.controller.ApplicationContextProvider;
 
 public class UATags extends TagSupport {
 
@@ -33,8 +34,12 @@ public class UATags extends TagSupport {
         try {
 
             Locale locale = pageContext.getRequest().getLocale();
+            
+            /*
             MessageSource messages = WebApplicationContextUtils.getRequiredWebApplicationContext(
                     pageContext.getServletContext());
+            */
+            MessageSource messages = ApplicationContextProvider.getApplicationContext();
 
             StringBuffer mollapa = new StringBuffer();
             String textoBotonCargarHijos;
