@@ -79,7 +79,7 @@ es.caib.rolsac.subscripcions
 	   es.caib.rolsac.solr.url=localhost:8983/solr
 	   es.caib.rolsac.solr.user=admin
 	   es.caib.rolsac.solr.pass=password
-	   es.caib.rolsac.solr.jobpendientes=0 0 10 * *
+	   es.caib.rolsac.solr.jobpendientes=0 0 10 * * ?
 	   <!-- Esta representado en MB. -->
 	   es.caib.rolsac.solr.tamanyomaximo=20
 	   es.caib.rolsac.solr.ficheros=doc,docx,xls,xlsx,pdf,pdfx,odt,ods,odp,odf,txt,rtf
