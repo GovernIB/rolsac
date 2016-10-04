@@ -1,6 +1,7 @@
 package es.caib.rolsac.api.v2.general;
 
-import org.jboss.axis.AxisProperties;
+//IMPORT INCORRECTO: import org.jboss.axis.AxisProperties;
+import org.apache.axis.AxisProperties;
 
 public class CertificadoUtil
 {
