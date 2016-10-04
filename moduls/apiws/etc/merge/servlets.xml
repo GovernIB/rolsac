@@ -59,3 +59,10 @@
     <servlet-class>es.caib.rolsac.api.v2.arxiu.ArxiuServlet</servlet-class>
     <load-on-startup>1</load-on-startup>
 </servlet>
+
+<servlet>
+    <servlet-name>apiArxiuInternServlet</servlet-name>
+    <display-name>Arxiu Intern API Servlet</display-name>
+    <servlet-class>es.caib.rolsac.api.v2.arxiu.ArxiuInternServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+</servlet>

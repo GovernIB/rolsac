@@ -14,6 +14,7 @@ public class ArxiuQueryServiceAdapter extends ArxiuDTO implements ArxiuQueryServ
      * La URL completa seria protocolo://ip:puerto + ARXIU_CONTEXTPATH_URL + idArchivo
      */
     public static final String ARXIU_CONTEXTPATH_URL = "/sacws-api/arxiu/apiArxiuServlet?id=";
+    public static final String ARXIU_INTERN_CONTEXTPATH_URL = "/sacws-api/arxiu/apiArxiuInternServlet?id=";
 
     public ArxiuQueryServiceAdapter(ArxiuDTO dto) throws QueryServiceException {
         try {

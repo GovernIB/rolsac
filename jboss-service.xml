@@ -41,14 +41,14 @@
        es.caib.rolsac.api.v2.alternativesIdioma_de=en,ca,es
        es.caib.rolsac.api.v2.alternativesIdioma_fr=en,ca,es
        es.caib.rolsac.api.v2.urlArxius=http://localhost:8080/sacws-api/arxiu/apiArxiuServlet?id=<!-- FIXME: cambiar por la url adecuada para produccion -->
-       
+       es.caib.rolsac.api.v2.urlArxiusInterns=http://localhost:8080/sacws-api/arxiu/apiArxiuInternServlet?id=<!-- FIXME: cambiar por la url adecuada para produccion -->
 	   
 	   <!-- valors sense confirmar -->
 	   	es.caib.rolsac.microsites=Y
       	es.indra.caib.rolsac.servidor=sdesweblin1.caib.es
       	es.indra.caib.rolsac.servidorPuerto=sdesweblin1.caib.es
       	es.indra.caib.rolsac.oficina=N
-      	es.indra.caib.rolsac.googleMapKey=AIzaSyCIvmOidKyhpEEb-bADWnDrNw76_oBb81A
+      	es.indra.caib.rolsac.googleMapKey=S
 		es.caib.webcaib.principal=N
 		
 		es.caib.rolsac.pidip
@@ -82,6 +82,12 @@ es.caib.rolsac.crawler.indexLocation
 es.caib.rolsac.microsites
 es.caib.rolsac.subscripcions 
 -->		
+	<!-- indexar solr -->
+	   es.caib.rolsac.solr.index=caib
+	   es.caib.rolsac.solr.url=localhost:8983/solr
+	   es.caib.rolsac.solr.user=admin
+	   es.caib.rolsac.solr.pass=password
+	   es.caib.rolsac.solr.jobpendientes=0 0 10 * * ?
     </attribute>
             
 </mbean>

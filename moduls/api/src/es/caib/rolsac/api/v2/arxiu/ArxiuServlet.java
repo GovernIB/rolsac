@@ -27,6 +27,12 @@ import org.ibit.rol.sac.model.Validacion;
 
 import es.caib.rolsac.api.v2.query.HibernateUtils;
 
+
+/**
+ * Accede a los ficheros aplicando restricciones de visibilidad.
+ * @author Indra
+ *
+ */
 public class ArxiuServlet extends HttpServlet {
 
     private static final long serialVersionUID = -7506098753146583591L;

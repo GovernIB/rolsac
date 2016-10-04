@@ -717,7 +717,7 @@ function CDetall() {
 			$("#item_resultat_" + idioma).val(printStringFromNull(dada_node[idioma]["resultat"]));
 			$("#item_destinataris_" + idioma).val(printStringFromNull(dada_node[idioma]["destinatarios"]));
 			$("#item_resolucio_" + idioma).val(printStringFromNull(dada_node[idioma]["resolucion"]));
-			//El campo notificaci�n queda obsoleto se ha eliminado del back #8 y que no se elimina para permitir compatibilidad entre la version 1.2 y 1.3 
+			//El campo notificacion queda obsoleto se ha eliminado del back #8 y que no se elimina para permitir compatibilidad entre la version 1.2 y 1.3 
 			$("#item_notificacio_" + idioma).val(printStringFromNull(dada_node[idioma]["notificacion"]));
 			//$("#item_silenci_" + idioma).val(printStringFromNull(dada_node[idioma]["silencio"]));
 			$("#item_observacions_" + idioma).val(printStringFromNull(dada_node[idioma]["observaciones"]));
@@ -739,7 +739,6 @@ function CDetall() {
 		jQuery("#item_silenci_combo").val(dada_node.item_silenci_combo);
 		
 		
-		$("#item_clave_primaria").val(dada_node.item_id);
 		$("#item_clave_primaria").change();
 
 		$("#item_data_actualitzacio").val(dada_node.item_data_actualitzacio);
@@ -793,7 +792,7 @@ function CDetall() {
 			$("#item_finestreta_unica").attr("checked", dada_node.item_finestreta_unica);
 			$("#item_finestreta_unica").change();
 		}		
-
+		
 		$("#item_responsable").val(dada_node.item_responsable);
 
 		$("#item_notes").val(dada_node.item_notes);

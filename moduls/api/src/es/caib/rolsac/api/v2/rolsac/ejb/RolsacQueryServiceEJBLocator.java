@@ -18,11 +18,11 @@ public class RolsacQueryServiceEJBLocator extends EJBLocator {
 
     public RolsacQueryServiceEJBRemote getRolsacQueryServiceEJB() throws LocatorException {
         try {
-            Object ref = getRemoteReference(JNDI_NAME); 
-            //RolsacQueryServiceEJBHome home = (RolsacQueryServiceEJBHome) PortableRemoteObject.narrow(ref, RolsacQueryServiceEJBHome.class);
-            //return (RolsacQueryServiceEJBRemote) PortableRemoteObject.narrow(home.create(), RolsacQueryServiceEJBRemote.class);
-            RolsacQueryServiceEJBHome home = (RolsacQueryServiceEJBHome) ref;
-            return home.create();
+        	Object ref = getRemoteReference(JNDI_NAME); 
+            RolsacQueryServiceEJBHome home = (RolsacQueryServiceEJBHome) PortableRemoteObject.narrow(ref, RolsacQueryServiceEJBHome.class);
+            return (RolsacQueryServiceEJBRemote) PortableRemoteObject.narrow(home.create(), RolsacQueryServiceEJBRemote.class);
+            //RolsacQueryServiceEJBHome home = (RolsacQueryServiceEJBHome) ref;
+            //return home.create();
         } catch (NamingException e) {
             throw new LocatorException(ExceptionMessages.JNDI_NAMING, e);
         } catch (RemoteException e) {

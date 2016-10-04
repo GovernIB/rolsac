@@ -14,7 +14,7 @@
         <import namespace="http://general.v2.api.rolsac.caib.es" />
         <complexType name="SilencioDTO">
             <sequence>
-                <element name="id" nillable="true" type="xsd:string" />
+                <element name="id" nillable="true" type="xsd:long" />
                 <element name="descripcion" nillable="true" type="xsd:string" />
                 <element name="nombre" nillable="true" type="xsd:string" />
             </sequence>

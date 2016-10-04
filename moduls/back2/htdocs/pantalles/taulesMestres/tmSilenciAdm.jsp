@@ -88,7 +88,7 @@
 
     // dades formularios
     var FormulariDades = [
-		{
+       {
             "modo": "individual",
             "etiqueta": "id",
             "etiquetaValor": "item_nombre_" + '<c:out value="${idiomaVal}"/>',

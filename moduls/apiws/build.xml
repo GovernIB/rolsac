@@ -41,7 +41,7 @@
 
     <path id="web.class.path">
         <fileset dir="${lib.dir}">
-            <include name="servlet-api.jar"/>
+        	<include name="servlet-api.jar"/>
             <include name="commons-logging.jar"/>
         	<include name="hibernate2.jar"/>
         </fileset>
@@ -134,7 +134,7 @@
         <javac destdir="${web.classes}"
             classpathref="web.class.path"
         	srcdir="${home.dir}/moduls/api/src"
-        	includes="**/ArxiuServlet.java, **/HibernateUtils.java"
+        	includes="**/Arxiu*Servlet.java, **/HibernateUtils.java"
             debug="${javac.debug}"
             deprecation="${javac.deprecation}"
             optimize="${javac.optimize}"

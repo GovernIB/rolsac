@@ -6,7 +6,7 @@ es.caib.rolsac.integracion.traductor.servidor=scatwnt1.caib.es:8080
 es.caib.rolsac.vuds.endpoint.obert=N
 es.caib.rolsac.vuds.endpoint=http://89.140.20.218:65003/ServiciosExternos/sistemaInformacionWS
 es.caib.rolsac.idiomaDefault=ca
-es.caib.rolsac.traspasboib=N
+es.caib.rolsac.traspasboib=Y
 es.caib.rolsac.permisosSuperAdicionales=N
 
 <!-- mode de connexió amb el boib: [boib|eBoib]
@@ -24,7 +24,7 @@ es.caib.rolsac.back2.urlSortir=http://intranet.caib.es
 
 <!-- urls per les previsualitzacions -->
 es.caib.rolsac.previsualitzacio.procediment.url=http://www.caib.es/govern/sac/visor_proc.do
-es.caib.rolsac.previsualitzacio.fitxa.url=http://www.caib.es/govern/sac/fitxa.do
+es.caib.rolsac.previsualitzacio.fitxa.url=http://www.caib.es/govern/sac/fitxaPrevi.do
 es.caib.rolsac.previsualitzacio.ua.url=http://www.caib.es/govern/organigrama/area.do
 
 <!-- API -->
@@ -35,6 +35,7 @@ es.caib.rolsac.api.v2.alternativesIdioma_en=ca,es
 es.caib.rolsac.api.v2.alternativesIdioma_de=en,ca,es
 es.caib.rolsac.api.v2.alternativesIdioma_fr=en,ca,es
 es.caib.rolsac.api.v2.urlArxius=http://localhost:8080/sacws-api/arxiu/apiArxiuServlet?id=<!-- FIXME: cambiar por la url adecuada para produccion -->
+es.caib.rolsac.api.v2.urlArxiusInterns=http://localhost:8080/sacws-api/arxiu/apiArxiuInternServlet?id=<!-- FIXME: cambiar por la url adecuada para produccion -->
 
 
 <!-- valors sense confirmar -->
