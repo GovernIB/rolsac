@@ -555,7 +555,6 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 			indexData.setCategoria(categoria);
 			indexData.setCategoriaPadre(EnumCategoria.ROLSAC_PROCEDIMIENTO);
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
-			indexData.setElementoId(idElemento.toString());
 			
 			//materia
 			final List<String> materiasId = new ArrayList<String>();		
@@ -632,6 +631,9 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 					}
 					
 					try {
+						
+						indexData.setElementoId(traduccion.getArchivo().getId().toString());
+						
 						//Anyadimos idioma al enumerado.
 						indexData.setIdioma(enumIdioma);
 						
@@ -781,7 +783,6 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 			final IndexFile indexData = new IndexFile();
 			indexData.setCategoria(categoria);
 			indexData.setCategoriaPadre(EnumCategoria.ROLSAC_FICHA);
-			indexData.setElementoId(idElemento.toString());
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
 			
 			//Datos de ids Materia
@@ -833,6 +834,8 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 						final MultilangLiteral urls = new MultilangLiteral();
 						final MultilangLiteral urlsPadre = new MultilangLiteral();
 						final MultilangLiteral searchTextOptional = new MultilangLiteral();
+						
+						indexData.setElementoId(traduccionDocumento.getArchivo().getId().toString());
 						
 						//Anyadimos idioma al enumerado.
 						indexData.setIdioma(enumIdioma);

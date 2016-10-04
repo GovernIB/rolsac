@@ -1263,7 +1263,6 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			indexData.setCategoria(categoria);
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
 			indexData.setCategoriaPadre(EnumCategoria.ROLSAC_TRAMITE);
-			indexData.setElementoId(idElemento.toString());
 			
 			//Datos Id materia
 			final List<String> materiasId = new ArrayList<String>();	
@@ -1307,6 +1306,9 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 							log.debug("NO Es indexable tradDoc Ficha con id:" + traduccion.getArchivo().getId()+" y tamanyo:" + traduccion.getArchivo().getPeso());
 							continue;
 						}
+						
+						//Seteado el id
+						indexData.setElementoId(traduccion.getArchivo().getId().toString());
 						
 						//Anyadimos idioma al enumerado.
 						indexData.setIdioma(enumIdioma);
