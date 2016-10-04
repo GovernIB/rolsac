@@ -144,7 +144,7 @@ public abstract class HibernateEJB implements SessionBean {
             try {
                 session.close();
             } catch (HibernateException e) {
-                log.error(e);
+                log.error(e, e);
             }
         }
     }

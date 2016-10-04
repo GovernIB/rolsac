@@ -1109,8 +1109,13 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 				
 				if (traduccion != null && enumIdioma != null) {
 					
-					//Para saltarse los idiomas sin titulo.
+					//Para saltarse los idiomas sin titulo
 					if ((traduccion.getTitulo() == null || traduccion.getTitulo().isEmpty())  && enumIdioma != EnumIdiomas.CATALA) {
+						continue;
+					}
+					
+					// Si no tiene UA, no indexamos
+					if (normativa.getUnidadAdministrativa() == null) {
 						continue;
 					}
 					
@@ -1131,38 +1136,36 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			    	textoOptional.append(" ");
 			    	textoOptional.append(traduccion.getObservaciones());
 			    	
-					//Unidades administrativas de las fichas.
+					//Unidad administrativas normativa
 					UnidadAdministrativa unidadAdministrativa = normativa.getUnidadAdministrativa();
-					if (unidadAdministrativa != null) {
-						List<PathUO> uos = new ArrayList<PathUO>();
-						PathUO uo = new PathUO();
-						List<String> path = new ArrayList<String>();
-						
-						//Hay que extraer la id de los predecesores y luego el de uno mismo
-						Set<UnidadAdministrativa> predecesores = unidadAdministrativa.getPredecesores();
-						for(UnidadAdministrativa predecesor : predecesores) {
-							if (predecesor != null && predecesor.getId() != null) {
-								path.add(predecesor.getId().toString());
-								if (predecesor.getNombre() != null) {
-									textoOptional.append(" ");
-									textoOptional.append(predecesor.getNombre());
-								}
+					List<PathUO> uos = new ArrayList<PathUO>();
+					PathUO uo = new PathUO();
+					List<String> path = new ArrayList<String>();
+					
+					//Hay que extraer la id de los predecesores y luego el de uno mismo
+					Set<UnidadAdministrativa> predecesores = unidadAdministrativa.getPredecesores();
+					for(UnidadAdministrativa predecesor : predecesores) {
+						if (predecesor != null && predecesor.getId() != null) {
+							path.add(predecesor.getId().toString());
+							if (predecesor.getNombre() != null) {
+								textoOptional.append(" ");
+								textoOptional.append(predecesor.getNombre());
 							}
 						}
-						
-						path.add( unidadAdministrativa.getId().toString());
-						if (unidadAdministrativa.getNombre() != null) {
-							textoOptional.append(" ");
-				    		textoOptional.append(unidadAdministrativa.getNombre());
-						}
-						
-						uo.setPath(path);
-						uos.add(uo);
-						indexData.setUos(uos);
 					}
 					
+					path.add( unidadAdministrativa.getId().toString());
+					if (unidadAdministrativa.getNombre() != null) {
+						textoOptional.append(" ");
+			    		textoOptional.append(unidadAdministrativa.getNombre());
+					}
 					
-			    	searchTextOptional.addIdioma(enumIdioma, textoOptional.toString());
+					uo.setPath(path);
+					uos.add(uo);
+					indexData.setUos(uos);
+				
+					
+					searchTextOptional.addIdioma(enumIdioma, textoOptional.toString());
 			    	if (normativa.getBoletin() == null && normativa.getFecha() != null && (traduccion.getEnlace() == null || traduccion.getEnlace().isEmpty())) {
 			    		Calendar calendar = Calendar.getInstance();
 			    		calendar.setTime(normativa.getFecha());
@@ -1249,11 +1252,15 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 				if (traduccion != null && enumIdioma != null) {
 					
 					//Para saltarse los idiomas sin titulo.
-					if (traduccion.getArchivo().getNombre() == null || traduccion.getArchivo().getNombre().isEmpty()) {
+					if (traduccion.getArchivo() == null || traduccion.getArchivo().getDatos() == null || traduccion.getArchivo().getNombre() == null || traduccion.getArchivo().getNombre().isEmpty()) {
 						continue;
 					}
 					
 					if (traduccion.getArchivo() == null || traduccion.getArchivo().getId().compareTo(idElemento) != 0) {
+						continue;
+					}
+					
+					if (normativa.getUnidadAdministrativa() == null) {
 						continue;
 					}
 					
@@ -1274,7 +1281,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 					descripcionPadre.addIdioma(enumIdioma, Utilidades.sanitizarTexto(traduccion.getTitulo()));
 					
 					urls.addIdioma(enumIdioma, "/normativa/archivo.do?id=" + traduccion.getArchivo().getId() + "&lang=" + keyIdioma);
-					if (normativa.getBoletin() == null && (traduccion.getEnlace() == null || traduccion.getEnlace().isEmpty())) {
+					if (normativa.getBoletin() == null && normativa.getFechaBoletin() != null && (traduccion.getEnlace() == null || traduccion.getEnlace().isEmpty())) {
 			    		Calendar calendar = Calendar.getInstance();
 			    		calendar.setTime(normativa.getFechaBoletin());
 			    		urlsPadre.addIdioma(enumIdioma,"/eboibfront/VisPdf?action=VisHistoric&p_any="+calendar.get(Calendar.YEAR)+"&p_numero="+normativa.getNumero()+"&p_finpag="+traduccion.getPaginaFinal()+"&p_inipag="+traduccion.getPaginaInicial()+"&idDocument="+normativa.getId()+"&lang="+keyIdioma);
@@ -1342,20 +1349,26 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 		Session session = getSession(); 
 		Normativa normativa = null;
 		try {
-			Long idNormativa = null;
-			try {
-				final Query sqlQuery = session.createQuery("select normativa.id from Normativa normativa inner join normativa.traduccionesCombinadas trad inner join trad.archivo arc where arc.id = " + idElemento);
-				idNormativa = Long.valueOf(sqlQuery.uniqueResult().toString());
-			} catch (Exception exception) {
-				log.error("Error intentando extraer la id, se va a proceder con NormativaLocal");
-			} 
+			Query sqlQuery = null;
+			List result = null;
 			
-			if (idNormativa == null) {
-				final Query sqlQuery = session.createQuery("select normativa.id from NormativaLocal normativa inner join normativa.traduccionesCombinadas trad inner join trad.archivo arc where arc.id = " + idElemento);
-				idNormativa = Long.valueOf(sqlQuery.uniqueResult().toString());
+			Long idNormativa = null;
+			
+			// Buscamos en normativa
+			sqlQuery = session.createQuery("select distinct normativa.id from Normativa normativa inner join normativa.traduccionesCombinadas trad inner join trad.archivo arc where arc.id = " + idElemento);					
+			result = sqlQuery.list();
+			if (result.size() <= 0) {
+				// Si no encuentra, buscamos en normativa local
+				sqlQuery = session.createQuery("select distinct normativa.id from NormativaLocal normativa inner join normativa.traduccionesCombinadas trad inner join trad.archivo arc where arc.id = " + idElemento);
+				result = sqlQuery.list();
 			}
 			
-			normativa = this.obtenerNormativaParaSolr(idNormativa, idElemento);			
+			if (result.size() > 0) {
+				idNormativa = Long.valueOf(result.get(0).toString());
+				normativa = this.obtenerNormativaParaSolr(idNormativa, idElemento);
+			}
+						
+						
 		} catch (HibernateException he) {
 			log.error("Error obteniendo normativa según archivo con id " + idElemento, he);
 		} catch (Exception e) {

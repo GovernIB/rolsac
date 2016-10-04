@@ -113,6 +113,7 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 		}
 		
     	final int totalFichas = listFicha.size();
+    	log.debug("Numero de fichas a revisar para indexar: " + totalFichas);
     	
 		int iFicha = 0;
     	for (Long idFicha : listFicha) {
@@ -129,20 +130,23 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
         			try{
         				solrDelegate.indexarPendiente(solrIndexer, docuDelegate, idDocumento, EnumCategoria.ROLSAC_FICHA_DOCUMENTO, solrPendienteJob);	        				
         			} catch (Exception e) {
-        				e.printStackTrace();
-    					log.error("Se ha producido un error en documento ficha con id " + idDocumento);
+    					log.error("Se ha producido un error en documento ficha con id " + idDocumento, e);
     				}
 				}
 			} catch (Exception e) {
-				log.error("Se ha producido un error en la ficha con id " + idFicha);
+				log.error("Se ha producido un error en la ficha con id " + idFicha, e);
 			}
 		}
+    	
+    	log.debug("Se han terminado de revisar las fichas para indexar.");
     	
     	solrPendienteJob.setTotalFicha(100f);
     	solrPendienteJob.setTotalFichaDoc(100f);
     	solrPendienteJob.setFechaFicha(new Date());
+    	
+    	
     	try {
-			solrDelegate.actualizarJob(solrPendienteJob);
+			solrDelegate.actualizarJob(solrPendienteJob);						
 		} catch (Exception e) {
 			log.debug("Error en indexarTodoFicha cuando se actualiza el job", e);
 		}
@@ -188,12 +192,15 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 		}
 		 
 		//Recorremos la lista
-    	final int totalDoc = listProc.size();
+    	final int totalProc = listProc.size();
+    	
+    	log.debug("Numero de procedimientos a revisar para indexar: " + totalProc);
+    	
     	int iDoc = 0;
     	for (Long idProc : listProc) {
     		iDoc++;
-			solrPendienteJob.setTotalProcedimiento( Float.valueOf( iDoc * 100 / totalDoc ));
-    		solrPendienteJob.setTotalProcedimientoDoc(Float.valueOf( iDoc * 100 / totalDoc ));
+			solrPendienteJob.setTotalProcedimiento( Float.valueOf( iDoc * 100 / totalProc ));
+    		solrPendienteJob.setTotalProcedimientoDoc(Float.valueOf( iDoc * 100 / totalProc ));
     		try {
     			solrDelegate.indexarPendiente(solrIndexer, procDelegate, idProc, EnumCategoria.ROLSAC_PROCEDIMIENTO, solrPendienteJob);
         		
@@ -202,15 +209,17 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
         			try{
         				solrDelegate.indexarPendiente(solrIndexer, docuDelegate, idDocumento, EnumCategoria.ROLSAC_PROCEDIMIENTO_DOCUMENTO, solrPendienteJob);	        				
 	        		} catch (Exception e) {
-    					log.error("Se ha producido un error en documento procedimiento con id " + idDocumento);
+    					log.error("Se ha producido un error en procedimiento " + idProc + " para documento  con id " + idDocumento, e);
     				}
 				}
 			} catch (Exception e) {
-				log.error("Se ha producido un error en el procedimiento con id " + idProc);
+				log.error("Se ha producido un error en el procedimiento con id " + idProc, e);
 			}
     		
 		}
 
+    	log.debug("Se han terminado de revisar los procedimientos para indexar.");
+    	
     	solrPendienteJob.setTotalProcedimiento(100f);
     	solrPendienteJob.setTotalProcedimientoDoc(100f);
     	solrPendienteJob.setFechaProcedimiento(new Date());
@@ -284,14 +293,16 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
             			try{	
             				solrDelegate.indexarPendiente(solrIndexer, normDelegate, arc.getId(), EnumCategoria.ROLSAC_NORMATIVA_DOCUMENTO, solrPendienteJob);
             			} catch (Exception e) {
-        					log.error("Se ha producido un error en documento normativa con id " + arc.getId());
+        					log.error("Se ha producido un error en normativa con id " + idNorm + " para archivo con id " + arc.getId(), e);
         				}
             		}
         		}
 			} catch (Exception e) {
-				log.error("Se ha producido un error en la normativa con id " + idNorm);
+				log.error("Se ha producido un error en la normativa con id " + idNorm, e);
 			} 	
     	}
+    	
+    	log.debug("Se han terminado de revisar las normativas para indexar.");
     	
     	solrPendienteJob.setTotalNormativa(100f);
     	solrPendienteJob.setFechaNormativa(new Date());
@@ -343,6 +354,9 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 		
 		//Recorremos la lista
     	final int totalTram = listTram.size();
+    	
+    	log.debug("Numero de tramites a revisar para indexar: " + totalTram);
+    	
     	int iTram = 0;
     	for (Long idTramite : listTram) {
     		iTram++;
@@ -354,13 +368,16 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
         			try{
         				solrDelegate.indexarPendiente(solrIndexer, tramDelegate, idDocumento, EnumCategoria.ROLSAC_TRAMITE_DOCUMENTO, solrPendienteJob);	        				
 	        		} catch (Exception e) {
-    					log.error("Se ha producido un error en documento procedimiento con id " + idDocumento);
+    					log.error("Se ha producido un error en tramite con id " + iTram + " para documento con id " + idDocumento, e);
     				}
 				}
 			} catch (Exception e) {
-				log.error("Se ha producido un error en el trámite con id " + idTramite);
+				log.error("Se ha producido un error en el trámite con id " + idTramite, e);
 			}
 		}
+    	
+    	
+    	log.debug("Se han terminado de revisar los tramites para indexar.");
     	
     	solrPendienteJob.setTotalTramite(100f);
     	solrPendienteJob.setFechaTramite(new Date());
@@ -410,17 +427,19 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 		
 		//Recorremos la lista
     	final int totalUA = listUas.size();
+    	log.debug("Numero de UAs a revisar para indexar: " + totalUA);
     	int iUA = 0;
     	for (Long idUa : listUas) {
     		iUA++;
     		solrPendienteJob.setTotalUnidadAdministrativa( Float.valueOf( iUA * 100 / totalUA ));
-    		
     		try {
     			solrDelegate.indexarPendiente(solrIndexer, uaDelegate, idUa, EnumCategoria.ROLSAC_UNIDAD_ADMINISTRATIVA, solrPendienteJob);    					
 			} catch (Exception e) {
-				log.error("Se ha producido un error en la unidad administrativa con id " + idUa);
+				log.error("Se ha producido un error en la unidad administrativa con id " + idUa, e);
 			}
 		}
+    	
+    	log.debug("Se han terminado de revisar las UAs para indexar.");
     	
     	solrPendienteJob.setTotalUnidadAdministrativa(100f);
     	solrPendienteJob.setFechaUnidadAdministrativa(new Date());

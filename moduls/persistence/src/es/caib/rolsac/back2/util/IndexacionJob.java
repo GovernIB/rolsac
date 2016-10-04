@@ -13,6 +13,9 @@ import org.quartz.JobExecutionException;
 import org.quartz.SchedulerContext;
 import org.quartz.SchedulerException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /***
  * la indexación. 
@@ -40,6 +43,8 @@ public class IndexacionJob implements Job  {
 		}
     	final String tipoIndexacion = (String) schedulerContext.get("tipoindexacion");
         
+    	log.debug("Ejecutando indexacion con tipo indexacion:" + tipoIndexacion);
+    	
     	SolrPendienteDelegate solrDelegate = DelegateUtil.getSolrPendienteDelegate();
     	SolrPendienteProcesoDelegate solrProceso = DelegateUtil.getSolrPendienteProcesoDelegate();
     	
@@ -54,39 +59,53 @@ public class IndexacionJob implements Job  {
 			}
     	}
 		
-    	log.debug("Ejecutando el indexacion job con tipoIndexacion:" + tipoIndexacion);
-    	
     	//PASO 2. EJECUTAR LA INDEXACION.
-        switch(tipoIndexacion) {
-        	case "todo":
-        		try { solrProceso.indexarTodoFicha(solrPendienteJob); } catch (DelegateException e) { log.error("Error indexando todo ficha", e); } log.debug("Finalizado indexacion ficha");
-        		try { solrProceso.indexarTodoProcedimiento(solrPendienteJob); } catch (DelegateException e) { log.error("Error indexando todo procedimiento", e); } log.debug("Finalizado indexacion procedimiento");
-        		try { solrProceso.indexarTodoNormativa(solrPendienteJob); } catch (DelegateException e) { log.error("Error indexando todo normativa", e); } log.debug("Finalizado indexacion normativa");
-        		try { solrProceso.indexarTodoTramite(solrPendienteJob); } catch (DelegateException e) { log.error("Error indexando todo tramite", e); } log.debug("Finalizado indexacion tramite");
-        		try { solrProceso.indexarTodoUA(solrPendienteJob); } catch (DelegateException e) { log.error("Error indexando todo ua", e); } log.debug("Finalizado indexacion ua");
-        		break;
-        	case "ficha":
-        		try { solrProceso.indexarTodoFicha(solrPendienteJob); } catch (DelegateException e) { log.error("Error indexando todo ficha", e); } log.debug("Finalizado indexacion ficha");
-        		break;
-        	case "procedimiento":
-        		try { solrProceso.indexarTodoProcedimiento(solrPendienteJob); } catch (DelegateException e) { log.error("Error indexando todo procedimiento", e); } log.debug("Finalizado indexacion procedimiento");
-        		break;
-        	case "normativa":
-        		try { solrProceso.indexarTodoNormativa(solrPendienteJob); } catch (DelegateException e) { log.error("Error indexando todo normativa", e); } log.debug("Finalizado indexacion normativa");
-        		break;
-        	case "tramite":
-        		try { solrProceso.indexarTodoTramite(solrPendienteJob); } catch (DelegateException e) { log.error("Error indexando todo tramite", e); } log.debug("Finalizado indexacion tramite");
-        		break;
-        	case "ua":
-        		try { solrProceso.indexarTodoUA(solrPendienteJob); } catch (DelegateException e) { log.error("Error indexando todo ua", e); } log.debug("Finalizado indexacion ua");
-        		break;
-        	case "pendientes":
-        		try { solrProceso.indexarPendientes(); } catch (DelegateException e) { log.error("Error indexando pendientes", e); } log.debug("Finalizado indexacion pendientes");
-        		break;
-        	default:
-        		log.error("NO HAY TIPO DE INDEXACION!!!"); 
-        		break;
-        }
+    	List<String> elementosIndexacion = new ArrayList<String>();
+    	if ("todo".equals(tipoIndexacion)) {
+    		elementosIndexacion.add("ficha");
+    		elementosIndexacion.add("procedimiento");
+    		elementosIndexacion.add("normativa");
+    		elementosIndexacion.add("tramite");
+    		elementosIndexacion.add("ua");
+    		elementosIndexacion.add("pendientes");
+    	} else {
+    		elementosIndexacion.add(tipoIndexacion);
+    	}
+    	
+    	
+    	for (String elementoIndexacion : elementosIndexacion) {
+    		log.debug("Iniciando indexacion " + elementoIndexacion);
+    		try {
+    			 switch(elementoIndexacion) {
+    	        	case "ficha":
+    	        		solrProceso.indexarTodoFicha(solrPendienteJob);
+    	        		break;
+    	        	case "procedimiento":
+    	        		solrProceso.indexarTodoProcedimiento(solrPendienteJob);
+    	        		break;
+    	        	case "normativa":
+    	        		solrProceso.indexarTodoNormativa(solrPendienteJob);
+    	        		break;
+    	        	case "tramite":
+    	        		solrProceso.indexarTodoTramite(solrPendienteJob);
+    	        		break;
+    	        	case "ua":
+    	        		solrProceso.indexarTodoUA(solrPendienteJob);
+    	        		break;
+    	        	case "pendientes":
+    	        		solrProceso.indexarPendientes();
+    	        		break;
+    	        	default:
+    	        		log.error("Tipo indexacion no controlado: " + elementoIndexacion); 
+    	        		break;
+    	        }
+    		} catch (DelegateException e) {
+    			log.error("Error indexacion " + elementoIndexacion, e); 
+    		}     		    	
+    		log.debug("Finalizado indexacion " + elementoIndexacion);    		
+    	}
+    	
+       
      
     	//Entrar solo si es no pendientes
     	if (!"pendientes".equals(tipoIndexacion)) {
@@ -97,31 +116,11 @@ public class IndexacionJob implements Job  {
 				log.error("Error cerrando el job", e);
 			}
     	}
+    	
+    	
+    	log.debug("Fin ejecucion indexacion con tipo indexacion:" + tipoIndexacion);
     }
-    
-    /**
-     * Job que se ejecuta todos los dias para indexar lo pendiente por la noche.
-     */
-    //@Scheduled(cron = "* 10 15 * *")
-    //@Scheduled(cron = "#{systemProperties['es.caib.rolsac.solr.jobpendientes']") 
-    /*public void jobIndexacionNocturna() {
-    	SolrPendienteDelegate solrDelegate = DelegateUtil.getSolrPendienteDelegate();
-    	try { 
-    		solrDelegate.indexarPendientes();
-    	} catch (DelegateException e) { log.error("Error indexando pendientes", e); }
-
-		log.error("jobIndexacionNocturna log.");	
-    }
-    
-    @Scheduled(cron = "0 0/5 * *")
-    public void jobIndexacionNocturna2() {
-    	SolrPendienteDelegate solrDelegate = DelegateUtil.getSolrPendienteDelegate();
-    	try { 
-    		solrDelegate.indexarPendientes();
-    	} catch (DelegateException e) { log.error("Error indexando pendientes", e); }
-    	log.error("jobIndexacionNocturna log 2.");
-    }*/
-
+       
    
 }
 
