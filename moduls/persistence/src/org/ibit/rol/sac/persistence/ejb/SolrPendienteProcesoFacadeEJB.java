@@ -96,7 +96,7 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 			solrIndexer.desindexarAplicacion(EnumCategoria.ROLSAC_FICHA);
 			solrIndexer.desindexarAplicacion(EnumCategoria.ROLSAC_FICHA_DOCUMENTO);
 		} catch (Exception e) {
-			log.debug("Error en indexarTodoFicha cuando se desindexa", e);
+			log.error("Error en indexarTodoFicha cuando se desindexa", e);
 			return;
 		}
 		
@@ -108,7 +108,7 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 		try {
 			listFicha = fichaDelegate.buscarIdsFichas();
 		} catch (Exception e) {
-			log.debug("Error en indexarTodoFicha cuando se busca las fichas ids", e);
+			log.error("Error en indexarTodoFicha cuando se busca las fichas ids", e);
 			return ;
 		}
 		
@@ -148,7 +148,7 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
     	try {
 			solrDelegate.actualizarJob(solrPendienteJob);						
 		} catch (Exception e) {
-			log.debug("Error en indexarTodoFicha cuando se actualiza el job", e);
+			log.error("Error en indexarTodoFicha cuando se actualiza el job", e);
 		}
     	
     	try {
@@ -175,7 +175,7 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 			solrIndexer.desindexarAplicacion(EnumCategoria.ROLSAC_PROCEDIMIENTO);
 			solrIndexer.desindexarAplicacion(EnumCategoria.ROLSAC_PROCEDIMIENTO_DOCUMENTO);
 		} catch (Exception e) {
-			log.debug("Error en indexarTodoProcedimiento cuando se desindexa", e);
+			log.error("Error en indexarTodoProcedimiento cuando se desindexa", e);
 			return;
 		}
 		
@@ -187,7 +187,7 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 		try {
 			listProc = procDelegate.buscarIdsProcedimientos();
 		} catch (DelegateException e) {
-			log.debug("Error en indexarTodoProcedimiento cuando se busca id procedimiento", e);
+			log.error("Error en indexarTodoProcedimiento cuando se busca id procedimiento", e);
 			return;
 		}
 		 
@@ -226,7 +226,7 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
     	try {
 			solrDelegate.actualizarJob(solrPendienteJob);
 		} catch (Exception e) {
-			log.debug("Error en indexarTodoProcedimiento cuando se actualiza el job", e);
+			log.error("Error en indexarTodoProcedimiento cuando se actualiza el job", e);
 		}
     	
     	try {
@@ -254,7 +254,7 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 			solrIndexer.desindexarAplicacion(EnumCategoria.ROLSAC_NORMATIVA);
 			solrIndexer.desindexarAplicacion(EnumCategoria.ROLSAC_NORMATIVA_DOCUMENTO);
 		} catch (Exception e) {
-			log.debug("Error en indexarTodoNormativa cuando se desindexa", e);
+			log.error("Error en indexarTodoNormativa cuando se desindexa", e);
 			return;
 		}
 		
@@ -265,7 +265,7 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 		try {
 			listNorm = normDelegate.buscarIdsNormativas();
 		} catch (DelegateException e) {
-			log.debug("Error en indexarTodoNormativa cuando se busca las ids de normativa", e);
+			log.error("Error en indexarTodoNormativa cuando se busca las ids de normativa", e);
 			return;
 		}
 		
@@ -309,7 +309,7 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
     	try {
 			solrDelegate.actualizarJob(solrPendienteJob);
 		} catch (Exception e) {
-			log.debug("Error en indexarTodoNormativa cuando se actualiza el job", e);
+			log.error("Error en indexarTodoNormativa cuando se actualiza el job", e);
 		}
     	
     	try {
@@ -335,7 +335,7 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 			solrIndexer.desindexarAplicacion(EnumCategoria.ROLSAC_TRAMITE);
 			solrIndexer.desindexarAplicacion(EnumCategoria.ROLSAC_TRAMITE_DOCUMENTO);
 		} catch (Exception e) {
-			log.debug("Error en indexarTodoTramite cuando se desindexa", e);
+			log.error("Error en indexarTodoTramite cuando se desindexa", e);
 			return;
 		}
 		
@@ -348,7 +348,7 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 		try {
 			listTram = tramDelegate.buscarIdsTramites();
 		} catch (DelegateException e) {
-			log.debug("Error en indexarTodoTramite cuando se busca los ids de tramites", e);
+			log.error("Error en indexarTodoTramite cuando se busca los ids de tramites", e);
 			return;
 		}
 		
@@ -384,7 +384,7 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
     	try {
 			solrDelegate.actualizarJob(solrPendienteJob);
 		} catch (Exception e) {
-			log.debug("Error en indexarTodoTramite cuando se actualiza el job", e);
+			log.error("Error en indexarTodoTramite cuando se actualiza el job", e);
 		}
     	try {
 			solrIndexer.commit();
@@ -409,7 +409,7 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 			solrIndexer = obtenerParamIndexer();
 			solrIndexer.desindexarAplicacion(EnumCategoria.ROLSAC_UNIDAD_ADMINISTRATIVA);
 		} catch (Exception e) {
-			log.debug("Error en indexarTodoUA cuando se desindexa", e);
+			log.error("Error en indexarTodoUA cuando se desindexa", e);
 			return;
 		}
 		
@@ -421,7 +421,7 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 		try { 
 			listUas = uaDelegate.buscarIdsUas();
 		} catch (DelegateException e) {
-			log.debug("Error en indexarTodoUA cuando se buscan las ids", e);
+			log.error("Error en indexarTodoUA cuando se buscan las ids", e);
 			return;
 		}
 		
@@ -446,7 +446,7 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
     	try {
 			solrDelegate.actualizarJob(solrPendienteJob);
 		} catch (Exception e) {
-			log.debug("Error en indexarTodoUA cuando se actualiza el job", e);
+			log.error("Error en indexarTodoUA cuando se actualiza el job", e);
 		}
     	try {
 			solrIndexer.commit();

@@ -45,7 +45,7 @@ import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.remote.vuds.ActualizacionVudsException;
 import org.ibit.rol.sac.persistence.remote.vuds.ValidateVudsException;
 import org.ibit.rol.sac.persistence.saver.TramiteSaver;
-import org.ibit.rol.sac.persistence.util.ArchivoUtils;
+import org.ibit.rol.sac.persistence.util.IndexacionUtil;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
 import es.caib.solr.api.SolrFactory;
@@ -976,24 +976,6 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 		this.tramiteSaver = tramiteSaver;
 	}
 
-	
-
-	/**
-	 * Comprueba si es indexable un tramite.
-	 * 
-	 * @return
-	 */
-	private boolean isIndexable(final Tramite tramite) {
-		boolean indexable = true;
-		
-		if (tramite.getProcedimiento() != null) {
-			if (tramite.getProcedimiento().getValidacion() != 1 ) {
-				indexable = false;
-			}			
-		}
-		return indexable;
-	}
-
 	 /**
 	 * Metodo para indexar un solrPendiente.
 	 * @param solrIndexer
@@ -1090,8 +1072,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 				return new SolrPendienteResultado(false, "Error obteniendo el trámite.");
 			}
 			
-			boolean isIndexable = this.isIndexable(tramite);
-			if (!isIndexable) {
+			if (!IndexacionUtil.isIndexable(tramite)) {
 				return new SolrPendienteResultado(true, "No se puede indexar");
 			}
 			
@@ -1105,6 +1086,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
 			indexData.setCategoriaPadre(EnumCategoria.ROLSAC_PROCEDIMIENTO);
 			indexData.setElementoId(idElemento.toString());
+			indexData.getUos().add(IndexacionUtil.calcularPathUO(procedimiento.getUnidadAdministrativa()));			
 			
 			//Iteramos las traducciones
 			final Map<String, Traduccion> traducciones = tramite.getTraduccionMap();
@@ -1136,25 +1118,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			    	searchText.addIdioma(enumIdioma, traduccion.getNombre()+ " " + traduccion.getObservaciones());
 			    	searchTextOptional.addIdioma(enumIdioma, traduccion.getDocumentacion());
 			    	
-					//Unidades administrativas de las fichas.
-					UnidadAdministrativa unidadAdministrativa = procedimiento.getUnidadAdministrativa();
-					if (unidadAdministrativa != null) {
-						List<PathUO> uos = new ArrayList<PathUO>();
-						PathUO uo = new PathUO();
-						List<String> path = new ArrayList<String>();
-						
-						//Hay que extraer la id de los predecesores y luego el de uno mismo
-						Set<UnidadAdministrativa> predecesores = unidadAdministrativa.getPredecesores();
-						for(UnidadAdministrativa predecesor : predecesores) {
-							path.add(predecesor.getId().toString());
-						}
-						path.add( unidadAdministrativa.getId().toString());
-						uo.setPath(path);
-						uos.add(uo);
-						indexData.setUos(uos);
-					}
-					
-			    	if (procedimiento != null ) {
+					if (procedimiento != null ) {
 			    		String nombrePubObjetivox = "";
 			    		if (procedimiento.getPublicosObjetivo().size() > 0) {
 			    			PublicoObjetivo pubObjetivo = (PublicoObjetivo)procedimiento.getPublicosObjetivo().toArray()[0];
@@ -1249,8 +1213,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 				return new SolrPendienteResultado(false, "Error obteniendo el trámite.");
 			}
 			
-			boolean isIndexable = this.isIndexable(docTramite.getTramit());
-			if (!isIndexable) {
+			if (!IndexacionUtil.isIndexable(docTramite.getTramit())) {
 				return new SolrPendienteResultado(true, "No se puede indexar");
 			}
 			
@@ -1284,6 +1247,9 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			indexData.setFechaCaducidad(procedimiento.getFechaCaducidad());
 			indexData.setInterno(false);
 			
+			// UOs
+			indexData.getUos().add(IndexacionUtil.calcularPathUO(procedimiento.getUnidadAdministrativa()));
+			
 			//FamiliaID
 			if (procedimiento.getFamilia() != null) {
 				indexData.setFamiliaId(procedimiento.getFamilia().getId().toString());
@@ -1300,7 +1266,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 				if (traduccion != null && enumIdioma != null) {
 					try {
 						
-						if (ArchivoUtils.isIndexableSolr(traduccion.getArchivo())) {
+						if (IndexacionUtil.isIndexableSolr(traduccion.getArchivo())) {
 							log.debug("Es indexable tradDoc Ficha con id:" + traduccion.getArchivo().getId()+" y tamanyo:" + traduccion.getArchivo().getPeso());
 						} else {
 							log.debug("NO Es indexable tradDoc Ficha con id:" + traduccion.getArchivo().getId()+" y tamanyo:" + traduccion.getArchivo().getPeso());
@@ -1342,24 +1308,6 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 					    	extension.addIdioma(enumIdioma, traduccion.getArchivo().getMime());
 					    }
 				    	
-				    	//Unidades administrativas de las fichas.
-						UnidadAdministrativa unidadAdministrativa = procedimiento.getUnidadAdministrativa();
-						if (unidadAdministrativa != null) {
-							List<PathUO> uos = new ArrayList<PathUO>();
-							PathUO uo = new PathUO();
-							List<String> path = new ArrayList<String>();
-							
-							//Hay que extraer la id de los predecesores y luego el de uno mismo
-							Set<UnidadAdministrativa> predecesores = unidadAdministrativa.getPredecesores();
-							for(UnidadAdministrativa predecesor : predecesores) {
-								path.add(predecesor.getId().toString());
-							}
-							path.add( unidadAdministrativa.getId().toString());
-							uo.setPath(path);
-							uos.add(uo);
-							indexData.setUos(uos);
-						}
-						
 				    	if (procedimiento != null ) {
 				    		String nombrePubObjetivox = "";
 				    		if (procedimiento.getPublicosObjetivo().size() > 0) {

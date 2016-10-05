@@ -60,6 +60,7 @@ import org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegate;
 import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.util.DateUtils;
+import org.ibit.rol.sac.persistence.util.IndexacionUtil;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
@@ -2058,20 +2059,6 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		}
 	}
 	
-	/**
-	 * Comprueba si es indexable un procedimiento.
-	 * @return
-	 */
-	private boolean isIndexable(final ProcedimientoLocal procedimiento) {
-		boolean indexable = true;
-		if (procedimiento.getValidacion() != 1 ) {
-			indexable = false;
-		}
-				
-		return indexable;
-	}
-	
-	
 
 	/**
 	 * Metodo para indexar un solrPendiente.
@@ -2137,7 +2124,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				return new SolrPendienteResultado(false, "Error obteniendo la id del procedimiento");
 			}
 			
-			boolean isIndexable = this.isIndexable(procedimiento);
+			boolean isIndexable = IndexacionUtil.isIndexable(procedimiento);
 			if (!isIndexable) {
 				return new SolrPendienteResultado(true, "No se puede indexar");
 			}
@@ -2199,28 +2186,15 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 					}
 			    	
 			    	//Servicio Responsable
-			    	//TODO Hay que integrarlo todo junto (la rama de github con esta) y entonces activar esta parte.
-			    	/**
+			    	/*  Se ha ocultado este campo en la aplicacion
 			    	if (procedimiento.getServicioResponsable() != null) {
 			    		TraduccionUA unidadAdm = (TraduccionUA) procedimiento.getServicioResponsable().getTraduccion(keyIdioma);
 						if (unidadAdm != null) {
 							textoOptional.append(" ");
 							textoOptional.append(unidadAdm.getNombre());
 						}
-			    	}**/
-			    	/*
-			    	//hechos vitales
-					for(HechoVitalProcedimiento hecho : procedimiento.getHechosVitalesProcedimientos()) {
-						final TraduccionHechoVital traduccionHechoVital =  (TraduccionHechoVital) hecho.getHechoVital().getTraduccionFront(keyIdioma);
-						if (traduccionHechoVital != null) {
-							textoOptional.append(" ");
-							textoOptional.append(traduccionHechoVital.getNombre());
-							textoOptional.append(" ");
-							textoOptional.append(traduccionHechoVital.getDescripcion());
-							textoOptional.append(" ");
-							textoOptional.append(traduccionHechoVital.getPalabrasclave());
-						}
-					}*/
+			    	}
+			    	*/
 					
 					//Publico objetivo, para extraer el nombre del publico objetivo
 					String nombrePubObjetivo = "";
@@ -2231,7 +2205,6 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 							break; //Con encontrar uno nos basta
 						}
 					}
-					
 					
 					//UO
 					if (procedimiento.getUnidadAdministrativa() != null && procedimiento.getUnidadAdministrativa().getTraduccion(keyIdioma) != null) {
@@ -2293,23 +2266,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			indexData.setInterno(false);
 			
 			//UA
-			UnidadAdministrativa unitatAdministrativa = procedimiento.getUnidadAdministrativa();
-			if (unitatAdministrativa != null) {
-				List<PathUO> uos = new ArrayList<PathUO>();
-				PathUO uo = new PathUO();
-				List<String> path = new ArrayList<String>();
-				
-				//Hay que extraer la id de los predecesores y luego el de uno mismo
-				Set<UnidadAdministrativa> predecesores = unitatAdministrativa.getPredecesores();
-				for(UnidadAdministrativa predecesor : predecesores) {
-					path.add(predecesor.getId().toString());
-				}
-				path.add(unitatAdministrativa.getId().toString());
-				
-				uo.setPath(path);
-				uos.add(uo);
-				indexData.setUos(uos);
-			}
+			indexData.getUos().add(IndexacionUtil.calcularPathUO(procedimiento.getUnidadAdministrativa()));
 			
 			//Revisar si el tramite es telematico
 			indexData.setTelematico(false);

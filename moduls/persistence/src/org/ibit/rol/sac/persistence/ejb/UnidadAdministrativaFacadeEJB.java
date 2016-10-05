@@ -55,6 +55,7 @@ import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegateI;
 import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.util.Cadenas;
+import org.ibit.rol.sac.persistence.util.IndexacionUtil;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
@@ -2542,7 +2543,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			indexData.setCategoria(categoria);
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
 			indexData.setElementoId(idElemento.toString());
-			
+			indexData.getUos().add(IndexacionUtil.calcularPathUO(unidadAdministrativa));
 			
 			//Iteramos las traducciones
 			final Map<String, Traduccion> traducciones = unidadAdministrativa.getTraduccionMap();
@@ -2587,14 +2588,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 							textoOptional.append(traduccionMateria.getPalabrasclave());
 			    		}
 					}
-			    	
-			    	/*textoOptional.append(" ");
-					textoOptional.append(traduccion.getNombre());
-					textoOptional.append(" ");
-					textoOptional.append(traduccion.getAbreviatura());
-					textoOptional.append(" ");
-					textoOptional.append(traduccion.getPresentacion());
-			    	*/
+			    				    	
 			    	//edificios
 			    	for(Edificio edificio : unidadAdministrativa.getEdificios()) { 
 			    		TraduccionEdificio traduccionEdificio = (TraduccionEdificio) edificio.getTraduccion(keyIdioma);
@@ -2604,30 +2598,10 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			    		}
 					}
 					
-					
-					//Unidades administrativas de las fichas.
-					List<PathUO> uos = new ArrayList<PathUO>();
-					PathUO uo = new PathUO();
-					List<String> path = new ArrayList<String>();
-					
-					//Hay que extraer la id de los predecesores y luego el de uno mismo
-					Set<UnidadAdministrativa> predecesores = unidadAdministrativa.getPredecesores();
-					for(UnidadAdministrativa predecesor : predecesores) {
-						TraduccionUA tradUA = (TraduccionUA) predecesor.getTraduccion(keyIdioma);
-						path.add(predecesor.getId().toString());
-						if (tradUA != null) {
-							textoOptional.append(" ");
-					    	textoOptional.append(predecesor.getNombre());
-						}
-					}
-					path.add( unidadAdministrativa.getId().toString());
-					textoOptional.append(" ");
-			    	textoOptional.append(unidadAdministrativa.getNombre());	
-					uo.setPath(path);
-					uos.add(uo);
-					indexData.setUos(uos);
-				
-					
+					//Unidades administrativas.
+			    	textoOptional.append(" ");
+			    	textoOptional.append(IndexacionUtil.calcularPathTextUO(unidadAdministrativa, keyIdioma));	
+			    	 
 			    	searchTextOptional.addIdioma(enumIdioma, textoOptional.toString());
 			    	urls.addIdioma(enumIdioma, "/govern/organigrama/area.do?lang="+keyIdioma+"&coduo="+unidadAdministrativa.getId());
 				}

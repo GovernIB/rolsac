@@ -47,7 +47,7 @@ import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
-import org.ibit.rol.sac.persistence.util.ArchivoUtils;
+import org.ibit.rol.sac.persistence.util.IndexacionUtil;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
@@ -974,21 +974,6 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 		return resultado;
 	}
 
-
-	/**
-	 * Comprueba si es indexable un tramite.
-	 * 
-	 * @return
-	 */
-	private boolean isIndexable(final Normativa normativa) {
-		boolean indexable = true;
-		if (normativa.getValidacion() != 1 ) {
-			indexable = false;
-		}
-		
-		return indexable;
-	}
-
 	 /**
 	 * Metodo para indexar un solrPendiente.
 	 * @param solrPendiente
@@ -1082,7 +1067,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 				return new SolrPendienteResultado(false, "Error obteniendo la normativa");
 			}
 			
-			boolean isIndexable = this.isIndexable(normativa);
+			boolean isIndexable = IndexacionUtil.isIndexable(normativa);
 			if (!isIndexable) {
 				return new SolrPendienteResultado(true, "No se puede indexar");
 			}
@@ -1091,7 +1076,9 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			final IndexData indexData = new IndexData();
 			indexData.setCategoria(categoria);
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
-			indexData.setElementoId(idElemento.toString());
+			indexData.setElementoId(idElemento.toString());			
+			indexData.setFechaPublicacion(normativa.getFechaBoletin());
+			indexData.getUos().add(IndexacionUtil.calcularPathUO(normativa.getUnidadAdministrativa()));
 			
 			//Iteramos las traducciones
 			final Map<String, Traduccion> traducciones = normativa.getTraduccionMap();
@@ -1114,11 +1101,6 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 						continue;
 					}
 					
-					// Si no tiene UA, no indexamos
-					if (normativa.getUnidadAdministrativa() == null) {
-						continue;
-					}
-					
 					//Anyadimos idioma al enumerado.
 					idiomas.add(enumIdioma);
 					
@@ -1133,38 +1115,9 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			    	searchText.addIdioma(enumIdioma, traduccion.getTitulo()+ " " + traduccion.getApartado() + " " + tipoNormativaNombre);
 			    	
 			    	final StringBuffer textoOptional = new StringBuffer();
-			    	textoOptional.append(" ");
-			    	textoOptional.append(traduccion.getObservaciones());
+			    	textoOptional.append(" " + traduccion.getObservaciones());
+			    	textoOptional.append(IndexacionUtil.calcularPathTextUO(normativa.getUnidadAdministrativa(), keyIdioma));
 			    	
-					//Unidad administrativas normativa
-					UnidadAdministrativa unidadAdministrativa = normativa.getUnidadAdministrativa();
-					List<PathUO> uos = new ArrayList<PathUO>();
-					PathUO uo = new PathUO();
-					List<String> path = new ArrayList<String>();
-					
-					//Hay que extraer la id de los predecesores y luego el de uno mismo
-					Set<UnidadAdministrativa> predecesores = unidadAdministrativa.getPredecesores();
-					for(UnidadAdministrativa predecesor : predecesores) {
-						if (predecesor != null && predecesor.getId() != null) {
-							path.add(predecesor.getId().toString());
-							if (predecesor.getNombre() != null) {
-								textoOptional.append(" ");
-								textoOptional.append(predecesor.getNombre());
-							}
-						}
-					}
-					
-					path.add( unidadAdministrativa.getId().toString());
-					if (unidadAdministrativa.getNombre() != null) {
-						textoOptional.append(" ");
-			    		textoOptional.append(unidadAdministrativa.getNombre());
-					}
-					
-					uo.setPath(path);
-					uos.add(uo);
-					indexData.setUos(uos);
-				
-					
 					searchTextOptional.addIdioma(enumIdioma, textoOptional.toString());
 			    	if (normativa.getBoletin() == null && normativa.getFecha() != null && (traduccion.getEnlace() == null || traduccion.getEnlace().isEmpty())) {
 			    		Calendar calendar = Calendar.getInstance();
@@ -1188,9 +1141,6 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			indexData.setSearchTextOptional(searchTextOptional);
 			indexData.setIdiomas(idiomas);
 						
-			//Fechas
-			indexData.setFechaPublicacion(normativa.getFechaBoletin());
-			
 			solrIndexer.indexarContenido(indexData);
 			return new SolrPendienteResultado(true);
 		} catch(Exception exception) {
@@ -1225,16 +1175,18 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 				return new SolrPendienteResultado(false, "Error obteniendo la normativa");
 			}
 			
-			boolean isIndexable = this.isIndexable(normativa);
+			boolean isIndexable = IndexacionUtil.isIndexable(normativa);
 			if (!isIndexable) {
 				return new SolrPendienteResultado(true, "No se puede indexar");
 			}
+												
 			
 			//Preparamos la información básica: id elemento, aplicacionID = ROLSAC y la categoria ( y padre) de tipo documento normativa.
 			final IndexFile indexData = new IndexFile();
 			indexData.setCategoria(categoria);
 			indexData.setCategoriaPadre(EnumCategoria.ROLSAC_NORMATIVA);
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
+			indexData.getUos().add(IndexacionUtil.calcularPathUO(normativa.getUnidadAdministrativa()));
 			
 			//Iteramos las traducciones
 			final Map<String, Traduccion> traducciones = normativa.getTraduccionMap();
@@ -1245,6 +1197,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			final MultilangLiteral urlsPadre = new MultilangLiteral();
 			
 			//Recorremos las traducciones
+			boolean encArchivo = false;
 			for (String keyIdioma : normativa.getTraduccionMap().keySet()) {
 				final EnumIdiomas enumIdioma = EnumIdiomas.fromString(keyIdioma);
 				final TraduccionNormativa traduccion = (TraduccionNormativa)traducciones.get(keyIdioma);
@@ -1256,16 +1209,19 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 						continue;
 					}
 					
+					// Verificamos si se ha encontrado el archivo asociado
 					if (traduccion.getArchivo() == null || traduccion.getArchivo().getId().compareTo(idElemento) != 0) {
 						continue;
 					}
+					
+					encArchivo = true;
 					
 					if (normativa.getUnidadAdministrativa() == null) {
 						continue;
 					}
 					
 
-					if (ArchivoUtils.isIndexableSolr(traduccion.getArchivo())) {
+					if (IndexacionUtil.isIndexableSolr(traduccion.getArchivo())) {
 						log.debug("Es indexable con mime:" + traduccion.getArchivo().getMime()+" y tamanyo:" + traduccion.getArchivo().getPeso());
 					} else {
 						log.debug("NO Es indexable con mime:" + traduccion.getArchivo().getMime()+" y tamanyo:" + traduccion.getArchivo().getPeso());
@@ -1296,24 +1252,8 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 				}
 			}
 			
-			//Unidades administrativas de las fichas.
-			UnidadAdministrativa unidadAdministrativa = normativa.getUnidadAdministrativa();
-			if (unidadAdministrativa != null) {
-				List<PathUO> uos = new ArrayList<PathUO>();
-				PathUO uo = new PathUO();
-				List<String> path = new ArrayList<String>();
-				
-				//Hay que extraer la id de los predecesores y luego el de uno mismo
-				Set<UnidadAdministrativa> predecesores = unidadAdministrativa.getPredecesores();
-				for(UnidadAdministrativa predecesor : predecesores) {
-					if (predecesor != null && predecesor.getId() != null) {
-						path.add(predecesor.getId().toString());
-					}
-				}
-				
-				uo.setPath(path);
-				uos.add(uo);
-				indexData.setUos(uos);
+			if (!encArchivo) {
+				return new SolrPendienteResultado(true, "No se ha encontrado normativa asociada");
 			}
 			
 			//Seteamos datos multidioma.

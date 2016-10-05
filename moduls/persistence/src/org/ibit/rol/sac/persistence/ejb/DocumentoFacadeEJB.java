@@ -5,9 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -16,7 +14,6 @@ import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 
-import org.apache.commons.io.FilenameUtils;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.Documento;
@@ -36,9 +33,7 @@ import org.ibit.rol.sac.model.TraduccionHechoVital;
 import org.ibit.rol.sac.model.TraduccionMateria;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimiento;
-import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
-import org.ibit.rol.sac.model.TraduccionTramite;
 import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -48,14 +43,12 @@ import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
-import org.ibit.rol.sac.persistence.util.ArchivoUtils;
+import org.ibit.rol.sac.persistence.util.IndexacionUtil;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
 import es.caib.solr.api.SolrIndexer;
-import es.caib.solr.api.model.IndexData;
 import es.caib.solr.api.model.IndexFile;
 import es.caib.solr.api.model.MultilangLiteral;
-import es.caib.solr.api.model.PathUO;
 import es.caib.solr.api.model.types.EnumAplicacionId;
 import es.caib.solr.api.model.types.EnumCategoria;
 import es.caib.solr.api.model.types.EnumIdiomas;
@@ -475,32 +468,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 	
     }
     
-    /**
-	 * Comprueba si es indexable una ficha.
-	 * @return
-	 */
-	private boolean isIndexable(final Ficha ficha) {
-		boolean indexable = true;
-		if (ficha.getValidacion() != 1 ) {
-			indexable = false;
-		}
-		
-		return indexable;
-	}
-	
-	 /**
-	 * Comprueba si es indexable un procedimiento local.
-	 * @param procedimiento
-	 * @return
-	 */
-	private boolean isIndexable(final ProcedimientoLocal procedimiento) {
-		boolean indexable = true;
-		if (procedimiento.getValidacion() != 1 ) {
-			indexable = false;
-		}
-				
-		return indexable;
-	}
+    
 	
 	
 	/**
@@ -541,7 +509,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 				return new SolrPendienteResultado(false, "Da problema al cargar la info del documento procedimiento.");
 			}
 			
-			boolean isIndexable = this.isIndexable(documento.getProcedimiento());
+			boolean isIndexable = IndexacionUtil.isIndexable(documento.getProcedimiento());
 			if (!isIndexable) {
 				return new SolrPendienteResultado(true, "No se puede indexar");
 			}
@@ -576,24 +544,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 			indexData.setFechaCaducidad(procedimiento.getFechaCaducidad());
 			
 			//UA
-			UnidadAdministrativa unitatAdministrativa =procedimiento.getUnidadAdministrativa();
-			if (unitatAdministrativa != null) {
-				List<PathUO> uos = new ArrayList<PathUO>();
-				PathUO uo = new PathUO();
-				List<String> path = new ArrayList<String>();
-				
-				//Hay que extraer la id de los predecesores y luego el de uno mismo
-				Set<UnidadAdministrativa> predecesores = unitatAdministrativa.getPredecesores();
-				for(UnidadAdministrativa predecesor : predecesores) {
-					path.add(predecesor.getId().toString());
-				}
-				path.add(unitatAdministrativa.getId().toString());
-				
-				uo.setPath(path);
-				uos.add(uo);
-				indexData.setUos(uos);
-			}
-			
+			indexData.getUos().add(IndexacionUtil.calcularPathUO(procedimiento.getUnidadAdministrativa()));
 			
 			if (procedimiento.getTramites() != null) {
 				for(Tramite tramite : procedimiento.getTramites()) {
@@ -601,13 +552,6 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 						indexData.setTelematico(true);
 					}
 				}
-			}
-			
-			final String nomUnidadAministrativa;
-			if (procedimiento.getUnidadAdministrativa() == null) {
-				nomUnidadAministrativa = "";
-			} else {
-				nomUnidadAministrativa = procedimiento.getUnidadAdministrativa().getNombre();
 			}
 			
 			//Traducciones
@@ -626,7 +570,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 						continue;
 					}
 					
-					if (ArchivoUtils.isIndexableSolr(traduccion.getArchivo())) {
+					if (IndexacionUtil.isIndexableSolr(traduccion.getArchivo())) {
 						log.debug("Es indexable con mime:" + traduccion.getArchivo().getMime()+" y tamanyo:" + traduccion.getArchivo().getPeso());
 					} else {
 						log.debug("NO Es indexable con mime:" + traduccion.getArchivo().getMime()+" y tamanyo:" + traduccion.getArchivo().getPeso());
@@ -696,11 +640,24 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 								nombrePubObjetivo = traduccionPO.getTitulo();
 							}
 						}
-						
-						
+												
 						//UO
-						textoOptional.append(" ");
-						textoOptional.append(nomUnidadAministrativa);
+						TraduccionUA traduccionUA = ((TraduccionUA) procedimiento.getUnidadAdministrativa().getTraduccion(keyIdioma));
+						if (traduccionUA != null && traduccionUA.getNombre() != null) {
+							textoOptional.append(" ");
+							textoOptional.append(traduccionUA.getNombre());							
+						}							
+						
+						//Servicio Responsable
+				    	/*  Se ha ocultado este campo en la aplicacion
+				    	if (procedimiento.getServicioResponsable() != null) {
+				    		TraduccionUA unidadAdm = (TraduccionUA) procedimiento.getServicioResponsable().getTraduccion(keyIdioma);
+							if (unidadAdm != null) {
+								textoOptional.append(" ");
+								textoOptional.append(unidadAdm.getNombre());
+							}
+				    	}
+				    	*/
 						
 				    	//Nombre familia
 						textoOptional.append(procedimiento.getNombreFamilia());
@@ -713,6 +670,8 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 								textoOptional.append(" ");
 							}
 						}
+						
+						// Urls
 				    	urlsPadres.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+nombrePubObjetivo+"/tramites/tramite/"+procedimiento.getId());
 				    	urls.addIdioma(enumIdioma, "govern/rest/arxiu/" + traduccion.getArchivo().getId());
 				    	
@@ -735,12 +694,6 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 				}
 			}
 			
-			
-			
-			
-			
-			
-		
 			return new SolrPendienteResultado(indexacion);
 		} catch(Exception exception) {
 			log.error("Error en documentofacade intentando indexar.  idElemento:" + idElemento+" categoria:"+ categoria, exception);
@@ -772,7 +725,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 				return new SolrPendienteResultado(false, "Da problema al cargar la info del documento ficha.");
 			}
 			
-			boolean isIndexable = this.isIndexable(documento.getFicha());
+			boolean isIndexable = IndexacionUtil.isIndexable(documento.getFicha());
 			if (!isIndexable) {
 				return new SolrPendienteResultado(true, "No se puede indexar");
 			}
@@ -808,6 +761,12 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 			indexData.setFechaPublicacion(ficha.getFechaPublicacion());
 			indexData.setFechaCaducidad(ficha.getFechaCaducidad());
 			indexData.setInterno(false);
+			
+			// Uos: una ficha puede tener varias UAs
+			indexData.setUos(IndexacionUtil.calcularPathUOsFicha(ficha));
+			
+			// Obtenemos primera UA
+			UnidadAdministrativa primeraUA = IndexacionUtil.calcularPrimeraUAFicha(ficha);		
 					
 			//Recorremos las traducciones
 			for (String keyIdioma : documento.getTraduccionMap().keySet()) {
@@ -822,7 +781,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 						continue;
 					}
 						
-					if (ArchivoUtils.isIndexableSolr(traduccionDocumento.getArchivo())) {
+					if (IndexacionUtil.isIndexableSolr(traduccionDocumento.getArchivo())) {
 						log.debug("Es indexable tradDoc Ficha con id:" + traduccionDocumento.getArchivo().getId()+" y tamanyo:" + traduccionDocumento.getArchivo().getPeso());
 					} else {
 						log.debug("NO Es indexable tradDoc Ficha con id:" + traduccionDocumento.getArchivo().getId()+" y tamanyo:" + traduccionDocumento.getArchivo().getPeso());
@@ -853,41 +812,17 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 				    	//StringBuffer que tendra el contenido a agregar en textOptional
 				    	final StringBuffer textoOptional = new StringBuffer();
 						
-				    	String fichaUAId = "";
-						//Unidades administrativas de las fichas.
-						for (FichaUA fichaUA : ficha.getFichasua()) {
-							if (fichaUAId.isEmpty()) {
-								fichaUAId = fichaUA.getId().toString();
-							}
-							
-							TraduccionUA traduccionUA = ((TraduccionUA)fichaUA.getUnidadAdministrativa().getTraduccion(keyIdioma));
-							if (traduccionUA != null) {
-								textoOptional.append(traduccionUA.getNombre());
-								textoOptional.append(" ");
-							}
-							
-							List<PathUO> uos = new ArrayList<PathUO>();
-							PathUO uo = new PathUO();
-							List<String> path = new ArrayList<String>();
-							
-							//Hay que extraer la id de los predecesores y luego el de uno mismo
-							Set<UnidadAdministrativa> predecesores = fichaUA.getUnidadAdministrativa().getPredecesores();
-							for(UnidadAdministrativa predecesor : predecesores) {
-								path.add(predecesor.getId().toString());
-							}
-							path.add( fichaUA.getUnidadAdministrativa().getId().toString());
-							
-							uo.setPath(path);
-							uos.add(uo);
-							indexData.setUos(uos);
-						}
-						
-						urls.addIdioma(enumIdioma, "govern/rest/arxiu/" + traduccionDocumento.getArchivo().getId());						
+				    	//Unidades administrativas de las fichas.
+				    	for (FichaUA fichaUA : ficha.getFichasua()) {
+							textoOptional.append(IndexacionUtil.calcularPathTextUO(fichaUA.getUnidadAdministrativa(), keyIdioma));																					
+						}	
+				    	
+				    	urls.addIdioma(enumIdioma, "govern/rest/arxiu/" + traduccionDocumento.getArchivo().getId());						
 						
 				    	if (traduccionFicha == null || (traduccionFicha.getUrl() == null || traduccionFicha.getUrl().isEmpty())) {
 				    		urlsPadre.addIdioma(enumIdioma, "/govern/sac/fitxaRedirect.do?codi="+ficha.getId()+"&lang="+keyIdioma);
 				    	} else {
-				    		String idUA = "{#UA:"+fichaUAId+"}";
+				    		String idUA = "{#UA:"+primeraUA.getId()+"}";
 				    		urlsPadre.addIdioma(enumIdioma, "/govern/sac/fitxa.do?codi="+ documento.getId() + "&coduo=" + idUA + "&lang=" + keyIdioma);
 				    	}
 				    	
@@ -923,6 +858,9 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 			return new SolrPendienteResultado(false, mensajeError);
 		}
 	}
+
+
+	
 	
 	/**
 	 * Metodo para indexar un solrPendiente.

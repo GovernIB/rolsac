@@ -64,6 +64,7 @@ import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.util.Cadenas;
 import org.ibit.rol.sac.persistence.util.DateUtils;
+import org.ibit.rol.sac.persistence.util.IndexacionUtil;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
@@ -1776,20 +1777,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 
     	}
 
-    }
-    
-	/**
-	 * Comprueba si es indexable un procedimiento.
-	 * @return
-	 */
-	private boolean isIndexable(final Ficha ficha) {
-		boolean indexable = true;
-		if (ficha.getValidacion() != 1 ) {
-			indexable = false;
-		}
-				
-		return indexable;
-	}
+    }    	
 
 
 	
@@ -1882,7 +1870,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 				return new SolrPendienteResultado(false, "Da problema al cargar la info de la ficha.");
 			}
 			
-			boolean isIndexable = this.isIndexable(ficha);
+			boolean isIndexable = IndexacionUtil.isIndexable(ficha);
 			if (!isIndexable) {
 				return new SolrPendienteResultado(true, "No se puede indexar");
 			}
@@ -1892,6 +1880,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			indexData.setCategoria(categoria);
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
 			indexData.setElementoId(idElemento.toString());
+			indexData.setUos(IndexacionUtil.calcularPathUOsFicha(ficha));
 			
 			//Iteramos las traducciones
 			final MultilangLiteral titulo = new MultilangLiteral();
@@ -1900,6 +1889,9 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			final MultilangLiteral searchText = new MultilangLiteral();
 			final MultilangLiteral searchTextOptional = new MultilangLiteral();
 			final List<EnumIdiomas> idiomas = new ArrayList<EnumIdiomas>();
+			
+			// Obtenemos primera UA
+			UnidadAdministrativa primeraUA = IndexacionUtil.calcularPrimeraUAFicha(ficha);	
 			
 			//Recorremos las traducciones
 			for (String keyIdioma : ficha.getTraduccionMap().keySet()) {
@@ -1950,38 +1942,13 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 						}
 					}
 					
-					String fichaUAId = "";
 					//Unidades administrativas de las fichas.
-					for (FichaUA fichaUA : ficha.getFichasua()) {
-						if (fichaUAId.isEmpty()) {
-							fichaUAId = fichaUA.getId().toString();
-						}
-						
-						TraduccionUA traduccionUA = ((TraduccionUA)fichaUA.getUnidadAdministrativa().getTraduccion(keyIdioma));
-						if (traduccionUA != null) {
-							textoOptional.append(traduccionUA.getNombre());
-							textoOptional.append(" ");
-						}
-						
-						List<PathUO> uos = new ArrayList<PathUO>();
-						PathUO uo = new PathUO();
-						List<String> path = new ArrayList<String>();
-						
-						//Hay que extraer la id de los predecesores y luego el de uno mismo
-						Set<UnidadAdministrativa> predecesores = fichaUA.getUnidadAdministrativa().getPredecesores();
-						for(UnidadAdministrativa predecesor : predecesores) {
-							path.add(predecesor.getId().toString());
-						}
-						path.add( fichaUA.getUnidadAdministrativa().getId().toString());
-						
-						uo.setPath(path);
-						uos.add(uo);
-						indexData.setUos(uos);
-					}
+					textoOptional.append(IndexacionUtil.calcularPathTextUOsFicha(ficha, keyIdioma));
+					textoOptional.append(" ");
 					
 			    	searchTextOptional.addIdioma(enumIdioma, textoOptional.toString());	    	
 			    	if (traduccion.getUrl() == null || traduccion.getUrl().isEmpty()) {
-			    		String idUA = "{#UA:"+fichaUAId+"}";
+			    		String idUA = "{#UA:"+primeraUA.getId()+"}";
 			    		urls.addIdioma(enumIdioma, "/govern/sac/fitxa.do?codi="+ ficha.getId() + "&coduo=" + idUA + "&lang=" + keyIdioma);	    		
 			    	} else {
 			    		urls.addIdioma(enumIdioma, "/govern/sac/fitxaRedirect.do?codi="+ficha.getId()+"&lang="+keyIdioma);
