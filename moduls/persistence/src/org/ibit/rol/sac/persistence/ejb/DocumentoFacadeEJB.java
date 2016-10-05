@@ -743,7 +743,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 		
 			return new SolrPendienteResultado(indexacion);
 		} catch(Exception exception) {
-			log.error("Error en documentofacade intentando indexar.", exception);
+			log.error("Error en documentofacade intentando indexar.  idElemento:" + idElemento+" categoria:"+ categoria, exception);
 			String mensajeError;
 			if (exception.getMessage() == null) {
 				mensajeError = exception.toString();
@@ -913,7 +913,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 			
 			return new SolrPendienteResultado(indexacion);
 		} catch(Exception exception) {
-			log.error("Error en documentofacade intentando indexar.", exception);
+			log.error("Error en documentofacade intentando indexar. idElemento:" + idElemento+" categoria:"+ categoria, exception);
 			String mensajeError;
 			if (exception.getMessage() == null) {
 				mensajeError = exception.toString();
