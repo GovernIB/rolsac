@@ -362,6 +362,8 @@ function CLlistat(){
 			ordre_C = ordre_Camp;
 			ordre_c1 = (ordre_C == "ordre") ? " " + ordre_T : "";
 			ordre_c2 = (ordre_C == "codiEstandar") ? " " + ordre_T : "";
+			ordre_c3 = (ordre_C == "fecha") ? " " + ordre_T : "";
+			ordre_c4 = (ordre_C == "mensaje") ? " " + ordre_T : "";
 
 			
 
@@ -379,16 +381,18 @@ function CLlistat(){
 			
 			codi_totals += "</p>";
 
-			codi_cap1 = "<div class=\"th nom" + ordre_c1 + "\" role=\"columnheader\">" + txtId + "</div>";
-			codi_cap2 = "<div class=\"th codi_estandard" + ordre_c2 + "\" role=\"columnheader\">" + txtDescripcio + "</div>";
-
+			codi_cap1 = "<div class=\"th id" + ordre_c1 + "\" role=\"columnheader\">" + txtId + "</div>";
+			codi_cap2 = "<div class=\"th descripcion" + ordre_c2 + "\" role=\"columnheader\">" + txtDescripcio + "</div>";
+			codi_cap3 = "<div class=\"th fecha" + ordre_c3 + "\" role=\"columnheader\">" + txtFechaIndexacion + "</div>";
+			codi_cap4 = "<div class=\"th mensaje" + ordre_c4 + "\" role=\"columnheader\">" + txtMensaje + "</div>";
+			
 			// codi taula
 			codi_taula = "<div class=\"table llistat\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\" style=\"clear:both\">";
 
 			// codi cap + cuerpo
 			codi_taula += "<div class=\"thead\">";
 			codi_taula += "<div class=\"tr\" role=\"rowheader\">";
-			codi_taula += codi_cap1 + codi_cap2;
+			codi_taula += codi_cap1 + codi_cap2 + codi_cap3 + codi_cap4;
 			codi_taula += "</div>";
 			codi_taula += "</div>";
 			codi_taula += "<div class=\"tbody\">";
@@ -401,19 +405,21 @@ function CLlistat(){
 				
 				dada_node = this;
 				
-				if (dada_node.tipo == "PRO") {
+				if(dada_node.tipo == "FCH"){
+					txtSolrDescripcionTipo = txtSolrDescripcionTipoFicha + " " + dada_node.idElemento;
+				} else if (dada_node.tipo == "PRO") {
 					txtSolrDescripcionTipo = txtSolrDescripcionTipoPro + " " + dada_node.idElemento;
-				}else if(dada_node.tipo == "UNA"){
+				} else if(dada_node.tipo == "UNA"){
 					txtSolrDescripcionTipo = txtSolrDescripcionTipoUna + " " + dada_node.idElemento;
-				}else if(dada_node.tipo == "DPR"){
+				} else if(dada_node.tipo == "DPR"){
 					txtSolrDescripcionTipo = txtSolrDescripcionTipoProDoc + " " + dada_node.idElemento;
-				}else if(dada_node.tipo == "NOR"){
+				} else if(dada_node.tipo == "NOR"){
 					txtSolrDescripcionTipo = txtSolrDescripcionTipoNor + " " + dada_node.idElemento;
-				}else if(dada_node.tipo == "DNO"){
+				} else if(dada_node.tipo == "DNO"){
 					txtSolrDescripcionTipo = txtSolrDescripcionTipoNorDoc + " " + dada_node.idElemento;
-				}else if(dada_node.tipo == "TRA"){
+				} else if(dada_node.tipo == "TRA"){
 					txtSolrDescripcionTipo = txtSolrDescripcionTipoTra + " " + dada_node.idElemento;
-				}else if(dada_node.tipo == "DFC "){
+				} else if(dada_node.tipo == "DFC"){
 					txtSolrDescripcionTipo = txtSolrDescripcionTipoFichaDoc + " " + dada_node.idElemento;
 				} else if(dada_node.tipo == "DTR") {
 					txtSolrDescripcionTipo = txtSolrDescripcionTipoTraDoc + " " + dada_node.idElemento;
@@ -425,15 +431,26 @@ function CLlistat(){
 
 				codi_taula += "<div class=\"tr" + parClass + "\" role=\"row\">";
 
-				codi_taula += "<div class=\"td perfil\" role=\"gridcell\">";
+				codi_taula += "<div class=\"td id\" role=\"gridcell\">";
 				codi_taula += "<input type=\"hidden\" value=\"" + dada_node.id + "\" class=\"id\" />";
-				codi_taula += "<span class=\"nom\">" + (printStringFromNull(dada_node.id, txtSinValor)) + "</span>";				
+				codi_taula += "<span class=\"perfil\">" + (printStringFromNull(dada_node.id, txtSinValor)) + "</span>";				
 				codi_taula += "</div>";
-				codi_taula += "<div class=\"td codiEstandard\" role=\"gridcell\">";				
+				codi_taula += "<div class=\"td descripcion\" role=\"gridcell\">";				
 				codi_taula += printStringFromNull(txtSolrDescripcionTipo, txtSinValor);
-
+				codi_taula += "</div>";
+				codi_taula += "<div class=\"td fecha\" role=\"gridcell\">";	
+				if (dada_node.fechaIndexacion == null || dada_node.fechaIndexacion == '') {
+				    codi_taula += " ";
+				} else {
+					var fecha = new Date(dada_node.fechaIndexacion);
+					codi_taula += printStringFromNull(fecha.getFullYear()+"/"+(fecha.getMonth()+1)+"/"+fecha.getDate(), txtSinValor);
+				}
+				codi_taula += "</div>";
+				codi_taula += "<div class=\"td mensaje\" role=\"gridcell\">";				
+				codi_taula += printStringFromNull(dada_node.mensajeError, txtSinValor);
 				codi_taula += "</div>";
 
+				
 				codi_taula += "</div>";
 			});
 

@@ -44,6 +44,8 @@
     var txtNoHiHaLlistat = txtNoHiHa + " " + txtLlistaItems.toLowerCase();
     var txtId = "<spring:message code='txt.indexaciones.id'/>";
     var txtDescripcio =  "<spring:message code='txt.indexaciones.descripcion'/>";
+    var txtFechaIndexacion =  "<spring:message code='txt.indexaciones.fechaindexacion'/>";
+    var txtMensaje =  "<spring:message code='txt.indexaciones.mensaje'/>";
     var txtSolrDescripcionTipoPro =  "<spring:message code='index.descripcio.tipo.PRO'/>";
     var txtSolrDescripcionTipoUna =  "<spring:message code='index.descripcio.tipo.UNA'/>";
     var txtSolrDescripcionTipoProDoc =  "<spring:message code='index.descripcio.tipo.DPR'/>";
