@@ -1187,7 +1187,8 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			indexData.setCategoriaPadre(EnumCategoria.ROLSAC_NORMATIVA);
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
 			indexData.getUos().add(IndexacionUtil.calcularPathUO(normativa.getUnidadAdministrativa()));
-			
+			indexData.setElementoIdPadre(normativa.getId().toString());
+
 			//Iteramos las traducciones
 			final Map<String, Traduccion> traducciones = normativa.getTraduccionMap();
 			final MultilangLiteral titulo = new MultilangLiteral();
@@ -1228,7 +1229,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 						return new SolrPendienteResultado(true, "El documento no cumple los requisitos.");
 					}
 					
-					indexData.setElementoId(traduccion.getArchivo().getId().toString());
+					indexData.setElementoId(idElemento+"."+traduccion.getArchivo().getId().toString());
 					
 					
 					//Seteamos los primeros campos multiidiomas: Titulo y Descripción (y padre).

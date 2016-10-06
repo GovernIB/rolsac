@@ -1087,7 +1087,8 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			indexData.setCategoriaPadre(EnumCategoria.ROLSAC_PROCEDIMIENTO);
 			indexData.setElementoId(idElemento.toString());
 			indexData.getUos().add(IndexacionUtil.calcularPathUO(procedimiento.getUnidadAdministrativa()));			
-			
+			indexData.setElementoIdPadre(procedimiento.getId().toString());
+
 			//Iteramos las traducciones
 			final Map<String, Traduccion> traducciones = tramite.getTraduccionMap();
 			final MultilangLiteral titulo = new MultilangLiteral();
@@ -1226,7 +1227,8 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			indexData.setCategoria(categoria);
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
 			indexData.setCategoriaPadre(EnumCategoria.ROLSAC_TRAMITE);
-			
+			indexData.setElementoIdPadre(tramite.getId().toString());
+
 			//Datos Id materia
 			final List<String> materiasId = new ArrayList<String>();	
 			for(Materia materia : procedimiento.getMaterias()) {
@@ -1274,7 +1276,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 						}
 						
 						//Seteado el id
-						indexData.setElementoId(traduccion.getArchivo().getId().toString());
+						indexData.setElementoId(idElemento+"."+traduccion.getArchivo().getId().toString());
 						
 						//Anyadimos idioma al enumerado.
 						indexData.setIdioma(enumIdioma);
