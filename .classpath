@@ -130,7 +130,7 @@
 	<classpathentry kind="lib" path="lib/webcaib/commons-discovery-0.5.jar"/>
 	<classpathentry kind="lib" path="lib/axis-1.4/axis.jar"/>
 	<classpathentry kind="lib" path="lib/jboss/jbossall-client.jar"/>
-	<classpathentry kind="lib" path="lib/solr/solrapi.jar" sourcepath="/solrapi"/>
+	<classpathentry kind="lib" path="lib/solr/solrapi.jar" sourcepath="/solr"/>
 	<classpathentry kind="lib" path="lib/webcaib/commons-codec-1.5.jar"/>
 	<classpathentry kind="src" path="/solrapi"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
