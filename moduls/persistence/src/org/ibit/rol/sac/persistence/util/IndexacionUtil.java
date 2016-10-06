@@ -247,11 +247,11 @@ public class IndexacionUtil {
 		if (tramite.getProcedimiento() != null) {
 			if (tramite.getProcedimiento().getValidacion() != 1 ) {
 				return false;
-			}			
-		}
-		
-		if (tramite.getProcedimiento().getUnidadAdministrativa() == null) {
-			return false;
+			}	
+			
+			if (tramite.getProcedimiento().getUnidadAdministrativa() == null) {
+				return false;
+			}
 		}
 		
 		return true;

@@ -1268,6 +1268,11 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 				if (traduccion != null && enumIdioma != null) {
 					try {
 						
+						//Para saltarse los idiomas sin titulo.
+						if (traduccion.getTitulo() == null || traduccion.getTitulo().isEmpty()) {
+							continue;
+						}
+						
 						if (IndexacionUtil.isIndexableSolr(traduccion.getArchivo())) {
 							log.debug("Es indexable tradDoc Ficha con id:" + traduccion.getArchivo().getId()+" y tamanyo:" + traduccion.getArchivo().getPeso());
 						} else {
