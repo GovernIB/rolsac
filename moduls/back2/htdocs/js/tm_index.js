@@ -407,7 +407,7 @@ function CLlistat(){
 					txtSolrDescripcionTipo = txtSolrDescripcionTipoUna + " " + dada_node.idElemento;
 				}else if(dada_node.tipo == "DPR"){
 					txtSolrDescripcionTipo = txtSolrDescripcionTipoProDoc + " " + dada_node.idElemento;
-				}else if(dada_node.tipo == "NOR "){
+				}else if(dada_node.tipo == "NOR"){
 					txtSolrDescripcionTipo = txtSolrDescripcionTipoNor + " " + dada_node.idElemento;
 				}else if(dada_node.tipo == "DNO"){
 					txtSolrDescripcionTipo = txtSolrDescripcionTipoNorDoc + " " + dada_node.idElemento;

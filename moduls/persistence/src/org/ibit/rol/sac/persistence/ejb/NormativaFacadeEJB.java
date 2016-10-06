@@ -1187,7 +1187,8 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			indexData.setCategoriaPadre(EnumCategoria.ROLSAC_NORMATIVA);
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
 			indexData.getUos().add(IndexacionUtil.calcularPathUO(normativa.getUnidadAdministrativa()));
-			
+			indexData.setElementoIdPadre(normativa.getId().toString());
+
 			//Iteramos las traducciones
 			final Map<String, Traduccion> traducciones = normativa.getTraduccionMap();
 			final MultilangLiteral titulo = new MultilangLiteral();
@@ -1224,11 +1225,15 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 					if (IndexacionUtil.isIndexableSolr(traduccion.getArchivo())) {
 						log.debug("Es indexable con mime:" + traduccion.getArchivo().getMime()+" y tamanyo:" + traduccion.getArchivo().getPeso());
 					} else {
-						log.debug("NO Es indexable con mime:" + traduccion.getArchivo().getMime()+" y tamanyo:" + traduccion.getArchivo().getPeso());
+						if (traduccion.getArchivo() == null) {
+							log.debug("NO Es indexable doc de normativa "+ normativa.getId()+" porque el archivo es nulo");
+						} else {
+							log.debug("NO Es indexable con mime:" + traduccion.getArchivo().getMime()+" y tamanyo:" + traduccion.getArchivo().getPeso());
+						}
 						return new SolrPendienteResultado(true, "El documento no cumple los requisitos.");
 					}
 					
-					indexData.setElementoId(traduccion.getArchivo().getId().toString());
+					indexData.setElementoId(idElemento+"."+traduccion.getArchivo().getId().toString());
 					
 					
 					//Seteamos los primeros campos multiidiomas: Titulo y Descripción (y padre).

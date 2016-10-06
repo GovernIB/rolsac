@@ -523,7 +523,8 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 			indexData.setCategoria(categoria);
 			indexData.setCategoriaPadre(EnumCategoria.ROLSAC_PROCEDIMIENTO);
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
-			
+			indexData.setElementoIdPadre(procedimiento.getId().toString());
+
 			//materia
 			final List<String> materiasId = new ArrayList<String>();		
 			for(Materia materia : procedimiento.getMaterias()) {
@@ -573,14 +574,18 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 					if (IndexacionUtil.isIndexableSolr(traduccion.getArchivo())) {
 						log.debug("Es indexable con mime:" + traduccion.getArchivo().getMime()+" y tamanyo:" + traduccion.getArchivo().getPeso());
 					} else {
-						log.debug("NO Es indexable con mime:" + traduccion.getArchivo().getMime()+" y tamanyo:" + traduccion.getArchivo().getPeso());
+						if (traduccion.getArchivo() == null) {
+							log.debug("NO Es indexable doc procedimiento " + procedimiento.getId()+ " porque el archivo es nulo. ");
+						} else {
+							log.debug("NO Es indexable con mime:" + traduccion.getArchivo().getMime()+" y tamanyo:" + traduccion.getArchivo().getPeso());
+						}
 						continue;
 					}
 					
 					try {
 						
-						indexData.setElementoId(traduccion.getArchivo().getId().toString());
-						
+						indexData.setElementoId(idElemento+"."+traduccion.getArchivo().getId().toString());
+
 						//Anyadimos idioma al enumerado.
 						indexData.setIdioma(enumIdioma);
 						
@@ -649,7 +654,6 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 						}							
 						
 						//Servicio Responsable
-				    	/*  Se ha ocultado este campo en la aplicacion
 				    	if (procedimiento.getServicioResponsable() != null) {
 				    		TraduccionUA unidadAdm = (TraduccionUA) procedimiento.getServicioResponsable().getTraduccion(keyIdioma);
 							if (unidadAdm != null) {
@@ -657,7 +661,6 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 								textoOptional.append(unidadAdm.getNombre());
 							}
 				    	}
-				    	*/
 						
 				    	//Nombre familia
 						textoOptional.append(procedimiento.getNombreFamilia());
@@ -740,7 +743,8 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 			indexData.setCategoria(categoria);
 			indexData.setCategoriaPadre(EnumCategoria.ROLSAC_FICHA);
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
-			
+			indexData.setElementoIdPadre(ficha.getId().toString());
+
 			//Datos de ids Materia
 			final List<String> materiasId = new ArrayList<String>();		
 			for(Materia materia : ficha.getMaterias()) {
@@ -784,7 +788,11 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 					if (IndexacionUtil.isIndexableSolr(traduccionDocumento.getArchivo())) {
 						log.debug("Es indexable tradDoc Ficha con id:" + traduccionDocumento.getArchivo().getId()+" y tamanyo:" + traduccionDocumento.getArchivo().getPeso());
 					} else {
-						log.debug("NO Es indexable tradDoc Ficha con id:" + traduccionDocumento.getArchivo().getId()+" y tamanyo:" + traduccionDocumento.getArchivo().getPeso());
+						if (traduccionDocumento.getArchivo() == null) {
+							log.debug("NO Es indexable doc ficha " + ficha.getId()+ " porque el archivo es nulo. ");
+						} else {
+							log.debug("NO Es indexable tradDoc Ficha con id:" + traduccionDocumento.getArchivo().getId()+" y tamanyo:" + traduccionDocumento.getArchivo().getPeso());
+						}
 						continue;
 					}
 					
@@ -797,7 +805,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 						final MultilangLiteral urlsPadre = new MultilangLiteral();
 						final MultilangLiteral searchTextOptional = new MultilangLiteral();
 						
-						indexData.setElementoId(traduccionDocumento.getArchivo().getId().toString());
+						indexData.setElementoId(idElemento+"."+traduccionDocumento.getArchivo().getId().toString());
 						
 						//Anyadimos idioma al enumerado.
 						indexData.setIdioma(enumIdioma);

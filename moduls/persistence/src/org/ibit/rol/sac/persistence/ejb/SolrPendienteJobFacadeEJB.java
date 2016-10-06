@@ -265,16 +265,30 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
 							}
 	        				break;
 	        			case ROLSAC_NORMATIVA:
+	        				if (solrpendiente.getAccion() == 1) { 
+								solrPendienteResultado= normDelegate.indexarSolr(solrIndexer, solrpendiente);
+							} else if (solrpendiente.getAccion() == 2) {
+								solrPendienteResultado= normDelegate.desindexarSolr(solrIndexer, solrpendiente);
+							}
+	        				break;
 	        			case ROLSAC_NORMATIVA_DOCUMENTO:
-							if (solrpendiente.getAccion() == 1) { 
+							if (solrpendiente.getAccion() == 1) {  //En documentos primero se desindexa y luego indexa
+								solrPendienteResultado= normDelegate.desindexarSolr(solrIndexer, solrpendiente);
 								solrPendienteResultado= normDelegate.indexarSolr(solrIndexer, solrpendiente);
 							} else if (solrpendiente.getAccion() == 2) {
 								solrPendienteResultado= normDelegate.desindexarSolr(solrIndexer, solrpendiente);
 							}
 	        				break;
 	        			case ROLSAC_TRAMITE:
+							if (solrpendiente.getAccion() == 1) {
+								solrPendienteResultado= tramDelegate.indexarSolr(solrIndexer, solrpendiente);
+							} else if (solrpendiente.getAccion() == 2) {
+								solrPendienteResultado= tramDelegate.desindexarSolr(solrIndexer, solrpendiente);
+							}
+	        				break;
 	        			case ROLSAC_TRAMITE_DOCUMENTO:
 							if (solrpendiente.getAccion() == 1) {
+								solrPendienteResultado= tramDelegate.desindexarSolr(solrIndexer, solrpendiente);
 								solrPendienteResultado= tramDelegate.indexarSolr(solrIndexer, solrpendiente);
 							} else if (solrpendiente.getAccion() == 2) {
 								solrPendienteResultado= tramDelegate.desindexarSolr(solrIndexer, solrpendiente);
@@ -289,7 +303,8 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
 							break;
 						case ROLSAC_FICHA_DOCUMENTO: 
 						case ROLSAC_PROCEDIMIENTO_DOCUMENTO: 					
-							if (solrpendiente.getAccion() == 1) {
+							if (solrpendiente.getAccion() == 1) { //En documentos primero se desindexa y luego indexa
+								solrPendienteResultado = docuDelegate.desindexarSolr(solrIndexer, solrpendiente);
 								solrPendienteResultado = docuDelegate.indexarSolr(solrIndexer, solrpendiente);
 							} else if (solrpendiente.getAccion() == 2) {
 								solrPendienteResultado = docuDelegate.desindexarSolr(solrIndexer, solrpendiente);
