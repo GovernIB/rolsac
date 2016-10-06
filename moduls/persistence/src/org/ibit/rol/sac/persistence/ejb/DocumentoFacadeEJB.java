@@ -549,7 +549,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 			
 			if (procedimiento.getTramites() != null) {
 				for(Tramite tramite : procedimiento.getTramites()) {
-					if (tramite.getIdTraTel() != null && !"".equals(tramite.getIdTraTel())) {
+					if (tramite != null && tramite.getIdTraTel() != null && !"".equals(tramite.getIdTraTel())) {
 						indexData.setTelematico(true);
 					}
 				}

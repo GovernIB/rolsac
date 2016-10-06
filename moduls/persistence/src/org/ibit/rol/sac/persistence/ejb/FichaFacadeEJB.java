@@ -1205,6 +1205,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
         if (ficha.getDocumentos() != null) {
             DocumentoDelegate documentoDelegate = DelegateUtil.getDocumentoDelegate();
             for (Documento documento : ficha.getDocumentos()) {
+            	if (documento == null) continue;
                 Documento doc = documentoDelegate.obtenerDocumento(documento.getId());
                 listaDocumentos.add(doc);
             }

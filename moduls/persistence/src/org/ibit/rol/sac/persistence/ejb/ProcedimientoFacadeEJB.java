@@ -219,12 +219,14 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		    //SOLR También indexar sus trámites y documentos
 		    if (procedimiento.getTramites() != null) {
 			    for(Tramite tramite : procedimiento.getTramites()) {
+			    	if (tramite == null) continue;
 			    	solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_TRAMITE.toString(), tramite.getId(), 1l);
 			    }
 		    }
 		    
 		    if (procedimiento.getDocumentos() != null) {
 		    	 for(Documento documento : procedimiento.getDocumentos()) {
+		    		 	if (documento == null) continue;
 				    	solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO_DOCUMENTO.toString(), documento.getId(), 1l);
 				 }
 		    }
@@ -353,12 +355,14 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		    //SOLR También indexar sus trámites y documentos
 		    if (procedimiento.getTramites() != null) {
 			    for(Tramite tramite : procedimiento.getTramites()) {
+			    	if (tramite == null) continue;
 			    	solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_TRAMITE.toString(), tramite.getId(), 1l);
 			    }
 		    }
 		    
 		    if (procedimiento.getDocumentos() != null) {
 		    	 for(Documento documento : procedimiento.getDocumentos()) {
+		    		 	if (documento == null) continue;
 				    	solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO_DOCUMENTO.toString(), documento.getId(), 1l);
 				 }
 		    }
@@ -1424,12 +1428,14 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		    //SOLR También indexar sus trámites y documentos
 		    if (procedimiento.getTramites() != null) {
 			    for(Tramite tramite : procedimiento.getTramites()) {
+			    	if (tramite == null) continue;
 			    	solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_TRAMITE.toString(), tramite.getId(), 2l);
 			    }
 		    }
 		    
 		    if (procedimiento.getDocumentos() != null) {
 		    	 for(Documento documento : procedimiento.getDocumentos()) {
+		    		 if (documento == null) continue;
 				    	solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO_DOCUMENTO.toString(), documento.getId(), 2l);
 				 }
 		    }
@@ -1727,6 +1733,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				List<Tramite>tramites = procedimiento.getTramites();
 				for (Iterator iter = tramites.iterator(); iter.hasNext();) {
 					Tramite tramite = (Tramite) iter.next();
+					if (tramite == null) continue;
 					Hibernate.initialize(tramite.getFormularios()); 
 					Hibernate.initialize(tramite.getDocsInformatius());
 					Hibernate.initialize(tramite.getTaxes());
@@ -1847,6 +1854,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         if (proc.getDocumentos() != null) {
             DocumentoDelegate documentoDelegate = DelegateUtil.getDocumentoDelegate();
             for (Documento documento : proc.getDocumentos()) {
+            	if (documento == null) continue;
                 listaDocumentos.add(documentoDelegate.obtenerDocumento(documento.getId()));
             }
         }
