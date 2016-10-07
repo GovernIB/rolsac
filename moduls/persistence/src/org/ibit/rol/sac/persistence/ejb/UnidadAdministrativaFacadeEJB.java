@@ -2571,7 +2571,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 					
 					//Seteamos los primeros campos multiidiomas: Titulo, Descripción y el search text.
 					titulo.addIdioma(enumIdioma, traduccion.getNombre());
-			    	descripcion.addIdioma(enumIdioma, traduccion.getPresentacion());
+			    	descripcion.addIdioma(enumIdioma, solrIndexer.htmlToText(traduccion.getPresentacion()));
 			    	searchText.addIdioma(enumIdioma, traduccion.getNombre()+ " " + unidadAdministrativa.getResponsable());
 			    	
 			    	final StringBuffer textoOptional = new StringBuffer();

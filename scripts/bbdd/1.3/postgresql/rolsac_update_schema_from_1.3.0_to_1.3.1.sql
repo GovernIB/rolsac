@@ -8,7 +8,7 @@ CREATE TABLE RSC_SOLRPD
     SLP_FECCRE date,
     SLP_FECIDX date,
     SLP_RESULT smallint,
-    SLP_TXTERR character varying(128)  
+    SLP_TXTERR character varying(4000)  
          
   );
   
