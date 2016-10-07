@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
     
-<project name="rolsac-1.3.0" default="main01ROLSAC">
+<project name="rolsac-1.4.0" default="main01ROLSAC">
     
 	<exec executable="git"  outputproperty="project.version" failifexecutionfails="true" errorproperty="">
 			<arg value="rev-parse"/> 
