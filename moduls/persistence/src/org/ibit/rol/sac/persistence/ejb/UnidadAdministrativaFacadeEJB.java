@@ -2562,7 +2562,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				if (traduccion != null && enumIdioma != null) {
 					
 					//Lo que hace es saltarse el idioma que no tiene nombre.
-					if ((traduccion.getNombre() == null || traduccion.getNombre().isEmpty())  && enumIdioma != EnumIdiomas.CATALA) {
+					if ((traduccion.getNombre() == null || traduccion.getNombre().isEmpty())) {
 						continue;
 					}
 					

@@ -1097,7 +1097,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 				if (traduccion != null && enumIdioma != null) {
 					
 					//Para saltarse los idiomas sin titulo
-					if ((traduccion.getTitulo() == null || traduccion.getTitulo().isEmpty())  && enumIdioma != EnumIdiomas.CATALA) {
+					if ((traduccion.getTitulo() == null || traduccion.getTitulo().isEmpty())) {
 						continue;
 					}
 					

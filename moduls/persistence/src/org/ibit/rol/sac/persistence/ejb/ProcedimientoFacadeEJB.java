@@ -2166,7 +2166,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				
 				if (traduccion != null && enumIdioma != null) {
 					
-					if ((traduccion.getNombre() == null || traduccion.getNombre().isEmpty()) && enumIdioma != EnumIdiomas.CATALA) {
+					if ((traduccion.getNombre() == null || traduccion.getNombre().isEmpty())) {
 						continue;
 					}
 					
