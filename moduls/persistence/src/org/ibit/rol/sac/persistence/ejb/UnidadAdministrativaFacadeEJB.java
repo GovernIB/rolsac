@@ -2620,7 +2620,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	    	solrIndexer.indexarContenido(indexData);
 	    	return new SolrPendienteResultado(true);
 		} catch(Exception exception) {
-			log.error("Error en unidadadministrativa intentando indexar.", exception);
+			log.error("Error en unidadadministrativa intentando indexar. idElemento:" + idElemento +" categoria:"+categoria, exception);
 			String mensajeError;
 			if (exception.getMessage() == null) {
 				mensajeError = exception.toString();
