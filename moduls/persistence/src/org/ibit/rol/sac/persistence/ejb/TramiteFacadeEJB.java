@@ -1107,6 +1107,11 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 				final TraduccionTramite traduccion = (TraduccionTramite)traducciones.get(keyIdioma);
 				
 				if (traduccion != null && enumIdioma != null) {
+											
+					if ((traduccion.getNombre() == null || traduccion.getNombre().isEmpty())) {
+						continue;
+					}						
+					
 					//Anyadimos idioma al enumerado.
 					idiomas.add(enumIdioma);
 					
