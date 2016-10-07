@@ -1112,7 +1112,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 					
 					//Seteamos los primeros campos multiidiomas: Titulo, Descripción (y padre) y el search text y el search text optional.
 					titulo.addIdioma(enumIdioma, traduccion.getNombre());
-			    	descripcion.addIdioma(enumIdioma, traduccion.getObservaciones());
+			    	descripcion.addIdioma(enumIdioma, solrIndexer.htmlToText(traduccion.getObservaciones()));
 			    	if (procedimiento.getTraduccion(keyIdioma) != null) {
 			    		descripcionPadre.addIdioma(enumIdioma, ((TraduccionProcedimiento) procedimiento.getTraduccion(keyIdioma)).getNombre());
 			    	}
@@ -1304,7 +1304,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 						
 						//Seteamos los primeros campos multiidiomas: Titulo, Descripción (y padre) y el search text y el search text optional.
 						titulo.addIdioma(enumIdioma, traduccion.getTitulo());
-						descripcion.addIdioma(enumIdioma, traduccion.getDescripcion());
+						descripcion.addIdioma(enumIdioma, solrIndexer.htmlToText(traduccion.getDescripcion()));
 						
 				    	//descripcion.addIdioma(enumIdioma, traduccion.getDescripcion());
 				    	if (tramite.getTraduccion(keyIdioma) != null) {

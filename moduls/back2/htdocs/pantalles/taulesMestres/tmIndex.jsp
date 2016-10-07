@@ -116,7 +116,7 @@
                 <p class="executant"><spring:message code='index.carregant_llistat_index'/></p>
             </div>
           	<br /><br /><br />     
-            <span class="missatge"><spring:message code='index.missatge.unitat_organica'/></span>
+            <span class="missatge"><spring:message code='index.missatge.indexTodo'/></span>
             <br />
             <span class="btnGenerico">
                  <a href="javascript:;" class="btn unitatOrganica" id = "btnContinuar"><span><span><spring:message code='boto.continuar'/></span></span></a>
