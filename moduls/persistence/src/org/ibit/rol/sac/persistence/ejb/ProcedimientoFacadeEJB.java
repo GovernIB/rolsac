@@ -2287,7 +2287,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			solrIndexer.indexarContenido(indexData);
 			return new SolrPendienteResultado(true);
 		} catch(Exception exception) {
-			log.error("Error en procedimientoFacade intentando indexar.", exception);
+			log.error("Error en procedimientoFacade intentando indexar. idElemento:" + idElemento +" categoria:"+categoria, exception);
 			String mensajeError;
 			if (exception.getMessage() == null) {
 				mensajeError = exception.toString();

@@ -1144,7 +1144,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			solrIndexer.indexarContenido(indexData);
 			return new SolrPendienteResultado(true);
 		} catch(Exception exception) {
-			log.error("Error en normativafacade intentando indexar.", exception);
+			log.error("Error en normativafacade intentando indexar. idElemento:" + idElemento +" categoria:"+categoria, exception);
 			String mensajeError;
 			if (exception.getMessage() == null) {
 				mensajeError = exception.toString();
@@ -1273,7 +1273,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			solrIndexer.indexarFichero(indexData);
 			return new SolrPendienteResultado(true);
 		} catch(Exception exception) {
-			log.error("Error en normativafacade intentando indexar.", exception);
+			log.error("Error en normativafacade intentando indexar. idElemento:" + idElemento +" categoria:"+categoria, exception);
 			String mensajeError; 
 			if (exception.getMessage() == null) {
 				mensajeError = exception.toString();
