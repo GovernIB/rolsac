@@ -1196,6 +1196,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			final MultilangLiteral descripcionPadre = new MultilangLiteral();
 			final MultilangLiteral urls = new MultilangLiteral();
 			final MultilangLiteral urlsPadre = new MultilangLiteral();
+			final MultilangLiteral extension = new MultilangLiteral();
 			
 			//Recorremos las traducciones
 			boolean encArchivo = false;
@@ -1205,11 +1206,6 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 				
 				if (traduccion != null && enumIdioma != null) {
 					
-					//Para saltarse los idiomas sin titulo.
-					if (traduccion.getArchivo() == null || traduccion.getArchivo().getDatos() == null || traduccion.getArchivo().getNombre() == null || traduccion.getArchivo().getNombre().isEmpty()) {
-						continue;
-					}
-					
 					// Verificamos si se ha encontrado el archivo asociado
 					if (traduccion.getArchivo() == null || traduccion.getArchivo().getId().compareTo(idElemento) != 0) {
 						continue;
@@ -1217,11 +1213,6 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 					
 					encArchivo = true;
 					
-					if (normativa.getUnidadAdministrativa() == null) {
-						continue;
-					}
-					
-
 					if (IndexacionUtil.isIndexableSolr(traduccion.getArchivo())) {
 						log.debug("Es indexable con mime:" + traduccion.getArchivo().getMime()+" y tamanyo:" + traduccion.getArchivo().getPeso());
 					} else {
@@ -1240,6 +1231,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 					titulo.addIdioma(enumIdioma, traduccion.getArchivo().getNombre());
 					descripcion.addIdioma(enumIdioma, traduccion.getArchivo().getMime());
 					descripcionPadre.addIdioma(enumIdioma, Utilidades.sanitizarTexto(traduccion.getTitulo()));
+					extension.addIdioma(enumIdioma, IndexacionUtil.calcularExtensionArchivo(traduccion.getArchivo().getNombre()));
 					
 					urls.addIdioma(enumIdioma, "/normativa/archivo.do?id=" + traduccion.getArchivo().getId() + "&lang=" + keyIdioma);
 					if (normativa.getBoletin() == null && normativa.getFechaBoletin() != null && (traduccion.getEnlace() == null || traduccion.getEnlace().isEmpty())) {
@@ -1252,6 +1244,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			    		urlsPadre.addIdioma(enumIdioma, "/govern/dadesNormativa.do?lang="+keyIdioma+"&codi="+normativa.getId()+"&coduo="+normativa.getUnidadAdministrativa().getId());
 			    	}
 					indexData.setFileContent(traduccion.getArchivo().getDatos());
+					indexData.setExtension(extension);
 					indexData.setIdioma(enumIdioma);
 					break;
 				}

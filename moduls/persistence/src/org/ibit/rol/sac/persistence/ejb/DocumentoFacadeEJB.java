@@ -14,6 +14,8 @@ import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.Documento;
@@ -605,9 +607,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 							descripcionPadre.addIdioma(enumIdioma, traduccionProc.getNombre());
 						}
 					    
-				    	
-				    	extension.addIdioma(enumIdioma, traduccion.getArchivo().getMime());
-				    	
+				    	extension.addIdioma(enumIdioma, FilenameUtils.getExtension(StringUtils.trim(traduccion.getArchivo().getNombre()).trim()));
 				    	
 				    	final StringBuffer textoOptional = new StringBuffer();
 						
@@ -688,6 +688,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 						searchTextOptional.addIdioma(enumIdioma, traduccion.getTitulo()+ " "+ traduccion.getDescripcion() + " "+ traduccion.getArchivo().getNombre());
 						indexData.setSearchTextOptional(searchTextOptional);
 						indexData.setFileContent(traduccion.getArchivo().getDatos());
+						indexData.setExtension(extension);
 						solrIndexer.indexarFichero(indexData);
 						indexacion = true;	
 						
@@ -804,6 +805,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 						final MultilangLiteral urls = new MultilangLiteral();
 						final MultilangLiteral urlsPadre = new MultilangLiteral();
 						final MultilangLiteral searchTextOptional = new MultilangLiteral();
+						final MultilangLiteral extension = new MultilangLiteral();
 						
 						indexData.setElementoId(idElemento+"."+traduccionDocumento.getArchivo().getId().toString());
 						
@@ -834,16 +836,19 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 				    		urlsPadre.addIdioma(enumIdioma, "/govern/sac/fitxa.do?codi="+ documento.getId() + "&coduo=" + idUA + "&lang=" + keyIdioma);
 				    	}
 				    	
+				    	extension.addIdioma(enumIdioma, IndexacionUtil.calcularExtensionArchivo(traduccionDocumento.getArchivo().getNombre()));
+				    	
 				    	//Seteamos datos multidioma.
 						indexData.setTitulo(titulo);
 						indexData.setDescripcion(descripcion);
 						indexData.setDescripcionPadre(descripcionPadre);
 						indexData.setUrl(urls);
-						indexData.setUrlPadre(urlsPadre);
+						indexData.setUrlPadre(urlsPadre);						
 						searchTextOptional.addIdioma(enumIdioma, traduccionDocumento.getTitulo()+ " "+ traduccionDocumento.getDescripcion() + " "+ traduccionDocumento.getArchivo().getNombre());
 						indexData.setSearchTextOptional(searchTextOptional);
-						
+												
 						indexData.setFileContent(traduccionDocumento.getArchivo().getDatos());
+						indexData.setExtension(extension);
 						solrIndexer.indexarFichero(indexData);
 						indexacion = true;	
 					} catch(Exception exceptionSolr) {

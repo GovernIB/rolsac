@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Archivo;
@@ -38,7 +39,7 @@ public class IndexacionUtil {
 		boolean retorno = true;
 		
 		//Si archivo es nulo, no intentar indexar.
-		if (archivo == null || archivo.getDatos() == null) {
+		if (archivo == null || archivo.getDatos() == null || archivo.getNombre() == null || archivo.getNombre().isEmpty()) {
 			retorno = false;
 		} else {
 			final String sTamanyoMaximo = System.getProperty("es.caib.rolsac.solr.tamanyomaximo");
@@ -145,10 +146,12 @@ public class IndexacionUtil {
 	public static List<PathUO> calcularPathUOsFicha(Ficha ficha) {
 		//Unidades administrativas de las fichas.
 		List<PathUO> uos = new ArrayList<PathUO>();
+		List<Long> idUAs = new ArrayList<Long>();
 		for (FichaUA fichaUA : ficha.getFichasua()) {
-			if (fichaUA.getUnidadAdministrativa() == null) {
+			if (fichaUA.getUnidadAdministrativa() == null || idUAs.contains(fichaUA.getUnidadAdministrativa().getId())) {
 				continue;
 			}	
+			idUAs.add(fichaUA.getUnidadAdministrativa().getId());
 			uos.add(IndexacionUtil.calcularPathUO(fichaUA.getUnidadAdministrativa()));												
 		}
 		return uos;
@@ -257,5 +260,11 @@ public class IndexacionUtil {
 		return true;
 	}
 	
+	
+	public static String calcularExtensionArchivo(String filename) {
+		if (filename == null) return null;
+		String extension = FilenameUtils.getExtension(StringUtils.trim(filename));
+		return StringUtils.lowerCase(extension);
+	}
 	
 }
