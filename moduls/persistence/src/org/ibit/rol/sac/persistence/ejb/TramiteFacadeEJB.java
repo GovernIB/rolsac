@@ -19,6 +19,7 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.Materia;
@@ -1316,24 +1317,19 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 				    		descripcionPadre.addIdioma(enumIdioma, ((TraduccionTramite) tramite.getTraduccion(keyIdioma)).getNombre());
 				    	}
 				    	
-				    	if (traduccion.getArchivo() == null) {
-				    		searchText.addIdioma(enumIdioma, traduccion.getTitulo()+ " " + traduccion.getDescripcion());
-				    	} else {
-				    		searchText.addIdioma(enumIdioma, traduccion.getTitulo()+ " " + traduccion.getDescripcion() +" " + traduccion.getArchivo().getNombre());
-				    		urls.addIdioma(enumIdioma, "/govern/rest/arxiu/"+traduccion.getArchivo().getId());
-					    	extension.addIdioma(enumIdioma, traduccion.getArchivo().getMime());
-					    }
+				    	searchText.addIdioma(enumIdioma, traduccion.getTitulo()+ " " + traduccion.getDescripcion() +" " + traduccion.getArchivo().getNombre());
+				    	urls.addIdioma(enumIdioma, "/govern/rest/arxiu/"+traduccion.getArchivo().getId());
+					    extension.addIdioma(enumIdioma, IndexacionUtil.calcularExtensionArchivo(traduccion.getArchivo().getNombre()));					    	
+					    
 				    	
-				    	if (procedimiento != null ) {
-				    		String nombrePubObjetivox = "";
-				    		if (procedimiento.getPublicosObjetivo().size() > 0) {
-				    			PublicoObjetivo pubObjetivo = (PublicoObjetivo)procedimiento.getPublicosObjetivo().toArray()[0];
-				    			if (pubObjetivo.getTraduccion(keyIdioma) != null) {
-				    				nombrePubObjetivox = ((TraduccionPublicoObjetivo) pubObjetivo.getTraduccion(keyIdioma)).getTitulo();
-				    			}
-				    		}
-				    		urlsPadre.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+nombrePubObjetivox+"/tramites/tramite/"+procedimiento.getId() );
-				    	}
+			    		String nombrePubObjetivox = "";
+			    		if (procedimiento.getPublicosObjetivo().size() > 0) {
+			    			PublicoObjetivo pubObjetivo = (PublicoObjetivo)procedimiento.getPublicosObjetivo().toArray()[0];
+			    			if (pubObjetivo.getTraduccion(keyIdioma) != null) {
+			    				nombrePubObjetivox = ((TraduccionPublicoObjetivo) pubObjetivo.getTraduccion(keyIdioma)).getTitulo();
+			    			}
+			    		}
+			    		urlsPadre.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+nombrePubObjetivox+"/tramites/tramite/"+procedimiento.getId() );
 				    	
 				    	//Seteamos datos multidioma.
 						indexData.setTitulo(titulo);
