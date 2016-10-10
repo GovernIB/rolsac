@@ -79,7 +79,7 @@ public abstract class SolrPendienteFacadeEJB extends HibernateEJB {
         try {
             Criteria criteri = session.createCriteria(SolrPendiente.class);
             criteri.add(Expression.eq("resultado", 0));
-            
+            criteri.addOrder(Order.asc("id"));
             List<SolrPendiente> solrPendientes = castList(SolrPendiente.class, criteri.list());
 
             return solrPendientes;
