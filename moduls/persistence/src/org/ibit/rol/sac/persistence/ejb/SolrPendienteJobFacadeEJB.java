@@ -2,6 +2,8 @@ package org.ibit.rol.sac.persistence.ejb;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -9,19 +11,29 @@ import javax.ejb.EJBException;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 
+import org.ibit.rol.sac.model.Documento;
+import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.model.Normativa;
+import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteJob;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
+import org.ibit.rol.sac.model.Traduccion;
+import org.ibit.rol.sac.model.TraduccionNormativa;
+import org.ibit.rol.sac.model.Tramite;
+import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
 import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
 import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
+import org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegate;
 import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 
 import es.caib.solr.api.SolrIndexer;
 import es.caib.solr.api.model.types.EnumCategoria;
+import es.caib.solr.api.model.types.EnumIdiomas;
 
 
 /**
@@ -244,86 +256,189 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
     		FichaDelegate fichaDelegate = DelegateUtil.getFichaDelegate();
         	ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
         	NormativaDelegate normDelegate = DelegateUtil.getNormativaDelegate();
-        	TramiteDelegate tramDelegate = DelegateUtil.getTramiteDelegate();
         	UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
-        	DocumentoDelegate docuDelegate = DelegateUtil.getDocumentoDelegate();
         	
-        			final EnumCategoria enumCategoria = EnumCategoria.fromString(solrpendiente.getTipo());
-        			switch (enumCategoria) {
+        	final EnumCategoria enumCategoria = EnumCategoria.fromString(solrpendiente.getTipo());
+        	switch (enumCategoria) {
 	        			case ROLSAC_FICHA:
-	        				if (solrpendiente.getAccion() == 1) {
-								solrPendienteResultado= fichaDelegate.indexarSolr(solrIndexer, solrpendiente);
-							} else if (solrpendiente.getAccion() == 2) {
-								solrPendienteResultado= fichaDelegate.desindexarSolr(solrIndexer, solrpendiente);
+	        				if (solrpendiente.getAccion() == SolrPendienteDelegate.REINDEXAR) {
+	        					fichaDelegate.desindexarSolr(solrIndexer, solrpendiente);
+	        					solrPendienteResultado = indexarPendienteFicha(solrIndexer, solrpendiente);
+							} else if (solrpendiente.getAccion() == SolrPendienteDelegate.DESINDEXAR) {
+								solrPendienteResultado = fichaDelegate.desindexarSolr(solrIndexer, solrpendiente);
 							}
 	        				break;
 	        			case ROLSAC_PROCEDIMIENTO:
-							if (solrpendiente.getAccion() == 1) {
-								solrPendienteResultado= procDelegate.indexarSolr(solrIndexer, solrpendiente);
-							} else if (solrpendiente.getAccion() == 2) {
-								solrPendienteResultado= procDelegate.desindexarSolr(solrIndexer, solrpendiente);
+							if (solrpendiente.getAccion() == SolrPendienteDelegate.REINDEXAR) {
+								procDelegate.desindexarSolr(solrIndexer, solrpendiente);
+								solrPendienteResultado = indexarPendienteProcedimiento(solrIndexer, solrpendiente);
+							} else if (solrpendiente.getAccion() == SolrPendienteDelegate.DESINDEXAR) {
+								solrPendienteResultado = procDelegate.desindexarSolr(solrIndexer, solrpendiente);
 							}
 	        				break;
 	        			case ROLSAC_NORMATIVA:
-	        				if (solrpendiente.getAccion() == 1) { 
-								solrPendienteResultado= normDelegate.indexarSolr(solrIndexer, solrpendiente);
-							} else if (solrpendiente.getAccion() == 2) {
-								solrPendienteResultado= normDelegate.desindexarSolr(solrIndexer, solrpendiente);
+	        				if (solrpendiente.getAccion() == SolrPendienteDelegate.REINDEXAR) { 
+	        					normDelegate.desindexarSolr(solrIndexer, solrpendiente);
+	        					solrPendienteResultado = indexarPendienteNormativa(solrIndexer, solrpendiente);
+							} else if (solrpendiente.getAccion() == SolrPendienteDelegate.DESINDEXAR) {
+								solrPendienteResultado = normDelegate.desindexarSolr(solrIndexer, solrpendiente);
 							}
 	        				break;
-	        			case ROLSAC_NORMATIVA_DOCUMENTO:
-							if (solrpendiente.getAccion() == 1) {  //En documentos primero se desindexa y luego indexa
-								solrPendienteResultado= normDelegate.desindexarSolr(solrIndexer, solrpendiente);
-								solrPendienteResultado= normDelegate.indexarSolr(solrIndexer, solrpendiente);
-							} else if (solrpendiente.getAccion() == 2) {
-								solrPendienteResultado= normDelegate.desindexarSolr(solrIndexer, solrpendiente);
+	        			case ROLSAC_UNIDAD_ADMINISTRATIVA: 
+							if (solrpendiente.getAccion() == SolrPendienteDelegate.REINDEXAR) {
+								uaDelegate.desindexarSolr(solrIndexer, solrpendiente);
+								solrPendienteResultado = uaDelegate.indexarSolr(solrIndexer, solrpendiente);
+							} else if (solrpendiente.getAccion() == SolrPendienteDelegate.DESINDEXAR) {
+								solrPendienteResultado = uaDelegate.desindexarSolr(solrIndexer, solrpendiente);
 							}
-	        				break;
-	        			case ROLSAC_TRAMITE:
-							if (solrpendiente.getAccion() == 1) {
-								solrPendienteResultado= tramDelegate.indexarSolr(solrIndexer, solrpendiente);
-							} else if (solrpendiente.getAccion() == 2) {
-								solrPendienteResultado= tramDelegate.desindexarSolr(solrIndexer, solrpendiente);
-							}
-	        				break;
-	        			case ROLSAC_TRAMITE_DOCUMENTO:
-							if (solrpendiente.getAccion() == 1) {
-								solrPendienteResultado= tramDelegate.desindexarSolr(solrIndexer, solrpendiente);
-								solrPendienteResultado= tramDelegate.indexarSolr(solrIndexer, solrpendiente);
-							} else if (solrpendiente.getAccion() == 2) {
-								solrPendienteResultado= tramDelegate.desindexarSolr(solrIndexer, solrpendiente);
-							}
-	        				break;
-						case ROLSAC_UNIDAD_ADMINISTRATIVA: 
-							if (solrpendiente.getAccion() == 1) {
-								solrPendienteResultado= uaDelegate.indexarSolr(solrIndexer, solrpendiente);
-							} else if (solrpendiente.getAccion() == 2) {
-								solrPendienteResultado= uaDelegate.desindexarSolr(solrIndexer, solrpendiente);
-							}
-							break;
-						case ROLSAC_FICHA_DOCUMENTO: 
-						case ROLSAC_PROCEDIMIENTO_DOCUMENTO: 					
-							if (solrpendiente.getAccion() == 1) { //En documentos primero se desindexa y luego indexa
-								solrPendienteResultado = docuDelegate.desindexarSolr(solrIndexer, solrpendiente);
-								solrPendienteResultado = docuDelegate.indexarSolr(solrIndexer, solrpendiente);
-							} else if (solrpendiente.getAccion() == 2) {
-								solrPendienteResultado = docuDelegate.desindexarSolr(solrIndexer, solrpendiente);
-							}
-							break;
+							break;						
 						default:
 							break;
-        			}
+        	 }
     	}
     	catch (Exception e) {
 	            log.error("Error intentando indexar " + solrpendiente,e);
+	            solrPendienteResultado = new SolrPendienteResultado(false, e.getMessage());
         } 
     	
     	return solrPendienteResultado;
         
     }
     
-    
     /**
+     * Indexa procedimiento e hijos/nietos (Doc Proc, Trámite y Doc Trámite).
+     * @param solrIndexer
+     * @param solrpendiente
+     * @return
+     * @throws DelegateException
+     */
+    private SolrPendienteResultado indexarPendienteProcedimiento(SolrIndexer solrIndexer, SolrPendiente solrpendiente) throws DelegateException {
+    	ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
+    	TramiteDelegate tramDelegate = DelegateUtil.getTramiteDelegate();
+    	DocumentoDelegate docuDelegate = DelegateUtil.getDocumentoDelegate();
+    	
+    	//Paso 1. Indexamos el procedimiento
+    	SolrPendienteResultado solrPendienteResultado= procDelegate.indexarSolr(solrIndexer, solrpendiente.getIdElemento(), EnumCategoria.ROLSAC_PROCEDIMIENTO);
+		log.debug("Resultado indexando procedimiento(ID:"+solrpendiente.getIdElemento()+"):"+ solrPendienteResultado.toString());
+		
+		//Paso 2. Recorremos documento y los indexamos
+		ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimiento(solrpendiente.getIdElemento());
+		for (Documento documento : procedimiento.getDocumentos()) {
+			try {
+				if (documento != null) {
+					solrPendienteResultado = docuDelegate.indexarSolrProcedimientoDoc(solrIndexer, documento.getId(), EnumCategoria.ROLSAC_PROCEDIMIENTO_DOCUMENTO);
+					log.debug("Resultado indexando procedimientoDocumento(DOC:"+documento.getId()+"):"+ solrPendienteResultado.toString());
+				}
+			} catch (Exception exception) {
+				log.error("Error indexando pendiente un doc(id:"+documento.getId()+") procedimiento:" + procedimiento.getId(), exception);
+				return new SolrPendienteResultado(false, exception.getMessage());
+			}
+		}
+		
+		//Paso 3. Recorremos trámites y documentos y los reindexamos
+		for(Tramite tramite : procedimiento.getTramites()) {
+			try {
+				if (tramite != null) {
+					solrPendienteResultado = tramDelegate.indexarSolr(solrIndexer, tramite.getId(), EnumCategoria.ROLSAC_TRAMITE);
+					log.debug("Resultado indexando tramite(ID:"+tramite.getId()+"):"+ solrPendienteResultado.toString());
+				
+					List<Long> idDocumentos = docuDelegate.obtenerDocumentosTramiteSolr(tramite.getId());
+	        		for (Long idDocumento : idDocumentos) {
+	        			try{
+	        				tramDelegate.indexarDocSolr(solrIndexer, idDocumento, EnumCategoria.ROLSAC_TRAMITE_DOCUMENTO);	        				
+		        		} catch (Exception exception2) {
+		        			log.error("Error indexando pendiente un doc(id:"+tramite.getId()+") tramite:" + procedimiento.getId(), exception2);
+		        			return new SolrPendienteResultado(false, exception2.getMessage());
+	    				}
+					}
+				}
+			} catch (Exception exception) {
+				log.error("Error indexando pendiente un tramite(id:"+tramite.getId()+") procedimiento:" + procedimiento.getId(), exception);
+				return new SolrPendienteResultado(false, exception.getMessage());				
+			}
+		}
+		
+		//Paso 4. Devolvemos resultado correcto sin mensaje.
+		return new SolrPendienteResultado(true, "");
+	}
+
+
+	/**
+     * Indexar normativa e hijos (Doc Normativa).
+     * @param solrIndexer
+     * @param solrpendiente
+     * @return
+     * @throws DelegateException
+     */
+    private SolrPendienteResultado indexarPendienteNormativa(SolrIndexer solrIndexer, SolrPendiente solrpendiente) throws DelegateException {
+    	NormativaDelegate normDelegate = DelegateUtil.getNormativaDelegate();
+    	
+    	//Paso 1. Indexamos la normativa.
+    	SolrPendienteResultado solrPendienteResultado= normDelegate.indexarSolrNormativa(solrIndexer, solrpendiente.getIdElemento(), EnumCategoria.ROLSAC_NORMATIVA);
+    	log.debug("Resultado indexando procedimiento(ID:"+solrpendiente.getIdElemento()+"):"+ solrPendienteResultado.toString());
+		Normativa normativa = normDelegate.obtenerNormativa(solrpendiente.getIdElemento());
+		TraduccionNormativa traduccion = null;
+		
+		//Paso 2. Recorremos las traducciones y reindexamos sus archivos.
+		//Recorremos las traducciones
+		for (String keyIdioma :  normativa.getTraduccionMap().keySet()) {
+			try {
+				traduccion = (TraduccionNormativa) normativa.getTraduccionMap().get(keyIdioma);
+				if (traduccion != null && traduccion.getArchivo() != null) { 
+					normDelegate.indexarSolrNormativaDocumento(solrIndexer, traduccion.getArchivo().getId(), EnumCategoria.ROLSAC_NORMATIVA_DOCUMENTO);
+				}
+			} catch (Exception exception ) {
+				//Cuidado, si da un error obteniendo la traducción, estaría con el valor anterior.
+				if (traduccion == null) {
+					log.error("Error indexando pendiente con traducción a null de normativa:" + normativa.getId(), exception);
+				} else if (traduccion.getArchivo() == null) {
+					log.error("Error indexando pendiente un archivo a nulo de normativa:" + normativa.getId(), exception);
+				} else {
+					log.error("Error indexando pendiente un doc(parece que id:"+traduccion.getArchivo().getId()+") de normativa:" + normativa.getId(), exception);
+				}
+				solrPendienteResultado = new SolrPendienteResultado(false, exception.getMessage());
+				break;
+			}
+		}
+		return new SolrPendienteResultado(true, "");
+	}
+
+
+	/**
+     * Indexar ficha e hijos (Doc ficha).
+     * @param solrIndexer
+     * @param solrpendiente
+     * @throws DelegateException 
+     */
+    private SolrPendienteResultado indexarPendienteFicha(SolrIndexer solrIndexer, SolrPendiente solrpendiente) throws DelegateException {
+    	FichaDelegate fichaDelegate = DelegateUtil.getFichaDelegate();
+    	DocumentoDelegate docuDelegate = DelegateUtil.getDocumentoDelegate();
+    	
+    	//Paso 1. Indexamos la ficha.
+    	SolrPendienteResultado solrPendienteResultado= fichaDelegate.indexarSolr(solrIndexer, solrpendiente.getIdElemento(), EnumCategoria.ROLSAC_FICHA);
+		log.debug("Resultado indexando ficha(ID:"+solrpendiente.getIdElemento()+"):"+ solrPendienteResultado.toString());
+		
+		//Paso 2. Reindexamos los documentos asociados a la ficha.
+		Ficha ficha = fichaDelegate.obtenerFicha(solrpendiente.getIdElemento());
+		if (ficha.getDocumentos() != null) {
+			for(Documento documento : ficha.getDocumentos()) {
+				try {
+					if (documento != null) {
+						solrPendienteResultado = docuDelegate.indexarSolrFichaDoc(solrIndexer, documento.getId(), EnumCategoria.ROLSAC_FICHA_DOCUMENTO);
+						log.debug("Resultado indexando fichaDocumento(DOC:"+documento.getId()+"):"+ solrPendienteResultado.toString());
+					}
+				} catch (Exception exception) {
+					log.error("Error indexando pendiente un doc(id:"+documento.getId()+") de ficha:" + ficha.getId(), exception);
+					return new SolrPendienteResultado(false, exception.getMessage());					
+				}
+			}
+		}
+		
+		return solrPendienteResultado;
+	}
+
+
+	/**
      * Método que se encarga de realizar las acciones segun si ha sido correcto o no.
      * @param solrpendiente
      * @param session
