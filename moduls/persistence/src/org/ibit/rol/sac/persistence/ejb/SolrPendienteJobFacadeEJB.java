@@ -261,34 +261,58 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
         	final EnumCategoria enumCategoria = EnumCategoria.fromString(solrpendiente.getTipo());
         	switch (enumCategoria) {
 	        			case ROLSAC_FICHA:
+<<<<<<< HEAD
 	        				if (solrpendiente.getAccion() == SolrPendienteDelegate.REINDEXAR) {
 	        					fichaDelegate.desindexarSolr(solrIndexer, solrpendiente);
 	        					solrPendienteResultado = indexarPendienteFicha(solrIndexer, solrpendiente);
 							} else if (solrpendiente.getAccion() == SolrPendienteDelegate.DESINDEXAR) {
+=======
+	        				if (solrpendiente.getAccion() == 1) {
+	        					solrPendienteResultado = indexarPendienteFicha(solrIndexer, solrpendiente);
+							} else if (solrpendiente.getAccion() == 2) {
+>>>>>>> branch 'rolsac-1.4' of https://github.com/GovernIB/rolsac.git
 								solrPendienteResultado = fichaDelegate.desindexarSolr(solrIndexer, solrpendiente);
 							}
 	        				break;
 	        			case ROLSAC_PROCEDIMIENTO:
+<<<<<<< HEAD
 							if (solrpendiente.getAccion() == SolrPendienteDelegate.REINDEXAR) {
 								procDelegate.desindexarSolr(solrIndexer, solrpendiente);
 								solrPendienteResultado = indexarPendienteProcedimiento(solrIndexer, solrpendiente);
 							} else if (solrpendiente.getAccion() == SolrPendienteDelegate.DESINDEXAR) {
+=======
+							if (solrpendiente.getAccion() == 1) {
+								solrPendienteResultado = indexarPendienteProcedimiento(solrIndexer, solrpendiente);
+							} else if (solrpendiente.getAccion() == 2) {
+>>>>>>> branch 'rolsac-1.4' of https://github.com/GovernIB/rolsac.git
 								solrPendienteResultado = procDelegate.desindexarSolr(solrIndexer, solrpendiente);
 							}
 	        				break;
 	        			case ROLSAC_NORMATIVA:
+<<<<<<< HEAD
 	        				if (solrpendiente.getAccion() == SolrPendienteDelegate.REINDEXAR) { 
 	        					normDelegate.desindexarSolr(solrIndexer, solrpendiente);
 	        					solrPendienteResultado = indexarPendienteNormativa(solrIndexer, solrpendiente);
 							} else if (solrpendiente.getAccion() == SolrPendienteDelegate.DESINDEXAR) {
+=======
+	        				if (solrpendiente.getAccion() == 1) { 
+	        					solrPendienteResultado = indexarPendienteNormativa(solrIndexer, solrpendiente);
+							} else if (solrpendiente.getAccion() == 2) {
+>>>>>>> branch 'rolsac-1.4' of https://github.com/GovernIB/rolsac.git
 								solrPendienteResultado = normDelegate.desindexarSolr(solrIndexer, solrpendiente);
 							}
 	        				break;
 	        			case ROLSAC_UNIDAD_ADMINISTRATIVA: 
+<<<<<<< HEAD
 							if (solrpendiente.getAccion() == SolrPendienteDelegate.REINDEXAR) {
 								uaDelegate.desindexarSolr(solrIndexer, solrpendiente);
 								solrPendienteResultado = uaDelegate.indexarSolr(solrIndexer, solrpendiente);
 							} else if (solrpendiente.getAccion() == SolrPendienteDelegate.DESINDEXAR) {
+=======
+							if (solrpendiente.getAccion() == 1) {
+								solrPendienteResultado = uaDelegate.indexarSolr(solrIndexer, solrpendiente);
+							} else if (solrpendiente.getAccion() == 2) {
+>>>>>>> branch 'rolsac-1.4' of https://github.com/GovernIB/rolsac.git
 								solrPendienteResultado = uaDelegate.desindexarSolr(solrIndexer, solrpendiente);
 							}
 							break;						
@@ -345,7 +369,11 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
 					List<Long> idDocumentos = docuDelegate.obtenerDocumentosTramiteSolr(tramite.getId());
 	        		for (Long idDocumento : idDocumentos) {
 	        			try{
+<<<<<<< HEAD
 	        				tramDelegate.indexarDocSolr(solrIndexer, idDocumento, EnumCategoria.ROLSAC_TRAMITE_DOCUMENTO);	        				
+=======
+	        				tramDelegate.indexarSolr(solrIndexer, idDocumento, EnumCategoria.ROLSAC_TRAMITE_DOCUMENTO);	        				
+>>>>>>> branch 'rolsac-1.4' of https://github.com/GovernIB/rolsac.git
 		        		} catch (Exception exception2) {
 		        			log.error("Error indexando pendiente un doc(id:"+tramite.getId()+") tramite:" + procedimiento.getId(), exception2);
 		        			return new SolrPendienteResultado(false, exception2.getMessage());
