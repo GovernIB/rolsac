@@ -1291,7 +1291,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 						}
 						
 						//Seteado el id
-						indexData.setElementoId(idElemento+"."+traduccion.getArchivo().getId().toString());
+						indexData.setElementoId(traduccion.getArchivo().getId().toString());
 						
 						//Anyadimos idioma al enumerado.
 						indexData.setIdioma(enumIdioma);

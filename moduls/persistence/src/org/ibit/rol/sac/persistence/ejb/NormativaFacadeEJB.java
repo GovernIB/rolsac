@@ -1224,7 +1224,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 						return new SolrPendienteResultado(true, "El documento no cumple los requisitos.");
 					}
 					
-					indexData.setElementoId(idElemento+"."+traduccion.getArchivo().getId().toString());
+					indexData.setElementoId(traduccion.getArchivo().getId().toString());
 					
 					
 					//Seteamos los primeros campos multiidiomas: Titulo y Descripción (y padre).

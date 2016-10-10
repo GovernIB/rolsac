@@ -586,7 +586,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 					
 					try {
 						
-						indexData.setElementoId(idElemento+"."+traduccion.getArchivo().getId().toString());
+						indexData.setElementoId(traduccion.getArchivo().getId().toString());
 
 						//Anyadimos idioma al enumerado.
 						indexData.setIdioma(enumIdioma);
@@ -807,7 +807,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 						final MultilangLiteral searchTextOptional = new MultilangLiteral();
 						final MultilangLiteral extension = new MultilangLiteral();
 						
-						indexData.setElementoId(idElemento+"."+traduccionDocumento.getArchivo().getId().toString());
+						indexData.setElementoId(traduccionDocumento.getArchivo().getId().toString());
 						
 						//Anyadimos idioma al enumerado.
 						indexData.setIdioma(enumIdioma);
