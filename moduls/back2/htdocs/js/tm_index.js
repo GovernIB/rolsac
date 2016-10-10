@@ -382,9 +382,10 @@ function CLlistat(){
 			codi_totals += "</p>";
 
 			codi_cap1 = "<div class=\"th id" + ordre_c1 + "\" role=\"columnheader\">" + txtId + "</div>";
-			codi_cap2 = "<div class=\"th descripcion" + ordre_c2 + "\" role=\"columnheader\">" + txtDescripcio + "</div>";
-			codi_cap3 = "<div class=\"th fecha" + ordre_c3 + "\" role=\"columnheader\">" + txtFechaIndexacion + "</div>";
-			codi_cap4 = "<div class=\"th mensaje" + ordre_c4 + "\" role=\"columnheader\">" + txtMensaje + "</div>";
+			codi_cap2 = "<div class=\"th accion" + ordre_c2 + "\" role=\"columnheader\">" + txtDescripcio + "</div>";
+			codi_cap3 = "<div class=\"th descripcion" + ordre_c2 + "\" role=\"columnheader\">" + txtDescripcio + "</div>";
+			codi_cap4 = "<div class=\"th fecha" + ordre_c3 + "\" role=\"columnheader\">" + txtFechaIndexacion + "</div>";
+			codi_cap5 = "<div class=\"th mensaje" + ordre_c4 + "\" role=\"columnheader\">" + txtMensaje + "</div>";
 			
 			// codi taula
 			codi_taula = "<div class=\"table llistat\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\" style=\"clear:both\">";
@@ -392,7 +393,7 @@ function CLlistat(){
 			// codi cap + cuerpo
 			codi_taula += "<div class=\"thead\">";
 			codi_taula += "<div class=\"tr\" role=\"rowheader\">";
-			codi_taula += codi_cap1 + codi_cap2 + codi_cap3 + codi_cap4;
+			codi_taula += codi_cap1 + codi_cap2 + codi_cap3 + codi_cap4 + codi_cap5;
 			codi_taula += "</div>";
 			codi_taula += "</div>";
 			codi_taula += "<div class=\"tbody\">";
@@ -435,6 +436,18 @@ function CLlistat(){
 				codi_taula += "<input type=\"hidden\" value=\"" + dada_node.id + "\" class=\"id\" />";
 				codi_taula += "<span class=\"perfil\">" + (printStringFromNull(dada_node.id, txtSinValor)) + "</span>";				
 				codi_taula += "</div>";
+				codi_taula += "<div class=\"td accion\" role=\"gridcell\">";				
+				if (dada_node.accion == "") {
+					codi_taula += " sin accion ";
+				} else if (dada_node.accion == "1") {
+					codi_taula += "Indexa";
+				} else if (dada_node.accion == "2") {
+					codi_taula += "Desindexa";
+				} else {
+					codi_taula += " desconocida ";
+				}
+				codi_taula += "</div>";
+				
 				codi_taula += "<div class=\"td descripcion\" role=\"gridcell\">";				
 				codi_taula += printStringFromNull(txtSolrDescripcionTipo, txtSinValor);
 				codi_taula += "</div>";

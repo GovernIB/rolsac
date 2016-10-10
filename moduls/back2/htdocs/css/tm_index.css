@@ -10,16 +10,21 @@ div.llistat div.id {
     width: 15%;
     padding-left: 21px;
 }
+
+div.llistat div.accion { 
+    width: 10%;
+    padding-left: 21px;
+}
 div.llistat div.descripcion { 
-    width: 25%;
+    width: 20%;
     padding-left: 21px;
 }
 div.llistat div.fecha { 
-    width: 20%;
+    width: 15%;
     padding-left: 21px;
 }
 div.llistat div.mensaje { 
-    width: 20%;
+    width: 15%;
     padding-left: 21px;
 }
 div.llistat div.tbody div.nom {

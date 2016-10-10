@@ -2699,54 +2699,56 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 	 
 	 private void marcarIndexacionPendienteElementosRelacionadosUA(final Long idUA) {
-       
-		 // TODO Evitamos ejecutar esta parte para no sobrecargar. Ante cambios en UAs conviene ejecutar indexacion completa.
-	     if (true) return;
+         
+	         // TODO Evitamos ejecutar esta parte para no sobrecargar. Ante cambios en UAs conviene ejecutar indexacion completa.
+	         if (true) return;
 	         
-         // Obtemos descendientes
-         List<Long> arbolUA = cargarArbolUnidadId(idUA);
-         
-         
-         //Primero las fichas que se relacionan con el hechovital.
-         Session session = getSession();
-         //La acción es indexar (porque habrá que actualizar la información)
-         final Long accion = 1l;
-         
-         try {       
-                 for (Long idUnidadAdministrativa : arbolUA) {
-                                
-                        //Primero busca las fichas relacionadas.
-                        StringBuilder consulta = new StringBuilder("select ficha.id from Ficha ficha left join ficha.fichasua fua left join fua.unidadAdministrativa uad  where uad.id = " + idUnidadAdministrativa);
-                        Query query = session.createQuery( consulta.toString() );
-                        query.setCacheable(true);
-                        final List<Long> idFichas =  castList(Long.class,query.list());
-                        for(Long idFicha : idFichas) {
-                                        IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_FICHA, idFicha, false);                  
-                        }
-                        
-                        //Luego los procedimientos
-                        consulta = new StringBuilder("select proc.id from ProcedimientoLocal proc left join proc.unidadAdministrativa uad where uad.id = " + idUnidadAdministrativa);
-                        query = session.createQuery( consulta.toString() );
-                        query.setCacheable(true);
-                        final List<Long> idProcedimientos =  castList(Long.class, query.list());
-                        for(Long idProcedimiento : idProcedimientos) {
-                                        IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, idProcedimiento, false);                                                                              
-                        }
-                        
-                        //Luego las normativas
-                        consulta = new StringBuilder("select nor.id from Normativa nor left join nor.unidadAdministrativa uad where uad.id = " + idUnidadAdministrativa);
-                        query = session.createQuery( consulta.toString() );
-                        query.setCacheable(true);
-                        final List<Long> idNormativas =  castList(Long.class, query.list());
-                        for(Long idNormativa : idNormativas) {
-                                        IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_NORMATIVA, idNormativa, false);
-                        }
-                 }
-         } catch (Exception he) {
-                         throw new EJBException(he);
-         } finally {
-                         close(session);
-         }
+	         // Obtemos descendientes
+	         List<Long> arbolUA = cargarArbolUnidadId(idUA);
+	         
+	         
+	         //Primero las fichas que se relacionan con el hechovital.
+	         Session session = getSession();
+	         //La acción es indexar (porque habrá que actualizar la información)
+	         final Long accion = 1l;
+	         
+	         try 
+	         {
+	                 for (Long idUnidadAdministrativa : arbolUA) {
+             
+	                	 	//Primero busca las fichas relacionadas.
+                            StringBuilder consulta = new StringBuilder("select ficha.id from Ficha ficha left join ficha.fichasua fua left join fua.unidadAdministrativa uad  where uad.id = " + idUnidadAdministrativa);
+                            Query query = session.createQuery( consulta.toString() );
+                            query.setCacheable(true);
+                            final List<Long> idFichas =  castList(Long.class,query.list());
+                            for(Long idFicha : idFichas) {
+                                            IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_FICHA, idFicha, false);                  
+                            }
+                            
+                            //Luego los procedimientos
+                            consulta = new StringBuilder("select proc.id from ProcedimientoLocal proc left join proc.unidadAdministrativa uad where uad.id = " + idUnidadAdministrativa);
+                            query = session.createQuery( consulta.toString() );
+                            query.setCacheable(true);
+                            final List<Long> idProcedimientos =  castList(Long.class, query.list());
+                            for(Long idProcedimiento : idProcedimientos) {
+                                            IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, idProcedimiento, false);                                                                              
+                            }
+                            
+                            //Luego las normativas
+                            consulta = new StringBuilder("select nor.id from Normativa nor left join nor.unidadAdministrativa uad where uad.id = " + idUnidadAdministrativa);
+                            query = session.createQuery( consulta.toString() );
+                            query.setCacheable(true);
+                            final List<Long> idNormativas =  castList(Long.class, query.list());
+                            for(Long idNormativa : idNormativas) {
+                                            IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_NORMATIVA, idNormativa, false);
+                            }
+                     }
+	         } catch (Exception he) {
+	                         throw new EJBException(he);
+	         } finally {
+	                         close(session);
+	         }
 	}
-		
+
+
 }
