@@ -158,34 +158,22 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
             
             session.flush();
             
+            
             if (ficha_id != null) {
-            	
-            	if (ficha_id != null) 
-            		ficha = (Ficha)session.load(Ficha.class, ficha_id);  
-            	
-                FichaDelegate ficdel = (null != fichDel) ? fichDel: DelegateUtil.getFichaDelegate();
-                
-                //SOLR Indexar ficha documento.
-    			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
-                solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_FICHA_DOCUMENTO.toString(), documento.getId(), 1l);
+            	ficha = (Ficha)session.load(Ficha.class, ficha_id);              	
             }
             
             if (procedimiento_id != null) {
-            	
-                if (procedimiento_id != null) 
-                	procedimiento = (ProcedimientoLocal)session.load(ProcedimientoLocal.class, procedimiento_id);
-                
-        		ProcedimientoDelegate pldel = (null != procDel) ? procDel : DelegateUtil.getProcedimientoDelegate();
-        		
+            	procedimiento = (ProcedimientoLocal)session.load(ProcedimientoLocal.class, procedimiento_id);
                 log.debug("Actualizamos documento del procedimiento");
-                Actualizador.actualizar(documento, procedimiento.getId());
-                                   
-                //SOLR Desindexar procedimiento documento.
-    			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
-                solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO_DOCUMENTO.toString(), documento.getId(), 1l);
+                Actualizador.actualizar(documento, procedimiento.getId());                
             }           
             session.flush();
-            //TODO añadir if para el tramite
+            
+            
+            if (ficha != null || procedimiento != null) {
+            	IndexacionUtil.marcarIndexacionPendiente(ficha != null?EnumCategoria.ROLSAC_FICHA:EnumCategoria.ROLSAC_PROCEDIMIENTO, ficha != null? ficha.getId(): procedimiento.getId(), false);
+            }
             
             return documento.getId();
             
@@ -299,26 +287,17 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
             session.delete(documento);
             session.flush();
             
-            //SOLR Desindexar ficha documento.
-			if (ficha != null) {
-            	SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
-            	solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_FICHA_DOCUMENTO.toString(), documento.getId(), 2l);
-            }
             
-            //SOLR Desindexar procedimiento documento.
-			if (procedimiento != null) {
-            	SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
-            	solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO_DOCUMENTO.toString(), documento.getId(), 2l);
-            }
-            
-		    
             if (procedimiento != null) {
         		ProcedimientoDelegate pldel = DelegateUtil.getProcedimientoDelegate();
-                                  	                	
                 Actualizador.borrar(documento, procedimiento.getId());
-                                    	                    
             } 
             session.flush();
+            
+            if (ficha != null || procedimiento != null) {
+            	IndexacionUtil.marcarIndexacionPendiente(ficha != null?EnumCategoria.ROLSAC_FICHA:EnumCategoria.ROLSAC_PROCEDIMIENTO, ficha != null? ficha.getId(): procedimiento.getId(), false);
+            }
+            
         } catch (HibernateException he) {
             throw new EJBException(he);     
         } catch (DelegateException e) {

@@ -17,6 +17,13 @@ public class SolrPendienteDelegate implements StatelessDelegate {
     SolrPendienteDelegateI impl;
 
 	private static long maxtime = 60000L; // 60 segundos
+	
+	
+	public final static long REINDEXAR = 1L;
+	
+	public final static long DESINDEXAR = 2L;
+	
+	
 
     private boolean timeout(long time) {
 

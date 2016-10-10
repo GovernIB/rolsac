@@ -212,27 +212,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			
 			session.flush();
 			
-			//SOLR Indexar procedimiento.
-			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
-		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO.toString(), procedimiento.getId(), 1l);
-		    
-		    //SOLR También indexar sus trámites y documentos
-		    if (procedimiento.getTramites() != null) {
-			    for(Tramite tramite : procedimiento.getTramites()) {
-			    	if (tramite == null) continue;
-			    	solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_TRAMITE.toString(), tramite.getId(), 1l);
-			    }
-		    }
-		    
-		    if (procedimiento.getDocumentos() != null) {
-		    	 for(Documento documento : procedimiento.getDocumentos()) {
-		    		 	if (documento == null) continue;
-				    	solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO_DOCUMENTO.toString(), documento.getId(), 1l);
-				 }
-		    }
-		    
-		 	
-		    session.flush();
+			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, procedimiento.getId(), false);
 		    
 			return procedimiento.getId();
 
@@ -348,26 +328,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			
 			session.flush();
 			
-			//SOLR Indexar procedimiento.
-			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
-		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO.toString(), procedimiento.getId(), 1l);
-		 	
-		    //SOLR También indexar sus trámites y documentos
-		    if (procedimiento.getTramites() != null) {
-			    for(Tramite tramite : procedimiento.getTramites()) {
-			    	if (tramite == null) continue;
-			    	solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_TRAMITE.toString(), tramite.getId(), 1l);
-			    }
-		    }
-		    
-		    if (procedimiento.getDocumentos() != null) {
-		    	 for(Documento documento : procedimiento.getDocumentos()) {
-		    		 	if (documento == null) continue;
-				    	solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO_DOCUMENTO.toString(), documento.getId(), 1l);
-				 }
-		    }
-		    
-		    session.flush();
+			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, procedimiento.getId(), false);
 			
 			return procedimiento.getId();
 
@@ -1303,15 +1264,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			procedimiento.addTramite(tramite);
 			session.flush();
 			
-			//SOLR Indexar procedimiento.
-			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
-		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO.toString(), procedimiento.getId(), 1l);
-		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_TRAMITE.toString(), tramite.getId(), 1l);
-		    
-		  
-		    
-		    session.flush();
-			
+			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, procedimiento.getId(), false);			
 
 		} catch (HibernateException e) {
 
@@ -1356,15 +1309,10 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 					throw new IllegalStateException("No se puede borrar el trámite de iniciación cuando el estado del procedimiento es público");
 			}
 			
+			procedimiento.removeTramite(tramite);
+			session.flush();
 			
-			//SOLR Indexar procedimiento.
-			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
-		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO.toString(), procedimiento.getId(), 1l);
-		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_TRAMITE.toString(), tramite.getId(), 2l);
-		    
-		    procedimiento.removeTramite(tramite);
-			
-		    session.flush();
+			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, procedimiento.getId(), false);
 			
 		} catch (HibernateException e) {
 
@@ -1421,32 +1369,12 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 			}
 
-			//SOLR Desindexar procedimiento.
-			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
-		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO.toString(), procedimiento.getId(), 2l);
-		    
-		    //SOLR También indexar sus trámites y documentos
-		    if (procedimiento.getTramites() != null) {
-			    for(Tramite tramite : procedimiento.getTramites()) {
-			    	if (tramite == null) continue;
-			    	solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_TRAMITE.toString(), tramite.getId(), 2l);
-			    }
-		    }
-		    
-		    if (procedimiento.getDocumentos() != null) {
-		    	 for(Documento documento : procedimiento.getDocumentos()) {
-		    		 if (documento == null) continue;
-				    	solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO_DOCUMENTO.toString(), documento.getId(), 2l);
-				 }
-		    }
-		    
 			// Borrar comentarios
 			session.delete("from ComentarioProcedimiento as cp where cp.procedimiento.id = ?", id, Hibernate.LONG);
-
 			session.delete(procedimiento);
-			
-			
 			session.flush();
+			
+			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, id, true);
 
 		} catch (HibernateException he) {
 
