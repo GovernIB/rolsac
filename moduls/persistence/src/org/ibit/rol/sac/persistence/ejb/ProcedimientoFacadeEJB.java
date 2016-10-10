@@ -76,7 +76,7 @@ import es.caib.solr.api.model.types.EnumIdiomas;
 
 
 /**
- * SessionBean para mantener y consultar Procedimientos.
+ * SessionBean para mantener y consultar Procedimientos
  *
  *  TODO (enricjaen@dgtic) 03.03.2011
  *  Aquesta clase te mes de 1000 linias de codi i 47 procediments. 
@@ -2122,15 +2122,17 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 					}
 			    	
 			    	//Servicio Responsable
-			    	/*  Se ha ocultado este campo en la aplicacion
 			    	if (procedimiento.getServicioResponsable() != null) {
-			    		TraduccionUA unidadAdm = (TraduccionUA) procedimiento.getServicioResponsable().getTraduccion(keyIdioma);
-						if (unidadAdm != null) {
-							textoOptional.append(" ");
-							textoOptional.append(unidadAdm.getNombre());
-						}
+			    		try {
+				    		TraduccionUA unidadAdm = (TraduccionUA) procedimiento.getServicioResponsable().getTraduccion(keyIdioma);
+							if (unidadAdm != null) {
+								textoOptional.append(" ");
+								textoOptional.append(unidadAdm.getNombre());
+							}
+			    		} catch (Exception exception) {
+			    			log.error("Error obteniendo el servicio responsable", exception);
+			    		}
 			    	}
-			    	*/
 					
 					//Publico objetivo, para extraer el nombre del publico objetivo
 					String nombrePubObjetivo = "";
