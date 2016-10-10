@@ -152,12 +152,12 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 		try {
 
 			Long tramiteId = getTramiteSaver().grabarTramite(tramite, idUA, session);
-
-			//SOLR Indexar tramite
-			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
-		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_TRAMITE.toString(), tramiteId, 1l);
-		    
 		    session.flush();
+		    
+		    
+		    Tramite tramiteReload = cargaTramite(session, tramiteId);
+		    IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, tramiteReload.getProcedimiento().getId(), false);
+		    
 			return tramiteId;
 
 		} catch (HibernateException he) {
@@ -227,13 +227,11 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			session.delete(tramite);
 			session.flush();
 			
-			//SOLR Desindexar tramite
-			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
-		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_TRAMITE.toString(), tramite.getId(), 2l);
-		    
-		    session.flush();
+			session.flush();
 
 			Actualizador.borrar(tramite, true);
+			
+			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, tramite.getProcedimiento().getId(), false);
 
 		} catch (HibernateException he) {
 
@@ -296,9 +294,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 
 			}
 			
-			//SOLR Desindexar tramite
-			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
-		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_TRAMITE_DOCUMENTO.toString(), doc.getId(), 1l);
+			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, tramite.getProcedimiento().getId(), false);
 		    
 			
 			return doc.getId();
@@ -365,10 +361,12 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 
 			}
 		
+			
+			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, tramite.getProcedimiento().getId(), false);
 
 			return taxa.getId();
 
-		} catch (HibernateException he) {
+		} catch (Exception he) {
 
 			throw new EJBException(he);
 
@@ -451,8 +449,11 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 				Actualizador.actualizar(tramite, true);
 
 			}
+			
+			
+			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, tramite.getProcedimiento().getId(), false);
 
-		} catch (HibernateException he) {
+		} catch (Exception he) {
 
 			throw new EJBException(he);
 
@@ -563,10 +564,9 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 
 			}
 			
-			//SOLR Desindexar tramite
-			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
-		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_TRAMITE_DOCUMENTO.toString(), id, 2l);
-
+			
+			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, tramite.getProcedimiento().getId(), false);
+						
 		    
 		} catch (HibernateException he) {
 
@@ -604,14 +604,8 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			List<Long> idTramites = new Vector<Long>();
 			
 			for ( DocumentTramit document : documentos ) {
-				
-				//SOLR Desindexar tramite
-				SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
-			    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_TRAMITE_DOCUMENTO.toString(), document.getId(), 2l);
-			    
 				document.getTramit().removeDocument(document);
 				idTramites.add( document.getId() );
-
 			}
 
 			String consulta = "from DocumentTramit as dt where dt.id in (:tramites)";
@@ -638,6 +632,8 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			getSessionFactory().evictCollection("org.ibit.rol.sac.model.Tramite.docsInformatius", tramite.getId());
 			getSessionFactory().evictCollection("org.ibit.rol.sac.model.Tramite.formularios", tramite.getId());
 			getSessionFactory().evictCollection("org.ibit.rol.sac.model.Tramite.docsRequerits", tramite.getId());
+			
+			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, tramite.getProcedimiento().getId(), false);
 			
 		} catch (HibernateException he) {
 

@@ -19,8 +19,12 @@ import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.persistence.delegate.DelegateException;
+import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegate;
 
 import es.caib.solr.api.model.PathUO;
+import es.caib.solr.api.model.types.EnumCategoria;
 
 public class IndexacionUtil {
 	
@@ -267,4 +271,14 @@ public class IndexacionUtil {
 		return StringUtils.lowerCase(extension);
 	}
 	
+	
+	
+	public static void marcarIndexacionPendiente(EnumCategoria categoria, Long idElemento, boolean soloBorrar) throws DelegateException {
+			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
+			if (soloBorrar) {
+				solrPendiente.grabarSolrPendiente(categoria.toString(), idElemento, SolrPendienteDelegate.DESINDEXAR);
+			} else {
+				solrPendiente.grabarSolrPendiente(categoria.toString(), idElemento, SolrPendienteDelegate.REINDEXAR);
+			}
+		}
 }

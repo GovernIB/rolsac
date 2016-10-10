@@ -176,11 +176,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 		    Ficha fichasend = obtenerFicha(ficha.getId());
 		    Actualizador.actualizar(fichasend);
 		    
-		    //SOLR Indexar ficha.
-			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
-		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_FICHA.toString(), ficha.getId(), 1l);
-		 
-		    session.flush();
+		    IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_FICHA, ficha.getId(), false);    
+		    
 		    return ficha.getId();
 
 		} catch (HibernateException e) {
@@ -820,13 +817,10 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 
     		}
 
-    		//SOLR Desindexar ficha.
-			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
-		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_FICHA.toString(), ficha.getId(), 2l);
-		    
     		session.delete(ficha);
-    		
     		session.flush();
+    		
+    		IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_FICHA, ficha.getId(), true);
 
     	} catch (HibernateException he) {
 
@@ -1043,15 +1037,11 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     		    		
     		session.flush();
 
-    		//SOLR Indexar ficha.
-			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
-		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_FICHA.toString(), ficha.getId(), 1l);
+    		IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_FICHA, ficha.getId(), false);
 		    
-		    session.flush();
     		return ficha.getId();
 
     	} catch (HibernateException e) {
-    		
     		throw new EJBException(e);
     		
     	} finally {
@@ -1061,6 +1051,9 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     	}
     	
     }
+
+
+	
 
     /**
      * Borrar una ficha de Unidad administrativa
@@ -1095,18 +1088,18 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 
     		session.delete(fichaUA);
     		session.flush();
+    		
     		Ficha ficha = obtenerFicha(idFicha);
 
-    		if(borrar)
+    		if(borrar) {
     			log.debug("Entro en borrar remoto ficha UA");
+    		}
     		
-    		//SOLR Indexar ficha.
-			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
-		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_FICHA.toString(), ficha.getId(), 1l);
-		    
-		    session.flush();
     		//Actualizador.borrar(new FichaUATransferible(idUA,idFicha,ceSeccion));
 
+    		IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_FICHA, ficha.getId(), false);
+    		
+    		
     	} catch (HibernateException he) {
 
     		throw new EJBException(he);
@@ -1703,12 +1696,11 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 
     		session.delete("from FichaUA as fua where fua.id in (" + ids.toString() + ")");
     		session.flush();
+    		
+    		
+    		// Marcamos para reindexar las fichas
     		for (FichaUA fua : fichasUA) {
-    			//SOLR Indexar ficha.
-    			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
-    		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_FICHA.toString(), fua.getFicha().getId(), 1l);
-    		    
-    			session.refresh(fua.getFicha());
+    			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_FICHA, fua.getFicha().getId(), false);    			
     		}
 
     	} catch (HibernateException he) {
@@ -2092,5 +2084,5 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     	}
     	
     }
-
+   
 }

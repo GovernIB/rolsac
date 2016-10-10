@@ -151,10 +151,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			}
 			session.flush();
 			
-			//SOLR Indexar normativa
-			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
-		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_NORMATIVA.toString(), normativa.getId(), 1l);
-		    session.flush();
+			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_NORMATIVA, normativa.getId(), false);
 		    
 			return normativa.getId();
 		} catch (HibernateException he) {
@@ -188,10 +185,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			}
 			session.flush();
 			
-			//SOLR Indexar normativa
-			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
-		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_NORMATIVA.toString(), normativa.getId(), 1l);
-		    session.flush();
+			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_NORMATIVA, normativa.getId(), false);
 		    
 			return normativa.getId();
 		} catch (HibernateException he) {
@@ -581,7 +575,10 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			normativaQueAfecta.getAfectadas().add(afectacion);
 			normativaAfectada.getAfectantes().add(afectacion);
 			session.flush();
-		} catch (HibernateException e) {
+			
+			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_NORMATIVA, normativaAfectada_id, false);
+			
+		} catch (Exception e) {
 			throw new EJBException(e);
 		} finally {
 			close(session);
@@ -625,7 +622,9 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			
 			session.flush();
 			
-		} catch (HibernateException e) {
+			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_NORMATIVA, idNormativaQueAfecta, false);
+			
+		} catch (Exception e) {
 			
 			throw new EJBException(e);
 			
@@ -652,7 +651,10 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			ProcedimientoLocal procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, proc_id);
 			procedimiento.getNormativas().add(normativa);
 			session.flush();
-		} catch (HibernateException e) {
+			
+			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_NORMATIVA, norm_id, false);
+			
+		} catch (Exception e) {
 			throw new EJBException(e);
 		} finally {
 			close(session);
@@ -674,7 +676,10 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			ProcedimientoLocal procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, proc_id);
 			procedimiento.getNormativas().remove(normativa);
 			session.flush();
-		} catch (HibernateException e) {
+			
+			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_NORMATIVA, norm_id, false);
+			
+		} catch (Exception e) {
 			throw new EJBException(e);
 		} finally {
 			close(session);
@@ -736,13 +741,12 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			}
 			normativa.getAfectantes().clear();
 			
-			//SOLR Desndexar normativa
-			SolrPendienteDelegate solrPendiente = DelegateUtil.getSolrPendienteDelegate();
-		    solrPendiente.grabarSolrPendiente(EnumCategoria.ROLSAC_NORMATIVA.toString(), normativa.getId(), 2l);
-		    
 			Actualizador.borrar(normativa);
 			session.delete(normativa);
 			session.flush();
+			
+			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_NORMATIVA, normativa.getId(), true);
+			
 		} catch (HibernateException he) {
 			throw new EJBException(he);
 		} finally {
