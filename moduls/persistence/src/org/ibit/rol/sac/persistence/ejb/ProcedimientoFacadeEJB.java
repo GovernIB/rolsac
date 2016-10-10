@@ -2123,15 +2123,11 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			    	
 			    	//Servicio Responsable
 			    	if (procedimiento.getServicioResponsable() != null) {
-			    		try {
-				    		TraduccionUA unidadAdm = (TraduccionUA) procedimiento.getServicioResponsable().getTraduccion(keyIdioma);
-							if (unidadAdm != null) {
-								textoOptional.append(" ");
-								textoOptional.append(unidadAdm.getNombre());
-							}
-			    		} catch (Exception exception) {
-			    			log.error("Error obteniendo el servicio responsable", exception);
-			    		}
+		    			TraduccionUA unidadAdm = (TraduccionUA) procedimiento.getServicioResponsable().getTraduccion(keyIdioma);
+						if (unidadAdm != null) {
+							textoOptional.append(" ");
+							textoOptional.append(unidadAdm.getNombre());
+						}			    		
 			    	}
 					
 					//Publico objetivo, para extraer el nombre del publico objetivo
