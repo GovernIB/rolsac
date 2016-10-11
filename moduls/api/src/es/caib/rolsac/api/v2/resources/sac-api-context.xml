@@ -1063,7 +1063,7 @@
     </bean>
 
     <bean id="silencioQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.silencio.ejb.SilencioQueryServiceEJBStrategy">
-        <property name="silencioQueryServiceDelegate" ref="silecioQueryServiceDelegate" />
+        <property name="silencioQueryServiceDelegate" ref="silencioQueryServiceDelegate" />
     </bean>
 
     <bean id="silencioQueryServiceDelegate" class="es.caib.rolsac.api.v2.silencio.ejb.SilencioQueryServiceDelegate">
