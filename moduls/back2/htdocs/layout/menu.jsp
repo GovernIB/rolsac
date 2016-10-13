@@ -103,10 +103,10 @@
 						<span class="titol"><spring:message code="menu.procediments" /></span>
 						<ul>
 							<li>
-								<a href="<c:url value="/familia/familia.do"/>"><spring:message code="menu.familia" /></a>
+								<a href="<c:url value="/familia/familia.do"/>"><spring:message code="camp.tipo.procedimiento" /></a>
 							</li>
 							<li>
-								<a href="<c:url value="/tipusIniciacio/tipusIniciacions.do"/>"><spring:message code="menu.tipus_iniciacio" /></a>
+								<a href="<c:url value="/tipusIniciacio/tipusIniciacions.do"/>"><spring:message code="camp.formaIniciacio" /></a>
 							</li>
 							<li>
 								<a href="<c:url value="/catalegDocuments/catalegDocuments.do"/>"><spring:message code="menu.cataleg_documents" /></a>

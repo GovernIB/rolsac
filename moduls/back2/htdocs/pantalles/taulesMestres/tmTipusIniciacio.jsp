@@ -22,8 +22,8 @@
     var txtAla = "<spring:message code='txt.a_la'/>";
     var txtTrobats = "<spring:message code='txt.trobats'/>";
     var txtTrobades = "<spring:message code='txt.trobades'/>";
-    var txtLlistaItem = "<spring:message code='txt.tipus_iniciacio'/>";
-    var txtLlistaItems = "<spring:message code='txt.tipus_iniciacions'/>";
+    var txtLlistaItem = "<spring:message code='camp.formaIniciacio'/>";
+    var txtLlistaItems = "<spring:message code='txt.formes_iniciacions'/>";
     var txtMostrem = "<spring:message code='txt.mostrem'/>";
     var txtMostremAl = " <spring:message code='txt.a_la'/> ";
     var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
