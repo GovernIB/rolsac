@@ -4,7 +4,7 @@
 	<div id="submenu_contingut">
 		<ul>
 	        <li class="seleccionat">
-	            <span><spring:message code="submenu.familia" /></span>
+	            <span><spring:message code="camp.tipo.procedimiento" /></span>
 	            <span class="actual"></span>
 	        </li>
         </ul>			
