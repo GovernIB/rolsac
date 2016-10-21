@@ -16,6 +16,7 @@ import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.TraduccionFicha;
 import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -25,6 +26,7 @@ import org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegate;
 
 import es.caib.solr.api.model.PathUO;
 import es.caib.solr.api.model.types.EnumCategoria;
+import es.caib.solr.api.model.types.EnumIdiomas;
 
 public class IndexacionUtil {
 	
@@ -221,8 +223,19 @@ public class IndexacionUtil {
 				}
 			}
 		}
+		
 		if (!existeUA) {
 			return false;
+		}
+		
+		//Si tiene el url relleno, que salga
+		for (String keyIdioma : ficha.getTraduccionMap().keySet()) {
+			final TraduccionFicha traduccion = (TraduccionFicha) ficha.getTraduccion(keyIdioma);
+			if (traduccion != null) {
+				if (traduccion.getUrl() != null && !traduccion.getUrl().trim().isEmpty()) {
+					return false;
+				}
+			}
 		}
 		
 		return true;

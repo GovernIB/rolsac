@@ -142,7 +142,7 @@ public class ArxiuServlet extends HttpServlet {
      */
 	private Documento getDocumentArchiu(Session session, long id) throws HibernateException {
 		
-        Query query = session.createQuery("from Documento as docu where docu.archivo.id=:code");
+        Query query = session.createQuery("from Documento as docu join docu.traducciones as tradDocu where tradDocu.archivo.id=:code");
         query.setParameter("code", id);
         Documento archivo = (Documento) query.uniqueResult();
            
