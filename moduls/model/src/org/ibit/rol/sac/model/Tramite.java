@@ -373,7 +373,9 @@ public class Tramite extends Ordenable implements Comparator {
 	    final Date now = new Date();
 	    boolean noCaducado = (getDataCaducitat() == null || getDataCaducitat().after(now));
 	    boolean publicado = (getDataPublicacio() == null || getDataPublicacio().before(now));
-	    boolean visible = (getValidacio() == null || Validacion.PUBLICA.equals(Integer.valueOf(getValidacio().toString())));
+	    // INDRA : La visibilidad depende del procedimiento 
+	    // boolean visible = (getValidacio() == null || Validacion.PUBLICA.equals(Integer.valueOf(getValidacio().toString())));
+	    boolean visible = procedimiento != null && (procedimiento.getValidacion() == null || Validacion.PUBLICA.equals(Integer.valueOf(procedimiento.getValidacion().toString())));
 	    return visible && noCaducado && publicado;
 	}
 
