@@ -56,49 +56,49 @@ public class ArxiuServlet extends HttpServlet {
             	return;
             }
             
-            //Obtenemos el documento, si es null es que el archivo no pertenece a un documento
+            boolean verified = false;
+            
+            // Verificamos si el documento pertenece a un procedimiento ficha
             Documento docu = getDocumentArchiu(session, id);
             //Docu proc
-            if(docu != null && docu.getProcedimiento() !=null && !docu.getProcedimiento().isVisible()){
-            	log.error("El archivo " + idParam + " no es de contingut públic (procedimiento no visible 1).");
-            	response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            	return;
+            if(docu != null) {
+            	verified = true;
+            	if (docu.getProcedimiento() !=null && !docu.getProcedimiento().isVisible()){
+            		log.error("El archivo " + idParam + " no es de contingut públic (procedimiento no visible 1).");
+                	response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                	return;
+            	}
+            	if(docu.getFicha() !=null && !docu.getFicha().isVisible() ){       		
+            		log.error("El archivo " + idParam + " no es de contingut públic (ficha no visible 2).");
+            		response.sendError(HttpServletResponse.SC_NOT_FOUND); 
+            		return;
+                }            	
             }
             
-            
-            Documento docuFicha = getDocumentFitxaArchiu(session, id);
-            //Docu ficha
-            if(docuFicha != null && docuFicha.getFicha() !=null && !docuFicha.getFicha().isVisible() ){       		
-        		log.error("El archivo " + idParam + " no es de contingut públic (ficha no visible 2).");
-        		response.sendError(HttpServletResponse.SC_NOT_FOUND); 
-        		return;
-
-            }
-            
-            DocumentTramit docuTramit = getDocumentTramitArchiu(session, id);
-            
-            //Docu tramit
-            if(docuTramit != null && docuTramit.getTramit() !=null && docuTramit.getTramit().getProcedimiento() != null 
-            		&& (!docuTramit.getTramit().esPublico() || !docuTramit.getTramit().getProcedimiento().isVisible())){
-            	log.error("El archivo " + idParam + " no es de contingut públic.");
-            	if (!docuTramit.getTramit().esPublico()) {
-            		log.error(" - El tramite no es visible");
-            		log.error(" - Datos tramiteId:" + docuTramit.getTramit().getId() 
-            						+ "fechaCad:" +docuTramit.getTramit().getDataCaducitat() 
-            				        + " fechaPub:"+docuTramit.getTramit().getDataPublicacio()
-            					    + " validacion:"+ docuTramit.getTramit().getValidacio());            		
-            	}
-            	
-            	if (!docuTramit.getTramit().getProcedimiento().isVisible()) {
-            		log.error(" - El procedimiento no es visible");
-            		log.error(" - Datos procedId:" + docuTramit.getTramit().getProcedimiento().getId() 
-            				+ " fechaCad:"+docuTramit.getTramit().getProcedimiento().getFechaCaducidad() 
-    				        + " fechaPub:"+docuTramit.getTramit().getProcedimiento().getFechaPublicacion() 
-    					    + " validacion:"+ docuTramit.getTramit().getProcedimiento().getValidacion());   
-            	}
-            	
-            	response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            	return;
+            if (!verified) {
+	            DocumentTramit docuTramit = getDocumentTramitArchiu(session, id);
+	            //Docu tramit
+	            if(docuTramit != null && docuTramit.getTramit() !=null && docuTramit.getTramit().getProcedimiento() != null 
+	            		&& (!docuTramit.getTramit().esPublico() || !docuTramit.getTramit().getProcedimiento().isVisible())){
+	            	log.error("El archivo " + idParam + " no es de contingut públic.");
+	            	if (!docuTramit.getTramit().esPublico()) {
+	            		log.error(" - El tramite no es visible");
+	            		log.error(" - Datos tramiteId:" + docuTramit.getTramit().getId() 
+	            						+ "fechaCad:" +docuTramit.getTramit().getDataCaducitat() 
+	            				        + " fechaPub:"+docuTramit.getTramit().getDataPublicacio()
+	            					    + " validacion:"+ docuTramit.getTramit().getProcedimiento().getValidacion());            		
+	            	}
+	            	
+	            	if (!docuTramit.getTramit().getProcedimiento().isVisible()) {
+	            		log.error(" - El procedimiento no es visible");
+	            		log.error(" - Datos procedId:" + docuTramit.getTramit().getProcedimiento().getId() 
+	            				+ " fechaCad:"+docuTramit.getTramit().getProcedimiento().getFechaCaducidad() 
+	    				        + " fechaPub:"+docuTramit.getTramit().getProcedimiento().getFechaPublicacion() 
+	    					    + " validacion:"+ docuTramit.getTramit().getProcedimiento().getValidacion());   
+	            	}
+	            	response.sendError(HttpServletResponse.SC_NOT_FOUND);
+	            	return;
+	            }
             }
 
             response.setContentType(archivo.getMime());
@@ -142,7 +142,7 @@ public class ArxiuServlet extends HttpServlet {
      */
 	private Documento getDocumentArchiu(Session session, long id) throws HibernateException {
 		
-        Query query = session.createQuery("from Documento as docu where docu.archivo.id=:code");
+        Query query = session.createQuery("from Documento as docu join docu.traducciones as tradDocu where tradDocu.archivo.id=:code");
         query.setParameter("code", id);
         Documento archivo = (Documento) query.uniqueResult();
            
@@ -167,24 +167,5 @@ public class ArxiuServlet extends HttpServlet {
            
         return archivo;
 		
-	}
-	
-
-	 /**
-    * Se obtiene el documento ficha a partir del archivo
-    * 
-    * @param session
-    * @param id
-    * @return
-    * @throws HibernateException
-    */
-	private Documento getDocumentFitxaArchiu(Session session, long id) throws HibernateException {
-		
-       Query query = session.createQuery("from Documento docu join docu.traducciones as tradDocu where tradDocu.archivo.id=:code");
-       query.setParameter("code", id);
-       Documento archivo = (Documento) query.uniqueResult();
-          
-       return archivo;
-		
-	}
+	}	
 }
