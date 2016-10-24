@@ -592,7 +592,7 @@ function CDetall() {
 			$("#item_finestreta_unica").attr("checked", jQuery(this).is(":checked")); 
 		});
 		
-
+		
 		// boton de traducir
 		jQuery("#botoTraduirProcediment").unbind("click").bind("click", function() {
 			Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
@@ -739,6 +739,7 @@ function CDetall() {
 		jQuery("#item_silenci_combo").val(dada_node.item_silenci_combo);
 		
 		
+		jQuery("#item_clave_primaria").val(dada_node.item_id);
 		$("#item_clave_primaria").change();
 
 		$("#item_data_actualitzacio").val(dada_node.item_data_actualitzacio);
