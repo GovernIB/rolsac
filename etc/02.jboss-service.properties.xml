@@ -87,4 +87,4 @@ es.caib.rolsac.subscripcions
 	   <!-- Esta representado en MB. -->
 	   es.caib.rolsac.solr.tamanyomaximo=20
 	   es.caib.rolsac.solr.ficheros=doc,docx,xls,xlsx,pdf,pdfx,odt,ods,odp,odf,txt,rtf
-    </attribute>
+    

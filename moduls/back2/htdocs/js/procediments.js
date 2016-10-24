@@ -742,6 +742,7 @@ function CDetall() {
 		$("#item_clave_primaria").val(dada_node.item_id);
 		$("#item_clave_primaria").change();
 
+		
 		$("#item_data_actualitzacio").val(dada_node.item_data_actualitzacio);
 
 		$("#item_data_publicacio").val(dada_node.item_data_publicacio);
