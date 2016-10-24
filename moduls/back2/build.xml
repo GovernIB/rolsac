@@ -95,6 +95,7 @@
 
 	<target name="main" depends="build" description="Packages app as WAR">
     	<delete file="${web.product}/${prefix.modul}-${modul}.war" quiet="yes"/>
+		<copy file="etc/resources/sac-back2-tags_ca.properties" tofile="etc/resources/sac-back2-tags.properties" overwrite="true" />
         <war destfile="${web.product}/${prefix.modul}-${modul}.war" webxml="${web.gen.etc}/web.xml" compress="true">
             <classes dir="${web.classes}" />
 
