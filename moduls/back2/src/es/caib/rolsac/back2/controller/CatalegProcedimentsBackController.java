@@ -1142,7 +1142,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		);
         
         // Actualiza estadísticas
-        DelegateUtil.getEstadisticaDelegate().grabarEstadisticaProcedimiento(procId);
+        //DelegateUtil.getEstadisticaDelegate().grabarEstadisticaProcedimiento(procId);
 
         return procId;
         
@@ -1171,7 +1171,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
     		);
             
             // Actualiza estadísticas
-            DelegateUtil.getEstadisticaDelegate().grabarEstadisticaProcedimiento(procId);
+           // DelegateUtil.getEstadisticaDelegate().grabarEstadisticaProcedimiento(procId);
 
             return procId;
 		
