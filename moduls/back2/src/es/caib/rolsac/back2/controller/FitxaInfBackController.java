@@ -1000,7 +1000,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 		/* FIN NOTA */
 		
 		Long idFicha = DelegateUtil.getFichaDelegate().grabarFicha(fitxa);
-		DelegateUtil.getEstadisticaDelegate().grabarEstadisticaFicha(idFicha);
+		//DelegateUtil.getEstadisticaDelegate().grabarEstadisticaFicha(idFicha);
 
 		return idFicha;
 		

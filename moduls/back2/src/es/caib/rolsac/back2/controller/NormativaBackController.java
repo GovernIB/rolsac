@@ -665,7 +665,7 @@ public class NormativaBackController extends PantallaBaseController {
             Long idNormativa = guardarNormativa(normativa, ua, normativaLocal);
 
             // Actualizar estadísticas
-            DelegateUtil.getEstadisticaDelegate().grabarEstadisticaNormativa(idNormativa);
+            //DelegateUtil.getEstadisticaDelegate().grabarEstadisticaNormativa(idNormativa);
 
             // Finalizado correctamente
             result = new IdNomDTO(normativa.getId(), messageSource.getMessage("normativa.guardat.correcte", null, request.getLocale()));
