@@ -68,8 +68,10 @@ import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
 import es.caib.rolsac.api.v2.enllac.EnllacDTO;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
+import es.caib.rolsac.api.v2.estadistica.EstadisticaInsertService;
 import es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioCriteria;
 import es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioDTO;
+import es.caib.rolsac.api.v2.exception.InsertServiceException;
 import es.caib.rolsac.api.v2.familia.FamiliaCriteria;
 import es.caib.rolsac.api.v2.familia.FamiliaDTO;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
@@ -82,6 +84,7 @@ import es.caib.rolsac.api.v2.fitxaUA.FitxaUADTO;
 import es.caib.rolsac.api.v2.formulari.FormulariCriteria;
 import es.caib.rolsac.api.v2.formulari.FormulariDTO;
 import es.caib.rolsac.api.v2.general.BasicUtils;
+import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.HibernateEJB;
 import es.caib.rolsac.api.v2.general.co.CriteriaObject;
 import es.caib.rolsac.api.v2.general.co.CriteriaObjectParseException;
@@ -495,6 +498,10 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 							procedimentLocal,
 							procedimentCriteria.getIdioma()
 							);
+					// Actualiza estadísticas
+		            //DelegateUtil.getEstadisticaDelegate().grabarEstadisticaProcedimiento(procedimentDTO.getId());
+		            EstadisticaInsertService service = (EstadisticaInsertService) BeanUtils.getBean("estadisticaInsertServiceWSAdapter");
+	    			service.gravarEstadisticaProcediment(procedimentDTO.getId());
 				}
 			}
 
@@ -513,6 +520,9 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 			log.error(e);
 			throw new EJBException(e);
 
+		}  catch (InsertServiceException e) {
+			log.error(e);
+			throw new EJBException(e);
 		} finally {
 
 			close(session);
@@ -926,6 +936,10 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 						uaCriteria.getIdioma());
 
                 uaDTO.setIdioma(uaCriteria.getIdioma());
+                
+                //Actualiza estadísticas
+    			EstadisticaInsertService service = (EstadisticaInsertService) BeanUtils.getBean("estadisticaInsertServiceWSAdapter");
+    			service.gravarEstadisticaUnitatAdministrativa(ua.getId());
 			}
 
 		} catch (HibernateException e) {
@@ -937,7 +951,10 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 		} catch (QueryBuilderException e) {
 			log.error(e);
 			throw new EJBException(e);
-		} finally {
+		} catch (InsertServiceException e) {
+			log.error(e);
+			throw new EJBException(e);
+		}finally {
 			close(session);
 		}
 
@@ -982,6 +999,8 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 						UnitatAdministrativaDTO.class, 
 						ua, 
 						uaCriteria.getIdioma()));
+				
+				 
 			}
 		} catch (HibernateException e) {
 			log.error(e);
@@ -992,7 +1011,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 		} catch (QueryBuilderException e) {
 			log.error(e);
 			throw new EJBException(e);
-		} finally {
+		}finally {
 			close(session);
 		}
 
@@ -1156,8 +1175,12 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 			Query query = qb.createQuery(session);
 			Ficha fitxa = (Ficha) query.uniqueResult();
 
-			if ( fitxa != null )
+			if ( fitxa != null ){
 				fitxaDTO = (FitxaDTO) BasicUtils.entityToDTO( FitxaDTO.class, fitxa, fitxaCriteria.getIdioma() );
+				
+				EstadisticaInsertService service = (EstadisticaInsertService) BeanUtils.getBean("estadisticaInsertServiceWSAdapter");
+	    		service.gravarEstadisticaNormativa(fitxaDTO.getId());
+			}
 
 
 		} catch (HibernateException e) {
@@ -1175,7 +1198,12 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 			log.error(e);
 			throw new EJBException(e);
 
-		} finally {
+		} catch (InsertServiceException e) {
+			
+			log.error(e);
+			throw new EJBException(e);
+			
+		}  finally {
 
 			close(session);
 
@@ -1400,6 +1428,9 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 						NormativaDTO.class, 
 						normativaLocal,
 						normativaCriteria.getIdioma());
+				// Actualizar estadísticas
+	            EstadisticaInsertService service = (EstadisticaInsertService) BeanUtils.getBean("estadisticaInsertServiceWSAdapter");
+    			service.gravarEstadisticaNormativa(normativaDTO.getId());
 			} else if (incluirExternas) {
 				criteris = BasicUtils.parseCriterias(NormativaCriteria.class, HQL_NORMATIVA_ALIAS, HQL_TRADUCCIONES_ALIAS, normativaCriteria);
 				entities = new ArrayList<FromClause>();
@@ -1414,6 +1445,10 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 							NormativaDTO.class, 
 							normativaExterna,
 							normativaCriteria.getIdioma());
+					
+					// Actualizar estadísticas
+		            EstadisticaInsertService service = (EstadisticaInsertService) BeanUtils.getBean("estadisticaInsertServiceWSAdapter");
+	    			service.gravarEstadisticaNormativa(normativaDTO.getId());
 				}
 			}
 		} catch (HibernateException e) {
@@ -1425,7 +1460,10 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 		} catch (QueryBuilderException e) {
 			log.error(e);
 			throw new EJBException(e);
-		} finally {
+		} catch (InsertServiceException e) {
+			log.error(e);
+			throw new EJBException(e);
+		}  finally {
 			close(session);
 		}
 

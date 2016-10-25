@@ -651,7 +651,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			crearOActualizarUnitatAdministrativa(unitatAdministrativa, unitatAdmPareId);
 
 			//Actualiza estadísticas
-			DelegateUtil.getEstadisticaDelegate().grabarEstadisticaUnidadAdministrativa( unitatAdministrativa.getId() );
+			//DelegateUtil.getEstadisticaDelegate().grabarEstadisticaUnidadAdministrativa( unitatAdministrativa.getId() );
 
 			// Sobre escrivim la unitat administrativa de la mollapa
 			UnidadAdministrativaController.actualizarUAMigaPan(session, unitatAdministrativa);
