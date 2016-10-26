@@ -565,6 +565,10 @@ function CDetall() {
 			jQuery("#item_fi_vida_administrativa,#item_fi_vida_administrativa_es,#item_fi_vida_administrativa_en,#item_fi_vida_administrativa_de,#item_fi_vida_administrativa_fr").val( jQuery(this).val());
 		});
 
+		jQuery("#item_silenci_combo,#item_silenci_combo_es,#item_silenci_combo_en,#item_silenci_combo_de,#item_silenci_combo_fr").change(function(){
+			jQuery("#item_silenci_combo,#item_silenci_combo_es,#item_silenci_combo_en,#item_silenci_combo_de,#item_silenci_combo_fr").val( jQuery(this).val());
+		});
+		
 		jQuery("#item_taxa,#item_taxa_es,#item_taxa_en,#item_taxa_de,#item_taxa_fr").change(function(){
 			jQuery("#item_taxa,#item_taxa_es,#item_taxa_en,#item_taxa_de,#item_taxa_fr").attr("checked", jQuery(this).is(":checked"));
 		});
@@ -736,8 +740,11 @@ function CDetall() {
 			jQuery("#item_codigo_sia").val(dada_node.item_codigo_sia);
 			jQuery("#item_codigo_sia").change();
 		}
-		jQuery("#item_silenci_combo").val(dada_node.item_silenci_combo);
-		jQuery("#item_silenci_combo").change();
+		
+		if (dada_node.item_silenci_combo != undefined) {
+			jQuery("#item_silenci_combo").val(dada_node.item_silenci_combo);
+			jQuery("#item_silenci_combo").change();
+		}
 		
 		
 		$("#item_clave_primaria").val(dada_node.item_id);
