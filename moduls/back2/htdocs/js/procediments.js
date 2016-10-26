@@ -737,7 +737,7 @@ function CDetall() {
 			jQuery("#item_codigo_sia").change();
 		}
 		jQuery("#item_silenci_combo").val(dada_node.item_silenci_combo);
-		
+		jQuery("#item_silenci_combo").change();
 		
 		jQuery("#item_clave_primaria").val(dada_node.item_id);
 		$("#item_clave_primaria").change();
@@ -763,6 +763,9 @@ function CDetall() {
 		if (dada_node.item_servei_responsable_id != undefined) {
 			$("#item_servei_responsable_id").val(dada_node.item_servei_responsable_id);
 			$("#item_servei_responsable").val(dada_node.item_servei_responsable_nom).change();
+		}else{
+			$("#item_servei_responsable_id").val("");
+			$("#item_servei_responsable").val("");
 		}
 		
 		if (dada_node.item_organ_id != undefined) {
