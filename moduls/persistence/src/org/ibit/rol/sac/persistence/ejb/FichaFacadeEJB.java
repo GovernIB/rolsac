@@ -1873,7 +1873,11 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			indexData.setCategoria(categoria);
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
 			indexData.setElementoId(idElemento.toString());
-			indexData.setUos(IndexacionUtil.calcularPathUOsFicha(ficha));
+			List<PathUO> pathUOsFicha = IndexacionUtil.calcularPathUOsFicha(ficha);
+			if (pathUOsFicha.size() <= 0) {
+				return new SolrPendienteResultado(true, "No se puede indexar: no cuelga de UAs visibles");
+			}
+			indexData.setUos(pathUOsFicha);
 			
 			//Iteramos las traducciones
 			final MultilangLiteral titulo = new MultilangLiteral();

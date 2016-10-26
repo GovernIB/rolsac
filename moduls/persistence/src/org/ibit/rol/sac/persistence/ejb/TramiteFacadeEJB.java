@@ -1083,7 +1083,11 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
 			indexData.setCategoriaPadre(EnumCategoria.ROLSAC_PROCEDIMIENTO);
 			indexData.setElementoId(idElemento.toString());
-			indexData.getUos().add(IndexacionUtil.calcularPathUO(procedimiento.getUnidadAdministrativa()));			
+			PathUO pathUO = IndexacionUtil.calcularPathUO(procedimiento.getUnidadAdministrativa());
+			if (pathUO == null) {
+				return new SolrPendienteResultado(true, "No se puede indexar: no cuelga de UA visible");
+			}
+			indexData.getUos().add(pathUO);			
 			indexData.setElementoIdPadre(procedimiento.getId().toString());
 
 			//Iteramos las traducciones
@@ -1252,7 +1256,11 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			indexData.setInterno(false);
 			
 			// UOs
-			indexData.getUos().add(IndexacionUtil.calcularPathUO(procedimiento.getUnidadAdministrativa()));
+			PathUO pathUO = IndexacionUtil.calcularPathUO(procedimiento.getUnidadAdministrativa());
+			if (pathUO == null) {
+				return new SolrPendienteResultado(true, "No se puede indexar: no cuelga de UA visible");
+			}
+			indexData.getUos().add(pathUO);
 			
 			//FamiliaID
 			if (procedimiento.getFamilia() != null) {

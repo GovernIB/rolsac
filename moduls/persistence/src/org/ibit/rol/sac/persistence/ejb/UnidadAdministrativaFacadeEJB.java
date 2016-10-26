@@ -2538,7 +2538,11 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			indexData.setCategoria(categoria);
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
 			indexData.setElementoId(idElemento.toString());
-			indexData.getUos().add(IndexacionUtil.calcularPathUO(unidadAdministrativa));
+			PathUO pathUO = IndexacionUtil.calcularPathUO(unidadAdministrativa);
+			if (pathUO == null) {
+				return new SolrPendienteResultado(true, "No se puede indexar: no cuelga de UA visible");
+			}
+			indexData.getUos().add(pathUO);
 			
 			//Iteramos las traducciones
 			final Map<String, Traduccion> traducciones = unidadAdministrativa.getTraduccionMap();

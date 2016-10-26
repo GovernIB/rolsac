@@ -2200,7 +2200,11 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			indexData.setInterno(false);
 			
 			//UA
-			indexData.getUos().add(IndexacionUtil.calcularPathUO(procedimiento.getUnidadAdministrativa()));
+			PathUO pathUO = IndexacionUtil.calcularPathUO(procedimiento.getUnidadAdministrativa());
+			if (pathUO == null) {
+				return new SolrPendienteResultado(true, "No se puede indexar: no cuelga de UA visible");
+			}
+			indexData.getUos().add(pathUO);
 			
 			//Revisar si el tramite es telematico
 			indexData.setTelematico(false);

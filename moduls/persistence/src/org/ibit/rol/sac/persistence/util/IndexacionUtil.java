@@ -97,6 +97,10 @@ public class IndexacionUtil {
 			return null;
 		}
 		
+		if (unidadAdministrativa.getValidacion() != 1) {
+			return null;
+		}
+		
 		List<PathUO> uos = new ArrayList<PathUO>();
 		PathUO uo = new PathUO();
 		List<String> path = new ArrayList<String>();
@@ -106,8 +110,11 @@ public class IndexacionUtil {
 		if (predecesores != null) {
 			for(UnidadAdministrativa predecesor : predecesores) {
 				if (predecesor != null && predecesor.getId() != null) {
+					if (predecesor.getValidacion() != 1) {
+						return null;
+					}
 					path.add(predecesor.getId().toString());				
-				}
+				}				
 			}
 		}
 		path.add( unidadAdministrativa.getId().toString());
@@ -124,6 +131,10 @@ public class IndexacionUtil {
 			return null;
 		}
 		
+		if (unidadAdministrativa.getValidacion() != 1) {
+			return null;
+		}
+		
 		StringBuffer textoOptional = new StringBuffer();
 		
 		//Hay que extraer la id de los predecesores y luego el de uno mismo
@@ -131,6 +142,9 @@ public class IndexacionUtil {
 		if (predecesores != null) {
 			for(UnidadAdministrativa predecesor : predecesores) {
 				if (predecesor != null && predecesor.getId() != null) {
+					if (predecesor.getValidacion() != 1) {
+						return null;
+					}
 					TraduccionUA traduccionUA = ((TraduccionUA) predecesor.getTraduccion(idioma));
 					if (traduccionUA != null && traduccionUA.getNombre() != null) {
 						textoOptional.append(traduccionUA.getNombre());
@@ -158,7 +172,10 @@ public class IndexacionUtil {
 				continue;
 			}	
 			idUAs.add(fichaUA.getUnidadAdministrativa().getId());
-			uos.add(IndexacionUtil.calcularPathUO(fichaUA.getUnidadAdministrativa()));												
+			PathUO pathUo = IndexacionUtil.calcularPathUO(fichaUA.getUnidadAdministrativa());
+			if (pathUo != null) {
+				uos.add(pathUo);
+			}
 		}
 		return uos;
 	}
@@ -198,7 +215,7 @@ public class IndexacionUtil {
 			return false;
 		}
 		// TODO Pendiente tratar Normativas externas (sin UA)
-		if (normativa.getUnidadAdministrativa() == null) {
+		if (normativa.getUnidadAdministrativa() == null || normativa.getUnidadAdministrativa().getValidacion() != 1) {
 			return false;
 		}
 		return true;
@@ -213,11 +230,11 @@ public class IndexacionUtil {
 			return false;
 		}
 		
-		// No es indexable si no tiene al menos una UA
+		// No es indexable si no tiene al menos una UA visible
 		boolean existeUA = false;
 		if (ficha.getFichasua() != null && ficha.getFichasua().size() > 0) {
 			for (FichaUA fichaUA : ficha.getFichasua()) {
-				if (fichaUA.getUnidadAdministrativa() != null) {
+				if (fichaUA.getUnidadAdministrativa() != null && fichaUA.getUnidadAdministrativa().getValidacion() == 1) {
 					existeUA = true;
 					break;
 				}
@@ -255,6 +272,9 @@ public class IndexacionUtil {
 		if (procedimiento.getUnidadAdministrativa() == null) {
 			return false;
 		}
+		if (procedimiento.getUnidadAdministrativa().getValidacion() != 1 ) {
+			return false;
+		}
 		return true;
 	}
 	
@@ -267,13 +287,11 @@ public class IndexacionUtil {
 		if (tramite.getProcedimiento() == null) {
 			return false;
 		}
-		if (tramite.getProcedimiento().getValidacion() != 1 ) {
+		
+		if (!IndexacionUtil.isIndexable(tramite.getProcedimiento())) {
 			return false;
 		}	
 		
-		if (tramite.getProcedimiento().getUnidadAdministrativa() == null) {
-			return false;
-		}
 		return true;
 	}
 	

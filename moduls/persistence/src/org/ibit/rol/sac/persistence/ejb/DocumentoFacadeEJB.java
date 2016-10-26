@@ -51,6 +51,7 @@ import org.ibit.rol.sac.persistence.ws.Actualizador;
 import es.caib.solr.api.SolrIndexer;
 import es.caib.solr.api.model.IndexFile;
 import es.caib.solr.api.model.MultilangLiteral;
+import es.caib.solr.api.model.PathUO;
 import es.caib.solr.api.model.types.EnumAplicacionId;
 import es.caib.solr.api.model.types.EnumCategoria;
 import es.caib.solr.api.model.types.EnumIdiomas;
@@ -526,7 +527,11 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 			indexData.setFechaCaducidad(procedimiento.getFechaCaducidad());
 			
 			//UA
-			indexData.getUos().add(IndexacionUtil.calcularPathUO(procedimiento.getUnidadAdministrativa()));
+			PathUO pathUO = IndexacionUtil.calcularPathUO(procedimiento.getUnidadAdministrativa());
+			if (pathUO == null) {
+				return new SolrPendienteResultado(true, "No se puede indexar: no cuelga de UA visible");
+			}
+			indexData.getUos().add(pathUO);
 			
 			if (procedimiento.getTramites() != null) {
 				for(Tramite tramite : procedimiento.getTramites()) {
@@ -747,7 +752,11 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 			indexData.setInterno(false);
 			
 			// Uos: una ficha puede tener varias UAs
-			indexData.setUos(IndexacionUtil.calcularPathUOsFicha(ficha));
+			List<PathUO> pathUOsFicha = IndexacionUtil.calcularPathUOsFicha(ficha);
+			if (pathUOsFicha.size() <= 0) {
+				return new SolrPendienteResultado(true, "No se puede indexar: no cuelga de UAs visibles");
+			}
+			indexData.setUos(pathUOsFicha);
 			
 			// Obtenemos primera UA
 			UnidadAdministrativa primeraUA = IndexacionUtil.calcularPrimeraUAFicha(ficha);		

@@ -1082,7 +1082,12 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
 			indexData.setElementoId(idElemento.toString());			
 			indexData.setFechaPublicacion(normativa.getFechaBoletin());
-			indexData.getUos().add(IndexacionUtil.calcularPathUO(normativa.getUnidadAdministrativa()));
+			PathUO pathUO = IndexacionUtil.calcularPathUO(normativa.getUnidadAdministrativa());
+			if (pathUO == null) {
+				return new SolrPendienteResultado(true, "No se puede indexar: no cuelga de UA visible");
+			}
+			indexData.getUos().add(pathUO);
+			
 			
 			//Iteramos las traducciones
 			final Map<String, Traduccion> traducciones = normativa.getTraduccionMap();
@@ -1190,7 +1195,11 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			indexData.setCategoria(categoria);
 			indexData.setCategoriaPadre(EnumCategoria.ROLSAC_NORMATIVA);
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
-			indexData.getUos().add(IndexacionUtil.calcularPathUO(normativa.getUnidadAdministrativa()));
+			PathUO pathUO = IndexacionUtil.calcularPathUO(normativa.getUnidadAdministrativa());
+			if (pathUO == null) {
+				return new SolrPendienteResultado(true, "No se puede indexar: no cuelga de UA visible");
+			}
+			indexData.getUos().add(pathUO);
 			indexData.setElementoIdPadre(normativa.getId().toString());
 
 			//Iteramos las traducciones
