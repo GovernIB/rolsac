@@ -2175,13 +2175,13 @@
 										</c:if>										
 		                                    <p class="info"><spring:message code='txt.noHiHaDocumentsRelacionats'/>.</p>
 		                                    <div class="listaOrdenable"></div>									
-										</c:forEach>									
 									</div>																		
+										</c:forEach>									
 	                                <div class="btnGenerico">
 	                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.afegeixDocument'/></span></span></a>
 	                                </div>
-	                            </div>								
-	                        </div>
+	                        </div>								
+	                    </div>
 	                        <!-- /modulDocuments -->                                 
 	                </fieldset>
 	            </div>    
