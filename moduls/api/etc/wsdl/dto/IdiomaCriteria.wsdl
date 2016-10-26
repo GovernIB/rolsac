@@ -10,7 +10,6 @@
     targetNamespace="http://ws.idioma.v2.api.rolsac.caib.es">
 
   <wsdl:import namespace="urn:tns4" location="IdiomaOrdenacio.wsdl"/> 
-
   <wsdl:types>
     <schema xmlns="http://www.w3.org/2001/XMLSchema"
         targetNamespace="http://idioma.v2.api.rolsac.caib.es">

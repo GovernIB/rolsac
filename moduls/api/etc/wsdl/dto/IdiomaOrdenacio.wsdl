@@ -13,7 +13,6 @@
         targetNamespace="http://idioma.v2.api.rolsac.caib.es">
         <import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
         <import namespace="http://general.v2.api.rolsac.caib.es" />
-
         <simpleType name="IdiomaOrdenacio">
             <restriction base="xsd:string">
                 <enumeration value="id_asc" />
