@@ -332,7 +332,7 @@ function CDetall(){
         if ((typeof idPare != 'undefined' && idPare != null && idPare != '') &&
         	(typeof nomPare != 'undefined' && nomPare != null && nomPare != '')) {
         	jQuery("#btnVolver").unbind("click").bind("click", function() {
-        		that.torna();
+        		that.vuelve();
 				if ($(".breadItems").length) {
 					$(".breadItems").remove();
 					$("#submenu").removeClass("breadcrumb");
@@ -451,7 +451,7 @@ function CDetall(){
     		});
     	} else {
         	jQuery("#btnVolver").unbind("click").bind("click", function() {
-        		that.torna();
+        		that.vuelve();
 				if ($(".breadItems").length) {
 					$(".breadItems").remove();
 					$("#submenu").removeClass("breadcrumb");
