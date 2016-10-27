@@ -942,6 +942,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
                 //Actualiza estadísticas
     			EstadisticaInsertService service = (EstadisticaInsertService) BeanUtils.getBean("estadisticaInsertServiceWSAdapter");
     			service.gravarEstadisticaUnitatAdministrativa(ua.getId());
+    			
 			}
 
 		} catch (HibernateException e) {
@@ -1179,7 +1180,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 				fitxaDTO = (FitxaDTO) BasicUtils.entityToDTO( FitxaDTO.class, fitxa, fitxaCriteria.getIdioma() );
 				
 				EstadisticaInsertService service = (EstadisticaInsertService) BeanUtils.getBean("estadisticaInsertServiceWSAdapter");
-	    		service.gravarEstadisticaNormativa(fitxaDTO.getId());
+	    		service.gravarEstadisticaFitxa(fitxaDTO.getId());
 			}
 
 
