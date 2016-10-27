@@ -459,7 +459,6 @@
         
         <delete file="${product.dir}/01${projecte.name.rolsac}.ear" quiet="yes"/>
         <antcall target="make.application.xml"/>
-        <antcall target="make.jboss-service.xml"/>
         
         <ear earfile="${product.dir}/01${projecte.name.rolsac}.ear" appxml="${output.dir}/application.xml" manifest="${etc.approlsac}/manifest.mf">
             <manifest>
@@ -717,29 +716,5 @@
 
     </target>
 
-
-
-    <!-- ================================================================== -->
-    <!-- Construeix el fitxer jboss-service.xml                             -->
-    <!-- ================================================================== -->
-    <target name="make.jboss-service.xml">
-        
-        <echo message="Desplegando jboss-service.xml ....."/>
-        <delete file="${output.dir}/01rolsac.jboss-service.xml"/>
-        <echo message="Archivo antigua eliminado ....."/>
-        <concat destfile="${output.dir}/01rolsac.jboss-service.xml" append="true" fixlastline="true">
-            <filelist dir="${etc}"    files="01.jboss-service.begin.xml"/>
-            <filelist dir="${etc}"    files="02.jboss-service.properties.xml"/>
-            <filelist dir="${etc}"    files="03.jboss-service.end.xml"/>
-        </concat>
-        <echo message="Archivo nuevo creado ...."/>
-        <echo message="${deploy.dir}"/>
-    	<!-- PARA REVISAR 
-        <copy verbose="true" file="${output.dir}/01rolsac.jboss-service.xml" todir="${jbossServiceDeploy.dir}"/>
-        -->
-        <echo message="Archivo copiado en el Jboss"/>
-        
-    </target>
-    
     
 </project>
