@@ -56,8 +56,8 @@
 	
 	<path id="ejb.class.path">
         <fileset dir="${lib.dir}">
-        	<include name="solrapi.jar"/>
-        	 <include name="hibernate2.jar"/>
+        	<include name="solrapi*.jar"/>
+        	<include name="hibernate2.jar"/>
             <include name="cglib2.jar"/>
             <include name="ejb-2_0.jar"/>
         	<include name="jaxrpc.jar"/>
