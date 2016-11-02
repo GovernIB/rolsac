@@ -1083,6 +1083,8 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
 			indexData.setCategoriaPadre(EnumCategoria.ROLSAC_PROCEDIMIENTO);
 			indexData.setElementoId(idElemento.toString());
+			indexData.setCategoriaRaiz(EnumCategoria.ROLSAC_PROCEDIMIENTO);
+			indexData.setElementoIdRaiz(procedimiento.getId().toString());
 			PathUO pathUO = IndexacionUtil.calcularPathUO(procedimiento.getUnidadAdministrativa());
 			if (pathUO == null) {
 				return new SolrPendienteResultado(true, "No se puede indexar: no cuelga de UA visible");
@@ -1234,6 +1236,8 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
 			indexData.setCategoriaPadre(EnumCategoria.ROLSAC_TRAMITE);
 			indexData.setElementoIdPadre(tramite.getId().toString());
+			indexData.setCategoriaRaiz(EnumCategoria.ROLSAC_PROCEDIMIENTO);
+			indexData.setElementoIdRaiz(procedimiento.getId().toString());
 
 			//Datos Id materia
 			final List<String> materiasId = new ArrayList<String>();	

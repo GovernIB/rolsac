@@ -2070,6 +2070,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			indexData.setCategoria(categoria);
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
 			indexData.setElementoId(idElemento.toString());
+			indexData.setCategoriaRaiz(EnumCategoria.ROLSAC_PROCEDIMIENTO);
+			indexData.setElementoIdRaiz(idElemento.toString());
 			
 			//Iteramos las traducciones
 			final Map<String, Traduccion> traducciones = procedimiento.getTraduccionMap();

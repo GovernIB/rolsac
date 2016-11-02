@@ -506,6 +506,8 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 			indexData.setCategoriaPadre(EnumCategoria.ROLSAC_PROCEDIMIENTO);
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
 			indexData.setElementoIdPadre(procedimiento.getId().toString());
+			indexData.setCategoriaRaiz(EnumCategoria.ROLSAC_PROCEDIMIENTO);
+			indexData.setElementoIdRaiz(procedimiento.getId().toString());
 
 			//materia
 			final List<String> materiasId = new ArrayList<String>();		
