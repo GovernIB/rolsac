@@ -616,7 +616,7 @@ public class TMSeccionsController extends PantallaBaseController {
 						
 						if ( secHija != null && elementos[i].equals(secHija.getId()) ) {
 							found = true;
-							secHija.setOrden(i + 1);
+							secHija.setOrden(i + 1);							
 						}
 						
 					}
@@ -695,16 +695,31 @@ public class TMSeccionsController extends PantallaBaseController {
         if (hijosSeccion != null) {
         	
         	// Ordenamos i.e. poner cada sección ordenada por su valor "orden" en el array.
-        	Seccion[] arraySecciones = new Seccion[hijosSeccion.size()];
+        	List<Seccion> listSeccionesOrdenadas = new ArrayList<Seccion>();        	
         	Iterator<Seccion> it = hijosSeccion.iterator();
         	
         	while ( it.hasNext() ) {
         		
         		Seccion s = it.next();
         		
-        		if (s != null)
-        			arraySecciones[s.getOrden()] = s;
-        		
+        		if (s != null) {
+        			if (listSeccionesOrdenadas.size() == 0) {
+        				listSeccionesOrdenadas.add(s);
+        			} else {
+        				boolean inserted = false;
+        				for (int i = 0; i < listSeccionesOrdenadas.size(); i++) {
+        					if (s.getOrden() < listSeccionesOrdenadas.get(i).getOrden()) {
+        						listSeccionesOrdenadas.add(i,s);   
+        						inserted = true;
+        						break;
+        					}
+        				}
+        				if (!inserted) {
+        					listSeccionesOrdenadas.add(s);   
+        				}
+        			}
+        		}
+        			        		
         	}
         	
         	Map<String, String> map;
@@ -712,9 +727,7 @@ public class TMSeccionsController extends PantallaBaseController {
         	TraduccionSeccion traSec;
 			String nombre;
 			              
-			for ( int i = 0; i < arraySecciones.length; i++ ) {
-				
-				Seccion s = arraySecciones[i];
+			for ( Seccion s : listSeccionesOrdenadas) {
 				
 				if (s != null) {
 					

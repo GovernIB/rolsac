@@ -93,8 +93,8 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 		SolrIndexer solrIndexer = null;
 		try {
 			solrIndexer = obtenerParamIndexer();
-			solrIndexer.desindexarAplicacion(EnumCategoria.ROLSAC_FICHA);
-			solrIndexer.desindexarAplicacion(EnumCategoria.ROLSAC_FICHA_DOCUMENTO);
+			solrIndexer.desindexarCategoria(EnumCategoria.ROLSAC_FICHA);
+			solrIndexer.desindexarCategoria(EnumCategoria.ROLSAC_FICHA_DOCUMENTO);
 		} catch (Exception e) {
 			log.error("Error en indexarTodoFicha cuando se desindexa", e);
 			return;
@@ -172,8 +172,8 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 		SolrIndexer solrIndexer = null;
 		try {
 			solrIndexer = obtenerParamIndexer();
-			solrIndexer.desindexarAplicacion(EnumCategoria.ROLSAC_PROCEDIMIENTO);
-			solrIndexer.desindexarAplicacion(EnumCategoria.ROLSAC_PROCEDIMIENTO_DOCUMENTO);
+			solrIndexer.desindexarCategoria(EnumCategoria.ROLSAC_PROCEDIMIENTO);
+			solrIndexer.desindexarCategoria(EnumCategoria.ROLSAC_PROCEDIMIENTO_DOCUMENTO);
 		} catch (Exception e) {
 			log.error("Error en indexarTodoProcedimiento cuando se desindexa", e);
 			return;
@@ -251,8 +251,8 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 		SolrIndexer solrIndexer = null;
 		try {
 			solrIndexer = obtenerParamIndexer();
-			solrIndexer.desindexarAplicacion(EnumCategoria.ROLSAC_NORMATIVA);
-			solrIndexer.desindexarAplicacion(EnumCategoria.ROLSAC_NORMATIVA_DOCUMENTO);
+			solrIndexer.desindexarCategoria(EnumCategoria.ROLSAC_NORMATIVA);
+			solrIndexer.desindexarCategoria(EnumCategoria.ROLSAC_NORMATIVA_DOCUMENTO);
 		} catch (Exception e) {
 			log.error("Error en indexarTodoNormativa cuando se desindexa", e);
 			return;
@@ -332,8 +332,8 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 		SolrIndexer solrIndexer  = null;
 		try {
 			solrIndexer = obtenerParamIndexer();
-			solrIndexer.desindexarAplicacion(EnumCategoria.ROLSAC_TRAMITE);
-			solrIndexer.desindexarAplicacion(EnumCategoria.ROLSAC_TRAMITE_DOCUMENTO);
+			solrIndexer.desindexarCategoria(EnumCategoria.ROLSAC_TRAMITE);
+			solrIndexer.desindexarCategoria(EnumCategoria.ROLSAC_TRAMITE_DOCUMENTO);
 		} catch (Exception e) {
 			log.error("Error en indexarTodoTramite cuando se desindexa", e);
 			return;
@@ -407,7 +407,7 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 		SolrIndexer solrIndexer = null;
 		try {
 			solrIndexer = obtenerParamIndexer();
-			solrIndexer.desindexarAplicacion(EnumCategoria.ROLSAC_UNIDAD_ADMINISTRATIVA);
+			solrIndexer.desindexarCategoria(EnumCategoria.ROLSAC_UNIDAD_ADMINISTRATIVA);
 		} catch (Exception e) {
 			log.error("Error en indexarTodoUA cuando se desindexa", e);
 			return;
