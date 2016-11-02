@@ -31,8 +31,7 @@ public class ProcedimentByTextosCriteria implements CriteriaObject {
         I18N_PREFIX + "requisitos",
         I18N_PREFIX + "resolucion", 
         I18N_PREFIX + "resultat", 
-        I18N_PREFIX + "resumen",
-        I18N_PREFIX + "silencio"
+        I18N_PREFIX + "resumen"
     };
     
     private String alias;
