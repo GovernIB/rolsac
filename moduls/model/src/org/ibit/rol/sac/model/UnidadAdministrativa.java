@@ -495,11 +495,11 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
         return ua.isDescendiente(this);
     }
 
-    public Set getPredecesores() {
+    public List getPredecesores() {
         if (isRaiz()) {
-            return new HashSet();
+            return new ArrayList();
         } else {
-            Set predecesores = getPadre().getPredecesores();
+            List predecesores = getPadre().getPredecesores();
             predecesores.add(getPadre());
             return predecesores;
         }
