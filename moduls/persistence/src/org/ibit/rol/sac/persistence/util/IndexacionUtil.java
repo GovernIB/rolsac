@@ -106,7 +106,7 @@ public class IndexacionUtil {
 		List<String> path = new ArrayList<String>();
 		
 		//Hay que extraer la id de los predecesores y luego el de uno mismo
-		Set<UnidadAdministrativa> predecesores = unidadAdministrativa.getPredecesores();
+		List<UnidadAdministrativa> predecesores = unidadAdministrativa.getPredecesores();
 		if (predecesores != null) {
 			for(UnidadAdministrativa predecesor : predecesores) {
 				if (predecesor != null && predecesor.getId() != null) {
@@ -138,7 +138,7 @@ public class IndexacionUtil {
 		StringBuffer textoOptional = new StringBuffer();
 		
 		//Hay que extraer la id de los predecesores y luego el de uno mismo
-		Set<UnidadAdministrativa> predecesores = unidadAdministrativa.getPredecesores();
+		List<UnidadAdministrativa> predecesores = unidadAdministrativa.getPredecesores();
 		if (predecesores != null) {
 			for(UnidadAdministrativa predecesor : predecesores) {
 				if (predecesor != null && predecesor.getId() != null) {
