@@ -17,6 +17,11 @@
 		<module><java>quartz-1.8.5.jar</java></module>
 		<module><java>slf4j-api-1.6.4.jar</java></module>
 		<module><java>wsdl4j-1.5.1.jar</java></module>
+		<module><java>axiom-api-1.2.8.jar</java></module>
+		<module><java>axiom-impl-1.2.8.jar</java></module>
+		<module><java>XmlSchema-1.4.3.jar</java></module>
+		<module><java>neethi-2.0.4.jar</java></module>
+		<module><java>commons-httpclient-3.1.jar</java></module>				
 		
 		<!-- SOLRJ -->
 		<module><java>commons-io-2.4.jar</java></module>
