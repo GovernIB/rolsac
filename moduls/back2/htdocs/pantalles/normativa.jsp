@@ -409,6 +409,17 @@
                   {
                       "obligatori": "<spring:message code='normativa.formulari.registre.estat'/>"
                   }
+          },
+          {
+              "modo": "individual",
+              "etiqueta": "id",
+              "etiquetaValor": "item_tipus",
+              "obligatori": "si",
+              "tipus": "numeric",
+              "error":
+               {
+                      "obligatori": "<spring:message code='normativa.formulari.tipus.obligatori'/> "
+               }
           }
       ];
       
@@ -468,23 +479,8 @@
                    "obligatori": "",
                    "tipus": "<spring:message code='normativa.formulari.traspas_eboib.campo_data_formato'/>"
                }            
-           },
-           {
-               "modo": "individual",
-               "etiqueta": "id",
-               "etiquetaValor": "item_tipus",
-               "obligatori": "si",
-               "tipus": "alfanumeric",
-               "caracters":
-               {
-                   "mostrar": "no",
-                   "abreviat": "no"
-               },
-               "error":
-                   {
-                       "obligatori": "<spring:message code='normativa.formulari.tipus.obligatori'/> "
-                   }
            }
+           
           ];
       
       </c:if>
