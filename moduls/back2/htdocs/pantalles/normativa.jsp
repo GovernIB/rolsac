@@ -313,8 +313,8 @@
                 {
                     "tipus": "<spring:message code='normativa.formulari.pagina_final_ca.tipus'/>"
                 }
-        }, 
-        
+        },    
+
           // No traduibles
           {
               "modo": "individual",
@@ -415,16 +415,11 @@
               "etiqueta": "id",
               "etiquetaValor": "item_tipus",
               "obligatori": "si",
-              "tipus": "alfanumeric",
-              "caracters":
-              {
-                  "mostrar": "no",
-                  "abreviat": "no"
-              },
+              "tipus": "numeric",
               "error":
-                  {
+               {
                       "obligatori": "<spring:message code='normativa.formulari.tipus.obligatori'/> "
-                  }
+               }
           }
       ];
       
@@ -485,6 +480,7 @@
                    "tipus": "<spring:message code='normativa.formulari.traspas_eboib.campo_data_formato'/>"
                }            
            }
+           
           ];
       
       </c:if>
