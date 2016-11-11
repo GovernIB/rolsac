@@ -104,4 +104,6 @@ public interface ProcedimientoDelegateI {
 
 	public abstract List<Long> buscarIdsProcedimientos() throws DelegateException;
 
+	public abstract List<ProcedimientoLocal> listarProcedimientosNormativa(Long idElemento) throws DelegateException;
+
 }

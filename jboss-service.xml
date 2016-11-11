@@ -83,6 +83,16 @@ es.caib.rolsac.subscripcions
 	   <!-- Esta representado en MB. -->
 	   es.caib.rolsac.solr.tamanyomaximo=20
 	   es.caib.rolsac.solr.ficheros=doc,docx,xls,xlsx,pdf,pdfx,odt,ods,odp,odf,txt,rtf
+	   
+	   es.webcaib.rolsac.sia.usuario = IBsgelabert
+	   es.webcaib.rolsac.sia.tipoActuacion = 1
+	   es.webcaib.rolsac.sia.tipologiaTramitacion = 4
+	   es.webcaib.rolsac.sia.administracion = 2
+       es.webcaib.rolsac.sia.comunidadautonoma = 4 
+       es.webcaib.rolsac.sia.idDepartamento = A04003003
+       es.webcaib.rolsac.sia.idCentroDirectivo = A04013518
+       es.webcaib.rolsac.sia.url = https://localhost:48080/seucaib/es/tramites/tramite/2978
+	   
     </attribute>
             
 </mbean>

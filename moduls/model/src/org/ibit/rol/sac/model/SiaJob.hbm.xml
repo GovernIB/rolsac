@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.SiaJob" table="RSC_SIAJOB" mutable="true">
+        <id name="id" unsaved-value="null" column="SIJ_ID">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+        <property name="fechaIni"       column="SIJ_FECINI" />
+        <property name="fechaFin"       column="SIJ_FECFIN" />
+        <property name="descBreve"  	column="SIJ_DESBRE" /> 
+        <property name="descripcion"    column="SIJ_DESCRI" />
+        <property name="estado"       	column="SIJ_ESTADO" />
+              
+    </class>
+</hibernate-mapping>

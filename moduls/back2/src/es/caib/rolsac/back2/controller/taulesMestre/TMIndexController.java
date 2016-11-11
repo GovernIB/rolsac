@@ -3,7 +3,13 @@ package es.caib.rolsac.back2.controller.taulesMestre;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,12 +18,18 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.ibit.rol.sac.model.SiaJob;
+import org.ibit.rol.sac.model.SiaPendiente;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteJob;
+import org.ibit.rol.sac.model.dto.SiaJobDTO;
+import org.ibit.rol.sac.model.dto.SiaPendienteDTO;
 import org.ibit.rol.sac.model.dto.SolrPendienteDTO;
 import org.ibit.rol.sac.model.dto.SolrPendienteJobDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.util.FiltroSia;
+import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -463,4 +475,223 @@ public class TMIndexController extends PantallaBaseController {
          return resultats;
     }
   
+    @RequestMapping(value = "/sia.do", method = GET)
+    public String pantallaSIA(Map<String, Object> model, HttpServletRequest request) {
+        model.put("menu", 1);
+        model.put("submenu", "layout/submenu/submenuTMSia.jsp");
+
+        RolUtil rolUtil= new RolUtil(request);
+        if (rolUtil.userIsAdmin()) {
+        	model.put("escriptori", "pantalles/taulesMestres/tmSia.jsp");
+        } else {
+        	model.put("error", "permisos");
+        }
+
+		loadIndexModel (model, request);	
+        return "index";
+    }
+    @RequestMapping(value = "/llistatSIAJob.do")
+    public @ResponseBody Map<String, Object> llistatSIAJob(HttpServletRequest request) {
+
+        List<SiaJobDTO> llistaSiaJobDTO = new ArrayList<SiaJobDTO>();
+        final Map<String, Object> resultats = new HashMap<String, Object>();
+
+        try {
+        			
+    		FiltroSia filtro = new FiltroSia();
+    		filtro.setNumElementos(20);
+    		llistaSiaJobDTO.addAll(convertirSIAToJobDTO(DelegateUtil.getSiaPendienteProcesoDelegate().getSiaProceso(filtro)));
+            
+
+        } catch (DelegateException dEx) {
+            if (dEx.isSecurityException()) {
+                log.error("Permisos insuficients: " + dEx.getMessage());
+            } else {
+                log.error("Error: " + dEx.getMessage());
+            }
+            if (dEx.getCause() == null) {
+            	resultats.put("error", dEx.getMessage());
+            } else {
+            	resultats.put("error", dEx.getCause().getMessage());
+            }
+        }
+
+        //resultats.put("total", llistaSiaJobDTO.size());
+        resultats.put("nodes", llistaSiaJobDTO);
+
+        return resultats;
+    }
+
+   
+	@RequestMapping(value = "/llistatSIA.do")
+    public @ResponseBody Map<String, Object> llistatSIA(HttpServletRequest request) {
+
+        List<SiaPendienteDTO> llistaSiaDTO = new ArrayList<SiaPendienteDTO>();
+        final Map<String, Object> resultats = new HashMap<String, Object>();
+
+        try {
+        			
+    		FiltroSia filtro = new FiltroSia();
+    		filtro.setNumElementos(20);
+    		llistaSiaDTO.addAll(convertirSIAToDTO(DelegateUtil.getSiaPendienteProcesoDelegate().getSiaPendientes(filtro)));
+            
+
+        } catch (DelegateException dEx) {
+            if (dEx.isSecurityException()) {
+                log.error("Permisos insuficients: " + dEx.getMessage());
+            } else {
+                log.error("Error: " + dEx.getMessage());
+            }
+            if (dEx.getCause() == null) {
+            	resultats.put("error", dEx.getMessage());
+            } else {
+            	resultats.put("error", dEx.getCause().getMessage());
+            }
+        }
+
+        resultats.put("total", llistaSiaDTO.size());
+        resultats.put("nodes", llistaSiaDTO);
+
+        return resultats;
+    }
+	private List<SiaPendienteDTO> convertirSIAToDTO(List<SiaPendiente> siaPendientes) {
+		 List<SiaPendienteDTO> siaPendienteDTO = new ArrayList<SiaPendienteDTO>();
+	        
+	        for (SiaPendiente sia : siaPendientes) {
+	        	siaPendienteDTO.add(new SiaPendienteDTO(
+	        			sia.getId(),
+	        			sia.getTipo(),
+	        			sia.getIdElemento(),
+	        			sia.getEstado(),
+	        			sia.getFecAlta(),
+	        			sia.getFecIdx(),
+	        			sia.getMensaje())
+	            );
+	        }
+	        return siaPendienteDTO;
+	}
+
+	private List<SiaJobDTO> convertirSIAToJobDTO(List<SiaJob> siaProceso) {
+		
+		List<SiaJobDTO> siaJobDTO = new ArrayList<SiaJobDTO>();
+		StringBuffer bufferDesc = new StringBuffer();
+		StringBuffer bufferDescBreve = new StringBuffer();
+			
+        for (SiaJob siaJob : siaProceso) {
+        	
+        	try {
+        		bufferDesc = SiaUtils.obtenerContenidoClob(siaJob.getDescripcion());
+        		bufferDescBreve = SiaUtils.obtenerContenidoClob(siaJob.getDescBreve());
+				
+			} catch (IOException e) {
+				log.error("Error: " + e.getMessage());
+			} catch (SQLException e) {
+				log.error("Error: " + e.getMessage());
+			}
+        	
+        	siaJobDTO.add(new SiaJobDTO(
+        			siaJob.getId(),
+        			siaJob.getFechaIni(),
+        			siaJob.getFechaFin(),
+        			bufferDescBreve.toString(),
+        			bufferDesc.toString())
+            );
+        }
+        return siaJobDTO;
+	}
+
+	
+	
+	 @RequestMapping(value = "/enviarTodo.do")
+	    public @ResponseBody Map<String, Object> enviarTodo(HttpServletRequest request) {
+
+	    	final Map<String, Object> resultats = new HashMap<String, Object>();
+	        try {
+	        	//Paso 1. Comprobar si hay algo creado.
+	          	if ( DelegateUtil.getSiaPendienteProcesoDelegate().checkJobsActivos()) {
+	          		resultats.put("error", "Hi ha tasques en execució");
+	          	} else {
+	          		//Paso 2. Si todo correcto, ejecutar job 
+	          		ejecutarJobSIA("todo");
+	          	}
+	        } catch (SchedulerException exception) {
+	        	log.error("Error: " + exception.getMessage());
+	            resultats.put("error", "No es pot generar el job");
+	        } catch (Exception dEx) {
+	           log.error("Error: " + dEx.getMessage());
+	            if (dEx.getCause() == null) {
+	            	resultats.put("error", dEx.getMessage());
+	            } else {
+	            	resultats.put("error", dEx.getCause().getMessage());
+	            }
+	        }
+	        return resultats; 
+	    }
+	 
+	 /**
+     * Se ejecuta y crea un job con un tipo de indexacion.
+     * 
+     * @param tipoIndexacion
+     * @throws SchedulerException 
+     */
+    private void ejecutarJobSIA(final String tipoEnvio) throws SchedulerException {
+      	//Se ha simplificado, se verán los últimos jobs ejecutados y, si alguno de ellos está sin fecha fin
+      	//  se da por hecho que se está ejecutando.
+      	Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler(); 
+      	scheduler.start(); 
+      	JobDetail jobDetail = new JobDetail("IndexacionJob", Scheduler.DEFAULT_GROUP, IndexacionJob.class);
+      	Trigger trigger = TriggerUtils.makeImmediateTrigger(0, 0); 
+      	scheduler.getContext().put("tipoEnvio", tipoEnvio);
+        trigger.setName("FireOnceNowTrigger");  
+      	scheduler.scheduleJob(jobDetail, trigger);
+    }
+	    
+    @RequestMapping(value = "/cerrarJobsSIA.do")
+    public @ResponseBody Map<String, Object> cerrarJobsSIA(HttpServletRequest request) {
+    	final Map<String, Object> resultats = new HashMap<String, Object>();
+        try {
+	    	Boolean retorno = DelegateUtil.getSiaPendienteProcesoDelegate().cerrarJobs();
+	    	if (retorno) {
+	    		log.debug("Todo correcto, se ha cerrado los jobs.");
+	    	} else  {
+	    		log.debug("Mal, no es pot cerrar els jobs.");
+	    		resultats.put("error", "No es pot cerrar los jobs.");
+	    	}
+        } catch (Exception exception) {
+            log.error("Error cerrando jobs." + exception.getMessage(), exception);
+            resultats.put("error", exception.getCause().getMessage());
+        }
+    	
+        return resultats;
+    }
+    
+    @RequestMapping(value = "/enviarPendientes.do")
+    public @ResponseBody Map<String, Object> enviarPendientes(HttpServletRequest request) {
+
+    	final Map<String, Object> resultats = new HashMap<String, Object>();     
+
+        try {
+        	
+        	//Paso 1. Comprobar si hay algo creado.
+        	if (DelegateUtil.getSiaPendienteProcesoDelegate().checkJobsActivos()) {
+        		resultats.put("error", "Hi ha tasques en execució");
+        	} else {
+        		//Paso 2. Si todo correcto, ejecutar job 
+        		ejecutarJobSIA("pendientes");
+        	}
+        	
+        } catch (SchedulerException exception) {
+        	log.error("Error: " + exception.getMessage());
+            resultats.put("error", "No es pot generar el job");
+        } catch (Exception dEx) {
+           log.error("Error: " + dEx.getMessage());
+            if (dEx.getCause() == null) {
+            	resultats.put("error", dEx.getMessage());
+            } else {
+            	resultats.put("error", dEx.getCause().getMessage());
+            }
+        }
+
+        return resultats;
+    }
 }
