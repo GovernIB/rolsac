@@ -540,6 +540,11 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 					if (tramite != null && tramite.getIdTraTel() != null && !"".equals(tramite.getIdTraTel())) {
 						indexData.setTelematico(true);
 					}
+					
+					if (tramite.getFase() == Tramite.INICIACION) {
+						indexData.setFechaPlazoIni(tramite.getDataInici());
+						indexData.setFechaPlazoFin(tramite.getDataTancament());
+					}
 				}
 			}
 			

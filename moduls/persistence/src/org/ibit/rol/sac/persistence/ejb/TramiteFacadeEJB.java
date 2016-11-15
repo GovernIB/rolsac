@@ -1257,6 +1257,9 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			indexData.setFechaActualizacion(tramite.getDataActualitzacio());
 			indexData.setFechaPublicacion(tramite.getDataPublicacio());
 			indexData.setFechaCaducidad(procedimiento.getFechaCaducidad());
+			indexData.setFechaPlazoIni(tramite.getDataInici());
+			indexData.setFechaPlazoFin(tramite.getDataTancament());
+			
 			indexData.setInterno(false);
 			
 			// UOs

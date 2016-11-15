@@ -2194,7 +2194,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			if (procedimiento.getFamilia() != null) {
 				indexData.setFamiliaId(procedimiento.getFamilia().getId().toString());
 			}
-			
+						
 			//Fechas
 			indexData.setFechaActualizacion(procedimiento.getFechaActualizacion());
 			indexData.setFechaPublicacion(procedimiento.getFechaPublicacion());
@@ -2212,10 +2212,15 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			indexData.setTelematico(false);
 			for(Tramite tramite : procedimiento.getTramites()) {
 				if (tramite != null && tramite.getIdTraTel() != null && !"".equals(tramite.getIdTraTel())) {
-					indexData.setTelematico(true);
-					break;
+					indexData.setTelematico(true);					
+				}
+				
+				if (tramite.getFase() == Tramite.INICIACION) {
+					indexData.setFechaPlazoIni(tramite.getDataInici());
+					indexData.setFechaPlazoFin(tramite.getDataTancament());
 				}
 			}
+			
 			solrIndexer.indexarContenido(indexData);
 			return new SolrPendienteResultado(true);
 		} catch(Exception exception) {
