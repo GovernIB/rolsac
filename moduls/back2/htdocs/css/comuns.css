@@ -1795,3 +1795,28 @@ div.modulLateral div.seleccionat ul {
 #labelFamilia .obligatori{
 	display:none;
 }
+#popup {
+	left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 1001;
+}
+.content-popup {
+	margin:0px auto;
+	margin-top:50px;
+	padding:10px;
+	width:500px;
+	min-height:250px;
+	border-radius:4px;
+	background-color:#FFFFFF;
+	box-shadow: 0 2px 5px #666666;
+
+}
+.content-popup textarea{
+	border-width:0;
+}
+.close {
+	position:relative;
+	left:480px;
+}

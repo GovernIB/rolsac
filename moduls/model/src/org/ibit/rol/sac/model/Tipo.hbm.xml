@@ -11,6 +11,8 @@
                 <param name="sequence">RSC_SEQ_ALL</param>
             </generator>
         </id>
+        <property name="tipoSia" column="TIP_CODSIA"/> 
+        
         <set name="normativas" cascade="none" inverse="true" lazy="true">
             <key column="NOR_CODTIP" foreign-key="RSC_NORTIP_FK"/>
             <one-to-many class="org.ibit.rol.sac.model.Normativa"/>

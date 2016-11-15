@@ -261,4 +261,17 @@ public final class DelegateUtil {
     	del.setImpl(impl);
     	return del;
     }
+    
+    public static SiaPendienteProcesoDelegate getSiaPendienteProcesoDelegate() {
+		SiaPendienteProcesoDelegateI impl = (SiaPendienteProcesoDelegateImpl) DelegateFactory.getDelegate(SiaPendienteProcesoDelegateImpl.class);
+		SiaPendienteProcesoDelegate del = new SiaPendienteProcesoDelegate();
+        del.setImpl(impl);
+        return del;
+	}
+    public static SiaDelegate getSiaDelegate() {
+		SiaDelegateI impl = (SiaDelegateImpl) DelegateFactory.getDelegate(SiaDelegateImpl.class);
+		SiaDelegate del = new SiaDelegate();
+        del.setImpl(impl);
+        return del;
+	}
 }

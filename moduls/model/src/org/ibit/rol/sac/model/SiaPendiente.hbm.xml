@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.SiaPendiente" table="RSC_SIAPDT" mutable="true">
+        <id name="id" unsaved-value="null" column="SIP_ID">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+        <property name="tipo" 		  column="SIP_TIPO" />
+        <property name="idElemento"   column="SIP_IDELEMENTO" />
+    	<property name="estado"	      column="SIP_ESTADO" />
+    	<property name="fecAlta"	  column="SIP_FECALT" />
+    	<property name="fecIdx"	      column="SIP_FECIDX" />
+    	<property name="mensaje"	  column="SIP_MENSA" />
+    	<property name="tipoAccion"   column="SIP_TIPOAC" />
+    	
+    </class>
+</hibernate-mapping>

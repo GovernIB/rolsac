@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.Sia" table="RSC_SIA" mutable="true">
+        <id name="id" unsaved-value="null" column="SIA_ID">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+        <property name="idProc"       column="SIA_IDPROC" />
+        <property name="titulo"       column="SIA_TITULO" />
+        <property name="descripcion"  column="SIA_DESCRI" /> 
+        <property name="idCent"       column="SIA_IDCENT" />
+        <property name="uaGest"       column="SIA_UAGEST" />
+        <property name="idDest"       column="SIA_IDDEST" />
+        <property name="nivAdm"       column="SIA_NIVADM" />
+        <property name="fiVia"        column="SIA_FIVIA" />
+    	<property name="IdNorm"       column="SIA_IDNORM" />
+    	<property name="tiNorm"   	  column="SIA_TINORM" />
+    	<property name="materias"     column="SIA_MATERI" />
+    	<property name="idSIA" 		  column="SIA_IDSIA" />
+    	
+        
+        
+    </class>
+</hibernate-mapping>
