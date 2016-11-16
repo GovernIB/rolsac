@@ -160,8 +160,4 @@ public class ProcedimientoDelegate {
 		return impl.buscarIdsProcedimientos();
 	}
 
-	public List<ProcedimientoLocal> listarProcedimientosNormativa(Long idElemento) throws DelegateException{
-		return impl.listarProcedimientosNormativa(idElemento);
-	}
-
 }

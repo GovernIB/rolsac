@@ -11,11 +11,9 @@
 
   <!--  Configuracion task de quartz  -->
   <bean id="taskIndexacion" class="es.caib.rolsac.back2.util.TaskIndexacion"></bean>
-  <bean id="taskSia" class="es.caib.rolsac.back2.util.TaskSia"></bean>
   <task:scheduler id="rolsacScheduler" pool-size="10"/>
   <task:scheduled-tasks scheduler="rolsacScheduler">
   	<task:scheduled ref="taskIndexacion" method="ejecutarJobInternal" cron="#{systemProperties['es.caib.rolsac.solr.jobpendientes']}"/>
-  	<task:scheduled ref="taskSia" method="ejecutarJobInternal" cron="#{systemProperties['es.caib.rolsac.sia.jobpendientes']}"/>
   </task:scheduled-tasks>
    	
 </beans>

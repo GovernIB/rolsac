@@ -79,9 +79,6 @@
         <mapping resource="org/ibit/rol/sac/model/SolrPendiente.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/SolrPendienteJob.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/SilencioAdm.hbm.xml" />
-        <mapping resource="org/ibit/rol/sac/model/Sia.hbm.xml" />
-        <mapping resource="org/ibit/rol/sac/model/SiaPendiente.hbm.xml" />
-        <mapping resource="org/ibit/rol/sac/model/SiaJob.hbm.xml" />
         
     </session-factory>
 

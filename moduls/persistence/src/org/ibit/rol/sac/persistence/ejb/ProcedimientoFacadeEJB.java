@@ -2287,33 +2287,4 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     	}
 		
 	}
-	
-	/**
-	 *	Devuelve una lista con los procedimientos que tienen una normativa
-	 *
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-	 */
-	public List<ProcedimientoLocal> listarProcedimientosNormativa(Long id){
-		Session session = getSession();
-		try {
-			List result = new ArrayList();
-			Normativa normativa = (Normativa) session.load(Normativa.class, id);
-			Hibernate.initialize(normativa.getProcedimientos());
-			for (Iterator iter = normativa.getProcedimientos().iterator(); iter.hasNext();) {
-				ProcedimientoLocal procedimiento = (ProcedimientoLocal) iter.next();
-				if (publico(procedimiento)) {
-					result.add(procedimiento);
-				}
-			}
-			//Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
-			Collections.sort(result, new ProcedimientoLocal());
-			return result;
-		} catch (HibernateException he) {
-			throw new EJBException(he);
-		} finally {
-			close(session);
-		}
-		
-	}
 }

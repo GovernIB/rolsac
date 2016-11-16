@@ -22,21 +22,6 @@ public class Tipo extends Traducible {
         this.normativas = normativas;
     }
 
-    /**
-     * @return the tipoSia
-     */
-    public Long getTipoSia() {
-    	return tipoSia;
-    }
-    
-    /**
-     * @param tipoSia the tipoSia to set
-     */
-    public void setTipoSia(Long tipoSia) {
-    	this.tipoSia = tipoSia;
-    }
-    
     private Long id;
-    private Long tipoSia;
-	private Set normativas;
+    private Set normativas;
 }
