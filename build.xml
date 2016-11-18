@@ -506,7 +506,9 @@
             	<include name="commons-logging.jar" />
             	<include name="jcl-over-slf4j-1.6.4.jar" />
             	<include name="slf4j-api-1.6.4.jar" />
-        	 	<include name="slf4j-log4j12-1.6.4.jar" />            	    
+        	 	<include name="slf4j-log4j12-1.6.4.jar" />   
+            	<include name="rome-1.0RC2.jar" />
+            	<include name="jdom.jar" />
             </fileset>
         	
         	<fileset dir="${lib}/webcaib">
