@@ -117,7 +117,7 @@ create table RSC_SIAJOB  (
 create table RSC_SIAPDT  (
    SIP_ID number(19,0) not null,
    SIP_TIPO varchar2(100),
-   SIP_IDELEMENTO number(1,0),
+   SIP_IDELEMENTO number(8,0),
    SIP_ESTADO number(1,0),
    SIP_FECALT date,
    SIP_FECIDX date,

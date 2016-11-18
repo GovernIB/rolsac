@@ -43,6 +43,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.IndexacionJob;
 import es.caib.rolsac.back2.util.RolUtil;
+import es.caib.rolsac.back2.util.SiaPendienteJob;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
 @Controller
@@ -576,12 +577,14 @@ public class TMIndexController extends PantallaBaseController {
 		List<SiaJobDTO> siaJobDTO = new ArrayList<SiaJobDTO>();
 		StringBuffer bufferDesc = new StringBuffer();
 		StringBuffer bufferDescBreve = new StringBuffer();
-			
+		
         for (SiaJob siaJob : siaProceso) {
         	
         	try {
         		bufferDesc = SiaUtils.obtenerContenidoClob(siaJob.getDescripcion());
         		bufferDescBreve = SiaUtils.obtenerContenidoClob(siaJob.getDescBreve());
+        		
+        		
 				
 			} catch (IOException e) {
 				log.error("Error: " + e.getMessage());
@@ -594,7 +597,8 @@ public class TMIndexController extends PantallaBaseController {
         			siaJob.getFechaIni(),
         			siaJob.getFechaFin(),
         			bufferDescBreve.toString(),
-        			bufferDesc.toString())
+        			bufferDesc.toString(),
+        			siaJob.getEstado())
             );
         }
         return siaJobDTO;
@@ -639,7 +643,7 @@ public class TMIndexController extends PantallaBaseController {
       	//  se da por hecho que se está ejecutando.
       	Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler(); 
       	scheduler.start(); 
-      	JobDetail jobDetail = new JobDetail("IndexacionJob", Scheduler.DEFAULT_GROUP, IndexacionJob.class);
+      	JobDetail jobDetail = new JobDetail("SiaPendienteJob", Scheduler.DEFAULT_GROUP, SiaPendienteJob.class);
       	Trigger trigger = TriggerUtils.makeImmediateTrigger(0, 0); 
       	scheduler.getContext().put("tipoEnvio", tipoEnvio);
         trigger.setName("FireOnceNowTrigger");  
@@ -671,7 +675,6 @@ public class TMIndexController extends PantallaBaseController {
     	final Map<String, Object> resultats = new HashMap<String, Object>();     
 
         try {
-        	
         	//Paso 1. Comprobar si hay algo creado.
         	if (DelegateUtil.getSiaPendienteProcesoDelegate().checkJobsActivos()) {
         		resultats.put("error", "Hi ha tasques en execució");

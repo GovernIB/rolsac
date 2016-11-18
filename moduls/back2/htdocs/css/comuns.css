@@ -631,6 +631,7 @@ div.table div.tbody div.td span.id{
     color: black;
     padding-right: 10px;
 }
+
 div.table div.tbody div.td a{
     font-size: 15px;
     color: #2176DE;
@@ -1819,4 +1820,7 @@ div.modulLateral div.seleccionat ul {
 .close {
 	position:relative;
 	left:480px;
+}
+div.table div.tbody div.errorEstado { 
+    background-color: #FAA8A8;
 }

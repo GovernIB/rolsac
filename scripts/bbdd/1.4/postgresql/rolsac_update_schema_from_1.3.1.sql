@@ -122,7 +122,7 @@ COMMENT ON TABLE  RSC_SIAJOB IS 'SIA Job';
 create table RSC_SIAPDT  (
    SIP_ID integer not null,
    SIP_TIPO character varying(100),
-   SIP_IDELEMENTO smallint,
+   SIP_IDELEMENTO NUMBER(8,2),
    SIP_ESTADO smallint,
    SIP_FECALT date,
    SIP_FECIDX date,

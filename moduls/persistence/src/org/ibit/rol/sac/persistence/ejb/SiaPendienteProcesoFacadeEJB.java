@@ -1,5 +1,6 @@
 package org.ibit.rol.sac.persistence.ejb;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
 import net.sf.hibernate.Criteria;
+import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
@@ -139,11 +141,11 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 		
 		try {
 
-    		StringBuilder consulta = new StringBuilder("select sia from SiaJob as sia where sia.estado = :estado");
+    		StringBuilder consulta = new StringBuilder("select sia from SiaJob as sia ");
     		
     		Query query = session.createQuery( consulta.toString() );
     		query.setCacheable(true);
-    		query.setLong("estado", SiaUtils.SIAJOB_SIJ_ESTADO_CREADO);
+    		//query.setLong("estado", SiaUtils.SIAJOB_SIJ_ESTADO_CREADO);
 
     		query.setMaxResults(filtro.numElementos);
     		
@@ -270,15 +272,21 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     	try
     	{
     		session = getSession();
-    		final Query query = getSession().createQuery("from SiaJob siaJob where siaJob.estado = " + SiaUtils.SIAJOB_SIJ_ESTADO_EN_EJECUCION);
+    		List<Integer> estados = new ArrayList<Integer>();
+    		estados.add(SiaUtils.SIAJOB_SIJ_ESTADO_EN_EJECUCION);
+    		estados.add(SiaUtils.SIAJOB_SIJ_ESTADO_CREADO);
+    		
+    		final Query query = getSession().createQuery("from SiaJob siaJob where siaJob.estado in  (:lId) ");
+    		query.setParameterList("lId", estados, Hibernate.INTEGER);
     		List<SiaJob> jobs =  query.list();
     		for(SiaJob job : jobs) {
     			job.setFechaFin(new Date());
     			job.setEstado(SiaUtils.SIAJOB_SIJ_ESTADO_ERROR_GRAVE);
-
-    			//TODO revisar
-    			job.getDescBreve().setString(0, "Finalizado a la fuerza" + job.getDescBreve()!=null?job.getDescBreve().toString():"");
-    				
+    			
+    			StringBuffer bufferDesc = SiaUtils.obtenerContenidoClob(job.getDescBreve());
+    					
+    			job.setDescBreve(Hibernate.createClob("Finalizado a la fuerza " + bufferDesc));
+    			
     			session.update(job);
     		} 
     		session.flush();

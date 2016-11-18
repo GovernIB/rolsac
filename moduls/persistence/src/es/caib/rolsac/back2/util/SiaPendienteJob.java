@@ -39,7 +39,7 @@ public class SiaPendienteJob implements Job  {
 		}
     	final String tipoEnvio = (String) schedulerContext.get("tipoEnvio");
         
-    	log.debug("Ejecutando indexacion con tipo indexacion:" + tipoEnvio);
+    	log.debug("Ejecutando enviar SIA con tipo envio:" + tipoEnvio);
     	
     	SiaDelegate siaDelegate = DelegateUtil.getSiaDelegate();
     	SiaPendienteProcesoDelegate siaProcesoDelegate = DelegateUtil.getSiaPendienteProcesoDelegate();
@@ -49,10 +49,10 @@ public class SiaPendienteJob implements Job  {
     		//EJECUTAR EL ENVIO A SIA.
 	    	
 	    	if ("todo".equals(tipoEnvio)) {
-					siaDelegate.enviarTodos();
+					siaDelegate.enviarTodos(siaJob);
 	    	} else {
 	    		
-	    		siaDelegate.enviarPendientes();
+	    		siaDelegate.enviarPendientes(siaJob);
 	    	}
 	    	
 	    	siaProcesoDelegate.cerrarSiaJob(siaJob);

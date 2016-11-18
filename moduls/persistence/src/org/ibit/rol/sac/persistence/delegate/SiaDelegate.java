@@ -1,10 +1,6 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import java.util.List;
-
 import org.ibit.rol.sac.model.SiaJob;
-import org.ibit.rol.sac.model.SiaPendiente;
-import org.ibit.rol.sac.persistence.util.FiltroSia;
 
 
 public class SiaDelegate implements StatelessDelegate {
@@ -25,12 +21,12 @@ public class SiaDelegate implements StatelessDelegate {
 	}
 
 
-	public void enviarTodos() throws DelegateException {
-        impl.enviarTodos();
+	public void enviarTodos(SiaJob siaJob) throws DelegateException {
+        impl.enviarTodos(siaJob);
     }
     
-	public void enviarPendientes() throws DelegateException {
-        impl.enviarPendientes();
+	public void enviarPendientes(SiaJob siaJob) throws DelegateException {
+        impl.enviarPendientes(siaJob);
     }
 
 }

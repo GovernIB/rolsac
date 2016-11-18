@@ -43,7 +43,7 @@ function inicializarBtn() {
         var url;        
 
 		if ($btn.hasClass('unitatOrganica')) {
-            url = pagIndexarTodo;
+            url = pagEnviarTodo;
 		} 
         
         $.ajax({
@@ -240,16 +240,17 @@ function CLlistat(){
 			var width20="20";
 
 			codi_totals = "<p class=\"info\" style = \"float:left\">" + txtTrobades + " <strong>" + resultats_total + "</strong> " + txtT.toLowerCase() + ".";			
-			codi_totals += "<div class=\"btnGenerico\" style = \"float:left\"><a href=\"javascript:;\" style=\"width:100px\" id = \"btnContinuar2\" class=\"btn unitatOrganica\"><span>"+txtBotonInfo+"</span></a></div>";
+			codi_totals += "<div class=\"btnGenerico\" style = \"float:left\"><a href=\"javascript:;\" style=\"width:120px\" id = \"btnContinuar2\" class=\"btn unitatOrganica\"><span>"+txtBotonEnvio+"</span></a></div>";
 			
 			codi_totals += "</p>";
 
-			codi_cap1 = "<div class=\"th id" + ordre_c1 + "\" role=\"columnheader\">" + txtId + "</div>";
-			codi_cap2 = "<div class=\"th " + ordre_c2 + "\" role=\"columnheader\">" + txtTipo + "</div>";
-			codi_cap3 = "<div class=\"th " + ordre_c2 + "\" role=\"columnheader\">" + txtEstado + "</div>";
-			codi_cap4 = "<div class=\"th " + ordre_c2 + "\" role=\"columnheader\">" + txtFalta + "</div>";
-			codi_cap5 = "<div class=\"th " + ordre_c2 + "\" role=\"columnheader\">" + txtFenvio + "</div>";
-			codi_cap6 = "<div class=\"th " + ordre_c2 + "\" role=\"columnheader\">" + txtMensaje + "</div>";
+			codi_cap1 = "<div class=\"th id" + ordre_c1 + "\" role=\"columnheader\"  style=\"width:"+width10+ "%\">" + txtId + "</div>";
+			codi_cap2 = "<div class=\"th desc" + ordre_c2 + "\" role=\"columnheader\" style=\"width:"+width10+ "%\">" + txtTipo + "</div>";
+			codi_cap3 = "<div class=\"th desc" + ordre_c2 + "\" role=\"columnheader\" style=\"width:"+width10+ "%\">" + txtIdElemento + "</div>";
+			codi_cap4 = "<div class=\"th desc" + ordre_c2 + "\" role=\"columnheader\" style=\"width:"+width10+ "%\">" + txtEstado + "</div>";
+			codi_cap5 = "<div class=\"th desc" + ordre_c2 + "\" role=\"columnheader\" style=\"width:"+width10+ "%\">" + txtFalta + "</div>";
+			codi_cap6 = "<div class=\"th desc" + ordre_c2 + "\" role=\"columnheader\" style=\"width:"+width10+ "%\">" + txtFenvio + "</div>";
+			codi_cap7 = "<div class=\"th " + ordre_c2 + "\" role=\"columnheader\" style=\"width:"+width20+ "%\">" + txtMensaje + "</div>";
 			
 
 			// codi taula
@@ -258,7 +259,7 @@ function CLlistat(){
 			// codi cap + cuerpo
 			codi_taula += "<div class=\"thead\">";
 			codi_taula += "<div class=\"tr\" role=\"rowheader\">";
-			codi_taula += codi_cap1 + codi_cap2 + codi_cap3 + codi_cap4 + codi_cap5 + codi_cap6;
+			codi_taula += codi_cap1 + codi_cap2 + codi_cap3 + codi_cap4 + codi_cap5 + codi_cap6 + codi_cap7;
 			codi_taula += "</div>";
 			codi_taula += "</div>";
 			codi_taula += "<div class=\"tbody\">";
@@ -272,11 +273,11 @@ function CLlistat(){
 				dada_node = this;
 				
 				if (dada_node.tipo == "PROC") {
-					txtSiaDescripcionTipo = txtSiaDescripcionTipoPro + " " + dada_node.idElemento;
+					txtSiaDescripcionTipo = txtSiaDescripcionTipoPro;
 				} else if(dada_node.tipo == "UA"){
-					txtSiaDescripcionTipo = txtSiaDescripcionTipoUna + " " + dada_node.idElemento;
+					txtSiaDescripcionTipo = txtSiaDescripcionTipoUna;
 				} else if(dada_node.tipo == "NORM"){
-					txtSiaDescripcionTipo = txtSiaDescripcionTipoNor + " " + dada_node.idElemento;
+					txtSiaDescripcionTipo = txtSiaDescripcionTipoNor;
 				}
 				
 				parClass = (i%2) ? " par": "";
@@ -288,33 +289,35 @@ function CLlistat(){
 				codi_taula += "<span class=\"perfil\" >" + (printStringFromNull(dada_node.id, txtSinValor)) + "</span>";				
 				codi_taula += "</div>";
 				
-				codi_taula += "<div class=\"td id\" role=\"gridcell\" style=\"width:"+width10+"%\">";				
+				codi_taula += "<div class=\"td\" role=\"gridcell\" style=\"width:"+width10+"%\">";				
 				codi_taula += printStringFromNull(txtSiaDescripcionTipo, txtSinValor);
 				codi_taula += "</div>";
 				
-				codi_taula += "<div class=\"td id\" role=\"gridcell\" style=\"width:"+width20+"%\">";				
-				if (dada_node.estado == "") {
-					codi_taula += " sin accion ";
-				} else if (dada_node.estado == "0") {
-					codi_taula += "Creado";
-				}else if (dada_node.estado == "1") {
+				codi_taula += "<div class=\"td\" role=\"gridcell\" style=\"width:"+width10+"%\">";				
+				codi_taula += printStringFromNull(dada_node.idElemento, txtSinValor);
+				codi_taula += "</div>";
+				
+				codi_taula += "<div class=\"td\" role=\"gridcell\" style=\"width:"+width10+"%\">";				
+				if (dada_node.estado == 0) {
+					codi_taula += "Espera";
+				}else if (dada_node.estado == 1) {
 					codi_taula += "Correcto";
-				}  else if (dada_node.estado == "-1") {
+				}  else if (dada_node.estado == 2) {
 					codi_taula += "Incorrecto";
 				} else {
-					codi_taula += " desconocida ";
+					codi_taula += " Desconocido ";
 				}
 				codi_taula += "</div>";
 				
-				codi_taula += "<div class=\"td id\" role=\"gridcell\" style=\"width:"+width10+"%\">";
+				codi_taula += "<div class=\"td\" role=\"gridcell\" style=\"width:"+width10+"%\">";
 				codi_taula += "<span class=\"falta\" >" + Llistat.getFechaString(dada_node.fecAlta) + "</span>";	
 				codi_taula += "</div>";
 				
-				codi_taula += "<div class=\"td id\" role=\"gridcell\" style=\"width:"+width10+"%\">";
+				codi_taula += "<div class=\"td\" role=\"gridcell\" style=\"width:"+width10+"%\">";
 				codi_taula += "<span class=\"fenvio\">" + Llistat.getFechaString(dada_node.fecIdx) + "</span>";	
 				codi_taula += "</div>";
 				
-				codi_taula += "<div class=\"td id\" role=\"gridcell\" style=\"width:"+width20+"%\">";				
+				codi_taula += "<div class=\"td\" role=\"gridcell\" style=\"width:"+width20+"%\">";				
 				codi_taula += printStringFromNull(dada_node.mensaje, txtSinValor);
 				codi_taula += "</div>";
 				
@@ -695,6 +698,11 @@ function CLlistat(){
 				
 				
 				parClass = (i%2) ? " par": "";
+				
+				//Si tiene estado 3 o -1 se marca como erroneo
+				if(elemento.estado == 3 || elemento.estado == -1){
+					parClass =  " errorEstado";
+				}
 				contenido += "<div class=\"tr" + parClass + "\" role=\"row\">";
 				
 				contenido += "<div class=\"td id\" role=\"gridcell\" style=\"width:"+width+"%\">";
@@ -703,11 +711,20 @@ function CLlistat(){
 				contenido += "</div>";			
 	
 				contenido += "<div class=\"td fechaIni\" role=\"gridcell\" style=\"width:"+width+"%\">";
-				if (elemento.fechaFin == null || elemento.fechaFin == "") { 
-					contenido += "<span class=\"fecha\">En execució</span>";	
-				} else {
-					contenido += "<span class=\"fecha\">Finalitzat</span>";
+				var descEstado="";
+				if (elemento.estado == 0) { 
+					descEstado = txtEstadoCreado;	
+				} else if (elemento.estado == 1){
+					descEstado = txtEstadoEje;
+				} else if(elemento.estado == 2){
+					descEstado = txtEstadoEnviado;
+				} else if(elemento.estado == 3){
+					descEstado = txtEstadoEnvError;
+				}else if(elemento.estado == -1){
+					descEstado = txtEstadoError;
 				}
+				
+				contenido += "<span class=\"fecha\">"+descEstado+"</span>";
 				contenido += "</div>";			
 				
 				contenido += "<div class=\"td fechaIni\" role=\"gridcell\" style=\"width:"+width+"%\">";
@@ -723,7 +740,7 @@ function CLlistat(){
 				contenido += "</div>";
 				
 				contenido += "<div class=\"td fechaNormativa\" role=\"gridcell\" style=\"width:"+width+"%\">";
-				contenido += "<div class=\"btnGenerico\" style = \"float:left\"><a href=\"javascript:;\" style=\"width:100px\" id = \"botonInfo\" class=\"btn unitatOrganica\" onclick=\"pintarPopUp('"+ elemento.descripcion +"')\"><span>"+txtBotonInfo+"</span></a></div>";
+				contenido += "<div class=\"btnGenerico\" style = \"float:left\"><a href=\"javascript:;\" style=\"width:100px;\" id = \"botonInfo\" class=\"btn unitatOrganica\" onclick=\"pintarPopUp('"+ elemento.descripcion +"')\"><span>"+txtBotonInfo+"</span></a></div>";
 
 				//FIN ROW
 				contenido += "</div>";

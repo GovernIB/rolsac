@@ -129,4 +129,21 @@ public class SiaPendienteProcesoDelegateImpl extends SiaPendienteProcesoDelegate
 	       }
 		
 	}
+	@Override
+	public SiaJob crearSiaJob()  throws DelegateException {
+		try {
+			return getFacade().crearSiaJob();
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
+	}
+	
+	@Override
+	public void cerrarSiaJob(SiaJob siaJob) throws DelegateException{
+		try {
+			getFacade().cerrarSiaJob(siaJob);
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
+	}
 }

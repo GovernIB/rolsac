@@ -48,35 +48,35 @@ public class SiaUtils {
     }
 
 	public static String getUsuario() {
-        return System.getProperty("es.webcaib.rolsac.sia.usuario");
+        return System.getProperty("es.rolsac.sia.usuario");
     }
 	
 	public static Long getTipoActuacion() {
-        return getLongFromProperty("es.webcaib.rolsac.sia.tipoActuacion");
+        return getLongFromProperty("es.rolsac.sia.tipoActuacion");
     }
 	
 	public static Long getTipologiaTramitacion() {
-        return getLongFromProperty("es.webcaib.rolsac.sia.tipologiaTramitacion");
+        return getLongFromProperty("es.rolsac.sia.tipologiaTramitacion");
     }
 	
 	public static Long getAdministracion() {
-        return getLongFromProperty("es.webcaib.rolsac.sia.administracion");
+        return getLongFromProperty("es.rolsac.sia.administracion");
     }
 	
 	public static Long getComunidadAutonoma() {
-        return getLongFromProperty("es.webcaib.rolsac.sia.comunidadautonoma");
+        return getLongFromProperty("es.rolsac.sia.comunidadautonoma");
     }
 	
 	public static String getDepartamento() {
-        return System.getProperty("es.webcaib.rolsac.sia.idDepartamento");
+        return System.getProperty("es.rolsac.sia.idDepartamento");
     }
 	
 	public static String getCentroDirectivo() {
-        return System.getProperty("es.webcaib.rolsac.sia.idCentroDirectivo");
+        return System.getProperty("es.rolsac.sia.idCentroDirectivo");
     }
 	
 	public static String getUrl() {
-        return System.getProperty("es.webcaib.rolsac.sia.url");
+        return System.getProperty("es.rolsac.sia.url");
     }
 	
 	/**
@@ -88,14 +88,21 @@ public class SiaUtils {
 	public static StringBuffer obtenerContenidoClob(Clob clob)
 			throws SQLException, IOException {
 		String read;
-		StringBuffer buffer;
-		BufferedReader reader = new BufferedReader(new InputStreamReader(clob.getAsciiStream()));
-		read = null;
-		buffer = new StringBuffer();
-		
-		while((read = reader.readLine()) != null ){
-			buffer.append(read);
+		StringBuffer buffer = new StringBuffer();
+		if (clob != null){
+			
+			BufferedReader reader = new BufferedReader(new InputStreamReader(clob.getAsciiStream()));
+			read = null;
+			
+			while((read = reader.readLine()) != null ){
+				buffer.append(read);
+			}
 		}
 		return buffer;
 	}
+	
+	
+	
+	
+	
 }

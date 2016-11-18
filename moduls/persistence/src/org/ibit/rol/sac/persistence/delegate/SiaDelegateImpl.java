@@ -6,6 +6,7 @@ import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
 
+import org.ibit.rol.sac.model.SiaJob;
 import org.ibit.rol.sac.persistence.intf.SiaPendienteFacade;
 import org.ibit.rol.sac.persistence.intf.SiaPendienteFacadeHome;
 import org.ibit.rol.sac.persistence.util.SiaPendienteFacadeUtil;
@@ -37,20 +38,20 @@ public class SiaDelegateImpl extends SiaDelegate implements  StatelessDelegate, 
 
  
 	@Override
-	public  void enviarTodos()  throws DelegateException{
+	public  void enviarTodos(SiaJob siaJob)  throws DelegateException{
 	
 	   try {
-		   getFacade().enviarTodos();
+		   getFacade().enviarTodos(siaJob);
        } catch (RemoteException e) {
            throw new DelegateException(e);
        }
 	}
 
 	@Override
-	public  void enviarPendientes()  throws DelegateException{
+	public  void enviarPendientes(SiaJob siaJob)  throws DelegateException{
 	
 	   try {
-		   getFacade().enviarPendientes();
+		   getFacade().enviarPendientes(siaJob);
        } catch (RemoteException e) {
            throw new DelegateException(e);
        }

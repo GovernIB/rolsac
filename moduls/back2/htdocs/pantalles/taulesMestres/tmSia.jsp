@@ -41,12 +41,19 @@
     var txtEstado =  "<spring:message code='txt.sia.estado'/>";
     var txtFalta =  "<spring:message code='txt.sia.fecha.alta'/>";
     var txtFenvio =  "<spring:message code='txt.sia.fecha.envio'/>";
+    var txtIdElemento =  "<spring:message code='txt.sia.id.elemento'/>";
     var txtMensaje =  "<spring:message code='txt.indexaciones.mensaje'/>";
     var txtTipo = "<spring:message code='txt.sia.tipo'/>";
     var txtSiaDescripcionTipoPro =  "<spring:message code='index.descripcio.tipo.PRO'/>";
     var txtSiaDescripcionTipoUna =  "<spring:message code='index.descripcio.tipo.UNA'/>";
     var txtSiaDescripcionTipoNor=  "<spring:message code='index.descripcio.tipo.NOR'/>";
     var txtEnviantDades="<spring:message code='index.missatge.enviant_dades'/>" ;
+    var txtBotonEnvio="<spring:message code='sia.boton.envio_pendiente' />";
+    var txtEstadoCreado="<spring:message code='sia.estado.creado' />";
+    var txtEstadoEje="<spring:message code='sia.estado.ejecucion' />";
+    var txtEstadoEnviado="<spring:message code='sia.estado.enviado' />";
+    var txtEstadoEnvError="<spring:message code='sia.estado.enviado_errores' />";
+    var txtEstadoError="<spring:message code='sia.estado.error' />";
 	
     //taula    
     var txtNou = "<spring:message code='txt.afegir_nova'/> "; + txtLlistaItem.toLowerCase();
