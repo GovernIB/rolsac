@@ -5,10 +5,6 @@ package org.ibit.rol.sac.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.ibit.rol.sac.model.ws.ArchivoTransferible;
-import org.ibit.rol.sac.model.ws.EdificioTransferible;
-import org.ibit.rol.sac.model.ws.ProcedimientoTransferible;
-
 public class Edificio extends Traducible {
 
     public Long getId() {
