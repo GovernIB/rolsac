@@ -1075,7 +1075,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			
 			//Obtenemos el procedimiento por separado porque daba un error de lazy hibernate
 			ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
-			ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimiento(tramite.getProcedimiento().getId());
+			ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimientoParaSolr(tramite.getProcedimiento().getId());
 			
 			//Preparamos la información básica: id elemento, aplicacionID = ROLSAC y la categoria de tipo ficha.
 			final IndexData indexData = new IndexData();

@@ -31,6 +31,9 @@ public interface ProcedimientoDelegateI {
 
 	public abstract ProcedimientoLocal obtenerProcedimiento(Long id)
 			throws DelegateException;
+	
+	public abstract ProcedimientoLocal obtenerProcedimientoParaSolr(Long id)
+			throws DelegateException;
 
 	public abstract ProcedimientoLocal obtenerProcedimientoNewBack(Long id)
 			throws DelegateException;

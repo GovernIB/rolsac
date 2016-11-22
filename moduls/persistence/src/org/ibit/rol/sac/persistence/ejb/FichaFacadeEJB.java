@@ -1815,12 +1815,19 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 		return indexarSolr(solrIndexer, solrPendiente.getIdElemento(), EnumCategoria.ROLSAC_FICHA);
 	}
 	
-	/**
-	 * Obtener ficha con lo mínimo imprescindible para solr.
-	 * @param id
-	 * @return
-	 */
-	private Ficha obtenerFichaParaSOLR(Long id) {
+	 /**
+     * Obtener ficha con lo mínimo imprescindible para solr.
+     * 
+     * @param id	Identificador de la ficha solicitada
+     * 
+     * @return Devuelve <code>Ficha</code> solicitada.
+     * @throws DelegateException 
+     * 
+     * @ejb.interface-method
+     * 
+     * @ejb.permission unchecked="true"
+     */
+	public Ficha obtenerFichaParaSolr(Long id) {
 
 		Session session = getSession();
 		Ficha ficha = null;
@@ -1831,6 +1838,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 				Hibernate.initialize(ficha.getHechosVitales());
 				Hibernate.initialize(ficha.getPublicosObjetivo());
 				Hibernate.initialize(ficha.getFichasua());
+				Hibernate.initialize(ficha.getDocumentos());
 				
 				session.clear();
 				
@@ -1858,7 +1866,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 		
 		try {
 			//Paso 0. Obtenemos la ficha y comprobamos si se puede indexar.
-			final Ficha ficha = obtenerFichaParaSOLR(idElemento);
+			final Ficha ficha = obtenerFichaParaSolr(idElemento);
 			if (ficha == null) {
 				return new SolrPendienteResultado(false, "Da problema al cargar la info de la ficha.");
 			}

@@ -175,6 +175,11 @@ public class FichaDelegate implements FichaDelegateI {
 	public List<Long> buscarIdsFichas() throws DelegateException {
 		return impl.buscarIdsFichas();
 	}
+
+
+	public Ficha obtenerFichaParaSolr(Long id) throws DelegateException{
+		return impl.obtenerFichaParaSolr(id);
+	}
     
     
 

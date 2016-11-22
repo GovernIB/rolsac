@@ -111,6 +111,17 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
     }
     
     /* (non-Javadoc)
+   	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#obtenerFichaParaSolr(java.lang.Long)
+   	 */
+       public Ficha obtenerFichaParaSolr(Long id) throws DelegateException {
+           try {
+               return getFacade().obtenerFichaParaSolr(id);
+           } catch (RemoteException e) {
+               throw new DelegateException(e);
+           }
+       }
+    
+    /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#obtenerIconoFicha(java.lang.Long)
 	 */
     public Archivo obtenerIconoFicha(Long id) throws DelegateException {

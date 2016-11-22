@@ -498,7 +498,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 						
 			//Obtenemos el procedimiento por separado porque daba un error de lazy hibernate
 			ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
-			ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimiento(documento.getProcedimiento().getId());
+			ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimientoParaSolr(documento.getProcedimiento().getId());
 			
 			//Preparamos la información básica: id elemento, aplicacionID = ROLSAC y la categoria de tipo ficha.
 			final IndexFile indexData = new IndexFile();
@@ -728,7 +728,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 			
 			//Obtenemos la ficha por separado porque daba un error de lazy hibernate
 			FichaDelegate fichaDelegate = DelegateUtil.getFichaDelegate();
-			Ficha ficha = fichaDelegate.obtenerFicha(documento.getFicha().getId());
+			Ficha ficha = fichaDelegate.obtenerFichaParaSolr(documento.getFicha().getId());
 
 			//Preparamos la información básica: id elemento, aplicacionID = ROLSAC, la categoria de tipo ficha documento, la categoria del padre de tipo ficha.
 			final IndexFile indexData = new IndexFile();

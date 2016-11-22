@@ -2169,7 +2169,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				session.flush();
 			    session.delete(fua);
 			    
-			    IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_FICHA, fua.getId(), false);
+			    IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_FICHA, fua.getFicha().getId(), false);
 
 			}
 

@@ -31,6 +31,8 @@ public interface FichaDelegateI {
 	
 	public abstract Ficha obtenerFicha(Long id) throws DelegateException;
 	
+	public abstract Ficha obtenerFichaParaSolr(Long id) throws DelegateException;
+	
 	public abstract Archivo obtenerIconoFicha(Long id) throws DelegateException;
 
 	public abstract Archivo obtenerImagenFicha(Long id)

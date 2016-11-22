@@ -322,7 +322,7 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
 		log.debug("Resultado indexando procedimiento(ID:"+solrpendiente.getIdElemento()+"):"+ solrPendienteResultado.toString());
 		
 		//Paso 2. Recorremos documento y los indexamos
-		ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimiento(solrpendiente.getIdElemento());
+		ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimientoParaSolr(solrpendiente.getIdElemento());
 		for (Documento documento : procedimiento.getDocumentos()) {
 			try {
 				if (documento != null) {
@@ -419,7 +419,7 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
 		log.debug("Resultado indexando ficha(ID:"+solrpendiente.getIdElemento()+"):"+ solrPendienteResultado.toString());
 		
 		//Paso 2. Reindexamos los documentos asociados a la ficha.
-		Ficha ficha = fichaDelegate.obtenerFicha(solrpendiente.getIdElemento());
+		Ficha ficha = fichaDelegate.obtenerFichaParaSolr(solrpendiente.getIdElemento());
 		if (ficha.getDocumentos() != null) {
 			for(Documento documento : ficha.getDocumentos()) {
 				try {
