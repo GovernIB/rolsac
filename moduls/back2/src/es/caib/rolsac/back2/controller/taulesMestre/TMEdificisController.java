@@ -413,10 +413,24 @@ public class TMEdificisController extends PantallaBaseController
 	private Edificio guardarEdificisFileItem(Map<String, String> valoresForm, Map<String, FileItem> ficherosForm, String parametro, Edificio edifici)
 	{
 		FileItem fileItem = ficherosForm.get(parametro);
-		if (fileItem.getSize() > 0)
-			edifici.setPlano(UploadUtil.obtenerArchivo(edifici.getPlano(), fileItem));
-		else if (valoresForm.get(parametro + "_delete") != null && !"".equals(valoresForm.get(parametro + "_delete"))) //borrar fichero si se solicita
-			edifici.setPlano(null);
+		if (fileItem.getSize() > 0){	
+ 			if(parametro.equals("item_foto_petita")){
+ 				edifici.setFotoPequenya(UploadUtil.obtenerArchivo(edifici.getFotoPequenya(), fileItem));
+ 			}else if(parametro.equals("item_foto_gran")){
+ 				edifici.setFotoGrande(UploadUtil.obtenerArchivo(edifici.getFotoGrande(), fileItem));
+ 			}else if(parametro.equals("item_planol")){				
+ 				edifici.setPlano(UploadUtil.obtenerArchivo(edifici.getPlano(), fileItem));
+ 			}
+ 		}
+ 		else if (valoresForm.get(parametro + "_delete") != null && !"".equals(valoresForm.get(parametro + "_delete"))){ //borrar fichero si se solicita
+ 			if(parametro.equals("item_foto_petita")){
+ 				edifici.setFotoPequenya(null);
+ 			}else if(parametro.equals("item_foto_gran")){
+ 				edifici.setFotoGrande(null);
+ 			}else if(parametro.equals("item_planol")){				
+ 				edifici.setPlano(null);
+ 			}
+ 		}
 		
 		return edifici;
 	}
