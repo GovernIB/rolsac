@@ -4,7 +4,7 @@ function BuscadorProcedimiento() {
 
 	this.buscar = function(opcions, url, listado) {
 
-		var procedimientoJSON = { "id" : "", "familia" : { "id" : "" }, "iniciacion" : { "id" : "" }, "tramite" : "", "indicador" : "", "ventanillaUnica" : "", "nombreProcedimiento" : "" };
+		var procedimientoJSON = { "id" : "", "familia" : { "id" : "" }, "iniciacion" : { "id" : "" }, "tramite" : "", "indicador" : "", "ventanillaUnica" : "", "nombreProcedimiento" : "" ,"silencio" : { "id" : "" }, "codigoSIA" :""};
 
 		var paginacionJSON = { "pagPag" : 0 , "pagRes" : 0 , "criterioOrdenacion" : "", "propiedadDeOrdenacion" : "" };
 
@@ -29,6 +29,8 @@ function BuscadorProcedimiento() {
 			criteria.procedimiento.familia.id = $("#cerca_familia").val();
 			criteria.procedimiento.iniciacion.id = $("#cerca_iniciacio").val();
 			criteria.procedimiento.tramite = $("#cerca_tramit").val();
+			criteria.procedimiento.silencio.id = $("#cerca_silenci").val();
+			criteria.procedimiento.codigoSIA = $("#cerca_sia").val();
 
 			switch ( $("#cerca_indicador").val() ) {
 
@@ -38,7 +40,11 @@ function BuscadorProcedimiento() {
 
 			case "0":
 				criteria.procedimiento.indicador = 0;
-				break
+				break;
+			
+			case "-1":
+				criteria.procedimiento.indicador = -1;
+				break;
 
 			default:
 				criteria.procedimiento.indicador = null;

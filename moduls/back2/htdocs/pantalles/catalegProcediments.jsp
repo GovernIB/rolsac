@@ -617,7 +617,122 @@
                     </div>                    
                     <div class="busquedaAvanzada">
                         <h2><spring:message code='txt.CERCADOR_AVANCAT'/></h2>
-                        <div class="fila">                                                                                    
+                        <div class="fila">
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_sia"><spring:message code='camp.codi_sia'/></label>
+                                </div>
+                                <div class="control">
+                                	<input id="cerca_sia" name="cerca_sia" type="text"/>
+                                </div>
+                            </div>
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_bolcat_sia"><spring:message code='camp.bolcat_sia'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_bolcat_sia" name="cerca_bolcat_sia" class="t8">
+                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                        <option value="-1"><spring:message code='camp.cap'/></option>
+                                        <option value="0"><spring:message code='boto.alta'/></option>
+                                        <option value="1"><spring:message code='boto.baixa'/></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_iniciacio"><spring:message code='camp.inici'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_iniciacio" name="cerca_iniciacio">
+                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                        <option value="-1"><spring:message code='camp.cap'/></option>
+                                        <c:forEach items="${iniciacions}" var="iniciacio">
+                                            <option value="<c:out value="${iniciacio.id}"/>"><c:out value="${iniciacio.nom}"/></option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="fila">
+                            
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_silenci"><spring:message code='camp.silenciAdministratiu'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_silenci" name="cerca_silenci" class="t8">
+                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                        <option value="-1"><spring:message code='camp.cap'/></option>
+                                        <c:forEach items="${llistaSilenci}" var="sil">
+                                  			<option value='<c:out value="${sil.codigo}" />'><c:out value="${sil.nom}" /></option>
+                             			</c:forEach>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_indicador"><spring:message code='camp.fiViaAdministrativa'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_indicador" name="cerca_indicador" class="t8">
+                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                        <option value="-1"><spring:message code='camp.cap'/></option>
+                                        <option value="0"><spring:message code='txt.no'/></option>
+                                        <option value="1"><spring:message code='txt.si'/></option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_publicObjectiu"><spring:message code='camp.publicObjectiu'/></label>
+                                </div>
+                                <div class="control select">
+                                    <select id="cerca_publicObjectiu" name="cerca_publicObjectiu" class="publicObjectiu">
+                                        <option value=""><spring:message code='camp.tria.opcio'/></option>
+                                        <option value="-1"><spring:message code='camp.cap'/></option>
+                                        <c:forEach items="${llistaPublicsObjectiu}" var="publicObjectiu">
+                                            <option value='<c:out value="${publicObjectiu.id}" />'><c:out value="${publicObjectiu.nom}" /></option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                            </div> 
+                           
+                        </div>
+                        
+                        
+                        <div class="fila">
+                        	<div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_familia"><spring:message code='camp.tipo.procedimiento'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_familia" name="cerca_familia">
+                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                        <option value="-1"><spring:message code='camp.cap'/></option>
+                                        <c:forEach items="${families}" var="familia">
+                                            <option value="<c:out value="${familia.id}"/>"><c:out value="${familia.nom}"/></option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                            </div>    
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_materia"><spring:message code='fitxes.llistat.materia'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_materia" name="cerca_materia" class="t8">
+                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>   
+                                        <option value="-1"><spring:message code='camp.cap'/></option>                                     
+                                        <c:forEach items="${llistaMateries}" var="materia">
+                                            <option value="<c:out value="${materia.id}"/>"><c:out value="${materia.nom}"/></option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                            </div>                                                                                
                             <div class="element t25">
                                 <div class="etiqueta">
                                     <label for="cerca_tramit"><spring:message code='camp.identificadorTramit'/></label>
@@ -626,7 +741,11 @@
                                     <input id="cerca_tramit" name="cerca_tramit" type="text"/>
                                 </div>
                             </div>
-                            <div class="element t25">
+                            
+                            
+                        </div>
+                        <div class="fila">
+                        	<div class="element t25">
                                 <div class="etiqueta">
                                     <label for="enPlazo"><spring:message code='camp.cerca_en_plazo'/></label>
                                 </div>
@@ -650,117 +769,9 @@
                                     </select>
                                 </div>
                             </div>
-                            <%--
-                            <div class="element t25">
-                                <div class="etiqueta">
-                                    <label for="cerca_estat"><spring:message code='camp.estat'/></label>
-                                </div>
-                                <div class="control">
-                                    <select id="cerca_estat" name="cerca_estat" class="t8">
-                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
-                                        <option value="1"><spring:message code='txt.validacio.publica'/></option>
-                                        <option value="2"><spring:message code='txt.validacio.interna'/></option>
-                                        <option value="3"><spring:message code='txt.validacio.reserva'/></option>
-                                    </select>
-                                </div>
-                            </div>
-                             --%>
+                            
                         </div>
-                        <div class="fila">
-                        	<div class="element t25">
-                                <div class="etiqueta">
-                                    <label for="cerca_publicObjectiu"><spring:message code='camp.publicObjectiu'/></label>
-                                </div>
-                                <div class="control select">
-                                    <select id="cerca_publicObjectiu" name="cerca_publicObjectiu" class="publicObjectiu">
-                                        <option value=""><spring:message code='camp.tria.opcio'/></option>
-                                        <c:forEach items="${llistaPublicsObjectiu}" var="publicObjectiu">
-                                            <option value='<c:out value="${publicObjectiu.id}" />'><c:out value="${publicObjectiu.nom}" /></option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="element t25">
-                                <div class="etiqueta">
-                                    <label for="cerca_materia"><spring:message code='fitxes.llistat.materia'/></label>
-                                </div>
-                                <div class="control">
-                                    <select id="cerca_materia" name="cerca_materia" class="t8">
-                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>                                        
-                                        <c:forEach items="${llistaMateries}" var="materia">
-                                            <option value="<c:out value="${materia.id}"/>"><c:out value="${materia.nom}"/></option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-                            </div>
-                            <!-- 
-                             <div class="element t25"> 
-                                 <div class="etiqueta"> 
-                                    <label for="cerca_fet_vital"><spring:message code='fitxes.llistat.fet_vital'/></label>
-                                 </div> 
-                                 <div class="control"> 
-                                     <select id="cerca_fet_vital" name="cerca_fet_vital" class="t8"> 
-                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>                                        
-                                        <c:forEach items="${llistaFetsVitals}" var="fetVital">
-                                            <option value="<c:out value="${fetVital.id}"/>"><c:out value="${fetVital.nom}"/></option>
-                                        </c:forEach>
-                                     </select> 
-                                 </div> 
-                             </div> --> 
-							<div class="element t25">
-                                <div class="etiqueta">
-                                    <label for="cerca_familia"><spring:message code='camp.tipo.procedimiento'/></label>
-                                </div>
-                                <div class="control">
-                                    <select id="cerca_familia" name="cerca_familia">
-                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
-                                        <c:forEach items="${families}" var="familia">
-                                            <option value="<c:out value="${familia.id}"/>"><c:out value="${familia.nom}"/></option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="fila">
-                            <div class="element t25">
-                                <div class="etiqueta">
-                                    <label for="cerca_iniciacio"><spring:message code='camp.inici'/></label>
-                                </div>
-                                <div class="control">
-                                    <select id="cerca_iniciacio" name="cerca_iniciacio">
-                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
-                                        <c:forEach items="${iniciacions}" var="iniciacio">
-                                            <option value="<c:out value="${iniciacio.id}"/>"><c:out value="${iniciacio.nom}"/></option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="element t25">
-                                <div class="etiqueta">
-                                    <label for="cerca_indicador"><spring:message code='camp.fiViaAdministrativa'/></label>
-                                </div>
-                                <div class="control">
-                                    <select id="cerca_indicador" name="cerca_indicador" class="t8">
-                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
-                                        <option value="0"><spring:message code='txt.no'/></option>
-                                        <option value="1"><spring:message code='txt.si'/></option>
-                                    </select>
-                                </div>
-                            </div>
-                            <!-- 
-                            <div class="element t25">
-                                <div class="etiqueta">
-                                    <label for="cerca_finestreta"><spring:message code='camp.finestraUnica'/></label>
-                                </div>
-                                <div class="control">
-                                    <select id="cerca_finestreta" name="cerca_finestreta" class="t8">
-                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
-                                        <option value="0"><spring:message code='txt.no'/></option>
-                                        <option value="1"><spring:message code='txt.si'/></option>
-                                    </select>
-                                </div>
-                            </div> -->
-                        </div>
+                        
 
                         <div class="fila">                            
                             <div class="botonera noClear">

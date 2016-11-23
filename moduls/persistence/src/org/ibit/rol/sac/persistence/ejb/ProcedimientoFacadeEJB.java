@@ -977,18 +977,22 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		try {
 			PaginacionCriteria paginacion = bc.getPaginacion();
 
-			StringBuilder consulta = new StringBuilder("select new ProcedimientoLocal(procedimiento.id, trad.nombre, procedimiento.validacion, procedimiento.fechaActualizacion, ");
-			consulta.append("procedimiento.fechaCaducidad, procedimiento.fechaPublicacion, tradFam.nombre, index(trad), procedimiento.unidadAdministrativa ) ");
-			consulta.append("from where");
-
 			StringBuilder from = new StringBuilder(" from  ProcedimientoLocal as procedimiento,  procedimiento.traducciones as trad");
-			from.append(", procedimiento.familia as fam, fam.traducciones as tradFam");
-
 			StringBuilder where = new StringBuilder("where index(trad) = :idioma ");
+			StringBuilder consulta = new StringBuilder("select new ProcedimientoLocal(procedimiento.id, trad.nombre, procedimiento.validacion, procedimiento.fechaActualizacion, ");
+			if(bc.getProcedimiento().getFamilia().getId() == null || bc.getProcedimiento().getFamilia().getId() != -1){
+				consulta.append("procedimiento.fechaCaducidad, procedimiento.fechaPublicacion, tradFam.nombre, index(trad), procedimiento.unidadAdministrativa ) ");
+				where.append("and index(tradFam) = :idioma ");
+				from.append(", procedimiento.familia as fam, fam.traducciones as tradFam");
+			}else{				//Para poder buscar proc sin familia
+				//TODO en el constructor s esta pasando familia con el nombre del proc
+				consulta.append("procedimiento.fechaCaducidad, procedimiento.fechaPublicacion,trad.nombre , index(trad), procedimiento.unidadAdministrativa ) ");
+				
+			}
+			consulta.append("from where");
+	
 			where.append("and procedimiento.unidadAdministrativa.id in (:UA) ");
-			where.append("and index(tradFam) = :idioma ");
-
-
+			
 			if ( bc.getProcedimiento().getId() != null )
 				where.append(" and procedimiento.id = :id ");
 
@@ -1009,25 +1013,59 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				where.append(" and upper(procedimiento.tramite) like upper(:tramite) ");
 
 
-			if ( bc.getProcedimiento().getFamilia().getId() != null )
-				where.append(" and procedimiento.familia.id = :familia ");
+			if ( bc.getProcedimiento().getFamilia().getId() != null ){
+				if(bc.getProcedimiento().getFamilia().getId() == -1){
+					where.append(" and procedimiento.familia is null ");
+
+				}else{
+					
+					where.append(" and procedimiento.familia.id = :familia ");
+				}
+			}
 
 
-			if ( bc.getProcedimiento().getIniciacion().getId() != null )
-				where.append(" and procedimiento.iniciacion.id = :iniciacion ");
+			if ( bc.getProcedimiento().getIniciacion().getId() != null ){
+				if(bc.getProcedimiento().getIniciacion().getId() ==-1){
+					where.append(" and procedimiento.iniciacion is null ");
+				}else{					
+					where.append(" and procedimiento.iniciacion.id = :iniciacion ");
+				}
+			}
 
 
 			if ( bc.getIdPublicoObjetivo() != null ) {
-
-				where.append(" and pubsObj.id = :idPublicoObjetivo ");
-				from.append(", procedimiento.publicosObjetivo as pubsObj");
+				if(bc.getIdPublicoObjetivo() ==-1){//Seleccionado cap
+					where.append(" and size(procedimiento.publicosObjetivo)=0 ");
+				}else{					
+					where.append(" and pubsObj.id = :idPublicoObjetivo ");
+					from.append(", procedimiento.publicosObjetivo as pubsObj");
+				}
 
 			}
 
 
-			if ( bc.getIdMateria() != null )
-				where.append(" and procedimiento.id in ( select procsLocales.id from Materia as mat, mat.procedimientosLocales as procsLocales where mat.id = :idMateria ) ");
+			if ( bc.getIdMateria() != null ){
+				if(bc.getIdMateria() == -1){
+					where.append(" and procedimiento.id  not in ( select procsLocales.id from Materia as mat, mat.procedimientosLocales as procsLocales where mat.id is not null ) ");
+					
+				}else{					
+					where.append(" and procedimiento.id in ( select procsLocales.id from Materia as mat, mat.procedimientosLocales as procsLocales where mat.id = :idMateria ) ");
+				}
+			}
 
+	
+			if(bc.getProcedimiento().getSilencio().getId() != null){
+				if(bc.getProcedimiento().getSilencio().getId() ==-1){
+					where.append(" and procedimiento.silencio is null ");
+				}else{					
+					where.append(" and procedimiento.silencio.id = :idSilencio ");
+				}
+			}
+
+			if(StringUtils.isNotEmpty( bc.getProcedimiento().getCodigoSIA() )  ){
+				
+				where.append(" and procedimiento.codigoSIA like upper(:codSIA) ");
+			}
 
 			if ( bc.getIdHechoVital() != null ) {
 
@@ -1058,7 +1096,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				else if ( !bc.getEnPlazo() )
 					where.append(" and procedimiento.id not in ");
 
-				where.append(" ( select tra.procedimiento from Tramite as tra where tra.fase = 1 ");
+				where.append(" ( select tra.procedimiento from Tramite as tra where tra.procedimiento is not null ");
 				where.append("and (sysdate < tra.dataTancament or tra.dataTancament is null) ");
 				where.append("and (sysdate > tra.dataInici or tra.dataInici is null) ) ");
 
@@ -1111,19 +1149,20 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				query.setParameter("idHechoVital", bc.getIdHechoVital());
 
 
-			if ( bc.getIdMateria() != null )
+			if ( bc.getIdMateria() != null && bc.getIdMateria() != -1)
 				query.setParameter("idMateria", bc.getIdMateria());
 
 
-			if ( bc.getIdPublicoObjetivo() != null )
+			if ( bc.getIdPublicoObjetivo() != null && bc.getIdPublicoObjetivo() != -1){				
 				query.setParameter("idPublicoObjetivo", bc.getIdPublicoObjetivo());
+			}
 
 
-			if ( bc.getProcedimiento().getIniciacion().getId() != null )
+			if ( bc.getProcedimiento().getIniciacion().getId() != null && bc.getProcedimiento().getIniciacion().getId() != -1)
 				query.setParameter("iniciacion", bc.getProcedimiento().getIniciacion());
 
 
-			if ( bc.getProcedimiento().getFamilia().getId() != null )
+			if ( bc.getProcedimiento().getFamilia().getId() != null && bc.getProcedimiento().getFamilia().getId() != -1)
 				query.setParameter("familia", bc.getProcedimiento().getFamilia().getId());
 
 
@@ -1141,6 +1180,16 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 			if ( validacion != null )
 				query.setParameter("validacion", validacion);
+			
+			if (bc.getProcedimiento().getSilencio().getId() != null && bc.getProcedimiento().getSilencio().getId() != -1){
+		
+				query.setParameter("idSilencio", bc.getProcedimiento().getSilencio().getId());
+			}
+			
+			if (StringUtils.isNotEmpty( bc.getProcedimiento().getCodigoSIA() )  ){
+				
+				query.setParameter("codSIA", "%" + bc.getProcedimiento().getCodigoSIA()+ "%");
+			}
 
 
 			resultadoBusqueda.setTotalResultados( query.list().size() );
