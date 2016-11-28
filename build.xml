@@ -510,6 +510,8 @@
             	<include name="rome-1.0RC2.jar" />
             	<include name="jdom.jar" />
             	<include name="jena-2.6.4.jar" />
+            	<include name="iri-0.8.jar" />
+            	<include name="icu4j-3.4.4.jar" />            	
             </fileset>
         	
         	<fileset dir="${lib}/webcaib">
