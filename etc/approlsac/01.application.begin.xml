@@ -24,6 +24,10 @@
 		<module><java>commons-httpclient-3.1.jar</java></module>
 		<module><java>rome-1.0RC2.jar</java></module> 
 		<module><java>jdom.jar</java></module>
+		<module><java>jena-2.6.4.jar</java></module>
+        <module><java>iri-0.8.jar</java></module>
+        <module><java>icu4j-3.4.4.jar</java></module>
+		
 						
 		
 		<!-- SOLRJ -->
