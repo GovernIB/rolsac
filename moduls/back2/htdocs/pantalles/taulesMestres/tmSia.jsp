@@ -47,7 +47,7 @@
     var txtSiaDescripcionTipoPro =  "<spring:message code='index.descripcio.tipo.PRO'/>";
     var txtSiaDescripcionTipoUna =  "<spring:message code='index.descripcio.tipo.UNA'/>";
     var txtSiaDescripcionTipoNor=  "<spring:message code='index.descripcio.tipo.NOR'/>";
-    var txtEnviantDades="<spring:message code='index.missatge.enviant_dades'/>" ;
+    var txtEnviantDades="<spring:message code='index.missatge.enviant_dades.sia'/>" ;
     var txtBotonEnvio="<spring:message code='sia.boton.envio_pendiente' />";
     var txtEstadoCreado="<spring:message code='sia.estado.creado' />";
     var txtEstadoEje="<spring:message code='sia.estado.ejecucion' />";
@@ -75,7 +75,6 @@
     var txtCercantElements = txtCercant + " <spring:message code='txt.elements'/>" + ". " + txtEspere;
 
     //Botones
-    var txtEnviantDades="<spring:message code='index.missatge.enviant_dades'/>" ;
     var txtCerrantJobs="<spring:message code='index.missatge.cerrando_jobs'/>" ;
     var txtBotonContinuar = "<spring:message code='boto.continuar'/>";
     var txtBotonInfo = "<spring:message code='boto.info'/>";

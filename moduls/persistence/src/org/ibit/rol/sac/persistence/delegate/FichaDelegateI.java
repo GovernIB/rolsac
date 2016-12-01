@@ -31,12 +31,12 @@ public interface FichaDelegateI {
 	
 	public abstract Ficha obtenerFicha(Long id) throws DelegateException;
 	
-	public abstract Archivo obtenerIconoFicha(Long id) throws DelegateException;
+	public abstract Archivo obtenerIconoFicha(Long id, String idioma) throws DelegateException;
 
-	public abstract Archivo obtenerImagenFicha(Long id)
+	public abstract Archivo obtenerImagenFicha(Long id, String idioma)
 			throws DelegateException;
 
-	public abstract Archivo obtenerBanerFicha(Long id) throws DelegateException;
+	public abstract Archivo obtenerBanerFicha(Long id, String idioma) throws DelegateException;
 	
 	public abstract void borrarFicha(Long id) throws DelegateException;
 	

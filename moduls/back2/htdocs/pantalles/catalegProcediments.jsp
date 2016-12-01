@@ -634,8 +634,8 @@
                                     <select id="cerca_bolcat_sia" name="cerca_bolcat_sia" class="t8">
                                         <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
                                         <option value="-1"><spring:message code='camp.cap'/></option>
-                                        <option value="0"><spring:message code='boto.alta'/></option>
-                                        <option value="1"><spring:message code='boto.baixa'/></option>
+                                        <option value="A"><spring:message code='boto.alta'/></option>
+                                        <option value="B"><spring:message code='boto.baixa'/></option>
                                     </select>
                                 </div>
                             </div>

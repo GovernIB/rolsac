@@ -466,8 +466,10 @@ function CDetall() {
 		// idioma
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {
 			
-			// Esconder todos menos el primero
-			escriptori_detall_elm.find('div.idioma').slice(1).hide();
+			// Esconder todos menos el primero y tercero
+			escriptori_detall_elm.find('div.idioma').slice(3).hide();
+			escriptori_detall_elm.find('div.idioma').slice(1,2).hide();
+			
 		
 			var ul_idiomes_elm = escriptori_detall_elm.find("ul.idiomes:first");
 						
@@ -530,9 +532,13 @@ function CDetall() {
 		doc_seleccionats_elm = escriptori_detall_elm.find("div.modulDocuments div.seleccionats");
 		doc_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaDocuments + ".");
 
-		limpiarArchivo("item_icona");
-		limpiarArchivo("item_banner");	
-		limpiarArchivo("item_imatge");	
+		 for (var i in idiomas) {
+	        	
+				limpiarArchivoMultiidioma("item_icona", idiomas[i]);
+				limpiarArchivoMultiidioma("item_banner", idiomas[i]);
+				limpiarArchivoMultiidioma("item_imatge", idiomas[i]);
+						
+		 }
 		
 		ModulMateries.nuevo();
 	
@@ -655,6 +661,10 @@ function CDetall() {
 
             $("#item_titol_" + idioma).val(printStringFromNull(dada_node[idioma].titulo));
             $("#item_url_" + idioma).val(printStringFromNull(dada_node[idioma].url));
+            $("#item_forum_" + idioma).val(printStringFromNull(dada_node[idioma].urlForo));
+            $("#item_youtube_" + idioma).val(printStringFromNull(dada_node[idioma].urlVideo));
+            
+            
             
             // El plugin de JQuery para TinyMCE parece que tiene un bug y a veces y en segun que navegador 
             // no carga bien el contenido ni en el textarea ni en el editor.
@@ -667,23 +677,23 @@ function CDetall() {
             $("#item_des_curta_" + idioma).val(descAbr);
             $("#item_des_llarga_" + idioma).val(descripcion);
             
+            // Icona
+            pintarArchivoMultiidioma("item_icona", idioma, dada_node);
+            
+            // Banner
+            pintarArchivoMultiidioma("item_banner", idioma, dada_node);	
+            
+            // Imatge
+            pintarArchivoMultiidioma("item_imatge", idioma, dada_node);
         }
         
-        // Fin bloque de pestanyas de idiomas		
 		
-		// Icona
-		pintarArchivo("item_icona", dada_node);
-
-		// Banner
-		pintarArchivo("item_banner", dada_node);	
+		// Fin bloque de pestanyas de idiomas	
 		
-		// Imatge
-		pintarArchivo("item_imatge", dada_node);
-
 		$("#item_responsable").val(dada_node.item_responsable);
 		$("#item_notes").val(dada_node.item_notes);
-		$("#item_youtube").val(dada_node.item_youtube);
-		$("#item_forum").val(dada_node.item_forum);				
+		//$("#item_youtube").val(dada_node.item_youtube);
+		//$("#item_forum").val(dada_node.item_forum);				
 	
 		ModulPublicObjectiu.inicializarPublics(dada_node.publicsObjectiu);
 		

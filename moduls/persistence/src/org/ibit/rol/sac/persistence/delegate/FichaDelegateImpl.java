@@ -113,9 +113,9 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#obtenerIconoFicha(java.lang.Long)
 	 */
-    public Archivo obtenerIconoFicha(Long id) throws DelegateException {
+    public Archivo obtenerIconoFicha(Long id, String idioma) throws DelegateException {
         try {
-            return getFacade().obtenerIconoFicha(id);
+            return getFacade().obtenerIconoFicha(id, idioma);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
@@ -124,9 +124,9 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#obtenerImagenFicha(java.lang.Long)
 	 */
-    public Archivo obtenerImagenFicha(Long id) throws DelegateException {
+    public Archivo obtenerImagenFicha(Long id, String idioma) throws DelegateException {
         try {
-            return getFacade().obtenerImagenFicha(id);
+            return getFacade().obtenerImagenFicha(id, idioma);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
@@ -135,9 +135,9 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#obtenerBanerFicha(java.lang.Long)
 	 */
-    public Archivo obtenerBanerFicha(Long id) throws DelegateException {
+    public Archivo obtenerBanerFicha(Long id, String idioma) throws DelegateException {
         try {
-            return getFacade().obtenerBanerFicha(id);
+            return getFacade().obtenerBanerFicha(id,idioma);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }

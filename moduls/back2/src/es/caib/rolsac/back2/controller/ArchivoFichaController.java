@@ -33,25 +33,27 @@ public class ArchivoFichaController extends ArchivoController {
 
 		Long id = new Long(request.getParameter("id"));
 		Integer tipo = new Integer(request.getParameter("tipus"));
+		String idioma = request.getParameter("lang");
+		
 		FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
 		Archivo archivo = null;
 		
-		//Obtener archivo seg�n el parametro "t" (tipo)		
+		//Obtener archivo según el parametro "t" (tipo)		
 		switch (tipo) {
 		
 			// Icona
 			case 1:
-				archivo = fitxaDelegate.obtenerIconoFicha(id); 
+				archivo = fitxaDelegate.obtenerIconoFicha(id, idioma); 
 				break;
 				
 			// Banner
 			case 2:			
-				archivo = fitxaDelegate.obtenerBanerFicha(id);
+				archivo = fitxaDelegate.obtenerBanerFicha(id, idioma);
 				break;
 			
 			// Imatge
 			case 3:
-				archivo = fitxaDelegate.obtenerImagenFicha(id);
+				archivo = fitxaDelegate.obtenerImagenFicha(id, idioma);
 				break;
 			}  
 		

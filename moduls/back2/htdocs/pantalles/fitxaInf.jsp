@@ -550,99 +550,108 @@
                     <legend><spring:message code='fitxes.formulari.multimedia'/></legend>
                     <div class="modul_continguts">
                         <!-- fila -->
-                        <div class="fila">
-	                        <div class="element t50p campoImagen">
-                                <div class="thumbnail"></div>
-	                            <div class="etiqueta"><label for="item_icona"><spring:message code='fitxes.formulari.icona'/></label></div>
-	                            <div class="control archivo">   
-	                            	<div id="grup_item_icona" class="file">
-	                            		<span><spring:message code='txt.no_arxiu_assignat'/></span>
-	                            		<a href="#" target="_blank"></a>
-	                            		<input type="checkbox" name="item_icona_delete" id="item_icona_delete" value="1"/>
-	                            		<label for="item_icona_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
-	                            	</div>
-	                            </div>
-	                        </div>    
+                        
+                         <div class="fila">
+                            
+                            				
+                            <div class="idiomes">
+                            			
+								<c:forEach items="${idiomes_aplicacio}" var="lang">
+                                <div class="idioma <c:out value="${lang}"/>">
+                                    <div class="fila">
+                                       <div class="element t50p campoImagen">
+                                			<div class="thumbnail"></div>
+	                            			<div class="etiqueta"><label for="item_icona_<c:out value="${lang}"/>"><spring:message code='fitxes.formulari.icona'/></label></div>
+	                           				<div class="control archivo">   
+				                            	<div id="grup_item_icona_<c:out value="${lang}"/>" class="file">
+				                            		<span><spring:message code='txt.no_arxiu_assignat'/></span>
+				                            		<a href="#" target="_blank"></a>
+				                            		<input type="checkbox" name="item_icona_<c:out value="${lang}"/>_delete" id="item_icona_<c:out value="${lang}"/>_delete" value="1"/>
+				                            		<label for="item_icona_<c:out value="${lang}"/>_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+				                            	</div>
+	                            			</div>
+	                        			</div>    
 	                        
-	                        <div class="element t50p">
-	                            <div class="etiqueta"><label for="item_icona"><spring:message code='fitxes.formulari.icona'/></label></div>
-	                            <div class="control">                                      		
-	                                <input id="item_icona" name="item_icona" type="file" class="nou" />
-	                            </div>
-	                        </div>                                                                                      
-                        </div>
-                        <!-- /fila -->
-                        <!-- fila -->
-                        <div class="fila">
-	                        <div class="element t50p campoImagen">
-                                <div class="thumbnail"></div>
-	                            <div class="etiqueta">
-                                    <label for="item_banner"><spring:message code='fitxes.formulari.banner'/></label>
+				                        <div class="element t50p">
+				                            <div class="etiqueta"><label for="item_icona_<c:out value="${lang}"/>"><spring:message code='fitxes.formulari.icona'/></label></div>
+				                            <div class="control">                                      		
+				                                <input id="item_icona_<c:out value="${lang}"/>" name="item_icona_<c:out value="${lang}"/>" type="file" class="nou" />
+				                            </div>
+				                        </div> 
+                     
+                                    </div>
+																	
+                                    <div class="fila">
+                                      <div class="element t50p campoImagen">
+			                                <div class="thumbnail"></div>
+				                            <div class="etiqueta">
+			                                    <label for="item_banner_<c:out value="${lang}"/>"><spring:message code='fitxes.formulari.banner'/></label>
+			                                </div>
+				                            <div class="control archivo">   
+				                            	<div id="grup_item_banner_<c:out value="${lang}"/>" class="file">
+				                            		<span><spring:message code='txt.no_arxiu_assignat'/></span>
+				                            		<a href="#" target="_blank"></a>
+				                            		<input type="checkbox" name="item_banner_<c:out value="${lang}"/>_delete" id="item_banner_<c:out value="${lang}"/>_delete" value="1"/>
+				                            		<label for="item_banner_<c:out value="${lang}"/>_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+				                            	</div>
+				                            </div>
+				                        </div>    
+				                        
+				                        <div class="element t50p">
+				                            <div class="etiqueta"><label for="item_banner_<c:out value="${lang}"/>"><spring:message code='fitxes.formulari.banner'/></label></div>
+				                            <div class="control">                                      		
+				                                <input id="item_banner_<c:out value="${lang}"/>" name="item_banner_<c:out value="${lang}"/>" type="file" class="nou" />
+				                            </div>
+				                        </div>               
+                                    </div>
+                                    
+                                    <div class="fila">
+                                       <div class="element t50p campoImagen">
+			                                <div class="thumbnail"></div>
+				                            <div class="etiqueta"><label for="item_imatge_<c:out value="${lang}"/>"><spring:message code='fitxes.formulari.imatge'/></label></div>
+				                            <div class="control archivo">   
+				                            	<div id="grup_item_imatge_<c:out value="${lang}"/>" class="file">
+				                            		<span><spring:message code='txt.no_arxiu_assignat'/></span>
+				                            		<a href="#" target="_blank"></a>
+				                            		<input type="checkbox" name="item_imatge_<c:out value="${lang}"/>_delete" id="item_imatge_<c:out value="${lang}"/>_delete" value="1"/>
+				                            		<label for="item_imatge_<c:out value="${lang}"/>_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+				                            	</div>
+				                            </div>
+				                        </div>
+				                        <div class="element t50p">
+				                            <div class="etiqueta"><label for="item_imatge_<c:out value="${lang}"/>"><spring:message code='fitxes.formulari.imatge'/></label></div>
+				                            <div class="control">                                      		
+				                                <input id="item_imatge_<c:out value="${lang}"/>" name="item_imatge_<c:out value="${lang}"/>" type="file" class="nou" />
+				                            </div>
+				                        </div>            
+                                    </div>
+                                    
+                                    <div class="fila">
+			                            <div class="element t50p">
+			                                <div class="etiqueta">
+			                                    <label for="item_youtube_<c:out value="${lang}"/>"><spring:message code='fitxes.formulari.adresa_youtube'/></label>
+			                                </div>
+			                                <div class="control">
+			                                    <input id="item_youtube_<c:out value="${lang}"/>" name="item_youtube_<c:out value="${lang}"/>" type="text"
+			                                        class="nou" />
+			                                </div>
+			                            </div>
+			                        
+			                            <div class="element t50p">
+			                                <div class="etiqueta">
+			                                    <label for="item_forum_<c:out value="${lang}"/>"><spring:message code='fitxes.formulari.enllas_forum'/></label>
+			                                </div>
+			                                <div class="control">
+			                                    <input id="item_forum_<c:out value="${lang}"/>" name="item_forum_<c:out value="${lang}"/>" type="text" class="nou" />
+			                                </div>
+			                            </div>
+                        		  </div>
+                                    
                                 </div>
-	                            <div class="control archivo">   
-	                            	<div id="grup_item_banner" class="file">
-	                            		<span><spring:message code='txt.no_arxiu_assignat'/></span>
-	                            		<a href="#" target="_blank"></a>
-	                            		<input type="checkbox" name="item_banner_delete" id="item_banner_delete" value="1"/>
-	                            		<label for="item_banner_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
-	                            	</div>
-	                            </div>
-	                        </div>    
-	                        
-	                        <div class="element t50p">
-	                            <div class="etiqueta"><label for="item_banner"><spring:message code='fitxes.formulari.banner'/></label></div>
-	                            <div class="control">                                      		
-	                                <input id="item_banner" name="item_banner" type="file" class="nou" />
-	                            </div>
-	                        </div>                                                                                      
-                        </div>
-                        <!-- /fila -->
-                        
-                        <!-- fila -->
-                        <div class="fila">
-	                        <div class="element t50p campoImagen">
-                                <div class="thumbnail"></div>
-	                            <div class="etiqueta"><label for="item_imatge"><spring:message code='fitxes.formulari.imatge'/></label></div>
-	                            <div class="control archivo">   
-	                            	<div id="grup_item_imatge" class="file">
-	                            		<span><spring:message code='txt.no_arxiu_assignat'/></span>
-	                            		<a href="#" target="_blank"></a>
-	                            		<input type="checkbox" name="item_imatge_delete" id="item_imatge_delete" value="1"/>
-	                            		<label for="item_imatge_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
-	                            	</div>
-	                            </div>
-	                        </div>
-	                        <div class="element t50p">
-	                            <div class="etiqueta"><label for="item_imatge"><spring:message code='fitxes.formulari.imatge'/></label></div>
-	                            <div class="control">                                      		
-	                                <input id="item_imatge" name="item_imatge" type="file" class="nou" />
-	                            </div>
-	                        </div>                                                                                      
-                        </div>
-                        <!-- /fila -->
-                        
-                        <!-- fila -->
-                        <div class="fila">
-                            <div class="element t50p">
-                                <div class="etiqueta">
-                                    <label for="item_youtube"><spring:message code='fitxes.formulari.adresa_youtube'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="item_youtube" name="item_youtube" type="text"
-                                        class="nou" />
-                                </div>
+								</c:forEach>
                             </div>
-                        
-                            <div class="element t50p">
-                                <div class="etiqueta">
-                                    <label for="item_forum"><spring:message code='fitxes.formulari.enllas_forum'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="item_forum" name="item_forum" type="text" class="nou" />
-                                </div>
-                            </div>
                         </div>
-                        <!-- /fila -->
+                        
                     </div>
                 </fieldset>
             </div>

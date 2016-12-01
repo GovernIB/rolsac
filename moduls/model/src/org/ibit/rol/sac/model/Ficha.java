@@ -15,13 +15,8 @@ public class Ficha extends Classificable implements Indexable, Validable {
 	private Long id;
 	private Date fechaPublicacion;
 	private Date fechaCaducidad;
-	private Date fechaActualizacion;
-	private String urlVideo;   
-	private String urlForo;      
+	private Date fechaActualizacion;   
 	private String foro_tema;
-	private Archivo icono;
-	private Archivo imagen;
-	private Archivo baner;
 	private Integer validacion;
 	private List<Documento> documentos;
 	private List<Enlace> enlaces;
@@ -89,22 +84,6 @@ public class Ficha extends Classificable implements Indexable, Validable {
         this.fechaActualizacion = fechaActualizacion;
     }   
     
-    public String getUrlVideo() {
-        return urlVideo;
-    }
-
-    public void setUrlVideo(String urlVideo) {
-        this.urlVideo = urlVideo;
-    }    
-    
-    public String getUrlForo() {
-        return urlForo;
-    }
-
-    public void setUrlForo(String urlForo) {
-        this.urlForo = urlForo;
-    }    
-
 	public String getForo_tema() {
 		return foro_tema;
 	}
@@ -113,30 +92,7 @@ public class Ficha extends Classificable implements Indexable, Validable {
 		this.foro_tema = foro_tema;
 	}
 	
-    public Archivo getIcono() {
-        return icono;
-    }
-
-    public void setIcono(Archivo icono) {
-        this.icono = icono;
-    }
-
-    public Archivo getImagen() {
-        return imagen;
-    }
-
-    public void setImagen(Archivo imagen) {
-        this.imagen = imagen;
-    }
-
-    public Archivo getBaner() {
-        return baner;
-    }
-
-    public void setBaner(Archivo baner) {
-        this.baner = baner;
-    }
-
+   
     public Integer getValidacion() {
         return validacion;
     }
@@ -256,12 +212,7 @@ public class Ficha extends Classificable implements Indexable, Validable {
 		return "Ficha [id=" + id + ", fechaPublicacion=" + fechaPublicacion
 				+ ", fechaCaducidad=" + fechaCaducidad
 				+ ", fechaActualizacion=" + fechaActualizacion 
-				+ ", urlVideo="	+ urlVideo 
-				+ ", urlForo=" + urlForo 
 				+ ", foro_tema=" + foro_tema 
-				//+ ", icono=" + icono 
-				//+ ", imagen=" + imagen
-				//+ ", baner=" + baner 
 				+ ", validacion=" + validacion
 				//+ ", documentos=" + documentos + ", enlaces=" + enlaces
 				//+ ", fichasua=" + fichasua 

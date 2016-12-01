@@ -18,15 +18,10 @@
         <property name="fechaPublicacion" column="FIC_FECPUB"/>
         <property name="fechaCaducidad" column="FIC_FECCAD"/>
         <property name="fechaActualizacion" column="FIC_FECACT"/>        
-        <many-to-one name="icono" cascade="all" column="FIC_ICONO" foreign-key="RSC_FICICO_FK"/>
-        <many-to-one name="imagen" cascade="all" column="FIC_IMAGEN" foreign-key="RSC_FICIMA_FK"/>
-        <many-to-one name="baner" cascade="all" column="FIC_BANER" foreign-key="RSC_FICBAN_FK"/>
         <property name="validacion" column="FIC_VALIDA"/>
         <!-- Nuevo campo INFO para informadores -->
 		<property name="info" column="FIC_INFO" length="4000"/> 
 		<property name="responsable" column="FIC_RESPON" length="256"/>
-        <property name="urlVideo" column="FIC_URLVID"/> 
-        <property name="urlForo" column="FIC_URLFOR"/>     
         <property name="foro_tema" column="FIC_FORTEM" length="1"/>     
         
 
@@ -77,6 +72,11 @@
                 <property name="url" length="512" column="TFI_URL"/>
                 <property name="descAbr" type="text" column="TFI_DESABR"/>
                 <property name="descripcion" type="text" column="TFI_DESCRI"/>
+                <property name="urlForo"     column="TFI_URLFOR"/> 
+                <property name="urlVideo" column="TFI_URLVID"/> 
+                <many-to-one name="icono" cascade="all" column="TFI_ICONO" foreign-key="RSC_FICICO_FK"/>
+        		<many-to-one name="imagen" cascade="all" column="TFI_IMAGEN" foreign-key="RSC_FICIMA_FK"/>
+        		<many-to-one name="banner" cascade="all" column="TFI_BANNER" foreign-key="RSC_FICBAN_FK"/>	
             </composite-element>
         </map>
 

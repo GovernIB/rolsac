@@ -36,9 +36,54 @@ public class TraduccionFicha implements Traduccion {
         this.url = url;
     }
     
+    public String getUrlForo() {
+        return urlForo;
+    }
+
+    public void setUrlForo(String urlForo) {
+        this.urlForo = urlForo;
+    } 
+    
+    public String getUrlVideo() {
+        return urlVideo;
+    }
+
+    public void setUrlVideo(String urlVideo) {
+        this.urlVideo = urlVideo;
+    }    
+    
+    public Archivo getIcono() {
+        return icono;
+    }
+
+    public void setIcono(Archivo icono) {
+        this.icono = icono;
+    }
+
+    public Archivo getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(Archivo imagen) {
+        this.imagen = imagen;
+    }
+
+    public Archivo getBanner() {
+        return banner;
+    }
+
+    public void setBanner(Archivo banner) {
+        this.banner = banner;
+    }
+
+    
     private String titulo;
     private String descAbr;
     private String descripcion;
     private String url;
-
+    private String urlForo;
+    private String urlVideo;
+    private Archivo icono;
+	private Archivo imagen;
+	private Archivo banner;
 }

@@ -84,15 +84,24 @@ es.caib.rolsac.subscripcions
 	   es.caib.rolsac.solr.tamanyomaximo=20
 	   es.caib.rolsac.solr.ficheros=doc,docx,xls,xlsx,pdf,pdfx,odt,ods,odp,odf,txt,rtf
 	   
-	   es.rolsac.sia.usuario = IBsgelabert
-	   es.rolsac.sia.tipoActuacion = 1
-	   es.rolsac.sia.tipologiaTramitacion = 4
-	   es.rolsac.sia.administracion = 2
-       es.rolsac.sia.comunidadautonoma = 4 
-       es.rolsac.sia.idDepartamento = A04003003
-       es.rolsac.sia.idCentroDirectivo = A04013518
-       es.rolsac.sia.url = https://localhost:48080/seucaib/es/tramites/tramite/2978
+	   es.caib.rolsac.sia.tipoActuacion = 1
+	   es.caib.rolsac.sia.tipologiaTramitacion = 4
+	   es.caib.rolsac.sia.administracion = 2 ?
+       es.caib.rolsac.sia.url = https://localhost:48080/seucaib/es/tramites/tramite/
 	   es.caib.rolsac.sia.jobpendientes=0 0 10 * * ?
+	   
+	   es.caib.rolsac.sia.usuario.envio = WSBALEARES
+	   es.caib.rolsac.sia.pass.envio = primera
+	   es.caib.rolsac.sia.url.envio = http://pre-sia2.redsara.es/axis2/services/wsSIAActualizarActuaciones
+	   
+	   <!-- Definición propiedades -->
+	   es.caib.rolsac.fitxa.control.proporcions=N
+	   es.caib.rolsac.fitxa.icona.altura=300
+	   es.caib.rolsac.fitxa.icona.amplada=300
+	   es.caib.rolsac.fitxa.banner.altura=300
+	   es.caib.rolsac.fitxa.banner.amplada=300
+	   es.caib.rolsac.fitxa.imatge.altura=300
+	   es.caib.rolsac.fitxa.imatge.amplada=300
 	   
     </attribute>
             

@@ -4,6 +4,11 @@ import static es.caib.rolsac.utils.LogUtils.logException;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -16,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -55,11 +61,12 @@ import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
 import org.ibit.rol.sac.persistence.delegate.FichaResumenDelegate;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalDelegate;
-import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
+import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
 import org.ibit.rol.sac.persistence.delegate.SeccionDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
+import org.ibit.rol.sac.persistence.util.RolsacPropertiesUtil;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -360,8 +367,6 @@ public class FitxaInfBackController extends PantallaBaseController {
 			resultats.put("item_estat", fitxa.getValidacion());
 			resultats.put("item_data_publicacio", DateUtils.formatDateSimpleTime(fitxa.getFechaPublicacion()));
 			resultats.put("item_data_caducitat", DateUtils.formatDateSimpleTime(fitxa.getFechaCaducidad()));
-			resultats.put("item_youtube", fitxa.getUrlVideo());
-			resultats.put("item_forum", fitxa.getUrlForo());
 			resultats.put("item_responsable", fitxa.getResponsable());
 			resultats.put("item_notes", fitxa.getInfo());
 
@@ -372,6 +377,8 @@ public class FitxaInfBackController extends PantallaBaseController {
 			recuperaPO(resultats, fitxa, lang);			// Recuperar los públicos objetiovs de una ficha.
 			recuperaRelacio(resultats, fitxa, lang);	// Recuperar las relaciones ficha-sección-UA
 			permisDuplicacio(resultats,request);		// Determina si l'usuari pot duplicar la fitxa
+			
+			
 
 		} catch (DelegateException dEx) {
 			
@@ -432,38 +439,100 @@ public class FitxaInfBackController extends PantallaBaseController {
 
 	}
 
+	
+	
 	/*
 	 * Función que recupera el contenido de las fichas según el idioma
 	 */
 	private void recuperaIdioma(Map<String, Object> resultats, Ficha fitxa, String langDefault) throws DelegateException {
-
-		List<String> langs = DelegateUtil.getIdiomaDelegate().listarLenguajes();
 		
+		IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
+		List<String> langs = idiomaDelegate.listarLenguajes();
+
 		for (String lang : langs) {
-			if (fitxa.getTraduccion(lang) != null) {
-				resultats.put(lang, (TraduccionFicha) fitxa.getTraduccion(lang));
+			HashMap<String, String> traduccionFichaDTO = new HashMap<String, String>();
+			
+			if (null != fitxa.getTraduccion(lang)) {
+				
+				TraduccionFicha tradF = (TraduccionFicha) fitxa.getTraduccion(lang);
+
+				obtenerArchivosTraduccion(resultats, fitxa, lang,traduccionFichaDTO, tradF);
+				
+			}else if (fitxa.getTraduccion(langDefault) != null) {
+				
+				TraduccionFicha tradF = (TraduccionFicha) fitxa.getTraduccion(langDefault);
+				obtenerArchivosTraduccion(resultats, fitxa, lang, traduccionFichaDTO, tradF);
+				
+				
 			} else {
-				if (fitxa.getTraduccion(langDefault) != null) {
-					resultats.put(lang, (TraduccionFicha) fitxa.getTraduccion(langDefault));
-				} else {
-					resultats.put(lang, new TraduccionFicha());
-				}
+				
+				resultats.put(lang, new HashMap<String, String>());
+				
 			}
+			
 		}
 		
+	}
+
+/**
+ * @param resultats
+ * @param fitxa
+ * @param lang
+ * @param traduccionFichaDTO
+ * @param tradF
+ */
+	private void obtenerArchivosTraduccion(Map<String, Object> resultats,
+			Ficha fitxa, String lang, HashMap<String, String> traduccionFichaDTO,
+			TraduccionFicha tradF) {
+		traduccionFichaDTO.put("titulo", tradF.getTitulo());
+		traduccionFichaDTO.put("descAbr", tradF.getDescAbr());
+		traduccionFichaDTO.put("descripcion", tradF.getDescripcion());
+		
+		traduccionFichaDTO.put("url", tradF.getUrl());
+		traduccionFichaDTO.put("urlVideo", tradF.getUrlVideo());
+		traduccionFichaDTO.put("urlForo", tradF.getUrlForo());
+	
+		if (tradF.getIcono() != null) {
+			traduccionFichaDTO.put("item_icona_enllas_arxiu", "fitxainf/archivo.do?id=" + fitxa.getId()  + "&lang=" + lang  + "&tipus=1");
+			traduccionFichaDTO.put("item_icona" , tradF.getIcono().getNombre());
+		} else {
+			traduccionFichaDTO.put("item_icona_enllas_arxiu", "");
+			traduccionFichaDTO.put("item_icona", "");
+		}
+	
+		if (tradF.getBanner() != null) {
+			traduccionFichaDTO.put("item_banner_enllas_arxiu" , "fitxainf/archivo.do?id=" + fitxa.getId()  + "&lang=" + lang + "&tipus=2");
+			traduccionFichaDTO.put("item_banner" , tradF.getBanner().getNombre());
+		} else {
+			traduccionFichaDTO.put("item_banner_enllas_arxiu", "");
+			traduccionFichaDTO.put("item_banner", "");
+		}
+	
+		if (tradF.getImagen() != null) {
+			traduccionFichaDTO.put("item_imatge_enllas_arxiu" , "fitxainf/archivo.do?id=" + fitxa.getId()  + "&lang=" + lang + "&tipus=3");
+			traduccionFichaDTO.put("item_imatge", tradF.getImagen().getNombre());
+		} else {
+			traduccionFichaDTO.put("item_imatge_enllas_arxiu", "");
+			traduccionFichaDTO.put("item_imatge", "");
+		}
+		
+		resultats.put(lang, traduccionFichaDTO);
 	}
 
 	/*
 	 * Función para recuperar el icono.
 	 */
-	private void recuperaIcono(Map<String, Object> resultats, Ficha fitxa) {
+	private void recuperaIcono(Map<String, Object> resultats, Ficha fitxa) throws DelegateException {
 
-		if (fitxa.getIcono() != null) {
-			resultats.put("item_icona_enllas_arxiu", "fitxainf/archivo.do?id=" + fitxa.getId() + "&tipus=1");
-			resultats.put("item_icona", fitxa.getIcono().getNombre());
-		} else {
-			resultats.put("item_icona_enllas_arxiu", "");
-			resultats.put("item_icona", "");
+		for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
+			TraduccionFicha tradF=(TraduccionFicha) fitxa.getTraduccion(lang);
+			if (tradF.getIcono() != null) {
+				resultats.put("item_icona_enllas_arxiu", "fitxainf/archivo.do?id=" + fitxa.getId()  + "&lang=" + lang  + "&tipus=1");
+				resultats.put("item_icona" , tradF.getIcono().getNombre());
+			} else {
+				resultats.put("item_icona_enllas_arxiu", "");
+				resultats.put("item_icona", "");
+			}
 		}
 		
 	}
@@ -471,14 +540,17 @@ public class FitxaInfBackController extends PantallaBaseController {
 	/*
 	 * Función para recuperar el banner
 	 */
-	private void recuperaBanner(Map<String, Object> resultats, Ficha fitxa) {
-
-		if (fitxa.getBaner() != null) {
-			resultats.put("item_banner_enllas_arxiu", "fitxainf/archivo.do?id=" + fitxa.getId() + "&tipus=2");
-			resultats.put("item_banner", fitxa.getBaner().getNombre());
-		} else {
-			resultats.put("item_banner_enllas_arxiu", "");
-			resultats.put("item_banner", "");
+	private void recuperaBanner(Map<String, Object> resultats, Ficha fitxa) throws DelegateException {
+		
+		for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
+			TraduccionFicha tradF=(TraduccionFicha) fitxa.getTraduccion(lang);
+			if (tradF.getBanner() != null) {
+				resultats.put("item_banner_enllas_arxiu" , "fitxainf/archivo.do?id=" + fitxa.getId()  + "&lang=" + lang + "&tipus=2");
+				resultats.put("item_banner" , tradF.getBanner().getNombre());
+			} else {
+				resultats.put("item_banner_enllas_arxiu", "");
+				resultats.put("item_banner", "");
+			}
 		}
 		
 	}
@@ -486,14 +558,17 @@ public class FitxaInfBackController extends PantallaBaseController {
 	/*
 	 * Función para recuperar la imagen de una ficha.
 	 */
-	private void recuperaImatge(Map<String, Object> resultats, Ficha fitxa) {
+	private void recuperaImatge(Map<String, Object> resultats, Ficha fitxa) throws DelegateException {
 
-		if (fitxa.getImagen() != null) {
-			resultats.put("item_imatge_enllas_arxiu", "fitxainf/archivo.do?id=" + fitxa.getId() + "&tipus=3");
-			resultats.put("item_imatge", fitxa.getImagen().getNombre());
-		} else {
-			resultats.put("item_imatge_enllas_arxiu", "");
-			resultats.put("item_imatge", "");
+		for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
+			TraduccionFicha tradF=(TraduccionFicha) fitxa.getTraduccion(lang);
+			if (tradF.getImagen() != null) {
+				resultats.put("item_imatge_enllas_arxiu" , "fitxainf/archivo.do?id=" + fitxa.getId()  + "&lang=" + lang + "&tipus=3");
+				resultats.put("item_imatge" , tradF.getImagen().getNombre());
+			} else {
+				resultats.put("item_imatge_enllas_arxiu", "");
+				resultats.put("item_imatge" , "");
+			}
 		}
 		
 	}
@@ -691,8 +766,6 @@ public class FitxaInfBackController extends PantallaBaseController {
 			fitxa = guardarPublicoObjetivo(edicion, fitxa, fitxaOld, valoresForm);      // Controlamos los públicos objetivos modificados o incluidos
 
 			fitxa.setFechaActualizacion(new Date());									// Guardamos la fecha actual al ser la última actualización
-			fitxa.setUrlForo(valoresForm.get("item_forum"));							// Guardamos el valor de la URL del foro
-			fitxa.setUrlVideo(valoresForm.get("item_youtube"));							// Guardamos el valor de la URL del video
 			fitxa.setResponsable(valoresForm.get("item_responsable"));					// Guardamos el responsable de la ficha
 			fitxa.setInfo(valoresForm.get("item_notes"));								// Guardamos el campo de la información
 			// Fin recuperación de los valores
@@ -741,6 +814,9 @@ public class FitxaInfBackController extends PantallaBaseController {
 			error = messageSource.getMessage(pe.getMessage(), null, request.getLocale());
 			result = new IdNomDTO(-4l, error);
 			
+		} catch (IOException e) {
+			error = messageSource.getMessage(e.getMessage(), null, request.getLocale());
+			result = new IdNomDTO(-5l, error);
 		}
 
 		return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
@@ -816,15 +892,15 @@ public class FitxaInfBackController extends PantallaBaseController {
 	/*
 	 * Guardamos la ficha anterior si se trata de una edición. 
 	 */
-	private Ficha guardarAntiguo(boolean edicion, Ficha fitxa, Ficha fitxaOld) {
+	private Ficha guardarAntiguo(boolean edicion, Ficha fitxa, Ficha fitxaOld) throws DelegateException {
 
 		if (edicion) {
 			
 			// Mantenim els valors que te la fitxa.
 			fitxa.setId(fitxaOld.getId());
-			fitxa.setBaner(fitxaOld.getBaner());
-			fitxa.setIcono(fitxaOld.getIcono());
-			fitxa.setImagen(fitxaOld.getImagen());
+//			fitxa.setBaner(fitxaOld.getBaner());
+//			fitxa.setIcono(fitxaOld.getIcono());
+//			fitxa.setImagen(fitxaOld.getImagen());
 			fitxa.setResponsable(fitxaOld.getResponsable());
 			fitxa.setForo_tema(fitxaOld.getForo_tema());
 			fitxa.setFichasua(fitxaOld.getFichasua());
@@ -833,6 +909,16 @@ public class FitxaInfBackController extends PantallaBaseController {
 			fitxa.setMaterias(fitxaOld.getMaterias());
 			fitxa.setHechosVitales(fitxaOld.getHechosVitales());
 			fitxa.setPublicosObjetivo(fitxaOld.getPublicosObjetivo());
+			
+			for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
+				TraduccionFicha tradF=(TraduccionFicha) fitxa.getTraduccion(lang) == null ? new TraduccionFicha() : (TraduccionFicha) fitxa.getTraduccion(lang);
+				TraduccionFicha tradOld=(TraduccionFicha) fitxaOld.getTraduccion(lang);
+				
+				tradF.setBanner(tradOld.getBanner());
+				tradF.setIcono(tradOld.getIcono());
+				tradF.setImagen(tradOld.getImagen());
+				fitxa.setTraduccion(lang, tradF);
+			}
 			
 		}
 
@@ -900,6 +986,8 @@ public class FitxaInfBackController extends PantallaBaseController {
 			tfi.setDescAbr(RolUtil.limpiaCadena(valoresForm.get("item_des_curta_" + lang)));
 			tfi.setDescripcion(RolUtil.limpiaCadena(valoresForm.get("item_des_llarga_" + lang)));
 			tfi.setUrl(valoresForm.get("item_url_" + lang));
+			tfi.setUrlForo(valoresForm.get("item_forum_" + lang));
+			tfi.setUrlVideo(valoresForm.get("item_youtube_" + lang));
 			fitxa.setTraduccion(lang, tfi);
 			
 		}
@@ -911,35 +999,83 @@ public class FitxaInfBackController extends PantallaBaseController {
 	/*
 	 * Controlamos el icono de la ficha
 	 */
-	private Ficha guardarIcono(Ficha fitxa, Map<String, String> valoresForm, Map<String, FileItem> ficherosForm) {
+	private Ficha guardarIcono(Ficha fitxa, Map<String, String> valoresForm, Map<String, FileItem> ficherosForm) throws DelegateException, IOException {
 
-		FileItem fileIcona = ficherosForm.get("item_icona");
+		for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
 		
-		if (fileIcona != null && fileIcona.getSize() > 0) {
-			fitxa.setIcono(UploadUtil.obtenerArchivo(fitxa.getIcono(), fileIcona));
-		} else if (valoresForm.get("item_icona_delete") != null && !"".equals(valoresForm.get("item_icona_delete"))) {
-			// borrar fichero si se solicita
-			fitxa.setIcono(null);
+			FileItem fileIcona = ficherosForm.get("item_icona_" + lang);
+			TraduccionFicha tradF=(TraduccionFicha) fitxa.getTraduccion(lang);
+			if (fileIcona != null && fileIcona.getSize() > 0) {
+				
+				if (RolsacPropertiesUtil.getControlProporciones()){					
+					BufferedImage bimg = obtenerBufferedImage(fileIcona);	
+					int width          = bimg.getWidth();
+					int height         = bimg.getHeight();
+					
+					int hIcono=RolsacPropertiesUtil.getAltoIcono();
+					int wIcono=RolsacPropertiesUtil.getAnchoIcono();
+					
+					if(height > hIcono || width > wIcono){
+						throw new IOException("error.tam.icon");
+					}
+				}
+				
+				tradF.setIcono(UploadUtil.obtenerArchivo(tradF.getIcono(), fileIcona));
+			} else if (valoresForm.get("item_icona_" + lang + "_delete") != null && !"".equals(valoresForm.get("item_icona_" + lang + "_delete"))) {
+				// borrar fichero si se solicita
+				tradF.setIcono(null);
+			}
 		}
+		
 
 		return fitxa;
 		
 	}
 
+	/** Obtiene un BufferedImage a partir de un FileItem 
+	 * @param fileIcona
+	 * @return
+	 * @throws IOException
+	 */
+	private BufferedImage obtenerBufferedImage(FileItem fileIcona)
+			throws IOException {
+		InputStream in = new ByteArrayInputStream(fileIcona.get());
+		BufferedImage bimg = ImageIO.read(in);
+		return bimg;
+	}
+
 	/*
 	 * Controlamos las modificaciones del banner
 	 */
-	private Ficha guardarBanner(Ficha fitxa, Map<String, String> valoresForm, Map<String, FileItem> ficherosForm) {
+	private Ficha guardarBanner(Ficha fitxa, Map<String, String> valoresForm, Map<String, FileItem> ficherosForm) throws DelegateException, IOException {
 
-		FileItem fileBanner = ficherosForm.get("item_banner");
-		
-		if (fileBanner != null && fileBanner.getSize() > 0) {
-			fitxa.setBaner(UploadUtil.obtenerArchivo(fitxa.getBaner(), fileBanner));
-		} else if (valoresForm.get("item_banner_delete") != null && !"".equals(valoresForm.get("item_banner_delete"))) {
-			// borrar fichero si se solicita
-			fitxa.setBaner(null);
+		for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
+			FileItem fileBanner = ficherosForm.get("item_banner_" + lang);
+			TraduccionFicha tradF=(TraduccionFicha) fitxa.getTraduccion(lang);
+			
+			if (fileBanner != null && fileBanner.getSize() > 0) {
+				
+				if (RolsacPropertiesUtil.getControlProporciones()){					
+					BufferedImage bimg = obtenerBufferedImage(fileBanner);	
+					int width          = bimg.getWidth();
+					int height         = bimg.getHeight();
+					
+					int hBanner=RolsacPropertiesUtil.getAltoBanner();
+					int wBanner=RolsacPropertiesUtil.getAnchoBanner();
+					
+					if(height > hBanner || width > wBanner){
+						throw new IOException("error.tam.banner");
+					}
+				}
+				
+				
+				
+				tradF.setBanner(UploadUtil.obtenerArchivo(tradF.getBanner(), fileBanner));
+			} else if (valoresForm.get("item_banner_" + lang + "_delete") != null && !"".equals(valoresForm.get("item_banner_" + lang + "_delete"))) {
+				// borrar fichero si se solicita
+				tradF.setBanner(null);
+			}
 		}
-
 		return fitxa;
 		
 	}
@@ -947,17 +1083,35 @@ public class FitxaInfBackController extends PantallaBaseController {
 	/*
 	 * Controlamos las modificaciones de la imagen
 	 */
-	private Ficha guardarImatge(Ficha fitxa, Map<String, String> valoresForm, Map<String, FileItem> ficherosForm) {
+	private Ficha guardarImatge(Ficha fitxa, Map<String, String> valoresForm, Map<String, FileItem> ficherosForm) throws DelegateException, IOException {
 
-		FileItem fileImatge = ficherosForm.get("item_imatge");
+		for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
+			
+			FileItem fileImatge = ficherosForm.get("item_imatge_" + lang);
+			TraduccionFicha tradF=(TraduccionFicha) fitxa.getTraduccion(lang);
+			
+			if (fileImatge != null && fileImatge.getSize() > 0) {
+				
+				if (RolsacPropertiesUtil.getControlProporciones()){					
+					BufferedImage bimg = obtenerBufferedImage(fileImatge);	
+					int width          = bimg.getWidth();
+					int height         = bimg.getHeight();
+					
+					int hImagen=RolsacPropertiesUtil.getAltoImagen();
+					int wImagen=RolsacPropertiesUtil.getAnchoImagen();
+					
+					if(height > hImagen || width > wImagen){
+						throw new IOException("error.tam.imatge");
+					}
+				}
+				
+				tradF.setImagen(UploadUtil.obtenerArchivo(tradF.getImagen(), fileImatge));
+			} else if (valoresForm.get("item_imatge_" + lang + "_delete") != null && !"".equals(valoresForm.get("item_imatge_" + lang + "_delete"))) {
+				// borrar fichero si se solicita
+				tradF.setImagen(null);
+			}
 		
-		if (fileImatge != null && fileImatge.getSize() > 0) {
-			fitxa.setImagen(UploadUtil.obtenerArchivo(fitxa.getImagen(), fileImatge));
-		} else if (valoresForm.get("item_imatge_delete") != null && !"".equals(valoresForm.get("item_imatge_delete"))) {
-			// borrar fichero si se solicita
-			fitxa.setImagen(null);
 		}
-
 		return fitxa;
 		
 	}
