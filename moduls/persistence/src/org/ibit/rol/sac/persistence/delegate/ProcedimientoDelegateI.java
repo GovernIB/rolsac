@@ -106,4 +106,6 @@ public interface ProcedimientoDelegateI {
 
 	public abstract List<ProcedimientoLocal> listarProcedimientosNormativa(Long idElemento) throws DelegateException;
 
+	public abstract void actualizarProcedimiento(ProcedimientoLocal proc) throws DelegateException;
+
 }

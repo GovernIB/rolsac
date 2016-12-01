@@ -164,4 +164,9 @@ public class ProcedimientoDelegate {
 		return impl.listarProcedimientosNormativa(idElemento);
 	}
 
+	public void actualizarProcedimiento(ProcedimientoLocal proc) throws DelegateException{
+		impl.actualizarProcedimiento(proc);
+		
+	}
+
 }

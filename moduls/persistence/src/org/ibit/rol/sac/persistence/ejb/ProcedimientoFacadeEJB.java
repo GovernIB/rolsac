@@ -61,6 +61,7 @@ import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.util.DateUtils;
 import org.ibit.rol.sac.persistence.util.IndexacionUtil;
+import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
@@ -1066,6 +1067,16 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				
 				where.append(" and procedimiento.codigoSIA like upper(:codSIA) ");
 			}
+			
+			if( StringUtils.isNotEmpty( bc.getProcedimiento().getEstadoSIA() )){
+				if(bc.getProcedimiento().getEstadoSIA().equals("-1")){					
+					where.append(" and procedimiento.estadoSIA is null ");
+				}else if(bc.getProcedimiento().getEstadoSIA().equals(SiaUtils.ESTADO_ALTA)){
+					where.append(" and procedimiento.estadoSIA not is null and procedimiento.estadoSIA <> :estadoSIA ");
+				}else{
+					where.append(" and procedimiento.estadoSIA = :estadoSIA ");
+				}
+			}
 
 			if ( bc.getIdHechoVital() != null ) {
 
@@ -1191,6 +1202,16 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				query.setParameter("codSIA", "%" + bc.getProcedimiento().getCodigoSIA()+ "%");
 			}
 
+			if (StringUtils.isNotEmpty( bc.getProcedimiento().getEstadoSIA() )  && !bc.getProcedimiento().getEstadoSIA().equals("-1")){
+				//No sea baja(reactivación,modificacion,alta)
+				if(bc.getProcedimiento().getEstadoSIA().equals(SiaUtils.ESTADO_ALTA)){
+					query.setParameter("estadoSIA",SiaUtils.ESTADO_BAJA);
+				}else{					
+					query.setParameter("estadoSIA",bc.getProcedimiento().getEstadoSIA());
+				}
+			}
+
+			
 
 			resultadoBusqueda.setTotalResultados( query.list().size() );
 
@@ -2358,6 +2379,32 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			//Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
 			Collections.sort(result, new ProcedimientoLocal());
 			return result;
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+		
+	}
+	
+	/**
+	 *	Actualiza el procedimiento pero no sus relaciones
+	 *
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public void actualizarProcedimiento(ProcedimientoLocal proc){
+		Session session = getSession();
+		try {
+					
+			session.save(proc);
+			
+//			Hibernate.initialize(proc.getTramites());
+//			Hibernate.initialize(proc.getMaterias());
+//			Hibernate.initialize(proc.getHechosVitalesProcedimientos());
+			
+			session.flush();
+			
 		} catch (HibernateException he) {
 			throw new EJBException(he);
 		} finally {

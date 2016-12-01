@@ -381,5 +381,14 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
             throw new DelegateException(e);
         }
 	}
+
+	@Override
+	public void actualizarProcedimiento(ProcedimientoLocal proc) throws DelegateException {
+		try {
+            getFacade().actualizarProcedimiento(proc);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+	}
     
 }
