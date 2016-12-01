@@ -13,7 +13,9 @@ public class FitxaByTextosCriteria extends ByTextosCriteria {
      * Los campos que empizan por I18N_PREFIX son traducibles.
      */
     private static final String[] TEXT_FIELDS = {
-        "urlVideo", "urlForo", "foro_tema", "info", "responsable",
+    	I18N_PREFIX +"urlVideo", 
+    	I18N_PREFIX +"urlForo", 
+    	"foro_tema", "info", "responsable",
         I18N_PREFIX + "titulo",
         I18N_PREFIX + "descAbr",
         I18N_PREFIX + "descripcion", 

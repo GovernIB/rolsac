@@ -213,9 +213,14 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 				Hibernate.initialize(ficha.getHechosVitales());
 				Hibernate.initialize(ficha.getPublicosObjetivo());
 				Hibernate.initialize(ficha.getFichasua());
-				Hibernate.initialize(ficha.getBaner());
-				Hibernate.initialize(ficha.getImagen());
-				Hibernate.initialize(ficha.getIcono());
+				for (String keyIdioma : ficha.getTraduccionMap().keySet()) {
+					TraduccionFicha tradFicha = (TraduccionFicha) ficha.getTraduccionMap().get(keyIdioma);
+					if(tradFicha != null){						
+						Hibernate.initialize(tradFicha.getBanner());
+						Hibernate.initialize(tradFicha.getImagen());
+						Hibernate.initialize(tradFicha.getIcono());
+					}
+				}
 
 				session.clear();
 				Query query = session.createQuery("from Documento doc where doc.ficha.id = :id");
@@ -279,7 +284,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     /**
      * Obtiene la imagen de una Ficha
      * 
-     * @param	id	Identificador de una ficha
+     * @param	id		Identificador de una ficha
+     * @param idioma	Idioma de una ficha
      * 
      * @return Devuelve <code>Archivo</code> que contiene la imagen de la ficha
      * 
@@ -287,7 +293,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
      * 
      * @ejb.permission unchecked="true"
      */
-    public Archivo obtenerImagenFicha(Long id) {
+    public Archivo obtenerImagenFicha(Long id, String idioma) {
 
 		Session session = getSession();
 	
@@ -297,10 +303,13 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 	
 		    if ( visible(ficha) ) {
 	
-			Hibernate.initialize( ficha.getImagen() );
-	
-			return ficha.getImagen();
-	
+	    	
+				TraduccionFicha tradFicha = (TraduccionFicha) ficha.getTraduccionMap().get(idioma);
+				
+				Hibernate.initialize(tradFicha.getImagen());
+				
+				return tradFicha.getImagen();
+				
 		    } else {
 	
 			throw new SecurityException("El usuario no tiene el rol operador");
@@ -324,6 +333,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
      * Obtiene el icono de una Ficha
      * 
      * @param id	Identificador de una ficha
+     * @param idioma	Identificador de una ficha
      * 
      * @return <code>Archivo</code> que contiene el icono de la ficha solicitada.
      * 
@@ -331,7 +341,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
      * 
      * @ejb.permission unchecked="true"
      */
-    public Archivo obtenerIconoFicha(Long id) {
+    public Archivo obtenerIconoFicha(Long id, String idioma) {
 
 		Session session = getSession();
 	
@@ -340,11 +350,15 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 		    Ficha ficha = (Ficha) session.load(Ficha.class, id);
 	
 		    if ( visible(ficha) ) {
-	
-			Hibernate.initialize( ficha.getIcono() );
-	
-			return ficha.getIcono();
-	
+		    	
+		    	
+				TraduccionFicha tradFicha = (TraduccionFicha) ficha.getTraduccionMap().get(idioma);
+				
+				Hibernate.initialize(tradFicha.getIcono());
+				
+				return tradFicha.getIcono();
+				
+
 		    } else {
 	
 			throw new SecurityException("El usuario no tiene el rol operador");
@@ -366,7 +380,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     /**
      * Obtiene el baner de una Ficha
      * 
-     * @param	id	Identificador de una ficha
+     * @param	id		Identificador de una ficha
+     * @param   idioma	Idioma de una ficha
      *
      * @return Devuelve <code>Archivo</code> que contiene el baner de una ficha
      * 
@@ -374,7 +389,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
      * 
      * @ejb.permission unchecked="true"
      */
-    public Archivo obtenerBanerFicha(Long id) {
+    public Archivo obtenerBanerFicha(Long id, String idioma) {
 
 		Session session = getSession();
 	
@@ -383,10 +398,15 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 		    Ficha ficha = (Ficha) session.load(Ficha.class, id);
 	
 		    if ( visible(ficha) ) {
+		    	
+		    	
+				TraduccionFicha tradFicha = (TraduccionFicha) ficha.getTraduccionMap().get(idioma);
+				
+				Hibernate.initialize(tradFicha.getBanner());
+				
+				return tradFicha.getBanner();
+				
 		
-				Hibernate.initialize( ficha.getBaner() );
-		
-				return ficha.getBaner();
 	
 		    } else {
 	
@@ -961,10 +981,16 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     			}
 
     			if ( relacionada ) {
-
-    				Hibernate.initialize( ficha.getIcono() );
-    				Hibernate.initialize( ficha.getImagen() );
-    				Hibernate.initialize( ficha.getBaner() );
+    				
+    				for (String keyIdioma : ficha.getTraduccionMap().keySet()) {
+    					TraduccionFicha tradFicha = (TraduccionFicha) ficha.getTraduccionMap().get(keyIdioma);
+    					
+    					Hibernate.initialize(tradFicha.getImagen());    					
+    					Hibernate.initialize(tradFicha.getIcono() );
+    					Hibernate.initialize(tradFicha.getBanner() );
+    					
+    				}
+    				
     				Hibernate.initialize( ficha.getMaterias() );
     				Hibernate.initialize( ficha.getHechosVitales() );
 
@@ -1378,9 +1404,16 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     			Hibernate.initialize( ficha.getMaterias() );
     			Hibernate.initialize( ficha.getHechosVitales() );
     			Hibernate.initialize( ficha.getFichasua() );
-    			Hibernate.initialize( ficha.getBaner() );
-    			Hibernate.initialize( ficha.getImagen() );
-    			Hibernate.initialize( ficha.getIcono() );
+    			
+    			for (String keyIdioma : ficha.getTraduccionMap().keySet()) {
+					TraduccionFicha tradFicha = (TraduccionFicha) ficha.getTraduccionMap().get(keyIdioma);
+					
+					Hibernate.initialize(tradFicha.getImagen());    					
+					Hibernate.initialize(tradFicha.getIcono() );
+					Hibernate.initialize(tradFicha.getBanner() );
+					
+				}
+    			
 
     		} else {
 
@@ -1975,9 +2008,14 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			}
 			indexData.setPublicoId(publicoObjetivoId);
 			
-			//Datos extras
-			if (ficha.getImagen() != null) {
-				indexData.setUrlFoto("/govern/rest/arxiu/" + ficha.getImagen().getId());
+			
+			for (String keyIdioma : ficha.getTraduccionMap().keySet()) {
+				TraduccionFicha tradFicha = (TraduccionFicha) ficha.getTraduccionMap().get(keyIdioma);
+				
+				//Datos extras
+				if (tradFicha != null && tradFicha.getImagen() != null) {
+					indexData.setUrlFoto("/govern/rest/arxiu/" + tradFicha.getImagen().getId());
+				}
 			}
 			
 			//Fechas

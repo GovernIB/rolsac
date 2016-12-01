@@ -45,8 +45,8 @@
                         <element name="t_titulo" nillable="true" type="xsd:string" />
                         <element name="t_url" nillable="true" type="xsd:string" />
                         <element name="unidadAdministrativa" nillable="true" type="xsd:string" />
-                        <element name="urlForo" nillable="true" type="xsd:string" />
-                        <element name="urlVideo" nillable="true" type="xsd:string" />
+                        <element name="t_urlForo" nillable="true" type="xsd:string" />
+                        <element name="t_urlVideo" nillable="true" type="xsd:string" />
                         <element name="validacion" nillable="true" type="xsd:string" />
                     </sequence>
                 </extension>

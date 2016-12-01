@@ -67,18 +67,18 @@ public class FichaDelegate implements FichaDelegateI {
 	}
 	
 	
-	public Archivo obtenerIconoFicha(Long id) throws DelegateException {
-		return impl.obtenerIconoFicha(id);
+	public Archivo obtenerIconoFicha(Long id, String idioma) throws DelegateException {
+		return impl.obtenerIconoFicha(id, idioma);
 	}
 
 	
-	public Archivo obtenerImagenFicha(Long id) throws DelegateException {
-		return impl.obtenerImagenFicha(id);
+	public Archivo obtenerImagenFicha(Long id, String idioma) throws DelegateException {
+		return impl.obtenerImagenFicha(id, idioma);
 	}
 
 	
-	public Archivo obtenerBanerFicha(Long id) throws DelegateException {
-		return impl.obtenerBanerFicha(id);
+	public Archivo obtenerBanerFicha(Long id, String idioma) throws DelegateException {
+		return impl.obtenerBanerFicha(id, idioma);
 	}
 	
 	
