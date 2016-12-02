@@ -1,5 +1,7 @@
 package org.ibit.rol.sac.model;
 
+import java.util.Set;
+
 
 /**
  * Representación  Sia.
@@ -10,9 +12,6 @@ public class Sia implements ValueObject {
 	/** Serial version UID. **/
 	private static final long serialVersionUID = 1L;
 	
-	/** Id. **/
-    private Long id;
-    
     /** Id del procedimiento **/
 	private String idProc;
 	
@@ -28,8 +27,8 @@ public class Sia implements ValueObject {
 	/** Nombre del órgano instructor. **/
 	private String uaGest;
 	
-	/** Los id del destinatario separados por ; siendo el valor 1 ciudadano, 2 la empresa y 3 la administración. **/
-	private String idDest;
+	/** Los id del destinatario  siendo el valor 1 ciudadano, 2 la empresa y 3 la administración. **/
+	private String[] idDest;
 	
 	/** Nivel de administración electrónica. Valores posibles:
 	1-Información 2-Descarga de formulario 3-Descarga y envío 4-Tramitación electrónica 5-Proactivo 6-Sin tramitación electrónica
@@ -39,31 +38,32 @@ public class Sia implements ValueObject {
 	/** Valores posibles: N  o  S **/
 	private String fiVia;
 	
-	/** Identificador de la normativa**/
-	private String IdNorm;
+	/** Normativas**/
+	private Set<Normativa> normativas;
 	
 	/** Título normativa**/
 	private String tiNorm;
 	
-	/** Identificador de las materias separados por ; **/
-	private String materias;
+	/** Identificador de las materias  **/
+	private String[] materias;
 	
 	/** Campo con el ID SIA (será nulo si es un procedimiento creado)**/
 	private String idSIA;
 	
+	/**Tipologia del trámite **/
+	private Integer tipologia;
 	
-	/**
-	 * @return the id
-	 */
-	public final Long getId() {
-		return id;
-	}
-	/**
-	 * @param id the id to set
-	 */
-	public final void setId(final Long id) {
-		this.id = id;
-	}
+	/**Tipo trámite **/
+	private String tipoTramite;
+	
+	/** Enlace web**/
+	private String enlaceWeb;
+	
+	/** Operación a realizar **/
+	private String operacion;
+	
+	/** Estado **/
+	private String estado;
 	
 	/**
 	 * @return the idProc
@@ -114,18 +114,7 @@ public class Sia implements ValueObject {
 	public void setUaGest(String uaGest) {
 		this.uaGest = uaGest;
 	}
-	/**
-	 * @return the idDest
-	 */
-	public String getIdDest() {
-		return idDest;
-	}
-	/**
-	 * @param idDest the idDest to set
-	 */
-	public void setIdDest(String idDest) {
-		this.idDest = idDest;
-	}
+	
 	/**
 	 * @return the nivAdm
 	 */
@@ -150,18 +139,7 @@ public class Sia implements ValueObject {
 	public void setFiVia(String fiVia) {
 		this.fiVia = fiVia;
 	}
-	/**
-	 * @return the idNorm
-	 */
-	public String getIdNorm() {
-		return IdNorm;
-	}
-	/**
-	 * @param idNorm the idNorm to set
-	 */
-	public void setIdNorm(String idNorm) {
-		IdNorm = idNorm;
-	}
+	
 	/**
 	 * @return the tiNorm
 	 */
@@ -174,8 +152,6 @@ public class Sia implements ValueObject {
 	public void setTiNorm(String tiNorm) {
 		this.tiNorm = tiNorm;
 	}
-	
-	
 	
 	/**
 	 * @return the idSIA
@@ -204,26 +180,100 @@ public class Sia implements ValueObject {
 	}
 	
 	/**
+	 * @return the idDest
+	 */
+	public String[] getIdDest() {
+		return idDest;
+	}
+	/**
+	 * @param idDest the idDest to set
+	 */
+	public void setIdDest(String[] idDest) {
+		this.idDest = idDest;
+	}
+	/**
+	 * @return the normativas
+	 */
+	public Set<Normativa> getNormativas() {
+		return normativas;
+	}
+	/**
+	 * @param normativas the normativas to set
+	 */
+	public void setNormativas(Set<Normativa> normativas) {
+		this.normativas = normativas;
+	}
+	/**
 	 * @return the materias
 	 */
-	public String getMaterias() {
+	public String[] getMaterias() {
 		return materias;
 	}
 	/**
 	 * @param materias the materias to set
 	 */
-	public void setMaterias(String materias) {
+	public void setMaterias(String[] materias) {
 		this.materias = materias;
 	}
-	
-	
-	@Override
-	public String toString() {
-		StringBuffer texto = new StringBuffer();
-		texto.append("Sia id:");
-		texto.append(id);
-		texto.append(" descripción:");
-		texto.append(descripcion);		
-		return texto.toString();
+	/**
+	 * @return the tipologia
+	 */
+	public Integer getTipologia() {
+		return tipologia;
 	}
+	/**
+	 * @param tipologia the tipologia to set
+	 */
+	public void setTipologia(Integer tipologia) {
+		this.tipologia = tipologia;
+	}
+	/**
+	 * @return the tipoTramite
+	 */
+	public String getTipoTramite() {
+		return tipoTramite;
+	}
+	/**
+	 * @param tipoTramite the tipoTramite to set
+	 */
+	public void setTipoTramite(String tipoTramite) {
+		this.tipoTramite = tipoTramite;
+	}
+	/**
+	 * @return the enlaceWeb
+	 */
+	public String getEnlaceWeb() {
+		return enlaceWeb;
+	}
+	/**
+	 * @param enlaceWeb the enlaceWeb to set
+	 */
+	public void setEnlaceWeb(String enlaceWeb) {
+		this.enlaceWeb = enlaceWeb;
+	}
+	/**
+	 * @return the operacion
+	 */
+	public String getOperacion() {
+		return operacion;
+	}
+	/**
+	 * @param operacion the operacion to set
+	 */
+	public void setOperacion(String operacion) {
+		this.operacion = operacion;
+	}
+	/**
+	 * @return the estado
+	 */
+	public String getEstado() {
+		return estado;
+	}
+	/**
+	 * @param estado the estado to set
+	 */
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+	
 }

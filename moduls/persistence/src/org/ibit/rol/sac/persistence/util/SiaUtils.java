@@ -27,6 +27,24 @@ public class SiaUtils {
 	public static final String SIAJOB_TIPO_UNIDAD_ADMINISTRATIVA = "UA";
 	public static final String SIAJOB_TIPO_NORMATIVA = "NORM";
 	
+	public static final String ESTADO_BAJA = "B";
+	public static final String ESTADO_ALTA = "A";
+	public static final String ESTADO_MODIFICACION = "M";
+	public static final String ESTADO_REACTIVACION = "AC";
+	
+	public static final Integer TIPOLOGIA_INTERNO_COMUN = 1;
+	public static final Integer TIPOLOGIA_INTERNO_ESPECIFICO = 2;
+	public static final Integer TIPOLOGIA_EXTERNO_COMUN = 3;
+	public static final Integer TIPOLOGIA_EXTERNO_ESPECIFICO = 4;
+	
+	public static final Integer TIPO_TRAMITE_PROC = 1;
+	
+	public static final String TRAMITE_PROC = "P";
+	public static final String TRAMITE_SERV = "S";
+	
+	public static final String SI = "S";
+	public static final String NO = "N";
+	
 	private static final String ERROR_MESSAGE = "Error obteniendo la propiedad ";
 	
 	public static Boolean validaProcedimientoSIA(ProcedimientoLocal procedimiento) {
@@ -46,37 +64,42 @@ public class SiaUtils {
             return null;
         }
     }
+	
+	private static int getIntFromProperty(String property) {
+        try {
+            return Integer.parseInt(System.getProperty(property));
+        } catch (Exception e) {
+            log.error(ERROR_MESSAGE + property, e);
+            return 0;
+        }
+    }
 
-	public static String getUsuario() {
-        return System.getProperty("es.rolsac.sia.usuario");
+	public static Integer getTipoActuacion() {
+        return getIntFromProperty("es.caib.rolsac.sia.tipoActuacion");
     }
 	
-	public static Long getTipoActuacion() {
-        return getLongFromProperty("es.rolsac.sia.tipoActuacion");
-    }
-	
-	public static Long getTipologiaTramitacion() {
-        return getLongFromProperty("es.rolsac.sia.tipologiaTramitacion");
+	public static Integer getTipologiaTramitacion() {
+        return getIntFromProperty("es.caib.rolsac.sia.tipologiaTramitacion");
     }
 	
 	public static Long getAdministracion() {
-        return getLongFromProperty("es.rolsac.sia.administracion");
-    }
-	
-	public static Long getComunidadAutonoma() {
-        return getLongFromProperty("es.rolsac.sia.comunidadautonoma");
-    }
-	
-	public static String getDepartamento() {
-        return System.getProperty("es.rolsac.sia.idDepartamento");
-    }
-	
-	public static String getCentroDirectivo() {
-        return System.getProperty("es.rolsac.sia.idCentroDirectivo");
+        return getLongFromProperty("es.caib.rolsac.sia.administracion");
     }
 	
 	public static String getUrl() {
-        return System.getProperty("es.rolsac.sia.url");
+        return System.getProperty("es.caib.rolsac.sia.url");
+    }
+	
+	public static String getUsuarioEnvio() {
+        return System.getProperty("es.caib.rolsac.sia.usuario.envio");
+    }
+	
+	public static String getPasswordEnvio() {
+        return System.getProperty("es.caib.rolsac.sia.pass.envio");
+    }
+	
+	public static String getUrlEnvio() {
+        return System.getProperty("es.caib.rolsac.sia.url.envio");
     }
 	
 	/**

@@ -4,7 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -49,6 +48,8 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
     private UnidadAdministrativa servicioResponsable;
     private String dirElectronica;
     private String codigoSIA;
+    private Date fechaSIA;
+    private String estadoSIA;
     private SilencioAdm silencio;
     
     //---------------------------------------------
@@ -481,6 +482,34 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
 
 	public void setSilencio(SilencioAdm silencio) {
 		this.silencio = silencio;
+	}
+
+	/**
+	 * @return the fechaSIA
+	 */
+	public Date getFechaSIA() {
+		return fechaSIA;
+	}
+
+	/**
+	 * @param fechaSIA the fechaSIA to set
+	 */
+	public void setFechaSIA(Date fechaSIA) {
+		this.fechaSIA = fechaSIA;
+	}
+
+	/**
+	 * @return the estadoSIA
+	 */
+	public String getEstadoSIA() {
+		return estadoSIA;
+	}
+
+	/**
+	 * @param estadoSIA the estadoSIA to set
+	 */
+	public void setEstadoSIA(String estadoSIA) {
+		this.estadoSIA = estadoSIA;
 	}	
 	
 }

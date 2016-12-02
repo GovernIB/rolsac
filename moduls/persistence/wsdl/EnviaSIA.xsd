@@ -1,0 +1,26 @@
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.map.es/sgca/actualizar/messages/EnviaSIA" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.map.es/sgca/actualizar/messages/EnviaSIA">
+<element name="enviaSIA">
+<complexType>
+<sequence>
+<element minOccurs="0" name="ACTUACIONES">
+<complexType>
+<sequence>
+<element maxOccurs="unbounded" name="ACTUACION">
+<complexType>
+<sequence>
+<element name="CORRECTO" type="string"/>
+<element name="DESCERROR" type="string"/>
+<element name="ERROR" type="string"/>
+</sequence>
+<attribute name="CODIGOORIGEN" type="string" use="required"/>
+<attribute name="OPERACION" type="string" use="required"/>
+<attribute name="CODIGOACTUACION" type="string" use="required"/>
+</complexType>
+</element>
+</sequence>
+</complexType>
+</element>
+</sequence>
+</complexType>
+</element>
+</schema>

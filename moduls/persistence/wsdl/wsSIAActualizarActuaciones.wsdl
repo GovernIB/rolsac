@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="wsSIAActualizarActuaciones" targetNamespace="http://www.map.es/sgca/actualizar" xmlns:msgOut_v3_1="http://www.map.es/sgca/actualizar/messages/v3_1/EnviaSIA" xmlns:msgIn_v3_0="http://www.map.es/sgca/actualizar/messages/v3_0/ParamSIA" xmlns:msgOut_v3_0="http://www.map.es/sgca/actualizar/messages/v3_0/EnviaSIA" xmlns:msgIn_v2_4="http://www.map.es/sgca/actualizar/messages/v2_4/ParamSIA" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://www.map.es/sgca/actualizar" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msgOut_v2_4="http://www.map.es/sgca/actualizar/messages/v2_4/EnviaSIA" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:msgOut="http://www.map.es/sgca/actualizar/messages/EnviaSIA" xmlns:msgIn="http://www.map.es/sgca/actualizar/messages/ParamSIA" xmlns:msgIn_v3_1="http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA">
+  <wsdl:types>
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+		<xsd:import namespace="http://www.map.es/sgca/actualizar/messages/ParamSIA" schemaLocation="ParamSIA.xsd"/>
+		<xsd:import namespace="http://www.map.es/sgca/actualizar/messages/EnviaSIA" schemaLocation="EnviaSIA.xsd"/>
+        <xsd:import namespace="http://www.map.es/sgca/actualizar/messages/v2_4/ParamSIA" schemaLocation="ParamSIA_v2_4.xsd"/>
+		<xsd:import namespace="http://www.map.es/sgca/actualizar/messages/v2_4/EnviaSIA" schemaLocation="EnviaSIA_v2_4.xsd"/>
+		<xsd:import namespace="http://www.map.es/sgca/actualizar/messages/v3_0/ParamSIA" schemaLocation="ParamSIA_v3_0.xsd"/>
+		<xsd:import namespace="http://www.map.es/sgca/actualizar/messages/v3_0/EnviaSIA" schemaLocation="EnviaSIA_v3_0.xsd"/>
+		<xsd:import namespace="http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA" schemaLocation="ParamSIA_v3_1.xsd"/>
+		<xsd:import namespace="http://www.map.es/sgca/actualizar/messages/v3_1/EnviaSIA" schemaLocation="EnviaSIA_v3_1.xsd"/>
+	</xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="actualizarSIAResponse">
+    <wsdl:part name="parameters" element="msgOut:enviaSIA">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="actualizarSIARequest_v3_1">
+    <wsdl:part name="parameters" element="msgIn_v3_1:paramSIA">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="actualizarSIARequest_v3_0">
+    <wsdl:part name="parameters" element="msgIn_v3_0:paramSIA">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="actualizarSIAResponse_v3_1">
+    <wsdl:part name="parameters" element="msgOut_v3_1:enviaSIA">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="actualizarSIAResponse_v2_4">
+    <wsdl:part name="parameters" element="msgOut_v2_4:enviaSIA">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="actualizarSIAResponse_v3_0">
+    <wsdl:part name="parameters" element="msgOut_v3_0:enviaSIA">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="actualizarSIARequest">
+    <wsdl:part name="parameters" element="msgIn:paramSIA">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="actualizarSIARequest_v2_4">
+    <wsdl:part name="parameters" element="msgIn_v2_4:paramSIA">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="wsSIAActualizarActuaciones">
+    <wsdl:operation name="actualizarSIA">
+      <wsdl:input message="tns:actualizarSIARequest">
+    </wsdl:input>
+      <wsdl:output message="tns:actualizarSIAResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="actualizarSIA_v2_4">
+      <wsdl:input message="tns:actualizarSIARequest_v2_4">
+    </wsdl:input>
+      <wsdl:output message="tns:actualizarSIAResponse_v2_4">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="actualizarSIA_v3_0">
+      <wsdl:input message="tns:actualizarSIARequest_v3_0">
+    </wsdl:input>
+      <wsdl:output message="tns:actualizarSIAResponse_v3_0">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="actualizarSIA_v3_1">
+      <wsdl:input message="tns:actualizarSIARequest_v3_1">
+    </wsdl:input>
+      <wsdl:output message="tns:actualizarSIAResponse_v3_1">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="wsSIAActualizarActuacionesSOAP" type="tns:wsSIAActualizarActuaciones">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="actualizarSIA">
+      <soap:operation soapAction="http://www.map.es/sgca/actualizar/actualizarSIA"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="actualizarSIA_v2_4">
+      <soap:operation soapAction="http://www.map.es/sgca/actualizar/actualizarSIA_v2_4"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="actualizarSIA_v3_0">
+      <soap:operation soapAction="http://www.map.es/sgca/actualizar/actualizarSIA_v3_0"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="actualizarSIA_v3_1">
+      <soap:operation soapAction="http://www.map.es/sgca/actualizar/actualizarSIA_v3_1"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="wsSIAActualizarActuaciones">
+    <wsdl:port name="wsSIAActualizarActuacionesSOAP" binding="tns:wsSIAActualizarActuacionesSOAP">
+      <soap:address location="https://pre-sia2.redsara.es/axis2/services/wsSIAActualizarActuaciones?wsdl"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

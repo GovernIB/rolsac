@@ -35,6 +35,8 @@
         <property name="responsable" column="PRO_RESPON" length="256"/>
         <property name="taxa" length="1024" column="PRO_TAXA"/>
         <property name="codigoSIA" length="12" column="PRO_CODSIA"/>
+        <property name="estadoSIA" length="12" column="PRO_ESTSIA"/>
+        <property name="fechaSIA" length="12" column="PRO_FECSIA"/>
         <many-to-one name="organResolutori" cascade="none" column="PRO_CODUNA_RESOL" foreign-key="RSC_PRO_CODUNA_RESOL_FK"/>
         <many-to-one name="unidadAdministrativa" column="PRO_CODUNA" foreign-key="RSC_PROUNA_FK"/>
         <many-to-one name="familia" column="PRO_CODFAM" foreign-key="RSC_PROFAM_FK"/>

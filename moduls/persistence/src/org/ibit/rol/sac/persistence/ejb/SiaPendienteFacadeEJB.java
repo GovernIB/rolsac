@@ -15,7 +15,6 @@ import net.sf.hibernate.Session;
 
 import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.Materia;
-import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.Sia;
@@ -25,12 +24,13 @@ import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.ws.SiaResultado;
-import org.ibit.rol.sac.model.ws.SiaWS;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.SiaPendienteProcesoDelegate;
+import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
+import org.ibit.rol.sac.persistence.ws.sia.SiaWS;
 
 
 /**
@@ -62,68 +62,45 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	
 	/**
 	 * Obtener SIA pendientes de enviar 
+	 * @throws Exception 
    	 * @ejb.interface-method
    	 * @ejb.permission unchecked="true"
-   	 * 
-   	
-	 * @throws DelegateException
 	 */
-	public void enviarTodos(SiaJob siaJob) throws DelegateException  {
+	public void enviarTodos(SiaJob siaJob)   {
 		log.debug("Enviar todos los procedimientos SIA ");
 		
 		final ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
 		
-		StringBuffer descripcionBreve = new StringBuffer();
-		SimpleDateFormat formato = new SimpleDateFormat("H:mm");
-		Date fecha = new Date();
-		String cadenaFecha = formato.format(fecha);
+		SiaResultado resultado = new SiaResultado();
 		
-		int correctos = 0;
-		int incorrectos = 0;
-		
-    	for(Long idProcedimiento : procDelegate.buscarIdsProcedimientos() ) {
-			ProcedimientoLocal proc = procDelegate.obtenerProcedimiento(idProcedimiento);
-			if (SiaUtils.validaProcedimientoSIA(proc) ) {
-				
+	
+    	try {
+			for(Long idProcedimiento : procDelegate.buscarIdsProcedimientos() ) {
+				ProcedimientoLocal proc = procDelegate.obtenerProcedimiento(idProcedimiento);
 				Sia  sia = obtenerSiaProc(proc);
-				//Enviar a SIA
-				SiaResultado resultado = SiaWS.enviarSIA(sia); //ALTA / MODIFICACION / REACTIVACION
-				if (resultado.isCorrecto()) {
-					correctos++;
-				} else {
-					incorrectos++;
+				resultado = SiaWS.enviarSIA(sia); 
+				proc.setCodigoSIA(resultado.getCodSIA());
+				proc.setEstadoSIA(resultado.getEstadoSIA());
+				proc.setFechaSIA(new Date());
+				
+				if(proc.getId() != 357){					
+					procDelegate.actualizarProcedimiento(proc);
 				}
-				
-				siaJob.setDescripcion(Hibernate.createClob(resultado.getMensaje()));
-							
-			} else if (proc.getCodigoSIA() != null && !proc.getCodigoSIA().isEmpty()){
-				
-				//Falta poner arriba en el if !proc.getEstadoSIA.equals("BAJA")
-				//TODO enviar desasignacion 
-				Sia  sia = obtenerSiaProc(proc);
-				//Enviar a SIA
-				SiaResultado resultado = SiaWS.enviarSIA(sia); //BAJA
-				
-				if (resultado.isCorrecto()) {
-					correctos++;
-				} else {
-					incorrectos++;
-				}
-				siaJob.setDescripcion(Hibernate.createClob(resultado.getMensaje()));
 			}
+		} catch (DelegateException e) {
+			log.error(e.getMessage());
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			
 		}
-		descripcionBreve.append("El proceso ha empezado a las " + cadenaFecha);
-		descripcionBreve.append("Se han enviado "+(correctos + incorrectos)+" datos \n");
-		descripcionBreve.append(correctos + " han sido correctos \n");
-		descripcionBreve.append(incorrectos + " han sido incorrectos \n");
-		fecha= new Date();
-		cadenaFecha = formato.format(fecha);
-		descripcionBreve.append("Finalizado hora "+ cadenaFecha);
+    	siaJob.setDescripcion(Hibernate.createClob(obtenerDescripcion(resultado).toString() 
+    			+ (resultado.getMensaje()!=null ? resultado.getMensaje() : "")));
+    	
+    
 		
-		siaJob.setDescBreve(Hibernate.createClob(descripcionBreve.toString()));
+		siaJob.setDescBreve(Hibernate.createClob(obtenerDescripcion(resultado).toString()));
 		
-		//siaJob.getDescBreve().setString(0L, descripcionBreve.toString());
-		if (incorrectos == 0) {
+		if (resultado.getIncorrectos() == 0) {
 			siaJob.setEstado(SiaUtils.SIAJOB_SIJ_ESTADO_ENVIADO);
 		} else {
 			siaJob.setEstado(SiaUtils.SIAJOB_SIJ_ESTADO_ENVIADO_CON_ERRORES);
@@ -131,9 +108,34 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
     	
     	
 	}
+
+
+	/** Genera la descripción 
+	 * 
+	 * @param formato
+	 * @param cadenaFecha
+	 * @param resultado
+	 * @return descripción breve
+	 */
+	private StringBuffer obtenerDescripcion( SiaResultado resultado) {
+		Date fecha = new Date();
+		SimpleDateFormat formato = new SimpleDateFormat("H:mm");
+		String cadenaFecha = formato.format(fecha);
+		StringBuffer descripcionBreve = new StringBuffer();
+		
+		descripcionBreve.append("El proceso ha empezado a las " + cadenaFecha);
+		descripcionBreve.append(" Se han enviado "+(resultado.getCorrectos() + resultado.getIncorrectos())+" datos \n");
+		descripcionBreve.append(resultado.getCorrectos() + " han sido correctos \n");
+		descripcionBreve.append(resultado.getIncorrectos() + " han sido incorrectos \n");
+		cadenaFecha = formato.format(fecha);
+		descripcionBreve.append(" Finalizado hora "+ cadenaFecha);
+		
+		return descripcionBreve;
+	}
 	
 	/**
 	 * Obtener SIA pendientes de enviar 
+	 * @throws Exception 
    	 * @ejb.interface-method
    	 * @ejb.permission unchecked="true"
    	 * 
@@ -155,10 +157,12 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
         	session = getSession();
         	
 			int i = 0;
-			int erroneos = 0;
+			SiaResultado resultado = new SiaResultado();
+			
 			final ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
-        	for(SiaPendiente siaPendiente : siaPendientes) {
-        			
+			
+	        	for(SiaPendiente siaPendiente : siaPendientes) {
+	        			
         			if (i % 20 == 0) {
         				session.flush();
         			} 
@@ -167,8 +171,17 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
         				
         				ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimiento(siaPendiente.getIdElemento());
         				//GENERAR OBJETO SIA
-    					Sia  sia = obtenerSiaProc(procedimiento);
-    					SiaResultado resultado = SiaWS.enviarSIA(sia);
+        				Sia  sia = obtenerSiaProc(procedimiento);
+    					try {
+							resultado = SiaWS.enviarSIA(sia);
+							procedimiento.setEstadoSIA(resultado.getEstadoSIA());
+							procedimiento.setFechaSIA(new Date());
+							
+							procDelegate.actualizarProcedimiento(procedimiento);
+							
+						} catch (Exception e) {
+							log.error(e.getMessage());
+						}
     					if (resultado.isCorrecto()) {
     						siaPendiente.setEstado(SiaUtils.SIAJOB_SIP_ESTADO_CORRECTO);
         					siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);	
@@ -177,8 +190,11 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
         					siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
     					}
     					
-    					siaJob.setDescBreve(Hibernate.createClob(resultado.getMensaje()));
-    					siaJob.setDescripcion(Hibernate.createClob(resultado.getMensaje()));
+    					siaJob.setDescBreve(Hibernate.createClob(obtenerDescripcion(resultado).toString()));
+    					siaJob.setDescripcion(Hibernate.createClob(obtenerDescripcion(resultado).toString() 
+    							+ (resultado.getMensaje()!=null ? resultado.getMensaje() : "")));
+    					
+    					
 
         				
         			} else if (SiaUtils.SIAJOB_TIPO_UNIDAD_ADMINISTRATIVA.equals(siaPendiente.getTipo() )) {
@@ -188,10 +204,15 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
         				for (ProcedimientoLocal proc : listProc) {
         					//GENERAR OBJETO SIA
         					Sia  sia = obtenerSiaProc(proc);
-        					erroneos = obtenerResultadosEnvio(
-									siaPendienteDelegate, erroneos,
-									siaPendiente, sia, siaJob);
         					
+								resultado=obtenerResultadosEnvio(
+										siaPendienteDelegate, resultado.getIncorrectos(),
+										siaPendiente, sia, siaJob);
+							
+								proc.setEstadoSIA(resultado.getEstadoSIA());
+								proc.setFechaSIA(new Date());
+								
+								procDelegate.actualizarProcedimiento(proc);
         					
 						}
         				
@@ -201,18 +222,24 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
         				for (ProcedimientoLocal proc : listProc) {
         					//GENERAR OBJETO SIA
         					Sia  sia = obtenerSiaProc(proc);
-        					erroneos = obtenerResultadosEnvio(
-									siaPendienteDelegate, erroneos,
+        					resultado = obtenerResultadosEnvio(
+									siaPendienteDelegate, resultado.getIncorrectos(),
 									siaPendiente, sia, siaJob);
+        					
+        					proc.setEstadoSIA(resultado.getEstadoSIA());
+        					proc.setFechaSIA(new Date());
+        					
+        					procDelegate.actualizarProcedimiento(proc);
 						}
         			} 
-        	}        	
-        	
-        	if (erroneos > 0) {
-				siaJob.setEstado(SiaUtils.SIAJOB_SIJ_ESTADO_ENVIADO_CON_ERRORES);
-			} else {
-				siaJob.setEstado(SiaUtils.SIAJOB_SIJ_ESTADO_ENVIADO);
-			}
+	        	}        	
+	        	
+	        	if (resultado.getIncorrectos() > 0) {
+					siaJob.setEstado(SiaUtils.SIAJOB_SIJ_ESTADO_ENVIADO_CON_ERRORES);
+				} else {
+					siaJob.setEstado(SiaUtils.SIAJOB_SIJ_ESTADO_ENVIADO);
+				}
+			
         	
         	session.flush();
         	
@@ -222,7 +249,9 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
         	log.error("Error en enviarPendientes ", e);
 		} catch (SQLException e) {
 			log.error("Error en enviarPendientes ", e);
-		} finally {
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}finally {
             if (session != null) {close(session);}
            
         }
@@ -231,11 +260,12 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 
 
 
-	private int obtenerResultadosEnvio(
+	private SiaResultado obtenerResultadosEnvio(
 			final SiaPendienteProcesoDelegate siaPendienteDelegate,
 			int erroneos, SiaPendiente siaPendiente, Sia sia, SiaJob siaJob)
-			throws DelegateException, SQLException {
+			throws Exception {
 		SiaResultado resultado = SiaWS.enviarSIA(sia);
+		
 		if (resultado.isCorrecto()) {
 			siaPendiente.setEstado(SiaUtils.SIAJOB_SIP_ESTADO_CORRECTO);
 			siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);	
@@ -245,21 +275,24 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 			siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
 		}
 		
-		siaJob.setDescBreve(Hibernate.createClob(resultado.getMensaje()));
-		siaJob.setDescripcion(Hibernate.createClob(resultado.getMensaje()));
+		siaJob.setDescBreve(Hibernate.createClob(obtenerDescripcion(resultado).toString()));
+		siaJob.setDescripcion(Hibernate.createClob(obtenerDescripcion(resultado).toString() 
+				+ (resultado.getMensaje()!=null ? resultado.getMensaje() : "")));
 		
-		return erroneos;
+		return resultado;
 	}
 
 
 
-	private Sia obtenerSiaProc(ProcedimientoLocal procedimiento) {
+	private Sia obtenerSiaProc(ProcedimientoLocal procedimiento) throws DelegateException {
 		Sia sia = new Sia();
-		sia.setIdProc(procedimiento.getId().toString());
 		
+		sia.setIdProc(procedimiento.getId().toString());
 		TraduccionProcedimientoLocal trad = (TraduccionProcedimientoLocal) procedimiento.getTraduccion("es");
-		sia.setTitulo(trad.getNombre());
-		sia.setDescripcion(trad.getResumen());
+		if(trad != null){			
+			sia.setTitulo(trad.getNombre());
+			sia.setDescripcion(trad.getResumen());
+		}
 		
 		List<UnidadAdministrativa> predecesores = procedimiento.getUnidadAdministrativa().getPredecesores();
 		for(UnidadAdministrativa predecesor : predecesores) {
@@ -270,12 +303,14 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		}
 		
 		sia.setUaGest(procedimiento.getUnidadAdministrativa().getNombre());
-		
-		String destinatarios="";
+	
+		String[] destinatarios = new String[procedimiento.getPublicosObjetivo().size()];
 		Set<PublicoObjetivo> publicoObjs = procedimiento.getPublicosObjetivo();
+		int i=0;
 		for (PublicoObjetivo pObj : publicoObjs) {
-			destinatarios+= pObj.getId().toString() +";";
+			destinatarios[i]= pObj.getId().toString();
 		}
+		
 		sia.setIdDest(destinatarios);
 		
 		List<Tramite> tramites = procedimiento.getTramites();
@@ -283,13 +318,19 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		for (Tramite tramite : tramites) {
 			if (tramite.getFase() == 1)  {
 				
-					if (tramite.getVersio() != null || !tramite.getUrlExterna().isEmpty()) {
+					if (tramite.getVersio() != null || 
+							(tramite.getUrlExterna() != null && !tramite.getUrlExterna().isEmpty())) {
 						nivelAdministrativo = 4;
 						break;
 					}
 				
-					Set<DocumentTramit> docs = tramite.getDocsInformatius();
-					docs.addAll(tramite.getDocsRequerits());
+					//Revisar no inicializa la lista dentro de tramite aunq en el servicio que obtiene proc si lo hace...
+					TramiteDelegate tramDelegate = DelegateUtil.getTramiteDelegate();
+					Tramite tram = tramDelegate.obtenerTramite(tramite.getId());
+					
+					Set<DocumentTramit> docs = tram.getDocsInformatius();
+					docs.addAll(tram.getDocsRequerits());
+					
 					for (DocumentTramit documentTramit : docs) {
 						if (documentTramit.getTipus() == 1) {
 							nivelAdministrativo=2;
@@ -298,25 +339,51 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 			}
 		}
 		sia.setNivAdm(nivelAdministrativo.toString());
+
+		sia.setNormativas(procedimiento.getNormativas());
 		
-		
-		String idNormativa="";
-		String titNormativa="";
-		for (Normativa norm : procedimiento.getNormativas()) {
-			idNormativa += norm.getTipo().getTipoSia().toString()+";";
-			titNormativa +=norm.getTraduccionTitulo()+";";
-			
-		}
-		sia.setIdNorm(idNormativa);
-		sia.setTiNorm(titNormativa);
-		
-		String idMateria="";
+		String[] materias = new String[procedimiento.getMaterias().size()];
+		i = 0;
 		for (Materia mat : procedimiento.getMaterias()) {
-			idMateria+=mat.getId().toString()+";";
-			
+			materias[i]  = mat.getId().toString();
+			i++;
+
 		}
-		sia.setMaterias(idMateria);
-		sia.setFiVia(procedimiento.getIndicador().equals("1")? "S":"N");
+		sia.setMaterias(materias);
+
+		sia.setFiVia(procedimiento.getIndicador().equals("1")? SiaUtils.SI : SiaUtils.NO);
+		
+		sia.setTipologia(SiaUtils.getTipologiaTramitacion());
+		
+		String tipoTramite = SiaUtils.TRAMITE_SERV;
+		
+		if (SiaUtils.getTipoActuacion() == SiaUtils.TIPO_TRAMITE_PROC){
+			tipoTramite = SiaUtils.TRAMITE_PROC;
+		}
+		sia.setTipoTramite(tipoTramite);
+		
+		sia.setEnlaceWeb(SiaUtils.getUrl()+procedimiento.getId().toString());
+		
+		sia.setEstado(procedimiento.getEstadoSIA());
+		
+		if (SiaUtils.validaProcedimientoSIA(procedimiento) ) {
+			
+			//ALTA / MODIFICACION / REACTIVACION
+			if (sia.getIdSIA() == null || sia.getIdSIA().isEmpty()) {
+				sia.setOperacion(SiaUtils.ESTADO_ALTA);
+			}else if (sia.getEstado().equals(SiaUtils.ESTADO_ALTA)) {
+				sia.setOperacion(SiaUtils.ESTADO_MODIFICACION); 
+			}else if (sia.getEstado().equals(SiaUtils.ESTADO_BAJA)) { 
+				sia.setOperacion(SiaUtils.ESTADO_REACTIVACION); 
+			}
+			
+						
+		} else if (procedimiento.getCodigoSIA() != null && !procedimiento.getCodigoSIA().isEmpty() 
+				&& !sia.getEstado().equals(SiaUtils.ESTADO_BAJA)){
+			
+			sia.setOperacion(SiaUtils.ESTADO_BAJA); 
+
+		}
 		
 		return sia;
 	}

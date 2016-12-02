@@ -1,0 +1,461 @@
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.map.es/sgca/actualizar/messages/v2_4/ParamSIA" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.map.es/sgca/actualizar/messages/v2_4/ParamSIA">
+<element name="paramSIA">
+<complexType>
+<sequence>
+<element minOccurs="0" name="user" type="string"/>
+<element minOccurs="0" name="password" type="string"/>
+<element minOccurs="0" name="certificado" type="string"/>
+<element minOccurs="0" name="ACTUACIONES">
+<complexType>
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="ACTUACION">
+<complexType>
+<sequence>
+<element minOccurs="0" name="ALTA">
+<complexType>
+<sequence>
+<element minOccurs="0" name="ALTATRAMITEESPECIFICO" type="tns:ALTATRAMITEESPECIFICO"/>
+<element minOccurs="0" name="ALTATRAMITECOMUN" type="tns:ALTATRAMITECOMUN"/>
+</sequence>
+<attribute fixed="A" name="OPERACION" type="string" use="required"/>
+</complexType>
+</element>
+<element minOccurs="0" name="EDICION">
+<complexType>
+<sequence>
+<element minOccurs="0" name="EDICIONTRAMITEESPECIFICO" type="tns:EDICIONTRAMITEESPECIFICO"/>
+<element minOccurs="0" name="EDICIONTRAMITECOMUN" type="tns:EDICIONTRAMITECOMUN"/>
+<element minOccurs="0" name="EDICIONTRAMITACIONELECTRONICA" type="tns:EDICIONTRAMITACIONELECTRONICA"/>
+<element minOccurs="0" name="EDICIONVOLUMENTRAMITACIONES" type="tns:EDICIONVOLUMENTRAMITACIONES"/>
+<element minOccurs="0" name="EDICIONCLASIFICACIONTEMATICA" type="tns:EDICIONCLASIFICACIONTEMATICA"/>
+<element minOccurs="0" name="EDICIONTIPOSRELACIONADOS" type="tns:EDICIONTIPOSRELACIONADOS"/>
+<element minOccurs="0" name="EDICIONOTROSDATOS" type="tns:EDICIONOTROSDATOS"/>
+<element minOccurs="0" name="EDICIONREGULACION" type="tns:EDICIONREGULACION"/>
+<element minOccurs="0" name="EDICIONDOCUMENTACIONASOCIADA" type="tns:EDICIONDOCUMENTACIONASOCIADA"/>
+</sequence>
+<attribute fixed="M" name="OPERACION" type="string" use="required"/>
+</complexType>
+</element>
+<element minOccurs="0" name="BAJA">
+<complexType>
+<attribute fixed="B" name="OPERACION" type="string" use="required"/>
+</complexType>
+</element>
+<element minOccurs="0" name="ACTIVACION">
+<complexType>
+<sequence>
+<element minOccurs="0" name="EDICIONTRAMITEESPECIFICO" type="tns:EDICIONTRAMITEESPECIFICO"/>
+<element minOccurs="0" name="EDICIONTRAMITECOMUN" type="tns:EDICIONTRAMITECOMUN"/>
+<element minOccurs="0" name="EDICIONTRAMITACIONELECTRONICA" type="tns:EDICIONTRAMITACIONELECTRONICA"/>
+<element minOccurs="0" name="EDICIONVOLUMENTRAMITACIONES" type="tns:EDICIONVOLUMENTRAMITACIONES"/>
+<element minOccurs="0" name="EDICIONCLASIFICACIONTEMATICA" type="tns:EDICIONCLASIFICACIONTEMATICA"/>
+<element minOccurs="0" name="EDICIONTIPOSRELACIONADOS" type="tns:EDICIONTIPOSRELACIONADOS"/>
+<element minOccurs="0" name="EDICIONOTROSDATOS" type="tns:EDICIONOTROSDATOS"/>
+<element minOccurs="0" name="EDICIONREGULACION" type="tns:EDICIONREGULACION"/>
+<element minOccurs="0" name="EDICIONDOCUMENTACIONASOCIADA" type="tns:EDICIONDOCUMENTACIONASOCIADA"/>
+</sequence>
+<attribute fixed="AC" name="OPERACION" type="string" use="required"/>
+</complexType>
+</element>
+</sequence>
+<attribute name="CODIGOORIGEN" type="string" use="required"/>
+<attribute name="CODIGOACTUACION" type="string" use="required"/>
+</complexType>
+</element>
+</sequence>
+</complexType>
+</element>
+</sequence>
+</complexType>
+</element>
+<complexType name="ALTATRAMITEESPECIFICO">
+<sequence>
+<element name="INTERNO" type="tns:booleano"/>
+<element name="TIPOTRAMITE" type="tns:TIPOTRAMITE"/>
+<element minOccurs="0" name="ALTAPROCEDIMIENTOESPECIFICO" type="tns:ALTAPROCEDIMIENTOESPECIFICO"/>
+<element minOccurs="0" name="ALTASERVICIOESPECIFICO" type="tns:ALTASERVICIOESPECIFICO"/>
+<element minOccurs="0" name="ALTAACTUACION" type="tns:ALTAACTUACION"/>
+</sequence>
+</complexType>
+<complexType name="ALTAPROCEDIMIENTOESPECIFICO">
+<sequence>
+<element name="DENOMINACION" type="string"/>
+<element name="FINALIDAD" type="string"/>
+<element name="ORGANISMORESPONSABLE" type="tns:ORGANISMORESPONSABLE"/>
+<element name="DESTINATARIOS" type="tns:DESTINATARIOS"/>
+<element name="CODNIVELADMINISTRACIONELECTRONICA" type="string"/>
+<element name="URL" type="string"/>
+<element name="ORGANOINICIA" type="string"/>
+<element minOccurs="0" name="INICIOS" type="tns:INICIOS"/>
+<element name="FINVIA" type="tns:booleano"/>
+<element name="NORMATIVAS" type="tns:NORMATIVAS"/>
+</sequence>
+</complexType>
+<complexType name="ALTASERVICIOESPECIFICO">
+<sequence>
+<element name="DENOMINACION" type="string"/>
+<element name="FINALIDAD" type="string"/>
+<element name="ORGANISMORESPONSABLE" type="tns:ORGANISMORESPONSABLE"/>
+<element name="DESTINATARIOS" type="tns:DESTINATARIOS"/>
+<element name="CODNIVELADMINISTRACIONELECTRONICA" type="string"/>
+<element name="URL" type="string"/>
+</sequence>
+</complexType>
+<complexType name="ALTAACTUACION">
+<sequence>
+<element name="DENOMINACION" type="string"/>
+<element name="FINALIDAD" type="string"/>
+<element name="ORGANISMORESPONSABLE" type="tns:ORGANISMORESPONSABLE"/>
+<element name="DESTINATARIOS" type="tns:DESTINATARIOS"/>
+<element name="CODPROCEDIMIENTOINCURSO" type="string"/>
+<element name="ORGANOINICIA" type="string"/>
+<element name="NORMATIVAS" type="tns:NORMATIVAS"/>
+</sequence>
+</complexType>
+<complexType name="ALTATRAMITECOMUN">
+<sequence>
+<element name="TIPOTRAMITE" type="tns:TIPOTRAMITE"/>
+<element name="CODTRAMITECOMUN" type="string"/>
+<element minOccurs="0" name="ALTAPROCEDIMIENTOCOMUN" type="tns:ALTAPROCEDIMIENTOCOMUN"/>
+<element minOccurs="0" name="ALTASERVICIOCOMUN" type="tns:ALTASERVICIOCOMUN"/>
+</sequence>
+</complexType>
+<complexType name="ALTAPROCEDIMIENTOCOMUN">
+<sequence>
+<element name="ORGANISMORESPONSABLE" type="tns:ORGANISMORESPONSABLE"/>
+<element minOccurs="0" name="DESTINATARIOS" type="tns:DESTINATARIOS"/>
+<element name="CODNIVELADMINISTRACIONELECTRONICA" type="string"/>
+<element name="URL" type="string"/>
+<element minOccurs="0" name="ORGANOINICIA" type="string"/>
+<element minOccurs="0" name="INICIOS" type="tns:INICIOS"/>
+<element minOccurs="0" name="FINVIA" type="tns:booleano"/>
+<element minOccurs="0" name="NORMATIVAS" type="tns:NORMATIVAS"/>
+</sequence>
+</complexType>
+<complexType name="ALTASERVICIOCOMUN">
+<sequence>
+<element name="ORGANISMORESPONSABLE" type="tns:ORGANISMORESPONSABLE"/>
+<element minOccurs="0" name="DESTINATARIOS" type="tns:DESTINATARIOS"/>
+<element name="CODNIVELADMINISTRACIONELECTRONICA" type="string"/>
+<element name="URL" type="string"/>
+</sequence>
+</complexType>
+<complexType name="EDICIONTRAMITEESPECIFICO">
+<sequence>
+<element minOccurs="0" name="EDICIONPROCEDIMIENTOESPECIFICO" type="tns:EDICIONPROCEDIMIENTOESPECIFICO"/>
+<element minOccurs="0" name="EDICIONSERVICIOESPECIFICO" type="tns:EDICIONSERVICIOESPECIFICO"/>
+<element minOccurs="0" name="EDICIONACTUACION" type="tns:EDICIONACTUACION"/>
+</sequence>
+</complexType>
+<complexType name="EDICIONPROCEDIMIENTOESPECIFICO">
+<sequence>
+<element minOccurs="0" name="DENOMINACION" type="string"/>
+<element minOccurs="0" name="FINALIDAD" type="string"/>
+<element minOccurs="0" name="ORGANISMORESPONSABLE" type="tns:ORGANISMORESPONSABLE"/>
+<element minOccurs="0" name="DESTINATARIOS" type="tns:DESTINATARIOS"/>
+<element minOccurs="0" name="CODNIVELADMINISTRACIONELECTRONICA" type="string"/>
+<element minOccurs="0" name="URL" type="string"/>
+<element minOccurs="0" name="ORGANOINICIA" type="string"/>
+<element minOccurs="0" name="INICIOS" type="tns:INICIOS"/>
+<element minOccurs="0" name="FINVIA" type="tns:booleano"/>
+<element minOccurs="0" name="NORMATIVAS" type="tns:NORMATIVAS"/>
+</sequence>
+</complexType>
+<complexType name="EDICIONSERVICIOESPECIFICO">
+<sequence>
+<element minOccurs="0" name="DENOMINACION" type="string"/>
+<element minOccurs="0" name="FINALIDAD" type="string"/>
+<element minOccurs="0" name="ORGANISMORESPONSABLE" type="tns:ORGANISMORESPONSABLE"/>
+<element minOccurs="0" name="DESTINATARIOS" type="tns:DESTINATARIOS"/>
+<element minOccurs="0" name="CODNIVELADMINISTRACIONELECTRONICA" type="string"/>
+<element minOccurs="0" name="URL" type="string"/>
+</sequence>
+</complexType>
+<complexType name="EDICIONACTUACION">
+<sequence>
+<element minOccurs="0" name="DENOMINACION" type="string"/>
+<element minOccurs="0" name="FINALIDAD" type="string"/>
+<element minOccurs="0" name="ORGANISMORESPONSABLE" type="tns:ORGANISMORESPONSABLE"/>
+<element minOccurs="0" name="DESTINATARIOS" type="tns:DESTINATARIOS"/>
+<element minOccurs="0" name="ORGANOINICIA" type="string"/>
+<element minOccurs="0" name="NORMATIVAS" type="tns:NORMATIVAS"/>
+</sequence>
+</complexType>
+<complexType name="EDICIONTRAMITECOMUN">
+<sequence>
+<element minOccurs="0" name="EDICIONPROCEDIMIENTOCOMUN" type="tns:EDICIONPROCEDIMIENTOCOMUN"/>
+<element minOccurs="0" name="EDICIONSERVICIOCOMUN" type="tns:EDICIONSERVICIOCOMUN"/>
+</sequence>
+</complexType>
+<complexType name="EDICIONPROCEDIMIENTOCOMUN">
+<sequence>
+<element minOccurs="0" name="ORGANISMORESPONSABLE" type="tns:ORGANISMORESPONSABLE"/>
+<element minOccurs="0" name="DESTINATARIOS" type="tns:DESTINATARIOS"/>
+<element minOccurs="0" name="CODNIVELADMINISTRACIONELECTRONICA" type="string"/>
+<element minOccurs="0" name="URL" type="string"/>
+<element minOccurs="0" name="ORGANOINICIA" type="string"/>
+<element minOccurs="0" name="INICIOS" type="tns:INICIOS"/>
+<element minOccurs="0" name="FINVIA" type="tns:booleano"/>
+<element minOccurs="0" name="NORMATIVAS" type="tns:NORMATIVAS"/>
+</sequence>
+</complexType>
+<complexType name="EDICIONSERVICIOCOMUN">
+<sequence>
+<element minOccurs="0" name="ORGANISMORESPONSABLE" type="tns:ORGANISMORESPONSABLE"/>
+<element minOccurs="0" name="DESTINATARIOS" type="tns:DESTINATARIOS"/>
+<element minOccurs="0" name="CODNIVELADMINISTRACIONELECTRONICA" type="string"/>
+<element minOccurs="0" name="URL" type="string"/>
+</sequence>
+</complexType>
+<complexType name="EDICIONTRAMITACIONELECTRONICA">
+<sequence>
+<element minOccurs="0" name="TITULOCIUDADANO" type="string"/>
+<element minOccurs="0" name="DESCRIPCIONCIUDADANO" type="string"/>
+<element minOccurs="0" name="NIVELMAXIMOTRAMITACION" type="tns:booleano"/>
+<element minOccurs="0" name="CODNIVELADMINISTRACIONELECTRONICA" type="string"/>
+<element minOccurs="0" name="SISTEMASIDENTIFICACION" type="tns:SISTEMASIDENTIFICACION"/>
+<element minOccurs="0" name="URL" type="string"/>
+<element minOccurs="0" name="IMPULSOADMINISTRACION" type="tns:booleano"/>
+<element minOccurs="0" name="PUBLICACIONSEDE060" type="tns:booleano"/>
+<element minOccurs="0" name="CODPORTAL" type="string"/>
+<element minOccurs="0" name="SEGUIMIENTOTRAMITACION" type="tns:SEGUIMIENTOTRAMITACION"/>
+<element minOccurs="0" name="CODTIPOENCUESTA" type="string"/>
+<element minOccurs="0" name="MULTILINGUISMOS" type="tns:MULTILINGUISMOS"/>
+<element minOccurs="0" name="PRESTACIONES" type="tns:PRESTACIONES"/>
+</sequence>
+</complexType>
+<complexType name="EDICIONVOLUMENTRAMITACIONES">
+<sequence>
+<element minOccurs="0" name="VOLUMENESTRAMITACIONES" type="tns:VOLUMENESTRAMITACIONES"/>
+</sequence>
+</complexType>
+<complexType name="EDICIONCLASIFICACIONTEMATICA">
+<sequence>
+<element minOccurs="0" name="TEMATICAS" type="tns:TEMATICAS"/>
+<element minOccurs="0" name="CODTIPOLOGIA" type="string"/>
+<element minOccurs="0" name="PERFILES" type="tns:PERFILES"/>
+</sequence>
+</complexType>
+<complexType name="EDICIONTIPOSRELACIONADOS">
+<sequence>
+<element minOccurs="0" name="TRAMITESRELACIONADOS" type="tns:TRAMITESRELACIONADOS"/>
+</sequence>
+</complexType>
+<complexType name="EDICIONOTROSDATOS">
+<sequence>
+<element minOccurs="0" name="REQUISITOS" type="string"/>
+<element minOccurs="0" name="PRESENTACIONPRESENCIAL" type="string"/>
+<element minOccurs="0" name="CODLUGARPRESENTACION" type="string"/>
+</sequence>
+</complexType>
+<complexType name="EDICIONREGULACION">
+<sequence>
+<element minOccurs="0" name="ORGANOINICIA" type="string"/>
+<element minOccurs="0" name="INICIOS" type="tns:INICIOS"/>
+<element minOccurs="0" name="PLAZORESOLUCION" type="tns:PLAZORESOLUCION"/>
+<element minOccurs="0" name="FINVIA" type="tns:booleano"/>
+<element minOccurs="0" name="NORMATIVAS" type="tns:NORMATIVAS"/>
+<element minOccurs="0" name="REDUCCIONES" type="tns:REDUCCIONES"/>
+</sequence>
+</complexType>
+<complexType name="EDICIONDOCUMENTACIONASOCIADA">
+<sequence>
+<element minOccurs="0" name="DOCUMENTACION" type="string"/>
+<element minOccurs="0" name="ALTADOCUMENTOSESPECIFICOS" type="tns:ALTADOCUMENTOSESPECIFICOS"/>
+<element minOccurs="0" name="DOCUMENTOSCATALOGO" type="tns:DOCUMENTOSCATALOGO"/>
+<element minOccurs="0" name="REDUCCIONES" type="tns:REDUCCIONES"/>
+</sequence>
+</complexType>
+<simpleType name="booleano">
+<restriction base="string">
+<pattern value="S|N"/>
+</restriction>
+</simpleType>
+<simpleType name="TIPOTRAMITE">
+<restriction base="string">
+<pattern value="P|S|A"/>
+</restriction>
+</simpleType>
+<complexType name="ORGANISMORESPONSABLE">
+<sequence>
+<element name="CODORGANISMORESPONSABLEN1" type="string"/>
+<element minOccurs="0" name="CODORGANISMORESPONSABLEN2" type="string"/>
+</sequence>
+</complexType>
+<simpleType name="TIPOSEGUIMIENTOTRAMITACION">
+<restriction base="string">
+<pattern value="S|O|N"/>
+</restriction>
+</simpleType>
+<complexType name="REDUCCIONES">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="REDUCCION">
+<complexType>
+<sequence>
+<element name="CODTIPOREDUCCION" type="string"/>
+</sequence>
+</complexType>
+</element>
+</sequence>
+</complexType>
+<complexType name="INICIOS">
+<sequence>
+<element name="FORMAINICIACIONINTERESADO" type="tns:booleano"/>
+<element minOccurs="0" name="CODEFECTOSILENCIOINTERESADO" type="string"/>
+<element name="FORMAINICIACIONOFICIO" type="tns:booleano"/>
+<element minOccurs="0" name="CODEFECTOSILENCIOOFICIO" type="string"/>
+</sequence>
+</complexType>
+<complexType name="NORMATIVAS">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="NORMATIVA">
+<complexType>
+<sequence>
+<element name="CODTIPONORMATIVA" type="string"/>
+<element name="CODRANGO" type="string"/>
+<element minOccurs="0" name="NUMERODISPOSICION" type="string"/>
+<element name="TITULO" type="string"/>
+</sequence>
+</complexType>
+</element>
+</sequence>
+</complexType>
+<complexType name="SISTEMASIDENTIFICACION">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="SISTEMAIDENTIFICACION">
+<complexType>
+<sequence>
+<element name="CODSISTEMAIDENTIFICACION" type="string"/>
+<element minOccurs="0" name="OTROSISTEMAIDENTIFICACION" type="string"/>
+</sequence>
+</complexType>
+</element>
+</sequence>
+</complexType>
+<complexType name="SEGUIMIENTOTRAMITACION">
+<sequence>
+<element name="SEGTRAMITACION" type="tns:TIPOSEGUIMIENTOTRAMITACION"/>
+<element minOccurs="0" name="CODACTUACIONSEG" type="string"/>
+</sequence>
+</complexType>
+<complexType name="MULTILINGUISMOS">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="MULTILINGUISMO">
+<complexType>
+<sequence>
+<element name="IDIOMA" type="string"/>
+<element minOccurs="0" name="OTRO" type="string"/>
+<element name="TIPOCONTENIDO" type="string"/>
+</sequence>
+</complexType>
+</element>
+</sequence>
+</complexType>
+<complexType name="PRESTACIONES">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="PRESTACION">
+<complexType>
+<sequence>
+<element name="CODTIPOPRESTACION" type="string"/>
+<element minOccurs="0" name="OTRO" type="string"/>
+</sequence>
+</complexType>
+</element>
+</sequence>
+</complexType>
+<complexType name="VOLUMENESTRAMITACIONES">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="VOLUMENTRAMITACIONES">
+<complexType>
+<sequence>
+<element name="ANIO" type="string"/>
+<element name="PERIODO" type="string"/>
+<element name="VOLTOTAL" type="string"/>
+<element name="VOLELEC" type="string"/>
+<element name="VOLCERTIFICADOELEC" type="string"/>
+<element name="VOLDNIELEC" type="string"/>
+</sequence>
+</complexType>
+</element>
+</sequence>
+</complexType>
+<complexType name="TEMATICAS">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="TEMATICA">
+<complexType>
+<sequence>
+<element name="CODTEMATICA" type="string"/>
+</sequence>
+</complexType>
+</element>
+</sequence>
+</complexType>
+<complexType name="PERFILES">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="PERFIL">
+<complexType>
+<sequence>
+<element name="CODTIPOPERFIL" type="string"/>
+</sequence>
+</complexType>
+</element>
+</sequence>
+</complexType>
+<complexType name="TRAMITESRELACIONADOS">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="TRAMITERELACIONADO">
+<complexType>
+<sequence>
+<element name="TRCODACTUACION" type="string"/>
+<element name="TRORDEN" type="string"/>
+</sequence>
+</complexType>
+</element>
+</sequence>
+</complexType>
+<complexType name="ALTADOCUMENTOSESPECIFICOS">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="ALTADOCUMENTOESPECIFICO">
+<complexType>
+<sequence>
+<element name="NOMBREDOCUMENTO" type="string"/>
+<element name="CODENTIDADEMISORA" type="string"/>
+<element name="CODORGARESPN1" type="string"/>
+<element minOccurs="0" name="CODORGARESPN2" type="string"/>
+<element minOccurs="0" name="CODORGAEMISORN1" type="string"/>
+<element minOccurs="0" name="CODORGAEMISORN2" type="string"/>
+</sequence>
+</complexType>
+</element>
+</sequence>
+</complexType>
+<complexType name="DOCUMENTOSCATALOGO">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="DOCUMENTOCATALOGO">
+<complexType>
+<sequence>
+<element name="CODDOCUMENTO" type="string"/>
+<element name="OBLIGADOAPORTARLOINTERESADO" type="tns:booleano"/>
+</sequence>
+</complexType>
+</element>
+</sequence>
+</complexType>
+<complexType name="DESTINATARIOS">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="DESTINATARIO">
+<complexType>
+<sequence>
+<element name="CODDESTINATARIO" type="string"/>
+</sequence>
+</complexType>
+</element>
+</sequence>
+</complexType>
+<complexType name="PLAZORESOLUCION">
+<sequence>
+<element name="NUMEROPLAZORESOLUCION" type="string"/>
+<element name="CODTIPOPLAZORESOLUCION" type="string"/>
+</sequence>
+</complexType>
+</schema>

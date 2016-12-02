@@ -286,6 +286,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     			StringBuffer bufferDesc = SiaUtils.obtenerContenidoClob(job.getDescBreve());
     					
     			job.setDescBreve(Hibernate.createClob("Finalizado a la fuerza " + bufferDesc));
+    			job.setDescripcion(Hibernate.createClob("Finalizado a la fuerza " + SiaUtils.obtenerContenidoClob(job.getDescripcion())));
     			
     			session.update(job);
     		} 
