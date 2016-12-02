@@ -1687,6 +1687,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     		StringBuilder ids = new StringBuilder();
     		for (FichaUA fua : fichasUA) {
     			FichaUA fichaUA = (FichaUA) session.load(FichaUA.class, fua.getId());
+    			
+    			
     			if (ids.length() == 0) {
     				ids.append(fichaUA.getId());
     			} else {
@@ -1694,12 +1696,15 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     			}
     		}
 
-    		session.delete("from FichaUA as fua where fua.id in (" + ids.toString() + ")");
+    		 session.delete("from FichaUA as fua where fua.id in (" + ids.toString() + ")");
     		session.flush();
     		
     		
+    		
+    	
     		// Marcamos para reindexar las fichas
     		for (FichaUA fua : fichasUA) {
+    			session.refresh(fua.getFicha());
     			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_FICHA, fua.getFicha().getId(), false);    			
     		}
 
