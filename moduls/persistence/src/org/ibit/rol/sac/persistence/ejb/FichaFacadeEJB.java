@@ -1733,6 +1733,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     		
     		// Marcamos para reindexar las fichas
     		for (FichaUA fua : fichasUA) {
+    			session.refresh(fua.getFicha());
     			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_FICHA, fua.getFicha().getId(), false);    			
     		}
 
