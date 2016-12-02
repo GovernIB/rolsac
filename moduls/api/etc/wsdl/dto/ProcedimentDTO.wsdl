@@ -48,6 +48,9 @@
                         <element name="version" nillable="true" type="xsd:long" />
                         <element name="servicioResponsable" nillable="true" type="xsd:long" />
                         <element name="silencio" nillable="true" type="xsd:long" />
+                        <element name="codigoSIA" nillable="true" type="xsd:string" />
+                        <element name="estadoSIA" nillable="true" type="xsd:string" />
+                        <element name="fechaSIA" nillable="true" type="xsd:dateTime" />
                     </sequence>
                 </extension>
             </complexContent>
