@@ -11,6 +11,7 @@ import javax.ejb.EJBException;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.Normativa;
@@ -298,7 +299,7 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
     	}
     	catch (Exception e) {
 	            log.error("Error intentando indexar " + solrpendiente,e);
-	            solrPendienteResultado = new SolrPendienteResultado(false, e.getMessage());
+	            solrPendienteResultado = new SolrPendienteResultado(false, ExceptionUtils.getStackTrace(e));
         } 
     	
     	return solrPendienteResultado;
@@ -331,7 +332,7 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
 				}
 			} catch (Exception exception) {
 				log.error("Error indexando pendiente un doc(id:"+documento.getId()+") procedimiento:" + procedimiento.getId(), exception);
-				return new SolrPendienteResultado(false, exception.getMessage());
+				return new SolrPendienteResultado(false, ExceptionUtils.getStackTrace(exception));
 			}
 		}
 		
@@ -348,13 +349,13 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
 	        				tramDelegate.indexarDocSolr(solrIndexer, idDocumento, EnumCategoria.ROLSAC_TRAMITE_DOCUMENTO);	        				
 		        		} catch (Exception exception2) {
 		        			log.error("Error indexando pendiente un doc(id:"+tramite.getId()+") tramite:" + procedimiento.getId(), exception2);
-		        			return new SolrPendienteResultado(false, exception2.getMessage());
+		        			return new SolrPendienteResultado(false, ExceptionUtils.getStackTrace(exception2));
 	    				}
 					}
 				}
 			} catch (Exception exception) {
 				log.error("Error indexando pendiente un tramite(id:"+tramite.getId()+") procedimiento:" + procedimiento.getId(), exception);
-				return new SolrPendienteResultado(false, exception.getMessage());				
+				return new SolrPendienteResultado(false,ExceptionUtils.getStackTrace(exception));				
 			}
 		}
 		
@@ -396,8 +397,9 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
 				} else {
 					log.error("Error indexando pendiente un doc(parece que id:"+traduccion.getArchivo().getId()+") de normativa:" + normativa.getId(), exception);
 				}
-				solrPendienteResultado = new SolrPendienteResultado(false, exception.getMessage());
-				break;
+				
+				solrPendienteResultado = new SolrPendienteResultado(false, ExceptionUtils.getStackTrace(exception));
+				return solrPendienteResultado;
 			}
 		}
 		return new SolrPendienteResultado(true, "");
@@ -418,8 +420,16 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
     	SolrPendienteResultado solrPendienteResultado= fichaDelegate.indexarSolr(solrIndexer, solrpendiente.getIdElemento(), EnumCategoria.ROLSAC_FICHA);
 		log.debug("Resultado indexando ficha(ID:"+solrpendiente.getIdElemento()+"):"+ solrPendienteResultado.toString());
 		
+		if (!solrPendienteResultado.isCorrecto()) {
+			return solrPendienteResultado;
+		}
+		
 		//Paso 2. Reindexamos los documentos asociados a la ficha.
 		Ficha ficha = fichaDelegate.obtenerFichaParaSolr(solrpendiente.getIdElemento());
+		if (ficha == null) {
+			log.error("No se encuentra ficha con id: " + solrpendiente.getIdElemento());
+			return new SolrPendienteResultado(false, "No se encuentra ficha con id: " + solrpendiente.getIdElemento());
+		}
 		if (ficha.getDocumentos() != null) {
 			for(Documento documento : ficha.getDocumentos()) {
 				try {
@@ -429,7 +439,7 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
 					}
 				} catch (Exception exception) {
 					log.error("Error indexando pendiente un doc(id:"+documento.getId()+") de ficha:" + ficha.getId(), exception);
-					return new SolrPendienteResultado(false, exception.getMessage());					
+					return new SolrPendienteResultado(false, ExceptionUtils.getStackTrace(exception));					
 				}
 			}
 		}

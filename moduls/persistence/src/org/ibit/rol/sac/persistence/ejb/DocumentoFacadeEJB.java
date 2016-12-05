@@ -16,6 +16,7 @@ import net.sf.hibernate.Session;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.Documento;
@@ -691,14 +692,8 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 			
 			return new SolrPendienteResultado(indexacion);
 		} catch(Exception exception) {
-			log.error("Error en documentofacade intentando indexar.  idElemento:" + idElemento+" categoria:"+ categoria, exception);
-			String mensajeError;
-			if (exception.getMessage() == null) {
-				mensajeError = exception.toString();
-			} else {
-				mensajeError = exception.getMessage();
-			}
-			return new SolrPendienteResultado(false, mensajeError);
+			log.error("Error en documentofacade intentando indexar.  idElemento:" + idElemento+" categoria:"+ categoria, exception);			
+			return new SolrPendienteResultado(false, ExceptionUtils.getStackTrace(exception));
 		}
 	}
 	
@@ -856,14 +851,8 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 			
 			return new SolrPendienteResultado(indexacion);
 		} catch(Exception exception) {
-			log.error("Error en documentofacade intentando indexar. idElemento:" + idElemento+" categoria:"+ categoria, exception);
-			String mensajeError;
-			if (exception.getMessage() == null) {
-				mensajeError = exception.toString();
-			} else {
-				mensajeError = exception.getMessage();
-			}
-			return new SolrPendienteResultado(false, mensajeError);
+			log.error("Error en documentofacade intentando indexar. idElemento:" + idElemento+" categoria:"+ categoria, exception);			
+			return new SolrPendienteResultado(false, ExceptionUtils.getStackTrace(exception));
 		}
 	}
 
@@ -882,7 +871,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 			return new SolrPendienteResultado(true);
 		} catch(Exception exception) {
 			log.error("Error en documentoFacade intentando desindexar.", exception);
-			return new SolrPendienteResultado(false, exception.getMessage());
+			return new SolrPendienteResultado(false, ExceptionUtils.getStackTrace(exception));
 		}
 	}
 

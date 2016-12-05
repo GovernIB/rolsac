@@ -22,6 +22,7 @@ import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.ibit.rol.sac.model.AdministracionRemota;
 import org.ibit.rol.sac.model.Auditoria;
 import org.ibit.rol.sac.model.DocumentTramit;
@@ -2228,13 +2229,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			return new SolrPendienteResultado(true);
 		} catch(Exception exception) {
 			log.error("Error en procedimientoFacade intentando indexar. idElemento:" + idElemento +" categoria:"+categoria, exception);
-			String mensajeError;
-			if (exception.getMessage() == null) {
-				mensajeError = exception.toString();
-			} else {
-				mensajeError = exception.getMessage();
-			}
-			return new SolrPendienteResultado(false, mensajeError);
+			return new SolrPendienteResultado(false, ExceptionUtils.getStackTrace(exception));
 		}
 	}
 	
@@ -2250,14 +2245,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			solrIndexer.desindexar(solrPendiente.getIdElemento().toString(), EnumCategoria.ROLSAC_PROCEDIMIENTO);
 			return new SolrPendienteResultado(true);
 		} catch(Exception exception) {
-			log.error("Error en procedimientoFacade intentando desindexar.", exception);
-			String mensajeError;
-			if (exception.getMessage() == null) {
-				mensajeError = exception.toString();
-			} else {
-				mensajeError = exception.getMessage();
-			}
-			return new SolrPendienteResultado(false, mensajeError);
+			log.error("Error en procedimientoFacade intentando desindexar.", exception);			
+			return new SolrPendienteResultado(false, ExceptionUtils.getStackTrace(exception));
 		}
 	}
 

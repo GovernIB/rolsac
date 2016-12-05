@@ -23,6 +23,7 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.ibit.rol.sac.model.Afectacion;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Auditoria;
@@ -1153,14 +1154,8 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			solrIndexer.indexarContenido(indexData);
 			return new SolrPendienteResultado(true);
 		} catch(Exception exception) {
-			log.error("Error en normativafacade intentando indexar. idElemento:" + idElemento +" categoria:"+categoria, exception);
-			String mensajeError;
-			if (exception.getMessage() == null) {
-				mensajeError = exception.toString();
-			} else {
-				mensajeError = exception.getMessage();
-			}
-			return new SolrPendienteResultado(false, mensajeError);
+			log.error("Error en normativafacade intentando indexar. idElemento:" + idElemento +" categoria:"+categoria, exception);			
+			return new SolrPendienteResultado(false, ExceptionUtils.getStackTrace(exception));
 		}
 
 	}
@@ -1279,14 +1274,8 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			solrIndexer.indexarFichero(indexData);
 			return new SolrPendienteResultado(true);
 		} catch(Exception exception) {
-			log.error("Error en normativafacade intentando indexar. idElemento:" + idElemento +" categoria:"+categoria, exception);
-			String mensajeError; 
-			if (exception.getMessage() == null) {
-				mensajeError = exception.toString();
-			} else {
-				mensajeError = exception.getMessage();
-			}
-			return new SolrPendienteResultado(false, mensajeError);
+			log.error("Error en normativafacade intentando indexar. idElemento:" + idElemento +" categoria:"+categoria, exception);			
+			return new SolrPendienteResultado(false, ExceptionUtils.getStackTrace(exception));
 		}
 
 	}
@@ -1341,14 +1330,8 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			solrIndexer.desindexar(solrPendiente.getIdElemento().toString(), EnumCategoria.ROLSAC_NORMATIVA);
 			return new SolrPendienteResultado(true);
 		} catch(Exception exception) {
-			log.error("Error en normativafacade intentando desindexar.", exception);
-			String mensajeError;
-			if (exception.getMessage() == null) {
-				mensajeError = exception.toString();
-			} else {
-				mensajeError = exception.getMessage();
-			}
-			return new SolrPendienteResultado(false, mensajeError);
+			log.error("Error en normativafacade intentando desindexar.", exception);			
+			return new SolrPendienteResultado(false, ExceptionUtils.getStackTrace(exception));
 		}
 	} 
 

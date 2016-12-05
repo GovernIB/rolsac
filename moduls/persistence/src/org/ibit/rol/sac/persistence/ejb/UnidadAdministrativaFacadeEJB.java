@@ -22,6 +22,7 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
 
 import org.apache.axis.utils.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.ibit.rol.sac.model.AdministracionRemota;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Auditoria;
@@ -1239,7 +1240,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			}
 			
 			//SOLR Desindexar unidad administrativa
-			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_UNIDAD_ADMINISTRATIVA, ua.getId(), true);
+			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_UNIDAD_ADMINISTRATIVA, idUA, true);
 			marcarIndexacionPendienteElementosRelacionadosUA(idUA);
 
 			session.delete(ua);
@@ -2528,6 +2529,10 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		try {
 			//Paso 0. Obtenemos la ficha y comprobamos si se puede indexar.
 			final UnidadAdministrativa unidadAdministrativa = obtenerUnidadAdministrativaIndexar(idElemento);
+			if (unidadAdministrativa == null) {
+				log.error("No se encuentra unidad administrativa con id: " + idElemento);
+				return new SolrPendienteResultado(false, "No se encuentra unidad administrativa con id: " + idElemento);
+			}
 			boolean isIndexable = this.isIndexable(unidadAdministrativa);
 			if (!isIndexable) {
 				return new SolrPendienteResultado(true, "No se puede indexar");
@@ -2619,14 +2624,8 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	    	solrIndexer.indexarContenido(indexData);
 	    	return new SolrPendienteResultado(true);
 		} catch(Exception exception) {
-			log.error("Error en unidadadministrativa intentando indexar. idElemento:" + idElemento +" categoria:"+categoria, exception);
-			String mensajeError;
-			if (exception.getMessage() == null) {
-				mensajeError = exception.toString();
-			} else {
-				mensajeError = exception.getMessage();
-			}
-			return new SolrPendienteResultado(false, mensajeError);
+			log.error("Error en unidadadministrativa intentando indexar. idElemento:" + idElemento +" categoria:"+categoria, exception);			
+			return new SolrPendienteResultado(false, ExceptionUtils.getStackTrace(exception));
 		}
 	}
 	
@@ -2662,14 +2661,8 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			solrIndexer.desindexar(solrPendiente.getIdElemento().toString(), EnumCategoria.ROLSAC_UNIDAD_ADMINISTRATIVA);
 			return new SolrPendienteResultado(true);
 		} catch(Exception exception) {
-			log.error("Error en unidadadministrativa intentando desindexar.", exception);
-			String mensajeError;
-			if (exception.getMessage() == null) {
-				mensajeError = exception.toString();
-			} else {
-				mensajeError = exception.getMessage();
-			}
-			return new SolrPendienteResultado(false, mensajeError);
+			log.error("Error en unidadadministrativa intentando desindexar.", exception);			
+			return new SolrPendienteResultado(false, ExceptionUtils.getStackTrace(exception));
 		}
 	}
 	
