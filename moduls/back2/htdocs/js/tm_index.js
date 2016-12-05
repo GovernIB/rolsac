@@ -386,6 +386,7 @@ function CLlistat(){
 			codi_cap3 = "<div class=\"th descripcion" + ordre_c2 + "\" role=\"columnheader\">" + txtDescripcio + "</div>";
 			codi_cap4 = "<div class=\"th fecha" + ordre_c3 + "\" role=\"columnheader\">" + txtFechaIndexacion + "</div>";
 			codi_cap5 = "<div class=\"th mensaje" + ordre_c4 + "\" role=\"columnheader\">" + txtMensaje + "</div>";
+							
 			
 			// codi taula
 			codi_taula = "<div class=\"table llistat\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\" style=\"clear:both\">";
@@ -460,7 +461,9 @@ function CLlistat(){
 				}
 				codi_taula += "</div>";
 				codi_taula += "<div class=\"td mensaje\" role=\"gridcell\">";				
+				codi_taula += "<div style=\"width:100%; height: 5em; overflow-y: scroll;\">"; 
 				codi_taula += printStringFromNull(dada_node.mensajeError, txtSinValor);
+				codi_taula += "</div>";
 				codi_taula += "</div>";
 
 				
@@ -633,7 +636,7 @@ function CLlistat(){
 				
 				parClass = (i%2) ? " par": "";
 
-				codi_taula += "<div class=\"tr" + parClass + "\" role=\"row\">";
+				codi_taula += "<div class=\"trRowIndexacionPendiente" + parClass + "\" role=\"row\">";
 
 				codi_taula += "<div class=\"td perfil\" role=\"gridcell\">";
 				codi_taula += "<input type=\"hidden\" value=\"" + dada_node.id + "\" class=\"id\" />";

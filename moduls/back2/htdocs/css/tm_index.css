@@ -7,7 +7,7 @@
 /* llistats table */
 
 div.llistat div.id { 
-    width: 15%;
+    width: 10%;
     padding-left: 21px;
 }
 
@@ -24,7 +24,7 @@ div.llistat div.fecha {
     padding-left: 21px;
 }
 div.llistat div.mensaje { 
-    width: 15%;
+    width: 35%;
     padding-left: 21px;
 }
 div.llistat div.tbody div.nom {

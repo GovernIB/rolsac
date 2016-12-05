@@ -11,6 +11,7 @@ import javax.ejb.EJBException;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.Ficha;
@@ -464,7 +465,7 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
 	    	 if (solrPendienteResultado != null) {
 	    		if (solrPendienteResultado.isCorrecto()) {
 					solrpendiente.setResultado(1);
-					solrpendiente.setMensajeError(solrPendienteResultado.getMensaje());
+					solrpendiente.setMensajeError(StringUtils.substring(solrPendienteResultado.getMensaje(), 0, 3000));
 					solrpendiente.setFechaIndexacion(new Date());
 					session.update(solrpendiente);
 					session.flush();
@@ -474,8 +475,8 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
 					final Calendar hoyCalendar  = Calendar.getInstance();
 					hoyCalendar.setTime(new Date());
 					
-					final int dias = hoyCalendar.get(Calendar.DATE) - fechaCalendar.get(Calendar.DATE);
-					solrpendiente.setMensajeError(solrPendienteResultado.getMensaje());
+					final int dias = hoyCalendar.get(Calendar.DATE) - fechaCalendar.get(Calendar.DATE);					
+					solrpendiente.setMensajeError(StringUtils.substring(solrPendienteResultado.getMensaje(), 0, 3000));
 					solrpendiente.setFechaIndexacion(new Date());
 					
 					//Si hace 10 dias o + que se crea se marca como erronea porque no se ha podido endexar
