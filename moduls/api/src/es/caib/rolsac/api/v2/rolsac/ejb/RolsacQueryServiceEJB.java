@@ -70,7 +70,6 @@ import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
 import es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioCriteria;
 import es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioDTO;
-import es.caib.rolsac.api.v2.exception.InsertServiceException;
 import es.caib.rolsac.api.v2.familia.FamiliaCriteria;
 import es.caib.rolsac.api.v2.familia.FamiliaDTO;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
@@ -515,10 +514,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 			log.error(e);
 			throw new EJBException(e);
 
-		}  catch (InsertServiceException e) {
-			log.error(e);
-			throw new EJBException(e);
-		} finally {
+		}  finally {
 
 			close(session);
 
@@ -942,10 +938,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 		} catch (QueryBuilderException e) {
 			log.error(e);
 			throw new EJBException(e);
-		} catch (InsertServiceException e) {
-			log.error(e);
-			throw new EJBException(e);
-		}finally {
+		} finally {
 			close(session);
 		}
 
@@ -1186,11 +1179,6 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 			log.error(e);
 			throw new EJBException(e);
 
-		} catch (InsertServiceException e) {
-			
-			log.error(e);
-			throw new EJBException(e);
-			
 		}  finally {
 
 			close(session);
@@ -1439,9 +1427,6 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 			log.error(e);
 			throw new EJBException(e);
 		} catch (QueryBuilderException e) {
-			log.error(e);
-			throw new EJBException(e);
-		} catch (InsertServiceException e) {
 			log.error(e);
 			throw new EJBException(e);
 		}  finally {
