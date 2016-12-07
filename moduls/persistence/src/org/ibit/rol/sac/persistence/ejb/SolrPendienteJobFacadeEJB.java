@@ -255,51 +255,54 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
     	
     	SolrPendienteResultado solrPendienteResultado = null;
     	try {
-    		FichaDelegate fichaDelegate = DelegateUtil.getFichaDelegate();
-        	ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
-        	NormativaDelegate normDelegate = DelegateUtil.getNormativaDelegate();
-        	UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
-        	
-        	final EnumCategoria enumCategoria = EnumCategoria.fromString(solrpendiente.getTipo());
+    		final EnumCategoria enumCategoria = EnumCategoria.fromString(solrpendiente.getTipo());
         	switch (enumCategoria) {
 	        			case ROLSAC_FICHA:
 	        				if (solrpendiente.getAccion() == SolrPendienteDelegate.REINDEXAR) {
-	        					solrPendienteResultado = fichaDelegate.desindexarSolr(solrIndexer, solrpendiente);
+	        					solrPendienteResultado = desindexarPendienteFicha(solrIndexer,
+										solrpendiente);
 	        					if (solrPendienteResultado.isCorrecto()) {	        						
 	        						solrPendienteResultado = indexarPendienteFicha(solrIndexer, solrpendiente);
 	        					}
 							} else if (solrpendiente.getAccion() == SolrPendienteDelegate.DESINDEXAR) {
-								solrPendienteResultado = fichaDelegate.desindexarSolr(solrIndexer, solrpendiente);
+								solrPendienteResultado = desindexarPendienteFicha(solrIndexer,
+										solrpendiente);
 							}
 	        				break;
 	        			case ROLSAC_PROCEDIMIENTO:
 							if (solrpendiente.getAccion() == SolrPendienteDelegate.REINDEXAR) {
-								solrPendienteResultado = procDelegate.desindexarSolr(solrIndexer, solrpendiente);
+								solrPendienteResultado = desindexarPendienteProcedimiento(solrIndexer,
+										solrpendiente);
 								if (solrPendienteResultado.isCorrecto()) {
 									solrPendienteResultado = indexarPendienteProcedimiento(solrIndexer, solrpendiente);
 								}
 							} else if (solrpendiente.getAccion() == SolrPendienteDelegate.DESINDEXAR) {
-								solrPendienteResultado = procDelegate.desindexarSolr(solrIndexer, solrpendiente);
+								solrPendienteResultado = desindexarPendienteProcedimiento(solrIndexer,
+										solrpendiente);
 							}
 	        				break;
 	        			case ROLSAC_NORMATIVA:
 	        				if (solrpendiente.getAccion() == SolrPendienteDelegate.REINDEXAR) { 
-	        					solrPendienteResultado = normDelegate.desindexarSolr(solrIndexer, solrpendiente);
+	        					solrPendienteResultado = desindexarPendienteNormativa(solrIndexer,
+										solrpendiente);
 	        					if (solrPendienteResultado.isCorrecto()) {
 	        						solrPendienteResultado = indexarPendienteNormativa(solrIndexer, solrpendiente);
 	        					}
 							} else if (solrpendiente.getAccion() == SolrPendienteDelegate.DESINDEXAR) {
-								solrPendienteResultado = normDelegate.desindexarSolr(solrIndexer, solrpendiente);
+								solrPendienteResultado = desindexarPendienteNormativa(solrIndexer,
+										solrpendiente);
 							}
 	        				break;
 	        			case ROLSAC_UNIDAD_ADMINISTRATIVA: 
 							if (solrpendiente.getAccion() == SolrPendienteDelegate.REINDEXAR) {
-								solrPendienteResultado = uaDelegate.desindexarSolr(solrIndexer, solrpendiente);
+								solrPendienteResultado = desindexarPendienteUnidadAdministrativa(
+										solrIndexer, solrpendiente);
 								if (solrPendienteResultado.isCorrecto()) {
-									solrPendienteResultado = uaDelegate.indexarSolr(solrIndexer, solrpendiente);
+									solrPendienteResultado = indexarPendienteUnidadAdministrativa(solrIndexer, solrpendiente);
 								}
 							} else if (solrpendiente.getAccion() == SolrPendienteDelegate.DESINDEXAR) {
-								solrPendienteResultado = uaDelegate.desindexarSolr(solrIndexer, solrpendiente);
+								solrPendienteResultado = desindexarPendienteUnidadAdministrativa(
+										solrIndexer, solrpendiente);
 							}
 							break;						
 						default:
@@ -314,6 +317,98 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
     	return solrPendienteResultado;
         
     }
+
+
+	private SolrPendienteResultado desindexarPendienteNormativa(
+			final SolrIndexer solrIndexer, final SolrPendiente solrpendiente) throws DelegateException {
+		NormativaDelegate normDelegate = DelegateUtil.getNormativaDelegate();
+		SolrPendienteResultado solrPendienteResultado = normDelegate.desindexarSolr(solrIndexer, solrpendiente);
+		
+		if (!solrPendienteResultado.isCorrecto()) {
+			log.error("Error desindexando Normativa con ID:" +solrpendiente.getIdElemento()+" :"+ solrPendienteResultado.toString());
+			return solrPendienteResultado;
+		} else {
+			log.debug("Resultado desindexando Normativa con ID:" +solrpendiente.getIdElemento()+" :"+ solrPendienteResultado.toString());
+		}
+		
+		// Devolvemos sin mensaje
+		return new SolrPendienteResultado(true, "");
+	}
+
+
+	private SolrPendienteResultado desindexarPendienteUnidadAdministrativa(
+			final SolrIndexer solrIndexer, final SolrPendiente solrpendiente) throws DelegateException {
+		
+		UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+		
+		SolrPendienteResultado solrPendienteResultado = uaDelegate.desindexarSolr(solrIndexer, solrpendiente);
+			
+		if (!solrPendienteResultado.isCorrecto()) {
+			log.error("Error desindexando UA con ID:" +solrpendiente.getIdElemento()+" :"+ solrPendienteResultado.toString());
+			return solrPendienteResultado;
+		} else {
+			log.debug("Resultado desindexando UA con ID:" +solrpendiente.getIdElemento()+" :"+ solrPendienteResultado.toString());
+		}
+		
+		// Devolvemos sin mensaje
+		return new SolrPendienteResultado(true, "");
+	}
+
+
+	private SolrPendienteResultado desindexarPendienteProcedimiento(
+			final SolrIndexer solrIndexer, final SolrPendiente solrpendiente) throws DelegateException {
+		ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
+		SolrPendienteResultado solrPendienteResultado = procDelegate.desindexarSolr(solrIndexer, solrpendiente);		
+		
+		if (!solrPendienteResultado.isCorrecto()) {
+			log.error("Error desindexando Procedimiento con ID:" +solrpendiente.getIdElemento()+" :"+ solrPendienteResultado.toString());
+			return solrPendienteResultado;
+		} else {
+			log.debug("Resultado desindexando Procedimiento con ID:" +solrpendiente.getIdElemento()+" :"+ solrPendienteResultado.toString());
+		}
+		
+		// Devolvemos sin mensaje
+		return new SolrPendienteResultado(true, "");
+	}
+
+
+	private SolrPendienteResultado desindexarPendienteFicha(
+			final SolrIndexer solrIndexer, final SolrPendiente solrpendiente) throws DelegateException {
+		
+		FichaDelegate fichaDelegate = DelegateUtil.getFichaDelegate();
+		SolrPendienteResultado solrPendienteResultado = fichaDelegate.desindexarSolr(solrIndexer, solrpendiente);
+		
+		if (!solrPendienteResultado.isCorrecto()) {
+			log.error("Error desindexando Ficha con ID:" +solrpendiente.getIdElemento()+" :"+ solrPendienteResultado.toString());
+			return solrPendienteResultado;
+		} else {
+			log.debug("Resultado desindexando Ficha con ID:" +solrpendiente.getIdElemento()+" :"+ solrPendienteResultado.toString());
+		}
+		
+		// Devolvemos sin mensaje
+		return new SolrPendienteResultado(true, "");
+	}
+
+
+	private SolrPendienteResultado indexarPendienteUnidadAdministrativa(
+			final SolrIndexer solrIndexer, final SolrPendiente solrpendiente) throws DelegateException {
+		
+		UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+		
+		SolrPendienteResultado solrPendienteResultado;
+		solrPendienteResultado = uaDelegate.indexarSolr(solrIndexer, solrpendiente);
+		
+		if (!solrPendienteResultado.isCorrecto()) {
+			log.error("Error indexando UA con ID:" +solrpendiente.getIdElemento()+" :"+ solrPendienteResultado.toString());
+			return solrPendienteResultado;
+		} else {
+			log.debug("Resultado indexando UA con ID:" +solrpendiente.getIdElemento()+" :"+ solrPendienteResultado.toString());
+		}
+		
+		// Devolvemos sin mensaje
+		return new SolrPendienteResultado(true, "");
+		
+	}
     
     /**
      * Indexa procedimiento e hijos/nietos (Doc Proc, Trámite y Doc Trámite).
