@@ -264,32 +264,40 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
         	switch (enumCategoria) {
 	        			case ROLSAC_FICHA:
 	        				if (solrpendiente.getAccion() == SolrPendienteDelegate.REINDEXAR) {
-	        					fichaDelegate.desindexarSolr(solrIndexer, solrpendiente);
-	        					solrPendienteResultado = indexarPendienteFicha(solrIndexer, solrpendiente);
+	        					solrPendienteResultado = fichaDelegate.desindexarSolr(solrIndexer, solrpendiente);
+	        					if (solrPendienteResultado.isCorrecto()) {	        						
+	        						solrPendienteResultado = indexarPendienteFicha(solrIndexer, solrpendiente);
+	        					}
 							} else if (solrpendiente.getAccion() == SolrPendienteDelegate.DESINDEXAR) {
 								solrPendienteResultado = fichaDelegate.desindexarSolr(solrIndexer, solrpendiente);
 							}
 	        				break;
 	        			case ROLSAC_PROCEDIMIENTO:
 							if (solrpendiente.getAccion() == SolrPendienteDelegate.REINDEXAR) {
-								procDelegate.desindexarSolr(solrIndexer, solrpendiente);
-								solrPendienteResultado = indexarPendienteProcedimiento(solrIndexer, solrpendiente);
+								solrPendienteResultado = procDelegate.desindexarSolr(solrIndexer, solrpendiente);
+								if (solrPendienteResultado.isCorrecto()) {
+									solrPendienteResultado = indexarPendienteProcedimiento(solrIndexer, solrpendiente);
+								}
 							} else if (solrpendiente.getAccion() == SolrPendienteDelegate.DESINDEXAR) {
 								solrPendienteResultado = procDelegate.desindexarSolr(solrIndexer, solrpendiente);
 							}
 	        				break;
 	        			case ROLSAC_NORMATIVA:
 	        				if (solrpendiente.getAccion() == SolrPendienteDelegate.REINDEXAR) { 
-	        					normDelegate.desindexarSolr(solrIndexer, solrpendiente);
-	        					solrPendienteResultado = indexarPendienteNormativa(solrIndexer, solrpendiente);
+	        					solrPendienteResultado = normDelegate.desindexarSolr(solrIndexer, solrpendiente);
+	        					if (solrPendienteResultado.isCorrecto()) {
+	        						solrPendienteResultado = indexarPendienteNormativa(solrIndexer, solrpendiente);
+	        					}
 							} else if (solrpendiente.getAccion() == SolrPendienteDelegate.DESINDEXAR) {
 								solrPendienteResultado = normDelegate.desindexarSolr(solrIndexer, solrpendiente);
 							}
 	        				break;
 	        			case ROLSAC_UNIDAD_ADMINISTRATIVA: 
 							if (solrpendiente.getAccion() == SolrPendienteDelegate.REINDEXAR) {
-								uaDelegate.desindexarSolr(solrIndexer, solrpendiente);
-								solrPendienteResultado = uaDelegate.indexarSolr(solrIndexer, solrpendiente);
+								solrPendienteResultado = uaDelegate.desindexarSolr(solrIndexer, solrpendiente);
+								if (solrPendienteResultado.isCorrecto()) {
+									solrPendienteResultado = uaDelegate.indexarSolr(solrIndexer, solrpendiente);
+								}
 							} else if (solrpendiente.getAccion() == SolrPendienteDelegate.DESINDEXAR) {
 								solrPendienteResultado = uaDelegate.desindexarSolr(solrIndexer, solrpendiente);
 							}
@@ -320,16 +328,28 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
     	DocumentoDelegate docuDelegate = DelegateUtil.getDocumentoDelegate();
     	
     	//Paso 1. Indexamos el procedimiento
-    	SolrPendienteResultado solrPendienteResultado= procDelegate.indexarSolr(solrIndexer, solrpendiente.getIdElemento(), EnumCategoria.ROLSAC_PROCEDIMIENTO);
-		log.debug("Resultado indexando procedimiento(ID:"+solrpendiente.getIdElemento()+"):"+ solrPendienteResultado.toString());
+    	SolrPendienteResultado solrPendienteResultado= procDelegate.indexarSolr(solrIndexer, solrpendiente.getIdElemento(), EnumCategoria.ROLSAC_PROCEDIMIENTO);	
+		if (!solrPendienteResultado.isCorrecto()) {
+			log.error("Resultado indexando procedimiento(ID:"+solrpendiente.getIdElemento()+"):"+ solrPendienteResultado.toString());
+			return solrPendienteResultado;
+		} else {
+			log.debug("Resultado indexando procedimiento(ID:"+solrpendiente.getIdElemento()+"):"+ solrPendienteResultado.toString());
+		}
 		
 		//Paso 2. Recorremos documento y los indexamos
+		// En caso de que falle un documento, lo dejamos pasar por si da error al indexar pero lo tenemos en cuenta en el mensaje de retorno
+		String msgRetorno = "";
 		ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimientoParaSolr(solrpendiente.getIdElemento());
 		for (Documento documento : procedimiento.getDocumentos()) {
 			try {
 				if (documento != null) {
 					solrPendienteResultado = docuDelegate.indexarSolrProcedimientoDoc(solrIndexer, documento.getId(), EnumCategoria.ROLSAC_PROCEDIMIENTO_DOCUMENTO);
-					log.debug("Resultado indexando procedimientoDocumento(DOC:"+documento.getId()+"):"+ solrPendienteResultado.toString());
+					if (!solrPendienteResultado.isCorrecto()) {
+						log.error("Error indexando documento " + documento.getId() + " de procedimiento " + procedimiento.getId() + ": " + solrPendienteResultado.getMensaje());
+						msgRetorno += "Ha fallado al indexar el documento " + documento.getId() + " del procedimiento (revise el log) \n";
+					} else {
+						log.debug("Resultado indexando procedimientoDocumento(DOC:"+documento.getId()+"):"+ solrPendienteResultado.toString());
+					}
 				}
 			} catch (Exception exception) {
 				log.error("Error indexando pendiente un doc(id:"+documento.getId()+") procedimiento:" + procedimiento.getId(), exception);
@@ -338,16 +358,31 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
 		}
 		
 		//Paso 3. Recorremos trámites y documentos y los reindexamos
+		// Si falla al indexar un trámite tomamos la indexacion como no correcta
+		// Si falla al indexar uno de los docs 
 		for(Tramite tramite : procedimiento.getTramites()) {
 			try {
 				if (tramite != null) {
+					
 					solrPendienteResultado = tramDelegate.indexarSolr(solrIndexer, tramite.getId(), EnumCategoria.ROLSAC_TRAMITE);
-					log.debug("Resultado indexando tramite(ID:"+tramite.getId()+"):"+ solrPendienteResultado.toString());
+					if (!solrPendienteResultado.isCorrecto()) {
+						log.error("Error indexando tramite(ID:"+tramite.getId()+"):"+ solrPendienteResultado.toString());
+						return solrPendienteResultado;
+					} else {
+						log.debug("Resultado indexando tramite(ID:"+tramite.getId()+"):"+ solrPendienteResultado.toString());
+					}
+					
 				
 					List<Long> idDocumentos = docuDelegate.obtenerDocumentosTramiteSolr(tramite.getId());
 	        		for (Long idDocumento : idDocumentos) {
 	        			try{
-	        				tramDelegate.indexarDocSolr(solrIndexer, idDocumento, EnumCategoria.ROLSAC_TRAMITE_DOCUMENTO);	        				
+	        				solrPendienteResultado = tramDelegate.indexarDocSolr(solrIndexer, idDocumento, EnumCategoria.ROLSAC_TRAMITE_DOCUMENTO);
+	        				if (!solrPendienteResultado.isCorrecto()) {
+	    						log.error("Error indexando documento " + idDocumento + " de tramite " + tramite.getId() + ": " + solrPendienteResultado.getMensaje());
+	    						msgRetorno += "Ha fallado al indexar el documento " + idDocumento + " de tramite " + tramite.getId() + " (revise el log) \n";
+	    					} else {
+	    						log.debug("Resultado indexando documento " + idDocumento + " de tramite " + tramite.getId() + ":"+ solrPendienteResultado.toString());
+	    					}
 		        		} catch (Exception exception2) {
 		        			log.error("Error indexando pendiente un doc(id:"+tramite.getId()+") tramite:" + procedimiento.getId(), exception2);
 		        			return new SolrPendienteResultado(false, ExceptionUtils.getStackTrace(exception2));
@@ -360,8 +395,8 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
 			}
 		}
 		
-		//Paso 4. Devolvemos resultado correcto sin mensaje.
-		return new SolrPendienteResultado(true, "");
+		//Paso 4. Devolvemos resultado correcto con mensaje si ha fallado alguno de los documentos.
+		return new SolrPendienteResultado(true, msgRetorno);
 	}
 
 
@@ -377,17 +412,32 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
     	
     	//Paso 1. Indexamos la normativa.
     	SolrPendienteResultado solrPendienteResultado= normDelegate.indexarSolrNormativa(solrIndexer, solrpendiente.getIdElemento(), EnumCategoria.ROLSAC_NORMATIVA);
-    	log.debug("Resultado indexando procedimiento(ID:"+solrpendiente.getIdElemento()+"):"+ solrPendienteResultado.toString());
+    	
+    	if (!solrPendienteResultado.isCorrecto()) {
+    		log.error("Error indexando procedimiento(ID:"+solrpendiente.getIdElemento()+"):"+ solrPendienteResultado.toString());
+    		return solrPendienteResultado;
+    	} else {
+    		log.debug("Resultado indexando procedimiento(ID:"+solrpendiente.getIdElemento()+"):"+ solrPendienteResultado.toString());
+    	}
+    	
+    	
 		Normativa normativa = normDelegate.obtenerNormativa(solrpendiente.getIdElemento());
 		TraduccionNormativa traduccion = null;
+		String msgRetorno = "";
 		
 		//Paso 2. Recorremos las traducciones y reindexamos sus archivos.
-		//Recorremos las traducciones
+		// En caso de que falle uno de los documentos continuamos pero lo tenemos en cuenta en el mensaje de retorno
 		for (String keyIdioma :  normativa.getTraduccionMap().keySet()) {
 			try {
 				traduccion = (TraduccionNormativa) normativa.getTraduccionMap().get(keyIdioma);
 				if (traduccion != null && traduccion.getArchivo() != null) { 
-					normDelegate.indexarSolrNormativaDocumento(solrIndexer, traduccion.getArchivo().getId(), EnumCategoria.ROLSAC_NORMATIVA_DOCUMENTO);
+					solrPendienteResultado = normDelegate.indexarSolrNormativaDocumento(solrIndexer, traduccion.getArchivo().getId(), EnumCategoria.ROLSAC_NORMATIVA_DOCUMENTO);
+					if (!solrPendienteResultado.isCorrecto()) {
+			    		log.error("Error indexando archivo " + traduccion.getArchivo().getId() + ": " + solrPendienteResultado.toString());
+			    		msgRetorno += "Error indexando archivo " + traduccion.getArchivo().getId() + " (revisar log) \n";
+			    	} else {
+			    		log.debug("Resultado indexando archivo " + traduccion.getArchivo().getId() + ": " + solrPendienteResultado.toString());
+			    	}
 				}
 			} catch (Exception exception ) {
 				//Cuidado, si da un error obteniendo la traducción, estaría con el valor anterior.
@@ -403,7 +453,9 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
 				return solrPendienteResultado;
 			}
 		}
-		return new SolrPendienteResultado(true, "");
+		
+		//Paso 4. Devolvemos resultado correcto con mensaje dependiendo si ha fallado algun documento.
+		return new SolrPendienteResultado(true, msgRetorno);
 	}
 
 
@@ -419,13 +471,16 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
     	
     	//Paso 1. Indexamos la ficha.
     	SolrPendienteResultado solrPendienteResultado= fichaDelegate.indexarSolr(solrIndexer, solrpendiente.getIdElemento(), EnumCategoria.ROLSAC_FICHA);
-		log.debug("Resultado indexando ficha(ID:"+solrpendiente.getIdElemento()+"):"+ solrPendienteResultado.toString());
-		
 		if (!solrPendienteResultado.isCorrecto()) {
+			log.error("Error indexando ficha(ID:"+solrpendiente.getIdElemento()+"):"+ solrPendienteResultado.toString());
 			return solrPendienteResultado;
+		} else {
+			log.debug("Resultado indexando ficha(ID:"+solrpendiente.getIdElemento()+"):"+ solrPendienteResultado.toString());
 		}
 		
 		//Paso 2. Reindexamos los documentos asociados a la ficha.
+		// En caso de que falle la indexacion de algun documento seguimos pero lo tenemos en cuenta en el mensaje
+		String msgRetorno = "";
 		Ficha ficha = fichaDelegate.obtenerFichaParaSolr(solrpendiente.getIdElemento());
 		if (ficha == null) {
 			log.error("No se encuentra ficha con id: " + solrpendiente.getIdElemento());
@@ -436,7 +491,12 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
 				try {
 					if (documento != null) {
 						solrPendienteResultado = docuDelegate.indexarSolrFichaDoc(solrIndexer, documento.getId(), EnumCategoria.ROLSAC_FICHA_DOCUMENTO);
-						log.debug("Resultado indexando fichaDocumento(DOC:"+documento.getId()+"):"+ solrPendienteResultado.toString());
+						if (!solrPendienteResultado.isCorrecto()) {
+							log.debug("Error indexando fichaDocumento(DOC:"+documento.getId()+"):"+ solrPendienteResultado.toString());
+							msgRetorno += "Error indexando fichaDocumento "+documento.getId() + " (revise el log) \n";
+						} else {
+							log.debug("Resultado indexando fichaDocumento(DOC:"+documento.getId()+"):"+ solrPendienteResultado.toString());
+						}						
 					}
 				} catch (Exception exception) {
 					log.error("Error indexando pendiente un doc(id:"+documento.getId()+") de ficha:" + ficha.getId(), exception);
@@ -445,7 +505,9 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
 			}
 		}
 		
-		return solrPendienteResultado;
+		//Paso 4. Devolvemos resultado correcto con mensaje dependiendo si falla algun documento
+		return new SolrPendienteResultado(true, msgRetorno);
+		
 	}
 
 
