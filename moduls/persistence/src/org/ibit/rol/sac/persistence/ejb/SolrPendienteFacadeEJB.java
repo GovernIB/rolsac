@@ -311,6 +311,12 @@ public abstract class SolrPendienteFacadeEJB extends HibernateEJB {
         	if (hayPendientes(tipo, idElemento, accion)){
         		resultado = true;
         	} else {
+        		//Si es un desindexar, habría que ver que borrar todos los indexar pendientes
+        		if (accion == 2l) {
+        			borrarReindexarPendientes(tipo, idElemento);
+        		}
+        		
+        		
 	            final SolrPendiente solrPendiente = new SolrPendiente();
 	            solrPendiente.setTipo(tipo);
 	            solrPendiente.setIdElemento(idElemento);
@@ -331,7 +337,29 @@ public abstract class SolrPendienteFacadeEJB extends HibernateEJB {
 
  
     
-    /**
+    private void borrarReindexarPendientes(String tipo, Long idElemento) {
+    	Session session = getSession();
+        try {
+            Criteria criteri = session.createCriteria(SolrPendiente.class);
+            criteri.add(Expression.eq("resultado", 0));
+            criteri.add(Expression.eq("idElemento", idElemento));
+            criteri.add(Expression.eq("tipo", tipo));
+            criteri.add(Expression.eq("accion", 1));
+            List<SolrPendiente> solrPendientes = castList(SolrPendiente.class, criteri.list());
+            for(SolrPendiente solrPendiente : solrPendientes) {
+            	session.delete(solrPendiente);
+            	session.flush();
+            }
+
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+	}
+
+
+	/**
      * Obtiene los pendientes para la paginación
      * 
      * @ejb.interface-method

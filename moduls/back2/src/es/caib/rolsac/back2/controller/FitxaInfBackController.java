@@ -526,7 +526,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 
 		for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
 			TraduccionFicha tradF=(TraduccionFicha) fitxa.getTraduccion(lang);
-			if (tradF.getIcono() != null) {
+			if (tradF != null && tradF.getIcono() != null) {
 				resultats.put("item_icona_enllas_arxiu", "fitxainf/archivo.do?id=" + fitxa.getId()  + "&lang=" + lang  + "&tipus=1");
 				resultats.put("item_icona" , tradF.getIcono().getNombre());
 			} else {
@@ -544,7 +544,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 		
 		for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
 			TraduccionFicha tradF=(TraduccionFicha) fitxa.getTraduccion(lang);
-			if (tradF.getBanner() != null) {
+			if (tradF != null && tradF.getBanner() != null) {
 				resultats.put("item_banner_enllas_arxiu" , "fitxainf/archivo.do?id=" + fitxa.getId()  + "&lang=" + lang + "&tipus=2");
 				resultats.put("item_banner" , tradF.getBanner().getNombre());
 			} else {
@@ -562,7 +562,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 
 		for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
 			TraduccionFicha tradF=(TraduccionFicha) fitxa.getTraduccion(lang);
-			if (tradF.getImagen() != null) {
+			if (tradF != null && tradF.getImagen() != null) {
 				resultats.put("item_imatge_enllas_arxiu" , "fitxainf/archivo.do?id=" + fitxa.getId()  + "&lang=" + lang + "&tipus=3");
 				resultats.put("item_imatge" , tradF.getImagen().getNombre());
 			} else {

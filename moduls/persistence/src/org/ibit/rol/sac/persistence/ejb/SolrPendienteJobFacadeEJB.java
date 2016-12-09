@@ -521,6 +521,7 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
 					} else {
 						log.debug("Resultado indexando archivo " + traduccion.getArchivo().getId() + ": " + solrPendienteResultado.toString());
 					}
+				}
 			} catch (Exception exception ) {
 				//Cuidado, si da un error obteniendo la traducción, estaría con el valor anterior.
 				if (traduccion == null) {
