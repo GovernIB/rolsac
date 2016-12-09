@@ -49,6 +49,7 @@
                         <element name="url" nillable="true" type="xsd:string" />
                         <element name="validacion" nillable="true" type="xsd:int" />
                         <element name="idioma" nillable="true" type="xsd:string" />
+                        <element name="codigoDIR3" nillable="true" type="xsd:string" />
                     </sequence>
                 </extension>
             </complexContent>
