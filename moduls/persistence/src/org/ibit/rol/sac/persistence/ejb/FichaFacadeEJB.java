@@ -66,6 +66,7 @@ import org.ibit.rol.sac.persistence.util.Cadenas;
 import org.ibit.rol.sac.persistence.util.DateUtils;
 import org.ibit.rol.sac.persistence.util.IndexacionUtil;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.caib.solr.api.SolrFactory;
@@ -1901,7 +1902,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			//Paso 0. Obtenemos la ficha y comprobamos si se puede indexar.
 			final Ficha ficha = obtenerFichaParaSolr(idElemento);
 			if (ficha == null) {
-				return new SolrPendienteResultado(false, "Da problema al cargar la info de la ficha.");
+				log.error("No se puede obtener la ficha con id: " + idElemento);
+				return new SolrPendienteResultado(false, "No se puede obtener la ficha con id: " + idElemento);
 			}
 			
 			boolean isIndexable = IndexacionUtil.isIndexable(ficha);
@@ -2035,14 +2037,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			solrIndexer.indexarContenido(indexData);
 			return new SolrPendienteResultado(true);
 		} catch(Exception exception) {
-			log.error("Error en fichafacade intentando indexar. idElemento:" + idElemento +" categoria:"+categoria, exception);
-			String mensajeError;
-			if (exception.getMessage() == null) {
-				mensajeError = exception.toString();
-			} else {
-				mensajeError = exception.getMessage();
-			}
-			return new SolrPendienteResultado(false, mensajeError);
+			log.error("Error en fichafacade intentando indexar. idElemento:" + idElemento +" categoria:"+categoria, exception);			
+			return new SolrPendienteResultado(false, ExceptionUtils.getStackTrace(exception));
 		}
 	}
 	
@@ -2057,14 +2053,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			solrIndexer.desindexar(solrPendiente.getIdElemento().toString(), EnumCategoria.fromString(solrPendiente.getTipo()));
 			return new SolrPendienteResultado(true);
 		} catch(Exception exception) {
-			log.error("Error en fichafacade intentando desindexar.", exception);
-			String mensajeError;
-			if (exception.getMessage() == null) {
-				mensajeError = exception.toString();
-			} else {
-				mensajeError = exception.getMessage();
-			}
-			return new SolrPendienteResultado(false, mensajeError);
+			log.error("Error en fichafacade intentando desindexar.", exception);			
+			return new SolrPendienteResultado(false, ExceptionUtils.getStackTrace(exception));
 		}
 	}
 	

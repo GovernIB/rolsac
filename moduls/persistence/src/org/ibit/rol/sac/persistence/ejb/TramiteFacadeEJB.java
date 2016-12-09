@@ -19,6 +19,7 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.ibit.rol.sac.model.DocumentTramit;
@@ -1190,14 +1191,8 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			solrIndexer.indexarContenido(indexData);
 			return new SolrPendienteResultado(true);
 		} catch(Exception exception) {
-			log.error("Error en tramitefacade intentando indexar.", exception);
-			String mensajeError;
-			if (exception.getMessage() == null) {
-				mensajeError = exception.toString();
-			} else {
-				mensajeError = exception.getMessage();
-			}
-			return new SolrPendienteResultado(false, mensajeError);
+			log.error("Error en tramitefacade intentando indexar.", exception);			
+			return new SolrPendienteResultado(false, ExceptionUtils.getStackTrace(exception));
 		}
 	}
 	
@@ -1367,14 +1362,8 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			
 			return new SolrPendienteResultado(indexacion);
 		} catch(Exception exception) {
-			log.error("Error en tramiteDocfacade intentando indexar.", exception);
-			String mensajeError;
-			if (exception.getMessage() == null) {
-				mensajeError = exception.toString();
-			} else {
-				mensajeError = exception.getMessage();
-			}
-			return new SolrPendienteResultado(false, mensajeError);
+			log.error("Error en tramiteDocfacade intentando indexar.", exception);			
+			return new SolrPendienteResultado(false, ExceptionUtils.getStackTrace(exception));
 		}
 	}
 	
@@ -1391,14 +1380,8 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			solrIndexer.desindexar(solrPendiente.getIdElemento().toString(), EnumCategoria.ROLSAC_TRAMITE);
 			return new SolrPendienteResultado(true);
 		} catch(Exception exception) {
-			log.error("Error en tramitefacade intentando desindexar.", exception);
-			String mensajeError;
-			if (exception.getMessage() == null) {
-				mensajeError = exception.toString();
-			} else {
-				mensajeError = exception.getMessage();
-			}
-			return new SolrPendienteResultado(false, mensajeError);
+			log.error("Error en tramitefacade intentando desindexar.", exception);			
+			return new SolrPendienteResultado(false, ExceptionUtils.getStackTrace(exception));
 		}
 	}
 	/**
