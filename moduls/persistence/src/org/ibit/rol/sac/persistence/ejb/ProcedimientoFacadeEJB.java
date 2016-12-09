@@ -2080,10 +2080,12 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	
 	/**
 	 * Obtiene un procedimiento Local.
+	 * @ejb.interface-method
+ 	 * @ejb.permission unchecked="true"
 	 * @param id	Identificador del procedimiento.
 	 * @return Devuelve <code>ProcedimientoLocal</code> solicitado.
 	 */
-	private ProcedimientoLocal obtenerProcedimientoParaSolr(Long id) {
+	public ProcedimientoLocal obtenerProcedimientoParaSolr(Long id) {
 
 		Session session = getSession();
 		ProcedimientoLocal procedimiento = null;
@@ -2101,7 +2103,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				Hibernate.initialize(procedimiento.getHechosVitalesProcedimientos());
 				Hibernate.initialize(procedimiento.getFamilia());
 				Hibernate.initialize(procedimiento.getServicioResponsable());
-    			
+				Hibernate.initialize(procedimiento.getDocumentos());
 			} 
 
 		} catch (HibernateException he) {

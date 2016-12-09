@@ -86,4 +86,5 @@ public interface FichaDelegateI {
 
 	public Integer comprobarRelacionFicha(Long idFitxa) throws DelegateException;
 
+	public abstract Ficha obtenerFichaParaSolr(Long id) throws DelegateException;
 }
