@@ -76,7 +76,7 @@
                 <property name="urlVideo" column="TFI_URLVID"/> 
                 <many-to-one name="icono" cascade="all" column="TFI_ICONO" foreign-key="RSC_FICICO_FK"/>
         		<many-to-one name="imagen" cascade="all" column="TFI_IMAGEN" foreign-key="RSC_FICIMA_FK"/>
-        		<many-to-one name="banner" cascade="all" column="TFI_BANNER" foreign-key="RSC_FICBAN_FK"/>	
+        		<many-to-one name="baner" cascade="all" column="TFI_BANNER" foreign-key="RSC_FICBAN_FK"/>	
             </composite-element>
         </map>
 

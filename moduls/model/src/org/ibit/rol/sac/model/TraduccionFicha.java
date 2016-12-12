@@ -68,12 +68,12 @@ public class TraduccionFicha implements Traduccion {
         this.imagen = imagen;
     }
 
-    public Archivo getBanner() {
-        return banner;
+    public Archivo getBaner() {
+        return baner;
     }
 
-    public void setBanner(Archivo banner) {
-        this.banner = banner;
+    public void setBaner(Archivo baner) {
+        this.baner = baner;
     }
 
     
@@ -85,5 +85,5 @@ public class TraduccionFicha implements Traduccion {
     private String urlVideo;
     private Archivo icono;
 	private Archivo imagen;
-	private Archivo banner;
+	private Archivo baner;
 }

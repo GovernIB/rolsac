@@ -217,7 +217,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 				for (String keyIdioma : ficha.getTraduccionMap().keySet()) {
 					TraduccionFicha tradFicha = (TraduccionFicha) ficha.getTraduccionMap().get(keyIdioma);
 					if(tradFicha != null){						
-						Hibernate.initialize(tradFicha.getBanner());
+						Hibernate.initialize(tradFicha.getBaner());
 						Hibernate.initialize(tradFicha.getImagen());
 						Hibernate.initialize(tradFicha.getIcono());
 					}
@@ -403,9 +403,9 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 		    	
 				TraduccionFicha tradFicha = (TraduccionFicha) ficha.getTraduccionMap().get(idioma);
 				
-				Hibernate.initialize(tradFicha.getBanner());
+				Hibernate.initialize(tradFicha.getBaner());
 				
-				return tradFicha.getBanner();
+				return tradFicha.getBaner();
 				
 		
 	
@@ -988,7 +988,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     					
     					Hibernate.initialize(tradFicha.getImagen());    					
     					Hibernate.initialize(tradFicha.getIcono() );
-    					Hibernate.initialize(tradFicha.getBanner() );
+    					Hibernate.initialize(tradFicha.getBaner() );
     					
     				}
     				
@@ -1411,7 +1411,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 					
 					Hibernate.initialize(tradFicha.getImagen());    					
 					Hibernate.initialize(tradFicha.getIcono() );
-					Hibernate.initialize(tradFicha.getBanner() );
+					Hibernate.initialize(tradFicha.getBaner() );
 					
 				}
     			

@@ -500,9 +500,9 @@ public class FitxaInfBackController extends PantallaBaseController {
 			traduccionFichaDTO.put("item_icona", "");
 		}
 	
-		if (tradF.getBanner() != null) {
+		if (tradF.getBaner() != null) {
 			traduccionFichaDTO.put("item_banner_enllas_arxiu" , "fitxainf/archivo.do?id=" + fitxa.getId()  + "&lang=" + lang + "&tipus=2");
-			traduccionFichaDTO.put("item_banner" , tradF.getBanner().getNombre());
+			traduccionFichaDTO.put("item_banner" , tradF.getBaner().getNombre());
 		} else {
 			traduccionFichaDTO.put("item_banner_enllas_arxiu", "");
 			traduccionFichaDTO.put("item_banner", "");
@@ -544,9 +544,9 @@ public class FitxaInfBackController extends PantallaBaseController {
 		
 		for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
 			TraduccionFicha tradF=(TraduccionFicha) fitxa.getTraduccion(lang);
-			if (tradF != null && tradF.getBanner() != null) {
+			if (tradF != null && tradF.getBaner() != null) {
 				resultats.put("item_banner_enllas_arxiu" , "fitxainf/archivo.do?id=" + fitxa.getId()  + "&lang=" + lang + "&tipus=2");
-				resultats.put("item_banner" , tradF.getBanner().getNombre());
+				resultats.put("item_banner" , tradF.getBaner().getNombre());
 			} else {
 				resultats.put("item_banner_enllas_arxiu", "");
 				resultats.put("item_banner", "");
@@ -914,7 +914,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 				TraduccionFicha tradF=(TraduccionFicha) fitxa.getTraduccion(lang) == null ? new TraduccionFicha() : (TraduccionFicha) fitxa.getTraduccion(lang);
 				TraduccionFicha tradOld=(TraduccionFicha) fitxaOld.getTraduccion(lang);
 				
-				tradF.setBanner(tradOld.getBanner());
+				tradF.setBaner(tradOld.getBaner());
 				tradF.setIcono(tradOld.getIcono());
 				tradF.setImagen(tradOld.getImagen());
 				fitxa.setTraduccion(lang, tradF);
@@ -1070,10 +1070,10 @@ public class FitxaInfBackController extends PantallaBaseController {
 				
 				
 				
-				tradF.setBanner(UploadUtil.obtenerArchivo(tradF.getBanner(), fileBanner));
+				tradF.setBaner(UploadUtil.obtenerArchivo(tradF.getBaner(), fileBanner));
 			} else if (valoresForm.get("item_banner_" + lang + "_delete") != null && !"".equals(valoresForm.get("item_banner_" + lang + "_delete"))) {
 				// borrar fichero si se solicita
-				tradF.setBanner(null);
+				tradF.setBaner(null);
 			}
 		}
 		return fitxa;
