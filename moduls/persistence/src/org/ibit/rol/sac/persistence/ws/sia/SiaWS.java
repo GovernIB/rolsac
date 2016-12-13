@@ -29,42 +29,54 @@ public class SiaWS {
 	public static SiaResultado enviarSIA(Sia sia) throws Exception {
 		
 		SiaResultado siaResultado = new SiaResultado();
-		String usuario = SiaUtils.getUsuarioEnvio();
-		String password = SiaUtils.getPasswordEnvio();
-		WsSIAActualizarActuaciones_PortType client = SiaClient.createClient(SiaUtils.getUrlEnvio());
-		
-		ParamSIAACTUACIONESACTUACION[] actuaciones = cargarDatosSia(sia);
-		
-		ParamSIA parameters = new ParamSIA(usuario, password, null, actuaciones);
-		
-		EnviaSIA resultado = client.actualizarSIA_v3_1(parameters);
-		
-		EnviaSIAACTUACIONESACTUACION[] res = resultado.getACTUACIONES();
-		
-		int correctos = 0;
-		int incorrectos = 0;
-		
-		if(res != null){
+		if (SiaUtils.isActivoEnvio()) {
+			String usuario = SiaUtils.getUsuarioEnvio();
+			String password = SiaUtils.getPasswordEnvio();
+			WsSIAActualizarActuaciones_PortType client = SiaClient.createClient(SiaUtils.getUrlEnvio());
 			
-			for (EnviaSIAACTUACIONESACTUACION envia : res) {
-				if(envia.getCORRECTO().equals(SiaUtils.SI)){
-					correctos++;
-					siaResultado.setCodSIA(envia.getCODIGOACTUACION());
-				} else {
-					incorrectos++;
-					ERRORESERROR[] arrayErrores = envia.getERRORES();
-					for (ERRORESERROR error : arrayErrores) {
-						siaResultado.setMensaje(error.getDESCERROR() + " "+ siaResultado.getMensaje());
+			ParamSIAACTUACIONESACTUACION[] actuaciones = cargarDatosSia(sia);
+			
+			ParamSIA parameters = new ParamSIA(usuario, password, null, actuaciones);
+			
+			EnviaSIA resultado = client.actualizarSIA_v3_1(parameters);
+			
+			EnviaSIAACTUACIONESACTUACION[] res = resultado.getACTUACIONES();
+			
+			int correctos = 0;
+			int incorrectos = 0;
+			
+			if(res != null) {
+				
+				for (EnviaSIAACTUACIONESACTUACION envia : res) {
+					if(envia.getCORRECTO().equals(SiaUtils.SI)) {
+						correctos++;
+						siaResultado.setCodSIA(envia.getCODIGOACTUACION());
+					} else {
+						incorrectos++;
+						ERRORESERROR[] arrayErrores = envia.getERRORES();
+						for (ERRORESERROR error : arrayErrores) {
+							siaResultado.setMensaje(error.getDESCERROR() + " "+ siaResultado.getMensaje());
+						}
 					}
+					siaResultado.setEstadoSIA(envia.getOPERACION());
 				}
-				siaResultado.setEstadoSIA(envia.getOPERACION());
+			}
+		
+			siaResultado.setCorrectos(correctos);
+			siaResultado.setIncorrectos(incorrectos);
+			
+		} else {
+			int aleatorio = (int)(Math.random()*(100));
+			if (aleatorio % 8 == 0) {
+				siaResultado.setMensaje("Error aleatorio, estás en modo prueba!!");
+				siaResultado.setCorrectos(0); 
+				siaResultado.setIncorrectos(1);
+			} else {
+				siaResultado.setCodSIA(String.valueOf(Math.random()*(10000)));
+				siaResultado.setCorrectos(1);
+				siaResultado.setIncorrectos(0);
 			}
 		}
-	
-		siaResultado.setCorrectos(correctos);
-		siaResultado.setIncorrectos(incorrectos);
-		
-		
 		return siaResultado;
 	}
 

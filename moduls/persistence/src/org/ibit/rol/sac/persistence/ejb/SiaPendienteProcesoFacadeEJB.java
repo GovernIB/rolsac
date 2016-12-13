@@ -102,13 +102,39 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 		
 		try {
 
-    		StringBuilder consulta = new StringBuilder("select sia from SiaPendiente as sia where sia.estado = :estado");
+    		StringBuilder consulta = new StringBuilder("select sia from SiaPendiente as sia where 1 = 1 ");
+    		
+    		if (filtro.getEstado() != null) {
+    			consulta.append(" and sia.estado = :estado");
+    		}
+    		
+    		if (filtro.getIdElemento() != null) {
+    			consulta.append(" and sia.idElemento = :idElemento");
+    		}
+    		
+    		if (filtro.getTipoAccion() != null) {
+    			consulta.append(" and sia.tipoAccion = :tipoAccion");
+    		}
+    		
     		
     		Query query = session.createQuery( consulta.toString() );
     		query.setCacheable(true);
-    		query.setLong("estado", SiaUtils.SIAJOB_SIJ_ESTADO_CREADO);
-
-    		query.setMaxResults(filtro.numElementos);
+    		
+    		if (filtro.getEstado() != null) {
+    			query.setLong("estado", filtro.getEstado());
+    		}
+    		if (filtro.getIdElemento() != null) {
+    			query.setLong("idElemento", filtro.getIdElemento());
+    		}
+    		
+    		if (filtro.getTipoAccion() != null) {
+    			query.setInteger("tipoAccion", filtro.getTipoAccion());
+    		}
+    		
+    		
+    		if (filtro.numElementos != null) {
+    			query.setMaxResults(filtro.numElementos);
+    		}
     		
     		return query.list();
 
@@ -176,9 +202,38 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 		
 		try {
 
-    		siaPendiente.setEstado(SiaUtils.SIAJOB_SIJ_ESTADO_CREADO);
-    		session.save(siaPendiente);
-    		session.flush();
+			//Si es de tipo borrado, hay que borrar las acciones pendientes de tipo accion existe.
+			if (SiaUtils.SIAPENDIENTE_TIPO_ACCION_BORRADO.compareTo(siaPendiente.getTipoAccion()) == 0) {
+				
+				//Borramos las pendientes.
+				FiltroSia filtro = new FiltroSia();
+				filtro.setEstado(SiaUtils.SIAJOB_SIJ_ESTADO_CREADO);
+				filtro.setTipoAccion(SiaUtils.SIAPENDIENTE_TIPO_ACCION_EXISTE);
+				filtro.setIdElemento(siaPendiente.getIdElemento());
+				List<SiaPendiente> pendientes = this.getSiaPendientes(filtro);
+				for(SiaPendiente siaPendienteParBorrar: pendientes) {
+					session.delete(siaPendienteParBorrar);
+				}
+				
+				//Guardamos
+				siaPendiente.setEstado(SiaUtils.SIAJOB_SIJ_ESTADO_CREADO);
+	    		session.save(siaPendiente);
+	    		session.flush();
+			} else {
+				//Si es de tipo creado, revisar si ya existe un pendiente.
+				FiltroSia filtro = new FiltroSia();
+				filtro.setEstado(SiaUtils.SIAJOB_SIJ_ESTADO_CREADO);
+				filtro.setTipoAccion(SiaUtils.SIAPENDIENTE_TIPO_ACCION_EXISTE);
+				filtro.setIdElemento(siaPendiente.getIdElemento());
+				List<SiaPendiente> pendientes = this.getSiaPendientes(filtro);
+			
+				//Si no hay datos, creamos.
+				if (pendientes.size() == 0) {
+					siaPendiente.setEstado(SiaUtils.SIAJOB_SIJ_ESTADO_CREADO);
+					session.save(siaPendiente);
+					session.flush();
+				}
+	    	}
     		
     		return siaPendiente;
 
@@ -276,7 +331,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     		estados.add(SiaUtils.SIAJOB_SIJ_ESTADO_EN_EJECUCION);
     		estados.add(SiaUtils.SIAJOB_SIJ_ESTADO_CREADO);
     		
-    		final Query query = getSession().createQuery("from SiaJob siaJob where siaJob.estado in  (:lId) ");
+    		final Query query = getSession().createQuery("from SiaJob siaJob where siaJob.fechaFin is null AND (siaJob.estado is null OR siaJob.estado in (:lId)) ");
     		query.setParameterList("lId", estados, Hibernate.INTEGER);
     		List<SiaJob> jobs =  query.list();
     		for(SiaJob job : jobs) {
@@ -335,7 +390,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
         Session session = getSession();
         try {
             Criteria criteri = session.createCriteria(SiaJob.class);
-            criteri.addOrder(Order.desc("fechaIni"));
+            criteri.addOrder(Order.desc("id"));
             criteri.setMaxResults(cuantos);
             
             return castList(SiaJob.class, criteri.list());

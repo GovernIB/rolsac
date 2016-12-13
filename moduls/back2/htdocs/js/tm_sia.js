@@ -495,6 +495,7 @@ function CLlistat(){
 		var contenido = "";
 		var width="10"; //Porcentaje del width de cada columna
 		var width20="20"; 
+		var width40="40";
 		
 		if (data.nodes.length == 0) {
 			contenido = "No hi ha dades";
@@ -507,8 +508,8 @@ function CLlistat(){
 			contenido += "<div class=\"th \" role=\"columnheader\" style=\"width:"+width+"%\">Estat</div>";
 			contenido += "<div class=\"th \" role=\"columnheader\" style=\"width:"+width+"%\">Data inici</div>";
 			contenido += "<div class=\"th \" role=\"columnheader\" style=\"width:"+width+"%\">Data fi</div>";
-			contenido += "<div class=\"th \" role=\"columnheader\" style=\"width:"+width20+"%\">Descripció abreviada</div>";
-			contenido += "<div class=\"th \" role=\"columnheader\" style=\"width:"+width+"%\">Descripció</div>";
+			contenido += "<div class=\"th \" role=\"columnheader\" style=\"width:"+width40+"%\">Descripció abreviada</div>";
+			contenido += "<div class=\"th \" role=\"columnheader\" style=\"width:"+width+"%;align-items: center;\">Descripció</div>";
 			contenido += "</div>";
 			contenido += "</div>";
 			contenido += "<div class=\"tbody\">";
@@ -559,11 +560,11 @@ function CLlistat(){
 				contenido += "<span class=\"fecha\">" + Llistat.getFechaString(elemento.fechaFin) + "</span>";	
 				contenido += "</div>";			
 				
-				contenido += "<div class=\"td fechaFicha\" role=\"gridcell\" style=\"width:"+width20+"%\">";
+				contenido += "<div class=\"td fechaFicha\" role=\"gridcell\" style=\"width:"+width40+"%\;text-align: left;\">";
 				contenido += "<span class=\"descripcion\" >" + elemento.descBreve + "</span>";
 				contenido += "</div>";
 				
-				contenido += "<div class=\"td fechaNormativa\" role=\"gridcell\" style=\"width:"+width+"%\">";
+				contenido += "<div class=\"td fechaNormativa\" role=\"gridcell\" style=\"width:"+width+"%;align-items: center;\">";
 				contenido += "<div class=\"btnGenerico\" style = \"float:left\"><a href=\"javascript:;\" style=\"width:100px;\" id = \"botonInfo\" class=\"btn unitatOrganica\" onclick=\"pintarPopUp('"+ elemento.descripcion +"')\"><span>"+txtBotonInfo+"</span></a></div>";
 
 				//FIN ROW

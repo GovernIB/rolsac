@@ -215,7 +215,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			session.flush();
 			
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, procedimiento.getId(), false);
-		    
+		    SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, procedimiento.getId(), SiaUtils.SIAPENDIENTE_TIPO_ACCION_EXISTE);
+			
 			return procedimiento.getId();
 
 		} catch (HibernateException he) {
@@ -331,6 +332,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			session.flush();
 			
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, procedimiento.getId(), false);
+			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, procedimiento.getId(), SiaUtils.SIAPENDIENTE_TIPO_ACCION_EXISTE);
 			
 			return procedimiento.getId();
 
@@ -1336,7 +1338,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			session.flush();
 			
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, procedimiento.getId(), false);			
-
+			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, procedimiento.getId(), SiaUtils.SIAPENDIENTE_TIPO_ACCION_EXISTE);
+			
 		} catch (HibernateException e) {
 
 			throw new EJBException(e);
@@ -1384,6 +1387,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			session.flush();
 			
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, procedimiento.getId(), false);
+			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, procedimiento.getId(), SiaUtils.SIAPENDIENTE_TIPO_ACCION_EXISTE);
 			
 		} catch (HibernateException e) {
 
@@ -1446,7 +1450,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			session.flush();
 			
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, id, true);
-
+			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, id, SiaUtils.SIAPENDIENTE_TIPO_ACCION_BORRADO);
+			
 		} catch (HibernateException he) {
 
 			throw new EJBException(he);
@@ -1471,12 +1476,24 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		try {
 			UnidadAdministrativa unidadAdministrativa = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, id);
 			Hibernate.initialize(unidadAdministrativa.getProcedimientos());
-			List procs = new ArrayList(unidadAdministrativa.getProcedimientos());
-
-			//Ordena la lista por el atributo id
-			Collections.sort(procs, new ProcedimientoLocal());
-
-			return procs;
+			
+			List result = new ArrayList();
+			for (Iterator iter = unidadAdministrativa.getProcedimientos().iterator(); iter.hasNext();) {
+				ProcedimientoLocal procedimiento = (ProcedimientoLocal) iter.next();
+				Hibernate.initialize(procedimiento.getTramites());
+				Hibernate.initialize(procedimiento.getMaterias());
+				Hibernate.initialize(procedimiento.getUnidadAdministrativa());
+				Hibernate.initialize(procedimiento.getHechosVitalesProcedimientos());
+				Hibernate.initialize(procedimiento.getPublicosObjetivo());
+				Hibernate.initialize(procedimiento.getNormativas());
+				if (publico(procedimiento)) {
+					result.add(procedimiento);
+				}
+			}
+			//Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+			Collections.sort(result, new ProcedimientoLocal());
+			
+			return result;
 		} catch (HibernateException he) {
 			throw new EJBException(he);
 		} finally {
@@ -2363,6 +2380,12 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			Hibernate.initialize(normativa.getProcedimientos());
 			for (Iterator iter = normativa.getProcedimientos().iterator(); iter.hasNext();) {
 				ProcedimientoLocal procedimiento = (ProcedimientoLocal) iter.next();
+				Hibernate.initialize(procedimiento.getTramites());
+				Hibernate.initialize(procedimiento.getMaterias());
+				Hibernate.initialize(procedimiento.getUnidadAdministrativa());
+				Hibernate.initialize(procedimiento.getHechosVitalesProcedimientos());
+				Hibernate.initialize(procedimiento.getPublicosObjetivo());
+				Hibernate.initialize(procedimiento.getNormativas());
 				if (publico(procedimiento)) {
 					result.add(procedimiento);
 				}

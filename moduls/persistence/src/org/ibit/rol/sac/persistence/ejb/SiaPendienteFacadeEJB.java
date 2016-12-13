@@ -1,7 +1,7 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -10,7 +10,6 @@ import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
 import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 
 import org.ibit.rol.sac.model.DocumentTramit;
@@ -31,6 +30,8 @@ import org.ibit.rol.sac.persistence.delegate.SiaPendienteProcesoDelegate;
 import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.ibit.rol.sac.persistence.ws.sia.SiaWS;
+
+
 
 
 /**
@@ -124,9 +125,9 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		StringBuffer descripcionBreve = new StringBuffer();
 		
 		descripcionBreve.append("El proceso ha empezado a las " + cadenaFecha);
-		descripcionBreve.append(" Se han enviado "+(resultado.getCorrectos() + resultado.getIncorrectos())+" datos \n");
-		descripcionBreve.append(resultado.getCorrectos() + " han sido correctos \n");
-		descripcionBreve.append(resultado.getIncorrectos() + " han sido incorrectos \n");
+		descripcionBreve.append(" Se han enviado "+(resultado.getCorrectos() + resultado.getIncorrectos())+" datos <br />");
+		descripcionBreve.append(resultado.getCorrectos() + " han sido correctos <br />");
+		descripcionBreve.append(resultado.getIncorrectos() + " han sido incorrectos <br />");
 		cadenaFecha = formato.format(fecha);
 		descripcionBreve.append(" Finalizado hora "+ cadenaFecha);
 		
@@ -149,111 +150,226 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		final SiaPendienteProcesoDelegate siaPendienteDelegate = DelegateUtil.getSiaPendienteProcesoDelegate();
 		Session session = null;
 		
-        try {
+		StringBuffer resultadoDescripcion = new StringBuffer();
+		StringBuffer resultadoDescripcionBreve = new StringBuffer();
+		int correctos = 0;
+		int incorrectos = 0;
+        try 
+        {
+        		List<SiaPendiente> siaPendientes = siaPendienteDelegate.getSiaPendientesEnviar();
+        		session = getSession();
         	
-        	
-        	
-        	List<SiaPendiente> siaPendientes = siaPendienteDelegate.getSiaPendientesEnviar();
-        	session = getSession();
-        	
-			int i = 0;
-			SiaResultado resultado = new SiaResultado();
+        		int i = 0;
+        		SiaResultado resultado = new SiaResultado();
 			
-			final ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
+        		final ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
 			
-	        	for(SiaPendiente siaPendiente : siaPendientes) {
-	        			
-        			if (i % 20 == 0) {
-        				session.flush();
-        			} 
-        			i++;
-        			if (SiaUtils.SIAJOB_TIPO_PROCEDIMIENTO.equals(siaPendiente.getTipo() )) {
-        				
-        				ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimiento(siaPendiente.getIdElemento());
-        				//GENERAR OBJETO SIA
-        				Sia  sia = obtenerSiaProc(procedimiento);
-    					try {
-							resultado = SiaWS.enviarSIA(sia);
-							procedimiento.setEstadoSIA(resultado.getEstadoSIA());
-							procedimiento.setFechaSIA(new Date());
+	        	for(SiaPendiente siaPendiente : siaPendientes) 
+	        	{
+	        
+	        		try 
+	        		{
+	        			if (i % 20 == 0) {
+	        				session.flush();
+	        			} 
+	        			i++;
+	        			if (SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO.equals(siaPendiente.getTipo() )) {
+	        				
+	        				if (siaPendiente.getTipoAccion().compareTo(SiaUtils.SIAPENDIENTE_TIPO_ACCION_BORRADO) == 0) {
+	        					
+	        					resultadoDescripcion.append(" Vamos a enviar una baja de un procedimiento (id:"+siaPendiente.getIdElemento()+", idSIA:"+siaPendiente.getIdSia()+") borrado <br /> ");
+		        				
+	        					Sia sia = new Sia();
+	        					sia.setIdSIA(siaPendiente.getIdSia().toString());
+	        					sia.setOperacion(SiaUtils.ESTADO_BAJA); 
+	        					resultado = SiaWS.enviarSIA(sia); 
+	        					if (resultado.isCorrecto()) {
+		    						siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_CORRECTO);
+		    						correctos++;
+		        					siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);	
+		        					resultadoDescripcion.append("   -- Marcado como correcto <br />");
+		    					} else {
+		    						siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_INCORRECTO);
+		    						siaPendiente.setMensaje(resultado.getMensaje());
+		    						incorrectos++;
+		    						siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
+		    						resultadoDescripcion.append("   -- Marcado como incorrecto <br />");
+		    						resultadoDescripcion.append("   -- Mensaje:"+resultado.getMensaje()+" <br />");
+		    					}
+	        					
+	        				} else {
+	        					
+	        					resultadoDescripcion.append(" Vamos a enviar una baja de un procedimiento (id:"+siaPendiente.getIdElemento()+", idSIA:"+siaPendiente.getIdSia()+") <br />");
+		        				
+	        					ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimiento(siaPendiente.getIdElemento());
+	        					
+	        					//GENERAR OBJETO SIA
+	            				Sia  sia = obtenerSiaProc(procedimiento);
+		    					
+	            				try {
+									resultado = SiaWS.enviarSIA(sia);
+								} catch (Exception e) {
+									log.error(e.getMessage());
+								}
+	            				
+		    					if (resultado.isCorrecto()) {
+		    						//Si es correcto, actualizamos el procedimiento
+		    						procedimiento.setEstadoSIA(resultado.getEstadoSIA());
+									procedimiento.setFechaSIA(new Date());
+									procDelegate.actualizarProcedimiento(procedimiento);
+									
+									//Actualizamos el siaPendinete
+									siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_CORRECTO);
+		    						siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
+		    						
+		    						correctos++;		
+		    						
+		    						resultadoDescripcion.append("   -- Marcado como correcto <br />");
+		    					} else {
+		    						//Actualizamos el siaPendinete
+									siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_INCORRECTO);
+									siaPendiente.setMensaje(resultado.getMensaje());
+		    						siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
+		        					
+		        					incorrectos++;	
+		        					resultadoDescripcion.append("   -- Marcado como incorrecto <br />");
+		    						resultadoDescripcion.append("   -- Mensaje:"+resultado.getMensaje()+" <br />");
+		    					}
+		    					
+		    					
+	        				}
+	
+	        				
+	        			} else if (SiaUtils.SIAPENDIENTE_TIPO_UNIDAD_ADMINISTRATIVA.equals(siaPendiente.getTipo() )) {
+	        				
+	        				List <ProcedimientoLocal>listProc = procDelegate.listarProcedimientosUA(siaPendiente.getIdElemento());
+	        				resultadoDescripcion.append(" Vamos a actualizar procedimientos asociados a una UA (idUA:"+siaPendiente.getIdElemento()+", idSIA:"+siaPendiente.getIdSia()+") <br />");
+	        				
+	        				boolean todosCorrectos = true;
+	        				for (ProcedimientoLocal proc : listProc) {
+	        					resultadoDescripcion.append("   -- Procedimiento asociado (idProc:"+proc.getId()+") <br />");
+		        				
+	        					//GENERAR OBJETO SIA
+	        					Sia  sia = obtenerSiaProc(proc);
+	        					
+								resultado = obtenerResultadosEnvio (siaPendienteDelegate, 
+																	resultado.getIncorrectos(),
+																	siaPendiente, 
+																	sia, 
+																	siaJob);
 							
-							procDelegate.actualizarProcedimiento(procedimiento);
-							
-						} catch (Exception e) {
-							log.error(e.getMessage());
-						}
-    					if (resultado.isCorrecto()) {
-    						siaPendiente.setEstado(SiaUtils.SIAJOB_SIP_ESTADO_CORRECTO);
-        					siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);	
-    					} else {
-    						siaPendiente.setEstado(SiaUtils.SIAJOB_SIP_ESTADO_INCORRECTO);
-        					siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
-    					}
-    					
-    					siaJob.setDescBreve(Hibernate.createClob(obtenerDescripcion(resultado).toString()));
-    					siaJob.setDescripcion(Hibernate.createClob(obtenerDescripcion(resultado).toString() 
-    							+ (resultado.getMensaje()!=null ? resultado.getMensaje() : "")));
-    					
-    					
-
-        				
-        			} else if (SiaUtils.SIAJOB_TIPO_UNIDAD_ADMINISTRATIVA.equals(siaPendiente.getTipo() )) {
-        				
-        				List <ProcedimientoLocal>listProc = procDelegate.listarProcedimientosUA(siaPendiente.getIdElemento());
-        				
-        				for (ProcedimientoLocal proc : listProc) {
-        					//GENERAR OBJETO SIA
-        					Sia  sia = obtenerSiaProc(proc);
-        					
-								resultado=obtenerResultadosEnvio(
+								if (resultado.isCorrecto() ) {
+		    						
+									//Si es correcto, actualizamos el procedimiento
+									proc.setEstadoSIA(resultado.getEstadoSIA());
+		    						proc.setFechaSIA(new Date());
+		    						procDelegate.actualizarProcedimiento(proc);
+		    						
+		    						resultadoDescripcion.append("   ---- Ejecutado correcto <br />");
+			        				
+		    					} else {
+		    						
+		    						todosCorrectos = false;
+		    						resultadoDescripcion.append("   ---- Ejecutado incorrecto. Mensaje:"+resultado.getMensaje()+" <br />");
+		    					}
+	        					
+							}
+	        				
+	        				if (todosCorrectos) {
+	        					//Actualizamos el siaPendiente
+								siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_CORRECTO);
+	    						siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
+	    						
+	    						correctos++;
+	    						resultadoDescripcion.append("   -- Marcado como correcto <br />");
+	    					} else {
+	    						//Actualizamos el siaPendiente
+								siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_INCORRECTO);
+								siaPendiente.setMensaje("Ha fallado indexando los procedimientos asociados a la UA");
+	        					siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
+	        					
+	        					incorrectos++;	
+	        					resultadoDescripcion.append("   -- Marcado como incorrecto <br />");
+	    						resultadoDescripcion.append("   -- Mensaje:"+resultado.getMensaje()+" <br />");
+	    					}
+	        				
+	        			} else if (SiaUtils.SIAPENDIENTE_TIPO_NORMATIVA.equals(siaPendiente.getTipo() )) {
+	        				
+	        				//OBTENER EL ID DE TODOS LAS PROCEDIMIENTOS AFECTADOS POR ESA NORMATIVA
+	        				final List <ProcedimientoLocal>listProc = procDelegate.listarProcedimientosNormativa(siaPendiente.getIdElemento());
+	        				boolean todosCorrectos = true;
+	        				for (ProcedimientoLocal proc : listProc) {
+	        					//GENERAR OBJETO SIA
+	        					final Sia  sia = obtenerSiaProc(proc);
+	        					resultado = obtenerResultadosEnvio(
 										siaPendienteDelegate, resultado.getIncorrectos(),
 										siaPendiente, sia, siaJob);
-							
-								proc.setEstadoSIA(resultado.getEstadoSIA());
-								proc.setFechaSIA(new Date());
-								
-								procDelegate.actualizarProcedimiento(proc);
-        					
-						}
-        				
-        			} else if (SiaUtils.SIAJOB_TIPO_NORMATIVA.equals(siaPendiente.getTipo() )) {
-        				//OBTENER EL ID DE TODOS LAS PROCEDIMIENTOS AFECTADOS POR ESA NORMATIVA
-        				List <ProcedimientoLocal>listProc = procDelegate.listarProcedimientosNormativa(siaPendiente.getIdElemento());
-        				for (ProcedimientoLocal proc : listProc) {
-        					//GENERAR OBJETO SIA
-        					Sia  sia = obtenerSiaProc(proc);
-        					resultado = obtenerResultadosEnvio(
-									siaPendienteDelegate, resultado.getIncorrectos(),
-									siaPendiente, sia, siaJob);
-        					
-        					proc.setEstadoSIA(resultado.getEstadoSIA());
-        					proc.setFechaSIA(new Date());
-        					
-        					procDelegate.actualizarProcedimiento(proc);
-						}
-        			} 
+	        					
+	        					if (resultado.isCorrecto() ) {
+		    						
+									//Si es correcto, actualizamos el procedimiento
+									proc.setEstadoSIA(resultado.getEstadoSIA());
+		    						proc.setFechaSIA(new Date());
+									procDelegate.actualizarProcedimiento(proc);
+									resultadoDescripcion.append("   ---- Ejecutado correcto <br />");
+		    					} else {
+		    						
+		    						todosCorrectos = false;
+		    						resultadoDescripcion.append("   ---- Ejecutado incorrecto. Mensaje:"+resultado.getMensaje()+" <br />");
+		    					}
+							}
+	        				
+	        				if (todosCorrectos) {
+	        					//Actualizamos el siaPendiente
+								siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_CORRECTO);
+	    						siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
+	    						
+	    						correctos++;		    						
+	    						resultadoDescripcion.append("   -- Marcado como correcto <br />");
+	    					} else {
+	    						//Actualizamos el siaPendiente
+								siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_INCORRECTO);
+								siaPendiente.setMensaje("Ha fallado indexando los procedimientos asociados a la normativa");
+	        					siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
+	        					
+	        					incorrectos++;		    	
+	        					resultadoDescripcion.append("   -- Marcado como incorrecto <br />");
+	    						resultadoDescripcion.append("   -- Mensaje:"+resultado.getMensaje()+" <br />");
+	    					}
+	        			} 
+        			
+	        		} catch (Exception exception) {
+	        			resultadoDescripcion.append("Ha fallado la indexación en pendiente con el mensaje." + exception.getMessage()+"<br />");
+	        			siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_INCORRECTO);
+						siaPendiente.setMensaje("Ha fallado indexando, error no controlado. Mensaje:"+ exception.getMessage());
+    					siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
+    					incorrectos++;
+	        		}
 	        	}        	
 	        	
-	        	if (resultado.getIncorrectos() > 0) {
+	        	if (incorrectos > 0) {
 					siaJob.setEstado(SiaUtils.SIAJOB_SIJ_ESTADO_ENVIADO_CON_ERRORES);
 				} else {
 					siaJob.setEstado(SiaUtils.SIAJOB_SIJ_ESTADO_ENVIADO);
 				}
-			
+			 
+	        	resultadoDescripcionBreve.append("Se han enviado "+(correctos+incorrectos)+"datos. De los cuales: <br />");
+	        	resultadoDescripcionBreve.append(" - "+correctos+" datos correctos  <br />");
+	        	resultadoDescripcionBreve.append(" - "+incorrectos+" datos incorrectos  <br />");
+	        	Calendar calendar = Calendar.getInstance();
+	        	resultadoDescripcionBreve.append(" Finalizado a las "+calendar.getTime()+"  <br />");
+	        	siaJob.setDescBreve(Hibernate.createClob(resultadoDescripcionBreve.toString()));
+    			siaJob.setDescripcion(Hibernate.createClob(resultadoDescripcion.toString()));
+    			
+	        	actualizarJob(siaJob);
+	        	
+	        	session.flush();
         	
-        	session.flush();
-        	
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } catch (DelegateException e) {
-        	log.error("Error en enviarPendientes ", e);
-		} catch (SQLException e) {
-			log.error("Error en enviarPendientes ", e);
-		} catch (Exception e) {
-			log.error(e.getMessage());
+      	} catch (Exception e) {
+			log.error(e.getMessage());			
 		}finally {
+			
             if (session != null) {close(session);}
-           
         }
         
 	}
@@ -267,18 +383,19 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		SiaResultado resultado = SiaWS.enviarSIA(sia);
 		
 		if (resultado.isCorrecto()) {
-			siaPendiente.setEstado(SiaUtils.SIAJOB_SIP_ESTADO_CORRECTO);
+			siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_CORRECTO);
 			siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);	
 		} else {
 			erroneos++;
-			siaPendiente.setEstado(SiaUtils.SIAJOB_SIP_ESTADO_INCORRECTO);
+			siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_INCORRECTO);
 			siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
 		}
 		
-		siaJob.setDescBreve(Hibernate.createClob(obtenerDescripcion(resultado).toString()));
-		siaJob.setDescripcion(Hibernate.createClob(obtenerDescripcion(resultado).toString() 
-				+ (resultado.getMensaje()!=null ? resultado.getMensaje() : "")));
-		
+		if (siaJob != null) {
+			siaJob.setDescBreve(Hibernate.createClob(obtenerDescripcion(resultado).toString()));
+			siaJob.setDescripcion(Hibernate.createClob(obtenerDescripcion(resultado).toString() 
+					+ (resultado.getMensaje()!=null ? resultado.getMensaje() : "")));
+		}
 		return resultado;
 	}
 

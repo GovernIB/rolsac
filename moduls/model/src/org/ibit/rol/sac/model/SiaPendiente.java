@@ -39,6 +39,9 @@ public class SiaPendiente implements ValueObject {
 	/** Tipo acción (alta,modificación.reactivación o baja) **/
 	private Integer tipoAccion;
 	
+	/** Código SIA. **/
+	private Long idSia;
+	
 	/**
 	 * @return the id
 	 */
@@ -144,6 +147,18 @@ public class SiaPendiente implements ValueObject {
 		this.tipoAccion = tipoAccion;
 	}
 	
+	/**
+	 * @return the idSia
+	 */
+	public Long getIdSia() {
+		return idSia;
+	}
+	/**
+	 * @param idSia the idSia to set
+	 */
+	public void setIdSia(Long idSia) {
+		this.idSia = idSia;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
