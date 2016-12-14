@@ -6,8 +6,8 @@ public class FiltroSia {
 	public Integer estado;
 	/** Cuantos elementos a mostrar por pantalla. **/
 	public Integer numElementos;
-	/** Tipo de acción. EXISTE o BORRADO. **/
-	public Integer tipoAccion;
+	/** Existe procedimiento o ha sido borrado. **/
+	public Integer existe;
 	/** Id del elemento. **/
 	public Long idElemento;
 
@@ -40,17 +40,17 @@ public class FiltroSia {
 	}
 
 	/**
-	 * @return the tipoAccion
+	 * @return the existe
 	 */
-	public Integer getTipoAccion() {
-		return tipoAccion;
+	public Integer getExiste() {
+		return existe;
 	}
 
 	/**
-	 * @param tipoAccion the tipoAccion to set
+	 * @param existe the existe to set
 	 */
-	public void setTipoAccion(Integer tipoAccion) {
-		this.tipoAccion = tipoAccion;
+	public void setExiste(Integer existe) {
+		this.existe = existe;
 	}
 
 	/**

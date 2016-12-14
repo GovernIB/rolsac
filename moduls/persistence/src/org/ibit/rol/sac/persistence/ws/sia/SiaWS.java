@@ -2,6 +2,7 @@ package org.ibit.rol.sac.persistence.ws.sia;
 
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.Sia;
+import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.ws.SiaResultado;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.ibit.rol.sac.persistence.ws.sia.actualizar.WsSIAActualizarActuaciones_PortType;
@@ -46,19 +47,24 @@ public class SiaWS {
 			int incorrectos = 0;
 			
 			if(res != null) {
-				
+				siaResultado.setResultado(SiaResultado.RESULTADO_OK);
 				for (EnviaSIAACTUACIONESACTUACION envia : res) {
 					if(envia.getCORRECTO().equals(SiaUtils.SI)) {
 						correctos++;
 						siaResultado.setCodSIA(envia.getCODIGOACTUACION());
 					} else {
+						siaResultado.setResultado(SiaResultado.RESULTADO_ERROR);
 						incorrectos++;
 						ERRORESERROR[] arrayErrores = envia.getERRORES();
 						for (ERRORESERROR error : arrayErrores) {
 							siaResultado.setMensaje(error.getDESCERROR() + " "+ siaResultado.getMensaje());
 						}
 					}
-					siaResultado.setEstadoSIA(envia.getOPERACION());
+					if (SiaUtils.ESTADO_BAJA.compareTo(envia.getOPERACION()) == 0) {
+						siaResultado.setEstadoSIA(SiaUtils.ESTADO_BAJA);
+					} else {
+						siaResultado.setEstadoSIA(SiaUtils.ESTADO_ALTA);
+					}					
 				}
 			}
 		
@@ -71,10 +77,17 @@ public class SiaWS {
 				siaResultado.setMensaje("Error aleatorio, estás en modo prueba!!");
 				siaResultado.setCorrectos(0); 
 				siaResultado.setIncorrectos(1);
+				siaResultado.setResultado(SiaResultado.RESULTADO_ERROR);
 			} else {
-				siaResultado.setCodSIA(String.valueOf(Math.random()*(10000)));
+				siaResultado.setCodSIA(String.valueOf((int)(Math.random()*(10000000))));
 				siaResultado.setCorrectos(1);
 				siaResultado.setIncorrectos(0);
+				siaResultado.setResultado(SiaResultado.RESULTADO_OK);
+				if (aleatorio % 8 == 2 || aleatorio % 8 == 4) {
+					siaResultado.setEstadoSIA(SiaUtils.ESTADO_BAJA);
+				} else {
+					siaResultado.setEstadoSIA(SiaUtils.ESTADO_ALTA);
+				} 
 			}
 		}
 		return siaResultado;
@@ -83,8 +96,9 @@ public class SiaWS {
 	/**
 	 * @param sia
 	 * @return
+	 * @throws Exception 
 	 */
-	private static ParamSIAACTUACIONESACTUACION[] cargarDatosSia(Sia sia) {
+	private static ParamSIAACTUACIONESACTUACION[] cargarDatosSia(Sia sia) throws Exception {
 		ParamSIAACTUACIONESACTUACION paramSia = new ParamSIAACTUACIONESACTUACION();
 		
 		paramSia.setCODIGOACTUACION(sia.getIdSIA());
@@ -111,8 +125,13 @@ public class SiaWS {
 		i=0;
 		for (Normativa norm : sia.getNormativas()) {
 			NORMATIVASNORMATIVA nor = new NORMATIVASNORMATIVA();
-			nor.setCODRANGO(norm.getTipo().getTipoSia().toString());
-			nor.setTITULO(norm.getTraduccionTitulo());
+			if (norm.getTipo() == null) { throw new Exception("No tiene tipo sia la normativa.");}
+			nor.setCODRANGO(norm.getTipo().getTipoSia().toString()); 
+			if (((TraduccionNormativa) norm.getTraduccion("es")) == null) {
+				nor.setTITULO(((TraduccionNormativa) norm.getTraduccion("ca")).getTitulo());
+			} else {
+				nor.setTITULO(((TraduccionNormativa) norm.getTraduccion("es")).getTitulo());
+			}
 			normativas[i]= nor;
 			i++;
 		}

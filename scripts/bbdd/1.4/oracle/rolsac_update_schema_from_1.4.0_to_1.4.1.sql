@@ -53,12 +53,12 @@ create table RSC_SIAJOB  (
 create table RSC_SIAPDT  (
    SIP_ID number(19,0) not null,
    SIP_TIPO varchar2(100),
-   SIP_IDELEMENTO number(8,0),
+   SIP_IDELEM number(8,0),
    SIP_ESTADO number(1,0),
    SIP_FECALT date,
    SIP_FECIDX date,
    SIP_MENSA varchar2(255),
-   SIP_TIPOAC number(1,0),
+   SIP_EXISTE number(1,0),
    SIP_SIA    number(19,0),
    primary key (SIP_ID)
 );
@@ -70,7 +70,7 @@ create table RSC_SIAPDT  (
   COMMENT ON COLUMN RSC_SIAPDT.SIP_FECALT   	IS 'Fecha creación';
   COMMENT ON COLUMN RSC_SIAPDT.SIP_FECIDX   	IS 'Fecha envio';
   COMMENT ON COLUMN RSC_SIAPDT.SIP_MENSA   	 	IS 'Mensaje';
-  COMMENT ON COLUMN RSC_SIAPDT.SIP_TIPOAC   	IS 'Tipo acción:alta,modificación,reactivación o baja';
+  COMMENT ON COLUMN RSC_SIAPDT.SIP_EXISTE   	IS 'Existe, siendo 1 que si y 0 que ha sido borrado del sistema.';
   COMMENT ON COLUMN RSC_SIAPDT.SIP_SIA   		IS 'ID SIA necesario para cuando se borra la entidad';
  
   --Añadimos los campos a la tabla de traducciones ficha RSC_TRAFIC

@@ -36,8 +36,8 @@ public class SiaPendiente implements ValueObject {
 	/** Mensaje recibido tras el envío de la información**/
 	private String mensaje;
 	
-	/** Tipo acción (alta,modificación.reactivación o baja) **/
-	private Integer tipoAccion;
+	/** Existe procedimiento **/
+	private Integer existe;
 	
 	/** Código SIA. **/
 	private Long idSia;
@@ -135,16 +135,16 @@ public class SiaPendiente implements ValueObject {
 	
 
 	/**
-	 * @return the tipoAccion
+	 * @return the existe
 	 */
-	public Integer getTipoAccion() {
-		return tipoAccion;
+	public Integer getExiste() {
+		return existe;
 	}
 	/**
-	 * @param tipoAccion the tipoAccion to set
+	 * @param existe the existe to set
 	 */
-	public void setTipoAccion(Integer tipoAccion) {
-		this.tipoAccion = tipoAccion;
+	public void setExiste(Integer existe) {
+		this.existe = existe;
 	}
 	
 	/**

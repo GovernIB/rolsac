@@ -18,11 +18,11 @@ import org.ibit.rol.sac.persistence.delegate.SiaPendienteProcesoDelegate;
 public class SiaUtils {
 	private static Log log = LogFactory.getLog(SiaUtils.class);
 	
-	public static final Integer SIAJOB_SIJ_ESTADO_CREADO  = 0;
-	public static final Integer SIAJOB_SIJ_ESTADO_EN_EJECUCION  = 1;
-	public static final Integer SIAJOB_SIJ_ESTADO_ENVIADO  = 2;
-	public static final Integer SIAJOB_SIJ_ESTADO_ENVIADO_CON_ERRORES = 3;
-	public static final Integer SIAJOB_SIJ_ESTADO_ERROR_GRAVE  = -1;
+	public static final Integer SIAJOB_ESTADO_CREADO  = 0;
+	public static final Integer SIAJOB_ESTADO_EN_EJECUCION  = 1;
+	public static final Integer SIAJOB_ESTADO_ENVIADO  = 2;
+	public static final Integer SIAJOB_ESTADO_ENVIADO_CON_ERRORES = 3;
+	public static final Integer SIAJOB_ESTADO_ERROR_GRAVE  = -1;
 	
 	public static final Integer SIAPENDIENTE_ESTADO_CREADO     = 0;
 	public static final Integer SIAPENDIENTE_ESTADO_CORRECTO   = 1;
@@ -55,8 +55,8 @@ public class SiaUtils {
 	*/
 	private static final String ERROR_MESSAGE = "Error obteniendo la propiedad ";
 
-	public static final Integer SIAPENDIENTE_TIPO_ACCION_EXISTE = 1;
-	public static final Integer SIAPENDIENTE_TIPO_ACCION_BORRADO = 0;
+	public static final Integer SIAPENDIENTE_PROCEDIMIENTO_EXISTE = 1;
+	public static final Integer SIAPENDIENTE_PROCEDIMIENTO_BORRADO = 0;
 	
 	/**
 	 * Valida si un procedimiento es para enviar o no a SIA.
@@ -157,6 +157,19 @@ public class SiaUtils {
     }
 	
 	/**
+	 * Get level SIA. 
+	 * @return
+	 */
+	public static Integer getLevelSIA() {
+		 String level = System.getProperty("es.caib.rolsac.sia.centro.level");
+		 if (level == null) {
+			 return 3;
+		 } else {
+			 return Integer.valueOf(level);
+		 }
+	}
+	
+	/**
 	 * @param clob
 	 * @return
 	 * @throws SQLException
@@ -182,15 +195,15 @@ public class SiaUtils {
 	 * Se encarga de crear una pendiente SIA según los datos de entrada.
 	 * @param tipo
 	 * @param idElemento
-	 * @param tipoAccion
+	 * @param existe
 	 */
-	public static void marcarIndexacionPendiente(final String tipo, final Long idElemento, final Integer tipoAccion) throws DelegateException {
+	public static void marcarIndexacionPendiente(final String tipo, final Long idElemento, final Integer existe) throws DelegateException {
 		SiaPendienteProcesoDelegate siaPendienteProcesoDeletegate = DelegateUtil.getSiaPendienteProcesoDelegate();
 		SiaPendiente siaPendiente = new SiaPendiente();
 		siaPendiente.setEstado(SIAPENDIENTE_ESTADO_CREADO);
 		siaPendiente.setFecAlta(new Date());
 		siaPendiente.setIdElemento(idElemento);
-		siaPendiente.setTipoAccion(tipoAccion);
+		siaPendiente.setExiste(existe);
 		siaPendiente.setTipo(tipo);
 		siaPendienteProcesoDeletegate.generarSiaPendiente(siaPendiente);
 	}
@@ -209,5 +222,47 @@ public class SiaUtils {
 		}
 		return activo;
 	}
+
+	/***
+	 * Comprueba si un procedimiento hay que enviarlo. Hay que tener en cuenta lo siguiente: 
+	 * <p>
+	 *   Los estados de un procedimiento son:
+	 *   <ul>
+	 *   	<li>Estado 1. Nunca se ha enviado (Procedimiento.estadoSIA == null).</li>
+	 *   	<li>Estado 2. Alta en SIA  (Procedimiento.estadoSIA == 'A').</li>
+	 *      <li>Estado 3. Baja en SIA   (Procedimiento.estadoSIA == 'B').</li>
+	 *   </ul>
+	 *   A partir de ahí, se valida la nueva información y puede pasar dos cosas:
+	 *   <ul>
+	 *   	<li>Debería estar en SIA. Activo en SIA. </li>
+	 *      <li>Debería estar en SIA. Desactivado en SIA. </li>
+	 *   </ul>
+	 *   En total se producen 6 combinaciones.
+	 *   <ul>
+	 *   	<li>Estado 1 y Activo en  (Enviar Alta). </li>
+	 *      <li>Estado 1 y Desactivado en SIA (NO HACER NADA). </li>
+	 *   	<li>Estado 2 y Activo en SIA (Enviar Modificación). </li>
+	 *      <li>Estado 2 y Desactivado en SIA (Enviar baja). </li>
+	 *   	<li>Estado 3 y Activo en SIA (Enviar Reactivación). </li>
+	 *      <li>Estado 3 y envío baja (NO HACER NADA). </li>
+	 *   </ul>
+	 *   Hay 2 combinaciones que no se debería hacer nada y que devolverán falsa, en el resto true.
+	 *   
+	 * </p>
+	 * @param proc
+	 * @return
+	 */
+	public static boolean isEnviableSia(ProcedimientoLocal proc) {
+		boolean activoEnSIA = SiaUtils.validaProcedimientoSIA(proc);
+		boolean retorno;
+		if (!activoEnSIA && (proc.getEstadoSIA() == null || SiaUtils.ESTADO_BAJA.equals(proc.getEstadoSIA())) ) {
+			retorno = false;
+		} else {
+			retorno = true;
+		}
+		return retorno;
+	}
+
+	
 	
 }

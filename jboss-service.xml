@@ -93,6 +93,7 @@ es.caib.rolsac.subscripcions
 	   es.caib.rolsac.sia.pass.envio = primera
 	   es.caib.rolsac.sia.url.envio = http://pre-sia2.redsara.es/axis2/services/wsSIAActualizarActuaciones
 	   es.caib.rolsac.sia.activarEnvio=N
+	   es.caib.rolsac.sia.centro.level=3	   
 	   
 	   <!-- Definición propiedades -->
 	   es.caib.rolsac.fitxa.control.proporcions=N

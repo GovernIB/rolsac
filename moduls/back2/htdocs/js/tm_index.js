@@ -265,17 +265,13 @@ function inicializarBtn2() {
             url: url, 
             dataType: "json",
             error: function() {					
-                // missatge
-                Missatge.cancelar();
-                setTimeout('Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"})', 400);
-                
+                setTimeout('Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: "' +txtAjaxError +'", text: "<p>' + txtIntenteho + '</p>"})', 400);
             },
             success: function(data) {
-                Missatge.cancelar();
                 if (data.id > 0) {
-                    setTimeout('Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom})', 400);
+					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});	
                 } else {
-                    setTimeout('Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtEnviantDades, text: "<p>" + data.nom + "</p>"})', 400);
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: data.error});	
                 }
             }
         });

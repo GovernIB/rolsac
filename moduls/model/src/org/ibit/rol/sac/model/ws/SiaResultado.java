@@ -6,7 +6,7 @@ public class SiaResultado {
 	
 	public static int RESULTADO_ERROR = -1;
 	
-	public int resultado; 
+	public int resultado = RESULTADO_ERROR; 
 	
 	public String mensaje;
 	
@@ -117,5 +117,5 @@ public class SiaResultado {
 	 */
 	public void setEstadoSIA(String estadoSIA) {
 		this.estadoSIA = estadoSIA;
-	} 
+	}
 }

@@ -215,7 +215,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			session.flush();
 			
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, procedimiento.getId(), false);
-		    SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, procedimiento.getId(), SiaUtils.SIAPENDIENTE_TIPO_ACCION_EXISTE);
+		    SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, procedimiento.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE);
 			
 			return procedimiento.getId();
 
@@ -332,7 +332,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			session.flush();
 			
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, procedimiento.getId(), false);
-			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, procedimiento.getId(), SiaUtils.SIAPENDIENTE_TIPO_ACCION_EXISTE);
+			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, procedimiento.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE);
 			
 			return procedimiento.getId();
 
@@ -1338,7 +1338,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			session.flush();
 			
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, procedimiento.getId(), false);			
-			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, procedimiento.getId(), SiaUtils.SIAPENDIENTE_TIPO_ACCION_EXISTE);
+			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, procedimiento.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE);
 			
 		} catch (HibernateException e) {
 
@@ -1387,7 +1387,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			session.flush();
 			
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, procedimiento.getId(), false);
-			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, procedimiento.getId(), SiaUtils.SIAPENDIENTE_TIPO_ACCION_EXISTE);
+			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, procedimiento.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE);
 			
 		} catch (HibernateException e) {
 
@@ -1450,7 +1450,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			session.flush();
 			
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, id, true);
-			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, id, SiaUtils.SIAPENDIENTE_TIPO_ACCION_BORRADO);
+			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, id, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_BORRADO);
 			
 		} catch (HibernateException he) {
 
@@ -2411,12 +2411,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		Session session = getSession();
 		try {
 					
-			session.save(proc);
-			
-//			Hibernate.initialize(proc.getTramites());
-//			Hibernate.initialize(proc.getMaterias());
-//			Hibernate.initialize(proc.getHechosVitalesProcedimientos());
-			
+			session.update(proc);
 			session.flush();
 			
 		} catch (HibernateException he) {

@@ -12,6 +12,7 @@ import javax.ejb.EJBException;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.Session;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
@@ -73,51 +74,161 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		final ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
 		
 		SiaResultado resultado = new SiaResultado();
+		StringBuffer resultadoDescripcion = new StringBuffer();
+		StringBuffer resultadoDescripcionBreve = new StringBuffer();
+		Calendar calendar = Calendar.getInstance();
 		
-	
-    	try {
-			for(Long idProcedimiento : procDelegate.buscarIdsProcedimientos() ) {
-				ProcedimientoLocal proc = procDelegate.obtenerProcedimiento(idProcedimiento);
-				Sia  sia = obtenerSiaProc(proc);
-				resultado = SiaWS.enviarSIA(sia); 
-				proc.setCodigoSIA(resultado.getCodSIA());
-				proc.setEstadoSIA(resultado.getEstadoSIA());
-				proc.setFechaSIA(new Date());
-				
-				if(proc.getId() != 357){					
-					procDelegate.actualizarProcedimiento(proc);
+		int correctos = 0;
+		int incorrectos = 0;
+		try {
+			List<Long> idProcedimientos = procDelegate.buscarIdsProcedimientos();
+	    	for(Long idProcedimiento : idProcedimientos ) {
+	    		
+	    		//Para actualizar cada 50 cambios, el job con el estado.
+	    		try {
+		    		if ( (correctos + incorrectos ) % 50 == 0) {
+		    			StringBuffer resultadoBeta = new StringBuffer();
+		    			resultadoBeta.append("Se han enviado "+(correctos+incorrectos)+" datos de un total de "+idProcedimientos.size()+" procedimientos. De los cuales: <br />");
+		    			resultadoBeta.append(" - "+correctos+" datos correctos  <br />");
+		    			resultadoBeta.append(" - "+incorrectos+" datos incorrectos  <br />");
+		    			resultadoBeta.append("Estado: "+Math.abs((correctos+incorrectos)*100/idProcedimientos.size())+"%  <br />");
+		    			
+		    			siaJob.setDescBreve(Hibernate.createClob(resultadoBeta.toString()));
+		    			siaJob.setDescripcion(Hibernate.createClob(resultadoDescripcion.toString()));
+		    			actualizarJob(siaJob);
+		    		}
+	    		} catch (Exception e) {
+					log.error("Error actualizando el jop.",e);					
 				}
+	    		
+	    		
+	    		//Obtenemos el procedimiento y vemos is es enviable a SIA.
+	    		ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimientoParaSolr(idProcedimiento);
+				if (SiaUtils.isEnviableSia(procedimiento)) {
+		    		try 
+		    		{
+		    			
+		    			enviarProcedimiento(procDelegate, procedimiento,  null, resultadoDescripcion,  correctos,  incorrectos);
+						/*resultadoDescripcion.append("   -- Vamos a indexar el procedimiento con id :"+idProcedimiento+" <br />");
+						Sia  sia = obtenerSiaProc(proc);
+						resultado = SiaWS.enviarSIA(sia); 
+						
+						if (resultado.isCorrecto()) {
+							correctos++;
+	    					resultadoDescripcion.append("   ---- Se ha enviado a SIA correctamente. <br />");
+	    					resultadoDescripcion.append("   ---- CodigoSIA:"+resultado.getCodSIA()+". <br />");
+	    					resultadoDescripcion.append("   ---- EstadoSia:"+resultado.getCodSIA()+". <br />");
+	    					proc.setCodigoSIA(resultado.getCodSIA());
+	    					proc.setEstadoSIA(resultado.getEstadoSIA());
+	    					proc.setFechaSIA(new Date());				
+	    					procDelegate.actualizarProcedimiento(proc);	
+						} else {
+							incorrectos++;
+							resultadoDescripcion.append("   -- Se ha enviado a SIA incorrectamente. <br />");
+							resultadoDescripcion.append("   -- Mensaje:"+resultado.getMensaje()+" <br />");
+						}*/
+		    			
+					} catch (Exception e) {
+						log.error("Error general enviando procedimiento ",e);
+						incorrectos++;
+						resultadoDescripcion.append("   -- Se ha enviado a SIA incorrectamente. <br />");
+						resultadoDescripcion.append("   -- Mensaje:"+ExceptionUtils.getStackTrace(e)+" <br />");
+					}
+	    		
+	    		} 
 			}
-		} catch (DelegateException e) {
-			log.error(e.getMessage());
-		} catch (Exception e) {
-			log.error(e.getMessage());
-			
+		} catch (Exception exception) {
+			log.error(exception);
+			incorrectos++;
+			resultadoDescripcion.append("   -- Error grave obteniendo los procedimientos. <br />");
+			resultadoDescripcion.append("   -- Mensaje:"+ExceptionUtils.getStackTrace(exception)+" <br />");
 		}
-    	siaJob.setDescripcion(Hibernate.createClob(obtenerDescripcion(resultado).toString() 
-    			+ (resultado.getMensaje()!=null ? resultado.getMensaje() : "")));
-    	
-    
+	
 		
-		siaJob.setDescBreve(Hibernate.createClob(obtenerDescripcion(resultado).toString()));
+    	SimpleDateFormat formato = new SimpleDateFormat("H:mm");
+		resultadoDescripcionBreve.append("Se han enviado "+(correctos+incorrectos)+" datos. De los cuales: <br />");
+    	resultadoDescripcionBreve.append(" - "+correctos+" datos correctos  <br />");
+    	resultadoDescripcionBreve.append(" - "+incorrectos+" datos incorrectos  <br />");
+    	resultadoDescripcionBreve.append(" Finalizado a las "+formato.format(calendar.getTime())+"  <br />");
+    	siaJob.setFechaFin(new Date());
+    	siaJob.setDescBreve(Hibernate.createClob(resultadoDescripcionBreve.toString()));
+		siaJob.setDescripcion(Hibernate.createClob(resultadoDescripcion.toString()));
 		
-		if (resultado.getIncorrectos() == 0) {
-			siaJob.setEstado(SiaUtils.SIAJOB_SIJ_ESTADO_ENVIADO);
+    	if (incorrectos == 0) {
+			siaJob.setEstado(SiaUtils.SIAJOB_ESTADO_ENVIADO);
 		} else {
-			siaJob.setEstado(SiaUtils.SIAJOB_SIJ_ESTADO_ENVIADO_CON_ERRORES);
+			siaJob.setEstado(SiaUtils.SIAJOB_ESTADO_ENVIADO_CON_ERRORES);
 		}
     	
-    	
+		actualizarJob(siaJob);
 	}
 
 
+	/**
+	 * Enviar procedimiento hacia SIA.
+	 * @param procDelegate
+	 * @param proc
+	 * @param resultadoDescripcion
+	 * @param correctos
+	 * @param incorrectos
+	 * @throws Exception
+	 */
+	private void enviarProcedimiento(ProcedimientoDelegate procDelegate, 
+									 ProcedimientoLocal proc,  
+									 SiaPendiente siaPendiente,
+										 StringBuffer resultadoDescripcion,  Integer correctos, Integer incorrectos) throws Exception {
+		
+		resultadoDescripcion.append("   -- Vamos a indexar el procedimiento con id :"+proc.getId()+" <br />");
+		final Sia  sia = obtenerSiaProc(proc);
+		final SiaResultado resultado = SiaWS.enviarSIA(sia); 
+		
+		if (resultado.isCorrecto()) {
+			
+			if (correctos != null) {
+				correctos++;
+			}
+			resultadoDescripcion.append("   ---- Se ha enviado a SIA correctamente. <br />");
+			resultadoDescripcion.append("   ---- CodigoSIA:"+resultado.getCodSIA()+". <br />");
+			resultadoDescripcion.append("   ---- EstadoSia:"+resultado.getCodSIA()+". <br />");
+			
+			//Actualizamos el procedimiento
+			proc.setCodigoSIA(resultado.getCodSIA());
+			proc.setEstadoSIA(resultado.getEstadoSIA());
+			proc.setFechaSIA(new Date());				
+			procDelegate.actualizarProcedimiento(proc);	
+			
+			//Actualizamos el siaPendinete
+			if (siaPendiente != null ) {
+				SiaPendienteProcesoDelegate siaPendienteDelegate = DelegateUtil.getSiaPendienteProcesoDelegate(); 
+				siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_CORRECTO);
+				siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
+			}
+			
+		} else {
+			if (incorrectos != null) {
+				incorrectos++;
+			}
+			//Actualizamos el resultado descripcion
+			resultadoDescripcion.append("   -- Se ha enviado a SIA incorrectamente. <br />");
+			resultadoDescripcion.append("   -- Mensaje:"+resultado.getMensaje()+" <br />");
+			
+			//Actualizamos el siaPendinete
+			if (siaPendiente != null ) {
+				SiaPendienteProcesoDelegate siaPendienteDelegate = DelegateUtil.getSiaPendienteProcesoDelegate(); 
+				siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_INCORRECTO);
+				siaPendiente.setMensaje(resultado.getMensaje());
+				siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
+			}
+		}
+	}
+	
 	/** Genera la descripción 
 	 * 
 	 * @param formato
 	 * @param cadenaFecha
 	 * @param resultado
 	 * @return descripción breve
-	 */
+	 *
 	private StringBuffer obtenerDescripcion( SiaResultado resultado) {
 		Date fecha = new Date();
 		SimpleDateFormat formato = new SimpleDateFormat("H:mm");
@@ -132,7 +243,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		descripcionBreve.append(" Finalizado hora "+ cadenaFecha);
 		
 		return descripcionBreve;
-	}
+	}*/
 	
 	/**
 	 * Obtener SIA pendientes de enviar 
@@ -148,34 +259,34 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 
 		
 		final SiaPendienteProcesoDelegate siaPendienteDelegate = DelegateUtil.getSiaPendienteProcesoDelegate();
-		Session session = null;
 		
 		StringBuffer resultadoDescripcion = new StringBuffer();
 		StringBuffer resultadoDescripcionBreve = new StringBuffer();
-		int correctos = 0;
-		int incorrectos = 0;
+		SimpleDateFormat formato = new SimpleDateFormat("H:mm");
+		Integer correctos = 0;
+		Integer incorrectos = 0;
         try 
         {
+        		Calendar calendar = Calendar.getInstance();
+        		resultadoDescripcion.append(" Vamos a comenzar a enviar pendientes. <br /> ");
+        		resultadoDescripcionBreve.append(" Empezando a las "+formato.format(calendar.getTime())+"  <br />");
+	        	
         		List<SiaPendiente> siaPendientes = siaPendienteDelegate.getSiaPendientesEnviar();
-        		session = getSession();
-        	
-        		int i = 0;
-        		SiaResultado resultado = new SiaResultado();
-			
+        		
+        		
         		final ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
-			
+        		resultadoDescripcion.append(" Hay "+siaPendientes.size()+" datos pendientes. <br /> ");
+        		
 	        	for(SiaPendiente siaPendiente : siaPendientes) 
 	        	{
 	        
-	        		try 
+	        		SiaResultado resultado = new SiaResultado();
+	    			try 
 	        		{
-	        			if (i % 20 == 0) {
-	        				session.flush();
-	        			} 
-	        			i++;
+	        			
 	        			if (SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO.equals(siaPendiente.getTipo() )) {
 	        				
-	        				if (siaPendiente.getTipoAccion().compareTo(SiaUtils.SIAPENDIENTE_TIPO_ACCION_BORRADO) == 0) {
+	        				if (siaPendiente.getExiste().compareTo(SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_BORRADO) == 0) {
 	        					
 	        					resultadoDescripcion.append(" Vamos a enviar una baja de un procedimiento (id:"+siaPendiente.getIdElemento()+", idSIA:"+siaPendiente.getIdSia()+") borrado <br /> ");
 		        				
@@ -199,42 +310,58 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	        					
 	        				} else {
 	        					
-	        					resultadoDescripcion.append(" Vamos a enviar una baja de un procedimiento (id:"+siaPendiente.getIdElemento()+", idSIA:"+siaPendiente.getIdSia()+") <br />");
+	        					resultadoDescripcion.append(" Vamos a enviar info de un procedimiento (id:"+siaPendiente.getIdElemento()+", idSIA:"+siaPendiente.getIdSia()+") <br />");
 		        				
-	        					ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimiento(siaPendiente.getIdElemento());
+	        					ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimientoParaSolr(siaPendiente.getIdElemento());
 	        					
-	        					//GENERAR OBJETO SIA
-	            				Sia  sia = obtenerSiaProc(procedimiento);
-		    					
-	            				try {
-									resultado = SiaWS.enviarSIA(sia);
-								} catch (Exception e) {
-									log.error(e.getMessage());
-								}
-	            				
-		    					if (resultado.isCorrecto()) {
-		    						//Si es correcto, actualizamos el procedimiento
-		    						procedimiento.setEstadoSIA(resultado.getEstadoSIA());
-									procedimiento.setFechaSIA(new Date());
-									procDelegate.actualizarProcedimiento(procedimiento);
-									
-									//Actualizamos el siaPendinete
+	        					if (SiaUtils.isEnviableSia(procedimiento)) {
+	        				    	
+	        						enviarProcedimiento(procDelegate, procedimiento,  siaPendiente, resultadoDescripcion,  correctos,  incorrectos);
+	        						
+	        						/*
+		        					//GENERAR OBJETO SIA
+		            				Sia  sia = obtenerSiaProc(procedimiento);
+			    					
+		            				try {
+										resultado = SiaWS.enviarSIA(sia);
+									} catch (Exception e) {
+										resultado = new SiaResultado();
+										resultado.setResultado(SiaResultado.RESULTADO_ERROR);
+										log.error(e.getMessage(), e);
+									}
+		            				
+			    					if (resultado.isCorrecto()) {
+			    						//Si es correcto, actualizamos el procedimiento
+			    						procedimiento.setEstadoSIA(resultado.getEstadoSIA());
+										procedimiento.setFechaSIA(new Date());
+										procedimiento.setCodigoSIA(resultado.getCodSIA());
+										procDelegate.actualizarProcedimiento(procedimiento);
+										
+										//Actualizamos el siaPendinete
+										siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_CORRECTO);
+			    						siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
+			    						
+			    						correctos++;		
+			    						
+			    						resultadoDescripcion.append("   -- Marcado como correcto <br />");
+			    					} else {
+			    						//Actualizamos el siaPendinete
+										siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_INCORRECTO);
+										siaPendiente.setMensaje(resultado.getMensaje());
+			    						siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
+			        					
+			        					incorrectos++;	
+			        					resultadoDescripcion.append("   -- Marcado como incorrecto <br />");
+			    						resultadoDescripcion.append("   -- Mensaje:"+resultado.getMensaje()+" <br />");
+			    					}*/
+	        					} else {
+	        						//Actualizamos el siaPendinete
 									siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_CORRECTO);
+									siaPendiente.setMensaje("No se ha enviado hacia SIA, no cumplía requisitos.");
 		    						siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
-		    						
+		    						resultadoDescripcion.append("   -- Marcado como correcto (no cumplia requisitos, no se ha enviado a SIA) <br />");
 		    						correctos++;		
-		    						
-		    						resultadoDescripcion.append("   -- Marcado como correcto <br />");
-		    					} else {
-		    						//Actualizamos el siaPendinete
-									siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_INCORRECTO);
-									siaPendiente.setMensaje(resultado.getMensaje());
-		    						siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
-		        					
-		        					incorrectos++;	
-		        					resultadoDescripcion.append("   -- Marcado como incorrecto <br />");
-		    						resultadoDescripcion.append("   -- Mensaje:"+resultado.getMensaje()+" <br />");
-		    					}
+	        					}
 		    					
 		    					
 	        				}
@@ -242,36 +369,46 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	        				
 	        			} else if (SiaUtils.SIAPENDIENTE_TIPO_UNIDAD_ADMINISTRATIVA.equals(siaPendiente.getTipo() )) {
 	        				
-	        				List <ProcedimientoLocal>listProc = procDelegate.listarProcedimientosUA(siaPendiente.getIdElemento());
+	        				List <ProcedimientoLocal>listProcedimientos = procDelegate.listarProcedimientosUA(siaPendiente.getIdElemento());
 	        				resultadoDescripcion.append(" Vamos a actualizar procedimientos asociados a una UA (idUA:"+siaPendiente.getIdElemento()+", idSIA:"+siaPendiente.getIdSia()+") <br />");
 	        				
 	        				boolean todosCorrectos = true;
-	        				for (ProcedimientoLocal proc : listProc) {
-	        					resultadoDescripcion.append("   -- Procedimiento asociado (idProc:"+proc.getId()+") <br />");
+	        				for (ProcedimientoLocal procedimiento : listProcedimientos) {
+	        					resultadoDescripcion.append("   -- Procedimiento asociado (idProc:"+procedimiento.getId()+") <br />");
 		        				
-	        					//GENERAR OBJETO SIA
-	        					Sia  sia = obtenerSiaProc(proc);
-	        					
-								resultado = obtenerResultadosEnvio (siaPendienteDelegate, 
-																	resultado.getIncorrectos(),
-																	siaPendiente, 
-																	sia, 
-																	siaJob);
-							
-								if (resultado.isCorrecto() ) {
-		    						
-									//Si es correcto, actualizamos el procedimiento
-									proc.setEstadoSIA(resultado.getEstadoSIA());
-		    						proc.setFechaSIA(new Date());
-		    						procDelegate.actualizarProcedimiento(proc);
-		    						
-		    						resultadoDescripcion.append("   ---- Ejecutado correcto <br />");
-			        				
-		    					} else {
-		    						
-		    						todosCorrectos = false;
-		    						resultadoDescripcion.append("   ---- Ejecutado incorrecto. Mensaje:"+resultado.getMensaje()+" <br />");
-		    					}
+	        					if (SiaUtils.isEnviableSia(procedimiento)) {
+	        						
+	        						enviarProcedimiento(procDelegate, procedimiento,  null, resultadoDescripcion,  null,  null);
+	        						
+	 	        				   /*
+		        					//GENERAR OBJETO SIA
+		        					Sia  sia = obtenerSiaProc(proc);
+		        					
+		        					
+									resultado = obtenerResultadosEnvio (siaPendienteDelegate, 
+																		resultado.getIncorrectos(),
+																		siaPendiente, 
+																		sia, 
+																		siaJob);
+								
+									if (resultado.isCorrecto() ) {
+			    						
+										//Si es correcto, actualizamos el procedimiento
+										proc.setEstadoSIA(resultado.getEstadoSIA());
+			    						proc.setFechaSIA(new Date());
+			    						proc.setCodigoSIA(resultado.getCodSIA());
+			    						procDelegate.actualizarProcedimiento(proc);
+			    						
+			    						resultadoDescripcion.append("   ---- Ejecutado correcto <br />");
+				        				
+			    					} else {
+			    						
+			    						todosCorrectos = false;
+			    						resultadoDescripcion.append("   ---- Ejecutado incorrecto. Mensaje:"+resultado.getMensaje()+" <br />");
+			    					}*/
+	        					} else {
+	        						resultadoDescripcion.append("   ---- Ejecutado correcto (no cumplia requisitos, no se ha enviado a SIA) <br />");
+	        					}
 	        					
 							}
 	        				
@@ -296,27 +433,37 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	        			} else if (SiaUtils.SIAPENDIENTE_TIPO_NORMATIVA.equals(siaPendiente.getTipo() )) {
 	        				
 	        				//OBTENER EL ID DE TODOS LAS PROCEDIMIENTOS AFECTADOS POR ESA NORMATIVA
-	        				final List <ProcedimientoLocal>listProc = procDelegate.listarProcedimientosNormativa(siaPendiente.getIdElemento());
+	        				final List <ProcedimientoLocal>listProcedimientos = procDelegate.listarProcedimientosNormativa(siaPendiente.getIdElemento());
 	        				boolean todosCorrectos = true;
-	        				for (ProcedimientoLocal proc : listProc) {
-	        					//GENERAR OBJETO SIA
-	        					final Sia  sia = obtenerSiaProc(proc);
-	        					resultado = obtenerResultadosEnvio(
-										siaPendienteDelegate, resultado.getIncorrectos(),
-										siaPendiente, sia, siaJob);
+	        				for (ProcedimientoLocal procedimiento : listProcedimientos) {
 	        					
-	        					if (resultado.isCorrecto() ) {
-		    						
-									//Si es correcto, actualizamos el procedimiento
-									proc.setEstadoSIA(resultado.getEstadoSIA());
-		    						proc.setFechaSIA(new Date());
-									procDelegate.actualizarProcedimiento(proc);
-									resultadoDescripcion.append("   ---- Ejecutado correcto <br />");
-		    					} else {
-		    						
-		    						todosCorrectos = false;
-		    						resultadoDescripcion.append("   ---- Ejecutado incorrecto. Mensaje:"+resultado.getMensaje()+" <br />");
-		    					}
+	        					if (SiaUtils.isEnviableSia(procedimiento)) {		 
+	        						enviarProcedimiento(procDelegate, procedimiento,  null, resultadoDescripcion,  null,  null);
+	        						
+	        						/*
+		        					//GENERAR OBJETO SIA
+		        					final Sia  sia = obtenerSiaProc(proc);
+		        					resultado = obtenerResultadosEnvio(
+											siaPendienteDelegate, resultado.getIncorrectos(),
+											siaPendiente, sia, siaJob);
+		        					
+		        					if (resultado.isCorrecto() ) {
+			    						
+										//Si es correcto, actualizamos el procedimiento
+										proc.setEstadoSIA(resultado.getEstadoSIA());
+			    						proc.setFechaSIA(new Date());
+			    						proc.setCodigoSIA(resultado.getCodSIA());
+			    						procDelegate.actualizarProcedimiento(proc);
+										resultadoDescripcion.append("   ---- Ejecutado correcto <br />");
+			    					} else {
+			    						
+			    						todosCorrectos = false;
+			    						resultadoDescripcion.append("   ---- Ejecutado incorrecto. Mensaje:"+resultado.getMensaje()+" <br />");
+			    					}
+			    					**/
+	        					} else {
+	        						resultadoDescripcion.append("   ---- Ejecutado correcto (no cumplia requisitos, no se ha enviado a SIA) <br />");
+	        					}
 							}
 	        				
 	        				if (todosCorrectos) {
@@ -339,43 +486,38 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	        			} 
         			
 	        		} catch (Exception exception) {
-	        			resultadoDescripcion.append("Ha fallado la indexación en pendiente con el mensaje." + exception.getMessage()+"<br />");
+	        			resultadoDescripcion.append("Ha fallado la indexación en pendiente con el mensaje." + ExceptionUtils.getStackTrace(exception)+"<br />");
 	        			siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_INCORRECTO);
-						siaPendiente.setMensaje("Ha fallado indexando, error no controlado. Mensaje:"+ exception.getMessage());
+						siaPendiente.setMensaje("Ha fallado indexando, error no controlado. Mensaje:"+ ExceptionUtils.getStackTrace(exception));
     					siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
     					incorrectos++;
 	        		}
 	        	}        	
 	        	
 	        	if (incorrectos > 0) {
-					siaJob.setEstado(SiaUtils.SIAJOB_SIJ_ESTADO_ENVIADO_CON_ERRORES);
+					siaJob.setEstado(SiaUtils.SIAJOB_ESTADO_ENVIADO_CON_ERRORES);
 				} else {
-					siaJob.setEstado(SiaUtils.SIAJOB_SIJ_ESTADO_ENVIADO);
+					siaJob.setEstado(SiaUtils.SIAJOB_ESTADO_ENVIADO);
 				}
 			 
-	        	resultadoDescripcionBreve.append("Se han enviado "+(correctos+incorrectos)+"datos. De los cuales: <br />");
+	        	resultadoDescripcionBreve.append("Se han enviado "+(correctos+incorrectos)+" datos. De los cuales: <br />");
 	        	resultadoDescripcionBreve.append(" - "+correctos+" datos correctos  <br />");
 	        	resultadoDescripcionBreve.append(" - "+incorrectos+" datos incorrectos  <br />");
-	        	Calendar calendar = Calendar.getInstance();
-	        	resultadoDescripcionBreve.append(" Finalizado a las "+calendar.getTime()+"  <br />");
+	        	resultadoDescripcionBreve.append(" Finalizado a las "+formato.format(calendar.getTime())+"  <br />");
 	        	siaJob.setDescBreve(Hibernate.createClob(resultadoDescripcionBreve.toString()));
     			siaJob.setDescripcion(Hibernate.createClob(resultadoDescripcion.toString()));
     			
 	        	actualizarJob(siaJob);
 	        	
-	        	session.flush();
         	
       	} catch (Exception e) {
-			log.error(e.getMessage());			
-		}finally {
-			
-            if (session != null) {close(session);}
-        }
+			log.error(e);			
+		} 
         
 	}
 
 
-
+/*
 	private SiaResultado obtenerResultadosEnvio(
 			final SiaPendienteProcesoDelegate siaPendienteDelegate,
 			int erroneos, SiaPendiente siaPendiente, Sia sia, SiaJob siaJob)
@@ -397,35 +539,33 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 					+ (resultado.getMensaje()!=null ? resultado.getMensaje() : "")));
 		}
 		return resultado;
-	}
+	}*/
 
 
 
-	private Sia obtenerSiaProc(ProcedimientoLocal procedimiento) throws DelegateException {
+	private Sia obtenerSiaProc(ProcedimientoLocal procedimiento) throws Exception {
 		Sia sia = new Sia();
 		
 		sia.setIdProc(procedimiento.getId().toString());
+		if (procedimiento.getCodigoSIA() != null) {
+			sia.setIdSIA(procedimiento.getCodigoSIA().toString());
+		}
 		TraduccionProcedimientoLocal trad = (TraduccionProcedimientoLocal) procedimiento.getTraduccion("es");
 		if(trad != null){			
 			sia.setTitulo(trad.getNombre());
 			sia.setDescripcion(trad.getResumen());
 		}
 		
-		List<UnidadAdministrativa> predecesores = procedimiento.getUnidadAdministrativa().getPredecesores();
-		for(UnidadAdministrativa predecesor : predecesores) {
-			if (predecesor.getPadre() != null && predecesor.getCodigoDIR3() != null) {
-				sia.setIdCent(predecesor.getCodigoDIR3());
-				break;
-			}
-		}
+		sia.setIdCent(getIdCentro(procedimiento));
 		
 		sia.setUaGest(procedimiento.getUnidadAdministrativa().getNombre());
 	
 		String[] destinatarios = new String[procedimiento.getPublicosObjetivo().size()];
 		Set<PublicoObjetivo> publicoObjs = procedimiento.getPublicosObjetivo();
-		int i=0;
+		int i = 0;
 		for (PublicoObjetivo pObj : publicoObjs) {
-			destinatarios[i]= pObj.getId().toString();
+			destinatarios[i] = pObj.getId().toString();
+			i++;
 		}
 		
 		sia.setIdDest(destinatarios);
@@ -433,8 +573,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		List<Tramite> tramites = procedimiento.getTramites();
 		Integer nivelAdministrativo = 1;
 		for (Tramite tramite : tramites) {
-			if (tramite.getFase() == 1)  {
-				
+			if (tramite != null && tramite.getFase() == 1)  {
 					if (tramite.getVersio() != null || 
 							(tramite.getUrlExterna() != null && !tramite.getUrlExterna().isEmpty())) {
 						nivelAdministrativo = 4;
@@ -468,8 +607,11 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		}
 		sia.setMaterias(materias);
 
-		sia.setFiVia(procedimiento.getIndicador().equals("1")? SiaUtils.SI : SiaUtils.NO);
-		
+		if (procedimiento.getIndicador() == null) {
+			sia.setFiVia(SiaUtils.NO);
+		} else {
+			sia.setFiVia(procedimiento.getIndicador().equals("1")? SiaUtils.SI : SiaUtils.NO);
+		}
 		sia.setTipologia(SiaUtils.getTipologiaTramitacion());
 		
 		String tipoTramite = SiaUtils.TRAMITE_SERV;
@@ -488,15 +630,15 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 			//ALTA / MODIFICACION / REACTIVACION
 			if (sia.getIdSIA() == null || sia.getIdSIA().isEmpty()) {
 				sia.setOperacion(SiaUtils.ESTADO_ALTA);
-			}else if (sia.getEstado().equals(SiaUtils.ESTADO_ALTA)) {
+			} else if (sia.getEstado().equals(SiaUtils.ESTADO_ALTA)) {
 				sia.setOperacion(SiaUtils.ESTADO_MODIFICACION); 
-			}else if (sia.getEstado().equals(SiaUtils.ESTADO_BAJA)) { 
+			} else if (sia.getEstado().equals(SiaUtils.ESTADO_BAJA)) { 
 				sia.setOperacion(SiaUtils.ESTADO_REACTIVACION); 
 			}
 			
 						
 		} else if (procedimiento.getCodigoSIA() != null && !procedimiento.getCodigoSIA().isEmpty() 
-				&& !sia.getEstado().equals(SiaUtils.ESTADO_BAJA)){
+				&& sia.getEstado() != null && !sia.getEstado().equals(SiaUtils.ESTADO_BAJA)){
 			
 			sia.setOperacion(SiaUtils.ESTADO_BAJA); 
 
@@ -505,6 +647,40 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		return sia;
 	}
 	
+
+	/**
+	 * Método que encuentra el id centro a partir del propio elemento y de los predecesores.
+	 * Es importante tener en cuenta que hay un nivel (por propiedades) y que el propio elemento no está
+	 *   dentro de las uas.
+	 * @param procedimiento
+	 * @return
+	 * @throws Exception 
+	 */
+	private String getIdCentro(ProcedimientoLocal procedimiento) throws Exception {
+		int nivel = SiaUtils.getLevelSIA();
+		int i;
+		if ( procedimiento.getServicioResponsable().getPredecesores().size() > nivel) {
+			i = nivel - 1;
+		} else {
+			if (procedimiento.getUnidadAdministrativa().getCodigoDIR3() != null) {
+				return procedimiento.getUnidadAdministrativa().getCodigoDIR3();
+			} 
+			if (procedimiento.getOrganResolutori().getPredecesores().size() == 0) { 
+				throw new Exception("No existe ningún elemento ni predecesor con DIR3."); 
+			}
+			i = procedimiento.getOrganResolutori().getPredecesores().size() - 1;
+		}
+		for(; i < procedimiento.getOrganResolutori().getPredecesores().size() ; i--) {
+			UnidadAdministrativa predecesor = (UnidadAdministrativa) procedimiento.getOrganResolutori().getPredecesores().get(i);
+			if (predecesor.getPadre() != null && predecesor.getCodigoDIR3() != null) {
+				return predecesor.getCodigoDIR3();
+			}
+		}
+		
+		throw new Exception("No existe ningún elemento ni predecesor con DIR3..");
+	}
+
+
 
 	/**
    	 * @ejb.interface-method

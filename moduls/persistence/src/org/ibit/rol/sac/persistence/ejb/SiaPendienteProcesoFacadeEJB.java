@@ -70,8 +70,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     		StringBuilder consulta = new StringBuilder("select sia from SiaPendiente as sia where sia.estado = :estado");
     		
     		Query query = session.createQuery( consulta.toString() );
-    		query.setCacheable(true);
-    		query.setLong("estado", SiaUtils.SIAJOB_SIJ_ESTADO_CREADO);
+    		query.setLong("estado", SiaUtils.SIAJOB_ESTADO_CREADO);
 
     		return query.list();
 
@@ -112,13 +111,12 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     			consulta.append(" and sia.idElemento = :idElemento");
     		}
     		
-    		if (filtro.getTipoAccion() != null) {
+    		if (filtro.getExiste() != null) {
     			consulta.append(" and sia.tipoAccion = :tipoAccion");
     		}
-    		
+    		consulta.append(" order by sia.id desc");
     		
     		Query query = session.createQuery( consulta.toString() );
-    		query.setCacheable(true);
     		
     		if (filtro.getEstado() != null) {
     			query.setLong("estado", filtro.getEstado());
@@ -127,14 +125,16 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     			query.setLong("idElemento", filtro.getIdElemento());
     		}
     		
-    		if (filtro.getTipoAccion() != null) {
-    			query.setInteger("tipoAccion", filtro.getTipoAccion());
+    		if (filtro.getExiste() != null) {
+    			query.setInteger("tipoAccion", filtro.getExiste());
     		}
     		
     		
     		if (filtro.numElementos != null) {
     			query.setMaxResults(filtro.numElementos);
     		}
+    		
+    		
     		
     		return query.list();
 
@@ -167,12 +167,10 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 		
 		try {
 
-    		StringBuilder consulta = new StringBuilder("select sia from SiaJob as sia ");
+    		StringBuilder consulta = new StringBuilder("select sia from SiaJob as sia order by sia.id desc");
     		
     		Query query = session.createQuery( consulta.toString() );
-    		query.setCacheable(true);
-    		//query.setLong("estado", SiaUtils.SIAJOB_SIJ_ESTADO_CREADO);
-
+    		
     		query.setMaxResults(filtro.numElementos);
     		
     		return query.list();
@@ -203,33 +201,28 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 		try {
 
 			//Si es de tipo borrado, hay que borrar las acciones pendientes de tipo accion existe.
-			if (SiaUtils.SIAPENDIENTE_TIPO_ACCION_BORRADO.compareTo(siaPendiente.getTipoAccion()) == 0) {
+			if (SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_BORRADO.compareTo(siaPendiente.getExiste()) == 0) {
 				
-				//Borramos las pendientes.
-				FiltroSia filtro = new FiltroSia();
-				filtro.setEstado(SiaUtils.SIAJOB_SIJ_ESTADO_CREADO);
-				filtro.setTipoAccion(SiaUtils.SIAPENDIENTE_TIPO_ACCION_EXISTE);
-				filtro.setIdElemento(siaPendiente.getIdElemento());
-				List<SiaPendiente> pendientes = this.getSiaPendientes(filtro);
+				List<SiaPendiente> pendientes = getPendientesSinEjecutar(siaPendiente.getIdElemento());
 				for(SiaPendiente siaPendienteParBorrar: pendientes) {
 					session.delete(siaPendienteParBorrar);
 				}
 				
 				//Guardamos
-				siaPendiente.setEstado(SiaUtils.SIAJOB_SIJ_ESTADO_CREADO);
+				siaPendiente.setEstado(SiaUtils.SIAJOB_ESTADO_CREADO);
 	    		session.save(siaPendiente);
 	    		session.flush();
 			} else {
 				//Si es de tipo creado, revisar si ya existe un pendiente.
 				FiltroSia filtro = new FiltroSia();
-				filtro.setEstado(SiaUtils.SIAJOB_SIJ_ESTADO_CREADO);
-				filtro.setTipoAccion(SiaUtils.SIAPENDIENTE_TIPO_ACCION_EXISTE);
+				filtro.setEstado(SiaUtils.SIAJOB_ESTADO_CREADO);
+				filtro.setExiste(SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE);
 				filtro.setIdElemento(siaPendiente.getIdElemento());
 				List<SiaPendiente> pendientes = this.getSiaPendientes(filtro);
 			
 				//Si no hay datos, creamos.
 				if (pendientes.size() == 0) {
-					siaPendiente.setEstado(SiaUtils.SIAJOB_SIJ_ESTADO_CREADO);
+					siaPendiente.setEstado(SiaUtils.SIAJOB_ESTADO_CREADO);
 					session.save(siaPendiente);
 					session.flush();
 				}
@@ -250,6 +243,21 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 	}
 	
 	/**
+	 * Obtiene las pendientes de ejecutar de si existe.
+	 * @param idElemento
+	 * @return
+	 */
+	private List<SiaPendiente> getPendientesSinEjecutar(Long idElemento) {
+		final FiltroSia filtro = new FiltroSia();
+		filtro.setEstado(SiaUtils.SIAJOB_ESTADO_CREADO);
+		filtro.setExiste(SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE);
+		filtro.setIdElemento(idElemento);
+		return this.getSiaPendientes(filtro);
+	}
+
+
+
+	/**
 	 * Actualiza SIA pendiente.
    	 * @ejb.interface-method
    	 * @ejb.permission unchecked="true"
@@ -264,7 +272,9 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 		Session session = getSession();
 		
 		try {
-
+			if (siaPendiente.getMensaje() != null && siaPendiente.getMensaje().length() > 255) {
+				siaPendiente.setMensaje(siaPendiente.getMensaje().substring(0, 253));
+			}
     		session.update(siaPendiente);
     		session.flush();
     		
@@ -328,15 +338,15 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     	{
     		session = getSession();
     		List<Integer> estados = new ArrayList<Integer>();
-    		estados.add(SiaUtils.SIAJOB_SIJ_ESTADO_EN_EJECUCION);
-    		estados.add(SiaUtils.SIAJOB_SIJ_ESTADO_CREADO);
+    		estados.add(SiaUtils.SIAJOB_ESTADO_EN_EJECUCION);
+    		estados.add(SiaUtils.SIAJOB_ESTADO_CREADO);
     		
     		final Query query = getSession().createQuery("from SiaJob siaJob where siaJob.fechaFin is null AND (siaJob.estado is null OR siaJob.estado in (:lId)) ");
     		query.setParameterList("lId", estados, Hibernate.INTEGER);
     		List<SiaJob> jobs =  query.list();
     		for(SiaJob job : jobs) {
     			job.setFechaFin(new Date());
-    			job.setEstado(SiaUtils.SIAJOB_SIJ_ESTADO_ERROR_GRAVE);
+    			job.setEstado(SiaUtils.SIAJOB_ESTADO_ERROR_GRAVE);
     			
     			StringBuffer bufferDesc = SiaUtils.obtenerContenidoClob(job.getDescBreve());
     					

@@ -135,7 +135,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			Actualizador.actualizar(unidad);
 
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_UNIDAD_ADMINISTRATIVA, unidad.getId(), false);
-			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_UNIDAD_ADMINISTRATIVA, unidad.getId(), SiaUtils.SIAPENDIENTE_TIPO_ACCION_EXISTE);
+			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_UNIDAD_ADMINISTRATIVA, unidad.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE);
 			
 			return unidad.getId();
 
@@ -186,7 +186,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 			//SOLR Indexar unidad administrativa
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_UNIDAD_ADMINISTRATIVA, unidad.getId(), false);
-			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_UNIDAD_ADMINISTRATIVA, unidad.getId(), SiaUtils.SIAPENDIENTE_TIPO_ACCION_EXISTE);
+			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_UNIDAD_ADMINISTRATIVA, unidad.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE);
 			
 			return unidad.getId();
 
@@ -273,7 +273,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_UNIDAD_ADMINISTRATIVA, unidad.getId(), false);
 			marcarIndexacionPendienteElementosRelacionadosUA(unidad.getId());
-			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_UNIDAD_ADMINISTRATIVA, unidad.getId(), SiaUtils.SIAPENDIENTE_TIPO_ACCION_EXISTE);
+			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_UNIDAD_ADMINISTRATIVA, unidad.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE);
 			
 		} catch (Exception he) {
 
@@ -318,7 +318,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			}
 			
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_UNIDAD_ADMINISTRATIVA, unidad.getId(), false);
-			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_UNIDAD_ADMINISTRATIVA, unidad.getId(), SiaUtils.SIAPENDIENTE_TIPO_ACCION_EXISTE);
+			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_UNIDAD_ADMINISTRATIVA, unidad.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE);
 			
 		} catch (DelegateException e) {
 			
@@ -2715,7 +2715,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	         query.setCacheable(true);
 	         final List<Long> idProcedimientos =  castList(Long.class, query.list());
 	         for(Long idProcedimiento : idProcedimientos) {
-	             SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, idProcedimiento, SiaUtils.SIAPENDIENTE_TIPO_ACCION_EXISTE);
+	             SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, idProcedimiento, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE);
 	         }
          } catch (Exception he) {
              throw new EJBException(he);

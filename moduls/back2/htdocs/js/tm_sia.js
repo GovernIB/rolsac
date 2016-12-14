@@ -56,7 +56,7 @@ function inicializarBtn() {
                 
             },
             success: function(data) {
-            	 if (data.error == null || data.error == "") {
+            	 if (!data.error) {
                   	Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtEnviantDades});			
                   } else {
                       Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: data.error});					
@@ -83,7 +83,7 @@ function inicializarBtn() {
                 
             },
             success: function(data) {
-            	 if (data.error == null || data.error == "") {
+            	 if (!data.error) {
                   	Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtCerrantJobs});			
                   } else {
                       Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: data.error});					
@@ -103,14 +103,29 @@ function inicializarBtn() {
 	
 }
 
-function pintarPopUp(descripcion){
+function incluirSaltosLinea(descripcion) {
+	 while (descripcion.indexOf("<br />") != -1) {
+		 descripcion = descripcion.replace("<br />","\n");
+	 }
+	 while (descripcion.indexOf("<br/>") != -1) {
+		 descripcion = descripcion.replace("<br/>","\n");
+	 }
+	 while (descripcion.indexOf("<br>") != -1) {
+		 descripcion = descripcion.replace("<br>","\n");
+	 }
+	 while (descripcion.indexOf("<br >") != -1) {
+		 descripcion = descripcion.replace("<br >","\n");
+	 }
+	 return descripcion;
+}
+
+function pintarPopUp(descripcion) {
 	 $('.popup').fadeIn('slow');
      $('.popup-overlay').fadeIn('slow');
      $('.popup-overlay').height($(window).height());
-     $("#item_texto").val(descripcion);
+	 $("#item_texto").val(incluirSaltosLinea (descripcion) );
      return false;
 }
-
 function inicializarBtn2() {
 	
 	jQuery("#btnContinuar2").unbind("click").bind("click", function() {
@@ -123,22 +138,19 @@ function inicializarBtn2() {
             url = pagEnviarPendientes;
 		} 
         
-        $.ajax({
+		$.ajax({
             type: "POST",
             url: url, 
             dataType: "json",
-            error: function() {					
-                // missatge
-                Missatge.cancelar();
-                setTimeout('Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"})', 400);
+            error: function(data) {					
+                setTimeout('Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: "'+txtAjaxError+'", text: "<p> + '+txtIntenteho+' + </p>"})', 400);
                 
             },
             success: function(data) {
-                Missatge.cancelar();
-                if (data.id > 0) {
-                    setTimeout('Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom})', 400);
+                if (!data.error) {
+                    setTimeout('Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: "'+txtEnviantDades+'"})', 400);
                 } else {
-                    setTimeout('Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtEnviantDades, text: "<p>" + data.nom + "</p>"})', 400);
+                    setTimeout('Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: "'+data.error+'"})', 400);
                 }
             }
         });
