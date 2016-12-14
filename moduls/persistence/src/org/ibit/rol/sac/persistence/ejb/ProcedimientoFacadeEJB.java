@@ -2411,12 +2411,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		Session session = getSession();
 		try {
 					
-			session.save(proc);
-			
-//			Hibernate.initialize(proc.getTramites());
-//			Hibernate.initialize(proc.getMaterias());
-//			Hibernate.initialize(proc.getHechosVitalesProcedimientos());
-			
+			session.update(proc);
 			session.flush();
 			
 		} catch (HibernateException he) {

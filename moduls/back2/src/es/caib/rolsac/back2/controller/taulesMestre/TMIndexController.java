@@ -152,7 +152,7 @@ public class TMIndexController extends PantallaBaseController {
         try {
         	//Paso 1. Comprobar si hay algo creado.
           	if ( DelegateUtil.getSolrPendienteDelegate().checkJobsActivos()) {
-          		resultats.put("error", "Hi ha tasques en execució");
+          		resultats.put("error", "Hi ha tasques en execucio");
           	} else {
           		//Paso 2. Si todo correcto, ejecutar job 
           		ejecutarJob("todo");
@@ -259,7 +259,7 @@ public class TMIndexController extends PantallaBaseController {
         try {
         	//Paso 1. Comprobar si hay algo creado.
           	if ( DelegateUtil.getSolrPendienteDelegate().checkJobsActivos()) {
-          		resultats.put("error", "Hi ha tasques en execució");
+          		resultats.put("error", "Hi ha tasques en execucio");
           	} else {
           		//Paso 2. Si todo correcto, ejecutar job 
           		ejecutarJob("ficha");
@@ -286,7 +286,7 @@ public class TMIndexController extends PantallaBaseController {
          try {
         	//Paso 1. Comprobar si hay algo creado.
           	if ( DelegateUtil.getSolrPendienteDelegate().checkJobsActivos()) {
-          		resultats.put("error", "Hi ha tasques en execució");
+          		resultats.put("error", "Hi ha tasques en execucio");
           	} else {
           		//Paso 2. Si todo correcto, ejecutar job 
           		ejecutarJob("procedimiento");
@@ -312,7 +312,7 @@ public class TMIndexController extends PantallaBaseController {
         try {
         	//Paso 1. Comprobar si hay algo creado.
          	if ( DelegateUtil.getSolrPendienteDelegate().checkJobsActivos()) {
-         		resultats.put("error", "Hi ha tasques en execució");
+         		resultats.put("error", "Hi ha tasques en execucio");
          	} else {
          		//Paso 2. Si todo correcto, ejecutar job 
          		ejecutarJob("normativa");
@@ -338,7 +338,7 @@ public class TMIndexController extends PantallaBaseController {
          try {
         	//Paso 1. Comprobar si hay algo creado.
          	if ( DelegateUtil.getSolrPendienteDelegate().checkJobsActivos()) {
-         		resultats.put("error", "Hi ha tasques en execució");
+         		resultats.put("error", "Hi ha tasques en execucio");
          	} else {
          		//Paso 2. Si todo correcto, ejecutar job 
          		ejecutarJob("tramite");
@@ -365,7 +365,7 @@ public class TMIndexController extends PantallaBaseController {
               
             //Paso 1. Comprobar si hay algo creado.
           	if ( DelegateUtil.getSolrPendienteDelegate().checkJobsActivos()) {
-          		resultats.put("error", "Hi ha tasques en execució");
+          		resultats.put("error", "Hi ha tasques en execucio");
           	} else {
           		//Paso 2. Si todo correcto, ejecutar job
           		ejecutarJob("ua");
@@ -395,7 +395,7 @@ public class TMIndexController extends PantallaBaseController {
         	
         	//Paso 1. Comprobar si hay algo creado.
         	if ( DelegateUtil.getSolrPendienteDelegate().checkJobsActivos()) {
-        		resultats.put("error", "Hi ha tasques en execució");
+        		resultats.put("error", "Hi ha tasques en execucio");
         	} else {
         		//Paso 2. Si todo correcto, ejecutar job 
         		ejecutarJob("pendientes");
@@ -609,7 +609,7 @@ public class TMIndexController extends PantallaBaseController {
 	        try {
 	        	//Paso 1. Comprobar si hay algo creado.
 	          	if ( DelegateUtil.getSiaPendienteProcesoDelegate().checkJobsActivos()) {
-	          		resultats.put("error", "Hi ha tasques en execució");
+	          		resultats.put("error", "Hi ha tasques en execucio");
 	          	} else {
 	          		//Paso 2. Si todo correcto, ejecutar job 
 	          		ejecutarJobSIA("todo");
@@ -673,7 +673,7 @@ public class TMIndexController extends PantallaBaseController {
         try {
         	//Paso 1. Comprobar si hay algo creado.
         	if (DelegateUtil.getSiaPendienteProcesoDelegate().checkJobsActivos()) {
-        		resultats.put("error", "Hi ha tasques en execució");
+        		resultats.put("error", "Hi ha tasques en execucio");
         	} else {
         		//Paso 2. Si todo correcto, ejecutar job 
         		ejecutarJobSIA("pendientes");

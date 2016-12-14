@@ -70,7 +70,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     		StringBuilder consulta = new StringBuilder("select sia from SiaPendiente as sia where sia.estado = :estado");
     		
     		Query query = session.createQuery( consulta.toString() );
-    		query.setCacheable(true);
+    		//query.setCacheable(true);
     		query.setLong("estado", SiaUtils.SIAJOB_SIJ_ESTADO_CREADO);
 
     		return query.list();
@@ -167,7 +167,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 		
 		try {
 
-    		StringBuilder consulta = new StringBuilder("select sia from SiaJob as sia ");
+    		StringBuilder consulta = new StringBuilder("select sia from SiaJob as sia order by sia.id desc");
     		
     		Query query = session.createQuery( consulta.toString() );
     		query.setCacheable(true);

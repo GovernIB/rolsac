@@ -46,12 +46,13 @@ public class SiaWS {
 			int incorrectos = 0;
 			
 			if(res != null) {
-				
+				siaResultado.setResultado(SiaResultado.RESULTADO_OK);
 				for (EnviaSIAACTUACIONESACTUACION envia : res) {
 					if(envia.getCORRECTO().equals(SiaUtils.SI)) {
 						correctos++;
 						siaResultado.setCodSIA(envia.getCODIGOACTUACION());
 					} else {
+						siaResultado.setResultado(SiaResultado.RESULTADO_ERROR);
 						incorrectos++;
 						ERRORESERROR[] arrayErrores = envia.getERRORES();
 						for (ERRORESERROR error : arrayErrores) {
@@ -71,10 +72,12 @@ public class SiaWS {
 				siaResultado.setMensaje("Error aleatorio, estás en modo prueba!!");
 				siaResultado.setCorrectos(0); 
 				siaResultado.setIncorrectos(1);
+				siaResultado.setResultado(SiaResultado.RESULTADO_ERROR);
 			} else {
-				siaResultado.setCodSIA(String.valueOf(Math.random()*(10000)));
+				siaResultado.setCodSIA(String.valueOf((int)(Math.random()*(10000000))));
 				siaResultado.setCorrectos(1);
 				siaResultado.setIncorrectos(0);
+				siaResultado.setResultado(SiaResultado.RESULTADO_OK);
 			}
 		}
 		return siaResultado;

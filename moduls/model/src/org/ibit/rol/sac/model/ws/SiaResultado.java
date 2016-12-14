@@ -117,5 +117,5 @@ public class SiaResultado {
 	 */
 	public void setEstadoSIA(String estadoSIA) {
 		this.estadoSIA = estadoSIA;
-	} 
+	}
 }

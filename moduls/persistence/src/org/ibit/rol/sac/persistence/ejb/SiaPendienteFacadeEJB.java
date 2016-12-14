@@ -12,6 +12,7 @@ import javax.ejb.EJBException;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.Session;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
@@ -73,41 +74,83 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		final ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
 		
 		SiaResultado resultado = new SiaResultado();
+		StringBuffer resultadoDescripcion = new StringBuffer();
+		StringBuffer resultadoDescripcionBreve = new StringBuffer();
+		Calendar calendar = Calendar.getInstance();
 		
-	
-    	try {
-			for(Long idProcedimiento : procDelegate.buscarIdsProcedimientos() ) {
-				ProcedimientoLocal proc = procDelegate.obtenerProcedimiento(idProcedimiento);
-				Sia  sia = obtenerSiaProc(proc);
-				resultado = SiaWS.enviarSIA(sia); 
-				proc.setCodigoSIA(resultado.getCodSIA());
-				proc.setEstadoSIA(resultado.getEstadoSIA());
-				proc.setFechaSIA(new Date());
-				
-				if(proc.getId() != 357){					
-					procDelegate.actualizarProcedimiento(proc);
+		int correctos = 0;
+		int incorrectos = 0;
+		try {
+			List<Long> idProcedimientos = procDelegate.buscarIdsProcedimientos();
+	    	for(Long idProcedimiento : idProcedimientos ) {
+	    		try {
+		    		if ( (correctos + incorrectos ) % 50 == 0) {
+		    			StringBuffer resultadoBeta = new StringBuffer();
+		    			resultadoBeta.append("Se han enviado "+(correctos+incorrectos)+" datos de un total de "+idProcedimientos.size()+" procedimientos. De los cuales: <br />");
+		    			resultadoBeta.append(" - "+correctos+" datos correctos  <br />");
+		    			resultadoBeta.append(" - "+incorrectos+" datos incorrectos  <br />");
+		    			resultadoBeta.append("Estado: "+Math.abs((correctos+incorrectos)*100/idProcedimientos.size())+"%  <br />");
+		    			
+		    			siaJob.setDescBreve(Hibernate.createClob(resultadoBeta.toString()));
+		    			siaJob.setDescripcion(Hibernate.createClob(resultadoDescripcion.toString()));
+		    			actualizarJob(siaJob);
+		    		}
+	    		} catch (Exception e) {
+					log.error("Error actualizando el jop.",e);					
+				}
+	    		
+	    		try 
+	    		{
+					ProcedimientoLocal proc = procDelegate.obtenerProcedimientoParaSolr(idProcedimiento);
+					resultadoDescripcion.append("   -- Vamos a indexar el procedimiento con id :"+idProcedimiento+" <br />");
+					Sia  sia = obtenerSiaProc(proc);
+					resultado = SiaWS.enviarSIA(sia); 
+					
+					if (resultado.isCorrecto()) {
+						correctos++;
+    					resultadoDescripcion.append("   ---- Se ha enviado a SIA correctamente. <br />");
+    					resultadoDescripcion.append("   ---- CodigoSIA:"+resultado.getCodSIA()+". <br />");
+    					resultadoDescripcion.append("   ---- EstadoSia:"+resultado.getCodSIA()+". <br />");
+    					proc.setCodigoSIA(resultado.getCodSIA());
+    					proc.setEstadoSIA(resultado.getEstadoSIA());
+    					proc.setFechaSIA(new Date());				
+    					procDelegate.actualizarProcedimiento(proc);	
+					} else {
+						incorrectos++;
+						resultadoDescripcion.append("   -- Se ha enviado a SIA incorrectamente. <br />");
+						resultadoDescripcion.append("   -- Mensaje:"+resultado.getMensaje()+" <br />");
+					}	
+				} catch (Exception e) {
+					log.error("Error general enviando procedimiento ",e);
+					incorrectos++;
+					resultadoDescripcion.append("   -- Se ha enviado a SIA incorrectamente. <br />");
+					resultadoDescripcion.append("   -- Mensaje:"+ExceptionUtils.getStackTrace(e)+" <br />");
 				}
 			}
-		} catch (DelegateException e) {
-			log.error(e.getMessage());
-		} catch (Exception e) {
-			log.error(e.getMessage());
-			
+		} catch (Exception exception) {
+			log.error(exception);
+			incorrectos++;
+			resultadoDescripcion.append("   -- Error grave obteniendo los procedimientos. <br />");
+			resultadoDescripcion.append("   -- Mensaje:"+ExceptionUtils.getStackTrace(exception)+" <br />");
 		}
-    	siaJob.setDescripcion(Hibernate.createClob(obtenerDescripcion(resultado).toString() 
-    			+ (resultado.getMensaje()!=null ? resultado.getMensaje() : "")));
+	
+		
+    	SimpleDateFormat formato = new SimpleDateFormat("H:mm");
+		resultadoDescripcionBreve.append("Se han enviado "+(correctos+incorrectos)+" datos. De los cuales: <br />");
+    	resultadoDescripcionBreve.append(" - "+correctos+" datos correctos  <br />");
+    	resultadoDescripcionBreve.append(" - "+incorrectos+" datos incorrectos  <br />");
+    	resultadoDescripcionBreve.append(" Finalizado a las "+formato.format(calendar.getTime())+"  <br />");
+    	siaJob.setDescBreve(Hibernate.createClob(resultadoDescripcionBreve.toString()));
+		siaJob.setDescripcion(Hibernate.createClob(resultadoDescripcion.toString()));
+		
     	
-    
-		
-		siaJob.setDescBreve(Hibernate.createClob(obtenerDescripcion(resultado).toString()));
-		
 		if (resultado.getIncorrectos() == 0) {
 			siaJob.setEstado(SiaUtils.SIAJOB_SIJ_ESTADO_ENVIADO);
 		} else {
 			siaJob.setEstado(SiaUtils.SIAJOB_SIJ_ESTADO_ENVIADO_CON_ERRORES);
 		}
     	
-    	
+		actualizarJob(siaJob);
 	}
 
 
@@ -152,10 +195,15 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		
 		StringBuffer resultadoDescripcion = new StringBuffer();
 		StringBuffer resultadoDescripcionBreve = new StringBuffer();
+		SimpleDateFormat formato = new SimpleDateFormat("H:mm");
 		int correctos = 0;
 		int incorrectos = 0;
         try 
         {
+        		Calendar calendar = Calendar.getInstance();
+        		resultadoDescripcion.append(" Vamos a comenzar a enviar pendientes. <br /> ");
+        		resultadoDescripcionBreve.append(" Empezando a las "+formato.format(calendar.getTime())+"  <br />");
+	        	
         		List<SiaPendiente> siaPendientes = siaPendienteDelegate.getSiaPendientesEnviar();
         		session = getSession();
         	
@@ -163,7 +211,8 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
         		SiaResultado resultado = new SiaResultado();
 			
         		final ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
-			
+        		resultadoDescripcion.append(" Hay "+siaPendientes.size()+" datos pendientes. <br /> ");
+        		
 	        	for(SiaPendiente siaPendiente : siaPendientes) 
 	        	{
 	        
@@ -339,9 +388,9 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	        			} 
         			
 	        		} catch (Exception exception) {
-	        			resultadoDescripcion.append("Ha fallado la indexación en pendiente con el mensaje." + exception.getMessage()+"<br />");
+	        			resultadoDescripcion.append("Ha fallado la indexación en pendiente con el mensaje." + ExceptionUtils.getStackTrace(exception)+"<br />");
 	        			siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_INCORRECTO);
-						siaPendiente.setMensaje("Ha fallado indexando, error no controlado. Mensaje:"+ exception.getMessage());
+						siaPendiente.setMensaje("Ha fallado indexando, error no controlado. Mensaje:"+ ExceptionUtils.getStackTrace(exception));
     					siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
     					incorrectos++;
 	        		}
@@ -353,11 +402,10 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 					siaJob.setEstado(SiaUtils.SIAJOB_SIJ_ESTADO_ENVIADO);
 				}
 			 
-	        	resultadoDescripcionBreve.append("Se han enviado "+(correctos+incorrectos)+"datos. De los cuales: <br />");
+	        	resultadoDescripcionBreve.append("Se han enviado "+(correctos+incorrectos)+" datos. De los cuales: <br />");
 	        	resultadoDescripcionBreve.append(" - "+correctos+" datos correctos  <br />");
 	        	resultadoDescripcionBreve.append(" - "+incorrectos+" datos incorrectos  <br />");
-	        	Calendar calendar = Calendar.getInstance();
-	        	resultadoDescripcionBreve.append(" Finalizado a las "+calendar.getTime()+"  <br />");
+	        	resultadoDescripcionBreve.append(" Finalizado a las "+formato.format(calendar.getTime())+"  <br />");
 	        	siaJob.setDescBreve(Hibernate.createClob(resultadoDescripcionBreve.toString()));
     			siaJob.setDescripcion(Hibernate.createClob(resultadoDescripcion.toString()));
     			
@@ -366,9 +414,8 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	        	session.flush();
         	
       	} catch (Exception e) {
-			log.error(e.getMessage());			
+			log.error(e);			
 		}finally {
-			
             if (session != null) {close(session);}
         }
         
@@ -468,8 +515,11 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		}
 		sia.setMaterias(materias);
 
-		sia.setFiVia(procedimiento.getIndicador().equals("1")? SiaUtils.SI : SiaUtils.NO);
-		
+		if (procedimiento.getIndicador() == null) {
+			sia.setFiVia(SiaUtils.NO);
+		} else {
+			sia.setFiVia(procedimiento.getIndicador().equals("1")? SiaUtils.SI : SiaUtils.NO);
+		}
 		sia.setTipologia(SiaUtils.getTipologiaTramitacion());
 		
 		String tipoTramite = SiaUtils.TRAMITE_SERV;
@@ -496,7 +546,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 			
 						
 		} else if (procedimiento.getCodigoSIA() != null && !procedimiento.getCodigoSIA().isEmpty() 
-				&& !sia.getEstado().equals(SiaUtils.ESTADO_BAJA)){
+				&& sia.getEstado() != null && !sia.getEstado().equals(SiaUtils.ESTADO_BAJA)){
 			
 			sia.setOperacion(SiaUtils.ESTADO_BAJA); 
 
