@@ -42,7 +42,7 @@ public class SiaDelegateImpl extends SiaDelegate implements  StatelessDelegate, 
 	
 	   try {
 		   getFacade().enviarTodos(siaJob);
-       } catch (RemoteException e) {
+       } catch (Exception e) {
            throw new DelegateException(e);
        }
 	}
