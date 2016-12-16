@@ -1816,10 +1816,11 @@ div.modulLateral div.seleccionat ul {
 }
 .content-popup textarea{
 	border-width:0;
+	width:770px;
 }
-.close {
+.content-popup div .close {
 	position:relative;
-	left:480px;
+	left:780px;
 }
 div.table div.tbody div.errorEstado { 
     background-color: #FAA8A8;

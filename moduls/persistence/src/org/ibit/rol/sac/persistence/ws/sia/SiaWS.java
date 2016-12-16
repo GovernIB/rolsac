@@ -101,7 +101,11 @@ public class SiaWS {
 	private static ParamSIAACTUACIONESACTUACION[] cargarDatosSia(Sia sia) throws Exception {
 		ParamSIAACTUACIONESACTUACION paramSia = new ParamSIAACTUACIONESACTUACION();
 		
-		paramSia.setCODIGOACTUACION(sia.getIdSIA());
+		if (sia.getOperacion() != null && SiaUtils.ESTADO_ALTA.equals(sia.getOperacion())) {
+			paramSia.setCODIGOACTUACION("inventadoCAIB"); //Obligan a que se introduzca, en caso de alta, lo generan ellos en la respuesta.
+		} else {
+			paramSia.setCODIGOACTUACION(sia.getIdSIA());
+		}
 		paramSia.setCODIGOORIGEN(sia.getIdProc());
 		
 		paramSia.setDENOMINACION(sia.getTitulo());
