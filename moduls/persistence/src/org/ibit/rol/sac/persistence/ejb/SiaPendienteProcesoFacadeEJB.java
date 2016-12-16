@@ -71,7 +71,6 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     		
     		Query query = session.createQuery( consulta.toString() );
     		query.setLong("estado", SiaUtils.SIAJOB_ESTADO_CREADO);
-
     		return query.list();
 
     	} catch (HibernateException he) {
@@ -434,6 +433,29 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
  			throw new EJBException(exception);
  		}
 	}
+	
+	
+	 /**
+     * Actualizar una sia job. 
+     * 
+   	 * @ejb.interface-method
+   	 * @ejb.permission unchecked="true"
+   	 * 
+   	 * @return   
+   	 */
+	public void actualizarSiaJob(SiaJob siaJob) {
+		try
+    	{
+			final Session session = getSession();
+			session.update(siaJob); 
+			session.flush();
+			session.close();			
+    	 } catch(Exception exception) {
+ 			throw new EJBException(exception);
+ 		}
+	}
+	
+	
 	/**
 	 * Cerrando el pendiente job.
 	 * 

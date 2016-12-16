@@ -577,7 +577,7 @@ function CLlistat(){
 				contenido += "</div>";
 				
 				contenido += "<div class=\"td fechaNormativa\" role=\"gridcell\" style=\"width:"+width+"%;align-items: center;\">";
-				contenido += "<div class=\"btnGenerico\" style = \"float:left\"><a href=\"javascript:;\" style=\"width:100px;\" id = \"botonInfo\" class=\"btn unitatOrganica\" onclick=\"pintarPopUp('"+ elemento.descripcion +"')\"><span>"+txtBotonInfo+"</span></a></div>";
+				contenido += "<div class=\"btnGenerico\" style = \"float:left\"><a href=\"javascript:;\" style=\"width:100px;\" id = \"botonInfo\" class=\"btn unitatOrganica\" onclick=\"pintarPopUp('"+ this.limpiarTexto(elemento.descripcion) +"')\"><span>"+txtBotonInfo+"</span></a></div>";
 
 				//FIN ROW
 				contenido += "</div>";
@@ -594,6 +594,13 @@ function CLlistat(){
 		
 		
 		$(".dadesJob").html(contenido);
+	};
+	
+	this.limpiarTexto = function (descripcion) {
+		while (descripcion.indexOf("'") != -1) {
+			 descripcion = descripcion.replace("'","");
+		}
+		return descripcion;		
 	};
 	
 	this.inicializarJobs = function() {

@@ -145,7 +145,7 @@
 
 <div id="popup" class="popup" style="display: none;">
     <div class="content-popup">
-        <div class="close"><a href="#" id="close"><img src="../img/cap/cerrarAplicacion.gif"/></a></div>
+        <div class="close"><a href="#" id="close"><img src="../img/botons/eliminar.gif"/></a></div>
         <div>
            <textarea id="item_texto" name="item_observacions" cols="70" rows="15" class="nou"></textarea>     
         </div>
