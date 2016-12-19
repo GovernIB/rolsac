@@ -26,7 +26,13 @@ import org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTU
  * Envio SIA
  */
 public class SiaWS {
-	
+
+	/**
+	 * Enviar dato a sia para actualizar.
+	 * @param sia
+	 * @return
+	 * @throws Exception
+	 */
 	public static SiaResultado enviarSIA(Sia sia) throws Exception {
 		
 		SiaResultado siaResultado = new SiaResultado();
@@ -56,8 +62,9 @@ public class SiaWS {
 						siaResultado.setResultado(SiaResultado.RESULTADO_ERROR);
 						incorrectos++;
 						ERRORESERROR[] arrayErrores = envia.getERRORES();
+						siaResultado.setMensaje("");
 						for (ERRORESERROR error : arrayErrores) {
-							siaResultado.setMensaje(error.getDESCERROR() + " "+ siaResultado.getMensaje());
+							siaResultado.setMensaje(siaResultado.getMensaje()+error.getDESCERROR() + " "+ siaResultado.getMensaje()+"<br />");
 						}
 					}
 					if (SiaUtils.ESTADO_BAJA.compareTo(envia.getOPERACION()) == 0) {

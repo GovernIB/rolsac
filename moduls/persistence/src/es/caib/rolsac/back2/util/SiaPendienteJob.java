@@ -49,9 +49,10 @@ public class SiaPendienteJob implements Job  {
     		//EJECUTAR EL ENVIO A SIA.
 	    	
 	    	if ("todo".equals(tipoEnvio)) {
-					siaDelegate.enviarTodos(siaJob);
+				siaDelegate.enviarTodos(siaJob);
+	    	} else if ("info".equals(tipoEnvio)){
+	    		siaDelegate.info(siaJob);
 	    	} else {
-	    		
 	    		siaDelegate.enviarPendientes(siaJob);
 	    	}
 	    	

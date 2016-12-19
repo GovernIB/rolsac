@@ -693,4 +693,33 @@ public class TMIndexController extends PantallaBaseController {
 
         return resultats;
     }
+    
+    
+    @RequestMapping(value = "/getinfosia.do")
+    public @ResponseBody Map<String, Object> getInfoSIA(HttpServletRequest request) {
+
+    	final Map<String, Object> resultats = new HashMap<String, Object>();     
+        try {
+        	//Paso 1. Comprobar si hay algo creado.
+        	if (DelegateUtil.getSiaPendienteProcesoDelegate().checkJobsActivos()) {
+        		resultats.put("error", "Hi ha tasques en execucio");
+        	} else {
+        		//Paso 2. Si todo correcto, ejecutar job 
+        		ejecutarJobSIA("info");
+        	}
+        	
+        } catch (SchedulerException exception) {
+        	log.error("Error: " + exception.getMessage());
+            resultats.put("error", "No es pot generar el job");
+        } catch (Exception dEx) {
+           log.error("Error: " + dEx.getMessage());
+            if (dEx.getCause() == null) {
+            	resultats.put("error", dEx.getMessage());
+            } else {
+            	resultats.put("error", dEx.getCause().getMessage());
+            }
+        }
+
+        return resultats;
+    }
 }

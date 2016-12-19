@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ClienteSIA - WSDL2JAVA" basedir="." default="SIA">
+
+	<property name="home.dir" location="${basedir}/../.."/>
+	<property name="lib.dir" location="${home.dir}/lib"/>
+	<property name="wsdl.dir" location="${basedir}/wsdl" />
+	<property name="wsdlinfo.dir" location="${basedir}/wsdlConsultar" />
+	<property name="generated.dir" location="${basedir}/src" />
+	<property name="package.wsdl" value="org.ibit.rol.sac.persistence.ws.sia"/>
+
+	<path id="jar.class.path">
+		<fileset dir="${lib.dir}">
+			
+			<!-- LIBS AXIS 1.4 	-->
+			<include name="axis-1.4/axis.jar" />			
+			
+			<!-- JAX RPC JBOSS -->
+			<include name="jaxrpc.jar" />
+			<include name="axis-1.4/saaj.jar" />
+			
+			<!-- Tarea ant wsdl -->
+			<include name="axis-1.4/axis-ant.jar" />
+
+			<!-- Commons -->
+			<include name="commons-logging*.jar" />
+			<include name="webcaib/commons-discovery*.jar" />
+			
+			<include name="axis2-1.5/activation.jar" />
+			<include name="mail.jar" />
+			<include name="webcaib/wsdl4j.jar" />
+			
+		</fileset>
+	</path>
+
+	<taskdef resource="axis-tasks.properties" classpathref="jar.class.path" />
+
+	<target name="SIA" description="SIA">
+		<axis-wsdl2java output="${generated.dir}" testcase="false" verbose="true" all="true" url="file:${wsdl.dir}/wsSIAActualizarActuaciones.wsdl">
+			<mapping namespace="http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA" package="${package.wsdl}.actualizar.v3_1.paramSIA" />
+			<mapping namespace="http://www.map.es/sgca/actualizar/messages/v3_1/EnviaSIA" package="${package.wsdl}.actualizar.v3_1.enviaSIA" />
+			<mapping namespace="http://www.map.es/sgca/actualizar/messages/v3_0/ParamSIA" package="${package.wsdl}.actualizar.v3_0.paramSIA" />
+			<mapping namespace="http://www.map.es/sgca/actualizar/messages/v3_0/EnviaSIA" package="${package.wsdl}.actualizar.v3_0.enviaSIA" />
+			<mapping namespace="http://www.map.es/sgca/actualizar/messages/v2_4/ParamSIA" package="${package.wsdl}.actualizar.v2_4.paramSIA" />
+			<mapping namespace="http://www.map.es/sgca/actualizar/messages/v2_4/EnviaSIA" package="${package.wsdl}.actualizar.v2_4.enviaSIA" />
+			<mapping namespace="http://www.map.es/sgca/actualizar/messages/ParamSIA" package="${package.wsdl}.actualizar.messages.paramSIA" />
+			<mapping namespace="http://www.map.es/sgca/actualizar/messages/EnviaSIA" package="${package.wsdl}.actualizar.messages.enviaSIA" />
+			<mapping namespace="http://www.map.es/sgca/actualizar" package="${package.wsdl}.actualizar" />
+		</axis-wsdl2java>
+		
+		<axis-wsdl2java output="${generated.dir}" testcase="false" verbose="true" all="true" url="file:${wsdlinfo.dir}/wsSIAConsultarActuacionesIdentificacion.wsdl">
+			<mapping namespace="http://www.map.es/sgca/consultar/messages/v3_1/ParamSIA" package="${package.wsdl}.consultar.v3_1.paramSIA" />
+			<mapping namespace="http://www.map.es/sgca/consultar/messages/v3_1/EnviaSIA" package="${package.wsdl}.consultar.v3_1.enviaSIA" />
+			<mapping namespace="http://www.map.es/sgca/consultar/messages/v3_0/ParamSIA" package="${package.wsdl}.consultar.v3_0.paramSIA" />
+			<mapping namespace="http://www.map.es/sgca/consultar/messages/v3_0/EnviaSIA" package="${package.wsdl}.consultar.v3_0.enviaSIA" />
+			<mapping namespace="http://www.map.es/sgca/consultar/messages/v2_4/ParamSIA" package="${package.wsdl}.consultar.v2_4.paramSIA" />
+			<mapping namespace="http://www.map.es/sgca/consultar/messages/v2_4/EnviaSIA" package="${package.wsdl}.consultar.v2_4.enviaSIA" />
+			<mapping namespace="http://www.map.es/sgca/consultar/messages/ParamSIA" package="${package.wsdl}.consultar.messages.paramSIA" />
+			<mapping namespace="http://www.map.es/sgca/consultar/messages/EnviaSIA" package="${package.wsdl}.consultar.messages.enviaSIA" />
+			<mapping namespace="http://www.map.es/sgca/consultar" package="${package.wsdl}.consultar" />
+		</axis-wsdl2java>
+		
+	</target>
+
+			
+</project>

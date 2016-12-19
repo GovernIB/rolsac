@@ -29,4 +29,8 @@ public class SiaDelegate implements StatelessDelegate {
         impl.enviarPendientes(siaJob);
     }
 
+	public void info(SiaJob siaJob)  throws DelegateException {
+        impl.info(siaJob);
+    }
+
 }

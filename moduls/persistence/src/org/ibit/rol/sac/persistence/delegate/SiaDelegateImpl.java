@@ -58,11 +58,13 @@ public class SiaDelegateImpl extends SiaDelegate implements  StatelessDelegate, 
 	}
 	
 
-
-
+	@Override
+	public  void info(SiaJob siaJob)  throws DelegateException{
 	
-
-	
-
-	
+	   try {
+		   getFacade().info(siaJob);
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
+	}	
 }

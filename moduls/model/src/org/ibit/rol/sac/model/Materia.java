@@ -160,6 +160,7 @@ public class Materia extends Traducible implements Comparator {
     private Set unidadesmaterias;
     private Set fichas;
     private Set iconos;
+    private Long codigoSIA;
     private Archivo icono;
     private Archivo iconoGrande;
     private Archivo foto;
@@ -233,6 +234,20 @@ public class Materia extends Traducible implements Comparator {
     public String getNombreMateria(String idioma) {
         TraduccionMateria tma = (TraduccionMateria) getTraduccion(idioma);
         return tma == null ? null : tma.getNombre();
-    }    
+    }
+
+	/**
+	 * @return the codigoSIA
+	 */
+	public Long getCodigoSIA() {
+		return codigoSIA;
+	}
+
+	/**
+	 * @param codigoSIA the codigoSIA to set
+	 */
+	public void setCodigoSIA(Long codigoSIA) {
+		this.codigoSIA = codigoSIA;
+	}    
 
 }

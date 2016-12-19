@@ -9,5 +9,7 @@ public interface SiaDelegateI {
 	public void enviarTodos(SiaJob siaJob) throws DelegateException;
 
 	public void enviarPendientes(SiaJob siaJob) throws DelegateException;
+
+	public void info(SiaJob siaJob) throws DelegateException;
 		
 }
