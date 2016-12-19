@@ -235,7 +235,12 @@ public abstract class SolrPendienteFacadeEJB extends HibernateEJB {
 				
 				final int dias = hoyCalendar.get(Calendar.DATE) - fechaCalendar.get(Calendar.DATE);
 				//Si hace 10 dias o + que se crea se marca como erronea porque no se ha podido endexar
-				if ( dias >= 10){
+				String sdias = System.getProperty("es.caib.rolsac.solr.dias");
+				int diasMaximos = 10;
+				if (sdias != null) {
+					diasMaximos = Integer.parseInt(sdias);
+				}
+				if ( dias >= diasMaximos){
 					solrpendiente.setResultado(-1);
 					solrpendiente.setMensajeError(solrPendienteResultado.getMensaje());
 					session.update(solrpendiente);

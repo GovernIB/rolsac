@@ -83,6 +83,7 @@ es.caib.rolsac.subscripcions
 	   <!-- Esta representado en MB. -->
 	   es.caib.rolsac.solr.tamanyomaximo=20
 	   es.caib.rolsac.solr.ficheros=doc,docx,xls,xlsx,pdf,pdfx,odt,ods,odp,odf,txt,rtf
+	   es.caib.rolsac.solr.dias = 10 <!--  Marca el numero máximo de días que se puede estar ejecutando. -->
 	   
 	   es.caib.rolsac.sia.tipoActuacion = 1
 	   es.caib.rolsac.sia.tipologiaTramitacion = 4
