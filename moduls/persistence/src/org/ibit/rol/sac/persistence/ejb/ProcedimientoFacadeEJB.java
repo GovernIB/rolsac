@@ -2057,6 +2057,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final Long idElemento, final EnumCategoria categoria) {
 		log.debug("FichafacadeEJB.indexarSolr. idElemento:" + idElemento +" categoria:"+categoria);
 		
+		String pasoIndexacion = "inicio indexacion";
+		
 		try {
 			//Paso 0. Obtenemos la ficha y comprobamos si se puede indexar.
 			final ProcedimientoLocal procedimiento = obtenerProcedimientoParaSolr(idElemento);
@@ -2064,11 +2066,13 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				return new SolrPendienteResultado(false, "Error obteniendo la id del procedimiento");
 			}
 			
+			pasoIndexacion = "verificacion indexable";
 			boolean isIndexable = IndexacionUtil.isIndexable(procedimiento);
 			if (!isIndexable) {
 				return new SolrPendienteResultado(true, "No se puede indexar");
 			}
 			
+			pasoIndexacion = "rellenar info basica";
 			//Preparamos la información básica: id elemento, aplicacionID = ROLSAC y la categoria de tipo ficha.
 			final IndexData indexData = new IndexData();
 			indexData.setCategoria(categoria);
@@ -2086,6 +2090,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			final MultilangLiteral searchTextOptional = new MultilangLiteral();	
 			final List<EnumIdiomas> idiomas = new ArrayList<EnumIdiomas>();
 			
+			pasoIndexacion = "rellenar UA";
 			final String nomUnidadAministrativa;
 			if (procedimiento.getUnidadAdministrativa() == null) {
 				nomUnidadAministrativa = "";
@@ -2094,6 +2099,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			}
 			
 			//Recorremos las traducciones
+			pasoIndexacion = "rellenar traducciones";
 			for (String keyIdioma : traducciones.keySet()) {
 				final EnumIdiomas enumIdioma = EnumIdiomas.fromString(keyIdioma);
 				final TraduccionProcedimiento traduccion = (TraduccionProcedimiento)traducciones.get(keyIdioma);
@@ -2108,6 +2114,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 					idiomas.add(enumIdioma);
 					
 					//Seteamos los primeros campos multiidiomas: Titulo, Descripción y el search text.
+					pasoIndexacion = "rellenar Titulo, Descripción y SearchText " + enumIdioma.toString();
 					titulo.addIdioma(enumIdioma, traduccion.getNombre());
 			    	descripcion.addIdioma(enumIdioma, traduccion.getResumen());
 			    	searchText.addIdioma(enumIdioma, traduccion.getNombre()  + " "+ traduccion.getResumen());
@@ -2115,6 +2122,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			    	final StringBuffer textoOptional = new StringBuffer();
 					
 			    	//materia
+			    	pasoIndexacion = "rellenar text optional materias" + enumIdioma.toString();
 			    	for(Materia materia : procedimiento.getMaterias()) {
 			    		TraduccionMateria traduccionMateria = (TraduccionMateria) materia.getTraduccion(keyIdioma);
 			    		if (traduccionMateria != null) {
@@ -2128,6 +2136,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 					}
 			    	
 			    	//Servicio Responsable
+			    	pasoIndexacion = "rellenar text optional servicio responsable" + enumIdioma.toString();
 			    	if (procedimiento.getServicioResponsable() != null) {
 		    			TraduccionUA unidadAdm = (TraduccionUA) procedimiento.getServicioResponsable().getTraduccion(keyIdioma);
 						if (unidadAdm != null) {
@@ -2137,6 +2146,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			    	}
 					
 					//Publico objetivo, para extraer el nombre del publico objetivo
+			    	pasoIndexacion = "rellenar publico objetivo" + enumIdioma.toString();
 					String nombrePubObjetivo = "";
 					for( PublicoObjetivo publicoObjectivo :  procedimiento.getPublicosObjetivo()) {
 						TraduccionPublicoObjetivo traduccionPO = (TraduccionPublicoObjetivo) publicoObjectivo.getTraduccion(keyIdioma);
@@ -2147,6 +2157,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 					}
 					
 					//UO
+					pasoIndexacion = "rellenar text optional UA" + enumIdioma.toString();
 					if (procedimiento.getUnidadAdministrativa() != null && procedimiento.getUnidadAdministrativa().getTraduccion(keyIdioma) != null) {
 						TraduccionUA unidadAdm = (TraduccionUA) procedimiento.getUnidadAdministrativa().getTraduccion(keyIdioma);
 						if (unidadAdm != null) {
@@ -2156,23 +2167,28 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 					} 
 					
 					//Nombre familia
+					pasoIndexacion = "rellenar text optional nombre familia" + enumIdioma.toString();
 					textoOptional.append(" ");
 					textoOptional.append(procedimiento.getNombreFamilia());
 					
 					//Normativa asociadas
+					pasoIndexacion = "rellenar text optional Normativas" + enumIdioma.toString();
 					for(Normativa normativa : procedimiento.getNormativas()) {
 						final TraduccionNormativa traduccionNormativa = (TraduccionNormativa) normativa.getTraduccion(keyIdioma);
 						if (traduccionNormativa != null) {
 							textoOptional.append(traduccionNormativa.getTitulo());
 							textoOptional.append(" ");
 						}
-					}
+					}									
 			    	searchTextOptional.addIdioma(enumIdioma, traduccion.getResultat() +" " +traduccion.getObservaciones() + " " + textoOptional.toString());
+			    	
+			    	pasoIndexacion = "rellenar url " + enumIdioma.toString();
 			    	urls.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+nombrePubObjetivo+"/tramites/tramite/"+procedimiento.getId());
 				}
 			}
 			
 			//Seteamos datos multidioma.
+			pasoIndexacion = "seteamos datos multidioma";
 			indexData.setTitulo(titulo);
 			indexData.setDescripcion(descripcion);
 			indexData.setUrl(urls);
@@ -2181,6 +2197,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			indexData.setIdiomas(idiomas);
 			
 			//Datos IDs materias.
+			pasoIndexacion = "seteamos id materias";
 			final List<String> materiasId = new ArrayList<String>();		
 			for(Materia materia : procedimiento.getMaterias()) {
 				materiasId.add(materia.getId().toString());
@@ -2188,6 +2205,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			indexData.setMateriaId(materiasId);
 			
 			//Datos IDs publico Objetivos.
+			pasoIndexacion = "seteamos id publico objetivo";
 	    	final List<String> publicoObjetivoId = new ArrayList<String>();		
 			for( PublicoObjetivo publicoObjectivo :  procedimiento.getPublicosObjetivo()) {
 				publicoObjetivoId.add(publicoObjectivo.getId().toString());
@@ -2195,17 +2213,20 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			indexData.setPublicoId(publicoObjetivoId);
 			
 			//Datos IDs de familia.
+			pasoIndexacion = "seteamos familia";
 			if (procedimiento.getFamilia() != null) {
 				indexData.setFamiliaId(procedimiento.getFamilia().getId().toString());
 			}
 						
 			//Fechas
+			pasoIndexacion = "seteamos fechas";
 			indexData.setFechaActualizacion(procedimiento.getFechaActualizacion());
 			indexData.setFechaPublicacion(procedimiento.getFechaPublicacion());
 			indexData.setFechaCaducidad(procedimiento.getFechaCaducidad());
 			indexData.setInterno(false);
 			
 			//UA
+			pasoIndexacion = "seteamos pathuo";
 			PathUO pathUO = IndexacionUtil.calcularPathUO(procedimiento.getUnidadAdministrativa());
 			if (pathUO == null) {
 				return new SolrPendienteResultado(true, "No se puede indexar: no cuelga de UA visible");
@@ -2213,6 +2234,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			indexData.getUos().add(pathUO);
 			
 			//Revisar si el tramite es telematico
+			pasoIndexacion = "seteamos si el tramite es telematico";
 			indexData.setTelematico(false);
 			for(Tramite tramite : procedimiento.getTramites()) {
 				if (tramite != null && tramite.getIdTraTel() != null && !"".equals(tramite.getIdTraTel())) {
@@ -2225,11 +2247,21 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				}
 			}
 			
+			pasoIndexacion = "indexamos contenido";
 			solrIndexer.indexarContenido(indexData);
+			
+			pasoIndexacion = "indexado contenido";
+			
 			return new SolrPendienteResultado(true);
 		} catch(Exception exception) {
-			log.error("Error en procedimientoFacade intentando indexar. idElemento:" + idElemento +" categoria:"+categoria, exception);
-			return new SolrPendienteResultado(false, ExceptionUtils.getStackTrace(exception));
+			log.error("Error en procedimientoFacade intentando indexar. idElemento:" + idElemento +" categoria:"+categoria + "(Paso indexacion: " + pasoIndexacion + ")", exception);
+			
+			String stackTrace = ExceptionUtils.getStackTrace(exception);
+			if (StringUtils.isEmpty(stackTrace)) {
+				stackTrace = "No se ha podido extraer la traza de la excepcion (excepcion: " + exception.getClass().getName() + " - message: " + exception.getMessage() + ")";			
+			}
+			
+			return new SolrPendienteResultado(false, stackTrace);
 		}
 	}
 	

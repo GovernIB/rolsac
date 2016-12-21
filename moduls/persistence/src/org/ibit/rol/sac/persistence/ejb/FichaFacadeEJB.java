@@ -1870,24 +1870,31 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 	public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final Long idElemento, final EnumCategoria categoria) {
 		log.debug("FichafacadeEJB.indexarSolr. idElemento:" + idElemento +" categoria:"+categoria);
 		
+		String pasoIndexacion = "inicio indexacion";
+		
 		try {
 			//Paso 0. Obtenemos la ficha y comprobamos si se puede indexar.
+			pasoIndexacion = "recuperar ficha";
 			final Ficha ficha = obtenerFichaParaSolr(idElemento);
 			if (ficha == null) {
 				log.error("No se puede obtener la ficha con id: " + idElemento);
 				return new SolrPendienteResultado(false, "No se puede obtener la ficha con id: " + idElemento);
 			}
 			
+			pasoIndexacion = "verificar si indexable";
 			boolean isIndexable = IndexacionUtil.isIndexable(ficha);
 			if (!isIndexable) {
 				return new SolrPendienteResultado(true, "No se puede indexar");
 			}
 			
 			//Preparamos la información básica: id elemento, aplicacionID = ROLSAC y la categoria de tipo ficha.
+			pasoIndexacion = "establecer info basica";
 			final IndexData indexData = new IndexData();
 			indexData.setCategoria(categoria);
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
 			indexData.setElementoId(idElemento.toString());
+			
+			pasoIndexacion = "calcular path uo";
 			List<PathUO> pathUOsFicha = IndexacionUtil.calcularPathUOsFicha(ficha);
 			if (pathUOsFicha.size() <= 0) {
 				return new SolrPendienteResultado(true, "No se puede indexar: no cuelga de UAs visibles");
@@ -1903,9 +1910,11 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			final List<EnumIdiomas> idiomas = new ArrayList<EnumIdiomas>();
 			
 			// Obtenemos primera UA
+			pasoIndexacion = "calcular primera ua";
 			UnidadAdministrativa primeraUA = IndexacionUtil.calcularPrimeraUAFicha(ficha);	
 			
 			//Recorremos las traducciones
+			pasoIndexacion = "establecer traducciones";
 			for (String keyIdioma : ficha.getTraduccionMap().keySet()) {
 				final EnumIdiomas enumIdioma = EnumIdiomas.fromString(keyIdioma);
 				final TraduccionFicha traduccion = (TraduccionFicha) ficha.getTraduccion(keyIdioma);
@@ -1921,6 +1930,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 					idiomas.add(enumIdioma);
 					
 					//Seteamos los primeros campos multiidiomas: Titulo, Descripción y el search text.
+					pasoIndexacion = "establecer Titulo, Descripción y el search text " + keyIdioma;
 					titulo.addIdioma(enumIdioma, traduccion.getTitulo());
 			    	descripcion.addIdioma(enumIdioma, solrIndexer.htmlToText(traduccion.getDescAbr()));
 			    	searchText.addIdioma(enumIdioma, traduccion.getTitulo()+ " "+ solrIndexer.htmlToText(traduccion.getDescAbr()) + " "+ solrIndexer.htmlToText(traduccion.getDescripcion()));
@@ -1929,6 +1939,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			    	final StringBuffer textoOptional = new StringBuffer();
 					
 			    	//Materia
+			    	pasoIndexacion = "establecer text optional materias " + keyIdioma;
 			    	for(Materia materia : ficha.getMaterias()) {
 						TraduccionMateria traduccionMateria = (TraduccionMateria) materia.getTraduccion(keyIdioma);
 						if (traduccionMateria != null) {
@@ -1942,6 +1953,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 					}
 			    	
 			    	//hechos vitales
+			    	pasoIndexacion = "establecer text optional hechos vitales " + keyIdioma;
 					for(HechoVital hecho : ficha.getHechosVitales()) {
 						final TraduccionHechoVital traduccionHechoVital =  (TraduccionHechoVital) hecho.getTraduccion(keyIdioma);
 						if (traduccionHechoVital != null) {
@@ -1955,10 +1967,13 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 					}
 					
 					//Unidades administrativas de las fichas.
+					pasoIndexacion = "establecer text optional uos hechos vitales " + keyIdioma;
 					textoOptional.append(IndexacionUtil.calcularPathTextUOsFicha(ficha, keyIdioma));
 					textoOptional.append(" ");
 					
-			    	searchTextOptional.addIdioma(enumIdioma, textoOptional.toString());	    	
+			    	searchTextOptional.addIdioma(enumIdioma, textoOptional.toString());
+			    	
+			    	pasoIndexacion = "establecer url " + keyIdioma;
 			    	if (traduccion.getUrl() == null || traduccion.getUrl().isEmpty()) {
 			    		String idUA = "{#UA:"+primeraUA.getId()+"}";
 			    		urls.addIdioma(enumIdioma, "/govern/sac/fitxa.do?codi="+ ficha.getId() + "&coduo=" + idUA + "&lang=" + keyIdioma);	    		
@@ -1969,6 +1984,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			}
 			
 			//Seteamos datos multidioma.
+			pasoIndexacion = "Seteamos datos multidioma";
 			indexData.setTitulo(titulo);
 			indexData.setDescripcion(descripcion);
 			indexData.setUrl(urls);
@@ -1977,6 +1993,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			indexData.setIdiomas(idiomas);
 			
 			//Datos IDs materias.
+			pasoIndexacion = "Seteamos id materias";
 			final List<String> materiasId = new ArrayList<String>();		
 			for(Materia materia : ficha.getMaterias()) {
 				materiasId.add(materia.getId().toString());
@@ -1984,6 +2001,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			indexData.setMateriaId(materiasId);
 			
 			//Datos IDs publico Objetivos.
+			pasoIndexacion = "Seteamos id publico Objetivo";
 	    	final List<String> publicoObjetivoId = new ArrayList<String>();		
 			for( PublicoObjetivo publicoObjectivo :  ficha.getPublicosObjetivo()) {
 				publicoObjetivoId.add(publicoObjectivo.getId().toString());
@@ -1991,21 +2009,33 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			indexData.setPublicoId(publicoObjetivoId);
 			
 			//Datos extras
+			pasoIndexacion = "Seteamos imagen";
 			if (ficha.getImagen() != null) {
 				indexData.setUrlFoto("/govern/rest/arxiu/" + ficha.getImagen().getId());
 			}
 			
 			//Fechas
+			pasoIndexacion = "Seteamos fechas";
 			indexData.setFechaActualizacion(ficha.getFechaActualizacion());
 			indexData.setFechaPublicacion(ficha.getFechaPublicacion());
 			indexData.setFechaCaducidad(ficha.getFechaCaducidad());
 			indexData.setInterno(false);
 			
+			pasoIndexacion = "indexar contenido";
 			solrIndexer.indexarContenido(indexData);
+			pasoIndexacion = "indexado contenido";
+			
 			return new SolrPendienteResultado(true);
 		} catch(Exception exception) {
-			log.error("Error en fichafacade intentando indexar. idElemento:" + idElemento +" categoria:"+categoria, exception);			
-			return new SolrPendienteResultado(false, ExceptionUtils.getStackTrace(exception));
+			log.error("Error en fichafacade intentando indexar. idElemento:" + idElemento +" categoria:"+categoria + "(Paso indexacion: " + pasoIndexacion + ")", exception);			
+			
+			String stackTrace = ExceptionUtils.getStackTrace(exception);
+			if (StringUtils.isEmpty(stackTrace)) {
+				stackTrace = "No se ha podido extraer la traza de la excepcion (excepcion: " + exception.getClass().getName() + " - message: " + exception.getMessage() + ")";			
+			}
+			
+			return new SolrPendienteResultado(false, stackTrace);
+
 		}
 	}
 	
