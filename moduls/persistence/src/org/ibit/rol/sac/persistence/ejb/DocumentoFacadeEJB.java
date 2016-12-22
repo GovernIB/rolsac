@@ -542,7 +542,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 						indexData.setTelematico(true);
 					}
 					
-					if (tramite.getFase() == Tramite.INICIACION) {
+					if (tramite != null && tramite.getFase() == Tramite.INICIACION) {
 						indexData.setFechaPlazoIni(tramite.getDataInici());
 						indexData.setFechaPlazoFin(tramite.getDataTancament());
 					}
