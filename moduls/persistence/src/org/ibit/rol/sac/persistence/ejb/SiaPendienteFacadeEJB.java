@@ -278,7 +278,8 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		        				
 	        					ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimientoParaSolr(siaPendiente.getIdElemento());
 	        					
-	        					if (SiaUtils.isEnviableSia(procedimiento)) {
+	        					boolean esEnviable = SiaUtils.isEnviableSia(procedimiento);
+	        					if (esEnviable || (!esEnviable && procedimiento.getEstadoSIA() != null && SiaUtils.ESTADO_ALTA.equals(procedimiento.getEstadoSIA()))) {
 	        				    	
 	        						enviarProcedimiento(procDelegate, procedimiento,  siaPendiente, resultadoDescripcion,  correctos,  incorrectos);
 	        						
@@ -304,8 +305,9 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	        				for (ProcedimientoLocal procedimiento : listProcedimientos) {
 	        					resultadoDescripcion.append("   -- Procedimiento asociado (idProc:"+procedimiento.getId()+") <br />");
 		        				
-	        					if (SiaUtils.isEnviableSia(procedimiento)) {
-	        						
+	        					boolean esEnviable = SiaUtils.isEnviableSia(procedimiento);
+	        					if (esEnviable || (!esEnviable && procedimiento.getEstadoSIA() != null && SiaUtils.ESTADO_ALTA.equals(procedimiento.getEstadoSIA()))) {
+	        				    	
 	        						enviarProcedimiento(procDelegate, procedimiento,  null, resultadoDescripcion,  null,  null);
 	        						
 	        					} else {
@@ -340,8 +342,9 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	        				boolean todosCorrectos = true;
 	        				for (ProcedimientoLocal procedimiento : listProcedimientos) {
 	        					
-	        					if (SiaUtils.isEnviableSia(procedimiento)) {	
-	        						
+	        					boolean esEnviable = SiaUtils.isEnviableSia(procedimiento);
+	        					if (esEnviable || (!esEnviable && procedimiento.getEstadoSIA() != null && SiaUtils.ESTADO_ALTA.equals(procedimiento.getEstadoSIA()))) {
+	        				    	
 	        						enviarProcedimiento(procDelegate, procedimiento,  null, resultadoDescripcion,  null,  null);        						
 
 	        					} else {
@@ -493,13 +496,6 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		}
 		sia.setTipologia(SiaUtils.getTipologiaTramitacion());
 		
-		String tipoTramite = SiaUtils.TRAMITE_SERV;
-		
-		if (SiaUtils.getTipoActuacion() == SiaUtils.TIPO_TRAMITE_PROC){
-			tipoTramite = SiaUtils.TRAMITE_PROC;
-		}
-		sia.setTipoTramite(tipoTramite);
-		
 		sia.setEnlaceWeb(SiaUtils.getUrl()+procedimiento.getId().toString());
 		
 		sia.setEstado(procedimiento.getEstadoSIA());
@@ -521,6 +517,13 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 			
 			sia.setOperacion(SiaUtils.ESTADO_BAJA); 
 
+		}
+		
+		//Se ha tenido que poner aquí (y se ha simplificado) pq se produce un error al enviar una modificación.
+		if (SiaUtils.ESTADO_ALTA.equals(sia.getOperacion())) {
+			sia.setTipoTramite(SiaUtils.TRAMITE_PROC);			
+		} else {
+			sia.setTipoTramite(null);
 		}
 		
 		return sia;

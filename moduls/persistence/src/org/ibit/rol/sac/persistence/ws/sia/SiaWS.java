@@ -119,7 +119,7 @@ public class SiaWS {
 		paramSia.setDESCRIPCION(sia.getDescripcion());
 		ORGANISMORESPONSABLE organismoResponsable = new ORGANISMORESPONSABLE();
 		organismoResponsable.setCODORGANISMORESPONSABLEN1(sia.getIdCent());
-		organismoResponsable.setCODORGANISMORESPONSABLEN2(sia.getUaGest());
+		//organismoResponsable.setCODORGANISMORESPONSABLEN2(sia.getUaGest());
 		paramSia.setORGANISMORESPONSABLE(organismoResponsable);
 		
 		DESTINATARIOSDESTINATARIO[] destinatarios = new DESTINATARIOSDESTINATARIO[sia.getIdDest().length];		

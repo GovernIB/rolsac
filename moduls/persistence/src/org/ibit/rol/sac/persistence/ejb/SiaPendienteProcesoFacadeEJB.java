@@ -111,7 +111,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     		}
     		
     		if (filtro.getExiste() != null) {
-    			consulta.append(" and sia.tipoAccion = :tipoAccion");
+    			consulta.append(" and sia.existe = :existe");
     		}
     		consulta.append(" order by sia.id desc");
     		
@@ -125,7 +125,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     		}
     		
     		if (filtro.getExiste() != null) {
-    			query.setInteger("tipoAccion", filtro.getExiste());
+    			query.setInteger("existe", filtro.getExiste());
     		}
     		
     		
