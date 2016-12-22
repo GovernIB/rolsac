@@ -2241,7 +2241,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 					indexData.setTelematico(true);					
 				}
 				
-				if (tramite.getFase() == Tramite.INICIACION) {
+				if (tramite != null && tramite.getFase() == Tramite.INICIACION) {
 					indexData.setFechaPlazoIni(tramite.getDataInici());
 					indexData.setFechaPlazoFin(tramite.getDataTancament());
 				}
