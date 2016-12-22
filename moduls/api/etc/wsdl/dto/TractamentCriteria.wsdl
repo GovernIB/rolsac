@@ -9,12 +9,19 @@
     xmlns:tns2="http://general.v2.api.rolsac.caib.es"
     targetNamespace="http://ws.tractament.v2.api.rolsac.caib.es">
 
+  <wsdl:import namespace="urn:tns4" location="TractamentOrdenacio.wsdl"/> 
   <wsdl:types>
     <schema xmlns="http://www.w3.org/2001/XMLSchema"
         targetNamespace="http://tractament.v2.api.rolsac.caib.es">
         <import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
         <import namespace="http://general.v2.api.rolsac.caib.es" />
-
+		
+		<complexType name="ArrayOfTractamentOrdenacio">
+            <sequence>
+                <element minOccurs="0" maxOccurs="unbounded" name="listaOrdenaciones" nillable="true" type="tns:TractamentOrdenacio" />
+            </sequence>
+        </complexType>
+        
         <complexType name="TractamentCriteria">
             <complexContent>
                 <extension base="tns2:BasicCriteria">
@@ -25,6 +32,7 @@
                         <element name="t_tratamientoM" nillable="true" type="xsd:string" />
                         <element name="t_cargoF" nillable="true" type="xsd:string" />
                         <element name="t_tratamientoF" nillable="true" type="xsd:string" />
+                        <element name="ordenar" nillable="true" type="tns:ArrayOfTractamentOrdenacio" />
                     </sequence>
                 </extension>
             </complexContent>
