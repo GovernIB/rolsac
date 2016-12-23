@@ -11,7 +11,7 @@
 
 	<!-- RolsacQueryService beans -->	
 	<!-- EJB -->
-	<bean id="rolsacQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.rolsac.RolsacQueryServiceAdapter">
+	<bean id="rolsacQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.rolsac.RolsacQueryServiceAdapter" scope="prototype">
 		<property name="rolsacQueryServiceStrategy" ref="rolsacQueryServiceEJBStrategy" />
 	</bean>
 
@@ -26,7 +26,7 @@
 	<bean id="rolsacQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.rolsac.ejb.RolsacQueryServiceEJBLocator" />
 	
 	<!-- WS -->
-    <bean id="rolsacQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.rolsac.RolsacQueryServiceAdapter">
+    <bean id="rolsacQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.rolsac.RolsacQueryServiceAdapter" scope="prototype">
         <property name="rolsacQueryServiceStrategy" ref="rolsacQueryServiceWSStrategy" />
     </bean>
 
@@ -302,7 +302,7 @@
 
     <!-- EstadisticaInsertService beans -->
     <!-- EJB -->
-    <bean id="estadisticaInsertServiceEJBAdapter" class="es.caib.rolsac.api.v2.estadistica.EstadisticaInsertServiceAdapter">
+    <bean id="estadisticaInsertServiceEJBAdapter" class="es.caib.rolsac.api.v2.estadistica.EstadisticaInsertServiceAdapter" scope="prototype">
         <property name="estadisticaInsertServiceStrategy" ref="estadisticaInsertServiceEJBStrategy" />
     </bean>
 

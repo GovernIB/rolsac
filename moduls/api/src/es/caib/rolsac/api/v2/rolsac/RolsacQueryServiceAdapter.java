@@ -118,8 +118,20 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
 
     private RolsacQueryServiceStrategy rolsacQueryServiceStrategy;
     
-    public void setRolsacQueryServiceStrategy(RolsacQueryServiceStrategy rolsacQueryServiceStrategy) {
+    private String url;
+    
+    public RolsacQueryServiceAdapter() {
+    	super();
+	}
+    
+    public RolsacQueryServiceAdapter(String url) {
+    	super();
+    	this.url = url;
+	}
+
+	public void setRolsacQueryServiceStrategy(RolsacQueryServiceStrategy rolsacQueryServiceStrategy) {
         this.rolsacQueryServiceStrategy = rolsacQueryServiceStrategy;
+        rolsacQueryServiceStrategy.setUrl(url);        
     }
 
     private STRATEGY getStrategy() {

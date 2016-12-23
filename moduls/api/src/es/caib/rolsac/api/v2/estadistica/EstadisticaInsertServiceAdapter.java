@@ -7,8 +7,20 @@ public class EstadisticaInsertServiceAdapter implements EstadisticaInsertService
     
     private EstadisticaInsertServiceStrategy estadisticaInsertServiceStrategy;
 
-    public void setEstadisticaInsertServiceStrategy(EstadisticaInsertServiceStrategy strategy) {
+    private String url;
+    
+    public EstadisticaInsertServiceAdapter() {
+		super();	
+	}
+    
+    public EstadisticaInsertServiceAdapter(String url) {
+		super();	
+		this.url = url;		
+	}
+
+	public void setEstadisticaInsertServiceStrategy(EstadisticaInsertServiceStrategy strategy) {
         this.estadisticaInsertServiceStrategy = strategy;
+        
     }
 
     public boolean gravarEstadisticaFitxa(long fitxaId) throws InsertServiceException {

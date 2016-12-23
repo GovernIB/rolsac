@@ -31,6 +31,19 @@ public class EstadisticaInsertServiceGateway {
 		}
 	}
 	
+	public void setUrl(String url) {
+		try {
+			
+			stub = new EstadisticaWSSoapBindingStub(
+					new URL(url + ConfiguracioServeis.NOM_SERVEI_ESTADISTICA),
+					null);
+		} catch (AxisFault e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public boolean gravarEstadisticaFitxa(long fitxaId)
 			throws RemoteException {
 		return stub.gravarEstadisticaFitxa(fitxaId);

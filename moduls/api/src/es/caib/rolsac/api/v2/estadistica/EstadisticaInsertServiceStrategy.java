@@ -3,6 +3,8 @@ package es.caib.rolsac.api.v2.estadistica;
 import es.caib.rolsac.api.v2.exception.StrategyException;
 
 public interface EstadisticaInsertServiceStrategy {
+	
+	public void setUrl(String url);
     
     /**
      * Crea o actualiza una Estadistica para una Ficha.

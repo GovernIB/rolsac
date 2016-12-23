@@ -76,6 +76,8 @@ import es.caib.rolsac.api.v2.usuari.UsuariDTO;
 
 public interface RolsacQueryServiceStrategy {
 
+	void setUrl(String url);
+	
     AgrupacioFetVitalDTO obtenirAgrupacioFetVital(AgrupacioFetVitalCriteria agrupacioFetVitalCriteria) throws StrategyException;
 
     List<AgrupacioFetVitalDTO> llistarAgrupacionsFetsVitals(AgrupacioFetVitalCriteria agrupacioFetVitalCriteria) throws StrategyException;

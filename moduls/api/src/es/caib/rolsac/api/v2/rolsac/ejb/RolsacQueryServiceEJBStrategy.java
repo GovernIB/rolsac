@@ -76,8 +76,12 @@ import es.caib.rolsac.api.v2.usuari.UsuariCriteria;
 import es.caib.rolsac.api.v2.usuari.UsuariDTO;
 
 public class RolsacQueryServiceEJBStrategy implements RolsacQueryServiceStrategy {
-
-    private RolsacQueryServiceDelegate rolsacQueryServiceDelegate;
+	
+	private RolsacQueryServiceDelegate rolsacQueryServiceDelegate;
+	
+	public void setUrl(String url) {
+		// Para EJB no necesario		
+	}
 
     public void setRolsacQueryServiceDelegate(RolsacQueryServiceDelegate rolsacQueryServiceDelegate) {
         this.rolsacQueryServiceDelegate = rolsacQueryServiceDelegate;

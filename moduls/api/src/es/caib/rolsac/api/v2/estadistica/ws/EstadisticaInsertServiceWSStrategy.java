@@ -9,6 +9,10 @@ import es.caib.rolsac.api.v2.exception.StrategyException;
 public class EstadisticaInsertServiceWSStrategy implements EstadisticaInsertServiceStrategy {
 
 	EstadisticaInsertServiceGateway gateway;	
+	
+	public void setUrl(String url) {
+		gateway.setUrl(url);
+	}
 
 	public void setGateway(EstadisticaInsertServiceGateway gateway) {
 		this.gateway = gateway;
@@ -78,4 +82,7 @@ public class EstadisticaInsertServiceWSStrategy implements EstadisticaInsertServ
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}		
 	}
+
+
+	
 }

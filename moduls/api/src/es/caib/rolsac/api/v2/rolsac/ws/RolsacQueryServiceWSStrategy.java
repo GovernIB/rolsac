@@ -82,6 +82,11 @@ public class RolsacQueryServiceWSStrategy implements RolsacQueryServiceStrategy 
 
 	// @Injected
 	private RolsacQueryServiceGateway gateway;
+	
+	
+	public void setUrl(String url) {
+		gateway.setUrl(url);
+	}
 
 	public void setGateway(RolsacQueryServiceGateway gateway) {
 		this.gateway = gateway;
@@ -993,5 +998,7 @@ public class RolsacQueryServiceWSStrategy implements RolsacQueryServiceStrategy 
             throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
         }
 	}
+
+	
 	
 }

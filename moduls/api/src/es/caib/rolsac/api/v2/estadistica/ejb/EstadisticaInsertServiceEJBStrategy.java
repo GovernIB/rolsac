@@ -8,6 +8,11 @@ public class EstadisticaInsertServiceEJBStrategy implements EstadisticaInsertSer
 
     private EstadisticaInsertServiceDelegate estadisticaInsertServiceDelegate;
 
+	public void setUrl(String url) {
+		// No necesario para EJB
+	}
+    
+    
     public void setEstadisticaInsertServiceDelegate(EstadisticaInsertServiceDelegate delegate) {
         this.estadisticaInsertServiceDelegate = delegate;
     }
@@ -67,5 +72,5 @@ public class EstadisticaInsertServiceEJBStrategy implements EstadisticaInsertSer
             throw new StrategyException(e);
         }
     }
-    
+
 }
