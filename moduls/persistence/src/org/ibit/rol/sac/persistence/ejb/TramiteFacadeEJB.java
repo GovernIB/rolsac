@@ -209,30 +209,30 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 	 * Borra un trámite
 	 * 
 	 * @param id	Identificador del trámite a borrar.	
+	 * @param idProc	Identificador del procedimiento.	
 	 * @throws DelegateException 
 	 * 
 	 * @ejb.interface-method
 	 * 
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
-	public void borrarTramite(Long id) throws DelegateException {
+	public void borrarTramite(Long id, Long idProc) throws DelegateException {
 
 		Session session = getSession();
 
 		try {
 
 			if ( !getAccesoManager().tieneAccesoTramite(id) )
-				throw new SecurityException("No tiene acceso al tr�mite");
+				throw new SecurityException("No tiene acceso al trámite");
 
 			Tramite tramite = (Tramite)session.load(Tramite.class, id);
+		
 			session.delete(tramite);
 			session.flush();
 			
-			session.flush();
-
 			Actualizador.borrar(tramite, true);
 			
-			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, tramite.getProcedimiento().getId(), false);
+			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, idProc, false);
 
 		} catch (HibernateException he) {
 

@@ -60,8 +60,8 @@ public class TramiteDelegate  {
 		impl.borrarTaxa(id);
 	}
 
-	public void borrarTramite(Long id) throws DelegateException {
-		impl.borrarTramite(id);
+	public void borrarTramite(Long id, Long idProc) throws DelegateException {
+		impl.borrarTramite(id, idProc);
 	}
 
 	public Long grabarDocument(DocumentTramit doc, Long tid)

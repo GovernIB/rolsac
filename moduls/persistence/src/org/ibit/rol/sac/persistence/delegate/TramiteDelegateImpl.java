@@ -59,9 +59,9 @@ public class TramiteDelegateImpl implements StatelessDelegate, TramiteDelegateI 
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#borrarTramite(java.lang.Long)
 	 */
-    public void borrarTramite(Long id) throws DelegateException {
+    public void borrarTramite(Long id, Long idProc) throws DelegateException {
         try {
-            getFacade().borrarTramite(id);
+            getFacade().borrarTramite(id, idProc);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }

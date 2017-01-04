@@ -18,7 +18,7 @@ public interface TramiteDelegateI {
 
 	public abstract Tramite obtenerTramite(Long id) throws DelegateException;
 	
-	public abstract void borrarTramite(Long id) throws DelegateException;
+	public abstract void borrarTramite(Long id, Long idProc) throws DelegateException;
 
 	public abstract Long grabarDocument(DocumentTramit doc, Long tid)
 			throws DelegateException;
