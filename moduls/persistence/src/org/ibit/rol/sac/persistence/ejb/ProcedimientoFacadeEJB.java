@@ -300,7 +300,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		            		throw new EJBException("No se puede borrar el trámite de iniciación cuando el estado del procedimiento es público");
 		        	
 		        	DelegateUtil.getProcedimientoDelegate().eliminarTramite(tramite.getId(), procedimiento.getId());
-		            tramiteDelegate.borrarTramite(tramite.getId());
+		            tramiteDelegate.borrarTramite(tramite.getId(), procedimiento.getId());
 		        
 		        }
 	

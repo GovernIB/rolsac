@@ -353,8 +353,11 @@ public class TramiteBackController {
         	// TODO amartin: tras la refactorización usando métodos privados como soporte a los públicos,
         	// veo que esta instrucción ya se ejecuta un par de líneas antes. Desconozco si es 
         	// código duplicado o algo necesario. ACLARAR.
-        	if (!edicion)
-        		procedimientoDelegate.anyadirTramite(tramite.getId(), idProcedimiento);
+        	
+        	//#386 Recuperació col·leccions de tràmits amb elements nuls, esto hace que se actualice el orden del tramite dos veces, y como 
+        	//la lista está definida index column="TRA_ORDEN" deja el hueco del orden anterior vacío
+//        	if (!edicion)
+//        		procedimientoDelegate.anyadirTramite(tramite.getId(), idProcedimiento);
         	
         } catch (ValidateVudsException e) {
         	
@@ -626,7 +629,7 @@ public class TramiteBackController {
 			    					
 			//Quita el tramite de la lista
 			procedimientoDelegate.eliminarTramite(idTramite, idProcedimiento);
-			tramiteDelegate.borrarTramite(idTramite);
+			tramiteDelegate.borrarTramite(idTramite,idProcedimiento);
 			
 			resultatStatus.setId(1l);
 			resultatStatus.setNom("correcte");
