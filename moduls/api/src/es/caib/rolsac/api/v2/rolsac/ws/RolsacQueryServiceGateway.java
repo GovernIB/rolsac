@@ -104,10 +104,12 @@ public class RolsacQueryServiceGateway {
 	
 	public void setUrl(String url) {
 		try {
-			stub = new RolsacWSSoapBindingStub(
-				new URL(url + ConfiguracioServeis.NOM_SERVEI_ROLSAC),
-				null
-			);
+			if(url != null && !url.isEmpty()){				
+				stub = new RolsacWSSoapBindingStub(
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_ROLSAC),
+						null
+						);
+			}
 		} catch (AxisFault e) {
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
