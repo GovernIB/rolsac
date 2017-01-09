@@ -68,8 +68,8 @@ public class SiaPendienteProcesoDelegate implements StatelessDelegate {
 		impl.actualizarSiaJob(siaJob);
 	}
 
-	public void cerrarSiaJob(SiaJob siaJob) throws DelegateException{
-		impl.cerrarSiaJob(siaJob);
+	public void cerrarSiaJob(Long idSiaJob) throws DelegateException{
+		impl.cerrarSiaJob(idSiaJob);
 	}
 
 	public Boolean cerrarJobs() throws DelegateException{

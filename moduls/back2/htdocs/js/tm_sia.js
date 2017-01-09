@@ -116,6 +116,9 @@ function incluirSaltosLinea(descripcion) {
 	 while (descripcion.indexOf("<br >") != -1) {
 		 descripcion = descripcion.replace("<br >","\n");
 	 }
+	 while (descripcion.indexOf("</a>") != -1) {
+		 descripcion = descripcion.replace("</a>","");
+	 }
 	 return descripcion;
 }
 

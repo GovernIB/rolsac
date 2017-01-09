@@ -27,7 +27,7 @@ public class TaskSia {
 			 SiaJob siaJob = siaProcesoDelegate.crearSiaJob();
 			 siaDelegate.enviarPendientes(siaJob);
 			 
-			 siaProcesoDelegate.cerrarSiaJob(siaJob);
+			 siaProcesoDelegate.cerrarSiaJob(siaJob.getId());
 			 
 		} catch (Exception e) {
 			log.error("Error enviando pendientes SIA", e);

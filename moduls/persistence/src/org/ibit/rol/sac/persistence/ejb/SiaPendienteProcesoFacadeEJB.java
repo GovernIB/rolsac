@@ -463,12 +463,13 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
    	 * @ejb.permission unchecked="true"
    	 *   
    	 */
-    public void cerrarSiaJob(SiaJob siaJob)  {
+    public void cerrarSiaJob(Long idSiaJob)  {
     	try
     	{
     		Session session = getSession();
-	    	siaJob.setFechaFin(new Date());
-	    	session.update(siaJob); 
+    		SiaJob siaJobNuevo = (SiaJob) session.get(SiaJob.class, idSiaJob);
+    		siaJobNuevo.setFechaFin(new Date());
+	    	session.update(siaJobNuevo); 
 			session.flush();
 			session.close();
 	    } catch(Exception exception) {

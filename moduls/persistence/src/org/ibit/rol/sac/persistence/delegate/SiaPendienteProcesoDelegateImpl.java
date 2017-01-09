@@ -150,9 +150,9 @@ public class SiaPendienteProcesoDelegateImpl extends SiaPendienteProcesoDelegate
 	
 	
 	@Override
-	public void cerrarSiaJob(SiaJob siaJob) throws DelegateException{
+	public void cerrarSiaJob(Long idSiaJob) throws DelegateException{
 		try {
-			getFacade().cerrarSiaJob(siaJob);
+			getFacade().cerrarSiaJob(idSiaJob);
        } catch (RemoteException e) {
            throw new DelegateException(e);
        }

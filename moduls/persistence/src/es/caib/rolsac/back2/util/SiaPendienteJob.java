@@ -56,7 +56,7 @@ public class SiaPendienteJob implements Job  {
 	    		siaDelegate.enviarPendientes(siaJob);
 	    	}
 	    	
-	    	siaProcesoDelegate.cerrarSiaJob(siaJob);
+	    	siaProcesoDelegate.cerrarSiaJob(siaJob.getId());
 	    	
     	} catch (DelegateException e) {
     		log.error("Error ejecucion envio con tipo envio:" + tipoEnvio);

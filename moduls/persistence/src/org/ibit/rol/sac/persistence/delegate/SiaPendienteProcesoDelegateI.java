@@ -27,7 +27,7 @@ public interface SiaPendienteProcesoDelegateI {
 
 	public void actualizarSiaJob(SiaJob siaJob)  throws DelegateException;
 	
-	public void cerrarSiaJob(SiaJob siaJob) throws DelegateException;
+	public void cerrarSiaJob(Long idSiaJob) throws DelegateException;
 
 	public Boolean cerrarJobs() throws DelegateException;
 }
