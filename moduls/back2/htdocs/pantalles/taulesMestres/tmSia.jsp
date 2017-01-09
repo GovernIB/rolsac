@@ -147,7 +147,7 @@
     <div class="content-popup">
         <div class="close"><a href="#" id="close"><img src="../img/botons/eliminar.gif"/></a></div>
         <div>
-           <textarea id="item_texto" name="item_observacions" cols="70" rows="15" class="nou"></textarea>     
+           <textarea id="item_texto" name="item_texto" cols="70" rows="15" class="nou"></textarea>     
         </div>
     </div>
 </div>
