@@ -187,6 +187,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 			if (siaPendiente != null ) {
 				SiaPendienteProcesoDelegate siaPendienteDelegate = DelegateUtil.getSiaPendienteProcesoDelegate(); 
 				siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_CORRECTO);
+				siaPendiente.setFecIdx(new Date());
 				siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
 			}
 			
@@ -203,6 +204,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 				SiaPendienteProcesoDelegate siaPendienteDelegate = DelegateUtil.getSiaPendienteProcesoDelegate(); 
 				siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_INCORRECTO);
 				siaPendiente.setMensaje(resultado.getMensaje());
+				siaPendiente.setFecIdx(new Date());
 				siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
 			}
 		}
@@ -258,6 +260,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	        					sia.setIdSIA(siaPendiente.getIdSia().toString());
 	        					sia.setOperacion(SiaUtils.ESTADO_BAJA); 
 	        					resultado = SiaWS.enviarSIA(sia); 
+	        					
 	        					if (resultado.isCorrecto()) {
 		    						siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_CORRECTO);
 		    						correctos++;
@@ -287,6 +290,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	        						//Actualizamos el siaPendinete
 									siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_CORRECTO);
 									siaPendiente.setMensaje("No se ha enviado hacia SIA, no cumplía requisitos.");
+									siaPendiente.setFecIdx(new Date());
 		    						siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
 		    						resultadoDescripcion.append("   -- Marcado como correcto (no cumplia requisitos, no se ha enviado a SIA) <br />");
 		    						correctos++;		
@@ -294,7 +298,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		    					
 		    					
 	        				}
-	
+	        				
 	        				
 	        			} else if (SiaUtils.SIAPENDIENTE_TIPO_UNIDAD_ADMINISTRATIVA.equals(siaPendiente.getTipo() )) {
 	        				
@@ -320,6 +324,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	        				if (todosCorrectos) {
 	        					//Actualizamos el siaPendiente
 								siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_CORRECTO);
+								siaPendiente.setFecIdx(new Date());
 	    						siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
 	    						
 	    						correctos++;
@@ -328,12 +333,14 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	    						//Actualizamos el siaPendiente
 								siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_INCORRECTO);
 								siaPendiente.setMensaje("Ha fallado indexando los procedimientos asociados a la UA");
+								siaPendiente.setFecIdx(new Date());
 	        					siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
 	        					
 	        					incorrectos++;	
 	        					resultadoDescripcion.append("   -- Marcado como incorrecto <br />");
 	    						resultadoDescripcion.append("   -- Mensaje:"+resultado.getMensaje()+" <br />");
 	    					}
+	        				
 	        				
 	        			} else if (SiaUtils.SIAPENDIENTE_TIPO_NORMATIVA.equals(siaPendiente.getTipo() )) {
 	        				
@@ -355,6 +362,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	        				if (todosCorrectos) {
 	        					//Actualizamos el siaPendiente
 								siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_CORRECTO);
+								siaPendiente.setFecIdx(new Date());
 	    						siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
 	    						
 	    						correctos++;		    						
@@ -363,6 +371,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	    						//Actualizamos el siaPendiente
 								siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_INCORRECTO);
 								siaPendiente.setMensaje("Ha fallado indexando los procedimientos asociados a la normativa");
+								siaPendiente.setFecIdx(new Date());
 	        					siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
 	        					
 	        					incorrectos++;		    	

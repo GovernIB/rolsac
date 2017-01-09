@@ -827,6 +827,10 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		procediment.setMaterias(procedimentOld.getMaterias());
 		procediment.setNormativas(procedimentOld.getNormativas());
 		
+		//Estos campos no se encuentran en la pantalla y se perderian sus valores al guardar
+		procediment.setFechaSIA(procedimentOld.getFechaSIA());
+		procediment.setEstadoSIA(procedimentOld.getEstadoSIA());
+		
 		return procediment;
 		
 	}
