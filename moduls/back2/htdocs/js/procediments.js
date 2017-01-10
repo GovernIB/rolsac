@@ -557,8 +557,8 @@ function CDetall() {
 			jQuery("#item_codigo_sia,#item_codigo_sia_es,#item_codigo_sia_en,#item_codigo_sia_de,#item_codigo_sia_fr").val( jQuery(this).val() );
 		});
 		
-		jQuery("#item_codigo_sia,#item_codigo_sia_es,#item_codigo_sia_en,#item_codigo_sia_de,#item_codigo_sia_fr").change(function(){
-			jQuery("#item_codigo_sia,#item_codigo_sia_es,#item_codigo_sia_en,#item_codigo_sia_de,#item_codigo_sia_fr").val( jQuery(this).val() );
+		jQuery("#item_estado_sia,#item_estado_sia_es,#item_estado_sia_en,#item_estado_sia_de,#item_estado_sia_fr").change(function(){
+			jQuery("#item_estado_sia,#item_estado_sia_es,#item_estado_sia_en,#item_estado_sia_de,#item_estado_sia_fr").val( jQuery(this).val() );
 		});
 		
 		jQuery("#item_fi_vida_administrativa,#item_fi_vida_administrativa_es,#item_fi_vida_administrativa_en,#item_fi_vida_administrativa_de,#item_fi_vida_administrativa_fr").change(function(){
@@ -622,6 +622,7 @@ function CDetall() {
 		jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").hide();
 		//#366 se añade sia
 		jQuery("#caja_item_codigo_sia, #caja_item_codigo_sia_es, #caja_item_codigo_sia_en, #caja_item_codigo_sia_de, #caja_item_codigo_sia_fr").hide();
+		jQuery("#caja_item_estado_sia, #caja_item_estado_sia_es, #caja_item_estado_sia_en, #caja_item_estado_sia_de, #caja_item_estado_sia_fr").hide();
 		
 		// Borrar del desplegable de estado de publicación las opciones no válidas al crear un nuevo procedimiento:
 		// (1 = Pública, 3 = Reserva).
@@ -701,6 +702,7 @@ function CDetall() {
 		jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").show();        
 		//#366 se añade SIA
 		jQuery("#caja_item_codigo_sia, #caja_item_codigo_sia_es, #caja_item_codigo_sia_en, #caja_item_codigo_sia_de, #caja_item_codigo_sia_fr").show();        
+		jQuery("#caja_item_estado_sia, #caja_item_estado_sia_es, #caja_item_estado_sia_en, #caja_item_estado_sia_de, #caja_item_estado_sia_fr").show();        
 		
 		
 		escriptori_detall_elm.find("a.elimina, a.previsualitza").show().end().find("h2:first").text(txtDetallTitol);
@@ -739,6 +741,24 @@ function CDetall() {
 		if (dada_node.item_codigo_sia != undefined) {
 			jQuery("#item_codigo_sia").val(dada_node.item_codigo_sia);
 			jQuery("#item_codigo_sia").change();
+		}
+		
+		if (dada_node.item_estado_sia != undefined) {
+			if (dada_node.item_estado_sia == 'A') {
+				jQuery("#item_estado_sia").val("Alta");
+			} else if (dada_node.item_estado_sia == 'B') {
+				jQuery("#item_estado_sia").val("Baixa");
+			}  else if (dada_node.item_estado_sia == 'RC') {
+				jQuery("#item_estado_sia").val("Reactivat");
+			} else if (dada_node.item_estado_sia == 'M') {
+				jQuery("#item_estado_sia").val("Modificat");
+			} else {
+				jQuery("#item_estado_sia").val(dada_node.item_estado_sia);
+			}
+			//jQuery("#item_estado_sia").val(dada_node.item_estado_sia);
+			
+			
+			jQuery("#item_estado_sia").change();
 		}
 		
 		if (dada_node.item_silenci_combo != undefined) {

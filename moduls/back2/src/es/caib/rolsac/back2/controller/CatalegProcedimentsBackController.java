@@ -319,6 +319,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			resultats.put("item_id", proc.getId());
 			resultats.put("item_codigo_pro", proc.getSignatura());
 			resultats.put("item_codigo_sia", proc.getCodigoSIA()); //#366 Se añade SIA
+			resultats.put("item_fecha_sia", DateUtils.formatDate(proc.getFechaSIA())); //#366 Se añade fecha SIA
+			resultats.put("item_estado_sia", proc.getEstadoSIA()); //#366 Se añade estado SIA
 			resultats.put("item_estat", proc.getValidacion());						
 			resultats.put("item_data_actualitzacio", DateUtils.formatDate(proc.getFechaActualizacion()));
 			resultats.put("item_data_publicacio", DateUtils.formatDateSimpleTime(proc.getFechaPublicacion()));

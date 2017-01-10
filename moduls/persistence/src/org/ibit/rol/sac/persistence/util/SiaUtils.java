@@ -197,7 +197,7 @@ public class SiaUtils {
 	 * @param idElemento
 	 * @param existe
 	 */
-	public static void marcarIndexacionPendiente(final String tipo, final Long idElemento, final Integer existe) throws DelegateException {
+	public static void marcarIndexacionPendiente(final String tipo, final Long idElemento, final Integer existe, final String idSia) throws DelegateException {
 		SiaPendienteProcesoDelegate siaPendienteProcesoDeletegate = DelegateUtil.getSiaPendienteProcesoDelegate();
 		SiaPendiente siaPendiente = new SiaPendiente();
 		siaPendiente.setEstado(SIAPENDIENTE_ESTADO_CREADO);
@@ -205,6 +205,9 @@ public class SiaUtils {
 		siaPendiente.setIdElemento(idElemento);
 		siaPendiente.setExiste(existe);
 		siaPendiente.setTipo(tipo);
+		if (idSia != null && !idSia.isEmpty()) {
+			siaPendiente.setIdSia(Long.valueOf(idSia));
+		}
 		siaPendienteProcesoDeletegate.generarSiaPendiente(siaPendiente);
 	}
 

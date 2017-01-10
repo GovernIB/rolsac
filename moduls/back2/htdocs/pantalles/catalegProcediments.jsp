@@ -850,6 +850,15 @@
                                                 <input id="item_codigo_sia" name="item_codigo_sia" type="text" class="nou" readonly="readonly" />
                                             </div>
                                         </div>
+                                         <div id="caja_item_codigo_sia" class="element t25p">
+                                            <div class="etiqueta">
+                                                <label for="item_estado_sia"><spring:message code='camp.codi_sia_estat'/></label>
+                                            </div>
+                                            <div class="control">
+                                           		  <input id="item_estado_sia" name="item_estado_sia" type="text" class="nou" readonly="readonly" />
+		                                        	
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="fila">
                                         <div class="element t75p">

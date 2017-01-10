@@ -33,7 +33,7 @@ public class SiaWS {
 	 * @return
 	 * @throws Exception
 	 */
-	public static SiaResultado enviarSIA(Sia sia) throws Exception {
+	public static SiaResultado enviarSIA(Sia sia, boolean borrado) throws Exception {
 		
 		SiaResultado siaResultado = new SiaResultado();
 		if (SiaUtils.isActivoEnvio()) {
@@ -41,7 +41,12 @@ public class SiaWS {
 			String password = SiaUtils.getPasswordEnvio();
 			WsSIAActualizarActuaciones_PortType client = SiaClient.createClient(SiaUtils.getUrlEnvio());
 			
-			ParamSIAACTUACIONESACTUACION[] actuaciones = cargarDatosSia(sia);
+			ParamSIAACTUACIONESACTUACION[] actuaciones;
+			if (borrado) {
+				actuaciones = cargarDatosSiaBorrado(sia);
+			} else {
+				actuaciones = cargarDatosSia(sia);
+			}
 			
 			ParamSIA parameters = new ParamSIA(usuario, password, null, actuaciones);
 			
@@ -99,7 +104,26 @@ public class SiaWS {
 		}
 		return siaResultado;
 	}
-
+	
+	/**
+	 * @param sia
+	 * @return
+	 * @throws Exception 
+	 */
+	private static ParamSIAACTUACIONESACTUACION[] cargarDatosSiaBorrado(Sia sia) throws Exception {
+		ParamSIAACTUACIONESACTUACION paramSia = new ParamSIAACTUACIONESACTUACION();
+		
+		paramSia.setCODIGOACTUACION(sia.getIdSIA());
+		paramSia.setCODIGOORIGEN(sia.getIdProc());
+		paramSia.setOPERACION(SiaUtils.ESTADO_BAJA);
+		
+		ParamSIAACTUACIONESACTUACION[] actuaciones = new ParamSIAACTUACIONESACTUACION[1];
+		actuaciones[0] = paramSia;
+		
+		return actuaciones;
+	}
+	
+	
 	/**
 	 * @param sia
 	 * @return

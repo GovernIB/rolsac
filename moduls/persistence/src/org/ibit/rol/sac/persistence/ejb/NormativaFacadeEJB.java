@@ -154,7 +154,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			session.flush();
 			
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_NORMATIVA, normativa.getId(), false);
-			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_NORMATIVA, normativa.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE);
+			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_NORMATIVA, normativa.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null);
 				
 			return normativa.getId();
 		} catch (HibernateException he) {
@@ -189,7 +189,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			session.flush();
 			
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_NORMATIVA, normativa.getId(), false);
-			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_NORMATIVA, normativa.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE);
+			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_NORMATIVA, normativa.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null);
 			
 			return normativa.getId();
 		} catch (HibernateException he) {
@@ -581,7 +581,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			session.flush();
 			
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_NORMATIVA, normativaAfectada_id, false);
-			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_NORMATIVA, normativaAfectada_id, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE);
+			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_NORMATIVA, normativaAfectada_id, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null);
 			
 		} catch (Exception e) {
 			throw new EJBException(e);
@@ -628,7 +628,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			session.flush();
 			
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_NORMATIVA, idNormativaQueAfecta, false);
-			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_NORMATIVA, idNormativaQueAfecta, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE);
+			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_NORMATIVA, idNormativaQueAfecta, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null);
 			
 		} catch (Exception e) {
 			
@@ -659,7 +659,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			session.flush();
 			
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_NORMATIVA, norm_id, false);
-			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_NORMATIVA, norm_id, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE);
+			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_NORMATIVA, norm_id, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null);
 			
 		} catch (Exception e) {
 			throw new EJBException(e);
@@ -685,7 +685,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			session.flush();
 			
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_NORMATIVA, norm_id, false);
-			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_NORMATIVA, norm_id, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE);
+			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_NORMATIVA, norm_id, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null);
 			
 		} catch (Exception e) {
 			throw new EJBException(e);
@@ -738,7 +738,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			((HistoricoNormativa) historico).setNormativa(null);
 			for (Iterator iterator = normativa.getProcedimientos().iterator(); iterator.hasNext();) {
 				ProcedimientoLocal proc = (ProcedimientoLocal) iterator.next();
-				SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, proc.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE);
+				SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, proc.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null);
 				
 				proc.getNormativas().remove(normativa);
 			}

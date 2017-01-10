@@ -173,7 +173,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		
 		resultadoDescripcion.append("   -- Vamos a indexar el procedimiento con id :"+proc.getId()+" <br />");
 		final Sia  sia = obtenerSiaProc(proc);
-		final SiaResultado resultado = SiaWS.enviarSIA(sia); 
+		final SiaResultado resultado = SiaWS.enviarSIA(sia, false); 
 		
 		if (resultado.isCorrecto()) {
 			
@@ -182,7 +182,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 			}
 			resultadoDescripcion.append("   ---- Se ha enviado a SIA correctamente. <br />");
 			resultadoDescripcion.append("   ---- CodigoSIA:"+resultado.getCodSIA()+". <br />");
-			resultadoDescripcion.append("   ---- EstadoSia:"+resultado.getCodSIA()+". <br />");
+			resultadoDescripcion.append("   ---- EstadoSia:"+resultado.getEstadoSIA()+". <br />");
 			
 			//Actualizamos el procedimiento
 			proc.setCodigoSIA(resultado.getCodSIA());
@@ -268,7 +268,8 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	        					Sia sia = new Sia();
 	        					sia.setIdSIA(siaPendiente.getIdSia().toString());
 	        					sia.setOperacion(SiaUtils.ESTADO_BAJA); 
-	        					resultado = SiaWS.enviarSIA(sia); 
+	        					sia.setIdProc(String.valueOf(siaPendiente.getIdElemento()));
+	        					resultado = SiaWS.enviarSIA(sia, true); 
 	        					
 	        					if (resultado.isCorrecto()) {
 		    						siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_CORRECTO);
