@@ -271,11 +271,12 @@ function inicializarBtn2() {
                 
             },
             success: function(data) {
-                Missatge.cancelar();
+               // Missatge.cancelar();
                 if (data.id > 0) {
-                    setTimeout('Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom})', 400);
+                    Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});
                 } else {
-                    setTimeout('Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtEnviantDades, text: "<p>" + data.nom + "</p>"})', 400);
+           
+                    Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtEnviantDades, text: "<p>" + data.error + "</p>"});
                 }
             }
         });

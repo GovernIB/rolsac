@@ -14,6 +14,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteJob;
+import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.model.dto.SolrPendienteDTO;
 import org.ibit.rol.sac.model.dto.SolrPendienteJobDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
@@ -390,6 +391,8 @@ public class TMIndexController extends PantallaBaseController {
         	} else {
         		//Paso 2. Si todo correcto, ejecutar job 
         		ejecutarJob("pendientes");
+        		resultats.put("id", 1L); //Se mostrará por pantalla el mensaje
+        		resultats.put("nom", messageSource.getMessage("index.missatge.enviant_dades", null, request.getLocale()));
         	}
         	
         } catch (SchedulerException exception) {
