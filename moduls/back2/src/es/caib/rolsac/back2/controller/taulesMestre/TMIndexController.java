@@ -399,6 +399,8 @@ public class TMIndexController extends PantallaBaseController {
         	} else {
         		//Paso 2. Si todo correcto, ejecutar job 
         		ejecutarJob("pendientes");
+        		resultats.put("id", 1L); //Se mostrará por pantalla el mensaje
+        		resultats.put("nom", messageSource.getMessage("index.missatge.enviant_dades", null, request.getLocale()));
         	}
         	
         } catch (SchedulerException exception) {
