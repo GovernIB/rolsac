@@ -1028,6 +1028,8 @@ create table RSC_PROCED (
    PRR_URLREM varchar2(512),
    PRR_CODADM number(19,0),
    PRO_CODUNA_SERV number(19,0), --#351 aÃ±adir servicio responsable
+   PRO_CODSIA VARCHAR2(12 CHAR),
+   PRO_CODSIL NUMBER(19,0),
    primary key (PRO_CODI)
 );
 create table RSC_SCRENV (

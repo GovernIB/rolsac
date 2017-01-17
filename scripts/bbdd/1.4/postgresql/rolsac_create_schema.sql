@@ -789,7 +789,9 @@ CREATE TABLE rsc_proced (
     prr_idexte bigint,
     prr_urlrem character varying(512),
     prr_codadm bigint,
-    pro_coduna_serv bigint  --#351 añadir servicio responsable
+    pro_coduna_serv bigint,  --#351 añadir servicio responsable
+    pro_codsia character varying(12 CHAR)
+    pro_codsil bigint
 );
 
 
