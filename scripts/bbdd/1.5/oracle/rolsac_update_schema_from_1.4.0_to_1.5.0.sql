@@ -33,7 +33,7 @@ create table RSC_SIAPDT  (
   COMMENT ON COLUMN RSC_SIAPDT.SIP_ID      	    IS 'Identificador';
   COMMENT ON COLUMN RSC_SIAPDT.SIP_TIPO     	IS 'UA/PROC/NORM';
   COMMENT ON COLUMN RSC_SIAPDT.SIP_IDELEM       IS 'Código elemento';
-  COMMENT ON COLUMN RSC_SIAPDT.SIP_ESTADO   	IS '0:Espera; 1:enviado correctamente; 2:enviado incorrectamente';
+  COMMENT ON COLUMN RSC_SIAPDT.SIP_ESTADO   	IS '0:Espera; 1:enviado correctamente; -1:enviado incorrectamente';
   COMMENT ON COLUMN RSC_SIAPDT.SIP_FECALT   	IS 'Fecha creación';
   COMMENT ON COLUMN RSC_SIAPDT.SIP_FECIDX   	IS 'Fecha envio';
   COMMENT ON COLUMN RSC_SIAPDT.SIP_MENSA   	 	IS 'Mensaje';
