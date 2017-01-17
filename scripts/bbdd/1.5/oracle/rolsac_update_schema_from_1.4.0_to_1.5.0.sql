@@ -1,37 +1,4 @@
 
-  create table RSC_SIA (
-   SIA_ID number(19,0) not null,
-   SIA_IDPROC varchar2(12),
-   SIA_TITULO varchar2(100),
-   SIA_DESCRI varchar2(255),
-   SIA_IDCENT varchar2(255),
-   SIA_UAGEST varchar2(100),
-   SIA_IDDEST varchar2(100),
-   SIA_NIVADM varchar2(2),
-   SIA_FIVIA varchar2(2),
-   SIA_IDNORM varchar2(100),
-   SIA_TINORM varchar2(100),
-   SIA_MATERI varchar2(255),
-   SIA_IDSIA varchar2(12),
-   primary key (SIA_ID)
-);
-
-COMMENT ON TABLE  RSC_SIA IS 'Envio SIA';
-  COMMENT ON COLUMN RSC_SIA.SIA_ID       IS 'Identificador';
-  COMMENT ON COLUMN RSC_SIA.SIA_IDPROC   IS 'Identificador Procedimiento';
-  COMMENT ON COLUMN RSC_SIA.SIA_TITULO   IS 'Título procedimiento';
-  COMMENT ON COLUMN RSC_SIA.SIA_DESCRI   IS 'Descripción procedimiento';
-  COMMENT ON COLUMN RSC_SIA.SIA_IDCENT   IS 'Id centro directivo';
-  COMMENT ON COLUMN RSC_SIA.SIA_UAGEST   IS 'Unidad gestora del trámite';
-  COMMENT ON COLUMN RSC_SIA.SIA_IDDEST   IS 'Id del destinatario. 1:ciudadano; 2:empresa; 3:administraci�n.';
-  COMMENT ON COLUMN RSC_SIA.SIA_NIVADM   IS '1:Información; 2:Descarga formulario; 3:Descarga y envío; 4:Tramitación electrónica; 5:Proactivo; 6:Sin tramitación electrónica';
-  COMMENT ON COLUMN RSC_SIA.SIA_FIVIA    IS 'Fin Via';
-  COMMENT ON COLUMN RSC_SIA.SIA_IDNORM   IS 'Identificador de la normativa';
-  COMMENT ON COLUMN RSC_SIA.SIA_TINORM   IS 'Título de la normativa';
-  COMMENT ON COLUMN RSC_SIA.SIA_MATERI   IS 'Identificadores de las materias';
-  COMMENT ON COLUMN RSC_SIA.SIA_IDSIA    IS 'Id SIA';
-  
- 
 create table RSC_SIAJOB  (
    SIJ_ID number(19,0) not null,
    SIJ_FECINI date,
