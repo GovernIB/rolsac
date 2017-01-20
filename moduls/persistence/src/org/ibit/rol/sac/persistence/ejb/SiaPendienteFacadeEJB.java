@@ -277,7 +277,11 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		        					siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);	
 		        					resultadoDescripcion.append("   -- Marcado como correcto <br />");
 		    					} else {
-		    						siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_INCORRECTO);
+		    						
+		    						int dias = calcularDias(siaPendiente);
+		    						if (dias > SiaUtils.getTiempoReintento()){		    							
+		    							siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_INCORRECTO);
+		    						}
 		    						siaPendiente.setMensaje(resultado.getMensaje());
 		    						incorrectos++;
 		    						siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
@@ -346,8 +350,12 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	    						correctos++;
 	    						resultadoDescripcion.append("   -- Marcado como correcto <br />");
 	    					} else {
-	    						//Actualizamos el siaPendiente
-								siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_INCORRECTO);
+	    						int dias = calcularDias(siaPendiente);
+	    						if (dias > SiaUtils.getTiempoReintento()){		    							
+	    							//Actualizamos el siaPendiente
+	    							siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_INCORRECTO);
+	    						}
+								
 								siaPendiente.setMensaje("Ha fallado indexando los procedimientos asociados a la UA");
 								siaPendiente.setFecIdx(new Date());
 	        					siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
@@ -386,8 +394,12 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	    						correctos++;		    						
 	    						resultadoDescripcion.append("   -- Marcado como correcto <br />");
 	    					} else {
-	    						//Actualizamos el siaPendiente
-								siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_INCORRECTO);
+	    						int dias = calcularDias(siaPendiente);
+	    						if (dias > SiaUtils.getTiempoReintento()){		    							
+	    							//Actualizamos el siaPendiente
+	    							siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_INCORRECTO);
+	    						}
+								
 								siaPendiente.setMensaje("Ha fallado indexando los procedimientos asociados a la normativa");
 								siaPendiente.setFecIdx(new Date());
 	        					siaPendienteDelegate.actualizarSiaPendiente(siaPendiente);
@@ -426,6 +438,19 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
       	} catch (Exception e) {
 			log.error(e);			
       	}
+	}
+
+
+
+	/**
+	 * Calcula los dias desde la fecha de alta hasta hoy
+	 * 
+	 * @param siaPendiente
+	 * @return
+	 */
+	private int calcularDias(SiaPendiente siaPendiente) {
+		int dias=(int) ((new Date().getTime()-siaPendiente.getFecAlta().getTime())/86400000);
+		return dias;
 	}
 
 	/**

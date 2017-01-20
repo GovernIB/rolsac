@@ -90,11 +90,12 @@ es.caib.rolsac.subscripcions
 	   es.caib.rolsac.sia.administracion = 2 ?
        es.caib.rolsac.sia.url = www.caib.es/seucaib/ca/200/persones/tramites/tramite/
 	   es.caib.rolsac.sia.jobpendientes=0 0 10 * * ?
-	   es.caib.rolsac.sia.usuario.envio = ********
+	   es.caib.rolsac.sia.usuario.envio = *******
 	   es.caib.rolsac.sia.pass.envio = *******
 	   es.caib.rolsac.sia.url.envio = http://pre-sia2.redsara.es/axis2/services/wsSIAActualizarActuaciones
 	   es.caib.rolsac.sia.activarEnvio=N
-	   es.caib.rolsac.sia.centro.level=3	   
+	   es.caib.rolsac.sia.centro.level=3	
+	   es.caib.rolsac.sia.tiempo.reintento=10 
 	   
 	   <!-- Definición propiedades -->
 	   es.caib.rolsac.fitxa.control.proporcions=N

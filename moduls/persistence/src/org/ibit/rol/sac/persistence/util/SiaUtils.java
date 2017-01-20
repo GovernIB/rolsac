@@ -266,6 +266,13 @@ public class SiaUtils {
 		return retorno;
 	}
 
+	/**
+	 * Get tipologia envio SIA.
+	 * @return
+	 */
+	public static Integer getTiempoReintento() {
+        return getIntFromProperty("es.caib.rolsac.sia.tiempo.reintento");
+    }
 	
 	
 }
