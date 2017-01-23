@@ -533,14 +533,16 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		
 		final List<String> materias = new ArrayList<String>();
 		
-		for (Materia mat : procedimiento.getMaterias()) {
-			if (mat.getCodigoSIA() != null) {
-				if (!materias.contains(mat.getCodigoSIA().toString())) {
-					materias.add(mat.getCodigoSIA().toString());
+		if (procedimiento.getMaterias() != null){			
+			for (Materia mat : procedimiento.getMaterias()) {
+				if (mat.getCodigoSIA() != null) {
+					if (!materias.contains(mat.getCodigoSIA().toString())) {
+						materias.add(mat.getCodigoSIA().toString());
+					}
 				}
 			}
+			sia.setMaterias(materias.toArray(new String[materias.size()]));
 		}
-		sia.setMaterias(materias.toArray(new String[materias.size()]));
 
 		if (procedimiento.getIndicador() == null) {
 			sia.setFiVia(SiaUtils.NO);
