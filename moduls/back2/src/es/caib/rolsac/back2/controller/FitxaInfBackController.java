@@ -6,7 +6,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -20,6 +19,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -914,9 +915,12 @@ public class FitxaInfBackController extends PantallaBaseController {
 				TraduccionFicha tradF=(TraduccionFicha) fitxa.getTraduccion(lang) == null ? new TraduccionFicha() : (TraduccionFicha) fitxa.getTraduccion(lang);
 				TraduccionFicha tradOld=(TraduccionFicha) fitxaOld.getTraduccion(lang);
 				
-				tradF.setBaner(tradOld.getBaner());
-				tradF.setIcono(tradOld.getIcono());
-				tradF.setImagen(tradOld.getImagen());
+				if(tradOld != null){					
+					tradF.setBaner(tradOld.getBaner());
+					tradF.setIcono(tradOld.getIcono());
+					tradF.setImagen(tradOld.getImagen());
+				}
+				
 				fitxa.setTraduccion(lang, tradF);
 			}
 			
@@ -1041,6 +1045,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 			throws IOException {
 		InputStream in = new ByteArrayInputStream(fileIcona.get());
 		BufferedImage bimg = ImageIO.read(in);
+		
 		return bimg;
 	}
 
