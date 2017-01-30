@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
     
-<project name="rolsac-1.4.0" default="main01ROLSAC">
+<project name="rolsac-1.5.0" default="main01ROLSAC">
     
 	<exec executable="git"  outputproperty="project.version" failifexecutionfails="true" errorproperty="">
 			<arg value="rev-parse"/> 
@@ -28,7 +28,7 @@
     <property name="moduls.dir" location="${output.dir}/moduls"/>
     <property name="doc.dir" location="${output.dir}/doc"/>
     <property name="projecte.name.rolsac" value="rolsac"/>
-    <property name="etc.approlsac" value="${etc}/approlsac"/>
+	<property name="etc.approlsac" value="${etc}/jboss-${jboss.version}/approlsac" />
     <property name="project.author" value="UTE" />
     
     <property environment="env"/>
@@ -505,8 +505,8 @@
                 <include name="ehcache.jar" />
             	<include name="commons-logging.jar" />
             	<include name="jcl-over-slf4j-1.6.4.jar" />
-            	<include name="slf4j-api-1.6.4.jar" />
-        	 	<include name="slf4j-log4j12-1.6.4.jar" />
+            	<include if="isJboss3" name="slf4j-api-1.6.4.jar" />
+            	<include if="isJboss3" name="slf4j-log4j12-1.6.4.jar" />
             	<include name="rome-1.0RC2.jar" /> 
             	<include name="jdom.jar" />
             	<include name="jena-2.6.4.jar" />
@@ -516,6 +516,7 @@
             </fileset>
         	
         	<fileset dir="${lib}/webcaib">
+        			<include if="isJboss5" name="commons-beanutils-1.8.3.jar" />
         	      	<include name="commons-codec-1.5.jar" />
         		  	<include name="commons-discovery-0.5.jar" />
         			<include name="ehcache.jar" />
@@ -524,6 +525,7 @@
         			<include name="jfreechart-1.0.14.jar" />
         			<include name="jcommon-1.0.0.jar" />
         			<include name="quartz-1.8.5.jar"  />
+	        		<include if="isJboss5" name="odmg.jar" />
         	</fileset>
             
             <zipfileset dir="${lib}/axis-1.4" prefix="lib">
@@ -542,7 +544,7 @@
 			</zipfileset>
 
         	<zipfileset dir="${lib}/jboss">
-				 <include name="commons-httpclient-3.1.jar" />  		
+				 <include name="commons-httpclient-3.1.jar" />
 			</zipfileset>
         	
         	<zipfileset dir="${lib}/solr">
@@ -574,7 +576,7 @@
     <!-- ================================================================== -->
     <!-- main                                                               -->
     <!-- ================================================================== -->
-    <target name="main01ROLSAC" depends="prepare,generate.properties" description="Realiza todo el proceso de construccin de ROLSAC">
+    <target name="main01ROLSAC" depends="checkJbossVersion,prepare,generate.properties" description="Realiza todo el proceso de construccin de ROLSAC">
 
         <fail unless="project.author" message="Et falta definir la propietat project.author"/>
         <fail unless="deploy.dir" message="Et falta definir la propietat deploy.dir"/>
@@ -732,6 +734,15 @@
         <sonar:sonar xmlns:sonar="antlib:org.sonar.ant" />
 
     </target>
+
+	<target name="checkJbossVersion">
+	       <condition property="isJboss5">
+	             <equals arg1="${jboss.version}" arg2="5.2"/>
+	       </condition>
+	       <condition property="isJboss3">
+	             <equals arg1="${jboss.version}" arg2="3.2"/>
+	       </condition>
+	</target>
 
     
 </project>

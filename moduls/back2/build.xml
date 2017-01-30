@@ -122,6 +122,10 @@
 				<!-- se necesita porque el quartz se queja de esto -->
 				<include name="commons-codec-1.5.jar" />
 			</lib>
+        	
+        	<lib dir="${web.product}">
+	        	<include if="isJboss5" name="integracion.jar"/>	        	
+	        </lib>
 
 			<lib dir="${lib.dir}/jstl">
 				<include name="jstl.jar" />
@@ -131,7 +135,7 @@
         </war>
     </target>
 
-    <target name="build" depends="prepare, webGeneration">
+    <target name="build" depends="checkJbossVersion, prepare, webGeneration">
         <javac destdir="${web.classes}" encoding="ISO-8859-1" source="1.5" target="1.5" debug="true" deprecation="false" optimize="false" failonerror="true">
             <src path="${web.dir}"/>
             <classpath refid="web.class.path"/>
@@ -184,6 +188,15 @@
         	<replacefilter token="@back.web.listener@" value="${back.web.listener}"/>
         </replace>
 		
+	</target>
+	
+	<target name="checkJbossVersion">
+	       <condition property="isJboss5">
+	             <equals arg1="${jboss.version}" arg2="5.2"/>
+	       </condition>
+	       <condition property="isJboss3">
+	             <equals arg1="${jboss.version}" arg2="3.2"/>
+	       </condition>
 	</target>
 
 </project>

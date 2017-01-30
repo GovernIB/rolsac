@@ -316,7 +316,7 @@
 	            />
 	
 	        <jboss
-	            version="${jboss.version}"
+	            version="${jboss-xml.version}"
 	            xmlencoding="UTF-8"
 	            destdir="${ejb.gen.etc}"
 	            mergedir="${ejb.merge.jboss}"

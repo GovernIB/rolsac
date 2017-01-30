@@ -103,13 +103,14 @@
                 xmlencoding="UTF-8"
                 validatexml="true"
                 mergedir="${web.merge.web}"
+            	distributable="false"
                 >
                 <welcomefile file="/test.jsp"/>
             </deploymentdescriptor>
 
             <jbosswebxml
                 destdir="${web.gen.etc}"
-                version="${jboss.version}"
+                version="${jboss-xml.version}"
                 xmlencoding="UTF-8"
                 validatexml="true"
                 mergedir="${web.merge.jboss}"

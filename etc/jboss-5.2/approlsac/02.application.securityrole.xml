@@ -1,0 +1,8 @@
+	<security-role>
+        <description>Administrador del cercador del BOIB</description>
+        <role-name>LBO_ADMIN</role-name>
+    </security-role>
+    <security-role>
+        <description>Administrador del cercador de Resums de premsa</description>
+        <role-name>LRP_ADMIN</role-name>
+    </security-role> 
