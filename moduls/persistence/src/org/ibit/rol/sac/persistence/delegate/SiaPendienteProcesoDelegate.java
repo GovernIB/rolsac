@@ -60,8 +60,8 @@ public class SiaPendienteProcesoDelegate implements StatelessDelegate {
 		return impl.checkJobsActivos();
 	}
 
-	public SiaJob crearSiaJob() throws DelegateException{
-		return impl.crearSiaJob();
+	public SiaJob crearSiaJob(String tipo) throws DelegateException{
+		return impl.crearSiaJob(tipo);
 	}
 	
 	public void actualizarSiaJob(SiaJob siaJob) throws DelegateException{
@@ -75,4 +75,5 @@ public class SiaPendienteProcesoDelegate implements StatelessDelegate {
 	public Boolean cerrarJobs() throws DelegateException{
 		return impl.cerrarJobs();
 	}
+	
 }

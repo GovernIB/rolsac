@@ -25,6 +25,9 @@ public class SiaJobDTO implements ValueObject {
 	
 	/** Estado **/
 	private Integer estado;
+	
+	/** Tipo. **/
+	private String tipo;
     
     /**
 	 * @return the estado
@@ -72,7 +75,7 @@ public class SiaJobDTO implements ValueObject {
 
     public SiaJobDTO() {}
 
-    public SiaJobDTO(Long id, Date fechaIni, Date fechaFin, String descBreve, String descripcion, Integer estado) {
+    public SiaJobDTO(Long id, Date fechaIni, Date fechaFin, String descBreve, String descripcion, Integer estado, String tipo) {
         super();
         this.id              	= id;
         this.fechaIni			= fechaIni	;
@@ -80,6 +83,7 @@ public class SiaJobDTO implements ValueObject {
         this.descBreve 			= descBreve;
         this.descripcion 		= descripcion;
         this.estado				= estado;
+        this.setTipo(tipo);
     }
 
 	public Long getId() {
@@ -118,14 +122,19 @@ public class SiaJobDTO implements ValueObject {
 		this.fechaFin = fechaFin;
 	}
 
-	
+	/**
+	 * @return the tipo
+	 */
+	public String getTipo() {
+		return tipo;
+	}
 
-	
+	/**
+	 * @param tipo the tipo to set
+	 */
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
 
-
-	
-	
-
-
-  
+	  
 }

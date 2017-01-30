@@ -419,12 +419,13 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
    	 * 
    	 * @return SiaJob indicando si se envian todos los procesos pendientes .     *  
    	 */
-	public SiaJob crearSiaJob() {
+	public SiaJob crearSiaJob(String tipo) {
 		try
     	{
 			final Session session = getSession();
 			final SiaJob siaJob = new SiaJob();
 	    	siaJob.setFechaIni(new Date());
+	    	siaJob.setTipo(tipo);
 	    	session.save(siaJob); 
 			session.flush();
 			session.close();

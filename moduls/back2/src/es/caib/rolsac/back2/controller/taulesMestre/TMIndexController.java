@@ -417,6 +417,9 @@ public class TMIndexController extends PantallaBaseController {
 
         return resultats;
     }
+    
+    
+    
 
     @RequestMapping(value = "/borrarCaducadas.do", method = POST)
     public @ResponseBody Map<String, Object> borrarCaducadas(HttpServletRequest request) {
@@ -489,6 +492,7 @@ public class TMIndexController extends PantallaBaseController {
 		loadIndexModel (model, request);	
         return "index";
     }
+    
     @RequestMapping(value = "/llistatSIAJob.do")
     public @ResponseBody Map<String, Object> llistatSIAJob(HttpServletRequest request) {
 
@@ -553,6 +557,8 @@ public class TMIndexController extends PantallaBaseController {
 
         return resultats;
     }
+	
+	
 	private List<SiaPendienteDTO> convertirSIAToDTO(List<SiaPendiente> siaPendientes) {
 		 List<SiaPendienteDTO> siaPendienteDTO = new ArrayList<SiaPendienteDTO>();
 	        
@@ -596,7 +602,8 @@ public class TMIndexController extends PantallaBaseController {
         			siaJob.getFechaFin(),
         			bufferDescBreve.toString(),
         			bufferDesc.toString(),
-        			siaJob.getEstado())
+        			siaJob.getEstado(),
+        			siaJob.getTipo())
             );
         }
         return siaJobDTO;
@@ -615,6 +622,37 @@ public class TMIndexController extends PantallaBaseController {
 	          	} else {
 	          		//Paso 2. Si todo correcto, ejecutar job 
 	          		ejecutarJobSIA("todo");
+	          	}
+	        } catch (SchedulerException exception) {
+	        	log.error("Error: " + exception.getMessage());
+	            resultats.put("error", "No es pot generar el job");
+	        } catch (Exception dEx) {
+	           log.error("Error: " + dEx.getMessage());
+	            if (dEx.getCause() == null) {
+	            	resultats.put("error", dEx.getMessage());
+	            } else {
+	            	resultats.put("error", dEx.getCause().getMessage());
+	            }
+	        }
+	        return resultats; 
+	    }
+	 
+	 /**
+	  * Método que ejecuta a la fuerza el revisar los procedimientos que cambian estado SIA por tiempo.
+	  * @param request
+	  * @return
+	  */
+	 @RequestMapping(value = "/procTiempoSIA.do")
+	    public @ResponseBody Map<String, Object> revisarTiempoSIA(HttpServletRequest request) {
+
+	    	final Map<String, Object> resultats = new HashMap<String, Object>();
+	        try {
+	        	//Paso 1. Comprobar si hay algo creado.
+	          	if ( DelegateUtil.getSiaPendienteProcesoDelegate().checkJobsActivos()) {
+	          		resultats.put("error", "Hi ha tasques en execucio");
+	          	} else {
+	          		//Paso 2. Si todo correcto, ejecutar job 
+	          		ejecutarJobSIA("tiempo");
 	          	}
 	        } catch (SchedulerException exception) {
 	        	log.error("Error: " + exception.getMessage());

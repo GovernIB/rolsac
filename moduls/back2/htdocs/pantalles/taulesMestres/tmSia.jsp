@@ -10,6 +10,7 @@
     var pagEnviarTodo = '<c:url value="/index/enviarTodo.do" />';
     var pagEnviarPendientes = '<c:url value="/index/enviarPendientes.do" />';
 	var pagCerrarJobs =  '<c:url value="/index/cerrarJobsSIA.do" />';
+	var pagSiaTiempo =  '<c:url value="/index/procTiempoSIA.do" />';
     
     //texts
     var txt_per = "<spring:message code='txt.per'/>";
@@ -76,6 +77,7 @@
 
     //Botones
     var txtCerrantJobs="<spring:message code='index.missatge.cerrando_jobs'/>" ;
+    var txtTiempoJobs="<spring:message code='index.missatge.tiempo_sia_jobs'/>" ;
     var txtBotonContinuar = "<spring:message code='boto.continuar'/>";
     var txtBotonInfo = "<spring:message code='boto.info'/>";
     
@@ -117,6 +119,11 @@
             <span class="missatge"><spring:message code='sia.volver_enviar'/></span>
             <span class="btnGenerico">
                  <a href="javascript:;" class="btn unitatOrganica" id = "btnContinuar"><span><span><spring:message code='boto.continuar'/></span></span></a>
+            </span> 
+            <br /><br /><br />     
+            <span class="missatge"><spring:message code='sia.enviar_tiempo'/></span>
+            <span class="btnGenerico">
+                 <a href="javascript:;" class="btn unitatOrganica" id = "btnIndexarTiempo"><span><span><spring:message code='boto.continuar'/></span></span></a>
             </span> 
             <br />
            

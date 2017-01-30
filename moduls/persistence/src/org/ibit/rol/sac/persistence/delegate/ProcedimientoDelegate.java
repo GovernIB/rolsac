@@ -172,4 +172,8 @@ public class ProcedimientoDelegate {
 	public ProcedimientoLocal obtenerProcedimientoParaSolr(Long idElemento) throws DelegateException {
 		 return impl.obtenerProcedimientoParaSolr(idElemento);
 	}
+
+	public List<Long> getProcedimientosEstadoSIAAlterado()  throws DelegateException {
+		 return impl.getProcedimientosEstadoSIAAlterado();
+	}
 }

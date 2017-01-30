@@ -130,9 +130,9 @@ public class SiaPendienteProcesoDelegateImpl extends SiaPendienteProcesoDelegate
 		
 	}
 	@Override
-	public SiaJob crearSiaJob()  throws DelegateException {
+	public SiaJob crearSiaJob(String tipo)  throws DelegateException {
 		try {
-			return getFacade().crearSiaJob();
+			return getFacade().crearSiaJob(tipo);
        } catch (RemoteException e) {
            throw new DelegateException(e);
        }
@@ -157,4 +157,5 @@ public class SiaPendienteProcesoDelegateImpl extends SiaPendienteProcesoDelegate
            throw new DelegateException(e);
        }
 	}
+	
 }

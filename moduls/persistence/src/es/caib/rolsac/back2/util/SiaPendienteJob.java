@@ -45,14 +45,19 @@ public class SiaPendienteJob implements Job  {
     	SiaPendienteProcesoDelegate siaProcesoDelegate = DelegateUtil.getSiaPendienteProcesoDelegate();
     	
     	try {
-    		siaJob=siaProcesoDelegate.crearSiaJob();
+    		
     		//EJECUTAR EL ENVIO A SIA.
-	    	
 	    	if ("todo".equals(tipoEnvio)) {
-				siaDelegate.enviarTodos(siaJob);
+	    		siaJob=siaProcesoDelegate.crearSiaJob("TOT");
+	    		siaDelegate.enviarTodos(siaJob);
 	    	} else if ("info".equals(tipoEnvio)){
+	    		siaJob=siaProcesoDelegate.crearSiaJob("INF");
 	    		siaDelegate.info(siaJob);
+	    	} else if ("tiempo".equals(tipoEnvio)) {
+	    		siaJob=siaProcesoDelegate.crearSiaJob("TMP");
+	    		siaDelegate.revisarProcedimientosPorTiempo(siaJob);
 	    	} else {
+	    		siaJob=siaProcesoDelegate.crearSiaJob("PDT");
 	    		siaDelegate.enviarPendientes(siaJob);
 	    	}
 	    	

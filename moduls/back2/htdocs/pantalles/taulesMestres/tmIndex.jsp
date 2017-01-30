@@ -17,7 +17,7 @@
     var pagBorrarCaducadas = '<c:url value="/index/borrarCaducadas.do" />';
     var pagGrabarPendientes = '<c:url value="/index/grabarSolrPendiente.do" />';
 	var pagCerrarJobs =  '<c:url value="/index/cerrarJobs.do" />';
-    
+	
     //texts
     var txt_per = "<spring:message code='txt.per'/>";
     var txtEsborrarCorrecte = "<spring:message code='txt.usuari_esborrat_correcte'/>";

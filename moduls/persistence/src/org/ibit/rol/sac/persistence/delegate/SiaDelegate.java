@@ -33,4 +33,7 @@ public class SiaDelegate implements StatelessDelegate {
         impl.info(siaJob);
     }
 
+	public void revisarProcedimientosPorTiempo(SiaJob siaJob) throws DelegateException {
+        impl.revisarProcedimientosPorTiempo(siaJob);
+    }
 }

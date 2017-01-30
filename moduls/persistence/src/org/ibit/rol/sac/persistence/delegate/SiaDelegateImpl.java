@@ -59,6 +59,17 @@ public class SiaDelegateImpl extends SiaDelegate implements  StatelessDelegate, 
 	
 
 	@Override
+	public  void revisarProcedimientosPorTiempo(SiaJob siaJob)  throws DelegateException {
+	
+	   try {
+		   getFacade().revisarProcedimientosPorTiempo(siaJob);
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
+	}
+	
+
+	@Override
 	public  void info(SiaJob siaJob)  throws DelegateException{
 	
 	   try {

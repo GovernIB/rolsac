@@ -23,11 +23,12 @@ public interface SiaPendienteProcesoDelegateI {
 
 	public boolean checkJobsActivos() throws DelegateException;
 
-	public SiaJob crearSiaJob()  throws DelegateException;
+	public SiaJob crearSiaJob(String tipo)  throws DelegateException;
 
 	public void actualizarSiaJob(SiaJob siaJob)  throws DelegateException;
 	
 	public void cerrarSiaJob(Long idSiaJob) throws DelegateException;
 
 	public Boolean cerrarJobs() throws DelegateException;
+
 }

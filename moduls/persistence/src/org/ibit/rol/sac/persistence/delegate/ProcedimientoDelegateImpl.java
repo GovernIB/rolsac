@@ -399,5 +399,14 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
             throw new DelegateException(e);
         }
 	}
+	
+	public List<Long> getProcedimientosEstadoSIAAlterado() throws DelegateException {
+		try {
+           return getFacade().getProcedimientosEstadoSIAAlterado();
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+	}
     
+	
 }
