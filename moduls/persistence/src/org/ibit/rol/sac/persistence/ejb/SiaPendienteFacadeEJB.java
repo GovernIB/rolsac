@@ -60,6 +60,8 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		super.ejbCreate();
 	}
 	
+	
+
 
 	
 	/**
@@ -219,6 +221,123 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		return resultado;
 	}
 	
+	
+	/**
+	 * Revisa los procedimientos que podrían estar en SIA y les envía un cambio si es necesario.
+	 * @throws Exception 
+   	 * @ejb.interface-method
+   	 * @ejb.permission unchecked="true"
+	 */
+	public void revisarProcedimientosPorTiempo(SiaJob siaJob)    {
+		final SiaPendienteProcesoDelegate siaPendienteDelegate = DelegateUtil.getSiaPendienteProcesoDelegate();
+		final ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
+		
+		List<Long> listProcedimientos = null;
+		int correctos = 0;
+		int incorrectos = 0;
+		int nulos = 0;
+		StringBuffer resultadoDescripcion = new StringBuffer();
+		StringBuffer resultadoDescripcionBreve = new StringBuffer();
+		Calendar calendar = Calendar.getInstance();
+		SimpleDateFormat formato = new SimpleDateFormat("H:mm");
+		
+		try {
+			listProcedimientos = procDelegate.getProcedimientosEstadoSIAAlterado();
+		} catch (DelegateException e) {
+			log.error(e);	
+			resultadoDescripcionBreve.append(" Finalizado a las "+formato.format(calendar.getTime())+"  <br />");
+			resultadoDescripcionBreve.append(" Error obteniendo los procedimientos");
+			siaJob.setDescBreve(Hibernate.createClob(resultadoDescripcionBreve.toString()));
+			siaJob.setDescripcion(Hibernate.createClob(resultadoDescripcionBreve.toString()));
+			try {
+				siaPendienteDelegate.actualizarSiaJob(siaJob);
+			} catch (DelegateException e2) {
+				log.error(e2);	
+			}
+			return;
+		}
+		resultadoDescripcionBreve.append(" Empezando a las "+formato.format(calendar.getTime())+"  <br />");
+    	
+		//Recorremos todas las ids.
+		for(Long idProcedimiento : listProcedimientos) {
+			try
+			{
+				
+				ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimientoParaSolr(idProcedimiento);
+				boolean esEnviable = SiaUtils.isEnviableSia(procedimiento);
+				resultadoDescripcion.append(" Vamos a revisar que hacemos con el procedimiento (id:"+idProcedimiento+") <br /> ");
+				
+				if (procedimiento.getCodigoSIA() == null || procedimiento.getCodigoSIA().isEmpty()) { 
+					
+					//no tiene código SIA, por lo que nunca ha estado.
+					if (esEnviable) {
+						resultadoDescripcion.append(" Se va a enviar el procedimiento hacia SIA como un alta <br /> ");
+						SiaResultado siaResultado = enviarProcedimiento(procDelegate, procedimiento,  null, resultadoDescripcion,  correctos,  incorrectos);
+						if (siaResultado.isCorrecto()) {
+							resultadoDescripcion.append("   -- Marcado como correcto (no cumplia requisitos, no se ha enviado a SIA) <br />");
+    						correctos++;		
+						} else {
+							incorrectos++;
+							resultadoDescripcion.append("   -- Marcado como incorrecto <br />");
+    						resultadoDescripcion.append("   -- Mensaje:"+siaResultado.getMensaje()+" <br />");
+						}
+						
+					} else {
+						//No se debe hacer nada.
+						nulos++;
+						resultadoDescripcion.append("   -- Marcado como nulo <br />");
+					}
+				} else {
+					//Tiene código SIA. Comprobar si está de alta y si es no enviable.
+					if (!esEnviable && (procedimiento.getEstadoSIA() == null ||
+									   procedimiento.getEstadoSIA().isEmpty() || 
+									   SiaUtils.ESTADO_ALTA.equals(procedimiento.getEstadoSIA())
+									 )
+					   ) 
+					{
+						
+						resultadoDescripcion.append(" Se va a enviar el procedimiento hacia SIA como una baja <br /> ");
+						SiaResultado siaResultado = enviarProcedimiento(procDelegate, procedimiento,  null, resultadoDescripcion,  correctos,  incorrectos);
+						if (siaResultado.isCorrecto()) {
+							resultadoDescripcion.append("   -- Marcado como correcto (no cumplia requisitos, no se ha enviado a SIA) <br />");
+    						correctos++;		
+						} else {
+							incorrectos++;
+							resultadoDescripcion.append("   -- Marcado como incorrecto <br />");
+    						resultadoDescripcion.append("   -- Mensaje:"+siaResultado.getMensaje()+" <br />");
+						}
+						
+					} else {
+						//No se debe hacer nada.
+						nulos++;
+						resultadoDescripcion.append("   -- Marcado como nulo <br />");
+					}
+				}
+			} catch (Exception exception) {
+				resultadoDescripcion.append("Ha fallado la indexación en pendiente con el mensaje." + ExceptionUtils.getStackTrace(exception)+"<br />");
+    			incorrectos++;
+			}
+		}
+		
+		if (incorrectos > 0) {
+			siaJob.setEstado(SiaUtils.SIAJOB_ESTADO_ENVIADO_CON_ERRORES);
+		} else {
+			siaJob.setEstado(SiaUtils.SIAJOB_ESTADO_ENVIADO);
+		}
+	 
+    	resultadoDescripcionBreve.append("Se han enviado "+(correctos+incorrectos)+" datos. De los cuales: <br />");
+    	resultadoDescripcionBreve.append(" - "+correctos+" datos correctos  <br />");
+    	resultadoDescripcionBreve.append(" - "+incorrectos+" datos incorrectos  <br />");
+    	resultadoDescripcionBreve.append(" - "+nulos+" datos nulos  <br />");
+    	resultadoDescripcionBreve.append(" Finalizado a las "+formato.format(calendar.getTime())+"  <br />");
+    	siaJob.setDescBreve(Hibernate.createClob(resultadoDescripcionBreve.toString()));
+		siaJob.setDescripcion(Hibernate.createClob(resultadoDescripcion.toString()));
+    	try {
+			siaPendienteDelegate.actualizarSiaJob(siaJob);
+		} catch (DelegateException e) {
+			log.error(e);	
+		}
+	}
 	
 	/**
 	 * Obtener SIA pendientes de enviar 

@@ -526,7 +526,7 @@
         			<include name="jfreechart-1.0.14.jar" />
         			<include name="jcommon-1.0.0.jar" />
         			<include name="quartz-1.8.5.jar"  />
-        			<include if="isJboss5" name="odmg.jar" />
+	        		<include if="isJboss5" name="odmg.jar" />
         	</fileset>
             
             <zipfileset dir="${lib}/axis-1.4" prefix="lib">
@@ -545,7 +545,7 @@
 			</zipfileset>
 
         	<zipfileset dir="${lib}/jboss">
-				 <include name="commons-httpclient-3.1.jar" />  		
+				 <include name="commons-httpclient-3.1.jar" />
 			</zipfileset>
         	
         	<zipfileset dir="${lib}/solr">
@@ -738,11 +738,12 @@
     </target>
 
 	<target name="checkJbossVersion">
-		<condition property="isJboss5">
-	 	       <equals arg1="${jboss.version}" arg2="5.2"/>
-	 	       </condition>
-	 	       <condition property="isJboss3">
-	 	             <equals arg1="${jboss.version}" arg2="3.2"/>
-	        </condition>
-	 </target>
+	       <condition property="isJboss5">
+	             <equals arg1="${jboss.version}" arg2="5.2"/>
+	       </condition>
+	       <condition property="isJboss3">
+	             <equals arg1="${jboss.version}" arg2="3.2"/>
+	       </condition>
+	</target>
+
 </project>

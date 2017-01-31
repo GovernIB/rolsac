@@ -103,6 +103,7 @@
                 xmlencoding="UTF-8"
                 validatexml="true"
                 mergedir="${web.merge.web}"
+            	distributable="false"
                 >
                 <welcomefile file="/test.jsp"/>
             </deploymentdescriptor>

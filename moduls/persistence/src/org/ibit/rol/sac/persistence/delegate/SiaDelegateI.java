@@ -11,5 +11,7 @@ public interface SiaDelegateI {
 	public void enviarPendientes(SiaJob siaJob) throws DelegateException;
 
 	public void info(SiaJob siaJob) throws DelegateException;
+
+	public void revisarProcedimientosPorTiempo(SiaJob siaJob) throws DelegateException;
 		
 }

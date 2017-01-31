@@ -109,4 +109,6 @@ public interface ProcedimientoDelegateI {
 	public abstract void actualizarProcedimiento(ProcedimientoLocal proc) throws DelegateException;
 
 	public abstract ProcedimientoLocal obtenerProcedimientoParaSolr(Long id) throws DelegateException;
+
+	public abstract List<Long> getProcedimientosEstadoSIAAlterado() throws DelegateException;
 }

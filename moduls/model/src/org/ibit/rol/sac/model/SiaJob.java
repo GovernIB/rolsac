@@ -35,6 +35,8 @@ public class SiaJob implements ValueObject {
 	/** Estado del envio de datos SIA **/
 	private Integer estado;
 	
+	/** Tipo de ejecucion: TOT (tots); PDT (pendientes); TMP (cambio estado por tiempo) */ 
+	private String tipo;
 	
 	/**
 	 * @return the id
@@ -113,14 +115,31 @@ public class SiaJob implements ValueObject {
 	}
 	
 	
+	/**
+	 * @return the tipo
+	 */
+	public String getTipo() {
+		return tipo;
+	}
+	
+	/**
+	 * @param tipo the tipo to set
+	 */
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+	
 	@Override
 	public String toString() {
 		StringBuffer texto = new StringBuffer();
 		texto.append("SiaJob id:");
-		texto.append(fechaIni);
+		texto.append(id);
 		texto.append(" fechaIni:");
-		texto.append(fechaFin);
+		texto.append(fechaIni);
 		texto.append(" fechaFin:");
+		texto.append(fechaFin);
+		texto.append(" tipo:");
+		texto.append(tipo);
 		return texto.toString();
 	}
 

@@ -114,10 +114,9 @@ public abstract class HibernateEJB implements SessionBean {
         try {
         	
         	Session session=null;
-
+/*
         	SessionInterceptor sessionInterceptor = SessionInterceptorBuilder.build();
-        	
-
+        	 
         	if(null==sessionInterceptor) {
         		session = sessionFactory.openSession();
         	}
@@ -126,7 +125,9 @@ public abstract class HibernateEJB implements SessionBean {
         		sessionInterceptor.setSession(session);
         		sessionInterceptor.setSessionContext(ctx);
         	}
+  */
         	
+        	session = sessionFactory.openSession();
             session.setFlushMode(FlushMode.COMMIT);  // (1)
             
             // (1) FIXME: ejaen@dgtic - diria que el flush mode.COMMIT  no te sentit doncs les transaccions 

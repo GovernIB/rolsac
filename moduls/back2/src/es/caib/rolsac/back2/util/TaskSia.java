@@ -24,10 +24,14 @@ public class TaskSia {
 			 SiaDelegate siaDelegate = DelegateUtil.getSiaDelegate();
 			 SiaPendienteProcesoDelegate siaProcesoDelegate = DelegateUtil.getSiaPendienteProcesoDelegate();
 			 
-			 SiaJob siaJob = siaProcesoDelegate.crearSiaJob();
+			 //Envia los pendientes
+			 SiaJob siaJob = siaProcesoDelegate.crearSiaJob("PDT");
 			 siaDelegate.enviarPendientes(siaJob);
-			 
 			 siaProcesoDelegate.cerrarSiaJob(siaJob.getId());
+			 
+			 SiaJob siaJob2 = siaProcesoDelegate.crearSiaJob("TMP");
+			 siaDelegate.revisarProcedimientosPorTiempo(siaJob2);
+			 siaProcesoDelegate.cerrarSiaJob(siaJob2.getId());
 			 
 		} catch (Exception e) {
 			log.error("Error enviando pendientes SIA", e);
