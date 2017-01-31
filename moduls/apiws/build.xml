@@ -134,7 +134,7 @@
         </replace>
     </target>
 
-	<target name="compile" depends="web.gen.all">
+	<target name="compile" depends="checkJbossVersion, web.gen.all">
         <javac destdir="${web.classes}"
             classpathref="web.class.path"
         	srcdir="${home.dir}/moduls/api/src"
@@ -188,6 +188,8 @@
 
         	<lib dir="${web.lib}">
         		<exclude name="commons-logging.jar" />
+        		<exclude if="isJboss5" name="model.jar" />
+        		<exclude if="isJboss5" name="sac-api.jar" />
         	</lib>
             	
             <webinf dir="${web.etc}" includes="*.wsdd"/>
@@ -199,5 +201,14 @@
     <target name="main" depends="ws.war" description="Construeye el war"/>
 
     <import file="../build_sonar.xml"/>
-    
+
+	<target name="checkJbossVersion">
+	       <condition property="isJboss5">
+	             <equals arg1="${jboss.version}" arg2="5.2"/>
+	       </condition>
+	       <condition property="isJboss3">
+	             <equals arg1="${jboss.version}" arg2="3.2"/>
+	       </condition>
+	</target>
+
 </project>
