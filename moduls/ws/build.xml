@@ -109,7 +109,7 @@
 
             <jbosswebxml
                 destdir="${web.gen.etc}"
-                version="${jboss.version}"
+                version="${jboss-xml.version}"
                 xmlencoding="UTF-8"
                 validatexml="true"
                 mergedir="${web.merge.jboss}"

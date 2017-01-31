@@ -93,6 +93,34 @@ function inicializarBtn() {
 	});
 	
 	
+	jQuery("#btnIndexarTiempo").unbind("click").bind("click", function() {
+		var $btn = jQuery(this);
+        var url;        
+
+		if ($btn.hasClass('unitatOrganica')) {
+            url = pagSiaTiempo;
+		} 
+        
+        $.ajax({
+            type: "POST",
+            url: url, 
+            dataType: "json",
+            error: function() {					
+                // missatge
+                Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+                
+            },
+            success: function(data) {
+            	 if (!data.error) {
+                  	Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtTiempoJobs});			
+                  } else {
+                      Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: data.error});					
+                  }
+            }
+        });
+	});
+	
+	
 	    
 	jQuery('#close').unbind("click").bind("click", function(){
 	        $('.popup').fadeOut('slow');
@@ -508,7 +536,8 @@ function CLlistat(){
 	this.finCargaListadoJob = function(opcions,data) {
 		
 		var contenido = "";
-		var width="10"; //Porcentaje del width de cada columna
+		var width="8"; //Porcentaje del width de cada columna
+		var width10="10"; 
 		var width20="20"; 
 		var width40="40";
 		
@@ -521,6 +550,7 @@ function CLlistat(){
 			contenido += "<div class=\"tr\" role=\"rowheader\">";
 			contenido += "<div class=\"th \" role=\"columnheader\" style=\"width:"+width+"%\">ID</div>";
 			contenido += "<div class=\"th \" role=\"columnheader\" style=\"width:"+width+"%\">Estat</div>";
+			contenido += "<div class=\"th \" role=\"columnheader\" style=\"width:"+width+"%\">Tipus</div>";
 			contenido += "<div class=\"th \" role=\"columnheader\" style=\"width:"+width+"%\">Data inici</div>";
 			contenido += "<div class=\"th \" role=\"columnheader\" style=\"width:"+width+"%\">Data fi</div>";
 			contenido += "<div class=\"th \" role=\"columnheader\" style=\"width:"+width40+"%\">Descripció abreviada</div>";
@@ -550,7 +580,7 @@ function CLlistat(){
 				contenido += "<span class=\"id\">" + elemento.id + "</span>";				
 				contenido += "</div>";			
 	
-				contenido += "<div class=\"td fechaIni\" role=\"gridcell\" style=\"width:"+width+"%\">";
+				contenido += "<div class=\"td fechaIni\" role=\"gridcell\" style=\"width:"+width10+"%\">";
 				var descEstado="";
 				if (elemento.estado == 0) { 
 					descEstado = txtEstadoCreado;	
@@ -566,6 +596,21 @@ function CLlistat(){
 				
 				contenido += "<span class=\"fecha\">"+descEstado+"</span>";
 				contenido += "</div>";			
+				
+				var tipo = elemento.tipo;
+				if (elemento.tipo == 'TOT') { 
+					tipo = 'Tots';	
+				} else if (elemento.tipo == 'PDT') { 
+					tipo = 'Pendents';
+				} else if(elemento.tipo == 'TMP') { 
+					tipo = 'Revisar proc. per temps';
+				} else if(elemento.tipo == 'TOT') { 
+					tipo = 'INFO';
+				} 
+				
+				contenido += "<div class=\"td fechaIni\" role=\"gridcell\" style=\"width:"+width+"%\">";
+				contenido += "<span class=\"fecha\">" + tipo + "</span>";	
+				contenido += "</div>";
 				
 				contenido += "<div class=\"td fechaIni\" role=\"gridcell\" style=\"width:"+width+"%\">";
 				contenido += "<span class=\"fecha\">" + Llistat.getFechaString(elemento.fechaIni) + "</span>";	
