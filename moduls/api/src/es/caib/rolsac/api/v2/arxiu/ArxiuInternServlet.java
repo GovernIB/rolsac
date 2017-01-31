@@ -8,14 +8,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Archivo;
 
-import es.caib.rolsac.api.v2.query.HibernateUtils;
+import es.caib.rolsac.api.v2.arxiu.ejb.ArxiuQueryServiceEJBLocator;
+import es.caib.rolsac.api.v2.arxiu.ejb.intf.ArxiuQueryServiceEJBRemote;
+import es.caib.rolsac.api.v2.exception.LocatorException;
 
 /**
  * Accede a los ficheros sin aplicar restricciones de visibilidad.
@@ -32,12 +31,12 @@ public class ArxiuInternServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String idParam = request.getParameter("id");
-        Session session = null;
         
         try {
             long id = Long.parseLong(idParam);
-            session = HibernateUtils.getSessionFactory().openSession();
-            Archivo archivo = (Archivo) session.get(Archivo.class, id);
+            ArxiuQueryServiceEJBRemote ejb = new ArxiuQueryServiceEJBLocator().getArxiuQueryServiceEJB();
+            
+            Archivo archivo = ejb.obtenirArxiu(id);
             
             if (archivo == null) {
                 log.error("El id " + idParam + " no existe.");
@@ -56,21 +55,11 @@ public class ArxiuInternServlet extends HttpServlet {
         } catch (NumberFormatException e) {
             log.error("El id " + idParam + " no es numerico.");
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-        } catch (HibernateException e) {
-            log.error("Error obteniendo session de Hibernate.");
+        } catch (LocatorException e) {
+            log.error("Error obteniendo ArxiuQueryServiceEJBLocator.");
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        } finally {
-            if (session != null && session.isOpen()) {
-                try {
-                    if (session.isDirty()) {
-                        log.warn("Cerrando sesion sucia!");
-                    }
-                    session.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                }
-            }
-        }
+        } 
+        
     }
     
 }

@@ -44,14 +44,17 @@
         	<include name="servlet-api.jar"/>
             <include name="commons-logging.jar"/>
         	<include name="hibernate2.jar"/>
+        	<include name="ejb-2_0.jar"/>       	                
         </fileset>
         
         <fileset dir="${lib.dir}/webcaib">
-            <include name="commons-collections-3.2.1.jar"/>   	
+            <include name="commons-collections-3.2.1.jar"/> 
+        	
         </fileset>
     	
     	<fileset dir="${web.product}">
-    		<include name="model.jar"/>
+    		<include name="model.jar" />
+    		<include name="sac-api.jar" />
         </fileset>
     </path>
 
@@ -108,13 +111,14 @@
                 xmlencoding="UTF-8"
                 validatexml="true"
                 mergedir="${web.merge.web}"
+        		distributable="false"
                 >
                 <welcomefile file="/test.jsp"/>
             </deploymentdescriptor>
 
             <jbosswebxml
                 destdir="${web.gen.etc}"
-                version="${jboss.version}"
+                version="${jboss-xml.version}"
                 xmlencoding="UTF-8"
                 validatexml="true"
                 securityDomain="${ws.auth.domain}"
@@ -146,12 +150,27 @@
     </target>
 
     <target name="ws.war" depends="compile">
-    	<copy todir="${web.classes}" file="${home.dir}/moduls/api/etc/hibernate.cfg.xml" overwrite="true" flatten="true"/>
+    	<copy file="${home.dir}/moduls/api/etc/hibernate.cfg.xml" todir="${web.gen.etc}" overwrite="true"/>
+    			
+	    <replace file="${web.gen.etc}/hibernate.cfg.xml">
+	        <replacefilter token="@hibernate.jndi@" value="${hibernate.jndi}"/>
+	        <replacefilter token="@datasource.jndi@" value="${datasource.jndi}"/>
+	        <replacefilter token="@hibernate.dialect@" value="${hibernate.dialect}"/>            
+	        <replacefilter token="@hibernate.cache.provider_class@" value="${hibernate.cache.provider_class}"/>
+	       	<replacefilter token="@hibernate.query.substitutions@" value="${hibernate.query.substitutions}"/>        	
+	        <replacefilter token="@hibernate.show_sql@" value="${hibernate.show_sql}"/>
+	        <replacefilter token="@hibernate.cglib@" value="${hibernate.cglib}"/>
+	    </replace>
+    	
+    	<copy todir="${web.classes}" file="${web.gen.etc}/hibernate.cfg.xml" overwrite="true" flatten="true"/>
+    	
     	<copy todir="${web.lib}" overwrite="true" flatten="true">
             <fileset dir="${home.dir}">
                 <include name="lib/hibernate2.jar"/>
                 <include name="lib/commons-logging.jar"/>
+            	<include name="lib/ejb-2_0.jar"/>
                 <include name="**/model.jar"/>
+            	<include name="**/sac-api.jar"/>
             </fileset>
         </copy>
     	

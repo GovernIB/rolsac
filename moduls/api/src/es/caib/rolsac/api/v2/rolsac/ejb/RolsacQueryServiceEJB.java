@@ -14,6 +14,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.AgrupacionHechoVital;
 import org.ibit.rol.sac.model.AgrupacionMateria;
+import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Boletin;
 import org.ibit.rol.sac.model.CatalegDocuments;
 import org.ibit.rol.sac.model.DocumentTramit;
@@ -82,7 +83,6 @@ import es.caib.rolsac.api.v2.fitxaUA.FitxaUADTO;
 import es.caib.rolsac.api.v2.formulari.FormulariCriteria;
 import es.caib.rolsac.api.v2.formulari.FormulariDTO;
 import es.caib.rolsac.api.v2.general.BasicUtils;
-import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.HibernateEJB;
 import es.caib.rolsac.api.v2.general.co.CriteriaObject;
 import es.caib.rolsac.api.v2.general.co.CriteriaObjectParseException;
@@ -4076,5 +4076,99 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
         return silencioDTO;
         
     }
+
+	public Archivo obtenirArxiu(Long idArxiu) {
+	
+	        Session session = null;
+	      
+	        try {
+	        
+	            session = getSession();
+	            StringBuilder consulta = new StringBuilder("select arc ");
+				consulta.append("from Archivo as arc ");
+				consulta.append("where arc.id = :idArxiu ");
+
+	            Query query = session.createQuery(consulta.toString());
+	            query.setParameter("idArxiu", idArxiu);
+	    		
+	            
+	            Archivo archivo = (Archivo)query.uniqueResult();
+	            
+	            return archivo;
+	            
+	        } catch (HibernateException e) {
+	        	
+	            log.error(e);
+	            throw new EJBException(e);
+	            
+	        } finally {
+	        	
+	            close(session);
+	            
+	        }
+
+	}
+
+	
+
+	public Documento getDocumentArchiu(Long idArxiu) {
+		 Session session = null;
+	      
+	        try {
+	        
+	            session = getSession();
+	            StringBuilder consulta = new StringBuilder("select docu ");
+				consulta.append("from Documento as docu join docu.traducciones as tradDocu ");
+				consulta.append( "where tradDocu.archivo.id=:code  ");
+
+	            Query query = session.createQuery(consulta.toString());
+	            query.setParameter("code", idArxiu);
+	    		
+	            
+	            Documento archivo = (Documento)query.uniqueResult();
+	            
+	            return archivo;
+	            
+	        } catch (HibernateException e) {
+	        	
+	            log.error(e);
+	            throw new EJBException(e);
+	            
+	        } finally {
+	        	
+	            close(session);
+	            
+	        }
+	}
+
+	public DocumentTramit getDocumentTramitArchiu(Long idArxiu) {
+		 Session session = null;
+	      
+	        try {
+	        
+	            session = getSession();
+	            StringBuilder consulta = new StringBuilder("select docu ");
+				consulta.append("from DocumentTramit docu join docu.traducciones as tradDocu ");
+				consulta.append( "where tradDocu.archivo.id=:code  ");
+
+	            Query query = session.createQuery(consulta.toString());
+	            query.setParameter("code", idArxiu);
+	    		
+	            
+	            DocumentTramit archivo = (DocumentTramit)query.uniqueResult();
+	            
+	            return archivo;
+	            
+	        } catch (HibernateException e) {
+	        	
+	            log.error(e);
+	            throw new EJBException(e);
+	            
+	        } finally {
+	        	
+	            close(session);
+	            
+	        }
+	}
 
 }
