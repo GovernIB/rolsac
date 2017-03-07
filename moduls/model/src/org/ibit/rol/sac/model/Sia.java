@@ -22,6 +22,9 @@ public class Sia implements ValueObject {
 	private String descripcion;
 	
 	/** Los ids de los centros directivos. **/
+	private String idDepartamento;
+	
+	/** Los ids de los centros directivos. **/
 	private String idCent;
 	
 	/** Nombre del órgano instructor. **/
@@ -274,6 +277,18 @@ public class Sia implements ValueObject {
 	 */
 	public void setEstado(String estado) {
 		this.estado = estado;
+	}
+	/**
+	 * @return the idDepartamento
+	 */
+	public String getIdDepartamento() {
+		return idDepartamento;
+	}
+	/**
+	 * @param idDepartamento the idDepartamento to set
+	 */
+	public void setIdDepartamento(String idDepartamento) {
+		this.idDepartamento = idDepartamento;
 	}
 	
 }

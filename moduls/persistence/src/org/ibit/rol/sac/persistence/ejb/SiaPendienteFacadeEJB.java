@@ -587,13 +587,19 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 			sia.setIdSIA(procedimiento.getCodigoSIA().toString());
 		}
 		TraduccionProcedimientoLocal trad = (TraduccionProcedimientoLocal) procedimiento.getTraduccion("es");
-		if(trad != null){			
+		if(trad == null){
+			trad = (TraduccionProcedimientoLocal) procedimiento.getTraduccion("ca");
+			if (trad != null) {
+				sia.setTitulo(trad.getNombre());
+				sia.setDescripcion(trad.getResumen());
+			}
+		} else {
 			sia.setTitulo(trad.getNombre());
 			sia.setDescripcion(trad.getResumen());
 		}
 		
 		sia.setIdCent(getIdCentro(procedimiento));
-		
+		sia.setIdDepartamento(SiaUtils.getIdDepartamento());
 		if (procedimiento.getUnidadAdministrativa().getTraduccion("es") != null && ((TraduccionUA)  procedimiento.getUnidadAdministrativa().getTraduccion("es")).getNombre() != null) {
 			sia.setUaGest(((TraduccionUA)  procedimiento.getUnidadAdministrativa().getTraduccion("es")).getNombre());
 		} else {

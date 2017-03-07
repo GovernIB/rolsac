@@ -79,7 +79,7 @@ public class SiaUtils {
 	 */
 	private static Long getLongFromProperty(String property) {
         try {
-            return Long.valueOf(System.getProperty(property));
+            return Long.valueOf(System.getProperty(property).trim());
         } catch (Exception e) {
             log.error(ERROR_MESSAGE + property, e);
             return null;
@@ -93,7 +93,7 @@ public class SiaUtils {
 	 */
 	private static Integer getIntFromProperty(String property) {
         try {
-            return Integer.valueOf(System.getProperty(property));
+            return Integer.valueOf(System.getProperty(property).trim());
         } catch (Exception e) {
             log.error(ERROR_MESSAGE + property, e);
             return 0;
@@ -129,15 +129,23 @@ public class SiaUtils {
 	 * @return
 	 */
 	public static String getUrl() {
-        return System.getProperty("es.caib.rolsac.sia.url");
+        return System.getProperty("es.caib.rolsac.sia.url").trim();
     }
+	
+	/**
+	 * Obtiene el id del departamento.
+	 * @return
+	 */
+	public static String getIdDepartamento() {
+		return System.getProperty("es.caib.rolsac.sia.departamento").trim();
+	}
 	
 	/**
 	 * Get usuario envio SIA.
 	 * @return
 	 */
 	public static String getUsuarioEnvio() {
-        return System.getProperty("es.caib.rolsac.sia.usuario.envio");
+        return System.getProperty("es.caib.rolsac.sia.usuario.envio").trim();
     }
 	
 	/**
@@ -145,7 +153,7 @@ public class SiaUtils {
 	 * @return
 	 */
 	public static String getPasswordEnvio() {
-        return System.getProperty("es.caib.rolsac.sia.pass.envio");
+        return System.getProperty("es.caib.rolsac.sia.pass.envio").trim();
     }
 	
 	/**
@@ -153,7 +161,7 @@ public class SiaUtils {
 	 * @return
 	 */
 	public static String getUrlEnvio() {
-        return System.getProperty("es.caib.rolsac.sia.url.envio");
+        return System.getProperty("es.caib.rolsac.sia.url.envio").trim();
     }
 	
 	/**
@@ -165,7 +173,7 @@ public class SiaUtils {
 		 if (level == null) {
 			 return 3;
 		 } else {
-			 return Integer.valueOf(level);
+			 return Integer.valueOf(level.trim());
 		 }
 	}
 	

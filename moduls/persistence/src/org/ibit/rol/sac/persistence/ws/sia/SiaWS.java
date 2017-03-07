@@ -140,10 +140,12 @@ public class SiaWS {
 		paramSia.setCODIGOORIGEN(sia.getIdProc());
 		
 		paramSia.setDENOMINACION(sia.getTitulo());
+		//paramSia.setTITULOCIUDADANO(sia.getTitulo());
 		paramSia.setDESCRIPCION(sia.getDescripcion());
 		ORGANISMORESPONSABLE organismoResponsable = new ORGANISMORESPONSABLE();
-		organismoResponsable.setCODORGANISMORESPONSABLEN1(sia.getIdCent());
-		//organismoResponsable.setCODORGANISMORESPONSABLEN2(sia.getUaGest());
+		//Fix 17/02. Pasado el id del centro a nivel 2 e incluido como nivel1 el departamento que viene por propiedades.
+		organismoResponsable.setCODORGANISMORESPONSABLEN1(sia.getIdDepartamento());
+		organismoResponsable.setCODORGANISMORESPONSABLEN2(sia.getIdCent());
 		paramSia.setORGANISMORESPONSABLE(organismoResponsable);
 		
 		DESTINATARIOSDESTINATARIO[] destinatarios = new DESTINATARIOSDESTINATARIO[sia.getIdDest().length];		
