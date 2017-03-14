@@ -33,10 +33,11 @@ public class EstadisticaInsertServiceGateway {
 	
 	public void setUrl(String url) {
 		try {
-			
-			stub = new EstadisticaWSSoapBindingStub(
-					new URL(url + ConfiguracioServeis.NOM_SERVEI_ESTADISTICA),
-					null);
+			if(url != null && !url.isEmpty()){				
+				stub = new EstadisticaWSSoapBindingStub(
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_ESTADISTICA),
+						null);
+			}
 		} catch (AxisFault e) {
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
