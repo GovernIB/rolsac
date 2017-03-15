@@ -138,14 +138,12 @@
 			 -->
 			<!-- Obtener revisión de GIT . -->
 			<exec executable="git"  outputproperty="git.revision" failifexecutionfails="false" errorproperty="">
-		        <arg value="describe"/> 
-		        <arg value="--tags"/>
-		        <arg value="--always"/>
-		        <arg value="HEAD"/>
+				        <arg value="rev-parse"/> 
+				        <arg value="--short"/>
+				        <arg value="HEAD"/>
 			</exec>
 
-		
-
+			
 				<tstamp>
 					<format property="rolsac.build" pattern="dd-MM-yyyy HH:mm:ss" locale="es,ES"/>
 				</tstamp>
