@@ -15,4 +15,6 @@ public interface AgrupacioMateriaQueryServiceStrategy {
 
     public int getNumMateries(long id) throws StrategyException;
 
+	public void setUrl(String url);
+
 }

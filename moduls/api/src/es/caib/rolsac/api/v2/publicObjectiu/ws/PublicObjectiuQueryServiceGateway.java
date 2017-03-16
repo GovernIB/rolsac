@@ -40,6 +40,21 @@ public class PublicObjectiuQueryServiceGateway {
 		}
 	}
 	
+	public void setUrl(String url) {
+		try {
+			if(url != null && !url.isEmpty()){				
+				stub = new PublicObjectiuWSSoapBindingStub(
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_PUBLIC_OBJECTIU),
+						null
+						);
+			}
+		} catch (AxisFault e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public int getNumAgrupacions(long id) throws RemoteException {
 		return stub.getNumAgrupacions(id);
 	}
@@ -96,5 +111,7 @@ public class PublicObjectiuQueryServiceGateway {
         
         return llistaFitxes;      
     }
+
+	
 	
 }

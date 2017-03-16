@@ -22,6 +22,12 @@ public class FetVitalQueryServiceWSStrategy implements FetVitalQueryServiceStrat
 	public void setGateway(FetVitalQueryServiceGateway gateway) {
 		this.gateway = gateway;		
 	}
+	
+	public void setUrl(String url) {
+		if (this.gateway  != null) {
+			this.gateway.setUrl(url);
+		}
+	}
     
     public int getNumFitxes(long id) throws StrategyException {
     	try {
@@ -102,5 +108,7 @@ public class FetVitalQueryServiceWSStrategy implements FetVitalQueryServiceStrat
 			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}
     }
+
+	
 
 }

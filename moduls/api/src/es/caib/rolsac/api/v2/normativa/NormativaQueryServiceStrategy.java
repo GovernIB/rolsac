@@ -34,4 +34,6 @@ public interface NormativaQueryServiceStrategy {
 
     public List<AfectacioDTO> llistarAfectacionsAfectades(Long id) throws StrategyException;
 
+	public void setUrl(String url);
+
 }

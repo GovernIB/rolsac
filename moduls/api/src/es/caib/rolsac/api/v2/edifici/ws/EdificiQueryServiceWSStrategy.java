@@ -19,6 +19,12 @@ public class EdificiQueryServiceWSStrategy implements EdificiQueryServiceStrateg
 		this.gateway = gateway;
 	}
 	
+	public void setUrl(String url) {
+		if (this.gateway  != null) {
+			this.gateway.setUrl(url);
+		}
+	}
+	
     public int getNumUnitatsAdministratives(long id) throws StrategyException {
     	try {
     		return gateway.getNumUnitatsAdministratives(id);
@@ -61,5 +67,7 @@ public class EdificiQueryServiceWSStrategy implements EdificiQueryServiceStrateg
     		throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
     	}
     }
+
+	
     
 }

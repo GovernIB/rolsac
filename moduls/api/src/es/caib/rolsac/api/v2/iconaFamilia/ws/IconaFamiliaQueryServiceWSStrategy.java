@@ -16,6 +16,12 @@ public class IconaFamiliaQueryServiceWSStrategy implements IconaFamiliaQueryServ
     public void setGateway( IconaFamiliaQueryServiceGateway gateway ) {
     	this.gateway = gateway;
     }
+    
+    public void setUrl(String url) {
+		if (this.gateway != null) {
+			this.gateway.setUrl(url);
+		}
+	}
 
     public FamiliaDTO obtenirFamilia(long id) throws StrategyException {
     	try {
@@ -40,4 +46,6 @@ public class IconaFamiliaQueryServiceWSStrategy implements IconaFamiliaQueryServ
     		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
     	}
     }
+
+	
 }

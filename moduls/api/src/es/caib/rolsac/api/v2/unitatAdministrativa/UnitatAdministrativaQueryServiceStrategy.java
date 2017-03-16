@@ -29,6 +29,8 @@ import es.caib.rolsac.api.v2.usuari.UsuariDTO;
 
 public interface UnitatAdministrativaQueryServiceStrategy {
 
+	public void setUrl(String url);
+	
     public UnitatAdministrativaDTO obtenirPare(long idPare, String idioma) throws StrategyException;
 
     public EspaiTerritorialDTO obtenirEspaiTerritorial(long idEt) throws StrategyException;

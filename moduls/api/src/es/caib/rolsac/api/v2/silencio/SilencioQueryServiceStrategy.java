@@ -6,4 +6,6 @@ public interface SilencioQueryServiceStrategy {
 	
 	public SilencioDTO obtenirSilenci(Long codSilencio, String idioma) throws StrategyException;
 
+	public void setUrl(String url);
+
 }

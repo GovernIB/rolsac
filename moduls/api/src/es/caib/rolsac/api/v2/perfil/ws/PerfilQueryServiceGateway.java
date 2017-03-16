@@ -38,6 +38,21 @@ public class PerfilQueryServiceGateway {
 		}
 	}
 	
+	public void setUrl(String url) {
+		try {
+			if(url != null && !url.isEmpty()){				
+				stub = new PerfilWSSoapBindingStub(
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_PERFIL),
+						null
+						);
+			}
+		} catch (AxisFault e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public int getNumIconesFamilia(long id) throws RemoteException {
 		return stub.getNumIconesFamilia(id);
 	}
@@ -80,4 +95,6 @@ public class PerfilQueryServiceGateway {
 		
 		return llistaIconesMateria;		
 	}
+
+	
 }

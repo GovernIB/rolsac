@@ -33,6 +33,21 @@ public class FitxaUAQueryServiceGateway {
 		}
 	}
 	
+	public void setUrl(String url) {
+		try {
+			if(url != null && !url.isEmpty()){				
+				stub = new FitxaUAWSSoapBindingStub(
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_FITXA_UA),
+						null
+						);
+			}
+		} catch (AxisFault e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public FitxaDTO obtenirFitxa(long idFitxa) throws RemoteException {
 		return stub.obtenirFitxa(idFitxa);
 	}
@@ -44,5 +59,7 @@ public class FitxaUAQueryServiceGateway {
 	public UnitatAdministrativaDTO obtenirUnitatAdministrativa(
 			long idUnitatAdministrativa) throws RemoteException {
 		return stub.obtenirUnitatAdministrativa(idUnitatAdministrativa);
-	}	
+	}
+
+	
 }

@@ -21,6 +21,14 @@ public class CatalegDocumentsQueryServiceAdapter extends CatalegDocumentsDTO imp
 
 	private CatalegDocumentsQueryServiceStrategy catalegDocumentsQueryServiceStrategy;	
 	
+	private String url;
+	public void setUrl(String url) {
+		this.url = url;
+		if (url != null && catalegDocumentsQueryServiceStrategy != null) {
+			catalegDocumentsQueryServiceStrategy.setUrl(url);
+		}
+	}
+	
     public void setCatalegDocumentsQueryServiceStrategy(CatalegDocumentsQueryServiceStrategy catalegDocumentsQueryServiceStrategy) {
         this.catalegDocumentsQueryServiceStrategy = catalegDocumentsQueryServiceStrategy;
     }	
@@ -53,10 +61,14 @@ public class CatalegDocumentsQueryServiceAdapter extends CatalegDocumentsDTO imp
 			List<DocumentTramitQueryServiceAdapter> llistaDocumentTramitQueryServiceAdapter = new ArrayList<DocumentTramitQueryServiceAdapter>();
 			
 			for ( DocumentTramitDTO documentTramitDTO : llistaDTO ) {
+				DocumentTramitQueryServiceAdapter dqsa = (DocumentTramitQueryServiceAdapter) BeanUtils
+						.getAdapter("documentTramit", getStrategy(),
+								documentTramitDTO);
+				if (dqsa != null && url != null) {
+					dqsa.setUrl(url);
+				}
 				llistaDocumentTramitQueryServiceAdapter
-						.add((DocumentTramitQueryServiceAdapter) BeanUtils
-								.getAdapter("documentTramit", getStrategy(),
-										documentTramitDTO));
+						.add(dqsa);
 			}
 
 			return llistaDocumentTramitQueryServiceAdapter;
@@ -64,5 +76,7 @@ public class CatalegDocumentsQueryServiceAdapter extends CatalegDocumentsDTO imp
 			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "documentos trámites.", e);
 		}
 	}
+
+	
 	
 }

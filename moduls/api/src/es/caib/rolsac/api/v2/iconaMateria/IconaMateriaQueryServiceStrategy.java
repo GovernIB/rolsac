@@ -13,4 +13,6 @@ public interface IconaMateriaQueryServiceStrategy {
 
     public ArxiuDTO obtenirIcona(long id) throws StrategyException;
 
+	public void setUrl(String url);
+
 }

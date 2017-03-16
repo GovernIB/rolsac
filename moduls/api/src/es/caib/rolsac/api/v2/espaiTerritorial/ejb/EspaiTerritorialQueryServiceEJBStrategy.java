@@ -75,4 +75,8 @@ public class EspaiTerritorialQueryServiceEJBStrategy implements EspaiTerritorial
         }
     }
 
+	public void setUrl(String url) {
+		//No es necesario en EJB.
+	}
+
 }

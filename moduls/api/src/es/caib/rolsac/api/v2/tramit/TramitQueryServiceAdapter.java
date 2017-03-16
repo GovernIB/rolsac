@@ -31,6 +31,14 @@ public class TramitQueryServiceAdapter extends TramitDTO implements TramitQueryS
     public void setTramitQueryServiceStrategy(TramitQueryServiceStrategy tramitQueryServiceStrategy) {
         this.tramitQueryServiceStrategy = tramitQueryServiceStrategy;
     }
+    
+    private String url;
+    public void setUrl(String url) {
+		this.url = url;
+		if (this.tramitQueryServiceStrategy != null) {
+			this.tramitQueryServiceStrategy.setUrl(url);
+		}
+	}    
 
     public TramitQueryServiceAdapter(TramitDTO dto) throws QueryServiceException {
         try {
@@ -72,7 +80,11 @@ public class TramitQueryServiceAdapter extends TramitDTO implements TramitQueryS
         if (this.getProcedimiento() == null) {return null;}
         try {
             ProcedimentDTO dto = tramitQueryServiceStrategy.obtenirProcediment(this.getProcedimiento());
-            return (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), dto);
+            ProcedimentQueryServiceAdapter dqsa=  (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), dto);
+            if (dqsa != null && url != null) {
+        		dqsa.setUrl(url);
+        	}
+        	return dqsa;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "procedimiento.", e);
         }
@@ -82,7 +94,11 @@ public class TramitQueryServiceAdapter extends TramitDTO implements TramitQueryS
         if (this.getOrganCompetent() == null) {return null;}
         try {
             UnitatAdministrativaDTO dto = tramitQueryServiceStrategy.obtenirOrganCompetent(this.getOrganCompetent());
-            return (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), dto);
+            UnitatAdministrativaQueryServiceAdapter dqsa = (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), dto);
+            if (dqsa != null && url != null) {
+        		dqsa.setUrl(url);
+        	}
+        	return dqsa;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "organo competente.", e);
         }
@@ -93,7 +109,11 @@ public class TramitQueryServiceAdapter extends TramitDTO implements TramitQueryS
             List<DocumentTramitDTO> llistaDTO = tramitQueryServiceStrategy.llistatDocumentsInformatius(getId(), documentTramitCriteria);
             List<DocumentTramitQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentTramitQueryServiceAdapter>();
             for (DocumentTramitDTO documentTramitDTO : llistaDTO) {
-                llistaQueryServiceAdapter.add((DocumentTramitQueryServiceAdapter) BeanUtils.getAdapter("documentTramit", getStrategy(), documentTramitDTO));
+            	DocumentTramitQueryServiceAdapter dqsa = (DocumentTramitQueryServiceAdapter) BeanUtils.getAdapter("documentTramit", getStrategy(), documentTramitDTO);
+            	if (dqsa != null && url != null) {
+            		dqsa.setUrl(url);
+            	}
+            	llistaQueryServiceAdapter.add(dqsa);
             }
             return llistaQueryServiceAdapter;
         } catch (StrategyException e) {
@@ -106,7 +126,11 @@ public class TramitQueryServiceAdapter extends TramitDTO implements TramitQueryS
             List<DocumentTramitDTO> llistaDTO = tramitQueryServiceStrategy.llistarFormularis(getId(), documentTramitCriteria);
             List<DocumentTramitQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentTramitQueryServiceAdapter>();
             for (DocumentTramitDTO documentTramitDTO : llistaDTO) {
-                llistaQueryServiceAdapter.add((DocumentTramitQueryServiceAdapter) BeanUtils.getAdapter("documentTramit", getStrategy(), documentTramitDTO));
+            	DocumentTramitQueryServiceAdapter dqsa = (DocumentTramitQueryServiceAdapter) BeanUtils.getAdapter("documentTramit", getStrategy(), documentTramitDTO);
+            	if (dqsa != null && url != null) {
+            		dqsa.setUrl(url);
+            	}
+            	llistaQueryServiceAdapter.add(dqsa);
             }
             return llistaQueryServiceAdapter;
         } catch (StrategyException e) {
@@ -119,12 +143,19 @@ public class TramitQueryServiceAdapter extends TramitDTO implements TramitQueryS
             List<TaxaDTO> llistaDTO = tramitQueryServiceStrategy.llistarTaxes(getId(), taxaCriteria);
             List<TaxaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<TaxaQueryServiceAdapter>();
             for (TaxaDTO taxaDTO : llistaDTO) {
-                llistaQueryServiceAdapter.add((TaxaQueryServiceAdapter) BeanUtils.getAdapter("taxa", getStrategy(), taxaDTO));
+            	TaxaQueryServiceAdapter dqsa = (TaxaQueryServiceAdapter) BeanUtils.getAdapter("taxa", getStrategy(), taxaDTO);
+            	if (dqsa != null && url != null) {
+            		dqsa.setUrl(url);
+            	}
+            	 llistaQueryServiceAdapter.add(dqsa);
             }
             return llistaQueryServiceAdapter;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "tasas.", e);
         }
     }
+
+    
+	
 
 }

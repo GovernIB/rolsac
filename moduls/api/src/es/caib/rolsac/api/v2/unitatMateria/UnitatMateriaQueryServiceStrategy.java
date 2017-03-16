@@ -10,4 +10,6 @@ public interface UnitatMateriaQueryServiceStrategy {
 
     public MateriaDTO obtenirMateria(Long idMateria) throws StrategyException;
 
+	public void setUrl(String url);
+
 }

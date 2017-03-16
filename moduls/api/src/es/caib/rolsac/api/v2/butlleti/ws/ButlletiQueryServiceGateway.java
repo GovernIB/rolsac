@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.axis.AxisFault;
+
 import es.caib.rolsac.api.v2.exception.APIException;
 import es.caib.rolsac.api.v2.general.ConfiguracioServeis;
 import es.caib.rolsac.api.v2.general.DTOUtil;
@@ -34,6 +36,21 @@ public class ButlletiQueryServiceGateway {
 		}
 	}
 
+	public void setUrl(String url) {
+		try {
+			if(url != null && !url.isEmpty()){				
+				stub = new ButlletiWSSoapBindingStub(
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_BUTLLETI),
+						null
+						);
+			}
+		} catch (AxisFault e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public int getNumNormatives(long id, TIPUS_NORMATIVA tipus)
 			throws RemoteException {
 		return stub.getNumNormatives(id, tipus.ordinal());
@@ -57,4 +74,6 @@ public class ButlletiQueryServiceGateway {
 
 		return llistaNormatives;
 	}
+
+
 }

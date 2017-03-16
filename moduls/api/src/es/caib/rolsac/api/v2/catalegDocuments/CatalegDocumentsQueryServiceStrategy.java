@@ -9,6 +9,7 @@ import es.caib.rolsac.api.v2.exception.StrategyException;
 public interface CatalegDocumentsQueryServiceStrategy {
 	
 	public int getNumDocumentsTramit(long id) throws StrategyException;
-	public List<DocumentTramitDTO> llistarDocumentsTramits(long id, DocumentTramitCriteria documentTramitCriteria) throws StrategyException;	
+	public List<DocumentTramitDTO> llistarDocumentsTramits(long id, DocumentTramitCriteria documentTramitCriteria) throws StrategyException;
+	public void setUrl(String url);	
 
 }

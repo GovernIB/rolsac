@@ -50,4 +50,8 @@ public class PerfilQueryServiceEJBStrategy implements PerfilQueryServiceStrategy
         }
     }
 
+	public void setUrl(String url) {
+		//No es necesario en EJB
+	}
+
 }

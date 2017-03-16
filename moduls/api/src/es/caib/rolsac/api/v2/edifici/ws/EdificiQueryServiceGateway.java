@@ -38,6 +38,20 @@ public class EdificiQueryServiceGateway {
 		}
 	}
 
+	public void setUrl(String url) {
+		try {
+			if(url != null && !url.isEmpty()){				
+				stub = new EdificiWSSoapBindingStub(
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_EDIFICI),
+						null
+						);
+			}
+		} catch (AxisFault e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}
 	public int getNumUnitatsAdministratives(long id) throws RemoteException {
 		return stub.getNumUnitatsAdministratives(id);
 	}
@@ -76,4 +90,5 @@ public class EdificiQueryServiceGateway {
 		return llistaMateries;
 
 	}
+
 }

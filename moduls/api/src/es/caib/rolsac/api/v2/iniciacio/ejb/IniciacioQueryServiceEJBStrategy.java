@@ -43,5 +43,9 @@ public class IniciacioQueryServiceEJBStrategy implements IniciacioQueryServiceSt
         }
 		
 	}
+
+	public void setUrl(String url) {
+		//No es necesario en EJBs.
+	}
 	
 }

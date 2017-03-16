@@ -19,4 +19,6 @@ public interface EdificiQueryServiceStrategy {
 
     public ArxiuDTO obtenirPlano(Long idPlano) throws StrategyException;
 
+	public void setUrl(String url);
+
 }

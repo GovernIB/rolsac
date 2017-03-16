@@ -21,6 +21,14 @@ public class IconaMateriaQueryServiceAdapter extends IconaMateriaDTO implements 
     public void setIconaMateriaQueryServiceStrategy(IconaMateriaQueryServiceStrategy iconaMateriaQueryServiceStrategy) {
         this.iconaMateriaQueryServiceStrategy = iconaMateriaQueryServiceStrategy;
     }
+    
+    private String url;
+    public void setUrl(String url) {
+    	this.url = url;
+		if (this.iconaMateriaQueryServiceStrategy != null) {
+			this.iconaMateriaQueryServiceStrategy.setUrl(url);
+		}
+	}
 
     public IconaMateriaQueryServiceAdapter(IconaMateriaDTO dto) throws QueryServiceException {
         try {
@@ -37,7 +45,11 @@ public class IconaMateriaQueryServiceAdapter extends IconaMateriaDTO implements 
     public MateriaQueryServiceAdapter obtenirMateria() throws QueryServiceException {
         if (this.getMateria() == null) {return null;}
         try {
-            return (MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), iconaMateriaQueryServiceStrategy.obtenirMateria(this.getMateria()));
+        	MateriaQueryServiceAdapter mqsa =  (MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), iconaMateriaQueryServiceStrategy.obtenirMateria(this.getMateria()));
+        	if (mqsa != null && url != null) {
+        		mqsa.setUrl(url);
+        	}
+        	return mqsa;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "materia.", e);
         }
@@ -46,7 +58,11 @@ public class IconaMateriaQueryServiceAdapter extends IconaMateriaDTO implements 
     public PerfilQueryServiceAdapter obtenirPerfil() throws QueryServiceException {
         if (this.getPerfil() == null) {return null;}
         try {
-            return (PerfilQueryServiceAdapter) BeanUtils.getAdapter("perfil", getStrategy(), iconaMateriaQueryServiceStrategy.obtenirPerfil(this.getPerfil()));
+        	PerfilQueryServiceAdapter pqsa = (PerfilQueryServiceAdapter) BeanUtils.getAdapter("perfil", getStrategy(), iconaMateriaQueryServiceStrategy.obtenirPerfil(this.getPerfil()));
+        	if (pqsa != null && url != null) {
+        		pqsa.setUrl(url);
+        	}
+        	return pqsa;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "perfil.", e);
         }
@@ -55,10 +71,16 @@ public class IconaMateriaQueryServiceAdapter extends IconaMateriaDTO implements 
     public ArxiuQueryServiceAdapter obtenirIcona() throws QueryServiceException {
         if (this.getIcono() == null) {return null;}
         try {
-            return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), iconaMateriaQueryServiceStrategy.obtenirIcona(this.getIcono()));
+        	ArxiuQueryServiceAdapter pqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), iconaMateriaQueryServiceStrategy.obtenirIcona(this.getIcono()));
+         	if (pqsa != null && url != null) {
+        		pqsa.setUrl(url);
+        	}
+        	return pqsa;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "icono.", e);
         }
     }
+
+	
     
 }

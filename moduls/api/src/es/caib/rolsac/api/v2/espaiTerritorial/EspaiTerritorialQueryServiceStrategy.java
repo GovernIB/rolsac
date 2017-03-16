@@ -22,5 +22,7 @@ public interface EspaiTerritorialQueryServiceStrategy {
     public ArxiuDTO obtenirLogo(Long idLogo) throws StrategyException;
 
     public EspaiTerritorialDTO obtenirPare(Long idPadre) throws StrategyException;
+
+	public void setUrl(String url);
     
 }

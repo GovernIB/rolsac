@@ -19,6 +19,12 @@ public class ButlletiQueryServiceWSStrategy implements
 	public void setGateway(ButlletiQueryServiceGateway gateway) {
 		this.gateway = gateway;
 	}
+	
+	public void setUrl(String url) {
+		if (this.gateway != null) {
+			this.gateway.setUrl(url);
+		}
+	}
 
 	public List<NormativaDTO> llistarNormatives(long id,
 			NormativaCriteria normativaCriteria) throws StrategyException {
@@ -39,5 +45,7 @@ public class ButlletiQueryServiceWSStrategy implements
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);			
 		}	
 	}
+
+	
 
 }

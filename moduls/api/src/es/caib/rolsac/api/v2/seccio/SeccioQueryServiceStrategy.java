@@ -28,5 +28,7 @@ public interface SeccioQueryServiceStrategy {
     public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria, FitxaUACriteria fitxaUACriteria) throws StrategyException;
 
     public SeccioDTO obtenirPare(Long padre) throws StrategyException;
+
+	public void setUrl(String url);
     
 }

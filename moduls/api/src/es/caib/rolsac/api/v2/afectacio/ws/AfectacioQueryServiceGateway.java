@@ -21,6 +21,10 @@ public class AfectacioQueryServiceGateway {
 	public TipusAfectacioDTO obtenirTipusAfectacio(long idTipusAfectacio)
 			throws RemoteException {
 		return null;	
+	}
+
+	public void setUrl(String url) {
+		//No hacer ndada
 	}	
 
 }

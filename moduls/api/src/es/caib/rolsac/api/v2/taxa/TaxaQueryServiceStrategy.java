@@ -7,4 +7,6 @@ public interface TaxaQueryServiceStrategy {
 
     public TramitDTO obtenirTramit(long idTramit) throws StrategyException;
 
+	public void setUrl(String url);
+
 }

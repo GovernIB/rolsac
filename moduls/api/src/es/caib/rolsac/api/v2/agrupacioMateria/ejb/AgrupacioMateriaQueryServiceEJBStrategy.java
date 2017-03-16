@@ -41,4 +41,8 @@ public class AgrupacioMateriaQueryServiceEJBStrategy implements AgrupacioMateria
         }
     }
 
+	public void setUrl(String url) {
+		// No se utiliza en ejb.		
+	}
+
 }

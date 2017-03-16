@@ -30,6 +30,14 @@ public class PublicObjectiuQueryServiceAdapter extends PublicObjectiuDTO impleme
     public void setPublicObjectiuQueryServiceStrategy(PublicObjectiuQueryServiceStrategy publicObjectiuQueryServiceStrategy) {
         this.publicObjectiuQueryServiceStrategy = publicObjectiuQueryServiceStrategy;
     }
+    
+    private String url;
+    public void setUrl(String url) {
+    	this.url = url;
+		if (this.publicObjectiuQueryServiceStrategy != null) {
+			this.publicObjectiuQueryServiceStrategy.setUrl(url);
+		}
+	}
 
     public PublicObjectiuQueryServiceAdapter(PublicObjectiuDTO dto) throws QueryServiceException {
         try {
@@ -56,7 +64,11 @@ public class PublicObjectiuQueryServiceAdapter extends PublicObjectiuDTO impleme
             List<AgrupacioFetVitalDTO> llistaDTO = publicObjectiuQueryServiceStrategy.llistarAgrupacions(getId(), agurpacioFetVitalCriteria);
             List<AgrupacioFetVitalQueryServiceAdapter> llistaAgrupacions = new ArrayList<AgrupacioFetVitalQueryServiceAdapter>();
             for (AgrupacioFetVitalDTO afvDTO : llistaDTO) {
-                llistaAgrupacions.add((AgrupacioFetVitalQueryServiceAdapter) BeanUtils.getAdapter("agrupacioFetVital", getStrategy(), afvDTO));
+            	AgrupacioFetVitalQueryServiceAdapter tqsa = (AgrupacioFetVitalQueryServiceAdapter) BeanUtils.getAdapter("agrupacioFetVital", getStrategy(), afvDTO);
+            	if (tqsa != null && url != null) {
+            		tqsa.setUrl(url);
+            	}
+            	llistaAgrupacions.add(tqsa);
             }
             return llistaAgrupacions;
         } catch (StrategyException e) {
@@ -69,7 +81,11 @@ public class PublicObjectiuQueryServiceAdapter extends PublicObjectiuDTO impleme
             List<ProcedimentDTO> llistaDTO = publicObjectiuQueryServiceStrategy.llistarProcediments(getId(), procediemntCriteria);
             List<ProcedimentQueryServiceAdapter> llistaProcediments = new ArrayList<ProcedimentQueryServiceAdapter>();
             for (ProcedimentDTO procDTO : llistaDTO) {
-                llistaProcediments.add((ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), procDTO));
+            	ProcedimentQueryServiceAdapter tqsa = (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), procDTO);
+            	if (tqsa != null && url != null) {
+            		tqsa.setUrl(url);
+            	}
+            	llistaProcediments.add(tqsa);
             }
             return llistaProcediments;
         } catch (StrategyException e) {
@@ -82,12 +98,18 @@ public class PublicObjectiuQueryServiceAdapter extends PublicObjectiuDTO impleme
             List<FitxaDTO> llistaDTO = publicObjectiuQueryServiceStrategy.llistarFitxes(getId(), fitxaCriteria);
             List<FitxaQueryServiceAdapter> llistaFitxes = new ArrayList<FitxaQueryServiceAdapter>();
             for (FitxaDTO fitxaDTO : llistaDTO) {
-                llistaFitxes.add((FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), fitxaDTO));
+            	FitxaQueryServiceAdapter tqsa = (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), fitxaDTO);
+            	if (tqsa != null && url != null) {
+            		tqsa.setUrl(url);
+            	}
+            	llistaFitxes.add(tqsa);
             }
             return llistaFitxes;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "fichas.", e);
         }
     }
+
+	
 
 }

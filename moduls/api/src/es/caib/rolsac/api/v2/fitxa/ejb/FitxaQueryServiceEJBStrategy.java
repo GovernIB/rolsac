@@ -167,5 +167,9 @@ public class FitxaQueryServiceEJBStrategy implements FitxaQueryServiceStrategy {
             throw new StrategyException(e);
         }
 	}
+
+	public void setUrl(String url) {
+		//No es necesario
+	}
 	
 }

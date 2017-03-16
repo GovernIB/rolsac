@@ -35,6 +35,21 @@ public class DocumentTramitQueryServiceGateway {
 			e.printStackTrace();
 		} 
 	}
+	
+	public void setUrl(String url) {
+		try {
+			if(url != null && !url.isEmpty()){				
+				stub = new DocumentTramitWSSoapBindingStub(
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_DOCUMENT_TRAMIT),
+						null
+						);
+			}
+		} catch (AxisFault e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public TramitDTO obtenirTramit(long id) throws RemoteException {
 		return stub.obtenirTramit(id);
@@ -53,5 +68,7 @@ public class DocumentTramitQueryServiceGateway {
 			throws RemoteException {
 		return stub.obtenirExcepcioDocumentacio(id);
 	}
+
+	
 	
 }

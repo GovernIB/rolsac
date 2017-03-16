@@ -37,5 +37,9 @@ public class FormulariQueryServiceEJBStrategy implements FormulariQueryServiceSt
             throw new StrategyException(e);
         }
     }
+
+	public void setUrl(String url) {
+		//No es necesario en EJBs.
+	}
     
 }

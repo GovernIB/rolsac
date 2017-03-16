@@ -18,4 +18,6 @@ public interface FamiliaQueryServiceStrategy {
 
     public List<IconaFamiliaDTO> llistarIcones(long id, IconaFamiliaCriteria iconaFamiliaCriteria) throws StrategyException;
 
+	public void setUrl(String url);
+
 }

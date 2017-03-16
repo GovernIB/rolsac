@@ -46,6 +46,21 @@ public class MateriaQueryServiceGateway {
 			e.printStackTrace();
 		}
 	}
+ 	
+ 	public void setUrl(String url) {
+		try {
+			if(url != null && !url.isEmpty()){				
+				stub = new MateriaWSSoapBindingStub(
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_MATERIA),
+						null
+						);
+			}
+		} catch (AxisFault e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	public int getNumFitxes(long id) throws RemoteException {
 		return stub.getNumFitxes(id);
@@ -188,4 +203,6 @@ public class MateriaQueryServiceGateway {
 		
 		return llistaUnitatsMateria;
 	}
+
+	
 }

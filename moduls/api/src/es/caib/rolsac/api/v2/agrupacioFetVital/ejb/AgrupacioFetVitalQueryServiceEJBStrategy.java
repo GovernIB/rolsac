@@ -66,4 +66,8 @@ public class AgrupacioFetVitalQueryServiceEJBStrategy implements AgrupacioFetVit
             throw new StrategyException(e);
         }
     }
+
+	public void setUrl(String url) {
+		//No se necesita impelementar en EJB.			
+	}
 }

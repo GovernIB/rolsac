@@ -30,6 +30,21 @@ public class EnllacQueryServiceGateway {
             e.printStackTrace();
         }
 	}
+	
+	public void setUrl(String url) {
+		try {
+			if(url != null && !url.isEmpty()){				
+				stub = new EnllacWSSoapBindingStub(
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_ENLLAC),
+						null
+						);
+			}
+		} catch (AxisFault e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public FitxaDTO obtenirFitxa(long id) throws RemoteException {
 		return stub.obtenirFitxa(id);
@@ -38,4 +53,6 @@ public class EnllacQueryServiceGateway {
 	public ProcedimentDTO obtenirProcediment(long id) throws RemoteException {
 		return stub.obtenirProcediment(id);
 	}
+
+	
 }

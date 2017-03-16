@@ -10,4 +10,6 @@ public interface EnllacQueryServiceStrategy {
 
     public ProcedimentDTO obtenirProcediment(long idProcediment) throws StrategyException;
 
+	public void setUrl(String url);
+
 }

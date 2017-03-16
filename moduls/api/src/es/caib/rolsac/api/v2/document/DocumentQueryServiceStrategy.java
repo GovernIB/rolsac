@@ -13,4 +13,6 @@ public interface DocumentQueryServiceStrategy {
     
     public ArxiuDTO obtenirArxiu(long id) throws StrategyException;
 
+	public void setUrl(String url);
+
 }

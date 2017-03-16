@@ -19,6 +19,13 @@ public class AgrupacioFetVitalQueryServiceWSStrategy implements AgrupacioFetVita
     public void setGateway( AgrupacioFetVitalQueryServiceGateway gateway) {
     	this.gateway = gateway;
     }
+    
+	public void setUrl(String url) {
+		if (this.gateway != null) {
+			this.gateway.setUrl(url);
+		}
+	}
+
 
     public ArxiuDTO getFotografia(long idFoto) throws StrategyException {
     	try {
@@ -67,5 +74,6 @@ public class AgrupacioFetVitalQueryServiceWSStrategy implements AgrupacioFetVita
 			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}
     }
+
     
 }

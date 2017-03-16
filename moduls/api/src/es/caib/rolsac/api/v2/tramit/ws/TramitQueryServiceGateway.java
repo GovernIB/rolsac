@@ -40,6 +40,21 @@ public class TramitQueryServiceGateway {
 		}
 	}
 	
+	public void setUrl(String url) {
+		try {
+			if(url != null && !url.isEmpty()){				
+				stub = new TramitWSSoapBindingStub(
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_TRAMIT),
+						null
+						);
+			}
+		} catch (AxisFault e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}	
+	
 	public int getNumDocumentsInformatius(long id) throws RemoteException {
 		return stub.getNumDocumentsInformatius(id);
 	}
@@ -119,6 +134,8 @@ public class TramitQueryServiceGateway {
 		}
 		
 		return llistaTaxes;		
-	}	
+	}
+
+	
 	
 }

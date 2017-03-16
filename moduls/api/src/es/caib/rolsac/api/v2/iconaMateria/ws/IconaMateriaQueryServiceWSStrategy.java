@@ -17,6 +17,12 @@ public class IconaMateriaQueryServiceWSStrategy implements IconaMateriaQueryServ
     	this.gateway = gateway;
     }
     
+    public void setUrl(String url) {
+		if (this.gateway != null) {
+			this.gateway.setUrl(url);
+		}
+	}
+    
     public MateriaDTO obtenirMateria(long id) throws StrategyException {
     	try {
     		return gateway.obtenirMateria(id);
@@ -40,5 +46,7 @@ public class IconaMateriaQueryServiceWSStrategy implements IconaMateriaQueryServ
     		throw new StrategyException( ExceptionMessages.REMOTE_CALL, e );
     	}
     }
+
+	
 
 }

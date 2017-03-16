@@ -16,6 +16,12 @@ public class AfectacioQueryServiceWSStrategy implements AfectacioQueryServiceStr
     	this.gateway = gateway;
     }
     
+    public void setUrl(String url) {
+		if (this.gateway != null) {
+			this.gateway.setUrl(url);
+		}
+	}
+    
 	public NormativaDTO obtenirAfectant(long idAfectant)
 			throws StrategyException {
 		try {
@@ -44,5 +50,7 @@ public class AfectacioQueryServiceWSStrategy implements AfectacioQueryServiceStr
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 	}
+
+	
     
 }

@@ -15,12 +15,21 @@ public class EstadisticaInsertServiceAdapter implements EstadisticaInsertService
     
     public EstadisticaInsertServiceAdapter(String url) {
 		super();	
-		this.url = url;		
+		this.url = url;
+	}
+    
+    public void setUrl(String url) {
+		this.url = url;	
+		if (this.estadisticaInsertServiceStrategy != null) {
+			this.estadisticaInsertServiceStrategy.setUrl(url);
+		}
 	}
 
 	public void setEstadisticaInsertServiceStrategy(EstadisticaInsertServiceStrategy strategy) {
         this.estadisticaInsertServiceStrategy = strategy;
-        
+        if (this.estadisticaInsertServiceStrategy != null) {
+        	this.estadisticaInsertServiceStrategy.setUrl(url);
+        }
     }
 
     public boolean gravarEstadisticaFitxa(long fitxaId) throws InsertServiceException {

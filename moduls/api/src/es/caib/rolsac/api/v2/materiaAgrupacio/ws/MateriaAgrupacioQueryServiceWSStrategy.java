@@ -15,6 +15,12 @@ public class MateriaAgrupacioQueryServiceWSStrategy implements MateriaAgrupacioQ
     public void setGateway(MateriaAgrupacioQueryServiceGateway gateway) {
     	this.gateway = gateway;
     }
+    
+    public void setUrl(String url) {
+		if (this.gateway != null) {
+			this.gateway.setUrl(url);
+		}
+	}
   
     public MateriaDTO obtenirMateria(Long idMateria) throws StrategyException {
     	try {
@@ -31,5 +37,7 @@ public class MateriaAgrupacioQueryServiceWSStrategy implements MateriaAgrupacioQ
     		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
     	}
     }
+
+	
 
 }

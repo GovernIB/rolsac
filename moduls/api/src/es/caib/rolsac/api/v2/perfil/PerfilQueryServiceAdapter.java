@@ -27,6 +27,14 @@ public class PerfilQueryServiceAdapter extends PerfilDTO implements PerfilQueryS
     public void setPerfilQueryServiceStrategy(PerfilQueryServiceStrategy perfilQueryServiceStrategy) {
         this.perfilQueryServiceStrategy = perfilQueryServiceStrategy;
     }
+    
+    private String url;
+    public void setUrl(String url) {
+    	this.url = url;
+		if ( this.perfilQueryServiceStrategy != null) {
+			 this.perfilQueryServiceStrategy.setUrl(url);
+		}
+	}
 
     public PerfilQueryServiceAdapter(PerfilDTO dto) throws QueryServiceException {
         try {
@@ -45,7 +53,11 @@ public class PerfilQueryServiceAdapter extends PerfilDTO implements PerfilQueryS
             List<IconaFamiliaDTO> llistaDTO = perfilQueryServiceStrategy.llistarIconesFamilia(getId(), iconaFamiliaCriteria);
             List<IconaFamiliaQueryServiceAdapter> icones = new ArrayList<IconaFamiliaQueryServiceAdapter>();
             for (IconaFamiliaDTO iDTO : llistaDTO) {
-                icones.add((IconaFamiliaQueryServiceAdapter) BeanUtils.getAdapter("iconaFamilia", getStrategy(), iDTO));
+                IconaFamiliaQueryServiceAdapter iqsa = (IconaFamiliaQueryServiceAdapter) BeanUtils.getAdapter("iconaFamilia", getStrategy(), iDTO);
+                if (iqsa != null && url != null) {
+                	iqsa.setUrl(url);
+                }
+            	icones.add(iqsa);
             }
             return icones;
         } catch (StrategyException e) {
@@ -58,7 +70,11 @@ public class PerfilQueryServiceAdapter extends PerfilDTO implements PerfilQueryS
             List<IconaMateriaDTO> llistaDTO = perfilQueryServiceStrategy.llistarIconesMateria(getId(), iconaMateriaCriteria);
             List<IconaMateriaQueryServiceAdapter> icones = new ArrayList<IconaMateriaQueryServiceAdapter>();
             for (IconaMateriaDTO iDTO : llistaDTO) {
-                icones.add((IconaMateriaQueryServiceAdapter) BeanUtils.getAdapter("iconaMateria", getStrategy(), iDTO));
+            	IconaMateriaQueryServiceAdapter iqsa = (IconaMateriaQueryServiceAdapter) BeanUtils.getAdapter("iconaMateria", getStrategy(), iDTO);
+            	if (iqsa != null && url != null) {
+            		iqsa.setUrl(url);
+            	}	
+            	icones.add(iqsa);
             }
             return icones;
         } catch (StrategyException e) {
@@ -81,4 +97,6 @@ public class PerfilQueryServiceAdapter extends PerfilDTO implements PerfilQueryS
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de iconos materias.", e);
         }
     }
+
+	
 }

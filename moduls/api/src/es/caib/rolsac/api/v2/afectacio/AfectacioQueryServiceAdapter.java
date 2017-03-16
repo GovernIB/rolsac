@@ -20,6 +20,14 @@ public class AfectacioQueryServiceAdapter extends AfectacioDTO implements Afecta
     public void setAfectacioQueryServiceStrategy(AfectacioQueryServiceStrategy afectacioQueryServiceStrategy) {
         this.afectacioQueryServiceStrategy = afectacioQueryServiceStrategy;
     }
+    
+    private String url;
+    public void setUrl(String url) {
+    	this.url = url;
+    	if (this.afectacioQueryServiceStrategy != null) {
+    		this.afectacioQueryServiceStrategy.setUrl(url);
+    	}
+    }
 
     public AfectacioQueryServiceAdapter(AfectacioDTO dto) throws QueryServiceException {
         try {

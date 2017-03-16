@@ -30,6 +30,15 @@ public class ExcepcioDocumentacioQueryServiceAdapter extends
     public void setExcepcioDocumentacioQueryServiceStrategy(ExcepcioDocumentacioQueryServiceStrategy excepcioDocumentacioQueryServiceStrategy) {
         this.excepcioDocumentacioQueryServiceStrategy = excepcioDocumentacioQueryServiceStrategy;
     }
+    
+
+    private String url;
+	public void setUrl(String url) {
+		this.url = url;
+		if (excepcioDocumentacioQueryServiceStrategy != null) {
+			excepcioDocumentacioQueryServiceStrategy.setUrl(url);
+		}
+	}
 
     public ExcepcioDocumentacioQueryServiceAdapter(ExcepcioDocumentacioDTO dto) throws QueryServiceException {
         try {
@@ -68,10 +77,14 @@ public class ExcepcioDocumentacioQueryServiceAdapter extends
 			List<CatalegDocumentsQueryServiceAdapter> llistaCatalegDocumentsQueryServiceAdapter = new ArrayList<CatalegDocumentsQueryServiceAdapter>();
 			
 			for ( CatalegDocumentsDTO catalegDocumentsDTO : llistaDTO ) {
+				CatalegDocumentsQueryServiceAdapter cqsa = (CatalegDocumentsQueryServiceAdapter) BeanUtils
+				.getAdapter("catalegDocuments", getStrategy(),
+						catalegDocumentsDTO);
+				if (cqsa != null && url != null) {
+					cqsa.setUrl(url);
+				}
 				llistaCatalegDocumentsQueryServiceAdapter
-						.add((CatalegDocumentsQueryServiceAdapter) BeanUtils
-								.getAdapter("catalegDocuments", getStrategy(),
-										catalegDocumentsDTO));
+						.add(cqsa);
 			}
 			
 			return llistaCatalegDocumentsQueryServiceAdapter;
@@ -89,10 +102,14 @@ public class ExcepcioDocumentacioQueryServiceAdapter extends
 			List<DocumentTramitQueryServiceAdapter> llistaDocumentTramitQueryServiceAdapter = new ArrayList<DocumentTramitQueryServiceAdapter>();
 			
 			for ( DocumentTramitDTO documentTramitDTO : llistaDTO ) {
+				DocumentTramitQueryServiceAdapter dqsa = (DocumentTramitQueryServiceAdapter) BeanUtils
+				.getAdapter("documentTramit", getStrategy(),
+						documentTramitDTO);
+				if (dqsa != null && url != null) {
+					dqsa.setUrl(url);
+				}
 				llistaDocumentTramitQueryServiceAdapter
-						.add((DocumentTramitQueryServiceAdapter) BeanUtils
-								.getAdapter("documentTramit", getStrategy(),
-										documentTramitDTO));
+						.add(dqsa);
 			}
 			
 			return llistaDocumentTramitQueryServiceAdapter;
@@ -100,4 +117,5 @@ public class ExcepcioDocumentacioQueryServiceAdapter extends
 			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "documentos trámite.", e);
 		}
 	}
+
 }

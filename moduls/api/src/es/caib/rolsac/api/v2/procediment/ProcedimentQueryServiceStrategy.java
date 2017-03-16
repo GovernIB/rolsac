@@ -41,4 +41,6 @@ public interface ProcedimentQueryServiceStrategy {
     
     public List<PublicObjectiuDTO> llistarPublicsObjectius(long id, PublicObjectiuCriteria poCriteria) throws StrategyException;
 
+	public void setUrl(String url);
+
 }

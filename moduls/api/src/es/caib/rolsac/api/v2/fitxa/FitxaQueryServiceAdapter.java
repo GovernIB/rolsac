@@ -47,6 +47,14 @@ public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryServ
         this.fitxaQueryServiceStrategy = fitxaQueryServiceStrategy;
     }
 
+    private String url;
+    public void setUrl(String url) {
+    	this.url = url;
+    	if (this.fitxaQueryServiceStrategy != null) {
+    		this.fitxaQueryServiceStrategy.setUrl(url);
+    	}
+    }
+    
     private STRATEGY getStrategy() {
         return fitxaQueryServiceStrategy instanceof FitxaQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
@@ -177,7 +185,11 @@ public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryServ
             List<DocumentDTO> llistaDTO = fitxaQueryServiceStrategy.llistarDocuments(getId(), documentCriteria);
             List<DocumentQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentQueryServiceAdapter>();
             for (DocumentDTO documentDTO : llistaDTO) {            
-                llistaQueryServiceAdapter.add((DocumentQueryServiceAdapter) BeanUtils.getAdapter("document", getStrategy(), documentDTO));
+            	DocumentQueryServiceAdapter fqsa = (DocumentQueryServiceAdapter) BeanUtils.getAdapter("document", getStrategy(), documentDTO);
+            	if (fqsa != null && url != null) {
+            		fqsa.setUrl(url);
+            	}
+            	llistaQueryServiceAdapter.add(fqsa);
             }
             return llistaQueryServiceAdapter;
         } catch (StrategyException e) {
@@ -190,7 +202,11 @@ public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryServ
             List<FetVitalDTO> llistaDTO = fitxaQueryServiceStrategy.llistarFetsVitals(getId(), fetVitalCritera);
             List<FetVitalQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FetVitalQueryServiceAdapter>();
             for (FetVitalDTO fetVitalDTO : llistaDTO) {            
-                llistaQueryServiceAdapter.add((FetVitalQueryServiceAdapter) BeanUtils.getAdapter("fetVital", getStrategy(), fetVitalDTO));
+            	FetVitalQueryServiceAdapter fqsa = (FetVitalQueryServiceAdapter) BeanUtils.getAdapter("fetVital", getStrategy(), fetVitalDTO);
+            	if (fqsa != null && url != null) {
+            		fqsa.setUrl(url);
+            	}
+            	llistaQueryServiceAdapter.add(fqsa);
             }
             return llistaQueryServiceAdapter;
         } catch (StrategyException e) {
@@ -201,7 +217,11 @@ public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryServ
     public ArxiuQueryServiceAdapter obtenirIcona() throws QueryServiceException {
         if (this.getIcono() == null) {return null;}
         try {
-            return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), fitxaQueryServiceStrategy.obtenirIcona(this.getIcono()));
+        	ArxiuQueryServiceAdapter fqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), fitxaQueryServiceStrategy.obtenirIcona(this.getIcono()));
+            if (fqsa != null && url != null) {
+        		fqsa.setUrl(url);
+        	}
+        	return fqsa;
         } catch (StrategyException e) {
              throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "icono.", e);
         }
@@ -210,7 +230,11 @@ public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryServ
     public ArxiuQueryServiceAdapter obtenirImatge() throws QueryServiceException {
         if (this.getImagen() == null) {return null;}
         try {
-            return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), fitxaQueryServiceStrategy.obtenirImatge(this.getImagen()));
+        	ArxiuQueryServiceAdapter fqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), fitxaQueryServiceStrategy.obtenirImatge(this.getImagen()));
+            if (fqsa != null && url != null) {
+        		fqsa.setUrl(url);
+        	}
+        	return fqsa;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "imagen.", e);
         }
@@ -219,7 +243,11 @@ public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryServ
     public ArxiuQueryServiceAdapter obtenirBaner() throws QueryServiceException {
         if (this.getBaner() == null) {return null;}
         try {
-            return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), fitxaQueryServiceStrategy.obtenirBaner(this.getBaner()));
+        	ArxiuQueryServiceAdapter fqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), fitxaQueryServiceStrategy.obtenirBaner(this.getBaner()));
+        	if (fqsa != null && url != null) {
+         		fqsa.setUrl(url);
+         	}
+         	return fqsa;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "baner.", e);
         }
@@ -230,7 +258,11 @@ public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryServ
             List<PublicObjectiuDTO> llistaDTO = fitxaQueryServiceStrategy.llistarPublicsObjectius(getId(), poCriteria);
             List<PublicObjectiuQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<PublicObjectiuQueryServiceAdapter>();
             for (PublicObjectiuDTO poDTO : llistaDTO) {
-                llistaQueryServiceAdapter.add((PublicObjectiuQueryServiceAdapter) BeanUtils.getAdapter("publicObjectiu", getStrategy(), poDTO));
+            	PublicObjectiuQueryServiceAdapter fqsa = (PublicObjectiuQueryServiceAdapter) BeanUtils.getAdapter("publicObjectiu", getStrategy(), poDTO);
+            	if (fqsa != null && url != null) {
+             		fqsa.setUrl(url);
+             	}
+            	llistaQueryServiceAdapter.add(fqsa);
             }
             return llistaQueryServiceAdapter;
         } catch (StrategyException e) {

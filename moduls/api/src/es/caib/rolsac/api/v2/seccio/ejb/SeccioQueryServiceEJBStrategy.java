@@ -93,4 +93,8 @@ public class SeccioQueryServiceEJBStrategy implements SeccioQueryServiceStrategy
         }
     }
 
+	public void setUrl(String url) {
+		//No es necesario en ejbs.
+	}
+
 }

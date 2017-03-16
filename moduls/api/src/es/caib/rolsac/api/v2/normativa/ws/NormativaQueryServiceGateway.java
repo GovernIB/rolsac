@@ -41,6 +41,21 @@ public class NormativaQueryServiceGateway {
 		}
 	}
 	
+	public void setUrl(String url) {
+		try {
+			if(url != null && !url.isEmpty()){				
+				stub = new NormativaWSSoapBindingStub(
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_NORMATIVA),
+						null
+						);
+			}
+		} catch (AxisFault e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public int getNumAfectades(long id) throws RemoteException {
 		return stub.getNumAfectades(id);
 	}
@@ -125,5 +140,7 @@ public class NormativaQueryServiceGateway {
 			throws RemoteException {
 		return Arrays.asList(stub.llistarAfectacionsAfectades(id));
 	}
+
+	
 
 }

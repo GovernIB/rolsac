@@ -31,4 +31,6 @@ public interface FetVitalQueryServiceStrategy {
 
     public List<AgrupacioFetVitalDTO> llistarFetsVitalsAgrupacionsFV(long id, AgrupacioFetVitalCriteria agrupacioFetVitalCriteria) throws StrategyException;
 
+	public void setUrl(String url);
+
 }

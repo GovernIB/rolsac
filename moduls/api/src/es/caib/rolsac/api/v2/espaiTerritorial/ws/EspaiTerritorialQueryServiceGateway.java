@@ -38,6 +38,21 @@ public class EspaiTerritorialQueryServiceGateway {
 			e.printStackTrace();
 		}
 	}
+	
+	public void setUrl(String url) {
+		try {
+			if(url != null && !url.isEmpty()){				
+				stub = new EspaiTerritorialWSSoapBindingStub(
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_ESPAI_TERRITORIAL),
+						null
+						);
+			}
+		} catch (AxisFault e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public int getNumFills(long id) throws RemoteException {
 		return stub.getNumFills(id);
@@ -90,4 +105,6 @@ public class EspaiTerritorialQueryServiceGateway {
 
 		return llistaUnitatsAdministratives;
 	}
+
+	
 }

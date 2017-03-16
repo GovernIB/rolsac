@@ -21,6 +21,14 @@ public class IniciacioQueryServiceAdapter extends IniciacioDTO implements Inicia
 	public void setIniciacioQueryServiceStrategy(IniciacioQueryServiceStrategy iniciacioQueryServiceStrategy) {
 		this.iniciacioQueryServiceStrategy = iniciacioQueryServiceStrategy;
 	}
+
+	private String url;
+	public void setUrl(String url) {
+		this.url = url;
+		if (this.iniciacioQueryServiceStrategy != null) {
+			this.iniciacioQueryServiceStrategy.setUrl(url);
+		}
+	}
 	
 	public IniciacioQueryServiceAdapter(IniciacioDTO dto) throws QueryServiceException {
         
@@ -48,7 +56,11 @@ public class IniciacioQueryServiceAdapter extends IniciacioDTO implements Inicia
             List<IniciacioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<IniciacioQueryServiceAdapter>();
             
             for (IniciacioDTO iniciacioDTO : llistaDTO) {
-                llistaQueryServiceAdapter.add((IniciacioQueryServiceAdapter)BeanUtils.getAdapter("iniciacio", getStrategy(), iniciacioDTO));
+            	IniciacioQueryServiceAdapter iqsa = (IniciacioQueryServiceAdapter)BeanUtils.getAdapter("iniciacio", getStrategy(), iniciacioDTO);
+            	if (iqsa != null && url != null) {
+            		iqsa.setUrl(url);
+            	}		
+            	llistaQueryServiceAdapter.add(iqsa);
             }
             
             return llistaQueryServiceAdapter;
@@ -66,7 +78,11 @@ public class IniciacioQueryServiceAdapter extends IniciacioDTO implements Inicia
 		try {
 			
 			IniciacioDTO dto = iniciacioQueryServiceStrategy.obtenirTipusIniciacio(iniciacioCriteria);
-			return (IniciacioQueryServiceAdapter)BeanUtils.getAdapter("iniciacio", getStrategy(), dto);
+			IniciacioQueryServiceAdapter iqsa =  (IniciacioQueryServiceAdapter)BeanUtils.getAdapter("iniciacio", getStrategy(), dto);
+			if (iqsa != null && url != null) {
+        		iqsa.setUrl(url);
+        	}	
+			return iqsa;
 			
 		} catch (StrategyException e) {
 			
@@ -75,5 +91,7 @@ public class IniciacioQueryServiceAdapter extends IniciacioDTO implements Inicia
         }
 		
 	}
+
+	
 	
 }

@@ -89,4 +89,6 @@ public interface UnitatAdministrativaQueryService {
     
     public ArxiuQueryServiceAdapter obtenirLogot() throws QueryServiceException;
     
+    public void setUrl(String url);
+    
 }

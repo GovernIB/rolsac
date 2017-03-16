@@ -49,4 +49,8 @@ public class DocumentTramitQueryServiceEJBStrategy implements DocumentTramitQuer
 			throw new StrategyException(e);
 		}
 	}
+
+	public void setUrl(String url) {
+		// NO se utilizan en EJB.
+	}
 }

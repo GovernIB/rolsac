@@ -36,6 +36,21 @@ public class AgrupacioMateriaQueryServiceGateway {
 			e.printStackTrace();
 		}
 	}
+	
+	public void setUrl(String url) {
+		try {
+			if(url != null && !url.isEmpty()){				
+				stub = new AgrupacioMateriaWSSoapBindingStub(
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_AGRUPACIO_MATERIA),
+						null
+						);
+			}
+		} catch (AxisFault e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public int getNumMateries(long id) throws RemoteException {
 		return stub.getNumMateries(id);
@@ -63,5 +78,7 @@ public class AgrupacioMateriaQueryServiceGateway {
 
 		return llistaMateries;
 	}
+
+	
 
 }

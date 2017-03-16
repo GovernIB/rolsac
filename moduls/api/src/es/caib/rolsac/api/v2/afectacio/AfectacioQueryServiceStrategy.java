@@ -13,4 +13,6 @@ public interface AfectacioQueryServiceStrategy {
     
     public TipusAfectacioDTO obtenirTipusAfectacio(long idTipusAfectacio) throws StrategyException;
 
+	public void setUrl(String url);
+
 }

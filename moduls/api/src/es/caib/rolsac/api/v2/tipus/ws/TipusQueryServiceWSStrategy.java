@@ -40,4 +40,10 @@ public class TipusQueryServiceWSStrategy implements TipusQueryServiceStrategy {
 		}
 		
 	}
+
+	public void setUrl(String url) {
+		if (this.gateway != null) {
+			this.gateway.setUrl(url);
+		}
+	}
 }

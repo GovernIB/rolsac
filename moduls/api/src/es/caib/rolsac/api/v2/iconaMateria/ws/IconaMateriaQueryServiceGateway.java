@@ -32,6 +32,21 @@ public class IconaMateriaQueryServiceGateway {
 			e.printStackTrace();
 		}
 	}
+	
+	public void setUrl(String url) {
+		try {
+			if(url != null && !url.isEmpty()){				
+				stub = new IconaMateriaWSSoapBindingStub(
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_ICONA_MATERIA),
+						null
+						);
+			}
+		} catch (AxisFault e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}	
 
     public MateriaDTO obtenirMateria(long id) throws RemoteException {
     	return stub.obtenirMateria(id);
@@ -43,6 +58,8 @@ public class IconaMateriaQueryServiceGateway {
 
     public ArxiuDTO obtenirIcona(long id) throws RemoteException {
     	return stub.obtenirIcona(id);
-    }	
+    }
+
+	
 
 }

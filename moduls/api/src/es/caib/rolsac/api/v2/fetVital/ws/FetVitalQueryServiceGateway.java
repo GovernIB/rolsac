@@ -40,6 +40,21 @@ public class FetVitalQueryServiceGateway {
 			e.printStackTrace();
 		}
 	}
+	
+	public void setUrl(String url) {
+		try {
+			if(url != null && !url.isEmpty()){				
+				stub = new FetVitalWSSoapBindingStub(
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_FET_VITAL),
+						null
+						);
+			}
+		} catch (AxisFault e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public int getNumFitxes(long id) throws RemoteException {
 		
@@ -139,5 +154,7 @@ public class FetVitalQueryServiceGateway {
     	
 		return llistaAgrupacionsFetVitals;
 	}
+
+	
         
 }

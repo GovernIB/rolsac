@@ -55,6 +55,21 @@ public class UnitatAdministrativaQueryServiceGateway {
 			e.printStackTrace();
 		}
 	}
+	
+	public void setUrl(String url) {
+		try {
+			if (url != null && !url.isEmpty()) {
+			stub = new UnitatAdministrativaWSSoapBindingStub(
+					 				new URL(url + ConfiguracioServeis.NOM_SERVEI_UNITAT_ADMINISTRATIVA),
+					 				null
+					 			);
+			}
+		} catch (RemoteException re) {
+			re.printStackTrace();
+		} catch (MalformedURLException mue) {
+			mue.printStackTrace();
+		} 
+	}
 
 	public ArxiuDTO obtenirFotop(Long fotop) throws RemoteException {
 		return stub.obtenirFotop(fotop);

@@ -34,6 +34,21 @@ public class IconaFamiliaQueryServiceGateway {
 		}
 	}
 	
+	public void setUrl(String url) {
+		try {
+			if(url != null && !url.isEmpty()){				
+				stub = new IconaFamiliaWSSoapBindingStub(
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_ICONA_FAMILIA),
+						null
+						);
+			}
+		} catch (AxisFault e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}
+	
     public FamiliaDTO obtenirFamilia(long id) throws RemoteException {
     	return stub.obtenirFamilia(id);
     }
@@ -45,5 +60,7 @@ public class IconaFamiliaQueryServiceGateway {
     public ArxiuDTO obtenirIcona(long id) throws RemoteException {
     	return stub.obtenirIcona(id);
     }
+
+	
 
 }

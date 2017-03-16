@@ -25,6 +25,14 @@ public class UsuariQueryServiceAdapter extends UsuariDTO implements UsuariQueryS
         this.usuariQueryServiceStrategy = usuariQueryServiceStrategy;
     }
 
+    private String url;
+	public void setUrl(String url) {
+		this.url = url;
+		if (this.usuariQueryServiceStrategy != null) {
+			this.usuariQueryServiceStrategy.setUrl(url);
+		}
+	}
+	
     public UsuariQueryServiceAdapter(UsuariDTO dto) throws QueryServiceException {
         try {
             PropertyUtils.copyProperties(this, dto);
@@ -50,12 +58,17 @@ public class UsuariQueryServiceAdapter extends UsuariDTO implements UsuariQueryS
             List<UnitatAdministrativaDTO> llistaDTO = usuariQueryServiceStrategy.llistarUnitatsAdministratives(getId(), unitatAdministrativaCriteria);
             List<UnitatAdministrativaQueryServiceAdapter> llistaUAQueryService = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
             for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
-                llistaUAQueryService.add((UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO));
+            	UnitatAdministrativaQueryServiceAdapter uqsa = (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO);
+            	if (uqsa != null && url != null) {
+            		uqsa.setUrl(url);
+            	}
+            	llistaUAQueryService.add(uqsa);
             }
             return llistaUAQueryService;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "unidades administrativas.", e);
         }
     }
+
 
 }

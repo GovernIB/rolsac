@@ -115,4 +115,8 @@ public class ProcedimentQueryServiceEJBStrategy implements ProcedimentQueryServi
         }
     }
 
+	public void setUrl(String url) {
+		//No es necesario en EJBs.
+	}
+
 }

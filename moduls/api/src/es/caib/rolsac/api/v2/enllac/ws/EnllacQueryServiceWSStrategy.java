@@ -32,5 +32,11 @@ public class EnllacQueryServiceWSStrategy implements EnllacQueryServiceStrategy 
     	}
     }
 
+	public void setUrl(String url) {
+		if (this.gateway != null) {
+			this.gateway.setUrl(url);
+		}
+	}
+
 
 }

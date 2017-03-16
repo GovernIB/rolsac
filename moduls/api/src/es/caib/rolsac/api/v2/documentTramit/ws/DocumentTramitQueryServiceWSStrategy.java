@@ -18,6 +18,12 @@ public class DocumentTramitQueryServiceWSStrategy implements DocumentTramitQuery
     	this.gateway = gateway;
     }
     
+    public void setUrl(String url) {
+    	if (this.gateway != null) {
+    		this.gateway.setUrl(url);
+    	}
+	}
+    
     public TramitDTO obtenirTramit(long id) throws StrategyException {
     	try {
         	return gateway.obtenirTramit(id);
@@ -51,4 +57,6 @@ public class DocumentTramitQueryServiceWSStrategy implements DocumentTramitQuery
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}		
 	}
+
+	
 }

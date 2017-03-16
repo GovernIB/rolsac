@@ -30,6 +30,20 @@ public class UnitatMateriaQueryServiceGateway {
 		}
 	}
 	
+	public void setUrl(String url) {
+		try {
+			stub = new UnitatMateriaWSSoapBindingStub(
+	 				new URL(url + ConfiguracioServeis.NOM_SERVEI_UNITAT_MATERIA),
+	 				null
+	 			);
+		} catch (RemoteException re) {
+			re.printStackTrace();
+		} catch (MalformedURLException mue) {
+			mue.printStackTrace();
+		} 
+	}
+	
+	
     public UnitatAdministrativaDTO obtenirUnitatAdministrativa(Long idUnitat) throws RemoteException {
     	return stub.obtenirUnitatAdministrativa(idUnitat);
     }
@@ -37,4 +51,6 @@ public class UnitatMateriaQueryServiceGateway {
     public MateriaDTO obtenirMateria(Long idMateria) throws RemoteException {
     	return stub.obtenirMateria(idMateria);
     }
+
+	
 }

@@ -34,6 +34,12 @@ public class FitxaQueryServiceWSStrategy implements FitxaQueryServiceStrategy {
 		this.gateway = gateway;
 	}	
 	
+	public void setUrl(String url) {
+		if (this.gateway != null) {
+			this.gateway.setUrl(url);
+		}
+	}
+	
 	public int getNumUnitatsAdministratives(long id) throws StrategyException {
 		try {
 			return gateway.getNumUnitatsAdministratives(id);			
@@ -191,5 +197,7 @@ public class FitxaQueryServiceWSStrategy implements FitxaQueryServiceStrategy {
         	throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
         }
 	}
+
+	
 	
 }

@@ -33,6 +33,21 @@ public class DocumentQueryServiceGateway {
 			e.printStackTrace();
 		}
 	}
+	
+	public void setUrl(String url) {
+		try {
+			if(url != null && !url.isEmpty()){				
+				stub = new DocumentWSSoapBindingStub(
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_DOCUMENT),
+						null
+						);
+			}
+		} catch (AxisFault e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public FitxaDTO obtenirFitxa(long id) throws RemoteException {
 		return stub.obtenirFitxa(id);
@@ -44,6 +59,8 @@ public class DocumentQueryServiceGateway {
 
 	public ArxiuDTO obtenirArxiu(long id) throws RemoteException {
 		return stub.obtenirArxiu(id);
-	}	
+	}
+
+		
 	
 }

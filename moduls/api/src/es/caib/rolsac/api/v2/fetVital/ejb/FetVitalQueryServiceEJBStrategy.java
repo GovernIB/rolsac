@@ -93,4 +93,8 @@ public class FetVitalQueryServiceEJBStrategy implements FetVitalQueryServiceStra
         }
     }
 
+	public void setUrl(String url) {
+		//No se utiliza en EJBs.
+	}
+
 }

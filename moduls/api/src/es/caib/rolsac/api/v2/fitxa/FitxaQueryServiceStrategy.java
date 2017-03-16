@@ -57,4 +57,6 @@ public interface FitxaQueryServiceStrategy {
 
     public ArxiuDTO obtenirBaner(Long baner) throws StrategyException;
 
+	public void setUrl(String url);
+
 }

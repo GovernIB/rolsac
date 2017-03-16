@@ -10,4 +10,6 @@ public interface MateriaAgrupacioQueryServiceStrategy {
 
     public AgrupacioMateriaDTO obtenirAgrupacioMateria(Long idAgrupacion) throws StrategyException;
 
+	public void setUrl(String url);
+
 }

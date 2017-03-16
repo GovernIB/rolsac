@@ -20,6 +20,14 @@ public class MateriaAgrupacioQueryServiceAdapter extends MateriaAgrupacioDTO imp
     public void setMateriaAgrupacioQueryServiceStrategy(MateriaAgrupacioQueryServiceStrategy materiaAgrupacioQueryServiceStrategy) {
         this.materiaAgrupacioQueryServiceStrategy = materiaAgrupacioQueryServiceStrategy;
     }
+    
+    private String url;
+	public void setUrl(String url) {
+		this.url = url;
+		if (this.materiaAgrupacioQueryServiceStrategy != null) {
+			this.materiaAgrupacioQueryServiceStrategy.setUrl(url);
+		}
+	}
 
     public MateriaAgrupacioQueryServiceAdapter(MateriaAgrupacioDTO dto) throws QueryServiceException {
         try {
@@ -36,7 +44,11 @@ public class MateriaAgrupacioQueryServiceAdapter extends MateriaAgrupacioDTO imp
     public MateriaQueryServiceAdapter obtenirMateria() throws QueryServiceException {
         if (this.getMateria() == null) {return null;}
         try {
-            return (MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), materiaAgrupacioQueryServiceStrategy.obtenirMateria(this.getMateria()));
+        	MateriaQueryServiceAdapter mqsa = (MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), materiaAgrupacioQueryServiceStrategy.obtenirMateria(this.getMateria()));
+        	if (mqsa != null && url != null) {
+        		mqsa.setUrl(url);
+        	}
+        	return mqsa;
         } catch (StrategyException e) {
              throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "materia.", e);
         }
@@ -45,10 +57,15 @@ public class MateriaAgrupacioQueryServiceAdapter extends MateriaAgrupacioDTO imp
     public AgrupacioMateriaQueryServiceAdapter obtenirAgrupacio() throws QueryServiceException {
         if (this.getAgrupacion() == null) {return null;}
         try {
-            return (AgrupacioMateriaQueryServiceAdapter) BeanUtils.getAdapter("agrupacioMateria", getStrategy(), materiaAgrupacioQueryServiceStrategy.obtenirAgrupacioMateria(this.getAgrupacion()));
+        	AgrupacioMateriaQueryServiceAdapter aqsa =  (AgrupacioMateriaQueryServiceAdapter) BeanUtils.getAdapter("agrupacioMateria", getStrategy(), materiaAgrupacioQueryServiceStrategy.obtenirAgrupacioMateria(this.getAgrupacion()));
+        	if (aqsa != null && url != null) {
+        		aqsa.setUrl(url);
+        	}
+        	return aqsa;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "agrupacion.", e);
         }
     }
+
 
 }

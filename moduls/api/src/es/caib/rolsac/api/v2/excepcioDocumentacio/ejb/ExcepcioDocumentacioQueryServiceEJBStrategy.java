@@ -58,4 +58,8 @@ public class ExcepcioDocumentacioQueryServiceEJBStrategy implements ExcepcioDocu
 		
 	}
 
+	public void setUrl(String url) {
+		// No es necesario en ejb			
+	}
+
 }

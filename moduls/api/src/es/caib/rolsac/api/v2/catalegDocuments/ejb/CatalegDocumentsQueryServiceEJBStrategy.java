@@ -35,4 +35,8 @@ public class CatalegDocumentsQueryServiceEJBStrategy implements CatalegDocuments
             throw new StrategyException(e);
         }
     }
+
+	public void setUrl(String url) {
+		// Vacio, no se necesita en los ejbs.		
+	}
 }

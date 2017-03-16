@@ -17,6 +17,12 @@ public class FitxaUAQueryServiceWSStrategy implements
 	public void setGateway(FitxaUAQueryServiceGateway gateway) {
 		this.gateway = gateway;
 	}
+	
+	public void setUrl(String url) {
+		if (this.gateway  != null) {
+			this.gateway.setUrl(url);
+		}
+	}
 
 	public FitxaDTO obtenirFitxa(long idFitxa) throws StrategyException {
     	try {
@@ -43,4 +49,6 @@ public class FitxaUAQueryServiceWSStrategy implements
 		}		
 		
 	}
+
+	
 }

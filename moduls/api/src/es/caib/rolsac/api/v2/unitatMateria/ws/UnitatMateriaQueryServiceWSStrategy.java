@@ -17,6 +17,10 @@ public class UnitatMateriaQueryServiceWSStrategy implements
 		this.gateway = gateway;
 	}
 	
+	 public void setUrl(String url) {
+			this.gateway.setUrl(url);
+		}
+	 
     public UnitatAdministrativaDTO obtenirUnitatAdministrativa(Long idUnitat) throws StrategyException {
     	try {
     		return gateway.obtenirUnitatAdministrativa(idUnitat);

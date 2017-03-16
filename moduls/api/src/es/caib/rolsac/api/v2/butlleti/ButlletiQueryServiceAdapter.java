@@ -25,6 +25,14 @@ public class ButlletiQueryServiceAdapter extends ButlletiDTO implements Butlleti
     public void setButlletiQueryServiceStrategy(ButlletiQueryServiceStrategy butlletiQueryServiceStrategy) {
         this.butlletiQueryServiceStrategy = butlletiQueryServiceStrategy;
     }
+    
+    private String url;
+    public void setUrl(String url) {
+    	this.url = url;
+		if (this.butlletiQueryServiceStrategy != null) {
+			this.butlletiQueryServiceStrategy.setUrl(url);
+		}
+	}
 
     public ButlletiQueryServiceAdapter(ButlletiDTO dto) throws QueryServiceException {
         try {
@@ -67,12 +75,18 @@ public class ButlletiQueryServiceAdapter extends ButlletiDTO implements Butlleti
             List<NormativaDTO> llistaDTO = butlletiQueryServiceStrategy.llistarNormatives(getId(), normativaCriteria);
             List<NormativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<NormativaQueryServiceAdapter>();
             for (NormativaDTO normativaDTO : llistaDTO) {
-                llistaQueryServiceAdapter.add((NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa", getStrategy(), normativaDTO));
+            	NormativaQueryServiceAdapter nqsa = (NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa", getStrategy(), normativaDTO);
+            	if (nqsa != null && url != null) {
+            		nqsa.setUrl(url);
+            	}
+                llistaQueryServiceAdapter.add(nqsa);
             }
             return llistaQueryServiceAdapter;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "normativas.", e);
         }
     }
+
+	
 
 }

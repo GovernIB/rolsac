@@ -25,6 +25,14 @@ public class EdificiQueryServiceAdapter extends EdificiDTO implements EdificiQue
     public void setEdificiQueryServiceStrategy(EdificiQueryServiceStrategy edificiQueryServiceStrategy) {
         this.edificiQueryServiceStrategy = edificiQueryServiceStrategy;
     }
+    
+    private String url;
+    public void setUrl(String url) {
+    	this.url = url;
+    	 if (this.edificiQueryServiceStrategy != null) {
+    		 this.edificiQueryServiceStrategy.setUrl(url);
+    	 }
+	}
 
     private STRATEGY getStrategy() {
         return edificiQueryServiceStrategy instanceof EdificiQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
@@ -51,7 +59,11 @@ public class EdificiQueryServiceAdapter extends EdificiDTO implements EdificiQue
             List<UnitatAdministrativaDTO> llistaDTO = edificiQueryServiceStrategy.llistarUnitatsAdministratives(getId(), unitatAdministrativaCriteria);
             List<UnitatAdministrativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
             for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
-                llistaQueryServiceAdapter.add((UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO));
+            	UnitatAdministrativaQueryServiceAdapter uqsa = (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO);
+            	if (uqsa != null && url != null) {
+            		uqsa.setUrl(url);
+            	}
+            	llistaQueryServiceAdapter.add(uqsa);
             }
             return llistaQueryServiceAdapter;
         } catch (StrategyException e) {
@@ -62,7 +74,11 @@ public class EdificiQueryServiceAdapter extends EdificiDTO implements EdificiQue
     public ArxiuQueryServiceAdapter obtenirFotoPequenya() throws QueryServiceException {
         if (this.getFotoPequenya() == null) {return null;}
         try {
-            return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), edificiQueryServiceStrategy.obtenirFotoPequenya(this.getFotoPequenya()));
+        	ArxiuQueryServiceAdapter aqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), edificiQueryServiceStrategy.obtenirFotoPequenya(this.getFotoPequenya()));
+        	if (aqsa != null && url != null) {
+        		aqsa.setUrl(url);
+        	}
+        	return aqsa;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "foto pequenya.", e);
         }
@@ -71,7 +87,11 @@ public class EdificiQueryServiceAdapter extends EdificiDTO implements EdificiQue
     public ArxiuQueryServiceAdapter obtenirFotoGrande() throws QueryServiceException {
         if (this.getFotoGrande() == null) {return null;}
         try {
-            return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), edificiQueryServiceStrategy.obtenirFotoGrande(this.getFotoGrande()));
+        	ArxiuQueryServiceAdapter aqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), edificiQueryServiceStrategy.obtenirFotoGrande(this.getFotoGrande()));
+            if (aqsa != null && url != null) {
+        		aqsa.setUrl(url);
+        	}
+            return aqsa;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "foto grande.", e);
         }
@@ -80,10 +100,16 @@ public class EdificiQueryServiceAdapter extends EdificiDTO implements EdificiQue
     public ArxiuQueryServiceAdapter obtenirPlano() throws QueryServiceException {
         if (this.getPlano() == null) {return null;}
         try {
-            return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), edificiQueryServiceStrategy.obtenirPlano(this.getPlano()));
+        	ArxiuQueryServiceAdapter aqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), edificiQueryServiceStrategy.obtenirPlano(this.getPlano()));
+             if (aqsa != null && url != null) {
+         		aqsa.setUrl(url);
+         	}
+            return aqsa;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "plano.", e);
         }
     }
+
+	
 
 }

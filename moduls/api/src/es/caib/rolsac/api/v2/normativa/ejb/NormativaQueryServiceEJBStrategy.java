@@ -113,4 +113,8 @@ public class NormativaQueryServiceEJBStrategy implements NormativaQueryServiceSt
         }
     }
 
+	public void setUrl(String url) {
+		//No se necesita para EJB.
+	}
+
 }

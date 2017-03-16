@@ -30,6 +30,14 @@ public class DocumentTramitQueryServiceAdapter extends DocumentTramitDTO impleme
     public void setDocumentTramitQueryServiceStrategy(DocumentTramitQueryServiceStrategy documentTramitQueryServiceStrategy) {
         this.documentTramitQueryServiceStrategy = documentTramitQueryServiceStrategy;
     }
+    
+    private String url;
+    public void setUrl(String url) {
+    	this.url = url;
+		if ( this.documentTramitQueryServiceStrategy != null) {
+			this.documentTramitQueryServiceStrategy.setUrl(url);
+		}
+	}
 
     public DocumentTramitQueryServiceAdapter(DocumentTramitDTO dto) throws QueryServiceException {
         try {
@@ -57,7 +65,11 @@ public class DocumentTramitQueryServiceAdapter extends DocumentTramitDTO impleme
         if (this.getArchivo() == null) {return null;}
         try {
             ArxiuDTO dto = documentTramitQueryServiceStrategy.obtenirArxiu(this.getArchivo());
-            return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
+            ArxiuQueryServiceAdapter aqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
+            if (aqsa != null && url != null) {
+            	aqsa.setUrl(url);
+            }
+            return aqsa;
         } catch (StrategyException e) {
              throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "tramite.", e);
         }
@@ -69,7 +81,11 @@ public class DocumentTramitQueryServiceAdapter extends DocumentTramitDTO impleme
 		
 		try {
 			CatalegDocumentsDTO dto = documentTramitQueryServiceStrategy.obtenirCatalegDocuments(this.getDocCatalogo());
-			return (CatalegDocumentsQueryServiceAdapter) BeanUtils.getAdapter("catalegDocuments", getStrategy(), dto);
+			CatalegDocumentsQueryServiceAdapter aqsa = (CatalegDocumentsQueryServiceAdapter) BeanUtils.getAdapter("catalegDocuments", getStrategy(), dto);
+			if (aqsa != null && url != null) {
+            	aqsa.setUrl(url);
+            }
+			return aqsa;
 		} catch (StrategyException e) {
 			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "catálogo documentos.", e);
 		}
@@ -82,9 +98,15 @@ public class DocumentTramitQueryServiceAdapter extends DocumentTramitDTO impleme
 		
 		try {
 			ExcepcioDocumentacioDTO dto = documentTramitQueryServiceStrategy.obtenirExcepcioDocumentacio(this.getExcepcioDocumentacio());
-			return (ExcepcioDocumentacioQueryServiceAdapter) BeanUtils.getAdapter("excepcioDocumentacio", getStrategy(), dto);
+			ExcepcioDocumentacioQueryServiceAdapter aqsa =(ExcepcioDocumentacioQueryServiceAdapter) BeanUtils.getAdapter("excepcioDocumentacio", getStrategy(), dto);
+			if (aqsa != null && url != null) {
+            	aqsa.setUrl(url);
+            }
+			return aqsa;
 		} catch (StrategyException e) {
 			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "excepción documentación." , e);
 		}
 	}
+
+	
 }

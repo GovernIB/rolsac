@@ -84,4 +84,8 @@ public class TramitQueryServiceEJBStrategy implements TramitQueryServiceStrategy
         }
     }
 
+	public void setUrl(String url) {
+		//No es necesario en EJBs.
+	}
+
 }

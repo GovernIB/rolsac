@@ -32,6 +32,22 @@ public class MateriaAgrupacioQueryServiceGateway {
 		}
 	}
 	
+	public void setUrl(String url) {
+		try {
+			if(url != null && !url.isEmpty()){				
+				stub = new MateriaAgrupacioWSSoapBindingStub(
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_MATERIA_AGRUPACIO),
+						null
+						);
+			}
+		} catch (AxisFault e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	
     public MateriaDTO obtenirMateria(Long idMateria) throws RemoteException {
     	return stub.obtenirMateria(idMateria);
     }
@@ -39,6 +55,7 @@ public class MateriaAgrupacioQueryServiceGateway {
     public AgrupacioMateriaDTO obtenirAgrupacioMateria(long idAgrupacion) throws RemoteException {
     	return stub.obtenirAgrupacioMateria(idAgrupacion);
     }
+
 	
 }
 

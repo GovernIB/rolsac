@@ -19,6 +19,12 @@ public class CatalegDocumentsQueryServiceWSStrategy implements
 		this.gateway = gateway;
 	}	
 	
+	public void setUrl(String url) {
+		if (gateway != null) {
+			gateway.setUrl(url);
+		}
+	}
+	
 	public int getNumDocumentsTramit(long id) throws StrategyException {		
 		try {
 			return gateway.getNumDocumentsTramit(id);
@@ -38,5 +44,7 @@ public class CatalegDocumentsQueryServiceWSStrategy implements
 				throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}					
 	}
+
+	
 
 }

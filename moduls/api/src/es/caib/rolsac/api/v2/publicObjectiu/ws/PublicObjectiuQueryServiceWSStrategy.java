@@ -62,4 +62,10 @@ public class PublicObjectiuQueryServiceWSStrategy implements
 			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}
     }
+
+	public void setUrl(String url) {
+		if (this.gateway != null) {
+			this.gateway.setUrl(url);
+		}
+	}
 }

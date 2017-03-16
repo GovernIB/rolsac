@@ -19,6 +19,14 @@ public class SilencioQueryServiceAdapter extends SilencioDTO implements Silencio
 		this.silencioQueryServiceStrategy = silencioQueryServiceStrategy;
 	}
 	
+	private String url;
+	public void setUrl(String url) {
+		this.url = url;
+		if (this.silencioQueryServiceStrategy != null) {
+			this.silencioQueryServiceStrategy.setUrl(url);
+		}
+	}
+	
 	public SilencioQueryServiceAdapter(SilencioDTO dto) throws QueryServiceException {
         
 		try {
@@ -45,13 +53,18 @@ public class SilencioQueryServiceAdapter extends SilencioDTO implements Silencio
 		try {
 				
 				SilencioDTO dto = silencioQueryServiceStrategy.obtenirSilenci(codSilencio, idioma);
-				return (SilencioQueryServiceAdapter)BeanUtils.getAdapter("silencio", getStrategy(), dto);
-				
+				SilencioQueryServiceAdapter sqsa= (SilencioQueryServiceAdapter)BeanUtils.getAdapter("silencio", getStrategy(), dto);
+				if (sqsa != null && url != null) {
+					sqsa.setUrl(url);
+				}
+				return sqsa;
 			} catch (StrategyException e) {
 				
 	            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "silencio.", e);
 	            
 	        }
 		}
+
+	
 	
 }

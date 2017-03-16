@@ -26,6 +26,14 @@ public class AgrupacioMateriaQueryServiceAdapter extends AgrupacioMateriaDTO imp
     public void setAgrupacioMateriaQueryServiceStrategy(AgrupacioMateriaQueryServiceStrategy agrupacioMateriaQueryServiceStrategy) {
         this.agrupacioMateriaQueryServiceStrategy = agrupacioMateriaQueryServiceStrategy;
     }
+    
+    private String url;
+    public void setUrl(String url) {
+    	this.url = url;
+		if (agrupacioMateriaQueryServiceStrategy != null) {
+			agrupacioMateriaQueryServiceStrategy.setUrl(url);
+		}
+	}
 
     public AgrupacioMateriaQueryServiceAdapter(AgrupacioMateriaDTO dto) throws QueryServiceException {
         try {
@@ -43,7 +51,11 @@ public class AgrupacioMateriaQueryServiceAdapter extends AgrupacioMateriaDTO imp
         if (this.getSeccion() == null) {return null;}
         try {
             SeccioDTO dto = agrupacioMateriaQueryServiceStrategy.obtenirSeccio(this.getSeccion());
-            return (SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), dto);
+            SeccioQueryServiceAdapter sqsa =  (SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), dto);
+            if (sqsa != null && url != null) {
+            	sqsa.setUrl(url);
+            }
+            return sqsa;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "seccion.", e);
         }
@@ -55,7 +67,11 @@ public class AgrupacioMateriaQueryServiceAdapter extends AgrupacioMateriaDTO imp
             List<MateriaDTO> llistaDTO = agrupacioMateriaQueryServiceStrategy.llistarMateries(getId(), materiaCriteria);
             List<MateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<MateriaQueryServiceAdapter>();
             for (MateriaDTO materiaDTO : llistaDTO) {
-                llistaQueryServiceAdapter.add((MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), materiaDTO));
+            	MateriaQueryServiceAdapter mqsa = (MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), materiaDTO);
+            	if (mqsa != null && url != null) {
+            		mqsa.setUrl(url);
+            	}
+                llistaQueryServiceAdapter.add(mqsa);
             }
             return llistaQueryServiceAdapter;
         } catch (StrategyException e) {
@@ -70,5 +86,7 @@ public class AgrupacioMateriaQueryServiceAdapter extends AgrupacioMateriaDTO imp
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de materias.", e);
         }
     }
+
+	
 
 }

@@ -33,4 +33,8 @@ public class TipusQueryServiceEJBStrategy implements TipusQueryServiceStrategy {
         }
     }
 
+	public void setUrl(String url) {
+		//No es necesario en EJBs.
+	}
+
 }

@@ -37,6 +37,21 @@ public class FamiliaQueryServiceGateway {
 		}
 		
 	}
+	
+	public void setUrl(String url) {
+		try {
+			if(url != null && !url.isEmpty()){				
+				stub = new FamiliaWSSoapBindingStub(
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_FAMILIA),
+						null
+						);
+			}
+		} catch (AxisFault e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}
 		
 	public int getNumProcedimentsLocals(long id) throws RemoteException {
 		return stub.getNumProcedimentsLocals(id);
@@ -81,4 +96,6 @@ public class FamiliaQueryServiceGateway {
 		return llistaIcones;		
 		
 	}
+
+	
 }

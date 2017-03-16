@@ -29,6 +29,12 @@ public class MateriaQueryServiceWSStrategy implements
 	public void setGateway(MateriaQueryServiceGateway gateway) {
 		this.gateway = gateway;
 	}
+	
+	public void setUrl(String url) {
+		if (this.gateway != null) {
+			this.gateway.setUrl(url);
+		}
+	}
 
 	public int getNumFitxes(long id) throws StrategyException {
 		try {
@@ -163,4 +169,6 @@ public class MateriaQueryServiceWSStrategy implements
 			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}								
 	}
+
+	
 }

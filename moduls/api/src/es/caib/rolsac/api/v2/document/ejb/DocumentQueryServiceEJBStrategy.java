@@ -38,4 +38,8 @@ public class DocumentQueryServiceEJBStrategy implements DocumentQueryServiceStra
             throw new StrategyException(e);
         }
     }
+
+	public void setUrl(String url) {
+		//No se utiliza en EJB.
+	}
 }

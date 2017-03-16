@@ -19,6 +19,12 @@ public class PerfilQueryServiceWSStrategy implements PerfilQueryServiceStrategy 
 	public void setGateway(PerfilQueryServiceGateway gateway) {
 		this.gateway = gateway;
 	}
+	
+	public void setUrl(String url) {
+		if (this.gateway != null) {
+			this.gateway.setUrl(url);
+		}
+	}
 
 	public int getNumIconesFamilia(long id) throws StrategyException {
 		try {
@@ -57,4 +63,6 @@ public class PerfilQueryServiceWSStrategy implements PerfilQueryServiceStrategy 
 			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}
 	}
+
+	
 }

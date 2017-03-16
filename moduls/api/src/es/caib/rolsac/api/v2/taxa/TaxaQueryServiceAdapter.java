@@ -19,6 +19,15 @@ public class TaxaQueryServiceAdapter extends TaxaDTO implements TaxaQueryService
     public void setTaxaQueryServiceStrategy(TaxaQueryServiceStrategy taxaQueryServiceStrategy) {
         this.taxaQueryServiceStrategy = taxaQueryServiceStrategy;
     }
+    
+
+    private String url;
+	public void setUrl(String url) {
+		this.url = url;
+		if (this.taxaQueryServiceStrategy != null) {
+			this.taxaQueryServiceStrategy.setUrl(url);
+		}
+	}
 
     public TaxaQueryServiceAdapter(TaxaDTO dto) throws QueryServiceException {
         try {
@@ -35,10 +44,15 @@ public class TaxaQueryServiceAdapter extends TaxaDTO implements TaxaQueryService
     public TramitQueryServiceAdapter obtenirTramit() throws QueryServiceException {
         if (this.getTramit() == null) {return null;}
         try {
-            return (TramitQueryServiceAdapter) BeanUtils.getAdapter("tramit", getStrategy(), taxaQueryServiceStrategy.obtenirTramit(this.getTramit()));
+        	TramitQueryServiceAdapter tqsa = (TramitQueryServiceAdapter) BeanUtils.getAdapter("tramit", getStrategy(), taxaQueryServiceStrategy.obtenirTramit(this.getTramit()));
+        	if (tqsa != null && url != null) {
+        		tqsa.setUrl(url);
+        	}
+        	return tqsa;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "tramite.", e);
         }
     }
+
 
 }

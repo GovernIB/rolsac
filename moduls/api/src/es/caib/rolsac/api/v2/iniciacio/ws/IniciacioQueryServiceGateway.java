@@ -44,5 +44,9 @@ public class IniciacioQueryServiceGateway
 //    	return stub.IniciacioDTO obtenirTipusIniciacio(IniciacioCriteria iniciacioCriteria);
     	return null;
     }
+
+	public void setUrl(String url) {
+		System.out.println("" + url);
+	}
     
 }

@@ -28,5 +28,11 @@ public class SilencioQueryServiceEJBStrategy implements SilencioQueryServiceStra
         }
 		
 	}
+
+
+
+	public void setUrl(String url) {
+		//No es necesario en EJBs.
+	}
 	
 }

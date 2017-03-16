@@ -20,6 +20,8 @@ public interface AgrupacioFetVitalQueryServiceStrategy {
     
     public ArxiuDTO getIconaGran(long idIconaGran) throws StrategyException;
     
-    public int getNumFetsVitals(long id) throws StrategyException; 
+    public int getNumFetsVitals(long id) throws StrategyException;
+
+	public void setUrl(String url); 
     
 }

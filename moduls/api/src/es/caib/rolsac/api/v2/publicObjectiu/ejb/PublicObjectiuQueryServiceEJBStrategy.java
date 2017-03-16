@@ -52,4 +52,8 @@ public class PublicObjectiuQueryServiceEJBStrategy implements PublicObjectiuQuer
         }
     }
 
+	public void setUrl(String url) {
+		//No es necesario en EJBs.
+	}
+
 }

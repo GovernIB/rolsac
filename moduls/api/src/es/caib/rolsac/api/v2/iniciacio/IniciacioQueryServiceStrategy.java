@@ -10,4 +10,6 @@ public interface IniciacioQueryServiceStrategy {
 	
 	public IniciacioDTO obtenirTipusIniciacio(IniciacioCriteria iniciacioCriteria) throws StrategyException;
 
+	public void setUrl(String url);
+
 }

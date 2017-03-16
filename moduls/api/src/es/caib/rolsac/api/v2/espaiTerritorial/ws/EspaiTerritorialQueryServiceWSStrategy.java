@@ -21,6 +21,12 @@ public class EspaiTerritorialQueryServiceWSStrategy implements
 	public void setGateway(EspaiTerritorialQueryServiceGateway gateway) {
 		this.gateway = gateway;
 	}
+	
+	public void setUrl(String url) {
+		if (this.gateway != null) {
+			this.gateway.setUrl(url);
+		}
+	}
 
 	public int getNumFills(long id) throws StrategyException {
 		try {
@@ -84,4 +90,6 @@ public class EspaiTerritorialQueryServiceWSStrategy implements
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 	}
+
+	
 }

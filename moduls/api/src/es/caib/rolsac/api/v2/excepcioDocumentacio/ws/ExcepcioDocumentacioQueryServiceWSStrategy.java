@@ -20,6 +20,12 @@ public class ExcepcioDocumentacioQueryServiceWSStrategy implements ExcepcioDocum
 		this.gateway = gateway;
 	}		
 	
+	public void setUrl(String url) {
+		if (this.gateway != null) {
+			this.gateway.setUrl(url);
+		}
+	}
+	
 	public int getNumCatalegsDocuments(long id) throws StrategyException {
 		try {
 			return gateway.getNumCatalegsDocuments(id);
@@ -61,4 +67,6 @@ public class ExcepcioDocumentacioQueryServiceWSStrategy implements ExcepcioDocum
 			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}
 	}
+
+
 }

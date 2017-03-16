@@ -47,4 +47,6 @@ public interface MateriaQueryServiceStrategy {
 
     public List<UnitatMateriaDTO> llistarUnitatsMateria(long id, UnitatMateriaCriteria unitatMateriaCriteria) throws StrategyException;
 
+	public void setUrl(String url);
+
 }

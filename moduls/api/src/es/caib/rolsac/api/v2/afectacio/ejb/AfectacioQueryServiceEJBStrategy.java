@@ -38,4 +38,8 @@ public class AfectacioQueryServiceEJBStrategy implements AfectacioQueryServiceSt
         }
     }
 
+	public void setUrl(String url) {
+		//No es necesario en los EJBs.
+	}
+
 }

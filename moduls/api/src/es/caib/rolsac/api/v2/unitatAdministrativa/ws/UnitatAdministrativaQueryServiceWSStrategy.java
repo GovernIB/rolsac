@@ -41,6 +41,10 @@ public class UnitatAdministrativaQueryServiceWSStrategy implements UnitatAdminis
     	this.gateway = gateway;
     }
     
+    public void setUrl(String url) {
+		this.gateway.setUrl(url);
+	}
+    
     public UnitatAdministrativaDTO obtenirPare(long idPare, String idioma) throws StrategyException {
     	try {
     		return gateway.obtenirPare(idPare, idioma);
@@ -311,4 +315,6 @@ public class UnitatAdministrativaQueryServiceWSStrategy implements UnitatAdminis
     		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
     	}
     }
+
+	
 }

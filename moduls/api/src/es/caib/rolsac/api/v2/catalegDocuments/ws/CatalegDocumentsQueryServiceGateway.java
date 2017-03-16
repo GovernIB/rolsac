@@ -33,6 +33,21 @@ public class CatalegDocumentsQueryServiceGateway {
 		}
 	}	
 	
+	public void setUrl(String url) {
+		try {
+			if(url != null && !url.isEmpty()){				
+				stub = new CatalegDocumentsWSSoapBindingStub(
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_CATALEG_DOCUMENTS),
+						null
+						);
+			}
+		} catch (RemoteException re) {
+			re.printStackTrace();			
+		} catch (MalformedURLException mue) {
+			mue.printStackTrace();			
+		} 
+	}
+	
 	public int getNumDocumentsTramit(long id) throws RemoteException {
 		return stub.getNumDocumentsTramit(id);
 	}
@@ -54,5 +69,7 @@ public class CatalegDocumentsQueryServiceGateway {
 
 		return llistaDocumentsTramit;
 		
-	}	
+	}
+
+		
 }

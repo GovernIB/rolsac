@@ -10,5 +10,6 @@ public interface IconaFamiliaQueryServiceStrategy {
     public FamiliaDTO obtenirFamilia(long id) throws StrategyException;
     public PerfilDTO obtenirPerfil(long id) throws StrategyException;
     public ArxiuDTO obtenirIcona(long id) throws StrategyException;
+	public void setUrl(String url);
 
 }

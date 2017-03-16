@@ -27,6 +27,14 @@ public class FamiliaQueryServiceAdapter extends FamiliaDTO implements FamiliaQue
     public void setFamiliaQueryServiceStrategy(FamiliaQueryServiceStrategy familiaQueryServiceStrategy) {
         this.familiaQueryServiceStrategy = familiaQueryServiceStrategy;
     }
+    
+    private String url;
+    public void setUrl(String url) {
+    	this.url = url;
+		if (this.familiaQueryServiceStrategy != null) {
+			this.familiaQueryServiceStrategy.setUrl(url);
+		}
+	}
 
     public FamiliaQueryServiceAdapter(FamiliaDTO dto) throws QueryServiceException {
         try {
@@ -61,7 +69,11 @@ public class FamiliaQueryServiceAdapter extends FamiliaDTO implements FamiliaQue
             List<ProcedimentDTO> llistaDTO = familiaQueryServiceStrategy.llistarProcedimentsLocals(getId(), procedimentCriteria);
             List<ProcedimentQueryServiceAdapter> procs = new ArrayList<ProcedimentQueryServiceAdapter>();
             for (ProcedimentDTO pDTO : llistaDTO) {
-                procs.add((ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), pDTO));
+            	ProcedimentQueryServiceAdapter pqsa = (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), pDTO);
+            	if (pqsa != null && url != null) {
+            		pqsa.setUrl(url);
+            	}
+            	procs.add(pqsa);
             }
             return procs;
         } catch (StrategyException e) {
@@ -74,12 +86,18 @@ public class FamiliaQueryServiceAdapter extends FamiliaDTO implements FamiliaQue
             List<IconaFamiliaDTO> llistaDTO = familiaQueryServiceStrategy.llistarIcones(getId(), iconaFamiliaCriteria);
             List<IconaFamiliaQueryServiceAdapter> icones = new ArrayList<IconaFamiliaQueryServiceAdapter>();
             for (IconaFamiliaDTO pDTO : llistaDTO) {
-                icones.add((IconaFamiliaQueryServiceAdapter) BeanUtils.getAdapter("iconaFamilia", getStrategy(), pDTO));
+            	IconaFamiliaQueryServiceAdapter pqsa = (IconaFamiliaQueryServiceAdapter) BeanUtils.getAdapter("iconaFamilia", getStrategy(), pDTO);
+            	if (pqsa != null && url != null) {
+            		pqsa.setUrl(url);
+            	}
+            	 icones.add(pqsa);
             }
             return icones;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "iconos.", e);
         }
     }
+
+	
 
 }

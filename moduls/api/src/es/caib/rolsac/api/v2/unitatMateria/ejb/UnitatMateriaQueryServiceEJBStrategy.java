@@ -13,6 +13,10 @@ public class UnitatMateriaQueryServiceEJBStrategy implements UnitatMateriaQueryS
     public void setUnitatMateriaQueryServiceDelegate(UnitatMateriaQueryServiceDelegate unitatMateriaQueryServiceDelegate) {
         this.unitatMateriaQueryServiceDelegate = unitatMateriaQueryServiceDelegate;
     }
+    
+    public void setUrl(String url) {
+    	//Los ejbs no necesitan. 
+    }
 
     public UnitatAdministrativaDTO obtenirUnitatAdministrativa(Long idUnitat) throws StrategyException {
         try {

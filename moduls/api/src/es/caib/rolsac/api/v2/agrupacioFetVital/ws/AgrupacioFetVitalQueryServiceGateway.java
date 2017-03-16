@@ -36,6 +36,21 @@ public class AgrupacioFetVitalQueryServiceGateway {
 			e.printStackTrace();
 		}
 	}
+	
+	public void setUrl(String url) {
+		try {
+			if(url != null && !url.isEmpty()){				
+				stub = new AgrupacioFetVitalWSSoapBindingStub(
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_AGRUPACIO_FET_VITAL),
+						null
+						);
+			}
+		} catch (AxisFault af) {
+			af.printStackTrace();
+		} catch (MalformedURLException mue) {
+			mue.printStackTrace();			
+		}
+	}
 
 	public ArxiuDTO getFotografia(long idFoto) throws RemoteException {
 		ArxiuDTO adto = null;
@@ -88,5 +103,7 @@ public class AgrupacioFetVitalQueryServiceGateway {
 
 		return llistaFetsVitals;
 	}
+
+	
 
 }

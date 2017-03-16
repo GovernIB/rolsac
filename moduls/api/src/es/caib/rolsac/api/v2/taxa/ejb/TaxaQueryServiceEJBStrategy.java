@@ -21,4 +21,8 @@ public class TaxaQueryServiceEJBStrategy implements TaxaQueryServiceStrategy {
         }
     }
 
+	public void setUrl(String url) {
+		//No es necesario en EJBs.
+	}
+
 }

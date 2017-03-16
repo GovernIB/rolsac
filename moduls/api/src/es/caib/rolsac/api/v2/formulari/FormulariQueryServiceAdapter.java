@@ -20,6 +20,14 @@ public class FormulariQueryServiceAdapter extends FormulariDTO implements Formul
     public void setFormulariQueryServiceStrategy(FormulariQueryServiceStrategy formulariQueryServiceStrategy) {
         this.formulariQueryServiceStrategy = formulariQueryServiceStrategy;
     }
+    
+    private String url;
+    public void setUrl(String url) {
+    	this.url = url;
+    	if (this.formulariQueryServiceStrategy != null) {
+    		this.formulariQueryServiceStrategy.setUrl(url);
+    	}
+    }
 
     public FormulariQueryServiceAdapter(FormulariDTO dto) throws QueryServiceException {
         try {
@@ -36,7 +44,11 @@ public class FormulariQueryServiceAdapter extends FormulariDTO implements Formul
     public ArxiuQueryServiceAdapter obtenirArchivo() throws QueryServiceException {
         if (this.getArchivo() == null) {return null;}
         try {
-            return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), formulariQueryServiceStrategy.obtenirArchivo(this.getArchivo()));
+        	ArxiuQueryServiceAdapter uqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), formulariQueryServiceStrategy.obtenirArchivo(this.getArchivo()));
+        	if (uqsa != null && url != null) {
+        		uqsa.setUrl(url);
+        	}
+        	return uqsa;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "archivo.", e);
         }
@@ -45,7 +57,11 @@ public class FormulariQueryServiceAdapter extends FormulariDTO implements Formul
     public ArxiuQueryServiceAdapter obtenirManual() throws QueryServiceException {
         if (this.getManual() == null) {return null;}
         try {
-            return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), formulariQueryServiceStrategy.obtenirManual(this.getManual()));
+        	ArxiuQueryServiceAdapter uqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), formulariQueryServiceStrategy.obtenirManual(this.getManual()));
+            if (uqsa != null && url != null) {
+        		uqsa.setUrl(url);
+        	}
+        	return uqsa;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "manual.", e);
         }
@@ -54,7 +70,11 @@ public class FormulariQueryServiceAdapter extends FormulariDTO implements Formul
     public TramitQueryServiceAdapter obtenirTramit() throws QueryServiceException {
         if (this.getTramite() == null) {return null;}
         try {
-            return (TramitQueryServiceAdapter) BeanUtils.getAdapter("tramit", getStrategy(), formulariQueryServiceStrategy.obtenirTramit(this.getTramite()));
+        	TramitQueryServiceAdapter uqsa = (TramitQueryServiceAdapter) BeanUtils.getAdapter("tramit", getStrategy(), formulariQueryServiceStrategy.obtenirTramit(this.getTramite()));
+            if (uqsa != null && url != null) {
+        		uqsa.setUrl(url);
+        	}
+        	return uqsa;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "tramite.", e);
         }        

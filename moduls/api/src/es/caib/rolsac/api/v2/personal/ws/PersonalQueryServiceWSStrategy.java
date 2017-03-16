@@ -26,4 +26,10 @@ public class PersonalQueryServiceWSStrategy implements
 		}
 	}
 
+	public void setUrl(String url) {
+		if (this.gateway != null) {
+			this.gateway.setUrl(url);
+		}
+	}
+
 }

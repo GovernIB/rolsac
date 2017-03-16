@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.axis.AxisFault;
+
 import es.caib.rolsac.api.v2.exception.APIException;
 import es.caib.rolsac.api.v2.general.ConfiguracioServeis;
 import es.caib.rolsac.api.v2.general.DTOUtil;
@@ -35,6 +37,21 @@ public class UsuariQueryServiceGateway {
 		}
 	}
 	
+	public void setUrl(String url) {
+		try {
+			if(url != null && !url.isEmpty()){				
+				stub = new UsuariWSSoapBindingStub(
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_USUARI),
+						null
+						);
+			}
+		} catch (AxisFault e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id,
 			UnitatAdministrativaCriteria unitatAdministrativaCriteria)
 			throws RemoteException, APIException {
@@ -56,4 +73,6 @@ public class UsuariQueryServiceGateway {
 	public int getNumUnitatsAdministratives(long id) throws RemoteException {
 		return stub.getNumUnitatsAdministratives(id);
 	}
+
+	
 }

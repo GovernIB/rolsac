@@ -24,6 +24,13 @@ public class SeccioQueryServiceWSStrategy implements SeccioQueryServiceStrategy 
 		this.gateway = gateway;
 	}
 
+
+	public void setUrl(String url) {
+		if (this.gateway != null) {
+			this.gateway.setUrl(url);	
+		}
+	}
+	
 	public int getNumFilles(long id) throws StrategyException {
 		
 		try {
@@ -105,4 +112,5 @@ public class SeccioQueryServiceWSStrategy implements SeccioQueryServiceStrategy 
 			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}		
 	}
+
 }

@@ -57,4 +57,8 @@ public class EdificiQueryServiceEJBStrategy implements EdificiQueryServiceStrate
         }
     }
 
+	public void setUrl(String url) {
+		//No es necesario en EJB.
+	}
+
 }

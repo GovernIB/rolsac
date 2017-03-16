@@ -17,4 +17,5 @@ public class TipusAfectacioQueryServiceAdapter extends TipusAfectacioDTO impleme
         }
     }
 
+
 }

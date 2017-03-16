@@ -22,4 +22,10 @@ public class TaxaQueryServiceWSStrategy implements TaxaQueryServiceStrategy {
     		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
     	}
     }
+
+	public void setUrl(String url) {
+		if (this.gateway != null) {
+			this.gateway.setUrl(url);
+		}
+	}
 }

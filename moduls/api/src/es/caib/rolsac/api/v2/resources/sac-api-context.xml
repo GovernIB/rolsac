@@ -933,7 +933,7 @@
     
 	<!-- WS -->
     <bean id="unitatAdministrativaQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter" scope="prototype">
-        <property name="unitatAdministrativaQueryServiceStrategy" ref="unitatAdministrativaQueryServiceWSStrategy" />
+        <property name="unitatAdministrativaQueryServiceStrategy" ref="unitatAdministrativaQueryServiceWSStrategy" />        
     </bean>
 
     <bean id="unitatAdministrativaQueryServiceWSStrategy" class="es.caib.rolsac.api.v2.unitatAdministrativa.ws.UnitatAdministrativaQueryServiceWSStrategy">

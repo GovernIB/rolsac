@@ -37,6 +37,10 @@ public class FitxaUAQueryServiceEJBStrategy implements FitxaUAQueryServiceStrate
         }
     }
 
+	public void setUrl(String url) {
+		//No es necesario en EJB.
+	}
+
 
 
 }

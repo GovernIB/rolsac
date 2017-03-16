@@ -41,6 +41,13 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
 
     private ProcedimentQueryServiceStrategy procedimentQueryServiceStrategy;
 
+    private String url;
+    public void setUrl(String url) {
+    	if ( this.procedimentQueryServiceStrategy != null) {
+    		 this.procedimentQueryServiceStrategy.setUrl(url);
+    	}
+    }
+    
     public void setProcedimentQueryServiceStrategy(ProcedimentQueryServiceStrategy procedimentQueryServiceStrategy) {
         this.procedimentQueryServiceStrategy = procedimentQueryServiceStrategy;
     }
@@ -118,7 +125,11 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
             List<TramitDTO> llistaDTO = procedimentQueryServiceStrategy.llistarTramits(getId(), tramitCriteria);
             List<TramitQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<TramitQueryServiceAdapter>();
             for (TramitDTO tramitDTO : llistaDTO) {
-                llistaQueryServiceAdapter.add((TramitQueryServiceAdapter) BeanUtils.getAdapter("tramit", getStrategy(), tramitDTO));
+            	TramitQueryServiceAdapter tqsa = (TramitQueryServiceAdapter) BeanUtils.getAdapter("tramit", getStrategy(), tramitDTO);
+            	if (tqsa != null && url != null) {
+            		tqsa.setUrl(url);
+            	}
+            	llistaQueryServiceAdapter.add(tqsa);
             }
             return llistaQueryServiceAdapter;
         } catch (StrategyException e) {
@@ -131,7 +142,11 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
             List<MateriaDTO> llistaDTO = procedimentQueryServiceStrategy.llistarMateries(getId(), materiaCriteria);
             List<MateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<MateriaQueryServiceAdapter>();
             for (MateriaDTO materiaDTO : llistaDTO) {
-                llistaQueryServiceAdapter.add((MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), materiaDTO));
+            	MateriaQueryServiceAdapter tqsa = (MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), materiaDTO);
+            	if (tqsa != null && url != null) {
+            		tqsa.setUrl(url);
+            	}
+            	llistaQueryServiceAdapter.add(tqsa);
             }
             return llistaQueryServiceAdapter;
         } catch (StrategyException e) {
@@ -144,7 +159,11 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
             List<NormativaDTO> llistaDTO = procedimentQueryServiceStrategy.llistarNormatives(getId(), normativaCriteria);
             List<NormativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<NormativaQueryServiceAdapter>();
             for (NormativaDTO normativaDTO : llistaDTO) {
-                llistaQueryServiceAdapter.add((NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa", getStrategy(), normativaDTO));
+            	NormativaQueryServiceAdapter tqsa = (NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa", getStrategy(), normativaDTO);
+            	if (tqsa != null && url != null) {
+            		tqsa.setUrl(url);
+            	}
+            	llistaQueryServiceAdapter.add(tqsa);
             }
             return llistaQueryServiceAdapter;
         } catch (StrategyException e) {
@@ -157,7 +176,11 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
             List<FetVitalDTO> llistaDTO = procedimentQueryServiceStrategy.llistarFetsVitals(getId(), fetsVitalsCriteria);
             List<FetVitalQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FetVitalQueryServiceAdapter>();
             for (FetVitalDTO fetVitalDTO : llistaDTO) {
-                llistaQueryServiceAdapter.add((FetVitalQueryServiceAdapter) BeanUtils.getAdapter("fetVital", getStrategy(), fetVitalDTO));
+            	FetVitalQueryServiceAdapter tqsa = (FetVitalQueryServiceAdapter) BeanUtils.getAdapter("fetVital", getStrategy(), fetVitalDTO);
+    			if (tqsa != null && url != null) {
+            		tqsa.setUrl(url);
+            	}
+            	llistaQueryServiceAdapter.add(tqsa);
             }
             return llistaQueryServiceAdapter;
         } catch (StrategyException e) {
@@ -170,7 +193,11 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
             List<DocumentDTO> llistaDTO = procedimentQueryServiceStrategy.llistarDocuments(getId(), documentCriteria);
             List<DocumentQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentQueryServiceAdapter>();
             for (DocumentDTO documentDTO : llistaDTO) {
-                llistaQueryServiceAdapter.add((DocumentQueryServiceAdapter) BeanUtils.getAdapter("document", getStrategy(), documentDTO));
+            	DocumentQueryServiceAdapter tqsa = (DocumentQueryServiceAdapter) BeanUtils.getAdapter("document", getStrategy(), documentDTO);
+            	if (tqsa != null && url != null) {
+            		tqsa.setUrl(url);
+            	}
+            	llistaQueryServiceAdapter.add(tqsa);
             }
             return llistaQueryServiceAdapter;
         } catch (StrategyException e) {
@@ -183,7 +210,11 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
             List<PublicObjectiuDTO> llistaDTO = procedimentQueryServiceStrategy.llistarPublicsObjectius(getId(), poCriteria);
             List<PublicObjectiuQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<PublicObjectiuQueryServiceAdapter>();
             for (PublicObjectiuDTO poDTO : llistaDTO) {
-                llistaQueryServiceAdapter.add((PublicObjectiuQueryServiceAdapter) BeanUtils.getAdapter("publicObjectiu", getStrategy(), poDTO));
+            	PublicObjectiuQueryServiceAdapter tqsa = (PublicObjectiuQueryServiceAdapter) BeanUtils.getAdapter("publicObjectiu", getStrategy(), poDTO);
+            	if (tqsa != null && url != null) {
+            		tqsa.setUrl(url);
+            	}
+            	llistaQueryServiceAdapter.add(tqsa);
             }
             return llistaQueryServiceAdapter;
         } catch (StrategyException e) {

@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.axis.AxisFault;
+
 import es.caib.rolsac.api.v2.exception.APIException;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
@@ -37,6 +39,21 @@ public class SeccioQueryServiceGateway {
 			e.printStackTrace();
 		}
 	}
+	
+	public void setUrl(String url) {
+		try {
+			if(url != null && !url.isEmpty()){				
+				stub = new SeccioWSSoapBindingStub(
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_SECCIO),
+						null
+						);
+			}
+		} catch (AxisFault e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}	
 	
 	public int getNumFilles(long id) throws RemoteException {
 		return stub.getNumFilles(id);
@@ -101,5 +118,7 @@ public class SeccioQueryServiceGateway {
 		}
 			
 		return llistaUnitatsAdministratives;				
-	}	
+	}
+
+	
 }

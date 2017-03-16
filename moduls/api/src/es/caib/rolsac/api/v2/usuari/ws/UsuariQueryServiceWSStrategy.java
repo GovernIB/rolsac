@@ -38,4 +38,10 @@ public class UsuariQueryServiceWSStrategy implements UsuariQueryServiceStrategy 
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 	}
+
+	public void setUrl(String url) {
+		if (gateway != null) {
+			gateway.setUrl(url);
+		}		
+	}
 }

@@ -33,4 +33,8 @@ public class ButlletiQueryServiceEJBStrategy implements ButlletiQueryServiceStra
         }
     }
 
+	public void setUrl(String url) {
+		//No necesario en EJB.
+	}
+
 }

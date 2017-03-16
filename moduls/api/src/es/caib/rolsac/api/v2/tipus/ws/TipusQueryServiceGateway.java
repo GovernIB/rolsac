@@ -37,6 +37,21 @@ public class TipusQueryServiceGateway {
 			e.printStackTrace();
 		}
 	}
+	
+	public void setUrl(String url) {
+		try {
+			if(url != null && !url.isEmpty()){				
+				stub = new TipusWSSoapBindingStub(
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_TIPUS),
+						null
+						);
+			}
+		} catch (AxisFault e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public List<NormativaDTO> llistarNormatives(Long id,
 			NormativaCriteria normativaCriteria) throws RemoteException, APIException {
@@ -59,4 +74,6 @@ public class TipusQueryServiceGateway {
 			throws RemoteException {
 			return stub.getNumNormatives(id, totes.ordinal());		
 	}
+
+	
 }

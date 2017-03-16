@@ -27,6 +27,14 @@ public class DocumentQueryServiceAdapter extends DocumentDTO implements Document
     public void setDocumentQueryServiceStrategy(DocumentQueryServiceStrategy documentQueryServiceStrategy) {
         this.documentQueryServiceStrategy = documentQueryServiceStrategy;
     }
+    
+    private String url;
+    public void setUrl(String url) {
+    	this.url = url;
+		if ( this.documentQueryServiceStrategy != null) {
+			 this.documentQueryServiceStrategy.setUrl(url);
+		}
+	}
 
     public DocumentQueryServiceAdapter(DocumentDTO dto) throws QueryServiceException {
         try {
@@ -44,7 +52,11 @@ public class DocumentQueryServiceAdapter extends DocumentDTO implements Document
         if (this.getFicha() == null) {return null;}
         try {
             FitxaDTO dto = documentQueryServiceStrategy.obtenirFitxa(this.getFicha());
-            return (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), dto);
+            FitxaQueryServiceAdapter fqsa = (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), dto);
+            if (fqsa != null && url != null) {
+            	fqsa.setUrl(url);
+            }
+            return fqsa;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "ficha.", e);
         }
@@ -54,7 +66,11 @@ public class DocumentQueryServiceAdapter extends DocumentDTO implements Document
         if (this.getProcedimiento() == null) {return null;}
         try {
             ProcedimentDTO dto = documentQueryServiceStrategy.obtenirProcediment(this.getProcedimiento());
-            return (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), dto);
+            ProcedimentQueryServiceAdapter pqsa = (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), dto);
+            if (pqsa != null && url != null) {
+            	pqsa.setUrl(url);
+            }
+            return pqsa;
         } catch (StrategyException e) {
              throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "procedimiento.", e);
         }
@@ -64,10 +80,16 @@ public class DocumentQueryServiceAdapter extends DocumentDTO implements Document
         if (this.getArchivo() == null) {return null;}
         try {
             ArxiuDTO dto = documentQueryServiceStrategy.obtenirArxiu(this.getArchivo());
-            return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
+            ArxiuQueryServiceAdapter aqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
+            if (aqsa != null && url != null) {
+            	aqsa.setUrl(url);
+            }
+            return aqsa;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "archivo.", e);
         }
     }
+
+   
 
 }

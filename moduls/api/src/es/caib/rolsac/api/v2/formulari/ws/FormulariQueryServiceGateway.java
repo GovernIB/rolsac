@@ -32,6 +32,21 @@ public class FormulariQueryServiceGateway {
 		}
 	}
 	
+	public void setUrl(String url) {
+		try {
+			if(url != null && !url.isEmpty()){				
+				stub = new FormulariWSSoapBindingStub(
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_FORMULARI),
+						null
+						);
+			}
+		} catch (AxisFault e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public ArxiuDTO obtenirArchivo(Long archivo) throws RemoteException {
 		return stub.obtenirArchivo(archivo);
 	}
@@ -43,4 +58,6 @@ public class FormulariQueryServiceGateway {
 	public TramitDTO obtenirTramit(Long idTramit) throws RemoteException {
 		return stub.obtenirTramit(idTramit);
 	}
+
+	
 }

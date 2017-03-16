@@ -13,4 +13,6 @@ public interface FitxaUAQueryServiceStrategy {
 
     public UnitatAdministrativaDTO obtenirUnitatAdministrativa(long idUnitatAdministrativa) throws StrategyException;
 
+	public void setUrl(String url);
+
 }

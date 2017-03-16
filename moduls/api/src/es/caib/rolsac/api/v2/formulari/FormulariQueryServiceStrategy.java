@@ -13,4 +13,6 @@ public interface FormulariQueryServiceStrategy {
 
     public TramitDTO obtenirTramit(Long idTramit) throws StrategyException;
 
+	public void setUrl(String url);
+
 }

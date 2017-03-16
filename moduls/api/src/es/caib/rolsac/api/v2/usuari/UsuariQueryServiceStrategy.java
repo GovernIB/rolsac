@@ -12,4 +12,6 @@ public interface UsuariQueryServiceStrategy {
 
     public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws StrategyException;
 
+	public void setUrl(String url);
+
 }

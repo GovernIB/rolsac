@@ -28,4 +28,6 @@ public interface TramitQueryServiceStrategy {
 
     public List<TaxaDTO> llistarTaxes(long id, TaxaCriteria taxaCriteria) throws StrategyException;
 
+	public void setUrl(String url);
+
 }

@@ -18,4 +18,6 @@ public interface PerfilQueryServiceStrategy {
     
     public int getNumIconesMateria(long id) throws StrategyException;
 
+	public void setUrl(String url);
+
 }

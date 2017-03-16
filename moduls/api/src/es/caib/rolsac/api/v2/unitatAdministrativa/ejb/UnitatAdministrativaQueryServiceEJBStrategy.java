@@ -38,6 +38,10 @@ public class UnitatAdministrativaQueryServiceEJBStrategy implements UnitatAdmini
     public void setUnitatAdministrativaQueryServiceDelegate(UnitatAdministrativaQueryServiceDelegate unitatAdministrativaQueryServiceDelegate) {
         this.unitatAdministrativaQueryServiceDelegate = unitatAdministrativaQueryServiceDelegate;
     }
+    
+    public void setUrl(String url) {
+    	//Los ejbs no necesitan. 
+    }
 
     public UnitatAdministrativaDTO obtenirPare(long idPare, String idioma) throws StrategyException {
         try {

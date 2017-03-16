@@ -32,6 +32,14 @@ public class FetVitalQueryServiceAdapter extends FetVitalDTO implements FetVital
     public void setFetVitalQueryServiceStrategy(FetVitalQueryServiceStrategy fetVitalQueryServiceStrategy) {
         this.fetVitalQueryServiceStrategy = fetVitalQueryServiceStrategy;
     }
+    
+    private String url;
+    public void setUrl(String url) {
+    	this.url = url;
+		if (this.fetVitalQueryServiceStrategy != null) {
+			this.fetVitalQueryServiceStrategy.setUrl(url);
+		}
+	}
 
     public FetVitalQueryServiceAdapter(FetVitalDTO dto) throws QueryServiceException {
         try {
@@ -74,7 +82,11 @@ public class FetVitalQueryServiceAdapter extends FetVitalDTO implements FetVital
             List<FitxaDTO> llistaDTO = fetVitalQueryServiceStrategy.llistarFitxes(getId(), fitxaCriteria);
             List<FitxaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FitxaQueryServiceAdapter>();
             for (FitxaDTO fitxaDTO : llistaDTO) {
-                llistaQueryServiceAdapter.add((FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), fitxaDTO));
+            	FitxaQueryServiceAdapter fqsa = (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), fitxaDTO);
+            	if (url != null && fqsa != null) {
+            		fqsa.setUrl(url);
+            	}
+            	llistaQueryServiceAdapter.add(fqsa);
             }
             return llistaQueryServiceAdapter;
         } catch (StrategyException e) {
@@ -87,7 +99,11 @@ public class FetVitalQueryServiceAdapter extends FetVitalDTO implements FetVital
             List<ProcedimentDTO> llistaDTO = fetVitalQueryServiceStrategy.llistarProcedimentsLocals(getId(), procedimentCriteria);
             List<ProcedimentQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<ProcedimentQueryServiceAdapter>();
             for (ProcedimentDTO procedimentDTO : llistaDTO) {
-                llistaQueryServiceAdapter.add((ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), procedimentDTO));
+            	ProcedimentQueryServiceAdapter pqsa = (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), procedimentDTO);
+            	if (pqsa != null && url != null) {
+            		return null;
+            	}
+            	llistaQueryServiceAdapter.add(pqsa);
             }
             return llistaQueryServiceAdapter;
         } catch (StrategyException e) {
@@ -100,7 +116,11 @@ public class FetVitalQueryServiceAdapter extends FetVitalDTO implements FetVital
             List<AgrupacioFetVitalDTO> llistaDTO = fetVitalQueryServiceStrategy.llistarFetsVitalsAgrupacionsFV(getId(), agrupacioFetVitalCriteria);
             List<AgrupacioFetVitalQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<AgrupacioFetVitalQueryServiceAdapter>();
             for (AgrupacioFetVitalDTO agrupacioFetVitalDTO : llistaDTO) {
-                llistaQueryServiceAdapter.add((AgrupacioFetVitalQueryServiceAdapter) BeanUtils.getAdapter("agrupacioFetVital", getStrategy(), agrupacioFetVitalDTO));
+            	AgrupacioFetVitalQueryServiceAdapter pqsa = (AgrupacioFetVitalQueryServiceAdapter) BeanUtils.getAdapter("agrupacioFetVital", getStrategy(), agrupacioFetVitalDTO);
+            	if (pqsa != null && url != null) {
+            		return null;
+            	}
+            	llistaQueryServiceAdapter.add(pqsa);
             }
             return llistaQueryServiceAdapter;
         } catch (StrategyException e) {
@@ -112,7 +132,11 @@ public class FetVitalQueryServiceAdapter extends FetVitalDTO implements FetVital
         if (this.getFoto() == null) {return null;}
         try {
             ArxiuDTO dto = (ArxiuDTO) fetVitalQueryServiceStrategy.getDistribuciCompetencial(this.getFoto());
-            return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
+            ArxiuQueryServiceAdapter pqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
+            if (pqsa != null && url != null) {
+        		return null;
+        	}
+            return pqsa;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "distribucioCompetencial.", e);
         }
@@ -123,7 +147,11 @@ public class FetVitalQueryServiceAdapter extends FetVitalDTO implements FetVital
         
         try {
             ArxiuDTO dto = (ArxiuDTO) fetVitalQueryServiceStrategy.getNormativa(this.getIcono());
-            return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
+            ArxiuQueryServiceAdapter pqsa=  (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
+            if (pqsa != null && url != null) {
+        		return null;
+        	}
+            return pqsa;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "icono.", e);
         }
@@ -133,10 +161,16 @@ public class FetVitalQueryServiceAdapter extends FetVitalDTO implements FetVital
         if (this.getIconoGrande() == null) {return null;}
         try {
             ArxiuDTO dto = (ArxiuDTO) fetVitalQueryServiceStrategy.getContingut(this.getIconoGrande());
-            return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
+            ArxiuQueryServiceAdapter pqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
+            if (pqsa != null && url != null) {
+        		return null;
+        	}
+            return pqsa;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "icono.", e);
         }
     }
+
+	
 
 }

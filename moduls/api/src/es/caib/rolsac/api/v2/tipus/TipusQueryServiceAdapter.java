@@ -26,6 +26,13 @@ public class TipusQueryServiceAdapter extends TipusDTO implements TipusQueryServ
         this.tipusQueryServiceStrategy = tipusQueryServiceStrategy;
     }
 
+    private String url;
+	public void setUrl(String url) {
+		this.url = url;		if ( this.tipusQueryServiceStrategy != null) {
+			 this.tipusQueryServiceStrategy.setUrl(url);
+		}
+	}
+	
     public TipusQueryServiceAdapter(TipusDTO dto) throws QueryServiceException {
         try {
             PropertyUtils.copyProperties(this, dto);
@@ -67,12 +74,17 @@ public class TipusQueryServiceAdapter extends TipusDTO implements TipusQueryServ
             List<NormativaDTO> llistaDTO = tipusQueryServiceStrategy.llistarNormatives(getId(), normativaCriteria);
             List<NormativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<NormativaQueryServiceAdapter>();
             for (NormativaDTO normativaDTO : llistaDTO) {
-                llistaQueryServiceAdapter.add((NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa", getStrategy(), normativaDTO));
+            	NormativaQueryServiceAdapter nqsa = (NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa", getStrategy(), normativaDTO);
+            	if (nqsa != null && url != null) {
+            		nqsa.setUrl(url);
+            	}
+            	llistaQueryServiceAdapter.add(nqsa);
             }
             return llistaQueryServiceAdapter;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "normativas.", e);
         }
     }
+
     
 }

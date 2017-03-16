@@ -39,4 +39,8 @@ public class IconaFamiliaQueryServiceEJBStrategy implements IconaFamiliaQuerySer
         }
     }
 
+	public void setUrl(String url) {
+		//No se puede utilizar EJBs.
+	}
+
 }

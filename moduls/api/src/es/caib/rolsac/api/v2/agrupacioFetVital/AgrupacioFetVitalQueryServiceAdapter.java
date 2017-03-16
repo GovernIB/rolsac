@@ -28,6 +28,14 @@ public class AgrupacioFetVitalQueryServiceAdapter extends AgrupacioFetVitalDTO i
     public void setAgrupacioFetVitalQueryServiceStrategy(AgrupacioFetVitalQueryServiceStrategy agrupacioFetVitalQueryServiceStrategy) {
         this.agrupacioFetVitalQueryServiceStrategy = agrupacioFetVitalQueryServiceStrategy;
     }
+    
+    private String url;
+    public void setUrl(String url) {
+    	this.url = url;
+		if ( this.agrupacioFetVitalQueryServiceStrategy != null) {
+			 this.agrupacioFetVitalQueryServiceStrategy.setUrl(url);
+		}
+	}
 
     public AgrupacioFetVitalQueryServiceAdapter(AgrupacioFetVitalDTO dto) throws QueryServiceException {
         try {
@@ -45,7 +53,11 @@ public class AgrupacioFetVitalQueryServiceAdapter extends AgrupacioFetVitalDTO i
         if (this.getFoto() == null) {return null;}
         try {
             ArxiuDTO dto = (ArxiuDTO) agrupacioFetVitalQueryServiceStrategy.getFotografia(this.getFoto());
-            return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
+            ArxiuQueryServiceAdapter asqa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
+            if (asqa != null && url != null) {
+            	asqa.setUrl(url);
+            }
+            return asqa;
         } catch (StrategyException e) {
             throw new QueryServiceException(e);
         }
@@ -55,7 +67,11 @@ public class AgrupacioFetVitalQueryServiceAdapter extends AgrupacioFetVitalDTO i
         if (this.getIcono() == null) {return null;}
         try {
             ArxiuDTO dto = (ArxiuDTO) agrupacioFetVitalQueryServiceStrategy.getIcona(this.getIcono());
-            return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
+            ArxiuQueryServiceAdapter asqa =(ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
+            if (asqa != null && url != null) {
+            	asqa.setUrl(url);
+            }
+            return asqa;
         } catch (StrategyException e) {
             throw new QueryServiceException(e);
         }
@@ -65,7 +81,11 @@ public class AgrupacioFetVitalQueryServiceAdapter extends AgrupacioFetVitalDTO i
         if (this.getIconoGrande() == null) {return null;}
         try {
             ArxiuDTO dto = (ArxiuDTO) agrupacioFetVitalQueryServiceStrategy.getIconaGran(this.getIconoGrande());
-            return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
+            ArxiuQueryServiceAdapter asqa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
+            if (asqa != null && url != null) {
+            	asqa.setUrl(url);
+            }
+            return asqa;
         } catch (StrategyException e) {
             throw new QueryServiceException(e);
         }
@@ -75,7 +95,11 @@ public class AgrupacioFetVitalQueryServiceAdapter extends AgrupacioFetVitalDTO i
         if (this.getPublico() == null) {return null;}
         try {
             PublicObjectiuDTO dto = (PublicObjectiuDTO) agrupacioFetVitalQueryServiceStrategy.obtenirPublicObjectiu(this.getPublico());
-            return (PublicObjectiuQueryServiceAdapter) BeanUtils.getAdapter("publicObjectiu", getStrategy(), dto);
+            PublicObjectiuQueryServiceAdapter asqa =  (PublicObjectiuQueryServiceAdapter) BeanUtils.getAdapter("publicObjectiu", getStrategy(), dto);
+            if (asqa != null && url != null) {
+            	asqa.setUrl(url);
+            }
+            return asqa;
         } catch (StrategyException e) {
             throw new QueryServiceException(e);
         }
@@ -86,7 +110,11 @@ public class AgrupacioFetVitalQueryServiceAdapter extends AgrupacioFetVitalDTO i
             List<FetVitalDTO> llistaDTO = agrupacioFetVitalQueryServiceStrategy.llistarFetsVitals(getId(), fetVitalCriteria);
             List<FetVitalQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FetVitalQueryServiceAdapter>();
             for (FetVitalDTO fetVitalDTO : llistaDTO) {
-                llistaQueryServiceAdapter.add((FetVitalQueryServiceAdapter) BeanUtils.getAdapter("fetVital", getStrategy(), fetVitalDTO));
+            	FetVitalQueryServiceAdapter fqsa = (FetVitalQueryServiceAdapter) BeanUtils.getAdapter("fetVital", getStrategy(), fetVitalDTO);
+            	if (fqsa != null && url != null) {
+                	fqsa.setUrl(url);
+                }
+                llistaQueryServiceAdapter.add(fqsa);
             }
             return llistaQueryServiceAdapter;
         } catch (StrategyException e) {
@@ -101,5 +129,7 @@ public class AgrupacioFetVitalQueryServiceAdapter extends AgrupacioFetVitalDTO i
             throw new QueryServiceException(e);
         }
     }
+
+	
     
 }

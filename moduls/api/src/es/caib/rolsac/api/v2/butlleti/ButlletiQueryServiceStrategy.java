@@ -13,4 +13,6 @@ public interface ButlletiQueryServiceStrategy {
     
     public int getNumNormatives(long id, TIPUS_NORMATIVA tipus) throws StrategyException;
 
+	public void setUrl(String url);
+
 }

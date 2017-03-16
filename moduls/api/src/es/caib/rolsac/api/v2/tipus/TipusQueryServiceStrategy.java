@@ -14,4 +14,6 @@ public interface TipusQueryServiceStrategy {
 
     public int getNumNormatives(Long id, TIPUS_NORMATIVA totes) throws StrategyException;
 
+	public void setUrl(String url);
+
 }

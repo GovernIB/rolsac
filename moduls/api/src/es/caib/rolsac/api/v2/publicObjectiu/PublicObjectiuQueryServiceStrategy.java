@@ -20,4 +20,6 @@ public interface PublicObjectiuQueryServiceStrategy {
     
     public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria) throws StrategyException;
 
+	public void setUrl(String url);
+
 }

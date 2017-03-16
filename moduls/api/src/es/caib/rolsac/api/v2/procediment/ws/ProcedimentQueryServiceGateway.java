@@ -46,6 +46,21 @@ public class ProcedimentQueryServiceGateway {
 			e.printStackTrace();
 		}
 	}
+	
+	public void setUrl(String url) {
+		try {
+			if(url != null && !url.isEmpty()){				
+				stub = new ProcedimentWSSoapBindingStub(
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_PROCEDIMENT),
+						null
+						);
+			}
+		} catch (AxisFault e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public int getNumTramits(long id) throws RemoteException {
 		return stub.getNumTramits(id);
@@ -180,5 +195,7 @@ public class ProcedimentQueryServiceGateway {
         return llistaPOs;
 
     }
+
+	
 	
 }

@@ -139,4 +139,8 @@ public class MateriaQueryServiceEJBStrategy implements MateriaQueryServiceStrate
         }
     }
 
+	public void setUrl(String url) {
+		//No se utilizan en EJB.
+	}
+
 }

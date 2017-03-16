@@ -20,6 +20,14 @@ public class PersonalQueryServiceAdapter extends PersonalDTO implements Personal
     public void setPersonalQueryServiceStrategy(PersonalQueryServiceStrategy personalQueryServiceStrategy) {
         this.personalQueryServiceStrategy = personalQueryServiceStrategy;
     }
+    
+    private String url;
+	public void setUrl(String url) {
+		this.url = url;
+		if (this.personalQueryServiceStrategy != null) {
+			this.personalQueryServiceStrategy.setUrl(url);
+		}
+	}
 
     public PersonalQueryServiceAdapter(PersonalDTO dto) throws QueryServiceException {
         try {
@@ -37,10 +45,16 @@ public class PersonalQueryServiceAdapter extends PersonalDTO implements Personal
         if (this.getUnidadAdministrativa() == null) {return null;}
         try {
             UnitatAdministrativaDTO dto = personalQueryServiceStrategy.obtenirUnitatAdministrativa(this.getUnidadAdministrativa());
-            return (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), dto);
+            UnitatAdministrativaQueryServiceAdapter uqsa = (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), dto);
+            if (uqsa != null && url != null) {
+            	uqsa.setUrl(url);
+            }
+            return uqsa;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "unidad administrativa.", e);
         }
     }
+
+
 
 }

@@ -35,6 +35,23 @@ public class ExcepcioDocumentacioQueryServiceGateway {
 		}
 	}	
 	
+	public void setUrl(String url) {
+		try {
+			if (url != null && !url.isEmpty()) {
+				stub = new ExcepcioDocumentacioWSSoapBindingStub(
+						 				new URL(url + ConfiguracioServeis.NOM_SERVEI_EXCEPCIO_DOCUMENTACIO),
+						 				null
+						 			);
+				}
+		} catch (RemoteException re) {
+			re.printStackTrace();			
+		} catch (MalformedURLException mue) {
+			mue.printStackTrace();			
+		}
+		
+		
+	}
+	
 	public int getNumCatalegsDocuments(long id) throws RemoteException {
 		return stub.getNumCatalegsDocuments(id);
 	}
@@ -79,5 +96,7 @@ public class ExcepcioDocumentacioQueryServiceGateway {
 
 		return llistaDocumentsTramit;
 		
-	}	
+	}
+
+		
 }

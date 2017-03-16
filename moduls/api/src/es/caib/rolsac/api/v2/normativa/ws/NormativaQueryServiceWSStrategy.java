@@ -24,6 +24,12 @@ public class NormativaQueryServiceWSStrategy implements
 		this.gateway = gateway;
 	}
 
+	public void setUrl(String url) {
+		if (this.gateway  != null) {
+			this.gateway.setUrl(url);
+		}
+	}
+	
 	public int getNumAfectades(long id) throws StrategyException {
 		try {
 			return gateway.getNumAfectades(id);
@@ -125,4 +131,6 @@ public class NormativaQueryServiceWSStrategy implements
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 	}
+
+	
 }

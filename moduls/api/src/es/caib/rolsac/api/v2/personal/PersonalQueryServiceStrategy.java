@@ -7,4 +7,6 @@ public interface PersonalQueryServiceStrategy {
 
     public UnitatAdministrativaDTO obtenirUnitatAdministrativa(long idUA) throws StrategyException;
 
+	public void setUrl(String url);
+
 }

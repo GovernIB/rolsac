@@ -20,6 +20,14 @@ public class UnitatMateriaQueryServiceAdapter extends UnitatMateriaDTO implement
     public void setUnitatMateriaQueryServiceStrategy(UnitatMateriaQueryServiceStrategy unitatMateriaQueryServiceStrategy) {
         this.unitatMateriaQueryServiceStrategy = unitatMateriaQueryServiceStrategy;
     }
+    
+    private String url;
+    public void setUrl(String url) {
+    	this.url = url;
+    	if (unitatMateriaQueryServiceStrategy != null) {
+    		unitatMateriaQueryServiceStrategy.setUrl(url);
+    	}    	
+    }
 
     private STRATEGY getStrategy() {
         return unitatMateriaQueryServiceStrategy instanceof UnitatMateriaQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
@@ -36,7 +44,11 @@ public class UnitatMateriaQueryServiceAdapter extends UnitatMateriaDTO implement
     public MateriaQueryServiceAdapter obtenirMateria() throws QueryServiceException {
         if (this.getMateria() == null) {return null;}
         try {
-            return (MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), unitatMateriaQueryServiceStrategy.obtenirMateria(this.getMateria()));
+        	 MateriaQueryServiceAdapter mqsa = (MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), unitatMateriaQueryServiceStrategy.obtenirMateria(this.getMateria()));
+        	 if (mqsa != null && url != null) {
+        		 mqsa.setUrl(url);
+        	 }
+        	 return mqsa;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "materia.", e);
         }
@@ -45,7 +57,11 @@ public class UnitatMateriaQueryServiceAdapter extends UnitatMateriaDTO implement
     public UnitatAdministrativaQueryServiceAdapter obtenirUnitatAdministrativa() throws QueryServiceException {
         if (this.getUnidad() == null) {return null;}
         try {
-            return (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatMateriaQueryServiceStrategy.obtenirUnitatAdministrativa(this.getUnidad()));
+        	UnitatAdministrativaQueryServiceAdapter mqsa = (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatMateriaQueryServiceStrategy.obtenirUnitatAdministrativa(this.getUnidad()));
+            if (mqsa != null && url != null) {
+            	mqsa.setUrl(url);
+	       	 }
+	       	 return mqsa;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "unidad administrativa.", e);
         }

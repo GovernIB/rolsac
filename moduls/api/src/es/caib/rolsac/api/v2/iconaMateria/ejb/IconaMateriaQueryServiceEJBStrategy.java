@@ -39,4 +39,8 @@ public class IconaMateriaQueryServiceEJBStrategy implements IconaMateriaQuerySer
         }
     }
 
+	public void setUrl(String url) {
+		//No es necesario en EJBs.
+	}
+
 }

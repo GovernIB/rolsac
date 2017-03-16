@@ -29,6 +29,13 @@ public class ProcedimentQueryServiceWSStrategy implements ProcedimentQueryServic
 	public void setGateway(ProcedimentQueryServiceGateway gateway) {
 		this.gateway = gateway;
 	}
+	
+	public void setUrl(String url) {
+		if (this.gateway != null) {
+			this.gateway.setUrl(url);
+		}
+	}
+
 
 	public int getNumTramits(long id) throws StrategyException {
 		try {
@@ -136,5 +143,6 @@ public class ProcedimentQueryServiceWSStrategy implements ProcedimentQueryServic
 			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}
     }
+
 
 }

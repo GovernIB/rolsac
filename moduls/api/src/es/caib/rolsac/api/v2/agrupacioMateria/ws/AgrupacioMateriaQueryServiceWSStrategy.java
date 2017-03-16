@@ -19,6 +19,13 @@ public class AgrupacioMateriaQueryServiceWSStrategy implements
 	public void setGateway(AgrupacioMateriaQueryServiceGateway gateway) {
 		this.gateway = gateway;
 	}
+	
+	public void setUrl(String url) {
+		if (this.gateway  != null) {
+			this.gateway.setUrl(url);
+		}
+	}	
+
 
 	public int getNumMateries(long id) throws StrategyException {
     	try {
@@ -46,5 +53,6 @@ public class AgrupacioMateriaQueryServiceWSStrategy implements
 		} catch (APIException e) {
 			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}
-	}	
+	}
+
 }

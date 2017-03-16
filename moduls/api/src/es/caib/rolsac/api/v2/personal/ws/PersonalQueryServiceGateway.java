@@ -34,6 +34,21 @@ public class PersonalQueryServiceGateway {
 	public UnitatAdministrativaDTO obtenirUnitatAdministrativa(long idUA)
 			throws RemoteException {
 		return stub.obtenirUnitatAdministrativa(idUA);
+	}
+
+	public void setUrl(String url) {
+		try {
+			if(url != null && !url.isEmpty()){				
+				stub = new PersonalWSSoapBindingStub(
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_PERSONAL),
+						null
+						);
+			}
+		} catch (AxisFault e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
 	}	
 	
 }

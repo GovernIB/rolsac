@@ -15,6 +15,10 @@ public class UsuariQueryServiceEJBStrategy implements UsuariQueryServiceStrategy
     public void setUsuariQueryServiceDelegate(UsuariQueryServiceDelegate usuariQueryServiceDelegate) {
         this.usuariQueryServiceDelegate = usuariQueryServiceDelegate;
     }
+    
+    public void setUrl(String url) {
+		//No es necesario en EJBs
+	}
 
     public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws StrategyException {
         try {
@@ -31,5 +35,7 @@ public class UsuariQueryServiceEJBStrategy implements UsuariQueryServiceStrategy
             throw new StrategyException(e);
         }
     }
+
+	
 
 }

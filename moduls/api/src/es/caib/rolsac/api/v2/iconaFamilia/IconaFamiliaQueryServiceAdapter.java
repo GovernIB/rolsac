@@ -21,6 +21,14 @@ public class IconaFamiliaQueryServiceAdapter extends IconaFamiliaDTO implements 
     public void setIconaFamiliaQueryServiceStrategy(IconaFamiliaQueryServiceStrategy iconaFamiliaQueryServiceStrategy) {
         this.iconaFamiliaQueryServiceStrategy = iconaFamiliaQueryServiceStrategy;
     }
+    
+    private String url;
+    public void setUrl(String url) {
+    	this.url = url;
+		if (this.iconaFamiliaQueryServiceStrategy != null) {
+			this.iconaFamiliaQueryServiceStrategy.setUrl(url);
+		}
+	}
 
     public IconaFamiliaQueryServiceAdapter(IconaFamiliaDTO dto) throws QueryServiceException {
         try {
@@ -37,7 +45,11 @@ public class IconaFamiliaQueryServiceAdapter extends IconaFamiliaDTO implements 
     public FamiliaQueryServiceAdapter obtenirFamilia() throws QueryServiceException {
         if (this.getFamilia() == null) {return null;}
         try {
-            return (FamiliaQueryServiceAdapter) BeanUtils.getAdapter("familia", getStrategy(), iconaFamiliaQueryServiceStrategy.obtenirFamilia(this.getFamilia()));
+        	FamiliaQueryServiceAdapter fqsa = (FamiliaQueryServiceAdapter) BeanUtils.getAdapter("familia", getStrategy(), iconaFamiliaQueryServiceStrategy.obtenirFamilia(this.getFamilia()));
+        	if (fqsa != null && url != null) {
+        		fqsa.setUrl(url);
+        	}
+        	return fqsa;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "familia.", e);
         }
@@ -46,7 +58,11 @@ public class IconaFamiliaQueryServiceAdapter extends IconaFamiliaDTO implements 
     public PerfilQueryServiceAdapter obtenirPerfil() throws QueryServiceException {
         if (this.getPerfil() == null) {return null;}
         try {
-            return (PerfilQueryServiceAdapter) BeanUtils.getAdapter("perfil", getStrategy(), iconaFamiliaQueryServiceStrategy.obtenirPerfil(this.getPerfil()));
+        	PerfilQueryServiceAdapter fqsa = (PerfilQueryServiceAdapter) BeanUtils.getAdapter("perfil", getStrategy(), iconaFamiliaQueryServiceStrategy.obtenirPerfil(this.getPerfil()));
+             if (fqsa != null && url != null) {
+         		fqsa.setUrl(url);
+         	}
+         	return fqsa;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "perfil.", e);
         }
@@ -55,7 +71,11 @@ public class IconaFamiliaQueryServiceAdapter extends IconaFamiliaDTO implements 
     public ArxiuQueryServiceAdapter obtenirIcona() throws QueryServiceException {
         if (this.getIcono() == null) {return null;}
         try {
-            return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), iconaFamiliaQueryServiceStrategy.obtenirIcona(this.getIcono()));
+        	ArxiuQueryServiceAdapter fqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), iconaFamiliaQueryServiceStrategy.obtenirIcona(this.getIcono()));
+            if (fqsa != null && url != null) {
+         		fqsa.setUrl(url);
+         	}
+         	return fqsa;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "icono.", e);
         }

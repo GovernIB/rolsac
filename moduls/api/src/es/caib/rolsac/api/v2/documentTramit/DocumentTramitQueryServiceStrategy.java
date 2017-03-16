@@ -15,5 +15,7 @@ public interface DocumentTramitQueryServiceStrategy {
 	public CatalegDocumentsDTO obtenirCatalegDocuments(long idCatalegDocuments) throws StrategyException;
 	
 	public ExcepcioDocumentacioDTO obtenirExcepcioDocumentacio(long idExcepcioDocumentacio) throws StrategyException;
+
+	public void setUrl(String url);
 }
 
