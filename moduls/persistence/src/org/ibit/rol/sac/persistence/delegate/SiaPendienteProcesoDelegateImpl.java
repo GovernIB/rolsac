@@ -7,9 +7,11 @@ import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
 
+import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.SiaJob;
 import org.ibit.rol.sac.model.SiaPendiente;
 import org.ibit.rol.sac.model.SolrPendienteJob;
+import org.ibit.rol.sac.model.ws.SiaResultado;
 import org.ibit.rol.sac.persistence.util.FiltroSia;
 import org.ibit.rol.sac.persistence.intf.SiaPendienteProcesoFacade;
 import org.ibit.rol.sac.persistence.intf.SiaPendienteProcesoFacadeHome;
@@ -153,6 +155,25 @@ public class SiaPendienteProcesoDelegateImpl extends SiaPendienteProcesoDelegate
 	public void cerrarSiaJob(Long idSiaJob) throws DelegateException{
 		try {
 			getFacade().cerrarSiaJob(idSiaJob);
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
+	}
+	
+	@Override
+	public SiaResultado enviarProcedimiento(ProcedimientoLocal proc)  throws DelegateException{
+		try {
+			getFacade().enviarProcedimiento(proc);
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
+	}
+	
+	
+	@Override
+	public SiaResultado borradoProcedimiento(Long idProc, String idSIA)  throws DelegateException{
+		try {
+			getFacade().borradoProcedimiento(idProc, idSIA);
        } catch (RemoteException e) {
            throw new DelegateException(e);
        }

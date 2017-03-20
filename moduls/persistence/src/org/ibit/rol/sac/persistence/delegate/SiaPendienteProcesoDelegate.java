@@ -2,8 +2,10 @@ package org.ibit.rol.sac.persistence.delegate;
 
 import java.util.List;
 
+import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.SiaJob;
 import org.ibit.rol.sac.model.SiaPendiente;
+import org.ibit.rol.sac.model.ws.SiaResultado;
 import org.ibit.rol.sac.persistence.util.FiltroSia;
 
 
@@ -75,5 +77,13 @@ public class SiaPendienteProcesoDelegate implements StatelessDelegate {
 	public Boolean cerrarJobs() throws DelegateException{
 		return impl.cerrarJobs();
 	}
+	
+	public SiaResultado enviarProcedimiento(ProcedimientoLocal proc) throws DelegateException{
+		return impl.enviarProcedimiento(proc);
+	} 
+	
+	public SiaResultado borradoProcedimiento(Long idProc, String idSIA)  throws DelegateException {
+        return impl.borradoProcedimiento(idProc, idSIA);
+    }
 	
 }

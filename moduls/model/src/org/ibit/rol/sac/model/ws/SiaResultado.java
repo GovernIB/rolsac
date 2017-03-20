@@ -2,6 +2,8 @@ package org.ibit.rol.sac.model.ws;
 
 public class SiaResultado {
 	
+	public static int RESULTADO_NULO = -2;
+	
 	public static int RESULTADO_OK = 1;
 	
 	public static int RESULTADO_ERROR = -1;
@@ -63,6 +65,14 @@ public class SiaResultado {
 		}
 	}
 
+	public boolean isNulo() {
+		if (resultado == SiaResultado.RESULTADO_NULO) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	/**
 	 * @return the correctos
 	 */

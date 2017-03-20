@@ -2,8 +2,10 @@ package org.ibit.rol.sac.persistence.delegate;
 
 import java.util.List;
 
+import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.SiaJob;
 import org.ibit.rol.sac.model.SiaPendiente;
+import org.ibit.rol.sac.model.ws.SiaResultado;
 import org.ibit.rol.sac.persistence.util.FiltroSia;
 
 
@@ -30,5 +32,9 @@ public interface SiaPendienteProcesoDelegateI {
 	public void cerrarSiaJob(Long idSiaJob) throws DelegateException;
 
 	public Boolean cerrarJobs() throws DelegateException;
+	
+	public SiaResultado enviarProcedimiento(ProcedimientoLocal proc) throws DelegateException;
+	
+	public SiaResultado borradoProcedimiento(Long idProc, String idSIA) throws DelegateException;
 
 }
