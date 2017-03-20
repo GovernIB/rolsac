@@ -35,7 +35,7 @@ import es.caib.solr.api.exception.ExcepcionSolrApi;
  *  view-type="remote"
  *  transaction-type="Container"
  *
- * @ejb.transaction type="Required"
+ * @ejb.transaction type="RequiresNew"
  */
 public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 

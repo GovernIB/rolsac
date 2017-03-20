@@ -63,13 +63,28 @@ public class SiaUtils {
 	 * @param procedimiento
 	 * @return
 	 */
-	public static Boolean validaProcedimientoSIA(ProcedimientoLocal procedimiento) {
+	public static SiaEnviableResultado validaProcedimientoSIA(ProcedimientoLocal procedimiento) {
 		
 	    boolean servicio = procedimiento.getServicioResponsable() != null ;
-	    boolean tieneMaterias=procedimiento.getMaterias().size() > 0;
-	    boolean tieneNormativas=procedimiento.getNormativas().size() > 0;
+	    if (!servicio) {
+	    	return new SiaEnviableResultado(false, "No tiene servicio responsable");
+	    }
 	    
-	    return procedimiento.isVisible() && servicio && tieneMaterias && tieneNormativas;
+	    boolean tieneMaterias=procedimiento.getMaterias().size() > 0;
+	    if (!tieneMaterias) {
+	    	return new SiaEnviableResultado(false, "No tiene materias");
+	    }
+	    
+	    boolean tieneNormativas=procedimiento.getNormativas().size() > 0;
+	    if (!tieneNormativas) {
+	    	return new SiaEnviableResultado(false, "No tiene normativas");
+	    }
+	    
+	    if (procedimiento.isVisible()) {
+	    	return new SiaEnviableResultado(true);
+	    } else {
+	    	return new SiaEnviableResultado(false, "Procedimiento no visible");
+	    }
 	}
 	
 	/**
@@ -250,11 +265,11 @@ public class SiaUtils {
 	 *   </ul>
 	 *   En total se producen 6 combinaciones.
 	 *   <ul>
-	 *   	<li>Estado 1 y Activo en  (Enviar Alta). </li>
+	 *   	<li>Estado 1 y Activo en  (Notificar Alta). </li>
 	 *      <li>Estado 1 y Desactivado en SIA (NO HACER NADA). </li>
-	 *   	<li>Estado 2 y Activo en SIA (Enviar Modificación). </li>
-	 *      <li>Estado 2 y Desactivado en SIA (Enviar baja). </li>
-	 *   	<li>Estado 3 y Activo en SIA (Enviar Reactivación). </li>
+	 *   	<li>Estado 2 y Activo en SIA (Notificar Modificación). </li>
+	 *      <li>Estado 2 y Desactivado en SIA (Notificar baja). </li>
+	 *   	<li>Estado 3 y Activo en SIA (Notificar Reactivación). </li>
 	 *      <li>Estado 3 y envío baja (NO HACER NADA). </li>
 	 *   </ul>
 	 *   Hay 2 combinaciones que no se debería hacer nada y que devolverán falsa, en el resto true.
@@ -263,15 +278,31 @@ public class SiaUtils {
 	 * @param proc
 	 * @return
 	 */
-	public static boolean isEnviableSia(ProcedimientoLocal proc) {
-		boolean activoEnSIA = SiaUtils.validaProcedimientoSIA(proc);
-		boolean retorno;
-		if (!activoEnSIA && (proc.getEstadoSIA() == null || SiaUtils.ESTADO_BAJA.equals(proc.getEstadoSIA())) ) {
-			retorno = false;
-		} else {
-			retorno = true;
+	public static SiaEnviableResultado isEnviableSia(ProcedimientoLocal proc) {
+		SiaEnviableResultado resultado = SiaUtils.validaProcedimientoSIA(proc);
+		
+		
+		if (resultado.isNotificiarSIA()) { //Si se notifica a SIA, se debe enviar un ALTA, MODIFICACION o REACTIVACIÓN.
+			
+			if (proc.getCodigoSIA() == null || proc.getCodigoSIA().isEmpty()) { //Si no tiene codigo SIA, ES UN ALTA!!!
+				resultado.setOperacion(SiaUtils.ESTADO_ALTA);
+			} else if (proc.getEstadoSIA() != null && proc.getEstadoSIA().equals(SiaUtils.ESTADO_BAJA)) {
+				resultado.setOperacion(SiaUtils.ESTADO_REACTIVACION);  //Si tiene codigo SIA y está de BAJA, entonces es una reactivación
+			} else {
+				resultado.setOperacion(SiaUtils.ESTADO_MODIFICACION);  //Como ultima acción, modificación.
+			}
+			
+		} else { //No tendría que estar activo en SIA.
+					//Sólo se envia info a SIA cuando hay que dar de baja un procedimiento.
+		
+			if ( proc.getEstadoSIA() != null &&  !SiaUtils.ESTADO_BAJA.equals(proc.getEstadoSIA()) ) {
+				//Si está dando 
+				resultado.setNotificarSIA(true);
+				resultado.setOperacion(SiaUtils.ESTADO_BAJA);
+			}
 		}
-		return retorno;
+		
+		return resultado;
 	}
 
 	/**
@@ -281,6 +312,9 @@ public class SiaUtils {
 	public static Integer getTiempoReintento() {
         return getIntFromProperty("es.caib.rolsac.sia.tiempo.reintento");
     }
+
+	
 	
 	
 }
+

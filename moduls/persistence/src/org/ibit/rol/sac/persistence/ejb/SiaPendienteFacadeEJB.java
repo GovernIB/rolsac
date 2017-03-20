@@ -29,6 +29,7 @@ import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.SiaPendienteProcesoDelegate;
 import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
+import org.ibit.rol.sac.persistence.util.SiaEnviableResultado;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.ibit.rol.sac.persistence.ws.sia.SiaWS;
 
@@ -107,7 +108,8 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	    		
 	    		//Obtenemos el procedimiento y vemos is es enviable a SIA.
 	    		ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimientoParaSolr(idProcedimiento);
-				if (SiaUtils.isEnviableSia(procedimiento)) {
+	    		SiaEnviableResultado siaEnviableResultado = SiaUtils.isEnviableSia(procedimiento);
+				if (siaEnviableResultado.isNotificiarSIA()) {
 		    		try 
 		    		{
 		    			SiaResultado siaResultado = enviarProcedimiento(procDelegate, procedimiento,  null, resultadoDescripcion,  correctos,  incorrectos);
@@ -169,9 +171,9 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	 * @throws Exception
 	 */
 	private SiaResultado enviarProcedimiento(ProcedimientoDelegate procDelegate, 
-									 ProcedimientoLocal proc,  
-									 SiaPendiente siaPendiente,
-										 StringBuffer resultadoDescripcion,  Integer correctos, Integer incorrectos) throws Exception {
+									 		 ProcedimientoLocal proc,  
+									 		 SiaPendiente siaPendiente,
+									 		 StringBuffer resultadoDescripcion,  Integer correctos, Integer incorrectos) throws Exception {
 		
 		resultadoDescripcion.append("   -- Vamos a indexar el procedimiento con id :"+proc.getId()+" <br />");
 		final Sia  sia = obtenerSiaProc(proc);
@@ -264,55 +266,27 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 			{
 				
 				ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimientoParaSolr(idProcedimiento);
-				boolean esEnviable = SiaUtils.isEnviableSia(procedimiento);
-				resultadoDescripcion.append(" Vamos a revisar que hacemos con el procedimiento (id:"+idProcedimiento+") <br /> ");
-				
-				if (procedimiento.getCodigoSIA() == null || procedimiento.getCodigoSIA().isEmpty()) { 
+				SiaEnviableResultado siaEnviableResultado = SiaUtils.isEnviableSia(procedimiento);
+				if (siaEnviableResultado.isNotificiarSIA()) {
 					
-					//no tiene código SIA, por lo que nunca ha estado.
-					if (esEnviable) {
-						resultadoDescripcion.append(" Se va a enviar el procedimiento hacia SIA como un alta <br /> ");
-						SiaResultado siaResultado = enviarProcedimiento(procDelegate, procedimiento,  null, resultadoDescripcion,  correctos,  incorrectos);
-						if (siaResultado.isCorrecto()) {
-							resultadoDescripcion.append("   -- Marcado como correcto (no cumplia requisitos, no se ha enviado a SIA) <br />");
-    						correctos++;		
-						} else {
-							incorrectos++;
-							resultadoDescripcion.append("   -- Marcado como incorrecto <br />");
-    						resultadoDescripcion.append("   -- Mensaje:"+siaResultado.getMensaje()+" <br />");
-						}
-						
+					resultadoDescripcion.append(" Se va a enviar el procedimiento hacia SIA como un "+siaEnviableResultado.getOperacion()+" <br /> ");
+					SiaResultado siaResultado = enviarProcedimiento(procDelegate, procedimiento,  null, resultadoDescripcion,  correctos,  incorrectos);
+					if (siaResultado.isCorrecto()) {
+						resultadoDescripcion.append("   -- Marcado como correcto (no cumplia requisitos, no se ha enviado a SIA) <br />");
+						correctos++;		
 					} else {
-						//No se debe hacer nada.
-						nulos++;
-						resultadoDescripcion.append("   -- Marcado como nulo <br />");
+						incorrectos++;
+						resultadoDescripcion.append("   -- Marcado como incorrecto <br />");
+						resultadoDescripcion.append("   -- Mensaje:"+siaResultado.getMensaje()+" <br />");
 					}
+					
 				} else {
-					//Tiene código SIA. Comprobar si está de alta y si es no enviable.
-					if (!esEnviable && (procedimiento.getEstadoSIA() == null ||
-									   procedimiento.getEstadoSIA().isEmpty() || 
-									   SiaUtils.ESTADO_ALTA.equals(procedimiento.getEstadoSIA())
-									 )
-					   ) 
-					{
-						
-						resultadoDescripcion.append(" Se va a enviar el procedimiento hacia SIA como una baja <br /> ");
-						SiaResultado siaResultado = enviarProcedimiento(procDelegate, procedimiento,  null, resultadoDescripcion,  correctos,  incorrectos);
-						if (siaResultado.isCorrecto()) {
-							resultadoDescripcion.append("   -- Marcado como correcto (no cumplia requisitos, no se ha enviado a SIA) <br />");
-    						correctos++;		
-						} else {
-							incorrectos++;
-							resultadoDescripcion.append("   -- Marcado como incorrecto <br />");
-    						resultadoDescripcion.append("   -- Mensaje:"+siaResultado.getMensaje()+" <br />");
-						}
-						
-					} else {
-						//No se debe hacer nada.
-						nulos++;
-						resultadoDescripcion.append("   -- Marcado como nulo <br />");
-					}
+					//No se debe hacer nada.
+					nulos++;
+					resultadoDescripcion.append("   -- Marcado como nulo (no enviable) "+siaEnviableResultado.getRespuesta()+". <br />");
 				}
+				
+				
 			} catch (Exception exception) {
 				resultadoDescripcion.append("Ha fallado la indexación en pendiente con el mensaje." + ExceptionUtils.getStackTrace(exception)+"<br />");
     			incorrectos++;
@@ -414,8 +388,8 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		        				
 	        					ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimientoParaSolr(siaPendiente.getIdElemento());
 	        					
-	        					boolean esEnviable = SiaUtils.isEnviableSia(procedimiento);
-	        					if (esEnviable || (!esEnviable && procedimiento.getEstadoSIA() != null && SiaUtils.ESTADO_ALTA.equals(procedimiento.getEstadoSIA()))) {
+	        					SiaEnviableResultado siaEnviableResultado = SiaUtils.isEnviableSia(procedimiento);
+	        					if (siaEnviableResultado.isNotificiarSIA()) {
 	        				    	
 	        						SiaResultado siaResultado = enviarProcedimiento(procDelegate, procedimiento,  siaPendiente, resultadoDescripcion,  correctos,  incorrectos);
 	        						if (siaResultado.isCorrecto()) {
@@ -446,8 +420,8 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	        				for (ProcedimientoLocal procedimiento : listProcedimientos) {
 	        					resultadoDescripcion.append("   -- Procedimiento asociado (idProc:"+procedimiento.getId()+") <br />");
 		        				
-	        					boolean esEnviable = SiaUtils.isEnviableSia(procedimiento);
-	        					if (esEnviable || (!esEnviable && procedimiento.getEstadoSIA() != null && SiaUtils.ESTADO_ALTA.equals(procedimiento.getEstadoSIA()))) {
+	        					SiaEnviableResultado siaEnviableResultado = SiaUtils.isEnviableSia(procedimiento);
+	        					if (siaEnviableResultado.isNotificiarSIA()) {
 	        				    	
 	        						SiaResultado siaResultado = enviarProcedimiento(procDelegate, procedimiento,  null, resultadoDescripcion,  null,  null);
 	        						if (!siaResultado.isCorrecto()) {
@@ -492,8 +466,8 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	        				boolean todosCorrectos = true;
 	        				for (ProcedimientoLocal procedimiento : listProcedimientos) {
 	        					
-	        					boolean esEnviable = SiaUtils.isEnviableSia(procedimiento);
-	        					if (esEnviable || (!esEnviable && procedimiento.getEstadoSIA() != null && SiaUtils.ESTADO_ALTA.equals(procedimiento.getEstadoSIA()))) {
+	        					SiaEnviableResultado siaEnviableResultado = SiaUtils.isEnviableSia(procedimiento);
+	        					if (siaEnviableResultado.isNotificiarSIA()) {
 	        				    	
 	        						SiaResultado siaResultado = enviarProcedimiento(procDelegate, procedimiento,  null, resultadoDescripcion,  null,  null);        						
 	        						if (!siaResultado.isCorrecto()) {
@@ -680,25 +654,10 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		
 		sia.setEstado(procedimiento.getEstadoSIA());
 		
-		if (SiaUtils.validaProcedimientoSIA(procedimiento) ) {
-			
-			//ALTA / MODIFICACION / REACTIVACION
-			if (sia.getIdSIA() == null || sia.getIdSIA().isEmpty()) {
-				sia.setOperacion(SiaUtils.ESTADO_ALTA);
-			} else if (sia.getEstado().equals(SiaUtils.ESTADO_ALTA)) {
-				sia.setOperacion(SiaUtils.ESTADO_MODIFICACION); 
-			} else if (sia.getEstado().equals(SiaUtils.ESTADO_BAJA)) { 
-				sia.setOperacion(SiaUtils.ESTADO_REACTIVACION); 
-			}
-			
-						
-		} else if (procedimiento.getCodigoSIA() != null && !procedimiento.getCodigoSIA().isEmpty() 
-				&& sia.getEstado() != null && !sia.getEstado().equals(SiaUtils.ESTADO_BAJA)){
-			
-			sia.setOperacion(SiaUtils.ESTADO_BAJA); 
-
-		}
-		
+		//Obtenemos el tipo de operación a partir de validar el procedimiento.
+		SiaEnviableResultado siaEnviableResultado = SiaUtils.validaProcedimientoSIA(procedimiento);
+		sia.setOperacion(siaEnviableResultado.getOperacion());
+					
 		//Se ha tenido que poner aquí (y se ha simplificado) pq se produce un error al enviar una modificación.
 		if (SiaUtils.ESTADO_ALTA.equals(sia.getOperacion())) {
 			sia.setTipoTramite(SiaUtils.TRAMITE_PROC);			
