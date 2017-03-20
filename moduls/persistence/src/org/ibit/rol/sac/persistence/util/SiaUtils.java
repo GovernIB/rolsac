@@ -58,34 +58,6 @@ public class SiaUtils {
 	public static final Integer SIAPENDIENTE_PROCEDIMIENTO_EXISTE = 1;
 	public static final Integer SIAPENDIENTE_PROCEDIMIENTO_BORRADO = 0;
 	
-	/**
-	 * Valida si un procedimiento es para enviar o no a SIA.
-	 * @param procedimiento
-	 * @return
-	 */
-	public static SiaEnviableResultado validaProcedimientoSIA(ProcedimientoLocal procedimiento) {
-		
-	    boolean servicio = procedimiento.getServicioResponsable() != null ;
-	    if (!servicio) {
-	    	return new SiaEnviableResultado(false, "No tiene servicio responsable");
-	    }
-	    
-	    boolean tieneMaterias=procedimiento.getMaterias().size() > 0;
-	    if (!tieneMaterias) {
-	    	return new SiaEnviableResultado(false, "No tiene materias");
-	    }
-	    
-	    boolean tieneNormativas=procedimiento.getNormativas().size() > 0;
-	    if (!tieneNormativas) {
-	    	return new SiaEnviableResultado(false, "No tiene normativas");
-	    }
-	    
-	    if (procedimiento.isVisible()) {
-	    	return new SiaEnviableResultado(true);
-	    } else {
-	    	return new SiaEnviableResultado(false, "Procedimiento no visible");
-	    }
-	}
 	
 	/**
 	 * Obtiene un long de una propiedad.
@@ -248,6 +220,15 @@ public class SiaUtils {
 		}
 		return activo;
 	}
+	
+	/**
+	 * Get tipologia envio SIA.
+	 * @return
+	 */
+	public static Integer getTiempoReintento() {
+        return getIntFromProperty("es.caib.rolsac.sia.tiempo.reintento");
+    }
+
 
 	/***
 	 * Comprueba si un procedimiento hay que enviarlo. Hay que tener en cuenta lo siguiente: 
@@ -275,18 +256,18 @@ public class SiaUtils {
 	 *   Hay 2 combinaciones que no se debería hacer nada y que devolverán falsa, en el resto true.
 	 *   
 	 * </p>
-	 * @param proc
+	 * @param procedimiento
 	 * @return
 	 */
-	public static SiaEnviableResultado isEnviableSia(ProcedimientoLocal proc) {
-		SiaEnviableResultado resultado = SiaUtils.validaProcedimientoSIA(proc);
+	public static SiaEnviableResultado isEnviableSia(ProcedimientoLocal procedimiento) {
+		SiaEnviableResultado resultado = SiaUtils.validaProcedimientoSIA(procedimiento);
 		
 		
 		if (resultado.isNotificiarSIA()) { //Si se notifica a SIA, se debe enviar un ALTA, MODIFICACION o REACTIVACIÓN.
 			
-			if (proc.getCodigoSIA() == null || proc.getCodigoSIA().isEmpty()) { //Si no tiene codigo SIA, ES UN ALTA!!!
+			if (procedimiento.getCodigoSIA() == null || procedimiento.getCodigoSIA().isEmpty()) { //Si no tiene codigo SIA, ES UN ALTA!!!
 				resultado.setOperacion(SiaUtils.ESTADO_ALTA);
-			} else if (proc.getEstadoSIA() != null && proc.getEstadoSIA().equals(SiaUtils.ESTADO_BAJA)) {
+			} else if (procedimiento.getEstadoSIA() != null && procedimiento.getEstadoSIA().equals(SiaUtils.ESTADO_BAJA)) {
 				resultado.setOperacion(SiaUtils.ESTADO_REACTIVACION);  //Si tiene codigo SIA y está de BAJA, entonces es una reactivación
 			} else {
 				resultado.setOperacion(SiaUtils.ESTADO_MODIFICACION);  //Como ultima acción, modificación.
@@ -295,7 +276,7 @@ public class SiaUtils {
 		} else { //No tendría que estar activo en SIA.
 					//Sólo se envia info a SIA cuando hay que dar de baja un procedimiento.
 		
-			if ( proc.getEstadoSIA() != null &&  !SiaUtils.ESTADO_BAJA.equals(proc.getEstadoSIA()) ) {
+			if ( procedimiento.getEstadoSIA() != null &&  !SiaUtils.ESTADO_BAJA.equals(procedimiento.getEstadoSIA()) ) {
 				//Si está dando 
 				resultado.setNotificarSIA(true);
 				resultado.setOperacion(SiaUtils.ESTADO_BAJA);
@@ -306,13 +287,35 @@ public class SiaUtils {
 	}
 
 	/**
-	 * Get tipologia envio SIA.
+	 * Valida si un procedimiento es para enviar o no a SIA.
+	 * @param procedimiento
 	 * @return
 	 */
-	public static Integer getTiempoReintento() {
-        return getIntFromProperty("es.caib.rolsac.sia.tiempo.reintento");
-    }
-
+	private static SiaEnviableResultado validaProcedimientoSIA(ProcedimientoLocal procedimiento) {
+		
+	    boolean servicio = procedimiento.getServicioResponsable() != null ;
+	    if (!servicio) {
+	    	return new SiaEnviableResultado(false, "No tiene servicio responsable");
+	    }
+	    
+	    boolean tieneMaterias=procedimiento.getMaterias().size() > 0;
+	    if (!tieneMaterias) {
+	    	return new SiaEnviableResultado(false, "No tiene materias");
+	    }
+	    
+	    boolean tieneNormativas=procedimiento.getNormativas().size() > 0;
+	    if (!tieneNormativas) {
+	    	return new SiaEnviableResultado(false, "No tiene normativas");
+	    }
+	    
+	    if (procedimiento.isVisible()) {
+	    	return new SiaEnviableResultado(true);
+	    } else {
+	    	return new SiaEnviableResultado(false, "Procedimiento no visible");
+	    }
+	}
+	
+	
 	
 	
 	

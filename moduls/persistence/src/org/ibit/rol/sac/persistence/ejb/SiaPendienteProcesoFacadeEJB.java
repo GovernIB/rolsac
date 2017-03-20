@@ -669,7 +669,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 		sia.setEstado(procedimiento.getEstadoSIA());
 		
 		//Obtenemos el tipo de operación a partir de validar el procedimiento.
-		SiaEnviableResultado siaEnviableResultado = SiaUtils.validaProcedimientoSIA(procedimiento);
+		SiaEnviableResultado siaEnviableResultado = SiaUtils.isEnviableSia(procedimiento);
 		sia.setOperacion(siaEnviableResultado.getOperacion());
 					
 		//Se ha tenido que poner aquí (y se ha simplificado) pq se produce un error al enviar una modificación.
