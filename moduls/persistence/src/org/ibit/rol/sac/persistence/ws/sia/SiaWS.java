@@ -1,5 +1,8 @@
 package org.ibit.rol.sac.persistence.ws.sia;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.Sia;
 import org.ibit.rol.sac.model.TraduccionNormativa;
@@ -158,20 +161,23 @@ public class SiaWS {
 		paramSia.setCODNIVELADMINISTRACIONELECTRONICA(sia.getNivAdm().toString());
 		
 		
-		NORMATIVASNORMATIVA[] normativas = new NORMATIVASNORMATIVA[sia.getNormativas().size()];
-		i=0;
+		List<NORMATIVASNORMATIVA> normativasCorrectas = new ArrayList<NORMATIVASNORMATIVA>();
 		for (Normativa norm : sia.getNormativas()) {
 			NORMATIVASNORMATIVA nor = new NORMATIVASNORMATIVA();
-			if (norm.getTipo() == null) { throw new Exception("No tiene tipo sia la normativa.");}
+			if (norm.getTipo() == null) { continue;}
 			nor.setCODRANGO(norm.getTipo().getTipoSia().toString()); 
 			if (((TraduccionNormativa) norm.getTraduccion("es")) == null) {
 				nor.setTITULO(((TraduccionNormativa) norm.getTraduccion("ca")).getTitulo());
 			} else {
 				nor.setTITULO(((TraduccionNormativa) norm.getTraduccion("es")).getTitulo());
 			}
-			normativas[i]= nor;
-			i++;
+			normativasCorrectas.add(nor);
 		}
+		NORMATIVASNORMATIVA[] normativas = new NORMATIVASNORMATIVA[normativasCorrectas.size()];
+		for( i = 0 ; i< normativasCorrectas.size(); i++) {
+			normativas[i] = normativasCorrectas.get(i);
+		}
+		
 		paramSia.setNORMATIVAS(normativas);
 		
 		MATERIASMATERIA[] materias = new MATERIASMATERIA[sia.getMaterias().length];

@@ -104,7 +104,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 				if (siaEnviableResultado.isNotificiarSIA()) {
 		    		try {
 		    			// Enviamos a SIA
-		    			enviarProcedimiento(procedimiento);		    						    		
+		    			siaResultado = enviarProcedimiento(procedimiento);		    						    		
 					} catch (Exception e) {
 						log.error("Error enviando procedimiento " + procedimiento.getId(), e);
 						siaResultado = new SiaResultado(SiaResultado.RESULTADO_ERROR, ExceptionUtils.getStackTrace(e));												
@@ -161,7 +161,10 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	private void actualizaEstadoProceso(Long procId, SiaResultado siaResultado,
 			EstadoProcesoSIA estadoProceso) {
 		
-		if (siaResultado.isNulo()) {
+		if (siaResultado == null || estadoProceso == null) {
+			//Para evitar cualquier error se incluye
+			return;
+		} else if (siaResultado.isNulo()) {
 			estadoProceso.addNulo();
 			estadoProceso.addLineaDetalle("   ---- Procedimiento: " + procId + " no cumple requisitos para enviar a SIA: " +  siaResultado.getMensaje() + "<br />");
 		} else if (siaResultado.isCorrecto()) {

@@ -121,12 +121,12 @@
                  <a href="javascript:;" class="btn unitatOrganica" id = "btnContinuar"><span><span><spring:message code='boto.continuar'/></span></span></a>
             </span> 
             <br /><br /><br />     
-            <span class="missatge"><spring:message code='sia.enviar_tiempo'/></span>
+            <!-- <span class="missatge"><spring:message code='sia.enviar_tiempo'/></span>
             <span class="btnGenerico">
                  <a href="javascript:;" class="btn unitatOrganica" id = "btnIndexarTiempo"><span><span><spring:message code='boto.continuar'/></span></span></a>
             </span> 
             <br />
-           
+            -->
             <span class="missatge"><spring:message code='sia.cerrar_job'/></span>
             <span class="btnGenerico">
                  <a href="javascript:;" class="btn unitatOrganica" id = "btnCerrarJobs"><span><span><spring:message code='boto.continuar'/></span></span></a>

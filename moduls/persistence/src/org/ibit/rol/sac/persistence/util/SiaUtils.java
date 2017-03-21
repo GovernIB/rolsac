@@ -11,6 +11,7 @@ import javax.ejb.EJBException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.SiaPendiente;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -316,6 +317,17 @@ public class SiaUtils {
 	    if (!tieneNormativas) {
 	    	return new SiaEnviableResultado(false, "No tiene normativas");
 	    }
+	    
+	    boolean encontradoTipo = false;
+	    for (Normativa norm : procedimiento.getNormativas()) {
+	    	if (norm.getTipo() != null && norm.getTipo().getTipoSia() != null) {
+	    		encontradoTipo = true;
+	    	}
+	    }
+	    if (!encontradoTipo) {
+	    	return new SiaEnviableResultado(false, "Ninguna de las normativas tiene asociado un tipo sia");
+	    }
+	    
 	    
 	    if (!procedimiento.isVisible()) {
 	    	return new SiaEnviableResultado(false, "Procedimiento no visible");
