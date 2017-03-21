@@ -31,11 +31,11 @@ public class PublicObjectiuQueryServiceAdapter extends PublicObjectiuDTO impleme
         this.publicObjectiuQueryServiceStrategy = publicObjectiuQueryServiceStrategy;
     }
     
-    private String url;
-    public void setRolsacUrl(String url) {
-    	this.url = url;
+    private String rolsacUrl;
+    public void setRolsacUrl(String rolsacUrl) {
+    	this.rolsacUrl = rolsacUrl;
 		if (this.publicObjectiuQueryServiceStrategy != null) {
-			this.publicObjectiuQueryServiceStrategy.setUrl(url);
+			this.publicObjectiuQueryServiceStrategy.setUrl(rolsacUrl);
 		}
 	}
 
@@ -65,8 +65,8 @@ public class PublicObjectiuQueryServiceAdapter extends PublicObjectiuDTO impleme
             List<AgrupacioFetVitalQueryServiceAdapter> llistaAgrupacions = new ArrayList<AgrupacioFetVitalQueryServiceAdapter>();
             for (AgrupacioFetVitalDTO afvDTO : llistaDTO) {
             	AgrupacioFetVitalQueryServiceAdapter tqsa = (AgrupacioFetVitalQueryServiceAdapter) BeanUtils.getAdapter("agrupacioFetVital", getStrategy(), afvDTO);
-            	if (tqsa != null && url != null) {
-            		tqsa.setRolsacUrl(url);
+            	if (tqsa != null && rolsacUrl != null) {
+            		tqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaAgrupacions.add(tqsa);
             }
@@ -82,8 +82,8 @@ public class PublicObjectiuQueryServiceAdapter extends PublicObjectiuDTO impleme
             List<ProcedimentQueryServiceAdapter> llistaProcediments = new ArrayList<ProcedimentQueryServiceAdapter>();
             for (ProcedimentDTO procDTO : llistaDTO) {
             	ProcedimentQueryServiceAdapter tqsa = (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), procDTO);
-            	if (tqsa != null && url != null) {
-            		tqsa.setRolsacUrl(url);
+            	if (tqsa != null && rolsacUrl != null) {
+            		tqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaProcediments.add(tqsa);
             }
@@ -99,8 +99,8 @@ public class PublicObjectiuQueryServiceAdapter extends PublicObjectiuDTO impleme
             List<FitxaQueryServiceAdapter> llistaFitxes = new ArrayList<FitxaQueryServiceAdapter>();
             for (FitxaDTO fitxaDTO : llistaDTO) {
             	FitxaQueryServiceAdapter tqsa = (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), fitxaDTO);
-            	if (tqsa != null && url != null) {
-            		tqsa.setRolsacUrl(url);
+            	if (tqsa != null && rolsacUrl != null) {
+            		tqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaFitxes.add(tqsa);
             }

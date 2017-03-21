@@ -26,11 +26,11 @@ public class EdificiQueryServiceAdapter extends EdificiDTO implements EdificiQue
         this.edificiQueryServiceStrategy = edificiQueryServiceStrategy;
     }
     
-    private String url;
-    public void setRolsacUrl(String url) {
-    	this.url = url;
+    private String rolsacUrl;
+    public void setRolsacUrl(String rolsacUrl) {
+    	this.rolsacUrl = rolsacUrl;
     	 if (this.edificiQueryServiceStrategy != null) {
-    		 this.edificiQueryServiceStrategy.setUrl(url);
+    		 this.edificiQueryServiceStrategy.setUrl(rolsacUrl);
     	 }
 	}
 
@@ -60,8 +60,8 @@ public class EdificiQueryServiceAdapter extends EdificiDTO implements EdificiQue
             List<UnitatAdministrativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
             for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
             	UnitatAdministrativaQueryServiceAdapter uqsa = (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO);
-            	if (uqsa != null && url != null) {
-            		uqsa.setRolsacUrl(url);
+            	if (uqsa != null && rolsacUrl != null) {
+            		uqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(uqsa);
             }
@@ -75,8 +75,8 @@ public class EdificiQueryServiceAdapter extends EdificiDTO implements EdificiQue
         if (this.getFotoPequenya() == null) {return null;}
         try {
         	ArxiuQueryServiceAdapter aqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), edificiQueryServiceStrategy.obtenirFotoPequenya(this.getFotoPequenya()));
-        	if (aqsa != null && url != null) {
-        		aqsa.setRolsacUrl(url);
+        	if (aqsa != null && rolsacUrl != null) {
+        		aqsa.setRolsacUrl(rolsacUrl);
         	}
         	return aqsa;
         } catch (StrategyException e) {
@@ -88,8 +88,8 @@ public class EdificiQueryServiceAdapter extends EdificiDTO implements EdificiQue
         if (this.getFotoGrande() == null) {return null;}
         try {
         	ArxiuQueryServiceAdapter aqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), edificiQueryServiceStrategy.obtenirFotoGrande(this.getFotoGrande()));
-            if (aqsa != null && url != null) {
-        		aqsa.setRolsacUrl(url);
+            if (aqsa != null && rolsacUrl != null) {
+        		aqsa.setRolsacUrl(rolsacUrl);
         	}
             return aqsa;
         } catch (StrategyException e) {
@@ -101,8 +101,8 @@ public class EdificiQueryServiceAdapter extends EdificiDTO implements EdificiQue
         if (this.getPlano() == null) {return null;}
         try {
         	ArxiuQueryServiceAdapter aqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), edificiQueryServiceStrategy.obtenirPlano(this.getPlano()));
-             if (aqsa != null && url != null) {
-         		aqsa.setRolsacUrl(url);
+             if (aqsa != null && rolsacUrl != null) {
+         		aqsa.setRolsacUrl(rolsacUrl);
          	}
             return aqsa;
         } catch (StrategyException e) {

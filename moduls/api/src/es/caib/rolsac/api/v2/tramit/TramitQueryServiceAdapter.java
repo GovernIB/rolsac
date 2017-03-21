@@ -32,11 +32,11 @@ public class TramitQueryServiceAdapter extends TramitDTO implements TramitQueryS
         this.tramitQueryServiceStrategy = tramitQueryServiceStrategy;
     }
     
-    private String url;
-    public void setRolsacUrl(String url) {
-		this.url = url;
+    private String rolsacUrl;
+    public void setRolsacUrl(String rolsacUrl) {
+		this.rolsacUrl = rolsacUrl;
 		if (this.tramitQueryServiceStrategy != null) {
-			this.tramitQueryServiceStrategy.setUrl(url);
+			this.tramitQueryServiceStrategy.setUrl(rolsacUrl);
 		}
 	}    
 
@@ -81,8 +81,8 @@ public class TramitQueryServiceAdapter extends TramitDTO implements TramitQueryS
         try {
             ProcedimentDTO dto = tramitQueryServiceStrategy.obtenirProcediment(this.getProcedimiento());
             ProcedimentQueryServiceAdapter dqsa=  (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), dto);
-            if (dqsa != null && url != null) {
-        		dqsa.setRolsacUrl(url);
+            if (dqsa != null && rolsacUrl != null) {
+        		dqsa.setRolsacUrl(rolsacUrl);
         	}
         	return dqsa;
         } catch (StrategyException e) {
@@ -95,8 +95,8 @@ public class TramitQueryServiceAdapter extends TramitDTO implements TramitQueryS
         try {
             UnitatAdministrativaDTO dto = tramitQueryServiceStrategy.obtenirOrganCompetent(this.getOrganCompetent());
             UnitatAdministrativaQueryServiceAdapter dqsa = (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), dto);
-            if (dqsa != null && url != null) {
-        		dqsa.setRolsacUrl(url);
+            if (dqsa != null && rolsacUrl != null) {
+        		dqsa.setRolsacUrl(rolsacUrl);
         	}
         	return dqsa;
         } catch (StrategyException e) {
@@ -110,8 +110,8 @@ public class TramitQueryServiceAdapter extends TramitDTO implements TramitQueryS
             List<DocumentTramitQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentTramitQueryServiceAdapter>();
             for (DocumentTramitDTO documentTramitDTO : llistaDTO) {
             	DocumentTramitQueryServiceAdapter dqsa = (DocumentTramitQueryServiceAdapter) BeanUtils.getAdapter("documentTramit", getStrategy(), documentTramitDTO);
-            	if (dqsa != null && url != null) {
-            		dqsa.setRolsacUrl(url);
+            	if (dqsa != null && rolsacUrl != null) {
+            		dqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(dqsa);
             }
@@ -127,8 +127,8 @@ public class TramitQueryServiceAdapter extends TramitDTO implements TramitQueryS
             List<DocumentTramitQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentTramitQueryServiceAdapter>();
             for (DocumentTramitDTO documentTramitDTO : llistaDTO) {
             	DocumentTramitQueryServiceAdapter dqsa = (DocumentTramitQueryServiceAdapter) BeanUtils.getAdapter("documentTramit", getStrategy(), documentTramitDTO);
-            	if (dqsa != null && url != null) {
-            		dqsa.setRolsacUrl(url);
+            	if (dqsa != null && rolsacUrl != null) {
+            		dqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(dqsa);
             }
@@ -144,8 +144,8 @@ public class TramitQueryServiceAdapter extends TramitDTO implements TramitQueryS
             List<TaxaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<TaxaQueryServiceAdapter>();
             for (TaxaDTO taxaDTO : llistaDTO) {
             	TaxaQueryServiceAdapter dqsa = (TaxaQueryServiceAdapter) BeanUtils.getAdapter("taxa", getStrategy(), taxaDTO);
-            	if (dqsa != null && url != null) {
-            		dqsa.setRolsacUrl(url);
+            	if (dqsa != null && rolsacUrl != null) {
+            		dqsa.setRolsacUrl(rolsacUrl);
             	}
             	 llistaQueryServiceAdapter.add(dqsa);
             }

@@ -28,11 +28,11 @@ public class DocumentQueryServiceAdapter extends DocumentDTO implements Document
         this.documentQueryServiceStrategy = documentQueryServiceStrategy;
     }
     
-    private String url;
-    public void setRolsacUrl(String url) {
-    	this.url = url;
+    private String rolsacUrl;
+    public void setRolsacUrl(String rolsacUrl) {
+    	this.rolsacUrl = rolsacUrl;
 		if ( this.documentQueryServiceStrategy != null) {
-			 this.documentQueryServiceStrategy.setUrl(url);
+			 this.documentQueryServiceStrategy.setUrl(rolsacUrl);
 		}
 	}
 
@@ -53,8 +53,8 @@ public class DocumentQueryServiceAdapter extends DocumentDTO implements Document
         try {
             FitxaDTO dto = documentQueryServiceStrategy.obtenirFitxa(this.getFicha());
             FitxaQueryServiceAdapter fqsa = (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), dto);
-            if (fqsa != null && url != null) {
-            	fqsa.setRolsacUrl(url);
+            if (fqsa != null && rolsacUrl != null) {
+            	fqsa.setRolsacUrl(rolsacUrl);
             }
             return fqsa;
         } catch (StrategyException e) {
@@ -67,8 +67,8 @@ public class DocumentQueryServiceAdapter extends DocumentDTO implements Document
         try {
             ProcedimentDTO dto = documentQueryServiceStrategy.obtenirProcediment(this.getProcedimiento());
             ProcedimentQueryServiceAdapter pqsa = (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), dto);
-            if (pqsa != null && url != null) {
-            	pqsa.setRolsacUrl(url);
+            if (pqsa != null && rolsacUrl != null) {
+            	pqsa.setRolsacUrl(rolsacUrl);
             }
             return pqsa;
         } catch (StrategyException e) {
@@ -81,8 +81,8 @@ public class DocumentQueryServiceAdapter extends DocumentDTO implements Document
         try {
             ArxiuDTO dto = documentQueryServiceStrategy.obtenirArxiu(this.getArchivo());
             ArxiuQueryServiceAdapter aqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
-            if (aqsa != null && url != null) {
-            	aqsa.setRolsacUrl(url);
+            if (aqsa != null && rolsacUrl != null) {
+            	aqsa.setRolsacUrl(rolsacUrl);
             }
             return aqsa;
         } catch (StrategyException e) {

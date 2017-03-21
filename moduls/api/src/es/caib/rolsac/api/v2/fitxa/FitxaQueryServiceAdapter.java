@@ -47,11 +47,11 @@ public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryServ
         this.fitxaQueryServiceStrategy = fitxaQueryServiceStrategy;
     }
 
-    private String url;
-    public void setRolsacUrl(String url) {
-    	this.url = url;
+    private String rolsacUrl;
+    public void setRolsacUrl(String rolsacUrl) {
+    	this.rolsacUrl = rolsacUrl;
     	if (this.fitxaQueryServiceStrategy != null) {
-    		this.fitxaQueryServiceStrategy.setUrl(url);
+    		this.fitxaQueryServiceStrategy.setUrl(rolsacUrl);
     	}
     }
     
@@ -186,8 +186,8 @@ public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryServ
             List<DocumentQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentQueryServiceAdapter>();
             for (DocumentDTO documentDTO : llistaDTO) {            
             	DocumentQueryServiceAdapter fqsa = (DocumentQueryServiceAdapter) BeanUtils.getAdapter("document", getStrategy(), documentDTO);
-            	if (fqsa != null && url != null) {
-            		fqsa.setRolsacUrl(url);
+            	if (fqsa != null && rolsacUrl != null) {
+            		fqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(fqsa);
             }
@@ -203,8 +203,8 @@ public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryServ
             List<FetVitalQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FetVitalQueryServiceAdapter>();
             for (FetVitalDTO fetVitalDTO : llistaDTO) {            
             	FetVitalQueryServiceAdapter fqsa = (FetVitalQueryServiceAdapter) BeanUtils.getAdapter("fetVital", getStrategy(), fetVitalDTO);
-            	if (fqsa != null && url != null) {
-            		fqsa.setRolsacUrl(url);
+            	if (fqsa != null && rolsacUrl != null) {
+            		fqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(fqsa);
             }
@@ -218,8 +218,8 @@ public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryServ
         if (this.getIcono() == null) {return null;}
         try {
         	ArxiuQueryServiceAdapter fqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), fitxaQueryServiceStrategy.obtenirIcona(this.getIcono()));
-            if (fqsa != null && url != null) {
-        		fqsa.setRolsacUrl(url);
+            if (fqsa != null && rolsacUrl != null) {
+        		fqsa.setRolsacUrl(rolsacUrl);
         	}
         	return fqsa;
         } catch (StrategyException e) {
@@ -231,8 +231,8 @@ public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryServ
         if (this.getImagen() == null) {return null;}
         try {
         	ArxiuQueryServiceAdapter fqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), fitxaQueryServiceStrategy.obtenirImatge(this.getImagen()));
-            if (fqsa != null && url != null) {
-        		fqsa.setRolsacUrl(url);
+            if (fqsa != null && rolsacUrl != null) {
+        		fqsa.setRolsacUrl(rolsacUrl);
         	}
         	return fqsa;
         } catch (StrategyException e) {
@@ -244,8 +244,8 @@ public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryServ
         if (this.getBaner() == null) {return null;}
         try {
         	ArxiuQueryServiceAdapter fqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), fitxaQueryServiceStrategy.obtenirBaner(this.getBaner()));
-        	if (fqsa != null && url != null) {
-         		fqsa.setRolsacUrl(url);
+        	if (fqsa != null && rolsacUrl != null) {
+         		fqsa.setRolsacUrl(rolsacUrl);
          	}
          	return fqsa;
         } catch (StrategyException e) {
@@ -259,8 +259,8 @@ public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryServ
             List<PublicObjectiuQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<PublicObjectiuQueryServiceAdapter>();
             for (PublicObjectiuDTO poDTO : llistaDTO) {
             	PublicObjectiuQueryServiceAdapter fqsa = (PublicObjectiuQueryServiceAdapter) BeanUtils.getAdapter("publicObjectiu", getStrategy(), poDTO);
-            	if (fqsa != null && url != null) {
-             		fqsa.setRolsacUrl(url);
+            	if (fqsa != null && rolsacUrl != null) {
+             		fqsa.setRolsacUrl(rolsacUrl);
              	}
             	llistaQueryServiceAdapter.add(fqsa);
             }

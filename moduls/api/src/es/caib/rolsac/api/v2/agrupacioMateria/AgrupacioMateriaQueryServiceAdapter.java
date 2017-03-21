@@ -27,11 +27,11 @@ public class AgrupacioMateriaQueryServiceAdapter extends AgrupacioMateriaDTO imp
         this.agrupacioMateriaQueryServiceStrategy = agrupacioMateriaQueryServiceStrategy;
     }
     
-    private String url;
-    public void setRolsacUrl(String url) {
-    	this.url = url;
+    private String rolsacUrl;
+    public void setRolsacUrl(String rolsacUrl) {
+    	this.rolsacUrl = rolsacUrl;
 		if (agrupacioMateriaQueryServiceStrategy != null) {
-			agrupacioMateriaQueryServiceStrategy.setUrl(url);
+			agrupacioMateriaQueryServiceStrategy.setUrl(rolsacUrl);
 		}
 	}
 
@@ -52,8 +52,8 @@ public class AgrupacioMateriaQueryServiceAdapter extends AgrupacioMateriaDTO imp
         try {
             SeccioDTO dto = agrupacioMateriaQueryServiceStrategy.obtenirSeccio(this.getSeccion());
             SeccioQueryServiceAdapter sqsa =  (SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), dto);
-            if (sqsa != null && url != null) {
-            	sqsa.setRolsacUrl(url);
+            if (sqsa != null && rolsacUrl != null) {
+            	sqsa.setRolsacUrl(rolsacUrl);
             }
             return sqsa;
         } catch (StrategyException e) {
@@ -68,8 +68,8 @@ public class AgrupacioMateriaQueryServiceAdapter extends AgrupacioMateriaDTO imp
             List<MateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<MateriaQueryServiceAdapter>();
             for (MateriaDTO materiaDTO : llistaDTO) {
             	MateriaQueryServiceAdapter mqsa = (MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), materiaDTO);
-            	if (mqsa != null && url != null) {
-            		mqsa.setRolsacUrl(url);
+            	if (mqsa != null && rolsacUrl != null) {
+            		mqsa.setRolsacUrl(rolsacUrl);
             	}
                 llistaQueryServiceAdapter.add(mqsa);
             }

@@ -25,11 +25,11 @@ public class EnllacQueryServiceAdapter extends EnllacDTO implements EnllacQueryS
         return enllacQueryServiceStrategy instanceof EnllacQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
     
-    private String url;
-    public void setRolsacUrl(String url) {
-    	this.url = url;
+    private String rolsacUrl;
+    public void setRolsacUrl(String rolsacUrl) {
+    	this.rolsacUrl = rolsacUrl;
 		if (this.enllacQueryServiceStrategy != null) {
-			this.enllacQueryServiceStrategy.setUrl(url);
+			this.enllacQueryServiceStrategy.setUrl(rolsacUrl);
 		}
 	}
 
@@ -45,8 +45,8 @@ public class EnllacQueryServiceAdapter extends EnllacDTO implements EnllacQueryS
         if (this.getFicha() == null) {return null;}
         try {
         	FitxaQueryServiceAdapter fqsa = (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), enllacQueryServiceStrategy.obtenirFitxa(this.getFicha()));
-        	if (fqsa != null && url != null) {
-        		fqsa.setRolsacUrl(url);
+        	if (fqsa != null && rolsacUrl != null) {
+        		fqsa.setRolsacUrl(rolsacUrl);
         	}
         	return fqsa;
         } catch (StrategyException e) {
@@ -58,8 +58,8 @@ public class EnllacQueryServiceAdapter extends EnllacDTO implements EnllacQueryS
         if (this.getProcedimiento() == null) {return null;}
         try {
         	ProcedimentQueryServiceAdapter fqsa = (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), enllacQueryServiceStrategy.obtenirProcediment(this.getProcedimiento()));
-            if (fqsa != null && url != null) {
-        		fqsa.setRolsacUrl(url);
+            if (fqsa != null && rolsacUrl != null) {
+        		fqsa.setRolsacUrl(rolsacUrl);
         	}
         	return fqsa;
         } catch (StrategyException e) {

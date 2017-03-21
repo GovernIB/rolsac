@@ -22,11 +22,11 @@ public class FitxaUAQueryServiceAdapter extends FitxaUADTO implements FitxaUAQue
         this.fitxaUAQueryServiceStrategy = fitxaUAQueryServiceStrategy;
     }
     
-    private String url;
-    public void setRolsacUrl(String url) {
-    	this.url = url;
+    private String rolsacUrl;
+    public void setRolsacUrl(String rolsacUrl) {
+    	this.rolsacUrl = rolsacUrl;
 		if (fitxaUAQueryServiceStrategy != null) {
-			fitxaUAQueryServiceStrategy.setUrl(url);
+			fitxaUAQueryServiceStrategy.setUrl(rolsacUrl);
 		}
 	}
 
@@ -46,8 +46,8 @@ public class FitxaUAQueryServiceAdapter extends FitxaUADTO implements FitxaUAQue
         if (this.getUnidadAdministrativa() == null) {return null;}
         try {
         	UnitatAdministrativaQueryServiceAdapter uaqsa = (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), fitxaUAQueryServiceStrategy.obtenirUnitatAdministrativa(this.getUnidadAdministrativa()));
-        	if (uaqsa != null && url != null) {
-        		uaqsa.setRolsacUrl(url);
+        	if (uaqsa != null && rolsacUrl != null) {
+        		uaqsa.setRolsacUrl(rolsacUrl);
         	}
         	return uaqsa;
         } catch (StrategyException e) {
@@ -59,8 +59,8 @@ public class FitxaUAQueryServiceAdapter extends FitxaUADTO implements FitxaUAQue
         if (this.getFicha()== null) {return null;}
         try {
         	FitxaQueryServiceAdapter uaqsa = (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), fitxaUAQueryServiceStrategy.obtenirFitxa(this.getFicha()));
-             if (uaqsa != null && url != null) {
-         		uaqsa.setRolsacUrl(url);
+             if (uaqsa != null && rolsacUrl != null) {
+         		uaqsa.setRolsacUrl(rolsacUrl);
          	}
          	return uaqsa;
         } catch (StrategyException e) {
@@ -72,8 +72,8 @@ public class FitxaUAQueryServiceAdapter extends FitxaUADTO implements FitxaUAQue
         if (this.getSeccion() == null) {return null;}
         try {
         	SeccioQueryServiceAdapter uaqsa = (SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), fitxaUAQueryServiceStrategy.obtenirSeccio(this.getSeccion()));
-            if (uaqsa != null && url != null) {
-         		uaqsa.setRolsacUrl(url);
+            if (uaqsa != null && rolsacUrl != null) {
+         		uaqsa.setRolsacUrl(rolsacUrl);
          	}
          	return uaqsa;
         } catch (StrategyException e) {

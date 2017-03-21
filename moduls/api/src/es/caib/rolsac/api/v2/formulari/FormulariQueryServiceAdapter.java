@@ -21,11 +21,11 @@ public class FormulariQueryServiceAdapter extends FormulariDTO implements Formul
         this.formulariQueryServiceStrategy = formulariQueryServiceStrategy;
     }
     
-    private String url;
-    public void setRolsacUrl(String url) {
-    	this.url = url;
+    private String rolsacUrl;
+    public void setRolsacUrl(String rolsacUrl) {
+    	this.rolsacUrl = rolsacUrl;
     	if (this.formulariQueryServiceStrategy != null) {
-    		this.formulariQueryServiceStrategy.setUrl(url);
+    		this.formulariQueryServiceStrategy.setUrl(rolsacUrl);
     	}
     }
 
@@ -45,8 +45,8 @@ public class FormulariQueryServiceAdapter extends FormulariDTO implements Formul
         if (this.getArchivo() == null) {return null;}
         try {
         	ArxiuQueryServiceAdapter uqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), formulariQueryServiceStrategy.obtenirArchivo(this.getArchivo()));
-        	if (uqsa != null && url != null) {
-        		uqsa.setRolsacUrl(url);
+        	if (uqsa != null && rolsacUrl != null) {
+        		uqsa.setRolsacUrl(rolsacUrl);
         	}
         	return uqsa;
         } catch (StrategyException e) {
@@ -58,8 +58,8 @@ public class FormulariQueryServiceAdapter extends FormulariDTO implements Formul
         if (this.getManual() == null) {return null;}
         try {
         	ArxiuQueryServiceAdapter uqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), formulariQueryServiceStrategy.obtenirManual(this.getManual()));
-            if (uqsa != null && url != null) {
-        		uqsa.setRolsacUrl(url);
+            if (uqsa != null && rolsacUrl != null) {
+        		uqsa.setRolsacUrl(rolsacUrl);
         	}
         	return uqsa;
         } catch (StrategyException e) {
@@ -71,8 +71,8 @@ public class FormulariQueryServiceAdapter extends FormulariDTO implements Formul
         if (this.getTramite() == null) {return null;}
         try {
         	TramitQueryServiceAdapter uqsa = (TramitQueryServiceAdapter) BeanUtils.getAdapter("tramit", getStrategy(), formulariQueryServiceStrategy.obtenirTramit(this.getTramite()));
-            if (uqsa != null && url != null) {
-        		uqsa.setRolsacUrl(url);
+            if (uqsa != null && rolsacUrl != null) {
+        		uqsa.setRolsacUrl(rolsacUrl);
         	}
         	return uqsa;
         } catch (StrategyException e) {

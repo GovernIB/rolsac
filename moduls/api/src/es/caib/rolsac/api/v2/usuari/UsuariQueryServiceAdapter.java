@@ -25,11 +25,11 @@ public class UsuariQueryServiceAdapter extends UsuariDTO implements UsuariQueryS
         this.usuariQueryServiceStrategy = usuariQueryServiceStrategy;
     }
 
-    private String url;
-	public void setRolsacUrl(String url) {
-		this.url = url;
+    private String rolsacUrl;
+	public void setRolsacUrl(String rolsacUrl) {
+		this.rolsacUrl = rolsacUrl;
 		if (this.usuariQueryServiceStrategy != null) {
-			this.usuariQueryServiceStrategy.setUrl(url);
+			this.usuariQueryServiceStrategy.setUrl(rolsacUrl);
 		}
 	}
 	
@@ -59,8 +59,8 @@ public class UsuariQueryServiceAdapter extends UsuariDTO implements UsuariQueryS
             List<UnitatAdministrativaQueryServiceAdapter> llistaUAQueryService = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
             for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
             	UnitatAdministrativaQueryServiceAdapter uqsa = (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO);
-            	if (uqsa != null && url != null) {
-            		uqsa.setRolsacUrl(url);
+            	if (uqsa != null && rolsacUrl != null) {
+            		uqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaUAQueryService.add(uqsa);
             }

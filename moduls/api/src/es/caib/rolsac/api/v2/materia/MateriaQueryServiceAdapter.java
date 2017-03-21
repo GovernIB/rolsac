@@ -41,11 +41,11 @@ public class MateriaQueryServiceAdapter extends MateriaDTO implements MateriaQue
         this.materiaQueryServiceStrategy = materiaQueryServiceStrategy;
     }
     
-    private String url;
-    public void setRolsacUrl(String url) {
-    	this.url = url;
+    private String rolsacUrl;
+    public void setRolsacUrl(String rolsacUrl) {
+    	this.rolsacUrl = rolsacUrl;
     	if (this.materiaQueryServiceStrategy != null) {
-			this.materiaQueryServiceStrategy.setUrl(url);
+			this.materiaQueryServiceStrategy.setUrl(rolsacUrl);
 		}
 	}
 
@@ -65,8 +65,8 @@ public class MateriaQueryServiceAdapter extends MateriaDTO implements MateriaQue
         if (this.getFoto() == null) {return null;}
         try {
         	ArxiuQueryServiceAdapter aqsa =  (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), materiaQueryServiceStrategy.getFotografia(this.getFoto()));
-        	if (aqsa != null && url != null) {
-        		aqsa.setRolsacUrl(url);
+        	if (aqsa != null && rolsacUrl != null) {
+        		aqsa.setRolsacUrl(rolsacUrl);
         	}
         	return aqsa;
         } catch (StrategyException e) {
@@ -78,8 +78,8 @@ public class MateriaQueryServiceAdapter extends MateriaDTO implements MateriaQue
         if (this.getIcono() == null) {return null;}
         try {
         	ArxiuQueryServiceAdapter aqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), materiaQueryServiceStrategy.getIcona(this.getIcono()));
-            if (aqsa != null && url != null) {
-        		aqsa.setRolsacUrl(url);
+            if (aqsa != null && rolsacUrl != null) {
+        		aqsa.setRolsacUrl(rolsacUrl);
         	}
         	return aqsa;
         } catch (StrategyException e) {
@@ -91,8 +91,8 @@ public class MateriaQueryServiceAdapter extends MateriaDTO implements MateriaQue
         if (this.getIconoGrande() == null) {return null;}
         try {
         	ArxiuQueryServiceAdapter aqsa =  (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), materiaQueryServiceStrategy.getIconaGran(this.getIconoGrande()));
-            if (aqsa != null && url != null) {
-        		aqsa.setRolsacUrl(url);
+            if (aqsa != null && rolsacUrl != null) {
+        		aqsa.setRolsacUrl(rolsacUrl);
         	}
         	return aqsa;
         } catch (StrategyException e) {
@@ -146,8 +146,8 @@ public class MateriaQueryServiceAdapter extends MateriaDTO implements MateriaQue
             List<FitxaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FitxaQueryServiceAdapter>();
             for (FitxaDTO fitxaDTO : llistaDTO) {
             	FitxaQueryServiceAdapter fqsa = (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), fitxaDTO);
-            	if (fqsa != null && url != null) {
-            		fqsa.setRolsacUrl(url);
+            	if (fqsa != null && rolsacUrl != null) {
+            		fqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(fqsa);
             }
@@ -163,8 +163,8 @@ public class MateriaQueryServiceAdapter extends MateriaDTO implements MateriaQue
             List<AgrupacioMateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<AgrupacioMateriaQueryServiceAdapter>();
             for (AgrupacioMateriaDTO agrupacioMateriaDTO : llistaDTO) {
             	AgrupacioMateriaQueryServiceAdapter fqsa = (AgrupacioMateriaQueryServiceAdapter) BeanUtils.getAdapter("agrupacioMateria", getStrategy(), agrupacioMateriaDTO);
-                if (fqsa != null && url != null) {
-            		fqsa.setRolsacUrl(url);
+                if (fqsa != null && rolsacUrl != null) {
+            		fqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(fqsa);
             }
@@ -180,8 +180,8 @@ public class MateriaQueryServiceAdapter extends MateriaDTO implements MateriaQue
             List<ProcedimentQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<ProcedimentQueryServiceAdapter>();
             for (ProcedimentDTO procedimentDTO : llistaDTO) {
             	ProcedimentQueryServiceAdapter fqsa = (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), procedimentDTO);
-                if (fqsa != null && url != null) {
-            		fqsa.setRolsacUrl(url);
+                if (fqsa != null && rolsacUrl != null) {
+            		fqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(fqsa);
             }
@@ -197,8 +197,8 @@ public class MateriaQueryServiceAdapter extends MateriaDTO implements MateriaQue
             List<UnitatMateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatMateriaQueryServiceAdapter>();
             for (UnitatMateriaDTO unitatMateriaDTO : llistaDTO) {
             	UnitatMateriaQueryServiceAdapter uqsa = (UnitatMateriaQueryServiceAdapter) BeanUtils.getAdapter("unitatMateria", getStrategy(), unitatMateriaDTO);
-            	if (uqsa != null && url != null) {
-            		uqsa.setRolsacUrl(url);
+            	if (uqsa != null && rolsacUrl != null) {
+            		uqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(uqsa );
             }
@@ -214,8 +214,8 @@ public class MateriaQueryServiceAdapter extends MateriaDTO implements MateriaQue
             List<UnitatAdministrativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
             for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
             	UnitatAdministrativaQueryServiceAdapter uqsa = (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO);
-            	if 	(uqsa != null && url != null) {
-            		uqsa.setRolsacUrl(url);
+            	if 	(uqsa != null && rolsacUrl != null) {
+            		uqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(uqsa);
             }
@@ -231,8 +231,8 @@ public class MateriaQueryServiceAdapter extends MateriaDTO implements MateriaQue
             List<IconaMateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<IconaMateriaQueryServiceAdapter>();
             for (IconaMateriaDTO iconaMateriaDTO : llistaDTO) {
             	IconaMateriaQueryServiceAdapter uqsa = (IconaMateriaQueryServiceAdapter) BeanUtils.getAdapter("iconaMateria", getStrategy(), iconaMateriaDTO);
-            	if 	(uqsa != null && url != null) {
-            		uqsa.setRolsacUrl(url);
+            	if 	(uqsa != null && rolsacUrl != null) {
+            		uqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(uqsa);
             }

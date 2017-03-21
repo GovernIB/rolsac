@@ -20,12 +20,11 @@ public class TaxaQueryServiceAdapter extends TaxaDTO implements TaxaQueryService
         this.taxaQueryServiceStrategy = taxaQueryServiceStrategy;
     }
     
-
-    private String url;
-	public void setRolsacUrl(String url) {
-		this.url = url;
+    private String rolsacUrl;
+	public void setRolsacUrl(String rolsacUrl) {
+		this.rolsacUrl = rolsacUrl;
 		if (this.taxaQueryServiceStrategy != null) {
-			this.taxaQueryServiceStrategy.setUrl(url);
+			this.taxaQueryServiceStrategy.setUrl(rolsacUrl);
 		}
 	}
 
@@ -45,8 +44,8 @@ public class TaxaQueryServiceAdapter extends TaxaDTO implements TaxaQueryService
         if (this.getTramit() == null) {return null;}
         try {
         	TramitQueryServiceAdapter tqsa = (TramitQueryServiceAdapter) BeanUtils.getAdapter("tramit", getStrategy(), taxaQueryServiceStrategy.obtenirTramit(this.getTramit()));
-        	if (tqsa != null && url != null) {
-        		tqsa.setRolsacUrl(url);
+        	if (tqsa != null && rolsacUrl != null) {
+        		tqsa.setRolsacUrl(rolsacUrl);
         	}
         	return tqsa;
         } catch (StrategyException e) {

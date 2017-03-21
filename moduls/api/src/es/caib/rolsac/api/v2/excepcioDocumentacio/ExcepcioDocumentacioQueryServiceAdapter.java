@@ -32,11 +32,11 @@ public class ExcepcioDocumentacioQueryServiceAdapter extends
     }
     
 
-    private String url;
-	public void setRolsacUrl(String url) {
-		this.url = url;
+    private String rolsacUrl;
+	public void setRolsacUrl(String rolsacUrl) {
+		this.rolsacUrl = rolsacUrl;
 		if (excepcioDocumentacioQueryServiceStrategy != null) {
-			excepcioDocumentacioQueryServiceStrategy.setUrl(url);
+			excepcioDocumentacioQueryServiceStrategy.setUrl(rolsacUrl);
 		}
 	}
 
@@ -80,8 +80,8 @@ public class ExcepcioDocumentacioQueryServiceAdapter extends
 				CatalegDocumentsQueryServiceAdapter cqsa = (CatalegDocumentsQueryServiceAdapter) BeanUtils
 				.getAdapter("catalegDocuments", getStrategy(),
 						catalegDocumentsDTO);
-				if (cqsa != null && url != null) {
-					cqsa.setRolsacUrl(url);
+				if (cqsa != null && rolsacUrl != null) {
+					cqsa.setRolsacUrl(rolsacUrl);
 				}
 				llistaCatalegDocumentsQueryServiceAdapter
 						.add(cqsa);
@@ -105,8 +105,8 @@ public class ExcepcioDocumentacioQueryServiceAdapter extends
 				DocumentTramitQueryServiceAdapter dqsa = (DocumentTramitQueryServiceAdapter) BeanUtils
 				.getAdapter("documentTramit", getStrategy(),
 						documentTramitDTO);
-				if (dqsa != null && url != null) {
-					dqsa.setRolsacUrl(url);
+				if (dqsa != null && rolsacUrl != null) {
+					dqsa.setRolsacUrl(rolsacUrl);
 				}
 				llistaDocumentTramitQueryServiceAdapter
 						.add(dqsa);

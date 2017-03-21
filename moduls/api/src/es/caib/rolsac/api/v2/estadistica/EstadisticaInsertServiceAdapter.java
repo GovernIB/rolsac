@@ -7,7 +7,7 @@ public class EstadisticaInsertServiceAdapter implements EstadisticaInsertService
     
     private EstadisticaInsertServiceStrategy estadisticaInsertServiceStrategy;
 
-    private String url;
+    private String rolsacUrl;
     
     public EstadisticaInsertServiceAdapter() {
 		super();	
@@ -15,20 +15,20 @@ public class EstadisticaInsertServiceAdapter implements EstadisticaInsertService
     
     public EstadisticaInsertServiceAdapter(String url) {
 		super();	
-		this.url = url;
+		this.rolsacUrl = url;
 	}
     
-    public void setUrl(String url) {
-		this.url = url;	
+    public void setUrl(String rolsacUrl) {
+		this.rolsacUrl = rolsacUrl;	
 		if (this.estadisticaInsertServiceStrategy != null) {
-			this.estadisticaInsertServiceStrategy.setUrl(url);
+			this.estadisticaInsertServiceStrategy.setUrl(rolsacUrl);
 		}
 	}
 
 	public void setEstadisticaInsertServiceStrategy(EstadisticaInsertServiceStrategy strategy) {
         this.estadisticaInsertServiceStrategy = strategy;
-        if (this.estadisticaInsertServiceStrategy != null) {
-        	this.estadisticaInsertServiceStrategy.setUrl(url);
+        if (this.estadisticaInsertServiceStrategy != null && rolsacUrl != null) {
+        	this.estadisticaInsertServiceStrategy.setUrl(rolsacUrl);
         }
     }
 

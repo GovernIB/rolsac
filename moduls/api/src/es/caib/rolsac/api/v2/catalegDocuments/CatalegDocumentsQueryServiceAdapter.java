@@ -21,11 +21,11 @@ public class CatalegDocumentsQueryServiceAdapter extends CatalegDocumentsDTO imp
 
 	private CatalegDocumentsQueryServiceStrategy catalegDocumentsQueryServiceStrategy;	
 	
-	private String url;
-	public void setRolsacUrl(String url) {
-		this.url = url;
-		if (url != null && catalegDocumentsQueryServiceStrategy != null) {
-			catalegDocumentsQueryServiceStrategy.setUrl(url);
+	private String rolsacUrl;
+	public void setRolsacUrl(String rolsacUrl) {
+		this.rolsacUrl = rolsacUrl;
+		if (rolsacUrl != null && catalegDocumentsQueryServiceStrategy != null) {
+			catalegDocumentsQueryServiceStrategy.setUrl(rolsacUrl);
 		}
 	}
 	
@@ -64,8 +64,8 @@ public class CatalegDocumentsQueryServiceAdapter extends CatalegDocumentsDTO imp
 				DocumentTramitQueryServiceAdapter dqsa = (DocumentTramitQueryServiceAdapter) BeanUtils
 						.getAdapter("documentTramit", getStrategy(),
 								documentTramitDTO);
-				if (dqsa != null && url != null) {
-					dqsa.setRolsacUrl(url);
+				if (dqsa != null && rolsacUrl != null) {
+					dqsa.setRolsacUrl(rolsacUrl);
 				}
 				llistaDocumentTramitQueryServiceAdapter
 						.add(dqsa);

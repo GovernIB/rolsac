@@ -31,11 +31,11 @@ public class DocumentTramitQueryServiceAdapter extends DocumentTramitDTO impleme
         this.documentTramitQueryServiceStrategy = documentTramitQueryServiceStrategy;
     }
     
-    private String url;
-    public void setRolsacUrl(String url) {
-    	this.url = url;
+    private String rolsacUrl;
+    public void setRolsacUrl(String rolsacUrl) {
+    	this.rolsacUrl = rolsacUrl;
 		if ( this.documentTramitQueryServiceStrategy != null) {
-			this.documentTramitQueryServiceStrategy.setUrl(url);
+			this.documentTramitQueryServiceStrategy.setUrl(rolsacUrl);
 		}
 	}
 
@@ -66,8 +66,8 @@ public class DocumentTramitQueryServiceAdapter extends DocumentTramitDTO impleme
         try {
             ArxiuDTO dto = documentTramitQueryServiceStrategy.obtenirArxiu(this.getArchivo());
             ArxiuQueryServiceAdapter aqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
-            if (aqsa != null && url != null) {
-            	aqsa.setRolsacUrl(url);
+            if (aqsa != null && rolsacUrl != null) {
+            	aqsa.setRolsacUrl(rolsacUrl);
             }
             return aqsa;
         } catch (StrategyException e) {
@@ -82,8 +82,8 @@ public class DocumentTramitQueryServiceAdapter extends DocumentTramitDTO impleme
 		try {
 			CatalegDocumentsDTO dto = documentTramitQueryServiceStrategy.obtenirCatalegDocuments(this.getDocCatalogo());
 			CatalegDocumentsQueryServiceAdapter aqsa = (CatalegDocumentsQueryServiceAdapter) BeanUtils.getAdapter("catalegDocuments", getStrategy(), dto);
-			if (aqsa != null && url != null) {
-            	aqsa.setRolsacUrl(url);
+			if (aqsa != null && rolsacUrl != null) {
+            	aqsa.setRolsacUrl(rolsacUrl);
             }
 			return aqsa;
 		} catch (StrategyException e) {
@@ -99,8 +99,8 @@ public class DocumentTramitQueryServiceAdapter extends DocumentTramitDTO impleme
 		try {
 			ExcepcioDocumentacioDTO dto = documentTramitQueryServiceStrategy.obtenirExcepcioDocumentacio(this.getExcepcioDocumentacio());
 			ExcepcioDocumentacioQueryServiceAdapter aqsa =(ExcepcioDocumentacioQueryServiceAdapter) BeanUtils.getAdapter("excepcioDocumentacio", getStrategy(), dto);
-			if (aqsa != null && url != null) {
-            	aqsa.setRolsacUrl(url);
+			if (aqsa != null && rolsacUrl != null) {
+            	aqsa.setRolsacUrl(rolsacUrl);
             }
 			return aqsa;
 		} catch (StrategyException e) {

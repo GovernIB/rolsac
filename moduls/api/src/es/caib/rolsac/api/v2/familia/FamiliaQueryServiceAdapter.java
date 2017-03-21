@@ -28,11 +28,11 @@ public class FamiliaQueryServiceAdapter extends FamiliaDTO implements FamiliaQue
         this.familiaQueryServiceStrategy = familiaQueryServiceStrategy;
     }
     
-    private String url;
-    public void setRolsacUrl(String url) {
-    	this.url = url;
+    private String rolsacUrl;
+    public void setRolsacUrl(String rolsacUrl) {
+    	this.rolsacUrl = rolsacUrl;
 		if (this.familiaQueryServiceStrategy != null) {
-			this.familiaQueryServiceStrategy.setUrl(url);
+			this.familiaQueryServiceStrategy.setUrl(rolsacUrl);
 		}
 	}
 
@@ -70,8 +70,8 @@ public class FamiliaQueryServiceAdapter extends FamiliaDTO implements FamiliaQue
             List<ProcedimentQueryServiceAdapter> procs = new ArrayList<ProcedimentQueryServiceAdapter>();
             for (ProcedimentDTO pDTO : llistaDTO) {
             	ProcedimentQueryServiceAdapter pqsa = (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), pDTO);
-            	if (pqsa != null && url != null) {
-            		pqsa.setRolsacUrl(url);
+            	if (pqsa != null && rolsacUrl != null) {
+            		pqsa.setRolsacUrl(rolsacUrl);
             	}
             	procs.add(pqsa);
             }
@@ -87,8 +87,8 @@ public class FamiliaQueryServiceAdapter extends FamiliaDTO implements FamiliaQue
             List<IconaFamiliaQueryServiceAdapter> icones = new ArrayList<IconaFamiliaQueryServiceAdapter>();
             for (IconaFamiliaDTO pDTO : llistaDTO) {
             	IconaFamiliaQueryServiceAdapter pqsa = (IconaFamiliaQueryServiceAdapter) BeanUtils.getAdapter("iconaFamilia", getStrategy(), pDTO);
-            	if (pqsa != null && url != null) {
-            		pqsa.setRolsacUrl(url);
+            	if (pqsa != null && rolsacUrl != null) {
+            		pqsa.setRolsacUrl(rolsacUrl);
             	}
             	 icones.add(pqsa);
             }

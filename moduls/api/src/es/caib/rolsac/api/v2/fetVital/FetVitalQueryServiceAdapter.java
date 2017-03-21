@@ -33,11 +33,11 @@ public class FetVitalQueryServiceAdapter extends FetVitalDTO implements FetVital
         this.fetVitalQueryServiceStrategy = fetVitalQueryServiceStrategy;
     }
     
-    private String url;
-    public void setRolsacUrl(String url) {
-    	this.url = url;
+    private String rolsacUrl;
+    public void setRolsacUrl(String rolsacUrl) {
+    	this.rolsacUrl = rolsacUrl;
 		if (this.fetVitalQueryServiceStrategy != null) {
-			this.fetVitalQueryServiceStrategy.setUrl(url);
+			this.fetVitalQueryServiceStrategy.setUrl(rolsacUrl);
 		}
 	}
 
@@ -83,8 +83,8 @@ public class FetVitalQueryServiceAdapter extends FetVitalDTO implements FetVital
             List<FitxaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FitxaQueryServiceAdapter>();
             for (FitxaDTO fitxaDTO : llistaDTO) {
             	FitxaQueryServiceAdapter fqsa = (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), fitxaDTO);
-            	if (url != null && fqsa != null) {
-            		fqsa.setRolsacUrl(url);
+            	if (rolsacUrl != null && fqsa != null) {
+            		fqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(fqsa);
             }
@@ -100,8 +100,8 @@ public class FetVitalQueryServiceAdapter extends FetVitalDTO implements FetVital
             List<ProcedimentQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<ProcedimentQueryServiceAdapter>();
             for (ProcedimentDTO procedimentDTO : llistaDTO) {
             	ProcedimentQueryServiceAdapter pqsa = (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), procedimentDTO);
-            	if (pqsa != null && url != null) {
-            		pqsa.setRolsacUrl(url);
+            	if (pqsa != null && rolsacUrl != null) {
+            		pqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(pqsa);
             }
@@ -117,8 +117,8 @@ public class FetVitalQueryServiceAdapter extends FetVitalDTO implements FetVital
             List<AgrupacioFetVitalQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<AgrupacioFetVitalQueryServiceAdapter>();
             for (AgrupacioFetVitalDTO agrupacioFetVitalDTO : llistaDTO) {
             	AgrupacioFetVitalQueryServiceAdapter pqsa = (AgrupacioFetVitalQueryServiceAdapter) BeanUtils.getAdapter("agrupacioFetVital", getStrategy(), agrupacioFetVitalDTO);
-            	if (pqsa != null && url != null) {
-            		pqsa.setRolsacUrl(url);
+            	if (pqsa != null && rolsacUrl != null) {
+            		pqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(pqsa);
             }
@@ -133,8 +133,8 @@ public class FetVitalQueryServiceAdapter extends FetVitalDTO implements FetVital
         try {
             ArxiuDTO dto = (ArxiuDTO) fetVitalQueryServiceStrategy.getDistribuciCompetencial(this.getFoto());
             ArxiuQueryServiceAdapter pqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
-            if (pqsa != null && url != null) {
-        		pqsa.setRolsacUrl(url);
+            if (pqsa != null && rolsacUrl != null) {
+        		pqsa.setRolsacUrl(rolsacUrl);
         	}
             return pqsa;
         } catch (StrategyException e) {
@@ -148,8 +148,8 @@ public class FetVitalQueryServiceAdapter extends FetVitalDTO implements FetVital
         try {
             ArxiuDTO dto = (ArxiuDTO) fetVitalQueryServiceStrategy.getNormativa(this.getIcono());
             ArxiuQueryServiceAdapter pqsa=  (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
-            if (pqsa != null && url != null) {
-        		pqsa.setRolsacUrl(url);
+            if (pqsa != null && rolsacUrl != null) {
+        		pqsa.setRolsacUrl(rolsacUrl);
         	}
             return pqsa;
         } catch (StrategyException e) {
@@ -162,8 +162,8 @@ public class FetVitalQueryServiceAdapter extends FetVitalDTO implements FetVital
         try {
             ArxiuDTO dto = (ArxiuDTO) fetVitalQueryServiceStrategy.getContingut(this.getIconoGrande());
             ArxiuQueryServiceAdapter pqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
-            if (pqsa != null && url != null) {
-        		pqsa.setRolsacUrl(url);
+            if (pqsa != null && rolsacUrl != null) {
+        		pqsa.setRolsacUrl(rolsacUrl);
         	}
             return pqsa;
         } catch (StrategyException e) {

@@ -26,11 +26,11 @@ public class EspaiTerritorialQueryServiceAdapter extends EspaiTerritorialDTO imp
         this.espaiTerritorialQueryServiceStrategy = espaiTerritorialQueryServiceStrategy;
     }
     
-    private String url;
-    public void setRolsacUrl(String url) {
-    	this.url = url;
+    private String rolsacUrl;
+    public void setRolsacUrl(String rolsacUrl) {
+    	this.rolsacUrl = rolsacUrl;
 		if ( this.espaiTerritorialQueryServiceStrategy  != null) {
-			 this.espaiTerritorialQueryServiceStrategy.setUrl(url);
+			 this.espaiTerritorialQueryServiceStrategy.setUrl(rolsacUrl);
 		}
 	}
 
@@ -66,8 +66,8 @@ public class EspaiTerritorialQueryServiceAdapter extends EspaiTerritorialDTO imp
         if (this.getPadre() == null) {return null;}
         try {
         	EspaiTerritorialQueryServiceAdapter eqsa =  (EspaiTerritorialQueryServiceAdapter) BeanUtils.getAdapter("espaiTerritorial", getStrategy(), espaiTerritorialQueryServiceStrategy.obtenirPare(this.getPadre()));
-        	if (eqsa != null && url != null) {
-        		eqsa.setRolsacUrl(url);
+        	if (eqsa != null && rolsacUrl != null) {
+        		eqsa.setRolsacUrl(rolsacUrl);
         	}
         	return eqsa;
         } catch (StrategyException e) {
@@ -81,8 +81,8 @@ public class EspaiTerritorialQueryServiceAdapter extends EspaiTerritorialDTO imp
             List<EspaiTerritorialQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<EspaiTerritorialQueryServiceAdapter>();
             for (EspaiTerritorialDTO espaiTerritorialDTO : llistaDTO) {
             	EspaiTerritorialQueryServiceAdapter eqsa = (EspaiTerritorialQueryServiceAdapter) BeanUtils.getAdapter("espaiTerritorial", getStrategy(),espaiTerritorialDTO);
-            	if (eqsa != null && url != null) {
-            		eqsa.setRolsacUrl(url);
+            	if (eqsa != null && rolsacUrl != null) {
+            		eqsa.setRolsacUrl(rolsacUrl);
             	}
                 llistaQueryServiceAdapter.add(eqsa);
             }
@@ -98,8 +98,8 @@ public class EspaiTerritorialQueryServiceAdapter extends EspaiTerritorialDTO imp
                 List<UnitatAdministrativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
                 for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
                 	UnitatAdministrativaQueryServiceAdapter uqsa = (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO);
-                    if (uqsa != null && url != null) {
-                    	uqsa.setRolsacUrl(url);
+                    if (uqsa != null && rolsacUrl != null) {
+                    	uqsa.setRolsacUrl(rolsacUrl);
                     }
                 	llistaQueryServiceAdapter.add(uqsa);
                 }
@@ -113,8 +113,8 @@ public class EspaiTerritorialQueryServiceAdapter extends EspaiTerritorialDTO imp
         if (this.getMapa() == null) {return null;}
         try {
         	ArxiuQueryServiceAdapter uqsa=  (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), espaiTerritorialQueryServiceStrategy.obtenirMapa(this.getMapa()));
-            if (uqsa != null && url != null) {
-            	uqsa.setRolsacUrl(url);
+            if (uqsa != null && rolsacUrl != null) {
+            	uqsa.setRolsacUrl(rolsacUrl);
             }
             return uqsa;
         } catch (StrategyException e) {
@@ -126,8 +126,8 @@ public class EspaiTerritorialQueryServiceAdapter extends EspaiTerritorialDTO imp
         if (this.getLogo() == null) {return null;}
         try {
         	ArxiuQueryServiceAdapter uqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), espaiTerritorialQueryServiceStrategy.obtenirLogo(this.getLogo()));
-            if (uqsa != null && url != null) {
-            	uqsa.setRolsacUrl(url);
+            if (uqsa != null && rolsacUrl != null) {
+            	uqsa.setRolsacUrl(rolsacUrl);
             }
             return uqsa;
         } catch (StrategyException e) {

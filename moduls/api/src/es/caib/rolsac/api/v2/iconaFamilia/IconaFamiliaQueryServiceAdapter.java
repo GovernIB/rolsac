@@ -22,11 +22,11 @@ public class IconaFamiliaQueryServiceAdapter extends IconaFamiliaDTO implements 
         this.iconaFamiliaQueryServiceStrategy = iconaFamiliaQueryServiceStrategy;
     }
     
-    private String url;
-    public void setRolsacUrl(String url) {
-    	this.url = url;
+    private String rolsacUrl;
+    public void setRolsacUrl(String rolsacUrl) {
+    	this.rolsacUrl = rolsacUrl;
 		if (this.iconaFamiliaQueryServiceStrategy != null) {
-			this.iconaFamiliaQueryServiceStrategy.setUrl(url);
+			this.iconaFamiliaQueryServiceStrategy.setUrl(rolsacUrl);
 		}
 	}
 
@@ -46,8 +46,8 @@ public class IconaFamiliaQueryServiceAdapter extends IconaFamiliaDTO implements 
         if (this.getFamilia() == null) {return null;}
         try {
         	FamiliaQueryServiceAdapter fqsa = (FamiliaQueryServiceAdapter) BeanUtils.getAdapter("familia", getStrategy(), iconaFamiliaQueryServiceStrategy.obtenirFamilia(this.getFamilia()));
-        	if (fqsa != null && url != null) {
-        		fqsa.setRolsacUrl(url);
+        	if (fqsa != null && rolsacUrl != null) {
+        		fqsa.setRolsacUrl(rolsacUrl);
         	}
         	return fqsa;
         } catch (StrategyException e) {
@@ -59,8 +59,8 @@ public class IconaFamiliaQueryServiceAdapter extends IconaFamiliaDTO implements 
         if (this.getPerfil() == null) {return null;}
         try {
         	PerfilQueryServiceAdapter fqsa = (PerfilQueryServiceAdapter) BeanUtils.getAdapter("perfil", getStrategy(), iconaFamiliaQueryServiceStrategy.obtenirPerfil(this.getPerfil()));
-             if (fqsa != null && url != null) {
-         		fqsa.setRolsacUrl(url);
+             if (fqsa != null && rolsacUrl != null) {
+         		fqsa.setRolsacUrl(rolsacUrl);
          	}
          	return fqsa;
         } catch (StrategyException e) {
@@ -72,8 +72,8 @@ public class IconaFamiliaQueryServiceAdapter extends IconaFamiliaDTO implements 
         if (this.getIcono() == null) {return null;}
         try {
         	ArxiuQueryServiceAdapter fqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), iconaFamiliaQueryServiceStrategy.obtenirIcona(this.getIcono()));
-            if (fqsa != null && url != null) {
-         		fqsa.setRolsacUrl(url);
+            if (fqsa != null && rolsacUrl != null) {
+         		fqsa.setRolsacUrl(rolsacUrl);
          	}
          	return fqsa;
         } catch (StrategyException e) {

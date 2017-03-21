@@ -28,11 +28,11 @@ public class PerfilQueryServiceAdapter extends PerfilDTO implements PerfilQueryS
         this.perfilQueryServiceStrategy = perfilQueryServiceStrategy;
     }
     
-    private String url;
-    public void setRolsacUrl(String url) {
-    	this.url = url;
+    private String rolsacUrl;
+    public void setRolsacUrl(String rolsacUrl) {
+    	this.rolsacUrl = rolsacUrl;
 		if ( this.perfilQueryServiceStrategy != null) {
-			 this.perfilQueryServiceStrategy.setUrl(url);
+			 this.perfilQueryServiceStrategy.setUrl(rolsacUrl);
 		}
 	}
 
@@ -54,8 +54,8 @@ public class PerfilQueryServiceAdapter extends PerfilDTO implements PerfilQueryS
             List<IconaFamiliaQueryServiceAdapter> icones = new ArrayList<IconaFamiliaQueryServiceAdapter>();
             for (IconaFamiliaDTO iDTO : llistaDTO) {
                 IconaFamiliaQueryServiceAdapter iqsa = (IconaFamiliaQueryServiceAdapter) BeanUtils.getAdapter("iconaFamilia", getStrategy(), iDTO);
-                if (iqsa != null && url != null) {
-                	iqsa.setRolsacUrl(url);
+                if (iqsa != null && rolsacUrl != null) {
+                	iqsa.setRolsacUrl(rolsacUrl);
                 }
             	icones.add(iqsa);
             }
@@ -71,8 +71,8 @@ public class PerfilQueryServiceAdapter extends PerfilDTO implements PerfilQueryS
             List<IconaMateriaQueryServiceAdapter> icones = new ArrayList<IconaMateriaQueryServiceAdapter>();
             for (IconaMateriaDTO iDTO : llistaDTO) {
             	IconaMateriaQueryServiceAdapter iqsa = (IconaMateriaQueryServiceAdapter) BeanUtils.getAdapter("iconaMateria", getStrategy(), iDTO);
-            	if (iqsa != null && url != null) {
-            		iqsa.setRolsacUrl(url);
+            	if (iqsa != null && rolsacUrl != null) {
+            		iqsa.setRolsacUrl(rolsacUrl);
             	}	
             	icones.add(iqsa);
             }

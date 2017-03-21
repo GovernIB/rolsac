@@ -32,11 +32,11 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
         this.normativaQueryServiceStrategy = normativaQueryServiceStrategy;
     }
     
-    private String url;
-    public void setRolsacUrl(String url) {
-    	this.url = url;
+    private String rolsacUrl;
+    public void setRolsacUrl(String rolsacUrl) {
+    	this.rolsacUrl = rolsacUrl;
 		if (this.normativaQueryServiceStrategy != null) {
-			this.normativaQueryServiceStrategy.setUrl(url);
+			this.normativaQueryServiceStrategy.setUrl(rolsacUrl);
 		}
 	}
 
@@ -57,8 +57,8 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
         try {
             ArxiuDTO dto = normativaQueryServiceStrategy.obtenirArxiuNormativa(this.getArchivo());
             ArxiuQueryServiceAdapter aqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
-            if (aqsa != null && url != null) {
-            	aqsa.setRolsacUrl(url);
+            if (aqsa != null && rolsacUrl != null) {
+            	aqsa.setRolsacUrl(rolsacUrl);
             }
             return aqsa;
         } catch (StrategyException e) {
@@ -96,8 +96,8 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
             List<AfectacioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<AfectacioQueryServiceAdapter>();
             for (AfectacioDTO afectacioDTO : llistaDTO) {
             	AfectacioQueryServiceAdapter aqsa =(AfectacioQueryServiceAdapter) BeanUtils.getAdapter("afectacio", getStrategy(), afectacioDTO); 
-            	if (aqsa != null && url != null) {
-                	aqsa.setRolsacUrl(url);
+            	if (aqsa != null && rolsacUrl != null) {
+                	aqsa.setRolsacUrl(rolsacUrl);
                 }
                 llistaQueryServiceAdapter.add(aqsa);
             }
@@ -113,8 +113,8 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
             List<NormativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<NormativaQueryServiceAdapter>();
             for (NormativaDTO normativaDTO : llistaDTO) {
             	NormativaQueryServiceAdapter aqsa = (NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa", getStrategy(), normativaDTO);
-            	if (aqsa != null && url != null) {
-                	aqsa.setRolsacUrl(url);
+            	if (aqsa != null && rolsacUrl != null) {
+                	aqsa.setRolsacUrl(rolsacUrl);
                 }
                 llistaQueryServiceAdapter.add(aqsa);
             }
@@ -130,8 +130,8 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
             List<AfectacioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<AfectacioQueryServiceAdapter>();
             for (AfectacioDTO afectacioDTO : llistaDTO) {
             	AfectacioQueryServiceAdapter aqsa = (AfectacioQueryServiceAdapter) BeanUtils.getAdapter("afectacio", getStrategy(), afectacioDTO);
-            	if (aqsa != null && url != null) {
-                	aqsa.setRolsacUrl(url);
+            	if (aqsa != null && rolsacUrl != null) {
+                	aqsa.setRolsacUrl(rolsacUrl);
                 }
                 llistaQueryServiceAdapter.add(aqsa);
             }
@@ -147,8 +147,8 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
             List<NormativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<NormativaQueryServiceAdapter>();
             for (NormativaDTO normativaDTO : llistaDTO) {
             	NormativaQueryServiceAdapter aqsa = (NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa", getStrategy(), normativaDTO);
-            	if (aqsa != null && url != null) {
-                	aqsa.setRolsacUrl(url);
+            	if (aqsa != null && rolsacUrl != null) {
+                	aqsa.setRolsacUrl(rolsacUrl);
                 }
                 llistaQueryServiceAdapter.add(aqsa);
             }
@@ -164,8 +164,8 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
             List<ProcedimentQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<ProcedimentQueryServiceAdapter>();
             for (ProcedimentDTO procedimentDTO : llistaDTO) {
             	ProcedimentQueryServiceAdapter aqsa = (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), procedimentDTO);
-            	if (aqsa != null && url != null) {
-                	aqsa.setRolsacUrl(url);
+            	if (aqsa != null && rolsacUrl != null) {
+                	aqsa.setRolsacUrl(rolsacUrl);
                 }
                 llistaQueryServiceAdapter.add(aqsa);
             }
@@ -178,8 +178,8 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
     public ButlletiQueryServiceAdapter obtenirButlleti() throws QueryServiceException {
         try {
         	ButlletiQueryServiceAdapter aqsa = (ButlletiQueryServiceAdapter) BeanUtils.getAdapter("butlleti", getStrategy(), normativaQueryServiceStrategy.obtenirButlleti(this.getBoletin()));
-            if (aqsa != null && url != null) {
-            	aqsa.setRolsacUrl(url);
+            if (aqsa != null && rolsacUrl != null) {
+            	aqsa.setRolsacUrl(rolsacUrl);
             }
             return aqsa;
         } catch (StrategyException e) {
@@ -193,8 +193,8 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
         try {
             UnitatAdministrativaDTO dto = (UnitatAdministrativaDTO) normativaQueryServiceStrategy.obtenirUnitatAdministrativa(this.getUnidadAdministrativa());
             UnitatAdministrativaQueryServiceAdapter aqsa = (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), dto);
-             if (aqsa != null && url != null) {
-             	aqsa.setRolsacUrl(url);
+             if (aqsa != null && rolsacUrl != null) {
+             	aqsa.setRolsacUrl(rolsacUrl);
              }
              return aqsa;
         } catch (StrategyException e) {

@@ -41,10 +41,11 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
 
     private ProcedimentQueryServiceStrategy procedimentQueryServiceStrategy;
 
-    private String url;
-    public void setRolsacUrl(String url) {
+    private String rolsacUrl;
+    public void setRolsacUrl(String rolsacUrl) {
+    	this.rolsacUrl = rolsacUrl;
     	if ( this.procedimentQueryServiceStrategy != null) {
-    		 this.procedimentQueryServiceStrategy.setUrl(url);
+    		 this.procedimentQueryServiceStrategy.setUrl(rolsacUrl);
     	}
     }
     
@@ -126,8 +127,8 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
             List<TramitQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<TramitQueryServiceAdapter>();
             for (TramitDTO tramitDTO : llistaDTO) {
             	TramitQueryServiceAdapter tqsa = (TramitQueryServiceAdapter) BeanUtils.getAdapter("tramit", getStrategy(), tramitDTO);
-            	if (tqsa != null && url != null) {
-            		tqsa.setRolsacUrl(url);
+            	if (tqsa != null && rolsacUrl != null) {
+            		tqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(tqsa);
             }
@@ -143,8 +144,8 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
             List<MateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<MateriaQueryServiceAdapter>();
             for (MateriaDTO materiaDTO : llistaDTO) {
             	MateriaQueryServiceAdapter tqsa = (MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), materiaDTO);
-            	if (tqsa != null && url != null) {
-            		tqsa.setRolsacUrl(url);
+            	if (tqsa != null && rolsacUrl != null) {
+            		tqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(tqsa);
             }
@@ -160,8 +161,8 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
             List<NormativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<NormativaQueryServiceAdapter>();
             for (NormativaDTO normativaDTO : llistaDTO) {
             	NormativaQueryServiceAdapter tqsa = (NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa", getStrategy(), normativaDTO);
-            	if (tqsa != null && url != null) {
-            		tqsa.setRolsacUrl(url);
+            	if (tqsa != null && rolsacUrl != null) {
+            		tqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(tqsa);
             }
@@ -177,8 +178,8 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
             List<FetVitalQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FetVitalQueryServiceAdapter>();
             for (FetVitalDTO fetVitalDTO : llistaDTO) {
             	FetVitalQueryServiceAdapter tqsa = (FetVitalQueryServiceAdapter) BeanUtils.getAdapter("fetVital", getStrategy(), fetVitalDTO);
-    			if (tqsa != null && url != null) {
-            		tqsa.setRolsacUrl(url);
+    			if (tqsa != null && rolsacUrl != null) {
+            		tqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(tqsa);
             }
@@ -194,8 +195,8 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
             List<DocumentQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentQueryServiceAdapter>();
             for (DocumentDTO documentDTO : llistaDTO) {
             	DocumentQueryServiceAdapter tqsa = (DocumentQueryServiceAdapter) BeanUtils.getAdapter("document", getStrategy(), documentDTO);
-            	if (tqsa != null && url != null) {
-            		tqsa.setRolsacUrl(url);
+            	if (tqsa != null && rolsacUrl != null) {
+            		tqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(tqsa);
             }
@@ -211,8 +212,8 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
             List<PublicObjectiuQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<PublicObjectiuQueryServiceAdapter>();
             for (PublicObjectiuDTO poDTO : llistaDTO) {
             	PublicObjectiuQueryServiceAdapter tqsa = (PublicObjectiuQueryServiceAdapter) BeanUtils.getAdapter("publicObjectiu", getStrategy(), poDTO);
-            	if (tqsa != null && url != null) {
-            		tqsa.setRolsacUrl(url);
+            	if (tqsa != null && rolsacUrl != null) {
+            		tqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(tqsa);
             }

@@ -49,7 +49,7 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
 
     private static final long serialVersionUID = -3568148291068148995L;
     
-    private String url;
+    private String rolsacUrl;
     
     private UnitatAdministrativaQueryServiceStrategy unitatAdministrativaQueryServiceStrategy;
 
@@ -57,23 +57,23 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
     	 super();
     }
     
-    public UnitatAdministrativaQueryServiceAdapter(String url) {
+    public UnitatAdministrativaQueryServiceAdapter(String rolsacUrl) {
      	super();
-     	this.url = url;
+     	this.rolsacUrl = rolsacUrl;
      	
     }
     	 
-    public void setRolsacUrl(String url) {
+    public void setRolsacUrl(String rolsacUrl) {
+    	this.rolsacUrl = rolsacUrl;
     	if (unitatAdministrativaQueryServiceStrategy != null) {
-    		unitatAdministrativaQueryServiceStrategy.setUrl(url);
+    		unitatAdministrativaQueryServiceStrategy.setUrl(rolsacUrl);
     	}
-    	this.url = url;
     }
     	 
     public void setUnitatAdministrativaQueryServiceStrategy(UnitatAdministrativaQueryServiceStrategy unitatAdministrativaQueryServiceStrategy) {
         this.unitatAdministrativaQueryServiceStrategy = unitatAdministrativaQueryServiceStrategy;      
-        if (this.unitatAdministrativaQueryServiceStrategy != null && url != null) {
-        	this.unitatAdministrativaQueryServiceStrategy.setUrl(url);
+        if (this.unitatAdministrativaQueryServiceStrategy != null && rolsacUrl != null) {
+        	this.unitatAdministrativaQueryServiceStrategy.setUrl(rolsacUrl);
         }
     }
 
@@ -93,8 +93,8 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
         if (this.getPadre() == null || this.getIdioma() == null) {return null;}
         try {
         	UnitatAdministrativaQueryServiceAdapter uqsa = (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaQueryServiceStrategy.obtenirPare(this.getPadre(), this.getIdioma()));
-        	if (uqsa != null && url != null) {
-        		uqsa.setRolsacUrl(url);
+        	if (uqsa != null && rolsacUrl != null) {
+        		uqsa.setRolsacUrl(rolsacUrl);
         	}
         	return uqsa;
         } catch (StrategyException e) {
@@ -107,8 +107,8 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
         if (this.getEspacioTerrit() == null) {return null;}
         try {
         	EspaiTerritorialQueryServiceAdapter uqsa = (EspaiTerritorialQueryServiceAdapter) BeanUtils.getAdapter("espaiTerritorial", getStrategy(), unitatAdministrativaQueryServiceStrategy.obtenirEspaiTerritorial(this.getEspacioTerrit()));
-            if (uqsa != null && url != null) {
-        		uqsa.setRolsacUrl(url);
+            if (uqsa != null && rolsacUrl != null) {
+        		uqsa.setRolsacUrl(rolsacUrl);
         	}
         	return uqsa;
         } catch (StrategyException e) {
@@ -121,8 +121,8 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
         if (this.getTratamiento() == null) {return null;}
         try {
         	TractamentQueryServiceAdapter uqsa = (TractamentQueryServiceAdapter) BeanUtils.getAdapter("tractament", getStrategy(), unitatAdministrativaQueryServiceStrategy.obtenirTractament(this.getTratamiento(), tractamentCriteria));
-            /*if (uqsa != null && url != null) {
-        		uqsa.setRolsacUrl(url);
+            /*if (uqsa != null && rolsacUrl != null) {
+        		uqsa.setRolsacUrl(rolsacUrl);
         	}*/
         	return uqsa;
         } catch (StrategyException e) {
@@ -136,8 +136,8 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
             List<UnitatAdministrativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
             for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
             	UnitatAdministrativaQueryServiceAdapter tqsa = (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO);
-            	if (tqsa != null && url != null) {
-            		tqsa.setRolsacUrl(url);
+            	if (tqsa != null && rolsacUrl != null) {
+            		tqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(tqsa);
             }
@@ -161,8 +161,8 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
             List<EdificiQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<EdificiQueryServiceAdapter>();
             for (EdificiDTO edificiDTO : llistaDTO) {
             	EdificiQueryServiceAdapter eqsa = (EdificiQueryServiceAdapter) BeanUtils.getAdapter("edifici", getStrategy(), edificiDTO);
-            	if (eqsa != null && url != null) {
-            		eqsa.setRolsacUrl(url);
+            	if (eqsa != null && rolsacUrl != null) {
+            		eqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(eqsa);
             }
@@ -178,8 +178,8 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
             List<PersonalQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<PersonalQueryServiceAdapter>();
             for (PersonalDTO personalDTO : llistaDTO) {
             	PersonalQueryServiceAdapter eqsa = (PersonalQueryServiceAdapter) BeanUtils.getAdapter("personal", getStrategy(), personalDTO);
-            	if (eqsa != null && url != null) {
-            		eqsa.setRolsacUrl(url);
+            	if (eqsa != null && rolsacUrl != null) {
+            		eqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(eqsa);
             }
@@ -195,8 +195,8 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
             List<NormativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<NormativaQueryServiceAdapter>();
             for (NormativaDTO normativaDTO : llistaDTO) {
             	NormativaQueryServiceAdapter eqsa = (NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa", getStrategy(), normativaDTO);
-            	if (eqsa != null && url != null) {
-            		eqsa.setRolsacUrl(url);
+            	if (eqsa != null && rolsacUrl != null) {
+            		eqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(eqsa);
             }
@@ -212,8 +212,8 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
             List<ProcedimentQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<ProcedimentQueryServiceAdapter>();
             for (ProcedimentDTO procedimentDTO : llistaDTO) {
             	ProcedimentQueryServiceAdapter eqsa = (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), procedimentDTO);
-            	if (eqsa != null && url != null) {
-            		eqsa.setRolsacUrl(url);
+            	if (eqsa != null && rolsacUrl != null) {
+            		eqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(eqsa);
             }
@@ -229,8 +229,8 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
             List<TramitQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<TramitQueryServiceAdapter>();
             for (TramitDTO tramitDTO : llistaDTO) {
             	TramitQueryServiceAdapter eqsa = (TramitQueryServiceAdapter) BeanUtils.getAdapter("tramit", getStrategy(), tramitDTO);
-    			if (eqsa != null && url != null) {
-            		eqsa.setRolsacUrl(url);
+    			if (eqsa != null && rolsacUrl != null) {
+            		eqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(eqsa);
             }
@@ -246,8 +246,8 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
             List<UsuariQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UsuariQueryServiceAdapter>();
             for (UsuariDTO usuariDTO : llistaDTO) {
             	UsuariQueryServiceAdapter uqsa = (UsuariQueryServiceAdapter) BeanUtils.getAdapter("usuari", getStrategy(), usuariDTO);
-            	if (uqsa != null && url != null) {
-            		uqsa.setRolsacUrl(url);
+            	if (uqsa != null && rolsacUrl != null) {
+            		uqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(uqsa);
             }
@@ -263,8 +263,8 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
             List<FitxaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FitxaQueryServiceAdapter>();
             for (FitxaDTO fitxaDTO : llistaDTO) {
             	FitxaQueryServiceAdapter fqsa = (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), fitxaDTO);
-            	if (fqsa != null && url != null) {
-            		fqsa.setRolsacUrl(url);
+            	if (fqsa != null && rolsacUrl != null) {
+            		fqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(fqsa);
             }
@@ -280,8 +280,8 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
             List<SeccioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<SeccioQueryServiceAdapter>();
             for (SeccioDTO seccioDTO : llistaDTO) {
             	SeccioQueryServiceAdapter fqsa = (SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), seccioDTO);
-            	if (fqsa != null && url != null) {
-            		fqsa.setRolsacUrl(url);
+            	if (fqsa != null && rolsacUrl != null) {
+            		fqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(fqsa);
             }
@@ -297,8 +297,8 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
             List<MateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<MateriaQueryServiceAdapter>();
             for (MateriaDTO materiaDTO : llistaDTO) {
             	MateriaQueryServiceAdapter fqsa = (MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), materiaDTO);
-            	if (fqsa != null && url != null) {
-            		fqsa.setRolsacUrl(url);
+            	if (fqsa != null && rolsacUrl != null) {
+            		fqsa.setRolsacUrl(rolsacUrl);
             	}
             	llistaQueryServiceAdapter.add(fqsa);
             }
@@ -392,8 +392,8 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
         if (this.getFotop() == null) {return null;}
         try {
         	ArxiuQueryServiceAdapter aqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), unitatAdministrativaQueryServiceStrategy.obtenirFotop(this.getFotop()));
-        	if (aqsa != null && url != null) {
-        		aqsa.setRolsacUrl(url);
+        	if (aqsa != null && rolsacUrl != null) {
+        		aqsa.setRolsacUrl(rolsacUrl);
         	}
         	return aqsa;
         } catch (StrategyException e) {
@@ -405,8 +405,8 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
         if (this.getFotog() == null) {return null;}
         try {
         	ArxiuQueryServiceAdapter aqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), unitatAdministrativaQueryServiceStrategy.obtenirFotog(this.getFotog()));
-            if (aqsa != null && url != null) {
-        		aqsa.setRolsacUrl(url);
+            if (aqsa != null && rolsacUrl != null) {
+        		aqsa.setRolsacUrl(rolsacUrl);
         	}
         	return aqsa;
         } catch (StrategyException e) {
@@ -418,8 +418,8 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
         if (this.getLogoh() == null) {return null;}
         try {
         	ArxiuQueryServiceAdapter aqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), unitatAdministrativaQueryServiceStrategy.obtenirLogoh(this.getLogoh()));
-            if (aqsa != null && url != null) {
-        		aqsa.setRolsacUrl(url);
+            if (aqsa != null && rolsacUrl != null) {
+        		aqsa.setRolsacUrl(rolsacUrl);
         	}
         	return aqsa;
         } catch (StrategyException e) {
@@ -431,8 +431,8 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
         if (this.getLogov() == null) {return null;}
         try {
         	ArxiuQueryServiceAdapter aqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), unitatAdministrativaQueryServiceStrategy.obtenirLogov(this.getLogov()));
-            if (aqsa != null && url != null) {
-        		aqsa.setRolsacUrl(url);
+            if (aqsa != null && rolsacUrl != null) {
+        		aqsa.setRolsacUrl(rolsacUrl);
         	}
         	return aqsa;
         } catch (StrategyException e) {
@@ -444,8 +444,8 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
         if (this.getLogos() == null) {return null;}
         try {
         	ArxiuQueryServiceAdapter aqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), unitatAdministrativaQueryServiceStrategy.obtenirLogos(this.getLogos()));
-            if (aqsa != null && url != null) {
-        		aqsa.setRolsacUrl(url);
+            if (aqsa != null && rolsacUrl != null) {
+        		aqsa.setRolsacUrl(rolsacUrl);
         	}
         	return aqsa;
         } catch (StrategyException e) {
@@ -457,8 +457,8 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
         if (this.getLogot() == null) {return null;}
         try {
         	ArxiuQueryServiceAdapter aqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), unitatAdministrativaQueryServiceStrategy.obtenirLogot(this.getLogot()));
-            if (aqsa != null && url != null) {
-        		aqsa.setRolsacUrl(url);
+            if (aqsa != null && rolsacUrl != null) {
+        		aqsa.setRolsacUrl(rolsacUrl);
         	}
         	return aqsa;
         } catch (StrategyException e) {

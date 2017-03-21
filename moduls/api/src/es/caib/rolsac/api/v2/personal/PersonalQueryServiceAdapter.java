@@ -21,11 +21,11 @@ public class PersonalQueryServiceAdapter extends PersonalDTO implements Personal
         this.personalQueryServiceStrategy = personalQueryServiceStrategy;
     }
     
-    private String url;
-	public void setRolsacUrl(String url) {
-		this.url = url;
+    private String rolsacUrl;
+	public void setRolsacUrl(String rolsacUrl) {
+		this.rolsacUrl = rolsacUrl;
 		if (this.personalQueryServiceStrategy != null) {
-			this.personalQueryServiceStrategy.setUrl(url);
+			this.personalQueryServiceStrategy.setUrl(rolsacUrl);
 		}
 	}
 
@@ -46,8 +46,8 @@ public class PersonalQueryServiceAdapter extends PersonalDTO implements Personal
         try {
             UnitatAdministrativaDTO dto = personalQueryServiceStrategy.obtenirUnitatAdministrativa(this.getUnidadAdministrativa());
             UnitatAdministrativaQueryServiceAdapter uqsa = (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), dto);
-            if (uqsa != null && url != null) {
-            	uqsa.setRolsacUrl(url);
+            if (uqsa != null && rolsacUrl != null) {
+            	uqsa.setRolsacUrl(rolsacUrl);
             }
             return uqsa;
         } catch (StrategyException e) {

@@ -24,9 +24,9 @@ public class ArxiuQueryServiceAdapter extends ArxiuDTO implements ArxiuQueryServ
         }
     }
     
-    private String url;
-    public void setRolsacUrl(String url) {
-    	this.url = url;
+    private String rolsacUrl;
+    public void setRolsacUrl(String rolsacUrl) {
+    	this.rolsacUrl = rolsacUrl;
     }
 
 }

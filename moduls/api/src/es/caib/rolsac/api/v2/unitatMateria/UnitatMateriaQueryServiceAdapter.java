@@ -21,11 +21,11 @@ public class UnitatMateriaQueryServiceAdapter extends UnitatMateriaDTO implement
         this.unitatMateriaQueryServiceStrategy = unitatMateriaQueryServiceStrategy;
     }
     
-    private String url;
-    public void setRolsacUrl(String url) {
-    	this.url = url;
+    private String rolsacUrl;
+    public void setRolsacUrl(String rolsacUrl) {
+    	this.rolsacUrl = rolsacUrl;
     	if (unitatMateriaQueryServiceStrategy != null) {
-    		unitatMateriaQueryServiceStrategy.setUrl(url);
+    		unitatMateriaQueryServiceStrategy.setUrl(rolsacUrl);
     	}    	
     }
 
@@ -45,8 +45,8 @@ public class UnitatMateriaQueryServiceAdapter extends UnitatMateriaDTO implement
         if (this.getMateria() == null) {return null;}
         try {
         	 MateriaQueryServiceAdapter mqsa = (MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), unitatMateriaQueryServiceStrategy.obtenirMateria(this.getMateria()));
-        	 if (mqsa != null && url != null) {
-        		 mqsa.setRolsacUrl(url);
+        	 if (mqsa != null && rolsacUrl != null) {
+        		 mqsa.setRolsacUrl(rolsacUrl);
         	 }
         	 return mqsa;
         } catch (StrategyException e) {
@@ -58,8 +58,8 @@ public class UnitatMateriaQueryServiceAdapter extends UnitatMateriaDTO implement
         if (this.getUnidad() == null) {return null;}
         try {
         	UnitatAdministrativaQueryServiceAdapter mqsa = (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatMateriaQueryServiceStrategy.obtenirUnitatAdministrativa(this.getUnidad()));
-            if (mqsa != null && url != null) {
-            	mqsa.setRolsacUrl(url);
+            if (mqsa != null && rolsacUrl != null) {
+            	mqsa.setRolsacUrl(rolsacUrl);
 	       	 }
 	       	 return mqsa;
         } catch (StrategyException e) {
