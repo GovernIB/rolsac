@@ -7,10 +7,13 @@ import java.sql.Clob;
 import java.sql.SQLException;
 import java.util.Date;
 
+import javax.ejb.EJBException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.SiaPendiente;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.SiaPendienteProcesoDelegate;
@@ -288,14 +291,20 @@ public class SiaUtils {
 
 	/**
 	 * Valida si un procedimiento es para enviar o no a SIA.
+	 * Condiciones:
+	 *  - Tiene organo resolutori
+	 *  - Tiene materias.
+	 *  - Tiene normativas
+	 *  - Procedimiento visible
+	 *  - El organo resolutori o alguno de los predecesores tiene código DIR3.
 	 * @param procedimiento
 	 * @return
 	 */
 	private static SiaEnviableResultado validaProcedimientoSIA(ProcedimientoLocal procedimiento) {
 		
-	    boolean servicio = procedimiento.getServicioResponsable() != null ;
+	    boolean servicio = procedimiento.getOrganResolutori() != null ;
 	    if (!servicio) {
-	    	return new SiaEnviableResultado(false, "No tiene servicio responsable");
+	    	return new SiaEnviableResultado(false, "No tiene organo resolutori");
 	    }
 	    
 	    boolean tieneMaterias=procedimiento.getMaterias().size() > 0;
@@ -308,15 +317,41 @@ public class SiaUtils {
 	    	return new SiaEnviableResultado(false, "No tiene normativas");
 	    }
 	    
-	    if (procedimiento.isVisible()) {
-	    	return new SiaEnviableResultado(true);
-	    } else {
+	    if (!procedimiento.isVisible()) {
 	    	return new SiaEnviableResultado(false, "Procedimiento no visible");
 	    }
+	    
+	    
+	    boolean encontrado = false;
+	    String codigoIdCentro = "";
+	    
+	    if (procedimiento.getOrganResolutori().getCodigoDIR3() == null) {
+	    	
+	    	//Recorremos sus predecesores
+	    	for(Object oua : procedimiento.getOrganResolutori().getPredecesores()) {
+	    		UnidadAdministrativa ua = (UnidadAdministrativa) oua;
+	    		if (ua.getCodigoDIR3() != null) {
+	    			encontrado = true;
+	    			codigoIdCentro = ua.getCodigoDIR3();
+	    			break;
+	    		}
+	    	}
+	    	
+	    } else {
+	    	encontrado = true;
+	    	codigoIdCentro = procedimiento.getOrganResolutori().getCodigoDIR3();
+	    }
+	    
+	    SiaEnviableResultado resultado;
+	    if (encontrado) {
+	    	resultado = new SiaEnviableResultado(true);
+	    	resultado.setIdCentro(codigoIdCentro);
+	    } else {
+	    	resultado = new SiaEnviableResultado(false, "No tiene código DIR ni el organo resolutori ni predecesores.");
+	    }
+	    
+	    return resultado;
 	}
-	
-	
-	
 	
 	
 }

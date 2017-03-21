@@ -33,8 +33,7 @@ public interface SiaPendienteProcesoDelegateI {
 
 	public Boolean cerrarJobs() throws DelegateException;
 	
-	public SiaResultado enviarProcedimiento(ProcedimientoLocal proc) throws DelegateException;
+	public void actualizarProcedimiento(ProcedimientoLocal proc, SiaResultado resultado) throws DelegateException;
 	
-	public SiaResultado borradoProcedimiento(Long idProc, String idSIA) throws DelegateException;
-
+	
 }

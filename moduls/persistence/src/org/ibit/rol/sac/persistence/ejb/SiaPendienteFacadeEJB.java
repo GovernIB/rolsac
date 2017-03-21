@@ -1,9 +1,11 @@
 package org.ibit.rol.sac.persistence.ejb;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -11,18 +13,28 @@ import javax.ejb.EJBException;
 import net.sf.hibernate.Hibernate;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.EstadoProcesoSIA;
+import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.ResultadoSiaPendiente;
+import org.ibit.rol.sac.model.Sia;
 import org.ibit.rol.sac.model.SiaJob;
 import org.ibit.rol.sac.model.SiaPendiente;
+import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
+import org.ibit.rol.sac.model.TraduccionUA;
+import org.ibit.rol.sac.model.Tramite;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.ws.SiaResultado;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.SiaPendienteProcesoDelegate;
+import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
 import org.ibit.rol.sac.persistence.util.SiaEnviableResultado;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
+import org.ibit.rol.sac.persistence.ws.sia.SiaWS;
 
 
 
@@ -92,7 +104,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 				if (siaEnviableResultado.isNotificiarSIA()) {
 		    		try {
 		    			// Enviamos a SIA
-		    			siaResultado = siaDelegate.enviarProcedimiento(procedimiento);		    						    		
+		    			enviarProcedimiento(procedimiento);		    						    		
 					} catch (Exception e) {
 						log.error("Error enviando procedimiento " + procedimiento.getId(), e);
 						siaResultado = new SiaResultado(SiaResultado.RESULTADO_ERROR, ExceptionUtils.getStackTrace(e));												
@@ -120,6 +132,29 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		estadoProceso.setFechaFin(new Date());		
 		guardarEstadoProcesoSIA(siaJob, estadoProceso);
 		    	
+	}
+
+
+	private SiaResultado enviarProcedimiento(
+			ProcedimientoLocal proc) throws Exception {
+		
+		// Enviamos a SIA
+		SiaResultado resultado = null;
+    	try {
+			// Obtenemos info para enviar a SIA
+	    	final Sia sia = obtenerSiaProc(proc);
+			// Enviamos a SIA
+			resultado = SiaWS.enviarSIA(sia, false);
+    	} catch (Exception ex) {
+    		log.error("Error enviando a SIA el procedimiento " + proc.getId() + ": " + ex.getMessage(), ex);
+    		throw new Exception("Error enviando a SIA el procedimiento " + proc.getId() + ": " + ex.getMessage(), ex);
+    	}
+		
+    	// Actualizamos procedimiento
+    	final SiaPendienteProcesoDelegate siaDelegate = DelegateUtil.getSiaPendienteProcesoDelegate();
+		siaDelegate.actualizarProcedimiento(proc, resultado);
+		
+		return resultado;
 	}
 
 	
@@ -179,7 +214,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
     			resultadoBeta.append(" - "+nulos+" datos no enviables a SIA  <br />");
     			    			
     			if (estadoProceso.getFechaFin() == null) {
-    				resultadoBeta.append("Estado: "+Math.abs((correctos+incorrectos)*100/total)+"%  <br />");
+    				resultadoBeta.append("Estado: "+Math.abs((correctos+incorrectos+nulos)*100/total)+"%  <br />");
     			} else {
     				resultadoBeta.append("Finalizado a las " + formato.format(estadoProceso.getFechaFin()) + "<br />");
     				siaJob.setFechaFin(estadoProceso.getFechaFin());
@@ -381,7 +416,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 
 	private ResultadoSiaPendiente enviarPendienteTipoNormativa(
 			EstadoProcesoSIA estadoProceso, SiaPendiente siaPendiente)
-			throws DelegateException {
+			throws Exception {
 		
 		final ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
 		final SiaPendienteProcesoDelegate siaPendienteDelegate = DelegateUtil.getSiaPendienteProcesoDelegate();
@@ -399,7 +434,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 			
 			// Verifica si envia a SIA
 			if (siaEnviableResultado.isNotificiarSIA()) {
-		    	siaResultado = siaPendienteDelegate.enviarProcedimiento(procedimiento);        						
+				siaResultado = enviarProcedimiento(procedimiento);        						
 				if (!siaResultado.isCorrecto()) {
 					todosCorrectos = false;
 					idsNoCorrectos += " " + procedimiento.getId();
@@ -425,7 +460,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 
 	private ResultadoSiaPendiente enviarPendienteTipoUA(
 			EstadoProcesoSIA estadoProceso, SiaPendiente siaPendiente)
-			throws DelegateException {
+			throws Exception {
 		
 		final ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
 		final SiaPendienteProcesoDelegate siaPendienteDelegate = DelegateUtil.getSiaPendienteProcesoDelegate();
@@ -443,7 +478,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 			
 			// Verifica si envia a SIA
 			if (siaEnviableResultado.isNotificiarSIA()) {
-		    	siaResultado = siaPendienteDelegate.enviarProcedimiento(procedimiento);	        	
+		    	siaResultado = enviarProcedimiento(procedimiento);	        	
 				if (!siaResultado.isCorrecto()) {
 					todosCorrectos = false;
 					idsNoCorrectos += " " + procedimiento.getId();
@@ -469,7 +504,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 
 	private ResultadoSiaPendiente enviarPendienteTipoProcedimiento(
 			EstadoProcesoSIA estadoProceso, SiaPendiente siaPendiente)
-			throws DelegateException {
+			throws Exception {
 		
 		final ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
 		final SiaPendienteProcesoDelegate siaPendienteDelegate = DelegateUtil.getSiaPendienteProcesoDelegate();
@@ -479,7 +514,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		if (siaPendiente.getExiste().compareTo(SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_BORRADO) == 0) {
 			
 			// Envia a SIA el borrado
-			SiaResultado siaResultado = siaPendienteDelegate.borradoProcedimiento(siaPendiente.getIdElemento(), siaPendiente.getIdSia().toString());
+			SiaResultado siaResultado = borradoProcedimiento(siaPendiente.getIdElemento(), siaPendiente.getIdSia().toString());
 			
 			// Actualizar estado proceso
 			actualizaEstadoProceso(siaPendiente.getIdElemento(), siaResultado, estadoProceso);
@@ -501,8 +536,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 			
 			// Verificamos si se puede enviar a SIA
 			if (siaEnviableResultado.isNotificiarSIA()) {
-				// Enviamos SIA
-		    	siaResultado = siaPendienteDelegate.enviarProcedimiento(procedimiento);	        						
+				siaResultado = enviarProcedimiento(procedimiento);	        						
 			}  else {
     			siaResultado = new SiaResultado(SiaResultado.RESULTADO_NULO, siaEnviableResultado.getRespuesta());		
     		}
@@ -521,6 +555,22 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		return resultadoPendiente;
 	}
 
+
+
+	private SiaResultado borradoProcedimiento(Long idProc, String idSIA) throws Exception {
+		SiaResultado resultado = null; 
+		Sia sia = new Sia();
+		sia.setIdSIA(idSIA);
+		sia.setOperacion(SiaUtils.ESTADO_BAJA); 
+		sia.setIdProc(String.valueOf(idProc));
+		try {
+			resultado = SiaWS.enviarSIA(sia, true);
+		} catch(Exception exception) {
+			log.error("Se ha producido un error enviando el dato a SIA de un borrado de procedimiento " + idProc, exception);
+			throw new Exception("Se ha producido un error enviando el dato a SIA de un borrado de procedimiento " + idProc, exception);
+		}
+		return resultado;
+	}
 
 
 	/**
@@ -633,4 +683,129 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
     		
     	}
 	}
+	
+	 /**
+		 * Obtiene el objeto SIA a partir del procedimiento.
+		 * 
+		 * @param procedimiento
+		 * @return
+		 * @throws Exception
+		 */
+		private Sia obtenerSiaProc(ProcedimientoLocal procedimiento) throws Exception {
+			Sia sia = new Sia();
+			SiaEnviableResultado siaEnviableResultado = SiaUtils.isEnviableSia(procedimiento);
+			
+			sia.setIdProc(procedimiento.getId().toString());
+			if (procedimiento.getCodigoSIA() != null) {
+				sia.setIdSIA(procedimiento.getCodigoSIA().toString());
+			}
+			TraduccionProcedimientoLocal trad = (TraduccionProcedimientoLocal) procedimiento.getTraduccion("es");
+			if(trad == null){
+				trad = (TraduccionProcedimientoLocal) procedimiento.getTraduccion("ca");
+				if (trad != null) {
+					sia.setTitulo(trad.getNombre());
+					sia.setDescripcion(trad.getResumen());
+				}
+			} else {
+				sia.setTitulo(trad.getNombre());
+				sia.setDescripcion(trad.getResumen());
+			}
+			
+			sia.setIdCent(siaEnviableResultado.getIdCentro());
+			sia.setIdDepartamento(SiaUtils.getIdDepartamento());
+			if (procedimiento.getUnidadAdministrativa().getTraduccion("es") != null && ((TraduccionUA)  procedimiento.getUnidadAdministrativa().getTraduccion("es")).getNombre() != null) {
+				sia.setUaGest(((TraduccionUA)  procedimiento.getUnidadAdministrativa().getTraduccion("es")).getNombre());
+			} else {
+				sia.setUaGest(((TraduccionUA)  procedimiento.getUnidadAdministrativa().getTraduccion("ca")).getNombre());
+			}
+			
+			String[] destinatarios = new String[procedimiento.getPublicosObjetivo().size()];
+			Set<PublicoObjetivo> publicoObjs = procedimiento.getPublicosObjetivo();
+			int i = 0;
+			for (PublicoObjetivo pObj : publicoObjs) {
+				switch(pObj.getId().intValue()) {
+					case 200:
+						destinatarios[i] = "1";
+						i++;
+						break;
+					case 201:
+						destinatarios[i] = "2";
+						i++;
+						break;
+					case 202:
+						destinatarios[i] = "3";
+						i++;
+						break;
+				}
+			}
+			
+			sia.setIdDest(destinatarios);
+			
+			List<Tramite> tramites = procedimiento.getTramites();
+			Integer nivelAdministrativo = 1;
+			for (Tramite tramite : tramites) {
+				if (tramite != null && tramite.getFase() == 1)  {
+						if (tramite.getVersio() != null || 
+								(tramite.getUrlExterna() != null && !tramite.getUrlExterna().isEmpty())) {
+							nivelAdministrativo = 4;
+							break;
+						}
+					
+						//Revisar no inicializa la lista dentro de tramite aunq en el servicio que obtiene proc si lo hace...
+						TramiteDelegate tramDelegate = DelegateUtil.getTramiteDelegate();
+						Tramite tram = tramDelegate.obtenerTramite(tramite.getId());
+						
+						Set<DocumentTramit> docs = tram.getDocsInformatius();
+						docs.addAll(tram.getDocsRequerits());
+						
+						for (DocumentTramit documentTramit : docs) {
+							if (documentTramit.getTipus() == 1) {
+								nivelAdministrativo=2;
+							}
+						}
+				}
+			}
+			sia.setNivAdm(nivelAdministrativo.toString());
+
+			sia.setNormativas(procedimiento.getNormativas());
+			
+			final List<String> materias = new ArrayList<String>();
+			
+			if (procedimiento.getMaterias() != null){			
+				for (Materia mat : procedimiento.getMaterias()) {
+					if (mat.getCodigoSIA() != null) {
+						if (!materias.contains(mat.getCodigoSIA().toString())) {
+							materias.add(mat.getCodigoSIA().toString());
+						}
+					}
+				}
+				sia.setMaterias(materias.toArray(new String[materias.size()]));
+			}
+
+			if (procedimiento.getIndicador() == null) {
+				sia.setFiVia(SiaUtils.NO);
+			} else {
+				sia.setFiVia(procedimiento.getIndicador().equals("1")? SiaUtils.SI : SiaUtils.NO);
+			}
+			sia.setTipologia(SiaUtils.getTipologiaTramitacion());
+			
+			sia.setEnlaceWeb(SiaUtils.getUrl()+procedimiento.getId().toString());
+			
+			sia.setEstado(procedimiento.getEstadoSIA());
+			
+			//Obtenemos el tipo de operación a partir de validar el procedimiento.
+			sia.setOperacion(siaEnviableResultado.getOperacion());
+						
+			//Se ha tenido que poner aquí (y se ha simplificado) pq se produce un error al enviar una modificación.
+			if (SiaUtils.ESTADO_ALTA.equals(sia.getOperacion())) {
+				sia.setTipoTramite(SiaUtils.TRAMITE_PROC);			
+			} else {
+				sia.setTipoTramite(null);
+			}
+			
+			return sia;
+		}
+	    
+		
+		
 }

@@ -161,22 +161,14 @@ public class SiaPendienteProcesoDelegateImpl extends SiaPendienteProcesoDelegate
 	}
 	
 	@Override
-	public SiaResultado enviarProcedimiento(ProcedimientoLocal proc)  throws DelegateException{
+	public void actualizarProcedimiento(ProcedimientoLocal proc, SiaResultado resultado)  throws DelegateException{
 		try {
-			return getFacade().enviarProcedimiento(proc);
+			 getFacade().actualizarProcedimiento(proc, resultado);
        } catch (RemoteException e) {
            throw new DelegateException(e);
        }
 	}
 	
 	
-	@Override
-	public SiaResultado borradoProcedimiento(Long idProc, String idSIA)  throws DelegateException{
-		try {
-			return getFacade().borradoProcedimiento(idProc, idSIA);
-       } catch (RemoteException e) {
-           throw new DelegateException(e);
-       }
-	}
 	
 }

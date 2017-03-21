@@ -497,32 +497,22 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     
     
     /**
-	 * Envia a SIA.
+	 * Actualizar procedimiento.
 	 * 
    	 * @ejb.interface-method
    	 * @ejb.permission unchecked="true"
    	 *   
    	 */
-    public SiaResultado enviarProcedimiento(ProcedimientoLocal proc) {
+    public void actualizarProcedimiento(ProcedimientoLocal proc, SiaResultado resultado) {
 
     	final ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
     	
-    	// Enviamos a SIA
-    	SiaResultado resultado = null; 
-    	try {
-			// Obtenemos info para enviar a SIA
-	    	final Sia sia = obtenerSiaProc(proc);
-			// Enviamos a SIA
-			resultado = SiaWS.enviarSIA(sia, false);
-    	} catch (Exception ex) {
-    		log.error("Error enviando a SIA el procedimiento " + proc.getId() + ": " + ex.getMessage(), ex);
-    		throw new EJBException("Error enviando a SIA el procedimiento " + proc.getId() + ": " + ex.getMessage(), ex);
-    	}
-
 		// Actualizamos procedimiento
     	try {
 			if (resultado.isCorrecto()) {
-				proc.setCodigoSIA(resultado.getCodSIA());
+				if (proc.getCodigoSIA() == null || proc.getCodigoSIA().isEmpty()) { 
+					proc.setCodigoSIA(resultado.getCodSIA()); 
+				}
 				proc.setEstadoSIA(resultado.getEstadoSIA());
 				proc.setFechaSIA(new Date());
 				procDelegate.actualizarProcedimiento(proc);
@@ -532,7 +522,6 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     		throw new EJBException("Error actualizando información de SIA en el procedimiento " + proc.getId() + ": " + ex.getMessage(), ex);
     	}
 		
-		return resultado;
 	}
     
     
@@ -560,159 +549,6 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     }
     
     
-    /**
-	 * Obtiene el objeto SIA a partir del procedimiento.
-	 * 
-	 * @param procedimiento
-	 * @return
-	 * @throws Exception
-	 */
-	private Sia obtenerSiaProc(ProcedimientoLocal procedimiento) throws Exception {
-		Sia sia = new Sia();
-		
-		sia.setIdProc(procedimiento.getId().toString());
-		if (procedimiento.getCodigoSIA() != null) {
-			sia.setIdSIA(procedimiento.getCodigoSIA().toString());
-		}
-		TraduccionProcedimientoLocal trad = (TraduccionProcedimientoLocal) procedimiento.getTraduccion("es");
-		if(trad == null){
-			trad = (TraduccionProcedimientoLocal) procedimiento.getTraduccion("ca");
-			if (trad != null) {
-				sia.setTitulo(trad.getNombre());
-				sia.setDescripcion(trad.getResumen());
-			}
-		} else {
-			sia.setTitulo(trad.getNombre());
-			sia.setDescripcion(trad.getResumen());
-		}
-		
-		sia.setIdCent(getIdCentro(procedimiento));
-		sia.setIdDepartamento(SiaUtils.getIdDepartamento());
-		if (procedimiento.getUnidadAdministrativa().getTraduccion("es") != null && ((TraduccionUA)  procedimiento.getUnidadAdministrativa().getTraduccion("es")).getNombre() != null) {
-			sia.setUaGest(((TraduccionUA)  procedimiento.getUnidadAdministrativa().getTraduccion("es")).getNombre());
-		} else {
-			sia.setUaGest(((TraduccionUA)  procedimiento.getUnidadAdministrativa().getTraduccion("ca")).getNombre());
-		}
-		
-		String[] destinatarios = new String[procedimiento.getPublicosObjetivo().size()];
-		Set<PublicoObjetivo> publicoObjs = procedimiento.getPublicosObjetivo();
-		int i = 0;
-		for (PublicoObjetivo pObj : publicoObjs) {
-			switch(pObj.getId().intValue()) {
-				case 200:
-					destinatarios[i] = "1";
-					i++;
-					break;
-				case 201:
-					destinatarios[i] = "2";
-					i++;
-					break;
-				case 202:
-					destinatarios[i] = "3";
-					i++;
-					break;
-			}
-		}
-		
-		sia.setIdDest(destinatarios);
-		
-		List<Tramite> tramites = procedimiento.getTramites();
-		Integer nivelAdministrativo = 1;
-		for (Tramite tramite : tramites) {
-			if (tramite != null && tramite.getFase() == 1)  {
-					if (tramite.getVersio() != null || 
-							(tramite.getUrlExterna() != null && !tramite.getUrlExterna().isEmpty())) {
-						nivelAdministrativo = 4;
-						break;
-					}
-				
-					//Revisar no inicializa la lista dentro de tramite aunq en el servicio que obtiene proc si lo hace...
-					TramiteDelegate tramDelegate = DelegateUtil.getTramiteDelegate();
-					Tramite tram = tramDelegate.obtenerTramite(tramite.getId());
-					
-					Set<DocumentTramit> docs = tram.getDocsInformatius();
-					docs.addAll(tram.getDocsRequerits());
-					
-					for (DocumentTramit documentTramit : docs) {
-						if (documentTramit.getTipus() == 1) {
-							nivelAdministrativo=2;
-						}
-					}
-			}
-		}
-		sia.setNivAdm(nivelAdministrativo.toString());
-
-		sia.setNormativas(procedimiento.getNormativas());
-		
-		final List<String> materias = new ArrayList<String>();
-		
-		if (procedimiento.getMaterias() != null){			
-			for (Materia mat : procedimiento.getMaterias()) {
-				if (mat.getCodigoSIA() != null) {
-					if (!materias.contains(mat.getCodigoSIA().toString())) {
-						materias.add(mat.getCodigoSIA().toString());
-					}
-				}
-			}
-			sia.setMaterias(materias.toArray(new String[materias.size()]));
-		}
-
-		if (procedimiento.getIndicador() == null) {
-			sia.setFiVia(SiaUtils.NO);
-		} else {
-			sia.setFiVia(procedimiento.getIndicador().equals("1")? SiaUtils.SI : SiaUtils.NO);
-		}
-		sia.setTipologia(SiaUtils.getTipologiaTramitacion());
-		
-		sia.setEnlaceWeb(SiaUtils.getUrl()+procedimiento.getId().toString());
-		
-		sia.setEstado(procedimiento.getEstadoSIA());
-		
-		//Obtenemos el tipo de operación a partir de validar el procedimiento.
-		SiaEnviableResultado siaEnviableResultado = SiaUtils.isEnviableSia(procedimiento);
-		sia.setOperacion(siaEnviableResultado.getOperacion());
-					
-		//Se ha tenido que poner aquí (y se ha simplificado) pq se produce un error al enviar una modificación.
-		if (SiaUtils.ESTADO_ALTA.equals(sia.getOperacion())) {
-			sia.setTipoTramite(SiaUtils.TRAMITE_PROC);			
-		} else {
-			sia.setTipoTramite(null);
-		}
-		
-		return sia;
-	}
-    
-	
-	/**
-	 * Método que encuentra el id centro a partir del propio elemento y de los predecesores.
-	 * Es importante tener en cuenta que hay un nivel (por propiedades) y que el propio elemento no está
-	 *   dentro de las uas.
-	 * @param procedimiento
-	 * @return
-	 * @throws Exception 
-	 */
-	private String getIdCentro(ProcedimientoLocal procedimiento) throws Exception {
-		int nivel = SiaUtils.getLevelSIA();
-		int i;
-		if ( procedimiento.getServicioResponsable().getPredecesores().size() > nivel) {
-			i = nivel - 1;
-		} else {
-			if (procedimiento.getUnidadAdministrativa().getCodigoDIR3() != null) {
-				return procedimiento.getUnidadAdministrativa().getCodigoDIR3();
-			} 
-			if (procedimiento.getOrganResolutori().getPredecesores().size() == 0) { 
-				throw new Exception("No existe ningún elemento ni predecesor con DIR3."); 
-			}
-			i = procedimiento.getOrganResolutori().getPredecesores().size() - 1;
-		}
-		for(; i < procedimiento.getOrganResolutori().getPredecesores().size() && i>=0; i--) {
-			UnidadAdministrativa predecesor = (UnidadAdministrativa) procedimiento.getOrganResolutori().getPredecesores().get(i);
-			if (predecesor.getPadre() != null && predecesor.getCodigoDIR3() != null) {
-				return predecesor.getCodigoDIR3();
-			}
-		}
-		
-		throw new Exception("No existe ningún elemento ni predecesor con DIR3..");
-	}
+   
 }
 

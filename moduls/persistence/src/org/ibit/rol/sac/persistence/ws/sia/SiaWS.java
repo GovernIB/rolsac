@@ -69,7 +69,7 @@ public class SiaWS {
 						ERRORESERROR[] arrayErrores = envia.getERRORES();
 						siaResultado.setMensaje("");
 						for (ERRORESERROR error : arrayErrores) {
-							siaResultado.setMensaje(siaResultado.getMensaje()+error.getDESCERROR() + " "+ siaResultado.getMensaje()+"<br />");
+							siaResultado.setMensaje(siaResultado.getMensaje()+error.getERROR()+":"+error.getDESCERROR() + " "+ siaResultado.getMensaje()+"<br />");
 						}
 					}
 					if (SiaUtils.ESTADO_BAJA.compareTo(envia.getOPERACION()) == 0) {

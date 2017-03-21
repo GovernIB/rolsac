@@ -13,6 +13,8 @@ public class SiaEnviableResultado {
 	private String respuesta;
 	/** Tipo de operación que se debe realizar. **/
 	private String operacion;
+	/** Id centro. **/
+	private String idCentro;
 	
 	/** Constructor. **/
 	public SiaEnviableResultado(boolean iEnviable, String iRespuesta) {
@@ -66,6 +68,20 @@ public class SiaEnviableResultado {
 	 */
 	public void setOperacion(String operacion) {
 		this.operacion = operacion;
+	}
+
+	/**
+	 * @return the idCentro
+	 */
+	public String getIdCentro() {
+		return idCentro;
+	}
+
+	/**
+	 * @param idCentro the idCentro to set
+	 */
+	public void setIdCentro(String idCentro) {
+		this.idCentro = idCentro;
 	}
 	
 }

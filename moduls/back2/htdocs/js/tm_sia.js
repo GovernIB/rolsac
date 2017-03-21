@@ -345,8 +345,12 @@ function CLlistat(){
 					codi_taula += "Espera";
 				}else if (dada_node.estado == 1) {
 					codi_taula += "Correcto";
-				}  else if (dada_node.estado == 2) {
+				} else if (dada_node.estado == 2) {
 					codi_taula += "Incorrecto";
+				} else if (dada_node.estado == -1) {
+					codi_taula += "Incorrecto";
+				} else if (dada_node.estado == -2) {
+					codi_taula += "No enviable a SIA";
 				} else {
 					codi_taula += " Desconocido ";
 				}
@@ -570,7 +574,7 @@ function CLlistat(){
 				parClass = (i%2) ? " par": "";
 				
 				//Si tiene estado 3 o -1 se marca como erroneo
-				if(elemento.estado == 3 || elemento.estado == -1){
+				if(elemento.estado == 3 || elemento.estado == -1 ){
 					parClass =  " errorEstado";
 				}
 				contenido += "<div class=\"tr" + parClass + "\" role=\"row\">";

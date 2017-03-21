@@ -78,12 +78,9 @@ public class SiaPendienteProcesoDelegate implements StatelessDelegate {
 		return impl.cerrarJobs();
 	}
 	
-	public SiaResultado enviarProcedimiento(ProcedimientoLocal proc) throws DelegateException{
-		return impl.enviarProcedimiento(proc);
+	public void actualizarProcedimiento(ProcedimientoLocal proc, SiaResultado resultado) throws DelegateException{
+		impl.actualizarProcedimiento(proc, resultado);
 	} 
 	
-	public SiaResultado borradoProcedimiento(Long idProc, String idSIA)  throws DelegateException {
-        return impl.borradoProcedimiento(idProc, idSIA);
-    }
 	
 }
