@@ -27,7 +27,7 @@ public class TipusQueryServiceAdapter extends TipusDTO implements TipusQueryServ
     }
 
     private String url;
-	public void setUrl(String url) {
+	public void setRolsacUrl(String url) {
 		this.url = url;		if ( this.tipusQueryServiceStrategy != null) {
 			 this.tipusQueryServiceStrategy.setUrl(url);
 		}
@@ -76,7 +76,7 @@ public class TipusQueryServiceAdapter extends TipusDTO implements TipusQueryServ
             for (NormativaDTO normativaDTO : llistaDTO) {
             	NormativaQueryServiceAdapter nqsa = (NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa", getStrategy(), normativaDTO);
             	if (nqsa != null && url != null) {
-            		nqsa.setUrl(url);
+            		nqsa.setRolsacUrl(url);
             	}
             	llistaQueryServiceAdapter.add(nqsa);
             }

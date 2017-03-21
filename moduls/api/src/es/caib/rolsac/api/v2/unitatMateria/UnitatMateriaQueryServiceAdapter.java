@@ -22,7 +22,7 @@ public class UnitatMateriaQueryServiceAdapter extends UnitatMateriaDTO implement
     }
     
     private String url;
-    public void setUrl(String url) {
+    public void setRolsacUrl(String url) {
     	this.url = url;
     	if (unitatMateriaQueryServiceStrategy != null) {
     		unitatMateriaQueryServiceStrategy.setUrl(url);
@@ -46,7 +46,7 @@ public class UnitatMateriaQueryServiceAdapter extends UnitatMateriaDTO implement
         try {
         	 MateriaQueryServiceAdapter mqsa = (MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), unitatMateriaQueryServiceStrategy.obtenirMateria(this.getMateria()));
         	 if (mqsa != null && url != null) {
-        		 mqsa.setUrl(url);
+        		 mqsa.setRolsacUrl(url);
         	 }
         	 return mqsa;
         } catch (StrategyException e) {
@@ -59,7 +59,7 @@ public class UnitatMateriaQueryServiceAdapter extends UnitatMateriaDTO implement
         try {
         	UnitatAdministrativaQueryServiceAdapter mqsa = (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatMateriaQueryServiceStrategy.obtenirUnitatAdministrativa(this.getUnidad()));
             if (mqsa != null && url != null) {
-            	mqsa.setUrl(url);
+            	mqsa.setRolsacUrl(url);
 	       	 }
 	       	 return mqsa;
         } catch (StrategyException e) {

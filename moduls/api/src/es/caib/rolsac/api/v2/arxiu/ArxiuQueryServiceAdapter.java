@@ -23,5 +23,10 @@ public class ArxiuQueryServiceAdapter extends ArxiuDTO implements ArxiuQueryServ
             throw new QueryServiceException(ExceptionMessages.ADAPTER_CONSTRUCTOR, e);
         }
     }
+    
+    private String url;
+    public void setRolsacUrl(String url) {
+    	this.url = url;
+    }
 
 }

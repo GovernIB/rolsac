@@ -29,7 +29,7 @@ public class FamiliaQueryServiceAdapter extends FamiliaDTO implements FamiliaQue
     }
     
     private String url;
-    public void setUrl(String url) {
+    public void setRolsacUrl(String url) {
     	this.url = url;
 		if (this.familiaQueryServiceStrategy != null) {
 			this.familiaQueryServiceStrategy.setUrl(url);
@@ -71,7 +71,7 @@ public class FamiliaQueryServiceAdapter extends FamiliaDTO implements FamiliaQue
             for (ProcedimentDTO pDTO : llistaDTO) {
             	ProcedimentQueryServiceAdapter pqsa = (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), pDTO);
             	if (pqsa != null && url != null) {
-            		pqsa.setUrl(url);
+            		pqsa.setRolsacUrl(url);
             	}
             	procs.add(pqsa);
             }
@@ -88,7 +88,7 @@ public class FamiliaQueryServiceAdapter extends FamiliaDTO implements FamiliaQue
             for (IconaFamiliaDTO pDTO : llistaDTO) {
             	IconaFamiliaQueryServiceAdapter pqsa = (IconaFamiliaQueryServiceAdapter) BeanUtils.getAdapter("iconaFamilia", getStrategy(), pDTO);
             	if (pqsa != null && url != null) {
-            		pqsa.setUrl(url);
+            		pqsa.setRolsacUrl(url);
             	}
             	 icones.add(pqsa);
             }

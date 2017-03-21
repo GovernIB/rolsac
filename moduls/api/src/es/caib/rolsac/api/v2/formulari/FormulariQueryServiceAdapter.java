@@ -22,7 +22,7 @@ public class FormulariQueryServiceAdapter extends FormulariDTO implements Formul
     }
     
     private String url;
-    public void setUrl(String url) {
+    public void setRolsacUrl(String url) {
     	this.url = url;
     	if (this.formulariQueryServiceStrategy != null) {
     		this.formulariQueryServiceStrategy.setUrl(url);
@@ -46,7 +46,7 @@ public class FormulariQueryServiceAdapter extends FormulariDTO implements Formul
         try {
         	ArxiuQueryServiceAdapter uqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), formulariQueryServiceStrategy.obtenirArchivo(this.getArchivo()));
         	if (uqsa != null && url != null) {
-        		uqsa.setUrl(url);
+        		uqsa.setRolsacUrl(url);
         	}
         	return uqsa;
         } catch (StrategyException e) {
@@ -59,7 +59,7 @@ public class FormulariQueryServiceAdapter extends FormulariDTO implements Formul
         try {
         	ArxiuQueryServiceAdapter uqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), formulariQueryServiceStrategy.obtenirManual(this.getManual()));
             if (uqsa != null && url != null) {
-        		uqsa.setUrl(url);
+        		uqsa.setRolsacUrl(url);
         	}
         	return uqsa;
         } catch (StrategyException e) {
@@ -72,7 +72,7 @@ public class FormulariQueryServiceAdapter extends FormulariDTO implements Formul
         try {
         	TramitQueryServiceAdapter uqsa = (TramitQueryServiceAdapter) BeanUtils.getAdapter("tramit", getStrategy(), formulariQueryServiceStrategy.obtenirTramit(this.getTramite()));
             if (uqsa != null && url != null) {
-        		uqsa.setUrl(url);
+        		uqsa.setRolsacUrl(url);
         	}
         	return uqsa;
         } catch (StrategyException e) {

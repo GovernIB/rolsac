@@ -27,7 +27,7 @@ public class EdificiQueryServiceAdapter extends EdificiDTO implements EdificiQue
     }
     
     private String url;
-    public void setUrl(String url) {
+    public void setRolsacUrl(String url) {
     	this.url = url;
     	 if (this.edificiQueryServiceStrategy != null) {
     		 this.edificiQueryServiceStrategy.setUrl(url);
@@ -61,7 +61,7 @@ public class EdificiQueryServiceAdapter extends EdificiDTO implements EdificiQue
             for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
             	UnitatAdministrativaQueryServiceAdapter uqsa = (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO);
             	if (uqsa != null && url != null) {
-            		uqsa.setUrl(url);
+            		uqsa.setRolsacUrl(url);
             	}
             	llistaQueryServiceAdapter.add(uqsa);
             }
@@ -76,7 +76,7 @@ public class EdificiQueryServiceAdapter extends EdificiDTO implements EdificiQue
         try {
         	ArxiuQueryServiceAdapter aqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), edificiQueryServiceStrategy.obtenirFotoPequenya(this.getFotoPequenya()));
         	if (aqsa != null && url != null) {
-        		aqsa.setUrl(url);
+        		aqsa.setRolsacUrl(url);
         	}
         	return aqsa;
         } catch (StrategyException e) {
@@ -89,7 +89,7 @@ public class EdificiQueryServiceAdapter extends EdificiDTO implements EdificiQue
         try {
         	ArxiuQueryServiceAdapter aqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), edificiQueryServiceStrategy.obtenirFotoGrande(this.getFotoGrande()));
             if (aqsa != null && url != null) {
-        		aqsa.setUrl(url);
+        		aqsa.setRolsacUrl(url);
         	}
             return aqsa;
         } catch (StrategyException e) {
@@ -102,7 +102,7 @@ public class EdificiQueryServiceAdapter extends EdificiDTO implements EdificiQue
         try {
         	ArxiuQueryServiceAdapter aqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), edificiQueryServiceStrategy.obtenirPlano(this.getPlano()));
              if (aqsa != null && url != null) {
-         		aqsa.setUrl(url);
+         		aqsa.setRolsacUrl(url);
          	}
             return aqsa;
         } catch (StrategyException e) {

@@ -42,7 +42,7 @@ public class MateriaQueryServiceAdapter extends MateriaDTO implements MateriaQue
     }
     
     private String url;
-    public void setUrl(String url) {
+    public void setRolsacUrl(String url) {
     	this.url = url;
     	if (this.materiaQueryServiceStrategy != null) {
 			this.materiaQueryServiceStrategy.setUrl(url);
@@ -66,7 +66,7 @@ public class MateriaQueryServiceAdapter extends MateriaDTO implements MateriaQue
         try {
         	ArxiuQueryServiceAdapter aqsa =  (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), materiaQueryServiceStrategy.getFotografia(this.getFoto()));
         	if (aqsa != null && url != null) {
-        		aqsa.setUrl(url);
+        		aqsa.setRolsacUrl(url);
         	}
         	return aqsa;
         } catch (StrategyException e) {
@@ -79,7 +79,7 @@ public class MateriaQueryServiceAdapter extends MateriaDTO implements MateriaQue
         try {
         	ArxiuQueryServiceAdapter aqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), materiaQueryServiceStrategy.getIcona(this.getIcono()));
             if (aqsa != null && url != null) {
-        		aqsa.setUrl(url);
+        		aqsa.setRolsacUrl(url);
         	}
         	return aqsa;
         } catch (StrategyException e) {
@@ -92,7 +92,7 @@ public class MateriaQueryServiceAdapter extends MateriaDTO implements MateriaQue
         try {
         	ArxiuQueryServiceAdapter aqsa =  (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), materiaQueryServiceStrategy.getIconaGran(this.getIconoGrande()));
             if (aqsa != null && url != null) {
-        		aqsa.setUrl(url);
+        		aqsa.setRolsacUrl(url);
         	}
         	return aqsa;
         } catch (StrategyException e) {
@@ -147,7 +147,7 @@ public class MateriaQueryServiceAdapter extends MateriaDTO implements MateriaQue
             for (FitxaDTO fitxaDTO : llistaDTO) {
             	FitxaQueryServiceAdapter fqsa = (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), fitxaDTO);
             	if (fqsa != null && url != null) {
-            		fqsa.setUrl(url);
+            		fqsa.setRolsacUrl(url);
             	}
             	llistaQueryServiceAdapter.add(fqsa);
             }
@@ -164,7 +164,7 @@ public class MateriaQueryServiceAdapter extends MateriaDTO implements MateriaQue
             for (AgrupacioMateriaDTO agrupacioMateriaDTO : llistaDTO) {
             	AgrupacioMateriaQueryServiceAdapter fqsa = (AgrupacioMateriaQueryServiceAdapter) BeanUtils.getAdapter("agrupacioMateria", getStrategy(), agrupacioMateriaDTO);
                 if (fqsa != null && url != null) {
-            		fqsa.setUrl(url);
+            		fqsa.setRolsacUrl(url);
             	}
             	llistaQueryServiceAdapter.add(fqsa);
             }
@@ -181,7 +181,7 @@ public class MateriaQueryServiceAdapter extends MateriaDTO implements MateriaQue
             for (ProcedimentDTO procedimentDTO : llistaDTO) {
             	ProcedimentQueryServiceAdapter fqsa = (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), procedimentDTO);
                 if (fqsa != null && url != null) {
-            		fqsa.setUrl(url);
+            		fqsa.setRolsacUrl(url);
             	}
             	llistaQueryServiceAdapter.add(fqsa);
             }
@@ -198,7 +198,7 @@ public class MateriaQueryServiceAdapter extends MateriaDTO implements MateriaQue
             for (UnitatMateriaDTO unitatMateriaDTO : llistaDTO) {
             	UnitatMateriaQueryServiceAdapter uqsa = (UnitatMateriaQueryServiceAdapter) BeanUtils.getAdapter("unitatMateria", getStrategy(), unitatMateriaDTO);
             	if (uqsa != null && url != null) {
-            		uqsa.setUrl(url);
+            		uqsa.setRolsacUrl(url);
             	}
             	llistaQueryServiceAdapter.add(uqsa );
             }
@@ -215,7 +215,7 @@ public class MateriaQueryServiceAdapter extends MateriaDTO implements MateriaQue
             for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
             	UnitatAdministrativaQueryServiceAdapter uqsa = (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO);
             	if 	(uqsa != null && url != null) {
-            		uqsa.setUrl(url);
+            		uqsa.setRolsacUrl(url);
             	}
             	llistaQueryServiceAdapter.add(uqsa);
             }
@@ -232,7 +232,7 @@ public class MateriaQueryServiceAdapter extends MateriaDTO implements MateriaQue
             for (IconaMateriaDTO iconaMateriaDTO : llistaDTO) {
             	IconaMateriaQueryServiceAdapter uqsa = (IconaMateriaQueryServiceAdapter) BeanUtils.getAdapter("iconaMateria", getStrategy(), iconaMateriaDTO);
             	if 	(uqsa != null && url != null) {
-            		uqsa.setUrl(url);
+            		uqsa.setRolsacUrl(url);
             	}
             	llistaQueryServiceAdapter.add(uqsa);
             }

@@ -20,7 +20,7 @@ public class SilencioQueryServiceAdapter extends SilencioDTO implements Silencio
 	}
 	
 	private String url;
-	public void setUrl(String url) {
+	public void setRolsacUrl(String url) {
 		this.url = url;
 		if (this.silencioQueryServiceStrategy != null) {
 			this.silencioQueryServiceStrategy.setUrl(url);
@@ -55,7 +55,7 @@ public class SilencioQueryServiceAdapter extends SilencioDTO implements Silencio
 				SilencioDTO dto = silencioQueryServiceStrategy.obtenirSilenci(codSilencio, idioma);
 				SilencioQueryServiceAdapter sqsa= (SilencioQueryServiceAdapter)BeanUtils.getAdapter("silencio", getStrategy(), dto);
 				if (sqsa != null && url != null) {
-					sqsa.setUrl(url);
+					sqsa.setRolsacUrl(url);
 				}
 				return sqsa;
 			} catch (StrategyException e) {

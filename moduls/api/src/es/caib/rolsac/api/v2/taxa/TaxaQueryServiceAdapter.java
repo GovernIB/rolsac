@@ -22,7 +22,7 @@ public class TaxaQueryServiceAdapter extends TaxaDTO implements TaxaQueryService
     
 
     private String url;
-	public void setUrl(String url) {
+	public void setRolsacUrl(String url) {
 		this.url = url;
 		if (this.taxaQueryServiceStrategy != null) {
 			this.taxaQueryServiceStrategy.setUrl(url);
@@ -46,7 +46,7 @@ public class TaxaQueryServiceAdapter extends TaxaDTO implements TaxaQueryService
         try {
         	TramitQueryServiceAdapter tqsa = (TramitQueryServiceAdapter) BeanUtils.getAdapter("tramit", getStrategy(), taxaQueryServiceStrategy.obtenirTramit(this.getTramit()));
         	if (tqsa != null && url != null) {
-        		tqsa.setUrl(url);
+        		tqsa.setRolsacUrl(url);
         	}
         	return tqsa;
         } catch (StrategyException e) {

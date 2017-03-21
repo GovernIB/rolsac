@@ -33,7 +33,7 @@ public class ExcepcioDocumentacioQueryServiceAdapter extends
     
 
     private String url;
-	public void setUrl(String url) {
+	public void setRolsacUrl(String url) {
 		this.url = url;
 		if (excepcioDocumentacioQueryServiceStrategy != null) {
 			excepcioDocumentacioQueryServiceStrategy.setUrl(url);
@@ -81,7 +81,7 @@ public class ExcepcioDocumentacioQueryServiceAdapter extends
 				.getAdapter("catalegDocuments", getStrategy(),
 						catalegDocumentsDTO);
 				if (cqsa != null && url != null) {
-					cqsa.setUrl(url);
+					cqsa.setRolsacUrl(url);
 				}
 				llistaCatalegDocumentsQueryServiceAdapter
 						.add(cqsa);
@@ -106,7 +106,7 @@ public class ExcepcioDocumentacioQueryServiceAdapter extends
 				.getAdapter("documentTramit", getStrategy(),
 						documentTramitDTO);
 				if (dqsa != null && url != null) {
-					dqsa.setUrl(url);
+					dqsa.setRolsacUrl(url);
 				}
 				llistaDocumentTramitQueryServiceAdapter
 						.add(dqsa);

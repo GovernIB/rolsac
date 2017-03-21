@@ -27,7 +27,7 @@ public class EspaiTerritorialQueryServiceAdapter extends EspaiTerritorialDTO imp
     }
     
     private String url;
-    public void setUrl(String url) {
+    public void setRolsacUrl(String url) {
     	this.url = url;
 		if ( this.espaiTerritorialQueryServiceStrategy  != null) {
 			 this.espaiTerritorialQueryServiceStrategy.setUrl(url);
@@ -67,7 +67,7 @@ public class EspaiTerritorialQueryServiceAdapter extends EspaiTerritorialDTO imp
         try {
         	EspaiTerritorialQueryServiceAdapter eqsa =  (EspaiTerritorialQueryServiceAdapter) BeanUtils.getAdapter("espaiTerritorial", getStrategy(), espaiTerritorialQueryServiceStrategy.obtenirPare(this.getPadre()));
         	if (eqsa != null && url != null) {
-        		eqsa.setUrl(url);
+        		eqsa.setRolsacUrl(url);
         	}
         	return eqsa;
         } catch (StrategyException e) {
@@ -82,7 +82,7 @@ public class EspaiTerritorialQueryServiceAdapter extends EspaiTerritorialDTO imp
             for (EspaiTerritorialDTO espaiTerritorialDTO : llistaDTO) {
             	EspaiTerritorialQueryServiceAdapter eqsa = (EspaiTerritorialQueryServiceAdapter) BeanUtils.getAdapter("espaiTerritorial", getStrategy(),espaiTerritorialDTO);
             	if (eqsa != null && url != null) {
-            		eqsa.setUrl(url);
+            		eqsa.setRolsacUrl(url);
             	}
                 llistaQueryServiceAdapter.add(eqsa);
             }
@@ -99,7 +99,7 @@ public class EspaiTerritorialQueryServiceAdapter extends EspaiTerritorialDTO imp
                 for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
                 	UnitatAdministrativaQueryServiceAdapter uqsa = (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO);
                     if (uqsa != null && url != null) {
-                    	uqsa.setUrl(url);
+                    	uqsa.setRolsacUrl(url);
                     }
                 	llistaQueryServiceAdapter.add(uqsa);
                 }
@@ -114,7 +114,7 @@ public class EspaiTerritorialQueryServiceAdapter extends EspaiTerritorialDTO imp
         try {
         	ArxiuQueryServiceAdapter uqsa=  (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), espaiTerritorialQueryServiceStrategy.obtenirMapa(this.getMapa()));
             if (uqsa != null && url != null) {
-            	uqsa.setUrl(url);
+            	uqsa.setRolsacUrl(url);
             }
             return uqsa;
         } catch (StrategyException e) {
@@ -127,7 +127,7 @@ public class EspaiTerritorialQueryServiceAdapter extends EspaiTerritorialDTO imp
         try {
         	ArxiuQueryServiceAdapter uqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), espaiTerritorialQueryServiceStrategy.obtenirLogo(this.getLogo()));
             if (uqsa != null && url != null) {
-            	uqsa.setUrl(url);
+            	uqsa.setRolsacUrl(url);
             }
             return uqsa;
         } catch (StrategyException e) {

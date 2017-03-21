@@ -23,7 +23,7 @@ public class IniciacioQueryServiceAdapter extends IniciacioDTO implements Inicia
 	}
 
 	private String url;
-	public void setUrl(String url) {
+	public void setRolsacUrl(String url) {
 		this.url = url;
 		if (this.iniciacioQueryServiceStrategy != null) {
 			this.iniciacioQueryServiceStrategy.setUrl(url);
@@ -58,7 +58,7 @@ public class IniciacioQueryServiceAdapter extends IniciacioDTO implements Inicia
             for (IniciacioDTO iniciacioDTO : llistaDTO) {
             	IniciacioQueryServiceAdapter iqsa = (IniciacioQueryServiceAdapter)BeanUtils.getAdapter("iniciacio", getStrategy(), iniciacioDTO);
             	if (iqsa != null && url != null) {
-            		iqsa.setUrl(url);
+            		iqsa.setRolsacUrl(url);
             	}		
             	llistaQueryServiceAdapter.add(iqsa);
             }
@@ -80,7 +80,7 @@ public class IniciacioQueryServiceAdapter extends IniciacioDTO implements Inicia
 			IniciacioDTO dto = iniciacioQueryServiceStrategy.obtenirTipusIniciacio(iniciacioCriteria);
 			IniciacioQueryServiceAdapter iqsa =  (IniciacioQueryServiceAdapter)BeanUtils.getAdapter("iniciacio", getStrategy(), dto);
 			if (iqsa != null && url != null) {
-        		iqsa.setUrl(url);
+        		iqsa.setRolsacUrl(url);
         	}	
 			return iqsa;
 			

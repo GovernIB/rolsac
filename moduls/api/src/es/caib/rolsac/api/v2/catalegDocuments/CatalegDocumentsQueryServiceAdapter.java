@@ -22,7 +22,7 @@ public class CatalegDocumentsQueryServiceAdapter extends CatalegDocumentsDTO imp
 	private CatalegDocumentsQueryServiceStrategy catalegDocumentsQueryServiceStrategy;	
 	
 	private String url;
-	public void setUrl(String url) {
+	public void setRolsacUrl(String url) {
 		this.url = url;
 		if (url != null && catalegDocumentsQueryServiceStrategy != null) {
 			catalegDocumentsQueryServiceStrategy.setUrl(url);
@@ -65,7 +65,7 @@ public class CatalegDocumentsQueryServiceAdapter extends CatalegDocumentsDTO imp
 						.getAdapter("documentTramit", getStrategy(),
 								documentTramitDTO);
 				if (dqsa != null && url != null) {
-					dqsa.setUrl(url);
+					dqsa.setRolsacUrl(url);
 				}
 				llistaDocumentTramitQueryServiceAdapter
 						.add(dqsa);

@@ -27,7 +27,7 @@ public class ButlletiQueryServiceAdapter extends ButlletiDTO implements Butlleti
     }
     
     private String url;
-    public void setUrl(String url) {
+    public void setRolsacUrl(String url) {
     	this.url = url;
 		if (this.butlletiQueryServiceStrategy != null) {
 			this.butlletiQueryServiceStrategy.setUrl(url);
@@ -77,7 +77,7 @@ public class ButlletiQueryServiceAdapter extends ButlletiDTO implements Butlleti
             for (NormativaDTO normativaDTO : llistaDTO) {
             	NormativaQueryServiceAdapter nqsa = (NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa", getStrategy(), normativaDTO);
             	if (nqsa != null && url != null) {
-            		nqsa.setUrl(url);
+            		nqsa.setRolsacUrl(url);
             	}
                 llistaQueryServiceAdapter.add(nqsa);
             }

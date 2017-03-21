@@ -32,7 +32,7 @@ public class DocumentTramitQueryServiceAdapter extends DocumentTramitDTO impleme
     }
     
     private String url;
-    public void setUrl(String url) {
+    public void setRolsacUrl(String url) {
     	this.url = url;
 		if ( this.documentTramitQueryServiceStrategy != null) {
 			this.documentTramitQueryServiceStrategy.setUrl(url);
@@ -67,7 +67,7 @@ public class DocumentTramitQueryServiceAdapter extends DocumentTramitDTO impleme
             ArxiuDTO dto = documentTramitQueryServiceStrategy.obtenirArxiu(this.getArchivo());
             ArxiuQueryServiceAdapter aqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
             if (aqsa != null && url != null) {
-            	aqsa.setUrl(url);
+            	aqsa.setRolsacUrl(url);
             }
             return aqsa;
         } catch (StrategyException e) {
@@ -83,7 +83,7 @@ public class DocumentTramitQueryServiceAdapter extends DocumentTramitDTO impleme
 			CatalegDocumentsDTO dto = documentTramitQueryServiceStrategy.obtenirCatalegDocuments(this.getDocCatalogo());
 			CatalegDocumentsQueryServiceAdapter aqsa = (CatalegDocumentsQueryServiceAdapter) BeanUtils.getAdapter("catalegDocuments", getStrategy(), dto);
 			if (aqsa != null && url != null) {
-            	aqsa.setUrl(url);
+            	aqsa.setRolsacUrl(url);
             }
 			return aqsa;
 		} catch (StrategyException e) {
@@ -100,7 +100,7 @@ public class DocumentTramitQueryServiceAdapter extends DocumentTramitDTO impleme
 			ExcepcioDocumentacioDTO dto = documentTramitQueryServiceStrategy.obtenirExcepcioDocumentacio(this.getExcepcioDocumentacio());
 			ExcepcioDocumentacioQueryServiceAdapter aqsa =(ExcepcioDocumentacioQueryServiceAdapter) BeanUtils.getAdapter("excepcioDocumentacio", getStrategy(), dto);
 			if (aqsa != null && url != null) {
-            	aqsa.setUrl(url);
+            	aqsa.setRolsacUrl(url);
             }
 			return aqsa;
 		} catch (StrategyException e) {

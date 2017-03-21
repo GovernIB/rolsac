@@ -42,7 +42,7 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
     private ProcedimentQueryServiceStrategy procedimentQueryServiceStrategy;
 
     private String url;
-    public void setUrl(String url) {
+    public void setRolsacUrl(String url) {
     	if ( this.procedimentQueryServiceStrategy != null) {
     		 this.procedimentQueryServiceStrategy.setUrl(url);
     	}
@@ -127,7 +127,7 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
             for (TramitDTO tramitDTO : llistaDTO) {
             	TramitQueryServiceAdapter tqsa = (TramitQueryServiceAdapter) BeanUtils.getAdapter("tramit", getStrategy(), tramitDTO);
             	if (tqsa != null && url != null) {
-            		tqsa.setUrl(url);
+            		tqsa.setRolsacUrl(url);
             	}
             	llistaQueryServiceAdapter.add(tqsa);
             }
@@ -144,7 +144,7 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
             for (MateriaDTO materiaDTO : llistaDTO) {
             	MateriaQueryServiceAdapter tqsa = (MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), materiaDTO);
             	if (tqsa != null && url != null) {
-            		tqsa.setUrl(url);
+            		tqsa.setRolsacUrl(url);
             	}
             	llistaQueryServiceAdapter.add(tqsa);
             }
@@ -161,7 +161,7 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
             for (NormativaDTO normativaDTO : llistaDTO) {
             	NormativaQueryServiceAdapter tqsa = (NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa", getStrategy(), normativaDTO);
             	if (tqsa != null && url != null) {
-            		tqsa.setUrl(url);
+            		tqsa.setRolsacUrl(url);
             	}
             	llistaQueryServiceAdapter.add(tqsa);
             }
@@ -178,7 +178,7 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
             for (FetVitalDTO fetVitalDTO : llistaDTO) {
             	FetVitalQueryServiceAdapter tqsa = (FetVitalQueryServiceAdapter) BeanUtils.getAdapter("fetVital", getStrategy(), fetVitalDTO);
     			if (tqsa != null && url != null) {
-            		tqsa.setUrl(url);
+            		tqsa.setRolsacUrl(url);
             	}
             	llistaQueryServiceAdapter.add(tqsa);
             }
@@ -195,7 +195,7 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
             for (DocumentDTO documentDTO : llistaDTO) {
             	DocumentQueryServiceAdapter tqsa = (DocumentQueryServiceAdapter) BeanUtils.getAdapter("document", getStrategy(), documentDTO);
             	if (tqsa != null && url != null) {
-            		tqsa.setUrl(url);
+            		tqsa.setRolsacUrl(url);
             	}
             	llistaQueryServiceAdapter.add(tqsa);
             }
@@ -212,7 +212,7 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
             for (PublicObjectiuDTO poDTO : llistaDTO) {
             	PublicObjectiuQueryServiceAdapter tqsa = (PublicObjectiuQueryServiceAdapter) BeanUtils.getAdapter("publicObjectiu", getStrategy(), poDTO);
             	if (tqsa != null && url != null) {
-            		tqsa.setUrl(url);
+            		tqsa.setRolsacUrl(url);
             	}
             	llistaQueryServiceAdapter.add(tqsa);
             }

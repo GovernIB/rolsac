@@ -23,7 +23,7 @@ public class IconaMateriaQueryServiceAdapter extends IconaMateriaDTO implements 
     }
     
     private String url;
-    public void setUrl(String url) {
+    public void setRolsacUrl(String url) {
     	this.url = url;
 		if (this.iconaMateriaQueryServiceStrategy != null) {
 			this.iconaMateriaQueryServiceStrategy.setUrl(url);
@@ -47,7 +47,7 @@ public class IconaMateriaQueryServiceAdapter extends IconaMateriaDTO implements 
         try {
         	MateriaQueryServiceAdapter mqsa =  (MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), iconaMateriaQueryServiceStrategy.obtenirMateria(this.getMateria()));
         	if (mqsa != null && url != null) {
-        		mqsa.setUrl(url);
+        		mqsa.setRolsacUrl(url);
         	}
         	return mqsa;
         } catch (StrategyException e) {
@@ -60,7 +60,7 @@ public class IconaMateriaQueryServiceAdapter extends IconaMateriaDTO implements 
         try {
         	PerfilQueryServiceAdapter pqsa = (PerfilQueryServiceAdapter) BeanUtils.getAdapter("perfil", getStrategy(), iconaMateriaQueryServiceStrategy.obtenirPerfil(this.getPerfil()));
         	if (pqsa != null && url != null) {
-        		pqsa.setUrl(url);
+        		pqsa.setRolsacUrl(url);
         	}
         	return pqsa;
         } catch (StrategyException e) {
@@ -73,7 +73,7 @@ public class IconaMateriaQueryServiceAdapter extends IconaMateriaDTO implements 
         try {
         	ArxiuQueryServiceAdapter pqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), iconaMateriaQueryServiceStrategy.obtenirIcona(this.getIcono()));
          	if (pqsa != null && url != null) {
-        		pqsa.setUrl(url);
+        		pqsa.setRolsacUrl(url);
         	}
         	return pqsa;
         } catch (StrategyException e) {

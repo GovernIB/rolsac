@@ -29,7 +29,7 @@ public class PerfilQueryServiceAdapter extends PerfilDTO implements PerfilQueryS
     }
     
     private String url;
-    public void setUrl(String url) {
+    public void setRolsacUrl(String url) {
     	this.url = url;
 		if ( this.perfilQueryServiceStrategy != null) {
 			 this.perfilQueryServiceStrategy.setUrl(url);
@@ -55,7 +55,7 @@ public class PerfilQueryServiceAdapter extends PerfilDTO implements PerfilQueryS
             for (IconaFamiliaDTO iDTO : llistaDTO) {
                 IconaFamiliaQueryServiceAdapter iqsa = (IconaFamiliaQueryServiceAdapter) BeanUtils.getAdapter("iconaFamilia", getStrategy(), iDTO);
                 if (iqsa != null && url != null) {
-                	iqsa.setUrl(url);
+                	iqsa.setRolsacUrl(url);
                 }
             	icones.add(iqsa);
             }
@@ -72,7 +72,7 @@ public class PerfilQueryServiceAdapter extends PerfilDTO implements PerfilQueryS
             for (IconaMateriaDTO iDTO : llistaDTO) {
             	IconaMateriaQueryServiceAdapter iqsa = (IconaMateriaQueryServiceAdapter) BeanUtils.getAdapter("iconaMateria", getStrategy(), iDTO);
             	if (iqsa != null && url != null) {
-            		iqsa.setUrl(url);
+            		iqsa.setRolsacUrl(url);
             	}	
             	icones.add(iqsa);
             }

@@ -26,7 +26,7 @@ public class EnllacQueryServiceAdapter extends EnllacDTO implements EnllacQueryS
     }
     
     private String url;
-    public void setUrl(String url) {
+    public void setRolsacUrl(String url) {
     	this.url = url;
 		if (this.enllacQueryServiceStrategy != null) {
 			this.enllacQueryServiceStrategy.setUrl(url);
@@ -46,7 +46,7 @@ public class EnllacQueryServiceAdapter extends EnllacDTO implements EnllacQueryS
         try {
         	FitxaQueryServiceAdapter fqsa = (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), enllacQueryServiceStrategy.obtenirFitxa(this.getFicha()));
         	if (fqsa != null && url != null) {
-        		fqsa.setUrl(url);
+        		fqsa.setRolsacUrl(url);
         	}
         	return fqsa;
         } catch (StrategyException e) {
@@ -59,7 +59,7 @@ public class EnllacQueryServiceAdapter extends EnllacDTO implements EnllacQueryS
         try {
         	ProcedimentQueryServiceAdapter fqsa = (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), enllacQueryServiceStrategy.obtenirProcediment(this.getProcedimiento()));
             if (fqsa != null && url != null) {
-        		fqsa.setUrl(url);
+        		fqsa.setRolsacUrl(url);
         	}
         	return fqsa;
         } catch (StrategyException e) {

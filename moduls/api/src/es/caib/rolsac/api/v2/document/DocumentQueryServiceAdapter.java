@@ -29,7 +29,7 @@ public class DocumentQueryServiceAdapter extends DocumentDTO implements Document
     }
     
     private String url;
-    public void setUrl(String url) {
+    public void setRolsacUrl(String url) {
     	this.url = url;
 		if ( this.documentQueryServiceStrategy != null) {
 			 this.documentQueryServiceStrategy.setUrl(url);
@@ -54,7 +54,7 @@ public class DocumentQueryServiceAdapter extends DocumentDTO implements Document
             FitxaDTO dto = documentQueryServiceStrategy.obtenirFitxa(this.getFicha());
             FitxaQueryServiceAdapter fqsa = (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), dto);
             if (fqsa != null && url != null) {
-            	fqsa.setUrl(url);
+            	fqsa.setRolsacUrl(url);
             }
             return fqsa;
         } catch (StrategyException e) {
@@ -68,7 +68,7 @@ public class DocumentQueryServiceAdapter extends DocumentDTO implements Document
             ProcedimentDTO dto = documentQueryServiceStrategy.obtenirProcediment(this.getProcedimiento());
             ProcedimentQueryServiceAdapter pqsa = (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), dto);
             if (pqsa != null && url != null) {
-            	pqsa.setUrl(url);
+            	pqsa.setRolsacUrl(url);
             }
             return pqsa;
         } catch (StrategyException e) {
@@ -82,7 +82,7 @@ public class DocumentQueryServiceAdapter extends DocumentDTO implements Document
             ArxiuDTO dto = documentQueryServiceStrategy.obtenirArxiu(this.getArchivo());
             ArxiuQueryServiceAdapter aqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
             if (aqsa != null && url != null) {
-            	aqsa.setUrl(url);
+            	aqsa.setRolsacUrl(url);
             }
             return aqsa;
         } catch (StrategyException e) {

@@ -22,7 +22,7 @@ public class AfectacioQueryServiceAdapter extends AfectacioDTO implements Afecta
     }
     
     private String url;
-    public void setUrl(String url) {
+    public void setRolsacUrl(String url) {
     	this.url = url;
     	if (this.afectacioQueryServiceStrategy != null) {
     		this.afectacioQueryServiceStrategy.setUrl(url);

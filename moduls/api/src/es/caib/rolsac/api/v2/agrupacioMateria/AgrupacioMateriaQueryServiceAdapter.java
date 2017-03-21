@@ -28,7 +28,7 @@ public class AgrupacioMateriaQueryServiceAdapter extends AgrupacioMateriaDTO imp
     }
     
     private String url;
-    public void setUrl(String url) {
+    public void setRolsacUrl(String url) {
     	this.url = url;
 		if (agrupacioMateriaQueryServiceStrategy != null) {
 			agrupacioMateriaQueryServiceStrategy.setUrl(url);
@@ -53,7 +53,7 @@ public class AgrupacioMateriaQueryServiceAdapter extends AgrupacioMateriaDTO imp
             SeccioDTO dto = agrupacioMateriaQueryServiceStrategy.obtenirSeccio(this.getSeccion());
             SeccioQueryServiceAdapter sqsa =  (SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), dto);
             if (sqsa != null && url != null) {
-            	sqsa.setUrl(url);
+            	sqsa.setRolsacUrl(url);
             }
             return sqsa;
         } catch (StrategyException e) {
@@ -69,7 +69,7 @@ public class AgrupacioMateriaQueryServiceAdapter extends AgrupacioMateriaDTO imp
             for (MateriaDTO materiaDTO : llistaDTO) {
             	MateriaQueryServiceAdapter mqsa = (MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), materiaDTO);
             	if (mqsa != null && url != null) {
-            		mqsa.setUrl(url);
+            		mqsa.setRolsacUrl(url);
             	}
                 llistaQueryServiceAdapter.add(mqsa);
             }

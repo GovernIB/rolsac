@@ -32,7 +32,7 @@ public class PublicObjectiuQueryServiceAdapter extends PublicObjectiuDTO impleme
     }
     
     private String url;
-    public void setUrl(String url) {
+    public void setRolsacUrl(String url) {
     	this.url = url;
 		if (this.publicObjectiuQueryServiceStrategy != null) {
 			this.publicObjectiuQueryServiceStrategy.setUrl(url);
@@ -66,7 +66,7 @@ public class PublicObjectiuQueryServiceAdapter extends PublicObjectiuDTO impleme
             for (AgrupacioFetVitalDTO afvDTO : llistaDTO) {
             	AgrupacioFetVitalQueryServiceAdapter tqsa = (AgrupacioFetVitalQueryServiceAdapter) BeanUtils.getAdapter("agrupacioFetVital", getStrategy(), afvDTO);
             	if (tqsa != null && url != null) {
-            		tqsa.setUrl(url);
+            		tqsa.setRolsacUrl(url);
             	}
             	llistaAgrupacions.add(tqsa);
             }
@@ -83,7 +83,7 @@ public class PublicObjectiuQueryServiceAdapter extends PublicObjectiuDTO impleme
             for (ProcedimentDTO procDTO : llistaDTO) {
             	ProcedimentQueryServiceAdapter tqsa = (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), procDTO);
             	if (tqsa != null && url != null) {
-            		tqsa.setUrl(url);
+            		tqsa.setRolsacUrl(url);
             	}
             	llistaProcediments.add(tqsa);
             }
@@ -100,7 +100,7 @@ public class PublicObjectiuQueryServiceAdapter extends PublicObjectiuDTO impleme
             for (FitxaDTO fitxaDTO : llistaDTO) {
             	FitxaQueryServiceAdapter tqsa = (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), fitxaDTO);
             	if (tqsa != null && url != null) {
-            		tqsa.setUrl(url);
+            		tqsa.setRolsacUrl(url);
             	}
             	llistaFitxes.add(tqsa);
             }

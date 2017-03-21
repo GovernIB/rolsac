@@ -33,7 +33,7 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
     }
     
     private String url;
-    public void setUrl(String url) {
+    public void setRolsacUrl(String url) {
     	this.url = url;
 		if (this.normativaQueryServiceStrategy != null) {
 			this.normativaQueryServiceStrategy.setUrl(url);
@@ -58,7 +58,7 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
             ArxiuDTO dto = normativaQueryServiceStrategy.obtenirArxiuNormativa(this.getArchivo());
             ArxiuQueryServiceAdapter aqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
             if (aqsa != null && url != null) {
-            	aqsa.setUrl(url);
+            	aqsa.setRolsacUrl(url);
             }
             return aqsa;
         } catch (StrategyException e) {
@@ -97,7 +97,7 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
             for (AfectacioDTO afectacioDTO : llistaDTO) {
             	AfectacioQueryServiceAdapter aqsa =(AfectacioQueryServiceAdapter) BeanUtils.getAdapter("afectacio", getStrategy(), afectacioDTO); 
             	if (aqsa != null && url != null) {
-                	aqsa.setUrl(url);
+                	aqsa.setRolsacUrl(url);
                 }
                 llistaQueryServiceAdapter.add(aqsa);
             }
@@ -114,7 +114,7 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
             for (NormativaDTO normativaDTO : llistaDTO) {
             	NormativaQueryServiceAdapter aqsa = (NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa", getStrategy(), normativaDTO);
             	if (aqsa != null && url != null) {
-                	aqsa.setUrl(url);
+                	aqsa.setRolsacUrl(url);
                 }
                 llistaQueryServiceAdapter.add(aqsa);
             }
@@ -131,7 +131,7 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
             for (AfectacioDTO afectacioDTO : llistaDTO) {
             	AfectacioQueryServiceAdapter aqsa = (AfectacioQueryServiceAdapter) BeanUtils.getAdapter("afectacio", getStrategy(), afectacioDTO);
             	if (aqsa != null && url != null) {
-                	aqsa.setUrl(url);
+                	aqsa.setRolsacUrl(url);
                 }
                 llistaQueryServiceAdapter.add(aqsa);
             }
@@ -148,7 +148,7 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
             for (NormativaDTO normativaDTO : llistaDTO) {
             	NormativaQueryServiceAdapter aqsa = (NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa", getStrategy(), normativaDTO);
             	if (aqsa != null && url != null) {
-                	aqsa.setUrl(url);
+                	aqsa.setRolsacUrl(url);
                 }
                 llistaQueryServiceAdapter.add(aqsa);
             }
@@ -165,7 +165,7 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
             for (ProcedimentDTO procedimentDTO : llistaDTO) {
             	ProcedimentQueryServiceAdapter aqsa = (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), procedimentDTO);
             	if (aqsa != null && url != null) {
-                	aqsa.setUrl(url);
+                	aqsa.setRolsacUrl(url);
                 }
                 llistaQueryServiceAdapter.add(aqsa);
             }
@@ -179,7 +179,7 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
         try {
         	ButlletiQueryServiceAdapter aqsa = (ButlletiQueryServiceAdapter) BeanUtils.getAdapter("butlleti", getStrategy(), normativaQueryServiceStrategy.obtenirButlleti(this.getBoletin()));
             if (aqsa != null && url != null) {
-            	aqsa.setUrl(url);
+            	aqsa.setRolsacUrl(url);
             }
             return aqsa;
         } catch (StrategyException e) {
@@ -194,7 +194,7 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
             UnitatAdministrativaDTO dto = (UnitatAdministrativaDTO) normativaQueryServiceStrategy.obtenirUnitatAdministrativa(this.getUnidadAdministrativa());
             UnitatAdministrativaQueryServiceAdapter aqsa = (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), dto);
              if (aqsa != null && url != null) {
-             	aqsa.setUrl(url);
+             	aqsa.setRolsacUrl(url);
              }
              return aqsa;
         } catch (StrategyException e) {

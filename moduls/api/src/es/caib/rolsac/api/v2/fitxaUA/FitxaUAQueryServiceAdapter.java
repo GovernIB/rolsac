@@ -23,7 +23,7 @@ public class FitxaUAQueryServiceAdapter extends FitxaUADTO implements FitxaUAQue
     }
     
     private String url;
-    public void setUrl(String url) {
+    public void setRolsacUrl(String url) {
     	this.url = url;
 		if (fitxaUAQueryServiceStrategy != null) {
 			fitxaUAQueryServiceStrategy.setUrl(url);
@@ -47,7 +47,7 @@ public class FitxaUAQueryServiceAdapter extends FitxaUADTO implements FitxaUAQue
         try {
         	UnitatAdministrativaQueryServiceAdapter uaqsa = (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), fitxaUAQueryServiceStrategy.obtenirUnitatAdministrativa(this.getUnidadAdministrativa()));
         	if (uaqsa != null && url != null) {
-        		uaqsa.setUrl(url);
+        		uaqsa.setRolsacUrl(url);
         	}
         	return uaqsa;
         } catch (StrategyException e) {
@@ -60,7 +60,7 @@ public class FitxaUAQueryServiceAdapter extends FitxaUADTO implements FitxaUAQue
         try {
         	FitxaQueryServiceAdapter uaqsa = (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), fitxaUAQueryServiceStrategy.obtenirFitxa(this.getFicha()));
              if (uaqsa != null && url != null) {
-         		uaqsa.setUrl(url);
+         		uaqsa.setRolsacUrl(url);
          	}
          	return uaqsa;
         } catch (StrategyException e) {
@@ -73,7 +73,7 @@ public class FitxaUAQueryServiceAdapter extends FitxaUADTO implements FitxaUAQue
         try {
         	SeccioQueryServiceAdapter uaqsa = (SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), fitxaUAQueryServiceStrategy.obtenirSeccio(this.getSeccion()));
             if (uaqsa != null && url != null) {
-         		uaqsa.setUrl(url);
+         		uaqsa.setRolsacUrl(url);
          	}
          	return uaqsa;
         } catch (StrategyException e) {

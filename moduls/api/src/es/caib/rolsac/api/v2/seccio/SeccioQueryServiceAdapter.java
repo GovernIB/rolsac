@@ -31,7 +31,7 @@ public class SeccioQueryServiceAdapter extends SeccioDTO implements SeccioQueryS
     }
     
     private String url;
-    public void setUrl(String url) {
+    public void setRolsacUrl(String url) {
     	this.url = url;
 		if (this.seccioQueryServiceStrategy != null) {
 			this.seccioQueryServiceStrategy.setUrl(url);
@@ -94,7 +94,7 @@ public class SeccioQueryServiceAdapter extends SeccioDTO implements SeccioQueryS
             for (SeccioDTO seccioDTO : llistaDTO) {
             	SeccioQueryServiceAdapter sqsa = (SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), seccioDTO);
             	if (sqsa != null && url != null) {
-            		sqsa.setUrl(url);
+            		sqsa.setRolsacUrl(url);
             	}
                 llistaQueryServiceAdapter.add(sqsa);
             }
@@ -111,7 +111,7 @@ public class SeccioQueryServiceAdapter extends SeccioDTO implements SeccioQueryS
             for (FitxaDTO fitxaDTO : llistaDTO) {
             	FitxaQueryServiceAdapter fqsa = (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), fitxaDTO);
             	if (fqsa != null && url != null) {
-            		fqsa.setUrl(url);
+            		fqsa.setRolsacUrl(url);
             	}
             	llistaQueryServiceAdapter.add(fqsa);
             }
@@ -129,7 +129,7 @@ public class SeccioQueryServiceAdapter extends SeccioDTO implements SeccioQueryS
             for (SeccioDTO seccioDTO : llistaDTO) {
             	SeccioQueryServiceAdapter fqsa = (SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), seccioDTO);
             	if (fqsa != null && url != null) {
-            		fqsa.setUrl(url);
+            		fqsa.setRolsacUrl(url);
             	}
             	llistaQueryServiceAdapter.add(fqsa);
             }
@@ -146,7 +146,7 @@ public class SeccioQueryServiceAdapter extends SeccioDTO implements SeccioQueryS
             for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
             	UnitatAdministrativaQueryServiceAdapter fqsa = (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO);
             	if (fqsa != null && url != null) {
-            		fqsa.setUrl(url);
+            		fqsa.setRolsacUrl(url);
             	}
             	llistaQueryServiceAdapter.add(fqsa);
             }
@@ -161,7 +161,7 @@ public class SeccioQueryServiceAdapter extends SeccioDTO implements SeccioQueryS
         try {
         	SeccioQueryServiceAdapter fqsa = (SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), seccioQueryServiceStrategy.obtenirPare(this.getPadre()));
             if (fqsa != null && url != null) {
-        		fqsa.setUrl(url);
+        		fqsa.setRolsacUrl(url);
         	}
             return fqsa;
         } catch (StrategyException e) {
