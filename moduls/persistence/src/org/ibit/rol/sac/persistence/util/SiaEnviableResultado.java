@@ -1,5 +1,6 @@
 package org.ibit.rol.sac.persistence.util;
 
+
 /**
  * Clase que indica si un procedimiento es enviable a SIA y en caso de no, envía el texto
  *   con la respuesta incorrecta.
@@ -55,6 +56,7 @@ public class SiaEnviableResultado {
 	public void setRespuesta(String respuesta) {
 		this.respuesta = respuesta;
 	}
+	
 
 	/**
 	 * @return the operacion

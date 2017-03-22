@@ -1,24 +1,31 @@
 package org.ibit.rol.sac.model.ws;
 
+/**
+ * Clase que indica el resultado.
+ * @author slromero
+ *
+ */
 public class SiaResultado {
-	
+	/** Resultado nulo. **/
 	public static int RESULTADO_NULO = -2;
-	
+	/** Resultado ok. **/
 	public static int RESULTADO_OK = 1;
-	
+	/** Resultado error. **/
 	public static int RESULTADO_ERROR = -1;
-	
+	/** resultado. **/
 	public int resultado = RESULTADO_ERROR; 
-	
+	/** Mensaje. **/
 	public String mensaje;
-	
+	/** Correctos. **/
 	public int correctos = 0;
-	
+	/** Incorrectos. **/
 	public int incorrectos = 0;
-	
+	/** Código SIA. **/
 	public String codSIA;
-	
+	/** Estado SIA. **/
 	public String estadoSIA;
+	/** Operacion. **/
+	public String operacion;
 	
 	public SiaResultado() {
 		
@@ -127,5 +134,19 @@ public class SiaResultado {
 	 */
 	public void setEstadoSIA(String estadoSIA) {
 		this.estadoSIA = estadoSIA;
+	}
+
+	/**
+	 * @return the operacion
+	 */
+	public String getOperacion() {
+		return operacion;
+	}
+
+	/**
+	 * @param operacion the operacion to set
+	 */
+	public void setOperacion(String operacion) {
+		this.operacion = operacion;
 	}
 }

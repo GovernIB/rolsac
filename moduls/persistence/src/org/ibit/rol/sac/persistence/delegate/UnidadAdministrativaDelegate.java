@@ -246,5 +246,9 @@ public class UnidadAdministrativaDelegate {
 	public List<Long> buscarIdsUas() throws DelegateException{
 		return impl.buscarIdsUas();
 	}
+
+	public List<Long> obtenerHijosUnidadAdministrativa(Long idUA) throws DelegateException{
+		return impl.obtenerHijosUnidadAdministrativa(idUA);
+	}
     
 }

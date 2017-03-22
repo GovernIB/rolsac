@@ -842,7 +842,7 @@
                                                 <input id="item_codigo_pro" name="item_codigo_pro" type="text" value=""/>
                                             </div>
                                         </div>
-                                         <div id="caja_item_codigo_sia" class="element t25p">
+                                        <div id="caja_item_codigo_sia" class="element t20p">
                                             <div class="etiqueta">
                                                 <label for="item_codigo_sia"><spring:message code='camp.codi_sia'/></label>
                                             </div>
@@ -850,12 +850,21 @@
                                                 <input id="item_codigo_sia" name="item_codigo_sia" type="text" class="nou" readonly="readonly" />
                                             </div>
                                         </div>
-                                         <div id="caja_item_codigo_sia" class="element t25p">
+                                        <div id="caja_item_estado_sia" class="element t15p">
                                             <div class="etiqueta">
                                                 <label for="item_estado_sia"><spring:message code='camp.codi_sia_estat'/></label>
                                             </div>
                                             <div class="control">
                                            		  <input id="item_estado_sia" name="item_estado_sia" type="text" class="nou" readonly="readonly" />
+		                                        	
+                                            </div>
+                                        </div>
+                                        <div id="caja_item_fecha_sia" class="element t15p">
+                                            <div class="etiqueta">
+                                                <label for="item_fecha_sia"><spring:message code='camp.codi_sia_data'/></label>
+                                            </div>
+                                            <div class="control">
+                                           		  <input id="item_fecha_sia" name="item_fecha_sia" type="text" class="nou" readonly="readonly" />
 		                                        	
                                             </div>
                                         </div>

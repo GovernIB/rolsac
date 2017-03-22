@@ -176,4 +176,8 @@ public class ProcedimientoDelegate {
 	public List<Long> getProcedimientosEstadoSIAAlterado()  throws DelegateException {
 		 return impl.getProcedimientosEstadoSIAAlterado();
 	}
+
+	public List<Long> listarProcedimientosOrganoResolutori(Long idOrganoResolutori)  throws DelegateException {
+		return impl.listarProcedimientosOrganoResolutori(idOrganoResolutori);
+	}
 }

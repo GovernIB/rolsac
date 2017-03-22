@@ -262,4 +262,6 @@ public interface UnidadAdministrativaDelegateI {
 
 	public abstract List<Long> buscarIdsUas() throws DelegateException;
 
+	public List<Long> obtenerHijosUnidadAdministrativa(Long idUA) throws DelegateException;
+
 }

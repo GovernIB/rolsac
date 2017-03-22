@@ -39,6 +39,7 @@ public class SiaWS {
 	public static SiaResultado enviarSIA(Sia sia, boolean borrado) throws Exception {
 		
 		SiaResultado siaResultado = new SiaResultado();
+		siaResultado.setOperacion(sia.getOperacion());
 		if (SiaUtils.isActivoEnvio()) {
 			String usuario = SiaUtils.getUsuarioEnvio();
 			String password = SiaUtils.getPasswordEnvio();

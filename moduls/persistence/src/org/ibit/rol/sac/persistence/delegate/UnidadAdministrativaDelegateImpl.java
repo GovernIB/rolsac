@@ -457,6 +457,17 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
             throw new DelegateException(e);
         }
     }
+    
+    
+    public List<Long> obtenerHijosUnidadAdministrativa(Long idUA) throws DelegateException {
+    	try {
+    		return getFacade().obtenerHijosUnidadAdministrativa(idUA);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    
 	/* ========================================================= */
 	/* ======================== REFERENCIA AL FACADE  ========== */
 	/* ========================================================= */

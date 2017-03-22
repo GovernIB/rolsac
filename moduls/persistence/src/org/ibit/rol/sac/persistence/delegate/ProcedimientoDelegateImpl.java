@@ -384,6 +384,14 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
         }
 	}
 
+	public List<Long> listarProcedimientosOrganoResolutori(Long idOrganoResolutori) throws DelegateException {
+		try {
+            return getFacade().listarProcedimientosOrganoResolutori(idOrganoResolutori);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+	}
+	
 	public List<ProcedimientoLocal> listarProcedimientosNormativa(Long idElemento) throws DelegateException {
 		try {
             return getFacade().listarProcedimientosNormativa(idElemento);

@@ -798,6 +798,33 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		}
 	}
 
+	/**
+	 * Obtiene las ids de las UAs hijas.
+	 * 
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 */
+	 public List<Long> obtenerHijosUnidadAdministrativa(Long idUA){
+
+			Session session = getSession();
+
+			try {
+
+				Query query = session.createQuery("select ua.id from UnidadAdministrativa as ua where ua.padre.id = " + idUA);
+				return query.list();
+			} catch (HibernateException he) {
+
+				throw new EJBException(he);
+
+			} finally {
+
+				close(session);
+
+			}
+
+	}
 
 	/**
 	 * Obtiene una Unidad Administrativa por el codigo Estandar(PORMAD).

@@ -2436,22 +2436,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		Session session = getSession();
 		try {
 			StringBuffer hql= new StringBuffer();
-			/*
-			hql.append("select pro.pro_codi ");
-			hql.append("  from rsc_proced pro ");
-			hql.append(" where (");
-			hql.append("       pro.pro_estsia is not null ");
-			hql.append("   and pro.pro_estsia like 'A' ");
-			hql.append("   and pro.pro_feccad is not null ");
-			hql.append("   and pro.pro_feccad < sysdate ");
-			hql.append("  ) ");
-			hql.append(" or ");
-			hql.append(" ( ");
-			hql.append("      (pro.pro_estsia is null OR pro.pro_estsia like 'B') ");
-			hql.append("  and (pro.pro_feccad is null OR pro.pro_feccad > sysdate) ");
-			hql.append("  and (pro.pro_fecpub is not null and pro.pro_fecpub < sysdate) ");
-			hql.append(" );");*/
-		
+	
 			hql.append(" select pro.id from ProcedimientoLocal pro");
 			hql.append(" where ");
 			//Procedimientos caducados son con estado SIA de alta y fechaCaducidad pasada.
@@ -2479,5 +2464,29 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	}
 	
 	
+	/**
+	 *	Obtiene los procedimientos según el organo resolutorio.
+	 *
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public List<Long> listarProcedimientosOrganoResolutori(Long idOrganResolutori) {
+		Session session = getSession();
+		try {
+			StringBuffer hql= new StringBuffer();
+	
+			hql.append(" select pro.id from ProcedimientoLocal pro");
+			hql.append(" where pro.organResolutori.id = " + idOrganResolutori);
+			
+			return session.createQuery(hql.toString()).list();
+			
+			
+		} catch (Exception he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+		
+	}
 	
 }

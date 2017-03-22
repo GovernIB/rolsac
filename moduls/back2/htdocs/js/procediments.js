@@ -561,6 +561,10 @@ function CDetall() {
 			jQuery("#item_estado_sia,#item_estado_sia_es,#item_estado_sia_en,#item_estado_sia_de,#item_estado_sia_fr").val( jQuery(this).val() );
 		});
 		
+		jQuery("#item_fecha_sia,#item_fecha_sia_es,#item_fecha_sia_en,#item_fecha_sia_de,#item_fecha_sia_fr").change(function(){
+			jQuery("#item_fecha_sia,#item_fecha_sia_es,#item_fecha_sia_en,#item_fecha_sia_de,#item_fecha_sia_fr").val( jQuery(this).val() );
+		});
+		
 		jQuery("#item_fi_vida_administrativa,#item_fi_vida_administrativa_es,#item_fi_vida_administrativa_en,#item_fi_vida_administrativa_de,#item_fi_vida_administrativa_fr").change(function(){
 			jQuery("#item_fi_vida_administrativa,#item_fi_vida_administrativa_es,#item_fi_vida_administrativa_en,#item_fi_vida_administrativa_de,#item_fi_vida_administrativa_fr").val( jQuery(this).val());
 		});
@@ -623,6 +627,8 @@ function CDetall() {
 		//#366 se añade sia
 		jQuery("#caja_item_codigo_sia, #caja_item_codigo_sia_es, #caja_item_codigo_sia_en, #caja_item_codigo_sia_de, #caja_item_codigo_sia_fr").hide();
 		jQuery("#caja_item_estado_sia, #caja_item_estado_sia_es, #caja_item_estado_sia_en, #caja_item_estado_sia_de, #caja_item_estado_sia_fr").hide();
+		jQuery("#caja_item_fecha_sia, #caja_item_fecha_sia_es, #caja_item_fecha_sia_en, #caja_item_fecha_sia_de, #caja_item_fecha_sia_fr").hide();
+		
 		
 		// Borrar del desplegable de estado de publicación las opciones no válidas al crear un nuevo procedimiento:
 		// (1 = Pública, 3 = Reserva).
@@ -703,6 +709,7 @@ function CDetall() {
 		//#366 se añade SIA
 		jQuery("#caja_item_codigo_sia, #caja_item_codigo_sia_es, #caja_item_codigo_sia_en, #caja_item_codigo_sia_de, #caja_item_codigo_sia_fr").show();        
 		jQuery("#caja_item_estado_sia, #caja_item_estado_sia_es, #caja_item_estado_sia_en, #caja_item_estado_sia_de, #caja_item_estado_sia_fr").show();        
+		jQuery("#caja_item_fecha_sia, #caja_item_fecha_sia_es, #caja_item_fecha_sia_en, #caja_item_fecha_sia_de, #caja_item_fecha_sia_fr").show();
 		
 		
 		escriptori_detall_elm.find("a.elimina, a.previsualitza").show().end().find("h2:first").text(txtDetallTitol);
@@ -743,6 +750,11 @@ function CDetall() {
 			jQuery("#item_codigo_sia").change();
 		}
 		
+		if (dada_node.item_fecha_sia != undefined) {
+			jQuery("#item_fecha_sia").val(dada_node.item_fecha_sia);
+			jQuery("#item_fecha_sia").change();
+		}
+		
 		if (dada_node.item_estado_sia != undefined) {
 			if (dada_node.item_estado_sia == 'A') {
 				jQuery("#item_estado_sia").val("Alta");
@@ -755,7 +767,6 @@ function CDetall() {
 			} else {
 				jQuery("#item_estado_sia").val(dada_node.item_estado_sia);
 			}
-			//jQuery("#item_estado_sia").val(dada_node.item_estado_sia);
 			
 			
 			jQuery("#item_estado_sia").change();

@@ -1177,6 +1177,9 @@ div.table div.tbody div.td select.ordenacion{
 .escriptori_detall .grupoModulosFormulario .element.checkbox .control{
     margin: 0 3px 0 0;
 }
+.escriptori_detall .grupoModulosFormulario .t15p{
+    width: 14.9%;
+}
 .escriptori_detall .grupoModulosFormulario .t20p{
     width: 19.9%;
 }
