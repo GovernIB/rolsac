@@ -16,7 +16,7 @@ if (logourl != null) {
             <div class="caib_logo" <%=style%>></div>
         </div>
         <div class="aplicacio">
-            <span class="nom"><spring:message code='aplicacio.nom'/></span><span class="versio">1.4</span>
+            <span class="nom"><spring:message code='aplicacio.nom'/></span><span class="versio"><c:out value="${rolsac_version}"/></span>
         </div>
         <div class="usuari">        
             <p>

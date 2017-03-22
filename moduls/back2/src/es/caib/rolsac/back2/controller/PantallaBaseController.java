@@ -89,6 +89,7 @@ public abstract class PantallaBaseController {
 			Properties versionsProperties = new Properties();
 			versionsProperties.load(PantallaBaseController.class.getClassLoader().getResourceAsStream("version.properties"));
 			
+			model.put("rolsac_version", versionsProperties.getProperty("rolsac.version"));
 			model.put("rolsac_einaversion",  " v" + versionsProperties.getProperty("rolsac.version") + " build: " + versionsProperties.getProperty("rolsac.build"));
 	    	model.put("rolsac_einarevision","("+ versionsProperties.getProperty("git.revision") +")");
 	    	model.put("rolsac_urlrevision", versionsProperties.getProperty("rolsac.urlrevision").replace("{0}",versionsProperties.getProperty("git.revision")));
