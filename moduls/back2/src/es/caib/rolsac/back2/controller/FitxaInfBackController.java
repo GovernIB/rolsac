@@ -17,8 +17,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+
 
 
 
@@ -462,8 +464,10 @@ public class FitxaInfBackController extends PantallaBaseController {
 			}else if (fitxa.getTraduccion(langDefault) != null) {
 				
 				TraduccionFicha tradF = (TraduccionFicha) fitxa.getTraduccion(langDefault);
+				tradF.setImagen(null);
+				tradF.setBaner(null);
+				tradF.setIcono(null);
 				obtenerArchivosTraduccion(resultats, fitxa, lang, traduccionFichaDTO, tradF);
-				
 				
 			} else {
 				
@@ -761,9 +765,9 @@ public class FitxaInfBackController extends PantallaBaseController {
 			fitxa = guardarFechaPublicacion(fitxa, valoresForm);                        // Recuperamos y controlamos el valor de la fecha de publicación
 			fitxa = guardarFechaCaducidad(fitxa, valoresForm);                          // Recuperamos y controlamos el valor de la fecha de caducidad
 			fitxa = guardarIdiomas(edicion, fitxa, valoresForm);                        // Recuperamos y controlamos las traducciones de la ficha
-			fitxa = guardarIcono(fitxa, valoresForm, ficherosForm);                     // Controlamos los cambios del icono
-			fitxa = guardarBanner(fitxa, valoresForm, ficherosForm);                    // Controlamos los cambios del banner
-			fitxa = guardarImatge(fitxa, valoresForm, ficherosForm);                    // Controlamos los cambios de la imagen
+			fitxa = guardarIcono(fitxa, valoresForm, ficherosForm, request.getLocale());                     // Controlamos los cambios del icono
+			fitxa = guardarBanner(fitxa, valoresForm, ficherosForm, request.getLocale());                    // Controlamos los cambios del banner
+			fitxa = guardarImatge(fitxa, valoresForm, ficherosForm, request.getLocale());                    // Controlamos los cambios de la imagen
 			fitxa = guardarPublicoObjetivo(edicion, fitxa, fitxaOld, valoresForm);      // Controlamos los públicos objetivos modificados o incluidos
 
 			fitxa.setFechaActualizacion(new Date());									// Guardamos la fecha actual al ser la última actualización
@@ -816,8 +820,9 @@ public class FitxaInfBackController extends PantallaBaseController {
 			result = new IdNomDTO(-4l, error);
 			
 		} catch (IOException e) {
-			error = messageSource.getMessage(e.getMessage(), null, request.getLocale());
-			result = new IdNomDTO(-5l, error);
+			
+			//error = messageSource.getMessage(e.getMessage(), null, request.getLocale());
+			result = new IdNomDTO(-5l, e.getMessage());
 		}
 
 		return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
@@ -1003,7 +1008,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 	/*
 	 * Controlamos el icono de la ficha
 	 */
-	private Ficha guardarIcono(Ficha fitxa, Map<String, String> valoresForm, Map<String, FileItem> ficherosForm) throws DelegateException, IOException {
+	private Ficha guardarIcono(Ficha fitxa, Map<String, String> valoresForm, Map<String, FileItem> ficherosForm, Locale locale) throws DelegateException, IOException {
 
 		for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
 		
@@ -1011,16 +1016,23 @@ public class FitxaInfBackController extends PantallaBaseController {
 			TraduccionFicha tradF=(TraduccionFicha) fitxa.getTraduccion(lang);
 			if (fileIcona != null && fileIcona.getSize() > 0) {
 				
-				if (RolsacPropertiesUtil.getControlProporciones()){					
-					BufferedImage bimg = obtenerBufferedImage(fileIcona);	
-					int width          = bimg.getWidth();
-					int height         = bimg.getHeight();
-					
-					int hIcono=RolsacPropertiesUtil.getAltoIcono();
-					int wIcono=RolsacPropertiesUtil.getAnchoIcono();
-					
-					if(height > hIcono || width > wIcono){
-						throw new IOException("error.tam.icon");
+				//La extensión svg se descarta en las comprobaciones.
+				if (!fileIcona.getName().endsWith(".svg")) {
+					if (RolsacPropertiesUtil.getControlProporciones()){					
+						BufferedImage bimg = obtenerBufferedImage(fileIcona);	
+						int width          = bimg.getWidth();
+						int height         = bimg.getHeight();
+						
+						int hIcono=RolsacPropertiesUtil.getAltoIcono();
+						int wIcono=RolsacPropertiesUtil.getAnchoIcono();
+						
+						if(height > hIcono || width > wIcono){
+							String mensaje = messageSource.getMessage("error.tam.icon", null, locale);
+							mensaje = mensaje.replace("%HEIGHT%", String.valueOf(hIcono));
+							mensaje = mensaje.replace("%WIDTH%", String.valueOf(wIcono));
+							
+							throw new IOException(mensaje);
+						}
 					}
 				}
 				
@@ -1052,7 +1064,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 	/*
 	 * Controlamos las modificaciones del banner
 	 */
-	private Ficha guardarBanner(Ficha fitxa, Map<String, String> valoresForm, Map<String, FileItem> ficherosForm) throws DelegateException, IOException {
+	private Ficha guardarBanner(Ficha fitxa, Map<String, String> valoresForm, Map<String, FileItem> ficherosForm, Locale locale) throws DelegateException, IOException {
 
 		for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
 			FileItem fileBanner = ficherosForm.get("item_banner_" + lang);
@@ -1060,19 +1072,25 @@ public class FitxaInfBackController extends PantallaBaseController {
 			
 			if (fileBanner != null && fileBanner.getSize() > 0) {
 				
-				if (RolsacPropertiesUtil.getControlProporciones()){					
-					BufferedImage bimg = obtenerBufferedImage(fileBanner);	
-					int width          = bimg.getWidth();
-					int height         = bimg.getHeight();
-					
-					int hBanner=RolsacPropertiesUtil.getAltoBanner();
-					int wBanner=RolsacPropertiesUtil.getAnchoBanner();
-					
-					if(height > hBanner || width > wBanner){
-						throw new IOException("error.tam.banner");
+				//La extensión svg se descarta en las comprobaciones.
+				if (!fileBanner.getName().endsWith(".svg")) {
+					if (RolsacPropertiesUtil.getControlProporciones()){					
+						BufferedImage bimg = obtenerBufferedImage(fileBanner);	
+						int width          = bimg.getWidth();
+						int height         = bimg.getHeight();
+						
+						int hBanner=RolsacPropertiesUtil.getAltoBanner();
+						int wBanner=RolsacPropertiesUtil.getAnchoBanner();
+						
+						if(height > hBanner || width > wBanner){
+							String mensaje = messageSource.getMessage("error.tam.banner", null, locale);
+							mensaje = mensaje.replace("%HEIGHT%", String.valueOf(hBanner));
+							mensaje = mensaje.replace("%WIDTH%", String.valueOf(wBanner));
+							
+							throw new IOException(mensaje);
+						}
 					}
 				}
-				
 				
 				
 				tradF.setBaner(UploadUtil.obtenerArchivo(tradF.getBaner(), fileBanner));
@@ -1088,7 +1106,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 	/*
 	 * Controlamos las modificaciones de la imagen
 	 */
-	private Ficha guardarImatge(Ficha fitxa, Map<String, String> valoresForm, Map<String, FileItem> ficherosForm) throws DelegateException, IOException {
+	private Ficha guardarImatge(Ficha fitxa, Map<String, String> valoresForm, Map<String, FileItem> ficherosForm, Locale locale) throws DelegateException, IOException {
 
 		for (String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
 			
@@ -1097,16 +1115,22 @@ public class FitxaInfBackController extends PantallaBaseController {
 			
 			if (fileImatge != null && fileImatge.getSize() > 0) {
 				
-				if (RolsacPropertiesUtil.getControlProporciones()){					
-					BufferedImage bimg = obtenerBufferedImage(fileImatge);	
-					int width          = bimg.getWidth();
-					int height         = bimg.getHeight();
-					
-					int hImagen=RolsacPropertiesUtil.getAltoImagen();
-					int wImagen=RolsacPropertiesUtil.getAnchoImagen();
-					
-					if(height > hImagen || width > wImagen){
-						throw new IOException("error.tam.imatge");
+				//La extensión svg se descarta en las comprobaciones.
+				if (!fileImatge.getName().endsWith(".svg")) {
+					if (RolsacPropertiesUtil.getControlProporciones()){					
+						BufferedImage bimg = obtenerBufferedImage(fileImatge);	
+						int width          = bimg.getWidth();
+						int height         = bimg.getHeight();
+						
+						int hImagen=RolsacPropertiesUtil.getAltoImagen();
+						int wImagen=RolsacPropertiesUtil.getAnchoImagen();
+						
+						if(height > hImagen || width > wImagen){
+							String mensaje = messageSource.getMessage("error.tam.imatge", null, locale);
+							mensaje = mensaje.replace("%HEIGHT%", String.valueOf(hImagen));
+							mensaje = mensaje.replace("%WIDTH%", String.valueOf(wImagen));
+							throw new IOException(mensaje);
+						}
 					}
 				}
 				
