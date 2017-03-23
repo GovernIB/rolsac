@@ -531,7 +531,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		}
 		
 		
-		//Ahora sus hijas.
+		//Ahora sus hijas. 
 		List<Long> uasHijas = uaDelegate.obtenerHijosUnidadAdministrativa(idUA);
 		for(Long uaHija : uasHijas) {
 			

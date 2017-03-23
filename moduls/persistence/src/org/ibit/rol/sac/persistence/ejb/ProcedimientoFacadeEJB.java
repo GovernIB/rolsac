@@ -2300,17 +2300,13 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			}
 			indexData.getUos().add(pathUO);
 			
-			//Revisar si el tramite es telematico
-			indexData.setTelematico(false);
-			for(Tramite tramite : procedimiento.getTramites()) {
-				if (tramite != null && tramite.getIdTraTel() != null && !"".equals(tramite.getIdTraTel())) {
-					indexData.setTelematico(true);					
-				}
-				
-				if (tramite != null && tramite.getFase() == Tramite.INICIACION) {
-					indexData.setFechaPlazoIni(tramite.getDataInici());
-					indexData.setFechaPlazoFin(tramite.getDataTancament());
-				}
+			final boolean telematico = IndexacionUtil.isTelematicoProcedimiento(procedimiento);
+			indexData.setTelematico(telematico);
+			
+			final Tramite tramite = IndexacionUtil.getTramiteInicio(procedimiento);
+			if (tramite != null) {
+				indexData.setFechaPlazoIni(tramite.getDataInici());
+				indexData.setFechaPlazoFin(tramite.getDataTancament());
 			}
 			
 			solrIndexer.indexarContenido(indexData);

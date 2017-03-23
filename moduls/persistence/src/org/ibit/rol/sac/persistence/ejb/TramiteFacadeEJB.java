@@ -1171,8 +1171,13 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			indexData.setFechaActualizacion(tramite.getDataActualitzacio());
 			indexData.setFechaPublicacion(tramite.getDataPublicacio());
 			indexData.setFechaCaducidad(procedimiento.getFechaCaducidad());
-			indexData.setFechaPlazoIni(tramite.getDataInici());
-			indexData.setFechaPlazoFin(tramite.getDataTancament());
+			
+			final Tramite tramiteInicio = IndexacionUtil.getTramiteInicio(procedimiento);
+			if (tramiteInicio != null) {
+				indexData.setFechaPlazoIni(tramiteInicio.getDataInici());
+				indexData.setFechaPlazoFin(tramiteInicio.getDataTancament());
+			}
+			
 			indexData.setInterno(false);
 			
 			//FamiliaID
@@ -1251,8 +1256,12 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			indexData.setFechaActualizacion(tramite.getDataActualitzacio());
 			indexData.setFechaPublicacion(tramite.getDataPublicacio());
 			indexData.setFechaCaducidad(procedimiento.getFechaCaducidad());
-			indexData.setFechaPlazoIni(tramite.getDataInici());
-			indexData.setFechaPlazoFin(tramite.getDataTancament());
+			
+			final Tramite tramiteInicio = IndexacionUtil.getTramiteInicio(procedimiento);
+			if (tramiteInicio != null) {
+				indexData.setFechaPlazoIni(tramiteInicio.getDataInici());
+				indexData.setFechaPlazoFin(tramiteInicio.getDataTancament());
+			}
 			
 			indexData.setInterno(false);
 			

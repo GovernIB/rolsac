@@ -312,4 +312,42 @@ public class IndexacionUtil {
 				solrPendiente.grabarSolrPendiente(categoria.toString(), idElemento, SolrPendienteDelegate.REINDEXAR);
 			}
 		}
+	
+	
+	/**
+	 * Compruebo si es telemático algún tramite del procedimiento.
+	 * @param procedimiento
+	 * @return
+	 */
+	public static boolean isTelematicoProcedimiento(ProcedimientoLocal procedimiento) {
+		boolean telematico = false;
+		for(Tramite tramite : procedimiento.getTramites()) {
+			if (tramite != null && StringUtils.isNotBlank(tramite.getIdTraTel())) {
+				telematico = true;
+				break;
+			}
+		}
+		return telematico;
+	}
+
+	/**
+	 * Se obtiene el trámite de inicio de un procedimiento, en caso de no tenerlo, devuelve nulo. 
+	 * 
+	 * @param procedimiento
+	 * @return
+	 */
+	public static Tramite getTramiteInicio(ProcedimientoLocal procedimiento) {
+		Tramite tramiteInicio = null;
+		for(Tramite tramite : procedimiento.getTramites()) {
+			
+			if (tramite != null && tramite.getFase() == Tramite.INICIACION) {
+				tramiteInicio = tramite;
+				break;
+			}
+		}
+		return tramiteInicio;
+	}
+	
+	
+	
 }
