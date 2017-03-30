@@ -1,149 +1,80 @@
-SET SERVEROUTPUT ON;
-DECLARE
-  CURSOR cFichasImagen
-      IS
-          SELECT *
-           FROM RSC_TRAFIC
-          WHERE TFI_CODIDI != 'ca'
-            AND TFI_IMAGEN IN (
-                    select tfi_imagen
-                     from rsc_trafic
-                    where tfi_imagen is not null
-                    group by tfi_imagen
-                   having count(*) >= 2
-            )
-            ORDER BY TFI_codfic asc;
- 
-  CURSOR cFichasBanner
-      IS
-           SELECT *
-             FROM RSC_TRAFIC
-            WHERE TFI_CODIDI != 'ca'
-              AND TFI_banner IN (
-                    select TFI_banner
-                     from rsc_trafic
-                    where TFI_banner is not null
-                    group by TFI_banner
-                   having count(*) >= 2
-            )
-            ORDER BY TFI_codfic asc;
-  CURSOR cFichasIcono
-      IS
-           SELECT *
-             FROM RSC_TRAFIC
-            WHERE TFI_CODIDI != 'ca'
-              AND TFI_icono IN (
-                    select TFI_icono
-                     from rsc_trafic
-                    where TFI_icono is not null
-                    group by TFI_icono
-                   having count(*) >= 2
-            )
-            ORDER BY TFI_codfic asc;
-     idNuevo NUMBER;
-     cuantos NUMBER := 0;
-BEGIN
-  dbms_output.put_line('empieza');
-  cuantos := 0;
-  FOR ficha IN cFichasImagen
-  LOOP
-    cuantos := cuantos +1;
-    if mod(cuantos,50) = 0
-    then
+set serveroutput on;
+declare
+    CURSOR cFICHAS IS
+        SELECT *
+          FROM RSC_FICHA
+         WHERE FIC_BANER IS NOT NULL
+            OR FIC_IMAGEN IS NOT NULL
+            OR FIC_ICONO IS NOT NULL;
+  cIdIdioma VARCHAR2(2);
+  cExisteCat NUMBER;
+  cExisteEsp NUMBER;
+  cExiste    NUMBER;
+  cuantos    NUMBER := 0;
+begin
+    
+    cuantos := cuantos +1 ;
+    IF MOD (cuantos, 40) = 0
+    then 
         commit;
-    end if;
+    END IF;
     
-      --Obtenemos el nuevo valor de la secuencia
-      select RSC_SEQ_ALL.NEXTVAL
-        into idNuevo
-        from dual;
+    
+    DBMS_OUTPUT.PUT_LINE(' INICIO ' );
+    FOR ficha IN cFICHAS
+    LOOP
+        select count(*)
+          into cExisteCat
+          from rsc_trafic
+         where tfi_codidi = 'ca'
+           and tfi_codfic = ficha.fic_codi;
         
-      --Generamos el objeto archivo a partir del ya existente.
-      INSERT INTO RSC_ARCHIV ("ARC_CODI",
-                              "ARC_NOMBRE",
-                              "ARC_MIME",
-                              "ARC_PESO",
-                              "ARC_DATOS")
-                    SELECT idNuevo, arc_nombre, arc_mime, arc_peso, arc_datos
-                      from rsc_archiv where arc_codi = ficha.tfi_imagen;
-                      
-      --Actualizamos la traducción de la ficha con el nuevo valor de imagen.
-      update rsc_trafic
-         set tfi_imagen = idNuevo
-       where tfi_codfic = ficha.tfi_codfic
-         and tfi_codidi = ficha.tfi_codidi
-         and tfi_imagen = ficha.tfi_imagen;
-  END LOOP;
-  COMMIT;
-  
-  cuantos := 0;
-  FOR ficha IN cFichasBanner
-  LOOP
-  
-    cuantos := cuantos +1;
-    if mod(cuantos,50) = 0
-    then
-        commit;
-    end if;
-    
-     --Obtenemos el nuevo valor de la secuencia
-      select RSC_SEQ_ALL.NEXTVAL
-        into idNuevo
-        from dual;
-        
-        
-         --Generamos el objeto archivo a partir del ya existente.
-      INSERT INTO RSC_ARCHIV ("ARC_CODI",
-                              "ARC_NOMBRE",
-                              "ARC_MIME",
-                              "ARC_PESO",
-                              "ARC_DATOS")
-                    SELECT idNuevo, arc_nombre, arc_mime, arc_peso, arc_datos
-                      from rsc_archiv where arc_codi = ficha.tfi_banner;
-    
-     --Actualizamos la traducción de la ficha con el nuevo valor de banner.
-      update rsc_trafic
-         set tfi_banner = idNuevo
-       where tfi_codfic = ficha.tfi_codfic
-         and tfi_codidi = ficha.tfi_codidi
-         and tfi_banner = ficha.tfi_banner;
-  END LOOP;
-  
-  
-  cuantos := 0;
-  FOR ficha IN cFichasIcono
-  LOOP
-    cuantos := cuantos +1;
-    if mod(cuantos,50) = 0
-    then
-        commit;
-    end if;
-    
-     --Obtenemos el nuevo valor de la secuencia
-      select RSC_SEQ_ALL.NEXTVAL
-        into idNuevo
-        from dual;
+         select count(*)
+          into cExisteEsp
+          from rsc_trafic
+         where tfi_codidi = 'es'
+           and tfi_codfic = ficha.fic_codi;
+         
+          select count(*)
+          into cExiste
+          from rsc_trafic
+         where tfi_codidi = 'ca'
+           and tfi_codfic = ficha.fic_codi;  
+           
+        IF cExisteCat = 1
+        THEN
+            cIdIdioma := 'ca';
+        ELSIF cExisteEsp = 1
+        THEN
+            cIdIdioma := 'es';
+        ELSIF cExiste > 0 
+        THEN
+             select TFI_CODIDI
+              into cIdIdioma
+              from rsc_trafic
+             where tfi_codfic = ficha.fic_codi
+               and rownum = 1;  
+        ELSE 
+            cIdIdioma := null;
+        END IF;
         
         
-         --Generamos el objeto archivo a partir del ya existente.
-      INSERT INTO RSC_ARCHIV ("ARC_CODI",
-                              "ARC_NOMBRE",
-                              "ARC_MIME",
-                              "ARC_PESO",
-                              "ARC_DATOS")
-                    SELECT idNuevo, arc_nombre, arc_mime, arc_peso, arc_datos
-                      from rsc_archiv where arc_codi = ficha.tfi_icono;
-    
-     --Actualizamos la traducción de la ficha con el nuevo valor de banner.
-      update rsc_trafic
-         set tfi_icono = idNuevo
-       where tfi_codfic = ficha.tfi_codfic
-         and tfi_codidi = ficha.tfi_codidi
-         and tfi_icono = ficha.tfi_icono;
-  END LOOP;
-  
-  
-  
-  dbms_output.put_line('fin');
+        
+        
+        IF cIdIdioma IS NOT NULL
+        THEN
+            UPDATE RSC_TRAFIC
+               SET TFI_IMAGEN = FICHA.FIC_IMAGEN,
+                   TFI_BANNER = FICHA.FIC_BANER,
+                   TFI_ICONO  = FICHA.FIC_ICONO
+             WHERE TFI_CODIDI = cIdIdioma
+               AND TFI_CODFIC = ficha.fic_codi;
+        END IF;
 
-END;
+        /*DBMS_OUTPUT.PUT_LINE(' FICHA ' || ficha.fic_codi || ' IDIOMA:' || cIdIdioma || ' AFECTADOS:' || sql%rowcount);*/
+        
+    END LOOP;
+    
+    commit;
+    DBMS_OUTPUT.PUT_LINE(' FIN ' );
+end;
