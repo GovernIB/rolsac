@@ -4,3 +4,14 @@ update rsc_proced
   where pro_codsia is not null
     and pro_estsia is null;                                                  
  
+    
+ /** Actualiza la imagen, icono, banner de todas las traducciones en catalán con la que tenga la ficha. **/
+UPDATE RSC_TRAFIC TRADUCCION_FICHA
+   SET (TRADUCCION_FICHA.TFI_IMAGEN, 
+        TRADUCCION_FICHA.TFI_BANNER, 
+        TRADUCCION_FICHA.TFI_ICONO) = (SELECT FICHA.FIC_IMAGEN, FICHA.FIC_BANER, FICHA.FIC_ICONO 
+                                                FROM RSC_FICHA FICHA
+                                               WHERE FICHA.FIC_CODI = TRADUCCION_FICHA.TFI_CODFIC
+                                               )
+ WHERE TRADUCCION_FICHA.TFI_CODIDI = 'ca';
+ 
