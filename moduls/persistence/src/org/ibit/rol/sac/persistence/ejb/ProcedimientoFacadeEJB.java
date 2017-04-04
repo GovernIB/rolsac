@@ -1017,7 +1017,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				where.append(" and upper(procedimiento.tramite) like upper(:tramite) ");
 
 
-			if ( bc.getProcedimiento().getFamilia().getId() != null ){
+			if ( bc.getProcedimiento().getFamilia() != null && bc.getProcedimiento().getFamilia().getId() != null ){
 				if(bc.getProcedimiento().getFamilia().getId() == -1){
 					where.append(" and procedimiento.familia is null ");
 
@@ -1028,7 +1028,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			}
 
 
-			if ( bc.getProcedimiento().getIniciacion().getId() != null ){
+			if ( bc.getProcedimiento().getIniciacion() != null && bc.getProcedimiento().getIniciacion().getId() != null ){
 				if(bc.getProcedimiento().getIniciacion().getId() ==-1){
 					where.append(" and procedimiento.iniciacion is null ");
 				}else{					
@@ -1058,7 +1058,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			}
 
 	
-			if(bc.getProcedimiento().getSilencio().getId() != null){
+			if(bc.getProcedimiento().getSilencio() != null && bc.getProcedimiento().getSilencio().getId() != null){
 				if(bc.getProcedimiento().getSilencio().getId() ==-1){
 					where.append(" and procedimiento.silencio is null ");
 				}else{					
