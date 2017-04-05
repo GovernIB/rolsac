@@ -393,6 +393,10 @@ public class SiaUtils {
 	private static String obtenerCodigoIdCentro(ProcedimientoLocal procedimiento) {
 		
 		String codigoIdCentro = null;
+		if (procedimiento == null || procedimiento.getOrganResolutori() == null) {
+			return "";
+		}
+		
 		if (procedimiento.getOrganResolutori().getCodigoDIR3() == null) {
 	    	
 	    	//Recorremos sus predecesores
