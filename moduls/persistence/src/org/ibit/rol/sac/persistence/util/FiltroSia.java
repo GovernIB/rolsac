@@ -3,13 +3,15 @@ package org.ibit.rol.sac.persistence.util;
 
 public class FiltroSia {
 	/** Posibles estados : 0 , 1 o -1. **/
-	public Integer estado;
+	private Integer estado;
 	/** Cuantos elementos a mostrar por pantalla. **/
-	public Integer numElementos;
+	private Integer numElementos;
 	/** Existe procedimiento o ha sido borrado. **/
-	public Integer existe;
+	private Integer existe;
 	/** Id del elemento. **/
-	public Long idElemento;
+	private Long idElemento;
+	/** Tipo de ejecución. PDT (pendiente), TOT (Tots) o TMP (Actualización por timepo) **/
+	private String tipo;
 
 	/**
 	 * @return the estado
@@ -66,8 +68,20 @@ public class FiltroSia {
 	public void setIdElemento(Long idElemento) {
 		this.idElemento = idElemento;
 	}
-	
-	
+
+	/**
+	 * @return the tipo
+	 */
+	public String getTipo() {
+		return tipo;
+	}
+
+	/**
+	 * @param tipo the tipo to set
+	 */
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
 	
 	
 }

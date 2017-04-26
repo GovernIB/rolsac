@@ -9,11 +9,13 @@ import java.util.Date;
 
 import javax.ejb.EJBException;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.SiaPendiente;
+import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
@@ -265,6 +267,7 @@ public class SiaUtils {
 	 * @return
 	 */
 	public static SiaEnviableResultado isEnviableSia(ProcedimientoLocal procedimiento) {
+		
 		SiaEnviableResultado resultado = SiaUtils.validaProcedimientoSIA(procedimiento);
 		
 		
@@ -305,6 +308,12 @@ public class SiaUtils {
 	private static SiaEnviableResultado validaProcedimientoSIA(final ProcedimientoLocal procedimiento) {
 		
 		final SiaEnviableResultado resultado = new SiaEnviableResultado(false);
+		if (procedimiento == null) {
+			resultado.setRespuesta("El procedimiento está nulo.");	
+			resultado.setIdCentro("");
+	    	return resultado;
+		}
+		
 		final String codigoIdCentro = obtenerCodigoIdCentro(procedimiento);
 		resultado.setIdCentro(codigoIdCentro);
 		
@@ -352,6 +361,19 @@ public class SiaUtils {
 	    	resultado.setRespuesta("No tiene código DIR ni el organo resolutori ni predecesores.");	
 	    	return resultado;
 	    }
+	    
+	    final String nombre = getNombreProcedimiento(procedimiento);
+	    if (StringUtils.isBlank(nombre)) {
+	    	resultado.setRespuesta("El procedimiento no tiene titulo.");	
+	    	return resultado;
+	    }
+	    
+	    final String resumen = getResumenProcedimiento(procedimiento);
+	    if (StringUtils.isBlank(resumen)) {
+	    	resultado.setRespuesta("El procedimiento no tiene resumen.");	
+	    	return resultado;
+	    }
+	    
 	    
 	    resultado.setNotificarSIA(true);
 	    return resultado;
@@ -415,6 +437,42 @@ public class SiaUtils {
 		return codigoIdCentro;
 	}
 	
-	
+	/**
+	 * Obtiene el resumen del procedimiento.
+	 * @param procedimiento
+	 * @return
+	 */
+	public static String getResumenProcedimiento(ProcedimientoLocal procedimiento) {
+		TraduccionProcedimientoLocal tradEs = (TraduccionProcedimientoLocal) procedimiento.getTraduccion("es");
+		TraduccionProcedimientoLocal tradCa = (TraduccionProcedimientoLocal) procedimiento.getTraduccion("ca");
+		String resumen = null;
+		if (tradEs != null  && StringUtils.isNotBlank(tradEs.getResumen())) {
+			resumen = tradEs.getResumen();
+		} else if (tradCa != null) {
+			resumen = tradCa.getResumen();
+		}
+		if (resumen != null && resumen.length() >= 4000) {
+			resumen = resumen.substring(0, 3999);
+		}
+		return resumen;
+	}
+
+	/**
+	 * Calcula el nombre del procedimiento. 
+	 * @param procedimiento
+	 * @return
+	 */
+	 public static String getNombreProcedimiento(ProcedimientoLocal procedimiento) {
+		TraduccionProcedimientoLocal tradEs = (TraduccionProcedimientoLocal) procedimiento.getTraduccion("es");
+		TraduccionProcedimientoLocal tradCa = (TraduccionProcedimientoLocal) procedimiento.getTraduccion("ca");
+		String nombre = null;
+		if (tradEs != null  && StringUtils.isNotBlank(tradEs.getNombre())) {
+			nombre = tradEs.getNombre();
+		} else if (tradCa != null ){
+			nombre = tradCa.getNombre();
+		}
+		return nombre;	
+	}
+    	
 }
 

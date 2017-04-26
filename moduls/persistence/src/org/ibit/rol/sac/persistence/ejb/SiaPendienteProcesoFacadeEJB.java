@@ -146,8 +146,8 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     		}
     		
     		
-    		if (filtro.numElementos != null) {
-    			query.setMaxResults(filtro.numElementos);
+    		if (filtro.getNumElementos() != null) {
+    			query.setMaxResults(filtro.getNumElementos());
     		}
     		
     		
@@ -183,11 +183,17 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 		
 		try {
 
-    		StringBuilder consulta = new StringBuilder("select sia from SiaJob as sia order by sia.id desc");
+    		StringBuilder consulta = new StringBuilder("select sia from SiaJob as sia ");
+    		if (filtro.getTipo() != null && !filtro.getTipo().trim().isEmpty()) {
+    			consulta.append(" where sia.tipo = '"+filtro.getTipo()+"'");
+    		}
     		
+    		consulta.append(" order by sia.id desc");
     		Query query = session.createQuery( consulta.toString() );
     		
-    		query.setMaxResults(filtro.numElementos);
+    		
+    		
+    		query.setMaxResults(filtro.getNumElementos());
     		
     		return query.list();
 

@@ -502,7 +502,9 @@ public class TMIndexController extends PantallaBaseController {
         try {
         			
     		FiltroSia filtro = new FiltroSia();
-    		filtro.setNumElementos(20);
+    		filtro.setNumElementos(10);
+    		filtro.setTipo("TOT"); 
+    		
     		llistaSiaJobDTO.addAll(convertirSIAToJobDTO(DelegateUtil.getSiaPendienteProcesoDelegate().getSiaProceso(filtro)));
             
 
@@ -536,6 +538,7 @@ public class TMIndexController extends PantallaBaseController {
         			
     		FiltroSia filtro = new FiltroSia();
     		filtro.setNumElementos(20);
+    		filtro.setEstado(0);
     		llistaSiaDTO.addAll(convertirSIAToDTO(DelegateUtil.getSiaPendienteProcesoDelegate().getSiaPendientes(filtro)));
             
 
