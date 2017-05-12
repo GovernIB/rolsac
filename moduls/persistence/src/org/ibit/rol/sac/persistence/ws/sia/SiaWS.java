@@ -167,11 +167,7 @@ public class SiaWS {
 			NORMATIVASNORMATIVA nor = new NORMATIVASNORMATIVA();
 			if (norm.getTipo() == null) { continue;}
 			nor.setCODRANGO(norm.getTipo().getTipoSia().toString()); 
-			if (((TraduccionNormativa) norm.getTraduccion("es")) == null) {
-				nor.setTITULO(((TraduccionNormativa) norm.getTraduccion("ca")).getTitulo());
-			} else {
-				nor.setTITULO(((TraduccionNormativa) norm.getTraduccion("es")).getTitulo());
-			}
+			nor.setTITULO(SiaUtils.getNombreNormativa(norm));
 			normativasCorrectas.add(nor);
 		}
 		NORMATIVASNORMATIVA[] normativas = new NORMATIVASNORMATIVA[normativasCorrectas.size()];

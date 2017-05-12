@@ -7,14 +7,13 @@ import java.sql.Clob;
 import java.sql.SQLException;
 import java.util.Date;
 
-import javax.ejb.EJBException;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.SiaPendiente;
+import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Validacion;
@@ -473,6 +472,23 @@ public class SiaUtils {
 		}
 		return nombre;	
 	}
-    	
+
+	 /**
+	 * Calcula el nombre de la normativa. 
+	 * @param normativa
+	 * @return
+	 */
+	 public static String getNombreNormativa(Normativa normativa) {
+		final TraduccionNormativa tradEs = (TraduccionNormativa) normativa.getTraduccion("es");
+		final TraduccionNormativa tradCa = (TraduccionNormativa) normativa.getTraduccion("ca");
+		String nombre = null;
+		if (tradEs != null  && StringUtils.isNotBlank(tradEs.getTitulo())) {
+			nombre = tradEs.getTitulo();
+		} else if (tradCa != null ){
+			nombre = tradCa.getTitulo();
+		}
+		return nombre;	
+	}
 }
+
 
