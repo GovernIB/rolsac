@@ -201,7 +201,13 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
     public Documento obtenerDocumento(Long id) {
         Session session = getSession();
         try {
+        	
             Documento doc =  (Documento) session.load(Documento.class, id);
+            
+            // forzamos que se actualice el orden, 
+            // para el caso en que se actualiza el documento desde DocumentoResumen al modificar el orden            
+        	session.refresh(doc);
+        	        	
             Hibernate.initialize(doc.getArchivo());
             for (Iterator iterator = doc.getLangs().iterator(); iterator.hasNext();) {
                 String lang = (String) iterator.next();
@@ -210,21 +216,6 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
                     Hibernate.initialize(traduccion.getArchivo());
                 }
             }
-/*
-            Tramite tramite=doc.getDocInformatiuTramite();
-            if(null!=tramite) {
-            	Hibernate.initialize(tramite.getFormularios()); 
-            	Hibernate.initialize(tramite.getDocsInformatius());
-            	Hibernate.initialize(tramite.getDocsPresentar());
-            }
-            
-            tramite=doc.getDocPresentarTramite();
-            if(null!=tramite) {
-            	Hibernate.initialize(tramite.getFormularios()); 
-            	Hibernate.initialize(tramite.getDocsInformatius());
-            	Hibernate.initialize(tramite.getDocsPresentar());
-            }
-*/
             
             return doc;
         } catch (HibernateException he) {
