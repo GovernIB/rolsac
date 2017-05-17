@@ -2229,7 +2229,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 					for( PublicoObjetivo publicoObjectivo :  procedimiento.getPublicosObjetivo()) {
 						TraduccionPublicoObjetivo traduccionPO = (TraduccionPublicoObjetivo) publicoObjectivo.getTraduccion(keyIdioma);
 						if (traduccionPO != null) {
-							nombrePubObjetivo = traduccionPO.getTitulo();
+							nombrePubObjetivo = traduccionPO.getTitulo().toLowerCase();
 							break; //Con encontrar uno nos basta
 						}
 					}
@@ -2256,7 +2256,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 						}
 					}
 			    	searchTextOptional.addIdioma(enumIdioma, traduccion.getResultat() +" " +traduccion.getObservaciones() + " " + textoOptional.toString());
-			    	urls.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+nombrePubObjetivo+"/tramites/tramite/"+procedimiento.getId());
+			    	urls.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/200/"+nombrePubObjetivo+"/tramites/tramite/"+procedimiento.getId());
 				}
 			}
 			
