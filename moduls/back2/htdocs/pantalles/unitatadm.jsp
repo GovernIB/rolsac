@@ -1862,6 +1862,7 @@
         var pagFitxes = '<c:url value="/fitxainf/llistat.do" />';
         var pagFitxesUASeccio = '<c:url value="/unitatadm/obtenirFitxesUASeccio.do" />';
         var pagGuardarFitxesUASeccio = '<c:url value="/unitatadm/guardarFitxesUASeccio.do" />';
+        var txtFitxaDuplicada = "<spring:message code='unitatadm.fitxa.duplicada' />";  
         var txtEsborrarCorrecte = "<spring:message code='unitatadm.esborrat.correcte'/>";  
         var pagTraduir = '<c:url value="/unitatadm/traduir.do" />';
         var pagFitxa = '<c:url value="/fitxainf/pagDetall.do" />';

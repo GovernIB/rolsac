@@ -2252,6 +2252,15 @@ function CEscriptoriSeccioFitxes() {
 		if (debug)
 			console.log("Entrando en CEscriptoriSeccioFitxes.asignarFicha");
 		
+		var inputs = $("div .td.nom.fitxa input");
+		for(var i = 0 ; i < inputs.size(); i++) {
+			var inputValor = inputs[i].value;
+			if (inputValor != null && inputValor == id) {
+				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtFitxaDuplicada});
+				return;
+			}
+		}
+		
 		var elementCaducidad = "#ficha-caducidad-" + id;
 		var caducidad = $(elementCaducidad).val();
 		var orden = 1;
