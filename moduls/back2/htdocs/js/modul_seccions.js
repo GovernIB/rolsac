@@ -2252,14 +2252,25 @@ function CEscriptoriSeccioFitxes() {
 		if (debug)
 			console.log("Entrando en CEscriptoriSeccioFitxes.asignarFicha");
 		
-		var inputs = $("div .td.nom.fitxa input");
+		var vectorPaginas = $("#resultatsFitxes").data("paginas");
+		for(var i = 0 ; i < vectorPaginas.length; i++) {
+			var vectorPagina = vectorPaginas[i];
+			for(var j= 0 ; j < vectorPagina.length; j++) {
+				var elemento = vectorPagina[j];
+				if (elemento != null && elemento.id != null && elemento.id == id) {
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtFitxaDuplicada+" "+elemento.ordre});
+					return;
+				}
+			}
+		}
+		/*var inputs = $("div .td.nom.fitxa input");
 		for(var i = 0 ; i < inputs.size(); i++) {
 			var inputValor = inputs[i].value;
 			if (inputValor != null && inputValor == id) {
-				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtFitxaDuplicada});
+				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtFitxaDuplicada+" "+(i+1)});
 				return;
 			}
-		}
+		}*/
 		
 		var elementCaducidad = "#ficha-caducidad-" + id;
 		var caducidad = $(elementCaducidad).val();

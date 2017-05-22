@@ -29,7 +29,7 @@
         <property name="urlForo" column="FIC_URLFOR"/>     
         <property name="foro_tema" column="FIC_FORTEM" length="1"/>
 
-        <set name="fichasua" cascade="all" lazy="false" batch-size="200">
+        <set name="fichasua" cascade="all" lazy="false" batch-size="200" inverse="true">
             <cache usage="read-write"/>
             <key column="FUA_CODFIC" foreign-key="RSC_FUAFIC_FK"/>
             <one-to-many class="org.ibit.rol.sac.model.FichaResumenUA"/>
