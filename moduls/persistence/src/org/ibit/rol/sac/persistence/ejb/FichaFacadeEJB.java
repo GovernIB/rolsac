@@ -1956,7 +1956,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 					
 					//Seteamos los primeros campos multiidiomas: Titulo, Descripción y el search text.
 					titulo.addIdioma(enumIdioma, traduccion.getTitulo());
-			    	descripcion.addIdioma(enumIdioma, solrIndexer.htmlToText(traduccion.getDescripcion()));
+			    	descripcion.addIdioma(enumIdioma, solrIndexer.htmlToText(traduccion.getDescAbr()));
 			    	searchText.addIdioma(enumIdioma, traduccion.getTitulo()+ " "+ solrIndexer.htmlToText(traduccion.getDescAbr()) + " "+ solrIndexer.htmlToText(traduccion.getDescripcion()));
 			    	
 			    	//StringBuffer que tendrá el contenido a agregar en textOptional
