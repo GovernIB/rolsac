@@ -1013,8 +1013,10 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				where.append(" and procedimiento.ventanillaUnica = :ventanillaUnica ");
 
 
-			if ( StringUtils.isNotEmpty( bc.getProcedimiento().getTramite() ) )
-				where.append(" and upper(procedimiento.tramite) like upper(:tramite) ");
+			if ( StringUtils.isNotEmpty( bc.getProcedimiento().getTramite() ) ) {
+				//where.append(" and procedimiento.tramites.id IN (:tramite) ");
+				where.append(" and procedimiento.id IN ( select tra.procedimiento from Tramite as tra where tra.id = :tramite ) ");	
+			}
 
 
 			if ( bc.getProcedimiento().getFamilia() != null && bc.getProcedimiento().getFamilia().getId() != null ){
@@ -1181,7 +1183,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 
 			if ( StringUtils.isNotEmpty( bc.getProcedimiento().getTramite() ) )
-				query.setParameter("tramite", "%" + bc.getProcedimiento().getTramite() + "%");
+				query.setParameter("tramite", bc.getProcedimiento().getTramite());
 
 
 			if ( StringUtils.isNotEmpty( bc.getProcedimiento().getIndicador() ) )

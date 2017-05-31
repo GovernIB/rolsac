@@ -772,7 +772,10 @@ function CDetall() {
 			jQuery("#item_estado_sia").change();
 		}
 		
-		if (dada_node.item_silenci_combo != undefined) {
+		if (dada_node.item_silenci_combo == undefined) {
+			jQuery("#item_silenci_combo").val("");
+			jQuery("#item_silenci_combo").change();
+		} else {
 			jQuery("#item_silenci_combo").val(dada_node.item_silenci_combo);
 			jQuery("#item_silenci_combo").change();
 		}
