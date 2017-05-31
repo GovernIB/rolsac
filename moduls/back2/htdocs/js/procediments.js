@@ -383,6 +383,18 @@ function CLlistat() {
 
 				// Asociamos el evento onclick a las cabeceras del listado para que sea ordenable.
 				jQuery("#resultats .table .th a").unbind("click").click(function() {
+					//Seteamos el ordreTipos y ordreCamp
+					var tipo;
+					if ( jQuery(this).parent().hasClass("DESC") ) {
+						tipo = "ASC";
+					} else if (  jQuery(this).parent().hasClass("ASC") ) {
+						tipo = "DESC";
+					} else {
+						tipo = "ASC";
+					}
+					var campo = jQuery(this).attr("class");  
+					ordreTipus_llistat_elm.val(tipo);
+					ordreCamp_llistat_elm.val(campo);
 					Llistat.ordena(this, opcions);
 				});
 
