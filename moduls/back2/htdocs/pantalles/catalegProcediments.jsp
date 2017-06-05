@@ -1783,7 +1783,6 @@
     <form id="formTramits">
 		<div class="escriptori_detall" id="escriptori_detall" style="display: block;">
 			<div class="grupoModulosFormulario modulPrincipal" id="modulPrincipal">    	
-		    	<input id="id_tramit_actual" name="id_tramit_actual" type="hidden"/>        
 		    	<input id="id_procediment_tramit" name="id_procediment_tramit" type="hidden"/>
 		    	
 			    <!-- titol  -->
@@ -1828,6 +1827,14 @@
 												<input id='item_nom_tramit_<c:out value="${lang}"/>' name='item_nom_tramit_<c:out value="${lang}"/>' type="text" class="nou" />
 											</div>
 										</div>
+										<div class="element t25p">
+                                            <div class="etiqueta">
+                                                <label for="id_tramit_actual"><spring:message code='camp.clau_primaria'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="id_tramit_actual" name="id_tramit_actual" type="text" class="nou" readonly="readonly" />
+                                            </div>
+                                        </div>
 									</div>						
 																								
 									<div class="fila">

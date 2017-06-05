@@ -1141,8 +1141,11 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 			}
 
-
-			where.append("order by procedimiento.").append( paginacion.getPropiedadDeOrdenacion() );
+			if (paginacion.getPropiedadDeOrdenacion().equals("familia")) {
+				where.append("order by tradFam.nombre");
+			} else {
+				where.append("order by procedimiento.").append( paginacion.getPropiedadDeOrdenacion() );
+			}
 			where.append(" ").append( paginacion.getCriterioOrdenacion() );
 
 			String idUAs =  DelegateUtil.getUADelegate().obtenerCadenaFiltroUA( bc.getUnidadAdministrativa().getId(), bc.getUaHijas(), bc.getUaPropias() );
