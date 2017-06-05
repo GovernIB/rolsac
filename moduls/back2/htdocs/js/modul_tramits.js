@@ -117,7 +117,9 @@ function CModulTramit() {
                         
         EscriptoriTramit.limpia();
         
-        $("#tramit_item_data_publicacio").val("");
+        //#391
+        $("#tramit_item_data_publicacio").val($("#item_data_publicacio").val());
+        
         $("#tramit_item_data_caducitat").val("");
         $("#tramit_item_data_inici").val("");
         $("#tramit_item_data_tancament").val("");
@@ -273,6 +275,24 @@ function CEscriptoriTramit() {
     		return false;
     	}
         
+        //#391
+        //Controlamos que la fecha de publicación y la fecha de inicio sean posteriores a 
+        // la fecha del procedimiento
+        var fechaPublicacionProcedimiento = $("#item_data_publicacio").datetimepicker('getDate');
+        var fechaPublicacionTramite = $("#tramit_item_data_publicacio").datetimepicker('getDate');     
+        
+        //Si la fecha del procedimiento debe estar rellenada 
+		if (!fechaPublicacionProcedimiento || fechaPublicacionProcedimiento > fechaPublicacionTramite){
+			Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtDataPublicacioPosterior, text: ""});
+    		return false;
+		}
+			
+		var fechaInicioTramite = $("#tramit_item_data_inici").datetimepicker('getDate');
+		if (fechaPublicacionProcedimiento > fechaInicioTramite){
+			Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtDataIniciPosterior, text: ""});
+    		return false;
+		}
+		
         // Coger el id del procedimiento o de la ficha (depende del mantenimiento/jsp en el que estemos).
         var procId = $("#procId");
         if (procId.length > 0) {

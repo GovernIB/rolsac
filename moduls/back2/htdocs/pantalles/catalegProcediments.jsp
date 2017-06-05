@@ -200,7 +200,12 @@
     var txtOrganoResponsableObligatorio = "<spring:message code='personal.formulari.organ.responsable.obligatori'/>";
     var txtRequisitsObligatori = "<spring:message code= 'tramit.formulari.requisits.obligatori'/>";
     var txtTerminiObligatori   = "<spring:message code= 'tramit.formulari.termini.obligatori'/>";
-    var txtModelObligatori   = "<spring:message code= 'tramit.formulari.models.obligatori'/>";
+    var txtModelObligatori   = "<spring:message code= 'tramit.formulari.models.obligatori'/>";    
+    var txtDataPublicacioObligatori = "<spring:message code='proc.formulari.error.fechapublicacion.obligatori'/>";
+    var txtDataIniciObligatori = "<spring:message code='proc.formulari.error.datainici.obligatori'/>";
+    var txtDataPublicacioPosterior = "<spring:message code='proc.formulari.error.fechapublicacion.posterior'/>";
+    var txtDataIniciPosterior = "<spring:message code='proc.formulari.error.datainici.posterior'/>";
+    
     // dades formularios
     var FormulariDades = [
         
@@ -319,7 +324,7 @@
             "tipus": "alfanumeric",         
             "error":
                 {
-                    "obligatori": "<spring:message code='proc.formulari.error.fechapublicacion.obligatori'/>"
+                    "obligatori": txtDataPublicacioObligatori
                 }
         },
                
@@ -458,6 +463,34 @@
                     "tipus": txtNombreNoSoloNumeros
                 }			
 		},
+		
+		//#391
+        // Fecha publicacion tramite
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "tramit_item_data_publicacio",
+            "obligatori": "si",
+            "tipus": "alfanumeric",         
+            "error":
+                {
+                    "obligatori": txtDataPublicacioObligatori
+                }
+        },
+
+        //#391
+        // Fecha inicio trámite
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "tramit_item_data_inici",
+            "obligatori": "si",
+            "tipus": "alfanumeric",         
+            "error":
+                {
+                    "obligatori": txtDataIniciObligatori
+                }
+        },
 						 
 		   
 		{	
