@@ -705,6 +705,26 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 					}
 				}
 				
+				//#391
+				//Validamos las fechas de inicio y publicación los trámites, 
+				//deben ser iguales o posteriores a la fecha de 
+				//publicación del procedimiento
+				for (Long id : listaIdsTramitesParaActualizar) {
+					Tramite tramite = DelegateUtil.getTramiteDelegate().obtenerTramite(id);
+					if(tramite!=null){
+						Date tdp = tramite.getDataPublicacio();
+						Date tdi = tramite.getDataInici();
+						Date pdp = procediment.getFechaPublicacion();
+						
+						if(tdp==null || tdi==null || pdp==null || tdi.before(pdp) || tdp.before(pdp)){
+							error = messageSource.getMessage("error.data_publicacio_e_inici_tramits_obligatori", null, request.getLocale());
+							return new IdNomDTO(-5l, error);
+						}
+					}
+				}
+				
+				
+				
 			}
 
 			Long procId = guardarGrabar(procediment, listaTramitesParaBorrar, listaIdsTramitesParaActualizar);
