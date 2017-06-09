@@ -2180,71 +2180,72 @@ function CEscriptoriSeccioFitxes() {
 		if ( this.validarParametro(idFicha) )
 			dataVars += "&idFicha=" + idFicha;
 
-		$.ajax({
-			type: "POST",
-			url: pagSeccionsFitxes,
-			data: dataVars,
-			dataType: "json",
-			beforeSend: function() {
-
-				$('#seleccion-fichas').fadeOut(300, function() {
-
-					$("#cerca_fitxes_nom").attr("disabled", "disabled");
-					$("#cerca_fitxes_codi").attr("disabled", "disabled");
-
-					$(this).html("<p class=\"executant\">" + txtCercantItems + "</p>");
-
-					$(this).fadeIn(300);
-
-				});
-
-			},
-			error: function() {
-
-				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
-				Error.llansar();
-
-			},
-			success: function(data) {
-
-				if (data.id == -1) {
-
-					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
-
-				} else if (data.id < -1) {
-
-					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
-
-				} else if (data.fitxes.length == 0) {
-
-					$("#seleccion-fichas").css("display", "block");
-					$("#seleccion-fichas").html("<p class='noItems'>" + txtNoHiHaFitxes + "</p>");	
-
-				} else {
-
-					EscriptoriSeccioFitxes.pintarListado(data);
-					$("#cerca_fitxes_nom").removeAttr("disabled");
-					$("#cerca_fitxes_codi").removeAttr("disabled");
-
-					$('#seleccion-fichas ul > li > div').each(function() {
-
-						var id = $(this).find("input[type=hidden]:first").val();
-
-						$(this).find("a.asigna").click(function() {
-							that.asignarFicha(id);
-						});
-
-					}); //End each
-
-				}
-
-			} //Fin success
-
-		}); //Fin ajax
 		
-		if (debug)
-			console.log("Saliendo de CEscriptoriSeccioFitxes.buscarFicha");
+		
+		
+		$('#seleccion-fichas').fadeOut(300, function() {
 
+			$("#cerca_fitxes_nom").attr("disabled", "disabled");
+			$("#cerca_fitxes_codi").attr("disabled", "disabled");
+
+			$(this).html("<p class=\"executant\">" + txtCercantItems + "</p>");
+
+			$(this).fadeIn(300, function() {
+					$.ajax({
+						type: "POST",
+						url: pagSeccionsFitxes,
+						data: dataVars,
+						dataType: "json",
+						error: function() {
+
+							Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+							Error.llansar();
+
+						},
+						success: function(data) {
+
+							if (data.id == -1) {
+
+								Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
+
+							} else if (data.id < -1) {
+
+								Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
+
+							} else if (data.fitxes.length == 0) {
+
+								$("#seleccion-fichas").css("display", "block");
+								$("#seleccion-fichas").html("<p class='noItems'>" + txtNoHiHaFitxes + "</p>");	
+
+							} else {
+
+								EscriptoriSeccioFitxes.pintarListado(data);
+								$("#cerca_fitxes_nom").removeAttr("disabled");
+								$("#cerca_fitxes_codi").removeAttr("disabled");
+
+								$('#seleccion-fichas ul > li > div').each(function() {
+
+									var id = $(this).find("input[type=hidden]:first").val();
+
+									$(this).find("a.asigna").click(function() {
+										that.asignarFicha(id);
+									});
+
+								}); //End each
+
+							}
+
+						} //Fin success
+
+					}); //Fin ajax
+				
+			});
+
+		});
+		
+		if (debug) {
+			console.log("Saliendo de CEscriptoriSeccioFitxes.buscarFicha");
+		}
 	};
 
 	this.asignarFicha = function(id) {// TODO: Cuando se asigne una ficha y ya no exista el listado se debe volver a pintar el listado pasándole por parámetro la nueva ficha
