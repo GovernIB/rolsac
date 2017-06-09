@@ -8,7 +8,6 @@ $(document).ready(function() {
     resultats_actiu_elm = resultats_elm.find("div.actiu:first");
     escriptori_tramits_elm = $("#escriptori_tramits");  
     cercador_elm = $("#cercador");
-    eliminaCancelar = false;
     
     // datos traductor
     CAMPOS_TRADUCTOR_TRAMITE = [
@@ -117,7 +116,9 @@ function CModulTramit() {
                         
         EscriptoriTramit.limpia();
         
-        $("#tramit_item_data_publicacio").val("");
+        //#391
+        $("#tramit_item_data_publicacio").val($("#item_data_publicacio").val());
+        
         $("#tramit_item_data_caducitat").val("");
         $("#tramit_item_data_inici").val("");
         $("#tramit_item_data_tancament").val("");
@@ -273,6 +274,27 @@ function CEscriptoriTramit() {
     		return false;
     	}
         
+        //#391
+        //Controlamos que la fecha de publicación y la fecha de inicio sean posteriores a 
+        // la fecha del procedimiento
+        var fechaPublicacionProcedimiento = $("#item_data_publicacio").datetimepicker('getDate');
+        //Ponemos los segundos a 0 para evitar que se tengan en cuenta al comparar
+        fechaPublicacionProcedimiento.setSeconds(0);
+        
+        var fechaPublicacionTramite = $("#tramit_item_data_publicacio").datetimepicker('getDate'); 
+        var txtFechaPublicacionProcedimiento= (!fechaPublicacionProcedimiento)? "" : " (" + $("#item_data_publicacio").val() + ")";
+        //Si la fecha del procedimiento debe estar rellenada 
+		if (!fechaPublicacionProcedimiento || fechaPublicacionProcedimiento > fechaPublicacionTramite){
+			Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtDataPublicacioPosterior + txtFechaPublicacionProcedimiento, text: ""});
+    		return false;
+		}
+			
+		var fechaInicioTramite = $("#tramit_item_data_inici").datetimepicker('getDate');
+		if (fechaPublicacionProcedimiento > fechaInicioTramite){
+			Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtDataIniciPosterior + txtFechaPublicacionProcedimiento, text: ""});
+    		return false;
+		}
+		
         // Coger el id del procedimiento o de la ficha (depende del mantenimiento/jsp en el que estemos).
         var procId = $("#procId");
         if (procId.length > 0) {
@@ -328,9 +350,9 @@ function CEscriptoriTramit() {
                         
                         that.contaSeleccionats();
                     }
-                    //#4 no se muestra mensaje "Correcto"
-                    eliminaCancelar=true;
-                    that.editarTramit(null, data.id); 
+                    	
+                    //Actualizamos la información de la pantalla, sin necesidad de mostrarla.
+                    that.ActualizarTramit(null, data.id); 
                     
                     //#358 Cuando es modificación se quiere volver a la pantalla del procedimiento
                     if(edita){
@@ -563,14 +585,9 @@ function CEscriptoriTramit() {
                 Error.llansar();
             },
             success: function(data) {
-            	if(!eliminaCancelar){
-            		//#4 no se muestra mensaje "Correcto"
-            		//casuistica especifica al guardar (TODO: buscar soluci�n alternativa)
-            		Missatge.cancelar();            		
-            	}else{
-            		eliminaCancelar = false;
-            	}
-                
+            	
+            	Missatge.cancelar();            		
+
                 if (data.idTramit > 0) {
                     
                     escriptori_detall_elm.fadeOut(300, function() {
@@ -600,5 +617,44 @@ function CEscriptoriTramit() {
         });
         
     };
+    
+    
+    //Actualiza la información del trámite, sin forzar que se muestre
+    this.ActualizarTramit = function( el, id ) {
+
+        var tramitId = $(el).find("input.tramit_id").val();
+        if (tramitId == null) {
+        	tramitId = id;
+        }
+        
+        Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
+        
+        $.ajax({
+            type: "POST",
+            url: pagDetallTramit,
+            data: "id=" + tramitId,
+            dataType: "json",
+            error: function() {
+                // Missatge.cancelar();
+                Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+                Error.llansar();
+            },
+            success: function(data) {            	               
+                if (data.idTramit > 0) {                    
+                    EscriptoriTramit.pintar(data);                    
+                } else if (data.id == -1){
+                    Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
+                } else if (data.id < -1){
+                    Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
+                }
+                
+                that.modificado(false);
+            }
+        });
+        
+    };
+    
+    
+    
     
 };
