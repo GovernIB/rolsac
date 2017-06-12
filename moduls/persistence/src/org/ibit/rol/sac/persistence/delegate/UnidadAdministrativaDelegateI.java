@@ -264,4 +264,6 @@ public interface UnidadAdministrativaDelegateI {
 
 	public List<Long> obtenerHijosUnidadAdministrativa(Long idUA) throws DelegateException;
 
+	public String checkProcedimientosUA(Long id) throws DelegateException;
+
 }

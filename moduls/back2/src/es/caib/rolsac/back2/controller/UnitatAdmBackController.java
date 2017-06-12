@@ -888,7 +888,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 				if ( !esBorrable )
 					return new IdNomDTO(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()));
 
-				String errorElementosRelacionados = validarElementosRelacionados(unitatAdministrativa);
+				String errorElementosRelacionados = validarElementosRelacionados(unitatAdministrativa, unidadAdministrativaDelegate);
 
 				if ( "".equals(errorElementosRelacionados ) ) {
 
@@ -1279,7 +1279,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 
 	}
 
-	private String validarElementosRelacionados(UnidadAdministrativa ua) {
+	private String validarElementosRelacionados(UnidadAdministrativa ua, UnidadAdministrativaDelegate unidadDelegate) throws DelegateException {
 
 		boolean boolProcedIsEmpty =ua.getProcedimientos().isEmpty();    	
 		String ids = "";
@@ -1329,6 +1329,14 @@ public class UnitatAdmBackController extends PantallaBaseController {
 				return "unitatadm.esborrat.incorrecte.normatives"; 
 
 		}
+		
+		//#395 Falta comprobar si algún procedimiento a través de sus atributos que relacionan con UA tienen asociado esta UA.
+		final String checkProcedimientoUA = unidadDelegate.checkProcedimientosUA(ua.getId());
+		if (checkProcedimientoUA != null && !checkProcedimientoUA.isEmpty()) {
+			return checkProcedimientoUA;
+		}
+		
+		
 
 		//return errores;
 		return "";

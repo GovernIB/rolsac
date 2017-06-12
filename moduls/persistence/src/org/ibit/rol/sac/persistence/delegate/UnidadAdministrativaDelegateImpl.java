@@ -499,5 +499,13 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
             throw new DelegateException(e);
         }
 	}
+
+	public String checkProcedimientosUA(Long id) throws DelegateException {
+		try {
+            return getFacade().checkProcedimientosUA(id);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+	}
 	
 }

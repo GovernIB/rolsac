@@ -1319,7 +1319,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 */
 	public void borrarUnidadAdministrativa(Long id) {
 
-		Session session = getSession();
+		final Session session = getSession();
 
 		try {
 
@@ -1338,7 +1338,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				}
 
 			}
-
+			
 			Long idPadre = ua.getPadre().getId();  
 			session.update(ua);
 
@@ -1377,6 +1377,51 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 	}
 
+	/**
+	 * Comprueba si se puede borrar la UA viendo si está asociado a algún procedimiento.
+	 * 
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission  unchecked="true"
+	 * 
+	 * @param id	Identificador de la unidad administrativa.
+	 * 
+	 * @return Devuelve el mensaje de error asociado si está asociado a algún procedimiento, sino devuelve nulo.
+	 */
+	public String checkProcedimientosUA(Long id) {
+		final Session session = getSession();
+		String mensajeError = null;
+		try{
+			
+			final Long cuantosProcUA = Long.valueOf(session.createQuery("select count(*) from ProcedimientoLocal procedimiento WHERE procedimiento.unidadAdministrativa.id = "+id).uniqueResult().toString());
+			if (cuantosProcUA > 0) {
+				mensajeError  = "unitatadm.esborrat.incorrecte.procediments";
+			}
+			
+			if (mensajeError == null) {
+				final Long cuantosProcResol = Long.valueOf(session.createQuery("select count(*) from ProcedimientoLocal procedimiento WHERE procedimiento.organResolutori.id = "+id).uniqueResult().toString());
+				if (cuantosProcResol > 0) {
+					mensajeError  = "unitatadm.esborrat.incorrecte.procediments.organ";
+				}
+			}
+			
+			if (mensajeError == null) {
+				final Long cuantosProcResp = Long.valueOf(session.createQuery("select count(*) from ProcedimientoLocal procedimiento WHERE procedimiento.servicioResponsable.id = "+id).uniqueResult().toString());
+				if (cuantosProcResp > 0) {
+					mensajeError  = "unitatadm.esborrat.incorrecte.procediments.servei";
+				}
+			}
+		} catch (Exception he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+
+		}
+		return mensajeError;
+	}
 
 	/**
 	 * Carga los identificadores de una unidad y de sus hijos de manera recursiva.
