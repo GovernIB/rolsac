@@ -41,8 +41,8 @@ public class SiaWS {
 		SiaResultado siaResultado = new SiaResultado();
 		siaResultado.setOperacion(sia.getOperacion());
 		if (SiaUtils.isActivoEnvio()) {
-			String usuario = SiaUtils.getUsuarioEnvio();
-			String password = SiaUtils.getPasswordEnvio();
+			String usuario = sia.getUsuario();
+			String password = sia.getPassword();
 			WsSIAActualizarActuaciones_PortType client = SiaClient.createClient(SiaUtils.getUrlEnvio());
 			
 			ParamSIAACTUACIONESACTUACION[] actuaciones;

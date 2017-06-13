@@ -161,8 +161,17 @@
 							<li>
 								<a href="<c:url value="/index/index.do"/>"><spring:message code="menu.reiniciar_index" /></a>
 							</li>
+							
+						</ul>
+					</li>
+					<li>
+						<span class="titol"><spring:message code="menu.sia" /></span>
+						<ul>
 							<li>
-								<a href="<c:url value="/index/sia.do"/>"><spring:message code="menu.sia" /></a>
+								<a href="<c:url value="/sia/sia.do"/>"><spring:message code="menu.siaindex" /></a>
+							</li>
+							<li>
+								<a href="<c:url value="/sia/siaua.do"/>"><spring:message code="menu.siaua" /></a>
 							</li>
 						</ul>
 					</li>

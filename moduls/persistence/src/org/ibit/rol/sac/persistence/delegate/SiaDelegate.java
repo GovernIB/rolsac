@@ -1,6 +1,10 @@
 package org.ibit.rol.sac.persistence.delegate;
 
+import java.util.List;
+
 import org.ibit.rol.sac.model.SiaJob;
+import org.ibit.rol.sac.model.SiaUA;
+
 
 
 public class SiaDelegate implements StatelessDelegate {
@@ -36,4 +40,6 @@ public class SiaDelegate implements StatelessDelegate {
 	public void revisarProcedimientosPorTiempo(SiaJob siaJob) throws DelegateException {
         impl.revisarProcedimientosPorTiempo(siaJob);
     }
+
+	
 }

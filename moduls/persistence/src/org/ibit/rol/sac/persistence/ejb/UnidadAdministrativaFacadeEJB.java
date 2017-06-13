@@ -21,17 +21,17 @@ import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
 
-import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.axis.utils.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.ibit.rol.sac.model.AdministracionRemota;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Auditoria;
-import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaResumen;
 import org.ibit.rol.sac.model.FichaResumenUA;
 import org.ibit.rol.sac.model.FichaUA;
+import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
@@ -46,7 +46,6 @@ import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.model.criteria.PaginacionCriteria;
 import org.ibit.rol.sac.model.dto.FichaDTO;
-import org.ibit.rol.sac.model.ws.TraduccionEdificioTransferible;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.EdificioDelegate;
@@ -83,7 +82,6 @@ import es.caib.solr.api.model.types.EnumIdiomas;
  *
  * @ejb.transaction type="Required"
  */
-@SuppressWarnings("deprecation")
 public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB implements UnidadAdministrativaDelegateI {
 
 	private static final long serialVersionUID = 6954366130820517158L;
@@ -135,7 +133,15 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			Actualizador.actualizar(unidad);
 
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_UNIDAD_ADMINISTRATIVA, unidad.getId(), false);
-			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_UNIDAD_ADMINISTRATIVA, unidad.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null);
+			//SIA
+			final List<Long> listIdProcedimientos = DelegateUtil.getProcedimientoDelegate().listarProcedimientosOrganoResolutori(unidad.getId());
+			for (Long idProcedimiento : listIdProcedimientos) {
+				try {
+					SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, idProcedimiento, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, null);
+				} catch (Exception ex) {
+					log.error("Error mirando si es indexable SIA. UA:"+unidad.getId()+" proc:"+idProcedimiento, ex);
+				}
+			}
 			
 			return unidad.getId();
 
@@ -186,8 +192,16 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 			//SOLR Indexar unidad administrativa
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_UNIDAD_ADMINISTRATIVA, unidad.getId(), false);
-			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_UNIDAD_ADMINISTRATIVA, unidad.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null);
-			
+			//SIA
+			final List<Long> listIdProcedimientos = DelegateUtil.getProcedimientoDelegate().listarProcedimientosOrganoResolutori(unidad.getId());
+			for (Long idProcedimiento : listIdProcedimientos) {
+				try {
+					SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, idProcedimiento, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, null);
+					
+				} catch (Exception ex) {
+					log.error("Error mirando si es indexable SIA. UA:"+unidad.getId()+" proc:"+idProcedimiento, ex);
+				}
+			}
 			return unidad.getId();
 
 		} catch (HibernateException he) {
@@ -273,8 +287,16 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_UNIDAD_ADMINISTRATIVA, unidad.getId(), false);
 			marcarIndexacionPendienteElementosRelacionadosUA(unidad.getId());
-			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_UNIDAD_ADMINISTRATIVA, unidad.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null);
-			
+			//SIA
+			final List<Long> listIdProcedimientos = DelegateUtil.getProcedimientoDelegate().listarProcedimientosOrganoResolutori(unidad.getId());
+			for (Long idProcedimiento : listIdProcedimientos) {
+				try {
+					SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, idProcedimiento, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, null);
+					
+				} catch (Exception ex) {
+					log.error("Error mirando si es indexable SIA. UA:"+unidad.getId()+" proc:"+idProcedimiento, ex);
+				}
+			}
 		} catch (Exception he) {
 
 			throw new EJBException(he);
@@ -318,8 +340,15 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			}
 			
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_UNIDAD_ADMINISTRATIVA, unidad.getId(), false);
-			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_UNIDAD_ADMINISTRATIVA, unidad.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null);
-			
+			//SIA
+			final List<Long> listIdProcedimientos = DelegateUtil.getProcedimientoDelegate().listarProcedimientosOrganoResolutori(unidad.getId());
+			for (Long idProcedimiento : listIdProcedimientos) {
+				try {
+					SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, idProcedimiento, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, null);
+				} catch (Exception ex) {
+					log.error("Error mirando si es indexable SIA. UA:"+unidad.getId()+" proc:"+idProcedimiento, ex);
+				}
+			}
 		} catch (DelegateException e) {
 			
 			throw new EJBException(e);
@@ -2787,7 +2816,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	         query.setCacheable(true);
 	         final List<Long> idProcedimientos =  castList(Long.class, query.list());
 	         for(Long idProcedimiento : idProcedimientos) {
-	             SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, idProcedimiento, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null);
+	             SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, idProcedimiento, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, null);
 	         }
          } catch (Exception he) {
              throw new EJBException(he);

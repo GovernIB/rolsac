@@ -1,16 +1,16 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<link href='<c:url value="/css/tm_index.css"/>' rel="stylesheet" type="text/css" media="screen" />
+<link href='<c:url value="/css/tm_sia.css"/>' rel="stylesheet" type="text/css" media="screen" />
 
 <script type="text/javascript" src="<c:url value='/js/tm_sia.js'/>"></script>
 <script type="text/javascript">
-    var pagLlistat = '<c:url value="/index/llistatSIA.do" />';
-    var pagLlistatJob = '<c:url value="/index/llistatSIAJob.do" />';
-    var pagEnviarTodo = '<c:url value="/index/enviarTodo.do" />';
-    var pagEnviarPendientes = '<c:url value="/index/enviarPendientes.do" />';
-	var pagCerrarJobs =  '<c:url value="/index/cerrarJobsSIA.do" />';
-	var pagSiaTiempo =  '<c:url value="/index/procTiempoSIA.do" />';
+    var pagLlistat = '<c:url value="/sia/llistatSIA.do" />';
+    var pagLlistatJob = '<c:url value="/sia/llistatSIAJob.do" />';
+    var pagEnviarTodo = '<c:url value="/sia/enviarTodo.do" />';
+    var pagEnviarPendientes = '<c:url value="/sia/enviarPendientes.do" />';
+	var pagCerrarJobs =  '<c:url value="/sia/cerrarJobsSIA.do" />';
+	var pagSiaTiempo =  '<c:url value="/sia/procTiempoSIA.do" />';
     
     //texts
     var txt_per = "<spring:message code='txt.per'/>";
@@ -55,6 +55,16 @@
     var txtEstadoEnviado="<spring:message code='sia.estado.enviado' />";
     var txtEstadoEnvError="<spring:message code='sia.estado.enviado_errores' />";
     var txtEstadoError="<spring:message code='sia.estado.error' />";
+	var txtTrobats = "<spring:message code='txt.trobats'/>";
+    var txtTrobades = "<spring:message code='txt.trobades'/>";
+    var txtMostrem = "<spring:message code='txt.mostrem'/>";
+    var txtDel = "<spring:message code='txt.del'/>";
+    var txtAla = "<spring:message code='txt.a_la'/>";
+    var txtOrdenats = "<spring:message code='txt.ordenats'/>";
+    var txtAscendentment = "<spring:message code='txt.ascendentment'/>";
+    var txtDescendentment = "<spring:message code='txt.descendentment'/>";
+    var txtPer = "<spring:message code='txt.per'/>";
+    
 	
     //taula    
     var txtNou = "<spring:message code='txt.afegir_nova'/> "; + txtLlistaItem.toLowerCase();
@@ -78,6 +88,7 @@
     //Botones
     var txtCerrantJobs="<spring:message code='index.missatge.cerrando_jobs'/>" ;
     var txtTiempoJobs="<spring:message code='index.missatge.tiempo_sia_jobs'/>" ;
+	var txtPendientesMensaje="<spring:message code='index.missatge.tiempo_sia_pendientes' />" ;
     var txtBotonContinuar = "<spring:message code='boto.continuar'/>";
     var txtBotonInfo = "<spring:message code='boto.info'/>";
     
@@ -98,54 +109,89 @@
     var txtNombreNoSoloNumeros = "<spring:message code='personal.formulari.nom.no_nomes_numeros'/>";
     
 </script>
+<script type="text/javascript" src="<c:url value='/js/detall_base_n.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/listado_base_n.js'/>"></script>
+<script type="text/javascript"> 
+	var listaJob, listaPendiente, listaNoCompletos;
+</script>
 
 <div id="escriptori_contingut"> 
     <ul id="opcions">
-         <li class="opcio L actiu sinicon">
-            <a id="tabListado" href="javascript:void(0)"><spring:message code='sia.principal'/></a>
+         <li id="tabListadoJobs" class="opcio L actiu" >
+            <a href="javascript:void(0)"><spring:message code='menu.sia.tabTodo'/></a>
         </li>
-        <li class="opcio C sinicon">
-            <a id="tabBuscador" href="javascript:;"><spring:message code='sia.envio_pendiente'/></a>
+        <li id="tabListadoPendientes" class="opcio L sinicon">
+            <a href="javascript:;"><spring:message code='menu.sia.tabPdt'/></a>
         </li>     
-        
+         <li id="tabListadoIncompleto"  class="opcio D sinicon">
+            <a href="javascript:;"><spring:message code='menu.sia.tabAdv'/></a>
+        </li>  
     </ul>
     <div id="resultats">
-        <div class="resultats L actiu">   
-          <div class="tabBlanco">            
+          <div id="divListadoJob" style="margin-top:40px" class="actiu">        
           	<div class="dadesJob">
                 <p class="executant"><spring:message code='index.carregant_llistat_index'/></p>
             </div>
           	<br /><br /><br />     
-            <span class="missatge"><spring:message code='sia.volver_enviar'/></span>
-            <span class="btnGenerico">
-                 <a href="javascript:;" class="btn unitatOrganica" id = "btnContinuar"><span><span><spring:message code='boto.continuar'/></span></span></a>
-            </span> 
-            <br /><br /><br />     
-            <!-- <span class="missatge"><spring:message code='sia.enviar_tiempo'/></span>
-            <span class="btnGenerico">
-                 <a href="javascript:;" class="btn unitatOrganica" id = "btnIndexarTiempo"><span><span><spring:message code='boto.continuar'/></span></span></a>
-            </span> 
-            <br />
-            -->
-            <span class="missatge"><spring:message code='sia.cerrar_job'/></span>
-            <span class="btnGenerico">
-                 <a href="javascript:;" class="btn unitatOrganica" id = "btnCerrarJobs"><span><span><spring:message code='boto.continuar'/></span></span></a>
-            </span>
+			<div id="botoneraListadoJob" style="margin-left:250px">
+				<span class="missatge" style="margin-left: 20px;"><spring:message code='sia.volver_enviar'/></span>
+				<span class="btnGenerico">
+					<a href="javascript:;" class="btn unitatOrganica" id = "btnContinuar"><span><span><spring:message code='boto.continuar'/></span></span></a>
+				</span> 
+				<br /><br /><br />     
+            	<span class="missatge" style="margin-left: 20px;"><spring:message code='sia.cerrar_job'/></span>
+				<span class="btnGenerico">
+					<a href="javascript:;" class="btn unitatOrganica" id = "btnCerrarJobs"><span><span><spring:message code='boto.continuar'/></span></span></a>
+				</span>
+			</div>
             <br />
            
-            
+            <form id="formJobs" style="display:none">
+				<input id="pagPag"     		type="hidden" value="0" /> 
+				<input id="pagRes"     		type="hidden" value="10" />
+				<input id="ordreTipus" 		type="hidden" value="DESC" /> 
+				<input id="ordreCamp"  		type="hidden" value="id"  />	
+				<input id="ordreCampNombre" type="hidden" value="id"  />
+				<input id="tipo"			type="hidden" value="TOT" />	
+			</form>
           </div>            
-        </div>
-        
-        <div class="resultats C">
-                                            
-            <div class="dades">
+       
+        <div id="divListadoPendientes" style="display:none">    
+                 
+            <div class="dadesPendientes" >
                 <p class="executant"><spring:message code='index.carregant_llistat_index'/></p>
             </div>
-            <input type="hidden" value="0" class="pagPagina" /> 
-            <input type="hidden" value="DESC" class="ordreTipus" /> 
-            <input type="hidden" value="id" class="ordreCamp" />				                               
-                                        
+			<form id="formPendientes" style="display:none">
+				<input id="pagPag"     		type="hidden" value="0" /> 
+				<input id="pagRes"     		type="hidden" value="10" />
+				<input id="ordreTipus" 		type="hidden" value="DESC" /> 
+				<input id="ordreCamp"  		type="hidden" value="id"  />	
+				<input id="ordreCampNombre" type="hidden" value="id"  />
+				<input id="estado"			type="hidden" value="0"   />			                               
+             </form>     
+	
+			<div style="margin-top:40px; margin-left:50px;">
+			<span class="missatge" style="margin-left: 20px;"><spring:message code='sia.envio_pendiente'/></span>
+				<span class="btnGenerico">
+					<a href="javascript:;" class="btn unitatOrganica" id = "btnEnviarPendientes"><span><span><spring:message code='sia.boton.envio_pendiente'/></span></span></a>
+				</span> 
+				
+			 </div>                       			 
+        </div>
+		
+		 <div id="divListadoIncompletas"  style="display:none">
+            	
+            <div class="dadesNoCompletas">
+                <p class="executant"><spring:message code='index.carregant_llistat_index'/></p>
+            </div>
+            <form id="formNoCompletos" style="display:none">
+				<input id="pagPag"     		type="hidden" value="0" /> 
+				<input id="pagRes"     		type="hidden" value="10" />
+				<input id="ordreTipus" 		type="hidden" value="DESC" /> 
+				<input id="ordreCamp"  		type="hidden" value="id"  />	
+				<input id="ordreCampNombre" type="hidden" value="id"  />
+				<input id="estado"			type="hidden" value="-2"   />			                               
+             </form>                                           
         </div>
     </div>
 </div>
@@ -157,6 +203,4 @@
            <textarea id="item_texto" name="item_texto" cols="70" rows="15" class="nou"></textarea>     
         </div>
     </div>
-</div>
-</form>
 </div>

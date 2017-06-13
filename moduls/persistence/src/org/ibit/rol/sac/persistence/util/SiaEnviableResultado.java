@@ -1,9 +1,16 @@
 package org.ibit.rol.sac.persistence.util;
 
+import org.ibit.rol.sac.model.SiaUA;
+
 
 /**
  * Clase que indica si un procedimiento es enviable a SIA y en caso de no, envía el texto
  *   con la respuesta incorrecta.
+ * Se incluye también:
+ * <ul>
+ * 	<li>Id centro (código DIR3) a partir del órgano resolutorio y sus descendientes.</li>
+ *  <li>Sia UA (Multientidad).</li>
+ * </ul>
  * @author slromero
  *
  */
@@ -16,6 +23,8 @@ public class SiaEnviableResultado {
 	private String operacion;
 	/** Id centro. **/
 	private String idCentro;
+	/** Sia UA. **/
+	private SiaUA siaUA;
 	
 	/** Constructor. **/
 	public SiaEnviableResultado(boolean iEnviable, String iRespuesta) {
@@ -85,5 +94,20 @@ public class SiaEnviableResultado {
 	public void setIdCentro(String idCentro) {
 		this.idCentro = idCentro;
 	}
+
+	/**
+	 * @return the siaUA
+	 */
+	public SiaUA getSiaUA() {
+		return siaUA;
+	}
+
+	/**
+	 * @param siaUA the siaUA to set
+	 */
+	public void setSiaUA(SiaUA siaUA) {
+		this.siaUA = siaUA;
+	}
+
 	
 }

@@ -10,12 +10,16 @@ import javax.naming.NamingException;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.SiaJob;
 import org.ibit.rol.sac.model.SiaPendiente;
+import org.ibit.rol.sac.model.SiaUA;
 import org.ibit.rol.sac.model.SolrPendienteJob;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.ws.SiaResultado;
 import org.ibit.rol.sac.persistence.util.FiltroSia;
 import org.ibit.rol.sac.persistence.intf.SiaPendienteProcesoFacade;
 import org.ibit.rol.sac.persistence.intf.SiaPendienteProcesoFacadeHome;
 import org.ibit.rol.sac.persistence.util.SiaPendienteProcesoFacadeUtil;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * Business delegate pera consultar idiomas.
@@ -69,7 +73,7 @@ public class SiaPendienteProcesoDelegateImpl extends SiaPendienteProcesoDelegate
 	}
 
 	@Override
-	public List<SiaPendiente> getSiaPendientes(FiltroSia filtro) throws DelegateException{
+	public ResultadoBusqueda getSiaPendientes(FiltroSia filtro) throws DelegateException{
 		 try {
 				return getFacade().getSiaPendientes(filtro);
 	       } catch (RemoteException e) {
@@ -78,7 +82,7 @@ public class SiaPendienteProcesoDelegateImpl extends SiaPendienteProcesoDelegate
 	}
 
 	@Override
-	public List<SiaJob> getSiaProceso(FiltroSia filtro) throws DelegateException{
+	public ResultadoBusqueda getSiaProceso(FiltroSia filtro) throws DelegateException{
 		 try {
 				return getFacade().getSiaProceso(filtro);
 	       } catch (RemoteException e) {
@@ -87,9 +91,9 @@ public class SiaPendienteProcesoDelegateImpl extends SiaPendienteProcesoDelegate
 	}
 
 	@Override
-	public SiaPendiente generarSiaPendiente(SiaPendiente siaPendiente) throws DelegateException{
+	public SiaPendiente generarSiaPendiente(SiaPendiente siaPendiente, ProcedimientoLocal procedimiento) throws DelegateException{
 		 try {
-				return getFacade().generarSiaPendiente(siaPendiente);
+				return getFacade().generarSiaPendiente(siaPendiente, procedimiento);
 	       } catch (RemoteException e) {
 	           throw new DelegateException(e);
 	       }
@@ -171,4 +175,50 @@ public class SiaPendienteProcesoDelegateImpl extends SiaPendienteProcesoDelegate
 	
 	
 	
+	@Override
+	public ResultadoBusqueda getSiaUAs(int pagina, int cuantos, final String orden, final String ordenAsc)  throws DelegateException{
+	   try {
+		   return getFacade().getSiaUAs(pagina, cuantos, orden, ordenAsc);
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
+	}		
+	
+	
+	
+	@Override 
+	public void grabarSiaUA(final SiaUA siaUA) throws DelegateException {
+	   try {
+		   getFacade().grabarSiaUA(siaUA);
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
+	}	
+	
+	@Override 
+	public SiaUA obtenerSiaUA(Long id)  throws DelegateException {
+	   try {
+		   return getFacade().obtenerSiaUA(id);
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
+	}
+	
+	@Override 
+	public SiaUA obtenerSiaUA(UnidadAdministrativa ua)  throws DelegateException {
+	   try {
+		   return getFacade().obtenerSiaUA(ua);
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
+	}
+	
+	@Override 
+	public void borrarSiaUA(Long id) throws DelegateException {
+		   try {
+			   getFacade().borrarSiaUA(id);
+	       } catch (RemoteException e) {
+	           throw new DelegateException(e);
+	       }
+		}
 }

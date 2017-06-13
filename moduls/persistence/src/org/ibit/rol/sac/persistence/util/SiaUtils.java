@@ -13,6 +13,7 @@ import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.SiaPendiente;
+import org.ibit.rol.sac.model.SiaUA;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -33,10 +34,11 @@ public class SiaUtils {
 	public static final Integer SIAPENDIENTE_ESTADO_CREADO     = 0;
 	public static final Integer SIAPENDIENTE_ESTADO_CORRECTO   = 1;
 	public static final Integer SIAPENDIENTE_ESTADO_INCORRECTO = -1;
+	public static final Integer SIAPENDIENTE_ESTADO_NO_CUMPLE_DATOS = -2;
 	
 	public static final String SIAPENDIENTE_TIPO_PROCEDIMIENTO = "PROC";
-	public static final String SIAPENDIENTE_TIPO_UNIDAD_ADMINISTRATIVA = "UA";
-	public static final String SIAPENDIENTE_TIPO_NORMATIVA = "NORM";
+	//Se quitan por los nuevos cambios: public static final String SIAPENDIENTE_TIPO_UNIDAD_ADMINISTRATIVA = "UA";
+	//Se quitan por los nuevos cambios: public static final String SIAPENDIENTE_TIPO_NORMATIVA = "NORM";
 	
 	public static final String ESTADO_BAJA = "B";
 	public static final String ESTADO_ALTA = "A";
@@ -133,21 +135,6 @@ public class SiaUtils {
 		return System.getProperty("es.caib.rolsac.sia.departamento").trim();
 	}
 	
-	/**
-	 * Get usuario envio SIA.
-	 * @return
-	 */
-	public static String getUsuarioEnvio() {
-        return System.getProperty("es.caib.rolsac.sia.usuario.envio").trim();
-    }
-	
-	/**
-	 * Get password envio SIA.
-	 * @return
-	 */
-	public static String getPasswordEnvio() {
-        return System.getProperty("es.caib.rolsac.sia.pass.envio").trim();
-    }
 	
 	/**
 	 * Get url envio SIA.
@@ -198,7 +185,7 @@ public class SiaUtils {
 	 * @param idElemento
 	 * @param existe
 	 */
-	public static void marcarIndexacionPendiente(final String tipo, final Long idElemento, final Integer existe, final String idSia) throws DelegateException {
+	public static void marcarIndexacionPendiente(final String tipo, final Long idElemento, final Integer existe, final String idSia, final ProcedimientoLocal procedimiento) throws DelegateException {
 		SiaPendienteProcesoDelegate siaPendienteProcesoDeletegate = DelegateUtil.getSiaPendienteProcesoDelegate();
 		SiaPendiente siaPendiente = new SiaPendiente();
 		siaPendiente.setEstado(SIAPENDIENTE_ESTADO_CREADO);
@@ -209,7 +196,7 @@ public class SiaUtils {
 		if (idSia != null && !idSia.isEmpty()) {
 			siaPendiente.setIdSia(Long.valueOf(idSia));
 		}
-		siaPendienteProcesoDeletegate.generarSiaPendiente(siaPendiente);
+		siaPendienteProcesoDeletegate.generarSiaPendiente(siaPendiente, procedimiento);
 	}
 
 	/**
@@ -236,149 +223,172 @@ public class SiaUtils {
     }
 
 
-	/***
-	 * Comprueba si un procedimiento hay que enviarlo. Hay que tener en cuenta lo siguiente: 
-	 * <p>
-	 *   Los estados de un procedimiento son:
-	 *   <ul>
-	 *   	<li>Estado 1. Nunca se ha enviado (Procedimiento.estadoSIA == null).</li>
-	 *   	<li>Estado 2. Alta en SIA  (Procedimiento.estadoSIA == 'A').</li>
-	 *      <li>Estado 3. Baja en SIA   (Procedimiento.estadoSIA == 'B').</li>
-	 *   </ul>
-	 *   A partir de ahí, se valida la nueva información y puede pasar dos cosas:
-	 *   <ul>
-	 *   	<li>Debería estar en SIA. Activo en SIA. </li>
-	 *      <li>Debería estar en SIA. Desactivado en SIA. </li>
-	 *   </ul>
-	 *   En total se producen 6 combinaciones.
-	 *   <ul>
-	 *   	<li>Estado 1 y Activo en  (Notificar Alta). </li>
-	 *      <li>Estado 1 y Desactivado en SIA (NO HACER NADA). </li>
-	 *   	<li>Estado 2 y Activo en SIA (Notificar Modificación). </li>
-	 *      <li>Estado 2 y Desactivado en SIA (Notificar baja). </li>
-	 *   	<li>Estado 3 y Activo en SIA (Notificar Reactivación). </li>
-	 *      <li>Estado 3 y envío baja (NO HACER NADA). </li>
-	 *   </ul>
-	 *   Hay 2 combinaciones que no se debería hacer nada y que devolverán falsa, en el resto true.
-	 *   
-	 * </p>
-	 * @param procedimiento
-	 * @return
-	 */
-	public static SiaEnviableResultado isEnviableSia(ProcedimientoLocal procedimiento) {
-		
-		SiaEnviableResultado resultado = SiaUtils.validaProcedimientoSIA(procedimiento);
-		
-		
-		if (resultado.isNotificiarSIA()) { //Si se notifica a SIA, se debe enviar un ALTA, MODIFICACION o REACTIVACIÓN.
-			
-			if (procedimiento.getCodigoSIA() == null || procedimiento.getCodigoSIA().isEmpty()) { //Si no tiene codigo SIA, ES UN ALTA!!!
-				resultado.setOperacion(SiaUtils.ESTADO_ALTA);
-			} else if (procedimiento.getEstadoSIA() != null && procedimiento.getEstadoSIA().equals(SiaUtils.ESTADO_BAJA)) {
-				resultado.setOperacion(SiaUtils.ESTADO_REACTIVACION);  //Si tiene codigo SIA y está de BAJA, entonces es una reactivación
-			} else {
-				resultado.setOperacion(SiaUtils.ESTADO_MODIFICACION);  //Como ultima acción, modificación.
-			}
-			
-		} else { //No tendría que estar activo en SIA.
-					//Sólo se envia info a SIA cuando hay que dar de baja un procedimiento.
-		
-			if ( procedimiento.getEstadoSIA() != null &&  !SiaUtils.ESTADO_BAJA.equals(procedimiento.getEstadoSIA()) ) {
-				//Si está dando 
-				resultado.setNotificarSIA(true);
-				resultado.setOperacion(SiaUtils.ESTADO_BAJA);
-			}
-		}
-		
-		return resultado;
-	}
-
 	/**
-	 * Valida si un procedimiento es para enviar o no a SIA.
-	 * Condiciones:
-	 *  - Tiene organo resolutori
-	 *  - Tiene materias.
-	 *  - Tiene normativas
-	 *  - Procedimiento visible
-	 *  - El organo resolutori o alguno de los predecesores tiene código DIR3.
+	 * Comprueba si un procedimiento es enviable a SIA.
+	 * Checks:
+	 * 	- Es visible.
+	 *  - Es visible UA.
+	 *  - Tiene codigo DIR3.
+	 *  - Está en SiaUA.
+	 * 
 	 * @param procedimiento
 	 * @return
 	 */
-	private static SiaEnviableResultado validaProcedimientoSIA(final ProcedimientoLocal procedimiento) {
-		
+	public static SiaEnviableResultado isEnviable (final ProcedimientoLocal procedimiento) {
 		final SiaEnviableResultado resultado = new SiaEnviableResultado(false);
+		final StringBuffer mensajeError = new StringBuffer();
+
+		//Si el procedimiento que se pasa es nulo, tiene que salir.
 		if (procedimiento == null) {
 			resultado.setRespuesta("El procedimiento está nulo.");	
 			resultado.setIdCentro("");
+			resultado.setNotificarSIA(false);
 	    	return resultado;
 		}
 		
-		final String codigoIdCentro = obtenerCodigoIdCentro(procedimiento);
-		resultado.setIdCentro(codigoIdCentro);
+		//Es visible.
+		final boolean esVisible = procedimiento.isVisible();
+		if (!esVisible) {
+			mensajeError.append("El procedimiento no es visible.");
+		}
 		
-	    boolean servicio = procedimiento.getOrganResolutori() != null ;
-	    if (!servicio) {
-	    	resultado.setRespuesta("no tiene organo resolutori");	
-	    	return resultado;
+		//Es visible UA.
+	    boolean isVisibleUA = isVisibleUA(procedimiento);
+	    if (!isVisibleUA) {
+	    	mensajeError.append("La UA del organo resolutori o de algunos de sus predecesores es no visible.");	
+	    }
+		
+		//Tiene código centro.
+		boolean tieneCodigoCentro;
+		final String codigoIdCentro = obtenerCodigoIdCentro(procedimiento);
+		if (codigoIdCentro == null) {
+			tieneCodigoCentro = false;
+			mensajeError.append("No tiene código DIR ni el organo resolutori ni predecesores.");
+	    } else {
+	    	tieneCodigoCentro = true;	
+	    	resultado.setIdCentro(codigoIdCentro);
+	    }
+		
+		//Tiene SiaUA.
+		boolean tieneSiaUA;
+		final SiaUA siaUA = obtenerSiaUA(procedimiento);
+	    if (siaUA == null) {
+			tieneSiaUA = false;	
+			mensajeError.append("No tiene una asociada una UA multientidad.");
+	    } else {
+	    	tieneSiaUA = true;
+	    	resultado.setSiaUA(siaUA);
+	    }
+		
+	    //Comprobamos
+	    //Si cumple los 4 checks.
+	    //    Si nunca ha estado en SIA --> es enviable a SIA como Alta (A)
+	    //    Si esta de baja           --> es enviable a SIA como Reactivación (R)
+	    //    Si no..................   --> es enviable a SIA como modificación (M)
+	    //Si no cumple alguno de los 4 checks.
+	    //    Si está de baja o nunca ha estado en SIA ---> NO es enviable
+	    //    Si no .....								--> es enviable a SIA como baja.
+	    if (esVisible && tieneCodigoCentro && tieneSiaUA && isVisibleUA) {
+	    	resultado.setNotificarSIA(true);
+		    if (procedimiento.getEstadoSIA() == null) {
+		    	resultado.setOperacion(SiaUtils.ESTADO_ALTA);
+		    } else {
+		    	if (SiaUtils.ESTADO_BAJA.equals(procedimiento.getEstadoSIA())) {
+		    		resultado.setOperacion(SiaUtils.ESTADO_REACTIVACION);
+		    	} else {
+		    		resultado.setOperacion(SiaUtils.ESTADO_MODIFICACION);
+		    	}
+		    }
+	    } else {
+	    	if (procedimiento.getEstadoSIA() == null || SiaUtils.ESTADO_BAJA.equals(procedimiento.getEstadoSIA())) {
+	    		resultado.setNotificarSIA(false);
+	    		resultado.setRespuesta(mensajeError.toString());
+	    	} else {
+	    		resultado.setNotificarSIA(true);
+	    	    resultado.setOperacion(SiaUtils.ESTADO_BAJA);
+	    	}
 	    }
 	    
+		return resultado;
+	}
+	
+	/**
+	 * Comprueba si le falta algún dato. 
+	 * Condiciones:
+	 *  - Tiene materias.
+	 *  - Tiene normativas y uno de tipo SIA.
+	 *  - Tiene descripción.
+	 *  - Tiene resumen.
+	 *  
+	 * @param procedimiento
+	 * @return
+	 */
+	public static SiaCumpleDatos cumpleDatos(final ProcedimientoLocal procedimiento) {
+		final SiaCumpleDatos resultado = new SiaCumpleDatos(false);
+		final StringBuffer mensajeError = new StringBuffer();
+
+		if (procedimiento == null) {
+			resultado.setRespuesta("El procedimiento está nulo.");
+			resultado.setCumpleDatos(false);
+			return resultado;
+		}
+		
 	    boolean tieneMaterias=procedimiento.getMaterias().size() > 0;
 	    if (!tieneMaterias) {
-	    	resultado.setRespuesta("No tiene materias");	
-	    	return resultado;
+	    	mensajeError.append("No tiene materias.");	
 	    }
 	    
 	    boolean tieneNormativas=procedimiento.getNormativas().size() > 0;
 	    if (!tieneNormativas) {
-	    	resultado.setRespuesta("No tiene normativas");	
-	    	return resultado;
+	    	mensajeError.append("No tiene normativas.");	
 	    }
 	    
 	    boolean encontradoTipo = false;
-	    for (Normativa norm : procedimiento.getNormativas()) {
-	    	if (norm.getTipo() != null && norm.getTipo().getTipoSia() != null) {
-	    		encontradoTipo = true;
-	    	}
+	    if (procedimiento.getNormativas().size() > 0) {
+		    for (Normativa norm : procedimiento.getNormativas()) {
+		    	if (norm.getTipo() != null && norm.getTipo().getTipoSia() != null) {
+		    		encontradoTipo = true;
+		    	}
+		    }
 	    }
+	    
 	    if (!encontradoTipo) {
-	    	resultado.setRespuesta("Ninguna de las normativas tiene asociado un tipo sia");	
-	    	return resultado;
+	    	mensajeError.append("Ninguna de las normativas tiene asociado un tipo sia.");
 	    }
 	    
-	    if (!procedimiento.isVisible()) {
-	    	resultado.setRespuesta("Procedimiento no visible");	
-	    	return resultado;
-	    }
-	    
-	    boolean isVisibleUA = isVisibleUA(procedimiento);
-	    if (!isVisibleUA) {
-	    	resultado.setRespuesta("La UA del organo resolutori o de algunos de sus predecesores es no visible.");	
-	    	return resultado;
-	    }
-
-	    if (codigoIdCentro == null) {
-	    	resultado.setRespuesta("No tiene código DIR ni el organo resolutori ni predecesores.");	
-	    	return resultado;
-	    }
 	    
 	    final String nombre = getNombreProcedimiento(procedimiento);
+	    boolean tieneNombre;
 	    if (StringUtils.isBlank(nombre)) {
-	    	resultado.setRespuesta("El procedimiento no tiene titulo.");	
-	    	return resultado;
+	    	mensajeError.append("El procedimiento no tiene titulo.");	
+	    	tieneNombre = false;
+	    } else {
+	    	tieneNombre = true;
+	    	resultado.setNombre(nombre);
 	    }
 	    
 	    final String resumen = getResumenProcedimiento(procedimiento);
+	    boolean tieneResumen;
 	    if (StringUtils.isBlank(resumen)) {
-	    	resultado.setRespuesta("El procedimiento no tiene resumen.");	
-	    	return resultado;
+	    	mensajeError.append("El procedimiento no tiene resumen.");	
+	    	tieneResumen = false;
+	    } else {
+	    	tieneResumen = true;
+	    	resultado.setResumen(resumen);
 	    }
 	    
+	    /** Si cumple todos los datos ok, sino incrustamos el mensaje de error. **/
+	    if (tieneMaterias && tieneNormativas && encontradoTipo && tieneNombre && tieneResumen) {
+	    	resultado.setCumpleDatos(true);	    	
+	    } else {
+	    	resultado.setCumpleDatos(false);
+	    	resultado.setRespuesta(mensajeError.toString());
+	    }
 	    
-	    resultado.setNotificarSIA(true);
 	    return resultado;
-	    
 	}
-
+	
+	
 	/**
 	 * Compruebo si todas las UAs son visible.
 	 * @param procedimiento
@@ -434,6 +444,41 @@ public class SiaUtils {
 	    }
 
 		return codigoIdCentro;
+	}
+	
+	
+	/**
+	 * Devuelve el código DIR3 de la UA, si es nulo, es que ninguno lo tiene.
+	 * 
+	 * @param procedimiento
+	 * @return
+	 */
+	private static SiaUA obtenerSiaUA(ProcedimientoLocal procedimiento) {
+		
+		SiaUA siaUA = null;
+		try {
+			if (procedimiento == null || procedimiento.getOrganResolutori() == null) {
+				return null;
+			}
+			
+			SiaPendienteProcesoDelegate siaPendienteProceso = DelegateUtil.getSiaPendienteProcesoDelegate();
+			siaUA = siaPendienteProceso.obtenerSiaUA(procedimiento.getOrganResolutori()); 
+			
+			if (siaUA == null) {
+				//Recorremos sus predecesores
+		    	for(final Object oua : procedimiento.getOrganResolutori().getPredecesores()) {
+		    		final UnidadAdministrativa ua = (UnidadAdministrativa) oua;
+		    		siaUA = siaPendienteProceso.obtenerSiaUA(ua); 
+		    		if (siaUA != null) {
+		    			break;
+		    		}
+		    	}
+			}
+		} catch (Exception exception) {
+			log.error("Error obteniendo la siaUA", exception);
+		}
+		
+		return siaUA;
 	}
 	
 	/**

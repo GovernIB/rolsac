@@ -5,8 +5,12 @@ import java.util.List;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.SiaJob;
 import org.ibit.rol.sac.model.SiaPendiente;
+import org.ibit.rol.sac.model.SiaUA;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.ws.SiaResultado;
 import org.ibit.rol.sac.persistence.util.FiltroSia;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 
 public class SiaPendienteProcesoDelegate implements StatelessDelegate {
@@ -38,16 +42,16 @@ public class SiaPendienteProcesoDelegate implements StatelessDelegate {
         return impl.getSiaPendientesEnviar();
     }
     
-    public List<SiaPendiente> getSiaPendientes(final FiltroSia filtro) throws DelegateException {
+    public ResultadoBusqueda getSiaPendientes(final FiltroSia filtro) throws DelegateException {
         return impl.getSiaPendientes(filtro);
     }
     
-    public List<SiaJob> getSiaProceso(final FiltroSia filtro) throws DelegateException {
+    public ResultadoBusqueda getSiaProceso(final FiltroSia filtro) throws DelegateException {
         return impl.getSiaProceso(filtro);
     }
     
-    public SiaPendiente generarSiaPendiente(SiaPendiente siaPendiente) throws DelegateException {
-        return impl.generarSiaPendiente(siaPendiente);
+    public SiaPendiente generarSiaPendiente(SiaPendiente siaPendiente, ProcedimientoLocal procedimiento) throws DelegateException {
+        return impl.generarSiaPendiente(siaPendiente, procedimiento);
     }
     
     public SiaPendiente actualizarSiaPendiente(SiaPendiente siaPendiente) throws DelegateException {
@@ -81,6 +85,27 @@ public class SiaPendienteProcesoDelegate implements StatelessDelegate {
 	public void actualizarProcedimiento(ProcedimientoLocal proc, SiaResultado resultado) throws DelegateException{
 		impl.actualizarProcedimiento(proc, resultado);
 	} 
+
+	public ResultadoBusqueda getSiaUAs(final int pagina,final int cuantos, final String orden, final String ordenAsc) throws DelegateException {
+		return impl.getSiaUAs(pagina, cuantos, orden, ordenAsc);
+	}
+
+	public void grabarSiaUA(SiaUA siaUA)  throws DelegateException {
+		impl.grabarSiaUA(siaUA);
+	}
+
+	public SiaUA obtenerSiaUA(UnidadAdministrativa ua) throws DelegateException {
+		return impl.obtenerSiaUA(ua);
+	}
+	
+	public SiaUA obtenerSiaUA(final Long id)  throws DelegateException {
+		return impl.obtenerSiaUA(id);
+	}
+
+	public void borrarSiaUA(Long id) throws DelegateException {
+		impl.borrarSiaUA(id);
+	}
+
 	
 	
 }

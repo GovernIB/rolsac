@@ -33,6 +33,7 @@ import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.SiaPendienteProcesoDelegate;
 import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
+import org.ibit.rol.sac.persistence.util.SiaCumpleDatos;
 import org.ibit.rol.sac.persistence.util.SiaEnviableResultado;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.ibit.rol.sac.persistence.ws.sia.SiaWS;
@@ -98,17 +99,22 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	    		
 	    		//Obtenemos el procedimiento y vemos is es enviable a SIA.
 	    		ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimientoParaSolr(idProcedimiento);
-    			SiaEnviableResultado siaEnviableResultado = SiaUtils.isEnviableSia(procedimiento);
+    			SiaEnviableResultado siaEnviableResultado = SiaUtils.isEnviable(procedimiento);
 	    		
 	    		SiaResultado siaResultado = null;
 				if (siaEnviableResultado.isNotificiarSIA()) {
-		    		try {
-		    			// Enviamos a SIA
-		    			siaResultado = enviarProcedimiento(procedimiento);		    						    		
-					} catch (Exception e) {
-						log.error("Error enviando procedimiento " + procedimiento.getId(), e);
-						siaResultado = new SiaResultado(SiaResultado.RESULTADO_ERROR, ExceptionUtils.getStackTrace(e));												
-					}	    	
+					SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(procedimiento);
+					if (siaCumpleDatos.isCumpleDatos()) {
+			    		try {
+			    			// Enviamos a SIA
+			    			siaResultado = enviarProcedimiento(procedimiento);		    						    		
+						} catch (Exception e) {
+							log.error("Error enviando procedimiento " + procedimiento.getId(), e);
+							siaResultado = new SiaResultado(SiaResultado.RESULTADO_ERROR, ExceptionUtils.getStackTrace(e));												
+						}	   
+					} else {
+						siaResultado = new SiaResultado(SiaResultado.RESULTADO_NULO, siaCumpleDatos.getRespuesta());
+					}
 	    		} else {
 	    			siaResultado = new SiaResultado(SiaResultado.RESULTADO_NULO, siaEnviableResultado.getRespuesta());		
 	    		}
@@ -146,15 +152,23 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	    	
 	    	// Enviamos a SIA
 			resultado = SiaWS.enviarSIA(sia, false);
+			
+			// Actualizamos procedimiento
+	    	final SiaPendienteProcesoDelegate siaDelegate = DelegateUtil.getSiaPendienteProcesoDelegate();
+			siaDelegate.actualizarProcedimiento(proc, resultado);
+			
     	} catch (Exception ex) {
-    		log.error("Error enviando a SIA el procedimiento " + proc.getId() + ": " + ex.getMessage(), ex);
-    		throw new Exception("Error enviando a SIA el procedimiento " + proc.getId() + ": " + ex.getMessage(), ex);
+    		if (ex.getMessage() != null && ex.getMessage().contains("0167:")) {
+    			//El código 0167 es porque ya ha sido dado de baja.
+    			resultado = new SiaResultado();
+    			resultado.setResultado(SiaResultado.RESULTADO_OK);				
+    		} else { 
+    			log.error("Error enviando a SIA el procedimiento " + proc.getId() + ": " + ex.getMessage(), ex);
+	    		throw new Exception("Error enviando a SIA el procedimiento " + proc.getId() + ": " + ex.getMessage(), ex);
+    		}
     	}
 		
-    	// Actualizamos procedimiento
-    	final SiaPendienteProcesoDelegate siaDelegate = DelegateUtil.getSiaPendienteProcesoDelegate();
-		siaDelegate.actualizarProcedimiento(proc, resultado);
-		
+    	
 		return resultado;
 	}
 
@@ -388,13 +402,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	        		
 	        		try 
 	        		{
-	        			if (SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO.equals(siaPendiente.getTipo() )) {
-	        				resultadoPendiente = enviarPendienteTipoProcedimiento(estadoProceso, siaPendiente);	        				
-	        			} else if (SiaUtils.SIAPENDIENTE_TIPO_UNIDAD_ADMINISTRATIVA.equals(siaPendiente.getTipo() )) {
-	        				resultadoPendiente = enviarPendienteTipoUA(estadoProceso, siaPendiente);        						        			
-	        			} else if (SiaUtils.SIAPENDIENTE_TIPO_NORMATIVA.equals(siaPendiente.getTipo() )) {
-	        				resultadoPendiente = enviarPendienteTipoNormativa(estadoProceso, siaPendiente);	        				
-	        			} 
+	        			resultadoPendiente = enviarPendienteTipoProcedimiento(estadoProceso, siaPendiente);	        			 
 	        		} catch (Exception exception) {
 	        			log.error("Error no controlado para elemento pendiente " + siaPendiente.getId(), exception);
 	        			// Indicamos resultado elemento
@@ -431,124 +439,15 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
       	}
 	}
 
-
-	private ResultadoSiaPendiente enviarPendienteTipoNormativa(
-			EstadoProcesoSIA estadoProceso, SiaPendiente siaPendiente)
-			throws Exception {
-		
-		final ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
-		
-		ResultadoSiaPendiente resultadoPendiente;
-		// Obtiene procs asociados a normativa
-		final List <ProcedimientoLocal>listProcedimientos = procDelegate.listarProcedimientosNormativa(siaPendiente.getIdElemento());
-		
-		boolean todosCorrectos = true;
-		String idsNoCorrectos = "";
-		for (ProcedimientoLocal procedimiento : listProcedimientos) {
-			
-			SiaResultado siaResultado = null;
-			SiaEnviableResultado siaEnviableResultado = SiaUtils.isEnviableSia(procedimiento);
-			
-			// Verifica si envia a SIA
-			if (siaEnviableResultado.isNotificiarSIA()) {
-				siaResultado = enviarProcedimiento(procedimiento);        						
-				if (!siaResultado.isCorrecto()) {
-					todosCorrectos = false;
-					idsNoCorrectos += " " + procedimiento.getId();
-				}
-			}  else {
-    			siaResultado = new SiaResultado(SiaResultado.RESULTADO_NULO, siaEnviableResultado.getRespuesta());		
-    		}
-			
-			// Actualizar estado proceso
-			actualizaEstadoProceso(procedimiento.getId(), siaResultado, estadoProceso);
-			
-		}
-		
-		// Indicamos resultado elemento
-		if (todosCorrectos) {
-			resultadoPendiente = new ResultadoSiaPendiente(true, null);
-		} else {
-			resultadoPendiente = new ResultadoSiaPendiente(false, "Procedimientos con error: " + idsNoCorrectos);
-		}
-		return resultadoPendiente;
-	}
-
-
-	private ResultadoSiaPendiente enviarPendienteTipoUA(
-			EstadoProcesoSIA estadoProceso, SiaPendiente siaPendiente)
-			throws Exception {
-		
-		
-		ResultadoSiaPendiente resultadoPendiente;
-		
-		String idsNoCorrectos = enviarPendienteTipoUARecursivo(estadoProceso,siaPendiente.getIdElemento());
-		
-		
-		
-		// Indicamos resultado elemento
-		if (StringUtils.isBlank(idsNoCorrectos)) {
-			resultadoPendiente = new ResultadoSiaPendiente(true, null);
-		} else {
-			resultadoPendiente = new ResultadoSiaPendiente(false, "Procedimientos con error: " + idsNoCorrectos);
-		}
-		return resultadoPendiente;
-	}
-
-	/**
-	 * Método recursivo de las uas.
-	 * @throws DelegateException 
+	/** 
+	 * Enviar SIA de tipo de procedimiento.
+	 * Antes había tipo Normativa y tipoUA pero se ha simplificado y sólo hay uno.
+	 *  
+	 * @param estadoProceso
+	 * @param siaPendiente
+	 * @return
+	 * @throws Exception
 	 */
-	private String enviarPendienteTipoUARecursivo(EstadoProcesoSIA estadoProceso,Long idUA) throws Exception {
-		
-		final ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
-		final UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
-		List<Long> listIdProcedimientos = procDelegate.listarProcedimientosOrganoResolutori(idUA);
-		
-		
-		///Primero ella misma
-		String idsNoCorrectos = "";
-		for (Long idProcedimiento : listIdProcedimientos) {
-			try {
-				ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimientoParaSolr(idProcedimiento);
-				if (procedimiento == null) {
-					log.error("Error obteniendo como nulo el procedimiento con id " + idProcedimiento +" de la UA "+idUA);
-				} else {
-					SiaResultado siaResultado = null;
-					SiaEnviableResultado siaEnviableResultado = SiaUtils.isEnviableSia(procedimiento);
-					
-					// Verifica si envia a SIA
-					if (siaEnviableResultado.isNotificiarSIA()) {
-				    	siaResultado = enviarProcedimiento(procedimiento);	        	
-						if (!siaResultado.isCorrecto()) {
-							idsNoCorrectos += " " + procedimiento.getId();
-						}
-					} else {
-		    			siaResultado = new SiaResultado(SiaResultado.RESULTADO_NULO, siaEnviableResultado.getRespuesta());		
-		    		}
-					
-					// Actualizar estado proceso
-					actualizaEstadoProceso(procedimiento.getId(), siaResultado, estadoProceso);
-				}
-			} catch (Exception e) {
-				idsNoCorrectos += " " + idProcedimiento;
-				log.error("Error ejecutando el envioSIA del procedimiento " + idProcedimiento +" de la UA "+idUA,e);
-			}
-			
-		}
-		
-		
-		//Ahora sus hijas. 
-		List<Long> uasHijas = uaDelegate.obtenerHijosUnidadAdministrativa(idUA);
-		for(Long uaHija : uasHijas) {
-			
-			String resultado = enviarPendienteTipoUARecursivo(estadoProceso, uaHija);
-			idsNoCorrectos += resultado;
-		}
-		return idsNoCorrectos;
-	}
-
-
 	private ResultadoSiaPendiente enviarPendienteTipoProcedimiento(
 			EstadoProcesoSIA estadoProceso, SiaPendiente siaPendiente)
 			throws Exception {
@@ -576,27 +475,34 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		} else {
 			
 				ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimientoParaSolr(siaPendiente.getIdElemento());
-			
-				SiaResultado siaResultado = null;
-				SiaEnviableResultado siaEnviableResultado = SiaUtils.isEnviableSia(procedimiento);
-				
-				// Verificamos si se puede enviar a SIA
-				if (siaEnviableResultado.isNotificiarSIA()) {
-					siaResultado = enviarProcedimiento(procedimiento);	        						
-				}  else {
-	    			siaResultado = new SiaResultado(SiaResultado.RESULTADO_NULO, siaEnviableResultado.getRespuesta());		
-	    		}
-				
-				// Actualizar estado proceso
-				if (procedimiento != null) {
-					actualizaEstadoProceso(procedimiento.getId(), siaResultado, estadoProceso);
-				}
-				
-				// Indicamos resultado elemento
-				if (siaResultado.isCorrecto()) {
-					resultadoPendiente = new ResultadoSiaPendiente(true, null);
+				if (procedimiento == null) {
+					resultadoPendiente = new ResultadoSiaPendiente(false, "Procedimiento nulo");				
 				} else {
-					resultadoPendiente = new ResultadoSiaPendiente(false, siaResultado.getMensaje());
+				
+					SiaResultado siaResultado = null; 
+					SiaEnviableResultado siaEnviableResultado = SiaUtils.isEnviable(procedimiento);
+					
+					// Verificamos si se puede enviar a SIA
+					if (siaEnviableResultado.isNotificiarSIA()) {
+						SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(procedimiento);
+						if (siaCumpleDatos.isCumpleDatos()) {
+							siaResultado = enviarProcedimiento(procedimiento);
+						} else {
+							siaResultado = new SiaResultado(SiaResultado.RESULTADO_NULO, siaCumpleDatos.getRespuesta());
+						}
+					}  else {
+		    			siaResultado = new SiaResultado(SiaResultado.RESULTADO_NULO, siaEnviableResultado.getRespuesta());		
+		    		}
+					
+					// Actualizar estado proceso
+					actualizaEstadoProceso(procedimiento.getId(), siaResultado, estadoProceso);
+					
+					// Indicamos resultado elemento
+					if (siaResultado.isCorrecto()) {
+						resultadoPendiente = new ResultadoSiaPendiente(true, null);
+					} else {
+						resultadoPendiente = new ResultadoSiaPendiente(false, siaResultado.getMensaje());
+					}
 				}
 				        					
 		}
@@ -740,8 +646,8 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		 * @throws Exception
 		 */
 		private Sia obtenerSiaProc(ProcedimientoLocal procedimiento) throws Exception {
-			Sia sia = new Sia();
-			SiaEnviableResultado siaEnviableResultado = SiaUtils.isEnviableSia(procedimiento);
+			final Sia sia = new Sia();
+			final SiaEnviableResultado siaEnviableResultado = SiaUtils.isEnviable(procedimiento);
 			
 			sia.setIdProc(procedimiento.getId().toString());
 			if (procedimiento.getCodigoSIA() != null) {
@@ -844,6 +750,9 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 			} else {
 				sia.setTipoTramite(null);
 			}
+			
+			sia.setUsuario(siaEnviableResultado.getSiaUA().getUsuario());
+			sia.setPassword(siaEnviableResultado.getSiaUA().getContrasenya());
 			
 			return sia;
 		}

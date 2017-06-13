@@ -1,54 +1,105 @@
 // TM SIA
-
 $(document).ready(function() {
+	
+	//Generamos las listas!
+	listaJob = new ListaN(); 
+	listaJob.tipo = "JOB";
+	listaJob.divDadesLista = ".dadesJob";
+	listaJob.nombreLista="listaJob";
+	
+	listaPendiente = new ListaN();  
+	listaPendiente.tipo = "Pendientes";
+	listaPendiente.divDadesLista = ".dadesPendientes";
+	listaPendiente.nombreLista="listaPendiente";
+	
+	listaNoCompletos= new ListaN(); 
+	listaNoCompletos.tipo = "Pendientes";
+	listaNoCompletos.divDadesLista = ".dadesNoCompletas";
+	listaNoCompletos.nombreLista="listaNoCompletos";
+	
+	//Evento sobre los tabs.
+	eventoClickTabs();
+	
 	// elements
 	inicializarBtn();
 	
-	opcions_elm = $("#opcions");
-	escriptori_elm = $("#escriptori");
-	escriptori_contingut_elm = $("#escriptori_contingut");
-
-	resultats_elm = $("#resultats");
-	resultats_llistat_elm = resultats_elm.find("div.L");
-
-	multipagina = new Multipagina();
-
-	pagPagina_llistat_elm = resultats_llistat_elm.find("input.pagPagina");
-	ordreTipus_llistat_elm = resultats_llistat_elm.find("input.ordreTipus");
-	ordreCamp_llistat_elm = resultats_llistat_elm.find("input.ordreCamp");
-
-	resultats_cercador_elm = resultats_elm.find("div.C");
-	cercador_elm = $("#cercador_contingut");
-
-	pagPagina_cercador_elm = resultats_cercador_elm.find("input.pagPagina");
-	ordreTipus_cercador_elm = resultats_cercador_elm.find("input.ordreTipus");
-	ordreCamp_cercador_elm = resultats_cercador_elm.find("input.ordreCamp");
-
-	//escriptori_detall_elm = $("#escriptori_detall");
-
-	// INICIEM
-	Llistat = new CLlistat();
-   
-	//LLAMAMOS AL LISTADO DE JOBS.
-	Llistat.inicializarJobs();
+	//Inicializamos listas.
+	inicializarListaJob();
+	inicializarListaPteYnoCompletos();
+	
+	//Buscar en la primera lista que es la de jobs.
+	listaJob.buscar();
 	
 });
 
+/** Inicializar Lista de Pendientes y No completos. **/
+function inicializarListaPteYnoCompletos() {
+	//Preparamos la lista de búsqueda de la primera página. 
+	//Declaración de items.
+	var item1 = new itemLista();item1.nombre = "id";			item1.width=8;	item1.evento=null;
+	var item2 = new itemLista();item2.nombre = "tipo";			item2.width=10;	item2.evento=null;
+	var item3 = new itemLista();item3.nombre = "idElemento";	item3.width=10;	item3.evento=null;
+	//var item4 = new itemLista();item4.nombre = "estado";		item4.width=10;	item4.evento=null;
+	var item5 = new itemLista();item5.nombre = "fecAlta";		item5.width=15;	item5.evento=null;
+	var item6 = new itemLista();item6.nombre = "fecIdx";		item6.width=15;	item6.evento=null;
+	var item7 = new itemLista();item7.nombre = "mensaje";		item7.width=35;	item7.evento=null;
+	var items = new Array(item1, item2, item3,  item5, item6, item7);
+	
+	//Declaramos la cabecera.
+	var cabecera1 = new itemCabecera(); cabecera1.nombre = txtId; 			cabecera1.width=10; cabecera1.order ="id";cabecera1.eventoActivo = true;
+	var cabecera2 = new itemCabecera(); cabecera2.nombre = txtTipo; 		cabecera2.width=10; cabecera2.order ="tipo";cabecera2.eventoActivo = true;
+	var cabecera3 = new itemCabecera(); cabecera3.nombre = txtIdElemento; 	cabecera3.width=10; cabecera3.order ="idElemento";cabecera3.eventoActivo = true;
+	//var cabecera4 = new itemCabecera(); cabecera4.nombre = txtEstado; 		cabecera4.width=10; cabecera4.order ="estado";cabecera4.eventoActivo = true;
+	var cabecera5 = new itemCabecera(); cabecera5.nombre = txtFalta; 		cabecera5.width=15; cabecera5.order ="fecAlta";cabecera5.eventoActivo = true;
+	var cabecera6 = new itemCabecera(); cabecera6.nombre = txtFenvio;		cabecera6.width=15; cabecera6.order ="fecIdx"; cabecera6.eventoActivo = true;
+	var cabecera7 = new itemCabecera(); cabecera7.nombre = txtMensaje; 		cabecera7.width=30; cabecera7.order ="mensaje"; cabecera7.eventoActivo = false;
+	var cabeceras = new Array(cabecera1, cabecera2,cabecera3,  cabecera5, cabecera6, cabecera7);
+	
+	var formularioBusquedaPdt = jQuery("#formPendientes");
+	//Inicializamos los items de la tab lista.
+	listaPendiente.inicializar  (formularioBusquedaPdt, pagLlistat, items, cabeceras);
 
+	var formularioBusquedaNoCompleto = jQuery("#formNoCompletos");
+	//Inicializamos los items de la tab lista.
+	listaNoCompletos.inicializar  (formularioBusquedaNoCompleto, pagLlistat, items, cabeceras);
+} 
+
+
+/** Inicializar lista jobs. **/
+function inicializarListaJob() {
+	//Preparamos la lista de búsqueda de la primera página. 
+	//Declaración de items.
+	var item1 = new itemLista();item1.nombre = "id";			item1.width=8;	item1.evento=null;
+	var item2 = new itemLista();item2.nombre = "estat";			item2.width=35;	item2.evento=null;
+	var item3 = new itemLista();item3.nombre = "tipo";			item3.width=15;	item3.evento=null;
+	var item4 = new itemLista();item4.nombre = "fechaIni";		item4.width=15;	item4.evento=null;
+	var item5 = new itemLista();item5.nombre = "fechaFin";		item5.width=20;	item5.evento=null;
+	var item6 = new itemLista();item6.nombre = "descBreve";		item6.width=20;	item6.evento=null;
+	var item7 = new itemLista();item7.nombre = "descripcion";	item7.width=20;	item7.evento=null;
+	var items = new Array(item1, item2, item3, item4, item5, item6, item7);
+	
+	//Declaramos la cabecera.
+	var cabecera1 = new itemCabecera(); cabecera1.nombre = txtId; 		cabecera1.width=10; cabecera1.order ="id";		cabecera1.eventoActivo = true; cabecera1.evento = null;     
+	var cabecera2 = new itemCabecera(); cabecera2.nombre = "Estat"; 	cabecera2.width=10; cabecera2.order ="estado";	cabecera2.eventoActivo = true; cabecera2.evento = null;
+	var cabecera3 = new itemCabecera(); cabecera3.nombre = txtTipo; 	cabecera3.width=8; cabecera3.order ="tipo";		cabecera3.eventoActivo = false; cabecera3.evento = null;
+	var cabecera4 = new itemCabecera(); cabecera4.nombre = "Data inici"; 	cabecera4.width=9; cabecera4.order ="fechaIni";	cabecera4.eventoActivo = true; cabecera4.evento = null;
+	var cabecera5 = new itemCabecera(); cabecera5.nombre = "Data fi"; 	cabecera5.width=9; cabecera5.order ="fechaFin";	cabecera5.eventoActivo = true; cabecera5.evento = null;
+	var cabecera6 = new itemCabecera(); cabecera6.nombre = "Descripció abreviada"; cabecera6.width=35; cabecera6.order ="descBreve"; cabecera6.eventoActivo = false; 
+	var cabeceras = new Array(cabecera1, cabecera2,cabecera3, cabecera4, cabecera5, cabecera6);
+	var formularioBusqueda = jQuery("#formJobs");
+	//Inicializamos los items de la tab lista.
+	listaJob.inicializar  (formularioBusqueda, pagLlistatJob, items, cabeceras);
+
+}
+
+/** Inicializar botones. ***/
 function inicializarBtn() {
 	
 	jQuery("#btnContinuar").unbind("click").bind("click", function() {
 		
-        var $btn = jQuery(this);
-        var url;        
-
-		if ($btn.hasClass('unitatOrganica')) {
-            url = pagEnviarTodo;
-		} 
-        
         $.ajax({
             type: "POST",
-            url: url, 
+            url: pagEnviarTodo, 
             dataType: "json",
             error: function() {					
                 // missatge
@@ -66,16 +117,10 @@ function inicializarBtn() {
 	});
 	
 	jQuery("#btnCerrarJobs").unbind("click").bind("click", function() {
-		var $btn = jQuery(this);
-        var url;        
-
-		if ($btn.hasClass('unitatOrganica')) {
-            url = pagCerrarJobs;
-		} 
-        
+		
         $.ajax({
             type: "POST",
-            url: url, 
+            url: pagCerrarJobs, 
             dataType: "json",
             error: function() {					
                 // missatge
@@ -94,16 +139,10 @@ function inicializarBtn() {
 	
 	
 	jQuery("#btnIndexarTiempo").unbind("click").bind("click", function() {
-		var $btn = jQuery(this);
-        var url;        
-
-		if ($btn.hasClass('unitatOrganica')) {
-            url = pagSiaTiempo;
-		} 
-        
+		
         $.ajax({
             type: "POST",
-            url: url, 
+            url: pagSiaTiempo, 
             dataType: "json",
             error: function() {					
                 // missatge
@@ -113,6 +152,27 @@ function inicializarBtn() {
             success: function(data) {
             	 if (!data.error) {
                   	Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtTiempoJobs});			
+                  } else {
+                      Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: data.error});					
+                  }
+            }
+        });
+	});
+	
+	jQuery("#btnEnviarPendientes").unbind("click").bind("click", function() {
+		
+        $.ajax({
+            type: "POST",
+            url: pagEnviarPendientes, 
+            dataType: "json",
+            error: function() {					
+                // missatge
+                Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+                
+            },
+            success: function(data) {
+            	 if (!data.error) {
+                  	Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtPendientesMensaje});			
                   } else {
                       Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: data.error});					
                   }
@@ -131,6 +191,57 @@ function inicializarBtn() {
 	
 }
 
+
+/** Incluir evento sobre el tab de listado. 
+ *  Se presupone que todos los listados cuelgan de divResultats. Además, sólo
+ *   ha sido probado cuando NO hay detalle, en este caso, todos son listas.
+ *   
+ * **/
+function eventoClickTabs () {
+	generarEventoClickTab("#tabListadoJobs",		"div#divListadoJob"		   , listaJob);
+	generarEventoClickTab("#tabListadoPendientes",	"div#divListadoPendientes" , listaPendiente );
+	generarEventoClickTab("#tabListadoIncompleto",	"div#divListadoIncompletas", listaNoCompletos);
+}	
+
+/**
+ * Función que asocia un evento click al tab.
+ * 
+ * La idea es que cada tab tiene un div asociado, lo que hace en resumen este evento es:
+ *  - Mirar que no esté el tab activo.
+ *  - Quitar la marca de clase 'actiu' a todos los elementos del tab.
+ *  - Asociarle como 'actiu' al tab.
+ *  - Generar un evento slideUp (que oculta hacia arriba) al div activo (que será de otro tab).
+ *  - Generar un evento slideUp (que muestra hacia abajo) al div asociado al tab del click.
+ * @param nombreTab
+ * @param nombreDiv
+ */
+function generarEventoClickTab(nombreTab, nombreDiv, lista) {
+	jQuery(nombreTab).click(function() {
+ 
+		//Primero comprobamos que no esté activo.
+		if( !jQuery(this).hasClass("actiu") ) {
+			
+			//Se lo borro a todos y se lo agrego a mi mismo
+			jQuery("ul#opcions li").removeClass("actiu");
+			jQuery(this).addClass("actiu");
+			
+			// resultats		
+			$("div#resultats").find("div.actiu").slideUp(300, function() {
+				
+				jQuery(this).removeClass("actiu");
+				
+				$("div#resultats").find(nombreDiv).slideDown(300, function() {
+					
+					jQuery(this).addClass("actiu");
+					lista.buscar();
+				});
+				
+			});
+		}
+	});
+}
+
+/** Para incluir saltos de linea sustituyendo por su etiqueta br **/
 function incluirSaltosLinea(descripcion) {
 	 while (descripcion.indexOf("<br />") != -1) {
 		 descripcion = descripcion.replace("<br />","\n");
@@ -150,6 +261,7 @@ function incluirSaltosLinea(descripcion) {
 	 return descripcion;
 }
 
+/** Función para pintar popuo. **/
 function pintarPopUp(descripcion) {
 	 $('.popup').fadeIn('slow');
      $('.popup-overlay').fadeIn('slow');
@@ -157,415 +269,39 @@ function pintarPopUp(descripcion) {
 	 $("#item_texto").val(incluirSaltosLinea (descripcion) );
      return false;
 }
-function inicializarBtn2() {
+
+/*** 
+ LISTA CUSTOMIZADA.
+***/
+function ListaN() {
+    
+	this.extend = detall_lista_n;
 	
-	jQuery("#btnContinuar2").unbind("click").bind("click", function() {
-		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
-        
-        var $btn = jQuery(this);
-        var url;        
-
-		if ($btn.hasClass('unitatOrganica')) {
-            url = pagEnviarPendientes;
-		} 
-        
-		$.ajax({
-            type: "POST",
-            url: url, 
-            dataType: "json",
-            error: function(data) {					
-                setTimeout('Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: "'+txtAjaxError+'", text: "<p> + '+txtIntenteho+' + </p>"})', 400);
-                
-            },
-            success: function(data) {
-                if (!data.error) {
-                    setTimeout('Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: "'+txtEnviantDades+'"})', 400);
-                } else {
-                    setTimeout('Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: "'+data.error+'"})', 400);
-                }
-            }
-        });
-	});
-}
-
-// idioma
-var pag_idioma = $("html").attr("lang");
-
-// minim cercador
-var numCercadorMinim = 0;
-
-// paginacio
-var paginacio_marge = 4;
-
-// Cllistat
-var claseCllistat;
-
-// llistat
-var itemID_ultim = 0;
-function CLlistat(){
-	this.extend = ListadoBase;
 	this.extend();
-
-	var that = this;
 	
-
-	// Cambia a la pestaña del buscador.
-	this.tabBuscador = function() {
-		jQuery("li.opcio, li.actiu").removeClass("actiu");
-		jQuery("#tabBuscador").parent().addClass("actiu");
-		
-		opcio_unitat = "C";
-		
-		//that.carregar({});
-		claseCllistat = that;
-		
-		// resultats
-		resultats_elm.find("div.actiu").slideUp(300, function() {			
-			jQuery(this).removeClass("actiu");
-			resultats_elm.find("div."+opcio_unitat).slideDown(300, function() {
-				
-				jQuery(this).addClass("actiu");
-				resultats_actiu_elm = resultats_elm.find("div.actiu:first");
-				claseCllistat.carregar({});
-               
-			});
-			
-		});
-		
-		
+	//Indica si es de tipo JOB o PENDIENTE
+	this.tipo = "JOB"; //JOB o PENDIENTE
+	
+	
+	/** Genera el contenido HTML segun los datos. **/
+	this.getContenidoHTML = function (data) {
+		if (this.tipo == "JOB") {
+			return this.getContenidoHTMLJob(data);
+		}
+		else {
+			return this.getContenidoHTMLPendiente(data);
+		}
 	};
 	
-	
-
-	this.finCargaListado = function(opcions,data) {
-		// total
-		resultats_total = parseInt(data.total,10);
-
-		if (resultats_total > 0) {
-
-			// minim per cercador
-			if (resultats_total > numCercadorMinim) {
-				opcions_elm.find("li.C").animate({
-					duration: "slow", width: 'show'
-					}, 300);
-			}
-
-			txtT = (resultats_total > 1) ? txtLlistaItems : txtLlistaItem;
-
-			ultimaPag = Math.floor(resultats_total / pag_Res) - 1;
-			if (resultats_total % pag_Res > 0){
-				ultimaPag++;
-			}
-			if (pag_Pag > ultimaPag) {
-				pag_Pag = ultimaPag;
-			}
-
-			resultatInici = ((pag_Pag*pag_Res)+1);
-			resultatFinal = ((pag_Pag*pag_Res) + pag_Res > resultats_total) ? resultats_total : (pag_Pag*pag_Res) + pag_Res;
-
-			// ordenacio
-			ordre_T = ordre_Tipus;
-			ordre_C = ordre_Camp;
-			ordre_c1 = (ordre_C == "ordre") ? " " + ordre_T : "";
-			ordre_c2 = (ordre_C == "codiEstandar") ? " " + ordre_T : "";
-			
-
-			
-
-			if (resultats_total > 1) {
-
-				txt_ordenats = (ordre_T == "DESC") ? txtOrdenats + " <em>" + txtAscendentment + "</em>" : txtOrdenats + " <em>" + txtDescendentment + "</em>";
-				var txt_per = txtOrdre;
-				
-
-			}
-			var width10="10"; //Porcentaje del width de cada columna
-			var width20="20";
-
-			codi_totals = "<p class=\"info\" style = \"float:left\">" + txtTrobades + " <strong>" + resultats_total + "</strong> " + txtT.toLowerCase() + ".";			
-			codi_totals += "<div class=\"btnGenerico\" style = \"float:left\"><a href=\"javascript:;\" style=\"width:120px\" id = \"btnContinuar2\" class=\"btn unitatOrganica\"><span>"+txtBotonEnvio+"</span></a></div>";
-			
-			codi_totals += "</p>";
-
-			codi_cap1 = "<div class=\"th id" + ordre_c1 + "\" role=\"columnheader\"  style=\"width:"+width10+ "%\">" + txtId + "</div>";
-			codi_cap2 = "<div class=\"th desc" + ordre_c2 + "\" role=\"columnheader\" style=\"width:"+width10+ "%\">" + txtTipo + "</div>";
-			codi_cap3 = "<div class=\"th desc" + ordre_c2 + "\" role=\"columnheader\" style=\"width:"+width10+ "%\">" + txtIdElemento + "</div>";
-			codi_cap4 = "<div class=\"th desc" + ordre_c2 + "\" role=\"columnheader\" style=\"width:"+width10+ "%\">" + txtEstado + "</div>";
-			codi_cap5 = "<div class=\"th desc" + ordre_c2 + "\" role=\"columnheader\" style=\"width:"+width10+ "%\">" + txtFalta + "</div>";
-			codi_cap6 = "<div class=\"th desc" + ordre_c2 + "\" role=\"columnheader\" style=\"width:"+width10+ "%\">" + txtFenvio + "</div>";
-			codi_cap7 = "<div class=\"th " + ordre_c2 + "\" role=\"columnheader\" style=\"width:"+width20+ "%\">" + txtMensaje + "</div>";
-			
-
-			// codi taula
-			codi_taula = "<div class=\"table llistat\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\" style=\"clear:both\">";
-
-			// codi cap + cuerpo
-			codi_taula += "<div class=\"thead\">";
-			codi_taula += "<div class=\"tr\" role=\"rowheader\">";
-			codi_taula += codi_cap1 + codi_cap2 + codi_cap3 + codi_cap4 + codi_cap5 + codi_cap6 + codi_cap7;
-			codi_taula += "</div>";
-			codi_taula += "</div>";
-			codi_taula += "<div class=\"tbody\">";
-			
-			 
-			
-			// codi cuerpo
-			var txtSiaDescripcionTipo="";
-			$(data.nodes).each(function(i) {
-				
-				dada_node = this;
-				
-				if (dada_node.tipo == "PROC") {
-					txtSiaDescripcionTipo = txtSiaDescripcionTipoPro;
-				} else if(dada_node.tipo == "UA"){
-					txtSiaDescripcionTipo = txtSiaDescripcionTipoUna;
-				} else if(dada_node.tipo == "NORM"){
-					txtSiaDescripcionTipo = txtSiaDescripcionTipoNor;
-				}
-				
-				parClass = (i%2) ? " par": "";
-
-				codi_taula += "<div class=\"tr" + parClass + "\" role=\"row\">";
-
-				codi_taula += "<div class=\"td id\" role=\"gridcell\" style=\"width:"+width10+"%\">";
-				codi_taula += "<input type=\"hidden\" value=\"" + dada_node.id + "\" class=\"id\" />";
-				codi_taula += "<span class=\"perfil\" >" + (printStringFromNull(dada_node.id, txtSinValor)) + "</span>";				
-				codi_taula += "</div>";
-				
-				codi_taula += "<div class=\"td\" role=\"gridcell\" style=\"width:"+width10+"%\">";				
-				codi_taula += printStringFromNull(txtSiaDescripcionTipo, txtSinValor);
-				codi_taula += "</div>";
-				
-				codi_taula += "<div class=\"td\" role=\"gridcell\" style=\"width:"+width10+"%\">";				
-				codi_taula += printStringFromNull(dada_node.idElemento, txtSinValor);
-				codi_taula += "</div>";
-				
-				codi_taula += "<div class=\"td\" role=\"gridcell\" style=\"width:"+width10+"%\">";				
-				if (dada_node.estado == 0) {
-					codi_taula += "Espera";
-				}else if (dada_node.estado == 1) {
-					codi_taula += "Correcto";
-				} else if (dada_node.estado == 2) {
-					codi_taula += "Incorrecto";
-				} else if (dada_node.estado == -1) {
-					codi_taula += "Incorrecto";
-				} else if (dada_node.estado == -2) {
-					codi_taula += "No enviable a SIA";
-				} else {
-					codi_taula += " Desconocido ";
-				}
-				codi_taula += "</div>";
-				
-				codi_taula += "<div class=\"td\" role=\"gridcell\" style=\"width:"+width10+"%\">";
-				codi_taula += "<span class=\"falta\" >" + Llistat.getFechaString(dada_node.fecAlta) + "</span>";	
-				codi_taula += "</div>";
-				
-				codi_taula += "<div class=\"td\" role=\"gridcell\" style=\"width:"+width10+"%\">";
-				codi_taula += "<span class=\"fenvio\">" + Llistat.getFechaString(dada_node.fecIdx) + "</span>";	
-				codi_taula += "</div>";
-				
-				codi_taula += "<div class=\"td\" role=\"gridcell\" style=\"width:"+width20+"%\">";				
-				codi_taula += printStringFromNull(dada_node.mensaje, txtSinValor);
-				codi_taula += "</div>";
-				
-				codi_taula += "</div>";
-			});
-
-			codi_taula += "</div>";
-			codi_taula += "</div>";
-
-			if($.browser.opera) {
-				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
-			}
-
-			// Instanciamos el navegador multipágina.
-			multipagina.init({
-				total: resultats_total,
-				itemsPorPagina: pag_Res,
-				paginaActual: pag_Pag,
-				funcionPagina: "Llistat.cambiaPagina"
-			});					
-
-			codi_navegacio = multipagina.getHtml();
-
-			// codi final
-			codi_final = codi_totals + codi_taula + codi_navegacio;
-
-		} else {
-			// no hi ha items
-			codi_final = "<p class=\"noItems\">" + txtNoHiHaLlistat + ".</p>";
-
-		}
-
-		// animacio
-		dades_elm = resultats_elm.find("div.actiu:first div.dades:first");
-		dades_elm.fadeOut(300, function() {
-			// pintem
-			dades_elm.html(codi_final).fadeIn(300, function() {
-
-				// Asociamos el evento onclick a los elementos de la lista para
-				// poder ir a ver su ficha.
-				escriptori_contingut_elm.find("#resultats .llistat .tbody a.editarIdioma").unbind("click").bind("click",function(){Llistat.ficha(this);});
-				inicializarBtn2();
-
-				// cercador
-				if (typeof opcions.cercador != "undefined" && opcions.cercador == "si") {
-					cercador_elm.find("input, select").removeAttr("disabled");
-				}
-
-				jQuery("#resultats .llistat .tbody select.ordenacion").unbind("change").bind("change",function(){
-					var itemID = jQuery(this).attr("id").split("_")[1];
-					var orden = jQuery(this).val();
-
-					// Obtenemos el valor del orden anterior para saber en qué dirección reordenar los elementos
-					var ordenAnterior = jQuery("#idioma_" + itemID).prev().html()-1;
-
-					var dataVars = "id=" + itemID+"&orden="+orden + "&ordenAnterior=" + ordenAnterior;
-
-					$.ajax({
-						type: "POST",
-						url: pagReordenar,
-						data: dataVars,
-						dataType: "json",
-						error: function() {
-							if (!a_enllas) {
-								// missatge
-								Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
-							}
-						},
-						success: function(data) {
-							that.anulaCache();
-							that.carregar({});
-						}
-					});
-				});
-			});
-		});
-		
-	}
-	
-	this.carregar = function(opcions) {
-		// opcions: cercador (si, no), ajaxPag (integer), ordreTipus (ASC,
-		// DESC), ordreCamp (tipus, carrec, tractament)
-
-		dataVars = "";
-
-		// cercador
-		if (typeof opcions.cercador != "undefined" && opcions.cercador == "si") {
-			pagPagina_elm = pagPagina_cercador_elm;
-			ordreTipus_elm = ordreTipus_cercador_elm;
-			ordreCamp_elm = ordreCamp_cercador_elm;
-
-			dataVars_cercador = "&codi=" + $("#cerca_codi").val();
-			dataVars_cercador += "&textes=" + $("#cerca_textes").val();
-		} else {
-			pagPagina_elm = pagPagina_llistat_elm;
-			ordreTipus_elm = ordreTipus_llistat_elm;
-			ordreCamp_elm = ordreCamp_llistat_elm;
-
-			dataVars_cercador = "";
-		}
-
-		// ordreTipus
-		if (typeof opcions.ordreTipus != "undefined") {
-			ordreTipus_elm.val(opcions.ordreTipus);
-		}
-		// ordreCamp
-		if (typeof opcions.ordreCamp != "undefined") {
-			ordreCamp_elm.val(opcions.ordreCamp);
-		}
-
-		// paginacio
-		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : multipagina.getPaginaActual();
-
-		// ordre
-		ordre_Tipus = ordreTipus_elm.val();
-		ordre_Camp = ordreCamp_elm.val();
-
-		// variables
-		dataVars += "pagPag=" + pag_Pag + "&pagRes=" + pag_Res + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;		
-
-		// ajax
-		$.ajax({
-			type: "POST",
-			url: pagLlistat,
-			data: dataVars,
-			dataType: "json",
-			error: function() {
-				if (!a_enllas) {
-					// missatge
-					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
-				}
-			},
-			success: function(data) {				
-				Llistat.finCargaListado(opcions,data);
-			}
-		});
-	};
-	
-	/** Devuelve la fecha en formato string DD/MM/YYYY HH:MM:SS **/
-	this.getFechaString = function(ifecha) {
-		var retorno = "";
-		if (ifecha != null) {
-			var fecha = new Date(ifecha);
-			retorno = this.getLPAD(fecha.getMonth()+1 , 2)+"/"+
-				this.getLPAD(fecha.getDate(), 2)+"/"+
-				this.getLPAD(fecha.getFullYear(), 4)+" "+
-				this.getLPAD(fecha.getHours(), 2)+":"+
-				this.getLPAD(fecha.getMinutes(), 2)+":"+
-				this.getLPAD(fecha.getSeconds(), 2);
-		}
-		
-		return retorno;
-	};
-	
-	/** Funcion LPDA. **/
-	this.getLPAD = function(itexto, longitud) {
-		var texto = itexto;
-		while (texto.length < longitud) {
-			texto = "0"+texto;
-		}
-		return texto;
-	};
-	
-	/** Obtiene el texto borrando el null. **/
-	this.getTexto = function(itexto) {
-		var texto = "";
-		if (itexto != null && itexto != "null") {
-			texto = itexto;
-		}
-		return texto;
-	};
-	
-	this.finCargaListadoJob = function(opcions,data) {
-		
-		var contenido = "";
+	/** Contiendo HTML De job. **/
+	this.getContenidoHTMLJob = function (data) {
+		// codi cuerpo
 		var width="8"; //Porcentaje del width de cada columna
 		var width10="10"; 
-		var width20="20"; 
 		var width40="40";
 		
-		if (data.nodes.length == 0) {
-			contenido = "No hi ha dades";
-		} else {
-			contenido +="<div class=\"table llistat\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\" style=\"clear:both;\">";
-			///HEAD
-			contenido += "<div class=\"thead\">";
-			contenido += "<div class=\"tr\" role=\"rowheader\">";
-			contenido += "<div class=\"th \" role=\"columnheader\" style=\"width:"+width+"%\">ID</div>";
-			contenido += "<div class=\"th \" role=\"columnheader\" style=\"width:"+width+"%\">Estat</div>";
-			contenido += "<div class=\"th \" role=\"columnheader\" style=\"width:"+width+"%\">Tipus</div>";
-			contenido += "<div class=\"th \" role=\"columnheader\" style=\"width:"+width+"%\">Data inici</div>";
-			contenido += "<div class=\"th \" role=\"columnheader\" style=\"width:"+width+"%\">Data fi</div>";
-			contenido += "<div class=\"th \" role=\"columnheader\" style=\"width:"+width40+"%\">Descripció abreviada</div>";
-			contenido += "<div class=\"th \" role=\"columnheader\" style=\"width:"+width+"%;align-items: center;\">Descripció</div>";
-			contenido += "</div>";
-			contenido += "</div>";
-			contenido += "<div class=\"tbody\">";
-			
-			
-			contenido +="<div class=\"tbody\">";
-		
+			var contenido = "<div class=\"tbody\">";
+			//$(data.nodes).each(function(i) {
 			//Bucle sobre los nodoes.
 			for(var i=0; i<data.nodes.length; i++) {
 				var elemento = data.nodes[i]; 
@@ -617,11 +353,11 @@ function CLlistat(){
 				contenido += "</div>";
 				
 				contenido += "<div class=\"td fechaIni\" role=\"gridcell\" style=\"width:"+width+"%\">";
-				contenido += "<span class=\"fecha\">" + Llistat.getFechaString(elemento.fechaIni) + "</span>";	
+				contenido += "<span class=\"fecha\">" + this.getFechaString(elemento.fechaIni) + "</span>";	
 				contenido += "</div>";
 				
 				contenido += "<div class=\"td fechaIni\" role=\"gridcell\" style=\"width:"+width+"%\">";
-				contenido += "<span class=\"fecha\">" + Llistat.getFechaString(elemento.fechaFin) + "</span>";	
+				contenido += "<span class=\"fecha\">" + this.getFechaString(elemento.fechaFin) + "</span>";	
 				contenido += "</div>";			
 				
 				contenido += "<div class=\"td fechaFicha\" role=\"gridcell\" style=\"width:"+width40+"%\;text-align: left;\">";
@@ -632,22 +368,85 @@ function CLlistat(){
 				contenido += "<div class=\"btnGenerico\" style = \"float:left\"><a href=\"javascript:;\" style=\"width:100px;\" id = \"botonInfo\" class=\"btn unitatOrganica\" onclick=\"pintarPopUp('"+ this.limpiarTexto(elemento.descripcion) +"')\"><span>"+txtBotonInfo+"</span></a></div>";
 
 				//FIN ROW
-				contenido += "</div>";
+				contenido += "</div>";				
+			}
+			return contenido;
+	};
+	
+	/** Contenido HTML de pendiente. **/
+	this.getContenidoHTMLPendiente = function (data) {
+		var contenidoHTML = "<div class=\"tbody\">";
+			//Bucle sobre los nodoes.
+			for(var i=0; i<data.nodes.length; i++) {
+				var elemento = data.nodes[i]; 
+				parClass = (i%2) ? " par": "";
 				
+				contenidoHTML += "<div class=\"tr" + parClass + "\" role=\"row\">";
+				
+				for(var j = 0 ; j < this.items.length; j++) {
+					var item = this.items[j];
+					contenidoHTML += "<div class=\"td "+item.nombre+"\" role=\"gridcell\" style=\"width:"+item.width+"%\">";
+					var textoElemento = elemento[item.nombre];
+					if (item.nombre == 'fecAlta' || item.nombre == 'fecIdx') {
+						textoElemento = this.getFechaString(textoElemento);			
+					}
+					if (item.nombre == 'mensaje' && textoElemento == null) {
+						textoElemento = '';
+					}
+					if (item.evento == null) {
+						contenidoHTML += "<span class=\"td "+item.nombre+"\">" + textoElemento + "</span>";				
+					} else {
+						contenidoHTML += "<span class=\"td "+item.nombre+"\"><a onclick=\""+ elemento.evento +"\"')>" + textoElemento + "</a></span>";
+					}
+					contenidoHTML += "</div>";	
+				}
+				
+				
+				//FIN ROW
+				contenidoHTML += "</div>";
 				
 			}
 			
 			//FIN TBODY
-			contenido += "</div>";
-			
-			//FIN TABLE
-			contenido += "</div>";
-		}
-		
-		
-		$(".dadesJob").html(contenido);
+			contenidoHTML += "</div>";
+			return contenidoHTML;
 	};
 	
+	/** Devuelve la fecha en formato string DD/MM/YYYY HH:MM:SS **/
+	this.getFechaString = function(ifecha) {
+		var retorno = "";
+		if (ifecha != null) {
+			var fecha = new Date(ifecha);
+			retorno = this.getLPAD(fecha.getMonth()+1 , 2)+"/"+
+				this.getLPAD(fecha.getDate(), 2)+"/"+
+				this.getLPAD(fecha.getFullYear(), 4)+" "+
+				this.getLPAD(fecha.getHours(), 2)+":"+
+				this.getLPAD(fecha.getMinutes(), 2)+":"+
+				this.getLPAD(fecha.getSeconds(), 2);
+		}
+		
+		return retorno;
+	};
+	
+	/** Funcion LPDA. **/
+	this.getLPAD = function(itexto, longitud) {
+		var texto = itexto;
+		while (texto.toString().length < longitud) {
+			texto = "0"+texto;
+		}
+		return texto;
+	};
+	
+	/** Obtiene el texto borrando el null. **/
+	this.getTexto = function(itexto) {
+		var texto = "";
+		if (itexto != null && itexto != "null") {
+			texto = itexto;
+		}
+		return texto;
+	};
+	
+	/** Limpiar texto. **/
 	this.limpiarTexto = function (descripcion) {
 		while (descripcion.indexOf("'") != -1) {
 			 descripcion = descripcion.replace("'","");
@@ -655,27 +454,4 @@ function CLlistat(){
 		return descripcion;		
 	};
 	
-	this.inicializarJobs = function() {
-		dataVars = "";
-    
-		// ajax
-		$.ajax({
-			type: "POST",
-			url: pagLlistatJob,
-			data: dataVars,
-			dataType: "json",
-			error: function() {
-				if (!a_enllas) {
-					// missatge
-					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
-				}
-			},
-			success: function(data) {				
-				Llistat.finCargaListadoJob(opcions,data);
-			}
-		});
-	}
-};
-
-
-
+}

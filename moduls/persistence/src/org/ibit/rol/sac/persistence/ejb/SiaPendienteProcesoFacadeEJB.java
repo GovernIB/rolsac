@@ -3,7 +3,6 @@ package org.ibit.rol.sac.persistence.ejb;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -15,28 +14,23 @@ import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Order;
 
-import org.ibit.rol.sac.model.DocumentTramit;
-import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
-import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.Sia;
 import org.ibit.rol.sac.model.SiaJob;
 import org.ibit.rol.sac.model.SiaPendiente;
-import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
-import org.ibit.rol.sac.model.TraduccionUA;
-import org.ibit.rol.sac.model.Tramite;
+import org.ibit.rol.sac.model.SiaUA;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.ws.SiaResultado;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
-import org.ibit.rol.sac.persistence.delegate.SiaPendienteProcesoDelegate;
-import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
 import org.ibit.rol.sac.persistence.util.FiltroSia;
+import org.ibit.rol.sac.persistence.util.SiaCumpleDatos;
 import org.ibit.rol.sac.persistence.util.SiaEnviableResultado;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.ibit.rol.sac.persistence.ws.sia.SiaWS;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.caib.solr.api.exception.ExcepcionSolrApi;
 
 
@@ -74,21 +68,28 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
    	 * @ejb.interface-method
    	 * @ejb.permission unchecked="true"
    	 * 
-   	
+   	 * @param filtro     Filtro
+   	 * @param pagina	 Pagina actual donde nos encontramos.
+	 * @param cuantos    Cuantos elementos a obtener
+	 * @param ordenCampo Marca el parámetro de orden
+	 * @param ordenAsc 	 Marca si es ASC o DESC (ascendente o descendente)
+	 * 
 	 * @throws DelegateException
 	 */
 	public List<SiaPendiente> getSiaPendientesEnviar()  {
 		log.debug("Obtener SIA pendientes enviar");
 
-		Session session = getSession();
+		final Session session = getSession();
 		
-		try {
+		try 
+		{
+			log.debug("Obtener SIA pendientes enviar");
 
     		StringBuilder consulta = new StringBuilder("select sia from SiaPendiente as sia where sia.estado = :estado");
     		
-    		Query query = session.createQuery( consulta.toString() );
-    		query.setLong("estado", SiaUtils.SIAJOB_ESTADO_CREADO);
-    		return query.list();
+	    	Query query = session.createQuery( consulta.toString() );
+	    	query.setLong("estado", SiaUtils.SIAPENDIENTE_ESTADO_CREADO);
+	    	return query.list(); 
 
     	} catch (HibernateException he) {
 
@@ -101,40 +102,138 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     	}
 	}
 	
+
+	/**
+	 * /**
+	 * Obtener SIA UAs.
+	 * 
+   	 * @ejb.interface-method
+   	 * @ejb.permission unchecked="true"
+	 *
+	 * @param pagina	 Pagina actual donde nos encontramos.
+	 * @param cuantos    Cuantos elementos a obtener
+	 * @param ordenCampo Marca el parámetro de orden
+	 * @param ordenAsc 	 Marca si es ASC o DESC (ascendente o descendente)
+	 * @return
+	 */
+	public ResultadoBusqueda getSiaUAs(final int pagina, final int cuantos, final String ordenCampo, final String ordenAsc) {
+		log.debug("Obtiene las SIA UAs.");
+
+		final Session session = getSession();
+		final ResultadoBusqueda resultado = new ResultadoBusqueda();
+		
+		try {
+
+    		final StringBuilder consultaSelect = new StringBuilder("select sia from SiaUA as sia ");
+    		final StringBuilder consultaTotal = new StringBuilder("select count(sia) from SiaUA as sia ");
+    		
+    		final StringBuilder consulta = new StringBuilder();
+    		//Indicamos el orden, por defecto es por la id descendente
+    		if (ordenCampo == null || ordenCampo.isEmpty()) {
+    			consulta.append(" order by sia.id desc");
+    		} else {
+    			consulta.append(" order by sia.");
+    			consulta.append(ordenCampo);
+    			if (ordenAsc == null || ordenAsc.isEmpty()) {
+    				consulta.append(" asc ");
+    			} else {
+    				consulta.append(" ");
+    				consulta.append(ordenAsc);
+    			}
+    		}
+    		
+    		
+    		
+    		//La select.
+    		consultaSelect.append(consulta);
+    		final Query query = session.createQuery( consultaSelect.toString() );
+    		//Calculamos a partir de cuando hay que calcular.
+    		final int primerResultado = new Integer(pagina).intValue() * cuantos;
+			query.setFirstResult(primerResultado);
+			query.setMaxResults(cuantos);
+    		List<SiaUA> lista = (List<SiaUA>) query.list();
+    		resultado.setListaResultados(lista);
+    		
+    		//El total.
+    		//consultaTotal.append(consulta); //No hace falta el order by en los counts
+    		final Query queryTotal = session.createQuery( consultaTotal.toString() );
+    		Integer totalResultados = Integer.valueOf( queryTotal.uniqueResult().toString() );
+    		resultado.setTotalResultados(totalResultados);
+    		
+    		return resultado;
+
+    	} catch (HibernateException he) {
+
+    		log.error("Error obteniendo SiaUA. Pagina:"+pagina+" Cuantos:"+cuantos+" Orden:"+ordenCampo+" OrdenAsc:"+ordenAsc, he);
+    		throw new EJBException(he);
+
+    	} finally {
+
+    		close(session);
+    		log.debug("Obtener SIA pendientes OK");
+    		
+    	}	
+		
+	}
 	
 	/**
-	* Obtiene SIA a partir de un filtro. 
+	* Obtiene SIA pendientes a partir de un filtro. 
    	 * @ejb.interface-method
    	 * @ejb.permission unchecked="true"
    	 * @param filtro
 	 * 
 	 * @throws DelegateException
 	 */
-	public List<SiaPendiente> getSiaPendientes(final FiltroSia filtro)  {
+	public ResultadoBusqueda getSiaPendientes(final FiltroSia filtro)  {
 		log.debug("Obtener SIA pendientes");
 		
 		Session session = getSession();
+		ResultadoBusqueda resultado = new ResultadoBusqueda();
 		
 		try {
-
-    		StringBuilder consulta = new StringBuilder("select sia from SiaPendiente as sia where 1 = 1 ");
+			
+			final StringBuilder consultaSelect = new StringBuilder("select sia from SiaPendiente as sia where 1 = 1 ");
+    		final StringBuilder consultaTotal = new StringBuilder("select count(sia) from SiaPendiente as sia where 1 = 1 ");
+    		
     		
     		if (filtro.getEstado() != null) {
-    			consulta.append(" and sia.estado = :estado");
+    			consultaSelect.append(" and sia.estado = :estado");
+    			consultaTotal.append(" and sia.estado = :estado");
     		}
     		
     		if (filtro.getIdElemento() != null) {
-    			consulta.append(" and sia.idElemento = :idElemento");
+    			consultaSelect.append(" and sia.idElemento = :idElemento");
+    			consultaTotal.append(" and sia.idElemento = :idElemento");
     		}
     		
     		if (filtro.getExiste() != null) {
-    			consulta.append(" and sia.existe = :existe");
+    			consultaSelect.append(" and sia.existe = :existe");
+    			consultaTotal.append(" and sia.existe = :existe");
     		}
-    		consulta.append(" order by sia.id desc");
     		
-    		Query query = session.createQuery( consulta.toString() );
+    		final StringBuilder consulta = new StringBuilder();
+    		//Indicamos el orden, por defecto es por la id descendente
+    		if (filtro.getOrdenCampo() == null || filtro.getOrdenCampo().isEmpty()) {
+    			consulta.append(" order by sia.id desc");
+    		} else {
+    			consulta.append(" order by sia.");
+    			consulta.append(filtro.getOrdenCampo());
+    			if (filtro.getOrdenAsc() == null || filtro.getOrdenAsc().isEmpty()) {
+    				consulta.append(" asc ");
+    			} else {
+    				consulta.append(" ");
+    				consulta.append(filtro.getOrdenAsc());
+    			}
+    		}
     		
-    		if (filtro.getEstado() != null) {
+    		//La select.
+    		consultaSelect.append(consulta);
+    		final Query query = session.createQuery( consultaSelect.toString() );
+    		//Calculamos a partir de cuando hay que calcular.
+    		final int primerResultado = new Integer(filtro.getPagina()).intValue() * filtro.getNumElementos();
+			query.setFirstResult(primerResultado);
+			query.setMaxResults(filtro.getNumElementos());
+			if (filtro.getEstado() != null) {
     			query.setLong("estado", filtro.getEstado());
     		}
     		if (filtro.getIdElemento() != null) {
@@ -144,15 +243,26 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     		if (filtro.getExiste() != null) {
     			query.setInteger("existe", filtro.getExiste());
     		}
+    		List<Sia> lista = (List<Sia>) query.list();
+    		resultado.setListaResultados(lista);
     		
-    		
-    		if (filtro.getNumElementos() != null) {
-    			query.setMaxResults(filtro.getNumElementos());
+    		//El total.
+    		//consultaTotal.append(consulta); //No hace falta el order by en los counts
+    		final Query queryTotal = session.createQuery( consultaTotal.toString() );
+    		if (filtro.getEstado() != null) {
+    			queryTotal.setLong("estado", filtro.getEstado());
+    		}
+    		if (filtro.getIdElemento() != null) {
+    			queryTotal.setLong("idElemento", filtro.getIdElemento());
     		}
     		
+    		if (filtro.getExiste() != null) {
+    			queryTotal.setInteger("existe", filtro.getExiste());
+    		}
+    		Integer totalResultados = Integer.valueOf( queryTotal.uniqueResult().toString() );
+    		resultado.setTotalResultados(totalResultados);
     		
-    		
-    		return query.list();
+    		return resultado;
 
     	} catch (HibernateException he) {
 
@@ -176,26 +286,100 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 	 * @throws ExcepcionSolrApi
 	 * @throws DelegateException
 	 */
-	public List<SiaJob> getSiaProceso(final FiltroSia filtro) {
-		log.debug("Obtener SIA proceso");
+	public ResultadoBusqueda getSiaProceso(final FiltroSia filtro) {
+		log.debug("Obtener SIA Job");
 		
 		Session session = getSession();
+		ResultadoBusqueda resultado = new ResultadoBusqueda();
 		
 		try {
-
-    		StringBuilder consulta = new StringBuilder("select sia from SiaJob as sia ");
-    		if (filtro.getTipo() != null && !filtro.getTipo().trim().isEmpty()) {
-    			consulta.append(" where sia.tipo = '"+filtro.getTipo()+"'");
+    		
+    		final StringBuilder consultaSelect = new StringBuilder("select sia from SiaJob as sia where 1 = 1 ");
+    		final StringBuilder consultaTotal = new StringBuilder("select count(sia) from SiaJob as sia where 1 = 1 ");
+    		
+    		
+    		if (filtro.getEstado() != null) {
+    			consultaSelect.append(" and sia.estado = :estado");
+    			consultaTotal.append(" and sia.estado = :estado");
     		}
     		
-    		consulta.append(" order by sia.id desc");
-    		Query query = session.createQuery( consulta.toString() );
+    		if (filtro.getIdElemento() != null) {
+    			consultaSelect.append(" and sia.idElemento = :idElemento");
+    			consultaTotal.append(" and sia.idElemento = :idElemento");
+    		}
+    		
+    		if (filtro.getExiste() != null) {
+    			consultaSelect.append(" and sia.existe = :existe");
+    			consultaTotal.append(" and sia.existe = :existe");
+    		}
+    		
+    		if (filtro.getTipo() != null) {
+    			consultaSelect.append(" and sia.tipo = :tipo");
+    			consultaTotal.append(" and sia.tipo = :tipo");
+    		}
     		
     		
+    		final StringBuilder consulta = new StringBuilder();
+    		//Indicamos el orden, por defecto es por la id descendente
+    		if (filtro.getOrdenCampo() == null || filtro.getOrdenCampo().isEmpty()) {
+    			consulta.append(" order by sia.id desc");
+    		} else {
+    			consulta.append(" order by sia.");
+    			consulta.append(filtro.getOrdenCampo());
+    			if (filtro.getOrdenAsc() == null || filtro.getOrdenAsc().isEmpty()) {
+    				consulta.append(" asc ");
+    			} else {
+    				consulta.append(" ");
+    				consulta.append(filtro.getOrdenAsc());
+    			}
+    		}
     		
-    		query.setMaxResults(filtro.getNumElementos());
+    		//La select.
+    		consultaSelect.append(consulta);
+    		final Query query = session.createQuery( consultaSelect.toString() );
+    		//Calculamos a partir de cuando hay que calcular.
+    		final int primerResultado = new Integer(filtro.getPagina()).intValue() * filtro.getNumElementos();
+			query.setFirstResult(primerResultado);
+			query.setMaxResults(filtro.getNumElementos());
+			if (filtro.getEstado() != null) {
+    			query.setLong("estado", filtro.getEstado());
+    		}
+    		if (filtro.getIdElemento() != null) {
+    			query.setLong("idElemento", filtro.getIdElemento());
+    		}
     		
-    		return query.list();
+    		if (filtro.getExiste() != null) {
+    			query.setInteger("existe", filtro.getExiste());
+    		}
+    		
+    		if (filtro.getTipo() != null) {
+    			query.setString("tipo", filtro.getTipo());
+    		}
+    		
+    		List<Sia> lista = (List<Sia>) query.list();
+    		resultado.setListaResultados(lista);
+    		
+    		//El total.
+    		//consultaTotal.append(consulta); //No hace falta el order by en los counts
+    		final Query queryTotal = session.createQuery( consultaTotal.toString() );
+    		if (filtro.getEstado() != null) {
+    			queryTotal.setLong("estado", filtro.getEstado());
+    		}
+    		if (filtro.getIdElemento() != null) {
+    			queryTotal.setLong("idElemento", filtro.getIdElemento());
+    		}
+    		
+    		if (filtro.getExiste() != null) {
+    			queryTotal.setInteger("existe", filtro.getExiste());
+    		}
+    		
+    		if (filtro.getTipo() != null) {
+    			queryTotal.setString("tipo", filtro.getTipo());
+    		}
+    		Integer totalResultados = Integer.valueOf( queryTotal.uniqueResult().toString() );
+    		resultado.setTotalResultados(totalResultados);
+    		
+    		return resultado;
 
     	} catch (HibernateException he) {
 
@@ -209,47 +393,83 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 	}
 	
 	/***
-	  * Genera SIA pendiente 
+	 * Genera SIA pendiente. Se ha simplificado el flujo. <br />
+	 * Paso 1. borramos todo dato almacenado en Sia pendiente asociado a ese id elemento.<br /> 
+	 * Paso 2. miramos si  es enviable (SiaUtils.isEnviable) o no:
+	 * <ul>
+	 * 		<li>SI es enviable, continuamos.
+	 * 		<li>No es enviable y PARAMOS. Es no enviable porque no cumple una de las siguiente condiciones:
+	 * 			<ul>
+	 * 				<li>El procedimiento es visible</li>
+	 * 				<li>La UA (organo resolutorio) o predecesor es visible</li>
+	 * 				<li>La UA (organo resolutorio) o predecesor tiene DIR3</li>
+	 * 				<li>La UA (organo resolutorio) o predecesor está en SiaUA</li>
+	 * 			</ul>
+	 * 
+	 * 		</li>
+	 * </ul>
+	 *  Paso 3., miramos si le faltan datos:
+	 *  <ul>
+	 *  	<li>Si no le faltan datos, guardamos un sia pendiente como por ejecutar.</li>
+	 *  	<li>Si le faltan datos, guardamos un sia pendiente como ya ejecutado (estado = -2) y el mensaje con el dato que le falta. </li>
+	 *  </ul>
+	 *  
+	 *  Si no son de tipo procedimiento, se realiza el paso 1 y se inserta como pendiente.
    	 * @ejb.interface-method
    	 * @ejb.permission unchecked="true"
    	 * @param siaPendiente
 	 * @throws DelegateException
 	 */
-	public SiaPendiente generarSiaPendiente(SiaPendiente siaPendiente)  {
+	public SiaPendiente generarSiaPendiente(SiaPendiente siaPendiente, ProcedimientoLocal iProcedimiento) throws DelegateException  {
 		log.debug("Generar SIA pendiente");
 		
 		Session session = getSession();
 		
 		try {
-
-			//Si es de tipo borrado, hay que borrar las acciones pendientes de tipo accion existe.
-			if (SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_BORRADO.compareTo(siaPendiente.getExiste()) == 0) {
-				
-				List<SiaPendiente> pendientes = getPendientesSinEjecutar(siaPendiente.getIdElemento());
-				for(SiaPendiente siaPendienteParBorrar: pendientes) {
-					session.delete(siaPendienteParBorrar);
-				}
-				
-				//Guardamos
-				siaPendiente.setEstado(SiaUtils.SIAJOB_ESTADO_CREADO);
-	    		session.save(siaPendiente);
-	    		session.flush();
-			} else {
-				//Si es de tipo creado, revisar si ya existe un pendiente.
-				FiltroSia filtro = new FiltroSia();
-				filtro.setEstado(SiaUtils.SIAJOB_ESTADO_CREADO);
-				filtro.setExiste(SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE);
-				filtro.setIdElemento(siaPendiente.getIdElemento());
-				List<SiaPendiente> pendientes = this.getSiaPendientes(filtro);
 			
-				//Si no hay datos, creamos.
-				if (pendientes.size() == 0) {
-					siaPendiente.setEstado(SiaUtils.SIAJOB_ESTADO_CREADO);
-					session.save(siaPendiente);
-					session.flush();
+			//Paso 1. Se borran todos los que coincidan el id elemento.
+			final FiltroSia filtro = new FiltroSia();
+			filtro.setNumElementos(9999); filtro.setPagina(0);
+			filtro.setIdElemento(siaPendiente.getIdElemento());
+			List<SiaPendiente> pendientes =  (List<SiaPendiente>) this.getSiaPendientes(filtro).getListaResultados();
+			
+			for(SiaPendiente siaPendienteParBorrar: pendientes) {
+				session.delete(siaPendienteParBorrar);
+			}
+			
+			//Vemos si es de tipo procedimiento.
+			if (SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO.equals(siaPendiente.getTipo())) {
+				//Paso 2. Checkeamos si es enviable, si no es enviable, no seguimos.
+				
+				ProcedimientoLocal procedimiento;
+				if (iProcedimiento == null) {
+					procedimiento = DelegateUtil.getProcedimientoDelegate().obtenerProcedimientoParaSolr(siaPendiente.getIdElemento());
+				} else {
+					procedimiento = iProcedimiento;
 				}
-	    	}
-    		
+				SiaEnviableResultado siaEnviable = SiaUtils.isEnviable(procedimiento);
+				
+				if (siaEnviable.isNotificiarSIA()) {
+					//Paso 3. 
+					SiaCumpleDatos cumpleDatos = SiaUtils.cumpleDatos(procedimiento);
+					if (cumpleDatos.isCumpleDatos()) {
+						siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_CREADO);
+						session.save(siaPendiente);
+						session.flush();
+					} else {
+						siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_NO_CUMPLE_DATOS);
+						siaPendiente.setMensaje(cumpleDatos.getRespuesta());
+						session.save(siaPendiente);
+						session.flush();
+					}
+				}
+				
+			} else { //Es tipo UA o normativa. Por lo que directamente se escribe.
+				siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_CREADO);
+				session.save(siaPendiente);
+				session.flush();
+			}
+			
     		return siaPendiente;
 
     	} catch (HibernateException he) {
@@ -263,20 +483,6 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     	}	
 			
 	}
-	
-	/**
-	 * Obtiene las pendientes de ejecutar de si existe.
-	 * @param idElemento
-	 * @return
-	 */
-	private List<SiaPendiente> getPendientesSinEjecutar(Long idElemento) {
-		final FiltroSia filtro = new FiltroSia();
-		filtro.setEstado(SiaUtils.SIAJOB_ESTADO_CREADO);
-		filtro.setExiste(SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE);
-		filtro.setIdElemento(idElemento);
-		return this.getSiaPendientes(filtro);
-	}
-
 
 
 	/**
@@ -285,8 +491,6 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
    	 * @ejb.permission unchecked="true"
    	 
    	 * @param siaPendiente
-	 * 
-	 * @throws DelegateException 
 	 */
 	public SiaPendiente actualizarSiaPendiente(SiaPendiente siaPendiente)  {
 		log.debug("Actualizar SIA pendiente");
@@ -323,7 +527,6 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
    	 * @ejb.permission unchecked="true"
    	 * 
    	 * @param siaPendiente
-     * @throws DelegateException 
    	 */
     public void borrarSiaPendiente(SiaPendiente siaPendiente) {
     	log.debug("Borrar SIA pendiente");
@@ -554,7 +757,124 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     	
     }
     
-    
+    /**
+	 * Envia a SIA un procedimiento borrado.
+	 * 
+   	 * @ejb.interface-method
+   	 * @ejb.permission unchecked="true"
+   	 *   
+   	 * @param siaUA Sia UA
+     * @throws Exception 
+   	 */
+    public void grabarSiaUA(final SiaUA siaUA)  {
+    	
+    	final Session session = getSession();
+		
+    	try {
+	    	//Prepaso si es nueva. Tenemos que checkear si tiene DIR3 y que no tiene UA sucesora/precesora con SIA y no está ya introducido.
+	    	if (siaUA.getId() == null) {
+				//Si tiene DIR3.
+	    		if (siaUA.getUnidadAdministrativa().getCodigoDIR3() == null || siaUA.getUnidadAdministrativa().getCodigoDIR3().trim().isEmpty()) {
+					throw new EJBException("No tiene código DIR3.");
+				} 
+				
+				//Si ya está introducido
+	    		final SiaUA siuaPropio = (SiaUA) session.createQuery("Select siaUA From SiaUA siaUA where siaUA.unidadAdministrativa.id = " + siaUA.getUnidadAdministrativa().getId()).uniqueResult();
+	    		if (siuaPropio != null) {
+	    			throw new EJBException("Ya existe uno introducido.");
+	    		} 
+	    		
+	    		//Si predecesor ya existe.
+				for (Object objectUA : siaUA.getUnidadAdministrativa().getPredecesores()) {
+					final UnidadAdministrativa ua = (UnidadAdministrativa) objectUA;
+					final SiaUA siaUAPre = (SiaUA) session.createQuery("Select siaUA From SiaUA siaUA where siaUA.unidadAdministrativa.id = " + ua.getId()).uniqueResult();
+		    		if (siaUAPre != null) {
+		    			throw new EJBException("Predecesor ya introducido en la gestión de entidades UA.");
+		    		}
+				} 
+				
+				//Si sucesor ya existe.
+				for (Long idUASucesora : DelegateUtil.getUADelegate().obtenerHijosUnidadAdministrativa(siaUA.getUnidadAdministrativa().getId())) {
+					final UnidadAdministrativa ua =  DelegateUtil.getUADelegate().obtenerUnidadAdministrativa(idUASucesora);
+					final SiaUA siaUAPre = (SiaUA) session.createQuery("Select siaUA From SiaUA siaUA where siaUA.unidadAdministrativa.id = " + ua.getId()).uniqueResult();
+		    		if (siaUAPre != null) {
+		    			throw new EJBException("Sucesor ya introducido en la gestión de entidades UA.");
+		    		}
+				} 
+			}
+    	} catch (HibernateException e) {
+    		throw new EJBException(e);
+		} catch (DelegateException e) {
+			throw new EJBException(e);
+		}
+    	
+    	try
+    	{
+			session.saveOrUpdate(siaUA); 
+			session.flush();
+			session.close();
+    	 } catch(Exception exception) {
+ 			throw new EJBException(exception);
+ 		}
+    }
    
+    /**
+	 * Devuelve siaUA.
+	 * 
+   	 * @ejb.interface-method
+   	 * @ejb.permission unchecked="true"
+   	 *   
+   	 * @param id id SIA UA
+   	 */
+    public SiaUA obtenerSiaUA(final Long id)  {
+    	try
+    	{
+    		final Session session = getSession();
+    		final SiaUA siaUA = (SiaUA) session.get(SiaUA.class, id);
+    		return siaUA;
+    	 } catch(Exception exception) {
+ 			throw new EJBException(exception);
+ 		}
+    }
+    
+   /********************************
+   	* 		Devuelve siaUA.
+   	* 
+  	* @ejb.interface-method
+  	* @ejb.permission unchecked="true"
+  	*   
+  	* @param id id SIA UA
+  	*/
+    public SiaUA obtenerSiaUA(final UnidadAdministrativa ua) {
+    	SiaUA siaUA = null;
+    	try {
+    		final Session session = getSession();
+	       	final Query query = session.createQuery("Select siaUA from SiaUA siaUA where siaUA.unidadAdministrativa.id = "+ua.getId());
+	       	siaUA = (SiaUA) query.uniqueResult();
+    	} catch(Exception exception) {
+    		throw new EJBException(exception);
+    	}
+    	return siaUA;
+    }
+    
+    /********************************
+     * Borra elemento siaUA.
+	 * 
+   	 * @ejb.interface-method
+   	 * @ejb.permission unchecked="true"
+   	 *   
+   	 * @param id id SIA UA
+   	 */
+    public void borrarSiaUA(final Long id)  {
+    	try
+    	{
+    		final Session session = getSession();
+    		session.delete("from SiaUA as siaUA where siaUA.id = ?", id, Hibernate.LONG);
+			session.flush();
+    	 } catch(Exception exception) {
+ 			throw new EJBException(exception);
+ 		}
+    }
+    
 }
 

@@ -22,8 +22,8 @@ public class SiaWSInfo {
 		if (!SiaUtils.isActivoEnvio()) {
 			throw new Exception(" Estás en modo debug!");
 		}
-		final String usuario = SiaUtils.getUsuarioEnvio();
-		final String password = SiaUtils.getPasswordEnvio();
+		final String usuario = "";//SiaUtils.getUsuarioEnvio();
+		final String password = "";//SiaUtils.getPasswordEnvio();
 		final WsSIAConsultarActuacionesIdentificacion_PortType client = SiaClient.createInfoClient(SiaUtils.getUrlEnvio());
 		ParamSIAACTUACIONESACTUACION[] actuaciones = cargarDatosSiaInfo(sia);
 		

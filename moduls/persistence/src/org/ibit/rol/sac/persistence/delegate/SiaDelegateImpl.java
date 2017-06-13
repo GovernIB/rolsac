@@ -1,12 +1,14 @@
 package org.ibit.rol.sac.persistence.delegate;
 
 import java.rmi.RemoteException;
+import java.util.List;
 
 import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
 
 import org.ibit.rol.sac.model.SiaJob;
+import org.ibit.rol.sac.model.SiaUA;
 import org.ibit.rol.sac.persistence.intf.SiaPendienteFacade;
 import org.ibit.rol.sac.persistence.intf.SiaPendienteFacadeHome;
 import org.ibit.rol.sac.persistence.util.SiaPendienteFacadeUtil;
@@ -16,7 +18,10 @@ import org.ibit.rol.sac.persistence.util.SiaPendienteFacadeUtil;
  */
 public class SiaDelegateImpl extends SiaDelegate implements  StatelessDelegate, SiaDelegateI {
 
-    private Handle facadeHandle;
+    /** Serial Version UID. **/
+	private static final long serialVersionUID = 1L;
+	
+	private Handle facadeHandle;
 
     private SiaPendienteFacade getFacade() throws RemoteException {
         return (SiaPendienteFacade) facadeHandle.getEJBObject();
@@ -78,4 +83,6 @@ public class SiaDelegateImpl extends SiaDelegate implements  StatelessDelegate, 
            throw new DelegateException(e);
        }
 	}	
+	
+
 }

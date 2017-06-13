@@ -6,6 +6,9 @@ import org.ibit.rol.sac.model.ValueObject;
 
 public class SolrPendienteDTO implements ValueObject {
 
+	/** Serial Version UID. **/
+	private static final long serialVersionUID = 1L;
+	
 	private Long id;
 	private String tipo;
 	private Long idElemento;

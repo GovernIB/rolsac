@@ -68,6 +68,12 @@ public class Sia implements ValueObject {
 	/** Estado **/
 	private String estado;
 	
+	/** Usuario de conexión. **/
+	private String usuario;
+	
+	/** Password de conexión. **/
+	private String password;
+	
 	/**
 	 * @return the idProc
 	 */
@@ -289,6 +295,30 @@ public class Sia implements ValueObject {
 	 */
 	public void setIdDepartamento(String idDepartamento) {
 		this.idDepartamento = idDepartamento;
+	}
+	/**
+	 * @return the usuario
+	 */
+	public String getUsuario() {
+		return usuario;
+	}
+	/**
+	 * @param usuario the usuario to set
+	 */
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
+	}
+	/**
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+	/**
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.SiaUA" table="RSC_SIAUA" mutable="true">
+        <id name="id" unsaved-value="null" column="SUA_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+        
+        <many-to-one name="unidadAdministrativa" column="SUA_CODUNA" foreign-key="RSC_SUAUNA_FK" />
+        <property 	 name="usuario"   			 column="SUA_USUARI" />
+    	<property 	 name="contrasenya"	      	 column="SUA_CONTRA" />
+    	
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,74 @@
+@charset "utf-8";
+ 
+ #submenu_contingut ul li.seleccionat {
+     border: 0 none;
+ }
+ 
+ /* llistats table */
+ 
+ div.llistat div.id { 
+     width: 10%;
+     padding-left: 21px;
+ }
+ 
+ div.llistat div.accion { 
+     width: 10%;
+     padding-left: 21px;
+ }
+ div.llistat div.descripcion { 
+     width: 20%;
+     padding-left: 21px;
+ }
+ div.llistat div.fecha { 
+     width: 15%;
+     padding-left: 21px;
+ }
+ div.llistat div.mensaje { 
+     width: 35%;
+     padding-left: 21px;
+ }
+ div.llistat div.tbody div.nom {
+     width: 50%;
+ }
+ div.llistat div.tbody div.perfil {
+     padding-left: 21px;
+     width: 50%;
+ }
+ div.tabBlanco {
+ 	padding: 0px 00px 100px 0px;
+     clear: both; 
+     border: 0px solid #D3D3D3; 
+     border-top: none; 
+     border-radius: 0 10px 10px 10px; 
+     background-color: White;
+     font-family: TrebuchetMS, 'Trebuchet MS', Arial, Helvetica, sans-serif;
+     margin-top: 10px; 
+     text-align: center;         
+ }
+ 
+ .sinicon{  
+      background-image: none !important;
+ }
+ span.missatge {
+     background: url("../img/missatge/alerta.gif") no-repeat scroll 0 0.0em transparent;
+     padding-left: 2em;    
+     padding-bottom: 22px;
+     display: inline-block;
+     font-size: 1.1em;
+ }
+ 
+ div.tabBlanco .btnGenerico {
+     display: inline-block;
+     float: none;
+ }
+ 
+ div.td.ua {
+    text-align: left;
+    margin-left: 20px;
+}
+
+p.noHiHaDades { 
+	display:block; 
+	font-style:italic; 
+	padding:2em 0 2em 2.6em; 
+}

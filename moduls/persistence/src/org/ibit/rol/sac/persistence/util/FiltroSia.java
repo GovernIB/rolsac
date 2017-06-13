@@ -1,8 +1,12 @@
 package org.ibit.rol.sac.persistence.util;
 
-
+/**
+ * Filtro SIA.
+ * @author slromero
+ *
+ */
 public class FiltroSia {
-	/** Posibles estados : 0 , 1 o -1. **/
+	/** Posibles estados : 0 , 1, -1 o -2. **/
 	private Integer estado;
 	/** Cuantos elementos a mostrar por pantalla. **/
 	private Integer numElementos;
@@ -12,7 +16,13 @@ public class FiltroSia {
 	private Long idElemento;
 	/** Tipo de ejecución. PDT (pendiente), TOT (Tots) o TMP (Actualización por timepo) **/
 	private String tipo;
-
+	/** Pagina. **/
+	private Integer pagina;
+	/** Orden campo. */
+	private String ordenCampo;
+	/** Orden ASC / DESC. **/
+	private String ordenAsc;
+	
 	/**
 	 * @return the estado
 	 */
@@ -81,6 +91,48 @@ public class FiltroSia {
 	 */
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
+	}
+
+	/**
+	 * @return the pagina
+	 */
+	public Integer getPagina() {
+		return pagina;
+	}
+
+	/**
+	 * @param pagina the pagina to set
+	 */
+	public void setPagina(Integer pagina) {
+		this.pagina = pagina;
+	}
+
+	/**
+	 * @return the ordenCampo
+	 */
+	public String getOrdenCampo() {
+		return ordenCampo;
+	}
+
+	/**
+	 * @param ordenCampo the ordenCampo to set
+	 */
+	public void setOrdenCampo(String ordenCampo) {
+		this.ordenCampo = ordenCampo;
+	}
+
+	/**
+	 * @return the ordenAsc
+	 */
+	public String getOrdenAsc() {
+		return ordenAsc;
+	}
+
+	/**
+	 * @param ordenAsc the ordenAsc to set
+	 */
+	public void setOrdenAsc(String ordenAsc) {
+		this.ordenAsc = ordenAsc;
 	}
 	
 	
