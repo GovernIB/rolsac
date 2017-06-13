@@ -304,8 +304,13 @@ public class SiaUtils {
 	    		resultado.setNotificarSIA(false);
 	    		resultado.setRespuesta(mensajeError.toString());
 	    	} else {
-	    		resultado.setNotificarSIA(true);
-	    	    resultado.setOperacion(SiaUtils.ESTADO_BAJA);
+	    		if (tieneSiaUA) {
+	    			resultado.setNotificarSIA(true);
+	    			resultado.setOperacion(SiaUtils.ESTADO_BAJA);
+	    		} else {
+	    			//Sin código SiaUA no se puede enviar
+	    			resultado.setNotificarSIA(false);
+	    		}
 	    	}
 	    }
 	    
@@ -397,19 +402,23 @@ public class SiaUtils {
 	private static boolean isVisibleUA(ProcedimientoLocal procedimiento) {
 		
 		boolean visible = true;
-		if (!procedimiento.getOrganResolutori().getValidacion().equals(Validacion.PUBLICA)) {
-			
+		if (procedimiento == null || procedimiento.getOrganResolutori() == null) {
 			visible = false;
-			
 		} else {
-			//Recorremos sus predecesores
-	    	for(Object oua : procedimiento.getOrganResolutori().getPredecesores()) {
-	    		final UnidadAdministrativa ua = (UnidadAdministrativa) oua;
-	    		if (!ua.getValidacion().equals(Validacion.PUBLICA)) {
-	    			visible = false;
-	    			break;
-	    		}
-	    	}
+			if (!procedimiento.getOrganResolutori().getValidacion().equals(Validacion.PUBLICA)) {
+				
+				visible = false;
+				
+			} else {
+				//Recorremos sus predecesores
+		    	for(Object oua : procedimiento.getOrganResolutori().getPredecesores()) {
+		    		final UnidadAdministrativa ua = (UnidadAdministrativa) oua;
+		    		if (!ua.getValidacion().equals(Validacion.PUBLICA)) {
+		    			visible = false;
+		    			break;
+		    		}
+		    	}
+			}
 		}
 		
 		return visible;
@@ -424,24 +433,26 @@ public class SiaUtils {
 	private static String obtenerCodigoIdCentro(ProcedimientoLocal procedimiento) {
 		
 		String codigoIdCentro = null;
-		if (procedimiento == null || procedimiento.getOrganResolutori() == null) {
-			return "";
-		}
 		
-		if (procedimiento.getOrganResolutori().getCodigoDIR3() == null) {
-	    	
-	    	//Recorremos sus predecesores
-	    	for(Object oua : procedimiento.getOrganResolutori().getPredecesores()) {
-	    		UnidadAdministrativa ua = (UnidadAdministrativa) oua;
-	    		if (ua.getCodigoDIR3() != null) {
-	    			codigoIdCentro = ua.getCodigoDIR3();
-	    			break;
-	    		}
-	    	}
-	    	
-	    } else {
-	    	codigoIdCentro = procedimiento.getOrganResolutori().getCodigoDIR3();
-	    }
+		if (procedimiento == null || procedimiento.getOrganResolutori() == null) {
+			codigoIdCentro = "";
+		} else {
+		
+			if (procedimiento.getOrganResolutori().getCodigoDIR3() == null) {
+		    	
+		    	//Recorremos sus predecesores
+		    	for(Object oua : procedimiento.getOrganResolutori().getPredecesores()) {
+		    		UnidadAdministrativa ua = (UnidadAdministrativa) oua;
+		    		if (ua.getCodigoDIR3() != null) {
+		    			codigoIdCentro = ua.getCodigoDIR3();
+		    			break;
+		    		}
+		    	}
+		    	
+		    } else {
+		    	codigoIdCentro = procedimiento.getOrganResolutori().getCodigoDIR3();
+		    }
+		}
 
 		return codigoIdCentro;
 	}
@@ -455,27 +466,29 @@ public class SiaUtils {
 	 */
 	private static SiaUA obtenerSiaUA(ProcedimientoLocal procedimiento) {
 		
-		SiaUA siaUA = null;
+		SiaUA siaUA;
 		try {
 			if (procedimiento == null || procedimiento.getOrganResolutori() == null) {
-				return null;
-			}
+				siaUA = null;
+			} else {
 			
-			SiaPendienteProcesoDelegate siaPendienteProceso = DelegateUtil.getSiaPendienteProcesoDelegate();
-			siaUA = siaPendienteProceso.obtenerSiaUA(procedimiento.getOrganResolutori()); 
-			
-			if (siaUA == null) {
-				//Recorremos sus predecesores
-		    	for(final Object oua : procedimiento.getOrganResolutori().getPredecesores()) {
-		    		final UnidadAdministrativa ua = (UnidadAdministrativa) oua;
-		    		siaUA = siaPendienteProceso.obtenerSiaUA(ua); 
-		    		if (siaUA != null) {
-		    			break;
-		    		}
-		    	}
+				SiaPendienteProcesoDelegate siaPendienteProceso = DelegateUtil.getSiaPendienteProcesoDelegate();
+				siaUA = siaPendienteProceso.obtenerSiaUA(procedimiento.getOrganResolutori()); 
+				
+				if (siaUA == null) {
+					//Recorremos sus predecesores
+			    	for(final Object oua : procedimiento.getOrganResolutori().getPredecesores()) {
+			    		final UnidadAdministrativa ua = (UnidadAdministrativa) oua;
+			    		siaUA = siaPendienteProceso.obtenerSiaUA(ua); 
+			    		if (siaUA != null) {
+			    			break;
+			    		}
+			    	}
+				}
 			}
 		} catch (Exception exception) {
 			log.error("Error obteniendo la siaUA", exception);
+			siaUA = null;
 		}
 		
 		return siaUA;
@@ -487,8 +500,8 @@ public class SiaUtils {
 	 * @return
 	 */
 	public static String getResumenProcedimiento(ProcedimientoLocal procedimiento) {
-		TraduccionProcedimientoLocal tradEs = (TraduccionProcedimientoLocal) procedimiento.getTraduccion("es");
-		TraduccionProcedimientoLocal tradCa = (TraduccionProcedimientoLocal) procedimiento.getTraduccion("ca");
+		final TraduccionProcedimientoLocal tradEs = (TraduccionProcedimientoLocal) procedimiento.getTraduccion("es");
+		final TraduccionProcedimientoLocal tradCa = (TraduccionProcedimientoLocal) procedimiento.getTraduccion("ca");
 		String resumen = null;
 		if (tradEs != null  && StringUtils.isNotBlank(tradEs.getResumen())) {
 			resumen = tradEs.getResumen();
@@ -507,15 +520,15 @@ public class SiaUtils {
 	 * @return
 	 */
 	 public static String getNombreProcedimiento(ProcedimientoLocal procedimiento) {
-		TraduccionProcedimientoLocal tradEs = (TraduccionProcedimientoLocal) procedimiento.getTraduccion("es");
-		TraduccionProcedimientoLocal tradCa = (TraduccionProcedimientoLocal) procedimiento.getTraduccion("ca");
-		String nombre = null;
-		if (tradEs != null  && StringUtils.isNotBlank(tradEs.getNombre())) {
+		 final TraduccionProcedimientoLocal tradEs = (TraduccionProcedimientoLocal) procedimiento.getTraduccion("es");
+		 final TraduccionProcedimientoLocal tradCa = (TraduccionProcedimientoLocal) procedimiento.getTraduccion("ca");
+		 String nombre = null;
+		 if (tradEs != null  && StringUtils.isNotBlank(tradEs.getNombre())) {
 			nombre = tradEs.getNombre();
-		} else if (tradCa != null ){
+		 } else if (tradCa != null ){
 			nombre = tradCa.getNombre();
-		}
-		return nombre;	
+		 }
+		 return nombre;	
 	}
 
 	 /**

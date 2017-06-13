@@ -97,33 +97,38 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 			
 	    	for(Long idProcedimiento : idProcedimientos ) {
 	    		
-	    		//Obtenemos el procedimiento y vemos is es enviable a SIA.
-	    		ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimientoParaSolr(idProcedimiento);
-    			SiaEnviableResultado siaEnviableResultado = SiaUtils.isEnviable(procedimiento);
+	    		try 
+	    		{
+		    		//Obtenemos el procedimiento y vemos is es enviable a SIA.
+		    		ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimientoParaSolr(idProcedimiento);
+	    			SiaEnviableResultado siaEnviableResultado = SiaUtils.isEnviable(procedimiento);
+		    		
+		    		SiaResultado siaResultado = null;
+					if (siaEnviableResultado.isNotificiarSIA()) {
+						SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(procedimiento);
+						if (siaCumpleDatos.isCumpleDatos()) {
+				    		try {
+				    			// Enviamos a SIA
+				    			siaResultado = enviarProcedimiento(procedimiento);		    						    		
+							} catch (Exception e) {
+								log.error("Error enviando procedimiento " + procedimiento.getId(), e);
+								siaResultado = new SiaResultado(SiaResultado.RESULTADO_ERROR, ExceptionUtils.getStackTrace(e));												
+							}	   
+						} else {
+							siaResultado = new SiaResultado(SiaResultado.RESULTADO_NULO, siaCumpleDatos.getRespuesta());
+						}
+		    		} else {
+		    			siaResultado = new SiaResultado(SiaResultado.RESULTADO_NULO, siaEnviableResultado.getRespuesta());		
+		    		}
+					
+					// Actualizamos estado proceso
+					actualizaEstadoProceso(procedimiento.getId(), siaResultado, estadoProceso);
 	    		
-	    		SiaResultado siaResultado = null;
-				if (siaEnviableResultado.isNotificiarSIA()) {
-					SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(procedimiento);
-					if (siaCumpleDatos.isCumpleDatos()) {
-			    		try {
-			    			// Enviamos a SIA
-			    			siaResultado = enviarProcedimiento(procedimiento);		    						    		
-						} catch (Exception e) {
-							log.error("Error enviando procedimiento " + procedimiento.getId(), e);
-							siaResultado = new SiaResultado(SiaResultado.RESULTADO_ERROR, ExceptionUtils.getStackTrace(e));												
-						}	   
-					} else {
-						siaResultado = new SiaResultado(SiaResultado.RESULTADO_NULO, siaCumpleDatos.getRespuesta());
-					}
-	    		} else {
-	    			siaResultado = new SiaResultado(SiaResultado.RESULTADO_NULO, siaEnviableResultado.getRespuesta());		
+					// Guarda estado proceso
+		    		guardarEstadoProcesoSIA(siaJob, estadoProceso);
+	    		} catch (Exception exception) {
+	    			log.error("Error no controlado enviando procedimiento (id:"+idProcedimiento+"): " + exception.getMessage(), exception);
 	    		}
-				
-				// Actualizamos estado proceso
-				actualizaEstadoProceso(procedimiento.getId(), siaResultado, estadoProceso);
-    		
-				// Guarda estado proceso
-	    		guardarEstadoProcesoSIA(siaJob, estadoProceso);
 	    		
 			}
 	    	
