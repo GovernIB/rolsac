@@ -126,15 +126,7 @@ public class SiaUtils {
 	public static String getUrl() {
         return System.getProperty("es.caib.rolsac.sia.url").trim();
     }
-	
-	/**
-	 * Obtiene el id del departamento.
-	 * @return
-	 */
-	public static String getIdDepartamento() {
-		return System.getProperty("es.caib.rolsac.sia.departamento").trim();
-	}
-	
+		
 	
 	/**
 	 * Get url envio SIA.
