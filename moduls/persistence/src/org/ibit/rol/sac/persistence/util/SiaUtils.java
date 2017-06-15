@@ -261,26 +261,17 @@ public class SiaUtils {
 	    	resultado.setIdCentro(codigoIdCentro);
 	    }
 		
-		//Tiene SiaUA.
-		boolean tieneSiaUA;
-		final SiaUA siaUA = obtenerSiaUA(procedimiento);
-	    if (siaUA == null) {
-			tieneSiaUA = false;	
-			mensajeError.append("No tiene una asociada una UA multientidad.");
-	    } else {
-	    	tieneSiaUA = true;
-	    	resultado.setSiaUA(siaUA);
-	    }
+		
 		
 	    //Comprobamos
-	    //Si cumple los 4 checks.
+	    //Si cumple los 3 checks.
 	    //    Si nunca ha estado en SIA --> es enviable a SIA como Alta (A)
 	    //    Si esta de baja           --> es enviable a SIA como Reactivación (R)
 	    //    Si no..................   --> es enviable a SIA como modificación (M)
-	    //Si no cumple alguno de los 4 checks.
+	    //Si no cumple alguno de los 34 checks.
 	    //    Si está de baja o nunca ha estado en SIA ---> NO es enviable
 	    //    Si no .....								--> es enviable a SIA como baja.
-	    if (esVisible && tieneCodigoCentro && tieneSiaUA && isVisibleUA) {
+	    if (esVisible && tieneCodigoCentro && isVisibleUA) {
 	    	resultado.setNotificarSIA(true);
 		    if (procedimiento.getEstadoSIA() == null) {
 		    	resultado.setOperacion(SiaUtils.ESTADO_ALTA);
@@ -296,13 +287,8 @@ public class SiaUtils {
 	    		resultado.setNotificarSIA(false);
 	    		resultado.setRespuesta(mensajeError.toString());
 	    	} else {
-	    		if (tieneSiaUA) {
-	    			resultado.setNotificarSIA(true);
-	    			resultado.setOperacion(SiaUtils.ESTADO_BAJA);
-	    		} else {
-	    			//Sin código SiaUA no se puede enviar
-	    			resultado.setNotificarSIA(false);
-	    		}
+	    		//Sin código SiaUA no se puede enviar
+    			resultado.setNotificarSIA(false);    			
 	    	}
 	    }
 	    
@@ -316,6 +302,7 @@ public class SiaUtils {
 	 *  - Tiene normativas y uno de tipo SIA.
 	 *  - Tiene descripción.
 	 *  - Tiene resumen.
+	 *  - Tiene SiaUA
 	 *  
 	 * @param procedimiento
 	 * @return
@@ -374,8 +361,18 @@ public class SiaUtils {
 	    	resultado.setResumen(resumen);
 	    }
 	    
+	    boolean tieneSiaUA;
+  		final SiaUA siaUA = obtenerSiaUA(procedimiento);
+  	    if (siaUA == null) {
+  			tieneSiaUA = false;	
+  			mensajeError.append("No tiene una asociada una UA multientidad.");
+  	    } else {
+  	    	tieneSiaUA = true;
+  	    	resultado.setSiaUA(siaUA);
+  	    }
+	    
 	    /** Si cumple todos los datos ok, sino incrustamos el mensaje de error. **/
-	    if (tieneMaterias && tieneNormativas && encontradoTipo && tieneNombre && tieneResumen) {
+	    if (tieneMaterias && tieneNormativas && encontradoTipo && tieneNombre && tieneResumen && tieneSiaUA) {
 	    	resultado.setCumpleDatos(true);	    	
 	    } else {
 	    	resultado.setCumpleDatos(false);

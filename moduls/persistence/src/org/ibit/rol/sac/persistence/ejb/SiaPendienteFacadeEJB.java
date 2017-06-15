@@ -12,7 +12,6 @@ import javax.ejb.EJBException;
 
 import net.sf.hibernate.Hibernate;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.EstadoProcesoSIA;
@@ -23,7 +22,6 @@ import org.ibit.rol.sac.model.ResultadoSiaPendiente;
 import org.ibit.rol.sac.model.Sia;
 import org.ibit.rol.sac.model.SiaJob;
 import org.ibit.rol.sac.model.SiaPendiente;
-import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.ws.SiaResultado;
@@ -32,7 +30,6 @@ import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.SiaPendienteProcesoDelegate;
 import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
-import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.util.SiaCumpleDatos;
 import org.ibit.rol.sac.persistence.util.SiaEnviableResultado;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
@@ -653,19 +650,20 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		private Sia obtenerSiaProc(ProcedimientoLocal procedimiento) throws Exception {
 			final Sia sia = new Sia();
 			final SiaEnviableResultado siaEnviableResultado = SiaUtils.isEnviable(procedimiento);
+			final SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(procedimiento);
 			
 			sia.setIdProc(procedimiento.getId().toString());
 			if (procedimiento.getCodigoSIA() != null) {
 				sia.setIdSIA(procedimiento.getCodigoSIA().toString());
 			}
 			
-			sia.setTitulo( SiaUtils.getNombreProcedimiento(procedimiento) );
+			sia.setTitulo( siaCumpleDatos.getNombre());//SiaUtils.getNombreProcedimiento(procedimiento) );
 			
-			sia.setDescripcion( SiaUtils.getResumenProcedimiento(procedimiento) );
+			sia.setDescripcion( siaCumpleDatos.getResumen()); //SiaUtils.getResumenProcedimiento(procedimiento) );
 			
 			
 			sia.setIdCent(siaEnviableResultado.getIdCentro());
-			sia.setIdDepartamento(siaEnviableResultado.getSiaUA().getUnidadAdministrativa().getCodigoDIR3());
+			sia.setIdDepartamento(siaCumpleDatos.getSiaUA().getUnidadAdministrativa().getCodigoDIR3());
 			if (procedimiento.getUnidadAdministrativa().getTraduccion("es") != null && ((TraduccionUA)  procedimiento.getUnidadAdministrativa().getTraduccion("es")).getNombre() != null) {
 				sia.setUaGest(((TraduccionUA)  procedimiento.getUnidadAdministrativa().getTraduccion("es")).getNombre());
 			} else {
@@ -690,11 +688,10 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 						i++;
 						break;
 				}
-			}
-			
+			}			
 			sia.setIdDest(destinatarios);
 			
-			List<Tramite> tramites = procedimiento.getTramites();
+			final List<Tramite> tramites = procedimiento.getTramites();
 			Integer nivelAdministrativo = 1;
 			for (Tramite tramite : tramites) {
 				if (tramite != null && tramite.getFase() == 1)  {
@@ -756,13 +753,10 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 				sia.setTipoTramite(null);
 			}
 			
-			sia.setUsuario(siaEnviableResultado.getSiaUA().getUsuario());
-			sia.setPassword(siaEnviableResultado.getSiaUA().getContrasenya());
+			sia.setUsuario(siaCumpleDatos.getSiaUA().getUsuario());
+			sia.setPassword(siaCumpleDatos.getSiaUA().getContrasenya());
 			
 			return sia;
 		}
-
-		
-		
 		
 }

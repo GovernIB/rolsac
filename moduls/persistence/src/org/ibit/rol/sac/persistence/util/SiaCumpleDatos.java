@@ -1,5 +1,7 @@
 package org.ibit.rol.sac.persistence.util;
 
+import org.ibit.rol.sac.model.SiaUA;
+
 
 /**
  * Clase que indica si un procedimiento es enviable a SIA y en caso de no, envía el texto
@@ -16,6 +18,8 @@ public class SiaCumpleDatos {
 	private String resumen;
 	/** El nombre. **/
 	private String nombre;
+	/** Sia UA. **/
+	private SiaUA siaUA;
 	
 	/** Constructor. **/
 	public SiaCumpleDatos(boolean iCumpleDatos, String iRespuesta) {
@@ -89,6 +93,20 @@ public class SiaCumpleDatos {
 	 */
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	/**
+	 * @return the siaUA
+	 */
+	public SiaUA getSiaUA() {
+		return siaUA;
+	}
+
+	/**
+	 * @param siaUA the siaUA to set
+	 */
+	public void setSiaUA(SiaUA siaUA) {
+		this.siaUA = siaUA;
 	}
 
 	
