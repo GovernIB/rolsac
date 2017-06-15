@@ -33,16 +33,17 @@
     var txtUA = "<spring:message code='txt.sia.siaUA'/>";
     var txtUser = "<spring:message code='txt.sia.usuario'/>";
     var txtPass = "<spring:message code='txt.sia.contra'/>";
+    var txtExcluir = "<spring:message code='txt.sia.tabla.excluir'/>";
     
     //Botones
     var txtBotonInfo = "<spring:message code='boto.info'/>";
     
 	//Mensajes de error para el formulario
-	var txtUsuarioObligatorio = "Usuario obligatorio";
-	var txtContrasenyaObligatorio = "Contraseña obligatoria";
-	var txtUAObligatorio = "Unitat administrativa obligatoria";
-	var txtCampObligatori ="Campo obligatorio"; //Obligatorio para formulari.js
-	var txtLlistaItem = "SIA UA";
+	var txtUsuarioObligatorio = "<spring:message code='txt.sia.error.usuario'/>";
+	var txtContrasenyaObligatorio ="<spring:message code='txt.sia.error.contrasenya'/>";
+	var txtUAObligatorio ="<spring:message code='txt.sia.error.ua'/>";
+	var txtCampObligatori ="<spring:message code='txt.sia.error.campo'/>";
+	var txtLlistaItem = "<spring:message code='txt.sia.siaua'/>";
 	var txtEspere = "<spring:message code='txt.esperi'/>";
 	var txtCarregant = "<spring:message code='txt.carregant'/>";
     var txtCarregantDetall = txtCarregant + " <spring:message code='txt.detall_de_la'/> "+ txtLlistaItem.toLowerCase() + ". " + txtEspere;
@@ -59,7 +60,7 @@
             "etiquetaValor": "item_usuario",
             "obligatori": "si",
             "tipus": "alfanumeric",
-            "error": { "obligatori": "<spring:message code='proc.formulari.error.estat.obligatori'/>" }
+            "error": { "obligatori": "<spring:message code='txt.sia.error.usuario'/>" }
         },
 		
 		// Contrasenya
@@ -69,7 +70,7 @@
             "etiquetaValor": "item_contrasenya",
             "obligatori": "si",
             "tipus": "alfanumeric",
-            "error": { "obligatori": "<spring:message code='proc.formulari.error.estat.obligatori'/>" }
+            "error": { "obligatori": "<spring:message code='txt.sia.error.contrasenya'/>" }
         },
 		
 		// UA
@@ -79,7 +80,7 @@
             "etiquetaValor": "item_ua_id",
             "obligatori": "si",
             "tipus": "alfanumeric",
-            "error": {   "obligatori": "<spring:message code='proc.formulari.error.estat.obligatori'/>"}
+            "error": {   "obligatori": "<spring:message code='txt.sia.error.ua'/>"}
         },
 		
 		// UA NOMBRE
@@ -89,7 +90,7 @@
             "etiquetaValor": "item_ua",
             "obligatori": "si",
             "tipus": "alfanumeric",
-            "error": { "obligatori": "<spring:message code='proc.formulari.error.estat.obligatori'/>" }
+            "error": { "obligatori": "<spring:message code='txt.sia.error.ua'/>" }
         }];
 
 </script>
@@ -110,7 +111,7 @@
  	   <li id="tabListado" class="opcio L actiu" data-div="">
             <a href="javascript:void(0)"><spring:message code='sia.listado'/></a>
        </li>
-	   <li id="tabNuevaFicha" class="opcions nuevo"><a id="btnNuevaFicha" href="javascript:;" class="btn nou"><span><span>Crear nuevo SIA Unitat Administrativa</span></span></a></li>        
+	   <li id="tabNuevaFicha" class="opcions nuevo"><a id="btnNuevaFicha" href="javascript:;" class="btn nou"><span><span><spring:message code='txt.sia.crear.siaua'/></span></span></a></li>        
     </ul>
 	
 	<!-- DIV DE ABAJO CON LOS RESULTADOS QUE TENDRÍAN BACKGROUND BLANCO Y ENCIMA EL TAB. -->
@@ -158,7 +159,7 @@
 							<div class="fila">
 								<div class="element t99p">
 									<div class="etiqueta">
-										<label for="item_ua">Unitat Administrativa</label>
+										<label for="item_ua"><spring:message code='txt.sia.tabla.ua'/></label>
 									</div>                                          
 								</div>
 							</div>
@@ -192,7 +193,7 @@
 							<div class="fila"> 
 								<div class="element t50p">
 									<div class="etiqueta">                                            
-										<label for="item_usuario">Usuario</label>
+										<label for="item_usuario"><spring:message code='txt.sia.tabla.usuari'/></label>
 									</div>
 									<div class="control">
 										<input id="item_usuario" name="item_usuario" type="text" value=""/>
@@ -200,7 +201,7 @@
 								</div>
 								<div class="element t50p">
 									<div class="etiqueta">
-										<label for="item_contrasenya">Contrasenya</label>
+										<label for="item_contrasenya"><spring:message code='txt.sia.tabla.contra'/></label>
 									</div>
 									<div class="control">
 										<input id="item_contrasenya" name="item_contrasenya" type="text" value="" />

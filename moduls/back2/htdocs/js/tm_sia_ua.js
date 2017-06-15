@@ -132,7 +132,7 @@ function ListaN() {
 				
 				//BOTON PARA QUITAR.
 				contenidoHTML += "<div class=\"td boton\" role=\"gridcell\" style=\"width:15%;align-items: center;\">";
-				contenidoHTML += "<div class=\"btnGenerico\" style = \"float:left\"><a href=\"javascript:;\" style=\"width:100px;\" id = \"botonInfo\" class=\"btn unitatOrganica\" onclick=\"$('#item_id').val('"+elemento['id']+"');Detall.eliminar();\"><span>Excluir</span></a></div></div>";
+				contenidoHTML += "<div class=\"btnGenerico\" style = \"float:left\"><a href=\"javascript:;\" style=\"width:100px;\" id = \"botonInfo\" class=\"btn unitatOrganica\" onclick=\"$('#item_id').val('"+elemento['id']+"');Detall.eliminar();\"><span>"+txtExcluir+"</span></a></div></div>";
 
 				//FIN ROW
 				contenidoHTML += "</div>";
