@@ -2203,7 +2203,9 @@ function CEscriptoriSeccioFitxes() {
 
 						},
 						success: function(data) {
-
+							$("#cerca_fitxes_nom").removeAttr("disabled");
+							$("#cerca_fitxes_codi").removeAttr("disabled");
+							
 							if (data.id == -1) {
 
 								Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
@@ -2213,16 +2215,13 @@ function CEscriptoriSeccioFitxes() {
 								Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
 
 							} else if (data.fitxes.length == 0) {
-
+								
 								$("#seleccion-fichas").css("display", "block");
 								$("#seleccion-fichas").html("<p class='noItems'>" + txtNoHiHaFitxes + "</p>");	
 
 							} else {
 
 								EscriptoriSeccioFitxes.pintarListado(data);
-								$("#cerca_fitxes_nom").removeAttr("disabled");
-								$("#cerca_fitxes_codi").removeAttr("disabled");
-
 								$('#seleccion-fichas ul > li > div').each(function() {
 
 									var id = $(this).find("input[type=hidden]:first").val();
