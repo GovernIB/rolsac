@@ -230,40 +230,6 @@
             {
                 "modo": "individual",
                 "etiqueta": "id",
-                "etiquetaValor": "item_epri",
-                "obligatori": "no",
-                "tipus": "numeric",
-                "caracters":
-                    {
-                        "maxim": 5,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    },
-                "error":
-                    {
-                        "tipus": "<spring:message code='personal.formulari.epri.nomes_numeros'/>"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_nlpri",
-                "obligatori": "no",
-                "tipus": "numeric",
-                "caracters":
-                    {
-                        "maxim": 9,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    },
-                "error":
-                    {
-                        "tipus": "<spring:message code='personal.formulari.nlpri.nomes_numeros'/>"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
                 "etiquetaValor": "item_em",
                 "obligatori": "no",
                 "tipus": "numeric",
@@ -511,24 +477,16 @@
                             <div class="control">                               
                                 <input id="item_nlpui" name="item_nlpui" type="text" class="nou t10" />
                             </div>                                      
-                        </div>                                  
+                        </div>  
+                                                  
                     </div>
                     <!-- /fila -->
                                                   
                     <!-- fila -->
-                    <div class="fila">                              
-                        <div class="element t25p">                                  
-                            <div class="etiqueta"><label for="item_epri"><spring:message code='camp.extensio_privada_intranet'/></label></div>
-                            <div class="control">
-                                <input id="item_epri" name="item_epri" type="text" class="nou t6" />
-                            </div>                                      
-                        </div>                                  
-                        <div class="element t25p">                                  
-                            <div class="etiqueta"><label for="item_nlpri"><spring:message code='camp.numero_llarg_provat_intranet'/></label></div>
-                            <div class="control">
-                                <input id="item_nlpri" name="item_nlpri" type="text" class="nou t10" />
-                            </div>                                      
-                        </div>                                  
+                    <div class="fila">   
+                    	<!-- #402 se ocultan las opciones de moviles privadas. -->  
+                    	<input id="item_epri" name="item_epri" type="text" class="nou t6" style="display:none"/>  
+                    	<input id="item_nlpri" name="item_nlpri" type="text" class="nou t10" style="display:none"/>                         
                         <div class="element t25p">                                  
                             <div class="etiqueta"><label for="item_em"><spring:message code='camp.extensio_mobil'/></label></div>
                             <div class="control">
