@@ -280,6 +280,7 @@ function CEscriptoriTramit() {
         var fechaPublicacionProcedimiento = $("#item_data_publicacio").datetimepicker('getDate');
         //Ponemos los segundos a 0 para evitar que se tengan en cuenta al comparar
         fechaPublicacionProcedimiento.setSeconds(0);
+        fechaPublicacionProcedimiento.setMilliseconds(0);
         
         var fechaPublicacionTramite = $("#tramit_item_data_publicacio").datetimepicker('getDate'); 
         var txtFechaPublicacionProcedimiento= (!fechaPublicacionProcedimiento)? "" : " (" + $("#item_data_publicacio").val() + ")";
@@ -331,9 +332,6 @@ function CEscriptoriTramit() {
                     if (idTramit != "" && idTramit != undefined) {
                     	mensaje = txtTramitModificatCorrecte;                        
                         ModulTramit.actualitzaNomTramit(data);
-                      //#358 Cuando es modificación se quiere volver a la pantalla del procedimiento
-                  //      Missatge.cancelar();
-                   //     that.vuelve();
                         edita = true;
                     } else {                    	 
                     	mensaje = txtTramitCreatCorrecte;                      
@@ -349,10 +347,10 @@ function CEscriptoriTramit() {
                         nouTramit.unbind("click").bind("click", function() { that.editarTramit(nouTramit, null); });
                         
                         that.contaSeleccionats();
-                    }
-                    	
-                    //Actualizamos la información de la pantalla, sin necesidad de mostrarla.
-                    that.ActualizarTramit(null, data.id); 
+                    }                    	
+                   //#4 no se muestra mensaje "Correcto"
+                   // indicamos que no hay que mostrar el cancelar y si hay que quedarse (inserción) o no (edición)
+                   that.editarTramit(null, data.id, false, !edita);  
                     
                     //#358 Cuando es modificación se quiere volver a la pantalla del procedimiento
                     if(edita){
@@ -565,7 +563,12 @@ function CEscriptoriTramit() {
         
     };
     
-    this.editarTramit = function( el, id ) {
+    
+   
+    this.editarTramit = function( el, id, mostrarCancelar, quedarse ) {
+    	
+    	mostrarCancelar = typeof mostrarCancelar !== 'undefined' ? mostrarCancelar : true;
+    	quedarse = typeof quedarse !== 'undefined' ? quedarse : true;
 
         var tramitId = $(el).find("input.tramit_id").val();
         if (tramitId == null) {
@@ -586,24 +589,30 @@ function CEscriptoriTramit() {
             },
             success: function(data) {
             	
-            	Missatge.cancelar();            		
+            	if(mostrarCancelar){
+            		//#4 no se muestra mensaje "Correcto"            	
+            		Missatge.cancelar();            		
+            	}           		
 
                 if (data.idTramit > 0) {
-                    
-                    escriptori_detall_elm.fadeOut(300, function() {
-                        escriptori_tramits_elm.fadeIn(300, function() {                         
-                            escriptori_tramits_elm.find(".btnEliminar").show();
-                            escriptori_tramits_elm.find("div#modul_documents_requerits").show();
-                            escriptori_tramits_elm.find("div#modul_documents_tramits").show();
-                            escriptori_tramits_elm.find("div#modul_formularis_tramits").show();
-                            
-                            if ( $("#item_taxa").attr("checked") != undefined) {
-                                escriptori_tramits_elm.find("div#modul_taxes_tramits").show();          
-                            } else 
-                                escriptori_tramits_elm.find("div#modul_taxes_tramits").hide();                          
-                        });
-                    });   
-                    
+                	
+                    if(quedarse){                      	
+                    	//si nos quedamos en la pantalla, es porque hay que mostrar los modulos laterales
+                    	//del trámite (estamos editando un trámite existente)
+	                    escriptori_detall_elm.fadeOut(300, function() {
+	                        escriptori_tramits_elm.fadeIn(300, function() {                         
+	                            escriptori_tramits_elm.find(".btnEliminar").show();
+	                            escriptori_tramits_elm.find("div#modul_documents_requerits").show();
+	                            escriptori_tramits_elm.find("div#modul_documents_tramits").show();
+	                            escriptori_tramits_elm.find("div#modul_formularis_tramits").show();
+	                            
+	                            if ( $("#item_taxa").attr("checked") != undefined) {
+	                                escriptori_tramits_elm.find("div#modul_taxes_tramits").show();          
+	                            } else 
+	                                escriptori_tramits_elm.find("div#modul_taxes_tramits").hide();                          
+	                        });
+	                    });   
+                    }                    
                     EscriptoriTramit.pintar(data);
                     
                 } else if (data.id == -1){
@@ -617,44 +626,5 @@ function CEscriptoriTramit() {
         });
         
     };
-    
-    
-    //Actualiza la información del trámite, sin forzar que se muestre
-    this.ActualizarTramit = function( el, id ) {
-
-        var tramitId = $(el).find("input.tramit_id").val();
-        if (tramitId == null) {
-        	tramitId = id;
-        }
-        
-        Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
-        
-        $.ajax({
-            type: "POST",
-            url: pagDetallTramit,
-            data: "id=" + tramitId,
-            dataType: "json",
-            error: function() {
-                // Missatge.cancelar();
-                Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
-                Error.llansar();
-            },
-            success: function(data) {            	               
-                if (data.idTramit > 0) {                    
-                    EscriptoriTramit.pintar(data);                    
-                } else if (data.id == -1){
-                    Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
-                } else if (data.id < -1){
-                    Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
-                }
-                
-                that.modificado(false);
-            }
-        });
-        
-    };
-    
-    
-    
     
 };
