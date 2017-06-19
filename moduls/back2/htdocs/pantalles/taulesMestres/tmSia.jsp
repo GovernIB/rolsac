@@ -92,6 +92,7 @@
     var txtBotonContinuar = "<spring:message code='boto.continuar'/>";
     var txtBotonInfo = "<spring:message code='boto.info'/>";
     
+	
 
 </script>
 <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>

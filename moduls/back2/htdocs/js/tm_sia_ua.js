@@ -40,17 +40,17 @@ function inicializamosLista() {
 	//Declaración de items.
 	//var item1 = new itemLista();item1.nombre = "id";			item1.width=8;	item1.evento=null;
 	var item2 = new itemLista();item2.nombre = "ua";			item2.width=35;	item2.evento=null;
-	var item4 = new itemLista();item4.nombre = "usuario";		item4.width=15;	item4.evento=null;
-	var item5 = new itemLista();item5.nombre = "contrasenya";	item5.width=20;	item5.evento=null;
-	var items = new Array(item2, item4, item5);
+	var item4 = new itemLista();item4.nombre = "usuario";		item4.width=25;	item4.evento=null;
+	//var item5 = new itemLista();item5.nombre = "contrasenya";	item5.width=20;	item5.evento=null;
+	var items = new Array(item2, item4/*, item5*/);
 	
 	//Declaramos la cabecera.
 	//var cabecera1 = new itemCabecera(); cabecera1.nombre = txtId; 	cabecera1.width=10; cabecera1.order ="id";cabecera1.eventoActivo = true;
 	var cabecera3 = new itemCabecera(); cabecera3.nombre = txtUA; 	cabecera3.width=40; cabecera3.order ="unidadAdministrativa.id";cabecera3.eventoActivo = true;
 	var cabecera4 = new itemCabecera(); cabecera4.nombre = txtUser; cabecera4.width=15; cabecera4.order ="usuario";cabecera4.eventoActivo = true;
-	var cabecera5 = new itemCabecera(); cabecera5.nombre = txtPass; cabecera5.width=15; cabecera5.order ="contrasenya";cabecera5.eventoActivo = true;
+	//var cabecera5 = new itemCabecera(); cabecera5.nombre = txtPass; cabecera5.width=15; cabecera5.order ="contrasenya";cabecera5.eventoActivo = true;
 	var cabecera6 = new itemCabecera(); cabecera6.nombre = ""; 		cabecera6.width=15; cabecera6.order =null; cabecera6.eventoActivo = false;
-	var cabeceras = new Array(cabecera3, cabecera4, cabecera5, cabecera6);
+	var cabeceras = new Array(cabecera3, cabecera4/*, cabecera5*/, cabecera6);
 	
 	//Inicializamos los items de la tab lista.
 	lista.inicializar  (formularioBusqueda, pagLlistat, items, cabeceras);
@@ -119,7 +119,7 @@ function ListaN() {
 					var item = this.items[j];
 					contenidoHTML += "<div class=\"td "+item.nombre+"\" role=\"gridcell\" style=\"width:"+item.width+"%\">";
 					if (this.items[j].nombre == "ua") {
-						contenidoHTML += "<span class=\"td "+item.nombre+"\"><a id=\"siaua_"+elemento['id']+"\" onclick=\"lista.ficha(this)\">" + elemento[item.nombre] + "</a></span>";			
+						contenidoHTML += "<span class=\"td "+item.nombre+"\"><a id=\"siaua_"+elemento['id']+"\" onclick=\"lista.Detall.modificado(false);lista.ficha(this)\">" + elemento[item.nombre] + "</a></span>";			
 					} else {
 						if (item.evento == null) {
 							contenidoHTML += "<span class=\"td "+item.nombre+"\">" + elemento[item.nombre] + "</span>";				
@@ -177,7 +177,7 @@ function CDetall() {
 			url: pagGuardar,
 			data: dataForm,
 			dataType: "json",
-			error: function() {
+			error: function(data) {
 				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
 			},
 			success: function(data) {
@@ -198,8 +198,19 @@ function CDetall() {
 					});
 			
 				} else {
+					
 					//Hay un error
-					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.error + "</p>"});	
+					var mensajeError = data.error.trim();
+					if ( mensajeError == 'txt.sia.error.siaua.repetida') {
+						mensajeError = txtErrorRepetida;
+					} else if( mensajeError == 'txt.sia.error.siaua.predecesor') {
+						mensajeError = txtErrorPredecesora;
+					} else if( mensajeError == 'txt.sia.error.siaua.sucesora') {
+						mensajeError = txtEErrorSucesora;
+					} else if( mensajeError == 'txt.sia.error.siaua.dir3') {
+						mensajeError = txtErrorDi3;
+					}
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" +  mensajeError + "</p>"});	
 				}//End if
 
 			} //Fin success

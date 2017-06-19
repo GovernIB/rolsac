@@ -43,7 +43,7 @@
 	var txtContrasenyaObligatorio ="<spring:message code='txt.sia.error.contrasenya'/>";
 	var txtUAObligatorio ="<spring:message code='txt.sia.error.ua'/>";
 	var txtCampObligatori ="<spring:message code='txt.sia.error.campo'/>";
-	var txtLlistaItem = "<spring:message code='txt.sia.siaua'/>";
+	var txtLlistaItem = "<spring:message code='txt.sia.siaUA'/>";
 	var txtEspere = "<spring:message code='txt.esperi'/>";
 	var txtCarregant = "<spring:message code='txt.carregant'/>";
     var txtCarregantDetall = txtCarregant + " <spring:message code='txt.detall_de_la'/> "+ txtLlistaItem.toLowerCase() + ". " + txtEspere;
@@ -93,6 +93,12 @@
             "error": { "obligatori": "<spring:message code='txt.sia.error.ua'/>" }
         }];
 
+	//Error SIA UA intentando crear.
+		var txtErrorRepetida = "<spring:message code='txt.sia.error.siaua.repetida'/>" ;
+		var txtErrorPredecesora = "<spring:message code='txt.sia.error.siaua.predecesor'/>" ;
+		var txtEErrorSucesora = "<spring:message code='txt.sia.error.siaua.sucesora'/>" ;
+		var txtErrorDi3 = "<spring:message code='txt.sia.error.siaua.dir3'/>" ;
+		
 </script>
 <script type="text/javascript" src="<c:url value='/js/detall_base_n.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
@@ -159,7 +165,7 @@
 							<div class="fila">
 								<div class="element t99p">
 									<div class="etiqueta">
-										<label for="item_ua"><spring:message code='txt.sia.tabla.ua'/></label>
+										<label for="item_ua"><spring:message code='txt.sia.tabla.ua'/></label><span class="obligatori" title="Campo obligatorio">*</span>
 									</div>                                          
 								</div>
 							</div>
@@ -204,7 +210,7 @@
 										<label for="item_contrasenya"><spring:message code='txt.sia.tabla.contra'/></label>
 									</div>
 									<div class="control">
-										<input id="item_contrasenya" name="item_contrasenya" type="text" value="" />
+										<input id="item_contrasenya" name="item_contrasenya" type="password" value="" />
 									</div>
 								</div>
 							</div>                        
@@ -219,7 +225,7 @@
 				<div class="modul publicacio">
 					<fieldset>
 						<a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-						<legend><spring:message code='txt.publicacio'/></legend>
+						<legend><spring:message code='txt.accions'/></legend>
 						<div class="modul_continguts mostrat">
 							
 							<!-- botonera dalt -->
@@ -228,7 +234,7 @@
 								  <li class="btnVolver impar">
 									  <a id="btnVolver" href="javascript:;" class="btn torna btnVolver"><span><span><spring:message code='boto.torna'/></span></span></a>
 								  </li>
-								  <li class="btnGuardar par">
+								  <li class="btnGuardar par off">
 									  <a id="btnGuardar" href="javascript:;" class="btn guarda important"><span><span><spring:message code='boto.guarda_exclamacio'/></span></span></a>
 								  </li>
 								  <li class="btnEliminar impar" style="display:none;">

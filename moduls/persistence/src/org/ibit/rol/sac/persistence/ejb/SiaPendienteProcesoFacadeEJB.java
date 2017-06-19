@@ -775,13 +775,13 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 	    	if (siaUA.getId() == null) {
 				//Si tiene DIR3.
 	    		if (siaUA.getUnidadAdministrativa().getCodigoDIR3() == null || siaUA.getUnidadAdministrativa().getCodigoDIR3().trim().isEmpty()) {
-					throw new EJBException("No tiene código DIR3.");
+					throw new EJBException("txt.sia.error.siaua.dir3");
 				} 
 				
 				//Si ya está introducido
 	    		final SiaUA siuaPropio = (SiaUA) session.createQuery("Select siaUA From SiaUA siaUA where siaUA.unidadAdministrativa.id = " + siaUA.getUnidadAdministrativa().getId()).uniqueResult();
 	    		if (siuaPropio != null) {
-	    			throw new EJBException("Ya existe uno introducido.");
+	    			throw new EJBException("txt.sia.error.siaua.repetida");
 	    		} 
 	    		
 	    		//Si predecesor ya existe.
@@ -789,7 +789,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 					final UnidadAdministrativa ua = (UnidadAdministrativa) objectUA;
 					final SiaUA siaUAPre = (SiaUA) session.createQuery("Select siaUA From SiaUA siaUA where siaUA.unidadAdministrativa.id = " + ua.getId()).uniqueResult();
 		    		if (siaUAPre != null) {
-		    			throw new EJBException("Predecesor ya introducido en la gestión de entidades UA.");
+		    			throw new EJBException("txt.sia.error.siaua.predecesor");
 		    		}
 				} 
 				
@@ -798,7 +798,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 					final UnidadAdministrativa ua =  DelegateUtil.getUADelegate().obtenerUnidadAdministrativa(idUASucesora);
 					final SiaUA siaUAPre = (SiaUA) session.createQuery("Select siaUA From SiaUA siaUA where siaUA.unidadAdministrativa.id = " + ua.getId()).uniqueResult();
 		    		if (siaUAPre != null) {
-		    			throw new EJBException("Sucesor ya introducido en la gestión de entidades UA.");
+		    			throw new EJBException("txt.sia.error.siaua.sucesora");
 		    		}
 				} 
 			}
