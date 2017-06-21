@@ -287,10 +287,9 @@ public class TramiteBackController {
 				
 			}
 			
-			// Si el estado de publicación del procedimiento es público, valideremos que se intente
-			// añadir de nuevo otro trámite de iniciación, lo cual impediremos si es el caso.
-			if (fase == Tramite.INICIACION && procedimientoDelegate.existeOtroTramiteInicioProcedimiento(idProcedimiento, tramite.getId()) 
-					&& isProcedimientoConEstadoPublicacionPublica) {
+			// #400, tanto si es publico como si no, 
+			// solo puede haber un tramite de iniciciación
+			if (fase == Tramite.INICIACION && procedimientoDelegate.existeOtroTramiteInicioProcedimiento(idProcedimiento, tramite.getId())) {
 				
 			    error = messageSource.getMessage("error.tramit_inici_ja_existeix", null, request.getLocale());
 	            result = new IdNomDTO(-2l, error);
