@@ -20,7 +20,7 @@
 	<div id="submenu_contingut">
 		<ul>
 	        <li class="seleccionat">
-	            <span><spring:message code="submenu.sia" /></span>
+	            <span><spring:message code="menu.siaindex" /></span>
 	            <span class="actual"></span>
 	        </li>
         </ul>

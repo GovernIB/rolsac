@@ -27,6 +27,7 @@ import org.ibit.rol.sac.model.dto.SiaPendienteDTO;
 import org.ibit.rol.sac.model.dto.SiaUADTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.delegate.SiaPendienteProcesoDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.util.FiltroSia;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
@@ -73,7 +74,7 @@ public class TMSiaController extends PantallaBaseController {
     @RequestMapping(value = "/llistatSIAUA.do")
     public @ResponseBody Map<String, Object> llistat(HttpServletRequest request) {
 
-    	List<SiaUADTO> llistaSolrPendienteDTO = new ArrayList<SiaUADTO>();
+    	List<SiaUADTO> llistaSiaPendienteDTO = new ArrayList<SiaUADTO>();
         final Map<String, Object> resultats = new HashMap<String, Object>();
 
         try {
@@ -92,8 +93,8 @@ public class TMSiaController extends PantallaBaseController {
     		ResultadoBusqueda resultado = DelegateUtil.getSiaPendienteProcesoDelegate().getSiaUAs(Integer.parseInt(pagPag), Integer.parseInt(pagRes), ordenCampo, ordenAsc);
             
             resultats.put("total", resultado.getTotalResultados());
-            llistaSolrPendienteDTO.addAll(convertSiaUAToSiaUADTO(resultado));
-            resultats.put("nodes", llistaSolrPendienteDTO);
+            llistaSiaPendienteDTO.addAll(convertSiaUAToSiaUADTO(resultado));
+            resultats.put("nodes", llistaSiaPendienteDTO);
 
         } catch (DelegateException dEx) {
             if (dEx.isSecurityException()) {
@@ -246,12 +247,14 @@ public class TMSiaController extends PantallaBaseController {
     public @ResponseBody Map<String, Object> indexarTodo(HttpServletRequest request) {
 
     	final Map<String, Object> resultats = new HashMap<String, Object>();
+    	final SiaPendienteProcesoDelegate siaPendienteProcesoDel = DelegateUtil.getSiaPendienteProcesoDelegate(); 
         try {
         	//Paso 1. Comprobar si hay algo creado.
-          	if ( DelegateUtil.getSolrPendienteDelegate().checkJobsActivos()) {
+          	if ( siaPendienteProcesoDel.checkJobsActivos()) {
           		resultats.put("error", "Hi ha tasques en execucio");
           	} else {
-          		//Paso 2. Si todo correcto, ejecutar job 
+          		
+          		//Paso 3. Si todo correcto, ejecutar job 
           		ejecutarJob("todo");
           	}
         } catch (SchedulerException exception) {
@@ -280,208 +283,14 @@ public class TMSiaController extends PantallaBaseController {
       	//  se da por hecho que se está ejecutando.
       	Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler(); 
       	scheduler.start(); 
-      	JobDetail jobDetail = new JobDetail("IndexacionJob", Scheduler.DEFAULT_GROUP, IndexacionJob.class);
+      	JobDetail jobDetail = new JobDetail(SiaUtils.SIA_JOB_QUARTZ_NAME, Scheduler.DEFAULT_GROUP, IndexacionJob.class);
       	Trigger trigger = TriggerUtils.makeImmediateTrigger(0, 0); 
       	scheduler.getContext().put("tipoindexacion", tipoIndexacion);
         trigger.setName("FireOnceNowTrigger");  
       	scheduler.scheduleJob(jobDetail, trigger);
     }
     
-    @RequestMapping(value = "/indexarTodoFicha.do")
-    public @ResponseBody Map<String, Object> indexarTodoFicha(HttpServletRequest request) {
-
-    	final Map<String, Object> resultats = new HashMap<String, Object>();
-        try {
-        	//Paso 1. Comprobar si hay algo creado.
-          	if ( DelegateUtil.getSolrPendienteDelegate().checkJobsActivos()) {
-          		resultats.put("error", "Hi ha tasques en execucio");
-          	} else {
-          		//Paso 2. Si todo correcto, ejecutar job 
-          		ejecutarJob("ficha");
-          	}    
-        } catch (SchedulerException exception) {
-        	log.error("Error: " + exception.getMessage());
-            resultats.put("error", "No es pot generar el job");
-        } catch (Exception dEx) {
-           log.error("Error: " + dEx.getMessage());
-            if (dEx.getCause() == null) {
-            	resultats.put("error", dEx.getMessage());
-            } else {
-            	resultats.put("error", dEx.getCause().getMessage());
-            }
-        }
-
-        return resultats; 
-    }
     
-    @RequestMapping(value = "/indexarTodoProcedimiento.do")
-    public @ResponseBody Map<String, Object> indexarTodoProcedimiento(HttpServletRequest request) {
-
-    	final Map<String, Object> resultats = new HashMap<String, Object>();
-         try {
-        	//Paso 1. Comprobar si hay algo creado.
-          	if ( DelegateUtil.getSolrPendienteDelegate().checkJobsActivos()) {
-          		resultats.put("error", "Hi ha tasques en execucio");
-          	} else {
-          		//Paso 2. Si todo correcto, ejecutar job 
-          		ejecutarJob("procedimiento");
-          	}    
-        } catch (SchedulerException exception) {
-        	log.error("Error: " + exception.getMessage());
-            resultats.put("error", "No es pot generar el job");
-        } catch (Exception dEx) {
-           log.error("Error: " + dEx.getMessage());
-            if (dEx.getCause() == null) {
-            	resultats.put("error", dEx.getMessage());
-            } else {
-            	resultats.put("error", dEx.getCause().getMessage());
-            }
-        }
-        return resultats; 
-    }
-    
-    @RequestMapping(value = "/indexarTodoNormativa.do")
-    public @ResponseBody Map<String, Object> indexarTodoNormativa(HttpServletRequest request) {
-
-    	final Map<String, Object> resultats = new HashMap<String, Object>();
-        try {
-        	//Paso 1. Comprobar si hay algo creado.
-         	if ( DelegateUtil.getSolrPendienteDelegate().checkJobsActivos()) {
-         		resultats.put("error", "Hi ha tasques en execucio");
-         	} else {
-         		//Paso 2. Si todo correcto, ejecutar job 
-         		ejecutarJob("normativa");
-         	}    
-        } catch (SchedulerException exception) {
-        	log.error("Error: " + exception.getMessage());
-            resultats.put("error", "No es pot generar el job");
-        } catch (Exception dEx) {
-           log.error("Error: " + dEx.getMessage());
-            if (dEx.getCause() == null) {
-            	resultats.put("error", dEx.getMessage());
-            } else {
-            	resultats.put("error", dEx.getCause().getMessage());
-            }
-        }
-        return resultats; 
-    }
-    
-    @RequestMapping(value = "/indexarTodoTramite.do")
-    public @ResponseBody Map<String, Object> indexarTodoTramite(HttpServletRequest request) {
-
-    	final Map<String, Object> resultats = new HashMap<String, Object>();
-         try {
-        	//Paso 1. Comprobar si hay algo creado.
-         	if ( DelegateUtil.getSolrPendienteDelegate().checkJobsActivos()) {
-         		resultats.put("error", "Hi ha tasques en execucio");
-         	} else {
-         		//Paso 2. Si todo correcto, ejecutar job 
-         		ejecutarJob("tramite");
-         	}  
-        } catch (SchedulerException exception) {
-        	log.error("Error: " + exception.getMessage());
-            resultats.put("error", "No es pot generar el job");
-        } catch (Exception dEx) {
-           log.error("Error: " + dEx.getMessage());
-            if (dEx.getCause() == null) {
-            	resultats.put("error", dEx.getMessage());
-            } else {
-            	resultats.put("error", dEx.getCause().getMessage());
-            }
-        }
-        return resultats; 
-    }
-    
-    @RequestMapping(value = "/indexarTodoUA.do")
-    public @ResponseBody Map<String, Object> indexarTodoUA(HttpServletRequest request) {
-
-    	final Map<String, Object> resultats = new HashMap<String, Object>();
-        try {
-              
-            //Paso 1. Comprobar si hay algo creado.
-          	if ( DelegateUtil.getSolrPendienteDelegate().checkJobsActivos()) {
-          		resultats.put("error", "Hi ha tasques en execucio");
-          	} else {
-          		//Paso 2. Si todo correcto, ejecutar job
-          		ejecutarJob("ua");
-          	}
-          	
-        } catch (SchedulerException exception) {
-        	log.error("Error: " + exception.getMessage());
-            resultats.put("error", "No es pot generar el job");
-        } catch (Exception dEx) {
-           log.error("Error: " + dEx.getMessage());
-            if (dEx.getCause() == null) {
-            	resultats.put("error", dEx.getMessage());
-            } else {
-            	resultats.put("error", dEx.getCause().getMessage());
-            }
-        }
-        return resultats; 
-    }
-
-
-    @RequestMapping(value = "/indexarPendientes.do")
-    public @ResponseBody Map<String, Object> indexarPendientes(HttpServletRequest request) {
-
-    	final Map<String, Object> resultats = new HashMap<String, Object>();     
-
-        try {
-        	
-        	//Paso 1. Comprobar si hay algo creado.
-        	if ( DelegateUtil.getSolrPendienteDelegate().checkJobsActivos()) {
-        		resultats.put("error", "Hi ha tasques en execucio");
-        	} else {
-        		//Paso 2. Si todo correcto, ejecutar job 
-        		ejecutarJob("pendientes");
-        		resultats.put("id", 1L); //Se mostrará por pantalla el mensaje
-        		resultats.put("nom", messageSource.getMessage("index.missatge.enviant_dades", null, request.getLocale()));
-        	}
-        	
-        } catch (SchedulerException exception) {
-        	log.error("Error: " + exception.getMessage());
-            resultats.put("error", "No es pot generar el job");
-        } catch (Exception dEx) {
-           log.error("Error: " + dEx.getMessage());
-            if (dEx.getCause() == null) {
-            	resultats.put("error", dEx.getMessage());
-            } else {
-            	resultats.put("error", dEx.getCause().getMessage());
-            }
-        }
-
-        return resultats;
-    }
-    
-    
-    
-
-    @RequestMapping(value = "/borrarCaducadas.do", method = POST)
-    public @ResponseBody Map<String, Object> borrarCaducadas(HttpServletRequest request) {
-
-    	final Map<String, Object> resultats = new HashMap<String, Object>();     
-    	 
-         try {
-        	 DelegateUtil.getSolrPendienteDelegate().borrarCaducadas();            
-
-         } catch (DelegateException dEx) {
-             if (dEx.isSecurityException()) {
-                 log.error("Permisos insuficients: " + dEx.getMessage());
-             } else {
-                 log.error("Error: " + dEx.getMessage());
-             }
-
-             if (dEx.getCause() == null) {
-             	resultats.put("error", dEx.getMessage());
-             } else {
-             	resultats.put("error", dEx.getCause().getMessage());
-             }
-         }
-
-         return resultats;
-    }
-
-
    
     
     @RequestMapping(value = "/sia.do", method = GET)

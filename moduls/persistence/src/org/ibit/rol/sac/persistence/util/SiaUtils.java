@@ -65,6 +65,9 @@ public class SiaUtils {
 
 	public static final Integer SIAPENDIENTE_PROCEDIMIENTO_EXISTE = 1;
 	public static final Integer SIAPENDIENTE_PROCEDIMIENTO_BORRADO = 0;
+
+	/** El nombre cuando se crea el job de quartz. **/
+	public static final String SIA_JOB_QUARTZ_NAME = "siaJob";
 	
 	
 	/**

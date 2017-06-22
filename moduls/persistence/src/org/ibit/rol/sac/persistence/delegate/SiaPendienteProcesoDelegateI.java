@@ -26,7 +26,7 @@ public interface SiaPendienteProcesoDelegateI {
 	
 	public void borrarSiaPendiente(SiaPendiente siaPendiente) throws DelegateException;
 
-	public boolean checkJobsActivos() throws DelegateException;
+	public boolean checkJobsActivos() throws Exception;
 
 	public SiaJob crearSiaJob(String tipo)  throws DelegateException;
 
@@ -47,5 +47,7 @@ public interface SiaPendienteProcesoDelegateI {
 	public SiaUA obtenerSiaUA(UnidadAdministrativa ua) throws DelegateException;
 	
 	public void borrarSiaUA(Long id) throws DelegateException;
+
+	public void borrarSiaPendientes() throws DelegateException;
 
 }

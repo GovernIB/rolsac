@@ -66,12 +66,17 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	
 	/**
 	 * Obtener SIA pendientes de enviar 
+	 * @throws DelegateException 
 	 * @throws Exception 
    	 * @ejb.interface-method
    	 * @ejb.permission unchecked="true"
 	 */
-	public void enviarTodos(SiaJob siaJob)  {
+	public void enviarTodos(SiaJob siaJob) throws DelegateException  {
 		log.debug("Enviar todos los procedimientos SIA ");
+		
+		//Prepaso, borramos todos los pendintes.
+  		DelegateUtil.getSiaPendienteProcesoDelegate().borrarSiaPendientes(); 
+  		
 		
 		final ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
 		
@@ -112,6 +117,16 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 								siaResultado = new SiaResultado(SiaResultado.RESULTADO_ERROR, ExceptionUtils.getStackTrace(e));												
 							}	   
 						} else {
+							//Guardamos un SIA Pendiente como que no cumple datos (última pestaña)
+							SiaPendiente siaPendiente = new SiaPendiente();
+							siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_NO_CUMPLE_DATOS);
+							siaPendiente.setExiste(SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE);
+							siaPendiente.setFecAlta(new Date());
+							siaPendiente.setFecIdx(new Date());
+							siaPendiente.setIdElemento(idProcedimiento);
+							siaPendiente.setTipo(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO);
+							siaPendiente.setMensaje(siaCumpleDatos.getRespuesta());
+							DelegateUtil.getSiaPendienteProcesoDelegate().generarSiaPendiente(siaPendiente, procedimiento);
 							siaResultado = new SiaResultado(SiaResultado.RESULTADO_NULO, siaCumpleDatos.getRespuesta());
 						}
 		    		} else {

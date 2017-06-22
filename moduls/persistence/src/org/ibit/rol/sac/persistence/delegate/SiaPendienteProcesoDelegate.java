@@ -62,7 +62,7 @@ public class SiaPendienteProcesoDelegate implements StatelessDelegate {
         impl.borrarSiaPendiente(siaPendiente);
     }
 
-	public boolean checkJobsActivos() throws DelegateException{
+    public boolean checkJobsActivos() throws Exception, DelegateException{
 		return impl.checkJobsActivos();
 	}
 
@@ -104,6 +104,10 @@ public class SiaPendienteProcesoDelegate implements StatelessDelegate {
 
 	public void borrarSiaUA(Long id) throws DelegateException {
 		impl.borrarSiaUA(id);
+	}
+
+	public void borrarSiaPendientes() throws DelegateException {
+		impl.borrarSiaPendientes();
 	}
 
 	

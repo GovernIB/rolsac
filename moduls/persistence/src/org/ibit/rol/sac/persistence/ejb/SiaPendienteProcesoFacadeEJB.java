@@ -29,6 +29,9 @@ import org.ibit.rol.sac.persistence.util.SiaCumpleDatos;
 import org.ibit.rol.sac.persistence.util.SiaEnviableResultado;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.ibit.rol.sac.persistence.ws.sia.SiaWS;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.impl.StdSchedulerFactory;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.caib.solr.api.exception.ExcepcionSolrApi;
@@ -593,24 +596,66 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     
     /**
      * Revisa si se está ejecutando algún job.
-     * 
+     * Se hacen 2 comprobaciones:
+     * <ul>
+     *  <lo>Primero si según el StdSchedulerFactory está activo.</lo>
+     *  <lo>Segundo si sale en la bbdd alguno no cerrado (se verán los últimos 5) </lo>
+     * </ul>
    	 * @ejb.interface-method
    	 * @ejb.permission unchecked="true"
    	 * 
    	 * @return Booleano True si hay algo activo y false si no lo está.  
+     * @throws SchedulerException 
    	 */
-    public boolean checkJobsActivos() {
+    public boolean checkJobsActivos() throws SchedulerException {
+    	
+    	Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler(); 
     	boolean retorno = false;
-    	//Se ha simplificado, se verán los últimos jobs ejecutados y, si alguno de ellos está sin fecha fin
-    	//  se da por hecho que se está ejecutando.
-    	List<SiaJob> jobs = getListJobs(5);
-    	for(SiaJob job : jobs) {
-    		if (job.getFechaFin() == null) {
-    			retorno = true;
-    		}
+    	
+    	//Buscamos en el grupo por defecto 'DEFAULT' un nombre de job que coincida con el de 'siaJob'.	 
+    	for (String jobName : scheduler.getJobNames(Scheduler.DEFAULT_GROUP)) {
+    		  if ("SiaPendienteJob".equals(jobName)) {
+    			  retorno = true;
+   			  }
+    	}
+    	
+    	if (!retorno) {
+	    	//Se ha simplificado, se verán los últimos jobs ejecutados y, si alguno de ellos está sin fecha fin
+	    	//  se da por hecho que se está ejecutando.
+	    	List<SiaJob> jobs = getListJobs(5);
+	    	for(SiaJob job : jobs) {
+	    		if (job.getFechaFin() == null) {
+	    			retorno = true;
+	    		}
+	    	}
     	}
     	return retorno;
+    	
+    	
     }
+    
+    
+    /**
+     * Borra todos los datos en sia pendiente.
+   	 * @ejb.interface-method
+   	 * @ejb.permission unchecked="true"
+   	 *   
+   	 */
+    public void borrarSiaPendientes() {
+    	final Session session = getSession();
+    	try
+    	{
+    		session.delete("Select siaPdt from SiaPendiente siaPdt");
+    		session.flush();			
+	    } catch(Exception exception) {
+			throw new EJBException(exception);
+		} finally {
+			if (session != null) {
+				close(session); 
+			}
+		}
+    }
+    
     
     /**
      * Lista todos los SiaJob según cuantos.
@@ -622,7 +667,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
      */
     public List<SiaJob> getListJobs(int cuantos) {
 
-        Session session = getSession();
+        final Session session = getSession();
         try {
             Criteria criteri = session.createCriteria(SiaJob.class);
             criteri.addOrder(Order.desc("id"));

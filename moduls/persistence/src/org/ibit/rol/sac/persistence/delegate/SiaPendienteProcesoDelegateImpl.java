@@ -11,12 +11,11 @@ import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.SiaJob;
 import org.ibit.rol.sac.model.SiaPendiente;
 import org.ibit.rol.sac.model.SiaUA;
-import org.ibit.rol.sac.model.SolrPendienteJob;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.ws.SiaResultado;
-import org.ibit.rol.sac.persistence.util.FiltroSia;
 import org.ibit.rol.sac.persistence.intf.SiaPendienteProcesoFacade;
 import org.ibit.rol.sac.persistence.intf.SiaPendienteProcesoFacadeHome;
+import org.ibit.rol.sac.persistence.util.FiltroSia;
 import org.ibit.rol.sac.persistence.util.SiaPendienteProcesoFacadeUtil;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
@@ -27,7 +26,10 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 public class SiaPendienteProcesoDelegateImpl extends SiaPendienteProcesoDelegate implements  StatelessDelegate, SiaPendienteProcesoDelegateI {
 
 	
-    private long timeLen = 0L;
+    /** Serial version UID. **/
+	private static final long serialVersionUID = 1L;
+
+	private long timeLen = 0L;
 
     // Cache de lenguaje por defecto
     private String porDefecto = null;
@@ -107,6 +109,15 @@ public class SiaPendienteProcesoDelegateImpl extends SiaPendienteProcesoDelegate
 	           throw new DelegateException(e);
 	       }
 	}
+	
+	@Override
+	public void borrarSiaPendientes() throws DelegateException {
+		try {
+			getFacade().borrarSiaPendientes();
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
+	}
 
 	@Override
 	public void borrarSiaPendiente(SiaPendiente siaPendiente) throws DelegateException{
@@ -117,9 +128,10 @@ public class SiaPendienteProcesoDelegateImpl extends SiaPendienteProcesoDelegate
 	       }
 		
 	}
+	
 	@Override
-	public boolean checkJobsActivos() throws DelegateException{
-		 try {
+	public boolean checkJobsActivos() throws Exception{
+		 try {   
 				return getFacade().checkJobsActivos();
 	       } catch (RemoteException e) {
 	           throw new DelegateException(e);
