@@ -983,18 +983,27 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 			StringBuilder from = new StringBuilder(" from  ProcedimientoLocal as procedimiento,  procedimiento.traducciones as trad");
 			StringBuilder where = new StringBuilder("where index(trad) = :idioma ");
-			StringBuilder consulta = new StringBuilder("select new ProcedimientoLocal(procedimiento.id, trad.nombre, procedimiento.validacion, procedimiento.fechaActualizacion, ");
-			if(bc.getProcedimiento().getFamilia().getId() == null || bc.getProcedimiento().getFamilia().getId() != -1){
-				consulta.append("procedimiento.fechaCaducidad, procedimiento.fechaPublicacion, tradFam.nombre, index(trad), procedimiento.unidadAdministrativa ) ");
-				where.append("and index(tradFam) = :idioma ");
-				from.append(", procedimiento.familia as fam, fam.traducciones as tradFam");
-			}else{				//Para poder buscar proc sin familia
-				//TODO en el constructor s esta pasando familia con el nombre del proc
-				consulta.append("procedimiento.fechaCaducidad, procedimiento.fechaPublicacion,trad.nombre , index(trad), procedimiento.unidadAdministrativa ) ");
+			StringBuilder consulta;
+			if (bc.getSoloId()) { 
+				consulta = new StringBuilder("select distinct procedimiento.id from where");
+				if(bc.getProcedimiento().getFamilia().getId() == null || bc.getProcedimiento().getFamilia().getId() != -1){
+					where.append("and index(tradFam) = :idioma ");
+					from.append(", procedimiento.familia as fam, fam.traducciones as tradFam");
+				}
+			} else {
+				consulta = new StringBuilder("select new ProcedimientoLocal(procedimiento.id, trad.nombre, procedimiento.validacion, procedimiento.fechaActualizacion, ");
+				if(bc.getProcedimiento().getFamilia().getId() == null || bc.getProcedimiento().getFamilia().getId() != -1){
+					consulta.append("procedimiento.fechaCaducidad, procedimiento.fechaPublicacion, tradFam.nombre, index(trad), procedimiento.unidadAdministrativa ) ");
+					where.append("and index(tradFam) = :idioma ");
+					from.append(", procedimiento.familia as fam, fam.traducciones as tradFam");
+				}else{				//Para poder buscar proc sin familia
+					//TODO en el constructor s esta pasando familia con el nombre del proc
+					consulta.append("procedimiento.fechaCaducidad, procedimiento.fechaPublicacion,trad.nombre , index(trad), procedimiento.unidadAdministrativa ) ");
+					
+				}
 				
+				consulta.append("from where");
 			}
-			consulta.append("from where");
-	
 			where.append("and procedimiento.unidadAdministrativa.id in (:UA) ");
 			
 			if ( bc.getProcedimiento().getId() != null )

@@ -21,11 +21,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-
-
-
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
@@ -78,6 +76,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.back2.util.CSVUtil;
 import es.caib.rolsac.back2.util.CargaModulosLateralesUtil;
 import es.caib.rolsac.back2.util.GuardadoAjaxUtil;
 import es.caib.rolsac.back2.util.HtmlUtils;
@@ -197,7 +196,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 			
 			FichaResumenDelegate fitxaResumenDelegate = DelegateUtil.getFichaResumenDelegate();
 
-			resultadoBusqueda = fitxaResumenDelegate.buscarFichas(paramMap, tradMap, ua, fetVital, materia, publicObjectiu, uaFilles, uaMeves, campoOrdenacion, orden, pagPag, pagRes, campoVisible);
+			resultadoBusqueda = fitxaResumenDelegate.buscarFichas(paramMap, tradMap, ua, fetVital, materia, publicObjectiu, uaFilles, uaMeves, campoOrdenacion, orden, pagPag, pagRes, campoVisible, false);
 
 			for ( FichaResumen fitxaResumen : castList(FichaResumen.class, resultadoBusqueda.getListaResultados()) ) {
 				
@@ -232,7 +231,182 @@ public class FitxaInfBackController extends PantallaBaseController {
 		return resultats;
 		
 	}
+	
+	
+	
+	@RequestMapping(value = "/exportar.do", method = POST)
+	public void exportar(HttpServletRequest request, HttpSession session, HttpServletResponse response) throws Exception {
 
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		Map<String, String> tradMap = new HashMap<String, String>();
+		
+		UnidadAdministrativa ua = null;
+		if (session.getAttribute("unidadAdministrativa") != null) {
+			ua = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
+		}
+
+		// Recuperamos los campos directamente des de el request
+		String campoOrdenacion = request.getParameter("ordreCamp");				// Recuperamos el parametro de ordenación por campo
+		String orden = request.getParameter("ordreTipus");						// Recuperamos el parametro de ordenación por tipo
+		boolean uaFilles = "1".equals(request.getParameter("uaFilles"));		// Recuperamos si se debe buscar en las UAs hijas
+		boolean uaMeves = "1".equals(request.getParameter("uaMeves"));			// Recuperamos si se debe buscar en las UAs propias
+
+		Long materia = recuperarParametroId(request,"materia");		       		// Recuperamos el id de la materia
+		Long fetVital = recuperarParametroId(request, "fetVital");				// Recuperamos el id del hecho vital
+		Long publicObjectiu = recuperarParametroId(request, "publicObjectiu");	// Recuperamos el id del público objetivo
+		String pagPag = recuperarPaginacion(request, "pagPag");			    	// Recuperamos la página actual
+		String pagRes = recuperarPaginacion(request, "pagRes");			    	// Recuperamos los resultados por página
+
+		int campoVisible = recuperarVisibilidad(request, paramMap);		     	// Recuperamos la visibilidad de la ficha
+
+		recuperarCodigo(request, paramMap);						     			// Recuperamos el parametro del código
+		recuperarTexto(request, tradMap, paramMap);								// Recuperamos el texto y lo buscamos en todos los idiomas
+		recuperarValidacio(request, paramMap);									// Recuperamos si es válido
+
+		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
+		
+		try {
+			
+			FichaResumenDelegate fitxaResumenDelegate = DelegateUtil.getFichaResumenDelegate();
+			
+			resultadoBusqueda = fitxaResumenDelegate.buscarFichas(paramMap, tradMap, ua, fetVital, materia, publicObjectiu, uaFilles, uaMeves, campoOrdenacion, orden, pagPag, pagRes, campoVisible, true);
+
+			CSVUtil.mostrarCSV(response, convertirFitxaToCSV((List<Long>) resultadoBusqueda.getListaResultados(), ua, uaFilles));
+
+			
+
+		}  catch (Exception dEx) {
+			log.error("Error generando el export de la búsqueda en fitxas.",dEx);
+			throw new Exception(dEx);
+		}	
+	}
+	
+	/**
+	 * Convierte procedimiento a String para CSV.
+	 * @param listaResultados
+	 * @return
+	 */
+	private String convertirFitxaToCSV(List<Long> listaResultados, UnidadAdministrativa ua, boolean uaFilles) {
+		StringBuffer retorno = new StringBuffer();
+		
+		//cabecera!
+		retorno.append("CODI_FITXA;");
+		retorno.append("NOM_FITXA_CA;");
+		retorno.append("NOM_FITXA_ES;");
+		retorno.append("ESTAT_FITXA;");// DECODE(FIC_VALIDA,1,'PUBLIC',2,'INTERN','RESERVA')
+		retorno.append("VISIBILITAT_FITXA;");// (ESTAT+DATA_PUB+DATA_CAD + UA_VISIBLE)
+		retorno.append("PUBLIC_OBJECTIU;");// (ID_PUBLIC OBJECTIU SEPARATS PER COMES)
+		retorno.append("NOM UA;");
+		retorno.append("DATA_ACTUALITZACIO;");
+		retorno.append("\n");
+		
+		
+		FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
+		for ( Long idFitxa : castList(Long.class, listaResultados) ) {
+			Ficha ficha;
+			try {
+				ficha = fitxaDelegate.obtenerFichaParaSolr(idFitxa);
+			} catch (Exception exception) {
+				log.error("Error obteniendo la ficha con id : " + idFitxa , exception);
+				retorno.append(CSVUtil.limpiar(idFitxa));
+				retorno.append(ExceptionUtils.getCause(exception));
+				retorno.append(CSVUtil.CARACTER_SALTOLINEA_CSV);
+				continue;
+			}
+			
+			//Extraemos datos.
+			TraduccionFicha tradEs = (TraduccionFicha) ficha.getTraduccion("es");
+			TraduccionFicha tradCa = (TraduccionFicha) ficha.getTraduccion("ca");
+			
+			String nomEs, nomCa;
+			if (tradEs == null) {
+				nomEs = "";
+			} else {
+				nomEs = tradEs.getTitulo();
+			}
+
+			if (tradCa == null) {
+				nomCa = "";
+			} else {
+				nomCa = tradCa.getTitulo();
+			}
+			
+			String publicoObjectivo = "";
+			if (ficha.getPublicosObjetivo() != null) {
+				for(PublicoObjetivo po : ficha.getPublicosObjetivo()) {
+					publicoObjectivo += po.getId() + " ,";
+				}
+				
+				if (publicoObjectivo.endsWith(",")) { publicoObjectivo = publicoObjectivo.substring(0, publicoObjectivo.length()- 1); }
+			}
+
+			String estado;
+			if (ficha.getValidacion().compareTo(1) == 0) {
+				estado = "PUBLIC";
+			} else if (ficha.getValidacion().compareTo(2) == 0) {
+				estado = "INTERN";
+			} else {
+				estado = "RESERVA";
+			}
+			
+			String nomUA = " ";
+			if (uaFilles) { 
+				/***
+				 * En caso de estar lo de ua FIlles se realiza los siguientes pasos:
+				 *  - Primero ver si está la UA principal en alguna de las fichasUA.
+				 *  - Si no está, se busca en cualquier de las predecesores, y cuando se encuentre, se pone el nombre de la UA hoja.
+				 */
+				Set<FichaUA> fichasUA = ficha.getFichasua();
+				if (fichasUA != null) {
+					boolean noEncontradoUA = true;
+					for(FichaUA fichaUA : fichasUA) {
+						if (fichaUA.getUnidadAdministrativa() != null) {
+							if (ua.getId().compareTo(fichaUA.getUnidadAdministrativa().getId()) == 0) {
+								nomUA = CSVUtil.getNombreUA(ua);
+								noEncontradoUA = false;
+								break;
+							}
+						}
+					}
+					
+					if (noEncontradoUA) {
+						boolean salir = false;
+						for(FichaUA fichaUA : fichasUA) {
+							if (salir) {
+								break;
+							}
+							if (fichaUA.getUnidadAdministrativa() != null && fichaUA.getUnidadAdministrativa().getPredecesores() != null) {
+								List<UnidadAdministrativa> predecesores = fichaUA.getUnidadAdministrativa().getPredecesores();
+								for(UnidadAdministrativa uaPredecesor : predecesores) {
+									if (ua.getId().compareTo(uaPredecesor.getId()) == 0) {
+										nomUA = CSVUtil.getNombreUA(fichaUA.getUnidadAdministrativa()); //Ponemos la UA hoja seleccionada.
+										salir = true;
+										break;
+									}
+								}
+							}
+						}
+					}
+				}
+			} else {
+				nomUA = CSVUtil.getNombreUA(ua);
+			}
+			
+			retorno.append(CSVUtil.limpiar(ficha.getId())); 		//CODI_FITXA,
+			retorno.append(CSVUtil.limpiar(nomCa)); 				//NOM_FITXA_CA,
+			retorno.append(CSVUtil.limpiar(nomEs)); 				//NOM_FITXA_CA,
+			retorno.append(CSVUtil.limpiar(estado)); 				//ESTAT_FITXA 		DECODE(FIC_VALIDA,1,'PUBLIC',2,'INTERN','RESERVA'),
+			retorno.append(CSVUtil.limpiar(ficha.isVisible())); 	//VISIBILITAT_FITXA (ESTAT+DATA_PUB+DATA_CAD + UA_VISIBLE)
+			retorno.append(CSVUtil.limpiar(publicoObjectivo)); 	//(ID_PUBLIC OBJECTIU SEPARATS PER COMES)
+			retorno.append(CSVUtil.limpiar(nomUA));					//NOM UA
+			retorno.append(CSVUtil.limpiar(ficha.getFechaActualizacion())); 	//DATA_ACTUALITZACIO
+			retorno.append(CSVUtil.CARACTER_SALTOLINEA_CSV);
+		}
+		
+		return retorno.toString();		
+	}
+	
+	
 	/*
 	 * Recuperamos el campo del código
 	 */

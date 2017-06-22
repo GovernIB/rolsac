@@ -623,6 +623,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     		String materiaQuery = "";        
     		String publicQuery = "";   
     		String mainQuery = "select distinct ficha from Ficha as ficha , ficha.traducciones as trad, ficha.fichasua as fsua ";
+    		
 
     		if (traduccion.get("idioma") != null) {
     			

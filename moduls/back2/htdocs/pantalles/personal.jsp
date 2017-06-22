@@ -8,6 +8,7 @@
     var pagDetall = '<c:url value="/personal/pagDetall.do" />';
     var pagGuardar = '<c:url value="/personal/guardar.do" />';
     var pagEsborrar = '<c:url value="/personal/esborrarPersonal.do" />';
+    var pagExportar = '<c:url value="/personal/exportar.do" />';
     
     //texts
     var txt_per = "<spring:message code='txt.per'/>";
@@ -51,7 +52,8 @@
     var txtCercantAnteriors = txtCercant + " " + txtLlistaItems.toLowerCase() + " " + txtAnteriors.toLowerCase() + ". " + txtEspere;
     var txtCercantSeguents = txtCercant + " " + txtLlistaItems.toLowerCase() + " " + txtSeguents.toLowerCase() + ". " + txtEspere;
     var txtCercantElements = txtCercant + " <spring:message code='txt.elements'/>" + ". " + txtEspere;
-
+    var txtProcessant = "<spring:message code='txt.processant'/>";
+    
     //detall
     var txtCarregantDetall = txtCarregant + " <spring:message code='txt.detall_de_la'/> "+ txtLlistaItem.toLowerCase() + ". " + txtEspere;
     var txtNouTitol = "<spring:message code='txt.nova'/> " + txtLlistaItem.toLowerCase();
@@ -332,6 +334,9 @@
                             
                         </div>
                         <div class="botonera">
+                        	<div class="boton btnGenerico">
+                        	       <a id="btnExportar" href="javascript:void(0)" class="btn exportar"><span><span>Exportar</span></span></a>
+                            </div>
                             <div class="boton btnGenerico">
                               <a id="btnLimpiarForm" href="javascript:void(0)" class="btn borrar"><span><span><spring:message code='boto.borrar'/></span></span></a>
                             </div>

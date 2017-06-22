@@ -151,7 +151,7 @@ public abstract class PersonalFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
      */
-    public ResultadoBusqueda buscadorListarPersonal(Map parametros, int pagina, int resultats, boolean uaFilles, boolean uaMeves) {
+    public ResultadoBusqueda buscadorListarPersonal(Map parametros, int pagina, int resultats, boolean uaFilles, boolean uaMeves, boolean soloIds) {
     	
     	int resultadosMax = new Integer(resultats).intValue();
     	int primerResultado = new Integer(pagina).intValue() * resultadosMax;
@@ -162,8 +162,12 @@ public abstract class PersonalFacadeEJB extends HibernateEJB {
 //    		if ( !userIsOper() )
 //    			parametros.put("validacion", Validacion.PUBLICA);
 //    		
-    		String sql = "from Personal perso ";
-    		
+    		String sql;
+    		if (soloIds) {
+    			sql = "Select perso.id from Personal perso ";
+    		} else {
+    			sql = "from Personal perso ";
+    		}
     		Long idUA = (Long) parametros.get("unidadAdministrativa");
     		String uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(idUA, uaFilles, uaMeves);
     		if (!StringUtils.isEmpty(uaQuery)) {

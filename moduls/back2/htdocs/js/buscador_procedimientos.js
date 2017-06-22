@@ -8,6 +8,7 @@ function BuscadorProcedimiento() {
 
 		var paginacionJSON = { "pagPag" : 0 , "pagRes" : 0 , "criterioOrdenacion" : "", "propiedadDeOrdenacion" : "" };
 
+		
 		var criteria = { 
 				"procedimiento" : procedimientoJSON,
 				"uaHijas" : "",
@@ -150,25 +151,80 @@ function BuscadorProcedimiento() {
 		criteria.paginacion.criterioOrdenacion = this.orden.tipo;
 		criteria.paginacion.propiedadDeOrdenacion = this.orden.campo;
 
-		// ajax		
-		$.ajax({
-			type: "POST",
-			url: url,
-			dataType: "json",
-			data: "criteria=" + JSON.stringify(criteria),
-			error: function() {
+		//Si es tipo exportar
+		if (typeof opcions.exportar != "undefined" && opcions.exportar == "si") {
+			
+			criteria.paginacion.pagPag = 0;
+			criteria.paginacion.pagRes = 99999;
+		
+			Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtProcessant});
+			var xhr = new XMLHttpRequest();
+			xhr.open('POST', url, true);
+			xhr.responseType = 'arraybuffer';
+			xhr.onload = function () {
+				Missatge.cancelar();
+				if (this.status === 200) {
+					var filename = "";
+					var disposition = xhr.getResponseHeader('Content-Disposition');
+					if (disposition && disposition.indexOf('attachment') !== -1) {
+						var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+						var matches = filenameRegex.exec(disposition);
+						if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+					}
+					var type = xhr.getResponseHeader('Content-Type');
 
-				if (!a_enllas) {
-					// missatge
-					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
-					// error
-					Error.llansar();
+					var blob = new Blob([this.response], { type: type });
+					if (typeof window.navigator.msSaveBlob !== 'undefined') {
+						// IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. These URLs will no longer resolve as the data backing the URL has been freed."
+						window.navigator.msSaveBlob(blob, filename);
+					} else {
+						var URL = window.URL || window.webkitURL;
+						var downloadUrl = URL.createObjectURL(blob);
+
+						if (filename) {
+							// use HTML5 a[download] attribute to specify filename
+							var a = document.createElement("a");
+							// safari doesn't support this yet
+							if (typeof a.download === 'undefined') {
+								window.location = downloadUrl;
+							} else {
+								a.href = downloadUrl;
+								a.download = filename;
+								document.body.appendChild(a);
+								a.click();
+							}
+						} else {
+							window.location = downloadUrl;
+						}
+
+						setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup
+					}
 				}
-			},
-			success: function(data) {				
-				listado.finCargaListado(opcions,data);					
-			}
-		});
+			};
+			xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+			xhr.send("criteria=" + JSON.stringify(criteria));
+		
+		} else {
+			// ajax		
+			$.ajax({
+				type: "POST",
+				url: url,
+				dataType: "json",
+				data: "criteria=" + JSON.stringify(criteria),
+				error: function() {
+
+					if (!a_enllas) {
+						// missatge
+						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+						// error
+						Error.llansar();
+					}
+				},
+				success: function(data) {				
+					listado.finCargaListado(opcions,data);					
+				}
+			});
+		}
 
 	}
 

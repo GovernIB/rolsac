@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
@@ -59,6 +60,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.back2.util.CSVUtil;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
@@ -168,10 +170,10 @@ public class NormativaBackController extends PantallaBaseController {
         return listaBoletinesDTO;
 
     }
-
+    
+    
     @RequestMapping(value = "/llistat.do", method = POST)
-    public @ResponseBody
-    Map<String, Object> llistat(HttpServletRequest request, HttpSession session) {
+    public @ResponseBody Map<String, Object> llistat(HttpServletRequest request, HttpSession session) {
 
         // Listar las normativas de la unidad administrativa.
         Map<String, Object> resultats = new HashMap<String, Object>();
@@ -233,7 +235,7 @@ public class NormativaBackController extends PantallaBaseController {
                 queBuscar = "todas";
             }
 
-            resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, queBuscar, idUA, meves, uaFilles, campoOrdenacion, orden, pagPag, pagRes);
+            resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, queBuscar, idUA, meves, uaFilles, campoOrdenacion, orden, pagPag, pagRes, false);
 
             for (Normativa normativa : (List<Normativa>) resultadoBusqueda.getListaResultados()) {
                 boolean local = NormativaLocal.class.isInstance(normativa);
@@ -258,6 +260,195 @@ public class NormativaBackController extends PantallaBaseController {
 
         return resultats;
     }
+
+
+    @RequestMapping(value = "/exportar.do", method = POST)
+    public void exportar(HttpServletRequest request, HttpSession session, HttpServletResponse response) throws Exception {
+
+        // Listar las normativas de la unidad administrativa.
+        Map<String, Object> resultats = new HashMap<String, Object>();
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        Map<String, String> paramTrad = new HashMap<String, String>();
+        List<NormativaDTO> llistaNormativesDTO = new ArrayList<NormativaDTO>();
+
+        ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
+
+        // Obtenemos la ordenación por parámetro.
+        String campoOrdenacion = request.getParameter("ordreCamp");
+        String orden = request.getParameter("ordreTipus");
+
+        // Determinar si el usuario ha marcado el checkbox de buscar en normaticas externas.
+        boolean buscaExternas = "true".equals(request.getParameter("cercaExternes"));
+
+        // Determinar si ha marcado el checkbox "Cerar a totes les meves unitats".
+        boolean meves = "true".equals(request.getParameter("totesUnitats"));
+        boolean uaFilles = "true".equals(request.getParameter("uaFilles"));
+
+        Long idUA = null;
+
+        if (request.getParameter("idUA") != null && !request.getParameter("idUA").equals("")) {
+            idUA = ParseUtil.parseLong(request.getParameter("idUA"));
+        }
+
+        try {
+            String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+
+            // Obtener parámetros de búsqueda.
+            String idStr = request.getParameter("id");
+            Long id = -1l;
+
+            if (idStr != null && StringUtils.isNumeric(idStr.trim()))
+                id = ParseUtil.parseLong(idStr.trim());
+
+            paramMap.put("id", idStr != null ? id : null);
+
+            // Procesa el objeto request y añade los valores necesarios a los mapas de parámetros y de traducciones.
+            procesarParametrosBusqueda(request, paramMap, paramTrad, lang);
+
+            // Realizar la consulta y obtener resultados
+            NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
+
+            // Información de paginación.
+            String pagPag = request.getParameter("pagPag");
+            String pagRes = request.getParameter("pagRes");
+
+            if (pagPag == null) {
+                pagPag = String.valueOf(0);
+            }
+
+            if (pagRes == null) {
+                pagRes = String.valueOf(10);
+            }
+
+            String queBuscar = "local";
+            if (buscaExternas) {
+                queBuscar = "todas";
+            }
+
+            resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, queBuscar, idUA, meves, uaFilles, campoOrdenacion, orden, pagPag, pagRes, true);
+            CSVUtil.mostrarCSV(response, convertirNormativaToCSV((List<Long>) resultadoBusqueda.getListaResultados()));
+
+
+        } catch (ParseException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
+
+        } catch (DelegateException dEx) {
+            if (dEx.isSecurityException()) {
+                log.error("Permisos insuficients: " + dEx.getMessage());
+            } else {
+                log.error("Error: " + dEx.getMessage());
+            }
+        }
+    }
+    
+    
+    private String convertirNormativaToCSV(List<Long> listaResultados) throws UnsupportedEncodingException {
+    	StringBuffer retorno = new StringBuffer();
+		
+		//cabecera!
+		retorno.append("CODI_NORMA;");
+		retorno.append("NOM_NORMA_CA;");
+		retorno.append("NOM_NORMA_ES;");
+		retorno.append("ESTAT_NORMA;");
+		retorno.append("VISIBILITAT_NORMA;");
+		//retorno.append("PUBLIC_OBJECTIU;");
+		retorno.append("TIPUS_NORMATIVA;");
+		retorno.append("NOM UA;");
+		retorno.append("RANG_LEGAL;");
+		retorno.append("TIPUS_BUTLLET"+new String(new byte[]{(byte)205})+";");
+		retorno.append("NUM_BUTLLET"+new String(new byte[]{(byte)205})+";");
+		retorno.append("ENLLA"+new String(new byte[]{(byte)199})+";");
+		retorno.append("DATA_NORMA;");
+		retorno.append("\n");
+	
+		
+		NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
+		for ( Long idNormativa : castList(Long.class, listaResultados) ) {
+			Normativa normativa;
+			try {
+				normativa = normativaDelegate.obtenerNormativa(idNormativa);
+			} catch (Exception exception) {
+				log.error("Error obteniendo la normativa con id : " + idNormativa , exception);
+				retorno.append(CSVUtil.limpiar(idNormativa));
+				retorno.append(ExceptionUtils.getCause(exception));
+				retorno.append(CSVUtil.CARACTER_SALTOLINEA_CSV);
+				continue;
+			}
+			
+			//Extraemos datos.
+			TraduccionNormativa tradEs = (TraduccionNormativa) normativa.getTraduccion("es");
+			TraduccionNormativa tradCa = (TraduccionNormativa) normativa.getTraduccion("ca");
+			
+			String nomEs, nomCa;
+			if (tradEs == null) {
+				nomEs = "";
+			} else {
+				nomEs = tradEs.getTitulo();
+			}
+
+			if (tradCa == null) {
+				nomCa = "";
+			} else {
+				nomCa = tradCa.getTitulo();
+			}
+			
+			String rangLegal = "";
+			if (normativa.getTipo() != null) {
+				TraduccionTipo tradEsT = (TraduccionTipo) normativa.getTipo().getTraduccion("es");
+				TraduccionTipo tradCaT = (TraduccionTipo) normativa.getTipo().getTraduccion("ca");
+				if (tradCaT != null) {
+					rangLegal = tradCaT.getNombre();
+				} else if(tradEsT != null) {
+					rangLegal = tradEsT.getNombre();
+				}
+			}
+			String estado;
+			if (normativa.getValidacion().compareTo(1) == 0) {
+				estado = "PUBLIC";
+			} else if (normativa.getValidacion().compareTo(2) == 0) {
+				estado = "INTERN";
+			} else {
+				estado = "RESERVA";
+			}
+			
+			String bolletiEnllac, bolletiNom = normativa.getNombreBoletin(), bolletiTipus;
+			if (normativa.getBoletin() == null) {
+				bolletiEnllac = "";
+				bolletiTipus = "";
+			} else {
+				bolletiEnllac = normativa.getBoletin().getEnlace();
+				bolletiTipus = normativa.getBoletin().getNombre();
+			}
+			
+			String tipoNormativa;
+			if (normativa instanceof NormativaLocal) {
+				tipoNormativa = "LOCAL";
+			} else {//			normativa instanceof NormativaExterna
+				tipoNormativa = "EXTERNA";
+			}
+			
+			
+			retorno.append(CSVUtil.limpiar(normativa.getId())); 	//CODI_NORMA,
+			retorno.append(CSVUtil.limpiar(nomCa)); 				//NOM_NORMA_CA,
+			retorno.append(CSVUtil.limpiar(nomEs)); 				//NOM_NORMA_ES,
+			retorno.append(CSVUtil.limpiar(estado)); 				//ESTAT_NORMA DECODE(NOR_VALIDA,1,'PUBLIC',2,'INTERN','RESERVA'),
+			retorno.append(CSVUtil.limpiar(normativa.isVisible()));	//VISIBILITAT_NORMA (ESTAT+DATA_PUB+DATA_CAD + UA_VISIBLE),
+			//retorno.append(CSVUtil.limpiar("PO")); 					//PUBLIC_OBJECTIU (ID_PUBLIC OBJECTIU SEPARATS PER COMES),
+			retorno.append(CSVUtil.limpiar(tipoNormativa));			//TIPUS_NORMATIVA (LOCAL, EXTERNA),
+			retorno.append(CSVUtil.limpiar(CSVUtil.getNombreUA(normativa.getUnidadAdministrativa()))); 	//NOM_UA
+			retorno.append(CSVUtil.limpiar(rangLegal)); 			//RANG LEGAL (LLEI, DECRETET,...)
+			retorno.append(CSVUtil.limpiar(bolletiTipus)); 			//TIPUS_BUTLLETÍ,
+			retorno.append(CSVUtil.limpiar(bolletiNom)); 			//NUM_BUTLLETÍ,
+			retorno.append(CSVUtil.limpiar(bolletiEnllac)); 		//ENLLAÇ,
+			retorno.append(CSVUtil.limpiar(normativa.getFechaBoletin())); //DATA_NORMA
+			retorno.append(CSVUtil.CARACTER_SALTOLINEA_CSV);
+		}
+		
+		return retorno.toString();		
+	}
+
+	
+
 
     /**
      * Procesa el objeto request y añade los valores necesarios a los mapas de
@@ -958,7 +1149,7 @@ public class NormativaBackController extends PantallaBaseController {
 
             // Realizar la consulta y obtener resultados
             NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
-            ResultadoBusqueda resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, "todas", null, false, false, campoOrdenacion, orden, pagPag, pagRes);
+            ResultadoBusqueda resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, "todas", null, false, false, campoOrdenacion, orden, pagPag, pagRes, false);
             resultats.put("total", resultadoBusqueda.getTotalResultados());
 
             llistaNormatives.addAll((List<Normativa>) resultadoBusqueda.getListaResultados());

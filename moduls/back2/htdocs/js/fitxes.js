@@ -147,6 +147,11 @@ function CLlistat() {
 	
 	};
 	
+	// Exporta la búsqueda
+	this.exporta = function(opcions) {	
+		this.carregar ({cercador: "si", exportar: "si"});
+	};
+	
 	this.finCargaListado = function(opcions, data) {
 		
 		resultats_total = parseInt(data.total,10);
@@ -293,7 +298,8 @@ function CLlistat() {
 	this.carregar = function(opcions) {
 		
 		var modoBuscador = (typeof opcions.cercador != "undefined" && opcions.cercador == "si");
-		var modoListado = !modoBuscador;
+		var modoListado  = !modoBuscador;
+		var modoExportar = (typeof opcions.exportar != "undefined" && opcions.exportar == "si");
 		
 		dataVars = "";
 		
@@ -344,9 +350,61 @@ function CLlistat() {
 		ordre_Camp = ordreCamp_elm.val();
 			
 		// variables
+		//El dataVarsExportar es para cuando se exporta poner el pagPag a 0 y el PagRes a 99999
+		var dataVarsExportar = dataVars + "pagPag=0&pagRes=99999&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;
 		dataVars += "pagPag=" + pag_Pag + "&pagRes=" + pag_Res + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;
 		
-		if ( modoListado || modoBuscador ) {
+		if (modoExportar) {
+			
+			
+			Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtProcessant});
+			var xhr = new XMLHttpRequest();
+			xhr.open('POST', pagExportar, true);
+			xhr.responseType = 'arraybuffer';
+			xhr.onload = function () {
+				Missatge.cancelar();
+				if (this.status === 200) {
+					var filename = "";
+					var disposition = xhr.getResponseHeader('Content-Disposition');
+					if (disposition && disposition.indexOf('attachment') !== -1) {
+						var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+						var matches = filenameRegex.exec(disposition);
+						if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+					}
+					var type = xhr.getResponseHeader('Content-Type');
+
+					var blob = new Blob([this.response], { type: type });
+					if (typeof window.navigator.msSaveBlob !== 'undefined') {
+						// IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. These URLs will no longer resolve as the data backing the URL has been freed."
+						window.navigator.msSaveBlob(blob, filename);
+					} else {
+						var URL = window.URL || window.webkitURL;
+						var downloadUrl = URL.createObjectURL(blob);
+
+						if (filename) {
+							// use HTML5 a[download] attribute to specify filename
+							var a = document.createElement("a");
+							// safari doesn't support this yet
+							if (typeof a.download === 'undefined') {
+								window.location = downloadUrl;
+							} else {
+								a.href = downloadUrl;
+								a.download = filename;
+								document.body.appendChild(a);
+								a.click();
+							}
+						} else {
+							window.location = downloadUrl;
+						}
+
+						setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup
+					}
+				}
+			};
+			xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+			xhr.send(dataVarsExportar);
+			
+		} else if ( modoListado || modoBuscador ) {
 			
 			$.ajax({
 				type: "POST",
@@ -396,6 +454,8 @@ function CDetall() {
 	
 	this.tipusAuditoria = 'fitxa';
 	this.tipusEstadistica = 'fitxa';
+	
+	
 	
 	//Se anyaden los campos que no se van a serializar directamente mediante .serialize()	
 	this.guarda = function() {

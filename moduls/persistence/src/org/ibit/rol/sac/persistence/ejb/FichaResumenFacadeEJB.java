@@ -64,7 +64,7 @@ public abstract class FichaResumenFacadeEJB extends HibernateEJB {
      */
     public ResultadoBusqueda buscarFichas(Map parametros, Map traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria,
 			Long idPublic, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden, String pagina, String resultats, 
-			int campoVisible) {
+			int campoVisible, boolean isSoloIds) {
 		
         Session session = getSession();
         
@@ -80,7 +80,12 @@ public abstract class FichaResumenFacadeEJB extends HibernateEJB {
             String materiaQuery = "";
             String publicQuery = "";
             String camposVariosQuery = "";
-            String selectResults = "select distinct ficha ";
+            String selectResults;
+            if (isSoloIds) {
+            	selectResults = "select distinct ficha.id ";
+            } else {
+            	selectResults = "select distinct ficha ";
+            }
             String selectCount = "select count (distinct ficha) ";
             String mainQuery = "from FichaResumen as ficha, ficha.traducciones as trad, ficha.fichasua as fsua ";
             

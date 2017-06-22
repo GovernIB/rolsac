@@ -9,22 +9,29 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.Personal;
+import org.ibit.rol.sac.model.PublicoObjetivo;
+import org.ibit.rol.sac.model.TraduccionFicha;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.model.dto.PersonalDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
 import org.ibit.rol.sac.persistence.delegate.PersonalDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.back2.util.CSVUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
@@ -106,7 +113,7 @@ public class PersonalBackController extends PantallaBaseController {
 
 		try {
 		    PersonalDelegate personalDelegate = DelegateUtil.getPersonalDelegate();
-		    resultadoBusqueda = personalDelegate.buscadorListarPersonal(paramMap, Integer.parseInt(pagPag), Integer.parseInt(pagRes), uaFilles, uaMeves);
+		    resultadoBusqueda = personalDelegate.buscadorListarPersonal(paramMap, Integer.parseInt(pagPag), Integer.parseInt(pagRes), uaFilles, uaMeves, false);
 
 		    for (Personal persona : (List<Personal>) resultadoBusqueda.getListaResultados()) {
 		        llistaPersonalDTO.add(new PersonalDTO(
@@ -132,6 +139,113 @@ public class PersonalBackController extends PantallaBaseController {
 		return resultats;
 	}
 
+	@RequestMapping(value = "/exportar.do", method = POST)
+	public void exportar(HttpServletRequest request, HttpSession session, HttpServletResponse response) throws Exception {
+
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+        
+        paramMap.put("username", request.getParameter("cerca_codi"));
+        
+        Long idUA = (session.getAttribute("unidadAdministrativa") != null) ? ((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getId() : null;
+        paramMap.put("unidadAdministrativa", idUA);
+
+        String textes = request.getParameter("cerca_text");
+        if (textes != null && !"".equals(textes)) {
+            textes = textes.toUpperCase();
+
+            paramMap.put("nombre", textes);
+            paramMap.put("funciones", textes);
+            paramMap.put("cargo", textes);
+            paramMap.put("email", textes);
+            paramMap.put("extensionPublica", textes);
+            paramMap.put("numeroLargoPublico", textes);
+            paramMap.put("extensionPrivada", textes);
+            paramMap.put("numeroLargoPrivado", textes);
+            paramMap.put("extensionMovil", textes);
+            paramMap.put("numeroLargoMovil", textes);
+        }
+
+        boolean uaFilles = "1".equals(request.getParameter("uaFilles"));
+        boolean uaMeves = "1".equals(request.getParameter("uaMeves"));
+
+        // Información de paginación
+        String pagPag = request.getParameter("pagPag");
+        String pagRes = request.getParameter("pagRes");
+
+        if (pagPag == null) {
+		    pagPag = String.valueOf(0);
+		}
+		if (pagRes == null) {
+		    pagRes = String.valueOf(10);
+		}
+
+		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
+
+		try {
+		    PersonalDelegate personalDelegate = DelegateUtil.getPersonalDelegate();
+		    resultadoBusqueda = personalDelegate.buscadorListarPersonal(paramMap, Integer.parseInt(pagPag), Integer.parseInt(pagRes), uaFilles, uaMeves, true);
+
+		    CSVUtil.mostrarCSV(response, convertirPersonalToCSV((List<Long>) resultadoBusqueda.getListaResultados()));
+
+
+		} catch (DelegateException dEx) {
+		    if ( dEx.isSecurityException() ) {
+		        log.error("Permisos insuficients: " + dEx.getMessage());
+		    } else {
+		        log.error("Error: " + dEx.getMessage());
+		    }
+		}
+		
+	}
+
+	/**
+	 * Genera el CSV a partir de los ids.
+	 * @param listaResultados
+	 * @return
+	 */
+	private String convertirPersonalToCSV(List<Long> listaResultados) {
+		StringBuffer retorno = new StringBuffer();
+		
+		//cabecera!
+		retorno.append("CODI_PERSONA;");
+		retorno.append("NOM_PERSONA;");
+		retorno.append("CARREC;");
+		retorno.append("NOM_UA;");
+		retorno.append("CORREU ELECTR"+new String(new byte[]{(byte)210})+"NIC;");
+		retorno.append("TELEFON EXTERIOR;");
+		retorno.append("EXTENSI"+new String(new byte[]{(byte)211})+" FIXA;");
+		retorno.append("TELEFON M"+new String(new byte[]{(byte)210})+"BIL;");
+		retorno.append("EXTENSI"+new String(new byte[]{(byte)211})+" M"+new String(new byte[]{(byte)210})+"BIL;");
+		retorno.append("\n");
+		
+		
+		PersonalDelegate personalDelegate = DelegateUtil.getPersonalDelegate();
+		for ( Long idPersonal : castList(Long.class, listaResultados) ) {
+			Personal personal;
+			try {
+				personal = personalDelegate.obtenerPersonal(idPersonal);
+			} catch (Exception exception) {
+				log.error("Error obteniendo el personal con id : " + idPersonal , exception);
+				retorno.append(CSVUtil.limpiar(idPersonal));
+				retorno.append(ExceptionUtils.getCause(exception));
+				retorno.append(CSVUtil.CARACTER_SALTOLINEA_CSV);
+				continue;
+			}
+			
+			retorno.append(CSVUtil.limpiar(personal.getId())); 					//CODI_PERSONA,
+			retorno.append(CSVUtil.limpiar(personal.getNombre())); 				//NOM_PERSONA,
+			retorno.append(CSVUtil.limpiar(personal.getCargo())); 				//CARREC,
+			retorno.append(CSVUtil.limpiar(CSVUtil.getNombreUA(personal.getUnidadAdministrativa()))); 	//NOM_UA
+			retorno.append(CSVUtil.limpiar(personal.getEmail())); 	//CORREU ELECTRÒNIC
+			retorno.append(CSVUtil.limpiar(personal.getNumeroLargoPublico())); 	//TELEFON EXTERIOR (PER_NUMPUB)
+			retorno.append(CSVUtil.limpiar(personal.getExtensionPublica()));	//EXTENSIÓ FIXA (PER_EXTPUB)
+			retorno.append(CSVUtil.limpiar(personal.getNumeroLargoMovil())); 	//TELEFON MÒBIL (PER_NUMMOV)
+			retorno.append(CSVUtil.limpiar(personal.getExtensionMovil())); 		//EXTENSIÓ MÒBIL (PER_EXTMOV)
+			retorno.append(CSVUtil.CARACTER_SALTOLINEA_CSV);
+		}
+		
+		return retorno.toString();		
+	}
 
 	@RequestMapping(value = "/pagDetall.do", method = POST)
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request)

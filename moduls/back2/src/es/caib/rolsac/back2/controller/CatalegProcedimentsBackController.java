@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
@@ -29,9 +30,9 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.ibit.rol.sac.model.Auditoria;
 import org.ibit.rol.sac.model.CatalegDocuments;
 import org.ibit.rol.sac.model.Documento;
-import org.ibit.rol.sac.model.EspacioTerritorial;
 import org.ibit.rol.sac.model.ExcepcioDocumentacio;
 import org.ibit.rol.sac.model.Familia;
 import org.ibit.rol.sac.model.HechoVital;
@@ -46,21 +47,23 @@ import org.ibit.rol.sac.model.SilencioAdm;
 import org.ibit.rol.sac.model.TraduccionCatalegDocuments;
 import org.ibit.rol.sac.model.TraduccionExcepcioDocumentacio;
 import org.ibit.rol.sac.model.TraduccionNormativa;
+import org.ibit.rol.sac.model.TraduccionProcedimiento;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
 import org.ibit.rol.sac.model.TraduccionTramite;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.criteria.BuscadorProcedimientoCriteria;
 import org.ibit.rol.sac.model.dto.CodNomDTO;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.model.dto.ListadoModuloTramiteDTO;
 import org.ibit.rol.sac.model.dto.ProcedimientoLocalDTO;
 import org.ibit.rol.sac.model.dto.ProcedimientoNormativaDTO;
+import org.ibit.rol.sac.persistence.delegate.AuditoriaDelegate;
 import org.ibit.rol.sac.persistence.delegate.CatalegDocumentsDelegate;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.delegate.EspacioTerritorialDelegate;
 import org.ibit.rol.sac.persistence.delegate.ExcepcioDocumentacioDelegate;
 import org.ibit.rol.sac.persistence.delegate.FamiliaDelegate;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalProcedimientoDelegate;
@@ -71,12 +74,14 @@ import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
 import org.ibit.rol.sac.persistence.delegate.SilencioAdmDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
+import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.back2.util.CSVUtil;
 import es.caib.rolsac.back2.util.CargaModulosLateralesUtil;
 import es.caib.rolsac.back2.util.GuardadoAjaxUtil;
 import es.caib.rolsac.back2.util.HtmlUtils;
@@ -248,8 +253,211 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		return resultats;
 		
 	}
+	
+	
+	@RequestMapping(value = "/exportar.do", method = POST)
+	public void exportar(String criteria, HttpServletRequest request, HttpSession session, HttpServletResponse response) throws Exception {
 
-	/** Método que se encarga de convertir un String en formato json a una instancia de BuscadorProcedimientoCriteria */
+		BuscadorProcedimientoCriteria buscadorCriteria = this.jsonToBuscadorProcedimientoCriteria(criteria);
+		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
+		
+		if (getUAFromSession(session) != null && buscadorCriteria != null) {
+			
+			try {
+				
+				UnidadAdministrativa ua = (UnidadAdministrativa) getUAFromSession(session);
+				buscadorCriteria.setUnidadAdministrativa(ua);
+
+				ProcedimientoDelegate procedimientosDelegate = DelegateUtil.getProcedimientoDelegate();
+				buscadorCriteria.setSoloId(true);
+				resultadoBusqueda = procedimientosDelegate.buscadorProcedimientos(buscadorCriteria);
+				CSVUtil.mostrarCSV(response, convertirProcLocalesToCSV((List<Long>) resultadoBusqueda.getListaResultados()));
+
+			} catch (Exception dEx) {
+				log.error("Error generando el export de la búsqueda en procedimientos.",dEx);
+				throw new Exception(dEx);
+			}
+			
+		}
+
+	}
+	
+	
+	
+	
+	/**
+	 * Convierte procedimiento a String para CSV.
+	 * @param listaResultados
+	 * @return
+	 */
+	private String convertirProcLocalesToCSV(List<Long> listaResultados) {
+		StringBuffer retorno = new StringBuffer();
+		
+		//cabecera!
+		retorno.append("CODI_PROCEDIEMNT;");
+		retorno.append("CODI_SIA;");
+		retorno.append("ESTAT_SIA;");
+		retorno.append("DATA_ACTUALITZACIO_SIA;");
+		retorno.append("ESTAT_PROCEDIMENT;");
+		retorno.append("VISIBILITAT_PROCEDIMENT;");
+		retorno.append("NOM_PROCEDIMENT_CA;");
+		retorno.append("NOM_PROCEDIMENT_ES;");
+		retorno.append("OBJECTE_CA;");
+		retorno.append("PUBLIC_OBJECTIU;");
+		retorno.append("NOM UA_INSTRUCTURA;");
+		retorno.append("NOM UA_RESPONSABLE;");
+		retorno.append("NOM NOM_UA_RESOLUTORIA;");
+		retorno.append("NUM TRAMITS;");
+		retorno.append("NUM TRAMITS TELEMATICS;");
+		retorno.append("NUM NORMES;");
+		retorno.append("DATA_ACTUALITZACIO;");
+		retorno.append("COD_USUARI_DARRERA_ACT;");
+		retorno.append("NOM_USUARI_DARRERA_ACT;");
+		retorno.append("\n");
+		
+		final ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
+		final AuditoriaDelegate auditoriaDelegate = DelegateUtil.getAuditoriaDelegate();
+		final UsuarioDelegate usuarioDelegate = DelegateUtil.getUsuarioDelegate();
+		//Contenido.
+		for (Long idProcedimiento : listaResultados) {
+			ProcedimientoLocal procedimiento = null;
+			try {
+				procedimiento = procedimientoDelegate.obtenerProcedimientoParaSolr(idProcedimiento);
+			} catch (Exception exception) {
+				log.error("Error obteniendo el procedimiento con id : " + idProcedimiento , exception);
+				retorno.append(CSVUtil.limpiar(idProcedimiento));
+				retorno.append(ExceptionUtils.getCause(exception));
+				retorno.append(CSVUtil.CARACTER_SALTOLINEA_CSV);
+				continue;
+			}
+			
+			if (procedimiento == null) {
+				retorno.append(CSVUtil.limpiar(idProcedimiento));
+				retorno.append("Procedimiento nulo");
+				retorno.append(CSVUtil.CARACTER_SALTOLINEA_CSV);
+				continue;
+			}
+			
+			//Extraemos datos.
+			TraduccionProcedimiento tradEs = (TraduccionProcedimiento) procedimiento.getTraduccion("es");
+			TraduccionProcedimiento tradCa = (TraduccionProcedimiento) procedimiento.getTraduccion("ca");
+			String nomEs, nomCa;
+			String objecte;
+			if (tradEs == null) {
+				nomEs = "";
+			} else {
+				nomEs = tradEs.getNombre();
+			}
+
+			if (tradCa == null) {
+				nomCa = "";
+			} else {
+				nomCa = tradCa.getNombre();
+			}
+			
+			if (tradCa != null) {
+				objecte = tradCa.getResumen();
+			} else if (tradEs != null) {
+				objecte = tradEs.getResumen();
+			} else {
+				objecte = "";
+			}
+			
+			String publicoObjectivo = "";
+			if (procedimiento.getPublicosObjetivo() != null) {
+				for(PublicoObjetivo po : procedimiento.getPublicosObjetivo()) {
+					publicoObjectivo += po.getId() + " ,";
+				}
+				
+				if (publicoObjectivo.endsWith(",")) { publicoObjectivo = publicoObjectivo.substring(0, publicoObjectivo.length()- 1); }
+			}
+			
+			int numTramits = 0, numTramitsTelematics = 0;
+			if (procedimiento.getTramites() != null) {
+				for(Tramite tramite : procedimiento.getTramites()) {
+					if (tramite == null) { continue;} numTramits ++;					
+					if (tramite.getIdTraTel() != null && !tramite.getIdTraTel().isEmpty()) {
+						numTramitsTelematics ++;
+					}
+				}
+			}
+			 
+			int num_nombres;
+			if (procedimiento.getNormativas() == null) {
+				num_nombres = 0;
+			} else {
+				num_nombres = procedimiento.getNormativas().size();
+			}
+			
+			String estado;
+			if (procedimiento.getValidacion().compareTo(1) == 0) {
+				estado = "PUBLIC";
+			} else if (procedimiento.getValidacion().compareTo(2) == 0) {
+				estado = "INTERN";
+			} else {
+				estado = "RESERVA";
+			}
+			
+			String codUsuario = "", nomUsuario = "";
+			try {
+				List<Auditoria> datos = auditoriaDelegate.listarAuditoriasProcedimiento(idProcedimiento);
+				if (datos != null && datos.size() > 0) {
+					Auditoria auditoria = datos.get(0);
+					if (auditoria.getUsuario() != null && !auditoria.getUsuario().isEmpty()) {
+						Usuario usuario = usuarioDelegate.obtenerUsuariobyUsername(auditoria.getUsuario());
+						if (usuario != null) {
+							codUsuario = usuario.getUsername();
+							nomUsuario = usuario.getNombre();
+						}
+					}
+				}
+			} catch (DelegateException e) {
+				log.error("Error obteniendo auditorias del procedimiento id:"+idProcedimiento, e);
+			}
+			
+			String estadoSIA = procedimiento.getEstadoSIA();
+			if (estadoSIA != null) {
+				if ("A".equals(estadoSIA)) {
+					estadoSIA = "Alta";
+				} else if ("B".equals(estadoSIA)) {
+					estadoSIA = "Baixa";
+				} else if ("M".equals(estadoSIA)) {
+					estadoSIA = "Modificació";
+				} else if ("R".equals(estadoSIA)) {
+					estadoSIA = "Reactivació";
+				}
+			}
+			
+			retorno.append(CSVUtil.limpiar(procedimiento.getId())); 		//CODI_PROCEDIEMNT,
+			retorno.append(CSVUtil.limpiar(procedimiento.getCodigoSIA()));  //CODI_SIA
+			retorno.append(CSVUtil.limpiar(estadoSIA));	//ESTAT_SIA
+			retorno.append(CSVUtil.limpiar(procedimiento.getFechaSIA()));	//DATA_ACTUALITZACIO_SIA
+			retorno.append(CSVUtil.limpiar(estado)); 						//ESTAT_PROCEDIMENT DECODE(PRO_VALIDA,1,'PUBLIC',2,'INTERN','RESERVA')
+			retorno.append(CSVUtil.limpiar(procedimiento.isVisible()));		//VISIBILITAT_PROCEDIMENT (ESTAT+DATA_PUB+DATA_CAD + UA_VISIBLE)
+			retorno.append(CSVUtil.limpiar(nomCa)); 						//NOM_PROCEDIMENT_CA,
+			retorno.append(CSVUtil.limpiar(nomEs));							//NOM_PROCEDIMENT_ES,
+			retorno.append(CSVUtil.limpiar(objecte));						//OBJECTE_CA
+			retorno.append(CSVUtil.limpiar(publicoObjectivo));				//PUBLIC_OBJECTIU (ID_PUBLIC OBJECTIU SEPARATS PER COMES)
+			retorno.append(CSVUtil.limpiar(CSVUtil.getNombreUA(procedimiento.getUnidadAdministrativa())));		//NOM UA_INSTRUCTURA
+			retorno.append(CSVUtil.limpiar(CSVUtil.getNombreUA(procedimiento.getServicioResponsable())));		//NOM UA_RESPONSABLE
+			retorno.append(CSVUtil.limpiar(CSVUtil.getNombreUA(procedimiento.getOrganResolutori())));		//NOM NOM_UA_RESOLUTORIA
+			retorno.append(CSVUtil.limpiar(numTramits));					//NUM TRAMITS
+			retorno.append(CSVUtil.limpiar(numTramitsTelematics));			//NUM TRAMITS TELEMÀTICS
+			retorno.append(CSVUtil.limpiar(num_nombres));					//NUM NORMES
+			retorno.append(CSVUtil.limpiar(procedimiento.getFechaActualizacion())); //DATA_ACTUALITZACIO
+			retorno.append(CSVUtil.limpiar(codUsuario));					//COD_USUARI_DARRERA_ACT
+			retorno.append(CSVUtil.limpiar(nomUsuario));					//NOM_USUARI_DARRERA_ACT
+			retorno.append(CSVUtil.CARACTER_SALTOLINEA_CSV);
+		}
+		
+		return retorno.toString();		
+	}
+
+	/** 
+	 * Método que se encarga de convertir un String en formato json a una instancia de BuscadorProcedimientoCriteria 
+	 * @param criteria
+	 * @return
+	 */
 	private BuscadorProcedimientoCriteria jsonToBuscadorProcedimientoCriteria (String criteria) {
 
 		BuscadorProcedimientoCriteria buscadorCriteria = null;
@@ -277,8 +485,11 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		
 	}
 
-	/*
+	/**
 	 * Función para convertir a procedimientos locales los resultados
+	 * @param resultadoBusqueda
+	 * @param request
+	 * @return
 	 */
 	private List<ProcedimientoLocalDTO> convertirProcLocales(ResultadoBusqueda resultadoBusqueda, HttpServletRequest request) {
 
@@ -1277,7 +1488,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 
 			//La búsqueda de normativas no tendrá en cuenta la UA actual (idua = null)
-			resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, "todas", null, false, false, campoOrdenacion, orden, pagPag, pagRes);
+			resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, "todas", null, false, false, campoOrdenacion, orden, pagPag, pagRes, false);
 
 			for (Normativa normativa : castList(Normativa.class, resultadoBusqueda.getListaResultados()) ) {
 				long idNormativa = normativa.getId();

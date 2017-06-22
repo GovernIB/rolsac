@@ -287,5 +287,6 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 	jQuery(idTabBuscador).bind("click", function() { that.tabBuscador(); });	
 	jQuery(idBtnBuscadorForm).bind("click", function() { that.busca(); });
 	jQuery(idBtnLimpiarForm).bind("click", function() { that.limpia(); });
+	jQuery("#btnExportar").bind("click", function() { that.exporta(); });
 	
 }

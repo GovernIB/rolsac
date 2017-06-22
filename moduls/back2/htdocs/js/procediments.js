@@ -417,6 +417,16 @@ function CLlistat() {
 		Buscador.buscar(opcions, pagLlistat, Llistat);
 		
 	};
+	
+	
+	// Exporta la búsqueda
+	this.exporta = function(opcions) {	
+			
+		Buscador = new BuscadorProcedimiento();
+		Buscador.orden.tipo = ordreTipus_llistat_elm.val();
+		Buscador.orden.campo = ordreCamp_llistat_elm.val();
+		Buscador.buscar({cercador: "si", exportar: "si"}, pagExportar, Llistat);
+	};
 
 };
 

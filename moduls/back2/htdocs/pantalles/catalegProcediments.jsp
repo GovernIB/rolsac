@@ -41,7 +41,8 @@
     var nomUAMollapa = '<c:out value="${nomUA}"/>';
 
     var pagLlistat = '<c:url value="/catalegProcediments/llistat.do" />';
-    var pagDetall = '<c:url value="/catalegProcediments/pagDetall.do" />';
+    var pagExportar = '<c:url value="/catalegProcediments/exportar.do" />';
+	var pagDetall = '<c:url value="/catalegProcediments/pagDetall.do" />';
     var pagGuardar = '<c:url value="/catalegProcediments/guardar.do" />';    
     var pagEsborrar = '<c:url value="/catalegProcediments/esborrarProcediment.do" />';
     var seccioNormatives = '<c:url value="/catalegProcediments/cercarNormatives.do" />';
@@ -106,7 +107,8 @@
     var txtFechaActualizacion = "<spring:message code='camp.dataActualitzacio'/>";
     var txtSeleccionats = "<spring:message code='txt.seleccionats'/>";
     var txtSeleccionat = "<spring:message code='txt.seleccionat'/>";
-
+	var txtProcessant = "<spring:message code='txt.processant'/>";
+    
     var txtHiHa = "<spring:message code='txt.hi_ha'/>";
     var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
     var txtNoHiHaLlistat = txtNoHiHa + " " + txtLlistaItems.toLowerCase();
@@ -805,9 +807,11 @@
                             
                         </div>
                         
-
-                        <div class="fila">                            
+						<div class="fila">                            
                             <div class="botonera noClear">
+								 <div class="boton btnGenerico">
+                                  <a id="btnExportar" href="javascript:void(0)" class="btn exportar"><span><span>Exportar</span></span></a>
+                                </div>
                                 <div class="boton btnGenerico">
                                   <a id="btnLimpiarForm" href="javascript:void(0)" class="btn borrar"><span><span><spring:message code='boto.borrar'/></span></span></a>
                                 </div>

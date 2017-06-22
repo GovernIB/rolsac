@@ -21,6 +21,7 @@ public class BuscadorProcedimientoCriteria implements Serializable {
 	private Boolean uaPropias;
 	private Boolean uaHijas;
 	private String locale;
+	private Boolean soloId = false;
 	
 	
 	public BuscadorProcedimientoCriteria() {
@@ -138,6 +139,20 @@ public class BuscadorProcedimientoCriteria implements Serializable {
 
 	public void setLocale(String locale) {
 		this.locale = locale;
+	}
+
+	/**
+	 * @return the soloId
+	 */
+	public Boolean getSoloId() {
+		return soloId;
+	}
+
+	/**
+	 * @param soloId the soloId to set
+	 */
+	public void setSoloId(Boolean soloId) {
+		this.soloId = soloId;
 	}
 
 }

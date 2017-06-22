@@ -38,6 +38,7 @@
 // accesos
    var pagLlistat = '<c:url value="/fitxainf/llistat.do" />';
    var pagDetall = '<c:url value="/fitxainf/pagDetall.do" />';
+   var pagExportar = '<c:url value="/fitxainf/exportar.do" />';
    var pagGuardar = '<c:url value="/fitxainf/guardar.do" />';
    var pagSeccions = '<c:url value="/fitxainf/seccions.do" />';
    var pagUnitats = '<c:url value="/fitxainf/unitats.do" />';
@@ -140,6 +141,7 @@
    var txtMateries = "<spring:message code='txt.materies'/>";
    var txtNoHiHaMateries = txtNoHiHa + " " + txtMateries;
    var txtNoHiHaMateriesSeleccionades = "<spring:message code='txt.noHiHaMateriaRelacionada'/>";
+   var txtProcessant = "<spring:message code='txt.processant'/>";
    
    // modul fets vitals
    var txtFet = "<spring:message code='txt.fet_vital'/>";
@@ -428,6 +430,9 @@
                         --%>
                         <div class="fila">                            
                             <div class="botonera noClear">
+                            	<div class="boton btnGenerico">
+                                  <a id="btnExportar" href="javascript:void(0)" class="btn exportar"><span><span>Exportar</span></span></a>
+                                </div>
                                 <div class="boton btnGenerico">
                                   <a id="btnLimpiarForm" href="javascript:void(0)" class="btn borrar"><span><span><spring:message code='boto.borrar'/></span></span></a>
                                 </div>

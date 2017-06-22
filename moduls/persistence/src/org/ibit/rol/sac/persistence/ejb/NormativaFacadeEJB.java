@@ -319,7 +319,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	public ResultadoBusqueda buscarNormativas(Map parametros, Map traduccion, String tipo,
 			Long idUA, boolean uaMeves, boolean uaFilles,
 			String campoOrdenacion, String orden, String pagina,
-			String resultats) {
+			String resultats, boolean soloIds) {
 
 		Session session = getSession();
 
@@ -342,7 +342,12 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 
 			Query query;
 			Query queryCount;
-			String select = "Select distinct normativa";
+			String select;
+			if (soloIds) {
+				select = "Select distinct normativa.id ";
+			} else {
+				select = "Select distinct normativa ";
+			}
 			String selectCount = "Select count(distinct normativa)";
 			String from;
 			if ("local".equals(tipo)) {

@@ -25,6 +25,7 @@
 
 	// pagines  
 	var pagLlistat = '<c:url value="/normativa/llistat.do" />';
+	var pagExportar = '<c:url value="/normativa/exportar.do" />';
 	var pagDetall = '<c:url value="/normativa/pagDetall.do" />';
 	var pagGuardar = '<c:url value="/normativa/guardar.do" />';
 	var pagEliminar = '<c:url value="/normativa/eliminar.do" />';
@@ -66,7 +67,8 @@
 	var txtAscendentment = "<spring:message code='txt.ascendentment'/>";
 	var txtDescendentment = "<spring:message code='txt.descendentment'/>";
 	var txtPer = "<spring:message code='txt.per'/>";
-
+	var txtProcessant = "<spring:message code='txt.processant'/>";
+	   
 	// taula
 	var txtNumero = "<spring:message code='camp.numero'/>";
     var txtNumBoletin = "<spring:message code='camp.nombreButlleti'/>";
@@ -706,6 +708,9 @@
                         --%>
                         
                         <div class="botonera">
+                        	<div class="boton btnGenerico">
+                                <a id="btnExportar" href="javascript:void(0)" class="btn exportar"><span><span>Exportar</span></span></a>
+                            </div>
                             <div class="boton btnGenerico">
                               <a id="btnLimpiarForm" href="javascript:void(0)" class="btn borrar"><span><span><spring:message code='boto.borrar'/></span></span></a>
                             </div>
