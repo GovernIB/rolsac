@@ -351,7 +351,6 @@ public class NormativaBackController extends PantallaBaseController {
 		retorno.append("NOM_NORMA_ES;");
 		retorno.append("ESTAT_NORMA;");
 		retorno.append("VISIBILITAT_NORMA;");
-		//retorno.append("PUBLIC_OBJECTIU;");
 		retorno.append("TIPUS_NORMATIVA;");
 		retorno.append("NOM UA;");
 		retorno.append("RANG_LEGAL;");
@@ -411,13 +410,18 @@ public class NormativaBackController extends PantallaBaseController {
 				estado = "RESERVA";
 			}
 			
-			String bolletiEnllac, bolletiNom = normativa.getNombreBoletin(), bolletiTipus;
+			String bolletiEnllac, bolletiTipus, bolletiNum;
 			if (normativa.getBoletin() == null) {
 				bolletiEnllac = "";
 				bolletiTipus = "";
 			} else {
 				bolletiEnllac = normativa.getBoletin().getEnlace();
 				bolletiTipus = normativa.getBoletin().getNombre();
+			}
+			if (normativa.getNumero() == null) {
+				bolletiNum = "";
+			} else {
+				bolletiNum = normativa.getNumero().toString();
 			}
 			
 			String tipoNormativa;
@@ -433,12 +437,11 @@ public class NormativaBackController extends PantallaBaseController {
 			retorno.append(CSVUtil.limpiar(nomEs)); 				//NOM_NORMA_ES,
 			retorno.append(CSVUtil.limpiar(estado)); 				//ESTAT_NORMA DECODE(NOR_VALIDA,1,'PUBLIC',2,'INTERN','RESERVA'),
 			retorno.append(CSVUtil.limpiar(normativa.isVisible()));	//VISIBILITAT_NORMA (ESTAT+DATA_PUB+DATA_CAD + UA_VISIBLE),
-			//retorno.append(CSVUtil.limpiar("PO")); 					//PUBLIC_OBJECTIU (ID_PUBLIC OBJECTIU SEPARATS PER COMES),
 			retorno.append(CSVUtil.limpiar(tipoNormativa));			//TIPUS_NORMATIVA (LOCAL, EXTERNA),
 			retorno.append(CSVUtil.limpiar(CSVUtil.getNombreUA(normativa.getUnidadAdministrativa()))); 	//NOM_UA
 			retorno.append(CSVUtil.limpiar(rangLegal)); 			//RANG LEGAL (LLEI, DECRETET,...)
 			retorno.append(CSVUtil.limpiar(bolletiTipus)); 			//TIPUS_BUTLLETÍ,
-			retorno.append(CSVUtil.limpiar(bolletiNom)); 			//NUM_BUTLLETÍ,
+			retorno.append(CSVUtil.limpiar(bolletiNum)); 			//NUM_BUTLLETÍ,
 			retorno.append(CSVUtil.limpiar(bolletiEnllac)); 		//ENLLAÇ,
 			retorno.append(CSVUtil.limpiar(normativa.getFechaBoletin())); //DATA_NORMA
 			retorno.append(CSVUtil.CARACTER_SALTOLINEA_CSV);
