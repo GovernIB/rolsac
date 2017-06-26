@@ -39,7 +39,7 @@
     var txtCodi = "<spring:message code='txt.codi'/>";
     var txtUA = "<spring:message code='txt.ua'/>";
     var txtEmail = "<spring:message code='txt.email'/>";
-    var txtEpui = "<spring:message code='txt.Epui'/>";
+    var txtEpui = "<spring:message code='txt.Efixa'/>";
 
     //paginacio
     var txtTrobat = "<spring:message code='txt.sha_trobat'/>";
