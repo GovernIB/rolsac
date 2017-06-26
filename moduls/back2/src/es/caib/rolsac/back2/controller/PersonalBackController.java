@@ -211,11 +211,11 @@ public class PersonalBackController extends PantallaBaseController {
 		retorno.append("NOM_PERSONA;");
 		retorno.append("CARREC;");
 		retorno.append("NOM_UA;");
-		retorno.append("CORREU ELECTR"+new String(new byte[]{(byte)210})+"NIC;");
+		retorno.append("CORREU ELECTRONIC;");
 		retorno.append("TELEFON EXTERIOR;");
-		retorno.append("EXTENSI"+new String(new byte[]{(byte)211})+" FIXA;");
-		retorno.append("TELEFON M"+new String(new byte[]{(byte)210})+"BIL;");
-		retorno.append("EXTENSI"+new String(new byte[]{(byte)211})+" M"+new String(new byte[]{(byte)210})+"BIL;");
+		retorno.append("EXTENSIO FIXA;");
+		retorno.append("TELEFON MOBIL;");
+		retorno.append("EXTENSIO MOBIL;");
 		retorno.append("\n");
 		
 		

@@ -354,8 +354,8 @@ public class NormativaBackController extends PantallaBaseController {
 		retorno.append("TIPUS_NORMATIVA;");
 		retorno.append("NOM UA;");
 		retorno.append("RANG_LEGAL;");
-		retorno.append("TIPUS_BUTLLET"+new String(new byte[]{(byte)205})+";");
-		retorno.append("NUM_BUTLLET"+new String(new byte[]{(byte)205})+";");
+		retorno.append("TIPUS_BUTLLETI;");
+		retorno.append("NUM_BUTLLETI;");
 		retorno.append("ENLLA"+new String(new byte[]{(byte)199})+";");
 		retorno.append("DATA_NORMA;");
 		retorno.append("\n");

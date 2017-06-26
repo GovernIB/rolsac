@@ -162,9 +162,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				model.put("error", "altres");
 				logException(log, dEx);
 			}
-			
 		}
-		
 	}
 
 	private List<CodNomDTO> llistarSilenci(String lang) throws DelegateException {
@@ -400,17 +398,48 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			
 			String codUsuario = "", nomUsuario = "";
 			try {
-				List<Auditoria> datos = auditoriaDelegate.listarAuditoriasProcedimiento(idProcedimiento);
-				if (datos != null && datos.size() > 0) {
-					Auditoria auditoria = datos.get(0);
-					if (auditoria.getUsuario() != null && !auditoria.getUsuario().isEmpty()) {
-						Usuario usuario = usuarioDelegate.obtenerUsuariobyUsername(auditoria.getUsuario());
-						if (usuario != null) {
-							codUsuario = usuario.getUsername();
-							nomUsuario = usuario.getNombre();
+				List<Auditoria> llista = auditoriaDelegate.listarAuditoriasProcedimiento(idProcedimiento);
+				Collections.sort(llista, new Comparator< Auditoria >( ){
+
+					/**
+					 * Teniendo en cuenta la siguiente simbología:
+					 * <p> -1 : o1 < o2   </p> 
+					 * <p>  0 : o1 == o2  </p>
+					 * <p> +1 : o1 > o2   </p>
+					 * Se penaliza que no tenga usuario o que no tenga fecha.
+					 * 
+					 * En caso que ambos tengan usuario y fecha, se compara la fecha.
+					 * <b>Como se ve, se da el valor al revés, para ordenar hacia abajo por fecha.</b>
+					 * 
+					 * @param o1
+					 * @param o2
+					 * @return
+					 */
+					public int compare(Auditoria o1, Auditoria o2) {
+						//Si o1 no tiene usuario o fecha
+						if (o1.getFecha() == null || o1.getUsuario() == null || o1.getUsuario().isEmpty()) {
+							return 1;
 						}
+						
+						//Si o2 no tiene usuario o fecha.
+						if (o2.getFecha() == null || o2.getUsuario() == null || o2.getUsuario().isEmpty()) {
+							return -1;
+						}
+						
+						//Se compara por fecha.
+						return o2.getFecha().compareTo(o1.getFecha());
 					}
-				}
+				
+				} );
+				
+				for (Auditoria auditoria : llista) {
+					Usuario usuario = usuarioDelegate.obtenerUsuariobyUsernamePMA(auditoria.getUsuario());
+					if (usuario != null){									
+						codUsuario = usuario.getUsername();
+						nomUsuario = usuario.getNombre();
+						break;
+					}
+				}								
 			} catch (DelegateException e) {
 				log.error("Error obteniendo auditorias del procedimiento id:"+idProcedimiento, e);
 			}
