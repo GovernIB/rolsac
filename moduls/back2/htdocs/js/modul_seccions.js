@@ -248,7 +248,11 @@ function CModulSeccio() {
 		copiaNodesOrigen = modul_seccions_elm.find(".listaOrdenable:first").html();
 
 		modul_seccions_elm.find("a.gestionaSeccions").one("click", function() { ModulSeccions.gestiona(); } );
-		modul_seccions_elm.find("a.enllasGestioFitxa").click( function() { that.mostraFitxes(this); } );
+		modul_seccions_elm.find("a.enllasGestioFitxa").click( function() { 
+			//#398 Dejar limpios los textos de los cercadores.
+			$("#cerca_fitxes_nom").val(""); 
+			$("#cerca_fitxes_codi").val(""); 
+			that.mostraFitxes(this); } );
 		
 		if (debug)
 			console.log("Saliendo de CModulSeccio.iniciar");
@@ -1873,13 +1877,17 @@ function CEscriptoriSeccioFitxes() {
 
 			longitud = data.length - 1;
 
-			for ( n = 0 ; n <= longitud ; n++ ) {
+			for ( var n = 0 ; n <= longitud ; n++ ) {
 
 				var idFicha = data[n].id;
 				var filaPar = ( n % 2 == 0 ? "" : "par" );
-				var orden = data[n].ordre;
-
-				listado += "<div class='tr " + filaPar + "' role='row'>";
+				
+				var noAlmacenado = ""; //Clase para indicar que no está almacenado en bbdd.
+				if (data[n].noAlmacenado == true) {
+					noAlmacenado = "noalmacenado";
+				}
+				
+				listado += "<div class='tr " + filaPar + " "+noAlmacenado+"' role='row'>";
 				listado += "	<div class='td nom fitxa' role='gridcell'>";
 				listado	+= "		<input type='hidden' value='" + idFicha + "' class='id'>";
 				listado += "		<a href='javascript:;' class='nom'>" + data[n].titulo + "</a>";
@@ -1921,74 +1929,42 @@ function CEscriptoriSeccioFitxes() {
 
 			$(this).click(function() {
 
-				var id = $(element).find(".id").val();
-				var dataVars = "idFitxa=" + id;
-				
-				
-				$.ajax({
-					type: "POST",
-					url: validarBorrar,
-					data: dataVars,
-					dataType: "json",
-					error: function(data) {
-							// missatge
-							Missatge.llansar( { tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: data.error } );
-							// error
-							Error.llansar();
-					},
-					success: function(data) {
-						
-						if (data.id <= 0) {
-
-							Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: data.nom});
-
-						}else{
+				if ($(element).hasClass("noalmacenado")) { //No hace falta validarlo.
+					EscriptoriSeccioFitxes.quitarFichaDefinitiva(element, cantidad);
+				} else {
+					var id = $(element).find(".id").val();
+					var dataVars = "idFitxa=" + id;
+					
+					
+					$.ajax({
+						type: "POST",
+						url: validarBorrar,
+						data: dataVars,
+						dataType: "json",
+						error: function(data) {
+								// missatge
+								Missatge.llansar( { tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: data.error } );
+								// error
+								Error.llansar();
+						},
+						success: function(data) {
 							
-							$(element).remove();
-							
-							switch (cantidad) {
-							
-							case 0:
-								$('#resultatsFitxes .dades').html( "<p class=\"noItems\">" + txtNoHiHaFitxes + "</p>" );
-								break;
+							if (data.id <= 0) {
+	
+								Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: data.nom});
+	
+							}else{
 								
-							default:
-								$("#resultatsFitxes .dades > p.info > strong").html(cantidad);
-							
-							var contador = 1;
-							
-							$("#resultatsFitxes .dades > div.table > div.tbody > div.tr").each(function() {
+								EscriptoriSeccioFitxes.quitarFichaDefinitiva(element, cantidad);
 								
-								$(this).removeClass("par");
-								
-								if ( contador % 2 == 0 )
-									$(this).addClass("par");
-								
-								contador += 1;
-								
-							});
-							
-							}
-							//Borramos el valor de la lista de fitxas devueltas, para que al guardar no se guarden los valores borrados.
-							
-							var listaTotal = $("#resultatsFitxes").data("fichas");
-							
-							for (var i=0; i<listaTotal.length; i++) {
-								if (listaTotal[i].id == id){
-									listaTotal.splice(i,1);
-								}
 							}
 							
-							$("#resultatsFitxes").data("fichas", listaTotal);
+							
 							
 						}
-						
-						
-						
-					}
-				});
+					});
 				
-				
+				}
 				
 
 			});
@@ -1998,6 +1974,46 @@ function CEscriptoriSeccioFitxes() {
 		if (debug)
 			console.log("Saliendo de CEscriptoriSeccioFitxes.quitarFicha");
 
+	};
+	
+	this.quitarFichaDefinitiva = function (element, cantidad) {
+		$(element).remove();
+		var id = $(element).find(".id").val();
+		
+		switch (cantidad) {
+		
+		case 0:
+			$('#resultatsFitxes .dades').html( "<p class=\"noItems\">" + txtNoHiHaFitxes + "</p>" );
+			break;
+			
+		default:
+			$("#resultatsFitxes .dades > p.info > strong").html(cantidad);
+		
+		var contador = 1;
+		
+		$("#resultatsFitxes .dades > div.table > div.tbody > div.tr").each(function() {
+			
+			$(this).removeClass("par");
+			
+			if ( contador % 2 == 0 )
+				$(this).addClass("par");
+			
+			contador += 1;
+			
+		});
+		
+		}
+		//Borramos el valor de la lista de fitxas devueltas, para que al guardar no se guarden los valores borrados.
+		
+		var listaTotal = $("#resultatsFitxes").data("fichas");
+		
+		for (var i=0; i<listaTotal.length; i++) {
+			if (listaTotal[i].id == id){
+				listaTotal.splice(i,1);
+			}
+		}
+		
+		$("#resultatsFitxes").data("fichas", listaTotal);
 	};
 
 	this.asignarEventoSeleccionable = function(pagPag) {
@@ -2279,7 +2295,7 @@ function CEscriptoriSeccioFitxes() {
 		var nodo = "#nodo-ficha-" + id + " > div > span";
 		var titulo = $(nodo).html();
 		var existTable = $("#resultatsFitxes .dades > div.table").length;
-		var ficha = { "id":id, "titulo":titulo, "ordre":orden};
+		var ficha = { "id":id, "titulo":titulo, "ordre":orden, "noAlmacenado":true};
 		var fichas = $("#resultatsFitxes").data("fichas");
 
 		if ( this.validarParametro(fichas) ) {
