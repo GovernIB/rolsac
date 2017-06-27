@@ -7,7 +7,7 @@
 <head>
     <title><spring:message code='arbreET.arbre'/></title>
     <meta content="text/html; charset='ISO-8859-15'" http-equiv="Content-type" />
-    <jsp:include page="layout/favicon.jsp" flush="true"/>
+    <jsp:include page="../layout/favicon.jsp" flush="true"/>
     <link href="<c:url value='/css/comuns.css'/>" rel="stylesheet" type="text/css" media="screen" />
     <link href="<c:url value='/css/arbreET.css'/>" rel="stylesheet" type="text/css" media="screen" />
     
