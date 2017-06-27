@@ -56,8 +56,23 @@ public class UATags extends TagSupport {
                 StringBuilder url = new StringBuilder("../unidadAdministrativa/cambiarUA.do?ua=");
                 String UA_ID_PLACEHOLDER = "__UAID__";
                 url.append(UA_ID_PLACEHOLDER);
-                url.append("&redirectTo=");
-                url.append(httpRequest.getRequestURL());
+                url.append("&redirectTo=");                                
+                
+                try {
+					// Tratamiento especial para compatibilidad con JBOSS 5 que parece tener un bug y el getRequestURL() retorna el jsp y no el action (la url real).
+                	// guia de los atributos http://timjansen.github.io/jarfiller/guide/servlet25/attributes.xhtml
+                	// si todo va ok añadimos la url absoluta
+	                StringBuffer rurl = httpRequest.getRequestURL();
+	                String ruri = httpRequest.getRequestURI();
+	                String urlCompleta = rurl.substring(0, rurl.indexOf(ruri)); 
+	                urlCompleta +=  httpRequest.getAttribute("javax.servlet.forward.request_uri"); 
+	                url.append(urlCompleta);
+				} catch (Exception e) {
+					//si ocurre un error añadimos la url relativa
+					url.append(httpRequest.getAttribute("javax.servlet.forward.servlet_path"));
+				}
+
+                
                 UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
                 mollapa.append(uaDelegate.getUaMollaBack2(ua.getId(), DelegateUtil.getIdiomaDelegate().lenguajePorDefecto(), url.toString(), UA_ID_PLACEHOLDER));
                 textoBotonCargarHijos = messages.getMessage("mollapa.unitats.filles.label", null, locale);
