@@ -765,16 +765,21 @@ function CDetall() {
 		if (dada_node.item_codigo_pro != undefined) {
 			jQuery("#item_codigo_pro").val(dada_node.item_codigo_pro);
 			jQuery("#item_codigo_pro").change();
-		}
+		} 
+		
 		//#366 se añade SIA
 		if (dada_node.item_codigo_sia != undefined) {
 			jQuery("#item_codigo_sia").val(dada_node.item_codigo_sia);
 			jQuery("#item_codigo_sia").change();
+		} else {
+			jQuery("#item_codigo_sia").val("");
 		}
 		
 		if (dada_node.item_fecha_sia != undefined) {
 			jQuery("#item_fecha_sia").val(dada_node.item_fecha_sia);
 			jQuery("#item_fecha_sia").change();
+		} else {
+			jQuery("#item_fecha_sia").val("");
 		}
 		
 		if (dada_node.item_estado_sia != undefined) {
@@ -792,6 +797,8 @@ function CDetall() {
 			
 			
 			jQuery("#item_estado_sia").change();
+		} else {
+			jQuery("#item_estado_sia").val("");
 		}
 		
 		if (dada_node.item_silenci_combo == undefined) {
