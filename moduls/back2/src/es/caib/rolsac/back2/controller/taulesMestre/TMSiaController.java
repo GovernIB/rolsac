@@ -356,7 +356,6 @@ public class TMSiaController extends PantallaBaseController {
             }
         }
 
-        //resultats.put("total", llistaSiaJobDTO.size());
         resultats.put("nodes", llistaSiaJobDTO);
 
         return resultats;
@@ -418,7 +417,6 @@ public class TMSiaController extends PantallaBaseController {
             }
         }
 
-        resultats.put("total", llistaSiaDTO.size());
         resultats.put("nodes", llistaSiaDTO);
 
         return resultats;

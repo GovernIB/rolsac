@@ -1,14 +1,12 @@
 package org.ibit.rol.sac.persistence.ejb;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Vector;
 
 import javax.ejb.CreateException;
@@ -19,9 +17,8 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
-import org.apache.commons.lang.exception.ExceptionUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
@@ -30,27 +27,24 @@ import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.Taxa;
 import org.ibit.rol.sac.model.Traduccion;
-import org.ibit.rol.sac.model.TraduccionDocumentTramit;
 import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.TraduccionProcedimiento;
 import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
 import org.ibit.rol.sac.model.TraduccionTramite;
 import org.ibit.rol.sac.model.Tramite;
-import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.DestinatarioDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
-import org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegate;
 import org.ibit.rol.sac.persistence.delegate.TramiteDelegateI;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.remote.vuds.ActualizacionVudsException;
 import org.ibit.rol.sac.persistence.remote.vuds.ValidateVudsException;
 import org.ibit.rol.sac.persistence.saver.TramiteSaver;
 import org.ibit.rol.sac.persistence.util.IndexacionUtil;
+import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
-import es.caib.solr.api.SolrFactory;
 import es.caib.solr.api.SolrIndexer;
 import es.caib.solr.api.model.IndexData;
 import es.caib.solr.api.model.IndexFile;
@@ -158,6 +152,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 		    
 		    Tramite tramiteReload = cargaTramite(session, tramiteId);
 		    IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, tramiteReload.getProcedimiento().getId(), false);
+		    SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, tramiteReload.getProcedimiento().getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, tramiteReload.getProcedimiento());
 		    
 			return tramiteId;
 
@@ -232,7 +227,8 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			Actualizador.borrar(tramite, true);
 			
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, idProc, false);
-
+			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, idProc, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, null);
+		    
 		} catch (HibernateException he) {
 
 			throw new EJBException(he);
@@ -294,8 +290,10 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 
 			}
 			
-			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, tramite.getProcedimiento().getId(), false);
-		    
+			if (tramite.getProcedimiento() != null) {
+				IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, tramite.getProcedimiento().getId(), false);
+				SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, tramite.getProcedimiento().getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, tramite.getProcedimiento());
+			}
 			
 			return doc.getId();
 
@@ -362,8 +360,10 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			}
 		
 			
-			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, tramite.getProcedimiento().getId(), false);
-
+			if ( tramite.getProcedimiento() != null ) {
+				IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, tramite.getProcedimiento().getId(), false);
+				SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, tramite.getProcedimiento().getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, tramite.getProcedimiento());
+			}
 			return taxa.getId();
 
 		} catch (Exception he) {
@@ -447,12 +447,15 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 
 				log.debug("Borro Taxa: Lanzo el actualizador");
 				Actualizador.actualizar(tramite, true);
-
+				
+				
+				IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, tramite.getProcedimiento().getId(), false);
+				SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, tramite.getProcedimiento().getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, tramite.getProcedimiento());
+				
 			}
 			
 			
-			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, tramite.getProcedimiento().getId(), false);
-
+			
 		} catch (Exception he) {
 
 			throw new EJBException(he);
@@ -561,13 +564,12 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 
 				log.debug("Borrar Documento: Lanzo el actualizador");
 				Actualizador.actualizar(tramite, true);
-
+				IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, tramite.getProcedimiento().getId(), false);
+				SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, tramite.getProcedimiento().getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, tramite.getProcedimiento());
 			}
 			
 			
-			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, tramite.getProcedimiento().getId(), false);
-						
-		    
+			
 		} catch (HibernateException he) {
 
 			throw new EJBException(he);
@@ -634,7 +636,8 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			getSessionFactory().evictCollection("org.ibit.rol.sac.model.Tramite.docsRequerits", tramite.getId());
 			
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, tramite.getProcedimiento().getId(), false);
-			
+			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, tramite.getProcedimiento().getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, tramite.getProcedimiento());
+				
 		} catch (HibernateException he) {
 
 			throw new EJBException(he);

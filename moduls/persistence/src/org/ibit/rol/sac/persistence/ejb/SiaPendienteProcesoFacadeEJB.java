@@ -439,6 +439,9 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 			for(SiaPendiente siaPendienteParBorrar: pendientes) {
 				session.delete(siaPendienteParBorrar);
 			}
+			if (pendientes.size() > 0) {
+				session.flush();
+			}
 			
 			//Vemos si es de tipo procedimiento.
 			if (SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO.equals(siaPendiente.getTipo())) {

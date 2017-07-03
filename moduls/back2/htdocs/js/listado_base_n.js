@@ -260,10 +260,7 @@ function detall_lista_n () {
 			contenido  += this.getContenidoHTML(data);
 			
 			//Obtenemos el html del footer
-			codi_navegacio = this.getHtmlFooterPagina(data, this.nombreLista+".cambiaPagina");
-
-			//Y lo anyadimos
-			contenido += codi_navegacio;
+			contenido += this.getHtmlFooterPagina(data, this.nombreLista+".cambiaPagina");
 			
 			//FIN TABLE
 			contenido += "</div>";
