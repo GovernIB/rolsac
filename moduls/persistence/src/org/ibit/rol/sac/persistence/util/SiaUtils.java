@@ -305,7 +305,8 @@ public class SiaUtils {
 	 *  - Tiene normativas y uno de tipo SIA.
 	 *  - Tiene descripción.
 	 *  - Tiene resumen.
-	 *  - Tiene SiaUA
+	 *  - Depende de una UA asociada a una entidad raiz.
+	 *  - No está asociado directamente a la entidad raíz.
 	 *  
 	 * @param procedimiento
 	 * @return
@@ -368,11 +369,22 @@ public class SiaUtils {
   		final SiaUA siaUA = obtenerSiaUA(procedimiento);
   	    if (siaUA == null) {
   			tieneSiaUA = false;	
-  			mensajeError.append("No tiene una asociada una UA multientidad.");
+  			mensajeError.append("El procedimiento no esta asociado a una entidad raiz.");
   	    } else {
   	    	tieneSiaUA = true;
   	    	resultado.setSiaUA(siaUA);
   	    }
+  	    
+  	    /*
+  	    boolean noAsociadoSiaUA = true;
+  	    if (tieneSiaUA) {
+	  	    final String codigoDir3IdCentro = obtenerCodigoIdCentro(procedimiento);
+	  	    final String codigoDir3SiaUA = siaUA.getUnidadAdministrativa().getCodigoDIR3();
+	  	    if (!codigoDir3SiaUA.equals(codigoDir3IdCentro)) {
+	  	    	mensajeError.append("El procedimiento esta asociado directamente a la entidad raiz.");
+	  	    	noAsociadoSiaUA = false;
+	  	    }
+  	    }*/
 	    
 	    /** Si cumple todos los datos ok, sino incrustamos el mensaje de error. **/
 	    if (tieneMaterias && tieneNormativas && encontradoTipo && tieneNombre && tieneResumen && tieneSiaUA) {
@@ -426,15 +438,14 @@ public class SiaUtils {
 		
 		String codigoIdCentro = null;
 		
-		if (procedimiento == null || procedimiento.getOrganResolutori() == null) {
-			codigoIdCentro = "";
-		} else {
+		if (procedimiento != null && procedimiento.getOrganResolutori() != null) {
 		
 			if (procedimiento.getOrganResolutori().getCodigoDIR3() == null) {
 		    	
 		    	//Recorremos sus predecesores
-		    	for(Object oua : procedimiento.getOrganResolutori().getPredecesores()) {
-		    		UnidadAdministrativa ua = (UnidadAdministrativa) oua;
+				for(int i =  procedimiento.getOrganResolutori().getPredecesores().size() -1 ; i >= 0 ; i --) {
+		    	//for(Object oua : procedimiento.getOrganResolutori().getPredecesores()) {
+		    		final UnidadAdministrativa ua = (UnidadAdministrativa) procedimiento.getOrganResolutori().getPredecesores().get(i);
 		    		if (ua.getCodigoDIR3() != null) {
 		    			codigoIdCentro = ua.getCodigoDIR3();
 		    			break;
