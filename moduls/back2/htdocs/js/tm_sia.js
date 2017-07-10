@@ -449,7 +449,7 @@ function ListaN() {
 	/** Limpiar texto. **/
 	this.limpiarTexto = function (descripcion) {
 		while (descripcion.indexOf("'") != -1) {
-			 descripcion = descripcion.replace("'","");
+			 descripcion = descripcion.replace("'","&lsquo;");
 		}
 		return descripcion;		
 	};

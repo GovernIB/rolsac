@@ -2,22 +2,29 @@ package org.ibit.rol.sac.model;
 
 import java.util.Date;
 
+/**
+ * Estado proceso SIA.
+ * @author slromero
+ *
+ */
 public class EstadoProcesoSIA {
-	
+	/** Fecha inicio. ***/
 	private Date fechaInicio;
-	
+	/** Fecha fin. **/
 	private Date fechaFin;
-	
+	/** Total. **/
 	private int total;
-	
+	/** Correctos. **/
 	private int correctos;
-	
+	/** Incorrectos. **/
 	private int incorrectos;
-	
-	private int nulos;
-	
+	/** No cumple datos. **/
+	private int noCumpleDatos;
+	/** No enviable. **/
+	private int noEnviable;
+	/** Detalle. **/ 
 	private String detalle = "";
-
+	
 	/**
 	 * @return the numeroProcedimientos
 	 */
@@ -61,6 +68,34 @@ public class EstadoProcesoSIA {
 	}
 
 	/**
+	 * @return the noCumpleDatos
+	 */
+	public int getNoCumpleDatos() {
+		return noCumpleDatos;
+	}
+
+	/**
+	 * @param noCumpleDatos the noCumpleDatos to set
+	 */
+	public void setNoCumpleDatos(int noCumpleDatos) {
+		this.noCumpleDatos = noCumpleDatos;
+	}
+
+	/**
+	 * @return the noEnviable
+	 */
+	public int getNoEnviable() {
+		return noEnviable;
+	}
+
+	/**
+	 * @param noEnviable the noEnviable to set
+	 */
+	public void setNoEnviable(int noEnviable) {
+		this.noEnviable = noEnviable;
+	}
+
+	/**
 	 * @return the detalle
 	 */
 	public String getDetalle() {
@@ -75,20 +110,9 @@ public class EstadoProcesoSIA {
 	}
 
 	/**
-	 * @return the nulos
+	 * Añade una nueva linea.
+	 * @param linea
 	 */
-	public int getNulos() {
-		return nulos;
-	}
-
-	/**
-	 * @param nulos the nulos to set
-	 */
-	public void setNulos(int nulos) {
-		this.nulos = nulos;
-	}
-	
-	
 	public void addLineaDetalle(String linea) {
 		detalle += linea + "\n";
 	}
@@ -121,16 +145,32 @@ public class EstadoProcesoSIA {
 		this.fechaFin = fechaFin;
 	}
 	
+	/**
+	 * Incrementa el total de correctos.
+	 */
 	public void addCorrecto() {
 		correctos++;
 	}
 	
+	/**
+	 * Incrementa el total de incorrectos.
+	 */
 	public void addIncorrecto() {
 		incorrectos++;
 	}
 	
-	public void addNulo() {
-		nulos++;
+	/**
+	 * Incrementa el total de no cumple datos.
+	 */
+	public void addNoCumpleDatos() {
+		noCumpleDatos++;
 	}
-
+	
+	/**
+	 * Incrementa el total de no enviables.
+	 */
+	public void addNoEnviable() {
+		noEnviable++;
+	}
+	
 }

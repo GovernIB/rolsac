@@ -38,7 +38,7 @@ public class ArchivoAdministracionRemotaController extends ArchivoController {
 		AdministracionRemotaDelegate adRemotaDelegate = DelegateUtil.getAdministracionRemotaDelegate();
 		Archivo archivo = null;
 		
-		//Obtener archivo seg�n el parametro "t" (tipo)		
+		//Obtener archivo segun el parametro "t" (tipo)		
 		switch (tipo) {
 		
 			//Foto logo pequeno

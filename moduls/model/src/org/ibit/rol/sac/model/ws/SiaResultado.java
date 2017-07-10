@@ -6,8 +6,10 @@ package org.ibit.rol.sac.model.ws;
  *
  */
 public class SiaResultado {
-	/** Resultado nulo. **/
-	public static int RESULTADO_NULO = -2;
+	/** Resultado enviable pero no cumple datos. **/
+	public static int RESULTADO_NO_CUMPLE_DATOS = -2;
+	/** Resultado No enviable. **/
+	public static int RESULTADO_NO_ENVIABLE = -3;
 	/** Resultado ok. **/
 	public static int RESULTADO_OK = 1;
 	/** Resultado error. **/
@@ -72,8 +74,24 @@ public class SiaResultado {
 		}
 	}
 
-	public boolean isNulo() {
-		if (resultado == SiaResultado.RESULTADO_NULO) {
+	/**
+	 * Es enviable pero no cumple los datos.
+	 * @return
+	 */
+	public boolean isNoCumpleDatos() {
+		if (resultado == SiaResultado.RESULTADO_NO_CUMPLE_DATOS) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Es no enviable.
+	 * @return
+	 */
+	public boolean isNoEnviable() {
+		if (resultado == SiaResultado.RESULTADO_NO_ENVIABLE) {
 			return true;
 		} else {
 			return false;

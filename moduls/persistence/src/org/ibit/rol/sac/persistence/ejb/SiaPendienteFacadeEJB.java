@@ -127,10 +127,10 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 							siaPendiente.setTipo(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO);
 							siaPendiente.setMensaje(siaCumpleDatos.getRespuesta());
 							DelegateUtil.getSiaPendienteProcesoDelegate().generarSiaPendiente(siaPendiente, procedimiento);
-							siaResultado = new SiaResultado(SiaResultado.RESULTADO_NULO, siaCumpleDatos.getRespuesta());
+							siaResultado = new SiaResultado(SiaResultado.RESULTADO_NO_CUMPLE_DATOS, siaCumpleDatos.getRespuesta());
 						}
 		    		} else {
-		    			siaResultado = new SiaResultado(SiaResultado.RESULTADO_NULO, siaEnviableResultado.getRespuesta());		
+		    			siaResultado = new SiaResultado(SiaResultado.RESULTADO_NO_ENVIABLE, siaEnviableResultado.getRespuesta());		
 		    		}
 					
 					// Actualizamos estado proceso
@@ -195,38 +195,41 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		
 		if (siaResultado == null || estadoProceso == null) {
 			//Para evitar cualquier error se incluye, no debería entrar.
-			estadoProceso.addLineaDetalle("   ---- Procedimiento: " + procId + ", revisar.");
+			estadoProceso.addLineaDetalle("   ---- Procediment: " + procId + ", revisar.");
 			return;
-		} else if (siaResultado.isNulo()) {
-			estadoProceso.addNulo();
-			estadoProceso.addLineaDetalle("   ---- Procedimiento: " + procId + " no cumple requisitos para enviar a SIA: " +  siaResultado.getMensaje() + "<br />");
+		} else if (siaResultado.isNoCumpleDatos()) {
+			estadoProceso.addNoCumpleDatos();
+			estadoProceso.addLineaDetalle("   ---- Procediment: " + procId + " s'hauria d'enviar però falten dades: " +  siaResultado.getMensaje() + "<br />");
+		} else if (siaResultado.isNoEnviable()) {
+			estadoProceso.addNoEnviable();
+			estadoProceso.addLineaDetalle("   ---- Procediment: " + procId + " no és visible i no s'ha d'enviar a SIA: " +  siaResultado.getMensaje() + "<br />");
 		} else if (siaResultado.isCorrecto()) {
-			estadoProceso.addCorrecto();
-			estadoProceso.addLineaDetalle("   ---- Procedimiento: " + procId + " <br />");
-			estadoProceso.addLineaDetalle("   ---- Se ha enviado a SIA correctamente. <br />");
-			estadoProceso.addLineaDetalle("   ---- CodigoSIA:"+siaResultado.getCodSIA()+". <br />");
-			estadoProceso.addLineaDetalle("   ---- EstadoSia:"+siaResultado.getEstadoSIA()+". <br />");
+			estadoProceso.addCorrecto(); 
+			estadoProceso.addLineaDetalle("   ---- Procediment: " + procId + " <br />");
+			estadoProceso.addLineaDetalle("   ---- S'ha enviat a SIA correctament. <br />");
+			estadoProceso.addLineaDetalle("   ---- CodiSIA:"+siaResultado.getCodSIA()+". <br />");
+			estadoProceso.addLineaDetalle("   ---- EstatSia:"+siaResultado.getEstadoSIA()+". <br />");
 			if (siaResultado.getOperacion() != null) {
-				estadoProceso.addLineaDetalle("   ---- Operacion:"+siaResultado.getOperacion()+". <br />");
+				estadoProceso.addLineaDetalle("   ---- Operació:"+siaResultado.getOperacion()+". <br />");
 			}
 		} else {
 			if (procId == null) {
 				estadoProceso.addIncorrecto();
-				estadoProceso.addLineaDetalle("   ---- Error no controlado. <br />");
-				estadoProceso.addLineaDetalle("   ---- Mensaje:"+siaResultado.getMensaje()+" <br />");
+				estadoProceso.addLineaDetalle("   ---- Error no controlat. <br />");
+				estadoProceso.addLineaDetalle("   ---- Missatge:"+siaResultado.getMensaje()+" <br />");
 				if (siaResultado.getOperacion() != null) {
-						estadoProceso.addLineaDetalle("   ---- Operacion:"+siaResultado.getOperacion()+". <br />");
+						estadoProceso.addLineaDetalle("   ---- Operació:"+siaResultado.getOperacion()+". <br />");
 				}
 			} else {
 				estadoProceso.addIncorrecto();
-				estadoProceso.addLineaDetalle("   ---- Procedimiento: " + procId + " <br />");
-				estadoProceso.addLineaDetalle("   ---- Se ha enviado a SIA incorrectamente. <br />");
-				estadoProceso.addLineaDetalle("   ---- Mensaje:"+siaResultado.getMensaje());
+				estadoProceso.addLineaDetalle("   ---- Procediment: " + procId + " <br />");
+				estadoProceso.addLineaDetalle("   ---- S'ha enviat a SIA incorrectament. <br />");
+				estadoProceso.addLineaDetalle("   ---- Missatge:"+siaResultado.getMensaje());
 				if (!siaResultado.getMensaje().contains("<br")) {
 					estadoProceso.addLineaDetalle(" <br />");
 				}
 				if (siaResultado.getOperacion() != null) {
-					estadoProceso.addLineaDetalle("   ---- Operacion:"+siaResultado.getOperacion()+". <br />");
+					estadoProceso.addLineaDetalle("   ---- Operació:"+siaResultado.getOperacion()+". <br />");
 				}
 			}
 		}
@@ -240,7 +243,10 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		
 		int correctos = estadoProceso.getCorrectos();
 		int incorrectos = estadoProceso.getIncorrectos();
-		int nulos = estadoProceso.getNulos();
+		//int nulos = estadoProceso.getNulos();
+		
+		int noCumpleDatos = estadoProceso.getNoCumpleDatos();
+		int noEnviable = estadoProceso.getNoEnviable();
 		int total = estadoProceso.getTotal();
 		
 		
@@ -250,22 +256,23 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		try {
 			
 			// Si no esta finalizado, actualizamos cada 50
-			if ( estadoProceso.getFechaFin() != null ||  (correctos + incorrectos + nulos ) % 50 == 0) {
+			if ( estadoProceso.getFechaFin() != null ||  (correctos + incorrectos + noCumpleDatos + noEnviable ) % 50 == 0) {
     			StringBuffer resultadoBeta = new StringBuffer();
-    			resultadoBeta.append("Iniciado a las " + formato.format(estadoProceso.getFechaInicio()) + "<br />");
+    			resultadoBeta.append("Iniciat a les " + formato.format(estadoProceso.getFechaInicio()) + "<br />");
     			if (total != -1) {
-    				resultadoBeta.append("Se han enviado "+(correctos+incorrectos)+" datos de un total de "+ total +" procedimientos. De los cuales: <br />");
+    				resultadoBeta.append("S'han intentat enviar "+(correctos+incorrectos)+" procediments d'un total de "+ total +" procediments disponibles: <br />");
     			} else {
-    				resultadoBeta.append("Se han enviado "+(correctos+incorrectos)+" datos. De los cuales: <br />");
+    				resultadoBeta.append("S'han intentat enviar  "+(correctos+incorrectos)+" procediments : <br />");
     			}
-    			resultadoBeta.append(" - "+correctos+" datos correctos  <br />");
-    			resultadoBeta.append(" - "+incorrectos+" datos incorrectos  <br />");
-    			resultadoBeta.append(" - "+nulos+" datos no enviables a SIA  <br />");
+    			resultadoBeta.append(" - "+correctos+" s'han enviat correctament <br />");
+    			resultadoBeta.append(" - "+incorrectos+" han donat errors al enviar <br />");
+    			resultadoBeta.append(" - "+noEnviable+" no s&oacute;n visibles i no s'han d'enviar  <br />");
+    			resultadoBeta.append(" - "+noCumpleDatos+" s'haurien d'enviar per&ograve; falten dades  <br />");
     			    			
     			if (estadoProceso.getFechaFin() == null) {
-    				resultadoBeta.append("Estado: "+Math.abs((correctos+incorrectos+nulos)*100/total)+"%  <br />");
+    				resultadoBeta.append("Estat: "+Math.abs((correctos+incorrectos+noEnviable+noCumpleDatos)*100/total)+"%  <br />");
     			} else {
-    				resultadoBeta.append("Finalizado a las " + formato.format(estadoProceso.getFechaFin()) + "<br />");
+    				resultadoBeta.append("Finalitzat a les " + formato.format(estadoProceso.getFechaFin()) + "<br />");
     				siaJob.setFechaFin(estadoProceso.getFechaFin());
     				if (incorrectos == 0) {
     					siaJob.setEstado(SiaUtils.SIAJOB_ESTADO_ENVIADO);
@@ -505,10 +512,10 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 						if (siaCumpleDatos.isCumpleDatos()) {
 							siaResultado = enviarProcedimiento(procedimiento);
 						} else {
-							siaResultado = new SiaResultado(SiaResultado.RESULTADO_NULO, siaCumpleDatos.getRespuesta());
+							siaResultado = new SiaResultado(SiaResultado.RESULTADO_NO_CUMPLE_DATOS, siaCumpleDatos.getRespuesta());
 						}
 					}  else {
-		    			siaResultado = new SiaResultado(SiaResultado.RESULTADO_NULO, siaEnviableResultado.getRespuesta());		
+		    			siaResultado = new SiaResultado(SiaResultado.RESULTADO_NO_ENVIABLE, siaEnviableResultado.getRespuesta());		
 		    		}
 					
 					// Actualizar estado proceso

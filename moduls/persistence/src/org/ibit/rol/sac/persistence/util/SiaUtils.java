@@ -235,7 +235,7 @@ public class SiaUtils {
 
 		//Si el procedimiento que se pasa es nulo, tiene que salir.
 		if (procedimiento == null) {
-			resultado.setRespuesta("El procedimiento está nulo.");	
+			resultado.setRespuesta("El procediment és nul.");	
 			resultado.setIdCentro("");
 			resultado.setNotificarSIA(false);
 	    	return resultado;
@@ -244,13 +244,13 @@ public class SiaUtils {
 		//Es visible.
 		final boolean esVisible = procedimiento.isVisible();
 		if (!esVisible) {
-			mensajeError.append("El procedimiento no es visible.");
+			mensajeError.append("El procediment no és visible.");
 		}
 		
 		//Es visible UA.
 	    boolean isVisibleUA = isVisibleUA(procedimiento);
 	    if (!isVisibleUA) {
-	    	mensajeError.append("La UA del organo resolutori o de algunos de sus predecesores es no visible.");	
+	    	mensajeError.append("La unitat de l'òrgan resolutori o d'alguns dels seus predecessors és no visible.");	
 	    }
 		
 		//Tiene código centro.
@@ -258,7 +258,7 @@ public class SiaUtils {
 		final String codigoIdCentro = obtenerCodigoIdCentro(procedimiento);
 		if (codigoIdCentro == null) {
 			tieneCodigoCentro = false;
-			mensajeError.append("No tiene código DIR ni el organo resolutori ni predecesores.");
+			mensajeError.append("No té codi DIR ni l'òrgan resolutori ni predecessors.");
 	    } else {
 	    	tieneCodigoCentro = true;	
 	    	resultado.setIdCentro(codigoIdCentro);
@@ -316,19 +316,19 @@ public class SiaUtils {
 		final StringBuffer mensajeError = new StringBuffer();
 
 		if (procedimiento == null) {
-			resultado.setRespuesta("El procedimiento está nulo.");
+			resultado.setRespuesta("El procediment està nul.");
 			resultado.setCumpleDatos(false);
 			return resultado;
 		}
 		
 	    boolean tieneMaterias=procedimiento.getMaterias().size() > 0;
 	    if (!tieneMaterias) {
-	    	mensajeError.append("No tiene materias.");	
+	    	mensajeError.append("No té matèries.");	
 	    }
 	    
 	    boolean tieneNormativas=procedimiento.getNormativas().size() > 0;
 	    if (!tieneNormativas) {
-	    	mensajeError.append("No tiene normativas.");	
+	    	mensajeError.append("No té normatives.");	
 	    }
 	    
 	    boolean encontradoTipo = false;
@@ -341,14 +341,14 @@ public class SiaUtils {
 	    }
 	    
 	    if (!encontradoTipo) {
-	    	mensajeError.append("Ninguna de las normativas tiene asociado un tipo sia.");
+	    	mensajeError.append("Cap de les normatives té associat un tipus sia.");
 	    }
 	    
 	    
 	    final String nombre = getNombreProcedimiento(procedimiento);
 	    boolean tieneNombre;
 	    if (StringUtils.isBlank(nombre)) {
-	    	mensajeError.append("El procedimiento no tiene titulo.");	
+	    	mensajeError.append("El procediment no té títol.");	
 	    	tieneNombre = false;
 	    } else {
 	    	tieneNombre = true;
@@ -358,7 +358,7 @@ public class SiaUtils {
 	    final String resumen = getResumenProcedimiento(procedimiento);
 	    boolean tieneResumen;
 	    if (StringUtils.isBlank(resumen)) {
-	    	mensajeError.append("El procedimiento no tiene resumen.");	
+	    	mensajeError.append("El procediment no té resum.");	
 	    	tieneResumen = false;
 	    } else {
 	    	tieneResumen = true;
@@ -369,7 +369,7 @@ public class SiaUtils {
   		final SiaUA siaUA = obtenerSiaUA(procedimiento);
   	    if (siaUA == null) {
   			tieneSiaUA = false;	
-  			mensajeError.append("El procedimiento no esta asociado a una entidad raiz.");
+  			mensajeError.append("El procediment no aquesta associat a una entitat arrel.");
   	    } else {
   	    	tieneSiaUA = true;
   	    	resultado.setSiaUA(siaUA);
