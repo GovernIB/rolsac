@@ -369,7 +369,7 @@ public class SiaUtils {
   		final SiaUA siaUA = obtenerSiaUA(procedimiento);
   	    if (siaUA == null) {
   			tieneSiaUA = false;	
-  			mensajeError.append("El procediment no aquesta associat a una entitat arrel.");
+  			mensajeError.append("El procediment no té associat a una entitat arrel.");
   	    } else {
   	    	tieneSiaUA = true;
   	    	resultado.setSiaUA(siaUA);
