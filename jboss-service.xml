@@ -45,10 +45,8 @@
 	   
 	   <!-- valors sense confirmar -->
 	   	es.caib.rolsac.microsites=Y
-      	es.indra.caib.rolsac.servidor=sdesweblin1.caib.es
-      	es.indra.caib.rolsac.servidorPuerto=sdesweblin1.caib.es
-      	es.indra.caib.rolsac.oficina=N
-      	es.indra.caib.rolsac.googleMapKey=AIzaSyCIvmOidKyhpEEb-bADWnDrNw76_oBb81A
+      	es.caib.rolsac.oficina=N
+      	es.caib.rolsac.googleMapKey=AIzaSyCIvmOidKyhpEEb-bADWnDrNw76_oBb81A
 		es.caib.webcaib.principal=N
 		
 		es.caib.rolsac.pidip

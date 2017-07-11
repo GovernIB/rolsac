@@ -70,7 +70,7 @@ public class PopupCoordenadesBackController {
     	        model.put("dirEdi", "");
     	    }
     	        	    
-    	    String googleMapKey = System.getProperty("es.indra.caib.rolsac.googleMapKey");          
+    	    String googleMapKey = System.getProperty("es.caib.rolsac.googleMapKey");          
     	    if (googleMapKey != null){
     	    	model.put("googleMapKey", googleMapKey);
     	    }

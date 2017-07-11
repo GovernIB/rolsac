@@ -224,7 +224,7 @@ public class EditarProcedimientoActionMock extends BaseDispatchAction {
 
         log.debug("Entramos en editar");
         String servidor="";
-        String value = System.getProperty("es.indra.caib.rolsac.oficina");
+        String value = System.getProperty("es.caib.rolsac.oficina");
         ResourceBundle rb =	ResourceBundle.getBundle("sac-back-messages");
         
         if ((value == null) || value.equals("N"))
@@ -323,7 +323,7 @@ public class EditarProcedimientoActionMock extends BaseDispatchAction {
 
         log.debug("Entramos en seleccionar");
         String servidor="";
-        String value = System.getProperty("es.indra.caib.rolsac.oficina");
+        String value = System.getProperty("es.caib.rolsac.oficina");
         ResourceBundle rb =	ResourceBundle.getBundle("sac-back-messages");
         
         if ((value == null) || value.equals("N"))
@@ -384,7 +384,7 @@ public class EditarProcedimientoActionMock extends BaseDispatchAction {
 
         log.debug("Entramos en busqueda");
         String servidor="";
-        String value = System.getProperty("es.indra.caib.rolsac.oficina");
+        String value = System.getProperty("es.caib.rolsac.oficina");
         ResourceBundle rb =	ResourceBundle.getBundle("sac-back-messages");
         
         if ((value == null) || value.equals("N"))
@@ -411,7 +411,7 @@ public class EditarProcedimientoActionMock extends BaseDispatchAction {
             Iterator itTrad = ((ArrayList) dForm.get("traducciones")).iterator();
             Iterator itLang = idiomaDelegate.listarLenguajes().iterator();
 
-            // Parámetros generales
+            // Parï¿½metros generales
             paramMap.put("signatura", dForm.get("signatura").toString().toUpperCase());
 
             if (request.isUserInRole("sacoper")){
@@ -435,7 +435,7 @@ public class EditarProcedimientoActionMock extends BaseDispatchAction {
             paramMap.put("version", dForm.get("version"));
             
 
-            // Parámetros traducibles
+            // Parï¿½metros traducibles
             tradMap.put("idioma", idiomaDelegate.lenguajePorDefecto());
             while (itLang.hasNext()){
                 TraduccionProcedimientoLocal tProcedimiento = (TraduccionProcedimientoLocal) itTrad.next();

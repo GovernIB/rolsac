@@ -154,10 +154,10 @@ public class ActualizadorTest extends junit.framework.TestCase {
 		 d.setNombre(null);
 		 assertFalse(a.calActualizar(d, elem));
 		 
-		 System.setProperty("es.indra.caib.rolsac.oficina", "S");
+		 System.setProperty("es.caib.rolsac.oficina", "S");
 		 assertFalse(a.calActualizar(d, elem));
 		 
-		 System.setProperty("es.indra.caib.rolsac.oficina", "N");
+		 System.setProperty("es.caib.rolsac.oficina", "N");
 		 d.setNombre("VUDS");
 		 assertFalse(a.calActualizar(d, elem));
 		 

@@ -29,7 +29,7 @@ import org.ibit.rol.sac.persistence.ws.invoker.WSInvocatorException;
  * Los elementos actualizables son {@link Ficha}, {@link UnidadAdministrativa},
  * {@link ProcedimientoLocal} y {@link FichaUATransferible}.
  * 
- * Modificacion de VRS(2008/02/01): Se a�ade System.getProperty("es.indra.caib.rolsac.oficina")
+ * Modificacion de VRS(2008/02/01): Se anyade System.getProperty("es.caib.rolsac.oficina")
  * para controlar que si estas en las oficinas de indra no se lance el webservices.
  * 
  * @author arodrigo
@@ -87,7 +87,7 @@ final public class Actualizador {
 		//si indra no diu res i
 		//altres casos -> false
 
-    	String value = System.getProperty("es.indra.caib.rolsac.oficina");
+    	String value = System.getProperty("es.caib.rolsac.oficina");
         if ((value == null) || value.equals("N")){
         	return true;
         }
@@ -312,7 +312,7 @@ final public class Actualizador {
 			
 			//La transformo en transferible
 			final TramiteTransferible tramT = TramiteTransferible.generar(tramit);
-			String value = System.getProperty("es.indra.caib.rolsac.oficina");
+			String value = System.getProperty("es.caib.rolsac.oficina");
 			//Y voy destinatario a destinatario mandando la actualizacion
 			for (final Destinatario destinatario : destinatarios) {
 				try{
@@ -506,7 +506,7 @@ final public class Actualizador {
 		 * @param edif
 		 */
 		private void borrarTramite(final Tramite tram){
-			String value = System.getProperty("es.indra.caib.rolsac.oficina");
+			String value = System.getProperty("es.caib.rolsac.oficina");
 			for (final Destinatario destinatario : destinatarios) {
 				try{
 					if ((value == null) || value.equals("N")) {		
