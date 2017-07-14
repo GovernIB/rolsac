@@ -302,9 +302,10 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		retorno.append("NOM_PROCEDIMENT_ES;");
 		retorno.append("OBJECTE_CA;");
 		retorno.append("PUBLIC_OBJECTIU;");
-		retorno.append("NOM UA_INSTRUCTURA;");
-		retorno.append("NOM UA_RESPONSABLE;");
-		retorno.append("NOM NOM_UA_RESOLUTORIA;");
+		retorno.append("NOM_UA_INSTRUCTURA;");
+		retorno.append("NOM_UA_RESPONSABLE;");
+		retorno.append("NOM_RESPONSABLE;");
+		retorno.append("NOM_UA_RESOLUTORIA;");
 		retorno.append("NUM TRAMITS;");
 		retorno.append("NUM TRAMITS TELEMATICS;");
 		retorno.append("NUM NORMES;");
@@ -469,6 +470,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			retorno.append(CSVUtil.limpiar(publicoObjectivo));				//PUBLIC_OBJECTIU (ID_PUBLIC OBJECTIU SEPARATS PER COMES)
 			retorno.append(CSVUtil.limpiar(CSVUtil.getNombreUA(procedimiento.getUnidadAdministrativa())));		//NOM UA_INSTRUCTURA
 			retorno.append(CSVUtil.limpiar(CSVUtil.getNombreUA(procedimiento.getServicioResponsable())));		//NOM UA_RESPONSABLE
+			retorno.append(CSVUtil.limpiar(procedimiento.getResponsable()));//NOM_RESPONSABLE
 			retorno.append(CSVUtil.limpiar(CSVUtil.getNombreUA(procedimiento.getOrganResolutori())));		//NOM NOM_UA_RESOLUTORIA
 			retorno.append(CSVUtil.limpiar(numTramits));					//NUM TRAMITS
 			retorno.append(CSVUtil.limpiar(numTramitsTelematics));			//NUM TRAMITS TELEMÀTICS
@@ -882,8 +884,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			
 			procediment.setResponsable(request.getParameter("item_responsable"));				// Responsable
 			procediment.setSignatura(request.getParameter("item_codigo_pro"));					// Signatura
-			//#366 se añade SIA
-			procediment.setCodigoSIA(request.getParameter("item_codigo_sia"));					// Código SIA
 			procediment = guardarSilencio(request, procediment, error); 						// SILENCIO
 			
 			//#351 cambio info por dir electronica
@@ -1092,7 +1092,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		//Estos campos no se encuentran en la pantalla y se perderian sus valores al guardar
 		procediment.setFechaSIA(procedimentOld.getFechaSIA());
 		procediment.setEstadoSIA(procedimentOld.getEstadoSIA());
-		
+		procediment.setCodigoSIA(procedimentOld.getCodigoSIA());
 		return procediment;
 		
 	}
