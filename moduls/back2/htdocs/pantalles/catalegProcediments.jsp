@@ -17,7 +17,7 @@
 <script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery.ui.datepicker-ca.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery-ui-timepicker-addon.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/procediments.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/procediments.js?versio=${rolsac_einarevision}' />"></script>
 <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/lista_ajax.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_documents_tramits.js'/>"></script>

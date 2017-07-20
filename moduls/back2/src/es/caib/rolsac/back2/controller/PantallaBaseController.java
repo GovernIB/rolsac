@@ -91,8 +91,9 @@ public abstract class PantallaBaseController {
 			
 			model.put("rolsac_version", versionsProperties.getProperty("rolsac.version"));
 			model.put("rolsac_einaversion",  " v" + versionsProperties.getProperty("rolsac.version") + " build: " + versionsProperties.getProperty("rolsac.build"));
-	    	model.put("rolsac_einarevision","("+ versionsProperties.getProperty("git.revision") +")");
+	    	model.put("rolsac_einarevision",versionsProperties.getProperty("git.revision"));
 	    	model.put("rolsac_urlrevision", versionsProperties.getProperty("rolsac.urlrevision").replace("{0}",versionsProperties.getProperty("git.revision")));
+	    	
 		} catch (IOException e) {
 			log.error(ExceptionUtils.getStackTrace(e));
 		}

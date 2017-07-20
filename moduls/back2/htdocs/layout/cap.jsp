@@ -23,7 +23,7 @@ if (logourl != null) {
                 <spring:message code="cap.usuari" />: <strong>[<c:out value="${capNomLlinatges}"/>]</strong> <a href="#" class="btn personalitzar" title="<spring:message code='cap.personalitza_aplicacio'/>"><rol:printRol/></a>
             </p>
             <p>
-                <spring:message code='aplicacio.nom'/> <c:out value="${rolsac_einaversion}"/><a href="<bean:write name="rolsac_urlrevision" ignore="true"/>" target="_blank"><bean:write name="rolsac_einarevision" ignore="true"/></a>
+                <spring:message code='aplicacio.nom'/> <c:out value="${rolsac_einaversion}"/><a href="<bean:write name="rolsac_urlrevision" ignore="true"/>" target="_blank">(<bean:write name="rolsac_einarevision" ignore="true"/>)</a>
 			</p>
         </div>
         <div id="tancarAplicacio">
