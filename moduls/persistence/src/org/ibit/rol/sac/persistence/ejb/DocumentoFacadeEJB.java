@@ -205,7 +205,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
             Documento doc =  (Documento) session.load(Documento.class, id);
             
             // forzamos que se actualice el orden, 
-            // para el caso en que se actualiza el documento desde DocumentoResumen al modificar el orden            
+            // para el caso en que se actualiza el documento desde Documento Resumen al modificar el orden            
         	session.refresh(doc);
         	        	
             Hibernate.initialize(doc.getArchivo());
@@ -490,7 +490,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 						
 			//Obtenemos el procedimiento por separado porque daba un error de lazy hibernate
 			ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
-			ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimientoParaSolr(documento.getProcedimiento().getId());
+			ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimientoParaSolr(documento.getProcedimiento().getId(), null);
 			
 			//Preparamos la información básica: id elemento, aplicacionID = ROLSAC y la categoria de tipo ficha.
 			final IndexFile indexData = new IndexFile();

@@ -426,7 +426,7 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
 		//Paso 2. Recorremos documento y los indexamos
     	// En caso de que falle un documento, lo dejamos pasar por si da error al indexar pero lo tenemos en cuenta en el mensaje de retorno
     	String msgRetorno = "";
-		ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimientoParaSolr(solrpendiente.getIdElemento());
+		ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimientoParaSolr(solrpendiente.getIdElemento(), null);
 		for (Documento documento : procedimiento.getDocumentos()) {
 			try {
 				if (documento != null) {

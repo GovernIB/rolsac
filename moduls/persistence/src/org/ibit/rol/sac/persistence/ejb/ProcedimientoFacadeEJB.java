@@ -1,7 +1,6 @@
 package org.ibit.rol.sac.persistence.ejb;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -22,6 +21,7 @@ import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.ibit.rol.sac.model.AdministracionRemota;
 import org.ibit.rol.sac.model.Auditoria;
 import org.ibit.rol.sac.model.DocumentTramit;
@@ -40,7 +40,6 @@ import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.Traduccion;
 import org.ibit.rol.sac.model.TraduccionDocumento;
-import org.ibit.rol.sac.model.TraduccionHechoVital;
 import org.ibit.rol.sac.model.TraduccionMateria;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimiento;
@@ -56,17 +55,14 @@ import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI;
-import org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegate;
 import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.util.DateUtils;
 import org.ibit.rol.sac.persistence.util.IndexacionUtil;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
-import org.apache.commons.lang.exception.ExceptionUtils;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
-import es.caib.solr.api.SolrFactory;
 import es.caib.solr.api.SolrIndexer;
 import es.caib.solr.api.model.IndexData;
 import es.caib.solr.api.model.MultilangLiteral;
@@ -194,6 +190,9 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			UnidadAdministrativa unidad = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, idUA);
 			procedimiento.setUnidadAdministrativa(unidad);
 
+			//#399 Check valores SIA
+			checkValoresSIA(procedimiento);
+			
 			if (procedimiento.getId() == null) {
 				
 				session.save(procedimiento);
@@ -219,7 +218,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			
 			return procedimiento.getId();
 
-		} catch (HibernateException he) {
+		} catch (Exception he) {
 			
 			throw new EJBException(he);
 			
@@ -231,8 +230,38 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		
 	}
 	
-	// TODO amartin: ¿intentar unificar los dos métodos de guardado en uno?
+	/**
+	 * Checkear valores de SIA.
+	 * @param procedimiento
+	 * @throws Exception
+	 */
+	private void checkValoresSIA(ProcedimientoLocal procedimiento) throws Exception {
+		
+		final boolean isNuloCodSia = StringUtils.isEmpty(procedimiento.getCodigoSIA());			
+		final boolean isNuloEstSia = StringUtils.isEmpty(procedimiento.getEstadoSIA());
+		final boolean isNuloFecSia = (procedimiento.getFechaSIA() == null);
+		
+		// Verifica que todos estan rellenados o todos estan nulos
+		final boolean correcto = (isNuloCodSia && isNuloEstSia && isNuloFecSia) || (!isNuloCodSia && !isNuloEstSia && !isNuloFecSia);
+				
+		if (!correcto) {		
+			String messageError = "Verificacion valores SIA: alguno de los atributos no son nulos y otros si. Procedimiento: "
+					+ procedimiento.getId()
+					+ " - Código SIA: "
+					+ procedimiento.getCodigoSIA()
+					+ " - Estado SIA: "
+					+ procedimiento.getEstadoSIA()
+					+ " - Fecha SIA: "
+					+ procedimiento.getFechaSIA();
+			log.error("Error: " + messageError);
+			throw new Exception(
+					messageError);
+		}
+		
+	}
+
 	
+	// TODO amartin: ¿intentar unificar los dos métodos de guardado en uno?
 	/**
 	 * Crea o actualiza un Procedimiento.
 	 * 
@@ -311,6 +340,9 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			
 			}
 
+			//#399 Check valores SIA
+			checkValoresSIA(procedimiento);
+			
 			if (procedimiento.getId() == null) {
 				
 				session.save(procedimiento);
@@ -336,13 +368,9 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			
 			return procedimiento.getId();
 
-		} catch (HibernateException he) {
+		} catch (Exception he) {
 			
 			throw new EJBException(he);
-			
-		} catch (DelegateException de) {
-			
-			throw new EJBException(de);
 			
 		} finally {
 			
@@ -360,7 +388,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 */
 	public List listarProcedimientos() {
 
-		//agarcia: antes era @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}". Pero este m�todo debe ser unchecked para permitir accesos via WS 
+		//agarcia: antes era @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}". Pero este metodo debe ser unchecked para permitir accesos via WS 
 		Session session = getSession();
 		try {
 			Criteria criteri = session.createCriteria(ProcedimientoLocal.class);
@@ -446,7 +474,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				Hibernate.initialize(procedimiento.getDocumentos());
 				for (Documento d : procedimiento.getDocumentos()) {
 					if (d == null) {
-						continue; //por alg�n motivo, en ocasiones los documentos en la colecci�n son nulos
+						continue; //por algun motivo, en ocasiones los documentos en la coleccion son nulos
 					}
 
 					Map<String, Traduccion> mapaTraduccions = d.getTraduccionMap();
@@ -566,7 +594,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	  	Collections.sort(norms, new Normativa());
 	  	procedimiento.setNormativas(new HashSet<Normativa>(norms));
 	  	
-		/* TODO: error de compilaci�n tras el merge con 177
+		/* TODO: error de compilacion tras el merge con 177
 	  	//Ordenamos los normativas por el campo id
 	  	List tramites = new ArrayList(procedimiento.getTramites());
 	  	Collections.sort(tramites, new Tramite());
@@ -752,7 +780,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 	/**
 	 *  @deprecated Se usa desde el back antiguo 
-	 * Busca todas los Procedimientos que cumplen los criterios de b�squeda
+	 * Busca todas los Procedimientos que cumplen los criterios de busqueda
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
@@ -1752,7 +1780,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 	/**
 	 * @deprecated No se usa
-	 * Consulta toda la informaci�n de un procedimiento
+	 * Consulta toda la informacion de un procedimiento
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
@@ -1790,7 +1818,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 
 	/**
-	 * Construye el query de búsqueda segun los par�metros
+	 * Construye el query de búsqueda segun los parametros
 	 */
 	private String populateQuery(Map parametros, Map traduccion, List params) {
 		String aux = "";
@@ -2119,9 +2147,14 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * @param id	Identificador del procedimiento.
 	 * @return Devuelve <code>ProcedimientoLocal</code> solicitado.
 	 */
-	public ProcedimientoLocal obtenerProcedimientoParaSolr(Long id) {
+	public ProcedimientoLocal obtenerProcedimientoParaSolr(Long id, Session iSession) {
 
-		Session session = getSession();
+		final Session session;
+		if (iSession == null) {
+			session = getSession();
+		} else {
+			session = iSession;
+		}
 		ProcedimientoLocal procedimiento = null;
 		try {
 			procedimiento = (ProcedimientoLocal) session.get(ProcedimientoLocal.class, id);
@@ -2143,7 +2176,9 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		} catch (HibernateException he) {
 			log.error("Error obteniendo el procedimiento con id " + id, he);
 		} finally {
-			close(session);
+			if (iSession == null) {
+				close(session);
+			}
 		}
 		
 		return procedimiento;
@@ -2161,7 +2196,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		
 		try {
 			//Paso 0. Obtenemos la ficha y comprobamos si se puede indexar.
-			final ProcedimientoLocal procedimiento = obtenerProcedimientoParaSolr(idElemento);
+			final ProcedimientoLocal procedimiento = obtenerProcedimientoParaSolr(idElemento, null);
 			if (procedimiento == null) {
 				return new SolrPendienteResultado(false, "Error obteniendo la id del procedimiento");
 			}
@@ -2423,10 +2458,13 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		Session session = getSession();
 		try {
 					
+			//#399 Check valores SIA
+			checkValoresSIA(proc);
+			
 			session.update(proc);
 			session.flush();
 			
-		} catch (HibernateException he) {
+		} catch (Exception he) {
 			throw new EJBException(he);
 		} finally {
 			close(session);
@@ -2497,6 +2535,101 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			close(session);
 		}
 		
+	}
+	
+	
+	/**
+	 *	Obtiene los procedimientos según el organo resolutorio.
+	 *
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public void reordenarDocumentos(final Long idProcedimiento, final List<Long> idDocumentos) {
+		Session session = getSession(); //session.beginTransaction()
+		try {
+			//Paso 1. Obtenemos el procedimiento.
+			ProcedimientoLocal procedimiento = obtenerProcedimientoParaSolr(idProcedimiento, session);
+			
+			//Paso 2. Obtener los procedimientos que han sido borrados.
+			long maxOrden = 0;
+			final List<Documento> docsParaBorrar = new ArrayList<Documento>();
+			if (procedimiento.getDocumentos() != null) {
+				for(Documento doc : procedimiento.getDocumentos()) {
+					if (doc != null && doc.getId() != null) {
+						if (doc.getOrden() >= maxOrden) {
+							maxOrden = doc.getOrden() + 1;
+						}
+						
+						if (!idDocumentos.contains(doc.getId())) {
+							docsParaBorrar.add(doc);  //Lo añadimos en la lista.
+						}
+						
+						//Paso 2.1. Comprobamos que tiene permisos para editar los documentos.
+						if (!getAccesoManager().tieneAccesoDocumento(doc.getId())) {
+							throw new SecurityException("No tiene acceso al documento");
+						}
+					}
+				}
+			}
+			
+			//Paso 3. Los borramos tanto en BBDD como en la relacion.
+			for(Documento docParaBorrar : docsParaBorrar) {
+				session.delete(docParaBorrar);    //Borramos el objeto
+				procedimiento.getDocumentos().remove(docParaBorrar); //Borramos la relacion
+			}
+			
+			//Debido a la posibilidad de que haya un reordenamiento incorrecto, se incrementa para poder coger una ventana de orden correcta.
+			maxOrden = maxOrden*10;
+			
+			//Paso 4. Reordenar.
+			for(int i = 0 ; i < idDocumentos.size(); i++) {
+				int orden = i; //Empezará en el 0 el orden.
+				Documento documento = (Documento) session.get(Documento.class, idDocumentos.get(i));
+				documento.setOrden(orden + maxOrden);
+				session.update(documento); 
+				
+				/*for(int j = 0 ; j < procedimiento.getDocumentos().size(); j++) {
+					Documento doc = procedimiento.getDocumentos().get(j);
+					if (doc != null && doc.getId() != null && doc.getId().compareTo(idDocumentos.get(i)) == 0) {
+						//doc.setOrden(orden);
+						procedimiento.getDocumentos().set(j, documento);
+					}
+				}*/
+			}
+			session.flush();
+			
+			//Paso 4.2 Reordenar.
+			for(int i = 0 ; i < idDocumentos.size(); i++) {
+				int orden = i; //Empezará en el 0 el orden.
+				Documento documento = (Documento) session.get(Documento.class, idDocumentos.get(i));
+				documento.setOrden(orden);
+				session.update(documento); 
+			}
+			session.flush();
+			
+			//Paso 5.Llamamos al addOperacion
+			addOperacion(session, procedimiento, Auditoria.MODIFICAR);
+			
+			//Paso 6. Obtenemos de nuevo el procedimiento (por si se cachea) y actualizamos la fecha de actualización.
+			procedimiento = obtenerProcedimientoParaSolr(idProcedimiento, session);
+			procedimiento.setFechaActualizacion(new Date());
+			session.update(procedimiento);
+			
+			//Paso 7. Llamamos al actualizador.
+			Actualizador.actualizar(procedimiento);
+			
+			//Paso 8. Actualizamos en solr y sia.
+			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, idProcedimiento, false);
+			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, idProcedimiento, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, procedimiento);
+			
+			//Paso 9. Flush.
+			session.flush();
+			
+		} catch (Exception he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
 	}
 	
 }

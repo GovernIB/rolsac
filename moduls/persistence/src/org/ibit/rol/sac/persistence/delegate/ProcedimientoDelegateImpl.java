@@ -11,6 +11,8 @@ import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
 
+import net.sf.hibernate.Session;
+
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
@@ -67,6 +69,19 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
         }
     }
     
+    
+    /* (non-Javadoc)
+   	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#reordenarDocumentos(java.lang.Long, java.util.List)
+   	 */
+       public void reordenarDocumentos(final Long idProcedimiento, final List<Long> idDocumentos) throws DelegateException {
+           try {
+                getFacade().reordenarDocumentos(idProcedimiento, idDocumentos);
+           } catch (RemoteException e) {
+               throw new DelegateException(e);
+           }
+       }
+       
+    
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#obtenerProcedimiento(java.lang.Long)
 	 */
@@ -81,9 +96,9 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
     /* (non-Javadoc)
      * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#obtenerProcedimientoParaSolr(java.lang.Long)
     	 */
-    public ProcedimientoLocal obtenerProcedimientoParaSolr(Long id) throws DelegateException {
+    public ProcedimientoLocal obtenerProcedimientoParaSolr(Long id, Session iSession) throws DelegateException {
     	try {
-          return getFacade().obtenerProcedimientoParaSolr(id);
+          return getFacade().obtenerProcedimientoParaSolr(id, iSession);
     	} catch (RemoteException e) {
            throw new DelegateException(e);
       }

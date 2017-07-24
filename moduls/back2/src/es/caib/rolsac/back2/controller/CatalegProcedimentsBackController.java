@@ -321,7 +321,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		for (Long idProcedimiento : listaResultados) {
 			ProcedimientoLocal procedimiento = null;
 			try {
-				procedimiento = procedimientoDelegate.obtenerProcedimientoParaSolr(idProcedimiento);
+				procedimiento = procedimientoDelegate.obtenerProcedimientoParaSolr(idProcedimiento, null);
 			} catch (Exception exception) {
 				log.error("Error obteniendo el procedimiento con id : " + idProcedimiento , exception);
 				retorno.append(CSVUtil.limpiar(idProcedimiento));
@@ -898,6 +898,13 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 			if (edicion) {
 				
+				// Verificamos que no se "pierda" el cod SIA
+				if (StringUtils.isNotBlank(request.getParameter("item_codigo_sia")) && 
+					 !StringUtils.equals(request.getParameter("item_codigo_sia"), procedimentOld.getCodigoSIA())) {
+					log.error("Error: el parámetro item_codigo_sia de la pantalla no concuerda con el de la BBDD.");
+					throw new IllegalStateException("error_sia_incorrecto");
+				}
+				
 				procediment = guardarProcedimientoAntiguo(procediment, procedimentOld);		// Si estamos guardando un procedimiento ya existente en vez de uno nuevo
 				
 				// Obtenemos las listas necesarias para el tratamiento de los trámites.
@@ -980,11 +987,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				result = new IdNomDTO(-1l, error);
 				
 			} else {
-				
 				error = messageSource.getMessage("error.altres", null, request.getLocale());
 				result = new IdNomDTO(-2l, error);
 				logException(log, dEx);
-				
 			}
 
 		} catch (NumberFormatException nfe) {
@@ -1005,12 +1010,20 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			else if ("error_mas_de_un_tramite_de_iniciacion".equals(ise.getMessage()))
 				error = messageSource.getMessage("error.procediment_multiples_tramits_iniciacio", null, request.getLocale());
 			
+			else if ("error_sia_incorrecto".equals(ise.getMessage()))
+				error = messageSource.getMessage("error.procediment_codigo_sia_incorrecto", null, request.getLocale());
+			
 			else
 				error = ise.getMessage();
 			
 			result = new IdNomDTO(-5l, error);
 			
-		}
+		} catch (Exception pe) {
+			
+			error = pe.getMessage();
+			result = new IdNomDTO(-4l, error);
+			
+		} 
 
 		return result;
 		
@@ -1884,17 +1897,20 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		
 		IdNomDTO result;
 		String error = null;
-		ProcedimientoLocal procedimiento = null;
+		//ProcedimientoLocal procedimiento = null;
 		
 		try {
 			
-			procedimiento = DelegateUtil.getProcedimientoDelegate().obtenerProcedimientoNewBack(id);
+			/*
+			 procedimiento = DelegateUtil.getProcedimientoDelegate().obtenerProcedimientoNewBack(id);
+			
 			List<Documento> documentos = GuardadoAjaxUtil.actualizarYOrdenarDocumentosRelacionados(elementos, procedimiento, null);
 			procedimiento.setDocumentos(documentos);
 			
 			guardarGrabar(procedimiento);
-			
-			result = new IdNomDTO(procedimiento.getId(), messageSource.getMessage("proc.guardat.documents.correcte", null, request.getLocale()));
+			*/
+			DelegateUtil.getProcedimientoDelegate().reordenarDocumentos(id, Arrays.asList(elementos));
+			result = new IdNomDTO(id, messageSource.getMessage("proc.guardat.documents.correcte", null, request.getLocale()));
 			
 		} catch (DelegateException dEx) {
 			

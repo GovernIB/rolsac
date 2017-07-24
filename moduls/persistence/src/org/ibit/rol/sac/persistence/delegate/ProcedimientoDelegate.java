@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.hibernate.Session;
+
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
@@ -123,6 +125,10 @@ public class ProcedimientoDelegate {
 	public void actualizarOrdenTramites(ArrayList<Long> tramitesId) throws DelegateException {
 		 impl.actualizarOrdenTramites(tramitesId);	
 	}
+	
+	public void reordenarDocumentos(final Long idProcedimiento, List<Long> idDocumentos) throws DelegateException {
+		 impl.reordenarDocumentos(idProcedimiento, idDocumentos);	
+	}
     
     public int buscarProcedimientosActivos(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException {
     	return impl.buscarProcedimientosActivos(listaUnidadAdministrativaId, fechaCaducidad);
@@ -169,8 +175,8 @@ public class ProcedimientoDelegate {
 		
 	}
 
-	public ProcedimientoLocal obtenerProcedimientoParaSolr(Long idElemento) throws DelegateException {
-		 return impl.obtenerProcedimientoParaSolr(idElemento);
+	public ProcedimientoLocal obtenerProcedimientoParaSolr(Long idElemento, Session iSession) throws DelegateException {
+		 return impl.obtenerProcedimientoParaSolr(idElemento, iSession);
 	}
 
 	public List<Long> getProcedimientosEstadoSIAAlterado()  throws DelegateException {

@@ -449,7 +449,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 				
 				ProcedimientoLocal procedimiento;
 				if (iProcedimiento == null) {
-					procedimiento = DelegateUtil.getProcedimientoDelegate().obtenerProcedimientoParaSolr(siaPendiente.getIdElemento());
+					procedimiento = DelegateUtil.getProcedimientoDelegate().obtenerProcedimientoParaSolr(siaPendiente.getIdElemento(), null);
 				} else {
 					procedimiento = iProcedimiento;
 				}

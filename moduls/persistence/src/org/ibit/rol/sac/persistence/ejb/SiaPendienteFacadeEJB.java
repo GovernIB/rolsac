@@ -102,7 +102,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	    		try 
 	    		{
 		    		//Obtenemos el procedimiento y vemos is es enviable a SIA.
-		    		ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimientoParaSolr(idProcedimiento);
+		    		ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimientoParaSolr(idProcedimiento, null);
 	    			SiaEnviableResultado siaEnviableResultado = SiaUtils.isEnviable(procedimiento);
 		    		
 		    		SiaResultado siaResultado = null;
@@ -498,7 +498,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 				        					
 		} else {
 			
-				ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimientoParaSolr(siaPendiente.getIdElemento());
+				ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimientoParaSolr(siaPendiente.getIdElemento(), null);
 				if (procedimiento == null) {
 					resultadoPendiente = new ResultadoSiaPendiente(false, "Procedimiento nulo");				
 				} else {
@@ -614,7 +614,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	    		}
 	    		
 	    		//Obtenemos el procedimiento y vemos is es enviable a SIA.
-	    		ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimientoParaSolr(idProcedimiento);
+	    		ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimientoParaSolr(idProcedimiento, null);
 				log.debug("El procedimiento para obtener el info " + procedimiento);
 	    		//TODO info SIA. Pendiente de ver si merece la pena seguir con este método.
 	    		/*

@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.Sia;
-import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.ws.SiaResultado;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.ibit.rol.sac.persistence.ws.sia.actualizar.WsSIAActualizarActuaciones_PortType;

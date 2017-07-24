@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.hibernate.Session;
+
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
@@ -108,9 +110,11 @@ public interface ProcedimientoDelegateI {
 
 	public abstract void actualizarProcedimiento(ProcedimientoLocal proc) throws DelegateException;
 
-	public abstract ProcedimientoLocal obtenerProcedimientoParaSolr(Long id) throws DelegateException;
+	public abstract ProcedimientoLocal obtenerProcedimientoParaSolr(Long id, Session iSession) throws DelegateException;
 
 	public abstract List<Long> getProcedimientosEstadoSIAAlterado() throws DelegateException;
 
 	public abstract List<Long> listarProcedimientosOrganoResolutori(Long idOrganoResolutori) throws DelegateException;
+
+	public abstract void reordenarDocumentos(Long idProcedimiento, List<Long> idDocumentos) throws DelegateException;
 }
