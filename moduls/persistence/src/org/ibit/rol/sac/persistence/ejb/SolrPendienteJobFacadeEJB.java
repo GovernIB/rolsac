@@ -565,7 +565,7 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
 		//Paso 2. Reindexamos los documentos asociados a la ficha.
 		// En caso de que falle la indexacion de algun documento seguimos pero lo tenemos en cuenta en el mensaje
 		String msgRetorno = "";
-		Ficha ficha = fichaDelegate.obtenerFichaParaSolr(solrpendiente.getIdElemento());
+		Ficha ficha = fichaDelegate.obtenerFichaParaSolr(solrpendiente.getIdElemento(), null);
 		if (ficha == null) {
 			log.error("No se encuentra ficha con id: " + solrpendiente.getIdElemento());
 			return new SolrPendienteResultado(false, "No se encuentra ficha con id: " + solrpendiente.getIdElemento());

@@ -5,6 +5,8 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.hibernate.Session;
+
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.Ficha;
@@ -176,8 +178,11 @@ public class FichaDelegate implements FichaDelegateI {
 		return impl.buscarIdsFichas();
 	}
     
-	public Ficha obtenerFichaParaSolr(Long id) throws DelegateException{
-		 		return impl.obtenerFichaParaSolr(id);
+	public Ficha obtenerFichaParaSolr(final Long id, final Session iSession) throws DelegateException{
+		 		return impl.obtenerFichaParaSolr(id, iSession);
 	}
 
+	public void reordenarDocumentos(final Long idFicha, List<Long> idDocumentos) throws DelegateException {
+		 impl.reordenarDocumentos(idFicha, idDocumentos);	
+	}
 }

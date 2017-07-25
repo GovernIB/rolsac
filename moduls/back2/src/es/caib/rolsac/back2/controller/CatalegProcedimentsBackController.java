@@ -1900,7 +1900,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		//ProcedimientoLocal procedimiento = null;
 		
 		try {
-			
+			if (elementos == null) {
+				elementos = new Long[0];
+			}
 			/*
 			 procedimiento = DelegateUtil.getProcedimientoDelegate().obtenerProcedimientoNewBack(id);
 			

@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -32,6 +30,7 @@ import net.sf.hibernate.expression.Expression;
 import net.sf.hibernate.expression.Order;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.ibit.rol.sac.model.AdministracionRemota;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Auditoria;
@@ -51,7 +50,6 @@ import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.TraduccionFicha;
 import org.ibit.rol.sac.model.TraduccionHechoVital;
 import org.ibit.rol.sac.model.TraduccionMateria;
-import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.Validacion;
@@ -66,10 +64,8 @@ import org.ibit.rol.sac.persistence.util.Cadenas;
 import org.ibit.rol.sac.persistence.util.DateUtils;
 import org.ibit.rol.sac.persistence.util.IndexacionUtil;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
-import org.apache.commons.lang.exception.ExceptionUtils;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
-import es.caib.solr.api.SolrFactory;
 import es.caib.solr.api.SolrIndexer;
 import es.caib.solr.api.model.IndexData;
 import es.caib.solr.api.model.MultilangLiteral;
@@ -238,7 +234,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 		    close(session);
 		}
 
-		ArrayList listaOrdenada = new ArrayList( ficha.getDocumentos() );
+		ArrayList listaOrdenada = new ArrayList<Documento>( ficha.getDocumentos() );
 		Comparator comp = new DocsFichaComparator();
 		Collections.sort(listaOrdenada, comp);
 		ficha.setDocumentos(listaOrdenada);                
@@ -1108,8 +1104,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 
     		FichaUA fichaUA = (FichaUA) session.load(FichaUA.class, id);
     		final  Long idFicha = fichaUA.getFicha().getId();
-    		final  String ceSeccion = fichaUA.getSeccion().getCodigoEstandard();
-    		final  Long idUA = fichaUA.getUnidadAdministrativa().getId();
+    		//final  String ceSeccion = fichaUA.getSeccion().getCodigoEstandard();
+    		//final  Long idUA = fichaUA.getUnidadAdministrativa().getId();
 
     		boolean borrar = !(fichaUA.getFicha() instanceof Remoto); 
 
@@ -1869,9 +1865,16 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 	 * 
 	 * @ejb.permission unchecked="true"
 	 */
-	public Ficha obtenerFichaParaSolr(Long id) {
+	public Ficha obtenerFichaParaSolr(Long id, Session iSession) {
 
-		Session session = getSession();
+		Session session;
+		
+		if (iSession == null) {
+			session = getSession();
+		} else {
+			session = iSession;
+		}
+		
 		Ficha ficha = null;
 		try {
 		    ficha = (Ficha) session.get(Ficha.class, id);
@@ -1882,13 +1885,14 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 				Hibernate.initialize(ficha.getFichasua());
 				Hibernate.initialize(ficha.getDocumentos());
 				session.clear();
-				
 		    }
 
 		} catch (HibernateException he) {
 		    log.error("Error cargando info de la ficha con id " + id, he);
 		} finally {
-		    close(session);
+			if (iSession == null) {
+				close(session);
+			}
 		}
 
 		return ficha;
@@ -1907,7 +1911,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 		
 		try {
 			//Paso 0. Obtenemos la ficha y comprobamos si se puede indexar.
-			final Ficha ficha = obtenerFichaParaSolr(idElemento);
+			final Ficha ficha = obtenerFichaParaSolr(idElemento, null);
 			if (ficha == null) {
 				log.error("No se puede obtener la ficha con id: " + idElemento);
 				return new SolrPendienteResultado(false, "No se puede obtener la ficha con id: " + idElemento);
@@ -2132,4 +2136,86 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     	
     }
    
+    
+    /**
+	 * Reordena los documentos de la ficha.
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public void reordenarDocumentos(final Long idFicha, final List<Long> idDocumentos) {
+		final Session session = getSession(); //session.beginTransaction()
+		try {
+			//Paso 1. Obtenemos el ficha.
+			Ficha ficha = obtenerFichaParaSolr(idFicha, session);
+			
+			//Paso 2. Obtener los documento de la ficha que han sido borrados.
+			long maxOrden = 0;
+			final List<Documento> docsParaBorrar = new ArrayList<Documento>();
+			if (ficha.getDocumentos() != null) {
+				for(Documento doc : ficha.getDocumentos()) {
+					if (doc != null && doc.getId() != null) {
+						if (doc.getOrden() >= maxOrden) {
+							maxOrden = doc.getOrden() + 1;
+						}
+						
+						if (!idDocumentos.contains(doc.getId())) {
+							docsParaBorrar.add(doc);  //Lo añadimos en la lista.
+						}
+						
+						//Paso 2.1. Comprobamos que tiene permisos para editar los documentos.
+						if (!getAccesoManager().tieneAccesoDocumento(doc.getId())) {
+							throw new SecurityException("No tiene acceso al documento");
+						}
+					}
+				}
+			}
+			
+			//Paso 3. Los borramos tanto en BBDD como en la relacion.
+			for(Documento docParaBorrar : docsParaBorrar) {
+				session.delete(docParaBorrar);    //Borramos el objeto
+				ficha.getDocumentos().remove(docParaBorrar); //Borramos la relacion
+			}
+			
+			//Paso 4. Reordenar.
+			for(int i = 0 ; i < idDocumentos.size(); i++) {
+				int orden = i; //Empezará en el 0 el orden.
+				Documento documento = (Documento) session.get(Documento.class, idDocumentos.get(i));
+				documento.setOrden(orden + maxOrden);
+				session.update(documento); 
+			}
+			session.flush();
+			
+			//Paso 4.2 Reordenar.
+			for(int i = 0 ; i < idDocumentos.size(); i++) {
+				int orden = i; //Empezará en el 0 el orden.
+				Documento documento = (Documento) session.get(Documento.class, idDocumentos.get(i));
+				documento.setOrden(orden);
+				session.update(documento); 
+			}
+			session.flush();
+			
+			//Paso 5.Llamamos al addOperacion
+			addOperacion(session, ficha, Auditoria.MODIFICAR);
+			
+			//Paso 6. Obtenemos de nuevo el ficha (por si se cachea) y actualizamos la fecha de actualización.
+			ficha = obtenerFichaParaSolr(idFicha, session);
+			ficha.setFechaActualizacion(new Date());
+			//session.update(ficha);
+			
+			//Paso 7. Llamamos al actualizador.
+			Actualizador.actualizar(ficha);
+			
+			//Paso 8. Actualizamos en solr.
+			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_FICHA, idFicha, false);
+			
+			//Paso 9. Flush.
+			session.flush(); 
+			
+		} catch (Exception he) {
+			throw new EJBException(he); 
+		} finally {
+			close(session);
+		}
+	}
 }

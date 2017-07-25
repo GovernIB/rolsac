@@ -710,7 +710,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 			
 			//Obtenemos la ficha por separado porque daba un error de lazy hibernate
 			FichaDelegate fichaDelegate = DelegateUtil.getFichaDelegate();
-			Ficha ficha = fichaDelegate.obtenerFichaParaSolr(documento.getFicha().getId());
+			Ficha ficha = fichaDelegate.obtenerFichaParaSolr(documento.getFicha().getId(), null);
 
 			//Preparamos la información básica: id elemento, aplicacionID = ROLSAC, la categoria de tipo ficha documento, la categoria del padre de tipo ficha.
 			final IndexFile indexData = new IndexFile();

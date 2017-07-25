@@ -10,6 +10,8 @@ import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
 
+import net.sf.hibernate.Session;
+
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.Ficha;
@@ -42,6 +44,14 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
+	}
+	
+	public void reordenarDocumentos(final Long idFicha, List<Long> idDocumentos) throws DelegateException {
+		try {
+            getFacade().reordenarDocumentos(idFicha, idDocumentos);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }		
 	}
 
     /* (non-Javadoc)
@@ -111,11 +121,11 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
     }
     
     /* (non-Javadoc)
-     * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#obtenerFichaParaSolr(java.lang.Long)
+     * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#obtenerFichaParaSolr(java.lang.Long,net.sf.hibernate.Session)
      */
-    public Ficha obtenerFichaParaSolr(Long id) throws DelegateException {
+    public Ficha obtenerFichaParaSolr(Long id, Session iSession) throws DelegateException {
          try {
-               return getFacade().obtenerFichaParaSolr(id);
+               return getFacade().obtenerFichaParaSolr(id, iSession);
            } catch (RemoteException e) {
                throw new DelegateException(e);
            }

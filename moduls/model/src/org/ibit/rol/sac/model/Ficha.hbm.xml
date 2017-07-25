@@ -25,13 +25,13 @@
         <property name="foro_tema" column="FIC_FORTEM" length="1"/>     
         
 
-        <list name="documentos" cascade="delete" inverse="true" lazy="true">
-            <cache usage="read-write"/>
+        <list name="documentos" inverse="true" lazy="true">
+            <!-- <cache usage="read-write"/> -->
             <key column="DOC_CODFIC" foreign-key="RSC_DOCFIC_FK"/>
             <index column="DOC_ORDEN"/>
             <one-to-many class="org.ibit.rol.sac.model.Documento"/>
         </list>
-
+        
        <list name="enlaces" cascade="delete" inverse="true" lazy="true">
             <cache usage="read-write"/>
             <key column="ENL_CODFIC" foreign-key="RSC_ENLFIC_FK"/>

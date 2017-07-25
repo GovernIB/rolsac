@@ -19,12 +19,7 @@
         <many-to-one name="ficha" column="DOC_CODFIC" foreign-key="RSC_DOCFIC_FK"/>
         <many-to-one name="procedimiento" column="DOC_CODPRO" foreign-key="RSC_DOCPRO_FK"/>
         <many-to-one name="archivo" cascade="all" column="DOC_CODARC2" foreign-key="RSC_DOCARC2_FK"/>
-<!-- 
-        <many-to-one name="docInformatiuTramite" column="DOC_INF_CODTRA" foreign-key="RSC_INF_DOCTRA_FK"/>
-        <many-to-one name="docPresentarTramite"  column="DOC_PRE_CODTRA" foreign-key="RSC_PRE_DOCTRA_FK"/>
-        <many-to-one name="requisitTramite"  column="DOC_REQ_CODTRA" foreign-key="RSC_REQ_DOCTRA_FK"/>
-        <many-to-one name="formulariTramite"  column="DOC_FOR_CODTRA" foreign-key="RSC_FOR_DOCTRA_FK"/>
--->
+
         <property name="orden" column="DOC_ORDEN" />
 
         <map name="traducciones" cascade="all" table="RSC_TRADOC">

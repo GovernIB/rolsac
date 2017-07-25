@@ -5,6 +5,8 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.hibernate.Session;
+
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.Ficha;
@@ -86,5 +88,8 @@ public interface FichaDelegateI {
 
 	public Integer comprobarRelacionFicha(Long idFitxa) throws DelegateException;
 
-	public abstract Ficha obtenerFichaParaSolr(Long id) throws DelegateException;
+	public abstract Ficha obtenerFichaParaSolr(Long id, Session iSession) throws DelegateException;
+	
+	public abstract void reordenarDocumentos(final Long idFicha, List<Long> idDocumentos) throws DelegateException ;
+	
 }

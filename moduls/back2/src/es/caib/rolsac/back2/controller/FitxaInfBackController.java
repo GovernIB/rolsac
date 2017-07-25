@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -305,7 +306,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 		for ( Long idFitxa : castList(Long.class, listaResultados) ) {
 			Ficha ficha;
 			try {
-				ficha = fitxaDelegate.obtenerFichaParaSolr(idFitxa);
+				ficha = fitxaDelegate.obtenerFichaParaSolr(idFitxa, null);
 			} catch (Exception exception) {
 				log.error("Error obteniendo la ficha con id : " + idFitxa , exception);
 				retorno.append(CSVUtil.limpiar(idFitxa));
@@ -1844,10 +1845,15 @@ public class FitxaInfBackController extends PantallaBaseController {
 		
 		IdNomDTO result;
 		String error = null;
-		Ficha ficha = null;
+		//Ficha ficha = null;
 		
 		try {
-			
+			if (elementos == null) {
+				elementos = new Long[0];
+			}
+			DelegateUtil.getFichaDelegate().reordenarDocumentos(id, Arrays.asList(elementos));
+			result = new IdNomDTO(id, messageSource.getMessage("fitxes.guardat.documents.correcte", null, request.getLocale()));
+			/*
 			ficha = DelegateUtil.getFichaDelegate().obtenerFicha(id);
 			List<Documento> documentos = GuardadoAjaxUtil.actualizarYOrdenarDocumentosRelacionados(elementos, null, ficha);
 			ficha.setDocumentos(documentos);
@@ -1855,6 +1861,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 			DelegateUtil.getFichaDelegate().grabarFicha(ficha);
 			
 			result = new IdNomDTO(ficha.getId(), messageSource.getMessage("fitxes.guardat.documents.correcte", null, request.getLocale()));
+			**/
 			
 		} catch (DelegateException dEx) {
 			

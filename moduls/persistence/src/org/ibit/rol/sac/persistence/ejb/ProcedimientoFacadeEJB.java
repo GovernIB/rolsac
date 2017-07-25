@@ -2539,7 +2539,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	
 	
 	/**
-	 *	Obtiene los procedimientos según el organo resolutorio.
+	 *	Reordena los documentos del procedimiento.
 	 *
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -2577,9 +2577,6 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				session.delete(docParaBorrar);    //Borramos el objeto
 				procedimiento.getDocumentos().remove(docParaBorrar); //Borramos la relacion
 			}
-			
-			//Debido a la posibilidad de que haya un reordenamiento incorrecto, se incrementa para poder coger una ventana de orden correcta.
-			maxOrden = maxOrden*10;
 			
 			//Paso 4. Reordenar.
 			for(int i = 0 ; i < idDocumentos.size(); i++) {
