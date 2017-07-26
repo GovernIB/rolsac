@@ -1437,8 +1437,13 @@
                             <input id="modulo_documents_modificado" type="hidden" name="modulo_documents_modificado" value="0" />
                             <ul class="idiomes">
 								<c:forEach items="${idiomasListado}" var="llengua" varStatus="loop">
-                                    <li class="idioma">
-                                        <a href="javascript:;" class='<c:out value="${llengua.lang}"/>'><c:out value="${llengua.lang}" /></a>
+                                    <c:if test="${loop.first}">
+                                        <li class="<c:out value="${llengua.lang}" /> seleccionat">
+                                    </c:if>
+                                    <c:if test="${!loop.first}">
+                                        <li class="<c:out value='${llengua.lang}'/>">
+                                    </c:if>
+                                    <c:out value="${llengua.lang}" />
                                     </li>
                                 </c:forEach>
                             </ul>

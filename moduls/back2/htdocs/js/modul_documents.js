@@ -445,9 +445,15 @@ function CModulDocuments() {
 			update: function(event,ui){
 				EscriptoriPare.calculaOrden(ui,"origen");
 				ModulDocuments.habilitarBotonGuardar();
+				that.activarEventoBotonBorrar();
 			}
 		}).css({cursor:"move"});
 		
+		this.activarEventoBotonBorrar();
+		
+		
+	};
+	this.activarEventoBotonBorrar = function () {
 		modul_documents_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function() {	
 			
 			var itemLista = jQuery(this).parents("li:first");
@@ -462,8 +468,7 @@ function CModulDocuments() {
 			}
 			
 		});
-		
-	};
+	}
 	
 	this.botonGuardar = jQuery("#btnGuardar_documentos");
 	
