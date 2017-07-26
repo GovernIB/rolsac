@@ -405,38 +405,7 @@ function CModulDocuments() {
         }
         
         // Editar el documento al hacer click sobre el.
-        modul_documents_elm.find('div.documents').each(function() {
-        	
-            $(this).unbind("click").bind("click", function() {
-            	
-                var docId = $(this).find("input.documents_id").val();
-                Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
-                
-                $.ajax({
-                    type: "GET",
-                    url: pagCarregarDoc,
-                    data: "id=" + docId,
-                    dataType: "json",
-                    error: function() {
-                        // Missatge.cancelar();
-                        Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
-                        Error.llansar();
-                    },
-                    success: function(data) {
-                        Missatge.cancelar();
-                        if (data.id > 0) {
-                            that.pintar(data.document);
-                        } else if (data.id == -1) {
-                            Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
-                        } else if (data.id < -1) {
-                            Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
-                        }
-                    }
-                });
-                
-            });
-            
-        });
+        this.editarBotonEdicion();
 		
 		that.contaSeleccionats();
 		
@@ -445,13 +414,48 @@ function CModulDocuments() {
 			update: function(event,ui){
 				EscriptoriPare.calculaOrden(ui,"origen");
 				ModulDocuments.habilitarBotonGuardar();
-				that.activarEventoBotonBorrar();
+				that.activarEventoBotonBorrar(); //El evento sobre el boton de borrar
+				that.editarBotonEdicion(); //El evento al click para editar
 			}
 		}).css({cursor:"move"});
 		
 		this.activarEventoBotonBorrar();
 		
 		
+	};
+	this.editarBotonEdicion = function () {
+		modul_documents_elm.find('div.documents').each(function() {
+		        	
+		            $(this).unbind("click").bind("click", function() {
+		            	
+		                var docId = $(this).find("input.documents_id").val();
+		                Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
+		                
+		                $.ajax({
+		                    type: "GET",
+		                    url: pagCarregarDoc,
+		                    data: "id=" + docId,
+		                    dataType: "json",
+		                    error: function() {
+		                        // Missatge.cancelar();
+		                        Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+		                        Error.llansar();
+		                    },
+		                    success: function(data) {
+		                        Missatge.cancelar();
+		                        if (data.id > 0) {
+		                            that.pintar(data.document);
+		                        } else if (data.id == -1) {
+		                            Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
+		                        } else if (data.id < -1) {
+		                            Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
+		                        }
+		                    }
+		                });
+		                
+		            });
+		            
+		        });
 	};
 	this.activarEventoBotonBorrar = function () {
 		modul_documents_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function() {	
@@ -468,7 +472,7 @@ function CModulDocuments() {
 			}
 			
 		});
-	}
+	};
 	
 	this.botonGuardar = jQuery("#btnGuardar_documentos");
 	
