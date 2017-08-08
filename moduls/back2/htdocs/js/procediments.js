@@ -682,6 +682,7 @@ function CDetall() {
 		$("#item_familia").val("");
 		$("#item_id").val("");
 		$("#item_organ_id").val("");
+		$("#item_organ").val("");
 
 		$("#modulPrincipal :input").each(limpiarCampo);
 
@@ -752,7 +753,7 @@ function CDetall() {
 			$("#item_resultat_" + idioma).val(printStringFromNull(dada_node[idioma]["resultat"]));
 			$("#item_destinataris_" + idioma).val(printStringFromNull(dada_node[idioma]["destinatarios"]));
 			$("#item_resolucio_" + idioma).val(printStringFromNull(dada_node[idioma]["resolucion"]));
-			//El campo notificaci�n queda obsoleto se ha eliminado del back #8 y que no se elimina para permitir compatibilidad entre la version 1.2 y 1.3 
+			//El campo notificacion queda obsoleto se ha eliminado del back #8 y que no se elimina para permitir compatibilidad entre la version 1.2 y 1.3 
 			$("#item_notificacio_" + idioma).val(printStringFromNull(dada_node[idioma]["notificacion"]));
 			//$("#item_silenci_" + idioma).val(printStringFromNull(dada_node[idioma]["silencio"]));
 			$("#item_observacions_" + idioma).val(printStringFromNull(dada_node[idioma]["observaciones"]));
@@ -830,6 +831,9 @@ function CDetall() {
 		if (dada_node.item_organ_responsable_id != undefined) {
 			$("#item_organ_responsable_id").val(dada_node.item_organ_responsable_id);
 			$("#item_organ_responsable").val(dada_node.item_organ_responsable_nom).change();
+		} else {
+			$("#item_organ_responsable_id").val("");
+			$("#item_organ_responsable").val("");
 		}
 
 		if (dada_node.item_servei_responsable_id != undefined) {
@@ -844,6 +848,10 @@ function CDetall() {
 			$("#item_organ_id").val(dada_node.item_organ_id);
 			$("#item_organ").val(dada_node.item_organ_nom);
 			$("#item_organ").change();
+		} else {
+			$("#item_organ_id").val("");
+			$("#item_organ").val("");
+			
 		}
 
 		if (dada_node.item_familia != undefined) {
