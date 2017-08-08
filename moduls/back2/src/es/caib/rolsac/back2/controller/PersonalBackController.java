@@ -75,6 +75,8 @@ public class PersonalBackController extends PantallaBaseController {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
         
         paramMap.put("username", request.getParameter("cerca_codi"));
+        paramMap.put("ordreCamp",  request.getParameter("ordreCamp"));
+        paramMap.put("ordreTipus",  request.getParameter("ordreTipus"));
         
         Long idUA = (session.getAttribute("unidadAdministrativa") != null) ? ((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getId() : null;
         paramMap.put("unidadAdministrativa", idUA);
@@ -143,9 +145,10 @@ public class PersonalBackController extends PantallaBaseController {
 	public void exportar(HttpServletRequest request, HttpSession session, HttpServletResponse response) throws Exception {
 
 		Map<String, Object> paramMap = new HashMap<String, Object>();
-        
+       
         paramMap.put("username", request.getParameter("cerca_codi"));
-        
+        paramMap.put("ordreCamp",  request.getParameter("ordreCamp"));
+        paramMap.put("ordreTipus",  request.getParameter("ordreTipus"));
         Long idUA = (session.getAttribute("unidadAdministrativa") != null) ? ((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getId() : null;
         paramMap.put("unidadAdministrativa", idUA);
 
@@ -185,7 +188,7 @@ public class PersonalBackController extends PantallaBaseController {
 		    PersonalDelegate personalDelegate = DelegateUtil.getPersonalDelegate();
 		    resultadoBusqueda = personalDelegate.buscadorListarPersonal(paramMap, Integer.parseInt(pagPag), Integer.parseInt(pagRes), uaFilles, uaMeves, true);
 
-		    CSVUtil.mostrarCSV(response, convertirPersonalToCSV((List<Long>) resultadoBusqueda.getListaResultados()));
+		    CSVUtil.mostrarCSV(response, convertirPersonalToCSV((List<Object[]>) resultadoBusqueda.getListaResultados()));
 
 
 		} catch (DelegateException dEx) {
@@ -203,7 +206,7 @@ public class PersonalBackController extends PantallaBaseController {
 	 * @param listaResultados
 	 * @return
 	 */
-	private String convertirPersonalToCSV(List<Long> listaResultados) {
+	private String convertirPersonalToCSV(List<Object[]> listaResultados) {
 		StringBuffer retorno = new StringBuffer();
 		
 		//cabecera!
@@ -220,7 +223,8 @@ public class PersonalBackController extends PantallaBaseController {
 		
 		
 		PersonalDelegate personalDelegate = DelegateUtil.getPersonalDelegate();
-		for ( Long idPersonal : castList(Long.class, listaResultados) ) {
+		for ( Object[] resultado : listaResultados ) {
+			final Long idPersonal = Long.valueOf(resultado[0].toString());
 			Personal personal;
 			try {
 				personal = personalDelegate.obtenerPersonal(idPersonal);

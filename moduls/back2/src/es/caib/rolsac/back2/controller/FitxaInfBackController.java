@@ -272,7 +272,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 			
 			resultadoBusqueda = fitxaResumenDelegate.buscarFichas(paramMap, tradMap, ua, fetVital, materia, publicObjectiu, uaFilles, uaMeves, campoOrdenacion, orden, pagPag, pagRes, campoVisible, true);
 
-			CSVUtil.mostrarCSV(response, convertirFitxaToCSV((List<Long>) resultadoBusqueda.getListaResultados(), ua, uaFilles));
+			CSVUtil.mostrarCSV(response, convertirFitxaToCSV((List<Object[]>) resultadoBusqueda.getListaResultados(), ua, uaFilles));
 
 			
 
@@ -287,7 +287,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 	 * @param listaResultados
 	 * @return
 	 */
-	private String convertirFitxaToCSV(List<Long> listaResultados, UnidadAdministrativa ua, boolean uaFilles) {
+	private String convertirFitxaToCSV(List<Object[]> listaResultados, UnidadAdministrativa ua, boolean uaFilles) {
 		StringBuffer retorno = new StringBuffer();
 		
 		//cabecera!
@@ -303,8 +303,9 @@ public class FitxaInfBackController extends PantallaBaseController {
 		
 		
 		FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
-		for ( Long idFitxa : castList(Long.class, listaResultados) ) {
+		for ( Object[] resultado : listaResultados ) {
 			Ficha ficha;
+			final Long idFitxa  = Long.valueOf(resultado[0].toString());
 			try {
 				ficha = fitxaDelegate.obtenerFichaParaSolr(idFitxa, null);
 			} catch (Exception exception) {

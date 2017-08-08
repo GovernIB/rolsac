@@ -326,7 +326,7 @@ public class NormativaBackController extends PantallaBaseController {
             }
 
             resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, queBuscar, idUA, meves, uaFilles, campoOrdenacion, orden, pagPag, pagRes, true);
-            CSVUtil.mostrarCSV(response, convertirNormativaToCSV((List<Long>) resultadoBusqueda.getListaResultados()));
+            CSVUtil.mostrarCSV(response, convertirNormativaToCSV((List<Object[]>) resultadoBusqueda.getListaResultados()));
 
 
         } catch (ParseException e) {
@@ -342,7 +342,7 @@ public class NormativaBackController extends PantallaBaseController {
     }
     
     
-    private String convertirNormativaToCSV(List<Long> listaResultados) throws UnsupportedEncodingException {
+    private String convertirNormativaToCSV(List<Object[]> listaResultados) throws UnsupportedEncodingException {
     	StringBuffer retorno = new StringBuffer();
 		
 		//cabecera!
@@ -362,8 +362,9 @@ public class NormativaBackController extends PantallaBaseController {
 	
 		
 		NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
-		for ( Long idNormativa : castList(Long.class, listaResultados) ) {
+		for ( Object[] resultado :  listaResultados ) {
 			Normativa normativa;
+			final Long idNormativa = Long.valueOf(resultado[0].toString());
 			try {
 				normativa = normativaDelegate.obtenerNormativa(idNormativa);
 			} catch (Exception exception) {

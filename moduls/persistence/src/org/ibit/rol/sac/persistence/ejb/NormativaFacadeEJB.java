@@ -339,12 +339,17 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			}            
 
 			String orderBy = " order by normativa." + campoOrdenacion + " " + orden;
-
+			if (campoOrdenacion != null && !"id".equals(campoOrdenacion)) { 
+				orderBy += " ,normativa.id ASC ";
+			}
+			
 			Query query;
 			Query queryCount;
 			String select;
 			if (soloIds) {
-				select = "Select distinct normativa.id ";
+				
+				select = "Select distinct normativa.id , normativa." + campoOrdenacion + " ";
+				
 			} else {
 				select = "Select distinct normativa ";
 			}
