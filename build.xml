@@ -755,6 +755,7 @@
     	<artifact:writepom pomRefId="tmp.pom" file="output/pom.xml" />
     	
     	<artifact:install file="output/moduls/sac-api-client.jar">
+    		<localRepository path="${svn.repository.path}" />
     	    <pom file="output/pom.xml" />
     	</artifact:install>    	
     </target>
@@ -773,6 +774,7 @@
 		
 		<echo>Obtenemos la librería de solrapi (${solrapi.version.tag}) y lo copiamos en la carpeta lib/solr.</echo>
 		<artifact:dependencies pathId="compile.classpath" filesetId="compile.fileset" >
+			<localRepository path="${svn.repository.path}" />
 			<dependency groupId="${solrapi.groupId}" artifactId="${solrapi.artifactId}" version="${solrapi.version.tag}" />
 		</artifact:dependencies>
 		<copy todir="lib/solr" flatten="true">
