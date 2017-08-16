@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="rolsac-1.5.0" default="main01ROLSAC" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+<project name="rolsac-${rolsac.version.tag}" default="main01ROLSAC" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 	     
 	<exec executable="git"  outputproperty="project.version" failifexecutionfails="true" errorproperty="">
 			<arg value="rev-parse"/> 
@@ -755,6 +755,7 @@
     	<artifact:writepom pomRefId="tmp.pom" file="output/pom.xml" />
     	
     	<artifact:install file="output/moduls/sac-api-client.jar">
+    		<localRepository path="${mvn.repository.path}" />
     	    <pom file="output/pom.xml" />
     	</artifact:install>    	
     </target>
@@ -773,6 +774,7 @@
 		
 		<echo>Obtenemos la librería de solrapi (${solrapi.version.tag}) y lo copiamos en la carpeta lib/solr.</echo>
 		<artifact:dependencies pathId="compile.classpath" filesetId="compile.fileset" >
+			<localRepository path="${mvn.repository.path}" />
 			<dependency groupId="${solrapi.groupId}" artifactId="${solrapi.artifactId}" version="${solrapi.version.tag}" />
 		</artifact:dependencies>
 		<copy todir="lib/solr" flatten="true">
