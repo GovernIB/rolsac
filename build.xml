@@ -778,7 +778,6 @@
 			<dependency groupId="${solrapi.groupId}" artifactId="${solrapi.artifactId}" version="${solrapi.version.tag}" />
 		</artifact:dependencies>
 		<copy todir="lib/solr" flatten="true">
-			
 			<fileset refid="compile.fileset" />
 			<fileset dir="lib">
 	            <include name="commons-collections-*.jar"/>
