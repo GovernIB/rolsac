@@ -350,7 +350,7 @@
             <div class="dades"></div>               
             <input type="hidden" value="0" class="pagPagina" />
             <input type="hidden" value="DESC" class="ordreTipus" />
-            <input type="hidden" value="nom" class="ordreCamp" />
+            <input type="hidden" value="nombre" class="ordreCamp" />
         </div>      
     </div>
 </div>

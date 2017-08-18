@@ -162,9 +162,19 @@ public abstract class PersonalFacadeEJB extends HibernateEJB {
 //    		if ( !userIsOper() )
 //    			parametros.put("validacion", Validacion.PUBLICA);
 //    		
+    		String campoOrden = null,  tipoOrden = null ;
+    		
+    		if (parametros.get("ordreCamp") != null) {
+    			campoOrden = parametros.get("ordreCamp").toString();
+    		}
+    		
+    		if (parametros.get("ordreTipus") != null) {
+        		tipoOrden = parametros.get("ordreTipus").toString();
+    		}
+            
     		String sql;
     		if (soloIds) {
-    			sql = "Select perso.id from Personal perso ";
+    			sql = "Select perso.id, perso."+campoOrden+" from Personal perso ";
     		} else {
     			sql = "from Personal perso ";
     		}
@@ -183,7 +193,22 @@ public abstract class PersonalFacadeEJB extends HibernateEJB {
         		sql += " and (" + sQuery + ") ";
     		}
     		
-    		sql += " order by ltrim(perso.nombre) ASC ";
+    		if (campoOrden == null || "id".equals(campoOrden)) {
+    			sql += " order by perso.id ";
+    			if (tipoOrden == null) {
+    				sql += " ASC ";
+    			} else {
+    				sql += tipoOrden;	
+    			}
+    		} else {
+    			sql += " order by perso." + campoOrden+" ";
+    			if (tipoOrden == null) {
+    				sql += " ASC ";
+    			} else {
+    				sql += tipoOrden;	
+    			}
+    			sql +=" , perso.id ASC ";
+    		}
     		Query query = session.createQuery(sql);
     		for ( int i = 0 ; i < params.size() ; i++ ) {
     			Object o = params.get(i);
@@ -211,7 +236,7 @@ public abstract class PersonalFacadeEJB extends HibernateEJB {
     
     
     /**
-     * Construye el query de b�squeda segun los parametros
+     * Construye el query de busqueda segun los parametros
      */
     private String populateQuery(Map parametros,  List params, String conector) {
         String aux = "";	// Debe ser una AND o una OR
@@ -219,6 +244,7 @@ public abstract class PersonalFacadeEJB extends HibernateEJB {
         // Tratamiento de parametros
         for (Iterator iter1 = parametros.keySet().iterator(); iter1.hasNext();) {
             String key = (String) iter1.next();
+            if ("ordreTipus".equals(key) || "ordreCamp".equals(key)) { continue;}
             Object value = parametros.get(key);
             if (value != null&&(!value.equals(""))) {
                 if (aux.length() > 0) aux = aux + " " + conector;

@@ -269,8 +269,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				ProcedimientoDelegate procedimientosDelegate = DelegateUtil.getProcedimientoDelegate();
 				buscadorCriteria.setSoloId(true);
 				resultadoBusqueda = procedimientosDelegate.buscadorProcedimientos(buscadorCriteria);
-				CSVUtil.mostrarCSV(response, convertirProcLocalesToCSV((List<Long>) resultadoBusqueda.getListaResultados()));
-
+				CSVUtil.mostrarCSV(response, convertirProcLocalesToCSV((List<Object[]>) resultadoBusqueda.getListaResultados()));
+				  
 			} catch (Exception dEx) {
 				log.error("Error generando el export de la búsqueda en procedimientos.",dEx);
 				throw new Exception(dEx);
@@ -288,11 +288,11 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	 * @param listaResultados
 	 * @return
 	 */
-	private String convertirProcLocalesToCSV(List<Long> listaResultados) {
+	private String convertirProcLocalesToCSV(List<Object[]> listaResultados) {
 		StringBuffer retorno = new StringBuffer();
 		
 		//cabecera!
-		retorno.append("CODI_PROCEDIEMNT;");
+		retorno.append("CODI_PROCEDIMENT;");
 		retorno.append("CODI_SIA;");
 		retorno.append("ESTAT_SIA;");
 		retorno.append("DATA_ACTUALITZACIO_SIA;");
@@ -318,8 +318,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		final AuditoriaDelegate auditoriaDelegate = DelegateUtil.getAuditoriaDelegate();
 		final UsuarioDelegate usuarioDelegate = DelegateUtil.getUsuarioDelegate();
 		//Contenido.
-		for (Long idProcedimiento : listaResultados) {
+		for (Object[] filaResultado : listaResultados) {
 			ProcedimientoLocal procedimiento = null;
+			Long idProcedimiento = Long.valueOf(filaResultado[0].toString()); 
 			try {
 				procedimiento = procedimientoDelegate.obtenerProcedimientoParaSolr(idProcedimiento, null);
 			} catch (Exception exception) {

@@ -3,7 +3,6 @@ package org.ibit.rol.sac.persistence.ejb;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -82,7 +81,7 @@ public abstract class FichaResumenFacadeEJB extends HibernateEJB {
             String camposVariosQuery = "";
             String selectResults;
             if (isSoloIds) {
-            	selectResults = "select distinct ficha.id ";
+            	selectResults = "select distinct ficha.id, ficha."+campoOrdenacion+" ";
             } else {
             	selectResults = "select distinct ficha ";
             }
@@ -140,8 +139,13 @@ public abstract class FichaResumenFacadeEJB extends HibernateEJB {
 			}
             
             String orderBy = "";
-            if (campoOrdenacion != null && orden != null) 
-            	orderBy = " order by ficha." + campoOrdenacion + " " + orden;
+            if (campoOrdenacion != null && orden != null) { 
+            	orderBy = " order by ficha." + campoOrdenacion + " " + orden + " ";
+             	if (campoOrdenacion != null && !"id".equals(campoOrdenacion)) { 
+             		orderBy += " , ficha.id ASC ";	
+             	}
+             	
+             }
             
 			Long idUA = (ua != null) ? ua.getId() : null;
             String uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA( idUA, uaFilles, uaMeves );

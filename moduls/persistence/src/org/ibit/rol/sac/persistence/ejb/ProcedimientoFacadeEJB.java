@@ -1013,7 +1013,12 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			StringBuilder where = new StringBuilder("where index(trad) = :idioma ");
 			StringBuilder consulta;
 			if (bc.getSoloId()) { 
-				consulta = new StringBuilder("select distinct procedimiento.id from where");
+				if ("familia".equals(paginacion.getPropiedadDeOrdenacion())) {
+					consulta = new StringBuilder("select distinct procedimiento.id, tradFam.nombre from where");
+				} else {
+					consulta = new StringBuilder("select distinct procedimiento.id, procedimiento."+paginacion.getPropiedadDeOrdenacion()+" from where");
+				} 
+				
 				if(bc.getProcedimiento().getFamilia().getId() == null || bc.getProcedimiento().getFamilia().getId() != -1){
 					where.append("and index(tradFam) = :idioma ");
 					from.append(", procedimiento.familia as fam, fam.traducciones as tradFam");
@@ -1184,7 +1189,11 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				where.append("order by procedimiento.").append( paginacion.getPropiedadDeOrdenacion() );
 			}
 			where.append(" ").append( paginacion.getCriterioOrdenacion() );
-
+			//Se incluye la siguiente linea para que siempre ordene luego por el id.
+			if (!"id".equals(paginacion.getPropiedadDeOrdenacion())) { 
+					where.append(" , procedimiento.id ").append(" ASC");
+			} 
+			 
 			String idUAs =  DelegateUtil.getUADelegate().obtenerCadenaFiltroUA( bc.getUnidadAdministrativa().getId(), bc.getUaHijas(), bc.getUaPropias() );
 			String queryString = consulta.toString().replace("from", from.toString()).replace("where", where.toString());
 
