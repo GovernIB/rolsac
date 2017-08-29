@@ -123,6 +123,10 @@
 				<include name="commons-codec-1.5.jar" />
 			</lib>
         	
+        	<lib dir="${lib.dir}/axis2-1.5">
+	    		<include name="**/*.jar" />
+	    	</lib>
+        	
         	<lib dir="${web.product}">
 	        	<include if="isJboss5" name="integracion.jar"/>	        	
 	        </lib>
