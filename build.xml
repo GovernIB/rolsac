@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="rolsac-${rolsac.version.tag}" default="main01ROLSAC" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+<project name="rolsac-${rolsac.version.tag}" default="mainROLSAC" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 	     
 	<exec executable="git"  outputproperty="project.version" failifexecutionfails="true" errorproperty="">
 			<arg value="rev-parse"/> 
@@ -87,11 +87,11 @@
             
             ****** Tasques de construccio :
             
-            assemble01ROLSAC  : construeix el ear amb tots els components existents
-            main01ROLSAC      : construeix tota l'aplicacio
+            assembleROLSAC  : construeix el ear amb tots els components existents
+            mainROLSAC      : construeix tota l'aplicacio
             makeSar           : genera el arxiu SAR per al desplegament (deprecated)
             clean             : esborra els directoris de treball
-            deploy01ROLSAC    : copia el ear al directori de deploy
+            deployROLSAC    : copia el ear al directori de deploy
             ---------------------------------------------------------------------------------------------------
         </echo>
     </target>
@@ -453,12 +453,12 @@
     <!-- ================================================================== -->
     <!-- assemble                                                           -->
     <!-- ================================================================== -->
-    <target name="assemble01ROLSAC" description="Actualiza el EAR con los componentes generados para rolsac." if="project.author">
+    <target name="assembleROLSAC" description="Actualiza el EAR con los componentes generados para rolsac." if="project.author">
         
-        <delete file="${product.dir}/01${projecte.name.rolsac}.ear" quiet="yes"/>
+        <delete file="${product.dir}/${projecte.name.rolsac}.ear" quiet="yes"/>
         <antcall target="make.application.xml"/>
         
-        <ear earfile="${product.dir}/01${projecte.name.rolsac}.ear" appxml="${output.dir}/application.xml" manifest="${etc.approlsac}/manifest.mf">
+        <ear earfile="${product.dir}/${projecte.name.rolsac}.ear" appxml="${output.dir}/application.xml" manifest="${etc.approlsac}/manifest.mf">
             <manifest>
             	 <!--  <attribute name="Version" value="${rolsac.target}"/>-->
             	<attribute name="Version" value="${rolsac.target}"/>
@@ -563,8 +563,8 @@
     </target>
     
     <target name="makeSar" description="Genera el archivo SAR para el despliegue.">
-        <delete file="${home}/01${projecte.name.rolsac}.sar" quiet="yes"/>
-        <jar jarfile="${home}/01${projecte.name.rolsac}.sar">
+        <delete file="${home}/${projecte.name.rolsac}.sar" quiet="yes"/>
+        <jar jarfile="${home}/${projecte.name.rolsac}.sar">
             <metainf dir="${home}" includes="jboss-service.xml"/>
         </jar>
     </target>
@@ -574,7 +574,7 @@
     <!-- ================================================================== -->
     <!-- main                                                               -->
     <!-- ================================================================== -->
-    <target name="main01ROLSAC" depends="checkJbossVersion,prepare,generate.properties" description="Realiza todo el proceso de construccin de ROLSAC">
+    <target name="mainROLSAC" depends="checkJbossVersion,prepare,generate.properties" description="Realiza todo el proceso de construccin de ROLSAC">
 
         <fail unless="project.author" message="Et falta definir la propietat project.author"/>
         <fail unless="deploy.dir" message="Et falta definir la propietat deploy.dir"/>
@@ -590,8 +590,8 @@
     	<!-- Se añade como primera acción el añadir el sorlapi. -->
     	<antcall target="solapiFromMVN" />
         <antcall target="update.all"/>
-        <antcall target="assemble01ROLSAC"/>
-        <antcall target="deploy01ROLSAC"/>
+        <antcall target="assembleROLSAC"/>
+        <antcall target="deployROLSAC"/>
     	<antcall target="mavenROLSAC"/>
     </target>
     
@@ -621,8 +621,8 @@
     <!-- ================================================================== -->
     <!-- deploy                                                             -->
     <!-- ================================================================== -->
-    <target name="deploy01ROLSAC" if="deploy.dir">
-        <copy verbose="true" file="${product.dir}/01${projecte.name.rolsac}.ear" todir="${deploy.dir}"/>
+    <target name="deployROLSAC" if="deploy.dir">
+        <copy verbose="true" file="${product.dir}/${projecte.name.rolsac}.ear" todir="${deploy.dir}"/>
         <echo>ES RECOMANA EXECUTAR test.unitario PER COMPROBAR QUE NO S'HAGI CORROMPUT FUNCIONALITAT.</echo>
     </target>
     
