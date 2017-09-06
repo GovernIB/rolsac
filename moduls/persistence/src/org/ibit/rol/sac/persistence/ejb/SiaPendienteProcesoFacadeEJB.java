@@ -591,9 +591,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 	    } catch(Exception exception) {
 			throw new EJBException(exception);
 		} finally {
-			if (session != null) {
-				close(session); 
-			}
+			close(session); 
 		}
     }
     
@@ -653,9 +651,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 	    } catch(Exception exception) {
 			throw new EJBException(exception);
 		} finally {
-			if (session != null) {
-				close(session); 
-			}
+			close(session); 
 		}
     }
     
@@ -694,18 +690,21 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
    	 * @return SiaJob indicando si se envian todos los procesos pendientes .     *  
    	 */
 	public SiaJob crearSiaJob(String tipo) {
+		Session session = null;
 		try
     	{
-			final Session session = getSession();
+			 session = getSession();
 			final SiaJob siaJob = new SiaJob();
 	    	siaJob.setFechaIni(new Date());
 	    	siaJob.setTipo(tipo);
 	    	session.save(siaJob); 
 			session.flush();
-			session.close();
+			
 			return siaJob;
     	 } catch(Exception exception) {
  			throw new EJBException(exception);
+ 		} finally {
+ 			close (session);
  		}
 	}
 	
@@ -719,15 +718,18 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
    	 * @return   
    	 */
 	public void actualizarSiaJob(SiaJob siaJob) {
+		Session session  = null;
 		try
     	{
-			final Session session = getSession();
+			session = getSession();
 			session.update(siaJob); 
 			session.flush();
-			session.close();			
+						
     	 } catch(Exception exception) {
  			throw new EJBException(exception);
- 		}
+ 		}finally {
+			close(session);
+		}
 	}
 	
 	
@@ -739,16 +741,18 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
    	 *   
    	 */
     public void cerrarSiaJob(Long idSiaJob)  {
+    	Session session = null;
     	try
     	{
-    		Session session = getSession();
+    		session = getSession();
     		SiaJob siaJobNuevo = (SiaJob) session.get(SiaJob.class, idSiaJob);
     		siaJobNuevo.setFechaFin(new Date());
 	    	session.update(siaJobNuevo); 
 			session.flush();
-			session.close();
 	    } catch(Exception exception) {
 			throw new EJBException(exception);
+		} finally {
+			close(session);
 		}
     }
     
@@ -850,20 +854,18 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 		    		}
 				} 
 			}
+	    	
+	    	session.saveOrUpdate(siaUA); 
+			session.flush();
+			
     	} catch (HibernateException e) {
     		throw new EJBException(e);
 		} catch (DelegateException e) {
 			throw new EJBException(e);
+		} finally {
+			close(session);
 		}
-    	
-    	try
-    	{
-			session.saveOrUpdate(siaUA); 
-			session.flush();
-			session.close();
-    	 } catch(Exception exception) {
- 			throw new EJBException(exception);
- 		}
+    	 
     }
    
     /**
@@ -875,14 +877,17 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
    	 * @param id id SIA UA
    	 */
     public SiaUA obtenerSiaUA(final Long id)  {
+    	Session session = null;
     	try
     	{
-    		final Session session = getSession();
+    		session = getSession();
     		final SiaUA siaUA = (SiaUA) session.get(SiaUA.class, id);
     		return siaUA;
-    	 } catch(Exception exception) {
+    	} catch(Exception exception) {
  			throw new EJBException(exception);
- 		}
+ 		} finally {
+ 			close(session);
+        }
     }
     
    /********************************
@@ -895,13 +900,16 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
   	*/
     public SiaUA obtenerSiaUA(final UnidadAdministrativa ua) {
     	SiaUA siaUA = null;
+    	Session session = null;
     	try {
-    		final Session session = getSession();
+    		session = getSession();
 	       	final Query query = session.createQuery("Select siaUA from SiaUA siaUA where siaUA.unidadAdministrativa.id = "+ua.getId());
 	       	siaUA = (SiaUA) query.uniqueResult();
     	} catch(Exception exception) {
     		throw new EJBException(exception);
-    	}
+    	} finally {
+ 			close(session);
+        }
     	return siaUA;
     }
     
@@ -914,14 +922,17 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
    	 * @param id id SIA UA
    	 */
     public void borrarSiaUA(final Long id)  {
+    	 Session session = null;
     	try
     	{
-    		final Session session = getSession();
+    		session = getSession();
     		session.delete("from SiaUA as siaUA where siaUA.id = ?", id, Hibernate.LONG);
 			session.flush();
     	 } catch(Exception exception) {
  			throw new EJBException(exception);
- 		}
+ 		} finally {
+ 			close(session);
+        }
     }
     
 }
