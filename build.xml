@@ -456,10 +456,10 @@
     <!-- ================================================================== -->
     <target name="assemble01ROLSAC" description="Actualiza el EAR con los componentes generados para rolsac." if="project.author">
         
-        <delete file="${product.dir}/01${projecte.name.rolsac}.ear" quiet="yes"/>
+        <delete file="${product.dir}/${projecte.name.rolsac}.ear" quiet="yes"/>
         <antcall target="make.application.xml"/>
         
-        <ear earfile="${product.dir}/01${projecte.name.rolsac}.ear" appxml="${output.dir}/application.xml" manifest="${etc.approlsac}/manifest.mf">
+        <ear earfile="${product.dir}/${projecte.name.rolsac}.ear" appxml="${output.dir}/application.xml" manifest="${etc.approlsac}/manifest.mf">
             <manifest>
             	 <!--  <attribute name="Version" value="${rolsac.target}"/>-->
             	<attribute name="Version" value="${rolsac.target}"/>
@@ -564,8 +564,8 @@
     </target>
     
     <target name="makeSar" description="Genera el archivo SAR para el despliegue.">
-        <delete file="${home}/01${projecte.name.rolsac}.sar" quiet="yes"/>
-        <jar jarfile="${home}/01${projecte.name.rolsac}.sar">
+        <delete file="${home}/${projecte.name.rolsac}.sar" quiet="yes"/>
+        <jar jarfile="${home}/${projecte.name.rolsac}.sar">
             <metainf dir="${home}" includes="jboss-service.xml"/>
         </jar>
     </target>
@@ -621,7 +621,7 @@
     <!-- deploy                                                             -->
     <!-- ================================================================== -->
     <target name="deploy01ROLSAC" if="deploy.dir">
-        <copy verbose="true" file="${product.dir}/01${projecte.name.rolsac}.ear" todir="${deploy.dir}"/>
+        <copy verbose="true" file="${product.dir}/${projecte.name.rolsac}.ear" todir="${deploy.dir}"/>
         <echo>ES RECOMANA EXECUTAR test.unitario PER COMPROBAR QUE NO S'HAGI CORROMPUT FUNCIONALITAT.</echo>
     </target>
     
