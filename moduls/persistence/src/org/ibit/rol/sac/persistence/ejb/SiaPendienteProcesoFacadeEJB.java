@@ -74,7 +74,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
    	 * @param filtro     Filtro
    	 * @param pagina	 Pagina actual donde nos encontramos.
 	 * @param cuantos    Cuantos elementos a obtener
-	 * @param ordenCampo Marca el par√°metro de orden
+	 * @param ordenCampo Marca el par·metro de orden
 	 * @param ordenAsc 	 Marca si es ASC o DESC (ascendente o descendente)
 	 * 
 	 * @throws DelegateException
@@ -115,7 +115,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 	 *
 	 * @param pagina	 Pagina actual donde nos encontramos.
 	 * @param cuantos    Cuantos elementos a obtener
-	 * @param ordenCampo Marca el par√°metro de orden
+	 * @param ordenCampo Marca el par·metro de orden
 	 * @param ordenAsc 	 Marca si es ASC o DESC (ascendente o descendente)
 	 * @return
 	 */
@@ -406,7 +406,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 	 * 				<li>El procedimiento es visible</li>
 	 * 				<li>La UA (organo resolutorio) o predecesor es visible</li>
 	 * 				<li>La UA (organo resolutorio) o predecesor tiene DIR3</li>
-	 * 				<li>La UA (organo resolutorio) o predecesor est√° en SiaUA</li>
+	 * 				<li>La UA (organo resolutorio) o predecesor est· en SiaUA</li>
 	 * 			</ul>
 	 * 
 	 * 		</li>
@@ -591,23 +591,21 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 	    } catch(Exception exception) {
 			throw new EJBException(exception);
 		} finally {
-			if (session != null) {
-				close(session); 
-			}
+			close(session); 
 		}
     }
     
     /**
-     * Revisa si se est√° ejecutando alg√∫n job.
+     * Revisa si se est· ejecutando alg˙n job.
      * Se hacen 2 comprobaciones:
      * <ul>
-     *  <lo>Primero si seg√∫n el StdSchedulerFactory est√° activo.</lo>
-     *  <lo>Segundo si sale en la bbdd alguno no cerrado (se ver√°n los √∫ltimos 5) </lo>
+     *  <lo>Primero si seg˙n el StdSchedulerFactory est· activo.</lo>
+     *  <lo>Segundo si sale en la bbdd alguno no cerrado (se ver·n los ˙ltimos 5) </lo>
      * </ul>
    	 * @ejb.interface-method
    	 * @ejb.permission unchecked="true"
    	 * 
-   	 * @return Booleano True si hay algo activo y false si no lo est√°.  
+   	 * @return Booleano True si hay algo activo y false si no lo est·.  
      * @throws SchedulerException 
    	 */
     public boolean checkJobsActivos() throws SchedulerException {
@@ -623,8 +621,8 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     	}
     	
     	if (!retorno) {
-	    	//Se ha simplificado, se ver√°n los √∫ltimos jobs ejecutados y, si alguno de ellos est√° sin fecha fin
-	    	//  se da por hecho que se est√° ejecutando.
+	    	//Se ha simplificado, se ver·n los ˙ltimos jobs ejecutados y, si alguno de ellos est· sin fecha fin
+	    	//  se da por hecho que se est· ejecutando.
 	    	List<SiaJob> jobs = getListJobs(5);
 	    	for(SiaJob job : jobs) {
 	    		if (job.getFechaFin() == null) {
@@ -653,15 +651,13 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 	    } catch(Exception exception) {
 			throw new EJBException(exception);
 		} finally {
-			if (session != null) {
-				close(session); 
-			}
+			close(session); 
 		}
     }
     
     
     /**
-     * Lista todos los SiaJob seg√∫n cuantos.
+     * Lista todos los SiaJob seg˙n cuantos.
      * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -694,18 +690,21 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
    	 * @return SiaJob indicando si se envian todos los procesos pendientes .     *  
    	 */
 	public SiaJob crearSiaJob(String tipo) {
+		Session session = null;
 		try
     	{
-			final Session session = getSession();
+			 session = getSession();
 			final SiaJob siaJob = new SiaJob();
 	    	siaJob.setFechaIni(new Date());
 	    	siaJob.setTipo(tipo);
 	    	session.save(siaJob); 
 			session.flush();
-			session.close();
+			
 			return siaJob;
     	 } catch(Exception exception) {
  			throw new EJBException(exception);
+ 		} finally {
+ 			close (session);
  		}
 	}
 	
@@ -719,15 +718,18 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
    	 * @return   
    	 */
 	public void actualizarSiaJob(SiaJob siaJob) {
+		Session session  = null;
 		try
     	{
-			final Session session = getSession();
+			session = getSession();
 			session.update(siaJob); 
 			session.flush();
-			session.close();			
+						
     	 } catch(Exception exception) {
  			throw new EJBException(exception);
- 		}
+ 		}finally {
+			close(session);
+		}
 	}
 	
 	
@@ -739,16 +741,18 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
    	 *   
    	 */
     public void cerrarSiaJob(Long idSiaJob)  {
+    	Session session = null;
     	try
     	{
-    		Session session = getSession();
+    		session = getSession();
     		SiaJob siaJobNuevo = (SiaJob) session.get(SiaJob.class, idSiaJob);
     		siaJobNuevo.setFechaFin(new Date());
 	    	session.update(siaJobNuevo); 
 			session.flush();
-			session.close();
 	    } catch(Exception exception) {
 			throw new EJBException(exception);
+		} finally {
+			close(session);
 		}
     }
     
@@ -775,8 +779,8 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 				procDelegate.actualizarProcedimiento(proc);
 			} 
     	} catch (Exception ex) {
-    		log.error("Error actualizando informaci√≥n de SIA en el procedimiento " + proc.getId() + ": " + ex.getMessage(), ex);
-    		throw new EJBException("Error actualizando informaci√≥n de SIA en el procedimiento " + proc.getId() + ": " + ex.getMessage(), ex);
+    		log.error("Error actualizando informaciÛn de SIA en el procedimiento " + proc.getId() + ": " + ex.getMessage(), ex);
+    		throw new EJBException("Error actualizando informaciÛn de SIA en el procedimiento " + proc.getId() + ": " + ex.getMessage(), ex);
     	}
 		
 	}
@@ -819,14 +823,14 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     	final Session session = getSession();
 		
     	try {
-	    	//Prepaso si es nueva. Tenemos que checkear si tiene DIR3 y que no tiene UA sucesora/precesora con SIA y no est√° ya introducido.
+	    	//Prepaso si es nueva. Tenemos que checkear si tiene DIR3 y que no tiene UA sucesora/precesora con SIA y no est· ya introducido.
 	    	if (siaUA.getId() == null) {
 				//Si tiene DIR3.
 	    		if (siaUA.getUnidadAdministrativa().getCodigoDIR3() == null || siaUA.getUnidadAdministrativa().getCodigoDIR3().trim().isEmpty()) {
 					throw new EJBException("txt.sia.error.siaua.dir3");
 				} 
 				
-				//Si ya est√° introducido
+				//Si ya est· introducido
 	    		final SiaUA siuaPropio = (SiaUA) session.createQuery("Select siaUA From SiaUA siaUA where siaUA.unidadAdministrativa.id = " + siaUA.getUnidadAdministrativa().getId()).uniqueResult();
 	    		if (siuaPropio != null) {
 	    			throw new EJBException("txt.sia.error.siaua.repetida");
@@ -850,20 +854,18 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 		    		}
 				} 
 			}
+	    	
+	    	session.saveOrUpdate(siaUA); 
+			session.flush();
+			
     	} catch (HibernateException e) {
     		throw new EJBException(e);
 		} catch (DelegateException e) {
 			throw new EJBException(e);
+		} finally {
+			close(session);
 		}
-    	
-    	try
-    	{
-			session.saveOrUpdate(siaUA); 
-			session.flush();
-			session.close();
-    	 } catch(Exception exception) {
- 			throw new EJBException(exception);
- 		}
+    	 
     }
    
     /**
@@ -875,14 +877,17 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
    	 * @param id id SIA UA
    	 */
     public SiaUA obtenerSiaUA(final Long id)  {
+    	Session session = null;
     	try
     	{
-    		final Session session = getSession();
+    		session = getSession();
     		final SiaUA siaUA = (SiaUA) session.get(SiaUA.class, id);
     		return siaUA;
-    	 } catch(Exception exception) {
+    	} catch(Exception exception) {
  			throw new EJBException(exception);
- 		}
+ 		} finally {
+ 			close(session);
+        }
     }
     
    /********************************
@@ -895,13 +900,16 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
   	*/
     public SiaUA obtenerSiaUA(final UnidadAdministrativa ua) {
     	SiaUA siaUA = null;
+    	Session session = null;
     	try {
-    		final Session session = getSession();
+    		session = getSession();
 	       	final Query query = session.createQuery("Select siaUA from SiaUA siaUA where siaUA.unidadAdministrativa.id = "+ua.getId());
 	       	siaUA = (SiaUA) query.uniqueResult();
     	} catch(Exception exception) {
     		throw new EJBException(exception);
-    	}
+    	} finally {
+ 			close(session);
+        }
     	return siaUA;
     }
     
@@ -914,14 +922,17 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
    	 * @param id id SIA UA
    	 */
     public void borrarSiaUA(final Long id)  {
+    	 Session session = null;
     	try
     	{
-    		final Session session = getSession();
+    		session = getSession();
     		session.delete("from SiaUA as siaUA where siaUA.id = ?", id, Hibernate.LONG);
 			session.flush();
     	 } catch(Exception exception) {
  			throw new EJBException(exception);
- 		}
+ 		} finally {
+ 			close(session);
+        }
     }
     
 }
