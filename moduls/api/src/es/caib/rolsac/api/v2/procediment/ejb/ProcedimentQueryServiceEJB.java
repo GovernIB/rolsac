@@ -331,7 +331,7 @@ public class ProcedimentQueryServiceEJB extends HibernateEJB {
             List<FromClause> entities = new ArrayList<FromClause>();
             entities.add(new FromClause(HQL_PROCEDIMIENTO_CLASS, HQL_PROCEDIMIENTO_ALIAS));
             entities.add(new FromClause(HQL_TRAMITES_CLASS, HQL_TRAMITES_ALIAS));
-            QueryBuilder qb = new QueryBuilder(HQL_TRAMITES_ALIAS, entities, tramitCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
+            QueryBuilder qb = new QueryBuilder(HQL_TRAMITES_ALIAS, entities, null, null); //SEUCAIB #2373 tramitCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
             
             ProcedimentCriteria pc = new ProcedimentCriteria();
