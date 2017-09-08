@@ -57,6 +57,7 @@
         </fileset>
     	<fileset dir="${lib.dir}/axis2-1.5">
     		<include name="**/*.jar" />
+    		<exclude name="**/xerces*.jar" />
     	</fileset>
     	<fileset dir="${lib.dir}/axis-1.4">
     	    <include name="**/*.jar" />
@@ -125,6 +126,7 @@
         	
         	<lib dir="${lib.dir}/axis2-1.5">
 	    		<include name="**/*.jar" />
+        		<exclude name="**/xerces*.jar" />
 	    	</lib>
         	
         	<lib dir="${web.product}">
