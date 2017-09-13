@@ -444,10 +444,42 @@ function CDetall() {
 	this.tipusAuditoria = 'procediment';
 	this.tipusEstadistica = 'procediment';
 
+	//Se comprueba que 
+	this.guarda = function() {
+		
+		
+		// missatge
+		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
+
+		item_ID = $("#item_id").val();
+
+		dataVars = "id=" + item_ID;
+
+		// ajax
+		$.ajax({
+			type: "POST",
+			url: pagNormativaVigentes,
+			data: dataVars,
+			dataType: "json",
+			error: function() {
+				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+			},
+			success: function(data) {
+				if (data.id > 0) {
+					that.guardaFinal();
+				} else if (data.id  == -66) {
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+				} else {
+					//Preguntar.
+					Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtNormativaDerogadaTitol, text: txtNormativaDerogada, funcio: that.guardaFinal});
+				}
+			}
+		});
+		
+	};
 	//Se anyaden los campos que no se van a serializar directamente mediante .serialize()	
 	//this._baseGuarda = this.guarda;	
-	this.guarda = function() {
-
+	this.guardaFinal = function () {
 		// Si el estado de publicación del procedimiento es distinto a 1 (Pública),
 		// no comprobamos que existe un trámite de inicialización. Guardamos directamente.
 		if ( ($('#item_estat').val() != 1) ) {

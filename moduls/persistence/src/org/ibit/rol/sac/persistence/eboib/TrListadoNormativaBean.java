@@ -2,7 +2,7 @@ package org.ibit.rol.sac.persistence.eboib;
 
 import java.util.Date;
 
-public class TrListadoNormativaLocalBean 
+public class TrListadoNormativaBean 
 {
 
   private String boib="";
@@ -12,55 +12,46 @@ public class TrListadoNormativaLocalBean
   private Date fechaBoletin;
   
 
-public TrListadoNormativaLocalBean()
-  {
+  public TrListadoNormativaBean()  {
   }
 
 
-  public void setBoib(String boib)
-  {
+  public void setBoib(String boib) {
     this.boib = boib;
   }
 
 
-  public String getBoib()
-  {
+  public String getBoib() {
     return boib;
   }
 
 
-  public void setRegistro(String registro)
-  {
+  public void setRegistro(String registro) {
     this.registro = registro;
   }
 
 
-  public String getRegistro()
-  {
+  public String getRegistro() {
     return registro;
   }
 
 
-  public void setTitulo(String titulo)
-  {
+  public void setTitulo(String titulo) {
     this.titulo = titulo;
   }
 
 
-  public String getTitulo()
-  {
+  public String getTitulo() {
     return titulo;
   }
 
 
-  public void setTrcodificacion(String trcodificacion)
-  {
+  public void setTrcodificacion(String trcodificacion) {
     this.trcodificacion = trcodificacion;
   }
 
 
-  public String getTrcodificacion()
-  {
+  public String getTrcodificacion()   {
     return trcodificacion;
   }
 

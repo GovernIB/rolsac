@@ -12,7 +12,7 @@ import org.ibit.rol.sac.model.AdministracionRemota;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.EdificioRemoto;
 import org.ibit.rol.sac.model.FichaRemota;
-import org.ibit.rol.sac.model.NormativaExternaRemota;
+import org.ibit.rol.sac.model.NormativaRemota;
 import org.ibit.rol.sac.model.ProcedimientoRemoto;
 import org.ibit.rol.sac.model.TramiteRemoto;
 import org.ibit.rol.sac.model.UnidadAdministrativaRemota;
@@ -117,10 +117,10 @@ public class AdministracionRemotaDelegate implements StatelessDelegate
 	}
 
 	@SuppressWarnings("unchecked")
-	public Set<NormativaExternaRemota> listarNormativasExternasRemotas(Long id)
+	public Set<NormativaRemota> listarNormativasRemotas(Long id)
 			throws DelegateException {
 		try {
-			return getFacade().listarNormativasExternasRemotas(id);
+			return getFacade().listarNormativasRemotas(id);
 		} catch (RemoteException e) {
 			throw new DelegateException(e);
 		}

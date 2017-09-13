@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.DocumentoNormativa" table="RSC_DOCNOR">
+        <cache usage="read-write"/>
+        
+        <id name="id" unsaved-value="null" column="DNO_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+
+        <many-to-one name="normativa" column="DNO_CODNOR" foreign-key="DNO_CODNOR_FK"/>
+        <property name="orden" column="ORDEN" />
+        
+        
+        <map name="traducciones" cascade="all" table="RSC_TRADNR">
+            <cache usage="read-write"/>
+            <key column="TDN_CODDNR" foreign-key="RSC_TRADNR_DOCNOR_FK" />
+            <index column="TDN_CODIDI" type="string" length="2"/>
+            <composite-element class="org.ibit.rol.sac.model.TraduccionDocumentoNormativa">
+                <property name="titulo" length="256" column="TDN_TITULO"/>
+                <property name="descripcion" length="4000" column="TDN_DESCRI"/>
+                <property name="enlace" length="256" column="TDN_ENLACE"/>
+                <many-to-one name="archivo" column="TDN_CODARC" cascade="all" foreign-key="RSC_TRADNR_ARCHIV_FK"/>                
+            </composite-element>
+        </map>
+        
+    </class>
+</hibernate-mapping>

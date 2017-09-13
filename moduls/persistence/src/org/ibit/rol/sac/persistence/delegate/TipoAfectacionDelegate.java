@@ -7,6 +7,7 @@ import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
 
+import org.ibit.rol.sac.model.Tipo;
 import org.ibit.rol.sac.model.TipoAfectacion;
 import org.ibit.rol.sac.persistence.intf.TipoAfectacionFacade;
 import org.ibit.rol.sac.persistence.intf.TipoAfectacionFacadeHome;
@@ -41,7 +42,7 @@ public class TipoAfectacionDelegate implements StatelessDelegate{
     	}
     }
     
-    public List listarTiposAfectaciones() throws DelegateException {
+    public  List<TipoAfectacion> listarTiposAfectaciones() throws DelegateException {
         try {
             return getFacade().listarTiposAfectaciones();
         } catch (RemoteException e) {

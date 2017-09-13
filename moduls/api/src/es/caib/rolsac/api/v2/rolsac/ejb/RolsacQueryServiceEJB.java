@@ -34,8 +34,7 @@ import org.ibit.rol.sac.model.Idioma;
 import org.ibit.rol.sac.model.Iniciacion;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.MateriaAgrupacionM;
-import org.ibit.rol.sac.model.NormativaExterna;
-import org.ibit.rol.sac.model.NormativaLocal;
+import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.PerfilCiudadano;
 import org.ibit.rol.sac.model.Personal;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
@@ -165,8 +164,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 	private static final String HQL_UA_ALIAS = "ua";
 	private static final String HQL_FITXA_CLASS = "Ficha";
 	private static final String HQL_FITXA_ALIAS = "fi";
-	private static final String HQL_NORMATIVA_LOCAL_CLASS = "NormativaLocal";
-	private static final String HQL_NORMATIVA_EXTERNA_CLASS = "NormativaExterna";
+	private static final String HQL_NORMATIVA_CLASS = "Normativa";
 	private static final String HQL_NORMATIVA_ALIAS = "n";
 	private static final String HQL_PERSONAL_CLASS = "Personal";
 	private static final String HQL_PERSONAL_ALIAS = "per";
@@ -1386,40 +1384,23 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 		List<CriteriaObject> criteris;
 		Session session = null;
 
-		boolean incluirExternas = (normativaCriteria.getIncluirExternas() == null)? false : normativaCriteria.getIncluirExternas();
-		normativaCriteria.setIncluirExternas(null); // Para evitar que se parsee como los demas criterias
-
+	
 		try {
 			criteris = BasicUtils.parseCriterias(NormativaCriteria.class, HQL_NORMATIVA_ALIAS, HQL_TRADUCCIONES_ALIAS, normativaCriteria);
 			List<FromClause> entities = new ArrayList<FromClause>();
-			entities.add(new FromClause(HQL_NORMATIVA_LOCAL_CLASS, HQL_NORMATIVA_ALIAS));
+			entities.add(new FromClause(HQL_NORMATIVA_CLASS, HQL_NORMATIVA_ALIAS));
 			QueryBuilder qb = new QueryBuilder("n", entities, normativaCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
 			qb.extendCriteriaObjects(criteris);
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			NormativaLocal normativaLocal = (NormativaLocal) query.uniqueResult();
-			if (normativaLocal != null) {
+			Normativa normativa = (Normativa) query.uniqueResult();
+			if (normativa != null) {
 				normativaDTO = (NormativaDTO) BasicUtils.entityToDTO(
 						NormativaDTO.class, 
-						normativaLocal,
+						normativa,
 						normativaCriteria.getIdioma());
-			} else if (incluirExternas) {
-				criteris = BasicUtils.parseCriterias(NormativaCriteria.class, HQL_NORMATIVA_ALIAS, HQL_TRADUCCIONES_ALIAS, normativaCriteria);
-				entities = new ArrayList<FromClause>();
-				entities.add(new FromClause(HQL_NORMATIVA_EXTERNA_CLASS, HQL_NORMATIVA_ALIAS));
-				qb = new QueryBuilder(HQL_NORMATIVA_ALIAS, entities, normativaCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
-				qb.extendCriteriaObjects(criteris);
-				query = qb.createQuery(session);
-				NormativaExterna normativaExterna = (NormativaExterna) query.uniqueResult();
-
-				if (normativaExterna != null) {
-					normativaDTO = (NormativaDTO) BasicUtils.entityToDTO(
-							NormativaDTO.class, 
-							normativaExterna,
-							normativaCriteria.getIdioma());
-				}
-			}
+			} 
 		} catch (HibernateException e) {
 			log.error(e);
 			throw new EJBException(e);
@@ -1450,43 +1431,23 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 		List<CriteriaObject> criteris;
 		Session session = null;
 
-		boolean incluirExternas = (normativaCriteria.getIncluirExternas() == null)? false : normativaCriteria.getIncluirExternas();
-		normativaCriteria.setIncluirExternas(null); // Para evitar que se parsee como los demas criterias
-
 		try {
 			criteris = BasicUtils.parseCriterias(NormativaCriteria.class, HQL_NORMATIVA_ALIAS, HQL_TRADUCCIONES_ALIAS, normativaCriteria);
 			List<FromClause> entities = new ArrayList<FromClause>();
-			entities.add(new FromClause(HQL_NORMATIVA_LOCAL_CLASS, HQL_NORMATIVA_ALIAS));
+			entities.add(new FromClause(HQL_NORMATIVA_CLASS, HQL_NORMATIVA_ALIAS));
 			QueryBuilder qb = new QueryBuilder("n", entities, normativaCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
 			qb.extendCriteriaObjects(criteris);
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<NormativaLocal> normativasLocalesResult = (List<NormativaLocal>) query.list();
+			List<Normativa> normativasResult = (List<Normativa>) query.list();
 
-			List<NormativaExterna> normativasExternasResult = null;
-			if (incluirExternas) {
-				criteris = BasicUtils.parseCriterias(NormativaCriteria.class, HQL_NORMATIVA_ALIAS, HQL_TRADUCCIONES_ALIAS, normativaCriteria);
-				entities = new ArrayList<FromClause>();
-				entities.add(new FromClause(HQL_NORMATIVA_EXTERNA_CLASS, HQL_NORMATIVA_ALIAS));
-				qb = new QueryBuilder(HQL_NORMATIVA_ALIAS, entities, normativaCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
-				qb.extendCriteriaObjects(criteris);
-				query = qb.createQuery(session);
-				normativasExternasResult = (List<NormativaExterna>) query.list();
-			}
 			NormativaDTO dto;
-			for (NormativaLocal normativa : normativasLocalesResult) {
+			for (Normativa normativa : normativasResult) {
 				dto = (NormativaDTO) BasicUtils.entityToDTO(NormativaDTO.class, normativa, normativaCriteria.getIdioma());
-				dto.setLocal(true);
 				normativaDTOList.add(dto);
 			}
-			if (incluirExternas) {
-				for (NormativaExterna normativa : normativasExternasResult) {
-					dto = (NormativaDTO) BasicUtils.entityToDTO(NormativaDTO.class, normativa, normativaCriteria.getIdioma());
-					dto.setLocal(false);
-					normativaDTOList.add(dto);
-				}
-			}
+			
 		} catch (HibernateException e) {
 			log.error(e);
 			throw new EJBException(e);
@@ -3898,7 +3859,6 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
-	@SuppressWarnings("unchecked")
 	public IniciacioDTO obtenirTipusIniciacio(IniciacioCriteria iniciacioCriteria) {
 
 		List<CriteriaObject> criteris;

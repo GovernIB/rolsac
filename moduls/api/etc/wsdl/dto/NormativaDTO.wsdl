@@ -25,7 +25,6 @@
                         <element name="fecha" nillable="true" type="xsd:dateTime" />
                         <element name="fechaBoletin" nillable="true" type="xsd:dateTime" />
                         <element name="id" nillable="true" type="xsd:long" />
-                        <element name="local" type="xsd:boolean" />
                         <element name="numero" nillable="true" type="xsd:long" />
                         <element name="observaciones" nillable="true" type="xsd:string" />
                         <element name="paginaFinal" nillable="true" type="xsd:int" />

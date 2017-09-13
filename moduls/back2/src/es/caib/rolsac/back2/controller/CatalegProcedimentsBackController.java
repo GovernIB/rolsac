@@ -829,6 +829,35 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		return resultatStatus;
 		
 	}
+	
+
+	@RequestMapping(value = "/checkNormativaVigente.do", method = POST)
+	public @ResponseBody IdNomDTO checkNormativaVigente(HttpSession session, HttpServletRequest request) {
+		IdNomDTO result = null;
+		String error = null;
+
+		try {
+
+			ProcedimientoDelegate procedimentDelegate = DelegateUtil.getProcedimientoDelegate();
+			Long id = Long.parseLong(request.getParameter("id"));
+			
+			if (id != null) {
+				if (procedimentDelegate.isNormativaDerogada(id)) {
+					error = messageSource.getMessage("proc.error.normativa.derogadas", null, request.getLocale());
+					return result = new IdNomDTO(-1l, error);
+				}
+			}
+			
+			return new IdNomDTO(id, "");
+		} catch (Exception exception) {
+			error = exception.getMessage();
+			result = new IdNomDTO(-66l, error);
+			
+		} 
+
+		return result;
+		
+	}
 
 	@RequestMapping(value = "/guardar.do", method = POST)
 	public @ResponseBody IdNomDTO guardar(HttpSession session, HttpServletRequest request) {

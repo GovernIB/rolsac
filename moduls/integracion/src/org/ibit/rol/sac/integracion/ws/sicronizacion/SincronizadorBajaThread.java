@@ -25,13 +25,13 @@ public class SincronizadorBajaThread extends SincronizadorThreadAbstract {
 	
 	
 	//Delegate's
-	private final transient  ProcedimientoDelegate procDelegate;
-	private final transient  UnidadAdministrativaDelegate uaDelegate;
-	private final transient  UARemotaDelegate uaRemotaDelegate;
-	private final transient  FichaDelegate fichaDelegate;
-	private final transient  AdministracionRemotaDelegate adminDelegate;
-	private final transient  TramiteRemotoDelegate tramiteRemotoDelegate;
-	private final transient NormativaExternaRemotaDelegate normativaRemotaDelegate;
+	private final transient ProcedimientoDelegate procDelegate;
+	private final transient UnidadAdministrativaDelegate uaDelegate;
+	private final transient UARemotaDelegate uaRemotaDelegate;
+	private final transient FichaDelegate fichaDelegate;
+	private final transient AdministracionRemotaDelegate adminDelegate;
+	private final transient TramiteRemotoDelegate tramiteRemotoDelegate;
+	private final transient NormativaRemotaDelegate normativaRemotaDelegate;
 	private final transient EdificioDelegate edificioDelegate;
 
 	//Excepcion
@@ -56,7 +56,7 @@ public class SincronizadorBajaThread extends SincronizadorThreadAbstract {
 		adminDelegate = DelegateUtil.getAdministracionRemotaDelegate();
 		uaRemotaDelegate = DelegateUtil.getUARemotaDelegate();
 		tramiteRemotoDelegate = DelegateUtil.getTramiteRemotoDelegate();
-		normativaRemotaDelegate = DelegateUtil.getNormativaExternaRemotaDelegate();
+		normativaRemotaDelegate = DelegateUtil.getNormativaRemotaDelegate();
 		edificioDelegate = DelegateUtil.getEdificioDelegate();
 
 		log.debug("Constructor completado");
@@ -243,8 +243,8 @@ public class SincronizadorBajaThread extends SincronizadorThreadAbstract {
 	 * @throws DelegateException
 	 */
 	private void borrarNormativas() throws DelegateException{
-		Set<NormativaExternaRemota> normats = adminDelegate.listarNormativasExternasRemotas(adminRemota.getId());		
-        for(NormativaExternaRemota norm : normats){
+		Set<NormativaRemota> normats = adminDelegate.listarNormativasRemotas(adminRemota.getId());		
+        for(NormativaRemota norm : normats){
 			normativaRemotaDelegate.borrarNormativaRemota(norm.getId());
         }
 	}

@@ -278,17 +278,17 @@ public class SincronizadorAltaThreadV3 extends SincronizadorAltaThread{
 				for(NormativaTransferible normativaTransferible : normativaTransferibles){
 
 					if (normativaTransferible.getId() != null) {
-						NormativaExternaRemota normativaExternaRemota = normativaExternaRemotaDelegate.obtenerNormativaExternaRemota(normativaTransferible.getId(),adminRemota.getId());
-                        if(normativaExternaRemota==null){
+						NormativaRemota normativaRemota = normativaRemotaDelegate.obtenerNormativaRemota(normativaTransferible.getId(),adminRemota.getId());
+                        if(normativaRemota==null){
                             log.debug("Entro aqui");
-                        	normativaExternaRemota= new NormativaExternaRemota();
+                        	normativaRemota= new NormativaRemota();
                         }
-                        normativaExternaRemota.rellenar(normativaTransferible);
+                        normativaRemota.rellenar(normativaTransferible);
 
                         log.debug("Normativa que vamos a guardar con idExt "+ normativaTransferible.getId());
-                        normativaExternaRemota.setAdministracionRemota(adminRemota);
-                        normativaExternaRemotaDelegate.grabarNormativaExternaRemota(normativaExternaRemota);
-                        normativaExternaRemotaDelegate.anyadirProcedimiento(proc.getId(), normativaExternaRemota.getId());
+                        normativaRemota.setAdministracionRemota(adminRemota);
+                        normativaRemotaDelegate.grabarNormativaRemota(normativaRemota);
+                        normativaRemotaDelegate.anyadirProcedimiento(proc.getId(), normativaRemota.getId());
                         log.debug("Normativa guardada idExt "+ normativaTransferible.getId());
                     } else {
                         log.warn("Normativa transferible con 'id' null, ignorando!!!!");

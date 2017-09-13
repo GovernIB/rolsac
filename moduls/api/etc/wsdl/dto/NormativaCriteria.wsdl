@@ -43,7 +43,6 @@
                         <element name="t_enlace" nillable="true" type="xsd:string" />
                         <element name="t_observaciones" nillable="true" type="xsd:string" />
                         <element name="t_responsable" nillable="true" type="xsd:string" />
-                        <element name="incluirExternas" nillable="true" type="xsd:boolean" />
                         <element name="ordenar" nillable="true" type="tns:ArrayOfNormativaOrdenacio" />
                     </sequence>
                 </extension>

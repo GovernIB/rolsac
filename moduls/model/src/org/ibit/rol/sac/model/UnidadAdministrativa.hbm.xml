@@ -63,12 +63,6 @@
             <one-to-many class="org.ibit.rol.sac.model.Personal"/>
         </set>
 
-        <set name="normativas" cascade="none" inverse="true" lazy="true" order-by="NOR_FECHA">
-            <cache usage="read-write"/>
-            <key column="NOR_CODUNA" foreign-key="RSC_NORUNA_FK"/>
-            <one-to-many class="org.ibit.rol.sac.model.Normativa"/>
-        </set>
-
         <set name="procedimientos" cascade="none" inverse="true" lazy="true">
             <cache usage="read-write"/>
             <key column="PRO_CODUNA" foreign-key="RSC_PROUNA_FK"/>
@@ -103,6 +97,12 @@
             <cache usage="read-write"/>
             <key column="UNM_CODUNA" foreign-key="RSC_UNMUNA_FK"/>
             <one-to-many class="org.ibit.rol.sac.model.UnidadMateria"/>
+        </set>
+        
+         <set name="unidadesNormativas" cascade="none" lazy="true" inverse="true">
+            <cache usage="read-write" />
+            <key column="UNN_CODUNA" foreign-key="RSC_UNNUNA_FK" />
+            <one-to-many class="org.ibit.rol.sac.model.UnidadNormativa" />
         </set>
 
 		<map name="traducciones" cascade="all" table="RSC_TRAUNA" batch-size="200">

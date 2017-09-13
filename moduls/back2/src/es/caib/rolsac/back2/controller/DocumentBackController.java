@@ -349,6 +349,8 @@ public class DocumentBackController extends ArchivoController {
     public void devolverArchivoDocumento(HttpServletRequest request, HttpServletResponse response) throws Exception {
         this.devolverArchivo(request, response);
     }
+    
+    
 
     @Override
     public Archivo obtenerArchivo(HttpServletRequest request) throws Exception {

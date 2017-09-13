@@ -186,4 +186,13 @@ public class ProcedimientoDelegate {
 	public List<Long> listarProcedimientosOrganoResolutori(Long idOrganoResolutori)  throws DelegateException {
 		return impl.listarProcedimientosOrganoResolutori(idOrganoResolutori);
 	}
+
+	/**
+	 * Comprueba si alguna de las normativas del procedicimiento está derogado.
+	 * @param id
+	 * @return
+	 */
+	public boolean isNormativaDerogada(Long id)   throws DelegateException {
+		return impl.isNormativaDerogada(id);
+	}
 }

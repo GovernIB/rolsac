@@ -81,17 +81,19 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
         }
     }
     
+    @Deprecated
     public int getNumNormativesLocals() throws QueryServiceException {
         try {
-            return procedimentQueryServiceStrategy.getNumNormatives(getId(), TIPUS_NORMATIVA.LOCAL);
+            return procedimentQueryServiceStrategy.getNumNormatives(getId(), TIPUS_NORMATIVA.TOTES);
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de normativas locales.", e);
         }
     }
     
+    @Deprecated
     public int getNumNormativesExternes() throws QueryServiceException {
         try {
-            return procedimentQueryServiceStrategy.getNumNormatives(getId(), TIPUS_NORMATIVA.EXTERNA);
+            return procedimentQueryServiceStrategy.getNumNormatives(getId(), TIPUS_NORMATIVA.TOTES);
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de normativas externas.", e);
         }

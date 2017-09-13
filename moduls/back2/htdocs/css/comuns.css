@@ -530,7 +530,8 @@ div.informacion { background:#fff url(../img/missatge/informacion.gif) no-repeat
 }
 
 #resultats p.executant,
-#resultadosUnidadesHijas p.executant { 
+#resultadosUnidadesHijas p.executant,
+#resultatsTB p.executant { 
     font-size:1.3em; 
     font-style:italic; 
     padding:1em 0 1em 1.6em; 
@@ -652,7 +653,7 @@ div.table div.tbody div.td select.ordenacion{
     color: #333333;
     text-align:left; 
     height: 50px;
-    width: 330px;
+    width: 430px;
     margin: 0 auto;
     padding: 13px 0 10px 0;    
 }
@@ -1831,4 +1832,17 @@ div.modulLateral div.seleccionat ul {
 }
 div.table div.tbody div.errorEstado { 
     background-color: #FAA8A8;
+}
+div.modulBOIB{
+    border-radius: 15px 15px 15px 15px;
+    border: 1px solid #D4D4D4;
+    background-color: White;
+    margin-bottom: 30px;    
+    position:relative;    
+    padding: 25px 0 25px 21px;
+}
+
+#cercadorTB.dades.paginacio {
+    width: 430px;
+    
 }

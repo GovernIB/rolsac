@@ -43,7 +43,6 @@ import org.ibit.rol.sac.model.HistoricoProcedimiento;
 import org.ibit.rol.sac.model.HistoricoUA;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Normativa;
-import org.ibit.rol.sac.model.NormativaLocal;
 import org.ibit.rol.sac.model.PerfilGestor;
 import org.ibit.rol.sac.model.Personal;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
@@ -55,6 +54,7 @@ import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.UnidadNormativa;
 import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.Validable;
 import org.ibit.rol.sac.model.Validacion;
@@ -504,13 +504,14 @@ public abstract class HibernateEJB implements SessionBean {
             return false;
         }
 
-        if (normativa instanceof NormativaLocal) {
-            NormativaLocal normaLocal = ((NormativaLocal) normativa);
-            if (normaLocal.getUnidadAdministrativa() != null) {
-                return tieneAcceso(usuario, normaLocal.getUnidadAdministrativa(), false);
-            }
+        if (normativa.getUnidadesnormativas() != null) {
+        	for(UnidadNormativa unidadNormativa : normativa.getUnidadesnormativas()) {
+	        	if (! tieneAcceso(usuario, unidadNormativa.getUnidadAdministrativa(), false)) {
+	        		return false; 
+	        	}
+        	}
         }
-
+        
         return true;
     }
 

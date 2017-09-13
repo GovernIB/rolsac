@@ -27,15 +27,16 @@ public class RemotoUtils {
      * @return {@link FichaUA}
      * @throws HibernateException
      */
-    @SuppressWarnings("unchecked")
 	public static FichaUA recogerFichaUA(final Session session, final Long idUnidad, final Long idFicha, final Long idSeccion) throws HibernateException{
 		final Query query = session.createQuery("select fichaua From FichaUA as fichaua where fichaua.seccion.id=:idSeccion and fichaua.ficha.id=:idFicha and fichaua.unidadAdministrativa.id=:idUnidad");
 		query.setLong("idSeccion", idSeccion);
 		query.setLong("idFicha", idFicha);
 		query.setLong("idUnidad", idUnidad);
-		List lista = query.list();
-		if(lista==null || lista.isEmpty())
+		@SuppressWarnings("unchecked")
+		List<FichaUA> lista = query.list();
+		if(lista==null || lista.isEmpty()) {
 			return null;
+		}
 		return (FichaUA)query.list().iterator().next();
     }
     
@@ -123,16 +124,16 @@ public class RemotoUtils {
 		return (ProcedimientoRemoto)query.uniqueResult();
     }
 
-    public static NormativaExternaRemota recogerNormativa(final Session session, Long idNorm, Long idAdmin) throws HibernateException{
-    	final Query query = session.createQuery("select norm From NormativaExternaRemota as norm where norm.administracionRemota.id=:idAdmin and norm.idExterno=:idNorm");
+    public static NormativaRemota recogerNormativaRemota(final Session session, Long idNorm, Long idAdmin) throws HibernateException{
+    	final Query query = session.createQuery("select norm From NormativaRemota as norm where norm.administracionRemota.id=:idAdmin and norm.idExterno=:idNorm");
 		query.setLong("idAdmin", idAdmin);
 		query.setLong("idNorm", idNorm);
 
-        NormativaExternaRemota normRemota = (NormativaExternaRemota) query.uniqueResult();
+        NormativaRemota normRemota = (NormativaRemota) query.uniqueResult();
         if(normRemota != null){
             Hibernate.initialize(normRemota.getProcedimientos());
         }
-		return (NormativaExternaRemota)query.uniqueResult();
+		return (NormativaRemota)query.uniqueResult();
     }
     
     public static AdministracionRemota recogerAdministracionRemota(final Session session, String idRemoto) throws HibernateException{

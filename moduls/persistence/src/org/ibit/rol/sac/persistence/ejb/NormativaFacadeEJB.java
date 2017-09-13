@@ -14,33 +14,26 @@ import java.util.Set;
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import net.sf.hibernate.Criteria;
-import net.sf.hibernate.FetchMode;
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.expression.Expression;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.ibit.rol.sac.model.Afectacion;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Auditoria;
 import org.ibit.rol.sac.model.Boletin;
+import org.ibit.rol.sac.model.DocumentoNormativa;
 import org.ibit.rol.sac.model.Historico;
 import org.ibit.rol.sac.model.HistoricoNormativa;
 import org.ibit.rol.sac.model.Normativa;
-import org.ibit.rol.sac.model.NormativaExterna;
-import org.ibit.rol.sac.model.NormativaLocal;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.TipoAfectacion;
 import org.ibit.rol.sac.model.Traduccion;
+import org.ibit.rol.sac.model.TraduccionDocumentoNormativa;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionTipo;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.UnidadNormativa;
 import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.model.webcaib.NormativaModel;
@@ -51,6 +44,7 @@ import org.ibit.rol.sac.persistence.util.IndexacionUtil;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
+import org.ibit.rol.sac.persistence.util.DateUtils;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.caib.solr.api.SolrIndexer;
 import es.caib.solr.api.model.IndexData;
@@ -61,6 +55,13 @@ import es.caib.solr.api.model.types.EnumAplicacionId;
 import es.caib.solr.api.model.types.EnumCategoria;
 import es.caib.solr.api.model.types.EnumIdiomas;
 import es.caib.solr.api.util.Utilidades;
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.FetchMode;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.expression.Expression;
 
 
 /**
@@ -112,7 +113,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
 	public boolean autorizaModificarNormativa(Long idNormativa) throws SecurityException {
-		return (getAccesoManager().tieneAccesoNormativa(idNormativa)); 
+		return (getAccesoManager().tieneAccesoNormativa(idNormativa));
 	}  
 
 	/**
@@ -121,12 +122,12 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
-	public Long grabarNormativaLocal(NormativaLocal normativa, Long idUA) throws DelegateException {
+	public Long grabarNormativa(final Normativa normativa, final Long idUA) throws DelegateException {
 		Session session = getSession();
 		try {
 			if (normativa.getId() == null) {
 				if (normativa.getValidacion().equals(Validacion.PUBLICA) && !userIsSuper()) {
-					throw new SecurityException("No puede crear una normativa pï¿½blica");
+					throw new SecurityException("No puede crear una normativa publica");
 				}
 			} else {
 				if (!getAccesoManager().tieneAccesoNormativa(normativa.getId())) {
@@ -134,34 +135,44 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 				}
 			}
 
+			/* Si se pasa UA es porque se va a crear. **/
 			if (idUA != null) {
 				if (!getAccesoManager().tieneAccesoUnidad(idUA, false)) {
 					throw new SecurityException("No tiene acceso a la unidad");
 				}
+			}
+
+			if (normativa.getId() == null) {
+				session.save(normativa);
+				addOperacion(session, normativa, Auditoria.INSERTAR);
+			} else {
+				session.update(normativa);
+				addOperacion(session, normativa, Auditoria.MODIFICAR);
+			}
+			session.flush();
+			
+			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_NORMATIVA, normativa.getId(), false);
+			final List <ProcedimientoLocal>listProcedimientos = DelegateUtil.getProcedimientoDelegate().listarProcedimientosNormativa(normativa.getId());
+			for(ProcedimientoLocal procedimiento : listProcedimientos) {
+				if (procedimiento != null) {
+					try {
+						SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, procedimiento.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, procedimiento);
+					} catch (Exception ex) {
+						log.error("Error mirando si es indexable SIA. Norm:"+normativa.getId()+" Proc:"+procedimiento.getId(), ex);
+					}
+				}
+			}
+			
+			//Cuando se crea hay que ponerle al menos una relacion.
+			if (idUA != null) {
+				final UnidadNormativa unidadNormativa = new UnidadNormativa();
+				unidadNormativa.setNormativa(normativa);
 				UnidadAdministrativa unidad = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, idUA);
-				normativa.setUnidadAdministrativa(unidad);
+				unidadNormativa.setUnidadAdministrativa(unidad);
+				session.save(unidadNormativa);
+				session.flush();
 			}
-
-			if (normativa.getId() == null) {
-				session.save(normativa);
-				addOperacion(session, normativa, Auditoria.INSERTAR);
-			} else {
-				session.update(normativa);
-				addOperacion(session, normativa, Auditoria.MODIFICAR);
-			}
-			session.flush();
 			
-			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_NORMATIVA, normativa.getId(), false);
-			final List <ProcedimientoLocal>listProcedimientos = DelegateUtil.getProcedimientoDelegate().listarProcedimientosNormativa(normativa.getId());
-			for(ProcedimientoLocal procedimiento : listProcedimientos) {
-				if (procedimiento != null) {
-					try {
-						SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, procedimiento.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, procedimiento);
-					} catch (Exception ex) {
-						log.error("Error mirando si es indexable SIA. Norm:"+normativa.getId()+" Proc:"+procedimiento.getId(), ex);
-					}
-				}
-			}
 			return normativa.getId();
 		} catch (HibernateException he) {
 			throw new EJBException(he);
@@ -170,64 +181,19 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 		}
 	}
 
-	/**
-	 * Crea o actualiza una Normativa.
-	 * @throws DelegateException 
-	 * @ejb.interface-method
-	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-	 */
-	public Long grabarNormativaExterna(NormativaExterna normativa) throws DelegateException {
-		Session session = getSession();
-		try {
-			if (normativa.getId() == null) {
-				if (normativa.getValidacion().equals(Validacion.PUBLICA) && !userIsSuper()) {
-					throw new SecurityException("No puede crear una normativa pï¿½blica");
-				}
-				session.save(normativa);
-				addOperacion(session, normativa, Auditoria.INSERTAR);
-			} else {
-				if (!getAccesoManager().tieneAccesoNormativa(normativa.getId())) {
-					throw new SecurityException("No tiene acceso a la normativa");
-				}
-				session.update(normativa);
-				addOperacion(session, normativa, Auditoria.MODIFICAR);
-			}
-			session.flush();
-			
-			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_NORMATIVA, normativa.getId(), false);
-			final List <ProcedimientoLocal>listProcedimientos = DelegateUtil.getProcedimientoDelegate().listarProcedimientosNormativa(normativa.getId());
-			for(ProcedimientoLocal procedimiento : listProcedimientos) {
-				if (procedimiento != null) {
-					try {
-						SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, procedimiento.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, procedimiento);
-					} catch (Exception ex) {
-						log.error("Error mirando si es indexable SIA. Norm:"+normativa.getId()+" Proc:"+procedimiento.getId(), ex);
-					}
-				}
-			}
-			return normativa.getId();
-		} catch (HibernateException he) {
-			throw new EJBException(he);
-		} finally {
-			close(session);
-		}
-	}
+	
 
 	/**
 	 * Lista todas las normativas.
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
-	public List listarNormativas() {
+	public List<Normativa> listarNormativas() {
 		Session session = getSession();
 		try {
-			Criteria criteri1 = session.createCriteria(NormativaLocal.class);
-			criteri1.setFetchMode("traducciones", FetchMode.EAGER);
-			Criteria criteri2 = session.createCriteria(NormativaExterna.class);
-			criteri2.setFetchMode("traducciones", FetchMode.EAGER);
-			List aux = criteri1.list();
-			aux.addAll(criteri2.list());
-			return aux;
+			Criteria criteri = session.createCriteria(Normativa.class);
+			criteri.setFetchMode("traducciones", FetchMode.EAGER);
+			return criteri.list();
 		} catch (HibernateException he) {
 			throw new EJBException(he);
 		} finally {
@@ -252,6 +218,8 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			Hibernate.initialize(normativa.getAfectadas());
 			Hibernate.initialize(normativa.getAfectantes());
 			Hibernate.initialize(normativa.getProcedimientos());
+			Hibernate.initialize(normativa.getDocumentos());
+			
 			return normativa;
 		} catch (HibernateException he) {
 			throw new EJBException(he);
@@ -259,46 +227,62 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			close(session);
 		}
 	}
+	
+	/**
+	 * Obtiene un documento de la normativa.
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param id
+	 * @return
+	 */
+	 public DocumentoNormativa obtenerDocumentoNormativa(Long id) {
+			Session session = getSession();
+			try {
+				DocumentoNormativa documento = (DocumentoNormativa) session.load(DocumentoNormativa.class, id);
+				Hibernate.initialize(documento.getTraducciones());
+				if (documento.getTraducciones() != null) {
+					for(String idioma : documento.getTraducciones().keySet()) {
+						TraduccionDocumentoNormativa tradNor = (TraduccionDocumentoNormativa) documento.getTraduccion(idioma);
+						if (tradNor != null && tradNor.getArchivo() != null) {
+							Hibernate.initialize(tradNor.getArchivo());
+						}
+					}
+				}
+				return documento;
+			} catch (HibernateException he) {
+				throw new EJBException(he);
+			} finally {
+				close(session);
+			}
+	 }
 
 	/**
-	 * Busca todas las Normativas que cumplen los criterios de bï¿½squeda
+	 * Busca todas las Normativas que cumplen los criterios de busqueda. 
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
-	public List buscarNormativas(Map parametros, Map traduccion, String tipo) {
+	public List<Normativa> buscarNormativas(Map parametros, Map traduccion, String tipo) {
 		Session session = getSession();
 		try {
-			List params = new ArrayList();
+			List<Normativa> params = new ArrayList<Normativa>();
 			String sQuery = populateQuery(parametros, traduccion, params);
 
-			Query query;
-			if ("local".equals(tipo)) {
-				// Eliminado "left join fetch" por problemas en el cache de traducciones.
-				query = session.createQuery("from NormativaLocal as normativa, normativa.traducciones as trad where " + sQuery);                
-			} else { // "externa".equals(tipo))
-				// Eliminado "left join fetch" por problemas en el cache de traducciones.
-				query = session.createQuery("from NormativaExterna as normativa, normativa.traducciones as trad where " + sQuery);
-			}
+			final Query query  = session.createQuery("from Normativa as normativa, normativa.traducciones as trad where " + sQuery);                
 			for (int i = 0; i < params.size(); i++) {
 				Object o = params.get(i);
 				query.setParameter(i, o);
 			}
 
-			List normativas = query.list();
+			List<Normativa> normativas = query.list();
 
-			List normativasAcceso = new ArrayList();
+			List<Normativa> normativasAcceso = new ArrayList<Normativa>();
 			Usuario usuario = getUsuario(session);
 			for (int i = 0; i < normativas.size(); i++) {
-				if("local".equals(tipo)){
-					NormativaLocal normativa =  (NormativaLocal)normativas.get(i);
-					if(tieneAcceso(usuario, normativa)){
-						normativasAcceso.add(normativa);
-					}
-				} else{
-					NormativaExterna normativa =  (NormativaExterna)normativas.get(i);
-					if(tieneAcceso(usuario, normativa)){
-						normativasAcceso.add(normativa);
-					}
+				Normativa normativa =  (Normativa)normativas.get(i);
+				if(tieneAcceso(usuario, normativa)){
+					normativasAcceso.add(normativa);
 				}
 			}
 
@@ -354,19 +338,12 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 				select = "Select distinct normativa ";
 			}
 			String selectCount = "Select count(distinct normativa)";
-			String from;
-			if ("local".equals(tipo)) {
-				from = " from NormativaLocal as normativa, normativa.traducciones as trad ";
-			} else if ("todas".equals(tipo)) {
-				from = " from Normativa as normativa, normativa.traduccionesCombinadas as trad ";
-			} else {
-				from = " from NormativaExterna as normativa, normativa.traducciones as trad ";
-			}
+			String from = " from Normativa as normativa inner join normativa.unidadesnormativas as unnor inner join normativa.traducciones as trad  ";
 
 			String uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(idUA, uaFilles, uaMeves);
 			if ( !StringUtils.isEmpty(uaQuery) ) {
-				uaQuery = " and  ( 	normativa.unidadAdministrativa.id in (" + uaQuery + ") " +
-						"		or normativa.unidadAdministrativa.id is null )"; //las externas no tienen ua
+				uaQuery = " and  ( 	unnor.unidadAdministrativa.id in (" + uaQuery + ") " +
+					" ) "; //	  "		 or unnor IS EMPTY )"; //las externas no tienen ua
 			}
 
 			//Filtrar por el acceso del usuario
@@ -382,17 +359,19 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 				if ( StringUtils.isEmpty(uaQuery) ) { //Se está buscando en todas las unidades orgánicas            	
 					uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(null, true, true);
 					if ( !StringUtils.isEmpty(uaQuery) ) {        	
-						uaQuery = " and ( normativa.unidadAdministrativa.id in (" + uaQuery + ") " +
-								"		or normativa.unidadAdministrativa.id is null )"; //las externas no tienen ua
+						uaQuery = " and ( unnor.unidadAdministrativa.id in (" + uaQuery + ") " + 
+								")"; //	"		unnor IS EMPTY )"; //las externas no tienen ua
 					} else {
 						//Esto significa que el usuario no tiene ninguna unidad administrativa configurada, y //no es system. 
-						uaQuery = " and normativa.unidadAdministrativa.id is null"; //las externas no tienen ua
+						uaQuery = " and normativa.unidadesnoramtivas IS EMPTY"; //las externas no tienen ua
 					}
 				}
 			}
 			ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
-			queryCount = session.createQuery(selectCount + from + " where " + sQuery + uaQuery + accessQuery);
-			query = session.createQuery(select + from + " where " + sQuery + uaQuery + accessQuery + orderBy);
+			String sqlCount = selectCount + from + " where " + sQuery + uaQuery + accessQuery;
+			queryCount = session.createQuery(sqlCount);
+			String sql = select + from + " where " + sQuery + uaQuery + accessQuery + orderBy;
+			query = session.createQuery(sql);
 
 			for ( int i = 0; i < params.size(); i++ ) {
 				Object o = params.get(i);
@@ -493,16 +472,11 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
-	public List buscarNormativasTipo(Long id, String tipo) {
+	public List<Normativa> buscarNormativasTipo(Long id, String tipo) {
 		Session session = getSession();
 		try {
-			String sQuery = "normativa.tipo.id = " + id;
-			Query query;
-			if ("local".equals(tipo)) {
-				query = session.createQuery("from NormativaLocal as normativa where " + sQuery);
-			} else { //("externa".equals(tipo))
-				query = session.createQuery("from NormativaExterna as normativa where " + sQuery);
-			}
+			final String sQuery = "normativa.tipo.id = " + id;
+			final Query query = session.createQuery("from Normativa as normativa where " + sQuery);
 			return query.list();
 		} catch (HibernateException he) {
 			throw new EJBException(he);
@@ -516,16 +490,11 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
-	public List buscarNormativasBoletin(Long id, String tipo) {
+	public List<Normativa> buscarNormativasBoletin(Long id, String tipo) {
 		Session session = getSession();
 		try {
-			String sQuery = "normativa.boletin.id = " + id;
-			Query query;
-			if ("local".equals(tipo)) {
-				query = session.createQuery("from NormativaLocal as normativa where " + sQuery);
-			} else { //("externa".equals(tipo))
-				query = session.createQuery("from NormativaExterna as normativa where " + sQuery);
-			}
+			final String sQuery = "normativa.boletin.id = " + id;
+			final Query query = session.createQuery("from Normativa as normativa where " + sQuery);
 			return query.list();
 		} catch (HibernateException he) {
 			throw new EJBException(he);
@@ -539,17 +508,11 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
-	public List buscarNormativasUA(Long id, String tipo) {
+	public List<Normativa> buscarNormativasUA(Long id, String tipo) {
 		Session session = getSession();
 		try {
-			String sQuery = "normativa.unidadAdministrativa.id = " + id;
-			Query query;
-			if ("local".equals(tipo)) {
-				query = session.createQuery("from NormativaLocal as normativa where " + sQuery);
-			} else { //("externa".equals(tipo))
-				query = session.createQuery("from NormativaExterna as normativa where " + sQuery);
-			}
-
+			final String sQuery = " unnor.unidadAdministrativa.id = " + id;
+			final Query query = session.createQuery("select distinct normativa from Normativa as normativa join normativa.unidadesnormativa unnor where " + sQuery);
 			return query.list();
 		} catch (HibernateException he) {
 			throw new EJBException(he);
@@ -563,17 +526,11 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
-	public List buscarNormativasNoRelacionadas(String tipo) {
+	public List<Normativa> buscarNormativasNoRelacionadas(String tipo) {
 		Session session = getSession();
 		try {
-			String sQuery = "normativa.procedimientos.size = 0";
-			Query query;
-			if ("local".equals(tipo)) {
-				query = session.createQuery("from NormativaLocal as normativa where " + sQuery);
-			} else { //("externa".equals(tipo))
-				query = session.createQuery("from NormativaExterna as normativa where " + sQuery);
-			}
-
+			final String sQuery = "normativa.procedimientos.size = 0";
+			final Query query = session.createQuery("from Normativa as normativa where " + sQuery);
 			return query.list();
 		} catch (HibernateException he) {
 			throw new EJBException(he);
@@ -583,7 +540,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	}
 
 	/**
-	 * Aï¿½ade una nueva afectacion a la normativa
+	 * Anyade una nueva afectacion a la normativa
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
@@ -779,7 +736,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			addOperacion(session, normativa, Auditoria.BORRAR);
 			Historico historico = getHistorico(session, normativa);
 			((HistoricoNormativa) historico).setNormativa(null);
-			for (Iterator iterator = normativa.getProcedimientos().iterator(); iterator.hasNext();) {
+			for (Iterator<ProcedimientoLocal> iterator = normativa.getProcedimientos().iterator(); iterator.hasNext();) {
 				ProcedimientoLocal proc = (ProcedimientoLocal) iterator.next();
 				SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, proc.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, null);
 				
@@ -787,7 +744,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			}
 			normativa.getAfectadas().clear();
 
-			for (Iterator iterator = normativa.getAfectantes().iterator(); iterator.hasNext();) {
+			for (Iterator<Afectacion> iterator = normativa.getAfectantes().iterator(); iterator.hasNext();) {
 				Afectacion afectacion = (Afectacion) iterator.next();
 				Normativa afectante = afectacion.getAfectante();
 				afectante.getAfectadas().remove(afectacion);
@@ -812,17 +769,17 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
-	public List listarNormativasUA(Long id) {
+	public List<Normativa> listarNormativasUA(Long id) {
 		Session session = getSession();
 		try {
 			UnidadAdministrativa unidadAdministrativa = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, id);            
-			Hibernate.initialize(unidadAdministrativa.getNormativas());            
+			Hibernate.initialize(unidadAdministrativa.getUnidadesNormativas());            
 
-			List result = new ArrayList();
-			for (Iterator iterator = unidadAdministrativa.getNormativas().iterator(); iterator.hasNext();) {
-				Normativa norm = (Normativa) iterator.next();
-				if (visible(norm)) {
-					result.add(norm);
+			List<Normativa> result = new ArrayList<Normativa>();
+			for (Iterator<UnidadNormativa> iterator = unidadAdministrativa.getUnidadesNormativas().iterator(); iterator.hasNext();) {
+				UnidadNormativa norm = (UnidadNormativa) iterator.next();
+				if (visible(norm.getNormativa())) {
+					result.add(norm.getNormativa());
 				}
 			}
 			return result;
@@ -834,8 +791,13 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	}
 
 
-	/**
-	 * Construye el query de bï¿½squeda segun los parï¿½metros
+	/** 
+	 * Construye el query de busqueda segun los parametros
+	 * 
+	 * @param parametros
+	 * @param trad
+	 * @param params
+	 * @return
 	 */
 	private String populateQuery(Map parametros, Map trad, List params) {
 
@@ -844,7 +806,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 		Map traduccion = new HashMap(trad);
 
 		// Tratamiento de parametros
-		for (Iterator iter1 = parametros.keySet().iterator(); iter1.hasNext();) {
+		for (Iterator<String> iter1 = parametros.keySet().iterator(); iter1.hasNext();) {
 
 			String key = (String) iter1.next();
 			Object value = parametros.get(key);
@@ -903,7 +865,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			traduccion.remove("idioma");
 		}
 
-		for (Iterator iter2 = traduccion.keySet().iterator(); iter2.hasNext();) {
+		for (Iterator<String> iter2 = traduccion.keySet().iterator(); iter2.hasNext();) {
 			String key = (String) iter2.next();
 			Object value = traduccion.get(key);
 			if (value != null) {
@@ -1005,23 +967,57 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 
 			Query query = null;
 			if (listaUnitatAdministrativaId.size() > 0) {
-				query = session.createQuery("select count(*) from NormativaLocal as nor where nor.validacion = :validacion " +
-						"and nor.unidadAdministrativa.id in (:lId)");
+				query = session.createQuery("select count(*) from Normativa as nor where nor.validacion = :validacion " +
+						"and nor.id in (select unnor.normativa.id from UnidadNormativa unnor where unnor.unidadAdministrativa.id in (:lId) )");
 				query.setInteger("validacion", Validacion.PUBLICA);
 				query.setParameterList("lId", listaUnitatAdministrativaId, Hibernate.LONG);
 
 				resultado = (Integer) query.uniqueResult();
 
-			}/* else {
+			}
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
 
-	        		query = session.createQuery("select count(*) from NormativaLocal as nor where nor.validacion = :validacion ");
-	        		query.setInteger("validacion", Validacion.PUBLICA);
+		return resultado;
+	}
+	
+	
+	/***
+	 * Comprueba si cumple la unicidad que es número de normativa,  
+	 * @param normativa
+	 * @return
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public boolean isNumNormativaCorrecto(Normativa normativa) {
+		final boolean resultado;
+		final Session session = getSession();
 
-	        	}
-
-	        	resultado = (Integer) query.uniqueResult();
-			 */	        		        	
-
+		try {
+ 
+			StringBuffer sql = new StringBuffer();
+			sql.append("select count(*) from Normativa as nor where nor.numNormativa like '" + normativa.getNumNormativa()+"' ");
+			if (normativa.getBoletin() != null) {
+				sql.append(" and nor.boletin.id = " + normativa.getBoletin().getId()); 
+			}
+			if (normativa.getFecha() != null) {
+				
+				sql.append(" and to_char(nor.fecha,'DD/MM/YYYY') = '"+DateUtils.formatearddMMyyyy(normativa.getFecha())+"' ");
+			}
+			if (normativa.getId() != null) {
+				sql.append(" and nor.id != " + normativa.getId());
+			}
+			Query query = session.createQuery(sql.toString());
+			int cuantos = (Integer) query.uniqueResult();
+			if (cuantos == 0) {
+				resultado = true;
+			} else {
+				resultado = false;
+			}
+			
 		} catch (HibernateException he) {
 			throw new EJBException(he);
 		} finally {
@@ -1064,16 +1060,25 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			} catch (Exception e) { //No ponemos error para poder depurar.
 			}
 			
-			if (normativa == null) {
-				normativa = (NormativaLocal) session.load(NormativaLocal.class, id);
-			} 
-			
 			Hibernate.initialize(normativa.getAfectadas());
 			Hibernate.initialize(normativa.getAfectantes());
 			Hibernate.initialize(normativa.getProcedimientos());
+			Hibernate.initialize(normativa.getDocumentos());
+			if(normativa.getDocumentos() != null) {
+				for(DocumentoNormativa documentoNormativa : normativa.getDocumentos()) {
+					if (documentoNormativa != null && documentoNormativa.getTraducciones() != null) {
+						for(String idioma : documentoNormativa.getTraducciones().keySet()) {
+							TraduccionDocumentoNormativa tradNor = (TraduccionDocumentoNormativa) documentoNormativa.getTraduccion(idioma);
+							if (tradNor != null && tradNor.getArchivo() != null) {
+								Hibernate.initialize(tradNor.getArchivo());
+							}
+						}
+					}
+				}
+			}
 			
 			Map<String, Traduccion> traduccionCorrecta = null;
-			for (Iterator iterator = normativa.getLangs().iterator(); iterator.hasNext();) {
+			for (Iterator<String> iterator = normativa.getLangs().iterator(); iterator.hasNext();) {
 				
 				String lang = (String) iterator.next();
 				TraduccionNormativa traduccion = (TraduccionNormativa) normativa.getTraduccion(lang);
@@ -1106,6 +1111,45 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 		return normativa;
 	}
 	
+	/**
+	 * Obtiene una normativa segun id con documentos para, de momento, solo el reordenamiento.
+	 * @param id
+	 * @return
+	 */
+	 
+	private Normativa obtenerNormativaConDocsParaSolr(Long id, Session session) {
+		Normativa normativa = null;
+		try {
+			try {
+				normativa = (Normativa) session.load(Normativa.class, id);
+			} catch (Exception exception) { //No ponemos error para poder depurar.
+				log.error("Error obteniendo la normativa con id : " + id , exception);
+				return null;
+			}
+			
+			Hibernate.initialize(normativa.getDocumentos());
+			if(normativa.getDocumentos() != null) {
+				for(DocumentoNormativa documentoNormativa : normativa.getDocumentos()) {
+					if (documentoNormativa != null && documentoNormativa.getTraducciones() != null) {
+						for(String idioma : documentoNormativa.getTraducciones().keySet()) {
+							TraduccionDocumentoNormativa tradNor = (TraduccionDocumentoNormativa) documentoNormativa.getTraduccion(idioma);
+							if (tradNor != null && tradNor.getArchivo() != null) {
+								Hibernate.initialize(tradNor.getArchivo());
+							}
+						}
+					}
+				}
+			}
+			
+		} catch (HibernateException he) {
+			log.error("Error obteniendo la normativa con id " + id, he);
+		} catch (Exception e) {
+			log.error("Error obteniendo la normativa con id " + id, e);
+		}
+		return normativa;
+	}
+	
+	
 	 /**
 	  * Metodo para indexar un solrPendiente.
 	  * @param solrIndexer
@@ -1134,13 +1178,24 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			indexData.setCategoria(categoria);
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
 			indexData.setElementoId(idElemento.toString());			
-			indexData.setFechaPublicacion(normativa.getFechaBoletin());
-			PathUO pathUO = IndexacionUtil.calcularPathUO(normativa.getUnidadAdministrativa());
-			if (pathUO == null) {
-				return new SolrPendienteResultado(true, "No se puede indexar: no cuelga de UA visible");
+			indexData.setFechaPublicacion(normativa.getFecha());
+			boolean noencontrado = true;
+			UnidadAdministrativa UA  = null;
+			for(UnidadNormativa unidadNormativa : normativa.getUnidadesnormativas()) {
+				final PathUO pathUO = IndexacionUtil.calcularPathUO(unidadNormativa.getUnidadAdministrativa());
+				if (pathUO != null) {
+					indexData.getUos().add(pathUO);
+					noencontrado = false;
+					if (UA == null) {
+						UA = unidadNormativa.getUnidadAdministrativa();
+					}
+				}
+				
 			}
-			indexData.getUos().add(pathUO);
 			
+			if (noencontrado) {
+				return new SolrPendienteResultado(true, "No se puede indexar: no cuelga de ninguna UA visible");
+			}
 			
 			//Iteramos las traducciones
 			final Map<String, Traduccion> traducciones = normativa.getTraduccionMap();
@@ -1174,22 +1229,14 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			    		 TraduccionTipo tipo = (TraduccionTipo) normativa.getTipo().getTraduccion(keyIdioma);
 			    		 tipoNormativaNombre = tipo.getNombre();
 			    	}
-			    	searchText.addIdioma(enumIdioma, traduccion.getTitulo()+ " " + traduccion.getApartado() + " " + tipoNormativaNombre);
+			    	searchText.addIdioma(enumIdioma, traduccion.getTitulo()+ " " + normativa.getNumNormativa() + " " + tipoNormativaNombre);
 			    	
 			    	final StringBuffer textoOptional = new StringBuffer();
 			    	textoOptional.append(" " + traduccion.getObservaciones());
-			    	textoOptional.append(IndexacionUtil.calcularPathTextUO(normativa.getUnidadAdministrativa(), keyIdioma));
+			    	textoOptional.append(IndexacionUtil.calcularPathTextUO(UA, keyIdioma));
 			    	
 					searchTextOptional.addIdioma(enumIdioma, textoOptional.toString());
-			    	if (normativa.getBoletin() == null && normativa.getFecha() != null && (traduccion.getEnlace() == null || traduccion.getEnlace().isEmpty())) {
-			    		Calendar calendar = Calendar.getInstance();
-			    		calendar.setTime(normativa.getFecha());
-			    		urls.addIdioma(enumIdioma,"/eboibfront/VisPdf?action=VisHistoric&p_any="+calendar.get(Calendar.YEAR)+"&p_numero="+normativa.getNumero()+"&p_finpag="+traduccion.getPaginaFinal()+"&p_inipag="+traduccion.getPaginaInicial()+"&idDocument="+normativa.getId()+"&lang="+keyIdioma);
-			    	} else if (normativa.getBoletin() == null && traduccion.getEnlace() != null && traduccion.getEnlace().isEmpty()) {
-			    		urls.addIdioma(enumIdioma, traduccion.getEnlace());
-			    	} else {
-			    		urls.addIdioma(enumIdioma, "/govern/dadesNormativa.do?lang="+keyIdioma+"&codi="+normativa.getId()+"&coduo="+normativa.getUnidadAdministrativa().getId());
-			    	}
+					urls.addIdioma(enumIdioma, traduccion.getEnlace());
 			    	
 				}
 		    	
@@ -1242,11 +1289,23 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			indexData.setCategoria(categoria);
 			indexData.setCategoriaPadre(EnumCategoria.ROLSAC_NORMATIVA);
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
-			PathUO pathUO = IndexacionUtil.calcularPathUO(normativa.getUnidadAdministrativa());
-			if (pathUO == null) {
-				return new SolrPendienteResultado(true, "No se puede indexar: no cuelga de UA visible");
+			boolean noencontrado = true;
+			Long idUA = null;
+			for(UnidadNormativa unidadNormativa : normativa.getUnidadesnormativas()) {
+				final PathUO pathUO = IndexacionUtil.calcularPathUO(unidadNormativa.getUnidadAdministrativa());
+				if (pathUO != null) {
+					indexData.getUos().add(pathUO);
+					noencontrado = false;
+					if (idUA == null) {
+						idUA = unidadNormativa.getUnidadAdministrativa().getId();
+					}
+				}
+				
 			}
-			indexData.getUos().add(pathUO);
+			
+			if (noencontrado) {
+				return new SolrPendienteResultado(true, "No se puede indexar: no cuelga de ninguna UA visible");
+			}
 			indexData.setElementoIdPadre(normativa.getId().toString());
 
 			//Iteramos las traducciones
@@ -1294,15 +1353,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 					extension.addIdioma(enumIdioma, IndexacionUtil.calcularExtensionArchivo(traduccion.getArchivo().getNombre()));
 					
 					urls.addIdioma(enumIdioma, "/normativa/archivo.do?id=" + traduccion.getArchivo().getId() + "&lang=" + keyIdioma);
-					if (normativa.getBoletin() == null && normativa.getFechaBoletin() != null && (traduccion.getEnlace() == null || traduccion.getEnlace().isEmpty())) {
-			    		Calendar calendar = Calendar.getInstance();
-			    		calendar.setTime(normativa.getFechaBoletin());
-			    		urlsPadre.addIdioma(enumIdioma,"/eboibfront/VisPdf?action=VisHistoric&p_any="+calendar.get(Calendar.YEAR)+"&p_numero="+normativa.getNumero()+"&p_finpag="+traduccion.getPaginaFinal()+"&p_inipag="+traduccion.getPaginaInicial()+"&idDocument="+normativa.getId()+"&lang="+keyIdioma);
-			    	} else if (normativa.getBoletin() == null && traduccion.getEnlace() != null && !traduccion.getEnlace().isEmpty()) {
-			    		urlsPadre.addIdioma(enumIdioma, traduccion.getEnlace());
-			    	} else {
-			    		urlsPadre.addIdioma(enumIdioma, "/govern/dadesNormativa.do?lang="+keyIdioma+"&codi="+normativa.getId()+"&coduo="+normativa.getUnidadAdministrativa().getId());
-			    	}
+					urls.addIdioma(enumIdioma, traduccion.getEnlace());
 					indexData.setFileContent(traduccion.getArchivo().getDatos());
 					indexData.setExtension(extension);
 					indexData.setIdioma(enumIdioma);
@@ -1322,7 +1373,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			indexData.setUrlPadre(urlsPadre);
 			
 			//Fechas
-			indexData.setFechaPublicacion(normativa.getFechaBoletin());
+			indexData.setFechaPublicacion(normativa.getFecha());
 			solrIndexer.indexarFichero(indexData);
 			return new SolrPendienteResultado(true);
 		} catch(Exception exception) {
@@ -1342,19 +1393,13 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 		Normativa normativa = null;
 		try {
 			Query sqlQuery = null;
-			List result = null;
+			List<Long> result = null;
 			
 			Long idNormativa = null;
 			
 			// Buscamos en normativa
 			sqlQuery = session.createQuery("select distinct normativa.id from Normativa normativa inner join normativa.traduccionesCombinadas trad inner join trad.archivo arc where arc.id = " + idElemento);					
 			result = sqlQuery.list();
-			if (result.size() <= 0) {
-				// Si no encuentra, buscamos en normativa local
-				sqlQuery = session.createQuery("select distinct normativa.id from NormativaLocal normativa inner join normativa.traduccionesCombinadas trad inner join trad.archivo arc where arc.id = " + idElemento);
-				result = sqlQuery.list();
-			}
-			
 			if (result.size() > 0) {
 				idNormativa = Long.valueOf(result.get(0).toString());
 				normativa = this.obtenerNormativaParaSolr(idNormativa, idElemento);
@@ -1415,6 +1460,92 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 
     	}
 		
+	}
+	
+	
+	/**
+	 *	Reordena los documentos del procedimiento.
+	 *
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public void reordenarDocumentos(final Long idNormativa, final List<Long> idDocumentos) {
+		Session session = getSession(); //session.beginTransaction()
+		try {
+			//Paso 1. Obtenemos el procedimiento.
+			Normativa normativa = obtenerNormativaConDocsParaSolr(idNormativa, session);
+			
+			//Paso 2. Obtener los procedimientos que han sido borrados.
+			long maxOrden = 0;
+			final List<DocumentoNormativa> docsParaBorrar = new ArrayList<DocumentoNormativa>();
+			if (normativa.getDocumentos() != null) {
+				for(DocumentoNormativa doc : normativa.getDocumentos()) {
+					if (doc != null && doc.getId() != null) {
+						if (doc.getOrden() >= maxOrden) {
+							maxOrden = doc.getOrden() + 1;
+						}
+						
+						if (!idDocumentos.contains(doc.getId())) {
+							docsParaBorrar.add(doc);  //Lo añadimos en la lista.
+						}
+						
+					}
+				}
+			}
+			
+			//Paso 3. Los borramos tanto en BBDD como en la relacion.
+			for(DocumentoNormativa docParaBorrar : docsParaBorrar) {
+				session.delete(docParaBorrar);    //Borramos el objeto
+				normativa.getDocumentos().remove(docParaBorrar); //Borramos la relacion
+			}
+			
+			//Paso 4. Reordenar.
+			for(int i = 0 ; i < idDocumentos.size(); i++) {
+				int orden = i; //Empezará en el 0 el orden.
+				DocumentoNormativa documento = (DocumentoNormativa) session.get(DocumentoNormativa.class, idDocumentos.get(i));
+				documento.setOrden(orden + maxOrden);
+				session.update(documento); 
+				
+				/*for(int j = 0 ; j < procedimiento.getDocumentos().size(); j++) {
+					Documento doc = procedimiento.getDocumentos().get(j);
+					if (doc != null && doc.getId() != null && doc.getId().compareTo(idDocumentos.get(i)) == 0) {
+						//doc.setOrden(orden);
+						procedimiento.getDocumentos().set(j, documento);
+					}
+				}*/
+			}
+			session.flush();
+			
+			//Paso 4.2 Reordenar.
+			for(int i = 0 ; i < idDocumentos.size(); i++) {
+				int orden = i; //Empezará en el 0 el orden.
+				DocumentoNormativa documento = (DocumentoNormativa) session.get(DocumentoNormativa.class, idDocumentos.get(i));
+				documento.setOrden(Long.valueOf(orden));
+				session.update(documento); 
+			}
+			session.flush();
+			
+			//Paso 5.Llamamos al addOperacion
+			addOperacion(session, normativa, Auditoria.MODIFICAR);
+			
+			//Paso 6. Obtenemos de nuevo el procedimiento (por si se cachea) y actualizamos la fecha de actualización.
+			normativa = obtenerNormativaConDocsParaSolr(idNormativa, session);
+			session.update(normativa);
+			
+			//Paso 7. Llamamos al actualizador.
+			Actualizador.actualizar(normativa);
+			
+			//Paso 8. Actualizamos en solr .
+			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_NORMATIVA, idNormativa, false);
+			
+			//Paso 9. Flush.
+			session.flush();
+			
+		} catch (Exception he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
 	}
 	
 }

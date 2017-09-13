@@ -13,8 +13,32 @@ $(document).ready(function() {
 		
 	});
 	
+	// Listener para guardado de módulos laterales vía AJAX.
+	jQuery(".lista-simple-uasMateria").click(function() {
+		
+		var element = $(this).parent().parent().find("li");
+		var id = $('#item_id').val();
+		var url = $(this).attr('action');
+		
+		ListaSimpleUAsMateria.guardar(element, url, id);
+		
+	});
+	
+	//Para el reordenamiento de documentos.
+	jQuery(".lista-simple-documentos").click(function() {
+		
+		var elements = $(this).parent().parent().find("div.cajaIdioma.ca li"); // Con esto obtenemos los <li> que cuelgan de <div class="cajaIdioma ca">
+		var id = $('#item_id').val();
+		var url = $(this).attr('action');
+		
+		ListaSimpleDocumentos.guardar(elements, url, id);
+	
+	});
+	
 	ListaSimpleAfectaciones = new CListaSimpleAfectaciones();
-
+	ListaSimpleUAsMateria = new CListaSimpleUAs();
+	ListaSimpleDocumentos = new CListaSimpleDocumentos();
+    
 	// elements
 	opcions_elm = $("#opcions");
 	escriptori_elm = $("#escriptori");
@@ -54,19 +78,33 @@ $(document).ready(function() {
 
 	Llistat.iniciar();
 
-	$("#item_ua_id").change( function() {
-
-		if ($(this).val() != "")
-			$("#tipoNormativa").text(txtNormativaLocal);
-
-		else
-			$("#tipoNormativa").text(txtNormativaExterna);
-
-	});
-
 	// datos traductor
 	CAMPOS_TRADUCTOR_NORMATIVA = ["item_titol_"];
 	DATOS_TRADUCIDOS_NORMATIVA = ["titulo"];
+	
+	// Listener para guardado de módulo vía AJAX.
+	jQuery(".gestionaBOIB").click(function() {
+				
+		// resultats
+		jQuery("div#escriptori_detall").slideUp(300, function() {
+
+			jQuery("div.modulBOIB").slideDown(300, function() {
+
+				resultats_actiu_elm = resultats_elm.find("div.actiu:first");	
+			});
+
+		});
+		
+	});
+	
+	jQuery( "#item_butlleti_id" ).change(function() {
+		var str = jQuery( "#item_butlleti_id option:selected" ).text();
+	    if (str.trim() == "BOIB") {
+	    	jQuery(".gestionaBOIB").show();
+	    } else {
+	    	jQuery(".gestionaBOIB").hide();
+	    }
+	});
 
 });
 
@@ -100,6 +138,7 @@ function CLlistat() {
 
 		$("#cerca_data").datepicker({ dateFormat: 'dd/mm/yy' });
 		$("#cerca_data_butlleti").datepicker({ dateFormat: 'dd/mm/yy' });				
+		$("#cerca_data_aprovacio").datepicker({ dateFormat: 'dd/mm/yy' });				
 		$("#fechaTB").datepicker({ dateFormat: 'dd/mm/yy' });
 
 		Llistat.carregar({});
@@ -139,7 +178,7 @@ function CLlistat() {
 			ordre_c1 = (ordre_C == "id") ? " " + ordre_T : "";
 			ordre_c2 = (ordre_C == "numero") ? " " + ordre_T : "";
 			ordre_c3 = (ordre_C == "tipo") ? " " + ordre_T : "";
-			ordre_c4 = (ordre_C == "unidadAdministrativa.id") ? " " + ordre_T : "";
+			ordre_c4 = (ordre_C == "numNormativa") ? " " + ordre_T : "";
 			ordre_c5 = (ordre_C == "fechaBoletin") ? " " + ordre_T : "";
 
 			txt_ordenacio = "";
@@ -151,17 +190,17 @@ function CLlistat() {
 				if (ordre_C == "id")
 					txt_per = txtLlistaItem;
 
-				else if (ordre_C == "numero")
-					txt_per = txtNumero;
+				else if (ordre_C == "numNormativa")
+					txt_per = txtNumNorma;
 
 				else if (ordre_C == "tipo")
-					txt_per = txtBoletin;
+					txt_per = txtTipologia;
 
 				else if (ordre_C == "fechaBoletin")
-					txt_per = txtData;
+					txt_per = txtFechaAprobacio;
 
 				else
-					txt_per = txtTipologia;
+					txt_per = txtTipologiaNorma;
 
 				txt_ordenacio += ", " + txt_ordenats + " " + txtPer + " <em>" + txt_per + "</em>";
 
@@ -172,11 +211,10 @@ function CLlistat() {
 			codi_totals += "</p>";
 
 			codi_cap1 = "<div class=\"th titol" + ordre_c1 + "\" role=\"columnheader\"><a class=\"id\" href=\"javascript:void(0)\">" + txtLlistaItem + "</a></div>";
-			codi_cap2 = "<div class=\"th tipologia" + ordre_c4 + "\" role=\"columnheader\">" + txtTipologiaNorma + "</div>";			
-			codi_cap3 = "<div class=\"th numero" + ordre_c2 + "\" role=\"columnheader\"><a class=\"numero\" href=\"javascript:void(0)\">" + txtNumBoletin + "</a></div>";
-			codi_cap4 = "<div class=\"th tipus" + ordre_c3 + "\" role=\"columnheader\">" + txtBoletin + "</div>";			
-			codi_cap5 = "<div class=\"th fecha" + ordre_c5 + "\" role=\"columnheader\"><a class=\"fechaBoletin\" href=\"javascript:void(0)\">" + txtFechaBoletin + "</a></div>";						
-
+			codi_cap2 = "<div class=\"th tipologia" + ordre_c4 + "\" role=\"columnheader\"><a class=\"numNormativa\" href=\"javascript:void(0)\">" + txtNumNorma + "</a></div>";	
+			codi_cap3 = "<div class=\"th numero" + ordre_c3 + "\" role=\"columnheader\"><a class=\"tipo\" href=\"javascript:void(0)\">" + txtBoletin + "</a></div>";
+			codi_cap4 = "<div class=\"th tipus" + ordre_c4 + "\" role=\"columnheader\">" + txtTipologiaNorma + "</div>";			
+			codi_cap5 = "<div class=\"th fecha" + ordre_c5 + "\" role=\"columnheader\"><a class=\"fechaBoletin\" href=\"javascript:void(0)\">" + txtFechaAprobacio + "</a></div>";						
 
 			// codi taula
 			codi_taula = "<div class=\"table llistat\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\">";
@@ -194,7 +232,7 @@ function CLlistat() {
 
 				dada_node = this;
 				parClass = (i%2) ? " par": "";
-				caducat_titol_class = (dada_node.caducat) ? " normativa" : " normativaCaducada";
+				caducat_titol_class = (dada_node.vigente) ? " normativa" : " normativaCaducada";
 
 				codi_taula += '<div class="tr' + parClass + '" role="row">';
 
@@ -203,10 +241,10 @@ function CLlistat() {
 				codi_taula += '<span class="id">'+ dada_node.id +'</span><a id="normativa_'+dada_node.id+'" href="javascript:void(0);" class="titol">' + dada_node.titulo + '</a>';
 				codi_taula += "</div>";
 
-				codi_taula += "<div class=\"td tipologia\" role=\"gridcell\">" + dada_node.tipologia + "</div>";
-				codi_taula += "<div class=\"td numero\" role=\"gridcell\">" + (dada_node.numero == "-1" ? "" : dada_node.numero) + "</div>";
-				codi_taula += "<div class=\"td tipus\" role=\"gridcell\">" + dada_node.boletin + "</div>";				
-				codi_taula += "<div class=\"td data\" role=\"gridcell\">" + dada_node.fecha_boletin + "</div>";
+				codi_taula += "<div class=\"td tipologia\" role=\"gridcell\">" + dada_node.numNormativa + "</div>";
+				codi_taula += "<div class=\"td numero\" role=\"gridcell\">" + dada_node.boletin + "</div>";
+				codi_taula += "<div class=\"td tipus\" role=\"gridcell\">" + dada_node.tipo + "</div>";				
+				codi_taula += "<div class=\"td data\" role=\"gridcell\">" + dada_node.fecha + "</div>";
 
 				codi_taula += "</div>";
 
@@ -263,6 +301,8 @@ function CLlistat() {
 
 	};
 
+	
+
 	this.carregar = function(opcions) {
 
 		var modoExportar = (typeof opcions.exportar != "undefined" && opcions.exportar == "si");
@@ -288,9 +328,11 @@ function CLlistat() {
 			dataVars_cercador += "&validacio=" + $("#cerca_validacio").val();			
 			dataVars_cercador += "&totesUnitats=" + $("#cerca_totes_unitats").is(':checked');
 			dataVars_cercador += "&uaFilles=" + $("#cerca_uaFilles").is(':checked');
-			dataVars_cercador += "&cercaExternes=" + $("#cerca_externes").is(':checked');			
 			dataVars_cercador += "&idUA=" + $("#cerca_ua_id").val();
-
+			dataVars_cercador += "&numNormativa=" + $("#cerca_num_normativa").val();
+			dataVars_cercador += "&dataAprovacio=" + $("#cerca_data_aprovacio").val();
+			
+			
 		} else {
 
 			pagPagina_elm = pagPagina_llistat_elm;
@@ -474,10 +516,10 @@ function CLlistat() {
 		resultats_dades_elm = resultats_actiu_elm.find("div.dades:first");
 
 		// animacio
-		resultats_dades_elm.fadeOut(300, function() { // pintem
+		jQuery("#cercadorTB").find(".dades").fadeOut(300, function() { // pintem
 
 			codi_cercant = "<p class=\"executant\">" + txtCercantElements + "</p>";
-			resultats_dades_elm.html(codi_cercant).fadeIn(300, function() { // events taula
+			jQuery("#cercadorTB").find(".dades").html(codi_cercant).fadeIn(300, function() { // events taula
 
 				pagPagina_cercador_elm.val(0); // Al pulsar el boton de consulta, los resultados se han de mostrar desde la primera página.
 				Llistat.carregarTB({});
@@ -534,7 +576,12 @@ function CLlistat() {
 
 			},
 			success: function(data) {
-				Llistat.finCargaListadoTB(opcions,data);
+				if (data.errorMessage && data.errorMessage != '') {
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + data.errorMessage + "</p>"});
+					Error.llansar();
+				} else {
+					Llistat.finCargaListadoTB(opcions,data);
+				}
 			}
 		});
 
@@ -591,7 +638,7 @@ function CLlistat() {
 					txt_per = txtNumero;
 				
 				else if (ordre_C == "tipo")
-					txt_per = txtBoletin;
+					txt_per = txtTipologia;
 				
 				else if (ordre_C == "fechaBoletin")
 					txt_per = txtData;
@@ -627,7 +674,7 @@ function CLlistat() {
 				
 				dada_node = this;
 				parClass = (i%2) ? " par": "";
-				caducat_titol_class = (dada_node.caducat) ? " normativa" : " normativaCaducada";
+				caducat_titol_class = (dada_node.vigente) ? " normativa" : " normativaCaducada";
 
 				codi_taula += '<div class="tr' + parClass + '" role="row">';
 				codi_taula += '<div class="td titol ' + caducat_titol_class + ' role="gridcell">';
@@ -667,32 +714,25 @@ function CLlistat() {
 		}
 		
 		// animacio
-		dades_elm = resultats_elm.find("div.actiu:first div.dades:first");
-		
-		dades_elm.fadeOut(300, function() { // pintem
-			
-			dades_elm.html(codi_final).fadeIn(300, function() {
-
+		jQuery("#cercadorTB").find(".dades").fadeOut(300, function() {
+			jQuery("#cercadorTB").find(".dades").html(codi_final).fadeIn(300, function() { // pintem
 				// Asociamos el evento onclick a los elementos de la lista para poder ir a ver su ficha.
-				escriptori_contingut_elm.find("#resultats .llistat .tbody a").unbind("click").bind("click", function(){ Llistat.fichaTB(this); });
-
-				/* TODO por ahora no hay ordenación
-                // Asociamos el evento onclick a las cabeceras del listado para que sea ordenable.
-                jQuery("#resultats .table .th a").unbind("click").click(function(){
-                    Llistat.ordena(this,opcions);
-                });
-				 */
+				jQuery("#cercadorTB").find(".dades").find(".llistat .tbody a").unbind("click").bind("click", function() { 
+					Llistat.fichaTB(this); 
+				});
 
 				// cercador
-				cercador_traspas_elm.find("input, select").removeAttr("disabled");
-
+				if (typeof opcions.cercador != "undefined" && opcions.cercador == "si") {
+					cercador_elm.find("input, select").removeAttr("disabled");
+				}
+				
 			});
-			
+
 		});
-
-		if (data.errorMessage)
+		
+		if (data.errorMessage) {
 			Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.errorMessage + "</p>"});
-
+		}
 	};
 	
 	/**
@@ -734,7 +774,8 @@ function CDetall() {
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {
 
 			// Esconder todos menos el primero
-			$('div.idioma:gt(0)').hide();			
+			//$('div.idioma:gt(0)').hide();
+			$('div.modulPrincipal').find('div.idioma:gt(0)').hide();			
 
 			ul_idiomes_elm = escriptori_detall_elm.find("ul.idiomes:first");
 
@@ -882,17 +923,9 @@ function CDetall() {
 		//Borrar valores de los campos
 		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou, div.fila select.nou, div.modulDocuments input.nou").val("").end().find("h2:first").text(txtNouTitol);
 
-		//Establecer UA por defecto
-		$("#item_ua_id").val(idUaActual);
-		$("#item_ua_nom").val(nomUaActual);
-
-		//Poner tipo Normativa local por defecto
-		$("#tipoNormativa").text(txtNormativaLocal);
-
-		//Establecer Validación por defecto si el usuario es operador
-		if ( $("#rolusuario").val() == "RSC_OPER" )
-			$("#item_validacio").val(2);
-
+		//Poner tipo Normativa por defecto
+		$("#tipoNormativa").text(txtNormativa);
+		
 		//Resetear upload de archivos			
 		for (var i in idiomas) {
 			
@@ -904,7 +937,7 @@ function CDetall() {
 		}
 
 		//Ocultar paneles
-		$("#modul_procediments, #modul_afectacions").hide();
+		$("#modul_procediments, #modul_afectacions, #modulDocumentNormativa, #modul_unitats_administratives").hide();
 
 		escriptori_detall_elm.find(".botonera li.btnEliminar").hide();
 		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);		
@@ -959,7 +992,7 @@ function CDetall() {
 			var idioma = idiomas[i];
 
 			$("#item_titol_" + idioma).val(nn(dada_node["idioma_" + idioma + "_titol"]));
-			$("#item_enllas_" + idioma).val(nn(dada_node["idioma_" + idioma + "_enllac"]));
+			$("#item_enllac_" + idioma).val(nn(dada_node["idioma_" + idioma + "_enllac"]));
 			$("#item_apartat_" + idioma).val(nn(dada_node["idioma_" + idioma + "_apartat"]));
 			$("#item_pagina_inicial_" + idioma).val(nn(dada_node["idioma_" + idioma + "_pagini"]));
 			$("#item_pagina_final_" + idioma).val(nn(dada_node["idioma_" + idioma + "_pagfin"]));
@@ -993,7 +1026,8 @@ function CDetall() {
 
 		$("#item_clave_primaria").val(nn(dada_node.id));
 		$("#item_clave_primaria").change();
-
+		$("#item_num_norma").val(nn(dada_node.numNormativa));
+		
 		$("#item_numero").val(nn(dada_node.numero));
 		$("#item_butlleti_id").val(nn(dada_node.butlleti_id));
 		$("#item_butlleti").val(nn(dada_node.butlleti));
@@ -1043,23 +1077,13 @@ function CDetall() {
 
 		}
 
-		//Mostrar / ocultar campo de responsable y botonera cambio UA en normativa local/externa
-		if ("E" == $("#item_tipologia").val()) {
-			
-			$("#tipoNormativa").text(txtNormativaExterna);
-			$("#botoneraCambioUA").hide();						
-			$("#item_responsable_ca, #item_responsable_es, #item_responsable_en, #item_responsable_de, #item_responsable_fr").show();
-			$("#item_responsable_ca, #item_responsable_es, #item_responsable_en, #item_responsable_de, #item_responsable_fr").parent().parent().show();
-			
-		} else {
-			
-			$("#tipoNormativa").text(txtNormativaLocal);
-			$("#botoneraCambioUA").show();
-			$("#botonBorrarUA a").hide();
-			$("#item_responsable_ca, #item_responsable_es, #item_responsable_en, #item_responsable_de, #item_responsable_fr").hide();
-			$("#item_responsable_ca, #item_responsable_es, #item_responsable_en, #item_responsable_de, #item_responsable_fr").parent().parent().hide();
-			
-		}
+		//Mostrar campo de responsable y mostrar normativa.
+		$("#tipoNormativa").text(txtNormativa);
+		$("#item_responsable_ca, #item_responsable_es, #item_responsable_en, #item_responsable_de, #item_responsable_fr").show();
+		$("#item_responsable_ca, #item_responsable_es, #item_responsable_en, #item_responsable_de, #item_responsable_fr").parent().parent().show();
+		
+		ModulDocuments.inicializarDocuments(dades.documents);
+		ModulUnitatAdministrativa.inicializarUnidadesAdministrativas(dades.uas);
 
 		// Marcamos el formulario como "no modificado".
 		this.modificado(false);		
@@ -1104,7 +1128,7 @@ function CDetall() {
 	this.carregarTB = function(boibID) {
 		
 		//Cargamos los datos de un edicto del boib en una ficha vacía de normativa nueva
-		escriptori_contingut_elm.fadeOut(300, function() {
+		$(".modulBOIB").fadeOut(300, function() {
 
 			codi_carregant = "<div id=\"carregantDetall\"><p class=\"executant\">" + txtCarregantDetall + "</p></div>";
 			escriptori_elm.append(codi_carregant).slideDown(300, function() {
@@ -1126,13 +1150,31 @@ function CDetall() {
 							
 							$("#carregantDetall").fadeOut(300, function() {
 								$(this).remove();
-								escriptori_contingut_elm.fadeIn(300);
+								$(".modulBOIB").fadeIn(300);
 							});
 							
 							Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.error + "</p>"});
 							
 						} else {
-							
+							/**
+							 * Datos que devuelve:
+							 * - butlleti:"BOIB"
+							 * - butlleti_id:"1"
+							 * - data_butlleti:"07/09/2017"
+							 * - idioma_ca_apartat:"Secció I. Disposicions generals"
+							 * - idioma_ca_enllac:"http://www.caib.es/eboibfront/ca/2017/10706/598980/aprovacio-definitiva-de-la-modificacio-del-credit-"
+							 * - idioma_ca_pagfin:"28561"
+							 * - idioma_ca_pagini:"28561"
+							 * - idioma_ca_titol:"Aprovació definitiva de la modificació del crèdit extraordinari núm. 13/2017"
+							 * - idioma_es_apartat:"Sección I. Disposiciones generales"
+							 * - idioma_es_enllac:"http://www.caib.es/eboibfront/es/2017/10706/598980/aprobacion-definitiva-de-la-modificacion-de-credit"
+							 * - idioma_es_pagfin:"28952"
+							 * - idioma_es_pagini:"28952"
+							 * - idioma_es_titol:"Aprobación definitiva de la modificación de crédito extraordinario núm. 13/2017"
+							 * - numero:"2017110"
+							 * - registre:"9654"
+							 * - validacio:null
+							 */
 							Detall.pintarTB(data);
 							
 						}
@@ -1150,60 +1192,59 @@ function CDetall() {
 	
 	this.pintarTB = function(dades) {
 
-		Detall.nou();		
+		//No es nuevo, es editar. Detall.nou();		
 
 		//Rellena el formulario con los datos de un elemento BOIB
 		dada_node = dades;
 
-		$("#item_validacio").val(dada_node.validacio);
-
+		
+		
 		for (var i in idiomas) {
 			
 			var idioma = idiomas[i];
 
 			$("#item_titol_" + idioma).val(nn(dada_node["idioma_" + idioma + "_titol"]));
-			$("#item_enllas_" + idioma).val(nn(dada_node["idioma_" + idioma + "_enllac"]));
-			$("#item_apartat_" + idioma).val(nn(dada_node["idioma_" + idioma + "_apartat"]));
-			$("#item_pagina_inicial_" + idioma).val(nn(dada_node["idioma_" + idioma + "_pagini"]));
-			$("#item_pagina_final_" + idioma).val(nn(dada_node["idioma_" + idioma + "_pagfin"]));
+			$("#item_enllac_" + idioma).val(nn(dada_node["idioma_" + idioma + "_enllac"]));
+			//$("#item_apartat_" + idioma).val(nn(dada_node["idioma_" + idioma + "_apartat"]));
+			//$("#item_pagina_inicial_" + idioma).val(nn(dada_node["idioma_" + idioma + "_pagini"]));
+			//$("#item_pagina_final_" + idioma).val(nn(dada_node["idioma_" + idioma + "_pagfin"]));
 			$("#item_responsable_" + idioma).val(nn(dada_node["idioma_" + idioma + "_responsable"]));
 			
 			//Campos comentados en Back2
 			////$("#item_des_curta_" + idioma).val(nn(dada_node["idioma_" + idioma + "_observacions"]));
 
-			$("#grup_arxiu_actual_" + idioma + " span").show();
-			$("#grup_arxiu_actual_" + idioma + " input").hide();
-			$("#grup_arxiu_actual_" + idioma + " label.eliminar").hide();
-			$("#grup_arxiu_actual_" + idioma + " a").hide();			
+			//$("#grup_arxiu_actual_" + idioma + " span").show();
+			//$("#grup_arxiu_actual_" + idioma + " input").hide();
+			//$("#grup_arxiu_actual_" + idioma + " label.eliminar").hide();
+			//$("#grup_arxiu_actual_" + idioma + " a").hide();			
 
 		}
 
 		$("#item_numero").val(nn(dada_node.numero));
 		$("#item_butlleti_id").val(nn(dada_node.butlleti_id));
 		$("#item_butlleti").val(nn(dada_node.butlleti));
-		$("#item_registre").val(nn(dada_node.registre));
+		//$("#item_registre").val(nn(dada_node.registre));
 		$("#item_data_butlleti").val(nn(dada_node.data_butlleti));
-
+		//$("#item_num_norma").val(nn(dada_node.numNormativa));
+		
+		// resultats
+		//jQuery("div.modulBOIB").slideUp(300, function() {
 		if ($("#carregantDetall").size() > 0) {
 
 			$("#carregantDetall").fadeOut(300, function() {
+				jQuery("div#escriptori_detall").slideDown(300); /*, function() {
 
-				$(this).remove();
-
-				// array
-				Detall.array({id: dada_node.id, accio: "guarda", dades: dada_node});
-
-				escriptori_detall_elm.fadeIn(300);
+					//resultats_actiu_elm = resultats_elm.find("div.actiu:first");	
+				});*/
 
 			});
-
+		
 		} else {
-
-			escriptori_contingut_elm.fadeOut(300, function() {
-				escriptori_detall_elm.fadeIn(300);
+			$("#carregantDetall").fadeOut(300, function() {
+				jQuery("div#escriptori_detall").slideDown(300);
 			});
-
 		}
+		
 
 	};
 
@@ -1230,7 +1271,7 @@ function CDetall() {
 			$(pro_nodes).each(function() {
 				
 				pro_node = this;
-				codi_pro += "<li element-id=" + pro_node.id + " modulo-id= '" + pro_node.idModulo + "' ><input type=\"hidden\" value=\"" + pro_node.id + "\" />" + pro_node.nombre + "</li>";
+				codi_pro += "<li element-id=" + pro_node.id + " modulo-id= '" + pro_node.idModulo + "' ><input type=\"hidden\" value=\"" + pro_node.id + "\" /><a target=\"_blank\" href=\"../catalegProcediments/catalegProcediments.do?itemId="+pro_node.idProcedimiento+"\" >" + pro_node.nombre + "</a></li>";
 				
 			});
 			

@@ -1,9 +1,5 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import org.ibit.rol.sac.model.SilencioAdm;
-
-
-
 /**
  * Define métodos estáticos para obtener delegates.
  */
@@ -219,12 +215,14 @@ public final class DelegateUtil {
         return (TramiteRemotoDelegate) DelegateFactory.getDelegate(TramiteRemotoDelegate.class);
     }
     
-    public static NormativaExternaRemotaDelegate getNormativaExternaRemotaDelegate() {
-        return (NormativaExternaRemotaDelegate) DelegateFactory.getDelegate(NormativaExternaRemotaDelegate.class);
+    public static NormativaRemotaDelegate getNormativaRemotaDelegate() {
+        return (NormativaRemotaDelegate) DelegateFactory.getDelegate(NormativaRemotaDelegate.class);
     }
+    
     public static CatalegDocumentsDelegate getCatalegDocumentsDelegate() {
       return (CatalegDocumentsDelegate) DelegateFactory.getDelegate(CatalegDocumentsDelegate.class);
     }
+    
     public static ExcepcioDocumentacioDelegate getExcepcioDocumentacioDelegate() {
       return (ExcepcioDocumentacioDelegate) DelegateFactory.getDelegate(ExcepcioDocumentacioDelegate.class);
     }
@@ -273,5 +271,13 @@ public final class DelegateUtil {
 		SiaDelegate del = new SiaDelegate();
         del.setImpl(impl);
         return del;
+	}
+
+	public static UnidadNormativaDelegate getUnidadNormativaDelegate() {
+	    return (UnidadNormativaDelegate) DelegateFactory.getDelegate(UnidadNormativaDelegate.class);
+	}
+
+	public static DocumentoNormativaDelegate getDocumentoNormativaDelegate() {
+		return (DocumentoNormativaDelegate) DelegateFactory.getDelegate(DocumentoNormativaDelegate.class);
 	}
 }

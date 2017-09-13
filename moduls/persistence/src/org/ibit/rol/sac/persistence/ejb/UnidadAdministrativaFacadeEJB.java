@@ -688,7 +688,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				Hibernate.initialize( ua.getHijos() );
 				Hibernate.initialize( ua.getProcedimientos() );
 				Hibernate.initialize( ua.getPersonal() );
-				Hibernate.initialize( ua.getNormativas() );
+				Hibernate.initialize( ua.getUnidadesNormativas() );
 				Hibernate.initialize( ua.getUsuarios() );
 
 				return ua;
@@ -749,7 +749,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				Hibernate.initialize( ua.getTodasfichas() );
 				Hibernate.initialize( ua.getProcedimientos() );
 				Hibernate.initialize( ua.getPersonal() );
-				Hibernate.initialize( ua.getNormativas() );
+				Hibernate.initialize( ua.getUnidadesNormativas() );
 
 				if ( userIsSuper() ) {
 
@@ -809,7 +809,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				Hibernate.initialize(ua.getTodasfichas());
 				Hibernate.initialize(ua.getProcedimientos());
 				Hibernate.initialize(ua.getPersonal());
-				Hibernate.initialize(ua.getNormativas());
+				Hibernate.initialize(ua.getUnidadesNormativas());
 
 				if (userIsAdmin()) {
 					Hibernate.initialize(ua.getUsuarios());
@@ -2863,7 +2863,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
                             }
                             
                             //Luego las normativas
-                            consulta = new StringBuilder("select nor.id from Normativa nor left join nor.unidadAdministrativa uad where uad.id = " + idUnidadAdministrativa);
+                            consulta = new StringBuilder("select nor.id from Normativa nor left join nor.unidadesnormativas.unidadAdministrativa uad where uad.id = " + idUnidadAdministrativa);
                             query = session.createQuery( consulta.toString() );
                             query.setCacheable(true);
                             final List<Long> idNormativas =  castList(Long.class, query.list());

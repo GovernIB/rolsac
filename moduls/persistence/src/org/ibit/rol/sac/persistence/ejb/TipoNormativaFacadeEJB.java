@@ -101,12 +101,12 @@ public abstract class TipoNormativaFacadeEJB extends HibernateEJB {
      * 
      * @return	Devuelve <code>List</code> de todos los tipos de normativas.
      */
-    public List listarTiposNormativas() {
+    public List<Tipo> listarTiposNormativas() {
     	
-        Session session = getSession();
+        final Session session = getSession();
         try {
         	
-            Criteria criteri = session.createCriteria(Tipo.class);
+        	final Criteria criteri = session.createCriteria(Tipo.class);
             
             return criteri.list();
             

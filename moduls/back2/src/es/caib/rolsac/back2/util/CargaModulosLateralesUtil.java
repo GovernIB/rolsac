@@ -68,7 +68,7 @@ public class CargaModulosLateralesUtil {
 					
 				}
 
-				Map map = new HashMap<String, Object>();
+				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("id", doc.getId());
 				
 				if (ordenable)
@@ -130,7 +130,7 @@ public class CargaModulosLateralesUtil {
 			
 			if (icono != null && StringUtils.isNotEmpty(icono.getNombre()) ) {
 				
-				Map map = new HashMap<String, Object>();
+				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("id", icono.getId());
 				map.put("nombre", icono.getNombre());
 				map.put("idMainItem", id);
@@ -158,7 +158,7 @@ public class CargaModulosLateralesUtil {
 			
 			if ( icono != null && icono.getIcono() != null ) {
 				
-				Map map = new HashMap<String, Object>();
+				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("id", icono.getId());
 				map.put("nombre", icono.getIcono().getNombre());
 				map.put("idMainItem", id);
@@ -221,7 +221,7 @@ public class CargaModulosLateralesUtil {
 			
 			TraduccionHechoVital thv = (TraduccionHechoVital)hechoVital.getTraduccion(lang);
 			
-			Map map = new HashMap<String, Object>();
+			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("id", hechoVital.getId());
 			map.put("nom", thv.getNombre());
 			map.put("idMainItem", id);
@@ -244,7 +244,7 @@ public class CargaModulosLateralesUtil {
 			
 			TraduccionHechoVital thv = (TraduccionHechoVital)hechoVitalProc.getHechoVital().getTraduccion(lang);
 			
-			Map map = new HashMap<String, Object>();
+			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("id", hechoVitalProc.getHechoVital().getId());
 			map.put("nom", thv.getNombre());
 			
@@ -281,7 +281,7 @@ public class CargaModulosLateralesUtil {
 					nombre = HtmlUtils.obtenerTituloDeEnlaceHtml(thv.getNombre());
 				}
 				
-				Map map = new HashMap<String, Object>();
+				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("id", fetVitalAgrupacioFV.getHechoVital().getId());
 				map.put("nombre", nombre);
 				
@@ -390,8 +390,8 @@ public class CargaModulosLateralesUtil {
 	 * @param lang
 	 * @return
 	 */
-	public static List<Map<String, Object>> recuperaUAsRelacionadas(List<UnidadAdministrativa> listaUAs, Long id, 
-			String lang, boolean ordenable) {
+	public static List<Map<String, Object>> recuperaUAsRelacionadas(final List<UnidadAdministrativa> listaUAs, final Long id, 
+			final String lang, final boolean ordenable) {
 		
 		List<Map<String, Object>> listaUAsDTO = new ArrayList<Map<String, Object>>();
 		
@@ -406,7 +406,7 @@ public class CargaModulosLateralesUtil {
 				
 				UnidadAdministrativa ua = it.next();
 				
-				Map map = new HashMap<String, Object>();
+				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("id", ua.getId());
 				map.put("nombre", ua.getNombreUnidadAdministrativa(lang));
 				

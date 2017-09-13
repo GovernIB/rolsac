@@ -2,7 +2,7 @@ package org.ibit.rol.sac.persistence.eboib;
 
 import java.util.Date;
 
-public class TrNormativaLocalBean 
+public class TrNormativaBean 
 {
       protected String numeroboib;
       protected String validacion;
@@ -29,7 +29,7 @@ public class TrNormativaLocalBean
       protected String tra_paginaFinal_v;
       protected String tra_observaciones_v;  
 
-  public TrNormativaLocalBean()
+  public TrNormativaBean()
   {
   }
 

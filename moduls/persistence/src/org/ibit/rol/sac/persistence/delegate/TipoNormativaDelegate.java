@@ -40,7 +40,7 @@ public class TipoNormativaDelegate implements StatelessDelegate {
     	}
     }
     
-    public List listarTiposNormativas() throws DelegateException {
+    public List<Tipo> listarTiposNormativas() throws DelegateException {
         try {
             return getFacade().listarTiposNormativas();
         } catch (RemoteException e) {

@@ -1,13 +1,30 @@
 package org.ibit.rol.sac.integracion.ws.provider;
 
-import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.ibit.rol.sac.model.*;
-import org.ibit.rol.sac.model.ws.*;
-import org.ibit.rol.sac.persistence.delegate.*;
+import org.ibit.rol.sac.model.AdministracionRemota;
+import org.ibit.rol.sac.model.DocumentoRemoto;
+import org.ibit.rol.sac.model.EdificioRemoto;
+import org.ibit.rol.sac.model.FichaRemota;
+import org.ibit.rol.sac.model.Iniciacion;
+import org.ibit.rol.sac.model.NormativaRemota;
+import org.ibit.rol.sac.model.ProcedimientoRemoto;
+import org.ibit.rol.sac.model.TramiteRemoto;
+import org.ibit.rol.sac.model.UnidadAdministrativaRemota;
+import org.ibit.rol.sac.model.ws.DocumentoTransferible;
+import org.ibit.rol.sac.model.ws.EdificioTransferible;
+import org.ibit.rol.sac.model.ws.FichaTransferible;
+import org.ibit.rol.sac.model.ws.NormativaTransferible;
+import org.ibit.rol.sac.model.ws.ProcedimientoTransferible;
+import org.ibit.rol.sac.model.ws.TramiteTransferible;
+import org.ibit.rol.sac.model.ws.UnidadAdministrativaTransferible;
+import org.ibit.rol.sac.persistence.delegate.DelegateException;
+import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.delegate.FichaRemotaDelegate;
+import org.ibit.rol.sac.persistence.delegate.NormativaRemotaDelegate;
+import org.ibit.rol.sac.persistence.delegate.ProcedimientoRemotoDelegate;
+import org.ibit.rol.sac.persistence.delegate.TramiteRemotoDelegate;
+import org.ibit.rol.sac.persistence.delegate.UARemotaDelegate;
 
 
 public class ActualizacionServicio{
@@ -218,14 +235,14 @@ public class ActualizacionServicio{
 
 			log.debug("Recibido normativa para actualizar");
 
-			NormativaExternaRemotaDelegate delegate = DelegateUtil.getNormativaExternaRemotaDelegate();
-			NormativaExternaRemota normExtRemota = delegate.obtenerNormativaExternaRemota(idRemoto,normT.getId());
+			NormativaRemotaDelegate delegate = DelegateUtil.getNormativaRemotaDelegate();
+			NormativaRemota normExtRemota = delegate.obtenerNormativaRemota(idRemoto,normT.getId());
 
 			if (normExtRemota == null){
-				normExtRemota = new NormativaExternaRemota();
+				normExtRemota = new NormativaRemota();
 			}
 			normExtRemota.rellenar(normT);
-            delegate.grabarNormativaExternaRemota(normExtRemota);
+            delegate.grabarNormativaRemota(normExtRemota);
 		}
 
 		return null;
@@ -238,22 +255,22 @@ public class ActualizacionServicio{
 
 			log.debug("Recibido Normativa para actualizar");
 
-			NormativaExternaRemotaDelegate normDelegate = DelegateUtil.getNormativaExternaRemotaDelegate();
+			NormativaRemotaDelegate normDelegate = DelegateUtil.getNormativaRemotaDelegate();
 			ProcedimientoRemotoDelegate procDelegate = DelegateUtil.getProcedimientoRemotoDelegate();
             UARemotaDelegate uaRemDelegate = DelegateUtil.getUARemotaDelegate();
 
-			NormativaExternaRemota normRemota = normDelegate.obtenerNormativaExternaRemota(idRemoto,normT.getId());
+			NormativaRemota normRemota = normDelegate.obtenerNormativaRemota(idRemoto,normT.getId());
 			ProcedimientoRemoto procRemoto = procDelegate.obtenerProcedimientoRemoto(idRemoto,idProc);
 
 			if(procRemoto!=null){
 
 				if (normRemota == null){
 					AdministracionRemota administracionRemota = uaRemDelegate.obtenerAdministracionRemota(idRemoto);
-					normRemota = new NormativaExternaRemota();
+					normRemota = new NormativaRemota();
 					normRemota.setAdministracionRemota(administracionRemota);
 				}
 				normRemota.rellenar(normT);
-				normDelegate.grabarNormativaExternaRemota(normRemota);
+				normDelegate.grabarNormativaRemota(normRemota);
                 normDelegate.anyadirProcedimiento(procRemoto.getId(),normRemota.getId());
 			}
 
@@ -345,12 +362,12 @@ public class ActualizacionServicio{
 
 	public void borrarNormativa(final String idRemoto,Long idExt) throws DelegateException {
 		log.debug("Borrando Normativa");
-		DelegateUtil.getNormativaExternaRemotaDelegate().borrarNormativaRemota(idRemoto,idExt);
+		DelegateUtil.getNormativaRemotaDelegate().borrarNormativaRemota(idRemoto,idExt);
 	}
 
 	public void borrarNormativaProcedimiento(final String idRemoto, Long idExt, Long idProc) throws DelegateException {
 		log.debug("Borrando NormativaProc");
-		DelegateUtil.getNormativaExternaRemotaDelegate().eliminarProcNormativa(idRemoto,idExt,idProc);
+		DelegateUtil.getNormativaRemotaDelegate().eliminarProcNormativa(idRemoto,idExt,idProc);
 	}
 
 

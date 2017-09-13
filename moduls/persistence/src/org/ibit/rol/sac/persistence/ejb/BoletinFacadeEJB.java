@@ -115,7 +115,7 @@ public abstract class BoletinFacadeEJB extends HibernateEJB
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      * @return Devuelve <code>List</code> de todos los boletines.
      */
-    public List listarBoletines()
+    public  List<Boletin> listarBoletines()
     {
     	Session session = getSession();
     	try {

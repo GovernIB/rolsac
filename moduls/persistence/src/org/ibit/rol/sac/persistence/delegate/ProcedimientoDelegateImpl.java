@@ -430,6 +430,18 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
             throw new DelegateException(e);
         }
 	}
+	
+	
+	/**
+	 * Devuelve true si alguna normativa esta derogada.
+	 */
+	public boolean isNormativaDerogada(Long id)   throws DelegateException {
+		try {
+	           return getFacade().isNormativaDerogada(id);
+	        } catch (RemoteException e) {
+	            throw new DelegateException(e);
+	        }
+	}
     
 	
 }

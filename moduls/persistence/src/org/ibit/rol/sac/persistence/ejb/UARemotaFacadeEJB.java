@@ -392,7 +392,7 @@ public abstract class UARemotaFacadeEJB extends HibernateEJB {
 			Hibernate.initialize( ua.getHijos() );
 			Hibernate.initialize( ua.getFichasUA() );
 			Hibernate.initialize( ua.getProcedimientos() );
-			Hibernate.initialize( ua.getNormativas() );
+			Hibernate.initialize( ua.getUnidadesNormativas() );
 
 			return ua;
 

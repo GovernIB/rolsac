@@ -583,11 +583,11 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB
                     "select distinct hn" +
                     " from Auditoria as a" +
                     ", HistoricoNormativa as hn" +
-                    ", NormativaLocal as nl" +
+                    ", Normativa as nl" +
                     " where ( hn.id = a.historico.id )" +
                     " and ( hn.normativa.id = nl.id )" +
                     " and ( a.codigoOperacion in (:codOperacion) )" +
-                    " and ( nl.unidadAdministrativa.id in (:idUA) )" +
+                    " and  nl.id in (select unnor from UnidadNormativa unnor where unnor.unidadAdministrativa.id in (:idUA) )" +
                     " and ( a.fecha between :fechaInicio and :fechaFin )" +
                     clausulaUsuari);
 			
@@ -753,13 +753,13 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB
 				queryNormativa = session.createQuery(
 						"select count(distinct h) from Historico as h, " +
 						"					  Auditoria as a, " +
-						"					  NormativaLocal as nlo " +
+						"					  Normativa as nlo " + //inner join nlo.unidadesnormativas as unnor" +
 						"where h.id = a.historico.id " +
 						"	and h.class = HistoricoNormativa " +
 						"	and a.fecha between :fechaInicio and :fechaFin " +
 						"	and a.codigoOperacion = :tipoOperacion " +
 						clausulaUsuari +
-						"	and nlo.unidadAdministrativa.id in (:lId) ");
+						"   and nlo.id in (select unnor.normativa.id from UnidadNormativa unnor where unnor.unidadAdministrativa.id in (:lId) )"); //"	and unnor.unidadAdministrativa.id in (:lId) ");
 				
 				queryNormativa.setParameter("fechaInicio", fechaInicio, Hibernate.DATE);
 				queryNormativa.setParameter("fechaFin", fechaFin, Hibernate.DATE);

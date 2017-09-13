@@ -25,7 +25,7 @@ public class UploadUtil {
 		factory.setRepository(new File(TEMP_DIR));
 		ServletFileUpload upload = new ServletFileUpload(factory);
 		upload.setSizeMax(MAX_FILE_SIZE);
-		
+
 		return upload;
 	}	
 	

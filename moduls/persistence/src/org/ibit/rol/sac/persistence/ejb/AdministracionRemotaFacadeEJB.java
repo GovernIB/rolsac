@@ -15,7 +15,7 @@ import org.ibit.rol.sac.model.AdministracionRemota;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.EdificioRemoto;
 import org.ibit.rol.sac.model.FichaRemota;
-import org.ibit.rol.sac.model.NormativaExternaRemota;
+import org.ibit.rol.sac.model.NormativaRemota;
 import org.ibit.rol.sac.model.ProcedimientoRemoto;
 import org.ibit.rol.sac.model.TramiteRemoto;
 import org.ibit.rol.sac.model.UnidadAdministrativaRemota;
@@ -169,7 +169,6 @@ public abstract class AdministracionRemotaFacadeEJB extends HibernateEJB
 	 * @param id	Identificador de una administración remota.
 	 * @return Devuelve <code>Set<FichaRemota></code> de todas las fichas de una administración remota almacenadas.
 	 */
-	@SuppressWarnings("unchecked")
 	public Set<FichaRemota> listarFichasRemotas(Long id)
 	{
 		Session session = getSession();
@@ -195,7 +194,6 @@ public abstract class AdministracionRemotaFacadeEJB extends HibernateEJB
 	 * @param id	Identificador de una administración remota.
 	 * @return Devuelve <code>Set<ProcedimientoRemoto></code> de todos los procedimientos de una administración remota.
 	 */
-	@SuppressWarnings("unchecked")
 	public Set<ProcedimientoRemoto> listarProcedimientosRemotos(Long id)
 	{
 		Session session = getSession();
@@ -221,7 +219,6 @@ public abstract class AdministracionRemotaFacadeEJB extends HibernateEJB
 	 * @param id	Identificador de una administración remota.
 	 * @return Devuelve <code>Set<EdificioRemoto></code> de todos los edificios de una administración remota.
 	 */
-	@SuppressWarnings("unchecked")
 	public Set<EdificioRemoto> listarEdificiosRemotos(Long id)
 	{
 		Session session = getSession();
@@ -247,7 +244,6 @@ public abstract class AdministracionRemotaFacadeEJB extends HibernateEJB
 	 * @param id	Identificador de una administración remota.
 	 * @return Devuelve <code>Set<TramiteRemoto></code> de todos los trámites de una administración remota.
 	 */
-	@SuppressWarnings("unchecked")
 	public Set<TramiteRemoto> listarTramitesRemotos(Long id)
 	{
 		Session session = getSession();
@@ -271,17 +267,16 @@ public abstract class AdministracionRemotaFacadeEJB extends HibernateEJB
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 * @param id	Identificador de una administración remota.
-	 * @return Devuelve <code>Set<NormativaExternaRemota></code> de normativas externas remotas.
+	 * @return Devuelve <code>Set<NormativaRemota></code> de normativas externas remotas.
 	 */
-	@SuppressWarnings("unchecked")
-	public Set<NormativaExternaRemota> listarNormativasExternasRemotas(Long id)
+	public Set<NormativaRemota> listarNormativasRemotas(Long id)
 	{
 		Session session = getSession();
 		try {
 			AdministracionRemota administracionRemota = (AdministracionRemota) session.load(AdministracionRemota.class, id);
-			Hibernate.initialize(administracionRemota.getNormativasExternasRemotas());
-			
-			return administracionRemota.getNormativasExternasRemotas();
+			Hibernate.initialize(administracionRemota.getNormativasRemotas());
+			 
+			return administracionRemota.getNormativasRemotas();
 			
 		} catch (HibernateException he) {
 			throw new EJBException(he);
@@ -299,7 +294,6 @@ public abstract class AdministracionRemotaFacadeEJB extends HibernateEJB
 	 * @param id	Identificador de una administración remota.
 	 * @return Devuelve <code>Set<UnidadAdministrativaRemota></code> de todas las unidades administrativas de una administración remota. 
 	 */
-	@SuppressWarnings("unchecked")
 	public Set<UnidadAdministrativaRemota> listarUARemotas(Long id)
 	{
 		Session session = getSession();

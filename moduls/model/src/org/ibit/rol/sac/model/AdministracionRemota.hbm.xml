@@ -55,10 +55,10 @@
             <one-to-many class="org.ibit.rol.sac.model.TramiteRemoto"/>
         </set>
 
-        <set name="normativasExternasRemotas" cascade="all" inverse="true" lazy="true">
+        <set name="normativasRemotas" cascade="all" inverse="true" lazy="true">
             <cache usage="read-write"/>
             <key column="NER_CODADM" foreign-key="RSC_NERADM_FK"/>
-            <one-to-many class="org.ibit.rol.sac.model.NormativaExternaRemota"/>
+            <one-to-many class="org.ibit.rol.sac.model.NormativaRemota"/>
         </set>
 
         <set name="documentosRemotos" cascade="all" inverse="true" lazy="true">

@@ -22,8 +22,10 @@ public interface ProcedimentQueryService {
 
     public int getNumNormatives() throws QueryServiceException;
     
+    @Deprecated
     public int getNumNormativesLocals() throws QueryServiceException;
     
+    @Deprecated
     public int getNumNormativesExternes() throws QueryServiceException;
 
     public int getNumMateries() throws QueryServiceException;

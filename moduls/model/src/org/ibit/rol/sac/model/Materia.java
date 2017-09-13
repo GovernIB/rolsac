@@ -29,11 +29,11 @@ public class Materia extends Traducible implements Comparator {
         this.procedimientosLocales = procedimientosLocales;
     }
 
-    public Set getUnidadesmaterias() {
+    public Set<UnidadMateria> getUnidadesmaterias() {
         return unidadesmaterias;
     }
 
-    public void setUnidadesmaterias(Set unidadesmaterias) {
+    public void setUnidadesmaterias(Set<UnidadMateria> unidadesmaterias) {
         this.unidadesmaterias = unidadesmaterias;
     }
 
@@ -157,7 +157,7 @@ public class Materia extends Traducible implements Comparator {
 	private Long id;
     private String codiHita;
     private Set procedimientosLocales;
-    private Set unidadesmaterias;
+    private Set<UnidadMateria> unidadesmaterias;
     private Set fichas;
     private Set iconos;
     private Long codigoSIA;

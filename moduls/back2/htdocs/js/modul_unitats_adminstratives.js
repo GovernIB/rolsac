@@ -316,8 +316,9 @@ function CListaSimpleUAs() {
 	
 	this.guardar = function(element, url, id) {
 		
-		if (debug)
+		if (debug) {
 			console.log("Entrando en CListaSimpleUAs.guardar");
+		}
 		
 		that._guardar(element, url, id);
 		
@@ -326,18 +327,20 @@ function CListaSimpleUAs() {
 		// Ir añadiendo casos aquí.
 		var urlGuardarUnidadesMateria = "/materies/guardarUnidadesRelacionadas.do";
 		var urlGuardarUnidadesUsuario = "/usuaris/guardarUnidadesRelacionadas.do";
+		var urlGuardarUnidadesNormativa = "/normativa/guardarUnidadesRelacionadas.do";
 		
 		if ( url.indexOf(urlGuardarUnidadesMateria) != -1 
-				|| url.indexOf(urlGuardarUnidadesUsuario) != -1 ) {
+				|| url.indexOf(urlGuardarUnidadesUsuario) != -1 
+				|| url.indexOf(urlGuardarUnidadesNormativa) != -1) {
 			
-			if (typeof ModulUnitatAdministrativa != 'undefined')
+			if (typeof ModulUnitatAdministrativa != 'undefined') {
 				ModulUnitatAdministrativa.deshabilitarBotonGuardar();
-			
+			}
 		}
 				
-		if (debug)
+		if (debug) {
 			console.log("Entrando en CListaSimpleUAs.guardar");
-		
+		}
 	};
 	
 };

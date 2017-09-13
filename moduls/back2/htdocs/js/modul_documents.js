@@ -316,7 +316,7 @@ function CModulDocuments() {
             for (var i in idiomas) {
             	
                 var idioma = idiomas[i];                
-                jQuery("#doc_descripcio_" + idioma + ", #doc_titol_" + idioma + ", #doc_arxiu_" + idioma).each(limpiarCampo);
+                jQuery("#doc_descripcio_" + idioma + ", #doc_titol_" + idioma + ", #doc_arxiu_" + idioma +", #doc_url_" + idioma).each(limpiarCampo);
                 limpiarArchivoMultiidioma("arxiu_actual_doc", idioma);
 
             }
@@ -447,8 +447,10 @@ function CModulDocuments() {
 		                            that.pintar(data.document);
 		                        } else if (data.id == -1) {
 		                            Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
+		                            Error.llansar();
 		                        } else if (data.id < -1) {
 		                            Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
+		                            Error.llansar();
 		                        }
 		                    }
 		                });
@@ -575,20 +577,22 @@ function CListaSimpleDocumentos() {
 		// Ir añadiendo casos aquí.
 		var urlGuardarDocumentosProcedimiento = "/catalegProcediments/guardarDocumentosRelacionados.do";
 		var urlGuardarDocumentosFicha = "/fitxainf/guardarDocumentosRelacionados.do";
+		var urlGuardarDocumentosNormativa = "/normativa/guardarDocumentosRelacionados.do";
 		
 		if ( url.indexOf(urlGuardarDocumentosProcedimiento) != -1 
-				|| url.indexOf(urlGuardarDocumentosFicha) != -1 ) {
+				|| url.indexOf(urlGuardarDocumentosFicha) != -1 
+				|| url.indexof(urlGuardarDocumentosNormativa) != -1) {
 			
-			if (typeof ModulDocuments != 'undefined')
+			if (typeof ModulDocuments != 'undefined') {
 				ModulDocuments.deshabilitarBotonGuardar();
-			
+			}
 		}
 		
 		Detall.modificado(false);
 		
-		if (debug)
+		if (debug) {
 			console.log("Entrando en CListaSimpleDocumentos.guardar");
-		
+		}
 	};
 	
 };

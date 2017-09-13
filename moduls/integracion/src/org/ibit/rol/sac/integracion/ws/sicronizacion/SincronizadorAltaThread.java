@@ -28,7 +28,7 @@ import org.ibit.rol.sac.model.ws.UnidadAdministrativaTransferible;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.FichaRemotaDelegate;
-import org.ibit.rol.sac.persistence.delegate.NormativaExternaRemotaDelegate;
+import org.ibit.rol.sac.persistence.delegate.NormativaRemotaDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoRemotoDelegate;
 import org.ibit.rol.sac.persistence.delegate.TramiteRemotoDelegate;
 import org.ibit.rol.sac.persistence.delegate.UARemotaDelegate;
@@ -50,11 +50,11 @@ public class SincronizadorAltaThread extends SincronizadorThreadAbstract{
 	protected final transient SincronizacionServicio sincInvoker;
 	
 	//Delegate's
-	protected final transient  ProcedimientoRemotoDelegate procRemotoDelegate;
-	protected final transient  UARemotaDelegate uaRemotaDelegate;
-	protected final transient  FichaRemotaDelegate fichaRemotaDelegate;
-	protected final transient  TramiteRemotoDelegate tramiteRemotoDelegate;
-	protected final transient NormativaExternaRemotaDelegate normativaExternaRemotaDelegate;
+	protected final transient ProcedimientoRemotoDelegate procRemotoDelegate;
+	protected final transient UARemotaDelegate uaRemotaDelegate;
+	protected final transient FichaRemotaDelegate fichaRemotaDelegate;
+	protected final transient TramiteRemotoDelegate tramiteRemotoDelegate;
+	protected final transient NormativaRemotaDelegate normativaRemotaDelegate;
 
 	//Array con los codigos estandar de las HechosVitales de nuestra DB
 	protected final transient String[] hechosCE ;
@@ -91,7 +91,7 @@ public class SincronizadorAltaThread extends SincronizadorThreadAbstract{
 		uaRemotaDelegate = DelegateUtil.getUARemotaDelegate();
 		fichaRemotaDelegate = DelegateUtil.getFichaRemotaDelegate();
 		tramiteRemotoDelegate = DelegateUtil.getTramiteRemotoDelegate();
-		normativaExternaRemotaDelegate = DelegateUtil.getNormativaExternaRemotaDelegate();
+		normativaRemotaDelegate = DelegateUtil.getNormativaRemotaDelegate();
 		
 		try {
 			//Genero un Array con los CE de las materia de la BD

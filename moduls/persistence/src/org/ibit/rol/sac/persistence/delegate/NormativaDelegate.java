@@ -9,9 +9,8 @@ import javax.ejb.Handle;
 import javax.naming.NamingException;
 
 import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.DocumentoNormativa;
 import org.ibit.rol.sac.model.Normativa;
-import org.ibit.rol.sac.model.NormativaExterna;
-import org.ibit.rol.sac.model.NormativaLocal;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.persistence.intf.NormativaFacade;
@@ -47,17 +46,9 @@ public class NormativaDelegate implements StatelessDelegate
         }
     }
     
-    public Long grabarNormativaLocal(NormativaLocal norma, Long idUA) throws DelegateException {
+    public Long grabarNormativa(Normativa norma, Long idUA) throws DelegateException {
         try {
-            return getFacade().grabarNormativaLocal(norma, idUA);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    public Long grabarNormativaExterna(NormativaExterna norma) throws DelegateException {
-        try {
-            return getFacade().grabarNormativaExterna(norma);
+            return getFacade().grabarNormativa(norma, idUA);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
@@ -200,6 +191,20 @@ public class NormativaDelegate implements StatelessDelegate
             throw new DelegateException(e);
         }
     }
+    
+    /**
+     * Obtener documento normativa.
+     * 
+     * @param id
+     * @return
+     */
+	public DocumentoNormativa obtenerDocumentoNormativa(Long id) throws DelegateException {
+		try {
+            return getFacade().obtenerDocumentoNormativa(id);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+	}
 
    	
    	/* ========================================================= */
@@ -226,6 +231,11 @@ public class NormativaDelegate implements StatelessDelegate
         }
     }
 
+    /**
+     * Buscar ids normativas.
+     * @return
+     * @throws DelegateException
+     */
 	public List<Long> buscarIdsNormativas() throws DelegateException{
 		try {
 			return getFacade().buscarIdsNormativas();
@@ -233,5 +243,32 @@ public class NormativaDelegate implements StatelessDelegate
 			throw new DelegateException(e);
 		}
 	}
-    
+
+	/**
+	 * Reordenar documentos. 
+	 * @param idNormativa
+	 * @param idDocumentos
+	 * @throws DelegateException
+	 */
+	public void reordenarDocumentos(final Long idNormativa, List<Long> idDocumentos) throws DelegateException {
+		try {
+             getFacade().reordenarDocumentos(idNormativa, idDocumentos);	
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+	}
+
+	/***
+	 * Comprueba si el número de normativa es correcto. 
+	 * @param normativa
+	 * @return
+	 */
+	public boolean isNumNormativaCorrecto(Normativa normativa) throws DelegateException {
+		try {
+            return getFacade().isNumNormativaCorrecto(normativa);	
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
+	}
+   
 }

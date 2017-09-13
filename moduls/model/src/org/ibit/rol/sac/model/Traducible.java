@@ -12,11 +12,11 @@ public class Traducible implements ValueObject {
 	
 	private Map<String,Traduccion> traducciones = new HashMap<String,Traduccion>();
 
-    protected Map<String,Traduccion> getTraducciones() {
+    public Map<String,Traduccion> getTraducciones() {
         return traducciones;
     }
 
-    protected void setTraducciones(Map<String,Traduccion> traducciones) {
+    public void setTraducciones(Map<String,Traduccion> traducciones) {
         this.traducciones = traducciones;
     }
 

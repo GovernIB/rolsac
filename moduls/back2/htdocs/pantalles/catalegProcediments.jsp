@@ -65,6 +65,7 @@
     var pagTraduirDocument = '<c:url value="/documents/traduir.do" />';
     var pagTraduirDocumentTramit = '<c:url value="/documentsTramit/traduir.do" />';
     var pagListarHechosVitales = '<c:url value="/catalegProcediments/listarHechosVitales.do" />';
+    var pagNormativaVigentes = '<c:url value="/catalegProcediments/checkNormativaVigente.do" />';
     var urlPrevisualizarProcedimiento = '<c:out value="${urlPrevisualitzacio}"/>';
     var modulos = '<c:url value="/catalegProcediments/modulos.do" />';
 
@@ -163,6 +164,8 @@
     var txtNoHiHaNormativaSeleccionada = txtNoHiHa + " " + txtNormativa.toLowerCase() + " " + txtSeleccionada.toLowerCase();
     var txtNoHiHaNormativesSeleccionades = txtNoHiHa + " " + txtNormatives.toLowerCase() + " " + txtSeleccionades.toLowerCase();
     var txtNumero = "<spring:message code='camp.numero'/>";
+    var txtNormativaDerogadaTitol= "<spring:message code='proc.error.normativa.derogadas.titulo'/>";
+    var txtNormativaDerogada= "<spring:message code='proc.error.normativa.derogadas'/>";
     
     var txtImmediat = "<spring:message code='txt.immediat'/>";
     var txtPublicacio = "<spring:message code='boto.publicacio'/>";

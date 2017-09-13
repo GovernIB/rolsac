@@ -114,7 +114,7 @@ SearchNormativa {
 			if (abortar) break;
 			for (String enviamentUrl : rdf.enviaments) {
 				if (abortar) break;
-				TrNormativaLocalBean normativa =  getEnviament(rdf, enviamentUrl);
+				TrNormativaBean normativa =  getEnviament(rdf, enviamentUrl);
 	            if (numregboib.equals("")) {
 	            	//No estamos buscando por numeroboib
 		            meterListaNormativa(normativa);
@@ -150,12 +150,12 @@ SearchNormativa {
 
 	}
 
-	private TrNormativaLocalBean getEnviament ( BoibResult rdf, String inputFileName ) {
+	private TrNormativaBean getEnviament ( BoibResult rdf, String inputFileName ) {
 
-		TrNormativaLocalBean normbean = new TrNormativaLocalBean();
+		TrNormativaBean normbean = new TrNormativaBean();
 		Model m = loadRdf (inputFileName);
 
-		//CATAL�
+		//CATALA
 		Resource res = m.getResource(inputFileName.substring(0, inputFileName.length()-4));
 
 		normbean.setNumeroboib(rdf.numBoib);

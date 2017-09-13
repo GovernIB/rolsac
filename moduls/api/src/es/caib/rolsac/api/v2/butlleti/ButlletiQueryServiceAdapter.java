@@ -54,17 +54,19 @@ public class ButlletiQueryServiceAdapter extends ButlletiDTO implements Butlleti
         }
     }
 
+    @Deprecated
     public int getNumNormativesLocals() throws QueryServiceException {
         try {
-            return butlletiQueryServiceStrategy.getNumNormatives(getId(), TIPUS_NORMATIVA.LOCAL);
+            return butlletiQueryServiceStrategy.getNumNormatives(getId(), TIPUS_NORMATIVA.TOTES);
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de normativas locales.", e);
         }
     }
 
+    @Deprecated
     public int getNumNormativesExternes() throws QueryServiceException {
         try {
-            return butlletiQueryServiceStrategy.getNumNormatives(getId(), TIPUS_NORMATIVA.EXTERNA);
+            return butlletiQueryServiceStrategy.getNumNormatives(getId(), TIPUS_NORMATIVA.TOTES);
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de normativas externas.", e);
         }

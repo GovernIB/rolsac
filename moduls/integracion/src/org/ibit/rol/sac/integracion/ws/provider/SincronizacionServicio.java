@@ -257,13 +257,12 @@ public class SincronizacionServicio {
 		}
     }
     
-    @SuppressWarnings("unchecked")
-	public NormativaTransferible[] recogerNormativasRelacionadas(final Long idProcedimiento) throws Exception {
+   public NormativaTransferible[] recogerNormativasRelacionadas(final Long idProcedimiento) throws Exception {
     	log.debug("recogerNormativasRelacionados");
     	try {
-            final NormativaExternaRemotaDelegate normativaExternaRemotaDelegate = DelegateUtil.getNormativaExternaRemotaDelegate();
+            final NormativaRemotaDelegate normativaRemotaDelegate = DelegateUtil.getNormativaRemotaDelegate();
 
-            final List<Normativa> normativas = normativaExternaRemotaDelegate.obtenerNormativasProcedimiento(idProcedimiento);
+            final List<Normativa> normativas = normativaRemotaDelegate.obtenerNormativasProcedimiento(idProcedimiento);
             NormativaTransferible[] normativasTransArray = null;
             if(normativas!=null && !normativas.isEmpty()){
                 final List<NormativaTransferible> normativasTrans = new ArrayList<NormativaTransferible>();
@@ -283,8 +282,7 @@ public class SincronizacionServicio {
     
     //VUDS
     
-    @SuppressWarnings("unchecked")
-	public TramiteTransferible[] recogerTramitesRelacionados(final Long idProcedimiento) throws Exception {
+    public TramiteTransferible[] recogerTramitesRelacionados(final Long idProcedimiento) throws Exception {
     	log.debug("recogerTramitesRelacionados");
     	try {
             final TramiteRemotoDelegate tramiteRemotoDelegate = DelegateUtil.getTramiteRemotoDelegate();

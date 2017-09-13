@@ -47,6 +47,7 @@ import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
 import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.UnidadNormativa;
 import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.model.criteria.BuscadorProcedimientoCriteria;
@@ -228,6 +229,34 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			
 		}
 		
+	}
+	
+	
+	/** 
+	 * Check si alguna normativa esta derogada.
+	 * 
+	 * @ejb.interface-method	  
+	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+	 */
+	public boolean isNormativaDerogada(Long id)   throws DelegateException {
+		Session session = getSession();
+		boolean resultado = false;
+		try {
+			ProcedimientoLocal procedimientoBD = obtenerProcedimientoNewBack(id);
+			for(Normativa normativa : procedimientoBD.getNormativas()) {
+				if (!normativa.isVigente()) {
+					resultado = true; break;
+				}
+			}
+		} catch (Exception he) {
+			
+			throw new EJBException(he);
+			
+		} finally {
+			
+			close(session);			
+		}
+		return resultado;
 	}
 	
 	/**
@@ -509,16 +538,19 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 					Hibernate.initialize(procedimiento.getOrganResolutori().getHijos());
 				}
 
-				Hibernate.initialize(procedimiento.getUnidadAdministrativa().getNormativas());
+				Hibernate.initialize(procedimiento.getUnidadAdministrativa().getUnidadesNormativas());
 				Hibernate.initialize(procedimiento.getUnidadAdministrativa().getEdificios());
 
-				for (Normativa n : procedimiento.getUnidadAdministrativa().getNormativas()) {
-					Map<String, Traduccion> mapaTraduccions = n.getTraduccionMap();
-					Set<String> idiomes = mapaTraduccions.keySet();
-					for (Iterator<String> i = idiomes.iterator(); i.hasNext();) {
-						TraduccionNormativa trad = (TraduccionNormativa)n.getTraduccion(i.next());
-						if (trad != null)
-							Hibernate.initialize(trad.getArchivo());
+				if (procedimiento.getUnidadAdministrativa().getUnidadesNormativas() != null) {
+					for (UnidadNormativa n : procedimiento.getUnidadAdministrativa().getUnidadesNormativas()) {
+						Map<String, Traduccion> mapaTraduccions = n.getNormativa().getTraduccionMap();
+						Set<String> idiomes = mapaTraduccions.keySet();
+						for (Iterator<String> i = idiomes.iterator(); i.hasNext();) {
+							TraduccionNormativa trad = (TraduccionNormativa)n.getNormativa().getTraduccion(i.next());
+							if (trad != null) {
+								Hibernate.initialize(trad.getArchivo());
+							}
+						}
 					}
 				}
 
@@ -2174,7 +2206,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				Hibernate.initialize(procedimiento.getNormativas());
 				Hibernate.initialize(procedimiento.getUnidadAdministrativa());
 				Hibernate.initialize(procedimiento.getUnidadAdministrativa().getHijos());
-				Hibernate.initialize(procedimiento.getUnidadAdministrativa().getNormativas());
+				Hibernate.initialize(procedimiento.getUnidadAdministrativa().getUnidadesNormativas());
 				Hibernate.initialize(procedimiento.getTramites());
 				Hibernate.initialize(procedimiento.getHechosVitalesProcedimientos());
 				Hibernate.initialize(procedimiento.getFamilia());

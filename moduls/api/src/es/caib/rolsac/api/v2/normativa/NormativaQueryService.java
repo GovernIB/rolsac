@@ -12,7 +12,7 @@ import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServi
 
 public interface NormativaQueryService {
     
-    public static enum TIPUS_NORMATIVA {TOTES, LOCAL, EXTERNA};
+    public static enum TIPUS_NORMATIVA {TOTES};
 
     public int getNumAfectades() throws QueryServiceException;
 

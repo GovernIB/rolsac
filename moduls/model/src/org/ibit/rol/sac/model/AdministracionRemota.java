@@ -32,7 +32,7 @@ public class AdministracionRemota implements ValueObject {
     private Set<ProcedimientoRemoto> procedimientosRemotos;
     private Set<EdificioRemoto> edificiosRemotos;
     private Set<TramiteRemoto> tramitesRemotos;
-    private Set<NormativaExternaRemota> normativasExternasRemotas;
+    private Set<NormativaRemota> normativasRemotas;
     private Set<DocumentoRemoto> documentosRemotos;
 
     public EspacioTerritorial getEspacioTerrit() {
@@ -141,12 +141,12 @@ public class AdministracionRemota implements ValueObject {
 		unidadesRemotas.remove(administrativaRemota);
 	}
 
-    public void addNormativaExternaRemota(NormativaExternaRemota normativaExternaRemota){
-    	normativasExternasRemotas.add(normativaExternaRemota);
+    public void addNormativaRemota(NormativaRemota normativaRemota){
+    	normativasRemotas.add(normativaRemota);
     }
 
-    public void removeNormativaExternaRemota(NormativaExternaRemota normativaExternaRemota){
-    	normativasExternasRemotas.remove(normativaExternaRemota);
+    public void removeNormativaRemota(NormativaRemota normativaRemota){
+    	normativasRemotas.remove(normativaRemota);
     }
 
      public void addDocumentoRemoto(DocumentoRemoto documentoRemoto){
@@ -227,12 +227,12 @@ public class AdministracionRemota implements ValueObject {
 	}
 
 
-    public Set<NormativaExternaRemota> getNormativasExternasRemotas() {
-        return normativasExternasRemotas;
+    public Set<NormativaRemota> getNormativasRemotas() {
+        return normativasRemotas;
     }
 
-    public void setNormativasExternasRemotas(Set<NormativaExternaRemota> normativasExternasRemotas) {
-        this.normativasExternasRemotas = normativasExternasRemotas;
+    public void setNormativasRemotas(Set<NormativaRemota> normativasRemotas) {
+        this.normativasRemotas = normativasRemotas;
     }
 
     public Set<DocumentoRemoto> getDocumentosRemotos() {

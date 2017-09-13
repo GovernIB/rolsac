@@ -16,10 +16,12 @@ import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.TraduccionFicha;
 import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.UnidadNormativa;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegate;
@@ -211,14 +213,21 @@ public class IndexacionUtil {
 	 * @return
 	 */
 	public static boolean isIndexable(final Normativa normativa) {
+		boolean indexable;
 		if (normativa.getValidacion() != 1 ) {
-			return false;
+			indexable = false;
+		} else {
+			indexable = false;
+			for(UnidadNormativa unidadNormativa : normativa.getUnidadesnormativas()) {
+				if (unidadNormativa.getUnidadAdministrativa() == null || unidadNormativa.getUnidadAdministrativa().getValidacion() == 1) {
+					indexable = true;
+					break;
+				}
+			}
 		}
-		// TODO Pendiente tratar Normativas externas (sin UA)
-		if (normativa.getUnidadAdministrativa() == null || normativa.getUnidadAdministrativa().getValidacion() != 1) {
-			return false;
-		}
-		return true;
+		
+		return indexable;
+		
 	}
 	
 	/**

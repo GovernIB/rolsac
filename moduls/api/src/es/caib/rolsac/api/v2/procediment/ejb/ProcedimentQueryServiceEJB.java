@@ -14,8 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.Materia;
-import org.ibit.rol.sac.model.NormativaExterna;
-import org.ibit.rol.sac.model.NormativaLocal;
+import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.Tramite;
 
@@ -32,7 +31,6 @@ import es.caib.rolsac.api.v2.materia.MateriaCriteria;
 import es.caib.rolsac.api.v2.materia.MateriaDTO;
 import es.caib.rolsac.api.v2.normativa.NormativaCriteria;
 import es.caib.rolsac.api.v2.normativa.NormativaDTO;
-import es.caib.rolsac.api.v2.normativa.NormativaQueryService.TIPUS_NORMATIVA;
 import es.caib.rolsac.api.v2.normativa.co.NormativaByProcedimientoCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
@@ -66,8 +64,7 @@ public class ProcedimentQueryServiceEJB extends HibernateEJB {
     private static final String HQL_PROCEDIMIENTO_ALIAS = "p";
     private static final String HQL_TRAMITES_CLASS = HQL_PROCEDIMIENTO_ALIAS + ".tramites";
     private static final String HQL_TRAMITES_ALIAS = "t";
-    private static final String HQL_NORMATIVAS_LOCAL_CLASS = "NormativaLocal";
-    private static final String HQL_NORMATIVAS_EXTERNA_CLASS = "NormativaExterna";
+    private static final String HQL_NORMATIVAS_CLASS = "Normativa";
     private static final String HQL_NORMATIVAS_ALIAS = "n";
     private static final String HQL_MATERIAS_CLASS = HQL_PROCEDIMIENTO_ALIAS + ".materias";
     private static final String HQL_MATERIAS_ALIAS = "m";
@@ -156,23 +153,14 @@ public class ProcedimentQueryServiceEJB extends HibernateEJB {
             criteris.add(normativaByProcCO);
             List<FromClause> entities = new ArrayList<FromClause>();
             
-            if (tipus == TIPUS_NORMATIVA.TOTES.ordinal() || tipus == TIPUS_NORMATIVA.LOCAL.ordinal()){
-                entities.add(new FromClause(HQL_NORMATIVAS_LOCAL_CLASS, HQL_NORMATIVAS_ALIAS));
-                entities.add(new FromClause(HQL_NORMATIVAS_ALIAS + ".procedimientos", HQL_PROCEDIMIENTO_ALIAS));            
-                qb = new QueryBuilder("n", entities, null, null, true);
-                qb.extendCriteriaObjects(criteris);                            
-                query = qb.createQuery(session);
-                numResultats = numResultats + getNumberResults(query);
-            }
-            if (tipus == TIPUS_NORMATIVA.TOTES.ordinal() || tipus == TIPUS_NORMATIVA.EXTERNA.ordinal()){
-                entities = new ArrayList<FromClause>();
-                entities.add(new FromClause(HQL_NORMATIVAS_EXTERNA_CLASS, HQL_NORMATIVAS_ALIAS));
-                entities.add(new FromClause(HQL_NORMATIVAS_ALIAS + ".procedimientos", HQL_PROCEDIMIENTO_ALIAS));            
-                qb = new QueryBuilder(HQL_NORMATIVAS_ALIAS, entities, null, null, true);
-                qb.extendCriteriaObjects(criteris);
-                query = qb.createQuery(session);
-                numResultats = numResultats + getNumberResults(query);
-            }
+            entities = new ArrayList<FromClause>();
+            entities.add(new FromClause(HQL_NORMATIVAS_CLASS, HQL_NORMATIVAS_ALIAS));
+            entities.add(new FromClause(HQL_NORMATIVAS_ALIAS + ".procedimientos", HQL_PROCEDIMIENTO_ALIAS));            
+            qb = new QueryBuilder(HQL_NORMATIVAS_ALIAS, entities, null, null, true);
+            qb.extendCriteriaObjects(criteris);
+            query = qb.createQuery(session);
+            numResultats = numResultats + getNumberResults(query);
+        
         } catch (HibernateException e) {
             log.error(e);
         } catch (CriteriaObjectParseException e) {
@@ -331,7 +319,7 @@ public class ProcedimentQueryServiceEJB extends HibernateEJB {
             List<FromClause> entities = new ArrayList<FromClause>();
             entities.add(new FromClause(HQL_PROCEDIMIENTO_CLASS, HQL_PROCEDIMIENTO_ALIAS));
             entities.add(new FromClause(HQL_TRAMITES_CLASS, HQL_TRAMITES_ALIAS));
-            QueryBuilder qb = new QueryBuilder(HQL_TRAMITES_ALIAS, entities, tramitCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
+            QueryBuilder qb = new QueryBuilder(HQL_TRAMITES_ALIAS, entities, null, null);//tramitCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
             
             ProcedimentCriteria pc = new ProcedimentCriteria();
@@ -372,9 +360,7 @@ public class ProcedimentQueryServiceEJB extends HibernateEJB {
         List<NormativaDTO> normativaDTOList = new ArrayList<NormativaDTO>();
         List<CriteriaObject> criteris;
         Session session = null;
-        boolean incluirExternas = (normativaCriteria.getIncluirExternas() == null)? false : normativaCriteria.getIncluirExternas();
-        normativaCriteria.setIncluirExternas(null); // Para evitar que se parsee como los demas criterias
-
+       
         try {
             criteris = BasicUtils.parseCriterias(NormativaCriteria.class, HQL_NORMATIVAS_ALIAS, HQL_TRADUCCIONES_ALIAS, normativaCriteria);
             CriteriaObject normativaByProcCO = new NormativaByProcedimientoCriteria(HQL_PROCEDIMIENTO_ALIAS);
@@ -382,40 +368,21 @@ public class ProcedimentQueryServiceEJB extends HibernateEJB {
             criteris.add(normativaByProcCO);
             
             List<FromClause> entities = new ArrayList<FromClause>();
-            entities.add(new FromClause(HQL_NORMATIVAS_LOCAL_CLASS, HQL_NORMATIVAS_ALIAS));
+            entities.add(new FromClause(HQL_NORMATIVAS_CLASS, HQL_NORMATIVAS_ALIAS));
             entities.add(new FromClause(HQL_NORMATIVAS_ALIAS + ".procedimientos", HQL_PROCEDIMIENTO_ALIAS));            
             QueryBuilder qb = new QueryBuilder("n", entities, normativaCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
             
             session = getSession();
             Query query = qb.createQuery(session);
-            List<NormativaLocal> normativasLocalesResult = (List<NormativaLocal>) query.list();
-            List<NormativaExterna> normativasExternasResult = null;
-            if (incluirExternas) {
-                criteris = BasicUtils.parseCriterias(NormativaCriteria.class, HQL_NORMATIVAS_ALIAS, HQL_TRADUCCIONES_ALIAS, normativaCriteria);
-                criteris.add(normativaByProcCO);
-                entities = new ArrayList<FromClause>();
-                entities.add(new FromClause(HQL_NORMATIVAS_EXTERNA_CLASS, HQL_NORMATIVAS_ALIAS));
-                entities.add(new FromClause(HQL_NORMATIVAS_ALIAS + ".procedimientos", HQL_PROCEDIMIENTO_ALIAS));            
-                qb = new QueryBuilder(HQL_NORMATIVAS_ALIAS, entities, normativaCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
-                qb.extendCriteriaObjects(criteris);
-                query = qb.createQuery(session);
-                normativasExternasResult = (List<NormativaExterna>) query.list();
-            }
+            List<Normativa> normativasResult = (List<Normativa>) query.list();
 
             NormativaDTO dto;
-            for (NormativaLocal normativa : normativasLocalesResult) {
+            for (Normativa normativa : normativasResult) {
                 dto = (NormativaDTO) BasicUtils.entityToDTO(NormativaDTO.class, normativa, normativaCriteria.getIdioma());
-                dto.setLocal(true);
                 normativaDTOList.add(dto);
             }
-            if (incluirExternas) {
-                for (NormativaExterna normativa : normativasExternasResult) {
-                    dto = (NormativaDTO) BasicUtils.entityToDTO(NormativaDTO.class, normativa, normativaCriteria.getIdioma());
-                    dto.setLocal(false);
-                    normativaDTOList.add(dto);
-                }
-            }
+           
         } catch (HibernateException e) {
             log.error(e);
         } catch (CriteriaObjectParseException e) {

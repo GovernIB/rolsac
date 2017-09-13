@@ -52,10 +52,10 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
     private Tratamiento tratamiento;
     private Set<Edificio> edificios;
     private Set<Personal> personal;
-    private Set<Normativa> normativas;
     private Set<ProcedimientoLocal> procedimientos;
     private Set<Tramite> tramites;
     private Set<UnidadMateria> unidadesMaterias;
+    private Set<UnidadNormativa> unidadesNormativas;
     private Set usuarios = new HashSet();
     private List<FichaUA> fichasUA;
     private EspacioTerritorial espacioTerrit;
@@ -278,14 +278,6 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
         this.personal = personal;
     }
 
-    public Set<Normativa> getNormativas() {
-        return normativas;
-    }
-
-    public void setNormativas(Set<Normativa> normativas) {
-        this.normativas = normativas;
-    }
-
     public Set<ProcedimientoLocal> getProcedimientos() {
         return procedimientos;
     }
@@ -464,25 +456,44 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
         unidadMateria.setUnidad(this);
         unidadesMaterias.add(unidadMateria);
     }
+    
+    public void addUnidadNormativa(UnidadNormativa unidadNormativa) {
+        unidadNormativa.setUnidadAdministrativa(this);
+        unidadesNormativas.add(unidadNormativa);
+    }
 
     public void removeUnidadMateria(UnidadMateria unidadMateria) {
         unidadesMaterias.remove(unidadMateria);
     }
     
-    public void addProcedimientoLocal(ProcedimientoLocal procedimientoLocal){
+    public void removeUnidadNormativa(UnidadNormativa unidadNormativa) {
+        unidadesNormativas.remove(unidadNormativa);
+    }
+    
+    
+    /**
+	 * @return the unidadesNormativas
+	 */
+	public Set<UnidadNormativa> getUnidadesNormativas() {
+		return unidadesNormativas;
+	}
+
+	/**
+	 * @param unidadesNormativas the unidadesNormativas to set
+	 */
+	public void setUnidadesNormativas(Set<UnidadNormativa> unidadesNormativas) {
+		this.unidadesNormativas = unidadesNormativas;
+	}
+
+	public void addProcedimientoLocal(ProcedimientoLocal procedimientoLocal){
         procedimientos.add(procedimientoLocal);
     }
 
     public void removeProcedimientoLocal(ProcedimientoLocal procedimientoLocal) {
         procedimientos.remove(procedimientoLocal);
     }
-    
-    public void removeNormativa(Normativa normativa) {
-        normativas.remove(normativa);
-    }    
-    
-
-    /* Gesti�n del organigrama */
+      
+    /* Gestion del organigrama */
 
     public boolean isRaiz() {
         return padre == null;
@@ -620,17 +631,17 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
 	}
 	
     /**
-     * M�todo que devuelve una Lista con los Ids de las Normativas relacionados con la UA. 
+     * Metodo que devuelve una Lista con los Ids de las Normativas relacionados con la UA. 
      * @author Indra
      * @return Devuelve un Lista con Ids de los Normativas relacionados
      */
 	public List<Long> getIdsNormativas(){
 		List<Long> idsList = new ArrayList<Long>();
-		Iterator<Normativa> iterNorma = this.normativas.iterator();
-	  	while(iterNorma.hasNext()){
-	  		Normativa normaLocal= (Normativa)iterNorma.next();
-	  		idsList.add(normaLocal.getId());
-	  	}
+		if (this.unidadesNormativas != null) {
+			for(UnidadNormativa unidadNormativa : this.unidadesNormativas) {
+				idsList.add(unidadNormativa.getId());
+			}
+		}
 	  	return idsList;
 	}
 

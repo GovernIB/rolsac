@@ -20,14 +20,16 @@ public class NormativaDTO implements ValueObject, Comparable {
     private String tipo;
     private String tipologia;
     private Date fechaDate; //para el compareTo
-    private Boolean caducat;
+    private Boolean vigente;
     private String registro;
+    private String numNormativa;
+    
 	
     public NormativaDTO() {
     	super();
     }
 
-	public NormativaDTO(long id, long numero, String titulo, Date fecha, Date fecha_boletin, String boletin, String tipo, String tipologia, Boolean caducat) {
+	public NormativaDTO(long id, long numero, String titulo, Date fecha, Date fecha_boletin, String boletin, String tipo, String tipologia, Boolean vigente, String numNormativa) {
 		
 	    super();
 	    
@@ -41,11 +43,12 @@ public class NormativaDTO implements ValueObject, Comparable {
 	    this.tipologia = tipologia;
 	    this.fecha_boletin = fecha_boletin != null ? df.format(fecha_boletin) : "";
 	    this.setBoletin(boletin);
-	    this.caducat = caducat;
+	    this.vigente = vigente;
+	    this.numNormativa = numNormativa;
 	}
 
-	public NormativaDTO(long id, long numero, String titulo, Date fecha, Date fecha_boletin, String tipo, String tipologia, Boolean caducat, String registro) {
-		this(id, numero, titulo, fecha, fecha_boletin, null, tipo, tipologia, caducat);
+	public NormativaDTO(long id, long numero, String titulo, Date fecha, Date fecha_boletin, String tipo, String tipologia, Boolean vigente, String registro) {
+		this(id, numero, titulo, fecha, fecha_boletin, null, tipo, tipologia, vigente, "");
 		this.registro = registro;
 	}
 
@@ -249,12 +252,20 @@ public class NormativaDTO implements ValueObject, Comparable {
 		this.tipo = tipo;
 	}
 
-	public void setCaducat(Boolean caducat) {
-		this.caducat = caducat;
+	/**
+	 * Set vigente.
+	 * @param vigente
+	 */
+	public void setVigente(Boolean vigente) {
+		this.vigente = vigente;
 	}
 
-	public Boolean getCaducat() {
-		return caducat;
+	/**
+	 * Get vigente.
+	 * @return vigente.
+	 */
+	public Boolean getVigente() {
+		return vigente;
 	}
 
 	public void setRegistro(String registro) {
@@ -263,6 +274,20 @@ public class NormativaDTO implements ValueObject, Comparable {
 
 	public String getRegistro() {
 		return registro;
+	}
+
+	/**
+	 * @return the numNormativa
+	 */
+	public String getNumNormativa() {
+		return numNormativa;
+	}
+
+	/**
+	 * @param numNormativa the numNormativa to set
+	 */
+	public void setNumNormativa(String numNormativa) {
+		this.numNormativa = numNormativa;
 	}
 	
 }

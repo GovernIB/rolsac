@@ -12,8 +12,7 @@ import net.sf.hibernate.Session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Afectacion;
-import org.ibit.rol.sac.model.NormativaExterna;
-import org.ibit.rol.sac.model.NormativaLocal;
+import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 
 import es.caib.rolsac.api.v2.afectacio.AfectacioDTO;
@@ -54,8 +53,6 @@ public class NormativaQueryServiceEJB extends HibernateEJB {
     private static Log log = LogFactory.getLog(NormativaQueryServiceEJB.class);
 
     private static final String HQL_NORMATIVA_CLASS = "Normativa";
-    private static final String HQL_NORMATIVA_LOCAL_CLASS = "NormativaLocal";
-    private static final String HQL_NORMATIVA_EXTERNA_CLASS = "NormativaExterna";    
     private static final String HQL_NORMATIVA_ALIAS = "n";
     private static final String HQL_PROCEDIMIENTOS_LOCALES_CLASS = HQL_NORMATIVA_ALIAS + ".procedimientos";
     private static final String HQL_PROCEDIMIENTOS_LOCALES_ALIAS = "p";
@@ -101,27 +98,17 @@ public class NormativaQueryServiceEJB extends HibernateEJB {
         try {
             session = getSession();
             
-            Query query = session.createQuery("SELECT DISTINCT nafec FROM NormativaLocal AS n, n.traducciones AS trad LEFT JOIN n.afectadas AS afec LEFT JOIN afec.normativa AS nafec WHERE INDEX(trad) = :idioma and n.id = :id ");
+            Query query = session.createQuery("SELECT DISTINCT nafec FROM Normativa AS n, n.traducciones AS trad LEFT JOIN n.afectadas AS afec LEFT JOIN afec.normativa AS nafec WHERE INDEX(trad) = :idioma and n.id = :id ");
             query.setParameter("idioma", BasicUtils.getDefaultLanguage());
             query.setParameter("id", id);
             
-            List<NormativaLocal> normativaLocalResult = (List<NormativaLocal>) query.list();                    
-            for (NormativaLocal normativa : normativaLocalResult) {
+            List<Normativa> normativaResult = (List<Normativa>) query.list();                    
+            for (Normativa normativa : normativaResult) {
                 dto = (NormativaDTO) BasicUtils.entityToDTO(NormativaDTO.class,  normativa, BasicUtils.getDefaultLanguage());
-                dto.setLocal(true);
                 normativaDTOList.add(dto);
             }
 
-            query = session.createQuery("SELECT DISTINCT nafec FROM NormativaExterna AS n, n.traducciones AS trad LEFT JOIN n.afectadas AS afec LEFT JOIN afec.normativa AS nafec WHERE INDEX(trad) = :idioma and n.id = :id ");
-            query.setParameter("idioma", BasicUtils.getDefaultLanguage());
-            query.setParameter("id", id);
-
-            List<NormativaExterna> normativaExternaResult = (List<NormativaExterna>) query.list();
-            for (NormativaExterna normativa : normativaExternaResult) {
-                dto = (NormativaDTO) BasicUtils.entityToDTO(NormativaDTO.class,  normativa, BasicUtils.getDefaultLanguage());
-                dto.setLocal(false);
-                normativaDTOList.add(dto);
-            }
+           
         } catch (HibernateException e) {
             log.error(e);
         } finally {
@@ -145,13 +132,9 @@ public class NormativaQueryServiceEJB extends HibernateEJB {
         try {
             session = getSession();
             
-            Query query = session.createQuery("SELECT COUNT(DISTINCT nafec) FROM NormativaLocal AS n LEFT JOIN n.afectadas AS afec LEFT JOIN afec.normativa AS nafec WHERE n.id = :id ");            
+            Query query = session.createQuery("SELECT COUNT(DISTINCT nafec) FROM Normativa AS n LEFT JOIN n.afectadas AS afec LEFT JOIN afec.normativa AS nafec WHERE n.id = :id ");            
             query.setParameter("id", id);
             numResultats = ((Integer) query.uniqueResult()).intValue();                    
-
-            query = session.createQuery("SELECT COUNT(DISTINCT nafec) FROM NormativaExterna AS n LEFT JOIN n.afectadas AS afec LEFT JOIN afec.normativa AS nafec WHERE n.id = :id ");
-            query.setParameter("id", id);
-            numResultats = getNumberResults(query);
         } catch (HibernateException e) {
             log.error(e);
         } finally {
@@ -177,25 +160,13 @@ public class NormativaQueryServiceEJB extends HibernateEJB {
         try {
             session = getSession();
             
-            Query query = session.createQuery("SELECT DISTINCT nafec FROM NormativaLocal AS n, n.traducciones AS trad LEFT JOIN n.afectantes AS afec LEFT JOIN afec.afectante AS nafec WHERE INDEX(trad) = :idioma and n.id = :id ");
+            Query query = session.createQuery("SELECT DISTINCT nafec FROM Normativa AS n, n.traducciones AS trad LEFT JOIN n.afectantes AS afec LEFT JOIN afec.afectante AS nafec WHERE INDEX(trad) = :idioma and n.id = :id ");
             query.setParameter("idioma", BasicUtils.getDefaultLanguage());
             query.setParameter("id", id);
 
-            List<NormativaLocal> normativaLocalResult = (List<NormativaLocal>) query.list();                    
-            for (NormativaLocal normativa : normativaLocalResult) {
+            List<Normativa> normativaResult = (List<Normativa>) query.list();                    
+            for (Normativa normativa : normativaResult) {
                 dto = (NormativaDTO) BasicUtils.entityToDTO(NormativaDTO.class,  normativa, BasicUtils.getDefaultLanguage());
-                dto.setLocal(true);
-                normativaDTOList.add(dto);
-            }
-
-            query = session.createQuery("SELECT DISTINCT nafec FROM NormativaExterna AS n, n.traducciones AS trad LEFT JOIN n.afectantes AS afec LEFT JOIN afec.afectante AS nafec WHERE INDEX(trad) = :idioma and n.id = :id ");
-            query.setParameter("idioma", BasicUtils.getDefaultLanguage());
-            query.setParameter("id", id);
-
-            List<NormativaExterna> normativaExternaResult = (List<NormativaExterna>) query.list();
-            for (NormativaExterna normativa : normativaExternaResult) {
-                dto = (NormativaDTO) BasicUtils.entityToDTO(NormativaDTO.class,  normativa, BasicUtils.getDefaultLanguage());
-                dto.setLocal(false);
                 normativaDTOList.add(dto);
             }
         } catch (HibernateException e) {
@@ -221,15 +192,10 @@ public class NormativaQueryServiceEJB extends HibernateEJB {
         try {
             session = getSession();
             
-            Query query = session.createQuery("SELECT DISTINCT nafec FROM NormativaLocal AS n, n.traducciones AS trad LEFT JOIN n.afectantes AS afec LEFT JOIN afec.afectante AS nafec WHERE INDEX(trad) = :idioma and n.id = :id ");
+            Query query = session.createQuery("SELECT DISTINCT nafec FROM Normativa AS n, n.traducciones AS trad LEFT JOIN n.afectantes AS afec LEFT JOIN afec.afectante AS nafec WHERE INDEX(trad) = :idioma and n.id = :id ");
             query.setParameter("idioma", BasicUtils.getDefaultLanguage());
             query.setParameter("id", id);
             numResultats = query.list().size();   
-            
-            query = session.createQuery("SELECT DISTINCT nafec FROM NormativaExterna AS n, n.traducciones AS trad LEFT JOIN n.afectantes AS afec LEFT JOIN afec.afectante AS nafec WHERE INDEX(trad) = :idioma and n.id = :id ");
-            query.setParameter("idioma", BasicUtils.getDefaultLanguage());
-            query.setParameter("id", id);
-            numResultats = numResultats + query.list().size();
             
         } catch (HibernateException e) {
             log.error(e);
@@ -392,32 +358,20 @@ public class NormativaQueryServiceEJB extends HibernateEJB {
         Session session = null;
         
         NormativaCriteria normativaCriteria = new NormativaCriteria(); 
-        normativaCriteria.setIncluirExternas(null); // Para evitar que se parsee como los demas criterias
         normativaCriteria.setId(String.valueOf(id));       
 
         try {
             criteris = BasicUtils.parseCriterias(NormativaCriteria.class, HQL_NORMATIVA_ALIAS, normativaCriteria);
             List<FromClause> entities = new ArrayList<FromClause>();
-            entities.add(new FromClause(HQL_NORMATIVA_LOCAL_CLASS, HQL_NORMATIVA_ALIAS));
+            entities.add(new FromClause(HQL_NORMATIVA_CLASS, HQL_NORMATIVA_ALIAS));
             QueryBuilder qb = new QueryBuilder(HQL_NORMATIVA_ALIAS, entities, null, null);
             qb.extendCriteriaObjects(criteris);
             
             session = getSession();
             Query query = qb.createQuery(session);
-            NormativaLocal normativaLocal = (NormativaLocal) query.uniqueResult();
-            if (normativaLocal != null) {
-                afectants = new ArrayList<Afectacion>(normativaLocal.getAfectantes());
-            } else {
-                criteris = BasicUtils.parseCriterias(NormativaCriteria.class, HQL_NORMATIVA_ALIAS, normativaCriteria);
-                entities = new ArrayList<FromClause>();
-                entities.add(new FromClause(HQL_NORMATIVA_EXTERNA_CLASS, HQL_NORMATIVA_ALIAS));
-                qb = new QueryBuilder(HQL_NORMATIVA_ALIAS, entities, null, null);
-                qb.extendCriteriaObjects(criteris);
-                query = qb.createQuery(session);
-                NormativaExterna normativaExterna = (NormativaExterna) query.uniqueResult();
-                if (normativaExterna != null) {
-                    afectants = new ArrayList<Afectacion>(normativaExterna.getAfectantes());
-                }
+            Normativa normativa = (Normativa) query.uniqueResult();
+            if (normativa != null) {
+                afectants = new ArrayList<Afectacion>(normativa.getAfectantes());
             }
             
             for (Afectacion afec: afectants){
@@ -451,32 +405,20 @@ public class NormativaQueryServiceEJB extends HibernateEJB {
         List<CriteriaObject> criteris;
         Session session = null;
         NormativaCriteria normativaCriteria = new NormativaCriteria(); 
-        normativaCriteria.setIncluirExternas(null); // Para evitar que se parsee como los demas criterias
         normativaCriteria.setId(String.valueOf(id));       
         try {
             criteris = BasicUtils.parseCriterias(NormativaCriteria.class, HQL_NORMATIVA_ALIAS, normativaCriteria);
             List<FromClause> entities = new ArrayList<FromClause>();
-            entities.add(new FromClause(HQL_NORMATIVA_LOCAL_CLASS, HQL_NORMATIVA_ALIAS));
+            entities.add(new FromClause(HQL_NORMATIVA_CLASS, HQL_NORMATIVA_ALIAS));
             QueryBuilder qb = new QueryBuilder(HQL_NORMATIVA_ALIAS, entities, null, null);
             qb.extendCriteriaObjects(criteris);
             
             session = getSession();
             Query query = qb.createQuery(session);
-            NormativaLocal normativaLocal = (NormativaLocal) query.uniqueResult();
-            if (normativaLocal != null) {
-                afectades = new ArrayList<Afectacion>(normativaLocal.getAfectadas());
-            } else {
-                criteris = BasicUtils.parseCriterias(NormativaCriteria.class, HQL_NORMATIVA_ALIAS, normativaCriteria);
-                entities = new ArrayList<FromClause>();
-                entities.add(new FromClause(HQL_NORMATIVA_EXTERNA_CLASS, HQL_NORMATIVA_ALIAS));
-                qb = new QueryBuilder(HQL_NORMATIVA_ALIAS, entities, null, null);
-                qb.extendCriteriaObjects(criteris);
-                query = qb.createQuery(session);
-                NormativaExterna normativaExterna = (NormativaExterna) query.uniqueResult();
-                if (normativaExterna != null) {
-                    afectades = new ArrayList<Afectacion>(normativaExterna.getAfectadas());
-                }
-            }
+            Normativa normativa = (Normativa) query.uniqueResult();
+            if (normativa != null) {
+                afectades = new ArrayList<Afectacion>(normativa.getAfectadas());
+            } 
                         
             for (Afectacion afec: afectades){
                 afectacioDTOList.add((AfectacioDTO) BasicUtils.entityToDTO(AfectacioDTO.class,  afec, normativaCriteria.getIdioma()));

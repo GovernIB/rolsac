@@ -181,7 +181,7 @@ public class Tramite extends Ordenable implements Comparator {
 	
 	
 	/** 
-	 * L'ordre es ref� en el TramiteFacadebEJB
+	 * L'ordre es refren el TramiteFacadebEJB
 	 * @param doc
 	 */
     public void removeDocument(Document doc) {

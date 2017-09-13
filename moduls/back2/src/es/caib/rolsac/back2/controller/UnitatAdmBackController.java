@@ -1293,14 +1293,15 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			return "unitatadm.esborrat.incorrecte.personal";
 		else if(!ua.getUnidadesMaterias().isEmpty())        	
 			return "unitatadm.esborrat.incorrecte.materies";
-		else if(!boolProcedIsEmpty || !ua.getNormativas().isEmpty() ) {
+		else if(!boolProcedIsEmpty || !ua.getUnidadesNormativas().isEmpty() ) {
 
 			List <Long> idsList=new ArrayList<Long>();
 
-			if(!boolProcedIsEmpty)
+			if(!boolProcedIsEmpty) {
 				idsList = ua.getIdsProcedimientos();
-			else
+			} else {
 				idsList = ua.getIdsNormativas();
+			}
 
 			Iterator<Long> iter = idsList.iterator();
 			int count = 0;
@@ -1313,20 +1314,21 @@ public class UnitatAdmBackController extends PantallaBaseController {
 					ids = id.toString();
 					count++;
 				} else {
-					if ( (count % 10) == 0 )
+					if ( (count % 10) == 0 ) {
 						ids = ids + ",<BR> " + id.toString();
-					else
+					} else {
 						ids = ids + ", " + id.toString();
-
+					}
 					count++;
 				}
 
 			}
 
-			if (!boolProcedIsEmpty)
+			if (!boolProcedIsEmpty) {
 				return "unitatadm.esborrat.incorrecte.procediments";
-			else
-				return "unitatadm.esborrat.incorrecte.normatives"; 
+			} else {
+				return "unitatadm.esborrat.incorrecte.normatives";
+			}
 
 		}
 		

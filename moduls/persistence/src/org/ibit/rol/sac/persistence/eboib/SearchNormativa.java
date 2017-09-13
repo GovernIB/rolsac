@@ -17,11 +17,11 @@ public interface SearchNormativa {
   public void makeSearchFromBoibRegistro(String trcodificacion); 
 
   //seters y geters
-  public void setNormativabean(TrNormativaLocalBean normativabean);
-  public TrNormativaLocalBean getNormativabean();
+  public void setNormativabean(TrNormativaBean normativabean);
+  public TrNormativaBean getNormativabean();
   public void setMensajeavisobean(TrMensaAvisoBean mensajeavisobean);
   public TrMensaAvisoBean getMensajeavisobean();
-  public void setListadonormativas(List<TrListadoNormativaLocalBean> listadonormativas);
-  public List<TrListadoNormativaLocalBean> getListadonormativas();
+  public void setListadonormativas(List<TrListadoNormativaBean> listadonormativas);
+  public List<TrListadoNormativaBean> getListadonormativas();
 
 }

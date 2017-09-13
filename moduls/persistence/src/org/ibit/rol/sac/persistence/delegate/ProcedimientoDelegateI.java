@@ -117,4 +117,6 @@ public interface ProcedimientoDelegateI {
 	public abstract List<Long> listarProcedimientosOrganoResolutori(Long idOrganoResolutori) throws DelegateException;
 
 	public abstract void reordenarDocumentos(Long idProcedimiento, List<Long> idDocumentos) throws DelegateException;
+	
+	public boolean isNormativaDerogada(Long id)   throws DelegateException;
 }

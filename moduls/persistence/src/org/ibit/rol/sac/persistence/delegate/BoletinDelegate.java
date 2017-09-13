@@ -41,7 +41,7 @@ public class BoletinDelegate implements StatelessDelegate
         }
     }
 
-	public List listarBoletines() throws DelegateException {
+	public  List<Boletin> listarBoletines() throws DelegateException {
 		try {
 			return getFacade().listarBoletines();
 		} catch (RemoteException e) {
