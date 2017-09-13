@@ -282,11 +282,11 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
     };
     
     // Bindings
-	jQuery(idTabListado).unbind("click").bind("click", function() { that.tabListado(); });
-	jQuery(idBtnNuevo).unbind("click").bind("click", function(){ that.nuevaFicha(); });
-	jQuery(idTabBuscador).unbind("click").bind("click", function() { that.tabBuscador(); });	
-	jQuery(idBtnBuscadorForm).unbind("click").bind("click", function() { that.busca(); });
-	jQuery(idBtnLimpiarForm).unbind("click").bind("click", function() { that.limpia(); });
+	jQuery(idTabListado).bind("click", function() { that.tabListado(); });
+	jQuery(idBtnNuevo).bind("click", function(){ that.nuevaFicha(); });
+	jQuery(idTabBuscador).bind("click", function() { that.tabBuscador(); });	
+	jQuery(idBtnBuscadorForm).bind("click", function() { that.busca(); });
+	jQuery(idBtnLimpiarForm).bind("click", function() { that.limpia(); });
 	jQuery("#btnExportar").unbind("click").bind("click", function() { 
 		Llistat.exporta(); 
 	});

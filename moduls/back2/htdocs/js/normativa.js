@@ -150,6 +150,15 @@ function CLlistat() {
 		formulariComprovarTB.iniciar();
 
 	};
+	
+	/** Obtiene el texto quitando el null **/
+	this.obtenerString = function(texto) {
+		if (texto == null) {
+			return "";
+		} else {
+			return texto;
+		}
+	};
 
 	this.finCargaListado = function( opcions, data ) {
 
@@ -241,10 +250,10 @@ function CLlistat() {
 				codi_taula += '<span class="id">'+ dada_node.id +'</span><a id="normativa_'+dada_node.id+'" href="javascript:void(0);" class="titol">' + dada_node.titulo + '</a>';
 				codi_taula += "</div>";
 
-				codi_taula += "<div class=\"td tipologia\" role=\"gridcell\">" + dada_node.numNormativa + "</div>";
-				codi_taula += "<div class=\"td numero\" role=\"gridcell\">" + dada_node.boletin + "</div>";
-				codi_taula += "<div class=\"td tipus\" role=\"gridcell\">" + dada_node.tipo + "</div>";				
-				codi_taula += "<div class=\"td data\" role=\"gridcell\">" + dada_node.fecha + "</div>";
+				codi_taula += "<div class=\"td tipologia\" role=\"gridcell\">" +  Llistat.obtenerString(dada_node.numNormativa) + "</div>";
+				codi_taula += "<div class=\"td numero\" role=\"gridcell\">" + Llistat.obtenerString(dada_node.boletin) + "</div>";
+				codi_taula += "<div class=\"td tipus\" role=\"gridcell\">" + Llistat.obtenerString(dada_node.tipo) + "</div>";				
+				codi_taula += "<div class=\"td data\" role=\"gridcell\">" + Llistat.obtenerString(dada_node.fecha) + "</div>";
 
 				codi_taula += "</div>";
 
@@ -938,7 +947,12 @@ function CDetall() {
 
 		//Ocultar paneles
 		$("#modul_procediments, #modul_afectacions, #modulDocumentNormativa, #modul_unitats_administratives").hide();
-
+		jQuery("#modulDocumentNormativa").find(".listaOrdenable").empty();
+		jQuery("#modul_unitats_administratives").find(".listaOrdenable").empty();
+		jQuery("#modul_procediments").find(".listaOrdenable").empty();
+		jQuery("#modul_afectacions").find(".listaOrdenable").empty();
+		
+		
 		escriptori_detall_elm.find(".botonera li.btnEliminar").hide();
 		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);		
 
