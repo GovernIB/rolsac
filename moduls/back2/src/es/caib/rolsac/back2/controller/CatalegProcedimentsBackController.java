@@ -57,7 +57,6 @@ import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.criteria.BuscadorProcedimientoCriteria;
 import org.ibit.rol.sac.model.dto.CodNomDTO;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
-import org.ibit.rol.sac.model.dto.ListadoModuloTramiteDTO;
 import org.ibit.rol.sac.model.dto.ProcedimientoLocalDTO;
 import org.ibit.rol.sac.model.dto.ProcedimientoNormativaDTO;
 import org.ibit.rol.sac.persistence.delegate.AuditoriaDelegate;
@@ -708,28 +707,41 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
         
 	}
 
-	/*
-	 * Función para recuperar los trámites de un procedimiento
+	/**
+	 * Devuelve los trámites, poniendo en el campo nom tanto el ca como el es.
+	 * @param resultats
+	 * @param proc
+	 * @param request
+	 * @throws DelegateException
 	 */
 	private void recuperaTramites(Map<String, Object> resultats, ProcedimientoLocal proc, HttpServletRequest request) throws DelegateException {
-
-		List<ListadoModuloTramiteDTO> listaTramitesDTO = null;
-		
+		List<Map<String, Object>> listaTramitesDTO = null;
+		List<String> idiomas = DelegateUtil.getIdiomaDelegate().listarLenguajes();
 		if (proc.getTramites() != null && proc.getTramites().size() != 0) {
-			
-			listaTramitesDTO = new ArrayList<ListadoModuloTramiteDTO>();
-			String lenguajePorDefecto = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			listaTramitesDTO = new ArrayList<Map<String, Object>>();
 			
 			for (Tramite tramite : proc.getTramites()) {
 				if (tramite != null) {
-					String nombreTramite;
-					if (tramite.getTraduccion(lenguajePorDefecto) != null) {
-					    nombreTramite = ((TraduccionTramite) tramite.getTraduccion(lenguajePorDefecto)).getNombre();
-					} else {
-					    nombreTramite = "void";
-					}
 
-					listaTramitesDTO.add(new ListadoModuloTramiteDTO(tramite.getId(), nombreTramite, tramite.getFase()));
+					Map<String, String> titulos = new HashMap<String, String>();
+					String nombreTramite;
+					TraduccionTramite tradTramite;
+					for (String idioma : idiomas) {
+						
+						tradTramite = (TraduccionTramite)tramite.getTraduccion(idioma);
+						nombreTramite = (tradTramite != null && tradTramite.getNombre() != null) ? tradTramite.getNombre() : "";
+						
+						titulos.put(idioma, nombreTramite);
+						
+					}
+					
+					Map<String,Object> map = new HashMap<String, Object>();
+					map.put("orden", tramite.getOrden());
+					map.put("id", tramite.getId());
+					map.put("nom", titulos);
+					map.put("moment", tramite.getFase());
+					
+					listaTramitesDTO.add(map);
 				}
 			}
 			

@@ -27,7 +27,6 @@ import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.Taxa;
 import org.ibit.rol.sac.model.Traduccion;
-import org.ibit.rol.sac.model.TraduccionCatalegDocuments;
 import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.TraduccionProcedimiento;
 import org.ibit.rol.sac.model.TraduccionTaxa;
@@ -122,15 +121,15 @@ public class TramiteBackController {
     			}
     		}
     		
-    		String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+    		List<String> langs = DelegateUtil.getIdiomaDelegate().listarLenguajes();
     		// Documentos relacionados
-    		resultats.put("documentosTramite", getListaDocumentosDTO(request, tramite, lang));
+    		resultats.put("documentosTramite", getListaDocumentsDTO(request, tramite, langs, tramite.getDocsInformatius()));
     		// Formularios relacionados    		
-    		resultats.put("formulariosTramite", getListaFormulariosDTO(request, tramite, lang));
+    		resultats.put("formulariosTramite", getListaDocumentsDTO(request, tramite, langs, tramite.getFormularios()));
     		// Documents Requerits relacionats
-    		resultats.put("docRequeritsTramite", getListaRequeritsDTO(request, tramite, lang));
+    		resultats.put("docRequeritsTramite", getListaDocumentsDTO(request, tramite, langs,  tramite.getDocsRequerits()));
     		// Tasas relacionadas
-    		resultats.put("tasasTramite", getListaTasasDTO(request, tramite, lang));
+    		resultats.put("tasasTramite", getListaTasasDTO(request, tramite, langs));
     		    		
     	} catch (DelegateException dEx) {
     		
@@ -148,75 +147,94 @@ public class TramiteBackController {
     	
     }
     
-	private List<IdNomDTO> getListaTasasDTO(HttpServletRequest request, Tramite tramite, String lang)
+    /**
+     * Obtención del documento en forma correcto con el multiidioma.
+     * @param request
+     * @param tramite
+     * @param idiomas
+     * @param listaDocuments
+     * @return
+     */
+    private List<Map<String, Object>> getListaDocumentsDTO(final HttpServletRequest request, final Tramite tramite, final List<String> idiomas, final Set<DocumentTramit> listaDocuments )
+	{
+		List<Map<String, Object>>  listaRequeritsDTO = null ;
+		
+		if (listaDocuments != null) {
+			listaRequeritsDTO = new ArrayList<Map<String, Object>>() ;
+			
+			for (DocumentTramit docReq: listaDocuments) {
+				
+				if (docReq != null) {
+					
+					Map<String, String> titulos = new HashMap<String, String>();
+					String nombre;
+					TraduccionDocumento tradTramite;
+					for (String idioma : idiomas) {
+						
+						tradTramite = (TraduccionDocumento)docReq.getTraduccion(idioma);
+						nombre = (tradTramite != null && tradTramite.getTitulo() != null) ? tradTramite.getTitulo() : "";
+						
+						titulos.put(idioma, nombre);
+						
+					}
+					
+					Map<String,Object> map = new HashMap<String, Object>();
+					map.put("id", tramite.getId());
+					map.put("nom", titulos);
+					map.put("moment", tramite.getFase());
+					
+					listaRequeritsDTO.add(map);
+				}
+			}
+		}
+		
+		return listaRequeritsDTO;
+	}
+    
+    /**
+     * Obtención de la taxa con el multiidoma.
+     * @param request
+     * @param tramite
+     * @param idiomas
+     * @return
+     */
+	private List<Map<String, Object>> getListaTasasDTO(HttpServletRequest request, Tramite tramite, List<String> idiomas)
 	{
 		Set<Taxa> listaTasas = tramite.getTaxes();
-		List<IdNomDTO> listaTasasDTO = null;
+		List<Map<String, Object>>  listaTasasDTO = null;
 		
 		if (listaTasas != null) {
-			listaTasasDTO = new ArrayList<IdNomDTO>();
+			listaTasasDTO = new ArrayList<Map<String, Object>>() ;
 			for (Taxa tasa: listaTasas) {
-				String codificacionTasa = ((TraduccionTaxa) tasa.getTraduccion(lang)).getCodificacio();
-				listaTasasDTO.add( new IdNomDTO(tasa.getId(), codificacionTasa));
+				
+				if (tasa != null) {
+					
+					Map<String, String> titulos = new HashMap<String, String>();
+					String nombre;
+					TraduccionTaxa tradTaxa;
+					for (String idioma : idiomas) {
+						
+						tradTaxa = (TraduccionTaxa)tasa.getTraduccion(idioma);
+						nombre = (tradTaxa != null && tradTaxa.getCodificacio() != null) ? tradTaxa.getCodificacio() : "";
+						
+						titulos.put(idioma, nombre);
+						
+					}
+					
+					Map<String,Object> map = new HashMap<String, Object>();
+					map.put("id", tramite.getId());
+					map.put("nom", titulos);
+					map.put("moment", tramite.getFase());
+					
+					listaTasasDTO.add(map);
+				}
 			}
 		}
 		
 		return listaTasasDTO;
 	}
 	
-	private List<IdNomDTO> getListaRequeritsDTO(HttpServletRequest request, Tramite tramite, String lang)
-	{
-		Set<DocumentTramit> listaDocumentsRequerits = tramite.getDocsRequerits();
-		List<IdNomDTO> listaRequeritsDTO = null;
-		
-		if (listaDocumentsRequerits != null) {
-			listaRequeritsDTO = new ArrayList<IdNomDTO>();
-			String nomDocRequerit = "";
-			
-			for (DocumentTramit docReq: listaDocumentsRequerits) {
-				if (docReq.getDocCatalogo() != null)
-					nomDocRequerit = ((TraduccionCatalegDocuments)docReq.getDocCatalogo().getTraduccion(lang)).getNombre();
-				else
-					nomDocRequerit = ((TraduccionDocumento) docReq.getTraduccion(lang)).getTitulo();
-				
-				listaRequeritsDTO.add(new IdNomDTO(docReq.getId(), nomDocRequerit));
-			}
-		}
-		
-		return listaRequeritsDTO;
-	}
 	
-	private List<IdNomDTO> getListaFormulariosDTO(HttpServletRequest request, Tramite tramite, String lang)
-	{
-		Set<DocumentTramit> listaFormularios = tramite.getFormularios();
-		List<IdNomDTO> listaFormulariosDTO = null;
-		
-		if (listaFormularios != null) {
-			listaFormulariosDTO = new ArrayList<IdNomDTO>();
-			for (DocumentTramit formulari: listaFormularios) {
-				String nombreFormulario = ((TraduccionDocumento) formulari.getTraduccion(lang)).getTitulo();
-				listaFormulariosDTO.add(new IdNomDTO(formulari.getId(), nombreFormulario));
-			}
-		}
-		
-		return listaFormulariosDTO;
-	}
-	
-	private List<IdNomDTO> getListaDocumentosDTO(HttpServletRequest request, Tramite tramite, String lang)
-	{
-		Set<DocumentTramit> listaDocumentos = tramite.getDocsInformatius();
-		List<IdNomDTO> listaDocumentosDTO = null;
-		
-		if (listaDocumentos != null) {
-			listaDocumentosDTO = new ArrayList<IdNomDTO>();
-			for (DocumentTramit document: listaDocumentos) {
-				String nombreDocumento = ((TraduccionDocumento) document.getTraduccion(lang)).getTitulo();
-				listaDocumentosDTO.add( new IdNomDTO( document.getId(), nombreDocumento));
-			}
-		}
-		
-		return listaDocumentosDTO;
-	}
 	
 	@RequestMapping(value = "/guardarTramit.do", method = POST)
 	public @ResponseBody ResponseEntity<String> guardar(HttpSession session, HttpServletRequest request) {
@@ -332,6 +350,7 @@ public class TramiteBackController {
 				UnidadAdministrativa unidadAdministrativa = DelegateUtil.getUADelegate().obtenerUnidadAdministrativa(scanner.nextLong());
 				tramite.setOrganCompetent(unidadAdministrativa);
 			}
+			scanner.close();
 			
 			tramite.setProcedimiento(procedimiento);
 			String idOrganCompetent = request.getParameter("tramits_item_organ_id");			
@@ -422,7 +441,7 @@ public class TramiteBackController {
 		IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
 		List<String> langs = idiomaDelegate.listarLenguajes();
 		
-		Map traducciones = new HashMap(langs.size());
+		Map<String, Traduccion> traducciones = new HashMap<String, Traduccion>(langs.size());
 		for (String lang : langs) {
 			traduccionTramite = (TraduccionTramite)tramite.getTraduccion(lang);
 			if (traduccionTramite == null)
@@ -597,7 +616,7 @@ public class TramiteBackController {
 		tramite.setDataActualitzacioVuds( fechaActualizacionVUDS );			
 	}
 
-	private void agregaTraduccionTramite(HttpServletRequest request, String lang, Map traducciones, TraduccionTramite traduccionTramite)
+	private void agregaTraduccionTramite(HttpServletRequest request, String lang, Map<String, Traduccion> traducciones, TraduccionTramite traduccionTramite)
 	{
 		traduccionTramite.setNombre( RolUtil.limpiaCadena(request.getParameter("item_nom_tramit_" + lang)) );
 		//#351 se cambia descripcion por observaciones

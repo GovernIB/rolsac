@@ -798,7 +798,9 @@ function CDetall() {
 		if (dada_node.item_codigo_pro != undefined) {
 			jQuery("#item_codigo_pro").val(dada_node.item_codigo_pro);
 			jQuery("#item_codigo_pro").change();
-		} 
+		} else {
+			jQuery("#item_codigo_pro,#item_codigo_pro_es,#item_codigo_pro_en,#item_codigo_pro_de,#item_codigo_pro_fr").val("");
+		}
 		
 		//#366 se añade SIA
 		if (dada_node.item_codigo_sia != undefined) {
@@ -858,6 +860,8 @@ function CDetall() {
 		if (dada_node.item_iniciacio != undefined) {
 			jQuery("#item_iniciacio").val(dada_node.item_iniciacio);
 			jQuery("#item_iniciacio").change();
+		} else {
+			jQuery("#item_iniciacio").val("");
 		}
 
 		if (dada_node.item_organ_responsable_id != undefined) {
@@ -888,6 +892,8 @@ function CDetall() {
 
 		if (dada_node.item_familia != undefined) {
 			$("#item_familia").val(dada_node.item_familia);
+		} else {
+			$("#item_familia").val("");
 		}
 
 		if (dada_node.item_familia_id != undefined) {
@@ -897,6 +903,8 @@ function CDetall() {
 		if (dada_node.item_fi_vida_administrativa != undefined) {
 			jQuery('#item_fi_vida_administrativa').val(dada_node.item_fi_vida_administrativa);                        
 			jQuery("#item_fi_vida_administrativa").change();
+		} else {
+			jQuery("#item_fi_vida_administrativa").val("");
 		}
 
 		if (dada_node.item_taxa != undefined) {

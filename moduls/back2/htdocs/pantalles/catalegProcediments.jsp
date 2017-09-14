@@ -1524,57 +1524,50 @@
             
 <!--             #349 Mover al final de los modulos laterales-->
              <!-- modul -->   
-             
-             <div id="modul_tramits" class="modul">
-                <fieldset>
-                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend><spring:message code='txt.TRAMITS'/> </legend>
-                   <div class="modul_continguts mostrat">                                  
-                            <!-- modulTramits -->
-                            <div class="modulTramits">
-                                <div class="seleccionats">                                
-                                    <div class="seleccionat">
-                                        <p class="info"><spring:message code='txt.noHiHaTramitsRelacionats'/></p>
-                                        <div class="listaOrdenable"></div>
-                                    </div>
-                                    <div class="btnGenerico">
+              <div id="modul_tramits" class="modul">
+			 
+				<fieldset>                                  
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
+                    <legend><spring:message code='txt.TRAMITS'/> </legend>                               
+                    <div class="modul_continguts mostrat">                                  
+                        <!-- modulTramits -->
+						<div class="modulTramits multilang">
+                            <input id="modulo_tramits_modificado" type="hidden" name="modulo_tramits_modificado" value="0" />
+                            <ul class="idiomes">
+								<c:forEach items="${idiomasListado}" var="llengua" varStatus="loop">
+                                    <c:if test="${loop.first}">
+                                        <li class="<c:out value="${llengua.lang}" /> seleccionat">
+                                    </c:if>
+                                    <c:if test="${!loop.first}">
+                                        <li class="<c:out value='${llengua.lang}'/>">
+                                    </c:if>
+                                    <c:out value="${llengua.lang}" />
+                                    </li>
+                                </c:forEach>
+                            </ul>
+                            
+                            <div class="seleccionats">								
+								<c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">
+                                <c:if test="${loop.first}">
+								<div class="seleccionat cajaIdioma <c:out value="${lang}"/>">
+									</c:if>
+									<c:if test="${!loop.first}">
+										<div class="<c:out value="${lang}"/> cajaIdioma">
+									</c:if>								
+											<p class="info"><spring:message code='txt.noHiHaTramitsRelacionats'/>.</p>
+											<div class="listaOrdenable"></div>
+										</div>								
+									</c:forEach>							                                
+									<p style="clear: both; margin-bottom: 10px;"/><!-- Separador -->
+									<div class="btnGenerico">
                                         <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='txt.gestiona_tramits'/></span></span></a>
                                     </div>
-                                </div>                                  
-                            </div>
-                            <!-- /modulTramits -->                                 
-                        </div>        
-                </fieldset>
-            </div>
-                  
-                     
-<!--             <div id="modul_tramits" class="modul destacado">                                -->
-<!--                 <div class="dec1"></div> -->
-<!--                 <div class="dec2"></div> -->
-                
-<!--                 <div class="interior">                     -->
-<!--                     <fieldset>                                   -->
-<%--                         <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                               --%>
-<%--                         <legend><spring:message code='txt.TRAMITS'/></legend>                                --%>
-<!--                         <div class="modul_continguts mostrat">                                   -->
-<!--                             modulTramits -->
-<!--                             <div class="modulTramits"> -->
-<!--                                 <div class="seleccionats">                                 -->
-<!--                                     <div class="seleccionat"> -->
-<%--                                         <p class="info"><spring:message code='txt.noHiHaTramitsRelacionats'/></p> --%>
-<!--                                         <div class="listaOrdenable"></div> -->
-<!--                                     </div> -->
-<!--                                     <div class="btnGenerico"> -->
-<%--                                         <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='txt.gestiona_tramits'/></span></span></a> --%>
-<!--                                     </div> -->
-<!--                                 </div>                                   -->
-<!--                             </div> -->
-<!--                             /modulTramits                                  -->
-<!--                         </div>                               -->
-<!--                     </fieldset>                      -->
-<!--                 </div> -->
-<!--             </div>             -->
-            <!-- /modul -->              
+								</div>    
+							</div>             
+						</div>  
+						<!-- /modulTramits --> 
+					</div>
+                </fieldset>               
             
         </div>
         <!-- /modulLateral -->
