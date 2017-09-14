@@ -68,7 +68,7 @@ public class CargaModulosLateralesUtil {
 					
 				}
 
-				Map map = new HashMap<String, Object>();
+				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("id", doc.getId());
 				
 				if (ordenable)

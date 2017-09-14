@@ -104,7 +104,7 @@ function CModulTramit() {
             nodoOrigen: modul_tramits_elm.find(".listaOrdenable"),
             nodoDestino: modul_tramits_elm.find(".listaOrdenable"),
             atributos: ["id", "nom", "orden", "moment"],  // Campos que queremos que aparezcan en las listas.
-            multilang: false
+            multilang: true
         });
         
         // one al botó de gestionar
@@ -152,8 +152,11 @@ function CModulTramit() {
     
         // Añadimos a los nombres de los trámites el tag <a> para que enlacen
         // a la edición del trámite en cuestión.
-        for ( i in listaTramites )
-            listaTramites[i].nom = "<a href='#' class='tramit_id'>" + listaTramites[i].nom + "</a>";        
+        for ( i in listaTramites ) {
+			
+			listaTramites[i].nom.ca = "<a href='#' class='tramit_id'>" + listaTramites[i].nom.ca + "</a>";        
+			listaTramites[i].nom.es = "<a href='#' class='tramit_id'>" + listaTramites[i].nom.es + "</a>";        
+		}
         
         if (typeof listaTramites != 'undefined' && listaTramites != null) {
             modul_tramits_elm.find(".listaOrdenable").empty();      

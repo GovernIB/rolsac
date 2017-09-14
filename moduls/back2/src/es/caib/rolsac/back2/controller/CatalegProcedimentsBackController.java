@@ -707,12 +707,56 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
         }
         
 	}
+	
+	/**
+	 * Devuelve los trámites, poniendo en el campo nom tanto el ca como el es.
+	 * @param resultats
+	 * @param proc
+	 * @param request
+	 * @throws DelegateException
+	 */
+	private void recuperaTramites(Map<String, Object> resultats, ProcedimientoLocal proc, HttpServletRequest request) throws DelegateException {
+		List<Map<String, Object>> listaTramitesDTO = null;
+		List<String> idiomas = DelegateUtil.getIdiomaDelegate().listarLenguajes();
+		if (proc.getTramites() != null && proc.getTramites().size() != 0) {
+			listaTramitesDTO = new ArrayList<Map<String, Object>>();
+			
+			for (Tramite tramite : proc.getTramites()) {
+				if (tramite != null) {
+
+					Map<String, String> titulos = new HashMap<String, String>();
+					String nombreTramite;
+					TraduccionTramite tradTramite;
+					for (String idioma : idiomas) {
+						
+						tradTramite = (TraduccionTramite)tramite.getTraduccion(idioma);
+						nombreTramite = (tradTramite != null && tradTramite.getNombre() != null) ? tradTramite.getNombre() : "";
+						
+						titulos.put(idioma, nombreTramite);
+						
+					}
+					
+					Map<String,Object> map = new HashMap<String, Object>();
+					map.put("orden", tramite.getOrden());
+					map.put("id", tramite.getId());
+					map.put("nom", titulos);
+					map.put("moment", tramite.getFase());
+					
+					listaTramitesDTO.add(map);
+				}
+			}
+			
+		}
+
+		resultats.put("tramites", listaTramitesDTO);
+		
+	}
 
 	/*
 	 * Función para recuperar los trámites de un procedimiento
 	 */
-	private void recuperaTramites(Map<String, Object> resultats, ProcedimientoLocal proc, HttpServletRequest request) throws DelegateException {
-
+	private void recuperaTramitesOld(Map<String, Object> resultats, ProcedimientoLocal proc, HttpServletRequest request) throws DelegateException {
+		
 		List<ListadoModuloTramiteDTO> listaTramitesDTO = null;
 		
 		if (proc.getTramites() != null && proc.getTramites().size() != 0) {
