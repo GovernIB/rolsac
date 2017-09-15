@@ -36,9 +36,6 @@
                         <element name="codiVuds" nillable="true" type="xsd:string" />
                         <element name="descCodiVuds" nillable="true" type="xsd:string" />
                         <element name="t_seccion" nillable="true" type="xsd:string" />                          
-                        <element name="t_apartado" nillable="true" type="xsd:string" />
-                        <element name="t_paginaInicial" nillable="true" type="xsd:string" />
-                        <element name="t_paginaFinal" nillable="true" type="xsd:string" />
                         <element name="t_titulo" nillable="true" type="xsd:string" />
                         <element name="t_enlace" nillable="true" type="xsd:string" />
                         <element name="t_observaciones" nillable="true" type="xsd:string" />

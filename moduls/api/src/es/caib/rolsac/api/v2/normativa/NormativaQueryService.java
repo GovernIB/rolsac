@@ -3,8 +3,8 @@ package es.caib.rolsac.api.v2.normativa;
 import java.util.List;
 
 import es.caib.rolsac.api.v2.afectacio.AfectacioQueryServiceAdapter;
-import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
 import es.caib.rolsac.api.v2.butlleti.ButlletiQueryServiceAdapter;
+import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
@@ -30,7 +30,7 @@ public interface NormativaQueryService {
     
     public UnitatAdministrativaQueryServiceAdapter obtenirUnitatAdministrativa() throws QueryServiceException;
     
-    public ArxiuQueryServiceAdapter obtenirArxiuNormativa() throws QueryServiceException;
+    public List<DocumentoNormativaQueryServiceAdapter> llistarDocumentNormativa(long idNormativa) throws QueryServiceException;
     
     public List<AfectacioQueryServiceAdapter> llistarAfectacionsAfectades() throws QueryServiceException;
     

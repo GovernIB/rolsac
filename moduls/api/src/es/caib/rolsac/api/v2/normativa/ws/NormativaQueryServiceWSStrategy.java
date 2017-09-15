@@ -6,8 +6,10 @@ import java.util.List;
 import es.caib.rolsac.api.v2.afectacio.AfectacioDTO;
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.butlleti.ButlletiDTO;
+import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaDTO;
 import es.caib.rolsac.api.v2.exception.APIException;
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.normativa.NormativaDTO;
 import es.caib.rolsac.api.v2.normativa.NormativaQueryServiceStrategy;
@@ -104,15 +106,16 @@ public class NormativaQueryServiceWSStrategy implements
 			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}
 	}
-
-	public ArxiuDTO obtenirArxiuNormativa(Long idArchivo)
+	
+	public List<DocumentoNormativaDTO> llistarDocumentNormativa(long idNormativa)
 			throws StrategyException {
 		try {
-			return gateway.obtenirArxiuNormativa(idArchivo);
+			return gateway.llistarDocumentNormativa(idNormativa);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}		
+		}
 	}
+	   
 
 	public List<AfectacioDTO> llistarAfectacionsAfectants(Long id)
 			throws StrategyException {

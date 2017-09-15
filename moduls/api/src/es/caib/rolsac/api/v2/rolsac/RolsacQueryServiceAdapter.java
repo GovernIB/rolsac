@@ -21,6 +21,8 @@ import es.caib.rolsac.api.v2.document.DocumentQueryServiceAdapter;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitDTO;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitQueryServiceAdapter;
+import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaDTO;
+import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiDTO;
 import es.caib.rolsac.api.v2.edifici.EdificiQueryServiceAdapter;
@@ -347,7 +349,22 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "documento tramite.", e);
         }
     }
-
+    
+    public List<DocumentoNormativaQueryServiceAdapter> llistarDocumentoNormativa(long idNormativa) throws QueryServiceException {
+    	try {
+            List<DocumentoNormativaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarDocumentoNormativa(idNormativa);
+            List<DocumentoNormativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentoNormativaQueryServiceAdapter>();
+            for (DocumentoNormativaDTO documentoNormativaDTO : llistaDTO) {
+            	DocumentoNormativaQueryServiceAdapter tdqsa = (DocumentoNormativaQueryServiceAdapter) BeanUtils.getAdapter("documentoNormativa", getStrategy(), documentoNormativaDTO);
+            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && tdqsa != null) { tdqsa.setRolsacUrl(rolsacUrl); }
+                llistaQueryServiceAdapter.add(tdqsa);
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "documentos tramite.", e);
+        }
+    }
+    
     public List<DocumentTramitQueryServiceAdapter> llistarDocumentTramit(DocumentTramitCriteria documentTramitCriteria) throws QueryServiceException {
         try {
             List<DocumentTramitDTO> llistaDTO = rolsacQueryServiceStrategy.llistarDocumentTramit(documentTramitCriteria);
@@ -1067,5 +1084,7 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
 	            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "silencio.", e);
 	        }
 	}
+
+	
 
 }

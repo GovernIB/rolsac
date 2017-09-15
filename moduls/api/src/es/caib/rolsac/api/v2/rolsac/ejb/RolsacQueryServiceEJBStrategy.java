@@ -14,6 +14,7 @@ import es.caib.rolsac.api.v2.document.DocumentCriteria;
 import es.caib.rolsac.api.v2.document.DocumentDTO;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitDTO;
+import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaDTO;
 import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiDTO;
 import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
@@ -194,6 +195,14 @@ public class RolsacQueryServiceEJBStrategy implements RolsacQueryServiceStrategy
     public List<DocumentTramitDTO> llistarDocumentTramit(DocumentTramitCriteria documentTramitCriteria) throws StrategyException {
         try {
             return rolsacQueryServiceDelegate.llistarDocumentTramit(documentTramitCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
+    }
+    
+    public List<DocumentoNormativaDTO> llistarDocumentoNormativa(long idNormativa) throws StrategyException {
+    	     try {
+            return rolsacQueryServiceDelegate.llistarDocumentoNormativa(idNormativa);
         } catch (DelegateException e) {
             throw new StrategyException(e);
         }

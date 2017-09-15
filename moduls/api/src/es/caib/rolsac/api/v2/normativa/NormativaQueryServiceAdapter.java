@@ -7,9 +7,9 @@ import org.apache.commons.beanutils.PropertyUtils;
 
 import es.caib.rolsac.api.v2.afectacio.AfectacioDTO;
 import es.caib.rolsac.api.v2.afectacio.AfectacioQueryServiceAdapter;
-import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
-import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
 import es.caib.rolsac.api.v2.butlleti.ButlletiQueryServiceAdapter;
+import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaDTO;
+import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.exception.StrategyException;
@@ -51,21 +51,7 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
     private STRATEGY getStrategy() {
         return normativaQueryServiceStrategy instanceof NormativaQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
-    
-    public ArxiuQueryServiceAdapter obtenirArxiuNormativa() throws QueryServiceException{
-        if (this.getArchivo() == null) {return null;}
-        try {
-            ArxiuDTO dto = normativaQueryServiceStrategy.obtenirArxiuNormativa(this.getArchivo());
-            ArxiuQueryServiceAdapter aqsa = (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
-            if (aqsa != null && rolsacUrl != null) {
-            	aqsa.setRolsacUrl(rolsacUrl);
-            }
-            return aqsa;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "materia.", e);
-        }
-    }
-    
+        
     public int getNumAfectades() throws QueryServiceException {
         try {
             return normativaQueryServiceStrategy.getNumAfectades(getId());
@@ -202,6 +188,23 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
         }
     }
 
-	
+	@Override
+	public List<DocumentoNormativaQueryServiceAdapter> llistarDocumentNormativa(long idNormativa) throws QueryServiceException {
+        try {
+            List<DocumentoNormativaDTO> llistaDTO = normativaQueryServiceStrategy.llistarDocumentNormativa(idNormativa);
+            List<DocumentoNormativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentoNormativaQueryServiceAdapter>();
+            for (DocumentoNormativaDTO DocumentoNormativaDTO : llistaDTO) {
+            	DocumentoNormativaQueryServiceAdapter dqsa = (DocumentoNormativaQueryServiceAdapter) BeanUtils.getAdapter("DocumentoNormativa", getStrategy(), DocumentoNormativaDTO);
+            	if (dqsa != null && rolsacUrl != null) {
+            		dqsa.setRolsacUrl(rolsacUrl);
+            	}
+            	llistaQueryServiceAdapter.add(dqsa);
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "documentos informativos.", e);
+        }
+    }
+
 
 }

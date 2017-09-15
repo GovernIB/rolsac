@@ -213,6 +213,34 @@
 	<bean id="gatewayDocumentTramit" class="es.caib.rolsac.api.v2.documentTramit.ws.DocumentTramitQueryServiceGateway" />	
     <!-- DocumentTramitQueryService beans -->
     
+    <!-- DocumentoNormativaQueryService beans -->
+    <!-- EJB -->
+    <bean id="documentoNormativaQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaQueryServiceAdapter" scope="prototype">
+        <property name="documentoNormativaQueryServiceStrategy" ref="documentoNormativaQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="documentoNormativaQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.documentoNormativa.ejb.DocumentoNormativaQueryServiceEJBStrategy">
+        <property name="documentoNormativaQueryServiceDelegate" ref="documentoNormativaQueryServiceDelegate" />
+    </bean>
+
+    <bean id="documentoNormativaQueryServiceDelegate" class="es.caib.rolsac.api.v2.documentoNormativa.ejb.DocumentoNormativaQueryServiceDelegate">
+        <property name="documentoNormativaQueryServiceLocator" ref="documentoNormativaQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="documentoNormativaQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.documentoNormativa.ejb.DocumentoNormativaQueryServiceEJBLocator" />
+    
+	<!-- WS -->
+	<bean id="documentoNormativaQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaQueryServiceAdapter" scope="prototype">
+        <property name="documentoNormativaQueryServiceStrategy" ref="documentoNormativaQueryServiceWSStrategy" />
+    </bean>
+
+    <bean id="documentoNormativaQueryServiceWSStrategy" class="es.caib.rolsac.api.v2.documentoNormativa.ws.DocumentoNormativaQueryServiceWSStrategy">
+        <property name="gateway" ref="gatewayDocumentoNormativa" />
+    </bean>
+
+	<bean id="gatewayDocumentoNormativa" class="es.caib.rolsac.api.v2.documentoNormativa.ws.DocumentoNormativaQueryServiceGateway" />	
+    <!-- DocumentoNormativaQueryService beans -->
+    
     <!-- EdificiQueryService beans -->
     <!-- EJB -->
     <bean id="edificiQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.edifici.EdificiQueryServiceAdapter" scope="prototype">

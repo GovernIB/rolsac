@@ -19,6 +19,7 @@ import org.ibit.rol.sac.model.Boletin;
 import org.ibit.rol.sac.model.CatalegDocuments;
 import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.Documento;
+import org.ibit.rol.sac.model.DocumentoNormativa;
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.EspacioTerritorial;
@@ -62,6 +63,7 @@ import es.caib.rolsac.api.v2.document.DocumentCriteria;
 import es.caib.rolsac.api.v2.document.DocumentDTO;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitDTO;
+import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaDTO;
 import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiDTO;
 import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
@@ -169,7 +171,9 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 	private static final String HQL_PERSONAL_CLASS = "Personal";
 	private static final String HQL_PERSONAL_ALIAS = "per";
 	private static final String HQL_DOC_TRAMITE_CLASS = "DocumentTramit";
+	private static final String HQL_DOC_NORMATIVA_CLASS = "DocumentoNormativa";
 	private static final String HQL_DOC_TRAMITE_ALIAS = "dt";
+	private static final String HQL_DOC_NORMATIVA_ALIAS = "dn";
 	private static final String HQL_USUARI_CLASS = "Usuario";
 	private static final String HQL_USUARI_ALIAS = "usu";
 	private static final String HQL_TAXA_CLASS = "Taxa";
@@ -1370,6 +1374,44 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 		return documentsTramitDTOList;
 	}
+	
+	
+	
+	/**
+	 * Obtiene documentos normativa.
+	 * @param idNormativa
+	 * @return List<DocumentNormativaDTO>
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	@SuppressWarnings("unchecked")
+	public List<DocumentoNormativaDTO> llistarDocumentoNormativa(long idNormativa) {        
+		Session session = null;
+
+		try {            
+			
+			 session = getSession();
+	            StringBuilder consulta = new StringBuilder("select docNor ");
+				consulta.append(" from DocumentoNormativa as docNor ");
+				//consulta.append("where index(trad) = :idioma ");
+				consulta.append(" where docNor.normativa.id = :idNormativa");
+				consulta.append(" order by docNor.id asc");
+				
+	            Query query = session.createQuery(consulta.toString());
+	            query.setParameter("idNormativa", idNormativa);
+	    		
+	            
+	           return query.list();
+		} catch (HibernateException e) {
+			log.error(e);
+			throw new EJBException(e);
+		} finally {
+			close(session);
+		}
+
+	}
+
 
 	/**
 	 * Obtiene una normativa.

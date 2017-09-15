@@ -20,6 +20,7 @@ import es.caib.rolsac.api.v2.document.DocumentCriteria;
 import es.caib.rolsac.api.v2.document.DocumentDTO;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitDTO;
+import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaDTO;
 import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiDTO;
 import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
@@ -462,6 +463,10 @@ public class RolsacQueryServiceGateway {
 		
 		return Arrays.asList(stub.llistarDocumentTramit(documentTramitCriteria));
 	}
+	
+    public List<DocumentoNormativaDTO> llistarDocumentoNormativa(long idNormativa) throws QueryServiceException, RemoteException {
+    	return Arrays.asList(stub.llistarDocumentoNormativa(idNormativa));
+    }
 
 	public List<EdificiDTO> llistarEdificis(EdificiCriteria edificCriteria)
 			throws QueryServiceException, RemoteException {

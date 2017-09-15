@@ -12,7 +12,9 @@ import org.apache.axis.AxisFault;
 import es.caib.rolsac.api.v2.afectacio.AfectacioDTO;
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.butlleti.ButlletiDTO;
+import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaDTO;
 import es.caib.rolsac.api.v2.exception.APIException;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.general.ConfiguracioServeis;
 import es.caib.rolsac.api.v2.general.DTOUtil;
 import es.caib.rolsac.api.v2.normativa.NormativaDTO;
@@ -76,12 +78,13 @@ public class NormativaQueryServiceGateway {
 			throws RemoteException {
 		return stub.obtenirUnitatAdministrativa(idUniAdm);
 	}
-
-	public ArxiuDTO obtenirArxiuNormativa(Long idArchivo)
-			throws RemoteException {
-		return stub.obtenirArxiuNormativa(idArchivo);
-	}
 	
+	public List<DocumentoNormativaDTO> llistarDocumentNormativa(long idNormativa)
+			throws RemoteException {
+			DocumentoNormativaDTO[] tmpLlista = stub.llistarDocumentNormativa(idNormativa);
+			return Arrays.asList(tmpLlista);
+	}
+			
 	public List<NormativaDTO> llistarAfectades(long id) throws RemoteException, APIException {
 		Object[] tmpLlista = null;
 		List<NormativaDTO> llistaAfectades = null;

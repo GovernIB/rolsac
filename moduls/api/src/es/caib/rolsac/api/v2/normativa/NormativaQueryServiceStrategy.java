@@ -3,8 +3,8 @@ package es.caib.rolsac.api.v2.normativa;
 import java.util.List;
 
 import es.caib.rolsac.api.v2.afectacio.AfectacioDTO;
-import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.butlleti.ButlletiDTO;
+import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaDTO;
 import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
@@ -28,8 +28,8 @@ public interface NormativaQueryServiceStrategy {
 
     public List<ProcedimentDTO> llistarProcediments(long id, ProcedimentCriteria procedimentCriteria) throws StrategyException;
 
-    public ArxiuDTO obtenirArxiuNormativa(Long idArchivo) throws StrategyException;
-
+    public List<DocumentoNormativaDTO> llistarDocumentNormativa(long idNormativa) throws StrategyException;
+    	
     public List<AfectacioDTO> llistarAfectacionsAfectants(Long id) throws StrategyException;
 
     public List<AfectacioDTO> llistarAfectacionsAfectades(Long id) throws StrategyException;

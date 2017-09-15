@@ -1065,11 +1065,23 @@ public class NormativaBackController extends PantallaBaseController {
             return "error.permisos";
         }
 
-        /*
-        // Comprobar que si la normativa se ha indicado UA
-        if (ua == null) {
-            return "error.altres";
-        }*/
+        //Solo comprobaremos que el numnormativa no pase de tamanyo 8, tenga la '/' y que el año este relleno. 
+        //   Se deja la posibilidad que el campo DDD (DDD/MMMM) se rellene entero o no. 
+        if (valoresForm.get("item_num_norma") != null && !"".equals(valoresForm.get("item_num_norma"))) {
+      	  	String numNorma = valoresForm.get("item_num_norma");
+      	  	if (numNorma.length() > 8) {
+      	  		return "normativa.formulari.error.numnormativaincorrecto";
+      	  	} 
+      	  	
+      	  	if (!numNorma.contains("/")) {
+      	  		return "normativa.formulari.error.numnormativaincorrecto";
+      	  	}
+      	  	
+      	  	String anyo = numNorma.substring(numNorma.indexOf("/")+1);
+      	  	if (anyo.length() != 4) {
+      	  		return "normativa.formulari.error.numnormativaincorrecto";
+      	  	}
+        }
 
         return "";
         

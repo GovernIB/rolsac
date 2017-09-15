@@ -65,7 +65,7 @@ COMMENT ON COLUMN RSC_NORMAT.NOR_CODBON is 'Nuevo codigo boletin de la normativa
 	--La constraint obliga a que el numero de normativa siga el formato NNN/YYYY siendo N el nº y Y el año.
 ALTER TABLE RSC_NORMAT
   ADD CONSTRAINT  RSC_NORMAT_NUMNOR_CHECK
-  CHECK (REGEXP_LIKE(NOR_NUMNOR,'[[:digit:]]{3}/[[:digit:]]{4}')); 
+  CHECK (REGEXP_LIKE(NOR_NUMNOR,'[[:digit:]]{0,3}/[[:digit:]]{4}')); 
   
 --Renombra la vista de traduccion de normativas.  
 RENAME RSC_TRANOR to RSC_TRANOR_VIEW;

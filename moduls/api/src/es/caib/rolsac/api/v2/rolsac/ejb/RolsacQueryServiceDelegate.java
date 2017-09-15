@@ -15,6 +15,7 @@ import es.caib.rolsac.api.v2.document.DocumentCriteria;
 import es.caib.rolsac.api.v2.document.DocumentDTO;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitDTO;
+import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaDTO;
 import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiDTO;
 import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
@@ -349,6 +350,20 @@ public class RolsacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
+    
+    
+    public List<DocumentoNormativaDTO> llistarDocumentoNormativa(long idNormativa) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarDocumentoNormativa(idNormativa);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+            
+    	
     
     public UsuariDTO obtenirUsuari(UsuariCriteria usuariCriteria) throws DelegateException {
         try {

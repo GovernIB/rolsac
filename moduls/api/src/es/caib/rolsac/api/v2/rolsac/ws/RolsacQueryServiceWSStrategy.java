@@ -15,6 +15,7 @@ import es.caib.rolsac.api.v2.document.DocumentCriteria;
 import es.caib.rolsac.api.v2.document.DocumentDTO;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitDTO;
+import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaDTO;
 import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiDTO;
 import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
@@ -620,6 +621,16 @@ public class RolsacQueryServiceWSStrategy implements RolsacQueryServiceStrategy 
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}				
 	}
+    public List<DocumentoNormativaDTO> llistarDocumentoNormativa(long idNormativa)  throws StrategyException {
+		try {
+			return gateway.llistarDocumentoNormativa(idNormativa);
+		} catch (QueryServiceException qse) {
+			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
+		} catch (RemoteException e) {
+			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		}				
+	}
+	
 
 	public List<EdificiDTO> llistarEdificis(EdificiCriteria edificiTramit) throws StrategyException {
 		try {
@@ -998,6 +1009,8 @@ public class RolsacQueryServiceWSStrategy implements RolsacQueryServiceStrategy 
             throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
         }
 	}
+
+	
 
 	
 	

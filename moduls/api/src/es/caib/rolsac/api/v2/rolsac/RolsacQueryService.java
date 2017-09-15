@@ -14,6 +14,7 @@ import es.caib.rolsac.api.v2.document.DocumentCriteria;
 import es.caib.rolsac.api.v2.document.DocumentQueryServiceAdapter;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitQueryServiceAdapter;
+import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiQueryServiceAdapter;
 import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
@@ -99,6 +100,8 @@ public interface RolsacQueryService {
 
     List<DocumentTramitQueryServiceAdapter> llistarDocumentTramit(DocumentTramitCriteria documentTramitCriteria) throws QueryServiceException;
 
+    List<DocumentoNormativaQueryServiceAdapter> llistarDocumentoNormativa(long idNormativa) throws QueryServiceException;
+    
     EdificiQueryServiceAdapter obtenirEdifici(EdificiCriteria edificiTramit) throws QueryServiceException;
 
     List<EdificiQueryServiceAdapter> llistarEdificis(EdificiCriteria edificiTramit) throws QueryServiceException;

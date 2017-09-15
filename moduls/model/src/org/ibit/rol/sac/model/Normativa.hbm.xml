@@ -67,7 +67,7 @@
 		<!--  Traducciones sin combinar. -->
 		<map name="traducciones" cascade="all" table="RSC_TRANOR">
             <cache usage="read-write"/>
-            <key column="TNO_CODNOR" />
+            <key column="TNO_CODNOR" foreign-key="RSC_TNONOR_FK"/>
             <index column="TNO_CODIDI" type="string" length="2" />
             <composite-element class="org.ibit.rol.sac.model.TraduccionNormativa">
                 <property name="seccion" length="256" column="TNO_SECCIO" />
@@ -77,7 +77,7 @@
                 <property name="titulo" length="1024" column="TNO_TITULO" />
                 <property name="enlace" length="512" column="TNO_ENLACE" />
                 <property name="responsable" length="512" column="TNO_RESPON" />
-                <many-to-one  cascade="all" name="archivo" column="TNO_CODARC" />
+                <!-- many-to-one  cascade="all" name="archivo" column="TNO_CODARC" / -->
                 <property name="observaciones" length="4000" column="TNO_OBSERV" />
             </composite-element>
         </map>

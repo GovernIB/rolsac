@@ -1,0 +1,91 @@
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
+	xmlns:impl="http://ws.documentoNormativa.v2.api.rolsac.caib.es"
+	xmlns:intf="http://ws.documentoNormativa.v2.api.rolsac.caib.es"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:tns1="http://normativa.v2.api.rolsac.caib.es"
+	xmlns:tns2="http://general.v2.api.rolsac.caib.es"
+	xmlns:tns3="http://arxiu.v2.api.rolsac.caib.es"
+	xmlns:tns4="http://catalegDocuments.v2.api.rolsac.caib.es"
+	xmlns:tns5="http://excepcioDocumentacio.v2.api.rolsac.caib.es"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://ws.documentoNormativa.v2.api.rolsac.caib.es">
+	
+	<wsdl:import namespace="urn:tns1" location="dto/NormativaDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="dto/EntitatRemota.wsdl"/>
+	<wsdl:import namespace="urn:tns3" location="dto/ArxiuDTO.wsdl"/>
+	
+	<wsdl:types>
+	</wsdl:types>
+	
+	<wsdl:message name="obtenirNormativaRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="obtenirNormativaResponse">
+		<wsdl:part name="obtenirNormativaReturn" type="tns1:NormativaDTO" />
+	</wsdl:message>
+		
+	<wsdl:message name="obtenirArxiuRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="obtenirArxiuResponse">
+		<wsdl:part name="obtenirArxiuReturn" type="tns3:ArxiuDTO" />
+	</wsdl:message>
+	
+	<wsdl:portType name="DocumentoNormativaQueryServiceEJBRemote">
+	
+		<wsdl:operation name="obtenirNormativa" parameterOrder="in0">
+			<wsdl:input message="impl:obtenirNormativaRequest" name="obtenirNormativaRequest" />
+			<wsdl:output message="impl:obtenirNormativaResponse" name="obtenirNormativaResponse" />
+		</wsdl:operation>
+		
+		<wsdl:operation name="obtenirArxiu" parameterOrder="in0">
+			<wsdl:input message="impl:obtenirArxiuRequest" name="obtenirArxiuRequest" />
+			<wsdl:output message="impl:obtenirArxiuResponse" name="obtenirArxiuResponse" />
+		</wsdl:operation>
+		
+	</wsdl:portType>
+	
+	<wsdl:binding name="DocumentoNormativaWSSoapBinding"
+		type="impl:DocumentoNormativaQueryServiceEJBRemote">
+		<wsdlsoap:binding style="rpc"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		
+		<wsdl:operation name="obtenirNormativa">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirNormativaRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.documentoNormativa.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirNormativaResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.documentoNormativa.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+		<wsdl:operation name="obtenirArxiu">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirArxiuRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.documentoNormativa.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirArxiuResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.documentoNormativa.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+		
+	</wsdl:binding>
+	<wsdl:service name="DocumentoNormativaQueryServiceEJBRemoteService">
+		<wsdl:port binding="impl:DocumentoNormativaWSSoapBinding" name="DocumentoNormativaWS">
+			<wsdlsoap:address
+				location="https://localhost:8443/sacws-api/services/DocumentoNormativaWS" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

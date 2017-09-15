@@ -8,6 +8,7 @@
 	xmlns:tns4="http://butlleti.v2.api.rolsac.caib.es"
 	xmlns:tns5="http://arxiu.v2.api.rolsac.caib.es"
 	xmlns:tns6="http://afectacio.v2.api.rolsac.caib.es"
+	xmlns:tns7="http://documentoNormativa.v2.api.rolsac.caib.es"
 	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
 	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -20,6 +21,8 @@
 	<wsdl:import namespace="urn:tns4" location="dto/ButlletiDTO.wsdl"/>
 	<wsdl:import namespace="urn:tns5" location="dto/ArxiuDTO.wsdl"/>
 	<wsdl:import namespace="urn:tns6" location="dto/AfectacioDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns7" location="dto/DocumentoNormativaDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns7" location="dto/DocumentoNormativaCriteria.wsdl"/>
 	
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
@@ -38,6 +41,14 @@
 				<complexContent>
 					<restriction base="soapenc:Array">
 						<attribute ref="soapenc:arrayType" wsdl:arrayType="tns6:AfectacioDTO[]" />
+					</restriction>
+				</complexContent>
+			</complexType>
+			<!-- Per a evitar conflictes amb DTO i ArrayStoreException -->			
+			<complexType name="ArrayOfDocumentoNormativaDTO">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="tns7:DocumentoNormativaDTO[]" />
 					</restriction>
 				</complexContent>
 			</complexType>
@@ -88,6 +99,9 @@
 	<wsdl:message name="llistarAfectantsRequest">
 		<wsdl:part name="in0" type="xsd:long" />
 	</wsdl:message>
+	<wsdl:message name="llistarDocumentNormativaRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
 	<wsdl:message name="obtenirArxiuNormativaResponse">
 		<wsdl:part name="obtenirArxiuNormativaReturn" type="tns5:ArxiuDTO" />
 	</wsdl:message>
@@ -106,6 +120,9 @@
 	<wsdl:message name="llistarAfectantsResponse">
 		<wsdl:part name="llistarAfectantsReturn" type="impl:ArrayOf_xsd_anyType" />
 	</wsdl:message>
+	<wsdl:message name="llistarDocumentNormativaResponse">
+		<wsdl:part name="llistarDocumentNormativaReturn" type="impl:ArrayOfDocumentoNormativaDTO" />
+	</wsdl:message>	
 	<wsdl:message name="obtenirUnitatAdministrativaResponse">
 		<wsdl:part name="obtenirUnitatAdministrativaReturn" type="tns3:UnitatAdministrativaDTO" />
 	</wsdl:message>
@@ -159,6 +176,11 @@
 			<wsdl:input message="impl:llistarAfectantsRequest" name="llistarAfectantsRequest" />
 			<wsdl:output message="impl:llistarAfectantsResponse"
 				name="llistarAfectantsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="llistarDocumentNormativa" parameterOrder="in0">
+			<wsdl:input message="impl:llistarDocumentNormativaRequest" name="llistarDocumentNormativaRequest" />
+			<wsdl:output message="impl:llistarDocumentNormativaResponse"
+				name="llistarDocumentNormativaResponse" />
 		</wsdl:operation>
 		<wsdl:operation name="getNumAfectants" parameterOrder="in0">
 			<wsdl:input message="impl:getNumAfectantsRequest" name="getNumAfectantsRequest" />
@@ -268,6 +290,18 @@
 					namespace="http://intf.ejb.normativa.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:input>
 			<wsdl:output name="llistarAfectantsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.normativa.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="llistarDocumentNormativa">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarDocumentNormativaRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.normativa.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarDocumentNormativaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
 					namespace="http://ws.normativa.v2.api.rolsac.caib.es"
 					use="encoded" />

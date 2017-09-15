@@ -12,6 +12,9 @@ import net.sf.hibernate.Session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Afectacion;
+import org.ibit.rol.sac.model.DocumentTramit;
+import org.ibit.rol.sac.model.Documento;
+import org.ibit.rol.sac.model.DocumentoNormativa;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 
@@ -19,6 +22,12 @@ import es.caib.rolsac.api.v2.afectacio.AfectacioDTO;
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.butlleti.ButlletiCriteria;
 import es.caib.rolsac.api.v2.butlleti.ButlletiDTO;
+import es.caib.rolsac.api.v2.document.DocumentCriteria;
+import es.caib.rolsac.api.v2.document.DocumentDTO;
+import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
+import es.caib.rolsac.api.v2.documentTramit.DocumentTramitDTO;
+import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaDTO;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.general.BasicUtils;
 import es.caib.rolsac.api.v2.general.HibernateEJB;
 import es.caib.rolsac.api.v2.general.co.CriteriaObject;
@@ -273,6 +282,9 @@ public class NormativaQueryServiceEJB extends HibernateEJB {
         return procedimentsDTOList;
         
     }
+    
+    
+    
 
     /**
      * Obtiene el numero de procedimientos
@@ -330,17 +342,6 @@ public class NormativaQueryServiceEJB extends HibernateEJB {
         return ejb.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
     }
 
-    /**
-     * Obtiene el archivo de la normativa
-     * @param idArxiu
-     * @return ArxiuDTO
-     * 
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public ArxiuDTO obtenirArxiuNormativa(long idArxiu) {
-        return getArxiuDTO(idArxiu);
-    }
 
     /**
      * Obtiene la lista de afectaciones afectantes.
@@ -436,4 +437,21 @@ public class NormativaQueryServiceEJB extends HibernateEJB {
         return afectacioDTOList;
     }
 
+    
+    
+    /**
+     * Obtiene listado de documentos informativos.
+     * @param id
+     * @param idNormativa
+     * @return List<DocumentTramitDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public List<DocumentoNormativaDTO> llistarDocumentNormativa(long idNormativa) {
+        RolsacQueryServiceEJB rolsacEJB = new RolsacQueryServiceEJB();
+        return rolsacEJB.llistarDocumentoNormativa(idNormativa);
+    }
+    
+    
 }

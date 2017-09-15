@@ -97,6 +97,21 @@ $(document).ready(function() {
 		
 	});
 	
+	jQuery("#btnVolverTB").click(function() {
+		
+		// resultats
+		jQuery("div.modulBOIB").slideUp(300, function() {
+
+			jQuery("div#escriptori_detall").slideDown(300, function() {	
+			});
+
+		});
+		
+	});
+	
+	
+	
+	
 	jQuery( "#item_butlleti_id" ).change(function() {
 		var str = jQuery( "#item_butlleti_id option:selected" ).text();
 	    if (str.trim() == "BOIB") {
@@ -1045,6 +1060,11 @@ function CDetall() {
 		$("#item_numero").val(nn(dada_node.numero));
 		$("#item_butlleti_id").val(nn(dada_node.butlleti_id));
 		$("#item_butlleti").val(nn(dada_node.butlleti));
+		if (dada_node.butlleti == "BOIB") {
+			$(".gestionaBOIB").show();
+		} else {
+			$(".gestionaBOIB").hide();
+		}
 		$("#item_registre").val(nn(dada_node.registre));
 		$("#item_llei").val(nn(dada_node.llei));
 
@@ -1093,7 +1113,8 @@ function CDetall() {
 
 		//Mostrar campo de responsable y mostrar normativa.
 		$("#tipoNormativa").text(txtNormativa);
-		$("#item_responsable_ca, #item_responsable_es, #item_responsable_en, #item_responsable_de, #item_responsable_fr").show();
+		$("#item_responsable_ca").show();
+		$("#item_responsable_es, #item_responsable_es, #item_responsable_en, #item_responsable_de, #item_responsable_fr").hide();
 		$("#item_responsable_ca, #item_responsable_es, #item_responsable_en, #item_responsable_de, #item_responsable_fr").parent().parent().show();
 		
 		ModulDocuments.inicializarDocuments(dades.documents);

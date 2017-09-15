@@ -11,8 +11,7 @@ public class DocumentoNormativa extends Document  {
 	private static final long serialVersionUID = 1L;
 	/** Normativa. **/
 	private Normativa normativa;
-	/** URL.  **/
-	private String url;
+	
 	
 	/**
 	 * @return the normativa
@@ -26,20 +25,6 @@ public class DocumentoNormativa extends Document  {
 	 */
 	public final void setNormativa(Normativa normativa) {
 		this.normativa = normativa;
-	}
-
-	/**
-	 * @return the url
-	 */
-	public String getUrl() {
-		return url;
-	}
-
-	/**
-	 * @param url the url to set
-	 */
-	public void setUrl(String url) {
-		this.url = url;
 	}
 
 	@Override

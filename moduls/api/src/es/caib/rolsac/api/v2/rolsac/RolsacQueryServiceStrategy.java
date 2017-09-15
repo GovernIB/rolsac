@@ -14,6 +14,7 @@ import es.caib.rolsac.api.v2.document.DocumentCriteria;
 import es.caib.rolsac.api.v2.document.DocumentDTO;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitDTO;
+import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaDTO;
 import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiDTO;
 import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
@@ -102,6 +103,8 @@ public interface RolsacQueryServiceStrategy {
 
     List<DocumentTramitDTO> llistarDocumentTramit(DocumentTramitCriteria docuemntTramitCriteria) throws StrategyException;
 
+    List<DocumentoNormativaDTO> llistarDocumentoNormativa(long idNormativa) throws StrategyException;
+        
     EdificiDTO obtenirEdifici(EdificiCriteria edificiTramit) throws StrategyException;
 
     List<EdificiDTO> llistarEdificis(EdificiCriteria edificiTramit) throws StrategyException;

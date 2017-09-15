@@ -4,8 +4,8 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 import es.caib.rolsac.api.v2.afectacio.AfectacioDTO;
-import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.butlleti.ButlletiDTO;
+import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaDTO;
 import es.caib.rolsac.api.v2.exception.DelegateException;
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.exception.LocatorException;
@@ -114,17 +114,18 @@ public class NormativaQueryServiceDelegate {
         }
     }
     
-    public ArxiuDTO obtenirArxiuNormativa(long idArchivo) throws DelegateException {
-        try {
+    
+    public List<DocumentoNormativaDTO> llistarDocumentNormativa(long idNormativa)  throws DelegateException {
+    	try {
             NormativaQueryServiceEJBRemote ejb = normativaQueryServiceLocator.getNormativaQueryServiceEJB();
-            return ejb.obtenirArxiuNormativa(idArchivo);
+            return ejb.llistarDocumentNormativa(idNormativa);
         } catch (LocatorException e) {
             throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
         } catch (RemoteException e) {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
+    
     }
-
     @SuppressWarnings("unchecked")
     public List<AfectacioDTO> llistarAfectacionsAfectants(Long id) throws DelegateException {
         try {

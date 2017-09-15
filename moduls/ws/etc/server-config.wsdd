@@ -63,6 +63,7 @@
 		<beanMapping qname="rol:Tramite" languageSpecificType="java:es.caib.rolsac.api.v1.TramiteDTO"/>
 		<beanMapping qname="rol:HechoVitalProcedimiento" languageSpecificType="java:es.caib.rolsac.api.v1.HechoVitalProcedimientoDTO"/>
 		<beanMapping qname="rol:Normativa" languageSpecificType="java:es.caib.rolsac.api.v1.NormativaDTO"/>
+		<beanMapping qname="rol:NormativaDocumento" languageSpecificType="java:es.caib.rolsac.api.v1.NormativaDocumentoDTO"/>
 		<beanMapping qname="rol:Tipo" languageSpecificType="java:es.caib.rolsac.api.v1.TipoDTO"/>
 		<beanMapping qname="rol:Archivo" languageSpecificType="java:es.caib.rolsac.api.v1.ArchivoDTO"/>
 		<beanMapping qname="rol:Taxa" languageSpecificType="java:es.caib.rolsac.api.v1.TaxaDTO"/>
@@ -137,13 +138,15 @@
     <beanMapping languageSpecificType="java:org.ibit.rol.sac.model.ws.TraduccionTaxaTransferible"
                  qname="ns1:TraduccionTaxaTransferible"
                  xmlns:ns1="http://ws.model.sac.rol.ibit.org/beans"/>
-   <beanMapping languageSpecificType="java:org.ibit.rol.sac.model.ws.TraduccionDocumentoTransferible"
+    <beanMapping languageSpecificType="java:org.ibit.rol.sac.model.ws.TraduccionDocumentoTransferible"
                  qname="ns1:TraduccionDocumentoTransferible"
                  xmlns:ns1="http://ws.model.sac.rol.ibit.org/beans"/>
     <beanMapping languageSpecificType="java:org.ibit.rol.sac.model.ws.TraduccionNormativaTransferible"
                  qname="ns1:TraduccionNormativaTransferible"
                  xmlns:ns1="http://ws.model.sac.rol.ibit.org/beans"/>
-
+    <beanMapping languageSpecificType="java:org.ibit.rol.sac.model.ws.TraduccionDocumentoNormativaTransferible"
+                 qname="ns1:TraduccionDocumentoNormativaTransferible"
+                 xmlns:ns1="http://ws.model.sac.rol.ibit.org/beans"/>
     <beanMapping languageSpecificType="java:org.ibit.rol.sac.model.ws.UnidadAdministrativaTransferible"
                  qname="ns1:UnidadAdministrativaTransferible"
                  xmlns:ns1="http://ws.model.sac.rol.ibit.org/beans"/>
@@ -166,6 +169,9 @@
 				 xmlns:ns1="http://ws.model.sac.rol.ibit.org/beans"/>
 	<beanMapping languageSpecificType="java:org.ibit.rol.sac.model.ws.NormativaTransferible"
 				 qname="ns1:NormativaTransferible"
+				 xmlns:ns1="http://ws.model.sac.rol.ibit.org/beans"/>    
+    <beanMapping languageSpecificType="java:org.ibit.rol.sac.model.ws.DocumentoNormativaTransferible"
+				 qname="ns1:DocumentoNormativaTransferible"
 				 xmlns:ns1="http://ws.model.sac.rol.ibit.org/beans"/>     
     <beanMapping languageSpecificType="java:org.ibit.rol.sac.model.ws.DocumentoTransferible"
 				 qname="ns1:DocumentoTransferible"
