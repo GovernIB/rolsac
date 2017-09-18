@@ -5,7 +5,7 @@ CREATE TABLE RSC_DOCNOR
   DNO_CODNOR NUMBER(19,0) NOT NULL ENABLE,
   ORDEN  NUMBER(19,0) NOT NULL ENABLE,
   PRIMARY KEY (DNO_CODI),
-  CONSTRAINT RSC_DOCNOR_ORDEN_UNIQUE UNIQUE (DNO_CODNOR, DNO_ORDEN) ENABLE,
+  CONSTRAINT RSC_DOCNOR_ORDEN_UNIQUE UNIQUE (DNO_CODNOR, ORDEN) ENABLE,
   CONSTRAINT RSC_DOCNOR_NORMAT_FK FOREIGN KEY (DNO_CODNOR) REFERENCES RSC_NORMAT (NOR_CODI) ENABLE
 );
 COMMENT ON TABLE RSC_DOCNOR IS 'Documento asociado a una normativa';
@@ -65,12 +65,12 @@ COMMENT ON COLUMN RSC_NORMAT.NOR_CODBON is 'Nuevo codigo boletin de la normativa
 	--La constraint obliga a que el numero de normativa siga el formato NNN/YYYY siendo N el nº y Y el año.
 ALTER TABLE RSC_NORMAT
   ADD CONSTRAINT  RSC_NORMAT_NUMNOR_CHECK
-  CHECK (REGEXP_LIKE(NOR_NUMNOR,'[[:digit:]]{3}/[[:digit:]]{4}')); 
+  CHECK (REGEXP_LIKE(NOR_NUMNOR,'[[:digit:]]{0,3}/[[:digit:]]{4}')); 
   
 --Renombra la vista de traduccion de normativas.  
 RENAME RSC_TRANOR to RSC_TRANOR_VIEW;
 
---Crea ña tabla de traduccion de normativas.
+--Crea la tabla de traduccion de normativas.
 CREATE TABLE RSC_TRANOR
   (
     TNR_CODNOR NUMBER(19,0) NOT NULL ENABLE,
