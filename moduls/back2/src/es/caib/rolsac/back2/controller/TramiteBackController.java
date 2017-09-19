@@ -162,16 +162,16 @@ public class TramiteBackController {
 		if (listaDocuments != null) {
 			listaRequeritsDTO = new ArrayList<Map<String, Object>>() ;
 			
-			for (DocumentTramit docReq: listaDocuments) {
+			for (DocumentTramit documento: listaDocuments) {
 				
-				if (docReq != null) {
+				if (documento != null) {
 					
 					Map<String, String> titulos = new HashMap<String, String>();
 					String nombre;
 					TraduccionDocumento tradTramite;
 					for (String idioma : idiomas) {
 						
-						tradTramite = (TraduccionDocumento)docReq.getTraduccion(idioma);
+						tradTramite = (TraduccionDocumento)documento.getTraduccion(idioma);
 						nombre = (tradTramite != null && tradTramite.getTitulo() != null) ? tradTramite.getTitulo() : "";
 						
 						titulos.put(idioma, nombre);
@@ -179,7 +179,7 @@ public class TramiteBackController {
 					}
 					
 					Map<String,Object> map = new HashMap<String, Object>();
-					map.put("id", tramite.getId());
+					map.put("id", documento.getId());
 					map.put("nom", titulos);
 					map.put("moment", tramite.getFase());
 					
@@ -222,7 +222,7 @@ public class TramiteBackController {
 					}
 					
 					Map<String,Object> map = new HashMap<String, Object>();
-					map.put("id", tramite.getId());
+					map.put("id", tasa.getId());
 					map.put("nom", titulos);
 					map.put("moment", tramite.getFase());
 					
