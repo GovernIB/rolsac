@@ -181,7 +181,7 @@ public class TramiteBackController {
 					}
 					
 					Map<String,Object> map = new HashMap<String, Object>();
-					map.put("id", tramite.getId());
+					map.put("id", docReq.getId());
 					map.put("nom", titulos);
 					map.put("moment", tramite.getFase());
 					
@@ -224,7 +224,7 @@ public class TramiteBackController {
 					}
 					
 					Map<String,Object> map = new HashMap<String, Object>();
-					map.put("id", tramite.getId());
+					map.put("id", tasa.getId());
 					map.put("nom", titulos);
 					map.put("moment", tramite.getFase());
 					
