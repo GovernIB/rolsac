@@ -197,7 +197,7 @@ function CModulTramit() {
         var listaTramites = "tramitsProcediment=";
         var separador = "";
         
-        modul_tramits_elm.find("div.listaOrdenable input.tramit_id").each(function() {
+        modul_tramits_elm.find("div.ca div.listaOrdenable input.tramit_id").each(function() {
             listaTramites += separador + $(this).val();
             separador = ",";
         });
@@ -215,7 +215,7 @@ function CModulTramit() {
 //        return modul_tramits_elm.find('div.listaOrdenable input.tramit_moment[value="1"]').length > 0 
 //        		&& modul_formularis_tramits_elm.find('div.listaOrdenable input.formularisTramit_id').length > 0;
         		
-        return modul_tramits_elm.find('div.listaOrdenable input.tramit_moment[value="1"]').length > 0;
+        return modul_tramits_elm.find('div.listaOrdenable input.tramit_moment_ca[value="1"]').length > 0;
     };
     
     // Actualiza el nombre.
@@ -227,7 +227,8 @@ function CModulTramit() {
         tramitInput.next().children().first().text($("<div/>").html(tramit.nom).text());
         
         if (tramit["moment"] != undefined) {
-            jQuery("#tramit_moment_" + tramit.id).val(tramit.moment);
+            jQuery("#tramit_moment_ca_" + tramit.id).val(tramit.moment);
+            jQuery("#tramit_moment_es_" + tramit.id).val(tramit.moment);
         }
         
     };
@@ -274,8 +275,9 @@ function CEscriptoriTramit() {
         if (!this.formulariValid()) {
             return false;
         }
+        
         //Controlamos que haya un modelo seleccionado
-        if (modul_formularis_tramits_elm.find('div.listaOrdenable input.formularisTramit_id').length == 0 && idTramit != "" ){
+        if (modul_formularis_tramits_elm.find('div.ca div.listaOrdenable input.formularisTramit_id').length == 0 && idTramit != "" ){
     		Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtModelObligatori, text: ""});
     		return false;
     	}
