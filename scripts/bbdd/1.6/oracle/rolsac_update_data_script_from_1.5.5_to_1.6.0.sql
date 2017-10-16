@@ -6,7 +6,7 @@ DECLARE
 
     cursor traducciones is
         select DISTINCT tno_codnor
-          from rsc_tranor
+          from rsc_tranor_view
          where tno_codarc is not null
            or  tno_enlace is not null;
            
@@ -27,7 +27,7 @@ BEGIN
       
       INSERT INTO RSC_TRADNR (TDN_CODDNR, TDN_TITULO, TDN_ENLACE, TDN_CODARC, TDN_CODIDI)
       ( SELECT ID_DOCNOR, 'Documento ' || TNO_CODIDI, TNO_ENLACE, TNO_CODARC, TNO_CODIDI
-          FROM RSC_TRANOR           
+          FROM RSC_TRANOR_VIEW           
          WHERE TNO_CODNOR = traduccion.TNO_CODNOR
            AND (TNO_CODARC is not null OR TNO_ENLACE is not null)
           
@@ -36,10 +36,6 @@ BEGIN
       
       
   END LOOP;
-  
-  --Quitamos el enlace a null (ya lo tiene el documento)
-  UPDATE rsc_tranor
-     SET TNO_ENLACE = null;
   
   DBMS_OUTPUT.PUT_LINE ('FIN');
   COMMIT;
