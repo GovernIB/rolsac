@@ -4,7 +4,6 @@ SET SERVEROUTPUT ON;
 -------- Tras pasar el documento de enlace, ponemos el enlace a null.
 DECLARE
 
-
     cursor traducciones is
         select DISTINCT tno_codnor
           from rsc_tranor_view

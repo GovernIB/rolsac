@@ -1,7 +1,7 @@
 SET SERVEROUTPUT ON;
 ---SCRIPT PARA PASAR EL DOCUMENTO A RSC_DOCNOR Y RSC_TRADNR
 ---Ademas, ese enlace pasa a ser del documento, no de la normativa.
--------- Tras pasar el documento de enlace, ponemos el enlace a null.
+-------- Tras pasar el documento de enlace, ponemos el enlace a null. 
 DECLARE
 
     cursor traducciones is
