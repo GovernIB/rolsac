@@ -35,7 +35,9 @@ public class Traductor extends AutomaticTranslationService implements Traduccion
 	private static final String MODE_TXT = "TXT",
 								MODE_HTML = "HTML",
 								TAG_INI_HTML =  "<HTML><BODY>",
-								TAG_FI_HTML = "</BODY></HTML>";
+								TAG_FI_HTML = "</BODY></HTML>",
+								TAG_INI_TRADUCCION = "<p>",
+								TAG_FIN_TRADUCCION = "</p>";
 	
 	
 	/**
@@ -289,9 +291,12 @@ public class Traductor extends AutomaticTranslationService implements Traduccion
 				_colorMarkups = ACTIVE;
 				_markUnknowns = ACTIVE;
 				_markAlternatives = ACTIVE;
+				_PPM_USE= ACTIVE;
 				
 			} else {
-				hasToAddTagsToTranslate = !textTraduccio.startsWith("<p>");
+				//deberia venir texto plano, pero antes se controlaba si llegaba la etiqueta <p>.
+				//Para evitar problemas se mantiene TAG_INI_TRADUCCION como "<p>".
+				hasToAddTagsToTranslate = !textTraduccio.startsWith(TAG_INI_TRADUCCION);
 				if (hasToAddTagsToTranslate) {
 					textTraduccio = montarTranslate(textTraduccio);
 				}
@@ -299,6 +304,7 @@ public class Traductor extends AutomaticTranslationService implements Traduccion
 				_colorMarkups = INACTIVE;
 				_markUnknowns = INACTIVE;
 				_markAlternatives = INACTIVE;
+				_PPM_USE= INACTIVE;
 			}
 			
 			// Condición añadida debido a un bug de la aplicación Lucy.
@@ -343,9 +349,9 @@ public class Traductor extends AutomaticTranslationService implements Traduccion
 	 */
 	private static String montarTranslate(String inPut)
 	{
-		StringBuilder encode = new StringBuilder("<p>");
+		StringBuilder encode = new StringBuilder(TAG_INI_TRADUCCION);
 		encode.append(StringEscapeUtils.escapeXml(inPut));
-		encode.append("</p>");
+		encode.append(TAG_FIN_TRADUCCION);
 		return encode.toString();
 	}
 	
@@ -355,9 +361,21 @@ public class Traductor extends AutomaticTranslationService implements Traduccion
 	 * @param inPut
 	 * @return
 	 */
-	private static String desmontarTranslate(String inPut)
-	{
-		return inPut.subSequence(3, inPut.length()-4).toString();
+	private static String desmontarTranslate(String inPut){	
+		int inicio=0;
+		int fin = 0;
+	
+		inicio= inPut.indexOf(TAG_INI_TRADUCCION) + TAG_INI_TRADUCCION.length();
+		fin= inPut.indexOf(TAG_FIN_TRADUCCION);
+		
+		if(inicio!=fin) {
+			return inPut.subSequence(inicio, fin).toString();
+		}else {
+			// si no hay nada retornamos vacio
+			return "";
+		}
+		
+		
 	}
 	
 }
