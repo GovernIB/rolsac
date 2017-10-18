@@ -12,10 +12,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.Servicio;
 import org.ibit.rol.sac.model.SiaPendiente;
 import org.ibit.rol.sac.model.SiaUA;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
+import org.ibit.rol.sac.model.TraduccionServicio;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
@@ -37,6 +39,7 @@ public class SiaUtils {
 	public static final Integer SIAPENDIENTE_ESTADO_NO_CUMPLE_DATOS = -2;
 	
 	public static final String SIAPENDIENTE_TIPO_PROCEDIMIENTO = "PROC";
+	public static final String SIAPENDIENTE_TIPO_SERVICIO = "SERV";
 	//Se quitan por los nuevos cambios: public static final String SIAPENDIENTE_TIPO_UNIDAD_ADMINISTRATIVA = "UA";
 	//Se quitan por los nuevos cambios: public static final String SIAPENDIENTE_TIPO_NORMATIVA = "NORM";
 	
@@ -65,6 +68,8 @@ public class SiaUtils {
 
 	public static final Integer SIAPENDIENTE_PROCEDIMIENTO_EXISTE = 1;
 	public static final Integer SIAPENDIENTE_PROCEDIMIENTO_BORRADO = 0;
+	public static final Integer SIAPENDIENTE_SERVICIO_EXISTE = 1;
+	public static final Integer SIAPENDIENTE_SERVICIO_BORRADO = 0;
 
 	/** El nombre cuando se crea el job de quartz. **/
 	public static final String SIA_JOB_QUARTZ_NAME = "siaJob";
@@ -191,7 +196,27 @@ public class SiaUtils {
 		if (idSia != null && !idSia.isEmpty()) {
 			siaPendiente.setIdSia(Long.valueOf(idSia));
 		}
-		siaPendienteProcesoDeletegate.generarSiaPendiente(siaPendiente, procedimiento);
+		siaPendienteProcesoDeletegate.generarSiaPendiente(siaPendiente, procedimiento, null);
+	}
+	
+	/**
+	 * Se encarga de crear una pendiente SIA según los datos de entrada.
+	 * @param tipo
+	 * @param idElemento
+	 * @param existe
+	 */
+	public static void marcarIndexacionPendienteServicio(final String tipo, final Long idElemento, final Integer existe, final String idSia, final Servicio servicio) throws DelegateException {
+		SiaPendienteProcesoDelegate siaPendienteProcesoDeletegate = DelegateUtil.getSiaPendienteProcesoDelegate();
+		SiaPendiente siaPendiente = new SiaPendiente();
+		siaPendiente.setEstado(SIAPENDIENTE_ESTADO_CREADO);
+		siaPendiente.setFecAlta(new Date());
+		siaPendiente.setIdElemento(idElemento);
+		siaPendiente.setExiste(existe);
+		siaPendiente.setTipo(tipo);
+		if (idSia != null && !idSia.isEmpty()) {
+			siaPendiente.setIdSia(Long.valueOf(idSia));
+		}
+		siaPendienteProcesoDeletegate.generarSiaPendiente(siaPendiente, null, servicio);
 	}
 
 	/**
@@ -287,6 +312,87 @@ public class SiaUtils {
 		    }
 	    } else {
 	    	if (procedimiento.getEstadoSIA() == null || SiaUtils.ESTADO_BAJA.equals(procedimiento.getEstadoSIA())) {
+	    		resultado.setNotificarSIA(false);
+	    		resultado.setRespuesta(mensajeError.toString());
+	    	} else {
+	    		//Sin código SiaUA no se puede enviar
+    			resultado.setNotificarSIA(false);    			
+	    	}
+	    }
+	    
+		return resultado;
+	}
+	
+	
+	/**
+	 * Comprueba si un procedimiento es enviable a SIA.
+	 * Checks:
+	 * 	- Es visible.
+	 *  - Es visible UA.
+	 *  - Tiene codigo DIR3.
+	 *  - Está en SiaUA.
+	 * 
+	 * @param servicio
+	 * @return
+	 */
+	public static SiaEnviableResultado isEnviable (final Servicio servicio) {
+		final SiaEnviableResultado resultado = new SiaEnviableResultado(false);
+		final StringBuffer mensajeError = new StringBuffer();
+
+		//Si el procedimiento que se pasa es nulo, tiene que salir.
+		if (servicio == null) {
+			resultado.setRespuesta("El procediment és nul.");	
+			resultado.setIdCentro("");
+			resultado.setNotificarSIA(false);
+	    	return resultado;
+		}
+		
+		//Es visible.
+		final boolean esVisible = servicio.isVisible();
+		if (!esVisible) {
+			mensajeError.append("El procediment no és visible.");
+		}
+		
+		//Es visible UA.
+	    boolean isVisibleUA = isVisibleUA(servicio);
+	    if (!isVisibleUA) {
+	    	mensajeError.append("La unitat de l'òrgan resolutori o d'alguns dels seus predecessors és no visible.");	
+	    }
+		
+		//Tiene código centro.
+		boolean tieneCodigoCentro;
+		final String codigoIdCentro = obtenerCodigoIdCentro(servicio);
+		if (codigoIdCentro == null) {
+			tieneCodigoCentro = false;
+			mensajeError.append("No té codi DIR ni l'òrgan resolutori ni predecessors.");
+	    } else {
+	    	tieneCodigoCentro = true;	
+	    	resultado.setIdCentro(codigoIdCentro);
+	    }
+		
+		
+		
+	    //Comprobamos
+	    //Si cumple los 3 checks.
+	    //    Si nunca ha estado en SIA --> es enviable a SIA como Alta (A)
+	    //    Si esta de baja           --> es enviable a SIA como Reactivación (R)
+	    //    Si no..................   --> es enviable a SIA como modificación (M)
+	    //Si no cumple alguno de los 34 checks.
+	    //    Si está de baja o nunca ha estado en SIA ---> NO es enviable
+	    //    Si no .....								--> es enviable a SIA como baja.
+	    if (esVisible && tieneCodigoCentro && isVisibleUA) {
+	    	resultado.setNotificarSIA(true);
+		    if (servicio.getEstadoSIA() == null) {
+		    	resultado.setOperacion(SiaUtils.ESTADO_ALTA);
+		    } else {
+		    	if (SiaUtils.ESTADO_BAJA.equals(servicio.getEstadoSIA())) {
+		    		resultado.setOperacion(SiaUtils.ESTADO_REACTIVACION);
+		    	} else {
+		    		resultado.setOperacion(SiaUtils.ESTADO_MODIFICACION);
+		    	}
+		    }
+	    } else {
+	    	if (servicio.getEstadoSIA() == null || SiaUtils.ESTADO_BAJA.equals(servicio.getEstadoSIA())) {
 	    		resultado.setNotificarSIA(false);
 	    		resultado.setRespuesta(mensajeError.toString());
 	    	} else {
@@ -399,6 +505,105 @@ public class SiaUtils {
 	
 	
 	/**
+	 * Comprueba si le falta algún dato. 
+	 * Condiciones:
+	 *  - Tiene materias.
+	 *  - Tiene normativas y uno de tipo SIA.
+	 *  - Tiene descripción.
+	 *  - Tiene resumen.
+	 *  - Depende de una UA asociada a una entidad raiz.
+	 *  - No está asociado directamente a la entidad raíz.
+	 *  
+	 * @param servicio
+	 * @return
+	 */
+	public static SiaCumpleDatos cumpleDatos(final Servicio servicio) {
+		final SiaCumpleDatos resultado = new SiaCumpleDatos(false);
+		final StringBuffer mensajeError = new StringBuffer();
+
+		if (servicio == null) {
+			resultado.setRespuesta("El procediment està nul.");
+			resultado.setCumpleDatos(false);
+			return resultado;
+		}
+		
+	    boolean tieneMaterias=servicio.getMaterias().size() > 0;
+	    if (!tieneMaterias) {
+	    	mensajeError.append("No té matèries.");	
+	    }
+	    
+	    boolean tieneNormativas=servicio.getNormativas().size() > 0;
+	    if (!tieneNormativas) {
+	    	mensajeError.append("No té normatives.");	
+	    }
+	    
+	    boolean encontradoTipo = false;
+	    if (servicio.getNormativas().size() > 0) {
+		    for (Normativa norm : servicio.getNormativas()) {
+		    	if (norm.getTipo() != null && norm.getTipo().getTipoSia() != null) {
+		    		encontradoTipo = true;
+		    	}
+		    }
+	    }
+	    
+	    if (!encontradoTipo) {
+	    	mensajeError.append("Cap de les normatives té associat un tipus sia.");
+	    }
+	    
+	    
+	    final String nombre = getNombreServicio(servicio);
+	    boolean tieneNombre;
+	    if (StringUtils.isBlank(nombre)) {
+	    	mensajeError.append("El procediment no té títol.");	
+	    	tieneNombre = false;
+	    } else {
+	    	tieneNombre = true;
+	    	resultado.setNombre(nombre);
+	    }
+	    
+	    final String resumen = getResumenServicio(servicio);
+	    boolean tieneResumen;
+	    if (StringUtils.isBlank(resumen)) {
+	    	mensajeError.append("El procediment no té resum.");	
+	    	tieneResumen = false;
+	    } else {
+	    	tieneResumen = true;
+	    	resultado.setResumen(resumen);
+	    }
+	    
+	    boolean tieneSiaUA;
+  		final SiaUA siaUA = obtenerSiaUA(servicio);
+  	    if (siaUA == null) {
+  			tieneSiaUA = false;	
+  			mensajeError.append("El procediment no té associat a una entitat arrel.");
+  	    } else {
+  	    	tieneSiaUA = true;
+  	    	resultado.setSiaUA(siaUA);
+  	    }
+  	    
+  	    /*
+  	    boolean noAsociadoSiaUA = true;
+  	    if (tieneSiaUA) {
+	  	    final String codigoDir3IdCentro = obtenerCodigoIdCentro(procedimiento);
+	  	    final String codigoDir3SiaUA = siaUA.getUnidadAdministrativa().getCodigoDIR3();
+	  	    if (!codigoDir3SiaUA.equals(codigoDir3IdCentro)) {
+	  	    	mensajeError.append("El procedimiento esta asociado directamente a la entidad raiz.");
+	  	    	noAsociadoSiaUA = false;
+	  	    }
+  	    }*/
+	    
+	    /** Si cumple todos los datos ok, sino incrustamos el mensaje de error. **/
+	    if (tieneMaterias && tieneNormativas && encontradoTipo && tieneNombre && tieneResumen && tieneSiaUA) {
+	    	resultado.setCumpleDatos(true);	    	
+	    } else {
+	    	resultado.setCumpleDatos(false);
+	    	resultado.setRespuesta(mensajeError.toString());
+	    }
+	    
+	    return resultado;
+	}
+	
+	/**
 	 * Compruebo si todas las UAs son visible.
 	 * @param procedimiento
 	 * @return
@@ -428,6 +633,39 @@ public class SiaUtils {
 		return visible;
 	}
 
+	
+
+	/**
+	 * Compruebo si todas las UAs son visible.
+	 * @param servicio
+	 * @return
+	 */
+	private static boolean isVisibleUA(Servicio servicio) {
+		
+		boolean visible = true;
+		if (servicio == null || servicio.getServicioResponsable() == null) {
+			visible = false;
+		} else {
+			if (!servicio.getServicioResponsable().getValidacion().equals(Validacion.PUBLICA)) {
+				
+				visible = false;
+				
+			} else {
+				//Recorremos sus predecesores
+		    	for(Object oua : servicio.getServicioResponsable().getPredecesores()) {
+		    		final UnidadAdministrativa ua = (UnidadAdministrativa) oua;
+		    		if (!ua.getValidacion().equals(Validacion.PUBLICA)) {
+		    			visible = false;
+		    			break;
+		    		}
+		    	}
+			}
+		}
+		
+		return visible;
+	}
+	
+	
 	/**
 	 * Devuelve el código DIR3 de la UA, si es nulo, es que ninguno lo tiene.
 	 * 
@@ -454,6 +692,39 @@ public class SiaUtils {
 		    	
 		    } else {
 		    	codigoIdCentro = procedimiento.getOrganResolutori().getCodigoDIR3();
+		    }
+		}
+
+		return codigoIdCentro;
+	}
+	
+	
+	/**
+	 * Devuelve el código DIR3 de la UA, si es nulo, es que ninguno lo tiene.
+	 * 
+	 * @param servicio
+	 * @return
+	 */
+	private static String obtenerCodigoIdCentro(Servicio servicio) {
+		
+		String codigoIdCentro = null;
+		
+		if (servicio != null && servicio.getServicioResponsable() != null) {
+		
+			if (servicio.getServicioResponsable().getCodigoDIR3() == null) {
+		    	
+		    	//Recorremos sus predecesores
+				for(int i =  servicio.getServicioResponsable().getPredecesores().size() -1 ; i >= 0 ; i --) {
+		    	//for(Object oua : procedimiento.getOrganResolutori().getPredecesores()) {
+		    		final UnidadAdministrativa ua = (UnidadAdministrativa) servicio.getServicioResponsable().getPredecesores().get(i);
+		    		if (ua.getCodigoDIR3() != null) {
+		    			codigoIdCentro = ua.getCodigoDIR3();
+		    			break;
+		    		}
+		    	}
+		    	
+		    } else {
+		    	codigoIdCentro = servicio.getServicioResponsable().getCodigoDIR3();
 		    }
 		}
 
@@ -497,6 +768,44 @@ public class SiaUtils {
 		return siaUA;
 	}
 	
+	
+	/**
+	 * Devuelve el código DIR3 de la UA, si es nulo, es que ninguno lo tiene.
+	 * 
+	 * @param servicio
+	 * @return
+	 */
+	private static SiaUA obtenerSiaUA(Servicio servicio) {
+		
+		SiaUA siaUA;
+		try {
+			if (servicio == null || servicio.getServicioResponsable() == null) {
+				siaUA = null;
+			} else {
+			
+				SiaPendienteProcesoDelegate siaPendienteProceso = DelegateUtil.getSiaPendienteProcesoDelegate();
+				siaUA = siaPendienteProceso.obtenerSiaUA(servicio.getServicioResponsable()); 
+				
+				if (siaUA == null) {
+					//Recorremos sus predecesores
+			    	for(final Object oua : servicio.getServicioResponsable().getPredecesores()) {
+			    		final UnidadAdministrativa ua = (UnidadAdministrativa) oua;
+			    		siaUA = siaPendienteProceso.obtenerSiaUA(ua); 
+			    		if (siaUA != null) {
+			    			break;
+			    		}
+			    	}
+				}
+			}
+		} catch (Exception exception) {
+			log.error("Error obteniendo la siaUA", exception);
+			siaUA = null;
+		}
+		
+		return siaUA;
+	}
+	
+	
 	/**
 	 * Obtiene el resumen del procedimiento.
 	 * @param procedimiento
@@ -516,6 +825,26 @@ public class SiaUtils {
 		}
 		return resumen;
 	}
+	
+	/**
+	 * Obtiene el resumen del servicio.
+	 * @param servicio
+	 * @return
+	 */
+	public static String getResumenServicio(Servicio servicio) {
+		final TraduccionServicio tradEs = (TraduccionServicio) servicio.getTraduccion("es");
+		final TraduccionServicio tradCa = (TraduccionServicio) servicio.getTraduccion("ca");
+		String resumen = null;
+		if (tradEs != null  && StringUtils.isNotBlank(tradEs.getObjeto())) {
+			resumen = tradEs.getObjeto();
+		} else if (tradCa != null) {
+			resumen = tradCa.getObjeto();
+		}
+		if (resumen != null && resumen.length() >= 4000) {
+			resumen = resumen.substring(0, 3999);
+		}
+		return resumen;
+	}
 
 	/**
 	 * Calcula el nombre del procedimiento. 
@@ -525,6 +854,23 @@ public class SiaUtils {
 	 public static String getNombreProcedimiento(ProcedimientoLocal procedimiento) {
 		 final TraduccionProcedimientoLocal tradEs = (TraduccionProcedimientoLocal) procedimiento.getTraduccion("es");
 		 final TraduccionProcedimientoLocal tradCa = (TraduccionProcedimientoLocal) procedimiento.getTraduccion("ca");
+		 String nombre = null;
+		 if (tradEs != null  && StringUtils.isNotBlank(tradEs.getNombre())) {
+			nombre = tradEs.getNombre();
+		 } else if (tradCa != null ){
+			nombre = tradCa.getNombre();
+		 }
+		 return nombre;	
+	}
+	 
+	 /**
+	 * Calcula el nombre del procedimiento. 
+	 * @param servicio
+	 * @return
+	 */
+	 public static String getNombreServicio(Servicio servicio) {
+		 final TraduccionServicio tradEs = (TraduccionServicio) servicio.getTraduccion("es");
+		 final TraduccionServicio tradCa = (TraduccionServicio) servicio.getTraduccion("ca");
 		 String nombre = null;
 		 if (tradEs != null  && StringUtils.isNotBlank(tradEs.getNombre())) {
 			nombre = tradEs.getNombre();

@@ -1,0 +1,143 @@
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
+	xmlns:impl="http://ws.documentoServicio.v2.api.rolsac.caib.es"
+	xmlns:intf="http://ws.documentoServicio.v2.api.rolsac.caib.es"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:tns1="http://servicio.v2.api.rolsac.caib.es"
+	xmlns:tns2="http://general.v2.api.rolsac.caib.es"
+	xmlns:tns3="http://arxiu.v2.api.rolsac.caib.es"
+	xmlns:tns4="http://catalegDocuments.v2.api.rolsac.caib.es"
+	xmlns:tns5="http://excepcioDocumentacio.v2.api.rolsac.caib.es"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://ws.documentoServicio.v2.api.rolsac.caib.es">
+	
+	<wsdl:import namespace="urn:tns1" location="dto/ServicioDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns2" location="dto/EntitatRemota.wsdl"/>
+	<wsdl:import namespace="urn:tns3" location="dto/ArxiuDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns4" location="dto/CatalegDocumentsDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns5" location="dto/ExcepcioDocumentacioDTO.wsdl"/>
+	
+	<wsdl:types>
+	</wsdl:types>
+	
+	<wsdl:message name="obtenirServicioRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="obtenirServicioResponse">
+		<wsdl:part name="obtenirServicioReturn" type="tns1:ServicioDTO" />
+	</wsdl:message>
+		
+	<wsdl:message name="obtenirArxiuRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="obtenirArxiuResponse">
+		<wsdl:part name="obtenirArxiuReturn" type="tns3:ArxiuDTO" />
+	</wsdl:message>
+	
+	<wsdl:message name="obtenirCatalegDocumentsRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="obtenirCatalegDocumentsResponse">
+		<wsdl:part name="obtenirCatalegDocumentsReturn" type="tns4:CatalegDocumentsDTO" />
+	</wsdl:message>
+	
+	<wsdl:message name="obtenirExcepcioDocumentacioRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="obtenirExcepcioDocumentacioResponse">
+		<wsdl:part name="obtenirExcepcioDocumentacioReturn" type="tns5:ExcepcioDocumentacioDTO" />
+	</wsdl:message>			
+	
+	<wsdl:portType name="DocumentoServicioQueryServiceEJBRemote">
+	
+		<wsdl:operation name="obtenirServicio" parameterOrder="in0">
+			<wsdl:input message="impl:obtenirServicioRequest" name="obtenirServicioRequest" />
+			<wsdl:output message="impl:obtenirServicioResponse" name="obtenirServicioResponse" />
+		</wsdl:operation>
+		
+		<wsdl:operation name="obtenirArxiu" parameterOrder="in0">
+			<wsdl:input message="impl:obtenirArxiuRequest" name="obtenirArxiuRequest" />
+			<wsdl:output message="impl:obtenirArxiuResponse" name="obtenirArxiuResponse" />
+		</wsdl:operation>
+		
+		<wsdl:operation name="obtenirCatalegDocuments" parameterOrder="in0">
+			<wsdl:input message="impl:obtenirCatalegDocumentsRequest" name="obtenirCatalegDocumentsRequest" />
+			<wsdl:output message="impl:obtenirCatalegDocumentsResponse" name="obtenirCatalegDocumentsResponse" />
+		</wsdl:operation>
+
+		<wsdl:operation name="obtenirExcepcioDocumentacio" parameterOrder="in0">
+			<wsdl:input message="impl:obtenirExcepcioDocumentacioRequest" name="obtenirExcepcioDocumentacioRequest" />
+			<wsdl:output message="impl:obtenirExcepcioDocumentacioResponse" name="obtenirExcepcioDocumentacioResponse" />
+		</wsdl:operation>
+		
+	</wsdl:portType>
+	
+	<wsdl:binding name="DocumentoServicioWSSoapBinding"
+		type="impl:DocumentoServicioQueryServiceEJBRemote">
+		<wsdlsoap:binding style="rpc"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="obtenirServicio">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirServicioRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.documentoServicio.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirServicioResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.documentServicio.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+		<wsdl:operation name="obtenirArxiu">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirArxiuRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.documentoServicio.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirArxiuResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.documentoServicio.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+		<wsdl:operation name="obtenirCatalegDocuments">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirCatalegDocumentsRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.documentoServicio.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirCatalegDocumentsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.documentoServicio.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="obtenirExcepcioDocumentacio">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirExcepcioDocumentacioRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.documentoServicio.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirExcepcioDocumentacioResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.documentoServicio.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+	</wsdl:binding>
+	<wsdl:service name="DocumentoServicioQueryServiceEJBRemoteService">
+		<wsdl:port binding="impl:DocumentoServicioWSSoapBinding" name="DocumentoServicioWS">
+			<wsdlsoap:address
+				location="https://localhost:8443/sacws-api/services/DocumentoServicioWS" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

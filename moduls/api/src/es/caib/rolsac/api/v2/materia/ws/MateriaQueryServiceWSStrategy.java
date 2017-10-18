@@ -16,6 +16,8 @@ import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaDTO;
 import es.caib.rolsac.api.v2.materia.MateriaQueryServiceStrategy;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 import es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaCriteria;
@@ -55,6 +57,14 @@ public class MateriaQueryServiceWSStrategy implements
 	public int getNumProcedimentsLocals(long id) throws StrategyException {
 		try {
 			return gateway.getNumProcedimentsLocals(id);
+		} catch (RemoteException e) {
+			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		}		
+	}
+	
+	public int getNumServicios(long id) throws StrategyException {
+		try {
+			return gateway.getNumServicios(id);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}		
@@ -105,6 +115,17 @@ public class MateriaQueryServiceWSStrategy implements
 			ProcedimentCriteria procedimentCriteria) throws StrategyException {
 		try {
 			return gateway.llistarProcedimentsLocals(id, procedimentCriteria);
+		} catch (RemoteException e) {
+			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+		}						
+	}
+	
+	public List<ServicioDTO> llistarServicios(long id,
+			ServicioCriteria servicioCriteria) throws StrategyException {
+		try {
+			return gateway.llistarServicios(id, servicioCriteria);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		} catch (APIException e) {

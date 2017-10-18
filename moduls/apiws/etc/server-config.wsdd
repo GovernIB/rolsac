@@ -48,6 +48,21 @@
             soapAction="">
             <parameter qname="in0" type="tns:ProcedimentCriteria" xmlns:tns="http://procediment.v2.api.rolsac.caib.es" />
         </operation>
+        <operation name="obtenirServicio" qname="operNS:obtenirServicio" xmlns:operNS="http://intf.ejb.rolsac.v2.api.rolsac.caib.es"
+            returnQName="obtenirServicioReturn" returnType="rtns:ServicioDTO" xmlns:rtns="http://servicio.v2.api.rolsac.caib.es"
+            soapAction="">
+            <parameter qname="in0" type="tns:ServicioCriteria" xmlns:tns="http://servicio.v2.api.rolsac.caib.es" />
+        </operation>
+        <operation name="llistarServicios" qname="operNS:llistarServicios" xmlns:operNS="http://intf.ejb.rolsac.v2.api.rolsac.caib.es"
+            returnQName="llistarServiciosReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.rolsac.v2.api.rolsac.caib.es"
+            returnItemType="tns2:ServicioDTO" xmlns:tns2="http://servicio.v2.api.rolsac.caib.es" soapAction="">
+            <parameter qname="in0" type="tns:ServicioCriteria" xmlns:tns="http://servicio.v2.api.rolsac.caib.es" />
+        </operation>
+        <operation name="getNumServicios" qname="operNS:getNumServicios" xmlns:operNS="http://intf.ejb.rolsac.v2.api.rolsac.caib.es"
+            returnQName="getNumServiciosReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema"
+            soapAction="">
+            <parameter qname="in0" type="tns:ServicioCriteria" xmlns:tns="http://servicio.v2.api.rolsac.caib.es" />
+        </operation>
         <operation name="getNumFitxes" qname="operNS:getNumFitxes" xmlns:operNS="http://intf.ejb.rolsac.v2.api.rolsac.caib.es"
                    returnQName="getNumFitxesReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema"
                    soapAction="">
@@ -111,12 +126,12 @@
         <operation name="llistarDocumentoNormativa" qname="operNS:llistarDocumentoNormativa" xmlns:operNS="http://intf.ejb.rolsac.v2.api.rolsac.caib.es"
             returnQName="llistarDocumentoNormativaReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.rolsac.v2.api.rolsac.caib.es"
             returnItemType="tns2:DocumentoNormativaDTO" xmlns:tns2="http://documentoNormativa.v2.api.rolsac.caib.es" soapAction="">
-            <parameter qname="in0"  type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"  />
+            <parameter qname="in0" type="tns:DocumentoNormativaCriteria" xmlns:tns="http://documentoNormativa.v2.api.rolsac.caib.es" />
         </operation>
         <operation name="obtenirNormativa" qname="operNS:obtenirNormativa" xmlns:operNS="http://intf.ejb.rolsac.v2.api.rolsac.caib.es"
             returnQName="obtenirNormativaReturn" returnType="rtns:NormativaDTO" xmlns:rtns="http://normativa.v2.api.rolsac.caib.es"
             soapAction="">
-            <parameter qname="in0" type="tns:NormativaCriteria" xmlns:tns="http://normativa.v2.api.rolsac.caib.es" />
+            <parameter qname="in0" type="tns:DocumentoNormativaCriteria" xmlns:tns="http://documentoNormativa.v2.api.rolsac.caib.es" />
         </operation>
         <operation name="llistarNormatives" qname="operNS:llistarNormatives" xmlns:operNS="http://intf.ejb.rolsac.v2.api.rolsac.caib.es"
             returnQName="llistarNormativesReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.rolsac.v2.api.rolsac.caib.es"
@@ -386,7 +401,7 @@
         </operation>
 		
         <parameter name="allowedMethods"
-            value="getNumProcediments getNumFitxes obtenirNormativa obtenirDocumentTramit obtenirDocument llistarPerfils llistarDocuments llistarMateries obtenirEnllac obtenirProcediment llistarTramit llistarDocumentTramit llistarDocumentoNormativa obtenirFamilia llistarFormularis obtenirEdifici llistarUnitatsMateries llistarPersonal llistarTaxes obtenirMateria obtenirMateriaAgrupacio obtenirFitxa llistarPublicsObjectius llistarEspaisTerritorials obtenirTaxa llistarButlletins llistarFitxes obtenirSeccio llistarIconesMateries obtenirPersonal llistarTipus obtenirPerfil obtenirEspaiTerritorial llistarTipusAfectacio llistarProcediments obtenirFormulari llistarNormatives obtenirButlleti llistarEnllacos obtenirIconaMateria obtenirAgrupacioFetVital llistarMateriesAgrupacions obtenirUnitatMateria obtenirTipusAfectacio llistarFamilies obtenirPublicObjectiu obtenirUsuari llistarEdificis obtenirAgrupacioMateria llistarIconesFamilies llistarAgrupacionsFetsVitals obtenirFetVital obtenirUnitatAdministrativa llistarUnitatsAdministratives llistarAgrupacionsMateries llistarSeccions obtenirTipus llistarFetsVitals obtenirFitxaUA llistarFitxesUA obtenirTramit obtenirIconaFamilia llistarUsuaris llistarTipusIniciacions obtenirTipusIniciacio obtenirCatalegDocuments llistarCatalegsDocuments obtenirIdioma llistarIdiomes obtenirSilenci" />
+            value="getNumProcediments getNumServicios getNumFitxes obtenirNormativa obtenirDocumentTramit obtenirDocument llistarPerfils llistarDocuments llistarMateries obtenirEnllac obtenirProcediment obtenirServicio llistarTramit llistarDocumentTramit llistarDocumentoNormativa obtenirFamilia llistarFormularis obtenirEdifici llistarUnitatsMateries llistarPersonal llistarTaxes obtenirMateria obtenirMateriaAgrupacio obtenirFitxa llistarPublicsObjectius llistarEspaisTerritorials obtenirTaxa llistarButlletins llistarFitxes obtenirSeccio llistarIconesMateries obtenirPersonal llistarTipus obtenirPerfil obtenirEspaiTerritorial llistarTipusAfectacio llistarProcediments llistarServicios obtenirFormulari llistarNormatives obtenirButlleti llistarEnllacos obtenirIconaMateria obtenirAgrupacioFetVital llistarMateriesAgrupacions obtenirUnitatMateria obtenirTipusAfectacio llistarFamilies obtenirPublicObjectiu obtenirUsuari llistarEdificis obtenirAgrupacioMateria llistarIconesFamilies llistarAgrupacionsFetsVitals obtenirFetVital obtenirUnitatAdministrativa llistarUnitatsAdministratives llistarAgrupacionsMateries llistarSeccions obtenirTipus llistarFetsVitals obtenirFitxaUA llistarFitxesUA obtenirTramit obtenirIconaFamilia llistarUsuaris llistarTipusIniciacions obtenirTipusIniciacio obtenirCatalegDocuments llistarCatalegsDocuments obtenirIdioma llistarIdiomes obtenirSilenci" />
 
         <arrayMapping xmlns:ns="http://ws.rolsac.v2.api.rolsac.caib.es" qname="ns:ArrayOfPerfilDTO"
             type="java:es.caib.rolsac.api.v2.perfil.PerfilDTO[]" innerType="cmp-ns:PerfilDTO" xmlns:cmp-ns="http://perfil.v2.api.rolsac.caib.es"
@@ -417,6 +432,12 @@
             deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
         <typeMapping xmlns:ns="http://procediment.v2.api.rolsac.caib.es" qname="ns:ProcedimentCriteria"
             type="java:es.caib.rolsac.api.v2.procediment.ProcedimentCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+            deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        <typeMapping xmlns:ns="http://servicio.v2.api.rolsac.caib.es" qname="ns:ServicioCriteria"
+            type="java:es.caib.rolsac.api.v2.servicio.ServicioCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+            deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        <typeMapping xmlns:ns="http://servicio.v2.api.rolsac.caib.es" qname="ns:ServicioCriteria"
+            type="java:es.caib.rolsac.api.v2.servicio.ServicioCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
             deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
         <typeMapping xmlns:ns="http://iconaFamilia.v2.api.rolsac.caib.es" qname="ns:IconaFamiliaCriteria"
             type="java:es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
@@ -480,6 +501,9 @@
             deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
         <typeMapping xmlns:ns="http://procediment.v2.api.rolsac.caib.es" qname="ns:ProcedimentDTO"
             type="java:es.caib.rolsac.api.v2.procediment.ProcedimentDTO" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+            deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        <typeMapping xmlns:ns="http://servicio.v2.api.rolsac.caib.es" qname="ns:ServicioDTO"
+            type="java:es.caib.rolsac.api.v2.servicio.ServicioDTO" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
             deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
         <typeMapping xmlns:ns="http://personal.v2.api.rolsac.caib.es" qname="ns:PersonalDTO"
             type="java:es.caib.rolsac.api.v2.personal.PersonalDTO" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
@@ -565,6 +589,9 @@
         <arrayMapping xmlns:ns="http://ws.rolsac.v2.api.rolsac.caib.es" qname="ns:ArrayOfProcedimentDTO"
             type="java:es.caib.rolsac.api.v2.procediment.ProcedimentDTO[]" innerType="cmp-ns:ProcedimentDTO"
             xmlns:cmp-ns="http://procediment.v2.api.rolsac.caib.es" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        <arrayMapping xmlns:ns="http://ws.rolsac.v2.api.rolsac.caib.es" qname="ns:ArrayOfServicioDTO"
+            type="java:es.caib.rolsac.api.v2.servicio.ServicioDTO[]" innerType="cmp-ns:ServicioDTO"
+            xmlns:cmp-ns="http://servicio.v2.api.rolsac.caib.es" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
         <typeMapping xmlns:ns="http://agrupacioMateria.v2.api.rolsac.caib.es" qname="ns:AgrupacioMateriaCriteria"
             type="java:es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
             deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
@@ -713,6 +740,12 @@
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
             <parameter qname="in1" type="tns:ProcedimentCriteria" xmlns:tns="http://procediment.v2.api.rolsac.caib.es" />
         </operation>
+        <operation name="llistarServicios" qname="operNS:llistarServicios" xmlns:operNS="http://intf.ejb.fetVital.v2.api.rolsac.caib.es"
+            returnQName="llistarServiciosReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.fetVital.v2.api.rolsac.caib.es"
+            returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+            <parameter qname="in1" type="tns:ServicioCriteria" xmlns:tns="http://servicio.v2.api.rolsac.caib.es" />
+        </operation>
         <operation name="llistarFetsVitalsAgrupacionsFV" qname="operNS:llistarFetsVitalsAgrupacionsFV"
             xmlns:operNS="http://intf.ejb.fetVital.v2.api.rolsac.caib.es" returnQName="llistarFetsVitalsAgrupacionsFVReturn"
             returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.fetVital.v2.api.rolsac.caib.es" returnItemType="tns2:anyType"
@@ -727,6 +760,11 @@
         </operation>
         <operation name="getNumProcedimentsLocals" qname="operNS:getNumProcedimentsLocals" xmlns:operNS="http://intf.ejb.fetVital.v2.api.rolsac.caib.es"
             returnQName="getNumProcedimentsLocalsReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema"
+            soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+        </operation>
+        <operation name="getNumServicios" qname="operNS:getNumServicios" xmlns:operNS="http://intf.ejb.fetVital.v2.api.rolsac.caib.es"
+            returnQName="getNumServiciosReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema"
             soapAction="">
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
         </operation>
@@ -746,7 +784,7 @@
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
         </operation>
         <parameter name="allowedMethods"
-            value="getNumFetsVitalsAgrupacionsFV getContingut llistarFitxes getNormativa getNumFitxes getNumProcedimentsLocals llistarFetsVitalsAgrupacionsFV llistarProcedimentsLocals getDistribuciCompetencial" />
+            value="getNumFetsVitalsAgrupacionsFV getContingut llistarFitxes getNormativa getNumFitxes getNumProcedimentsLocals getNumServicios llistarFetsVitalsAgrupacionsFV llistarProcedimentsLocals llistarServicios getDistribuciCompetencial" />
 
         <typeMapping xmlns:ns="http://arxiu.v2.api.rolsac.caib.es" qname="ns:ArxiuDTO"
             type="java:es.caib.rolsac.api.v2.arxiu.ArxiuDTO" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
@@ -759,6 +797,9 @@
             encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
         <typeMapping xmlns:ns="http://procediment.v2.api.rolsac.caib.es" qname="ns:ProcedimentCriteria"
             type="java:es.caib.rolsac.api.v2.procediment.ProcedimentCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+            deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        <typeMapping xmlns:ns="http://servicio.v2.api.rolsac.caib.es" qname="ns:ServicioCriteria"
+            type="java:es.caib.rolsac.api.v2.servicio.ServicioCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
             deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
         <typeMapping xmlns:ns="http://fitxa.v2.api.rolsac.caib.es" qname="ns:FitxaCriteria"
             type="java:es.caib.rolsac.api.v2.fitxa.FitxaCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
@@ -917,6 +958,11 @@
             soapAction="">
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
         </operation>
+        <operation name="obtenirServicio" qname="operNS:obtenirServicio" xmlns:operNS="http://intf.ejb.document.v2.api.rolsac.caib.es"
+            returnQName="obtenirServicioReturn" returnType="rtns:ServicioDTO" xmlns:rtns="http://servicio.v2.api.rolsac.caib.es"
+            soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+        </operation>
         <operation name="obtenirFitxa" qname="operNS:obtenirFitxa" xmlns:operNS="http://intf.ejb.document.v2.api.rolsac.caib.es"
             returnQName="obtenirFitxaReturn" returnType="rtns:FitxaDTO" xmlns:rtns="http://fitxa.v2.api.rolsac.caib.es"
             soapAction="">
@@ -927,10 +973,13 @@
             soapAction="">
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
         </operation>
-        <parameter name="allowedMethods" value="obtenirProcediment obtenirArxiu obtenirFitxa" />
+        <parameter name="allowedMethods" value="obtenirProcediment obtenirServicio obtenirArxiu obtenirFitxa" />
 
         <typeMapping xmlns:ns="http://procediment.v2.api.rolsac.caib.es" qname="ns:ProcedimentDTO"
             type="java:es.caib.rolsac.api.v2.procediment.ProcedimentDTO" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+            deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        <typeMapping xmlns:ns="http://servicio.v2.api.rolsac.caib.es" qname="ns:ServicioDTO"
+            type="java:es.caib.rolsac.api.v2.servicio.ServicioDTO" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
             deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
         <typeMapping xmlns:ns="http://arxiu.v2.api.rolsac.caib.es" qname="ns:ArxiuDTO"
             type="java:es.caib.rolsac.api.v2.arxiu.ArxiuDTO" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
@@ -1193,8 +1242,19 @@
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
             <parameter qname="in1" type="tns:ProcedimentCriteria" xmlns:tns="http://procediment.v2.api.rolsac.caib.es" />
         </operation>
+        <operation name="llistarServicios" qname="operNS:llistarServicios" xmlns:operNS="http://intf.ejb.familia.v2.api.rolsac.caib.es"
+            returnQName="llistarServiciosReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.familia.v2.api.rolsac.caib.es"
+            returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+            <parameter qname="in1" type="tns:ServicioCriteria" xmlns:tns="http://servicio.v2.api.rolsac.caib.es" />
+        </operation>
         <operation name="getNumProcedimentsLocals" qname="operNS:getNumProcedimentsLocals" xmlns:operNS="http://intf.ejb.familia.v2.api.rolsac.caib.es"
             returnQName="getNumProcedimentsLocalsReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema"
+            soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+        </operation>
+        <operation name="getNumServicios" qname="operNS:getNumServicios" xmlns:operNS="http://intf.ejb.familia.v2.api.rolsac.caib.es"
+            returnQName="getNumServiciosReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema"
             soapAction="">
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
         </operation>
@@ -1209,7 +1269,7 @@
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
             <parameter qname="in1" type="tns:IconaFamiliaCriteria" xmlns:tns="http://iconaFamilia.v2.api.rolsac.caib.es" />
         </operation>
-        <parameter name="allowedMethods" value="llistarIcones getNumIcones getNumProcedimentsLocals llistarProcedimentsLocals" />
+        <parameter name="allowedMethods" value="llistarIcones getNumIcones getNumProcedimentsLocals llistarProcedimentsLocals getNumServicios llistarServicios" />
 
         <arrayMapping xmlns:ns="http://ws.familia.v2.api.rolsac.caib.es" qname="ns:ArrayOf_xsd_anyType"
             type="java:java.lang.Object[]" innerType="cmp-ns:anyType" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"
@@ -1219,6 +1279,9 @@
             deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
         <typeMapping xmlns:ns="http://procediment.v2.api.rolsac.caib.es" qname="ns:ProcedimentCriteria"
             type="java:es.caib.rolsac.api.v2.procediment.ProcedimentCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+            deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        <typeMapping xmlns:ns="http://servicio.v2.api.rolsac.caib.es" qname="ns:ServicioCriteria"
+            type="java:es.caib.rolsac.api.v2.servicio.ServicioCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
             deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
         <typeMapping xmlns:ns="http://general.v2.api.rolsac.caib.es" qname="ns:BasicCriteria"
             type="java:es.caib.rolsac.api.v2.general.BasicCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
@@ -1676,6 +1739,12 @@
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
             <parameter qname="in1" type="tns:ProcedimentCriteria" xmlns:tns="http://procediment.v2.api.rolsac.caib.es" />
         </operation>
+        <operation name="llistarServicios" qname="operNS:llistarServicios" xmlns:operNS="http://intf.ejb.materia.v2.api.rolsac.caib.es"
+            returnQName="llistarServiciosReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.materia.v2.api.rolsac.caib.es"
+            returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+            <parameter qname="in1" type="tns:ServicioCriteria" xmlns:tns="http://servicio.v2.api.rolsac.caib.es" />
+        </operation>
         <operation name="getNumFitxes" qname="operNS:getNumFitxes" xmlns:operNS="http://intf.ejb.materia.v2.api.rolsac.caib.es"
             returnQName="getNumFitxesReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema"
             soapAction="">
@@ -1683,6 +1752,11 @@
         </operation>
         <operation name="getNumProcedimentsLocals" qname="operNS:getNumProcedimentsLocals" xmlns:operNS="http://intf.ejb.materia.v2.api.rolsac.caib.es"
             returnQName="getNumProcedimentsLocalsReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema"
+            soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+        </operation>
+        <operation name="getNumServicios" qname="operNS:getNumServicios" xmlns:operNS="http://intf.ejb.materia.v2.api.rolsac.caib.es"
+            returnQName="getNumServiciosReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema"
             soapAction="">
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
         </operation>
@@ -1729,7 +1803,7 @@
             <parameter qname="in1" type="tns:UnitatMateriaCriteria" xmlns:tns="http://unitatMateria.v2.api.rolsac.caib.es" />
         </operation>
         <parameter name="allowedMethods"
-            value="getIconaGran llistarUnitatsAdministratives getNumIcones llistarUnitatsMateria llistarAgrupacioMateries getNumAgrupacioMateries getNumUnitatsMateries llistarFitxes getIcona getNumFitxes llistarIconesMateries getNumProcedimentsLocals llistarProcedimentsLocals getFotografia" />
+            value="getIconaGran llistarUnitatsAdministratives getNumIcones llistarUnitatsMateria llistarAgrupacioMateries getNumAgrupacioMateries getNumUnitatsMateries llistarFitxes getIcona getNumFitxes llistarIconesMateries getNumProcedimentsLocals llistarProcedimentsLocals getNumServicios llistarServicios getFotografia" />
 
         <typeMapping xmlns:ns="http://unitatMateria.v2.api.rolsac.caib.es" qname="ns:UnitatMateriaCriteria"
             type="java:es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
@@ -1751,6 +1825,9 @@
             deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
         <typeMapping xmlns:ns="http://procediment.v2.api.rolsac.caib.es" qname="ns:ProcedimentCriteria"
             type="java:es.caib.rolsac.api.v2.procediment.ProcedimentCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+            deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        <typeMapping xmlns:ns="http://servicio.v2.api.rolsac.caib.es" qname="ns:ServicioCriteria"
+            type="java:es.caib.rolsac.api.v2.servicio.ServicioCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
             deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
         <typeMapping xmlns:ns="http://fitxa.v2.api.rolsac.caib.es" qname="ns:FitxaCriteria"
             type="java:es.caib.rolsac.api.v2.fitxa.FitxaCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
@@ -1774,6 +1851,12 @@
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
             <parameter qname="in1" type="tns:ProcedimentCriteria" xmlns:tns="http://procediment.v2.api.rolsac.caib.es" />
         </operation>
+        <operation name="llistarServicios" qname="operNS:llistarServicios" xmlns:operNS="http://intf.ejb.normativa.v2.api.rolsac.caib.es"
+            returnQName="llistarServiciosReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.normativa.v2.api.rolsac.caib.es"
+            returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+            <parameter qname="in1" type="tns:ServicioCriteria" xmlns:tns="http://servicio.v2.api.rolsac.caib.es" />
+        </operation>
         <operation name="obtenirUnitatAdministrativa" qname="operNS:obtenirUnitatAdministrativa" xmlns:operNS="http://intf.ejb.normativa.v2.api.rolsac.caib.es"
             returnQName="obtenirUnitatAdministrativaReturn" returnType="rtns:UnitatAdministrativaDTO"
             xmlns:rtns="http://unitatAdministrativa.v2.api.rolsac.caib.es" soapAction="">
@@ -1786,6 +1869,11 @@
         </operation>
         <operation name="getNumProcediments" qname="operNS:getNumProcediments" xmlns:operNS="http://intf.ejb.normativa.v2.api.rolsac.caib.es"
             returnQName="getNumProcedimentsReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema"
+            soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+        </operation>
+        <operation name="getNumServicios" qname="operNS:getNumServicios" xmlns:operNS="http://intf.ejb.normativa.v2.api.rolsac.caib.es"
+            returnQName="getNumServiciosReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema"
             soapAction="">
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
         </operation>
@@ -1820,7 +1908,7 @@
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
         </operation>
         <parameter name="allowedMethods" 
-            value="llistarAfectades llistarAfectacionsAfectants obtenirUnitatAdministrativa llistarProcediments obtenirButlleti getNumProcediments llistarAfectants getNumAfectades llistarAfectacionsAfectades getNumAfectants" />
+            value="llistarAfectades llistarAfectacionsAfectants obtenirUnitatAdministrativa llistarProcediments llistarServicios obtenirButlleti getNumProcediments getNumServicios llistarAfectants getNumAfectades llistarAfectacionsAfectades getNumAfectants" />
 
         <typeMapping xmlns:ns="http://arxiu.v2.api.rolsac.caib.es" qname="ns:ArxiuDTO"
             type="java:es.caib.rolsac.api.v2.arxiu.ArxiuDTO" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
@@ -1839,6 +1927,9 @@
             deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
         <typeMapping xmlns:ns="http://procediment.v2.api.rolsac.caib.es" qname="ns:ProcedimentCriteria"
             type="java:es.caib.rolsac.api.v2.procediment.ProcedimentCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+            deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        <typeMapping xmlns:ns="http://servicio.v2.api.rolsac.caib.es" qname="ns:ServicioCriteria"
+            type="java:es.caib.rolsac.api.v2.servicio.ServicioCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
             deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
         <typeMapping xmlns:ns="http://afectacio.v2.api.rolsac.caib.es" qname="ns:AfectacioDTO"
             type="java:es.caib.rolsac.api.v2.afectacio.AfectacioDTO" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
@@ -2020,6 +2111,93 @@
             type="java:es.caib.rolsac.api.v2.materia.MateriaCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
             deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
     </service>
+    
+    <service name="ServicioWS" provider="java:EJB">
+        <parameter name="beanJndiName" value="es.caib.rolsac.api.v2.servicio.ejb.ServicioQueryServiceEJB" />
+        <parameter name="homeInterfaceName" value="es.caib.rolsac.api.v2.servicio.ejb.intf.ServicioQueryServiceEJBHome" />
+        <parameter name="remoteInterfaceName" value="es.caib.rolsac.api.v2.servicio.ejb.intf.ServicioQueryServiceEJBRemote" />
+        <parameter name="allowedMethods" value="*" />
+        <parameter name="jndiurl" value="https://localhost:8443" />
+        <parameter name="jndiContextClass" value="org.jnp.interfaces.NamingContextFactory" />
+        <parameter name="typeMappingVersion" value="1.1" />
+        <operation name="llistarMateries" qname="operNS:llistarMateries" xmlns:operNS="http://intf.ejb.servicio.v2.api.rolsac.caib.es"
+            returnQName="llistarMateriesReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.servicio.v2.api.rolsac.caib.es"
+            returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+            <parameter qname="in1" type="tns:MateriaCriteria" xmlns:tns="http://materia.v2.api.rolsac.caib.es" />
+        </operation>
+        <operation name="llistarFetsVitals" qname="operNS:llistarFetsVitals" xmlns:operNS="http://intf.ejb.servicio.v2.api.rolsac.caib.es"
+            returnQName="llistarFetsVitalsReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.servicio.v2.api.rolsac.caib.es"
+            returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+            <parameter qname="in1" type="tns:FetVitalCriteria" xmlns:tns="http://fetVital.v2.api.rolsac.caib.es" />
+        </operation>
+        <operation name="llistarNormatives" qname="operNS:llistarNormatives" xmlns:operNS="http://intf.ejb.servicio.v2.api.rolsac.caib.es"
+            returnQName="llistarNormativesReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.servicio.v2.api.rolsac.caib.es"
+            returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+            <parameter qname="in1" type="tns:NormativaCriteria" xmlns:tns="http://normativa.v2.api.rolsac.caib.es" />
+        </operation>
+        <operation name="llistarDocuments" qname="operNS:llistarDocuments" xmlns:operNS="http://intf.ejb.servicio.v2.api.rolsac.caib.es"
+            returnQName="llistarDocumentsReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.servicio.v2.api.rolsac.caib.es"
+            returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+            <parameter qname="in1" type="tns:DocumentoServicioCriteria" xmlns:tns="http://documentoServicio.v2.api.rolsac.caib.es" />
+        </operation>
+        <operation name="llistarPublicsObjectius" qname="operNS:llistarPublicsObjectius" xmlns:operNS="http://intf.ejb.servicio.v2.api.rolsac.caib.es"
+            returnQName="llistarPublicsObjectiusReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.servicio.v2.api.rolsac.caib.es"
+            returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+            <parameter qname="in1" type="tns:PublicObjectiuCriteria" xmlns:tns="http://publicObjectiu.v2.api.rolsac.caib.es" />
+        </operation>
+        <operation name="getNumNormatives" qname="operNS:getNumNormatives" xmlns:operNS="http://intf.ejb.servicio.v2.api.rolsac.caib.es"
+            returnQName="getNumNormativesReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema"
+            soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+            <parameter qname="in1" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+        </operation>
+        <operation name="getNumFetsVitals" qname="operNS:getNumFetsVitals" xmlns:operNS="http://intf.ejb.servicio.v2.api.rolsac.caib.es"
+            returnQName="getNumFetsVitalsReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema"
+            soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+        </operation>
+        <operation name="getNumTramits" qname="operNS:getNumTramits" xmlns:operNS="http://intf.ejb.servicio.v2.api.rolsac.caib.es"
+            returnQName="getNumTramitsReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema"
+            soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+        </operation>
+        <operation name="getNumMateries" qname="operNS:getNumMateries" xmlns:operNS="http://intf.ejb.servicio.v2.api.rolsac.caib.es"
+            returnQName="getNumMateriesReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema"
+            soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+        </operation>
+        <operation name="getNumDocuments" qname="operNS:getNumDocuments" xmlns:operNS="http://intf.ejb.servicio.v2.api.rolsac.caib.es"
+            returnQName="getNumDocumentsReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema"
+            soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+        </operation>
+        <parameter name="allowedMethods"
+            value="llistarPublicsObjectius getNumTramits getNumMateries getNumFetsVitals llistarMateries llistarDocuments getNumNormatives llistarFetsVitals getNumDocuments llistarTramits llistarNormatives" />
+
+        <typeMapping xmlns:ns="http://normativa.v2.api.rolsac.caib.es" qname="ns:NormativaCriteria"
+            type="java:es.caib.rolsac.api.v2.normativa.NormativaCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+            deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        <typeMapping xmlns:ns="http://fetVital.v2.api.rolsac.caib.es" qname="ns:FetVitalCriteria"
+            type="java:es.caib.rolsac.api.v2.fetVital.FetVitalCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+            deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        <typeMapping xmlns:ns="http://documentoServicio.v2.api.rolsac.caib.es" qname="ns:DocumentoServicioCriteria"
+            type="java:es.caib.rolsac.api.v2.documentoServicio.DocumentoServicioCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+            deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        <arrayMapping xmlns:ns="http://ws.servicio.v2.api.rolsac.caib.es" qname="ns:ArrayOf_xsd_anyType"
+            type="java:java.lang.Object[]" innerType="cmp-ns:anyType" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"
+            encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        <typeMapping xmlns:ns="http://general.v2.api.rolsac.caib.es" qname="ns:BasicCriteria"
+            type="java:es.caib.rolsac.api.v2.general.BasicCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+            deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        <typeMapping xmlns:ns="http://materia.v2.api.rolsac.caib.es" qname="ns:MateriaCriteria"
+            type="java:es.caib.rolsac.api.v2.materia.MateriaCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+            deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    </service>
 
     <service name="PublicObjectiuWS" provider="java:EJB">
         <parameter name="beanJndiName" value="es.caib.rolsac.api.v2.publicObjectiu.ejb.PublicObjectiuQueryServiceEJB" />
@@ -2046,13 +2224,19 @@
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
             <parameter qname="in1" type="tns:ProcedimentCriteria" xmlns:tns="http://procediment.v2.api.rolsac.caib.es" />
         </operation>
+        <operation name="llistarServicios" qname="operNS:llistarServicios" xmlns:operNS="http://intf.ejb.publicObjectiu.v2.api.rolsac.caib.es"
+            returnQName="llistarServiciosReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.publicObjectiu.v2.api.rolsac.caib.es"
+            returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+            <parameter qname="in1" type="tns:ServicioCriteria" xmlns:tns="http://servicio.v2.api.rolsac.caib.es" />
+        </operation>
         <operation name="llistarFitxes" qname="operNS:llistarFitxes" xmlns:operNS="http://intf.ejb.publicObjectiu.v2.api.rolsac.caib.es"
             returnQName="llistarFitxesReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.publicObjectiu.v2.api.rolsac.caib.es"
             returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="">
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
             <parameter qname="in1" type="tns:FitxaCriteria" xmlns:tns="http://fitxa.v2.api.rolsac.caib.es" />
         </operation>
-        <parameter name="allowedMethods" value="getNumAgrupacions llistarFitxes llistarAgrupacions llistarProcediments" />
+        <parameter name="allowedMethods" value="getNumAgrupacions llistarFitxes llistarAgrupacions llistarProcediments llistarServicios" />
 
         <arrayMapping xmlns:ns="http://ws.publicObjectiu.v2.api.rolsac.caib.es" qname="ns:ArrayOf_xsd_anyType"
             type="java:java.lang.Object[]" innerType="cmp-ns:anyType" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"
@@ -2288,6 +2472,13 @@
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
             <parameter qname="in1" type="tns:ProcedimentCriteria" xmlns:tns="http://procediment.v2.api.rolsac.caib.es" />
         </operation>
+        <operation name="llistarServicios" qname="operNS:llistarServicios"
+            xmlns:operNS="http://intf.ejb.unitatAdministrativa.v2.api.rolsac.caib.es" returnQName="llistarServiciosReturn"
+            returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
+            returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+            <parameter qname="in1" type="tns:ServicioCriteria" xmlns:tns="http://servicio.v2.api.rolsac.caib.es" />
+        </operation>
         <operation name="llistarMateries" qname="operNS:llistarMateries" xmlns:operNS="http://intf.ejb.unitatAdministrativa.v2.api.rolsac.caib.es"
             returnQName="llistarMateriesReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
             returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="">
@@ -2417,6 +2608,11 @@
             returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="">
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
         </operation>
+         <operation name="getNumServicios" qname="operNS:getNumServicios"
+            xmlns:operNS="http://intf.ejb.unitatAdministrativa.v2.api.rolsac.caib.es" returnQName="getNumServiciosReturn"
+            returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+        </operation>
         <operation name="getNumTramits" qname="operNS:getNumTramits" xmlns:operNS="http://intf.ejb.unitatAdministrativa.v2.api.rolsac.caib.es"
             returnQName="getNumTramitsReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema"
             soapAction="">
@@ -2438,7 +2634,7 @@
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
         </operation>
         <parameter name="allowedMethods"
-            value="getNumPersonal obtenirEspaiTerritorial obtenirTractament llistarProcediments llistarFilles getNumTramits llistarNormatives getNumMateries getNumProcediments llistarMateries getNumEdificis llistarEdificis getNumFilles getNumNormatives obtenirFotog obtenirLogov llistarPersonal llistarSeccions obtenirFotop llistarTramits obtenirLogos obtenirLogot getNumSeccions obtenirLogoh llistarFitxes obtenirPare getNumFitxes getNumUsuaris llistarUsuaris llistarDescendents" />
+            value="getNumPersonal obtenirEspaiTerritorial obtenirTractament llistarProcediments llistarServicios llistarFilles getNumTramits llistarNormatives getNumMateries getNumProcediments getNumServicios llistarMateries getNumEdificis llistarEdificis getNumFilles getNumNormatives obtenirFotog obtenirLogov llistarPersonal llistarSeccions obtenirFotop llistarTramits obtenirLogos obtenirLogot getNumSeccions obtenirLogoh llistarFitxes obtenirPare getNumFitxes getNumUsuaris llistarUsuaris llistarDescendents" />
 
         <typeMapping xmlns:ns="http://usuari.v2.api.rolsac.caib.es" qname="ns:UsuariCriteria"
             type="java:es.caib.rolsac.api.v2.usuari.UsuariCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
@@ -2469,6 +2665,9 @@
             deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
         <typeMapping xmlns:ns="http://procediment.v2.api.rolsac.caib.es" qname="ns:ProcedimentCriteria"
             type="java:es.caib.rolsac.api.v2.procediment.ProcedimentCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+            deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        <typeMapping xmlns:ns="http://servicio.v2.api.rolsac.caib.es" qname="ns:ServicioCriteria"
+            type="java:es.caib.rolsac.api.v2.servicio.ServicioCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
             deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
         <typeMapping xmlns:ns="http://general.v2.api.rolsac.caib.es" qname="ns:BasicCriteria"
             type="java:es.caib.rolsac.api.v2.general.BasicCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
@@ -2599,13 +2798,18 @@
             returnType="rtns:boolean" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="">
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
         </operation>
+        <operation name="gravarEstadisticaServicio" qname="operNS:gravarEstadisticaServicio"
+            xmlns:operNS="http://intf.ejb.estadistica.v2.api.rolsac.caib.es" returnQName="gravarEstadisticaServicioReturn"
+            returnType="rtns:boolean" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+        </operation>
         <operation name="gravarEstadisticaUnitatAdministrativa" qname="operNS:gravarEstadisticaUnitatAdministrativa"
             xmlns:operNS="http://intf.ejb.estadistica.v2.api.rolsac.caib.es" returnQName="gravarEstadisticaUnitatAdministrativaReturn"
             returnType="rtns:boolean" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="">
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
         </operation>
         <parameter name="allowedMethods"
-            value="gravarEstadisticaFitxaPerUA gravarEstadisticaUnitatAdministrativa gravarEstadisticaProcediment gravarEstadisticaNormativa gravarEstadisticaMateria gravarEstadisticaFitxaPerMateria gravarEstadisticaFitxa" />
+            value="gravarEstadisticaFitxaPerUA gravarEstadisticaUnitatAdministrativa gravarEstadisticaProcediment gravarEstadisticaServicio gravarEstadisticaNormativa gravarEstadisticaMateria gravarEstadisticaFitxaPerMateria gravarEstadisticaFitxa" />
     </service>
 
     <service name="TaxaWS" provider="java:EJB">

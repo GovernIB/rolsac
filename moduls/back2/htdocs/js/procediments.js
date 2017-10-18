@@ -100,7 +100,6 @@ $(document).ready(function() {
 	  "item_destinataris_",
 	  "item_resolucio_",
 	  "item_notificacio_",
-	  //"item_silenci_",
 	  "item_observacions_"
     ];
 
@@ -111,7 +110,6 @@ $(document).ready(function() {
       "destinatarios",
       "resolucion",
       "notificacion",
-     // "silencio",
       "observaciones"
     ];
 
@@ -465,7 +463,7 @@ function CDetall() {
 				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
 			},
 			success: function(data) {
-				if (data.id > 0) {
+				if (data.id == null || data.id > 0) {
 					that.guardaFinal();
 				} else if (data.id  == -66) {
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
@@ -565,9 +563,6 @@ function CDetall() {
 		jQuery('#modul_materies .llistat li input[type=checkbox]').unbind('change');
 		
 		// dates
-		//$("#item_data_publicacio, #item_data_caducitat").mask("99/99/9999").datepicker({ altField: '#actualDate' });
-		//$("#item_data_caducitat").datepicker({ altField: '#actualDate', dateFormat: 'dd/mm/yy'});
-		
 		$("#item_data_caducitat").datetimepicker({ format: 'yyyy/MM/dd HH:mm' , setDate: new Date(),hour:'23', minute:'59' });
 		//$("#item_data_publicacio").bind("blur",Detall.dataPublicacio).datepicker({ altField: '#actualDate', dateFormat: 'dd/mm/yy' });
 		$("#item_data_publicacio").bind("blur",Detall.dataPublicacio).datetimepicker({ timeFormat: 'hh:mm' });

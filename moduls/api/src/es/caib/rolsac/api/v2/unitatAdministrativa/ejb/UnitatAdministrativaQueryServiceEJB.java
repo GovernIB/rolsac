@@ -20,6 +20,7 @@ import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.Personal;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.Seccion;
+import org.ibit.rol.sac.model.Servicio;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.Tratamiento;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -47,6 +48,8 @@ import es.caib.rolsac.api.v2.personal.PersonalCriteria;
 import es.caib.rolsac.api.v2.personal.PersonalDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
 import es.caib.rolsac.api.v2.query.FromClause;
 import es.caib.rolsac.api.v2.query.QueryBuilder;
 import es.caib.rolsac.api.v2.query.QueryBuilderException;
@@ -93,6 +96,8 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 	private static final String HQL_NORMATIVA_ALIAS = "n";
 	private static final String HQL_PROCEDIMIENTO_CLASS = HQL_UA_ALIAS + ".procedimientos";
 	private static final String HQL_PROCEDIMIENTO_ALIAS = "p";
+	private static final String HQL_SERVICIO_CLASS = HQL_UA_ALIAS + ".servicios";
+	private static final String HQL_SERVICIO_ALIAS = "s";
 	private static final String HQL_TRAMIT_CLASS = HQL_UA_ALIAS + ".tramites";
 	private static final String HQL_TRAMIT_ALIAS = "t";
 	private static final String HQL_UNITAT_MATERIA_CLASS = HQL_UA_ALIAS + ".unidadesMaterias";
@@ -567,6 +572,76 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 		return procedimentsDTOList;
 
 	}
+	
+	
+	/**
+	 * Obtiene listado de servicios.
+	 * @param id
+	 * @param servicioCriteria
+	 * @return List<ServicioDTO>
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	@SuppressWarnings("unchecked")
+	public List<ServicioDTO> llistarServicios(long id, ServicioCriteria servicioCriteria) {
+
+		List<ServicioDTO> serviciosDTOList = new ArrayList<ServicioDTO>();
+		List<CriteriaObject> criteris;
+		Session session = null;
+
+		try {      
+
+			criteris = BasicUtils.parseCriterias(ServicioCriteria.class, HQL_SERVICIO_ALIAS, HQL_TRADUCCIONES_ALIAS, servicioCriteria);
+            List<FromClause> entities = new ArrayList<FromClause>();
+            entities.add(new FromClause(HQL_UA_CLASS, HQL_UA_ALIAS));
+            entities.add(new FromClause(HQL_SERVICIO_CLASS, HQL_SERVICIO_ALIAS));
+            QueryBuilder qb = new QueryBuilder(HQL_SERVICIO_ALIAS, entities, servicioCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
+            qb.extendCriteriaObjects(criteris);
+            
+            UnitatAdministrativaCriteria uac = new UnitatAdministrativaCriteria();
+            uac.setId(String.valueOf(id));
+            criteris = BasicUtils.parseCriterias(UnitatAdministrativaCriteria.class, HQL_UA_ALIAS, uac);
+            qb.extendCriteriaObjects(criteris);
+
+            session = getSession();
+            Query query = qb.createQuery(session);
+            List<Servicio> serviciosResult = (List<Servicio>)query.list();
+            
+            for (Servicio servicio : serviciosResult) {
+                
+				serviciosDTOList.add(
+					(ServicioDTO)BasicUtils.entityToDTO(
+						ServicioDTO.class, 
+						servicio, 
+						servicioCriteria.getIdioma()
+					)
+				);
+				
+                
+            }
+
+		} catch (HibernateException e) {
+
+			log.error(e);
+
+		} catch (CriteriaObjectParseException e) {
+
+			log.error(e);
+
+		} catch (QueryBuilderException e) {
+
+			log.error(e);
+
+		} finally {
+
+			close(session);
+
+		}
+
+		return serviciosDTOList;
+
+	}
 
 	/**
 	 * Obtiene listado de tramites.
@@ -1032,7 +1107,7 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 	}
 
 	/**
-	 * Obtiene numero de personal.
+	 * Obtiene numero de procedimientos.
 	 * @param id
 	 * @return int
 	 * 
@@ -1049,6 +1124,48 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 			entities.add(new FromClause(HQL_UA_CLASS, HQL_UA_ALIAS));
 			entities.add(new FromClause(HQL_PROCEDIMIENTO_CLASS, HQL_PROCEDIMIENTO_ALIAS));
 			QueryBuilder qb = new QueryBuilder(HQL_PROCEDIMIENTO_ALIAS, entities, null, null, true);
+			qb.extendCriteriaObjects(criteris);
+
+			UnitatAdministrativaCriteria uac = new UnitatAdministrativaCriteria();
+			uac.setId(String.valueOf(id));
+			criteris = BasicUtils.parseCriterias(UnitatAdministrativaCriteria.class, HQL_UA_ALIAS, uac);
+			qb.extendCriteriaObjects(criteris);
+
+			session = getSession();
+			Query query = qb.createQuery(session);
+			numResultats = getNumberResults(query);
+		} catch (HibernateException e) {
+			log.error(e);
+		} catch (CriteriaObjectParseException e) {
+			log.error(e);
+		} catch (QueryBuilderException e) {
+			log.error(e);
+		} finally {
+			close(session);
+		}
+
+		return numResultats;
+	}
+	
+	
+	/**
+	 * Obtiene numero de servicios.
+	 * @param id
+	 * @return int
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public int getNumServicios(Long id) {
+		List<CriteriaObject> criteris;
+		Session session = null;
+		int numResultats = 0;
+		try {           
+			criteris = BasicUtils.parseCriterias(ServicioCriteria.class, HQL_SERVICIO_ALIAS, new ServicioCriteria());
+			List<FromClause> entities = new ArrayList<FromClause>();
+			entities.add(new FromClause(HQL_UA_CLASS, HQL_UA_ALIAS));
+			entities.add(new FromClause(HQL_SERVICIO_CLASS, HQL_SERVICIO_ALIAS));
+			QueryBuilder qb = new QueryBuilder(HQL_SERVICIO_ALIAS, entities, null, null, true);
 			qb.extendCriteriaObjects(criteris);
 
 			UnitatAdministrativaCriteria uac = new UnitatAdministrativaCriteria();

@@ -6,6 +6,7 @@ import java.util.List;
 import es.caib.rolsac.api.v2.afectacio.AfectacioDTO;
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.butlleti.ButlletiDTO;
+import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaCriteria;
 import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaDTO;
 import es.caib.rolsac.api.v2.exception.APIException;
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
@@ -15,6 +16,8 @@ import es.caib.rolsac.api.v2.normativa.NormativaDTO;
 import es.caib.rolsac.api.v2.normativa.NormativaQueryServiceStrategy;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 
 public class NormativaQueryServiceWSStrategy implements
@@ -56,6 +59,14 @@ public class NormativaQueryServiceWSStrategy implements
 		}
 	}
 
+	public int getNumServicios(long id) throws StrategyException {
+		try {
+			return gateway.getNumServicios(id);
+		} catch (RemoteException e) {
+			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		}
+	}
+	
 	public ButlletiDTO obtenirButlleti(long idButlleti)
 			throws StrategyException {
 		try {
@@ -107,10 +118,21 @@ public class NormativaQueryServiceWSStrategy implements
 		}
 	}
 	
-	public List<DocumentoNormativaDTO> llistarDocumentNormativa(long idNormativa)
+	public List<ServicioDTO> llistarServicios(long id,
+			ServicioCriteria servicioCriteria) throws StrategyException {
+		try {
+			return gateway.llistarServicios(id, servicioCriteria);
+		} catch (RemoteException e) {
+			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+		}
+	}
+	
+	public List<DocumentoNormativaDTO> llistarDocumentoNormativa(DocumentoNormativaCriteria documentoNormativaCriteria)
 			throws StrategyException {
 		try {
-			return gateway.llistarDocumentNormativa(idNormativa);
+			return gateway.llistarDocumentoNormativa(documentoNormativaCriteria);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}

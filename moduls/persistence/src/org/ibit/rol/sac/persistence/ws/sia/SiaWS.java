@@ -117,7 +117,7 @@ public class SiaWS {
 		ParamSIAACTUACIONESACTUACION paramSia = new ParamSIAACTUACIONESACTUACION();
 		
 		paramSia.setCODIGOACTUACION(sia.getIdSIA());
-		paramSia.setCODIGOORIGEN(sia.getIdProc());
+		paramSia.setCODIGOORIGEN(sia.getIdElemento());
 		paramSia.setOPERACION(SiaUtils.ESTADO_BAJA);
 		
 		ParamSIAACTUACIONESACTUACION[] actuaciones = new ParamSIAACTUACIONESACTUACION[1];
@@ -140,7 +140,7 @@ public class SiaWS {
 		} else {
 			paramSia.setCODIGOACTUACION(sia.getIdSIA());
 		}
-		paramSia.setCODIGOORIGEN(sia.getIdProc());
+		paramSia.setCODIGOORIGEN(sia.getIdElemento());
 		
 		paramSia.setDENOMINACION(sia.getTitulo());
 		//paramSia.setTITULOCIUDADANO(sia.getTitulo());

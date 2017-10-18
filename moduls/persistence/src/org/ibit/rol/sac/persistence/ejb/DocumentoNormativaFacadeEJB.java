@@ -131,7 +131,7 @@ public abstract class DocumentoNormativaFacadeEJB extends HibernateEJB
 		try {
 
 			if ( !getAccesoManager().tieneAccesoNormativa(idNormativa) )
-				throw new SecurityException("No tiene acceso al tramite.");
+				throw new SecurityException("No tiene acceso a la normativa.");
 
 			Normativa normativa = null;
 			boolean actualizar = false;

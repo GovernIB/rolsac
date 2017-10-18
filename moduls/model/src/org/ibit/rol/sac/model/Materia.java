@@ -9,10 +9,31 @@ import java.util.Set;
  * Modificado para (PORMAD)
  */
 
-public class Materia extends Traducible implements Comparator {
+public class Materia extends Traducible implements Comparator<Materia> {
 
 	private static final long serialVersionUID = -4138848500142267423L;
 
+
+	private Long id;
+    private String codiHita;
+    private Set<ProcedimientoLocal> procedimientosLocales;
+    private Set<Servicio> servicios;
+    private Set<UnidadMateria> unidadesmaterias;
+    private Set fichas;
+    private Set iconos;
+    private Long codigoSIA;
+    private Archivo icono;
+    private Archivo iconoGrande;
+    private Archivo foto;
+    private String codigoEstandar;
+    private boolean destacada;
+    private int orden;
+    private String nombre;
+    private Set<MateriaAgrupacionM> materiasAgrupacionM;
+	public static final String CE_SENSECLASSIFICAR = "SENSECLA";
+	
+	
+	
 	public Long getId() {
         return id;
     }
@@ -21,11 +42,11 @@ public class Materia extends Traducible implements Comparator {
         this.id = id;
     }
 
-    public Set getProcedimientosLocales() {
+    public Set<ProcedimientoLocal> getProcedimientosLocales() {
         return procedimientosLocales;
     }
 
-    public void setProcedimientosLocales(Set procedimientosLocales) {
+    public void setProcedimientosLocales(Set<ProcedimientoLocal> procedimientosLocales) {
         this.procedimientosLocales = procedimientosLocales;
     }
 
@@ -154,24 +175,6 @@ public class Materia extends Traducible implements Comparator {
 	}
 
 
-	private Long id;
-    private String codiHita;
-    private Set procedimientosLocales;
-    private Set<UnidadMateria> unidadesmaterias;
-    private Set fichas;
-    private Set iconos;
-    private Long codigoSIA;
-    private Archivo icono;
-    private Archivo iconoGrande;
-    private Archivo foto;
-    private String codigoEstandar;
-    private boolean destacada;
-    private int orden;
-    private String nombre;
-    private Set<MateriaAgrupacionM> materiasAgrupacionM;
-	public static final String CE_SENSECLASSIFICAR = "SENSECLA";
-	
-	
 	public Materia(Long id, String nombre, int orden) {
 		
 		this.id = id;
@@ -199,10 +202,10 @@ public class Materia extends Traducible implements Comparator {
 	}
 
     
-    public int compare(Object o1, Object o2) {
-	    Materia u1 = (Materia) o1;
-	    Materia u2 = (Materia) o2;
-	    return u1.getId().intValue() - u2.getId().intValue();
+    public int compare(Materia u1, Materia u2) {
+	    if (u1 == null || u1.getId() == null) { return -1;}
+	    if (u2 == null || u2.getId() == null) { return 1;}
+    	return u1.getId().compareTo(u2.getId());
 	}	
 
 	private boolean noEsDelTipusMateria(Object o) {
@@ -248,6 +251,20 @@ public class Materia extends Traducible implements Comparator {
 	 */
 	public void setCodigoSIA(Long codigoSIA) {
 		this.codigoSIA = codigoSIA;
+	}
+
+	/**
+	 * @return the servicios
+	 */
+	public Set<Servicio> getServicios() {
+		return servicios;
+	}
+
+	/**
+	 * @param servicios the servicios to set
+	 */
+	public void setServicios(Set<Servicio> servicios) {
+		this.servicios = servicios;
 	}    
 
 }

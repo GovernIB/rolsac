@@ -24,6 +24,9 @@ import es.caib.rolsac.api.v2.materia.ejb.MateriaQueryServiceEJBStrategy;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
@@ -123,6 +126,16 @@ public class MateriaQueryServiceAdapter extends MateriaDTO implements MateriaQue
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de procedimientos.", e);
         }
     }
+    
+
+    public int getNumServicios() throws QueryServiceException {
+        try {
+            return materiaQueryServiceStrategy.getNumServicios(getId());
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de servicios.", e);
+        }
+    }
+
 
     public int getNumUnitatsMateries() throws QueryServiceException {
         try {
@@ -191,6 +204,23 @@ public class MateriaQueryServiceAdapter extends MateriaDTO implements MateriaQue
         }
     }
 
+    public List<ServicioQueryServiceAdapter> llistarServicios(ServicioCriteria servicioCriteria) throws QueryServiceException {
+        try {
+            List<ServicioDTO> llistaDTO = materiaQueryServiceStrategy.llistarServicios(getId(),servicioCriteria);
+            List<ServicioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<ServicioQueryServiceAdapter>();
+            for (ServicioDTO servicioDTO : llistaDTO) {
+            	ServicioQueryServiceAdapter fqsa = (ServicioQueryServiceAdapter) BeanUtils.getAdapter("servicio", getStrategy(), servicioDTO);
+                if (fqsa != null && rolsacUrl != null) {
+            		fqsa.setRolsacUrl(rolsacUrl);
+            	}
+            	llistaQueryServiceAdapter.add(fqsa);
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "agrupaciones materia.", e);
+        }
+    }
+    
     public List<UnitatMateriaQueryServiceAdapter> llistarUnitatsMateria(UnitatMateriaCriteria unitatMateriaCriteria) throws QueryServiceException {
         try {
             List<UnitatMateriaDTO> llistaDTO = materiaQueryServiceStrategy.llistarUnitatsMateria(getId(),unitatMateriaCriteria);

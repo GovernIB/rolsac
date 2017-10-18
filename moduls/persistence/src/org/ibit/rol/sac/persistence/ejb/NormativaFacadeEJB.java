@@ -218,6 +218,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			Hibernate.initialize(normativa.getAfectadas());
 			Hibernate.initialize(normativa.getAfectantes());
 			Hibernate.initialize(normativa.getProcedimientos());
+			Hibernate.initialize(normativa.getServicios());
 			Hibernate.initialize(normativa.getDocumentos());
 			
 			return normativa;
@@ -738,7 +739,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			((HistoricoNormativa) historico).setNormativa(null);
 			for (Iterator<ProcedimientoLocal> iterator = normativa.getProcedimientos().iterator(); iterator.hasNext();) {
 				ProcedimientoLocal proc = (ProcedimientoLocal) iterator.next();
-				SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, proc.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, null);
+				SiaUtils.marcarIndexacionPendienteServicio(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, proc.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, null);
 				
 				proc.getNormativas().remove(normativa);
 			}
@@ -1063,6 +1064,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			Hibernate.initialize(normativa.getAfectadas());
 			Hibernate.initialize(normativa.getAfectantes());
 			Hibernate.initialize(normativa.getProcedimientos());
+			Hibernate.initialize(normativa.getServicios());
 			Hibernate.initialize(normativa.getDocumentos());
 			if(normativa.getDocumentos() != null) {
 				for(DocumentoNormativa documentoNormativa : normativa.getDocumentos()) {

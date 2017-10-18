@@ -25,14 +25,17 @@ import org.ibit.rol.sac.model.HistoricoFicha;
 import org.ibit.rol.sac.model.HistoricoMateria;
 import org.ibit.rol.sac.model.HistoricoNormativa;
 import org.ibit.rol.sac.model.HistoricoProcedimiento;
+import org.ibit.rol.sac.model.HistoricoServicio;
 import org.ibit.rol.sac.model.HistoricoUA;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.Servicio;
 import org.ibit.rol.sac.model.TraduccionFicha;
 import org.ibit.rol.sac.model.TraduccionMateria;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
+import org.ibit.rol.sac.model.TraduccionServicio;
 import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 
@@ -171,6 +174,32 @@ public abstract class HibernateEJB implements SessionBean {
                     .getTraduccion();
             if (traduccionProcedimientoLocal != null) {
                 hp.setNombre(traduccionProcedimientoLocal.getNombre());
+            } else {
+                hp.setNombre("-");
+            }
+            session.save(hp);
+            session.flush();
+        } else {
+            hp = hprs.get(0);
+        }
+        return hp;
+    }
+    
+    @SuppressWarnings("unchecked")
+    protected Historico getHistoric(Session session, Servicio ser) throws HibernateException {
+    	HistoricoServicio hp;
+        Query query = session.createQuery("from HistoricoServicio as hp where hp.servicio.id = :serv_id");
+        query.setParameter("serv_id", ser.getId(), Hibernate.LONG);
+        query.setCacheable(true);
+        query.setMaxResults(1);
+        List<HistoricoServicio> hprs = (List<HistoricoServicio>) query.list();
+        if (hprs.isEmpty()) {
+            hp = new HistoricoServicio();
+            hp.setServicio(ser);
+            TraduccionServicio traduccionServicio = (TraduccionServicio) ser
+                    .getTraduccion();
+            if (traduccionServicio != null) {
+                hp.setNombre(traduccionServicio.getNombre());
             } else {
                 hp.setNombre("-");
             }

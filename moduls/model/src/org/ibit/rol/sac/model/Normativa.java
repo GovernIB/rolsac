@@ -10,7 +10,7 @@ import java.util.Set;
  * @author slromero
  *
  */
-public class Normativa extends Traducible implements Indexable, Validable, Comparator {
+public class Normativa extends Traducible implements Indexable, Validable, Comparator<Normativa> {
 
 	/** Serial Version UID.	 */
 	private static final long serialVersionUID = 1L;
@@ -36,6 +36,8 @@ public class Normativa extends Traducible implements Indexable, Validable, Compa
     private Boletin boletin;
     /** Procedimientos. **/
     private Set<ProcedimientoLocal> procedimientos = new HashSet<ProcedimientoLocal>();
+    /** Servicios. **/
+    private Set<Servicio> servicios = new HashSet<Servicio>();
     /** Tipo. **/
     private Tipo tipo;
     /** Codi Vuds. */
@@ -214,7 +216,21 @@ public class Normativa extends Traducible implements Indexable, Validable, Compa
         this.procedimientos = procedimientos;
     }
 
-    public final String getCodiVuds() {
+    /**
+	 * @return the servicios
+	 */
+	public Set<Servicio> getServicios() {
+		return servicios;
+	}
+
+	/**
+	 * @param servicios the servicios to set
+	 */
+	public void setServicios(Set<Servicio> servicios) {
+		this.servicios = servicios;
+	}
+
+	public final String getCodiVuds() {
 		return codiVuds;
 	}
 
@@ -247,10 +263,10 @@ public class Normativa extends Traducible implements Indexable, Validable, Compa
         return true;
     }
 
-    public final int compare(Object o1, Object o2) {
-	    Normativa u1 = (Normativa) o1;
-	    Normativa u2 = (Normativa) o2;
-	    return u1.getId().intValue() - u2.getId().intValue();
+    public final int compare(Normativa u1, Normativa u2) {
+    	if (u1 == null || u1.getId() == null) { return -1;}
+ 	    if (u2 == null || u2.getId() == null) { return 1;}
+	    return u1.getId().compareTo(u2.getId());
 	}
     
     public final int hashCode() {

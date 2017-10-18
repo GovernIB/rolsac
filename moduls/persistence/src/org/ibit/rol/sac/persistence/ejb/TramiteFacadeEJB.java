@@ -227,7 +227,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			Actualizador.borrar(tramite, true);
 			
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, idProc, false);
-			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, idProc, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, null);
+			SiaUtils.marcarIndexacionPendienteServicio(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, idProc, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, null);
 		    
 		} catch (HibernateException he) {
 

@@ -13,6 +13,9 @@
 	<wsdl:message name="gravarEstadisticaProcedimentRequest">
 		<wsdl:part name="in0" type="xsd:long" />
 	</wsdl:message>
+	<wsdl:message name="gravarEstadisticaServicioRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>	
 	<wsdl:message name="gravarEstadisticaMateriaRequest">
 		<wsdl:part name="in0" type="xsd:long" />
 	</wsdl:message>
@@ -26,6 +29,9 @@
 	</wsdl:message>
 	<wsdl:message name="gravarEstadisticaProcedimentResponse">
 		<wsdl:part name="gravarEstadisticaProcedimentReturn" type="xsd:boolean" />
+	</wsdl:message>
+	<wsdl:message name="gravarEstadisticaServicioResponse">
+		<wsdl:part name="gravarEstadisticaServicioReturn" type="xsd:boolean" />
 	</wsdl:message>
 	<wsdl:message name="gravarEstadisticaFitxaPerUARequest">
 		<wsdl:part name="in0" type="xsd:long" />
@@ -95,6 +101,13 @@
 				name="gravarEstadisticaProcedimentRequest" />
 			<wsdl:output message="impl:gravarEstadisticaProcedimentResponse"
 				name="gravarEstadisticaProcedimentResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="gravarEstadisticaServicio"
+			parameterOrder="in0">
+			<wsdl:input message="impl:gravarEstadisticaServicioRequest"
+				name="gravarEstadisticaServicioRequest" />
+			<wsdl:output message="impl:gravarEstadisticaServicioResponse"
+				name="gravarEstadisticaServicioResponse" />
 		</wsdl:operation>
 		<wsdl:operation name="gravarEstadisticaUnitatAdministrativa"
 			parameterOrder="in0">
@@ -175,6 +188,18 @@
 					namespace="http://intf.ejb.estadistica.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:input>
 			<wsdl:output name="gravarEstadisticaProcedimentResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.estadistica.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="gravarEstadisticaServicio">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="gravarEstadisticaServicioRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.estadistica.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="gravarEstadisticaServicioResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
 					namespace="http://ws.estadistica.v2.api.rolsac.caib.es"
 					use="encoded" />

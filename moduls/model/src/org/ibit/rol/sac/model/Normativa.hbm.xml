@@ -63,6 +63,12 @@
             <key column="PRN_CODNOR" foreign-key="RSC_PRNNOR_FK"/>
             <many-to-many class="org.ibit.rol.sac.model.ProcedimientoLocal" column="PRN_CODPRO" foreign-key="RSC_PRNPRO_FK" />
         </set>
+        
+        <set name="servicios" table="RSC_SERNOR" inverse="true" lazy="true">
+            <cache usage="read-write"/>
+            <key column="SRN_CODNOR" foreign-key="RSC_SRNNOR_FK"/>
+            <many-to-many class="org.ibit.rol.sac.model.Servicio" column="SRN_CODSER" foreign-key="RSC_SRNNOR_FK" />
+        </set>
 
 		<!--  Traducciones sin combinar. -->
 		<map name="traducciones" cascade="all" table="RSC_TRANOR">

@@ -23,6 +23,8 @@ public class SolrPendienteJob implements ValueObject {
 	private Date fechaFicha; 
 	/** Fecha de fin de procedimientos. **/
 	private Date fechaProcedimiento;
+	/** Fecha de fin de servicios. **/
+	private Date fechaServicio;
 	/** Fecha de fin de normativas. **/
 	private Date fechaNormativa;
 	/** Fecha de fin de trámites. **/
@@ -37,6 +39,10 @@ public class SolrPendienteJob implements ValueObject {
 	private Float totalProcedimiento;
 	/** Total procedimiento doc. **/
 	private Float totalProcedimientoDoc;
+	/** Total servicio. **/
+	private Float totalServicio;
+	/** Total servicio doc. **/
+	private Float totalServicioDoc;
 	/** Total normativa. **/
 	private Float totalNormativa;
 	/** Total normativa doc. **/
@@ -108,6 +114,18 @@ public class SolrPendienteJob implements ValueObject {
 	 */
 	public final void setFechaProcedimiento(Date fechaProcedimiento) {
 		this.fechaProcedimiento = fechaProcedimiento;
+	}
+	/**
+	 * @return the fechaServicio
+	 */
+	public Date getFechaServicio() {
+		return fechaServicio;
+	}
+	/**
+	 * @param fechaServicio the fechaServicio to set
+	 */
+	public void setFechaServicio(Date fechaServicio) {
+		this.fechaServicio = fechaServicio;
 	}
 	/**
 	 * @return the fechaNormativa
@@ -192,6 +210,30 @@ public class SolrPendienteJob implements ValueObject {
 	 */
 	public final void setTotalProcedimientoDoc(Float totalProcedimientoDoc) {
 		this.totalProcedimientoDoc = totalProcedimientoDoc;
+	}
+	/**
+	 * @return the totalServicio
+	 */
+	public Float getTotalServicio() {
+		return totalServicio;
+	}
+	/**
+	 * @param totalServicio the totalServicio to set
+	 */
+	public void setTotalServicio(Float totalServicio) {
+		this.totalServicio = totalServicio;
+	}
+	/**
+	 * @return the totalServicioDoc
+	 */
+	public Float getTotalServicioDoc() {
+		return totalServicioDoc;
+	}
+	/**
+	 * @param totalServicioDoc the totalServicioDoc to set
+	 */
+	public void setTotalServicioDoc(Float totalServicioDoc) {
+		this.totalServicioDoc = totalServicioDoc;
 	}
 	/**
 	 * @return the totalNormativa
@@ -302,6 +344,34 @@ public class SolrPendienteJob implements ValueObject {
 	public boolean isTotalProcedimientoDocActualizable() {
 		boolean retorno;
 		if (totalProcedimientoDoc != null && (totalProcedimientoDoc % 3.0f) == 0.0f) {
+			retorno = true;
+		} else {
+			retorno = false;
+		}
+		return retorno;
+	}
+	
+	/**
+	 * Es actualizable si el modulo con 3 (para que se actualice cada 3%) es 0.
+	 * @return
+	 */
+	public boolean isTotalServicioActualizable() {
+		boolean retorno;
+		if (totalServicio != null && (totalServicio % 3.0f) == 0.0f) {
+			retorno = true;
+		} else {
+			retorno = false;
+		}
+		return retorno;
+	}
+	
+	/**
+	 * Es actualizable si el modulo con 3 (para que se actualice cada 3%) es 0.
+	 * @return
+	 */
+	public boolean isTotalServicioDocActualizable() {
+		boolean retorno;
+		if (totalServicioDoc != null && (totalServicioDoc % 3.0f) == 0.0f) {
 			retorno = true;
 		} else {
 			retorno = false;

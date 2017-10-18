@@ -64,6 +64,7 @@ public class IndexacionJob implements Job  {
     	if ("todo".equals(tipoIndexacion)) {
     		elementosIndexacion.add("ficha");
     		elementosIndexacion.add("procedimiento");
+    		elementosIndexacion.add("servicio");
     		elementosIndexacion.add("normativa");
     		elementosIndexacion.add("tramite");
     		elementosIndexacion.add("ua");
@@ -82,6 +83,9 @@ public class IndexacionJob implements Job  {
     	        		break;
     	        	case "procedimiento":
     	        		solrProceso.indexarTodoProcedimiento(solrPendienteJob);
+    	        		break;
+    	        	case "servicio":
+    	        		solrProceso.indexarTodoServicio(solrPendienteJob);
     	        		break;
     	        	case "normativa":
     	        		solrProceso.indexarTodoNormativa(solrPendienteJob);

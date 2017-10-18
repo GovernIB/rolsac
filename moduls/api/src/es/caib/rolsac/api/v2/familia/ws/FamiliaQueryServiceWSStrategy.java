@@ -11,6 +11,8 @@ import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
 
 public class FamiliaQueryServiceWSStrategy implements
 		FamiliaQueryServiceStrategy {
@@ -35,6 +37,14 @@ public class FamiliaQueryServiceWSStrategy implements
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 	}
+	
+	public int getNumServicios(long id) throws StrategyException {
+		try {
+			return gateway.getNumServicios(id);
+		} catch (RemoteException e) {
+			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		}
+	}
 
 	public int getNumIcones(long id) throws StrategyException {
 		try {
@@ -48,6 +58,17 @@ public class FamiliaQueryServiceWSStrategy implements
 			ProcedimentCriteria procedimentCriteria) throws StrategyException {
 		try {
 			return gateway.llistarProcedimentsLocals(id, procedimentCriteria);
+		} catch (RemoteException e) {
+			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+		}
+	}
+	
+	public List<ServicioDTO> llistarServicios(long id,
+			ServicioCriteria servicioCriteria) throws StrategyException {
+		try {
+			return gateway.llistarServicios(id, servicioCriteria);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		} catch (APIException e) {

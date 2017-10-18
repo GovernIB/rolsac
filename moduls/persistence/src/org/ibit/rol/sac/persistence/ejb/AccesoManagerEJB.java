@@ -111,6 +111,23 @@ public abstract class AccesoManagerEJB extends HibernateEJB {
 			close(session);
 		}
 	}
+	
+	/**
+	 * Devuelve <code>true</code> si y solo si el usuario puede modificar el servicio.
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+	 */
+	public boolean tieneAccesoServicio(Long idServ) {
+		Session session = getSession();
+		try {
+			return tieneAcceso(getUsuario(session), (Servicio) session.get(Servicio.class, idServ));
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
 
 	/**
 	 * Devuelve <code>true</code> si y solo si el usuario puede modificar la normativa.

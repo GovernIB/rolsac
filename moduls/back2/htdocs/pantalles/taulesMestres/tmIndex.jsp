@@ -10,6 +10,7 @@
     var pagIndexarTodo = '<c:url value="/index/indexarTodo.do" />';
     var pagIndexarTodoFicha = '<c:url value="/index/indexarTodoFicha.do" />'; 
     var pagIndexarTodoProcedimiento = '<c:url value="/index/indexarTodoProcedimiento.do" />'; 
+    var pagIndexarTodoServicio = '<c:url value="/index/indexarTodoServicio.do" />'; 
     var pagIndexarTodoNormativa = '<c:url value="/index/indexarTodoNormativa.do" />'; 
     var pagIndexarTodoTramite = '<c:url value="/index/indexarTodoTramite.do" />'; 
     var pagIndexarTodoUA = '<c:url value="/index/indexarTodoUA.do" />'; 
@@ -133,6 +134,11 @@
             Procedimiento : 
             <span class="btnGenerico">
                  <a href="javascript:;" class="btn unitatOrganica" id = "btnIndexarProcedimiento"><span><span><spring:message code='boto.continuar'/></span></span></a>
+            </span> 
+            <br />
+            Servicio : 
+            <span class="btnGenerico">
+                 <a href="javascript:;" class="btn unitatOrganica" id = "btnIndexarServicio"><span><span><spring:message code='boto.continuar'/></span></span></a>
             </span> 
             <br />
             Normativa : 

@@ -64,6 +64,14 @@ public class EstadisticaInsertServiceEJBStrategy implements EstadisticaInsertSer
             throw new StrategyException(e);
         }
     }
+    
+    public boolean gravarEstadisticaServicio(long servicioId) throws StrategyException {
+        try {
+            return estadisticaInsertServiceDelegate.gravarEstadisticaServicio(servicioId);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
+    }
 
     public boolean gravarEstadisticaUnitatAdministrativa(long uaId) throws StrategyException {
         try {

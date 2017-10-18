@@ -12,6 +12,8 @@ import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuQueryServiceStrategy;
 
 public class PublicObjectiuQueryServiceWSStrategy implements
@@ -46,6 +48,17 @@ public class PublicObjectiuQueryServiceWSStrategy implements
             throws StrategyException {
         try {
             return gateway.llistarProcediments(id, procedimentCriteria);
+        } catch (RemoteException e) {
+            throw new  StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+		}
+    }
+    
+    public List<ServicioDTO> llistarServicios(long id, ServicioCriteria servicioCriteria)
+            throws StrategyException {
+        try {
+            return gateway.llistarServicios(id, servicioCriteria);
         } catch (RemoteException e) {
             throw new  StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		} catch (APIException e) {

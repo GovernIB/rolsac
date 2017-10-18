@@ -18,6 +18,8 @@ import es.caib.rolsac.api.v2.general.ConfiguracioServeis;
 import es.caib.rolsac.api.v2.general.DTOUtil;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
 
 public class PublicObjectiuQueryServiceGateway {
 
@@ -94,6 +96,23 @@ public class PublicObjectiuQueryServiceGateway {
         }
         
         return llistaProcediments;      
+    }
+	
+	public List<ServicioDTO> llistarServicios(long id, ServicioCriteria servicioCriteria) throws RemoteException,
+			APIException {
+		
+        Object[] tmpLlista = null;
+        List<ServicioDTO> llistaServicios = null;
+        
+        tmpLlista = stub.llistarServicios(id, servicioCriteria);
+        llistaServicios = new ArrayList<ServicioDTO>( Arrays.asList(tmpLlista).size() );
+        
+        for (Object o : tmpLlista) {
+        	ServicioDTO pdto = (ServicioDTO) DTOUtil.object2DTO(o, ServicioDTO.class);
+            llistaServicios.add(pdto);
+        }
+        
+        return llistaServicios;      
     }
 	
 	public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria)

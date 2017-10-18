@@ -620,6 +620,22 @@
         	verbose="true"
         	serverside="true">	    	
     	</axis-wsdl2java>
+    	
+    	<axis-wsdl2java url="${ws.etc.wsdl}/DocumentoServicioWS.wsdl"
+    		                     output="${wsdl.gen.src}"
+    		                     typemappingversion="1.1"
+    		                     testcase="false"
+    		                     verbose="true"
+    		    				 serverside="true">
+    		    </axis-wsdl2java>
+    	
+    	<axis-wsdl2java url="${ws.etc.wsdl}/ServicioWS.wsdl"
+            output="${wsdl.gen.src}"
+	        typemappingversion="1.1"
+    	    testcase="false"
+        	verbose="true"
+        	serverside="true">	    	
+    	</axis-wsdl2java>
 
     	<axis-wsdl2java url="${ws.etc.wsdl}/PublicObjectiuWS.wsdl"
             output="${wsdl.gen.src}"

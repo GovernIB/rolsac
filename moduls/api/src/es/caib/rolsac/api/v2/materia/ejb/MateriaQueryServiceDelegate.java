@@ -16,6 +16,8 @@ import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaDTO;
 import es.caib.rolsac.api.v2.materia.ejb.intf.MateriaQueryServiceEJBRemote;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 import es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaCriteria;
@@ -94,6 +96,18 @@ public class MateriaQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
+    
+    public int getNumServicios(long id) throws DelegateException {
+        try {
+            MateriaQueryServiceEJBRemote ejb = materiaQueryServiceLocator.getMateriaQueryServiceEJB();
+            return ejb.getNumServicios(id);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+
 
     public int getNumUnitatsMateries(long id) throws DelegateException {
         try {
@@ -122,6 +136,18 @@ public class MateriaQueryServiceDelegate {
         try {
             MateriaQueryServiceEJBRemote ejb = materiaQueryServiceLocator.getMateriaQueryServiceEJB();
             return ejb.llistarProcedimentsLocals(id, procedimentCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<ServicioDTO> llistarServicios(long id, ServicioCriteria servicioCriteria) throws DelegateException {
+        try {
+            MateriaQueryServiceEJBRemote ejb = materiaQueryServiceLocator.getMateriaQueryServiceEJB();
+            return ejb.llistarServicios(id, servicioCriteria);
         } catch (LocatorException e) {
             throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
         } catch (RemoteException e) {

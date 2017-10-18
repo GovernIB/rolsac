@@ -21,6 +21,8 @@ import es.caib.rolsac.api.v2.personal.PersonalCriteria;
 import es.caib.rolsac.api.v2.personal.PersonalDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
 import es.caib.rolsac.api.v2.tractament.TractamentCriteria;
@@ -123,6 +125,16 @@ public class UnitatAdministrativaQueryServiceWSStrategy implements UnitatAdminis
     public List<ProcedimentDTO> llistarProcediments(long id, ProcedimentCriteria procedimentCriteria) throws StrategyException {
     	try {
     		return gateway.llistarProcediments(id, procedimentCriteria);
+    	} catch (RemoteException e) {
+    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+		}
+    }
+    
+    public List<ServicioDTO> llistarServicios(long id, ServicioCriteria servicioCriteria) throws StrategyException {
+    	try {
+    		return gateway.llistarServicios(id, servicioCriteria);
     	} catch (RemoteException e) {
     		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		} catch (APIException e) {
@@ -271,6 +283,14 @@ public class UnitatAdministrativaQueryServiceWSStrategy implements UnitatAdminis
     public int getNumProcediments(Long id) throws StrategyException {
     	try {
     		return gateway.getNumProcediments(id);
+    	} catch (RemoteException e) {
+    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+    	}
+    }
+    
+    public int getNumServicios(Long id) throws StrategyException {
+    	try {
+    		return gateway.getNumServicios(id);
     	} catch (RemoteException e) {
     		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
     	}

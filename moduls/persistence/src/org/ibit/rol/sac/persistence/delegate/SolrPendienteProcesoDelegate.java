@@ -41,6 +41,10 @@ public class SolrPendienteProcesoDelegate implements StatelessDelegate {
         impl.indexarTodoProcedimiento(solrPendienteJob);
     }
     
+    public void indexarTodoServicio(final SolrPendienteJob solrPendienteJob) throws DelegateException {
+        impl.indexarTodoServicio(solrPendienteJob);
+    }
+    
     public void indexarTodoNormativa(final SolrPendienteJob solrPendienteJob) throws DelegateException {
         impl.indexarTodoNormativa(solrPendienteJob);
     }

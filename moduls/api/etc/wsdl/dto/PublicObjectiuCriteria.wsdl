@@ -33,6 +33,7 @@
                         <element name="t_descripcion" nillable="true" type="xsd:string" />
                         <element name="t_palabrasclave" nillable="true" type="xsd:string" />
                         <element name="procedimiento" nillable="true" type="xsd:string" />
+                        <element name="servicio" nillable="true" type="xsd:string" />
                         <element name="ficha" nillable="true" type="xsd:string" />
                         <element name="ordenar" nillable="true" type="tns:ArrayOfPublicObjectiuOrdenacio" />
                     </sequence>

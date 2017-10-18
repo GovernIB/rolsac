@@ -14,6 +14,7 @@
         <property name="fechaFin"   column="JOB_FECFIN" />
         <property name="fechaFicha"   column="JOB_FECFCH" /> 
         <property name="fechaProcedimiento"   column="JOB_FECPRO" />
+        <property name="fechaServicio"   column="JOB_FECSER" />
         <property name="fechaNormativa"   column="JOB_FECNOR" />
         <property name="fechaTramite"   column="JOB_FECTRA" />
         <property name="fechaUnidadAdministrativa"   column="JOB_FECUNA" />
@@ -21,6 +22,8 @@
     	<property name="totalFichaDoc" column="JOB_TOTDFC" />
     	<property name="totalProcedimiento" column="JOB_TOTPRO" />
     	<property name="totalProcedimientoDoc" column="JOB_TOTDPR" />
+    	<property name="totalServicio" column="JOB_TOTSER" />
+    	<property name="totalServicioDoc" column="JOB_TOTDSR" />
     	<property name="totalNormativa" column="JOB_TOTNOR" />
     	<property name="totalNormativaDoc" column="JOB_TOTDNO" />
     	<property name="totalTramite" column="JOB_TOTTRA" />

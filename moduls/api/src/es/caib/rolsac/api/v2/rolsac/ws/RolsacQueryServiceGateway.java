@@ -20,6 +20,7 @@ import es.caib.rolsac.api.v2.document.DocumentCriteria;
 import es.caib.rolsac.api.v2.document.DocumentDTO;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitDTO;
+import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaCriteria;
 import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaDTO;
 import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiDTO;
@@ -62,6 +63,8 @@ import es.caib.rolsac.api.v2.personal.PersonalCriteria;
 import es.caib.rolsac.api.v2.personal.PersonalDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
@@ -202,6 +205,16 @@ public class RolsacQueryServiceGateway {
 		procedimentDTO = stub.obtenirProcediment(procedimentCriteria);
 
 		return procedimentDTO;
+	}
+	
+	public ServicioDTO obtenirServicio(
+			ServicioCriteria servicioCriteria)
+			throws QueryServiceException, RemoteException {
+
+		ServicioDTO servicioDTO = new ServicioDTO();
+		servicioDTO = stub.obtenirServicio(servicioCriteria);
+
+		return servicioDTO;
 	}
 
 	public PersonalDTO obtenirPersonal(PersonalCriteria personalCriteria)
@@ -464,7 +477,7 @@ public class RolsacQueryServiceGateway {
 		return Arrays.asList(stub.llistarDocumentTramit(documentTramitCriteria));
 	}
 	
-    public List<DocumentoNormativaDTO> llistarDocumentoNormativa(long idNormativa) throws QueryServiceException, RemoteException {
+    public List<DocumentoNormativaDTO> llistarDocumentoNormativa(DocumentoNormativaCriteria idNormativa) throws QueryServiceException, RemoteException {
     	return Arrays.asList(stub.llistarDocumentoNormativa(idNormativa));
     }
 
@@ -578,6 +591,20 @@ public class RolsacQueryServiceGateway {
             throws QueryServiceException, RemoteException {
         
         return stub.getNumProcediments(procedimentCriteria);    
+    }
+	
+	public List<ServicioDTO> llistarServicios(
+			ServicioCriteria servicioCriteria)
+			throws QueryServiceException, RemoteException {
+		
+		return Arrays.asList(stub.llistarServicios(servicioCriteria));	
+	}
+
+	public int getNumServicios(
+			ServicioCriteria servicioCriteria)
+            throws QueryServiceException, RemoteException {
+        
+        return stub.getNumServicios(servicioCriteria);    
     }
 	
 	public List<PublicObjectiuDTO> llistarPublicsObjectius(

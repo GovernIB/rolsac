@@ -3,6 +3,8 @@ package es.caib.rolsac.api.v2.rolsac.ws;
 import java.rmi.RemoteException;
 import java.util.List;
 
+import org.ibit.rol.sac.model.DocumentoNormativa;
+
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalCriteria;
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalDTO;
 import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaCriteria;
@@ -15,6 +17,7 @@ import es.caib.rolsac.api.v2.document.DocumentCriteria;
 import es.caib.rolsac.api.v2.document.DocumentDTO;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitDTO;
+import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaCriteria;
 import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaDTO;
 import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiDTO;
@@ -57,6 +60,8 @@ import es.caib.rolsac.api.v2.personal.PersonalCriteria;
 import es.caib.rolsac.api.v2.personal.PersonalDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.rolsac.RolsacQueryServiceStrategy;
@@ -245,6 +250,22 @@ public class RolsacQueryServiceWSStrategy implements RolsacQueryServiceStrategy 
 		}
 
 		return procedimentDTO;
+	}
+	
+	public ServicioDTO obtenirServicio(
+			ServicioCriteria servicioCriteria) throws StrategyException {
+
+		ServicioDTO servicioDTO = new ServicioDTO();
+
+		try {
+			servicioDTO = gateway.obtenirServicio(servicioCriteria);
+		} catch (QueryServiceException qse) {
+			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
+		} catch (RemoteException e) {
+			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		}
+
+		return servicioDTO;
 	}
 
 	public PersonalDTO obtenirPersonal(PersonalCriteria personalCriteria)
@@ -621,7 +642,7 @@ public class RolsacQueryServiceWSStrategy implements RolsacQueryServiceStrategy 
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}				
 	}
-    public List<DocumentoNormativaDTO> llistarDocumentoNormativa(long idNormativa)  throws StrategyException {
+    public List<DocumentoNormativaDTO> llistarDocumentoNormativa(DocumentoNormativaCriteria idNormativa)  throws StrategyException {
 		try {
 			return gateway.llistarDocumentoNormativa(idNormativa);
 		} catch (QueryServiceException qse) {
@@ -804,6 +825,26 @@ public class RolsacQueryServiceWSStrategy implements RolsacQueryServiceStrategy 
 	public Integer getNumProcediments(ProcedimentCriteria procedimentCriteria) throws StrategyException {
         try {
             return gateway.getNumProcediments(procedimentCriteria);
+        } catch (QueryServiceException qse) {
+            throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        }                       
+    }
+	
+	public List<ServicioDTO> llistarServicios(ServicioCriteria servicioCriteria) throws StrategyException {
+        try {
+            return gateway.llistarServicios(servicioCriteria);
+        } catch (QueryServiceException qse) {
+            throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        }                       
+    }
+	
+	public Integer getNumServicios(ServicioCriteria servicioCriteria) throws StrategyException {
+        try {
+            return gateway.getNumServicios(servicioCriteria);
         } catch (QueryServiceException qse) {
             throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
         } catch (RemoteException e) {

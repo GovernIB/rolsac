@@ -12,6 +12,7 @@ import org.apache.axis.AxisFault;
 import es.caib.rolsac.api.v2.afectacio.AfectacioDTO;
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.butlleti.ButlletiDTO;
+import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaCriteria;
 import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaDTO;
 import es.caib.rolsac.api.v2.exception.APIException;
 import es.caib.rolsac.api.v2.exception.StrategyException;
@@ -20,6 +21,8 @@ import es.caib.rolsac.api.v2.general.DTOUtil;
 import es.caib.rolsac.api.v2.normativa.NormativaDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 
 public class NormativaQueryServiceGateway {
@@ -70,6 +73,10 @@ public class NormativaQueryServiceGateway {
 		return stub.getNumProcediments(id);
 	}
 
+	public int getNumServicios(long id) throws RemoteException {
+		return stub.getNumServicios(id);
+	}
+	
 	public ButlletiDTO obtenirButlleti(long idButlleti) throws RemoteException {
 		return stub.obtenirButlleti(idButlleti);
 	}
@@ -79,9 +86,9 @@ public class NormativaQueryServiceGateway {
 		return stub.obtenirUnitatAdministrativa(idUniAdm);
 	}
 	
-	public List<DocumentoNormativaDTO> llistarDocumentNormativa(long idNormativa)
+	public List<DocumentoNormativaDTO> llistarDocumentoNormativa(DocumentoNormativaCriteria documentoNormativaCriteria)
 			throws RemoteException {
-			DocumentoNormativaDTO[] tmpLlista = stub.llistarDocumentNormativa(idNormativa);
+			DocumentoNormativaDTO[] tmpLlista = stub.llistarDocumentoNormativa(documentoNormativaCriteria);
 			return Arrays.asList(tmpLlista);
 	}
 			
@@ -130,6 +137,24 @@ public class NormativaQueryServiceGateway {
 		}
 		
 		return llistaProcediments;		
+		
+	}
+	
+	public List<ServicioDTO> llistarServicios(long id,
+			ServicioCriteria servicioCriteria) throws RemoteException, APIException {
+
+		Object[] tmpLlista = null;
+		List<ServicioDTO> llistaServicios = null;
+		
+		tmpLlista = stub.llistarServicios(id, servicioCriteria);
+		llistaServicios = new ArrayList<ServicioDTO>( Arrays.asList(tmpLlista).size() );
+			
+		for ( Object o : tmpLlista ) {
+			ServicioDTO pdto = (ServicioDTO) DTOUtil.object2DTO(o, ServicioDTO.class);
+			llistaServicios.add(pdto);
+		}
+		
+		return llistaServicios;		
 		
 	}
 

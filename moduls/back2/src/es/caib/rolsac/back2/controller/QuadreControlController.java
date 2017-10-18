@@ -19,11 +19,14 @@ import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.HistoricoFicha;
 import org.ibit.rol.sac.model.HistoricoNormativa;
 import org.ibit.rol.sac.model.HistoricoProcedimiento;
+import org.ibit.rol.sac.model.HistoricoServicio;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.Servicio;
 import org.ibit.rol.sac.model.TraduccionFicha;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimiento;
+import org.ibit.rol.sac.model.TraduccionServicio;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.dto.FechaHistoricoDTO;
@@ -134,6 +137,13 @@ public class QuadreControlController extends PantallaBaseController {
     			        ProcedimientoLocal procediment = ( (HistoricoProcedimiento) element.getHistorico() ).getProcedimiento();
     			        if ( procediment != null ) {
     			            ( (HistoricoProcedimiento) element.getHistorico() ).setNombre( ( (TraduccionProcedimiento) procediment.getTraduccion(idioma) ).getNombre() );
+    			        }
+    			        
+    			    }  else if ( element.getHistorico() instanceof HistoricoServicio ) {
+    			    	
+    			        Servicio servicio = ( (HistoricoServicio) element.getHistorico() ).getServicio();
+    			        if ( servicio != null ) {
+    			            ( (HistoricoServicio) element.getHistorico() ).setNombre( ( (TraduccionServicio) servicio.getTraduccion(idioma) ).getNombre() );
     			        }
     			        
     			    } else {

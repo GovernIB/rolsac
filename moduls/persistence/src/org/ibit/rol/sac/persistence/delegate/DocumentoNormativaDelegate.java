@@ -1,7 +1,6 @@
 package org.ibit.rol.sac.persistence.delegate;
 
 import java.rmi.RemoteException;
-import java.util.List;
 
 import javax.ejb.CreateException;
 import javax.ejb.Handle;
@@ -21,6 +20,7 @@ public class DocumentoNormativaDelegate implements StatelessDelegate
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
+	/** Serial Version UID. **/
 	private static final long serialVersionUID = 1L;
 
 	/**

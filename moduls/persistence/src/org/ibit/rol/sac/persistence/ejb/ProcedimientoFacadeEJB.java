@@ -1421,7 +1421,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			session.flush();
 			
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, procedimiento.getId(), false);			
-			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, procedimiento.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, null);
+			SiaUtils.marcarIndexacionPendienteServicio(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, procedimiento.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, null);
 			
 		} catch (HibernateException e) {
 
@@ -1470,7 +1470,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			session.flush();
 			
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, procedimiento.getId(), false);
-			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, procedimiento.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, null);
+			SiaUtils.marcarIndexacionPendienteServicio(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, procedimiento.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, null);
 			
 		} catch (HibernateException e) {
 
@@ -2205,8 +2205,10 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				Hibernate.initialize(procedimiento.getPublicosObjetivo());
 				Hibernate.initialize(procedimiento.getNormativas());
 				Hibernate.initialize(procedimiento.getUnidadAdministrativa());
-				Hibernate.initialize(procedimiento.getUnidadAdministrativa().getHijos());
-				Hibernate.initialize(procedimiento.getUnidadAdministrativa().getUnidadesNormativas());
+				if (procedimiento.getUnidadAdministrativa() != null) {
+					Hibernate.initialize(procedimiento.getUnidadAdministrativa().getHijos());
+					Hibernate.initialize(procedimiento.getUnidadAdministrativa().getUnidadesNormativas());
+				}
 				Hibernate.initialize(procedimiento.getTramites());
 				Hibernate.initialize(procedimiento.getHechosVitalesProcedimientos());
 				Hibernate.initialize(procedimiento.getFamilia());

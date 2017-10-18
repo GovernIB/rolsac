@@ -53,6 +53,7 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
     private Set<Edificio> edificios;
     private Set<Personal> personal;
     private Set<ProcedimientoLocal> procedimientos;
+    private Set<Servicio> servicios;
     private Set<Tramite> tramites;
     private Set<UnidadMateria> unidadesMaterias;
     private Set<UnidadNormativa> unidadesNormativas;
@@ -492,6 +493,14 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
     public void removeProcedimientoLocal(ProcedimientoLocal procedimientoLocal) {
         procedimientos.remove(procedimientoLocal);
     }
+    
+    public void addServicio(Servicio procedimientoLocal){
+        servicios.add(procedimientoLocal);
+    }
+
+    public void removeServicio(Servicio servicio) {
+    	servicios.remove(servicio);
+    }
       
     /* Gestion del organigrama */
 
@@ -679,6 +688,20 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
 
 	public void setCodigoDIR3(String codigoDIR3) {
 		this.codigoDIR3 = codigoDIR3;
+	}
+
+	/**
+	 * @return the servicios
+	 */
+	public Set<Servicio> getServicios() {
+		return servicios;
+	}
+
+	/**
+	 * @param servicios the servicios to set
+	 */
+	public void setServicios(Set<Servicio> servicios) {
+		this.servicios = servicios;
 	}
  
  

@@ -15,6 +15,7 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Order;
 
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.Servicio;
 import org.ibit.rol.sac.model.Sia;
 import org.ibit.rol.sac.model.SiaJob;
 import org.ibit.rol.sac.model.SiaPendiente;
@@ -24,6 +25,7 @@ import org.ibit.rol.sac.model.ws.SiaResultado;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
+import org.ibit.rol.sac.persistence.delegate.ServicioDelegate;
 import org.ibit.rol.sac.persistence.util.FiltroSia;
 import org.ibit.rol.sac.persistence.util.SiaCumpleDatos;
 import org.ibit.rol.sac.persistence.util.SiaEnviableResultado;
@@ -418,12 +420,14 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 	 *  </ul>
 	 *  
 	 *  Si no son de tipo procedimiento, se realiza el paso 1 y se inserta como pendiente.
+	 *  
    	 * @ejb.interface-method
    	 * @ejb.permission unchecked="true"
+   	 * 
    	 * @param siaPendiente
 	 * @throws DelegateException
 	 */
-	public SiaPendiente generarSiaPendiente(SiaPendiente siaPendiente, ProcedimientoLocal iProcedimiento) throws DelegateException  {
+	public SiaPendiente generarSiaPendiente(SiaPendiente siaPendiente, ProcedimientoLocal iProcedimiento, Servicio iServicio) throws DelegateException  {
 		log.debug("Generar SIA pendiente");
 		
 		Session session = getSession();
@@ -470,6 +474,32 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 					}
 				}
 				
+			} else if (SiaUtils.SIAPENDIENTE_TIPO_SERVICIO.equals(siaPendiente.getTipo())) {
+				//Paso 2. Checkeamos si es enviable, si no es enviable, no seguimos.
+				
+				Servicio servicio;
+				if (iServicio == null) {
+					servicio = DelegateUtil.getServicioDelegate().obtenerServicioParaSolr(siaPendiente.getIdElemento(), null);
+				} else {
+					servicio = iServicio;
+				}
+				SiaEnviableResultado siaEnviable = SiaUtils.isEnviable(servicio);
+				
+				if (siaEnviable.isNotificiarSIA()) {
+					//Paso 3. 
+					SiaCumpleDatos cumpleDatos = SiaUtils.cumpleDatos(servicio);
+					if (cumpleDatos.isCumpleDatos()) {
+						siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_CREADO);
+						session.save(siaPendiente);
+						session.flush();
+					} else {
+						siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_NO_CUMPLE_DATOS);
+						siaPendiente.setMensaje(cumpleDatos.getRespuesta());
+						session.save(siaPendiente);
+						session.flush();
+					}
+				}
+				
 			} else { //Es tipo UA o normativa. Por lo que directamente se escribe.
 				siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_CREADO);
 				session.save(siaPendiente);
@@ -489,6 +519,9 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     	}	
 			
 	}
+	
+	
+
 
 
 	/**
@@ -799,7 +832,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     		Sia sia = new Sia();
 			sia.setIdSIA(idSIA);
 			sia.setOperacion(SiaUtils.ESTADO_BAJA); 
-			sia.setIdProc(String.valueOf(idProc));
+			sia.setIdElemento(String.valueOf(idProc));
 			resultado = SiaWS.enviarSIA(sia, true);
 			return resultado;
     	} catch (Exception ex) {
@@ -809,8 +842,61 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     	
     }
     
+    
     /**
-	 * Envia a SIA un procedimiento borrado.
+  	 * Actualizar procedimiento.
+  	 * 
+ 	 * @ejb.interface-method
+ 	 * @ejb.permission unchecked="true"
+ 	 *   
+ 	 */
+    public void actualizarServicio(Servicio servicio, SiaResultado resultado) {
+
+      	final ServicioDelegate servicioDelegate = DelegateUtil.getServicioDelegate();
+      	
+  		// Actualizamos procedimiento
+      	try {
+  			if (resultado.isCorrecto()) {
+  				if (servicio.getCodigoSIA() == null || servicio.getCodigoSIA().isEmpty()) { 
+  					servicio.setCodigoSIA(resultado.getCodSIA()); 
+  				}
+  				servicio.setEstadoSIA(resultado.getEstadoSIA());
+  				servicio.setFechaSIA(new Date());
+  				servicioDelegate.actualizarServicio(servicio);
+  			} 
+      	} catch (Exception ex) {
+      		log.error("Error actualizando información de SIA en el servicio " + servicio.getId() + ": " + ex.getMessage(), ex);
+      		throw new EJBException("Error actualizando información de SIA en el servicio " + servicio.getId() + ": " + ex.getMessage(), ex);
+      	}
+  		
+  	}
+      
+      
+      /**
+  	 * Envia a SIA un servicio borrado.
+  	 * 
+ 	 * @ejb.interface-method
+ 	 * @ejb.permission unchecked="true"
+ 	 *   
+ 	 */
+    public SiaResultado borradoServicio(Long idServicio, String idSIA) {   
+      	try {
+      		SiaResultado resultado = null; 
+      		Sia sia = new Sia();
+  			sia.setIdSIA(idSIA);
+  			sia.setOperacion(SiaUtils.ESTADO_BAJA); 
+  			sia.setIdElemento(String.valueOf(idServicio));
+  			resultado = SiaWS.enviarSIA(sia, true);
+  			return resultado;
+      	} catch (Exception ex) {
+      		log.error("Error enviando a SIA el servicio " + idServicio + ": " + ex.getMessage(), ex);
+      		throw new EJBException("Error enviando a SIA el servicio " + idServicio + ": " + ex.getMessage(), ex);
+      	}
+      	
+      }
+      
+    /**
+	 * Graba SiaUA.
 	 * 
    	 * @ejb.interface-method
    	 * @ejb.permission unchecked="true"

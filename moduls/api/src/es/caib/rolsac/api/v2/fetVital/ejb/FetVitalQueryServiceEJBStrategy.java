@@ -12,6 +12,8 @@ import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
 
 public class FetVitalQueryServiceEJBStrategy implements FetVitalQueryServiceStrategy {
 
@@ -37,6 +39,14 @@ public class FetVitalQueryServiceEJBStrategy implements FetVitalQueryServiceStra
         }
     }
 
+    public List<ServicioDTO> llistarServicios(long id, ServicioCriteria servicioCriteria) throws StrategyException {
+        try {
+            return fetVitalQueryServiceDelegate.llistarServicios(id, servicioCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
+    }
+    
     public List<AgrupacioFetVitalDTO> llistarFetsVitalsAgrupacionsFV(long id, AgrupacioFetVitalCriteria agrupacioFetVitalCriteria) throws StrategyException {
         try {
             return fetVitalQueryServiceDelegate.llistarFetsVitalsAgrupacionsFV(id, agrupacioFetVitalCriteria);
@@ -56,6 +66,14 @@ public class FetVitalQueryServiceEJBStrategy implements FetVitalQueryServiceStra
     public int getNumProcedimentsLocals(long id) throws StrategyException {
         try {
             return fetVitalQueryServiceDelegate.getNumProcedimentsLocals(id);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
+    }
+    
+    public int getNumServicios(long id) throws StrategyException {
+        try {
+            return fetVitalQueryServiceDelegate.getNumServicios(id);
         } catch (DelegateException e) {
             throw new StrategyException(e);
         }

@@ -8,6 +8,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import es.caib.rolsac.api.v2.afectacio.AfectacioDTO;
 import es.caib.rolsac.api.v2.afectacio.AfectacioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.butlleti.ButlletiQueryServiceAdapter;
+import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaCriteria;
 import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaDTO;
 import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
@@ -19,6 +20,9 @@ import es.caib.rolsac.api.v2.normativa.ejb.NormativaQueryServiceEJBStrategy;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
 
@@ -76,6 +80,14 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
         }
     }
 
+    public int getNumServicios() throws QueryServiceException {
+        try {
+            return normativaQueryServiceStrategy.getNumServicios(getId());
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de servicios.", e);
+        }
+    }
+    
     public List<AfectacioQueryServiceAdapter> llistarAfectacionsAfectades() throws QueryServiceException{
         try {
             List<AfectacioDTO> llistaDTO = normativaQueryServiceStrategy.llistarAfectacionsAfectades(getId());
@@ -161,6 +173,23 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
         }
     }
 
+    public List<ServicioQueryServiceAdapter> llistarServicios(ServicioCriteria servicioCriteria) throws QueryServiceException {
+        try {
+            List<ServicioDTO> llistaDTO = normativaQueryServiceStrategy.llistarServicios(getId(), servicioCriteria);
+            List<ServicioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<ServicioQueryServiceAdapter>();
+            for (ServicioDTO servicioDTO : llistaDTO) {
+            	ServicioQueryServiceAdapter aqsa = (ServicioQueryServiceAdapter) BeanUtils.getAdapter("servicio", getStrategy(), servicioDTO);
+            	if (aqsa != null && rolsacUrl != null) {
+                	aqsa.setRolsacUrl(rolsacUrl);
+                }
+                llistaQueryServiceAdapter.add(aqsa);
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "servicios.", e);
+        }
+    }
+
     public ButlletiQueryServiceAdapter obtenirButlleti() throws QueryServiceException {
         try {
         	ButlletiQueryServiceAdapter aqsa = (ButlletiQueryServiceAdapter) BeanUtils.getAdapter("butlleti", getStrategy(), normativaQueryServiceStrategy.obtenirButlleti(this.getBoletin()));
@@ -189,9 +218,9 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
     }
 
 	@Override
-	public List<DocumentoNormativaQueryServiceAdapter> llistarDocumentNormativa(long idNormativa) throws QueryServiceException {
+	public List<DocumentoNormativaQueryServiceAdapter> llistarDocumentoNormativa(DocumentoNormativaCriteria documentoNormativaCriteria) throws QueryServiceException {
         try {
-            List<DocumentoNormativaDTO> llistaDTO = normativaQueryServiceStrategy.llistarDocumentNormativa(idNormativa);
+            List<DocumentoNormativaDTO> llistaDTO = normativaQueryServiceStrategy.llistarDocumentoNormativa(documentoNormativaCriteria);
             List<DocumentoNormativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentoNormativaQueryServiceAdapter>();
             for (DocumentoNormativaDTO DocumentoNormativaDTO : llistaDTO) {
             	DocumentoNormativaQueryServiceAdapter dqsa = (DocumentoNormativaQueryServiceAdapter) BeanUtils.getAdapter("DocumentoNormativa", getStrategy(), DocumentoNormativaDTO);

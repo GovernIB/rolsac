@@ -137,7 +137,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			final List<Long> listIdProcedimientos = DelegateUtil.getProcedimientoDelegate().listarProcedimientosOrganoResolutori(unidad.getId());
 			for (Long idProcedimiento : listIdProcedimientos) {
 				try {
-					SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, idProcedimiento, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, null);
+					SiaUtils.marcarIndexacionPendienteServicio(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, idProcedimiento, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, null);
 				} catch (Exception ex) {
 					log.error("Error mirando si es indexable SIA. UA:"+unidad.getId()+" proc:"+idProcedimiento, ex);
 				}
@@ -196,7 +196,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			final List<Long> listIdProcedimientos = DelegateUtil.getProcedimientoDelegate().listarProcedimientosOrganoResolutori(unidad.getId());
 			for (Long idProcedimiento : listIdProcedimientos) {
 				try {
-					SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, idProcedimiento, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, null);
+					SiaUtils.marcarIndexacionPendienteServicio(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, idProcedimiento, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, null);
 					
 				} catch (Exception ex) {
 					log.error("Error mirando si es indexable SIA. UA:"+unidad.getId()+" proc:"+idProcedimiento, ex);
@@ -291,7 +291,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			final List<Long> listIdProcedimientos = DelegateUtil.getProcedimientoDelegate().listarProcedimientosOrganoResolutori(unidad.getId());
 			for (Long idProcedimiento : listIdProcedimientos) {
 				try {
-					SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, idProcedimiento, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, null);
+					SiaUtils.marcarIndexacionPendienteServicio(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, idProcedimiento, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, null);
 					
 				} catch (Exception ex) {
 					log.error("Error mirando si es indexable SIA. UA:"+unidad.getId()+" proc:"+idProcedimiento, ex);
@@ -344,7 +344,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			final List<Long> listIdProcedimientos = DelegateUtil.getProcedimientoDelegate().listarProcedimientosOrganoResolutori(unidad.getId());
 			for (Long idProcedimiento : listIdProcedimientos) {
 				try {
-					SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, idProcedimiento, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, null);
+					SiaUtils.marcarIndexacionPendienteServicio(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, idProcedimiento, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, null);
 				} catch (Exception ex) {
 					log.error("Error mirando si es indexable SIA. UA:"+unidad.getId()+" proc:"+idProcedimiento, ex);
 				}
@@ -2805,18 +2805,34 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 
 	 
 	 private void marcarSiaPendienteElementosRelacionadosUA(final Long idUA) {
-		//Luego los procedimientos
-		 StringBuilder consulta = new StringBuilder("select proc.id from ProcedimientoLocal proc left join proc.unidadAdministrativa uad where uad.id = " + idUA);
-        
+		 
 		 //Primero las fichas que se relacionan con el hechovital.
          Session session = getSession();
          
-         try {
+         //Luego los procedimientos
+ 		StringBuilder consulta = new StringBuilder("select proc.id from ProcedimientoLocal proc left join proc.unidadAdministrativa uad where uad.id = " + idUA);
+          try {
 	         Query query = session.createQuery( consulta.toString() );
 	         query.setCacheable(true);
 	         final List<Long> idProcedimientos =  castList(Long.class, query.list());
 	         for(Long idProcedimiento : idProcedimientos) {
-	             SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, idProcedimiento, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, null);
+	             SiaUtils.marcarIndexacionPendienteServicio(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, idProcedimiento, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, null);
+	         }
+         } catch (Exception he) {
+             throw new EJBException(he);
+		 } finally {
+		             close(session);
+		 }
+         
+         
+          //Luego los servicios
+   		  consulta = new StringBuilder("select serv.id from Servicio serv left join serv.servicioResponsable uad where uad.id = " + idUA);
+          try {
+	         Query query = session.createQuery( consulta.toString() );
+	         query.setCacheable(true);
+	         final List<Long> idServicios =  castList(Long.class, query.list());
+	         for(Long idServicio : idServicios) {
+	             SiaUtils.marcarIndexacionPendienteServicio(SiaUtils.SIAPENDIENTE_TIPO_SERVICIO, idServicio, SiaUtils.SIAPENDIENTE_SERVICIO_EXISTE, null, null);
 	         }
          } catch (Exception he) {
              throw new EJBException(he);

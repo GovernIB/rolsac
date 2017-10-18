@@ -33,7 +33,12 @@
             <one-to-many class="org.ibit.rol.sac.model.MateriaAgrupacionM"/>
         </set>
 
-        <set name="procedimientosLocales" cascade="none" inverse="true" lazy="true" table="RSC_PROMAT" >
+        <set name="servicios" cascade="none" inverse="true" lazy="true" table="RSC_SERMAT" >
+            <key column="SRM_CODMAT" foreign-key="RSC_SRMMAT_FK"/>
+            <many-to-many class="org.ibit.rol.sac.model.Servicio" column="PRM_CODSER" foreign-key="RSC_SRMSER_FK" />
+        </set>
+
+		<set name="procedimientosLocales" cascade="none" inverse="true" lazy="true" table="RSC_PROMAT" >
             <key column="PRM_CODMAT" foreign-key="RSC_PRMMAT_FK"/>
             <many-to-many class="org.ibit.rol.sac.model.ProcedimientoLocal" column="PRM_CODPRO" foreign-key="RSC_PRMPRO_FK" />
         </set>

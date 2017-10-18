@@ -69,6 +69,12 @@
             <one-to-many class="org.ibit.rol.sac.model.ProcedimientoLocal"/>
         </set>
 
+		<set name="servicios" cascade="none" inverse="true" lazy="true">
+            <cache usage="read-write"/>
+            <key column="SER_SERRSP" foreign-key="RSC_SET_SERRSP_FK"/>
+            <one-to-many class="org.ibit.rol.sac.model.Servicio"/>
+        </set>
+        
 		<set name="tramites" cascade="none" inverse="true" lazy="true">
             <cache usage="read-write"/>
             <key column="TRA_ORGCOMP" foreign-key="RSC_ORGCOMP_FK"/>

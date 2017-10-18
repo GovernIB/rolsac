@@ -74,6 +74,11 @@ public class EstadisticaInsertServiceGateway {
 			throws RemoteException {
 		return stub.gravarEstadisticaProcediment(procedimentId);
 	}
+	
+	public boolean gravarEstadisticaServicio(long servicioId)
+			throws RemoteException {
+		return stub.gravarEstadisticaServicio(servicioId);
+	}
 
 	public boolean gravarEstadisticaUnitatAdministrativa(long uaId)
 			throws RemoteException {

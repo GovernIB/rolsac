@@ -19,6 +19,9 @@ import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.publicObjectiu.ejb.PublicObjectiuQueryServiceEJBStrategy;
 
 public class PublicObjectiuQueryServiceAdapter extends PublicObjectiuDTO implements PublicObjectiuQueryService {
@@ -76,9 +79,9 @@ public class PublicObjectiuQueryServiceAdapter extends PublicObjectiuDTO impleme
         }
     }
 
-    public List<ProcedimentQueryServiceAdapter> llistarProcediments(ProcedimentCriteria procediemntCriteria) throws QueryServiceException {
+    public List<ProcedimentQueryServiceAdapter> llistarProcediments(ProcedimentCriteria procedimentCriteria) throws QueryServiceException {
         try {
-            List<ProcedimentDTO> llistaDTO = publicObjectiuQueryServiceStrategy.llistarProcediments(getId(), procediemntCriteria);
+            List<ProcedimentDTO> llistaDTO = publicObjectiuQueryServiceStrategy.llistarProcediments(getId(), procedimentCriteria);
             List<ProcedimentQueryServiceAdapter> llistaProcediments = new ArrayList<ProcedimentQueryServiceAdapter>();
             for (ProcedimentDTO procDTO : llistaDTO) {
             	ProcedimentQueryServiceAdapter tqsa = (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), procDTO);
@@ -90,6 +93,24 @@ public class PublicObjectiuQueryServiceAdapter extends PublicObjectiuDTO impleme
             return llistaProcediments;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "procedimientos.", e);
+        }
+    }
+
+    
+    public List<ServicioQueryServiceAdapter> llistarServicios(ServicioCriteria servicioCriteria) throws QueryServiceException {
+        try {
+            List<ServicioDTO> llistaDTO = publicObjectiuQueryServiceStrategy.llistarServicios(getId(), servicioCriteria);
+            List<ServicioQueryServiceAdapter> llistaServicios = new ArrayList<ServicioQueryServiceAdapter>();
+            for (ServicioDTO servDTO : llistaDTO) {
+            	ServicioQueryServiceAdapter tqsa = (ServicioQueryServiceAdapter) BeanUtils.getAdapter("servicio", getStrategy(), servDTO);
+            	if (tqsa != null && rolsacUrl != null) {
+            		tqsa.setRolsacUrl(rolsacUrl);
+            	}
+            	llistaServicios.add(tqsa);
+            }
+            return llistaServicios;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "servicios.", e);
         }
     }
 

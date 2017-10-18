@@ -26,6 +26,10 @@
         <subclass name="org.ibit.rol.sac.model.HistoricoProcedimiento" discriminator-value="Procedimiento">
             <many-to-one name="procedimiento" cascade="none" outer-join="false" column="HIS_CODPRO" foreign-key="RSC_HISPRO_FK"/>
         </subclass>
+        
+         <subclass name="org.ibit.rol.sac.model.HistoricoServicio" discriminator-value="Servicio">
+            <many-to-one name="servicio" cascade="none" outer-join="false" column="HIS_CODSER" foreign-key="RSC_HISSER_FK"/>
+        </subclass>
 
         <subclass name="org.ibit.rol.sac.model.HistoricoFicha" discriminator-value="Ficha">
             <many-to-one name="ficha" cascade="none" outer-join="false" column="HIS_CODFIC" foreign-key="RSC_HISFIC_FK"/>

@@ -34,6 +34,7 @@ public final class ConfiguracioServeis {
 	public static final String NOM_SERVEI_PERFIL = "PerfilWS";
 	public static final String NOM_SERVEI_PERSONAL = "PersonalWS";
 	public static final String NOM_SERVEI_PROCEDIMENT = "ProcedimentWS";
+	public static final String NOM_SERVEI_SERVICIO = "ServicioWS";
 	public static final String NOM_SERVEI_PUBLIC_OBJECTIU = "PublicObjectiuWS";
 	public static final String NOM_SERVEI_SECCIO = "SeccioWS";
 	public static final String NOM_SERVEI_TAXA = "TaxaWS";

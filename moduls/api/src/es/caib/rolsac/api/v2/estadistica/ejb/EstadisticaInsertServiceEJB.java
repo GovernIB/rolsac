@@ -18,6 +18,7 @@ import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.Periodo;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.Servicio;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 
 import es.caib.rolsac.api.v2.general.HibernateEJB;
@@ -287,6 +288,45 @@ public class EstadisticaInsertServiceEJB extends HibernateEJB {
                 tx = session.beginTransaction();
                 ProcedimientoLocal procediment = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, procedimentId);
                 Historico historico = getHistoric(session, procediment);
+                grabarEstadistica(session, historico, periodo);
+                tx.commit();
+                estadisticaGravada = true;
+            }
+        } catch (HibernateException e) {
+            if (tx != null) {
+                try {
+                    tx.rollback();
+                } catch (HibernateException e1) {
+                    log.error(e);
+                }
+            }
+            log.error(e);
+        } finally {
+            close(session);
+        }
+        return estadisticaGravada;
+    }
+    
+    
+    /**
+     * Crea o actualiza una Estadistica para un servicio.
+     * @param servicioId
+     * @return boolean
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */ 
+    public boolean gravarEstadisticaServicio(Long servicioId) {
+        boolean estadisticaGravada = false;
+        Session session = null;
+        Transaction tx = null;
+        try {
+            if (servicioId > 0) {
+                Periodo periodo = PeriodoUtil.crearPeriodoMes();
+                session = getSession();
+                tx = session.beginTransaction();
+                Servicio servicio = (Servicio) session.load(Servicio.class, servicioId);
+                Historico historico = getHistoric(session, servicio);
                 grabarEstadistica(session, historico, periodo);
                 tx.commit();
                 estadisticaGravada = true;

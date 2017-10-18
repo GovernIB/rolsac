@@ -3,7 +3,9 @@ package org.ibit.rol.sac.model.dto;
 import org.ibit.rol.sac.model.ValueObject;
 
 public class ProcedimientoNormativaDTO implements ValueObject {
-	
+	 
+	/** Serial Version UID. **/
+	private static final long serialVersionUID = 1L;
 	private long id;
 	private String titulo;
     private String fecha;

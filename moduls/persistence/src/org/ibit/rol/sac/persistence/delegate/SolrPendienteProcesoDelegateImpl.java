@@ -83,6 +83,17 @@ public class SolrPendienteProcesoDelegateImpl extends SolrPendienteDelegate impl
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegateI#indexarTodo()
 	 */
+    public void indexarTodoServicio(final SolrPendienteJob solrPendienteJob) throws DelegateException {
+    	try {
+             getFacade().indexarTodoServicio(solrPendienteJob);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegateI#indexarTodo()
+	 */
     public void indexarTodoNormativa(final SolrPendienteJob solrPendienteJob) throws DelegateException {
     	try {
              getFacade().indexarTodoNormativa(solrPendienteJob);

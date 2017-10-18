@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="org.ibit.rol.sac.model.Servicio" table="RSC_SERVIC" discriminator-value="servicio">
+        <cache usage="read-write"/>
+
+        <id name="id" unsaved-value="null" column="SER_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+
+        <property name="validacion" 					column="SER_VALIDA"/>
+        <property name="codigo" 	length="256" 		column="SER_CODIGO" />
+        <property name="codigoSIA" 	length="12" 		column="SER_CODSIA" />
+        <property name="estadoSIA" 	length="1" 			column="SER_ESTSIA" />
+        <property name="fechaSIA"  						column="SER_FECSIA" />
+        <property name="tasaUrl"  	length="256" 		column="SER_TASURL" />
+        <property name="nombreResponsable" length="256" column="SER_NOMRSP" />
+        <property name="correo"  	length="256" 		column="SER_CORREO" />
+        <property name="telefono"  	length="256" 		column="SER_TELEFO" />
+        <property name="fechaPublicacion"  				column="SER_FECPUB" />
+        <property name="fechaDespublicacion"  			column="SER_FECDES" />
+        <property name="fechaActualizacion"  			column="SER_FECACT" />
+        <property name="tramiteUrl"	length="256" 		column="SER_TRAULR" />
+        <property name="tramiteId" 	length="256" 		column="SER_TRAID" />
+        <property name="tramiteVersion" length="256" 	column="SER_TRAVER" />
+        
+        
+        <many-to-one name="organoInstructor" 	cascade="none" column="SER_INSTRU" foreign-key="RSC_SER_INSTRU_FK"/>
+        <many-to-one name="servicioResponsable" cascade="none" column="SER_SERRSP" foreign-key="RSC_SET_SERRSP_FK"/>
+        
+        
+        
+        <map name="traducciones" cascade="all" table="RSC_TRASER">
+            <cache usage="read-write"/>
+            <key column="TSR_CODSER" foreign-key="RSC_TRASER_SER_FK"/>
+            <index column="TSR_CODIDI" type="string" length="2"/>
+            <composite-element class="org.ibit.rol.sac.model.TraduccionServicio">
+                <property name="nombre" 		length="256" 	column="TSR_NOMBRE" />
+                <property name="objeto" 		length="256" 	column="TSR_OBJETO" />
+                <property name="destinatarios" 	type="text"  	column="TSR_DESTIN" />
+                <property name="requisitos" 	type="text"  	column="TSR_REQUIS" />
+                <property name="observaciones" 	type="text" 	column="TSR_OBSERV" />
+            </composite-element>
+        </map>
+        
+        
+        <set name="normativas" cascade="none" table="RSC_SERNOR" lazy="true">
+            <cache usage="read-write"/>
+            <key column="SRN_CODSER" foreign-key="RSC_SRNSER_FK"/>
+            <many-to-many class="org.ibit.rol.sac.model.Normativa" column="SRN_CODNOR"  foreign-key="RSC_SRNNOR_FK"/>
+        </set>
+        
+        <set name="documentos" cascade="all-delete-orphan" inverse="true" lazy="true" order-by="ORDEN">
+            <cache usage="read-write"/>
+            <key column="DSR_CODSER" foreign-key="DSR_CODSER_FK"/>
+            <one-to-many class="org.ibit.rol.sac.model.DocumentoServicio" />
+        </set>
+        
+        <set name="materias" cascade="none" lazy="true" table="RSC_SERMAT">
+            <cache usage="read-write"/>
+            <key column="SRM_CODSER" foreign-key="RSC_SRMSER_FK"/>
+            <many-to-many class="org.ibit.rol.sac.model.Materia" column="SRM_CODMAT"  foreign-key="RSC_SRMMAT_FK"/>
+        </set>
+        
+        <set name="publicosObjetivo" cascade="none" lazy="true" table="RSC_POBSER">
+            <cache usage="read-write"/>
+            <key column="PSR_CODSER" foreign-key="RSC_PSRSER_FK"/>
+            <many-to-many class="org.ibit.rol.sac.model.PublicoObjetivo" column="PSR_CODPOB"  foreign-key="RSC_PSRPOB_FK"/>
+        </set>
+        
+        <set name="hechosVitalesServicios" cascade="all" lazy="true" inverse="true">
+            <cache usage="read-write"/>
+            <key column="HVS_CODSER" foreign-key="RSC_HVSSER_FK"/>
+            <one-to-many class="org.ibit.rol.sac.model.HechoVitalServicio"/>
+        </set>
+
+       
+    </class>
+
+</hibernate-mapping>

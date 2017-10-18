@@ -12,6 +12,8 @@ import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaCriteria;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaCriteria;
@@ -25,6 +27,8 @@ public interface MateriaQueryService {
 
     public int getNumProcedimentsLocals() throws QueryServiceException;
 
+    public int getNumServicios() throws QueryServiceException;
+
     public int getNumUnitatsMateries() throws QueryServiceException;
 
     public int getNumIcones() throws QueryServiceException;
@@ -36,6 +40,8 @@ public interface MateriaQueryService {
     public ArxiuQueryServiceAdapter getIconaGran() throws QueryServiceException;
 
     public List<ProcedimentQueryServiceAdapter> llistarProcedimentsLocals(ProcedimentCriteria procedimentCriteria) throws QueryServiceException;
+
+    public List<ServicioQueryServiceAdapter> llistarServicios(ServicioCriteria servicioCriteria) throws QueryServiceException;
 
     public List<FitxaQueryServiceAdapter> llistarFitxes(FitxaCriteria fitxaCriteria) throws QueryServiceException;
 

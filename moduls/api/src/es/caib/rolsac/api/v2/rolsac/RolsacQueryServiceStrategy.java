@@ -14,6 +14,7 @@ import es.caib.rolsac.api.v2.document.DocumentCriteria;
 import es.caib.rolsac.api.v2.document.DocumentDTO;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitDTO;
+import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaCriteria;
 import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaDTO;
 import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiDTO;
@@ -55,6 +56,8 @@ import es.caib.rolsac.api.v2.personal.PersonalCriteria;
 import es.caib.rolsac.api.v2.personal.PersonalDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
@@ -103,7 +106,7 @@ public interface RolsacQueryServiceStrategy {
 
     List<DocumentTramitDTO> llistarDocumentTramit(DocumentTramitCriteria docuemntTramitCriteria) throws StrategyException;
 
-    List<DocumentoNormativaDTO> llistarDocumentoNormativa(long idNormativa) throws StrategyException;
+    List<DocumentoNormativaDTO> llistarDocumentoNormativa(DocumentoNormativaCriteria documentoNormativaCriteria) throws StrategyException;
         
     EdificiDTO obtenirEdifici(EdificiCriteria edificiTramit) throws StrategyException;
 
@@ -174,6 +177,12 @@ public interface RolsacQueryServiceStrategy {
     List<ProcedimentDTO> llistarProcediments(ProcedimentCriteria procedimentCriteria) throws StrategyException;
     
     Integer getNumProcediments(ProcedimentCriteria procedimentCriteria) throws StrategyException;
+
+    ServicioDTO obtenirServicio(ServicioCriteria servicioCriteria) throws StrategyException;
+
+    List<ServicioDTO> llistarServicios(ServicioCriteria servicioCriteria) throws StrategyException;
+    
+    Integer getNumServicios(ServicioCriteria servicioCriteria) throws StrategyException;
 
     PublicObjectiuDTO obtenirPublicObjectiu(PublicObjectiuCriteria publicObjectiuCriteria) throws StrategyException;
 

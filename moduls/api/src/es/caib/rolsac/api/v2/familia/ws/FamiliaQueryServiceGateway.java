@@ -16,6 +16,9 @@ import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
+
 
 public class FamiliaQueryServiceGateway {
 	
@@ -57,6 +60,10 @@ public class FamiliaQueryServiceGateway {
 		return stub.getNumProcedimentsLocals(id);
 	}
 
+	public int getNumServicios(long id) throws RemoteException {
+		return stub.getNumServicios(id);
+	}
+	
 	public int getNumIcones(long id) throws RemoteException {
 		return stub.getNumIcones(id);
 	}
@@ -76,6 +83,24 @@ public class FamiliaQueryServiceGateway {
 		}
 		
 		return llistaMateries;
+
+	}
+	
+	public List<ServicioDTO> llistarServicios(long id,
+			ServicioCriteria servicioCriteria) throws RemoteException, APIException {
+		
+		Object[] tmpLlista = null;
+		List<ServicioDTO> llistaServicios = null;
+		
+		tmpLlista = stub.llistarServicios(id, servicioCriteria);
+		llistaServicios = new ArrayList<ServicioDTO>( Arrays.asList(tmpLlista).size() );
+			
+		for ( Object o : tmpLlista ) {
+			ServicioDTO pdto = (ServicioDTO) DTOUtil.object2DTO(o, ServicioDTO.class);
+			llistaServicios.add(pdto);
+		}
+		
+		return llistaServicios;
 
 	}
 

@@ -122,6 +122,29 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB
 		}
 	}
 	
+	/**
+	 * Crea o actualiza una Estadistica para una Servicio
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 * @param idServicio	Identificador de un servicio.
+	 */
+	public void grabarEstadisticaServicio(Long idServicio)
+	{
+		Session session = getSession();
+		try {
+			Servicio servicio = (Servicio) session.load(Servicio.class, idServicio);
+			Periodo periodo = PeriodoUtil.crearPeriodoMes();
+			Historico historico = getHistorico(session, servicio);
+			grabarEstadistica(session, historico, periodo);
+			
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+	
 	
 	/**
 	 * Crea o actualiza una Estadistica para una Ficha
@@ -303,6 +326,38 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB
 		Session session = getSession();
 		try {
 			ProcedimientoLocal procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, idProcedimiento);
+			Historico historico = getHistorico(session, procedimiento);
+			Criteria criterio = session.createCriteria(Estadistica.class);
+			criterio.add(Expression.eq("historico.id", historico.getId()));
+			criterio.add(Expression.between("fecha", fechaInicio, fechaFin));
+			criterio.addOrder(Order.asc("fecha"));
+			List list = criterio.list();
+			
+			return completarEstadisticaMeses(list, fechaInicio, fechaFin);
+			
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+	
+	
+	/**
+	 * Resumen en un periodo de un Servicio.
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 * @param	idServicio	Identificador de un servicio.
+	 * @param	fechaInicio	Indica la fecha de inicio del resumen.
+	 * @param fechaFin	Indica la fecha final del resumen.
+	 * @return Devuelve <code>List</code> de estadísticas en un rango de fechas de un servicio.
+	 */
+	public List listarEstadisticasServicio(Long idServicio, Date fechaInicio, Date fechaFin)
+	{
+		Session session = getSession();
+		try {
+			Servicio procedimiento = (Servicio) session.load(Servicio.class, idServicio);
 			Historico historico = getHistorico(session, procedimiento);
 			Criteria criterio = session.createCriteria(Estadistica.class);
 			criterio.add(Expression.eq("historico.id", historico.getId()));
@@ -549,10 +604,11 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB
             tiposAuditorias.add(Auditoria.MODIFICAR);
             tiposAuditorias.add(Auditoria.INSERTAR);
 
-			// Lanzamos 3 query porque una solo hacia que el tiempo de respuesta fuese exponencial
+			// Lanzamos 4 query porque una solo hacia que el tiempo de respuesta fuese exponencial
 			Query queryProcedimiento = null;
 			Query queryNormativa = null;
 			Query queryFicha = null;
+			Query queryServicio = null;
 			
 			/* Consulta de auditorías de procedimientos */
 			queryProcedimiento = session.createQuery(
@@ -577,6 +633,32 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB
 				queryProcedimiento.setParameter("usuari", userName);
 			}
 			queryProcedimiento.setMaxResults(numeroRegistros);
+			
+			/* Consulta de auditorías de servicio */
+			queryServicio = session.createQuery(
+                    "select distinct hs" +
+                    ", sv.fechaActualizacion" +
+                    " from Auditoria as a" +
+                    ", HistoricoServicio as hs" +
+                    ", Servicio as sv" +
+                    " where ( hs.id = a.historico.id )" +
+                    " and ( hs.servicio.id = sv.id )" +
+                    " and ( a.codigoOperacion in (:codOperacion) )" +
+                    " and ( sv.servicioResponsable.id in (:idUA) )" +
+                    " and ( a.fecha between :fechaInicio and :fechaFin )" +
+                    clausulaUsuari +
+                    " order by sv.fechaActualizacion desc");
+			
+			queryServicio.setParameterList("codOperacion", tiposAuditorias);
+			queryServicio.setParameterList("idUA", listaUnidadAdministrativaId);
+			queryServicio.setParameter("fechaInicio", fechaInicio);
+			queryServicio.setParameter("fechaFin", fechaFin);
+			if (!"".equals(clausulaUsuari)) {
+				queryServicio.setParameter("usuari", userName);
+			}
+			queryServicio.setMaxResults(numeroRegistros);
+			
+			
 
 			/* Consulta de auditorías de normativas */
 			queryNormativa = session.createQuery(
@@ -626,7 +708,7 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB
 			}
 			queryFicha.setMaxResults(numeroRegistros);
 
-			List<FechaHistoricoDTO> historicoOrdenado = ordenarLista(queryProcedimiento, queryNormativa, queryFicha, numeroRegistros, session);
+			List<FechaHistoricoDTO> historicoOrdenado = ordenarLista(queryProcedimiento, queryNormativa, queryFicha, queryServicio, numeroRegistros, session);
 			return historicoOrdenado;
 			
 		} catch (HibernateException he) {
@@ -645,16 +727,21 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB
      * @return	Devuelve <code>List<FechaHistoricoDTO></code> solicitada.
      * @throws HibernateException
      */
-    private List<FechaHistoricoDTO> ordenarLista(Query queryProcedimiento, Query queryNormativa, Query queryFicha, Integer numeroRegistros, Session session) throws HibernateException {
+    private List<FechaHistoricoDTO> ordenarLista(Query queryProcedimiento, Query queryNormativa, Query queryFicha, Query queryServicio, Integer numeroRegistros, Session session) throws HibernateException {
 
         // Tratamiento de la query
         List<Object[]> lQueryProcedimiento = queryProcedimiento.list();
+        List<Object[]> lQueryServicio = queryServicio.list();
         List<HistoricoNormativa> lQueryNormativa = queryNormativa.list();
         List<Object[]> lQueryFicha = queryFicha.list();
 
         Map<Date, Object> historico = new HashMap<Date, Object>();
 
         for (Object[] obj : lQueryProcedimiento) {
+			historico.put((Timestamp) obj[1], obj[0]);
+        }
+        
+        for (Object[] obj : lQueryServicio) {
 			historico.put((Timestamp) obj[1], obj[0]);
         }
 

@@ -10,6 +10,7 @@
 	xmlns:tns6="http://arxiu.v2.api.rolsac.caib.es"
 	xmlns:tns7="http://agrupacioMateria.v2.api.rolsac.caib.es"
 	xmlns:tns8="http://unitatMateria.v2.api.rolsac.caib.es"
+	xmlns:tns9="http://servicio.v2.api.rolsac.caib.es"
 	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
 	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -23,6 +24,7 @@
 	<wsdl:import namespace="urn:tns6" location="dto/ArxiuDTO.wsdl"/>
 	<wsdl:import namespace="urn:tns7" location="dto/AgrupacioMateriaCriteria.wsdl"/>
 	<wsdl:import namespace="urn:tns8" location="dto/UnitatMateriaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns9" location="dto/ServicioCriteria.wsdl"/>
 	
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
@@ -68,6 +70,10 @@
 		<wsdl:part name="in0" type="xsd:long" />
 		<wsdl:part name="in1" type="tns5:ProcedimentCriteria" />
 	</wsdl:message>
+	<wsdl:message name="llistarServiciosRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in1" type="tns9:ServicioCriteria" />
+	</wsdl:message>
 	<wsdl:message name="getIconaGranRequest">
 		<wsdl:part name="in0" type="xsd:long" />
 	</wsdl:message>
@@ -93,6 +99,9 @@
 	</wsdl:message>
 	<wsdl:message name="getNumProcedimentsLocalsResponse">
 		<wsdl:part name="getNumProcedimentsLocalsReturn" type="xsd:int" />
+	</wsdl:message>
+	<wsdl:message name="getNumServiciosResponse">
+		<wsdl:part name="getNumServiciosReturn" type="xsd:int" />
 	</wsdl:message>
 	<wsdl:message name="getNumFitxesRequest">
 		<wsdl:part name="in0" type="xsd:long" />
@@ -121,6 +130,9 @@
 	<wsdl:message name="llistarProcedimentsLocalsResponse">
 		<wsdl:part name="llistarProcedimentsLocalsReturn" type="impl:ArrayOf_xsd_anyType" />
 	</wsdl:message>
+	<wsdl:message name="llistarServiciosResponse">
+		<wsdl:part name="llistarServiciosReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
 	<wsdl:message name="llistarUnitatsAdministrativesResponse">
 		<wsdl:part name="llistarUnitatsAdministrativesReturn" type="impl:ArrayOf_xsd_anyType" />
 	</wsdl:message>
@@ -137,6 +149,9 @@
 		<wsdl:part name="in1" type="tns7:AgrupacioMateriaCriteria" />
 	</wsdl:message>
 	<wsdl:message name="getNumProcedimentsLocalsRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="getNumServiciosRequest">
 		<wsdl:part name="in0" type="xsd:long" />
 	</wsdl:message>
 	<wsdl:portType name="MateriaQueryServiceEJBRemote">
@@ -165,6 +180,13 @@
 			<wsdl:output message="impl:llistarProcedimentsLocalsResponse"
 				name="llistarProcedimentsLocalsResponse" />
 		</wsdl:operation>
+		<wsdl:operation name="llistarServicios"
+			parameterOrder="in0 in1">
+			<wsdl:input message="impl:llistarServiciosRequest"
+				name="llistarServiciosRequest" />
+			<wsdl:output message="impl:llistarServiciosResponse"
+				name="llistarServiciosResponse" />
+		</wsdl:operation>
 		<wsdl:operation name="getNumFitxes" parameterOrder="in0">
 			<wsdl:input message="impl:getNumFitxesRequest" name="getNumFitxesRequest" />
 			<wsdl:output message="impl:getNumFitxesResponse" name="getNumFitxesResponse" />
@@ -175,6 +197,13 @@
 				name="getNumProcedimentsLocalsRequest" />
 			<wsdl:output message="impl:getNumProcedimentsLocalsResponse"
 				name="getNumProcedimentsLocalsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getNumServicios"
+			parameterOrder="in0">
+			<wsdl:input message="impl:getNumServiciosRequest"
+				name="getNumServiciosRequest" />
+			<wsdl:output message="impl:getNumServiciosResponse"
+				name="getNumServiciosResponse" />
 		</wsdl:operation>
 		<wsdl:operation name="getFotografia" parameterOrder="in0">
 			<wsdl:input message="impl:getFotografiaRequest" name="getFotografiaRequest" />
@@ -272,6 +301,18 @@
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
+		<wsdl:operation name="llistarServicios">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarServiciosRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.materia.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarServiciosResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.materia.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
 		<wsdl:operation name="getNumFitxes">
 			<wsdlsoap:operation soapAction="" />
 			<wsdl:input name="getNumFitxesRequest">
@@ -291,6 +332,18 @@
 					namespace="http://intf.ejb.materia.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:input>
 			<wsdl:output name="getNumProcedimentsLocalsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.materia.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getNumServicios">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="getNumServiciosRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.materia.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="getNumServiciosResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
 					namespace="http://ws.materia.v2.api.rolsac.caib.es"
 					use="encoded" />

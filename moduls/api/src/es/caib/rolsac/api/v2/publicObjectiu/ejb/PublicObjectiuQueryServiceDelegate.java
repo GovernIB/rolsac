@@ -12,6 +12,8 @@ import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
 import es.caib.rolsac.api.v2.publicObjectiu.ejb.intf.PublicObjectiuQueryServiceEJBRemote;
 
 public class PublicObjectiuQueryServiceDelegate {
@@ -50,6 +52,18 @@ public class PublicObjectiuQueryServiceDelegate {
         try {
             PublicObjectiuQueryServiceEJBRemote ejb = publicObjectiuQueryServiceLocator.getPublicObjectiuQueryServceEJB();
             return ejb.llistarProcediments(id, procedimentCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<ServicioDTO> llistarServicios(long id, ServicioCriteria servicioCriteria) throws DelegateException {
+        try {
+            PublicObjectiuQueryServiceEJBRemote ejb = publicObjectiuQueryServiceLocator.getPublicObjectiuQueryServceEJB();
+            return ejb.llistarServicios(id, servicioCriteria);
         } catch (LocatorException e) {
             throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
         } catch (RemoteException e) {

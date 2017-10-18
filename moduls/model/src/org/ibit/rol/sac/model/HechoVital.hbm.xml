@@ -26,6 +26,13 @@
             <index column="HVP_ORDEN"/>
             <one-to-many class="org.ibit.rol.sac.model.HechoVitalProcedimiento"/>
         </list>
+        
+        <list name="hechosVitalesServicios" cascade="all" inverse="true" lazy="true">
+            <cache usage="read-write"/>
+            <key column="HVP_CODHEV" foreign-key="RSC_HVPHEV_FK"/>
+            <index column="HVP_ORDEN"/>
+            <one-to-many class="org.ibit.rol.sac.model.HechoVitalServicio"/>
+        </list>
 
         <set name="fichas" cascade="none" inverse="true" lazy="true" table="RSC_FICHEV">
             <key column="FIH_CODHEV" foreign-key="RSC_FIHHEV_FK"/>

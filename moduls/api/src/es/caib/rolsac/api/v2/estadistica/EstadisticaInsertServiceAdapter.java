@@ -79,6 +79,14 @@ public class EstadisticaInsertServiceAdapter implements EstadisticaInsertService
             throw new InsertServiceException(e);
         }
     }
+    
+    public boolean gravarEstadisticaServicio(long servicioId) throws InsertServiceException {
+        try {
+            return estadisticaInsertServiceStrategy.gravarEstadisticaServicio(servicioId);
+        } catch (StrategyException e) {
+            throw new InsertServiceException(e);
+        }
+    }
 
     public boolean gravarEstadisticaUnitatAdministrativa(long uaId) throws InsertServiceException {
         try {

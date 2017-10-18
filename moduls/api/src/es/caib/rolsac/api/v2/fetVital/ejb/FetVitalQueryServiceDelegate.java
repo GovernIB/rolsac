@@ -14,6 +14,8 @@ import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
 
 public class FetVitalQueryServiceDelegate {
 
@@ -40,6 +42,18 @@ public class FetVitalQueryServiceDelegate {
         try {
             FetVitalQueryServiceEJBRemote ejb = fetVitalQueryServiceLocator.getFetVitalQueryServiceEJB();
             return ejb.llistarProcedimentsLocals(id, procedimentCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<ServicioDTO> llistarServicios(long id, ServicioCriteria servicioCriteria) throws DelegateException {
+        try {
+            FetVitalQueryServiceEJBRemote ejb = fetVitalQueryServiceLocator.getFetVitalQueryServiceEJB();
+            return ejb.llistarServicios(id, servicioCriteria);
         } catch (LocatorException e) {
             throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
         } catch (RemoteException e) {
@@ -107,6 +121,17 @@ public class FetVitalQueryServiceDelegate {
         try {
             FetVitalQueryServiceEJBRemote ejb = fetVitalQueryServiceLocator.getFetVitalQueryServiceEJB();
             return ejb.getNumProcedimentsLocals(id);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
+    public int getNumServicios(long id) throws DelegateException {
+        try {
+            FetVitalQueryServiceEJBRemote ejb = fetVitalQueryServiceLocator.getFetVitalQueryServiceEJB();
+            return ejb.getNumServicios(id);
         } catch (LocatorException e) {
             throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
         } catch (RemoteException e) {

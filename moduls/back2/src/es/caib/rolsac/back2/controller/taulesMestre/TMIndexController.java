@@ -305,6 +305,32 @@ public class TMIndexController extends PantallaBaseController {
         return resultats; 
     }
     
+    @RequestMapping(value = "/indexarTodoServicio.do")
+    public @ResponseBody Map<String, Object> indexarTodoServicio(HttpServletRequest request) {
+
+    	final Map<String, Object> resultats = new HashMap<String, Object>();
+         try {
+        	//Paso 1. Comprobar si hay algo creado.
+          	if ( DelegateUtil.getSolrPendienteDelegate().checkJobsActivos()) {
+          		resultats.put("error", "Hi ha tasques en execucio");
+          	} else {
+          		//Paso 2. Si todo correcto, ejecutar job 
+          		ejecutarJob("servicio");
+          	}    
+        } catch (SchedulerException exception) {
+        	log.error("Error: " + exception.getMessage());
+            resultats.put("error", "No es pot generar el job");
+        } catch (Exception dEx) {
+           log.error("Error: " + dEx.getMessage());
+            if (dEx.getCause() == null) {
+            	resultats.put("error", dEx.getMessage());
+            } else {
+            	resultats.put("error", dEx.getCause().getMessage());
+            }
+        }
+        return resultats; 
+    }
+    
     @RequestMapping(value = "/indexarTodoNormativa.do")
     public @ResponseBody Map<String, Object> indexarTodoNormativa(HttpServletRequest request) {
 

@@ -13,7 +13,7 @@ import org.apache.commons.beanutils.PropertyUtils;
  * Modificado para (PORMAD)
  */
 @SuppressWarnings("deprecation")
-public class ProcedimientoLocal extends Classificable implements Procedimiento, Indexable, Validable, Comparator {
+public class ProcedimientoLocal extends Classificable implements Procedimiento, Indexable, Validable, Comparator<ProcedimientoLocal> {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -337,11 +337,14 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
 	}
 	
 	
-	public int compare(Object o1, Object o2) {
-	    ProcedimientoLocal u1 = (ProcedimientoLocal) o1;
-	    ProcedimientoLocal u2 = (ProcedimientoLocal) o2;
+	public int compare(ProcedimientoLocal u1, ProcedimientoLocal u2) {
+	    
 	    int res = 0;
-	    if (u1.getOrden()!=null && u2.getOrden()!=null){
+	    if (u1 == null ) {
+	    	res = -1;
+		} else if (u2 == null) {
+			res = 1;
+		}  else if (u1.getOrden()!=null && u2.getOrden()!=null){
 	    	res = u1.getOrden().intValue() - u2.getOrden().intValue();
 	    } else {
 	    	res = u1.getId().intValue() - u2.getId().intValue();
@@ -401,7 +404,7 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
 		this.publicosObjetivo.remove(pob);
 	}
 	
-	//u92770[enric] a�adido equals para que procedimiento pueda ser testeable con easyMock.
+	//u92770[enric] anyadido equals para que procedimiento pueda ser testeable con easyMock.
 	@Override
 	public boolean equals(Object obj) {
 		ProcedimientoLocal other=(ProcedimientoLocal)obj;
@@ -510,6 +513,7 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
 	 */
 	public void setEstadoSIA(String estadoSIA) {
 		this.estadoSIA = estadoSIA;
-	}	
+	}
+
 	
 }

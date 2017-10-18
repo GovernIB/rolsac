@@ -846,6 +846,7 @@ function CDetall() {
 		// altres moduls
 		modulAfectacions_pare_elm = $("#modulLateral div.modulAfectacions").parents("div.modul:first");
 		modulProcediments_pare_elm = $("#modulLateral div.modulProcediments").parents("div.modul:first");
+		modulServeis_pare_elm = $("#modulLateral div.modulServeis").parents("div.modul:first");
 
 		// esborrar arxiu (reemplasar <input type="file"> per un de nou perque a IE nomes es de lectura)
 		jQuery('a.esborraArxiu').click().unbind("click").click(function(event) {
@@ -910,11 +911,13 @@ function CDetall() {
 			
 			modulAfectacions_pare_elm.fadeOut(300);
 			modulProcediments_pare_elm.fadeOut(300);
+			modulServeis_pare_elm.fadeOut(300);
 			
 		} else {
 			
 			modulAfectacions_pare_elm.fadeIn(300);
 			modulProcediments_pare_elm.fadeIn(300);
+			modulServeis_pare_elm.fadeIn(300);
 			
 		}
 
@@ -961,10 +964,11 @@ function CDetall() {
 		}
 
 		//Ocultar paneles
-		$("#modul_procediments, #modul_afectacions, #modulDocumentNormativa, #modul_unitats_administratives").hide();
+		$("#modul_procediments, #modul_serveis, #modul_afectacions, #modulDocumentNormativa, #modul_unitats_administratives").hide();
 		jQuery("#modulDocumentNormativa").find(".listaOrdenable").empty();
 		jQuery("#modul_unitats_administratives").find(".listaOrdenable").empty();
 		jQuery("#modul_procediments").find(".listaOrdenable").empty();
+		jQuery("#modul_serveis").find(".listaOrdenable").empty();
 		jQuery("#modul_afectacions").find(".listaOrdenable").empty();
 		
 		
@@ -977,6 +981,9 @@ function CDetall() {
 		afecta_seleccionats_elm = escriptori_detall_elm.find("div.modulProcediments div.seleccionats");
 		afecta_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaProcediments + ".");
 
+		servicio_seleccionats_elm = escriptori_detall_elm.find("div.modulServeis div.seleccionats");
+		servicio_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaServeis + ".");
+
 		if (suggeriment_elm.size() != 0 && suggeriment_elm.css("display") != "none")
 			suggeriment_elm.slideUp(300);
 
@@ -984,6 +991,7 @@ function CDetall() {
 
 		modulAfectacions_pare_elm.show();
 		modulProcediments_pare_elm.show();
+		modulServeis_pare_elm.show();
 
 		escriptori_contingut_elm.fadeOut(300, function() {
 			
@@ -1001,7 +1009,7 @@ function CDetall() {
 	
 	this.pintar = function(dades) {
 
-		$("#modul_procediments, #modul_afectacions").show();
+		$("#modul_procediments, #modul_serveis, #modul_afectacions").show();
 
 		jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").show();
 
@@ -1083,11 +1091,13 @@ function CDetall() {
 
 			modulAfectacions_pare_elm.hide();
 			modulProcediments_pare_elm.hide();
+			modulServeis_pare_elm.hide();
 
 		} else {
 
 			modulAfectacions_pare_elm.show();
 			modulProcediments_pare_elm.show();
+			modulServeis_pare_elm.show();
 
 		}
 
@@ -1316,6 +1326,36 @@ function CDetall() {
 			pro_seleccionats_elm.html(codi_pro);
 			
 		}
+		
+
+		// En el caso de los procedimientos no inicializamos de forma normal, ya que no será una lista editable,
+		// sino una lista de elementos de "sólo lectura". Los pintamos de forma especial teniendo eso en cuenta.
+		ser_seleccionats_elm = escriptori_detall_elm.find("div.modulServicios div.listaOrdenable");
+		ser_nodes = dades.serveis;
+		ser_nodes_size = ser_nodes.length;
+
+		if (ser_nodes_size == 0) {
+			
+			escriptori_detall_elm.find("div.modulServeis p.info").text(txtNoHiHaServeis + ".");
+			ser_seleccionats_elm.html("");
+			
+		} else {
+			
+			codi_ser = "<ul>";
+			
+			$(ser_nodes).each(function() {
+				
+				ser_node = this;
+				codi_ser += "<li element-id=" + ser_node.id + " modulo-id= '" + ser_node.idModulo + "' ><input type=\"hidden\" value=\"" + ser_node.id + "\" /><a target=\"_blank\" href=\"../catalegServeis/catalegServeis.do?itemId="+ser_node.idServicio+"\" >" + ser_node.nombre + "</a></li>";
+				
+			});
+			
+			codi_ser += "</ul>";
+			txt_serveis = (ser_nodes_size == 1) ? txtServei : txtServeis;
+			escriptori_detall_elm.find("div.modulServeis p.info").html(txtHiHa + " <strong>" + ser_nodes_size + " " + txt_serveis + "</strong>.");
+			ser_seleccionats_elm.html(codi_ser);
+			
+		}
 
 	};
 
@@ -1323,6 +1363,7 @@ function CDetall() {
 
 		if ( !selector.hasClass("publicacio") && !selector.attr("id") == "#modulDocumentNormativa" 
 				&& !selector.attr("id") == "modul_procediments" 
+				&& !selector.attr("id") == "modul_serveis" 
 				&& !selector.attr("id") == "modul_afectacions")
 			selector.addClass("invisible");
 

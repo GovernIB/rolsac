@@ -19,6 +19,8 @@ import es.caib.rolsac.api.v2.personal.PersonalCriteria;
 import es.caib.rolsac.api.v2.personal.PersonalDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
 import es.caib.rolsac.api.v2.tractament.TractamentCriteria;
@@ -110,6 +112,14 @@ public class UnitatAdministrativaQueryServiceEJBStrategy implements UnitatAdmini
     public List<ProcedimentDTO> llistarProcediments(long id, ProcedimentCriteria procedimentCriteria) throws StrategyException {
         try {
             return unitatAdministrativaQueryServiceDelegate.llistarProcediments(id, procedimentCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
+    }
+    
+    public List<ServicioDTO> llistarServicios(long id, ServicioCriteria servicioCriteria) throws StrategyException {
+        try {
+            return unitatAdministrativaQueryServiceDelegate.llistarServicios(id, servicioCriteria);
         } catch (DelegateException e) {
             throw new StrategyException(e);
         }
@@ -243,6 +253,14 @@ public class UnitatAdministrativaQueryServiceEJBStrategy implements UnitatAdmini
         }
     }
 
+    public int getNumServicios(Long id) throws StrategyException {
+        try {
+            return unitatAdministrativaQueryServiceDelegate.getNumServicios(id);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
+    }
+    
     public int getNumTramits(Long id) throws StrategyException {
         try {
             return unitatAdministrativaQueryServiceDelegate.getNumTramits(id);

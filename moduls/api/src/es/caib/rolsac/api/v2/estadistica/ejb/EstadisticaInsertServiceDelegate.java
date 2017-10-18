@@ -82,6 +82,17 @@ public class EstadisticaInsertServiceDelegate {
         }
     }
     
+    public boolean gravarEstadisticaServicio(long servicioId) throws DelegateException {
+        try {
+            EstadisticaInsertServiceEJBRemote ejb = estadisticaInsertServiceLocator.getEstadisticaInsertServiceEJB();
+            return ejb.gravarEstadisticaServicio(servicioId);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
     public boolean gravarEstadisticaUnitatAdministrativa(long uaId) throws DelegateException {
         try {
             EstadisticaInsertServiceEJBRemote ejb = estadisticaInsertServiceLocator.getEstadisticaInsertServiceEJB();

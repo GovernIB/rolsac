@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
+    xmlns:tns="http://servicio.v2.api.rolsac.caib.es"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    name="ServicioDTO"
+    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:tns2="http://general.v2.api.rolsac.caib.es"
+    targetNamespace="http://ws.servicio.v2.api.rolsac.caib.es">
+  <wsdl:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://servicio.v2.api.rolsac.caib.es">
+        <import namespace="http://general.v2.api.rolsac.caib.es" />
+        <complexType name="ServicioDTO">
+            <complexContent>
+                <extension base="tns2:EntitatRemota">
+                    <sequence>
+                        <element name="codigo" nillable="true" type="xsd:string" />
+                        <element name="codigoSIA" nillable="true" type="xsd:string" />
+                        <element name="correo" nillable="true" type="xsd:string" />
+                        <element name="destinatarios" nillable="true" type="xsd:string" />
+                        <element name="estadoSIA" nillable="true" type="xsd:string" />
+                        <element name="fechaActualizacion" nillable="true" type="xsd:dateTime" />
+                        <element name="fechaDespublicacion" nillable="true" type="xsd:dateTime" />
+                        <element name="fechaPublicacion" nillable="true" type="xsd:dateTime" />
+                        <element name="fechaSIA" nillable="true" type="xsd:dateTime" />
+                        <element name="id" nillable="true" type="xsd:long" />
+                        <element name="nombre" nillable="true" type="xsd:string" />
+                        <element name="nombreResponsable" nillable="true" type="xsd:string" />
+                        <element name="objeto" nillable="true" type="xsd:string" />
+                        <element name="observaciones" nillable="true" type="xsd:string" />
+                        <element name="organoInstructor" nillable="true" type="xsd:long" />
+                        <element name="requisitos" nillable="true" type="xsd:string" />
+                        <element name="servicioResponsable" nillable="true" type="xsd:long" />
+                        <element name="telefono" nillable="true" type="xsd:string" />
+                        <element name="tramiteUrl" nillable="true" type="xsd:string" />
+                        <element name="tramiteId" nillable="true" type="xsd:string" />
+                        <element name="tasaUrl" nillable="true" type="xsd:string" />
+                        <element name="tramiteVersion" nillable="true" type="xsd:string" />
+                        <element name="validacion" nillable="true" type="xsd:int" />
+                    </sequence>
+                </extension>
+            </complexContent>
+        </complexType>
+    </schema>
+  </wsdl:types>
+</wsdl:definitions>

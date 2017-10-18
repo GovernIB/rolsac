@@ -87,7 +87,10 @@
 		<mapping resource="org/ibit/rol/sac/model/SiaUA.hbm.xml" />
 		<mapping resource="org/ibit/rol/sac/model/DocumentoNormativa.hbm.xml" />
 		<mapping resource="org/ibit/rol/sac/model/UnidadNormativa.hbm.xml" />
-		
+		<mapping resource="org/ibit/rol/sac/model/Servicio.hbm.xml" />
+   		<mapping resource="org/ibit/rol/sac/model/DocumentoServicio.hbm.xml" />
+   		<mapping resource="org/ibit/rol/sac/model/HechoVitalServicio.hbm.xml" />
+        
     </session-factory>
 
 </hibernate-configuration>

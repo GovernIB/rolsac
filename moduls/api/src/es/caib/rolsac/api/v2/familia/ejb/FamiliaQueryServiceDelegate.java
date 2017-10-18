@@ -11,6 +11,8 @@ import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
 
 public class FamiliaQueryServiceDelegate {
 
@@ -31,11 +33,34 @@ public class FamiliaQueryServiceDelegate {
         }
     }
     
+    public int getNumServicios(long id) throws DelegateException {
+        try {
+            FamiliaQueryServiceEJBRemote ejb = familiaQueryServiceLocator.getFamiliaQueryServceEJB();
+            return ejb.getNumServicios(id);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     public List<ProcedimentDTO> llistarProcedimentsLocals(long id, ProcedimentCriteria procedimentCriteria) throws DelegateException {
         try {
             FamiliaQueryServiceEJBRemote ejb = familiaQueryServiceLocator.getFamiliaQueryServceEJB();
             return ejb.llistarProcedimentsLocals(id, procedimentCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<ServicioDTO> llistarServicios(long id, ServicioCriteria servicioCriteria) throws DelegateException {
+        try {
+            FamiliaQueryServiceEJBRemote ejb = familiaQueryServiceLocator.getFamiliaQueryServceEJB();
+            return ejb.llistarServicios(id, servicioCriteria);
         } catch (LocatorException e) {
             throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
         } catch (RemoteException e) {

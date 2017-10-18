@@ -72,7 +72,17 @@ public class EstadisticaInsertServiceWSStrategy implements EstadisticaInsertServ
 			return gateway.gravarEstadisticaProcediment(procedimentId);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}	}
+		}	
+	}
+	
+	public boolean gravarEstadisticaServicio(long servicioId)
+			throws StrategyException {
+		try {
+			return gateway.gravarEstadisticaServicio(servicioId);
+		} catch (RemoteException e) {
+			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		}	
+	}
 
 	public boolean gravarEstadisticaUnitatAdministrativa(long uaId)
 			throws StrategyException {

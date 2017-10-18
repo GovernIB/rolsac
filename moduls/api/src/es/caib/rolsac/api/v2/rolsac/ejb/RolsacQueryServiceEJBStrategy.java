@@ -14,6 +14,7 @@ import es.caib.rolsac.api.v2.document.DocumentCriteria;
 import es.caib.rolsac.api.v2.document.DocumentDTO;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitDTO;
+import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaCriteria;
 import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaDTO;
 import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiDTO;
@@ -55,6 +56,8 @@ import es.caib.rolsac.api.v2.personal.PersonalCriteria;
 import es.caib.rolsac.api.v2.personal.PersonalDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.rolsac.RolsacQueryServiceStrategy;
@@ -200,9 +203,9 @@ public class RolsacQueryServiceEJBStrategy implements RolsacQueryServiceStrategy
         }
     }
     
-    public List<DocumentoNormativaDTO> llistarDocumentoNormativa(long idNormativa) throws StrategyException {
+    public List<DocumentoNormativaDTO> llistarDocumentoNormativa(DocumentoNormativaCriteria documentoNormativaCriteria) throws StrategyException {
     	     try {
-            return rolsacQueryServiceDelegate.llistarDocumentoNormativa(idNormativa);
+            return rolsacQueryServiceDelegate.llistarDocumentoNormativa(documentoNormativaCriteria);
         } catch (DelegateException e) {
             throw new StrategyException(e);
         }
@@ -467,6 +470,30 @@ public class RolsacQueryServiceEJBStrategy implements RolsacQueryServiceStrategy
     public Integer getNumProcediments(ProcedimentCriteria procedimentCriteria) throws StrategyException {
         try {
             return rolsacQueryServiceDelegate.getNumProcediments(procedimentCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
+    }
+    
+    public ServicioDTO obtenirServicio(ServicioCriteria servicioCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirServicio(servicioCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
+    }
+
+    public List<ServicioDTO> llistarServicios(ServicioCriteria servicioCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarServicios(servicioCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
+    }
+    
+    public Integer getNumServicios(ServicioCriteria servicioCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.getNumServicios(servicioCriteria);
         } catch (DelegateException e) {
             throw new StrategyException(e);
         }

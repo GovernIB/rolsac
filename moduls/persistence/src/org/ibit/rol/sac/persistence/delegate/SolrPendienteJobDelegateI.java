@@ -16,6 +16,8 @@ public interface SolrPendienteJobDelegateI {
 	public void indexarPendiente(final SolrIndexer solrIndexer, final NormativaDelegate normativaDelegate, final Long idElemento,  final EnumCategoria categoria, final SolrPendienteJob sorlPendienteJob) throws DelegateException;
 	public void indexarPendiente(final SolrIndexer solrIndexer, final TramiteDelegate delegate, final Long idElemento,  final EnumCategoria categoria, final SolrPendienteJob sorlPendienteJob) throws DelegateException;
 	public void indexarPendiente(final SolrIndexer solrIndexer, final UnidadAdministrativaDelegate delegate, final Long idElemento,  final EnumCategoria categoria, final SolrPendienteJob sorlPendienteJob) throws DelegateException;
+	public void indexarPendiente(final SolrIndexer solrIndexer, final ServicioDelegate delegate, final Long idElemento,  final EnumCategoria categoria, final SolrPendienteJob sorlPendienteJob) throws DelegateException;
+	public void indexarPendiente(final SolrIndexer solrIndexer, final DocumentoServicioDelegate delegate, final Long idElemento,  final EnumCategoria categoria, final SolrPendienteJob sorlPendienteJob) throws DelegateException;
 
 	public void actualizarJob(SolrPendienteJob solrpendienteJob) throws DelegateException;	
 	

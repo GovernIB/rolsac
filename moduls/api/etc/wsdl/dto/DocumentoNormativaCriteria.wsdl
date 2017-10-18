@@ -27,8 +27,11 @@
             <complexContent>
                 <extension base="tns2:BasicCriteria">
                     <sequence>
-                        <element name="normativa" nillable="true" type="xsd:string" />
-                    </sequence>
+                         <element name="normativa" nillable="true" type="xsd:string" />
+                         <element name="t_titulo" nillable="true" type="xsd:string" />
+                         <element name="t_descripcion" nillable="true" type="xsd:string" />
+                         <element name="ordenar" nillable="true" type="tns:ArrayOfDocumentoNormativaOrdenacio" />
+                   </sequence>
                 </extension>
             </complexContent>
         </complexType>

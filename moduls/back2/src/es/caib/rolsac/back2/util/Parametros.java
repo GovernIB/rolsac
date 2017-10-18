@@ -76,6 +76,7 @@ public class Parametros {
 	public static String MODUL_GRAFICA_UA 				= "unitat";
 	public static String MODUL_GRAFICA_FITXA 			= "fitxa";
 	public static String MODUL_GRAFICA_NORMATIVA 		= "normativa";
+	public static String MODUL_GRAFICA_SERVICIO			= "servei";
 	public static String MODUL_GRAFICA_MATERIA 			= "materia";
 
 	

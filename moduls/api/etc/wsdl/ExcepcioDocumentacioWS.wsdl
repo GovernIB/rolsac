@@ -6,6 +6,7 @@
 	xmlns:tns2="http://general.v2.api.rolsac.caib.es"
 	xmlns:tns3="http://catalegDocuments.v2.api.rolsac.caib.es"
 	xmlns:tns4="http://excepcioDocumentacio.v2.api.rolsac.caib.es"
+	xmlns:tns5="http://documentoServicio.v2.api.rolsac.caib.es"
 	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
 	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -16,6 +17,7 @@
 	<wsdl:import namespace="urn:tns3" location="dto/CatalegDocumentsCriteria.wsdl"/>
 	<wsdl:import namespace="urn:tns4" location="dto/ExcepcioDocumentacioCriteria.wsdl"/>
     <wsdl:import namespace="urn:tns4" location="dto/ExcepcioDocumentacioDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns5" location="dto/DocumentoServicioCriteria.wsdl"/>
 	
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
@@ -49,7 +51,14 @@
 		<wsdl:part name="in0" type="xsd:long" />
 		<wsdl:part name="in1" type="tns1:DocumentTramitCriteria" />
 	</wsdl:message>
+	<wsdl:message name="llistarDocumentsServiciosRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in1" type="tns5:DocumentoServicioCriteria" />
+	</wsdl:message>
 	<wsdl:message name="getNumDocumentsTramitRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="getNumDocumentsServicioRequest">
 		<wsdl:part name="in0" type="xsd:long" />
 	</wsdl:message>
 	<wsdl:message name="llistarCatalegsDocumentsRequest">
@@ -65,8 +74,14 @@
 	<wsdl:message name="llistarDocumentsTramitsResponse">
 		<wsdl:part name="llistarDocumentsTramitsReturn" type="impl:ArrayOf_xsd_anyType" />
 	</wsdl:message>
+	<wsdl:message name="llistarDocumentsServiciosResponse">
+		<wsdl:part name="llistarDocumentsServiciosReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
 	<wsdl:message name="getNumDocumentsTramitResponse">
 		<wsdl:part name="getNumDocumentsTramitReturn" type="xsd:int" />
+	</wsdl:message>
+	<wsdl:message name="getNumDocumentsServicioResponse">
+		<wsdl:part name="getNumDocumentsServicioReturn" type="xsd:int" />
 	</wsdl:message>
 	<wsdl:portType name="ExcepcioDocumentacioQueryServiceEJBRemote">
 		<wsdl:operation name="getNumDocumentsTramit"
@@ -82,6 +97,20 @@
 				name="llistarDocumentsTramitsRequest" />
 			<wsdl:output message="impl:llistarDocumentsTramitsResponse"
 				name="llistarDocumentsTramitsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getNumDocumentsServicio"
+			parameterOrder="in0">
+			<wsdl:input message="impl:getNumDocumentsServicioRequest"
+				name="getNumDocumentsServicioRequest" />
+			<wsdl:output message="impl:getNumDocumentsServicioResponse"
+				name="getNumDocumentsServicioResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="llistarDocumentsServicios"
+			parameterOrder="in0 in1">
+			<wsdl:input message="impl:llistarDocumentsServiciosRequest"
+				name="llistarDocumentsServiciosRequest" />
+			<wsdl:output message="impl:llistarDocumentsServiciosResponse"
+				name="llistarDocumentsServiciosResponse" />
 		</wsdl:operation>
 		<wsdl:operation name="getNumCatalegsDocuments"
 			parameterOrder="in0">
@@ -123,6 +152,32 @@
 					use="encoded" />
 			</wsdl:input>
 			<wsdl:output name="llistarDocumentsTramitsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.excepcioDocumentacio.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getNumDocumentsServicio">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="getNumDocumentsServicioRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.excepcioDocumentacio.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="getNumDocumentsServicioResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.excepcioDocumentacio.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="llistarDocumentsServicios">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarDocumentsServiciosRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.excepcioDocumentacio.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarDocumentsServiciosResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
 					namespace="http://ws.excepcioDocumentacio.v2.api.rolsac.caib.es"
 					use="encoded" />

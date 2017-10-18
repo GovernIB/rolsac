@@ -14,6 +14,8 @@ import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaDTO;
 import es.caib.rolsac.api.v2.materia.MateriaQueryServiceStrategy;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 import es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaCriteria;
@@ -74,6 +76,14 @@ public class MateriaQueryServiceEJBStrategy implements MateriaQueryServiceStrate
             throw new StrategyException(e);
         }
     }
+    
+    public int getNumServicios(long id) throws StrategyException {
+        try {
+            return materiaQueryServiceDelegate.getNumServicios(id);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
+    }
 
     public int getNumUnitatsMateries(long id) throws StrategyException {
         try {
@@ -99,6 +109,14 @@ public class MateriaQueryServiceEJBStrategy implements MateriaQueryServiceStrate
         }
     }
 
+    public List<ServicioDTO> llistarServicios(long id, ServicioCriteria servicioCriteria) throws StrategyException {
+        try {
+            return materiaQueryServiceDelegate.llistarServicios(id, servicioCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
+    }
+    
     public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria) throws StrategyException {
         try {
             return materiaQueryServiceDelegate.llistarFitxes(id, fitxaCriteria);

@@ -9,11 +9,12 @@ import java.util.Set;
  */
 public class Sia implements ValueObject {
 	
+	
 	/** Serial version UID. **/
 	private static final long serialVersionUID = 1L;
 	
-    /** Id del procedimiento **/
-	private String idProc;
+    /** Id del elemento. **/
+	private String idElemento;
 	
 	/** Título del procedimiento para el ciudadano. **/
 	private String titulo;
@@ -75,16 +76,16 @@ public class Sia implements ValueObject {
 	private String password;
 	
 	/**
-	 * @return the idProc
+	 * @return the idElemento
 	 */
-	public String getIdProc() {
-		return idProc;
+	public String getIdElemento() {
+		return idElemento;
 	}
 	/**
-	 * @param idProc the idProc to set
+	 * @param idElemento the idElemento to set
 	 */
-	public void setIdProc(String idProc) {
-		this.idProc = idProc;
+	public void setIdElemento(String idElemento) {
+		this.idElemento = idElemento;
 	}
 	/**
 	 * @return the titulo

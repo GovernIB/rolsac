@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.DocumentoServicio" table="RSC_DOCSER">
+        <cache usage="read-write"/>
+        
+        <id name="id" unsaved-value="null" column="DSR_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+
+        <many-to-one name="servicio" column="DSR_CODSER" foreign-key="DSR_CODSER_FK"/>
+        <property name="orden" column="ORDEN" />
+        
+        
+        <map name="traducciones" cascade="all" table="RSC_TRADSR">
+            <cache usage="read-write"/>
+            <key column="TDS_CODDSR" foreign-key="RSC_TRADSR_DOCSER_FK" />
+            <index column="TDS_CODIDI" type="string" length="2"/>
+            <composite-element class="org.ibit.rol.sac.model.TraduccionDocumentoServicio">
+                <property name="titulo" length="256" column="TDS_TITULO"/>
+                <property name="descripcion" length="4000" column="TDS_DESCRI"/>
+                <many-to-one name="archivo" column="TDS_CODARC" cascade="all" foreign-key="RSC_TRADSR_ARCHIV_FK"/>                
+            </composite-element>
+        </map>
+        
+    </class>
+</hibernate-mapping>

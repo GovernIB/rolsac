@@ -22,6 +22,9 @@ import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioQueryServiceAdapter;
 
 public class FetVitalQueryServiceAdapter extends FetVitalDTO implements FetVitalQueryService {
 
@@ -68,6 +71,14 @@ public class FetVitalQueryServiceAdapter extends FetVitalDTO implements FetVital
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de procedimientos.", e);
         }
     }
+    
+    public int getNumServicios() throws QueryServiceException {
+        try {
+            return fetVitalQueryServiceStrategy.getNumServicios(getId());
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de servicios.", e);
+        }
+    }
 
     public int getNumFetsVitalsAgrupacionsFV() throws QueryServiceException {
         try {
@@ -108,6 +119,23 @@ public class FetVitalQueryServiceAdapter extends FetVitalDTO implements FetVital
             return llistaQueryServiceAdapter;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "procedimientos.", e);
+        }
+    }
+
+    public List<ServicioQueryServiceAdapter> llistarServicios(ServicioCriteria servicioCriteria) throws QueryServiceException {
+        try {
+            List<ServicioDTO> llistaDTO = fetVitalQueryServiceStrategy.llistarServicios(getId(), servicioCriteria);
+            List<ServicioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<ServicioQueryServiceAdapter>();
+            for (ServicioDTO servicioDTO : llistaDTO) {
+            	ServicioQueryServiceAdapter pqsa = (ServicioQueryServiceAdapter) BeanUtils.getAdapter("servicio", getStrategy(), servicioDTO);
+            	if (pqsa != null && rolsacUrl != null) {
+            		pqsa.setRolsacUrl(rolsacUrl);
+            	}
+            	llistaQueryServiceAdapter.add(pqsa);
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "servicios.", e);
         }
     }
 

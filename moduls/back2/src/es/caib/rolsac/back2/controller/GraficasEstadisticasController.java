@@ -107,6 +107,10 @@ public class GraficasEstadisticasController extends ArchivoController {
 
         	datosEstadistica = eDelegate.listarEstadisticasFicha(id, periodo.getFechaInicio(),periodo.getFechaFin(), null, null);
 
+        } else if (tipusModul.equals(Parametros.MODUL_GRAFICA_SERVICIO) ) {
+
+        	datosEstadistica = eDelegate.listarEstadisticasServicio(id, periodo.getFechaInicio(),periodo.getFechaFin());
+
         } else {
         	throw new IllegalArgumentException ("Tipus de gr�fica desconeguda");
         }

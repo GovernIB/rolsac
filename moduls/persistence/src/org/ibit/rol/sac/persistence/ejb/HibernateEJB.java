@@ -13,15 +13,6 @@ import javax.ejb.EJBException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 
-import net.sf.hibernate.Criteria;
-import net.sf.hibernate.FlushMode;
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.SessionFactory;
-import net.sf.hibernate.expression.Expression;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Auditoria;
@@ -40,6 +31,7 @@ import org.ibit.rol.sac.model.HistoricoFicha;
 import org.ibit.rol.sac.model.HistoricoMateria;
 import org.ibit.rol.sac.model.HistoricoNormativa;
 import org.ibit.rol.sac.model.HistoricoProcedimiento;
+import org.ibit.rol.sac.model.HistoricoServicio;
 import org.ibit.rol.sac.model.HistoricoUA;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Normativa;
@@ -47,10 +39,12 @@ import org.ibit.rol.sac.model.PerfilGestor;
 import org.ibit.rol.sac.model.Personal;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.Seccion;
+import org.ibit.rol.sac.model.Servicio;
 import org.ibit.rol.sac.model.TraduccionFicha;
 import org.ibit.rol.sac.model.TraduccionMateria;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
+import org.ibit.rol.sac.model.TraduccionServicio;
 import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -60,9 +54,15 @@ import org.ibit.rol.sac.model.Validable;
 import org.ibit.rol.sac.model.Validacion;
 
 import es.caib.rolsac.persistence.hibernate.HibernateLocator;
-import es.caib.rolsac.persistence.hibernate.SessionInterceptor;
-import es.caib.rolsac.persistence.hibernate.SessionInterceptorBuilder;
 import es.caib.rolsac.utils.ResultadoBusqueda;
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.FlushMode;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.SessionFactory;
+import net.sf.hibernate.expression.Expression;
 
 /**
  * Bean con la funcionalidad basica para interactuar con HIBERNATE.
@@ -311,21 +311,44 @@ public abstract class HibernateEJB implements SessionBean {
     	query.setCacheable(true);
     	List hprs = query.list();
     	if (hprs.isEmpty()) {
-	    hp = new HistoricoProcedimiento();
-	    hp.setProcedimiento(pr);
-	    TraduccionProcedimientoLocal traduccionProcedimientoLocal = (TraduccionProcedimientoLocal) pr.getTraduccion();
-	    if (traduccionProcedimientoLocal != null) {
-	        hp.setNombre(traduccionProcedimientoLocal.getNombre());
-	    } else {
-	        hp.setNombre("-");
-	    }
-	    session.save(hp);
-	    session.flush();
-	} else {
-	    hp = (HistoricoProcedimiento) hprs.get(0);
+		    hp = new HistoricoProcedimiento();
+		    hp.setProcedimiento(pr);
+		    TraduccionProcedimientoLocal traduccionProcedimientoLocal = (TraduccionProcedimientoLocal) pr.getTraduccion();
+		    if (traduccionProcedimientoLocal != null) {
+		        hp.setNombre(traduccionProcedimientoLocal.getNombre());
+		    } else {
+		        hp.setNombre("-");
+		    }
+		    session.save(hp);
+		    session.flush();
+		} else {
+		    hp = (HistoricoProcedimiento) hprs.get(0);
+		}
+    	return hp;
 	}
+    	
+	protected Historico getHistorico(Session session, Servicio sr) throws HibernateException {
+    	HistoricoServicio hs;
+    	Query query = session.createQuery("from HistoricoServicio as hp where hp.servicio.id = :serv_id");
+    	query.setParameter("serv_id", sr.getId(), Hibernate.LONG);
+    	query.setCacheable(true);
+    	List hprs = query.list();
+    	if (hprs.isEmpty()) {
+	    hs = new HistoricoServicio();
+	    hs.setServicio(sr);
+	    TraduccionServicio traduccionServicio = (TraduccionServicio) sr.getTraduccion();
+	    if (traduccionServicio != null) {
+		        hs.setNombre(traduccionServicio.getNombre());
+		    } else {
+		        hs.setNombre("-");
+		    }
+		    session.save(hs);
+		    session.flush();
+		} else {
+		    hs = (HistoricoServicio) hprs.get(0);
+		}
 	
-	return hp;
+    	return hs;
 	}
     
     protected Historico getHistorico(Session session, Normativa norm)
@@ -414,6 +437,16 @@ public abstract class HibernateEJB implements SessionBean {
         session.save(aud);
         session.flush();
     }
+    
+    protected void addOperacion(Session session, Servicio sr, int operacion) throws HibernateException {
+        Auditoria aud = new Auditoria();
+        aud.setUsuario(ctx.getCallerPrincipal().getName());
+        aud.setFecha(new Date());
+        aud.setCodigoOperacion(operacion);
+        aud.setHistorico(getHistorico(session, sr));
+        session.save(aud);
+        session.flush();
+    }
 
     protected void addOperacion(Session session, Normativa norm, int operacion) throws HibernateException {
         Auditoria aud = new Auditoria();
@@ -476,7 +509,7 @@ public abstract class HibernateEJB implements SessionBean {
 	        return true;
 	    }*/
 	
-	    for (Iterator iterator = seccion.getPerfilsGestor().iterator(); iterator.hasNext();) {
+	    for (Iterator<PerfilGestor> iterator = seccion.getPerfilsGestor().iterator(); iterator.hasNext();) {
 	        PerfilGestor perfilGestor = (PerfilGestor) iterator.next();
 	        if (tieneAcceso(usuario, perfilGestor, true)) {
 	            return true;
@@ -492,6 +525,14 @@ public abstract class HibernateEJB implements SessionBean {
     protected boolean tieneAcceso(Usuario usuario, ProcedimientoLocal procedimiento) {
         return (tieneAccesoValidable(usuario, procedimiento)
                 && tieneAcceso(usuario, procedimiento.getUnidadAdministrativa(), false));
+    }
+    
+    /**
+     * Comprueba si un usuario puede modificar un servicio.
+     */
+    protected boolean tieneAcceso(Usuario usuario, Servicio servicio) {
+        return (tieneAccesoValidable(usuario, servicio)
+                && tieneAcceso(usuario, servicio.getServicioResponsable(), false));
     }
 
     /**

@@ -17,6 +17,9 @@ import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioQueryServiceAdapter;
 
 public class FamiliaQueryServiceAdapter extends FamiliaDTO implements FamiliaQueryService {
 
@@ -55,6 +58,15 @@ public class FamiliaQueryServiceAdapter extends FamiliaDTO implements FamiliaQue
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de procedimientos.", e);
         }
     }
+    
+    public int getNumServicios() throws QueryServiceException {
+        try {
+            return familiaQueryServiceStrategy.getNumServicios(getId());
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de servicios.", e);
+        }
+    }
+    
 
     public int getNumIcones() throws QueryServiceException {
         try {
@@ -81,6 +93,23 @@ public class FamiliaQueryServiceAdapter extends FamiliaDTO implements FamiliaQue
         }
     }
 
+    
+    public List<ServicioQueryServiceAdapter> llistarServicios(ServicioCriteria servicioCriteria) throws QueryServiceException {
+        try {
+            List<ServicioDTO> llistaDTO = familiaQueryServiceStrategy.llistarServicios(getId(), servicioCriteria);
+            List<ServicioQueryServiceAdapter> servicios = new ArrayList<ServicioQueryServiceAdapter>();
+            for (ServicioDTO pDTO : llistaDTO) {
+            	ServicioQueryServiceAdapter pqsa = (ServicioQueryServiceAdapter) BeanUtils.getAdapter("servicio", getStrategy(), pDTO);
+            	if (pqsa != null && rolsacUrl != null) {
+            		pqsa.setRolsacUrl(rolsacUrl);
+            	}
+            	servicios.add(pqsa);
+            }
+            return servicios;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "servicios.", e);
+        }
+    }
     public List<IconaFamiliaQueryServiceAdapter> llistarIcones(IconaFamiliaCriteria iconaFamiliaCriteria) throws QueryServiceException {
         try {
             List<IconaFamiliaDTO> llistaDTO = familiaQueryServiceStrategy.llistarIcones(getId(), iconaFamiliaCriteria);

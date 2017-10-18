@@ -206,6 +206,12 @@
     var txtSeleccionats = "<spring:message code='txt.seleccionats'/>";
     var txtNoHiHaProcedimentsSeleccionats = txtNoHiHa + " " + txtProcediments.toLowerCase() + " " + txtSeleccionats.toLowerCase();        
     
+	// modul serveis
+    var txtServei = "<spring:message code='txt.servei'/>";
+    var txtServeis = "<spring:message code='txt.serveis'/>";
+    var txtNoHiHaServeis = txtNoHiHa + " " + txtServeis.toLowerCase();
+    var txtNoHiHaServeisSeleccionats = txtNoHiHa + " " + txtServeis.toLowerCase() + " " + txtSeleccionats.toLowerCase();        
+    
     var txtColUsuario = "<spring:message code='txt.auditoria.usu'/>";
     var txtColNombre = "<spring:message code='txt.auditoria.nombre'/>";
     var txtColFecha = "<spring:message code='txt.auditoria.fecha'/>";
@@ -1162,6 +1168,25 @@
                         <div class="seleccionats">
                             <div class="seleccionat">
                                 <p class="info"><spring:message code='txt.no_procediments'/></p>
+                                <div class="listaOrdenable"></div> 
+                            </div>                            
+                        </div>
+                    </div>
+                    <!-- /modulProcediments -->
+                </div>
+            </fieldset>
+        </div>
+        
+        <div class="modul invisible" id="modul_serveis">
+            <fieldset>
+                <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                <legend><spring:message code='txt.serveis_relacionats'/></legend>
+                <div class="modul_continguts mostrat">
+                    <!-- modulProcediments -->
+                    <div class="modulServicios">
+                        <div class="seleccionats">
+                            <div class="seleccionat">
+                                <p class="info"><spring:message code='txt.no_serveis'/></p>
                                 <div class="listaOrdenable"></div> 
                             </div>                            
                         </div>

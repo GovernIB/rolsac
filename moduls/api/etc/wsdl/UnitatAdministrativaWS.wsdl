@@ -17,6 +17,7 @@
     xmlns:tns13="http://tramit.v2.api.rolsac.caib.es"
     xmlns:tns14="http://arxiu.v2.api.rolsac.caib.es"
     xmlns:tns15="http://fitxaUA.v2.api.rolsac.caib.es"
+	xmlns:tns16="http://servicio.v2.api.rolsac.caib.es"
 	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
 	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -40,6 +41,7 @@
 	<wsdl:import namespace="urn:tns13" location="dto/TramitCriteria.wsdl"/>
 	<wsdl:import namespace="urn:tns14" location="dto/ArxiuDTO.wsdl"/>
     <wsdl:import namespace="urn:tns15" location="dto/FitxaUACriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns16" location="dto/ServicioCriteria.wsdl"/>
 	
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
@@ -120,6 +122,9 @@
 	<wsdl:message name="getNumProcedimentsResponse">
 		<wsdl:part name="getNumProcedimentsReturn" type="xsd:int" />
 	</wsdl:message>
+	<wsdl:message name="getNumServiciosResponse">
+		<wsdl:part name="getNumServiciosReturn" type="xsd:int" />
+	</wsdl:message>
 	<wsdl:message name="getNumUsuarisResponse">
 		<wsdl:part name="getNumUsuarisReturn" type="xsd:int" />
 	</wsdl:message>
@@ -188,6 +193,10 @@
 		<wsdl:part name="in0" type="xsd:long" />
 		<wsdl:part name="in1" type="tns4:ProcedimentCriteria" />
 	</wsdl:message>
+	<wsdl:message name="llistarServiciosRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in1" type="tns16:ServicioCriteria" />
+	</wsdl:message>
 	<wsdl:message name="obtenirPareRequest">
 		<wsdl:part name="in0" type="xsd:long" />
         <wsdl:part name="in1" type="xsd:string" />
@@ -239,6 +248,9 @@
 	<wsdl:message name="getNumProcedimentsRequest">
 		<wsdl:part name="in0" type="xsd:long" />
 	</wsdl:message>
+	<wsdl:message name="getNumServiciosRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
 	<wsdl:message name="llistarSeccionsRequest">
 		<wsdl:part name="in0" type="xsd:long" />
 		<wsdl:part name="in1" type="tns11:SeccioCriteria" />
@@ -265,6 +277,9 @@
 	<wsdl:message name="llistarProcedimentsResponse">
 		<wsdl:part name="llistarProcedimentsReturn" type="impl:ArrayOf_xsd_anyType" />
 	</wsdl:message>
+	<wsdl:message name="llistarServiciosResponse">
+		<wsdl:part name="llistarServiciosReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
 	<wsdl:message name="obtenirLogovResponse">
 		<wsdl:part name="obtenirLogovReturn" type="tns14:ArxiuDTO" />
 	</wsdl:message>
@@ -286,6 +301,13 @@
 				name="llistarProcedimentsRequest" />
 			<wsdl:output message="impl:llistarProcedimentsResponse"
 				name="llistarProcedimentsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="llistarServicios"
+			parameterOrder="in0 in1">
+			<wsdl:input message="impl:llistarServiciosRequest"
+				name="llistarServiciosRequest" />
+			<wsdl:output message="impl:llistarServiciosResponse"
+				name="llistarServiciosResponse" />
 		</wsdl:operation>
 		<wsdl:operation name="llistarMateries" parameterOrder="in0 in1">
 			<wsdl:input message="impl:llistarMateriesRequest" name="llistarMateriesRequest" />
@@ -386,6 +408,12 @@
 			<wsdl:output message="impl:getNumProcedimentsResponse"
 				name="getNumProcedimentsResponse" />
 		</wsdl:operation>
+		<wsdl:operation name="getNumServicios"
+			parameterOrder="in0">
+			<wsdl:input message="impl:getNumServiciosRequest" name="getNumServiciosRequest" />
+			<wsdl:output message="impl:getNumServiciosResponse"
+				name="getNumServiciosResponse" />
+		</wsdl:operation>
 		<wsdl:operation name="getNumTramits" parameterOrder="in0">
 			<wsdl:input message="impl:getNumTramitsRequest" name="getNumTramitsRequest" />
 			<wsdl:output message="impl:getNumTramitsResponse" name="getNumTramitsResponse" />
@@ -441,6 +469,19 @@
 					use="encoded" />
 			</wsdl:input>
 			<wsdl:output name="llistarProcedimentsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="llistarServicios">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarServiciosRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.unitatAdministrativa.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarServiciosResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
 					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
@@ -740,6 +781,19 @@
 					use="encoded" />
 			</wsdl:input>
 			<wsdl:output name="getNumProcedimentsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+				<wsdl:operation name="getNumServicios">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="getNumServiciosRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.unitatAdministrativa.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="getNumServiciosResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
 					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />

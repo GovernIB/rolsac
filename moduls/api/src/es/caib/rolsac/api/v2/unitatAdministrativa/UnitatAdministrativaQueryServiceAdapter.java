@@ -32,6 +32,9 @@ import es.caib.rolsac.api.v2.personal.PersonalQueryServiceAdapter;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
 import es.caib.rolsac.api.v2.seccio.SeccioQueryServiceAdapter;
@@ -223,6 +226,23 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
         }
     }
 
+    public List<ServicioQueryServiceAdapter> llistarServicios(ServicioCriteria servicioCriteria) throws QueryServiceException {
+        try {
+            List<ServicioDTO> llistaDTO = unitatAdministrativaQueryServiceStrategy.llistarServicios(getId(), servicioCriteria);
+            List<ServicioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<ServicioQueryServiceAdapter>();
+            for (ServicioDTO servicioDTO : llistaDTO) {
+            	ServicioQueryServiceAdapter eqsa = (ServicioQueryServiceAdapter) BeanUtils.getAdapter("servicio", getStrategy(), servicioDTO);
+            	if (eqsa != null && rolsacUrl != null) {
+            		eqsa.setRolsacUrl(rolsacUrl);
+            	}
+            	llistaQueryServiceAdapter.add(eqsa);
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "servicios.", e);
+        }
+    }
+
     public List<TramitQueryServiceAdapter> llistarTramits(TramitCriteria tramitCriteria) throws QueryServiceException {
         try {
             List<TramitDTO> llistaDTO = unitatAdministrativaQueryServiceStrategy.llistarTramits(getId(), tramitCriteria);
@@ -345,6 +365,14 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
             return unitatAdministrativaQueryServiceStrategy.getNumProcediments(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de procedimientos.", e);
+        }
+    }
+    
+    public int getNumServicios() throws QueryServiceException {
+        try {
+            return unitatAdministrativaQueryServiceStrategy.getNumServicios(getId());
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de servicios.", e);
         }
     }
 

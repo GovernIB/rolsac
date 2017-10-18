@@ -5,79 +5,59 @@ package org.ibit.rol.sac.model;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Hecho vital.
+ * 
+ * @author slromero
+ *
+ */
 public class HechoVital extends Traducible {
 
 	private static final long serialVersionUID = 1L;
-	
+	/** Id. **/
 	private Long id;
+	/** Orden. **/
     private int orden;
+    /** Icono. **/
     private Archivo icono;
+    /** Icono grande. **/
     private Archivo iconoGrande;
+    /** Foto. **/
     private Archivo foto;
+    /** Lista de hechos vitales procedimientos. */
     private List<HechoVitalProcedimiento> hechosVitalesProcedimientos;
+    /** Lista de hechos vitales servicios. */
+    private List<HechoVitalServicio> hechosVitalesServicios;
+    /** Codigo estandar. **/
     private String codigoEstandar;
+    /** Lista de fichas. **/
     private Set<Ficha> fichas;
+    /** Lista de hechos vitales agrupacion HV. **/
     private Set<HechoVitalAgrupacionHV> hechosVitalesAgrupacionHV;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public int getOrden() {
-        return orden;
-    }
-
-    public void setOrden(int orden) {
-        this.orden = orden;
-    }
-
-    public Archivo getIcono() {
-        return icono;
-    }
-
-    public void setIcono(Archivo icono) {
-        this.icono = icono;
-    }
-
-    public Archivo getIconoGrande() {
-		return iconoGrande;
-	}
-
-	public void setIconoGrande(Archivo iconoGrande) {
-		this.iconoGrande = iconoGrande;
-	}
-	
-	public Archivo getFoto() {
-		return foto;
-	}
-
-	public void setFoto(Archivo foto) {
-		this.foto = foto;
-	}
-
-	public List getHechosVitalesProcedimientos() {
-        return hechosVitalesProcedimientos;
-    }
-
-    public void setHechosVitalesProcedimientos(List<HechoVitalProcedimiento> hechosVitalesProcedimientos) {
-        this.hechosVitalesProcedimientos = hechosVitalesProcedimientos;
-    }
-
+    /**
+     * Add hecho vital procedimiento.
+     * @param hpv
+     */
     public void addHechoVitalProcedimiento(HechoVitalProcedimiento hpv) {
         hpv.setHechoVital(this);
         hpv.setOrden(hechosVitalesProcedimientos.size());
         hechosVitalesProcedimientos.add(hpv);
     }
     
+    /**
+     * Add hecho vital procedimiento respetando el orden.
+     * @param hpv
+     */
     public void addHechoVitalProcedimientoRespetandoOrden(HechoVitalProcedimiento hpv) {
         hpv.setHechoVital(this);
         hechosVitalesProcedimientos.add(hpv);
     }
 
+    /**
+     * Remove hecho vital procedimiento.
+     * @param hechovp
+     */
     public void removeHechoVitalProcedimiento(HechoVitalProcedimiento hechovp){
         int index = hechosVitalesProcedimientos.indexOf(hechovp);
         if (index > -1) {
@@ -90,39 +70,200 @@ public class HechoVital extends Traducible {
             }
         }
     }
-
-    public String getCodigoEstandar() {
-        return codigoEstandar;
-    }
-
-    public void setCodigoEstandar(String codigoEstandar) {
-        this.codigoEstandar = codigoEstandar;
-    }
-
-     public Set getFichas() {
-        return fichas;
-    }
-
-    public void setFichas(Set<Ficha> fichas) {
-        this.fichas = fichas;
-    }
-
-    public Set<HechoVitalAgrupacionHV> getHechosVitalesAgrupacionHV() {
-        return hechosVitalesAgrupacionHV;
-    }
-
-    public void setHechosVitalesAgrupacionHV(Set<HechoVitalAgrupacionHV> agrupaciones) {
-        this.hechosVitalesAgrupacionHV = agrupaciones;
+    
+    /**
+     * Add hecho vital servicio.
+     * @param hpv
+     */
+    public void addHechoVitalServicio(HechoVitalServicio hpv) {
+        hpv.setHechoVital(this);
+        hpv.setOrden(hechosVitalesProcedimientos.size());
+        hechosVitalesServicios.add(hpv);
     }
     
+    /**
+     * Add hecho vital servicio respetando el orden.
+     * @param hpv
+     */
+    public void addHechoVitalServicioRespetandoOrden(HechoVitalServicio hpv) {
+        hpv.setHechoVital(this);
+        hechosVitalesServicios.add(hpv);
+    }
+
+    /**
+     * Remove hecho vital servicio.
+     * @param hechovp
+     */
+    public void removeHechoVitalServicio(HechoVitalServicio hechovp){
+        int index = hechosVitalesServicios.indexOf(hechovp);
+        if (index > -1) {
+        	hechosVitalesServicios.remove(index);
+            for (int i = index; i < hechosVitalesServicios.size(); i++) {
+            	HechoVitalServicio hvp = (HechoVitalServicio) hechosVitalesServicios.get(i);
+                if (hvp != null) {
+                	hvp.setOrden(i);
+                }
+            }
+        }
+    }
+
+
+   /**
+    * Add hecho vital agrupacion HV.
+    * @param hva
+    */
     public void addHechoVitalAgrupacionHV(HechoVitalAgrupacionHV hva) {
     	hva.setHechoVital(this);
         hechosVitalesAgrupacionHV.add(hva);
     }
 
+    /**
+     * Remove hecho vital agrupacion HV.
+     * @param hechova
+     */
     public void removeHechoVitalAgrupacionHV(HechoVitalAgrupacionHV hechova) {
         hechova.setHechoVital(null);
         hechosVitalesAgrupacionHV.remove(hechova);
     }
+
+	/**
+	 * @return the id
+	 */
+	public Long getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	/**
+	 * @return the orden
+	 */
+	public int getOrden() {
+		return orden;
+	}
+
+	/**
+	 * @param orden the orden to set
+	 */
+	public void setOrden(int orden) {
+		this.orden = orden;
+	}
+
+	/**
+	 * @return the icono
+	 */
+	public Archivo getIcono() {
+		return icono;
+	}
+
+	/**
+	 * @param icono the icono to set
+	 */
+	public void setIcono(Archivo icono) {
+		this.icono = icono;
+	}
+
+	/**
+	 * @return the iconoGrande
+	 */
+	public Archivo getIconoGrande() {
+		return iconoGrande;
+	}
+
+	/**
+	 * @param iconoGrande the iconoGrande to set
+	 */
+	public void setIconoGrande(Archivo iconoGrande) {
+		this.iconoGrande = iconoGrande;
+	}
+
+	/**
+	 * @return the foto
+	 */
+	public Archivo getFoto() {
+		return foto;
+	}
+
+	/**
+	 * @param foto the foto to set
+	 */
+	public void setFoto(Archivo foto) {
+		this.foto = foto;
+	}
+
+	/**
+	 * @return the hechosVitalesProcedimientos
+	 */
+	public List<HechoVitalProcedimiento> getHechosVitalesProcedimientos() {
+		return hechosVitalesProcedimientos;
+	}
+
+	/**
+	 * @param hechosVitalesProcedimientos the hechosVitalesProcedimientos to set
+	 */
+	public void setHechosVitalesProcedimientos(List<HechoVitalProcedimiento> hechosVitalesProcedimientos) {
+		this.hechosVitalesProcedimientos = hechosVitalesProcedimientos;
+	}
+
+	/**
+	 * @return the hechosVitaleServicios
+	 */
+	public List<HechoVitalServicio> getHechosVitalesServicios() {
+		return hechosVitalesServicios;
+	}
+
+	/**
+	 * @param hechosVitalesServicios the hechosVitaleServicios to set
+	 */
+	public void setHechosVitalesServicios(List<HechoVitalServicio> hechosVitalesServicios) {
+		this.hechosVitalesServicios = hechosVitalesServicios;
+	}
+
+	/**
+	 * @return the codigoEstandar
+	 */
+	public String getCodigoEstandar() {
+		return codigoEstandar;
+	}
+
+	/**
+	 * @param codigoEstandar the codigoEstandar to set
+	 */
+	public void setCodigoEstandar(String codigoEstandar) {
+		this.codigoEstandar = codigoEstandar;
+	}
+
+	/**
+	 * @return the fichas
+	 */
+	public Set<Ficha> getFichas() {
+		return fichas;
+	}
+
+	/**
+	 * @param fichas the fichas to set
+	 */
+	public void setFichas(Set<Ficha> fichas) {
+		this.fichas = fichas;
+	}
+
+	/**
+	 * @return the hechosVitalesAgrupacionHV
+	 */
+	public Set<HechoVitalAgrupacionHV> getHechosVitalesAgrupacionHV() {
+		return hechosVitalesAgrupacionHV;
+	}
+
+	/**
+	 * @param hechosVitalesAgrupacionHV the hechosVitalesAgrupacionHV to set
+	 */
+	public void setHechosVitalesAgrupacionHV(Set<HechoVitalAgrupacionHV> hechosVitalesAgrupacionHV) {
+		this.hechosVitalesAgrupacionHV = hechosVitalesAgrupacionHV;
+	}
 
 }

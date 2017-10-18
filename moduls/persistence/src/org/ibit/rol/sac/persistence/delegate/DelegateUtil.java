@@ -94,6 +94,10 @@ public final class DelegateUtil {
     public static HechoVitalProcedimientoDelegate getHechoVitalProcedimientoDelegate() {
         return (HechoVitalProcedimientoDelegate) DelegateFactory.getDelegate(HechoVitalProcedimientoDelegate.class);
     }
+    
+    public static HechoVitalServicioDelegate getHechoVitalServicioDelegate() {
+        return (HechoVitalServicioDelegate) DelegateFactory.getDelegate(HechoVitalServicioDelegate.class);
+    }
 
     public static FichaDelegate getFichaDelegate(){
         FichaDelegateI impl= (FichaDelegateImpl) DelegateFactory.getDelegate(FichaDelegateImpl.class);
@@ -261,11 +265,9 @@ public final class DelegateUtil {
     }
     
     public static SiaPendienteProcesoDelegate getSiaPendienteProcesoDelegate() {
-		SiaPendienteProcesoDelegateI impl = (SiaPendienteProcesoDelegateImpl) DelegateFactory.getDelegate(SiaPendienteProcesoDelegateImpl.class);
-		SiaPendienteProcesoDelegate del = new SiaPendienteProcesoDelegate();
-        del.setImpl(impl);
-        return del;
+		return (SiaPendienteProcesoDelegate) DelegateFactory.getDelegate(SiaPendienteProcesoDelegate.class);
 	}
+    
     public static SiaDelegate getSiaDelegate() {
 		SiaDelegateI impl = (SiaDelegateImpl) DelegateFactory.getDelegate(SiaDelegateImpl.class);
 		SiaDelegate del = new SiaDelegate();
@@ -280,4 +282,12 @@ public final class DelegateUtil {
 	public static DocumentoNormativaDelegate getDocumentoNormativaDelegate() {
 		return (DocumentoNormativaDelegate) DelegateFactory.getDelegate(DocumentoNormativaDelegate.class);
 	}
+	
+	public static DocumentoServicioDelegate getDocumentoServicioDelegate() {
+		return (DocumentoServicioDelegate) DelegateFactory.getDelegate(DocumentoServicioDelegate.class);
+	}
+	
+    public static ServicioDelegate getServicioDelegate(){
+    	return (ServicioDelegate) DelegateFactory.getDelegate(ServicioDelegate.class);    	
+    }
 }

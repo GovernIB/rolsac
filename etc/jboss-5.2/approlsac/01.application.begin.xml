@@ -39,7 +39,7 @@
 		<module><java>httpmime-4.4.1.jar</java></module>
 		<module><java>httpclient-4.4.1.jar</java></module>
 		<module><java>solr-solrj-5.5.1.jar</java></module>
-		<module><java>solrapi-1.0.1.jar</java></module>
+		<module><java>solrapi-1.0.2.jar</java></module>
 		<module><java>jericho-html-2.5.jar</java></module>
 	
 	

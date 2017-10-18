@@ -9,7 +9,7 @@ public class FitxaByTextosCriteria extends ByTextosCriteria {
     private static final String I18N_PREFIX = "t_";
     
     /* 
-     * De ProcedimentCriteria.java y ProcedimientCriteria.java.
+     * De FitxaCriteria.java y FitxaCriteria.java.
      * Los campos que empizan por I18N_PREFIX son traducibles.
      */
     private static final String[] TEXT_FIELDS = {

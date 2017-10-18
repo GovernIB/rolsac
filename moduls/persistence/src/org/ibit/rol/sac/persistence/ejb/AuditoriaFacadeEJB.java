@@ -16,6 +16,7 @@ import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.Historico;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.Servicio;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 
 /**
@@ -32,6 +33,10 @@ import org.ibit.rol.sac.model.UnidadAdministrativa;
  */
 public abstract class AuditoriaFacadeEJB extends HibernateEJB
 {
+	/** Serial Version UID. **/
+	private static final long serialVersionUID = 1L;
+
+
 	/**
      * @ejb.create-method
      * @ejb.permission unchecked="true"
@@ -50,7 +55,7 @@ public abstract class AuditoriaFacadeEJB extends HibernateEJB
      * @param idUA	Identificador de una unidad administrtiva.
      * @return Devuelve <code>List</code> de todas las auditorias filtradas por una unidad administrativa.
      */
-    public List listarAuditoriasUnidadAdministrativa(Long idUA)
+    public List<Auditoria> listarAuditoriasUnidadAdministrativa(Long idUA)
     {
     	Session session = getSession();
     	try {
@@ -77,12 +82,39 @@ public abstract class AuditoriaFacadeEJB extends HibernateEJB
      * @param idProcedimiento	Identificador de un procedimiento.
      * @return Devuelve <code>List</code> de todas las auditorías de un procedimiento.
      */
-    public List listarAuditoriasProcedimiento(Long idProcedimiento)
+    public List<Auditoria> listarAuditoriasProcedimiento(Long idProcedimiento)
     {
     	Session session = getSession();
     	try {
     		ProcedimientoLocal procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, idProcedimiento);
     		Historico historico = getHistorico(session, procedimiento);
+    		Criteria criteri = session.createCriteria(Auditoria.class);
+    		criteri.add(Expression.eq("historico.id", historico.getId()));
+    		
+    		return criteri.list();
+    		
+    	} catch (HibernateException he) {
+    		throw new EJBException(he);
+    	} finally {
+    		close(session);
+    	}
+    }
+    
+    
+    /**
+     * Lista todas las Auditorias de un Procedimiento.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+     * @param idServicio	Identificador de un servicio.
+     * @return Devuelve <code>List</code> de todas las auditorías de un servicio.
+     */
+    public List<Auditoria> listarAuditoriasServicio(Long idServicio)
+    {
+    	Session session = getSession();
+    	try {
+    		Servicio servicio = (Servicio) session.load(Servicio.class, idServicio);
+    		Historico historico = getHistorico(session, servicio);
     		Criteria criteri = session.createCriteria(Auditoria.class);
     		criteri.add(Expression.eq("historico.id", historico.getId()));
     		
@@ -104,7 +136,7 @@ public abstract class AuditoriaFacadeEJB extends HibernateEJB
      * @param idNoramtiva Identificador de una normativa.
      * @return Devuelve <code>List</code> de todas las auditorías de un procedimiento.
      */
-    public List listarAuditoriasNormativa(Long idNoramtiva)
+    public List<Auditoria> listarAuditoriasNormativa(Long idNoramtiva)
     {
     	Session session = getSession();
     	try {
@@ -131,7 +163,7 @@ public abstract class AuditoriaFacadeEJB extends HibernateEJB
      * @param idFicha	Identificador de una ficha informativa.
      * @return Devuelve <code>List</code> de todas las auditorías de una ficha informativa.
      */
-    public List listarAuditoriasFicha(Long idFicha)
+    public List<Auditoria> listarAuditoriasFicha(Long idFicha)
     {
     	Session session = getSession();
     	try {
@@ -158,7 +190,7 @@ public abstract class AuditoriaFacadeEJB extends HibernateEJB
      * @param idProcedimiento	Identificador de un procedimiento.
      * @return Devuelve <code>List</code> de todas las auditorías de un procedimiento.
      */
-    public List listarAuditoriasProcedimientoPMA(Long idProcedimiento)
+    public List<Auditoria> listarAuditoriasProcedimientoPMA(Long idProcedimiento)
     {
     	Session session = getSession();
     	try {
@@ -186,7 +218,7 @@ public abstract class AuditoriaFacadeEJB extends HibernateEJB
      * @param idFicha	Identificador de una ficha informativa.
      * @return Devuelve <code>List</code> de todas las auditorías de una ficha informativa.
      */
-    public List listarAuditoriasFichaPMA(Long idFicha)
+    public List<Auditoria> listarAuditoriasFichaPMA(Long idFicha)
     {
     	Session session = getSession();
     	try {

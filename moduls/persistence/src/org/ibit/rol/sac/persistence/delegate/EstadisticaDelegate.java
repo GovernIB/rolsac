@@ -82,6 +82,14 @@ public class EstadisticaDelegate implements StatelessDelegate
         }
     }
     
+    public List listarEstadisticasServicio(Long idServicio, Date fechaInicio, Date fechaFin) throws DelegateException {
+        try {
+            return getFacade().listarEstadisticasServicio(idServicio, fechaInicio, fechaFin);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
     public List listarEstadisticasFicha(Long idFicha, Date fechaInicio, Date fechaFin, Long idMat, Long idUA) throws DelegateException {
         try {
             return getFacade().listarEstadisticasFicha(idFicha, fechaInicio, fechaFin, idMat, idUA);

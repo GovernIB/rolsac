@@ -14,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.AgrupacionHechoVital;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.Servicio;
 
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalCriteria;
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalDTO;
@@ -28,6 +29,8 @@ import es.caib.rolsac.api.v2.general.co.CriteriaObject;
 import es.caib.rolsac.api.v2.general.co.CriteriaObjectParseException;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
 import es.caib.rolsac.api.v2.query.FromClause;
 import es.caib.rolsac.api.v2.query.QueryBuilder;
 import es.caib.rolsac.api.v2.query.QueryBuilderException;
@@ -62,6 +65,10 @@ public class FetVitalQueryServiceEJB extends HibernateEJB {
 	private static final String HQL_FET_VITAL_PROCEDIMENT_ALIAS = "fvp";
 	private static final String HQL_PROCEDIMIENTOS_LOCALES_CLASS = HQL_FET_VITAL_PROCEDIMENT_ALIAS + ".procedimiento";
 	private static final String HQL_PROCEDIMIENTOS_LOCALES_ALIAS = "p"; 
+	private static final String HQL_FET_VITAL_SERVICIO_CLASS = HQL_FET_VITAL_ALIAS + ".hechosVitalesServicios";
+	private static final String HQL_FET_VITAL_SERVICIO_ALIAS = "fvs";
+	private static final String HQL_SERVICIOS_CLASS = HQL_FET_VITAL_PROCEDIMENT_ALIAS + ".servicio";
+	private static final String HQL_SERVICIOS_ALIAS = "s";
 	private static final String HQL_TRADUCCIONES_ALIAS = "trad";
 
 	/**
@@ -212,6 +219,75 @@ public class FetVitalQueryServiceEJB extends HibernateEJB {
 		return procedimentsDTOList;
 
 	}
+	
+	/**
+	 * Obtiene listado de servicio.
+	 * @param id
+	 * @param servicioCriteria
+	 * @return List<ServicioDTO>
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */ 
+	@SuppressWarnings("unchecked")
+	public List<ServicioDTO> llistarServicios(long id, ServicioCriteria servicioCriteria) {
+
+		List<ServicioDTO> serviciosDTOList = new ArrayList<ServicioDTO>();
+		List<CriteriaObject> criteris;
+		Session session = null;
+
+		try {        
+
+			criteris = BasicUtils.parseCriterias(ProcedimentCriteria.class, HQL_SERVICIOS_ALIAS, HQL_TRADUCCIONES_ALIAS, servicioCriteria);
+			List<FromClause> entities = new ArrayList<FromClause>();
+			entities.add(new FromClause(HQL_FET_VITAL_CLASS, HQL_FET_VITAL_ALIAS));
+			entities.add(new FromClause(HQL_FET_VITAL_SERVICIO_CLASS, HQL_FET_VITAL_SERVICIO_ALIAS));
+			entities.add(new FromClause(HQL_SERVICIOS_CLASS, HQL_SERVICIOS_ALIAS));            
+			QueryBuilder qb = new QueryBuilder(HQL_SERVICIOS_ALIAS, entities, servicioCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
+			qb.extendCriteriaObjects(criteris);
+
+			FetVitalCriteria fvc = new FetVitalCriteria();
+			fvc.setId(String.valueOf(id));
+			criteris = BasicUtils.parseCriterias(FetVitalCriteria.class, HQL_FET_VITAL_ALIAS, fvc);
+			qb.extendCriteriaObjects(criteris);
+
+			session = getSession();
+			Query query = qb.createQuery(session);
+			List<Servicio> serviciosResult = (List<Servicio>) query.list();
+
+			for (Servicio servicio : serviciosResult) {
+
+				serviciosDTOList.add(
+					(ServicioDTO)BasicUtils.entityToDTO(
+						ServicioDTO.class, 
+						servicio, 
+						servicioCriteria.getIdioma()
+					)
+				);
+
+			}
+
+		} catch (HibernateException e) {
+
+			log.error(e);
+
+		} catch (CriteriaObjectParseException e) {
+
+			log.error(e);
+
+		} catch (QueryBuilderException e) {
+
+			log.error(e);
+
+		} finally {
+
+			close(session);
+
+		}
+
+		return serviciosDTOList;
+
+	}
 
 	/**
 	 * Obtiene listado de agrupaciones.
@@ -323,6 +399,50 @@ public class FetVitalQueryServiceEJB extends HibernateEJB {
 			entities.add(new FromClause(HQL_FET_VITAL_PROCEDIMENT_CLASS, HQL_FET_VITAL_PROCEDIMENT_ALIAS));
 			entities.add(new FromClause(HQL_PROCEDIMIENTOS_LOCALES_CLASS, HQL_PROCEDIMIENTOS_LOCALES_ALIAS));  
 			QueryBuilder qb = new QueryBuilder(HQL_PROCEDIMIENTOS_LOCALES_ALIAS, entities, null, null, true);
+			qb.extendCriteriaObjects(criteris);
+
+			FetVitalCriteria fvc = new FetVitalCriteria();
+			fvc.setId(String.valueOf(id));
+			criteris = BasicUtils.parseCriterias(FetVitalCriteria.class, HQL_FET_VITAL_ALIAS, fvc);
+			qb.extendCriteriaObjects(criteris);
+
+			session = getSession();
+			Query query = qb.createQuery(session);
+			numResultats = getNumberResults(query);
+		} catch (HibernateException e) {
+			log.error(e);
+		} catch (CriteriaObjectParseException e) {
+			log.error(e);
+		} catch (QueryBuilderException e) {
+			log.error(e);
+		} finally {
+			close(session);
+		}
+
+		return numResultats;
+	}
+	
+	
+	/**
+	 * Obtiene numero de servicios.
+	 * @param id
+	 * @return int
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public int getNumServicios(long id) {
+		List<CriteriaObject> criteris;
+		Session session = null;
+		int numResultats = 0;
+
+		try {
+			criteris = BasicUtils.parseCriterias(ServicioCriteria.class, HQL_SERVICIOS_ALIAS, new ServicioCriteria());
+			List<FromClause> entities = new ArrayList<FromClause>();
+			entities.add(new FromClause(HQL_FET_VITAL_CLASS, HQL_FET_VITAL_ALIAS));
+			entities.add(new FromClause(HQL_FET_VITAL_SERVICIO_CLASS, HQL_FET_VITAL_SERVICIO_ALIAS));
+			entities.add(new FromClause(HQL_SERVICIOS_CLASS, HQL_SERVICIOS_ALIAS));  
+			QueryBuilder qb = new QueryBuilder(HQL_SERVICIOS_ALIAS, entities, null, null, true);
 			qb.extendCriteriaObjects(criteris);
 
 			FetVitalCriteria fvc = new FetVitalCriteria();

@@ -41,6 +41,7 @@ import org.ibit.rol.sac.model.Personal;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.Seccion;
+import org.ibit.rol.sac.model.Servicio;
 import org.ibit.rol.sac.model.SilencioAdm;
 import org.ibit.rol.sac.model.Taxa;
 import org.ibit.rol.sac.model.Tipo;
@@ -63,6 +64,7 @@ import es.caib.rolsac.api.v2.document.DocumentCriteria;
 import es.caib.rolsac.api.v2.document.DocumentDTO;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitDTO;
+import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaCriteria;
 import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaDTO;
 import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiDTO;
@@ -108,6 +110,9 @@ import es.caib.rolsac.api.v2.personal.PersonalDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentUtils;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioUtils;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.query.FromClause;
@@ -154,6 +159,8 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 	private static final String HQL_TRADUCCIONES_ALIAS = "trad";
 	private static final String HQL_PROCEDIMIENTO_CLASS = "ProcedimientoLocal";
 	private static final String HQL_PROCEDIMIENTO_ALIAS = "p";
+	private static final String HQL_SERVICIO_CLASS = "Servicio";
+	private static final String HQL_SERVICIO_ALIAS = "s";
 	private static final String HQL_MATERIA_CLASS = "Materia";
 	private static final String HQL_MATERIA_ALIAS = "m";
 	private static final String HQL_CATALOGO_DOCUMENTOS_CLASS = "CatalegDocuments";
@@ -676,6 +683,235 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 	}
 
+	
+	/**
+	 * Obtiene un servicio.
+	 * @param servicioCriteria
+	 * @return ServicioDTO
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public ServicioDTO obtenirServicio(ServicioCriteria servicioCriteria) {
+
+		List<CriteriaObject> criteris = new ArrayList<CriteriaObject>();
+		ServicioDTO servicioDTO = null;
+		Session session = null;
+
+		// Guardamos el estado de la UA para que no influya en la query
+		String estadoUA = servicioCriteria.getEstadoUA();
+		servicioCriteria.setEstadoUA(null);
+
+		try {
+
+			List<FromClause> entities = new ArrayList<FromClause>();
+			entities.add(new FromClause(HQL_SERVICIO_CLASS,HQL_SERVICIO_ALIAS));
+
+			QueryBuilder qb = new QueryBuilder(
+					HQL_SERVICIO_ALIAS, 
+					entities, 
+					servicioCriteria.getIdioma(),
+					HQL_TRADUCCIONES_ALIAS);
+
+			ServicioUtils.parseActiu(criteris, servicioCriteria, HQL_SERVICIO_ALIAS, qb);
+			criteris.addAll(BasicUtils.parseCriterias(
+					ServicioCriteria.class,
+					HQL_SERVICIO_ALIAS,
+					HQL_TRADUCCIONES_ALIAS,
+					servicioCriteria));
+
+			qb.extendCriteriaObjects(criteris);
+
+			session = getSession();
+			Query query = qb.createQuery(session);
+			Servicio servicio = (Servicio)query.uniqueResult();
+
+			if (servicio != null) {
+
+				if (estadoUA == null || servicio.getServicioResponsable().getValidacion() == Integer.parseInt(estadoUA)) {
+
+					servicioDTO = (ServicioDTO)BasicUtils.entityToDTO(
+							ServicioDTO.class,
+							servicio,
+							servicioCriteria.getIdioma()
+							);					
+				}
+			}
+
+		} catch (HibernateException e) {
+
+			log.error(e);
+			throw new EJBException(e);
+
+		} catch (CriteriaObjectParseException e) {
+
+			log.error(e);
+			throw new EJBException(e);
+
+		} catch (QueryBuilderException e) {
+
+			log.error(e);
+			throw new EJBException(e);
+
+		} finally {
+
+			close(session);
+
+		}
+
+		return servicioDTO;
+
+	}
+
+	/**
+	 * Obtiene servicios.
+	 * @param servicioCriteria
+	 * @return List<ServicioDTO>
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	@SuppressWarnings("unchecked")
+	public List<ServicioDTO> llistarServicios(ServicioCriteria servicioCriteria) {
+
+		List<ServicioDTO> serviciosDTOList = new ArrayList<ServicioDTO>();
+		List<CriteriaObject> criteris = new ArrayList<CriteriaObject>();
+		Session session = null;
+
+		try {
+
+			List<FromClause> entities = new ArrayList<FromClause>();
+			entities.add(new FromClause(HQL_SERVICIO_CLASS, HQL_SERVICIO_ALIAS));
+
+			QueryBuilder qb = new QueryBuilder(
+					HQL_SERVICIO_ALIAS, 
+					entities, 
+					servicioCriteria.getIdioma(),
+					HQL_TRADUCCIONES_ALIAS);
+
+			Restriction telematicoVigente = ServicioUtils.ParseTelematicoVigente(servicioCriteria, HQL_SERVICIO_ALIAS);
+
+			if (telematicoVigente != null)
+				qb.addRestriction(telematicoVigente);
+
+			ServicioUtils.parseActiu(criteris, servicioCriteria, HQL_SERVICIO_ALIAS, qb);
+
+			criteris.addAll(BasicUtils.parseCriterias(
+					ServicioCriteria.class,
+					HQL_SERVICIO_ALIAS,
+					HQL_TRADUCCIONES_ALIAS, 
+					servicioCriteria));
+
+			qb.extendCriteriaObjects(criteris);
+
+			session = getSession();
+			Query query = qb.createQuery(session);
+			List<Servicio> serviciosResult = (List<Servicio>) query.list();
+
+			for (Servicio servicio : serviciosResult) {
+				serviciosDTOList.add(
+						(ServicioDTO)BasicUtils.entityToDTO(
+								ServicioDTO.class, 
+								servicio, 
+								servicioCriteria.getIdioma()
+								)
+						);
+			}
+
+		} catch (HibernateException e) {
+
+			log.error(e);
+			throw new EJBException(e);
+
+		} catch (CriteriaObjectParseException e) {
+
+			log.error(e);
+			throw new EJBException(e);
+
+		} catch (QueryBuilderException e) {
+
+			log.error(e);
+			throw new EJBException(e);
+
+		} finally {
+
+			close(session);
+
+		}
+
+		return serviciosDTOList;
+
+	}
+
+	/**
+	 * Cuenta servicios.
+	 * @param servicioCriteria
+	 * @return int
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public int getNumServicios(ServicioCriteria servicioCriteria) {
+
+		Integer numResultats = -1;
+		List<CriteriaObject> criteris = new ArrayList<CriteriaObject>();
+		Session session = null;
+
+		try {
+
+			List<FromClause> entities = new ArrayList<FromClause>();
+			entities.add(new FromClause(HQL_SERVICIO_CLASS, HQL_SERVICIO_ALIAS));
+
+			QueryBuilder qb = new QueryBuilder(
+					HQL_SERVICIO_ALIAS, 
+					entities, 
+					servicioCriteria.getIdioma(),
+					HQL_TRADUCCIONES_ALIAS, 
+					true);
+
+			Restriction telematicoVigente = ServicioUtils.ParseTelematicoVigente(servicioCriteria, HQL_SERVICIO_ALIAS);
+
+			if ( telematicoVigente != null )
+				qb.addRestriction(telematicoVigente);
+
+			ServicioUtils.parseActiu(criteris, servicioCriteria, HQL_SERVICIO_ALIAS);            
+
+			criteris.addAll(BasicUtils.parseCriterias(
+					ServicioCriteria.class,
+					HQL_SERVICIO_ALIAS,
+					HQL_TRADUCCIONES_ALIAS, 
+					servicioCriteria));
+
+			qb.extendCriteriaObjects(criteris);
+
+			session = getSession();
+			Query query = qb.createQuery(session);
+			numResultats = ((Integer) query.uniqueResult()).intValue();
+			
+		} catch (HibernateException e) {
+
+			log.error(e);
+			throw new EJBException(e);
+
+		}  catch (QueryBuilderException e) {
+
+			log.error(e);
+			throw new EJBException(e);
+
+		} catch (CriteriaObjectParseException e) {
+
+			log.error(e);
+			throw new EJBException(e);
+
+		} finally {
+
+			close(session);
+
+		}
+
+		return numResultats;
+
+	}
 	/**
 	 * Obtiene una materia.
 	 * @param materiaCriteria
@@ -1379,16 +1615,18 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 	
 	/**
 	 * Obtiene documentos normativa.
-	 * @param idNormativa
+	 * @param documentoNormativaCriteria
 	 * @return List<DocumentNormativaDTO>
 	 * 
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
 	@SuppressWarnings("unchecked")
-	public List<DocumentoNormativaDTO> llistarDocumentoNormativa(long idNormativa) {        
+	public List<DocumentoNormativaDTO> llistarDocumentoNormativa(DocumentoNormativaCriteria documentoNormativaCriteria) {        
+		/*
 		Session session = null;
 
+		List<DocumentoNormativaDTO> documentosDTO = new ArrayList<DocumentoNormativaDTO>();
 		try {            
 			
 			 session = getSession();
@@ -1399,17 +1637,67 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 				consulta.append(" order by docNor.id asc");
 				
 	            Query query = session.createQuery(consulta.toString());
-	            query.setParameter("idNormativa", idNormativa);
+	            query.setParameter("idNormativa", documentoNormativaCriteria.getId());
 	    		
-	            
-	           return query.list();
+	            List<DocumentoNormativa> documentos = query.list();
+	            for (DocumentoNormativa documento : documentos) {
+	            	documentosDTO.add((DocumentoNormativaDTO) BasicUtils.entityToDTO(
+							DocumentoNormativaDTO.class,
+							documento, 
+							documentoNormativaCriteria.getIdioma()));
+				}
+	           return documentosDTO;
 		} catch (HibernateException e) {
+			log.error(e);
+			throw new EJBException(e);
+		} finally {
+			close(session);
+		}*/
+
+		List<DocumentoNormativaDTO> documentsNormativaDTOList = new ArrayList<DocumentoNormativaDTO>();
+		List<CriteriaObject> criteris;
+		Session session = null;
+
+		try {            
+			criteris = BasicUtils.parseCriterias(
+							DocumentoNormativaCriteria.class,
+							HQL_DOC_NORMATIVA_ALIAS,
+							HQL_TRADUCCIONES_ALIAS, 
+							documentoNormativaCriteria);
+
+			List<FromClause> entities = new ArrayList<FromClause>();
+			entities.add(new FromClause(HQL_DOC_NORMATIVA_CLASS, HQL_DOC_NORMATIVA_ALIAS));
+
+			QueryBuilder qb = new QueryBuilder(
+					HQL_DOC_NORMATIVA_ALIAS, 
+					entities, 
+					documentoNormativaCriteria.getIdioma(),
+					HQL_TRADUCCIONES_ALIAS);
+			qb.extendCriteriaObjects(criteris);
+
+			session = getSession();
+			Query query = qb.createQuery(session);
+			List<DocumentoNormativa> documentoNormativasResult = (List<DocumentoNormativa>) query.list();
+			for (DocumentoNormativa documentoNormativa : documentoNormativasResult) {
+				documentsNormativaDTOList.add((DocumentoNormativaDTO) BasicUtils.entityToDTO(
+						DocumentoNormativaDTO.class,
+						documentoNormativa, 
+						documentoNormativaCriteria.getIdioma()));
+			}
+		} catch (HibernateException e) {
+			log.error(e);
+			throw new EJBException(e);
+		} catch (CriteriaObjectParseException e) {
+			log.error(e);
+			throw new EJBException(e);
+		} catch (QueryBuilderException e) {
 			log.error(e);
 			throw new EJBException(e);
 		} finally {
 			close(session);
 		}
 
+		return documentsNormativaDTOList;
 	}
 
 

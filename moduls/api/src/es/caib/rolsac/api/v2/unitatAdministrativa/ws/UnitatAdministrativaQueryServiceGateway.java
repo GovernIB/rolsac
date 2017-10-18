@@ -25,6 +25,8 @@ import es.caib.rolsac.api.v2.personal.PersonalCriteria;
 import es.caib.rolsac.api.v2.personal.PersonalDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
 import es.caib.rolsac.api.v2.tractament.TractamentCriteria;
@@ -117,9 +119,12 @@ public class UnitatAdministrativaQueryServiceGateway {
 
 	public int getNumProcediments(Long id) throws RemoteException {
 		return stub.getNumProcediments(id);
-
 	}
 
+	public int getNumServicios(Long id) throws RemoteException {
+		return stub.getNumServicios(id);
+	}
+	
 	public int getNumTramits(Long id) throws RemoteException {
 		return stub.getNumTramits(id);
 
@@ -245,6 +250,25 @@ public class UnitatAdministrativaQueryServiceGateway {
 		for (Object o : tmpLlista) {
 			ProcedimentDTO pdto = (ProcedimentDTO) DTOUtil.object2DTO(o,
 					ProcedimentDTO.class);
+			llistaNormatives.add(pdto);
+		}
+
+		return llistaNormatives;
+	}
+	
+	public List<ServicioDTO> llistarServicios(long id,
+			ServicioCriteria servicioCriteria) throws RemoteException, APIException {
+
+		Object[] tmpLlista = null;
+		List<ServicioDTO> llistaNormatives = null;
+
+		tmpLlista = stub.llistarServicios(id, servicioCriteria);
+		llistaNormatives = new ArrayList<ServicioDTO>(Arrays.asList(
+				tmpLlista).size());
+
+		for (Object o : tmpLlista) {
+			ServicioDTO pdto = (ServicioDTO) DTOUtil.object2DTO(o,
+					ServicioDTO.class);
 			llistaNormatives.add(pdto);
 		}
 

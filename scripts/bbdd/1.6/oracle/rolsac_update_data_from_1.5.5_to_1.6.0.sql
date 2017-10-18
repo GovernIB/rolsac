@@ -49,7 +49,7 @@ INSERT INTO RSC_TRANOR (TNO_CODNOR, TNO_SECCIO, TNO_APARTA, TNO_PAGINI, TNO_PAGF
   
 -- Backup de normativa type y Cambiar la normativaLocal y normativaExterna al valor normativa  mientras que normativaExternaRemota/normativaLocalRemota pasa a Remota.  
 update rsc_normat set nor_typen = 'normativa';
-update rsc_normat set nor_validn = 1;
+update rsc_normat set nor_validn = 'PENDIENTE, HAY QUE VER QUE VALOR TENDRÁ AL FINAL SEGUN CAIB.';
 update rsc_normat set nor_codbol_ant = nor_codbol;
 update rsc_normat set nor_codbol = nor_codbol where nor_codbol not in (select bol_codi from rsc_boleti where bol_nombre in ('BOIB', 'BOE', 'DOCE'));
 delete rsc_bolleti where bol_nombre not in ('BOIB','BOE','DOCE');

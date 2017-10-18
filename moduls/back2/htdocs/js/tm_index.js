@@ -127,6 +127,37 @@ function inicializarBtn() {
         });
 	});
 	
+	jQuery("#btnIndexarServicio").unbind("click").bind("click", function() {
+		//Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
+		//setTimeout('Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtEnviantDades})', 400);
+        
+        var $btn = jQuery(this);
+        var url;        
+
+		if ($btn.hasClass('unitatOrganica')) {
+            url = pagIndexarTodoServicio;
+		} 
+        
+        $.ajax({
+            type: "POST",
+            url: url, 
+            dataType: "json",
+            error: function() {					
+                // missatge
+                Missatge.cancelar();
+                setTimeout('Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"})', 400);
+                
+            },
+            success: function(data) {
+                if (data.error == null || data.error == "") {
+                	Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtEnviantDades});			
+                } else {
+                    Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: data.error});					
+                }
+            }
+        });
+	});
+	
 	jQuery("#btnIndexarNormativa").unbind("click").bind("click", function() {
 		//Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
 		//setTimeout('Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtEnviantDades})', 400);

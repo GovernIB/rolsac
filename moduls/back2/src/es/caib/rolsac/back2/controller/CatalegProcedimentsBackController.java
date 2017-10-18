@@ -71,6 +71,7 @@ import org.ibit.rol.sac.persistence.delegate.IniciacionDelegate;
 import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
+import org.ibit.rol.sac.persistence.delegate.ServicioDelegate;
 import org.ibit.rol.sac.persistence.delegate.SilencioAdmDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
@@ -850,13 +851,17 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 		try {
 
-			ProcedimientoDelegate procedimentDelegate = DelegateUtil.getProcedimientoDelegate();
-			Long id = Long.parseLong(request.getParameter("id"));
-			
-			if (id != null) {
-				if (procedimentDelegate.isNormativaDerogada(id)) {
-					error = messageSource.getMessage("proc.error.normativa.derogadas", null, request.getLocale());
-					return result = new IdNomDTO(-1l, error);
+			Long id = null;
+			if (!request.getParameter("id").isEmpty()) {
+				
+				ServicioDelegate servicioDelegate = DelegateUtil.getServicioDelegate();
+				id = Long.parseLong(request.getParameter("id"));
+				
+				if (id != null) {
+					if (servicioDelegate.isNormativaDerogada(id)) {
+						error = messageSource.getMessage("serv.error.normativa.derogadas", null, request.getLocale());
+						return result = new IdNomDTO(-1l, error);
+					}
 				}
 			}
 			

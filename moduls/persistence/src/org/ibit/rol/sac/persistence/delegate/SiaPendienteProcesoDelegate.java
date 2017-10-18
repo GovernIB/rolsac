@@ -1,115 +1,252 @@
 package org.ibit.rol.sac.persistence.delegate;
 
+import java.rmi.RemoteException;
 import java.util.List;
 
+import javax.ejb.CreateException;
+import javax.ejb.Handle;
+import javax.naming.NamingException;
+
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.Servicio;
 import org.ibit.rol.sac.model.SiaJob;
 import org.ibit.rol.sac.model.SiaPendiente;
 import org.ibit.rol.sac.model.SiaUA;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.ws.SiaResultado;
+import org.ibit.rol.sac.persistence.intf.DocumentoNormativaFacade;
+import org.ibit.rol.sac.persistence.intf.DocumentoNormativaFacadeHome;
+import org.ibit.rol.sac.persistence.intf.SiaPendienteProcesoFacade;
+import org.ibit.rol.sac.persistence.intf.SiaPendienteProcesoFacadeHome;
+import org.ibit.rol.sac.persistence.util.DocumentoNormativaFacadeUtil;
 import org.ibit.rol.sac.persistence.util.FiltroSia;
+import org.ibit.rol.sac.persistence.util.SiaPendienteProcesoFacadeUtil;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
-
-public class SiaPendienteProcesoDelegate implements StatelessDelegate {
-
-	private static final long serialVersionUID = -4377464442759993342L;
-
-    private long timeLen = 0L;
-
-    SiaPendienteProcesoDelegateI impl;
-
-	private static long maxtime = 60000L; // 60 segundos
-
-    private boolean timeout(long time) {
-
-        return ((System.currentTimeMillis() - time) > maxtime);
-    }
-
-	public SiaPendienteProcesoDelegateI getImpl() {
-		return impl;
-	}
-
-	public void setImpl(SiaPendienteProcesoDelegateI impl) {
-		this.impl = impl;
-	}
+/**
+ * Business delegate pera consultar sia pendiente..
+ */
+public class SiaPendienteProcesoDelegate implements  StatelessDelegate 
+{
+	/* ========================================================= */
+    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ========================================================= */
 
 	
-    
-    public List<SiaPendiente> getSiaPendientesEnviar() throws DelegateException {
-        return impl.getSiaPendientesEnviar();
-    }
-    
-    public ResultadoBusqueda getSiaPendientes(final FiltroSia filtro) throws DelegateException {
-        return impl.getSiaPendientes(filtro);
-    }
-    
-    public ResultadoBusqueda getSiaProceso(final FiltroSia filtro) throws DelegateException {
-        return impl.getSiaProceso(filtro);
-    }
-    
-    public SiaPendiente generarSiaPendiente(SiaPendiente siaPendiente, ProcedimientoLocal procedimiento) throws DelegateException {
-        return impl.generarSiaPendiente(siaPendiente, procedimiento);
-    }
-    
-    public SiaPendiente actualizarSiaPendiente(SiaPendiente siaPendiente) throws DelegateException {
-        return impl.actualizarSiaPendiente(siaPendiente);
+    /** Serial version UID. **/
+	private static final long serialVersionUID = 1L;
+/*    
+    private Handle facadeHandle;
+
+    private SiaPendienteProcesoFacade getFacade() throws RemoteException {
+        return (SiaPendienteProcesoFacade) facadeHandle.getEJBObject();
     }
 
-    public void borrarSiaPendiente(SiaPendiente siaPendiente) throws DelegateException {
-        impl.borrarSiaPendiente(siaPendiente);
-    }
+    protected void SiaPendienteProcesoDelegateImpl() throws DelegateException {
+        try {
+        	SiaPendienteProcesoFacadeHome home = SiaPendienteProcesoFacadeUtil.getHome();
+        	SiaPendienteProcesoFacade remote = home.create();
+            facadeHandle = remote.getHandle();
+        } catch (NamingException e) {
+            throw new DelegateException(e);
+        } catch (CreateException e) {
+            throw new DelegateException(e);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }**/
 
-    public boolean checkJobsActivos() throws Exception, DelegateException{
-		return impl.checkJobsActivos();
+ 
+	public List<SiaPendiente> getSiaPendientesEnviar() throws DelegateException{
+	
+	   try {
+			return getFacade().getSiaPendientesEnviar();
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
 	}
 
-	public SiaJob crearSiaJob(String tipo) throws DelegateException{
-		return impl.crearSiaJob(tipo);
+	public ResultadoBusqueda getSiaPendientes(FiltroSia filtro) throws DelegateException{
+		 try {
+				return getFacade().getSiaPendientes(filtro);
+	       } catch (RemoteException e) {
+	           throw new DelegateException(e);
+	       }
 	}
+
+	public ResultadoBusqueda getSiaProceso(FiltroSia filtro) throws DelegateException{
+		 try {
+				return getFacade().getSiaProceso(filtro);
+	       } catch (RemoteException e) {
+	           throw new DelegateException(e);
+	       }
+	}
+
+	public SiaPendiente generarSiaPendiente(SiaPendiente siaPendiente, ProcedimientoLocal procedimiento, Servicio servicio) throws DelegateException{
+		 try {
+				return getFacade().generarSiaPendiente(siaPendiente, procedimiento, servicio);
+	       } catch (RemoteException e) {
+	           throw new DelegateException(e);
+	       }
+	}
+	
+	public SiaPendiente actualizarSiaPendiente(SiaPendiente siaPendiente) throws DelegateException{
+		 try {
+				return getFacade().actualizarSiaPendiente(siaPendiente);
+	       } catch (RemoteException e) {
+	           throw new DelegateException(e);
+	       }
+	}
+	
+	public void borrarSiaPendientes() throws DelegateException {
+		try {
+			getFacade().borrarSiaPendientes();
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
+	}
+
+	public void borrarSiaPendiente(SiaPendiente siaPendiente) throws DelegateException{
+		 try {
+				getFacade().borrarSiaPendiente(siaPendiente);
+	       } catch (RemoteException e) {
+	           throw new DelegateException(e);
+	       }
+		
+	}
+	
+	public boolean checkJobsActivos() throws Exception{
+		 try {   
+				return getFacade().checkJobsActivos();
+	       } catch (RemoteException e) {
+	           throw new DelegateException(e);
+	       }
+		
+	}
+	
+	public Boolean cerrarJobs() throws DelegateException{
+		 try {
+				return getFacade().cerrarJobs();
+	       } catch (RemoteException e) {
+	           throw new DelegateException(e);
+	       }
+		
+	}
+	
+	public SiaJob crearSiaJob(String tipo)  throws DelegateException {
+		try {
+			return getFacade().crearSiaJob(tipo);
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
+	}
+	
 	
 	public void actualizarSiaJob(SiaJob siaJob) throws DelegateException{
-		impl.actualizarSiaJob(siaJob);
+		try {
+			getFacade().actualizarSiaJob(siaJob);
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
 	}
-
+	
+	
+	
+	
 	public void cerrarSiaJob(Long idSiaJob) throws DelegateException{
-		impl.cerrarSiaJob(idSiaJob);
-	}
-
-	public Boolean cerrarJobs() throws DelegateException{
-		return impl.cerrarJobs();
-	}
-	
-	public void actualizarProcedimiento(ProcedimientoLocal proc, SiaResultado resultado) throws DelegateException{
-		impl.actualizarProcedimiento(proc, resultado);
-	} 
-
-	public ResultadoBusqueda getSiaUAs(final int pagina,final int cuantos, final String orden, final String ordenAsc) throws DelegateException {
-		return impl.getSiaUAs(pagina, cuantos, orden, ordenAsc);
-	}
-
-	public void grabarSiaUA(SiaUA siaUA)  throws DelegateException {
-		impl.grabarSiaUA(siaUA);
-	}
-
-	public SiaUA obtenerSiaUA(UnidadAdministrativa ua) throws DelegateException {
-		return impl.obtenerSiaUA(ua);
+		try {
+			getFacade().cerrarSiaJob(idSiaJob);
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
 	}
 	
-	public SiaUA obtenerSiaUA(final Long id)  throws DelegateException {
-		return impl.obtenerSiaUA(id);
+	
+	public void actualizarProcedimiento(ProcedimientoLocal proc, SiaResultado resultado)  throws DelegateException{
+		try {
+			 getFacade().actualizarProcedimiento(proc, resultado);
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
 	}
-
+	
+	
+	public void actualizarServicio(Servicio servicio, SiaResultado resultado)  throws DelegateException{
+		try {
+			 getFacade().actualizarServicio(servicio, resultado);
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
+	}
+	
+	public ResultadoBusqueda getSiaUAs(int pagina, int cuantos, final String orden, final String ordenAsc)  throws DelegateException{
+	   try {
+		   return getFacade().getSiaUAs(pagina, cuantos, orden, ordenAsc);
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
+	}		
+	
+	
+	
+	 
+	public void grabarSiaUA(final SiaUA siaUA) throws DelegateException {
+	   try {
+		   getFacade().grabarSiaUA(siaUA);
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
+	}	
+	
+	 
+	public SiaUA obtenerSiaUA(Long id)  throws DelegateException {
+	   try {
+		   return getFacade().obtenerSiaUA(id);
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
+	}
+	
+	 
+	public SiaUA obtenerSiaUA(UnidadAdministrativa ua)  throws DelegateException {
+	   try {
+		   return getFacade().obtenerSiaUA(ua);
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
+	}
+	
+	 
 	public void borrarSiaUA(Long id) throws DelegateException {
-		impl.borrarSiaUA(id);
-	}
+		   try {
+			   getFacade().borrarSiaUA(id);
+	       } catch (RemoteException e) {
+	           throw new DelegateException(e);
+	       }
+		}
 
-	public void borrarSiaPendientes() throws DelegateException {
-		impl.borrarSiaPendientes();
-	}
-
-	
-	
+	  /* ========================================================= */
+    /* ======================== REFERENCIA AL FACADE  ========== */
+    /* ========================================================= */
+    
+    private Handle facadeHandle;
+    
+    private SiaPendienteProcesoFacade getFacade() throws RemoteException {
+        return (SiaPendienteProcesoFacade) facadeHandle.getEJBObject();
+    }
+    
+    protected SiaPendienteProcesoDelegate() throws DelegateException {
+        try {
+        	SiaPendienteProcesoFacadeHome home = SiaPendienteProcesoFacadeUtil.getHome();
+        	SiaPendienteProcesoFacade remote = home.create();
+            facadeHandle = remote.getHandle();
+        } catch (NamingException e) {
+            throw new DelegateException(e);
+        } catch (CreateException e) {
+            throw new DelegateException(e);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
 }

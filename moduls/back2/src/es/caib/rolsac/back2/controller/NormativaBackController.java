@@ -36,11 +36,13 @@ import org.ibit.rol.sac.model.Boletin;
 import org.ibit.rol.sac.model.DocumentoNormativa;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.Servicio;
 import org.ibit.rol.sac.model.Tipo;
 import org.ibit.rol.sac.model.TipoAfectacion;
 import org.ibit.rol.sac.model.TraduccionDocumentoNormativa;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
+import org.ibit.rol.sac.model.TraduccionServicio;
 import org.ibit.rol.sac.model.TraduccionTipo;
 import org.ibit.rol.sac.model.TraduccionTipoAfectacion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -50,6 +52,7 @@ import org.ibit.rol.sac.model.dto.AfectacionesDTO;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.model.dto.NormativaDTO;
 import org.ibit.rol.sac.model.dto.ProcedimientoLocalDTO;
+import org.ibit.rol.sac.model.dto.ServicioDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
@@ -812,6 +815,7 @@ public class NormativaBackController extends PantallaBaseController {
    			
    			resultats.put("afectacions", getNormativasAfectadasDTO(normativa, lang, id));
    			resultats.put("procediments", getProcedimientosNormativaDTO(normativa, lang));
+   			resultats.put("serveis", getServiciosNormativaDTO(normativa, lang));
 
    		} catch (DelegateException dEx) {
 
@@ -849,6 +853,29 @@ public class NormativaBackController extends PantallaBaseController {
         }
 
         return procedimientos;
+        
+    }
+    
+    private List<ServicioDTO> getServiciosNormativaDTO(Normativa normativa, String idiomaUsuario) {
+
+        Set<Servicio> listaServicios = normativa.getServicios();
+        List<ServicioDTO> servicios = new ArrayList<ServicioDTO>();
+
+        for (Servicio servicio : listaServicios) {
+        	
+        	TraduccionServicio traServ = (TraduccionServicio)servicio.getTraduccion(idiomaUsuario);
+            
+            servicios.add(
+        		new ServicioDTO(
+        			0L,
+    				servicio.getId(),
+    				traServ != null ? traServ.getNombre() : "",
+    				null, null, null, null
+				)
+    		);
+        }
+
+        return servicios;
         
     }
 

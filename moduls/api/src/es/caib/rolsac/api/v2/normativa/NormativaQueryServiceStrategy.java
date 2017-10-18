@@ -4,10 +4,13 @@ import java.util.List;
 
 import es.caib.rolsac.api.v2.afectacio.AfectacioDTO;
 import es.caib.rolsac.api.v2.butlleti.ButlletiDTO;
+import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaCriteria;
 import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaDTO;
 import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 
 public interface NormativaQueryServiceStrategy {
@@ -17,6 +20,8 @@ public interface NormativaQueryServiceStrategy {
     public int getNumAfectants(long id) throws StrategyException;
 
     public int getNumProcediments(long id) throws StrategyException;
+    
+    public int getNumServicios(long id) throws StrategyException;
     
     public ButlletiDTO obtenirButlleti(long idButlleti) throws StrategyException;
     
@@ -28,7 +33,9 @@ public interface NormativaQueryServiceStrategy {
 
     public List<ProcedimentDTO> llistarProcediments(long id, ProcedimentCriteria procedimentCriteria) throws StrategyException;
 
-    public List<DocumentoNormativaDTO> llistarDocumentNormativa(long idNormativa) throws StrategyException;
+    public List<ServicioDTO> llistarServicios(long id, ServicioCriteria servicioCriteria) throws StrategyException;
+
+    public List<DocumentoNormativaDTO> llistarDocumentoNormativa(DocumentoNormativaCriteria DocumentoNormativaCriteria) throws StrategyException;
     	
     public List<AfectacioDTO> llistarAfectacionsAfectants(Long id) throws StrategyException;
 

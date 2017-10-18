@@ -30,6 +30,7 @@ public class AdministracionRemota implements ValueObject {
     private Set<UnidadAdministrativaRemota> unidadesRemotas;
     private Set<FichaRemota> fichasRemotas;
     private Set<ProcedimientoRemoto> procedimientosRemotos;
+    private Set<ServicioRemoto> serviciosRemotos;
     private Set<EdificioRemoto> edificiosRemotos;
     private Set<TramiteRemoto> tramitesRemotos;
     private Set<NormativaRemota> normativasRemotas;
@@ -107,6 +108,14 @@ public class AdministracionRemota implements ValueObject {
     
     public void removeProcedimientoRemoto(ProcedimientoRemoto procedimientoRemoto){
     	procedimientosRemotos.remove(procedimientoRemoto);
+    }
+    
+    public void addServicioRemoto(ServicioRemoto servicioRemoto){
+    	serviciosRemotos.add(servicioRemoto);
+    }
+    
+    public void removeServicioRemoto(ServicioRemoto servicioRemoto){
+    	serviciosRemotos.remove(servicioRemoto);
     }
     
     public void addEdificioRemoto(EdificioRemoto edificioRemoto){
@@ -242,4 +251,18 @@ public class AdministracionRemota implements ValueObject {
     public void setDocumentosRemotos(Set<DocumentoRemoto> documentosRemotos) {
         this.documentosRemotos = documentosRemotos;
     }
+
+	/**
+	 * @return the serviciosRemotos
+	 */
+	public Set<ServicioRemoto> getServiciosRemotos() {
+		return serviciosRemotos;
+	}
+
+	/**
+	 * @param serviciosRemotos the serviciosRemotos to set
+	 */
+	public void setServiciosRemotos(Set<ServicioRemoto> serviciosRemotos) {
+		this.serviciosRemotos = serviciosRemotos;
+	}
 }

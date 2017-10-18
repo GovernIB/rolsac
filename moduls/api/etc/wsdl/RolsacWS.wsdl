@@ -42,6 +42,8 @@
 	xmlns:tns51="http://idioma.v2.api.rolsac.caib.es" 
 	xmlns:tns52="http://silencio.v2.api.rolsac.caib.es"
 	xmlns:tns53="http://documentoNormativa.v2.api.rolsac.caib.es"
+	xmlns:tns54="http://servicio.v2.api.rolsac.caib.es"
+	xmlns:tns55="http://documentoServicio.v2.api.rolsac.caib.es"
 	targetNamespace="http://ws.rolsac.v2.api.rolsac.caib.es">
 	
 	<wsdl:import namespace="urn:tns1" location="dto/UnitatAdministrativaCriteria.wsdl"/>
@@ -117,6 +119,10 @@
 	<wsdl:import namespace="urn:tns52" location="dto/SilencioDTO.wsdl"/>
 	<wsdl:import namespace="urn:tns53" location="dto/DocumentoNormativaCriteria.wsdl"/>
 	<wsdl:import namespace="urn:tns53" location="dto/DocumentoNormativaDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns54" location="dto/ServicioCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns54" location="dto/ServicioDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns55" location="dto/DocumentoServicioCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns55" location="dto/DocumentoServicioDTO.wsdl"/>
 	
 	
 	<wsdl:types>
@@ -137,6 +143,15 @@
 				<complexContent>
 					<restriction base="soapenc:Array">
 						<attribute ref="soapenc:arrayType" wsdl:arrayType="tns4:ProcedimentDTO[]" />
+					</restriction>
+				</complexContent>
+			</complexType>
+			
+			<!-- Definim aquests tipus per a evitar conflictes amb DTO i ArrayStoreException -->
+			<complexType name="ArrayOfServicioDTO">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="tns54:ServicioDTO[]" />
 					</restriction>
 				</complexContent>
 			</complexType>
@@ -217,6 +232,14 @@
 				<complexContent>
 					<restriction base="soapenc:Array">
 						<attribute ref="soapenc:arrayType" wsdl:arrayType="tns9:DocumentTramitDTO[]" />
+					</restriction>
+				</complexContent>
+			</complexType>
+			
+			<complexType name="ArrayOfDocumentoServicioDTO">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="tns55:DocumentoServicioDTO[]" />
 					</restriction>
 				</complexContent>
 			</complexType>
@@ -531,6 +554,9 @@
 	<wsdl:message name="obtenirProcedimentRequest">
 		<wsdl:part name="in0" type="tns4:ProcedimentCriteria" />
 	</wsdl:message>
+	<wsdl:message name="obtenirServicioRequest">
+		<wsdl:part name="in0" type="tns54:ServicioCriteria" />
+	</wsdl:message>
 	<wsdl:message name="obtenirEspaiTerritorialResponse">
 		<wsdl:part name="obtenirEspaiTerritorialReturn" type="tns3:EspaiTerritorialDTO" />
 	</wsdl:message>
@@ -579,6 +605,12 @@
     <wsdl:message name="getNumProcedimentsResponse">
         <wsdl:part name="getNumProcedimentsReturn" type="xsd:int" />
     </wsdl:message>
+    <wsdl:message name="llistarServiciosResponse">
+		<wsdl:part name="llistarServiciosReturn" type="impl:ArrayOfServicioDTO" />
+	</wsdl:message>
+    <wsdl:message name="getNumServiciosResponse">
+        <wsdl:part name="getNumServiciosReturn" type="xsd:int" />
+    </wsdl:message>
     <wsdl:message name="getNumFitxesResponse">
         <wsdl:part name="getNumFitxesReturn" type="xsd:int" />
     </wsdl:message>
@@ -597,6 +629,9 @@
 	<wsdl:message name="llistarDocumentTramitResponse">
 		<wsdl:part name="llistarDocumentTramitReturn" type="impl:ArrayOfDocumentTramitDTO" />
 	</wsdl:message>
+	<wsdl:message name="llistarDocumentoServicioResponse">
+		<wsdl:part name="llistarDocumentoServicioReturn" type="impl:ArrayOfDocumentoServicioDTO" />
+	</wsdl:message>
 	<wsdl:message name="llistarDocumentoNormativaResponse">
 		<wsdl:part name="llistarDocumentoNormativaReturn" type="impl:ArrayOfDocumentoNormativaDTO" />
 	</wsdl:message>
@@ -611,6 +646,9 @@
 	</wsdl:message>
 	<wsdl:message name="obtenirDocumentTramitResponse">
 		<wsdl:part name="obtenirDocumentTramitReturn" type="tns9:DocumentTramitDTO" />
+	</wsdl:message>
+	<wsdl:message name="obtenirDocumentoServicioResponse">
+		<wsdl:part name="obtenirDocumentoServicioReturn" type="tns55:DocumentoServicioDTO" />
 	</wsdl:message>
 	<wsdl:message name="obtenirFitxaRequest">
 		<wsdl:part name="in0" type="tns8:FitxaCriteria" />
@@ -630,8 +668,11 @@
 	<wsdl:message name="llistarDocumentTramitRequest">
 		<wsdl:part name="in0" type="tns9:DocumentTramitCriteria" />
 	</wsdl:message>
+	<wsdl:message name="llistarDocumentoServicioRequest">
+		<wsdl:part name="in0" type="tns55:DocumentoServicioCriteria" />
+	</wsdl:message>
 	<wsdl:message name="llistarDocumentoNormativaRequest">
-		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in0" type="tns53:DocumentoNormativaCriteria" />
 	</wsdl:message>
 	<wsdl:message name="obtenirIconaMateriaRequest">
 		<wsdl:part name="in0" type="tns25:IconaMateriaCriteria" />
@@ -717,6 +758,15 @@
     <wsdl:message name="getNumProcedimentsRequest">
         <wsdl:part name="in0" type="tns4:ProcedimentCriteria" />
     </wsdl:message>
+    <wsdl:message name="obtenirServicioResponse">
+		<wsdl:part name="obtenirServicioReturn" type="tns54:ServicioDTO" />
+	</wsdl:message>
+	<wsdl:message name="llistarServiciosRequest">
+		<wsdl:part name="in0" type="tns54:ServicioCriteria" />
+	</wsdl:message>
+    <wsdl:message name="getNumServiciosRequest">
+        <wsdl:part name="in0" type="tns54:ServicioCriteria" />
+    </wsdl:message>
     <wsdl:message name="getNumFitxesRequest">
         <wsdl:part name="in0" type="tns8:FitxaCriteria" />
     </wsdl:message>
@@ -729,6 +779,9 @@
 	</wsdl:message>
 	<wsdl:message name="obtenirDocumentTramitRequest">
 		<wsdl:part name="in0" type="tns9:DocumentTramitCriteria" />
+	</wsdl:message>
+	<wsdl:message name="obtenirDocumentoServicioRequest">
+		<wsdl:part name="in0" type="tns55:DocumentoServicioCriteria" />
 	</wsdl:message>
 	<wsdl:message name="obtenirDocumentoNormativaRequest">
 		<wsdl:part name="in0" type="xsd:long" />
@@ -906,6 +959,23 @@
             <wsdl:input message="intf:getNumProcedimentsRequest" name="getNumProcedimentsRequest" />
             <wsdl:output message="intf:getNumProcedimentsResponse" name="getNumProcedimentsResponse" />
         </wsdl:operation>
+        <wsdl:operation name="obtenirServicio"
+			parameterOrder="in0">
+			<wsdl:input message="intf:obtenirServicioRequest" name="obtenirServicioRequest" />
+			<wsdl:output message="intf:obtenirServicioResponse"
+				name="obtenirServicioResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="llistarServicios"
+            parameterOrder="in0">
+            <wsdl:input message="intf:llistarServiciosRequest"
+                name="llistarServiciosRequest" />
+            <wsdl:output message="intf:llistarServiciosResponse"
+                name="llistarServiciosResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="getNumServicios" parameterOrder="in0">
+            <wsdl:input message="intf:getNumServiciosRequest" name="getNumServiciosRequest" />
+            <wsdl:output message="intf:getNumServiciosResponse" name="getNumServiciosResponse" />
+        </wsdl:operation>
         <wsdl:operation name="getNumFitxes" parameterOrder="in0">
             <wsdl:input message="intf:getNumFitxesRequest" name="getNumFitxesRequest" />
             <wsdl:output message="intf:getNumFitxesResponse" name="getNumFitxesResponse" />
@@ -959,6 +1029,10 @@
 			<wsdl:input message="intf:obtenirDocumentTramitRequest"	name="obtenirDocumentTramitRequest" />
 			<wsdl:output message="intf:obtenirDocumentTramitResponse" name="obtenirDocumentTramitResponse" />
 		</wsdl:operation>
+		<wsdl:operation name="obtenirDocumentoServicio" parameterOrder="in0">
+			<wsdl:input message="intf:obtenirDocumentoServicioRequest"	name="obtenirDocumentoServicioRequest" />
+			<wsdl:output message="intf:obtenirDocumentoServicioResponse" name="obtenirDocumentoServicioResponse" />
+		</wsdl:operation>
 		<wsdl:operation name="obtenirDocumentoNormativa" parameterOrder="in0">
 			<wsdl:input message="intf:obtenirDocumentoNormativaRequest"	name="obtenirDocumentoNormativaRequest" />
 			<wsdl:output message="intf:obtenirDocumentoNormativaResponse" name="obtenirDocumentoNormativaResponse" />
@@ -969,6 +1043,13 @@
 				name="llistarDocumentTramitRequest" />
 			<wsdl:output message="intf:llistarDocumentTramitResponse"
 				name="llistarDocumentTramitResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="llistarDocumentoServicio"
+			parameterOrder="in0">
+			<wsdl:input message="intf:llistarDocumentoServicioRequest"
+				name="llistarDocumentoServicioRequest" />
+			<wsdl:output message="intf:llistarDocumentoServicioResponse"
+				name="llistarDocumentoServicioResponse" />
 		</wsdl:operation>
 		<wsdl:operation name="llistarDocumentoNormativa"
 			parameterOrder="in0">
@@ -1337,6 +1418,39 @@
                     namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="obtenirServicio">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirServicioRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirServicioResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="llistarServicios">
+            <wsdlsoap:operation soapAction="" />
+            <wsdl:input name="llistarServiciosRequest">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="http://intf.ejb.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+            </wsdl:input>
+            <wsdl:output name="llistarServiciosResponse">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getNumServicios">
+            <wsdlsoap:operation soapAction="" />
+            <wsdl:input name="getNumServiciosRequest">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="http://intf.ejb.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+            </wsdl:input>
+            <wsdl:output name="getNumServiciosResponse">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="getNumFitxes">
             <wsdlsoap:operation soapAction="" />
             <wsdl:input name="getNumFitxesRequest">
@@ -1472,6 +1586,17 @@
 					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
+		<wsdl:operation name="obtenirDocumentoServicio">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirDocumentoServicioRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirDocumentoServicioResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
 		<wsdl:operation name="obtenirDocumentoNormativa">
 			<wsdlsoap:operation soapAction="" />
 			<wsdl:input name="obtenirDocumentoNormativaRequest">
@@ -1490,6 +1615,17 @@
 					namespace="http://intf.ejb.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:input>
 			<wsdl:output name="llistarDocumentTramitResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="llistarDocumentoServicio">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarDocumentoServicioRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarDocumentoServicioResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
 					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>

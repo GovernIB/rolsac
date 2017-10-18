@@ -55,6 +55,14 @@ public class SolrPendienteJobDelegate implements StatelessDelegate {
 		impl.indexarPendiente(solrIndexer, delegate , idElemento, categoria, sorlPendienteJob);
 	}
 	
+	public void indexarPendiente(SolrIndexer solrIndexer, ServicioDelegate delegate, Long idElemento, EnumCategoria categoria, SolrPendienteJob sorlPendienteJob)  throws DelegateException {
+		impl.indexarPendiente(solrIndexer, delegate , idElemento, categoria, sorlPendienteJob);
+	}
+	
+	public void indexarPendiente(SolrIndexer solrIndexer, DocumentoServicioDelegate delegate, Long idElemento, EnumCategoria categoria, SolrPendienteJob sorlPendienteJob)  throws DelegateException {
+		impl.indexarPendiente(solrIndexer, delegate , idElemento, categoria, sorlPendienteJob);
+	}
+	
 	public void actualizarJob(final SolrPendienteJob solrpendienteJob) throws DelegateException {
         impl.actualizarJob(solrpendienteJob);
     }
@@ -71,4 +79,6 @@ public class SolrPendienteJobDelegate implements StatelessDelegate {
     public void resolverPendiente(final SolrPendiente solrpendiente, final SolrPendienteResultado solrPendienteResultado) throws DelegateException {
     	impl.resolverPendiente(solrpendiente, solrPendienteResultado);
     }
+
+	
   }

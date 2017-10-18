@@ -105,6 +105,21 @@ public class SolrPendienteJobDelegateImpl extends SolrPendienteJobDelegate imple
         } 
 	}
  
+	public void indexarPendiente(final SolrIndexer solrIndexer, ServicioDelegate delegate, final Long idElemento,  final EnumCategoria categoria, final SolrPendienteJob sorlPendienteJob) throws DelegateException {
+		try {
+            getFacade().indexarPendiente(solrIndexer, delegate , idElemento, categoria, sorlPendienteJob);
+    	} catch (RemoteException e) {
+            throw new DelegateException(e);
+        } 
+	}
+	
+	public void indexarPendiente(final SolrIndexer solrIndexer, DocumentoServicioDelegate delegate, final Long idElemento,  final EnumCategoria categoria, final SolrPendienteJob sorlPendienteJob) throws DelegateException {
+		try {
+            getFacade().indexarPendiente(solrIndexer, delegate , idElemento, categoria, sorlPendienteJob);
+    	} catch (RemoteException e) {
+            throw new DelegateException(e);
+        } 
+	}
 	
 	
 	public void actualizarJob(SolrPendienteJob solrpendienteJob) throws DelegateException {

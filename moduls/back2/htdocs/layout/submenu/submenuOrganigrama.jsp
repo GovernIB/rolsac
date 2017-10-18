@@ -41,6 +41,18 @@
             </c:choose>
             
             <c:choose>
+                <c:when test="${submenu_seleccionado==6}">
+                    <li class="seleccionat">
+                        <span><spring:message code="submenu.cataleg_serveis" /></span>
+                        <span class="actual"></span>
+                    </li>
+                </c:when>
+                <c:otherwise>
+                    <li><a href="<c:url value="/catalegServeis/catalegServeis.do"/>"><spring:message code="submenu.cataleg_serveis" /></a></li>
+                </c:otherwise>
+            </c:choose>
+            
+            <c:choose>
                 <c:when test="${submenu_seleccionado==3}">
                     <li class="seleccionat">
                         <span><spring:message code="submenu.fitxes_informatives" /></span>

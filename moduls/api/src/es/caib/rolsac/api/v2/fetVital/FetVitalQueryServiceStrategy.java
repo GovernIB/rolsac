@@ -2,6 +2,7 @@ package es.caib.rolsac.api.v2.fetVital;
 
 import java.util.List;
 
+
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalCriteria;
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalDTO;
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
@@ -10,6 +11,8 @@ import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
 
 public interface FetVitalQueryServiceStrategy {
 
@@ -23,11 +26,15 @@ public interface FetVitalQueryServiceStrategy {
 
     public int getNumProcedimentsLocals(long id) throws StrategyException;
 
+    public int getNumServicios(long id) throws StrategyException;
+
     public int getNumFetsVitalsAgrupacionsFV(long id) throws StrategyException;
 
     public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria) throws StrategyException;
 
     public List<ProcedimentDTO> llistarProcedimentsLocals(long id, ProcedimentCriteria procedimentCriteria) throws StrategyException;
+
+    public List<ServicioDTO> llistarServicios(long id, ServicioCriteria servicioCriteria) throws StrategyException;
 
     public List<AgrupacioFetVitalDTO> llistarFetsVitalsAgrupacionsFV(long id, AgrupacioFetVitalCriteria agrupacioFetVitalCriteria) throws StrategyException;
 

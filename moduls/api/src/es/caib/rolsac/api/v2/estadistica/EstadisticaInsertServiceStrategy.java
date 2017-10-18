@@ -44,6 +44,12 @@ public interface EstadisticaInsertServiceStrategy {
     public boolean gravarEstadisticaProcediment(long procedimentId) throws StrategyException;
     
     /**
+     * Crea o actualiza una Estadistica para un servicio
+     * @param
+     */
+    public boolean gravarEstadisticaServicio(long servicioId) throws StrategyException;
+    
+    /**
      * Crea o actualiza una Estadistica para una unitatAdministrativa
      * @param uaId
      */

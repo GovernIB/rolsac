@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.HechoVitalServicio" table="RSC_HEVISR">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column= "HVS_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+
+        <many-to-one name="hechoVital" column="HVS_CODHEV" foreign-key="RSC_HVSHEV_FK"/>
+        <many-to-one name="servicio" column="HVS_CODSER" foreign-key="RSC_HVSSER_FK"/>
+        <property name="orden" column= "HVS_ORDEN"/>
+
+    </class>
+</hibernate-mapping>

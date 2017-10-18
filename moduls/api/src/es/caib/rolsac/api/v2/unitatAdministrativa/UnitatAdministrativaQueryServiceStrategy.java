@@ -18,6 +18,8 @@ import es.caib.rolsac.api.v2.personal.PersonalCriteria;
 import es.caib.rolsac.api.v2.personal.PersonalDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
 import es.caib.rolsac.api.v2.tractament.TractamentCriteria;
@@ -48,6 +50,8 @@ public interface UnitatAdministrativaQueryServiceStrategy {
     public List<NormativaDTO> llistarNormatives(long id, NormativaCriteria normativaCriteria) throws StrategyException;
 
     public List<ProcedimentDTO> llistarProcediments(long id, ProcedimentCriteria procedimentCriteria) throws StrategyException;
+
+    public List<ServicioDTO> llistarServicios(long id, ServicioCriteria servicioCriteria) throws StrategyException;
 
     public List<TramitDTO> llistarTramits(long id, TramitCriteria tramitCriteria) throws StrategyException;
 
@@ -80,6 +84,8 @@ public interface UnitatAdministrativaQueryServiceStrategy {
     public int getNumNormatives(Long id) throws StrategyException;
 
     public int getNumProcediments(Long id) throws StrategyException;
+
+    public int getNumServicios(Long id) throws StrategyException;
 
     public int getNumTramits(Long id) throws StrategyException;
 

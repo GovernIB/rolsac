@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
@@ -16,7 +15,7 @@ import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
-import org.ibit.rol.sac.model.SolrPendienteResultado;
+import org.ibit.rol.sac.model.Servicio;
 import org.ibit.rol.sac.model.TraduccionFicha;
 import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.Tramite;
@@ -28,7 +27,6 @@ import org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegate;
 
 import es.caib.solr.api.model.PathUO;
 import es.caib.solr.api.model.types.EnumCategoria;
-import es.caib.solr.api.model.types.EnumIdiomas;
 
 public class IndexacionUtil {
 	
@@ -286,6 +284,25 @@ public class IndexacionUtil {
 		}
 		return true;
 	}
+	
+	
+	 /**
+		 * Comprueba si es indexable un servicio.
+		 * @param servicio
+		 * @return
+		 */
+		public static boolean isIndexable(final Servicio servicio) {
+			if (servicio.getValidacion() != 1 ) {
+				return false;
+			}				
+			if (servicio.getServicioResponsable() == null) {
+				return false;
+			}
+			if (servicio.getServicioResponsable().getValidacion() != 1 ) {
+				return false;
+			}
+			return true;
+		}
 	
 	/**
 	 * Comprueba si es indexable un tramite.

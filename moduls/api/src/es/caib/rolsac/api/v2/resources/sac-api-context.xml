@@ -759,6 +759,34 @@
     <!-- ProcedimentQueryService beans -->
     
     
+    <!-- ServicioQueryService beans -->
+	<!-- EJB -->
+    <bean id="servicioQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.servicio.ServicioQueryServiceAdapter" scope="prototype">
+        <property name="servicioQueryServiceStrategy" ref="servicioQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="servicioQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.servicio.ejb.ServicioQueryServiceEJBStrategy">
+        <property name="servicioQueryServiceDelegate" ref="servicioQueryServiceDelegate" />
+    </bean>
+
+    <bean id="servicioQueryServiceDelegate" class="es.caib.rolsac.api.v2.servicio.ejb.ServicioQueryServiceDelegate">
+        <property name="servicioQueryServiceLocator" ref="servicioQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="servicioQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.servicio.ejb.ServicioQueryServiceEJBLocator" />
+    
+    <!-- WS -->
+        <bean id="servicioQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.servicio.ServicioQueryServiceAdapter" scope="prototype">
+        <property name="servicioQueryServiceStrategy" ref="servicioQueryServiceWSStrategy" />
+    </bean>
+
+    <bean id="servicioQueryServiceWSStrategy" class="es.caib.rolsac.api.v2.servicio.ws.ServicioQueryServiceWSStrategy">
+        <property name="gateway" ref="gatewayServicio" />
+    </bean>
+
+	<bean id="gatewayServicio" class="es.caib.rolsac.api.v2.servicio.ws.ServicioQueryServiceGateway" />	        
+    <!-- ServicioQueryService beans -->
+    
     <!-- PublicObjectiuQueryService beans -->
     <!-- EJB -->
     <bean id="publicObjectiuQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuQueryServiceAdapter" scope="prototype">

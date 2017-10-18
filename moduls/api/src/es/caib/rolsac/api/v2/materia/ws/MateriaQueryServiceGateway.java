@@ -21,6 +21,8 @@ import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaCriteria;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 import es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaCriteria;
@@ -73,6 +75,10 @@ public class MateriaQueryServiceGateway {
 	public int getNumProcedimentsLocals(long id) throws RemoteException {
 		return stub.getNumProcedimentsLocals(id);
 	}
+	
+	public int getNumServicios(long id) throws RemoteException {
+		return stub.getNumServicios(id);
+	}
 
 	public int getNumUnitatsMateries(long id) throws RemoteException {
 		return stub.getNumUnitatsMateries(id);
@@ -116,6 +122,23 @@ public class MateriaQueryServiceGateway {
 		return llistarProcedimentsLocals;							
 	}
 
+	public List<ServicioDTO> llistarServicios(long id,
+			ServicioCriteria servicioCriteria) throws RemoteException, APIException {
+
+		Object[] tmpLlista = null;
+		List<ServicioDTO> llistarServicios = null;
+		
+		tmpLlista = stub.llistarServicios(id, servicioCriteria);
+		llistarServicios = new ArrayList<ServicioDTO>( Arrays.asList(tmpLlista).size() );
+			
+		for ( Object o : tmpLlista ) {
+			ServicioDTO fdto = (ServicioDTO) DTOUtil.object2DTO(o, ServicioDTO.class);
+			llistarServicios.add(fdto);
+		}
+		
+		return llistarServicios;							
+	}
+	
 	public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria)
 			throws RemoteException, APIException {
 		

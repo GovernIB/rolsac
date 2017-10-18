@@ -22,9 +22,11 @@ import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
+import org.ibit.rol.sac.persistence.delegate.DocumentoServicioDelegate;
 import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
 import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
+import org.ibit.rol.sac.persistence.delegate.ServicioDelegate;
 import org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegate;
 import org.ibit.rol.sac.persistence.delegate.SolrPendienteJobDelegate;
 import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
@@ -160,7 +162,7 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 	
 	
 	/**
-	* Indexa todas los procedimientos. 
+	 * Indexa todas los procedimientos. 
    	 * @ejb.interface-method
    	 * @ejb.permission unchecked="true"
    	 * @param solrPendienteJob
@@ -235,6 +237,84 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 			log.error("Ha dado un error intentando comitear en indexar todo procedimiento", e);				
 		}
 	}
+	
+	/**
+	 * Indexa todas los servicios. 
+   	 * @ejb.interface-method
+   	 * @ejb.permission unchecked="true"
+   	 * @param solrPendienteJob
+	 * @throws ExcepcionSolrApi
+	 * @throws DelegateException
+	 */
+	public void indexarTodoServicio(final SolrPendienteJob solrPendienteJob)  {
+		log.debug("INDEXAR TODO SERVICIO");
+		SolrIndexer solrIndexer = null;
+		try {
+			solrIndexer = obtenerParamIndexer();
+			solrIndexer.desindexarCategoria(EnumCategoria.ROLSAC_SERVICIO);
+			solrIndexer.desindexarCategoria(EnumCategoria.ROLSAC_SERVICIO_DOCUMENTO);
+		} catch (Exception e) {
+			log.error("Error en indexarTodoServicio cuando se desindexa", e);
+			return;
+		}
+		
+		//Obtiene los servicios
+    	final ServicioDelegate servicioDelegate = DelegateUtil.getServicioDelegate();
+    	final DocumentoServicioDelegate docuDelegate = DelegateUtil.getDocumentoServicioDelegate();
+		final SolrPendienteJobDelegate solrDelegate = DelegateUtil.getSolrPendienteJobDelegate();
+    	List<Long> listServ = null;
+		try {
+			listServ = servicioDelegate.buscarIdsServicios();
+		} catch (DelegateException e) {
+			log.error("Error en indexarTodoServicio cuando se busca id servicio", e);
+			return;
+		}
+		 
+		//Recorremos la lista
+    	final int totalServicios = listServ.size();
+    	
+    	log.debug("Numero de servicios a revisar para indexar: " + totalServicios);
+    	
+    	int iDoc = 0;
+    	for (Long idServicio : listServ) {
+    		iDoc++;
+			solrPendienteJob.setTotalServicio( Float.valueOf( iDoc * 100 / totalServicios ));
+    		solrPendienteJob.setTotalServicioDoc(Float.valueOf( iDoc * 100 / totalServicios ));
+    		try {
+    			solrDelegate.indexarPendiente(solrIndexer, servicioDelegate, idServicio, EnumCategoria.ROLSAC_SERVICIO, solrPendienteJob);
+        		
+    			List<Long> idDocumentos = docuDelegate.obtenerDocumentosServiciosSolr(idServicio);
+        		for (Long idDocumento : idDocumentos) {
+        			try{
+        				solrDelegate.indexarPendiente(solrIndexer, docuDelegate, idDocumento, EnumCategoria.ROLSAC_SERVICIO_DOCUMENTO, solrPendienteJob);	        				
+	        		} catch (Exception e) {
+    					log.error("Se ha producido un error en servicio " + idServicio + " para documento  con id " + idDocumento, e);
+    				}
+				}
+			} catch (Exception e) {
+				log.error("Se ha producido un error en el servicio con id " + idServicio, e);
+			}
+    		
+		}
+
+    	log.debug("Se han terminado de revisar los servicios para indexar.");
+    	
+    	solrPendienteJob.setTotalServicio(100f);
+    	solrPendienteJob.setTotalServicioDoc(100f);
+    	solrPendienteJob.setFechaServicio(new Date());
+    	try {
+			solrDelegate.actualizarJob(solrPendienteJob);
+		} catch (Exception e) {
+			log.error("Error en indexarTodoServicio cuando se actualiza el job", e);
+		}
+    	
+    	try {
+			solrIndexer.commit();
+		} catch (ExcepcionSolrApi e) {
+			log.error("Ha dado un error intentando comitear en indexar todo servicio", e);				
+		}
+	}
+	
 	
 	
 	/**

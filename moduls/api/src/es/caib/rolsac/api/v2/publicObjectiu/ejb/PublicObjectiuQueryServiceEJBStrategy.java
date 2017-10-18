@@ -10,6 +10,8 @@ import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuQueryServiceStrategy;
 
 public class PublicObjectiuQueryServiceEJBStrategy implements PublicObjectiuQueryServiceStrategy {
@@ -39,6 +41,14 @@ public class PublicObjectiuQueryServiceEJBStrategy implements PublicObjectiuQuer
     public List<ProcedimentDTO> llistarProcediments(long id, ProcedimentCriteria procedimentCriteria) throws StrategyException {
         try {
             return publicObjectiuQueryServiceDelegate.llistarProcediments(id, procedimentCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
+    }
+    
+    public List<ServicioDTO> llistarServicios(long id, ServicioCriteria procedimentServicio) throws StrategyException {
+        try {
+            return publicObjectiuQueryServiceDelegate.llistarServicios(id, procedimentServicio);
         } catch (DelegateException e) {
             throw new StrategyException(e);
         }
