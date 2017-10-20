@@ -22,6 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.DocumentTramit;
+import org.ibit.rol.sac.model.TraduccionDocumentTramit;
 import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
@@ -170,13 +171,22 @@ public class DocumentTramitBackController extends ArchivoController {
             documentTramit = gestionarTraducciones(valoresForm, ficherosForm, archivosBorrar, documentTramitOld,
                 documentTramit, tipoTag);
 
+            boolean continuar = true;
             //#421 Comprobacion del tamaño del nombre de archivo.
-            if (documentTramit != null && documentTramit.getArchivo() != null && documentTramit.getArchivo().getNombre() != null && documentTramit.getArchivo().getNombre().length() >= Archivo.NOMBRE_LONGITUD_MAXIMA) {
-            	String error = messageSource.getMessage("error.fitxer.tamany_nom", null, locale);
-            	log.error("Error controlado, ha intentado subir un fichero con una longitud en el nombre de más de 128 caracteres.");
-            	jsonResult = new IdNomDTO(-3l, error).getJson();
-            } else {
-            	 // Guardar el documento
+            if (documentTramit != null && documentTramit.getLangs() != null) {
+        	    //Buscamos el archivo del idioma.
+	           	for(String idioma : documentTramit.getLangs()) {
+	   				TraduccionDocumento tradNor = (TraduccionDocumento) documentTramit.getTraduccion(idioma);
+	   				if (tradNor != null && tradNor.getArchivo() != null  && tradNor.getArchivo().getNombre() != null && tradNor.getArchivo().getNombre().length() >= Archivo.NOMBRE_LONGITUD_MAXIMA) {
+	   					String error = messageSource.getMessage("error.fitxer.tamany_nom", null, locale);
+	   	            	log.error("Error controlado, ha intentado subir un fichero con una longitud en el nombre de más de 128 caracteres.");
+	   	            	jsonResult = new IdNomDTO(-3l, error).getJson();
+	   	            	continuar = false;
+	   				}
+	   			}
+            }
+            
+            if (continuar) {
                 jsonResult = guardarDocumento(valoresForm, idTag, locale, archivosBorrar, documentTramit);
             }
            
