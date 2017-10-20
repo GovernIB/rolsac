@@ -1132,14 +1132,16 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			    	
 					if (procedimiento != null ) {
 			    		String nombrePubObjetivox = "";
+			    		String idPublicoObjetivo ="";
 			    		if (procedimiento.getPublicosObjetivo().size() > 0) {
 			    			PublicoObjetivo pubObjetivo = (PublicoObjetivo)procedimiento.getPublicosObjetivo().toArray()[0];
 			    			if (pubObjetivo.getTraduccion(keyIdioma) != null) {
 			    				nombrePubObjetivox = ((TraduccionPublicoObjetivo) pubObjetivo.getTraduccion(keyIdioma)).getTitulo();
+			    				idPublicoObjetivo = pubObjetivo.getId().toString();
 			    			}
 			    		}
-			    		urlsPadre.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+nombrePubObjetivox+"/tramites/tramite/"+procedimiento.getId() );
-			    		urls.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+nombrePubObjetivox+"/tramites/tramite/"+procedimiento.getId() );
+			    		urlsPadre.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+idPublicoObjetivo+"/"+nombrePubObjetivox+"/tramites/tramite/"+procedimiento.getId() );
+			    		urls.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+idPublicoObjetivo+"/"+nombrePubObjetivox+"/tramites/tramite/"+procedimiento.getId() );
 			    	}
 				}
 		    	
@@ -1340,13 +1342,15 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 					    
 				    	
 			    		String nombrePubObjetivox = "";
+			    		String idPubObjetivo = "";
 			    		if (procedimiento.getPublicosObjetivo().size() > 0) {
 			    			PublicoObjetivo pubObjetivo = (PublicoObjetivo)procedimiento.getPublicosObjetivo().toArray()[0];
 			    			if (pubObjetivo.getTraduccion(keyIdioma) != null) {
 			    				nombrePubObjetivox = ((TraduccionPublicoObjetivo) pubObjetivo.getTraduccion(keyIdioma)).getTitulo();
+			    				idPubObjetivo = pubObjetivo.getId().toString();
 			    			}
 			    		}
-			    		urlsPadre.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+nombrePubObjetivox+"/tramites/tramite/"+procedimiento.getId() );
+			    		urlsPadre.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+idPubObjetivo+"/"+nombrePubObjetivox+"/tramites/tramite/"+procedimiento.getId() );
 				    	
 				    	//Seteamos datos multidioma.
 						indexData.setTitulo(titulo);

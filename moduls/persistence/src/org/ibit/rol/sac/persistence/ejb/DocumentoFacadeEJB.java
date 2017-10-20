@@ -617,10 +617,13 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 						
 						//Publico objetivo, para añadirlo como id y para extraer el titulo para la url
 						String nombrePubObjetivo = "";
-						for( PublicoObjetivo publicoObjectivo :  procedimiento.getPublicosObjetivo()) {
-							final TraduccionPublicoObjetivo traduccionPO = (TraduccionPublicoObjetivo) publicoObjectivo.getTraduccion(keyIdioma);
+						String idPubObjetivo = "";
+						for( PublicoObjetivo publicoObjetivo :  procedimiento.getPublicosObjetivo()) {
+							final TraduccionPublicoObjetivo traduccionPO = (TraduccionPublicoObjetivo) publicoObjetivo.getTraduccion(keyIdioma);
 							if (traduccionPO != null) {
 								nombrePubObjetivo = traduccionPO.getTitulo();
+								idPubObjetivo = publicoObjetivo.getId().toString();
+								break;
 							}
 						}
 												
@@ -653,7 +656,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 						}
 						
 						// Urls
-				    	urlsPadres.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+nombrePubObjetivo+"/tramites/tramite/"+procedimiento.getId());
+				    	urlsPadres.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+idPubObjetivo+"/"+nombrePubObjetivo+"/tramites/tramite/"+procedimiento.getId());
 				    	urls.addIdioma(enumIdioma, "govern/rest/arxiu/" + traduccion.getArchivo().getId());
 				    	
 				    	//Seteamos datos multidioma.

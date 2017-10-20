@@ -373,12 +373,16 @@ public class PersonalBackController extends PantallaBaseController {
 			if (dEx.isSecurityException()) {
 				String error = messageSource.getMessage("error.permisos", null, request.getLocale());
 				result = new IdNomDTO(-1l, error);
-				log.error("Permisos insuficients: " + dEx.getMessage());
+				log.error("Permisos insuficients: " + dEx.getMessage() , dEx);
 			} else {
 				String error = messageSource.getMessage("error.altres", null, request.getLocale());
 				result = new IdNomDTO(-2l, error);
-				log.error("Error: " + dEx.getMessage());
+				log.error("Error: " + dEx.getMessage(), dEx);
 			}
+		} catch (Exception dEx) {
+			String error = messageSource.getMessage("error.altres", null, request.getLocale());
+			result = new IdNomDTO(-2l, error);
+			log.error("Error: " + dEx.getMessage(), dEx);
 		}
 
 		return result;

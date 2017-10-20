@@ -100,8 +100,16 @@ public class DocumentBackController extends ArchivoController {
             } else if (valoresForm.get("fitxaId") != null && !"".equals(valoresForm.get("fitxaId"))) {
                 iden = "fitxaId";
             }
-
-            jsonResult = guardarDocumento(valoresForm, iden, locale, archivosAborrar, doc);
+            
+            //#421 Comprobacion del tamaño del nombre de archivo.
+            if (doc != null && doc.getArchivo() != null && doc.getArchivo().getNombre() != null && doc.getArchivo().getNombre().length() >= Archivo.NOMBRE_LONGITUD_MAXIMA) {
+            	String error = messageSource.getMessage("error.fitxer.tamany_nom", null, locale);
+            	log.error("Error controlado, ha intentado subir un fichero con una longitud en el nombre de más de 128 caracteres.");
+            	jsonResult = new IdNomDTO(-3l, error).getJson();
+            } else {
+            	// Guardar el documento
+                jsonResult = guardarDocumento(valoresForm, iden, locale, archivosAborrar, doc);
+            }
 
         } catch (FileUploadException fue) {
             String error = messageSource.getMessage("error.fitxer.tamany", null, locale);

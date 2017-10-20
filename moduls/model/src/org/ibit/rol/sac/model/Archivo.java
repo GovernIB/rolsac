@@ -5,7 +5,8 @@ package org.ibit.rol.sac.model;
 import org.ibit.rol.sac.model.ws.ArchivoTransferible;
 
 public class Archivo implements ValueObject {
-
+	/** Indica la longitud máxima del nombre del archivo. **/
+	public static final int NOMBRE_LONGITUD_MAXIMA = 128;
 	private Long id;
 	private String mime;
 	private String nombre;
