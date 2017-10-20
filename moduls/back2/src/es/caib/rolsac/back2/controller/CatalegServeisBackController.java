@@ -34,9 +34,9 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Auditoria;
 import org.ibit.rol.sac.model.CatalegDocuments;
-import org.ibit.rol.sac.model.DocumentoServicio;
 import org.ibit.rol.sac.model.DocumentoServicio;
 import org.ibit.rol.sac.model.ExcepcioDocumentacio;
 import org.ibit.rol.sac.model.HechoVital;
@@ -47,7 +47,6 @@ import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.Servicio;
 import org.ibit.rol.sac.model.SilencioAdm;
 import org.ibit.rol.sac.model.TraduccionCatalegDocuments;
-import org.ibit.rol.sac.model.TraduccionDocumentoNormativa;
 import org.ibit.rol.sac.model.TraduccionDocumentoServicio;
 import org.ibit.rol.sac.model.TraduccionExcepcioDocumentacio;
 import org.ibit.rol.sac.model.TraduccionNormativa;
@@ -1617,9 +1616,26 @@ public class CatalegServeisBackController extends PantallaBaseController {
 	            } else if (valoresForm.get("fitxaId") != null && !"".equals(valoresForm.get("fitxaId"))) {
 	                iden = "fitxaId";
 	            }
+	            
+	            boolean continuar = true;
+	            //#421 Comprobacion del tamaño del nombre de archivo.
+	            if (doc != null && doc.getTraducciones() != null) {
+	        	    //Buscamos el archivo del idioma.
+		           	for(String idioma : doc.getTraducciones().keySet()) {
+		   				TraduccionDocumentoServicio tradNor = (TraduccionDocumentoServicio) doc.getTraduccion(idioma);
+		   				if (tradNor != null && tradNor.getArchivo() != null  && tradNor.getArchivo().getNombre() != null && tradNor.getArchivo().getNombre().length() >= Archivo.NOMBRE_LONGITUD_MAXIMA) {
+		   					String error = messageSource.getMessage("error.fitxer.tamany_nom", null, locale);
+		   	            	log.error("Error controlado, ha intentado subir un fichero con una longitud en el nombre de más de 128 caracteres.");
+		   	            	jsonResult = new IdNomDTO(-3l, error).getJson();
+		   	            	continuar = false;
+		   				}
+		   			}
+	            }
 
-	            jsonResult = guardarDocumento(valoresForm, iden, locale, archivosAborrar, doc);
-
+	            if (continuar) {
+	            	jsonResult = guardarDocumento(valoresForm, iden, locale, archivosAborrar, doc);
+	            }
+	            
 	        } catch (FileUploadException fue) {
 	            String error = messageSource.getMessage("error.fitxer.tamany", null, locale);
 	            jsonResult = new IdNomDTO(-3l, error).getJson();

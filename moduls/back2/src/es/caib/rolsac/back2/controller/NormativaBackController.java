@@ -1664,16 +1664,26 @@ public class NormativaBackController extends PantallaBaseController {
             doc = gestionarTraducciones(valoresForm, ficherosForm, archivosAborrar, docOld, doc);
 
             // Guardar el documento
-            String iden = "";
+            String iden = "normat";
 
-            if (valoresForm.get("procId") != null && !"".equals(valoresForm.get("procId"))) {
-                iden = "procId";
-            } else if (valoresForm.get("fitxaId") != null && !"".equals(valoresForm.get("fitxaId"))) {
-                iden = "fitxaId";
+            boolean continuar = true;
+            //#421 Comprobacion del tamaño del nombre de archivo.
+            if (doc != null && doc.getTraducciones() != null) {
+        	    //Buscamos el archivo del idioma.
+	           	for(String idioma : doc.getTraducciones().keySet()) {
+	   				TraduccionDocumentoNormativa tradNor = (TraduccionDocumentoNormativa) doc.getTraduccion(idioma);
+	   				if (tradNor != null && tradNor.getArchivo() != null  && tradNor.getArchivo().getNombre() != null && tradNor.getArchivo().getNombre().length() >= Archivo.NOMBRE_LONGITUD_MAXIMA) {
+	   					String error = messageSource.getMessage("error.fitxer.tamany_nom", null, locale);
+	   	            	log.error("Error controlado, ha intentado subir un fichero con una longitud en el nombre de más de 128 caracteres.");
+	   	            	jsonResult = new IdNomDTO(-3l, error).getJson();
+	   	            	continuar = false;
+	   				}
+	   			}
             }
 
-            jsonResult = guardarDocumento(valoresForm, iden, locale, archivosAborrar, doc);
-
+            if (continuar) {
+            	jsonResult = guardarDocumento(valoresForm, iden, locale, archivosAborrar, doc);
+            }
         } catch (FileUploadException fue) {
             String error = messageSource.getMessage("error.fitxer.tamany", null, locale);
             jsonResult = new IdNomDTO(-3l, error).getJson();
