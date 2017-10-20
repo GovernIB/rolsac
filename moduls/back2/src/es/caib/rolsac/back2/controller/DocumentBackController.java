@@ -101,14 +101,23 @@ public class DocumentBackController extends ArchivoController {
                 iden = "fitxaId";
             }
             
+            boolean continuar = true;
             //#421 Comprobacion del tamaño del nombre de archivo.
-            if (doc != null && doc.getArchivo() != null && doc.getArchivo().getNombre() != null && doc.getArchivo().getNombre().length() >= Archivo.NOMBRE_LONGITUD_MAXIMA) {
-            	String error = messageSource.getMessage("error.fitxer.tamany_nom", null, locale);
-            	log.error("Error controlado, ha intentado subir un fichero con una longitud en el nombre de más de 128 caracteres.");
-            	jsonResult = new IdNomDTO(-3l, error).getJson();
-            } else {
-            	// Guardar el documento
-                jsonResult = guardarDocumento(valoresForm, iden, locale, archivosAborrar, doc);
+            if (doc != null && doc.getLangs() != null) {
+        	    //Buscamos el archivo del idioma.
+	           	for(String idioma : doc.getLangs()) {
+	   				TraduccionDocumento tradNor = (TraduccionDocumento) doc.getTraduccion(idioma);
+	   				if (tradNor != null && tradNor.getArchivo() != null  && tradNor.getArchivo().getNombre() != null && tradNor.getArchivo().getNombre().length() >= Archivo.NOMBRE_LONGITUD_MAXIMA) {
+	   					String error = messageSource.getMessage("error.fitxer.tamany_nom", null, locale);
+	   	            	log.error("Error controlado, ha intentado subir un fichero con una longitud en el nombre de más de 128 caracteres.");
+	   	            	jsonResult = new IdNomDTO(-3l, error).getJson();
+	   	            	continuar = false;
+	   				}
+	   			}
+            }
+            
+            if (continuar) {
+            	jsonResult = guardarDocumento(valoresForm, iden, locale, archivosAborrar, doc);
             }
 
         } catch (FileUploadException fue) {
