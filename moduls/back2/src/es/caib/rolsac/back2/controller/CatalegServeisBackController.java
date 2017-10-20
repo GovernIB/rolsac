@@ -1609,10 +1609,10 @@ public class CatalegServeisBackController extends PantallaBaseController {
 	            doc = gestionarTraducciones(valoresForm, ficherosForm, archivosAborrar, docOld, doc);
 
 	            // Guardar el documento
-	            String iden = "";
+	            String iden = "procId";
 
-	            if (valoresForm.get("servId") != null && !"".equals(valoresForm.get("servId"))) {
-	                iden = "servId";
+	            if (valoresForm.get("procId") != null && !"".equals(valoresForm.get("procId"))) {
+	                iden = "procId";
 	            } else if (valoresForm.get("fitxaId") != null && !"".equals(valoresForm.get("fitxaId"))) {
 	                iden = "fitxaId";
 	            }

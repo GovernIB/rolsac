@@ -1663,8 +1663,13 @@ public class NormativaBackController extends PantallaBaseController {
 
             doc = gestionarTraducciones(valoresForm, ficherosForm, archivosAborrar, docOld, doc);
 
-            // Guardar el documento
-            String iden = "normat";
+            String iden = "";
+
+            if (valoresForm.get("procId") != null && !"".equals(valoresForm.get("procId"))) {
+                iden = "procId";
+            } else if (valoresForm.get("fitxaId") != null && !"".equals(valoresForm.get("fitxaId"))) {
+                iden = "fitxaId";
+            }
 
             boolean continuar = true;
             //#421 Comprobacion del tamaño del nombre de archivo.
@@ -1682,7 +1687,8 @@ public class NormativaBackController extends PantallaBaseController {
             }
 
             if (continuar) {
-            	jsonResult = guardarDocumento(valoresForm, iden, locale, archivosAborrar, doc);
+            	 // Guardar el documento
+                jsonResult = guardarDocumento(valoresForm, iden, locale, archivosAborrar, doc);
             }
         } catch (FileUploadException fue) {
             String error = messageSource.getMessage("error.fitxer.tamany", null, locale);
