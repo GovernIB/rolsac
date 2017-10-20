@@ -379,6 +379,10 @@ public class PersonalBackController extends PantallaBaseController {
 				result = new IdNomDTO(-2l, error);
 				log.error("Error: " + dEx.getMessage());
 			}
+		} catch (Exception dEx) {
+			String error = messageSource.getMessage("error.altres", null, request.getLocale());
+			result = new IdNomDTO(-2l, error);
+			log.error("Error: " + dEx.getMessage());
 		}
 
 		return result;
