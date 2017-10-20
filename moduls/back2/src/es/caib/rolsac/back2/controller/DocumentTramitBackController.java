@@ -170,9 +170,16 @@ public class DocumentTramitBackController extends ArchivoController {
             documentTramit = gestionarTraducciones(valoresForm, ficherosForm, archivosBorrar, documentTramitOld,
                 documentTramit, tipoTag);
 
-            // Guardar el documento
-            jsonResult = guardarDocumento(valoresForm, idTag, locale, archivosBorrar, documentTramit);
-
+            //#421 Comprobacion del tamaño del nombre de archivo.
+            if (documentTramit != null && documentTramit.getArchivo() != null && documentTramit.getArchivo().getNombre() != null && documentTramit.getArchivo().getNombre().length() >= Archivo.NOMBRE_LONGITUD_MAXIMA) {
+            	String error = messageSource.getMessage("error.fitxer.tamany_nom", null, locale);
+            	log.error("Error controlado, ha intentado subir un fichero con una longitud en el nombre de más de 128 caracteres.");
+            	jsonResult = new IdNomDTO(-3l, error).getJson();
+            } else {
+            	 // Guardar el documento
+                jsonResult = guardarDocumento(valoresForm, idTag, locale, archivosBorrar, documentTramit);
+            }
+           
         } catch (FileUploadException fue) {
             String error = messageSource.getMessage("error.fitxer.tamany", null, locale);
             jsonResult = new IdNomDTO(-3l, error).getJson();
