@@ -2284,10 +2284,12 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 					
 					//Publico objetivo, para extraer el nombre del publico objetivo
 					String nombrePubObjetivo = "";
+					String idPublicoObjetivo = "";
 					for( PublicoObjetivo publicoObjectivo :  procedimiento.getPublicosObjetivo()) {
 						TraduccionPublicoObjetivo traduccionPO = (TraduccionPublicoObjetivo) publicoObjectivo.getTraduccion(keyIdioma);
 						if (traduccionPO != null) {
 							nombrePubObjetivo = traduccionPO.getTitulo().toLowerCase();
+							idPublicoObjetivo = publicoObjectivo.getId().toString();
 							break; //Con encontrar uno nos basta
 						}
 					}
@@ -2314,7 +2316,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 						}
 					}
 			    	searchTextOptional.addIdioma(enumIdioma, traduccion.getResultat() +" " +traduccion.getObservaciones() + " " + textoOptional.toString());
-			    	urls.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/200/"+nombrePubObjetivo+"/tramites/tramite/"+procedimiento.getId());
+			    	urls.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+idPublicoObjetivo+"/"+nombrePubObjetivo+"/tramites/tramite/"+procedimiento.getId());
 				}
 			}
 			
