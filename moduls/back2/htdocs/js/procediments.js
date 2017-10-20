@@ -893,7 +893,7 @@ function CDetall() {
 
 		if (dada_node.item_familia_id != undefined) {
 			$("#item_familia").val(dada_node.item_familia_nom);
-		}
+		} 
 
 		if (dada_node.item_fi_vida_administrativa != undefined) {
 			jQuery('#item_fi_vida_administrativa').val(dada_node.item_fi_vida_administrativa);                        
@@ -905,7 +905,7 @@ function CDetall() {
 		if (dada_node.item_taxa != undefined) {
 			jQuery('#item_taxa').attr('checked', dada_node.item_taxa);                        
 			jQuery("#item_taxa").change();
-		}
+		} 
 
 		if (dada_node.item_finestreta_unica != undefined) {
 			$("#item_finestreta_unica").attr("checked", dada_node.item_finestreta_unica);

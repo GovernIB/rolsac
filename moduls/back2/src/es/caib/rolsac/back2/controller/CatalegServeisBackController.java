@@ -231,7 +231,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 				ServicioDelegate serviciosDelegate = DelegateUtil.getServicioDelegate();
 				resultadoBusqueda = serviciosDelegate.buscadorServicios(buscadorCriteria);
-				llistaServicioDTO.addAll(convertirProcLocales(resultadoBusqueda, request));
+				llistaServicioDTO.addAll(convertirServeisLocales(resultadoBusqueda, request));
 
 			} catch (DelegateException dEx) {
 				
@@ -269,7 +269,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 				ServicioDelegate serviciosDelegate = DelegateUtil.getServicioDelegate();
 				buscadorCriteria.setSoloId(true);
 				resultadoBusqueda = serviciosDelegate.buscadorServicios(buscadorCriteria);
-				CSVUtil.mostrarCSV(response, convertirProcLocalesToCSV((List<Object[]>) resultadoBusqueda.getListaResultados()));
+				CSVUtil.mostrarCSV(response, convertirServeisToCSV((List<Object[]>) resultadoBusqueda.getListaResultados()));
 
 			} catch (Exception dEx) {
 				log.error("Error generando el export de la búsqueda en servicios.",dEx);
@@ -288,7 +288,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 	 * @param listaResultados
 	 * @return
 	 */
-	private String convertirProcLocalesToCSV(List<Object[]> listaResultados) {
+	private String convertirServeisToCSV(List<Object[]> listaResultados) {
 		StringBuffer retorno = new StringBuffer();
 		
 		//cabecera!
@@ -448,14 +448,14 @@ public class CatalegServeisBackController extends PantallaBaseController {
 				}
 			}
 			
-			retorno.append(CSVUtil.limpiar(servicio.getId())); 		//CODI_PROCEDIEMNT,
+			retorno.append(CSVUtil.limpiar(servicio.getId())); 		//CODI_SERVEI,
 			retorno.append(CSVUtil.limpiar(servicio.getCodigoSIA()));  //CODI_SIA
 			retorno.append(CSVUtil.limpiar(estadoSIA));	//ESTAT_SIA
 			retorno.append(CSVUtil.limpiar(servicio.getFechaSIA()));	//DATA_ACTUALITZACIO_SIA
-			retorno.append(CSVUtil.limpiar(estado)); 						//ESTAT_PROCEDIMENT DECODE(PRO_VALIDA,1,'PUBLIC',2,'INTERN','RESERVA')
-			retorno.append(CSVUtil.limpiar(servicio.isVisible()));		//VISIBILITAT_PROCEDIMENT (ESTAT+DATA_PUB+DATA_CAD + UA_VISIBLE)
-			retorno.append(CSVUtil.limpiar(nomCa)); 						//NOM_PROCEDIMENT_CA,
-			retorno.append(CSVUtil.limpiar(nomEs));							//NOM_PROCEDIMENT_ES,
+			retorno.append(CSVUtil.limpiar(estado)); 						//ESTAT_SERVEI DECODE(PRO_VALIDA,1,'PUBLIC',2,'INTERN','RESERVA')
+			retorno.append(CSVUtil.limpiar(servicio.isVisible()));		//VISIBILITAT_SERVEI (ESTAT+DATA_PUB+DATA_CAD + UA_VISIBLE)
+			retorno.append(CSVUtil.limpiar(nomCa)); 						//NOM_SERVEI_CA,
+			retorno.append(CSVUtil.limpiar(nomEs));							//NOM_SERVEI_ES,
 			retorno.append(CSVUtil.limpiar(objecte));						//OBJECTE_CA
 			retorno.append(CSVUtil.limpiar(publicoObjectivo));				//PUBLIC_OBJECTIU (ID_PUBLIC OBJECTIU SEPARATS PER COMES)
 			retorno.append(CSVUtil.limpiar(CSVUtil.getNombreUA(servicio.getServicioResponsable())));		//NOM UA_RESPONSABLE
@@ -509,7 +509,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 	 * @param request
 	 * @return
 	 */
-	private List<ServicioDTO> convertirProcLocales(ResultadoBusqueda resultadoBusqueda, HttpServletRequest request) {
+	private List<ServicioDTO> convertirServeisLocales(ResultadoBusqueda resultadoBusqueda, HttpServletRequest request) {
 
 		List<ServicioDTO> llistaServicioDTO = new ArrayList<ServicioDTO>();
 		for (Servicio pl : castList(Servicio.class, resultadoBusqueda.getListaResultados())) {
@@ -729,7 +729,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 		
 	}
 
-	@RequestMapping(value = "/esborrarProcediment.do", method = POST)
+	@RequestMapping(value = "/esborrarServei.do", method = POST)
 	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
 
 		IdNomDTO resultatStatus = new IdNomDTO();
@@ -1031,9 +1031,9 @@ public class CatalegServeisBackController extends PantallaBaseController {
 	private Servicio guardarFechaPublicacion(HttpServletRequest request, Servicio servicio) 
 			throws ParseException {
 
-		if (parametroNoNulo(request, "item_data_publicacio")) {
+		if (parametroNoNulo(request, "item_data_publicacion")) {
 			
-			Date data_publicacio = DateUtils.parseDateSimpleTime(request.getParameter("item_data_publicacio"));
+			Date data_publicacio = DateUtils.parseDateSimpleTime(request.getParameter("item_data_publicacion"));
 			
 			if (data_publicacio == null) {
 			    throw new ParseException("error.data_publicacio", 0);
@@ -1056,11 +1056,6 @@ public class CatalegServeisBackController extends PantallaBaseController {
 		if (parametroNoNulo(request, "item_data_despublicacion")) {
 			
 			Date data_despublicacion = DateUtils.parseDateSimpleTime(request.getParameter("item_data_despublicacion"));
-			
-			if (data_despublicacion == null) {
-			    throw new ParseException("error.data_despublicacion", 0);
-			}
-
 			servicio.setFechaDespublicacion(data_despublicacion);
 			
 		}
@@ -1290,17 +1285,17 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			
 		} catch (TraductorException traEx) {
 			
-		    log.error("CatalegProcedimentBackController.traduir: El traductor no puede traducir todos los idiomas");
+		    log.error("CatalegServeisBackController.traduir: El traductor no puede traducir todos los idiomas");
 		    resultats.put("error", messageSource.getMessage("traductor.no_traduible", null, request.getLocale()));
 		    
 		} catch (NullPointerException npe) {
 			
-			log.error("CatalegProcedimentBackController.traduir: El traductor no se encuentra en en contexto.");
+			log.error("CatalegServeisBackController.traduir: El traductor no se encuentra en en contexto.");
 			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
 			
 		} catch (Exception e) {
 			
-			log.error("CatalegProcedimentBackController.traduir: Error en al traducir servicio: " + e);
+			log.error("CatalegServeisBackController.traduir: Error en al traducir servicio: " + e);
 			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
 			
 		}
@@ -1617,8 +1612,8 @@ public class CatalegServeisBackController extends PantallaBaseController {
 	            // Guardar el documento
 	            String iden = "";
 
-	            if (valoresForm.get("procId") != null && !"".equals(valoresForm.get("procId"))) {
-	                iden = "procId";
+	            if (valoresForm.get("servId") != null && !"".equals(valoresForm.get("servId"))) {
+	                iden = "servId";
 	            } else if (valoresForm.get("fitxaId") != null && !"".equals(valoresForm.get("fitxaId"))) {
 	                iden = "fitxaId";
 	            }
@@ -1736,14 +1731,13 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			
 			IdNomDTO result;
 			String error = null;
-			//ProcedimientoLocal procedimiento = null;
 			
 			try {
 				if (elementos == null) {
 					elementos = new Long[0];
 				}
 				DelegateUtil.getNormativaDelegate().reordenarDocumentos(id, Arrays.asList(elementos));
-				result = new IdNomDTO(id, messageSource.getMessage("proc.guardat.documents.correcte", null, request.getLocale()));
+				result = new IdNomDTO(id, messageSource.getMessage("serv.guardat.documents.correcte", null, request.getLocale()));
 				
 			} catch (DelegateException dEx) {
 				
@@ -1790,7 +1784,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 	        } else {
 	            String error = messageSource.getMessage("error.altres", null, locale);
 	            jsonResult = new IdNomDTO(-2l, error).getJson();
-	            log.error("Error guardant document: No s'ha especificat id de procediment o de fitxer.");
+	            log.error("Error guardant document: No s'ha especificat id de servei.");
 	        }
 
 	        return jsonResult;

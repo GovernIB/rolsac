@@ -128,7 +128,6 @@
 	    		<include name="**/*.jar" />
         		<exclude name="**/xerces*.jar" />
 	    	</lib> 
-        			
         	<lib dir="${web.product}">
 	        	<include if="isJboss5" name="integracion.jar"/>	        	
 	        </lib>

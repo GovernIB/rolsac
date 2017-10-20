@@ -1524,7 +1524,7 @@
             
 <!--             #349 Mover al final de los modulos laterales-->
              <!-- modul -->   
-              <div id="modul_tramits" class="modul">
+             <div id="modul_tramits" class="modul">
 			 
 				<fieldset>                                  
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
@@ -1568,7 +1568,6 @@
 						<!-- /modulTramits --> 
 					</div>
                 </fieldset>               
-            
         </div>
         <!-- /modulLateral -->
     </div>

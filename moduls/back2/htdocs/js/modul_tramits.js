@@ -154,12 +154,14 @@ function CModulTramit() {
         // a la edición del trámite en cuestión.
         for ( i in listaTramites ) {
         	if (listaTramites[i].nom.es == null || listaTramites[i].nom.es == "") { //Si esta vacio, ponerlo en catalan.
-				listaTramites[i].nom.es = "<a href='#' class='tramit_id'>" + listaTramites[i].nom.ca + "</a>";        
-			} else {
-				listaTramites[i].nom.es = "<a href='#' class='tramit_id'>" + listaTramites[i].nom.es + "</a>";        
-			}
-        	listaTramites[i].nom.ca = "<a href='#' class='tramit_id'>" + listaTramites[i].nom.ca + "</a>";   
-        }
+
+        			listaTramites[i].nom.es = "<a href='#' class='tramit_id'>" + listaTramites[i].nom.ca + "</a>";        
+        	} else {
+        			listaTramites[i].nom.es = "<a href='#' class='tramit_id'>" + listaTramites[i].nom.es + "</a>";        
+        	}
+        	listaTramites[i].nom.ca = "<a href='#' class='tramit_id'>" + listaTramites[i].nom.ca + "</a>";        
+		}
+
         
         if (typeof listaTramites != 'undefined' && listaTramites != null) {
             modul_tramits_elm.find(".listaOrdenable").empty();      

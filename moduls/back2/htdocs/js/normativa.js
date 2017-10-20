@@ -1124,8 +1124,8 @@ function CDetall() {
 		//Mostrar campo de responsable y mostrar normativa.
 		$("#tipoNormativa").text(txtNormativa);
 		$("#item_responsable_ca").show();
-		$("#item_responsable_es, #item_responsable_es, #item_responsable_en, #item_responsable_de, #item_responsable_fr").hide();
-		$("#item_responsable_ca, #item_responsable_es, #item_responsable_en, #item_responsable_de, #item_responsable_fr").parent().parent().show();
+		$(".modul_informador div div.campoIdioma.es").hide();
+		
 		
 		ModulDocuments.inicializarDocuments(dades.documents);
 		ModulUnitatAdministrativa.inicializarUnidadesAdministrativas(dades.uas);

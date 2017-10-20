@@ -263,20 +263,6 @@
         {
             "modo": "individual",
             "etiqueta": "id",
-            "etiquetaValor": "item_titol_" + '<c:out value="${idiomaVal}"/>',
-            "obligatori": "no",
-            "tipus": "alfanumeric",
-            "caracters":
-            {
-                "maxim": 230,
-                "mostrar": "no",
-                "abreviat": "no"
-            }
-        },
-
-        {
-            "modo": "individual",
-            "etiqueta": "id",
             "etiquetaValor": "item_enllac_" + '<c:out value="${idiomaVal}"/>',
             "obligatori": "no",
             "tipus": "alfanumeric",

@@ -1191,7 +1191,7 @@
     </script>
     <form id="formGuardarDoc" action="" method="POST">
         <input type="hidden" name="docId" id="docId" />
-        <input type="hidden" name="procId" id="procId" />
+        <input type="hidden" name="servId" id="servId" />
         <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>
         <!-- modulPrincipal -->
         <!--div id="modulPrincipal" class="grupoModulosFormulario"-->                    

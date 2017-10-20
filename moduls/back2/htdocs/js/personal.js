@@ -143,6 +143,7 @@ function CLlistat(){
 			codi_cap2 = "<div class=\"th codi" + ordre_c2 + "\" role=\"columnheader\"><a class=\"username\" href=\"javascript:void(0)\">" + txtCodi + "</a></div>";
 			codi_cap3 = "<div class=\"th ua" + ordre_c3 + "\" role=\"columnheader\"><a class=\"unidadAdministrativa.id\" href=\"javascript:void(0)\">" + txtUA + "</a></div>";
 			codi_cap4 = "<div class=\"th email" + ordre_c4 + "\" role=\"columnheader\"><a class=\"email\" href=\"javascript:void(0)\">" + txtEmail + "</a></div>";
+
 			codi_cap5 = "<div class=\"th epui" + ordre_c5 + "\" role=\"columnheader\"><a class=\"extensionPublica\" href=\"javascript:void(0)\">" + txtEpui + "</a></div>";
 			
 			// codi taula

@@ -81,9 +81,7 @@ public abstract class FichaResumenFacadeEJB extends HibernateEJB {
             String camposVariosQuery = "";
             String selectResults;
             if (isSoloIds) {
-            	
             	selectResults = "select distinct ficha.id, ficha."+campoOrdenacion+" ";
-            	
             } else {
             	selectResults = "select distinct ficha ";
             }
@@ -146,7 +144,6 @@ public abstract class FichaResumenFacadeEJB extends HibernateEJB {
             	if (campoOrdenacion != null && !"id".equals(campoOrdenacion)) { 
             		orderBy += " , ficha.id ASC ";	
             	}
-            	
             }
             
 			Long idUA = (ua != null) ? ua.getId() : null;

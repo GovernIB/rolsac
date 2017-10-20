@@ -116,7 +116,7 @@ public class NormativaBackController extends PantallaBaseController {
             model.put("llistaButlletins", getListaBoletinesDTO());
             // Tipos normativa.
             model.put("llistaTipusNormativa", getListaTiposNormativaDTO(idioma));
-            // Tipos afectación.
+            // Tipos afectacion.
             model.put("llistaTipusAfectacio", getListaTiposAfectacionDTO(idioma));
 
         } catch (DelegateException e) {
@@ -199,7 +199,7 @@ public class NormativaBackController extends PantallaBaseController {
 
         ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
 
-        // Obtenemos la ordenación por parámetro.
+        // Obtenemos la ordenacion por parametro.
         String campoOrdenacion = request.getParameter("ordreCamp");
         String orden = request.getParameter("ordreTipus");
 
@@ -221,7 +221,7 @@ public class NormativaBackController extends PantallaBaseController {
         try {
             String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 
-            // Obtener parámetros de búsqueda.
+            // Obtener parametros de bÃºsqueda.
             String idStr = request.getParameter("id");
             Long id = -1l;
 
@@ -230,13 +230,13 @@ public class NormativaBackController extends PantallaBaseController {
 
             paramMap.put("id", idStr != null ? id : null);
 
-            // Procesa el objeto request y añade los valores necesarios a los mapas de parámetros y de traducciones.
+            // Procesa el objeto request y anyade los valores necesarios a los mapas de parametros y de traducciones.
             procesarParametrosBusqueda(request, paramMap, paramTrad, lang);
 
             // Realizar la consulta y obtener resultados
             NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 
-            // Información de paginación.
+            // Informacion de paginacion.
             String pagPag = request.getParameter("pagPag");
             String pagRes = request.getParameter("pagRes");
 
@@ -287,7 +287,7 @@ public class NormativaBackController extends PantallaBaseController {
 
         ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
 
-        // Obtenemos la ordenación por parámetro.
+        // Obtenemos la ordenacion por parametro.
         String campoOrdenacion = request.getParameter("ordreCamp");
         String orden = request.getParameter("ordreTipus");
 
@@ -307,7 +307,7 @@ public class NormativaBackController extends PantallaBaseController {
         try {
             String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 
-            // Obtener parámetros de búsqueda.
+            // Obtener parametros de busqueda.
             String idStr = request.getParameter("id");
             Long id = -1l;
 
@@ -316,13 +316,13 @@ public class NormativaBackController extends PantallaBaseController {
 
             paramMap.put("id", idStr != null ? id : null);
 
-            // Procesa el objeto request y añade los valores necesarios a los mapas de parámetros y de traducciones.
+            // Procesa el objeto request y anyade los valores necesarios a los mapas de parametros y de traducciones.
             procesarParametrosBusqueda(request, paramMap, paramTrad, lang);
 
             // Realizar la consulta y obtener resultados
             NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 
-            // Información de paginación.
+            // Informacion de paginacion.
             String pagPag = request.getParameter("pagPag");
             String pagRes = request.getParameter("pagRes");
 
@@ -342,7 +342,6 @@ public class NormativaBackController extends PantallaBaseController {
             resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, queBuscar, idUA, meves, uaFilles, campoOrdenacion, orden, pagPag, pagRes, true);
             CSVUtil.mostrarCSV(response, convertirNormativaToCSV((List<Object[]>) resultadoBusqueda.getListaResultados()));
 
-
         } catch (ParseException e) {
             log.error(ExceptionUtils.getStackTrace(e));
 
@@ -354,7 +353,6 @@ public class NormativaBackController extends PantallaBaseController {
             }
         }
     }
-    
     
     private String convertirNormativaToCSV(List<Object[]> listaResultados) throws UnsupportedEncodingException {
     	StringBuffer retorno = new StringBuffer();
@@ -465,8 +463,8 @@ public class NormativaBackController extends PantallaBaseController {
 
 
     /**
-     * Procesa el objeto request y añade los valores necesarios a los mapas de
-     * parámetros y de traducciones.
+     * Procesa el objeto request y anyade los valores necesarios a los mapas de
+     * parametros y de traducciones.
      * 
      * @param request
      * @param paramMap
@@ -949,7 +947,7 @@ public class NormativaBackController extends PantallaBaseController {
          * curiosamente depende del navegador desde el que se hace la peticion.
          * Esto se debe a que como esta peticion es invocada desde un iFrame
          * (oculto) algunos navegadores interpretan la respuesta como un
-         * descargable o fichero vinculado a una aplicación. De esta forma, y
+         * descargable o fichero vinculado a una aplicacion. De esta forma, y
          * devolviendo un ResponseEntity, forzaremos el Content-Type de la
          * respuesta.
          */
@@ -964,7 +962,7 @@ public class NormativaBackController extends PantallaBaseController {
         Map<String, FileItem> ficherosForm = new HashMap<String, FileItem>();
 
         try {
-            // Recuperació dels diferents items, tant dades con fitxers dels
+            // Recuperacio dels diferents items, tant dades con fitxers dels
             // formularis
         	// Ya no se recupera el fichero.
             recuperarItems(request, valoresForm, ficherosForm);
@@ -998,7 +996,7 @@ public class NormativaBackController extends PantallaBaseController {
                 normativa.setId(idNorm);
 
             } else {
-            	// Comprobar permisos de creación
+                // Comprobar permisos de creacion
                 if (!normativaDelegate.autorizaCrearNormativa(ParseUtil.parseInt(valoresForm.get("item_validacio")))) {
                     IdNomDTO error = new IdNomDTO(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()));
                     return new ResponseEntity<String>(error.getJson(), responseHeaders, HttpStatus.CREATED);
@@ -1015,6 +1013,7 @@ public class NormativaBackController extends PantallaBaseController {
             // Recuperar el resto de campos de la normativa
             normativa = recuperarCamposNormativa(valoresForm, normativa);
 
+
             if (normativaDelegate.isNumNormativaCorrecto(normativa)) {
             
 	            // Guardar la Normativa
@@ -1027,7 +1026,7 @@ public class NormativaBackController extends PantallaBaseController {
             	 String error = messageSource.getMessage("error.numnormativa.repetido", null, request.getLocale());
                  result = new IdNomDTO(-4l, error);                 
             }
-            
+        
         } catch (DelegateException dEx) {
         	
             if (dEx.isSecurityException()) {
@@ -1058,8 +1057,8 @@ public class NormativaBackController extends PantallaBaseController {
     }
 
     /**
-     * Aquí nos llegará un multipart, de modo que no podemos obtener los datos
-     * mediante request.getParameter(). Iremos recopilando los parámetros de
+     * AquÃ­ nos llegara un multipart, de modo que no podemos obtener los datos
+     * mediante request.getParameter(). Iremos recopilando los parametros de
      * tipo fichero en el Map ficherosForm y el resto en valoresForm.
      */
     private void recuperarItems(HttpServletRequest request, Map<String, String> valoresForm, Map<String, FileItem> ficherosForm) throws FileUploadException, UnsupportedEncodingException {
@@ -1076,7 +1075,7 @@ public class NormativaBackController extends PantallaBaseController {
 
 
     /**
-     * Función para revisar si una normativa es editable
+     * Funcion para revisar si una normativa es editable
      * si el editable la cadena es vacia
      * en caso contrario devuelve el error
      * 
@@ -1143,10 +1142,10 @@ public class NormativaBackController extends PantallaBaseController {
                 traNorm.setPaginaFinal(ParseUtil.parseInt(valoresForm.get("item_pagina_final_" + idioma)));
             }
 
+
             // Responsable sólo en normativa externa
             traNorm.setResponsable(RolUtil.limpiaCadena(valoresForm.get("item_responsable_" + idioma)));
-            
-
+     
             // Archivo
             FileItem fileItem = ficherosForm.get("item_arxiu_" + idioma);
             if (fileItem != null && fileItem.getSize() > 0) {
@@ -1164,7 +1163,7 @@ public class NormativaBackController extends PantallaBaseController {
      * Recuperar campos de la normativa
      */
     private Normativa recuperarCamposNormativa(Map<String, String> valoresForm, Normativa normativa) throws DelegateException, ParseException {
-        // Obtener los demás campos
+        // Obtener los demas campos
         if (valoresForm.get("item_numero") != null && !"".equals(valoresForm.get("item_numero"))) {
             normativa.setNumero(ParseUtil.parseLong(valoresForm.get("item_numero")));
         }
@@ -1302,7 +1301,7 @@ public class NormativaBackController extends PantallaBaseController {
                 paramTrad.put("idioma", idioma);
             }
 
-            // Información de paginación
+            // Informacion de paginacion
             String pagPag = request.getParameter("pagPagina");
             String pagRes = request.getParameter("pagRes");
 
@@ -1337,7 +1336,7 @@ public class NormativaBackController extends PantallaBaseController {
     }
 
     /**
-     * Obtiene una lista de NormativaDTO a partir de una lista de envíos de eboib
+     * Obtiene una lista de NormativaDTO a partir de una lista de envÃ­os de eboib
      * 
      * @param listadonormativas
      * @param idioma
@@ -1391,7 +1390,7 @@ public class NormativaBackController extends PantallaBaseController {
      * De un string que contiene un enlace HTML extrae el titulo del enlace.
      * 
      * @param texto String que contiene el enlace.
-     * @return Título del enlace, si no hay enlace devuelve el texto tal cual.
+     * @return TÃ­tulo del enlace, si no hay enlace devuelve el texto tal cual.
      */
     private static String obtenerTituloDeEnlaceHtml(String texto) {
 
@@ -1451,7 +1450,7 @@ public class NormativaBackController extends PantallaBaseController {
     }
 
     /**
-     * Recuperació dels camps dels formularis
+     * Recuperacio dels camps dels formularis
      * @param request
      * @param idiomaOrigenTraductor
      * @return
@@ -1472,9 +1471,9 @@ public class NormativaBackController extends PantallaBaseController {
     	
     	/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
-		 * Si no se fuerza el content type, Spring lo calcula y curiosamente depende del navegador desde el que se hace la petición.
-		 * Esto se debe a que como esta petición es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
-		 * un descargable o fichero vinculado a una aplicación. 
+		 * Si no se fuerza el content type, Spring lo calcula y curiosamente depende del navegador desde el que se hace la peticion.
+		 * Esto se debe a que como esta peticion es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
+		 * un descargable o fichero vinculado a una aplicacion. 
 		 * De esta forma, y devolviendo un ResponseEntity, forzaremos el Content-Type de la respuesta.
 		 */
 		HttpHeaders responseHeaders = new HttpHeaders();
@@ -1509,10 +1508,10 @@ public class NormativaBackController extends PantallaBaseController {
             AfectacionesDTO afectaciones = new AfectacionesDTO();
             afectaciones.setListaAfectaciones(listaNuevasAfectaciones);
             
-            // Comparar la lista actual de afectaciones con la nueva para determinar qué añadir y qué eliminar.
+            // Comparar la lista actual de afectaciones con la nueva para determinar quÃ© anyadir y quÃ© eliminar.
             for (Afectacion afectacionOld : listaActualAfectaciones) {
 
-                // Buscar la afectación afectacionOld en la lista nueva recibida en el post
+                // Buscar la afectacion afectacionOld en la lista nueva recibida en el post
                 boolean estaEnLaListaNueva = false;
                 
                 for (AfectacionDTO afectacionNew : afectaciones.getListaAfectaciones()) {
@@ -1525,14 +1524,14 @@ public class NormativaBackController extends PantallaBaseController {
                 
                 }
                 
-                // Si no está en la lista nueva es que hay que eliminarla
+                // Si no esta en la lista nueva es que hay que eliminarla
                 if (!estaEnLaListaNueva) {
                     normativaDelegate.eliminarAfectacion(normativa.getId(), afectacionOld.getTipoAfectacion().getId(), afectacionOld.getNormativa().getId());
                 }
                 
             }
 
-            // Añadir afectaciones
+            // Anyadir afectaciones
             for (AfectacionDTO afectacion : afectaciones.getListaAfectaciones()) {
                 normativaDelegate.anyadirAfectacion(afectacion.getNormaId(), afectacion.getAfectacioId(), normativa.getId());
             }
@@ -1858,7 +1857,7 @@ public class NormativaBackController extends PantallaBaseController {
             tradDoc = new TraduccionDocumentoNormativa();
             tradDoc.setTitulo(RolUtil.limpiaCadena(valoresForm.get("doc_titol_" + lang)));
             tradDoc.setDescripcion(RolUtil.limpiaCadena(valoresForm.get("doc_descripcio_" + lang)));
-            tradDoc.setEnlace(RolUtil.limpiaCadena(valoresForm.get("doc_enlace_" + lang)));
+            tradDoc.setEnlace(RolUtil.limpiaCadena(valoresForm.get("doc_url_" + lang)));
             FileItem fileItem = ficherosForm.get("doc_arxiu_" + lang); // Archivo
 
             if (fileItem != null && fileItem.getSize() > 0) {

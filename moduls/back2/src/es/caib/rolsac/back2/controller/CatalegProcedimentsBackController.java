@@ -707,7 +707,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
         }
         
 	}
-
+	
 	/**
 	 * Devuelve los trámites, poniendo en el campo nom tanto el ca como el es.
 	 * @param resultats
@@ -751,6 +751,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		resultats.put("tramites", listaTramitesDTO);
 		
 	}
+
 
 	/*
 	 * Función para recuperar los públicos objeticos de un procedimiento

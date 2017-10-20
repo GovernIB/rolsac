@@ -274,8 +274,6 @@ public class FitxaInfBackController extends PantallaBaseController {
 
 			CSVUtil.mostrarCSV(response, convertirFitxaToCSV((List<Object[]>) resultadoBusqueda.getListaResultados(), ua, uaFilles));
 
-			
-
 		}  catch (Exception dEx) {
 			log.error("Error generando el export de la búsqueda en fitxas.",dEx);
 			throw new Exception(dEx);

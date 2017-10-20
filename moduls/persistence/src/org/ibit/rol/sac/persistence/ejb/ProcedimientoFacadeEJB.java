@@ -1225,7 +1225,6 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			if (!"id".equals(paginacion.getPropiedadDeOrdenacion())) { 
 				where.append(" , procedimiento.id ").append(" ASC");
 			} 
-			
 			String idUAs =  DelegateUtil.getUADelegate().obtenerCadenaFiltroUA( bc.getUnidadAdministrativa().getId(), bc.getUaHijas(), bc.getUaPropias() );
 			String queryString = consulta.toString().replace("from", from.toString()).replace("where", where.toString());
 
