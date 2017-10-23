@@ -260,7 +260,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		SiaResultado resultado = null;
     	try {
 			// Obtenemos info para enviar a SIA
-	    	final Sia sia = obtenerSiaProc(proc);
+	    	final Sia sia = obtenerSiaProcedimiento(proc);
 	    	
 	    	// Enviamos a SIA
 			resultado = SiaWS.enviarSIA(sia, false);
@@ -895,7 +895,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		 * @return
 		 * @throws Exception
 		 */
-		private Sia obtenerSiaProc(ProcedimientoLocal procedimiento) throws Exception {
+		private Sia obtenerSiaProcedimiento(ProcedimientoLocal procedimiento) throws Exception {
 			final Sia sia = new Sia();
 			final SiaEnviableResultado siaEnviableResultado = SiaUtils.isEnviable(procedimiento);
 			final SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(procedimiento);
@@ -1093,6 +1093,12 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 			sia.setUsuario(siaCumpleDatos.getSiaUA().getUsuario());
 			sia.setPassword(siaCumpleDatos.getSiaUA().getContrasenya());
 			
+			if (servicio.getTramiteUrl() != null && servicio.getTramiteUrl() != null) {
+				sia.setNivAdm("4");
+			} else {
+				sia.setNivAdm("1");	
+			}
+
 			return sia;
 		}
 		

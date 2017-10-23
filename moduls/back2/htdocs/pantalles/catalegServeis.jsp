@@ -1321,7 +1321,7 @@
         <div class="resultats C actiu" style="display: block;">
             <div id="cercador_normativa" class="escriptori_items_cercador"> 
                 <div id="cercador_normativa_contingut">
-                    <div class="fila">                                  
+                    <div class="fila" style="margin-bottom: 30px;">                                  
                         <div class="element t26">                               
                             <div class="etiqueta"><label for="cerca_normativa_titol"><spring:message code='camp.titol'/></label></div>
                             <div class="control">
