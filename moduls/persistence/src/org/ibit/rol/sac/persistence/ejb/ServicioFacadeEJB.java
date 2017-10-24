@@ -1028,13 +1028,14 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 			if ( !getAccesoManager().tieneAccesoServicio(id) )
 				throw new SecurityException("No tiene acceso al servicio");
 
-			Servicio servicio = (Servicio) session.load( Servicio.class, id );
+			Servicio servicio = obtenerServicioParaSolr(id, session);
+			
 			idSia = servicio.getCodigoSIA();
 			servicio.getNormativas().clear();
 
 			//Borram els documents directament amb query per evitar el problema del ordres.
 			//S'ha llevat el cascade=delete de l'hbm.
-			session.delete( "from Documento as doc where doc.servicio.id = ?", id, Hibernate.LONG );
+			//session.delete( "from DocumentoServicio as doc where doc.servicio.id = ?", id, Hibernate.LONG );
 
 			addOperacion(session, servicio, Auditoria.BORRAR);
 			Historico historico = getHistorico( session, servicio );
@@ -1053,8 +1054,9 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 
 			}
 
+			/*
 			// Borrar comentarios
-			session.delete("from ComentarioServicio as cp where cp.servicio.id = ?", id, Hibernate.LONG);
+			session.delete("from ComentarioServicio as cp where cp.servicio.id = ?", id, Hibernate.LONG);**/
 			session.delete(servicio);
 			session.flush();
 			

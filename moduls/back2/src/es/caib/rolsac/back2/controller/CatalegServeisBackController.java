@@ -748,8 +748,13 @@ public class CatalegServeisBackController extends PantallaBaseController {
 				resultatStatus.setId(-1l);
 			} else {
 				resultatStatus.setId(-2l);
-				logException(log, dEx);
+				logException(log, dEx);dEx.printStackTrace();
 			}
+			
+		}  catch (Exception dEx) {
+			
+			resultatStatus.setId(-2l);
+			logException(log, dEx);
 			
 		}
 

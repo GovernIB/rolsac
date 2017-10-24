@@ -315,7 +315,8 @@ public class SiaUtils {
 	    		resultado.setNotificarSIA(false);
 	    		resultado.setRespuesta(mensajeError.toString());
 	    	} else {
-    			resultado.setNotificarSIA(true);    			
+	    		resultado.setNotificarSIA(true);    
+	    		resultado.setOperacion(SiaUtils.ESTADO_BAJA);		
 	    	}
 	    }
 	    
@@ -395,8 +396,8 @@ public class SiaUtils {
 	    		resultado.setNotificarSIA(false);
 	    		resultado.setRespuesta(mensajeError.toString());
 	    	} else {
-	    		//Sin código SiaUA no se puede enviar
-    			resultado.setNotificarSIA(false);    			
+	    		resultado.setNotificarSIA(true);    
+	    		resultado.setOperacion(SiaUtils.ESTADO_BAJA);
 	    	}
 	    }
 	    
@@ -480,19 +481,18 @@ public class SiaUtils {
   	    	resultado.setSiaUA(siaUA);
   	    }
   	    
-  	    /*
   	    boolean noAsociadoSiaUA = true;
   	    if (tieneSiaUA) {
 	  	    final String codigoDir3IdCentro = obtenerCodigoIdCentro(procedimiento);
 	  	    final String codigoDir3SiaUA = siaUA.getUnidadAdministrativa().getCodigoDIR3();
-	  	    if (!codigoDir3SiaUA.equals(codigoDir3IdCentro)) {
+	  	    if (codigoDir3SiaUA.equals(codigoDir3IdCentro)) {
 	  	    	mensajeError.append("El procedimiento esta asociado directamente a la entidad raiz.");
 	  	    	noAsociadoSiaUA = false;
 	  	    }
-  	    }*/
+  	    }
 	    
 	    /** Si cumple todos los datos ok, sino incrustamos el mensaje de error. **/
-	    if (tieneMaterias && tieneNormativas && encontradoTipo && tieneNombre && tieneResumen && tieneSiaUA) {
+	    if (tieneMaterias && tieneNormativas && encontradoTipo && tieneNombre && tieneResumen && tieneSiaUA && noAsociadoSiaUA) {
 	    	resultado.setCumpleDatos(true);	    	
 	    } else {
 	    	resultado.setCumpleDatos(false);
@@ -580,19 +580,18 @@ public class SiaUtils {
   	    	resultado.setSiaUA(siaUA);
   	    }
   	    
-  	    /*
   	    boolean noAsociadoSiaUA = true;
   	    if (tieneSiaUA) {
-	  	    final String codigoDir3IdCentro = obtenerCodigoIdCentro(procedimiento);
+	  	    final String codigoDir3IdCentro = obtenerCodigoIdCentro(servicio);
 	  	    final String codigoDir3SiaUA = siaUA.getUnidadAdministrativa().getCodigoDIR3();
-	  	    if (!codigoDir3SiaUA.equals(codigoDir3IdCentro)) {
+	  	    if (codigoDir3SiaUA.equals(codigoDir3IdCentro)) {
 	  	    	mensajeError.append("El procedimiento esta asociado directamente a la entidad raiz.");
 	  	    	noAsociadoSiaUA = false;
 	  	    }
-  	    }*/
+  	    }
 	    
 	    /** Si cumple todos los datos ok, sino incrustamos el mensaje de error. **/
-	    if (tieneMaterias && tieneNormativas && encontradoTipo && tieneNombre && tieneResumen && tieneSiaUA) {
+	    if (tieneMaterias && tieneNormativas && encontradoTipo && tieneNombre && tieneResumen && tieneSiaUA && noAsociadoSiaUA) {
 	    	resultado.setCumpleDatos(true);	    	
 	    } else {
 	    	resultado.setCumpleDatos(false);
