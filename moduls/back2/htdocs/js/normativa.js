@@ -2,6 +2,19 @@
 
 $(document).ready(function() {
 	
+	//#421 para comprobar que no tiene la longitud del nombre demasiado largo.
+	jQuery("input:file").change(function(e) {
+		  if (e.target.files.length > 0) {
+		  var file = e.target.files[0];
+			if (file != null && file.name != null) {
+				if (file.name.length >= 128) {
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + txtErrorTamanyoFitxer + "</p>"});
+				}
+			}
+		  }
+	});
+	
+	
 	// Listener para guardado de módulo vía AJAX.
 	jQuery(".lista-simple-afectaciones").click(function() {
 				
@@ -1211,11 +1224,13 @@ function CDetall() {
 							 * - idioma_ca_pagfin:"28561"
 							 * - idioma_ca_pagini:"28561"
 							 * - idioma_ca_titol:"Aprovació definitiva de la modificació del crèdit extraordinari núm. 13/2017"
+							 * - idioma_ca_tipo_publicacion:"anunci licitació"
 							 * - idioma_es_apartat:"Sección I. Disposiciones generales"
 							 * - idioma_es_enllac:"http://www.caib.es/eboibfront/es/2017/10706/598980/aprobacion-definitiva-de-la-modificacion-de-credit"
 							 * - idioma_es_pagfin:"28952"
 							 * - idioma_es_pagini:"28952"
 							 * - idioma_es_titol:"Aprobación definitiva de la modificación de crédito extraordinario núm. 13/2017"
+							 * - idioma_es_tipo_publicacion:"anuncio licitación"
 							 * - numero:"2017110"
 							 * - registre:"9654"
 							 * - validacio:null
@@ -1271,6 +1286,9 @@ function CDetall() {
 		//$("#item_registre").val(nn(dada_node.registre));
 		$("#item_data_butlleti").val(nn(dada_node.data_butlleti));
 		//$("#item_num_norma").val(nn(dada_node.numNormativa));
+		if (dada_node.tipo_normativa_id != '') {
+			$("#item_tipus").val(dada_node.tipo_normativa_id);
+		}
 		
 		// resultats
 		//jQuery("div.modulBOIB").slideUp(300, function() {

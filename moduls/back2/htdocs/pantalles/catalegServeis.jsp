@@ -111,7 +111,8 @@
     var txtNoHiHaTaxes = txtNoHiHa + " " + txtTaxes;
     var txtNoHiHaDocumentsSeleccionats = txtNoHiHaDocuments + " " + txtSeleccionats.toLowerCase();
     var txtNoHiHaTaxesSeleccionades = txtNoHiHaTaxes + " " + txtSeleccionades.toLowerCase();
-    
+    var txtErrorTamanyoFitxer ="<spring:message code='error.fitxer.tamany_nom'/>";
+	
     var txtTaxaCreadaCorrecte = "<spring:message code='txt.taxa_creada_correcte'/>";
     var txtTaxaModificadaCorrecte = "<spring:message code='txt.taxa_modificada_correcte'/>";    
     

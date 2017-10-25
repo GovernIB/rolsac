@@ -152,7 +152,8 @@
    var txtPublics = "<spring:message code='txt.publics_objectiu'/>";
    var txtNoHiHaPublics = txtNoHiHa + " " + txtPublics;
    var txtNoHiHaPublicsSeleccionats = txtNoHiHa + " " + txtPublics.toLowerCase() + " " + txtSeleccionats.toLowerCase();
-   
+   var txtErrorTamanyoFitxer ="<spring:message code='error.fitxer.tamany_nom'/>";
+	
    // modul seccio/ua
    var txtSeccioUA = "<spring:message code='txt.seccio_ua'/>";
    var txtSeccionsUA = "<spring:message code='txt.seccions_ua'/>";

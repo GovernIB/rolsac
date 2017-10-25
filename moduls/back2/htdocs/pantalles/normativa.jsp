@@ -86,8 +86,8 @@
     var txtNoHiHaTaxes = txtNoHiHa + " " + txtTaxes;
     var txtNoHiHaDocumentsSeleccionats = txtNoHiHaDocuments + " " + txtSeleccionats.toLowerCase();
     var txtNoHiHaTaxesSeleccionades = txtNoHiHaTaxes + " " + txtSeleccionades.toLowerCase();
-    
-    
+    var txtErrorTamanyoFitxer ="<spring:message code='error.fitxer.tamany_nom'/>";
+	
 	// taula
 	var txtNumero = "<spring:message code='camp.numero'/>";
     var txtNumBoletin = "<spring:message code='camp.nombreButlleti'/>";

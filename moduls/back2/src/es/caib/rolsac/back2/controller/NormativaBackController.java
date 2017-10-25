@@ -584,12 +584,14 @@ public class NormativaBackController extends PantallaBaseController {
             normativaDetall.put("idioma_ca_apartat", normativa.getTra_apartado_c());
             normativaDetall.put("idioma_ca_pagini", normativa.getTra_paginaInicial_c());
             normativaDetall.put("idioma_ca_pagfin", normativa.getTra_paginaFinal_c());
+            normativaDetall.put("idioma_ca_tipo_publicacion", normativa.getTipoPublicacion_c());
 
             normativaDetall.put("idioma_es_titol", normativa.getTra_titulo_v());
             normativaDetall.put("idioma_es_enllac", normativa.getTra_enlace_v());
             normativaDetall.put("idioma_es_apartat", normativa.getTra_apartado_v());
             normativaDetall.put("idioma_es_pagini", normativa.getTra_paginaInicial_v());
             normativaDetall.put("idioma_es_pagfin", normativa.getTra_paginaFinal_v());
+            normativaDetall.put("idioma_es_tipo_publicacion", normativa.getTipoPublicacion_v());
 
             normativaDetall.put("numero", normativa.getNumeroboib());
             normativaDetall.put("butlleti_id", normativa.getIdBoletin());
@@ -598,6 +600,13 @@ public class NormativaBackController extends PantallaBaseController {
             normativaDetall.put("registre", normativa.getValorRegistro());
             normativaDetall.put("validacio", normativa.getValidacion());
 
+            if (normativa.getIdTipoNormativa() != null) {
+            	//¿Nuevo id (nuevo campo) o cambiar la id?
+            	//Revisar que más tiene el email.
+            	String nuevoId = "";
+            	normativaDetall.put("tipo_normativa_id", normativa.getIdTipoNormativa());
+            }
+            
         } else {
             normativaDetall.put("error", bdcons.getMensajeavisobean().getCabecera() + ": " + bdcons.getMensajeavisobean().getSubcabecera());
         }
