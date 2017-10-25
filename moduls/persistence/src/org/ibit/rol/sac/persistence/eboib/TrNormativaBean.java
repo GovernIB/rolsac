@@ -13,6 +13,8 @@ public class TrNormativaBean
       protected String idUA;
       protected String nombreUA;
       protected String valorRegistro;
+      protected String tipoNormativa;
+      protected String idTipoNormativa;
       protected Date fechaBoletin;
       
       //las del detalle de cada idioma
@@ -22,13 +24,15 @@ public class TrNormativaBean
       protected String tra_paginaInicial_c;
       protected String tra_paginaFinal_c;
       protected String tra_observaciones_c;
+      protected String tipoPublicacion_c;
       protected String tra_titulo_v;
       protected String tra_enlace_v;
       protected String tra_apartado_v;
       protected String tra_paginaInicial_v;
       protected String tra_paginaFinal_v;
       protected String tra_observaciones_v;  
-
+      protected String tipoPublicacion_v;
+      
   public TrNormativaBean()
   {
   }
@@ -94,7 +98,7 @@ public class TrNormativaBean
   }
 
 
-  public void setNombreBoletin(String nombreBoletin)
+public void setNombreBoletin(String nombreBoletin)
   {
     this.nombreBoletin = nombreBoletin;
   }
@@ -293,6 +297,70 @@ public Date getFechaBoletin() {
 
 public void setFechaBoletin(Date fechaBoletin) {
 	this.fechaBoletin = fechaBoletin;
+}
+
+
+/**
+ * @return the tipoPublicacion_c
+ */
+public String getTipoPublicacion_c() {
+	return tipoPublicacion_c;
+}
+
+
+/**
+ * @param tipoPublicacion_c the tipoPublicacion_c to set
+ */
+public void setTipoPublicacion_c(String tipoPublicacion_c) {
+	this.tipoPublicacion_c = tipoPublicacion_c;
+}
+
+
+/**
+ * @return the tipoPublicacion_v
+ */
+public String getTipoPublicacion_v() {
+	return tipoPublicacion_v;
+}
+
+
+/**
+ * @param tipoPublicacion_v the tipoPublicacion_v to set
+ */
+public void setTipoPublicacion_v(String tipoPublicacion_v) {
+	this.tipoPublicacion_v = tipoPublicacion_v;
+}
+
+
+/**
+ * @return the tipoNormativa
+ */
+public String getTipoNormativa() {
+	return tipoNormativa;
+}
+
+
+/**
+ * @param tipoNormativa the tipoNormativa to set
+ */
+public void setTipoNormativa(String tipoNormativa) {
+	this.tipoNormativa = tipoNormativa;
+}
+
+
+/**
+ * @return the idTipoNormativa
+ */
+public String getIdTipoNormativa() {
+	return idTipoNormativa;
+}
+
+
+/**
+ * @param idTipoNormativa the idTipoNormativa to set
+ */
+public void setIdTipoNormativa(String idTipoNormativa) {
+	this.idTipoNormativa = idTipoNormativa;
 }
 
 

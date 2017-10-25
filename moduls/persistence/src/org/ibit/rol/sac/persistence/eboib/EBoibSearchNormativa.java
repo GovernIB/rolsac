@@ -13,6 +13,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.ResIterator;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.util.FileManager;
 import com.sun.syndication.feed.synd.SyndEntry;
@@ -31,6 +32,8 @@ SearchNormativa {
 	private int numeroregistros = 0;
 	private Model seccionsCA = null;
 	private Model seccionsES = null;
+	private Model tipusPublicacionsCA = null;
+	private Model tipusPublicacionsES = null;
 	private String numeroregistro;
 	private String fecha;
 	private String numeroboletin;
@@ -62,10 +65,41 @@ SearchNormativa {
 	private String getSeccio(Model seccions, String rdfId) {
 		
 		Resource seccio = seccions.getResource(rdfId);
-		String nom = seccio.getProperty(RdfProperties.NOM).getString();
-		Statement idPare = seccio.getProperty(RdfProperties.ID_PARE);
+		String nom = seccio.getProperty(RdfProperties.SECCIO_NOM).getString();
+		Statement idPare = seccio.getProperty(RdfProperties.SECCIO_ID_PARE);
 		if (idPare != null) {
 			nom = getSeccio(seccions, idPare.getResource().getURI()) + " | " + nom;
+		}
+		return nom;
+		
+	}
+	
+	private String getTipoPublicacionCA (String rdfId) {
+		if (tipusPublicacionsCA == null) {
+			tipusPublicacionsCA = loadRdf(eboibUrl + "ca/tipus-publicacio");
+		}
+		return getPublicacion(tipusPublicacionsCA, rdfId);
+	}
+	
+	private String getTipoPublicacionES (String rdfId) {
+		if (tipusPublicacionsES == null) {
+			tipusPublicacionsES = loadRdf(eboibUrl + "es/tipus-publicacio");
+		}
+		return getPublicacion(tipusPublicacionsES, rdfId);
+	}	
+
+	private String getPublicacion(Model publicacions, String rdfId) {
+		
+		Resource seccio = publicacions.getResource(rdfId);
+		String nom;
+		if (seccio == null || seccio.getProperty(RdfProperties.TIPUS_PUBLICACIO_NOM) == null) {
+			nom ="";
+		} else {
+			nom = seccio.getProperty(RdfProperties.TIPUS_PUBLICACIO_NOM).getString(); 
+			Statement idPare = seccio.getProperty(RdfProperties.TIPUS_PUBLICACIO_ID_PARE);
+			if (idPare != null) {
+				nom = getPublicacion(publicacions, idPare.getResource().getURI()) + " | " + nom;
+			}
 		}
 		return nom;
 		
@@ -162,7 +196,9 @@ SearchNormativa {
 		normbean.setIdBoletin("1");
 		normbean.setNombreBoletin("BOIB");
 		normbean.setValorRegistro("" + res.getProperty(RdfProperties.NUM_REGISTRE).getString());
-
+		
+		
+		
 		/*
 		 agarcia: el tipo no está disponible por RDF
 		//String tipo_sac = "" + tipusNorma.getTipusNormesArticle(registre.getRegistre());
@@ -189,12 +225,14 @@ SearchNormativa {
 		//català
 		normbean.setTra_titulo_c( limpiaSumario(res.getProperty(RdfProperties.SUMARI).getString()));
 		normbean.setTra_apartado_c( getSeccioCA(res.getProperty(RdfProperties.SECCIO).getResource().getURI()) );
+		normbean.setIdTipoNormativa(extraerIdTipoNormativa(res.getProperty(RdfProperties.TIPUS_PUBLICACIO).getResource().getURI()));
+		//normbean.setTipoPublicacion_c( getTipoPublicacionCA(res.getProperty(RdfProperties.TIPUS_PUBLICACIO).getResource().getURI()) );
 		normbean.setTra_paginaInicial_c(res.getProperty(RdfProperties.NUM_PAG_INICIAL).getString());
 		normbean.setTra_paginaFinal_c(res.getProperty(RdfProperties.NUM_PAG_FINAL).getString());
 		if (!rdf.historic) {
 			normbean.setTra_enlace_c(res.getURI());
 		}
-
+		
 		String inputFileNameEs = inputFileName.replace("/ca/", "/es/");
 		//CASTELLANO
 		// read the RDF/XML file
@@ -204,6 +242,7 @@ SearchNormativa {
 			Resource resEs = resIter.nextResource();
 			normbean.setTra_titulo_v(limpiaSumario(resEs.getProperty(RdfProperties.SUMARI).getString()));
 			normbean.setTra_apartado_v( getSeccioES(resEs.getProperty(RdfProperties.SECCIO).getResource().getURI()) );
+			//normbean.setTipoPublicacion_v( getTipoPublicacionES(resEs.getProperty(RdfProperties.TIPUS_PUBLICACIO).getResource().getURI()) );
 			normbean.setTra_paginaInicial_v(resEs.getProperty(RdfProperties.NUM_PAG_INICIAL).getString());
 			normbean.setTra_paginaFinal_v(resEs.getProperty(RdfProperties.NUM_PAG_FINAL).getString());
 			if (!rdf.historic) {
@@ -215,6 +254,21 @@ SearchNormativa {
 
 	}
 
+	/**
+	 * Obtiene la id del tipo normativa.
+	 * @param uri
+	 * @return
+	 */
+	private String extraerIdTipoNormativa(String uri) {
+		String id = "";
+		if (uri != null) {
+			String[] uriSplit = uri.split("#");
+			if (uriSplit.length == 2) {
+				id = uriSplit[1];
+			}
+		}
+		return id;
+	}
 
 	private Model loadRdf(String inputFileName) {
 		Model m = ModelFactory.createDefaultModel();

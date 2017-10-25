@@ -58,8 +58,12 @@ public class RdfProperties {
 	
 	
 	public static final String SECNAMESPACE = HOST + "rdf/schema/seccio/1.0/";
-	public static final Property ID_PARE = ResourceFactory.createProperty(SECNAMESPACE + "idSeccioPare");
-	public static final Property NOM = ResourceFactory.createProperty(SECNAMESPACE + "nom");
+	public static final Property SECCIO_ID_PARE = ResourceFactory.createProperty(SECNAMESPACE + "idSeccioPare");
+	public static final Property SECCIO_NOM = ResourceFactory.createProperty(SECNAMESPACE + "nom");
+	
+	public static final String TIPUS_PUBLICACIO_NAMESPACE = HOST + "rdf/schema/tipus-publicacio/1.0/";
+	public static final Property TIPUS_PUBLICACIO_ID_PARE = ResourceFactory.createProperty(TIPUS_PUBLICACIO_NAMESPACE + "idSeccioPare");
+	public static final Property TIPUS_PUBLICACIO_NOM = ResourceFactory.createProperty(TIPUS_PUBLICACIO_NAMESPACE + "nom");
 	
 	
 	private static String getUrlBase() {
