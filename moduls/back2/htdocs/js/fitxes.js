@@ -2,6 +2,18 @@
 
 $(document).ready(function() {
 	
+	//#421 para comprobar que no tiene la longitud del nombre demasiado largo.
+	jQuery("input:file").change(function(e) {
+		  if (e.target.files.length > 0) {
+		  var file = e.target.files[0];
+			if (file != null && file.name != null) {
+				if (file.name.length >= 128) {
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + txtErrorTamanyoFitxer + "</p>"});
+				}
+			}
+		  }
+	});
+	
 	jQuery("#btnInsertar").bind("click", function() { Detall.modificado(); });
 	
 	jQuery(".lista-simple").click(function() {

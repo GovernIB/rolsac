@@ -130,7 +130,8 @@
     var txtNoHiHaTaxes = txtNoHiHa + " " + txtTaxes;
     var txtNoHiHaDocumentsSeleccionats = txtNoHiHaDocuments + " " + txtSeleccionats.toLowerCase();
     var txtNoHiHaTaxesSeleccionades = txtNoHiHaTaxes + " " + txtSeleccionades.toLowerCase();
-    
+    var txtErrorTamanyoFitxer ="<spring:message code='error.fitxer.tamany_nom'/>";
+	
     var txtTramitNouProcediment = "<spring:message code='txt.gestionar_tramits_guardar_procediment'/>";
     var txtTramit = "<spring:message code='txt.tramit'/>";
     var txtTramits = "<spring:message code='txt.tramits'/>";

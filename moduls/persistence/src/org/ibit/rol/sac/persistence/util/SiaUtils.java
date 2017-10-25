@@ -291,7 +291,7 @@ public class SiaUtils {
 	    		resultado.setRespuesta(mensajeError.toString());
 	    	} else {
 	    		//Sin código SiaUA no se puede enviar
-    			resultado.setNotificarSIA(false);    			
+    			resultado.setNotificarSIA(true);    			
 	    	}
 	    }
 	    
