@@ -193,6 +193,8 @@ public class SiaUtils {
 		siaPendiente.setIdElemento(idElemento);
 		siaPendiente.setExiste(existe);
 		siaPendiente.setTipo(tipo);
+		final SiaUA siaUA = SiaUtils.obtenerSiaUA(procedimiento);
+		siaPendiente.setSiaUA(siaUA);
 		if (idSia != null && !idSia.isEmpty()) {
 			siaPendiente.setIdSia(Long.valueOf(idSia));
 		}
@@ -396,8 +398,9 @@ public class SiaUtils {
 	    		resultado.setNotificarSIA(false);
 	    		resultado.setRespuesta(mensajeError.toString());
 	    	} else {
-	    		resultado.setNotificarSIA(true);    
-	    		resultado.setOperacion(SiaUtils.ESTADO_BAJA);
+	    		//Sin código SiaUA no se puede enviar
+    			resultado.setNotificarSIA(true);   
+    			resultado.setOperacion(SiaUtils.ESTADO_BAJA);
 	    	}
 	    }
 	    
@@ -748,7 +751,7 @@ public class SiaUtils {
 				siaUA = siaPendienteProceso.obtenerSiaUA(procedimiento.getOrganResolutori()); 
 				
 				if (siaUA == null) {
-					//Recorremos sus predecesores
+					//Recorremos sus predecesores (este predecesor va al reves, empieza desde más arriba hacia abajo pero nos conviene para encontrar antes a la raiz)
 			    	for(final Object oua : procedimiento.getOrganResolutori().getPredecesores()) {
 			    		final UnidadAdministrativa ua = (UnidadAdministrativa) oua;
 			    		siaUA = siaPendienteProceso.obtenerSiaUA(ua); 
@@ -801,6 +804,33 @@ public class SiaUtils {
 		}
 		
 		return siaUA;
+	}
+	
+	
+	/**
+	 * Compara 2 procedimientos y miran si son la misma SiaUA.
+	 * 
+	 * @param procedimiento
+	 * @return
+	 */
+	public static boolean mismaSiaUA(ProcedimientoLocal procedimiento, ProcedimientoLocal procedimiento2) {
+		boolean retorno;
+		SiaUA siaUA1 = obtenerSiaUA(procedimiento);
+		SiaUA siaUA2 = obtenerSiaUA(procedimiento2);
+		if (siaUA1 == null && siaUA2 == null) { //Si los 2 son nulos, son iguales
+			retorno = true; 
+		} else if (siaUA2 == null || siaUA1 == null) { //Si uno de los 2 es nulo, son distintos (el otro seguro que no es nulo)
+			retorno = false;
+		} else {
+			if (siaUA1.getId().compareTo(siaUA2.getId()) == 0 ) {
+				retorno = true ;
+			} else {
+				retorno = false;
+			}
+		}
+		 
+		
+		return retorno;
 	}
 	
 	

@@ -438,6 +438,8 @@ function CLlistat(){
 					txtSolrDescripcionTipo = txtSolrDescripcionTipoFicha + " " + dada_node.idElemento;
 				} else if (dada_node.tipo == "PRO") {
 					txtSolrDescripcionTipo = txtSolrDescripcionTipoPro + " " + dada_node.idElemento;
+				} else if (dada_node.tipo == "SER") {
+					txtSolrDescripcionTipo = txtSolrDescripcionTipoSer + " " + dada_node.idElemento;
 				} else if(dada_node.tipo == "UNA"){
 					txtSolrDescripcionTipo = txtSolrDescripcionTipoUna + " " + dada_node.idElemento;
 				} else if(dada_node.tipo == "DPR"){

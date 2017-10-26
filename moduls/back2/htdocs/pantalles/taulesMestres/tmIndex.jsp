@@ -48,6 +48,7 @@
     var txtFechaIndexacion =  "<spring:message code='txt.indexaciones.fechaindexacion'/>";
     var txtMensaje =  "<spring:message code='txt.indexaciones.mensaje'/>";
     var txtSolrDescripcionTipoPro =  "<spring:message code='index.descripcio.tipo.PRO'/>";
+    var txtSolrDescripcionTipoSer =  "<spring:message code='index.descripcio.tipo.SER'/>";
     var txtSolrDescripcionTipoUna =  "<spring:message code='index.descripcio.tipo.UNA'/>";
     var txtSolrDescripcionTipoProDoc =  "<spring:message code='index.descripcio.tipo.DPR'/>";
     var txtSolrDescripcionTipoFicha=  "<spring:message code='index.descripcio.tipo.FCH'/>";

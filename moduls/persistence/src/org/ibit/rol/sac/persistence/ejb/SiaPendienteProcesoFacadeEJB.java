@@ -479,6 +479,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 							session.save(siaPendiente);
 							session.flush();
 						}
+<<<<<<< HEAD
 					}
 				}
 				
@@ -513,6 +514,8 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 							session.save(siaPendiente);
 							session.flush();
 						}
+=======
+>>>>>>> refs/remotes/origin/rolsac-1.5
 					}
 				}
 				
@@ -841,7 +844,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
    	 * @ejb.interface-method
    	 * @ejb.permission unchecked="true"
    	 *   
-   	 */
+   	 *
     public SiaResultado borradoProcedimiento(Long idProc, String idSIA) {   
     	try {
     		SiaResultado resultado = null; 
@@ -856,7 +859,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     		throw new EJBException("Error enviando a SIA el procedimiento " + idProc + ": " + ex.getMessage(), ex);
     	}
     	
-    }
+    }*/
     
     
     /**

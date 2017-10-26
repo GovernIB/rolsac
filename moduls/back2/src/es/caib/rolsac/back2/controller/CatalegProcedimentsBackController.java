@@ -75,6 +75,7 @@ import org.ibit.rol.sac.persistence.delegate.ServicioDelegate;
 import org.ibit.rol.sac.persistence.delegate.SilencioAdmDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
+import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -910,7 +911,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				error = messageSource.getMessage("proc.error.falta.materia", null, request.getLocale());
 				return result = new IdNomDTO(-4l, error);
 			} 
-				
 			
 			procediment = guardarVersion(request, procediment, procedimentOld, error);			// Versión
 			procediment = guardarPublicoObjetivo(request, procediment, procedimentOld);			// Procesar Público Objectivo
@@ -944,7 +944,18 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			List<Tramite> listaTramitesParaBorrar = null;
 			List<Long> listaIdsTramitesParaActualizar = null;
 
+			
 			if (edicion) {
+				
+				//#414 Comprobamos si hay un cambio de entidad raíz (sólo en edición y si está con código SIA).
+				if (procedimentOld.getCodigoSIA() != null && !procedimentOld.getCodigoSIA().isEmpty() && procedimentOld.getEstadoSIA() != null &&
+						 ("A".equals(procedimentOld.getEstadoSIA()) || "R".equals(procedimentOld.getEstadoSIA()) ||"M".equals(procedimentOld.getEstadoSIA()) ) 
+						 && !SiaUtils.mismaSiaUA(procediment, procedimentOld)) {
+					//Si estamos en modo edicición, tiene código sia y está en SIA (Alta, Modif. o Reactiv) entonces comprobamos si hay cambio de raíz.
+					error = messageSource.getMessage("proc.error.siaUA.misma", null, request.getLocale());
+					return result = new IdNomDTO(-5l, error);
+				}
+				
 				
 				// Verificamos que no se "pierda" el cod SIA
 				if (StringUtils.isNotBlank(request.getParameter("item_codigo_sia")) && 
