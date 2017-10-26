@@ -42,6 +42,9 @@ public class SiaPendiente implements ValueObject {
 	/** Código SIA. **/
 	private Long idSia;
 	
+	/** Código de SiaUA. **/
+	private SiaUA siaUA;
+	
 	/**
 	 * @return the id
 	 */
@@ -153,12 +156,28 @@ public class SiaPendiente implements ValueObject {
 	public Long getIdSia() {
 		return idSia;
 	}
+	
 	/**
 	 * @param idSia the idSia to set
 	 */
 	public void setIdSia(Long idSia) {
 		this.idSia = idSia;
 	}
+	
+	/**
+	 * @return the siaUA
+	 */
+	public SiaUA getSiaUA() {
+		return siaUA;
+	}
+	
+	/**
+	 * @param siaUA the siaUA to set
+	 */
+	public void setSiaUA(SiaUA siaUA) {
+		this.siaUA = siaUA;
+	}
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */

@@ -456,17 +456,25 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 				SiaEnviableResultado siaEnviable = SiaUtils.isEnviable(procedimiento);
 				
 				if (siaEnviable.isNotificiarSIA()) {
-					//Paso 3. 
-					SiaCumpleDatos cumpleDatos = SiaUtils.cumpleDatos(procedimiento);
-					if (cumpleDatos.isCumpleDatos()) {
+					
+					if (siaPendiente.getExiste() != null && siaPendiente.getExiste() == SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_BORRADO) {
+						//Si ha sido borrado, no se enviaba por el cumple datos.
 						siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_CREADO);
 						session.save(siaPendiente);
 						session.flush();
 					} else {
-						siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_NO_CUMPLE_DATOS);
-						siaPendiente.setMensaje(cumpleDatos.getRespuesta());
-						session.save(siaPendiente);
-						session.flush();
+						//Paso 3. 
+						SiaCumpleDatos cumpleDatos = SiaUtils.cumpleDatos(procedimiento);
+						if (cumpleDatos.isCumpleDatos()) {
+							siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_CREADO);
+							session.save(siaPendiente);
+							session.flush();
+						} else {
+							siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_NO_CUMPLE_DATOS);
+							siaPendiente.setMensaje(cumpleDatos.getRespuesta());
+							session.save(siaPendiente);
+							session.flush();
+						}
 					}
 				}
 				
@@ -792,7 +800,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
    	 * @ejb.interface-method
    	 * @ejb.permission unchecked="true"
    	 *   
-   	 */
+   	 *
     public SiaResultado borradoProcedimiento(Long idProc, String idSIA) {   
     	try {
     		SiaResultado resultado = null; 
@@ -807,7 +815,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     		throw new EJBException("Error enviando a SIA el procedimiento " + idProc + ": " + ex.getMessage(), ex);
     	}
     	
-    }
+    }*/
     
     /**
 	 * Envia a SIA un procedimiento borrado.

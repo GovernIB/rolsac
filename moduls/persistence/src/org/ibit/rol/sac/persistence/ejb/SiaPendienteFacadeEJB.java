@@ -34,7 +34,7 @@ import org.ibit.rol.sac.persistence.util.SiaCumpleDatos;
 import org.ibit.rol.sac.persistence.util.SiaEnviableResultado;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.ibit.rol.sac.persistence.ws.sia.SiaWS;
-
+import org.ibit.rol.sac.model.SiaUA;
 
 
 
@@ -483,7 +483,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		if (siaPendiente.getExiste().compareTo(SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_BORRADO) == 0) {
 			
 			// Envia a SIA el borrado
-			SiaResultado siaResultado = borradoProcedimiento(siaPendiente.getIdElemento(), siaPendiente.getIdSia().toString());
+			SiaResultado siaResultado = borradoProcedimiento(siaPendiente.getIdElemento(), siaPendiente.getIdSia().toString(), siaPendiente.getSiaUA());
 			
 			// Actualizar estado proceso
 			actualizaEstadoProceso(siaPendiente.getIdElemento(), siaResultado, estadoProceso);
@@ -535,12 +535,16 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 
 
 
-	private SiaResultado borradoProcedimiento(Long idProc, String idSIA) throws Exception {
+	private SiaResultado borradoProcedimiento(Long idProc, String idSIA, SiaUA siaUA) throws Exception {
 		SiaResultado resultado = null; 
 		Sia sia = new Sia();
 		sia.setIdSIA(idSIA);
 		sia.setOperacion(SiaUtils.ESTADO_BAJA); 
 		sia.setIdProc(String.valueOf(idProc));
+		if (siaUA != null) {
+			sia.setUsuario(siaUA.getUsuario());
+			sia.setPassword(siaUA.getContrasenya());
+		}
 		try {
 			resultado = SiaWS.enviarSIA(sia, true);
 		} catch(Exception exception) {

@@ -18,6 +18,7 @@
     	<property name="mensaje"	  column="SIP_MENSA" />
     	<property name="existe"       column="SIP_EXISTE" />
     	<property name="idSia"        column="SIP_SIA" />
-    	
+    	<many-to-one name="siaUA" 	  column="SIP_SIAUA" foreign-key="RSC_SIP_SIAUA_FK"/>
+        
     </class>
 </hibernate-mapping>
