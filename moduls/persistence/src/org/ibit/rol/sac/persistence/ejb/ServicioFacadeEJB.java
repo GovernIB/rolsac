@@ -1719,11 +1719,13 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 			    	}
 					
 					//Publico objetivo, para extraer el nombre del publico objetivo
-					String nombrePubObjetivo = "";
-					for( PublicoObjetivo publicoObjectivo :  servicio.getPublicosObjetivo()) {
-						TraduccionPublicoObjetivo traduccionPO = (TraduccionPublicoObjetivo) publicoObjectivo.getTraduccion(keyIdioma);
+					String nombrePubObjetivo = "persones";
+					String idPubObjetivo = "200";
+					for( PublicoObjetivo publicoObjetivo :  servicio.getPublicosObjetivo()) {
+						TraduccionPublicoObjetivo traduccionPO = (TraduccionPublicoObjetivo) publicoObjetivo.getTraduccion(keyIdioma);
 						if (traduccionPO != null) {
 							nombrePubObjetivo = traduccionPO.getTitulo().toLowerCase();
+							idPubObjetivo = publicoObjetivo.getId().toString();
 							break; //Con encontrar uno nos basta
 						}
 					}
@@ -1746,7 +1748,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 						}
 					}
 			    	searchTextOptional.addIdioma(enumIdioma, traduccion.getObjeto() +" " +traduccion.getObservaciones() + " " + textoOptional.toString());
-			    	urls.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/200/"+nombrePubObjetivo+"/tramites/tramite/"+servicio.getId());
+			    	urls.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+idPubObjetivo+"/"+nombrePubObjetivo+"/tramites/tramite/"+servicio.getId());
 				}
 			}
 			
