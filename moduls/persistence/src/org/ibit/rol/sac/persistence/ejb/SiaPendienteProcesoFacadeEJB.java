@@ -479,7 +479,6 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 							session.save(siaPendiente);
 							session.flush();
 						}
-<<<<<<< HEAD
 					}
 				}
 				
@@ -514,8 +513,6 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 							session.save(siaPendiente);
 							session.flush();
 						}
-=======
->>>>>>> refs/remotes/origin/rolsac-1.5
 					}
 				}
 				
