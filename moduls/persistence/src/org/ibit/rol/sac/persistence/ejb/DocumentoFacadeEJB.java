@@ -616,8 +616,8 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 						}
 						
 						//Publico objetivo, para añadirlo como id y para extraer el titulo para la url
-						String nombrePubObjetivo = "";
-						String idPubObjetivo = "";
+						String nombrePubObjetivo = "persones";
+						String idPubObjetivo = "200";
 						for( PublicoObjetivo publicoObjetivo :  procedimiento.getPublicosObjetivo()) {
 							final TraduccionPublicoObjetivo traduccionPO = (TraduccionPublicoObjetivo) publicoObjetivo.getTraduccion(keyIdioma);
 							if (traduccionPO != null) {

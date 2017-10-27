@@ -2316,8 +2316,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			    	}
 					
 					//Publico objetivo, para extraer el nombre del publico objetivo
-					String nombrePubObjetivo = "";
-					String idPublicoObjetivo = "";
+					String nombrePubObjetivo = "persones";
+					String idPublicoObjetivo = "200";
 					for( PublicoObjetivo publicoObjectivo :  procedimiento.getPublicosObjetivo()) {
 						TraduccionPublicoObjetivo traduccionPO = (TraduccionPublicoObjetivo) publicoObjectivo.getTraduccion(keyIdioma);
 						if (traduccionPO != null) {
