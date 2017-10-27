@@ -1131,8 +1131,8 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			    	searchTextOptional.addIdioma(enumIdioma, traduccion.getDocumentacion());
 			    	
 					if (procedimiento != null ) {
-			    		String nombrePubObjetivox = "";
-			    		String idPublicoObjetivo ="";
+			    		String nombrePubObjetivox = "persones";
+			    		String idPublicoObjetivo = "200";
 			    		if (procedimiento.getPublicosObjetivo().size() > 0) {
 			    			PublicoObjetivo pubObjetivo = (PublicoObjetivo)procedimiento.getPublicosObjetivo().toArray()[0];
 			    			if (pubObjetivo.getTraduccion(keyIdioma) != null) {
@@ -1341,8 +1341,8 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 					    extension.addIdioma(enumIdioma, IndexacionUtil.calcularExtensionArchivo(traduccion.getArchivo().getNombre()));					    	
 					    
 				    	
-			    		String nombrePubObjetivox = "";
-			    		String idPubObjetivo = "";
+			    		String nombrePubObjetivox = "persones";
+			    		String idPubObjetivo = "200";
 			    		if (procedimiento.getPublicosObjetivo().size() > 0) {
 			    			PublicoObjetivo pubObjetivo = (PublicoObjetivo)procedimiento.getPublicosObjetivo().toArray()[0];
 			    			if (pubObjetivo.getTraduccion(keyIdioma) != null) {
