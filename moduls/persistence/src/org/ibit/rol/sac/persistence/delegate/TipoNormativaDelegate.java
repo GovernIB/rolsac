@@ -56,6 +56,15 @@ public class TipoNormativaDelegate implements StatelessDelegate {
         }
     }
     
+    public Tipo obtenerTipoNormativaByBOIB(String idBOIB) throws DelegateException {
+        try {
+            return getFacade().obtenerTipoNormativaByBOIB(idBOIB);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    
     public void borrarTipoNormativa(Long id) throws DelegateException {
         try {
             getFacade().borrarTipoNormativa(id);

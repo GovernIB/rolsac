@@ -190,6 +190,42 @@ public abstract class TipoNormativaFacadeEJB extends HibernateEJB {
     
     
     /**
+     * Obtiene un tipo normativa segun el id de boib.
+     * 
+     * @ejb.interface-method
+     * 
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+     * 
+     * @param	idBoib	Identificador del tipo de normativa en BOIB.
+     * 
+     * @return	Devuelve <code>Tipo</code> solicitado.
+     */
+    public Tipo obtenerTipoNormativaByBOIB(String idBoib) {
+    	
+    	Session session = getSession();
+    	try {
+    		
+    		StringBuilder consulta = new StringBuilder("select tipo ");
+    		consulta.append("from Tipo as tipo ");
+    		consulta.append("where tipo.idBoib = " + idBoib); 
+    		
+    		Query query = session.createQuery( consulta.toString() );
+    		return (Tipo) query.uniqueResult(); 
+    		
+    	} catch (HibernateException he) {
+    		
+    		throw new EJBException(he);
+    		
+    	} finally {
+    		
+    		close(session);
+    		
+    	}    	    	
+    	
+    }
+    
+    
+    /**
      * Borra un Tipo Normativa.
      * 
      * @ejb.interface-method

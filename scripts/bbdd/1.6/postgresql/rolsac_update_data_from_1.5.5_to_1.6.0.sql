@@ -54,3 +54,10 @@ update rsc_normat set nor_codbol_ant = nor_codbol;
 update rsc_normat set nor_codbol = nor_codbol where nor_codbol not in (select bol_codi from rsc_boleti where bol_nombre in ('BOIB', 'BOE', 'DOCE'));
 delete rsc_bolleti where bol_nombre not in ('BOIB','BOE','DOCE');
 
+/** Actualiza el id boib en los tipos de normativa. **/ 
+UPDATE RSC_TIPO SET TIP_IDBOIB = 5225 WHERE TIP_CODI = 2;
+UPDATE RSC_TIPO SET TIP_IDBOIB = 184  WHERE TIP_CODI = 20;
+UPDATE RSC_TIPO SET TIP_IDBOIB = 31   WHERE TIP_CODI = 8;
+UPDATE RSC_TIPO SET TIP_IDBOIB = 29   WHERE TIP_CODI = 7;
+UPDATE RSC_TIPO SET TIP_IDBOIB = 2    WHERE TIP_CODI = 1;
+UPDATE RSC_TIPO SET TIP_IDBOIB = 5227 WHERE TIP_CODI = 4;

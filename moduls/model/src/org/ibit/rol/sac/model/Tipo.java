@@ -36,7 +36,24 @@ public class Tipo extends Traducible {
     	this.tipoSia = tipoSia;
     }
     
-    private Long id;
+
+	/**
+	 * @return the idBoib
+	 */
+	public Long getIdBoib() {
+		return idBoib;
+	}
+
+	/**
+	 * @param idBoib the idBoib to set
+	 */
+	public void setIdBoib(Long idBoib) {
+		this.idBoib = idBoib;
+	}
+
+
+	private Long id;
     private Long tipoSia;
 	private Set normativas;
+	private Long idBoib;
 }

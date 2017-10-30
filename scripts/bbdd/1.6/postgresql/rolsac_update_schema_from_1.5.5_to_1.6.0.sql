@@ -262,3 +262,6 @@ ALTER TABLE RSC_SOLJOB ADD JOB_TOTDSR NUMBER(5,2);
 COMMENT ON COLUMN RSC_SOLJOB.JOB_FECSER is 'Fecha fin ejecutando servicios.';
 COMMENT ON COLUMN RSC_SOLJOB.JOB_TOTSER is 'Porcentaje de total servicios.';
 COMMENT ON COLUMN RSC_SOLJOB.JOB_TOTDSR is 'Porcentaje de total servicios documento.';
+
+--Anyadimos el tipo cod pidip al tipo SIA.
+ALTER TABLE RSC_TIPO ADD TIP_CODPID NUMBER(19,0);

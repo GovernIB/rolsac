@@ -568,7 +568,7 @@ public class NormativaBackController extends PantallaBaseController {
 
     @RequestMapping(value = "/detallBoib.do", method = POST)
     public @ResponseBody
-    Map<String, Object> detallBoib(HttpServletRequest request, Map<String, Object> model) {
+    Map<String, Object> detallBoib(HttpServletRequest request, Map<String, Object> model) throws DelegateException {
 
         Map<String, Object> normativaDetall = new HashMap<String, Object>();
 
@@ -601,10 +601,12 @@ public class NormativaBackController extends PantallaBaseController {
             normativaDetall.put("validacio", normativa.getValidacion());
 
             if (normativa.getIdTipoNormativa() != null) {
-            	//¿Nuevo id (nuevo campo) o cambiar la id?
-            	//Revisar que más tiene el email.
             	String nuevoId = "";
-            	normativaDetall.put("tipo_normativa_id", normativa.getIdTipoNormativa());
+            	Tipo tipo = DelegateUtil.getTipoNormativaDelegate().obtenerTipoNormativaByBOIB(normativa.getIdTipoNormativa());
+            	if (tipo != null) {
+            		nuevoId = tipo.getId().toString();
+            	}
+            	normativaDetall.put("tipo_normativa_id", nuevoId);
             }
             
         } else {

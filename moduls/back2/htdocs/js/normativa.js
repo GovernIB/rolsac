@@ -1295,6 +1295,7 @@ function CDetall() {
 		if ($("#carregantDetall").size() > 0) {
 
 			$("#carregantDetall").fadeOut(300, function() {
+				$(this).remove();
 				jQuery("div#escriptori_detall").slideDown(300); /*, function() {
 
 					//resultats_actiu_elm = resultats_elm.find("div.actiu:first");	
