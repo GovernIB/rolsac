@@ -336,7 +336,7 @@ public class PersonalBackController extends PantallaBaseController {
 			String nom = request.getParameter("item_nom");
 			String username = request.getParameter("item_codi");
 
-			if (ua == null || nom == null || username == null || "".equals(nom) || "".equals(username)) {
+			if (ua == null || nom == null || username == null || "".equals(nom.trim()) || "".equals(username.trim())) {
 				String error = messageSource.getMessage("persona.error.falten.camps", null, request.getLocale());
 				result = new IdNomDTO(-3l, error);
 			} else {
@@ -350,8 +350,8 @@ public class PersonalBackController extends PantallaBaseController {
 					persona = new Personal();
 				}
 
-				persona.setNombre(nom);
-				persona.setUsername(username);
+				persona.setNombre(nom.trim());
+				persona.setUsername(username.trim());
 				persona.setUnidadAdministrativa(ua);
 				persona.setFunciones(request.getParameter("item_funcions"));
 				persona.setCargo(request.getParameter("item_carrec"));
