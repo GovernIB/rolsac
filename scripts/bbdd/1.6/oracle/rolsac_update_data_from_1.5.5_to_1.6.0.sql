@@ -51,8 +51,7 @@ INSERT INTO RSC_TRANOR (TNO_CODNOR, TNO_SECCIO, TNO_APARTA, TNO_PAGINI, TNO_PAGF
 update rsc_normat set nor_typen = 'normativa';
 update rsc_normat set nor_validn = 'PENDIENTE, HAY QUE VER QUE VALOR TENDRÁ AL FINAL SEGUN CAIB.';
 update rsc_normat set nor_codbol_ant = nor_codbol;
-update rsc_normat set nor_codbol = null where nor_codbol not in (select bol_codi from rsc_boleti where bol_nombre in ('BOIB', 'BOE', 'DOCE'));
---delete rsc_bolleti where bol_nombre not in ('BOIB','BOE','DOCE');
+update rsc_normat set nor_codbol = 'DOCE' where nor_codbol in (select bol_codi from rsc_boleti where lower(bol_nombre) like '%diario%uropea%' );
 
 /** Actualiza el id boib en los tipos de normativa. **/ 
 UPDATE RSC_TIPO SET TIP_IDBOIB = 5225 WHERE TIP_CODI = 2;

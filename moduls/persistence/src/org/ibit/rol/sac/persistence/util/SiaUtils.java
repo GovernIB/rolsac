@@ -443,7 +443,7 @@ public class SiaUtils {
 	    boolean encontradoTipo = false;
 	    if (procedimiento.getNormativas().size() > 0) {
 		    for (Normativa norm : procedimiento.getNormativas()) {
-		    	if (norm.getTipo() != null && norm.getTipo().getTipoSia() != null) {
+		    	if (norm != null && norm.isVisible() &&norm.getTipo() != null && norm.getTipo().getTipoSia() != null) {
 		    		encontradoTipo = true;
 		    	}
 		    }
@@ -539,14 +539,16 @@ public class SiaUtils {
 	    	mensajeError.append("No té normatives.");	
 	    }
 	    
+	    boolean encontradoTipo = true; //En los servicios no es obligatorio.
+	    /*
 	    boolean encontradoTipo = false;
 	    if (servicio.getNormativas().size() > 0) {
 		    for (Normativa norm : servicio.getNormativas()) {
-		    	if (norm.getTipo() != null && norm.getTipo().getTipoSia() != null) {
+		    	if (norm != null && norm.isVisible() &&norm.getTipo() != null && norm.getTipo().getTipoSia() != null) {
 		    		encontradoTipo = true;
 		    	}
 		    }
-	    }
+	    }*/
 	    
 	    if (!encontradoTipo) {
 	    	mensajeError.append("Cap de les normatives té associat un tipus sia.");

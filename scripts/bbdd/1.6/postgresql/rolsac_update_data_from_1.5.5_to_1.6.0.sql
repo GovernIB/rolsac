@@ -49,10 +49,10 @@ INSERT INTO RSC_TRANOR (TNO_CODNOR, TNO_SECCIO, TNO_APARTA, TNO_PAGINI, TNO_PAGF
   
 -- Backup de normativa type y Cambiar la normativaLocal y normativaExterna al valor normativa  mientras que normativaExternaRemota/normativaLocalRemota pasa a Remota.  
 update rsc_normat set nor_typen = 'normativa';
-update rsc_normat set nor_validn = 1;
+update rsc_normat set nor_validn = 'PENDIENTE, HAY QUE VER QUE VALOR TENDRÁ AL FINAL SEGUN CAIB.';
 update rsc_normat set nor_codbol_ant = nor_codbol;
-update rsc_normat set nor_codbol = null where nor_codbol not in (select bol_codi from rsc_boleti where bol_nombre in ('BOIB', 'BOE', 'DOCE'));
-delete rsc_bolleti where bol_nombre not in ('BOIB','BOE','DOCE');
+update rsc_normat set nor_codbol = 'DOCE' where nor_codbol in (select bol_codi from rsc_boleti where lower(bol_nombre) like '%diario%uropea%' );
+
 
 /** Actualiza el id boib en los tipos de normativa. **/ 
 UPDATE RSC_TIPO SET TIP_IDBOIB = 5225 WHERE TIP_CODI = 2;
@@ -83,3 +83,4 @@ INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (32, 'es', 'R
 INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (32, 'en', 'European Regulation');
 INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (32, 'fr', 'Réglementation européenne');
 INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (32, 'de', 'Europäische Regelung');
+  

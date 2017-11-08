@@ -164,7 +164,7 @@ public class SiaWS {
 		List<NORMATIVASNORMATIVA> normativasCorrectas = new ArrayList<NORMATIVASNORMATIVA>();
 		for (Normativa norm : sia.getNormativas()) {
 			NORMATIVASNORMATIVA nor = new NORMATIVASNORMATIVA();
-			if (norm.getTipo() == null) { continue;}
+			if (norm == null || norm.getTipo() == null || !norm.isVisible()) { continue;}
 			nor.setCODRANGO(norm.getTipo().getTipoSia().toString()); 
 			nor.setTITULO(SiaUtils.getNombreNormativa(norm));
 			normativasCorrectas.add(nor);

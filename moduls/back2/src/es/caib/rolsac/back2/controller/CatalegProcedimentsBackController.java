@@ -54,6 +54,7 @@ import org.ibit.rol.sac.model.TraduccionTramite;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Usuario;
+import org.ibit.rol.sac.model.ValidacionNormativa;
 import org.ibit.rol.sac.model.criteria.BuscadorProcedimientoCriteria;
 import org.ibit.rol.sac.model.dto.CodNomDTO;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
@@ -1563,6 +1564,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				paramMap.put("fechaBoletin", fechaBoletin);
 			}
 
+			//Restricción del acta de reunión de normativas para que salgan sólo las vigentes.
+			paramMap.put("validacion", ValidacionNormativa.VIGENTE);
+			
 			// Título (en todos los idiomas)
 			String text = request.getParameter("titol");
 			if (text != null && !"".equals(text)) {
