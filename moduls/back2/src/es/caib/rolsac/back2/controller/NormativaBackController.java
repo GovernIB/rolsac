@@ -39,6 +39,7 @@ import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.Servicio;
 import org.ibit.rol.sac.model.Tipo;
 import org.ibit.rol.sac.model.TipoAfectacion;
+import org.ibit.rol.sac.model.Traduccion;
 import org.ibit.rol.sac.model.TraduccionDocumentoNormativa;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
@@ -1781,7 +1782,11 @@ public class NormativaBackController extends PantallaBaseController {
 
             DocumentoNormativaDelegate docDelegate = DelegateUtil.getDocumentoNormativaDelegate();
             Long id = Long.parseLong(valoresForm.get(iden));
+            //Map<String, Traduccion> traducciones = doc.getTraducciones();
+            //doc.setTraducciones(null);
             docId = docDelegate.grabarDocument(doc, id);
+            //doc.setTraducciones(traducciones);
+            //docId = docDelegate.grabarDocument(doc, id);
             
 
             for (Long idArchivo : archivosBorrar) {

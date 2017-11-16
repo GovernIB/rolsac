@@ -51,8 +51,11 @@ INSERT INTO RSC_TRANOR (TNO_CODNOR, TNO_SECCIO, TNO_APARTA, TNO_PAGINI, TNO_PAGF
 update rsc_normat set nor_typen = 'normativa';
 update rsc_normat set nor_validn = 'PENDIENTE, HAY QUE VER QUE VALOR TENDRÁ AL FINAL SEGUN CAIB.';
 update rsc_normat set nor_codbol_ant = nor_codbol;
-update rsc_normat set nor_codbol = 'DOCE' where nor_codbol in (select bol_codi from rsc_boleti where lower(bol_nombre) like '%diario%uropea%' );
-
+---Actualizamos el tipo boletin para que cree el DOUE y fusione el DOCE y el Diario Europeu en DOUE.
+INSERT INTO RSC_BOLETI (BOL_CODI , BOL_NOMBRE, BOL_ENLACE) VALUES ( RSC_SEQ_ALL.nextval, 'DOUE', null);
+update rsc_normat set nor_codbol = (select bol_codi from rsc_boleti where lower(bol_nombre) like 'doue') where nor_codbol in (select bol_codi from rsc_boleti where lower(bol_nombre) like 'doce' );
+update rsc_normat set nor_codbol = (select bol_codi from rsc_boleti where lower(bol_nombre) like 'doue') where nor_codbol in (select bol_codi from rsc_boleti where lower(bol_nombre) like '%diario%uropea%' );
+delete from rsc_boleti where lower(bol_nombre) like 'doce';
 
 /** Actualiza el id boib en los tipos de normativa. **/ 
 UPDATE RSC_TIPO SET TIP_IDBOIB = 5225 WHERE TIP_CODI = 2;

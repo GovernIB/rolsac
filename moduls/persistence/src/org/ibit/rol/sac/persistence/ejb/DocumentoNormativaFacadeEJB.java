@@ -1,28 +1,24 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import java.util.Collection;
+import java.util.Map;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.DocumentoNormativa;
 import org.ibit.rol.sac.model.Normativa;
-import org.ibit.rol.sac.model.TraduccionDocumento;
+import org.ibit.rol.sac.model.Traduccion;
 import org.ibit.rol.sac.model.TraduccionDocumentoNormativa;
-import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.util.IndexacionUtil;
-import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
+import es.caib.solr.api.model.types.EnumCategoria;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
-
-import es.caib.solr.api.model.types.EnumCategoria;
 
 
 /**
@@ -150,8 +146,20 @@ public abstract class DocumentoNormativaFacadeEJB extends HibernateEJB
 				session.save(doc);
 
 			} else {
-
-				session.saveOrUpdate(doc);
+				boolean probar = false;
+				if (probar) {
+					Map<String, Traduccion> traducciones = doc.getTraducciones();
+					for(Traduccion traduccion : traducciones.values()) {
+						session.delete(traduccion);
+					}
+				}
+				
+				//doc.setTraducciones(null);
+				session.update(doc); 
+				session.flush();
+				
+				//doc.setTraducciones(traducciones);
+				//session.update(doc);
 				actualizar = true;
 			}
 
@@ -161,7 +169,7 @@ public abstract class DocumentoNormativaFacadeEJB extends HibernateEJB
 			}
 
 			log.debug("Grabar Documento: Lanzo el actualizador");
-			Actualizador.actualizar(normativa, true);
+			Actualizador.actualizar(normativa, normativa.getId());
 			
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_NORMATIVA, normativa.getId(), false);
 			return doc.getId();
