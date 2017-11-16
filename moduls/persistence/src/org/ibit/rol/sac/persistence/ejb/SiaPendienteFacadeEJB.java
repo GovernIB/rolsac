@@ -107,7 +107,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		    		
 		    		SiaResultado siaResultado = null;
 					if (siaEnviableResultado.isNotificiarSIA()) {
-						SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(procedimiento);
+						SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(procedimiento, siaEnviableResultado);
 						if (siaCumpleDatos.isCumpleDatos()) {
 				    		try {
 				    			// Enviamos a SIA
@@ -508,7 +508,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 					
 					// Verificamos si se puede enviar a SIA
 					if (siaEnviableResultado.isNotificiarSIA()) {
-						SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(procedimiento);
+						SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(procedimiento, siaEnviableResultado);
 						if (siaCumpleDatos.isCumpleDatos()) {
 							siaResultado = enviarProcedimiento(procedimiento);
 						} else {
@@ -676,7 +676,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		private Sia obtenerSiaProc(ProcedimientoLocal procedimiento) throws Exception {
 			final Sia sia = new Sia();
 			final SiaEnviableResultado siaEnviableResultado = SiaUtils.isEnviable(procedimiento);
-			final SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(procedimiento);
+			final SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(procedimiento, siaEnviableResultado);
 			
 			sia.setIdProc(procedimiento.getId().toString());
 			if (procedimiento.getCodigoSIA() != null) {

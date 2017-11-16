@@ -314,7 +314,7 @@ public class SiaUtils {
 	 * @param procedimiento
 	 * @return
 	 */
-	public static SiaCumpleDatos cumpleDatos(final ProcedimientoLocal procedimiento) {
+	public static SiaCumpleDatos cumpleDatos(final ProcedimientoLocal procedimiento, SiaEnviableResultado siaEnviableResultado) {
 		final SiaCumpleDatos resultado = new SiaCumpleDatos(false);
 		final StringBuffer mensajeError = new StringBuffer();
 
@@ -324,51 +324,7 @@ public class SiaUtils {
 			return resultado;
 		}
 		
-	    boolean tieneMaterias=procedimiento.getMaterias().size() > 0;
-	    if (!tieneMaterias) {
-	    	mensajeError.append("No té matèries.");	
-	    }
-	    
-	    boolean tieneNormativas=procedimiento.getNormativas().size() > 0;
-	    if (!tieneNormativas) {
-	    	mensajeError.append("No té normatives.");	
-	    }
-	    
-	    boolean encontradoTipo = false;
-	    if (procedimiento.getNormativas().size() > 0) {
-		    for (Normativa norm : procedimiento.getNormativas()) {
-		    	if (norm.getTipo() != null && norm.getTipo().getTipoSia() != null) {
-		    		encontradoTipo = true;
-		    	}
-		    }
-	    }
-	    
-	    if (!encontradoTipo) {
-	    	mensajeError.append("Cap de les normatives té associat un tipus sia.");
-	    }
-	    
-	    
-	    final String nombre = getNombreProcedimiento(procedimiento);
-	    boolean tieneNombre;
-	    if (StringUtils.isBlank(nombre)) {
-	    	mensajeError.append("El procediment no té títol.");	
-	    	tieneNombre = false;
-	    } else {
-	    	tieneNombre = true;
-	    	resultado.setNombre(nombre);
-	    }
-	    
-	    final String resumen = getResumenProcedimiento(procedimiento);
-	    boolean tieneResumen;
-	    if (StringUtils.isBlank(resumen)) {
-	    	mensajeError.append("El procediment no té resum.");	
-	    	tieneResumen = false;
-	    } else {
-	    	tieneResumen = true;
-	    	resultado.setResumen(resumen);
-	    }
-	    
-	    boolean tieneSiaUA;
+		boolean tieneSiaUA;
   		final SiaUA siaUA = obtenerSiaUA(procedimiento);
   	    if (siaUA == null) {
   			tieneSiaUA = false;	
@@ -388,6 +344,64 @@ public class SiaUtils {
 	  	    	noAsociadoSiaUA = false;
 	  	    }
   	    }
+  	    
+  	    boolean tieneNombre, tieneResumen, tieneMaterias, tieneNormativas, encontradoTipo; 
+  	    if (siaEnviableResultado.getOperacion() != null && SiaUtils.ESTADO_BAJA.equals(siaEnviableResultado.getOperacion())) {
+  	    	//En caso de baja, no hace falta comprobar ni normativas, ni materia, ni si tiene tipo, ni nombre ni resumen.
+  	    	//Eso si, sin siaUA, es imposible enviar una baja.
+  	    	tieneMaterias = true;
+  	    	tieneNormativas = true;
+  	    	encontradoTipo = true;
+  	    	tieneResumen = true;
+  	    	tieneNombre = true;
+  	    } else {
+  	    	
+  	    	final String nombre = getNombreProcedimiento(procedimiento);
+  		    
+  		    if (StringUtils.isBlank(nombre)) {
+  		    	mensajeError.append("El procediment no té títol.");	
+  		    	tieneNombre = false;
+  		    } else {
+  		    	tieneNombre = true;
+  		    	resultado.setNombre(nombre);
+  		    }
+  		    
+  		    final String resumen = getResumenProcedimiento(procedimiento);
+  		    if (StringUtils.isBlank(resumen)) {
+  		    	mensajeError.append("El procediment no té resum.");	
+  		    	tieneResumen = false;
+  		    } else {
+  		    	tieneResumen = true;
+  		    	resultado.setResumen(resumen);
+  		    }
+  		    
+  		    
+		    tieneMaterias=procedimiento.getMaterias().size() > 0;
+		    if (!tieneMaterias) {
+		    	mensajeError.append("No té matèries.");	
+		    }
+		    
+		    
+		    tieneNormativas=procedimiento.getNormativas().size() > 0;
+		    if (!tieneNormativas) {
+		    	mensajeError.append("No té normatives.");	
+		    }
+		    
+		    encontradoTipo = false;
+		    if (procedimiento.getNormativas().size() > 0) {
+			    for (Normativa norm : procedimiento.getNormativas()) {
+			    	if (norm != null && norm.isVisible() && norm.getTipo() != null && norm.getTipo().getTipoSia() != null) {
+			    		encontradoTipo = true;
+			    	}
+			    }
+		    }
+		    
+		    if (!encontradoTipo) {
+		    	mensajeError.append("Cap de les normatives té associat un tipus sia.");
+		    }
+  	    }
+	    
+	    
 	    
 	    /** Si cumple todos los datos ok, sino incrustamos el mensaje de error. **/
 	    if (tieneMaterias && tieneNormativas && encontradoTipo && tieneNombre && tieneResumen && tieneSiaUA && noAsociadoSiaUA) {

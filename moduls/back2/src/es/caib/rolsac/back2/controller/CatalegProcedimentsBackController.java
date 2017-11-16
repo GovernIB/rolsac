@@ -1559,7 +1559,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				Date fechaBoletin = DateUtils.parseDate(request.getParameter("dataButlleti"));
 				paramMap.put("fechaBoletin", fechaBoletin);
 			}
-
+			
 			// Título (en todos los idiomas)
 			String text = request.getParameter("titol");
 			if (text != null && !"".equals(text)) {
