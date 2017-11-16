@@ -106,6 +106,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		
 		estadoProceso = enviarTodosProcedimientos(idProcedimientos, siaJob, estadoProceso);
 		estadoProceso = enviarTodosServicios(idServicios, siaJob, estadoProceso);
+
 		
 		// Finalizamos proceso y guardamos
 		estadoProceso.setFechaFin(new Date());		
@@ -137,7 +138,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 				    		
 				    		SiaResultado siaResultado = null;
 							if (siaEnviableResultado.isNotificiarSIA()) {
-								SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(procedimiento);
+								SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(procedimiento, siaEnviableResultado);
 								if (siaCumpleDatos.isCumpleDatos()) {
 						    		try {
 						    			// Enviamos a SIA
@@ -207,7 +208,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 				    		
 				    		SiaResultado siaResultado = null;
 							if (siaEnviableResultado.isNotificiarSIA()) {
-								SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(servicio);
+								SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(servicio, siaEnviableResultado);
 								if (siaCumpleDatos.isCumpleDatos()) {
 						    		try {
 						    			// Enviamos a SIA
@@ -647,7 +648,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 					
 					// Verificamos si se puede enviar a SIA
 					if (siaEnviableResultado.isNotificiarSIA()) {
-						SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(procedimiento);
+						SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(procedimiento, siaEnviableResultado);
 						if (siaCumpleDatos.isCumpleDatos()) {
 							siaResultado = enviarProcedimiento(procedimiento);
 						} else {
@@ -907,7 +908,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		private Sia obtenerSiaProcedimiento(ProcedimientoLocal procedimiento) throws Exception {
 			final Sia sia = new Sia();
 			final SiaEnviableResultado siaEnviableResultado = SiaUtils.isEnviable(procedimiento);
-			final SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(procedimiento);
+			final SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(procedimiento, siaEnviableResultado);
 			
 			sia.setIdElemento(procedimiento.getId().toString());
 			if (procedimiento.getCodigoSIA() != null) {
