@@ -146,6 +146,7 @@ public abstract class DocumentoNormativaFacadeEJB extends HibernateEJB
 				session.save(doc);
 
 			} else {
+				/*
 				boolean probar = false;
 				if (probar) {
 					Map<String, Traduccion> traducciones = doc.getTraducciones();
@@ -153,6 +154,7 @@ public abstract class DocumentoNormativaFacadeEJB extends HibernateEJB
 						session.delete(traduccion);
 					}
 				}
+				*/
 				
 				//doc.setTraducciones(null);
 				session.update(doc); 
