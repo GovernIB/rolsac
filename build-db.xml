@@ -9,6 +9,7 @@
 
     <path id="db.classpath">
         <fileset dir="${lib}">
+        	<include name="postgresql-9.4.1207.jre7.jar" />
     		<include name="hibernate2.jar"/>
         	<include name="cglib2.jar"/>
         	<include name="commons-logging.jar"/>        	
