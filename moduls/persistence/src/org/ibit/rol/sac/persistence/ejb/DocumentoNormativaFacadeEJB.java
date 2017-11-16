@@ -146,22 +146,9 @@ public abstract class DocumentoNormativaFacadeEJB extends HibernateEJB
 				session.save(doc);
 
 			} else {
-				/*
-				boolean probar = false;
-				if (probar) {
-					Map<String, Traduccion> traducciones = doc.getTraducciones();
-					for(Traduccion traduccion : traducciones.values()) {
-						session.delete(traduccion);
-					}
-				}
-				*/
 				
-				//doc.setTraducciones(null);
 				session.update(doc); 
 				session.flush();
-				
-				//doc.setTraducciones(traducciones);
-				//session.update(doc);
 				actualizar = true;
 			}
 
