@@ -29,6 +29,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
@@ -77,6 +78,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.back2.exception.TextNoValidException;
 import es.caib.rolsac.back2.util.CSVUtil;
 import es.caib.rolsac.back2.util.CargaModulosLateralesUtil;
 import es.caib.rolsac.back2.util.GuardadoAjaxUtil;
@@ -950,7 +952,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 			// Fin recuperación de los valores
 
 			Long idFitxa = guardarGrabar(fitxa);										// Guardar los cambios de una ficha
-
+			
 			// Guardado de las relaciones de una ficha con otras entidades
 			guardarSeccionessUA(edicion, fitxaOld, valoresForm, idFitxa);					// Guardamos las relaciones de la ficha con las secciones y las UAs
 			// Fin guardado relaciones
@@ -973,14 +975,12 @@ public class FitxaInfBackController extends PantallaBaseController {
 			
 			error = messageSource.getMessage("error.fitxer.tamany", null, request.getLocale());
 			result = new IdNomDTO(-3l, error);
-			
 			log.error(ExceptionUtils.getStackTrace(e));
 			
 		} catch (UnsupportedEncodingException e) {
 			
 			error = messageSource.getMessage("error.altres", null, request.getLocale());
 			result = new IdNomDTO(-2l, error);
-			
 			log.error(ExceptionUtils.getStackTrace(e));
 			
 		} catch (NumberFormatException nfe) {
@@ -995,8 +995,15 @@ public class FitxaInfBackController extends PantallaBaseController {
 			
 		} catch (IOException e) {
 			
-			//error = messageSource.getMessage(e.getMessage(), null, request.getLocale());
 			result = new IdNomDTO(-5l, e.getMessage());
+			
+		} catch (TextNoValidException exception) {
+			
+			error = messageSource.getMessage("fitxer.error.texte.incorrecte", null, request.getLocale());
+			if (exception.getCampo() != null && !exception.getCampo().isEmpty()) {
+				error +=  " " + messageSource.getMessage(exception.getCampo(), null, request.getLocale());
+			}
+			result = new IdNomDTO(-6l, error);
 		}
 
 		return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
@@ -1153,7 +1160,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 	/*
 	 * Controlamos los diferentes idiomas de una ficha
 	 */
-	private Ficha guardarIdiomas(boolean edicion, Ficha fitxa, Map<String, String> valoresForm) throws DelegateException {
+	private Ficha guardarIdiomas(boolean edicion, Ficha fitxa, Map<String, String> valoresForm) throws DelegateException, TextNoValidException {
 
 		TraduccionFicha tfi;
 		
@@ -1164,7 +1171,11 @@ public class FitxaInfBackController extends PantallaBaseController {
 			if (tfi == null) {
 				tfi = new TraduccionFicha();
 			}
-
+			
+			checkTextoValido(RolUtil.limpiaCadena(valoresForm.get("item_titol_" + lang)), "fitxes.formulari.titol");
+			checkTextoValido(RolUtil.limpiaCadena(valoresForm.get("item_des_curta_" + lang)), "fitxes.formulari.descripcio.abreviada");
+			checkTextoValido(RolUtil.limpiaCadena(valoresForm.get("item_des_llarga_" + lang)), "fitxes.formulari.descripcio.extensa");
+			
 			tfi.setTitulo(RolUtil.limpiaCadena(valoresForm.get("item_titol_" + lang)));
 			tfi.setDescAbr(RolUtil.limpiaCadena(valoresForm.get("item_des_curta_" + lang)));
 			tfi.setDescripcion(RolUtil.limpiaCadena(valoresForm.get("item_des_llarga_" + lang)));
@@ -1179,6 +1190,17 @@ public class FitxaInfBackController extends PantallaBaseController {
 		
 	}
 
+	private void checkTextoValido (final String texto, final String parametro) throws TextNoValidException {
+		int length = texto.length();
+        char character;
+		for (int i = 0; i < length; i++) {
+            character = texto.charAt( i );
+            if (character < 0x20) {
+                throw new TextNoValidException(parametro);
+            } 
+        }
+	}
+	
 	/*
 	 * Controlamos el icono de la ficha
 	 */
