@@ -502,7 +502,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 						session.flush();
 					} else {
 						//Paso 3. 
-						SiaCumpleDatos cumpleDatos = SiaUtils.cumpleDatos(servicio);
+						SiaCumpleDatos cumpleDatos = SiaUtils.cumpleDatos(servicio, siaEnviable);
 						if (cumpleDatos.isCumpleDatos()) {
 							siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_CREADO);
 							session.save(siaPendiente);

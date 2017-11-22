@@ -719,7 +719,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 					
 					// Verificamos si se puede enviar a SIA
 					if (siaEnviableResultado.isNotificiarSIA()) {
-						SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(servicio);
+						SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(servicio, siaEnviableResultado);
 						if (siaCumpleDatos.isCumpleDatos()) {
 							siaResultado = enviarServicio(servicio);
 						} else {
@@ -1028,7 +1028,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		private Sia obtenerSiaServicio(Servicio servicio) throws Exception {
 			final Sia sia = new Sia();
 			final SiaEnviableResultado siaEnviableResultado = SiaUtils.isEnviable(servicio);
-			final SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(servicio);
+			final SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(servicio, siaEnviableResultado);
 			
 			sia.setIdElemento(servicio.getId().toString());
 			if (servicio.getCodigoSIA() != null) {
