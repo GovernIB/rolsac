@@ -62,7 +62,7 @@ COMMENT ON COLUMN RSC_NORMAT.NOR_NUMNOR is 'Numero de la normativa.';
 COMMENT ON COLUMN RSC_NORMAT.NOR_TYPEN is 'Nuevo tipo de la normativa.';
 COMMENT ON COLUMN RSC_NORMAT.NOR_VALIDN is 'Nuevo valida de la normativa.';
 
-	--La constraint obliga a que el numero de normativa siga el formato NNN/YYYY siendo N el nº y Y el año.
+	--La constraint obliga a que el numero de normativa siga el formato NNN/YYYY siendo N el nï¿½ y Y el aï¿½o.
 ALTER TABLE RSC_NORMAT
   ADD CONSTRAINT  RSC_NORMAT_NUMNOR_CHECK
   CHECK (REGEXP_LIKE(NOR_NUMNOR,'[[:digit:]]{0,3}/[[:digit:]]{4}')); 
@@ -263,7 +263,7 @@ ALTER TABLE RSC_SOLJOB ADD JOB_TOTDSR NUMBER(5,2);
 COMMENT ON COLUMN RSC_SOLJOB.JOB_FECSER is 'Fecha fin ejecutando servicios.';
 COMMENT ON COLUMN RSC_SOLJOB.JOB_TOTSER is 'Porcentaje de total servicios.';
 COMMENT ON COLUMN RSC_SOLJOB.JOB_TOTDSR is 'Porcentaje de total servicios documento.';
-
+  
 --Anyadimos el tipo cod pidip al tipo SIA.
 ALTER TABLE RSC_TIPO ADD TIP_IDBOIB NUMBER(19,0);
 COMMENT ON COLUMN RSC_TIPO.TIP_IDBOIB is 'Codigo de BOIB.';
