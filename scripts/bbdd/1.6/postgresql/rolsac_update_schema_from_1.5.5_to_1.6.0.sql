@@ -60,7 +60,6 @@ ALTER TABLE RSC_NORMAT MODIFY (NOR_TYPEN NOT NULL); --Ahora el tipon ya no es nu
 COMMENT ON COLUMN RSC_NORMAT.NOR_NUMNOR is 'Numero de la normativa.';
 COMMENT ON COLUMN RSC_NORMAT.NOR_TYPEN is 'Nuevo tipo de la normativa.';
 COMMENT ON COLUMN RSC_NORMAT.NOR_VALIDN is 'Nuevo valida de la normativa.';
-COMMENT ON COLUMN RSC_NORMAT.NOR_CODBON is 'Nuevo codigo boletin de la normativa.';
 
 	--La constraint obliga a que el numero de normativa siga el formato NNN/YYYY siendo N el nº y Y el año.
 ALTER TABLE RSC_NORMAT
@@ -265,5 +264,5 @@ COMMENT ON COLUMN RSC_SOLJOB.JOB_TOTSER is 'Porcentaje de total servicios.';
 COMMENT ON COLUMN RSC_SOLJOB.JOB_TOTDSR is 'Porcentaje de total servicios documento.';
 
 --Anyadimos el tipo cod pidip al tipo SIA.
-ALTER TABLE RSC_TIPO ADD TIP_CODPID NUMBER(19,0);
-COMMENT ON COLUMN RSC_TIPO.TIP_CODPID is 'Codigo de PIDIP.';
+ALTER TABLE RSC_TIPO ADD TIP_IDBOIB NUMBER(19,0);
+COMMENT ON COLUMN RSC_TIPO.TIP_IDBOIB is 'Codigo de BOIB.';

@@ -1,4 +1,4 @@
---Tabla de relacion de documentos con normativa y su traducción.
+--Tabla de relacion de documentos con normativa y su traduccion.
 CREATE TABLE RSC_DOCNOR
 (
   DNO_CODI   NUMBER(19,0) NOT NULL ENABLE,
@@ -26,7 +26,7 @@ CREATE TABLE RSC_TRADNR
     CONSTRAINT RSC_TRADNR_DOCNOR_FK FOREIGN KEY (TDN_CODDNR) REFERENCES RSC_DOCNOR (DNO_CODI) ENABLE
 );
 
-COMMENT ON TABLE RSC_TRADNR IS 'Traducción del documento asociado a una normativa';
+COMMENT ON TABLE RSC_TRADNR IS 'Traduccion del documento asociado a una normativa';
 COMMENT ON COLUMN RSC_TRADNR.TDN_CODDNR is 'Identificador de la normativa. PK - 1';
 COMMENT ON COLUMN RSC_TRADNR.TDN_CODIDI is 'Identificador del idioma (es / ca). PK - 2';
 COMMENT ON COLUMN RSC_TRADNR.TDN_TITULO is 'Titulo del documento para mostrar en el modulo.';
@@ -53,14 +53,14 @@ COMMENT ON COLUMN RSC_UNANOR.UNN_CODUNA is 'Identificador de la UA.';
 --Cambios en las normativas. 
 ALTER TABLE RSC_NORMAT ADD NOR_TYPEN	VARCHAR2(64 CHAR); --Nuevo tipo que es normativa o normativaExterna
 ALTER TABLE RSC_NORMAT ADD NOR_VALIDN	NUMBER(10, 0); --Nuevo valida
-ALTER TABLE RSC_NORMAT ADD NOR_CODBOL_ANT	NUMBER(19, 0); --Codigo boletín antiguo
+ALTER TABLE RSC_NORMAT ADD NOR_CODBOL_ANT	NUMBER(19, 0); --Codigo boletin antiguo
+ALTER TABLE RSC_NORMAT ADD NOR_CODBOL_ANT	NUMBER(19, 0); --Codigo boletin antiguo
 ALTER TABLE RSC_NORMAT ADD NOR_NUMNOR VARCHAR2(8 CHAR); --Numero normativa.
 ALTER TABLE RSC_NORMAT MODIFY (NOR_TYPE NULL); --Ahora el tipo puede ser nulo
 ALTER TABLE RSC_NORMAT MODIFY (NOR_TYPEN NOT NULL); --Ahora el tipon ya no es nulo
 COMMENT ON COLUMN RSC_NORMAT.NOR_NUMNOR is 'Numero de la normativa.';
 COMMENT ON COLUMN RSC_NORMAT.NOR_TYPEN is 'Nuevo tipo de la normativa.';
 COMMENT ON COLUMN RSC_NORMAT.NOR_VALIDN is 'Nuevo valida de la normativa.';
-COMMENT ON COLUMN RSC_NORMAT.NOR_CODBON is 'Nuevo codigo boletin de la normativa.';
 
 	--La constraint obliga a que el numero de normativa siga el formato NNN/YYYY siendo N el nº y Y el año.
 ALTER TABLE RSC_NORMAT
@@ -155,7 +155,7 @@ COMMENT ON COLUMN RSC_TRASER.TSR_CODIDI is 'Codigo del idioma';
   
   
   
---Tabla de relacion de documentos con servicios y su traducción.
+--Tabla de relacion de documentos con servicios y su traduccion.
 CREATE TABLE RSC_DOCSER
 (
   DSR_CODI   NUMBER(19,0) NOT NULL ENABLE,
@@ -183,7 +183,7 @@ CREATE TABLE RSC_TRADSR
     CONSTRAINT RSC_TRADSR_DOCNOR_FK FOREIGN KEY (TDS_CODDSR) REFERENCES RSC_DOCSER (DSR_CODI) ENABLE
 );
 
-COMMENT ON TABLE RSC_TRADSR IS 'Traducción del documento asociado a un servicios';
+COMMENT ON TABLE RSC_TRADSR IS 'Traduccion del documento asociado a un servicios';
 COMMENT ON COLUMN RSC_TRADSR.TDS_CODDSR is 'Identificador del doc servicio. PK - 1';
 COMMENT ON COLUMN RSC_TRADSR.TDS_CODIDI is 'Identificador del idioma (es / ca). PK - 2';
 COMMENT ON COLUMN RSC_TRADSR.TDS_TITULO is 'Titulo del documento para mostrar en el modulo.';
@@ -265,5 +265,5 @@ COMMENT ON COLUMN RSC_SOLJOB.JOB_TOTSER is 'Porcentaje de total servicios.';
 COMMENT ON COLUMN RSC_SOLJOB.JOB_TOTDSR is 'Porcentaje de total servicios documento.';
 
 --Anyadimos el tipo cod pidip al tipo SIA.
-ALTER TABLE RSC_TIPO ADD TIP_CODPID NUMBER(19,0);
-COMMENT ON COLUMN RSC_TIPO.TIP_CODPID is 'Codigo de PIDIP.';
+ALTER TABLE RSC_TIPO ADD TIP_IDBOIB NUMBER(19,0);
+COMMENT ON COLUMN RSC_TIPO.TIP_IDBOIB is 'Codigo de BOIB.';
