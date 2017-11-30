@@ -76,6 +76,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.util.CSVUtil;
 import es.caib.rolsac.back2.util.CargaModulosLateralesUtil;
+import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
@@ -1411,9 +1412,11 @@ public class NormativaBackController extends PantallaBaseController {
         }
 
         String tmp = texto;
+        
+        return HtmlUtils.html2text(texto).trim();
 
         // Sera el texto desde el primer '>' y desde ahi al primer '<'
-        int pos = tmp.indexOf('>');
+   /*     int pos = tmp.indexOf('>');
         if (pos > -1) {
             tmp = tmp.substring(pos + 1);
             pos = tmp.indexOf('<');
@@ -1425,7 +1428,7 @@ public class NormativaBackController extends PantallaBaseController {
             }
         } else {
             return texto;
-        }
+        }*/
     }
 
     @RequestMapping(value = "/traduir.do")

@@ -208,7 +208,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 				llistaFitxesDTO.add(
 					new FichaDTO(
 						fitxaResumen.getId(),
-						tfi == null ? null : tfi.getTitulo(),
+						tfi == null ? null : HtmlUtils.html2text(tfi.getTitulo()),
 						DateUtils.formatDate(fitxaResumen.getFechaPublicacion()),
 						DateUtils.formatDate(fitxaResumen.getFechaCaducidad()),
 						DateUtils.formatDate(fitxaResumen.getFechaActualizacion()),

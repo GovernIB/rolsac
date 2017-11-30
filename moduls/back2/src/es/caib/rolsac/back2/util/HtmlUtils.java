@@ -49,4 +49,9 @@ public class HtmlUtils
 		return txt;
 	}
 	
+	
+	public static String html2text(String html) {
+	    return html.replaceAll("\\<.*?>","");
+	}
+	
 }

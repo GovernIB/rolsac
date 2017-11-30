@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.util.CSVUtil;
+import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
@@ -120,7 +121,7 @@ public class PersonalBackController extends PantallaBaseController {
 		    for (Personal persona : (List<Personal>) resultadoBusqueda.getListaResultados()) {
 		        llistaPersonalDTO.add(new PersonalDTO(
 		            persona.getId(),
-		            persona.getNombre(),
+		            HtmlUtils.html2text(persona.getNombre()),
 		            persona.getUsername(),
 		            persona.getUnidadAdministrativa().getNombreUnidadAdministrativa(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto()),
 		            persona.getEmail(),

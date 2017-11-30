@@ -532,7 +532,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			
 			ProcedimientoLocalDTO procLocalDTO = new ProcedimientoLocalDTO(
 			    pl.getId(),
-			    pl.getNombreProcedimiento(),
+			    HtmlUtils.html2text(pl.getNombreProcedimiento()),
 			    pl.isVisible(),
 			    DateUtils.formatDate(pl.getFechaActualizacion()),
 			    pl.getNombreFamilia()
