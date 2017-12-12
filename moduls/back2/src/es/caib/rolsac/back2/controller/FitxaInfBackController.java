@@ -1195,9 +1195,21 @@ public class FitxaInfBackController extends PantallaBaseController {
         char character;
 		for (int i = 0; i < length; i++) {
             character = texto.charAt( i );
-            if (character < 0x20) {
-                throw new TextNoValidException(parametro);
-            } 
+	            switch (character) {
+	            		case '"':
+	                    case '&':
+	                    case '<':
+	                    case '>':
+	                    case '\n':
+	                    case '\r':
+	                    case '\t':
+	                    	break;
+	                    default:
+	                        if (character < 0x20) {
+	                    		throw new TextNoValidException(parametro);
+	                        }
+	                        break;
+	            } 
         }
 	}
 	
