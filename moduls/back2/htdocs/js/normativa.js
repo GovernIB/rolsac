@@ -365,6 +365,7 @@ function CLlistat() {
 			dataVars_cercador += "&validacio=" + $("#cerca_validacio").val();			
 			dataVars_cercador += "&totesUnitats=" + $("#cerca_totes_unitats").is(':checked');
 			dataVars_cercador += "&uaFilles=" + $("#cerca_uaFilles").is(':checked');
+			dataVars_cercador += "&invalids=" + $("#cerca_invalids").is(':checked');
 			dataVars_cercador += "&idUA=" + $("#cerca_ua_id").val();
 			dataVars_cercador += "&numNormativa=" + $("#cerca_num_normativa").val();
 			dataVars_cercador += "&dataAprovacio=" + $("#cerca_data_aprovacio").val();

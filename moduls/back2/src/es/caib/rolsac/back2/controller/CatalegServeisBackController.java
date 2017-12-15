@@ -54,6 +54,7 @@ import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
 import org.ibit.rol.sac.model.TraduccionServicio;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Usuario;
+import org.ibit.rol.sac.model.ValidacionNormativa;
 import org.ibit.rol.sac.model.criteria.BuscadorServicioCriteria;
 import org.ibit.rol.sac.model.dto.CodNomDTO;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
@@ -1218,7 +1219,10 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			} else {
 				paramTrad.put("idioma", idioma);
 			}
-
+			
+			//Restricción del acta de reunión de normativas para que salgan sólo las vigentes.
+			paramMap.put("validacion", ValidacionNormativa.VIGENTE);
+			
 			//Información de paginación
 			String pagPag = request.getParameter("pagPagina");
 			String pagRes = request.getParameter("pagRes");
@@ -1230,13 +1234,14 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			    pagRes = String.valueOf(10);
 			}
 
+			
 			resultadoBusqueda = new ResultadoBusqueda();
 
 			// Realizar la consulta y obtener resultados
 			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 
 			//La búsqueda de normativas no tendrá en cuenta la UA actual (idua = null)
-			resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, "todas", null, false, false, campoOrdenacion, orden, pagPag, pagRes, false);
+			resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, "todas", null, false, false, false, campoOrdenacion, orden, pagPag, pagRes, false);
 
 			for (Normativa normativa : castList(Normativa.class, resultadoBusqueda.getListaResultados()) ) {
 				long idNormativa = normativa.getId();

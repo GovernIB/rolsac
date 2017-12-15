@@ -98,6 +98,11 @@ function ListaOrdenable() {
 		if (debug)
 			console.log("Entrando en ListaOrdenable.getHtmlItem");
 		
+		var fontcolor = ""; //Parametro extra para marcar con rojo valores no validos.
+		if (item["color"] != undefined && item["color"] != '') {
+			fontcolor = "style=\"color:" + item["color"]+"\"";
+		}
+		
 		var sufijoIdioma = "";
 		var idiomaAtributo = "";
 		var partesAtributo;
@@ -140,7 +145,7 @@ function ListaOrdenable() {
 					if (jQuery.trim(valor) == "")
 						valor = "&nbsp;";
 					
-					html += "<span class=\"" + params.nombre + "\">" + valor + "</span>";
+					html += "<span class=\"" + params.nombre + "\" "+fontcolor+">" + valor + "</span>";
 					break;			
 
 				case "url":

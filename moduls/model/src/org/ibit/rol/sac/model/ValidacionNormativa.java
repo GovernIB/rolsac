@@ -3,8 +3,9 @@
 package org.ibit.rol.sac.model;
 
 public class ValidacionNormativa {
-
-    public final static Integer VIGENTE = 1;
+	public final static Integer VIGENTE = 1;
     public final static Integer DEROGADA = 2;
+    /** Se tendrá que eliminar tras la depuración de normativas. **/
+    public final static Integer INTERNA_PRIVADA = 4;
     
 }

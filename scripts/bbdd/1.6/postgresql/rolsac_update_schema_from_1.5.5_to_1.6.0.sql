@@ -57,9 +57,11 @@ ALTER TABLE RSC_NORMAT ADD NOR_CODBOL_ANT	NUMBER(19, 0); --Codigo bolet�n anti
 ALTER TABLE RSC_NORMAT ADD NOR_NUMNOR VARCHAR2(8 CHAR); --Numero normativa.
 ALTER TABLE RSC_NORMAT MODIFY (NOR_TYPE NULL); --Ahora el tipo puede ser nulo
 ALTER TABLE RSC_NORMAT MODIFY (NOR_TYPEN NOT NULL); --Ahora el tipon ya no es nulo
+ALTER TABLE RSC_NORMAT ADD NOR_DATVAL NUMBER; --Datos validados
 COMMENT ON COLUMN RSC_NORMAT.NOR_NUMNOR is 'Numero de la normativa.';
 COMMENT ON COLUMN RSC_NORMAT.NOR_TYPEN is 'Nuevo tipo de la normativa.';
 COMMENT ON COLUMN RSC_NORMAT.NOR_VALIDN is 'Nuevo valida de la normativa.';
+COMMENT ON COLUMN RSC_NORMAT.NOR_DATVAL is 'Indica si los datos de la normativa estan validados siendo 0 NO y 1 SI (y por tanto esta correcto y bien depurado).';
 
 	--La constraint obliga a que el numero de normativa siga el formato NNN/YYYY siendo N el n� y Y el a�o.
 ALTER TABLE RSC_NORMAT

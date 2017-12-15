@@ -46,6 +46,8 @@ public class Normativa extends Traducible implements Indexable, Validable, Compa
     private String descCodiVuds;
     /** Número normativa. **/
     private String numNormativa;
+    /** Datos validos. **/
+    private Integer datosValidos;
     
 //	//Campos usados para optimizar la búsqueda
     /** Traduccion titulo. **/
@@ -291,7 +293,35 @@ public class Normativa extends Traducible implements Indexable, Validable, Compa
     }
     
     
-    // Metode creat per poder ser cridad des de la JSP atraves de jstl
+    /**
+	 * @return the datosValidos
+	 */
+	public Integer getDatosValidos() {
+		return datosValidos;
+	}
+
+	/**
+	 * @param datosValidos the datosValidos to set
+	 */
+	public void setDatosValidos(Integer datosValidos) {
+		this.datosValidos = datosValidos;
+	}
+	
+	/**
+	 * Indica si la normativa tiene los datos validos.
+	 * @return
+	 */
+	public boolean isDatosValidos() {
+		boolean esValido;
+		if (this.datosValidos != null && this.datosValidos == 1) {
+			esValido = true;
+		} else {
+			esValido = false;
+		}
+		return esValido;
+	}
+
+	// Metode creat per poder ser cridad des de la JSP atraves de jstl
 	public final Boolean getIsVisible() {
 		return this.isVisible();
 	}

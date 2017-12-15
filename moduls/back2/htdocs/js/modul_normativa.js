@@ -354,8 +354,6 @@ function CEscriptoriNormativa() {
 				
 				parClass = (i % 2) ? " par": "";
 
-				codi_taula += "<div class=\"tr" + parClass + "\" role=\"row\">";
-
 				codi_taula += "<div class=\"td nom\" role=\"gridcell\">";
 				codi_taula += "<input type=\"hidden\" value=\"" + dada_node.id + "\" class=\"id\" />";
 				codi_taula += "<a class=\"normativa_" + dada_node.id + "\" href=\"javascript:;\" class=\"nom\">" + dada_node.titulo + "</a>";

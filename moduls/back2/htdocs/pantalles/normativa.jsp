@@ -518,7 +518,9 @@
                                         <c:when test="${rolSuper}" >
                                             <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>                                
                                             <option value="1"><spring:message code='txt.validacio.vigente'/></option>
-                                            <option value="2"><spring:message code='txt.validacio.derogada'/></option>                                                                                  
+                                            <option value="2"><spring:message code='txt.validacio.derogada'/></option>       
+                                            <option value="4"><spring:message code='txt.validacio.interna'/></option>
+                                                                                                                      
                                         </c:when>
                                         <c:otherwise>
                                             <option value="1" selected="selected"><spring:message code='txt.validacio.vigente'/></option>
@@ -623,7 +625,16 @@
                                     <input id="cerca_data_aprovacio" name="cerca_data_aprovacio" type="text" class="data" />
                                 </div>
                             </div>          
-                                                        
+                                 
+                                 
+                            <div class="element t50">
+                                <div class="etiqueta">
+                                    <label for="cerca_invalids"><spring:message code='camp.norm_invalids'/></label>
+                                </div>
+                                <div class="control">
+                                	<input type="checkbox" name="cerca_invalids" id='cerca_invalids' value="1"/>                               
+                                </div>                          
+                            </div>                               
                         </div>
 
                         <%--

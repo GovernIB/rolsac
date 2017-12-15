@@ -302,7 +302,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	 * @ejb.permission unchecked="true"
 	 */
 	public ResultadoBusqueda buscarNormativas(Map parametros, Map traduccion, String tipo,
-			Long idUA, boolean uaMeves, boolean uaFilles,
+			Long idUA, boolean uaMeves, boolean uaFilles, boolean invalids,
 			String campoOrdenacion, String orden, String pagina,
 			String resultats, boolean soloIds) {
 
@@ -351,6 +351,8 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			if (!userIsSuper()) {
 				accessQuery += " and normativa.validacion = " + Validacion.INTERNA;
 			}
+			
+			
 
 			// tieneAcceso
 			if (!userIsSystem()) {
@@ -365,10 +367,16 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 					}
 				}
 			}
+			
+			String invalidQuery = "";
+			if (invalids) {
+				invalidQuery = " and normativa.datosValidos = 0 ";
+			}
+
 			ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
-			String sqlCount = selectCount + from + " where " + sQuery + uaQuery + accessQuery;
+			String sqlCount = selectCount + from + " where " + sQuery + uaQuery + accessQuery + invalidQuery;
 			queryCount = session.createQuery(sqlCount);
-			String sql = select + from + " where " + sQuery + uaQuery + accessQuery + orderBy;
+			String sql = select + from + " where " + sQuery + uaQuery + accessQuery + invalidQuery + orderBy;
 			query = session.createQuery(sql);
 
 			for ( int i = 0; i < params.size(); i++ ) {

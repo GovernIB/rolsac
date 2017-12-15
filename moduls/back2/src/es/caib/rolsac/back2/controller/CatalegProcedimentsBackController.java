@@ -780,7 +780,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	}
 
 	/*
-	 * Función para recuperar las materias de un procedimiento
+	 * Función para recuperar las normativas de un procedimiento
 	 */
 	private void recuperaNormativas(Map<String, Object> resultats, ProcedimientoLocal proc, String lang, Long idProcedimiento) {
 
@@ -802,7 +802,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				map.put("nombre", titulo);
 				map.put("idMainItem", idProcedimiento.toString());
 				map.put("idRelatedItem", normativa.getId().toString());
-				
+				if (!normativa.isDatosValidos()) {
+					map.put("color", "red");
+				}
 				llistaNormatives.add(map);
 				
 			}
@@ -1576,6 +1578,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				paramTrad.put("idioma", idioma);
 			}
 
+			paramMap.put("datosValidos", 1);
+			
 			//Información de paginación
 			String pagPag = request.getParameter("pagPagina");
 			String pagRes = request.getParameter("pagRes");
@@ -1593,7 +1597,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 
 			//La búsqueda de normativas no tendrá en cuenta la UA actual (idua = null)
-			resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, "todas", null, false, false, campoOrdenacion, orden, pagPag, pagRes, false);
+			resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, "todas", null, false, false, false, campoOrdenacion, orden, pagPag, pagRes, false);
 
 			for (Normativa normativa : castList(Normativa.class, resultadoBusqueda.getListaResultados()) ) {
 				long idNormativa = normativa.getId();

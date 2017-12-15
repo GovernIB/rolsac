@@ -49,13 +49,62 @@ INSERT INTO RSC_TRANOR (TNO_CODNOR, TNO_SECCIO, TNO_APARTA, TNO_PAGINI, TNO_PAGF
   
 -- Backup de normativa type y Cambiar la normativaLocal y normativaExterna al valor normativa  mientras que normativaExternaRemota/normativaLocalRemota pasa a Remota.  
 update rsc_normat set nor_typen = 'normativa';
-update rsc_normat set nor_validn = 1;
+--El estado 1 pasara las publicas a vigentes
+update rsc_normat set nor_validn = 4 where nor_valida IN (2,3); --Para convertir internas y reservas en un nuevo estado de valor 4 que las agrupa
 update rsc_normat set nor_codbol_ant = nor_codbol;
 ---Actualizamos el tipo boletin para que cree el DOUE y fusione el DOCE y el Diario Europeu en DOUE.
 INSERT INTO RSC_BOLETI (BOL_CODI , BOL_NOMBRE, BOL_ENLACE) VALUES ( RSC_SEQ_ALL.nextval, 'DOUE', null);
 update rsc_normat set nor_codbol = (select bol_codi from rsc_boleti where lower(bol_nombre) like 'doue') where nor_codbol in (select bol_codi from rsc_boleti where lower(bol_nombre) like 'doce' );
 update rsc_normat set nor_codbol = (select bol_codi from rsc_boleti where lower(bol_nombre) like 'doue') where nor_codbol in (select bol_codi from rsc_boleti where lower(bol_nombre) like '%diario%uropea%' );
 delete from rsc_boleti where lower(bol_nombre) like 'doce';
+
+/** Para eliminar los tipos que sobran, se ponen las normativas el campo codtip a nulo, se borran de tipo y las traducciones. **/
+ update rsc_normat
+     set nor_codtip = null
+   where nor_codtip in (select tti_codtip from rsc_tratip
+   where tti_codtip not in (select tti_codtip  from rsc_tratip where lower(tti_nombre) in (
+               'decret',
+                'decret del president',
+                'decret legislatiu',
+                'decret llei',
+                'directiva europea',
+                'llei',
+                'llei orgànica',
+                'ordre',
+                'ordre ministerial',
+                'real decreto legislativo',
+                'reglament europeu',
+                'reglament (ccll)', --Lo repetimos abajo 
+                'reglament',
+                'reial decret',
+                'reial decret llei'
+                )
+        )
+      );
+  
+delete from rsc_tratip
+   where tti_codtip not in (select tti_codtip  from rsc_tratip where lower(tti_nombre) in (
+               'decret',
+                'decret del president',
+                'decret legislatiu',
+                'decret llei',
+                'directiva europea',
+                'llei',
+                'llei orgànica',
+                'ordre',
+                'ordre ministerial',
+                'real decreto legislativo',
+                'reglament europeu',
+                'reglament (ccll)', --Lo repetimos abajo 
+                'reglament',
+                'reial decret',
+                'reial decret llei'
+                )
+                );
+             
+          
+DELETE FROM RSC_TIPO WHERE TIP_CODI NOT IN (SELECT TTI_CODTIP FROM RSC_TRATIP);
+   
 
 /** Actualiza el id boib en los tipos de normativa. **/ 
 UPDATE RSC_TIPO SET TIP_IDBOIB = 5225 WHERE TIP_CODI = 2;
