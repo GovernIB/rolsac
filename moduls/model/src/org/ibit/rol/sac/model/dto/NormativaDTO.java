@@ -23,13 +23,13 @@ public class NormativaDTO implements ValueObject, Comparable {
     private Boolean vigente;
     private String registro;
     private String numNormativa;
-    
+    private String color;
 	
     public NormativaDTO() {
     	super();
     }
 
-	public NormativaDTO(long id, long numero, String titulo, Date fecha, Date fecha_boletin, String boletin, String tipo, String tipologia, Boolean vigente, String numNormativa) {
+	public NormativaDTO(long id, long numero, String titulo, Date fecha, Date fecha_boletin, String boletin, String tipo, String tipologia, Boolean vigente, String numNormativa, String color) {
 		
 	    super();
 	    
@@ -45,10 +45,11 @@ public class NormativaDTO implements ValueObject, Comparable {
 	    this.setBoletin(boletin);
 	    this.vigente = vigente;
 	    this.numNormativa = numNormativa;
+	    this.color = color;
 	}
 
 	public NormativaDTO(long id, long numero, String titulo, Date fecha, Date fecha_boletin, String tipo, String tipologia, Boolean vigente, String registro) {
-		this(id, numero, titulo, fecha, fecha_boletin, null, tipo, tipologia, vigente, "");
+		this(id, numero, titulo, fecha, fecha_boletin, null, tipo, tipologia, vigente, "", "");
 		this.registro = registro;
 	}
 
@@ -288,6 +289,20 @@ public class NormativaDTO implements ValueObject, Comparable {
 	 */
 	public void setNumNormativa(String numNormativa) {
 		this.numNormativa = numNormativa;
+	}
+
+	/**
+	 * @return the color
+	 */
+	public String getColor() {
+		return color;
+	}
+
+	/**
+	 * @param color the color to set
+	 */
+	public void setColor(String color) {
+		this.color = color;
 	}
 	
 }

@@ -271,11 +271,16 @@ function CLlistat() {
 				parClass = (i%2) ? " par": "";
 				caducat_titol_class = (dada_node.vigente) ? " normativa" : " normativaCaducada";
 
+				var fontcolor = ""; //Parametro extra para marcar con rojo valores no validos.
+				if (dada_node.color != undefined && dada_node.color != '') {
+						fontcolor = "style=\"color:" + dada_node.color+"\"";
+				}
+				
 				codi_taula += '<div class="tr' + parClass + '" role="row">';
 
 				codi_taula += '<div class="td titol ' + caducat_titol_class + ' role="gridcell">';
 				codi_taula += '<input type="hidden" value="' + dada_node.id + '" class="id" />';
-				codi_taula += '<span class="id">'+ dada_node.id +'</span><a id="normativa_'+dada_node.id+'" href="javascript:void(0);" class="titol">' + dada_node.titulo + '</a>';
+				codi_taula += '<span class="id">'+ dada_node.id +'</span><a id="normativa_'+dada_node.id+'" href="javascript:void(0);" class="titol" '+fontcolor+'>' + dada_node.titulo + '</a>';
 				codi_taula += "</div>";
 
 				codi_taula += "<div class=\"td tipologia\" role=\"gridcell\">" +  Llistat.obtenerString(dada_node.numNormativa) + "</div>";
@@ -1019,6 +1024,7 @@ function CDetall() {
 
 		this.modificado(false);
 		
+		$("#item_validacio").val(1)
 	};
 	
 	this.pintar = function(dades) {

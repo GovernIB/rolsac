@@ -260,9 +260,14 @@ public class NormativaBackController extends PantallaBaseController {
             resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, queBuscar, idUA, meves, uaFilles, invalids, campoOrdenacion, orden, pagPag, pagRes, false);
 
             for (Normativa normativa : (List<Normativa>) resultadoBusqueda.getListaResultados()) {
+            	String color = "";
+                if (!normativa.isDatosValidos()) {
+                	color = "red";
+                }
+                
                 normativa.setIdioma(lang);
                 llistaNormativesDTO.add(new NormativaDTO(normativa.getId(), normativa.getNumero() != null ? normativa.getNumero() : 0, obtenerTituloDeEnlaceHtml(normativa.getTraduccionTitulo()),
-                    normativa.getFecha(), normativa.getFechaBoletin(), normativa.getNombreBoletin(), normativa.getNombreTipo(), "normativa", normativa.isVigente(), normativa.getNumNormativa()));
+                    normativa.getFecha(), normativa.getFechaBoletin(), normativa.getNombreBoletin(), normativa.getNombreTipo(), "normativa", normativa.isVigente(), normativa.getNumNormativa(), color));
             }
 
         } catch (ParseException e) {
@@ -1012,12 +1017,12 @@ public class NormativaBackController extends PantallaBaseController {
                 normativa.setId(idNorm);
 
             } else {
+            	// Ya no hace falta, no existe publica.
                 // Comprobar permisos de creacion
-                if (!normativaDelegate.autorizaCrearNormativa(ParseUtil.parseInt(valoresForm.get("item_validacio")))) {
-                    IdNomDTO error = new IdNomDTO(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()));
-                    return new ResponseEntity<String>(error.getJson(), responseHeaders, HttpStatus.CREATED);
-                }
-                
+                // if (!normativaDelegate.autorizaCrearNormativa(ParseUtil.parseInt(valoresForm.get("item_validacio")))) {
+                //     IdNomDTO error = new IdNomDTO(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()));
+                //     return new ResponseEntity<String>(error.getJson(), responseHeaders, HttpStatus.CREATED);
+                // }
                 
                 ua =  (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
                 
@@ -1408,9 +1413,13 @@ public class NormativaBackController extends PantallaBaseController {
             TraduccionTipo traTip = normativa.getTipo() != null ? (TraduccionTipo) normativa.getTipo().getTraduccion(idioma) : null;
             String tipus = traTip != null ? traTip.getNombre() : "";
             
+            String color = "";
+            if (!normativa.isDatosValidos()) {
+            	color = "red";
+            }
             llistaNormativesDTO
                 .add(new NormativaDTO(normativa.getId() != null ? normativa.getId().longValue() : 0, normativa.getNumero() != null ? normativa.getNumero().longValue() : -1l, titulo, normativa
-                    .getFecha(), normativa.getFechaBoletin(), normativa.getBoletin() != null ? normativa.getBoletin().getNombre() : "", tipus, "Normativa", normativa.isVisible(), normativa.getNumNormativa()));
+                    .getFecha(), normativa.getFechaBoletin(), normativa.getBoletin() != null ? normativa.getBoletin().getNombre() : "", tipus, "Normativa", normativa.isVisible(), normativa.getNumNormativa(), color));
         }
 
         return llistaNormativesDTO;

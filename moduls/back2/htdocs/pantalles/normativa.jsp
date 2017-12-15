@@ -519,7 +519,7 @@
                                             <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>                                
                                             <option value="1"><spring:message code='txt.validacio.vigente'/></option>
                                             <option value="2"><spring:message code='txt.validacio.derogada'/></option>       
-                                            <option value="4"><spring:message code='txt.validacio.interna'/></option>
+                                            <option value="4"><spring:message code='txt.validacio.internaprivada'/></option>
                                                                                                                       
                                         </c:when>
                                         <c:otherwise>
@@ -999,17 +999,10 @@
                             </div>
                             <div class="control">
                                 <select id="item_validacio" name="item_validacio">
-                                
-                                    <c:set var="rolSuper"><rol:userIsSuper/></c:set>
-                                    <c:choose>
-                                        <c:when test="${rolSuper}" >
-                                            <option value="1" selected="selected"><spring:message code='txt.validacio.vigente'/></option>
-                                            <option value="2"><spring:message code='txt.validacio.derogada'/></option>                                                                                  
-                                        </c:when>
-                                        <c:otherwise>
-                                            <option value="2" selected="selected"><spring:message code='txt.validacio.interna'/></option>
-                                        </c:otherwise>
-                                    </c:choose>                                                               
+                                	 <option value="1" selected="selected"><spring:message code='txt.validacio.vigente'/></option>
+                                     <option value="2"><spring:message code='txt.validacio.derogada'/></option>     
+                                     <option value="4"><spring:message code='txt.validacio.internaprivada'/></option>
+                                    
                                 </select>
                             </div>
                         </div>
