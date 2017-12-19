@@ -503,7 +503,7 @@ public class SiaUtils {
 		    }
 		    
 		    if (!encontradoTipo) {
-		    	mensajeError.append("Cap de les normatives té associat un tipus sia.");
+		    	mensajeError.append("Cap de les normatives es visible o té associat un tipus sia.");
 		    }
   	    }
 	    
@@ -600,7 +600,7 @@ public class SiaUtils {
 		    }*/
 		    
 		    if (!encontradoTipo) {
-		    	mensajeError.append("Cap de les normatives té associat un tipus sia.");
+		    	mensajeError.append("Cap de les normatives es visible o té associat un tipus sia.");
 		    }
 		    
 		    
