@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="moduls/back2/src"/>
+	<classpathentry kind="src" path="moduls/apirest/src"/>
 	<classpathentry kind="src" path="moduls/extractor/src"/>
 	<classpathentry kind="src" path="moduls/integracion/src"/>
 	<classpathentry kind="src" path="moduls/model/src"/>
@@ -180,5 +181,10 @@
 	<classpathentry kind="lib" path="lib/webcaib/Tidy.jar"/>
 	<classpathentry kind="lib" path="lib/webcaib/wai.jar"/>
 	<classpathentry kind="lib" path="lib/webcaib/wsdl4j.jar"/>
+	<classpathentry kind="lib" path="lib/jersey/jersey-bundle-1.19.1.jar"/>
+	<classpathentry kind="lib" path="lib/swagger/swagger-annotations-1.5.17.jar"/>
+	<classpathentry kind="lib" path="lib/swagger/swagger-core-1.5.17.jar"/>
+	<classpathentry kind="lib" path="lib/swagger/swagger-jaxrs_2.9.1-1.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/swagger/swagger-jersey-jaxrs-1.5.0-M1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

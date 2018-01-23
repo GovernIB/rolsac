@@ -72,6 +72,7 @@
             update.model      : actualitza el model de dades
             update.persistence: actualitza la capa de persistencia
             update.api        : actualitza la API
+        	update.apirest    : actualitza el REST API
             update.XDOCLET    : update.extractor + update.model + update.persistence
             
             update.integracion: actualitza la capa d'integració
@@ -189,6 +190,7 @@
         <antcall target="update.model"/>
         <antcall target="update.persistence"/>
         <antcall target="update.api"/>
+    	<antcall target="update.apirest"/>
     </target>
     
     <target name="update.utils" description="Actualizar utilidades">
@@ -284,7 +286,13 @@
         </propertyset>
     </target>
 
-   
+	<target name="update.apirest" description="Actualizar el Rest API">
+        <echo>API</echo>
+        <ant dir="moduls/apirest" target="main" inheritall="false"/>
+        <propertyset>
+            <propertyref name="rolsac.target"/>
+        </propertyset>
+    </target>
     
     <!-- ================================================================== -->
     <!-- doc                                                                -->
@@ -298,6 +306,7 @@
 	    <antcall target="doc.integracion"/>
 	    <antcall target="doc.back2"/>
 	    <antcall target="doc.api"/>
+    	<antcall target="doc.apirest"/>
     </target>
     
 
@@ -375,7 +384,14 @@
         </propertyset>
     </target>
     
-    
+	<!-- API Rolsac -->
+    <target name="doc.apirest" description="Generar documentación del REST API">
+        <echo>API</echo>
+        <ant dir="moduls/apirest" target="doc" inheritall="false"/>
+        <propertyset>
+            <propertyref name="rolsac.target"/>
+        </propertyset>
+    </target>
     
 	
     <!-- ================================================================== -->
@@ -425,6 +441,7 @@
             <filelist dir="moduls/api"          files="appmodule.xml"/>
             <filelist dir="moduls/apiws"        files="appmodule.xml"/>
             <filelist dir="moduls/ws"           files="appmodule.xml"/>
+        	<filelist dir="moduls/apirest"      files="appmodule.xml"/>
         </concat>
         
         <if> <equals arg1="${db.oracle}" arg2="true" />
@@ -486,6 +503,7 @@
                     cuando esté corregido  problema al quitar este jar)    -->
                 <!-- include name="${prefix.modul}-api-client.jar" / -->
                 <include name="${prefix.modul}-apiws.war" />
+            	<include name="${prefix.modul}-apirest.war" />
             </fileset>
             
             <!-- No incluimos los .jar externos, solo para stand alone-->
@@ -558,6 +576,14 @@
         		<include name="jericho-html-2.5.jar" />
             </zipfileset>
         	
+        	<zipfileset dir="${lib}/swagger">
+				<include name="swagger-annotations-1.5.17.jar" />
+			    <include name="swagger-core-1.5.17.jar" />
+			</zipfileset>
+			
+        	<zipfileset dir="${lib}/jersey">
+				<include name="jersey-bundle-1.19.1.jar"/>
+			</zipfileset>  
         </ear>
         
     </target>
@@ -612,7 +638,8 @@
         <antcall target="update.back2"/>
     	<antcall target="update.api"/>
         <antcall target="update.apiws"/>
-        
+    	<antcall target="update.apirest"/>
+    	        
         
     </target>
     

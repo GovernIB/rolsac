@@ -7,22 +7,30 @@
 	xmlns:tns3="http://arxiu.v2.api.rolsac.caib.es"
 	xmlns:tns4="http://catalegDocuments.v2.api.rolsac.caib.es"
 	xmlns:tns5="http://excepcioDocumentacio.v2.api.rolsac.caib.es"
+	xmlns:tns6="http://servicio.v2.api.rolsac.caib.es"
+	xmlns:tns7="http://general.v2.api.rolsac.caib.es"
+	xmlns:tns8="http://servicio.v2.api.rolsac.caib.es"
 	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
 	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://ws.documentoServicio.v2.api.rolsac.caib.es">
-	
+	 
 	<wsdl:import namespace="urn:tns1" location="dto/ServicioDTO.wsdl"/>
 	<wsdl:import namespace="urn:tns2" location="dto/EntitatRemota.wsdl"/>
 	<wsdl:import namespace="urn:tns3" location="dto/ArxiuDTO.wsdl"/>
 	<wsdl:import namespace="urn:tns4" location="dto/CatalegDocumentsDTO.wsdl"/>
 	<wsdl:import namespace="urn:tns5" location="dto/ExcepcioDocumentacioDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns6" location="dto/DocumentoServicioCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns6" location="dto/DocumentoServicioDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns7" location="dto/BasicCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns8" location="dto/ServicioCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns8" location="dto/ServicioDTO.wsdl"/>
 	
 	<wsdl:types>
 	</wsdl:types>
 	
 	<wsdl:message name="obtenirServicioRequest">
-		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in0" type="tns6:ServicioCriteria" />
 	</wsdl:message>
 	<wsdl:message name="obtenirServicioResponse">
 		<wsdl:part name="obtenirServicioReturn" type="tns1:ServicioDTO" />
