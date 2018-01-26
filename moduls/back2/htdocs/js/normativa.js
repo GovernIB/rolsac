@@ -370,7 +370,7 @@ function CLlistat() {
 			dataVars_cercador += "&validacio=" + $("#cerca_validacio").val();			
 			dataVars_cercador += "&totesUnitats=" + $("#cerca_totes_unitats").is(':checked');
 			dataVars_cercador += "&uaFilles=" + $("#cerca_uaFilles").is(':checked');
-			dataVars_cercador += "&invalids=" + $("#cerca_invalids").is(':checked');
+			dataVars_cercador += "&invalids=" + $("#cerca_invalids").val();
 			dataVars_cercador += "&idUA=" + $("#cerca_ua_id").val();
 			dataVars_cercador += "&numNormativa=" + $("#cerca_num_normativa").val();
 			dataVars_cercador += "&dataAprovacio=" + $("#cerca_data_aprovacio").val();
@@ -1107,6 +1107,18 @@ function CDetall() {
 		$("#item_ua_id").val(nn(dada_node.idUA));
 		$("#item_ua_nom").val(nn(dada_node.nomUA));
 
+		$("#normativa_datos_validos").val(txtNormativaSinvalorar);
+		$("#normativa_datos_validos").css( "color", "black" );
+		
+		if (dada_node.datosValidos == 0) {
+			$("#normativa_datos_validos").val(txtNormativaNoValida);
+			$("#normativa_datos_validos").css( "color", "red" );
+		}
+		
+		if (dada_node.datosValidos == 1) {
+			$("#normativa_datos_validos").val(txtNormativaValida);
+		}
+		
 		if (dada_node.tipus == "B") {
 
 			modulAfectacions_pare_elm.hide();

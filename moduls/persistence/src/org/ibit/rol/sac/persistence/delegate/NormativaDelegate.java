@@ -70,7 +70,7 @@ public class NormativaDelegate implements StatelessDelegate
         }
     }
     
-	public ResultadoBusqueda buscarNormativas(Map parametros, Map traduccion, String tipo, Long idUA, boolean uaMeves, boolean uaFilles, boolean invalids, String campoOrdenacion, String orden, String pagina, String resultats, boolean soloIds) throws DelegateException {
+	public ResultadoBusqueda buscarNormativas(Map parametros, Map traduccion, String tipo, Long idUA, boolean uaMeves, boolean uaFilles, String invalids, String campoOrdenacion, String orden, String pagina, String resultats, boolean soloIds) throws DelegateException {
         try {
             return getFacade().buscarNormativas(parametros, traduccion, tipo, idUA, uaMeves, uaFilles, invalids, campoOrdenacion, orden, pagina, resultats, soloIds);
         } catch (RemoteException e) {

@@ -1222,7 +1222,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			
 			//Restricción del acta de reunión de normativas para que salgan sólo las vigentes.
 			paramMap.put("validacion", ValidacionNormativa.VIGENTE);
-			
+			 
 			//Información de paginación
 			String pagPag = request.getParameter("pagPagina");
 			String pagRes = request.getParameter("pagRes");
@@ -1241,7 +1241,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 
 			//La búsqueda de normativas no tendrá en cuenta la UA actual (idua = null)
-			resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, "todas", null, false, false, false, campoOrdenacion, orden, pagPag, pagRes, false);
+			resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, "todas", null, false, false, "1", campoOrdenacion, orden, pagPag, pagRes, false);
 
 			for (Normativa normativa : castList(Normativa.class, resultadoBusqueda.getListaResultados()) ) {
 				long idNormativa = normativa.getId();
