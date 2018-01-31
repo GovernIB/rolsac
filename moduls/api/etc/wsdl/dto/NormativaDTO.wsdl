@@ -31,6 +31,7 @@
                         <element name="titulo" nillable="true" type="xsd:string" />
                         <element name="unidadAdministrativa" nillable="true" type="xsd:long" />
                         <element name="validacion" nillable="true" type="xsd:int" />
+                        <element name="datosValidos" nillable="true" type="xsd:int" />
                     </sequence>
                 </extension>
             </complexContent>
