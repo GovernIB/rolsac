@@ -54,7 +54,7 @@ COMMENT ON COLUMN RSC_UNANOR.UNN_CODUNA is 'Identificador de la UA.';
 ALTER TABLE RSC_NORMAT ADD NOR_TYPEN	VARCHAR2(64 CHAR); --Nuevo tipo que es normativa o normativaExterna
 ALTER TABLE RSC_NORMAT ADD NOR_VALIDN	NUMBER(10, 0); --Nuevo valida
 ALTER TABLE RSC_NORMAT ADD NOR_CODBOL_ANT	NUMBER(19, 0); --Codigo bolet�n antiguo
-ALTER TABLE RSC_NORMAT ADD NOR_NUMNOR VARCHAR2(8 CHAR); --Numero normativa.
+ALTER TABLE RSC_NORMAT ADD NOR_NUMNOR VARCHAR2(9 CHAR); --Numero normativa.
 ALTER TABLE RSC_NORMAT MODIFY (NOR_TYPE NULL); --Ahora el tipo puede ser nulo
 ALTER TABLE RSC_NORMAT MODIFY (NOR_TYPEN NOT NULL); --Ahora el tipon ya no es nulo
 ALTER TABLE RSC_NORMAT ADD NOR_DATVAL NUMBER; --Datos validados
@@ -66,7 +66,7 @@ COMMENT ON COLUMN RSC_NORMAT.NOR_DATVAL is 'Indica si los datos de la normativa 
 	--La constraint obliga a que el numero de normativa siga el formato NNN/YYYY siendo N el n� y Y el a�o.
 ALTER TABLE RSC_NORMAT
   ADD CONSTRAINT  RSC_NORMAT_NUMNOR_CHECK
-  CHECK (REGEXP_LIKE(NOR_NUMNOR,'[[:digit:]]{0,3}/[[:digit:]]{4}')); 
+  CHECK (REGEXP_LIKE(NOR_NUMNOR,'[[:digit:]]{0,4}/[[:digit:]]{4}')); 
   
 --Renombra la vista de traduccion de normativas.  
 RENAME RSC_TRANOR to RSC_TRANOR_VIEW;
