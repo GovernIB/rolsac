@@ -186,5 +186,16 @@
 	<classpathentry kind="lib" path="lib/swagger/swagger-core-1.5.17.jar"/>
 	<classpathentry kind="lib" path="lib/swagger/swagger-jaxrs_2.9.1-1.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/swagger/swagger-jersey-jaxrs-1.5.0-M1.jar"/>
+	<classpathentry kind="lib" path="lib/swagger/commons-lang3-3.6.jar"/>
+	<classpathentry kind="lib" path="lib/swagger/google-collections-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/swagger/guava-19.0.jar"/>
+	<classpathentry kind="lib" path="lib/swagger/jackson-annotations-2.8.11.jar"/>
+	<classpathentry kind="lib" path="lib/swagger/jackson-core-2.8.11.jar"/>
+	<classpathentry kind="lib" path="lib/swagger/jackson-databind-2.8.11.jar"/>
+	<classpathentry kind="lib" path="lib/swagger/jackson-dataformat-yaml-2.8.11.jar"/>
+	<classpathentry kind="lib" path="lib/swagger/swagger-codegen-cli-2.2.3.jar"/>
+	<classpathentry kind="lib" path="lib/swagger/swagger-jaxrs-1.5.17.jar"/>
+	<classpathentry kind="lib" path="lib/swagger/swagger-models-1.5.17.jar"/>
+	<classpathentry kind="lib" path="lib/swagger/validation-api-1.1.0.Final.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

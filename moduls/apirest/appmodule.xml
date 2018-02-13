@@ -1,0 +1,6 @@
+			<module>
+        		<web>
+    	      	<web-uri>@prefix.modul@-apirest.war</web-uri>
+    	  	    <context-root>rolsac/apirest</context-root>
+        		</web>
+    		</module>            
