@@ -1,4 +1,4 @@
-package es.caib.rolsac.apirest.v1.model;
+package es.caib.rolsac.apirest.v1.model.respuestas;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -11,26 +11,23 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import java.lang.Object;
 import java.util.List;
 import java.io.IOException;
+import es.caib.rolsac.apirest.v1.model.Idioma;
 
 /**
- * Idioma.
+ * RespuestaBase. Estructura de respuesta que contiene la información comun a todas las respuestas.
  * 
  * @author indra
  *
  */
 @XmlRootElement
-@ApiModel(value = "Respuesta", description = "Respuesta Base")
-public class Respuesta {
+@ApiModel(value = "RespuestaBase", description = "Respuesta Base")
+public class RespuestaBase {
 	 
 
 
 	/** Status a retornar. **/
 	@ApiModelProperty(value = "Status", dataType = "java.lang.String", required = true)
 	private String status;
-
-	/** Código interno del error. **/
-	@ApiModelProperty(value = "Código de  error ", dataType = "java.lang.String", required = false)
-	private String codigoError;
 	
 	/** Mensaje de  error. **/
 	@ApiModelProperty(value = "Mensaje de  error ", dataType = "java.lang.String", required = false)
@@ -40,26 +37,22 @@ public class Respuesta {
 	@ApiModelProperty(value = "Numero de Elementos", dataType = "java.lang.Integer", required = true)
 	private Integer numeroElementos;
 
-	/** Resultado. **/
-	@ApiModelProperty(value = "Resultado", dataType = "es.caib.rolsac.apirest.v1.model.ModeloBase", required = false)
-	private List<Idioma> resultado;
+	
+	//private List<T> resultado;
 
-	public Respuesta(String status, String codigoError, String mensajeError, Integer numeroElementos,
-			List<Idioma> resultado) {
+	public RespuestaBase(String status, String codigoError, String mensajeError, Integer numeroElementos) {
 		super();
 		this.status = status;
-		this.codigoError = codigoError;
 		this.mensajeError = mensajeError;
 		this.numeroElementos = numeroElementos;
-		this.resultado = resultado;
+		//this.resultado = resultado;
 	}
 	
-	public Respuesta() {
+	public RespuestaBase() {
 		this.status = null;
-		this.codigoError = null;
 		this.mensajeError = null;
 		this.numeroElementos = null;
-		this.resultado = null;
+		//this.resultado = null;
 	};
 	
 	/**
@@ -76,19 +69,6 @@ public class Respuesta {
 		this.status = status;
 	}
 
-	/**
-	 * @return the codigoError
-	 */
-	public String getCodigoError() {
-		return codigoError;
-	}
-
-	/**
-	 * @param codigoError the codigoError to set
-	 */
-	public void setCodigoError(String codigoError) {
-		this.codigoError = codigoError;
-	}
 
 	/**
 	 * @return the mensajeError
@@ -121,17 +101,16 @@ public class Respuesta {
 	/**
 	 * @return the resultado
 	 */
-	public List<Idioma> getResultado() {
+	/*public List<T> getResultado() {
 		return resultado;
-	}
+	}*/
 
 	/**
 	 * @param resultado the resultado to set
 	 */
-	public void setResultado(List<Idioma> resultado) {
+	/*public void setResultado(List<T> resultado) {
 		this.resultado = resultado;
-	}
-
+	}*/
 
 	
 }

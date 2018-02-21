@@ -117,8 +117,6 @@ public class Idioma {
 	}
 	
 	
-	
-	
 	public static Idioma valueOf(final String json) {
 		final ObjectMapper objectMapper = new ObjectMapper();
 		final TypeReference<Idioma> typeRef = new TypeReference<Idioma>() {

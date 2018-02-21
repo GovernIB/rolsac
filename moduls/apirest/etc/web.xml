@@ -26,7 +26,7 @@
 
 	<servlet-mapping>
 		<servlet-name>restapiv1</servlet-name>
-		<url-pattern>services/v1/*</url-pattern>
+		<url-pattern>v1/*</url-pattern>
 	</servlet-mapping>
 
 	<session-config>
