@@ -1,15 +1,18 @@
 package es.caib.rolsac.apirest.v1.model;
 
+import java.io.IOException;
+
+import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import java.io.IOException;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Idioma.
@@ -22,6 +25,8 @@ import java.io.IOException;
 public class Idioma {
 	 
 	/** Lang. **/
+	@NotNull
+	@Size(min = 2, max = 2, message = "El código de idioma debe ser de 2 carácteres ej: (ca)")
 	@ApiModelProperty(value = "Lang (ca/es)", dataType = "java.lang.String", required = true)
 	private String lang;
 

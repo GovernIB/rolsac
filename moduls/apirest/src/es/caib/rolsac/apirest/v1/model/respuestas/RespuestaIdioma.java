@@ -21,9 +21,9 @@ public class RespuestaIdioma extends RespuestaBase{
 	/** Resultado. **/
 	@ApiModelProperty(value = "Listado con los objetos de resultado",  required = false)
 	private List<Idioma> resultado;
-	public RespuestaIdioma(String status, String codigoError, String mensajeError, Integer numeroElementos,
+	public RespuestaIdioma(String status, String mensaje, Integer numeroElementos,
 			List<Idioma> resultado) {
-		super(status, codigoError, mensajeError, numeroElementos);
+		super(status,  mensaje, numeroElementos);
 		this.resultado=resultado;
 		
 	};

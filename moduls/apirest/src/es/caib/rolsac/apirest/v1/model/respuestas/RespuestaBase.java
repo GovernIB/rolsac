@@ -30,8 +30,8 @@ public class RespuestaBase {
 	private String status;
 	
 	/** Mensaje de  error. **/
-	@ApiModelProperty(value = "Mensaje de  error ", dataType = "java.lang.String", required = false)
-	private String mensajeError;
+	@ApiModelProperty(value = "Mensaje", dataType = "java.lang.String", required = false)
+	private String mensaje;
 
 	/** Numero de Elementos. **/
 	@ApiModelProperty(value = "Numero de Elementos", dataType = "java.lang.Integer", required = true)
@@ -40,19 +40,17 @@ public class RespuestaBase {
 	
 	//private List<T> resultado;
 
-	public RespuestaBase(String status, String codigoError, String mensajeError, Integer numeroElementos) {
+	public RespuestaBase(String status, String mensaje, Integer numeroElementos) {
 		super();
 		this.status = status;
-		this.mensajeError = mensajeError;
+		this.mensaje = mensaje;
 		this.numeroElementos = numeroElementos;
-		//this.resultado = resultado;
 	}
 	
 	public RespuestaBase() {
 		this.status = null;
-		this.mensajeError = null;
+		this.mensaje = null;
 		this.numeroElementos = null;
-		//this.resultado = null;
 	};
 	
 	/**
@@ -73,15 +71,15 @@ public class RespuestaBase {
 	/**
 	 * @return the mensajeError
 	 */
-	public String getMensajeError() {
-		return mensajeError;
+	public String getMensaje() {
+		return mensaje;
 	}
 
 	/**
 	 * @param mensajeError the mensajeError to set
 	 */
-	public void setMensajeError(String mensajeError) {
-		this.mensajeError = mensajeError;
+	public void setMensaje(String mensaje) {
+		this.mensaje = mensaje;
 	}
 
 	/**
@@ -97,20 +95,5 @@ public class RespuestaBase {
 	public void setNumeroElementos(Integer numeroElementos) {
 		this.numeroElementos = numeroElementos;
 	}
-
-	/**
-	 * @return the resultado
-	 */
-	/*public List<T> getResultado() {
-		return resultado;
-	}*/
-
-	/**
-	 * @param resultado the resultado to set
-	 */
-	/*public void setResultado(List<T> resultado) {
-		this.resultado = resultado;
-	}*/
-
 	
 }
