@@ -1,4 +1,4 @@
---Introducir el dato de la UA en la nueva tabla que relaciona UA con Normativas.
+Ôªø--Introducir el dato de la UA en la nueva tabla que relaciona UA con Normativas.
 INSERT INTO RSC_UNANOR (UNN_CODNOR, UNN_CODUNA, UNN_CODI) (
   SELECT NOR_CODI, NOR_CODUNA, RSC_SEQ_ALL.NEXTVAL
     FROM RSC_NORMAT
@@ -7,7 +7,7 @@ INSERT INTO RSC_UNANOR (UNN_CODNOR, UNN_CODUNA, UNN_CODI) (
 
 /*** 
   Traducciones mezcladas de traduccion normativas local y externas.
-  Hay que ejecutarlo antes del script de arriba para ver si est· correcto. 
+  Hay que ejecutarlo antes del script de arriba para ver si est√° correcto. 
   
   SELECT * 
    FROM RSC_TRANOL 
@@ -69,7 +69,7 @@ delete from rsc_boleti where lower(bol_nombre) like 'doce';
                 'decret llei',
                 'directiva europea',
                 'llei',
-                'llei org‡nica',
+                'llei org√†nica',
                 'ordre',
                 'ordre ministerial',
                 'real decreto legislativo',
@@ -90,7 +90,7 @@ delete from rsc_tratip
                 'decret llei',
                 'directiva europea',
                 'llei',
-                'llei org‡nica',
+                'llei org√†nica',
                 'ordre',
                 'ordre ministerial',
                 'real decreto legislativo',
@@ -118,12 +118,12 @@ INSERT INTO RSC_TIPO (TIP_CODI,TIP_CODSIA,TIP_IDBOIB) VALUES (30, null, null);
 INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (30, 'ca', 'Directiva Europea'); 
 INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (30, 'es', 'Directiva Europea');
 INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (30, 'en', 'European Directive');
-INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (30, 'fr', 'Directive EuropÈenne');
-INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (30, 'de', 'Europ‰ische Richtlinie');
+INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (30, 'fr', 'Directive Europ√©enne');
+INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (30, 'de', 'Europ√§ische Richtlinie');
   
 INSERT INTO RSC_TIPO (TIP_CODI,TIP_CODSIA,TIP_IDBOIB) VALUES (31, null, null);
-INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (31, 'ca', 'Llei Org‡nica'); 
-INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (31, 'es', 'Ley Org·nica');
+INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (31, 'ca', 'Llei Org√†nica'); 
+INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (31, 'es', 'Ley Org√°nica');
 INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (31, 'en', 'Organic Law');
 INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (31, 'fr', 'Loi Organique');
 INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (31, 'de', 'Organisches Recht');
@@ -132,6 +132,6 @@ INSERT INTO RSC_TIPO (TIP_CODI,TIP_CODSIA,TIP_IDBOIB) VALUES (32, null, null);
 INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (32, 'ca', 'Reglament Europeu'); 
 INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (32, 'es', 'Reglamento Europeo');
 INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (32, 'en', 'European Regulation');
-INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (32, 'fr', 'RÈglementation europÈenne');
-INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (32, 'de', 'Europ‰ische Regelung');
+INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (32, 'fr', 'R√©glementation europ√©enne');
+INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (32, 'de', 'Europ√§ische Regelung');
   
