@@ -57,6 +57,7 @@ INSERT INTO RSC_BOLETI (BOL_CODI , BOL_NOMBRE, BOL_ENLACE) VALUES ( RSC_SEQ_ALL.
 update rsc_normat set nor_codbol = (select bol_codi from rsc_boleti where lower(bol_nombre) like 'doue') where nor_codbol in (select bol_codi from rsc_boleti where lower(bol_nombre) like 'doce' );
 update rsc_normat set nor_codbol = (select bol_codi from rsc_boleti where lower(bol_nombre) like 'doue') where nor_codbol in (select bol_codi from rsc_boleti where lower(bol_nombre) like '%diario%uropea%' );
 delete from rsc_boleti where lower(bol_nombre) like 'doce';
+delete from rsc_boleti where lower(bol_nombre) like '%diario%uropea%';
 
 /** Para eliminar los tipos que sobran, se ponen las normativas el campo codtip a nulo, se borran de tipo y las traducciones. **/
  update rsc_normat
