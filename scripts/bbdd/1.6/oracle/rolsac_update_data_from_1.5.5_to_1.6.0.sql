@@ -54,9 +54,9 @@ update rsc_normat set nor_validn = 4 where nor_valida IN (2,3); --Para convertir
 update rsc_normat set nor_codbol_ant = nor_codbol;
 ---Actualizamos el tipo boletin para que cree el DOUE y fusione el DOCE y el Diario Europeu en DOUE.
 INSERT INTO RSC_BOLETI (BOL_CODI , BOL_NOMBRE, BOL_ENLACE) VALUES ( RSC_SEQ_ALL.nextval, 'DOUE', null);
-update rsc_normat set nor_codbol = (select bol_codi from rsc_boleti where lower(bol_nombre) like 'doue') where nor_codbol in (select bol_codi from rsc_boleti where lower(bol_nombre) like 'doce' );
-update rsc_normat set nor_codbol = (select bol_codi from rsc_boleti where lower(bol_nombre) like 'doue') where nor_codbol in (select bol_codi from rsc_boleti where lower(bol_nombre) like '%diario%uropea%' );
-delete from rsc_boleti where lower(bol_nombre) like 'doce';
+---Actualizamos el tipo boletin para que cree el DOUE y fusione el DOCE y el Diario Europeu en DOUE.
+update rsc_normat set nor_codbol = (select bol_codi from rsc_boleti where lower(bol_nombre) like 'doce') where nor_codbol in (select bol_codi from rsc_boleti where lower(bol_nombre) like '%diario%uropea%' );
+update rsc_boleti set bol_nombre = 'DOUE' where lower(bol_nombre) like 'doce';
 delete from rsc_boleti where lower(bol_nombre) like '%diario%uropea%';
 
 /** Para eliminar los tipos que sobran, se ponen las normativas el campo codtip a nulo, se borran de tipo y las traducciones. **/
