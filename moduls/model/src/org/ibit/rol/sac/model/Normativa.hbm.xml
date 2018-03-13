@@ -30,7 +30,7 @@
             <one-to-many class="org.ibit.rol.sac.model.UnidadNormativa" />
         </set>
         
-        <set name="documentos" cascade="all-delete-orphan" inverse="true" lazy="true" order-by="ORDEN">
+        <set name="documentos" cascade="all-delete-orphan" inverse="true" lazy="true" order-by="DNO_ORDEN">
             <cache usage="read-write"/>
             <key column="DNO_CODNOR" foreign-key="DNO_CODNOR_FK"/>
             <one-to-many class="org.ibit.rol.sac.model.DocumentoNormativa"/>

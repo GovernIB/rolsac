@@ -14,7 +14,7 @@
         </id>
 
         <many-to-one name="servicio" column="DSR_CODSER" foreign-key="DSR_CODSER_FK"/>
-        <property name="orden" column="ORDEN" />
+        <property name="orden" column="DSR_ORDEN" />
         
         
         <map name="traducciones" cascade="all" table="RSC_TRADSR">

@@ -48,10 +48,10 @@ public abstract class Document extends Ordenable {
 	private String tipusToString(int tipus) {
 		String s=null;
 		switch(tipus) {
-		case DOCINFORMATIU:return "docInformatiu";
-		case FORMULARI:return "formulari";
-		//case DOCPRESENTAR:return "docPresentar";
-		case REQUERIT: return "docRequerit";
+			case DOCINFORMATIU:return "docInformatiu";
+			case FORMULARI:return "formulari";
+			//case DOCPRESENTAR:return "docPresentar";
+			case REQUERIT: return "docRequerit";
 
 		}
 		return null;

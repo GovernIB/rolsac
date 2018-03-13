@@ -14,7 +14,7 @@
         </id>
 
         <many-to-one name="normativa" column="DNO_CODNOR" foreign-key="DNO_CODNOR_FK"/>
-        <property name="orden" column="ORDEN" />
+        <property name="orden" column="DNO_ORDEN" />
         
         
         <map name="traducciones" cascade="all" table="RSC_TRADNR">
