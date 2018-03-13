@@ -1,4 +1,4 @@
-﻿--Introducir el dato de la UA en la nueva tabla que relaciona UA con Normativas.
+--Introducir el dato de la UA en la nueva tabla que relaciona UA con Normativas.
 INSERT INTO RSC_UNANOR (UNN_CODNOR, UNN_CODUNA, UNN_CODI) (
   SELECT NOR_CODI, NOR_CODUNA, RSC_SEQ_ALL.NEXTVAL
     FROM RSC_NORMAT
