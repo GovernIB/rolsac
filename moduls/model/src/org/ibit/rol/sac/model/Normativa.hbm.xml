@@ -23,7 +23,7 @@
         <property name="codiVuds" column="NOR_CODIVUDS"/>
         <property name="descCodiVuds" column="NOR_DESCCODIVUDS"/>
         <property name="numNormativa" column="NOR_NUMNOR" />
-        <property name="datosValidos" column="NOR_DATVAL" />
+        <property name="datosValidos" column="NOR_DATVAL" type="integer" />
         
         <set name="unidadesnormativas" cascade="all" inverse="true" >
             <key column="UNN_CODNOR" foreign-key="RSC_UNNNOR_FK"/>
