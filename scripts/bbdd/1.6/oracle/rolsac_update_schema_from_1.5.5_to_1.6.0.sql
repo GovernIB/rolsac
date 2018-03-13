@@ -271,5 +271,5 @@ COMMENT ON COLUMN RSC_TIPO.TIP_IDBOIB is 'Codigo de BOIB.';
 
 --Renombramiento del campo orden para adecuarse a las nomenclaturas.
 ALTER TABLE RSC_DOCSER RENAME COLUMN ORDEN TO DSR_ORDEN;
-ALTER TABLE RSC_DOCNOR RENAME COLUMN ORDEN TO DNO_ORDEN;
+
   
