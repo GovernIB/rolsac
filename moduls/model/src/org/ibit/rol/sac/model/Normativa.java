@@ -289,7 +289,11 @@ public class Normativa extends Traducible implements Indexable, Validable, Compa
      * @return
      */
     public final Boolean isVigente() {
-    	return this.getValidacion().equals(ValidacionNormativa.VIGENTE);
+    	if (this.getValidacion() == null) {
+    		return false;
+    	} else {
+    		return this.getValidacion().equals(ValidacionNormativa.VIGENTE);
+    	}
     }
     
     

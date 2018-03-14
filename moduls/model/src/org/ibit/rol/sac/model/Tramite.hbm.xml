@@ -52,22 +52,22 @@
         
         
 
-        <set name="docsInformatius" cascade="all-delete-orphan" inverse="true" lazy="true" where="TIPUS = 0" order-by="ORDEN">
+        <set name="docsInformatius" cascade="all-delete-orphan" inverse="true" lazy="true" where="DTR_TIPUS = 0" order-by="DTR_ORDEN">
             <cache usage="read-write"/>
-            <key column="CODITRA" foreign-key="RSC_CODITRA_FK"/>
+            <key column="DTR_CODTRA" foreign-key="RSC_CODITRA_FK"/>
             <one-to-many class="org.ibit.rol.sac.model.DocumentTramit"/>
         </set>
 
-        <set name="formularios" cascade="all-delete-orphan" inverse="true" lazy="true" where="TIPUS = 1" order-by="ORDEN">
+        <set name="formularios" cascade="all-delete-orphan" inverse="true" lazy="true" where="DTR_TIPUS = 1" order-by="DTR_ORDEN">
 
             <cache usage="read-write"/>
-            <key column="CODITRA" foreign-key="RSC_CODITRA_FK"/>
+            <key column="DTR_CODTRA" foreign-key="RSC_CODITRA_FK"/>
             <one-to-many class="org.ibit.rol.sac.model.DocumentTramit"/>
         </set>
 
-		<set name="docsRequerits" cascade="all-delete-orphan" inverse="true" lazy="true" where="TIPUS = 2" order-by="ORDEN">
+		<set name="docsRequerits" cascade="all-delete-orphan" inverse="true" lazy="true" where="DTR_TIPUS = 2" order-by="DTR_ORDEN">
             <cache usage="read-write"/>
-            <key column="CODITRA" foreign-key="RSC_CODITRA_FK"/>
+            <key column="DTR_CODTRA" foreign-key="RSC_CODITRA_FK"/>
             <one-to-many class="org.ibit.rol.sac.model.DocumentTramit"/>
         </set>
 
