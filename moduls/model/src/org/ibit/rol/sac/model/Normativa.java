@@ -47,7 +47,7 @@ public class Normativa extends Traducible implements Indexable, Validable, Compa
     /** Número normativa. **/
     private String numNormativa;
     /** Datos validos. **/
-    private Integer datosValidos;
+    private Boolean datosValidos;
     
 //	//Campos usados para optimizar la búsqueda
     /** Traduccion titulo. **/
@@ -295,19 +295,18 @@ public class Normativa extends Traducible implements Indexable, Validable, Compa
     		return this.getValidacion().equals(ValidacionNormativa.VIGENTE);
     	}
     }
-    
-    
-    /**
+
+	/**
 	 * @return the datosValidos
 	 */
-	public Integer getDatosValidos() {
+	public Boolean getDatosValidos() {
 		return datosValidos;
 	}
 
 	/**
 	 * @param datosValidos the datosValidos to set
 	 */
-	public void setDatosValidos(Integer datosValidos) {
+	public void setDatosValidos(Boolean datosValidos) {
 		this.datosValidos = datosValidos;
 	}
 	
@@ -317,14 +316,14 @@ public class Normativa extends Traducible implements Indexable, Validable, Compa
 	 */
 	public boolean isDatosValidos() {
 		boolean esValido;
-		if (this.datosValidos != null && this.datosValidos == 1) {
+		if (this.datosValidos != null && this.datosValidos) {
 			esValido = true;
 		} else {
 			esValido = false;
 		}
 		return esValido;
 	}
-
+	
 	// Metode creat per poder ser cridad des de la JSP atraves de jstl
 	public final Boolean getIsVisible() {
 		return this.isVisible();

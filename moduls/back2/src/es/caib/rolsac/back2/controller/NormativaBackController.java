@@ -1006,9 +1006,9 @@ public class NormativaBackController extends PantallaBaseController {
                 normativaOld = normativaDelegate.obtenerNormativa(idNorm);
                 
                 //#427 No se pueden editar y actualizarse las normativas con datos no vÃ¡lidos
-                if (normativaOld.getDatosValidos() != null && normativaOld.getDatosValidos() == 0) {
+                if (!normativaOld.isDatosValidos()) {
                 	
-                	log.debug("La normativa estÃ¡ marcada como no vÃ¡lida y no se puede editar.");
+                	log.debug("La normativa esta marcada como no valida y no se puede editar.");
                   	String error = messageSource.getMessage("error.normativa.novalida.edicion", null, request.getLocale());
                     result = new IdNomDTO(-4l, error);    
                     return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
@@ -1084,7 +1084,7 @@ public class NormativaBackController extends PantallaBaseController {
 	            	} else {
 	            	
 		            	//Seteamos los datos validos a 1 (correcto)
-		            	normativa.setDatosValidos(1);
+		            	normativa.setDatosValidos(true);
 		            	
 			            // Guardar la Normativa
 			            guardarNormativa(normativa, ua);
@@ -1347,6 +1347,18 @@ public class NormativaBackController extends PantallaBaseController {
                 Date dataButlleti = df.parse(request.getParameter("data_butlleti"));
                 paramMap.put("fechaBoletin", dataButlleti);
             }
+            
+            if (request.getParameter("numNormativa") != null && !request.getParameter("numNormativa").equals("")) {
+				paramMap.put("numNormativa", request.getParameter("numNormativa"));
+			}
+			
+			if (request.getParameter("tipo") != null && !request.getParameter("tipo").equals("")) {
+				paramMap.put("tipo", request.getParameter("tipo"));
+			}
+
+			if (request.getParameter("boletin") != null && !request.getParameter("boletin").equals("")) {
+				paramMap.put("boletin", request.getParameter("boletin"));
+			}
 
             String titulo = request.getParameter("titol");
             if (titulo != null && !"".equals(titulo)) {

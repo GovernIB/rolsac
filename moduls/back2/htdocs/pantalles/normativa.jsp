@@ -1436,7 +1436,7 @@
         <li class="opcio C actiu">Gestiona</li>                               
     </ul>    
     
-    <div id="resultats_afectacions" class="escriptori_items_llistat">            
+    <div id="resultats_afectacions" class="escriptori_items_llistat mh150px">            
         <div class="resultats C actiu" style="display: block;">
             <div id="cercador_afectacions" class="escriptori_items_cercador"> 
                 <div id="cercador_afectacions_contingut">

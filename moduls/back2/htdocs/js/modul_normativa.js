@@ -40,7 +40,7 @@ function CModulNormativa() {
 		
 		jQuery("#cerca_normativa_data").datepicker({ dateFormat: 'dd/mm/yy' });
 		jQuery("#cerca_normativa_data_butlleti").datepicker({ dateFormat: 'dd/mm/yy' });
-
+		
 		normatives_llistat_elm = escriptori_normatives_elm.find("div.escriptori_items_llistat:first");
 		normatives_cercador_elm = escriptori_normatives_elm.find("div.escriptori_items_cercador:first");
 		normatives_seleccionades_elm = escriptori_normatives_elm.find("div.escriptori_items_seleccionats:first");
@@ -432,6 +432,9 @@ function CEscriptoriNormativa() {
 		var filtrosBuscador = "&titol=" + $("#cerca_normativa_titol").val();
 		filtrosBuscador += "&data=" + $("#cerca_normativa_data").val();
 		filtrosBuscador += "&dataButlleti=" + $("#cerca_normativa_data_butlleti").val();
+		filtrosBuscador += "&tipo=" + $("#cerca_tipus_normativa").val();
+		filtrosBuscador += "&numNormativa=" + $("#cerca_num_normativa").val();
+		filtrosBuscador += "&boletin=" + $("#cerca_butlleti").val();
 
 		// ordreTipus
 		if (typeof opcions.ordreTipus != "undefined") {

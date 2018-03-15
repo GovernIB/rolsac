@@ -270,7 +270,7 @@ public class SiaUtils {
 		
 		//#427 Actualizado el isEnviable para que si una normativa tiene alguna normativa con datos no validos, entonces no enviar pase lo que pase.
 		for(Normativa normativa : procedimiento.getNormativas()) {
-			if (normativa.getDatosValidos() == 0) {
+			if (normativa.getDatosValidos() == null || !normativa.getDatosValidos()) {
 				resultado.setRespuesta("Té alguna normativa no vàlida.");	
 				resultado.setIdCentro("");
 				resultado.setNotificarSIA(false);

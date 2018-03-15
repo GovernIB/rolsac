@@ -145,7 +145,11 @@ function ListaOrdenable() {
 					if (jQuery.trim(valor) == "")
 						valor = "&nbsp;";
 					
-					html += "<span class=\"" + params.nombre + "\" "+fontcolor+">" + valor + "</span>";
+					if (params.nodoDestino != null && params.nodoDestino.length > 0 && params.nodoDestino[0].id != null && params.nodoDestino[0].id == 'listaNormativasDeProcedimientos') {
+						html += "<span class=\"" + params.nombre + "\" "+fontcolor+"><a href='../normativa/normativa.do?itemId="+item.id+"' target='_blank' "+fontcolor+">" + valor + "</a></span>";
+					} else {
+						html += "<span class=\"" + params.nombre + "\" "+fontcolor+">" + valor + "</span>";
+					}
 					break;			
 
 				case "url":

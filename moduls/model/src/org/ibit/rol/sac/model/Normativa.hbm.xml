@@ -23,7 +23,7 @@
         <property name="codiVuds" column="NOR_CODIVUDS"/>
         <property name="descCodiVuds" column="NOR_DESCCODIVUDS"/>
         <property name="numNormativa" column="NOR_NUMNOR" />
-        <property name="datosValidos" column="NOR_DATVAL" type="java.lang.Integer" />
+        <property name="datosValidos" column="NOR_DATVAL" />
         
         <set name="unidadesnormativas" cascade="all" inverse="true" >
             <key column="UNN_CODNOR" foreign-key="RSC_UNNNOR_FK"/>

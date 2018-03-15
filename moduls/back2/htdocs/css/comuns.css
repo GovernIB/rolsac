@@ -1391,7 +1391,24 @@ div.table div.tbody div.td select.ordenacion{
 .menuPublicacion{
     margin-top: 0;
     float: right;
-    width: 286px;    
+    width: 286px;  
+}
+
+.mh150px {
+	min-height: 150px;
+}
+
+.mr10px {
+	margin-right:10px;
+}
+.mr20px {
+	margin-right:20px;
+}
+.mr30px {
+	margin-right:30px;
+}
+.mr40px {
+	margin-right:40px;
 }
 
 .escriptori_detall .modulLateral div.modul,
