@@ -67,7 +67,8 @@ function CModulNormativa() {
 	            "nombre", 
 	            "orden", 
 	            "idRelatedItem", 	// Campo necesario para guardado AJAX genérico de módulos laterales.
-	            "idMainItem"		// Campo necesario para guardado AJAX genérico de módulos laterales.
+	            "idMainItem",		// Campo necesario para guardado AJAX genérico de módulos laterales.
+	            "color" 			//Indica si es datos validos o no.
             ],
 			multilang: false
 		});
