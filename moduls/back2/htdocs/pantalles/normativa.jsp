@@ -803,7 +803,7 @@
 									<div class="element t25p">
                                         <div class="etiqueta"><label for="item_num_norma"><spring:message code='txt.numNorma'/></label></div>
                                         <div class="control">
-                                            <input id="item_num_norma" placeholder="NNNN/YYYY" name="item_num_norma" type="text" class="nou" />
+                                            <input id="item_num_norma" placeholder="NNNNN/YYYY" name="item_num_norma" type="text" class="nou" />
                                         </div>
                                     </div>
                                     <div class="element t25p">

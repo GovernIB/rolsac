@@ -1039,32 +1039,31 @@ public class NormativaBackController extends PantallaBaseController {
 
             // Recuperamos las traducciones
             normativa = recuperarTraducciones(valoresForm, ficherosForm, normativaOld, normativa);
+            
+            // Recuperar el resto de campos de la normativa
+            normativa = recuperarCamposNormativa(valoresForm, normativa);
 
             //Solo comprobaremos que el numnormativa no pase de tamanyo 9, tenga la '/' y que el año este relleno. 
             //   Se deja la posibilidad que el campo DDDD (DDDD/MMMM) se rellene entero o no. 
             if (normativa.getNumNormativa() != null && !"".equals(normativa.getNumNormativa() )) {
           	  	String numNorma = normativa.getNumNormativa();
-          	  	if (numNorma.length() > 9 || !numNorma.contains("/")) {
+          	  	if (numNorma.length() > 10 || !numNorma.contains("/")) {
           	  		IdNomDTO error = new IdNomDTO(-1l, messageSource.getMessage("normativa.formulari.error.numnormativaincorrecto", null, request.getLocale()));
           	  		return new ResponseEntity<String>(error.getJson(), responseHeaders, HttpStatus.CREATED);
           	  	} 
-          	  	
-          	  	String anyo = numNorma.substring(numNorma.indexOf("/")+1);
-          	  	if (anyo.length() != 4) {
+          	    
+          	  	if (!numNorma.matches("[0-9]{1,5}/[0-9]{4}")) { 
           	  		IdNomDTO error = new IdNomDTO(-1l, messageSource.getMessage("normativa.formulari.error.numnormativaincorrecto", null, request.getLocale()));
           	  		return new ResponseEntity<String>(error.getJson(), responseHeaders, HttpStatus.CREATED);
           	  	}
             } 
             
-            // Recuperar el resto de campos de la normativa
-            normativa = recuperarCamposNormativa(valoresForm, normativa);
-
             boolean todoCorrecto = true;
             //El num normativa es obligatorio, menos si es de tipo 'Ordre' (id=4)
             if (normativa.getTipo().getId().compareTo(4l) != 0) {
             	if (normativa.getNumNormativa() == null || normativa.getNumNormativa().isEmpty()) {
             		todoCorrecto = false;
-            		log.debug("El num de normativa no estÃ¡ introducido y no es de tipo ordre.");
+            		log.debug("El num de normativa no esta introducido y no es de tipo ordre.");
                	 	String error = messageSource.getMessage("error.normativa.numnormativavacio", null, request.getLocale());
                     result = new IdNomDTO(-4l, error);           
             		
