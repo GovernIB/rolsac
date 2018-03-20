@@ -504,8 +504,7 @@
                                         <c:when test="${rolSuper}" >
                                             <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>                                
                                             <option value="1"><spring:message code='txt.validacio.vigente'/></option>
-                                            <option value="2"><spring:message code='txt.validacio.derogada'/></option>       
-                                            <option value="4"><spring:message code='txt.validacio.internaprivada'/></option>
+                                            <option value="2"><spring:message code='txt.validacio.derogada'/></option>
                                                                                                                       
                                         </c:when>
                                         <c:otherwise>

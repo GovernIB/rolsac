@@ -1043,8 +1043,7 @@ public class NormativaBackController extends PantallaBaseController {
             // Recuperar el resto de campos de la normativa
             normativa = recuperarCamposNormativa(valoresForm, normativa);
 
-            //Solo comprobaremos que el numnormativa no pase de tamanyo 9, tenga la '/' y que el año este relleno. 
-            //   Se deja la posibilidad que el campo DDDD (DDDD/MMMM) se rellene entero o no. 
+            //Solo comprobaremos que el numnormativa es correcto
             if (normativa.getNumNormativa() != null && !"".equals(normativa.getNumNormativa() )) {
           	  	String numNorma = normativa.getNumNormativa();
           	  	if (numNorma.length() > 10 || !numNorma.contains("/")) {
@@ -1072,25 +1071,16 @@ public class NormativaBackController extends PantallaBaseController {
             
             if (todoCorrecto) {
 	            if (normativaDelegate.isNumNormativaCorrecto(normativa)) {
-	            
-	            	//Comprobamos si la normativa es privada.
-	            	if (normativa.getValidacion() == ValidacionNormativa.INTERNA_PRIVADA) {
-	            		
-	            		log.debug("El estado es privado / interna de la normativa y se bloquea cualquier actualizaciÃ³n.");
-	               	 	String error = messageSource.getMessage("error.normativa.interna", null, request.getLocale());
-	                    result = new IdNomDTO(-4l, error);           
-	            		
-	            	} else {
+	            	            	
+	            	//Seteamos los datos validos a 1 (correcto)
+	            	normativa.setDatosValidos(true);
 	            	
-		            	//Seteamos los datos validos a 1 (correcto)
-		            	normativa.setDatosValidos(true);
-		            	
-			            // Guardar la Normativa
-			            guardarNormativa(normativa, ua);
-			
-			            // Finalizado correctamente
-			            result = new IdNomDTO(normativa.getId(), messageSource.getMessage("normativa.guardat.correcte", null, request.getLocale()));
-	            	}
+		            // Guardar la Normativa
+		            guardarNormativa(normativa, ua);
+		
+		            // Finalizado correctamente
+		            result = new IdNomDTO(normativa.getId(), messageSource.getMessage("normativa.guardat.correcte", null, request.getLocale()));
+            	
 	            } else {
 	            	 log.debug("El numero de normativa ya existe.");
 	            	 String error = messageSource.getMessage("error.numnormativa.repetido", null, request.getLocale());
