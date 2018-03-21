@@ -138,3 +138,11 @@ INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (32, 'en', 'E
 INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (32, 'fr', 'Réglementation européenne');
 INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (32, 'de', 'Europäische Regelung');
   
+--Eliminado text refundit de boletín
+ update rsc_normat
+    set nor_codbol = null
+  where nor_codbol in (select bol_codi
+                         from rsc_boleti 
+                         where lower(bol_nombre) like '%refundit%');
+
+delete  from rsc_boleti  where lower(bol_nombre) like '%refundit%';
