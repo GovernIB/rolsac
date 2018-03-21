@@ -996,8 +996,7 @@
                                 <select id="item_validacio" name="item_validacio">
                                 	 <option value="1" selected="selected"><spring:message code='txt.validacio.vigente'/></option>
                                      <option value="2"><spring:message code='txt.validacio.derogada'/></option>     
-                                     <option value="4"><spring:message code='txt.validacio.internaprivada'/></option>
-                                    
+                                     
                                 </select>
                             </div>
                         </div>

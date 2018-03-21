@@ -374,6 +374,7 @@ function CLlistat() {
 			dataVars_cercador += "&idUA=" + $("#cerca_ua_id").val();
 			dataVars_cercador += "&numNormativa=" + $("#cerca_num_normativa").val();
 			dataVars_cercador += "&dataAprovacio=" + $("#cerca_data_aprovacio").val();
+			dataVars_cercador += "&desactivarUA=true";
 			
 			
 		} else {

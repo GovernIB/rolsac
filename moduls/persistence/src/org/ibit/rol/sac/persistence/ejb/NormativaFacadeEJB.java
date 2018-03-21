@@ -304,7 +304,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	public ResultadoBusqueda buscarNormativas(Map parametros, Map traduccion, String tipo,
 			Long idUA, boolean uaMeves, boolean uaFilles, String invalids,
 			String campoOrdenacion, String orden, String pagina,
-			String resultats, boolean soloIds) {
+			String resultats, boolean soloIds, boolean restriccionUAs) {
 
 		Session session = getSession();
 
@@ -336,12 +336,37 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 				select = "Select distinct normativa ";
 			}
 			String selectCount = "Select count(distinct normativa)";
-			String from = " from Normativa as normativa inner join normativa.unidadesnormativas as unnor inner join normativa.traducciones as trad  ";
-
-			String uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(idUA, uaFilles, uaMeves);
-			if ( !StringUtils.isEmpty(uaQuery) ) {
-				uaQuery = " and  ( 	unnor.unidadAdministrativa.id in (" + uaQuery + ") " +
-					" ) "; //	  "		 or unnor IS EMPTY )"; //las externas no tienen ua
+			
+			String from;
+			
+			if (restriccionUAs || uaFilles || uaMeves) {
+				from = " from Normativa as normativa inner join normativa.unidadesnormativas as unnor inner join normativa.traducciones as trad  ";
+			} else {
+				from = " from Normativa as normativa inner join normativa.traducciones as trad  ";
+			}
+			
+			String uaQuery = "";
+			
+			
+			//Esta restricción activa el filtro por UAs si se pasa activo.
+			//En caso de userIsSystem se hace una búsqueda menor y en caso contrario, la búsqueda es más restrictiva
+			if (restriccionUAs || uaFilles || uaMeves) {
+				
+				uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(idUA, uaFilles, uaMeves);
+				if ( !StringUtils.isEmpty(uaQuery) ) {
+					uaQuery = " and  ( 	unnor.unidadAdministrativa.id in (" + uaQuery + ") " +
+						" ) "; 
+				} else { //if ( StringUtils.isEmpty(uaQuery) ) { //Se está buscando en todas las unidades orgánicas
+					uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(null, true, true);
+					if ( !StringUtils.isEmpty(uaQuery) ) {        	
+						uaQuery = " and ( normativa.unidadAdministrativa.id in (" + uaQuery + ") " +
+									"		or normativa.unidadAdministrativa.id is null )"; //las externas no tienen ua
+					} else {
+						//Esto significa que el usuario no tiene ninguna unidad administrativa configurada, y //no es system. 
+						uaQuery = " and normativa.unidadAdministrativa.id is null"; 
+					}
+					
+				}
 			}
 
 			//Filtrar por el acceso del usuario
@@ -350,22 +375,6 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			//tieneAccesoValidable
 			if (!userIsSuper()) {
 				accessQuery += " and normativa.validacion = " + Validacion.INTERNA;
-			}
-			
-			
-
-			// tieneAcceso
-			if (!userIsSystem()) {
-				if ( StringUtils.isEmpty(uaQuery) ) { //Se está buscando en todas las unidades orgánicas            	
-					uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(null, true, true);
-					if ( !StringUtils.isEmpty(uaQuery) ) {        	
-						uaQuery = " and ( unnor.unidadAdministrativa.id in (" + uaQuery + ") " + 
-								")"; //	"		unnor IS EMPTY )"; //las externas no tienen ua
-					} else {
-						//Esto significa que el usuario no tiene ninguna unidad administrativa configurada, y //no es system. 
-						uaQuery = " and normativa.unidadesnoramtivas IS EMPTY"; //las externas no tienen ua
-					}
-				}
 			}
 			
 			String invalidQuery = "";

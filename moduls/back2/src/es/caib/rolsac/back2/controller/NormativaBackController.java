@@ -220,7 +220,10 @@ public class NormativaBackController extends PantallaBaseController {
             idUA = ParseUtil.parseLong(request.getParameter("idUA"));
         }
         
-        
+        boolean activarBusquedaUA = true;
+        if (request.getParameter("desactivarUA") != null && !request.getParameter("desactivarUA").equals("")) {
+        	activarBusquedaUA = false;
+        }
 
         try {
             String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
@@ -257,7 +260,7 @@ public class NormativaBackController extends PantallaBaseController {
                 queBuscar = "todas"; 
             }
 
-            resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, queBuscar, idUA, meves, uaFilles, invalids, campoOrdenacion, orden, pagPag, pagRes, false);
+            resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, queBuscar, idUA, meves, uaFilles, invalids, campoOrdenacion, orden, pagPag, pagRes, false, activarBusquedaUA);
 
             for (Normativa normativa : (List<Normativa>) resultadoBusqueda.getListaResultados()) {
             	String color = "";
@@ -349,7 +352,7 @@ public class NormativaBackController extends PantallaBaseController {
                 queBuscar = "todas";
             }
 
-            resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, queBuscar, idUA, meves, uaFilles, invalids, campoOrdenacion, orden, pagPag, pagRes, true);
+            resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, queBuscar, idUA, meves, uaFilles, invalids, campoOrdenacion, orden, pagPag, pagRes, true, false);
             CSVUtil.mostrarCSV(response, convertirNormativaToCSV((List<Object[]>) resultadoBusqueda.getListaResultados()));
 
         } catch (ParseException e) {
@@ -1372,7 +1375,7 @@ public class NormativaBackController extends PantallaBaseController {
 
             // Realizar la consulta y obtener resultados
             NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
-            ResultadoBusqueda resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, "todas", null, false, false, invalids, campoOrdenacion, orden, pagPag, pagRes, false);
+            ResultadoBusqueda resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, "todas", null, false, false, invalids, campoOrdenacion, orden, pagPag, pagRes, false, false);
             resultats.put("total", resultadoBusqueda.getTotalResultados());
 
             llistaNormatives.addAll((List<Normativa>) resultadoBusqueda.getListaResultados());
