@@ -458,7 +458,10 @@
         <li class="opcio C">            
             <a id="tabBuscador" href="javascript:;"><spring:message code='tab.cercador'/></a>
         </li>
-
+		<li class="opcio nuevo"><!--  que es L C ... -->
+			<a id="tabTraspasBoib" href="javascript:;"><spring:message code='normativa.traspas.boib'/></a>
+		</li>
+		
         <c:if test="${idUA > 0}">
             <li class="opcions nuevo">
                 <a id="btnNuevaFicha" href="javascript:;" class="btn nou"><span><span><spring:message code='normativa.crea_nova_normativa'/></span></span></a>
@@ -474,7 +477,7 @@
             <input type="hidden" value="DESC" class="ordreTipus" /> 
             <input type="hidden" value="id" class="ordreCamp" />
         </div>
-        <div class="resultats C">
+		<div class="resultats C">
             <div id="cercador">
                 <div id="cercador_contingut">
                     <div class="opcionesBusqueda">
@@ -660,8 +663,8 @@
             <input type="hidden" value="DESC" class="ordreTipus" /> 
             <input type="hidden" value="id" class="ordreCamp" />
         </div>
-	<!--
-<c:if test="${traspasboib == 'Y'}">
+		
+
         <div class="resultats TL">
             <div class="dades">
                 <p class="executant"><spring:message code='normativa.carregant_llistat_normativa'/></p>
@@ -717,15 +720,15 @@
                     </div>
                                         
                 </div>
+				<div class="dades"></div>
+				<input type="hidden" value="0" class="pagPagina" /> 
+				<input type="hidden" value="DESC" class="ordreTipus" /> 
+				<input type="hidden" value="id" class="ordreCamp" />
             </div> 
-            <div class="dades"></div>
-            <input type="hidden" value="0" class="pagPagina" /> 
-            <input type="hidden" value="DESC" class="ordreTipus" /> 
-            <input type="hidden" value="id" class="ordreCamp" />
+            
         </div>
 	
-</c:if>
--->
+
  </div>
 
 </div>
@@ -842,12 +845,6 @@
                             </div>       
                         </div>
 						<div class="element t25p">
-							<div class="etiqueta"><label></label></div>
-							<div class="btnGenerico">
-									<a class="btn gestionaBOIB" href="javascript:;" style="display:none"><span><span><spring:message code='normativa.traspas.boib'/></span></span></a>
-								</div>
-						</div>
-						<div class="element t25p">
 							<div class="etiqueta"><label for="item_data_butlleti"><spring:message code='txt.dataButlleti'/></label></div>
 							<div class="control">
 								<input id="item_data_butlleti" name="item_data_butlleti" type="text" class="nou" />
@@ -858,7 +855,15 @@
 							<div class="control">
 								<input id="item_numero" name="item_numero" type="text" class="nou" />
 							</div>
-						</div>    
+						</div>  
+						<!-- 
+						<div class="element t25p">
+							<div class="etiqueta"><label></label></div>
+							<div class="btnGenerico">
+									<a class="btn gestionaBOIB" href="javascript:;" style="display:none"><span><span><spring:message code='normativa.traspas.boib'/></span></span></a>
+								</div> 
+						</div>-->
+						  
                     </div>
                     <!-- /fila -->
 					
@@ -1267,8 +1272,8 @@
 									
 			</div>
 			<div id="resultatsTB" class="dades"></div>
+		</div>
 	</div>
-</div>
 
 <!-- escriptori_documents -->
 <div id="escriptori_documents" class="escriptori_detall">

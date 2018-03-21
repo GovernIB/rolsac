@@ -500,7 +500,7 @@ public class NormativaBackController extends PantallaBaseController {
         if (request.getParameter("dataAprovacio") != null && !request.getParameter("dataAprovacio").equals("")) {
             DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
             Date dataAprobacio = df.parse(request.getParameter("dataAprovacio"));
-            paramMap.put("dataAprovacio", dataAprobacio);
+            paramMap.put("fecha", dataAprobacio);
         }
         
        

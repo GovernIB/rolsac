@@ -96,6 +96,7 @@ $(document).ready(function() {
 	DATOS_TRADUCIDOS_NORMATIVA = ["titulo"];
 	
 	// Listener para guardado de módulo vía AJAX.
+	/*
 	jQuery(".gestionaBOIB").click(function() {
 				
 		// resultats
@@ -108,7 +109,7 @@ $(document).ready(function() {
 
 		});
 		
-	});
+	});*/
 	
 	jQuery("#btnVolverTB").click(function() {
 		
@@ -124,7 +125,7 @@ $(document).ready(function() {
 	
 	
 	
-	
+	/*
 	jQuery( "#item_butlleti_id" ).change(function() {
 		var str = jQuery( "#item_butlleti_id option:selected" ).text();
 	    if (str.trim() == "BOIB") {
@@ -132,7 +133,7 @@ $(document).ready(function() {
 	    } else {
 	    	jQuery(".gestionaBOIB").hide();
 	    }
-	});
+	});*/
 
 });
 
@@ -571,6 +572,56 @@ function CLlistat() {
 			});
 		});
 
+
+	};
+	
+	//Métodos para traspaso BOIB
+	this.carregarTBaNormativa = function(boibID) {
+		
+		//Cargamos los datos de un edicto del boib en una ficha vacía de normativa nueva
+		escriptori_contingut_elm.fadeOut(300, function() {
+
+			codi_carregant = "<div id=\"carregantDetall\"><p class=\"executant\">" + txtCarregantDetall + "</p></div>";
+			escriptori_elm.append(codi_carregant).slideDown(300, function() {
+
+				dataVars = "accio=carregar" + "&id=" + boibID;
+
+				// ajax
+				$.ajax({
+					type: "POST",
+					url: pagDetallBoib,
+					data: dataVars,
+					dataType: "json",
+					error: function() {
+						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+					},
+					success: function(data) {
+						
+						if (typeof data.error != 'undefined') {
+							
+							$("#carregantDetall").fadeOut(300, function() {
+								$(this).remove();
+								escriptori_contingut_elm.fadeIn(300);
+							});
+							
+							Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.error + "</p>"});
+							
+						} else {
+							
+							Detall.nou(); 
+							Detall.pintarTB(data);
+							
+						}
+					}
+					
+				});
+				
+			});
+			
+		});
+
+		//this.actualizaEventos();
+		
 	};
 
 	this.carregarTB = function(opcions) {
@@ -787,8 +838,8 @@ function CLlistat() {
 		
 		// Obtenemos el id del item a partir del id del enlace.
 		itemID = jQuery(link).attr("id").split("_")[1];
-		Detall.carregarTB(itemID);
-
+		//Detall.carregarTB(itemID);
+		this.carregarTBaNormativa(itemID);
 	};
 
 };
@@ -1089,11 +1140,12 @@ function CDetall() {
 		$("#item_numero").val(nn(dada_node.numero));
 		$("#item_butlleti_id").val(nn(dada_node.butlleti_id));
 		$("#item_butlleti").val(nn(dada_node.butlleti));
-		if (dada_node.butlleti == "BOIB") {
+		/* Mostraba el botón antiguo de Importar BOIB
+		 * if (dada_node.butlleti == "BOIB") {
 			$(".gestionaBOIB").show();
 		} else {
 			$(".gestionaBOIB").hide();
-		}
+		}*/
 		$("#item_registre").val(nn(dada_node.registre));
 		$("#item_llei").val(nn(dada_node.llei));
 
