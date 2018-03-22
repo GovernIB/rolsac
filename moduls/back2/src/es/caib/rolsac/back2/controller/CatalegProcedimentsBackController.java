@@ -82,6 +82,8 @@ import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -1025,6 +1027,13 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			
 			if (edicion) {
 				
+				//#427 Comprobamos que no tiene ninguna normativa caducada asociada.
+				if (!procedimentDelegate.isNormativaValidas(procedimentOld.getId())) {
+					//Si estamos en modo edicición, tiene que tener todas las normativas con datos validos.
+					error = messageSource.getMessage("proc.error.normativa.datosinvalidos", null, request.getLocale());
+					return result = new IdNomDTO(-5l, error);
+				}
+				
 				//#414 Comprobamos si hay un cambio de entidad raíz (sólo en edición y si está con código SIA).
 				if (procedimentOld.getCodigoSIA() != null && !procedimentOld.getCodigoSIA().isEmpty() && procedimentOld.getEstadoSIA() != null &&
 						 ("A".equals(procedimentOld.getEstadoSIA()) || "R".equals(procedimentOld.getEstadoSIA()) ||"M".equals(procedimentOld.getEstadoSIA()) ) 
@@ -1642,7 +1651,14 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			}
 			
 			if (request.getParameter("numNormativa") != null && !request.getParameter("numNormativa").equals("")) {
-				paramMap.put("numNormativa", request.getParameter("numNormativa"));
+				String numNorma = request.getParameter("numNormativa");
+				
+				if (!numNorma.matches("[0-9]{1,5}/[0-9]{4}")) { 
+          	  		resultats.put("error", messageSource.getMessage("normativa.formulari.error.numnormativaincorrecto", null, request.getLocale()));
+          	  		return resultats;
+          	  	}
+				paramMap.put("numNormativa", numNorma);
+				
 			}
 			
 			if (request.getParameter("tipo") != null && !request.getParameter("tipo").equals("")) {

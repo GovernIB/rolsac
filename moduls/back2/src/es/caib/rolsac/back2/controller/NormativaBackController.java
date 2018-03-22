@@ -240,6 +240,17 @@ public class NormativaBackController extends PantallaBaseController {
             // Procesa el objeto request y anyade los valores necesarios a los mapas de parametros y de traducciones.
             procesarParametrosBusqueda(request, paramMap, paramTrad, lang);
 
+
+            if (request.getParameter("numNormativa") != null && !"".equals(request.getParameter("numNormativa"))) {
+                String numNorma = request.getParameter("numNormativa");
+    			
+    			if (!numNorma.matches("[0-9]{1,5}/[0-9]{4}")) { 
+          	  		resultats.put("error", messageSource.getMessage("normativa.formulari.error.numnormativaincorrecto", null, request.getLocale()));
+          	  		return resultats;
+          	  	}
+    			paramMap.put("numNormativa", numNorma);
+            }
+            
             // Realizar la consulta y obtener resultados
             NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 
@@ -491,10 +502,6 @@ public class NormativaBackController extends PantallaBaseController {
             DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
             Date dataButlleti = df.parse(request.getParameter("data_butlleti"));
             paramMap.put("fechaBoletin", dataButlleti);
-        }
-        
-        if (request.getParameter("numNormativa") != null && !"".equals(request.getParameter("numNormativa"))) {
-            paramMap.put("numNormativa", request.getParameter("numNormativa"));
         }
         
         if (request.getParameter("dataAprovacio") != null && !request.getParameter("dataAprovacio").equals("")) {
@@ -1058,12 +1065,13 @@ public class NormativaBackController extends PantallaBaseController {
           	  		IdNomDTO error = new IdNomDTO(-1l, messageSource.getMessage("normativa.formulari.error.numnormativaincorrecto", null, request.getLocale()));
           	  		return new ResponseEntity<String>(error.getJson(), responseHeaders, HttpStatus.CREATED);
           	  	}
-            } 
+            }
             
             boolean todoCorrecto = true;
             //El num normativa es obligatorio, menos si es de tipo 'Ordre' (id=4)
             if (normativa.getTipo().getId().compareTo(4l) != 0) {
             	if (normativa.getNumNormativa() == null || normativa.getNumNormativa().isEmpty()) {
+            		
             		todoCorrecto = false;
             		log.debug("El num de normativa no esta introducido y no es de tipo ordre.");
                	 	String error = messageSource.getMessage("error.normativa.numnormativavacio", null, request.getLocale());
@@ -1074,20 +1082,22 @@ public class NormativaBackController extends PantallaBaseController {
             
             if (todoCorrecto) {
 	            if (normativaDelegate.isNumNormativaCorrecto(normativa)) {
-	            	            	
+
 	            	//Seteamos los datos validos a 1 (correcto)
 	            	normativa.setDatosValidos(true);
-	            	
+
 		            // Guardar la Normativa
 		            guardarNormativa(normativa, ua);
-		
+
 		            // Finalizado correctamente
 		            result = new IdNomDTO(normativa.getId(), messageSource.getMessage("normativa.guardat.correcte", null, request.getLocale()));
-            	
+
 	            } else {
-	            	 log.debug("El numero de normativa ya existe.");
-	            	 String error = messageSource.getMessage("error.numnormativa.repetido", null, request.getLocale());
-	                 result = new IdNomDTO(-4l, error);                 
+
+	            	log.debug("El numero de normativa ya existe.");
+	            	String error = messageSource.getMessage("error.numnormativa.repetido", null, request.getLocale());
+	                result = new IdNomDTO(-4l, error);
+
 	            }
             }
         
@@ -1341,7 +1351,13 @@ public class NormativaBackController extends PantallaBaseController {
             }
             
             if (request.getParameter("numNormativa") != null && !request.getParameter("numNormativa").equals("")) {
-				paramMap.put("numNormativa", request.getParameter("numNormativa"));
+				String numNorma = request.getParameter("numNormativa");
+				
+				if (!numNorma.matches("[0-9]{1,5}/[0-9]{4}")) { 
+          	  		resultats.put("error", messageSource.getMessage("normativa.formulari.error.numnormativaincorrecto", null, request.getLocale()));
+          	  		return resultats;
+          	  	}
+				paramMap.put("numNormativa", numNorma);
 			}
 			
 			if (request.getParameter("tipo") != null && !request.getParameter("tipo").equals("")) {

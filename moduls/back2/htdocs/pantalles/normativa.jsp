@@ -555,7 +555,7 @@
                                     <label for="cerca_num_normativa"><spring:message code='txt.numNorma'/></label>
                                 </div>
                                 <div class="control">
-                                    <input id="cerca_num_normativa" name="cerca_num_normativa" type="text" />
+                                    <input id="cerca_num_normativa" placeholder="NNNNN/YYYY" name="cerca_num_normativa" type="text" />
                                 </div>                          
                             </div>
                             
@@ -1233,7 +1233,7 @@
 								<label for="numeroboletinTB"><spring:message code='camp.n_butlleti'/></label>
 							</div>
 							<div class="control">
-								<input id="numeroboletinTB" name="numeroboletinTB" type="text" />
+								<input id="numeroboletinTB" placeholder="YYYYNNN" name="numeroboletinTB" type="text" />
 							</div>                          
 						</div>
 						
@@ -1242,7 +1242,7 @@
 								<label for="numeroregistroTB"><spring:message code='camp.n_registre'/></label>
 							</div>
 							<div class="control">
-								<input id="numeroregistroTB" name="numeroregistroTB" type="text" maxlength="250" />
+								<input id="numeroregistroTB" placeholder="NNN" name="numeroregistroTB" type="text" maxlength="250" />
 							</div>
 						</div>
 

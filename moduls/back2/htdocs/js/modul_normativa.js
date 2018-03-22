@@ -473,7 +473,12 @@ function CEscriptoriNormativa() {
 				}
 			},
 			success: function(data) {
-				that.finCargaListado(data, opcions);
+				if (data.error == undefined || data.error == '') {
+					that.finCargaListado(data, opcions);
+				} else {
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: "Error", text: "<p>" + data.error + "</p>"});
+					that.finCargaListado(data, opcions);
+				}
 			}
 		});
 		

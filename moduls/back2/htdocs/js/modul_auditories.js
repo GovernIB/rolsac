@@ -31,7 +31,7 @@ function ModulAuditories(idModuloAuditorias){
 			return;
 		}
 		// variables
-		var dataVars = "&id=" + itemID;
+		var dataVars = "id=" + itemID;
 		dataVars += "&tipus=" + tipusAuditoria;
 										
 		// ajax		

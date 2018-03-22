@@ -259,6 +259,35 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		return resultado;
 	}
 	
+	
+	/** 
+	 * Check si alguna normativa esta como no valida..
+	 * 
+	 * @ejb.interface-method	  
+	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+	 */
+	public boolean isNormativaValidas(Long id)   throws DelegateException {
+		Session session = getSession();
+		boolean resultado = true;
+		try {
+			ProcedimientoLocal procedimientoBD = obtenerProcedimientoNewBack(id);
+			for(Normativa normativa : procedimientoBD.getNormativas()) {
+				if (!normativa.isDatosValidos()) {
+					resultado = false;
+					break;
+				}
+			}
+		} catch (Exception he) {
+			
+			throw new EJBException(he);
+			
+		} finally {
+			
+			close(session);			
+		}
+		return resultado;
+	}
+	
 	/**
 	 * Checkear valores de SIA.
 	 * @param procedimiento

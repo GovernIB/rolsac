@@ -1740,7 +1740,7 @@
                             </div>                                  
                         </div>                              
                         <div class="element t12">                                
-                            <div class="etiqueta"><label for="cerca_normativa_data"><spring:message code='txt.data'/></label></div>
+                            <div class="etiqueta"><label for="cerca_normativa_data"><spring:message code='txt.dataAprovacio'/></label></div>
                             <div class="control">
                                 <input id="cerca_normativa_data" name="cerca_normativa_data" type="text" class="data" />
                             </div>                                  
@@ -1759,7 +1759,7 @@
                                     <label for="cerca_num_normativa"><spring:message code='txt.numNorma'/></label>
                                 </div>
                                 <div class="control">
-                                    <input id="cerca_num_normativa" name="cerca_num_normativa" type="text" />
+                                    <input id="cerca_num_normativa" placeholder="NNNNN/YYYY" name="cerca_num_normativa" type="text" />
                                 </div>                          
                             </div>
                             

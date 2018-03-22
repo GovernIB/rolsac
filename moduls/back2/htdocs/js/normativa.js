@@ -473,8 +473,13 @@ function CLlistat() {
 					}
 	
 				},
-				success: function(data) {				
-					Llistat.finCargaListado(opcions,data);					
+				success: function(data) {	
+					if (data.error == undefined || data.error == '') {
+						Llistat.finCargaListado(opcions,data);	
+					} else {
+						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: "Error", text: "<p>" + data.error + "</p>"});
+						Llistat.finCargaListado(opcions,data);	
+					}					
 				}
 			});
 		}
