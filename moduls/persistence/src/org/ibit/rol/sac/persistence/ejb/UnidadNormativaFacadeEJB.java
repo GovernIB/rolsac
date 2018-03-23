@@ -12,6 +12,9 @@ import net.sf.hibernate.Session;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.UnidadNormativa;
+import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
+import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
 /**
@@ -33,6 +36,12 @@ public abstract class UnidadNormativaFacadeEJB extends HibernateEJB
 	 */
 	private static final long serialVersionUID = 3203877720788468776L;
 	
+
+	/**
+	 * Obtiene referéncia al ejb de control de Acceso.
+	 * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
+	 */
+	protected abstract AccesoManagerLocal getAccesoManager();
 	
 	/**
      * @ejb.create-method
@@ -110,8 +119,12 @@ public abstract class UnidadNormativaFacadeEJB extends HibernateEJB
 		try {
 			
 			// Primero borramos las especificadas.
-			for (Long id : unidadesNormativaABorrar)
+			for (Long id : unidadesNormativaABorrar) {
+				
+				UnidadNormativa unidadNormativa = (UnidadNormativa) session.load(UnidadNormativa.class, id);
+				
 				borrarUnidadNormativa(id);
+			}
 			
 			// Creamos/actualizamos relaciones unidad-Normativa.
 			for (UnidadNormativa um : unidadesNormativaNuevas) {
@@ -166,6 +179,9 @@ public abstract class UnidadNormativaFacadeEJB extends HibernateEJB
 		try {
 			UnidadNormativa unidadNormativa = (UnidadNormativa) session.load(UnidadNormativa.class, id);
 			final UnidadAdministrativa unidadA = unidadNormativa.getUnidadAdministrativa();
+			if (!getAccesoManager().tieneAccesoUnidad(unidadA.getId(), true)) {
+				throw new EJBException("No tiene acceso para modificar la relacion de la UA : " + unidadA.getId());
+			}
 			unidadNormativa.getNormativa().removeUnidadNormativa(unidadNormativa);
             unidadNormativa.getUnidadAdministrativa().removeUnidadNormativa(unidadNormativa);
             session.delete(unidadNormativa);

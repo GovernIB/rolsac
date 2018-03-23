@@ -1075,8 +1075,8 @@
                                                     <input id="item_organ_responsable" name="item_organ_responsable" type="text" class="nou" readonly="readonly" />                                                
                                                 </div>
                                                 <div class="botones">
-                                                    <div class="btnCambiar boton btnGenerico">                        
-                                                        <a href="javascript:carregarArbreUAExpand('<c:url value="/pantalles/popArbreUAExpandir.do"/>','popUA','item_organ_responsable_id', 'item_organ_responsable');" class="btn consulta">
+                                                    <div class="btnCambiar boton btnGenerico">  
+                                                        <a href="javascript:carregarArbreUAExpand('<c:url value="/pantalles/popArbreUAExpandir.do"/>','popUA','item_organ_responsable_id', 'item_organ_responsable','S');" class="btn consulta">
                                                             <span><span><spring:message code='boto.canviarOrgan'/></span></span>
                                                         </a>
                                                     </div>
@@ -1133,7 +1133,7 @@
                                   </div>
                                   <div class="botones">
                                       <div class="btnCambiar boton btnGenerico">                        
-                                          <a href="javascript:carregarArbreUAExpand('<c:url value="/pantalles/popArbreUAExpandir.do"/>','popUA','item_servei_responsable_id', 'item_servei_responsable');" class="btn consulta">
+                                          <a href="javascript:carregarArbreTotesUAExpand('<c:url value="/pantalles/popArbreUAExpandir.do"/>','popUA','item_servei_responsable_id', 'item_servei_responsable');" class="btn consulta">
                                               <span><span><spring:message code='boto.canviarOrgan'/></span></span>
                                           </a>
                                       </div>

@@ -16,9 +16,11 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
+import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -58,11 +60,8 @@ public class PopupUABackController {
                 if (request.getParameter("idUAraiz") == null || request.getParameter("idUAraiz").isEmpty()) {
                 	raices = buscarRaicesUnidadesAdministrativas(request.getParameter("padres") != null, false);
                 } else {
-                	raices = new ArrayList();
-                	Long idUAraiz = Long.valueOf(request.getParameter("idUAraiz"));
-                	raices.add(uaDelegate.obtenerUnidadAdministrativa(idUAraiz));
+                	raices = this.uaUsuario(request);
                 	model.put("idUAraiz", request.getParameter("idUAraiz"));
-                    
                 }
                 
                 model.put("raizOptions", raices);
@@ -91,6 +90,20 @@ public class PopupUABackController {
         
         return "pantalles/popArbreUA";
         
+    }
+    
+    /**
+     * Obtiene las UA del usuario.
+     * @throws DelegateException 
+     */
+    private List<UnidadAdministrativa> uaUsuario( HttpServletRequest request) throws DelegateException {
+    	String username = request.getRemoteUser();
+    	UnidadAdministrativaDelegate uaDelegate = null == this.uaDelegate ? DelegateUtil.getUADelegate() : this.uaDelegate;
+        UsuarioDelegate usuDelegate = DelegateUtil.getUsuarioDelegate();
+        Usuario usuario = usuDelegate.obtenerUsuariobyUsername(username);
+        List<UnidadAdministrativa> uas = new ArrayList();
+        uas.addAll(usuario.getUnidadesAdministrativas());
+        return uas;
     }
 
     private List<UnidadAdministrativa> buscarRaicesUnidadesAdministrativas(boolean padre, boolean todas) throws DelegateException {
@@ -133,9 +146,7 @@ public class PopupUABackController {
 	        raices = buscarRaicesUnidadesAdministrativas(request.getParameter("padres") != null,
 	        		"1".equals(request.getParameter("totes")));
         } else {
-        	raices = new ArrayList();
-        	Long idUAraiz = Long.valueOf(request.getParameter("idUAraiz"));
-        	raices.add(uaDelegate.obtenerUnidadAdministrativa(idUAraiz));
+        	raices = this.uaUsuario(request);
         	model.put("idUAraiz", request.getParameter("idUAraiz"));
         }
         model.put("raizOptions", raices);
@@ -197,9 +208,7 @@ public class PopupUABackController {
 	        raices = buscarRaicesUnidadesAdministrativas(request.getParameter("padres") != null,
 	        		"1".equals(request.getParameter("totes")));
         } else {
-        	raices = new ArrayList();
-        	Long idUAraiz = Long.valueOf(request.getParameter("idUAraiz"));
-        	raices.add(uaDelegate.obtenerUnidadAdministrativa(idUAraiz));
+        	raices = this.uaUsuario(request);
         	model.put("idUAraiz", request.getParameter("idUAraiz"));
         }
         model.put("raizOptions", raices);

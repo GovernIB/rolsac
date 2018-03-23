@@ -133,6 +133,16 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 				if (!getAccesoManager().tieneAccesoNormativa(normativa.getId())) {
 					throw new SecurityException("No tiene acceso a la normativa");
 				}
+				
+				//#427 Checkear la normativa  !userIsSuper()
+				Normativa normativaConUAs = this.obtenerNormativa(normativa.getId());
+				if (normativaConUAs.getUnidadesnormativas() != null) { 
+					for(UnidadNormativa unanor : normativaConUAs.getUnidadesnormativas()) {
+						if (!getAccesoManager().tieneAccesoUnidad(unanor.getUnidadAdministrativa().getId(), true)) {
+							throw new SecurityException("No tiene acceso a la normativa por la UA");
+						}
+					}
+				}
 			}
 
 			/* Si se pasa UA es porque se va a crear. **/
@@ -141,7 +151,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 					throw new SecurityException("No tiene acceso a la unidad");
 				}
 			}
-
+			
 			if (normativa.getId() == null) {
 				session.save(normativa);
 				addOperacion(session, normativa, Auditoria.INSERTAR);
@@ -1041,6 +1051,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 
 		return resultado;
 	}
+	
 
 	 /**
 	 * Metodo para indexar un solrPendiente.

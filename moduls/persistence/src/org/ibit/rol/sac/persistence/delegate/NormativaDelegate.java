@@ -270,5 +270,5 @@ public class NormativaDelegate implements StatelessDelegate
            throw new DelegateException(e);
        }
 	}
-   
+
 }

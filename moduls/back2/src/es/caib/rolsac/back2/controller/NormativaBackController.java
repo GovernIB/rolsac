@@ -1300,6 +1300,24 @@ public class NormativaBackController extends PantallaBaseController {
 
         try {
             if (normativaDelegate.autorizaModificarNormativa(id)) {
+            	
+            	Normativa normativa = normativaDelegate.obtenerNormativa(id);
+    			if (normativa == null) {
+    				
+    				return new IdNomDTO(-1l, messageSource.getMessage("error.normativa.relaciones", null, request.getLocale()));
+    				 
+    			} else {
+    				
+    				if (normativa.getProcedimientos() != null && normativa.getProcedimientos().size() > 0) {
+    					return new IdNomDTO(-1l, messageSource.getMessage("error.normativa.relaciones", null, request.getLocale()));
+    				}
+    				
+    				if (normativa.getServicios() != null && normativa.getServicios().size() > 0) {
+    					return new IdNomDTO(-1l, messageSource.getMessage("error.normativa.relaciones", null, request.getLocale()));
+    				}
+    				
+    			}
+    			
                 normativaDelegate.borrarNormativa(id);
             } else {
                 return new IdNomDTO(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()));
@@ -1659,15 +1677,64 @@ public class NormativaBackController extends PantallaBaseController {
 			Set<UnidadNormativa> unidadesNormativa = (Set<UnidadNormativa>)normativa.getUnidadesnormativas();
 			List<Long> unidadesNormativaABorrar = new ArrayList<Long>();
 			Iterator<UnidadNormativa> it = unidadesNormativa.iterator();
-			while ( it.hasNext() )
-				unidadesNormativaABorrar.add( it.next().getId() );
+			while ( it.hasNext() ) {
+				UnidadNormativa uaNormativa = it.next();
+				Long idUN = uaNormativa.getId();
+				Long idUA = uaNormativa.getUnidadAdministrativa().getId();
+				if (elementos == null) {
+					unidadesNormativaABorrar.add( idUN );
+				} else {
+					boolean encontrado = false;
+					for(Long elemento : elementos) {
+						if (elemento.compareTo(idUA) == 0) {
+							encontrado = true;
+							break;
+						}
+					}
+					
+					//Creamos las unidadNormativaABorrar
+					if (!encontrado) {
+						unidadesNormativaABorrar.add( idUN );
+					}
+				}
+			}
 			
+			//Unidad Normativa a añadir
+			UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
 			List<UnidadNormativa> unidadesNormativaNuevas = new ArrayList<UnidadNormativa>();
+			if (elementos != null) {
+				for(Long elemento : elementos) {
+					boolean encontrado = false;
+					Iterator<UnidadNormativa> it2 = unidadesNormativa.iterator();
+					
+					while ( it2.hasNext() ) {
+						UnidadNormativa uaNormativa = it2.next();
+						Long idUA = uaNormativa.getUnidadAdministrativa().getId();
+						if (elemento.compareTo(idUA) == 0) {
+							encontrado = true;
+							break;
+						}
+					}
+					
+					//Si no se encuentra el elemento, es que hay que crearlo
+					if (!encontrado) {
+						UnidadNormativa uam = new UnidadNormativa();
+						UnidadAdministrativa ua = uaDelegate.consultarUnidadAdministrativaSinFichas(elemento);
+						
+						uam.setNormativa(normativa);
+						uam.setUnidadAdministrativa(ua);
+						
+						unidadesNormativaNuevas.add(uam);
+					}
+				}
+				
+				
+			}
 			
+			/*
 			// Procesamos los elementos actuales.
 			if ( elementos != null ) {
 				
-				UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
 								
 				for ( int i = 0; i < elementos.length; i++ ) {
 					
@@ -1685,7 +1752,8 @@ public class NormativaBackController extends PantallaBaseController {
 					
 				}
 				
-			}
+			}*/
+			
 			
 			uaNormativaDelegate.grabarUnidadesNormativa(unidadesNormativaNuevas, unidadesNormativaABorrar);
 			
@@ -1694,7 +1762,7 @@ public class NormativaBackController extends PantallaBaseController {
 
 		} catch (DelegateException dEx) {
 			
-			if (dEx.isSecurityException()) {
+			if (dEx.isSecurityException() || (dEx.getMessage() != null && dEx.getMessage().contains("No tiene acceso para modificar la relacion de la UA"))) {
 				String error = messageSource.getMessage("error.permisos", null, request.getLocale());
 				result = new IdNomDTO(-1l, error);
 				log.error(ExceptionUtils.getStackTrace(dEx));
