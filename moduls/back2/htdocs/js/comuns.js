@@ -1325,15 +1325,14 @@ function itemAEditar() {
 	return 0;
 }
 
-
-function carregarModulArbreUA (url, idDiv, llocOnPintar ){
+function carregarModulArbreUA (url, idDiv, llocOnPintar, idUAraiz ){
 	
 	// Aseguram que no estigui creat
 	if ($('#' + idDiv).length == 0 ) {
 		if (typeof llocOnPintar == 'undefined') {
-			$('body').append('<div id="'+ idDiv + '" class="falsePopUp" style="left:'+(($(document).width() / 2) - 275)+'px"><iframe src="' + url + '?idUA=0" style="width:550px; height:450px;" /></div>');
+			$('body').append('<div id="'+ idDiv + '" class="falsePopUp" style="left:'+(($(document).width() / 2) - 275)+'px"><iframe src="' + url + '?idUA=0&idUAraiz=' + idUAraiz +'" style="width:550px; height:450px;" /></div>');
 		} else {
-			$(llocOnPintar).append('<div id="'+ idDiv + '"><iframe src="' + url + '?idUA=0"  /></div>');
+			$(llocOnPintar).append('<div id="'+ idDiv + '"><iframe src="' + url + '?idUA=0&idUAraiz=' + idUAraiz +'"  /></div>');
 		}
 	}
 }

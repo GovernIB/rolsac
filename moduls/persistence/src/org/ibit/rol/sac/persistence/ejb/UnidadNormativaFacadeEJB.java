@@ -77,6 +77,7 @@ public abstract class UnidadNormativaFacadeEJB extends HibernateEJB
         	session.flush();
         	
         	Hibernate.initialize(unidad.getHijos());
+        	Hibernate.initialize(unidad.getUnidadesMaterias());
             Actualizador.actualizar(unidad);
             
             return unidadNormativa.getId();
@@ -128,6 +129,7 @@ public abstract class UnidadNormativaFacadeEJB extends HibernateEJB
 						session.flush();
 						
 						Hibernate.initialize(unidad.getHijos());
+						Hibernate.initialize(unidad.getUnidadesMaterias());
 						Actualizador.actualizar(unidad);
 						
 					} else {
@@ -169,6 +171,7 @@ public abstract class UnidadNormativaFacadeEJB extends HibernateEJB
             session.delete(unidadNormativa);
             session.flush();
             Hibernate.initialize(unidadA.getHijos());
+            Hibernate.initialize(unidadA.getUnidadesMaterias());
             Actualizador.actualizar(unidadA);
             
         } catch (HibernateException he) {

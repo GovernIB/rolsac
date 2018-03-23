@@ -51,12 +51,23 @@ public class PopupUABackController {
             
             try {
 
-                List<UnidadAdministrativa> raices = buscarRaicesUnidadesAdministrativas(request.getParameter("padres") != null, false);
-
+            	
+                List<UnidadAdministrativa> raices;
+                UnidadAdministrativaDelegate uaDelegate = null == this.uaDelegate ? DelegateUtil.getUADelegate() : this.uaDelegate;
+                
+                if (request.getParameter("idUAraiz") == null || request.getParameter("idUAraiz").isEmpty()) {
+                	raices = buscarRaicesUnidadesAdministrativas(request.getParameter("padres") != null, false);
+                } else {
+                	raices = new ArrayList();
+                	Long idUAraiz = Long.valueOf(request.getParameter("idUAraiz"));
+                	raices.add(uaDelegate.obtenerUnidadAdministrativa(idUAraiz));
+                	model.put("idUAraiz", request.getParameter("idUAraiz"));
+                    
+                }
+                
                 model.put("raizOptions", raices);
 
-                UnidadAdministrativaDelegate uaDelegate = null == this.uaDelegate ? DelegateUtil.getUADelegate() : this.uaDelegate;
-
+                
                 for (int i = 0; i < raices.size(); i++) {
                     UnidadAdministrativa raizActual = (UnidadAdministrativa) raices.get(i);
                     if (!uaDelegate.listarHijosUA(raizActual.getId()).isEmpty()) {
@@ -115,17 +126,24 @@ public class PopupUABackController {
         request.setAttribute("idSelect", request.getParameter("idSelect"));
         request.setAttribute("totes", request.getParameter("totes"));
 
-        List<UnidadAdministrativa> raices = buscarRaicesUnidadesAdministrativas(
-        		request.getParameter("padres") != null, 
-        		"1".equals(request.getParameter("totes")));
-        
+        List<UnidadAdministrativa> raices;
+        UnidadAdministrativaDelegate uaDelegate = null == this.uaDelegate ? DelegateUtil.getUADelegate() : this.uaDelegate;
+        if (request.getParameter("idUAraiz") == null || request.getParameter("idUAraiz").isEmpty()) {
+    	    
+	        raices = buscarRaicesUnidadesAdministrativas(request.getParameter("padres") != null,
+	        		"1".equals(request.getParameter("totes")));
+        } else {
+        	raices = new ArrayList();
+        	Long idUAraiz = Long.valueOf(request.getParameter("idUAraiz"));
+        	raices.add(uaDelegate.obtenerUnidadAdministrativa(idUAraiz));
+        	model.put("idUAraiz", request.getParameter("idUAraiz"));
+        }
         model.put("raizOptions", raices);
         
         model.put("id_input", request.getParameter("idInput"));
         model.put("id_hidden", request.getParameter("idHidden"));        
 
-        UnidadAdministrativaDelegate uaDelegate = null == this.uaDelegate ? DelegateUtil.getUADelegate() : this.uaDelegate;
-
+        
         for (int i = 0; i < raices.size(); i++) {
             UnidadAdministrativa raizActual = (UnidadAdministrativa) raices.get(i);
             if (!uaDelegate.listarHijosUA(raizActual.getId()).isEmpty()) {
@@ -172,10 +190,19 @@ public class PopupUABackController {
         request.setAttribute("idUA", new Long(request.getParameter("idUA")));
         request.setAttribute("totes", request.getParameter("totes"));
 
-        List<UnidadAdministrativa> raices = buscarRaicesUnidadesAdministrativas(request.getParameter("padres") != null,
-        		"1".equals(request.getParameter("totes")));
-
+        List<UnidadAdministrativa> raices;
         UnidadAdministrativaDelegate uaDelegate = null == this.uaDelegate ? DelegateUtil.getUADelegate() : this.uaDelegate;
+        if (request.getParameter("idUAraiz") == null || request.getParameter("idUAraiz").isEmpty()) {
+    	    
+	        raices = buscarRaicesUnidadesAdministrativas(request.getParameter("padres") != null,
+	        		"1".equals(request.getParameter("totes")));
+        } else {
+        	raices = new ArrayList();
+        	Long idUAraiz = Long.valueOf(request.getParameter("idUAraiz"));
+        	raices.add(uaDelegate.obtenerUnidadAdministrativa(idUAraiz));
+        	model.put("idUAraiz", request.getParameter("idUAraiz"));
+        }
+        model.put("raizOptions", raices);
 
         for (int i = 0; i < raices.size(); i++) {
             UnidadAdministrativa raizActual = (UnidadAdministrativa) raices.get(i);

@@ -303,7 +303,7 @@ public class UnidadAdministrativaTransferible extends ActuacionTransferible impl
 		if(hijos!=null && !hijos.isEmpty()){
 			idHijos = new ArrayList<Long>();
 			for(final UnidadAdministrativa hijo : hijos){
-				if(hijo.getValidacion().equals(Validacion.PUBLICA)){
+				if(hijo != null && hijo.getValidacion().equals(Validacion.PUBLICA)){
 					idHijos.add(hijo.getId());
 				}
 			}

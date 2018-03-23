@@ -1125,7 +1125,7 @@
                                     <div class="listaOrdenable"></div>
                                 </div>
                                 <div class="boton btnGenerico" style="margin-left: 0px;">
-                                    <a href="javascript:carregarModulArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA');" class="btn consulta">
+                                    <a href="javascript:carregarModulArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA', undefined,'<c:out value="${idUA}" />');" class="btn consulta">
                                         <span><span><spring:message code='boto.afegeixUnitatAdminsitrativa'/></span></span>
                                     </a>
                                 </div>
