@@ -757,6 +757,17 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			if (!getAccesoManager().tieneAccesoNormativa(id)) {
 				throw new SecurityException("No tiene acceso a la normativa");
 			}
+			
+			//#427 Checkear la normativa  !userIsSuper()
+			Normativa normativaConUAs = this.obtenerNormativa(id);
+			if (normativaConUAs.getUnidadesnormativas() != null) { 
+				for(UnidadNormativa unanor : normativaConUAs.getUnidadesnormativas()) {
+					if (!getAccesoManager().tieneAccesoUnidad(unanor.getUnidadAdministrativa().getId(), true)) {
+						throw new SecurityException("No tiene acceso a la normativa por la UA");
+					}
+				}
+			}
+			
 			Normativa normativa = (Normativa) session.load(Normativa.class, id);
 			addOperacion(session, normativa, Auditoria.BORRAR);
 			Historico historico = getHistorico(session, normativa);
