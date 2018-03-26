@@ -168,8 +168,11 @@ function CLlistat() {
 		$("#cerca_data").datepicker({ dateFormat: 'dd/mm/yy' });
 		$("#cerca_data_butlleti").datepicker({ dateFormat: 'dd/mm/yy' });				
 		$("#cerca_data_aprovacio").datepicker({ dateFormat: 'dd/mm/yy' });				
-		$("#fechaTB").datepicker({ dateFormat: 'dd/mm/yy' });
-
+		jQuery("#fechaTB").datepicker({ dateFormat: 'dd/mm/yy' });
+		jQuery("#fechaTB").change(function(){
+			jQuery("#fechaTB").val( jQuery(this).val() );
+		});
+		
 		Llistat.carregar({});
 
 		if (typeof FormularioBusquedaTB === "undefined")		
@@ -677,9 +680,15 @@ function CLlistat() {
 			},
 			success: function(data) {
 				if (data.errorMessage && data.errorMessage != '') {
-					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + data.errorMessage + "</p>"});
-					Error.llansar();
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: "error", text: "<p>" + data.errorMessage + "</p>"});
+					jQuery("#cercadorTB").find(".dades").fadeOut();
+					jQuery("#numeroboletinTB").prop( "disabled", false );
+					jQuery("#numeroregistroTB").prop( "disabled", false );
+					jQuery("#fechaTB").prop( "disabled", false );
 				} else {
+					jQuery("#numeroboletinTB").prop( "disabled", false );
+					jQuery("#numeroregistroTB").prop( "disabled", false );
+					jQuery("#fechaTB").prop( "disabled", false );
 					Llistat.finCargaListadoTB(opcions,data);
 				}
 			}

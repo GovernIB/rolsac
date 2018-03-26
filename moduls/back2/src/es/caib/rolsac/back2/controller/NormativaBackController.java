@@ -564,6 +564,21 @@ public class NormativaBackController extends PantallaBaseController {
         if (fecha != null) {
             fecha = fecha.trim();
         }
+        
+        //#427 Comprobamos que numBoletin cumple correctamente el patron 
+        if (numBoletin != null && !numBoletin.isEmpty() && !numBoletin.matches("\\d{7}")) {
+        	
+        	resultats.put("errorMessage", messageSource.getMessage("error.normativa.boib.numBoletin", null, request.getLocale()));
+        	return resultats;
+        }
+        
+        //#427 Comprobamos que numRegistro cumple correctamente el patron
+        if (numRegistro != null && !numRegistro.isEmpty() && !numBoletin.matches("\\d{3}")) {
+        	
+        	resultats.put("errorMessage", messageSource.getMessage("error.normativa.boib.numRegistro", null, request.getLocale()));
+        	return resultats;
+        }
+        
 
         SearchNormativa bdcons = new EBoibSearchNormativa(numBoletin, numRegistro, fecha);
         bdcons.makeSearch();

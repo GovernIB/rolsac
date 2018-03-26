@@ -423,23 +423,6 @@
                    "obligatori": "",
                    "tipus": "<spring:message code='normativa.formulari.traspas_eboib.campo_registro_numero'/>"
                }
-           },{
-           "modo": "individual",
-           "etiqueta": "id",
-           "etiquetaValor": "fechaTB",
-           "obligatori": "no",
-           "tipus": "data",
-           "caracters":
-               {
-                   "maxim": 9,
-                   "mostrar": "no",
-                   "abreviat": "no"
-               },
-           "error":
-               {
-                   "obligatori": "",
-                   "tipus": "<spring:message code='normativa.formulari.traspas_eboib.campo_data_formato'/>"
-               }            
            }
            
           ];
@@ -686,7 +669,7 @@
                                     <label for="numeroboletinTB"><spring:message code='camp.n_butlleti'/></label>
                                 </div>
                                 <div class="control">
-                                    <input id="numeroboletinTB" name="numeroboletinTB" type="text" />
+                                    <input id="numeroboletinTB" placeholder="YYYYNNN" name="numeroboletinTB" type="text" />
                                 </div>                          
                             </div>
                             
@@ -695,7 +678,7 @@
                                     <label for="numeroregistroTB"><spring:message code='camp.n_registre'/></label>
                                 </div>
                                 <div class="control">
-                                    <input id="numeroregistroTB" name="numeroregistroTB" type="text" maxlength="250" />
+                                    <input id="numeroregistroTB" placeholder="NNN" name="numeroregistroTB" type="text" maxlength="250" />
                                 </div>
                             </div>
 
