@@ -23,6 +23,9 @@ import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
 
 import org.apache.commons.lang.StringUtils;
+import org.ibit.rol.sac.model.Tipo;
+import org.ibit.rol.sac.persistence.delegate.DelegateException;
+import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 
 
 public class EBoibSearchNormativa extends SearchNormativaBase implements
@@ -121,7 +124,7 @@ SearchNormativa {
 	
 	
 
-	public void makeSearch() {
+	public void makeSearch()  {
 		/*
 		 * 1.- buscar el BOIB por fecha o número en RSS
 		 * 		- buscar por número: /filtrerss.do?lang=ca&resultados=20&num_ini=1&num_fin=1&any_ini=2009&any_fin=2009
@@ -151,7 +154,9 @@ SearchNormativa {
 				TrNormativaBean normativa =  getEnviament(rdf, enviamentUrl);
 	            if (numregboib.equals("")) {
 	            	//No estamos buscando por numeroboib
-		            meterListaNormativa(normativa);
+	            	if (isNormativaValida(normativa)) {
+		                meterListaNormativa(normativa);
+	            	}
 	            } else {
 	            	//Estamos buscando por numeroboib
 		            if (normativa.getValorRegistro().equals(numregboib)) {
@@ -164,7 +169,9 @@ SearchNormativa {
 		                }
 		                traza("ENCONTRADO REGISTRO EN BOIB. REGISTRO: " + numregboib);
 		                normativabean = normativa;
-			            meterListaNormativa(normativa);
+		                if (isNormativaValida(normativa)) {
+		                	meterListaNormativa(normativa);
+		                }
 		                abortar = true;
 		            }
 	            }
@@ -182,6 +189,33 @@ SearchNormativa {
 		
 
 
+	}
+	
+	/**
+	 * Método que comprueba si la normativa tiene el id tipo correcto.
+	 * @param normativa
+	 * @return
+	 * @throws DelegateException
+	 */
+	private boolean isNormativaValida(TrNormativaBean normativa) {
+		 boolean correcto;
+		 if (normativa.getIdTipoNormativa() == null) {
+			 correcto = false;
+		 } else {
+         	Tipo tipo;
+			try {
+				tipo = DelegateUtil.getTipoNormativaDelegate().obtenerTipoNormativaByBOIB(normativa.getIdTipoNormativa());
+				if (tipo == null) {
+	         		correcto = false;
+	         	} else {
+	         		correcto = true;
+	         	}
+			} catch (DelegateException e) {
+				correcto = false;
+			}
+         	
+         }
+		return correcto;
 	}
 
 	private TrNormativaBean getEnviament ( BoibResult rdf, String inputFileName ) {
