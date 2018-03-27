@@ -1457,7 +1457,7 @@ public class NormativaBackController extends PantallaBaseController {
         final List<NormativaDTO> llistaNormativesDTO = new ArrayList<NormativaDTO>();
         for (TrListadoNormativaBean normativa : listadonormativas) {
             // Retirar posible enlace incrustado en titulo
-        	llistaNormativesDTO.add(new NormativaDTO(0, Long.parseLong(normativa.getBoib()), normativa.getTitulo(), null, normativa.getFechaBoletin(), null, "BOIB", true, normativa.getRegistro()));
+        	listaNormativesDTO.add(new NormativaDTO(0, Long.parseLong(normativa.getBoib()), normativa.getTitulo(), null, normativa.getFechaBoletin(), null, "BOIB", true, normativa.getRegistro()));
         }
 
         return llistaNormativesDTO;
