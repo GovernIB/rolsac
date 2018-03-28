@@ -8,6 +8,9 @@ package es.caib.rolsac.apirest.v1.utiles;
  */
 public class Constantes {
 
+	/** Version del api (minusculas, sin espacios)**/
+	public static final String API_VERSION = "v1";
+	
 	/** Idioma por defecto. **/
 	public static final String IDIOMA_DEFECTO = "ca";
 	
@@ -34,8 +37,37 @@ public class Constantes {
 		return res;
 	}
 	
+	public static final String getUrlPropiedades() {
+		String res ="";
+		try {
+			res = System.getProperty("es.caib.rolsac.apirest.urlbase");
+			if(org.apache.commons.lang.StringUtils.isEmpty(res)) {
+				res = org.apache.commons.lang.StringUtils.isEmpty(System.getProperty("es.caib.rolsac.portal.url"))?"":System.getProperty("es.caib.rolsac.portal.url");
+			}
+		} catch (Exception e) {
+			res=e.getMessage();
+		}
+		return res;
+	}
+		 
+	public static final String URL_MODULO = "/rolsac/api/rest/";
+	public static final String URL_BASE = Constantes.getUrlPropiedades()+ URL_MODULO + Constantes.API_VERSION+"/";
 	
-	
+	public static final String ENTIDAD_IDIOMA = "idiomes";
+	public static final String URL_IDIOMA = ENTIDAD_IDIOMA+"/{0}";
+		
+	public static final String ENTIDAD_UA = "unitats_administratives";
+	public static final String URL_UA = ENTIDAD_UA+"/{0}";
 
-	
+	public static final String ENTIDAD_ESPACIO_TERRITORIAL = "espais_territorials";
+	public static final String URL_ESPACIO_TERRITORIAL = ENTIDAD_ESPACIO_TERRITORIAL+"/{0}";
+
+	public static final String ENTIDAD_ARCHIVO = "arxiu";
+	public static final String URL_ARCHIVO = ENTIDAD_ARCHIVO + "/{0}";
 }
+
+
+
+
+
+

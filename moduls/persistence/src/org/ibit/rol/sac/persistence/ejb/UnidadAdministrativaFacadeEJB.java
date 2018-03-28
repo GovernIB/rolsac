@@ -14,13 +14,6 @@ import java.util.Vector;
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import net.sf.hibernate.Criteria;
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.expression.Expression;
-
 import org.apache.axis.utils.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.ibit.rol.sac.model.AdministracionRemota;
@@ -31,7 +24,6 @@ import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaResumen;
 import org.ibit.rol.sac.model.FichaResumenUA;
 import org.ibit.rol.sac.model.FichaUA;
-import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
@@ -46,6 +38,7 @@ import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.model.criteria.PaginacionCriteria;
 import org.ibit.rol.sac.model.dto.FichaDTO;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.EdificioDelegate;
@@ -59,6 +52,7 @@ import org.ibit.rol.sac.persistence.util.IndexacionUtil;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
+import es.caib.rolsac.apirest.v1.model.filtros.FiltroUA;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.caib.solr.api.SolrIndexer;
 import es.caib.solr.api.model.IndexData;
@@ -67,6 +61,12 @@ import es.caib.solr.api.model.PathUO;
 import es.caib.solr.api.model.types.EnumAplicacionId;
 import es.caib.solr.api.model.types.EnumCategoria;
 import es.caib.solr.api.model.types.EnumIdiomas;
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.expression.Expression;
 
 /**
  * SessionBean para mantener y consultar Unidades Administrativas.
@@ -273,7 +273,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 					for ( int i = 0 ; i < lista.size() ; i++ ) {
 
-						UnidadAdministrativa uni = (UnidadAdministrativa) lista.get(i);
+						UnidadAdministrativa uni = lista.get(i);
 						uni.setOrden(i);
 
 					}
@@ -417,7 +417,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 			for ( int i = 0; i < ua.getHijos().size(); i++ ) {
 
-				UnidadAdministrativa uaHijo = (UnidadAdministrativa) ua.getHijos().get(i);
+				UnidadAdministrativa uaHijo = ua.getHijos().get(i);
 				if (uaHijo != null && visible(uaHijo))
 					result.add(uaHijo);
 
@@ -466,7 +466,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 				for ( int i = 0 ; i < uas.size() ; i++ ) {
 
-					UnidadAdministrativa unidad = (UnidadAdministrativa) uas.get(i);
+					UnidadAdministrativa unidad = uas.get(i);
 					UnidadAdministrativa padre = unidad.getPadre();
 					boolean duplicada = false;
 
@@ -886,7 +886,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 			}
 
-			UnidadAdministrativa ua = (UnidadAdministrativa) result.get(0);
+			UnidadAdministrativa ua = result.get(0);
 
 			if ( visible(ua) ) {
 
@@ -1798,7 +1798,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				
 				/* 16/12/2013: Se genera un orden en lugar de recuperar el orden real debido a que se ha cambiado el mecanismo que establece el orden de las fichas.
 				 Los datos antiguos generan valores que no coinciden con los generados por el nuevo mecanismo.*/
-				List<FichaDTO> listaFichas = (List<FichaDTO>) query.list();
+				List<FichaDTO> listaFichas = query.list();
 				
 				long ordenBase =  0L;
 				
@@ -1859,7 +1859,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				
 				/* 16/12/2013: Se genera un orden en lugar de recuperar el orden real debido a que se ha cambiado el mecanismo que establece el orden de las fichas.
 				 Los datos antiguos generan valores que no coinciden con los generados por el nuevo mecanismo.*/
-				listaFichas = (ArrayList<FichaDTO>) query.list();
+				listaFichas = query.list();
 																			
 				
 			} catch (HibernateException he) {
@@ -2893,6 +2893,72 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	                         close(session);
 	         }
 	}
+	 
+	 
+	 
+	 /**
+	 * 
+	 * 
+	 */
+	public List<UnidadAdministrativa> consultaUnidadesAdministrativas(FiltroGenerico filtro) {
+	
+		Session session = getSession();	
+		Integer pageSize = filtro.getPageSize();
+		Integer pageNumber = filtro.getPage();
+		String lang = filtro.getLang();
+		
+		String codigoUAPadre = filtro.getValor("codigoUAPadre");
+		//String codigoUAPadre = filtro.getValor("codigoUAPadre");
+		//String codigoUAPadre = filtro.getValor("codigoUAPadre");
+		
+		StringBuilder select = new StringBuilder("SELECT ua.* ");
+		StringBuilder from = new StringBuilder("FROM UnidadAdministrativa as ua ") ;
+		StringBuilder where =new StringBuilder("");
+		StringBuilder order = filtro.getOrdenSQL();
+		StringBuilder consulta = new StringBuilder("");
+		
+		Map <String,String> parametros = new Map<String,String>();
+		
+		
+		try {
+			if(filtro.hayFiltro()) {
+				
+				where.append("WHERE ")
+				
+				if(codigoUAPadre!=null) {
+					where.append(" ua.padre = :" + codigoUAPadre);
+					parametros.put("padre", codigoUAPadre);					
+				}
+								
+				
+				
+				consulta.append(select);
+				consulta.append(from);
+				consulta.append(where);
+				consulta.append(order);
+				consulta.append(select);
+				Query query = session.createQuery(consulta.toString());
+				
+				//Añadimos todos los parámetros.
+				for (Map.Entry<String, String> param : parametros.entrySet()){
+				    query.setParameter(param.getKey(), param.getValue());
+				}				
+				 query.setFirstResult((pageNumber - 1) * pageSize);
+				 query.setMaxResults(pageSize);				
+			}
 
+	
+			return query.list();
+	
+		} catch (HibernateException he) {
 
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+
+		}
+
+	}
 }

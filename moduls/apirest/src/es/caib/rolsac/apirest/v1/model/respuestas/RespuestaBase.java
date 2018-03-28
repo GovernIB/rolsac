@@ -4,14 +4,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import java.lang.Object;
-import java.util.List;
-import java.io.IOException;
-import es.caib.rolsac.apirest.v1.model.Idioma;
 
 /**
  * RespuestaBase. Estructura de respuesta que contiene la información comun a todas las respuestas.

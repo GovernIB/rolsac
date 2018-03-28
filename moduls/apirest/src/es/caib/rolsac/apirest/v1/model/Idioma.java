@@ -22,11 +22,9 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @XmlRootElement
 @ApiModel(value = "Idioma", description = "Definición de la clase idioma")
-public class Idioma {
+public class Idioma extends EntidadBase {
 	 
 	/** Lang. **/
-	@NotNull
-	@Size(min = 2, max = 2, message = "El código de idioma debe ser de 2 carácteres ej: (ca)")
 	@ApiModelProperty(value = "Lang (ca/es)", dataType = "java.lang.String", required = true)
 	private String lang;
 

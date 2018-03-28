@@ -101,6 +101,9 @@ es.caib.rolsac.subscripcions
 	   es.caib.rolsac.fitxa.banner.amplada=300
 	   es.caib.rolsac.fitxa.imatge.altura=300
 	   es.caib.rolsac.fitxa.imatge.amplada=300
+	         
+	   <!--  URLBASE api rest sin barra final [{protocolo}://{servidor}[:{puerto}]]-->
+	   es.caib.rolsac.apirest.urlbase=https://localhost:48080
 	   
     </attribute>
             

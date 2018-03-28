@@ -467,6 +467,14 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
         }
     }
     
+	public List<UnidadAdministrativa> consultaUnidadesAdministrativas(es.caib.rolsac.apirest.v1.model.filtros.FiltroUA filtro) throws DelegateException {
+    	try {
+    		return getFacade().consultaUnidadesAdministrativas(filtro);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+	} 
+    
     
 	/* ========================================================= */
 	/* ======================== REFERENCIA AL FACADE  ========== */

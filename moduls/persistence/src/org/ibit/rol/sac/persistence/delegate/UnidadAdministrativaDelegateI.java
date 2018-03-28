@@ -265,5 +265,7 @@ public interface UnidadAdministrativaDelegateI {
 	public List<Long> obtenerHijosUnidadAdministrativa(Long idUA) throws DelegateException;
 
 	public String checkProcedimientosUA(Long id) throws DelegateException;
+	
+	public List<UnidadAdministrativa> consultaUnidadesAdministrativas(es.caib.rolsac.apirest.v1.model.filtros.FiltroUA filtro);
 
 }
