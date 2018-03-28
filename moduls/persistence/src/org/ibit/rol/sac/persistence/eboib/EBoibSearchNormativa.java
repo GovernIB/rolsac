@@ -151,30 +151,39 @@ SearchNormativa {
 			if (abortar) break;
 			for (String enviamentUrl : rdf.enviaments) {
 				if (abortar) break;
-				TrNormativaBean normativa =  getEnviament(rdf, enviamentUrl);
-	            if (numregboib.equals("")) {
-	            	//No estamos buscando por numeroboib
-	            	if (isNormativaValida(normativa)) {
-		                meterListaNormativa(normativa);
-	            	}
-	            } else {
-	            	//Estamos buscando por numeroboib
-		            if (normativa.getValorRegistro().equals(numregboib)) {
-		            	//Registro encontrado
-		                boolean estaInsertadoEnSac = isInsertSAC(Integer.parseInt(rdf.numBoib), Integer.parseInt(numregboib));
-		                if (estaInsertadoEnSac) {
-		                    numeroregistros=-1;
-		                    mensajeavisobean.setCabecera("ERROR EN ELS PAR&Agrave;METRES");
-		                    mensajeavisobean.setSubcabecera("El boib i el registre JA ESTAN introdu&iuml;ts en el SAC");
-		                }
-		                traza("ENCONTRADO REGISTRO EN BOIB. REGISTRO: " + numregboib);
-		                normativabean = normativa;
-		                if (isNormativaValida(normativa)) {
-		                	meterListaNormativa(normativa);
-		                }
-		                abortar = true;
+				TrNormativaBean normativa;
+				try {
+					normativa = getEnviament(rdf, enviamentUrl);
+				} catch (Exception exception) {
+					//Error recuperando el enviamente a pesar de la url.
+					normativa = null;
+				}
+				
+				if (normativa != null) {
+		            if (numregboib.equals("")) {
+		            	//No estamos buscando por numeroboib
+		            	if (isNormativaValida(normativa)) {
+			                meterListaNormativa(normativa);
+		            	}
+		            } else {
+		            	//Estamos buscando por numeroboib
+			            if (normativa.getValorRegistro().equals(numregboib)) {
+			            	//Registro encontrado
+			                boolean estaInsertadoEnSac = isInsertSAC(Integer.parseInt(rdf.numBoib), Integer.parseInt(numregboib));
+			                if (estaInsertadoEnSac) {
+			                    numeroregistros=-1;
+			                    mensajeavisobean.setCabecera("ERROR EN ELS PAR&Agrave;METRES");
+			                    mensajeavisobean.setSubcabecera("El boib i el registre JA ESTAN introdu&iuml;ts en el SAC");
+			                }
+			                traza("ENCONTRADO REGISTRO EN BOIB. REGISTRO: " + numregboib);
+			                normativabean = normativa;
+			                if (isNormativaValida(normativa)) {
+			                	meterListaNormativa(normativa);
+			                }
+			                abortar = true;
+			            }
 		            }
-	            }
+				}
 			}
 		}
 		
