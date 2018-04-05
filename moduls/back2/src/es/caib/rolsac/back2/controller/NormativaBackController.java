@@ -1083,8 +1083,8 @@ public class NormativaBackController extends PantallaBaseController {
             }
             
             boolean todoCorrecto = true;
-            //El num normativa es obligatorio, menos si es de tipo 'Ordre' (id=4)
-            if (normativa.getTipo().getId().compareTo(4l) != 0 && normativa.getTipo().getId().compareTo(4l) != 0) {
+            //El num normativa es obligatorio, menos si es de tipo 'Ordre' (id=4) o 'Reglament' (id=1707912)
+            if (normativa.getTipo().getId().compareTo(4l) != 0 && normativa.getTipo().getId().compareTo(1707912l) != 0) {
             	if (normativa.getNumNormativa() == null || normativa.getNumNormativa().isEmpty()) {
             		
             		todoCorrecto = false;
