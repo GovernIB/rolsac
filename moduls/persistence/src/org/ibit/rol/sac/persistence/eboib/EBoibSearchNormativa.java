@@ -207,24 +207,10 @@ SearchNormativa {
 	 * @throws DelegateException
 	 */
 	private boolean isNormativaValida(TrNormativaBean normativa) {
-		 boolean correcto;
-		 if (normativa.getIdTipoNormativa() == null) {
-			 correcto = false;
-		 } else {
-         	Tipo tipo;
-			try {
-				tipo = DelegateUtil.getTipoNormativaDelegate().obtenerTipoNormativaByBOIB(normativa.getIdTipoNormativa());
-				if (tipo == null) {
-	         		correcto = false;
-	         	} else {
-	         		correcto = true;
-	         	}
-			} catch (DelegateException e) {
-				correcto = false;
-			}
-         	
-         }
-		return correcto;
+		/**
+		 * Antes se comprobaba si el tipo es correcto pero se tiró para atrás.
+		 */
+		return true;
 	}
 
 	private TrNormativaBean getEnviament ( BoibResult rdf, String inputFileName ) {
