@@ -678,7 +678,7 @@
                                     <label for="numeroregistroTB"><spring:message code='camp.n_registre'/></label>
                                 </div>
                                 <div class="control">
-                                    <input id="numeroregistroTB" placeholder="NNN" name="numeroregistroTB" type="text" maxlength="250" />
+                                    <input id="numeroregistroTB" placeholder="NNNN" name="numeroregistroTB" type="text" maxlength="250" />
                                 </div>
                             </div>
 

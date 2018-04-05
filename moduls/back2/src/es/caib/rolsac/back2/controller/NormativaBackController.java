@@ -573,7 +573,7 @@ public class NormativaBackController extends PantallaBaseController {
         }
         
         //#427 Comprobamos que numRegistro cumple correctamente el patron
-        if (numRegistro != null && !numRegistro.isEmpty() && !numBoletin.matches("\\d{3}")) {
+        if (numRegistro != null && !numRegistro.isEmpty() && !numBoletin.matches("\\d{4}")) {
         	
         	resultats.put("errorMessage", messageSource.getMessage("error.normativa.boib.numRegistro", null, request.getLocale()));
         	return resultats;
