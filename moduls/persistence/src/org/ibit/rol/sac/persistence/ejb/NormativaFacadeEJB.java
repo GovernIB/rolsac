@@ -191,7 +191,37 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 		}
 	}
 
-	
+	/**
+	 * Tiene relaciones con procedimento o servicios.
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+	 */
+	public boolean tieneRelaciones(Long id)  {
+		Session session = getSession();
+		try {
+			
+			
+			Normativa normativa = (Normativa) session.load(Normativa.class, id);
+			session.refresh(normativa);
+			boolean retorno = false;
+			
+			if (normativa.getProcedimientos() != null && normativa.getProcedimientos().size() > 0 )   {
+				retorno = true;
+			}
+			
+			if (normativa.getServicios() != null && normativa.getServicios().size() > 0 )   {
+				retorno = true;
+			}
+			
+			
+			return retorno;
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
 
 	/**
 	 * Lista todas las normativas.
@@ -220,6 +250,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 		Session session = getSession();
 		try {
 			Normativa normativa = (Normativa) session.load(Normativa.class, id);
+			session.refresh(normativa);
 			for (Iterator iterator = normativa.getLangs().iterator(); iterator.hasNext();) {
 				String lang = (String) iterator.next();
 				TraduccionNormativa traduccion = (TraduccionNormativa) normativa.getTraduccion(lang);

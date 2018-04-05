@@ -1084,7 +1084,7 @@ public class NormativaBackController extends PantallaBaseController {
             
             boolean todoCorrecto = true;
             //El num normativa es obligatorio, menos si es de tipo 'Ordre' (id=4)
-            if (normativa.getTipo().getId().compareTo(4l) != 0) {
+            if (normativa.getTipo().getId().compareTo(4l) != 0 && normativa.getTipo().getId().compareTo(4l) != 0) {
             	if (normativa.getNumNormativa() == null || normativa.getNumNormativa().isEmpty()) {
             		
             		todoCorrecto = false;
@@ -1316,22 +1316,11 @@ public class NormativaBackController extends PantallaBaseController {
         try {
             if (normativaDelegate.autorizaModificarNormativa(id)) {
             	
-            	Normativa normativa = normativaDelegate.obtenerNormativa(id);
-    			if (normativa == null) {
+            	if (normativaDelegate.tieneRelaciones(id)) {
     				
     				return new IdNomDTO(-1l, messageSource.getMessage("error.normativa.relaciones", null, request.getLocale()));
     				 
-    			} else {
-    				
-    				if (normativa.getProcedimientos() != null && normativa.getProcedimientos().size() > 0) {
-    					return new IdNomDTO(-1l, messageSource.getMessage("error.normativa.relaciones", null, request.getLocale()));
-    				}
-    				
-    				if (normativa.getServicios() != null && normativa.getServicios().size() > 0) {
-    					return new IdNomDTO(-1l, messageSource.getMessage("error.normativa.relaciones", null, request.getLocale()));
-    				}
-    				
-    			}
+    			} 
     			
                 normativaDelegate.borrarNormativa(id);
             } else {

@@ -157,9 +157,12 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		Session session = getSession();
 		
 		try {
+			if (!getAccesoManager().tieneAccesoUnidad(idUA, false)) {
+			    throw new SecurityException("No tiene acceso a la unidad");
+			}
 			
-			Date FechaActualizacionBD = new Date();
-			
+			Date fechaActualizacionBD = new Date();
+			///CHECKS
 			if (procedimiento.getId() == null) {
 				
 				if (procedimiento.getValidacion().equals(Validacion.PUBLICA) && !userIsSuper()) {
@@ -171,20 +174,24 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				if (!getAccesoManager().tieneAccesoProcedimiento( procedimiento.getId())) {
 					throw new SecurityException("No tiene acceso al procedimiento");
 				}
-
+				
+				
+				
 				ProcedimientoLocal procedimientoBD = obtenerProcedimientoNewBack(procedimiento.getId());
-				FechaActualizacionBD = procedimientoBD.getFechaActualizacion();
+				procedimientoBD.mergeNormativas(procedimiento);
+				session.update(procedimientoBD);
+				session.flush();
+				session.evict(procedimientoBD); //TODO Faltaría hacer un merge correcto
+				fechaActualizacionBD = procedimientoBD.getFechaActualizacion();
 				
 				
 			}
 
-			if (!getAccesoManager().tieneAccesoUnidad(idUA, false)) {
-			    throw new SecurityException("No tiene acceso a la unidad");
-			}
+			
 
 			/* Se alimenta la fecha de actualización de forma automática si no se ha introducido dato*/                      
 			if (procedimiento.getFechaActualizacion() == null 
-					|| DateUtils.fechasIguales(FechaActualizacionBD, procedimiento.getFechaActualizacion())) {
+					|| DateUtils.fechasIguales(fechaActualizacionBD, procedimiento.getFechaActualizacion())) {
 			    procedimiento.setFechaActualizacion( new Date() );
 			}
 

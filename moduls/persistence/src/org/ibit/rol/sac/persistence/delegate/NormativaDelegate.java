@@ -271,4 +271,16 @@ public class NormativaDelegate implements StatelessDelegate
        }
 	}
 
+	/**
+	 * Tiene relaciones la normativa con procedimientos o servicios.
+	 * @param id
+	 * @return
+	 */
+	public boolean tieneRelaciones(Long id) throws DelegateException {
+		try {
+            return getFacade().tieneRelaciones(id);	
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
+	}
 }
