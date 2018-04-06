@@ -1119,7 +1119,7 @@ public class NormativaBackController extends PantallaBaseController {
         } catch (DelegateException dEx) {
         	
             if (dEx.isSecurityException()) {
-                String error = messageSource.getMessage("error.permisos", null, request.getLocale());
+                String error = messageSource.getMessage("error.permisos.normativa", null, request.getLocale());
                 result = new IdNomDTO(-1l, error);
             } else {
                 String error = messageSource.getMessage("error.altres", null, request.getLocale());
@@ -1178,7 +1178,7 @@ public class NormativaBackController extends PantallaBaseController {
         if (!DelegateUtil.getNormativaDelegate().autorizaModificarNormativa(normativaOld.getId())
             || (request.isUserInRole("sacoper") && !normativaOld.getValidacion().equals(ParseUtil.parseInt(valoresForm.get("item_validacio"))))) {
 
-            return "error.permisos";
+            return "error.permisos.normativa";
         }
 
         return "";
