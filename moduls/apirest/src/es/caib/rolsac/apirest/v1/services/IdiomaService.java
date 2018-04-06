@@ -89,8 +89,8 @@ public class IdiomaService {
 	
 	
 	public RespuestaIdioma  getIdioma(  
-			@ApiParam( value = "Codigo idioma (ej: es, ca, en)", required = false, defaultValue = Constantes.IDIOMA_DEFECTO )
-		    @PathParam( "lang") final  String lang) throws Exception,ValidationException {
+			@ApiParam( value = "Codigo idioma (ej: es, ca, en)", required = false, defaultValue = Constantes.IDIOMA_DEFECTO )  @PathParam( "lang") final  String lang
+			) throws Exception,ValidationException {
 		
 		final List<Idioma> idiomas = new ArrayList<Idioma>();		
 		org.ibit.rol.sac.model.Idioma rIdioma = DelegateUtil.getIdiomaDelegate().obtenerIdioma(lang);

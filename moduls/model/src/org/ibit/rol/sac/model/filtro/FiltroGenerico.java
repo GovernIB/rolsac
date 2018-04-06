@@ -1,10 +1,18 @@
 package org.ibit.rol.sac.model.filtro;
 
-import java.util.Iterator;
+import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import org.apache.commons.lang.StringUtils;
 
-public class FiltroGenerico {
+/**
+ * filtro generico para aplanar los filtros del api rest
+ * @author Indra
+ *
+ */
+
+public class FiltroGenerico implements Serializable {
 
 	private Map<String,String> filtros;
 	private Map<String,String> columnasOrdenar;
@@ -16,18 +24,32 @@ public class FiltroGenerico {
 	private final String ASCENDENTE = "ASC";
 	private final String DESCENDENTE = "DESC";
 	
+	public final static String FILTRO_GENERICO_LANG="lang";
+	public final static String FILTRO_GENERICO_SIZE="size";
+	public final static String FILTRO_GENERICO_PAGE="page";
 	
 	
+	public final static String FILTRO_UA_CODIGO_UA_PADRE = "codigoUAPadre";
+	public final static String FILTRO_UA_VALIDACION = "validacion";
+	public final static String FILTRO_UA_CODIGO_SECCION = "codigoSeccion";
+	public final static String FILTRO_UA_CODIGO_NORMATIVA = "codigoNormativa";
 	
+
 	
 	public FiltroGenerico() {
-		this.filtros = new Map<String,String>();
+		this.filtros = new HashMap<String,String>();
+		this.columnasOrdenar = new HashMap<String,String>();
 	}
 	
 	public void addFiltro(String campo, String valor) {
 		this.filtros.put(campo, valor);		
 	}
 	
+	/**
+	 * Retorna el valor del campo o null si no existe
+	 * @param campo
+	 * @return
+	 */
 	public String getValor(String campo) {
 		return this.filtros.get(campo);		
 	}
@@ -50,7 +72,7 @@ public class FiltroGenerico {
 	
 	
 	public int getPage() {
-		String page = this.filtros.get("page");
+		String page = this.filtros.get(FILTRO_GENERICO_PAGE);
 		int res = 1;//valor por defecto
 		if(page!=null && !page.isEmpty()) {
 			try {
@@ -62,8 +84,16 @@ public class FiltroGenerico {
 		return res;
 	}
 	
+	public void setPage(Integer page) {
+		if(page!=null && page.intValue()>0) {
+			this.filtros.put(FILTRO_GENERICO_PAGE, page+"");			
+		}
+	}
+	
+	
+	
 	public int getPageSize() {
-		String size = this.filtros.get("size");
+		String size = this.filtros.get(FILTRO_GENERICO_SIZE);
 		int res = 30;
 		if(size!=null && !size.isEmpty()) {
 			try {
@@ -75,12 +105,26 @@ public class FiltroGenerico {
 		return res;
 	}	
 	
+	public void setPageSize(Integer size) {
+		if(size!=null && size.intValue()>0) {
+			this.filtros.put(FILTRO_GENERICO_SIZE, size+"");			
+		}
+	}
+	
+	
+	
 	public String getLang() {
-		String lang = this.filtros.get("lang");
+		String lang = this.filtros.get(FILTRO_GENERICO_LANG);
 		if(lang==null || lang.length()!=2) {
 			lang = LANG_DEFECTO; // idioma por defecto
 		}
 		return lang.toLowerCase();
+	}
+	
+	public void setLang(String lang) {
+		if(lang!=null && lang.length()==2) {
+			this.filtros.put(FILTRO_GENERICO_LANG, lang);			
+		}
 	}
 
 	/**
@@ -104,21 +148,28 @@ public class FiltroGenerico {
 		this.columnasOrdenar.put(campo, orden.equals(this.DESCENDENTE)?this.DESCENDENTE:this.ASCENDENTE);		
 	}
 
-	public String getOrdenSQL() {
-		String res = "";
+	/**
+	 * Retorna la sentencia ORDER BY concatenando los diferentes prefijoEntidad+campo
+	 * @param prefijoEntidad indica la entidad / alias de que dependen los campos
+	 * @return
+	 */
+	public String getOrdenSQL(String prefijoEntidad) {
+		StringBuilder res = new StringBuilder();
 		boolean primero = true;
-		for (Map.Entry<String, String> orden : columnasOrdenar.entrySet())
-		{
+		for (Map.Entry<String, String> orden : columnasOrdenar.entrySet()){
 			if (primero) {
-				res += " ORDER BY ";
+				res.append(" ORDER BY ");
 			}else {
-				res += ", ";
+				res.append(", ");
 			}
-			
-			res += orden.getKey() + " " + orden.getValue();		    
-		}		
+			if(!StringUtils.isEmpty(prefijoEntidad)){
+				res.append(prefijoEntidad);
+				res.append(".");
+			}
+			res.append(orden.getKey());
+			res.append(" ");		    
+			res.append(orden.getValue());		    
+		}	
+		return res.toString();
 	}
-	
-	
-	
 }

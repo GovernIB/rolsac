@@ -52,7 +52,6 @@ import org.ibit.rol.sac.persistence.util.IndexacionUtil;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
-import es.caib.rolsac.apirest.v1.model.filtros.FiltroUA;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.caib.solr.api.SolrIndexer;
 import es.caib.solr.api.model.IndexData;
@@ -786,6 +785,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Deprecated
 	public UnidadAdministrativa consultarUnidadAdministrativaPMA(Long id) {
 		Session session = getSession();
 
@@ -2897,67 +2897,95 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 
 	 
 	 /**
+	 * Consulta las unidades administrativas en funcion del filtro generico
 	 * 
-	 * 
+	 * @ejb.interface-method
+     * @ejb.permission unchecked="true"
 	 */
-	public List<UnidadAdministrativa> consultaUnidadesAdministrativas(FiltroGenerico filtro) {
+	public ResultadoBusqueda consultaUnidadesAdministrativas(FiltroGenerico filtro){
 	
 		Session session = getSession();	
 		Integer pageSize = filtro.getPageSize();
 		Integer pageNumber = filtro.getPage();
 		String lang = filtro.getLang();
+		Map <String,String> parametros = new HashMap<String,String>();
 		
-		String codigoUAPadre = filtro.getValor("codigoUAPadre");
-		//String codigoUAPadre = filtro.getValor("codigoUAPadre");
-		//String codigoUAPadre = filtro.getValor("codigoUAPadre");
+		String codigoUAPadre = filtro.getValor(FiltroGenerico.FILTRO_UA_CODIGO_UA_PADRE);
+		String validacion = filtro.getValor(FiltroGenerico.FILTRO_UA_VALIDACION);
+		String codigoNormativa = filtro.getValor(FiltroGenerico.FILTRO_UA_CODIGO_NORMATIVA);
+		String codigoSeccion = filtro.getValor(FiltroGenerico.FILTRO_UA_CODIGO_SECCION);
 		
-		StringBuilder select = new StringBuilder("SELECT ua.* ");
-		StringBuilder from = new StringBuilder("FROM UnidadAdministrativa as ua ") ;
-		StringBuilder where =new StringBuilder("");
-		StringBuilder order = filtro.getOrdenSQL();
+		
+		StringBuilder select = new StringBuilder("SELECT ua ");
+		StringBuilder selectCount = new StringBuilder("SELECT count(ua) ");
+		StringBuilder from = new StringBuilder(" FROM UnidadAdministrativa as ua, ua.traducciones as trad ") ;
+		StringBuilder where =new StringBuilder(" WHERE index(trad) = :lang");
+		parametros.put("lang",lang);
+		StringBuilder order = new StringBuilder(filtro.getOrdenSQL("ua"));
 		StringBuilder consulta = new StringBuilder("");
-		
-		Map <String,String> parametros = new Map<String,String>();
-		
-		
+		StringBuilder consultaCount = new StringBuilder("");
+				
 		try {
-			if(filtro.hayFiltro()) {
-				
-				where.append("WHERE ")
-				
-				if(codigoUAPadre!=null) {
-					where.append(" ua.padre = :" + codigoUAPadre);
-					parametros.put("padre", codigoUAPadre);					
+									
+			if(!StringUtils.isEmpty(codigoUAPadre)) {
+				if(codigoUAPadre.equals("-1")) {
+					where.append(" AND ua.padre is null");
+				}else {
+					where.append(" AND ua.padre = :padre");
+					parametros.put("padre", codigoUAPadre);
 				}
-								
-				
-				
-				consulta.append(select);
-				consulta.append(from);
-				consulta.append(where);
-				consulta.append(order);
-				consulta.append(select);
-				Query query = session.createQuery(consulta.toString());
-				
-				//Añadimos todos los parámetros.
-				for (Map.Entry<String, String> param : parametros.entrySet()){
-				    query.setParameter(param.getKey(), param.getValue());
-				}				
-				 query.setFirstResult((pageNumber - 1) * pageSize);
-				 query.setMaxResults(pageSize);				
+									
 			}
-
-	
-			return query.list();
+			
+			if(!StringUtils.isEmpty(validacion)) {
+				where.append(" AND ua.validacion = :validacion");
+				parametros.put("validacion", validacion);					
+			}
+			
+			if(!StringUtils.isEmpty(codigoNormativa)) {
+				//ua de una normativa en concreto
+				where.append(" AND ua.id in ( SELECT uad.id FROM Normativa nor LEFT JOIN nor.unidadesnormativas noruas join noruas.unidadAdministrativa uad where nor.id = :normativa ) ");
+				parametros.put("normativa", codigoNormativa);
+			}			
+			
+			//Buscamos las ua que estén relacionadas con una seccion (la seccion se relaciona con ua a través de la ficha)
+			if(!StringUtils.isEmpty(codigoSeccion)) {
+				where.append(" AND ua.id in  (SELECT fua.unidadAdministrativa.id FROM  FichaUA AS fua WHERE fua.seccion.id = :seccion )  ");
+				parametros.put("seccion", codigoSeccion);
+			}
+				
+			//Creamos la consulta de listado
+			consulta.append(select);			
+			consulta.append(from);
+			consulta.append(where);
+			consulta.append(order);
+			Query query = session.createQuery(consulta.toString());
+			
+			//Creamos la consulta para retornar el numero de elementos
+			consultaCount.append(selectCount);
+			consultaCount.append(from);
+			consultaCount.append(where);
+			Query queryCount = session.createQuery(consultaCount.toString());
+			
+			//Añadimos todos los parámetros.
+			for (Map.Entry<String, String> param : parametros.entrySet()){
+			    query.setParameter(param.getKey(), param.getValue());
+			    queryCount.setParameter(param.getKey(), param.getValue());
+			}				
+			 query.setFirstResult((pageNumber - 1) * pageSize);
+			 query.setMaxResults(pageSize);				
+		
+			 
+			 ResultadoBusqueda res = new ResultadoBusqueda();
+			 res.setListaResultados(query.list());
+			 res.setTotalResultados((Integer) queryCount.uniqueResult());
+			 
+			return res;
 	
 		} catch (HibernateException he) {
-
 			throw new EJBException(he);
-
 		} finally {
-
 			close(session);
-
 		}
 
 	}

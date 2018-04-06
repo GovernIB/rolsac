@@ -82,6 +82,7 @@
 		</fileset> 
     	
     	<fileset dir="${ejb.product}">
+    		<include name="sac-utils.jar"/>   
 	        <include name="sac.jar"/>        	
 	        <include name="model.jar"/>
 	    	<include name="micromodel.jar"/>
@@ -101,6 +102,7 @@
         	<include name="ejb-2_0.jar" />
         </fileset>
         <fileset dir="${ejb.product}">
+        	<include name="sac-utils.jar"/>  
             <include name="sac.jar"/>        	
             <include name="model.jar"/>
         	<include name="micromodel.jar"/>

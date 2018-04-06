@@ -18,6 +18,7 @@ import org.ibit.rol.sac.model.dto.FichaDTO;
 import org.ibit.rol.sac.persistence.intf.UnidadAdministrativaFacade;
 import org.ibit.rol.sac.persistence.intf.UnidadAdministrativaFacadeHome;
 import org.ibit.rol.sac.persistence.util.UnidadAdministrativaFacadeUtil;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.caib.solr.api.SolrIndexer;
@@ -467,7 +468,7 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
         }
     }
     
-	public List<UnidadAdministrativa> consultaUnidadesAdministrativas(es.caib.rolsac.apirest.v1.model.filtros.FiltroUA filtro) throws DelegateException {
+    public ResultadoBusqueda consultaUnidadesAdministrativas(FiltroGenerico filtro) throws DelegateException {
     	try {
     		return getFacade().consultaUnidadesAdministrativas(filtro);
         } catch (RemoteException e) {

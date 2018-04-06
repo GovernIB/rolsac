@@ -7,6 +7,8 @@ import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang3.StringUtils;
+import org.ibit.rol.sac.model.TraduccionTramite;
+import org.ibit.rol.sac.model.TraduccionTratamiento;
 import org.ibit.rol.sac.model.TraduccionUA;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -141,9 +143,13 @@ public class UnitatAdministrativa extends EntidadBase {
     private java.lang.String telefono;
 	
 	/** tratamiento **/
-	@ApiModelProperty(value = "tratamiento", dataType = "java.lang.Long", required = false)
+/*	@ApiModelProperty(value = "tratamiento", dataType = "java.lang.Long", required = false)
     private java.lang.Long tratamiento;
-
+*/
+	/** tratamiento **/
+    private Tratamiento tratamiento;
+	
+	
 	/** url **/
 	@ApiModelProperty(value = "url", dataType = "java.lang.String", required = false)
     private java.lang.String url;
@@ -159,6 +165,7 @@ public class UnitatAdministrativa extends EntidadBase {
 	/** codigoDIR3 **/
 	@ApiModelProperty(value = "codigoDIR3", dataType = "java.lang.String", required = false)
     private java.lang.String codigoDIR3;
+	
 	
 	public UnitatAdministrativa (org.ibit.rol.sac.model.UnidadAdministrativa ua, String urlBase,String idioma,boolean hateoasEnabled ) {
 		this.fill( ua, urlBase, idioma, hateoasEnabled);
@@ -205,7 +212,21 @@ public class UnitatAdministrativa extends EntidadBase {
 		this.responsableEmail = ua.getResponsableEmail();
 		this.sexoResponsable = ua.getSexoResponsable();
 		this.telefono = ua.getTelefono();
-		this.tratamiento = ua.getTratamiento().getId();		
+		
+		if(ua.getTratamiento()!=null ) {
+			this.tratamiento = new Tratamiento();
+			this.tratamiento.setCodigo(ua.getTratamiento().getId());
+			this.tratamiento.setCodigoEstandar(ua.getTratamiento().getCodigoEstandar());
+			if(!StringUtils.isEmpty(idioma) && ua.getTratamiento().getTraduccion(idioma)!=null) {
+				TraduccionTratamiento tt =(TraduccionTratamiento) ua.getTratamiento().getTraduccion(idioma);
+				this.tratamiento.setCargoF(tt.getCargoF());
+				this.tratamiento.setCargoM(tt.getCargoM());
+				this.tratamiento.setTipo(tt.getTipo());
+				this.tratamiento.setTratamientoF(tt.getTratamientoF());
+				this.tratamiento.setTratamientoM(tt.getTratamientoM());				
+			}
+		}
+				
 		this.validacion = ua.getValidacion();		
 		this.codigoDIR3 = ua.getCodigoDIR3();
 		
@@ -244,8 +265,7 @@ public class UnitatAdministrativa extends EntidadBase {
 		this.addLink(ua.getNumfoto3(), Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"numfoto3" );
 		this.addLink(ua.getNumfoto4(), Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"numfoto4" );
 
-	}
-	
+	}	
 	
 	public static UnitatAdministrativa valueOf(final String json) {
 		final ObjectMapper objectMapper = new ObjectMapper();
@@ -722,20 +742,7 @@ public class UnitatAdministrativa extends EntidadBase {
 	}
 
 
-	/**
-	 * @return the tratamiento
-	 */
-	public java.lang.Long getTratamiento() {
-		return tratamiento;
-	}
-
-
-	/**
-	 * @param tratamiento the tratamiento to set
-	 */
-	public void setTratamiento(java.lang.Long tratamiento) {
-		this.tratamiento = tratamiento;
-	}
+	
 
 
 	/**
@@ -799,6 +806,20 @@ public class UnitatAdministrativa extends EntidadBase {
 	 */
 	public void setCodigoDIR3(java.lang.String codigoDIR3) {
 		this.codigoDIR3 = codigoDIR3;
+	}
+
+	/**
+	 * @return the tratamiento
+	 */
+	public Tratamiento getTratamiento() {
+		return tratamiento;
+	}
+
+	/**
+	 * @param tratamiento the tratamiento to set
+	 */
+	public void setTratamiento(Tratamiento tratamiento) {
+		this.tratamiento = tratamiento;
 	}
 	
 	

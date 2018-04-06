@@ -44,7 +44,6 @@ public class BootstrapV1 extends HttpServlet {
 		 e.printStackTrace();
 	}
 
-    
 
     swagger.externalDocs(new ExternalDocs("Más info contacte con el responsable.", "http://www.caib.es"));
 

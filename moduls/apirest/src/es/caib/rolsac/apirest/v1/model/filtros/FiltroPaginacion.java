@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import es.caib.rolsac.apirest.v1.utiles.Constantes;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -21,6 +22,8 @@ import io.swagger.annotations.ApiModelProperty;
 @XmlRootElement
 @ApiModel(value = "FiltroPaginacion", description = "Filtro que permite paginar los resultados")
 public class FiltroPaginacion {
+	
+	public static final String SAMPLE = Constantes.SALTO_LINEA + "{\"page\":\"0\",\"size\":\"0\"}";
 	 
 	/** Page. **/
 	@ApiModelProperty(value = "Page", dataType = "java.lang.Integer", required = false)

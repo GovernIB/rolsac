@@ -10,6 +10,7 @@ import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.criteria.PaginacionCriteria;
 import org.ibit.rol.sac.model.dto.FichaDTO;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.caib.solr.api.SolrIndexer;
@@ -266,6 +267,6 @@ public interface UnidadAdministrativaDelegateI {
 
 	public String checkProcedimientosUA(Long id) throws DelegateException;
 	
-	public List<UnidadAdministrativa> consultaUnidadesAdministrativas(es.caib.rolsac.apirest.v1.model.filtros.FiltroUA filtro);
+	public ResultadoBusqueda consultaUnidadesAdministrativas(FiltroGenerico filtro) throws DelegateException;
 
 }

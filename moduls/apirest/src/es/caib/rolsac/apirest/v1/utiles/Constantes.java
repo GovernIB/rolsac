@@ -7,6 +7,8 @@ package es.caib.rolsac.apirest.v1.utiles;
  *
  */
 public class Constantes {
+	
+	public static final String SALTO_LINEA="<br>";
 
 	/** Version del api (minusculas, sin espacios)**/
 	public static final String API_VERSION = "v1";

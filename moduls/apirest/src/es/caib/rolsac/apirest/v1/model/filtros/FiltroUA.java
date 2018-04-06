@@ -4,11 +4,14 @@ import java.io.IOException;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import es.caib.rolsac.apirest.v1.utiles.Constantes;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -21,6 +24,13 @@ import io.swagger.annotations.ApiModelProperty;
 @XmlRootElement
 @ApiModel(value = "FiltroUA", description = "Filtro propio de la entidad Unidad Administrativa")
 public class FiltroUA {
+	
+	public static final String SAMPLE = Constantes.SALTO_LINEA+ 
+			"{\"codigoUAPadre\":\"0\","	+ Constantes.SALTO_LINEA +
+			"\"validacion\":\"0\","		+ Constantes.SALTO_LINEA +
+			"\"codigoSeccion\":\"0\","	+ Constantes.SALTO_LINEA +
+			"\"codigoNormativa\":\"0\"}";
+	
 	 
 	/** CodigoUAPadre. **/
 	@ApiModelProperty(value = "Código Unidad Administrativa padre ", dataType = "java.lang.Integer", required = false)
@@ -39,16 +49,9 @@ public class FiltroUA {
 	@ApiModelProperty(value = "Código de Normativa", dataType = "java.lang.Integer", required = false)
 	private Integer codigoNormativa;
 	
+
 	
-	public boolean hayFiltro() {		
-		return 	this.codigoUAPadre!=null || 
-				this.validacion!=null || 
-				this.codigoSeccion!=null || 
-				this.codigoNormativa!=null;
-	}
-	
-	
-	
+		
 	public static FiltroUA valueOf(final String json) {
 		final ObjectMapper objectMapper = new ObjectMapper();
 		final TypeReference<FiltroUA> typeRef = new TypeReference<FiltroUA>() {
@@ -61,6 +64,28 @@ public class FiltroUA {
 			throw new RuntimeException(e);
 		}
 		return obj;
+	}
+	
+	
+	public FiltroGenerico toFiltroGenerico() {
+		FiltroGenerico fg = new FiltroGenerico();
+		if(this.codigoUAPadre!= null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_UA_CODIGO_UA_PADRE, this.codigoUAPadre+"");
+		}
+		
+		if(this.codigoNormativa!= null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_UA_CODIGO_NORMATIVA, this.codigoNormativa+"");
+		}
+		
+		if(this.codigoSeccion!= null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_UA_CODIGO_SECCION, this.codigoSeccion+"");
+		}
+		
+		if(this.validacion!=null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_UA_VALIDACION, this.validacion+"");
+		}
+		
+		return fg;
 	}
 
 	

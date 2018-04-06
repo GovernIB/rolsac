@@ -101,7 +101,7 @@
 	<classpathentry kind="lib" path="test/lib/struts/strutstest-2.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/commons-validator.jar"/>
 	<classpathentry kind="lib" path="lib/webcaib/pdfbox-app-1.8.4.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
 	<classpathentry kind="lib" path="lib/jasper/ant.jar"/>
 	<classpathentry kind="lib" path="lib/jasper/commons-el.jar"/>
 	<classpathentry kind="lib" path="lib/jasper/jasper-compiler.jar"/>
