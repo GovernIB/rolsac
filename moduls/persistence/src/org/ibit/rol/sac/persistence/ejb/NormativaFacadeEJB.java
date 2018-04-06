@@ -302,7 +302,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	 * @ejb.permission unchecked="true"
 	 */
 	public ResultadoBusqueda buscarNormativas(Map parametros, Map traduccion, String tipo,
-			Long idUA, boolean uaMeves, boolean uaFilles, boolean invalids,
+			Long idUA, boolean uaMeves, boolean uaFilles, String invalids,
 			String campoOrdenacion, String orden, String pagina,
 			String resultats, boolean soloIds) {
 
@@ -369,8 +369,8 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			}
 			
 			String invalidQuery = "";
-			if (invalids) {
-				invalidQuery = " and normativa.datosValidos = 0 ";
+			if (invalids != null && !invalids.isEmpty()) {
+				invalidQuery = " and normativa.datosValidos = " + invalids;
 			}
 
 			ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();

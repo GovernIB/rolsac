@@ -75,6 +75,9 @@
 	var txtProcessant = "<spring:message code='txt.processant'/>";
 	var txtDocument = "<spring:message code='txt.document'/>";    
     var txtDocuments = "<spring:message code='txt.documents'/>";
+    var txtNormativaValida= "<spring:message code='camp.norm.valid.valid'/>";
+    var txtNormativaNoValida= "<spring:message code='camp.norm.valid.invalid'/>";
+    var txtNormativaSinvalorar = "<spring:message code='camp.norm.valid.sinvalorar'/>";
     
     var txtDocument = "<spring:message code='txt.document'/>";    
     var txtDocuments = "<spring:message code='txt.documents'/>";
@@ -289,23 +292,6 @@
                 "abreviat": "no"
             }
         },
-        {
-            "modo": "individual",
-            "etiqueta": "id",
-            "etiquetaValor": "item_num_norma",
-            "obligatori": "si",
-            "tipus": "alfanumeric",
-            "caracters":
-            {
-                "maxim": 8,
-                "mostrar": "no",
-                "abreviat": "no"
-            },
-			"error":
-			  {
-				"obligatori": "<spring:message code='normativa.formulari.error.numnormativa.obligatori'/>"
-			  }
-           },
            {
                "modo": "individual",
                "etiqueta": "id",
@@ -629,10 +615,14 @@
                                  
                             <div class="element t50">
                                 <div class="etiqueta">
-                                    <label for="cerca_invalids"><spring:message code='camp.norm_invalids'/></label>
+                                    <label for="cerca_invalids"><spring:message code='camp.norm.valid.titulo'/></label>
                                 </div>
                                 <div class="control">
-                                	<input type="checkbox" name="cerca_invalids" id='cerca_invalids' value="1"/>                               
+                                	<select id="cerca_invalids" name="cerca_invalids">
+                                			 <option value=""><spring:message code='txt.tots'/></option>
+                                			 <option value="1"><spring:message code='camp.norm.valid.valids'/></option>
+                                			 <option value="0"><spring:message code='camp.norm.valid.invalids'/></option>                                			 
+                                	</select>                               
                                 </div>                          
                             </div>                               
                         </div>
@@ -793,7 +783,7 @@
                              </div>	
                              </c:forEach>	
                                 <div class="fila">
-                                    <div class="element t50p">
+                                    <div class="element t25p">
                                         <div class="etiqueta"><label for="item_tipus"><spring:message code='camp.tipus_normativa'/></label></div>
                                         <div class="control select">
                                             <select id="item_tipus" name="item_tipus" class="nou">
@@ -804,10 +794,16 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="element t25p">
+                                        <div class="etiqueta"><label><spring:message code='camp.norm.valid.titulo'/></label></div>
+                                        <div class="control">
+                                        	<input id="normativa_datos_validos" type="text" class="nou"  readonly="readonly"></input>
+                                        </div>
+                                    </div>
 									<div class="element t25p">
                                         <div class="etiqueta"><label for="item_num_norma"><spring:message code='txt.numNorma'/></label></div>
                                         <div class="control">
-                                            <input id="item_num_norma" placeholder="NNN/YYYY" name="item_num_norma" type="text" class="nou" />
+                                            <input id="item_num_norma" placeholder="NNNN/YYYY" name="item_num_norma" type="text" class="nou" />
                                         </div>
                                     </div>
                                     <div class="element t25p">

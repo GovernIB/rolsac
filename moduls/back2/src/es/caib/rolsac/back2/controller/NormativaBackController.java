@@ -212,7 +212,7 @@ public class NormativaBackController extends PantallaBaseController {
         // Determinar si ha marcado el checkbox "Cerar a totes les meves unitats".
         boolean meves = "true".equals(request.getParameter("totesUnitats"));
         boolean uaFilles = "true".equals(request.getParameter("uaFilles"));
-        boolean invalids = "true".equals(request.getParameter("invalids"));
+        String invalids = request.getParameter("invalids");
 
         Long idUA = null;
 
@@ -254,7 +254,7 @@ public class NormativaBackController extends PantallaBaseController {
 
             String queBuscar = "local";
             if (buscaExternas) {
-                queBuscar = "todas";
+                queBuscar = "todas"; 
             }
 
             resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, queBuscar, idUA, meves, uaFilles, invalids, campoOrdenacion, orden, pagPag, pagRes, false);
@@ -306,7 +306,7 @@ public class NormativaBackController extends PantallaBaseController {
         // Determinar si ha marcado el checkbox "Cerar a totes les meves unitats".
         boolean meves = "true".equals(request.getParameter("totesUnitats"));
         boolean uaFilles = "true".equals(request.getParameter("uaFilles"));
-        boolean invalids = "true".equals(request.getParameter("invalids"));
+        String invalids = request.getParameter("invalids");
         
         Long idUA = null;
 
@@ -686,7 +686,7 @@ public class NormativaBackController extends PantallaBaseController {
             	}
             }
             normativaDetall.put("uas", CargaModulosLateralesUtil.recuperaUAsRelacionadas(uas, normativa.getId(), lang, false));
-			
+			normativaDetall.put("datosValidos", normativa.getDatosValidos());
 
         } catch (DelegateException dEx) {
             log.error("Error: " + dEx.getMessage());
@@ -1004,7 +1004,16 @@ public class NormativaBackController extends PantallaBaseController {
             if (edicion) {
                 Long idNorm = ParseUtil.parseLong(valoresForm.get("item_id"));
                 normativaOld = normativaDelegate.obtenerNormativa(idNorm);
-
+                
+                //#427 No se pueden editar y actualizarse las normativas con datos no válidos
+                if (normativaOld.getDatosValidos() != null && normativaOld.getDatosValidos() == 0) {
+                	
+                	log.debug("La normativa está marcada como no válida y no se puede editar.");
+                  	String error = messageSource.getMessage("error.normativa.novalida.edicion", null, request.getLocale());
+                    result = new IdNomDTO(-4l, error);    
+                    return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
+                }	
+                
                 String mensaje = mensajeEditable(request, valoresForm, normativaOld, ua);
                 if (!mensaje.equals("")) {
                     IdNomDTO error = new IdNomDTO(-1l, messageSource.getMessage(mensaje, null, request.getLocale()));
@@ -1034,31 +1043,44 @@ public class NormativaBackController extends PantallaBaseController {
             // Recuperar el resto de campos de la normativa
             normativa = recuperarCamposNormativa(valoresForm, normativa);
 
-
-            if (normativaDelegate.isNumNormativaCorrecto(normativa)) {
-            
-            	//Comprobamos si la normativa es privada.
-            	if (normativa.getValidacion() == ValidacionNormativa.INTERNA_PRIVADA) {
-            		
-            		log.debug("El estado es privado / interna de la normativa y se bloquea cualquier actualización.");
-               	 	String error = messageSource.getMessage("error.normativa.interna", null, request.getLocale());
+            boolean todoCorrecto = true;
+            //El num normativa es obligatorio, menos si es de tipo 'Ordre' (id=4)
+            if (normativa.getTipo().getId().compareTo(4l) != 0) {
+            	if (normativa.getNumNormativa() == null || normativa.getNumNormativa().isEmpty()) {
+            		todoCorrecto = false;
+            		log.debug("El num de normativa no está introducido y no es de tipo ordre.");
+               	 	String error = messageSource.getMessage("error.normativa.numnormativavacio", null, request.getLocale());
                     result = new IdNomDTO(-4l, error);           
             		
-            	} else {
-            	
-	            	//Seteamos los datos validos a 1 (correcto)
-	            	normativa.setDatosValidos(1);
-	            	
-		            // Guardar la Normativa
-		            guardarNormativa(normativa, ua);
-		
-		            // Finalizado correctamente
-		            result = new IdNomDTO(normativa.getId(), messageSource.getMessage("normativa.guardat.correcte", null, request.getLocale()));
             	}
-            } else {
-            	 log.debug("El numero de normativa ya existe.");
-            	 String error = messageSource.getMessage("error.numnormativa.repetido", null, request.getLocale());
-                 result = new IdNomDTO(-4l, error);                 
+            }
+            
+            if (todoCorrecto) {
+	            if (normativaDelegate.isNumNormativaCorrecto(normativa)) {
+	            
+	            	//Comprobamos si la normativa es privada.
+	            	if (normativa.getValidacion() == ValidacionNormativa.INTERNA_PRIVADA) {
+	            		
+	            		log.debug("El estado es privado / interna de la normativa y se bloquea cualquier actualización.");
+	               	 	String error = messageSource.getMessage("error.normativa.interna", null, request.getLocale());
+	                    result = new IdNomDTO(-4l, error);           
+	            		
+	            	} else {
+	            	
+		            	//Seteamos los datos validos a 1 (correcto)
+		            	normativa.setDatosValidos(1);
+		            	
+			            // Guardar la Normativa
+			            guardarNormativa(normativa, ua);
+			
+			            // Finalizado correctamente
+			            result = new IdNomDTO(normativa.getId(), messageSource.getMessage("normativa.guardat.correcte", null, request.getLocale()));
+	            	}
+	            } else {
+	            	 log.debug("El numero de normativa ya existe.");
+	            	 String error = messageSource.getMessage("error.numnormativa.repetido", null, request.getLocale());
+	                 result = new IdNomDTO(-4l, error);                 
+	            }
             }
         
         } catch (DelegateException dEx) {
@@ -1086,6 +1108,7 @@ public class NormativaBackController extends PantallaBaseController {
 
         }
 
+        
         return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
         
     }
@@ -1346,7 +1369,7 @@ public class NormativaBackController extends PantallaBaseController {
             if (pagRes == null) {
                 pagRes = String.valueOf(10);
             }
-            boolean invalids = "true".equals(request.getParameter("invalids"));
+            final String invalids = request.getParameter("invalids");
 
             // Realizar la consulta y obtener resultados
             NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();

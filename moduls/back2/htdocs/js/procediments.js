@@ -480,8 +480,10 @@ function CDetall() {
 				} else if (data.id  == -66) {
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
 				} else {
+					//Antes se preguntaba, ahora no, se lanza error sin preguntar si quiere continuar.
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtNormativaDerogadaTitol, text: "<p>" + txtNormativaDerogada + "</p>"});
 					//Preguntar.
-					Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtNormativaDerogadaTitol, text: txtNormativaDerogada, funcio: that.guardaFinal});
+					//Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtNormativaDerogadaTitol, text: txtNormativaDerogada, funcio: that.guardaFinal});
 				}
 			}
 		});
