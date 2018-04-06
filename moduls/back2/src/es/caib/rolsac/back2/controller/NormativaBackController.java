@@ -1084,16 +1084,24 @@ public class NormativaBackController extends PantallaBaseController {
             
             boolean todoCorrecto = true;
             //El num normativa es obligatorio, menos si es de tipo 'Ordre' (id=4) o 'Reglament' (id=1707912)
-            if (normativa.getTipo().getId().compareTo(4l) != 0 && normativa.getTipo().getId().compareTo(1707912l) != 0) {
-            	if (normativa.getNumNormativa() == null || normativa.getNumNormativa().isEmpty()) {
-            		
-            		todoCorrecto = false;
-            		log.debug("El num de normativa no esta introducido y no es de tipo ordre.");
-               	 	String error = messageSource.getMessage("error.normativa.numnormativavacio", null, request.getLocale());
-                    result = new IdNomDTO(-4l, error);           
-            		
+            
+            
+            boolean tipoNumNormaObligatorio = true;
+            List<Long> tiposNoObligatorios = getTiposConNumNormativaNulo();
+            for(Long tipoNoObligatorios : tiposNoObligatorios) {
+            	if (normativa.getTipo().getId().compareTo(tipoNoObligatorios) == 0) {
+            		tipoNumNormaObligatorio = false;
             	}
             }
+            
+            if (tipoNumNormaObligatorio && (normativa.getNumNormativa() == null || normativa.getNumNormativa().isEmpty())) {
+        		
+        		todoCorrecto = false;
+        		log.debug("El num de normativa no esta introducido y no es de tipo ordre.");
+           	 	String error = messageSource.getMessage("error.normativa.numnormativavacio", null, request.getLocale());
+                result = new IdNomDTO(-4l, error);           
+        		
+        	}
             
             if (todoCorrecto) {
 	            if (normativaDelegate.isNumNormativaCorrecto(normativa)) {
@@ -1144,6 +1152,27 @@ public class NormativaBackController extends PantallaBaseController {
         
         return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
         
+    }
+    
+    /**
+     * Lee de propiedades los tipos de normativa que no obliga a tener relleno el num.normativa.
+     * @return
+     */
+    private List<Long> getTiposConNumNormativaNulo() {
+    	List<Long> tipos = new ArrayList<Long>();
+    	try {
+    		String[] propiedad = System.getProperty("es.caib.rolsac.normativa.tipusnorma.sensenum").trim().split(",");
+    		for(String valor : propiedad) {
+    			tipos.add(Long.valueOf(valor.trim()));
+    		}
+    	} catch (Exception e) {
+    		log.error("Error intentando leer los tipos de normativas cuya num. norma no es obligatorio", e);
+    		//Se setea un valor para evitar problemas
+    		tipos = new ArrayList<Long>();
+    		tipos.add(1707912l);
+    		tipos.add(4l);
+    	}
+    	return tipos;
     }
 
     /**
