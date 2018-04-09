@@ -75,6 +75,7 @@ public abstract class SearchNormativaBase implements SearchNormativa {
 	    tmpbean.setTitulo(normativabean.getTra_titulo_v());
 	    tmpbean.setFechaBoletin(normativabean.getFechaBoletin());
 	    tmpbean.setTrcodificacion(tmpbean.getBoib()+"X"+tmpbean.getRegistro());
+	    tmpbean.setIdTipoNormativa(normativabean.getIdTipoNormativa());
 	    this.getListadonormativas().add(tmpbean);
 	  }
 

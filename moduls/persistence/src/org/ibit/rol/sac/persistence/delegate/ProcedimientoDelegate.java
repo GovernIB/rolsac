@@ -195,4 +195,13 @@ public class ProcedimientoDelegate {
 	public boolean isNormativaDerogada(Long id)   throws DelegateException {
 		return impl.isNormativaDerogada(id);
 	}
+	
+	/**
+	 * Comprueba si alguna de las normativas del procedicimiento está validos.
+	 * @param id
+	 * @return
+	 */
+	public boolean isNormativaValidas(Long id)   throws DelegateException {
+		return impl.isNormativaValidas(id);
+	}
 }

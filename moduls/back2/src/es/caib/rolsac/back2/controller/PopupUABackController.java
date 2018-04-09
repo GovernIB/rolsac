@@ -16,9 +16,11 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
+import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -51,12 +53,20 @@ public class PopupUABackController {
             
             try {
 
-                List<UnidadAdministrativa> raices = buscarRaicesUnidadesAdministrativas(request.getParameter("padres") != null, false);
-
+            	
+                List<UnidadAdministrativa> raices;
+                UnidadAdministrativaDelegate uaDelegate = null == this.uaDelegate ? DelegateUtil.getUADelegate() : this.uaDelegate;
+                
+                if (request.getParameter("idUAraiz") == null || request.getParameter("idUAraiz").isEmpty()) {
+                	raices = buscarRaicesUnidadesAdministrativas(request.getParameter("padres") != null, false);
+                } else {
+                	raices = this.uaUsuario(request);
+                	model.put("idUAraiz", request.getParameter("idUAraiz"));
+                }
+                
                 model.put("raizOptions", raices);
 
-                UnidadAdministrativaDelegate uaDelegate = null == this.uaDelegate ? DelegateUtil.getUADelegate() : this.uaDelegate;
-
+                
                 for (int i = 0; i < raices.size(); i++) {
                     UnidadAdministrativa raizActual = (UnidadAdministrativa) raices.get(i);
                     if (!uaDelegate.listarHijosUA(raizActual.getId()).isEmpty()) {
@@ -80,6 +90,20 @@ public class PopupUABackController {
         
         return "pantalles/popArbreUA";
         
+    }
+    
+    /**
+     * Obtiene las UA del usuario.
+     * @throws DelegateException 
+     */
+    private List<UnidadAdministrativa> uaUsuario( HttpServletRequest request) throws DelegateException {
+    	String username = request.getRemoteUser();
+    	UnidadAdministrativaDelegate uaDelegate = null == this.uaDelegate ? DelegateUtil.getUADelegate() : this.uaDelegate;
+        UsuarioDelegate usuDelegate = DelegateUtil.getUsuarioDelegate();
+        Usuario usuario = usuDelegate.obtenerUsuariobyUsername(username);
+        List<UnidadAdministrativa> uas = new ArrayList();
+        uas.addAll(usuario.getUnidadesAdministrativas());
+        return uas;
     }
 
     private List<UnidadAdministrativa> buscarRaicesUnidadesAdministrativas(boolean padre, boolean todas) throws DelegateException {
@@ -115,17 +139,22 @@ public class PopupUABackController {
         request.setAttribute("idSelect", request.getParameter("idSelect"));
         request.setAttribute("totes", request.getParameter("totes"));
 
-        List<UnidadAdministrativa> raices = buscarRaicesUnidadesAdministrativas(
-        		request.getParameter("padres") != null, 
-        		"1".equals(request.getParameter("totes")));
-        
+        List<UnidadAdministrativa> raices;
+        UnidadAdministrativaDelegate uaDelegate = null == this.uaDelegate ? DelegateUtil.getUADelegate() : this.uaDelegate;
+        if (request.getParameter("idUAraiz") == null || request.getParameter("idUAraiz").isEmpty()) {
+    	    
+	        raices = buscarRaicesUnidadesAdministrativas(request.getParameter("padres") != null,
+	        		"1".equals(request.getParameter("totes")));
+        } else {
+        	raices = this.uaUsuario(request);
+        	model.put("idUAraiz", request.getParameter("idUAraiz"));
+        }
         model.put("raizOptions", raices);
         
         model.put("id_input", request.getParameter("idInput"));
         model.put("id_hidden", request.getParameter("idHidden"));        
 
-        UnidadAdministrativaDelegate uaDelegate = null == this.uaDelegate ? DelegateUtil.getUADelegate() : this.uaDelegate;
-
+        
         for (int i = 0; i < raices.size(); i++) {
             UnidadAdministrativa raizActual = (UnidadAdministrativa) raices.get(i);
             if (!uaDelegate.listarHijosUA(raizActual.getId()).isEmpty()) {
@@ -172,10 +201,17 @@ public class PopupUABackController {
         request.setAttribute("idUA", new Long(request.getParameter("idUA")));
         request.setAttribute("totes", request.getParameter("totes"));
 
-        List<UnidadAdministrativa> raices = buscarRaicesUnidadesAdministrativas(request.getParameter("padres") != null,
-        		"1".equals(request.getParameter("totes")));
-
+        List<UnidadAdministrativa> raices;
         UnidadAdministrativaDelegate uaDelegate = null == this.uaDelegate ? DelegateUtil.getUADelegate() : this.uaDelegate;
+        if (request.getParameter("idUAraiz") == null || request.getParameter("idUAraiz").isEmpty()) {
+    	    
+	        raices = buscarRaicesUnidadesAdministrativas(request.getParameter("padres") != null,
+	        		"1".equals(request.getParameter("totes")));
+        } else {
+        	raices = this.uaUsuario(request);
+        	model.put("idUAraiz", request.getParameter("idUAraiz"));
+        }
+        model.put("raizOptions", raices);
 
         for (int i = 0; i < raices.size(); i++) {
             UnidadAdministrativa raizActual = (UnidadAdministrativa) raices.get(i);

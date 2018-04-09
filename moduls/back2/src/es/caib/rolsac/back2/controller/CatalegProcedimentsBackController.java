@@ -31,6 +31,7 @@ import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.ibit.rol.sac.model.Auditoria;
+import org.ibit.rol.sac.model.Boletin;
 import org.ibit.rol.sac.model.CatalegDocuments;
 import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.ExcepcioDocumentacio;
@@ -44,12 +45,16 @@ import org.ibit.rol.sac.model.Procedimiento;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.SilencioAdm;
+import org.ibit.rol.sac.model.Tipo;
+import org.ibit.rol.sac.model.TipoAfectacion;
 import org.ibit.rol.sac.model.TraduccionCatalegDocuments;
 import org.ibit.rol.sac.model.TraduccionExcepcioDocumentacio;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimiento;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
+import org.ibit.rol.sac.model.TraduccionTipo;
+import org.ibit.rol.sac.model.TraduccionTipoAfectacion;
 import org.ibit.rol.sac.model.TraduccionTramite;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -77,6 +82,8 @@ import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -122,6 +129,21 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 		loadIndexModel (model, request);
 		
+		//#427 Listas para el buscador  de normativas. Las pasamos a DTO. 
+        // Lo ponemos en try catch para evitar que esto bloquee cualquier recuperación 
+        try {
+            String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+            // Boletines.
+            model.put("llistaButlletins", getListaBoletinesDTO());
+            // Tipos normativa.
+            model.put("llistaTipusNormativa", getListaTiposNormativaDTO(idioma));
+            // Tipos afectacion.
+            model.put("llistaTipusAfectacio", getListaTiposAfectacionDTO(idioma));
+
+        } catch (DelegateException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
+        }
+        
 		return "index";
 		
 	}
@@ -249,6 +271,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		resultats.put("total", resultadoBusqueda.getTotalResultados());
 		resultats.put("nodes", llistaProcedimientoLocalDTO);
 
+		
+        
 		return resultats;
 		
 	}
@@ -628,7 +652,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				resultats.put("item_silenci_combo", proc.getSilencio().getId());
 			}
             
-
 		} catch (DelegateException dEx) {
 			
 			logException(log, dEx);
@@ -644,6 +667,61 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		return resultats;
 		
 	}
+	
+	 private List<IdNomDTO> getListaTiposAfectacionDTO(String idioma) throws DelegateException {
+
+	        List<TipoAfectacion> listaTiposAfectacion = DelegateUtil.getTipoAfectacionDelegate().listarTiposAfectaciones();
+	        List<IdNomDTO> listaTiposAfectacionDTO = new ArrayList<IdNomDTO>();
+	        for (TipoAfectacion tipoAfec : listaTiposAfectacion) { 
+	            TraduccionTipoAfectacion traTipAfec = (TraduccionTipoAfectacion) tipoAfec.getTraduccion(idioma);
+	            if (traTipAfec == null) {
+	                traTipAfec = (TraduccionTipoAfectacion) tipoAfec.getTraduccion();
+	            }
+
+	            IdNomDTO tipAfecTran = new IdNomDTO(tipoAfec.getId(), traTipAfec.getNombre());
+	            listaTiposAfectacionDTO.add(tipAfecTran);
+	        }
+
+	        return listaTiposAfectacionDTO;
+
+	    }
+
+	    private List<IdNomDTO> getListaTiposNormativaDTO(String idioma) throws DelegateException {
+
+	        List<Tipo> listaTiposNormativa = DelegateUtil.getTipoNormativaDelegate().listarTiposNormativas();
+	        List<IdNomDTO> listaTiposNormativaDTO = new ArrayList<IdNomDTO>();
+	        for (Tipo tipo : listaTiposNormativa) { 
+	            TraduccionTipo traTipo = (TraduccionTipo) tipo.getTraduccion(idioma);
+	            if (traTipo == null) {
+	                traTipo = (TraduccionTipo) tipo.getTraduccion();
+	            }
+
+	            IdNomDTO tipoTran;
+	            if (traTipo != null) {
+	                tipoTran = new IdNomDTO(tipo.getId(), traTipo.getNombre());
+	            } else {
+	                tipoTran = new IdNomDTO(tipo.getId(), "");
+	            }
+
+	            listaTiposNormativaDTO.add(tipoTran);
+	        }
+
+	        return listaTiposNormativaDTO;
+
+	    }
+
+	    private List<IdNomDTO> getListaBoletinesDTO() throws DelegateException {
+
+	        List<Boletin> listaBoletines = DelegateUtil.getBoletinDelegate().listarBoletines();
+	        List<IdNomDTO> listaBoletinesDTO = new ArrayList<IdNomDTO>();
+	        for (Boletin boletin : listaBoletines) {
+	            IdNomDTO bol = new IdNomDTO(boletin.getId(), boletin.getNombre());
+	            listaBoletinesDTO.add(bol);
+	        }
+
+	        return listaBoletinesDTO;
+
+	    }
 	
 	@RequestMapping(value = "/modulos.do")
 	public @ResponseBody Map<String, Object> recuperaModulos(Long id, HttpServletRequest request) {
@@ -948,6 +1026,13 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 			
 			if (edicion) {
+				
+				//#427 Comprobamos que no tiene ninguna normativa caducada asociada.
+				if (!procedimentDelegate.isNormativaValidas(procedimentOld.getId())) {
+					//Si estamos en modo edicición, tiene que tener todas las normativas con datos validos.
+					error = messageSource.getMessage("proc.error.normativa.datosinvalidos", null, request.getLocale());
+					return result = new IdNomDTO(-5l, error);
+				}
 				
 				//#414 Comprobamos si hay un cambio de entidad raíz (sólo en edición y si está con código SIA).
 				if (procedimentOld.getCodigoSIA() != null && !procedimentOld.getCodigoSIA().isEmpty() && procedimentOld.getEstadoSIA() != null &&
@@ -1564,6 +1649,26 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				Date fechaBoletin = DateUtils.parseDate(request.getParameter("dataButlleti"));
 				paramMap.put("fechaBoletin", fechaBoletin);
 			}
+			
+			if (request.getParameter("numNormativa") != null && !request.getParameter("numNormativa").equals("")) {
+				String numNorma = request.getParameter("numNormativa");
+				
+				if (!numNorma.matches("[0-9]{1,5}/[0-9]{4}")) { 
+          	  		resultats.put("error", messageSource.getMessage("normativa.formulari.error.numnormativaincorrecto", null, request.getLocale()));
+          	  		return resultats;
+          	  	}
+				paramMap.put("numNormativa", numNorma);
+				
+			}
+			
+			if (request.getParameter("tipo") != null && !request.getParameter("tipo").equals("")) {
+				paramMap.put("tipo", request.getParameter("tipo"));
+			}
+
+			if (request.getParameter("boletin") != null && !request.getParameter("boletin").equals("")) {
+				paramMap.put("boletin", request.getParameter("boletin"));
+			}
+
 
 			//Restricción del acta de reunión de normativas para que salgan sólo las vigentes.
 			paramMap.put("validacion", ValidacionNormativa.VIGENTE);
@@ -1596,7 +1701,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 
 			//La búsqueda de normativas no tendrá en cuenta la UA actual (idua = null)
-			resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, "todas", null, false, false, "1", campoOrdenacion, orden, pagPag, pagRes, false);
+			resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, "todas", null, false, false, "1", campoOrdenacion, orden, pagPag, pagRes, false, false);
 
 			for (Normativa normativa : castList(Normativa.class, resultadoBusqueda.getListaResultados()) ) {
 				long idNormativa = normativa.getId();

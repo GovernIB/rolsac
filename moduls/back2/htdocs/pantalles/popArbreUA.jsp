@@ -185,11 +185,11 @@
         }
 
         function unopen(nr){
-            window.location = "<c:url value='popArbreUAContreure.do' />?idUA=<c:out value='${idUA}' />&idSelect=" + ex[nr].codi + "&idHidden=<c:out value='${id_hidden}' />&idInput=<c:out value='${id_input}' />&totes=<c:out value='${totes}' />";
+            window.location = "<c:url value='popArbreUAContreure.do' />?idUA=<c:out value='${idUA}' />&idUAraiz=<c:out value='${idUAraiz}' />&idSelect=" + ex[nr].codi + "&idHidden=<c:out value='${id_hidden}' />&idInput=<c:out value='${id_input}' />&totes=<c:out value='${totes}' />";
         }
         
         function open(nr){
-            window.location = "<c:url value='popArbreUAExpandir.do' />?idUA=<c:out value='${idUA}' />&idSelect=" + ex[nr].codi + "&idHidden=<c:out value='${id_hidden}' />&idInput=<c:out value='${id_input}' />&totes=<c:out value='${totes}' />";
+            window.location = "<c:url value='popArbreUAExpandir.do' />?idUA=<c:out value='${idUA}' />&idUAraiz=<c:out value='${idUAraiz}' />&idSelect=" + ex[nr].codi + "&idHidden=<c:out value='${id_hidden}' />&idInput=<c:out value='${id_input}' />&totes=<c:out value='${totes}' />";
         }
 
     //]]>

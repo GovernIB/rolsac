@@ -443,5 +443,15 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
 	        }
 	}
     
-	
+	/**
+	 * Devuelve true si alguna normativa no es valida.
+	 */
+	public boolean isNormativaValidas(Long id)   throws DelegateException {
+		try {
+	           return getFacade().isNormativaValidas(id);
+	        } catch (RemoteException e) {
+	            throw new DelegateException(e);
+	        }
+	}
+    
 }

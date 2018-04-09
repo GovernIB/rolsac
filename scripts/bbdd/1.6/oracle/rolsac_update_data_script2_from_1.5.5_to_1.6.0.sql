@@ -14,42 +14,64 @@ DECLARE
            
     nAnyo NUMBER;
     nUA   NUMBER;
-    
+    nURL  RSC_TRANOR.TNO_ENLACE%TYPE;
+    cuantos NUMBER;
+    cuantosAct NUMBER := 0;
+    cuantosNul NUMBER := 0;
 BEGIN
   DBMS_OUTPUT.PUT_LINE ('INICIO');
   FOR normativa IN normativas
   LOOP 
-     DBMS_OUTPUT.PUT_LINE ('Normativa.id:' || normativa.nor_codi);
+     
      FOR traduccion IN traducciones(normativa.nor_codi)
-      LOOP
-                IF normativa.nor_codbol is null AND normativa.nor_fecha is not null
-                THEN 
-                    nAnyo := to_number(to_char(normativa.nor_fecha, 'yyyy'));
+     LOOP
+              select count(*)
+                into cuantos
+                from rolsac.rsc_tranor tn, rolsac.rsc_normat n
+              where tn.tno_pagini is not null
+              and tn.tno_pagini!=0
+              and tn.tno_pagfin is not null
+              and tn.tno_pagfin!=0
+              and n.nor_numero is not null
+              and length(n.nor_numero)>=5
+              and tn.tno_codnor =  n.nor_codi
+              and tn.tno_codidi =  traduccion.TNO_CODIDI
+              and n.nor_codi = normativa.nor_codi;
+          
+              IF cuantos = 1
+              THEN
+                    select nvl(tno_enlace, 'http://www.caib.es/eboibfront/pdf/VisPdf?action=VisHistoric' ||  chr(38) || 'p_any=' || substr(nor_numero,0,4) ||  chr(38) || 'p_numero=' || substr(nor_numero,5,3)
+                         ||  chr(38) || 'p_finpag=' || tno_pagfin ||  chr(38) || 'p_inipag=' || tno_pagini || chr(38) || 'lang=' || traduccion.TNO_CODIDI)
+                      into nURL
+                    from rolsac.rsc_tranor tn, rolsac.rsc_normat n
+                    where tn.tno_pagini is not null
+                    and tn.tno_pagini!=0
+                    and tn.tno_pagfin is not null
+                    and tn.tno_pagfin!=0
+                    and n.nor_numero is not null
+                    and length(n.nor_numero)>=5
+                    and tn.tno_codnor =  n.nor_codi
+                    and tn.tno_codidi =  traduccion.TNO_CODIDI
+                    and n.nor_codi = normativa.nor_codi;
                 
-                    UPDATE RSC_TRANOR
-                       SET TNO_ENLACE = '/eboibfront/VisPdf?action=VisHistoric' || chr(38) || 'p_any=' || nAnyo || chr(38) || 'p_numero=' || normativa.nor_numero || chr(38) || 'p_finpag=' || traduccion.tno_pagfin || chr(38) || 'p_inipag=' || traduccion.tno_pagini || chr(38) || 'idDocument=' || +normativa.nor_codi || chr(38) || 'lang=' || traduccion.tno_codidi
-                     WHERE TNO_CODIDI = traduccion.TNO_CODIDI
-                       AND TNO_CODNOR = traduccion.TNO_CODNOR;
-                ELSE
-                
-                    nUA := '';
-                    IF normativa.nor_coduna IS NOT NULL
+                    IF nURL IS NOT NULL
                     THEN
-                        nUA := TO_CHAR (normativa.nor_coduna);
+                          UPDATE RSC_TRANOR
+                             SET TNO_ENLACE = nURL
+                           WHERE TNO_CODIDI = traduccion.TNO_CODIDI
+                             AND TNO_CODNOR = traduccion.TNO_CODNOR;
+                      
                     END IF;
-                
-                    UPDATE RSC_TRANOR
-                       SET TNO_ENLACE = '/govern/dadesNormativa.do' || chr(38) || 'lang=' || traduccion.tno_codidi || chr(38) || 'codi=' || normativa.nor_codi || chr(38) || 'coduo=' || nUA
-                     WHERE TNO_CODIDI = traduccion.TNO_CODIDI
-                       AND TNO_CODNOR = traduccion.TNO_CODNOR;
-                END IF;
-                
-                
+                  DBMS_OUTPUT.PUT_LINE ('Normativa.id:' || normativa.nor_codi || ' Actualizada URL');
+                  cuantosAct := cuantosAct + 1;
+            ELSE 
+                  DBMS_OUTPUT.PUT_LINE ('Normativa.id:' || normativa.nor_codi || ' URL Nula');
+                  cuantosNul := cuantosNul + 1;
+            END IF;
       END LOOP;
   END LOOP;
-  
+  DBMS_OUTPUT.PUT_LINE ('Normativas URL actualizadas ' || cuantosAct); 
+  DBMS_OUTPUT.PUT_LINE ('Normativas URL nulas  ' || cuantosNul);
   DBMS_OUTPUT.PUT_LINE ('FIN');
   COMMIT;
 END;
-
-

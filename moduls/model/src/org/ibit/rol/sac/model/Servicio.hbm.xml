@@ -56,7 +56,7 @@
             <many-to-many class="org.ibit.rol.sac.model.Normativa" column="SRN_CODNOR"  foreign-key="RSC_SRNNOR_FK"/>
         </set>
         
-        <set name="documentos" cascade="all-delete-orphan" inverse="true" lazy="true" order-by="ORDEN">
+        <set name="documentos" cascade="all-delete-orphan" inverse="true" lazy="true" order-by="DSR_ORDEN">
             <cache usage="read-write"/>
             <key column="DSR_CODSER" foreign-key="DSR_CODSER_FK"/>
             <one-to-many class="org.ibit.rol.sac.model.DocumentoServicio" />

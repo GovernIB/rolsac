@@ -70,9 +70,9 @@ public class NormativaDelegate implements StatelessDelegate
         }
     }
     
-	public ResultadoBusqueda buscarNormativas(Map parametros, Map traduccion, String tipo, Long idUA, boolean uaMeves, boolean uaFilles, String invalids, String campoOrdenacion, String orden, String pagina, String resultats, boolean soloIds) throws DelegateException {
+	public ResultadoBusqueda buscarNormativas(Map parametros, Map traduccion, String tipo, Long idUA, boolean uaMeves, boolean uaFilles, String invalids, String campoOrdenacion, String orden, String pagina, String resultats, boolean soloIds, boolean restriccionUAs) throws DelegateException {
         try {
-            return getFacade().buscarNormativas(parametros, traduccion, tipo, idUA, uaMeves, uaFilles, invalids, campoOrdenacion, orden, pagina, resultats, soloIds);
+            return getFacade().buscarNormativas(parametros, traduccion, tipo, idUA, uaMeves, uaFilles, invalids, campoOrdenacion, orden, pagina, resultats, soloIds, restriccionUAs);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
@@ -270,5 +270,17 @@ public class NormativaDelegate implements StatelessDelegate
            throw new DelegateException(e);
        }
 	}
-   
+
+	/**
+	 * Tiene relaciones la normativa con procedimientos o servicios.
+	 * @param id
+	 * @return
+	 */
+	public boolean tieneRelaciones(Long id) throws DelegateException {
+		try {
+            return getFacade().tieneRelaciones(id);	
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
+	}
 }

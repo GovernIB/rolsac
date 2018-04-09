@@ -1,6 +1,7 @@
 package org.ibit.rol.sac.model;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -515,5 +516,99 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
 		this.estadoSIA = estadoSIA;
 	}
 
+	/**
+	 * Para la cache añadir normativas.
+	 */
+	public void addNormativa(Normativa normativa) {
+		boolean encontrado = false;
+		if (this.normativas != null) {
+			for(Normativa norm : this.normativas) {
+				if (norm.getId() != null && normativa.getId() != null && normativa.getId().compareTo(norm.getId()) == 0) {
+					encontrado = true;
+					break;
+				}
+			}
+		}
+		
+		if (!encontrado) {
+			normativa.getProcedimientos().add(this);
+			this.normativas.add(normativa);
+		}
+	}
+	
+	/**
+	 * Para la cache borrar normativas.
+	 * @param normativa
+	 */
+	public void borrarNormativa(Normativa normativa) {
+		
+		boolean encontrado = false;
+		if (this.normativas != null) {
+			for(Normativa norm : this.normativas) {
+				if (norm.getId() != null && normativa.getId() != null && normativa.getId().compareTo(norm.getId()) == 0) {
+					encontrado = true;
+					break;
+				}
+			}
+		}
+		
+		if (encontrado) {
+			normativa.getProcedimientos().remove(this);
+			this.normativas.remove(normativa);
+		}
+		
+	}
+
+	/**
+	 * Para mergear dos procedimientos.
+	 * @param procedimientoNuevo
+	 */
+	public void mergeNormativas(ProcedimientoLocal procedimientoNuevo) {
+		
+		//Las que desaparecen
+		List<Normativa> normativasBorrar = new ArrayList<Normativa>();
+		for(Normativa normativa : this.getNormativas()) {
+			boolean existe = false;
+			for(Normativa norm : procedimientoNuevo.getNormativas()) {
+				if (norm.getId() != null && norm.getId().compareTo(normativa.getId()) == 0) {
+					existe = true;
+					break;
+				} 
+			}
+			
+			if (!existe) {
+				normativasBorrar.add(normativa);
+			}
+		}
+		
+		for(Normativa norm : normativasBorrar) {
+			this.borrarNormativa(norm);
+		}
+	
+		//Las que aparecen nuevas
+		List<Normativa> normativasNuevas = new ArrayList<Normativa>();
+		for(Normativa normativa : procedimientoNuevo.getNormativas()) {
+			
+			boolean existe = false;
+			for(Normativa norm : this.getNormativas()) {
+				if (norm.getId() != null && norm.getId().compareTo(normativa.getId()) == 0) {
+					existe = true;
+					break;
+				} 
+			}
+			
+			if (!existe) {
+				normativasNuevas.add(normativa);
+			}
+		}
+		
+		for(Normativa norm : normativasNuevas) {
+			this.addNormativa(norm);
+		}
+		
+		
+	}
+
+	
 	
 }

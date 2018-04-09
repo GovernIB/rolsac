@@ -10,6 +10,7 @@ public class TrListadoNormativaBean
   private String titulo="";
   private String trcodificacion="";
   private Date fechaBoletin;
+  private String idTipoNormativa;
   
 
   public TrListadoNormativaBean()  {
@@ -64,6 +65,22 @@ public class TrListadoNormativaBean
   public Date getFechaBoletin() {
 		return fechaBoletin;
 	}
+
+
+/**
+ * @return the idTipoNormativa
+ */
+public String getIdTipoNormativa() {
+	return idTipoNormativa;
+}
+
+
+/**
+ * @param idTipoNormativa the idTipoNormativa to set
+ */
+public void setIdTipoNormativa(String idTipoNormativa) {
+	this.idTipoNormativa = idTipoNormativa;
+}
 
 
 }

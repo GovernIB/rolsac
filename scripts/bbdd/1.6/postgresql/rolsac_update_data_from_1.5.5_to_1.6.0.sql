@@ -1,4 +1,4 @@
-﻿--Introducir el dato de la UA en la nueva tabla que relaciona UA con Normativas.
+--Introducir el dato de la UA en la nueva tabla que relaciona UA con Normativas.
 INSERT INTO RSC_UNANOR (UNN_CODNOR, UNN_CODUNA, UNN_CODI) (
   SELECT NOR_CODI, NOR_CODUNA, RSC_SEQ_ALL.NEXTVAL
     FROM RSC_NORMAT
@@ -50,13 +50,14 @@ INSERT INTO RSC_TRANOR (TNO_CODNOR, TNO_SECCIO, TNO_APARTA, TNO_PAGINI, TNO_PAGF
 -- Backup de normativa type y Cambiar la normativaLocal y normativaExterna al valor normativa  mientras que normativaExternaRemota/normativaLocalRemota pasa a Remota.  
 update rsc_normat set nor_typen = 'normativa';
 --El estado 1 pasara las publicas a vigentes
+update rsc_normat set nor_validn = 1 where nor_valida = 1;
 update rsc_normat set nor_validn = 4 where nor_valida IN (2,3); --Para convertir internas y reservas en un nuevo estado de valor 4 que las agrupa
 update rsc_normat set nor_codbol_ant = nor_codbol;
 ---Actualizamos el tipo boletin para que cree el DOUE y fusione el DOCE y el Diario Europeu en DOUE.
 INSERT INTO RSC_BOLETI (BOL_CODI , BOL_NOMBRE, BOL_ENLACE) VALUES ( RSC_SEQ_ALL.nextval, 'DOUE', null);
-update rsc_normat set nor_codbol = (select bol_codi from rsc_boleti where lower(bol_nombre) like 'doue') where nor_codbol in (select bol_codi from rsc_boleti where lower(bol_nombre) like 'doce' );
-update rsc_normat set nor_codbol = (select bol_codi from rsc_boleti where lower(bol_nombre) like 'doue') where nor_codbol in (select bol_codi from rsc_boleti where lower(bol_nombre) like '%diario%uropea%' );
-delete from rsc_boleti where lower(bol_nombre) like 'doce';
+---Actualizamos el tipo boletin para que cree el DOUE y fusione el DOCE y el Diario Europeu en DOUE.
+update rsc_normat set nor_codbol = (select bol_codi from rsc_boleti where lower(bol_nombre) like 'doce') where nor_codbol in (select bol_codi from rsc_boleti where lower(bol_nombre) like '%diario%uropea%' );
+update rsc_boleti set bol_nombre = 'DOUE' where lower(bol_nombre) like 'doce';
 delete from rsc_boleti where lower(bol_nombre) like '%diario%uropea%';
 
 /** Para eliminar los tipos que sobran, se ponen las normativas el campo codtip a nulo, se borran de tipo y las traducciones. **/
@@ -135,4 +136,12 @@ INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (32, 'es', 'R
 INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (32, 'en', 'European Regulation');
 INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (32, 'fr', 'Réglementation européenne');
 INSERT INTO RSC_TRATIP (TTI_CODTIP, TTI_CODIDI, TTI_NOMBRE) VALUES (32, 'de', 'Europäische Regelung');
-  
+
+--Eliminado text refundit de boletín
+ update rsc_normat
+    set nor_codbol = null
+  where nor_codbol in (select bol_codi
+                         from rsc_boleti 
+                         where lower(bol_nombre) like '%refundit%');
+
+delete  from rsc_boleti  where lower(bol_nombre) like '%refundit%';

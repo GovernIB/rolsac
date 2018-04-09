@@ -423,23 +423,6 @@
                    "obligatori": "",
                    "tipus": "<spring:message code='normativa.formulari.traspas_eboib.campo_registro_numero'/>"
                }
-           },{
-           "modo": "individual",
-           "etiqueta": "id",
-           "etiquetaValor": "fechaTB",
-           "obligatori": "no",
-           "tipus": "data",
-           "caracters":
-               {
-                   "maxim": 9,
-                   "mostrar": "no",
-                   "abreviat": "no"
-               },
-           "error":
-               {
-                   "obligatori": "",
-                   "tipus": "<spring:message code='normativa.formulari.traspas_eboib.campo_data_formato'/>"
-               }            
            }
            
           ];
@@ -458,7 +441,10 @@
         <li class="opcio C">            
             <a id="tabBuscador" href="javascript:;"><spring:message code='tab.cercador'/></a>
         </li>
-
+		<li class="opcio nuevo"><!--  que es L C ... -->
+			<a id="tabTraspasBoib" href="javascript:;"><spring:message code='normativa.traspas.boib'/></a>
+		</li>
+		
         <c:if test="${idUA > 0}">
             <li class="opcions nuevo">
                 <a id="btnNuevaFicha" href="javascript:;" class="btn nou"><span><span><spring:message code='normativa.crea_nova_normativa'/></span></span></a>
@@ -474,7 +460,7 @@
             <input type="hidden" value="DESC" class="ordreTipus" /> 
             <input type="hidden" value="id" class="ordreCamp" />
         </div>
-        <div class="resultats C">
+		<div class="resultats C">
             <div id="cercador">
                 <div id="cercador_contingut">
                     <div class="opcionesBusqueda">
@@ -504,8 +490,7 @@
                                         <c:when test="${rolSuper}" >
                                             <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>                                
                                             <option value="1"><spring:message code='txt.validacio.vigente'/></option>
-                                            <option value="2"><spring:message code='txt.validacio.derogada'/></option>       
-                                            <option value="4"><spring:message code='txt.validacio.internaprivada'/></option>
+                                            <option value="2"><spring:message code='txt.validacio.derogada'/></option>
                                                                                                                       
                                         </c:when>
                                         <c:otherwise>
@@ -553,7 +538,7 @@
                                     <label for="cerca_num_normativa"><spring:message code='txt.numNorma'/></label>
                                 </div>
                                 <div class="control">
-                                    <input id="cerca_num_normativa" name="cerca_num_normativa" type="text" />
+                                    <input id="cerca_num_normativa" placeholder="NNNNN/YYYY" name="cerca_num_normativa" type="text" />
                                 </div>                          
                             </div>
                             
@@ -661,8 +646,8 @@
             <input type="hidden" value="DESC" class="ordreTipus" /> 
             <input type="hidden" value="id" class="ordreCamp" />
         </div>
-	<!--
-<c:if test="${traspasboib == 'Y'}">
+		
+
         <div class="resultats TL">
             <div class="dades">
                 <p class="executant"><spring:message code='normativa.carregant_llistat_normativa'/></p>
@@ -684,7 +669,7 @@
                                     <label for="numeroboletinTB"><spring:message code='camp.n_butlleti'/></label>
                                 </div>
                                 <div class="control">
-                                    <input id="numeroboletinTB" name="numeroboletinTB" type="text" />
+                                    <input id="numeroboletinTB" placeholder="YYYYNNN" name="numeroboletinTB" type="text" />
                                 </div>                          
                             </div>
                             
@@ -693,7 +678,7 @@
                                     <label for="numeroregistroTB"><spring:message code='camp.n_registre'/></label>
                                 </div>
                                 <div class="control">
-                                    <input id="numeroregistroTB" name="numeroregistroTB" type="text" maxlength="250" />
+                                    <input id="numeroregistroTB" placeholder="NNNN" name="numeroregistroTB" type="text" maxlength="250" />
                                 </div>
                             </div>
 
@@ -718,15 +703,15 @@
                     </div>
                                         
                 </div>
+				<div class="dades"></div>
+				<input type="hidden" value="0" class="pagPagina" /> 
+				<input type="hidden" value="DESC" class="ordreTipus" /> 
+				<input type="hidden" value="id" class="ordreCamp" />
             </div> 
-            <div class="dades"></div>
-            <input type="hidden" value="0" class="pagPagina" /> 
-            <input type="hidden" value="DESC" class="ordreTipus" /> 
-            <input type="hidden" value="id" class="ordreCamp" />
+            
         </div>
 	
-</c:if>
--->
+
  </div>
 
 </div>
@@ -803,7 +788,7 @@
 									<div class="element t25p">
                                         <div class="etiqueta"><label for="item_num_norma"><spring:message code='txt.numNorma'/></label></div>
                                         <div class="control">
-                                            <input id="item_num_norma" placeholder="NNNN/YYYY" name="item_num_norma" type="text" class="nou" />
+                                            <input id="item_num_norma" placeholder="NNNNN/YYYY" name="item_num_norma" type="text" class="nou" />
                                         </div>
                                     </div>
                                     <div class="element t25p">
@@ -843,12 +828,6 @@
                             </div>       
                         </div>
 						<div class="element t25p">
-							<div class="etiqueta"><label></label></div>
-							<div class="btnGenerico">
-									<a class="btn gestionaBOIB" href="javascript:;" style="display:none"><span><span><spring:message code='normativa.traspas.boib'/></span></span></a>
-								</div>
-						</div>
-						<div class="element t25p">
 							<div class="etiqueta"><label for="item_data_butlleti"><spring:message code='txt.dataButlleti'/></label></div>
 							<div class="control">
 								<input id="item_data_butlleti" name="item_data_butlleti" type="text" class="nou" />
@@ -859,7 +838,15 @@
 							<div class="control">
 								<input id="item_numero" name="item_numero" type="text" class="nou" />
 							</div>
-						</div>    
+						</div>  
+						<!-- 
+						<div class="element t25p">
+							<div class="etiqueta"><label></label></div>
+							<div class="btnGenerico">
+									<a class="btn gestionaBOIB" href="javascript:;" style="display:none"><span><span><spring:message code='normativa.traspas.boib'/></span></span></a>
+								</div> 
+						</div>-->
+						  
                     </div>
                     <!-- /fila -->
 					
@@ -997,8 +984,7 @@
                                 <select id="item_validacio" name="item_validacio">
                                 	 <option value="1" selected="selected"><spring:message code='txt.validacio.vigente'/></option>
                                      <option value="2"><spring:message code='txt.validacio.derogada'/></option>     
-                                     <option value="4"><spring:message code='txt.validacio.internaprivada'/></option>
-                                    
+                                     
                                 </select>
                             </div>
                         </div>
@@ -1122,7 +1108,7 @@
                                     <div class="listaOrdenable"></div>
                                 </div>
                                 <div class="boton btnGenerico" style="margin-left: 0px;">
-                                    <a href="javascript:carregarModulArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA');" class="btn consulta">
+                                    <a href="javascript:carregarModulArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA', undefined,'S');" class="btn consulta">
                                         <span><span><spring:message code='boto.afegeixUnitatAdminsitrativa'/></span></span>
                                     </a>
                                 </div>
@@ -1230,7 +1216,7 @@
 								<label for="numeroboletinTB"><spring:message code='camp.n_butlleti'/></label>
 							</div>
 							<div class="control">
-								<input id="numeroboletinTB" name="numeroboletinTB" type="text" />
+								<input id="numeroboletinTB" placeholder="YYYYNNN" name="numeroboletinTB" type="text" />
 							</div>                          
 						</div>
 						
@@ -1239,7 +1225,7 @@
 								<label for="numeroregistroTB"><spring:message code='camp.n_registre'/></label>
 							</div>
 							<div class="control">
-								<input id="numeroregistroTB" name="numeroregistroTB" type="text" maxlength="250" />
+								<input id="numeroregistroTB" placeholder="NNN" name="numeroregistroTB" type="text" maxlength="250" />
 							</div>
 						</div>
 
@@ -1269,8 +1255,8 @@
 									
 			</div>
 			<div id="resultatsTB" class="dades"></div>
+		</div>
 	</div>
-</div>
 
 <!-- escriptori_documents -->
 <div id="escriptori_documents" class="escriptori_detall">
@@ -1436,7 +1422,7 @@
         <li class="opcio C actiu">Gestiona</li>                               
     </ul>    
     
-    <div id="resultats_afectacions" class="escriptori_items_llistat">            
+    <div id="resultats_afectacions" class="escriptori_items_llistat mh150px">            
         <div class="resultats C actiu" style="display: block;">
             <div id="cercador_afectacions" class="escriptori_items_cercador"> 
                 <div id="cercador_afectacions_contingut">

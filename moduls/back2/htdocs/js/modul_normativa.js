@@ -40,7 +40,7 @@ function CModulNormativa() {
 		
 		jQuery("#cerca_normativa_data").datepicker({ dateFormat: 'dd/mm/yy' });
 		jQuery("#cerca_normativa_data_butlleti").datepicker({ dateFormat: 'dd/mm/yy' });
-
+		
 		normatives_llistat_elm = escriptori_normatives_elm.find("div.escriptori_items_llistat:first");
 		normatives_cercador_elm = escriptori_normatives_elm.find("div.escriptori_items_cercador:first");
 		normatives_seleccionades_elm = escriptori_normatives_elm.find("div.escriptori_items_seleccionats:first");
@@ -67,7 +67,8 @@ function CModulNormativa() {
 	            "nombre", 
 	            "orden", 
 	            "idRelatedItem", 	// Campo necesario para guardado AJAX genérico de módulos laterales.
-	            "idMainItem"		// Campo necesario para guardado AJAX genérico de módulos laterales.
+	            "idMainItem",		// Campo necesario para guardado AJAX genérico de módulos laterales.
+	            "color" 			//Indica si es datos validos o no.
             ],
 			multilang: false
 		});
@@ -432,6 +433,9 @@ function CEscriptoriNormativa() {
 		var filtrosBuscador = "&titol=" + $("#cerca_normativa_titol").val();
 		filtrosBuscador += "&data=" + $("#cerca_normativa_data").val();
 		filtrosBuscador += "&dataButlleti=" + $("#cerca_normativa_data_butlleti").val();
+		filtrosBuscador += "&tipo=" + $("#cerca_tipus_normativa").val();
+		filtrosBuscador += "&numNormativa=" + $("#cerca_num_normativa").val();
+		filtrosBuscador += "&boletin=" + $("#cerca_butlleti").val();
 
 		// ordreTipus
 		if (typeof opcions.ordreTipus != "undefined") {
@@ -469,7 +473,12 @@ function CEscriptoriNormativa() {
 				}
 			},
 			success: function(data) {
-				that.finCargaListado(data, opcions);
+				if (data.error == undefined || data.error == '') {
+					that.finCargaListado(data, opcions);
+				} else {
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: "Error", text: "<p>" + data.error + "</p>"});
+					that.finCargaListado(data, opcions);
+				}
 			}
 		});
 		

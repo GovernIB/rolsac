@@ -23,6 +23,9 @@ import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
 
 import org.apache.commons.lang.StringUtils;
+import org.ibit.rol.sac.model.Tipo;
+import org.ibit.rol.sac.persistence.delegate.DelegateException;
+import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 
 
 public class EBoibSearchNormativa extends SearchNormativaBase implements
@@ -121,7 +124,7 @@ SearchNormativa {
 	
 	
 
-	public void makeSearch() {
+	public void makeSearch()  {
 		/*
 		 * 1.- buscar el BOIB por fecha o número en RSS
 		 * 		- buscar por número: /filtrerss.do?lang=ca&resultados=20&num_ini=1&num_fin=1&any_ini=2009&any_fin=2009
@@ -148,26 +151,39 @@ SearchNormativa {
 			if (abortar) break;
 			for (String enviamentUrl : rdf.enviaments) {
 				if (abortar) break;
-				TrNormativaBean normativa =  getEnviament(rdf, enviamentUrl);
-	            if (numregboib.equals("")) {
-	            	//No estamos buscando por numeroboib
-		            meterListaNormativa(normativa);
-	            } else {
-	            	//Estamos buscando por numeroboib
-		            if (normativa.getValorRegistro().equals(numregboib)) {
-		            	//Registro encontrado
-		                boolean estaInsertadoEnSac = isInsertSAC(Integer.parseInt(rdf.numBoib), Integer.parseInt(numregboib));
-		                if (estaInsertadoEnSac) {
-		                    numeroregistros=-1;
-		                    mensajeavisobean.setCabecera("ERROR EN ELS PAR&Agrave;METRES");
-		                    mensajeavisobean.setSubcabecera("El boib i el registre JA ESTAN introdu&iuml;ts en el SAC");
-		                }
-		                traza("ENCONTRADO REGISTRO EN BOIB. REGISTRO: " + numregboib);
-		                normativabean = normativa;
-			            meterListaNormativa(normativa);
-		                abortar = true;
+				TrNormativaBean normativa;
+				try {
+					normativa = getEnviament(rdf, enviamentUrl);
+				} catch (Exception exception) {
+					//Error recuperando el enviamente a pesar de la url.
+					normativa = null;
+				}
+				
+				if (normativa != null) {
+		            if (numregboib.equals("")) {
+		            	//No estamos buscando por numeroboib
+		            	if (isNormativaValida(normativa)) {
+			                meterListaNormativa(normativa);
+		            	}
+		            } else {
+		            	//Estamos buscando por numeroboib
+			            if (normativa.getValorRegistro().equals(numregboib)) {
+			            	//Registro encontrado
+			                boolean estaInsertadoEnSac = isInsertSAC(Integer.parseInt(rdf.numBoib), Integer.parseInt(numregboib));
+			                if (estaInsertadoEnSac) {
+			                    numeroregistros=-1;
+			                    mensajeavisobean.setCabecera("ERROR EN ELS PAR&Agrave;METRES");
+			                    mensajeavisobean.setSubcabecera("El boib i el registre JA ESTAN introdu&iuml;ts en el SAC");
+			                }
+			                traza("ENCONTRADO REGISTRO EN BOIB. REGISTRO: " + numregboib);
+			                normativabean = normativa;
+			                if (isNormativaValida(normativa)) {
+			                	meterListaNormativa(normativa);
+			                }
+			                abortar = true;
+			            }
 		            }
-	            }
+				}
 			}
 		}
 		
@@ -182,6 +198,19 @@ SearchNormativa {
 		
 
 
+	}
+	
+	/**
+	 * Método que comprueba si la normativa tiene el id tipo correcto.
+	 * @param normativa
+	 * @return
+	 * @throws DelegateException
+	 */
+	private boolean isNormativaValida(TrNormativaBean normativa) {
+		/**
+		 * Antes se comprobaba si el tipo es correcto pero se tiró para atrás.
+		 */
+		return true;
 	}
 
 	private TrNormativaBean getEnviament ( BoibResult rdf, String inputFileName ) {

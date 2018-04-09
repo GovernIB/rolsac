@@ -7,19 +7,19 @@
     <class name="org.ibit.rol.sac.model.DocumentTramit" table="RSC_DOCTRA">
         <cache usage="read-write"/>
         
-        <id name="id" unsaved-value="null" column="DOC_CODI">
+        <id name="id" unsaved-value="null" column="DTR_CODI">
             <generator class="sequence">
                 <param name="sequence">RSC_SEQ_ALL</param>
             </generator>
         </id>
 
-        <many-to-one name="tramit" column="CODITRA" foreign-key="RSC_CODITRA_FK"/>
-        <many-to-one name="archivo" cascade="all" column="DOC_CODARC" foreign-key="RSC_DOCARC_FK"/>
-        <many-to-one name="docCatalogo" class="org.ibit.rol.sac.model.CatalegDocuments" column="DOC_CODCDC" foreign-key="RSC_DOCTRA_CATDOC_FK"/>
-		<many-to-one name="excepcioDocumentacio" class="org.ibit.rol.sac.model.ExcepcioDocumentacio" column="DOC_CODEXD" foreign-key="RSC_DOCTRA_EXCDOC_FK"/>
+        <many-to-one name="tramit" column="DTR_CODTRA" foreign-key="RSC_CODITRA_FK"/>
+        <many-to-one name="archivo" cascade="all" column="DTR_CODARC" foreign-key="RSC_DOCARC_FK"/>
+        <many-to-one name="docCatalogo" class="org.ibit.rol.sac.model.CatalegDocuments" column="DTR_CODCDC" foreign-key="RSC_DOCTRA_CATDOC_FK"/>
+		<many-to-one name="excepcioDocumentacio" class="org.ibit.rol.sac.model.ExcepcioDocumentacio" column="DTR_CODEXD" foreign-key="RSC_DOCTRA_EXCDOC_FK"/>
         
-        <property name="orden" column="ORDEN" />
-        <property name="tipus" column="TIPUS" />
+        <property name="orden" column="DTR_ORDEN" />
+        <property name="tipus" column="DTR_TIPUS" />
 
         <map name="traducciones" cascade="all" table="RSC_TRADOCTRA">
             <cache usage="read-write"/>

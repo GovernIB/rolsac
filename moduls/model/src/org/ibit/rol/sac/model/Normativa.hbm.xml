@@ -30,7 +30,7 @@
             <one-to-many class="org.ibit.rol.sac.model.UnidadNormativa" />
         </set>
         
-        <set name="documentos" cascade="all-delete-orphan" inverse="true" lazy="true" order-by="ORDEN">
+        <set name="documentos" cascade="all-delete-orphan" inverse="true" order-by="DNO_ORDEN">
             <cache usage="read-write"/>
             <key column="DNO_CODNOR" foreign-key="DNO_CODNOR_FK"/>
             <one-to-many class="org.ibit.rol.sac.model.DocumentoNormativa"/>
@@ -59,13 +59,13 @@
         <many-to-one name="boletin" column="NOR_CODBOL" foreign-key="RSC_NORBOL_FK"/>
         <many-to-one name="tipo" column="NOR_CODTIP" foreign-key="RSC_NORTIP_FK"/>
 
-        <set name="procedimientos" table="RSC_PRONOR" inverse="true" lazy="true">
+        <set name="procedimientos" table="RSC_PRONOR" inverse="true">
             <cache usage="read-write"/>
             <key column="PRN_CODNOR" foreign-key="RSC_PRNNOR_FK"/>
             <many-to-many class="org.ibit.rol.sac.model.ProcedimientoLocal" column="PRN_CODPRO" foreign-key="RSC_PRNPRO_FK" />
         </set>
         
-        <set name="servicios" table="RSC_SERNOR" inverse="true" lazy="true">
+        <set name="servicios" table="RSC_SERNOR" inverse="true">
             <cache usage="read-write"/>
             <key column="SRN_CODNOR" foreign-key="RSC_SRNNOR_FK"/>
             <many-to-many class="org.ibit.rol.sac.model.Servicio" column="SRN_CODSER" foreign-key="RSC_SRNNOR_FK" />

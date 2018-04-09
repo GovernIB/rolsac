@@ -1075,8 +1075,8 @@
                                                     <input id="item_organ_responsable" name="item_organ_responsable" type="text" class="nou" readonly="readonly" />                                                
                                                 </div>
                                                 <div class="botones">
-                                                    <div class="btnCambiar boton btnGenerico">                        
-                                                        <a href="javascript:carregarArbreUAExpand('<c:url value="/pantalles/popArbreUAExpandir.do"/>','popUA','item_organ_responsable_id', 'item_organ_responsable');" class="btn consulta">
+                                                    <div class="btnCambiar boton btnGenerico">  
+                                                        <a href="javascript:carregarArbreUAExpand('<c:url value="/pantalles/popArbreUAExpandir.do"/>','popUA','item_organ_responsable_id', 'item_organ_responsable','S');" class="btn consulta">
                                                             <span><span><spring:message code='boto.canviarOrgan'/></span></span>
                                                         </a>
                                                     </div>
@@ -1133,7 +1133,7 @@
                                   </div>
                                   <div class="botones">
                                       <div class="btnCambiar boton btnGenerico">                        
-                                          <a href="javascript:carregarArbreUAExpand('<c:url value="/pantalles/popArbreUAExpandir.do"/>','popUA','item_servei_responsable_id', 'item_servei_responsable');" class="btn consulta">
+                                          <a href="javascript:carregarArbreTotesUAExpand('<c:url value="/pantalles/popArbreUAExpandir.do"/>','popUA','item_servei_responsable_id', 'item_servei_responsable');" class="btn consulta">
                                               <span><span><spring:message code='boto.canviarOrgan'/></span></span>
                                           </a>
                                       </div>
@@ -1728,7 +1728,7 @@
         <li class="opcio C actiu"><spring:message code='txt.gestiona'/></li>                                 
     </ul>
     
-    <div id="resultats_normativa" class="escriptori_items_llistat">            
+    <div id="resultats_normativa" class="escriptori_items_llistat firefoxAlturaMinima">            
         <div class="resultats C actiu" style="display: block;">
             <div id="cercador_normativa" class="escriptori_items_cercador"> 
                 <div id="cercador_normativa_contingut">
@@ -1740,7 +1740,7 @@
                             </div>                                  
                         </div>                              
                         <div class="element t12">                                
-                            <div class="etiqueta"><label for="cerca_normativa_data"><spring:message code='txt.data'/></label></div>
+                            <div class="etiqueta"><label for="cerca_normativa_data"><spring:message code='txt.dataAprovacio'/></label></div>
                             <div class="control">
                                 <input id="cerca_normativa_data" name="cerca_normativa_data" type="text" class="data" />
                             </div>                                  
@@ -1752,6 +1752,47 @@
                             </div>                                  
                         </div>                              
                     </div>
+					 <div class="fila">
+                           
+                            <div class="element t12">
+                                <div class="etiqueta">
+                                    <label for="cerca_num_normativa"><spring:message code='txt.numNorma'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="cerca_num_normativa" placeholder="NNNNN/YYYY" name="cerca_num_normativa" type="text" />
+                                </div>                          
+                            </div>
+                            
+                             
+                            <div class="element t12">
+                                <div class="etiqueta">
+                                    <label for="cerca_tipus_normativa"><spring:message code='camp.tipus_normativa'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_tipus_normativa" name="cerca_tipus_normativa">
+                                        <option value=""><spring:message code='txt.tots'/></option>
+                                        <c:forEach items="${llistaTipusNormativa}" var="tipus">                                     
+                                            <option value='<c:out value="${tipus.id}" />'><c:out value="${tipus.nom}" /></option>
+                                        </c:forEach>
+                                    </select>                               
+                                </div>                          
+                            </div>                                       
+                            
+                            <div class="element t12">
+                                <div class="etiqueta">
+                                    <label for="cerca_butlleti"><spring:message code='camp.butlleti'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_butlleti" name="cerca_butlleti">
+                                        <option value=""><spring:message code='txt.tots'/></option>
+                                        <c:forEach items="${llistaButlletins}" var="butlleti">                                      
+                                            <option value='<c:out value="${butlleti.id}" />'><c:out value="${butlleti.nom}" /></option>
+                                        </c:forEach>
+                                    </select>                               
+                                </div>                          
+                            </div>      
+                        
+                        </div>
                     
                     <div class="botonera">
                         <div class="boton btnGenerico"><a id="btnLimpiarForm_normativa" class="btn borrar" href="javascript:;"><span><span><spring:message code='boto.borrar'/></span></span></a></div>
@@ -1802,7 +1843,7 @@
                 <div class="seleccionats">
                     <div class="seleccionat">
                         <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
-                        <div class="listaOrdenable"></div>
+                        <div id="listaNormativasDeProcedimientos" class="listaOrdenable"></div>
                     </div>
                 </div>                                  
             </div>

@@ -96,6 +96,7 @@ $(document).ready(function() {
 	DATOS_TRADUCIDOS_NORMATIVA = ["titulo"];
 	
 	// Listener para guardado de módulo vía AJAX.
+	/*
 	jQuery(".gestionaBOIB").click(function() {
 				
 		// resultats
@@ -108,7 +109,7 @@ $(document).ready(function() {
 
 		});
 		
-	});
+	});*/
 	
 	jQuery("#btnVolverTB").click(function() {
 		
@@ -124,7 +125,7 @@ $(document).ready(function() {
 	
 	
 	
-	
+	/*
 	jQuery( "#item_butlleti_id" ).change(function() {
 		var str = jQuery( "#item_butlleti_id option:selected" ).text();
 	    if (str.trim() == "BOIB") {
@@ -132,7 +133,7 @@ $(document).ready(function() {
 	    } else {
 	    	jQuery(".gestionaBOIB").hide();
 	    }
-	});
+	});*/
 
 });
 
@@ -167,8 +168,11 @@ function CLlistat() {
 		$("#cerca_data").datepicker({ dateFormat: 'dd/mm/yy' });
 		$("#cerca_data_butlleti").datepicker({ dateFormat: 'dd/mm/yy' });				
 		$("#cerca_data_aprovacio").datepicker({ dateFormat: 'dd/mm/yy' });				
-		$("#fechaTB").datepicker({ dateFormat: 'dd/mm/yy' });
-
+		jQuery("#fechaTB").datepicker({ dateFormat: 'dd/mm/yy' });
+		jQuery("#fechaTB").change(function(){
+			jQuery("#fechaTB").val( jQuery(this).val() );
+		});
+		
 		Llistat.carregar({});
 
 		if (typeof FormularioBusquedaTB === "undefined")		
@@ -374,6 +378,7 @@ function CLlistat() {
 			dataVars_cercador += "&idUA=" + $("#cerca_ua_id").val();
 			dataVars_cercador += "&numNormativa=" + $("#cerca_num_normativa").val();
 			dataVars_cercador += "&dataAprovacio=" + $("#cerca_data_aprovacio").val();
+			dataVars_cercador += "&desactivarUA=true";
 			
 			
 		} else {
@@ -471,8 +476,13 @@ function CLlistat() {
 					}
 	
 				},
-				success: function(data) {				
-					Llistat.finCargaListado(opcions,data);					
+				success: function(data) {	
+					if (data.error == undefined || data.error == '') {
+						Llistat.finCargaListado(opcions,data);	
+					} else {
+						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: "Error", text: "<p>" + data.error + "</p>"});
+						Llistat.finCargaListado(opcions,data);	
+					}					
 				}
 			});
 		}
@@ -570,6 +580,56 @@ function CLlistat() {
 			});
 		});
 
+
+	};
+	
+	//Métodos para traspaso BOIB
+	this.carregarTBaNormativa = function(boibID) {
+		
+		//Cargamos los datos de un edicto del boib en una ficha vacía de normativa nueva
+		escriptori_contingut_elm.fadeOut(300, function() {
+
+			codi_carregant = "<div id=\"carregantDetall\"><p class=\"executant\">" + txtCarregantDetall + "</p></div>";
+			escriptori_elm.append(codi_carregant).slideDown(300, function() {
+
+				dataVars = "accio=carregar" + "&id=" + boibID;
+
+				// ajax
+				$.ajax({
+					type: "POST",
+					url: pagDetallBoib,
+					data: dataVars,
+					dataType: "json",
+					error: function() {
+						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+					},
+					success: function(data) {
+						
+						if (typeof data.error != 'undefined') {
+							
+							$("#carregantDetall").fadeOut(300, function() {
+								$(this).remove();
+								escriptori_contingut_elm.fadeIn(300);
+							});
+							
+							Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.error + "</p>"});
+							
+						} else {
+							
+							Detall.nou(); 
+							Detall.pintarTB(data);
+							
+						}
+					}
+					
+				});
+				
+			});
+			
+		});
+
+		//this.actualizaEventos();
+		
 	};
 
 	this.carregarTB = function(opcions) {
@@ -620,9 +680,15 @@ function CLlistat() {
 			},
 			success: function(data) {
 				if (data.errorMessage && data.errorMessage != '') {
-					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + data.errorMessage + "</p>"});
-					Error.llansar();
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: "error", text: "<p>" + data.errorMessage + "</p>"});
+					jQuery("#cercadorTB").find(".dades").fadeOut();
+					jQuery("#numeroboletinTB").prop( "disabled", false );
+					jQuery("#numeroregistroTB").prop( "disabled", false );
+					jQuery("#fechaTB").prop( "disabled", false );
 				} else {
+					jQuery("#numeroboletinTB").prop( "disabled", false );
+					jQuery("#numeroregistroTB").prop( "disabled", false );
+					jQuery("#fechaTB").prop( "disabled", false );
 					Llistat.finCargaListadoTB(opcions,data);
 				}
 			}
@@ -786,8 +852,8 @@ function CLlistat() {
 		
 		// Obtenemos el id del item a partir del id del enlace.
 		itemID = jQuery(link).attr("id").split("_")[1];
-		Detall.carregarTB(itemID);
-
+		//Detall.carregarTB(itemID);
+		this.carregarTBaNormativa(itemID);
 	};
 
 };
@@ -1088,11 +1154,12 @@ function CDetall() {
 		$("#item_numero").val(nn(dada_node.numero));
 		$("#item_butlleti_id").val(nn(dada_node.butlleti_id));
 		$("#item_butlleti").val(nn(dada_node.butlleti));
-		if (dada_node.butlleti == "BOIB") {
+		/* Mostraba el botón antiguo de Importar BOIB
+		 * if (dada_node.butlleti == "BOIB") {
 			$(".gestionaBOIB").show();
 		} else {
 			$(".gestionaBOIB").hide();
-		}
+		}*/
 		$("#item_registre").val(nn(dada_node.registre));
 		$("#item_llei").val(nn(dada_node.llei));
 

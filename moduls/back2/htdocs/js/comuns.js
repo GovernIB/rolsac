@@ -1210,15 +1210,18 @@ function nn(valor) {
 
 
 // Carrega la unitat obrint l'arbre d'UAs
-function carregarArbreUAExpand(url, idDiv, id_ua, id_ua_texte) {
-	
+function carregarArbreUAExpand(url, idDiv, id_ua, id_ua_texte, idUARaiz) {
+	var idRaiz = "";
+	if (typeof idUARaiz !== 'undefined') { 
+		idRaiz = "&idRaiz=S";
+	}
 	id_select = $("#" + id_ua).val();
 	
 	if ( id_select == "" || id_ua == undefined)	
 		id_select = 1;	
 	
 	if ($('#' + idDiv).length == 0 ) {
-		$('body').append('<div id="'+ idDiv + '" class="falsePopUp" style="left:'+(($(document).width() / 2) - 275)+'px;"><iframe id="iframeUA" src="' + url + '?idUA=0&idInput='+ id_ua_texte + '&idSelect='  + id_select + '&idHidden=' + id_ua +'" id="iframe" style="width:550px; height:450px;" /></div>');
+		$('body').append('<div id="'+ idDiv + '" class="falsePopUp" style="left:'+(($(document).width() / 2) - 275)+'px;"><iframe id="iframeUA" src="' + url + '?idUA=0&idInput='+ id_ua_texte + '&idSelect='  + id_select + '&idHidden=' + id_ua + idRaiz + '" id="iframe" style="width:550px; height:450px;" /></div>');
 		
 		// Marcar la UA actual y mostrarla en la ventana al abrir la lista
 		$('#iframeUA').load(function() {			
@@ -1266,6 +1269,7 @@ function carregarArbreTotesUAExpand(url, idDiv, id_ua, id_ua_texte) {
 }
 
 function carregarArbreUA(url, idDiv, id_ua, id_ua_texte, llocOnPintar) {
+	var idRaiz = "";
 	
 	// Aseguram que no estigui creat
 	if ($('#' + idDiv).length == 0 ) {
@@ -1325,15 +1329,18 @@ function itemAEditar() {
 	return 0;
 }
 
-
-function carregarModulArbreUA (url, idDiv, llocOnPintar ){
+function carregarModulArbreUA (url, idDiv, llocOnPintar, idUAraiz ){
+	var idRaiz = "";
+	if (typeof idUAraiz !== 'undefined') { 
+		idRaiz = "&idRaiz=S";
+	}
 	
 	// Aseguram que no estigui creat
 	if ($('#' + idDiv).length == 0 ) {
 		if (typeof llocOnPintar == 'undefined') {
-			$('body').append('<div id="'+ idDiv + '" class="falsePopUp" style="left:'+(($(document).width() / 2) - 275)+'px"><iframe src="' + url + '?idUA=0" style="width:550px; height:450px;" /></div>');
+			$('body').append('<div id="'+ idDiv + '" class="falsePopUp" style="left:'+(($(document).width() / 2) - 275)+'px"><iframe src="' + url + '?idUA=0' + idRaiz +'" style="width:550px; height:450px;" /></div>');
 		} else {
-			$(llocOnPintar).append('<div id="'+ idDiv + '"><iframe src="' + url + '?idUA=0"  /></div>');
+			$(llocOnPintar).append('<div id="'+ idDiv + '"><iframe src="' + url + '?idUA=0' + idRaiz +'"  /></div>');
 		}
 	}
 }
