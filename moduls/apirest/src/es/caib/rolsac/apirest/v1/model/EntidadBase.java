@@ -1,15 +1,18 @@
 package es.caib.rolsac.apirest.v1.model;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.commons.lang3.StringUtils;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import es.caib.rolsac.apirest.v1.utiles.Constantes;
+import es.caib.rolsac.apirest.v1.utiles.Utiles;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -23,12 +26,61 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "EntidadBase", description = "Entidad Base")
 public class EntidadBase {
 	
+    protected List<String> SETTERS_INVALIDS = new ArrayList<String>() {
+		private static final long serialVersionUID = 1L;
+
+	{
+        add("setSerializer");
+        add("setDeserializer");
+        add("setTypeDesc");
+    }};
+    
+	 
+    private static Log log = LogFactory.getLog(EntidadBase.class);
+    
+    
+
+	
+	
+
+	
+
+	
 	@ApiModelProperty(hidden = true)
 	@XmlTransient
-	private boolean hateoasEnabled;
+	protected boolean hateoasEnabled;
 	
-	public EntidadBase() {
+	
+	
+	public EntidadBase() {		
 		super();
+		addSetersInvalidos();
+	}
+		
+	/**
+	 * Permite generar una clase a partir de los resultados del EJB (tr)
+	 * @param tr Origen de datos, clase de la que copiar las propiedades (deben llamarse igual que en la clase actual)
+	 * @param urlBase
+	 * @param idioma
+	 * @param hateoasEnabled
+	 */
+	public <T> EntidadBase(T tr, String urlBase,String idioma,boolean hateoasEnabled) {
+		super();
+		this.fill( tr, urlBase, idioma, hateoasEnabled);
+	}
+	
+	/**
+	 *  Función que permite copiar los valores de las propiedades de tr en la clase actual
+	 *  asigna el hateoas,copia las propiedades y genera los links
+	 * @param tr
+	 * @param urlBase
+	 * @param idioma
+	 * @param hateoasEnabled
+	 */
+	public <T> void fill(T tr, String urlBase, String idioma, boolean hateoasEnabled) {
+		setHateoasEnabled(hateoasEnabled);
+		copiaPropiedadesDeEntity(tr, idioma);
+		generaLinks(urlBase);
 	}
 
 	/** Status a retornar. **/
@@ -125,6 +177,53 @@ public class EntidadBase {
 	 */
 	public void setHateoasEnabled(boolean hateoasEnabled) {
 		this.hateoasEnabled = hateoasEnabled;
+	}
+	
+	public void copiaPropiedadesDeEntity(Object entity,String lang) {
+		if (entity == null) {
+            return;
+        }
+		try {			
+			Method[] dtoMethods = this.getClass().getMethods();
+			Method method;
+			StringBuilder errores = new StringBuilder();
+
+			for (int i = 0; i < dtoMethods.length; i++) {
+				method = dtoMethods[i];
+				if (method.getName().startsWith("set") && !SETTERS_INVALIDS.contains(method.getName())) {
+					try {
+						Utiles.copyProperty(entity, this, method, lang);
+					}catch (Exception e) {
+						errores.append("Error al copiar la propiedad:");
+						errores.append(method.getName());
+						errores.append(";");						
+					}
+					
+				}
+			}
+			if (errores.length()>0) {
+				throw new Exception(errores.toString());
+			}
+		} catch (Exception e) {
+			log.error("Error al copiar las propiedades en " + this.getClass() + " a partir de " + entity.getClass() + ".-->" +  e.getMessage(), e);
+		}
+	}
+	
+    /**
+     * Función que permite añadir nuevos setters a la lista de setters a omitir al volcar las propiedades de
+     * la clase referenciada en el constructor como origen de datos  
+     */
+	protected void addSetersInvalidos() {
+	}
+	
+	/**
+	 * Función que permite especificar los links a las diferentes entidades.
+	 * debe sobreescribirse para incluirlos.
+	 * @param urlBase
+	 */
+	protected void generaLinks(String urlBase) {
+		
+		
 	}
 	
 	

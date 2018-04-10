@@ -2,24 +2,16 @@ package es.caib.rolsac.apirest.v1.model;
 
 import java.io.IOException;
 
-import javax.validation.constraints.Size;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import org.apache.commons.lang3.StringUtils;
-import org.ibit.rol.sac.model.TraduccionTramite;
-import org.ibit.rol.sac.model.TraduccionTratamiento;
-import org.ibit.rol.sac.model.TraduccionUA;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import es.caib.rolsac.apirest.v1.utiles.Constantes;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-import es.caib.rolsac.apirest.v1.utiles.Constantes;
 
 /**
  * Idioma.
@@ -32,6 +24,7 @@ import es.caib.rolsac.apirest.v1.utiles.Constantes;
 @ApiModel(value = "Unidad Administrativa", description = "Definición de la clase Unidad Administrativa")
 public class UnitatAdministrativa extends EntidadBase {
 	 
+	
 	/** abreviatura. **/
 	@ApiModelProperty(value = "abreviatura", dataType = "java.lang.String", required = false)
     private java.lang.String abreviatura;
@@ -168,16 +161,33 @@ public class UnitatAdministrativa extends EntidadBase {
 	
 	
 	public UnitatAdministrativa (org.ibit.rol.sac.model.UnidadAdministrativa ua, String urlBase,String idioma,boolean hateoasEnabled ) {
-		this.fill( ua, urlBase, idioma, hateoasEnabled);
+		super(ua, urlBase, idioma, hateoasEnabled);
+		
+		//this.fill( ua, urlBase, idioma, hateoasEnabled);
 	}
+	
 	
 	public UnitatAdministrativa () {
-		super();
+		super();		
 	}
 	
-	public void fill(org.ibit.rol.sac.model.UnidadAdministrativa ua, String urlBase,String idioma, boolean hateoasEnabled ) {
-		this.setHateoasEnabled(hateoasEnabled);		
-		if(!StringUtils.isEmpty(idioma)) {			
+	
+	/**
+	 * Necesario solo si queremos añadir propiedades que no serán copiadas automaticamente
+	 * y deben copiarse manualmente.
+	 */
+	@Override
+	protected void addSetersInvalidos() {
+		if(!SETTERS_INVALIDS.contains("setTratamiento")) {
+			SETTERS_INVALIDS.add("setTratamiento");
+		}
+	}
+	
+	@Override
+	public <T> void fill(T ua, String urlBase,String idioma, boolean hateoasEnabled ) {
+		super.fill(ua, urlBase, idioma, hateoasEnabled);	
+		
+/*		if(!StringUtils.isEmpty(idioma)) {			
 			TraduccionUA traUA = (TraduccionUA)ua.getTraduccion(idioma);
 			if(traUA != null) {
 				this.presentacion = traUA.getPresentacion();
@@ -245,13 +255,34 @@ public class UnitatAdministrativa extends EntidadBase {
 		this.idioma = ua.getIdioma();
 		this.codigo = ua.getId();
 				
+		if(ua.getEspacioTerrit()!=null) {
+			this.espacioTerrit = ua.getEspacioTerrit().getId();		
+		}*/
+		
+		//super.copiaPropiedadesDeEntity(ua, idioma);
+		
+		//generaLinks(urlBase);
+		
+		
+		
+		//copiamos los datos que no tienen la misma estructura:		
+		if(((org.ibit.rol.sac.model.UnidadAdministrativa)ua).getTratamiento()!=null ) {					
+			this.tratamiento = new Tratamiento(((org.ibit.rol.sac.model.UnidadAdministrativa)ua).getTratamiento(),urlBase,idioma,hateoasEnabled);				
+		}		
+		
+		// si el padre es null lo convertimos a -1
+		if(this.padre==null) {
+			this.padre=new Long(-1);
+		}		
+				
+	}	
+	
+	@Override
+	protected void generaLinks(String urlBase) {		
 		
 		this.addLink(this.idioma, Constantes.ENTIDAD_IDIOMA, Constantes.URL_IDIOMA, urlBase);
-		this.addLink(ua.getId(), Constantes.ENTIDAD_UA, Constantes.URL_UA, urlBase,"codigo");
-		if(ua.getEspacioTerrit()!=null) {
-			this.espacioTerrit = ua.getEspacioTerrit().getId();
-			this.addLink(this.espacioTerrit, Constantes.ENTIDAD_ESPACIO_TERRITORIAL, Constantes.URL_ESPACIO_TERRITORIAL, urlBase,"espacioTerrit");
-		}
+		this.addLink(this.getCodigo(), Constantes.ENTIDAD_UA, Constantes.URL_UA, urlBase,"codigo");
+		this.addLink(this.espacioTerrit, Constantes.ENTIDAD_ESPACIO_TERRITORIAL, Constantes.URL_ESPACIO_TERRITORIAL, urlBase,"espacioTerrit");
 		
 		this.addLink(this.fotog, Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"fotog" );
 		this.addLink(this.fotop, Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"fotop" );
@@ -260,12 +291,12 @@ public class UnitatAdministrativa extends EntidadBase {
 		this.addLink(this.logot, Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"logot" );		
 		this.addLink(this.logov, Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"logov" );
 		
-		this.addLink(ua.getNumfoto1(), Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"numfoto1" );
-		this.addLink(ua.getNumfoto2(), Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"numfoto2" );
-		this.addLink(ua.getNumfoto3(), Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"numfoto3" );
-		this.addLink(ua.getNumfoto4(), Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"numfoto4" );
+		this.addLink(this.numfoto1, Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"numfoto1" );
+		this.addLink(this.numfoto2, Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"numfoto2" );
+		this.addLink(this.numfoto3, Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"numfoto3" );
+		this.addLink(this.numfoto4, Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"numfoto4" );
 
-	}	
+	}
 	
 	public static UnitatAdministrativa valueOf(final String json) {
 		final ObjectMapper objectMapper = new ObjectMapper();
@@ -466,6 +497,10 @@ public class UnitatAdministrativa extends EntidadBase {
 	 * @param codigo the id to set
 	 */
 	public void setCodigo(java.lang.Long codigo) {
+		this.codigo = codigo;
+	}
+	//Creamos este metodo para que se recupere el valor automaticamente por parte de copiproperty
+	public void setId(java.lang.Long codigo) {
 		this.codigo = codigo;
 	}
 

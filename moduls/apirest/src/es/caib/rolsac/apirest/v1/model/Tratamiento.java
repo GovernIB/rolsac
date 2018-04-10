@@ -2,8 +2,6 @@ package es.caib.rolsac.apirest.v1.model;
 
 import java.io.IOException;
 
-import javax.validation.constraints.Size;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -24,6 +22,14 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "Tratamiento", description = "Definición de la clase Tratamiento")
 public class Tratamiento extends EntidadBase {
 	 
+	public Tratamiento(org.ibit.rol.sac.model.Tratamiento tr, String urlBase,String idioma,boolean hateoasEnabled) {
+		super(tr, urlBase, idioma, hateoasEnabled);		
+	}
+	
+	public Tratamiento() {
+		super();
+	}
+
 	/** codigo. **/
 	@ApiModelProperty(value = "codigo", dataType = "java.lang.Long")
 	private Long codigo;
@@ -80,6 +86,8 @@ public class Tratamiento extends EntidadBase {
 	}
 
 
+	
+	
 	/**
 	 * @return the codigo
 	 */
@@ -88,6 +96,13 @@ public class Tratamiento extends EntidadBase {
 	}
 
 
+	/**
+	 * @param codigo the codigo to set
+	 */
+	public void setId(Long codigo) {
+		this.codigo = codigo;
+	}
+	
 	/**
 	 * @param codigo the codigo to set
 	 */
