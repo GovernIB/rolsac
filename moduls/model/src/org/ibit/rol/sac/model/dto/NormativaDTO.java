@@ -24,7 +24,7 @@ public class NormativaDTO implements ValueObject, Comparable {
     private String registro;
     private String numNormativa;
     private String color;
-    private Boolean datosValidos;
+    private boolean datosValidos;
 	
     public NormativaDTO() {
     	super();
@@ -309,14 +309,14 @@ public class NormativaDTO implements ValueObject, Comparable {
 	/**
 	 * @return the datosValidos
 	 */
-	public Boolean getDatosValidos() {
+	public boolean getDatosValidos() {
 		return datosValidos;
 	}
 
 	/**
 	 * @param datosValidos the datosValidos to set
 	 */
-	public void setDatosValidos(Boolean datosValidos) {
+	public void setDatosValidos(boolean datosValidos) {
 		this.datosValidos = datosValidos;
 	}
 	
