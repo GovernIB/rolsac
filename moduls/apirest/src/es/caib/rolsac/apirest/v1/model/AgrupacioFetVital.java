@@ -87,6 +87,7 @@ public class AgrupacioFetVital extends EntidadBase {
 		generaLinks(urlBase);
 	}
 	
+	@Override
 	public void generaLinks(String urlBase) {
 		this.addLink(this.foto, Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"foto" );
 		this.addLink(this.icono, Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"icono" );
@@ -311,6 +312,18 @@ public class AgrupacioFetVital extends EntidadBase {
 	 */
 	public void setPublico(Long publico) {
 		this.publico = publico;
+	}
+
+	@Override
+	protected void addSetersInvalidos() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setId(Long codigo) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

@@ -499,7 +499,8 @@ public class UnitatAdministrativa extends EntidadBase {
 	public void setCodigo(java.lang.Long codigo) {
 		this.codigo = codigo;
 	}
-	//Creamos este metodo para que se recupere el valor automaticamente por parte de copiproperty
+	
+	@Override	
 	public void setId(java.lang.Long codigo) {
 		this.codigo = codigo;
 	}

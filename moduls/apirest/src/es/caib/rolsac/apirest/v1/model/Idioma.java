@@ -2,8 +2,6 @@ package es.caib.rolsac.apirest.v1.model;
 
 import java.io.IOException;
 
-import javax.validation.constraints.Size;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -144,6 +142,24 @@ public class Idioma extends EntidadBase {
 			// TODO PENDIENTE
 			throw new RuntimeException(e);
 		}
+	}
+
+	@Override
+	protected void addSetersInvalidos() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void generaLinks(String urlBase) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setId(Long codigo) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

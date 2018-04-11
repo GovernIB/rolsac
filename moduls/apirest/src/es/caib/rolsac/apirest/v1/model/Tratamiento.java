@@ -96,9 +96,7 @@ public class Tratamiento extends EntidadBase {
 	}
 
 
-	/**
-	 * @param codigo the codigo to set
-	 */
+	@Override
 	public void setId(Long codigo) {
 		this.codigo = codigo;
 	}
@@ -204,6 +202,18 @@ public class Tratamiento extends EntidadBase {
 	 */
 	public void setTratamientoM(String tratamientoM) {
 		this.tratamientoM = tratamientoM;
+	}
+
+	@Override
+	protected void addSetersInvalidos() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void generaLinks(String urlBase) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

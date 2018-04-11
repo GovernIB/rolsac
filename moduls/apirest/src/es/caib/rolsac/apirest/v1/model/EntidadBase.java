@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @XmlRootElement
 @ApiModel(value = "EntidadBase", description = "Entidad Base")
-public class EntidadBase {
+public abstract class EntidadBase {
 	
     protected List<String> SETTERS_INVALIDS = new ArrayList<String>() {
 		private static final long serialVersionUID = 1L;
@@ -38,12 +38,6 @@ public class EntidadBase {
 	 
     private static Log log = LogFactory.getLog(EntidadBase.class);
     
-    
-
-	
-	
-
-	
 
 	
 	@ApiModelProperty(hidden = true)
@@ -213,21 +207,21 @@ public class EntidadBase {
      * Función que permite añadir nuevos setters a la lista de setters a omitir al volcar las propiedades de
      * la clase referenciada en el constructor como origen de datos  
      */
-	protected void addSetersInvalidos() {
-	}
+	protected abstract void addSetersInvalidos(); //{	}
 	
 	/**
 	 * Función que permite especificar los links a las diferentes entidades.
 	 * debe sobreescribirse para incluirlos.
 	 * @param urlBase
 	 */
-	protected void generaLinks(String urlBase) {
-		
-		
-	}
+	protected abstract void generaLinks(String urlBase); //{}
 	
-	
-	
+	/**
+	 * Función necesaria para convertir la propiedad Id (proviene de los EJB) a la 
+	 * propiedad código que se envia por ejb 
+	 * @param codigo (id)s
+	 */
+	public abstract void setId(Long codigo);
 	
 	
 }
