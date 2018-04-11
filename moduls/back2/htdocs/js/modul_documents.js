@@ -581,7 +581,7 @@ function CListaSimpleDocumentos() {
 		
 		if ( url.indexOf(urlGuardarDocumentosProcedimiento) != -1 
 				|| url.indexOf(urlGuardarDocumentosFicha) != -1 
-				|| url.indexof(urlGuardarDocumentosNormativa) != -1) {
+				|| url.indexOf(urlGuardarDocumentosNormativa) != -1) {
 			
 			if (typeof ModulDocuments != 'undefined') {
 				ModulDocuments.deshabilitarBotonGuardar();

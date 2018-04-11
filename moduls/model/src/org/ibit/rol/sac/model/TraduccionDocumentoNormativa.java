@@ -7,8 +7,6 @@ package org.ibit.rol.sac.model;
  */
 public class TraduccionDocumentoNormativa implements Traduccion {
 
-    /** Serial Version UID. **/
-	private static final long serialVersionUID = 1L;
 	/** Archivo. **/
 	private Archivo archivo;
     /** Enlace. **/
@@ -17,6 +15,7 @@ public class TraduccionDocumentoNormativa implements Traduccion {
     private String titulo;
     /** Descripción. **/
     private String descripcion;
+   
 	/**
 	 * @return the archivo
 	 */
