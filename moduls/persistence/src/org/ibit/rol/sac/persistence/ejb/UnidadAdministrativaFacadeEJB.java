@@ -47,6 +47,7 @@ import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegateI;
 import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
+import org.ibit.rol.sac.persistence.util.ApiRestUtils;
 import org.ibit.rol.sac.persistence.util.Cadenas;
 import org.ibit.rol.sac.persistence.util.IndexacionUtil;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
@@ -2907,9 +2908,10 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		Session session = getSession();	
 		Integer pageSize = filtro.getPageSize();
 		Integer pageNumber = filtro.getPage();
+		Long id = filtro.getId();
 		String lang = filtro.getLang();
 		Map <String,String> parametros = new HashMap<String,String>();
-		
+				
 		String codigoUAPadre = filtro.getValor(FiltroGenerico.FILTRO_UA_CODIGO_UA_PADRE);
 		String validacion = filtro.getValor(FiltroGenerico.FILTRO_UA_VALIDACION);
 		String codigoNormativa = filtro.getValor(FiltroGenerico.FILTRO_UA_CODIGO_NORMATIVA);
@@ -2933,8 +2935,12 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				}else {
 					where.append(" AND ua.padre = :padre");
 					parametros.put("padre", codigoUAPadre);
-				}
-									
+				}									
+			}
+			
+			if(id!=null && id>0) {
+				where.append(" AND ua.id = :id");
+				parametros.put("id", id.toString());					
 			}
 			
 			if(!StringUtils.isEmpty(validacion)) {
@@ -2952,35 +2958,10 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			if(!StringUtils.isEmpty(codigoSeccion)) {
 				where.append(" AND ua.id in  (SELECT fua.unidadAdministrativa.id FROM  FichaUA AS fua WHERE fua.seccion.id = :seccion )  ");
 				parametros.put("seccion", codigoSeccion);
-			}
-				
-			//Creamos la consulta de listado
-			consulta.append(select);			
-			consulta.append(from);
-			consulta.append(where);
-			consulta.append(order);
-			Query query = session.createQuery(consulta.toString());
+			}	
 			
-			//Creamos la consulta para retornar el numero de elementos
-			consultaCount.append(selectCount);
-			consultaCount.append(from);
-			consultaCount.append(where);
-			Query queryCount = session.createQuery(consultaCount.toString());
+			return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(), selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
 			
-			//Añadimos todos los parámetros.
-			for (Map.Entry<String, String> param : parametros.entrySet()){
-			    query.setParameter(param.getKey(), param.getValue());
-			    queryCount.setParameter(param.getKey(), param.getValue());
-			}				
-			 query.setFirstResult((pageNumber - 1) * pageSize);
-			 query.setMaxResults(pageSize);				
-		
-			 
-			 ResultadoBusqueda res = new ResultadoBusqueda();
-			 res.setListaResultados(query.list());
-			 res.setTotalResultados((Integer) queryCount.uniqueResult());
-			 
-			return res;
 	
 		} catch (HibernateException he) {
 			throw new EJBException(he);

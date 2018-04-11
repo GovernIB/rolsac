@@ -36,12 +36,12 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @Path( "/"+ Constantes.ENTIDAD_UA ) 
-@Api( value = "/"+ Constantes.ENTIDAD_UA,   tags = "unitats_administratives"  )
+@Api( value = "/"+ Constantes.ENTIDAD_UA,   tags = Constantes.ENTIDAD_UA  )
 public class UAService {
 		
 		
 	/**
-	 * Listado de idiomas.
+	 * Listado de unidades administrativas.
 	 * @return
 	 * @throws DelegateException 
 	 */
@@ -50,8 +50,8 @@ public class UAService {
 	@Consumes({MediaType.APPLICATION_JSON , MediaType.APPLICATION_FORM_URLENCODED })
 	@Path("/")
 	@ApiOperation( 
-	    value = "unitats_administratives",
-	    notes = "Lista todos las Unidades administrativas disponibles"
+	    value = "Lista las Unidades Administrativas",
+	    notes = "Lista las Unidades administrativas disponibles en funcion de los filtros"
 	)
 	@ApiResponses(value = { 
 			 @ApiResponse(code = 200, message =  Constantes.MSJ_200_GENERICO, response = RespuestaUA.class),
@@ -67,13 +67,12 @@ public class UAService {
 	  })*/
 	
 	public RespuestaUA llistarUA(
-		@ApiParam( value = "Codigo de idioma", required = false ) @DefaultValue(Constantes.IDIOMA_DEFECTO) @FormParam("codigoIdioma") final String codigoIdioma,
-		@ApiParam( value = "Filtro de Unidad Administrativa: " + FiltroUA.SAMPLE) @FormParam("filtro") FiltroUA filtro,
+		@ApiParam( value = "Codigo de idioma", required = false ) @DefaultValue(Constantes.IDIOMA_DEFECTO) @FormParam("codigoIdioma") final String codigoIdioma,		
 		@ApiParam( value = "Filtro de Paginación: " + FiltroPaginacion.SAMPLE) @FormParam("filtroPaginacion") FiltroPaginacion filtroPaginacion,
+		@ApiParam( value = "Filtro de Unidad Administrativa: " + FiltroUA.SAMPLE) @FormParam("filtro") FiltroUA filtro,
 		@ApiParam( value = "Filtro de Orden: " + Orden.SAMPLE_ORDEN_UA) @FormParam("orden") Orden orden						
 			) throws DelegateException,ExcepcionAplicacion,ValidationException  {
-		
-				
+						
 		if(filtro==null) {
 			filtro = new FiltroUA(); 
 		}
@@ -117,7 +116,7 @@ public class UAService {
 	
 	
 	/**
-	 * Para obtener el idioma.
+	 * Para obtener una unidad administrativa.
 	 * @param idioma 
 	 * @param id
 	 * @return
@@ -125,11 +124,11 @@ public class UAService {
 	 */
 	@Produces( { MediaType.APPLICATION_JSON } )
 	@POST
-	@Consumes("multipart/form-data")
+	@Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
 	@Path("/{codigoua}")
 	@ApiOperation( 
-	    value = "Unidad Administrativa",
-	    notes = "Obtiene La Unidad Administrativa especificada"
+	    value = "Obtiene una Unidad Administrativa",
+	    notes = "Obtiene La Unidad Administrativa con el código indicado"
 	)
 	@ApiResponses(value = { 
 			 @ApiResponse(code = 200, message =  Constantes.MSJ_200_GENERICO, response = RespuestaUA.class),
@@ -140,16 +139,26 @@ public class UAService {
 			@ApiParam( value = "Codigo Unidad Administrativa", required = true ) @PathParam( "codigoua") final  String codigoua,
 		    @ApiParam( value = "codigo de idioma", required = false ) @DefaultValue(Constantes.IDIOMA_DEFECTO) @FormParam("codigoIdioma") final String codigoIdioma
 			) throws Exception,ValidationException {
-		final List<UnitatAdministrativa> ruas = new ArrayList<UnitatAdministrativa>();
-		final org.ibit.rol.sac.model.UnidadAdministrativa ua = DelegateUtil.getUADelegate().consultarUnidadAdministrativa(new Long(Long.parseLong(codigoua)));
-		if 	(ua!=null) {
-			UnitatAdministrativa rua = new UnitatAdministrativa(ua,null,codigoIdioma,true);
-			ruas.add(rua);
-		}		
-					
-		RespuestaUA r = new RespuestaUA(Response.Status.OK.getStatusCode()+"", Constantes.mensaje200(ruas.size()) , new Integer(ruas.size()), ruas);
-		return r;
+
+		FiltroGenerico fg = new FiltroGenerico();
+		
+		if(codigoIdioma!=null) {
+			fg.setLang(codigoIdioma);	
+		}
+		fg.setId(new Long(codigoua));		
+		
+		es.caib.rolsac.utils.ResultadoBusqueda resultadoBusqueda = DelegateUtil.getUADelegate().consultaUnidadesAdministrativas(fg);
+		
+		List <UnitatAdministrativa> lista = new ArrayList <UnitatAdministrativa>();
 			
+		for (UnidadAdministrativa nodo : Utiles.castList(UnidadAdministrativa.class, resultadoBusqueda.getListaResultados())) {
+			UnitatAdministrativa elemento = new UnitatAdministrativa(nodo,null,fg.getLang(),true);
+			lista.add(elemento);
+		}
+		
+		RespuestaUA r = new RespuestaUA(Response.Status.OK.getStatusCode()+"", Constantes.mensaje200(lista.size()) , new Integer(resultadoBusqueda.getTotalResultados()), lista);
+		return r;	
+		
 	}
 
 }

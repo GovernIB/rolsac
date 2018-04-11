@@ -73,7 +73,7 @@ public class AgrupacioFetVital extends EntidadBase {
 	
 
 	public AgrupacioFetVital (org.ibit.rol.sac.model.AgrupacionHechoVital ahv, String urlBase,String idioma,boolean hateoasEnabled ) {
-		this.fill( ahv, urlBase, idioma, hateoasEnabled);
+		super( ahv, urlBase, idioma, hateoasEnabled);
 	}
 	
 	public AgrupacioFetVital() {
@@ -81,17 +81,12 @@ public class AgrupacioFetVital extends EntidadBase {
 	}
 	
 	
-	public void fill(org.ibit.rol.sac.model.AgrupacionHechoVital ahv, String urlBase,String idioma, boolean hateoasEnabled ) {
-		this.setHateoasEnabled(hateoasEnabled);			
-		super.copiaPropiedadesDeEntity(ahv, idioma);	
-		generaLinks(urlBase);
-	}
-	
 	@Override
 	public void generaLinks(String urlBase) {
 		this.addLink(this.foto, Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"foto" );
 		this.addLink(this.icono, Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"icono" );
 		this.addLink(this.iconoGrande, Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"iconoGrande" );
+		this.addLink(this.publico, Constantes.ENTIDAD_PUBLICO, Constantes.URL_PUBLICO, urlBase,"publico" );
 		
 	}
 
@@ -322,8 +317,7 @@ public class AgrupacioFetVital extends EntidadBase {
 
 	@Override
 	public void setId(Long codigo) {
-		// TODO Auto-generated method stub
-		
+		this.codigo = codigo;		
 	}
 	
 }

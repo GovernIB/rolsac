@@ -23,7 +23,7 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "FiltroPaginacion", description = "Filtro que permite paginar los resultados")
 public class FiltroPaginacion {
 	
-	public static final String SAMPLE = Constantes.SALTO_LINEA + "{\"page\":\"0\",\"size\":\"0\"}";
+	public static final String SAMPLE = Constantes.SALTO_LINEA + "{\"page\":\"1\",\"size\":\"30\"}";
 	 
 	/** Page. **/
 	@ApiModelProperty(value = "Page", dataType = "java.lang.Integer", required = false)

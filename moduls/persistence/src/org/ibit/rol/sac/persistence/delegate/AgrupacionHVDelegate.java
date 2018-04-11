@@ -10,6 +10,7 @@ import javax.naming.NamingException;
 import org.ibit.rol.sac.model.AgrupacionHechoVital;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.HechoVitalAgrupacionHV;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.intf.AgrupacionHVFacade;
 import org.ibit.rol.sac.persistence.intf.AgrupacionHVFacadeHome;
 import org.ibit.rol.sac.persistence.util.AgrupacionHVFacadeUtil;
@@ -88,6 +89,14 @@ public class AgrupacionHVDelegate implements StatelessDelegate
              throw new DelegateException(e);
          }
 	}
+
+    public ResultadoBusqueda consultaAgrupacionsFetsVitals(FiltroGenerico filtro) throws DelegateException {
+    	 try {
+             return getFacade().consultaAgrupacionsFetsVitals(filtro);
+         } catch (RemoteException e) {
+             throw new DelegateException(e);
+         }
+    }
     
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

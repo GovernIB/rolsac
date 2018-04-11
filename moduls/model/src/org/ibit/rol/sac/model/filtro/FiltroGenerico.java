@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -14,12 +15,13 @@ import org.apache.commons.lang.StringUtils;
 
 public class FiltroGenerico implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private Map<String,String> filtros;
 	private Map<String,String> columnasOrdenar;
 	
-	private String LANG_DEFECTO="ca";
-	private int SIZE_DEFECTO=30;
-	private int PAGE_DEFECTO=1;
+	public static final String LANG_DEFECTO=getPropiedadlangDefecto("ca");	
+	public static final int SIZE_DEFECTO = getPropiedadIntegerPositivo("es.caib.rolsac.api.rest.pageSize", 30) ;
+	public static final int PAGE_DEFECTO = getPropiedadIntegerPositivo("es.caib.rolsac.api.rest.pageNumber", 1);
 	
 	private final String ASCENDENTE = "ASC";
 	private final String DESCENDENTE = "DESC";
@@ -28,11 +30,14 @@ public class FiltroGenerico implements Serializable {
 	public final static String FILTRO_GENERICO_SIZE="size";
 	public final static String FILTRO_GENERICO_PAGE="page";
 	
+	public final static String FILTRO_GENERICO_ID="id";
+	
 	
 	public final static String FILTRO_UA_CODIGO_UA_PADRE = "codigoUAPadre";
 	public final static String FILTRO_UA_VALIDACION = "validacion";
 	public final static String FILTRO_UA_CODIGO_SECCION = "codigoSeccion";
 	public final static String FILTRO_UA_CODIGO_NORMATIVA = "codigoNormativa";
+	public static final String FILTRO_AFV_PUBLICO = "publico";
 	
 
 	
@@ -73,12 +78,12 @@ public class FiltroGenerico implements Serializable {
 	
 	public int getPage() {
 		String page = this.filtros.get(FILTRO_GENERICO_PAGE);
-		int res = 1;//valor por defecto
-		if(page!=null && !page.isEmpty()) {
+		int res = PAGE_DEFECTO;//valor por defecto
+		if(!StringUtils.isEmpty(page)) {
 			try {
 				res = Integer.parseInt(page);
 			}catch(Exception e) {
-				res=1;
+				res=PAGE_DEFECTO;
 			}
 		}		
 		return res;
@@ -94,12 +99,12 @@ public class FiltroGenerico implements Serializable {
 	
 	public int getPageSize() {
 		String size = this.filtros.get(FILTRO_GENERICO_SIZE);
-		int res = 30;
-		if(size!=null && !size.isEmpty()) {
+		int res = SIZE_DEFECTO;
+		if(!StringUtils.isEmpty(size)) {
 			try {
 				res = Integer.parseInt(size);
 			}catch(Exception e) {
-				res=30;
+				res=SIZE_DEFECTO;
 			}
 		}		
 		return res;
@@ -108,6 +113,30 @@ public class FiltroGenerico implements Serializable {
 	public void setPageSize(Integer size) {
 		if(size!=null && size.intValue()>0) {
 			this.filtros.put(FILTRO_GENERICO_SIZE, size+"");			
+		}
+	}
+	
+	
+	/**
+	 * Retorna el filtro id   
+	 * @return 0 si no hay id y >0 si hay un filtro id
+	 */
+	public Long getId() {
+		String id = this.filtros.get(FILTRO_GENERICO_ID);
+		Long res = new Long(0);
+		if(!StringUtils.isEmpty(id)) {
+			try {
+				res = Long.parseLong(id);
+			}catch(Exception e) {
+				res=new Long(0);
+			}
+		}		
+		return res;
+	}	
+	
+	public void setId(Long id) {
+		if(id!=null && id.longValue()>0) {
+			this.filtros.put(FILTRO_GENERICO_ID, id+"");			
 		}
 	}
 	
@@ -172,4 +201,33 @@ public class FiltroGenerico implements Serializable {
 		}	
 		return res.toString();
 	}
+	
+	private static Integer getPropiedadIntegerPositivo(String propiedad, Integer valorPorDefecto) {
+		String val = System.getProperty(propiedad);	
+		if (StringUtils.isEmpty(val)) {
+			return valorPorDefecto;
+		}else {
+			Integer i = valorPorDefecto;
+			try {
+				 i = Integer.parseInt(val);
+				 if(i<0) {
+					 i=valorPorDefecto;
+				 }
+			} catch (Exception e) {
+				i = valorPorDefecto;
+			}
+			
+			return i;			
+		}
+	}
+	
+	private static String getPropiedadlangDefecto(String valorPorDefecto) {
+		String val = System.getProperty("es.caib.rolsac.api.v2.idiomaPerDefecte");
+		if(StringUtils.isEmpty(val) || val.trim().length()!=2) {
+			return valorPorDefecto;
+		}
+		return val.trim();
+		
+	}
+	
 }

@@ -7,23 +7,27 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
-import io.swagger.models.Scheme;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import es.caib.rolsac.apirest.v1.utiles.Constantes;
 import io.swagger.jaxrs.config.SwaggerContextService;
 import io.swagger.models.ExternalDocs;
 import io.swagger.models.Info;
+import io.swagger.models.Scheme;
 import io.swagger.models.Swagger;
 import io.swagger.models.Tag;
 
 /**
  * Expecifica propiedades del api para swagger.
- * @author slromero
+ * @author Indra
  *
  */
 public class BootstrapV1 extends HttpServlet {
   /** Serial version UID.	 */
 	private static final long serialVersionUID = 1L;
+	private static Log log = LogFactory.getLog(BootstrapV1.class);
 
 @Override
   public void init(ServletConfig config) throws ServletException {
@@ -36,10 +40,16 @@ public class BootstrapV1 extends HttpServlet {
     Swagger swagger = new Swagger().info(info);
  
     try {
-    	URI uri = new URI(Constantes.getUrlPropiedades());
-        swagger.addScheme(uri.getScheme().equals("https")?Scheme.HTTPS:Scheme.HTTP);
-        swagger.setHost(uri.getAuthority());
-        swagger.setBasePath(Constantes.URL_MODULO+Constantes.API_VERSION);
+    	String url = Constantes.getUrlPropiedades();
+    	if(!StringUtils.isEmpty(url)) {    		    
+	    	URI uri = new URI(url);
+	        swagger.addScheme(uri.getScheme().equals("https")?Scheme.HTTPS:Scheme.HTTP);
+	        swagger.setHost(uri.getAuthority());
+	        
+    	}else {
+    		log.error("ERROR No seha podido cargar la URL del API_REST, verifique que se ha definido correctamente la propiedad de URL para el api rest");
+    	}
+    	swagger.setBasePath(Constantes.URL_MODULO+Constantes.API_VERSION);
 	} catch (Exception e) {
 		 e.printStackTrace();
 	}
@@ -48,13 +58,19 @@ public class BootstrapV1 extends HttpServlet {
     swagger.externalDocs(new ExternalDocs("Más info contacte con el responsable.", "http://www.caib.es"));
 
    swagger.tag(new Tag()
-      .name("idiomes")
+      .name(Constantes.ENTIDAD_IDIOMA)
       .description("Servicio para la obtención de información de los idiomas.")
       );
    swagger.tag(new Tag()
-		      .name("unitats_administratives")
+		      .name(Constantes.ENTIDAD_UA)
 		      .description("Servicio para la obtención de información de las Unidades Administrativas.")
 		      );
+   
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_ARUPACIO_FET_VITAL)
+		      .description("Servicio para la obtención de información de las Agrupaciones de hechos vitales.")
+		      );
+   
     new SwaggerContextService().withServletConfig(config).updateSwagger(swagger);
   }
 }

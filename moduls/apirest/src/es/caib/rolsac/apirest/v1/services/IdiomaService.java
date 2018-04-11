@@ -3,17 +3,14 @@ package es.caib.rolsac.apirest.v1.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.ValidationException;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.validation.ValidationException;
-import javax.validation.constraints.Size;
-import javax.validation.Valid;
 
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
@@ -30,7 +27,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @Path( "/"+Constantes.ENTIDAD_IDIOMA ) 
-@Api( value = "/"+Constantes.ENTIDAD_IDIOMA,   tags = "idiomes"  )
+@Api( value = "/"+Constantes.ENTIDAD_IDIOMA,   tags = Constantes.ENTIDAD_IDIOMA  )
 public class IdiomaService {
 		
 		
@@ -44,7 +41,7 @@ public class IdiomaService {
 	@Consumes("application/json, multipart/form-data")
 	@Path("/")
 	@ApiOperation( 
-	    value = "idiomes",
+	    value = "lista de idiomas",
 	    notes = "Lista todos los idiomas disponibles"
 	)
 	@ApiResponses(value = { 
@@ -79,7 +76,7 @@ public class IdiomaService {
 	@POST
 	@Path("/{lang}")
 	@ApiOperation( 
-	    value = "idioma",
+	    value = "Obtiene un idioma",
 	    notes = "Obtiene el idioma especificado"
 	)
 	@ApiResponses(value = { 

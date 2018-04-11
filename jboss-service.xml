@@ -42,7 +42,7 @@
        es.caib.rolsac.api.v2.alternativesIdioma_fr=en,ca,es
        es.caib.rolsac.api.v2.urlArxius=http://localhost:8080/sacws-api/arxiu/apiArxiuServlet?id=<!-- FIXME: cambiar por la url adecuada para produccion -->
        es.caib.rolsac.api.v2.urlArxiusInterns=http://localhost:8080/sacws-api/arxiu/apiArxiuInternServlet?id=<!-- FIXME: cambiar por la url adecuada para produccion -->
-	   
+	      
 	   <!-- valors sense confirmar -->
 	   	es.caib.rolsac.microsites=Y
       	es.caib.rolsac.oficina=N
@@ -102,8 +102,12 @@ es.caib.rolsac.subscripcions
 	   es.caib.rolsac.fitxa.imatge.altura=300
 	   es.caib.rolsac.fitxa.imatge.amplada=300
 	         
-	   <!--  URLBASE api rest sin barra final [{protocolo}://{servidor}[:{puerto}]]-->
-	   es.caib.rolsac.apirest.urlbase=https://localhost:48080
+	   <!-- API REST -->      
+	   <!--  URLBASE api rest sin barra final [{protocolo}://{servidor}[:{puerto}]]
+	   Si no existe, se usa es.caib.rolsac.portal.url-->
+	   es.caib.rolsac.api.rest.urlbase=https://localhost:48080	   
+	   es.caib.rolsac.api.rest.pageSize=30
+	   es.caib.rolsac.api.rest.pageNumber=1
 	   
     </attribute>
             
