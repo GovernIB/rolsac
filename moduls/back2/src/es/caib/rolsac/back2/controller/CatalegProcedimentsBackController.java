@@ -1661,8 +1661,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				
 			}
 			
+			String tipo = null;
 			if (request.getParameter("tipo") != null && !request.getParameter("tipo").equals("")) {
-				paramMap.put("tipo", request.getParameter("tipo"));
+				tipo = request.getParameter("tipo");
 			}
 
 			if (request.getParameter("boletin") != null && !request.getParameter("boletin").equals("")) {
@@ -1701,7 +1702,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 
 			//La búsqueda de normativas no tendrá en cuenta la UA actual (idua = null)
-			resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, "todas", null, false, false, "1", campoOrdenacion, orden, pagPag, pagRes, false, false);
+			resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, tipo, null, false, false, "1", campoOrdenacion, orden, pagPag, pagRes, false, false);
 
 			for (Normativa normativa : castList(Normativa.class, resultadoBusqueda.getListaResultados()) ) {
 				long idNormativa = normativa.getId();

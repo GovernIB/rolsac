@@ -422,6 +422,12 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			if (invalids != null && !invalids.isEmpty()) {
 				invalidQuery = " and normativa.datosValidos = " + invalids;
 			}
+			
+			if (tipo != null && !tipo.isEmpty()) {
+				if (sQuery.length() > 0) {
+					sQuery += " and normativa.tipo = " + tipo;
+				}
+			}
 
 			ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
 			String sqlCount = selectCount + from + " where " + sQuery + uaQuery + accessQuery + invalidQuery;
