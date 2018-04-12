@@ -176,7 +176,6 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				}
 				
 				
-				
 				ProcedimientoLocal procedimientoBD = obtenerProcedimientoNewBack(procedimiento.getId());
 				procedimientoBD.mergeNormativas(procedimiento);
 				session.update(procedimientoBD);

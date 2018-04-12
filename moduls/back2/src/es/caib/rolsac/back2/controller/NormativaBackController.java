@@ -33,6 +33,7 @@ import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Afectacion;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Boletin;
+import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.DocumentoNormativa;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
@@ -46,6 +47,7 @@ import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionServicio;
 import org.ibit.rol.sac.model.TraduccionTipo;
 import org.ibit.rol.sac.model.TraduccionTipoAfectacion;
+import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.UnidadNormativa;
 import org.ibit.rol.sac.model.ValidacionNormativa;
@@ -61,6 +63,7 @@ import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
 import org.ibit.rol.sac.persistence.delegate.DocumentoNormativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
+import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadNormativaDelegate;
 import org.ibit.rol.sac.persistence.eboib.EBoibSearchNormativa;
@@ -834,7 +837,7 @@ public class NormativaBackController extends PantallaBaseController {
 				
 			} else {
 				
-				log.error("El registre amb ID " + id + " tÃ© un document nul.");
+				log.error("El registre amb ID " + id + " te un document nul.");
 				
 			}
 			
@@ -1244,7 +1247,7 @@ public class NormativaBackController extends PantallaBaseController {
             }
 
 
-            // Responsable sÃ³lo en normativa externa
+            // Responsable solo en normativa externa
             traNorm.setResponsable(RolUtil.limpiaCadena(valoresForm.get("item_responsable_" + idioma)));
      
             // Archivo
@@ -1322,7 +1325,7 @@ public class NormativaBackController extends PantallaBaseController {
         /* FIN NOTA */
         
         Long idUA = null;
-        if (ua != null) { //Solo estara relleno en la creaciÃ³n y serÃ¡ cuando no sea edicion
+        if (ua != null) { //Solo estara relleno en la creacion y serÃ¡ cuando no sea edicion
         	idUA = ua.getId();
         }
         return DelegateUtil.getNormativaDelegate().grabarNormativa(normativa, idUA);
@@ -1816,10 +1819,10 @@ public class NormativaBackController extends PantallaBaseController {
         /*
          * Forzar content type en la cabecera para evitar bug en IE y en
          * Firefox. Si no se fuerza el content type Spring lo calcula y
-         * curiosamente depende del navegador desde el que se hace la peticiÃ³n.
+         * curiosamente depende del navegador desde el que se hace la peticion.
          * Esto se debe a que como esta peticiï¿½n es invocada desde un iFrame
          * (oculto) algunos navegadores interpretan la respuesta como un
-         * descargable o fichero vinculado a una aplicaciÃ³n. De esta forma, y
+         * descargable o fichero vinculado a una aplicacion. De esta forma, y
          * devolviendo un ResponseEntity, forzaremos el Content-Type de la
          * respuesta.
          */
@@ -1838,7 +1841,7 @@ public class NormativaBackController extends PantallaBaseController {
             // Recuperamos el documento antiguo si existe
             DocumentoNormativa docOld = recuperarDocOld(valoresForm);
 
-            // Copiamos la informaciÃ³n deseada al nuevo documento
+            // Copiamos la informacion deseada al nuevo documento
             DocumentoNormativa doc = recuperarInformacionDocumento(valoresForm, docOld);
 
             // Actualizamos las traducciones y marcamos los archivos que deven
@@ -1847,16 +1850,10 @@ public class NormativaBackController extends PantallaBaseController {
 
             doc = gestionarTraducciones(valoresForm, ficherosForm, archivosAborrar, docOld, doc);
 
-            String iden = "";
-
-            if (valoresForm.get("procId") != null && !"".equals(valoresForm.get("procId"))) {
-                iden = "procId";
-            } else if (valoresForm.get("fitxaId") != null && !"".equals(valoresForm.get("fitxaId"))) {
-                iden = "fitxaId";
-            }
+            String iden = "procId";
 
             boolean continuar = true;
-            //#421 Comprobacion del tamaÃ±o del nombre de archivo.
+            //#421 Comprobacion del tamanyo del nombre de archivo.
             if (doc != null && doc.getTraducciones() != null) {
         	    //Buscamos el archivo del idioma.
 	           	for(String idioma : doc.getTraducciones().keySet()) {
@@ -1906,7 +1903,7 @@ public class NormativaBackController extends PantallaBaseController {
 	public @ResponseBody IdNomDTO guardarDocumentosRelacionados(Long id, Long[] elementos, HttpServletRequest request) {
 		
 		// Guardaremos el orden y borraremos los documentos que se hayan marcado para borrar.
-		// La creaciÃ³n se gestiona en el controlador DocumentBackController.
+		// La creacion se gestiona en el controlador DocumentBackController.
 		
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
@@ -1950,29 +1947,19 @@ public class NormativaBackController extends PantallaBaseController {
         String jsonResult = null;
         Long docId = null;
 
-        if (valoresForm.get(iden) != null && !"".equals(valoresForm.get(iden))) {
-
-            DocumentoNormativaDelegate docDelegate = DelegateUtil.getDocumentoNormativaDelegate();
-            Long id = Long.parseLong(valoresForm.get(iden));
-            //Map<String, Traduccion> traducciones = doc.getTraducciones();
-            //doc.setTraducciones(null);
-            docId = docDelegate.grabarDocument(doc, id);
-            //doc.setTraducciones(traducciones);
-            //docId = docDelegate.grabarDocument(doc, id);
-            
-
-            for (Long idArchivo : archivosBorrar) {
-                DelegateUtil.getArchivoDelegate().borrarArchivo(idArchivo);
-            }
-
-            jsonResult = new IdNomDTO(docId, messageSource.getMessage("document.guardat.correcte", null, locale))
-                .getJson();
-
-        } else {
-            String error = messageSource.getMessage("error.altres", null, locale);
-            jsonResult = new IdNomDTO(-2l, error).getJson();
-            log.error("Error guardant document: No s'ha especificat id de procediment o de fitxer.");
+        DocumentoNormativaDelegate docDelegate = DelegateUtil.getDocumentoNormativaDelegate();
+        Long id = Long.parseLong(valoresForm.get(iden));
+       
+        docId = docDelegate.grabarDocument(doc, id);
+        
+        for (Long idArchivo : archivosBorrar) {
+            DelegateUtil.getArchivoDelegate().borrarArchivo(idArchivo);
         }
+
+        jsonResult = new IdNomDTO(docId, messageSource.getMessage("document.guardat.correcte", null, locale))
+            .getJson();
+
+       
 
         return jsonResult;
     }
@@ -2019,12 +2006,13 @@ public class NormativaBackController extends PantallaBaseController {
 
     
     /** 
-     * Recuperamos la informaciÃ³n antigua si el documento ya existia 
+     * Recuperamos la informacion antigua si el documento ya existia 
      * @param valoresForm
      * @param docOld
      * @return
+     * @throws DelegateException 
      */
-    private DocumentoNormativa recuperarInformacionDocumento(Map<String, String> valoresForm, DocumentoNormativa docOld) {
+    private DocumentoNormativa recuperarInformacionDocumento(Map<String, String> valoresForm, DocumentoNormativa docOld) throws DelegateException {
 
     	DocumentoNormativa doc = new DocumentoNormativa();
 
@@ -2033,16 +2021,17 @@ public class NormativaBackController extends PantallaBaseController {
             // Este atributo parece que ya no se usa. Se mantiene por si acaso.
             doc.setArchivo(docOld.getArchivo()); 
             doc.setOrden(docOld.getOrden());
-            doc.setNormativa(docOld.getNormativa());
-            doc.setTraducciones(docOld.getTraducciones());
+            NormativaDelegate normDelegate = DelegateUtil.getNormativaDelegate();
+            doc.setNormativa(normDelegate.obtenerNormativa(docOld.getNormativa().getId()));
+            //Importante, no descomentar 
+            //doc.setTraducciones(docOld.getTraducciones());
         }
 
         return doc;
     }
-
-
+    
     /** 
-     * GestiÃ³n de las traducciones y los archivos.
+     * Gestion de las traducciones y los archivos.
      * 
      * @param valoresForm
      * @param ficherosForm
@@ -2070,7 +2059,7 @@ public class NormativaBackController extends PantallaBaseController {
                 	
                 	TraduccionDocumentoNormativa traDocOld = (TraduccionDocumentoNormativa)docOld.getTraduccion(lang);
                     
-                    // Si aÃºn no hay traducciÃ³n asociada es que no toca procesar el archivo adjunto.
+                    // Si aun no hay traduccion asociada es que no toca procesar el archivo adjunto.
                     if (traDocOld != null) {
                     
 	                    if (this.isArchivoParaBorrar(valoresForm, lang) 
@@ -2090,7 +2079,7 @@ public class NormativaBackController extends PantallaBaseController {
 
             } else if (this.isArchivoParaBorrar(valoresForm, lang)) {
             	
-                // Indicamos a la traducciÃ³n del documento que no va a tener
+                // Indicamos a la traduccion del documento que no va a tener
                 // asignado el archivo.
                 TraduccionDocumentoNormativa traDocOld = (TraduccionDocumentoNormativa)docOld.getTraduccion(lang);
                 archivosAborrar.add(traDocOld.getArchivo().getId());
@@ -2116,7 +2105,7 @@ public class NormativaBackController extends PantallaBaseController {
     
 
     /**
-     * MÃ©todo que indica si el documento obtenido de la peticiÃ³n es un documento
+     * Metodo que indica si el documento obtenido de la peticion es un documento
      * nuevo.
      * 
      * @param valoresForm
@@ -2129,7 +2118,7 @@ public class NormativaBackController extends PantallaBaseController {
     }
     
     /**
-     * MÃ©todo que indica si el archivo adjunto de un documento se tiene que
+     * Metodo que indica si el archivo adjunto de un documento se tiene que
      * borrar.
      * 
      * @param valoresForm
@@ -2146,7 +2135,7 @@ public class NormativaBackController extends PantallaBaseController {
     }
 
     /**
-     * MÃ©todo que indica si se va a modificar el fichero adjunto a un documento
+     * Metodo que indica si se va a modificar el fichero adjunto a un documento
      * existente.
      * 
      * @param valoresForm

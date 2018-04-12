@@ -1873,7 +1873,8 @@ public class CatalegServeisBackController extends PantallaBaseController {
 	            doc.setArchivo(docOld.getArchivo()); 
 	            doc.setOrden(docOld.getOrden());
 	            doc.setServicio(docOld.getServicio());
-	            doc.setTraducciones(docOld.getTraducciones());
+	            //Hay que comentarlo porque sino no se podrán guardar los documentos de servicios.
+	            //doc.setTraducciones(docOld.getTraducciones());
 	        }
 
 	        return doc;

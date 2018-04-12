@@ -1,13 +1,10 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import java.util.Map;
-
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
 import org.ibit.rol.sac.model.DocumentoNormativa;
 import org.ibit.rol.sac.model.Normativa;
-import org.ibit.rol.sac.model.Traduccion;
 import org.ibit.rol.sac.model.TraduccionDocumentoNormativa;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
@@ -147,8 +144,14 @@ public abstract class DocumentoNormativaFacadeEJB extends HibernateEJB
 
 			} else {
 				
-				session.update(doc); 
-				session.flush();
+				//session.update(doc); 
+				//session.flush();
+				//session.update(doc);
+				//normativa = cargaNormativa(session, idNormativa);
+				//DocumentoNormativa docNuevo = normativa.addDocumentoNormativa(doc);
+				//session.evict(normativa); session.evict(docNuevo);
+				session.update(doc);
+				
 				actualizar = true;
 			}
 
@@ -208,7 +211,7 @@ public abstract class DocumentoNormativaFacadeEJB extends HibernateEJB
 	private Normativa cargaNormativa(Session session, Long idNormativa) throws HibernateException {
 
 		Normativa normativa = (Normativa) session.load(Normativa.class, idNormativa);
-		Hibernate.initialize(normativa.getDocumentos());
+		Hibernate.initialize(normativa.getDocumentos()); 
 		if (normativa.getDocumentos() != null) {
 			for(DocumentoNormativa documentoNormativa : normativa.getDocumentos()) {
 				if (documentoNormativa != null) {

@@ -308,7 +308,11 @@ public class BasicUtils {
                 if (!(value.getClass().equals(Boolean.class) || value.getClass().equals(boolean.class))) {
                     value = stringToBoolean((String) value);
                 }
-                valueClasses[0] = boolean.class;
+                if (propertyClass.equals(boolean.class)) {
+                	valueClasses[0] = boolean.class;
+                } else {
+                	valueClasses[0] = Boolean.class;
+                }
             } else if (Date.class.equals(propertyClass)) {
                 value = (Date) value; // Para evitar problemas con java.sql.Timestamp.
                 valueClasses[0] = Date.class;

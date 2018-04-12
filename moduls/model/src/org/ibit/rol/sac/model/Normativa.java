@@ -393,14 +393,116 @@ public class Normativa extends Traducible implements Indexable, Validable, Compa
      * @param documentoNormativa
      */
     public void addDocumentoNormativa(DocumentoNormativa documentoNormativa) {
+    	documentoNormativa.setNormativa(this);
+    	if (documentoNormativa.getOrden() == null) {
+    		documentoNormativa.setOrden(Long.valueOf(this.documentos.size()+1));
+    	}
 		this.documentos.add(documentoNormativa);							
 	}
-	
+    
+    /**
+     * Add documento noramtiva. 
+     * @deprecated Se marca como deprecated pq no es recomendable hacer merge debido al mapeo de hibernate
+     * @param documentoNormativa
+     * @return 
+     */
+    public DocumentoNormativa addDocumentoNormativaMerge(DocumentoNormativa documentoNormativa) {
+		DocumentoNormativa antiguo = null;
+		if (documentoNormativa.getId() != null) {
+			for(DocumentoNormativa doc : this.documentos) {
+				if (doc.getId().compareTo(documentoNormativa.getId()) == 0) {
+					doc.setOrden(documentoNormativa.getOrden());
+					doc.setTipus(documentoNormativa.getTipus());
+					
+					//Primero actualizamos las traducciones que ya habían
+					for(String idioma : doc.getTraducciones().keySet()) {
+						//Si la traduccion nueva la tiene, entonces actualizamos
+						if (documentoNormativa.getTraduccion(idioma) != null && ((TraduccionDocumentoNormativa) doc.getTraduccion(idioma)) != null) {
+							
+							TraduccionDocumentoNormativa traduccionNueva = (TraduccionDocumentoNormativa) documentoNormativa.getTraduccion(idioma);
+							((TraduccionDocumentoNormativa) doc.getTraduccion(idioma)).setDescripcion(traduccionNueva.getDescripcion());
+							((TraduccionDocumentoNormativa) doc.getTraduccion(idioma)).setEnlace(traduccionNueva.getEnlace());
+							((TraduccionDocumentoNormativa) doc.getTraduccion(idioma)).setTitulo(traduccionNueva.getTitulo());
+							if (traduccionNueva.getArchivo() == null) {
+								((TraduccionDocumentoNormativa) doc.getTraduccion(idioma)).setArchivo(null);
+							} else {
+								Archivo arcNuevo = traduccionNueva.getArchivo();
+								if (((TraduccionDocumentoNormativa) doc.getTraduccion(idioma)).getArchivo() == null) {
+									((TraduccionDocumentoNormativa) doc.getTraduccion(idioma)).setArchivo(arcNuevo);
+								} else {
+									if (arcNuevo.getDatos() != null) {
+										((TraduccionDocumentoNormativa) doc.getTraduccion(idioma)).getArchivo().setDatos(arcNuevo.getDatos());
+									}
+									if (arcNuevo.getMime() != null) {
+										((TraduccionDocumentoNormativa) doc.getTraduccion(idioma)).getArchivo().setMime(arcNuevo.getMime());
+									}
+									if (arcNuevo.getNombre() != null) {
+										((TraduccionDocumentoNormativa) doc.getTraduccion(idioma)).getArchivo().setNombre(arcNuevo.getNombre());
+									}
+									if (arcNuevo.getPeso() != 0) {
+										((TraduccionDocumentoNormativa) doc.getTraduccion(idioma)).getArchivo().setPeso(arcNuevo.getPeso());
+									}
+								}
+							}
+						}
+					}
+					
+					//Segundo, incluimos las traducciones que no habían.
+					for(String idioma : documentoNormativa.getTraducciones().keySet()) {
+						if (doc.getTraduccion(idioma) == null && documentoNormativa.getTraduccion(idioma) != null) {
+							doc.getTraducciones().put(idioma, documentoNormativa.getTraduccion(idioma));
+						}
+					}
+					
+					antiguo = doc;
+					break;
+				}
+			}
+	    }	
+		
+		if (antiguo == null) { //Si no existia antes, se añade a secas
+			this.documentos.add(documentoNormativa);
+			return documentoNormativa;
+		} else {
+			return antiguo;
+		}
+		
+	}
+    
 	/**
-	 * Remove documento normativa
+	 * Borra un documento de la normativa
 	 * @param documentoNormativa
+	 * @return
 	 */
     public void removeDocumentoNormativa(DocumentoNormativa documentoNormativa) {
-		this.documentos.remove(documentoNormativa);		
+    	this.documentos.remove(documentoNormativa); 
+    }
+    
+	/**
+	 * Remove documento normativa
+	 * @deprecated Se marca como deprecated pq no es recomendable hacer merge debido al mapeo de hibernate
+     * @param documentoNormativa
+	 * @return 
+	 */
+    public DocumentoNormativa removeDocumentoNormativaMerge(DocumentoNormativa documentoNormativa) {
+    	
+    	if (this.documentos.contains(documentoNormativa)) {
+    		this.documentos.remove(documentoNormativa);		
+    		return documentoNormativa;
+    	} else {
+    		DocumentoNormativa normativaBorrar = null;
+    		for(DocumentoNormativa doc : this.documentos) {
+    			if (doc.getId().compareTo(documentoNormativa.getId()) == 0) {
+    				normativaBorrar = doc;
+    				break;
+    			}
+    		}
+    		
+    		if (normativaBorrar != null) {
+    			this.documentos.remove(normativaBorrar);    		
+    		}
+    		
+    		return normativaBorrar;
+    	}
     }
 }
