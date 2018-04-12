@@ -25,11 +25,12 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "FiltroUA", description = "Filtro propio de la entidad Unidad Administrativa")
 public class FiltroUA {
 	
-	public static final String SAMPLE = Constantes.SALTO_LINEA+ 
-			"{\"codigoUAPadre\":\"0\","	+ Constantes.SALTO_LINEA +
-			"\"validacion\":\"0\","		+ Constantes.SALTO_LINEA +
-			"\"codigoSeccion\":\"0\","	+ Constantes.SALTO_LINEA +
-			"\"codigoNormativa\":\"0\"}";
+	public static final String SAMPLE =    Constantes.SALTO_LINEA + 
+			"{\"codigoUAPadre\":\"0\","	 + Constantes.SALTO_LINEA +
+			"\"validacion\":\"0\","		 + Constantes.SALTO_LINEA +
+			"\"codigoSeccion\":\"0\","	 + Constantes.SALTO_LINEA +
+			"\"codigoNormativa\":\"0\"}" + Constantes.SALTO_LINEA + 
+			"Usar codigoUAPadre = -1 para recuperar las UA que no tienen padre";
 	
 	 
 	/** CodigoUAPadre. **/

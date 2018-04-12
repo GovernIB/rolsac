@@ -218,7 +218,7 @@ public abstract class EntidadBase {
 	
 	/**
 	 * Función necesaria para convertir la propiedad Id (proviene de los EJB) a la 
-	 * propiedad código que se envia por ejb 
+	 * propiedad código 
 	 * @param codigo (id)s
 	 */
 	public abstract void setId(Long codigo);

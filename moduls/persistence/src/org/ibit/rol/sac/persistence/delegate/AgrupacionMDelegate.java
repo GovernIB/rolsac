@@ -1,18 +1,20 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import org.ibit.rol.sac.persistence.delegate.DelegateException;
-import org.ibit.rol.sac.persistence.delegate.StatelessDelegate;
+import java.rmi.RemoteException;
+import java.util.List;
+
+import javax.ejb.CreateException;
+import javax.ejb.Handle;
+import javax.naming.NamingException;
+
+import org.ibit.rol.sac.model.AgrupacionMateria;
+import org.ibit.rol.sac.model.MateriaAgrupacionM;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.intf.AgrupacionMFacade;
 import org.ibit.rol.sac.persistence.intf.AgrupacionMFacadeHome;
 import org.ibit.rol.sac.persistence.util.AgrupacionMFacadeUtil;
-import org.ibit.rol.sac.model.AgrupacionMateria;
-import org.ibit.rol.sac.model.MateriaAgrupacionM;
 
-import javax.ejb.Handle;
-import javax.ejb.CreateException;
-import javax.naming.NamingException;
-import java.rmi.RemoteException;
-import java.util.List;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * Business delegate para manipular Agrupaciones Materias.
@@ -80,5 +82,13 @@ public class AgrupacionMDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+
+	public ResultadoBusqueda consultaAgrupacionMaterias(FiltroGenerico filtro) throws DelegateException {
+	  	try {
+            return getFacade().consultaAgrupacionMaterias(filtro);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+	}
     
 }

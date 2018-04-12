@@ -71,6 +71,11 @@ public class BootstrapV1 extends HttpServlet {
 		      .description("Servicio para la obtención de información de las Agrupaciones de hechos vitales.")
 		      );
    
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_ARUPACIO_MATERIES)
+		      .description("Servicio para la obtención de información de las Agrupaciones de materias.")
+		      );
+      
     new SwaggerContextService().withServletConfig(config).updateSwagger(swagger);
   }
 }

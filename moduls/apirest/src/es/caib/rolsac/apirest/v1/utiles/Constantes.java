@@ -59,6 +59,13 @@ public class Constantes {
 	public static final String ENTIDAD_ARUPACIO_FET_VITAL = "agrupacions_fets_vitals";
 	public static final String URL_ARUPACIO_FET_VITAL = ENTIDAD_ARUPACIO_FET_VITAL + "/{0}";
 	
+	public static final String ENTIDAD_ARUPACIO_MATERIES = "agrupacions_materies";
+	public static final String URL_ARUPACIO_MATERIES = ENTIDAD_ARUPACIO_MATERIES + "/{0}";
+	
+	public static final String ENTIDAD_SECCION = "seccions";
+	public static final String URL_SECCION = ENTIDAD_SECCION + "/{0}";
+	
+	
 
 	
 	

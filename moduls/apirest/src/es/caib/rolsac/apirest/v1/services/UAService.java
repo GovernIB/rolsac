@@ -99,19 +99,8 @@ public class UAService {
 				}
 			}		
 		}
-		
-				
-		es.caib.rolsac.utils.ResultadoBusqueda resultadoBusqueda = DelegateUtil.getUADelegate().consultaUnidadesAdministrativas(fg);
-		
-		List <UnitatAdministrativa> lua = new ArrayList <UnitatAdministrativa>();
-			
-		for (UnidadAdministrativa rua : Utiles.castList(UnidadAdministrativa.class, resultadoBusqueda.getListaResultados())) {
-			UnitatAdministrativa ua = new UnitatAdministrativa(rua,null,fg.getLang(),true);
-			lua.add(ua);
-		}
-		
-		RespuestaUA r = new RespuestaUA(Response.Status.OK.getStatusCode()+"", Constantes.mensaje200(lua.size()) , new Integer(resultadoBusqueda.getTotalResultados()), lua);
-		return r;
+						
+		return getRespuesta(fg);
 	}
 	
 	
@@ -147,8 +136,13 @@ public class UAService {
 		}
 		fg.setId(new Long(codigoua));		
 		
-		es.caib.rolsac.utils.ResultadoBusqueda resultadoBusqueda = DelegateUtil.getUADelegate().consultaUnidadesAdministrativas(fg);
+		return getRespuesta(fg);	
 		
+	}
+	
+	
+    private RespuestaUA getRespuesta(FiltroGenerico fg) throws DelegateException {		
+    	es.caib.rolsac.utils.ResultadoBusqueda resultadoBusqueda = DelegateUtil.getUADelegate().consultaUnidadesAdministrativas(fg);		
 		List <UnitatAdministrativa> lista = new ArrayList <UnitatAdministrativa>();
 			
 		for (UnidadAdministrativa nodo : Utiles.castList(UnidadAdministrativa.class, resultadoBusqueda.getListaResultados())) {
@@ -157,8 +151,9 @@ public class UAService {
 		}
 		
 		RespuestaUA r = new RespuestaUA(Response.Status.OK.getStatusCode()+"", Constantes.mensaje200(lista.size()) , new Integer(resultadoBusqueda.getTotalResultados()), lista);
-		return r;	
-		
+		return r;
 	}
+	
+	
 
 }
