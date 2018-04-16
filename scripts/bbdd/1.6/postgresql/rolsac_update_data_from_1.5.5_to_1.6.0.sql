@@ -51,7 +51,7 @@ INSERT INTO RSC_TRANOR (TNO_CODNOR, TNO_SECCIO, TNO_APARTA, TNO_PAGINI, TNO_PAGF
 update rsc_normat set nor_typen = 'normativa';
 --El estado 1 pasara las publicas a vigentes
 update rsc_normat set nor_validn = 1 where nor_valida = 1;
-update rsc_normat set nor_validn = 4 where nor_valida IN (2,3); --Para convertir internas y reservas en un nuevo estado de valor 4 que las agrupa
+update rsc_normat set nor_validn = 4 where nor_valida IN (2,3);
 update rsc_normat set nor_codbol_ant = nor_codbol;
 ---Actualizamos el tipo boletin para que cree el DOUE y fusione el DOCE y el Diario Europeu en DOUE.
 INSERT INTO RSC_BOLETI (BOL_CODI , BOL_NOMBRE, BOL_ENLACE) VALUES ( RSC_SEQ_ALL.nextval, 'DOUE', null);

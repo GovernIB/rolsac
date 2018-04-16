@@ -10,7 +10,7 @@ DECLARE
           from rsc_tranor
          where tno_titulo is not null
            and tno_enlace is null
-           and tno_codnor = cId; -- Comprobamos si el titulo no es nulo para quitar las traducciones sin rellenar.
+           and tno_codnor = cId; 
            
     nAnyo NUMBER;
     nUA   NUMBER;
