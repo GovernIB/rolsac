@@ -3,6 +3,7 @@ package es.caib.rolsac.apirest.v1.model;
 import java.io.IOException;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -20,7 +21,7 @@ import io.swagger.annotations.ApiModelProperty;
  *
  */
 @XmlRootElement
-@ApiModel(value = "AgrupacioMateries", description = "Definición de la clase AgrupacioMateries")
+@ApiModel(value = Constantes.ENTIDAD_ARUPACIO_MATERIES, description = Constantes.TXT_DEFINICION_CLASE + Constantes.ENTIDAD_ARUPACIO_MATERIES )
 public class AgrupacioMateries extends EntidadBase {
 	 
 	/** codigoEstandar. **/
@@ -35,9 +36,17 @@ public class AgrupacioMateries extends EntidadBase {
 	@ApiModelProperty(value = "nombre", dataType = "java.lang.Long", required = false)
 	private String nombre;
 	
-
+	/** idioma **/
+	@ApiModelProperty(value = "idioma", required = false)    
+	private java.lang.String idioma;
+	
+	//-- LINKS--//
+	//-- se duplican las propiedades para poder generar la clase link en funcion de la propiedad principal (sin "link_")
 	/** contenido **/
-	@ApiModelProperty(value = "seccion", dataType = "java.lang.Long", required = false)
+	@ApiModelProperty(value = "link_seccion", required = false)
+	private Link link_seccion;
+	@ApiModelProperty(hidden = true)
+	@XmlTransient
 	private Long seccion;
 	
 
@@ -52,7 +61,7 @@ public class AgrupacioMateries extends EntidadBase {
 	
 	@Override
 	public void generaLinks(String urlBase) {
-		this.addLink(this.seccion, Constantes.ENTIDAD_SECCION, Constantes.URL_SECCION, urlBase,"seccion" );
+		this.link_seccion = this.generaLink(this.seccion, Constantes.ENTIDAD_SECCION, Constantes.URL_SECCION, urlBase,null );
 	}
 
 
@@ -140,6 +149,7 @@ public class AgrupacioMateries extends EntidadBase {
 	/**
 	 * @return the seccion
 	 */
+	@XmlTransient
 	public Long getSeccion() {
 		return seccion;
 	}
@@ -149,6 +159,34 @@ public class AgrupacioMateries extends EntidadBase {
 	 */
 	public void setSeccion(Long seccion) {
 		this.seccion = seccion;
+	}
+
+	/**
+	 * @return the idioma
+	 */
+	public java.lang.String getIdioma() {
+		return idioma;
+	}
+
+	/**
+	 * @param idioma the idioma to set
+	 */
+	public void setIdioma(java.lang.String idioma) {
+		this.idioma = idioma;
+	}
+
+	/**
+	 * @return the link_seccion
+	 */
+	public Link getLink_seccion() {
+		return link_seccion;
+	}
+
+	/**
+	 * @param link_seccion the link_seccion to set
+	 */
+	public void setLink_seccion(Link link_seccion) {
+		this.link_seccion = link_seccion;
 	}
 	
 }

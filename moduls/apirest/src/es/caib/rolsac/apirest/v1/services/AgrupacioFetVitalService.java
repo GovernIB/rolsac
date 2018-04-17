@@ -49,7 +49,7 @@ public class AgrupacioFetVitalService {
 	@Path("/")
 	@ApiOperation( 
 	    value = "Lista de agrupaciones de hechos vitales",
-	    notes = "Lista todas las Agrupaciones de hechos vitales disponibles"
+	    notes = "Lista todas las agrupaciones de hechos vitales disponibles"
 	)
 	@ApiResponses(value = { 
 			 @ApiResponse(code = 200, message =  Constantes.MSJ_200_GENERICO, response = RespuestaAgrupacioFetVital.class),
@@ -57,9 +57,9 @@ public class AgrupacioFetVitalService {
 		   })
 	
 	public RespuestaAgrupacioFetVital llistarAFV(
-		@ApiParam( value = "Codigo de idioma", required = false ) @DefaultValue(Constantes.IDIOMA_DEFECTO) @FormParam("codigoIdioma") final String codigoIdioma,		
-		@ApiParam( value = "Filtro de Paginación: " + FiltroPaginacion.SAMPLE) @FormParam("filtroPaginacion") FiltroPaginacion filtroPaginacion,
-		@ApiParam( value = "Filtro de Agrupación de hechos vitales: " + FiltroAgrupacioFetVital.SAMPLE) @FormParam("filtro") FiltroAgrupacioFetVital filtro				
+		@ApiParam( value = "Código de idioma", required = false ) @DefaultValue(Constantes.IDIOMA_DEFECTO) @FormParam("lang") final String lang,		
+		@ApiParam( value = "Filtro de paginación: " + FiltroPaginacion.SAMPLE) @FormParam("filtroPaginacion") FiltroPaginacion filtroPaginacion,
+		@ApiParam( value = "Filtro de agrupación de hechos vitales: " + FiltroAgrupacioFetVital.SAMPLE) @FormParam("filtro") FiltroAgrupacioFetVital filtro				
 			) throws DelegateException,ExcepcionAplicacion,ValidationException  {
 		
 				
@@ -68,8 +68,8 @@ public class AgrupacioFetVitalService {
 		}
 		FiltroGenerico fg = filtro.toFiltroGenerico();
 		
-		if(codigoIdioma!=null) {
-			fg.setLang(codigoIdioma);	
+		if(lang!=null) {
+			fg.setLang(lang);	
 		}
 				
 		//si no vienen los filtros se completan con los datos por defecto (los definidos dentro de Filtro generico)
@@ -92,10 +92,10 @@ public class AgrupacioFetVitalService {
 	@Produces( { MediaType.APPLICATION_JSON } )
 	@POST
 	@Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
-	@Path("/{codigoAFV}")
+	@Path("/{codigo}")
 	@ApiOperation( 
-	    value = "Obtiene una Agrupacion de hecho vital",
-	    notes = "Obtiene La Agrupacion de hecho vital con el id(código) indicado"
+	    value = "Obtiene una agrupación de hecho vital",
+	    notes = "Obtiene la agrupación de hecho vital con el id(código) indicado"
 	)
 	@ApiResponses(value = { 
 			 @ApiResponse(code = 200, message =  Constantes.MSJ_200_GENERICO, response = RespuestaAgrupacioFetVital.class),
@@ -103,16 +103,16 @@ public class AgrupacioFetVitalService {
 		   })
 		
 	public RespuestaAgrupacioFetVital  getAFV(  
-			@ApiParam( value = "Codigo Agrupacion de hecho vital", required = true ) @PathParam( "codigoAFV") final  String codigoAFV,
-		    @ApiParam( value = "codigo de idioma", required = false ) @DefaultValue(Constantes.IDIOMA_DEFECTO) @FormParam("codigoIdioma") final String codigoIdioma
+			@ApiParam( value = "Código agrupación de hecho vital", required = true ) @PathParam( "codigo") final  String codigo,
+		    @ApiParam( value = "Código de idioma", required = false ) @DefaultValue(Constantes.IDIOMA_DEFECTO) @FormParam("lang") final String lang
 			) throws Exception,ValidationException {
 		
 		FiltroGenerico fg = new FiltroGenerico();
-		if(codigoIdioma!=null) {
-			fg.setLang(codigoIdioma);	
+		if(lang!=null) {
+			fg.setLang(lang);	
 		}
 		
-		fg.setId(new Long(codigoAFV));			
+		fg.setId(new Long(codigo));			
 		return getRespuesta(fg);
 	}
 	

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import es.caib.rolsac.apirest.v1.utiles.Constantes;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -19,7 +20,7 @@ import io.swagger.annotations.ApiModelProperty;
  *
  */
 @XmlRootElement
-@ApiModel(value = "Tratamiento", description = "Definición de la clase Tratamiento")
+@ApiModel(value = "Tratamiento", description = Constantes.TXT_DEFINICION_CLASE + "Tratamiento")
 public class Tratamiento extends EntidadBase {
 	 
 	public Tratamiento(org.ibit.rol.sac.model.Tratamiento tr, String urlBase,String idioma,boolean hateoasEnabled) {

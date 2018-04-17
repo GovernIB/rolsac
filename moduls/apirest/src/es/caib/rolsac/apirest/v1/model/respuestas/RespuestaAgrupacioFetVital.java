@@ -5,6 +5,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import es.caib.rolsac.apirest.v1.model.AgrupacioFetVital;
+import es.caib.rolsac.apirest.v1.utiles.Constantes;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -16,7 +17,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 
 @XmlRootElement
-@ApiModel(value = "Respuesta Agrupación hecho vital", description = "Respuesta Agrupación hecho vital")
+@ApiModel(value = Constantes.TXT_RESPUESTA + Constantes.ENTIDAD_ARUPACIO_FET_VITAL, description = Constantes.TXT_RESPUESTA + Constantes.ENTIDAD_ARUPACIO_FET_VITAL)
 public class RespuestaAgrupacioFetVital extends RespuestaBase{	
 	/** Resultado. **/
 	@ApiModelProperty(value = "Listado con los objetos de resultado",  required = false)

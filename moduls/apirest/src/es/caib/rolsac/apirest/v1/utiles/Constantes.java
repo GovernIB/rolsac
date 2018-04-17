@@ -38,31 +38,34 @@ public class Constantes {
 	
 	
 	
+	public static final String TXT_DEFINICION_CLASE = "Definición de la clase ";
+	public static final String TXT_RESPUESTA = "Respuesta ";
+	
 	public static final String URL_MODULO = "/rolsac/api/rest/";
 	public static final String URL_BASE = Constantes.getUrlPropiedades()+ URL_MODULO + Constantes.API_VERSION+"/";
 	
-	public static final String ENTIDAD_IDIOMA = "idiomes";
+	public static final String ENTIDAD_IDIOMA = "idiomas";
 	public static final String URL_IDIOMA = ENTIDAD_IDIOMA+"/{0}";
 		
-	public static final String ENTIDAD_UA = "unitats_administratives";
+	public static final String ENTIDAD_UA = "unidades_administrativas";
 	public static final String URL_UA = ENTIDAD_UA+"/{0}";
 
-	public static final String ENTIDAD_ESPACIO_TERRITORIAL = "espais_territorials";
+	public static final String ENTIDAD_ESPACIO_TERRITORIAL = "espacios_territoriales";
 	public static final String URL_ESPACIO_TERRITORIAL = ENTIDAD_ESPACIO_TERRITORIAL+"/{0}";
 
-	public static final String ENTIDAD_ARCHIVO = "arxiu";
+	public static final String ENTIDAD_ARCHIVO = "archivos";
 	public static final String URL_ARCHIVO = ENTIDAD_ARCHIVO + "/{0}";
 
-	public static final String ENTIDAD_PUBLICO = "public_objectiu";
+	public static final String ENTIDAD_PUBLICO = "publicos_objetivo";
 	public static final String URL_PUBLICO = ENTIDAD_PUBLICO + "/{0}";
 	
-	public static final String ENTIDAD_ARUPACIO_FET_VITAL = "agrupacions_fets_vitals";
+	public static final String ENTIDAD_ARUPACIO_FET_VITAL = "agrupaciones_hechos_vitales";
 	public static final String URL_ARUPACIO_FET_VITAL = ENTIDAD_ARUPACIO_FET_VITAL + "/{0}";
 	
-	public static final String ENTIDAD_ARUPACIO_MATERIES = "agrupacions_materies";
+	public static final String ENTIDAD_ARUPACIO_MATERIES = "agrupaciones_materias";
 	public static final String URL_ARUPACIO_MATERIES = ENTIDAD_ARUPACIO_MATERIES + "/{0}";
 	
-	public static final String ENTIDAD_SECCION = "seccions";
+	public static final String ENTIDAD_SECCION = "secciones";
 	public static final String URL_SECCION = ENTIDAD_SECCION + "/{0}";
 	
 	

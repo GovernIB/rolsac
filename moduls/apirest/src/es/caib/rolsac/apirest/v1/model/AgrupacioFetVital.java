@@ -3,6 +3,7 @@ package es.caib.rolsac.apirest.v1.model;
 import java.io.IOException;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -20,7 +21,7 @@ import io.swagger.annotations.ApiModelProperty;
  *
  */
 @XmlRootElement
-@ApiModel(value = "AgrupacioFetVital", description = "Definición de la clase AgrupacioFetVital")
+@ApiModel(value = Constantes.ENTIDAD_ARUPACIO_FET_VITAL, description = Constantes.TXT_DEFINICION_CLASE +  Constantes.ENTIDAD_ARUPACIO_FET_VITAL)
 public class AgrupacioFetVital extends EntidadBase {
 	 
 	/** codigoEstandar. **/
@@ -37,19 +38,7 @@ public class AgrupacioFetVital extends EntidadBase {
 	
 	/** distribComp **/
 	@ApiModelProperty(value = "distribComp", dataType = "java.lang.Long", required = false)
-	private Long distribComp;
-	
-	/** foto **/
-	@ApiModelProperty(value = "foto", dataType = "java.lang.Long", required = false)
-	private Long foto;
-	
-	/** icono **/
-	@ApiModelProperty(value = "icono", dataType = "java.lang.Long", required = false)
-	private Long icono;
-	
-	/** iconoGrande **/
-	@ApiModelProperty(value = "iconoGrande", dataType = "java.lang.Long", required = false)
-	private Long iconoGrande;
+	private Long distribComp;	
 	
 	/** codigo **/
 	@ApiModelProperty(value = "codigo", dataType = "java.lang.Long", required = false)
@@ -59,17 +48,59 @@ public class AgrupacioFetVital extends EntidadBase {
 	@ApiModelProperty(value = "nombre", dataType = "java.lang.Long", required = false)
 	private String nombre;
 	
-	/** normativa **/
-	@ApiModelProperty(value = "normativa", dataType = "java.lang.Long", required = false)
-	private Long normativa;
+	
 	
 	/** palabrasclave **/
 	@ApiModelProperty(value = "palabrasclave", dataType = "java.lang.Long", required = false)
 	private String palabrasclave;
 	
+	/** idioma **/
+	@ApiModelProperty(value = "idioma", required = false)    
+	private java.lang.String idioma;
+	
+	//-- LINKS--//
+	//-- se duplican las entidades para poder generar la clase link en funcion de la propiedad principal (sin "link_")
+	/** foto **/
+	@ApiModelProperty(value = "link_foto", required = false)
+	private Link link_foto;	
+	@ApiModelProperty(hidden = true)
+	@XmlTransient
+	private Long foto;
+	
+	/** icono **/
+	@ApiModelProperty(value = "link_icono", required = false)
+	private Link link_icono;	
+	@ApiModelProperty(hidden = true)
+	@XmlTransient
+	private Long icono;
+	
+	/** iconoGrande **/
+	@ApiModelProperty(value = "link_iconoGrande", required = false)
+	private Link link_iconoGrande;
+	@ApiModelProperty(hidden = true)
+	@XmlTransient
+	private Long iconoGrande;
+	
 	/** publico **/
-	@ApiModelProperty(value = "publico", dataType = "java.lang.Long", required = false)
+	@ApiModelProperty(value = "link_publico",  required = false)
+	private Link link_publico;
+	@ApiModelProperty(hidden = true)
+	@XmlTransient
 	private Long publico;
+	
+	/** normativa 
+	 * 
+	 * hemos revisado el modelo y en realidad no hay correspòndencia con el modelo de datos, por lo que
+	 * no vendrá nunca rellenado. deberia eliminarse, se mantiene para que tenga una correspondencia con el
+	 * antiguo api soap
+	 * **/
+	@ApiModelProperty(value = "link_normativa", required = false)
+	private Link link_normativa;
+	@ApiModelProperty(hidden = true)
+	@XmlTransient
+	private Long normativa;
+	
+	
 	
 
 	public AgrupacioFetVital (org.ibit.rol.sac.model.AgrupacionHechoVital ahv, String urlBase,String idioma,boolean hateoasEnabled ) {
@@ -83,11 +114,11 @@ public class AgrupacioFetVital extends EntidadBase {
 	
 	@Override
 	public void generaLinks(String urlBase) {
-		this.addLink(this.foto, Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"foto" );
-		this.addLink(this.icono, Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"icono" );
-		this.addLink(this.iconoGrande, Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"iconoGrande" );
-		this.addLink(this.publico, Constantes.ENTIDAD_PUBLICO, Constantes.URL_PUBLICO, urlBase,"publico" );
-		
+				
+		link_foto = this.generaLinkArchivo(this.foto, urlBase , null );
+		link_icono = this.generaLinkArchivo(this.icono, urlBase , null );
+		link_iconoGrande = this.generaLinkArchivo(this.iconoGrande,urlBase,null );
+		link_publico = this.generaLink(this.publico, Constantes.ENTIDAD_PUBLICO, Constantes.URL_PUBLICO, urlBase,null );		
 	}
 
 
@@ -185,6 +216,8 @@ public class AgrupacioFetVital extends EntidadBase {
 	/**
 	 * @return the foto
 	 */
+	
+	@XmlTransient
 	public Long getFoto() {
 		return foto;
 	}
@@ -201,6 +234,7 @@ public class AgrupacioFetVital extends EntidadBase {
 	/**
 	 * @return the icono
 	 */
+	@XmlTransient
 	public Long getIcono() {
 		return icono;
 	}
@@ -217,6 +251,7 @@ public class AgrupacioFetVital extends EntidadBase {
 	/**
 	 * @return the iconoGrande
 	 */
+	@XmlTransient
 	public Long getIconoGrande() {
 		return iconoGrande;
 	}
@@ -265,6 +300,7 @@ public class AgrupacioFetVital extends EntidadBase {
 	/**
 	 * @return the normativa
 	 */
+	@XmlTransient
 	public Long getNormativa() {
 		return normativa;
 	}
@@ -297,6 +333,7 @@ public class AgrupacioFetVital extends EntidadBase {
 	/**
 	 * @return the publico
 	 */
+	@XmlTransient
 	public Long getPublico() {
 		return publico;
 	}
@@ -318,6 +355,90 @@ public class AgrupacioFetVital extends EntidadBase {
 	@Override
 	public void setId(Long codigo) {
 		this.codigo = codigo;		
+	}
+
+	/**
+	 * @return the idioma
+	 */
+	public java.lang.String getIdioma() {
+		return idioma;
+	}
+
+	/**
+	 * @param idioma the idioma to set
+	 */
+	public void setIdioma(java.lang.String idioma) {
+		this.idioma = idioma;
+	}
+
+	/**
+	 * @return the link_foto
+	 */
+	public Link getLink_foto() {
+		return link_foto;
+	}
+
+	/**
+	 * @param link_foto the link_foto to set
+	 */
+	public void setLink_foto(Link link_foto) {
+		this.link_foto = link_foto;
+	}
+
+	/**
+	 * @return the link_icono
+	 */
+	public Link getLink_icono() {
+		return link_icono;
+	}
+
+	/**
+	 * @param link_icono the link_icono to set
+	 */
+	public void setLink_icono(Link link_icono) {
+		this.link_icono = link_icono;
+	}
+
+	/**
+	 * @return the link_iconoGrande
+	 */
+	public Link getLink_iconoGrande() {
+		return link_iconoGrande;
+	}
+
+	/**
+	 * @param link_iconoGrande the link_iconoGrande to set
+	 */
+	public void setLink_iconoGrande(Link link_iconoGrande) {
+		this.link_iconoGrande = link_iconoGrande;
+	}
+
+	/**
+	 * @return the link_publico
+	 */
+	public Link getLink_publico() {
+		return link_publico;
+	}
+
+	/**
+	 * @param link_publico the link_publico to set
+	 */
+	public void setLink_publico(Link link_publico) {
+		this.link_publico = link_publico;
+	}
+
+	/**
+	 * @return the link_normativa
+	 */
+	public Link getLink_normativa() {
+		return link_normativa;
+	}
+
+	/**
+	 * @param link_normativa the link_normativa to set
+	 */
+	public void setLink_normativa(Link link_normativa) {
+		this.link_normativa = link_normativa;
 	}
 	
 }

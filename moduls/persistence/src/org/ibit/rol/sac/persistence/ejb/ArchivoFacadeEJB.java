@@ -3,12 +3,11 @@ package org.ibit.rol.sac.persistence.ejb;
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import net.sf.hibernate.Hibernate;
+import org.ibit.rol.sac.model.Archivo;
+
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
-
-import org.ibit.rol.sac.model.Archivo;
 
 
 /**
@@ -32,6 +31,7 @@ public abstract class ArchivoFacadeEJB extends HibernateEJB {
 	 * @ejb.create-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Override
 	public void ejbCreate() throws CreateException {
 		super.ejbCreate();
 	}
@@ -53,26 +53,21 @@ public abstract class ArchivoFacadeEJB extends HibernateEJB {
 
 		try {
 
-			Archivo archivo = new Archivo();
+			Archivo archivo = null;
 
-			Query query = session.createQuery("from Archivo archivo where archivo.id = :id");
-			query.setParameter( "idArchivo" , id );
+			Query query = session.createQuery("SELECT a FROM Archivo a WHERE a.id = :id");
+			query.setParameter( "id" , id );
 
-			if ( query.list().size() == 1 )	
-				archivo = (Archivo) query.list().get(0);
-
-			Hibernate.initialize(archivo);
-
+			if ( query.list().size() == 1 )	{
+				archivo = (Archivo) query.uniqueResult();			
+			}
+			
 			return archivo;
 
 		} catch (HibernateException he) {
-
 			throw new EJBException(he);
-
 		} finally {
-
 			close(session);
-
 		}
 
 	}
@@ -104,8 +99,5 @@ public abstract class ArchivoFacadeEJB extends HibernateEJB {
 			close(session);
 
 		}
-
 	}  
-
-	
 }

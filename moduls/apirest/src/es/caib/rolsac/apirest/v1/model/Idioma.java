@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import es.caib.rolsac.apirest.v1.utiles.Constantes;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -19,7 +20,7 @@ import io.swagger.annotations.ApiModelProperty;
  *
  */
 @XmlRootElement
-@ApiModel(value = "Idioma", description = "Definición de la clase idioma")
+@ApiModel(value = Constantes.ENTIDAD_IDIOMA, description = Constantes.TXT_DEFINICION_CLASE + Constantes.ENTIDAD_IDIOMA)
 public class Idioma extends EntidadBase {
 	 
 	/** Lang. **/

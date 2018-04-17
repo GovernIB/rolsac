@@ -5,6 +5,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import es.caib.rolsac.apirest.v1.model.AgrupacioMateries;
+import es.caib.rolsac.apirest.v1.utiles.Constantes;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -14,7 +15,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 
 @XmlRootElement
-@ApiModel(value = "Respuesta Agrupación materias", description = "Respuesta Agrupación materias")
+@ApiModel(value = Constantes.TXT_RESPUESTA + Constantes.ENTIDAD_ARUPACIO_MATERIES, description = Constantes.TXT_RESPUESTA + Constantes.ENTIDAD_ARUPACIO_MATERIES)
 public class RespuestaAgrupacioMateries extends RespuestaBase{	
 	/** Resultado. **/
 	@ApiModelProperty(value = "Listado con los objetos de resultado",  required = false)

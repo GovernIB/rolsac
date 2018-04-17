@@ -5,6 +5,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import es.caib.rolsac.apirest.v1.model.Idioma;
+import es.caib.rolsac.apirest.v1.utiles.Constantes;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -16,7 +17,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 
 @XmlRootElement
-@ApiModel(value = "RespuestaIdioma", description = "Respuesta Idioma")
+@ApiModel(value = Constantes.TXT_RESPUESTA + Constantes.ENTIDAD_IDIOMA, description = Constantes.TXT_RESPUESTA + Constantes.ENTIDAD_IDIOMA)
 public class RespuestaIdioma extends RespuestaBase{	
 	/** Resultado. **/
 	@ApiModelProperty(value = "Listado con los objetos de resultado",  required = false)

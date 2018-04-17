@@ -47,7 +47,7 @@ public class AgrupacioMateriesService {
 	@Consumes({MediaType.APPLICATION_JSON , MediaType.APPLICATION_FORM_URLENCODED })
 	@Path("/")
 	@ApiOperation( 
-	    value = "Lista de agrupaciones de materias",
+	    value = "Lista de Agrupaciones de materias",
 	    notes = "Lista todas las Agrupaciones de materias disponibles"
 	)
 	@ApiResponses(value = { 
@@ -56,14 +56,14 @@ public class AgrupacioMateriesService {
 		   })
 	
 	public RespuestaAgrupacioMateries llistarAM(
-		@ApiParam( value = "Codigo de idioma", required = false ) @DefaultValue(Constantes.IDIOMA_DEFECTO) @FormParam("codigoIdioma") final String codigoIdioma,		
+		@ApiParam( value = "Código de idioma", required = false ) @DefaultValue(Constantes.IDIOMA_DEFECTO) @FormParam("lang") final String lang,		
 		@ApiParam( value = "Filtro de Paginación: " + FiltroPaginacion.SAMPLE) @FormParam("filtroPaginacion") FiltroPaginacion filtroPaginacion				
 			) throws DelegateException,ExcepcionAplicacion,ValidationException  {
 		
 		FiltroGenerico fg = new FiltroGenerico();
 		
-		if(codigoIdioma!=null) {
-			fg.setLang(codigoIdioma);	
+		if(lang!=null) {
+			fg.setLang(lang);	
 		}
 				
 		//si no vienen los filtros se completan con los datos por defecto (los definidos dentro de Filtro generico)
@@ -85,10 +85,10 @@ public class AgrupacioMateriesService {
 	@Produces( { MediaType.APPLICATION_JSON } )
 	@POST
 	@Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
-	@Path("/{codigoAM}")
+	@Path("/{codigo}")
 	@ApiOperation( 
-	    value = "Obtiene una Agrupacion de Materias",
-	    notes = "Obtiene La Agrupacion de Materias con el id(código) indicado"
+	    value = "Obtiene una Agrupación de Materias",
+	    notes = "Obtiene La Agrupación de Materias con el id(código) indicado"
 	)
 	@ApiResponses(value = { 
 			 @ApiResponse(code = 200, message =  Constantes.MSJ_200_GENERICO, response = RespuestaAgrupacioMateries.class),
@@ -96,16 +96,16 @@ public class AgrupacioMateriesService {
 		   })
 		
 	public RespuestaAgrupacioMateries  getAM(  
-			@ApiParam( value = "Codigo Agrupacion de Materias", required = true ) @PathParam( "codigoAM") final  String codigoAM,
-		    @ApiParam( value = "codigo de idioma", required = false ) @DefaultValue(Constantes.IDIOMA_DEFECTO) @FormParam("codigoIdioma") final String codigoIdioma
+			@ApiParam( value = "Código Agrupación de Materias", required = true ) @PathParam( "codigo") final  String codigo,
+		    @ApiParam( value = "Código de idioma", required = false ) @DefaultValue(Constantes.IDIOMA_DEFECTO) @FormParam("lang") final String lang
 			) throws Exception,ValidationException {
 		
 		FiltroGenerico fg = new FiltroGenerico();
-		if(codigoIdioma!=null) {
-			fg.setLang(codigoIdioma);	
+		if(lang!=null) {
+			fg.setLang(lang);	
 		}
 		
-		fg.setId(new Long(codigoAM));			
+		fg.setId(new Long(codigo));			
 		return getRespuesta(fg);
 	}	
 	

@@ -67,7 +67,7 @@ public class UAService {
 	  })*/
 	
 	public RespuestaUA llistarUA(
-		@ApiParam( value = "Codigo de idioma", required = false ) @DefaultValue(Constantes.IDIOMA_DEFECTO) @FormParam("codigoIdioma") final String codigoIdioma,		
+		@ApiParam( value = "Codigo de idioma", required = false ) @DefaultValue(Constantes.IDIOMA_DEFECTO) @FormParam("lang") final String lang,		
 		@ApiParam( value = "Filtro de Paginación: " + FiltroPaginacion.SAMPLE) @FormParam("filtroPaginacion") FiltroPaginacion filtroPaginacion,
 		@ApiParam( value = "Filtro de Unidad Administrativa: " + FiltroUA.SAMPLE) @FormParam("filtro") FiltroUA filtro,
 		@ApiParam( value = "Filtro de Orden: " + Orden.SAMPLE_ORDEN_UA) @FormParam("orden") Orden orden						
@@ -78,8 +78,8 @@ public class UAService {
 		}
 		FiltroGenerico fg = filtro.toFiltroGenerico();
 		
-		if(codigoIdioma!=null) {
-			fg.setLang(codigoIdioma);	
+		if(lang!=null) {
+			fg.setLang(lang);	
 		}
 				
 		//si no vienen los filtros se completan con los datos por defecto
@@ -114,7 +114,7 @@ public class UAService {
 	@Produces( { MediaType.APPLICATION_JSON } )
 	@POST
 	@Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
-	@Path("/{codigoua}")
+	@Path("/{codigo}")
 	@ApiOperation( 
 	    value = "Obtiene una Unidad Administrativa",
 	    notes = "Obtiene La Unidad Administrativa con el código indicado"
@@ -125,16 +125,16 @@ public class UAService {
 		   })
 		
 	public RespuestaUA  getUA(  
-			@ApiParam( value = "Codigo Unidad Administrativa", required = true ) @PathParam( "codigoua") final  String codigoua,
-		    @ApiParam( value = "codigo de idioma", required = false ) @DefaultValue(Constantes.IDIOMA_DEFECTO) @FormParam("codigoIdioma") final String codigoIdioma
+			@ApiParam( value = "Codigo Unidad Administrativa", required = true ) @PathParam( "codigo") final  String codigo,
+		    @ApiParam( value = "codigo de idioma", required = false ) @DefaultValue(Constantes.IDIOMA_DEFECTO) @FormParam("lang") final String lang
 			) throws Exception,ValidationException {
 
 		FiltroGenerico fg = new FiltroGenerico();
 		
-		if(codigoIdioma!=null) {
-			fg.setLang(codigoIdioma);	
+		if(lang!=null) {
+			fg.setLang(lang);	
 		}
-		fg.setId(new Long(codigoua));		
+		fg.setId(new Long(codigo));		
 		
 		return getRespuesta(fg);	
 		

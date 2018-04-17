@@ -1,15 +1,15 @@
 package es.caib.rolsac.apirest.v1.model.respuestas;
 
+import javax.validation.ValidationException;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.sun.jersey.api.NotFoundException;
 import com.sun.jersey.api.ParamException;
-import javax.validation.ValidationException;
-import io.swagger.annotations.ApiModel;
 
 import es.caib.rolsac.apirest.v1.exception.ExcepcionAplicacion;
 import es.caib.rolsac.apirest.v1.utiles.Constantes;
+import io.swagger.annotations.ApiModel;
 
 /**
  * Respuesta Error
@@ -19,7 +19,7 @@ import es.caib.rolsac.apirest.v1.utiles.Constantes;
  */
 
 @XmlRootElement
-@ApiModel(value = "RespuestaError", description = "Respuesta Error")
+@ApiModel(value = Constantes.TXT_RESPUESTA + "Error", description = Constantes.TXT_RESPUESTA + "Error")
 public class RespuestaError extends RespuestaBase{	
 
 	public RespuestaError(String status, String mensaje) {

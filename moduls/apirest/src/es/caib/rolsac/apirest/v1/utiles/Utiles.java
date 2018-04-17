@@ -50,84 +50,107 @@ public class Utiles {
         return r;
     } 
 
+    /**
+     *  Rellena la propiedad definida en el setter del dto con el valor de la propiedad del mismo nombre en entity. 
+     *  con excepción de idioma, que normalmente no está en el entity y se usa el que llega como parametro
+     *  y el codigo que se usa la propiedad id del entity
+     * @param entity
+     * @param dto
+     * @param setter
+     * @param lang
+     * @throws SecurityException
+     * @throws NoSuchMethodException
+     * @throws IllegalArgumentException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     * @throws NoSuchFieldException
+     */
     public static void copyProperty(Object entity, Object dto, Method setter, String lang) throws SecurityException,
             NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException,
             NoSuchFieldException {
 
         String property = StringUtils.uncapitalize(setter.getName().substring(3));
         Object value = null;
-              
-        /*
-         * Primero se busca la propiedad en la traduccion. Nota 1: Las traducciones no tienen booleanos (no hay getters
-         * que empiecen por isXxx). Nota 2: Se busca primero en la traduccion porque en Documento y DocumentTramit
-         * existe una propiedad con el mismo nombre en la clase y en la traduccion. La propiedad de la clase ya no se
-         * usa, por lo que tiene prioridad el getter de la traduccion.
-         */
-        Method i18nGetter = null;
-        try {
-            Traduccion trad;
-            if (StringUtils.isBlank(lang)) {
-                i18nGetter = entity.getClass().getMethod("getTraduccion");
-                trad = (Traduccion) i18nGetter.invoke(entity);
-            } else {
-                i18nGetter = entity.getClass().getMethod("getTraduccion", lang.getClass());
-                trad = (Traduccion) i18nGetter.invoke(entity, lang);
-            }
-            if (trad != null) {
-                i18nGetter = trad.getClass().getMethod("get" + StringUtils.capitalize(property));
-                value = i18nGetter.invoke(trad);
-            }
-            
-            if (value == null) {
-            	//No hemos encontrado valor en la traduccion principal, buscamos en las traducciones alternativas
-            	String[] langAlternates = getLangAlternates(lang);
-            	if (langAlternates != null) {
-            		for ( String altLang : langAlternates) {
-            			altLang = altLang.trim();
-            			i18nGetter = entity.getClass().getMethod("getTraduccion", altLang.getClass());
-                        trad = (Traduccion) i18nGetter.invoke(entity, altLang);
-            			
-                        if (trad != null) {
-                            i18nGetter = trad.getClass().getMethod("get" + StringUtils.capitalize(property));
-                            value = i18nGetter.invoke(trad);
-                        }
-                        if (value != null) {
-                        	break; //Encontrado valor
-                        }
-            			
-            		}
-            	}
-            	
-            }
-                
-
-        } catch (NoSuchMethodException e) {
-        }
-
-        // Si no se ha encontrado la propiedad en la traduccion, buscamos en la entidad.
-        if (value == null) {
-            // Obtener el valor de la propiedad a traves del getter de entity.
-            Method entityGetter = null;
-            try {
-                entityGetter = entity.getClass().getMethod("get" + StringUtils.capitalize(property));
-                value = entityGetter.invoke(entity);
-            } catch (NoSuchMethodException eGet) {
-                // Si la propiedad es booleana el getter sera isXxx() en vez de getXxx().
-                try {
-                    entityGetter = entity.getClass().getMethod("is" + StringUtils.capitalize(property));
-                    value = entityGetter.invoke(entity);
-                } catch (NoSuchMethodException eIs) {
-                }
-            }
-        }
-
-        // Si value tiene un metodo getId() es que es una FK y hay que recuperar su id.
-        if (value != null) {
-            try {
-                Method idGetter = value.getClass().getMethod("getId");
-                value = idGetter.invoke(value);
-            } catch (NoSuchMethodException e) {
-            }
+        
+        // si estamos intentando obtener el idioma, como no está en el dto usamos el que nos llega
+        // del request.(en algunos casos si que aparece pero deberia venir a nulo, si no es asi
+        // es un caso especial, habria que revisar el código fuente de esta funcion) 
+        if("idioma".equals(property)) {
+        	value = lang;
+        }else {
+     
+	        /*
+	         * Primero se busca la propiedad en la traduccion. Nota 1: Las traducciones no tienen booleanos (no hay getters
+	         * que empiecen por isXxx). Nota 2: Se busca primero en la traduccion porque en Documento y DocumentTramit
+	         * existe una propiedad con el mismo nombre en la clase y en la traduccion. La propiedad de la clase ya no se
+	         * usa, por lo que tiene prioridad el getter de la traduccion.
+	         */
+	        Method i18nGetter = null;
+	        try {
+	            Traduccion trad;
+	            if (StringUtils.isBlank(lang)) {
+	                i18nGetter = entity.getClass().getMethod("getTraduccion");
+	                trad = (Traduccion) i18nGetter.invoke(entity);
+	            } else {
+	                i18nGetter = entity.getClass().getMethod("getTraduccion", lang.getClass());
+	                trad = (Traduccion) i18nGetter.invoke(entity, lang);
+	            }
+	            if (trad != null) {
+	                i18nGetter = trad.getClass().getMethod("get" + StringUtils.capitalize(property));
+	                value = i18nGetter.invoke(trad);
+	            }
+	            
+	            if (value == null) {
+	            	//No hemos encontrado valor en la traduccion principal, buscamos en las traducciones alternativas
+	            	String[] langAlternates = getLangAlternates(lang);
+	            	if (langAlternates != null) {
+	            		for ( String altLang : langAlternates) {
+	            			altLang = altLang.trim();
+	            			i18nGetter = entity.getClass().getMethod("getTraduccion", altLang.getClass());
+	                        trad = (Traduccion) i18nGetter.invoke(entity, altLang);
+	            			
+	                        if (trad != null) {
+	                            i18nGetter = trad.getClass().getMethod("get" + StringUtils.capitalize(property));
+	                            value = i18nGetter.invoke(trad);
+	                        }
+	                        if (value != null) {
+	                        	break; //Encontrado valor
+	                        }
+	            			
+	            		}
+	            	}
+	            	
+	            }
+	                
+	
+	        } catch (NoSuchMethodException e) {
+	        }
+	
+	        // Si no se ha encontrado la propiedad en la traduccion, buscamos en la entidad.
+	        if (value == null) {
+	            // Obtener el valor de la propiedad a traves del getter de entity.
+	            Method entityGetter = null;
+	            try {
+	                entityGetter = entity.getClass().getMethod("get" + StringUtils.capitalize(property));
+	                value = entityGetter.invoke(entity);
+	            } catch (NoSuchMethodException eGet) {
+	                // Si la propiedad es booleana el getter sera isXxx() en vez de getXxx().
+	                try {
+	                    entityGetter = entity.getClass().getMethod("is" + StringUtils.capitalize(property));
+	                    value = entityGetter.invoke(entity);
+	                } catch (NoSuchMethodException eIs) {
+	                }
+	            }
+	        }
+	
+	        // Si value tiene un metodo getId() es que es una FK y hay que recuperar su id.
+	        if (value != null) {
+	            try {
+	                Method idGetter = value.getClass().getMethod("getId");
+	                value = idGetter.invoke(value);
+	            } catch (NoSuchMethodException e) {
+	            }
+	        }      
         }
 
         // Llamar al setter

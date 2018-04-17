@@ -3,6 +3,7 @@ package es.caib.rolsac.apirest.v1.model;
 import java.io.IOException;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -14,14 +15,14 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * Idioma.
+ * Unidad Administrativa.
  * 
  * @author indra
  *
  */
 
 @XmlRootElement
-@ApiModel(value = "Unidad Administrativa", description = "Definición de la clase Unidad Administrativa")
+@ApiModel(value = Constantes.ENTIDAD_UA, description = Constantes.TXT_DEFINICION_CLASE + Constantes.ENTIDAD_UA)
 public class UnitatAdministrativa extends EntidadBase {
 	 
 	
@@ -49,68 +50,39 @@ public class UnitatAdministrativa extends EntidadBase {
 	@ApiModelProperty(value = "email", dataType = "java.lang.String", required = false)
     private java.lang.String email;
 
-    private java.lang.Long espacioTerrit;
-
 	/** fax **/
 	@ApiModelProperty(value = "fax", dataType = "java.lang.String", required = false)
     private java.lang.String fax;
-
-	/** fotog **/
-	@ApiModelProperty(value = "fotog", dataType = "java.lang.Long", required = false)
-    private java.lang.Long fotog;
-
-	/** fotop **/
-	@ApiModelProperty(value = "fotop", dataType = "java.lang.Long", required = false)
-    private java.lang.Long fotop;
-
+	
+	
 	/** codigo **/
 	@ApiModelProperty(value = "codigo", dataType = "java.lang.Long", required = false)
     private java.lang.Long codigo;
-
-	/** logoh **/
-	@ApiModelProperty(value = "logoh", dataType = "java.lang.Long", required = false)
-    private java.lang.Long logoh;
-
-	/** logos **/
-	@ApiModelProperty(value = "logos", dataType = "java.lang.Long", required = false)
-    private java.lang.Long logos;
-
-	/** logot **/
-	@ApiModelProperty(value = "logot", dataType = "java.lang.Long", required = false)
-    private java.lang.Long logot;
-
-	/** logov **/
-	@ApiModelProperty(value = "logov", dataType = "java.lang.Long", required = false)
-    private java.lang.Long logov;
 
 	/** nombre **/
 	@ApiModelProperty(value = "nombre", dataType = "java.lang.String", required = false)
     private java.lang.String nombre;
 
 	/** numfoto1 **/
-	@ApiModelProperty(value = "numfoto1", dataType = "java.lang.Integer", required = false)
+	@ApiModelProperty(value = "numfoto1 (fichaNivel1)", dataType = "java.lang.Integer", required = false)
     private java.lang.Integer numfoto1;
 
 	/** numfoto2 **/
-	@ApiModelProperty(value = "numfoto2", dataType = "java.lang.Integer", required = false)
+	@ApiModelProperty(value = "numfoto2 (fichaNivel2)", dataType = "java.lang.Integer", required = false)
     private java.lang.Integer numfoto2;
 
 	/** numfoto3 **/
-	@ApiModelProperty(value = "numfoto3", dataType = "java.lang.Integer", required = false)
+	@ApiModelProperty(value = "numfoto3  (fichaNivel3)", dataType = "java.lang.Integer", required = false)
     private java.lang.Integer numfoto3;
 
 	/** numfoto4 **/
-	@ApiModelProperty(value = "numfoto4", dataType = "java.lang.Integer", required = false)
+	@ApiModelProperty(value = "numfoto4  (nivelListado)", dataType = "java.lang.Integer", required = false)
     private java.lang.Integer numfoto4;
 
 	/** orden **/
 	@ApiModelProperty(value = "orden", dataType = "java.lang.Long", required = false)
     private java.lang.Long orden;
-	
-	/** padre **/
-	@ApiModelProperty(value = "padre", dataType = "java.lang.Long", required = false)
-    private java.lang.Long padre;
-
+		
 	/** presentacion **/
 	@ApiModelProperty(value = "presentacion", dataType = "java.lang.String", required = false)
     private java.lang.String presentacion;
@@ -136,13 +108,8 @@ public class UnitatAdministrativa extends EntidadBase {
     private java.lang.String telefono;
 	
 	/** tratamiento **/
-/*	@ApiModelProperty(value = "tratamiento", dataType = "java.lang.Long", required = false)
-    private java.lang.Long tratamiento;
-*/
-	/** tratamiento **/
     private Tratamiento tratamiento;
-	
-	
+
 	/** url **/
 	@ApiModelProperty(value = "url", dataType = "java.lang.String", required = false)
     private java.lang.String url;
@@ -151,19 +118,83 @@ public class UnitatAdministrativa extends EntidadBase {
 	@ApiModelProperty(value = "validacion", dataType = "java.lang.Integer", required = false)
     private java.lang.Integer validacion;
 
-	/** idioma **/
-	@ApiModelProperty(value = "idioma", dataType = "java.lang.String", required = false)
-    private java.lang.String idioma;
-
 	/** codigoDIR3 **/
 	@ApiModelProperty(value = "codigoDIR3", dataType = "java.lang.String", required = false)
     private java.lang.String codigoDIR3;
 	
+	/**  **/
+	@ApiModelProperty(value = "idioma", required = false)    
+	private java.lang.String idioma;
+    
+    
+    //-- LINKS--//
+  	//-- se duplican las entidades para poder generar la clase link en funcion de la propiedad principal (sin "link_")
+	
+	
+	
+	
+	/** espacioTerrit **/
+	@ApiModelProperty(value = "link_espacioTerritorial", required = false)
+	private Link link_espacioTerritorial;
+	@ApiModelProperty(hidden = true)
+	@XmlTransient
+    private java.lang.Long espacioTerrit;
+
+	/** fotog **/
+	@ApiModelProperty(value = "link_fotog", required = false)
+	private Link link_fotog;
+	@ApiModelProperty(hidden = true)
+	@XmlTransient
+    private java.lang.Long fotog;
+
+	/** fotop **/
+	@ApiModelProperty(value = "link_fotop", required = false)
+	private Link link_fotop;
+	@ApiModelProperty(hidden = true)
+	@XmlTransient
+    private java.lang.Long fotop;
+
+	/** logoh **/
+	@ApiModelProperty(value = "link_logoh", required = false)	
+	private Link link_logoh;
+	@ApiModelProperty(hidden = true)
+	@XmlTransient
+    private java.lang.Long logoh;
+
+	/** logos **/
+	@ApiModelProperty(value = "link_logos",  required = false)
+	private Link link_logos;
+	@ApiModelProperty(hidden = true)
+	@XmlTransient
+    private java.lang.Long logos;
+
+	/** logot **/
+	@ApiModelProperty(value = "link_logot", required = false)
+	private Link link_logot;
+	@ApiModelProperty(hidden = true)
+	@XmlTransient
+    private java.lang.Long logot;
+
+	/** logov **/
+	@ApiModelProperty(value = "link_logov", required = false)
+	private Link link_logov;
+	@ApiModelProperty(hidden = true)
+	@XmlTransient
+    private java.lang.Long logov;
+	
+	/** padre **/
+	@ApiModelProperty(value = "link_padre", required = false)
+	private Link link_padre;
+	@ApiModelProperty(hidden = true)
+	@XmlTransient
+    private java.lang.Long padre;
+	
+	
+	
+	
 	
 	public UnitatAdministrativa (org.ibit.rol.sac.model.UnidadAdministrativa ua, String urlBase,String idioma,boolean hateoasEnabled ) {
 		super(ua, urlBase, idioma, hateoasEnabled);
-		
-		//this.fill( ua, urlBase, idioma, hateoasEnabled);
 	}
 	
 	
@@ -187,84 +218,6 @@ public class UnitatAdministrativa extends EntidadBase {
 	public <T> void fill(T ua, String urlBase,String idioma, boolean hateoasEnabled ) {
 		super.fill(ua, urlBase, idioma, hateoasEnabled);	
 		
-/*		if(!StringUtils.isEmpty(idioma)) {			
-			TraduccionUA traUA = (TraduccionUA)ua.getTraduccion(idioma);
-			if(traUA != null) {
-				this.presentacion = traUA.getPresentacion();
-				this.nombre = traUA.getNombre();
-				this.abreviatura = traUA.getAbreviatura();
-				this.cvResponsable = traUA.getCvResponsable();
-				this.url = traUA.getUrl();
-			}else {
-				this.presentacion = "";
-				this.nombre = "";
-				this.abreviatura = "";
-				this.cvResponsable = "";
-				this.url = "";
-			}			
-		}else {
-			this.presentacion = "";
-			this.nombre = "";
-			this.abreviatura = "";
-			this.cvResponsable = "";
-			this.url = "";
-		}
-		
-		this.businessKey = ua.getBusinessKey();
-		this.claveHita = ua.getClaveHita();
-		this.codigoEstandar = ua.getCodigoEstandar();
-		this.dominio = ua.getDominio();
-		this.email = ua.getEmail();
-		this.fax = ua.getFax();		
-		this.orden = new Long(ua.getOrden());
-		this.padre = (ua.getPadre()==null)?new Long(-1):ua.getPadre().getId();
-		this.responsable = ua.getResponsable();
-		this.responsableEmail = ua.getResponsableEmail();
-		this.sexoResponsable = ua.getSexoResponsable();
-		this.telefono = ua.getTelefono();
-		
-		if(ua.getTratamiento()!=null ) {
-			this.tratamiento = new Tratamiento();
-			this.tratamiento.setCodigo(ua.getTratamiento().getId());
-			this.tratamiento.setCodigoEstandar(ua.getTratamiento().getCodigoEstandar());
-			if(!StringUtils.isEmpty(idioma) && ua.getTratamiento().getTraduccion(idioma)!=null) {
-				TraduccionTratamiento tt =(TraduccionTratamiento) ua.getTratamiento().getTraduccion(idioma);
-				this.tratamiento.setCargoF(tt.getCargoF());
-				this.tratamiento.setCargoM(tt.getCargoM());
-				this.tratamiento.setTipo(tt.getTipo());
-				this.tratamiento.setTratamientoF(tt.getTratamientoF());
-				this.tratamiento.setTratamientoM(tt.getTratamientoM());				
-			}
-		}
-				
-		this.validacion = ua.getValidacion();		
-		this.codigoDIR3 = ua.getCodigoDIR3();
-		
-		this.fotog = this.getIdArchivo(ua.getFotog());
-		this.fotop = this.getIdArchivo(ua.getFotop());
-		this.logoh = this.getIdArchivo(ua.getLogoh());
-		this.logos = this.getIdArchivo(ua.getLogos());
-		this.logot = this.getIdArchivo(ua.getLogot());
-		this.logov = this.getIdArchivo(ua.getLogov());
-		
-		this.numfoto1 = ua.getNumfoto1();
-		this.numfoto2 = ua.getNumfoto2();
-		this.numfoto3 = ua.getNumfoto3();
-		this.numfoto4 = ua.getNumfoto4();
-		
-		this.idioma = ua.getIdioma();
-		this.codigo = ua.getId();
-				
-		if(ua.getEspacioTerrit()!=null) {
-			this.espacioTerrit = ua.getEspacioTerrit().getId();		
-		}*/
-		
-		//super.copiaPropiedadesDeEntity(ua, idioma);
-		
-		//generaLinks(urlBase);
-		
-		
-		
 		//copiamos los datos que no tienen la misma estructura:		
 		if(((org.ibit.rol.sac.model.UnidadAdministrativa)ua).getTratamiento()!=null ) {					
 			this.tratamiento = new Tratamiento(((org.ibit.rol.sac.model.UnidadAdministrativa)ua).getTratamiento(),urlBase,idioma,hateoasEnabled);				
@@ -280,22 +233,15 @@ public class UnitatAdministrativa extends EntidadBase {
 	@Override
 	protected void generaLinks(String urlBase) {		
 		
-		this.addLink(this.idioma, Constantes.ENTIDAD_IDIOMA, Constantes.URL_IDIOMA, urlBase);
-		this.addLink(this.getCodigo(), Constantes.ENTIDAD_UA, Constantes.URL_UA, urlBase,"codigo");
-		this.addLink(this.espacioTerrit, Constantes.ENTIDAD_ESPACIO_TERRITORIAL, Constantes.URL_ESPACIO_TERRITORIAL, urlBase,"espacioTerrit");
+		this.link_espacioTerritorial = this.generaLink(this.espacioTerrit, Constantes.ENTIDAD_ESPACIO_TERRITORIAL, Constantes.URL_ESPACIO_TERRITORIAL, urlBase,null);
+		this.link_padre = this.generaLink(this.padre, Constantes.ENTIDAD_UA, Constantes.URL_UA, urlBase,null );
 		
-		this.addLink(this.fotog, Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"fotog" );
-		this.addLink(this.fotop, Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"fotop" );
-		this.addLink(this.logoh, Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"logoh" );
-		this.addLink(this.logos, Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"logos" );		
-		this.addLink(this.logot, Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"logot" );		
-		this.addLink(this.logov, Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"logov" );
-		
-		this.addLink(this.numfoto1, Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"numfoto1" );
-		this.addLink(this.numfoto2, Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"numfoto2" );
-		this.addLink(this.numfoto3, Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"numfoto3" );
-		this.addLink(this.numfoto4, Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,"numfoto4" );
-
+		this.link_fotog = this.generaLinkArchivo(this.fotog, urlBase,null);
+		this.link_fotop = this.generaLinkArchivo(this.fotop, urlBase,null );
+		this.link_logoh = this.generaLinkArchivo(this.logoh, urlBase,null );
+		this.link_logos = this.generaLinkArchivo(this.logos, urlBase,null );		
+		this.link_logot = this.generaLinkArchivo(this.logot, urlBase,null );		
+		this.link_logov = this.generaLinkArchivo(this.logov, urlBase,null );
 	}
 	
 	public static UnitatAdministrativa valueOf(final String json) {
@@ -424,6 +370,7 @@ public class UnitatAdministrativa extends EntidadBase {
 	/**
 	 * @return the espacioTerrit
 	 */
+	@XmlTransient
 	public java.lang.Long getEspacioTerrit() {
 		return espacioTerrit;
 	}
@@ -456,6 +403,7 @@ public class UnitatAdministrativa extends EntidadBase {
 	/**
 	 * @return the fotog
 	 */
+	@XmlTransient
 	public java.lang.Long getFotog() {
 		return fotog;
 	}
@@ -472,6 +420,7 @@ public class UnitatAdministrativa extends EntidadBase {
 	/**
 	 * @return the fotop
 	 */
+	@XmlTransient
 	public java.lang.Long getFotop() {
 		return fotop;
 	}
@@ -488,6 +437,7 @@ public class UnitatAdministrativa extends EntidadBase {
 	/**
 	 * @return the codigo
 	 */
+	@XmlTransient
 	public java.lang.Long getCodigo() {
 		return codigo;
 	}
@@ -509,6 +459,7 @@ public class UnitatAdministrativa extends EntidadBase {
 	/**
 	 * @return the logoh
 	 */
+	@XmlTransient
 	public java.lang.Long getLogoh() {
 		return logoh;
 	}
@@ -525,6 +476,7 @@ public class UnitatAdministrativa extends EntidadBase {
 	/**
 	 * @return the logos
 	 */
+	@XmlTransient
 	public java.lang.Long getLogos() {
 		return logos;
 	}
@@ -541,6 +493,7 @@ public class UnitatAdministrativa extends EntidadBase {
 	/**
 	 * @return the logot
 	 */
+	@XmlTransient
 	public java.lang.Long getLogot() {
 		return logot;
 	}
@@ -557,6 +510,7 @@ public class UnitatAdministrativa extends EntidadBase {
 	/**
 	 * @return the logov
 	 */
+	@XmlTransient
 	public java.lang.Long getLogov() {
 		return logov;
 	}
@@ -669,6 +623,7 @@ public class UnitatAdministrativa extends EntidadBase {
 	/**
 	 * @return the padre
 	 */
+	@XmlTransient
 	public java.lang.Long getPadre() {
 		return padre;
 	}
@@ -856,6 +811,134 @@ public class UnitatAdministrativa extends EntidadBase {
 	 */
 	public void setTratamiento(Tratamiento tratamiento) {
 		this.tratamiento = tratamiento;
+	}
+
+
+	/**
+	 * @return the link_logoh
+	 */
+	public Link getLink_logoh() {
+		return link_logoh;
+	}
+
+
+	/**
+	 * @param link_logoh the link_logoh to set
+	 */
+	public void setLink_logoh(Link link_logoh) {
+		this.link_logoh = link_logoh;
+	}
+
+
+	/**
+	 * @return the link_espacioTerritorial
+	 */
+	public Link getLink_espacioTerritorial() {
+		return link_espacioTerritorial;
+	}
+
+
+	/**
+	 * @param link_espacioTerritorial the link_espacioTerritorial to set
+	 */
+	public void setLink_espacioTerritorial(Link link_espacioTerritorial) {
+		this.link_espacioTerritorial = link_espacioTerritorial;
+	}
+
+
+	/**
+	 * @return the link_fotog
+	 */
+	public Link getLink_fotog() {
+		return link_fotog;
+	}
+
+
+	/**
+	 * @param link_fotog the link_fotog to set
+	 */
+	public void setLink_fotog(Link link_fotog) {
+		this.link_fotog = link_fotog;
+	}
+
+
+	/**
+	 * @return the link_fotop
+	 */
+	public Link getLink_fotop() {
+		return link_fotop;
+	}
+
+
+	/**
+	 * @param link_fotop the link_fotop to set
+	 */
+	public void setLink_fotop(Link link_fotop) {
+		this.link_fotop = link_fotop;
+	}
+
+
+	/**
+	 * @return the link_logos
+	 */
+	public Link getLink_logos() {
+		return link_logos;
+	}
+
+
+	/**
+	 * @param link_logos the link_logos to set
+	 */
+	public void setLink_logos(Link link_logos) {
+		this.link_logos = link_logos;
+	}
+
+
+	/**
+	 * @return the link_logot
+	 */
+	public Link getLink_logot() {
+		return link_logot;
+	}
+
+
+	/**
+	 * @param link_logot the link_logot to set
+	 */
+	public void setLink_logot(Link link_logot) {
+		this.link_logot = link_logot;
+	}
+
+
+	/**
+	 * @return the link_logov
+	 */
+	public Link getLink_logov() {
+		return link_logov;
+	}
+
+
+	/**
+	 * @param link_logov the link_logov to set
+	 */
+	public void setLink_logov(Link link_logov) {
+		this.link_logov = link_logov;
+	}
+
+
+	/**
+	 * @return the link_padre
+	 */
+	public Link getLink_padre() {
+		return link_padre;
+	}
+
+
+	/**
+	 * @param link_padre the link_padre to set
+	 */
+	public void setLink_padre(Link link_padre) {
+		this.link_padre = link_padre;
 	}
 	
 	

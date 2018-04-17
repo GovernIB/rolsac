@@ -15,16 +15,20 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "Link", description = "Relaciones con otros objetos")
 public class Link {
 	 
-	public Link(String entidad, String codigo, String url,String descripcio) {
+	public Link(String entidad, String codigo, String url,String descripcion,boolean hateoas) {
 		super();
-		this.entidad = entidad;
-		this.codigo = codigo;
-		this.url = url;
-		this.descripcio = descripcio;
+		this.rel = entidad;
+		this.codigo = codigo;		
+		this.descripcion = descripcion;
+		if(hateoas) {
+			this.href = url;
+		}else {
+			this.href = null;
+		}
 	}
 	
-	public Link(String entidad, String codigo, String url) {
-		this(entidad,codigo,url,null);
+	public Link(String entidad, String codigo, String url, boolean hateoas) {
+		this(entidad,codigo,url,null,hateoas);
 	}
 
 	public Link() {
@@ -33,8 +37,8 @@ public class Link {
 
 
 	/** Status a retornar. **/
-	@ApiModelProperty(value = "Entidad", dataType = "java.lang.String", required = true)
-	private String entidad;
+	@ApiModelProperty(value = "Entidad relacionada", dataType = "java.lang.String", required = true)
+	private String rel;
 	
 	/** Mensaje de  error. **/
 	@ApiModelProperty(value = "Codigo", dataType = "java.lang.String", required = false)
@@ -42,13 +46,25 @@ public class Link {
 	
 	/** Mensaje de  error. **/
 	@ApiModelProperty(value = "Url", dataType = "java.lang.String", required = true)
-	private String url;
+	private String href;
 	
 	/** Mensaje de  error. **/
 	@ApiModelProperty(value = "Descripcion", dataType = "java.lang.String", required = false)
-	private String descripcio;
-	
+	private String descripcion;
 
+	/**
+	 * @return the rel
+	 */
+	public String getRel() {
+		return rel;
+	}
+
+	/**
+	 * @param rel the rel to set
+	 */
+	public void setRel(String rel) {
+		this.rel = rel;
+	}
 
 	/**
 	 * @return the codigo
@@ -65,45 +81,34 @@ public class Link {
 	}
 
 	/**
-	 * @return the url
+	 * @return the href
 	 */
-	public String getUrl() {
-		return url;
+	public String getHref() {
+		return href;
 	}
 
 	/**
-	 * @param url the url to set
+	 * @param href the href to set
 	 */
-	public void setUrl(String url) {
-		this.url = url;
+	public void setHref(String href) {
+		this.href = href;
 	}
 
 	/**
-	 * @return the entidad
+	 * @return the descripcion
 	 */
-	public String getEntidad() {
-		return entidad;
+	public String getDescripcion() {
+		return descripcion;
 	}
 
 	/**
-	 * @param entidad the entidad to set
+	 * @param descripcion the descripcion to set
 	 */
-	public void setEntidad(String entidad) {
-		this.entidad = entidad;
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
+	
 
-	/**
-	 * @return the descripcio
-	 */
-	public String getDescripcio() {
-		return descripcio;
-	}
 
-	/**
-	 * @param descripcio the descripcio to set
-	 */
-	public void setDescripcio(String descripcio) {
-		this.descripcio = descripcio;
-	}
-		
+
 }

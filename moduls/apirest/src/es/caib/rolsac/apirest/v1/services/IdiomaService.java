@@ -98,7 +98,6 @@ public class IdiomaService {
 			idioma.setLangTraductor(rIdioma.getLangTraductor());
 			idioma.setNombre(rIdioma.getNombre());
 			idioma.setOrden(rIdioma.getOrden());
-			idioma.addLink(rIdioma.getCodigoEstandar(), Constantes.ENTIDAD_IDIOMA, Constantes.URL_IDIOMA,"");
 			idiomas.add(idioma);
 			
 		}

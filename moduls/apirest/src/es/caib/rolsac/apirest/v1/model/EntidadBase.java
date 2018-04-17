@@ -60,6 +60,7 @@ public abstract class EntidadBase {
 	 */
 	public <T> EntidadBase(T tr, String urlBase,String idioma,boolean hateoasEnabled) {
 		super();
+		addSetersInvalidos();
 		this.fill( tr, urlBase, idioma, hateoasEnabled);
 	}
 	
@@ -76,78 +77,35 @@ public abstract class EntidadBase {
 		copiaPropiedadesDeEntity(tr, idioma);
 		generaLinks(urlBase);
 	}
-
-	/** Status a retornar. **/
-	@ApiModelProperty(value = "Links", required = false)
-	private ArrayList<Link> links=null;
 	
-
-	/**
-	 * @return the links
-	 */
-	public ArrayList<Link> getLinks() {
-		return this.links;
-	}
-
-	/**
-	 * @param links the links to set
-	 */
-	public void setLinks(ArrayList<Link> links) {
-		this.links = links;
-	}
-	
-	
-	/**
-	 * Añade el link especificado si el modo hateoas está activado y el codigo no es null
-	 * 
-	 * @param codigo codigo a usar
-	 * @param entidad entidad a la que hace referencia el enlace
-	 * @param url url relativa de acceso al objeto
-	 * @param urlBase urlbase que unida a la url forman una url real. campo opcional, por defecto se usa la existente en el fichero properties
-	 * @param descripcion campo al que hace referencia el enlace.
-	 */
-	public void addLink(String codigo, String entidad, String url, String urlBase, String descripcion) {
-		if(hateoasEnabled) {
-			if(this.links==null) {
-				this.links = new ArrayList<Link>();
-			}		
-			if(codigo!=null) {
-				this.links.add(new Link(entidad,codigo,(StringUtils.isEmpty(urlBase)?Constantes.URL_BASE:urlBase) + url.replace("{0}", codigo),descripcion));
-			}	
-		}
-		
-	}
-	/**
-	 *  Añade el link especificado si el modo hateoas está activado y el codigo no es null
-	 */
-	public void addLink(Long codigo, String entidad, String url, String urlBase, String descripcion) {	
+	public Link generaLink(String codigo, String entidad, String url, String urlBase,String descripcion) {		
 		if(codigo!=null) {
-			this.addLink(codigo.toString(),entidad,url,urlBase,descripcion);
-		}
-	}
-	/**
-	 *  Añade el link especificado si el modo hateoas está activado y el codigo no es null
-	 */
-	public void addLink(Integer codigo, String entidad, String url, String urlBase, String descripcion) {	
-		if(codigo!=null) {
-			this.addLink(codigo.toString(),entidad,url,urlBase,descripcion);
-		}
-	}
-	/**
-	 *  Añade el link especificado si el modo hateoas está activado y el codigo no es null. 
-	 */
-	public void addLink(String codigo, String entidad, String url, String urlBase) {
-		this.addLink(codigo, entidad, url, urlBase,null);
+			return	new Link(entidad,codigo,(StringUtils.isEmpty(urlBase)?Constantes.URL_BASE:urlBase) + url.replace("{0}", codigo),descripcion,hateoasEnabled);
+		}			
+		return null;
 	}
 	
-	/**
-	 *  Añade el link especificado si el modo hateoas está activado y el codigo no es null. incluyendo la 
-	 */
-	public void addLinkArchivo(Long codigo,String descripcion, String urlBase) {
+	public Link generaLink(Long codigo, String entidad, String url, String urlBase,String descripcion) {		
 		if(codigo!=null) {
-			this.addLink(codigo.toString(), Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,descripcion );
-		}
+			return	new Link(entidad,codigo.toString(),(StringUtils.isEmpty(urlBase)?Constantes.URL_BASE:urlBase) + url.replace("{0}", codigo+""),descripcion,hateoasEnabled);
+		}			
+		return null;
 	}
+	
+	public Link generaLinkArchivo(Long codigo, String urlBase,String descripcion) {
+		if(codigo!=null) {
+			return generaLink(codigo.toString(), Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase,descripcion);
+		}	
+		return null;
+	}
+	
+	
+/*	public Link generaLinkArchivo(Integer codigo, String urlBase,String descripcion) {
+		if(codigo!=null) {
+			return generaLink(codigo.toString(), Constantes.ENTIDAD_ARCHIVO, Constantes.URL_ARCHIVO, urlBase, descripcion);
+		}	
+		return null;
+	}*/
 	
 	/**
 	 * Si el objeto no es nulo retorna el Id (codigo) del archivo
