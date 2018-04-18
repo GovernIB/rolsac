@@ -68,6 +68,9 @@ public class Constantes {
 	public static final String ENTIDAD_SECCION = "secciones";
 	public static final String URL_SECCION = ENTIDAD_SECCION + "/{0}";
 	
+	public static final String ENTIDAD_BOLETINES = "boletines";
+	public static final String URL_BOLETINES = ENTIDAD_BOLETINES + "/{0}";
+	
 	
 
 	

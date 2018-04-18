@@ -80,6 +80,11 @@ public class BootstrapV1 extends HttpServlet {
 		      .name(Constantes.ENTIDAD_ARCHIVO)
 		      .description("Servicio para la obtención de información de los archivos.")
 		      );
+   
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_BOLETINES)
+		      .description("Servicio para la obtención de información de los boletines.")
+		      );
       
     new SwaggerContextService().withServletConfig(config).updateSwagger(swagger);
   }

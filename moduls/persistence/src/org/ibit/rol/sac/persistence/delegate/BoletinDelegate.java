@@ -8,6 +8,7 @@ import javax.ejb.Handle;
 import javax.naming.NamingException;
 
 import org.ibit.rol.sac.model.Boletin;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.intf.BoletinFacade;
 import org.ibit.rol.sac.persistence.intf.BoletinFacadeHome;
 import org.ibit.rol.sac.persistence.util.BoletinFacadeUtil;
@@ -84,6 +85,14 @@ public class BoletinDelegate implements StatelessDelegate
 			throw new DelegateException(e);
 		} catch (CreateException e) {
 			throw new DelegateException(e);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+
+	public ResultadoBusqueda consultaBoletines(FiltroGenerico filtro) throws DelegateException {
+		try {
+			return getFacade().consultaBoletines(filtro);
 		} catch (RemoteException e) {
 			throw new DelegateException(e);
 		}

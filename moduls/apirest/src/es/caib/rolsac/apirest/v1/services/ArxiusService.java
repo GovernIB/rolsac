@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.validation.ValidationException;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -53,15 +51,10 @@ public class ArxiusService {
 		   })
 		
 	public RespuestaArxius  getArxiu(  
-			@ApiParam( value = "Código del archivo", required = true ) @PathParam( "codigo") final  String codigo,
-		    @ApiParam( value = "Código de idioma", required = false ) @DefaultValue(Constantes.IDIOMA_DEFECTO) @FormParam("lang") final String lang
+			@ApiParam( value = "Código del archivo", required = true ) @PathParam( "codigo") final  String codigo
 			) throws Exception,ValidationException {
 		
 		FiltroGenerico fg = new FiltroGenerico();
-
-		if(lang!=null) {
-			fg.setLang(lang);	//así se recupera el de por defecto si es necesario
-		}
 		
 		fg.setId(new Long(codigo));	
 		

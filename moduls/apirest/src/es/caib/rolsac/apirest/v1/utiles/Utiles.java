@@ -25,8 +25,8 @@ import org.ibit.rol.sac.model.Traduccion;
 public class Utiles {
 
 	private static Log log = LogFactory.getLog(Utiles.class);
-	private static String[] GETTERS_INVALIDS = {"getSerializer","getDeserializer", "getTypeDesc"};
-    private static String[] SETTERS_INVALIDS = {"setSerializer", "setDeserializer", "setTypeDesc"};    
+	//private static String[] GETTERS_INVALIDS = {"getSerializer","getDeserializer", "getTypeDesc"};
+    //private static String[] SETTERS_INVALIDS = {"setSerializer", "setDeserializer", "setTypeDesc"};    
 
 	
 

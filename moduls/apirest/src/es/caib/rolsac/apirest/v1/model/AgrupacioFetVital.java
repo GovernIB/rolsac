@@ -45,7 +45,7 @@ public class AgrupacioFetVital extends EntidadBase {
 	private long codigo;
 	
 	/** nombre **/
-	@ApiModelProperty(value = "nombre", dataType = "java.lang.Long", required = false)
+	@ApiModelProperty(value = "nombre", dataType = "java.lang.String", required = false)
 	private String nombre;
 	
 	
