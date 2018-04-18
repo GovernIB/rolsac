@@ -25,20 +25,20 @@ public class Arxius extends EntidadBase {
 	 
 
 	/** codigo **/
-	@ApiModelProperty(value = "codigo", dataType = "java.lang.Long", required = false)
+	@ApiModelProperty(value = "codigo",  required = false)
 	private long codigo;
 	
 	/** nombre **/
-	@ApiModelProperty(value = "nombre", dataType = "java.lang.String", required = false)
+	@ApiModelProperty(value = "nombre",  required = false)
 	private String nombre;
 	
 
 	/** mime **/
-	@ApiModelProperty(value = "mime", dataType = "java.lang.String", required = false)
+	@ApiModelProperty(value = "mime",  required = false)
 	private String mime;
 	
 	/** peso **/
-	@ApiModelProperty(value = "peso", dataType = "java.lang.Long", required = false)
+	@ApiModelProperty(value = "peso",  required = false)
 	private long peso;
 	
 

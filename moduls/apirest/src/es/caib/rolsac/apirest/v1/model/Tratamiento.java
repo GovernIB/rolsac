@@ -32,31 +32,31 @@ public class Tratamiento extends EntidadBase {
 	}
 
 	/** codigo. **/
-	@ApiModelProperty(value = "codigo", dataType = "java.lang.Long")
+	@ApiModelProperty(value = "codigo")
 	private Long codigo;
 
 	/** cargoF. **/
-	@ApiModelProperty(value = "cargoF", dataType = "java.lang.String")
+	@ApiModelProperty(value = "cargoF")
 	private String cargoF;
 
 	/** cargoM. **/
-	@ApiModelProperty(value = "cargoM", dataType = "java.lang.String")
+	@ApiModelProperty(value = "cargoM")
 	private String cargoM;
 
 	/** codigoEstandar**/
-	@ApiModelProperty(value = "codigoEstandar", dataType = "java.lang.String")
+	@ApiModelProperty(value = "codigoEstandar")
 	private String codigoEstandar;
 	
 	/** tipo**/
-	@ApiModelProperty(value = "tipo", dataType = "java.lang.String")
+	@ApiModelProperty(value = "tipo")
 	private String tipo;
 	
 	/** tratamientoF**/
-	@ApiModelProperty(value = "tratamientoF", dataType = "java.lang.String")
+	@ApiModelProperty(value = "tratamientoF")
 	private String tratamientoF;
 	
 	/** **/
-	@ApiModelProperty(value = "tratamientoM", dataType = "java.lang.String")
+	@ApiModelProperty(value = "tratamientoM")
 	private String tratamientoM;
 	
 	

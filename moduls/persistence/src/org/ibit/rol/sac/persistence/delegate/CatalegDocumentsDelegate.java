@@ -1,18 +1,19 @@
 package org.ibit.rol.sac.persistence.delegate;
 
+import java.rmi.RemoteException;
+import java.util.List;
+
+import javax.ejb.CreateException;
+import javax.ejb.Handle;
+import javax.naming.NamingException;
+
 import org.ibit.rol.sac.model.CatalegDocuments;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.intf.CatalegDocumentsFacade;
 import org.ibit.rol.sac.persistence.intf.CatalegDocumentsFacadeHome;
 import org.ibit.rol.sac.persistence.util.CatalegDocumentsFacadeUtil;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
-
-import javax.ejb.Handle;
-import javax.ejb.CreateException;
-import javax.naming.NamingException;
-import java.rmi.RemoteException;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Business delegate para manipular el catalogo de documentos
@@ -86,5 +87,13 @@ public class CatalegDocumentsDelegate implements StatelessDelegate
             throw new DelegateException(e);
         }
     }
+
+	public ResultadoBusqueda consultaCatalegDocuments(FiltroGenerico filtro) throws DelegateException {
+	       try {
+	            return getFacade().consultaCatalegDocuments(filtro);
+	        } catch (RemoteException e) {
+	            throw new DelegateException(e);
+	        }
+	}
     
 }

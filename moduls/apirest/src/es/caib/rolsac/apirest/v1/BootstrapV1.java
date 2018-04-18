@@ -57,34 +57,47 @@ public class BootstrapV1 extends HttpServlet {
 
     swagger.externalDocs(new ExternalDocs("Más info contacte con el responsable.", "http://www.caib.es"));
 
+    String txt_descripcion = "Servicio para la obtención de información de";
+    
    swagger.tag(new Tag()
       .name(Constantes.ENTIDAD_IDIOMA)
-      .description("Servicio para la obtención de información de los idiomas.")
+      .description(txt_descripcion + " los idiomas.")
       );
    swagger.tag(new Tag()
 		      .name(Constantes.ENTIDAD_UA)
-		      .description("Servicio para la obtención de información de las unidades administrativas.")
+		      .description(txt_descripcion + " las unidades administrativas.")
 		      );
    
    swagger.tag(new Tag()
 		      .name(Constantes.ENTIDAD_ARUPACIO_FET_VITAL)
-		      .description("Servicio para la obtención de información de las agrupaciones de hechos vitales.")
+		      .description(txt_descripcion + " las agrupaciones de hechos vitales.")
 		      );
    
    swagger.tag(new Tag()
 		      .name(Constantes.ENTIDAD_ARUPACIO_MATERIES)
-		      .description("Servicio para la obtención de información de las agrupaciones de materias.")
+		      .description(txt_descripcion + " las agrupaciones de materias.")
 		      );
    
    swagger.tag(new Tag()
 		      .name(Constantes.ENTIDAD_ARCHIVO)
-		      .description("Servicio para la obtención de información de los archivos.")
+		      .description(txt_descripcion + " los archivos.")
 		      );
    
    swagger.tag(new Tag()
 		      .name(Constantes.ENTIDAD_BOLETINES)
-		      .description("Servicio para la obtención de información de los boletines.")
+		      .description(txt_descripcion + " los boletines.")
 		      );
+   
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_CATALOGO_DOCUMENTOS)
+		      .description(txt_descripcion + "l catalogo de documentos.")
+		      );
+   
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_DOCUMENTOS)
+		      .description(txt_descripcion + " los documentos de fichas y procedimientos.")
+		      );
+   
       
     new SwaggerContextService().withServletConfig(config).updateSwagger(swagger);
   }

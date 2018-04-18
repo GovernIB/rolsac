@@ -37,8 +37,12 @@ public class FiltroGenerico implements Serializable {
 	public final static String FILTRO_UA_VALIDACION = "validacion";
 	public final static String FILTRO_UA_CODIGO_SECCION = "codigoSeccion";
 	public final static String FILTRO_UA_CODIGO_NORMATIVA = "codigoNormativa";
+	
 	public static final String FILTRO_AFV_PUBLICO = "publico";
 	
+	public static final String FILTRO_DOC_ARCHIVO = "archivo";
+	public static final String FILTRO_DOC_FICHA = "ficha";
+	public static final String FILTRO_DOC_PROCEDIMIENTO = "procedimiento";	
 
 	
 	public FiltroGenerico() {

@@ -3,6 +3,7 @@ package org.ibit.rol.sac.persistence.ejb;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -10,12 +11,9 @@ import java.util.Map;
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.Documento;
@@ -39,15 +37,17 @@ import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
 import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
+import org.ibit.rol.sac.persistence.util.ApiRestUtils;
 import org.ibit.rol.sac.persistence.util.IndexacionUtil;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
-import org.apache.commons.lang.exception.ExceptionUtils;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.caib.solr.api.SolrIndexer;
 import es.caib.solr.api.model.IndexFile;
 import es.caib.solr.api.model.MultilangLiteral;
@@ -55,6 +55,9 @@ import es.caib.solr.api.model.PathUO;
 import es.caib.solr.api.model.types.EnumAplicacionId;
 import es.caib.solr.api.model.types.EnumCategoria;
 import es.caib.solr.api.model.types.EnumIdiomas;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Session;
 
 /**
  * SessionBean para mantener y consultar Documentos.
@@ -88,7 +91,8 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
-    public void ejbCreate() throws CreateException {
+    @Override
+	public void ejbCreate() throws CreateException {
         super.ejbCreate();
     }
 
@@ -935,5 +939,73 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 			}
     	}
 	}	
+	
+	/**
+	 *  Metodo para consultar los documentos. 
+	 * @param filtro generico
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     * 
+	 * @return
+	 */
+	public ResultadoBusqueda consultaDocumentos(FiltroGenerico filtro) {
+		
+		Session session = getSession();	
+		Integer pageSize = filtro.getPageSize();
+		Integer pageNumber = filtro.getPage();
+		String lang = filtro.getLang();
+		Long id = filtro.getId();
+		Map <String,String> parametros = new HashMap<String,String>();
+		
+		
+		String idArchivo = filtro.getValor(FiltroGenerico.FILTRO_DOC_ARCHIVO);
+		String idFicha = filtro.getValor(FiltroGenerico.FILTRO_DOC_FICHA);
+		String idProcedimiento = filtro.getValor(FiltroGenerico.FILTRO_DOC_PROCEDIMIENTO);
+		
+		
+		
+		StringBuilder select = new StringBuilder("SELECT d ");
+		StringBuilder selectCount = new StringBuilder("SELECT count(d) ");
+		StringBuilder from = new StringBuilder(" FROM Documento as d, d.traducciones as trad ") ;
+		StringBuilder where =new StringBuilder(" WHERE index(trad) = :lang");
+		parametros.put("lang",lang);
+		StringBuilder order = new StringBuilder("");			
+				
+		try {
+				
+			if(id!=null && id>0) {
+				where.append(" AND d.id = :id");
+				parametros.put("id", id.toString());					
+			}
+			
+			if(idArchivo!=null && StringUtils.isNumeric(idArchivo) &&  Integer.parseInt(idArchivo)>0) {				
+				from.append(", d.archivo as a ");
+				where.append(" AND  a.id = :idArchivo");
+				parametros.put("idArchivo", idArchivo);					
+			}
+			
+			if(idFicha!=null && StringUtils.isNumeric(idFicha) &&  Integer.parseInt(idFicha)>0) {				
+				from.append(", d.ficha as f ");
+				where.append(" AND  f.id = :idFicha");
+				parametros.put("idFicha", idFicha);					
+			}
+			
+			if(idProcedimiento!=null && StringUtils.isNumeric(idProcedimiento) &&  Integer.parseInt(idProcedimiento)>0) {				
+				from.append(", d.procedimiento as p ");
+				where.append(" AND  p.id = :idProcedimiento");
+				parametros.put("idProcedimiento", idProcedimiento);					
+			}
+				 
+			return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(), selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
+	
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+	
+	
+	
 	
 }

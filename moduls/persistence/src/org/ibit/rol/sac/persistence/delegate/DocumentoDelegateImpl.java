@@ -1,23 +1,25 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import org.ibit.rol.sac.model.Documento;
-import org.ibit.rol.sac.model.Archivo;
-import org.ibit.rol.sac.model.SolrPendiente;
-import org.ibit.rol.sac.model.SolrPendienteResultado;
-import org.ibit.rol.sac.persistence.intf.DocumentoFacade;
-import org.ibit.rol.sac.persistence.intf.DocumentoFacadeHome;
-import org.ibit.rol.sac.persistence.util.DocumentoFacadeUtil;
-
-import es.caib.solr.api.SolrIndexer;
-import es.caib.solr.api.model.types.EnumCategoria;
+import java.rmi.RemoteException;
+import java.util.List;
+import java.util.Map;
 
 import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
 
-import java.rmi.RemoteException;
-import java.util.List;
-import java.util.Map;
+import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.Documento;
+import org.ibit.rol.sac.model.SolrPendiente;
+import org.ibit.rol.sac.model.SolrPendienteResultado;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
+import org.ibit.rol.sac.persistence.intf.DocumentoFacade;
+import org.ibit.rol.sac.persistence.intf.DocumentoFacadeHome;
+import org.ibit.rol.sac.persistence.util.DocumentoFacadeUtil;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
+import es.caib.solr.api.SolrIndexer;
+import es.caib.solr.api.model.types.EnumCategoria;
 
 /**
  * Created by IntelliJ IDEA.
@@ -176,5 +178,13 @@ public class DocumentoDelegateImpl implements  StatelessDelegate, DocumentoDeleg
             throw new DelegateException(e);
         }
 	}	
+	
+	public ResultadoBusqueda consultaDocumentos(FiltroGenerico filtro) throws DelegateException {
+		try {
+            return getFacade().consultaDocumentos(filtro);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+	}
     
 }

@@ -7,7 +7,9 @@ import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.caib.solr.api.SolrIndexer;
 import es.caib.solr.api.model.types.EnumCategoria;
 
@@ -74,5 +76,9 @@ public class DocumentoDelegate  implements DocumentoDelegateI
 	
 	public List<Long> obtenerDocumentosTramiteSolr(Long idTramite) throws DelegateException{
 		return impl.obtenerDocumentosTramiteSolr(idTramite);
+	}
+
+	public ResultadoBusqueda consultaDocumentos(FiltroGenerico filtro) throws DelegateException {
+		return impl.consultaDocumentos(filtro);
 	}
 }

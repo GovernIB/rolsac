@@ -24,23 +24,23 @@ import io.swagger.annotations.ApiModelProperty;
 public class Idioma extends EntidadBase {
 	 
 	/** Lang. **/
-	@ApiModelProperty(value = "Lang (ca/es)", dataType = "java.lang.String", required = true)
+	@ApiModelProperty(value = "Lang (ca/es)", required = true)
 	private String lang;
 
 	/** Código estándar. **/
-	@ApiModelProperty(value = "Código estandar", dataType = "java.lang.String", required = false)
+	@ApiModelProperty(value = "Código estandar", required = false)
 	private String codigoEstandar;
 
 	/** Orden. **/
-	@ApiModelProperty(value = "Orden", dataType = "java.lang.Integer", required = false)
+	@ApiModelProperty(value = "Orden",  required = false)
 	private Integer orden;
 
 	/** Nombre. **/
-	@ApiModelProperty(value = "Nombre", dataType = "java.lang.String", required = false)
+	@ApiModelProperty(value = "Nombre", required = false)
 	private String nombre;
 
 	/** Traductor. **/
-	@ApiModelProperty(value = "Idioma traductor", dataType = "java.lang.String", required = false)
+	@ApiModelProperty(value = "Idioma traductor",  required = false)
 	private String langTraductor;
 
 	/**

@@ -27,99 +27,99 @@ public class UnitatAdministrativa extends EntidadBase {
 	 
 	
 	/** abreviatura. **/
-	@ApiModelProperty(value = "abreviatura", dataType = "java.lang.String", required = false)
+	@ApiModelProperty(value = "abreviatura", required = false)
     private java.lang.String abreviatura;
 
 	/** . **/
-	@ApiModelProperty(value = "businessKey", dataType = "java.lang.String", required = false)
+	@ApiModelProperty(value = "businessKey", required = false)
     private java.lang.String businessKey;
 
 	/** claveHita **/
-	@ApiModelProperty(value = "claveHita", dataType = "java.lang.String", required = false)
+	@ApiModelProperty(value = "claveHita", required = false)
     private java.lang.String claveHita;
 
 	/** codigoEstandar **/
-	@ApiModelProperty(value = "codigoEstandar", dataType = "java.lang.String", required = false)
+	@ApiModelProperty(value = "codigoEstandar", required = false)
     private java.lang.String codigoEstandar;
 
 	/** dominio **/
-	@ApiModelProperty(value = "dominio", dataType = "java.lang.String", required = false)
+	@ApiModelProperty(value = "dominio", required = false)
     private java.lang.String dominio;
 
 	/** email **/
-	@ApiModelProperty(value = "email", dataType = "java.lang.String", required = false)
+	@ApiModelProperty(value = "email", required = false)
     private java.lang.String email;
 
 	/** fax **/
-	@ApiModelProperty(value = "fax", dataType = "java.lang.String", required = false)
+	@ApiModelProperty(value = "fax", required = false)
     private java.lang.String fax;
 	
 	
 	/** codigo **/
-	@ApiModelProperty(value = "codigo", dataType = "java.lang.Long", required = false)
+	@ApiModelProperty(value = "codigo",required = false)
     private java.lang.Long codigo;
 
 	/** nombre **/
-	@ApiModelProperty(value = "nombre", dataType = "java.lang.String", required = false)
+	@ApiModelProperty(value = "nombre", required = false)
     private java.lang.String nombre;
 
 	/** numfoto1 **/
-	@ApiModelProperty(value = "numfoto1 (fichaNivel1)", dataType = "java.lang.Integer", required = false)
+	@ApiModelProperty(value = "numfoto1 (fichaNivel1)", required = false)
     private java.lang.Integer numfoto1;
 
 	/** numfoto2 **/
-	@ApiModelProperty(value = "numfoto2 (fichaNivel2)", dataType = "java.lang.Integer", required = false)
+	@ApiModelProperty(value = "numfoto2 (fichaNivel2)", required = false)
     private java.lang.Integer numfoto2;
 
 	/** numfoto3 **/
-	@ApiModelProperty(value = "numfoto3  (fichaNivel3)", dataType = "java.lang.Integer", required = false)
+	@ApiModelProperty(value = "numfoto3  (fichaNivel3)", required = false)
     private java.lang.Integer numfoto3;
 
 	/** numfoto4 **/
-	@ApiModelProperty(value = "numfoto4  (nivelListado)", dataType = "java.lang.Integer", required = false)
+	@ApiModelProperty(value = "numfoto4  (nivelListado)", required = false)
     private java.lang.Integer numfoto4;
 
 	/** orden **/
-	@ApiModelProperty(value = "orden", dataType = "java.lang.Long", required = false)
+	@ApiModelProperty(value = "orden",  required = false)
     private java.lang.Long orden;
 		
 	/** presentacion **/
-	@ApiModelProperty(value = "presentacion", dataType = "java.lang.String", required = false)
+	@ApiModelProperty(value = "presentacion", required = false)
     private java.lang.String presentacion;
 
 	/** responsable **/
-	@ApiModelProperty(value = "responsable", dataType = "java.lang.String", required = false)
+	@ApiModelProperty(value = "responsable", required = false)
     private java.lang.String responsable;
 
 	/** responsableEmail **/
-	@ApiModelProperty(value = "responsableEmail", dataType = "java.lang.String", required = false)
+	@ApiModelProperty(value = "responsableEmail", required = false)
     private java.lang.String responsableEmail;
 
 	/** sexoResponsable **/
-	@ApiModelProperty(value = "sexoResponsable", dataType = "java.lang.Integer", required = false)
+	@ApiModelProperty(value = "sexoResponsable", required = false)
     private java.lang.Integer sexoResponsable;
 
 	/** cvResponsable **/
-	@ApiModelProperty(value = "cvResponsable", dataType = "java.lang.String", required = false)
+	@ApiModelProperty(value = "cvResponsable", required = false)
     private java.lang.String cvResponsable;
 
 	/** telefono **/
-	@ApiModelProperty(value = "telefono", dataType = "java.lang.String", required = false)
+	@ApiModelProperty(value = "telefono", required = false)
     private java.lang.String telefono;
 	
 	/** tratamiento **/
     private Tratamiento tratamiento;
 
 	/** url **/
-	@ApiModelProperty(value = "url", dataType = "java.lang.String", required = false)
+	@ApiModelProperty(value = "url", required = false)
     private java.lang.String url;
 
 	/** validacion **/
-	@ApiModelProperty(value = "validacion", dataType = "java.lang.Integer", required = false)
+	@ApiModelProperty(value = "validacion",required = false)
     private java.lang.Integer validacion;
 
 	/** codigoDIR3 **/
-	@ApiModelProperty(value = "codigoDIR3", dataType = "java.lang.String", required = false)
+	@ApiModelProperty(value = "codigoDIR3",required = false)
     private java.lang.String codigoDIR3;
 	
 	/**  **/

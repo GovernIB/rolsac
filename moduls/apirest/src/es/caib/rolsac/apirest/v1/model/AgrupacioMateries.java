@@ -25,15 +25,15 @@ import io.swagger.annotations.ApiModelProperty;
 public class AgrupacioMateries extends EntidadBase {
 	 
 	/** codigoEstandar. **/
-	@ApiModelProperty(value = "codigoEstandar", dataType = "java.lang.String", required = false)
+	@ApiModelProperty(value = "codigoEstandar",  required = false)
 	private String codigoEstandar;
 	
 	/** codigo **/
-	@ApiModelProperty(value = "codigo", dataType = "java.lang.Long", required = false)
+	@ApiModelProperty(value = "codigo",  required = false)
 	private long codigo;
 	
 	/** nombre **/
-	@ApiModelProperty(value = "nombre", dataType = "java.lang.Long", required = false)
+	@ApiModelProperty(value = "nombre",  required = false)
 	private String nombre;
 	
 	/** idioma **/

@@ -25,33 +25,33 @@ import io.swagger.annotations.ApiModelProperty;
 public class AgrupacioFetVital extends EntidadBase {
 	 
 	/** codigoEstandar. **/
-	@ApiModelProperty(value = "codigoEstandar", dataType = "java.lang.String", required = false)
+	@ApiModelProperty(value = "codigoEstandar",  required = false)
 	private String codigoEstandar;
 	
 	/** contenido **/
-	@ApiModelProperty(value = "contenido", dataType = "java.lang.Long", required = false)
+	@ApiModelProperty(value = "contenido",  required = false)
 	private Long contenido;
 	
 	/** descripcion **/
-	@ApiModelProperty(value = "descripcion", dataType = "java.lang.String", required = false)
+	@ApiModelProperty(value = "descripcion",  required = false)
 	private String descripcion;
 	
 	/** distribComp **/
-	@ApiModelProperty(value = "distribComp", dataType = "java.lang.Long", required = false)
+	@ApiModelProperty(value = "distribComp", required = false)
 	private Long distribComp;	
 	
 	/** codigo **/
-	@ApiModelProperty(value = "codigo", dataType = "java.lang.Long", required = false)
+	@ApiModelProperty(value = "codigo", required = false)
 	private long codigo;
 	
 	/** nombre **/
-	@ApiModelProperty(value = "nombre", dataType = "java.lang.String", required = false)
+	@ApiModelProperty(value = "nombre",required = false)
 	private String nombre;
 	
 	
 	
 	/** palabrasclave **/
-	@ApiModelProperty(value = "palabrasclave", dataType = "java.lang.Long", required = false)
+	@ApiModelProperty(value = "palabrasclave", required = false)
 	private String palabrasclave;
 	
 	/** idioma **/

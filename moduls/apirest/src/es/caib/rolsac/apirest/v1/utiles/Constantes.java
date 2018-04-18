@@ -71,9 +71,18 @@ public class Constantes {
 	public static final String ENTIDAD_BOLETINES = "boletines";
 	public static final String URL_BOLETINES = ENTIDAD_BOLETINES + "/{0}";
 	
-	
+	public static final String ENTIDAD_CATALOGO_DOCUMENTOS = "catalogo_documentos";
+	public static final String URL_CATALOGO_DOCUMENTOS = ENTIDAD_CATALOGO_DOCUMENTOS + "/{0}";
 
-	
+	public static final String ENTIDAD_DOCUMENTOS = "documentos";
+	public static final String URL_DOCUMENTOS = ENTIDAD_DOCUMENTOS + "/{0}";
+
+	public static final String ENTIDAD_PROCEDIMIENTO = "procedimientos";
+	public static final String URL_PROCEDIMIENTO = ENTIDAD_PROCEDIMIENTO + "/{0}";
+
+	public static final String ENTIDAD_FICHA = "fichas";
+	public static final String URL_FICHA = ENTIDAD_FICHA + "/{0}";
+
 	
 	
 	
