@@ -427,7 +427,7 @@ function CEscriptoriNormativa() {
 	this.carregar = function(opcions) {
 		// opcions: ajaxPag (integer), ordreTipus (ASC, DESC), ordreCamp (tipus, carrec, tractament)
 
-		dataVars = "";
+		//dataVars = "";
 		
 		// cercador
 		var filtrosBuscador = "&titol=" + $("#cerca_normativa_titol").val();
@@ -455,7 +455,7 @@ function CEscriptoriNormativa() {
 		ordre_Camp = ordreCamp_normativa_elm.val();
 
 		// variables
-		dataVars += "&pagPagina=" + pag_Pag + "&pagRes=" + pag_Res + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + filtrosBuscador;		
+		dataVars = "pagPagina=" + pag_Pag + "&pagRes=" + pag_Res + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + filtrosBuscador;		
 
 		// ajax
 		$.ajax({

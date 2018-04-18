@@ -269,12 +269,9 @@ public class NormativaBackController extends PantallaBaseController {
                 pagRes = String.valueOf(10);
             }
 
-            String queBuscar = "local";
-            if (buscaExternas) {
-                queBuscar = "todas"; 
-            }
+            String tipo = null;
 
-            resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, queBuscar, idUA, meves, uaFilles, invalids, campoOrdenacion, orden, pagPag, pagRes, false, activarBusquedaUA);
+            resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, tipo, idUA, meves, uaFilles, invalids, campoOrdenacion, orden, pagPag, pagRes, false, activarBusquedaUA);
 
             for (Normativa normativa : (List<Normativa>) resultadoBusqueda.getListaResultados()) {
             	String color = "";
@@ -361,12 +358,9 @@ public class NormativaBackController extends PantallaBaseController {
                 pagRes = String.valueOf(10);
             }
 
-            String queBuscar = "local";
-            if (buscaExternas) {
-                queBuscar = "todas";
-            }
+            String tipo = null;
 
-            resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, queBuscar, idUA, meves, uaFilles, invalids, campoOrdenacion, orden, pagPag, pagRes, true, false);
+            resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, tipo, idUA, meves, uaFilles, invalids, campoOrdenacion, orden, pagPag, pagRes, true, false);
             CSVUtil.mostrarCSV(response, convertirNormativaToCSV((List<Object[]>) resultadoBusqueda.getListaResultados()));
 
         } catch (ParseException e) {
@@ -576,7 +570,7 @@ public class NormativaBackController extends PantallaBaseController {
         }
         
         //#427 Comprobamos que numRegistro cumple correctamente el patron
-        if (numRegistro != null && !numRegistro.isEmpty() && !numBoletin.matches("\\d{4}")) {
+        if (numRegistro != null && !numRegistro.isEmpty() && !numRegistro.matches("\\d{1,4}")) {
         	
         	resultats.put("errorMessage", messageSource.getMessage("error.normativa.boib.numRegistro", null, request.getLocale()));
         	return resultats;
@@ -1414,8 +1408,9 @@ public class NormativaBackController extends PantallaBaseController {
 				paramMap.put("numNormativa", numNorma);
 			}
 			
+            String tipo = null;
 			if (request.getParameter("tipo") != null && !request.getParameter("tipo").equals("")) {
-				paramMap.put("tipo", request.getParameter("tipo"));
+				tipo =  request.getParameter("tipo");
 			}
 
 			if (request.getParameter("boletin") != null && !request.getParameter("boletin").equals("")) {
@@ -1445,7 +1440,7 @@ public class NormativaBackController extends PantallaBaseController {
 
             // Realizar la consulta y obtener resultados
             NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
-            ResultadoBusqueda resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, "todas", null, false, false, invalids, campoOrdenacion, orden, pagPag, pagRes, false, false);
+            ResultadoBusqueda resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, tipo, null, false, false, invalids, campoOrdenacion, orden, pagPag, pagRes, false, false);
             resultats.put("total", resultadoBusqueda.getTotalResultados());
 
             llistaNormatives.addAll((List<Normativa>) resultadoBusqueda.getListaResultados());
