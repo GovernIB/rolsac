@@ -26,8 +26,10 @@ public class Orden {
 	
 	
 	public static final String CAMPO_ORD_UA_ORDEN = "orden"; 
-	public static final String SAMPLE_ORDEN_UA = Constantes.SALTO_LINEA + "{\"listaOrden\":[{\"campo\":\"" + CAMPO_ORD_UA_ORDEN + "\",\"tipoOrden\":\"ASC/DESC\"}]}";
+	public static final String CAMPO_ORD_DOC_ORDEN = "orden"; 
 	
+	public static final String SAMPLE_ORDEN_UA = Constantes.SALTO_LINEA + "{\"listaOrden\":[{\"campo\":\"" + CAMPO_ORD_UA_ORDEN + "\",\"tipoOrden\":\"ASC/DESC\"}]}";
+	public static final String SAMPLE_ORDEN_DOC = Constantes.SALTO_LINEA + "{\"listaOrden\":[{\"campo\":\"" + CAMPO_ORD_DOC_ORDEN + "\",\"tipoOrden\":\"ASC/DESC\"}]}";
 	
 	
 		

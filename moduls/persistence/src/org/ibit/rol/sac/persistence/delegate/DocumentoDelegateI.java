@@ -44,4 +44,6 @@ public interface DocumentoDelegateI
 
 	public abstract ResultadoBusqueda consultaDocumentos(FiltroGenerico filtro) throws DelegateException;
 
+	public abstract ResultadoBusqueda consultaDocumentosTramite(FiltroGenerico filtro) throws DelegateException;
+
 }

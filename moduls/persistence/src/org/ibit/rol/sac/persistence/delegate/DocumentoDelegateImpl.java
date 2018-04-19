@@ -186,5 +186,13 @@ public class DocumentoDelegateImpl implements  StatelessDelegate, DocumentoDeleg
             throw new DelegateException(e);
         }
 	}
+	
+	public ResultadoBusqueda consultaDocumentosTramite(FiltroGenerico filtro) throws DelegateException {
+		try {
+            return getFacade().consultaDocumentosTramite(filtro);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+	}
     
 }

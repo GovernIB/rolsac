@@ -81,4 +81,8 @@ public class DocumentoDelegate  implements DocumentoDelegateI
 	public ResultadoBusqueda consultaDocumentos(FiltroGenerico filtro) throws DelegateException {
 		return impl.consultaDocumentos(filtro);
 	}
+
+	public ResultadoBusqueda consultaDocumentosTramite(FiltroGenerico filtro) throws DelegateException{
+		return impl.consultaDocumentosTramite(filtro);
+	}
 }

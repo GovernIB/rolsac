@@ -76,6 +76,9 @@ public class Constantes {
 
 	public static final String ENTIDAD_DOCUMENTOS = "documentos";
 	public static final String URL_DOCUMENTOS = ENTIDAD_DOCUMENTOS + "/{0}";
+	
+	public static final String ENTIDAD_DOCUMENTOS_TRAMITES = "documentos_tramites";
+	public static final String URL_DOCUMENTOS_TRAMITES = ENTIDAD_DOCUMENTOS_TRAMITES + "/{0}";
 
 	public static final String ENTIDAD_PROCEDIMIENTO = "procedimientos";
 	public static final String URL_PROCEDIMIENTO = ENTIDAD_PROCEDIMIENTO + "/{0}";
@@ -83,6 +86,9 @@ public class Constantes {
 	public static final String ENTIDAD_FICHA = "fichas";
 	public static final String URL_FICHA = ENTIDAD_FICHA + "/{0}";
 
+	public static final String ENTIDAD_TRAMITE = "tramites";
+	public static final String URL_TRAMITE = ENTIDAD_TRAMITE + "/{0}";
+	
 	
 	
 	

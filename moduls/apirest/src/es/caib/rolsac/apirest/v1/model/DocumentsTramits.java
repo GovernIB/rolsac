@@ -15,15 +15,19 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * Documents.
+ * DocumentsTramits.
  * 
  * @author Indra
  *
  */
 @XmlRootElement
 @ApiModel(value = Constantes.ENTIDAD_DOCUMENTOS, description = Constantes.TXT_DEFINICION_CLASE +  Constantes.ENTIDAD_ARUPACIO_FET_VITAL)
-public class Documents extends EntidadBase {
+public class DocumentsTramits extends EntidadBase {
 	 
+	/** idioma **/
+	@ApiModelProperty(value = "idioma", required = false)    
+	private java.lang.String idioma;
+	
 	/** codigo **/
 	@ApiModelProperty(value = "codigo", required = false)
 	private long codigo;
@@ -36,14 +40,21 @@ public class Documents extends EntidadBase {
 	@ApiModelProperty(value = "orden", required = false)
 	private Long orden;	
 	
+	/** tipus **/
+	@ApiModelProperty(value = "tipus",required = false)
+	private Integer tipus;
+	
 	/** titulo **/
 	@ApiModelProperty(value = "titulo",required = false)
 	private String titulo;
+		
+	/** excepcioDocumentacio **/
+	@ApiModelProperty(value = "excepcionDocumentacion", required = false) 
+	private excepcioDocumentacio excepcionDocumentacion;
+	@ApiModelProperty(hidden = true)
+	@XmlTransient
+	private java.lang.Long excepcioDocumentacio;
 	
-	
-	/** idioma **/
-	@ApiModelProperty(value = "idioma", required = false)    
-	private java.lang.String idioma;
 	
 	//-- LINKS--//
 	//-- se duplican las entidades para poder generar la clase link en funcion de la propiedad principal (sin "link_")
@@ -54,26 +65,31 @@ public class Documents extends EntidadBase {
 	@XmlTransient
 	private Long archivo;
 	
-	/** procedimiento **/
-	@ApiModelProperty(value = "link_procedimiento", required = false)
-	private Link link_procedimiento;	
+	/** tramit **/
+	@ApiModelProperty(value = "link_tramite", required = false)
+	private Link link_tramite;	
 	@ApiModelProperty(hidden = true)
 	@XmlTransient
-	private Long procedimiento;
+	private Long tramit;
 	
-	/** ficha **/
-	@ApiModelProperty(value = "link_ficha", required = false)
-	private Link link_ficha;
+	/** tramit **/
+	@ApiModelProperty(value = "link_docCatalogo", required = false)
+	private Link link_docCatalogo;	
 	@ApiModelProperty(hidden = true)
 	@XmlTransient
-	private Long ficha;
+	private Long docCatalogo;
 	
 	
-	public Documents (org.ibit.rol.sac.model.Documento elem, String urlBase,String idioma,boolean hateoasEnabled ) {
+	
+	public DocumentsTramits (org.ibit.rol.sac.model.DocumentTramit elem, String urlBase,String idioma,boolean hateoasEnabled ) {
 		super( elem, urlBase, idioma, hateoasEnabled);
+		
+		if(elem.getExcepcioDocumentacio()!=null) {
+			this.excepcionDocumentacion = new excepcioDocumentacio(elem.getExcepcioDocumentacio(),urlBase,idioma,hateoasEnabled);			
+		}		
 	}
 	
-	public Documents() {
+	public DocumentsTramits() {
 		super();
 	}
 	
@@ -81,18 +97,18 @@ public class Documents extends EntidadBase {
 	@Override
 	public void generaLinks(String urlBase) {				
 		link_archivo = this.generaLinkArchivo(this.archivo, urlBase , null );
-		link_procedimiento = this.generaLink(this.procedimiento, Constantes.ENTIDAD_PROCEDIMIENTO, Constantes.URL_PROCEDIMIENTO, urlBase,null );
-		link_ficha = this.generaLink(this.ficha, Constantes.ENTIDAD_FICHA, Constantes.URL_FICHA, urlBase,null );
+		link_tramite = this.generaLink(this.tramit, Constantes.ENTIDAD_TRAMITE, Constantes.URL_TRAMITE, urlBase,null );
+		link_docCatalogo = this.generaLink(this.docCatalogo, Constantes.ENTIDAD_CATALOGO_DOCUMENTOS, Constantes.URL_CATALOGO_DOCUMENTOS, urlBase,null );				
 	}
 
 
-	public static Documents valueOf(final String json) {
+	public static DocumentsTramits valueOf(final String json) {
 		final ObjectMapper objectMapper = new ObjectMapper();
-		final TypeReference<Documents> typeRef = new TypeReference<Documents>() {
+		final TypeReference<DocumentsTramits> typeRef = new TypeReference<DocumentsTramits>() {
 		};
-		Documents obj;
+		DocumentsTramits obj;
 		try {
-			obj = (Documents) objectMapper.readValue(json, typeRef);
+			obj = (DocumentsTramits) objectMapper.readValue(json, typeRef);
 		} catch (final IOException e) {
 			// TODO PENDIENTE
 			throw new RuntimeException(e);
@@ -122,6 +138,20 @@ public class Documents extends EntidadBase {
 	@Override
 	public void setId(Long codigo) {
 		this.codigo = codigo;		
+	}
+
+	/**
+	 * @return the idioma
+	 */
+	public java.lang.String getIdioma() {
+		return idioma;
+	}
+
+	/**
+	 * @param idioma the idioma to set
+	 */
+	public void setIdioma(java.lang.String idioma) {
+		this.idioma = idioma;
 	}
 
 	/**
@@ -167,6 +197,20 @@ public class Documents extends EntidadBase {
 	}
 
 	/**
+	 * @return the tipus
+	 */
+	public Integer getTipus() {
+		return tipus;
+	}
+
+	/**
+	 * @param tipus the tipus to set
+	 */
+	public void setTipus(Integer tipus) {
+		this.tipus = tipus;
+	}
+
+	/**
 	 * @return the titulo
 	 */
 	public String getTitulo() {
@@ -180,19 +224,7 @@ public class Documents extends EntidadBase {
 		this.titulo = titulo;
 	}
 
-	/**
-	 * @return the idioma
-	 */
-	public java.lang.String getIdioma() {
-		return idioma;
-	}
-
-	/**
-	 * @param idioma the idioma to set
-	 */
-	public void setIdioma(java.lang.String idioma) {
-		this.idioma = idioma;
-	}
+	
 
 	/**
 	 * @return the link_archivo
@@ -224,67 +256,90 @@ public class Documents extends EntidadBase {
 	}
 
 	/**
-	 * @return the link_procedimiento
+	 * @return the link_tramite
 	 */
-	public Link getLink_procedimiento() {
-		return link_procedimiento;
+	public Link getLink_tramite() {
+		return link_tramite;
 	}
 
 	/**
-	 * @param link_procedimiento the link_procedimiento to set
+	 * @param link_tramite the link_tramite to set
 	 */
-	public void setLink_procedimiento(Link link_procedimiento) {
-		this.link_procedimiento = link_procedimiento;
+	public void setLink_tramite(Link link_tramite) {
+		this.link_tramite = link_tramite;
 	}
 
 	/**
-	 * @return the procedimiento
+	 * @return the tramit
 	 */
 	@XmlTransient
-	public Long getProcedimiento() {
-		return procedimiento;
+	public Long getTramit() {
+		return tramit;
 	}
 
 	/**
-	 * @param procedimiento the procedimiento to set
+	 * @param tramit the tramit to set
 	 */
-	public void setProcedimiento(Long procedimiento) {
-		this.procedimiento = procedimiento;
+	public void setTramit(Long tramit) {
+		this.tramit = tramit;
 	}
 
 	/**
-	 * @return the link_ficha
+	 * @return the link_docCatalogo
 	 */
-	public Link getLink_ficha() {
-		return link_ficha;
+	public Link getLink_docCatalogo() {
+		return link_docCatalogo;
 	}
 
 	/**
-	 * @param link_ficha the link_ficha to set
+	 * @param link_docCatalogo the link_docCatalogo to set
 	 */
-	public void setLink_ficha(Link link_ficha) {
-		this.link_ficha = link_ficha;
+	public void setLink_docCatalogo(Link link_docCatalogo) {
+		this.link_docCatalogo = link_docCatalogo;
 	}
 
 	/**
-	 * @return the ficha
+	 * @return the docCatalogo
 	 */
 	@XmlTransient
-	public Long getFicha() {
-		return ficha;
+	public Long getDocCatalogo() {
+		return docCatalogo;
 	}
 
 	/**
-	 * @param ficha the ficha to set
+	 * @param docCatalogo the docCatalogo to set
 	 */
-	public void setFicha(Long ficha) {
-		this.ficha = ficha;
+	public void setDocCatalogo(Long docCatalogo) {
+		this.docCatalogo = docCatalogo;
 	}
-	
-	
-	
-	
 
-	
+	/**
+	 * @return the excepcionDocumentacion
+	 */
+	public excepcioDocumentacio getExcepcionDocumentacion() {
+		return excepcionDocumentacion;
+	}
+
+	/**
+	 * @param excepcionDocumentacion the excepcionDocumentacion to set
+	 */
+	public void setExcepcionDocumentacion(excepcioDocumentacio excepcionDocumentacion) {
+		this.excepcionDocumentacion = excepcionDocumentacion;
+	}
+
+	/**
+	 * @param excepcioDocumentacio the excepcioDocumentacio to set
+	 */
+	public void setExcepcioDocumentacio(java.lang.Long excepcioDocumentacio) {
+		this.excepcioDocumentacio = excepcioDocumentacio;
+	}
+
+	/**
+	 * @return the excepcioDocumentacio
+	 */
+	@XmlTransient
+	public java.lang.Long getExcepcioDocumentacio() {
+		return excepcioDocumentacio;
+	}
 	
 }

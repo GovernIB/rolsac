@@ -23,6 +23,8 @@ import es.caib.rolsac.apirest.v1.exception.ExcepcionAplicacion;
 import es.caib.rolsac.apirest.v1.model.Documents;
 import es.caib.rolsac.apirest.v1.model.filtros.FiltroDocuments;
 import es.caib.rolsac.apirest.v1.model.filtros.FiltroPaginacion;
+import es.caib.rolsac.apirest.v1.model.orden.CampoOrden;
+import es.caib.rolsac.apirest.v1.model.orden.Orden;
 import es.caib.rolsac.apirest.v1.model.respuestas.RespuestaDocuments;
 import es.caib.rolsac.apirest.v1.model.respuestas.RespuestaError;
 import es.caib.rolsac.apirest.v1.utiles.Constantes;
@@ -59,7 +61,8 @@ public class DocumentsService {
 	public RespuestaDocuments llistar(
 		@ApiParam( value = "Código de idioma", required = false ) @DefaultValue(Constantes.IDIOMA_DEFECTO) @FormParam("lang") final String lang,		
 		@ApiParam( value = "Filtro de paginación: " + FiltroPaginacion.SAMPLE) @FormParam("filtroPaginacion") FiltroPaginacion filtroPaginacion,
-		@ApiParam( value = "Filtro de documentos: " + FiltroDocuments.SAMPLE) @FormParam("filtro") FiltroDocuments filtro				
+		@ApiParam( value = "Filtro de documentos: " + FiltroDocuments.SAMPLE) @FormParam("filtro") FiltroDocuments filtro,
+		@ApiParam( value = "Filtro de Orden: " + Orden.SAMPLE_ORDEN_DOC) @FormParam("orden") Orden orden	
 			) throws DelegateException,ExcepcionAplicacion,ValidationException  {
 		
 				
@@ -76,6 +79,18 @@ public class DocumentsService {
 		if(filtroPaginacion!=null) {
 			fg.setPageSize(filtroPaginacion.getSize());
 			fg.setPage(filtroPaginacion.getPage());
+		}
+		
+		// si viene el orden intentamos rellenarlo
+		if(orden!=null) {
+			List<CampoOrden> ord = orden.getListaOrden();
+			if(ord!=null && ord.size()>0) {
+				for (CampoOrden campoOrden : ord) {
+					if(campoOrden.getCampo().equals(Orden.CAMPO_ORD_DOC_ORDEN)) {
+						fg.addOrden(campoOrden.getCampo(), campoOrden.getTipoOrden());	
+					}
+				}
+			}		
 		}
 	
 		return getRespuesta(fg);

@@ -42,7 +42,10 @@ public class FiltroGenerico implements Serializable {
 	
 	public static final String FILTRO_DOC_ARCHIVO = "archivo";
 	public static final String FILTRO_DOC_FICHA = "ficha";
-	public static final String FILTRO_DOC_PROCEDIMIENTO = "procedimiento";	
+	public static final String FILTRO_DOC_PROCEDIMIENTO = "procedimiento";
+	
+	public static final String FILTRO_DOC_TRAMITE_TRAMITE = "tramite";
+	public static final String FILTRO_DOC_TRAMITE_TIPO_DOCUMENTO = "tipoDocumento";	
 
 	
 	public FiltroGenerico() {

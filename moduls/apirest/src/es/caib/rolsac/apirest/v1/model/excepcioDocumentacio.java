@@ -14,54 +14,43 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * Bulletins.
+ * Tratamiento.
  * 
  * @author indra
  *
  */
 @XmlRootElement
-@ApiModel(value = Constantes.ENTIDAD_BOLETINES, description = Constantes.TXT_DEFINICION_CLASE +  Constantes.ENTIDAD_BOLETINES)
-public class Bulletins extends EntidadBase {
+@ApiModel(value = "excepcioDocumentacio", description = Constantes.TXT_DEFINICION_CLASE + "excepcioDocumentacio")
+public class excepcioDocumentacio extends EntidadBase {
 	 
-	/** enlace. **/
-	@ApiModelProperty(value = "enlace", required = false)
-	private String enlace;
-	
-	/** codigo **/
-	@ApiModelProperty(value = "codigo", required = false)
-	private long codigo;
-	
-	/** nombre **/
-	@ApiModelProperty(value = "nombre", required = false)
-	private String nombre;
-	
-	/** idioma 
-	@ApiModelProperty(value = "idioma", required = false)    
-	private java.lang.String idioma;
-**/
-	
-	public Bulletins (org.ibit.rol.sac.model.Boletin ahv, String urlBase,String idioma,boolean hateoasEnabled ) {
-		super( ahv, urlBase, idioma, hateoasEnabled);
+	public excepcioDocumentacio(org.ibit.rol.sac.model.ExcepcioDocumentacio tr, String urlBase,String idioma,boolean hateoasEnabled) {
+		super(tr, urlBase, idioma, hateoasEnabled);		
 	}
 	
-	public Bulletins() {
+	public excepcioDocumentacio() {
 		super();
 	}
+
+	/** codigo. **/
+	@ApiModelProperty(value = "codigo")
+	private Long codigo;
+	
+	/** nombre **/
+	@ApiModelProperty(value = "nombre")
+	private String nombre;
+	
+	/** descripcion **/
+	@ApiModelProperty(value = "descripcion")
+	private String descripcion;
 	
 	
-	@Override
-	public void generaLinks(String urlBase) {
-		
-	}
-
-
-	public static Bulletins valueOf(final String json) {
+	public static excepcioDocumentacio valueOf(final String json) {
 		final ObjectMapper objectMapper = new ObjectMapper();
-		final TypeReference<Bulletins> typeRef = new TypeReference<Bulletins>() {
+		final TypeReference<excepcioDocumentacio> typeRef = new TypeReference<excepcioDocumentacio>() {
 		};
-		Bulletins obj;
+		excepcioDocumentacio obj;
 		try {
-			obj = (Bulletins) objectMapper.readValue(json, typeRef);
+			obj = (excepcioDocumentacio) objectMapper.readValue(json, typeRef);
 		} catch (final IOException e) {
 			// TODO PENDIENTE
 			throw new RuntimeException(e);
@@ -80,12 +69,16 @@ public class Bulletins extends EntidadBase {
 			throw new RuntimeException(e);
 		}
 	}
-
+	
 
 	@Override
 	protected void addSetersInvalidos() {
 		// TODO Auto-generated method stub
-		
+	}
+
+	@Override
+	protected void generaLinks(String urlBase) {
+		// TODO Auto-generated method stub		
 	}
 
 	@Override
@@ -94,30 +87,16 @@ public class Bulletins extends EntidadBase {
 	}
 
 	/**
-	 * @return the enlace
-	 */
-	public String getEnlace() {
-		return enlace;
-	}
-
-	/**
-	 * @param enlace the enlace to set
-	 */
-	public void setEnlace(String enlace) {
-		this.enlace = enlace;
-	}
-
-	/**
 	 * @return the codigo
 	 */
-	public long getCodigo() {
+	public Long getCodigo() {
 		return codigo;
 	}
 
 	/**
 	 * @param codigo the codigo to set
 	 */
-	public void setCodigo(long codigo) {
+	public void setCodigo(Long codigo) {
 		this.codigo = codigo;
 	}
 
@@ -136,19 +115,17 @@ public class Bulletins extends EntidadBase {
 	}
 
 	/**
-	 * @return the idioma
-	 
-	public java.lang.String getIdioma() {
-		return idioma;
-	}*/
+	 * @return the descripcion
+	 */
+	public String getDescripcion() {
+		return descripcion;
+	}
 
 	/**
-	 * @param idioma the idioma to set
-	 
-	public void setIdioma(java.lang.String idioma) {
-		this.idioma = idioma;
-	}*/
-
-
+	 * @param descripcion the descripcion to set
+	 */
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
 	
 }

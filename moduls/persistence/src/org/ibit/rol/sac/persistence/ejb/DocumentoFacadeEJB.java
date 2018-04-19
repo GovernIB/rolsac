@@ -969,7 +969,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 		StringBuilder from = new StringBuilder(" FROM Documento as d, d.traducciones as trad ") ;
 		StringBuilder where =new StringBuilder(" WHERE index(trad) = :lang");
 		parametros.put("lang",lang);
-		StringBuilder order = new StringBuilder("");			
+		StringBuilder order = new StringBuilder(filtro.getOrdenSQL("d"));			
 				
 		try {
 				
@@ -994,6 +994,66 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 				from.append(", d.procedimiento as p ");
 				where.append(" AND  p.id = :idProcedimiento");
 				parametros.put("idProcedimiento", idProcedimiento);					
+			}
+			
+			
+				 
+			return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(), selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
+	
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+	
+	
+	/**
+	 *  Metodo para consultar los documentos de un tramite. 
+	 * @param filtro generico
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     * 
+	 * @return
+	 */
+	public ResultadoBusqueda consultaDocumentosTramite(FiltroGenerico filtro) {
+		
+		Session session = getSession();	
+		Integer pageSize = filtro.getPageSize();
+		Integer pageNumber = filtro.getPage();
+		String lang = filtro.getLang();
+		Long id = filtro.getId();
+		Map <String,String> parametros = new HashMap<String,String>();
+		
+		
+		String idtramite = filtro.getValor(FiltroGenerico.FILTRO_DOC_TRAMITE_TRAMITE);
+		String tipoDocumento = filtro.getValor(FiltroGenerico.FILTRO_DOC_TRAMITE_TIPO_DOCUMENTO);
+		
+		
+		
+		StringBuilder select = new StringBuilder("SELECT d ");
+		StringBuilder selectCount = new StringBuilder("SELECT count(d) ");
+		StringBuilder from = new StringBuilder(" FROM DocumentTramit as d, d.traducciones as trad ") ;
+		StringBuilder where =new StringBuilder(" WHERE index(trad) = :lang");
+		parametros.put("lang",lang);
+		StringBuilder order = new StringBuilder(filtro.getOrdenSQL("d"));			
+				
+		try {
+				
+			if(id!=null && id>0) {
+				where.append(" AND d.id = :id");
+				parametros.put("id", id.toString());					
+			}
+			
+			if(idtramite!=null && StringUtils.isNumeric(idtramite) &&  Integer.parseInt(idtramite)>0) {				
+				from.append(", d.tramit as t ");
+				where.append(" AND  t.id = :idtramite");
+				parametros.put("idtramite", idtramite);					
+			}
+			
+			if(tipoDocumento!=null && StringUtils.isNumeric(tipoDocumento) ) {				
+				where.append(" AND  d.tipus = :tipoDocumento");
+				parametros.put("tipoDocumento", tipoDocumento);					
 			}
 				 
 			return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(), selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
