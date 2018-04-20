@@ -32,6 +32,7 @@ public class Orden {
 	public static final String SAMPLE_ORDEN_DOC = Constantes.SALTO_LINEA + "{\"listaOrden\":[{\"campo\":\"" + CAMPO_ORD_DOC_ORDEN + "\",\"tipoOrden\":\"ASC/DESC\"}]}";
 	
 	
+	
 		
 	/** Lista de campos a ordenar. **/
 	@ApiModelProperty(value = "Lista de campos por los que ordenar", required = false)

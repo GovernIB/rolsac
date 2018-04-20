@@ -7,9 +7,12 @@ import javax.ejb.Handle;
 import javax.naming.NamingException;
 
 import org.ibit.rol.sac.model.DocumentoNormativa;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.intf.DocumentoNormativaFacade;
 import org.ibit.rol.sac.persistence.intf.DocumentoNormativaFacadeHome;
 import org.ibit.rol.sac.persistence.util.DocumentoNormativaFacadeUtil;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * Business delegate para manipular Documento Normativa
@@ -64,6 +67,22 @@ public class DocumentoNormativaDelegate implements StatelessDelegate
 	         throw new DelegateException(e);
 	     }
     }
+	
+	
+	/**
+	 * consultaDocumentosNormativas.
+	 * @param filtro
+	 * @return
+	 * @throws DelegateException
+	 */
+	public ResultadoBusqueda consultaDocumentosNormativas(FiltroGenerico filtro) throws DelegateException {
+		try {
+            return getFacade().consultaDocumentosNormativas(filtro);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+	}
+	
     
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

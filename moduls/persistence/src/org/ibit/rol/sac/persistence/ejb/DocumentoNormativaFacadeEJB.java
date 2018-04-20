@@ -1,16 +1,23 @@
 package org.ibit.rol.sac.persistence.ejb;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
+import org.apache.commons.lang.StringUtils;
 import org.ibit.rol.sac.model.DocumentoNormativa;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.TraduccionDocumentoNormativa;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
+import org.ibit.rol.sac.persistence.util.ApiRestUtils;
 import org.ibit.rol.sac.persistence.util.IndexacionUtil;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.caib.solr.api.model.types.EnumCategoria;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
@@ -46,6 +53,7 @@ public abstract class DocumentoNormativaFacadeEJB extends HibernateEJB
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
+	@Override
 	public void ejbCreate() throws CreateException
 	{
         super.ejbCreate();
@@ -228,4 +236,59 @@ public abstract class DocumentoNormativaFacadeEJB extends HibernateEJB
 		return normativa;
 
 	}
+	
+	
+	
+	
+	/**
+	 *  Metodo para consultar los documentos de una normativa. 
+	 * @param filtro generico
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     * 
+	 * @return
+	 */
+	public ResultadoBusqueda consultaDocumentosNormativas(FiltroGenerico filtro) {
+		
+		Session session = getSession();	
+		Integer pageSize = filtro.getPageSize();
+		Integer pageNumber = filtro.getPage();
+		String lang = filtro.getLang();
+		Long id = filtro.getId();
+		Map <String,String> parametros = new HashMap<String,String>();
+		
+		
+		String idNormativa = filtro.getValor(FiltroGenerico.FILTRO_DOC_NORMATIVA_NORMATIVA);
+		
+		
+		
+		StringBuilder select = new StringBuilder("SELECT d ");
+		StringBuilder selectCount = new StringBuilder("SELECT count(d) ");
+		StringBuilder from = new StringBuilder(" FROM DocumentoNormativa as d, d.traducciones as trad ") ;
+		StringBuilder where =new StringBuilder(" WHERE index(trad) = :lang");
+		parametros.put("lang",lang);
+		StringBuilder order = new StringBuilder(filtro.getOrdenSQL("d"));			
+				
+		try {
+				
+			if(id!=null && id>0) {
+				where.append(" AND d.id = :id");
+				parametros.put("id", id.toString());					
+			}
+			
+			if(idNormativa!=null && StringUtils.isNumeric(idNormativa) &&  Integer.parseInt(idNormativa)>0) {				
+				from.append(", d.normativa as n ");
+				where.append(" AND  n.id = :idNormativa");
+				parametros.put("idNormativa", idNormativa);					
+			}
+				 
+			return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(), selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
+	
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+	
 }

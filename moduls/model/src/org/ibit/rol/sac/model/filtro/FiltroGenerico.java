@@ -45,8 +45,9 @@ public class FiltroGenerico implements Serializable {
 	public static final String FILTRO_DOC_PROCEDIMIENTO = "procedimiento";
 	
 	public static final String FILTRO_DOC_TRAMITE_TRAMITE = "tramite";
-	public static final String FILTRO_DOC_TRAMITE_TIPO_DOCUMENTO = "tipoDocumento";	
-
+	public static final String FILTRO_DOC_TRAMITE_TIPO_DOCUMENTO = "tipoDocumento";
+	
+	public static final String FILTRO_DOC_NORMATIVA_NORMATIVA = "normativa";
 	
 	public FiltroGenerico() {
 		this.filtros = new HashMap<String,String>();

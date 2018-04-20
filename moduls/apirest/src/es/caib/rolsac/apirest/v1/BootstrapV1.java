@@ -102,6 +102,11 @@ public class BootstrapV1 extends HttpServlet {
 		      .name(Constantes.ENTIDAD_DOCUMENTOS_TRAMITES)
 		      .description(txt_descripcion + " los documentos de los trámites.")
 		      );
+   
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_DOCUMENTOS_NORMATIVAS)
+		      .description(txt_descripcion + " los documentos de las normativas.")
+		      );
 
       
     new SwaggerContextService().withServletConfig(config).updateSwagger(swagger);
