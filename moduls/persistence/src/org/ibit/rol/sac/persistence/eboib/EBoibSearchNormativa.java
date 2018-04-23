@@ -358,8 +358,10 @@ SearchNormativa {
 		feedUrl.append("/filtrerss.do?lang=ca&resultados=10");
 
 		if (StringUtils.isNotEmpty(numeroboletin)) {
-			String anyo = numeroboletin.substring(0, 4);
-			String num = numeroboletin.substring(4);
+			
+			String anyo = numeroboletin.split("/")[1];
+			String num = numeroboletin.split("/")[0];
+			
 			feedUrl.append("&any_ini=").append(anyo).append("&any_fin=").append(anyo);
 			feedUrl.append("&num_ini=").append(num).append("&num_fin=").append(num);
 		} else if (StringUtils.isNotEmpty(fecha)) {
