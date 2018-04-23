@@ -7,8 +7,8 @@ import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
 
-import org.ibit.rol.sac.model.Tipo;
 import org.ibit.rol.sac.model.TipoAfectacion;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.intf.TipoAfectacionFacade;
 import org.ibit.rol.sac.persistence.intf.TipoAfectacionFacadeHome;
 import org.ibit.rol.sac.persistence.util.TipoAfectacionFacadeUtil;
@@ -59,7 +59,8 @@ public class TipoAfectacionDelegate implements StatelessDelegate{
     }
 
     /** @deprecated No se usa*/
-    public boolean tieneAfectaciones(Long id) throws DelegateException {
+    @Deprecated
+	public boolean tieneAfectaciones(Long id) throws DelegateException {
         try {
             return getFacade().tieneAfectaciones(id);
         } catch (RemoteException e) {
@@ -74,6 +75,14 @@ public class TipoAfectacionDelegate implements StatelessDelegate{
             throw new DelegateException(e);
         }
     }
+    
+	public ResultadoBusqueda consultaTipoAfectacion(FiltroGenerico filtro) throws DelegateException {
+		try {
+           return getFacade().consultaTipoAfectacion(filtro);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+	}
 
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

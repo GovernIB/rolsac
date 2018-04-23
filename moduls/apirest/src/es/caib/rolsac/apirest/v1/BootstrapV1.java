@@ -117,6 +117,18 @@ public class BootstrapV1 extends HttpServlet {
 		      .name(Constantes.ENTIDAD_FAMILIA)
 		      .description(txt_descripcion + " las familias.")
 		      );
+   
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_TIPO)
+		      .description(txt_descripcion + " los tipos de normativas.")
+		      );
+   
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_TIPO_AFECTACION)
+		      .description(txt_descripcion + " los tipos de afectación.")
+		      );
+
+
 
       
     new SwaggerContextService().withServletConfig(config).updateSwagger(swagger);

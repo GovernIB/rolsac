@@ -1,19 +1,22 @@
 package org.ibit.rol.sac.persistence.ejb;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
+import org.ibit.rol.sac.model.Tipo;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
+import org.ibit.rol.sac.persistence.util.ApiRestUtils;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
 import net.sf.hibernate.Criteria;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
-
-import org.ibit.rol.sac.model.Tipo;
-
-import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * SessionBean para mantener y consultar Tipo Normativa.
@@ -33,7 +36,8 @@ public abstract class TipoNormativaFacadeEJB extends HibernateEJB {
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
-    public void ejbCreate() throws CreateException {
+    @Override
+	public void ejbCreate() throws CreateException {
         super.ejbCreate();
     }
 
@@ -259,6 +263,49 @@ public abstract class TipoNormativaFacadeEJB extends HibernateEJB {
         }
         
     }
+    
+   
+	
+	/**
+	 *  Metodo para consultar los Tipos de normativas. 
+	 * @param filtro generico
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     * 
+	 * @return
+	 */
+    public ResultadoBusqueda consultaTipo(FiltroGenerico filtro)  {
+		
+		Session session = getSession();	
+		Integer pageSize = filtro.getPageSize();
+		Integer pageNumber = filtro.getPage();
+		String lang = filtro.getLang();
+		Long id = filtro.getId();
+		Map <String,String> parametros = new HashMap<String,String>();
+		
+		
+		StringBuilder select = new StringBuilder("SELECT t ");
+		StringBuilder selectCount = new StringBuilder("SELECT count(t) ");
+		StringBuilder from = new StringBuilder(" FROM Tipo as t, t.traducciones as trad ") ;
+		StringBuilder where =new StringBuilder(" WHERE index(trad) = :lang");
+		parametros.put("lang",lang);
+		StringBuilder order = new StringBuilder("");			
+				
+		try {
+				
+			if(id!=null && id>0) {
+				where.append(" AND t.id = :id");
+				parametros.put("id", id.toString());					
+			}
+				 
+			return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(), selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
+	
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
     
 
 }

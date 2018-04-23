@@ -8,6 +8,7 @@ import javax.ejb.Handle;
 import javax.naming.NamingException;
 
 import org.ibit.rol.sac.model.Tipo;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.intf.TipoNormativaFacade;
 import org.ibit.rol.sac.persistence.intf.TipoNormativaFacadeHome;
 import org.ibit.rol.sac.persistence.util.TipoNormativaFacadeUtil;
@@ -73,6 +74,14 @@ public class TipoNormativaDelegate implements StatelessDelegate {
         }
     }
 
+	public ResultadoBusqueda consultaTipo(FiltroGenerico filtro) throws DelegateException{
+		 try {
+	           return getFacade().consultaTipo(filtro);
+	        } catch (RemoteException e) {
+	            throw new DelegateException(e);
+	        }
+	}
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
