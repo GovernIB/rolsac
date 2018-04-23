@@ -10,6 +10,7 @@ import javax.naming.NamingException;
 
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.EspacioTerritorial;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.intf.EspacioTerritorialFacade;
 import org.ibit.rol.sac.persistence.intf.EspacioTerritorialFacadeHome;
 import org.ibit.rol.sac.persistence.util.EspacioTerritorialFacadeUtil;
@@ -138,5 +139,13 @@ public class EspacioTerritorialDelegate  implements StatelessDelegate
             throw new DelegateException(e);
         }
     }
+
+	public ResultadoBusqueda consultaEspaciosTerritoriales(FiltroGenerico filtro) throws DelegateException{
+        try {
+            return getFacade().consultaEspaciosTerritoriales(filtro);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+	}
     
 }

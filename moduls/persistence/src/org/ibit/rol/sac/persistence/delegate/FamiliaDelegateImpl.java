@@ -8,6 +8,7 @@ import javax.ejb.Handle;
 import javax.naming.NamingException;
 
 import org.ibit.rol.sac.model.Familia;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.intf.FamiliaFacade;
 import org.ibit.rol.sac.persistence.intf.FamiliaFacadeHome;
 import org.ibit.rol.sac.persistence.util.FamiliaFacadeUtil;
@@ -76,6 +77,15 @@ public class FamiliaDelegateImpl implements StatelessDelegate, FamiliaDelegateI
             throw new DelegateException(e);
         }
     }
+    
+    
+      public ResultadoBusqueda consultaFamilias(FiltroGenerico filtro) throws DelegateException {
+          try {
+              return getFacade().consultaFamilias(filtro);
+          } catch (RemoteException e) {
+              throw new DelegateException(e);
+          }
+      }
     
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

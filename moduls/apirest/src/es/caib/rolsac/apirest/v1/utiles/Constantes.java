@@ -94,6 +94,30 @@ public class Constantes {
 
 	public static final String ENTIDAD_NORMATIVAS = "normativas";
 	public static final String URL_NORMATIVAS = ENTIDAD_NORMATIVAS + "/{0}";
+	public static final String ENTIDAD_FAMILIA = "familias";
+	public static final String URL_FAMILIA = ENTIDAD_FAMILIA + "/{0}";
+	
+	public static final String ENTIDAD_FORMULARIO = "formularios";
+	public static final String URL_FORMULARIO = ENTIDAD_FORMULARIO + "/{0}";
+	
+	
+	public static final String ENTIDAD_ICONO_FAMILIA = "iconos_familias";
+	public static final String URL_ICONO_FAMILIA = ENTIDAD_ICONO_FAMILIA + "/{0}";
+	
+	public static final String ENTIDAD_MATERIA_AGRUPACION = "materias_agrupaciones";
+	public static final String URL_MATERIA_AGRUPACION = ENTIDAD_MATERIA_AGRUPACION + "/{0}";
+	
+	public static final String ENTIDAD_PERFIL = "perfiles";
+	public static final String URL_PERFIL = ENTIDAD_PERFIL + "/{0}";
+	
+	public static final String ENTIDAD_TIPO = "tipos";
+	public static final String URL_TIPO = ENTIDAD_TIPO + "/{0}";
+	
+	public static final String ENTIDAD_TIPO_AFECTACION = "tipos_afectacion";
+	public static final String URL_TIPO_AFECTACION = ENTIDAD_TIPO_AFECTACION + "/{0}";
+	
+	public static final String ENTIDAD_UNIDAD_MATERIA = "unidades_materias";
+	public static final String URL_UNIDAD_MATERIA = ENTIDAD_UNIDAD_MATERIA + "/{0}";
 	
 	
 	

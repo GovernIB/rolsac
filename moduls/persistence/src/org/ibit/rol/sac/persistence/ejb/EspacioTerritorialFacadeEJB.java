@@ -2,21 +2,24 @@ package org.ibit.rol.sac.persistence.ejb;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
+import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.EspacioTerritorial;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
+import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
+import org.ibit.rol.sac.persistence.util.ApiRestUtils;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
-
-import org.ibit.rol.sac.model.Archivo;
-import org.ibit.rol.sac.model.EspacioTerritorial;
-import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
-
-import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * SessionBean para mantener y consultar Espacios Territoriales (PORMAD)
@@ -43,7 +46,8 @@ public abstract class EspacioTerritorialFacadeEJB extends HibernateEJB
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
-    public void ejbCreate() throws CreateException
+    @Override
+	public void ejbCreate() throws CreateException
     {
         super.ejbCreate();
     }
@@ -389,5 +393,46 @@ public abstract class EspacioTerritorialFacadeEJB extends HibernateEJB
     		}
     	}
     }
+    
+    
+    /**
+	 * Consulta los Espacios Territoriales en funcion del filtro generico
+	 * 
+	 * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public ResultadoBusqueda consultaEspaciosTerritoriales(FiltroGenerico filtro){
+	
+		Session session = getSession();	
+		Integer pageSize = filtro.getPageSize();
+		Integer pageNumber = filtro.getPage();
+		String lang = filtro.getLang();
+		Long id = filtro.getId();
+		Map <String,String> parametros = new HashMap<String,String>();
+		
+		StringBuilder select = new StringBuilder("SELECT et ");
+		StringBuilder selectCount = new StringBuilder("SELECT count(et) ");
+		StringBuilder from = new StringBuilder(" FROM EspacioTerritorial as et, et.traducciones as trad ") ;
+		StringBuilder where =new StringBuilder(" WHERE index(trad) = :lang");
+		parametros.put("lang",lang);
+		StringBuilder order = new StringBuilder(" ORDER BY trad.nombre ASC");			
+				
+		try {
+				
+			if(id!=null && id>0) {
+				where.append(" AND et.id = :id");
+				parametros.put("id", id.toString());					
+			}
+				 
+			return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(), selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
+	
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+
+	}
+    
     
 }

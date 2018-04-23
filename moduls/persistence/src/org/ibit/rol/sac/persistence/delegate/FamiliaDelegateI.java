@@ -3,6 +3,7 @@ package org.ibit.rol.sac.persistence.delegate;
 import java.util.List;
 
 import org.ibit.rol.sac.model.Familia;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
@@ -21,6 +22,9 @@ public interface FamiliaDelegateI
 			throws DelegateException;
 	
 	public abstract void borrarFamilia(Long id)
+			throws DelegateException;
+
+	public abstract ResultadoBusqueda consultaFamilias(FiltroGenerico filtro)
 			throws DelegateException;
 	
 }
