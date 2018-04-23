@@ -21,7 +21,7 @@ import io.swagger.annotations.ApiModelProperty;
  *
  */
 @XmlRootElement
-@ApiModel(value = Constantes.ENTIDAD_DOCUMENTOS, description = Constantes.TXT_DEFINICION_CLASE +  Constantes.ENTIDAD_ARUPACIO_FET_VITAL)
+@ApiModel(value = Constantes.ENTIDAD_DOCUMENTOS_NORMATIVAS, description = Constantes.TXT_DEFINICION_CLASE +  Constantes.ENTIDAD_DOCUMENTOS_NORMATIVAS)
 public class DocumentsNormatives extends EntidadBase {
 	 
 	/** idioma **/

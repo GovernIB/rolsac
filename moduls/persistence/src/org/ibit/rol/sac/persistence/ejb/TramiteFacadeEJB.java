@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -11,11 +12,6 @@ import java.util.Vector;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
-
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -32,6 +28,7 @@ import org.ibit.rol.sac.model.TraduccionProcedimiento;
 import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
 import org.ibit.rol.sac.model.TraduccionTramite;
 import org.ibit.rol.sac.model.Tramite;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.DestinatarioDelegate;
@@ -41,10 +38,12 @@ import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.remote.vuds.ActualizacionVudsException;
 import org.ibit.rol.sac.persistence.remote.vuds.ValidateVudsException;
 import org.ibit.rol.sac.persistence.saver.TramiteSaver;
+import org.ibit.rol.sac.persistence.util.ApiRestUtils;
 import org.ibit.rol.sac.persistence.util.IndexacionUtil;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.caib.solr.api.SolrIndexer;
 import es.caib.solr.api.model.IndexData;
 import es.caib.solr.api.model.IndexFile;
@@ -53,6 +52,10 @@ import es.caib.solr.api.model.PathUO;
 import es.caib.solr.api.model.types.EnumAplicacionId;
 import es.caib.solr.api.model.types.EnumCategoria;
 import es.caib.solr.api.model.types.EnumIdiomas;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
 
 /**
  * SessionBean para mantener y consultar Tramites.
@@ -93,6 +96,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 	 * @ejb.create-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Override
 	public void ejbCreate() throws CreateException {
 		super.ejbCreate();
 	}
@@ -1426,5 +1430,46 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 
     	}
 	}
+	
+	
+    /**
+	 * Consulta los formularios en funcion del filtro generico
+	 * 
+	 * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public ResultadoBusqueda  consultaFormularios(FiltroGenerico filtro){
+	
+		Session session = getSession();	
+		Integer pageSize = filtro.getPageSize();
+		Integer pageNumber = filtro.getPage();
+		String lang = filtro.getLang();
+		Long id = filtro.getId();
+		Map <String,String> parametros = new HashMap<String,String>();
+		
+		StringBuilder select = new StringBuilder("SELECT f ");
+		StringBuilder selectCount = new StringBuilder("SELECT count(f) ");
+		StringBuilder from = new StringBuilder(" FROM Formulario as f ") ;
+		StringBuilder where =new StringBuilder("");
+		//parametros.put("lang",lang);
+		StringBuilder order = new StringBuilder("");			
+				
+		try {
+				
+			if(id!=null && id>0) {
+				where.append(" WHERE f.id = :id");
+				parametros.put("id", id.toString());					
+			}
+				 
+			return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(), selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
+	
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+
+	}
+
 
 }

@@ -8,9 +8,12 @@ import javax.ejb.Handle;
 import javax.naming.NamingException;
 
 import org.ibit.rol.sac.model.UnidadMateria;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.intf.UnidadMateriaFacade;
 import org.ibit.rol.sac.persistence.intf.UnidadMateriaFacadeHome;
 import org.ibit.rol.sac.persistence.util.UnidadMateriaFacadeUtil;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * Business delegate para manipular Unidades Materia
@@ -46,6 +49,15 @@ public class UnidadMateriaDelegate implements StatelessDelegate
             throw new DelegateException(e);
         }
     }
+    
+
+	public ResultadoBusqueda consultaUnidadMateria(FiltroGenerico filtro) throws DelegateException {
+		try {
+	        return getFacade().consultaUnidadMateria(filtro);
+	    } catch (RemoteException e) {
+	        throw new DelegateException(e);
+	    }
+	}
     
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

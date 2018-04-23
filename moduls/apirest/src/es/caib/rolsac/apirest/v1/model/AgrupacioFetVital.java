@@ -21,7 +21,7 @@ import io.swagger.annotations.ApiModelProperty;
  *
  */
 @XmlRootElement
-@ApiModel(value = Constantes.ENTIDAD_ARUPACIO_FET_VITAL, description = Constantes.TXT_DEFINICION_CLASE +  Constantes.ENTIDAD_ARUPACIO_FET_VITAL)
+@ApiModel(value = Constantes.ENTIDAD_AGRUPACIO_FET_VITAL, description = Constantes.TXT_DEFINICION_CLASE +  Constantes.ENTIDAD_AGRUPACIO_FET_VITAL)
 public class AgrupacioFetVital extends EntidadBase {
 	 
 	/** codigoEstandar. **/

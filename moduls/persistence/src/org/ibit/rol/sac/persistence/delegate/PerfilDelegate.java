@@ -8,6 +8,7 @@ import javax.ejb.Handle;
 import javax.naming.NamingException;
 
 import org.ibit.rol.sac.model.PerfilCiudadano;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.intf.PerfilFacade;
 import org.ibit.rol.sac.persistence.intf.PerfilFacadeHome;
 import org.ibit.rol.sac.persistence.util.PerfilFacadeUtil;
@@ -62,6 +63,16 @@ public class PerfilDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
+
+	public ResultadoBusqueda consultaPerfil(FiltroGenerico filtro) throws DelegateException {
+		  try {
+	           return getFacade().consultaPerfil(filtro);
+	        } catch (RemoteException e) {
+	            throw new DelegateException(e);
+	        }
+	}
+
 
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

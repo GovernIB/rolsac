@@ -59,11 +59,11 @@ public class Constantes {
 	public static final String ENTIDAD_PUBLICO = "publicos_objetivo";
 	public static final String URL_PUBLICO = ENTIDAD_PUBLICO + "/{0}";
 	
-	public static final String ENTIDAD_ARUPACIO_FET_VITAL = "agrupaciones_hechos_vitales";
-	public static final String URL_ARUPACIO_FET_VITAL = ENTIDAD_ARUPACIO_FET_VITAL + "/{0}";
+	public static final String ENTIDAD_AGRUPACIO_FET_VITAL = "agrupaciones_hechos_vitales";
+	public static final String URL_AGRUPACIO_FET_VITAL = ENTIDAD_AGRUPACIO_FET_VITAL + "/{0}";
 	
-	public static final String ENTIDAD_ARUPACIO_MATERIES = "agrupaciones_materias";
-	public static final String URL_ARUPACIO_MATERIES = ENTIDAD_ARUPACIO_MATERIES + "/{0}";
+	public static final String ENTIDAD_AGRUPACIO_MATERIES = "agrupaciones_materias";
+	public static final String URL_AGRUPACIO_MATERIES = ENTIDAD_AGRUPACIO_MATERIES + "/{0}";
 	
 	public static final String ENTIDAD_SECCION = "secciones";
 	public static final String URL_SECCION = ENTIDAD_SECCION + "/{0}";
@@ -118,7 +118,9 @@ public class Constantes {
 	
 	public static final String ENTIDAD_UNIDAD_MATERIA = "unidades_materias";
 	public static final String URL_UNIDAD_MATERIA = ENTIDAD_UNIDAD_MATERIA + "/{0}";
-	
+
+	public static final String ENTIDAD_MATERIA = "materias";
+	public static final String URL_MATERIA = ENTIDAD_MATERIA + "/{0}";
 	
 	
 	public static String mensaje200(int numeroElementos) {

@@ -1,16 +1,20 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import org.ibit.rol.sac.model.IconoFamilia;
+import java.rmi.RemoteException;
+import java.util.Collection;
+
+import javax.ejb.CreateException;
+import javax.ejb.Handle;
+import javax.naming.NamingException;
+
 import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.IconoFamilia;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.intf.IconoFamiliaFacade;
 import org.ibit.rol.sac.persistence.intf.IconoFamiliaFacadeHome;
 import org.ibit.rol.sac.persistence.util.IconoFamiliaFacadeUtil;
 
-import javax.ejb.Handle;
-import javax.ejb.CreateException;
-import javax.naming.NamingException;
-import java.rmi.RemoteException;
-import java.util.Collection;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * Business delegate para manipular Iconos familias.
@@ -53,6 +57,15 @@ public class IconoFamiliaDelegate implements StatelessDelegate
     	}
     }
     
+    
+
+	public ResultadoBusqueda consultaIconoFamilia(FiltroGenerico filtro) throws DelegateException {
+		try {
+    		return getFacade().consultaIconoFamilia(filtro);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+	}    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

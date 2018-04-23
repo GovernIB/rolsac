@@ -1,21 +1,24 @@
 package org.ibit.rol.sac.persistence.ejb;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
+import org.ibit.rol.sac.model.AgrupacionMateria;
+import org.ibit.rol.sac.model.Materia;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
+import org.ibit.rol.sac.persistence.util.ApiRestUtils;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
 import net.sf.hibernate.Criteria;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Order;
-
-import org.ibit.rol.sac.model.AgrupacionMateria;
-import org.ibit.rol.sac.model.Materia;
-
-import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * SessionBean para mantener y consultar Materia AgrupacionMateria. 
@@ -35,6 +38,7 @@ public abstract class MateriaAgrupacionMFacadeEJB extends HibernateEJB {
 	 * @ejb.create-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Override
 	public void ejbCreate() throws CreateException {
 		super.ejbCreate();
 	}
@@ -101,7 +105,7 @@ public abstract class MateriaAgrupacionMFacadeEJB extends HibernateEJB {
 			query.setParameter("idAgrupacionMateria", idAgrupacionMateria);
 			query.setParameter("idioma", idioma);
 			
-			materias = (List<Materia>)query.list();
+			materias = query.list();
 
 		} catch (HibernateException he) {
 			
@@ -116,5 +120,49 @@ public abstract class MateriaAgrupacionMFacadeEJB extends HibernateEJB {
 		return materias;
 
 	}
+	
+	
+	  /**
+	 * Consulta las materia agrupacion en funcion del filtro generico
+	 * 
+	 * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public ResultadoBusqueda consultaMateriaAgrupacion(FiltroGenerico filtro){
+	
+		Session session = getSession();	
+		Integer pageSize = filtro.getPageSize();
+		Integer pageNumber = filtro.getPage();
+		String lang = filtro.getLang();
+		Long id = filtro.getId();
+		Map <String,String> parametros = new HashMap<String,String>();
+		
+		StringBuilder select = new StringBuilder("SELECT am ");
+		StringBuilder selectCount = new StringBuilder("SELECT count(am) ");
+		StringBuilder from = new StringBuilder(" FROM MateriaAgrupacionM as am ") ;
+		StringBuilder where =new StringBuilder("");
+		//parametros.put("lang",lang);
+		StringBuilder order = new StringBuilder("");			
+				
+		try {
+				
+			if(id!=null && id>0) {
+				where.append(" WHERE am.id = :id");
+				parametros.put("id", id.toString());					
+			}
+				 
+			return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(), selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
+	
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+
+	}
+	
+	
+	
+	
 
 }

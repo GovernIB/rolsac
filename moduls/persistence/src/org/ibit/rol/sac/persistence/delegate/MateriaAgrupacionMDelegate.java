@@ -1,7 +1,6 @@
 package org.ibit.rol.sac.persistence.delegate;
 
 import java.rmi.RemoteException;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.ejb.CreateException;
@@ -9,7 +8,7 @@ import javax.ejb.Handle;
 import javax.naming.NamingException;
 
 import org.ibit.rol.sac.model.Materia;
-import org.ibit.rol.sac.model.MateriaAgrupacionM;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.intf.MateriaAgrupacionMFacade;
 import org.ibit.rol.sac.persistence.intf.MateriaAgrupacionMFacadeHome;
 import org.ibit.rol.sac.persistence.util.MateriaAgrupacionMFacadeUtil;
@@ -51,6 +50,15 @@ public class MateriaAgrupacionMDelegate implements StatelessDelegate {
 			
 		}
 		
+	}
+	
+
+	public ResultadoBusqueda consultaMateriaAgrupacion(FiltroGenerico filtro) throws DelegateException{
+		try {			
+			return getFacade().consultaMateriaAgrupacion(filtro);			
+		} catch (RemoteException e) {			
+			throw new DelegateException(e);			
+		}
 	}
 	
 	/* ========================================================= */

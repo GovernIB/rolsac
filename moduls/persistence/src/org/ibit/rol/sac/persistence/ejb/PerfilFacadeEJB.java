@@ -1,25 +1,28 @@
 package org.ibit.rol.sac.persistence.ejb;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
-
-import net.sf.hibernate.Criteria;
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
 
 import org.ibit.rol.sac.model.Familia;
 import org.ibit.rol.sac.model.IconoFamilia;
 import org.ibit.rol.sac.model.IconoMateria;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.PerfilCiudadano;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
+import org.ibit.rol.sac.persistence.util.ApiRestUtils;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
 
 /**
  * SessionBean para matener y consultar perfiles de usuario.
@@ -39,7 +42,8 @@ public abstract class PerfilFacadeEJB extends HibernateEJB {
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
-    public void ejbCreate() throws CreateException {
+    @Override
+	public void ejbCreate() throws CreateException {
         super.ejbCreate();
     }
 
@@ -243,5 +247,49 @@ public abstract class PerfilFacadeEJB extends HibernateEJB {
         }
         
     }
+    
+    
+    
+    /**
+  	 * Consulta los perfiles en funcion del filtro generico
+  	 * 
+  	 * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+  	 */
+  	public ResultadoBusqueda consultaPerfil(FiltroGenerico filtro){
+  	
+  		Session session = getSession();	
+  		Integer pageSize = filtro.getPageSize();
+  		Integer pageNumber = filtro.getPage();
+  		String lang = filtro.getLang();
+  		Long id = filtro.getId();
+  		Map <String,String> parametros = new HashMap<String,String>();
+  		
+  		StringBuilder select = new StringBuilder("SELECT p ");
+  		StringBuilder selectCount = new StringBuilder("SELECT count(p) ");
+  		StringBuilder from = new StringBuilder(" FROM PerfilCiudadano as p , p.traducciones as trad ") ;
+  		StringBuilder where =new StringBuilder(" WHERE index(trad) = :lang");
+  		parametros.put("lang",lang);
+
+  		StringBuilder order = new StringBuilder("");			
+  				
+  		try {
+  				
+  			if(id!=null && id>0) {
+  				where.append(" AND p.id = :id");
+  				parametros.put("id", id.toString());					
+  			}
+  				 
+  			return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(), selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
+  	
+  		} catch (HibernateException he) {
+  			throw new EJBException(he);
+  		} finally {
+  			close(session);
+  		}
+
+  	}
+  	
+    
 
 }

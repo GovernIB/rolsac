@@ -33,8 +33,8 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@Path( "/"+ Constantes.ENTIDAD_ARUPACIO_FET_VITAL ) 
-@Api( value = "/"+ Constantes.ENTIDAD_ARUPACIO_FET_VITAL,   tags = Constantes.ENTIDAD_ARUPACIO_FET_VITAL  )
+@Path( "/"+ Constantes.ENTIDAD_AGRUPACIO_FET_VITAL ) 
+@Api( value = "/"+ Constantes.ENTIDAD_AGRUPACIO_FET_VITAL,   tags = Constantes.ENTIDAD_AGRUPACIO_FET_VITAL  )
 public class AgrupacioFetVitalService {
 		
 		

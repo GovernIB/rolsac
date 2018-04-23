@@ -21,7 +21,7 @@ import io.swagger.annotations.ApiModelProperty;
  *
  */
 @XmlRootElement
-@ApiModel(value = Constantes.ENTIDAD_ARUPACIO_MATERIES, description = Constantes.TXT_DEFINICION_CLASE + Constantes.ENTIDAD_ARUPACIO_MATERIES )
+@ApiModel(value = Constantes.ENTIDAD_AGRUPACIO_MATERIES, description = Constantes.TXT_DEFINICION_CLASE + Constantes.ENTIDAD_AGRUPACIO_MATERIES )
 public class AgrupacioMateries extends EntidadBase {
 	 
 	/** codigoEstandar. **/

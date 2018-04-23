@@ -8,7 +8,9 @@ import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.Taxa;
 import org.ibit.rol.sac.model.Tramite;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.caib.solr.api.SolrIndexer;
 import es.caib.solr.api.model.types.EnumCategoria;
 
@@ -58,5 +60,6 @@ public interface TramiteDelegateI {
 
 	public abstract List<Long> buscarIdsTramites() throws DelegateException;
 
+	public abstract ResultadoBusqueda consultaFormularios(FiltroGenerico filtro) throws DelegateException;
 	
 }

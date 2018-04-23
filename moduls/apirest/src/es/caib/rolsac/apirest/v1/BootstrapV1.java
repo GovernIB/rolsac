@@ -69,12 +69,12 @@ public class BootstrapV1 extends HttpServlet {
 		      );
    
    swagger.tag(new Tag()
-		      .name(Constantes.ENTIDAD_ARUPACIO_FET_VITAL)
+		      .name(Constantes.ENTIDAD_AGRUPACIO_FET_VITAL)
 		      .description(txt_descripcion + " las agrupaciones de hechos vitales.")
 		      );
    
    swagger.tag(new Tag()
-		      .name(Constantes.ENTIDAD_ARUPACIO_MATERIES)
+		      .name(Constantes.ENTIDAD_AGRUPACIO_MATERIES)
 		      .description(txt_descripcion + " las agrupaciones de materias.")
 		      );
    
@@ -126,6 +126,16 @@ public class BootstrapV1 extends HttpServlet {
    swagger.tag(new Tag()
 		      .name(Constantes.ENTIDAD_TIPO_AFECTACION)
 		      .description(txt_descripcion + " los tipos de afectación.")
+		      );
+   
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_FORMULARIO)
+		      .description(txt_descripcion + " los formularios.")
+		      );
+   
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_ICONO_FAMILIA)
+		      .description(txt_descripcion + " los iconos familia.")
 		      );
 
 

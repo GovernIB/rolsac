@@ -13,10 +13,12 @@ import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.Taxa;
 import org.ibit.rol.sac.model.Tramite;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.intf.TramiteFacade;
 import org.ibit.rol.sac.persistence.intf.TramiteFacadeHome;
 import org.ibit.rol.sac.persistence.util.TramiteFacadeUtil;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.caib.solr.api.SolrIndexer;
 import es.caib.solr.api.model.types.EnumCategoria;
 
@@ -251,6 +253,15 @@ public class TramiteDelegateImpl implements StatelessDelegate, TramiteDelegateI 
 	public List<Long> buscarIdsTramites() throws DelegateException {
 		try {
             return getFacade().buscarIdsTramites();
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+	}
+	
+
+	public ResultadoBusqueda consultaFormularios(FiltroGenerico filtro) throws DelegateException {
+		try {
+            return getFacade().consultaFormularios(filtro);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }

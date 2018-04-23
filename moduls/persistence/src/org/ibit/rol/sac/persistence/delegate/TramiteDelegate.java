@@ -8,9 +8,11 @@ import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.Taxa;
 import org.ibit.rol.sac.model.Tramite;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.remote.vuds.ActualizacionVudsException;
 import org.ibit.rol.sac.persistence.remote.vuds.ValidateVudsException;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.caib.solr.api.SolrIndexer;
 import es.caib.solr.api.model.types.EnumCategoria;
 
@@ -109,6 +111,10 @@ public class TramiteDelegate  {
 
 	public List<Long> buscarIdsTramites() throws DelegateException{
 		return impl.buscarIdsTramites();
+	}
+
+	public ResultadoBusqueda consultaFormularios(FiltroGenerico filtro) throws DelegateException {
+		return impl.consultaFormularios(filtro);
 	}
 
 }
