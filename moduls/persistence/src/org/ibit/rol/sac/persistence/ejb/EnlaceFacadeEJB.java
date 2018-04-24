@@ -1,16 +1,22 @@
 package org.ibit.rol.sac.persistence.ejb;
 
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-
+import org.apache.commons.lang.StringUtils;
 import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
+import org.ibit.rol.sac.persistence.util.ApiRestUtils;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Session;
 
 /**
  * SessionBean para mantener y consultar Enlaces.
@@ -42,7 +48,8 @@ public abstract class EnlaceFacadeEJB extends HibernateEJB {
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
-    public void ejbCreate() throws CreateException {
+    @Override
+	public void ejbCreate() throws CreateException {
         super.ejbCreate();
     }
 
@@ -138,5 +145,57 @@ public abstract class EnlaceFacadeEJB extends HibernateEJB {
     		return x1.compareTo(x2);
     	}
     }
+    
+    
+	
+	 /**
+	 * Consulta los edificios en funcion del filtro generico
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public ResultadoBusqueda consultaEnlaces(FiltroGenerico filtro){
+	
+		Session session = getSession();	
+		Integer pageSize = filtro.getPageSize();
+		Integer pageNumber = filtro.getPage();
+		Long id = filtro.getId();
+		String lang = filtro.getLang();
+		Map <String,String> parametros = new HashMap<String,String>();
+				
+		String codigoFicha = filtro.getValor(FiltroGenerico.FILTRO_ENLACES_FICHA);
+		
+		StringBuilder select = new StringBuilder("SELECT e ");
+		StringBuilder selectCount = new StringBuilder("SELECT count(e) ");
+		StringBuilder from = new StringBuilder(" FROM Enlace as e, e.traducciones as trad ") ;
+		StringBuilder where =new StringBuilder(" WHERE index(trad) = :lang");
+		parametros.put("lang",lang);
+		StringBuilder order = new StringBuilder("");
+
+				
+		try {
+									
+			if(!StringUtils.isEmpty(codigoFicha)) {
+				from.append(" , e.ficha as f");
+				where.append(" AND f.id = :codigoFicha");
+				parametros.put("codigoFicha", codigoFicha);												
+			}
+			
+			if(id!=null && id>0) {
+				where.append(" AND e.id = :id");
+				parametros.put("id", id.toString());					
+			}
+			
+			
+			return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(), selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
+			
+	
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+
+	}
     
 }

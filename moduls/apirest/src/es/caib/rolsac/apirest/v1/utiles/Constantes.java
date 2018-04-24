@@ -125,6 +125,10 @@ public class Constantes {
 	public static final String ENTIDAD_EDIFICIO = "edificios";
 	public static final String URL_EDIFICIO = ENTIDAD_EDIFICIO + "/{0}";
 		
+	public static final String ENTIDAD_ENLACE = "enlaces";
+	public static final String URL_ENLACE = ENTIDAD_ENLACE + "/{0}";
+	
+	
 	
 	public static String mensaje200(int numeroElementos) {
 		String res = null;

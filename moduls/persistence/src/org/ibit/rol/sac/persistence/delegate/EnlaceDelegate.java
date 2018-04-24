@@ -1,16 +1,18 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import org.ibit.rol.sac.model.Enlace;
-import org.ibit.rol.sac.persistence.intf.EnlaceFacade;
-import org.ibit.rol.sac.persistence.intf.EnlaceFacadeHome;
-import org.ibit.rol.sac.persistence.util.EnlaceFacadeUtil;
+import java.rmi.RemoteException;
 
 import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
 
-import java.rmi.RemoteException;
-import java.util.Map;
+import org.ibit.rol.sac.model.Enlace;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
+import org.ibit.rol.sac.persistence.intf.EnlaceFacade;
+import org.ibit.rol.sac.persistence.intf.EnlaceFacadeHome;
+import org.ibit.rol.sac.persistence.util.EnlaceFacadeUtil;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * Business delegate para manipular Enlaces.
@@ -36,6 +38,16 @@ public class EnlaceDelegate implements StatelessDelegate
             throw new DelegateException(e);
         }
     }
+    
+    
+
+	public ResultadoBusqueda consultaEnlaces(FiltroGenerico filtro)  throws DelegateException {
+		try {
+		    return getFacade().consultaEnlaces(filtro);
+		} catch (RemoteException e) {
+		    throw new DelegateException(e);
+		}
+	}
     
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
