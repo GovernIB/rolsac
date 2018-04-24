@@ -2923,9 +2923,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		StringBuilder from = new StringBuilder(" FROM UnidadAdministrativa as ua, ua.traducciones as trad ") ;
 		StringBuilder where =new StringBuilder(" WHERE index(trad) = :lang");
 		parametros.put("lang",lang);
-		StringBuilder order = new StringBuilder(filtro.getOrdenSQL("ua"));
-		StringBuilder consulta = new StringBuilder("");
-		StringBuilder consultaCount = new StringBuilder("");
+		StringBuilder order = new StringBuilder(filtro.getOrdenSQL("ua"));		
 				
 		try {
 									

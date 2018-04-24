@@ -138,7 +138,25 @@ public class BootstrapV1 extends HttpServlet {
 		      .description(txt_descripcion + " los iconos familia.")
 		      );
 
-
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_MATERIA_AGRUPACION)
+		      .description(txt_descripcion + " las materias agrupacion.")
+		      );
+   
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_PERFIL)
+		      .description(txt_descripcion + " los perfiles.")
+		      );
+   
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_UNIDAD_MATERIA)
+		      .description(txt_descripcion + " las unidades materias.")
+		      );
+   
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_EDIFICIO)
+		      .description(txt_descripcion + " los edificios.")
+		      );
 
       
     new SwaggerContextService().withServletConfig(config).updateSwagger(swagger);
