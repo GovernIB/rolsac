@@ -359,9 +359,14 @@ SearchNormativa {
 
 		if (StringUtils.isNotEmpty(numeroboletin)) {
 			
-			String anyo = numeroboletin.split("/")[1];
-			String num = numeroboletin.split("/")[0];
-			
+			String anyo, num;
+			if (numeroboletin.contains("/")) {
+				anyo = numeroboletin.split("/")[1];
+				num = numeroboletin.split("/")[0];
+			} else {
+				anyo = numeroboletin.substring(0, 4);
+				num = numeroboletin.substring(4);
+			}
 			feedUrl.append("&any_ini=").append(anyo).append("&any_fin=").append(anyo);
 			feedUrl.append("&num_ini=").append(num).append("&num_fin=").append(num);
 		} else if (StringUtils.isNotEmpty(fecha)) {
