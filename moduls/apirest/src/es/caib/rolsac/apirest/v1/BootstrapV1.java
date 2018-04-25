@@ -157,6 +157,11 @@ public class BootstrapV1 extends HttpServlet {
 		      .name(Constantes.ENTIDAD_EDIFICIO)
 		      .description(txt_descripcion + " los edificios.")
 		      );
+   
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_ESTADISTICAS)
+		      .description("Servicio para la actualización de estadisticas de uso.")
+		      );
 
       
     new SwaggerContextService().withServletConfig(config).updateSwagger(swagger);
