@@ -53,6 +53,9 @@ public class FiltroGenerico implements Serializable {
 	
 	public static final String FILTRO_ENLACES_FICHA = "codigoFicha";
 	
+	public static final String FILTRO_HV_AGRUPACION_HV = "codigoAgrupacionHechoVital";
+	public static final String FILTRO_HV_FICHA = "ficha";
+	
 	public FiltroGenerico() {
 		this.filtros = new HashMap<String,String>();
 		this.columnasOrdenar = new HashMap<String,String>();

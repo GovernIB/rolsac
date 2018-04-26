@@ -1,23 +1,17 @@
 package org.ibit.rol.sac.persistence.ejb;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import net.sf.hibernate.Criteria;
-import net.sf.hibernate.FetchMode;
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.expression.Expression;
-import net.sf.hibernate.expression.Order;
-
+import org.apache.commons.lang.StringUtils;
 import org.ibit.rol.sac.model.AgrupacionHechoVital;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Ficha;
@@ -26,12 +20,22 @@ import org.ibit.rol.sac.model.HechoVitalAgrupacionHV;
 import org.ibit.rol.sac.model.HechoVitalProcedimiento;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionHechoVital;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegate;
+import org.ibit.rol.sac.persistence.util.ApiRestUtils;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.caib.solr.api.model.types.EnumCategoria;
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.FetchMode;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.expression.Expression;
+import net.sf.hibernate.expression.Order;
 
 /**
  * SessionBean para mantener y consultar Hechos Vitales.
@@ -54,6 +58,7 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
 	 * @ejb.create-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Override
 	public void ejbCreate() throws CreateException {
 		super.ejbCreate();
 	}
@@ -138,7 +143,7 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
 				criteri.addOrder( Order.asc("orden") );
 				List<HechoVital> result = criteri.list();
 
-				HechoVital hechoVitalAux = (HechoVital) result.get( orden - 1 );
+				HechoVital hechoVitalAux = result.get( orden - 1 );
 
 				hechoVitalAux.setOrden(orden);
 				result.set( orden, hechoVitalAux );
@@ -289,7 +294,7 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
 			Iterator<String> iterator = hechoVital.getLangs().iterator();
 			while ( iterator.hasNext() ) {
 
-				String lang = (String) iterator.next();
+				String lang = iterator.next();
 				TraduccionHechoVital traduccion = (TraduccionHechoVital) hechoVital.getTraduccion(lang);
 				if ( traduccion != null ) {
 
@@ -341,7 +346,7 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
 			if ( result.isEmpty() )
 				return null;
 
-			HechoVital hechoVital = (HechoVital) result.get(0);
+			HechoVital hechoVital = result.get(0);
 			Hibernate.initialize( hechoVital.getIcono() );
 			Hibernate.initialize( hechoVital.getHechosVitalesProcedimientos() );
 
@@ -489,7 +494,7 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
 			Iterator<HechoVitalProcedimiento> iteradorHechoVitalProcedimiento = listadoHechoVitalProcedimiento.iterator(); 
 			while ( iteradorHechoVitalProcedimiento.hasNext() ) {
 				
-				HechoVitalProcedimiento hechoVitalProcedimiento = (HechoVitalProcedimiento) iteradorHechoVitalProcedimiento.next();
+				HechoVitalProcedimiento hechoVitalProcedimiento = iteradorHechoVitalProcedimiento.next();
 				ProcedimientoLocal proc = hechoVitalProcedimiento.getProcedimiento();
 				proc.removeHechoVitalProcedimiento(hechoVitalProcedimiento);
 				
@@ -499,7 +504,7 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
 			Iterator<HechoVitalAgrupacionHV> iteradorHechoVitalAgrHV = listadoHechoVitalAgrHV.iterator();
 			while ( iteradorHechoVitalAgrHV.hasNext() ) {
 				
-				HechoVitalAgrupacionHV hechova = (HechoVitalAgrupacionHV) iteradorHechoVitalAgrHV.next();
+				HechoVitalAgrupacionHV hechova = iteradorHechoVitalAgrHV.next();
 				AgrupacionHechoVital agru = hechova.getAgrupacion();
 				agru.removeHechoVitalAgrupacionHV(hechova);
 				
@@ -511,7 +516,7 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
 
 			for ( int i = 0 ; i < hechos.size() ; i++ ) {
 				
-				HechoVital hec = (HechoVital) hechos.get(i);
+				HechoVital hec = hechos.get(i);
 				hec.setOrden(i);
 				
 			}
@@ -972,5 +977,63 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
 			close(session);
 		}
 
+	}
+	
+	
+	
+	
+	 /**
+	 * Consulta los hechos vitales en funcion del filtro generico
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public ResultadoBusqueda consultaHechoVital(FiltroGenerico filtro){
+	
+		Session session = getSession();	
+		Integer pageSize = filtro.getPageSize();
+		Integer pageNumber = filtro.getPage();
+		Long id = filtro.getId();
+		String lang = filtro.getLang();
+		Map <String,String> parametros = new HashMap<String,String>();
+				
+		String codigoAHV = filtro.getValor(FiltroGenerico.FILTRO_HV_AGRUPACION_HV);
+		String codigoFicha = filtro.getValor(FiltroGenerico.FILTRO_HV_FICHA);
+		
+		StringBuilder select = new StringBuilder("SELECT hv ");
+		StringBuilder selectCount = new StringBuilder("SELECT count(hv) ");
+		StringBuilder from = new StringBuilder(" FROM HechoVital as hv, hv.traducciones as trad ") ;
+		StringBuilder where =new StringBuilder(" WHERE index(trad) = :lang");
+		parametros.put("lang",lang);
+		StringBuilder order = new StringBuilder("");
+				
+		try {
+									
+			if(!StringUtils.isEmpty(codigoFicha)) {
+				from.append(" , hv.fichas as f");
+				where.append(" AND f.id = :codigoFicha");
+				parametros.put("codigoFicha", codigoFicha);												
+			}
+			
+			
+			if(!StringUtils.isEmpty(codigoAHV)) {	
+				//seleccionamos los id que pertenecen a esa agrupacion
+				where.append(" AND hv.id in ( SELECT hechovital.id FROM  HechoVitalAgrupacionHV as ahv, ahv.hechoVital as hechovital, ahv.agrupacion as agr WHERE agr.id = :codigoAHV ) ");				     
+				parametros.put("codigoAHV", codigoAHV);												
+			}
+			
+			if(id!=null && id>0) {
+				where.append(" AND hv.id = :id");
+				parametros.put("id", id.toString());					
+			}
+						
+			return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(), selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
+			
+	
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
 	}
 }

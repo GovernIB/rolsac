@@ -10,7 +10,7 @@ import javax.naming.NamingException;
 
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.HechoVital;
-import org.ibit.rol.sac.model.HechoVitalAgrupacionHV;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.intf.HechoVitalFacade;
 import org.ibit.rol.sac.persistence.intf.HechoVitalFacadeHome;
 import org.ibit.rol.sac.persistence.util.HechoVitalFacadeUtil;
@@ -151,6 +151,15 @@ public class HechoVitalDelegate implements StatelessDelegate
 	public List<HechoVital> listarHechosVitales(Set<?> publicosObjetivo, String idioma) throws DelegateException {
 		try {
 			return getFacade().listarHechosVitales(publicosObjetivo, idioma);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+	
+
+	public ResultadoBusqueda consultaHechoVital(FiltroGenerico filtro)  throws DelegateException {
+		try {
+			return getFacade().consultaHechoVital(filtro);
 		} catch (RemoteException e) {
 			throw new DelegateException(e);
 		}

@@ -94,12 +94,12 @@ public class Constantes {
 
 	public static final String ENTIDAD_NORMATIVAS = "normativas";
 	public static final String URL_NORMATIVAS = ENTIDAD_NORMATIVAS + "/{0}";
+	
 	public static final String ENTIDAD_FAMILIA = "familias";
 	public static final String URL_FAMILIA = ENTIDAD_FAMILIA + "/{0}";
 	
 	public static final String ENTIDAD_FORMULARIO = "formularios";
 	public static final String URL_FORMULARIO = ENTIDAD_FORMULARIO + "/{0}";
-	
 	
 	public static final String ENTIDAD_ICONO_FAMILIA = "iconos_familias";
 	public static final String URL_ICONO_FAMILIA = ENTIDAD_ICONO_FAMILIA + "/{0}";
@@ -128,6 +128,9 @@ public class Constantes {
 	public static final String ENTIDAD_ENLACE = "enlaces";
 	public static final String URL_ENLACE = ENTIDAD_ENLACE + "/{0}";
 	
+	public static final String ENTIDAD_HECHOS_VITALES = "hechos_vitales";
+	public static final String URL_HECHOS_VITALES = ENTIDAD_HECHOS_VITALES + "/{0}";
+		
 	
 	public static final String ENTIDAD_ESTADISTICAS = "estadisticas";
 	
