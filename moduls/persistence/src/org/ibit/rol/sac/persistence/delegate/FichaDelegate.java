@@ -189,4 +189,9 @@ public class FichaDelegate implements FichaDelegateI {
 	public ResultadoBusqueda consultaFichas(FiltroGenerico filtro)  throws DelegateException{		
 		return impl.consultaFichas(filtro);	
 	}
+
+
+	public ResultadoBusqueda consultaFichasUA(FiltroGenerico filtro)  throws DelegateException{		
+		return impl.consultaFichasUA(filtro);	
+	}
 }

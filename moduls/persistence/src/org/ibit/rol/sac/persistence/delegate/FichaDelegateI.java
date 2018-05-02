@@ -94,4 +94,6 @@ public interface FichaDelegateI {
 
 	public abstract ResultadoBusqueda consultaFichas(FiltroGenerico filtro) throws DelegateException;
 	
+	public abstract ResultadoBusqueda consultaFichasUA(FiltroGenerico filtro) throws DelegateException;
+	
 }

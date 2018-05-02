@@ -30,10 +30,17 @@ public class Orden {
 	public static final String CAMPO_ORD_ENLACE_ORDEN = "orden"; 
 	public static final String CAMPO_ORD_FICHA_FECHA_ACTUALIZACION = "fechaActualizacion"; 
 	
+	public static final String CAMPO_ORD_FICHAUA_ORDEN = "orden"; 
+	public static final String CAMPO_ORD_FICHAUA_ORDEN_SECCION = "ordenseccion"; 
+	
+	
 	public static final String SAMPLE_ORDEN_UA = Constantes.SALTO_LINEA + "{\"listaOrden\":[{\"campo\":\"" + CAMPO_ORD_UA_ORDEN + "\",\"tipoOrden\":\"ASC/DESC\"}]}";
 	public static final String SAMPLE_ORDEN_DOC = Constantes.SALTO_LINEA + "{\"listaOrden\":[{\"campo\":\"" + CAMPO_ORD_DOC_ORDEN + "\",\"tipoOrden\":\"ASC/DESC\"}]}";	
 	public static final String SAMPLE_ORDEN_ENLACE = Constantes.SALTO_LINEA + "{\"listaOrden\":[{\"campo\":\"" + CAMPO_ORD_ENLACE_ORDEN + "\",\"tipoOrden\":\"ASC/DESC\"}]}";
 	public static final String SAMPLE_ORDEN_FICHA = Constantes.SALTO_LINEA + "{\"listaOrden\":[{\"campo\":\"" + CAMPO_ORD_FICHA_FECHA_ACTUALIZACION + "\",\"tipoOrden\":\"ASC/DESC\"}]}";
+	
+	public static final String SAMPLE_ORDEN_FICHAUA = Constantes.SALTO_LINEA + "{\"listaOrden\":[{\"campo\":\"" + CAMPO_ORD_FICHAUA_ORDEN + "\",\"tipoOrden\":\"ASC/DESC\"},"+
+			"{\"campo\":\"" + CAMPO_ORD_FICHAUA_ORDEN_SECCION + "\",\"tipoOrden\":\"ASC/DESC\"}]}";
 	
 	
 		

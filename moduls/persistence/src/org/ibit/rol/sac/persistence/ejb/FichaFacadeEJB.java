@@ -2324,6 +2324,86 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 	
 	}
 	
+	
+	
+	
+	
+	 /**
+		 * Consulta las fichasUA en funcion del filtro generico
+		 * 
+		 * @ejb.interface-method
+		 * @ejb.permission unchecked="true"
+		 */
+		public ResultadoBusqueda consultaFichasUA(FiltroGenerico filtro){
+		
+			Session session = getSession();	
+			Integer pageSize = filtro.getPageSize();
+			Integer pageNumber = filtro.getPage();
+			Long id = filtro.getId();
+		//	String lang = filtro.getLang();
+			Map <String,String> parametros = new HashMap<String,String>();
+						
+			String codigoSeccion = filtro.getValor(FiltroGenerico.FILTRO_FICHASUA_SECCION);
+			String codigoUA = filtro.getValor(FiltroGenerico.FILTRO_FICHASUA_UA);
+			String codigoFicha = filtro.getValor(FiltroGenerico.FILTRO_FICHASUA_FICHA);		
+			
+			
+			StringBuilder select = new StringBuilder("SELECT f ");
+			StringBuilder selectCount = new StringBuilder("SELECT count(f) ");
+			StringBuilder from = new StringBuilder(" FROM FichaUA as f") ;
+			StringBuilder where =new StringBuilder("");
+			//parametros.put("lang",lang);
+			StringBuilder order = new StringBuilder(filtro.getOrdenSQL("f"));		
+					
+			try {
+				
+				if(id!=null && id>0) {
+					where.append(" AND f.id = :id");
+					parametros.put("id", id.toString());					
+				}
+				
+				Boolean hayWhere = false;
+				
+							
+				if(!StringUtils.isEmpty(codigoSeccion)) {
+					hayWhere=true;
+					where.append(" WHERE f.seccion.id = :codigoSeccion ");
+					parametros.put("codigoSeccion", codigoSeccion);					
+				}
+				
+				if(!StringUtils.isEmpty(codigoUA)) {
+					if(hayWhere) {
+						where.append(" AND ");						
+					}else {
+						where.append(" WHERE ");
+						hayWhere=true;
+					}
+					where.append(" f.unidadAdministrativa.id = :codigoUA ");
+					parametros.put("codigoUA", codigoUA);					
+				}				
+								
+				if(!StringUtils.isEmpty(codigoFicha)) {
+					if(hayWhere) {
+						where.append(" AND ");						
+					}else {
+						where.append(" WHERE ");
+						hayWhere=true;
+					}
+					where.append(" f.ficha.id = :codigoFicha ");
+					parametros.put("codigoFicha", codigoFicha);					
+				}	
+		
+				return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(), selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
+				
+		
+			} catch (HibernateException he) {
+				throw new EJBException(he);
+			} finally {
+				close(session);
+			}
+		
+		}
+	
 
 	
 	 private String filtroFichaActivos(String alias) {

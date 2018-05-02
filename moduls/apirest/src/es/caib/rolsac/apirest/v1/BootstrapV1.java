@@ -172,7 +172,16 @@ public class BootstrapV1 extends HttpServlet {
 		      .name(Constantes.ENTIDAD_HECHOS_VITALES)
 		      .description(txt_descripcion + " los hechos vitales.")
 		      );
-
+   
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_FICHA)
+		      .description(txt_descripcion + " las fichas.")
+		      );
+   
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_FICHAUA)
+		      .description(txt_descripcion + " las fichasUA.")
+		      );
       
     new SwaggerContextService().withServletConfig(config).updateSwagger(swagger);
   }

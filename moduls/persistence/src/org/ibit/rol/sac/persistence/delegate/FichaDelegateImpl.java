@@ -337,6 +337,14 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
 		}
 	}
 	
+	public ResultadoBusqueda consultaFichasUA(FiltroGenerico filtro) throws DelegateException {
+		try {
+			return getFacade().consultaFichasUA(filtro);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

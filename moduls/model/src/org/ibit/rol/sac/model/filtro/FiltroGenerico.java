@@ -64,6 +64,10 @@ public class FiltroGenerico implements Serializable {
 	public static final String FILTRO_FICHAS_HECHOS_VITALES ="codigoHechosVitales";
 	public static final String FILTRO_FICHAS_PUBLICO_OBJETIVO ="codigoPublicoObjetivo";
 	
+	public static final String FILTRO_FICHASUA_SECCION = "codigoSeccion";
+	public static final String FILTRO_FICHASUA_UA = "codigoUA";
+	public static final String FILTRO_FICHASUA_FICHA = "codigoFicha";
+	
 
 	public FiltroGenerico() {
 		this.filtros = new HashMap<String,String>();
@@ -212,6 +216,7 @@ public class FiltroGenerico implements Serializable {
 		for (Map.Entry<String, String> orden : columnasOrdenar.entrySet()){
 			if (primero) {
 				res.append(" ORDER BY ");
+				primero = false;
 			}else {
 				res.append(", ");
 			}

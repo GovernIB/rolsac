@@ -88,6 +88,9 @@ public class Constantes {
 
 	public static final String ENTIDAD_FICHA = "fichas";
 	public static final String URL_FICHA = ENTIDAD_FICHA + "/{0}";
+	
+	public static final String ENTIDAD_FICHAUA = "fichas_ua";
+	public static final String URL_FICHAUA = ENTIDAD_FICHAUA + "/{0}";
 
 	public static final String ENTIDAD_TRAMITE = "tramites";
 	public static final String URL_TRAMITE = ENTIDAD_TRAMITE + "/{0}";
