@@ -5,8 +5,6 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.hibernate.Session;
-
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.Ficha;
@@ -14,10 +12,12 @@ import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.caib.solr.api.SolrIndexer;
 import es.caib.solr.api.model.types.EnumCategoria;
+import net.sf.hibernate.Session;
 
 public interface FichaDelegateI {
 
@@ -91,5 +91,7 @@ public interface FichaDelegateI {
 	public abstract Ficha obtenerFichaParaSolr(Long id, Session iSession) throws DelegateException;
 	
 	public abstract void reordenarDocumentos(final Long idFicha, List<Long> idDocumentos) throws DelegateException ;
+
+	public abstract ResultadoBusqueda consultaFichas(FiltroGenerico filtro) throws DelegateException;
 	
 }

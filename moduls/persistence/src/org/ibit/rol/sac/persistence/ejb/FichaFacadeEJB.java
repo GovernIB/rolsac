@@ -20,15 +20,6 @@ import java.util.Set;
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import net.sf.hibernate.Criteria;
-import net.sf.hibernate.FetchMode;
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.expression.Expression;
-import net.sf.hibernate.expression.Order;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.ibit.rol.sac.model.AdministracionRemota;
@@ -53,6 +44,7 @@ import org.ibit.rol.sac.model.TraduccionMateria;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.Validacion;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
@@ -60,6 +52,7 @@ import org.ibit.rol.sac.persistence.delegate.EnlaceDelegate;
 import org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
+import org.ibit.rol.sac.persistence.util.ApiRestUtils;
 import org.ibit.rol.sac.persistence.util.Cadenas;
 import org.ibit.rol.sac.persistence.util.DateUtils;
 import org.ibit.rol.sac.persistence.util.IndexacionUtil;
@@ -73,6 +66,14 @@ import es.caib.solr.api.model.PathUO;
 import es.caib.solr.api.model.types.EnumAplicacionId;
 import es.caib.solr.api.model.types.EnumCategoria;
 import es.caib.solr.api.model.types.EnumIdiomas;
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.FetchMode;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.expression.Expression;
+import net.sf.hibernate.expression.Order;
 
 /**
  * SessionBean para mantener y consultar Fichas (PORMAD)
@@ -104,7 +105,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
-    public void ejbCreate() throws CreateException {
+    @Override
+	public void ejbCreate() throws CreateException {
     	super.ejbCreate();
     }
 
@@ -222,7 +224,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 				session.clear();
 				Query query = session.createQuery("from Documento doc where doc.ficha.id = :id");
 				query.setParameter("id", id);
-				ficha.setDocumentos( (List<Documento>)query.list() );
+				ficha.setDocumentos( query.list() );
 
 		    } else {
 		    	throw new SecurityException("El usuario no tiene el rol operador");
@@ -436,7 +438,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */    
-    public List buscarFichas(Map parametros, String traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria,Long idPublic, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden) {
+    @Deprecated
+	public List buscarFichas(Map parametros, String traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria,Long idPublic, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden) {
 
 		Session session = getSession();
 		Criteria criteria = null;
@@ -1688,7 +1691,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     		return ordenSeccion; 
     	}
 
-    	public boolean equals( Object o ) {
+    	@Override
+		public boolean equals( Object o ) {
 
     		if ( !( o instanceof SimpleFichaUA ) ) 
     			return false;
@@ -2218,4 +2222,227 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			close(session);
 		}
 	}
+	
+	
+	 /**
+	 * Consulta las fichas en funcion del filtro generico
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public ResultadoBusqueda consultaFichas(FiltroGenerico filtro){
+	
+		Session session = getSession();	
+		Integer pageSize = filtro.getPageSize();
+		Integer pageNumber = filtro.getPage();
+		Long id = filtro.getId();
+		String lang = filtro.getLang();
+		Map <String,String> parametros = new HashMap<String,String>();
+				
+		String activo = filtro.getValor(FiltroGenerico.FILTRO_FICHAS_ACTIVO);		
+		String codigoSeccion = filtro.getValor(FiltroGenerico.FILTRO_FICHAS_SECCION);
+		String codigoUA = filtro.getValor(FiltroGenerico.FILTRO_FICHAS_UA);
+		String validacion = filtro.getValor(FiltroGenerico.FILTRO_FICHAS_VALIDACION);		
+		String fechaPublicacion = filtro.getValor(FiltroGenerico.FILTRO_FICHAS_FECHA_PUBLICACION);
+		String codigoHechosVitales = filtro.getValor(FiltroGenerico.FILTRO_FICHAS_HECHOS_VITALES);
+		String codigoPublicoObjetivo = filtro.getValor(FiltroGenerico.FILTRO_FICHAS_PUBLICO_OBJETIVO);
+		
+		
+		StringBuilder select = new StringBuilder("SELECT f ");
+		StringBuilder selectCount = new StringBuilder("SELECT count(f) ");
+		StringBuilder from = new StringBuilder(" FROM Ficha as f, f.traducciones as trad ") ;
+		StringBuilder where =new StringBuilder(" WHERE index(trad) = :lang");
+		parametros.put("lang",lang);
+		StringBuilder order = new StringBuilder(filtro.getOrdenSQL("f"));		
+				
+		try {
+			
+			if(id!=null && id>0) {
+				where.append(" AND f.id = :id");
+				parametros.put("id", id.toString());					
+			}
+									
+			if(!StringUtils.isEmpty(activo)) {	
+				if(activo.equals("1")) {
+					// está activo
+					where.append(filtroFichaActivos("f"));					
+				}else if(activo.equals("0")) {
+					// esta caducado
+					where.append(filtroFichaCaducados("f"));
+				}											
+			}
+			
+			if(!StringUtils.isEmpty(codigoSeccion) && !StringUtils.isEmpty(codigoUA)) {
+				where.append(" AND f.id in (SELECT fua.ficha.id FROM  FichaUA AS fua WHERE fua.seccion.id = :codigoSeccion AND fua.unidadAdministrativa.id = :codigoUA ) ");
+				parametros.put("codigoSeccion", codigoSeccion);	
+				parametros.put("codigoUA", codigoUA);
+			}else {				
+				if(!StringUtils.isEmpty(codigoSeccion)) {
+					where.append(" AND f.id in (SELECT fua.ficha.id FROM  FichaUA AS fua WHERE fua.seccion.id = :codigoSeccion ) ");
+					parametros.put("codigoSeccion", codigoSeccion);					
+				}
+				
+				if(!StringUtils.isEmpty(codigoUA)) {
+					where.append(" AND f.id in (SELECT fua.ficha.id FROM  FichaUA AS fua WHERE fua.unidadAdministrativa.id = :codigoUA ) ");
+					parametros.put("codigoUA", codigoUA);					
+				}				
+			}
+			
+			
+			if(!StringUtils.isEmpty(validacion)) {
+				where.append(" AND f.validacion = :validacion");
+				parametros.put("validacion", validacion);					
+			}
+			
+			
+			if(!StringUtils.isEmpty(fechaPublicacion)) {
+				where.append(" AND f.fechaPublicacion = :fechaPublicacion ");
+				parametros.put("fechaPublicacion", fechaPublicacion);					
+			}
+			
+			if(!StringUtils.isEmpty(codigoHechosVitales)) {
+				from.append(" , f.hechosVitales as fhv ");
+				where.append("  AND fhv.id = :codigoHechosVitales");
+				parametros.put("codigoHechosVitales", codigoHechosVitales);					
+			}
+			
+			
+			if(!StringUtils.isEmpty(codigoPublicoObjetivo)) {
+				from.append(" , f.publicosObjetivo as phv ");
+				where.append("  AND phv.id = :codigoPublicoObjetivo");
+				parametros.put("codigoPublicoObjetivo", codigoPublicoObjetivo);					
+			}			
+	
+			return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(), selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
+			
+	
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	
+	}
+	
+
+	
+	 private String filtroFichaActivos(String alias) {
+		 StringBuilder res = new StringBuilder(" AND ( ");
+		 res.append(alias);
+		 res.append(".validacion = ");
+		 res.append(Validacion.PUBLICA);
+		 res.append(" AND ( ");
+		 res.append(campo(alias,"fechaCaducidad"));
+		 res.append(" >= ");
+		 res.append(formatoFecha(DateUtils.getNow()));
+		 res.append(" OR ");
+		 res.append(campo(alias,"fechaCaducidad"));
+		 res.append(" is null ) AND ( ");
+		 res.append(campo(alias,"fechaPublicacion"));
+		 res.append(" <= ");
+		 res.append(formatoFecha(DateUtils.getNow()));
+		 res.append(" OR ");
+		 res.append(campo(alias,"fechaPublicacion"));
+		 res.append(" is null ))");
+		 
+		 return res.toString();
+		/*
+		qb.openParenthesis(LOGIC.AND);
+
+		qb.addRestriction(new Restriction(alias + "validacion", OPERATION.EQ, Validacion.PUBLICA));
+
+		List<Restriction> restrictions = new ArrayList<Restriction>(2);
+		restrictions.add(new Restriction(LOGIC.AND, alias + "fechaCaducidad", OPERATION.GE, PeriodoUtil.getNow()));
+		restrictions.add(new Restriction(LOGIC.OR, alias + "fechaCaducidad", OPERATION.NULL));
+		qb.addGroupedRestrictions(restrictions);
+
+		restrictions = new ArrayList<Restriction>(2);
+		restrictions.add(new Restriction(LOGIC.AND, alias + "fechaPublicacion", OPERATION.LE, PeriodoUtil.getNow()));
+		restrictions.add(new Restriction(LOGIC.OR, alias + "fechaPublicacion", OPERATION.NULL));
+		qb.addGroupedRestrictions(restrictions);
+
+		qb.closeParenthesis();
+		*/
+
+	}
+
+	private String filtroFichaCaducados(String alias) {
+
+		Date fecha = DateUtils.getNextDay();
+		
+		StringBuilder res = new StringBuilder(" AND ( ");
+		res.append(campo(alias,"validacion"));
+		res.append(" != ");
+		res.append(Validacion.PUBLICA);
+		res.append(" OR ( ");//--1
+		res.append(campo(alias,"validacion"));
+		res.append(" = ");
+		res.append(Validacion.PUBLICA);
+		res.append(" AND ");
+		res.append(campo(alias,"fechaCaducidad"));
+		res.append(" < " );
+		res.append(formatoFecha((fecha)));
+		res.append(" ) OR ( "); //--2
+		res.append(campo(alias,"validacion"));
+		res.append(" = ");
+		res.append(Validacion.PUBLICA);		
+		res.append(" AND ( ");
+		res.append(campo(alias,"fechaCaducidad"));
+		res.append(" is null OR ");
+		res.append(campo(alias,"fechaCaducidad"));
+		res.append(" >= " );
+		res.append(formatoFecha((fecha)));
+		res.append(") AND " );
+		res.append(campo(alias,"fechaPublicacion"));
+		res.append(" < " );
+		res.append(formatoFecha((fecha)));
+		res.append(" ))"); 
+			 
+		return res.toString();
+		
+		
+		/*
+		Date fecha = PeriodoUtil.getNextDay();		
+
+		qb.openParenthesis(LOGIC.AND);
+
+		qb.addRestriction(new Restriction(alias + "validacion", OPERATION.NEQ, Validacion.PUBLICA));
+
+		List<Restriction> restrictions = new ArrayList<Restriction>(2);
+		restrictions.add(new Restriction(LOGIC.OR, alias + "validacion", OPERATION.EQ, Validacion.PUBLICA));
+		restrictions.add(new Restriction(LOGIC.AND, alias + "fechaCaducidad", OPERATION.LT, fecha));
+		qb.addGroupedRestrictions(restrictions);
+
+		restrictions = new ArrayList<Restriction>(3);
+		restrictions.add(new Restriction(LOGIC.OR, alias + "validacion", OPERATION.EQ, Validacion.PUBLICA));
+		restrictions.add(new Restriction(LOGIC.AND, alias + "fechaCaducidad", OPERATION.NULL));
+		restrictions.add(new Restriction(LOGIC.AND, alias + "fechaPublicacion", OPERATION.GT, fecha));
+		qb.addGroupedRestrictions(restrictions);
+
+		restrictions = new ArrayList<Restriction>(3);
+		restrictions.add(new Restriction(LOGIC.OR, alias + "validacion", OPERATION.EQ, Validacion.PUBLICA));
+		restrictions.add(new Restriction(LOGIC.AND, alias + "fechaCaducidad", OPERATION.GE, fecha));
+		restrictions.add(new Restriction(LOGIC.AND, alias + "fechaPublicacion", OPERATION.GT, fecha));
+		qb.addGroupedRestrictions(restrictions);
+
+		qb.closeParenthesis();
+	*/
+	}
+	
+	private StringBuilder campo(String alias, String campo) {
+		StringBuilder res = new StringBuilder(alias);
+		res.append(".");
+		res.append(campo);
+		return res;
+	}
+	private String formatoFecha(Date d) {
+		return "'"+DateUtils.formatearddMMyyyy(d)+"'";
+	}
+	 
+	
+	
+	
+	
+	
+	
 }

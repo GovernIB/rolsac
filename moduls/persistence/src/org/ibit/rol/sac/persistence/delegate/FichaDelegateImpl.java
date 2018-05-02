@@ -10,8 +10,6 @@ import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
 
-import net.sf.hibernate.Session;
-
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.Ficha;
@@ -19,6 +17,7 @@ import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.intf.FichaFacade;
 import org.ibit.rol.sac.persistence.intf.FichaFacadeHome;
 import org.ibit.rol.sac.persistence.util.FichaFacadeUtil;
@@ -26,6 +25,7 @@ import org.ibit.rol.sac.persistence.util.FichaFacadeUtil;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.caib.solr.api.SolrIndexer;
 import es.caib.solr.api.model.types.EnumCategoria;
+import net.sf.hibernate.Session;
 
 /**
  * Business delegate para manipular fichas.
@@ -324,6 +324,14 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
 	public Integer comprobarRelacionFicha(Long idFitxa) throws DelegateException {
 		try {
 			return getFacade().comprobarRelacionFicha(idFitxa);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+	
+	public ResultadoBusqueda consultaFichas(FiltroGenerico filtro) throws DelegateException {
+		try {
+			return getFacade().consultaFichas(filtro);
 		} catch (RemoteException e) {
 			throw new DelegateException(e);
 		}

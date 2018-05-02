@@ -76,4 +76,26 @@ public class DateUtils {
 		SimpleDateFormat fmt = new SimpleDateFormat ("dd/MM/yyyy HH:mm");											
 		return fmt.format (fecha);
 	}
+	
+    public static Date getNow() {
+        Calendar cal = Calendar.getInstance();
+        return cal.getTime();
+    }
+	
+	public static Date getNextDay() {
+		return getNextDay(new Date());
+	}
+
+	public static Date getNextDay(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.DATE, 1);
+		cal.set(Calendar.HOUR, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		  return cal.getTime();
+    }
+	
+	
 }
