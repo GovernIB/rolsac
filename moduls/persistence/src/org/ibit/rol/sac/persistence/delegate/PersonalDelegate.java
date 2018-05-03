@@ -1,7 +1,6 @@
 package org.ibit.rol.sac.persistence.delegate;
 
 import java.rmi.RemoteException;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -11,6 +10,7 @@ import javax.naming.NamingException;
 
 import org.ibit.rol.sac.model.Personal;
 import org.ibit.rol.sac.model.criteria.PaginacionCriteria;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.intf.PersonalFacade;
 import org.ibit.rol.sac.persistence.intf.PersonalFacadeHome;
 import org.ibit.rol.sac.persistence.util.PersonalFacadeUtil;
@@ -53,6 +53,7 @@ public class PersonalDelegate implements StatelessDelegate {
 	/**
 	 * @deprecated	Se usa desde el back antiguo.
 	 * */
+	@Deprecated
 	public Set listarPersonalUA(Long unidadAdmin_id) throws DelegateException {
 		try {
 			return getFacade().listarPersonalUA(unidadAdmin_id);
@@ -72,6 +73,14 @@ public class PersonalDelegate implements StatelessDelegate {
 	public ResultadoBusqueda buscadorListarPersonal(Personal personal, Long idUA, boolean uaHijas, boolean uaPropias, PaginacionCriteria paginacion) throws DelegateException {
 		try {
 			return getFacade().buscadorListarPersonal(personal, idUA, uaHijas, uaPropias, paginacion);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+	
+	public ResultadoBusqueda consultaPersonal(FiltroGenerico filtro) throws DelegateException {
+		try {
+			return getFacade().consultaPersonal(filtro);
 		} catch (RemoteException e) {
 			throw new DelegateException(e);
 		}
@@ -100,5 +109,7 @@ public class PersonalDelegate implements StatelessDelegate {
 			throw new DelegateException(e);
 		}
 	}
+
+
 
 }

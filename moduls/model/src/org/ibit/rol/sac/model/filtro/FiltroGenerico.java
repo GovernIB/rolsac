@@ -72,6 +72,8 @@ public class FiltroGenerico implements Serializable {
 	public static final String FILTRO_MATERIAS_UA = "codigoUA";
 	public static final String FILTRO_MATERIAS_FICHA = "codigoFicha";
 	
+	public static final String FILTRO_PERSONAL_UA = "codigoUA";
+	
 
 	public FiltroGenerico() {
 		this.filtros = new HashMap<String,String>();

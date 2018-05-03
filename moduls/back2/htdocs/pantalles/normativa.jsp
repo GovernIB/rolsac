@@ -392,7 +392,6 @@
            "etiqueta": "id",
            "etiquetaValor": "numeroboletinTB",
            "obligatori": "no",
-           "tipus": "numeric",
            "caracters":
                {
                    "maxim": 50,
@@ -669,7 +668,7 @@
                                     <label for="numeroboletinTB"><spring:message code='camp.n_butlleti'/></label>
                                 </div>
                                 <div class="control">
-                                    <input id="numeroboletinTB" placeholder="YYYYNNN" name="numeroboletinTB" type="text" />
+                                    <input id="numeroboletinTB" placeholder="NNN/YYYY" name="numeroboletinTB" type="text" />
                                 </div>                          
                             </div>
                             
@@ -678,7 +677,7 @@
                                     <label for="numeroregistroTB"><spring:message code='camp.n_registre'/></label>
                                 </div>
                                 <div class="control">
-                                    <input id="numeroregistroTB" placeholder="NNNN" name="numeroregistroTB" type="text" maxlength="250" />
+                                    <input id="numeroregistroTB" placeholder="NNNNN" name="numeroregistroTB" type="text" maxlength="250" />
                                 </div>
                             </div>
 
@@ -1216,7 +1215,7 @@
 								<label for="numeroboletinTB"><spring:message code='camp.n_butlleti'/></label>
 							</div>
 							<div class="control">
-								<input id="numeroboletinTB" placeholder="YYYYNNN" name="numeroboletinTB" type="text" />
+								<input id="numeroboletinTB" placeholder="NNN/YYYY" name="numeroboletinTB" type="text" />
 							</div>                          
 						</div>
 						
@@ -1225,7 +1224,7 @@
 								<label for="numeroregistroTB"><spring:message code='camp.n_registre'/></label>
 							</div>
 							<div class="control">
-								<input id="numeroregistroTB" placeholder="NNN" name="numeroregistroTB" type="text" maxlength="250" />
+								<input id="numeroregistroTB" placeholder="NNNNN" name="numeroregistroTB" type="text" maxlength="250" />
 							</div>
 						</div>
 

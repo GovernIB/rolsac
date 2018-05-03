@@ -1,28 +1,30 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
 
 import org.apache.commons.lang.StringUtils;
 import org.ibit.rol.sac.model.Personal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.criteria.PaginacionCriteria;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
+import org.ibit.rol.sac.persistence.util.ApiRestUtils;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
 
 /**
  * SessionBean para mantener y consultar Personal.
@@ -50,7 +52,8 @@ public abstract class PersonalFacadeEJB extends HibernateEJB {
      * 
      * @ejb.permission unchecked="true"
      */
-    public void ejbCreate() throws CreateException {
+    @Override
+	public void ejbCreate() throws CreateException {
         super.ejbCreate();
     }
 
@@ -278,7 +281,8 @@ public abstract class PersonalFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public Set listarPersonalUA(Long unidadAdmin_id) throws DelegateException {
+    @Deprecated
+	public Set listarPersonalUA(Long unidadAdmin_id) throws DelegateException {
         Session session = getSession();
         try {
         	
@@ -475,4 +479,72 @@ public abstract class PersonalFacadeEJB extends HibernateEJB {
 		return resultadoBusqueda;
     }
     
+    
+    /**
+  	 * Consulta el personal en funcion del filtro generico
+  	 * 
+  	 * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+  	 */
+	public ResultadoBusqueda consultaPersonal(FiltroGenerico filtro){
+		
+  		Session session = getSession();	
+  		Integer pageSize = filtro.getPageSize();
+  		Integer pageNumber = filtro.getPage();
+  		String lang = filtro.getLang();
+  		Long id = filtro.getId();
+  		Map <String,String> parametros = new HashMap<String,String>();
+  		
+  		String codigoUA = filtro.getValor(FiltroGenerico.FILTRO_PERSONAL_UA);
+  		
+  		StringBuilder select = new StringBuilder("SELECT p ");
+  		StringBuilder selectCount = new StringBuilder("SELECT count(p) ");
+  		StringBuilder from = new StringBuilder(" FROM Personal as p ") ;
+  		StringBuilder where =new StringBuilder(" ");
+  		//parametros.put("lang",lang);
+
+  		StringBuilder order = new StringBuilder("");			
+  				
+  		try {
+  			Boolean hayWhere = false;	
+  			
+  			if(id!=null && id>0) {
+  				hayWhere = true;	
+  				where.append(" WHERE p.id = :id");
+  				parametros.put("id", id.toString());					
+  			}  			
+  			  			
+  			Long ua = null;		
+			if(!StringUtils.isEmpty(codigoUA)) {
+				ua = Long.parseLong(codigoUA);
+				
+				String listaUA = null;
+				try {
+					listaUA = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(ua,false , false);
+				} catch (DelegateException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	    		
+				if(hayWhere) {
+					where.append(" AND ");						
+				}else {
+					where.append(" WHERE ");
+					hayWhere=true;
+				}	
+				if (!StringUtils.isEmpty(listaUA)) {
+					where.append(" p.unidadAdministrativa in ( :listaUA)");
+					parametros.put("listaUA", listaUA);	
+	    		}
+			}
+  				 
+  			return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(), selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
+	
+		} catch (HibernateException he) {
+  			throw new EJBException(he);
+  		} finally {
+  			close(session);
+  		}
+
+  	}  
 }

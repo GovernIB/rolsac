@@ -563,14 +563,15 @@ public class NormativaBackController extends PantallaBaseController {
         }
         
         //#427 Comprobamos que numBoletin cumple correctamente el patron 
-        if (numBoletin != null && !numBoletin.isEmpty() && !numBoletin.matches("\\d{7}")) {
+        if (numBoletin != null && !numBoletin.isEmpty() && !numBoletin.matches("[0-9]{3}/[0-9]{4}")) { 
+        	
         	
         	resultats.put("errorMessage", messageSource.getMessage("error.normativa.boib.numBoletin", null, request.getLocale()));
         	return resultats;
         }
         
         //#427 Comprobamos que numRegistro cumple correctamente el patron
-        if (numRegistro != null && !numRegistro.isEmpty() && !numRegistro.matches("\\d{1,4}")) {
+        if (numRegistro != null && !numRegistro.isEmpty() && !numRegistro.matches("\\d{1,5}")) {
         	
         	resultats.put("errorMessage", messageSource.getMessage("error.normativa.boib.numRegistro", null, request.getLocale()));
         	return resultats;
