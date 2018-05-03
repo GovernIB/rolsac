@@ -1,20 +1,16 @@
 package org.ibit.rol.sac.persistence.ejb;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import net.sf.hibernate.Criteria;
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.expression.Order;
-
+import org.apache.commons.lang.StringUtils;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Auditoria;
 import org.ibit.rol.sac.model.Historico;
@@ -24,14 +20,22 @@ import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.PerfilCiudadano;
 import org.ibit.rol.sac.model.TraduccionMateria;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.SolrPendienteDelegate;
+import org.ibit.rol.sac.persistence.util.ApiRestUtils;
 import org.ibit.rol.sac.persistence.util.RemotoUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.caib.solr.api.model.types.EnumCategoria;
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.expression.Order;
 
 /**
  * SessionBean para mantener y consultar materias.
@@ -53,6 +57,7 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
 	 * @ejb.create-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Override
 	public void ejbCreate() throws CreateException {
 		super.ejbCreate();
 	}
@@ -189,6 +194,7 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked= "true"
 	 */
+	@Deprecated
 	public List<Materia> listarMateriasFront() {
 		Session session = getSession();
 		try {
@@ -283,7 +289,7 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
 			Query query = session.createQuery(consulta.toString());
 			query.setParameter("id", idMateria);
 			
-			return (List<IconoMateria>)query.list();
+			return query.list();
 			
 		} catch (HibernateException he) {
 			
@@ -585,6 +591,7 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Deprecated
 	public Archivo obtenerIconoGrande(Long id) {
 		Session session = getSession();
 		try {
@@ -610,6 +617,7 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
+	@Deprecated
 	public Set<Materia> obtenerMateriasCE(final String[] ceMaterias){
 		Session session = getSession();
 		try {
@@ -633,6 +641,7 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Deprecated
 	public Materia obtenerMateriaCE(final String codigosEstandarMateria){
 		Session session = getSession();
 		try {
@@ -657,6 +666,7 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Deprecated
 	@SuppressWarnings("unchecked")
 	public List<Materia> buscar(final String busqueda, final String idioma){
 		List<Materia> resultado;
@@ -666,7 +676,7 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
 				Query query = session.createQuery("from Materia as mat, mat.traducciones as trad where index(trad) = :idioma and upper(trad.nombre) like :busqueda");
 				query.setString("idioma", idioma);
 				query.setString("busqueda", "%"+busqueda.trim().toUpperCase()+"%");
-				resultado = (List<Materia>)query.list();
+				resultado = query.list();
 			} catch (HibernateException he) {
 				throw new EJBException(he);
 			} finally {
@@ -686,6 +696,7 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
+	@Deprecated
 	public Materia obtenerMateriaFichasProced (Long id) {
 		
         Session session = getSession();
@@ -715,7 +726,7 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
 		try {
 			Query query = session.createQuery("from Materia as mat, mat.traducciones as trad where index(trad) = :idioma and mat.id in (" + ids + ") ");
         	query.setString("idioma", idioma);
-        	resultado = (List<Materia>)query.list();
+        	resultado = query.list();
 			return resultado;
 		} catch (HibernateException he){
 			throw new EJBException(he);
@@ -739,7 +750,7 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
 			Query query = session.createQuery("from Materia as mat, mat.traducciones as trad where index(trad) = :idioma and mat.id in (:materias) ");
         	query.setParameter("idioma", idioma);
         	query.setParameterList("materias", materias);
-        	resultado = (List<Materia>)query.list();
+        	resultado = query.list();
         	
 			return resultado;
 			
@@ -780,7 +791,7 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
 				Query query = session.createQuery(" SELECT unimat.unidad FROM UnidadMateria AS unimat WHERE unimat.materia.id = :id ");
 				query.setLong("id", id);
 
-				resultado = (List<UnidadAdministrativa>) query.list();
+				resultado = query.list();
 
 			} catch (HibernateException he) {
 
@@ -850,4 +861,74 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
 			close(session);
 		}
 	}
+	
+	
+	 /**
+	 * Consulta las Materias en funcion del filtro generico
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public ResultadoBusqueda consultaMaterias(FiltroGenerico filtro){
+	
+		Session session = getSession();	
+		Integer pageSize = filtro.getPageSize();
+		Integer pageNumber = filtro.getPage();
+		Long id = filtro.getId();
+		String lang = filtro.getLang();
+		Map <String,String> parametros = new HashMap<String,String>();
+					
+		String codigoAgrupacionMaterias = filtro.getValor(FiltroGenerico.FILTRO_MATERIAS_AGRUPACIONMATERIAS);
+		String codigoUA = filtro.getValor(FiltroGenerico.FILTRO_MATERIAS_UA);
+		String codigoFicha = filtro.getValor(FiltroGenerico.FILTRO_MATERIAS_FICHA);		
+		
+		
+		StringBuilder select = new StringBuilder("SELECT m ");
+		StringBuilder selectCount = new StringBuilder("SELECT count(m) ");
+		StringBuilder from = new StringBuilder(" FROM Materia as m, m.traducciones as trad ") ;
+		StringBuilder where =new StringBuilder(" WHERE index(trad) = :lang");
+		parametros.put("lang",lang);
+		StringBuilder order = new StringBuilder("");		
+				
+		try {
+			
+			if(id!=null && id>0) {
+				where.append(" AND m.id = :id");
+				parametros.put("id", id.toString());					
+			}
+			
+			Boolean hayWhere = false;
+			
+						
+			if(!StringUtils.isEmpty(codigoAgrupacionMaterias)) {	
+				from.append(", m.materiasAgrupacionM as mag");
+				where.append(" AND mag.id = :codigoAgrupacionMaterias ");
+				parametros.put("codigoAgrupacionMaterias", codigoAgrupacionMaterias);					
+			}
+			
+			if(!StringUtils.isEmpty(codigoUA)) {
+				from.append(", m.unidadesmaterias as um, um.unidad as ua");
+				where.append(" AND ua.id = :codigoUA ");
+				parametros.put("codigoUA", codigoUA);					
+			}				
+							
+			if(!StringUtils.isEmpty(codigoFicha)) {
+				from.append(", m.fichas as f");
+				where.append(" AND f.id = :codigoFicha ");
+				parametros.put("codigoFicha", codigoFicha);					
+			}	
+	
+			return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(), selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
+			
+	
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	
+	}
+
+
+	
 }

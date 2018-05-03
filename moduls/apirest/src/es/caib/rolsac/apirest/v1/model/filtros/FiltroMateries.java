@@ -16,26 +16,26 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * FiltroFitxes.
+ * FiltroMaterias.
  * 
  * @author Indra
  *
  */
 @XmlRootElement
-@ApiModel(value = "FiltroFichasUA", description = "Filtro que permite buscar por diferentes campos")
-public class FiltroFitxesUA {
+@ApiModel(value = "FiltroMaterias", description = "Filtro que permite buscar por diferentes campos")
+public class FiltroMateries {
 	
 	public static final String SAMPLE = 
-			  Constantes.SALTO_LINEA + "{\"codigoSeccion\":\"0\","
+			  Constantes.SALTO_LINEA + "{\"codigoAgrupacionMaterias\":\"0\","
 			+ Constantes.SALTO_LINEA + "\"codigoUA\":\"0\","
 			+ Constantes.SALTO_LINEA + "\"codigoFicha\":\"0\""
 		    + "}";
 	 
 	
 
-	/** codigoSeccion. **/
-	@ApiModelProperty(value = "codigoSeccion", required = false)
-	private Integer codigoSeccion;
+	/** codigoAgrupacionMaterias. **/
+	@ApiModelProperty(value = "codigoAgrupacionMaterias", required = false)
+	private Integer codigoAgrupacionMaterias;
 
 	/** codigoUA. **/
 	@ApiModelProperty(value = "codigoUA", required = false)
@@ -48,21 +48,19 @@ public class FiltroFitxesUA {
 		
 	public FiltroGenerico toFiltroGenerico() {
 		FiltroGenerico fg = new FiltroGenerico();
-		
-		
-		
-		if(this.codigoSeccion!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_FICHASUA_SECCION, this.codigoSeccion+"");
+
+		if(this.codigoAgrupacionMaterias!= null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_MATERIAS_AGRUPACIONMATERIAS, this.codigoAgrupacionMaterias+"");
 		}
 		
 		
 		if(this.codigoUA!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_FICHASUA_UA, this.codigoUA+"");
+			fg.addFiltro(FiltroGenerico.FILTRO_MATERIAS_UA, this.codigoUA+"");
 		}
 		
 		
 		if(this.codigoFicha!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_FICHASUA_FICHA, this.codigoFicha+"");
+			fg.addFiltro(FiltroGenerico.FILTRO_MATERIAS_FICHA, this.codigoFicha+"");
 		}
 		
 		return fg;
@@ -70,13 +68,13 @@ public class FiltroFitxesUA {
 	
 	
 	
-	public static FiltroFitxesUA valueOf(final String json) {
+	public static FiltroMateries valueOf(final String json) {
 		final ObjectMapper objectMapper = new ObjectMapper();
-		final TypeReference<FiltroFitxesUA> typeRef = new TypeReference<FiltroFitxesUA>() {
+		final TypeReference<FiltroMateries> typeRef = new TypeReference<FiltroMateries>() {
 		};
-		FiltroFitxesUA obj;
+		FiltroMateries obj;
 		try {
-			obj = (FiltroFitxesUA) objectMapper.readValue(json, typeRef);
+			obj = (FiltroMateries) objectMapper.readValue(json, typeRef);
 		} catch (final IOException e) {
 			// TODO PENDIENTE
 			throw new RuntimeException(e);
@@ -99,22 +97,18 @@ public class FiltroFitxesUA {
 
 
 	/**
-	 * @return the codigoSeccion
+	 * @return the codigoAgrupacionMaterias
 	 */
-	public Integer getCodigoSeccion() {
-		return codigoSeccion;
+	public Integer getCodigoAgrupacionMaterias() {
+		return codigoAgrupacionMaterias;
 	}
-
-
 
 	/**
-	 * @param codigoSeccion the codigoSeccion to set
+	 * @param codigoAgrupacionMaterias the codigoAgrupacionMaterias to set
 	 */
-	public void setCodigoSeccion(Integer codigoSeccion) {
-		this.codigoSeccion = codigoSeccion;
+	public void setCodigoAgrupacionMaterias(Integer codigoAgrupacionMaterias) {
+		this.codigoAgrupacionMaterias = codigoAgrupacionMaterias;
 	}
-
-
 
 	/**
 	 * @return the codigoUA
@@ -123,16 +117,12 @@ public class FiltroFitxesUA {
 		return codigoUA;
 	}
 
-
-
 	/**
 	 * @param codigoUA the codigoUA to set
 	 */
 	public void setCodigoUA(Integer codigoUA) {
 		this.codigoUA = codigoUA;
 	}
-
-
 
 	/**
 	 * @return the codigoFicha
@@ -141,16 +131,11 @@ public class FiltroFitxesUA {
 		return codigoFicha;
 	}
 
-
-
 	/**
 	 * @param codigoFicha the codigoFicha to set
 	 */
 	public void setCodigoFicha(Integer codigoFicha) {
 		this.codigoFicha = codigoFicha;
-	}
-
-
-	
+	}	
 	
 }

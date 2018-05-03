@@ -2356,15 +2356,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			StringBuilder order = new StringBuilder(filtro.getOrdenSQL("f"));		
 					
 			try {
-				
-				if(id!=null && id>0) {
-					where.append(" AND f.id = :id");
-					parametros.put("id", id.toString());					
-				}
-				
 				Boolean hayWhere = false;
 				
-							
 				if(!StringUtils.isEmpty(codigoSeccion)) {
 					hayWhere=true;
 					where.append(" WHERE f.seccion.id = :codigoSeccion ");
@@ -2392,6 +2385,18 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 					where.append(" f.ficha.id = :codigoFicha ");
 					parametros.put("codigoFicha", codigoFicha);					
 				}	
+				
+				if(id!=null && id>0) {
+					if(hayWhere) {
+						where.append(" AND ");						
+					}else {
+						where.append(" WHERE ");
+						hayWhere=true;
+					}
+					
+					where.append(" f.id = :id");
+					parametros.put("id", id.toString());					
+				}
 		
 				return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(), selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
 				

@@ -2,7 +2,6 @@ package org.ibit.rol.sac.persistence.delegate;
 
 import java.rmi.RemoteException;
 import java.util.List;
-import java.util.Set;
 
 import javax.ejb.CreateException;
 import javax.ejb.Handle;
@@ -11,8 +10,8 @@ import javax.naming.NamingException;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.IconoMateria;
 import org.ibit.rol.sac.model.Materia;
-import org.ibit.rol.sac.model.MateriaAgrupacionM;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.intf.MateriaFacade;
 import org.ibit.rol.sac.persistence.intf.MateriaFacadeHome;
 import org.ibit.rol.sac.persistence.util.MateriaFacadeUtil;
@@ -196,6 +195,14 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
     public List<UnidadAdministrativa> listarUAsMateria(Long id) throws DelegateException {
     	try {
             return getFacade().listarUAsMateria(id);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+	}
+    
+    public ResultadoBusqueda consultaMaterias(FiltroGenerico filtro) throws DelegateException {
+    	try {
+            return getFacade().consultaMaterias(filtro);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }

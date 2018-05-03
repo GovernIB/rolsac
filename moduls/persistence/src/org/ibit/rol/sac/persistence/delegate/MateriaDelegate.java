@@ -1,14 +1,12 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import java.rmi.RemoteException;
 import java.util.List;
-import java.util.Set;
 
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.IconoMateria;
 import org.ibit.rol.sac.model.Materia;
-import org.ibit.rol.sac.model.MateriaAgrupacionM;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
@@ -98,6 +96,10 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 	
 	public List<UnidadAdministrativa> listarUAsMateria(Long id) throws DelegateException {
 		return impl.listarUAsMateria(id);
+	}
+
+	public ResultadoBusqueda consultaMaterias(FiltroGenerico filtro) throws DelegateException  {
+		return impl.consultaMaterias(filtro);
 	}
 		
 }
