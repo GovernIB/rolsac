@@ -8,6 +8,7 @@ import javax.ejb.Handle;
 import javax.naming.NamingException;
 
 import org.ibit.rol.sac.model.PublicoObjetivo;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.intf.PublicoObjetivoFacade;
 import org.ibit.rol.sac.persistence.intf.PublicoObjetivoFacadeHome;
 import org.ibit.rol.sac.persistence.util.PublicoObjetivoFacadeUtil;
@@ -87,6 +88,15 @@ public class PublicoObjetivoDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
+
+	public ResultadoBusqueda consultaPublicosObjetivo(FiltroGenerico filtro) throws DelegateException  {
+        try {
+            return getFacade().consultaPublicosObjetivo(filtro);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+	}
 
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
@@ -111,4 +121,5 @@ public class PublicoObjetivoDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+
 }

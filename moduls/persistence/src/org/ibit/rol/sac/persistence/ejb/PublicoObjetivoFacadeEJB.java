@@ -1,11 +1,20 @@
 package org.ibit.rol.sac.persistence.ejb;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
+import org.apache.commons.lang.StringUtils;
+import org.ibit.rol.sac.model.AgrupacionHechoVital;
+import org.ibit.rol.sac.model.PublicoObjetivo;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
+import org.ibit.rol.sac.persistence.util.ApiRestUtils;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
 import net.sf.hibernate.Criteria;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
@@ -13,11 +22,6 @@ import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
 import net.sf.hibernate.expression.Order;
-
-import org.ibit.rol.sac.model.AgrupacionHechoVital;
-import org.ibit.rol.sac.model.PublicoObjetivo;
-
-import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * SessionBean para mantener y consultar Publico Objetivo.(PORMAD)
@@ -39,7 +43,8 @@ public abstract class PublicoObjetivoFacadeEJB extends HibernateEJB {
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
-    public void ejbCreate() throws CreateException {
+    @Override
+	public void ejbCreate() throws CreateException {
         super.ejbCreate();
     }
 
@@ -239,7 +244,7 @@ public abstract class PublicoObjetivoFacadeEJB extends HibernateEJB {
             
             for ( int i = 0 ; i < publicos.size() ; i++ ) {
             	
-                PublicoObjetivo pub = (PublicoObjetivo) publicos.get(i);
+                PublicoObjetivo pub = publicos.get(i);
                 pub.setOrden(i);
                 
             }
@@ -283,7 +288,7 @@ public abstract class PublicoObjetivoFacadeEJB extends HibernateEJB {
                 criteri.addOrder( Order.asc("orden") );
                 List<PublicoObjetivo> result = castList( PublicoObjetivo.class, criteri.list() );
 
-                PublicoObjetivo poModificado = (PublicoObjetivo) result.get( orden - 1 );
+                PublicoObjetivo poModificado = result.get( orden - 1 );
 
                 poModificado.setOrden(orden);
                 result.set(orden, poModificado);
@@ -458,7 +463,7 @@ public abstract class PublicoObjetivoFacadeEJB extends HibernateEJB {
         try {
             Query query = session.createQuery("from PublicoObjetivo as po, po.traducciones as trad where index(trad) = :idioma and po.id in (" + ids + ") ");
             query.setString("idioma", idioma);
-            resultado = (List<PublicoObjetivo>)query.list();
+            resultado = query.list();
             return resultado;
         } catch (HibernateException he){
             throw new EJBException(he);
@@ -466,5 +471,52 @@ public abstract class PublicoObjetivoFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
+    
+    
+	 /**
+	 * Consulta publicos objetivo en funcion del filtro generico
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public ResultadoBusqueda consultaPublicosObjetivo(FiltroGenerico filtro){
+	
+		Session session = getSession();	
+		Integer pageSize = filtro.getPageSize();
+		Integer pageNumber = filtro.getPage();
+		Long id = filtro.getId();
+		String lang = filtro.getLang();
+		Map <String,String> parametros = new HashMap<String,String>();
+					
+		String listaCodigos = filtro.getValor(FiltroGenerico.FILTRO_PUBLICO_LISTA_CODIGOS);				
+		
+		StringBuilder select = new StringBuilder("SELECT p ");
+		StringBuilder selectCount = new StringBuilder("SELECT count(p) ");
+		StringBuilder from = new StringBuilder(" FROM PublicoObjetivo as p, p.traducciones as trad ") ;
+		StringBuilder where =new StringBuilder(" WHERE index(trad) = :lang");
+		parametros.put("lang",lang);
+		StringBuilder order = new StringBuilder("");		
+				
+		try {
+			
+			if(id!=null && id>0) {
+				where.append(" AND p.id = :id");
+				parametros.put("id", id.toString());					
+			}
+			
+			if(!StringUtils.isEmpty(listaCodigos)) {
+				where.append(" AND p.id in (" +listaCodigos+ ")");					
+			}
+	
+			return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(), selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
+			
+	
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	
+	}
     
 }
