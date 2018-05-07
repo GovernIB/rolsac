@@ -1762,7 +1762,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 				if (elementos == null) {
 					elementos = new Long[0];
 				}
-				DelegateUtil.getNormativaDelegate().reordenarDocumentos(id, Arrays.asList(elementos));
+				DelegateUtil.getServicioDelegate().reordenarDocumentos(id, Arrays.asList(elementos));
 				result = new IdNomDTO(id, messageSource.getMessage("serv.guardat.documents.correcte", null, request.getLocale()));
 				
 			} catch (DelegateException dEx) {

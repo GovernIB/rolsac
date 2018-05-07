@@ -1978,6 +1978,10 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 		try {
 			//Paso 1. Obtenemos el servicio.
 			Servicio servicio = obtenerServicioParaSolr(idServicio, session);
+			//Paso 1.1. Comprobamos que tiene permisos para editar los documentos del servicio.
+			if (servicio.getId() != null && !getAccesoManager().tieneAccesoServicio(servicio.getId())) {
+				throw new SecurityException("No tiene acceso al servicio");
+			}
 			
 			//Paso 2. Obtener los servicios que han sido borrados.
 			long maxOrden = 0;
@@ -1993,10 +1997,6 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 							docsParaBorrar.add(doc);  //Lo añadimos en la lista.
 						}
 						
-						//Paso 2.1. Comprobamos que tiene permisos para editar los documentos.
-						if (!getAccesoManager().tieneAccesoDocumento(doc.getId())) {
-							throw new SecurityException("No tiene acceso al documento");
-						}
 					}
 				}
 			}

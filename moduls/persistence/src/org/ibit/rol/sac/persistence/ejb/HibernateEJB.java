@@ -20,6 +20,7 @@ import org.ibit.rol.sac.model.Comentario;
 import org.ibit.rol.sac.model.ComentarioFicha;
 import org.ibit.rol.sac.model.ComentarioProcedimiento;
 import org.ibit.rol.sac.model.Documento;
+import org.ibit.rol.sac.model.DocumentoServicio;
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaResumen;
@@ -642,6 +643,14 @@ public abstract class HibernateEJB implements SessionBean {
             return tieneAcceso(usuario, documento.getProcedimiento());
         }
         return true;
+    }
+    
+    /**
+     * Comprueba si un usuario puede modificar un documento.
+     * Tendra acceso si tiene acceso a la ficha o al procedimiento a que pertenece el documento.
+     */
+    protected boolean tieneAcceso(Usuario usuario, DocumentoServicio documento) {
+         return tieneAcceso(usuario, documento.getServicio());
     }
 
     /**
