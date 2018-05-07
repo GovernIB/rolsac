@@ -1,18 +1,16 @@
 package org.ibit.rol.sac.persistence.delegate;
 
 import java.rmi.RemoteException;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.Map;
 
 import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
 
 import org.ibit.rol.sac.model.Seccion;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.intf.SeccionFacade;
 import org.ibit.rol.sac.persistence.intf.SeccionFacadeHome;
-import org.ibit.rol.sac.persistence.util.FichaUAFichaIds;
 import org.ibit.rol.sac.persistence.util.SeccionFacadeUtil;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
@@ -173,6 +171,15 @@ public class SeccionDelegate implements StatelessDelegate
    		throw new DelegateException(e);
    	}
    }
+   
+
+	public ResultadoBusqueda consultaSecciones(FiltroGenerico filtro) throws DelegateException{
+	    try {
+	   		return getFacade().consultaSecciones(filtro);
+	   	} catch (RemoteException e) {
+	   		throw new DelegateException(e);
+	   	}
+	}
     
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

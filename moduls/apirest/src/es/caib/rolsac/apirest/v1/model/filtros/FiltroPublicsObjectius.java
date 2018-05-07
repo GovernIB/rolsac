@@ -25,7 +25,7 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "Filtro Publicos Objetivo", description = "Filtro propio de la entidad " + Constantes.ENTIDAD_PUBLICO)
 public class FiltroPublicsObjectius {
 	
-	public static final String SAMPLE = "{\"codigos\":\"0,1,2,3\"}"; 
+	public static final String SAMPLE = "{\"codigosPO\":\"0,1,2,3\"}"; 
 	
 	 
 	/** codigoUA. **/

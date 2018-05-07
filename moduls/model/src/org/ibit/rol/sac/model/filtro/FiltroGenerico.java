@@ -76,6 +76,8 @@ public class FiltroGenerico implements Serializable {
 	
 	public static final String FILTRO_PUBLICO_LISTA_CODIGOS = "codigosPO";
 	
+	public static final String FILTRO_SECCIONES_UA = "codigoUA";
+	public static final String FILTRO_SECCIONES_CODIGO_ESTANDAR = "codigoEstandar";
 	
 	
 

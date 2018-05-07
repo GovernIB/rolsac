@@ -1,27 +1,15 @@
 package org.ibit.rol.sac.persistence.ejb;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
-
-import net.sf.hibernate.Criteria;
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.expression.Expression;
-import net.sf.hibernate.expression.Order;
-
-
-
-
-
-
 
 import org.apache.commons.lang.StringUtils;
 import org.ibit.rol.sac.model.Ficha;
@@ -30,12 +18,20 @@ import org.ibit.rol.sac.model.PerfilGestor;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Usuario;
-import org.ibit.rol.sac.model.Validacion;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.PerfilGestorDelegate;
+import org.ibit.rol.sac.persistence.util.ApiRestUtils;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.expression.Expression;
+import net.sf.hibernate.expression.Order;
 
 /**
  * SessionBean para mantener y consultar Secciones.
@@ -53,7 +49,8 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
-    public void ejbCreate() throws CreateException {
+    @Override
+	public void ejbCreate() throws CreateException {
         super.ejbCreate();
     }
 
@@ -147,7 +144,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
                     hermanos = castList(Seccion.class, session.getNamedQuery("secciones.root").list());
                 }
 
-                Seccion sec2 = (Seccion) hermanos.get(orden - 1);
+                Seccion sec2 = hermanos.get(orden - 1);
 
                 sec2.setOrden(orden);
                 hermanos.set(orden, sec2);
@@ -343,7 +340,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
             List<Seccion> secciones = new ArrayList<Seccion>();
             
             for (int i = 0; i < result.size(); i++) {
-                Seccion seccion = (Seccion) result.get(i);
+                Seccion seccion = result.get(i);
                 if (userIs(seccion.getPerfil())) {
                     secciones.add(seccion);
                 }
@@ -460,7 +457,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     	Seccion seccion = (Seccion)session.load(Seccion.class, id);
     	Hibernate.initialize(seccion.getHijos());
     	for (int i = 0; i < seccion.getHijos().size(); i++ ) {
-    		Seccion secHija = (Seccion)seccion.getHijos().get(i);
+    		Seccion secHija = seccion.getHijos().get(i);
     		if (secHija != null){
     			descendientes.add(secHija);
     			cargarDescendientesSeccion(secHija.getId(), descendientes, session);
@@ -479,7 +476,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
             Seccion seccion = (Seccion) session.load(Seccion.class, id);
             Set<FichaUA> fichasUA = castSet(FichaUA.class, seccion.getFichasUA());
             for (Iterator<FichaUA> iter = fichasUA.iterator(); iter.hasNext();) {
-                FichaUA ficha = (FichaUA) iter.next();
+                FichaUA ficha = iter.next();
                 UnidadAdministrativa ua = ficha.getUnidadAdministrativa();
                 Ficha fic = ficha.getFicha();
                 if (ua != null) {
@@ -586,7 +583,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
         Query query = session.getNamedQuery("secciones.root");
         List<Seccion> lista = castList(Seccion.class, query.list());
         for (int i = 0; i < lista.size(); i++) {
-            Seccion sec = (Seccion) lista.get(i);
+            Seccion sec = lista.get(i);
             sec.setOrden(i);
         }
     }
@@ -680,5 +677,64 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
 		}
 		
 	}
+    
+    
+	
+	 /**
+	 * Consulta las secciones en funcion del filtro generico
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+    public ResultadoBusqueda consultaSecciones(FiltroGenerico filtro){
+	
+		Session session = getSession();	
+		Integer pageSize = filtro.getPageSize();
+		Integer pageNumber = filtro.getPage();
+		Long id = filtro.getId();
+		String lang = filtro.getLang();
+		Map <String,String> parametros = new HashMap<String,String>();
+					
+		String codigoUA = filtro.getValor(FiltroGenerico.FILTRO_SECCIONES_UA);
+		String codigoEstandard = filtro.getValor(FiltroGenerico.FILTRO_SECCIONES_CODIGO_ESTANDAR);		
+		
+		
+		StringBuilder select = new StringBuilder("SELECT s ");
+		StringBuilder selectCount = new StringBuilder("SELECT count(s) ");
+		StringBuilder from = new StringBuilder(" FROM Seccion as s, s.traducciones as trad ") ;
+		StringBuilder where =new StringBuilder(" WHERE index(trad) = :lang");
+		parametros.put("lang",lang);
+		StringBuilder order = new StringBuilder("");		
+				
+		try {
+			
+			if(id!=null && id>0) {
+				where.append(" AND s.id = :id");
+				parametros.put("id", id.toString());					
+			}
+			
+			
+			if(!StringUtils.isEmpty(codigoUA)) {
+				where.append(" AND s.id in (SELECT fua.seccion.id FROM  FichaUA AS fua WHERE fua.unidadAdministrativa.id = :codigoUA ) ");
+				parametros.put("codigoUA", codigoUA);					
+			}				
+							
+			if(!StringUtils.isEmpty(codigoEstandard)) {
+				where.append(" AND s.codigoEstandard = :codigoEstandard ");
+				
+				parametros.put("codigoEstandard", codigoEstandard);					
+			}	
+	
+			return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(), selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
+			
+	
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	
+	}
+    
 	
 }
