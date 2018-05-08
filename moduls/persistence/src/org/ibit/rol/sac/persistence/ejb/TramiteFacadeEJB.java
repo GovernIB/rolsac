@@ -933,7 +933,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 	 * */
 	private List<DocumentTramit> obtenirDocumentsSegonsTipus(Session session, long tid, int tipus) throws HibernateException {
 
-		Query query = session.createQuery("from DocumentTramit where tipus = :tipus and coditra = :id");
+		Query query = session.createQuery("from DocumentTramit dt where dt.tipus = :tipus and dt.tramit.id = :id");
 		query.setInteger("tipus", tipus);
 		query.setLong("id", tid);
 

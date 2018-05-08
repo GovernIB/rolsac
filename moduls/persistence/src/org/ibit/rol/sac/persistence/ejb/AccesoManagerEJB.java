@@ -196,6 +196,23 @@ public abstract class AccesoManagerEJB extends HibernateEJB {
 			close(session);
 		}
 	}
+	
+	/**
+	 * Devuelve <code>true</code> si y solo si el usuario puede modificar el documento.
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+	 */
+	public boolean tieneAccesoDocumentoServicio(Long idDoc) {
+		Session session = getSession();
+		try {
+			return tieneAcceso(getUsuario(session), (DocumentoServicio) session.get(DocumentoServicio.class, idDoc));
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
 
 	/**
 	 * Devuelve <code>true</code> si y solo si el usuario puede modificar el tramite.
