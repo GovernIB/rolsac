@@ -13,6 +13,7 @@ import org.ibit.rol.sac.model.DocumentoNormativa;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.intf.NormativaFacade;
 import org.ibit.rol.sac.persistence.intf.NormativaFacadeHome;
 import org.ibit.rol.sac.persistence.util.NormativaFacadeUtil;
@@ -279,6 +280,14 @@ public class NormativaDelegate implements StatelessDelegate
 	public boolean tieneRelaciones(Long id) throws DelegateException {
 		try {
             return getFacade().tieneRelaciones(id);	
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
+	}
+
+	public ResultadoBusqueda consultaNormativas(FiltroGenerico filtro) throws DelegateException {
+		try {
+            return getFacade().consultaNormativas(filtro);	
        } catch (RemoteException e) {
            throw new DelegateException(e);
        }

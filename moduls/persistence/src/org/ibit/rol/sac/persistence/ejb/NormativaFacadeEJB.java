@@ -36,15 +36,17 @@ import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.UnidadNormativa;
 import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.Validacion;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.model.webcaib.NormativaModel;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
+import org.ibit.rol.sac.persistence.util.ApiRestUtils;
+import org.ibit.rol.sac.persistence.util.DateUtils;
 import org.ibit.rol.sac.persistence.util.IndexacionUtil;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
-import org.ibit.rol.sac.persistence.util.DateUtils;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.caib.solr.api.SolrIndexer;
 import es.caib.solr.api.model.IndexData;
@@ -322,7 +324,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			List<Normativa> normativasAcceso = new ArrayList<Normativa>();
 			Usuario usuario = getUsuario(session);
 			for (int i = 0; i < normativas.size(); i++) {
-				Normativa normativa =  (Normativa)normativas.get(i);
+				Normativa normativa =  normativas.get(i);
 				if(tieneAcceso(usuario, normativa)){
 					normativasAcceso.add(normativa);
 				}
@@ -810,7 +812,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			Historico historico = getHistorico(session, normativa);
 			((HistoricoNormativa) historico).setNormativa(null);
 			for (Iterator<ProcedimientoLocal> iterator = normativa.getProcedimientos().iterator(); iterator.hasNext();) {
-				ProcedimientoLocal proc = (ProcedimientoLocal) iterator.next();
+				ProcedimientoLocal proc = iterator.next();
 				SiaUtils.marcarIndexacionPendienteServicio(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, proc.getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, null);
 				
 				proc.getNormativas().remove(normativa);
@@ -818,7 +820,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			normativa.getAfectadas().clear();
 
 			for (Iterator<Afectacion> iterator = normativa.getAfectantes().iterator(); iterator.hasNext();) {
-				Afectacion afectacion = (Afectacion) iterator.next();
+				Afectacion afectacion = iterator.next();
 				Normativa afectante = afectacion.getAfectante();
 				afectante.getAfectadas().remove(afectacion);
 			}
@@ -850,7 +852,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 
 			List<Normativa> result = new ArrayList<Normativa>();
 			for (Iterator<UnidadNormativa> iterator = unidadAdministrativa.getUnidadesNormativas().iterator(); iterator.hasNext();) {
-				UnidadNormativa norm = (UnidadNormativa) iterator.next();
+				UnidadNormativa norm = iterator.next();
 				if (visible(norm.getNormativa())) {
 					result.add(norm.getNormativa());
 				}
@@ -881,7 +883,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 		// Tratamiento de parametros
 		for (Iterator<String> iter1 = parametros.keySet().iterator(); iter1.hasNext();) {
 
-			String key = (String) iter1.next();
+			String key = iter1.next();
 			Object value = parametros.get(key);
 
 			if (value != null) {
@@ -939,7 +941,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 		}
 
 		for (Iterator<String> iter2 = traduccion.keySet().iterator(); iter2.hasNext();) {
-			String key = (String) iter2.next();
+			String key = iter2.next();
 			Object value = traduccion.get(key);
 			if (value != null) {
 				if (value instanceof String) {
@@ -1155,7 +1157,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			Map<String, Traduccion> traduccionCorrecta = null;
 			for (Iterator<String> iterator = normativa.getLangs().iterator(); iterator.hasNext();) {
 				
-				String lang = (String) iterator.next();
+				String lang = iterator.next();
 				TraduccionNormativa traduccion = (TraduccionNormativa) normativa.getTraduccion(lang);
 				if (traduccion!=null)  Hibernate.initialize(traduccion.getArchivo());
 				
@@ -1622,5 +1624,111 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			close(session);
 		}
 	}
+	
+	
+	
+	
+	 /**
+	 * Consulta las Normativas en funcion del filtro generico
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public ResultadoBusqueda consultaNormativas(FiltroGenerico filtro){
+	
+		Session session = getSession();	
+		Integer pageSize = filtro.getPageSize();
+		Integer pageNumber = filtro.getPage();
+		Long id = filtro.getId();
+		String lang = filtro.getLang();
+		Map <String,String> parametros = new HashMap<String,String>();
+					
+		
+		String codigoUA = filtro.getValor(FiltroGenerico.FILTRO_NORMATIVA_UA);
+		String fechaPublicacion = filtro.getValor(FiltroGenerico.FILTRO_NORMATIVA_FECHA_PUBLICACION);		
+		String fechaBoletin = filtro.getValor(FiltroGenerico.FILTRO_NORMATIVA_FECHABOLETIN);		
+		String numeroNorma = filtro.getValor(FiltroGenerico.FILTRO_NORMATIVA_NUMERO_NORMA);		
+		String codigoProcedimiento = filtro.getValor(FiltroGenerico.FILTRO_NORMATIVA_PROCEDIMIENTO);		
+		String codigoServicio = filtro.getValor(FiltroGenerico.FILTRO_NORMATIVA_SERVICIO);		
+		String texto = filtro.getValor(FiltroGenerico.FILTRO_NORMATIVA_TEXTO);		
+		String tipoPublicacion = filtro.getValor(FiltroGenerico.FILTRO_NORMATIVA_TIPO_PUBLICACION);		
+		
+		
+		StringBuilder select = new StringBuilder("SELECT n ");
+		StringBuilder selectCount = new StringBuilder("SELECT count(n) ");
+		StringBuilder from = new StringBuilder(" FROM Normativa as n, n.traducciones as trad ") ;
+		StringBuilder where =new StringBuilder(" WHERE index(trad) = :lang");
+		parametros.put("lang",lang);
+		StringBuilder order = new StringBuilder("");		
+				
+		try {
+			
+			if(id!=null && id>0) {
+				where.append(" AND n.id = :id");
+				parametros.put("id", id.toString());					
+			}
+			
+			if(!StringUtils.isEmpty(codigoUA)) {
+				from.append(", n.unidadesnormativas as un, un.unidadAdministrativa as ua");
+				where.append(" AND ua.id = :codigoUA ");
+				parametros.put("codigoUA", codigoUA);					
+			}	
+			
+			
+			if(!StringUtils.isEmpty(codigoProcedimiento)) {
+				from.append(", n.procedimientos as p");
+				where.append(" AND p.id = :codigoProcedimiento ");
+				parametros.put("codigoProcedimiento", codigoProcedimiento);					
+			}	
+			
+			
+			if(!StringUtils.isEmpty(codigoServicio)) {
+				from.append(", n.servicios as s");
+				where.append(" AND s.id = :codigoServicio ");
+				parametros.put("codigoServicio", codigoServicio);					
+			}	
+			
+			
+			if(!StringUtils.isEmpty(fechaBoletin)) {
+				where.append(" AND n.fechaBoletin = :fechaBoletin ");
+				parametros.put("fechaBoletin", fechaBoletin);					
+			}	
+			
+			
+			if(!StringUtils.isEmpty(fechaPublicacion)) {
+				where.append(" AND n.fecha = :fechaPublicacion ");
+				parametros.put("fechaPublicacion", fechaPublicacion);					
+			}	
+			
+			
+			if(!StringUtils.isEmpty(numeroNorma)) {
+				where.append(" AND n.numNormativa = :numeroNorma ");
+				parametros.put("numeroNorma", numeroNorma);					
+			}	
+			
+			
+			if(!StringUtils.isEmpty(tipoPublicacion)) {
+				where.append(" AND n.tipo.id = :tipoPublicacion ");
+				parametros.put("tipoPublicacion", tipoPublicacion);					
+			}	
+			
+
+			if(!StringUtils.isEmpty(texto)) {
+				where.append(" AND trad.titulo LIKE :texto ");
+				parametros.put("texto", "%" + texto + "%");					
+			}	
+			
+
+			return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(), selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
+			
+	
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	
+	}
+	
 	
 }

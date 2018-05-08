@@ -137,6 +137,9 @@ public class Constantes {
 	public static final String ENTIDAD_PERSONAL = "personal";
 	public static final String URL_PERSONAL = ENTIDAD_PERSONAL + "/{0}";
 	
+	public static final String ENTIDAD_USUARIOS = "usuarios";
+	public static final String URL_USUARIOS = ENTIDAD_USUARIOS + "/{0}";
+	
 	public static final String ENTIDAD_ESTADISTICAS = "estadisticas";
 	
 	
