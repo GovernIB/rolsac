@@ -1,19 +1,23 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import org.ibit.rol.sac.model.Usuario;
-import org.ibit.rol.sac.persistence.intf.UsuarioFacade;
-import org.ibit.rol.sac.persistence.intf.UsuarioFacadeHome;
-import org.ibit.rol.sac.persistence.util.UsuarioFacadeUtil;
-
-import javax.ejb.CreateException;
-import javax.ejb.Handle;
-import javax.naming.NamingException;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
 
+import javax.ejb.CreateException;
+import javax.ejb.Handle;
+import javax.naming.NamingException;
+
+import org.ibit.rol.sac.persistence.intf.UsuarioFacade;
+import org.ibit.rol.sac.persistence.intf.UsuarioFacadeHome;
+import org.ibit.rol.sac.persistence.util.UsuarioFacadeUtil;
+import org.ibit.rol.sac.model.Usuario;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
+
 /**
- * Business delegate para manipular usurios.
+ * Business delegate para manipular usuarios.
  */
 public class UsuarioDelegate implements StatelessDelegate {
 
@@ -87,6 +91,14 @@ public class UsuarioDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }   
+
+    public ResultadoBusqueda consultaUsuarios(FiltroGenerico filtro)  throws DelegateException {
+		try {
+			return getFacade().consultaUsuarios(filtro);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
     
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
@@ -111,5 +123,4 @@ public class UsuarioDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
 }

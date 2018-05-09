@@ -1,5 +1,6 @@
 package org.ibit.rol.sac.persistence.ejb;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -7,16 +8,20 @@ import java.util.Map;
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
+import org.apache.commons.lang.StringUtils;
+import org.ibit.rol.sac.model.Comentario;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.Usuario;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
+import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
+import org.ibit.rol.sac.persistence.util.ApiRestUtils;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
 import net.sf.hibernate.Criteria;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
-
-import org.ibit.rol.sac.model.Comentario;
-import org.ibit.rol.sac.model.UnidadAdministrativa;
-import org.ibit.rol.sac.model.Usuario;
-import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 
 /**
  * SessionBean para gestionar usuarios.
@@ -30,6 +35,8 @@ import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
  *
  * @ejb.transaction type="Required"
  */
+
+
 public abstract class UsuarioFacadeEJB extends HibernateEJB {
 
 	private static final long serialVersionUID = 1L;
@@ -45,6 +52,7 @@ public abstract class UsuarioFacadeEJB extends HibernateEJB {
 	 * @ejb.create-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Override
 	public void ejbCreate() throws CreateException {
 		super.ejbCreate();
 	}
@@ -425,4 +433,57 @@ public abstract class UsuarioFacadeEJB extends HibernateEJB {
 
 	}
 
+	/**
+	 * Consulta los usuarios en funcion del filtro generico
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public ResultadoBusqueda consultaUsuarios(FiltroGenerico filtro){
+	
+		Session session = getSession();	
+		Integer pageSize = filtro.getPageSize();
+		Integer pageNumber = filtro.getPage();
+		Long id = filtro.getId();
+		//String lang = filtro.getLang();
+		Map <String,String> parametros = new HashMap<String,String>();
+				
+		String codigoUA = filtro.getValor(FiltroGenerico.FILTRO_USUARIOS_UA);
+
+		StringBuilder select = new StringBuilder("SELECT us ");
+		StringBuilder selectCount = new StringBuilder("SELECT count(us) ");
+		StringBuilder where = new StringBuilder("");
+		StringBuilder from = new StringBuilder(" FROM Usuario as us");
+		StringBuilder order = new StringBuilder("");
+				
+		try {
+									
+			
+			if(!StringUtils.isEmpty(codigoUA)) {
+				from.append(" , us.unidadesAdministrativas as usua");
+				
+				where.append(" WHERE usua.id = :codigoUA");
+				parametros.put("codigoUA", codigoUA);												
+			}
+			
+			
+			if(id!=null && id>0) {
+				if (where.length()==0) {
+					where.append(" WHERE ");
+				}else {
+					where.append(" AND ");
+				}
+				where.append(" us.id = :id");
+				parametros.put("id", id.toString());					
+			}
+						
+			return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(), selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
+			
+	
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
 }
