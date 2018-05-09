@@ -2479,7 +2479,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 		res.append(formatoFecha((fecha)));
 		res.append(") AND " );
 		res.append(campo(alias,"fechaPublicacion"));
-		res.append(" < " );
+		res.append(" > " );
 		res.append(formatoFecha((fecha)));
 		res.append(" ))"); 
 			 

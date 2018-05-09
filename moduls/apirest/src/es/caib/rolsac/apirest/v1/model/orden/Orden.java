@@ -32,6 +32,10 @@ public class Orden {
 	
 	public static final String CAMPO_ORD_FICHAUA_ORDEN = "orden"; 
 	public static final String CAMPO_ORD_FICHAUA_ORDEN_SECCION = "ordenseccion"; 
+
+	public static final String CAMPO_ORD_PROCEDIMIENTO_FECHA_PUBLICACION = "fechaPublicacion"; 
+	public static final String CAMPO_ORD_PROCEDIMIENTO_FECHA_ACTUALIZACION = "fechaActualizacion"; 
+	public static final String CAMPO_ORD_PROCEDIMIENTO_CODIGO = "id"; 
 	
 	
 	public static final String SAMPLE_ORDEN_UA = Constantes.SALTO_LINEA + "{\"listaOrden\":[{\"campo\":\"" + CAMPO_ORD_UA_ORDEN + "\",\"tipoOrden\":\"ASC/DESC\"}]}";
@@ -40,8 +44,12 @@ public class Orden {
 	public static final String SAMPLE_ORDEN_FICHA = Constantes.SALTO_LINEA + "{\"listaOrden\":[{\"campo\":\"" + CAMPO_ORD_FICHA_FECHA_ACTUALIZACION + "\",\"tipoOrden\":\"ASC/DESC\"}]}";
 	
 	public static final String SAMPLE_ORDEN_FICHAUA = Constantes.SALTO_LINEA + "{\"listaOrden\":[{\"campo\":\"" + CAMPO_ORD_FICHAUA_ORDEN + "\",\"tipoOrden\":\"ASC/DESC\"},"+
-			"{\"campo\":\"" + CAMPO_ORD_FICHAUA_ORDEN_SECCION + "\",\"tipoOrden\":\"ASC/DESC\"}]}";
+			"{\"campo\":\"" + CAMPO_ORD_FICHAUA_ORDEN_SECCION + "\",\"tipoOrden\":\"ASC/DESC\"}]}";	
 	
+	public static final String SAMPLE_ORDEN_PROCEDIMIENTO = Constantes.SALTO_LINEA + "{\"listaOrden\":[{\"campo\":\"" + CAMPO_ORD_PROCEDIMIENTO_FECHA_PUBLICACION + "\",\"tipoOrden\":\"ASC/DESC\"},"+
+			"{\"campo\":\"" + CAMPO_ORD_PROCEDIMIENTO_FECHA_ACTUALIZACION + "\",\"tipoOrden\":\"ASC/DESC\"}," +
+			"{\"campo\":\"" + CAMPO_ORD_PROCEDIMIENTO_CODIGO + "\",\"tipoOrden\":\"ASC/DESC\"}"
+			+"]}";
 	
 		
 	/** Lista de campos a ordenar. **/

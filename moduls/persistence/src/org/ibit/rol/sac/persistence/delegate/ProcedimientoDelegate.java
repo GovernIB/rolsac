@@ -5,17 +5,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.hibernate.Session;
-
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.criteria.BuscadorProcedimientoCriteria;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.caib.solr.api.SolrIndexer;
 import es.caib.solr.api.model.types.EnumCategoria;
+import net.sf.hibernate.Session;
 
 /*
  * ejaen@dgtic  - u92770
@@ -54,12 +54,14 @@ public class ProcedimientoDelegate {
 	}
 	
 	/** @deprecated No se usa */
+	@Deprecated
 	public ResultadoBusqueda buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu, String pagina, String resultats, int visible, String en_plazo, String telematico) 
 			throws DelegateException {
 		return impl.buscadorProcedimientos(parametros, traduccion, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu, pagina, resultats, visible, en_plazo, telematico);
 	}
 
 	/** @deprecated Se usa desde la API v1*/
+	@Deprecated
 	public List buscarProcedimientosMateria(Long id) throws DelegateException {
 		return impl.buscarProcedimientosMateria(id);
 	}	
@@ -83,11 +85,13 @@ public class ProcedimientoDelegate {
 	
 	
 	/** @deprecated Se usa desde API v1 */
+	@Deprecated
 	public List listarProcedimientosPublicos() throws DelegateException {
 		return impl.listarProcedimientosPublicos();
     }
 	
 	/** @deprecated Se usa desde el back antiguo */
+	@Deprecated
 	public List listarProcedimientos() throws DelegateException {
 		return impl.listarProcedimientos();
 	}
@@ -105,6 +109,7 @@ public class ProcedimientoDelegate {
 	}
 	
 	/** @deprecated Se usa desde el back antiguo */
+	@Deprecated
 	public List listarProcedimientosUA(Long id) throws DelegateException {
 		return impl.listarProcedimientosUA(id);
 	}
@@ -203,5 +208,9 @@ public class ProcedimientoDelegate {
 	 */
 	public boolean isNormativaValidas(Long id)   throws DelegateException {
 		return impl.isNormativaValidas(id);
+	}
+
+	public ResultadoBusqueda consultaProcedimientos(FiltroGenerico filtro) throws DelegateException  {
+		return impl.consultaProcedimientos(filtro);
 	}
 }

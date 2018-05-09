@@ -14,12 +14,6 @@ import java.util.Set;
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import net.sf.hibernate.Criteria;
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.ibit.rol.sac.model.AdministracionRemota;
@@ -52,12 +46,14 @@ import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.model.criteria.BuscadorProcedimientoCriteria;
 import org.ibit.rol.sac.model.criteria.PaginacionCriteria;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI;
 import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
+import org.ibit.rol.sac.persistence.util.ApiRestUtils;
 import org.ibit.rol.sac.persistence.util.DateUtils;
 import org.ibit.rol.sac.persistence.util.IndexacionUtil;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
@@ -71,6 +67,11 @@ import es.caib.solr.api.model.PathUO;
 import es.caib.solr.api.model.types.EnumAplicacionId;
 import es.caib.solr.api.model.types.EnumCategoria;
 import es.caib.solr.api.model.types.EnumIdiomas;
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
 
 
 
@@ -124,6 +125,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
+	@Deprecated
 	public boolean autorizaCrearProcedimiento(Integer validacionProcedimiento) throws SecurityException  {
 		return !(validacionProcedimiento.equals(Validacion.PUBLICA) && !userIsSuper()); 
 	}
@@ -135,6 +137,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
+	@Deprecated
 	public boolean autorizaModificarProcedimiento(Long idProcedimiento) throws SecurityException {
 		return (getAccesoManager().tieneAccesoProcedimiento(idProcedimiento)); 
 	}      
@@ -489,6 +492,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Deprecated
 	public List listarProcedimientosPublicos() {
 	    
 		//agarcia: antes era @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
@@ -851,6 +855,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Deprecated
 	public List buscarProcedimientos(Map parametros, Map traduccion) {
 
 		Session session = getSession();
@@ -880,7 +885,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				List procedimientosAcceso = new ArrayList();
 				Usuario usuario = getUsuario(session);
 				for (int i = 0; i < procedimientos.size(); i++) {
-					ProcedimientoLocal procedimiento =  (ProcedimientoLocal)procedimientos.get(i);
+					ProcedimientoLocal procedimiento =  procedimientos.get(i);
 					if(tieneAcceso(usuario, procedimiento)){
 						procedimientosAcceso.add(procedimiento);
 					}
@@ -903,6 +908,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Deprecated
 	public ResultadoBusqueda buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu, String pagina, String resultats, int visible, String en_plazo, String telematico) {
 
 		Session session = getSession();
@@ -1399,6 +1405,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Deprecated
 	public List buscarProcedimientosMateria(Long id) {
 		Session session = getSession();
 		try {
@@ -1590,6 +1597,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Deprecated
 	public List listarProcedimientosUA(Long id) {
 		Session session = getSession();
 		try {
@@ -1627,6 +1635,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Deprecated
 	public List listarProcedimientosUO(Long id,Integer conse) {
 		Session session = getSession();
 
@@ -1673,6 +1682,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Deprecated
 	public List listarProcedimientosPublicosUA(Long id) {
 		Session session = getSession();
 		try {
@@ -1702,7 +1712,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 		for ( int i = 0 ; i < ua.getHijos().size() ; i++ ) {
 
-			UnidadAdministrativa uaHijo = (UnidadAdministrativa) ua.getHijos().get(i);
+			UnidadAdministrativa uaHijo = ua.getHijos().get(i);
 			result.addAll( procedimientosPublicosRecursivosUA(uaHijo) );
 
 		}
@@ -1828,7 +1838,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			List result = new ArrayList();
 			for ( int i = 0 ; i < hechoVital.getHechosVitalesProcedimientos().size() ; i++ ) {
 
-				HechoVitalProcedimiento hechoVitalProcedimiento = (HechoVitalProcedimiento) hechoVital.getHechosVitalesProcedimientos().get(i);
+				HechoVitalProcedimiento hechoVitalProcedimiento = hechoVital.getHechosVitalesProcedimientos().get(i);
 				ProcedimientoLocal proc = hechoVitalProcedimiento.getProcedimiento();
 				if ( publico(proc) )
 					result.add(proc);
@@ -1859,6 +1869,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Deprecated
 	public ProcedimientoLocal consultarProcedimiento(Long id) {
 		Session session = getSession();
 		try {
@@ -2142,6 +2153,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Deprecated
 	@SuppressWarnings("unchecked")
 	public List<ProcedimientoLocal> listarProcedimientosPublicosUAHVMateria(Long idUA, String[] codEstMat, String[] codEstHV) {
 		Session session = getSession();
@@ -2707,5 +2719,302 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			close(session);
 		}
 	}
+	
+	
+	
+	 /**
+	 * Consulta los procedimientos en funcion del filtro generico
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public ResultadoBusqueda consultaProcedimientos(FiltroGenerico filtro){
+	
+		Session session = getSession();	
+		Integer pageSize = filtro.getPageSize();
+		Integer pageNumber = filtro.getPage();
+		Long id = filtro.getId();
+		String lang = filtro.getLang();
+		Map <String,String> parametros = new HashMap<String,String>();
+				
+		String activo = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_ACTIVO);		
+		String codigoUA = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_UA);
+		String vigente = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_VIGENTE);		
+		String telematico = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_TELEMATICO);
+		String codigoAHV = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_AGRUPACION_HECHO_VITAL);	
+		String codigoAM = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_AGRUPACION_MATERIA);
+		String codigoSIA = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_CODIGO_SIA);
+		String estadoSIA = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_ESTADO_SIA);
+		String estadoUA = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_ESTADO_UA);
+		String codigoFamilia = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_FAMILIA);
+		String fechaActualizacionSia = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_FECHA_ACTUALIZACION_SIA);
+		String fechaPublicacionDesde = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_FECHA_PUBLICACION_DESDE);
+		String fechaPublicacionHasta = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_FECHA_PUBLICACION_HASTA);
+		String codigoMateria = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_MATERIA);
+		String codigoPublicoObjetivo = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_PUBLICO);		
+		String textos = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_TEXTOS);
+		String tramiteTelematico = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_TRAMITE_TELEMATICO);
+		String versionTramiteTelematico = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_VERSION_TRAMITE_TELEMATICO);
+
+				
+		StringBuilder select = new StringBuilder("SELECT p ");
+		StringBuilder selectCount = new StringBuilder("SELECT count(p) ");
+		StringBuilder from = new StringBuilder(" FROM ProcedimientoLocal as p, p.traducciones as trad ") ;
+		StringBuilder where =new StringBuilder(" WHERE index(trad) = :lang");
+		parametros.put("lang",lang);
+		StringBuilder order = new StringBuilder(filtro.getOrdenSQL("p"));		
+				
+		try {
+			
+			if(id!=null && id>0) {
+				where.append(" AND p.id = :id");
+				parametros.put("id", id.toString());					
+			}
+									
+			if(!StringUtils.isEmpty(activo)) {	
+				if(activo.equals("1")) {
+					// está activo
+					where.append(filtroProcedimientosActivos("p"));					
+				}else if(activo.equals("0")) {
+					// esta caducado
+					where.append(filtroProcedimientosCaducados("p"));
+				}											
+			}
+			
+
+			if(!StringUtils.isEmpty(codigoUA)) {
+				where.append(" AND p.unidadAdministrativa.id = :codigoUA ");
+				parametros.put("codigoUA", codigoUA);
+			}	
+			
+			if(!StringUtils.isEmpty(estadoUA)) {
+				where.append(" AND p.unidadAdministrativa.validacion = :estadoUA");
+				parametros.put("estadoUA", estadoUA);					
+			}
+			
+			
+			
+			if((!StringUtils.isEmpty(vigente) && vigente.equals("1")) || (!StringUtils.isEmpty(telematico) && telematico.equals("1"))) {
+				StringBuilder wereSubselect = new StringBuilder(); 
+				
+				if ((!StringUtils.isEmpty(vigente) && vigente.equals("1"))) {					
+					wereSubselect.append("WHERE (t.idTraTel IS NOT NULL OR t.urlExterna IS NOT NULL) ");
+				}
+					
+				if((!StringUtils.isEmpty(telematico) && telematico.equals("1"))){
+					if (wereSubselect.length()<=0) {
+						wereSubselect.append("WHERE ");
+					}else {
+						wereSubselect.append("AND ");
+					}
+					
+					wereSubselect.append("t.fase = 1 AND (t.dataInici > current_date OR t.dataInici IS NULL) AND (t.dataTancament < current_date OR t.dataTancament IS NULL) ");
+
+				}
+				
+				where.append(" AND p.id in ( SELECT t.procedimiento FROM Tramite AS t " ); 
+				where.append(wereSubselect.toString());
+				where.append(" ) ");
+				
+			}
+			
+			if(!StringUtils.isEmpty(codigoAHV)) {
+				from.append(" , p.hechosVitalesProcedimientos as hv ");
+				where.append(" AND hv.hechoVital.id in ( SELECT hechovital.id FROM  HechoVitalAgrupacionHV as ahv, ahv.hechoVital as hechovital, ahv.agrupacion as agr WHERE agr.id = :codigoAHV ) ");
+				parametros.put("codigoAHV", codigoAHV);
+			}
+
+				
+			if(!StringUtils.isEmpty(codigoAM)) {
+				where.append(" AND p.materias in (SELECT am.materia FROM MateriaAgrupacionM AS am WHERE am.agrupacion.id = :codigoAM ) ");
+				parametros.put("codigoAM", codigoAM);					
+			}			
+			
+			if(!StringUtils.isEmpty(codigoSIA)) {
+				where.append(" AND p.codigoSIA = :codigoSIA");
+				parametros.put("codigoSIA", codigoSIA);					
+			}
+			
+			if(!StringUtils.isEmpty(estadoSIA)) {
+				where.append(" AND p.estadoSIA = :estadoSIA");
+				parametros.put("estadoSIA", estadoSIA);					
+			}
+			
+			if(!StringUtils.isEmpty(codigoFamilia)) {
+				where.append(" AND p.familia.id = :codigoFamilia");
+				parametros.put("codigoFamilia", codigoFamilia);					
+			}
+			
+			if(!StringUtils.isEmpty(fechaActualizacionSia)) {
+				where.append(" AND p.fechaSIA = :fechaActualizacionSia");
+				parametros.put("fechaActualizacionSia", fechaActualizacionSia);					
+			}
+						
+			if(!StringUtils.isEmpty(fechaPublicacionDesde)) {
+				where.append(" AND p.fechaPublicacion >= :fechaPublicacionDesde");
+				parametros.put("fechaPublicacionDesde", fechaPublicacionDesde);					
+			}
+			
+			if(!StringUtils.isEmpty(fechaPublicacionHasta)) {
+				where.append(" AND p.fechaPublicacion <= :fechaPublicacionHasta");
+				parametros.put("fechaPublicacionHasta", fechaPublicacionHasta);					
+			}
+			
+			if(!StringUtils.isEmpty(codigoMateria)) {
+				from.append(" , p.materias as m ");
+				where.append(" AND m.id = :codigoMateria");
+				parametros.put("codigoMateria", codigoMateria);					
+			}
+			
+			if(!StringUtils.isEmpty(codigoPublicoObjetivo)) {
+				from.append(" , p.publicosObjetivo as po ");
+				where.append(" AND po.id = :codigoPublicoObjetivo");
+				parametros.put("codigoPublicoObjetivo", codigoPublicoObjetivo);					
+			}			
+			
+			if(!StringUtils.isEmpty(tramiteTelematico)) {
+				where.append(" AND p.tramite = :tramiteTelematico");
+				parametros.put("tramiteTelematico", tramiteTelematico);					
+			}
+			
+			if(!StringUtils.isEmpty(versionTramiteTelematico)) {
+				where.append(" AND p.version = :versionTramiteTelematico");
+				parametros.put("versionTramiteTelematico", versionTramiteTelematico);					
+			}
+			
+			
+			
+			
+			if(!StringUtils.isEmpty(textos)) {				
+			     final String[] camposBuscablesPorTexto = {
+			            "p.dirElectronica", "p.responsable", "p.tramite", "p.url", "p.signatura",
+			            "trad.destinatarios",
+			            "trad.lugar",
+			            "trad.nombre", 
+			            "trad.notificacion",
+			            "trad.observaciones",
+			            "trad.plazos",
+			            "trad.recursos", 
+			            "trad.requisitos",
+			            "trad.resolucion", 
+			            "trad.resultat", 
+			            "trad.resumen"
+			        };
+
+			    where.append(" AND ( ");
+			    parametros.put("textos", "%" + textos +"%" );	
+			    
+			    boolean  primero = true;
+			    
+			    for (String campo : camposBuscablesPorTexto) {
+					if (primero) {
+						primero = false;					
+					}else {
+						where.append(" OR ");
+					}
+			    	
+			    	where.append(campo);
+			    	where.append(" LIKE :textos ");
+
+				}	
+			    
+			    where.append(" ) ");
+			}
+			
+			return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(), selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
+			
+	
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	
+	}
+	
+	
+	
+	
+	 private String filtroProcedimientosActivos(String alias) {
+		 /*
+		 AND ( p.validacion = 1 " +
+					" AND (p.fechaCaducidad >= :ahora or p.fechaCaducidad is null) " +
+					" AND (p.fechaPublicacion <= :ahora or p.fechaPublicacion is null) )
+		 */
+		 
+		 StringBuilder res = new StringBuilder(" AND ( ");
+		 res.append(alias);
+		 res.append(".validacion = ");
+		 res.append(Validacion.PUBLICA);
+		 res.append(" AND ( ");
+		 res.append(campo(alias,"fechaCaducidad"));
+		 res.append(" >= ");
+		 res.append(formatoFecha(DateUtils.getNow()));
+		 res.append(" OR ");
+		 res.append(campo(alias,"fechaCaducidad"));
+		 res.append(" is null ) AND ( ");
+		 res.append(campo(alias,"fechaPublicacion"));
+		 res.append(" <= ");
+		 res.append(formatoFecha(DateUtils.getNow()));
+		 res.append(" OR ");
+		 res.append(campo(alias,"fechaPublicacion"));
+		 res.append(" is null ))");
+		 
+		 return res.toString();
+
+	}
+
+	private String filtroProcedimientosCaducados(String alias) {
+		/*
+		 * 	( p.validacion != 1 ) " +
+		" 	or ( p.validacion = 1 and p.fechaCaducidad < :manana ) " +
+		" 	or ( p.validacion = 1 and p.fechaCaducidad is null and p.fechaPublicacion > :manana ) " +
+		" 	or ( p.validacion = 1 and p.fechaCaducidad >= :manana and p.fechaPublicacion > :manana ) 
+		 */
+
+		Date fecha = DateUtils.getNextDay();
+		
+		StringBuilder res = new StringBuilder(" AND ( ");
+		res.append(campo(alias,"validacion"));
+		res.append(" != ");
+		res.append(Validacion.PUBLICA);
+		res.append(" OR ( ");//--1
+		res.append(campo(alias,"validacion"));
+		res.append(" = ");
+		res.append(Validacion.PUBLICA);
+		res.append(" AND ");
+		res.append(campo(alias,"fechaCaducidad"));
+		res.append(" < " );
+		res.append(formatoFecha((fecha)));
+		res.append(" ) OR ( "); //--2
+		res.append(campo(alias,"validacion"));
+		res.append(" = ");
+		res.append(Validacion.PUBLICA);		
+		res.append(" AND ( ");
+		res.append(campo(alias,"fechaCaducidad"));
+		res.append(" is null OR ");
+		res.append(campo(alias,"fechaCaducidad"));
+		res.append(" >= " );
+		res.append(formatoFecha((fecha)));
+		res.append(") AND " );
+		res.append(campo(alias,"fechaPublicacion"));
+		res.append(" > " );
+		res.append(formatoFecha((fecha)));
+		res.append(" ))"); 
+			 
+		return res.toString();
+
+	}
+	
+	private StringBuilder campo(String alias, String campo) {
+		StringBuilder res = new StringBuilder(alias);
+		res.append(".");
+		res.append(campo);
+		return res;
+	}
+	private String formatoFecha(Date d) {
+		return "'"+DateUtils.formatearddMMyyyy(d)+"'";
+	}
+	
 	
 }

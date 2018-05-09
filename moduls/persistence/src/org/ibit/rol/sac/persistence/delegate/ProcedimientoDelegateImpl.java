@@ -11,8 +11,6 @@ import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
 
-import net.sf.hibernate.Session;
-
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
@@ -20,6 +18,7 @@ import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Validable;
 import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.model.criteria.BuscadorProcedimientoCriteria;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.intf.ProcedimientoFacade;
 import org.ibit.rol.sac.persistence.intf.ProcedimientoFacadeHome;
 import org.ibit.rol.sac.persistence.util.ProcedimientoFacadeUtil;
@@ -27,6 +26,7 @@ import org.ibit.rol.sac.persistence.util.ProcedimientoFacadeUtil;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.caib.solr.api.SolrIndexer;
 import es.caib.solr.api.model.types.EnumCategoria;
+import net.sf.hibernate.Session;
 /**
  * Business delegate para manipular procedimientos.
  */
@@ -449,6 +449,17 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
 	public boolean isNormativaValidas(Long id)   throws DelegateException {
 		try {
 	           return getFacade().isNormativaValidas(id);
+	        } catch (RemoteException e) {
+	            throw new DelegateException(e);
+	        }
+	}
+	
+	/**
+	 * Devuelve true si alguna normativa no es valida.
+	 */
+	public  ResultadoBusqueda consultaProcedimientos(FiltroGenerico filtro)  throws DelegateException {
+		try {
+	           return getFacade().consultaProcedimientos(filtro);
 	        } catch (RemoteException e) {
 	            throw new DelegateException(e);
 	        }

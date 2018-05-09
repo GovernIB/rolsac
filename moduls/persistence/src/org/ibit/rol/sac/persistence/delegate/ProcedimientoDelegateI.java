@@ -5,17 +5,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.hibernate.Session;
-
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.criteria.BuscadorProcedimientoCriteria;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.caib.solr.api.SolrIndexer;
 import es.caib.solr.api.model.types.EnumCategoria;
+import net.sf.hibernate.Session;
 
 public interface ProcedimientoDelegateI {
 
@@ -121,4 +121,6 @@ public interface ProcedimientoDelegateI {
 	public boolean isNormativaDerogada(Long id)   throws DelegateException;
 	
 	public boolean isNormativaValidas(Long id)   throws DelegateException;
+
+	public abstract ResultadoBusqueda consultaProcedimientos(FiltroGenerico filtro) throws DelegateException;
 }

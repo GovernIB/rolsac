@@ -90,6 +90,26 @@ public class FiltroGenerico implements Serializable {
 	public static final String FILTRO_NORMATIVA_FECHA_PUBLICACION = "fechaPublicacion";
 	public static final String FILTRO_NORMATIVA_TIPO_PUBLICACION = "tipoPublicacion";
 	public static final String FILTRO_NORMATIVA_TEXTO = "texto";
+	
+	
+	public static final String FILTRO_PROCEDIMIENTO_UA = "codigoUA";
+	public static final String FILTRO_PROCEDIMIENTO_ACTIVO = "activo";
+	public static final String FILTRO_PROCEDIMIENTO_ESTADO_UA = "estadoUA";
+	public static final String FILTRO_PROCEDIMIENTO_AGRUPACION_HECHO_VITAL = "agrupacionHechoVital";
+	public static final String FILTRO_PROCEDIMIENTO_PUBLICO = "publicoObjetivo";
+	public static final String FILTRO_PROCEDIMIENTO_FAMILIA = "familia";
+	public static final String FILTRO_PROCEDIMIENTO_AGRUPACION_MATERIA = "agrupacionMateria";
+	public static final String FILTRO_PROCEDIMIENTO_MATERIA = "materia";
+	public static final String FILTRO_PROCEDIMIENTO_TEXTOS = "textos";
+	public static final String FILTRO_PROCEDIMIENTO_FECHA_PUBLICACION_DESDE = "fechaPublicacionDesde";
+	public static final String FILTRO_PROCEDIMIENTO_FECHA_PUBLICACION_HASTA = "fechaPublicacionHasta";
+	public static final String FILTRO_PROCEDIMIENTO_VIGENTE = "vigente";
+	public static final String FILTRO_PROCEDIMIENTO_TELEMATICO = "telematico";
+	public static final String FILTRO_PROCEDIMIENTO_CODIGO_SIA = "codigoSIA";
+	public static final String FILTRO_PROCEDIMIENTO_ESTADO_SIA = "estadoSIA";
+	public static final String FILTRO_PROCEDIMIENTO_FECHA_ACTUALIZACION_SIA = "actualizacionSIA";
+	public static final String FILTRO_PROCEDIMIENTO_TRAMITE_TELEMATICO = "tramiteTelematico";
+	public static final String FILTRO_PROCEDIMIENTO_VERSION_TRAMITE_TELEMATICO = "versionTramiteTelematico";
 
 	public FiltroGenerico() {
 		this.filtros = new HashMap<String,String>();
