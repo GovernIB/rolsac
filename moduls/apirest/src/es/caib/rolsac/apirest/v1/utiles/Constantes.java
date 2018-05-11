@@ -140,6 +140,9 @@ public class Constantes {
 	public static final String ENTIDAD_USUARIOS = "usuarios";
 	public static final String URL_USUARIOS = ENTIDAD_USUARIOS + "/{0}";
 	
+	public static final String ENTIDAD_SERVICIOS = "servicios";
+	public static final String URL_SERVICIOS = ENTIDAD_SERVICIOS + "/{0}";
+	
 	public static final String ENTIDAD_ESTADISTICAS = "estadisticas";
 	
 	

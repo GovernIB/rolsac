@@ -42,10 +42,12 @@ import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.model.criteria.BuscadorServicioCriteria;
 import org.ibit.rol.sac.model.criteria.PaginacionCriteria;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.DocumentoServicioDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
+import org.ibit.rol.sac.persistence.util.ApiRestUtils;
 import org.ibit.rol.sac.persistence.util.DateUtils;
 import org.ibit.rol.sac.persistence.util.IndexacionUtil;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
@@ -115,6 +117,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
+	@Deprecated
 	public boolean autorizaCrearServicio(Integer validacionServicio) throws SecurityException  {
 		return !(validacionServicio.equals(Validacion.PUBLICA) && !userIsSuper()); 
 	}
@@ -126,6 +129,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
+	@Deprecated
 	public boolean autorizaModificarServicio(Long idServicio) throws SecurityException {
 		return (getAccesoManager().tieneAccesoServicio(idServicio)); 
 	}      
@@ -520,6 +524,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Deprecated
 	public List buscarServicios(Map<String, Object> parametros, Map traduccion) {
 
 		Session session = getSession();
@@ -549,7 +554,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 				List serviciosAcceso = new ArrayList();
 				Usuario usuario = getUsuario(session);
 				for (int i = 0; i < servicios.size(); i++) {
-					Servicio servicio =  (Servicio)servicios.get(i);
+					Servicio servicio =  servicios.get(i);
 					if(tieneAcceso(usuario, servicio)){
 						serviciosAcceso.add(servicio);
 					}
@@ -572,6 +577,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Deprecated
 	public ResultadoBusqueda buscadorServicios(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu, String pagina, String resultats, int visible, String en_plazo, String telematico) {
 
 		Session session = getSession();
@@ -987,6 +993,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Deprecated
 	public List buscarServiciosMateria(Long id) {
 		Session session = getSession();
 		try {
@@ -1082,6 +1089,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Deprecated
 	public List listarServiciosUA(Long id) {
 		Session session = getSession();
 		try {
@@ -1131,7 +1139,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 
 		for ( int i = 0 ; i < ua.getHijos().size() ; i++ ) {
 
-			UnidadAdministrativa uaHijo = (UnidadAdministrativa) ua.getHijos().get(i);
+			UnidadAdministrativa uaHijo = ua.getHijos().get(i);
 			result.addAll( serviciosPublicosRecursivosUA(uaHijo) );
 
 		}
@@ -1257,7 +1265,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 			List result = new ArrayList();
 			for ( int i = 0 ; i < hechoVital.getHechosVitalesServicios().size() ; i++ ) {
  
-				HechoVitalServicio hechoVitalServicio = (HechoVitalServicio) hechoVital.getHechosVitalesServicios().get(i);
+				HechoVitalServicio hechoVitalServicio = hechoVital.getHechosVitalesServicios().get(i);
 				Servicio proc = hechoVitalServicio.getServicio();
 				if ( publico(proc) )
 					result.add(proc);
@@ -1288,6 +1296,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Deprecated
 	public Servicio consultarServicio(Long id) {
 		Session session = getSession();
 		try {
@@ -1319,7 +1328,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 		String aux = "";
 
 		for (Iterator<String> iter1 = parametros.keySet().iterator(); iter1.hasNext();) {
-			String key = (String) iter1.next();
+			String key = iter1.next();
 			Object value = parametros.get(key);
 			if (!key.startsWith("ordre") && value != null) {
 				if (value instanceof String) {
@@ -1352,7 +1361,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 			traduccion.remove("idioma");
 		}
 		for (Iterator<String> iter2 = traduccion.keySet().iterator(); iter2.hasNext();) {
-			String key = (String) iter2.next();
+			String key = iter2.next();
 			Object value = traduccion.get(key);
 			if (value != null) {
 				if (value instanceof String) {
@@ -1508,6 +1517,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Deprecated
 	@SuppressWarnings("unchecked")
 	public List<Servicio> listarServiciosPublicosUAHVMateria(Long idUA, String[] codEstMat, String[] codEstHV) {
 		Session session = getSession();
@@ -1856,7 +1866,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 			Normativa normativa = (Normativa) session.load(Normativa.class, id);
 			Hibernate.initialize(normativa.getServicios()); 
 			for (Iterator<Servicio> iter = normativa.getServicios().iterator(); iter.hasNext();) {
-				Servicio servicio = (Servicio) iter.next();
+				Servicio servicio = iter.next();
 				Hibernate.initialize(servicio.getMaterias());
 				Hibernate.initialize(servicio.getServicioResponsable());
 				Hibernate.initialize(servicio.getHechosVitalesServicios());
@@ -2057,5 +2067,302 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 			close(session);
 		}
 	}
+	
+	
+	 /**
+		 * Consulta los servicios en funcion del filtro generico
+		 * 
+		 * @ejb.interface-method
+		 * @ejb.permission unchecked="true"
+		 */
+		public ResultadoBusqueda consultaServicios(FiltroGenerico filtro){
+		
+			Session session = getSession();	
+			Integer pageSize = filtro.getPageSize();
+			Integer pageNumber = filtro.getPage();
+			Long id = filtro.getId();
+			String lang = filtro.getLang();
+			Map <String,String> parametros = new HashMap<String,String>();
+					
+			String activo = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_ACTIVO);		
+			String codigoUA = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_UA); 
+			String vigente = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_VIGENTE);		
+			String telematico = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_TELEMATICO);
+			String codigoAHV = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_AGRUPACION_HECHO_VITAL);	
+			String codigoAM = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_AGRUPACION_MATERIA);
+			String codigoSIA = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_CODIGO_SIA);
+			String estadoSIA = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_ESTADO_SIA);
+			String estadoUA = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_ESTADO_UA);
+			String codigoFamilia = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_FAMILIA);
+			String fechaActualizacionSia = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_FECHA_ACTUALIZACION_SIA);
+			String fechaPublicacionDesde = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_FECHA_PUBLICACION_DESDE);
+			String fechaPublicacionHasta = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_FECHA_PUBLICACION_HASTA);
+			String codigoMateria = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_MATERIA);
+			String codigoPublicoObjetivo = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_PUBLICO);		
+			String textos = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_TEXTOS);
+			String tramiteTelematico = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_TRAMITE_TELEMATICO);
+			String versionTramiteTelematico = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_VERSION_TRAMITE_TELEMATICO);
+
+					
+					
+			StringBuilder select = new StringBuilder("SELECT s ");
+			StringBuilder selectCount = new StringBuilder("SELECT count(s) ");
+			StringBuilder from = new StringBuilder(" FROM Servicio as s, s.traducciones as trad ") ;
+			StringBuilder where =new StringBuilder(" WHERE index(trad) = :lang");
+			parametros.put("lang",lang);
+			StringBuilder order = new StringBuilder("");		
+					
+			try {
+				
+				if(id!=null && id>0) {
+					where.append(" AND s.id = :id");
+					parametros.put("id", id.toString());					
+				}
+										
+				if(!StringUtils.isEmpty(activo)) {	
+					if(activo.equals("1")) {
+						// está activo
+						where.append(filtroProcedimientosActivos("s"));					
+					}else if(activo.equals("0")) {
+						// esta caducado
+						where.append(filtroProcedimientosCaducados("s"));
+					}											
+				}
+				
+
+				if(!StringUtils.isEmpty(codigoUA)) {
+					where.append(" AND s.servicioResponsable.id = :codigoUA ");
+					parametros.put("codigoUA", codigoUA);
+				}	
+				
+				if(!StringUtils.isEmpty(estadoUA)) {
+					where.append(" AND s.servicioResponsable.validacion = :estadoUA");
+					parametros.put("estadoUA", estadoUA);					
+				}
+				
+				
+				
+		/*		if((!StringUtils.isEmpty(vigente) && vigente.equals("1")) || (!StringUtils.isEmpty(telematico) && telematico.equals("1"))) {
+					StringBuilder wereSubselect = new StringBuilder(); 
+					
+					if ((!StringUtils.isEmpty(vigente) && vigente.equals("1"))) {					
+						wereSubselect.append("WHERE (t.idTraTel IS NOT NULL OR t.urlExterna IS NOT NULL) ");
+					}
+						
+					if((!StringUtils.isEmpty(telematico) && telematico.equals("1"))){
+						if (wereSubselect.length()<=0) {
+							wereSubselect.append("WHERE ");
+						}else {
+							wereSubselect.append("AND ");
+						}
+						
+						wereSubselect.append("t.fase = 1 AND (t.dataInici > current_date OR t.dataInici IS NULL) AND (t.dataTancament < current_date OR t.dataTancament IS NULL) ");
+
+					}
+					
+					where.append(" AND s.id in ( SELECT t.servicio FROM Tramite AS t " ); 
+					where.append(wereSubselect.toString());
+					where.append(" ) ");
+					
+				}*/
+				
+				if(!StringUtils.isEmpty(codigoAHV)) {
+					from.append(" , s.hechosVitalesServicios as hv ");
+					where.append(" AND hv.hechoVital.id in ( SELECT hechovital.id FROM  HechoVitalAgrupacionHV as ahv, ahv.hechoVital as hechovital, ahv.agrupacion as agr WHERE agr.id = :codigoAHV ) ");
+					parametros.put("codigoAHV", codigoAHV);
+				}
+
+					
+				if(!StringUtils.isEmpty(codigoAM)) {
+					from.append(" , s.materias as mat ");
+					where.append(" AND mat.id in (SELECT am.materia FROM MateriaAgrupacionM AS am WHERE am.agrupacion.id = :codigoAM ) ");
+					parametros.put("codigoAM", codigoAM);					
+				}
+							
+				
+				if(!StringUtils.isEmpty(codigoSIA)) {
+					where.append(" AND s.codigoSIA = :codigoSIA");
+					parametros.put("codigoSIA", codigoSIA);					
+				}
+				
+				if(!StringUtils.isEmpty(estadoSIA)) {
+					where.append(" AND s.estadoSIA = :estadoSIA");
+					parametros.put("estadoSIA", estadoSIA);					
+				}
+				
+				/*
+				if(!StringUtils.isEmpty(codigoFamilia)) {
+					where.append(" AND p.familia.id = :codigoFamilia");
+					parametros.put("codigoFamilia", codigoFamilia);					
+				}
+				*/
+				
+				if(!StringUtils.isEmpty(fechaActualizacionSia)) {
+					where.append(" AND s.fechaSIA = :fechaActualizacionSia");
+					parametros.put("fechaActualizacionSia", fechaActualizacionSia);					
+				}
+			
+				
+				if(!StringUtils.isEmpty(fechaPublicacionDesde)) {
+					where.append(" AND s.fechaPublicacion >= :fechaPublicacionDesde");
+					parametros.put("fechaPublicacionDesde", fechaPublicacionDesde);					
+				}
+				
+				if(!StringUtils.isEmpty(fechaPublicacionHasta)) {
+					where.append(" AND s.fechaPublicacion <= :fechaPublicacionHasta");
+					parametros.put("fechaPublicacionHasta", fechaPublicacionHasta);					
+				}
+				
+				if(!StringUtils.isEmpty(codigoMateria)) {
+					from.append(" , s.materias as m ");
+					where.append(" AND m.id = :codigoMateria");
+					parametros.put("codigoMateria", codigoMateria);					
+				}
+				
+				if(!StringUtils.isEmpty(codigoPublicoObjetivo)) {
+					from.append(" , s.publicosObjetivo as po ");
+					where.append(" AND po.id = :codigoPublicoObjetivo");
+					parametros.put("codigoPublicoObjetivo", codigoPublicoObjetivo);					
+				}			
+				
+				if(!StringUtils.isEmpty(tramiteTelematico)) {
+					where.append(" AND s.tramiteId = :tramiteTelematico");
+					parametros.put("tramiteTelematico", tramiteTelematico);					
+				}
+				
+				if(!StringUtils.isEmpty(versionTramiteTelematico)) {
+					where.append(" AND s.tramiteVersion = :versionTramiteTelematico");
+					parametros.put("versionTramiteTelematico", versionTramiteTelematico);					
+				}
+				
+				
+				
+				
+				if(!StringUtils.isEmpty(textos)) {				
+				     final String[] camposBuscablesPorTexto = {
+				            "s.correo", "s.nombreResponsable", "s.tramiteId", "s.tramiteUrl", //"s.signatura",
+				            "trad.destinatarios",
+				            "trad.nombre", 
+				            "trad.observaciones",
+				            "trad.requisitos",
+				            "trad.objeto"
+		
+				        };
+
+				    where.append(" AND ( ");
+				    parametros.put("textos", "%" + textos +"%" );	
+				    
+				    boolean  primero = true;
+				    
+				    for (String campo : camposBuscablesPorTexto) {
+						if (primero) {
+							primero = false;					
+						}else {
+							where.append(" OR ");
+						}
+				    	
+				    	where.append(campo);
+				    	where.append(" LIKE :textos ");
+
+					}	
+				    
+				    where.append(" ) ");
+				}
+				
+				return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(), selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
+				
+		
+			} catch (HibernateException he) {
+				throw new EJBException(he);
+			} finally {
+				close(session);
+			}
+		
+		}
+		
+		
+		
+		
+		 private String filtroProcedimientosActivos(String alias) {
+			 /*
+			 AND ( p.validacion = 1 " +
+						" AND (p.fechaCaducidad >= :ahora or p.fechaCaducidad is null) " +
+						" AND (p.fechaPublicacion <= :ahora or p.fechaPublicacion is null) )
+			 */
+			 
+			 StringBuilder res = new StringBuilder(" AND ( ");
+			 res.append(alias);
+			 res.append(".validacion = ");
+			 res.append(Validacion.PUBLICA);
+			 res.append(" AND ( ");
+			 res.append(campo(alias,"fechaDespublicacion"));
+			 res.append(" >= ");
+			 res.append(formatoFecha(DateUtils.getNow()));
+			 res.append(" OR ");
+			 res.append(campo(alias,"fechaDespublicacion"));
+			 res.append(" is null ) AND ( ");
+			 res.append(campo(alias,"fechaPublicacion"));
+			 res.append(" <= ");
+			 res.append(formatoFecha(DateUtils.getNow()));
+			 res.append(" OR ");
+			 res.append(campo(alias,"fechaPublicacion"));
+			 res.append(" is null ))");
+			 
+			 return res.toString();
+
+		}
+
+		private String filtroProcedimientosCaducados(String alias) {
+			/*
+			 * 	( p.validacion != 1 ) " +
+			" 	or ( p.validacion = 1 and p.fechaCaducidad < :manana ) " +
+			" 	or ( p.validacion = 1 and p.fechaCaducidad is null and p.fechaPublicacion > :manana ) " +
+			" 	or ( p.validacion = 1 and p.fechaCaducidad >= :manana and p.fechaPublicacion > :manana ) 
+			 */
+
+			Date fecha = DateUtils.getNextDay();
+			
+			StringBuilder res = new StringBuilder(" AND ( ");
+			res.append(campo(alias,"validacion"));
+			res.append(" != ");
+			res.append(Validacion.PUBLICA);
+			res.append(" OR ( ");//--1
+			res.append(campo(alias,"validacion"));
+			res.append(" = ");
+			res.append(Validacion.PUBLICA);
+			res.append(" AND ");
+			res.append(campo(alias,"fechaDespublicacion"));
+			res.append(" < " );
+			res.append(formatoFecha((fecha)));
+			res.append(" ) OR ( "); //--2
+			res.append(campo(alias,"validacion"));
+			res.append(" = ");
+			res.append(Validacion.PUBLICA);		
+			res.append(" AND ( ");
+			res.append(campo(alias,"fechaDespublicacion"));
+			res.append(" is null OR ");
+			res.append(campo(alias,"fechaDespublicacion"));
+			res.append(" >= " );
+			res.append(formatoFecha((fecha)));
+			res.append(") AND " );
+			res.append(campo(alias,"fechaPublicacion"));
+			res.append(" > " );
+			res.append(formatoFecha((fecha)));
+			res.append(" ))"); 
+				 
+			return res.toString();
+
+		}
+		
+		private StringBuilder campo(String alias, String campo) {
+			StringBuilder res = new StringBuilder(alias);
+			res.append(".");
+			res.append(campo);
+			return res;
+		}
+		private String formatoFecha(Date d) {
+			return "'"+DateUtils.formatearddMMyyyy(d)+"'";
+		}
+	
 	
 }

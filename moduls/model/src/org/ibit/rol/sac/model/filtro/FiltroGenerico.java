@@ -111,6 +111,26 @@ public class FiltroGenerico implements Serializable {
 	public static final String FILTRO_PROCEDIMIENTO_TRAMITE_TELEMATICO = "tramiteTelematico";
 	public static final String FILTRO_PROCEDIMIENTO_VERSION_TRAMITE_TELEMATICO = "versionTramiteTelematico";
 
+	public static final String FILTRO_SERVICIOS_UA = "codigoUA";
+	public static final String FILTRO_SERVICIOS_ACTIVO = "activo";
+	public static final String FILTRO_SERVICIOS_ESTADO_UA = "estadoUA";
+	public static final String FILTRO_SERVICIOS_AGRUPACION_HECHO_VITAL = "agrupacionHechoVital";
+	public static final String FILTRO_SERVICIOS_PUBLICO = "publicoObjetivo";
+	public static final String FILTRO_SERVICIOS_FAMILIA = "familia";
+	public static final String FILTRO_SERVICIOS_AGRUPACION_MATERIA = "agrupacionMateria";
+	public static final String FILTRO_SERVICIOS_MATERIA = "materia";
+	public static final String FILTRO_SERVICIOS_TEXTOS = "textos";
+	public static final String FILTRO_SERVICIOS_FECHA_PUBLICACION_DESDE = "fechaPublicacionDesde";
+	public static final String FILTRO_SERVICIOS_FECHA_PUBLICACION_HASTA = "fechaPublicacionHasta";
+	public static final String FILTRO_SERVICIOS_VIGENTE = "vigente";
+	public static final String FILTRO_SERVICIOS_TELEMATICO = "telematico";
+	public static final String FILTRO_SERVICIOS_CODIGO_SIA = "codigoSIA";
+	public static final String FILTRO_SERVICIOS_ESTADO_SIA = "estadoSIA";
+	public static final String FILTRO_SERVICIOS_FECHA_ACTUALIZACION_SIA = "actualizacionSIA";
+	public static final String FILTRO_SERVICIOS_TRAMITE_TELEMATICO = "tramiteTelematico";
+	public static final String FILTRO_SERVICIOS_VERSION_TRAMITE_TELEMATICO = "versionTramiteTelematico";
+
+	
 	public FiltroGenerico() {
 		this.filtros = new HashMap<String,String>();
 		this.columnasOrdenar = new HashMap<String,String>();

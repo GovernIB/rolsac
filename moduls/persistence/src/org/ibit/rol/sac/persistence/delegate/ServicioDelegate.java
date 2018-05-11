@@ -1,17 +1,13 @@
 package org.ibit.rol.sac.persistence.delegate;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
-
-import net.sf.hibernate.Session;
 
 import org.ibit.rol.sac.model.Servicio;
 import org.ibit.rol.sac.model.SolrPendiente;
@@ -20,6 +16,7 @@ import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Validable;
 import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.model.criteria.BuscadorServicioCriteria;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.intf.ServicioFacade;
 import org.ibit.rol.sac.persistence.intf.ServicioFacadeHome;
 import org.ibit.rol.sac.persistence.util.ServicioFacadeUtil;
@@ -27,6 +24,7 @@ import org.ibit.rol.sac.persistence.util.ServicioFacadeUtil;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.caib.solr.api.SolrIndexer;
 import es.caib.solr.api.model.types.EnumCategoria;
+import net.sf.hibernate.Session;
 /**
  * Business delegate para manipular servicios.
  */
@@ -341,6 +339,14 @@ public class ServicioDelegate implements StatelessDelegate {
 	public boolean isNormativaDerogada(Long id)   throws DelegateException {
 		try {
 	           return getFacade().isNormativaDerogada(id);
+	        } catch (RemoteException e) {
+	            throw new DelegateException(e);
+	        }
+	}
+
+	public ResultadoBusqueda consultaServicios(FiltroGenerico filtro)  throws DelegateException {
+		try {
+	           return getFacade().consultaServicios(filtro);
 	        } catch (RemoteException e) {
 	            throw new DelegateException(e);
 	        }
