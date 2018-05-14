@@ -22,7 +22,7 @@ import io.swagger.annotations.ApiModelProperty;
  *
  */
 @XmlRootElement
-@ApiModel(value = "Filtro Secciones", description = "Filtro propio de las secciones " + Constantes.ENTIDAD_SECCION)
+@ApiModel(value = "Filtro Secciones", description = "Filtro propio de la entidad " + Constantes.ENTIDAD_SECCION)
 public class FiltroSeccions {
 	
 	public static final String SAMPLE = "{\"codigoUA\":\"0\","+

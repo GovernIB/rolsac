@@ -22,7 +22,7 @@ import io.swagger.annotations.ApiModelProperty;
  *
  */
 @XmlRootElement
-@ApiModel(value = "Filtro documentos tramites", description = "Filtro propio de la entidad " + Constantes.ENTIDAD_DOCUMENTOS_TRAMITES)
+@ApiModel(value = "Filtro documentos tramites", description = "Filtro propio de la entidad " + Constantes.ENTIDAD_DOCUMENTOS_TRAMITE)
 public class FiltroDocumentsTramits {
 	
 	public static final String SAMPLE = "{\"tramite\":\"0\"," + Constantes.SALTO_LINEA + 

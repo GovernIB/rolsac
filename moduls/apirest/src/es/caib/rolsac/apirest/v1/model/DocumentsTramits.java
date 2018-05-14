@@ -21,7 +21,7 @@ import io.swagger.annotations.ApiModelProperty;
  *
  */
 @XmlRootElement
-@ApiModel(value = Constantes.ENTIDAD_DOCUMENTOS_TRAMITES, description = Constantes.TXT_DEFINICION_CLASE +  Constantes.ENTIDAD_DOCUMENTOS_TRAMITES)
+@ApiModel(value = Constantes.ENTIDAD_DOCUMENTOS_TRAMITE, description = Constantes.TXT_DEFINICION_CLASE +  Constantes.ENTIDAD_DOCUMENTOS_TRAMITE)
 public class DocumentsTramits extends EntidadBase {
 	 
 	/** idioma **/

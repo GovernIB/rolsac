@@ -61,5 +61,7 @@ public interface TramiteDelegateI {
 	public abstract List<Long> buscarIdsTramites() throws DelegateException;
 
 	public abstract ResultadoBusqueda consultaFormularios(FiltroGenerico filtro) throws DelegateException;
+
+	public abstract ResultadoBusqueda consultaTramites(FiltroGenerico filtro) throws DelegateException;
 	
 }

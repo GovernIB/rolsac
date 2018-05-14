@@ -129,6 +129,14 @@ public class FiltroGenerico implements Serializable {
 	public static final String FILTRO_SERVICIOS_FECHA_ACTUALIZACION_SIA = "actualizacionSIA";
 	public static final String FILTRO_SERVICIOS_TRAMITE_TELEMATICO = "tramiteTelematico";
 	public static final String FILTRO_SERVICIOS_VERSION_TRAMITE_TELEMATICO = "versionTramiteTelematico";
+	
+	
+	public static final String FILTRO_TRAMITE_UA = "codigoUA";
+	public static final String FILTRO_TRAMITE_FASE = "fase";
+	public static final String FILTRO_TRAMITE_PROCEDIMIENTO = "codigoProcedimiento";
+	public static final String FILTRO_TRAMITE_TRAMITE_TELEMATICO = "codigoTramiteTelematico";
+	public static final String FILTRO_TRAMITE_VERSION_TRAMITE_TELEMATICO = "versionTramiteTelematico";
+	public static final String FILTRO_TRAMITE_URL_TRAMITE_TELEMATICO = "urlTramiteTelematico";
 
 	
 	public FiltroGenerico() {

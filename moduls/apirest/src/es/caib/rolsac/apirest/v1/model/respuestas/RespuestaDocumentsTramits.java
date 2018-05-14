@@ -17,7 +17,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 
 @XmlRootElement
-@ApiModel(value = Constantes.TXT_RESPUESTA + Constantes.ENTIDAD_DOCUMENTOS_TRAMITES, description = Constantes.TXT_RESPUESTA + Constantes.ENTIDAD_DOCUMENTOS_TRAMITES)
+@ApiModel(value = Constantes.TXT_RESPUESTA + Constantes.ENTIDAD_DOCUMENTOS_TRAMITE, description = Constantes.TXT_RESPUESTA + Constantes.ENTIDAD_DOCUMENTOS_TRAMITE)
 public class RespuestaDocumentsTramits extends RespuestaBase{	
 	/** Resultado. **/
 	@ApiModelProperty(value = "Listado con los objetos de resultado",  required = false)

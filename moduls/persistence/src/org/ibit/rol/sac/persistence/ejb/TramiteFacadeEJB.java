@@ -1430,45 +1430,126 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 
     	}
 	}
-	
-	
-    /**
+
+	/**
 	 * Consulta los formularios en funcion del filtro generico
 	 * 
 	 * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+	 * @ejb.permission unchecked="true"
 	 */
-	public ResultadoBusqueda  consultaFormularios(FiltroGenerico filtro){
-	
-		Session session = getSession();	
+	public ResultadoBusqueda consultaFormularios(FiltroGenerico filtro) {
+
+		Session session = getSession();
 		Integer pageSize = filtro.getPageSize();
 		Integer pageNumber = filtro.getPage();
 		String lang = filtro.getLang();
 		Long id = filtro.getId();
-		Map <String,String> parametros = new HashMap<String,String>();
-		
+		Map<String, String> parametros = new HashMap<String, String>();
+
 		StringBuilder select = new StringBuilder("SELECT f ");
 		StringBuilder selectCount = new StringBuilder("SELECT count(f) ");
-		StringBuilder from = new StringBuilder(" FROM Formulario as f ") ;
-		StringBuilder where =new StringBuilder("");
-		//parametros.put("lang",lang);
-		StringBuilder order = new StringBuilder("");			
-				
+		StringBuilder from = new StringBuilder(" FROM Formulario as f ");
+		StringBuilder where = new StringBuilder("");
+		// parametros.put("lang",lang);
+		StringBuilder order = new StringBuilder("");
+
 		try {
-				
-			if(id!=null && id>0) {
+
+			if (id != null && id > 0) {
 				where.append(" WHERE f.id = :id");
-				parametros.put("id", id.toString());					
+				parametros.put("id", id.toString());
 			}
-				 
-			return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(), selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
-	
+
+			return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(),
+					selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
+
 		} catch (HibernateException he) {
 			throw new EJBException(he);
 		} finally {
 			close(session);
 		}
 
+	}
+
+	/**
+	 * Consulta los tramites en funcion del filtro generico
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public ResultadoBusqueda consultaTramites(FiltroGenerico filtro) {
+		Session session = getSession();
+		Integer pageSize = filtro.getPageSize();
+		Integer pageNumber = filtro.getPage();
+		Long id = filtro.getId();
+		String lang = filtro.getLang();
+		Map<String, String> parametros = new HashMap<String, String>();
+
+		String codigoUA = filtro.getValor(FiltroGenerico.FILTRO_TRAMITE_UA);
+		String fase = filtro.getValor(FiltroGenerico.FILTRO_TRAMITE_FASE);
+		String codigoProcedimiento = filtro.getValor(FiltroGenerico.FILTRO_TRAMITE_PROCEDIMIENTO);
+		String tramiteTelematico = filtro.getValor(FiltroGenerico.FILTRO_TRAMITE_TRAMITE_TELEMATICO);
+		String versionTramiteTelematico = filtro.getValor(FiltroGenerico.FILTRO_TRAMITE_VERSION_TRAMITE_TELEMATICO);
+		String urlTramiteTelematico = filtro.getValor(FiltroGenerico.FILTRO_TRAMITE_URL_TRAMITE_TELEMATICO);
+
+		StringBuilder select = new StringBuilder("SELECT t ");
+		StringBuilder selectCount = new StringBuilder("SELECT count(t) ");
+		StringBuilder from = new StringBuilder(" FROM Tramite as t, t.traducciones as trad ");
+		StringBuilder where = new StringBuilder(" WHERE index(trad) = :lang");
+		parametros.put("lang", lang);
+		StringBuilder order = new StringBuilder("");
+
+		try {
+
+			if (id != null && id > 0) {
+				where.append(" AND t.id = :id");
+				parametros.put("id", id.toString());
+			}
+
+			if (!StringUtils.isEmpty(codigoUA)) {
+				where.append(" AND t.organCompetent.id = :codigoUA ");
+				parametros.put("codigoUA", codigoUA);
+			}
+
+			if (!StringUtils.isEmpty(fase)) {
+				where.append(" AND t.fase = :fase ");
+				parametros.put("fase", fase);
+			}
+
+			if (!StringUtils.isEmpty(codigoProcedimiento)) {
+				where.append(" AND t.procedimiento.id = :codigoProcedimiento ");
+				parametros.put("codigoProcedimiento", codigoProcedimiento);
+			}
+
+			if (!StringUtils.isEmpty(tramiteTelematico)) {
+				where.append(" AND t.idTraTel = :tramiteTelematico ");
+				parametros.put("tramiteTelematico", tramiteTelematico);
+			}
+
+			if (!StringUtils.isEmpty(versionTramiteTelematico)) {
+				where.append(" AND t.versio = :versionTramiteTelematico ");
+				parametros.put("versionTramiteTelematico", versionTramiteTelematico);
+			}
+
+			if (!StringUtils.isEmpty(urlTramiteTelematico)) {
+				where.append(" AND t.urlExterna = :urlTramiteTelematico ");
+				parametros.put("urlTramiteTelematico", urlTramiteTelematico);
+			}
+
+			ResultadoBusqueda res = ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(),
+					selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
+						
+			for (Object t : res.getListaResultados()) {							
+				Hibernate.initialize(((Tramite) t).getTaxes());
+			}
+			
+			return res;
+
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
 	}
 
 

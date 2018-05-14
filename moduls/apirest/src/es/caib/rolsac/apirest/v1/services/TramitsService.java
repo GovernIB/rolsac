@@ -14,18 +14,17 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 
 import es.caib.rolsac.apirest.v1.exception.ExcepcionAplicacion;
-import es.caib.rolsac.apirest.v1.model.DocumentsTramits;
-import es.caib.rolsac.apirest.v1.model.filtros.FiltroDocumentsTramits;
+import es.caib.rolsac.apirest.v1.model.Tramits;
 import es.caib.rolsac.apirest.v1.model.filtros.FiltroPaginacion;
-import es.caib.rolsac.apirest.v1.model.orden.CampoOrden;
-import es.caib.rolsac.apirest.v1.model.orden.Orden;
-import es.caib.rolsac.apirest.v1.model.respuestas.RespuestaDocumentsTramits;
+import es.caib.rolsac.apirest.v1.model.filtros.FiltroTramits;
 import es.caib.rolsac.apirest.v1.model.respuestas.RespuestaError;
+import es.caib.rolsac.apirest.v1.model.respuestas.RespuestaTramits;
 import es.caib.rolsac.apirest.v1.utiles.Constantes;
 import es.caib.rolsac.apirest.v1.utiles.Utiles;
 import io.swagger.annotations.Api;
@@ -34,13 +33,13 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@Path( "/"+ Constantes.ENTIDAD_DOCUMENTOS_TRAMITE ) 
-@Api( value = "/"+ Constantes.ENTIDAD_DOCUMENTOS_TRAMITE,   tags = Constantes.ENTIDAD_DOCUMENTOS_TRAMITE  )
-public class DocumentsTramitsService {
+@Path( "/"+ Constantes.ENTIDAD_TRAMITE ) 
+@Api( value = "/"+ Constantes.ENTIDAD_TRAMITE,   tags = Constantes.ENTIDAD_TRAMITE  )
+public class TramitsService {
 		
 		
 	/**
-	 * Listado de documentos de tramites.
+	 * Listado de Tramites.
 	 * @return
 	 * @throws DelegateException 
 	 */
@@ -49,23 +48,23 @@ public class DocumentsTramitsService {
 	@Consumes({MediaType.APPLICATION_JSON , MediaType.APPLICATION_FORM_URLENCODED })
 	@Path("/")
 	@ApiOperation( 
-	    value = "Lista los documentos de tramites",
-	    notes = "Lista los documentos de tramites disponibles en funcion de los filtros"
+	    value = "Lista los tramites",
+	    notes = "Lista los tramites disponibles en funcion de los filtros"
 	)
 	@ApiResponses(value = { 
-			 @ApiResponse(code = 200, message =  Constantes.MSJ_200_GENERICO, response = RespuestaDocumentsTramits.class),
+			 @ApiResponse(code = 200, message =  Constantes.MSJ_200_GENERICO, response = RespuestaTramits.class),
 			@ApiResponse(code = 400, message = Constantes.MSJ_400_GENERICO, response = RespuestaError.class)
 		   })
-		
-	public RespuestaDocumentsTramits llistar(
+	
+	public RespuestaTramits llistar(
 		@ApiParam( value = "Codigo de idioma", required = false ) @DefaultValue(Constantes.IDIOMA_DEFECTO) @FormParam("lang") final String lang,		
 		@ApiParam( value = "Filtro de Paginación: " + FiltroPaginacion.SAMPLE) @FormParam("filtroPaginacion") FiltroPaginacion filtroPaginacion,
-		@ApiParam( value = "Filtro de documentos de tramites: " + FiltroDocumentsTramits.SAMPLE) @FormParam("filtro") FiltroDocumentsTramits filtro,
-		@ApiParam( value = "Filtro de Orden: " + Orden.SAMPLE_ORDEN_UA) @FormParam("orden") Orden orden						
+		@ApiParam( value = "Filtro de tramites: " + FiltroTramits.SAMPLE) @FormParam("filtro") FiltroTramits filtro//,
+		//@ApiParam( value = "Filtro de Orden: " + Orden.SAMPLE_ORDEN_PROCEDIMIENTO) @FormParam("orden") Orden orden						
 			) throws DelegateException,ExcepcionAplicacion,ValidationException  {
 						
 		if(filtro==null) {
-			filtro = new FiltroDocumentsTramits(); 
+			filtro = new FiltroTramits(); 
 		}
 		FiltroGenerico fg = filtro.toFiltroGenerico();
 		
@@ -78,25 +77,27 @@ public class DocumentsTramitsService {
 			fg.setPageSize(filtroPaginacion.getSize());
 			fg.setPage(filtroPaginacion.getPage());
 		}
-		
+		/*
 		// si viene el orden intentamos rellenarlo
 		if(orden!=null) {
 			List<CampoOrden> ord = orden.getListaOrden();
 			if(ord!=null && ord.size()>0) {
 				for (CampoOrden campoOrden : ord) {
-					if(campoOrden.getCampo().equals(Orden.CAMPO_ORD_DOC_ORDEN)) {
+					if(campoOrden.getCampo().equals(Orden.CAMPO_ORD_PROCEDIMIENTO_CODIGO)||
+							campoOrden.getCampo().equals(Orden.CAMPO_ORD_PROCEDIMIENTO_FECHA_ACTUALIZACION)||
+							campoOrden.getCampo().equals(Orden.CAMPO_ORD_PROCEDIMIENTO_FECHA_PUBLICACION)) {
 						fg.addOrden(campoOrden.getCampo(), campoOrden.getTipoOrden());	
 					}
 				}
 			}		
-		}
+		}*/
 						
 		return getRespuesta(fg);
 	}
 	
 	
 	/**
-	 * Para obtener un documento de tramite.
+	 * Para obtener un tramite.
 	 * @param idioma 
 	 * @param id
 	 * @return
@@ -107,16 +108,16 @@ public class DocumentsTramitsService {
 	@Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
 	@Path("/{codigo}")
 	@ApiOperation( 
-	    value = "Obtiene un documento de tramite",
-	    notes = "Obtiene el documento de tramite con el código indicado"
+	    value = "Obtiene un tramite",
+	    notes = "Obtiene el tramite con el código indicado"
 	)
 	@ApiResponses(value = { 
-			 @ApiResponse(code = 200, message =  Constantes.MSJ_200_GENERICO, response = RespuestaDocumentsTramits.class),
+			@ApiResponse(code = 200, message =  Constantes.MSJ_200_GENERICO, response = RespuestaTramits.class),
 			@ApiResponse(code = 400, message = Constantes.MSJ_400_GENERICO, response = RespuestaError.class)
 		   })
 		
-	public RespuestaDocumentsTramits  getPorId(  
-			@ApiParam( value = "Codigo documento de tramite", required = true ) @PathParam( "codigo") final  String codigo,
+	public RespuestaTramits  getPorId(  
+			@ApiParam( value = "Codigo tramite", required = true ) @PathParam( "codigo") final  String codigo,
 		    @ApiParam( value = "codigo de idioma", required = false ) @DefaultValue(Constantes.IDIOMA_DEFECTO) @FormParam("lang") final String lang
 			) throws Exception,ValidationException {
 
@@ -127,21 +128,20 @@ public class DocumentsTramitsService {
 		}
 		fg.setId(new Long(codigo));		
 		
-		return getRespuesta(fg);	
-		
+		return getRespuesta(fg);			
 	}
 	
 	
-    private RespuestaDocumentsTramits getRespuesta(FiltroGenerico fg) throws DelegateException {		
-    	es.caib.rolsac.utils.ResultadoBusqueda resultadoBusqueda = DelegateUtil.getDocumentoDelegate().consultaDocumentosTramite(fg);		
-		List <DocumentsTramits> lista = new ArrayList <DocumentsTramits>();
+    private RespuestaTramits getRespuesta(FiltroGenerico filtro) throws DelegateException {		
+    	es.caib.rolsac.utils.ResultadoBusqueda resultadoBusqueda = DelegateUtil.getTramiteDelegate().consultaTramites(filtro);	
+		List <Tramits> lista = new ArrayList <Tramits>();
 			
-		for (org.ibit.rol.sac.model.DocumentTramit nodo : Utiles.castList(org.ibit.rol.sac.model.DocumentTramit.class, resultadoBusqueda.getListaResultados())) {
-			DocumentsTramits elemento = new DocumentsTramits(nodo,null,fg.getLang(),true);
+		for (Tramite nodo : Utiles.castList(Tramite.class, resultadoBusqueda.getListaResultados())) {
+			Tramits elemento = new Tramits(nodo,null,filtro.getLang(),true);
 			lista.add(elemento);
 		}
 		
-		RespuestaDocumentsTramits r = new RespuestaDocumentsTramits(Response.Status.OK.getStatusCode()+"", Constantes.mensaje200(lista.size()) , new Integer(resultadoBusqueda.getTotalResultados()), lista);
+		RespuestaTramits r = new RespuestaTramits(Response.Status.OK.getStatusCode()+"", Constantes.mensaje200(lista.size()) , new Integer(resultadoBusqueda.getTotalResultados()), lista);
 		return r;
 	}
 	

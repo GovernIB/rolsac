@@ -267,4 +267,13 @@ public class TramiteDelegateImpl implements StatelessDelegate, TramiteDelegateI 
         }
 	}
 	
+
+	public ResultadoBusqueda consultaTramites(FiltroGenerico filtro)  throws DelegateException {
+		try {
+            return getFacade().consultaTramites(filtro);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+	}
+	
 }

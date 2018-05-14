@@ -117,4 +117,8 @@ public class TramiteDelegate  {
 		return impl.consultaFormularios(filtro);
 	}
 
+	public ResultadoBusqueda consultaTramites(FiltroGenerico filtro)  throws DelegateException {
+		return impl.consultaTramites(filtro);
+	}
+
 }

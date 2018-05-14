@@ -60,9 +60,10 @@ public class BootstrapV1 extends HttpServlet {
     String txt_descripcion = "Servicio para la obtención de información de";
     
    swagger.tag(new Tag()
-      .name(Constantes.ENTIDAD_IDIOMA)
-      .description(txt_descripcion + " los idiomas.")
-      );
+		      .name(Constantes.ENTIDAD_IDIOMA)
+		      .description(txt_descripcion + " los idiomas.")
+		      );
+		   
    swagger.tag(new Tag()
 		      .name(Constantes.ENTIDAD_UA)
 		      .description(txt_descripcion + " las unidades administrativas.")
@@ -99,7 +100,7 @@ public class BootstrapV1 extends HttpServlet {
 		      );
    
    swagger.tag(new Tag()
-		      .name(Constantes.ENTIDAD_DOCUMENTOS_TRAMITES)
+		      .name(Constantes.ENTIDAD_DOCUMENTOS_TRAMITE)
 		      .description(txt_descripcion + " los documentos de los trámites.")
 		      );
    
@@ -207,6 +208,25 @@ public class BootstrapV1 extends HttpServlet {
 		      .name(Constantes.ENTIDAD_PROCEDIMIENTO)
 		      .description(txt_descripcion + " los procedimientos.")
 		      );
+   
+   
+   swagger.tag(new Tag()
+		   .name(Constantes.ENTIDAD_USUARIOS)
+		   .description(txt_descripcion + " los usuarios.")
+		   );
+   
+   swagger.tag(new Tag()
+		   .name(Constantes.ENTIDAD_SERVICIOS)
+		   .description(txt_descripcion + " los servicios.")
+		   );
+
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_TRAMITE)
+		      .description(txt_descripcion + " los tramites.")
+		      );
+   
+   
+   
     new SwaggerContextService().withServletConfig(config).updateSwagger(swagger);
   }
 }
