@@ -437,7 +437,6 @@ public class UnitatAdministrativa extends EntidadBase {
 	/**
 	 * @return the codigo
 	 */
-	@XmlTransient
 	public java.lang.Long getCodigo() {
 		return codigo;
 	}

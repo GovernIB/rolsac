@@ -59,15 +59,7 @@ public class BootstrapV1 extends HttpServlet {
 
     String txt_descripcion = "Servicio para la obtención de información de";
     
-   swagger.tag(new Tag()
-		      .name(Constantes.ENTIDAD_IDIOMA)
-		      .description(txt_descripcion + " los idiomas.")
-		      );
-		   
-   swagger.tag(new Tag()
-		      .name(Constantes.ENTIDAD_UA)
-		      .description(txt_descripcion + " las unidades administrativas.")
-		      );
+
    
    swagger.tag(new Tag()
 		      .name(Constantes.ENTIDAD_AGRUPACIO_FET_VITAL)
@@ -100,78 +92,38 @@ public class BootstrapV1 extends HttpServlet {
 		      );
    
    swagger.tag(new Tag()
-		      .name(Constantes.ENTIDAD_DOCUMENTOS_TRAMITE)
-		      .description(txt_descripcion + " los documentos de los trámites.")
-		      );
-   
-   swagger.tag(new Tag()
 		      .name(Constantes.ENTIDAD_DOCUMENTOS_NORMATIVAS)
 		      .description(txt_descripcion + " los documentos de las normativas.")
-		      );
-   
+		      ); 
+    
    swagger.tag(new Tag()
-		      .name(Constantes.ENTIDAD_ESPACIO_TERRITORIAL)
-		      .description(txt_descripcion + " los espacios territoriales.")
-		      );
-   
-   swagger.tag(new Tag()
-		      .name(Constantes.ENTIDAD_FAMILIA)
-		      .description(txt_descripcion + " las familias.")
-		      );
-   
-   swagger.tag(new Tag()
-		      .name(Constantes.ENTIDAD_TIPO)
-		      .description(txt_descripcion + " los tipos de normativas.")
-		      );
-   
-   swagger.tag(new Tag()
-		      .name(Constantes.ENTIDAD_TIPO_AFECTACION)
-		      .description(txt_descripcion + " los tipos de afectación.")
-		      );
-   
-   swagger.tag(new Tag()
-		      .name(Constantes.ENTIDAD_FORMULARIO)
-		      .description(txt_descripcion + " los formularios.")
-		      );
-   
-   swagger.tag(new Tag()
-		      .name(Constantes.ENTIDAD_ICONO_FAMILIA)
-		      .description(txt_descripcion + " los iconos familia.")
-		      );
-
-   swagger.tag(new Tag()
-		      .name(Constantes.ENTIDAD_MATERIA_AGRUPACION)
-		      .description(txt_descripcion + " las materias agrupacion.")
-		      );
-   
-   swagger.tag(new Tag()
-		      .name(Constantes.ENTIDAD_PERFIL)
-		      .description(txt_descripcion + " los perfiles.")
-		      );
-   
-   swagger.tag(new Tag()
-		      .name(Constantes.ENTIDAD_UNIDAD_MATERIA)
-		      .description(txt_descripcion + " las unidades materias.")
+		      .name(Constantes.ENTIDAD_DOCUMENTOS_TRAMITE)
+		      .description(txt_descripcion + " los documentos de los trámites.")
 		      );
    
    swagger.tag(new Tag()
 		      .name(Constantes.ENTIDAD_EDIFICIO)
 		      .description(txt_descripcion + " los edificios.")
 		      );
-   
+
    swagger.tag(new Tag()
 		      .name(Constantes.ENTIDAD_ENLACE)
 		      .description(txt_descripcion + " los enlaces.")
 		      );
-   
+
    swagger.tag(new Tag()
 		      .name(Constantes.ENTIDAD_ESTADISTICAS)
 		      .description("Servicio para la actualización de estadisticas de uso.")
 		      );
+
+   swagger.tag(new Tag()
+	      .name(Constantes.ENTIDAD_ESPACIO_TERRITORIAL)
+	      .description(txt_descripcion + " los espacios territoriales.")
+	      );
    
    swagger.tag(new Tag()
-		      .name(Constantes.ENTIDAD_HECHOS_VITALES)
-		      .description(txt_descripcion + " los hechos vitales.")
+		      .name(Constantes.ENTIDAD_FAMILIA)
+		      .description(txt_descripcion + " las familias.")
 		      );
    
    swagger.tag(new Tag()
@@ -184,9 +136,44 @@ public class BootstrapV1 extends HttpServlet {
 		      .description(txt_descripcion + " las fichasUA.")
 		      );
    
+      swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_FORMULARIO)
+		      .description(txt_descripcion + " los formularios.")
+		      );
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_HECHOS_VITALES)
+		      .description(txt_descripcion + " los hechos vitales.")
+		      );
+   
+      swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_ICONO_FAMILIA)
+		      .description(txt_descripcion + " los iconos familia.")
+		      );
+      
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_IDIOMA)
+		      .description(txt_descripcion + " los idiomas.")
+		      );
+   
    swagger.tag(new Tag()
 		      .name(Constantes.ENTIDAD_MATERIA)
 		      .description(txt_descripcion + " las materias.")
+		      );
+   
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_MATERIA_AGRUPACION)
+		      .description(txt_descripcion + " las materias agrupacion.")
+		      );
+   
+   
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_NORMATIVAS)
+		      .description(txt_descripcion + " las normativas.")
+		      );
+      
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_PERFIL)
+		      .description(txt_descripcion + " los perfiles.")
 		      );
       
    swagger.tag(new Tag()
@@ -194,6 +181,11 @@ public class BootstrapV1 extends HttpServlet {
 		      .description(txt_descripcion + " el personal.")
 		      );
    
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_PROCEDIMIENTO)
+		      .description(txt_descripcion + " los procedimientos.")
+		      );
+
    swagger.tag(new Tag()
 		      .name(Constantes.ENTIDAD_PUBLICO)
 		      .description(txt_descripcion + " los publicos objetivo.")
@@ -203,29 +195,45 @@ public class BootstrapV1 extends HttpServlet {
 		      .name(Constantes.ENTIDAD_SECCION)
 		      .description(txt_descripcion + " las secciones.")
 		      );
-
+   
    swagger.tag(new Tag()
-		      .name(Constantes.ENTIDAD_PROCEDIMIENTO)
-		      .description(txt_descripcion + " los procedimientos.")
+		   .name(Constantes.ENTIDAD_SERVICIOS)
+		   .description(txt_descripcion + " los servicios.")
+		   );
+   
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_TIPO_AFECTACION)
+		      .description(txt_descripcion + " los tipos de afectación.")
 		      );
    
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_TIPO)
+		      .description(txt_descripcion + " los tipos de normativas.")
+		      );
+
+   
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_TRAMITE)
+		      .description(txt_descripcion + " los tramites.")
+		      );
+
+
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_UA)
+		      .description(txt_descripcion + " las unidades administrativas.")
+		      );
+      
+   swagger.tag(new Tag()
+		      .name(Constantes.ENTIDAD_UNIDAD_MATERIA)
+		      .description(txt_descripcion + " las unidades materias.")
+		      );
    
    swagger.tag(new Tag()
 		   .name(Constantes.ENTIDAD_USUARIOS)
 		   .description(txt_descripcion + " los usuarios.")
 		   );
    
-   swagger.tag(new Tag()
-		   .name(Constantes.ENTIDAD_SERVICIOS)
-		   .description(txt_descripcion + " los servicios.")
-		   );
 
-   swagger.tag(new Tag()
-		      .name(Constantes.ENTIDAD_TRAMITE)
-		      .description(txt_descripcion + " los tramites.")
-		      );
-   
-   
    
     new SwaggerContextService().withServletConfig(config).updateSwagger(swagger);
   }
