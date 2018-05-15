@@ -45,7 +45,7 @@
 	var pagDetall = '<c:url value="/catalegProcediments/pagDetall.do" />';
     var pagGuardar = '<c:url value="/catalegProcediments/guardar.do" />';    
     var pagEsborrar = '<c:url value="/catalegProcediments/esborrarProcediment.do" />';
-    var seccioNormatives = '<c:url value="/catalegProcediments/cercarNormatives.do" />';
+    var seccioNormatives = '<c:url value="/normativa/cercarNormativesProcServ.do" />';
     var pagDetallTramit = '<c:url value="/tramit/carregarTramit.do" />';
     var pagGuardarTramit = '<c:url value="/tramit/guardarTramit.do" />';
     var pagEsborrarTramit = '<c:url value="/tramit/esborrarTramit.do" />';

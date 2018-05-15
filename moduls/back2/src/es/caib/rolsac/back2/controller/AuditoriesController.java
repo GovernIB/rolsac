@@ -59,6 +59,8 @@ public class AuditoriesController {
 
 			if (tipus.equals("procediment")) {
 				llista = auditoriaDelegate.listarAuditoriasProcedimiento(id);
+			} else if (tipus.equals("servei")) {
+				llista = auditoriaDelegate.listarAuditoriasServicio(id);
 			} else if (tipus.equals("fitxa")) {
 				llista = auditoriaDelegate.listarAuditoriasFicha(id);
 			} else if (tipus.equals("unitat")) {

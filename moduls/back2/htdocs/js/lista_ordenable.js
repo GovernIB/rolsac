@@ -145,7 +145,7 @@ function ListaOrdenable() {
 					if (jQuery.trim(valor) == "")
 						valor = "&nbsp;";
 					
-					if (params.nodoDestino != null && params.nodoDestino.length > 0 && params.nodoDestino[0].id != null && params.nodoDestino[0].id == 'listaNormativasDeProcedimientos') {
+					if (params.nodoDestino != null && params.nodoDestino.length > 0 && params.nodoDestino[0].id != null && (params.nodoDestino[0].id == 'listaNormativasDeProcedimientos' || params.nodoDestino[0].id == 'listaNormativasDeServicios')) {
 						html += "<span class=\"" + params.nombre + "\" "+fontcolor+"><a href='../normativa/normativa.do?itemId="+item.id+"' target='_blank' "+fontcolor+">" + valor + "</a></span>";
 					} else {
 						html += "<span class=\"" + params.nombre + "\" "+fontcolor+">" + valor + "</span>";
