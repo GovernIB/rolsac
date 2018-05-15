@@ -39,7 +39,6 @@
                     <li><a href="<c:url value="/catalegProcediments/catalegProcediments.do"/>"><spring:message code="submenu.cataleg_procediments" /></a></li>
                 </c:otherwise>
             </c:choose>
-            <!-- 
             <c:choose>
                 <c:when test="${submenu_seleccionado==6}">
                     <li class="seleccionat">
@@ -50,7 +49,7 @@
                 <c:otherwise>
                     <li><a href="<c:url value="/catalegServeis/catalegServeis.do"/>"><spring:message code="submenu.cataleg_serveis" /></a></li>
                 </c:otherwise>
-            </c:choose>-->
+            </c:choose>
             <c:choose>
                 <c:when test="${submenu_seleccionado==3}">
                     <li class="seleccionat">

@@ -153,6 +153,13 @@ final public class Actualizador {
 				} else {
 					actualizarProcedimiento(proc);
 				}
+			} else if (actualizar instanceof Servicio) {
+				final Servicio serv = (Servicio) actualizar;
+				if (borrar) {
+					borrarServicio(serv);
+				} else {
+					actualizarServicio(serv);
+				}
 			} else if (actualizar instanceof UnidadAdministrativa) {
 				final UnidadAdministrativa unidad = (UnidadAdministrativa) actualizar;
 				if (borrar) {
@@ -294,6 +301,39 @@ final public class Actualizador {
 				} catch (WSInvocatorException e) {
 					//Si falla mando un Email informando del fallo al destinatario
 					ReportarFallo.reportar(proc, borrar, destinatario, e);
+					log.error(e);
+				}
+			}
+		}
+		}
+		
+		/**
+		 * Actualiza un {@link Servicio}
+		 * @param servicio
+		 */
+		private void actualizarServicio(final Servicio servicio){
+			log.debug("Actualizando un Procedimiento");
+			
+			//La transformo en transferible
+			ServicioTransferible servT =null;
+			if(0<destinatarios.size()) {
+				servT = ServicioTransferible.generar(servicio);
+				if(servT.getResponsable() == null || servT.getResponsable().trim().length()<= 0){
+					String responsables = obtenerResponsableHistorico(servicio.getId(),"servicio");
+					if (responsables!=null && responsables.length()>0)servT.setResponsable(responsables);
+				}
+			//Y voy destinatario a destinatario mandando la actualizacion
+			for (final Destinatario destinatario : destinatarios) {
+				try{
+						if(calActualizar(destinatario, servicio)) {
+					log.debug("Al Destinatario: "+destinatario.getNombre());
+						final ActualizacionServicio actualizacion = new ActualizacionServicio(
+								destinatario.getEndpoint(), destinatario.getIdRemoto());
+						actualizacion.actualizarServicio(servT);
+			        }
+				} catch (WSInvocatorException e) {
+					//Si falla mando un Email informando del fallo al destinatario
+					ReportarFallo.reportar(servicio, borrar, destinatario, e);
 					log.error(e);
 				}
 			}
@@ -481,6 +521,27 @@ final public class Actualizador {
 			}
 		}
 		
+		/**
+		 * Borra un {@link Servicio}
+		 * @param servicio
+		 */
+		private void borrarServicio(final Servicio servicio){
+			for (final Destinatario destinatario : destinatarios) {
+				try{
+					if(calActualizar(destinatario, servicio)) {
+						log.debug("Al Destinatario: "+destinatario.getNombre());	
+						final ActualizacionServicio actualizacion = new ActualizacionServicio(
+							destinatario.getEndpoint(), destinatario.getIdRemoto());
+						actualizacion.borrarProcedimiento(servicio.getId());
+			        }
+				} catch (WSInvocatorException e) {
+					//Si falla mando un Email informando del fallo al destinatario
+					ReportarFallo.reportar(servicio, borrar, destinatario, e);
+					log.error(e);
+				}
+			}
+		}
+		
 			/**
 		 * Borra un {@link Edificio}
 		 * @param edif
@@ -589,8 +650,9 @@ final public class Actualizador {
 						
 						if(tipo.equals("procedimiento")){
 							listaAuditorias = auditoriaDelegate.listarAuditoriasProcedimientoPMA(id);
-						}
-						else if(tipo.equals("ficha")){
+						} else if(tipo.equals("servicio")){
+							listaAuditorias = auditoriaDelegate.listarAuditoriasServicio(id);
+						} else if(tipo.equals("ficha")){
 							listaAuditorias = auditoriaDelegate.listarAuditoriasFichaPMA(id);
 						}
 						

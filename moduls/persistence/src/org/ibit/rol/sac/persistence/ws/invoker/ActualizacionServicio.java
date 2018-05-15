@@ -110,6 +110,24 @@ public class ActualizacionServicio extends IdInvoker {
 		}
 	}
 
+	public Boolean actualizarServicio(ServicioTransferible servT)
+			throws WSInvocatorException {
+		try {
+			setOperationName("actualizarServicio");
+
+			addParameter("servT", new QName(NAMESPACEURI,
+					ServicioTransferible.class.getSimpleName()),
+					javax.xml.rpc.ParameterMode.IN);
+
+			setReturnType(org.apache.axis.Constants.XSD_BOOLEAN);
+            setReturnQName(new QName("", "actualizarServicioReturn"));
+
+			return (Boolean) invoke(servT);
+		} catch (RemoteException e) {
+			throw new WSInvocatorException(e);
+		}
+	}
+	
 	public Boolean actualizarEdificio(EdificioTransferible edifT)throws WSInvocatorException {
 		try {
 			
