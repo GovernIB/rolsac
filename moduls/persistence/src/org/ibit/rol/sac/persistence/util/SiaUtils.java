@@ -577,7 +577,7 @@ public class SiaUtils {
   	    }
   	    
   	    
-  	    boolean tieneNombre, tieneResumen, tieneMaterias, tieneNormativas, encontradoTipo; 
+  	    boolean tieneNombre, tieneResumen, tieneMaterias, tieneNormativas = true, encontradoTipo; 
 	    if (siaEnviableResultado.getOperacion() != null && SiaUtils.ESTADO_BAJA.equals(siaEnviableResultado.getOperacion())) {
 	    	//En caso de baja, no hace falta comprobar ni normativas, ni materia, ni si tiene tipo, ni nombre ni resumen.
 	    	//Eso si, sin siaUA, es imposible enviar una baja.
@@ -593,11 +593,6 @@ public class SiaUtils {
 		    tieneMaterias=servicio.getMaterias().size() > 0;
 		    if (!tieneMaterias) {
 		    	mensajeError.append("No té matèries.");	
-		    }
-		    
-		    tieneNormativas=servicio.getNormativas().size() > 0;
-		    if (!tieneNormativas) {
-		    	mensajeError.append("No té normatives.");	
 		    }
 		    
 		    encontradoTipo = true; //En los servicios no es obligatorio.

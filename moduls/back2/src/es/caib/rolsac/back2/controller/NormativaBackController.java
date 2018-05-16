@@ -56,6 +56,7 @@ import org.ibit.rol.sac.model.dto.AfectacionesDTO;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.model.dto.NormativaDTO;
 import org.ibit.rol.sac.model.dto.ProcedimientoLocalDTO;
+import org.ibit.rol.sac.model.dto.ProcedimientoNormativaDTO;
 import org.ibit.rol.sac.model.dto.ServicioDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
@@ -1367,6 +1368,125 @@ public class NormativaBackController extends PantallaBaseController {
 
         return new IdNomDTO(id, messageSource.getMessage("normativa.eliminat.correcte", null, request.getLocale()));
     }
+    
+    /**
+     * Es el buscador de normativas para procedimientos y servicios.
+     * @param request
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "/cercarNormativesProcServ.do", method = POST)
+	public @ResponseBody Map<String, Object> llistatNormatives(HttpServletRequest request, HttpSession session) {
+
+		//Listar las normativas de la unidad administrativa
+		List<ProcedimientoNormativaDTO>llistaNormativesDTO= new ArrayList<ProcedimientoNormativaDTO>();
+		Map<String,Object> resultats = new HashMap<String,Object>();
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		Map<String, String> paramTrad = new HashMap<String, String>();
+
+		// TODO obtener la ordenación por parámetro
+		String campoOrdenacion = "fecha";
+		String orden = "desc";
+
+		//Si no hay unidad administrativa se devuelve vacío
+		if (getUAFromSession(session) == null) {
+		    return resultats;	
+		}
+
+		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
+
+		try {
+			
+			String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+
+			// Obtener parámetros de búsqueda
+			if (request.getParameter("data") != null && !request.getParameter("data").equals("")) {
+				Date fecha = es.caib.rolsac.utils.DateUtils.parseDate(request.getParameter("data"));
+				paramMap.put("fecha", fecha);
+			}
+
+			if (request.getParameter("dataButlleti") != null && !request.getParameter("dataButlleti").equals("")) {
+				Date fechaBoletin = es.caib.rolsac.utils.DateUtils.parseDate(request.getParameter("dataButlleti"));
+				paramMap.put("fechaBoletin", fechaBoletin);
+			}
+			
+			if (request.getParameter("numNormativa") != null && !request.getParameter("numNormativa").equals("")) {
+				String numNorma = request.getParameter("numNormativa");
+				
+				if (!numNorma.matches("[0-9]{1,5}/[0-9]{4}")) { 
+          	  		resultats.put("error", messageSource.getMessage("normativa.formulari.error.numnormativaincorrecto", null, request.getLocale()));
+          	  		return resultats;
+          	  	}
+				paramMap.put("numNormativa", numNorma);
+				
+			}
+			
+			String tipo = null;
+			if (request.getParameter("tipo") != null && !request.getParameter("tipo").equals("")) {
+				tipo = request.getParameter("tipo");
+			}
+
+			if (request.getParameter("boletin") != null && !request.getParameter("boletin").equals("")) {
+				paramMap.put("boletin", request.getParameter("boletin"));
+			}
+
+
+			//Restricción del acta de reunión de normativas para que salgan sólo las vigentes.
+			paramMap.put("validacion", ValidacionNormativa.VIGENTE);
+			
+			// Título (en todos los idiomas)
+			String text = request.getParameter("titol");
+			if (text != null && !"".equals(text)) {
+				text = text.toUpperCase();
+				paramTrad.put("titulo", text);
+			} else {
+				paramTrad.put("idioma", idioma);
+			}
+
+			paramMap.put("datosValidos", 1);
+			
+			//Información de paginación
+			String pagPag = request.getParameter("pagPagina");
+			String pagRes = request.getParameter("pagRes");
+			
+			if (pagPag == null) {
+			    pagPag = String.valueOf(0);
+			}
+			if (pagRes == null) {
+			    pagRes = String.valueOf(10);
+			}
+
+			resultadoBusqueda = new ResultadoBusqueda();
+
+			// Realizar la consulta y obtener resultados
+			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
+
+			//La búsqueda de normativas no tendrá en cuenta la UA actual (idua = null)
+			resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, tipo, null, false, false, "1", campoOrdenacion, orden, pagPag, pagRes, false, false);
+
+			for (Normativa normativa : castList(Normativa.class, resultadoBusqueda.getListaResultados()) ) {
+				long idNormativa = normativa.getId();
+				String tituloEnlaceHTML = HtmlUtils.obtenerTituloDeEnlaceHtml( ( (TraduccionNormativa) normativa.getTraduccion("ca") ).getTitulo() );
+				String fecha = normativa.getFecha() == null  ?  " "  :  es.caib.rolsac.utils.DateUtils.formatDate( normativa.getFecha() );
+				String fechaBoletin = normativa.getFechaBoletin() == null  ?  " "  :  es.caib.rolsac.utils.DateUtils.formatDate( normativa.getFechaBoletin() );
+
+				llistaNormativesDTO.add( new ProcedimientoNormativaDTO( idNormativa, tituloEnlaceHTML, fecha, fechaBoletin ) );
+			}
+
+		} catch (DelegateException dEx) {
+			
+			if (!dEx.isSecurityException()) {
+			    logException(log, dEx);
+			}
+			
+		}
+
+		resultats.put("total", resultadoBusqueda.getTotalResultados());
+		resultats.put("nodes", llistaNormativesDTO);
+
+		return resultats;
+		
+	}
 
     @RequestMapping(value = "/cercarNormatives.do", method = POST)
     public @ResponseBody
