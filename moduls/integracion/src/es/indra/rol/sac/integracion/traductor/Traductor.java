@@ -317,6 +317,8 @@ public class Traductor extends AutomaticTranslationService implements Traduccion
 				if (hasToAddTagsToTranslate) {
 					translation = desmontarTranslate(translation);
 				}
+				//solventado problema con la traduccion de porcentajes, y generalizado para otros caracteres
+				translation = translation.replaceAll("&amp;#([0-9]{2,4});", "&#$1;");
 				return translation;
 			}
 
