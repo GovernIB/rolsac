@@ -36,6 +36,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Auditoria;
+import org.ibit.rol.sac.model.Boletin;
 import org.ibit.rol.sac.model.CatalegDocuments;
 import org.ibit.rol.sac.model.DocumentoServicio;
 import org.ibit.rol.sac.model.ExcepcioDocumentacio;
@@ -46,20 +47,22 @@ import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.Servicio;
 import org.ibit.rol.sac.model.SilencioAdm;
+import org.ibit.rol.sac.model.Tipo;
+import org.ibit.rol.sac.model.TipoAfectacion;
 import org.ibit.rol.sac.model.TraduccionCatalegDocuments;
 import org.ibit.rol.sac.model.TraduccionDocumentoServicio;
 import org.ibit.rol.sac.model.TraduccionExcepcioDocumentacio;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
 import org.ibit.rol.sac.model.TraduccionServicio;
+import org.ibit.rol.sac.model.TraduccionTipo;
+import org.ibit.rol.sac.model.TraduccionTipoAfectacion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Usuario;
-import org.ibit.rol.sac.model.ValidacionNormativa;
 import org.ibit.rol.sac.model.criteria.BuscadorServicioCriteria;
 import org.ibit.rol.sac.model.dto.CodNomDTO;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.model.dto.ServicioDTO;
-import org.ibit.rol.sac.model.dto.ServicioNormativaDTO;
 import org.ibit.rol.sac.persistence.delegate.AuditoriaDelegate;
 import org.ibit.rol.sac.persistence.delegate.CatalegDocumentsDelegate;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
@@ -121,9 +124,81 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 		loadIndexModel (model, request);
 		
+		//#427 Listas para el buscador  de normativas. Las pasamos a DTO. 
+        // Lo ponemos en try catch para evitar que esto bloquee cualquier recuperación 
+        try {
+            String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+            // Boletines.
+            model.put("llistaButlletins", getListaBoletinesDTO());
+            // Tipos normativa.
+            model.put("llistaTipusNormativa", getListaTiposNormativaDTO(idioma));
+            // Tipos afectacion.
+            model.put("llistaTipusAfectacio", getListaTiposAfectacionDTO(idioma));
+
+        } catch (DelegateException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
+        }
+        
+		
 		return "index";
 		
 	}
+	
+	
+	 private List<IdNomDTO> getListaTiposAfectacionDTO(String idioma) throws DelegateException {
+
+	        List<TipoAfectacion> listaTiposAfectacion = DelegateUtil.getTipoAfectacionDelegate().listarTiposAfectaciones();
+	        List<IdNomDTO> listaTiposAfectacionDTO = new ArrayList<IdNomDTO>();
+	        for (TipoAfectacion tipoAfec : listaTiposAfectacion) { 
+	            TraduccionTipoAfectacion traTipAfec = (TraduccionTipoAfectacion) tipoAfec.getTraduccion(idioma);
+	            if (traTipAfec == null) {
+	                traTipAfec = (TraduccionTipoAfectacion) tipoAfec.getTraduccion();
+	            }
+
+	            IdNomDTO tipAfecTran = new IdNomDTO(tipoAfec.getId(), traTipAfec.getNombre());
+	            listaTiposAfectacionDTO.add(tipAfecTran);
+	        }
+
+	        return listaTiposAfectacionDTO;
+
+	    }
+
+	    private List<IdNomDTO> getListaTiposNormativaDTO(String idioma) throws DelegateException {
+
+	        List<Tipo> listaTiposNormativa = DelegateUtil.getTipoNormativaDelegate().listarTiposNormativas();
+	        List<IdNomDTO> listaTiposNormativaDTO = new ArrayList<IdNomDTO>();
+	        for (Tipo tipo : listaTiposNormativa) { 
+	            TraduccionTipo traTipo = (TraduccionTipo) tipo.getTraduccion(idioma);
+	            if (traTipo == null) {
+	                traTipo = (TraduccionTipo) tipo.getTraduccion();
+	            }
+
+	            IdNomDTO tipoTran;
+	            if (traTipo != null) {
+	                tipoTran = new IdNomDTO(tipo.getId(), traTipo.getNombre());
+	            } else {
+	                tipoTran = new IdNomDTO(tipo.getId(), "");
+	            }
+
+	            listaTiposNormativaDTO.add(tipoTran);
+	        }
+
+	        return listaTiposNormativaDTO;
+
+	    }
+
+	    private List<IdNomDTO> getListaBoletinesDTO() throws DelegateException {
+
+	        List<Boletin> listaBoletines = DelegateUtil.getBoletinDelegate().listarBoletines();
+	        List<IdNomDTO> listaBoletinesDTO = new ArrayList<IdNomDTO>();
+	        for (Boletin boletin : listaBoletines) {
+	            IdNomDTO bol = new IdNomDTO(boletin.getId(), boletin.getNombre());
+	            listaBoletinesDTO.add(bol);
+	        }
+
+	        return listaBoletinesDTO;
+
+	    }
 
 	private boolean estemEnUnitatAdministrativa(HttpSession session) {
 		return null != getUAFromSession(session);
@@ -226,7 +301,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			
 			try {
 				
-				UnidadAdministrativa ua = (UnidadAdministrativa) getUAFromSession(session);
+				UnidadAdministrativa ua = getUAFromSession(session);
 				buscadorCriteria.setUnidadAdministrativa(ua);
 
 				ServicioDelegate serviciosDelegate = DelegateUtil.getServicioDelegate();
@@ -263,7 +338,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			
 			try {
 				
-				UnidadAdministrativa ua = (UnidadAdministrativa) getUAFromSession(session);
+				UnidadAdministrativa ua = getUAFromSession(session);
 				buscadorCriteria.setUnidadAdministrativa(ua);
 
 				ServicioDelegate serviciosDelegate = DelegateUtil.getServicioDelegate();
@@ -654,10 +729,10 @@ public class CatalegServeisBackController extends PantallaBaseController {
 	    
         for (String lang : langs) {
             if (serv.getTraduccion(lang) != null) {
-                resultats.put(lang, (TraduccionServicio) serv.getTraduccion(lang));
+                resultats.put(lang, serv.getTraduccion(lang));
             } else {
                 if (serv.getTraduccion(langDefault) != null) {
-                    resultats.put(lang, (TraduccionServicio) serv.getTraduccion(langDefault));
+                    resultats.put(lang, serv.getTraduccion(langDefault));
                 } else {
                     resultats.put(lang, new TraduccionServicio());
                 }
@@ -1309,7 +1384,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 	                hvp.setHechoVital(hv);
 	               
 	                int maxOrden = 0;
-	                for (HechoVitalServicio hechoVitalServicio : (List<HechoVitalServicio>)hv.getHechosVitalesServicios()) {
+	                for (HechoVitalServicio hechoVitalServicio : hv.getHechosVitalesServicios()) {
 	                    if (hechoVitalServicio != null) {
 	                        if (maxOrden < hechoVitalServicio.getOrden()) {
 	                            maxOrden = hechoVitalServicio.getOrden();
