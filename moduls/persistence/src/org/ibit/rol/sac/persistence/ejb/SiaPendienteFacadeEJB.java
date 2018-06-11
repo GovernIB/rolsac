@@ -10,8 +10,6 @@ import java.util.Set;
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import net.sf.hibernate.Hibernate;
-
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.EstadoProcesoSIA;
@@ -23,6 +21,7 @@ import org.ibit.rol.sac.model.Servicio;
 import org.ibit.rol.sac.model.Sia;
 import org.ibit.rol.sac.model.SiaJob;
 import org.ibit.rol.sac.model.SiaPendiente;
+import org.ibit.rol.sac.model.SiaUA;
 import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.ws.SiaResultado;
@@ -36,7 +35,8 @@ import org.ibit.rol.sac.persistence.util.SiaCumpleDatos;
 import org.ibit.rol.sac.persistence.util.SiaEnviableResultado;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.ibit.rol.sac.persistence.ws.sia.SiaWS;
-import org.ibit.rol.sac.model.SiaUA;
+
+import net.sf.hibernate.Hibernate;
 
 
 
@@ -60,6 +60,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	 * @ejb.create-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Override
 	public void ejbCreate() throws CreateException {
 
 		super.ejbCreate();
@@ -1042,10 +1043,10 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 			
 			sia.setIdCent(siaEnviableResultado.getIdCentro());
 			sia.setIdDepartamento(siaCumpleDatos.getSiaUA().getUnidadAdministrativa().getCodigoDIR3());
-			if (servicio.getServicioResponsable().getTraduccion("es") != null && ((TraduccionUA)  servicio.getServicioResponsable().getTraduccion("es")).getNombre() != null) {
-				sia.setUaGest(((TraduccionUA)  servicio.getServicioResponsable().getTraduccion("es")).getNombre());
+			if (servicio.getOrganoInstructor().getTraduccion("es") != null && ((TraduccionUA)  servicio.getOrganoInstructor().getTraduccion("es")).getNombre() != null) {
+				sia.setUaGest(((TraduccionUA)  servicio.getOrganoInstructor().getTraduccion("es")).getNombre());
 			} else {
-				sia.setUaGest(((TraduccionUA)  servicio.getServicioResponsable().getTraduccion("ca")).getNombre());
+				sia.setUaGest(((TraduccionUA)  servicio.getOrganoInstructor().getTraduccion("ca")).getNombre());
 			}
 			
 			String[] destinatarios = new String[servicio.getPublicosObjetivo().size()];
