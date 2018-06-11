@@ -551,7 +551,7 @@ public class SiaUtils {
 		final StringBuffer mensajeError = new StringBuffer();
 
 		if (servicio == null) {
-			resultado.setRespuesta("El procediment està nul.");
+			resultado.setRespuesta("El servei està nul.");
 			resultado.setCumpleDatos(false);
 			return resultado;
 		}
@@ -560,7 +560,7 @@ public class SiaUtils {
   		final SiaUA siaUA = obtenerSiaUA(servicio);
   	    if (siaUA == null) {
   			tieneSiaUA = false;	
-  			mensajeError.append("El procediment no té associat a una entitat arrel.");
+  			mensajeError.append("El servei no té associat a una entitat arrel.");
   	    } else {
   	    	tieneSiaUA = true;
   	    	resultado.setSiaUA(siaUA);
@@ -571,7 +571,7 @@ public class SiaUtils {
 	  	    final String codigoDir3IdCentro = obtenerCodigoIdCentro(servicio);
 	  	    final String codigoDir3SiaUA = siaUA.getUnidadAdministrativa().getCodigoDIR3();
 	  	    if (codigoDir3SiaUA.equals(codigoDir3IdCentro)) {
-	  	    	mensajeError.append("El procedimiento esta asociado directamente a la entidad raiz.");
+	  	    	mensajeError.append("El servicio esta asociado directamente a la entidad raiz.");
 	  	    	noAsociadoSiaUA = false;
 	  	    }
   	    }
@@ -613,7 +613,7 @@ public class SiaUtils {
 		    
 		    final String nombre = getNombreServicio(servicio);
 		    if (StringUtils.isBlank(nombre)) {
-		    	mensajeError.append("El procediment no té títol.");	
+		    	mensajeError.append("El servicio no té títol.");	
 		    	tieneNombre = false;
 		    } else {
 		    	tieneNombre = true;
@@ -622,7 +622,7 @@ public class SiaUtils {
 		    
 		    final String resumen = getResumenServicio(servicio);
 		    if (StringUtils.isBlank(resumen)) {
-		    	mensajeError.append("El procediment no té resum.");	
+		    	mensajeError.append("El servicio no té resum.");	
 		    	tieneResumen = false;
 		    } else {
 		    	tieneResumen = true;
@@ -748,14 +748,14 @@ public class SiaUtils {
 		
 		String codigoIdCentro = null;
 		
-		if (servicio != null && servicio.getServicioResponsable() != null) {
+		if (servicio != null && servicio.getOrganoInstructor() != null) {
 		
-			if (servicio.getServicioResponsable().getCodigoDIR3() == null) {
+			if (servicio.getOrganoInstructor().getCodigoDIR3() == null) {
 		    	
 		    	//Recorremos sus predecesores
-				for(int i =  servicio.getServicioResponsable().getPredecesores().size() -1 ; i >= 0 ; i --) {
+				for(int i =  servicio.getOrganoInstructor().getPredecesores().size() -1 ; i >= 0 ; i --) {
 		    	//for(Object oua : procedimiento.getOrganResolutori().getPredecesores()) {
-		    		final UnidadAdministrativa ua = (UnidadAdministrativa) servicio.getServicioResponsable().getPredecesores().get(i);
+		    		final UnidadAdministrativa ua = (UnidadAdministrativa) servicio.getOrganoInstructor().getPredecesores().get(i);
 		    		if (ua.getCodigoDIR3() != null) {
 		    			codigoIdCentro = ua.getCodigoDIR3();
 		    			break;
@@ -763,7 +763,7 @@ public class SiaUtils {
 		    	}
 		    	
 		    } else {
-		    	codigoIdCentro = servicio.getServicioResponsable().getCodigoDIR3();
+		    	codigoIdCentro = servicio.getOrganoInstructor().getCodigoDIR3();
 		    }
 		}
 
