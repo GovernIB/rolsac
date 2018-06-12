@@ -325,7 +325,7 @@ function CLlistat() {
 				dada_node = this;
 
 				parClass = (i%2) ? " par": "";
-				caducat_nom_class = (dada_node.caducat) ? " servicio" : " serveiCaducat";
+				caducat_nom_class = (dada_node.caducat) ? " servei" : " serveiCaducat";
 
 				codi_taula += "<div class=\"tr" + parClass + "\" role=\"row\">";
 
