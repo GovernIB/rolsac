@@ -16,6 +16,9 @@
 
         <property name="fase" column="TRA_FASE"/>
         <property name="orden" column="TRA_ORDEN"/>
+        
+        <property name="telematico" column="TRA_CTELEM" />
+        <property name="presencial" column="TRA_CPRESE" />
 
         <many-to-one name="procedimiento" column="TRA_CODPRO" foreign-key="RSC_TRAPRO_FK"/>
 

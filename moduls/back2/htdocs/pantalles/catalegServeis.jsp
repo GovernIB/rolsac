@@ -178,7 +178,8 @@
     var txtOrganoResponsableObligatorio = "<spring:message code='personal.formulari.organ.responsable.obligatori'/>";
     var txtRequisitsObligatori = "<spring:message code= 'tramit.formulari.requisits.obligatori'/>";
     var txtTerminiObligatori   = "<spring:message code= 'tramit.formulari.termini.obligatori'/>";
-    var txtModelObligatori   = "<spring:message code= 'tramit.formulari.models.obligatori'/>";    
+    var txtModelObligatori   = "<spring:message code= 'tramit.formulari.models.obligatori'/>"; 
+    var txtCanalObligatori   = "<spring:message code= 'tramit.formulari.canal.obligatori'/>";   
     var txtDataPublicacioObligatori = "<spring:message code='serv.formulari.error.fechapublicacion.obligatori'/>";
     var txtDataIniciObligatori = "<spring:message code='serv.formulari.error.datainici.obligatori'/>";
     var txtDataPublicacioPosterior = "<spring:message code='serv.formulari.error.fechapublicacion.posterior'/>";
@@ -766,7 +767,42 @@
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                     <legend><spring:message code='serv.dades.tramit'/></legend>
                     <div class="modul_tramit mostrat">
-                       <div class="fila">
+						<div class="fila">
+							<div class="element t20p">
+								<div class="etiqueta">
+									<label for="item_check_tramit_presencial"><spring:message
+											code='camp.tramitPresencial' /></label>
+								</div>
+								<div class="control">
+									<input id="item_check_tramit_presencial"
+										name="item_check_tramit_presencial" type="checkbox"
+										class="nou" />
+								</div>
+							</div>
+							<div class="element t20p">
+								<div class="etiqueta">
+									<label for="item_check_tramit_telematico"><spring:message
+											code='camp.tramitTelematico' /></label>
+								</div>
+								<div class="control">
+									<input id="item_check_tramit_telematico"
+										name="item_check_tramit_telematico" type="checkbox"
+										class="nou" />
+								</div>
+							</div>
+							<div class="element t20p">
+								<div class="etiqueta">
+									<label for="item_check_tramit_telefonico"><spring:message
+											code='camp.tramitTelefonico' /></label>
+								</div>
+								<div class="control">
+									<input id="item_check_tramit_telefonico"
+										name="item_check_tramit_telefonico" type="checkbox"
+										class="nou" />
+								</div>
+							</div>
+						</div>
+						<div class="fila">
                             <div class="element t99p">
                                 <div class="etiqueta">
                                     <label for="item_tramite_url"><spring:message code='serv.tramit.url'/></label>

@@ -27,7 +27,6 @@ import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.Taxa;
 import org.ibit.rol.sac.model.Traduccion;
-import org.ibit.rol.sac.model.TraduccionCatalegDocuments;
 import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.TraduccionProcedimiento;
 import org.ibit.rol.sac.model.TraduccionTaxa;
@@ -108,13 +107,16 @@ public class TramiteBackController {
     		resultats.put("item_finestreta_unica", procedimiento.getVentanillaUnica());
     		resultats.put("item_taxes", procedimiento.getTaxa());
     		
+    		resultats.put("item_check_tramit_presencial", tramite.isPresencial());
+    		resultats.put("item_check_tramit_telematico", tramite.isTelematico());
+    		
     		if (tramite.getOrganCompetent() != null) {
     			resultats.put("tramits_item_organ_id", tramite.getOrganCompetent().getId());
     		}
     		    		    		
 			// Idiomas
     		for ( String idioma : idiomas ) {
-    			resultats.put(idioma, (TraduccionTramite) tramite.getTraduccion(idioma));
+    			resultats.put(idioma, tramite.getTraduccion(idioma));
     			//TraduccionUA traduccionUA = ((TraduccionUA) tramite.getOrganCompetent().getTraduccion(idioma));
     			if (tramite.getOrganCompetent() != null) {
         			String nombreUA = tramite.getOrganCompetent().getNombreUnidadAdministrativa(idioma);    			
@@ -277,9 +279,36 @@ public class TramiteBackController {
 			}
 			
 			String version = request.getParameter("item_version_tramit");
-			tramite.setVersio( !"".equals(version) ? Integer.parseInt(version) : 0 );
-			tramite.setUrlExterna( request.getParameter("item_url_tramit"));
-			tramite.setIdTraTel( request.getParameter("item_tramite_tramit"));
+			tramite.setVersio( StringUtils.isNumeric(version)&& !"".equals(version)? Integer.parseInt(version) : 0 );
+			tramite.setUrlExterna( request.getParameter("item_url_tramit")==null?"":request.getParameter("item_url_tramit"));
+			tramite.setIdTraTel( request.getParameter("item_tramite_tramit")==null?"":request.getParameter("item_tramite_tramit"));
+			
+			tramite.setTelematico( request.getParameter("item_check_tramit_telematico") != null && !"".equals(request.getParameter("item_check_tramit_telematico")));
+			tramite.setPresencial( request.getParameter("item_check_tramit_presencial") != null && !"".equals(request.getParameter("item_check_tramit_presencial")));
+			
+			boolean urlTramiteRelleno = !tramite.getUrlExterna().equals("");
+			boolean idTramiteTelleno = !tramite.getIdTraTel().equals("") && !"".equals(version);
+			boolean idTramiteIncoherente = (!tramite.getIdTraTel().equals("") && "".equals(version)) 
+										|| (tramite.getIdTraTel().equals("") && (!"".equals(version) && !"0".equals(version) ));
+			
+			//si es telematico debe estar rellenos url o version+id, pero no ambos.
+			if(tramite.isTelematico()) {
+				//Traramos la posible incoherencia de datos
+				if( urlTramiteRelleno && idTramiteTelleno || //estan los dos completados  
+					!urlTramiteRelleno && !idTramiteTelleno || // ninguno esta completado	
+					idTramiteIncoherente) { //el id y version es incoherente (uno si y el otro no)
+						error = messageSource.getMessage("proc.formulari.error.telematic.sensedades", null, request.getLocale());
+			            result = new IdNomDTO(-2l, error);
+			            return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.ACCEPTED);					
+				}
+			}else {
+				// si no es telemático vaciamos los campos.
+				tramite.setVersio( 0 );
+				tramite.setUrlExterna( "");
+				tramite.setIdTraTel("");
+			}
+			
+			
 			
 			// 1 - Inicialización
 			// 2 - Instrucción

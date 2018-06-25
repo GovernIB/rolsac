@@ -32,6 +32,9 @@ public class Tramite extends Ordenable implements Comparator {
     UnidadAdministrativa organCompetent;
     
 
+    boolean presencial;
+    boolean telematico;
+    
     String	idTraTel;
     Integer versio;  //NUMBER(2)
     String urlExterna; //VARCHAR2(1024 CHAR)
@@ -384,5 +387,33 @@ public class Tramite extends Ordenable implements Comparator {
 	    Tramite u1 = (Tramite) o1;
 	    Tramite u2 = (Tramite) o2;
 	    return u1.getId().intValue() - u2.getId().intValue();
+	}
+
+	/**
+	 * @return the presencial
+	 */
+	public boolean isPresencial() {
+		return presencial;
+	}
+
+	/**
+	 * @param presencial the presencial to set
+	 */
+	public void setPresencial(boolean presencial) {
+		this.presencial = presencial;
+	}
+
+	/**
+	 * @return the telematico
+	 */
+	public boolean isTelematico() {
+		return telematico;
+	}
+
+	/**
+	 * @param telematico the telematico to set
+	 */
+	public void setTelematico(boolean telematico) {
+		this.telematico = telematico;
 	}
 }

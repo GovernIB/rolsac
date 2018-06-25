@@ -1863,3 +1863,9 @@ div.modulBOIB{
     width: 430px;
     
 }
+
+
+input[type=text]:disabled{
+    background-color: #EEE !important; 
+    color:#BBB !important;
+}

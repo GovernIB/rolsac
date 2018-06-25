@@ -6,10 +6,6 @@ import java.util.List;
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.AgrupacionHechoVital;
@@ -110,9 +106,6 @@ import es.caib.rolsac.api.v2.personal.PersonalDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentUtils;
-import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
-import es.caib.rolsac.api.v2.servicio.ServicioDTO;
-import es.caib.rolsac.api.v2.servicio.ServicioUtils;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.query.FromClause;
@@ -121,6 +114,9 @@ import es.caib.rolsac.api.v2.query.QueryBuilderException;
 import es.caib.rolsac.api.v2.query.Restriction;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioUtils;
 import es.caib.rolsac.api.v2.silencio.SilencioDTO;
 import es.caib.rolsac.api.v2.taxa.TaxaCriteria;
 import es.caib.rolsac.api.v2.taxa.TaxaDTO;
@@ -136,6 +132,9 @@ import es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaCriteria;
 import es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaDTO;
 import es.caib.rolsac.api.v2.usuari.UsuariCriteria;
 import es.caib.rolsac.api.v2.usuari.UsuariDTO;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
 
 /**
  * SessionBean para consultas de ROLSAC.
@@ -324,7 +323,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<ExcepcioDocumentacio> excepcioDocumentacioResult = (List<ExcepcioDocumentacio>) query.list();
+			List<ExcepcioDocumentacio> excepcioDocumentacioResult = query.list();
 			for (ExcepcioDocumentacio excepcioDocumentacio : excepcioDocumentacioResult) {
 				excepcioDocumentacioDTOList.add((ExcepcioDocumentacioDTO) BasicUtils.entityToDTO(
 						ExcepcioDocumentacioDTO.class, 
@@ -431,7 +430,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<CatalegDocuments> catalegDocumentsResult = (List<CatalegDocuments>) query.list();
+			List<CatalegDocuments> catalegDocumentsResult = query.list();
 			for (CatalegDocuments catalegDocuments: catalegDocumentsResult) {
 				catalegDocumentsDTOList.add((CatalegDocumentsDTO) BasicUtils.entityToDTO(
 						CatalegDocumentsDTO.class, 
@@ -576,7 +575,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<ProcedimientoLocal> procedimentsResult = (List<ProcedimientoLocal>) query.list();
+			List<ProcedimientoLocal> procedimentsResult = query.list();
 
 			for (ProcedimientoLocal procediment : procedimentsResult) {
 				procedimentDTOList.add(
@@ -789,10 +788,14 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 					servicioCriteria.getIdioma(),
 					HQL_TRADUCCIONES_ALIAS);
 
-			Restriction telematicoVigente = ServicioUtils.ParseTelematicoVigente(servicioCriteria, HQL_SERVICIO_ALIAS);
+			Restriction vigente = ServicioUtils.ParseVigente(servicioCriteria, HQL_SERVICIO_ALIAS);
+			Restriction telematico = ServicioUtils.ParseTelematico(servicioCriteria, HQL_SERVICIO_ALIAS);
 
-			if (telematicoVigente != null)
-				qb.addRestriction(telematicoVigente);
+			if (vigente != null)
+				qb.addRestriction(vigente);
+
+			if(telematico != null)
+				qb.addRestriction(telematico);			
 
 			ServicioUtils.parseActiu(criteris, servicioCriteria, HQL_SERVICIO_ALIAS, qb);
 
@@ -806,7 +809,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<Servicio> serviciosResult = (List<Servicio>) query.list();
+			List<Servicio> serviciosResult = query.list();
 
 			for (Servicio servicio : serviciosResult) {
 				serviciosDTOList.add(
@@ -869,10 +872,14 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 					HQL_TRADUCCIONES_ALIAS, 
 					true);
 
-			Restriction telematicoVigente = ServicioUtils.ParseTelematicoVigente(servicioCriteria, HQL_SERVICIO_ALIAS);
+			Restriction vigente = ServicioUtils.ParseVigente(servicioCriteria, HQL_SERVICIO_ALIAS);
+			Restriction telematico = ServicioUtils.ParseTelematico(servicioCriteria, HQL_SERVICIO_ALIAS);
 
-			if ( telematicoVigente != null )
-				qb.addRestriction(telematicoVigente);
+			if (vigente != null)
+				qb.addRestriction(vigente);
+
+			if(telematico != null)
+				qb.addRestriction(telematico);	
 
 			ServicioUtils.parseActiu(criteris, servicioCriteria, HQL_SERVICIO_ALIAS);            
 
@@ -995,7 +1002,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<Materia> materiaResult = (List<Materia>) query.list();
+			List<Materia> materiaResult = query.list();
 			for (Materia materia: materiaResult) {
 				materiaDTOList.add((MateriaDTO) BasicUtils.entityToDTO(
 						MateriaDTO.class, 
@@ -1103,7 +1110,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<Tramite> tramitsResult = (List<Tramite>) query.list();
+			List<Tramite> tramitsResult = query.list();
 			for (Tramite tramit: tramitsResult) {
 				tramitDTOList.add((TramitDTO) BasicUtils.entityToDTO(
 						TramitDTO.class, 
@@ -1215,7 +1222,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<UnidadAdministrativa> uaResult = (List<UnidadAdministrativa>) query.list();
+			List<UnidadAdministrativa> uaResult = query.list();
 			for (UnidadAdministrativa ua: uaResult) {
 				uaDTOList.add((UnitatAdministrativaDTO) BasicUtils.entityToDTO(
 						UnitatAdministrativaDTO.class, 
@@ -1338,7 +1345,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<HechoVital> fvResult = (List<HechoVital>) query.list();
+			List<HechoVital> fvResult = query.list();
 			for (HechoVital fv: fvResult) {
 				fetVitalDTOList.add((FetVitalDTO) BasicUtils.entityToDTO(
 						FetVitalDTO.class, fv, fetVitalCriteria.getIdioma()));
@@ -1463,7 +1470,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<Ficha> fitxaResult = (List<Ficha>) query.list();
+			List<Ficha> fitxaResult = query.list();
 
 			for (Ficha ficha: fitxaResult) {
 
@@ -1588,7 +1595,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<DocumentTramit> documentTramitsResult = (List<DocumentTramit>) query.list();
+			List<DocumentTramit> documentTramitsResult = query.list();
 			for (DocumentTramit documentTramit : documentTramitsResult) {
 				documentsTramitDTOList.add((DocumentTramitDTO) BasicUtils.entityToDTO(
 						DocumentTramitDTO.class,
@@ -1677,7 +1684,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<DocumentoNormativa> documentoNormativasResult = (List<DocumentoNormativa>) query.list();
+			List<DocumentoNormativa> documentoNormativasResult = query.list();
 			for (DocumentoNormativa documentoNormativa : documentoNormativasResult) {
 				documentsNormativaDTOList.add((DocumentoNormativaDTO) BasicUtils.entityToDTO(
 						DocumentoNormativaDTO.class,
@@ -1770,7 +1777,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<Normativa> normativasResult = (List<Normativa>) query.list();
+			List<Normativa> normativasResult = query.list();
 
 			NormativaDTO dto;
 			for (Normativa normativa : normativasResult) {
@@ -1864,7 +1871,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<Personal> personalResult = (List<Personal>) query.list();
+			List<Personal> personalResult = query.list();
 			for (Personal personal: personalResult) {
 				personalDTOList.add((PersonalDTO) BasicUtils.entityToDTO(
 						PersonalDTO.class, 
@@ -1957,7 +1964,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<Usuario> usuariResult = (List<Usuario>) query.list();
+			List<Usuario> usuariResult = query.list();
 			for (Usuario usuari : usuariResult) {
 				usuariDTOList.add((UsuariDTO) BasicUtils.entityToDTO(
 						UsuariDTO.class, 
@@ -2015,7 +2022,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<Idioma> idiomaResult = (List<Idioma>) query.list();
+			List<Idioma> idiomaResult = query.list();
 			for (Idioma f: idiomaResult) {
 				idiomaDTOList.add((IdiomaDTO)BasicUtils.entityToDTO(IdiomaDTO.class, f, idiomaCriteria.getIdioma()));
 			}
@@ -2193,7 +2200,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			sessio = getSession();
 			Query query = qb.createQuery(sessio);
-			List<Taxa> taxesResult = (List<Taxa>) query.list();
+			List<Taxa> taxesResult = query.list();
 			for (Taxa taxa : taxesResult) {
 				taxesDTOList.add((TaxaDTO) BasicUtils.entityToDTO(TaxaDTO.class,  taxa, taxaCriteria.getIdioma()));
 			}
@@ -2299,7 +2306,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<AgrupacionHechoVital> afvResult = (List<AgrupacionHechoVital>) query.list();
+			List<AgrupacionHechoVital> afvResult = query.list();
 			for (AgrupacionHechoVital afv: afvResult) {
 				afvDTOList.add((AgrupacioFetVitalDTO) BasicUtils.entityToDTO(
 						AgrupacioFetVitalDTO.class, 
@@ -2408,7 +2415,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<AgrupacionMateria> amResult = (List<AgrupacionMateria>) query.list();
+			List<AgrupacionMateria> amResult = query.list();
 			for (AgrupacionMateria am: amResult) {
 				amDTOList.add((AgrupacioMateriaDTO) BasicUtils.entityToDTO(
 						AgrupacioMateriaDTO.class, 
@@ -2501,7 +2508,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<Boletin> butlletiResult = (List<Boletin>) query.list();
+			List<Boletin> butlletiResult = query.list();
 			for (Boletin boletin: butlletiResult) {
 				butlletiDTOList.add((ButlletiDTO) BasicUtils.entityToDTO(
 						ButlletiDTO.class, 
@@ -2607,7 +2614,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			sessio = getSession();
 			Query query = qb.createQuery(sessio);
-			List<Documento> docResult = (List<Documento>) query.list();
+			List<Documento> docResult = query.list();
 			for (Documento doc: docResult) {
 				docDTOList.add((DocumentDTO) BasicUtils.entityToDTO(DocumentDTO.class, doc, docCriteria.getIdioma()));
 			}
@@ -2710,7 +2717,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			sessio = getSession();
 			Query query = qb.createQuery(sessio);
-			List<Edificio> edificiResult = (List<Edificio>) query.list();
+			List<Edificio> edificiResult = query.list();
 			for (Edificio ed: edificiResult) {
 				edificisDTOList.add((EdificiDTO) BasicUtils.entityToDTO(
 						EdificiDTO.class, 
@@ -2816,7 +2823,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			sessio = getSession();
 			Query query = qb.createQuery(sessio);
-			List<Enlace> enllacResult = (List<Enlace>) query.list();
+			List<Enlace> enllacResult = query.list();
 			for (Enlace e: enllacResult) {
 				enllacDTOList.add((EnllacDTO) BasicUtils.entityToDTO(EnllacDTO.class, e, enllacCriteria.getIdioma()));
 			}
@@ -2920,7 +2927,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<EspacioTerritorial> etResult = (List<EspacioTerritorial>) query.list();
+			List<EspacioTerritorial> etResult = query.list();
 			for (EspacioTerritorial e: etResult) {
 				etDTOList.add((EspaiTerritorialDTO) BasicUtils.entityToDTO(
 						EspaiTerritorialDTO.class, e, etCriteria.getIdioma()));
@@ -3024,7 +3031,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<Familia> familiaResult = (List<Familia>) query.list();
+			List<Familia> familiaResult = query.list();
 			for (Familia f: familiaResult) {
 				familiaDTOList.add((FamiliaDTO) BasicUtils.entityToDTO(FamiliaDTO.class, f, familiaCriteria.getIdioma()));
 			}
@@ -3127,7 +3134,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<PublicoObjetivo> poResult = (List<PublicoObjetivo>) query.list();
+			List<PublicoObjetivo> poResult = query.list();
 			for (PublicoObjetivo po: poResult) {
 				poDTOList.add((PublicObjectiuDTO) BasicUtils.entityToDTO(
 						PublicObjectiuDTO.class, po, poCriteria.getIdioma()));
@@ -3215,7 +3222,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<FichaUA> fuaResult = (List<FichaUA>) query.list();
+			List<FichaUA> fuaResult = query.list();
 			for (FichaUA fua: fuaResult) {
 				fuaDTOList.add((FitxaUADTO) BasicUtils.entityToDTO(FitxaUADTO.class, fua, fuaCriteria.getIdioma()));
 			}
@@ -3302,7 +3309,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<Formulario> formResult = (List<Formulario>) query.list();
+			List<Formulario> formResult = query.list();
 			for (Formulario form: formResult) {
 				formDTOList.add((FormulariDTO) BasicUtils.entityToDTO(FormulariDTO.class, form, formCriteria.getIdioma()));
 			}
@@ -3389,7 +3396,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<IconoFamilia> ifResult = (List<IconoFamilia>) query.list();
+			List<IconoFamilia> ifResult = query.list();
 			for (IconoFamilia iFam: ifResult) {
 				ifDTOList.add((IconaFamiliaDTO) BasicUtils.entityToDTO(IconaFamiliaDTO.class, iFam, ifCriteria.getIdioma()));
 			}
@@ -3476,7 +3483,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<IconoMateria> imResult = (List<IconoMateria>) query.list();
+			List<IconoMateria> imResult = query.list();
 			for (IconoMateria iMat: imResult) {
 				imDTOList.add((IconaMateriaDTO) BasicUtils.entityToDTO(IconaMateriaDTO.class, iMat, imCriteria.getIdioma()));
 			}
@@ -3563,7 +3570,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<MateriaAgrupacionM> maResult = (List<MateriaAgrupacionM>) query.list();
+			List<MateriaAgrupacionM> maResult = query.list();
 			for (MateriaAgrupacionM ma: maResult) {
 				imDTOList.add((MateriaAgrupacioDTO) BasicUtils.entityToDTO(MateriaAgrupacioDTO.class, ma, maCriteria.getIdioma()));
 			}
@@ -3668,7 +3675,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<PerfilCiudadano> perfilResult = (List<PerfilCiudadano>) query.list();
+			List<PerfilCiudadano> perfilResult = query.list();
 			for (PerfilCiudadano p: perfilResult) {
 				perfilDTOList.add((PerfilDTO) BasicUtils.entityToDTO(PerfilDTO.class, p, perfilCriteria.getIdioma()));
 			}
@@ -3773,7 +3780,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<Seccion> seccioResult = (List<Seccion>) query.list();
+			List<Seccion> seccioResult = query.list();
 			for (Seccion s: seccioResult) {
 				seccioDTOList.add((SeccioDTO) BasicUtils.entityToDTO(SeccioDTO.class, s, seccioCriteria.getIdioma()));
 			}
@@ -3878,7 +3885,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<UnidadMateria> umResult = (List<UnidadMateria>) query.list();
+			List<UnidadMateria> umResult = query.list();
 			for (UnidadMateria um: umResult) {
 				umDTOList.add((UnitatMateriaDTO) BasicUtils.entityToDTO(UnitatMateriaDTO.class, um, umCriteria.getIdioma()));
 			}
@@ -3983,7 +3990,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<Tipo> tipusResult = (List<Tipo>) query.list();
+			List<Tipo> tipusResult = query.list();
 			for (Tipo t: tipusResult) {
 				tipusDTOList.add((TipusDTO) BasicUtils.entityToDTO(TipusDTO.class, t, tipusCriteria.getIdioma()));
 			}
@@ -4088,7 +4095,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<TipoAfectacion> tipoAfectacionResult = (List<TipoAfectacion>) query.list();
+			List<TipoAfectacion> tipoAfectacionResult = query.list();
 			for (TipoAfectacion t: tipoAfectacionResult) {
 				tipusAfectacioDTOList.add((TipusAfectacioDTO) BasicUtils.entityToDTO(TipusAfectacioDTO.class, t, tipusAfectacioCriteria.getIdioma()));
 			}
@@ -4147,7 +4154,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			session = getSession();
 			Query query = qb.createQuery(session);
-			List<Iniciacion> iniciacioResult = (List<Iniciacion>)query.list();
+			List<Iniciacion> iniciacioResult = query.list();
 
 			for (Iniciacion iniciacion: iniciacioResult) {
 				iniciacioDTOList.add((IniciacioDTO)BasicUtils.entityToDTO(

@@ -348,7 +348,7 @@ public class IndexacionUtil {
 	public static boolean isTelematicoProcedimiento(ProcedimientoLocal procedimiento) {
 		boolean telematico = false;
 		for(Tramite tramite : procedimiento.getTramites()) {
-			if (tramite != null && StringUtils.isNotBlank(tramite.getIdTraTel())) {
+			if (tramite != null && tramite.isTelematico()) {
 				telematico = true;
 				break;
 			}

@@ -636,6 +636,9 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			resultats.put("item_tramite_url", serv.getTramiteUrl());
 			resultats.put("item_tramite_version", serv.getTramiteVersion());
 			resultats.put("item_tramite_id", serv.getTramiteId());
+    		resultats.put("item_check_tramit_presencial", serv.isPresencial());
+    		resultats.put("item_check_tramit_telematico", serv.isTelematico());
+    		resultats.put("item_check_tramit_telefonico", serv.isTelefonico());
 			
 			if (serv.getServicioResponsable() != null) {
 				UnidadAdministrativa ua = serv.getServicioResponsable();
@@ -924,10 +927,38 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			servicio.setCodigo(request.getParameter("item_codigo_servicio"));			// Codigo
 			servicio.setCorreo(request.getParameter("item_email"));						// Email
 			servicio.setTelefono(request.getParameter("item_telefon"));					// Telefon
-			servicio.setTramiteId(request.getParameter("item_tramite_id"));				// Tramite id
-			servicio.setTramiteUrl(request.getParameter("item_tramite_url"));			// Tramite url
-			servicio.setTramiteVersion(request.getParameter("item_tramite_version"));	// Tramite version
+			servicio.setTramiteId(request.getParameter("item_tramite_id")==null?"":request.getParameter("item_tramite_id"));				// Tramite id
+			servicio.setTramiteUrl(request.getParameter("item_tramite_url")==null?"":request.getParameter("item_tramite_url"));			// Tramite url
+			
+			String version =request.getParameter("item_tramite_version")==null ?"":request.getParameter("item_tramite_version");
+			servicio.setTramiteVersion("".equals(version)?"0":version);	// Tramite version
 			servicio.setTasaUrl(request.getParameter("item_tasa_url"));					// Tasa url
+			
+			
+			servicio.setTelematico( request.getParameter("item_check_tramit_telematico") != null && !"".equals(request.getParameter("item_check_tramit_telematico")));
+			servicio.setPresencial( request.getParameter("item_check_tramit_presencial") != null && !"".equals(request.getParameter("item_check_tramit_presencial")));
+			servicio.setTelefonico( request.getParameter("item_check_tramit_telefonico") != null && !"".equals(request.getParameter("item_check_tramit_telefonico")));
+			
+			boolean urlTramiteRelleno = !servicio.getTramiteUrl().equals("");
+			boolean idTramiteTelleno = !servicio.getTramiteId().equals("") && !"".equals(version);
+			boolean idTramiteIncoherente = (!servicio.getTramiteId().equals("") && "".equals(version))  || 
+											(servicio.getTramiteId().equals("") && ( !"".equals(version) && !"0".equals(version)));
+			
+			//si es telematico debe estar rellenos url o version+id, pero no ambos.
+			if(servicio.isTelematico()) {
+				//Traramos la posible incoherencia de datos
+				if( urlTramiteRelleno && idTramiteTelleno || //estan los dos completados  
+					!urlTramiteRelleno && !idTramiteTelleno || // ninguno esta completado	
+					idTramiteIncoherente) { //el id y version es incoherente (uno si y el otro no)
+						error = messageSource.getMessage("proc.formulari.error.telematic.sensedades", null, request.getLocale());
+			            return result = new IdNomDTO(-2l, error);			            				
+				}
+			}else {
+				// si no es telemático vaciamos los campos.
+				servicio.setTramiteVersion( "0" );
+				servicio.setTramiteUrl("");
+				servicio.setTramiteId("");
+			}			
 			
 			if (edicion) {
 				

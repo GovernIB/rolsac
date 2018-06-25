@@ -943,14 +943,9 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			String from = "from ProcedimientoLocal as procedimiento, ";
 			String where = "";
 
-			if (telematico != null && !telematico.equals("")) {
-				if (telematico.equals("1")) {
-					where += "and procedimiento.id in ";
-				} else if (telematico.equals("0")) {
-					where += "and procedimiento.id not in ";
-				}
-
-				where += "( select tra.procedimiento from Tramite as tra where tra.idTraTel is not null )";
+			if (telematico != null && (telematico.equals("1") || telematico.equals("0"))) {						
+				
+				where += "and procedimiento.id in ( select tra.procedimiento from Tramite as tra where tra.telematico = " +telematico+" )";
 			}
 
 			if (en_plazo != null && !en_plazo.equals("")) {
@@ -1207,17 +1202,10 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 
 			if ( bc.getTelematico() != null ) {
-
-				if ( bc.getTelematico() )
-					where.append(" and procedimiento.id in ");
-
-				else if ( !bc.getTelematico() )
-					where.append(" and procedimiento.id not in ");
-
-				where.append(" ( select tra.procedimiento from Tramite as tra where tra.idTraTel is not null ) ");	
-
+				String telematico = bc.getTelematico()?"1":"0";				
+				where.append("and procedimiento.id in ( select tra.procedimiento from Tramite as tra where tra.telematico = " + telematico +" )");
 			}
-
+			
 
 			if ( bc.getEnPlazo() != null ) {
 
@@ -2794,14 +2782,14 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			
 			
 			
-			if((!StringUtils.isEmpty(vigente) && vigente.equals("1")) || (!StringUtils.isEmpty(telematico) && telematico.equals("1"))) {
+			if((!StringUtils.isEmpty(vigente) && vigente.equals("1")) || (!StringUtils.isEmpty(telematico) && (telematico.equals("1") || telematico.equals("0")))) {
 				StringBuilder wereSubselect = new StringBuilder(); 
 				
-				if ((!StringUtils.isEmpty(vigente) && vigente.equals("1"))) {					
-					wereSubselect.append("WHERE (t.idTraTel IS NOT NULL OR t.urlExterna IS NOT NULL) ");
+				if ((!StringUtils.isEmpty(telematico) && (telematico.equals("1") || telematico.equals("0")) )) {					
+					wereSubselect.append("WHERE (t.telematico = " + telematico +" ) ");
 				}
 					
-				if((!StringUtils.isEmpty(telematico) && telematico.equals("1"))){
+				if((!StringUtils.isEmpty(vigente) && vigente.equals("1"))){
 					if (wereSubselect.length()<=0) {
 						wereSubselect.append("WHERE ");
 					}else {

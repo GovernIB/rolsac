@@ -612,14 +612,8 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 			String from = "from Servicio as servicio, ";
 			String where = "";
 
-			if (telematico != null && !telematico.equals("")) {
-				if (telematico.equals("1")) {
-					where += "and servicio.id in ";
-				} else if (telematico.equals("0")) {
-					where += "and servicio.id not in ";
-				}
-
-				where += "( select tra.servicio from Tramite as tra where tra.idTraTel is not null )";
+			if (telematico != null && (telematico.equals("1") || telematico.equals("0")) ) {
+				where += " and servicio.telematico = " + telematico + " ";
 			}
 
 			if (en_plazo != null && !en_plazo.equals("")) {
@@ -821,15 +815,8 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 
 
 			if ( bc.getTelematico() != null ) {
-
-				if ( bc.getTelematico() )
-					where.append(" and servicio.id in ");
-
-				else if ( !bc.getTelematico() )
-					where.append(" and servicio.id not in ");
-
-				where.append(" ( select tra.servicio from Tramite as tra where tra.idTraTel is not null ) ");	
-
+				String telematico = bc.getTelematico()?"1":"0";
+				where.append(" and servicio.telematico = " + telematico + " ");	
 			}
 
 
@@ -1791,6 +1778,9 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 			indexData.setFechaCaducidad(servicio.getFechaDespublicacion());
 			indexData.setInterno(false);
 			
+			//Telematico
+			indexData.setTelematico(servicio.isTelematico());
+			
 			//UA
 			PathUO pathUO = IndexacionUtil.calcularPathUO(servicio.getServicioResponsable());
 			if (pathUO == null) {
@@ -2140,31 +2130,12 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 					parametros.put("estadoUA", estadoUA);					
 				}
 				
-				
-				
-		/*		if((!StringUtils.isEmpty(vigente) && vigente.equals("1")) || (!StringUtils.isEmpty(telematico) && telematico.equals("1"))) {
-					StringBuilder wereSubselect = new StringBuilder(); 
-					
-					if ((!StringUtils.isEmpty(vigente) && vigente.equals("1"))) {					
-						wereSubselect.append("WHERE (t.idTraTel IS NOT NULL OR t.urlExterna IS NOT NULL) ");
-					}
-						
-					if((!StringUtils.isEmpty(telematico) && telematico.equals("1"))){
-						if (wereSubselect.length()<=0) {
-							wereSubselect.append("WHERE ");
-						}else {
-							wereSubselect.append("AND ");
-						}
-						
-						wereSubselect.append("t.fase = 1 AND (t.dataInici > current_date OR t.dataInici IS NULL) AND (t.dataTancament < current_date OR t.dataTancament IS NULL) ");
-
-					}
-					
-					where.append(" AND s.id in ( SELECT t.servicio FROM Tramite AS t " ); 
-					where.append(wereSubselect.toString());
-					where.append(" ) ");
-					
-				}*/
+								
+				if((!StringUtils.isEmpty(telematico) && (telematico.equals("1") || telematico.equals("0")))) {
+					where.append(" AND s.telematico = :telematico ");
+					parametros.put("telematico", telematico);					
+				}
+	
 				
 				if(!StringUtils.isEmpty(codigoAHV)) {
 					from.append(" , s.hechosVitalesServicios as hv ");

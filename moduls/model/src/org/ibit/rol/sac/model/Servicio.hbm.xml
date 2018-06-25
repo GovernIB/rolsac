@@ -29,6 +29,9 @@
         <property name="tramiteUrl"	length="256" 		column="SER_TRAULR" />
         <property name="tramiteId" 	length="256" 		column="SER_TRAID" />
         <property name="tramiteVersion" length="256" 	column="SER_TRAVER" />
+        <property name="telematico" 				 	column="SER_CTELEM" />
+        <property name="presencial" 				 	column="SER_CPRESE" />
+        <property name="telefonico" 				 	column="SER_CTELEF" />
         
         
         <many-to-one name="organoInstructor" 	cascade="none" column="SER_INSTRU" foreign-key="RSC_SER_INSTRU_FK"/>

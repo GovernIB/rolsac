@@ -449,7 +449,12 @@ function CDetall() {
 	//Se comprueba que 
 	this.guarda = function() {
 		
-		
+        if(!jQuery("#item_check_tramit_presencial").prop('checked') && !jQuery("#item_check_tramit_telematico").prop('checked') && !jQuery("#item_check_tramit_telefonico").prop('checked') ){
+        	//debe haber almenos un check marcado
+        	Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtCanalObligatori, text: ""});
+    		return false;
+        }
+        
 		// missatge
 		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
 
@@ -640,6 +645,26 @@ function CDetall() {
 		jQuery("#botoTraduirServei").unbind("click").bind("click", function() {
 			Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
 		});
+		
+		
+		jQuery("#item_check_tramit_telematico").change(function(){
+			if($(this).prop('checked')){
+				//si no es telemático se deshabilitan los inputs relacionados
+				jQuery("#item_tramite_url").prop('disabled', false);
+				jQuery("#item_tramite_id").prop('disabled', false);
+				jQuery("#item_tramite_version").prop('disabled', false);
+			}else{
+				jQuery("#item_tramite_url").prop('disabled', true);
+				jQuery("#item_tramite_id").prop('disabled', true);
+				jQuery("#item_tramite_version").prop('disabled', true);
+			}
+		});
+		
+		jQuery("#item_tramite_version").prop('disabled', true);
+		jQuery("#item_tramite_id").prop('disabled', true);
+		jQuery("#item_tramite_url").prop('disabled', true);
+		
+		
 		
 	};
 
@@ -868,6 +893,48 @@ function CDetall() {
 			jQuery("#item_tramite_version").change();
 		} else {
 			jQuery("#item_tramite_version").val("");
+		}
+		/////////////////////////
+		// Canal presentación
+		/////////////////////////
+		if (dada_node.item_check_tramit_presencial != undefined) {
+			jQuery("#item_check_tramit_presencial").prop('checked', dada_node.item_check_tramit_presencial);
+			jQuery("#item_check_tramit_presencial").change();
+		} else {
+			jQuery("#item_check_tramit_presencial").prop('checked', false);
+		}
+		
+		if (dada_node.item_check_tramit_telefonico != undefined) {
+			jQuery("#item_check_tramit_telefonico").prop('checked', dada_node.item_check_tramit_telefonico);
+			jQuery("#item_check_tramit_telefonico").change();
+		} else {
+			jQuery("#item_check_tramit_telefonico").prop('checked', false);
+		}
+		
+		if (dada_node.item_check_tramit_telematico != undefined) {
+			jQuery("#item_check_tramit_telematico").prop('checked', dada_node.item_check_tramit_telematico);
+			/*jQuery("#item_check_tramit_telematico").change(function(){
+				if($(this).prop('checked')){
+					//si no es telemático se deshabilitan los inputs relacionados
+					jQuery("#item_tramite_url").prop('disabled', false);
+					jQuery("#item_tramite_id").prop('disabled', false);
+					jQuery("#item_tramite_version").prop('disabled', false);
+				}else{
+					jQuery("#item_tramite_url").prop('disabled', true);
+					jQuery("#item_tramite_id").prop('disabled', true);
+					jQuery("#item_tramite_version").prop('disabled', true);
+				}
+			});*/
+			
+			jQuery("#item_tramite_version").prop('disabled', !dada_node.item_check_tramit_telematico);
+			jQuery("#item_tramite_id").prop('disabled', !dada_node.item_check_tramit_telematico);
+			jQuery("#item_tramite_url").prop('disabled', !dada_node.item_check_tramit_telematico);
+			
+		} else {
+			jQuery("#item_check_tramit_telematico").prop('checked', false);
+			jQuery("#item_tramite_version").prop('disabled', true);
+			jQuery("#item_tramite_id").prop('disabled', true);
+			jQuery("#item_tramite_url").prop('disabled', true);
 		}
 		
 		

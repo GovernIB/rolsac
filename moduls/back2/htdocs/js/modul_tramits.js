@@ -110,6 +110,24 @@ function CModulTramit() {
         // one al botó de gestionar
         modul_tramits_elm.find("a.gestiona").one("click", function() { ModulTramit.gestiona(); });
         
+        //anyadimos comportamiento al checkbox de telematico
+        jQuery("#item_check_tramit_telematico").change(function(){
+			if($(this).prop('checked')){
+				//si no es telemático se deshabilitan los inputs relacionados
+				jQuery("#item_url_tramit").prop('disabled', false);
+				jQuery("#item_tramite_tramit").prop('disabled', false);
+				jQuery("#item_version_tramit").prop('disabled', false);
+			}else{
+				jQuery("#item_url_tramit").prop('disabled', true);
+				jQuery("#item_tramite_tramit").prop('disabled', true);
+				jQuery("#item_version_tramit").prop('disabled', true);
+			}
+		});
+		
+		jQuery("#item_version_tramit").prop('disabled', true);
+		jQuery("#item_tramite_tramit").prop('disabled', true);
+		jQuery("#item_url_tramit").prop('disabled', true);
+        
     };
     
     this.gestiona = function() {
@@ -278,11 +296,20 @@ function CEscriptoriTramit() {
             return false;
         }
         
-        //Controlamos que haya un modelo seleccionado
-        if (modul_formularis_tramits_elm.find('div.ca div.listaOrdenable input.formularisTramit_id').length == 0 && idTramit != "" ){
-    		Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtModelObligatori, text: ""});
+        //Controlamos que haya un modelo seleccionado solo si esta marcado presencial
+        if(jQuery("#item_check_tramit_presencial").prop('checked')){
+	        if (modul_formularis_tramits_elm.find('div.ca div.listaOrdenable input.formularisTramit_id').length == 0 && idTramit != "" ){
+	    		Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtModelObligatori, text: ""});
+	    		return false;
+	    	}
+        }
+        
+        if(!jQuery("#item_check_tramit_presencial").prop('checked') && !jQuery("#item_check_tramit_telematico").prop('checked') ){
+        	//debe haber almenos un check marcado
+        	Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtCanalObligatori, text: ""});
     		return false;
-    	}
+        }
+        
         
         //#391
         //Controlamos que la fecha de publicación y la fecha de inicio sean posteriores a 
@@ -526,6 +553,45 @@ function CEscriptoriTramit() {
         $("#item_moment_tramit").val( datos.item_moment_tramit );
         $("#item_validacio_tramit").val( datos.item_validacio_tramit ); 
         $("#tramits_item_organ_id").val( datos.tramits_item_organ_id );
+        
+        
+    	/////////////////////////
+		// Canal presentación
+		/////////////////////////
+		if (datos.item_check_tramit_presencial != undefined) {
+			jQuery("#item_check_tramit_presencial").prop('checked', datos.item_check_tramit_presencial);
+			jQuery("#item_check_tramit_presencial").change();
+		} else {
+			jQuery("#item_check_tramit_presencial").prop('checked', false);
+		}
+		
+		if (datos.item_check_tramit_telematico != undefined) {
+			jQuery("#item_check_tramit_telematico").prop('checked', datos.item_check_tramit_telematico);
+			/*jQuery("#item_check_tramit_telematico").change(function(){
+				if($(this).prop('checked')){
+					//si no es telemático se deshabilitan los inputs relacionados
+					jQuery("#item_url_tramit").prop('disabled', false);
+					jQuery("#item_tramite_tramit").prop('disabled', false);
+					jQuery("#item_version_tramit").prop('disabled', false);
+				}else{
+					jQuery("#item_url_tramit").prop('disabled', true);
+					jQuery("#item_tramite_tramit").prop('disabled', true);
+					jQuery("#item_version_tramit").prop('disabled', true);
+				}
+			});*/
+			
+			jQuery("#item_version_tramit").prop('disabled', !datos.item_check_tramit_telematico);
+			jQuery("#item_tramite_tramit").prop('disabled', !datos.item_check_tramit_telematico);
+			jQuery("#item_url_tramit").prop('disabled', !datos.item_check_tramit_telematico);
+			
+		} else {
+			jQuery("#item_check_tramit_telematico").prop('checked', false);
+			jQuery("#item_version_tramit").prop('disabled', true);
+			jQuery("#item_tramite_tramit").prop('disabled', true);
+			jQuery("#item_url_tramit").prop('disabled', true);
+		}
+        
+        
         
         // Bloque de pestanyas de idiomas
         idiomas = datos.idiomas;

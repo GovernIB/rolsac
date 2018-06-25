@@ -52,7 +52,8 @@ public class ProcedimentUtils {
 			else
 				where += "AND ";
 
-			where += "(t.idTraTel IS NOT NULL OR t.urlExterna IS NOT NULL) ";
+			//where += "(t.idTraTel IS NOT NULL OR t.urlExterna IS NOT NULL) ";
+			where += "(t.telematico = 1) ";
 		}
 		pc.setTelematico(null);
 		return where;

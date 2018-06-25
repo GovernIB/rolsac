@@ -47,6 +47,11 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
     private String telefono;
     
     /************ SECCION TRAMITE. *******************/
+    
+    boolean presencial;
+    boolean telefonico;
+    boolean telematico;
+        
 	/** Tramite URL. **/
     private String tramiteUrl;
     /** Tramite ID. **/
@@ -653,6 +658,54 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 
          return remoto;
      }
+
+
+	/**
+	 * @return the presencial
+	 */
+	public boolean isPresencial() {
+		return presencial;
+	}
+
+
+	/**
+	 * @param presencial the presencial to set
+	 */
+	public void setPresencial(boolean presencial) {
+		this.presencial = presencial;
+	}
+
+
+	/**
+	 * @return the telefonico
+	 */
+	public boolean isTelefonico() {
+		return telefonico;
+	}
+
+
+	/**
+	 * @param telefonico the telefonico to set
+	 */
+	public void setTelefonico(boolean telefonico) {
+		this.telefonico = telefonico;
+	}
+
+
+	/**
+	 * @return the telematico
+	 */
+	public boolean isTelematico() {
+		return telematico;
+	}
+
+
+	/**
+	 * @param telematico the telematico to set
+	 */
+	public void setTelematico(boolean telematico) {
+		this.telematico = telematico;
+	}
      
 
 }

@@ -1195,11 +1195,9 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			}
 			
 			//Telematico
-			if (tramite.getIdTraTel() == null || tramite.getIdTraTel().isEmpty()) {
-				indexData.setTelematico(false);
-			} else {
-				indexData.setTelematico(true);
-			}	
+			
+			indexData.setTelematico(tramite.isTelematico());
+			
 		
 			solrIndexer.indexarContenido(indexData);
 			return new SolrPendienteResultado(true);
