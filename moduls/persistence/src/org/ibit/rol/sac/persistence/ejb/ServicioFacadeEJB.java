@@ -115,6 +115,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
+	@Deprecated
 	public boolean autorizaCrearServicio(Integer validacionServicio) throws SecurityException  {
 		return !(validacionServicio.equals(Validacion.PUBLICA) && !userIsSuper()); 
 	}
@@ -126,6 +127,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
+	@Deprecated
 	public boolean autorizaModificarServicio(Long idServicio) throws SecurityException {
 		return (getAccesoManager().tieneAccesoServicio(idServicio)); 
 	}      
@@ -326,13 +328,13 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 					}
 				}
 
-				Hibernate.initialize(servicio.getServicioResponsable());
-				if (servicio.getServicioResponsable() != null) {
-					Hibernate.initialize(servicio.getServicioResponsable().getHijos());
-					Hibernate.initialize(servicio.getServicioResponsable().getUnidadesNormativas());
-					Hibernate.initialize(servicio.getServicioResponsable().getEdificios());
-					if (servicio.getServicioResponsable().getUnidadesNormativas() != null) {
-						for (UnidadNormativa n : servicio.getServicioResponsable().getUnidadesNormativas()) {
+				Hibernate.initialize(servicio.getOrganoInstructor());
+				if (servicio.getOrganoInstructor() != null) {
+					Hibernate.initialize(servicio.getOrganoInstructor().getHijos());
+					Hibernate.initialize(servicio.getOrganoInstructor().getUnidadesNormativas());
+					Hibernate.initialize(servicio.getOrganoInstructor().getEdificios());
+					if (servicio.getOrganoInstructor().getUnidadesNormativas() != null) {
+						for (UnidadNormativa n : servicio.getOrganoInstructor().getUnidadesNormativas()) {
 							Map<String, Traduccion> mapaTraduccions = n.getNormativa().getTraduccionMap();
 							Set<String> idiomes = mapaTraduccions.keySet();
 							for (Iterator<String> i = idiomes.iterator(); i.hasNext();) {
@@ -345,9 +347,9 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 					}
 				}
 				
-				Hibernate.initialize(servicio.getOrganoInstructor());
-				if (servicio.getOrganoInstructor() != null) {
-					Hibernate.initialize(servicio.getOrganoInstructor().getHijos());
+				Hibernate.initialize(servicio.getServicioResponsable());
+				if (servicio.getServicioResponsable() != null) {
+					Hibernate.initialize(servicio.getServicioResponsable().getHijos());
 				}
 
 				Hibernate.initialize(servicio.getHechosVitalesServicios());
@@ -414,14 +416,14 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
     			Hibernate.initialize(servicio.getMaterias());
     			Hibernate.initialize(servicio.getPublicosObjetivo());
     			Hibernate.initialize(servicio.getNormativas());
-    			Hibernate.initialize(servicio.getServicioResponsable());
+    			Hibernate.initialize(servicio.getOrganoInstructor());
 				
-    			if (servicio.getServicioResponsable() != null) {
-					Hibernate.initialize(servicio.getServicioResponsable().getHijos());
-					Hibernate.initialize(servicio.getServicioResponsable().getUnidadesNormativas());
-					Hibernate.initialize(servicio.getServicioResponsable().getEdificios());
-					if (servicio.getServicioResponsable().getUnidadesNormativas() != null) {
-						for (UnidadNormativa n : servicio.getServicioResponsable().getUnidadesNormativas()) {
+    			if (servicio.getOrganoInstructor() != null) {
+					Hibernate.initialize(servicio.getOrganoInstructor().getHijos());
+					Hibernate.initialize(servicio.getOrganoInstructor().getUnidadesNormativas());
+					Hibernate.initialize(servicio.getOrganoInstructor().getEdificios());
+					if (servicio.getOrganoInstructor().getUnidadesNormativas() != null) {
+						for (UnidadNormativa n : servicio.getOrganoInstructor().getUnidadesNormativas()) {
 							Map<String, Traduccion> mapaTraduccions = n.getNormativa().getTraduccionMap();
 							Set<String> idiomes = mapaTraduccions.keySet();
 							for (Iterator<String> i = idiomes.iterator(); i.hasNext();) {
@@ -434,9 +436,9 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 					}
 				}
 				
-				Hibernate.initialize(servicio.getOrganoInstructor());
-				if (servicio.getOrganoInstructor() != null) {
-					Hibernate.initialize(servicio.getOrganoInstructor().getHijos());
+				Hibernate.initialize(servicio.getServicioResponsable());
+				if (servicio.getServicioResponsable() != null) {
+					Hibernate.initialize(servicio.getServicioResponsable().getHijos());
 				}
     			
     			
@@ -520,6 +522,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Deprecated
 	public List buscarServicios(Map<String, Object> parametros, Map traduccion) {
 
 		Session session = getSession();
@@ -549,7 +552,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 				List serviciosAcceso = new ArrayList();
 				Usuario usuario = getUsuario(session);
 				for (int i = 0; i < servicios.size(); i++) {
-					Servicio servicio =  (Servicio)servicios.get(i);
+					Servicio servicio =  servicios.get(i);
 					if(tieneAcceso(usuario, servicio)){
 						serviciosAcceso.add(servicio);
 					}
@@ -572,6 +575,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Deprecated
 	public ResultadoBusqueda buscadorServicios(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu, String pagina, String resultats, int visible, String en_plazo, String telematico) {
 
 		Session session = getSession();
@@ -987,6 +991,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Deprecated
 	public List buscarServiciosMateria(Long id) {
 		Session session = getSession();
 		try {
@@ -1040,7 +1045,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 			addOperacion(session, servicio, Auditoria.BORRAR);
 			Historico historico = getHistorico( session, servicio );
 			( (HistoricoServicio) historico ).setServicio(null);
-			servicio.getServicioResponsable().removeServicio(servicio);
+			servicio.getOrganoInstructor().removeServicio(servicio);
 
 			if ( servicio instanceof ServicioRemoto ) { 
 
@@ -1082,6 +1087,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Deprecated
 	public List listarServiciosUA(Long id) {
 		Session session = getSession();
 		try {
@@ -1093,6 +1099,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 				Servicio servicio = (Servicio) iter.next();
 				Hibernate.initialize(servicio.getMaterias());
 				Hibernate.initialize(servicio.getServicioResponsable());
+				Hibernate.initialize(servicio.getOrganoInstructor());
 				Hibernate.initialize(servicio.getHechosVitalesServicios());
 				Hibernate.initialize(servicio.getPublicosObjetivo());
 				Hibernate.initialize(servicio.getNormativas());
@@ -1131,7 +1138,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 
 		for ( int i = 0 ; i < ua.getHijos().size() ; i++ ) {
 
-			UnidadAdministrativa uaHijo = (UnidadAdministrativa) ua.getHijos().get(i);
+			UnidadAdministrativa uaHijo = ua.getHijos().get(i);
 			result.addAll( serviciosPublicosRecursivosUA(uaHijo) );
 
 		}
@@ -1257,7 +1264,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 			List result = new ArrayList();
 			for ( int i = 0 ; i < hechoVital.getHechosVitalesServicios().size() ; i++ ) {
  
-				HechoVitalServicio hechoVitalServicio = (HechoVitalServicio) hechoVital.getHechosVitalesServicios().get(i);
+				HechoVitalServicio hechoVitalServicio = hechoVital.getHechosVitalesServicios().get(i);
 				Servicio proc = hechoVitalServicio.getServicio();
 				if ( publico(proc) )
 					result.add(proc);
@@ -1288,6 +1295,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Deprecated
 	public Servicio consultarServicio(Long id) {
 		Session session = getSession();
 		try {
@@ -1319,7 +1327,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 		String aux = "";
 
 		for (Iterator<String> iter1 = parametros.keySet().iterator(); iter1.hasNext();) {
-			String key = (String) iter1.next();
+			String key = iter1.next();
 			Object value = parametros.get(key);
 			if (!key.startsWith("ordre") && value != null) {
 				if (value instanceof String) {
@@ -1352,7 +1360,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 			traduccion.remove("idioma");
 		}
 		for (Iterator<String> iter2 = traduccion.keySet().iterator(); iter2.hasNext();) {
-			String key = (String) iter2.next();
+			String key = iter2.next();
 			Object value = traduccion.get(key);
 			if (value != null) {
 				if (value instanceof String) {
@@ -1508,6 +1516,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Deprecated
 	@SuppressWarnings("unchecked")
 	public List<Servicio> listarServiciosPublicosUAHVMateria(Long idUA, String[] codEstMat, String[] codEstHV) {
 		Session session = getSession();
@@ -1669,10 +1678,10 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 			final List<EnumIdiomas> idiomas = new ArrayList<EnumIdiomas>();
 			
 			final String nomUnidadAministrativa;
-			if (servicio.getServicioResponsable() == null) {
+			if (servicio.getOrganoInstructor() == null) {
 				nomUnidadAministrativa = "";
 			} else {
-				nomUnidadAministrativa = servicio.getServicioResponsable().getNombre();
+				nomUnidadAministrativa = servicio.getOrganoInstructor().getNombre();
 			}
 			
 			//Recorremos las traducciones
@@ -1856,9 +1865,10 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 			Normativa normativa = (Normativa) session.load(Normativa.class, id);
 			Hibernate.initialize(normativa.getServicios()); 
 			for (Iterator<Servicio> iter = normativa.getServicios().iterator(); iter.hasNext();) {
-				Servicio servicio = (Servicio) iter.next();
+				Servicio servicio = iter.next();
 				Hibernate.initialize(servicio.getMaterias());
 				Hibernate.initialize(servicio.getServicioResponsable());
+				Hibernate.initialize(servicio.getOrganoInstructor());
 				Hibernate.initialize(servicio.getHechosVitalesServicios());
 				Hibernate.initialize(servicio.getPublicosObjetivo());
 				Hibernate.initialize(servicio.getNormativas());

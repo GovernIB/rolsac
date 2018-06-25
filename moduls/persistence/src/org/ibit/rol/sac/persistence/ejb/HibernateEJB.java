@@ -511,7 +511,7 @@ public abstract class HibernateEJB implements SessionBean {
 	    }*/
 	
 	    for (Iterator<PerfilGestor> iterator = seccion.getPerfilsGestor().iterator(); iterator.hasNext();) {
-	        PerfilGestor perfilGestor = (PerfilGestor) iterator.next();
+	        PerfilGestor perfilGestor = iterator.next();
 	        if (tieneAcceso(usuario, perfilGestor, true)) {
 	            return true;
 	        }
@@ -533,7 +533,7 @@ public abstract class HibernateEJB implements SessionBean {
      */
     protected boolean tieneAcceso(Usuario usuario, Servicio servicio) {
         return (tieneAccesoValidable(usuario, servicio)
-                && tieneAcceso(usuario, servicio.getServicioResponsable(), false));
+                && tieneAcceso(usuario, servicio.getOrganoInstructor(), false));
     }
 
     /**
