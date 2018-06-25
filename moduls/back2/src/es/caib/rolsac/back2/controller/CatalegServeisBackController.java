@@ -1262,7 +1262,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
         
         Long servId = DelegateUtil.getServicioDelegate().grabarServicio(
     		servicio, 
-    		servicio.getServicioResponsable().getId()
+    		servicio.getOrganoInstructor().getId()
 		);
         
         return servId;

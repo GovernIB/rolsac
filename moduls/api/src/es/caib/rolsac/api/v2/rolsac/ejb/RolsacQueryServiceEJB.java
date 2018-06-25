@@ -727,7 +727,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 			if (servicio != null) {
 
-				if (estadoUA == null || servicio.getServicioResponsable().getValidacion() == Integer.parseInt(estadoUA)) {
+				if (estadoUA == null || servicio.getOrganoInstructor().getValidacion() == Integer.parseInt(estadoUA)) {
 
 					servicioDTO = (ServicioDTO)BasicUtils.entityToDTO(
 							ServicioDTO.class,

@@ -330,13 +330,13 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 					}
 				}
 
-				Hibernate.initialize(servicio.getServicioResponsable());
-				if (servicio.getServicioResponsable() != null) {
-					Hibernate.initialize(servicio.getServicioResponsable().getHijos());
-					Hibernate.initialize(servicio.getServicioResponsable().getUnidadesNormativas());
-					Hibernate.initialize(servicio.getServicioResponsable().getEdificios());
-					if (servicio.getServicioResponsable().getUnidadesNormativas() != null) {
-						for (UnidadNormativa n : servicio.getServicioResponsable().getUnidadesNormativas()) {
+				Hibernate.initialize(servicio.getOrganoInstructor());
+				if (servicio.getOrganoInstructor() != null) {
+					Hibernate.initialize(servicio.getOrganoInstructor().getHijos());
+					Hibernate.initialize(servicio.getOrganoInstructor().getUnidadesNormativas());
+					Hibernate.initialize(servicio.getOrganoInstructor().getEdificios());
+					if (servicio.getOrganoInstructor().getUnidadesNormativas() != null) {
+						for (UnidadNormativa n : servicio.getOrganoInstructor().getUnidadesNormativas()) {
 							Map<String, Traduccion> mapaTraduccions = n.getNormativa().getTraduccionMap();
 							Set<String> idiomes = mapaTraduccions.keySet();
 							for (Iterator<String> i = idiomes.iterator(); i.hasNext();) {
@@ -349,9 +349,9 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 					}
 				}
 				
-				Hibernate.initialize(servicio.getOrganoInstructor());
-				if (servicio.getOrganoInstructor() != null) {
-					Hibernate.initialize(servicio.getOrganoInstructor().getHijos());
+				Hibernate.initialize(servicio.getServicioResponsable());
+				if (servicio.getServicioResponsable() != null) {
+					Hibernate.initialize(servicio.getServicioResponsable().getHijos());
 				}
 
 				Hibernate.initialize(servicio.getHechosVitalesServicios());
@@ -418,14 +418,14 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
     			Hibernate.initialize(servicio.getMaterias());
     			Hibernate.initialize(servicio.getPublicosObjetivo());
     			Hibernate.initialize(servicio.getNormativas());
-    			Hibernate.initialize(servicio.getServicioResponsable());
+    			Hibernate.initialize(servicio.getOrganoInstructor());
 				
-    			if (servicio.getServicioResponsable() != null) {
-					Hibernate.initialize(servicio.getServicioResponsable().getHijos());
-					Hibernate.initialize(servicio.getServicioResponsable().getUnidadesNormativas());
-					Hibernate.initialize(servicio.getServicioResponsable().getEdificios());
-					if (servicio.getServicioResponsable().getUnidadesNormativas() != null) {
-						for (UnidadNormativa n : servicio.getServicioResponsable().getUnidadesNormativas()) {
+    			if (servicio.getOrganoInstructor() != null) {
+					Hibernate.initialize(servicio.getOrganoInstructor().getHijos());
+					Hibernate.initialize(servicio.getOrganoInstructor().getUnidadesNormativas());
+					Hibernate.initialize(servicio.getOrganoInstructor().getEdificios());
+					if (servicio.getOrganoInstructor().getUnidadesNormativas() != null) {
+						for (UnidadNormativa n : servicio.getOrganoInstructor().getUnidadesNormativas()) {
 							Map<String, Traduccion> mapaTraduccions = n.getNormativa().getTraduccionMap();
 							Set<String> idiomes = mapaTraduccions.keySet();
 							for (Iterator<String> i = idiomes.iterator(); i.hasNext();) {
@@ -438,9 +438,9 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 					}
 				}
 				
-				Hibernate.initialize(servicio.getOrganoInstructor());
-				if (servicio.getOrganoInstructor() != null) {
-					Hibernate.initialize(servicio.getOrganoInstructor().getHijos());
+				Hibernate.initialize(servicio.getServicioResponsable());
+				if (servicio.getServicioResponsable() != null) {
+					Hibernate.initialize(servicio.getServicioResponsable().getHijos());
 				}
     			
     			
@@ -1034,7 +1034,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 			addOperacion(session, servicio, Auditoria.BORRAR);
 			Historico historico = getHistorico( session, servicio );
 			( (HistoricoServicio) historico ).setServicio(null);
-			servicio.getServicioResponsable().removeServicio(servicio);
+			servicio.getOrganoInstructor().removeServicio(servicio);
 
 			if ( servicio instanceof ServicioRemoto ) { 
 
@@ -1088,6 +1088,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 				Servicio servicio = (Servicio) iter.next();
 				Hibernate.initialize(servicio.getMaterias());
 				Hibernate.initialize(servicio.getServicioResponsable());
+				Hibernate.initialize(servicio.getOrganoInstructor());
 				Hibernate.initialize(servicio.getHechosVitalesServicios());
 				Hibernate.initialize(servicio.getPublicosObjetivo());
 				Hibernate.initialize(servicio.getNormativas());
@@ -1666,10 +1667,10 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 			final List<EnumIdiomas> idiomas = new ArrayList<EnumIdiomas>();
 			
 			final String nomUnidadAministrativa;
-			if (servicio.getServicioResponsable() == null) {
+			if (servicio.getOrganoInstructor() == null) {
 				nomUnidadAministrativa = "";
 			} else {
-				nomUnidadAministrativa = servicio.getServicioResponsable().getNombre();
+				nomUnidadAministrativa = servicio.getOrganoInstructor().getNombre();
 			}
 			
 			//Recorremos las traducciones
@@ -1859,6 +1860,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 				Servicio servicio = iter.next();
 				Hibernate.initialize(servicio.getMaterias());
 				Hibernate.initialize(servicio.getServicioResponsable());
+				Hibernate.initialize(servicio.getOrganoInstructor());
 				Hibernate.initialize(servicio.getHechosVitalesServicios());
 				Hibernate.initialize(servicio.getPublicosObjetivo());
 				Hibernate.initialize(servicio.getNormativas());

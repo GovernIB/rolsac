@@ -295,10 +295,10 @@ public class IndexacionUtil {
 			if (servicio.getValidacion() != 1 ) {
 				return false;
 			}				
-			if (servicio.getServicioResponsable() == null) {
+			if (servicio.getOrganoInstructor() == null) {
 				return false;
 			}
-			if (servicio.getServicioResponsable().getValidacion() != 1 ) {
+			if (servicio.getOrganoInstructor().getValidacion() != 1 ) {
 				return false;
 			}
 			return true;

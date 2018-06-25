@@ -682,16 +682,16 @@ public class SiaUtils {
 	private static boolean isVisibleUA(Servicio servicio) {
 		
 		boolean visible = true;
-		if (servicio == null || servicio.getServicioResponsable() == null) {
+		if (servicio == null || servicio.getOrganoInstructor()== null) {
 			visible = false;
 		} else {
-			if (!servicio.getServicioResponsable().getValidacion().equals(Validacion.PUBLICA)) {
+			if (!servicio.getOrganoInstructor().getValidacion().equals(Validacion.PUBLICA)) {
 				
 				visible = false;
 				
 			} else {
 				//Recorremos sus predecesores
-		    	for(Object oua : servicio.getServicioResponsable().getPredecesores()) {
+		    	for(Object oua : servicio.getOrganoInstructor().getPredecesores()) {
 		    		final UnidadAdministrativa ua = (UnidadAdministrativa) oua;
 		    		if (!ua.getValidacion().equals(Validacion.PUBLICA)) {
 		    			visible = false;
@@ -818,16 +818,16 @@ public class SiaUtils {
 		
 		SiaUA siaUA;
 		try {
-			if (servicio == null || servicio.getServicioResponsable() == null) {
+			if (servicio == null || servicio.getOrganoInstructor() == null) {
 				siaUA = null;
 			} else {
 			
 				SiaPendienteProcesoDelegate siaPendienteProceso = DelegateUtil.getSiaPendienteProcesoDelegate();
-				siaUA = siaPendienteProceso.obtenerSiaUA(servicio.getServicioResponsable()); 
+				siaUA = siaPendienteProceso.obtenerSiaUA(servicio.getOrganoInstructor()); 
 				
 				if (siaUA == null) {
 					//Recorremos sus predecesores
-			    	for(final Object oua : servicio.getServicioResponsable().getPredecesores()) {
+			    	for(final Object oua : servicio.getOrganoInstructor().getPredecesores()) {
 			    		final UnidadAdministrativa ua = (UnidadAdministrativa) oua;
 			    		siaUA = siaPendienteProceso.obtenerSiaUA(ua); 
 			    		if (siaUA != null) {

@@ -74,6 +74,7 @@ public abstract class DocumentoServicioFacadeEJB extends HibernateEJB
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
+	@Override
 	public void ejbCreate() throws CreateException
 	{
         super.ejbCreate();
@@ -331,7 +332,7 @@ public abstract class DocumentoServicioFacadeEJB extends HibernateEJB
 			indexData.setFechaCaducidad(servicio.getFechaDespublicacion());
 			
 			//UA
-			PathUO pathUO = IndexacionUtil.calcularPathUO(servicio.getServicioResponsable());
+			PathUO pathUO = IndexacionUtil.calcularPathUO(servicio.getOrganoInstructor());
 			if (pathUO == null) {
 				return new SolrPendienteResultado(true, "No se puede indexar: no cuelga de UA visible");
 			}
@@ -430,7 +431,7 @@ public abstract class DocumentoServicioFacadeEJB extends HibernateEJB
 						}
 												
 						//UO
-						TraduccionUA traduccionUA = ((TraduccionUA) servicio.getServicioResponsable().getTraduccion(keyIdioma));
+						TraduccionUA traduccionUA = ((TraduccionUA) servicio.getOrganoInstructor().getTraduccion(keyIdioma));
 						if (traduccionUA != null && traduccionUA.getNombre() != null) {
 							textoOptional.append(" ");
 							textoOptional.append(traduccionUA.getNombre());							
