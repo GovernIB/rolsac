@@ -2119,12 +2119,12 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 				
 
 				if(!StringUtils.isEmpty(codigoUA)) {
-					where.append(" AND s.servicioResponsable.id = :codigoUA ");
+					where.append(" AND s.organoInstructor.id = :codigoUA ");
 					parametros.put("codigoUA", codigoUA);
 				}	
 				
 				if(!StringUtils.isEmpty(estadoUA)) {
-					where.append(" AND s.servicioResponsable.validacion = :estadoUA");
+					where.append(" AND s.organoInstructor.validacion = :estadoUA");
 					parametros.put("estadoUA", estadoUA);					
 				}
 				
