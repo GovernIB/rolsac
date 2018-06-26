@@ -182,7 +182,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 			}
 
 			UnidadAdministrativa unidad = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, idUA);
-			servicio.setServicioResponsable(unidad);
+			servicio.setOrganoInstructor(unidad);
 
 			//#399 Check valores SIA
 			checkValoresSIA(servicio);
@@ -441,10 +441,6 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 					Hibernate.initialize(servicio.getServicioResponsable().getHijos());
 				}
     			
-    			
-				if (servicio.getServicioResponsable() != null) {
-    			    Hibernate.initialize(servicio.getServicioResponsable().getHijos());
-    			}
 
     			Hibernate.initialize(servicio.getHechosVitalesServicios());
     			
@@ -604,7 +600,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 			String uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(idUA, uaFilles, uaMeves);
 
 			if (!StringUtils.isEmpty(uaQuery)) {
-			    uaQuery = " and servicio.unidadAdministrativa.id in (" + uaQuery + ")";
+			    uaQuery = " and servicio.organoInstructor.id in (" + uaQuery + ")";
 			}
 
 			String from = "from Servicio as servicio, ";
@@ -669,7 +665,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 					if ( StringUtils.isEmpty(uaQuery) ) { //Se está buscando en todas las unidades orgánicas            	
 						uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(null, true, true);
 						if ( !StringUtils.isEmpty(uaQuery) ) {        	
-							uaQuery = " and servicio.unidadAdministrativa.id in (" + uaQuery + ")";
+							uaQuery = " and servicio.organoInstructor.id in (" + uaQuery + ")";
 						} else {
 							//Esto significa que el usuario no tiene ninguna unidad administrativa configurada, y 
 							//no es system. Por lo que en realidad no hace falta ejecutar nada, sino más bien devolver
@@ -765,7 +761,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 				consulta = new StringBuilder("select new Servicio(servicio.id, trad.nombre, servicio.validacion, servicio.fechaActualizacion, servicio.fechaDespublicacion, servicio.fechaPublicacion, index(trad), servicio.nombreResponsable ) ");
 				consulta.append("from where");
 			}
-			where.append("and servicio.servicioResponsable.id in (:UA) ");
+			where.append("and servicio.organoInstructor.id in (:UA) ");
 			
 			if ( bc.getServicio() != null &&  bc.getServicio().getId() != null )
 				where.append(" and servicio.id = :id ");
@@ -1740,8 +1736,8 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 					}
 					
 					//UO
-					if (servicio.getServicioResponsable() != null && servicio.getServicioResponsable().getTraduccion(keyIdioma) != null) {
-						TraduccionUA unidadAdm = (TraduccionUA) servicio.getServicioResponsable().getTraduccion(keyIdioma);
+					if (servicio.getOrganoInstructor() != null && servicio.getOrganoInstructor().getTraduccion(keyIdioma) != null) {
+						TraduccionUA unidadAdm = (TraduccionUA) servicio.getOrganoInstructor().getTraduccion(keyIdioma);
 						if (unidadAdm != null) {
 							textoOptional.append(" ");
 							textoOptional.append(unidadAdm.getNombre());
@@ -1791,7 +1787,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 			indexData.setInterno(false);
 			
 			//UA
-			PathUO pathUO = IndexacionUtil.calcularPathUO(servicio.getServicioResponsable());
+			PathUO pathUO = IndexacionUtil.calcularPathUO(servicio.getOrganoInstructor());
 			if (pathUO == null) {
 				return new SolrPendienteResultado(true, "No se puede indexar: no cuelga de UA visible");
 			}
