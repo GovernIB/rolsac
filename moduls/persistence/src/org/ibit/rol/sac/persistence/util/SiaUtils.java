@@ -215,6 +215,8 @@ public class SiaUtils {
 		siaPendiente.setIdElemento(idElemento);
 		siaPendiente.setExiste(existe);
 		siaPendiente.setTipo(tipo);
+		final SiaUA siaUA = SiaUtils.obtenerSiaUA(servicio);
+		siaPendiente.setSiaUA(siaUA);
 		if (idSia != null && !idSia.isEmpty()) {
 			siaPendiente.setIdSia(Long.valueOf(idSia));
 		}

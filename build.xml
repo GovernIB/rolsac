@@ -776,7 +776,7 @@
 		<!-- ****** SI SE TIENEN PROBLEMAS al descargar la libreria y se usan versiones anteriores a la 1.8 de java puede ser necesario añadir "-Dhttps.protocols=TLSv1.2" como argumentos de la VM del JRE-->		
 		<artifact:remoteRepository id="github-governib-maven-repos" url="${mavencaib.url}" /> 
 		
-		<artifact:dependencies pathId="compile.classpath" filesetId="compile.fileset" >
+		<artifact:dependencies pathId="compile.classpath" filesetId="compile.fileset">
 			<localRepository path="${mvn.repository.path}" />
 			<!-- Repositorio remoto que se activará cuando se deploye solrapi.-->
 			<remoteRepository refid="github-governib-maven-repos" />
