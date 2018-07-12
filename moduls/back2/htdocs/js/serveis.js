@@ -118,7 +118,7 @@ $(document).ready(function() {
       "nombre",
       "objeto",
       "destinatarios",
-      "requisito",
+      "requisitos",
       "observaciones"
     ];
 
