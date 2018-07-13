@@ -108,7 +108,7 @@ $(document).ready(function() {
 	// datos traductor
 	CAMPOS_TRADUCTOR_SERVEI = [
       "item_nom_",
-	  "item_objecte_",
+	  "item_objeto_",
 	  "item_destinatarios_",
 	  "item_requisitos_",
 	  "item_observaciones_"
@@ -118,7 +118,7 @@ $(document).ready(function() {
       "nombre",
       "objeto",
       "destinatarios",
-      "requisito",
+      "requisitos",
       "observaciones"
     ];
 

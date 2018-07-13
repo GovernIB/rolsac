@@ -1340,18 +1340,18 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 	    if (StringUtils.isNotEmpty(request.getParameter("item_nom_" + idiomaOrigenTraductor))) {
 	        traduccioOrigen.setNombre(request.getParameter("item_nom_" + idiomaOrigenTraductor));
-	    }
+	    } 
 	    if (StringUtils.isNotEmpty(request.getParameter("item_objeto_" + idiomaOrigenTraductor))) {
 	        traduccioOrigen.setObjeto(request.getParameter("item_objeto_" + idiomaOrigenTraductor));
 	    }
-	    if (StringUtils.isNotEmpty(request.getParameter("item_destinataris_" + idiomaOrigenTraductor))) {
-	        traduccioOrigen.setDestinatarios(request.getParameter("item_destinataris_" + idiomaOrigenTraductor));
+	    if (StringUtils.isNotEmpty(request.getParameter("item_destinatarios_" + idiomaOrigenTraductor))) {
+	        traduccioOrigen.setDestinatarios(request.getParameter("item_destinatarios_" + idiomaOrigenTraductor));
 	    }
 	    if (StringUtils.isNotEmpty(request.getParameter("item_requisitos_" + idiomaOrigenTraductor))) {
 	        traduccioOrigen.setRequisitos(request.getParameter("item_requisitos_" + idiomaOrigenTraductor));
 	    }
-        if (StringUtils.isNotEmpty(request.getParameter("item_observacions_" + idiomaOrigenTraductor))) {
-            traduccioOrigen.setObservaciones(request.getParameter("item_observacions_" + idiomaOrigenTraductor));
+        if (StringUtils.isNotEmpty(request.getParameter("item_observaciones_" + idiomaOrigenTraductor))) {
+            traduccioOrigen.setObservaciones(request.getParameter("item_observaciones_" + idiomaOrigenTraductor));
         }
         return traduccioOrigen;
         
