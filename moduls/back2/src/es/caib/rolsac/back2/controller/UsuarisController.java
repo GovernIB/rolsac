@@ -332,7 +332,6 @@ public class UsuarisController extends PantallaBaseController {
 		
 	}
     
-    @SuppressWarnings("unchecked")
 	@RequestMapping(value = "/guardarUnidadesRelacionadas.do")
 	public @ResponseBody IdNomDTO guardarUnidadesRelacionadas(Long id, Long[] elementos, HttpServletRequest request) {
 		
@@ -343,12 +342,10 @@ public class UsuarisController extends PantallaBaseController {
 			UsuarioDelegate usuarioDelegate = DelegateUtil.getUsuarioDelegate();
 			Usuario usuario = usuarioDelegate.obtenerUsuario(id);
 									
-			// Procesamos los elementos actuales.
-			if ( elementos != null ) {
-				
-				UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
-				Set<UnidadAdministrativa> uasNuevas = new HashSet<UnidadAdministrativa>();
-								
+			UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+			Set<UnidadAdministrativa> uasNuevas = new HashSet<UnidadAdministrativa>();
+							
+			if (elementos != null) {
 				for ( int i = 0; i < elementos.length; i++ ) {
 					
 					if ( elementos[i] != null ) {
@@ -359,11 +356,9 @@ public class UsuarisController extends PantallaBaseController {
 					}
 					
 				}
-				
-				usuario.setUnidadesAdministrativas(uasNuevas);
-				
 			}
-						
+			
+			usuario.setUnidadesAdministrativas(uasNuevas);
 			usuarioDelegate.grabarUsuario(usuario);
 						
 			String ok = messageSource.getMessage("usuari.guardat.uas.correcte", null, request.getLocale());
