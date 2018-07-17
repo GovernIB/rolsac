@@ -382,7 +382,6 @@ public class UsuarisController extends PantallaBaseController {
 		
 	}
     
-    @SuppressWarnings("unchecked")
 	@RequestMapping(value = "/guardarPerfilsGestorRelacionats.do")
 	public @ResponseBody IdNomDTO guardarPerfilsGestorRelacionats(Long id, Long[] elementos, HttpServletRequest request) {
 		
@@ -392,12 +391,12 @@ public class UsuarisController extends PantallaBaseController {
 						
 			UsuarioDelegate usuarioDelegate = DelegateUtil.getUsuarioDelegate();
 			Usuario usuario = usuarioDelegate.obtenerUsuario(id);
+			Set<PerfilGestor> perfilesNuevos = new HashSet<PerfilGestor>();
 									
 			// Procesamos los elementos actuales.
 			if ( elementos != null ) {
 				
 				PerfilGestorDelegate perfilDelegate = DelegateUtil.getPerfilGestorDelegate();
-				Set<PerfilGestor> perfilesNuevos = new HashSet<PerfilGestor>();
 								
 				for ( int i = 0; i < elementos.length; i++ ) {
 					
@@ -410,10 +409,10 @@ public class UsuarisController extends PantallaBaseController {
 					
 				}
 				
-				usuario.setPerfilsGestor(perfilesNuevos);
 				
 			}
 						
+			usuario.setPerfilsGestor(perfilesNuevos);
 			usuarioDelegate.grabarUsuario(usuario);
 						
 			String ok = messageSource.getMessage("perfil.guardat.correcte", null, request.getLocale());
