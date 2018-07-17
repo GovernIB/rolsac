@@ -84,7 +84,12 @@
             test.unitario     : executa els tests unitaris
             doc               : genera la documentació de tots els mòduls
             
-            
+        	****** Tasques maven
+        	
+        	solrapiFromMVN 		: obtiene solrapi desde maven y lo incluye al proyecto
+        	mavenDeployROLSAC   : deploya el sac-api-client en el repositorio remoto
+        	mavenROLSAC         : instala sac-api-client con maven para que pueda ser utilizado por otros proyectos
+        	
             ****** Tasques de construccio :
             
             assembleROLSAC  : construeix el ear amb tots els components existents
@@ -775,11 +780,13 @@
 		    	    	
 		    <!-- deployar el sac-api-client -->
 			<artifact:deploy file="output/moduls/sac-api-client.jar">
-		    	    <remoteRepository refid="github-governib-maven-repos" />
+		    	    <remoteRepository refid="github-governib-maven-repos">
+		    	    	<authentication username="${mavencaib.username}" password="${mavencaib.password}"/>
+		    	    </remoteRepository>
 		    		<pom file="output/pom.xml" />
 		    </artifact:deploy>
 	</target>		
-		
+	
 	<!-- Para instalar solrapi de maven. -->
 	<target name="solrapiFromMVN" unless="compile.classpath" xmlns:artifact="urn:maven-artifact-ant" description="Copia las librerías solrapi y dependencias en la carpeta.">
 		<typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="urn:maven-artifact-ant"
