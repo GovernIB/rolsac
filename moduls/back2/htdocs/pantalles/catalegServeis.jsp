@@ -5,7 +5,7 @@
 
 <c:set var="rolAdmin"><rol:userIsAdmin/></c:set>
 
-<link rel="stylesheet" type="text/css" href="<c:url value="/css/cataleg_serveis.css"/>" media="screen" />
+<link rel="stylesheet" type="text/css" href="<c:url value="/css/cataleg_serveis.css?versio=${rolsac_einarevision}"/>" media="screen" />
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/modul_documents.css"/>" media="screen" />
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/modul_normativa.css"/>" media="screen" />
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/jquery-ui.css"/>" />
@@ -19,12 +19,10 @@
 <script type="text/javascript" src="<c:url value='/js/serveis.js?versio=${rolsac_einarevision}' />"></script>
 <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/lista_ajax.js'/>"></script>
-<!-- script type="text/javascript" src="<c:url value='/js/modul_documents_requerits.js'/>"></script -->
 <script type="text/javascript" src="<c:url value='/js/modul_documents.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_materies.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_public_objectiu.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/modul_normativa.js'/>"></script>
-<!--<script type="text/javascript" src="<c:url value='/js/modul_fetsVitals.js'/>"></script>-->
+<script type="text/javascript" src="<c:url value='/js/modul_normativa.js?versio=${rolsac_einarevision}'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_fetsVitals_serveis.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_auditories.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_estadistiques.js'/>"></script>
@@ -596,7 +594,7 @@
                                                 <label for="item_nom_<c:out value="${lang}" />"><spring:message code='camp.nomServei'/></label>
                                             </div>
                                             <div class="control">
-                                                <input id="item_nom_<c:out value="${lang}" />" name="item_nom_<c:out value="${lang}" />" type="text" class="nou" />
+                                                <input id="item_nom_<c:out value="${lang}" />" name="item_nom_<c:out value="${lang}" />" type="text" class="nou inputGris" />
                                             </div>
                                         </div>
                                         <div id="caja_item_clave_primaria" class="element t25p">
@@ -707,7 +705,7 @@
                               <div class="control">
                                   <input id="item_servei_responsable_id" name="item_servei_responsable_id" type="hidden" />
                                   <div class="campo t50p">
-                                      <input id="item_servei_responsable" name="item_servei_responsable" type="text" class="nou" readonly="readonly" />                                                
+                                      <input id="item_servei_responsable" name="item_servei_responsable" type="text" class="nou inputGris" readonly="readonly" />                                                
                                   </div>
                                   <div class="botones">
                                       <div class="btnCambiar boton btnGenerico">                        
@@ -730,7 +728,7 @@
                                     <label for="item_responsable_nombre"><spring:message code='camp.responsable.servei'/></label>
                                 </div>
                                 <div class="control">
-                                    <input id="item_responsable_nombre" name="item_responsable_nombre" type="text" class="nou" />
+                                    <input id="item_responsable_nombre" name="item_responsable_nombre" type="text" class="nou inputGris" />
                                 </div>
                             </div>                            
                         </div>                                               
@@ -740,7 +738,7 @@
                                     <label for="item_email"><spring:message code='serv.formulari.email'/></label>
                                 </div>
                                 <div class="control">                                   
-                                    <input id="item_email" name="item_email" type="text" />                                        
+                                    <input id="item_email" name="item_email" type="text" class="inputGris" />                                        
                                 </div>
                                 
                             </div>
@@ -749,7 +747,7 @@
                                     <label for="item_telefon"><spring:message code='serv.formulari.telefon'/></label>
                                 </div>
                                 <div class="control">                                   
-                                    <input id="item_telefon" name="item_telefon" type="text" />                                        
+                                    <input id="item_telefon" name="item_telefon" type="text" class="inputGris" />                                        
                                 </div>
                                 
                             </div>
@@ -808,7 +806,7 @@
                                     <label for="item_tramite_url"><spring:message code='serv.tramit.url'/></label>
                                 </div>
                                 <div class="control">
-                                    <input id="item_tramite_url" name="item_tramite_url" type="text" class="nou" />
+                                    <input id="item_tramite_url" name="item_tramite_url" type="text" class="nou inputGris" />
                                 </div>
                             </div>                            
                         </div>                                               
@@ -818,7 +816,7 @@
                                     <label for="item_tramite_id"><spring:message code='serv.tramit.id'/></label>
                                 </div>
                                 <div class="control">                                   
-                                    <input id="item_tramite_id" name="item_tramite_id" type="text" />                                        
+                                    <input id="item_tramite_id" name="item_tramite_id" type="text" class="inputGris" />                                        
                                 </div>
                                 
                             </div>
@@ -827,7 +825,7 @@
                                     <label for="item_tramite_version"><spring:message code='serv.tramit.versio'/></label>
                                 </div>
                                 <div class="control">                                   
-                                    <input id="item_tramite_version" name="item_tramite_version" type="text" />                                        
+                                    <input id="item_tramite_version" name="item_tramite_version" type="text" class="inputGris" />                                        
                                 </div>
                                 
                             </div>
@@ -1351,7 +1349,7 @@
 <div id="escriptori_normatives">
 
    <ul id="opcions_normativa" class="opcions">
-        <li class="opcio C actiu"><spring:message code='txt.gestiona'/></li>                                 
+        <li class="opcio C actiu"><spring:message code='normativa.gestiona.titulo'/></li>                                 
     </ul>
     
     <div id="resultats_normativa" class="escriptori_items_llistat">            
