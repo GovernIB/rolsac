@@ -5,7 +5,7 @@
 
 <c:set var="rolAdmin"><rol:userIsAdmin/></c:set>
 
-<link rel="stylesheet" type="text/css" href="<c:url value="/css/cataleg_procediments.css"/>" media="screen" />
+<link rel="stylesheet" type="text/css" href="<c:url value="/css/cataleg_procediments.css?versio=${rolsac_einarevision}"/>" media="screen" />
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/modul_documents.css"/>" media="screen" />
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/modul_normativa.css"/>" media="screen" />
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/modul_tramits.css"/>" media="screen" />
@@ -25,9 +25,8 @@
 <script type="text/javascript" src="<c:url value='/js/modul_documents.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_materies.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_public_objectiu.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/modul_normativa.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_normativa.js?versio=${rolsac_einarevision}'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_tramits.js?versio=${rolsac_einarevision}'/>"></script>
-<!--<script type="text/javascript" src="<c:url value='/js/modul_fetsVitals.js'/>"></script>-->
 <script type="text/javascript" src="<c:url value='/js/modul_fetsVitals_procediments.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_taxes_tramits.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_formularis_tramits.js'/>"></script>
@@ -916,7 +915,7 @@
                                                 <label for="item_nom_<c:out value="${lang}" />"><spring:message code='camp.nomProcediment'/></label>
                                             </div>
                                             <div class="control">
-                                                <input id="item_nom_<c:out value="${lang}" />" name="item_nom_<c:out value="${lang}" />" type="text" class="nou" />
+                                                <input id="item_nom_<c:out value="${lang}" />" name="item_nom_<c:out value="${lang}" />" type="text" class="nou inputGris" />
                                             </div>
                                         </div>
                                         <div id="caja_item_clave_primaria" class="element t25p">
@@ -1129,7 +1128,7 @@
                               <div class="control">
                                   <input id="item_servei_responsable_id" name="item_servei_responsable_id" type="hidden" />
                                   <div class="campo">
-                                      <input id="item_servei_responsable" name="item_servei_responsable" type="text" class="nou" readonly="readonly" />                                                
+                                      <input id="item_servei_responsable" name="item_servei_responsable" type="text" class="nou inputGris" readonly="readonly" />                                                
                                   </div>
                                   <div class="botones">
                                       <div class="btnCambiar boton btnGenerico">                        
@@ -1152,7 +1151,7 @@
                                     <label for="item_responsable"><spring:message code='camp.responsable.procediment'/></label>
                                 </div>
                                 <div class="control">
-                                    <input id="item_responsable" name="item_responsable" type="text" class="nou" />
+                                    <input id="item_responsable" name="item_responsable" type="text" class="nou inputGris" />
                                 </div>
                             </div>                            
                         </div>                                               
@@ -1162,7 +1161,7 @@
                                     <label for="item_notes"><spring:message code='proc.formulari.email'/></label>
                                 </div>
                                 <div class="control">                                   
-                                    <input id="item_notes" name="item_notes" type="text" />                                        
+                                    <input id="item_notes" name="item_notes" type="text" class="inputGris" />
                                 </div>
                                 
                             </div>
@@ -1725,7 +1724,7 @@
 <div id="escriptori_normatives">
 
    <ul id="opcions_normativa" class="opcions">
-        <li class="opcio C actiu"><spring:message code='txt.gestiona'/></li>                                 
+        <li class="opcio C actiu"><spring:message code='normativa.gestiona.titulo'/></li>                                 
     </ul>
     
     <div id="resultats_normativa" class="escriptori_items_llistat firefoxAlturaMinima">            

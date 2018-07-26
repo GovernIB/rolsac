@@ -66,3 +66,6 @@ div.llistat div.tbody div.servei {
 #escriptori_detall .organoCompetente .botones .btnCambiar, #escriptori_detall .organoResponsable .botones .btnCambiar{
     margin-right: 17px;
 }
+.inputGris {
+	color: #666 !important;	
+}

@@ -19,7 +19,11 @@ $(document).ready(function() {
 
 	// Evento para el botón de volver al detalle
 	jQuery("#btnVolver_normatives").bind("click", function() { EscriptoriNormativa.torna(); });	
-	jQuery("#btnGuardar_normatives").bind("click", function() { EscriptoriNormativa.finalizar(); });
+	jQuery("#btnGuardar_normatives").bind("click", function() { 
+		if (this.parentNode.className.indexOf("off") == -1) {
+			EscriptoriNormativa.finalizar();	
+		}
+	});
 	
 });
 

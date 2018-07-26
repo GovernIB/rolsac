@@ -41,11 +41,13 @@ $(document).ready(function() {
 	
 	jQuery(".lista-simple-normativas").click(function() {
 		
-		var elements = $('#escriptori_normatives .seleccionats').find("li");
-		var id = $('#item_id').val();
-		var url = $(this).attr('action');
-		
-		ListaSimpleNormativas.guardar(elements, url, id);
+		if (this.parentNode.className.indexOf("off") == -1) {
+			var elements = $('#escriptori_normatives .seleccionats').find("li");
+			var id = $('#item_id').val();
+			var url = $(this).attr('action');
+			
+			ListaSimpleNormativas.guardar(elements, url, id);
+		}
 		
 	});
 	
