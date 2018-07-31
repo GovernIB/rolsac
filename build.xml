@@ -779,9 +779,13 @@
 	</target>
 	
 	<!-- Deploya la librería en maven. -->
-	<target name="mavenDeployROLSAC"  if="isMavenDeploy">
-		<echo>Copiamos sac-api-client y pom.xml</echo>
-		<copy file="output/moduls/sac-api-client.jar" tofile="target/sac-api-client-${rolsac.version.tag}.jar" overwrite="true" />
+	<target name="mavenDeployROLSAC"  if="isMavenDeploy" >
+		<echo>Copiamos sac-api-client y pom.xml</echo>		
+		<unjar src="output/moduls/sac-api-client.jar" dest="target/classes/">
+		  <patternset>
+		    <include name="es/**"/>
+		  </patternset>		  
+		</unjar>
 		<copy file="pom.ori.xml" tofile="pom.xml" overwrite="true" />
 	    <replace file="pom.xml" token="ROLSAC_VERSION"  value="${rolsac.version.tag}" />
 		<replace file="pom.xml" token="ROLSAC_GROUPID"  value="${rolsac.groupId}" />
@@ -791,8 +795,8 @@
 		<artifact:mvn  pom="pom.xml" mavenHome="${mvn.installation.path}">
 			<arg value="deploy" />
 			<arg value="-Dmaven.javadoc.skip=true -Dhttps.protocols=TLSv1.2" />
-		</artifact:mvn> 
-	</target>		
+		</artifact:mvn>	
+	</target>	
 	
 	<!-- Para instalar solrapi de maven. -->
 	<target name="solrapiFromMVN" unless="compile.classpath" xmlns:artifact="urn:maven-artifact-ant" description="Copia las librerías solrapi y dependencias en la carpeta.">
