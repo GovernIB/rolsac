@@ -29,6 +29,8 @@
     <property name="projecte.name.rolsac" value="rolsac"/>
 	<property name="etc.approlsac" value="${etc}/jboss-${jboss.version}/approlsac" />
     <property name="project.author" value="UTE" />
+	<property name="target.dir" location="${home}/target"/>
+	<property name="targetouput.dir" location="${target.dir}/output"/>
     
     <property environment="env"/>
     
@@ -128,6 +130,8 @@
     <target name="clean" description="Destruye los directorios de trabajo">
         <ant dir="moduls/api" target="clean" inheritall="false"/>
         <delete dir="${output.dir}" quiet="yes"/>
+    	<delete dir="${target.dir}" quiet="yes"/>
+    	<delete file="pom.xml" quiet="yes"/>
     </target>
     
 	<target name="generate.properties" description="Genera el archivo de propiedades del build">
@@ -180,6 +184,8 @@
         <mkdir dir="${product.dir}"/>
         <mkdir dir="${moduls.dir}"/>
         <mkdir dir="${doc.dir}"/>
+    	<mkdir dir="${target.dir}"/>
+    	<mkdir dir="${targetouput.dir}"/>    	
     </target>
     
     
@@ -774,17 +780,18 @@
 	
 	<!-- Deploya la librería en maven. -->
 	<target name="mavenDeployROLSAC"  if="isMavenDeploy">
-	    	<artifact:pom id="tmp.pom" groupid="${rolsac.groupId}" artifactid="${rolsac.artifactId}" version="${rolsac.version.tag}" packaging="${rolsac.packaging}" name="${rolsac.name}" />
-	    	<artifact:writepom pomRefId="tmp.pom" file="output/pom.xml" />
-	    	<artifact:remoteRepository id="github-governib-maven-repos" url="${mavencaib.url}" /> 
+		<echo>Copiamos sac-api-client y pom.xml</echo>
+		<copy file="output/moduls/sac-api-client.jar" tofile="target/sac-api-client-${rolsac.version.tag}.jar" overwrite="true" />
+		<copy file="pom.ori.xml" tofile="pom.xml" overwrite="true" />
+	    <replace file="pom.xml" token="ROLSAC_VERSION"  value="${rolsac.version.tag}" />
+		<replace file="pom.xml" token="ROLSAC_GROUPID"  value="${rolsac.groupId}" />
+		<replace file="pom.xml" token="ROLSAC_ARTIFACT"  value="${rolsac.artifactId}" />
 		    	    	
-		    <!-- deployar el sac-api-client -->
-			<artifact:deploy file="output/moduls/sac-api-client.jar">
-		    	    <remoteRepository refid="github-governib-maven-repos">
-		    	    	<authentication username="${mavencaib.username}" password="${mavencaib.password}"/>
-		    	    </remoteRepository>
-		    		<pom file="output/pom.xml" />
-		    </artifact:deploy>
+		<echo>Comenzamos a realizar el deploy</echo>
+		<artifact:mvn  pom="pom.xml" mavenHome="${mvn.installation.path}">
+			<arg value="deploy" />
+			<arg value="-Dmaven.javadoc.skip=true -Dhttps.protocols=TLSv1.2" />
+		</artifact:mvn> 
 	</target>		
 	
 	<!-- Para instalar solrapi de maven. -->

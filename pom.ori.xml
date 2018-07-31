@@ -1,0 +1,112 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>ROLSAC_GROUPID</groupId>
+  	<artifactId>ROLSAC_ARTIFACT</artifactId>
+	<version>ROLSAC_VERSION</version>
+	<packaging>jar</packaging>
+
+	<name>SAC API CLIENT</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	
+	
+	<repositories>
+		<repository>
+		   <id>github-governib-maven-repos</id>
+		   <name>GitHub GovernIB Maven Repository</name>
+		   <url>http://GovernIB.github.io/maven/maven/</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+	
+		<dependency>
+		    <groupId>org.apache.maven</groupId>
+		    <artifactId>maven-settings</artifactId>
+		    <version>2.2.1</version>
+		</dependency>
+	</dependencies>
+	<build>
+
+		<plugins>
+		
+			<!-- download source code in Eclipse, best practice -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.9</version>
+				<configuration>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>false</downloadJavadocs>
+				</configuration>
+			</plugin>
+
+			<!-- Set a JDK compiler level -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+
+			
+			<!-- DO NOT include log4j.properties file in your Jar <plugin> <groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId> <version>2.3.2</version> <configuration>
+				<excludes> <exclude>**/log4j.properties</exclude> </excludes> </configuration>
+				</plugin> -->
+
+			<!--  Lo siguiente es para hacer un deploy del proyecto.  -->
+			<plugin>
+		        <groupId>com.github.github</groupId>
+		        <artifactId>site-maven-plugin</artifactId>
+		        <version>0.12</version> 
+		        <configuration>
+		          <!-- git commit message -->
+		          <message>Maven artifacts for ${project.version}</message> 
+			 <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory> 
+		          <noJekyll>true</noJekyll>   
+		          <!-- remote branch name -->
+		          <branch>refs/heads/gh-pages</branch> 
+		          <includes>
+		            <include>**/*</include>
+		          </includes>
+		          <path>maven</path>
+		          <!-- github repo name -->
+		          <repositoryName>maven</repositoryName>      
+		          <!-- github username or organization  -->
+		          <repositoryOwner>GovernIB</repositoryOwner>    
+		          <server>github_governib_maven</server>
+		          <merge>true</merge>
+		          <dryRun>false</dryRun>
+		         <!-- <file>output/moduls/sac-api-client.jar</file>-->
+		        </configuration>
+		        <executions>
+		          <execution>
+		            <goals>
+		              <goal>site</goal>
+		            </goals>
+		            <phase>deploy</phase>
+		          </execution>
+		        </executions>
+		   </plugin>
+		
+	 </plugins>
+
+	</build>
+	<distributionManagement>
+	    <repository>
+	      <id>github_governib_maven</id>
+	      <name>GitHub GovernIB Maven Repository</name>
+	      <url>file://${project.build.directory}/mvn-repo</url>
+	    </repository>
+	  </distributionManagement>
+		
+</project>
