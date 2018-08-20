@@ -792,9 +792,10 @@
 		<replace file="pom.xml" token="ROLSAC_ARTIFACT"  value="${rolsac.artifactId}" />
 		    	    	
 		<echo>Comenzamos a realizar el deploy</echo>
-		<artifact:mvn  pom="pom.xml" mavenHome="${mvn.installation.path}">
+		<artifact:mvn  pom="pom.xml" mavenHome="${mvn.installation.path}" fork="true" > 
 			<arg value="deploy" />
-			<arg value="-Dmaven.javadoc.skip=true -Dhttps.protocols=TLSv1.2" />
+			<arg value="-Dmaven.javadoc.skip=true" />
+			<jvmarg value="-Dhttps.protocols=TLSv1.2"></jvmarg>
 		</artifact:mvn>	
 	</target>	
 	
