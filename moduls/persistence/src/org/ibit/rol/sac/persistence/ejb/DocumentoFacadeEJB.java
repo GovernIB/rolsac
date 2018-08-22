@@ -441,7 +441,23 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 	
     }
     
-    
+    /**
+	 * Metodo para indexar un solrPendiente.
+	 * @param solrPendiente
+	 * @param solrIndexer
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente) {
+		final EnumCategoria categoria = EnumCategoria.fromString(solrPendiente.getTipo()); 
+		if (EnumCategoria.ROLSAC_FICHA_DOCUMENTO == categoria) {
+			return indexarSolrFichaDoc(solrIndexer, solrPendiente.getIdElemento(), EnumCategoria.ROLSAC_FICHA_DOCUMENTO);
+		} else if(EnumCategoria.ROLSAC_PROCEDIMIENTO_DOCUMENTO == categoria) {
+			return indexarSolrProcedimientoDoc(solrIndexer, solrPendiente.getIdElemento(), EnumCategoria.ROLSAC_PROCEDIMIENTO_DOCUMENTO);
+		} else {
+			return null;
+		}
+	}
 	
     /**
 	 * Metodo para indexar un solrPendiente.
