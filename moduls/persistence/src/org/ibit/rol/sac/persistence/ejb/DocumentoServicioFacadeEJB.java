@@ -273,7 +273,6 @@ public abstract class DocumentoServicioFacadeEJB extends HibernateEJB
 
 	}
 	
-	
 	/**
 	 * Metodo para indexar un solrPendiente.
 	 * 
@@ -448,7 +447,7 @@ public abstract class DocumentoServicioFacadeEJB extends HibernateEJB
 						}
 						
 						// Urls
-				    	urlsPadres.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+idPubObjetivo+"/"+nombrePubObjetivo+"/tramites/tramite/"+servicio.getId());
+				    	urlsPadres.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+idPubObjetivo+"/"+nombrePubObjetivo+"/tramites/servicio/"+servicio.getId());
 				    	urls.addIdioma(enumIdioma, "govern/rest/arxiu/" + traduccion.getArchivo().getId());
 				    	
 				    	//Seteamos datos multidioma.
@@ -462,6 +461,8 @@ public abstract class DocumentoServicioFacadeEJB extends HibernateEJB
 						indexData.setSearchTextOptional(searchTextOptional);
 						indexData.setFileContent(traduccion.getArchivo().getDatos());
 						indexData.setExtension(extension);
+						
+						indexData.setFamiliaId("none");
 						solrIndexer.indexarFichero(indexData);
 						indexacion = true;	
 						

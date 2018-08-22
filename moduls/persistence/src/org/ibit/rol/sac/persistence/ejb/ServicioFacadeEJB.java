@@ -1622,6 +1622,8 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 		
 		return servicio;
 	}
+
+	
 	
 	/**
 	 * Metodo para indexar un solrPendiente.
@@ -1742,7 +1744,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 						}
 					}
 			    	searchTextOptional.addIdioma(enumIdioma, traduccion.getObjeto() +" " +traduccion.getObservaciones() + " " + textoOptional.toString());
-			    	urls.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+idPubObjetivo+"/"+nombrePubObjetivo+"/tramites/tramite/"+servicio.getId());
+			    	urls.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+idPubObjetivo+"/"+nombrePubObjetivo+"/tramites/servicio/"+servicio.getId());
 				}
 			}
 			
@@ -1785,6 +1787,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 			}
 			indexData.getUos().add(pathUO);
 			
+			indexData.setFamiliaId("none");
 			solrIndexer.indexarContenido(indexData);
 			return new SolrPendienteResultado(true);
 		} catch(Exception exception) {
@@ -1809,7 +1812,8 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 			return new SolrPendienteResultado(false, ExceptionUtils.getStackTrace(exception));
 		}
 	}
-
+	
+	
 	/**
 	 *	Devuelve una lista con los ids de los servicios
 	 *
