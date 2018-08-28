@@ -1283,6 +1283,12 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			final MultilangLiteral searchTextOptional = new MultilangLiteral();
 			final List<EnumIdiomas> idiomas = new ArrayList<EnumIdiomas>();
 			
+			String urlCAT = null;
+			if (normativa.getTraduccion(idioma_per_defecte) != null) {
+				final TraduccionNormativa traduccion = (TraduccionNormativa)traducciones.get(idioma_per_defecte);
+				urlCAT = traduccion.getEnlace();
+			}
+			
 			//Recorremos las traducciones
 			for (String keyIdioma : normativa.getTraduccionMap().keySet()) {
 				final TraduccionNormativa traduccion = (TraduccionNormativa)traducciones.get(keyIdioma);
@@ -1313,7 +1319,12 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			    	textoOptional.append(IndexacionUtil.calcularPathTextUO(UA, keyIdioma));
 			    	
 					searchTextOptional.addIdioma(enumIdioma, textoOptional.toString());
-					urls.addIdioma(enumIdioma, traduccion.getEnlace());
+					if (traduccion.getEnlace() != null && !traduccion.getEnlace().isEmpty()) {
+						urls.addIdioma(enumIdioma, traduccion.getEnlace());
+					} else {
+						//En caso de url vacio, cogemos la de catalan.
+						urls.addIdioma(enumIdioma, urlCAT);
+					}
 			    	
 				}
 		    	
