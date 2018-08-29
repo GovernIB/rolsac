@@ -1049,7 +1049,9 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 							Hibernate.initialize(trad.getArchivo());
 						}
 					}
+					Hibernate.initialize(documentTramit.getTramit().getProcedimiento().getTramites());
 				}
+				
 			} catch (HibernateException he) {
 				log.error("Error obteniendo document tramite según archivo con id " + idDocumentTramit, he);
 			} finally {
