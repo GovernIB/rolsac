@@ -5,21 +5,16 @@ import java.util.List;
 
 import javax.ejb.CreateException;
 
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 
 import es.caib.rolsac.api.v2.document.DocumentCriteria;
-import es.caib.rolsac.api.v2.document.DocumentDTO;
 import es.caib.rolsac.api.v2.documentoServicio.DocumentoServicioCriteria;
+import es.caib.rolsac.api.v2.documentoServicio.DocumentoServicioDTO;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalDTO;
 import es.caib.rolsac.api.v2.fetVital.FetVitalServicioCriteria;
@@ -32,12 +27,16 @@ import es.caib.rolsac.api.v2.materia.MateriaDTO;
 import es.caib.rolsac.api.v2.normativa.NormativaCriteria;
 import es.caib.rolsac.api.v2.normativa.NormativaDTO;
 import es.caib.rolsac.api.v2.normativa.co.NormativaByServicioCriteria;
-import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.query.FromClause;
 import es.caib.rolsac.api.v2.query.QueryBuilder;
 import es.caib.rolsac.api.v2.query.QueryBuilderException;
+import es.caib.rolsac.api.v2.rolsac.ejb.RolsacQueryServiceEJB;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
 
 /**
  * SessionBean para consultas de servicios.
@@ -287,7 +286,7 @@ public class ServicioQueryServiceEJB extends HibernateEJB {
             
             session = getSession();
             Query query = qb.createQuery(session);
-            List<Normativa> normativasResult = (List<Normativa>) query.list();
+            List<Normativa> normativasResult = query.list();
 
             NormativaDTO dto;
             for (Normativa normativa : normativasResult) {
@@ -338,7 +337,7 @@ public class ServicioQueryServiceEJB extends HibernateEJB {
 
             session = getSession();
             Query query = qb.createQuery(session);
-            List<Materia> materiesResult = (List<Materia>) query.list();
+            List<Materia> materiesResult = query.list();
 
             for (Materia materia : materiesResult) {
                 materiesDTOList.add((MateriaDTO) BasicUtils.entityToDTO(MateriaDTO.class,  materia, materiaCriteria.getIdioma()));
@@ -388,7 +387,7 @@ public class ServicioQueryServiceEJB extends HibernateEJB {
 
             session = getSession();
             Query query = qb.createQuery(session);
-            List<HechoVital> fetsVitalsResult = (List<HechoVital>) query.list();
+            List<HechoVital> fetsVitalsResult = query.list();
 
             for (HechoVital fetVital : fetsVitalsResult) {
                 fetsVitalsDTOList.add((FetVitalDTO) BasicUtils.entityToDTO(FetVitalDTO.class,  fetVital, fetVitalCriteria.getIdioma()));
@@ -416,12 +415,12 @@ public class ServicioQueryServiceEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
     @SuppressWarnings("unchecked")
-    public List<DocumentDTO> llistarDocuments(long id, DocumentoServicioCriteria documentoServicioCriteria) {
-        List<DocumentDTO> documentsDTOList = new ArrayList<DocumentDTO>();
+    public List<DocumentoServicioDTO> llistarDocuments(long id, DocumentoServicioCriteria documentoServicioCriteria) {
+        List<DocumentoServicioDTO> documentsDTOList = new ArrayList<DocumentoServicioDTO>();
         List<CriteriaObject> criteris;
         Session session = null;
 
-        try {            
+   /*     try {            
             criteris = BasicUtils.parseCriterias(DocumentoServicioCriteria.class, HQL_DOCUMENTOS_ALIAS, HQL_TRADUCCIONES_ALIAS, documentoServicioCriteria);
             List<FromClause> entities = new ArrayList<FromClause>();
             entities.add(new FromClause(HQL_SERVICIO_CLASS, HQL_SERVICIO_ALIAS));
@@ -436,9 +435,9 @@ public class ServicioQueryServiceEJB extends HibernateEJB {
 
             session = getSession();
             Query query = qb.createQuery(session);
-            List<Documento> documentosResult = (List<Documento>) query.list();
-            for (Documento document : documentosResult) {
-                documentsDTOList.add((DocumentDTO) BasicUtils.entityToDTO(DocumentDTO.class,  document, documentoServicioCriteria.getIdioma()));
+            List<DocumentoServicio> documentosResult = query.list();
+            for (DocumentoServicio document : documentosResult) {
+                documentsDTOList.add((DocumentoServicioDTO) BasicUtils.entityToDTO(DocumentoServicioDTO.class,  document, documentoServicioCriteria.getIdioma()));
             }
         } catch (HibernateException e) {
             log.error(e);
@@ -448,9 +447,13 @@ public class ServicioQueryServiceEJB extends HibernateEJB {
             log.error(e);
         } finally {
             close(session);
-        }
+        }*/
+        
+        
+        RolsacQueryServiceEJB rolsacEJB = new RolsacQueryServiceEJB();
+        return rolsacEJB.llistarDocumentoServicio(documentoServicioCriteria);
 
-        return documentsDTOList;
+      //  return documentsDTOList;
     }
     
     /**
@@ -484,7 +487,7 @@ public class ServicioQueryServiceEJB extends HibernateEJB {
 
             session = getSession();
             Query query = qb.createQuery(session);
-            List<PublicoObjetivo> poResult = (List<PublicoObjetivo>) query.list();
+            List<PublicoObjetivo> poResult = query.list();
 
             for (PublicoObjetivo po : poResult) {
                 poDTOList.add((PublicObjectiuDTO) BasicUtils.entityToDTO(PublicObjectiuDTO.class,  po, poCriteria.getIdioma()));

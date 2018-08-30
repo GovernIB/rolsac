@@ -16,6 +16,8 @@ import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitDTO;
 import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaCriteria;
 import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaDTO;
+import es.caib.rolsac.api.v2.documentoServicio.DocumentoServicioCriteria;
+import es.caib.rolsac.api.v2.documentoServicio.DocumentoServicioDTO;
 import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiDTO;
 import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
@@ -56,13 +58,13 @@ import es.caib.rolsac.api.v2.personal.PersonalCriteria;
 import es.caib.rolsac.api.v2.personal.PersonalDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
-import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
-import es.caib.rolsac.api.v2.servicio.ServicioDTO;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.rolsac.RolsacQueryServiceStrategy;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
 import es.caib.rolsac.api.v2.silencio.SilencioDTO;
 import es.caib.rolsac.api.v2.taxa.TaxaCriteria;
 import es.caib.rolsac.api.v2.taxa.TaxaDTO;
@@ -210,6 +212,15 @@ public class RolsacQueryServiceEJBStrategy implements RolsacQueryServiceStrategy
             throw new StrategyException(e);
         }
     }
+    
+    
+    public List<DocumentoServicioDTO> llistarDocumentoServicio(DocumentoServicioCriteria documentoServicioCriteria) throws StrategyException {
+    	try {
+	       return rolsacQueryServiceDelegate.llistarDocumentoServicio(documentoServicioCriteria);
+	   } catch (DelegateException e) {
+	       throw new StrategyException(e);
+	   }
+	}
 
     public EdificiDTO obtenirEdifici(EdificiCriteria edificiCriteria) throws StrategyException {
         try {

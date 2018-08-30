@@ -3,8 +3,6 @@ package es.caib.rolsac.api.v2.servicio.ejb;
 import java.rmi.RemoteException;
 import java.util.List;
 
-import es.caib.rolsac.api.v2.document.DocumentCriteria;
-import es.caib.rolsac.api.v2.document.DocumentDTO;
 import es.caib.rolsac.api.v2.documentoServicio.DocumentoServicioCriteria;
 import es.caib.rolsac.api.v2.documentoServicio.DocumentoServicioDTO;
 import es.caib.rolsac.api.v2.exception.DelegateException;
@@ -20,8 +18,6 @@ import es.caib.rolsac.api.v2.normativa.NormativaQueryService.TIPUS_NORMATIVA;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.servicio.ejb.intf.ServicioQueryServiceEJBRemote;
-import es.caib.rolsac.api.v2.tramit.TramitCriteria;
-import es.caib.rolsac.api.v2.tramit.TramitDTO;
 
 public class ServicioQueryServiceDelegate {
 

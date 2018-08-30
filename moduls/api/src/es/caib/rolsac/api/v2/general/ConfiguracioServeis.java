@@ -13,6 +13,7 @@ public final class ConfiguracioServeis {
 	public static final String NOM_SERVEI_CATALEG_DOCUMENTS = "CatalegDocumentsWS";
 	public static final String NOM_SERVEI_DOCUMENT_TRAMIT = "DocumentTramitWS";
 	public static final String NOM_SERVEI_DOCUMENTO_NORMATIVA = "DocumentoNormativaWS";
+	public static final String NOM_SERVEI_DOCUMENTO_SERVICIO = "DocumentoServicioWS";
 	public static final String NOM_SERVEI_DOCUMENT = "DocumentWS";
 	public static final String NOM_SERVEI_EDIFICI = "EdificiWS";
 	public static final String NOM_SERVEI_ENLLAC = "EnllacWS";

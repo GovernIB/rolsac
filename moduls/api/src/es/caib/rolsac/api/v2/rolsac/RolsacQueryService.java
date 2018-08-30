@@ -16,6 +16,8 @@ import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitQueryServiceAdapter;
 import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaCriteria;
 import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaQueryServiceAdapter;
+import es.caib.rolsac.api.v2.documentoServicio.DocumentoServicioCriteria;
+import es.caib.rolsac.api.v2.documentoServicio.DocumentoServicioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiQueryServiceAdapter;
 import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
@@ -55,12 +57,12 @@ import es.caib.rolsac.api.v2.personal.PersonalCriteria;
 import es.caib.rolsac.api.v2.personal.PersonalQueryServiceAdapter;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
-import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
-import es.caib.rolsac.api.v2.servicio.ServicioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuQueryServiceAdapter;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioQueryServiceAdapter;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.silencio.SilencioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.taxa.TaxaCriteria;
 import es.caib.rolsac.api.v2.taxa.TaxaQueryServiceAdapter;
@@ -104,6 +106,8 @@ public interface RolsacQueryService {
     List<DocumentTramitQueryServiceAdapter> llistarDocumentTramit(DocumentTramitCriteria documentTramitCriteria) throws QueryServiceException;
 
     List<DocumentoNormativaQueryServiceAdapter> llistarDocumentoNormativa(DocumentoNormativaCriteria documentoNormativaCriteria) throws QueryServiceException;
+    
+    List<DocumentoServicioQueryServiceAdapter> llistarDocumentoServicio(DocumentoServicioCriteria documentoServicioCriteria) throws QueryServiceException;
     
     EdificiQueryServiceAdapter obtenirEdifici(EdificiCriteria edificiTramit) throws QueryServiceException;
 

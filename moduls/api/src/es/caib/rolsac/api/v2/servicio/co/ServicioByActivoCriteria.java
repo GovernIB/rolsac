@@ -54,8 +54,8 @@ public class ServicioByActivoCriteria implements CriteriaObject {
         qb.addRestriction(new Restriction(alias + "validacion", OPERATION.EQ, Validacion.PUBLICA));
 
         List<Restriction> restrictions = new ArrayList<Restriction>(2);
-        restrictions.add(new Restriction(LOGIC.AND, alias + "fechaCaducidad", OPERATION.GE, PeriodoUtil.getNow()));
-        restrictions.add(new Restriction(LOGIC.OR, alias + "fechaCaducidad", OPERATION.NULL));
+        restrictions.add(new Restriction(LOGIC.AND, alias + "fechaDespublicacion", OPERATION.GE, PeriodoUtil.getNow()));
+        restrictions.add(new Restriction(LOGIC.OR, alias + "fechaDespublicacion", OPERATION.NULL));
         qb.addGroupedRestrictions(restrictions);
 
         restrictions = new ArrayList<Restriction>(2);
@@ -88,18 +88,18 @@ public class ServicioByActivoCriteria implements CriteriaObject {
 
         List<Restriction> restrictions = new ArrayList<Restriction>(2);
         restrictions.add(new Restriction(LOGIC.OR, alias + "validacion", OPERATION.EQ, Validacion.PUBLICA));
-        restrictions.add(new Restriction(LOGIC.AND, alias + "fechaCaducidad", OPERATION.LT, fecha));
+        restrictions.add(new Restriction(LOGIC.AND, alias + "fechaDespublicacion", OPERATION.LT, fecha));
         qb.addGroupedRestrictions(restrictions);
         
         restrictions = new ArrayList<Restriction>(3);
         restrictions.add(new Restriction(LOGIC.OR, alias + "validacion", OPERATION.EQ, Validacion.PUBLICA));
-        restrictions.add(new Restriction(LOGIC.AND, alias + "fechaCaducidad", OPERATION.NULL));
+        restrictions.add(new Restriction(LOGIC.AND, alias + "fechaDespublicacion", OPERATION.NULL));
         restrictions.add(new Restriction(LOGIC.AND, alias + "fechaPublicacion", OPERATION.GT, fecha));
         qb.addGroupedRestrictions(restrictions);
         
         restrictions = new ArrayList<Restriction>(3);
         restrictions.add(new Restriction(LOGIC.OR, alias + "validacion", OPERATION.EQ, Validacion.PUBLICA));
-        restrictions.add(new Restriction(LOGIC.AND, alias + "fechaCaducidad", OPERATION.GE, fecha));
+        restrictions.add(new Restriction(LOGIC.AND, alias + "fechaDespublicacion", OPERATION.GE, fecha));
         restrictions.add(new Restriction(LOGIC.AND, alias + "fechaPublicacion", OPERATION.GT, fecha));
         qb.addGroupedRestrictions(restrictions);
         
