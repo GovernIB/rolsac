@@ -1511,28 +1511,21 @@ public class CatalegServeisBackController extends PantallaBaseController {
 				
 				servicio = DelegateUtil.getServicioDelegate().obtenerServicioNewBack(id);
 				
+				List<Long> normativasList = new Vector<Long>();
+				NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
+				
 				if (elementos != null && elementos.length > 0) {
-
-					List<Long> normativasList = new Vector<Long>();
-					NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 					
-					for (int i = 0; i < elementos.length; i++)
+					for (int i = 0; i < elementos.length; i++) {
 						normativasList.add(elementos[i]);
-					
-					
+					}
 					normativas.addAll(normativaDelegate.buscarNormativas(normativasList));
 					
-					servicio.setNormativas(normativas); 
-					
-				} else {
-					if (servicio.getValidacion() == 1 && normativas.isEmpty()){
-						error = messageSource.getMessage("serv.error.falta.normativa", null, request.getLocale());
-						return result = new IdNomDTO(-6l, error);
-					}
-					
-					servicio.setNormativas(new HashSet<Normativa>());
-					
 				}
+				
+				servicio.setNormativas(normativas); 
+				
+			
 				
 				guardarGrabar(servicio);
 				
