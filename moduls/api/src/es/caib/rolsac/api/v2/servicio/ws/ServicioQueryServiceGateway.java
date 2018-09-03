@@ -35,7 +35,7 @@ public class ServicioQueryServiceGateway {
 			stub = new ServicioWSSoapBindingStub(
 					new URL(
 							ConfiguracioServeis
-									.getUrlServei(ConfiguracioServeis.NOM_SERVEI_PROCEDIMENT)),
+									.getUrlServei(ConfiguracioServeis.NOM_SERVEI_SERVICIO)),
 					null);
 		} catch (AxisFault e) {
 			e.printStackTrace();
@@ -50,7 +50,7 @@ public class ServicioQueryServiceGateway {
 		try {
 			if(url != null && !url.isEmpty()){				
 				stub = new ServicioWSSoapBindingStub(
-						new URL(url + ConfiguracioServeis.NOM_SERVEI_PROCEDIMENT),
+						new URL(url + ConfiguracioServeis.NOM_SERVEI_SERVICIO),
 						null
 						);
 			}

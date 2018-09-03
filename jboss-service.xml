@@ -86,7 +86,7 @@ es.caib.rolsac.subscripcions
 	   es.caib.rolsac.sia.tipoActuacion = 1
 	   es.caib.rolsac.sia.tipologiaTramitacion = 4
 	   es.caib.rolsac.sia.administracion = 2
-       es.caib.rolsac.sia.url = www.caib.es/seucaib/ca/200/persones/tramites/tramite/
+       es.caib.rolsac.sia.url = www.caib.es/seucaib/ca/200/persones/tramites/
 	   es.caib.rolsac.sia.jobpendientes=0 0 10 * * ?
 	   es.caib.rolsac.sia.url.envio = http://pre-sia2.redsara.es/axis2/services/wsSIAActualizarActuaciones
 	   es.caib.rolsac.sia.activarEnvio=N

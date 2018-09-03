@@ -2,8 +2,8 @@ package es.caib.rolsac.api.v2.servicio;
 
 import java.util.List;
 
-import es.caib.rolsac.api.v2.document.DocumentQueryServiceAdapter;
 import es.caib.rolsac.api.v2.documentoServicio.DocumentoServicioCriteria;
+import es.caib.rolsac.api.v2.documentoServicio.DocumentoServicioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalQueryServiceAdapter;
@@ -37,7 +37,7 @@ public interface ServicioQueryService {
 
     public List<FetVitalQueryServiceAdapter> llistarFetsVitals(FetVitalCriteria fetsVitalsCriteria) throws QueryServiceException;
 
-    public List<DocumentQueryServiceAdapter> llistarDocuments(DocumentoServicioCriteria documentoServicioCriteria) throws QueryServiceException;
+    public List<DocumentoServicioQueryServiceAdapter> llistarDocuments(DocumentoServicioCriteria documentoServicioCriteria) throws QueryServiceException;
 
     public List<PublicObjectiuQueryServiceAdapter> llistarPublicsObjectius(PublicObjectiuCriteria poCriteria) throws QueryServiceException;
         

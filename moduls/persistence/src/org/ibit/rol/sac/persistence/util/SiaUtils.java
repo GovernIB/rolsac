@@ -131,8 +131,12 @@ public class SiaUtils {
 	 * Get url envio SIA.
 	 * @return
 	 */
-	public static String getUrl() {
-        return System.getProperty("es.caib.rolsac.sia.url").trim();
+	public static String getUrlProcedimiento() {
+        return System.getProperty("es.caib.rolsac.sia.url").trim()+"tramite/";
+    }
+	
+	public static String getUrlServicio() {
+        return System.getProperty("es.caib.rolsac.sia.url").trim()+"servicio/";
     }
 		
 	

@@ -5,11 +5,9 @@ import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
-import es.caib.rolsac.api.v2.document.DocumentCriteria;
-import es.caib.rolsac.api.v2.document.DocumentDTO;
-import es.caib.rolsac.api.v2.document.DocumentQueryServiceAdapter;
 import es.caib.rolsac.api.v2.documentoServicio.DocumentoServicioCriteria;
 import es.caib.rolsac.api.v2.documentoServicio.DocumentoServicioDTO;
+import es.caib.rolsac.api.v2.documentoServicio.DocumentoServicioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.exception.StrategyException;
@@ -25,10 +23,10 @@ import es.caib.rolsac.api.v2.normativa.NormativaCriteria;
 import es.caib.rolsac.api.v2.normativa.NormativaDTO;
 import es.caib.rolsac.api.v2.normativa.NormativaQueryService.TIPUS_NORMATIVA;
 import es.caib.rolsac.api.v2.normativa.NormativaQueryServiceAdapter;
-import es.caib.rolsac.api.v2.servicio.ejb.ServicioQueryServiceEJBStrategy;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuQueryServiceAdapter;
+import es.caib.rolsac.api.v2.servicio.ejb.ServicioQueryServiceEJBStrategy;
 
 /**
  * Adapta el ServicioDTO a un Objecte amb dades i metodes
@@ -166,12 +164,12 @@ public class ServicioQueryServiceAdapter extends ServicioDTO implements Servicio
         }
     }
     
-    public List<DocumentQueryServiceAdapter> llistarDocuments(DocumentoServicioCriteria documentoServicioCriteria) throws QueryServiceException {
+    public List<DocumentoServicioQueryServiceAdapter> llistarDocuments(DocumentoServicioCriteria documentoServicioCriteria) throws QueryServiceException {
         try {
             List<DocumentoServicioDTO> llistaDTO = servicioQueryServiceStrategy.llistarDocuments(getId(), documentoServicioCriteria);
-            List<DocumentQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentQueryServiceAdapter>();
+            List<DocumentoServicioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentoServicioQueryServiceAdapter>();
             for (DocumentoServicioDTO documentDTO : llistaDTO) {
-            	DocumentQueryServiceAdapter tqsa = (DocumentQueryServiceAdapter) BeanUtils.getAdapter("document", getStrategy(), documentDTO);
+            	DocumentoServicioQueryServiceAdapter tqsa = (DocumentoServicioQueryServiceAdapter) BeanUtils.getAdapter("documentoServicio", getStrategy(), documentDTO);
             	if (tqsa != null && rolsacUrl != null) {
             		tqsa.setRolsacUrl(rolsacUrl);
             	}

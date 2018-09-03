@@ -16,6 +16,7 @@ import org.ibit.rol.sac.model.CatalegDocuments;
 import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.DocumentoNormativa;
+import org.ibit.rol.sac.model.DocumentoServicio;
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.EspacioTerritorial;
@@ -62,6 +63,8 @@ import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitDTO;
 import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaCriteria;
 import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaDTO;
+import es.caib.rolsac.api.v2.documentoServicio.DocumentoServicioCriteria;
+import es.caib.rolsac.api.v2.documentoServicio.DocumentoServicioDTO;
 import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiDTO;
 import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
@@ -178,8 +181,10 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 	private static final String HQL_PERSONAL_ALIAS = "per";
 	private static final String HQL_DOC_TRAMITE_CLASS = "DocumentTramit";
 	private static final String HQL_DOC_NORMATIVA_CLASS = "DocumentoNormativa";
+	private static final String HQL_DOC_SERVICIO_CLASS = "DocumentoServicio";
 	private static final String HQL_DOC_TRAMITE_ALIAS = "dt";
 	private static final String HQL_DOC_NORMATIVA_ALIAS = "dn";
+	private static final String HQL_DOC_SERVICIO_ALIAS = "ds";
 	private static final String HQL_USUARI_CLASS = "Usuario";
 	private static final String HQL_USUARI_ALIAS = "usu";
 	private static final String HQL_TAXA_CLASS = "Taxa";
@@ -228,6 +233,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 	private static final String HQL_INICIACIO_ALIAS = "inici";
 	private static final String HQL_IDIOMA_CLASS = "Idioma";
     private static final String HQL_IDIOMA_ALIAS = "idi";
+
 
 	/**
 	 * @ejb.create-method
@@ -1705,6 +1711,66 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 		}
 
 		return documentsNormativaDTOList;
+	}
+	
+	
+
+	/**
+	 * Obtiene documentos Servicio.
+	 * @param documentoServicioCriteria
+	 * @return List<DocumentServicioDTO>
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	@SuppressWarnings("unchecked")
+	public List<DocumentoServicioDTO> llistarDocumentoServicio(DocumentoServicioCriteria documentoServicioCriteria) {        
+		
+
+		List<DocumentoServicioDTO> documentsServicioDTOList = new ArrayList<DocumentoServicioDTO>();
+		List<CriteriaObject> criteris;
+		Session session = null;
+
+		try {            
+			criteris = BasicUtils.parseCriterias(
+							DocumentoServicioCriteria.class,
+							HQL_DOC_SERVICIO_ALIAS,
+							HQL_TRADUCCIONES_ALIAS, 
+							documentoServicioCriteria);
+
+			List<FromClause> entities = new ArrayList<FromClause>();
+			entities.add(new FromClause(HQL_DOC_SERVICIO_CLASS, HQL_DOC_SERVICIO_ALIAS));
+
+			QueryBuilder qb = new QueryBuilder(
+					HQL_DOC_SERVICIO_ALIAS, 
+					entities, 
+					documentoServicioCriteria.getIdioma(),
+					HQL_TRADUCCIONES_ALIAS);
+			qb.extendCriteriaObjects(criteris);
+
+			session = getSession();
+			Query query = qb.createQuery(session);
+			List<DocumentoServicio> documentoServiciosResult = query.list();
+			for (DocumentoServicio documentoServicio : documentoServiciosResult) {
+				documentsServicioDTOList.add((DocumentoServicioDTO) BasicUtils.entityToDTO(
+						DocumentoServicioDTO.class,
+						documentoServicio, 
+						documentoServicioCriteria.getIdioma()));
+			}
+		} catch (HibernateException e) {
+			log.error(e);
+			throw new EJBException(e);
+		} catch (CriteriaObjectParseException e) {
+			log.error(e);
+			throw new EJBException(e);
+		} catch (QueryBuilderException e) {
+			log.error(e);
+			throw new EJBException(e);
+		} finally {
+			close(session);
+		}
+
+		return documentsServicioDTOList;
 	}
 
 

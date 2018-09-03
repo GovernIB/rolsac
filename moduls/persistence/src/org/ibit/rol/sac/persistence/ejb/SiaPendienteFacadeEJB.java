@@ -998,7 +998,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 			}
 			sia.setTipologia(SiaUtils.getTipologiaTramitacion());
 			
-			sia.setEnlaceWeb(SiaUtils.getUrl()+procedimiento.getId().toString());
+			sia.setEnlaceWeb(SiaUtils.getUrlProcedimiento()+procedimiento.getId().toString());
 			
 			sia.setEstado(procedimiento.getEstadoSIA());
 			
@@ -1087,7 +1087,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 
 			sia.setTipologia(SiaUtils.getTipologiaTramitacion());
 			
-			sia.setEnlaceWeb(SiaUtils.getUrl()+servicio.getId().toString());
+			sia.setEnlaceWeb(SiaUtils.getUrlServicio()+servicio.getId().toString());
 			
 			sia.setEstado(servicio.getEstadoSIA());
 			

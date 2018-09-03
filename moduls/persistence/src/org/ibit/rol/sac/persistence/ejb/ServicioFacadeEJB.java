@@ -641,10 +641,10 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 			}
 
 			if (visible == 1) {
-				where += " and (sysdate < servicio.fechaCaducidad or servicio.fechaCaducidad is null) ";
+				where += " and (sysdate < servicio.fechaDespublicacion or servicio.fechaDespublicacion is null) ";
 				where += " and (sysdate > servicio.fechaPublicacion or servicio.fechaPublicacion is null) ";
 			} else if (visible == 2) {
-				where += " and (sysdate > servicio.fechaCaducidad or sysdate < servicio.fechaPublicacion or servicio.validacion = 2 or servicio.validacion = 3) ";
+				where += " and (sysdate > servicio.fechaDespublicacion or sysdate < servicio.fechaPublicacion or servicio.validacion = 2 or servicio.validacion = 3) ";
 			}
 
 			if ( userIsOper() ) {
@@ -682,7 +682,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 
 			where += " and index(tradFam) = 'ca' ";
 			String select = "select new Servicio(servicio.id, trad.nombre, servicio.validacion, " +
-					"servicio.fechaActualizacion, servicio.fechaCaducidad, servicio.fechaPublicacion, " +
+					"servicio.fechaActualizacion, servicio.fechaDespublicacion, servicio.fechaPublicacion, " +
 					"tradFam.nombre, index(trad), servicio.unidadAdministrativa ) ";
 
 			String selectCount = "select count(*) ";
@@ -780,10 +780,10 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 
 			if ( bc.getIdMateria() != null ){
 				if(bc.getIdMateria() == -1){
-					where.append(" and servicio.id  not in ( select procsLocales.id from Materia as mat, mat.serviciosLocales as procsLocales where mat.id is not null ) ");
+					where.append(" and servicio.id  not in ( select servs.id from Materia as mat, mat.servicios as servs where mat.id is not null ) ");
 					
 				}else{					
-					where.append(" and servicio.id in ( select procsLocales.id from Materia as mat, mat.serviciosLocales as procsLocales where mat.id = :idMateria ) ");
+					where.append(" and servicio.id in ( select servs.id from Materia as mat, mat.servicios as servs where mat.id = :idMateria ) ");
 				}
 			}
 
@@ -832,11 +832,11 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 
 
 			if ( bc.getVisibilidad() == Validacion.PUBLICA ) {
-				where.append(" and (sysdate < servicio.fechaCaducidad or servicio.fechaCaducidad is null) ");
+				where.append(" and (sysdate < servicio.fechaDespublicacion or servicio.fechaDespublicacion is null) ");
 				where.append(" and (sysdate > servicio.fechaPublicacion or servicio.fechaPublicacion is null) ");
 				where.append(" and (servicio.validacion <> "+Validacion.INTERNA+" and servicio.validacion <> "+Validacion.RESERVA+") "); //#355 devolvia no visibles
 			} else if ( bc.getVisibilidad() == Validacion.INTERNA ) {
-				where.append(" and (sysdate > servicio.fechaCaducidad or sysdate < servicio.fechaPublicacion or servicio.validacion = "+Validacion.INTERNA+" or servicio.validacion = "+Validacion.RESERVA+") ");
+				where.append(" and (sysdate > servicio.fechaDespublicacion or sysdate < servicio.fechaPublicacion or servicio.validacion = "+Validacion.INTERNA+" or servicio.validacion = "+Validacion.RESERVA+") ");
 			}
 
 
@@ -1418,10 +1418,10 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 * @param listaUnidadAdministrativaId	Listado de identificadores de unidades administrativas.
-	 * @param fechaCaducidad	Filtro que indica el rango temporal en el que se encuentra activo un  servicio.
+	 * @param fechaDespublicacion	Filtro que indica el rango temporal en el que se encuentra activo un  servicio.
 	 * @return numero de Servicios activos
 	 */
-	public int buscarServiciosActivos(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) {
+	public int buscarServiciosActivos(List<Long> listaUnidadAdministrativaId, Date fechaDespublicacion) {
 
 		Integer resultado = 0;
 		Session session = getSession();
@@ -1432,12 +1432,12 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 				query = session.createQuery(
 						" select count(*) from Servicio as srv " +
 								" where srv.validacion = :validacion " +
-								" and (srv.fechaCaducidad >= :fecha or srv.fechaCaducidad is null) " +
+								" and (srv.fechaDespublicacion >= :fecha or srv.fechaDespublicacion is null) " +
 								" and (srv.fechaPublicacion <= :fecha or srv.fechaPublicacion is null) " +
 						" and srv.unidadAdministrativa.id in (:lId) ");
 
 				query.setInteger( "validacion", Validacion.PUBLICA );
-				query.setDate( "fecha", fechaCaducidad );
+				query.setDate( "fecha", fechaDespublicacion );
 				query.setParameterList( "lId", listaUnidadAdministrativaId, Hibernate.LONG );
 
 				resultado = (Integer) query.uniqueResult();
@@ -1458,10 +1458,10 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 * @param listaUnidadAdministrativaId	Listado de identificadores de unidades administrativas.
-	 * @param fechaCaducidad	Filtro que indica el rango temporal en el que se encuentra activo un  servicio.
-	 * @return Devuelve el número de Servicios caducados
+	 * @param fechaDespublicacion	Filtro que indica el rango temporal en el que se encuentra activo un  servicio.
+	 * @return Devuelve el numero de Servicios caducados
 	 */
-	public int buscarServiciosCaducados(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad){
+	public int buscarServiciosCaducados(List<Long> listaUnidadAdministrativaId, Date fechaDespublicacion){
 
 		Integer resultado = 0;		
 		Session session = getSession();
@@ -1473,13 +1473,13 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 						" select count(*) from Servicio as srv " +
 								" where ( " +
 								" 	( srv.validacion != :validacion ) " +
-								" 	or ( srv.validacion = :validacion and srv.fechaCaducidad < :fecha ) " +
-								" 	or ( srv.validacion = :validacion and srv.fechaCaducidad is null and srv.fechaPublicacion > :fecha ) " +
-								" 	or ( srv.validacion = :validacion and srv.fechaCaducidad >= :fecha and srv.fechaPublicacion > :fecha ) " +
+								" 	or ( srv.validacion = :validacion and srv.fechaDespublicacion < :fecha ) " +
+								" 	or ( srv.validacion = :validacion and srv.fechaDespublicacion is null and srv.fechaPublicacion > :fecha ) " +
+								" 	or ( srv.validacion = :validacion and srv.fechaDespublicacion >= :fecha and srv.fechaPublicacion > :fecha ) " +
 						" ) and srv.unidadAdministrativa.id in (:lId) ");
 
 				query.setInteger("validacion", Validacion.PUBLICA);
-				query.setDate("fecha", fechaCaducidad);
+				query.setDate("fecha", fechaDespublicacion);
 				query.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
 
 				resultado = (Integer) query.uniqueResult();
@@ -1918,11 +1918,11 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 	
 			hql.append(" select pro.id from Servicio pro");
 			hql.append(" where ");
-			//Servicios caducados son con estado SIA de alta y fechaCaducidad pasada.
+			//Servicios caducados son con estado SIA de alta y fechaDespublicacion pasada.
 			hql.append(" (   pro.estadoSIA is not null ");
 			hql.append(" AND pro.estadoSIA like 'A'"); 
-			hql.append(" AND pro.fechaCaducidad is not null ");
-			hql.append(" AND pro.fechaCaducidad < SYSDATE ) ");
+			hql.append(" AND pro.fechaDespublicacion is not null ");
+			hql.append(" AND pro.fechaDespublicacion < SYSDATE ) ");
 			
 			hql.append(" OR ");
 			//Servicios activos sin estado o de baja y cuya fecha de caducidad es futura.

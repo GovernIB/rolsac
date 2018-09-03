@@ -4,7 +4,7 @@ function BuscadorServicio() {
 
 	this.buscar = function(opcions, url, listado) {
 
-		var servicioJSON = { "id" : "", "familia" : { "id" : "" }, "iniciacion" : { "id" : "" }, "tramite" : "", "indicador" : "", "ventanillaUnica" : "", "nombreProcedimiento" : "" ,"silencio" : { "id" : "" }, "codigoSIA" :"","estadoSIA" :""};
+		var servicioJSON = { "id" : "", "familia" : { "id" : "" }, "iniciacion" : { "id" : "" }, "tramite" : "", "indicador" : "", "ventanillaUnica" : "", "nombreServicio" : "" ,"silencio" : { "id" : "" }, "codigoSIA" :"","estadoSIA" :""};
 
 		var paginacionJSON = { "pagPag" : 0 , "pagRes" : 0 , "criterioOrdenacion" : "", "propiedadDeOrdenacion" : "" };
 
@@ -73,7 +73,7 @@ function BuscadorServicio() {
 			}
 
 
-			criteria.servicio.nombreProcedimiento = $("#cerca_textes").val();
+			criteria.servicio.nombreServicio = $("#cerca_textes").val();
 
 			criteria.uaHijas = $("#cerca_uaFilles").is(':checked') ? 1 : 0;
 			criteria.uaPropias = $("#cerca_uaMeves").is(':checked') ? 1 : 0;

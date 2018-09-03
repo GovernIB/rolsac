@@ -3,8 +3,6 @@ package es.caib.rolsac.api.v2.rolsac.ws;
 import java.rmi.RemoteException;
 import java.util.List;
 
-import org.ibit.rol.sac.model.DocumentoNormativa;
-
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalCriteria;
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalDTO;
 import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaCriteria;
@@ -19,6 +17,8 @@ import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitDTO;
 import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaCriteria;
 import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaDTO;
+import es.caib.rolsac.api.v2.documentoServicio.DocumentoServicioCriteria;
+import es.caib.rolsac.api.v2.documentoServicio.DocumentoServicioDTO;
 import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiDTO;
 import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
@@ -60,14 +60,13 @@ import es.caib.rolsac.api.v2.personal.PersonalCriteria;
 import es.caib.rolsac.api.v2.personal.PersonalDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
-import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
-import es.caib.rolsac.api.v2.servicio.ServicioDTO;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.rolsac.RolsacQueryServiceStrategy;
-import es.caib.rolsac.api.v2.rolsac.ejb.RolsacQueryServiceEJB;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
 import es.caib.rolsac.api.v2.silencio.SilencioDTO;
 import es.caib.rolsac.api.v2.taxa.TaxaCriteria;
 import es.caib.rolsac.api.v2.taxa.TaxaDTO;
@@ -645,6 +644,16 @@ public class RolsacQueryServiceWSStrategy implements RolsacQueryServiceStrategy 
     public List<DocumentoNormativaDTO> llistarDocumentoNormativa(DocumentoNormativaCriteria idNormativa)  throws StrategyException {
 		try {
 			return gateway.llistarDocumentoNormativa(idNormativa);
+		} catch (QueryServiceException qse) {
+			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
+		} catch (RemoteException e) {
+			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		}				
+	}
+    
+    public List<DocumentoServicioDTO> llistarDocumentoServicio(DocumentoServicioCriteria idServicio)  throws StrategyException {
+		try {
+			return gateway.llistarDocumentoServicio(idServicio);
 		} catch (QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
 		} catch (RemoteException e) {

@@ -24,6 +24,9 @@ import es.caib.rolsac.api.v2.documentTramit.DocumentTramitQueryServiceAdapter;
 import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaCriteria;
 import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaDTO;
 import es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaQueryServiceAdapter;
+import es.caib.rolsac.api.v2.documentoServicio.DocumentoServicioCriteria;
+import es.caib.rolsac.api.v2.documentoServicio.DocumentoServicioDTO;
+import es.caib.rolsac.api.v2.documentoServicio.DocumentoServicioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiDTO;
 import es.caib.rolsac.api.v2.edifici.EdificiQueryServiceAdapter;
@@ -86,9 +89,6 @@ import es.caib.rolsac.api.v2.personal.PersonalQueryServiceAdapter;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
-import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
-import es.caib.rolsac.api.v2.servicio.ServicioDTO;
-import es.caib.rolsac.api.v2.servicio.ServicioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuQueryServiceAdapter;
@@ -96,6 +96,9 @@ import es.caib.rolsac.api.v2.rolsac.ejb.RolsacQueryServiceEJBStrategy;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
 import es.caib.rolsac.api.v2.seccio.SeccioQueryServiceAdapter;
+import es.caib.rolsac.api.v2.servicio.ServicioCriteria;
+import es.caib.rolsac.api.v2.servicio.ServicioDTO;
+import es.caib.rolsac.api.v2.servicio.ServicioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.silencio.SilencioDTO;
 import es.caib.rolsac.api.v2.silencio.SilencioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.taxa.TaxaCriteria;
@@ -400,6 +403,21 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
             List<DocumentoNormativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentoNormativaQueryServiceAdapter>();
             for (DocumentoNormativaDTO documentoNormativaDTO : llistaDTO) {
             	DocumentoNormativaQueryServiceAdapter tdqsa = (DocumentoNormativaQueryServiceAdapter) BeanUtils.getAdapter("documentoNormativa", getStrategy(), documentoNormativaDTO);
+            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && tdqsa != null) { tdqsa.setRolsacUrl(rolsacUrl); }
+                llistaQueryServiceAdapter.add(tdqsa);
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "documentos tramite.", e);
+        }
+    }
+    
+    public List<DocumentoServicioQueryServiceAdapter> llistarDocumentoServicio(DocumentoServicioCriteria documentoServicioCriteria) throws QueryServiceException {
+    	try {
+            List<DocumentoServicioDTO> llistaDTO = rolsacQueryServiceStrategy.llistarDocumentoServicio(documentoServicioCriteria);
+            List<DocumentoServicioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentoServicioQueryServiceAdapter>();
+            for (DocumentoServicioDTO documentoServicioDTO : llistaDTO) {
+            	DocumentoServicioQueryServiceAdapter tdqsa = (DocumentoServicioQueryServiceAdapter) BeanUtils.getAdapter("documentoServicio", getStrategy(), documentoServicioDTO);
             	if (rolsacUrl != null && !rolsacUrl.isEmpty() && tdqsa != null) { tdqsa.setRolsacUrl(rolsacUrl); }
                 llistaQueryServiceAdapter.add(tdqsa);
             }

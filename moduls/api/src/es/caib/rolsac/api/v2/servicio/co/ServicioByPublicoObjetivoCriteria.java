@@ -24,8 +24,8 @@ public class ServicioByPublicoObjetivoCriteria extends ByLongCriteria {
      */
     @Override
     public void extendCriteria(QueryBuilder qb) {
-        StringBuilder query = new StringBuilder(" SELECT po_.servicios.elements ")
-                .append("FROM PublicoObjetivo AS po_ ")
+        StringBuilder query = new StringBuilder(" SELECT ser_ ")
+                .append("FROM Servicio AS ser_ , ser_.publicosObjetivo po_ ")
                 .append("WHERE po_.id ");
         CriteriaObjectUtil.buildInSelectQuery(query, this);
         qb.addRestriction(new Restriction(LOGIC.AND, field, OPERATION.IN_SELECT, query.toString()));
