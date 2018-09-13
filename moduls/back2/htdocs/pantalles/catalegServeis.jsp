@@ -218,6 +218,19 @@
                     "obligatori": "<spring:message code='serv.formulari.error.estat.obligatori'/>"
                 }
         },
+        
+        // Servei Responsable
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_servei_responsable_id",
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "error":
+                {
+                    "obligatori": "<spring:message code='serv.formulari.error.servei.responsable.obligatori'/>"
+                }
+        },
 
      // Objecte
         {
@@ -232,6 +245,21 @@
                 }
         },
         
+        
+        
+        
+        // Responsable
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_responsable_nombre",
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "error":
+                {
+                    "obligatori": "<spring:message code='serv.formulari.error.responsable.obligatori'/>"
+                }
+        },
 
         // Destinataris
         {
@@ -248,41 +276,10 @@
              	
 
         
-        // Servei Responsable
-        {
-            "modo": "individual",
-            "etiqueta": "id",
-            "etiquetaValor": "item_servei_responsable_id",
-            "obligatori": "si",
-            "tipus": "alfanumeric",
-            "error":
-                {
-                    "obligatori": "<spring:message code='serv.formulari.error.servei.responsable.obligatori'/>"
-                }
-        },
-        
-
-     
-        
-        // Responsable
-        {
-            "modo": "individual",
-            "etiqueta": "id",
-            "etiquetaValor": "item_responsable",
-            "obligatori": "si",
-            "tipus": "alfanumeric",
-            "error":
-                {
-                    "obligatori": "<spring:message code='serv.formulari.error.responsable.obligatori'/>"
-                }
-        },
-        
-        
 
         
-        
-        
-        
+
+           
         // Organ competent per resoldre 
         {   
             "modo": "individual",
