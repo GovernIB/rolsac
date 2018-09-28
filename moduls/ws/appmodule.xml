@@ -1,6 +1,0 @@
-			<module>
-        		<web>
-    	      	<web-uri>@prefix.modul@-ws.war</web-uri>
-    	  	    <context-root>@context.ws@</context-root>
-        		</web>
-    		</module>
