@@ -138,7 +138,7 @@ public class Tramits extends EntidadBase {
 	@Override
 	public void generaLinks(String urlBase) {
 		link_organCompetent = this.generaLink(this.organCompetent,Constantes.ENTIDAD_UA,Constantes.URL_UA, urlBase , null );
-		link_procedimiento = this.generaLink(this.procedimiento,Constantes.ENTIDAD_UA,Constantes.URL_UA, urlBase , null );		
+		link_procedimiento = this.generaLink(this.procedimiento,Constantes.ENTIDAD_PROCEDIMIENTO,Constantes.URL_PROCEDIMIENTO, urlBase , null );		
 	}
 
 
