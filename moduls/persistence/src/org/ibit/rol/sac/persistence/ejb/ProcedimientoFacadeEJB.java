@@ -2562,24 +2562,25 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		Session session = getSession();
 		try {
 			StringBuffer hql= new StringBuffer();
-	
+			
 			hql.append(" select pro.id from ProcedimientoLocal pro");
 			hql.append(" where ");
-			//Procedimientos caducados son con estado SIA de alta y fechaCaducidad pasada.
+			//Procedimientos caducados son con estado SIA de alta y fechaCaducidad pasada y que son publicas.
 			hql.append(" (   pro.estadoSIA is not null ");
 			hql.append(" AND pro.estadoSIA like 'A'"); 
+			hql.append(" AND pro.validacion = 1");
 			hql.append(" AND pro.fechaCaducidad is not null ");
 			hql.append(" AND pro.fechaCaducidad < SYSDATE ) ");
 			
 			hql.append(" OR ");
-			//Procedimientos activos sin estado o de baja y cuya fecha de caducidad es futura.
+			//Procedimientos activos sin estado o de baja y cuya fecha de caducidad es futura y que son publicas.
 			hql.append(" (   (pro.estadoSIA is null     OR   (pro.estadoSIA is NOT NULL AND pro.estadoSIA like 'B')) "); 
+			hql.append(" AND pro.validacion = 1");
 			hql.append(" AND pro.fechaPublicacion IS NOT NULL ");
 			hql.append(" AND pro.fechaPublicacion <= SYSDATE ");
 			hql.append("  ) ");
 			
 			return session.createQuery(hql.toString()).list();
-			
 			
 		} catch (Exception he) {
 			throw new EJBException(he);

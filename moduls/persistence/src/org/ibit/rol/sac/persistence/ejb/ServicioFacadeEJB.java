@@ -1914,26 +1914,28 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 		
 		Session session = getSession();
 		try {
+			
 			StringBuffer hql= new StringBuffer();
-	
-			hql.append(" select pro.id from Servicio pro");
+			
+			hql.append(" select srv.id from Servicio srv");
 			hql.append(" where ");
-			//Servicios caducados son con estado SIA de alta y fechaDespublicacion pasada.
-			hql.append(" (   pro.estadoSIA is not null ");
-			hql.append(" AND pro.estadoSIA like 'A'"); 
-			hql.append(" AND pro.fechaDespublicacion is not null ");
-			hql.append(" AND pro.fechaDespublicacion < SYSDATE ) ");
+			//Servicios caducados son con estado SIA de alta y fechaDespublicacion pasada y son publicas.
+			hql.append(" (   srv.estadoSIA is not null ");
+			hql.append(" AND srv.estadoSIA like 'A'"); 
+			hql.append(" AND srv.validacion = 1 "); 
+			hql.append(" AND srv.fechaDespublicacion is not null ");
+			hql.append(" AND srv.fechaDespublicacion < SYSDATE ) ");
 			
 			hql.append(" OR ");
-			//Servicios activos sin estado o de baja y cuya fecha de caducidad es futura.
-			hql.append(" (   (pro.estadoSIA is null     OR   (pro.estadoSIA is NOT NULL AND pro.estadoSIA like 'B')) "); 
-			hql.append(" AND pro.fechaPublicacion IS NOT NULL ");
-			hql.append(" AND pro.fechaPublicacion <= SYSDATE ");
+			//Servicios activos sin estado o de baja y cuya fecha de caducidad es futura y son publicas.
+			hql.append(" (   (srv.estadoSIA is null     OR   (srv.estadoSIA is NOT NULL AND srv.estadoSIA like 'B')) "); 
+			hql.append(" AND srv.validacion = 1 "); 
+			hql.append(" AND srv.fechaPublicacion IS NOT NULL ");
+			hql.append(" AND srv.fechaPublicacion <= SYSDATE ");
 			hql.append("  ) ");
 			
 			return session.createQuery(hql.toString()).list();
-			
-			
+				
 		} catch (Exception he) {
 			throw new EJBException(he);
 		} finally {

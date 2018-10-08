@@ -25,13 +25,13 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	/************ SECCION DADES. *********************/
 	/** Id. **/
 	private Long id;
-	/** Código SIA. **/
+	/** Codigo SIA. **/
 	private String codigoSIA;
 	/** Fecha SIA. **/
     private Date fechaSIA;
     /** Estado SIA. **/
     private String estadoSIA;
-    /** Código. **/
+    /** Codigo. **/
 	private String codigo;
 	/** Organo instructor. **/
 	private UnidadAdministrativa organoInstructor; 
@@ -56,7 +56,7 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
     private String tramiteUrl;
     /** Tramite ID. **/
     private String tramiteId;
-    /** Trámite version. **/
+    /** Tramite version. **/
     private String tramiteVersion;
     
     /************ MODUL TAXES. ***********************/
@@ -64,13 +64,13 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
     private String tasaUrl;
     
     /************ MODUL PUBLICACIO. ******************/
-    /** Validación. **/
+    /** Validacion. **/
     private Integer validacion;
-    /** Fecha despublicación. **/
+    /** Fecha despublicacion. **/
     private Date fechaDespublicacion;
-    /** Fecha publicación. **/
+    /** Fecha publicacion. **/
     private Date fechaPublicacion;
-    /** Fecha actualización. **/
+    /** Fecha actualizacion. **/
     private Date fechaActualizacion;
 
     /** Documentos. **/
@@ -86,7 +86,7 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
     
     
     //---------------------------------------------
-    //Campos especiales para optimizar la búsqueda
+    //Campos especiales para optimizar la busqueda
     /** Nombre servicio que indica el order by. **/
     private String nombreServicio;
     /** Idioma de la busqueda. **/
@@ -94,7 +94,7 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
   
   
 	/** 
-	 * Constructor para búsqueda optimizada.
+	 * Constructor para busqueda optimizada.
 	 * 
 	 * @param id
 	 * @param nombreServicio
@@ -217,10 +217,7 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
         this.normativas = normativas;
     }
 
-   
 
-    
-	
 	@Override
 	public String toString() {
 		String pid=obtenirId();
@@ -295,7 +292,7 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 		
 		Boolean esPublic = Validacion.PUBLICA.equals(this.getValidacion());
 		Boolean noCaducat = (this.getFechaDespublicacion() != null && this.getFechaDespublicacion().after(dataActual.getTime())) || this.getFechaDespublicacion() == null;
-		Boolean esPublicat =  (this.getFechaPublicacion() != null && this.getFechaPublicacion().before(dataActual.getTime())) || this.getFechaDespublicacion() == null;
+		Boolean esPublicat =  (this.getFechaPublicacion() != null && this.getFechaPublicacion().before(dataActual.getTime())) || this.getFechaPublicacion() == null;
 		
 		if (esPublic && noCaducat && esPublicat) {
 			visible = Boolean.TRUE;
@@ -305,7 +302,7 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 		return visible;
 	}
 	
-	// Mètode creat per poder ser cridat des de la JSP a través de JSTL
+	// Metode creat per poder ser cridat des de la JSP a traves de JSTL
 	/** 
 	 * Get isVisible.
 	 * @return
