@@ -17,6 +17,7 @@
 	<property name="modul.output.dir" location="${output.dir}/${modul}"/>
 	<property name="web.classes" location="${modul.output.dir}/classes"/>
 	<property name="web.product" location="${output.dir}/moduls"/>
+	<property name="web.gen.etc" location="${modul.output.dir}/gen-etc"/>
 	
     <property name="lib.dir" location="${home.dir}/lib"/>
     <property name="jar.src" location="${basedir}/src"/>
@@ -231,14 +232,14 @@
 
 	
 	<target name="web.gen.all" depends="prepare,init">
-        <!--
+      <!--
 		<webdoclet
             destdir="${web.gen.src}"
             excludedtags="@version,@author"
             force="false"
             verbose="true"
             >
-            <fileset dir="${web.merge.web}">
+              <fileset dir="${ejb.etc}">
                 <include name="**/*.java"/>
             </fileset>
         	
@@ -262,14 +263,13 @@
                 securityDomain="${ws.auth.domain}"
                 />
 
-        </webdoclet> 
-
+        </webdoclet> -->
+				
+		<copy file="${ejb.etc}/web.xml" tofile="${web.gen.etc}/web.xml" overwrite="true" />
         <replace file="${web.gen.etc}/web.xml">
-            <replacefilter token="@role.system@" value="${role.system}"/>
-            <replacefilter token="@role.admin@" value="${role.admin}"/>
-            <replacefilter token="@role.super@" value="${role.super}"/>
-            <replacefilter token="@role.oper@" value="${role.oper}"/>
-        </replace>-->
+        	<replacefilter token="@role.api.rest@" value="${role.api.rest}"/>
+        	<replacefilter token="@tipo.autenticacion@" value="${tipo.autenticacion}"/>
+        </replace>
     </target>
 	
     <path id="jar.class.path">
@@ -483,7 +483,7 @@
 	<!-- <target name="main" depends="jar.jar" description="Construye el jar"/> -->
 	<target name="main" depends="ejb.client, ejb.server" description="Construye el jar">
 		
-		<war destfile="${web.product}/${prefix.modul}-${modul}.war" webxml="${jar.etc}/web.xml" compress="true">
+		<war destfile="${web.product}/${prefix.modul}-${modul}.war" webxml="${web.gen.etc}/web.xml" compress="true">
 				<classes dir="${web.classes}" />
 				<lib dir="${home.dir}/lib/jersey">
 					<include name="*.jar" />

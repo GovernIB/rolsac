@@ -33,4 +33,28 @@
 		<session-timeout>60</session-timeout>
 	</session-config>
 
+
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>apirestSecurity</web-resource-name>
+			<url-pattern>*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>@role.api.rest@</role-name>
+		</auth-constraint>
+	</security-constraint>
+
+
+	<login-config>
+    <auth-method>@tipo.autenticacion@</auth-method>
+    <realm-name>Autenticacion</realm-name>
+  </login-config>
+
+
+	<security-role>
+		<role-name>@role.api.rest@</role-name>
+	</security-role>
+
+	
+
 </web-app>
