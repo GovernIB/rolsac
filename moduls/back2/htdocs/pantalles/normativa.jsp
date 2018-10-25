@@ -25,7 +25,7 @@
 
 <script type="text/javascript">
 <!--
-
+	var permisoGestionNormativas=<c:out value="${permisoGestionNormativas}" />;
 	// pagines  
 	var pagLlistat = '<c:url value="/normativa/llistat.do" />';
 	var pagExportar = '<c:url value="/normativa/exportar.do" />';

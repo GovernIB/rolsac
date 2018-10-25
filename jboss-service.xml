@@ -109,6 +109,9 @@ es.caib.rolsac.subscripcions
 	   es.caib.rolsac.api.rest.pageSize=30
 	   es.caib.rolsac.api.rest.pageNumber=1
 	   
+	   <!-- Indica el valor por defecto del permiso de gestion de normativas al dar de alta un nuevo usuario S/N -->
+	   es.caib.rolsac.usuari.gestioNormativa=S
+	   
     </attribute>
             
 </mbean>

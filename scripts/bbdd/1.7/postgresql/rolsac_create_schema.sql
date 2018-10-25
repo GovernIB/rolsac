@@ -643,6 +643,7 @@ create table RSC_USUARI (
    USU_OBSERV varchar(4000),
    USU_PERFIL varchar(64),
    USU_EMAIL varchar(256),
+   USU_PERMISOS varchar(512),
    primary key (USU_CODI)
 );
 create table RSC_GRPGEN (

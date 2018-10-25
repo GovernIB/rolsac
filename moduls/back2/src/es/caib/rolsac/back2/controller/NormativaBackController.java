@@ -33,23 +33,21 @@ import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Afectacion;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Boletin;
-import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.DocumentoNormativa;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.Servicio;
 import org.ibit.rol.sac.model.Tipo;
 import org.ibit.rol.sac.model.TipoAfectacion;
-import org.ibit.rol.sac.model.Traduccion;
 import org.ibit.rol.sac.model.TraduccionDocumentoNormativa;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionServicio;
 import org.ibit.rol.sac.model.TraduccionTipo;
 import org.ibit.rol.sac.model.TraduccionTipoAfectacion;
-import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.UnidadNormativa;
+import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.ValidacionNormativa;
 import org.ibit.rol.sac.model.dto.AfectacionDTO;
 import org.ibit.rol.sac.model.dto.AfectacionesDTO;
@@ -60,13 +58,12 @@ import org.ibit.rol.sac.model.dto.ProcedimientoNormativaDTO;
 import org.ibit.rol.sac.model.dto.ServicioDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
 import org.ibit.rol.sac.persistence.delegate.DocumentoNormativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
-import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadNormativaDelegate;
+import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
 import org.ibit.rol.sac.persistence.eboib.EBoibSearchNormativa;
 import org.ibit.rol.sac.persistence.eboib.SearchNormativa;
 import org.ibit.rol.sac.persistence.eboib.TrListadoNormativaBean;
@@ -87,7 +84,6 @@ import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.indra.rol.sac.integracion.traductor.Traductor;
-import net.sf.hibernate.Hibernate;
 
 @SuppressWarnings("unused")
 @Controller
@@ -103,6 +99,9 @@ public class NormativaBackController extends PantallaBaseController {
         model.put("submenu_seleccionado", 4);
         model.put("titol_escriptori", "Normativa");
         model.put("escriptori", "pantalles/normativa.jsp");
+        
+        String permisos = getPermisosUsuario(request);           
+        model.put("permisoGestionNormativas" , Usuario.tienePermiso(permisos, Usuario.PERMISO_MODIFICACION_NORMATIVA));
 
         if (session.getAttribute("unidadAdministrativa") != null) {
             model.put("idUA", ((UnidadAdministrativa) session.getAttribute("unidadAdministrativa")).getId());
@@ -1007,6 +1006,12 @@ public class NormativaBackController extends PantallaBaseController {
         Map<String, FileItem> ficherosForm = new HashMap<String, FileItem>();
 
         try {
+        	
+            String permisos = getPermisosUsuario(request);            
+            if(!Usuario.tienePermiso(permisos, Usuario.PERMISO_MODIFICACION_NORMATIVA)) {
+            	IdNomDTO error = new IdNomDTO(-1l, messageSource.getMessage("error.permisos.normativa", null, request.getLocale()));
+                return new ResponseEntity<String>(error.getJson(), responseHeaders, HttpStatus.CREATED);
+            }
             // Recuperacio dels diferents items, tant dades con fitxers dels
             // formularis
         	// Ya no se recupera el fichero.
@@ -1341,7 +1346,12 @@ public class NormativaBackController extends PantallaBaseController {
         Long id = ParseUtil.parseLong(request.getParameter("id"));
         NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 
-        try {
+        try {        	
+            String permisos = getPermisosUsuario(request);            
+            if(!Usuario.tienePermiso(permisos, Usuario.PERMISO_MODIFICACION_NORMATIVA)) {
+                return  new IdNomDTO(-1l, messageSource.getMessage("error.permisos.normativa", null, request.getLocale()));
+            }
+            
             if (normativaDelegate.autorizaModificarNormativa(id)) {
             	
             	if (normativaDelegate.tieneRelaciones(id)) {
@@ -1736,6 +1746,13 @@ public class NormativaBackController extends PantallaBaseController {
 		IdNomDTO result = null;
 		
 		try {
+			
+		    String permisos = getPermisosUsuario(request);            
+            if(!Usuario.tienePermiso(permisos, Usuario.PERMISO_MODIFICACION_NORMATIVA)) {            	
+            	error = messageSource.getMessage("error.permisos.normativa", null, request.getLocale());
+				result = new IdNomDTO(-1l, error);
+				return result;
+            }
 					
 			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 			Normativa normativa = normativaDelegate.obtenerNormativa(id);
@@ -1820,13 +1837,21 @@ public class NormativaBackController extends PantallaBaseController {
 		IdNomDTO result = null;
 		
 		try {
-						
+				
+		    String permisos = getPermisosUsuario(request);            
+            if(!Usuario.tienePermiso(permisos, Usuario.PERMISO_MODIFICACION_NORMATIVA)) {            	
+            	String error = messageSource.getMessage("error.permisos.normativa", null, request.getLocale());
+				result = new IdNomDTO(-1l, error);
+				return result;
+            }
+			
+			
 			Normativa normativa = DelegateUtil.getNormativaDelegate().obtenerNormativa(id);
 			
 			UnidadNormativaDelegate uaNormativaDelegate = DelegateUtil.getUnidadNormativaDelegate();
 			 
 			// Obtenemos las relaciones que borraremos primero.
-			Set<UnidadNormativa> unidadesNormativa = (Set<UnidadNormativa>)normativa.getUnidadesnormativas();
+			Set<UnidadNormativa> unidadesNormativa = normativa.getUnidadesnormativas();
 			List<Long> unidadesNormativaABorrar = new ArrayList<Long>();
 			Iterator<UnidadNormativa> it = unidadesNormativa.iterator();
 			while ( it.hasNext() ) {
@@ -1950,6 +1975,13 @@ public class NormativaBackController extends PantallaBaseController {
         Map<String, FileItem> ficherosForm = new HashMap<String, FileItem>();
 
         try {
+        	
+        	  String permisos = getPermisosUsuario(request);            
+              if(!Usuario.tienePermiso(permisos, Usuario.PERMISO_MODIFICACION_NORMATIVA)) {            	
+              	String error = messageSource.getMessage("error.permisos.normativa", null, request.getLocale());
+              	jsonResult = new IdNomDTO(-1l, error).getJson();
+  				return new ResponseEntity<String>(jsonResult, responseHeaders, HttpStatus.CREATED);
+              }
 
             // Recuperamos los valores del request
             recuperarForms(request, valoresForm, ficherosForm);
@@ -2027,6 +2059,13 @@ public class NormativaBackController extends PantallaBaseController {
 		IdNomDTO result;
 		String error = null;
 		//ProcedimientoLocal procedimiento = null;
+		
+		 String permisos = getPermisosUsuario(request);            
+		 if(!Usuario.tienePermiso(permisos, Usuario.PERMISO_MODIFICACION_NORMATIVA)) {            	
+		  	error = messageSource.getMessage("error.permisos.normativa", null, request.getLocale());
+		  	result = new IdNomDTO(-1l, error);
+			return result;
+		 }
 		
 		try {
 			if (elementos == null) {
@@ -2319,6 +2358,31 @@ public class NormativaBackController extends PantallaBaseController {
         
         return archivo;
         
-    }
+    }  
+    
+    private String getPermisosUsuario(HttpServletRequest request) {
+    	
+    	//return (String) session.getAttribute("permisosUsuario");
+    	
+    	String username = request.getRemoteUser();
+    	if(StringUtils.isEmpty(username)) {
+    		username = (String) request.getSession().getAttribute("username");
+    	}
+    			    	
+    	UsuarioDelegate usuariDelegate = DelegateUtil.getUsuarioDelegate();    	
+    	Usuario usuari = null;
+    	String permisos = "";
+    	try {
+			usuari = usuariDelegate.obtenerUsuariobyUsername(username);
+		} catch (DelegateException e) {
+			e.printStackTrace();
+		}
+    	
+    	if (usuari != null && !StringUtils.isEmpty(usuari.getPermisos())) {
+    		permisos = usuari.getPermisos();
+    	}    	
+		return permisos;
+    	
+    }  
 
 }

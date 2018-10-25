@@ -356,6 +356,12 @@ function CDetall() {
     
 	this.iniciar = function() {	
 		moduls_elm = escriptori_detall_elm.find("div.modul"); // moduls		
+		
+		jQuery("#item_check_permis_modificacio_normativa").change(function(){
+			jQuery("#item_check_permis_modificacio_normativa").attr("checked", jQuery(this).is(":checked"));
+		});
+		
+		
 	};
 	
 	this.nou = function() {
@@ -368,6 +374,7 @@ function CDetall() {
 
 		$("#item_id").val("");
 		$("#modulPrincipal :input, #modulPrincipal select").each(limpiarCampo);
+		$("#item_check_permis_modificacio_normativa").val("on");
 		
 		escriptori_contingut_elm.fadeOut(300, function() {
 			escriptori_detall_elm.fadeIn(300, function() {
@@ -379,6 +386,11 @@ function CDetall() {
 		
 		this.modificado(false);
 		
+		if(gestionNormativasPorDefecto){
+			jQuery("#item_check_permis_modificacio_normativa").prop('checked', true);
+			jQuery("#item_check_permis_modificacio_normativa").change();
+		}
+				
 	};
 	
 	this.pintar = function(dades) {
@@ -393,6 +405,14 @@ function CDetall() {
 		$("#item_nom").val(dada_node.item_nom);
 		$("#item_password").val(dada_node.item_password);
 		$("#item_observacions").val(dada_node.item_observacions);
+		
+		if (dada_node.item_check_permis_modificacio_normativa != undefined) {
+			jQuery("#item_check_permis_modificacio_normativa").prop('checked', dada_node.item_check_permis_modificacio_normativa);
+			jQuery("#item_check_permis_modificacio_normativa").change();
+		} else {
+			jQuery("#item_check_permis_modificacio_normativa").prop('checked', gestionNormativasPorDefecto);
+		}
+		
 		marcarOpcionSelect("item_perfil", dada_node.item_perfil);
 
 		$("#modulLateral li.btnEliminar").show();

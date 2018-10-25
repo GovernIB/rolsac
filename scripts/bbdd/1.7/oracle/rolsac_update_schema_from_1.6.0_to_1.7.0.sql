@@ -12,3 +12,8 @@ COMMENT ON COLUMN RSC_TRAMIT.TRA_CPRESE is 'Canal presencial.';
 COMMENT ON COLUMN RSC_SERVIC.SER_CTELEM is 'Canal telematico.';
 COMMENT ON COLUMN RSC_SERVIC.SER_CPRESE is 'Canal presencial.';
 COMMENT ON COLUMN RSC_SERVIC.SER_CTELEF is 'Canal telefonico.';
+
+ALTER TABLE RSC_USUARI ADD USU_PERMISOS VARCHAR2(512 CHAR) DEFAULT 'P_MOD_NOR';
+-- Si se desea que los usuarios actuales no tenga el permiso de gestion de normativas.
+--ALTER TABLE RSC_USUARI ADD USU_PERMISOS VARCHAR2(512 CHAR);
+COMMENT ON COLUMN RSC_USUARI.USU_PERMISOS is 'Permisos que tiene el usuario separados por comas: P_MOD_NOR (modificacion de normativas)';

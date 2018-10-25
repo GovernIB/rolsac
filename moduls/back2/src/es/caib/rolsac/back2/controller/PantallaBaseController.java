@@ -44,10 +44,10 @@ public abstract class PantallaBaseController {
 	protected void loadIndexModel (Map<String, Object> model, HttpServletRequest request) {
 
 		HttpSession session = request.getSession();
-
 		String nomLlinatges = (String)session.getAttribute("capNomLlinatges");
-		
-		if (nomLlinatges == null) {
+		String usuario = (String)session.getAttribute("username");
+
+		if (nomLlinatges == null || usuario == null) {
 			
 	    	String username = request.getRemoteUser();
 	    	nomLlinatges = username; 
@@ -62,7 +62,8 @@ public abstract class PantallaBaseController {
 		    		nomLlinatges = usuari.getNombre();
 		    	}
 		    	
-		    	session.setAttribute("nomLlinatges", nomLlinatges);
+		    	session.setAttribute("capNomLlinatges", nomLlinatges);
+		    	session.setAttribute("username", username);			    	
 	        
 		    } catch (DelegateException dEx) {
 		    	

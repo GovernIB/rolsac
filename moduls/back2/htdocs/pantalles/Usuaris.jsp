@@ -107,6 +107,7 @@
     var txtUsernameObligatorio = "<spring:message code='usuari.formulari.username.obligatori'/>";
     var txtPasswordObligatorio = "<spring:message code='usuari.formulari.password.obligatori'/>";
     var txtPerfilObligatorio = "<spring:message code='usuari.formulari.perfil.obligatori'/>";
+    var gestionNormativasPorDefecto =<c:out value="${valorDefectoGestionNormativas}" />;
 
     // dades formularis
     var FormulariDades = [
@@ -368,7 +369,18 @@
 	                                    <option value="sacinfo"><spring:message code='usuari.sacinfo'/></option>
 	                                </select>
                                 </div>
-                            </div>
+                            </div>                            
+                            <div class="element t50p">
+								<div class="etiqueta">
+									<label for="item_check_permis_modificacio_normativa"><spring:message
+											code='camp.permisModificacioNormativa' /></label>
+								</div>
+								<div class="control">
+									<input id="item_check_permis_modificacio_normativa"
+										name="item_check_permis_modificacio_normativa" type="checkbox"
+										class="nou" />
+								</div>
+							 </div>                        
                         </div>
                         <div class="fila">
                             <div class="element t99p">

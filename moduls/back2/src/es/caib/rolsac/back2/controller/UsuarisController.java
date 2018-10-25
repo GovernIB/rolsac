@@ -44,6 +44,7 @@ public class UsuarisController extends PantallaBaseController {
     	
     	model.put("menu", 2);
 		model.put("submenu", "layout/submenu/submenuUsuaris.jsp");
+		
         
         RolUtil rolUtil= new RolUtil(request);
         if (rolUtil.userIsAdmin()) {
@@ -60,7 +61,7 @@ public class UsuarisController extends PantallaBaseController {
 	    			llistaPerfilsGestorDTO.add(new IdNomDTO(perfil.getId(), perfil.getNombrePerfilGestor(lang)));
 	    		}
 	    		model.put("llistaPerfilsGestor", llistaPerfilsGestorDTO);
-	    		
+	    		model.put("valorDefectoGestionNormativas", getPermisoGestionNormativasPorDefecto(true)?"true":"false");
 			}catch (DelegateException dEx) {
         		
     			if (dEx.isSecurityException()) {
@@ -158,6 +159,15 @@ public class UsuarisController extends PantallaBaseController {
     	
     }
     
+	private static boolean getPermisoGestionNormativasPorDefecto(boolean valorPorDefecto) {
+		String val = System.getProperty("es.caib.rolsac.usuari.gestioNormativa");
+		if(StringUtils.isEmpty(val) || val.trim().length()!=1) {
+			return valorPorDefecto;
+		}
+		return val.trim().equals("S");
+		
+	}
+    
     @RequestMapping(value = "/pagDetall.do")
     public @ResponseBody Map<String, Object> recuperaDetall(Long id, HttpServletRequest request) {
     	
@@ -175,6 +185,7 @@ public class UsuarisController extends PantallaBaseController {
     		resultats.put("item_email", usuari.getEmail());
     		resultats.put("item_observacions", usuari.getObservaciones());
     		resultats.put("item_perfil", usuari.getPerfil());
+    		resultats.put("item_check_permis_modificacio_normativa", usuari.tienePermiso(Usuario.PERMISO_MODIFICACION_NORMATIVA));
     		
     	} catch (DelegateException dEx) {
     		
@@ -305,7 +316,7 @@ public class UsuarisController extends PantallaBaseController {
 			usuari.setPerfil(request.getParameter("item_perfil"));
 			usuari.setEmail(request.getParameter("item_email"));
 			usuari.setObservaciones(request.getParameter("item_observacions"));
-			            
+			usuari.setPermiso(Usuario.PERMISO_MODIFICACION_NORMATIVA, request.getParameter("item_check_permis_modificacio_normativa") != null && !"".equals(request.getParameter("item_check_permis_modificacio_normativa")));		            
 			usuarioDelegate.grabarUsuario(usuari);
 			
 			String ok = messageSource.getMessage("usuari.guardat.correcte", null, request.getLocale());

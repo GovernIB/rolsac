@@ -1,11 +1,15 @@
 package org.ibit.rol.sac.model;
 
-import java.util.Set;
 import java.util.Iterator;
+import java.util.Set;
 
 public class Usuario implements ValueObject {
 
 	private static final long serialVersionUID = 1L;
+	
+	public static String PERMISO_MODIFICACION_NORMATIVA = "P_MOD_NOR";
+	public static String PERMISO_SEPARADOR = ",";
+	
 	
 	public Long getId() {
         return id;
@@ -115,5 +119,81 @@ public class Usuario implements ValueObject {
     private Set unidadesAdministrativas;
     private String email;
     private Set perfilsGestor;
+    //permisos separados por coma(PERMISO_SEPARADOR), por si desean anyadir mas
+    //Contiene los permisos que tiene el usuario
+    private String permisos; 
+    
+	/**
+	 * Recupera true si un usuario tiene un permiso determinado definido a nivel de aplicacion
+	 * @param permiso
+	 * @return true si tiene el permiso
+	 */
+	public boolean tienePermiso(String permiso) {
+		return tienePermiso(this.permisos,permiso);
+	}
+	
+	public void setPermiso(String permiso, boolean tienePermiso) {
+		this.permisos=setPermiso(this.permisos,permiso,tienePermiso);
+	}
+	
+	
+	public static boolean tienePermiso(String permisos,String permiso) {
+		return permisos!=null && permisos.contains(permiso);
+	}
+	
+	/**
+	 * actualiza el permiso indicado en la lista de permisos facilitada.
+	 * @param permisos lista de permisos separada por comas
+	 * @param permiso
+	 * @param tienePermiso
+	 */
+	public static String setPermiso(String permisos, String permiso, boolean tienePermiso) {
+		//usamos un separador para que quede claro que permisos existen si se consulta directamente la BBDD
+		String[] lperm;
+		String res = "";
+		if(tienePermiso(permisos,permiso)) {
+			if(!tienePermiso) {
+				//tiene el permiso y se lo hemos de quitar (this.permisos no puede ser nulo)
+				lperm= permisos.split(PERMISO_SEPARADOR);
+				boolean primero=true;
+				for (String p : lperm) {
+					if(primero) {
+						primero=false;
+					}else {
+						res+=PERMISO_SEPARADOR;
+					}
+					if(!p.equals(permiso)) {
+						res+=p;
+					}
+				}
+			}else{
+				res=permisos;
+			}			
+		}else {
+			res = permisos;
+			if(tienePermiso) {
+				// hay que anyadir el permiso
+				if(permisos!=null && permisos.length()>0 ) {
+					res+=PERMISO_SEPARADOR + permiso;
+				}else {
+					res=permiso;
+				}
+			}//si no hay que anyadirlo no hacemos nada
+		}	
+		return res;
+	}
 
+	/**
+	 * @return the permisos
+	 */
+	public String getPermisos() {
+		return permisos;
+	}
+
+	/**
+	 * @param permisos the permisos to set
+	 */
+	public void setPermisos(String permisos) {
+		this.permisos = permisos;
+	}
 }

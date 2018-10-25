@@ -1228,6 +1228,20 @@ function CDetall() {
 		
 		ModulDocuments.inicializarDocuments(dades.documents);
 		ModulUnitatAdministrativa.inicializarUnidadesAdministrativas(dades.uas);
+		
+		
+		if(!permisoGestionNormativas){
+			//si no tiene permisos deshabilitamos los botones
+			$("#modulDocumentNormativa a.btn.elimina").hide();
+			$("#modulDocumentNormativa a.btn.gestiona").hide();
+			
+			$("#modul_unitats_administratives a.btn.elimina").hide();
+			$("#modul_unitats_administratives a.btn.consulta").hide();
+			
+			$("#modul_afectacions a.btn.elimina").hide();
+			$("#modul_afectacions a.btn.gestiona").hide();
+		}
+		
 
 		// Marcamos el formulario como "no modificado".
 		this.modificado(false);		
