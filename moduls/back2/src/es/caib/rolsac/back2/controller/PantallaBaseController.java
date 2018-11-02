@@ -52,9 +52,7 @@ public abstract class PantallaBaseController {
 	    	String username = request.getRemoteUser();
 	    	nomLlinatges = username; 
 	    	
-		    try {
-		    	
-		    	model.put("idiomaVal", DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
+		    try {		    			    	
 		    	
 		    	UsuarioDelegate usuariDelegate = DelegateUtil.getUsuarioDelegate();
 		    	Usuario usuari = usuariDelegate.obtenerUsuariobyUsername(username);
@@ -71,6 +69,12 @@ public abstract class PantallaBaseController {
 				
 			}
 		    
+		}
+		
+		try {
+			model.put("idiomaVal", DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
+		} catch (DelegateException e1) {
+			log.error(ExceptionUtils.getStackTrace(e1));
 		}
 			    
 	    model.put("capNomLlinatges", nomLlinatges);

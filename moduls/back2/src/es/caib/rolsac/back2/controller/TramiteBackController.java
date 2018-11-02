@@ -353,7 +353,9 @@ public class TramiteBackController {
 
 			//#4 si el tramite tiene momento=ini, el procedimiento es publico debe tener modelo solicitud obligatoriamente
 			if (edicion && isProcedimientoConEstadoPublicacionPublica && fase == 1 &&
-					(request.getParameter("formularisTramit") == null || request.getParameter("formularisTramit").equals(""))) {
+					(request.getParameter("formularisTramit") == null || request.getParameter("formularisTramit").equals("")) 
+					&& tramite.isPresencial() //#438 solo se pide el modelo si es presencial					
+					) {
 				
 				error = messageSource.getMessage("error.tramit_inici_sin_model", null, request.getLocale());
 	            result = new IdNomDTO(-3l, error);

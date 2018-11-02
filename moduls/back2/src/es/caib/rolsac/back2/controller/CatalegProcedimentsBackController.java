@@ -59,12 +59,10 @@ import org.ibit.rol.sac.model.TraduccionTramite;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Usuario;
-import org.ibit.rol.sac.model.ValidacionNormativa;
 import org.ibit.rol.sac.model.criteria.BuscadorProcedimientoCriteria;
 import org.ibit.rol.sac.model.dto.CodNomDTO;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.model.dto.ProcedimientoLocalDTO;
-import org.ibit.rol.sac.model.dto.ProcedimientoNormativaDTO;
 import org.ibit.rol.sac.persistence.delegate.AuditoriaDelegate;
 import org.ibit.rol.sac.persistence.delegate.CatalegDocumentsDelegate;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
@@ -82,8 +80,6 @@ import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -249,7 +245,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			
 			try {
 				
-				UnidadAdministrativa ua = (UnidadAdministrativa) getUAFromSession(session);
+				UnidadAdministrativa ua = getUAFromSession(session);
 				buscadorCriteria.setUnidadAdministrativa(ua);
 
 				ProcedimientoDelegate procedimientosDelegate = DelegateUtil.getProcedimientoDelegate();
@@ -288,7 +284,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			
 			try {
 				
-				UnidadAdministrativa ua = (UnidadAdministrativa) getUAFromSession(session);
+				UnidadAdministrativa ua = getUAFromSession(session);
 				buscadorCriteria.setUnidadAdministrativa(ua);
 
 				ProcedimientoDelegate procedimientosDelegate = DelegateUtil.getProcedimientoDelegate();
@@ -775,10 +771,10 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	    
         for (String lang : langs) {
             if (proc.getTraduccion(lang) != null) {
-                resultats.put(lang, (TraduccionProcedimientoLocal) proc.getTraduccion(lang));
+                resultats.put(lang, proc.getTraduccion(lang));
             } else {
                 if (proc.getTraduccion(langDefault) != null) {
-                    resultats.put(lang, (TraduccionProcedimientoLocal) proc.getTraduccion(langDefault));
+                    resultats.put(lang, proc.getTraduccion(langDefault));
                 } else {
                     resultats.put(lang, new TraduccionProcedimientoLocal());
                 }
@@ -1076,10 +1072,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 						if (tramite.getFase() == Tramite.INICIACION) {
 							hayTramiteDeIniciacion = true;
 							numTramitesIniciacion++;
-							//#349 si el tramite de ini no tiene modelo solicitud
-							if(tramite.getFormularios() == null || tramite.getFormularios().size() == 0){
-								hayTramiteSinModelo = true;
-								
+							//#349 si el tramite de ini no tiene modelo solicitud y (#438) es presencial , los telematicos no requieren modelo
+							if((tramite.getFormularios() == null || tramite.getFormularios().size() == 0 ) && tramite.isPresencial()){
+								hayTramiteSinModelo = true;								
 							}
 						}
 					}
@@ -1765,7 +1760,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	                hvp.setHechoVital(hv);
 	               
 	                int maxOrden = 0;
-	                for (HechoVitalProcedimiento hechoVitalProcedimiento : (List<HechoVitalProcedimiento>)hv.getHechosVitalesProcedimientos()) {
+	                for (HechoVitalProcedimiento hechoVitalProcedimiento : hv.getHechosVitalesProcedimientos()) {
 	                    if (hechoVitalProcedimiento != null) {
 	                        if (maxOrden < hechoVitalProcedimiento.getOrden()) {
 	                            maxOrden = hechoVitalProcedimiento.getOrden();
