@@ -5,17 +5,15 @@ import java.util.List;
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.UnidadNormativa;
-import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
+
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Session;
 
 /**
  * SessionBean para mantener y consultar UnidadNormativa. (PORMAD)
@@ -47,6 +45,7 @@ public abstract class UnidadNormativaFacadeEJB extends HibernateEJB
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
+	@Override
 	public void ejbCreate() throws CreateException
 	{
         super.ejbCreate();
@@ -110,7 +109,7 @@ public abstract class UnidadNormativaFacadeEJB extends HibernateEJB
      * @param	idNormativa	Identificador de una Normativa
      * @return Devuelve el identificador  de la unidad Normativa guardada
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin}"
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
      */
 	public void grabarUnidadesNormativa(List<UnidadNormativa> unidadesNormativaNuevas, List<Long> unidadesNormativaABorrar) {
 		
@@ -171,7 +170,7 @@ public abstract class UnidadNormativaFacadeEJB extends HibernateEJB
      * Borra una UnidadNormativa.
      * @param id	Identificador de la unidad Normativa a borrar.
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin}"
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
      */
 	public void borrarUnidadNormativa(Long id)
 	{
