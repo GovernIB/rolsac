@@ -2821,8 +2821,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	         }
          } catch (Exception he) {
              throw new EJBException(he);
-		 } finally {
-		             close(session);
 		 }
          
          
