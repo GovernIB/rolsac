@@ -14,13 +14,6 @@ import java.util.Vector;
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import net.sf.hibernate.Criteria;
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.expression.Expression;
-
 import org.apache.axis.utils.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.ibit.rol.sac.model.AdministracionRemota;
@@ -31,7 +24,6 @@ import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaResumen;
 import org.ibit.rol.sac.model.FichaResumenUA;
 import org.ibit.rol.sac.model.FichaUA;
-import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
@@ -67,6 +59,12 @@ import es.caib.solr.api.model.PathUO;
 import es.caib.solr.api.model.types.EnumAplicacionId;
 import es.caib.solr.api.model.types.EnumCategoria;
 import es.caib.solr.api.model.types.EnumIdiomas;
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.expression.Expression;
 
 /**
  * SessionBean para mantener y consultar Unidades Administrativas.
@@ -273,7 +271,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 					for ( int i = 0 ; i < lista.size() ; i++ ) {
 
-						UnidadAdministrativa uni = (UnidadAdministrativa) lista.get(i);
+						UnidadAdministrativa uni = lista.get(i);
 						uni.setOrden(i);
 
 					}
@@ -417,7 +415,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 			for ( int i = 0; i < ua.getHijos().size(); i++ ) {
 
-				UnidadAdministrativa uaHijo = (UnidadAdministrativa) ua.getHijos().get(i);
+				UnidadAdministrativa uaHijo = ua.getHijos().get(i);
 				if (uaHijo != null && visible(uaHijo))
 					result.add(uaHijo);
 
@@ -466,7 +464,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 				for ( int i = 0 ; i < uas.size() ; i++ ) {
 
-					UnidadAdministrativa unidad = (UnidadAdministrativa) uas.get(i);
+					UnidadAdministrativa unidad = uas.get(i);
 					UnidadAdministrativa padre = unidad.getPadre();
 					boolean duplicada = false;
 
@@ -786,6 +784,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Deprecated
 	public UnidadAdministrativa consultarUnidadAdministrativaPMA(Long id) {
 		Session session = getSession();
 
@@ -886,7 +885,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 			}
 
-			UnidadAdministrativa ua = (UnidadAdministrativa) result.get(0);
+			UnidadAdministrativa ua = result.get(0);
 
 			if ( visible(ua) ) {
 
@@ -1798,7 +1797,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				
 				/* 16/12/2013: Se genera un orden en lugar de recuperar el orden real debido a que se ha cambiado el mecanismo que establece el orden de las fichas.
 				 Los datos antiguos generan valores que no coinciden con los generados por el nuevo mecanismo.*/
-				List<FichaDTO> listaFichas = (List<FichaDTO>) query.list();
+				List<FichaDTO> listaFichas = query.list();
 				
 				long ordenBase =  0L;
 				
@@ -1859,7 +1858,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				
 				/* 16/12/2013: Se genera un orden en lugar de recuperar el orden real debido a que se ha cambiado el mecanismo que establece el orden de las fichas.
 				 Los datos antiguos generan valores que no coinciden con los generados por el nuevo mecanismo.*/
-				listaFichas = (ArrayList<FichaDTO>) query.list();
+				listaFichas = query.list();
 																			
 				
 			} catch (HibernateException he) {
@@ -2820,8 +2819,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	         }
          } catch (Exception he) {
              throw new EJBException(he);
-		 } finally {
-		             close(session);
 		 }
          
          
