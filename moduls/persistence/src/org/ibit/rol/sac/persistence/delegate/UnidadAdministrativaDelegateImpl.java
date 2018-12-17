@@ -15,10 +15,10 @@ import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.criteria.PaginacionCriteria;
 import org.ibit.rol.sac.model.dto.FichaDTO;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.intf.UnidadAdministrativaFacade;
 import org.ibit.rol.sac.persistence.intf.UnidadAdministrativaFacadeHome;
 import org.ibit.rol.sac.persistence.util.UnidadAdministrativaFacadeUtil;
-import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.caib.solr.api.SolrIndexer;
@@ -471,6 +471,15 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
     public ResultadoBusqueda consultaUnidadesAdministrativas(FiltroGenerico filtro) throws DelegateException {
     	try {
     		return getFacade().consultaUnidadesAdministrativas(filtro);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    } 
+   
+    
+    public String consultaCodigoDir3(Long id) throws DelegateException {
+    	try {
+    		return getFacade().consultaCodigoDir3(id);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }

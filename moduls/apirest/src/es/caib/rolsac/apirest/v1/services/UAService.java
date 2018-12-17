@@ -26,6 +26,7 @@ import es.caib.rolsac.apirest.v1.model.filtros.FiltroUA;
 import es.caib.rolsac.apirest.v1.model.orden.CampoOrden;
 import es.caib.rolsac.apirest.v1.model.orden.Orden;
 import es.caib.rolsac.apirest.v1.model.respuestas.RespuestaError;
+import es.caib.rolsac.apirest.v1.model.respuestas.RespuestaSimple;
 import es.caib.rolsac.apirest.v1.model.respuestas.RespuestaUA;
 import es.caib.rolsac.apirest.v1.utiles.Constantes;
 import es.caib.rolsac.apirest.v1.utiles.Utiles;
@@ -137,6 +138,37 @@ public class UAService {
 		fg.setId(new Long(codigo));		
 		
 		return getRespuesta(fg);	
+		
+	}
+	
+	
+	/**
+	 * Para obtener el código DIR3 de la UA (el suyo o el antecesor) .
+	 * @param id
+	 * @return
+	 * @throws Exception 
+	 */
+	@Produces( { MediaType.APPLICATION_JSON } )
+	@POST
+	@Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
+	@Path("/codigoDir3/{codigo}")
+	@ApiOperation( 
+	    value = "Obtiene el codigo dir3 de la Unidad Administrativa",
+	    notes = "Obtiene el codigo dir3 de la Unidad Administrativa "
+	)
+	@ApiResponses(value = { 
+			 @ApiResponse(code = 200, message =  Constantes.MSJ_200_GENERICO, response = RespuestaSimple.class),
+			@ApiResponse(code = 400, message = Constantes.MSJ_400_GENERICO, response = RespuestaError.class)
+		   })
+		
+	public RespuestaSimple  getCodDir3UA(  
+			@ApiParam( value = "Codigo Unidad Administrativa", required = true ) @PathParam( "codigo") final  Long codigo			
+			) throws Exception,ValidationException {
+		
+		String resultadoBusqueda = DelegateUtil.getUADelegate().consultaCodigoDir3(codigo);
+		
+		RespuestaSimple res =new RespuestaSimple (Response.Status.OK.getStatusCode()+"", Constantes.mensaje200(1) , new Integer(1), resultadoBusqueda);						
+		return res;			
 		
 	}
 	
