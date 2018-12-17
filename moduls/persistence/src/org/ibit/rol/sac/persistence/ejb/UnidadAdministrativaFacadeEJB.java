@@ -2988,11 +2988,12 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				resultado = ua.getCodigoDIR3();				
 			}else {
 				UnidadAdministrativa padre = ua.getPadre();
-				while(StringUtils.isEmpty(padre.getCodigoDIR3()) &&  !padre.isRaiz() && padre !=null ){
+				
+				while( padre!=null && StringUtils.isEmpty(padre.getCodigoDIR3())  && !padre.isRaiz() && padre !=null ){
 					padre=padre.getPadre();
 				}	
 				
-				if(!StringUtils.isEmpty(padre.getCodigoDIR3())){
+				if(padre!=null && !StringUtils.isEmpty(padre.getCodigoDIR3())){
 					resultado = padre.getCodigoDIR3();
 				}	
 			}			

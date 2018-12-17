@@ -14,6 +14,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang3.StringUtils;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
@@ -167,7 +168,8 @@ public class UAService {
 		
 		String resultadoBusqueda = DelegateUtil.getUADelegate().consultaCodigoDir3(codigo);
 		
-		RespuestaSimple res =new RespuestaSimple (Response.Status.OK.getStatusCode()+"", Constantes.mensaje200(1) , new Integer(1), resultadoBusqueda);						
+		int numeroElementos = StringUtils.isEmpty(resultadoBusqueda)?0:1;
+		RespuestaSimple res =new RespuestaSimple (Response.Status.OK.getStatusCode()+"", Constantes.mensaje200(numeroElementos) , new Integer(numeroElementos), resultadoBusqueda);						
 		return res;			
 		
 	}
