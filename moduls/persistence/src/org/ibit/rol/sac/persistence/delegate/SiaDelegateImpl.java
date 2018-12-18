@@ -7,8 +7,11 @@ import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
 
+import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.Servicio;
 import org.ibit.rol.sac.model.SiaJob;
 import org.ibit.rol.sac.model.SiaUA;
+import org.ibit.rol.sac.model.ws.SiaResultado;
 import org.ibit.rol.sac.persistence.intf.SiaPendienteFacade;
 import org.ibit.rol.sac.persistence.intf.SiaPendienteFacadeHome;
 import org.ibit.rol.sac.persistence.util.SiaPendienteFacadeUtil;
@@ -79,6 +82,24 @@ public class SiaDelegateImpl extends SiaDelegate implements  StatelessDelegate, 
 	
 	   try {
 		   getFacade().info(siaJob);
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
+	}	
+	
+	@Override
+	public SiaResultado enviarProcedimientoNoActivo(ProcedimientoLocal proc) throws DelegateException{
+	   try {
+		   return getFacade().enviarProcedimientoNoActivo(proc);
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
+	}	
+	
+	@Override
+	public SiaResultado enviarServicioNoActivo(Servicio serv) throws DelegateException{
+	   try {
+		   return getFacade().enviarServicioNoActivo(serv);
        } catch (RemoteException e) {
            throw new DelegateException(e);
        }

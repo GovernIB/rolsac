@@ -147,7 +147,7 @@ function DetallBase_n(soloFicha, reglasFormulario, identificadores) {
 
 	};
 
-	this.guardaGenerico = function(dataVars) {
+	this.guardaGenerico = function(dataVars, funcion) {
 		
 		DebugJS.debug("Entrando en DetallBase.guardaGenerico");
 
@@ -181,11 +181,16 @@ function DetallBase_n(soloFicha, reglasFormulario, identificadores) {
 
 				} else {
 
-					if ( !soloFicha )
-						Detall.recarregar(data.id);
-
-					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});
-
+					if (typeof funcion != 'undefined') {
+						//Llamamos a la funcion
+						funcion();
+					} else {
+						//Recargamos
+						if ( !soloFicha )
+							Detall.recarregar(data.id);
+	
+						Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});
+					}
 				}//End if
 
 			} //Fin success
@@ -200,7 +205,17 @@ function DetallBase_n(soloFicha, reglasFormulario, identificadores) {
 		
 		DebugJS.debug("Entrando en DetallBase.guarda");
 		
-		that.guardaGenerico(dataVars);
+		that.guardaGenerico(dataVars, undefined);
+		
+		DebugJS.debug("Saliendo de DetallBase.guarda");
+		
+	};
+	
+	this.guardaCallback = function(dataVars, funcion) {
+		
+		DebugJS.debug("Entrando en DetallBase.guarda");
+		
+		that.guardaGenerico(dataVars, funcion);
 		
 		DebugJS.debug("Saliendo de DetallBase.guarda");
 		

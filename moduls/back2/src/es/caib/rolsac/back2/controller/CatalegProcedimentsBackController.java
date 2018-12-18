@@ -44,6 +44,7 @@ import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.Procedimiento;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.PublicoObjetivo;
+import org.ibit.rol.sac.model.SiaUA;
 import org.ibit.rol.sac.model.SilencioAdm;
 import org.ibit.rol.sac.model.Tipo;
 import org.ibit.rol.sac.model.TipoAfectacion;
@@ -63,6 +64,7 @@ import org.ibit.rol.sac.model.criteria.BuscadorProcedimientoCriteria;
 import org.ibit.rol.sac.model.dto.CodNomDTO;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.model.dto.ProcedimientoLocalDTO;
+import org.ibit.rol.sac.model.ws.SiaResultado;
 import org.ibit.rol.sac.persistence.delegate.AuditoriaDelegate;
 import org.ibit.rol.sac.persistence.delegate.CatalegDocumentsDelegate;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
@@ -78,6 +80,7 @@ import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
 import org.ibit.rol.sac.persistence.delegate.SilencioAdmDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
+import org.ibit.rol.sac.persistence.util.SiaEnviableResultado;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
@@ -643,10 +646,17 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
             recuperaTramites(resultats, proc, request);     // Recuperar los trámites relacionados de un procedimiento
             recuperaPO(resultats, proc, lang);              // Recuperar los públicos objetivos asociados a un procedimiento
             
-            //#366 se carga el combo silencio adm y su selección
+            //#366 se carga el combo silencio adm y su seleccion
             if (proc.getSilencio() != null) {
 				resultats.put("item_silenci_combo", proc.getSilencio().getId());
 			}
+            
+            //#431 Activar boton de envio a SIA en estado no activo
+            if (proc.getEstadoSIA() == null || proc.getEstadoSIA().isEmpty() || proc.getEstadoSIA().equals(SiaUtils.ESTADO_BAJA)) {
+            	resultats.put("boto_sia_no_activo", "S");
+            } else {
+            	resultats.put("boto_sia_no_activo", "N");
+            } 
             
 		} catch (DelegateException dEx) {
 			
@@ -918,6 +928,83 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		}
 
 		return resultatStatus;
+		
+	}
+	
+	@RequestMapping(value = "/envioSiaNoActivo.do", method = POST)
+	public @ResponseBody IdNomDTO envioSiaNoActivo(HttpSession session, HttpServletRequest request) {
+		IdNomDTO result = null;
+		String error = null;
+
+		try {
+
+			Long id = null;
+			if (request.getParameter("id").isEmpty()) {
+				
+				result = new IdNomDTO(-65l,  messageSource.getMessage("proc.error.esnulo", null, request.getLocale()));	
+				
+			} else {
+				
+				ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
+				id = Long.parseLong(request.getParameter("id"));
+				ProcedimientoLocal procedimiento = procedimientoDelegate.obtenerProcedimientoNewBack(id);
+				if (procedimiento.getEstadoSIA() != null && procedimiento.getEstadoSIA().equals(SiaUtils.ESTADO_ALTA)) {
+					result = new IdNomDTO(-65l,  messageSource.getMessage("proc.error.estaactivo", null, request.getLocale()));
+				} else { 
+					SiaResultado resultado = DelegateUtil.getSiaDelegate().enviarProcedimientoNoActivo(procedimiento);
+					if (resultado.isCorrecto()) {
+						result = new IdNomDTO(id, "");
+					} else {
+						result = new IdNomDTO(-66l, resultado.getMensaje());
+					}
+				}
+			}
+			return result;
+			
+		} catch (Exception exception) {
+			error = exception.getMessage();
+			result = new IdNomDTO(-64l, error);
+			
+		} 
+
+		return result;
+		
+	}
+	
+	@RequestMapping(value = "/checkEnvioSiaNoActivo.do", method = POST)
+	public @ResponseBody IdNomDTO checkEnvioSiaNoActivo(HttpSession session, HttpServletRequest request) {
+		IdNomDTO result = null;
+		String error = null;
+
+		try {
+
+			Long id = null;
+			if (request.getParameter("id").isEmpty()) {
+				result  = new IdNomDTO(-65l, messageSource.getMessage("txt.sia.error.noproc", null, request.getLocale()));				
+			} else {
+				ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
+				
+				id = Long.parseLong(request.getParameter("id"));
+				ProcedimientoLocal procedimiento = procedimientoDelegate.obtenerProcedimiento(id);
+				SiaEnviableResultado resultado = SiaUtils.isEnviableNoActivo(procedimiento);
+				if (resultado.isNotificiarSIA()) {
+					result = new IdNomDTO(id, "");
+				} else {
+					if (resultado.getRespuesta() == null || resultado.getRespuesta().isEmpty()) {
+						result = new IdNomDTO(-67l, messageSource.getMessage("proc.error.noenviar", null, request.getLocale()));
+					} else {
+						result = new IdNomDTO(-66l, messageSource.getMessage(resultado.getRespuesta(), null, request.getLocale()));
+					}
+				}	
+			}
+			
+		} catch (Exception exception) {
+			error = exception.getMessage();
+			result = new IdNomDTO(-64l, error);
+			
+		} 
+
+		return result;
 		
 	}
 	

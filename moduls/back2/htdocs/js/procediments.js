@@ -51,6 +51,27 @@ $(document).ready(function() {
 		
 	});
 	
+	// #431 Hacemos un guardar y después que llame a otro evento
+	jQuery("#btnEnvioSiaNoActivo").click(function() {
+		
+		//Detall.guarda();
+		if ( Detall.cambiosSinGuardar() ) {
+
+			Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: txtAvisoCambiosSinGuardar, funcio: function() {
+
+				Detall.guardaFinal(Detall.checkSiaNoActivo);				
+
+			}});
+
+		} else {
+
+			Detall.checkSiaNoActivo();
+
+		}
+		
+		
+	});
+	
 	/*
 	 * amartin: casos de guardado de listas de elementos donde su gestión se ha implementado con checkboxes.
 	 * Es necesario hacerlo vía eventos personalizados, ya que el DOM es diferente y no podemos tirar de los
@@ -457,7 +478,7 @@ function CDetall() {
 	this.tipusAuditoria = 'procediment';
 	this.tipusEstadistica = 'procediment';
 
-	//Se comprueba que 
+	//Se comprueba que esta correcto
 	this.guarda = function() {
 		
 		
@@ -479,7 +500,7 @@ function CDetall() {
 			},
 			success: function(data) {
 				if (data.id == null || data.id > 0) {
-					that.guardaFinal();
+					that.guardaFinal(undefined);
 				} else if (data.id  == -66) {
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
 				} else {
@@ -492,9 +513,10 @@ function CDetall() {
 		});
 		
 	};
+	
 	//Se anyaden los campos que no se van a serializar directamente mediante .serialize()	
 	//this._baseGuarda = this.guarda;	
-	this.guardaFinal = function () {
+	this.guardaFinal = function (funcion) {
 		// Si el estado de publicación del procedimiento es distinto a 1 (Pública),
 		// no comprobamos que existe un trámite de inicialización. Guardamos directamente.
 		if ( ($('#item_estat').val() != 1) ) {
@@ -505,7 +527,7 @@ function CDetall() {
 			urlParams += "&" + ModulPublicObjectiu.listaPublics();
 			urlParams += "&" + ModulTramit.listaTramites();
 
-			that.guardaGenerico(urlParams);
+			that.guardaGenerico(urlParams, funcion);
 
 		}
 
@@ -521,7 +543,7 @@ function CDetall() {
 			urlParams += "&" + ModulPublicObjectiu.listaPublics();
 			urlParams += "&" + ModulTramit.listaTramites();
 
-			that.guardaGenerico(urlParams);
+			that.guardaGenerico(urlParams, funcion);
 
 		// Si no hay trámite de inicialización con estado de publicación 1, lanzamos mensaje de error.
 		} else {
@@ -539,7 +561,79 @@ function CDetall() {
 		}
 
 	};
+	/** 
+	 * Se encarga de preguntar si quiere enviar a SIA
+	 */
+	this.checkSiaNoActivo = function (funcion) {
+		
+		var id = escriptori_detall_elm.find("#item_id").val();
+		
+			$.ajax({
+				type: "POST",
+				url: 'checkEnvioSiaNoActivo.do',
+				data: 'id='+id,
+				dataType: "json",
+				error: function() {
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+				},
+				success: function(data) {
 
+					Llistat.cacheDatosListado = null;
+
+					if (data.id < 0) {
+
+						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
+
+					} else {
+
+						that.envioSiaNoActivo();
+						
+					}//End if
+
+				} //Fin success
+
+			});//Fin ajax
+			
+	};
+	/** 
+	 * Se encarga de preguntar si quiere enviar a SIA
+	 */
+	this.envioSiaNoActivo = function (funcion) {
+		
+		var id = escriptori_detall_elm.find("#item_id").val();
+		
+		Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: 'Se va a proceder a enviar este procedimiento en el sistema SIA como no activo,¿desea continuar?', funcio: function() {
+	
+			$.ajax({
+				type: "POST",
+				url: 'envioSiaNoActivo.do',
+				data: 'id='+id,
+				dataType: "json",
+				error: function() {
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+				},
+				success: function(data) {
+
+					Llistat.cacheDatosListado = null;
+
+					if (data.id < 0) {
+
+						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
+
+					} else {
+
+						Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: 'Enviado a SIA correctamente'});
+						Detall.recarregar(data.id);
+					}//End if
+
+				} //Fin success
+
+			});//Fin ajax
+			
+		}});
+	};
+
+	
 	this.urlPrevisualizar = urlPrevisualizarProcedimiento;
 
 	// Sobrecargo método para preview personalizado.
@@ -959,6 +1053,13 @@ function CDetall() {
 
 		}
 
+		//#431 Activamos o no botón dependendiendo del param
+		if (dada_node.boto_sia_no_activo != undefined && dada_node.boto_sia_no_activo == 'S') { 
+			$("#liEnvioSiaNoActivo").show();
+		} else {
+			$("#liEnvioSiaNoActivo").hide();
+		}
+		
 		this.modificado(false);
 	
 	};

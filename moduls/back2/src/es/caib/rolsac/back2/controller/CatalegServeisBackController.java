@@ -44,6 +44,7 @@ import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.HechoVitalServicio;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Normativa;
+import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.Servicio;
 import org.ibit.rol.sac.model.SilencioAdm;
@@ -63,6 +64,7 @@ import org.ibit.rol.sac.model.criteria.BuscadorServicioCriteria;
 import org.ibit.rol.sac.model.dto.CodNomDTO;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.model.dto.ServicioDTO;
+import org.ibit.rol.sac.model.ws.SiaResultado;
 import org.ibit.rol.sac.persistence.delegate.AuditoriaDelegate;
 import org.ibit.rol.sac.persistence.delegate.CatalegDocumentsDelegate;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
@@ -72,11 +74,14 @@ import org.ibit.rol.sac.persistence.delegate.ExcepcioDocumentacioDelegate;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalServicioDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
+import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
 import org.ibit.rol.sac.persistence.delegate.ServicioDelegate;
 import org.ibit.rol.sac.persistence.delegate.SilencioAdmDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
+import org.ibit.rol.sac.persistence.util.SiaEnviableResultado;
+import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -652,7 +657,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 				resultats.put("item_organ_instructor_nom", ua.getNombreUnidadAdministrativa(lang));
 			}
 
-			// Obtención de listado de posibles hechos vitales del servicio
+			// Obtencion de listado de posibles hechos vitales del servicio
 			Set<PublicoObjetivo> listaPublicosObjetivos =  serv.getPublicosObjetivo();
 			if (!listaPublicosObjetivos.isEmpty()) {
 				resultats.put("listadoHechosVitales", LlistatUtil.llistarHechosVitales(listaPublicosObjetivos, lang));
@@ -660,10 +665,16 @@ public class CatalegServeisBackController extends PantallaBaseController {
 				resultats.put("listadoHechosVitales", Collections.EMPTY_SET);
 			}
 
-			recuperaIdiomas(resultats, serv, lang);         // Recuperar los servicios según los idiomas
-            recuperaPO(resultats, serv, lang);              // Recuperar los públicos objetivos asociados a un servicio
+			recuperaIdiomas(resultats, serv, lang);         // Recuperar los servicios segun los idiomas
+            recuperaPO(resultats, serv, lang);              // Recuperar los publicos objetivos asociados a un servicio
 
-
+            //#431 Activar boton de envio a SIA en estado no activo
+            if (serv.getEstadoSIA() == null || serv.getEstadoSIA().isEmpty() || serv.getEstadoSIA().equals(SiaUtils.ESTADO_BAJA)) {
+            	resultats.put("boto_sia_no_activo", "S");
+            } else {
+            	resultats.put("boto_sia_no_activo", "N");
+            } 
+            
 		} catch (DelegateException dEx) {
 			
 			logException(log, dEx);
@@ -838,6 +849,83 @@ public class CatalegServeisBackController extends PantallaBaseController {
 		}
 
 		return resultatStatus;
+		
+	}
+	
+	@RequestMapping(value = "/envioSiaNoActivo.do", method = POST)
+	public @ResponseBody IdNomDTO envioSiaNoActivo(HttpSession session, HttpServletRequest request) {
+		IdNomDTO result = null;
+		String error = null;
+
+		try {
+
+			Long id = null;
+			if (request.getParameter("id").isEmpty()) {
+				
+				result = new IdNomDTO(-65l, messageSource.getMessage("serv.error.esnulo", null, request.getLocale()));
+				
+			} else {
+				
+				id = Long.parseLong(request.getParameter("id"));
+				ServicioDelegate servicioDelegate = DelegateUtil.getServicioDelegate();
+				Servicio servicio = servicioDelegate.obtenerServicioNewBack(id);
+				if (servicio.getEstadoSIA() != null && servicio.getEstadoSIA().equals(SiaUtils.ESTADO_ALTA)) {
+					result = new IdNomDTO(-65l,  messageSource.getMessage("serv.error.yaactivo", null, request.getLocale()) );
+				} else {
+					SiaResultado resultado = DelegateUtil.getSiaDelegate().enviarServicioNoActivo(servicio);
+					if (resultado.isCorrecto()) {
+						result = new IdNomDTO(id, "");
+					} else {
+						result = new IdNomDTO(-66l, resultado.getMensaje());
+					}
+				}
+			}
+			return new IdNomDTO(id, "");
+			
+		} catch (Exception exception) {
+			error = exception.getMessage();
+			result = new IdNomDTO(-64l, error);
+			
+		} 
+
+		return result;
+		
+	}
+	
+	@RequestMapping(value = "/checkEnvioSiaNoActivo.do", method = POST)
+	public @ResponseBody IdNomDTO checkEnvioSiaNoActivo(HttpSession session, HttpServletRequest request) {
+		IdNomDTO result = null;
+		String error = null;
+
+		try {
+
+			Long id = null;
+			if (request.getParameter("id").isEmpty()) {
+				result  = new IdNomDTO(-65l, messageSource.getMessage("txt.sia.error.noserv", null, request.getLocale()));				
+			} else {
+				
+				id = Long.parseLong(request.getParameter("id"));
+				ServicioDelegate servicioDelegate = DelegateUtil.getServicioDelegate();
+				Servicio servicio = servicioDelegate.obtenerServicio(id);
+				SiaEnviableResultado resultado = SiaUtils.isEnviableNoActivo(servicio);
+				if (resultado.isNotificiarSIA()) {
+					result = new IdNomDTO(id, "");
+				} else {
+					if (resultado.getRespuesta() == null || resultado.getRespuesta().isEmpty()) {
+						result = new IdNomDTO(-67l,  messageSource.getMessage("serv.error.noenviar", null, request.getLocale()));
+					} else {
+						result = new IdNomDTO(-66l, messageSource.getMessage(resultado.getRespuesta(), null, request.getLocale()));
+					}
+				}	
+			}
+			
+		} catch (Exception exception) {
+			error = exception.getMessage();
+			result = new IdNomDTO(-64l, error);
+			
+		} 
+
+		return result;
 		
 	}
 	

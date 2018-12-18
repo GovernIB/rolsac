@@ -1268,6 +1268,9 @@
                               <li class="btnPrevisualizar par">
                                   <a id="btnPrevisualizar" href="javascript:;" class="btn previsualitza"><span><span><spring:message code='boto.previsualitza'/></span></span></a>
                               </li>
+                              <li id="liEnvioSiaNoActivo" class="btnPrevisualizar par">
+	                                 <a id="btnEnvioSiaNoActivo" href="javascript:;" class="btn previsualitza"><span><span><spring:message code='boto.envio_sia_no_activo'/></span></span></a>
+	                          </li>	
                           </ul>
                         </div>
                         <!-- /botonera dalt -->

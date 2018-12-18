@@ -139,7 +139,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 				    		
 				    		SiaResultado siaResultado = null;
 							if (siaEnviableResultado.isNotificiarSIA()) {
-								SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(procedimiento, siaEnviableResultado);
+								SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(procedimiento, siaEnviableResultado, true);
 								if (siaCumpleDatos.isCumpleDatos()) {
 						    		try {
 						    			// Enviamos a SIA
@@ -149,7 +149,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 										siaResultado = new SiaResultado(SiaResultado.RESULTADO_ERROR, ExceptionUtils.getStackTrace(e));												
 									}	   
 								} else {
-									//Guardamos un SIA Pendiente como que no cumple datos (última pestaña)
+									//Guardamos un SIA Pendiente como que no cumple datos (ultima pestanya)
 									SiaPendiente siaPendiente = new SiaPendiente();
 									siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_NO_CUMPLE_DATOS);
 									siaPendiente.setExiste(SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE);
@@ -209,7 +209,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 				    		
 				    		SiaResultado siaResultado = null;
 							if (siaEnviableResultado.isNotificiarSIA()) {
-								SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(servicio, siaEnviableResultado);
+								SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(servicio, siaEnviableResultado, true);
 								if (siaCumpleDatos.isCumpleDatos()) {
 						    		try {
 						    			// Enviamos a SIA
@@ -219,7 +219,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 										siaResultado = new SiaResultado(SiaResultado.RESULTADO_ERROR, ExceptionUtils.getStackTrace(e));												
 									}	   
 								} else {
-									//Guardamos un SIA Pendiente como que no cumple datos (última pestaña)
+									//Guardamos un SIA Pendiente como que no cumple datos (ultima pestaña)
 									SiaPendiente siaPendiente = new SiaPendiente();
 									siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_NO_CUMPLE_DATOS);
 									siaPendiente.setExiste(SiaUtils.SIAPENDIENTE_SERVICIO_EXISTE);
@@ -265,7 +265,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	    	final Sia sia = obtenerSiaProcedimiento(proc);
 	    	
 	    	// Enviamos a SIA
-			resultado = SiaWS.enviarSIA(sia, false);
+			resultado = SiaWS.enviarSIA(sia, false, false);
 			
 			// Actualizamos procedimiento
 	    	final SiaPendienteProcesoDelegate siaDelegate = DelegateUtil.getSiaPendienteProcesoDelegate();
@@ -286,6 +286,41 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		return resultado;
 	}
 	
+	/**
+	 * Envia procedimiento como no activo.
+	 * 
+	 * @param proc
+	 * @return
+	 * @throws Exception
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public SiaResultado enviarProcedimientoNoActivo(ProcedimientoLocal proc) throws DelegateException   {
+		
+		// Enviamos a SIA
+		SiaResultado resultado = null;
+    	try {
+    		
+    		// Obtenemos info para enviar a SIA
+	    	final Sia sia = obtenerSiaProcedimientoNoActivo(proc);
+	    	
+	    	// Enviamos a SIA
+			resultado = SiaWS.enviarSIA(sia, false, true);
+			
+			// Actualizamos procedimiento
+	    	final SiaPendienteProcesoDelegate siaDelegate = DelegateUtil.getSiaPendienteProcesoDelegate();
+	    	resultado.setEstadoSIA("B"); //Se marca como baja
+			siaDelegate.actualizarProcedimiento(proc, resultado);
+			
+    	} catch (Exception ex) {
+    		resultado = new SiaResultado();
+    		resultado.setCorrectos(0);
+			resultado.setResultado(SiaResultado.RESULTADO_ERROR); 
+			resultado.setMensaje(ExceptionUtils.getStackTrace(ex));
+    	}
+    	
+		return resultado;
+	}
 	
 	private SiaResultado enviarServicio(Servicio servicio) throws Exception {
 		
@@ -296,7 +331,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 	    	final Sia sia = obtenerSiaServicio(servicio);
 	    	
 	    	// Enviamos a SIA
-			resultado = SiaWS.enviarSIA(sia, false);
+			resultado = SiaWS.enviarSIA(sia, false, false);
 			
 			// Actualizamos servicio
 	    	final SiaPendienteProcesoDelegate siaDelegate = DelegateUtil.getSiaPendienteProcesoDelegate();
@@ -311,6 +346,41 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
     			log.error("Error enviando a SIA el servicio " + servicio.getId() + ": " + ex.getMessage(), ex);
 	    		throw new Exception("Error enviando a SIA el servicio " + servicio.getId() + ": " + ex.getMessage(), ex);
     		}
+    	}
+		
+    	
+		return resultado;
+	}
+
+
+	/**
+	 * Envia servicio como no activo
+	 * @param servicio
+	 * @return
+	 * @throws Exception
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public SiaResultado enviarServicioNoActivo(Servicio servicio) throws DelegateException  {
+		
+		// Enviamos a SIA
+		SiaResultado resultado = null;
+    	try {
+			// Obtenemos info para enviar a SIA
+	    	final Sia sia = obtenerSiaServicioNoActivo(servicio);
+	    	
+	    	// Enviamos a SIA
+			resultado = SiaWS.enviarSIA(sia, false, true);
+			
+			// Actualizamos servicio
+	    	final SiaPendienteProcesoDelegate siaDelegate = DelegateUtil.getSiaPendienteProcesoDelegate();
+	    	resultado.setEstadoSIA("B"); //Se marca como baja
+			siaDelegate.actualizarServicio(servicio, resultado);
+			
+    	} catch (Exception ex) {
+    		resultado = new SiaResultado();
+			resultado.setResultado(SiaResultado.RESULTADO_ERROR); 
+			resultado.setMensaje(ExceptionUtils.getStackTrace(ex));
     	}
 		
     	
@@ -599,7 +669,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 					
 					// Verificamos si se puede enviar a SIA
 					if (siaEnviableResultado.isNotificiarSIA()) {
-						SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(procedimiento, siaEnviableResultado);
+						SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(procedimiento, siaEnviableResultado, true);
 						if (siaCumpleDatos.isCumpleDatos()) {
 							siaResultado = enviarProcedimiento(procedimiento);
 						} else {
@@ -670,7 +740,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 					
 					// Verificamos si se puede enviar a SIA
 					if (siaEnviableResultado.isNotificiarSIA()) {
-						SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(servicio, siaEnviableResultado);
+						SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(servicio, siaEnviableResultado, true);
 						if (siaCumpleDatos.isCumpleDatos()) {
 							siaResultado = enviarServicio(servicio);
 						} else {
@@ -709,7 +779,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		}
 
 		try {
-			resultado = SiaWS.enviarSIA(sia, true);
+			resultado = SiaWS.enviarSIA(sia, true, false);
 		} catch(Exception exception) {
 			log.error("Se ha producido un error enviando el dato a SIA de un borrado de procedimiento " + idProc, exception);
 			throw new Exception("Se ha producido un error enviando el dato a SIA de un borrado de procedimiento " + idProc, exception);
@@ -728,7 +798,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 			sia.setPassword(siaUA.getContrasenya());
 		}
 		try {
-			resultado = SiaWS.enviarSIA(sia, true);
+			resultado = SiaWS.enviarSIA(sia, true, false);
 		} catch(Exception exception) {
 			log.error("Se ha producido un error enviando el dato a SIA de un borrado de servicio " + idServ, exception);
 			throw new Exception("Se ha producido un error enviando el dato a SIA de un borrado de servicio " + idServ, exception);
@@ -849,7 +919,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
     	}
 	}
 	
-	 /**
+	 	/**
 		 * Obtiene el objeto SIA a partir del procedimiento.
 		 * 
 		 * @param procedimiento
@@ -857,18 +927,42 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		 * @throws Exception
 		 */
 		private Sia obtenerSiaProcedimiento(ProcedimientoLocal procedimiento) throws Exception {
-			final Sia sia = new Sia();
 			final SiaEnviableResultado siaEnviableResultado = SiaUtils.isEnviable(procedimiento);
-			final SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(procedimiento, siaEnviableResultado);
-			
+			final SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(procedimiento, siaEnviableResultado, true);
+			return obtenerSiaProcedimiento(procedimiento, siaEnviableResultado, siaCumpleDatos);
+		}
+		
+		/**
+		 * Obtiene el objeto SIA a partir del procedimiento.
+		 * 
+		 * @param procedimiento
+		 * @return
+		 * @throws Exception
+		 */
+		private Sia obtenerSiaProcedimientoNoActivo(ProcedimientoLocal procedimiento) throws Exception {
+			final SiaEnviableResultado siaEnviableResultado = SiaUtils.isEnviableNoActivo(procedimiento);
+			final SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(procedimiento, siaEnviableResultado, false);
+			return obtenerSiaProcedimiento(procedimiento, siaEnviableResultado, siaCumpleDatos);
+		}
+		
+		/**
+		 * Nucleo encargado de obtener el objeto SIA a partir de los datos que se les pasa.
+		 * @param procedimiento
+		 * @param siaEnviableResultado
+		 * @param siaCumpleDatos
+		 * @return
+		 * @throws Exception
+		 */
+		private Sia obtenerSiaProcedimiento(ProcedimientoLocal procedimiento, SiaEnviableResultado siaEnviableResultado, SiaCumpleDatos siaCumpleDatos) throws Exception {
+			final Sia sia = new Sia();
 			sia.setIdElemento(procedimiento.getId().toString());
 			if (procedimiento.getCodigoSIA() != null) {
 				sia.setIdSIA(procedimiento.getCodigoSIA().toString());
 			}
 			
-			sia.setTitulo( siaCumpleDatos.getNombre());//SiaUtils.getNombreProcedimiento(procedimiento) );
+			sia.setTitulo( siaCumpleDatos.getNombre());
 			
-			sia.setDescripcion( siaCumpleDatos.getResumen()); //SiaUtils.getResumenProcedimiento(procedimiento) );
+			sia.setDescripcion( siaCumpleDatos.getResumen()); 
 			
 			
 			sia.setIdCent(siaEnviableResultado.getIdCentro());
@@ -952,10 +1046,10 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 			
 			sia.setEstado(procedimiento.getEstadoSIA());
 			
-			//Obtenemos el tipo de operación a partir de validar el procedimiento.
+			//Obtenemos el tipo de operacion a partir de validar el procedimiento.
 			sia.setOperacion(siaEnviableResultado.getOperacion());
 						
-			//Se ha tenido que poner aquí (y se ha simplificado) pq se produce un error al enviar una modificación.
+			//Se ha tenido que poner aqui (y se ha simplificado) pq se produce un error al enviar una modificacion.
 			if (SiaUtils.ESTADO_ALTA.equals(sia.getOperacion())) {
 				sia.setTipoTramite(SiaUtils.TRAMITE_PROC);			
 			} else {
@@ -964,10 +1058,22 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 			
 			sia.setUsuario(siaCumpleDatos.getSiaUA().getUsuario());
 			sia.setPassword(siaCumpleDatos.getSiaUA().getContrasenya());
-			
+			sia.setTipoTramite("P");
 			return sia;
 		}
 		
+		/**
+		 * Obtiene el objeto SIA como no activo a partir del servicio.
+		 * 
+		 * @param servicio
+		 * @return
+		 * @throws Exception
+		*/
+		private Sia obtenerSiaServicioNoActivo(Servicio servicio) throws Exception {
+			final SiaEnviableResultado siaEnviableResultado = SiaUtils.isEnviableNoActivo(servicio);
+			final SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(servicio, siaEnviableResultado, false);
+			return obtenerSiaServicio( servicio,  siaEnviableResultado,  siaCumpleDatos) ;
+		}
 		
 		/**
 		 * Obtiene el objeto SIA a partir del procedimiento.
@@ -977,10 +1083,20 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		 * @throws Exception
 		 */
 		private Sia obtenerSiaServicio(Servicio servicio) throws Exception {
-			final Sia sia = new Sia();
 			final SiaEnviableResultado siaEnviableResultado = SiaUtils.isEnviable(servicio);
-			final SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(servicio, siaEnviableResultado);
-			
+			final SiaCumpleDatos siaCumpleDatos = SiaUtils.cumpleDatos(servicio, siaEnviableResultado, true);
+			return obtenerSiaServicio( servicio,  siaEnviableResultado,  siaCumpleDatos) ;
+		}	
+		
+		/**
+		 * Nucleo del obtener SIA a partir de servicio, SiaEnviableResultado y SiaCumpleDatos.
+		 * 
+		 * @param servicio
+		 * @return
+		 * @throws Exception
+		 */
+		private Sia obtenerSiaServicio(Servicio servicio, SiaEnviableResultado siaEnviableResultado, SiaCumpleDatos siaCumpleDatos) throws Exception {
+			final Sia sia = new Sia();
 			sia.setIdElemento(servicio.getId().toString());
 			if (servicio.getCodigoSIA() != null) {
 				sia.setIdSIA(servicio.getCodigoSIA().toString());
@@ -1060,6 +1176,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 				sia.setNivAdm("1");	
 			}
 
+			sia.setTipoTramite("S");
 			return sia;
 		}
 		

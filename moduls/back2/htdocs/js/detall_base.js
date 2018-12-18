@@ -137,7 +137,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 
 	};
 
-	this.guardaGenerico = function(dataVars) {
+	this.guardaGenerico = function(dataVars, funcion) {
 		
 		DebugJS.debug("Entrando en DetallBase.guardaGenerico");
 
@@ -170,12 +170,14 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
 
 				} else {
-
-					if ( !soloFicha )
-						Detall.recarregar(data.id);
-
-					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});
-
+					if (typeof funcion != 'undefined') { 
+						funcion();
+					} else {
+						if ( !soloFicha )
+							Detall.recarregar(data.id);
+	
+						Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});
+					}
 				}//End if
 
 			} //Fin success

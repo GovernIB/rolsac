@@ -20,6 +20,7 @@ import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionServicio;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Validacion;
+import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.SiaPendienteProcesoDelegate;
@@ -428,17 +429,19 @@ public class SiaUtils {
 	/**
 	 * Comprueba si le falta algún dato. 
 	 * Condiciones:
-	 *  - Tiene materias.
-	 *  - Tiene normativas y uno de tipo SIA.
+	 *  - Tiene materias (se comprueba si está activo).
+	 *  - Tiene normativas y uno de tipo SIA (se comprueba si está activo).
 	 *  - Tiene descripción.
 	 *  - Tiene resumen.
 	 *  - Depende de una UA asociada a una entidad raiz.
 	 *  - No está asociado directamente a la entidad raíz.
 	 *  
 	 * @param procedimiento
+	 * @param siaEnviableResultado
+	 * @param activo Indica si se envia el servicio como activo o no activo (el botón para enviar a SIA sin estar visible)
 	 * @return
 	 */
-	public static SiaCumpleDatos cumpleDatos(final ProcedimientoLocal procedimiento, SiaEnviableResultado siaEnviableResultado) {
+	public static SiaCumpleDatos cumpleDatos(final ProcedimientoLocal procedimiento, SiaEnviableResultado siaEnviableResultado, boolean activo) {
 		final SiaCumpleDatos resultado = new SiaCumpleDatos(false);
 		final StringBuffer mensajeError = new StringBuffer();
 
@@ -501,18 +504,18 @@ public class SiaUtils {
   		    
   		    
 		    tieneMaterias=procedimiento.getMaterias().size() > 0;
-		    if (!tieneMaterias) {
+		    if (!tieneMaterias && activo) {
 		    	mensajeError.append("No té matèries.");	
 		    }
 		    
 		    
 		    tieneNormativas=procedimiento.getNormativas().size() > 0;
-		    if (!tieneNormativas) {
+		    if (!tieneNormativas && activo) {
 		    	mensajeError.append("No té normatives.");	
 		    }
 		    
 		    encontradoTipo = false;
-		    if (procedimiento.getNormativas().size() > 0) {
+		    if (procedimiento.getNormativas().size() > 0 && activo) {
 			    for (Normativa norm : procedimiento.getNormativas()) {
 			    	if (norm != null && norm.isVisible() && norm.getTipo() != null && norm.getTipo().getTipoSia() != null) {
 			    		encontradoTipo = true;
@@ -543,16 +546,19 @@ public class SiaUtils {
 	 * Comprueba si le falta algún dato. 
 	 * Condiciones:
 	 *  - Tiene materias.
-	 *  - Tiene normativas y uno de tipo SIA.
+	 *  - Tiene normativas y uno de tipo SIA (se comprueba si está activo).
 	 *  - Tiene descripción.
 	 *  - Tiene resumen.
 	 *  - Depende de una UA asociada a una entidad raiz.
 	 *  - No está asociado directamente a la entidad raíz.
 	 *  
 	 * @param servicio
+	 * @param siaEnviableResultado
+	 * @param activo Indica si se envia el servicio como activo o no activo (el botón para enviar a SIA sin estar visible)
+	 * 
 	 * @return
 	 */
-	public static SiaCumpleDatos cumpleDatos(final Servicio servicio, SiaEnviableResultado siaEnviableResultado) {
+	public static SiaCumpleDatos cumpleDatos(final Servicio servicio, SiaEnviableResultado siaEnviableResultado, boolean activo) {
 		final SiaCumpleDatos resultado = new SiaCumpleDatos(false);
 		final StringBuffer mensajeError = new StringBuffer();
 
@@ -597,7 +603,7 @@ public class SiaUtils {
 		
 		
 		    tieneMaterias=servicio.getMaterias().size() > 0;
-		    if (!tieneMaterias) {
+		    if (!tieneMaterias && activo) { //Solo mirar si está activo
 		    	mensajeError.append("No té matèries.");	
 		    }
 		    
@@ -967,6 +973,111 @@ public class SiaUtils {
 			nombre = tradCa.getTitulo();
 		}
 		return nombre;	
+	}
+
+	/**
+	 * Comprueba si es enviable en modo No Activo hacia SIA. Se comprueba lo básico, es decir, que tiene SiaUA, DIR3 y no coinciden ambos.
+	 * @param procedimiento
+	 * @return
+	 */
+	public static SiaEnviableResultado isEnviableNoActivo(ProcedimientoLocal procedimiento) {
+		
+		final SiaEnviableResultado resultado = new SiaEnviableResultado(false);
+		
+		boolean visibleUA = SiaUtils.isVisibleUA(procedimiento);
+		if (!visibleUA) {						
+			resultado.setRespuesta("txt.sia.error.raiz.novisible");	
+			resultado.setIdCentro("");
+			resultado.setNotificarSIA(false);
+	    	return resultado;
+		}
+		
+		String codigoDir3IdCentro = SiaUtils.obtenerCodigoIdCentro(procedimiento);
+		if (codigoDir3IdCentro == null || codigoDir3IdCentro.isEmpty()) {
+			resultado.setRespuesta("txt.sia.error.centre.nodir3");	
+			resultado.setIdCentro("");
+			resultado.setNotificarSIA(false);
+	    	return resultado;
+		}
+				
+		SiaUA siaUA = SiaUtils.obtenerSiaUA(procedimiento);
+		if (siaUA == null) {
+			resultado.setRespuesta("txt.sia.error.raiz.noexisten");	
+			resultado.setIdCentro("");
+			resultado.setNotificarSIA(false);
+	    	return resultado;	    	
+		}
+		
+		final String codigoDir3SiaUA = siaUA.getUnidadAdministrativa().getCodigoDIR3();
+  	    if (codigoDir3SiaUA.equals(codigoDir3IdCentro)) {
+  	    	resultado.setRespuesta("txt.sia.error.proc.raizdirecta");	
+			resultado.setIdCentro("");
+			resultado.setNotificarSIA(false);
+	    	return resultado;
+  	    }
+  	    
+  	  if (procedimiento.getCodigoSIA() == null || procedimiento.getCodigoSIA().isEmpty()) {
+	    	resultado.setOperacion(SiaUtils.ESTADO_ALTA);
+	    } else {
+	    	resultado.setOperacion(SiaUtils.ESTADO_MODIFICACION);
+	    }
+  	    
+  	    resultado.setNotificarSIA(true);
+	    return resultado;
+  	    
+	}
+	
+
+	/**
+	 * Comprueba si es enviable en modo No Activo hacia SIA. Se comprueba lo básico, es decir, que tiene SiaUA, DIR3 y no coinciden ambos.
+	 * @param servicio
+	 * @return
+	 */
+	public static SiaEnviableResultado isEnviableNoActivo(Servicio servicio) {
+		
+		final SiaEnviableResultado resultado = new SiaEnviableResultado(false);
+		boolean visibleUA = SiaUtils.isVisibleUA(servicio);
+		if (!visibleUA) {						
+			resultado.setRespuesta("txt.sia.error.raiz.novisible");	
+			resultado.setIdCentro("");
+			resultado.setNotificarSIA(false);
+	    	return resultado;					
+		}
+		
+		String codigoDir3IdCentro = SiaUtils.obtenerCodigoIdCentro(servicio);
+		if (codigoDir3IdCentro == null || codigoDir3IdCentro.isEmpty()) {
+			resultado.setRespuesta("txt.sia.error.centre.nodir3");	
+			resultado.setIdCentro("");
+			resultado.setNotificarSIA(false);
+	    	return resultado;
+		}
+				
+		SiaUA siaUA = SiaUtils.obtenerSiaUA(servicio);
+		if (siaUA == null) {
+			resultado.setRespuesta("txt.sia.error.raiz.noexisten");	
+			resultado.setIdCentro("");
+			resultado.setNotificarSIA(false);
+	    	return resultado;	    	
+		}
+		
+		final String codigoDir3SiaUA = siaUA.getUnidadAdministrativa().getCodigoDIR3();
+  	    if (codigoDir3SiaUA.equals(codigoDir3IdCentro)) {
+  	    	resultado.setRespuesta("txt.sia.error.serv.raizdirecta");	
+			resultado.setIdCentro("");
+			resultado.setNotificarSIA(false);
+	    	return resultado;
+  	    }
+  	  
+  	    if (servicio.getCodigoSIA() == null || servicio.getCodigoSIA().isEmpty()) {
+  	    	resultado.setOperacion(SiaUtils.ESTADO_ALTA);
+  	    } else {
+  	    	resultado.setOperacion(SiaUtils.ESTADO_MODIFICACION);
+  	    }
+	    
+  	    resultado.setNotificarSIA(true);
+	    return resultado;
+	    
+  	    
 	}
 }
 

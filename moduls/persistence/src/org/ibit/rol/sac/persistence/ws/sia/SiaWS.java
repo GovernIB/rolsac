@@ -32,10 +32,13 @@ public class SiaWS {
 	/**
 	 * Enviar dato a sia para actualizar.
 	 * @param sia
+	 * @param borrado Indica si esta en modo borrado
+	 * @param noactivo Indica si esta en modo noactivo (se envia la minimo info)
+	 * 
 	 * @return
 	 * @throws Exception
 	 */
-	public static SiaResultado enviarSIA(Sia sia, boolean borrado) throws Exception {
+	public static SiaResultado enviarSIA(Sia sia, boolean borrado, boolean noactivo) throws Exception {
 		
 		SiaResultado siaResultado = new SiaResultado();
 		siaResultado.setOperacion(sia.getOperacion());
@@ -45,7 +48,9 @@ public class SiaWS {
 			WsSIAActualizarActuaciones_PortType client = SiaClient.createClient(SiaUtils.getUrlEnvio());
 			
 			ParamSIAACTUACIONESACTUACION[] actuaciones;
-			if (borrado) {
+			if (noactivo) {
+				actuaciones = cargarDatosSiaNoActivo(sia);
+			} else if (borrado) {
 				actuaciones = cargarDatosSiaBorrado(sia);
 			} else {
 				actuaciones = cargarDatosSia(sia);
@@ -106,6 +111,107 @@ public class SiaWS {
 			}
 		}
 		return siaResultado;
+	}
+	
+	/**
+	 * @param sia
+	 * @return
+	 * @throws Exception 
+	 */
+	private static ParamSIAACTUACIONESACTUACION[] cargarDatosSiaNoActivo(Sia sia) throws Exception {
+		
+		ParamSIAACTUACIONESACTUACION paramSia = new ParamSIAACTUACIONESACTUACION();
+		paramSia.setACTIVO(new ParamSIAACTUACIONESACTUACIONACTIVO("N"));
+		paramSia.setINTERNO(new ParamSIAACTUACIONESACTUACIONINTERNO("N"));
+		
+		if (sia.getIdSIA() == null || sia.getIdSIA().isEmpty()) {
+			paramSia.setCODIGOACTUACION("inventadoCAIB"); //Obligan a que se introduzca, en caso de alta, lo generan ellos en la respuesta.
+		} else {
+			paramSia.setCODIGOACTUACION(sia.getIdSIA());
+		}
+		paramSia.setCODIGOORIGEN(sia.getIdElemento());
+		
+		paramSia.setDENOMINACION(sia.getTitulo());
+		paramSia.setDESCRIPCION(sia.getDescripcion());
+		ORGANISMORESPONSABLE organismoResponsable = new ORGANISMORESPONSABLE();
+		//Fix 17/02. Pasado el id del centro a nivel 2 e incluido como nivel1 el departamento que viene por propiedades.
+		organismoResponsable.setCODORGANISMORESPONSABLEN1(sia.getIdDepartamento());
+		organismoResponsable.setCODORGANISMORESPONSABLEN2(sia.getIdCent());
+		paramSia.setORGANISMORESPONSABLE(organismoResponsable);
+		
+		DESTINATARIOSDESTINATARIO[] destinatarios = new DESTINATARIOSDESTINATARIO[sia.getIdDest().length];		
+		int i = 0;
+		for (String pObj : sia.getIdDest()) {
+			destinatarios[i]= new DESTINATARIOSDESTINATARIO(pObj);
+			i++;
+		}
+		paramSia.setDESTINATARIOS(destinatarios);
+		paramSia.setCODNIVELADMINISTRACIONELECTRONICA(sia.getNivAdm().toString());
+		
+		
+		List<NORMATIVASNORMATIVA> normativasCorrectas = new ArrayList<NORMATIVASNORMATIVA>();
+		for (Normativa norm : sia.getNormativas()) {
+			NORMATIVASNORMATIVA nor = new NORMATIVASNORMATIVA();
+			if (norm == null || norm.getTipo() == null || !norm.isVisible() || norm.getTipo().getTipoSia() == null ) { continue;}
+			nor.setCODRANGO(norm.getTipo().getTipoSia().toString()); 
+			nor.setTITULO(SiaUtils.getNombreNormativa(norm));
+			normativasCorrectas.add(nor);
+		}
+		
+		if (! normativasCorrectas.isEmpty()) {
+			NORMATIVASNORMATIVA[] normativas = new NORMATIVASNORMATIVA[normativasCorrectas.size()];
+			for( i = 0 ; i< normativasCorrectas.size(); i++) {
+				normativas[i] = normativasCorrectas.get(i);
+			}
+			
+			paramSia.setNORMATIVAS(normativas);
+		}
+		
+		if (sia.getMaterias().length > 0) {
+			MATERIASMATERIA[] materias = new MATERIASMATERIA[sia.getMaterias().length];
+			i = 0;
+			for (String mat : sia.getMaterias()) {
+				materias[i]  = new MATERIASMATERIA(mat);
+				i++;
+			}
+			paramSia.setMATERIAS(materias);
+		}
+		
+		ParamSIAACTUACIONESACTUACIONFINVIA finVia = new ParamSIAACTUACIONESACTUACIONFINVIA(sia.getFiVia());
+		paramSia.setFINVIA(finVia);
+		
+		ParamSIAACTUACIONESACTUACIONINTERNO interno = new ParamSIAACTUACIONESACTUACIONINTERNO();
+		ParamSIAACTUACIONESACTUACIONESCOMUN comun = new ParamSIAACTUACIONESACTUACIONESCOMUN();
+		
+		if(sia.getTipologia() == SiaUtils.TIPOLOGIA_INTERNO_COMUN){
+			interno.setBooleanoValue(SiaUtils.SI);
+			comun.setBooleanoValue(SiaUtils.SI);
+		}else if(sia.getTipologia() == SiaUtils.TIPOLOGIA_INTERNO_ESPECIFICO){
+			interno.setBooleanoValue(SiaUtils.SI);
+			comun.setBooleanoValue(SiaUtils.NO);
+		}else if(sia.getTipologia() == SiaUtils.TIPOLOGIA_EXTERNO_COMUN){
+			interno.setBooleanoValue(SiaUtils.NO);
+			comun.setBooleanoValue(SiaUtils.SI);
+		}else if(sia.getTipologia() == SiaUtils.TIPOLOGIA_EXTERNO_ESPECIFICO){
+			interno.setBooleanoValue(SiaUtils.NO);
+			comun.setBooleanoValue(SiaUtils.NO);
+		}
+		
+		paramSia.setESCOMUN(comun);
+		
+		ParamSIAACTUACIONESACTUACIONTIPOTRAMITE tipoTramite= new ParamSIAACTUACIONESACTUACIONTIPOTRAMITE();
+		tipoTramite.setTIPOTRAMITEValue(sia.getTipoTramite());
+		paramSia.setTIPOTRAMITE(tipoTramite);
+		
+		paramSia.setUNIDADGESTORATRAMITE(sia.getUaGest());
+		
+		paramSia.setENLACEWEB(sia.getEnlaceWeb());
+		paramSia.setOPERACION(sia.getOperacion());
+		
+		ParamSIAACTUACIONESACTUACION[] actuaciones = new ParamSIAACTUACIONESACTUACION[1];
+		actuaciones[0] = paramSia;
+		
+		return actuaciones;
 	}
 	
 	/**

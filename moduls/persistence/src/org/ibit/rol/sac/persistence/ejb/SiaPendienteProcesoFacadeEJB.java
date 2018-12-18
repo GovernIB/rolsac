@@ -468,7 +468,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 						session.flush();
 					} else {
 						//Paso 3. 
-						SiaCumpleDatos cumpleDatos = SiaUtils.cumpleDatos(procedimiento, siaEnviable);
+						SiaCumpleDatos cumpleDatos = SiaUtils.cumpleDatos(procedimiento, siaEnviable, true);
 						if (cumpleDatos.isCumpleDatos()) {
 							siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_CREADO);
 							session.save(siaPendiente);
@@ -502,7 +502,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 						session.flush();
 					} else {
 						//Paso 3. 
-						SiaCumpleDatos cumpleDatos = SiaUtils.cumpleDatos(servicio, siaEnviable);
+						SiaCumpleDatos cumpleDatos = SiaUtils.cumpleDatos(servicio, siaEnviable, true);
 						if (cumpleDatos.isCumpleDatos()) {
 							siaPendiente.setEstado(SiaUtils.SIAPENDIENTE_ESTADO_CREADO);
 							session.save(siaPendiente);
@@ -828,8 +828,8 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 				procDelegate.actualizarProcedimiento(proc);
 			} 
     	} catch (Exception ex) {
-    		log.error("Error actualizando información de SIA en el procedimiento " + proc.getId() + ": " + ex.getMessage(), ex);
-    		throw new EJBException("Error actualizando información de SIA en el procedimiento " + proc.getId() + ": " + ex.getMessage(), ex);
+    		log.error("Error actualizando informacion de SIA en el procedimiento " + proc.getId() + ": " + ex.getMessage(), ex);
+    		throw new EJBException("Error actualizando informacion de SIA en el procedimiento " + proc.getId() + ": " + ex.getMessage(), ex);
     	}
 		
 	}
@@ -902,7 +902,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
   			sia.setIdSIA(idSIA);
   			sia.setOperacion(SiaUtils.ESTADO_BAJA); 
   			sia.setIdElemento(String.valueOf(idServicio));
-  			resultado = SiaWS.enviarSIA(sia, true);
+  			resultado = SiaWS.enviarSIA(sia, true, false);
   			return resultado;
       	} catch (Exception ex) {
       		log.error("Error enviando a SIA el servicio " + idServicio + ": " + ex.getMessage(), ex);
