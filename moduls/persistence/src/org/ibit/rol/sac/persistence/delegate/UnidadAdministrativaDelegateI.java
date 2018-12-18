@@ -268,5 +268,7 @@ public interface UnidadAdministrativaDelegateI {
 	public String checkProcedimientosUA(Long id) throws DelegateException;
 	
 	public ResultadoBusqueda consultaUnidadesAdministrativas(FiltroGenerico filtro) throws DelegateException;
+	
+	public String consultaCodigoDir3(Long id) throws DelegateException;
 
 }

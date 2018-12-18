@@ -94,6 +94,12 @@ public class Tramits extends EntidadBase {
 	@ApiModelProperty(value = "tasas", required = false)
 	private ArrayList<Taxes> tasas;
 	
+	@ApiModelProperty(value = "presencial", required = false)
+	private  boolean presencial;
+	
+	@ApiModelProperty(value = "telematico", required = false)
+	private  boolean telematico;
+	
 	
 	
 	//-- LINKS--//
@@ -544,6 +550,34 @@ public class Tramits extends EntidadBase {
 	 */
 	public void setProcedimiento(java.lang.Long procedimiento) {
 		this.procedimiento = procedimiento;
+	}
+
+	/**
+	 * @return the presencial
+	 */
+	public boolean isPresencial() {
+		return presencial;
+	}
+
+	/**
+	 * @param presencial the presencial to set
+	 */
+	public void setPresencial(boolean presencial) {
+		this.presencial = presencial;
+	}
+
+	/**
+	 * @return the telematico
+	 */
+	public boolean isTelematico() {
+		return telematico;
+	}
+
+	/**
+	 * @param telematico the telematico to set
+	 */
+	public void setTelematico(boolean telematico) {
+		this.telematico = telematico;
 	}
 
 }

@@ -1,6 +1,5 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
 
@@ -259,4 +258,8 @@ public class UnidadAdministrativaDelegate {
 	public ResultadoBusqueda consultaUnidadesAdministrativas(FiltroGenerico filtro) throws DelegateException {
 		return impl.consultaUnidadesAdministrativas(filtro);
 	}    
+	
+	public String consultaCodigoDir3(Long id) throws DelegateException{
+		return impl.consultaCodigoDir3(id);
+	}
 }

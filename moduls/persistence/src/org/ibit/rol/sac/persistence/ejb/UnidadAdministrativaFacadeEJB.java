@@ -2821,8 +2821,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	         }
          } catch (Exception he) {
              throw new EJBException(he);
-		 } finally {
-		             close(session);
 		 }
          
          
@@ -2968,4 +2966,44 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		}
 
 	}
+	
+	
+	 /**
+	 * Consulta el código de dir3 de la UA, 
+	 * si tiene codigo dir3 retorna ese código, si no busca el cod dir 3 en el padre. 
+	 * -- retorna vacio si no encuentra codigo dir 3 y no tiene padre, sino retona el cod dir 3 
+	 *  actual o el de su antecesor mas cercano.
+	 * @ejb.interface-method
+    * @ejb.permission unchecked="true"
+	 */
+	public String consultaCodigoDir3(Long id){
+	
+		String resultado = "";
+		Session session = getSession();
+		try {
+
+			UnidadAdministrativa ua = (UnidadAdministrativa) session.load( UnidadAdministrativa.class, id );
+			
+			if(!StringUtils.isEmpty(ua.getCodigoDIR3())) {
+				resultado = ua.getCodigoDIR3();				
+			}else {
+				UnidadAdministrativa padre = ua.getPadre();
+				
+				while( padre!=null && StringUtils.isEmpty(padre.getCodigoDIR3())  && !padre.isRaiz() && padre !=null ){
+					padre=padre.getPadre();
+				}	
+				
+				if(padre!=null && !StringUtils.isEmpty(padre.getCodigoDIR3())){
+					resultado = padre.getCodigoDIR3();
+				}	
+			}			
+			
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+		return resultado;
+	}
+	
 }
