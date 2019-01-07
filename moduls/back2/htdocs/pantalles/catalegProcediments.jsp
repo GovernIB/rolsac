@@ -186,6 +186,12 @@
     var txtColFecha = "<spring:message code='txt.auditoria.fecha'/>";
     var txtColOperacion = "<spring:message code='txt.auditoria.operacion'/>";
     
+    var txtEstadoSiaB = "<spring:message code='txt.sia.estado.B'/>";
+    var txtEstadoSiaA = "<spring:message code='txt.sia.estado.A'/>";
+    var txtEstadoSiaRC = "<spring:message code='txt.sia.estado.RC'/>";
+    var txtEstadoSiaM = "<spring:message code='txt.sia.estado.M'/>";
+    
+    
 </script>
 <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
 <script type="text/javascript">
@@ -673,8 +679,8 @@
                                     <select id="cerca_bolcat_sia" name="cerca_bolcat_sia" class="t8">
                                         <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
                                         <option value="-1"><spring:message code='camp.cap'/></option>
-                                        <option value="A"><spring:message code='boto.alta'/></option>
-                                        <option value="B"><spring:message code='boto.baixa'/></option>
+                                        <option value="A"><spring:message code='txt.sia.estado.A'/></option>
+                                        <option value="B"><spring:message code='txt.sia.estado.B'/></option>
                                     </select>
                                 </div>
                             </div>
@@ -875,7 +881,7 @@
                                 <!-- Camps per cada idioma -->
                                 <div class="idioma <c:out value="${lang}" />">
                                     <div class="fila">
-                                        <div class="element t50p">
+                                        <div class="element t45p">
                                             <div class="etiqueta">                                            
                                                 <label for="item_codigo_pro"><spring:message code='txt.codi'/></label>
                                             </div>
@@ -900,7 +906,7 @@
 		                                        	
                                             </div>
                                         </div>
-                                        <div id="caja_item_fecha_sia" class="element t15p">
+                                        <div id="caja_item_fecha_sia" class="element t20p">
                                             <div class="etiqueta">
                                                 <label for="item_fecha_sia"><spring:message code='camp.codi_sia_data'/></label>
                                             </div>

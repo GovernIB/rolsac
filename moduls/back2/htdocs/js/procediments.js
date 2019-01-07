@@ -57,11 +57,7 @@ $(document).ready(function() {
 		//Detall.guarda();
 		if ( Detall.cambiosSinGuardar() ) {
 
-			Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: txtAvisoCambiosSinGuardar, funcio: function() {
-
-				Detall.guardaFinal(Detall.checkSiaNoActivo);				
-
-			}});
+			Detall.guardaFinal(Detall.checkSiaNoActivo);				
 
 		} else {
 
@@ -925,13 +921,13 @@ function CDetall() {
 		
 		if (dada_node.item_estado_sia != undefined) {
 			if (dada_node.item_estado_sia == 'A') {
-				jQuery("#item_estado_sia").val("Alta");
+				jQuery("#item_estado_sia").val(txtEstadoSiaA);
 			} else if (dada_node.item_estado_sia == 'B') {
-				jQuery("#item_estado_sia").val("Baixa");
+				jQuery("#item_estado_sia").val(txtEstadoSiaB);
 			}  else if (dada_node.item_estado_sia == 'RC') {
-				jQuery("#item_estado_sia").val("Reactivat");
+				jQuery("#item_estado_sia").val(txtEstadoSiaRC);
 			} else if (dada_node.item_estado_sia == 'M') {
-				jQuery("#item_estado_sia").val("Modificat");
+				jQuery("#item_estado_sia").val(txtEstadoSiaM);
 			} else {
 				jQuery("#item_estado_sia").val(dada_node.item_estado_sia);
 			}

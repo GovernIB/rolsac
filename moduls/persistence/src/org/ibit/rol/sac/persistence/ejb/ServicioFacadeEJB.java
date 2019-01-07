@@ -31,6 +31,7 @@ import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.Traduccion;
 import org.ibit.rol.sac.model.TraduccionDocumento;
+import org.ibit.rol.sac.model.TraduccionDocumentoServicio;
 import org.ibit.rol.sac.model.TraduccionMateria;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
@@ -308,7 +309,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 					Map<String, Traduccion> mapaTraduccions = d.getTraduccionMap();
 					Set<String> idiomes = mapaTraduccions.keySet();
 					for (Iterator<String> i = idiomes.iterator(); i.hasNext();) {
-						TraduccionDocumento trad = (TraduccionDocumento)d.getTraduccion(i.next());
+						TraduccionDocumentoServicio trad = (TraduccionDocumentoServicio)d.getTraduccion(i.next());
 						if (trad != null) {
 							Hibernate.initialize( trad.getArchivo() );
 						}

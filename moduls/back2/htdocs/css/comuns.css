@@ -1182,6 +1182,12 @@ div.table div.tbody div.td select.ordenacion{
 .escriptori_detall .grupoModulosFormulario .element.checkbox .control{
     margin: 0 3px 0 0;
 }
+.escriptori_detall .grupoModulosFormulario .t5p{
+    width: 4.9%;
+}
+.escriptori_detall .grupoModulosFormulario .t10p{
+    width: 9.9%;
+}
 .escriptori_detall .grupoModulosFormulario .t15p{
     width: 14.9%;
 }
@@ -1194,6 +1200,12 @@ div.table div.tbody div.td select.ordenacion{
 .escriptori_detall .grupoModulosFormulario .t30p{
     width: 29.9%;
 }
+.escriptori_detall .grupoModulosFormulario .t40p{
+    width: 39.9%;
+}
+.escriptori_detall .grupoModulosFormulario .t45p{
+    width: 44.9%;
+}
 .escriptori_detall .grupoModulosFormulario .t50p{
     width: 49.9%;
 }
@@ -1203,7 +1215,6 @@ div.table div.tbody div.td select.ordenacion{
 .escriptori_detall .grupoModulosFormulario .t99p{
     width: 99.9%;
 }
-
 /* Botones */
 
 .escriptori_detall .botonera,

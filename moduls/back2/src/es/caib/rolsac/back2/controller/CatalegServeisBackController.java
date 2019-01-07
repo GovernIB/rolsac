@@ -626,9 +626,9 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 			resultats.put("item_id", serv.getId());
 			resultats.put("item_codigo_servicio", serv.getCodigo());
-			resultats.put("item_codigo_sia", serv.getCodigoSIA()); //#366 Se añade SIA
-			resultats.put("item_fecha_sia", DateUtils.formatDate(serv.getFechaSIA())); //#366 Se añade fecha SIA
-			resultats.put("item_estado_sia", serv.getEstadoSIA()); //#366 Se añade estado SIA
+			resultats.put("item_codigo_sia", serv.getCodigoSIA()); //#366 Se anyade SIA
+			resultats.put("item_fecha_sia", DateUtils.formatDateSimpleTime(serv.getFechaSIA())); //#366 Se anyade fecha SIA
+			resultats.put("item_estado_sia", serv.getEstadoSIA()); //#366 Se anyade estado SIA
 			resultats.put("item_estat", serv.getValidacion());						
 			resultats.put("item_data_actualitzacion", DateUtils.formatDate(serv.getFechaActualizacion()));
 			resultats.put("item_data_publicacion", DateUtils.formatDateSimpleTime(serv.getFechaPublicacion()));
