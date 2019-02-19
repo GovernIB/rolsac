@@ -1,5 +1,6 @@
 # ![Logo](https://github.com/GovernIB/maven/raw/binaris/rolsac/projectinfo_Attachments/icon.jpg) Rolsac
-
+> - Versió Estable: __rolsac-1.7.1__ (Tag [rolsac-1.7.1](https://github.com/GovernIB/rolsac/tree/rolsac-1.7.1))
+> - Versió Desenvolupament: __rolsac-1.7__ (branca [rolsac-1.7](https://github.com/GovernIB/rolsac/tree/rolsac-1.7))
 
 **Descripción funcional**
 
@@ -39,27 +40,3 @@ Aquest esquema enumera tots els components que generen els continguts mostrats p
 * Programming Language: Java & JSP
 * Translations: Catalan & Spanish
 * user Interface: Web-based
-
-
-
-
-**Captures de pantalla**
-
-![Back Office de Rolsac](https://github.com/GovernIB/maven/raw/binaris/rolsac/projectinfo_Attachments/screenshots/313663.jpg)<br/>
-Back Office de Rolsac
-
-
-
-![Detalls del Procediment de petició de Llicència d'Obra](https://github.com/GovernIB/maven/raw/binaris/rolsac/projectinfo_Attachments/screenshots/313665.jpg)<br/>
-Detalls del Procediment de petició de Llicència d'Obra
-
-
-
-![Procediments Administratius de Santa Margalida](https://github.com/GovernIB/maven/raw/binaris/rolsac/projectinfo_Attachments/screenshots/313667.jpg)<br/>
-Procediments Administratius de Santa Margalida
-
-
-
-![Pantalla d'Autentificació](https://github.com/GovernIB/maven/raw/binaris/rolsac/projectinfo_Attachments/screenshots/313667.jpg)<br/>
-Pantalla d'Autentificació
-
