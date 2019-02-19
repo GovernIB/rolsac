@@ -10,34 +10,3 @@ Per tal motiu, defineix un conjunt de punts de connexió amb gestors de contingu
 
 [**Documentació**](https://github.com/GovernIB/rolsac/tree/rolsac-1.7.1/doc/pdf)
 
-**Característiques principals**
-
-* Gestió d'informació administrativa: organigrama, procediments administratius, normativa, fitxes informatives i personal.
-* Segmentació de continguts per família, matèries, fets vitals, públic objectiu, etc...
-* Suport de contingut multiadministratiu.
-* Facilitat d'integració amb gestors de continguts externs.
-* Integració amb el portal EUGO.
-* Indexació de continguts mitjançant Lucene.
-* Possibilitat d'integració amb plataformes de traducció automàtica de continguts.
-* Suport multiidioma.
-* Estadístiques d'ús i auditories accés.
-
- 
-
-**Esquema general dels gestors de continguts**
-
-Aquest esquema enumera tots els components que generen els continguts mostrats per la web corporativa i pot servir per posar en context la ubicació de l'eina ROLSAC en el conjunt de mòduls disponibles.
-
-
-**Característiques Producte**
-
-* Registered: 2010-06-02
-* Topic: Internet-WWW/HTTP-CMS Systems
-* License: European Union Public License  & GNU General Public License version 3.0 (GPLv3)
-* Database Environment: JDBC
-* Development Status: Production/Stable
-* Intended Audience: Government
-* Operating System: OS Independent (Written in an interpreted language)
-* Programming Language: Java & JSP
-* Translations: Catalan & Spanish
-* user Interface: Web-based
