@@ -107,7 +107,7 @@ public abstract class DocumentoServicioFacadeEJB extends HibernateEJB
      * Obtener una DocumentoServicio.
      * @param id	Identificador del documento servicio a obtener.
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin}"
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
      */
 	public DocumentoServicio obtenerDocumentoServicio(Long id)
 	{
