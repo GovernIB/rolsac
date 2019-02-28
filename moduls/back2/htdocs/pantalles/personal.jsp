@@ -320,7 +320,7 @@
                                     <label for="cerca_codi"><spring:message code='camp.codi'/></label>
                                 </div>
                                 <div class="control">                                   
-                                    <input id="cerca_codi" name="cerca_codi" type="text" maxlength="7" class="codi" />
+                                    <input id="cerca_codi" name="cerca_codi" type="text" maxlength="19" class="codi" />
                                 </div>                  
                             </div>
                             <div class="element t75">
