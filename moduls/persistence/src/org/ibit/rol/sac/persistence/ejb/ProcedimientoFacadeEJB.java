@@ -2818,7 +2818,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
-	@Override
+	
 	public ResultadoBusqueda consultaProcedimientos(final FiltroGenerico filtro) {
 
 		final Session session = getSession();
@@ -2830,6 +2830,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 		final String activo = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_ACTIVO);
 		final String codigoUA = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_UA);
+		final String descendientes = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_UA_DESCENDIENTES);		
 		final String vigente = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_VIGENTE);
 		final String telematico = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_TELEMATICO);
 		final String codigoAHV = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_AGRUPACION_HECHO_VITAL);
@@ -2847,6 +2848,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		final String codigoMateria = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_MATERIA);
 		final String codigoPublicoObjetivo = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_PUBLICO);
 		final String textos = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_TEXTOS);
+		final String titulo = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_TITULO);
 		final String tramiteTelematico = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_TRAMITE_TELEMATICO);
 		final String versionTramiteTelematico = filtro
 				.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_VERSION_TRAMITE_TELEMATICO);
@@ -2875,10 +2877,19 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				}
 			}
 
-			if (!StringUtils.isEmpty(codigoUA)) {
-				where.append(" AND p.unidadAdministrativa.id = :codigoUA ");
-				parametros.put("codigoUA", codigoUA);
+		
+			final Long idUA = (codigoUA != null) ? Long.parseLong(codigoUA) : null;
+			String uaQuery = null;
+			try {
+				uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(idUA, "1".equals(descendientes), false);
+			} catch (DelegateException e) {
+				e.printStackTrace();
 			}
+
+			if (!StringUtils.isEmpty(uaQuery)) {
+				where.append( " AND p.unidadAdministrativa.id in (" + uaQuery + ")");
+			}
+			
 
 			if (!StringUtils.isEmpty(estadoUA)) {
 				where.append(" AND p.unidadAdministrativa.validacion = :estadoUA");
@@ -3005,6 +3016,36 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 				where.append(" ) ");
 			}
+						
+			if (!StringUtils.isEmpty(titulo)) {
+				final String[] camposBuscablesPorTexto = { "trad.nombre" };
+
+				//Si hubiera que buscar en case-insensitive se podria hacer algo tipo:
+				// titulo.tolowercase
+				//y en la query (aunque no es muy eficiente):
+				//where.append("LOWER("+campo+")) like('%pres%')
+				
+				where.append(" AND ( ");
+				parametros.put("titulo", "%" + titulo + "%");
+
+				boolean primero = true;
+
+				for (final String campo : camposBuscablesPorTexto) {
+					if (primero) {
+						primero = false;
+					} else {
+						where.append(" OR ");
+					}
+
+					where.append(campo);
+					where.append(" LIKE :titulo ");
+
+				}
+
+				where.append(" ) ");
+			}
+			
+			
 
 			return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(),
 					selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);

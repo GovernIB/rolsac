@@ -30,7 +30,6 @@ import org.ibit.rol.sac.model.ServicioRemoto;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.Traduccion;
-import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.TraduccionDocumentoServicio;
 import org.ibit.rol.sac.model.TraduccionMateria;
 import org.ibit.rol.sac.model.TraduccionNormativa;
@@ -2081,6 +2080,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 					
 			String activo = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_ACTIVO);		
 			String codigoUA = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_UA); 
+		    String descendientes = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_UA_DESCENDIENTES);		
 			String vigente = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_VIGENTE);		
 			String telematico = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_TELEMATICO);
 			String codigoAHV = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_AGRUPACION_HECHO_VITAL);	
@@ -2095,6 +2095,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 			String codigoMateria = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_MATERIA);
 			String codigoPublicoObjetivo = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_PUBLICO);		
 			String textos = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_TEXTOS);
+			String titulo = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_TITULO);
 			String tramiteTelematico = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_TRAMITE_TELEMATICO);
 			String versionTramiteTelematico = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_VERSION_TRAMITE_TELEMATICO);
 
@@ -2125,10 +2126,18 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 				}
 				
 
-				if(!StringUtils.isEmpty(codigoUA)) {
-					where.append(" AND s.organoInstructor.id = :codigoUA ");
-					parametros.put("codigoUA", codigoUA);
-				}	
+				
+				final Long idUA = (codigoUA != null) ? Long.parseLong(codigoUA) : null;
+				String uaQuery = null;
+				try {
+					uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(idUA, "1".equals(descendientes), false);
+				} catch (DelegateException e) {
+					e.printStackTrace();
+				}			
+
+				if (!StringUtils.isEmpty(uaQuery)) {
+					where.append( " AND s.organoInstructor.id in (" + uaQuery + ")");
+				}
 				
 				if(!StringUtils.isEmpty(estadoUA)) {
 					where.append(" AND s.organoInstructor.validacion = :estadoUA");
@@ -2244,6 +2253,36 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 				    
 				    where.append(" ) ");
 				}
+				
+				
+				if (!StringUtils.isEmpty(titulo)) {
+					final String[] camposBuscablesPorTexto = { "trad.nombre" };
+
+					//Si hubiera que buscar en case-insensitive se podria hacer algo tipo:
+					// titulo.tolowercase
+					//y en la query:
+					//where.append("LOWER("+campo+")) like('%pres%')
+					where.append(" AND ( ");
+					parametros.put("titulo", "%" + titulo + "%");
+
+					boolean primero = true;
+
+					for (final String campo : camposBuscablesPorTexto) {
+						if (primero) {
+							primero = false;
+						} else {
+							where.append(" OR ");
+						}
+
+						where.append(campo);
+						where.append(" LIKE :titulo ");
+
+					}
+
+					where.append(" ) ");
+				}
+				
+				
 				
 				return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(), selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
 				

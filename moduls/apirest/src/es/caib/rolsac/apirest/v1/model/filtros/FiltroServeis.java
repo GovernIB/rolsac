@@ -26,14 +26,16 @@ import io.swagger.annotations.ApiModelProperty;
 public class FiltroServeis {
 	
 	public static final String SAMPLE = 
-		     Constantes.SALTO_LINEA + "{\"codigoUA\":\"0\"," +
-		     Constantes.SALTO_LINEA + "\"activo\":\"0/1\","
+		     Constantes.SALTO_LINEA + "{\"codigoUA\":\"0\"," 
+		 	+ Constantes.SALTO_LINEA + "\"buscarEnDescendientesUA\":\"0/1\","
+		    + Constantes.SALTO_LINEA + "\"activo\":\"0/1\","
 		    + Constantes.SALTO_LINEA + "\"estadoUA\":\"0\","
 		    + Constantes.SALTO_LINEA + "\"codigoAgrupacionHechoVital\":\"0\","
 		    + Constantes.SALTO_LINEA + "\"codigoPublicoObjetivo\":\"0\","
 		  //  + Constantes.SALTO_LINEA + "\"codigoFamilia\":\"0\","
 		    + Constantes.SALTO_LINEA + "\"codigoAgrupacionMateria\":\"0\","
 			+ Constantes.SALTO_LINEA + "\"codigoMateria\":\"0\","
+			+ Constantes.SALTO_LINEA + "\"titulo\":\"texto\""
 			+ Constantes.SALTO_LINEA + "\"textos\":\"texto\""
 			+ Constantes.SALTO_LINEA + "\"fechaPublicacionDesde\":\"DD/MM/YYYY\","
 			+ Constantes.SALTO_LINEA + "\"fechaPublicacionHasta\":\"DD/MM/YYYY\","
@@ -47,6 +49,12 @@ public class FiltroServeis {
 	/** codigoUA. **/
 	@ApiModelProperty(value = "codigoUA", required = false)
 	private Integer codigoUA; 
+	
+	
+	/** buscarEnDescendientesUA. **/
+	@ApiModelProperty(value = "buscarEnDescendientesUA", required = false)
+	private Integer buscarEnDescendientesUA; 
+
 	
 	/** activo. **/
 	@ApiModelProperty(value = "activo", required = false)
@@ -79,6 +87,11 @@ public class FiltroServeis {
 	/** textos. **/
 	@ApiModelProperty(value = "textos", required = false)
 	private String textos; 
+	
+	/** textos. **/
+	@ApiModelProperty(value = "titulo", required = false)
+	private String titulo; 
+		
 		
 	/** fechaPublicacionDesde. **/
 	@ApiModelProperty(value = "fechaPublicacionDesde", required = false)
@@ -118,6 +131,11 @@ public class FiltroServeis {
 			fg.addFiltro(FiltroGenerico.FILTRO_SERVICIOS_UA, this.codigoUA+"");
 		}
 		
+		if(this.buscarEnDescendientesUA!= null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_SERVICIOS_UA_DESCENDIENTES, this.buscarEnDescendientesUA+"");
+		}
+		
+		
 		if(this.activo!= null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_SERVICIOS_ACTIVO, this.activo+"");
 		}
@@ -148,6 +166,10 @@ public class FiltroServeis {
 		
 		if(this.textos!= null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_SERVICIOS_TEXTOS, this.textos+"");
+		}
+		
+		if(this.titulo!= null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_SERVICIOS_TITULO, this.titulo+"");
 		}
 		
 		if(this.fechaPublicacionDesde!= null) {
@@ -494,6 +516,42 @@ public class FiltroServeis {
 	 */
 	public void setCodigoSia(String codigoSia) {
 		this.codigoSia = codigoSia;
+	}
+
+
+
+	/**
+	 * @return the buscarEnDescendientesUA
+	 */
+	public Integer getBuscarEnDescendientesUA() {
+		return buscarEnDescendientesUA;
+	}
+
+
+
+	/**
+	 * @param buscarEnDescendientesUA the buscarEnDescendientesUA to set
+	 */
+	public void setBuscarEnDescendientesUA(Integer buscarEnDescendientesUA) {
+		this.buscarEnDescendientesUA = buscarEnDescendientesUA;
+	}
+
+
+
+	/**
+	 * @return the titulo
+	 */
+	public String getTitulo() {
+		return titulo;
+	}
+
+
+
+	/**
+	 * @param titulo the titulo to set
+	 */
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
 	}
 	
 }

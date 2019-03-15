@@ -93,6 +93,7 @@ public class FiltroGenerico implements Serializable {
 	
 	
 	public static final String FILTRO_PROCEDIMIENTO_UA = "codigoUA";
+	public static final String FILTRO_PROCEDIMIENTO_UA_DESCENDIENTES = "buscarEnDescendientesUA";
 	public static final String FILTRO_PROCEDIMIENTO_ACTIVO = "activo";
 	public static final String FILTRO_PROCEDIMIENTO_ESTADO_UA = "estadoUA";
 	public static final String FILTRO_PROCEDIMIENTO_AGRUPACION_HECHO_VITAL = "agrupacionHechoVital";
@@ -101,6 +102,7 @@ public class FiltroGenerico implements Serializable {
 	public static final String FILTRO_PROCEDIMIENTO_AGRUPACION_MATERIA = "agrupacionMateria";
 	public static final String FILTRO_PROCEDIMIENTO_MATERIA = "materia";
 	public static final String FILTRO_PROCEDIMIENTO_TEXTOS = "textos";
+	public static final String FILTRO_PROCEDIMIENTO_TITULO = "titulo";
 	public static final String FILTRO_PROCEDIMIENTO_FECHA_PUBLICACION_DESDE = "fechaPublicacionDesde";
 	public static final String FILTRO_PROCEDIMIENTO_FECHA_PUBLICACION_HASTA = "fechaPublicacionHasta";
 	public static final String FILTRO_PROCEDIMIENTO_VIGENTE = "vigente";
@@ -112,6 +114,7 @@ public class FiltroGenerico implements Serializable {
 	public static final String FILTRO_PROCEDIMIENTO_VERSION_TRAMITE_TELEMATICO = "versionTramiteTelematico";
 
 	public static final String FILTRO_SERVICIOS_UA = "codigoUA";
+	public static final String FILTRO_SERVICIOS_UA_DESCENDIENTES = "buscarEnDescendientesUA";
 	public static final String FILTRO_SERVICIOS_ACTIVO = "activo";
 	public static final String FILTRO_SERVICIOS_ESTADO_UA = "estadoUA";
 	public static final String FILTRO_SERVICIOS_AGRUPACION_HECHO_VITAL = "agrupacionHechoVital";
@@ -120,6 +123,7 @@ public class FiltroGenerico implements Serializable {
 	public static final String FILTRO_SERVICIOS_AGRUPACION_MATERIA = "agrupacionMateria";
 	public static final String FILTRO_SERVICIOS_MATERIA = "materia";
 	public static final String FILTRO_SERVICIOS_TEXTOS = "textos";
+	public static final String FILTRO_SERVICIOS_TITULO = "titulo";
 	public static final String FILTRO_SERVICIOS_FECHA_PUBLICACION_DESDE = "fechaPublicacionDesde";
 	public static final String FILTRO_SERVICIOS_FECHA_PUBLICACION_HASTA = "fechaPublicacionHasta";
 	public static final String FILTRO_SERVICIOS_VIGENTE = "vigente";
