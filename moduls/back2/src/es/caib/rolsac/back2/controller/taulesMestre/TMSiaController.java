@@ -4,8 +4,6 @@ import static es.caib.rolsac.utils.LogUtils.logException;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -453,30 +451,34 @@ public class TMSiaController extends PantallaBaseController {
 	private List<SiaJobDTO> convertirSIAToJobDTO(List<?> siaJobs) {
 		
 		final List<SiaJobDTO> siaJobsDTO = new ArrayList<SiaJobDTO>();
-		StringBuffer bufferDesc = new StringBuffer();
-		StringBuffer bufferDescBreve = new StringBuffer();
+		//StringBuffer bufferDesc = new StringBuffer();
+		//StringBuffer bufferDescBreve = new StringBuffer();
 		
         for (Object oSiaJob : siaJobs) {
         	
-        	try 
-        	{
+        	try {
         		final SiaJob siaJob = (SiaJob) oSiaJob;
-        		bufferDesc = SiaUtils.obtenerContenidoClob(siaJob.getDescripcion());
-        		bufferDescBreve = SiaUtils.obtenerContenidoClob(siaJob.getDescBreve());
         		
+        		//bufferDesc = SiaUtils.obtenerContenidoClob(siaJob.getDescripcion());
+        		//bufferDescBreve = SiaUtils.obtenerContenidoClob(siaJob.getDescBreve());        		
         		siaJobsDTO.add(new SiaJobDTO(
             			siaJob.getId(),
             			siaJob.getFechaIni(),
             			siaJob.getFechaFin(),
-            			bufferDescBreve.toString(),
-            			bufferDesc.toString(),
+            		//	bufferDescBreve.toString(),
+            		//	bufferDesc.toString(),
+            			siaJob.getDescBreve(),
+            			siaJob.getDescripcion(),
             			siaJob.getEstado(),
             			siaJob.getTipo())
                 );
         		
-			} catch (IOException e) {
+		/*	} catch (IOException e) {
 				log.error("Error: " + e.getMessage());
 			} catch (SQLException e) {
+				log.error("Error: " + e.getMessage());
+			*/
+        	}catch (Exception e) {
 				log.error("Error: " + e.getMessage());
 			}
         	

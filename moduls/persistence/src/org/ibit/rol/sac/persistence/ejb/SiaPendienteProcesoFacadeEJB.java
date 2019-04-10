@@ -7,13 +7,6 @@ import java.util.List;
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import net.sf.hibernate.Criteria;
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.expression.Order;
-
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.Servicio;
 import org.ibit.rol.sac.model.Sia;
@@ -37,6 +30,12 @@ import org.quartz.impl.StdSchedulerFactory;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.caib.solr.api.exception.ExcepcionSolrApi;
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.expression.Order;
 
 
 
@@ -61,6 +60,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
 	 * @ejb.create-method
 	 * @ejb.permission unchecked="true"
 	 */
+	@Override
 	public void ejbCreate() throws CreateException {
 
 		super.ejbCreate();
@@ -156,7 +156,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     		final int primerResultado = new Integer(pagina).intValue() * cuantos;
 			query.setFirstResult(primerResultado);
 			query.setMaxResults(cuantos);
-    		List<SiaUA> lista = (List<SiaUA>) query.list();
+    		List<SiaUA> lista = query.list();
     		resultado.setListaResultados(lista);
     		
     		//El total.
@@ -248,7 +248,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     		if (filtro.getExiste() != null) {
     			query.setInteger("existe", filtro.getExiste());
     		}
-    		List<Sia> lista = (List<Sia>) query.list();
+    		List<Sia> lista = query.list();
     		resultado.setListaResultados(lista);
     		
     		//El total.
@@ -361,7 +361,7 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     			query.setString("tipo", filtro.getTipo());
     		}
     		
-    		List<Sia> lista = (List<Sia>) query.list();
+    		List<Sia> lista = query.list();
     		resultado.setListaResultados(lista);
     		
     		//El total.
@@ -628,10 +628,12 @@ public abstract class SiaPendienteProcesoFacadeEJB extends HibernateEJB {
     			job.setFechaFin(new Date());
     			job.setEstado(SiaUtils.SIAJOB_ESTADO_ERROR_GRAVE);
     			
-    			StringBuffer bufferDesc = SiaUtils.obtenerContenidoClob(job.getDescBreve());
+    			//StringBuffer bufferDesc = SiaUtils.obtenerContenidoClob(job.getDescBreve());
     					
-    			job.setDescBreve(Hibernate.createClob("Finalizado a la fuerza " + bufferDesc));
-    			job.setDescripcion(Hibernate.createClob("Finalizado a la fuerza " + SiaUtils.obtenerContenidoClob(job.getDescripcion())));
+    			//job.setDescBreve(Hibernate.createClob("Finalizado a la fuerza " + bufferDesc));
+    			//job.setDescripcion(Hibernate.createClob("Finalizado a la fuerza " + SiaUtils.obtenerContenidoClob(job.getDescripcion())));
+    			job.setDescBreve("Finalizado a la fuerza " + job.getDescBreve());
+    			job.setDescripcion("Finalizado a la fuerza " + job.getDescripcion());
     			
     			session.update(job);
     		} 

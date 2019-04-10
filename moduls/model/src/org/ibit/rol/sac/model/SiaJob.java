@@ -1,6 +1,5 @@
 package org.ibit.rol.sac.model;
 
-import java.sql.Clob;
 import java.util.Date;
 
 /**
@@ -24,13 +23,16 @@ public class SiaJob implements ValueObject {
 	/** Descripción breve del envío de datos. 
 	 * Incluirá información básica a mostrar en la interfaz como cuantos envíos se han realizado 
 	 * y cuántos de ellos han sido correctos o incorrectos.. **/
-	private Clob descBreve; 
+//	private Clob descBreve; 
+	private String descBreve; 
 	
 	/** Descripción completa de todos los envíos realizados. La información a incluir será:
                   Fecha  -Desc_SIA – Resultado
 	Siendo la fecha el momento del envío, en desc_SIA se mostrará información sobre la fila 
 	mientras en resultado se almacenará la respuesta obtenida. **/
-	private Clob descripcion;
+	//private Clob descripcion;
+	private String descripcion;
+	
 	
 	/** Estado del envio de datos SIA **/
 	private Integer estado;
@@ -80,26 +82,26 @@ public class SiaJob implements ValueObject {
 	/**
 	 * @return the descBreve
 	 */
-	public Clob getDescBreve() {
+	public String getDescBreve() {
 		return descBreve;
 	}
 	/**
 	 * @param descBreve the descBreve to set
 	 */
-	public void setDescBreve(Clob descBreve) {
-		this.descBreve = descBreve;
+	public void setDescBreve(String descBreve) {		
+			this.descBreve = descBreve;
 	}
 	/**
 	 * @return the descripcion
 	 */
-	public Clob getDescripcion() {
+	public String getDescripcion() {
 		return descripcion;
 	}
 	/**
 	 * @param descripcion the descripcion to set
 	 */
-	public void setDescripcion(Clob descripcion) {
-		this.descripcion = descripcion;
+	public void setDescripcion(String descripcion) {
+			this.descripcion = descripcion;
 	}
 	/**
 	 * @return the estado

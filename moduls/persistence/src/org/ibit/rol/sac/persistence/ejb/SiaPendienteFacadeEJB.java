@@ -36,8 +36,6 @@ import org.ibit.rol.sac.persistence.util.SiaEnviableResultado;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.ibit.rol.sac.persistence.ws.sia.SiaWS;
 
-import net.sf.hibernate.Hibernate;
-
 
 
 /**
@@ -479,8 +477,10 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
     			}
     			
     			// TODO PASAR A STRING + CLOB
-    			siaJob.setDescBreve(Hibernate.createClob(resultadoBeta.toString()));
-    			siaJob.setDescripcion(Hibernate.createClob(estadoProceso.getDetalle()));
+    			//siaJob.setDescBreve(Hibernate.createClob(resultadoBeta.toString()));
+    			//siaJob.setDescripcion(Hibernate.createClob(estadoProceso.getDetalle()));
+    			siaJob.setDescBreve(resultadoBeta.toString());
+    			siaJob.setDescripcion(estadoProceso.getDetalle());
     			
     			final SiaPendienteProcesoDelegate siaPendienteDelegate = DelegateUtil.getSiaPendienteProcesoDelegate();
     			siaPendienteDelegate.actualizarSiaJob(siaJob);
@@ -524,8 +524,10 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 			log.error(e);	
 			StringBuffer resultadoDescripcionBreve = new StringBuffer();
 			resultadoDescripcionBreve.append(" Error obteniendo los procedimientos y servicios caducados. Mensaje:" + e.getMessage());
-			siaJob.setDescBreve(Hibernate.createClob(resultadoDescripcionBreve.toString()));
-			siaJob.setDescripcion(Hibernate.createClob(resultadoDescripcionBreve.toString()));
+			//siaJob.setDescBreve(Hibernate.createClob(resultadoDescripcionBreve.toString()));
+			//siaJob.setDescripcion(Hibernate.createClob(resultadoDescripcionBreve.toString()));
+			siaJob.setDescBreve(resultadoDescripcionBreve.toString());
+			siaJob.setDescripcion(resultadoDescripcionBreve.toString());
 			try {
 				siaPendienteDelegate.actualizarSiaJob(siaJob);
 			} catch (DelegateException e2) {
@@ -860,8 +862,10 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		    			resultadoBeta.append(" - "+incorrectos+" datos incorrectos  <br />");
 		    			resultadoBeta.append("Estado: "+Math.abs((correctos+incorrectos)*100/idProcedimientos.size())+"%  <br />");
 		    			
-		    			siaJob.setDescBreve(Hibernate.createClob(resultadoBeta.toString()));
-		    			siaJob.setDescripcion(Hibernate.createClob(resultadoDescripcion.toString()));
+		    			//siaJob.setDescBreve(Hibernate.createClob(resultadoBeta.toString()));
+		    			//siaJob.setDescripcion(Hibernate.createClob(resultadoDescripcion.toString()));
+		    			siaJob.setDescBreve(resultadoBeta.toString());
+		    			siaJob.setDescripcion(resultadoDescripcion.toString());
 		    			final SiaPendienteProcesoDelegate siaPendienteDelegate = DelegateUtil.getSiaPendienteProcesoDelegate();
 		    			siaPendienteDelegate.actualizarSiaJob(siaJob);
 			        	
@@ -901,8 +905,10 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
     	resultadoDescripcionBreve.append(" - "+incorrectos+" datos incorrectos  <br />");
     	resultadoDescripcionBreve.append(" Finalizado a las "+formato.format(calendar.getTime())+"  <br />");
     	siaJob.setFechaFin(new Date());
-    	siaJob.setDescBreve(Hibernate.createClob(resultadoDescripcionBreve.toString()));
-		siaJob.setDescripcion(Hibernate.createClob(resultadoDescripcion.toString()));
+    	//siaJob.setDescBreve(Hibernate.createClob(resultadoDescripcionBreve.toString()));
+    	//siaJob.setDescripcion(Hibernate.createClob(resultadoDescripcion.toString()));
+    	siaJob.setDescBreve(resultadoDescripcionBreve.toString());
+		siaJob.setDescripcion(resultadoDescripcion.toString());
 		
     	if (incorrectos == 0) {
 			siaJob.setEstado(SiaUtils.SIAJOB_ESTADO_ENVIADO);

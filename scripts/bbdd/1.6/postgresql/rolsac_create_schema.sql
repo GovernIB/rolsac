@@ -448,6 +448,7 @@ create table RSC_NORMAT (
    NER_IDEXTE int8,
    NER_URLREM varchar(512),
    NER_CODADM int8,
+   NOR_DATVAL bool,
    primary key (NOR_CODI)
 );
 create table RSC_TAXA (
@@ -1260,13 +1261,13 @@ create table RSC_TRAHEV (
    primary key (THE_CODHEV, THE_CODIDI)
 );
 create table RSC_DOCTRA (
-   DOC_CODI int8 not null,
-   CODITRA int8,
-   DOC_CODARC int8,
-   DOC_CODCDC int8,
-   DOC_CODEXD int8,
-   ORDEN int8,
-   TIPUS int4,
+   DTR_CODI int8 not null,
+   DTR_CODTRA int8,
+   DTR_CODARC int8,
+   DTR_CODCDC int8,
+   DTR_CODEXD int8,
+   DTR_ORDEN int8,
+   DTR_TIPUS int4,
    primary key (DOC_CODI)
 );
 create table RSC_DOCUME (
@@ -1284,7 +1285,7 @@ create table RSC_DOCUME (
 create table RSC_DOCSER (
    DSR_CODI int8 not null,
    DSR_CODSER int8,
-   ORDEN int8,
+   DSR_ORDEN int8,
    primary key (DSR_CODI)
 );
 create table RSC_SENSGR (

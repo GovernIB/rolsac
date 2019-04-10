@@ -77,6 +77,21 @@ public class DateUtils {
 		return fmt.format (fecha);
 	}
 	
+	/**
+	 * Formatea la fecha para incluir una fecha sin hora en una consulta SQL valida para oracle y postgres
+	 * @param fecha
+	 * @return
+	 */
+	public static String stringFechaBBDD(final Date d) {
+		return "'" + DateUtils.formatearddMMyyyy(d) + "'";
+	}
+	
+	
+	public static String stringFechaAhoraBBDD() {
+		return stringFechaBBDD(getNow());
+	}
+	
+	
     public static Date getNow() {
         Calendar cal = Calendar.getInstance();
         return cal.getTime();

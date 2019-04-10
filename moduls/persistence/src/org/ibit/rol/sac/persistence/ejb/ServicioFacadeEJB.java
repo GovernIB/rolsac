@@ -609,7 +609,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 			String where = "";
 
 			if (telematico != null && (telematico.equals("1") || telematico.equals("0")) ) {
-				where += " and servicio.telematico = " + telematico + " ";
+				where += " and servicio.telematico = " + ApiRestUtils.intToBool(telematico) + " ";
 			}
 
 			if (en_plazo != null && !en_plazo.equals("")) {
@@ -620,8 +620,8 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 				}
 
 				where += "( select tra.servicio from Tramite as tra where tra.fase = 1 ";
-				where += "and (sysdate < tra.dataTancament or tra.dataTancament is null) ";
-				where += "and (sysdate > tra.dataInici or tra.dataInici is null) ) ";
+				where += "and ( " + DateUtils.stringFechaAhoraBBDD() + " < tra.dataTancament or tra.dataTancament is null) ";
+				where += "and ( " + DateUtils.stringFechaAhoraBBDD() + " > tra.dataInici or tra.dataInici is null) ) ";
 			}
 
 			if (materia != null) {
@@ -641,10 +641,10 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 			}
 
 			if (visible == 1) {
-				where += " and (sysdate < servicio.fechaDespublicacion or servicio.fechaDespublicacion is null) ";
-				where += " and (sysdate > servicio.fechaPublicacion or servicio.fechaPublicacion is null) ";
+				where += " and ( " + DateUtils.stringFechaAhoraBBDD() + " < servicio.fechaDespublicacion or servicio.fechaDespublicacion is null) ";
+				where += " and ( " + DateUtils.stringFechaAhoraBBDD() + " > servicio.fechaPublicacion or servicio.fechaPublicacion is null) ";
 			} else if (visible == 2) {
-				where += " and (sysdate > servicio.fechaDespublicacion or sysdate < servicio.fechaPublicacion or servicio.validacion = 2 or servicio.validacion = 3) ";
+				where += " and ( " + DateUtils.stringFechaAhoraBBDD() + " > servicio.fechaDespublicacion or " + DateUtils.stringFechaAhoraBBDD() + " < servicio.fechaPublicacion or servicio.validacion = 2 or servicio.validacion = 3) ";
 			}
 
 			if ( userIsOper() ) {
@@ -812,7 +812,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 
 			if ( bc.getTelematico() != null ) {
 				String telematico = bc.getTelematico()?"1":"0";
-				where.append(" and servicio.telematico = " + telematico + " ");	
+				where.append(" and servicio.telematico = " + ApiRestUtils.intToBool(telematico) + " ");	
 			}
 
 
@@ -825,18 +825,18 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 					where.append(" and servicio.id not in ");
 
 				where.append(" ( select tra.servicio from Tramite as tra where tra.servicio is not null ");
-				where.append("and (sysdate < tra.dataTancament or tra.dataTancament is null) ");
-				where.append("and (sysdate > tra.dataInici or tra.dataInici is null) ) ");
+				where.append("and ( " + DateUtils.stringFechaAhoraBBDD() + " < tra.dataTancament or tra.dataTancament is null) ");
+				where.append("and ( " + DateUtils.stringFechaAhoraBBDD() + " > tra.dataInici or tra.dataInici is null) ) ");
 
 			}
 
 
 			if ( bc.getVisibilidad() == Validacion.PUBLICA ) {
-				where.append(" and (sysdate < servicio.fechaDespublicacion or servicio.fechaDespublicacion is null) ");
-				where.append(" and (sysdate > servicio.fechaPublicacion or servicio.fechaPublicacion is null) ");
+				where.append(" and ( " + DateUtils.stringFechaAhoraBBDD() + " < servicio.fechaDespublicacion or servicio.fechaDespublicacion is null) ");
+				where.append(" and ( " + DateUtils.stringFechaAhoraBBDD() + " > servicio.fechaPublicacion or servicio.fechaPublicacion is null) ");
 				where.append(" and (servicio.validacion <> "+Validacion.INTERNA+" and servicio.validacion <> "+Validacion.RESERVA+") "); //#355 devolvia no visibles
 			} else if ( bc.getVisibilidad() == Validacion.INTERNA ) {
-				where.append(" and (sysdate > servicio.fechaDespublicacion or sysdate < servicio.fechaPublicacion or servicio.validacion = "+Validacion.INTERNA+" or servicio.validacion = "+Validacion.RESERVA+") ");
+				where.append(" and ( " + DateUtils.stringFechaAhoraBBDD() + " > servicio.fechaDespublicacion or " + DateUtils.stringFechaAhoraBBDD() + " < servicio.fechaPublicacion or servicio.validacion = "+Validacion.INTERNA+" or servicio.validacion = "+Validacion.RESERVA+") ");
 			}
 
 
@@ -1924,14 +1924,14 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 			hql.append(" AND srv.estadoSIA like 'A'"); 
 			hql.append(" AND srv.validacion = 1 "); 
 			hql.append(" AND srv.fechaDespublicacion is not null ");
-			hql.append(" AND srv.fechaDespublicacion < SYSDATE ) ");
+			hql.append(" AND srv.fechaDespublicacion < " + DateUtils.stringFechaAhoraBBDD() + " ) ");
 			
 			hql.append(" OR ");
 			//Servicios activos sin estado o de baja y cuya fecha de caducidad es futura y son publicas.
 			hql.append(" (   (srv.estadoSIA is null     OR   (srv.estadoSIA is NOT NULL AND srv.estadoSIA like 'B')) "); 
 			hql.append(" AND srv.validacion = 1 "); 
 			hql.append(" AND srv.fechaPublicacion IS NOT NULL ");
-			hql.append(" AND srv.fechaPublicacion <= SYSDATE ");
+			hql.append(" AND srv.fechaPublicacion <= " + DateUtils.stringFechaAhoraBBDD() + " ");
 			hql.append("  ) ");
 			
 			return session.createQuery(hql.toString()).list();
@@ -2147,7 +2147,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 								
 				if((!StringUtils.isEmpty(telematico) && (telematico.equals("1") || telematico.equals("0")))) {
 					where.append(" AND s.telematico = :telematico ");
-					parametros.put("telematico", telematico);					
+					parametros.put("telematico", ApiRestUtils.intToBool(telematico));					
 				}
 	
 				

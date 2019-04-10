@@ -313,8 +313,8 @@ drop table RSC_HECVIT;
 drop sequence RSC_SEQSEN;
 drop sequence RSC_SEQHIS;
 drop sequence RSC_SEQ_ALL;
-drop sequence RSC_SEQSCK;
 drop sequence RSC_SEQ_COM;
+drop sequence RSC_SEQSCK;
 drop sequence RSC_SEQGRP;
 drop sequence RSC_SEQSGR;
 drop sequence RSC_SEQSCR;
@@ -353,7 +353,7 @@ create table RSC_HEVIAG (
 create table RSC_DOCNOR (
    DNO_CODI int8 not null,
    DNO_CODNOR int8,
-   ORDEN int8,
+   DNO_ORDEN int8,
    primary key (DNO_CODI)
 );
 create table RSC_TRAEDI (
@@ -443,6 +443,7 @@ create table RSC_NORMAT (
    NOR_CODIVUDS varchar(255),
    NOR_DESCCODIVUDS varchar(255),
    NOR_NUMNOR varchar(255),
+   NOR_DATVAL bool,
    NOR_CODBOL int8,
    NOR_CODTIP int8,
    NER_IDEXTE int8,
@@ -704,7 +705,6 @@ create table RSC_SCRGID (
 );
 create table RSC_SERMAT (
    SRM_CODMAT int8 not null,
-   PRM_CODSER int8 not null,
    SRM_CODSER int8 not null,
    primary key (SRM_CODSER, SRM_CODMAT)
 );
@@ -982,9 +982,9 @@ create table RSC_TRASIL (
 );
 create table RSC_TRADNR (
    TDN_CODDNR int8 not null,
-   TDN_TITULO varchar(256),
+   TDN_TITULO varchar(512),
    TDN_DESCRI varchar(4000),
-   TDN_ENLACE varchar(256),
+   TDN_ENLACE varchar(512),
    TDN_CODARC int8,
    TDN_CODIDI varchar(2) not null,
    primary key (TDN_CODDNR, TDN_CODIDI)
@@ -1019,6 +1019,8 @@ create table RSC_TRAMIT (
    TRA_TYPE varchar(64) not null,
    TRA_FASE int4,
    TRA_ORDEN int8,
+   TRA_CTELEM bool,
+   TRA_CPRESE bool,
    TRA_CODPRO int8,
    TRA_CODIVUDS varchar(255),
    TRA_DESCCODIVUDS varchar(255),
@@ -1036,8 +1038,6 @@ create table RSC_TRAMIT (
    TRR_IDEXTE int8,
    TRR_URLREM varchar(512),
    TRR_CODADM int8,
-   TRA_CTELEM NUMBER(1,0),
-   TRA_CPRESE NUMBER(1,0),
    primary key (TRA_CODI)
 );
 create table RSC_SERVIC (
@@ -1057,11 +1057,11 @@ create table RSC_SERVIC (
    SER_TRAULR varchar(256),
    SER_TRAID varchar(256),
    SER_TRAVER varchar(256),
+   SER_CTELEM bool,
+   SER_CPRESE bool,
+   SER_CTELEF bool,
    SER_INSTRU int8,
    SER_SERRSP int8,
-   SER_CTELEM NUMBER(1,0),
-   SER_CPRESE NUMBER(1,0),
-   SER_CTELEF NUMBER(1,0),
    primary key (SER_CODI)
 );
 create table RSC_PERGES (
@@ -1266,14 +1266,16 @@ create table RSC_TRAHEV (
    primary key (THE_CODHEV, THE_CODIDI)
 );
 create table RSC_DOCTRA (
-   DOC_CODI int8 not null,
-   CODITRA int8,
-   DOC_CODARC int8,
+   DTR_CODI int8 not null,
+   DTR_CODTRA int8,
+   DTR_CODARC int8,
+   DTR_CODCDC int8,
+   DTR_CODEXD int8,
+   DTR_ORDEN int8,
+   DTR_TIPUS int4,
    DOC_CODCDC int8,
    DOC_CODEXD int8,
-   ORDEN int8,
-   TIPUS int4,
-   primary key (DOC_CODI)
+   primary key (DTR_CODI)
 );
 create table RSC_DOCUME (
    DOC_CODI int8 not null,
@@ -1290,7 +1292,7 @@ create table RSC_DOCUME (
 create table RSC_DOCSER (
    DSR_CODI int8 not null,
    DSR_CODSER int8,
-   ORDEN int8,
+   DSR_ORDEN int8,
    primary key (DSR_CODI)
 );
 create table RSC_SENSGR (
@@ -1543,10 +1545,10 @@ alter table RSC_TRAHEV add constraint RSC_THEHEV_FK foreign key (THE_CODHEV) ref
 alter table RSC_TRAHEV add constraint RSC_THENOR_FK foreign key (THE_NORMAT) references RSC_ARCHIV;
 alter table RSC_TRAHEV add constraint RSC_THECON_FK foreign key (THE_CONTEN) references RSC_ARCHIV;
 alter table RSC_TRAHEV add constraint RSC_THEDIS_FK foreign key (THE_CODDIS) references RSC_ARCHIV;
-alter table RSC_DOCTRA add constraint RSC_DOCARC_FK foreign key (DOC_CODARC) references RSC_ARCHIV;
-alter table RSC_DOCTRA add constraint RSC_CODITRA_FK foreign key (CODITRA) references RSC_TRAMIT;
-alter table RSC_DOCTRA add constraint RSC_DOCTRA_CATDOC_FK foreign key (DOC_CODCDC) references RSC_CATDOC;
-alter table RSC_DOCTRA add constraint RSC_DOCTRA_EXCDOC_FK foreign key (DOC_CODEXD) references RSC_EXCDOC;
+alter table RSC_DOCTRA add constraint RSC_DOCARC_FK foreign key (DTR_CODARC) references RSC_ARCHIV;
+alter table RSC_DOCTRA add constraint RSC_CODITRA_FK foreign key (DTR_CODTRA) references RSC_TRAMIT;
+alter table RSC_DOCTRA add constraint RSC_DOCTRA_CATDOC_FK foreign key (DTR_CODCDC) references RSC_CATDOC;
+alter table RSC_DOCTRA add constraint RSC_DOCTRA_EXCDOC_FK foreign key (DTR_CODEXD) references RSC_EXCDOC;
 alter table RSC_DOCUME add constraint RSC_DOCARC2_FK foreign key (DOC_CODARC2) references RSC_ARCHIV;
 alter table RSC_DOCUME add constraint RSC_DOCARC2_FKE61D7DD2 foreign key (DOC_CODARC2) references RSC_ARCHIV;
 alter table RSC_DOCUME add constraint RSC_DOCPRO_FK foreign key (DOC_CODPRO) references RSC_PROCED;
@@ -1570,8 +1572,8 @@ alter table RSC_HECVIT add constraint RSC_HEVICG_FK foreign key (HEV_ICOGRA) ref
 create sequence RSC_SEQSEN;
 create sequence RSC_SEQHIS;
 create sequence RSC_SEQ_ALL;
-create sequence RSC_SEQSCK;
 create sequence RSC_SEQ_COM;
+create sequence RSC_SEQSCK;
 create sequence RSC_SEQGRP;
 create sequence RSC_SEQSGR;
 create sequence RSC_SEQSCR;

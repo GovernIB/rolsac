@@ -49,6 +49,7 @@ import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.util.ApiRestUtils;
 import org.ibit.rol.sac.persistence.util.Cadenas;
+import org.ibit.rol.sac.persistence.util.DateUtils;
 import org.ibit.rol.sac.persistence.util.IndexacionUtil;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
@@ -1589,8 +1590,8 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				consulta.append(" and fua.ficha.id = ficha.id ");
 				consulta.append(" and fua.idSeccio = :idSeccion ");
 				consulta.append(" and ficha.validacion = :validacion " );
-				consulta.append(" and (ficha.fechaCaducidad > sysdate or ficha.fechaCaducidad is null) ");
-				consulta.append(" and (ficha.fechaPublicacion <= sysdate or ficha.fechaPublicacion is null) ");
+				consulta.append(" and (ficha.fechaCaducidad > " + DateUtils.stringFechaAhoraBBDD() + " or ficha.fechaCaducidad is null) ");
+				consulta.append(" and (ficha.fechaPublicacion <= " + DateUtils.stringFechaAhoraBBDD() + " or ficha.fechaPublicacion is null) ");
 
 				Query query = session.createQuery( consulta.toString() );
 
@@ -1795,6 +1796,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				query.setParameter("idSeccion", idSeccion);
 				query.setParameter("idioma", idioma);
 				query.setParameter("validacion", Validacion.PUBLICA);
+				query.setParameter("sysdate", DateUtils.getNow());
 				
 				
 				/* 16/12/2013: Se genera un orden en lugar de recuperar el orden real debido a que se ha cambiado el mecanismo que establece el orden de las fichas.
@@ -1856,6 +1858,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				query.setParameter("idSeccion", idSeccion);
 				query.setParameter("idioma", idioma);
 				query.setParameter("validacion", Validacion.PUBLICA);
+				query.setParameter("sysdate", DateUtils.getNow());
 				
 				
 				/* 16/12/2013: Se genera un orden en lugar de recuperar el orden real debido a que se ha cambiado el mecanismo que establece el orden de las fichas.
@@ -2269,6 +2272,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			query.setParameter("idSeccion", idSeccion);
 			query.setParameter("idioma", DelegateUtil.getIdiomaDelegate().lenguajePorDefecto() );
 			query.setParameter("validacion", Validacion.PUBLICA);
+			query.setParameter("sysdate", DateUtils.getNow());
 			
 			//Borramos las fichas UA
 			List<FichaResumenUA> listaFichasUA = query.list();

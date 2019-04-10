@@ -10,10 +10,6 @@ import java.util.Map;
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-
 import org.apache.commons.lang.StringUtils;
 import org.ibit.rol.sac.model.FichaResumen;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -21,8 +17,12 @@ import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
+import org.ibit.rol.sac.persistence.util.DateUtils;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
 
 /**
  * SessionBean para mantener y consultar Fichas con la información justa(PORMAD)
@@ -52,7 +52,8 @@ public abstract class FichaResumenFacadeEJB extends HibernateEJB {
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
-    public void ejbCreate() throws CreateException {
+    @Override
+	public void ejbCreate() throws CreateException {
         super.ejbCreate();
     }
     
@@ -132,10 +133,10 @@ public abstract class FichaResumenFacadeEJB extends HibernateEJB {
 			}
             
             if (campoVisible == 1) {
-            	i18nQuery += " and (sysdate < ficha.fechaCaducidad or ficha.fechaCaducidad is null) ";
-				i18nQuery += " and (sysdate > ficha.fechaPublicacion or ficha.fechaPublicacion is null) ";
+            	i18nQuery += " and ( " + DateUtils.stringFechaAhoraBBDD() + "  < ficha.fechaCaducidad or ficha.fechaCaducidad is null) ";
+				i18nQuery += " and ( " + DateUtils.stringFechaAhoraBBDD() + " > ficha.fechaPublicacion or ficha.fechaPublicacion is null) ";
 			} else if (campoVisible == 2) {
-				i18nQuery += " and (sysdate > ficha.fechaCaducidad or sysdate < ficha.fechaPublicacion or ficha.validacion = 2 or ficha.validacion = 3) ";
+				i18nQuery += " and ( " + DateUtils.stringFechaAhoraBBDD() + " > ficha.fechaCaducidad or " + DateUtils.stringFechaAhoraBBDD() + " < ficha.fechaPublicacion or ficha.validacion = 2 or ficha.validacion = 3) ";
 			}
             
             String orderBy = "";

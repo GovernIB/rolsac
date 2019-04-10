@@ -55,8 +55,14 @@ public class ApiRestUtils {
 		
 		//Añadimos todos los parámetros.
 		for (Map.Entry<String, String> param : parametros.entrySet()){
-		    query.setParameter(param.getKey(), param.getValue());
-		    queryCount.setParameter(param.getKey(), param.getValue());
+			if("true".equals(param.getValue()) || "false".equals(param.getValue())){
+				query.setParameter(param.getKey(), "true".equals(param.getValue()));
+			    queryCount.setParameter(param.getKey(), "true".equals(param.getValue()));
+			}else {
+				query.setParameter(param.getKey(), param.getValue());
+				queryCount.setParameter(param.getKey(), param.getValue());
+			}
+		    
 		}				
 		 query.setFirstResult((pageNumber - 1) * pageSize);
 		 query.setMaxResults(pageSize);				
@@ -69,5 +75,30 @@ public class ApiRestUtils {
 		return res;
 		
 	}
+	
+	/**
+	 * "true" si el num es >=1. "false" si num no es un numero o el num es <=0  
+	 * @param num
+	 * @return
+	 */
+	public static String intToBool(String num ) {		
+		try {
+			int n = Integer.parseInt(num);
+			return intToBool(n);
+		} catch (Exception e) {
+			return "false";
+		}		
+	}
+	
+	/**
+	 * "true" si el num es >=1. "false" en caso contrario
+	 * @param num
+	 * @return
+	 */
+	public static String intToBool(int num ) {		
+		return num>=1?"true":"false";
+	}
+	
+	
 
 }

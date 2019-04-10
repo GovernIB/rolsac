@@ -973,7 +973,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			if (telematico != null && (telematico.equals("1") || telematico.equals("0"))) {
 
 				where += "and procedimiento.id in ( select tra.procedimiento from Tramite as tra where tra.telematico = "
-						+ telematico + " )";
+						+ ApiRestUtils.intToBool(telematico) + " )";
 			}
 
 			if (en_plazo != null && !en_plazo.equals("")) {
@@ -984,8 +984,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				}
 
 				where += "( select tra.procedimiento from Tramite as tra where tra.fase = 1 ";
-				where += "and (sysdate < tra.dataTancament or tra.dataTancament is null) ";
-				where += "and (sysdate > tra.dataInici or tra.dataInici is null) ) ";
+				where += "and ( " + DateUtils.stringFechaAhoraBBDD() + " < tra.dataTancament or tra.dataTancament is null) ";
+				where += "and ( " + DateUtils.stringFechaAhoraBBDD() + " > tra.dataInici or tra.dataInici is null) ) ";
 			}
 
 			if (materia != null) {
@@ -1005,10 +1005,10 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			}
 
 			if (visible == 1) {
-				where += " and (sysdate < procedimiento.fechaCaducidad or procedimiento.fechaCaducidad is null) ";
-				where += " and (sysdate > procedimiento.fechaPublicacion or procedimiento.fechaPublicacion is null) ";
+				where += " and ( " + DateUtils.stringFechaAhoraBBDD() + " < procedimiento.fechaCaducidad or procedimiento.fechaCaducidad is null) ";
+				where += " and ( " + DateUtils.stringFechaAhoraBBDD() + " > procedimiento.fechaPublicacion or procedimiento.fechaPublicacion is null) ";
 			} else if (visible == 2) {
-				where += " and (sysdate > procedimiento.fechaCaducidad or sysdate < procedimiento.fechaPublicacion or procedimiento.validacion = 2 or procedimiento.validacion = 3) ";
+				where += " and ( " + DateUtils.stringFechaAhoraBBDD() + " > procedimiento.fechaCaducidad or " + DateUtils.stringFechaAhoraBBDD() + " < procedimiento.fechaPublicacion or procedimiento.validacion = 2 or procedimiento.validacion = 3) ";
 			}
 
 			if (userIsOper()) {
@@ -1241,7 +1241,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				final String telematico = bc.getTelematico() ? "1" : "0";
 				where.append(
 						"and procedimiento.id in ( select tra.procedimiento from Tramite as tra where tra.telematico = "
-								+ telematico + " )");
+								+ ApiRestUtils.intToBool(telematico) + " )");
 			}
 
 			if (bc.getEnPlazo() != null) {
@@ -1253,20 +1253,20 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 					where.append(" and procedimiento.id not in ");
 
 				where.append(" ( select tra.procedimiento from Tramite as tra where tra.procedimiento is not null ");
-				where.append("and (sysdate < tra.dataTancament or tra.dataTancament is null) ");
-				where.append("and (sysdate > tra.dataInici or tra.dataInici is null) ) ");
+				where.append("and ( " + DateUtils.stringFechaAhoraBBDD() + " < tra.dataTancament or tra.dataTancament is null) ");
+				where.append("and ( " + DateUtils.stringFechaAhoraBBDD() + " > tra.dataInici or tra.dataInici is null) ) ");
 
 			}
 
 			if (bc.getVisibilidad() == Validacion.PUBLICA) {
-				where.append(" and (sysdate < procedimiento.fechaCaducidad or procedimiento.fechaCaducidad is null) ");
+				where.append(" and ( " + DateUtils.stringFechaAhoraBBDD() + " < procedimiento.fechaCaducidad or procedimiento.fechaCaducidad is null) ");
 				where.append(
-						" and (sysdate > procedimiento.fechaPublicacion or procedimiento.fechaPublicacion is null) ");
+						" and ( " + DateUtils.stringFechaAhoraBBDD() + " > procedimiento.fechaPublicacion or procedimiento.fechaPublicacion is null) ");
 				where.append(" and (procedimiento.validacion <> " + Validacion.INTERNA
 						+ " and procedimiento.validacion <> " + Validacion.RESERVA + ") "); // #355 devolvia no visibles
 			} else if (bc.getVisibilidad() == Validacion.INTERNA) {
 				where.append(
-						" and (sysdate > procedimiento.fechaCaducidad or sysdate < procedimiento.fechaPublicacion or procedimiento.validacion = "
+						" and ( " + DateUtils.stringFechaAhoraBBDD() + " > procedimiento.fechaCaducidad or " + DateUtils.stringFechaAhoraBBDD() + " < procedimiento.fechaPublicacion or procedimiento.validacion = "
 								+ Validacion.INTERNA + " or procedimiento.validacion = " + Validacion.RESERVA + ") ");
 			}
 
@@ -2673,7 +2673,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			hql.append(" AND pro.estadoSIA like 'A'");
 			hql.append(" AND pro.validacion = 1");
 			hql.append(" AND pro.fechaCaducidad is not null ");
-			hql.append(" AND pro.fechaCaducidad < SYSDATE ) ");
+			hql.append(" AND pro.fechaCaducidad < " + DateUtils.stringFechaAhoraBBDD() + " ) ");
 
 			hql.append(" OR ");
 			// Procedimientos activos sin estado o de baja y cuya fecha de caducidad es
@@ -2681,7 +2681,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			hql.append(" (   (pro.estadoSIA is null     OR   (pro.estadoSIA is NOT NULL AND pro.estadoSIA like 'B')) ");
 			hql.append(" AND pro.validacion = 1");
 			hql.append(" AND pro.fechaPublicacion IS NOT NULL ");
-			hql.append(" AND pro.fechaPublicacion <= SYSDATE ");
+			hql.append(" AND pro.fechaPublicacion <= " + DateUtils.stringFechaAhoraBBDD() + " ");
 			hql.append("  ) ");
 
 			return session.createQuery(hql.toString()).list();
@@ -2901,7 +2901,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				final StringBuilder wereSubselect = new StringBuilder();
 
 				if ((!StringUtils.isEmpty(telematico) && (telematico.equals("1") || telematico.equals("0")))) {
-					wereSubselect.append("WHERE (t.telematico = " + telematico + " ) ");
+					wereSubselect.append("WHERE (t.telematico = " + ApiRestUtils.intToBool(telematico) + " ) ");
 				}
 
 				if ((!StringUtils.isEmpty(vigente) && vigente.equals("1"))) {
@@ -3140,5 +3140,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	private String formatoFecha(final Date d) {
 		return "'" + DateUtils.formatearddMMyyyy(d) + "'";
 	}
+	
+	
+	
 
 }

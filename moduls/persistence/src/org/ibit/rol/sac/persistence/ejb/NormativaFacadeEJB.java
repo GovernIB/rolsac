@@ -422,7 +422,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			
 			String invalidQuery = "";
 			if (invalids != null && !invalids.isEmpty()) {
-				invalidQuery = " and normativa.datosValidos = " + invalids;
+				invalidQuery = " and normativa.datosValidos = " + ApiRestUtils.intToBool(invalids);
 			}
 			
 			if (tipo != null && !tipo.isEmpty()) {
@@ -924,7 +924,13 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 				} else {
 
 					if (aux.length() > 0) aux = aux + " and ";
-					aux = aux + "normativa." + key + " = " + value;
+					
+					if("datosValidos".equals(key)) {
+						aux = aux + "normativa." + key + " = " + ApiRestUtils.intToBool(value.toString());
+					}else {
+						aux = aux + "normativa." + key + " = " + value;
+					}
+					
 
 				}
 
