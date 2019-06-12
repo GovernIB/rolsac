@@ -11,11 +11,9 @@ import org.ibit.rol.sac.model.Familia;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.Iniciacion;
 import org.ibit.rol.sac.model.Materia;
-import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.TraduccionFamilia;
 import org.ibit.rol.sac.model.TraduccionHechoVital;
 import org.ibit.rol.sac.model.TraduccionIniciacion;
-import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
@@ -23,7 +21,7 @@ import org.ibit.rol.sac.persistence.delegate.FamiliaDelegate;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalDelegate;
 import org.ibit.rol.sac.persistence.delegate.IniciacionDelegate;
 import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
-import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
+import org.ibit.rol.sac.persistence.util.POUtils;
 
 public class LlistatUtil {
 
@@ -89,16 +87,15 @@ public class LlistatUtil {
 		return fetsDTOList;
 	}
 	
-	public static List<IdNomDTO> llistarPublicObjectius(String lang) throws DelegateException {
-		PublicoObjetivoDelegate publicoObjetivoDelegate = DelegateUtil.getPublicoObjetivoDelegate();
-		List<IdNomDTO> publicObjDTOList = new ArrayList<IdNomDTO>();
-		List<PublicoObjetivo> llistaPublicObjetius = publicoObjetivoDelegate.listarPublicoObjetivo();
-		TraduccionPublicoObjetivo tpo;
-		for (PublicoObjetivo publicoObjetivo : llistaPublicObjetius) {
-			tpo = (TraduccionPublicoObjetivo) publicoObjetivo.getTraduccion(lang);
-			publicObjDTOList.add(new IdNomDTO(publicoObjetivo.getId(), tpo.getTitulo()));
-		}
-		return publicObjDTOList;
+	/**
+	 * lista los públicos objetivos (no incluye los internos).
+	 * @param lang
+	 * @return
+	 * @throws DelegateException
+	 */
+	public static List<IdNomDTO> llistarPublicObjectius(String lang) throws DelegateException {	
+		//por defecto no se debe incluir este público objetivo (interno)
+		return POUtils.llistarPublicObjectius(lang,false);
 	}
 	
 

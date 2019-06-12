@@ -20,7 +20,6 @@ import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionServicio;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Validacion;
-import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.SiaPendienteProcesoDelegate;
@@ -116,8 +115,31 @@ public class SiaUtils {
 	 * Get tipologia envio SIA.
 	 * @return
 	 */
-	public static Integer getTipologiaTramitacion() {
-        return getIntFromProperty("es.caib.rolsac.sia.tipologiaTramitacion");
+	public static Integer getTipologiaTramitacion(boolean esInterno,boolean esComun) {
+		/*
+		public static final Integer TIPOLOGIA_INTERNO_COMUN = 1;
+		public static final Integer TIPOLOGIA_INTERNO_ESPECIFICO = 2;
+		public static final Integer TIPOLOGIA_EXTERNO_COMUN = 3;
+		public static final Integer TIPOLOGIA_EXTERNO_ESPECIFICO = 4;
+		*/
+		
+		int res = 4;
+		if(esInterno) {
+			if(esComun) {
+				res = TIPOLOGIA_INTERNO_COMUN;
+			}else {
+				res = TIPOLOGIA_INTERNO_ESPECIFICO;
+			}
+		}else {
+			if(esComun) {
+				res = TIPOLOGIA_EXTERNO_COMUN;
+			}else {
+				res = TIPOLOGIA_EXTERNO_ESPECIFICO;
+			}
+		}
+
+	    // return getIntFromProperty("es.caib.rolsac.sia.tipologiaTramitacion");
+		return res;			
     }
 	
 	/**
@@ -132,12 +154,22 @@ public class SiaUtils {
 	 * Get url envio SIA.
 	 * @return
 	 */
-	public static String getUrlProcedimiento() {
-        return System.getProperty("es.caib.rolsac.sia.url").trim()+"tramite/";
+	public static String getUrlProcedimiento(boolean esInterno) {
+		if(esInterno) {
+			return System.getProperty("es.caib.rolsac.sia.url.procedimiento.interno").trim();
+		}else {
+			return System.getProperty("es.caib.rolsac.sia.url").trim()+"tramite/";
+		}
+        
     }
 	
-	public static String getUrlServicio() {
-        return System.getProperty("es.caib.rolsac.sia.url").trim()+"servicio/";
+	public static String getUrlServicio(boolean esInterno) {
+		if(esInterno) {
+			return System.getProperty("es.caib.rolsac.sia.url.servicio.interno").trim();
+		}else {			
+			 return System.getProperty("es.caib.rolsac.sia.url").trim()+"servicio/";
+		}
+       
     }
 		
 	

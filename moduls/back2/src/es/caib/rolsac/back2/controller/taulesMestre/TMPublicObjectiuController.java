@@ -79,11 +79,13 @@ public class TMPublicObjectiuController extends PantallaBaseController {
    				Long id = (Long) ((Object[]) o)[0];
    				Integer ordre = (Integer) ((Object[]) o) [1];
    				String codiEstandard = (String) ((Object[]) o )[2];
+   				boolean interno = (Boolean) ((Object[]) o )[3];
    				
    				publicObjectiuDTO = new HashMap<String, Object>();
    				publicObjectiuDTO.put("id", id);
    				publicObjectiuDTO.put("ordre", ordre);
    				publicObjectiuDTO.put("codiEstandard", codiEstandard);
+   				publicObjectiuDTO.put("interno", interno);
    				
    				llistaPublicObjectiuDTO.add(publicObjectiuDTO);
    			}
@@ -114,6 +116,7 @@ public class TMPublicObjectiuController extends PantallaBaseController {
 	        resultats.put("item_id", publicObjectiu.getId());
 	      
 	        resultats.put("item_codi_estandard", publicObjectiu.getCodigoEstandar());
+	        resultats.put("item_es_interno", publicObjectiu.isInterno());
 	      
 			omplirCampsTraduibles(resultats, publicObjectiu);
 	       
@@ -136,7 +139,7 @@ public class TMPublicObjectiuController extends PantallaBaseController {
 		
 		for (String lang: langs) {
 		    if (null!=publicObjectiu.getTraduccion(lang)) {
-				resultats.put(lang, (TraduccionPublicoObjetivo) publicObjectiu.getTraduccion(lang));
+				resultats.put(lang, publicObjectiu.getTraduccion(lang));
 			} else {
 				resultats.put(lang, new TraduccionPublicoObjetivo());
 			}
@@ -161,12 +164,30 @@ public class TMPublicObjectiuController extends PantallaBaseController {
 				edicion = true;
 				publicObjectiu.setId(publicObjectiuOld.getId());
 				publicObjectiu.setOrden(publicObjectiuOld.getOrden());
+				publicObjectiu.setInterno(publicObjectiuOld.isInterno());
 			} catch (NumberFormatException nfe) {
 				publicObjectiuOld = null;
 				edicion = false;
 			}
 			
 			publicObjectiu.setCodigoEstandar(request.getParameter("item_codi_estandard"));
+			publicObjectiu.setInterno(request.getParameter("item_es_interno") != null && !"".equals(request.getParameter("item_es_interno")));
+			
+			
+			List<PublicoObjetivo> publicos =  publicoObjetivolDelegate.listarPublicoObjetivo();
+			
+			int numInternos=0; //numero de po internos que no son el actual
+			for(PublicoObjetivo p: publicos) {
+				//si es nuevo elemento los cogemos todos los internos, si es edicion no recuperamos el valor del actual
+				if(p.isInterno() && (publicObjectiu.getId()== null || !p.getId().equals(publicObjectiu.getId()))) {
+					numInternos++;
+				}
+			}
+			
+			if(numInternos > 0  && publicObjectiu.isInterno()) {
+				throw new Exception("ERROR: se está intentando guardar un público objetivo como interno y ya existe otro.");
+			}
+			
 					
 			// Idiomas
 			TraduccionPublicoObjetivo tpo;
@@ -207,8 +228,10 @@ public class TMPublicObjectiuController extends PantallaBaseController {
 			}
 		} catch (NumberFormatException nfe) {
 			result = new IdNomDTO(-3l, error);
+		} catch (Exception e) {
+			error = messageSource.getMessage("error.po.interno.unico", null, request.getLocale());
+			result = new IdNomDTO(-3l, error);
 		}
-
 		return result;
 	}	
     

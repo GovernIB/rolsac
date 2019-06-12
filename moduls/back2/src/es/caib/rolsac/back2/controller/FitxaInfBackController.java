@@ -29,7 +29,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
@@ -134,7 +133,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 			
 			model.put("llistaFetsVitals", llistaFetsVitalsDTO);
 
-			PublicoObjetivoDelegate publicObjectiuDelegate = DelegateUtil.getPublicoObjetivoDelegate();
+		/*	PublicoObjetivoDelegate publicObjectiuDelegate = DelegateUtil.getPublicoObjetivoDelegate();
 			List<PublicoObjetivo> llistaPublicsObjectiu = new ArrayList<PublicoObjetivo>();
 			List<IdNomDTO> llistaPublicsObjectiuDTO = new ArrayList<IdNomDTO>();
 
@@ -144,7 +143,9 @@ public class FitxaInfBackController extends PantallaBaseController {
 				llistaPublicsObjectiuDTO.add(new IdNomDTO(publicObjectiu.getId(), tpo == null ? null : tpo.getTitulo()));
 			}
 			
-			model.put("llistaPublicsObjectiu", llistaPublicsObjectiuDTO);
+			model.put("llistaPublicsObjectiu", llistaPublicsObjectiuDTO);*/
+			
+			model.put("llistaPublicsObjectiu", LlistatUtil.llistarPublicObjectius(lang));
 
 		} catch (DelegateException dEx) {
 			

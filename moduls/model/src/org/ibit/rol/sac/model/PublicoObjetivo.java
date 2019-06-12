@@ -17,6 +17,7 @@ public class PublicoObjetivo extends Traducible {
     private Integer orden;
     private Set fichas = new HashSet();
     private Set procedimientosLocales  = new HashSet();
+    private boolean interno;
     
     
     public Long getId() {
@@ -68,5 +69,19 @@ public class PublicoObjetivo extends Traducible {
 
 	public void setProcedimientosLocales(Set procedimientosLocales) {
 		this.procedimientosLocales = procedimientosLocales;
+	}
+
+	/**
+	 * @return the interno
+	 */
+	public boolean isInterno() {
+		return interno;
+	}
+
+	/**
+	 * @param interno the interno to set
+	 */
+	public void setInterno(boolean interno) {
+		this.interno = interno;
 	}
 }

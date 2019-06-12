@@ -59,4 +59,36 @@ public class RolsacPropertiesUtil {
 		return getIntFromProperty("es.caib.rolsac.fitxa.imatge.amplada");
 	}
 	
+	
+	/**
+	 * funcion que retorna el código del público objetivo interno
+	 * @return
+	 */
+	public static String getPropiedadPOInternoUrlProc() {
+		String res = "";
+		try {
+			res = System.getProperty("es.caib.rolsac.procser.interno.url.procedimientos");
+		}catch(Exception e) {
+			 log.error(ERROR_MESSAGE + "es.caib.rolsac.procser.interno.url.procedimientos", e);
+			res="";			
+		}
+		return res==null?"":res;		
+	}	
+	
+	/**
+	 * funcion que retorna el código del público objetivo interno
+	 * @return
+	 */
+	public static String getPropiedadPOInternoUrlSer() {
+		String res = "";
+		
+		try {
+			res = System.getProperty("es.caib.rolsac.procser.interno.url.servicios");
+		}catch(Exception e) {
+			 log.error(ERROR_MESSAGE + "es.caib.rolsac.procser.interno.url.servicios", e);
+			res="";			
+		}
+		return res==null?"":res;		
+	}	
+	
 }

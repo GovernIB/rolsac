@@ -41,6 +41,10 @@ public class PublicsObjectius extends EntidadBase {
 	@ApiModelProperty(value = "orden", required = false)
 	    private int orden;
 	
+	/** interno **/
+	@ApiModelProperty(value = "interno", required = false)
+	    private boolean interno;
+	
 	/** palabrasclave **/
 	@ApiModelProperty(value = "palabrasclave", required = false)
 	    private java.lang.String palabrasclave;
@@ -185,6 +189,20 @@ public class PublicsObjectius extends EntidadBase {
 	 */
 	public void setTitulo(java.lang.String titulo) {
 		this.titulo = titulo;
+	}
+
+	/**
+	 * @return the interno
+	 */
+	public boolean isInterno() {
+		return interno;
+	}
+
+	/**
+	 * @param interno the interno to set
+	 */
+	public void setInterno(boolean interno) {
+		this.interno = interno;
 	}
 
 }

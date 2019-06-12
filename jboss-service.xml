@@ -113,6 +113,14 @@ es.caib.rolsac.subscripcions
 	   <!-- Indica el valor por defecto del permiso de gestion de normativas al dar de alta un nuevo usuario S/N -->
 	   es.caib.rolsac.usuari.gestioNormativa=S
 	   
+	   <!-- url de acceso para los procedimientos y servicios internos (SOLR) -->	   
+	    es.caib.rolsac.procser.interno.url.procedimientos=http://ejemploSOLR.url.procedimiento/interno/{idioma}/{idPublicoObjetivo}/{nombrePubObjetivo}/{idProcedimiento}
+	    es.caib.rolsac.procser.interno.url.servicios=http://ejemploSOLR.url.servicio/interno/{idioma}/{idPublicoObjetivo}/{nombrePubObjetivo}/{idServicio}
+	    
+	    <!-- url de acceso para los procedimientos y servicios internos (SIA) -->
+	    es.caib.rolsac.sia.url.procedimiento.interno=https://www.caib.es/SIA/procedimiento/interno/ca/
+	    es.caib.rolsac.sia.url.servicio.interno=https://www.caib.es/SIA/interno/ca/
+	   	   
     </attribute>
             
 </mbean>

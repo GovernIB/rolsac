@@ -17,6 +17,9 @@ function CModulPublicObjectiu(){
     // Campo hidden para controlar los cambios sobre un módulo.
     var $moduloModificado = null;
     
+    // Campo Hidden que contiene el código del publicoObjetivo interno
+    var $publicoObjetivoInterno = null;
+    
 	var that = this;
 	
 	this.iniciar = function() {
@@ -30,11 +33,34 @@ function CModulPublicObjectiu(){
 		});
 
         // Obtenemos el campo oculto para controlar los cambios.
-        $moduloModificado = modul_publics_elm.find('input[name="modul_public_modificat"]');        
+        $moduloModificado = modul_publics_elm.find('input[name="modul_public_modificat"]'); 
+        
+        // Obtenemos el campo oculto con el id del publico objetivo interno.
+        $publicoObjetivoInterno = modul_publics_elm.find('input[name="modul_public_intern"]').val(); 
         
         // Controlamos los cambios sobre los elementos del módulo, poniendo el campo hidden correspondiente a 1.
         modul_publics_elm.find("input[type=checkbox]").change(function(){
             $moduloModificado.val(1);
+            $this = jQuery(this);
+            if($this.val()==$publicoObjetivoInterno && $this.attr("checked") == "checked"){
+            	//si estamos marcando el check del publico objetivo interno, desmarcamos los otros
+            	modul_publics_elm.find("input[type=checkbox]").each(function() {
+         			$this2 = jQuery(this);
+         			if ($this2.val()!=$publicoObjetivoInterno) {
+         				$this2.removeAttr("checked");
+         			}
+         		});
+            	
+            }else if ($this.val()!=$publicoObjetivoInterno && $this.attr("checked") == "checked"){
+            	//si estamos marcando el check de otro publico objetivo, desmarcamos el de los internos
+            	modul_publics_elm.find("input[type=checkbox]").each(function() {
+         			$this2 = jQuery(this);
+         			if ($this2.val()==$publicoObjetivoInterno) {
+         				$this2.removeAttr("checked");
+         			}
+         		});            	
+            }
+
         });                
 	}
 	

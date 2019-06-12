@@ -226,6 +226,16 @@
                                                 <input id="item_codi_estandard" name="item_codi_estandard" type="text" class="nou" />
                                             </div>
                                         </div>
+                                                                                
+                                        <div class="element t50p">
+										    <div class="etiqueta">
+										        <label for="item_es_interno"><spring:message code='camp.publicIntern'/></label>
+										    </div>
+										    <div class="control">
+										        <input id="item_es_interno" name="item_es_interno" type="checkbox" class="nou" />
+										    </div>
+										</div>
+                                        
                                     </div>
 
                                     <div class="fila">

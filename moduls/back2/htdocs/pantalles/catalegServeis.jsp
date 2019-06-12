@@ -956,6 +956,7 @@
                         <div class="ModulPublicObjectiu selectorChecks">
                         
                             <input name="modul_public_modificat" type="hidden" value="0" />
+                            <input type="hidden" name="modul_public_intern" value='<c:out value="${publicObjectiuIntern}" />' />
                         
                             <div class="seleccionats">
                                 <p class="info"><spring:message code='unitatadm.formulari.publics.noInfo'/>.</p>

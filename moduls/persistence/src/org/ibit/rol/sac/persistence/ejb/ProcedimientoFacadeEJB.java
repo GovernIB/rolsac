@@ -56,6 +56,8 @@ import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.util.ApiRestUtils;
 import org.ibit.rol.sac.persistence.util.DateUtils;
 import org.ibit.rol.sac.persistence.util.IndexacionUtil;
+import org.ibit.rol.sac.persistence.util.POUtils;
+import org.ibit.rol.sac.persistence.util.RolsacPropertiesUtil;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
@@ -2342,6 +2344,10 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		return procedimiento;
 	}
 
+	
+	
+	
+	
 	/**
 	 * Metodo para indexar un solrPendiente.
 	 *
@@ -2391,6 +2397,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			} else {
 				nomUnidadAministrativa = procedimiento.getUnidadAdministrativa().getNombre();
 			}
+						
+			boolean esProcSerInterno = POUtils.contienePOInterno(procedimiento.getPublicosObjetivo());
 
 			// Recorremos las traducciones
 			for (final String keyIdioma : traducciones.keySet()) {
@@ -2475,10 +2483,25 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 							textoOptional.append(" ");
 						}
 					}
+					
+					
 					searchTextOptional.addIdioma(enumIdioma, traduccion.getResultat() + " "
-							+ traduccion.getObservaciones() + " " + textoOptional.toString());
-					urls.addIdioma(enumIdioma, "/seucaib/" + keyIdioma + "/" + idPublicoObjetivo + "/"
-							+ nombrePubObjetivo + "/tramites/tramite/" + procedimiento.getId());
+								+ traduccion.getObservaciones() + " " + textoOptional.toString());
+					
+					if(esProcSerInterno) {
+						//Si es interno usamos la url especifica para los procedimientos internos
+						
+						String url = RolsacPropertiesUtil.getPropiedadPOInternoUrlProc().replace("{idioma}", keyIdioma)
+								.replace("{idPublicoObjetivo}", idPublicoObjetivo)
+								.replace("{nombrePubObjetivo}",nombrePubObjetivo)
+								.replace("{idProcedimiento}",procedimiento.getId().toString());		
+						urls.addIdioma(enumIdioma, url);	
+					
+					}else {
+						//Si no es interno					
+						urls.addIdioma(enumIdioma, "/seucaib/" + keyIdioma + "/" + idPublicoObjetivo + "/"
+								+ nombrePubObjetivo + "/tramites/tramite/" + procedimiento.getId());	
+					}	
 				}
 			}
 
@@ -2513,7 +2536,13 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			indexData.setFechaActualizacion(procedimiento.getFechaActualizacion());
 			indexData.setFechaPublicacion(procedimiento.getFechaPublicacion());
 			indexData.setFechaCaducidad(procedimiento.getFechaCaducidad());
-			indexData.setInterno(false);
+		
+			if(esProcSerInterno) {
+				indexData.setInterno(true);
+			}else {
+				indexData.setInterno(false);
+			}	
+		
 
 			// UA
 			final PathUO pathUO = IndexacionUtil.calcularPathUO(procedimiento.getUnidadAdministrativa());

@@ -169,7 +169,7 @@ public abstract class PublicoObjetivoFacadeEJB extends HibernateEJB {
     	Session session = getSession();
     	try {
     		
-    		StringBuilder  consulta = new StringBuilder("select pubObj.id, pubObj.orden, pubObj.codigoEstandar ");
+    		StringBuilder  consulta = new StringBuilder("select pubObj.id, pubObj.orden, pubObj.codigoEstandar, pubObj.interno");
     		consulta.append(" from PublicoObjetivo as pubObj ");
     		consulta.append(" order by pubObj.orden asc ");
     		Query query = session.createQuery( consulta.toString() );

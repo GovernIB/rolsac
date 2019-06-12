@@ -14,6 +14,7 @@
 
         <property name="codigoEstandar" length="128" column="POB_CODEST"/>
  		<property name="orden" column="POB_ORDEN"/>
+ 		<property name="interno" column="POB_INTERNO" />
  		
  		<set name="agrupaciones" inverse="true" cascade="all" lazy="true" order-by="AGH_CODEST">
             <cache usage="read-write"/>

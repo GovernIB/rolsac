@@ -44,7 +44,6 @@ import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.HechoVitalServicio;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Normativa;
-import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.Servicio;
 import org.ibit.rol.sac.model.SilencioAdm;
@@ -74,12 +73,12 @@ import org.ibit.rol.sac.persistence.delegate.ExcepcioDocumentacioDelegate;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalServicioDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
-import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
 import org.ibit.rol.sac.persistence.delegate.ServicioDelegate;
 import org.ibit.rol.sac.persistence.delegate.SilencioAdmDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
+import org.ibit.rol.sac.persistence.util.POUtils;
 import org.ibit.rol.sac.persistence.util.SiaEnviableResultado;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.springframework.http.HttpHeaders;
@@ -227,12 +226,13 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			model.put("escriptori", "pantalles/catalegServeis.jsp");
 			model.put("urlPrevisualitzacio", System.getProperty(URL_PREVISUALIZACION));
 			model.put("llistaMateries", LlistatUtil.llistarMaterias(lang));
-			model.put("llistaPublicsObjectiu", LlistatUtil.llistarPublicObjectius(lang));
+			model.put("llistaPublicsObjectiu", POUtils.llistarPublicObjectius(lang,true));
 			model.put("families", LlistatUtil.llistarFamilias(lang));
 			model.put("iniciacions", LlistatUtil.llistarIniciacions(lang));
 			model.put("llistaSilenci", llistarSilenci(lang));
 			model.put("excepcions", llistarExcepcionsDocumentacio(lang));
 			model.put("cataleg", llistarCatalegDocuments(lang));
+			model.put("publicObjectiuIntern", POUtils.getPublicoObjetivoInterno());
 
 		} catch (DelegateException dEx) {
 			
@@ -971,6 +971,11 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			
 			if (request.getParameter("publicsObjectiu") == null || request.getParameter("publicsObjectiu").equals("")) {
 				error = messageSource.getMessage("serv.error.falta.public", null, request.getLocale());
+				return result = new IdNomDTO(-3l, error);
+			}
+			
+			if (!POUtils.validaPublicosObjetivos(request.getParameter("publicsObjectiu"))) {
+				error = messageSource.getMessage("proc.error.public.objectiu.intern", null, request.getLocale());
 				return result = new IdNomDTO(-3l, error);
 			}
 			

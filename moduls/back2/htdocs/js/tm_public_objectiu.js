@@ -379,6 +379,9 @@ function CDetall(){
 		}
 		// Fin bloque de pestanyas de idiomas
 		
+		if (dada_node.item_es_interno != undefined) {
+			jQuery("#item_es_interno").prop('checked', dada_node.item_es_interno);
+		}
 		
 		
         // mostrem

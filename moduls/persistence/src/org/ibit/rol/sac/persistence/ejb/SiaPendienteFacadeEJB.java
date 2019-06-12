@@ -31,6 +31,7 @@ import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.ServicioDelegate;
 import org.ibit.rol.sac.persistence.delegate.SiaPendienteProcesoDelegate;
 import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
+import org.ibit.rol.sac.persistence.util.POUtils;
 import org.ibit.rol.sac.persistence.util.SiaCumpleDatos;
 import org.ibit.rol.sac.persistence.util.SiaEnviableResultado;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
@@ -961,6 +962,10 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		 */
 		private Sia obtenerSiaProcedimiento(ProcedimientoLocal procedimiento, SiaEnviableResultado siaEnviableResultado, SiaCumpleDatos siaCumpleDatos) throws Exception {
 			final Sia sia = new Sia();
+			
+			boolean esProcSerInterno = POUtils.contienePOInterno(procedimiento.getPublicosObjetivo());
+			boolean esProcSerComun = false;
+			
 			sia.setIdElemento(procedimiento.getId().toString());
 			if (procedimiento.getCodigoSIA() != null) {
 				sia.setIdSIA(procedimiento.getCodigoSIA().toString());
@@ -979,26 +984,33 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 				sia.setUaGest(((TraduccionUA)  procedimiento.getUnidadAdministrativa().getTraduccion("ca")).getNombre());
 			}
 			
-			String[] destinatarios = new String[procedimiento.getPublicosObjetivo().size()];
-			Set<PublicoObjetivo> publicoObjs = procedimiento.getPublicosObjetivo();
-			int i = 0;
-			for (PublicoObjetivo pObj : publicoObjs) {
-				switch(pObj.getId().intValue()) {
-					case 200:
-						destinatarios[i] = "1";
-						i++;
-						break;
-					case 201:
-						destinatarios[i] = "2";
-						i++;
-						break;
-					case 202:
-						destinatarios[i] = "3";
-						i++;
-						break;
-				}
-			}			
-			sia.setIdDest(destinatarios);
+			if(esProcSerInterno) {
+				//si es interno siempre se envia como Administracion, y es el único publico objetivo.
+				final String[] dest = {"3"};
+				sia.setIdDest(dest);
+			}else {
+				String[] destinatarios = new String[procedimiento.getPublicosObjetivo().size()];
+				Set<PublicoObjetivo> publicoObjs = procedimiento.getPublicosObjetivo();
+				int i = 0;
+				for (PublicoObjetivo pObj : publicoObjs) {
+					switch(pObj.getId().intValue()) {
+						case 200:
+							destinatarios[i] = "1";
+							i++;
+							break;
+						case 201:
+							destinatarios[i] = "2";
+							i++;
+							break;
+						case 202:
+							destinatarios[i] = "3";
+							i++;
+							break;
+					}
+				}			
+				sia.setIdDest(destinatarios);
+			}
+			
 			
 			final List<Tramite> tramites = procedimiento.getTramites();
 			Integer nivelAdministrativo = 1;
@@ -1046,9 +1058,9 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 			} else {
 				sia.setFiVia(procedimiento.getIndicador().equals("1")? SiaUtils.SI : SiaUtils.NO);
 			}
-			sia.setTipologia(SiaUtils.getTipologiaTramitacion());
+			sia.setTipologia(SiaUtils.getTipologiaTramitacion(esProcSerInterno, esProcSerComun));
 			
-			sia.setEnlaceWeb(SiaUtils.getUrlProcedimiento()+procedimiento.getId().toString());
+			sia.setEnlaceWeb(SiaUtils.getUrlProcedimiento(esProcSerInterno)+procedimiento.getId().toString());
 			
 			sia.setEstado(procedimiento.getEstadoSIA());
 			
@@ -1108,6 +1120,9 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 				sia.setIdSIA(servicio.getCodigoSIA().toString());
 			}
 			
+			boolean esProcSerInterno = POUtils.contienePOInterno(servicio.getPublicosObjetivo());
+			boolean esProcSerComun = false;
+			
 			sia.setTitulo( siaCumpleDatos.getNombre());
 			
 			sia.setDescripcion( siaCumpleDatos.getResumen()); 
@@ -1121,27 +1136,32 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 				sia.setUaGest(((TraduccionUA)  servicio.getOrganoInstructor().getTraduccion("ca")).getNombre());
 			}
 			
-			String[] destinatarios = new String[servicio.getPublicosObjetivo().size()];
-			Set<PublicoObjetivo> publicoObjs = servicio.getPublicosObjetivo();
-			int i = 0;
-			for (PublicoObjetivo pObj : publicoObjs) {
-				switch(pObj.getId().intValue()) {
-					case 200:
-						destinatarios[i] = "1";
-						i++;
-						break;
-					case 201:
-						destinatarios[i] = "2";
-						i++;
-						break;
-					case 202:
-						destinatarios[i] = "3";
-						i++;
-						break;
-				}
-			}			
-			sia.setIdDest(destinatarios);
-			
+			if(esProcSerInterno) {
+				//si es interno siempre se envia como Administracion, y es el único publico objetivo.
+				final String[] dest = {"3"};
+				sia.setIdDest(dest);
+			}else {
+				String[] destinatarios = new String[servicio.getPublicosObjetivo().size()];
+				Set<PublicoObjetivo> publicoObjs = servicio.getPublicosObjetivo();
+				int i = 0;
+				for (PublicoObjetivo pObj : publicoObjs) {
+					switch(pObj.getId().intValue()) {
+						case 200:
+							destinatarios[i] = "1";
+							i++;
+							break;
+						case 201:
+							destinatarios[i] = "2";
+							i++;
+							break;
+						case 202:
+							destinatarios[i] = "3";
+							i++;
+							break;
+					}
+				}			
+				sia.setIdDest(destinatarios);
+			}
 			sia.setNormativas(servicio.getNormativas());
 			
 			final List<String> materias = new ArrayList<String>();
@@ -1157,9 +1177,9 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 				sia.setMaterias(materias.toArray(new String[materias.size()]));
 			}
 
-			sia.setTipologia(SiaUtils.getTipologiaTramitacion());
+			sia.setTipologia(SiaUtils.getTipologiaTramitacion(esProcSerInterno, esProcSerComun));
 			
-			sia.setEnlaceWeb(SiaUtils.getUrlServicio()+servicio.getId().toString());
+			sia.setEnlaceWeb(SiaUtils.getUrlServicio(esProcSerInterno)+servicio.getId().toString());		
 			
 			sia.setEstado(servicio.getEstadoSIA());
 			

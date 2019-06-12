@@ -50,6 +50,8 @@ import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.util.ApiRestUtils;
 import org.ibit.rol.sac.persistence.util.DateUtils;
 import org.ibit.rol.sac.persistence.util.IndexacionUtil;
+import org.ibit.rol.sac.persistence.util.POUtils;
+import org.ibit.rol.sac.persistence.util.RolsacPropertiesUtil;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
@@ -1670,6 +1672,8 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 			} else {
 				nomUnidadAministrativa = servicio.getOrganoInstructor().getNombre();
 			}
+						
+			boolean esProcSerInterno = POUtils.contienePOInterno(servicio.getPublicosObjetivo());
 			
 			//Recorremos las traducciones
 			for (String keyIdioma : traducciones.keySet()) {
@@ -1743,8 +1747,25 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 							textoOptional.append(" ");
 						}
 					}
+					
 			    	searchTextOptional.addIdioma(enumIdioma, traduccion.getObjeto() +" " +traduccion.getObservaciones() + " " + textoOptional.toString());
-			    	urls.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+idPubObjetivo+"/"+nombrePubObjetivo+"/tramites/servicio/"+servicio.getId());
+				
+					if(esProcSerInterno) {
+						//Si es interno usamos la url especifica para los Servicios internos
+						
+						String url = RolsacPropertiesUtil.getPropiedadPOInternoUrlProc().replace("{idioma}", keyIdioma)
+								.replace("{idPublicoObjetivo}", idPubObjetivo)
+								.replace("{nombrePubObjetivo}",nombrePubObjetivo)
+								.replace("{idServicio}",servicio.getId().toString());		
+						urls.addIdioma(enumIdioma, url);	
+					
+					}else {
+						//Si no es interno					
+						urls.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+idPubObjetivo+"/"+nombrePubObjetivo+"/tramites/servicio/"+servicio.getId());	
+					}	
+				    	
+			    	
+			    	
 				}
 			}
 			
@@ -1775,8 +1796,12 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 			indexData.setFechaActualizacion(servicio.getFechaActualizacion());
 			indexData.setFechaPublicacion(servicio.getFechaPublicacion());
 			indexData.setFechaCaducidad(servicio.getFechaDespublicacion());
-			indexData.setInterno(false);
-			
+			if(esProcSerInterno) {
+				indexData.setInterno(true);
+			}else {
+				indexData.setInterno(false);
+			}	
+					
 			//Telematico
 			indexData.setTelematico(servicio.isTelematico());
 			
