@@ -662,7 +662,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 						
 						// Urls
 				    	urlsPadres.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+idPubObjetivo+"/"+nombrePubObjetivo+"/tramites/tramite/"+procedimiento.getId());
-				    	urls.addIdioma(enumIdioma, "govern/rest/arxiu/" + traduccion.getArchivo().getId());
+				    	urls.addIdioma(enumIdioma, "/govern/rest/arxiu/" + traduccion.getArchivo().getId());
 				    	
 				    	//Seteamos datos multidioma.
 						indexData.setTitulo(titulo);
@@ -817,7 +817,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 									IndexacionUtil.calcularPathTextUO(fichaUA.getUnidadAdministrativa(), keyIdioma));
 						}
 
-						urls.addIdioma(enumIdioma, "govern/rest/arxiu/" + traduccionDocumento.getArchivo().getId());
+						urls.addIdioma(enumIdioma, "/govern/rest/arxiu/" + traduccionDocumento.getArchivo().getId());
 
 						if (traduccionFicha == null
 								|| (traduccionFicha.getUrl() == null || traduccionFicha.getUrl().isEmpty())) {

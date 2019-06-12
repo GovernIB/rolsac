@@ -448,7 +448,7 @@ public abstract class DocumentoServicioFacadeEJB extends HibernateEJB
 						
 						// Urls
 				    	urlsPadres.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+idPubObjetivo+"/"+nombrePubObjetivo+"/tramites/servicio/"+servicio.getId());
-				    	urls.addIdioma(enumIdioma, "govern/rest/arxiu/" + traduccion.getArchivo().getId());
+				    	urls.addIdioma(enumIdioma, "/govern/rest/arxiu/" + traduccion.getArchivo().getId());
 				    	
 				    	//Seteamos datos multidioma.
 						indexData.setTitulo(titulo);
