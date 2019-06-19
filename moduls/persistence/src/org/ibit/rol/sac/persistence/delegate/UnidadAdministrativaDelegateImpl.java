@@ -178,6 +178,15 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
 		}
 	}
 	
+	
+	public UnidadAdministrativa obtenerUnidadAdministrativaPorCodDir3(String codDir3,boolean inicializar) throws DelegateException {
+		try {
+			return getFacade().obtenerUnidadAdministrativaPorCodDir3(codDir3,inicializar);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+		
 	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegateI#obtenerFotoPequenyaUA(java.lang.Long)
 	 */
@@ -294,6 +303,15 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
 	public String obtenerCadenaFiltroUA(Long ua, boolean uaFilles, boolean uaMeves) throws DelegateException {
 		try {
 			return getFacade().obtenerCadenaFiltroUA( ua, uaFilles, uaMeves );
+		}  catch (RemoteException e) {
+			throw new DelegateException(e);
+		}  	
+	}
+	
+	
+	public String obtenerCadenaFiltroUAPorDir3(String codigoDir3UA, boolean uaFilles, boolean uaMeves) throws DelegateException {
+		try {
+			return getFacade().obtenerCadenaFiltroUAPorDir3( codigoDir3UA, uaFilles, uaMeves );
 		}  catch (RemoteException e) {
 			throw new DelegateException(e);
 		}  	

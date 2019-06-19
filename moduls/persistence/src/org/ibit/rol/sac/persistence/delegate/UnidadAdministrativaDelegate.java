@@ -159,6 +159,10 @@ public class UnidadAdministrativaDelegate {
 		return impl.obtenerUnidadAdministrativaPorCodEstandar(codEst);
 	}
 	
+	public UnidadAdministrativa obtenerUnidadAdministrativaPorCodDir3(String codDir3,boolean inicializar) throws DelegateException {
+		return impl.obtenerUnidadAdministrativaPorCodDir3( codDir3, inicializar);
+	}
+	
 	@Override
 	public String toString() {
 		return impl.toString();
@@ -166,6 +170,10 @@ public class UnidadAdministrativaDelegate {
 	
 	public String obtenerCadenaFiltroUA(Long ua, boolean uaFilles, boolean uaMeves) throws DelegateException {
 		return impl.obtenerCadenaFiltroUA(ua, uaFilles, uaMeves);
+	}
+	
+	public String obtenerCadenaFiltroUAPorDir3(String codigoDir3UA, boolean uaFilles, boolean uaMeves) throws DelegateException {
+		return impl.obtenerCadenaFiltroUAPorDir3(codigoDir3UA, uaFilles, uaMeves);
 	}
 	
 	public ResultadoBusqueda buscadorUnidadesAdministrativas(Map<String, Object> parametros, Map<String, String> traduccion, Long id, String idioma, boolean uaFilles, boolean uaMeves, Long materia, String pagina, String resultats) throws DelegateException {

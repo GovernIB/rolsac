@@ -106,6 +106,11 @@ public interface UnidadAdministrativaDelegateI {
 			String codEst) throws DelegateException;
 	
 	/* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#obtenerUnidadAdministrativaPorCodDir3(java.lang.String)
+	 */
+	public UnidadAdministrativa obtenerUnidadAdministrativaPorCodDir3(String codDir3,boolean inicializar) throws DelegateException;
+	
+	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#obtenerFotoPequenyaUA(java.lang.Long)
 	 */
 	public abstract Archivo obtenerFotoPequenyaUA(Long id)
@@ -175,6 +180,9 @@ public interface UnidadAdministrativaDelegateI {
 			throws DelegateException;
 	
 	public abstract String obtenerCadenaFiltroUA(Long ua, boolean uaFilles, boolean uaMeves)
+			throws DelegateException;
+
+	public abstract String obtenerCadenaFiltroUAPorDir3(String codigoDir3UA, boolean uaFilles, boolean uaMeves)
 			throws DelegateException;
 	
 	/* (non-Javadoc)

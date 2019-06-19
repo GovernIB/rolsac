@@ -14,6 +14,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang3.StringUtils;
 import org.ibit.rol.sac.model.Procedimiento;
 import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
@@ -68,6 +69,11 @@ public class ProcedimentsService {
 		if(filtro==null) {
 			filtro = new FiltroProcediments(); 
 		}
+		
+	/*	if(filtro.getCodigoUADir3()!=null && filtro.getCodigoUA()!=null) {
+			throw new ExcepcionAplicacion(400,"No se puede indicar un codigoUA y un codigoUADir3 simultaneamente");
+		}*/
+		
 		FiltroGenerico fg = filtro.toFiltroGenerico();
 		
 		if(lang!=null) {

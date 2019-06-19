@@ -66,6 +66,11 @@ public class ServeisService {
 		if(filtro==null) {
 			filtro = new FiltroServeis(); 
 		}
+	/*	
+		if(filtro.getCodigoUADir3()!=null && filtro.getCodigoUA()!=null) {
+			throw new ExcepcionAplicacion(400,"No se puede indicar un codigoUA y un codigoUADir3 simultaneamente");
+		}
+		*/
 		FiltroGenerico fg = filtro.toFiltroGenerico();
 		
 		if(lang!=null) {
