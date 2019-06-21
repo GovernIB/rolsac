@@ -25,22 +25,35 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "FiltroServicios", description = "Filtro que permite buscar por diferentes campos")
 public class FiltroServeis {
 
-	public static final String SAMPLE = Constantes.SALTO_LINEA + "{\"codigoUA\":\"0\"," + Constantes.SALTO_LINEA
-			+ "\"buscarEnDescendientesUA\":\"0/1\"," + Constantes.SALTO_LINEA + "\"activo\":\"0/1\","
-			+ Constantes.SALTO_LINEA + "\"estadoUA\":\"0\"," + Constantes.SALTO_LINEA
-			+ "\"codigoAgrupacionHechoVital\":\"0\"," + Constantes.SALTO_LINEA + "\"codigoPublicoObjetivo\":\"0\","
-			+ Constantes.SALTO_LINEA + "\"codigoAgrupacionMateria\":\"0\"," + Constantes.SALTO_LINEA
-			+ "\"codigoMateria\":\"0\"," + Constantes.SALTO_LINEA + "\"titulo\":\"texto\"" + Constantes.SALTO_LINEA
-			+ "\"textos\":\"texto\"" + Constantes.SALTO_LINEA + "\"fechaPublicacionDesde\":\"DD/MM/YYYY\","
-			+ Constantes.SALTO_LINEA + "\"fechaPublicacionHasta\":\"DD/MM/YYYY\"," + Constantes.SALTO_LINEA
-			+ "\"codigoTramiteTelematico\":\"codigo\"," + Constantes.SALTO_LINEA
-			+ "\"versionTramiteTelematico\":\"version\"," + Constantes.SALTO_LINEA + "\"codigoSia\":\"codigo\","
-			+ Constantes.SALTO_LINEA + "\"estadoSia\":\"0\"," + Constantes.SALTO_LINEA
-			+ "\"fechaActualizacionSia\":\"DD/MM/YYYY\"" + "}";
+	public static final String SAMPLE = 
+			  Constantes.SALTO_LINEA + "{\"codigoUA\":\"0\"," 
+			+ Constantes.SALTO_LINEA + "\"codigoUADir3\":\"codigo\","
+			+ Constantes.SALTO_LINEA + "\"buscarEnDescendientesUA\":\"0/1\"," 
+			+ Constantes.SALTO_LINEA + "\"activo\":\"0/1\",  (1=procedimientos publicos y no caducados, 0=procedimientos no publicos o caducados)"
+			+ Constantes.SALTO_LINEA + "\"estadoUA\":\"1/2/3\",  (1=Pública,2=Interna,3=Reserva)"
+			+ Constantes.SALTO_LINEA + "\"codigoAgrupacionHechoVital\":\"0\"," 
+			+ Constantes.SALTO_LINEA + "\"codigoPublicoObjetivo\":\"0\","
+			+ Constantes.SALTO_LINEA + "\"codigoAgrupacionMateria\":\"0\"," 
+			+ Constantes.SALTO_LINEA + "\"codigoMateria\":\"0\"," 
+			+ Constantes.SALTO_LINEA + "\"titulo\":\"texto\"" 
+			+ Constantes.SALTO_LINEA + "\"textos\":\"texto\"" 
+			+ Constantes.SALTO_LINEA + "\"fechaPublicacionDesde\":\"DD/MM/YYYY\","
+			+ Constantes.SALTO_LINEA + "\"fechaPublicacionHasta\":\"DD/MM/YYYY\"," 
+			+ Constantes.SALTO_LINEA + "\"codigoTramiteTelematico\":\"codigo\"," 
+			+ Constantes.SALTO_LINEA + "\"versionTramiteTelematico\":\"version\"," 
+			+ Constantes.SALTO_LINEA + "\"codigoSia\":\"codigo\","
+			+ Constantes.SALTO_LINEA + "\"estadoSia\":\"A/B\", (A=Alta, B=Baja)"
+			+ Constantes.SALTO_LINEA + "\"fechaActualizacionSia\":\"DD/MM/YYYY\"" + "}";
+	
+	
 
 	/** codigoUA. **/
 	@ApiModelProperty(value = "codigoUA", required = false)
 	private Integer codigoUA;
+	
+	/** codigoUADir3. **/
+	@ApiModelProperty(value = "codigoUADir3", required = false)
+	private String codigoUADir3;
 
 	/** buscarEnDescendientesUA. **/
 	@ApiModelProperty(value = "buscarEnDescendientesUA", required = false)
@@ -123,6 +136,10 @@ public class FiltroServeis {
 
 		if (this.codigoUA != null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_SERVICIOS_UA, this.codigoUA + "");
+		}
+		
+		if (this.codigoUADir3 != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_SERVICIOS_UA_DIR3, this.codigoUADir3 + "");
 		}
 
 		if (this.buscarEnDescendientesUA != null) {
@@ -528,6 +545,20 @@ public class FiltroServeis {
 	 */
 	public void setVersionTramiteTelematico(final String versionTramiteTelematico) {
 		this.versionTramiteTelematico = versionTramiteTelematico;
+	}
+
+	/**
+	 * @return the codigoUADir3
+	 */
+	public String getCodigoUADir3() {
+		return codigoUADir3;
+	}
+
+	/**
+	 * @param codigoUADir3 the codigoUADir3 to set
+	 */
+	public void setCodigoUADir3(String codigoUADir3) {
+		this.codigoUADir3 = codigoUADir3;
 	}
 
 }

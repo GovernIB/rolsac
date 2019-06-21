@@ -2105,6 +2105,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 					
 			String activo = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_ACTIVO);		
 			String codigoUA = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_UA); 
+			String codigoUADIR3 = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_UA_DIR3);
 		    String descendientes = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_UA_DESCENDIENTES);		
 			String vigente = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_VIGENTE);		
 			String telematico = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_TELEMATICO);
@@ -2151,7 +2152,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 				}
 				
 
-				
+				// Buscamos por id de la ua (y sus descendientes si procede)
 				final Long idUA = (codigoUA != null) ? Long.parseLong(codigoUA) : null;
 				String uaQuery = null;
 				try {
@@ -2163,6 +2164,27 @@ public abstract class ServicioFacadeEJB extends HibernateEJB  {
 				if (!StringUtils.isEmpty(uaQuery)) {
 					where.append( " AND s.organoInstructor.id in (" + uaQuery + ")");
 				}
+				
+				
+				//Buscamos por codigo dir3 de la ua y sus descendientes				
+				String uaQueryDir3 = null;
+				try {
+					uaQueryDir3 = DelegateUtil.getUADelegate().obtenerCadenaFiltroUAPorDir3(codigoUADIR3, "1".equals(descendientes), false);
+				} catch (DelegateException e) {
+					e.printStackTrace();
+				}
+				
+				
+				if (!StringUtils.isEmpty(uaQueryDir3)) {
+					// se ha añadido un codigodir3 que concuerda con una UA
+					where.append( " AND s.organoInstructor.id in (" + uaQueryDir3 + ")");
+				}else if(!StringUtils.isEmpty(codigoUADIR3)) {
+					//Se ha añadido un codigo dir3 que no se corresponde con ninguna ua por lo que no tendra descendientes
+					//Se añade para forzar que no retorne resultados
+					where.append( " AND s.organoInstructor.codigoDIR3 = :codigoUADIR3");
+					parametros.put("codigoUADIR3", codigoUADIR3);				
+				}
+					
 				
 				if(!StringUtils.isEmpty(estadoUA)) {
 					where.append(" AND s.organoInstructor.validacion = :estadoUA");

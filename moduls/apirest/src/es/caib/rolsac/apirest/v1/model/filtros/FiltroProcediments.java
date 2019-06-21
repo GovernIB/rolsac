@@ -26,10 +26,11 @@ import io.swagger.annotations.ApiModelProperty;
 public class FiltroProcediments {
 	
 	public static final String SAMPLE = 
-			  Constantes.SALTO_LINEA + "{\"codigoUA\":\"0\"," 
+			  Constantes.SALTO_LINEA + "{\"codigoUA\":\"0\"," 			  
+			+ Constantes.SALTO_LINEA + "\"codigoUADir3\":\"codigo\","
 			+ Constantes.SALTO_LINEA + "\"buscarEnDescendientesUA\":\"0/1\","
-		    + Constantes.SALTO_LINEA + "\"activo\":\"0/1\","
-		    + Constantes.SALTO_LINEA + "\"estadoUA\":\"0\","
+		    + Constantes.SALTO_LINEA + "\"activo\":\"0/1\", (1=procedimientos publicos y no caducados, 0=procedimientos no publicos o caducados)"
+		    + Constantes.SALTO_LINEA + "\"estadoUA\":\"1/2/3\",(1=Pública,2=Interna,3=Reserva)"
 		    + Constantes.SALTO_LINEA + "\"codigoAgrupacionHechoVital\":\"0\","
 		    + Constantes.SALTO_LINEA + "\"codigoPublicoObjetivo\":\"0\","
 		    + Constantes.SALTO_LINEA + "\"codigoFamilia\":\"0\","
@@ -39,10 +40,10 @@ public class FiltroProcediments {
 			+ Constantes.SALTO_LINEA + "\"titulo\":\"texto\""
 			+ Constantes.SALTO_LINEA + "\"fechaPublicacionDesde\":\"DD/MM/YYYY\","
 			+ Constantes.SALTO_LINEA + "\"fechaPublicacionHasta\":\"DD/MM/YYYY\","
-			+ Constantes.SALTO_LINEA + "\"vigente\":\"0/1\","
-			+ Constantes.SALTO_LINEA + "\"telematico\":\"0/1\","
-			+ Constantes.SALTO_LINEA + "\"codigoSia\":\"0\","
-			+ Constantes.SALTO_LINEA + "\"estadoSia\":\"0\","
+			+ Constantes.SALTO_LINEA + "\"vigente\":\"0/1\",  (1=procedimientos con tramites de inicio no caducados)"
+			+ Constantes.SALTO_LINEA + "\"telematico\":\"0/1\", (1= procedimientos con trámites telemáticos)"
+			+ Constantes.SALTO_LINEA + "\"codigoSia\":\"codigo\","
+			+ Constantes.SALTO_LINEA + "\"estadoSia\":\"A/B\", (A=Alta, B=Baja)"
 			+ Constantes.SALTO_LINEA + "\"fechaActualizacionSia\":\"DD/MM/YYYY\","
 			+ Constantes.SALTO_LINEA + "\"codigoTramiteTelematico\":\"codigo\","
 			+ Constantes.SALTO_LINEA + "\"versionTramiteTelematico\":\"version\""
@@ -51,6 +52,10 @@ public class FiltroProcediments {
 	/** codigoUA. **/
 	@ApiModelProperty(value = "codigoUA", required = false)
 	private Integer codigoUA;
+	
+	/** codigoUADir3. **/
+	@ApiModelProperty(value = "codigoUADir3", required = false)
+	private String codigoUADir3;
 	
 	/** buscarEnDescendientesUA. **/
 	@ApiModelProperty(value = "buscarEnDescendientesUA", required = false)
@@ -136,6 +141,10 @@ public class FiltroProcediments {
 
 		if(this.codigoUA!= null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_UA, this.codigoUA+"");
+		}
+		
+		if(this.codigoUADir3!= null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_UA_DIR3, this.codigoUADir3+"");
 		}
 		
 		if(this.buscarEnDescendientesUA!= null) {
@@ -601,6 +610,24 @@ public class FiltroProcediments {
 	 */
 	public void setTitulo(String titulo) {
 		this.titulo = titulo;
+	}
+
+
+
+	/**
+	 * @return the codigoUADir3
+	 */
+	public String getCodigoUADir3() {
+		return codigoUADir3;
+	}
+
+
+
+	/**
+	 * @param codigoUADir3 the codigoUADir3 to set
+	 */
+	public void setCodigoUADir3(String codigoUADir3) {
+		this.codigoUADir3 = codigoUADir3;
 	}
 
 

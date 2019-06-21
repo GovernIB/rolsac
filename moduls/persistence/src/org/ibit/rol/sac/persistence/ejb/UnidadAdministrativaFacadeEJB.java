@@ -924,6 +924,62 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	}
 
 
+	
+	/**
+	 * Obtiene una Unidad Administrativa por el codigo DIR3.
+	 * 
+	 * @ejb.interface-method
+	 * 
+	 * @ejb.permission unchecked="true"
+	 * 
+	 * @param codEstandar Indica el código estándar de una unidad administrativa.
+	 * 
+	 * @return <code>UnidadAdministrativa</code> solicitada.
+	 * 
+	 */
+	public UnidadAdministrativa obtenerUnidadAdministrativaPorCodDir3(String codDir3,boolean inicializar) {
+		UnidadAdministrativa res = null;
+				
+		if(!StringUtils.isEmpty(codDir3)) {
+			Session session = getSession();
+			try {
+				Query query = session.createQuery("from UnidadAdministrativa as ua where ua.codigoDIR3 = :codDir3");
+	
+				query.setParameter( "codDir3", codDir3 );
+				query.setMaxResults(1);
+				query.setCacheable(true);
+	
+				List<UnidadAdministrativa> result = castList(UnidadAdministrativa.class, query.list());
+	
+				if ( !result.isEmpty() ) {
+					
+					UnidadAdministrativa ua = result.get(0);
+					if(inicializar) {
+						Hibernate.initialize( ua.getFotop() );
+						Hibernate.initialize( ua.getHijos() );
+						Hibernate.initialize( ua.getFotog() );
+						Hibernate.initialize( ua.getLogoh() );
+						Hibernate.initialize( ua.getLogov() );
+						Hibernate.initialize( ua.getLogos() );
+						Hibernate.initialize( ua.getLogot() );
+						Hibernate.initialize( ua.getTratamiento() );
+						Hibernate.initialize( ua.getUnidadesMaterias() );
+						Hibernate.initialize( ua.getEdificios() );
+					}
+					res = ua;
+				}				
+			} catch (HibernateException he) {	
+				throw new EJBException(he);
+			} finally {
+				close(session);
+			}
+		}
+		return res;
+	}
+	
+	
+	
+	
 	/**
 	 * Obtiene la foto pequeña de una Unidad Administrativa.
 	 * 
@@ -2244,6 +2300,30 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		return consultaUA.toString();
 
 	}	
+		
+	/**
+	 * Método que devuelve una cadena csv de ids de unidades administrativas según los 
+	 * parámetros pasados. si no encuentra codigo dir3 retorna cadena vacia
+	 * 	 
+	 * @param codDir3UA	Código DIR3 de la unidada administrativa.
+	 * @param uaHijas	Indica si la unidad administrativa tiene unidades hijas.
+	 * @param uaPropias
+	 * @return
+	 * @throws HibernateException
+	 * @throws DelegateException
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public String obtenerCadenaFiltroUAPorDir3 (String codDir3UA, boolean uaHijas, boolean uaPropias) throws DelegateException {
+		String res = "";
+		if(!StringUtils.isEmpty(codDir3UA)) {
+			UnidadAdministrativa ua = obtenerUnidadAdministrativaPorCodDir3(codDir3UA,false);
+			Long idUa = ua!=null?ua.getId():null;		
+			res = obtenerCadenaFiltroUA(idUa, uaHijas, uaPropias);
+		}		
+		return res;
+	}
 
 
 	/**

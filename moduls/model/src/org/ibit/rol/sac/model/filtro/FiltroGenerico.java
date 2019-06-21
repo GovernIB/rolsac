@@ -37,6 +37,7 @@ public class FiltroGenerico implements Serializable {
 	public final static String FILTRO_UA_VALIDACION = "validacion";
 	public final static String FILTRO_UA_CODIGO_SECCION = "codigoSeccion";
 	public final static String FILTRO_UA_CODIGO_NORMATIVA = "codigoNormativa";
+	public static final String FILTRO_UA_CODIGO_DIR3 = "codigoDir3";
 	
 	public static final String FILTRO_AFV_PUBLICO = "publico";
 	
@@ -93,6 +94,7 @@ public class FiltroGenerico implements Serializable {
 	
 	
 	public static final String FILTRO_PROCEDIMIENTO_UA = "codigoUA";
+	public static final String FILTRO_PROCEDIMIENTO_UA_DIR3 = "codigoUADir3";	
 	public static final String FILTRO_PROCEDIMIENTO_UA_DESCENDIENTES = "buscarEnDescendientesUA";
 	public static final String FILTRO_PROCEDIMIENTO_ACTIVO = "activo";
 	public static final String FILTRO_PROCEDIMIENTO_ESTADO_UA = "estadoUA";
@@ -114,6 +116,7 @@ public class FiltroGenerico implements Serializable {
 	public static final String FILTRO_PROCEDIMIENTO_VERSION_TRAMITE_TELEMATICO = "versionTramiteTelematico";
 
 	public static final String FILTRO_SERVICIOS_UA = "codigoUA";
+	public static final String FILTRO_SERVICIOS_UA_DIR3 = "codigoUADir3";	
 	public static final String FILTRO_SERVICIOS_UA_DESCENDIENTES = "buscarEnDescendientesUA";
 	public static final String FILTRO_SERVICIOS_ACTIVO = "activo";
 	public static final String FILTRO_SERVICIOS_ESTADO_UA = "estadoUA";
@@ -141,6 +144,7 @@ public class FiltroGenerico implements Serializable {
 	public static final String FILTRO_TRAMITE_TRAMITE_TELEMATICO = "codigoTramiteTelematico";
 	public static final String FILTRO_TRAMITE_VERSION_TRAMITE_TELEMATICO = "versionTramiteTelematico";
 	public static final String FILTRO_TRAMITE_URL_TRAMITE_TELEMATICO = "urlTramiteTelematico";
+
 
 	
 	public FiltroGenerico() {

@@ -2859,6 +2859,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 		final String activo = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_ACTIVO);
 		final String codigoUA = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_UA);
+		final String codigoUADIR3 = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_UA_DIR3);
 		final String descendientes = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_UA_DESCENDIENTES);		
 		final String vigente = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_VIGENTE);
 		final String telematico = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_TELEMATICO);
@@ -2906,7 +2907,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				}
 			}
 
-		
+			//Buscamos por id de la ua (y sus descendientes si procede)
 			final Long idUA = (codigoUA != null) ? Long.parseLong(codigoUA) : null;
 			String uaQuery = null;
 			try {
@@ -2918,6 +2919,27 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			if (!StringUtils.isEmpty(uaQuery)) {
 				where.append( " AND p.unidadAdministrativa.id in (" + uaQuery + ")");
 			}
+			
+			
+			//Buscamos por codigo dir3 de la ua y sus descendientes				
+			String uaQueryDir3 = null;
+			try {
+				uaQueryDir3 = DelegateUtil.getUADelegate().obtenerCadenaFiltroUAPorDir3(codigoUADIR3, "1".equals(descendientes), false);
+			} catch (DelegateException e) {
+				e.printStackTrace();
+			}
+			
+			
+			if (!StringUtils.isEmpty(uaQueryDir3)) {
+				// se ha añadido un codigodir3 que concuerda con una UA
+				where.append( " AND p.unidadAdministrativa.id in (" + uaQueryDir3 + ")");
+			}else if(!StringUtils.isEmpty(codigoUADIR3)) {
+				//Se ha añadido un codigo dir3 que no se corresponde con ninguna ua por lo que no tendra descendientes
+				//Se añade para forzar que no retorne resultados
+				where.append( " AND p.unidadAdministrativa.codigoDIR3 = :codigoUADIR3");
+				parametros.put("codigoUADIR3", codigoUADIR3);				
+			}
+				
 			
 
 			if (!StringUtils.isEmpty(estadoUA)) {
