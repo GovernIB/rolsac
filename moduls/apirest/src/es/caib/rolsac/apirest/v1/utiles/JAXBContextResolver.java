@@ -7,6 +7,7 @@ import javax.xml.bind.JAXBContext;
 import com.sun.jersey.api.json.JSONConfiguration;
 import com.sun.jersey.api.json.JSONJAXBContext;
 
+import es.caib.rolsac.apirest.v1.model.Tramits;
 import es.caib.rolsac.apirest.v1.model.respuestas.RespuestaAgrupacioFetVital;
 import es.caib.rolsac.apirest.v1.model.respuestas.RespuestaAgrupacioMateries;
 import es.caib.rolsac.apirest.v1.model.respuestas.RespuestaArxius;
@@ -60,11 +61,12 @@ public class JAXBContextResolver implements ContextResolver<JAXBContext> {
 			RespuestaMateries.class, RespuestaNormatives.class, RespuestaPerfil.class, RespuestaPersonal.class,
 			RespuestaProcediments.class, RespuestaPublicsObjectius.class, RespuestaSeccions.class,
 			RespuestaServeis.class, RespuestaTipus.class, RespuestaTipusAfectacio.class, RespuestaTramits.class,
-			RespuestaUA.class, RespuestaUnitatsMateries.class, RespuestaUsuarios.class  };
+			RespuestaUA.class, RespuestaUnitatsMateries.class, RespuestaUsuarios.class,Tramits.class  };
 
 	public JAXBContextResolver() throws Exception {
-		this.context = new JSONJAXBContext(JSONConfiguration.mapped().arrays("resultado").build(), types);
-
+		
+		this.context = new JSONJAXBContext(JSONConfiguration.mapped().arrays("resultado","tasas").build(), types);
+		
 	}
 
 	@Override
