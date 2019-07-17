@@ -232,18 +232,20 @@
 
 	
 	<target name="web.gen.all" depends="prepare,init">
-      <!--
+     
 		<webdoclet
             destdir="${web.gen.src}"
             excludedtags="@version,@author"
             force="false"
             verbose="true"
             >
-              <fileset dir="${ejb.etc}">
+             
+           <fileset dir="${ejb.etc}">
                 <include name="**/*.java"/>
             </fileset>
-        	
-            <deploymentdescriptor
+			
+			<!--
+           <deploymentdescriptor
                 destdir="${web.gen.etc}"
                 servletspec="2.3"
                 sessiontimeout="60"
@@ -254,7 +256,7 @@
                 >
                 <welcomefile file="/test.jsp"/>
             </deploymentdescriptor>
-
+ -->
             <jbosswebxml
                 destdir="${web.gen.etc}"
                 version="${jboss-xml.version}"
@@ -263,7 +265,7 @@
                 securityDomain="${ws.auth.domain}"
                 />
 
-        </webdoclet> -->
+        </webdoclet>
 				
 		<copy file="${ejb.etc}/web.xml" tofile="${web.gen.etc}/web.xml" overwrite="true" />
         <replace file="${web.gen.etc}/web.xml">
@@ -484,39 +486,40 @@
 	<target name="main" depends="ejb.client, ejb.server" description="Construye el jar">
 		
 		<war destfile="${web.product}/${prefix.modul}-${modul}.war" webxml="${web.gen.etc}/web.xml" compress="true">
-				<classes dir="${web.classes}" />
-				<lib dir="${home.dir}/lib/jersey">
-					<include name="*.jar" />
-				</lib>
-				<lib dir="${lib.dir}">
-			    		<include name="servlet-api.jar" />
-			    </lib>
-			    <lib dir="${home.dir}/lib/swagger">
-					<include name="swagger-annotations-1.5.17.jar"/>
-					<include name="swagger-core-1.5.17.jar"/>
-					<include name="swagger-jaxrs-1.5.17.jar" />
-					<include name="swagger-jersey-jaxrs-1.5.0-M1.jar" />
-			    	<include name="swagger-models-1.5.17.jar" />
-			    	<include name="jackson-annotations-2.8.11.jar" />
-			    	<include name="jackson-core-2.8.11.jar" />
-			    	<include name="jackson-databind-2.8.11.jar" />
-			    	<include name="commons-lang3-3.1.jar" />
-			    	<include name="google-collections-1.0" />
-			    	<include name="jackson-dataformat-yaml-2.8.11.jar" />
-			    	<include name="guava-19.0.jar" />
-			    	<include name="validation-api-1.1.0.Final.jar" />
-			    	<include name="commons-lang3-3.6.jar" />
-			    	<include name="reflections-0.9.10.jar"/>
-				</lib>
-			
-				<lib dir="${web.product}">
-					<include name="sac-apirest.jar"/>
-				</lib>
-				<fileset dir="${web.htdocs}">
-			                <exclude name="**/web.xml"/>
-			        	<exclude name="**/WEB-INF/classes/**"/>
-			        </fileset>
-			</war>	
+			<webinf dir="${web.gen.etc}" includes="jboss-web.xml"/>
+			<classes dir="${web.classes}" />
+			<lib dir="${home.dir}/lib/jersey">
+				<include name="*.jar" />
+			</lib>
+			<lib dir="${lib.dir}">
+		    		<include name="servlet-api.jar" />
+		    </lib>
+		    <lib dir="${home.dir}/lib/swagger">
+				<include name="swagger-annotations-1.5.17.jar"/>
+				<include name="swagger-core-1.5.17.jar"/>
+				<include name="swagger-jaxrs-1.5.17.jar" />
+				<include name="swagger-jersey-jaxrs-1.5.0-M1.jar" />
+		    	<include name="swagger-models-1.5.17.jar" />
+		    	<include name="jackson-annotations-2.8.11.jar" />
+		    	<include name="jackson-core-2.8.11.jar" />
+		    	<include name="jackson-databind-2.8.11.jar" />
+		    	<include name="commons-lang3-3.1.jar" />
+		    	<include name="google-collections-1.0" />
+		    	<include name="jackson-dataformat-yaml-2.8.11.jar" />
+		    	<include name="guava-19.0.jar" />
+		    	<include name="validation-api-1.1.0.Final.jar" />
+		    	<include name="commons-lang3-3.6.jar" />
+		    	<include name="reflections-0.9.10.jar"/>
+			</lib>
+		
+			<lib dir="${web.product}">
+				<include name="sac-apirest.jar"/>
+			</lib>
+			<fileset dir="${web.htdocs}">
+		                <exclude name="**/web.xml"/>
+		        	<exclude name="**/WEB-INF/classes/**"/>
+		    </fileset>
+		</war>	
 		
 	</target>
 	
