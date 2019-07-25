@@ -4,6 +4,7 @@ import org.ibit.rol.sac.model.ValueObject;
 
 /**
  * Servicio dto.
+ *
  * @author slromero
  *
  */
@@ -11,13 +12,14 @@ public class ServicioDTO implements ValueObject {
 	/** Serial Version UID. **/
 	private static final long serialVersionUID = 3258125847574821172L;
 	/** Id. **/
-	private long id;			// PK de la relación N-M.
+	private long id; // PK de la relación N-M.
 	/** Id servicio. **/
 	private Long idServicio;
 	/** Id Related Item. **/
 	private long idRelatedItem; // Para guardado genérico vía AJAX: el valor de la PK del procedimiento.
 	/** Id Main Item. **/
-	private long idMainItem;	// Para guardado genérico vía AJAX: el valor de la PK del registro con el que se encuentra relacionado el procedimiento.
+	private long idMainItem; // Para guardado genérico vía AJAX: el valor de la PK del registro con el que se
+								// encuentra relacionado el procedimiento.
 	/** Nombre. **/
 	private String nombre;
 	/** Publicacio **/
@@ -30,10 +32,12 @@ public class ServicioDTO implements ValueObject {
 	private Integer orden;
 	/** Fecha Actualización. **/
 	private String fechaActualizacion;
-	
+	/** Comun. **/
+	private Boolean comun;
+
 	/**
 	 * Servicio DTO.
-	 * 
+	 *
 	 * @param id
 	 * @param idProcedimiento
 	 * @param nombre
@@ -42,7 +46,8 @@ public class ServicioDTO implements ValueObject {
 	 * @param caducat
 	 * @param orden
 	 */
-	public ServicioDTO(long id, Long idServicio, String nombre, String publicacio, String caducitat, Boolean caducat, Integer orden) {
+	public ServicioDTO(final long id, final Long idServicio, final String nombre, final String publicacio,
+			final String caducitat, final Boolean caducat, final Integer orden) {
 		super();
 		this.id = id;
 		this.idServicio = idServicio;
@@ -52,10 +57,10 @@ public class ServicioDTO implements ValueObject {
 		this.caducat = caducat;
 		this.orden = orden;
 	}
-	
-	/** 
-	 * Servicio DTO. 
-	 * 
+
+	/**
+	 * Servicio DTO.
+	 *
 	 * @param id
 	 * @param nombre
 	 * @param publicacio
@@ -65,7 +70,8 @@ public class ServicioDTO implements ValueObject {
 	 * @param idRelatedItem
 	 * @param idMainItem
 	 */
-	public ServicioDTO(long id, String nombre, String publicacio, String caducitat, Boolean caducat, Integer orden, long idRelatedItem, long idMainItem) {
+	public ServicioDTO(final long id, final String nombre, final String publicacio, final String caducitat,
+			final Boolean caducat, final Integer orden, final long idRelatedItem, final long idMainItem) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
@@ -79,19 +85,21 @@ public class ServicioDTO implements ValueObject {
 
 	/**
 	 * Servicio DTO.
-	 * 
+	 *
 	 * @param id
 	 * @param nombre
 	 * @param caducat
 	 * @param fechaActualizacion
 	 * @param familia
 	 */
-	public ServicioDTO(long id, String nombre, Boolean caducat, String fechaActualizacion) {
+	public ServicioDTO(final long id, final String nombre, final Boolean caducat, final String fechaActualizacion,
+			final Boolean comun) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.caducat = caducat;
 		this.fechaActualizacion = fechaActualizacion;
+		this.comun = comun;
 	}
 
 	/**
@@ -102,9 +110,10 @@ public class ServicioDTO implements ValueObject {
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
-	public void setId(long id) {
+	public void setId(final long id) {
 		this.id = id;
 	}
 
@@ -116,9 +125,10 @@ public class ServicioDTO implements ValueObject {
 	}
 
 	/**
-	 * @param idServicio the idServicio to set
+	 * @param idServicio
+	 *            the idServicio to set
 	 */
-	public void setIdServicio(Long idServicio) {
+	public void setIdServicio(final Long idServicio) {
 		this.idServicio = idServicio;
 	}
 
@@ -130,9 +140,10 @@ public class ServicioDTO implements ValueObject {
 	}
 
 	/**
-	 * @param idRelatedItem the idRelatedItem to set
+	 * @param idRelatedItem
+	 *            the idRelatedItem to set
 	 */
-	public void setIdRelatedItem(long idRelatedItem) {
+	public void setIdRelatedItem(final long idRelatedItem) {
 		this.idRelatedItem = idRelatedItem;
 	}
 
@@ -144,9 +155,10 @@ public class ServicioDTO implements ValueObject {
 	}
 
 	/**
-	 * @param idMainItem the idMainItem to set
+	 * @param idMainItem
+	 *            the idMainItem to set
 	 */
-	public void setIdMainItem(long idMainItem) {
+	public void setIdMainItem(final long idMainItem) {
 		this.idMainItem = idMainItem;
 	}
 
@@ -158,9 +170,10 @@ public class ServicioDTO implements ValueObject {
 	}
 
 	/**
-	 * @param nombre the nombre to set
+	 * @param nombre
+	 *            the nombre to set
 	 */
-	public void setNombre(String nombre) {
+	public void setNombre(final String nombre) {
 		this.nombre = nombre;
 	}
 
@@ -172,9 +185,10 @@ public class ServicioDTO implements ValueObject {
 	}
 
 	/**
-	 * @param publicacio the publicacio to set
+	 * @param publicacio
+	 *            the publicacio to set
 	 */
-	public void setPublicacio(String publicacio) {
+	public void setPublicacio(final String publicacio) {
 		this.publicacio = publicacio;
 	}
 
@@ -186,9 +200,10 @@ public class ServicioDTO implements ValueObject {
 	}
 
 	/**
-	 * @param caducitat the caducitat to set
+	 * @param caducitat
+	 *            the caducitat to set
 	 */
-	public void setCaducitat(String caducitat) {
+	public void setCaducitat(final String caducitat) {
 		this.caducitat = caducitat;
 	}
 
@@ -200,9 +215,10 @@ public class ServicioDTO implements ValueObject {
 	}
 
 	/**
-	 * @param caducat the caducat to set
+	 * @param caducat
+	 *            the caducat to set
 	 */
-	public void setCaducat(Boolean caducat) {
+	public void setCaducat(final Boolean caducat) {
 		this.caducat = caducat;
 	}
 
@@ -214,9 +230,10 @@ public class ServicioDTO implements ValueObject {
 	}
 
 	/**
-	 * @param orden the orden to set
+	 * @param orden
+	 *            the orden to set
 	 */
-	public void setOrden(Integer orden) {
+	public void setOrden(final Integer orden) {
 		this.orden = orden;
 	}
 
@@ -228,9 +245,25 @@ public class ServicioDTO implements ValueObject {
 	}
 
 	/**
-	 * @param fechaActualizacion the fechaActualizacion to set
+	 * @param fechaActualizacion
+	 *            the fechaActualizacion to set
 	 */
-	public void setFechaActualizacion(String fechaActualizacion) {
+	public void setFechaActualizacion(final String fechaActualizacion) {
 		this.fechaActualizacion = fechaActualizacion;
+	}
+
+	/**
+	 * @return the comun
+	 */
+	public Boolean getComun() {
+		return comun;
+	}
+
+	/**
+	 * @param comun
+	 *            the comun to set
+	 */
+	public void setComun(final Boolean comun) {
+		this.comun = comun;
 	}
 }

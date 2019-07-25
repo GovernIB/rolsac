@@ -1,8 +1,52 @@
 //CATALEG PROCEDIMENTS
 var hechosVitalesAsignados = null;
 
+/** Funcion para cuando se checkea el comun de un procedimiento. **/
+function item_comun_change(activo_check) {
+	var estilo_comunes;
+	var estilo_nocomunes;
+	if (activo_check) {
+		estilo_comunes = '';
+		estilo_nocomunes = 'none';
+	} else {
+		estilo_comunes = 'none';
+		estilo_nocomunes = '';
+	}
+
+	//Tiene que buscar los items de esta manera pq sino directamnete, solo encuentra 1 en vez de multidiioma
+	$("#modul_continguts_idiomas").find( "#item_organ_comun" ).each(function() {
+	   this.style.display 	= estilo_comunes;
+	});
+	$("#modul_continguts_idiomas").find( "#item_organ" ).each(function() {
+		this.style.display 	= estilo_nocomunes;
+	});
+	$("#modul_continguts_idiomas").find( "#item_organ_botones" ).each(function() {
+		this.style.display 	= estilo_nocomunes;
+	});
+
+	$("#modul_continguts_idiomas").find( "#item_organ_responsable_comun" ).each(function() {
+		this.style.display 	= estilo_comunes;
+	});
+	$("#modul_continguts_idiomas").find( "#item_organ_responsable" ).each(function() {
+		this.style.display 	= estilo_nocomunes;
+	});
+	$("#modul_continguts_idiomas").find( "#item_organ_responsable_botones" ).each(function() {
+		this.style.display 	= estilo_nocomunes;
+	});
+
+	idiomas.forEach(function (idioma, index) {
+		$("#tramits_item_organ_"+idioma+"_comun")[0].style.display 	= estilo_comunes;
+		$("#tramits_item_organ_"+idioma)[0].style.display 			= estilo_nocomunes;
+		$("#tramits_item_organ_"+idioma+"_botones")[0].style.display 	= estilo_nocomunes;
+	});
+
+	if (activo_check && !desactivarMensajeComun) {
+		Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtComunTramite + " '"+comunUA+"'"});
+	}
+}
+
 $(document).ready(function() {
-	
+
 	//#421 para comprobar que no tiene la longitud del nombre demasiado largo.
 	jQuery("input:file").change(function(e) {
 		  if (e.target.files.length > 0) {
@@ -15,82 +59,86 @@ $(document).ready(function() {
 		  }
 	});
 
+	jQuery("#item_comun").change(function(e) {
+		item_comun_change( e.currentTarget.checked);
+	});
+
 	jQuery(".lista-simple").click(function() {
-		
+
 		var elements = $(this).parent().parent().find("li");
 		var id = $('#item_id').val();
 		var url = $(this).attr('action');
-		
+
 		ListaSimpleGenerica.guardar(elements, url, id);
-		
+
 	});
-	
+
 	// XXX amartin: creamos un listener singular para esta lista ya que el selector de elementos es diferente.
 	// Es un caso singular ya que, al ser una lista multiidioma pero sólo tener que guardar el orden de los elementos
 	// y borrar los que no están, la tratamos como una lista simple.
 	jQuery(".lista-simple-documentos").click(function() {
-		
+
 		var elements = $(this).parent().parent().find("div.cajaIdioma.ca li"); // Con esto obtenemos los <li> que cuelgan de <div class="cajaIdioma ca">
 		var id = $('#item_id').val();
 		var url = $(this).attr('action');
-		
+
 		ListaSimpleDocumentos.guardar(elements, url, id);
-	
+
 	});
-	
+
 	jQuery(".lista-simple-normativas").click(function() {
-		
+
 		if (this.parentNode.className.indexOf("off") == -1) {
-			
+
 			var elements = $('#escriptori_normatives .seleccionats').find("li");
 			var id = $('#item_id').val();
 			var url = $(this).attr('action');
-			
+
 			ListaSimpleNormativas.guardar(elements, url, id);
 		}
-		
+
 	});
-	
+
 	// #431 Hacemos un guardar y después que llame a otro evento
 	jQuery("#btnEnvioSiaNoActivo").click(function() {
-		
+
 		//Detall.guarda();
 		if ( Detall.cambiosSinGuardar() ) {
 
-			Detall.guardaFinal(Detall.checkSiaNoActivo);				
+			Detall.guardaFinal(Detall.checkSiaNoActivo);
 
 		} else {
 
 			Detall.checkSiaNoActivo();
 
 		}
-		
-		
+
+
 	});
-	
+
 	/*
 	 * amartin: casos de guardado de listas de elementos donde su gestión se ha implementado con checkboxes.
 	 * Es necesario hacerlo vía eventos personalizados, ya que el DOM es diferente y no podemos tirar de los
 	 * elementos <li> generados dentro del listado de elementos seleccionados que cuelga de <div class="seleccionats">.
 	 */
 	jQuery(".modulMateries").bind("finalizaMaterias", function() {
-		
+
 		var elements = $('.modulMateries .seleccionats').find('li');
 		var id = $('#item_id').val();
 		var url = $('#btnFinalizar_materias').attr('action');
-		
+
 		ListaSimpleMaterias.guardar(elements, url, id);
-		
+
 	});
-	
+
 	jQuery(".modulFetsVitals").bind("finalizaHechosVitales", function() {
-		
+
 		var elements = $('.modulFetsVitals .seleccionats').find('li');
 		var id = $('#item_id').val();
 		var url = $('#btnFinalizar_hechosVitales').attr('action');
-		
+
 		ListaSimpleHechosVitales.guardar(elements, url, id);
-		
+
 	});
 
 	ListaSimpleGenerica = new ListaSimple();
@@ -98,7 +146,7 @@ $(document).ready(function() {
 	ListaSimpleHechosVitales = new ListaSimple();
 	ListaSimpleNormativas = new ListaSimple();
 	ListaSimpleDocumentos = new CListaSimpleDocumentos();
-	
+
 	// elements
 	opcions_elm = $("#opcions");
 	escriptori_elm = $("#escriptori");
@@ -147,7 +195,7 @@ $(document).ready(function() {
 
 	// INICIEM
 	Llistat = new CLlistat();
-	Detall = new CDetall();	
+	Detall = new CDetall();
 	Error = new CError();
 	Auditoria = new ModulAuditories();
 	Estadistica = new ModulEstadistiques();
@@ -161,14 +209,14 @@ $(document).ready(function() {
 		Detall.carregar(itemACarregar);
 
 	Llistat.iniciar();
-	
+
 	/*Listar hechos vitales al cambiar los publicos objetivos*/
 	$('.ModulPublicObjectiu .finalitza').click(function() {
 
 		var idProcedimiento = $('#item_clave_primaria').val();
 
-		/* En el momento de crear un procedimiento no se asignan hechos vitales, solo durante la edición, 
-		 * por lo tanto si no hay id de procedimiento significa que estamos creando un nuevo procedimiento y 
+		/* En el momento de crear un procedimiento no se asignan hechos vitales, solo durante la edición,
+		 * por lo tanto si no hay id de procedimiento significa que estamos creando un nuevo procedimiento y
 		 * no debe realizar la petición de carga del listado de hechos vitales */
 		if ( idProcedimiento != "" ) {
 
@@ -205,18 +253,18 @@ $(document).ready(function() {
 							Error.llansar();
 
 						}
-						
+
 					},
-					success: function(data) {				
+					success: function(data) {
 
 						ModulFetsVitals.pintar( data.listadoHechosVitales );
 						ModulFetsVitals.inicializarHechosVitales( hechosVitalesAsignados );
 
 					} // Fin success
 
-				}); //Fin ajax 
+				}); //Fin ajax
 
-				//Si no se realiza la petición se muestran únicamente los hechos vitales asignados        		
+				//Si no se realiza la petición se muestran únicamente los hechos vitales asignados
 			} else {
 
 				$("#fetsVitals .llistat > ul").empty();
@@ -234,7 +282,7 @@ $(document).ready(function() {
 		hechosVitalesAsignados = "";
 
 	});
-	
+
 }); //Fin $(document).ready
 
 //idioma
@@ -254,18 +302,18 @@ var paginacio_marge = 4;
 var itemID_ultim = 0;
 
 function CLlistat() {
-	
+
 	this.extend = ListadoBase;
 	this.extend();
 
 	this.iniciar = function() {
-		
+
 		$("#cerca_fechaCaducidad").datepicker({ dateFormat: 'dd/mm/yy' });
 		$("#cerca_fechaPublicacion").datepicker({ dateFormat: 'dd/mm/yy' });
 		$("#cerca_fechaActualizacion").datepicker({ dateFormat: 'dd/mm/yy' });
 
 		this.carregar({});
-		
+
 	};
 
 	this.finCargaListado = function(opcions, data) {
@@ -300,8 +348,9 @@ function CLlistat() {
 			ordre_T = ordre_Tipus;
 			ordre_C = ordre_Camp;
 			ordre_c1 = (ordre_C == "id") ? " " + ordre_T : "";
-			ordre_c2 = (ordre_C == "familia") ? " " + ordre_T : "";            
+			ordre_c2 = (ordre_C == "familia") ? " " + ordre_T : "";
 			ordre_c3 = (ordre_C == "fechaActualizacion") ? " " + ordre_T : "";
+			ordre_c4 = (ordre_C == "comun") ? " " + ordre_T : "";
 
 			txt_ordenacio = "";
 
@@ -334,6 +383,10 @@ function CLlistat() {
 			codi_cap1 = "<div class=\"th procedimiento "+ ordre_c1 +"\" role=\"columnheader\"><a href=\"javascript:void(0)\" class=\"id\">" + txtLlistaItem + "</a></div>";
 			codi_cap2 = "<div class=\"th familia "+ ordre_c2 +"\" role=\"columnheader\"><a href=\"javascript:void(0)\" class=\"familia\">" + txtFamilia + "</a></div>";
 			codi_cap3 = "<div class=\"th fechaActualizacion "+ ordre_c3 +"\" role=\"columnheader\"><a href=\"javascript:void(0)\" class=\"fechaActualizacion\">" + txtFechaActualizacion + "</a></div>";
+			codi_cap4 = "";
+			if (comunActivo == 'true') {
+				codi_cap4 = "<div class=\"th comun "+ ordre_c4 +"\" role=\"columnheader\"><a href=\"javascript:void(0)\" class=\"comun\">" + txtComun + "</a></div>";
+			}
 
 			// codi taula
 			codi_taula = "<div class=\"table llistat\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\">";
@@ -341,15 +394,14 @@ function CLlistat() {
 			// codi cap + cuerpo
 			codi_taula += "<div class=\"thead\">";
 			codi_taula += "<div class=\"tr\" role=\"rowheader\">";
-			codi_taula += codi_cap1 + codi_cap2 + codi_cap3;
+			codi_taula += codi_cap1 + codi_cap2 + codi_cap3 + codi_cap4;
 			codi_taula += "</div>";
 			codi_taula += "</div>";
 			codi_taula += "<div class=\"tbody\">";
 
 			// codi cuerpo
-			//$(data.nodes).slice(resultatInici-1,resultatFinal).each(function(i) {
 			$(data.nodes).each( function(i) {
-				
+
 				dada_node = this;
 
 				parClass = (i%2) ? " par": "";
@@ -371,8 +423,18 @@ function CLlistat() {
 				//codi_taula += "<div class=\"td caducitat" + caducat_class + "\" role=\"gridcell\">" + printStringFromNull(dada_node.caducitat) + "</div>";
 				codi_taula += "<div class=\"td fechaActualizacion" + caducat_class + "\" role=\"gridcell\">" + printStringFromNull(dada_node.fechaActualizacion, txtSinValor) + "</div>";
 
+				if (comunActivo == 'true') {
+					var txtValorComun;
+					if (dada_node.comun == true) {
+						txtValorComun = txtSI;
+					} else {
+						txtValorComun = txtNO;
+					}
+					codi_taula += "<div class=\"td comun\" role=\"gridcell\">" + txtValorComun + "</div>";
+				}
+
 				codi_taula += "</div>";
-				
+
 			});
 
 			codi_taula += "</div>";
@@ -381,13 +443,13 @@ function CLlistat() {
 			if($.browser.opera)
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 
-			// Instanciamos el navegador multipágina.					
+			// Instanciamos el navegador multipágina.
 			multipagina.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
 				paginaActual: pag_Pag,
 				funcionPagina: "Llistat.cambiaPagina"
-			});					
+			});
 
 			codi_navegacio = multipagina.getHtml();
 
@@ -404,7 +466,7 @@ function CLlistat() {
 		// animacio
 		dades_elm = resultats_elm.find("div.actiu:first div.dades:first");
 		dades_elm.fadeOut(300, function() {
-			
+
 			// pintem
 			dades_elm.html(codi_final).fadeIn(300, function() {
 
@@ -422,7 +484,7 @@ function CLlistat() {
 					} else {
 						tipo = "ASC";
 					}
-					var campo = jQuery(this).attr("class");  
+					var campo = jQuery(this).attr("class");
 					ordreTipus_llistat_elm.val(tipo);
 					ordreCamp_llistat_elm.val(campo);
 					Llistat.ordena(this, opcions);
@@ -445,13 +507,13 @@ function CLlistat() {
 		Buscador.orden.tipo = ordreTipus_llistat_elm.val();
 		Buscador.orden.campo = ordreCamp_llistat_elm.val();
 		Buscador.buscar(opcions, pagLlistat, Llistat);
-		
+
 	};
-	
-	
+
+
 	// Exporta la búsqueda
-	this.exporta = function(opcions) {	
-			
+	this.exporta = function(opcions) {
+
 		Buscador = new BuscadorProcedimiento();
 		Buscador.orden.tipo = ordreTipus_llistat_elm.val();
 		Buscador.orden.campo = ordreCamp_llistat_elm.val();
@@ -465,10 +527,10 @@ var Items_arr = new Array();
 
 //detall
 function CDetall() {
-    
+
 	this.extend = DetallBase;
 	this.extend();
-	
+
 	var that = this;
 
 	this.tipusAuditoria = 'procediment';
@@ -476,8 +538,8 @@ function CDetall() {
 
 	//Se comprueba que esta correcto
 	this.guarda = function() {
-		
-		
+
+
 		// missatge
 		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
 
@@ -507,11 +569,11 @@ function CDetall() {
 				}
 			}
 		});
-		
+
 	};
-	
-	//Se anyaden los campos que no se van a serializar directamente mediante .serialize()	
-	//this._baseGuarda = this.guarda;	
+
+	//Se anyaden los campos que no se van a serializar directamente mediante .serialize()
+	//this._baseGuarda = this.guarda;
 	this.guardaFinal = function (funcion) {
 		// Si el estado de publicación del procedimiento es distinto a 1 (Pública),
 		// no comprobamos que existe un trámite de inicialización. Guardamos directamente.
@@ -546,7 +608,7 @@ function CDetall() {
 
 			if (!ModulTramit.hayTramiteInicializacion()){
 				//var mensaje = txtErrorTramitIniciObligatori;  //#4 Si no hay modelo de solicitud seleccionado en el trámite de inicializacion se muestra
-			//if (ModulTramit.bolTramiteInicio){		      //el error 
+			//if (ModulTramit.bolTramiteInicio){		      //el error
 			//		mensaje = txtErrorModelSolicitudObligatori;
 			//	}
 				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + txtErrorTramitIniciObligatori + "</p>"});
@@ -557,13 +619,13 @@ function CDetall() {
 		}
 
 	};
-	/** 
+	/**
 	 * Se encarga de preguntar si quiere enviar a SIA
 	 */
 	this.checkSiaNoActivo = function (funcion) {
-		
+
 		var id = escriptori_detall_elm.find("#item_id").val();
-		
+
 			$.ajax({
 				type: "POST",
 				url: 'checkEnvioSiaNoActivo.do',
@@ -583,23 +645,23 @@ function CDetall() {
 					} else {
 
 						that.envioSiaNoActivo();
-						
+
 					}//End if
 
 				} //Fin success
 
 			});//Fin ajax
-			
+
 	};
-	/** 
+	/**
 	 * Se encarga de preguntar si quiere enviar a SIA
 	 */
 	this.envioSiaNoActivo = function (funcion) {
-		
+
 		var id = escriptori_detall_elm.find("#item_id").val();
-		
+
 		Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: 'Se va a proceder a enviar este procedimiento en el sistema SIA como no activo,¿desea continuar?', funcio: function() {
-	
+
 			$.ajax({
 				type: "POST",
 				url: 'envioSiaNoActivo.do',
@@ -625,16 +687,16 @@ function CDetall() {
 				} //Fin success
 
 			});//Fin ajax
-			
+
 		}});
 	};
 
-	
+
 	this.urlPrevisualizar = urlPrevisualizarProcedimiento;
 
 	// Sobrecargo método para preview personalizado.
 	// Se espera una URL de la forma:
-	// - http://www.caib.es/govern/sac/visor_proc.do?lang=__lang__&amp;codi=__id__&amp;previ=__previ__  
+	// - http://www.caib.es/govern/sac/visor_proc.do?lang=__lang__&amp;codi=__id__&amp;previ=__previ__
 	// - http://www.caib.es/seucaib/__lang__/__po_id__/__po_nombre__/tramites/tramite/__id__
 	// - Etc.
 	this.previsualitza = function() {
@@ -643,14 +705,14 @@ function CDetall() {
 
 		var idiomaSeleccionat = escriptori_detall_elm.find("ul.idiomes li.seleccionat span").attr("class");
 		var id = escriptori_detall_elm.find("#item_id").val();
-		
+
 		// Si la URL tiene parámetros separamos por &amp;, pasamos las entidades a &.
 		url = url.replace(/&amp;/g, "&");
-		
+
 		// Obtenemos público objetivo, por si hay que mostrar previsualización en la SEU.
 		var codigoPO = $(".ModulPublicObjectiu .seleccionats .listaOrdenable ul li:first-child input[type=hidden]").val();
 		var nombrePO = $(".ModulPublicObjectiu .seleccionats .listaOrdenable ul li:first-child").text().toLowerCase();
-		
+
 		// Después, sustituimos el resto de parámetros.
 		url = url.replace("__lang__", idiomaSeleccionat);
 		url = url.replace("__id__", id);
@@ -665,19 +727,19 @@ function CDetall() {
 	};
 
 	this.iniciar = function() {
-		
+
 		// Desactivamos que se cambie el detalle a modificado por cambiar los checkboxes de materias relacionadas con el procedimiento.
 		jQuery('#modul_materies .llistat li input[type=checkbox]').unbind('change');
-		
+
 		// dates
 		$("#item_data_caducitat").datetimepicker({ format: 'yyyy/MM/dd HH:mm' , setDate: new Date(),hour:'23', minute:'59' });
 		//$("#item_data_publicacio").bind("blur",Detall.dataPublicacio).datepicker({ altField: '#actualDate', dateFormat: 'dd/mm/yy' });
 		$("#item_data_publicacio").bind("blur",Detall.dataPublicacio).datetimepicker({ timeFormat: 'hh:mm' });
-		
+
 
 		// idioma
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {
-			
+
 			// Esconder todos menos el primero
 			escriptori_detall_elm.find('div.idioma').slice(1).hide();
 
@@ -696,15 +758,15 @@ function CDetall() {
 			ul_idiomes_elm.bind("click", that.idioma);
 
 			// Solo mostramos los idiomas activos para los campos multi-idioma.
-			escriptori_detall_elm.find(".element.multilang .campoIdioma").hide();            
+			escriptori_detall_elm.find(".element.multilang .campoIdioma").hide();
 			escriptori_detall_elm.find(".element.multilang .campoIdioma:first-child").show().addClass("seleccionat");
-			
+
 		}
 
 		// moduls
-		moduls_elm = escriptori_detall_elm.find("div.modul");		                
+		moduls_elm = escriptori_detall_elm.find("div.modul");
 
-		// Sincronizar campos sin idioma en zona multi-idioma.   
+		// Sincronizar campos sin idioma en zona multi-idioma.
 		jQuery("#item_codigo_pro,#item_codigo_pro_es,#item_codigo_pro_en,#item_codigo_pro_de,#item_codigo_pro_fr").change(function(){
 			jQuery("#item_codigo_pro,#item_codigo_pro_es,#item_codigo_pro_en,#item_codigo_pro_de,#item_codigo_pro_fr").val( jQuery(this).val() );
 		});
@@ -712,15 +774,15 @@ function CDetall() {
 		jQuery("#item_codigo_sia,#item_codigo_sia_es,#item_codigo_sia_en,#item_codigo_sia_de,#item_codigo_sia_fr").change(function(){
 			jQuery("#item_codigo_sia,#item_codigo_sia_es,#item_codigo_sia_en,#item_codigo_sia_de,#item_codigo_sia_fr").val( jQuery(this).val() );
 		});
-		
+
 		jQuery("#item_estado_sia,#item_estado_sia_es,#item_estado_sia_en,#item_estado_sia_de,#item_estado_sia_fr").change(function(){
 			jQuery("#item_estado_sia,#item_estado_sia_es,#item_estado_sia_en,#item_estado_sia_de,#item_estado_sia_fr").val( jQuery(this).val() );
 		});
-		
+
 		jQuery("#item_fecha_sia,#item_fecha_sia_es,#item_fecha_sia_en,#item_fecha_sia_de,#item_fecha_sia_fr").change(function(){
 			jQuery("#item_fecha_sia,#item_fecha_sia_es,#item_fecha_sia_en,#item_fecha_sia_de,#item_fecha_sia_fr").val( jQuery(this).val() );
 		});
-		
+
 		jQuery("#item_fi_vida_administrativa,#item_fi_vida_administrativa_es,#item_fi_vida_administrativa_en,#item_fi_vida_administrativa_de,#item_fi_vida_administrativa_fr").change(function(){
 			jQuery("#item_fi_vida_administrativa,#item_fi_vida_administrativa_es,#item_fi_vida_administrativa_en,#item_fi_vida_administrativa_de,#item_fi_vida_administrativa_fr").val( jQuery(this).val());
 		});
@@ -728,7 +790,7 @@ function CDetall() {
 		jQuery("#item_silenci_combo,#item_silenci_combo_es,#item_silenci_combo_en,#item_silenci_combo_de,#item_silenci_combo_fr").change(function(){
 			jQuery("#item_silenci_combo,#item_silenci_combo_es,#item_silenci_combo_en,#item_silenci_combo_de,#item_silenci_combo_fr").val( jQuery(this).val());
 		});
-		
+
 		jQuery("#item_taxa,#item_taxa_es,#item_taxa_en,#item_taxa_de,#item_taxa_fr").change(function(){
 			jQuery("#item_taxa,#item_taxa_es,#item_taxa_en,#item_taxa_de,#item_taxa_fr").attr("checked", jQuery(this).is(":checked"));
 		});
@@ -737,38 +799,47 @@ function CDetall() {
 			jQuery("#item_clave_primaria,#item_clave_primaria_es,#item_clave_primaria_en,#item_clave_primaria_de,#item_clave_primaria_fr").val( jQuery(this).val() );
 		});
 
-		jQuery("#item_organ_responsable, #item_organ_responsable_es, #item_organ_responsable_ca, #item_organ_responsable_en, #item_organ_responsable_de, #item_organ_responsable_fr").change(function(){        
-			jQuery("#item_organ_responsable, #item_organ_responsable_es, #item_organ_responsable_ca, #item_organ_responsable_en, #item_organ_responsable_de, #item_organ_responsable_fr").val( jQuery(this).val() );        
+		jQuery("#item_organ_responsable, #item_organ_responsable_es, #item_organ_responsable_ca, #item_organ_responsable_en, #item_organ_responsable_de, #item_organ_responsable_fr").change(function(){
+			jQuery("#item_organ_responsable, #item_organ_responsable_es, #item_organ_responsable_ca, #item_organ_responsable_en, #item_organ_responsable_de, #item_organ_responsable_fr").val( jQuery(this).val() );
 		});
-		
-		jQuery("#item_servei_responsable, #item_servei_responsable_es, #item_servei_responsable_ca, #item_servei_responsable_en, #item_servei_responsable_de, #item_servei_responsable_fr").change(function(){        
-			jQuery("#item_servei_responsable, #item_servei_responsable_es, #item_servei_responsable_ca, #item_servei_responsable_en, #item_servei_responsable_de, #item_servei_responsable_fr").val( jQuery(this).val() );        
+
+		jQuery("#item_servei_responsable, #item_servei_responsable_es, #item_servei_responsable_ca, #item_servei_responsable_en, #item_servei_responsable_de, #item_servei_responsable_fr").change(function(){
+			jQuery("#item_servei_responsable, #item_servei_responsable_es, #item_servei_responsable_ca, #item_servei_responsable_en, #item_servei_responsable_de, #item_servei_responsable_fr").val( jQuery(this).val() );
 		});
-		jQuery("#item_organ, #item_organ_es, #item_organ_ca, #item_organ_en, #item_organ_de, #item_organ_fr").change(function(){        
-			jQuery("#item_organ, #item_organ_es, #item_organ_ca, #item_organ_en, #item_organ_de, #item_organ_fr").val( jQuery(this).val() );        
+		jQuery("#item_organ, #item_organ_es, #item_organ_ca, #item_organ_en, #item_organ_de, #item_organ_fr").change(function(){
+			jQuery("#item_organ, #item_organ_es, #item_organ_ca, #item_organ_en, #item_organ_de, #item_organ_fr").val( jQuery(this).val() );
 		});
 
 		jQuery("#item_iniciacio,#item_iniciacio_es,#item_iniciacio_ca,#item_iniciacio_en,#item_iniciacio_de,#item_iniciacio_fr").change(function(){
 			jQuery("#item_iniciacio,#item_iniciacio_es,#item_iniciacio_ca,#item_iniciacio_en,#item_iniciacio_de,#item_iniciacio_fr").val( jQuery(this).val() );
 		});
 
-		jQuery("#item_finestreta_unica").change(function() { 
-			$("#item_finestreta_unica").attr("checked", jQuery(this).is(":checked")); 
+		jQuery("#item_finestreta_unica").change(function() {
+			$("#item_finestreta_unica").attr("checked", jQuery(this).is(":checked"));
 		});
-		
+
+		jQuery("#item_comun").change(function(){
+			var checked = "off";
+			if (jQuery(this).is(":checked")) {
+				checked = "on";
+			}
+			jQuery("#formGuardar").find("#item_comun").val(checked);
+			jQuery("#formGuardar").find("#item_comun").attr("checked", jQuery(this).is(":checked"));
+			item_comun_change(jQuery(this).is(":checked"));
+		});
 
 		// boton de traducir
 		jQuery("#botoTraduirProcediment").unbind("click").bind("click", function() {
 			Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
 		});
-		
+
 	};
 
 	this.traduirWrapper = function () {
 		that.traduir(pagTraduir, CAMPOS_TRADUCTOR_PROCEDIMIENTO, DATOS_TRADUCIDOS_PROCEDIMIENTO);
 	};
 
-	this.dataPublicacio = function(e) {		
+	this.dataPublicacio = function(e) {
 //		if ($(this).val() == "") {
 //		$(this).val(txtImmediat);
 //		}
@@ -784,8 +855,8 @@ function CDetall() {
 		jQuery("#caja_item_codigo_sia, #caja_item_codigo_sia_es, #caja_item_codigo_sia_en, #caja_item_codigo_sia_de, #caja_item_codigo_sia_fr").hide();
 		jQuery("#caja_item_estado_sia, #caja_item_estado_sia_es, #caja_item_estado_sia_en, #caja_item_estado_sia_de, #caja_item_estado_sia_fr").hide();
 		jQuery("#caja_item_fecha_sia, #caja_item_fecha_sia_es, #caja_item_fecha_sia_en, #caja_item_fecha_sia_de, #caja_item_fecha_sia_fr").hide();
-		
-		
+
+
 		// Borrar del desplegable de estado de publicación las opciones no válidas al crear un nuevo procedimiento:
 		// (1 = Pública, 3 = Reserva).
 		$("#item_estat option[value=]").remove(); // Opción por defecto, sin valor. La borramos también.
@@ -818,35 +889,62 @@ function CDetall() {
 		$("#item_organ_id").val("");
 		$("#item_organ").val("");
 
+		var estilo_check;
+		if (comunActivo) {
+			estilo_check = "";
+		} else {
+			estilo_check = "none";
+		}
+		$("#modul_continguts_idiomas").find( "#divComun" ).each(function() {
+			this.style.display 	= estilo_check;
+		});
+
+		jQuery("#item_comun").unbind();
+		jQuery("#item_comun").val("off");
+		item_comun_change(false);
+		jQuery("#formGuardar").find("#item_organ_comun").val(comunUA);
+		jQuery("#formGuardar").find("#item_organ_responsable_comun").val(comunUA);
+		jQuery("#item_comun").change(function(){
+			var checked = "off";
+			if (jQuery(this).is(":checked")) {
+				checked = "on";
+			}
+			jQuery("#formGuardar").find("#item_comun").val(checked);
+			jQuery("#formGuardar").find("#item_comun").attr("checked", jQuery(this).is(":checked"));
+			item_comun_change(jQuery(this).is(":checked"));
+		});
+
 		$("#modulPrincipal :input").each(limpiarCampo);
 
 		if (typeof idUAMollapa == "undefined" || idUAMollapa == null || idUAMollapa == "") {
-			
+
 			$("#item_organ_responsable_id").val("");
 			$("#item_servei_responsable_id").val("");
 
 			//test
 			$("#item_organ_id").val("");
-			
+
 		} else {
-			
+
 			$("#item_organ_responsable_id").val(idUAMollapa);
 			$("#item_organ_responsable").val(nomUAMollapa).change();
 
 			//test
 			$("#item_organ_id").val(idUAMollapa);
 			$("#item_organ").val(nomUAMollapa).change();
-			
+
 			$("#item_servei_responsable_id").val(idUAMollapa);
 			$("#item_servei_responsable").val(nomUAMollapa).change();
-			
+
 		}
+
+
 
 		$("#modulLateral p.baix:first").removeClass("iCaducat").removeClass("iPublicat");
 
 		escriptori_contingut_elm.fadeOut(300, function() {
 			escriptori_detall_elm.fadeIn(300, function() {
-				// activar				
+				// activar
 				itemID_ultim = 0;
 			});
 		});
@@ -854,21 +952,31 @@ function CDetall() {
 		this.actualizaEventos();
 
 		this.modificado(false);
-		
+
 	};
 
 	this.pintar = function(dades) {
 
+		var estilo_check;
+		if (dades.comun_tramite) {
+			estilo_check = "";
+		} else {
+			estilo_check = "none";
+		}
+		$("#modul_continguts_idiomas").find( "#divComun" ).each(function() {
+			this.style.display 	= estilo_check;
+		});
+
 		// Mostrar paneles
 		jQuery("#modul_documents").show();
 		jQuery("#modul_tramits").show();
-		jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").show();        
+		jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").show();
 		//#366 se añade SIA
-		jQuery("#caja_item_codigo_sia, #caja_item_codigo_sia_es, #caja_item_codigo_sia_en, #caja_item_codigo_sia_de, #caja_item_codigo_sia_fr").show();        
-		jQuery("#caja_item_estado_sia, #caja_item_estado_sia_es, #caja_item_estado_sia_en, #caja_item_estado_sia_de, #caja_item_estado_sia_fr").show();        
+		jQuery("#caja_item_codigo_sia, #caja_item_codigo_sia_es, #caja_item_codigo_sia_en, #caja_item_codigo_sia_de, #caja_item_codigo_sia_fr").show();
+		jQuery("#caja_item_estado_sia, #caja_item_estado_sia_es, #caja_item_estado_sia_en, #caja_item_estado_sia_de, #caja_item_estado_sia_fr").show();
 		jQuery("#caja_item_fecha_sia, #caja_item_fecha_sia_es, #caja_item_fecha_sia_en, #caja_item_fecha_sia_de, #caja_item_fecha_sia_fr").show();
-		
-		
+
+
 		escriptori_detall_elm.find("a.elimina, a.previsualitza").show().end().find("h2:first").text(txtDetallTitol);
 
 		dada_node = dades;
@@ -887,7 +995,7 @@ function CDetall() {
 			$("#item_resultat_" + idioma).val(printStringFromNull(dada_node[idioma]["resultat"]));
 			$("#item_destinataris_" + idioma).val(printStringFromNull(dada_node[idioma]["destinatarios"]));
 			$("#item_resolucio_" + idioma).val(printStringFromNull(dada_node[idioma]["resolucion"]));
-			//El campo notificacion queda obsoleto se ha eliminado del back #8 y que no se elimina para permitir compatibilidad entre la version 1.2 y 1.3 
+			//El campo notificacion queda obsoleto se ha eliminado del back #8 y que no se elimina para permitir compatibilidad entre la version 1.2 y 1.3
 			$("#item_notificacio_" + idioma).val(printStringFromNull(dada_node[idioma]["notificacion"]));
 			//$("#item_silenci_" + idioma).val(printStringFromNull(dada_node[idioma]["silencio"]));
 			$("#item_observacions_" + idioma).val(printStringFromNull(dada_node[idioma]["observaciones"]));
@@ -903,7 +1011,7 @@ function CDetall() {
 		} else {
 			jQuery("#item_codigo_pro,#item_codigo_pro_es,#item_codigo_pro_en,#item_codigo_pro_de,#item_codigo_pro_fr").val("");
 		}
-		
+
 		//#366 se añade SIA
 		if (dada_node.item_codigo_sia != undefined) {
 			jQuery("#item_codigo_sia").val(dada_node.item_codigo_sia);
@@ -911,14 +1019,14 @@ function CDetall() {
 		} else {
 			jQuery("#item_codigo_sia").val("");
 		}
-		
+
 		if (dada_node.item_fecha_sia != undefined) {
 			jQuery("#item_fecha_sia").val(dada_node.item_fecha_sia);
 			jQuery("#item_fecha_sia").change();
 		} else {
 			jQuery("#item_fecha_sia").val("");
 		}
-		
+
 		if (dada_node.item_estado_sia != undefined) {
 			if (dada_node.item_estado_sia == 'A') {
 				jQuery("#item_estado_sia").val(txtEstadoSiaA);
@@ -931,13 +1039,13 @@ function CDetall() {
 			} else {
 				jQuery("#item_estado_sia").val(dada_node.item_estado_sia);
 			}
-			
-			
+
+
 			jQuery("#item_estado_sia").change();
 		} else {
 			jQuery("#item_estado_sia").val("");
 		}
-		
+
 		if (dada_node.item_silenci_combo == undefined) {
 			jQuery("#item_silenci_combo").val("");
 			jQuery("#item_silenci_combo").change();
@@ -945,12 +1053,12 @@ function CDetall() {
 			jQuery("#item_silenci_combo").val(dada_node.item_silenci_combo);
 			jQuery("#item_silenci_combo").change();
 		}
-		
-		
+
+
 		$("#item_clave_primaria").val(dada_node.item_id);
 		$("#item_clave_primaria").change();
 
-		
+
 		$("#item_data_actualitzacio").val(dada_node.item_data_actualitzacio);
 
 		$("#item_data_publicacio").val(dada_node.item_data_publicacio);
@@ -981,7 +1089,7 @@ function CDetall() {
 			$("#item_servei_responsable_id").val("");
 			$("#item_servei_responsable").val("");
 		}
-		
+
 		if (dada_node.item_organ_id != undefined) {
 			$("#item_organ_id").val(dada_node.item_organ_id);
 			$("#item_organ").val(dada_node.item_organ_nom);
@@ -989,7 +1097,7 @@ function CDetall() {
 		} else {
 			$("#item_organ_id").val("");
 			$("#item_organ").val("");
-			
+
 		}
 
 		if (dada_node.item_familia != undefined) {
@@ -1000,24 +1108,31 @@ function CDetall() {
 
 		if (dada_node.item_familia_id != undefined) {
 			$("#item_familia").val(dada_node.item_familia_nom);
-		} 
+		}
 
 		if (dada_node.item_fi_vida_administrativa != undefined) {
-			jQuery('#item_fi_vida_administrativa').val(dada_node.item_fi_vida_administrativa);                        
+			jQuery('#item_fi_vida_administrativa').val(dada_node.item_fi_vida_administrativa);
 			jQuery("#item_fi_vida_administrativa").change();
 		} else {
 			jQuery("#item_fi_vida_administrativa").val("");
 		}
 
 		if (dada_node.item_taxa != undefined) {
-			jQuery('#item_taxa').attr('checked', dada_node.item_taxa);                        
+			jQuery('#item_taxa').attr('checked', dada_node.item_taxa);
 			jQuery("#item_taxa").change();
-		} 
+		}
 
 		if (dada_node.item_finestreta_unica != undefined) {
 			$("#item_finestreta_unica").attr("checked", dada_node.item_finestreta_unica);
 			$("#item_finestreta_unica").change();
-		}		
+		}
+
+		desactivarMensajeComun = true;
+		if (dada_node.item_comun != undefined) {
+			$("#item_comun").attr("checked", dada_node.item_comun);
+			$("#item_comun").change();
+		}
+		desactivarMensajeComun = false;
 
 		$("#item_responsable").val(dada_node.item_responsable);
 
@@ -1031,33 +1146,33 @@ function CDetall() {
 
 		if ($("#carregantDetall").size() > 0) {
 			$("#carregantDetall").fadeOut(300, function() {
-				
+
 				$(this).remove();
 
 				// array
 				Detall.array({id: dada_node.item_id, accio: "guarda", dades: dada_node});
 
-				escriptori_detall_elm.fadeIn(300);				
+				escriptori_detall_elm.fadeIn(300);
 
 			});
 
 		} else {
-			
+
 			escriptori_contingut_elm.fadeOut(300, function() {
-				escriptori_detall_elm.fadeIn(300);				
+				escriptori_detall_elm.fadeIn(300);
 			});
 
 		}
 
 		//#431 Activamos o no botón dependendiendo del param
-		if (dada_node.boto_sia_no_activo != undefined && dada_node.boto_sia_no_activo == 'S') { 
+		if (dada_node.boto_sia_no_activo != undefined && dada_node.boto_sia_no_activo == 'S') {
 			$("#liEnvioSiaNoActivo").show();
 		} else {
 			$("#liEnvioSiaNoActivo").hide();
 		}
-		
+
 		this.modificado(false);
-	
+
 	};
 
 	this.elimina = function() {
@@ -1091,7 +1206,7 @@ function CDetall() {
 				}
 			}
 		});
-		
+
 	};
 
 	this.pintarModulos = function(dades) {
@@ -1107,17 +1222,17 @@ function CDetall() {
 
 	this.ocultarModulos = function(selector) {
 
-		if ( !selector.hasClass("publicacio") && !selector.attr("id") == "modul_documents" 
+		if ( !selector.hasClass("publicacio") && !selector.attr("id") == "modul_documents"
 				&& !selector.children().is(".modulMateries")
 				&& !selector.children().is(".modulNormatives")
 				&& !selector.attr("id") == "fetsVitals" )
 			selector.addClass("invisible");
-		
+
 		//#349 si entramos en detalle y volvemos a nuevo se mostraban los modulos
 		if (selector.attr("id") == "modul_materies" || selector.attr("id") == "modul_normatives"){
 			selector.addClass("invisible");
 		}
 
 	};
-	
+
 };

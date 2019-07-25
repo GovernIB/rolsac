@@ -9,9 +9,9 @@ import java.util.Set;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
-
 /**
  * Clase servicio.
+ *
  * @author slromero
  *
  */
@@ -20,7 +20,7 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	public static final Integer ESTADO_PUBLICACION_PUBLICA = 1;
 	public static final Integer ESTADO_PUBLICACION_INTERNA = 2;
 	public static final Integer ESTADO_PUBLICACION_RESERVA = 3;
-	
+
 	private static final long serialVersionUID = 1L;
 	/************ SECCION DADES. *********************/
 	/** Id. **/
@@ -28,74 +28,73 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	/** Codigo SIA. **/
 	private String codigoSIA;
 	/** Fecha SIA. **/
-    private Date fechaSIA;
-    /** Estado SIA. **/
-    private String estadoSIA;
-    /** Codigo. **/
+	private Date fechaSIA;
+	/** Estado SIA. **/
+	private String estadoSIA;
+	/** Codigo. **/
 	private String codigo;
 	/** Organo instructor. **/
-	private UnidadAdministrativa organoInstructor; 
-	
-    /************ SECCION DADES. *********************/
-	/** Servicio responsable. **/
-	private UnidadAdministrativa servicioResponsable; 
-    /** Nombre del responsable. **/
-    private String nombreResponsable;
-    /** Correo. **/
-    private String correo;
-    /** Telefono. **/
-    private String telefono;
-    
-    /************ SECCION TRAMITE. *******************/
-    
-    boolean presencial;
-    boolean telefonico;
-    boolean telematico;
-        
-	/** Tramite URL. **/
-    private String tramiteUrl;
-    /** Tramite ID. **/
-    private String tramiteId;
-    /** Tramite version. **/
-    private String tramiteVersion;
-    
-    /************ MODUL TAXES. ***********************/
-    /** Taxa url. **/
-    private String tasaUrl;
-    
-    /************ MODUL PUBLICACIO. ******************/
-    /** Validacion. **/
-    private Integer validacion;
-    /** Fecha despublicacion. **/
-    private Date fechaDespublicacion;
-    /** Fecha publicacion. **/
-    private Date fechaPublicacion;
-    /** Fecha actualizacion. **/
-    private Date fechaActualizacion;
+	private UnidadAdministrativa organoInstructor;
 
-    /** Documentos. **/
-    private Set<DocumentoServicio> documentos = new HashSet<DocumentoServicio>();
-    
-    
-    /** Normativas. **/
-    private Set<Normativa> normativas;
-    /** Hechos Vitales. **/
-    private Set<HechoVitalServicio> hechosVitalesServicios;
-    /** Publico objetivo. **/
-    private Set<PublicoObjetivo> publicosObjetivo;
-    
-    
-    //---------------------------------------------
-    //Campos especiales para optimizar la busqueda
-    /** Nombre servicio que indica el order by. **/
-    private String nombreServicio;
-    /** Idioma de la busqueda. **/
-    private String idioma;
-  
-  
-	/** 
+	/************ SECCION DADES. *********************/
+	/** Servicio responsable. **/
+	private UnidadAdministrativa servicioResponsable;
+	/** Nombre del responsable. **/
+	private String nombreResponsable;
+	/** Correo. **/
+	private String correo;
+	/** Telefono. **/
+	private String telefono;
+
+	/************ SECCION TRAMITE. *******************/
+
+	private boolean presencial;
+	private boolean telefonico;
+	private boolean telematico;
+
+	/** Es comun. **/
+	private boolean comun;
+	/** Tramite URL. **/
+	private String tramiteUrl;
+	/** Tramite ID. **/
+	private String tramiteId;
+	/** Tramite version. **/
+	private String tramiteVersion;
+
+	/************ MODUL TAXES. ***********************/
+	/** Taxa url. **/
+	private String tasaUrl;
+
+	/************ MODUL PUBLICACIO. ******************/
+	/** Validacion. **/
+	private Integer validacion;
+	/** Fecha despublicacion. **/
+	private Date fechaDespublicacion;
+	/** Fecha publicacion. **/
+	private Date fechaPublicacion;
+	/** Fecha actualizacion. **/
+	private Date fechaActualizacion;
+
+	/** Documentos. **/
+	private Set<DocumentoServicio> documentos = new HashSet<DocumentoServicio>();
+
+	/** Normativas. **/
+	private Set<Normativa> normativas;
+	/** Hechos Vitales. **/
+	private Set<HechoVitalServicio> hechosVitalesServicios;
+	/** Publico objetivo. **/
+	private Set<PublicoObjetivo> publicosObjetivo;
+
+	// ---------------------------------------------
+	// Campos especiales para optimizar la busqueda
+	/** Nombre servicio que indica el order by. **/
+	private String nombreServicio;
+	/** Idioma de la busqueda. **/
+	private String idioma;
+
+	/**
 	 * Constructor para busqueda optimizada.
-	 * 
+	 *
 	 * @param id
 	 * @param nombreServicio
 	 * @param validacion
@@ -106,133 +105,144 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	 * @param idioma
 	 * @param nombreServicioResponsable
 	 */
-	public Servicio(Long id, String nombreServicio, Integer validacion, Date fechaActualizacion, Date fechaDespublicacion, Date fechaPublicacion, String idioma, String nombreServicioResponsable) {
-		
-    	super();
-    	
-    	this.id = id;
-    	this.nombreServicio = nombreServicio != null ? nombreServicio : "";
-    	this.validacion = validacion;
-    	this.fechaActualizacion = fechaActualizacion;
-    	this.fechaDespublicacion = fechaDespublicacion;
-    	this.fechaPublicacion = fechaPublicacion;
-    	this.idioma = idioma;
-    	this.nombreResponsable = nombreServicioResponsable;
-    }   
-	
-	
-	//Constructores
+	public Servicio(final Long id, final String nombreServicio, final Integer validacion, final Date fechaActualizacion,
+			final Date fechaDespublicacion, final Date fechaPublicacion, final String idioma,
+			final String nombreServicioResponsable, final boolean comun) {
+
+		super();
+
+		this.id = id;
+		this.nombreServicio = nombreServicio != null ? nombreServicio : "";
+		this.validacion = validacion;
+		this.fechaActualizacion = fechaActualizacion;
+		this.fechaDespublicacion = fechaDespublicacion;
+		this.fechaPublicacion = fechaPublicacion;
+		this.idioma = idioma;
+		this.nombreResponsable = nombreServicioResponsable;
+		this.comun = comun;
+	}
+
+	// Constructores
 	/**
 	 * Constructor.
+	 *
 	 * @param id
 	 */
-    public Servicio(Long id) {
+	public Servicio(final Long id) {
 		super();
 		this.id = id;
 	}
 
-    /**
-     * Constructor.
-     */
-    public Servicio() {
+	/**
+	 * Constructor.
+	 */
+	public Servicio() {
 		super();
 	}
-    
-    /**
-     * Idioma.
-     * @return
-     */
-    public String getIdioma() {
-    	return this.idioma;
-    }
-    
-    /**
-     * Get id.
-     * @return
-     */
+
+	/**
+	 * Idioma.
+	 *
+	 * @return
+	 */
+	public String getIdioma() {
+		return this.idioma;
+	}
+
+	/**
+	 * Get id.
+	 *
+	 * @return
+	 */
 	public Long getId() {
-        return id;
-    }
+		return id;
+	}
 
 	/**
 	 * Set id.
+	 *
 	 * @param id
 	 */
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(final Long id) {
+		this.id = id;
+	}
 
-    /**
-     * Lista de documentos servicios.
-     * @return
-     */
-    public Set<DocumentoServicio> getDocumentos() {
-        return documentos;
-    }
+	/**
+	 * Lista de documentos servicios.
+	 *
+	 * @return
+	 */
+	public Set<DocumentoServicio> getDocumentos() {
+		return documentos;
+	}
 
-    /**
-     * Set documentos servicios.
-     * @param documentos
-     */
-    public void setDocumentos(Set<DocumentoServicio> documentos) {
-        this.documentos = documentos;
-    }
+	/**
+	 * Set documentos servicios.
+	 *
+	 * @param documentos
+	 */
+	public void setDocumentos(final Set<DocumentoServicio> documentos) {
+		this.documentos = documentos;
+	}
 
-    /**
-     * Add documento servicio.
-     * @param documento
-     */
-    public final void addDocumentoServicio(final DocumentoServicio documento) {
-        documento.setServicio(this);
-        documento.setOrden(Long.valueOf(documentos.size()));
-        documentos.add(documento);
-    }
+	/**
+	 * Add documento servicio.
+	 *
+	 * @param documento
+	 */
+	public final void addDocumentoServicio(final DocumentoServicio documento) {
+		documento.setServicio(this);
+		documento.setOrden(Long.valueOf(documentos.size()));
+		documentos.add(documento);
+	}
 
-    /**
-     * Remove documento servicio.
-     * @param documento
-     */
-    public final void removeDocumentoServicio(final DocumentoServicio documento) {
-        documentos.remove(documento);
-        Long i = 0l;
-        for(DocumentoServicio documentoServicio : documentos) {
-        	documentoServicio.setOrden(i);
-        	i++;
-        }
-    }
-    
-    /**
-     * Get normativas.
-     * @return
-     */
-    public Set<Normativa> getNormativas() {
-        return normativas;
-    }
+	/**
+	 * Remove documento servicio.
+	 *
+	 * @param documento
+	 */
+	public final void removeDocumentoServicio(final DocumentoServicio documento) {
+		documentos.remove(documento);
+		Long i = 0l;
+		for (final DocumentoServicio documentoServicio : documentos) {
+			documentoServicio.setOrden(i);
+			i++;
+		}
+	}
 
-    /**
-     * Set normativas.
-     * @param normativas
-     */
-    public void setNormativas(Set<Normativa> normativas) {
-        this.normativas = normativas;
-    }
+	/**
+	 * Get normativas.
+	 *
+	 * @return
+	 */
+	public Set<Normativa> getNormativas() {
+		return normativas;
+	}
 
+	/**
+	 * Set normativas.
+	 *
+	 * @param normativas
+	 */
+	public void setNormativas(final Set<Normativa> normativas) {
+		this.normativas = normativas;
+	}
 
 	@Override
 	public String toString() {
-		String pid=obtenirId();
-		String nombre = obtenerNombre();
-		return "Servicio [id="+pid+ 
-				" nombre="+nombre+ "]";
+		final String pid = obtenirId();
+		final String nombre = obtenerNombre();
+		return "Servicio [id=" + pid + " nombre=" + nombre + "]";
 	}
-	
+
 	/**
 	 * Obtener nombre.
+	 *
 	 * @return
 	 */
 	private String obtenerNombre() {
-		final TraduccionServicio traduccion = (TraduccionServicio)getTraduccion();
-		if(null==traduccion) {
+		final TraduccionServicio traduccion = (TraduccionServicio) getTraduccion();
+		if (null == traduccion) {
 			return null;
 		} else {
 			return traduccion.getNombre();
@@ -241,59 +251,65 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 
 	/**
 	 * Obtiene id.
+	 *
 	 * @return
 	 */
 	private String obtenirId() {
-		return null==id? null : id.toString();
+		return null == id ? null : id.toString();
 	}
-	
-	
+
 	/**
 	 * Set publico objetivo.
+	 *
 	 * @param publicosObjetivo
 	 */
-	public void setPublicosObjetivo(Set<PublicoObjetivo> publicosObjetivo) {
+	public void setPublicosObjetivo(final Set<PublicoObjetivo> publicosObjetivo) {
 		this.publicosObjetivo = publicosObjetivo;
 	}
-	
+
 	/**
 	 * Add publico objetivo.
+	 *
 	 * @param publicosObjetivo
 	 */
-	public void addPublicosObjetivo(PublicoObjetivo publicosObjetivo) {
+	public void addPublicosObjetivo(final PublicoObjetivo publicosObjetivo) {
 		this.publicosObjetivo.add(publicosObjetivo);
-		
+
 	}
-	
+
 	/**
 	 * Remove publico objetivo.
+	 *
 	 * @param id
 	 */
-	public void removePublicosObjetivo(long id) {
-		PublicoObjetivo pob=new PublicoObjetivo();
+	public void removePublicosObjetivo(final long id) {
+		final PublicoObjetivo pob = new PublicoObjetivo();
 		pob.setId(id);
 		this.publicosObjetivo.remove(pob);
 	}
-	
+
 	@Override
-	public boolean equals(Object obj) {
-		Servicio other=(Servicio)obj;
+	public boolean equals(final Object obj) {
+		final Servicio other = (Servicio) obj;
 		return (other instanceof Servicio) && id.equals(other.id);
 	}
 
 	/**
 	 * Es visible?
+	 *
 	 * @return
 	 */
 	public Boolean isVisible() {
-		
-		GregorianCalendar dataActual = new GregorianCalendar(); 
+
+		final GregorianCalendar dataActual = new GregorianCalendar();
 		Boolean visible;
-		
-		Boolean esPublic = Validacion.PUBLICA.equals(this.getValidacion());
-		Boolean noCaducat = (this.getFechaDespublicacion() != null && this.getFechaDespublicacion().after(dataActual.getTime())) || this.getFechaDespublicacion() == null;
-		Boolean esPublicat =  (this.getFechaPublicacion() != null && this.getFechaPublicacion().before(dataActual.getTime())) || this.getFechaPublicacion() == null;
-		
+
+		final Boolean esPublic = Validacion.PUBLICA.equals(this.getValidacion());
+		final Boolean noCaducat = (this.getFechaDespublicacion() != null
+				&& this.getFechaDespublicacion().after(dataActual.getTime())) || this.getFechaDespublicacion() == null;
+		final Boolean esPublicat = (this.getFechaPublicacion() != null
+				&& this.getFechaPublicacion().before(dataActual.getTime())) || this.getFechaPublicacion() == null;
+
 		if (esPublic && noCaducat && esPublicat) {
 			visible = Boolean.TRUE;
 		} else {
@@ -301,10 +317,11 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 		}
 		return visible;
 	}
-	
+
 	// Metode creat per poder ser cridat des de la JSP a traves de JSTL
-	/** 
+	/**
 	 * Get isVisible.
+	 *
 	 * @return
 	 */
 	public Boolean getIsVisible() {
@@ -313,23 +330,24 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 
 	/**
 	 * Set nombre servicio.
+	 *
 	 * @param nombreServicio
 	 */
-	public void setNombreServicio(String nombreServicio) {
+	public void setNombreServicio(final String nombreServicio) {
 		this.nombreServicio = nombreServicio;
 	}
 
 	/**
 	 * Set idioma.
+	 *
 	 * @param idioma
 	 */
-	public void setIdioma(String idioma) {
+	public void setIdioma(final String idioma) {
 		this.idioma = idioma;
 	}
-	
-	
+
 	@Override
-	public int compare(Servicio o1, Servicio o2) {
+	public int compare(final Servicio o1, final Servicio o2) {
 		int resultado;
 		if (o1 == null || o1.getId() == null) {
 			resultado = -1;
@@ -349,9 +367,10 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	}
 
 	/**
-	 * @param codigoSIA the codigoSIA to set
+	 * @param codigoSIA
+	 *            the codigoSIA to set
 	 */
-	public void setCodigoSIA(String codigoSIA) {
+	public void setCodigoSIA(final String codigoSIA) {
 		this.codigoSIA = codigoSIA;
 	}
 
@@ -363,9 +382,10 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	}
 
 	/**
-	 * @param fechaSIA the fechaSIA to set
+	 * @param fechaSIA
+	 *            the fechaSIA to set
 	 */
-	public void setFechaSIA(Date fechaSIA) {
+	public void setFechaSIA(final Date fechaSIA) {
 		this.fechaSIA = fechaSIA;
 	}
 
@@ -377,9 +397,10 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	}
 
 	/**
-	 * @param estadoSIA the estadoSIA to set
+	 * @param estadoSIA
+	 *            the estadoSIA to set
 	 */
-	public void setEstadoSIA(String estadoSIA) {
+	public void setEstadoSIA(final String estadoSIA) {
 		this.estadoSIA = estadoSIA;
 	}
 
@@ -391,9 +412,10 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	}
 
 	/**
-	 * @param codigo the codigo to set
+	 * @param codigo
+	 *            the codigo to set
 	 */
-	public void setCodigo(String codigo) {
+	public void setCodigo(final String codigo) {
 		this.codigo = codigo;
 	}
 
@@ -405,9 +427,10 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	}
 
 	/**
-	 * @param organoInstructor the organoInstructor to set
+	 * @param organoInstructor
+	 *            the organoInstructor to set
 	 */
-	public void setOrganoInstructor(UnidadAdministrativa organoInstructor) {
+	public void setOrganoInstructor(final UnidadAdministrativa organoInstructor) {
 		this.organoInstructor = organoInstructor;
 	}
 
@@ -419,9 +442,10 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	}
 
 	/**
-	 * @param servicioResponsable the servicioResponsable to set
+	 * @param servicioResponsable
+	 *            the servicioResponsable to set
 	 */
-	public void setServicioResponsable(UnidadAdministrativa servicioResponsable) {
+	public void setServicioResponsable(final UnidadAdministrativa servicioResponsable) {
 		this.servicioResponsable = servicioResponsable;
 	}
 
@@ -433,9 +457,10 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	}
 
 	/**
-	 * @param nombreResponsable the nombreResponsable to set
+	 * @param nombreResponsable
+	 *            the nombreResponsable to set
 	 */
-	public void setNombreResponsable(String nombreResponsable) {
+	public void setNombreResponsable(final String nombreResponsable) {
 		this.nombreResponsable = nombreResponsable;
 	}
 
@@ -447,9 +472,10 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	}
 
 	/**
-	 * @param correo the correo to set
+	 * @param correo
+	 *            the correo to set
 	 */
-	public void setCorreo(String correo) {
+	public void setCorreo(final String correo) {
 		this.correo = correo;
 	}
 
@@ -461,9 +487,10 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	}
 
 	/**
-	 * @param telefono the telefono to set
+	 * @param telefono
+	 *            the telefono to set
 	 */
-	public void setTelefono(String telefono) {
+	public void setTelefono(final String telefono) {
 		this.telefono = telefono;
 	}
 
@@ -475,9 +502,10 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	}
 
 	/**
-	 * @param tramiteUrl the tramiteUrl to set
+	 * @param tramiteUrl
+	 *            the tramiteUrl to set
 	 */
-	public void setTramiteUrl(String tramiteUrl) {
+	public void setTramiteUrl(final String tramiteUrl) {
 		this.tramiteUrl = tramiteUrl;
 	}
 
@@ -489,9 +517,10 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	}
 
 	/**
-	 * @param tramiteId the tramiteId to set
+	 * @param tramiteId
+	 *            the tramiteId to set
 	 */
-	public void setTramiteId(String tramiteId) {
+	public void setTramiteId(final String tramiteId) {
 		this.tramiteId = tramiteId;
 	}
 
@@ -503,9 +532,10 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	}
 
 	/**
-	 * @param tramiteVersion the tramiteVersion to set
+	 * @param tramiteVersion
+	 *            the tramiteVersion to set
 	 */
-	public void setTramiteVersion(String tramiteVersion) {
+	public void setTramiteVersion(final String tramiteVersion) {
 		this.tramiteVersion = tramiteVersion;
 	}
 
@@ -517,23 +547,27 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	}
 
 	/**
-	 * @param tasaUrl the tasaUrl to set
+	 * @param tasaUrl
+	 *            the tasaUrl to set
 	 */
-	public void setTasaUrl(String tasaUrl) {
+	public void setTasaUrl(final String tasaUrl) {
 		this.tasaUrl = tasaUrl;
 	}
 
 	/**
 	 * @return the validacion
 	 */
+	@Override
 	public Integer getValidacion() {
 		return validacion;
 	}
 
 	/**
-	 * @param validacion the validacion to set
+	 * @param validacion
+	 *            the validacion to set
 	 */
-	public void setValidacion(Integer validacion) {
+	@Override
+	public void setValidacion(final Integer validacion) {
 		this.validacion = validacion;
 	}
 
@@ -545,9 +579,10 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	}
 
 	/**
-	 * @param fechaDespublicacion the fechaDespublicacion to set
+	 * @param fechaDespublicacion
+	 *            the fechaDespublicacion to set
 	 */
-	public void setFechaDespublicacion(Date fechaDespublicacion) {
+	public void setFechaDespublicacion(final Date fechaDespublicacion) {
 		this.fechaDespublicacion = fechaDespublicacion;
 	}
 
@@ -559,9 +594,10 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	}
 
 	/**
-	 * @param fechaPublicacion the fechaPublicacion to set
+	 * @param fechaPublicacion
+	 *            the fechaPublicacion to set
 	 */
-	public void setFechaPublicacion(Date fechaPublicacion) {
+	public void setFechaPublicacion(final Date fechaPublicacion) {
 		this.fechaPublicacion = fechaPublicacion;
 	}
 
@@ -573,9 +609,10 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	}
 
 	/**
-	 * @param fechaActualizacion the fechaActualizacion to set
+	 * @param fechaActualizacion
+	 *            the fechaActualizacion to set
 	 */
-	public void setFechaActualizacion(Date fechaActualizacion) {
+	public void setFechaActualizacion(final Date fechaActualizacion) {
 		this.fechaActualizacion = fechaActualizacion;
 	}
 
@@ -587,9 +624,10 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	}
 
 	/**
-	 * @param hechosVitalesServicios the hechosVitalesServicios to set
+	 * @param hechosVitalesServicios
+	 *            the hechosVitalesServicios to set
 	 */
-	public void setHechosVitalesServicios(Set<HechoVitalServicio> hechosVitalesServicios) {
+	public void setHechosVitalesServicios(final Set<HechoVitalServicio> hechosVitalesServicios) {
 		this.hechosVitalesServicios = hechosVitalesServicios;
 	}
 
@@ -609,53 +647,53 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 
 	/**
 	 * Add documento.
+	 *
 	 * @param documento
 	 */
-	 public void addDocumento(DocumentoServicio documento) {
-        documento.setServicio(this);
-        documento.setOrden(Long.valueOf(documentos.size()));
-        documentos.add(documento);
-	 }
-	 
-	 
+	public void addDocumento(final DocumentoServicio documento) {
+		documento.setServicio(this);
+		documento.setOrden(Long.valueOf(documentos.size()));
+		documentos.add(documento);
+	}
+
 	/**
 	 * Add Hecho Vitales Servicio.
+	 *
 	 * @param hpv
 	 */
-	 public void addHechoVitalServicio(HechoVitalServicio hpv) {
-        hpv.setServicio(this);
-        hechosVitalesServicios.add(hpv);
-     }
+	public void addHechoVitalServicio(final HechoVitalServicio hpv) {
+		hpv.setServicio(this);
+		hechosVitalesServicios.add(hpv);
+	}
 
-	 /**
-	  * Remove hecho vitales servicio.
-	  * @param hechovp
-	  */
-     public void removeHechoVitalServicio(HechoVitalServicio hechovp) {
-        hechovp.setServicio(null);
-        hechosVitalesServicios.remove(hechovp);
-     }
+	/**
+	 * Remove hecho vitales servicio.
+	 *
+	 * @param hechovp
+	 */
+	public void removeHechoVitalServicio(final HechoVitalServicio hechovp) {
+		hechovp.setServicio(null);
+		hechosVitalesServicios.remove(hechovp);
+	}
 
-	    
-     public ServicioRemoto crearRemoto() {
-    	 ServicioRemoto remoto = new ServicioRemoto();
-         try {
-             remoto.setParamValue(getId().toString());
-             remoto.setParamName("idServicio");
+	public ServicioRemoto crearRemoto() {
+		final ServicioRemoto remoto = new ServicioRemoto();
+		try {
+			remoto.setParamValue(getId().toString());
+			remoto.setParamName("idServicio");
 
-             PropertyUtils.copyProperties(remoto, this);
-             PropertyUtils.copyProperties(remoto, this.getTraduccion());
-         } catch (IllegalAccessException e) {
-             ;
-         } catch (InvocationTargetException e) {
-             ;
-         } catch (NoSuchMethodException e) {
-             ;
-         }
+			PropertyUtils.copyProperties(remoto, this);
+			PropertyUtils.copyProperties(remoto, this.getTraduccion());
+		} catch (final IllegalAccessException e) {
+			;
+		} catch (final InvocationTargetException e) {
+			;
+		} catch (final NoSuchMethodException e) {
+			;
+		}
 
-         return remoto;
-     }
-
+		return remoto;
+	}
 
 	/**
 	 * @return the presencial
@@ -664,14 +702,13 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 		return presencial;
 	}
 
-
 	/**
-	 * @param presencial the presencial to set
+	 * @param presencial
+	 *            the presencial to set
 	 */
-	public void setPresencial(boolean presencial) {
+	public void setPresencial(final boolean presencial) {
 		this.presencial = presencial;
 	}
-
 
 	/**
 	 * @return the telefonico
@@ -680,14 +717,13 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 		return telefonico;
 	}
 
-
 	/**
-	 * @param telefonico the telefonico to set
+	 * @param telefonico
+	 *            the telefonico to set
 	 */
-	public void setTelefonico(boolean telefonico) {
+	public void setTelefonico(final boolean telefonico) {
 		this.telefonico = telefonico;
 	}
-
 
 	/**
 	 * @return the telematico
@@ -696,13 +732,27 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 		return telematico;
 	}
 
-
 	/**
-	 * @param telematico the telematico to set
+	 * @param telematico
+	 *            the telematico to set
 	 */
-	public void setTelematico(boolean telematico) {
+	public void setTelematico(final boolean telematico) {
 		this.telematico = telematico;
 	}
-     
+
+	/**
+	 * @return the comun
+	 */
+	public boolean isComun() {
+		return comun;
+	}
+
+	/**
+	 * @param comun
+	 *            the comun to set
+	 */
+	public void setComun(final boolean comun) {
+		this.comun = comun;
+	}
 
 }

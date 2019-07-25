@@ -182,6 +182,11 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 			}
 
+			if (procedimiento.isComun() && procedimiento.getId() != null) {
+				actualizarTramiteComun(session, procedimiento.getId(), procedimiento.getOrganResolutori());
+
+			}
+
 			/*
 			 * Se alimenta la fecha de actualización de forma automática si no se ha
 			 * introducido dato
@@ -233,6 +238,18 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 		}
 
+	}
+
+	private void actualizarTramiteComun(final Session session, final Long idProcedimiento,
+			final UnidadAdministrativa organResolutori) throws HibernateException {
+		final Query query = session.createQuery("from Tramite t where t.procedimiento.id = :id");
+		query.setLong("id", idProcedimiento);
+
+		final List<Tramite> tramites = query.list();
+		for (final Tramite tramit : tramites) {
+			tramit.setOrganCompetent(organResolutori);
+			session.update(tramit);
+		}
 	}
 
 	/**
@@ -401,7 +418,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				}
 
 				// Actualizar orden y añadir los trámites
-				if (listaIdsTramitesParaActualizar.size() > 0) {
+				if (!listaIdsTramitesParaActualizar.isEmpty()) {
 					actualizarOrdenTramites(new ArrayList<Long>(listaIdsTramitesParaActualizar));
 				}
 
@@ -420,6 +437,11 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				session.update(procedimiento);
 				addOperacion(session, procedimiento, Auditoria.MODIFICAR);
 
+			}
+
+			session.flush();
+			if (procedimiento.isComun()) {
+				actualizarTramiteComun(session, procedimiento.getId(), procedimiento.getOrganResolutori());
 			}
 
 			Hibernate.initialize(procedimiento.getTramites());
@@ -986,7 +1008,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				}
 
 				where += "( select tra.procedimiento from Tramite as tra where tra.fase = 1 ";
-				where += "and ( " + DateUtils.stringFechaAhoraBBDD() + " < tra.dataTancament or tra.dataTancament is null) ";
+				where += "and ( " + DateUtils.stringFechaAhoraBBDD()
+						+ " < tra.dataTancament or tra.dataTancament is null) ";
 				where += "and ( " + DateUtils.stringFechaAhoraBBDD() + " > tra.dataInici or tra.dataInici is null) ) ";
 			}
 
@@ -1007,10 +1030,14 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			}
 
 			if (visible == 1) {
-				where += " and ( " + DateUtils.stringFechaAhoraBBDD() + " < procedimiento.fechaCaducidad or procedimiento.fechaCaducidad is null) ";
-				where += " and ( " + DateUtils.stringFechaAhoraBBDD() + " > procedimiento.fechaPublicacion or procedimiento.fechaPublicacion is null) ";
+				where += " and ( " + DateUtils.stringFechaAhoraBBDD()
+						+ " < procedimiento.fechaCaducidad or procedimiento.fechaCaducidad is null) ";
+				where += " and ( " + DateUtils.stringFechaAhoraBBDD()
+						+ " > procedimiento.fechaPublicacion or procedimiento.fechaPublicacion is null) ";
 			} else if (visible == 2) {
-				where += " and ( " + DateUtils.stringFechaAhoraBBDD() + " > procedimiento.fechaCaducidad or " + DateUtils.stringFechaAhoraBBDD() + " < procedimiento.fechaPublicacion or procedimiento.validacion = 2 or procedimiento.validacion = 3) ";
+				where += " and ( " + DateUtils.stringFechaAhoraBBDD() + " > procedimiento.fechaCaducidad or "
+						+ DateUtils.stringFechaAhoraBBDD()
+						+ " < procedimiento.fechaPublicacion or procedimiento.validacion = 2 or procedimiento.validacion = 3) ";
 			}
 
 			if (userIsOper()) {
@@ -1133,7 +1160,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				}
 			} else {
 				consulta = new StringBuilder(
-						"select new ProcedimientoLocal(procedimiento.id, trad.nombre, procedimiento.validacion, procedimiento.fechaActualizacion, ");
+						"select new ProcedimientoLocal(procedimiento.id, trad.nombre, procedimiento.validacion, procedimiento.fechaActualizacion, procedimiento.comun, ");
 				if (bc.getProcedimiento().getFamilia().getId() == null
 						|| bc.getProcedimiento().getFamilia().getId() != -1) {
 					consulta.append(
@@ -1167,6 +1194,10 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				// where.append(" and procedimiento.tramites.id IN (:tramite) ");
 				where.append(
 						" and procedimiento.id IN ( select tra.procedimiento from Tramite as tra where tra.id = :tramite ) ");
+			}
+
+			if (bc.getComun() != null) {
+				where.append(" and procedimiento.comun = " + ApiRestUtils.intToBool(bc.getComun()) + " ");
 			}
 
 			if (bc.getProcedimiento().getFamilia() != null && bc.getProcedimiento().getFamilia().getId() != null) {
@@ -1255,21 +1286,25 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 					where.append(" and procedimiento.id not in ");
 
 				where.append(" ( select tra.procedimiento from Tramite as tra where tra.procedimiento is not null ");
-				where.append("and ( " + DateUtils.stringFechaAhoraBBDD() + " < tra.dataTancament or tra.dataTancament is null) ");
-				where.append("and ( " + DateUtils.stringFechaAhoraBBDD() + " > tra.dataInici or tra.dataInici is null) ) ");
+				where.append("and ( " + DateUtils.stringFechaAhoraBBDD()
+						+ " < tra.dataTancament or tra.dataTancament is null) ");
+				where.append(
+						"and ( " + DateUtils.stringFechaAhoraBBDD() + " > tra.dataInici or tra.dataInici is null) ) ");
 
 			}
 
 			if (bc.getVisibilidad() == Validacion.PUBLICA) {
-				where.append(" and ( " + DateUtils.stringFechaAhoraBBDD() + " < procedimiento.fechaCaducidad or procedimiento.fechaCaducidad is null) ");
-				where.append(
-						" and ( " + DateUtils.stringFechaAhoraBBDD() + " > procedimiento.fechaPublicacion or procedimiento.fechaPublicacion is null) ");
+				where.append(" and ( " + DateUtils.stringFechaAhoraBBDD()
+						+ " < procedimiento.fechaCaducidad or procedimiento.fechaCaducidad is null) ");
+				where.append(" and ( " + DateUtils.stringFechaAhoraBBDD()
+						+ " > procedimiento.fechaPublicacion or procedimiento.fechaPublicacion is null) ");
 				where.append(" and (procedimiento.validacion <> " + Validacion.INTERNA
 						+ " and procedimiento.validacion <> " + Validacion.RESERVA + ") "); // #355 devolvia no visibles
 			} else if (bc.getVisibilidad() == Validacion.INTERNA) {
-				where.append(
-						" and ( " + DateUtils.stringFechaAhoraBBDD() + " > procedimiento.fechaCaducidad or " + DateUtils.stringFechaAhoraBBDD() + " < procedimiento.fechaPublicacion or procedimiento.validacion = "
-								+ Validacion.INTERNA + " or procedimiento.validacion = " + Validacion.RESERVA + ") ");
+				where.append(" and ( " + DateUtils.stringFechaAhoraBBDD() + " > procedimiento.fechaCaducidad or "
+						+ DateUtils.stringFechaAhoraBBDD()
+						+ " < procedimiento.fechaPublicacion or procedimiento.validacion = " + Validacion.INTERNA
+						+ " or procedimiento.validacion = " + Validacion.RESERVA + ") ");
 			}
 
 			Integer validacion = null;
@@ -2344,10 +2379,6 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		return procedimiento;
 	}
 
-	
-	
-	
-	
 	/**
 	 * Metodo para indexar un solrPendiente.
 	 *
@@ -2397,8 +2428,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			} else {
 				nomUnidadAministrativa = procedimiento.getUnidadAdministrativa().getNombre();
 			}
-						
-			boolean esProcSerInterno = POUtils.contienePOInterno(procedimiento.getPublicosObjetivo());
+
+			final boolean esProcSerInterno = POUtils.contienePOInterno(procedimiento.getPublicosObjetivo());
 
 			// Recorremos las traducciones
 			for (final String keyIdioma : traducciones.keySet()) {
@@ -2483,25 +2514,24 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 							textoOptional.append(" ");
 						}
 					}
-					
-					
+
 					searchTextOptional.addIdioma(enumIdioma, traduccion.getResultat() + " "
-								+ traduccion.getObservaciones() + " " + textoOptional.toString());
-					
-					if(esProcSerInterno) {
-						//Si es interno usamos la url especifica para los procedimientos internos
-						
-						String url = RolsacPropertiesUtil.getPropiedadPOInternoUrlProc().replace("{idioma}", keyIdioma)
-								.replace("{idPublicoObjetivo}", idPublicoObjetivo)
-								.replace("{nombrePubObjetivo}",nombrePubObjetivo)
-								.replace("{idProcedimiento}",procedimiento.getId().toString());		
-						urls.addIdioma(enumIdioma, url);	
-					
-					}else {
-						//Si no es interno					
+							+ traduccion.getObservaciones() + " " + textoOptional.toString());
+
+					if (esProcSerInterno) {
+						// Si es interno usamos la url especifica para los procedimientos internos
+
+						final String url = RolsacPropertiesUtil.getPropiedadPOInternoUrlProc()
+								.replace("{idioma}", keyIdioma).replace("{idPublicoObjetivo}", idPublicoObjetivo)
+								.replace("{nombrePubObjetivo}", nombrePubObjetivo)
+								.replace("{idProcedimiento}", procedimiento.getId().toString());
+						urls.addIdioma(enumIdioma, url);
+
+					} else {
+						// Si no es interno
 						urls.addIdioma(enumIdioma, "/seucaib/" + keyIdioma + "/" + idPublicoObjetivo + "/"
-								+ nombrePubObjetivo + "/tramites/tramite/" + procedimiento.getId());	
-					}	
+								+ nombrePubObjetivo + "/tramites/tramite/" + procedimiento.getId());
+					}
 				}
 			}
 
@@ -2536,13 +2566,12 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			indexData.setFechaActualizacion(procedimiento.getFechaActualizacion());
 			indexData.setFechaPublicacion(procedimiento.getFechaPublicacion());
 			indexData.setFechaCaducidad(procedimiento.getFechaCaducidad());
-		
-			if(esProcSerInterno) {
+
+			if (esProcSerInterno) {
 				indexData.setInterno(true);
-			}else {
+			} else {
 				indexData.setInterno(false);
-			}	
-		
+			}
 
 			// UA
 			final PathUO pathUO = IndexacionUtil.calcularPathUO(procedimiento.getUnidadAdministrativa());
@@ -2847,7 +2876,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
-	
+
+	@Override
 	public ResultadoBusqueda consultaProcedimientos(final FiltroGenerico filtro) {
 
 		final Session session = getSession();
@@ -2860,7 +2890,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		final String activo = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_ACTIVO);
 		final String codigoUA = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_UA);
 		final String codigoUADIR3 = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_UA_DIR3);
-		final String descendientes = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_UA_DESCENDIENTES);		
+		final String descendientes = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_UA_DESCENDIENTES);
 		final String vigente = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_VIGENTE);
 		final String telematico = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_TELEMATICO);
 		final String codigoAHV = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_AGRUPACION_HECHO_VITAL);
@@ -2880,6 +2910,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		final String textos = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_TEXTOS);
 		final String titulo = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_TITULO);
 		final String tramiteTelematico = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_TRAMITE_TELEMATICO);
+		final String comun = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_COMUN);
 		final String versionTramiteTelematico = filtro
 				.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_VERSION_TRAMITE_TELEMATICO);
 
@@ -2907,40 +2938,38 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				}
 			}
 
-			//Buscamos por id de la ua (y sus descendientes si procede)
+			// Buscamos por id de la ua (y sus descendientes si procede)
 			final Long idUA = (codigoUA != null) ? Long.parseLong(codigoUA) : null;
 			String uaQuery = null;
 			try {
 				uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(idUA, "1".equals(descendientes), false);
-			} catch (DelegateException e) {
+			} catch (final DelegateException e) {
 				e.printStackTrace();
 			}
 
 			if (!StringUtils.isEmpty(uaQuery)) {
-				where.append( " AND p.unidadAdministrativa.id in (" + uaQuery + ")");
+				where.append(" AND p.unidadAdministrativa.id in (" + uaQuery + ")");
 			}
-			
-			
-			//Buscamos por codigo dir3 de la ua y sus descendientes				
+
+			// Buscamos por codigo dir3 de la ua y sus descendientes
 			String uaQueryDir3 = null;
 			try {
-				uaQueryDir3 = DelegateUtil.getUADelegate().obtenerCadenaFiltroUAPorDir3(codigoUADIR3, "1".equals(descendientes), false);
-			} catch (DelegateException e) {
+				uaQueryDir3 = DelegateUtil.getUADelegate().obtenerCadenaFiltroUAPorDir3(codigoUADIR3,
+						"1".equals(descendientes), false);
+			} catch (final DelegateException e) {
 				e.printStackTrace();
 			}
-			
-			
+
 			if (!StringUtils.isEmpty(uaQueryDir3)) {
 				// se ha añadido un codigodir3 que concuerda con una UA
-				where.append( " AND p.unidadAdministrativa.id in (" + uaQueryDir3 + ")");
-			}else if(!StringUtils.isEmpty(codigoUADIR3)) {
-				//Se ha añadido un codigo dir3 que no se corresponde con ninguna ua por lo que no tendra descendientes
-				//Se añade para forzar que no retorne resultados
-				where.append( " AND p.unidadAdministrativa.codigoDIR3 = :codigoUADIR3");
-				parametros.put("codigoUADIR3", codigoUADIR3);				
+				where.append(" AND p.unidadAdministrativa.id in (" + uaQueryDir3 + ")");
+			} else if (!StringUtils.isEmpty(codigoUADIR3)) {
+				// Se ha añadido un codigo dir3 que no se corresponde con ninguna ua por lo que
+				// no tendra descendientes
+				// Se añade para forzar que no retorne resultados
+				where.append(" AND p.unidadAdministrativa.codigoDIR3 = :codigoUADIR3");
+				parametros.put("codigoUADIR3", codigoUADIR3);
 			}
-				
-			
 
 			if (!StringUtils.isEmpty(estadoUA)) {
 				where.append(" AND p.unidadAdministrativa.validacion = :estadoUA");
@@ -3042,6 +3071,11 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				}
 			}
 
+			if (!StringUtils.isEmpty(comun)) {
+				where.append(" AND p.comun = :comun");
+				parametros.put("comun", comun);
+			}
+
 			if (!StringUtils.isEmpty(textos)) {
 				final String[] camposBuscablesPorTexto = { "p.dirElectronica", "p.responsable", "p.tramite", "p.url",
 						"p.signatura", "trad.destinatarios", "trad.lugar", "trad.nombre", "trad.notificacion",
@@ -3067,15 +3101,15 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 				where.append(" ) ");
 			}
-						
+
 			if (!StringUtils.isEmpty(titulo)) {
 				final String[] camposBuscablesPorTexto = { "trad.nombre" };
 
-				//Si hubiera que buscar en case-insensitive se podria hacer algo tipo:
+				// Si hubiera que buscar en case-insensitive se podria hacer algo tipo:
 				// titulo.tolowercase
-				//y en la query (aunque no es muy eficiente):
-				//where.append("LOWER("+campo+")) like('%pres%')
-				
+				// y en la query (aunque no es muy eficiente):
+				// where.append("LOWER("+campo+")) like('%pres%')
+
 				where.append(" AND ( ");
 				parametros.put("titulo", "%" + titulo + "%");
 
@@ -3095,8 +3129,6 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 				where.append(" ) ");
 			}
-			
-			
 
 			return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(),
 					selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
@@ -3191,8 +3223,5 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	private String formatoFecha(final Date d) {
 		return "'" + DateUtils.formatearddMMyyyy(d) + "'";
 	}
-	
-	
-	
 
 }

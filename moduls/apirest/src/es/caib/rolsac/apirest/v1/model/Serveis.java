@@ -16,120 +16,121 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Serveis.
- * 
+ *
  * @author Indra
  *
  */
 @XmlRootElement
-@ApiModel(value = Constantes.ENTIDAD_SERVICIOS, description = Constantes.TXT_DEFINICION_CLASE +  Constantes.ENTIDAD_SERVICIOS)
+@ApiModel(value = Constantes.ENTIDAD_SERVICIOS, description = Constantes.TXT_DEFINICION_CLASE
+		+ Constantes.ENTIDAD_SERVICIOS)
 public class Serveis extends EntidadBase {
-	 
 
-	
-		/** codigo **/
-		@ApiModelProperty(value = "codigo", required = false)
-		private long codigo;
-	
-		@ApiModelProperty(value = "codigoServicio", required = false)
-	  	private java.lang.String codigoServicio; //en el modelo se llama codigo
+	/** codigo **/
+	@ApiModelProperty(value = "codigo", required = false)
+	private long codigo;
 
-		@ApiModelProperty(value = "codigoSIA", required = false)
-	    private java.lang.String codigoSIA;
+	@ApiModelProperty(value = "codigoServicio", required = false)
+	private java.lang.String codigoServicio; // en el modelo se llama codigo
 
-		@ApiModelProperty(value = "correo", required = false)
-	    private java.lang.String correo;
+	@ApiModelProperty(value = "codigoSIA", required = false)
+	private java.lang.String codigoSIA;
 
-		@ApiModelProperty(value = "destinatarios", required = false)
-	    private java.lang.String destinatarios;
+	@ApiModelProperty(value = "correo", required = false)
+	private java.lang.String correo;
 
-		@ApiModelProperty(value = "estadoSIA", required = false)
-	    private java.lang.String estadoSIA;
+	@ApiModelProperty(value = "destinatarios", required = false)
+	private java.lang.String destinatarios;
 
-		@ApiModelProperty(value = "fechaActualizacion", required = false)
-	    private java.util.Calendar fechaActualizacion;
+	@ApiModelProperty(value = "estadoSIA", required = false)
+	private java.lang.String estadoSIA;
 
-		@ApiModelProperty(value = "fechaDespublicacion", required = false)
-	    private java.util.Calendar fechaDespublicacion;
+	@ApiModelProperty(value = "fechaActualizacion", required = false)
+	private java.util.Calendar fechaActualizacion;
 
-		@ApiModelProperty(value = "fechaPublicacion", required = false)
-	    private java.util.Calendar fechaPublicacion;
+	@ApiModelProperty(value = "fechaDespublicacion", required = false)
+	private java.util.Calendar fechaDespublicacion;
 
-		@ApiModelProperty(value = "fechaSIA", required = false)
-	    private java.util.Calendar fechaSIA;
+	@ApiModelProperty(value = "fechaPublicacion", required = false)
+	private java.util.Calendar fechaPublicacion;
 
-		@ApiModelProperty(value = "id", required = false)
-	    private java.lang.Long id;
+	@ApiModelProperty(value = "fechaSIA", required = false)
+	private java.util.Calendar fechaSIA;
 
-		@ApiModelProperty(value = "nombre", required = false)
-	    private java.lang.String nombre;
+	@ApiModelProperty(value = "id", required = false)
+	private java.lang.Long id;
 
-		@ApiModelProperty(value = "nombreResponsable", required = false)
-	    private java.lang.String nombreResponsable;
+	@ApiModelProperty(value = "nombre", required = false)
+	private java.lang.String nombre;
 
-		@ApiModelProperty(value = "objeto", required = false)
-	    private java.lang.String objeto;
+	@ApiModelProperty(value = "nombreResponsable", required = false)
+	private java.lang.String nombreResponsable;
 
-		@ApiModelProperty(value = "observaciones", required = false)
-	    private java.lang.String observaciones;
+	@ApiModelProperty(value = "objeto", required = false)
+	private java.lang.String objeto;
 
+	@ApiModelProperty(value = "observaciones", required = false)
+	private java.lang.String observaciones;
 
-		@ApiModelProperty(value = "requisitos", required = false)
-	    private java.lang.String requisitos;
+	@ApiModelProperty(value = "requisitos", required = false)
+	private java.lang.String requisitos;
 
-		@ApiModelProperty(value = "telefono", required = false)
-	    private java.lang.String telefono;
+	@ApiModelProperty(value = "telefono", required = false)
+	private java.lang.String telefono;
 
-		@ApiModelProperty(value = "tramiteUrl", required = false)
-	    private java.lang.String tramiteUrl;
+	@ApiModelProperty(value = "tramiteUrl", required = false)
+	private java.lang.String tramiteUrl;
 
-		@ApiModelProperty(value = "tramiteId", required = false)
-	    private java.lang.String tramiteId;
+	@ApiModelProperty(value = "tramiteId", required = false)
+	private java.lang.String tramiteId;
 
-		@ApiModelProperty(value = "tasaUrl", required = false)
-	    private java.lang.String tasaUrl;
+	@ApiModelProperty(value = "tasaUrl", required = false)
+	private java.lang.String tasaUrl;
 
-		@ApiModelProperty(value = "tramiteVersion", required = false)
-	    private java.lang.String tramiteVersion;
+	@ApiModelProperty(value = "tramiteVersion", required = false)
+	private java.lang.String tramiteVersion;
 
-		@ApiModelProperty(value = "validacion", required = false)
-	    private java.lang.Integer validacion;
+	@ApiModelProperty(value = "validacion", required = false)
+	private java.lang.Integer validacion;
 
-
-	
-	
-	//-- LINKS--//
-	//-- se duplican las entidades para poder generar la clase link en funcion de la propiedad principal (sin "link_")
+	// -- LINKS--//
+	// -- se duplican las entidades para poder generar la clase link en funcion de
+	// la propiedad principal (sin "link_")
 	/**  **/
 	@ApiModelProperty(value = "link_servicioResponsable", required = false)
-	private Link link_servicioResponsable;	
+	private Link link_servicioResponsable;
 	@ApiModelProperty(hidden = true)
 	@XmlTransient
 	private Long servicioResponsable;
-	
+
 	@ApiModelProperty(value = "link_organoInstructor", required = false)
-	private Link link_organoInstructor;	
+	private Link link_organoInstructor;
 	@ApiModelProperty(hidden = true)
 	@XmlTransient
 	private Long organoInstructor;
-		
-	public Serveis (org.ibit.rol.sac.model.Servicio elem, String urlBase,String idioma,boolean hateoasEnabled ) {
-		super( elem, urlBase, idioma, hateoasEnabled);	
-		if(elem.getCodigo()!=null ) {					
-			this.codigoServicio = elem.getCodigo();				
-		}	
+
+	/** es comun **/
+	@ApiModelProperty(value = "comun", required = false)
+	private boolean comun;
+
+	public Serveis(final org.ibit.rol.sac.model.Servicio elem, final String urlBase, final String idioma,
+			final boolean hateoasEnabled) {
+		super(elem, urlBase, idioma, hateoasEnabled);
+		if (elem.getCodigo() != null) {
+			this.codigoServicio = elem.getCodigo();
+		}
 	}
-	
+
 	public Serveis() {
 		super();
 	}
-	
-	
-	@Override
-	public void generaLinks(String urlBase) {
-		link_servicioResponsable = this.generaLink(this.servicioResponsable,Constantes.ENTIDAD_UA,Constantes.URL_UA, urlBase , null );
-		link_organoInstructor = this.generaLink(this.organoInstructor,Constantes.ENTIDAD_UA,Constantes.URL_UA, urlBase , null );
-	}
 
+	@Override
+	public void generaLinks(final String urlBase) {
+		link_servicioResponsable = this.generaLink(this.servicioResponsable, Constantes.ENTIDAD_UA, Constantes.URL_UA,
+				urlBase, null);
+		link_organoInstructor = this.generaLink(this.organoInstructor, Constantes.ENTIDAD_UA, Constantes.URL_UA,
+				urlBase, null);
+	}
 
 	public static Serveis valueOf(final String json) {
 		final ObjectMapper objectMapper = new ObjectMapper();
@@ -145,7 +146,6 @@ public class Serveis extends EntidadBase {
 		return obj;
 	}
 
-	
 	public String toJson() {
 		try {
 			final ObjectMapper objectMapper = new ObjectMapper();
@@ -157,18 +157,17 @@ public class Serveis extends EntidadBase {
 		}
 	}
 
-
 	@Override
 	protected void addSetersInvalidos() {
-		if(!SETTERS_INVALIDS.contains("setCodigo")) {
+		if (!SETTERS_INVALIDS.contains("setCodigo")) {
 			SETTERS_INVALIDS.add("setCodigo");
 		}
-		
+
 	}
 
 	@Override
-	public void setId(Long codigo) {
-		this.codigo = codigo;		
+	public void setId(final Long codigo) {
+		this.codigo = codigo;
 	}
 
 	/**
@@ -179,9 +178,10 @@ public class Serveis extends EntidadBase {
 	}
 
 	/**
-	 * @param codigo the codigo to set
+	 * @param codigo
+	 *            the codigo to set
 	 */
-	public void setCodigo(long codigo) {
+	public void setCodigo(final long codigo) {
 		this.codigo = codigo;
 	}
 
@@ -193,9 +193,10 @@ public class Serveis extends EntidadBase {
 	}
 
 	/**
-	 * @param codigoServicio the codigoServicio to set
+	 * @param codigoServicio
+	 *            the codigoServicio to set
 	 */
-	public void setCodigoServicio(java.lang.String codigoServicio) {
+	public void setCodigoServicio(final java.lang.String codigoServicio) {
 		this.codigoServicio = codigoServicio;
 	}
 
@@ -207,9 +208,10 @@ public class Serveis extends EntidadBase {
 	}
 
 	/**
-	 * @param codigoSIA the codigoSIA to set
+	 * @param codigoSIA
+	 *            the codigoSIA to set
 	 */
-	public void setCodigoSIA(java.lang.String codigoSIA) {
+	public void setCodigoSIA(final java.lang.String codigoSIA) {
 		this.codigoSIA = codigoSIA;
 	}
 
@@ -221,9 +223,10 @@ public class Serveis extends EntidadBase {
 	}
 
 	/**
-	 * @param correo the correo to set
+	 * @param correo
+	 *            the correo to set
 	 */
-	public void setCorreo(java.lang.String correo) {
+	public void setCorreo(final java.lang.String correo) {
 		this.correo = correo;
 	}
 
@@ -235,9 +238,10 @@ public class Serveis extends EntidadBase {
 	}
 
 	/**
-	 * @param destinatarios the destinatarios to set
+	 * @param destinatarios
+	 *            the destinatarios to set
 	 */
-	public void setDestinatarios(java.lang.String destinatarios) {
+	public void setDestinatarios(final java.lang.String destinatarios) {
 		this.destinatarios = destinatarios;
 	}
 
@@ -249,9 +253,10 @@ public class Serveis extends EntidadBase {
 	}
 
 	/**
-	 * @param estadoSIA the estadoSIA to set
+	 * @param estadoSIA
+	 *            the estadoSIA to set
 	 */
-	public void setEstadoSIA(java.lang.String estadoSIA) {
+	public void setEstadoSIA(final java.lang.String estadoSIA) {
 		this.estadoSIA = estadoSIA;
 	}
 
@@ -263,9 +268,10 @@ public class Serveis extends EntidadBase {
 	}
 
 	/**
-	 * @param fechaActualizacion the fechaActualizacion to set
+	 * @param fechaActualizacion
+	 *            the fechaActualizacion to set
 	 */
-	public void setFechaActualizacion(java.util.Calendar fechaActualizacion) {
+	public void setFechaActualizacion(final java.util.Calendar fechaActualizacion) {
 		this.fechaActualizacion = fechaActualizacion;
 	}
 
@@ -277,9 +283,10 @@ public class Serveis extends EntidadBase {
 	}
 
 	/**
-	 * @param fechaDespublicacion the fechaDespublicacion to set
+	 * @param fechaDespublicacion
+	 *            the fechaDespublicacion to set
 	 */
-	public void setFechaDespublicacion(java.util.Calendar fechaDespublicacion) {
+	public void setFechaDespublicacion(final java.util.Calendar fechaDespublicacion) {
 		this.fechaDespublicacion = fechaDespublicacion;
 	}
 
@@ -291,9 +298,10 @@ public class Serveis extends EntidadBase {
 	}
 
 	/**
-	 * @param fechaPublicacion the fechaPublicacion to set
+	 * @param fechaPublicacion
+	 *            the fechaPublicacion to set
 	 */
-	public void setFechaPublicacion(java.util.Calendar fechaPublicacion) {
+	public void setFechaPublicacion(final java.util.Calendar fechaPublicacion) {
 		this.fechaPublicacion = fechaPublicacion;
 	}
 
@@ -305,9 +313,10 @@ public class Serveis extends EntidadBase {
 	}
 
 	/**
-	 * @param fechaSIA the fechaSIA to set
+	 * @param fechaSIA
+	 *            the fechaSIA to set
 	 */
-	public void setFechaSIA(java.util.Calendar fechaSIA) {
+	public void setFechaSIA(final java.util.Calendar fechaSIA) {
 		this.fechaSIA = fechaSIA;
 	}
 
@@ -319,9 +328,10 @@ public class Serveis extends EntidadBase {
 	}
 
 	/**
-	 * @param nombre the nombre to set
+	 * @param nombre
+	 *            the nombre to set
 	 */
-	public void setNombre(java.lang.String nombre) {
+	public void setNombre(final java.lang.String nombre) {
 		this.nombre = nombre;
 	}
 
@@ -333,9 +343,10 @@ public class Serveis extends EntidadBase {
 	}
 
 	/**
-	 * @param nombreResponsable the nombreResponsable to set
+	 * @param nombreResponsable
+	 *            the nombreResponsable to set
 	 */
-	public void setNombreResponsable(java.lang.String nombreResponsable) {
+	public void setNombreResponsable(final java.lang.String nombreResponsable) {
 		this.nombreResponsable = nombreResponsable;
 	}
 
@@ -347,9 +358,10 @@ public class Serveis extends EntidadBase {
 	}
 
 	/**
-	 * @param objeto the objeto to set
+	 * @param objeto
+	 *            the objeto to set
 	 */
-	public void setObjeto(java.lang.String objeto) {
+	public void setObjeto(final java.lang.String objeto) {
 		this.objeto = objeto;
 	}
 
@@ -361,9 +373,10 @@ public class Serveis extends EntidadBase {
 	}
 
 	/**
-	 * @param observaciones the observaciones to set
+	 * @param observaciones
+	 *            the observaciones to set
 	 */
-	public void setObservaciones(java.lang.String observaciones) {
+	public void setObservaciones(final java.lang.String observaciones) {
 		this.observaciones = observaciones;
 	}
 
@@ -375,9 +388,10 @@ public class Serveis extends EntidadBase {
 	}
 
 	/**
-	 * @param requisitos the requisitos to set
+	 * @param requisitos
+	 *            the requisitos to set
 	 */
-	public void setRequisitos(java.lang.String requisitos) {
+	public void setRequisitos(final java.lang.String requisitos) {
 		this.requisitos = requisitos;
 	}
 
@@ -389,9 +403,10 @@ public class Serveis extends EntidadBase {
 	}
 
 	/**
-	 * @param telefono the telefono to set
+	 * @param telefono
+	 *            the telefono to set
 	 */
-	public void setTelefono(java.lang.String telefono) {
+	public void setTelefono(final java.lang.String telefono) {
 		this.telefono = telefono;
 	}
 
@@ -403,9 +418,10 @@ public class Serveis extends EntidadBase {
 	}
 
 	/**
-	 * @param tramiteUrl the tramiteUrl to set
+	 * @param tramiteUrl
+	 *            the tramiteUrl to set
 	 */
-	public void setTramiteUrl(java.lang.String tramiteUrl) {
+	public void setTramiteUrl(final java.lang.String tramiteUrl) {
 		this.tramiteUrl = tramiteUrl;
 	}
 
@@ -417,9 +433,10 @@ public class Serveis extends EntidadBase {
 	}
 
 	/**
-	 * @param tramiteId the tramiteId to set
+	 * @param tramiteId
+	 *            the tramiteId to set
 	 */
-	public void setTramiteId(java.lang.String tramiteId) {
+	public void setTramiteId(final java.lang.String tramiteId) {
 		this.tramiteId = tramiteId;
 	}
 
@@ -431,9 +448,10 @@ public class Serveis extends EntidadBase {
 	}
 
 	/**
-	 * @param tasaUrl the tasaUrl to set
+	 * @param tasaUrl
+	 *            the tasaUrl to set
 	 */
-	public void setTasaUrl(java.lang.String tasaUrl) {
+	public void setTasaUrl(final java.lang.String tasaUrl) {
 		this.tasaUrl = tasaUrl;
 	}
 
@@ -445,9 +463,10 @@ public class Serveis extends EntidadBase {
 	}
 
 	/**
-	 * @param tramiteVersion the tramiteVersion to set
+	 * @param tramiteVersion
+	 *            the tramiteVersion to set
 	 */
-	public void setTramiteVersion(java.lang.String tramiteVersion) {
+	public void setTramiteVersion(final java.lang.String tramiteVersion) {
 		this.tramiteVersion = tramiteVersion;
 	}
 
@@ -459,9 +478,10 @@ public class Serveis extends EntidadBase {
 	}
 
 	/**
-	 * @param validacion the validacion to set
+	 * @param validacion
+	 *            the validacion to set
 	 */
-	public void setValidacion(java.lang.Integer validacion) {
+	public void setValidacion(final java.lang.Integer validacion) {
 		this.validacion = validacion;
 	}
 
@@ -473,9 +493,10 @@ public class Serveis extends EntidadBase {
 	}
 
 	/**
-	 * @param link_servicioResponsable the link_servicioResponsable to set
+	 * @param link_servicioResponsable
+	 *            the link_servicioResponsable to set
 	 */
-	public void setLink_servicioResponsable(Link link_servicioResponsable) {
+	public void setLink_servicioResponsable(final Link link_servicioResponsable) {
 		this.link_servicioResponsable = link_servicioResponsable;
 	}
 
@@ -487,9 +508,10 @@ public class Serveis extends EntidadBase {
 	}
 
 	/**
-	 * @param servicioResponsable the servicioResponsable to set
+	 * @param servicioResponsable
+	 *            the servicioResponsable to set
 	 */
-	public void setServicioResponsable(Long servicioResponsable) {
+	public void setServicioResponsable(final Long servicioResponsable) {
 		this.servicioResponsable = servicioResponsable;
 	}
 
@@ -501,9 +523,10 @@ public class Serveis extends EntidadBase {
 	}
 
 	/**
-	 * @param link_organoInstructor the link_organoInstructor to set
+	 * @param link_organoInstructor
+	 *            the link_organoInstructor to set
 	 */
-	public void setLink_organoInstructor(Link link_organoInstructor) {
+	public void setLink_organoInstructor(final Link link_organoInstructor) {
 		this.link_organoInstructor = link_organoInstructor;
 	}
 
@@ -515,10 +538,26 @@ public class Serveis extends EntidadBase {
 	}
 
 	/**
-	 * @param organoInstructor the organoInstructor to set
+	 * @param organoInstructor
+	 *            the organoInstructor to set
 	 */
-	public void setOrganoInstructor(Long organoInstructor) {
+	public void setOrganoInstructor(final Long organoInstructor) {
 		this.organoInstructor = organoInstructor;
+	}
+
+	/**
+	 * @return the comun
+	 */
+	public boolean isComun() {
+		return comun;
+	}
+
+	/**
+	 * @param comun
+	 *            the comun to set
+	 */
+	public void setComun(final boolean comun) {
+		this.comun = comun;
 	}
 
 	/**
@@ -527,6 +566,5 @@ public class Serveis extends EntidadBase {
 	public java.lang.Long getId() {
 		return id;
 	}
-	
 
 }

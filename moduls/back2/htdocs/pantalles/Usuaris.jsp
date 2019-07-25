@@ -26,7 +26,7 @@
     var pagGuardar = '<c:url value="/usuaris/guardar.do" />';
     var pagEsborrar = '<c:url value="/usuaris/esborrarUsuari.do" />';
     var modulos = '<c:url value="/usuaris/modulos.do" />';
-    
+
     //texts
     var txtEsborrarCorrecte = "<spring:message code='txt.usuari_esborrat_correcte'/>";
     var txtEsborrarIncorrecte = "";
@@ -61,7 +61,7 @@
     var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
     var txtNoHiHaLlistat = txtNoHiHa + " " + txtLlistaItems.toLowerCase();
     var txtNouTitol = "<spring:message code='txt.nova'/> " + txtLlistaItem.toLowerCase();
-    
+
     var txtUnitatAdministrativa = "<spring:message code='unitatAdministrativa.ua'/>";
     var txtUnitatsAdministratives = "<spring:message code='unitatAdministrativa.uas'/>";
     var txtNoHiHaUA = txtNoHiHa + " " + txtUnitatAdministrativa.toLowerCase();
@@ -70,7 +70,7 @@
     var txtSeleccionades = "<spring:message code='txt.seleccionades'/>";
     var txtNoHiHaUASeleccionada = txtNoHiHa + " " + txtUnitatAdministrativa.toLowerCase() + " " + txtSeleccionada.toLowerCase();
     var txtNoHiHaUAsSeleccionades = txtNoHiHa + " " + txtUnitatsAdministratives.toLowerCase() + " " + txtSeleccionades.toLowerCase();
-    
+
     var txtTrobat = "<spring:message code='txt.sha_trobat'/>";
     var txtSeguents = "<spring:message code='txt.seguents'/>";
     var txtAnteriors = "<spring:message code='txt.anteriors'/>";
@@ -81,18 +81,18 @@
     var txtCercantAnteriors = txtCercant + " " + txtLlistaItems.toLowerCase() + " " + txtAnteriors.toLowerCase() + ". " + txtEspere;
     var txtCercantSeguents = txtCercant + " " + txtLlistaItems.toLowerCase() + " " + txtSeguents.toLowerCase() + ". " + txtEspere;
     var txtCercantElements = txtCercant + " <spring:message code='txt.elements'/>" + ". " + txtEspere;
-    
+
     var txtNom = "<spring:message code='txt.nom'/>";
     var txtUsername = "<spring:message code='txt.usuari'/>";
     var txtPerfil = "<spring:message code='txt.perfil'/>";
     var txtEmail = "<spring:message code='txt.email'/>";
-    
+
     // modul Perfils Gestor
     var txtPerfilGestor = "<spring:message code='txt.perfil_gestor'/>";
     var txtPerfilsGestor = "<spring:message code='txt.perfils_gestor'/>";
     var txtNoHiHaPerfilsGestor = txtNoHiHa + " " + txtPerfilsGestor;
     var txtNoHiHaPerfilsGestorSeleccionats = "<spring:message code='txt.noHiHaPerfilsGestorRelacionats'/>";
-    
+
 </script>
 <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
 <script type="text/javascript">
@@ -102,7 +102,7 @@
     var txtCaracters = "<spring:message code='txt.caracters'/>";
     var txtCampObligatori = "<spring:message code='txt.camp_obligatori'/>";
     var txtNoEsCorrecte = "<spring:message code='txt.data_no_correcte'/>";
-    var txtNombreObligatorio = "<spring:message code='personal.formulari.nom.obligatori'/>";    
+    var txtNombreObligatorio = "<spring:message code='personal.formulari.nom.obligatori'/>";
     var txtNombreNoSoloNumeros = "<spring:message code='personal.formulari.nom.no_nomes_numeros'/>";
     var txtUsernameObligatorio = "<spring:message code='usuari.formulari.username.obligatori'/>";
     var txtPasswordObligatorio = "<spring:message code='usuari.formulari.password.obligatori'/>";
@@ -261,7 +261,7 @@
                                     </c:forEach>
                                 </select>
                             </div>
-                        </div>    
+                        </div>
                         <div class="element t30">
                             <div class="etiqueta">
                                 <label for="cerca_unitat_administrativa_nom"><spring:message code='camp.unitat_administrativa'/></label>
@@ -310,7 +310,7 @@
     <div id="escriptori_detall" class="escriptori_detall">
         <input id="item_id" name="item_id" type="hidden" value="" class="nou" />
         <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>
-        
+
         <!-- modulPrincipal -->
         <div id="modulPrincipal" class="grupoModulosFormulario modulPrincipal">
             <!-- modul -->
@@ -369,8 +369,8 @@
 	                                    <option value="sacinfo"><spring:message code='usuari.sacinfo'/></option>
 	                                </select>
                                 </div>
-                            </div>                            
-                            <div class="element t50p">
+                            </div>
+                            <div class="element t25p">
 								<div class="etiqueta">
 									<label for="item_check_permis_modificacio_normativa"><spring:message
 											code='camp.permisModificacioNormativa' /></label>
@@ -380,7 +380,18 @@
 										name="item_check_permis_modificacio_normativa" type="checkbox"
 										class="nou" />
 								</div>
-							 </div>                        
+							 </div>
+							 <div class="element t25p">
+								<div class="etiqueta">
+									<label for="item_check_gestion_comunes"><spring:message
+											code='camp.permisModificacionComunes' /></label>
+								</div>
+								<div class="control">
+									<input id="item_check_gestion_comunes"
+										name="item_check_gestion_comunes" type="checkbox"
+										class="nou" />
+								</div>
+							 </div>
                         </div>
                         <div class="fila">
                             <div class="element t99p">
@@ -398,7 +409,7 @@
             <!-- /modul -->
         </div>
         <!-- /modulPrincipal -->
-        
+
         <!-- modulLateral -->
         <div class="modulLateral">
             <!-- modul -->
@@ -432,12 +443,12 @@
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                     <legend><spring:message code='seccio.perfils_gestor_relacionats'/></legend>
-                    <div class="modul_continguts mostrat">                    
+                    <div class="modul_continguts mostrat">
                         <!-- modulPerfilsGestor -->
                         <div class="modulPerfilsGestor selectorChecks">
-                        
+
                          	<input type="hidden" name="modulo_perfils_gestor_modificado" value="0">
-                        
+
                             <div class="seleccionats">
                                 <p class="info"><spring:message code='seccio.no_hi_ha_perfils_gestor'/></p>
                                 <div class="listaOrdenable"></div>
@@ -455,14 +466,14 @@
                                             <c:otherwise>
                                                <li class="impar">
                                             </c:otherwise>
-                                        </c:choose>                                     
+                                        </c:choose>
                                           <label><span><c:out value="${perfil.nom}" /></span><input type="checkbox" value="<c:out value='${perfil.id}' />" /></label>
-                                        </li>                                                                                                               
+                                        </li>
                                     </c:forEach>
                                 </ul>
                                 <div class="botonera">
                                     <div class="btnGenerico">
-                                        <a id="btnFinalizar_perfils_gestor" class="btn finalitza" href="javascript:;" 
+                                        <a id="btnFinalizar_perfils_gestor" class="btn finalitza" href="javascript:;"
                                         		action="<c:url value="/usuaris/guardarPerfilsGestorRelacionats.do" />">
                                         	<span><span><spring:message code='boto.finalitza'/></span></span>
                                        	</a>
@@ -473,18 +484,18 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- /modulPerfilsGestor -->                        
+                        <!-- /modulPerfilsGestor -->
                     </div>
                 </fieldset>
             </div>
             <!-- /modul -->
             <!-- modul -->
             <div class="modul invisible" id="modul_unitats_administratives">
-                <input type="hidden" id="llistaUnitatsAdministratives" name="unitatsAdministratives" value=""/>                     
-                <fieldset>                                  
-                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
-                    <legend><spring:message code='unitatAdministrativa.uaRelacionats'/></legend>                               
-                    <div class="modul_continguts mostrat">                                  
+                <input type="hidden" id="llistaUnitatsAdministratives" name="unitatsAdministratives" value=""/>
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='unitatAdministrativa.uaRelacionats'/></legend>
+                    <div class="modul_continguts mostrat">
                         <!-- modulUnitatAdministrativa -->
                         <div class="modulUnitatAdministratives">
                             <div class="seleccionats">
@@ -505,13 +516,13 @@
 	                           			<span><span><spring:message code='boto.guarda'/></span></span>
 	                            	</a>
 	                            </div>
-                            </div>                                  
+                            </div>
                         </div>
-                        <!-- /modulUnitatAdministrativa -->                                 
-                    </div>                              
-                </fieldset>                     
+                        <!-- /modulUnitatAdministrativa -->
+                    </div>
+                </fieldset>
             </div>
-            <!-- /modul -->  
+            <!-- /modul -->
         </div>
         <!-- /modulLateral -->
     </div>

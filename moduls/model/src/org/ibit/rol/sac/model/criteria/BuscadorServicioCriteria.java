@@ -7,13 +7,14 @@ import org.ibit.rol.sac.model.UnidadAdministrativa;
 
 /**
  * Buscador criteria de servicios.
+ * 
  * @author slromero
  *
  */
 public class BuscadorServicioCriteria implements Serializable {
-	
+
 	private static final long serialVersionUID = -8158903773722414035L;
-	
+
 	private Servicio servicio;
 	private UnidadAdministrativa unidadAdministrativa;
 	private PaginacionCriteria paginacion;
@@ -27,15 +28,15 @@ public class BuscadorServicioCriteria implements Serializable {
 	private Boolean uaHijas;
 	private String locale;
 	private Boolean soloId = false;
-	
-	
+	private Integer comun;
+
 	public BuscadorServicioCriteria() {
-		
-		
+
 	}
-	
-	public BuscadorServicioCriteria(Servicio servicio, PaginacionCriteria paginacion, Long idMateria, 
-			Long idPublicoObjetivo, Long idHechoVital, int visibilidad, Boolean enPlazo, Boolean telematico, Boolean uaPropias, Boolean uaHijas) {
+
+	public BuscadorServicioCriteria(final Servicio servicio, final PaginacionCriteria paginacion, final Long idMateria,
+			final Long idPublicoObjetivo, final Long idHechoVital, final int visibilidad, final Boolean enPlazo,
+			final Boolean telematico, final Boolean uaPropias, final Boolean uaHijas, final Integer comun) {
 
 		this.servicio = servicio;
 		this.paginacion = paginacion;
@@ -47,86 +48,87 @@ public class BuscadorServicioCriteria implements Serializable {
 		this.telematico = telematico;
 		this.uaPropias = uaPropias;
 		this.uaHijas = uaHijas;
-		
+		this.comun = comun;
+
 	}
-	
+
 	public Servicio getServicio() {
 		return servicio;
 	}
-	
-	public void setServicio(Servicio servicio) {
+
+	public void setServicio(final Servicio servicio) {
 		this.servicio = servicio;
 	}
-	
+
 	public UnidadAdministrativa getUnidadAdministrativa() {
 		return unidadAdministrativa;
 	}
-	
-	public void setUnidadAdministrativa(UnidadAdministrativa unidadAdministrativa) {
+
+	public void setUnidadAdministrativa(final UnidadAdministrativa unidadAdministrativa) {
 		this.unidadAdministrativa = unidadAdministrativa;
 	}
-	
+
 	public PaginacionCriteria getPaginacion() {
 		return paginacion;
 	}
-	
-	public void setPaginacion(PaginacionCriteria paginacion) {
+
+	public void setPaginacion(final PaginacionCriteria paginacion) {
 		this.paginacion = paginacion;
 	}
-	
+
 	public Long getIdMateria() {
 		return idMateria;
 	}
-	
-	public void setIdMateria(Long idMateria) {
+
+	public void setIdMateria(final Long idMateria) {
 		this.idMateria = idMateria;
 	}
-	
+
 	public Long getIdPublicoObjetivo() {
 		return idPublicoObjetivo;
 	}
-	
-	public void setIdPublicoObjetivo(Long idPublicoObjetivo) {
+
+	public void setIdPublicoObjetivo(final Long idPublicoObjetivo) {
 		this.idPublicoObjetivo = idPublicoObjetivo;
 	}
-	
+
 	public Long getIdHechoVital() {
 		return idHechoVital;
 	}
-	
-	public void setIdHechoVital(Long idHechoVital) {
+
+	public void setIdHechoVital(final Long idHechoVital) {
 		this.idHechoVital = idHechoVital;
 	}
-	
+
 	public int getVisibilidad() {
 		return visibilidad;
 	}
-	
-	public void setVisibilidad(int visibilidad) {
+
+	public void setVisibilidad(final int visibilidad) {
 		this.visibilidad = visibilidad;
 	}
-	
+
 	public Boolean getEnPlazo() {
 		return enPlazo;
 	}
-	
-	public void setEnPlazo(Boolean enPlazo) {
+
+	public void setEnPlazo(final Boolean enPlazo) {
 		this.enPlazo = enPlazo;
 	}
-	
+
 	public Boolean getTelematico() {
 		return telematico;
 	}
-	
-	public void setTelematico(Boolean telematico) {
+
+	public void setTelematico(final Boolean telematico) {
 		this.telematico = telematico;
 	}
-	
+
 	public Boolean getUaPropias() {
 		return uaPropias;
 	}
 
-	public void setUaPropias(Boolean uaPropias) {
+	public void setUaPropias(final Boolean uaPropias) {
 		this.uaPropias = uaPropias;
 	}
 
@@ -134,7 +136,7 @@ public class BuscadorServicioCriteria implements Serializable {
 		return uaHijas;
 	}
 
-	public void setUaHijas(Boolean uaHijas) {
+	public void setUaHijas(final Boolean uaHijas) {
 		this.uaHijas = uaHijas;
 	}
 
@@ -142,7 +144,7 @@ public class BuscadorServicioCriteria implements Serializable {
 		return locale;
 	}
 
-	public void setLocale(String locale) {
+	public void setLocale(final String locale) {
 		this.locale = locale;
 	}
 
@@ -154,10 +156,26 @@ public class BuscadorServicioCriteria implements Serializable {
 	}
 
 	/**
-	 * @param soloId the soloId to set
+	 * @param soloId
+	 *            the soloId to set
 	 */
-	public void setSoloId(Boolean soloId) {
+	public void setSoloId(final Boolean soloId) {
 		this.soloId = soloId;
+	}
+
+	/**
+	 * @return the comun
+	 */
+	public Integer getComun() {
+		return comun;
+	}
+
+	/**
+	 * @param comun
+	 *            the comun to set
+	 */
+	public void setComun(final Integer comun) {
+		this.comun = comun;
 	}
 
 }

@@ -1,5 +1,5 @@
 function BuscadorServicio() {
-	
+
 	this.orden = { "tipo" : "DESC", "campo" : "id" };
 
 	this.buscar = function(opcions, url, listado) {
@@ -8,8 +8,8 @@ function BuscadorServicio() {
 
 		var paginacionJSON = { "pagPag" : 0 , "pagRes" : 0 , "criterioOrdenacion" : "", "propiedadDeOrdenacion" : "" };
 
-		
-		var criteria = { 
+
+		var criteria = {
 				"servicio" : servicioJSON,
 				"uaHijas" : "",
 				"uaPropias" : "",
@@ -19,7 +19,8 @@ function BuscadorServicio() {
 				"idPublicoObjetivo" : "",
 				"enPlazo" : null,
 				"telematico" : null,
-				"paginacion" : paginacionJSON
+				"paginacion" : paginacionJSON,
+				"comun" : ""
 		};
 
 
@@ -33,7 +34,7 @@ function BuscadorServicio() {
 			criteria.servicio.silencio.id = $("#cerca_silenci").val();
 			criteria.servicio.codigoSIA = $("#cerca_sia").val();
 			criteria.servicio.estadoSIA = $("#cerca_bolcat_sia").val();
-			
+
 
 			switch ( $("#cerca_indicador").val() ) {
 
@@ -44,7 +45,7 @@ function BuscadorServicio() {
 			case "0":
 				criteria.servicio.indicador = 0;
 				break;
-			
+
 			case "-1":
 				criteria.servicio.indicador = -1;
 				break;
@@ -150,13 +151,16 @@ function BuscadorServicio() {
 		criteria.paginacion.pagRes = pag_Res;
 		criteria.paginacion.criterioOrdenacion = this.orden.tipo;
 		criteria.paginacion.propiedadDeOrdenacion = this.orden.campo;
+		if ($("#cerca_comun") != null && $("#cerca_comun").val() != '') {
+			criteria.comun = $("#cerca_comun").val();
+		}
 
 		//Si es tipo exportar
 		if (typeof opcions.exportar != "undefined" && opcions.exportar == "si") {
-			
+
 			criteria.paginacion.pagPag = 0;
 			criteria.paginacion.pagRes = 99999;
-		
+
 			Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtProcessant});
 			var xhr = new XMLHttpRequest();
 			xhr.open('POST', url, true);
@@ -203,9 +207,9 @@ function BuscadorServicio() {
 			};
 			xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 			xhr.send("criteria=" + JSON.stringify(criteria));
-		
+
 		} else {
-			// ajax		
+			// ajax
 			$.ajax({
 				type: "POST",
 				url: url,
@@ -220,8 +224,8 @@ function BuscadorServicio() {
 						Error.llansar();
 					}
 				},
-				success: function(data) {				
-					listado.finCargaListado(opcions,data);					
+				success: function(data) {
+					listado.finCargaListado(opcions,data);
 				}
 			});
 		}
