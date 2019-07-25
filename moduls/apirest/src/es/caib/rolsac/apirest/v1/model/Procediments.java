@@ -16,202 +16,202 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Procediments.
- * 
+ *
  * @author Indra
  *
  */
 @XmlRootElement
-@ApiModel(value = Constantes.ENTIDAD_PROCEDIMIENTO, description = Constantes.TXT_DEFINICION_CLASE +  Constantes.ENTIDAD_PROCEDIMIENTO)
+@ApiModel(value = Constantes.ENTIDAD_PROCEDIMIENTO, description = Constantes.TXT_DEFINICION_CLASE
+		+ Constantes.ENTIDAD_PROCEDIMIENTO)
 public class Procediments extends EntidadBase {
-	 
 
-	
 	/** codigo **/
 	@ApiModelProperty(value = "codigo", required = false)
 	private long codigo;
-	
+
 	/**  **/
 	@ApiModelProperty(value = "destinatarios", required = false)
-    private java.lang.String destinatarios;
-
+	private java.lang.String destinatarios;
 
 	/**  **/
 	@ApiModelProperty(value = "fechaActualizacion", required = false)
-    private java.util.Calendar fechaActualizacion;
+	private java.util.Calendar fechaActualizacion;
 
 	/**  **/
 	@ApiModelProperty(value = "fechaCaducidad", required = false)
-    private java.util.Calendar fechaCaducidad;
+	private java.util.Calendar fechaCaducidad;
 
 	/**  **/
 	@ApiModelProperty(value = "fechaPublicacion", required = false)
-    private java.util.Calendar fechaPublicacion;
+	private java.util.Calendar fechaPublicacion;
 
 	/**  **/
 	@ApiModelProperty(value = "indicador", required = false)
-    private boolean indicador;
+	private boolean indicador;
 
 	/**  **/
 	@ApiModelProperty(value = "dirElectronica", required = false)
-    private java.lang.String dirElectronica;
+	private java.lang.String dirElectronica;
 
 	/**  **/
 	@ApiModelProperty(value = "lugar", required = false)
-    private java.lang.String lugar;
+	private java.lang.String lugar;
 
 	/**  **/
 	@ApiModelProperty(value = "nombre", required = false)
-    private java.lang.String nombre;
+	private java.lang.String nombre;
 
 	/**  **/
 	@ApiModelProperty(value = "notificacion", required = false)
-    private java.lang.String notificacion;
+	private java.lang.String notificacion;
 
 	/**  **/
 	@ApiModelProperty(value = "observaciones", required = false)
-    private java.lang.String observaciones;
+	private java.lang.String observaciones;
 
 	/**  **/
 	@ApiModelProperty(value = "plazos", required = false)
-    private java.lang.String plazos;
+	private java.lang.String plazos;
 
 	/**  **/
 	@ApiModelProperty(value = "recursos", required = false)
-    private java.lang.String recursos;
+	private java.lang.String recursos;
 
 	/**  **/
 	@ApiModelProperty(value = "requisitos", required = false)
-    private java.lang.String requisitos;
+	private java.lang.String requisitos;
 
 	/**  **/
 	@ApiModelProperty(value = "resolucion", required = false)
-    private java.lang.String resolucion;
+	private java.lang.String resolucion;
 
 	/**  **/
 	@ApiModelProperty(value = "responsable", required = false)
-    private java.lang.String responsable;
+	private java.lang.String responsable;
 
 	/**  **/
 	@ApiModelProperty(value = "resumen", required = false)
-    private java.lang.String resumen;
+	private java.lang.String resumen;
 
 	/**  **/
 	@ApiModelProperty(value = "signatura", required = false)
-    private java.lang.String signatura;
+	private java.lang.String signatura;
 
 	/**  **/
 	@ApiModelProperty(value = "signatura", required = false)
-    private boolean taxa;
+	private boolean taxa;
 
 	/**  **/
 	@ApiModelProperty(value = "url", required = false)
-    private java.lang.String url;
+	private java.lang.String url;
 
 	/**  **/
 	@ApiModelProperty(value = "validacion", required = false)
-    private java.lang.Integer validacion;
+	private java.lang.Integer validacion;
 
 	/**  **/
 	@ApiModelProperty(value = "codigoSIA", required = false)
-    private java.lang.String codigoSIA;
+	private java.lang.String codigoSIA;
 
 	/**  **/
 	@ApiModelProperty(value = "estadoSIA", required = false)
-    private java.lang.String estadoSIA;
+	private java.lang.String estadoSIA;
 
 	/**  **/
 	@ApiModelProperty(value = "fechaSIA", required = false)
-    private java.util.Calendar fechaSIA;
-	
+	private java.util.Calendar fechaSIA;
+
 	@ApiModelProperty(value = "tramite", required = false)
 	private java.lang.String tramite;
-	
+
 	@ApiModelProperty(value = "version", required = false)
 	private java.lang.Long version;
-	
-	
-	/* 
-    	private java.lang.String resultat;
-        private boolean ventanillaUnica;
-	*/
-	
-	//-- LINKS--//
-	//-- se duplican las entidades para poder generar la clase link en funcion de la propiedad principal (sin "link_")
+
+	/*
+	 * private java.lang.String resultat; private boolean ventanillaUnica;
+	 */
+
+	// -- LINKS--//
+	// -- se duplican las entidades para poder generar la clase link en funcion de
+	// la propiedad principal (sin "link_")
 	/** servicioResponsable **/
 	@ApiModelProperty(value = "link_servicioResponsable", required = false)
-	private Link link_servicioResponsable;	
+	private Link link_servicioResponsable;
 	@ApiModelProperty(hidden = true)
 	@XmlTransient
 	private Long servicioResponsable;
-	
+
 	/** unidadAdministrativa **/
 	@ApiModelProperty(value = "link_unidadAdministrativa", required = false)
-	private Link link_unidadAdministrativa;	
+	private Link link_unidadAdministrativa;
 	@ApiModelProperty(hidden = true)
 	@XmlTransient
 	private Long unidadAdministrativa;
-	
-	
+
 	/** organResolutori **/
 	@ApiModelProperty(value = "link_organResolutori", required = false)
-	private Link link_organResolutori;	
+	private Link link_organResolutori;
 	@ApiModelProperty(hidden = true)
 	@XmlTransient
 	private Long organResolutori;
-	
-	
+
 	/** familia **/
 	@ApiModelProperty(value = "link_familia", required = false)
-	private Link link_familia;	
+	private Link link_familia;
 	@ApiModelProperty(hidden = true)
 	@XmlTransient
 	private Long familia;
-	
-	
+
 	////// CASOS ESPECIALES, SE RELLENA LA SUBENTIDAD.
 	/** silencio **/
 	@ApiModelProperty(value = "silencio", required = false)
-	private Silencis silencio;	
+	private Silencis silencio;
 
-		
 	/** iniciacion **/
 	@ApiModelProperty(value = "iniciacion", required = false)
-	private Iniciacions iniciacion;	
-	
-			
-	public Procediments (org.ibit.rol.sac.model.Procedimiento elem, String urlBase,String idioma,boolean hateoasEnabled ) {
-		super( elem, urlBase, idioma, hateoasEnabled);
-		
+	private Iniciacions iniciacion;
+
+	/** es comun **/
+	@ApiModelProperty(value = "comun", required = false)
+	private boolean comun;
+
+	public Procediments(final org.ibit.rol.sac.model.Procedimiento elem, final String urlBase, final String idioma,
+			final boolean hateoasEnabled) {
+		super(elem, urlBase, idioma, hateoasEnabled);
+
 		try {
-			//copiamos los datos que no tienen la misma estructura:		
-			if(((org.ibit.rol.sac.model.ProcedimientoLocal)elem).getSilencio()!=null ) {					
-				this.silencio = new Silencis(((org.ibit.rol.sac.model.ProcedimientoLocal)elem).getSilencio(),urlBase,idioma,hateoasEnabled);				
-			}	
-		
-			//copiamos los datos que no tienen la misma estructura:		
-			if(((org.ibit.rol.sac.model.ProcedimientoLocal)elem).getIniciacion()!=null ) {					
-				this.iniciacion = new Iniciacions(((org.ibit.rol.sac.model.ProcedimientoLocal)elem).getIniciacion(),urlBase,idioma,hateoasEnabled);				
-			}	
-		}catch(Exception e) {
-					
+			// copiamos los datos que no tienen la misma estructura:
+			if (((org.ibit.rol.sac.model.ProcedimientoLocal) elem).getSilencio() != null) {
+				this.silencio = new Silencis(((org.ibit.rol.sac.model.ProcedimientoLocal) elem).getSilencio(), urlBase,
+						idioma, hateoasEnabled);
+			}
+
+			// copiamos los datos que no tienen la misma estructura:
+			if (((org.ibit.rol.sac.model.ProcedimientoLocal) elem).getIniciacion() != null) {
+				this.iniciacion = new Iniciacions(((org.ibit.rol.sac.model.ProcedimientoLocal) elem).getIniciacion(),
+						urlBase, idioma, hateoasEnabled);
+			}
+		} catch (final Exception e) {
+
 		}
-			
+
 	}
-	
+
 	public Procediments() {
 		super();
 	}
-	
-	
+
 	@Override
-	public void generaLinks(String urlBase) {
-		link_servicioResponsable = this.generaLink(this.servicioResponsable,Constantes.ENTIDAD_UA,Constantes.URL_UA, urlBase , null );
-		link_unidadAdministrativa = this.generaLink(this.unidadAdministrativa,Constantes.ENTIDAD_UA,Constantes.URL_UA, urlBase , null );
-		link_organResolutori = this.generaLink(this.organResolutori,Constantes.ENTIDAD_UA,Constantes.URL_UA, urlBase , null );
-		link_familia = this.generaLink(this.familia,Constantes.ENTIDAD_FAMILIA,Constantes.URL_FAMILIA, urlBase , null );
+	public void generaLinks(final String urlBase) {
+		link_servicioResponsable = this.generaLink(this.servicioResponsable, Constantes.ENTIDAD_UA, Constantes.URL_UA,
+				urlBase, null);
+		link_unidadAdministrativa = this.generaLink(this.unidadAdministrativa, Constantes.ENTIDAD_UA, Constantes.URL_UA,
+				urlBase, null);
+		link_organResolutori = this.generaLink(this.organResolutori, Constantes.ENTIDAD_UA, Constantes.URL_UA, urlBase,
+				null);
+		link_familia = this.generaLink(this.familia, Constantes.ENTIDAD_FAMILIA, Constantes.URL_FAMILIA, urlBase, null);
 
 	}
-
 
 	public static Procediments valueOf(final String json) {
 		final ObjectMapper objectMapper = new ObjectMapper();
@@ -227,7 +227,6 @@ public class Procediments extends EntidadBase {
 		return obj;
 	}
 
-	
 	public String toJson() {
 		try {
 			final ObjectMapper objectMapper = new ObjectMapper();
@@ -239,22 +238,21 @@ public class Procediments extends EntidadBase {
 		}
 	}
 
-
 	@Override
 	protected void addSetersInvalidos() {
-		if(!SETTERS_INVALIDS.contains("setIniciacion")) {
+		if (!SETTERS_INVALIDS.contains("setIniciacion")) {
 			SETTERS_INVALIDS.add("setIniciacion");
 		}
-		
-		if(!SETTERS_INVALIDS.contains("setSilencio")) {
+
+		if (!SETTERS_INVALIDS.contains("setSilencio")) {
 			SETTERS_INVALIDS.add("setSilencio");
 		}
-		
+
 	}
 
 	@Override
-	public void setId(Long codigo) {
-		this.codigo = codigo;		
+	public void setId(final Long codigo) {
+		this.codigo = codigo;
 	}
 
 	/**
@@ -265,9 +263,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param codigo the codigo to set
+	 * @param codigo
+	 *            the codigo to set
 	 */
-	public void setCodigo(long codigo) {
+	public void setCodigo(final long codigo) {
 		this.codigo = codigo;
 	}
 
@@ -279,9 +278,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param destinatarios the destinatarios to set
+	 * @param destinatarios
+	 *            the destinatarios to set
 	 */
-	public void setDestinatarios(java.lang.String destinatarios) {
+	public void setDestinatarios(final java.lang.String destinatarios) {
 		this.destinatarios = destinatarios;
 	}
 
@@ -293,9 +293,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param fechaActualizacion the fechaActualizacion to set
+	 * @param fechaActualizacion
+	 *            the fechaActualizacion to set
 	 */
-	public void setFechaActualizacion(java.util.Calendar fechaActualizacion) {
+	public void setFechaActualizacion(final java.util.Calendar fechaActualizacion) {
 		this.fechaActualizacion = fechaActualizacion;
 	}
 
@@ -307,9 +308,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param fechaCaducidad the fechaCaducidad to set
+	 * @param fechaCaducidad
+	 *            the fechaCaducidad to set
 	 */
-	public void setFechaCaducidad(java.util.Calendar fechaCaducidad) {
+	public void setFechaCaducidad(final java.util.Calendar fechaCaducidad) {
 		this.fechaCaducidad = fechaCaducidad;
 	}
 
@@ -321,9 +323,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param fechaPublicacion the fechaPublicacion to set
+	 * @param fechaPublicacion
+	 *            the fechaPublicacion to set
 	 */
-	public void setFechaPublicacion(java.util.Calendar fechaPublicacion) {
+	public void setFechaPublicacion(final java.util.Calendar fechaPublicacion) {
 		this.fechaPublicacion = fechaPublicacion;
 	}
 
@@ -335,9 +338,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param indicador the indicador to set
+	 * @param indicador
+	 *            the indicador to set
 	 */
-	public void setIndicador(boolean indicador) {
+	public void setIndicador(final boolean indicador) {
 		this.indicador = indicador;
 	}
 
@@ -349,13 +353,12 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param dirElectronica the dirElectronica to set
+	 * @param dirElectronica
+	 *            the dirElectronica to set
 	 */
-	public void setDirElectronica(java.lang.String dirElectronica) {
+	public void setDirElectronica(final java.lang.String dirElectronica) {
 		this.dirElectronica = dirElectronica;
 	}
-
-	
 
 	/**
 	 * @return the lugar
@@ -365,9 +368,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param lugar the lugar to set
+	 * @param lugar
+	 *            the lugar to set
 	 */
-	public void setLugar(java.lang.String lugar) {
+	public void setLugar(final java.lang.String lugar) {
 		this.lugar = lugar;
 	}
 
@@ -379,9 +383,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param nombre the nombre to set
+	 * @param nombre
+	 *            the nombre to set
 	 */
-	public void setNombre(java.lang.String nombre) {
+	public void setNombre(final java.lang.String nombre) {
 		this.nombre = nombre;
 	}
 
@@ -393,9 +398,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param notificacion the notificacion to set
+	 * @param notificacion
+	 *            the notificacion to set
 	 */
-	public void setNotificacion(java.lang.String notificacion) {
+	public void setNotificacion(final java.lang.String notificacion) {
 		this.notificacion = notificacion;
 	}
 
@@ -407,9 +413,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param observaciones the observaciones to set
+	 * @param observaciones
+	 *            the observaciones to set
 	 */
-	public void setObservaciones(java.lang.String observaciones) {
+	public void setObservaciones(final java.lang.String observaciones) {
 		this.observaciones = observaciones;
 	}
 
@@ -421,9 +428,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param plazos the plazos to set
+	 * @param plazos
+	 *            the plazos to set
 	 */
-	public void setPlazos(java.lang.String plazos) {
+	public void setPlazos(final java.lang.String plazos) {
 		this.plazos = plazos;
 	}
 
@@ -435,9 +443,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param recursos the recursos to set
+	 * @param recursos
+	 *            the recursos to set
 	 */
-	public void setRecursos(java.lang.String recursos) {
+	public void setRecursos(final java.lang.String recursos) {
 		this.recursos = recursos;
 	}
 
@@ -449,9 +458,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param requisitos the requisitos to set
+	 * @param requisitos
+	 *            the requisitos to set
 	 */
-	public void setRequisitos(java.lang.String requisitos) {
+	public void setRequisitos(final java.lang.String requisitos) {
 		this.requisitos = requisitos;
 	}
 
@@ -463,9 +473,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param resolucion the resolucion to set
+	 * @param resolucion
+	 *            the resolucion to set
 	 */
-	public void setResolucion(java.lang.String resolucion) {
+	public void setResolucion(final java.lang.String resolucion) {
 		this.resolucion = resolucion;
 	}
 
@@ -477,9 +488,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param responsable the responsable to set
+	 * @param responsable
+	 *            the responsable to set
 	 */
-	public void setResponsable(java.lang.String responsable) {
+	public void setResponsable(final java.lang.String responsable) {
 		this.responsable = responsable;
 	}
 
@@ -491,9 +503,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param resumen the resumen to set
+	 * @param resumen
+	 *            the resumen to set
 	 */
-	public void setResumen(java.lang.String resumen) {
+	public void setResumen(final java.lang.String resumen) {
 		this.resumen = resumen;
 	}
 
@@ -505,9 +518,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param signatura the signatura to set
+	 * @param signatura
+	 *            the signatura to set
 	 */
-	public void setSignatura(java.lang.String signatura) {
+	public void setSignatura(final java.lang.String signatura) {
 		this.signatura = signatura;
 	}
 
@@ -519,9 +533,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param taxa the taxa to set
+	 * @param taxa
+	 *            the taxa to set
 	 */
-	public void setTaxa(boolean taxa) {
+	public void setTaxa(final boolean taxa) {
 		this.taxa = taxa;
 	}
 
@@ -533,9 +548,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param url the url to set
+	 * @param url
+	 *            the url to set
 	 */
-	public void setUrl(java.lang.String url) {
+	public void setUrl(final java.lang.String url) {
 		this.url = url;
 	}
 
@@ -547,9 +563,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param validacion the validacion to set
+	 * @param validacion
+	 *            the validacion to set
 	 */
-	public void setValidacion(java.lang.Integer validacion) {
+	public void setValidacion(final java.lang.Integer validacion) {
 		this.validacion = validacion;
 	}
 
@@ -561,9 +578,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param codigoSIA the codigoSIA to set
+	 * @param codigoSIA
+	 *            the codigoSIA to set
 	 */
-	public void setCodigoSIA(java.lang.String codigoSIA) {
+	public void setCodigoSIA(final java.lang.String codigoSIA) {
 		this.codigoSIA = codigoSIA;
 	}
 
@@ -575,9 +593,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param estadoSIA the estadoSIA to set
+	 * @param estadoSIA
+	 *            the estadoSIA to set
 	 */
-	public void setEstadoSIA(java.lang.String estadoSIA) {
+	public void setEstadoSIA(final java.lang.String estadoSIA) {
 		this.estadoSIA = estadoSIA;
 	}
 
@@ -589,9 +608,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param fechaSIA the fechaSIA to set
+	 * @param fechaSIA
+	 *            the fechaSIA to set
 	 */
-	public void setFechaSIA(java.util.Calendar fechaSIA) {
+	public void setFechaSIA(final java.util.Calendar fechaSIA) {
 		this.fechaSIA = fechaSIA;
 	}
 
@@ -603,9 +623,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param link_servicioResponsable the link_servicioResponsable to set
+	 * @param link_servicioResponsable
+	 *            the link_servicioResponsable to set
 	 */
-	public void setLink_servicioResponsable(Link link_servicioResponsable) {
+	public void setLink_servicioResponsable(final Link link_servicioResponsable) {
 		this.link_servicioResponsable = link_servicioResponsable;
 	}
 
@@ -618,9 +639,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param servicioResponsable the servicioResponsable to set
+	 * @param servicioResponsable
+	 *            the servicioResponsable to set
 	 */
-	public void setServicioResponsable(Long servicioResponsable) {
+	public void setServicioResponsable(final Long servicioResponsable) {
 		this.servicioResponsable = servicioResponsable;
 	}
 
@@ -632,9 +654,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param link_unidadAdministrativa the link_unidadAdministrativa to set
+	 * @param link_unidadAdministrativa
+	 *            the link_unidadAdministrativa to set
 	 */
-	public void setLink_unidadAdministrativa(Link link_unidadAdministrativa) {
+	public void setLink_unidadAdministrativa(final Link link_unidadAdministrativa) {
 		this.link_unidadAdministrativa = link_unidadAdministrativa;
 	}
 
@@ -647,9 +670,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param unidadAdministrativa the unidadAdministrativa to set
+	 * @param unidadAdministrativa
+	 *            the unidadAdministrativa to set
 	 */
-	public void setUnidadAdministrativa(Long unidadAdministrativa) {
+	public void setUnidadAdministrativa(final Long unidadAdministrativa) {
 		this.unidadAdministrativa = unidadAdministrativa;
 	}
 
@@ -661,9 +685,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param link_organResolutori the link_organResolutori to set
+	 * @param link_organResolutori
+	 *            the link_organResolutori to set
 	 */
-	public void setLink_organResolutori(Link link_organResolutori) {
+	public void setLink_organResolutori(final Link link_organResolutori) {
 		this.link_organResolutori = link_organResolutori;
 	}
 
@@ -676,9 +701,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param organResolutori the organResolutori to set
+	 * @param organResolutori
+	 *            the organResolutori to set
 	 */
-	public void setOrganResolutori(Long organResolutori) {
+	public void setOrganResolutori(final Long organResolutori) {
 		this.organResolutori = organResolutori;
 	}
 
@@ -690,9 +716,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param link_familia the link_familia to set
+	 * @param link_familia
+	 *            the link_familia to set
 	 */
-	public void setLink_familia(Link link_familia) {
+	public void setLink_familia(final Link link_familia) {
 		this.link_familia = link_familia;
 	}
 
@@ -705,9 +732,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param familia the familia to set
+	 * @param familia
+	 *            the familia to set
 	 */
-	public void setFamilia(Long familia) {
+	public void setFamilia(final Long familia) {
 		this.familia = familia;
 	}
 
@@ -719,9 +747,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param tramite the tramite to set
+	 * @param tramite
+	 *            the tramite to set
 	 */
-	public void setTramite(java.lang.String tramite) {
+	public void setTramite(final java.lang.String tramite) {
 		this.tramite = tramite;
 	}
 
@@ -733,12 +762,12 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param version the version to set
+	 * @param version
+	 *            the version to set
 	 */
-	public void setVersion(java.lang.Long version) {
+	public void setVersion(final java.lang.Long version) {
 		this.version = version;
 	}
-
 
 	/**
 	 * @return the silencio
@@ -748,9 +777,10 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param silencio the silencio to set
+	 * @param silencio
+	 *            the silencio to set
 	 */
-	public void setSilencio(Silencis silencio) {
+	public void setSilencio(final Silencis silencio) {
 		this.silencio = silencio;
 	}
 
@@ -762,10 +792,26 @@ public class Procediments extends EntidadBase {
 	}
 
 	/**
-	 * @param iniciacion the iniciacion to set
+	 * @param iniciacion
+	 *            the iniciacion to set
 	 */
-	public void setIniciacion(Iniciacions iniciacion) {
+	public void setIniciacion(final Iniciacions iniciacion) {
 		this.iniciacion = iniciacion;
+	}
+
+	/**
+	 * @return the comun
+	 */
+	public boolean isComun() {
+		return comun;
+	}
+
+	/**
+	 * @param comun
+	 *            the comun to set
+	 */
+	public void setComun(final boolean comun) {
+		this.comun = comun;
 	}
 
 }

@@ -39,6 +39,7 @@
                         <element name="tasaUrl" nillable="true" type="xsd:string" />
                         <element name="tramiteVersion" nillable="true" type="xsd:string" />
                         <element name="validacion" nillable="true" type="xsd:int" />
+                        <element name="comun" nillable="true" type="xsd:boolean" />
                     </sequence>
                 </extension>
             </complexContent>

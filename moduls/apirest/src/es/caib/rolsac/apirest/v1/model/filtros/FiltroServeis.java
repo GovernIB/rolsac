@@ -25,32 +25,27 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "FiltroServicios", description = "Filtro que permite buscar por diferentes campos")
 public class FiltroServeis {
 
-	public static final String SAMPLE = 
-			  Constantes.SALTO_LINEA + "{\"codigoUA\":\"0\"," 
-			+ Constantes.SALTO_LINEA + "\"codigoUADir3\":\"codigo\","
-			+ Constantes.SALTO_LINEA + "\"buscarEnDescendientesUA\":\"0/1\"," 
-			+ Constantes.SALTO_LINEA + "\"activo\":\"0/1\",  (1=procedimientos publicos y no caducados, 0=procedimientos no publicos o caducados)"
+	public static final String SAMPLE = Constantes.SALTO_LINEA + "{\"codigoUA\":\"0\"," + Constantes.SALTO_LINEA
+			+ "\"codigoUADir3\":\"codigo\"," + Constantes.SALTO_LINEA + "\"buscarEnDescendientesUA\":\"0/1\","
+			+ Constantes.SALTO_LINEA
+			+ "\"activo\":\"0/1\",  (1=procedimientos publicos y no caducados, 0=procedimientos no publicos o caducados)"
 			+ Constantes.SALTO_LINEA + "\"estadoUA\":\"1/2/3\",  (1=Pública,2=Interna,3=Reserva)"
-			+ Constantes.SALTO_LINEA + "\"codigoAgrupacionHechoVital\":\"0\"," 
-			+ Constantes.SALTO_LINEA + "\"codigoPublicoObjetivo\":\"0\","
-			+ Constantes.SALTO_LINEA + "\"codigoAgrupacionMateria\":\"0\"," 
-			+ Constantes.SALTO_LINEA + "\"codigoMateria\":\"0\"," 
-			+ Constantes.SALTO_LINEA + "\"titulo\":\"texto\"" 
-			+ Constantes.SALTO_LINEA + "\"textos\":\"texto\"" 
-			+ Constantes.SALTO_LINEA + "\"fechaPublicacionDesde\":\"DD/MM/YYYY\","
-			+ Constantes.SALTO_LINEA + "\"fechaPublicacionHasta\":\"DD/MM/YYYY\"," 
-			+ Constantes.SALTO_LINEA + "\"codigoTramiteTelematico\":\"codigo\"," 
-			+ Constantes.SALTO_LINEA + "\"versionTramiteTelematico\":\"version\"," 
-			+ Constantes.SALTO_LINEA + "\"codigoSia\":\"codigo\","
-			+ Constantes.SALTO_LINEA + "\"estadoSia\":\"A/B\", (A=Alta, B=Baja)"
-			+ Constantes.SALTO_LINEA + "\"fechaActualizacionSia\":\"DD/MM/YYYY\"" + "}";
-	
-	
+			+ Constantes.SALTO_LINEA + "\"codigoAgrupacionHechoVital\":\"0\"," + Constantes.SALTO_LINEA
+			+ "\"codigoPublicoObjetivo\":\"0\"," + Constantes.SALTO_LINEA + "\"codigoAgrupacionMateria\":\"0\","
+			+ Constantes.SALTO_LINEA + "\"codigoMateria\":\"0\"," + Constantes.SALTO_LINEA + "\"titulo\":\"texto\""
+			+ Constantes.SALTO_LINEA + "\"textos\":\"texto\"" + Constantes.SALTO_LINEA
+			+ "\"fechaPublicacionDesde\":\"DD/MM/YYYY\"," + Constantes.SALTO_LINEA
+			+ "\"fechaPublicacionHasta\":\"DD/MM/YYYY\"," + Constantes.SALTO_LINEA
+			+ "\"codigoTramiteTelematico\":\"codigo\"," + Constantes.SALTO_LINEA
+			+ "\"versionTramiteTelematico\":\"version\"," + Constantes.SALTO_LINEA
+			+ "\"comun\":\"0/1\", (1= servicios comunes)" + Constantes.SALTO_LINEA + "\"codigoSia\":\"codigo\","
+			+ Constantes.SALTO_LINEA + "\"estadoSia\":\"A/B\", (A=Alta, B=Baja)" + Constantes.SALTO_LINEA
+			+ "\"fechaActualizacionSia\":\"DD/MM/YYYY\"" + "}";
 
 	/** codigoUA. **/
 	@ApiModelProperty(value = "codigoUA", required = false)
 	private Integer codigoUA;
-	
+
 	/** codigoUADir3. **/
 	@ApiModelProperty(value = "codigoUADir3", required = false)
 	private String codigoUADir3;
@@ -111,6 +106,10 @@ public class FiltroServeis {
 	@ApiModelProperty(value = "telematico", required = false)
 	private Integer telematico;
 
+	/** telematico. **/
+	@ApiModelProperty(value = "comun", required = false)
+	private Integer comun;
+
 	/** codigoSia. **/
 	@ApiModelProperty(value = "codigoSia", required = false)
 	private String codigoSia;
@@ -137,7 +136,7 @@ public class FiltroServeis {
 		if (this.codigoUA != null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_SERVICIOS_UA, this.codigoUA + "");
 		}
-		
+
 		if (this.codigoUADir3 != null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_SERVICIOS_UA_DIR3, this.codigoUADir3 + "");
 		}
@@ -172,6 +171,10 @@ public class FiltroServeis {
 
 		if (this.codigoMateria != null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_SERVICIOS_MATERIA, this.codigoMateria + "");
+		}
+
+		if (this.comun != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_SERVICIOS_COMUN, this.comun + "");
 		}
 
 		if (this.textos != null) {
@@ -555,10 +558,26 @@ public class FiltroServeis {
 	}
 
 	/**
-	 * @param codigoUADir3 the codigoUADir3 to set
+	 * @param codigoUADir3
+	 *            the codigoUADir3 to set
 	 */
-	public void setCodigoUADir3(String codigoUADir3) {
+	public void setCodigoUADir3(final String codigoUADir3) {
 		this.codigoUADir3 = codigoUADir3;
+	}
+
+	/**
+	 * @return the comun
+	 */
+	public Integer getComun() {
+		return comun;
+	}
+
+	/**
+	 * @param comun
+	 *            the comun to set
+	 */
+	public void setComun(final Integer comun) {
+		this.comun = comun;
 	}
 
 }

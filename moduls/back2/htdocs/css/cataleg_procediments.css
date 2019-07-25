@@ -3,8 +3,8 @@
 /* llistats table */
 
 
-div.llistat div.nom { 
-    width: 400px;   
+div.llistat div.nom {
+    width: 400px;
     padding-left: 21px;
 }
 div.llistat div.th.procedimiento{
@@ -17,11 +17,11 @@ div.llistat div.familia{
 div.llistat div.fechaActualizacion{
     width: 200px;
 }
-div.llistat div.publicacio{ 
+div.llistat div.publicacio{
     width: 200px;
     padding: 0 12px;
 }
-div.llistat div.caducitat  { 
+div.llistat div.caducitat  {
     width: 200px;
     padding: 0 12px;
 }
@@ -66,6 +66,21 @@ div.llistat div.tbody div.procediment {
 #escriptori_detall .organoCompetente .botones .btnCambiar, #escriptori_detall .organoResponsable .botones .btnCambiar{
     margin-right: 17px;
 }
+
+#escriptori_detall .servicioResponsable{
+    float: none;
+}
+#escriptori_detall .servicioResponsable .campo{
+    width: 495px;
+    float: left;
+}
+#escriptori_detall .servicioResponsable .botones{
+    float: right;
+}
+#escriptori_detall .servicioResponsable .botones .btnCambiar{
+    margin-right: 17px;
+}
+
 .inputGris {
-	color: #666 !important;	
+	color: #666 !important;
 }

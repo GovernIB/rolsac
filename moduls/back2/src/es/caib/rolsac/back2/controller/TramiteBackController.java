@@ -57,635 +57,680 @@ import es.indra.rol.sac.integracion.traductor.Traductor;
 @Controller
 @RequestMapping("/tramit/")
 public class TramiteBackController {
-	
+
 	private final String IDIOMA_ORIGEN_TRADUCTOR = "ca";
-	
-	private static Log log = LogFactory.getLog(TramiteBackController.class);	
+
+	private static Log log = LogFactory.getLog(TramiteBackController.class);
 	private MessageSource messageSource = null;
-	
-    @Autowired
-    public void setMessageSource(MessageSource messageSource){
-        this.messageSource = messageSource;
-    }
-        
-    @RequestMapping(value = "/tramite.do", method = GET)
-    public void obtenerTramite(HttpServletRequest request, HttpServletResponse response) {}    
-    
-    @RequestMapping(value = "/carregarTramit.do", method = POST)
-    public @ResponseBody Map<String, Object> recuperaDetall(HttpSession session, HttpServletRequest request) {    
-    	    	
-		HttpHeaders responseHeaders = new HttpHeaders();
+
+	@Autowired
+	public void setMessageSource(final MessageSource messageSource) {
+		this.messageSource = messageSource;
+	}
+
+	@RequestMapping(value = "/tramite.do", method = GET)
+	public void obtenerTramite(final HttpServletRequest request, final HttpServletResponse response) {
+	}
+
+	@RequestMapping(value = "/carregarTramit.do", method = POST)
+	public @ResponseBody Map<String, Object> recuperaDetall(final HttpSession session,
+			final HttpServletRequest request) {
+
+		final HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
-    	
-    	Map<String, Object> resultats = new HashMap<String, Object>();
-    	Long idTramite = new Long(request.getParameter("id"));
-    	
-    	try {    		 
-    		
-			IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
-			List<String> idiomas = idiomaDelegate.listarLenguajes();			
-    		Tramite tramite = DelegateUtil.getTramiteDelegate().obtenerTramite(idTramite);
-    		    		
-    		ProcedimientoLocal procedimiento = tramite.getProcedimiento();
-    		resultats.put("idiomas", idiomas);
-    		resultats.put("idTramit", tramite.getId());
-    		resultats.put("id_tramit_actual", tramite.getId());
-    		resultats.put("id_procediment_tramit", procedimiento.getId());
-    		resultats.put("nom_procediment_tramit", ((TraduccionProcedimiento) procedimiento.getTraduccion(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto())).getNombre());
-    		resultats.put("tramit_item_data_actualitzacio", DateUtils.formatDate(tramite.getDataActualitzacio()));
-    		resultats.put("tramit_item_data_publicacio", DateUtils.formatDateSimpleTime(tramite.getDataPublicacio()));
-    		resultats.put("tramit_item_data_caducitat", DateUtils.formatDate(tramite.getDataCaducitat()));
-    		resultats.put("tramit_item_data_inici", DateUtils.formatDateSimpleTime(tramite.getDataInici()));
-    		resultats.put("tramit_item_data_tancament", DateUtils.formatDateSimpleTime(tramite.getDataTancament()));
-    		resultats.put("item_moment_tramit", tramite.getFase());
-    		resultats.put("item_validacio_tramit", tramite.getValidacio());
-    		resultats.put("item_url_tramit", tramite.getUrlExterna());
-    		resultats.put("item_tramite_tramit", tramite.getIdTraTel());
-    		resultats.put("item_version_tramit", tramite.getVersio());
-    		resultats.put("item_codivuds_tramit", tramite.getCodiVuds());
-    		resultats.put("tramit_item_data_vuds", tramite.getDataActualitzacioVuds());    		
-    		resultats.put("item_finestreta_unica", procedimiento.getVentanillaUnica());
-    		resultats.put("item_taxes", procedimiento.getTaxa());
-    		
-    		resultats.put("item_check_tramit_presencial", tramite.isPresencial());
-    		resultats.put("item_check_tramit_telematico", tramite.isTelematico());
-    		
-    		if (tramite.getOrganCompetent() != null) {
-    			resultats.put("tramits_item_organ_id", tramite.getOrganCompetent().getId());
-    		}
-    		    		    		
+
+		final Map<String, Object> resultats = new HashMap<String, Object>();
+		final Long idTramite = new Long(request.getParameter("id"));
+
+		try {
+
+			final IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
+			final List<String> idiomas = idiomaDelegate.listarLenguajes();
+			final Tramite tramite = DelegateUtil.getTramiteDelegate().obtenerTramite(idTramite);
+
+			final ProcedimientoLocal procedimiento = tramite.getProcedimiento();
+			resultats.put("idiomas", idiomas);
+			resultats.put("idTramit", tramite.getId());
+			resultats.put("id_tramit_actual", tramite.getId());
+			resultats.put("id_procediment_tramit", procedimiento.getId());
+			resultats.put("nom_procediment_tramit", ((TraduccionProcedimiento) procedimiento
+					.getTraduccion(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto())).getNombre());
+			resultats.put("tramit_item_data_actualitzacio", DateUtils.formatDate(tramite.getDataActualitzacio()));
+			resultats.put("tramit_item_data_publicacio", DateUtils.formatDateSimpleTime(tramite.getDataPublicacio()));
+			resultats.put("tramit_item_data_caducitat", DateUtils.formatDate(tramite.getDataCaducitat()));
+			resultats.put("tramit_item_data_inici", DateUtils.formatDateSimpleTime(tramite.getDataInici()));
+			resultats.put("tramit_item_data_tancament", DateUtils.formatDateSimpleTime(tramite.getDataTancament()));
+			resultats.put("item_moment_tramit", tramite.getFase());
+			resultats.put("item_validacio_tramit", tramite.getValidacio());
+			resultats.put("item_url_tramit", tramite.getUrlExterna());
+			resultats.put("item_tramite_tramit", tramite.getIdTraTel());
+			resultats.put("item_version_tramit", tramite.getVersio());
+			resultats.put("item_codivuds_tramit", tramite.getCodiVuds());
+			resultats.put("tramit_item_data_vuds", tramite.getDataActualitzacioVuds());
+			resultats.put("item_finestreta_unica", procedimiento.getVentanillaUnica());
+			resultats.put("item_taxes", procedimiento.getTaxa());
+
+			resultats.put("item_check_tramit_presencial", tramite.isPresencial());
+			resultats.put("item_check_tramit_telematico", tramite.isTelematico());
+
+			if (tramite.getOrganCompetent() != null) {
+				resultats.put("tramits_item_organ_id", tramite.getOrganCompetent().getId());
+			}
+
 			// Idiomas
-    		for ( String idioma : idiomas ) {
-    			resultats.put(idioma, tramite.getTraduccion(idioma));
-    			//TraduccionUA traduccionUA = ((TraduccionUA) tramite.getOrganCompetent().getTraduccion(idioma));
-    			if (tramite.getOrganCompetent() != null) {
-        			String nombreUA = tramite.getOrganCompetent().getNombreUnidadAdministrativa(idioma);    			
-        			resultats.put("ua_" + idioma, nombreUA);
-    			}
-    		}
-    		
-    		List<String> langs = DelegateUtil.getIdiomaDelegate().listarLenguajes();
-    		// Documentos relacionados
-    		resultats.put("documentosTramite", getListaDocumentsDTO(request, tramite, langs, tramite.getDocsInformatius()));
-    		// Formularios relacionados    		
-    		resultats.put("formulariosTramite", getListaDocumentsDTO(request, tramite, langs, tramite.getFormularios()));
-    		// Documents Requerits relacionats
-    		resultats.put("docRequeritsTramite", getListaDocumentsDTO(request, tramite, langs,  tramite.getDocsRequerits()));
-    		// Tasas relacionadas
-    		resultats.put("tasasTramite", getListaTasasDTO(request, tramite, langs));
-    		    		
-    	} catch (DelegateException dEx) {
-    		
+			for (final String idioma : idiomas) {
+				resultats.put(idioma, tramite.getTraduccion(idioma));
+				// TraduccionUA traduccionUA = ((TraduccionUA)
+				// tramite.getOrganCompetent().getTraduccion(idioma));
+				if (tramite.getOrganCompetent() != null) {
+					final String nombreUA = tramite.getOrganCompetent().getNombreUnidadAdministrativa(idioma);
+					resultats.put("ua_" + idioma, nombreUA);
+				}
+			}
+
+			final List<String> langs = DelegateUtil.getIdiomaDelegate().listarLenguajes();
+			// Documentos relacionados
+			resultats.put("documentosTramite",
+					getListaDocumentsDTO(request, tramite, langs, tramite.getDocsInformatius()));
+			// Formularios relacionados
+			resultats.put("formulariosTramite",
+					getListaDocumentsDTO(request, tramite, langs, tramite.getFormularios()));
+			// Documents Requerits relacionats
+			resultats.put("docRequeritsTramite",
+					getListaDocumentsDTO(request, tramite, langs, tramite.getDocsRequerits()));
+			// Tasas relacionadas
+			resultats.put("tasasTramite", getListaTasasDTO(request, tramite, langs));
+
+		} catch (final DelegateException dEx) {
+
 			logException(log, dEx);
 
 			if (dEx.isSecurityException()) {
 				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
 			} else {
 				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
-			}    
-			
-    	}
-    	
-    	return resultats; 
-    	
-    }
-    
-    /**
-     * Obtención del documento en forma correcto con el multiidioma.
-     * @param request
-     * @param tramite
-     * @param idiomas
-     * @param listaDocuments
-     * @return
-     */
-    private List<Map<String, Object>> getListaDocumentsDTO(final HttpServletRequest request, final Tramite tramite, final List<String> idiomas, final Set<DocumentTramit> listaDocuments )
-	{
-		List<Map<String, Object>>  listaRequeritsDTO = null ;
-		
+			}
+
+		}
+
+		return resultats;
+
+	}
+
+	/**
+	 * Obtención del documento en forma correcto con el multiidioma.
+	 *
+	 * @param request
+	 * @param tramite
+	 * @param idiomas
+	 * @param listaDocuments
+	 * @return
+	 */
+	private List<Map<String, Object>> getListaDocumentsDTO(final HttpServletRequest request, final Tramite tramite,
+			final List<String> idiomas, final Set<DocumentTramit> listaDocuments) {
+		List<Map<String, Object>> listaRequeritsDTO = null;
+
 		if (listaDocuments != null) {
-			listaRequeritsDTO = new ArrayList<Map<String, Object>>() ;
-			
-			for (DocumentTramit documento: listaDocuments) {
-				
+			listaRequeritsDTO = new ArrayList<Map<String, Object>>();
+
+			for (final DocumentTramit documento : listaDocuments) {
+
 				if (documento != null) {
-					
-					Map<String, String> titulos = new HashMap<String, String>();
+
+					final Map<String, String> titulos = new HashMap<String, String>();
 					String nombre;
 					TraduccionDocumento tradTramite;
-					for (String idioma : idiomas) {
-						
-						tradTramite = (TraduccionDocumento)documento.getTraduccion(idioma);
-						nombre = (tradTramite != null && tradTramite.getTitulo() != null) ? tradTramite.getTitulo() : "";
-						
+					for (final String idioma : idiomas) {
+
+						tradTramite = (TraduccionDocumento) documento.getTraduccion(idioma);
+						nombre = (tradTramite != null && tradTramite.getTitulo() != null) ? tradTramite.getTitulo()
+								: "";
+
 						titulos.put(idioma, nombre);
-						
+
 					}
-					
-					Map<String,Object> map = new HashMap<String, Object>();
+
+					final Map<String, Object> map = new HashMap<String, Object>();
 					map.put("id", documento.getId());
 					map.put("nom", titulos);
 					map.put("moment", tramite.getFase());
-					
+
 					listaRequeritsDTO.add(map);
 				}
 			}
 		}
-		
+
 		return listaRequeritsDTO;
 	}
-    
-    /**
-     * Obtención de la taxa con el multiidoma.
-     * @param request
-     * @param tramite
-     * @param idiomas
-     * @return
-     */
-	private List<Map<String, Object>> getListaTasasDTO(HttpServletRequest request, Tramite tramite, List<String> idiomas)
-	{
-		Set<Taxa> listaTasas = tramite.getTaxes();
-		List<Map<String, Object>>  listaTasasDTO = null;
-		
+
+	/**
+	 * Obtención de la taxa con el multiidoma.
+	 *
+	 * @param request
+	 * @param tramite
+	 * @param idiomas
+	 * @return
+	 */
+	private List<Map<String, Object>> getListaTasasDTO(final HttpServletRequest request, final Tramite tramite,
+			final List<String> idiomas) {
+		final Set<Taxa> listaTasas = tramite.getTaxes();
+		List<Map<String, Object>> listaTasasDTO = null;
+
 		if (listaTasas != null) {
-			listaTasasDTO = new ArrayList<Map<String, Object>>() ;
-			for (Taxa tasa: listaTasas) {
-				
+			listaTasasDTO = new ArrayList<Map<String, Object>>();
+			for (final Taxa tasa : listaTasas) {
+
 				if (tasa != null) {
-					
-					Map<String, String> titulos = new HashMap<String, String>();
+
+					final Map<String, String> titulos = new HashMap<String, String>();
 					String nombre;
 					TraduccionTaxa tradTaxa;
-					for (String idioma : idiomas) {
-						
-						tradTaxa = (TraduccionTaxa)tasa.getTraduccion(idioma);
-						nombre = (tradTaxa != null && tradTaxa.getCodificacio() != null) ? tradTaxa.getCodificacio() : "";
-						
+					for (final String idioma : idiomas) {
+
+						tradTaxa = (TraduccionTaxa) tasa.getTraduccion(idioma);
+						nombre = (tradTaxa != null && tradTaxa.getCodificacio() != null) ? tradTaxa.getCodificacio()
+								: "";
+
 						titulos.put(idioma, nombre);
-						
+
 					}
-					
-					Map<String,Object> map = new HashMap<String, Object>();
+
+					final Map<String, Object> map = new HashMap<String, Object>();
 					map.put("id", tasa.getId());
 					map.put("nom", titulos);
 					map.put("moment", tramite.getFase());
-					
+
 					listaTasasDTO.add(map);
 				}
 			}
 		}
-		
+
 		return listaTasasDTO;
 	}
-	
-	
-	
+
 	@RequestMapping(value = "/guardarTramit.do", method = POST)
-	public @ResponseBody ResponseEntity<String> guardar(HttpSession session, HttpServletRequest request) {
-		
-		HttpHeaders responseHeaders = new HttpHeaders();
+	public @ResponseBody ResponseEntity<String> guardar(final HttpSession session, final HttpServletRequest request) {
+
+		final HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", "text/html; charset=UTF-8");
 
 		String error = null;
 		IdNomDTO result = null;
 		Tramite tramite = null;
-		Long idProcedimiento = new Long( request.getParameter("id_procediment_tramit") );
-		
+		final Long idProcedimiento = new Long(request.getParameter("id_procediment_tramit"));
+
 		try {
-			
-			ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
-			ProcedimientoLocal procedimiento = procedimientoDelegate.obtenerProcedimientoNewBack(idProcedimiento);
-			TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
-			
-			String idTramite = request.getParameter("id_tramit_actual"); 
-			boolean edicion = !"".equals(idTramite);
-			
+
+			final ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
+			final ProcedimientoLocal procedimiento = procedimientoDelegate.obtenerProcedimientoNewBack(idProcedimiento);
+			final TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
+
+			final String idTramite = request.getParameter("id_tramit_actual");
+			final boolean edicion = !"".equals(idTramite);
+
 			if (!edicion) {
 				if (!tramiteDelegate.autorizaCrearTramite(idProcedimiento))
 					throw new SecurityException("Avís: no té permis per a crear el tràmit");
-				
+
 				tramite = new Tramite();
 				tramite.setOperativa(Tramite.Operativa.CREA);
 				tramite.setOrden(0L);
-				
+
 			} else {
-				
+
 				tramite = tramiteDelegate.obtenerTramite(new Long(idTramite));
 
-				if (!tramiteDelegate.autorizaModificarTramite( tramite.getId()))				
+				if (!tramiteDelegate.autorizaModificarTramite(tramite.getId()))
 					throw new SecurityException("Avís: no té� permis per a crear el tràmit");
-				
+
 				tramite.setOperativa(Tramite.Operativa.MODIFICA);
-				
+
 			}
-			
-			String version = request.getParameter("item_version_tramit");
-			tramite.setVersio( StringUtils.isNumeric(version)&& !"".equals(version)? Integer.parseInt(version) : 0 );
-			tramite.setUrlExterna( request.getParameter("item_url_tramit")==null?"":request.getParameter("item_url_tramit"));
-			tramite.setIdTraTel( request.getParameter("item_tramite_tramit")==null?"":request.getParameter("item_tramite_tramit"));
-			
-			tramite.setTelematico( request.getParameter("item_check_tramit_telematico") != null && !"".equals(request.getParameter("item_check_tramit_telematico")));
-			tramite.setPresencial( request.getParameter("item_check_tramit_presencial") != null && !"".equals(request.getParameter("item_check_tramit_presencial")));
-			
-			boolean urlTramiteRelleno = !tramite.getUrlExterna().equals("");
-			boolean idTramiteTelleno = !tramite.getIdTraTel().equals("") && !"".equals(version);
-			boolean idTramiteIncoherente = (!tramite.getIdTraTel().equals("") && "".equals(version)) 
-										|| (tramite.getIdTraTel().equals("") && (!"".equals(version) && !"0".equals(version) ));
-			
-			//si es telematico debe estar rellenos url o version+id, pero no ambos.
-			if(tramite.isTelematico()) {
-				//Traramos la posible incoherencia de datos
-				if( urlTramiteRelleno && idTramiteTelleno || //estan los dos completados  
-					!urlTramiteRelleno && !idTramiteTelleno || // ninguno esta completado	
-					idTramiteIncoherente) { //el id y version es incoherente (uno si y el otro no)
-						error = messageSource.getMessage("proc.formulari.error.telematic.sensedades", null, request.getLocale());
-			            result = new IdNomDTO(-2l, error);
-			            return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.ACCEPTED);					
+
+			final String version = request.getParameter("item_version_tramit");
+			tramite.setVersio(StringUtils.isNumeric(version) && !"".equals(version) ? Integer.parseInt(version) : 0);
+			tramite.setUrlExterna(
+					request.getParameter("item_url_tramit") == null ? "" : request.getParameter("item_url_tramit"));
+			tramite.setIdTraTel(request.getParameter("item_tramite_tramit") == null ? ""
+					: request.getParameter("item_tramite_tramit"));
+
+			tramite.setTelematico(request.getParameter("item_check_tramit_telematico") != null
+					&& !"".equals(request.getParameter("item_check_tramit_telematico")));
+			tramite.setPresencial(request.getParameter("item_check_tramit_presencial") != null
+					&& !"".equals(request.getParameter("item_check_tramit_presencial")));
+
+			final boolean urlTramiteRelleno = !tramite.getUrlExterna().equals("");
+			final boolean idTramiteTelleno = !tramite.getIdTraTel().equals("") && !"".equals(version);
+			final boolean idTramiteIncoherente = (!tramite.getIdTraTel().equals("") && "".equals(version))
+					|| (tramite.getIdTraTel().equals("") && (!"".equals(version) && !"0".equals(version)));
+
+			// si es telematico debe estar rellenos url o version+id, pero no ambos.
+			if (tramite.isTelematico()) {
+				// Traramos la posible incoherencia de datos
+				if (urlTramiteRelleno && idTramiteTelleno || // estan los dos completados
+						!urlTramiteRelleno && !idTramiteTelleno || // ninguno esta completado
+						idTramiteIncoherente) { // el id y version es incoherente (uno si y el otro no)
+					error = messageSource.getMessage("proc.formulari.error.telematic.sensedades", null,
+							request.getLocale());
+					result = new IdNomDTO(-2l, error);
+					return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.ACCEPTED);
 				}
-			}else {
+			} else {
 				// si no es telemático vaciamos los campos.
-				tramite.setVersio( 0 );
-				tramite.setUrlExterna( "");
+				tramite.setVersio(0);
+				tramite.setUrlExterna("");
 				tramite.setIdTraTel("");
 			}
-			
-			
-			
+
 			// 1 - Inicialización
 			// 2 - Instrucción
 			// 3 - Finalización
-			int fase = Integer.parseInt(request.getParameter("item_moment_tramit"));
-			boolean isProcedimientoConEstadoPublicacionPublica = DelegateUtil.getProcedimientoDelegate().isProcedimientoConEstadoPublicacionPublica(idProcedimiento);
-			
-			// Si se cambia el estado del trámite de iniciación a otro tipo y el procedimiento
-			// al cual está asociado tiene como estado de publicación público, impedimos esta
+			final int fase = Integer.parseInt(request.getParameter("item_moment_tramit"));
+			final boolean isProcedimientoConEstadoPublicacionPublica = DelegateUtil.getProcedimientoDelegate()
+					.isProcedimientoConEstadoPublicacionPublica(idProcedimiento);
+
+			// Si se cambia el estado del trámite de iniciación a otro tipo y el
+			// procedimiento
+			// al cual está asociado tiene como estado de publicación público, impedimos
+			// esta
 			// edición, ya que en ese estado el procedimiento no puede quedarse sin trámite
 			// de iniciación.
 			if (edicion) {
-				
-				int faseAnterior = tramite.getFase();
-			
-				if (faseAnterior == Tramite.INICIACION && fase != faseAnterior && isProcedimientoConEstadoPublicacionPublica) {
-					
-					error = messageSource.getMessage("error.tramit_inici_no_es_pot_canviar_tipus", null, request.getLocale());
-		            result = new IdNomDTO(-2l, error);
-		            
-		            return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.ACCEPTED);
-					
-				}
-				
-			}
-			
-			// #400, tanto si es publico como si no, 
-			// solo puede haber un tramite de iniciciación
-			if (fase == Tramite.INICIACION && procedimientoDelegate.existeOtroTramiteInicioProcedimiento(idProcedimiento, tramite.getId())) {
-				
-			    error = messageSource.getMessage("error.tramit_inici_ja_existeix", null, request.getLocale());
-	            result = new IdNomDTO(-2l, error);
-	            
-	            return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.ACCEPTED);
-	            
-			} else {
-				
-			    tramite.setFase(fase);
-			    
-			}
-			
 
-			//#4 si el tramite tiene momento=ini, el procedimiento es publico debe tener modelo solicitud obligatoriamente
-			if (edicion && isProcedimientoConEstadoPublicacionPublica && fase == 1 &&
-					(request.getParameter("formularisTramit") == null || request.getParameter("formularisTramit").equals("")) 
-					&& tramite.isPresencial() //#438 solo se pide el modelo si es presencial					
-					) {
-				
+				final int faseAnterior = tramite.getFase();
+
+				if (faseAnterior == Tramite.INICIACION && fase != faseAnterior
+						&& isProcedimientoConEstadoPublicacionPublica) {
+
+					error = messageSource.getMessage("error.tramit_inici_no_es_pot_canviar_tipus", null,
+							request.getLocale());
+					result = new IdNomDTO(-2l, error);
+
+					return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.ACCEPTED);
+
+				}
+
+			}
+
+			// #400, tanto si es publico como si no,
+			// solo puede haber un tramite de iniciciación
+			if (fase == Tramite.INICIACION
+					&& procedimientoDelegate.existeOtroTramiteInicioProcedimiento(idProcedimiento, tramite.getId())) {
+
+				error = messageSource.getMessage("error.tramit_inici_ja_existeix", null, request.getLocale());
+				result = new IdNomDTO(-2l, error);
+
+				return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.ACCEPTED);
+
+			} else {
+
+				tramite.setFase(fase);
+
+			}
+
+			// #4 si el tramite tiene momento=ini, el procedimiento es publico debe tener
+			// modelo solicitud obligatoriamente
+			if (edicion && isProcedimientoConEstadoPublicacionPublica && fase == 1
+					&& (request.getParameter("formularisTramit") == null
+							|| request.getParameter("formularisTramit").equals(""))
+					&& tramite.isPresencial() // #438 solo se pide el modelo si es presencial
+			) {
+
 				error = messageSource.getMessage("error.tramit_inici_sin_model", null, request.getLocale());
-	            result = new IdNomDTO(-3l, error);
-	            
-	            return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.ACCEPTED);
-				
+				result = new IdNomDTO(-3l, error);
+
+				return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.ACCEPTED);
+
 			}
 			// 1 - Pública
 			// 2 - Interna
 			// 3 - Reserva
-			if ( !"".equals(request.getParameter("item_validacio_tramit"))){
-				tramite.setValidacio( new Long(request.getParameter("item_validacio_tramit")) );	
+			if (!"".equals(request.getParameter("item_validacio_tramit"))) {
+				tramite.setValidacio(new Long(request.getParameter("item_validacio_tramit")));
 			}
-			
+
 			// Parsear fechas en request y asignarlas al trámite.
 			procesarFechasTramite(request, tramite);
 			// Rellenar los campos
 			tramite.setCodiVuds(request.getParameter("item_id_codivuds_tramit"));
 			// Traducciones.
 			tramite.setTraduccionMap(getTraduccionesTramite(request, tramite));
-						
-			Scanner scanner = new Scanner(request.getParameter("tramits_item_organ_id"));
+
+			final Scanner scanner = new Scanner(request.getParameter("tramits_item_organ_id"));
 			if (scanner.hasNextLong()) {
-				UnidadAdministrativa unidadAdministrativa = DelegateUtil.getUADelegate().obtenerUnidadAdministrativa(scanner.nextLong());
+				final UnidadAdministrativa unidadAdministrativa = DelegateUtil.getUADelegate()
+						.obtenerUnidadAdministrativa(scanner.nextLong());
 				tramite.setOrganCompetent(unidadAdministrativa);
 			}
 			scanner.close();
-			
-			tramite.setProcedimiento(procedimiento);
-			String idOrganCompetent = request.getParameter("tramits_item_organ_id");			
-			
-			tramiteDelegate.grabarTramite(tramite, !"".equals(idOrganCompetent) ? new Long(idOrganCompetent) : procedimiento.getUnidadAdministrativa().getId());
-			
-        	if (!edicion) {
-        		request.setAttribute("alert", "confirmacion.alta");
-        		procedimientoDelegate.anyadirTramite(tramite.getId(), idProcedimiento);
-        	} else {
-        		request.setAttribute("alert", "confirmacion.modificacion");
-        		// Guardar tasas.
-            	guardaTasasTramite(request, tramite, tramiteDelegate);
-        		// Guardar documentos y formularios.
-        		guardaDocumentosYFormularios(request, edicion, tramite, tramiteDelegate);
-        	}
 
-        	// TODO amartin: tras la refactorización usando métodos privados como soporte a los públicos,
-        	// veo que esta instrucción ya se ejecuta un par de líneas antes. Desconozco si es 
-        	// código duplicado o algo necesario. ACLARAR.
-        	
-        	//#386 Recuperació col·leccions de tràmits amb elements nuls, esto hace que se actualice el orden del tramite dos veces, y como 
-        	//la lista está definida index column="TRA_ORDEN" deja el hueco del orden anterior vacío
-//        	if (!edicion)
-//        		procedimientoDelegate.anyadirTramite(tramite.getId(), idProcedimiento);
-        	
-        } catch (ValidateVudsException e) {
-        	
-        	String camps = "";
-        	for (String camp: e.getCampsSenseValidar())
-        		camps += "\\n-" + camp;
-        	
-        	error = messageSource.getMessage("error.validacio.tramit" + ".Camps sense validar: " + camps, null, request.getLocale());
-        	result = new IdNomDTO(-2l, error);
-        	log.error(ExceptionUtils.getStackTrace(e));
-        	
-        } catch (ActualizacionVudsException e) {
-        	
-        	try {
-        		
-        		// Ha fallado la actualización pero el trámite ha sido creado correctamente, así que se añade al procedimiento.
-        		ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
-        		procedimientoDelegate.anyadirTramite(tramite.getId(), idProcedimiento);
-        		error = messageSource.getMessage("error.enviament.tramit", null, request.getLocale());
-        		result = new IdNomDTO(-2l, error);
-        		log.error(ExceptionUtils.getStackTrace(e));
-        		request.setAttribute("idSelect", tramite.getId());
-        		
-        	} catch (DelegateException dEx) {
-        		
-        		if (dEx.isSecurityException()) {
-        			error = messageSource.getMessage("error.permisos", null, request.getLocale());
-        			result = new IdNomDTO(-1l, error);
-        		} else {
-        			error = messageSource.getMessage("error.altres", null, request.getLocale());
-        			result = new IdNomDTO(-2l, error);
-        			log.error(ExceptionUtils.getStackTrace(dEx));
-        		}
-        		
-        	}
-        	
-        } catch (DelegateException dEx) {
-        	
-        	if (dEx.isSecurityException()) {
-        		error = messageSource.getMessage("error.permisos", null, request.getLocale());
-        		result = new IdNomDTO(-1l, error);
-        	} else {
-        		error = messageSource.getMessage("error.altres", null, request.getLocale());
-        		result = new IdNomDTO(-2l, error);
-        		log.error(ExceptionUtils.getStackTrace(dEx));
-        	}
-        	
-        }
-		
+			tramite.setProcedimiento(procedimiento);
+			final String idOrganCompetent = request.getParameter("tramits_item_organ_id");
+			if (procedimiento.isComun()
+					&& procedimiento.getUnidadAdministrativa().getId().compareTo(Long.valueOf(idOrganCompetent)) != 0) {
+				error = messageSource.getMessage("error.tramit_comun_distinta_ua", null, request.getLocale());
+				result = new IdNomDTO(-3l, error);
+
+				return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.ACCEPTED);
+			}
+
+			tramiteDelegate.grabarTramite(tramite, !"".equals(idOrganCompetent) ? new Long(idOrganCompetent)
+					: procedimiento.getUnidadAdministrativa().getId());
+
+			if (!edicion) {
+				request.setAttribute("alert", "confirmacion.alta");
+				procedimientoDelegate.anyadirTramite(tramite.getId(), idProcedimiento);
+			} else {
+				request.setAttribute("alert", "confirmacion.modificacion");
+				// Guardar tasas.
+				guardaTasasTramite(request, tramite, tramiteDelegate);
+				// Guardar documentos y formularios.
+				guardaDocumentosYFormularios(request, edicion, tramite, tramiteDelegate);
+			}
+
+			// TODO amartin: tras la refactorización usando métodos privados como soporte a
+			// los públicos,
+			// veo que esta instrucción ya se ejecuta un par de líneas antes. Desconozco si
+			// es
+			// código duplicado o algo necesario. ACLARAR.
+
+			// #386 Recuperació col·leccions de tràmits amb elements nuls, esto hace que se
+			// actualice el orden del tramite dos veces, y como
+			// la lista está definida index column="TRA_ORDEN" deja el hueco del orden
+			// anterior vacío
+			// if (!edicion)
+			// procedimientoDelegate.anyadirTramite(tramite.getId(), idProcedimiento);
+
+		} catch (final ValidateVudsException e) {
+
+			String camps = "";
+			for (final String camp : e.getCampsSenseValidar())
+				camps += "\\n-" + camp;
+
+			error = messageSource.getMessage("error.validacio.tramit" + ".Camps sense validar: " + camps, null,
+					request.getLocale());
+			result = new IdNomDTO(-2l, error);
+			log.error(ExceptionUtils.getStackTrace(e));
+
+		} catch (final ActualizacionVudsException e) {
+
+			try {
+
+				// Ha fallado la actualización pero el trámite ha sido creado correctamente, así
+				// que se añade al procedimiento.
+				final ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
+				procedimientoDelegate.anyadirTramite(tramite.getId(), idProcedimiento);
+				error = messageSource.getMessage("error.enviament.tramit", null, request.getLocale());
+				result = new IdNomDTO(-2l, error);
+				log.error(ExceptionUtils.getStackTrace(e));
+				request.setAttribute("idSelect", tramite.getId());
+
+			} catch (final DelegateException dEx) {
+
+				if (dEx.isSecurityException()) {
+					error = messageSource.getMessage("error.permisos", null, request.getLocale());
+					result = new IdNomDTO(-1l, error);
+				} else {
+					error = messageSource.getMessage("error.altres", null, request.getLocale());
+					result = new IdNomDTO(-2l, error);
+					log.error(ExceptionUtils.getStackTrace(dEx));
+				}
+
+			}
+
+		} catch (final DelegateException dEx) {
+
+			if (dEx.isSecurityException()) {
+				error = messageSource.getMessage("error.permisos", null, request.getLocale());
+				result = new IdNomDTO(-1l, error);
+			} else {
+				error = messageSource.getMessage("error.altres", null, request.getLocale());
+				result = new IdNomDTO(-2l, error);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+			}
+
+		}
+
 		if (result == null) {
 			result = new IdNomDTO();
 			result.setId(tramite.getId());
-			result.setNom( ((TraduccionTramite) tramite.getTraduccion("ca")).getNombre() );        
+			result.setNom(((TraduccionTramite) tramite.getTraduccion("ca")).getNombre());
 		}
-		
+
 		return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
-		
+
 	}
-	
-	private Map<String, Traduccion> getTraduccionesTramite(HttpServletRequest request, Tramite tramite) throws DelegateException
-	{
+
+	private Map<String, Traduccion> getTraduccionesTramite(final HttpServletRequest request, final Tramite tramite)
+			throws DelegateException {
 		TraduccionTramite traduccionTramite;
-		IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
-		List<String> langs = idiomaDelegate.listarLenguajes();
-		
-		Map<String, Traduccion> traducciones = new HashMap<String, Traduccion>(langs.size());
-		for (String lang : langs) {
-			traduccionTramite = (TraduccionTramite)tramite.getTraduccion(lang);
+		final IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
+		final List<String> langs = idiomaDelegate.listarLenguajes();
+
+		final Map<String, Traduccion> traducciones = new HashMap<String, Traduccion>(langs.size());
+		for (final String lang : langs) {
+			traduccionTramite = (TraduccionTramite) tramite.getTraduccion(lang);
 			if (traduccionTramite == null)
 				traduccionTramite = new TraduccionTramite();
-			
+
 			agregaTraduccionTramite(request, lang, traducciones, traduccionTramite);
 		}
-		
+
 		return traducciones;
 	}
-	
-	private void guardaDocumentosYFormularios(HttpServletRequest request, boolean edicion, Tramite tramite, TramiteDelegate tramiteDelegate) throws NumberFormatException, DelegateException
-	{
+
+	private void guardaDocumentosYFormularios(final HttpServletRequest request, final boolean edicion,
+			final Tramite tramite, final TramiteDelegate tramiteDelegate)
+			throws NumberFormatException, DelegateException {
 		// Recuperamos todos los documentos del request
 		String documentosTramite = request.getParameter("documentsTramit");
-		String separador = (!"".equals(documentosTramite))? "," : "";
-		documentosTramite += (!"".equals(request.getParameter("formularisTramit"))? separador + request.getParameter("formularisTramit") :"");
-		separador = (!"".equals(documentosTramite))? "," : "";
-		documentosTramite += (!"".equals(request.getParameter("documentsRequerits"))? separador + request.getParameter("documentsRequerits") :"");
-		
+		String separador = (!"".equals(documentosTramite)) ? "," : "";
+		documentosTramite += (!"".equals(request.getParameter("formularisTramit"))
+				? separador + request.getParameter("formularisTramit")
+				: "");
+		separador = (!"".equals(documentosTramite)) ? "," : "";
+		documentosTramite += (!"".equals(request.getParameter("documentsRequerits"))
+				? separador + request.getParameter("documentsRequerits")
+				: "");
+
 		// Unimos todos los documentos en un solo Set
-		List<DocumentTramit> listaDocumentosOld = new ArrayList<DocumentTramit>();
+		final List<DocumentTramit> listaDocumentosOld = new ArrayList<DocumentTramit>();
 		listaDocumentosOld.addAll(tramite.getDocsInformatius());
 		listaDocumentosOld.addAll(tramite.getFormularios());
 		listaDocumentosOld.addAll(tramite.getDocsRequerits());
-		
+
 		// Comprobamos de que tengamos tramites desde el request
 		if ("".equals(documentosTramite) && listaDocumentosOld.size() > 0) {
-			
+
 			tramiteDelegate.borrarDocumentos(tramite, listaDocumentosOld);
-			
+
 		} else {
-			
-			List<DocumentTramit> documentosNuevos = new ArrayList<DocumentTramit>();
-			String[] codigosDocumentosNuevos = documentosTramite.split(",");
-			List<DocumentTramit> listaDocumentosBorrar = new ArrayList<DocumentTramit>();
+
+			final List<DocumentTramit> documentosNuevos = new ArrayList<DocumentTramit>();
+			final String[] codigosDocumentosNuevos = documentosTramite.split(",");
+			final List<DocumentTramit> listaDocumentosBorrar = new ArrayList<DocumentTramit>();
 			if (edicion) {
-				
-				for (DocumentTramit documentoTramite: listaDocumentosOld) {
-					
+
+				for (final DocumentTramit documentoTramite : listaDocumentosOld) {
+
 					int i = 0;
 					while (i < codigosDocumentosNuevos.length) {
-						if (!"".equals(codigosDocumentosNuevos[i]) && documentoTramite.getId().equals(Long.valueOf(codigosDocumentosNuevos[i]))) {
+						if (!"".equals(codigosDocumentosNuevos[i])
+								&& documentoTramite.getId().equals(Long.valueOf(codigosDocumentosNuevos[i]))) {
 							documentosNuevos.add(documentoTramite);
 							i = codigosDocumentosNuevos.length;
 						}
 						i++;
 					}
-					
+
 					// Eliminar los que se han quitado de la lista.
 					if (!documentosNuevos.contains(documentoTramite)) {
 						tramite.removeDocument(documentoTramite);
 						listaDocumentosBorrar.add(documentoTramite);
 					}
 				}
-				
+
 				if (listaDocumentosBorrar.size() > 0)
 					tramiteDelegate.borrarDocumentos(tramite, listaDocumentosBorrar);
-				
+
 			}
-			
+
 			// Actualizar el orden de la lista de documentos.
-			HashMap<String,String[]> actualizadorDocs = new HashMap<String, String[]>();
-			for (DocumentTramit documentTramit: documentosNuevos) {
-				Long idDoc = documentTramit.getId();
+			final HashMap<String, String[]> actualizadorDocs = new HashMap<String, String[]>();
+			for (final DocumentTramit documentTramit : documentosNuevos) {
+				final Long idDoc = documentTramit.getId();
 				String ordenDocumento = "";
-				
+
 				if (documentTramit.getTipus() == 0)
 					ordenDocumento = request.getParameter("documentsTramit_orden_" + idDoc);
 				else if (documentTramit.getTipus() == 1)
 					ordenDocumento = request.getParameter("formularisTramit_orden_" + idDoc);
 				else
 					ordenDocumento = request.getParameter("documentsRequerits_orden_" + idDoc);
-				
-				String[] orden = { ordenDocumento };
+
+				final String[] orden = { ordenDocumento };
 				actualizadorDocs.put("orden_doc" + idDoc, orden);
 			}
-			
+
 			tramiteDelegate.actualizarOrdenDocs(actualizadorDocs, new Long(request.getParameter("id_tramit_actual")));
-			
+
 		}
-		
+
 	}
 
-	private void guardaTasasTramite(HttpServletRequest request, Tramite tramite, TramiteDelegate tramiteDelegate) throws DelegateException
-	{
-		String tasasTramite = request.getParameter("taxesTramit");        		   
-		Set<Taxa> listaTasasOld = tramite.getTaxes();
-		
+	private void guardaTasasTramite(final HttpServletRequest request, final Tramite tramite,
+			final TramiteDelegate tramiteDelegate) throws DelegateException {
+		final String tasasTramite = request.getParameter("taxesTramit");
+		final Set<Taxa> listaTasasOld = tramite.getTaxes();
+
 		if (!"".equals(tasasTramite)) {
-			        			
-			List<Taxa> listaTasasBorrar = new ArrayList<Taxa>();
-			Set<Taxa> tasasNuevas = new HashSet<Taxa>();
-			String[] codigosTasasNuevas = tasasTramite.split(",");
-			
-			for ( int i = 0; i < codigosTasasNuevas.length; i++ ) {        				
-				for ( Taxa tasa : listaTasasOld ) {
-					if ( !"".equals(codigosTasasNuevas[i]) && tasa.getId().equals(Long.valueOf(codigosTasasNuevas[i])) ) {
-						
-						tasasNuevas.add( tasa );
+
+			final List<Taxa> listaTasasBorrar = new ArrayList<Taxa>();
+			final Set<Taxa> tasasNuevas = new HashSet<Taxa>();
+			final String[] codigosTasasNuevas = tasasTramite.split(",");
+
+			for (int i = 0; i < codigosTasasNuevas.length; i++) {
+				for (final Taxa tasa : listaTasasOld) {
+					if (!"".equals(codigosTasasNuevas[i]) && tasa.getId().equals(Long.valueOf(codigosTasasNuevas[i]))) {
+
+						tasasNuevas.add(tasa);
 						codigosTasasNuevas[i] = null;
-						
+
 						break;
-						
+
 					}
 				}
 			}
-			
-			//Eliminar los que se han quitado de la lista
-			for ( Taxa tasa : listaTasasOld ) {
-				if ( !tasasNuevas.contains(tasa) )
-					listaTasasBorrar.add(tasa);        				
+
+			// Eliminar los que se han quitado de la lista
+			for (final Taxa tasa : listaTasasOld) {
+				if (!tasasNuevas.contains(tasa))
+					listaTasasBorrar.add(tasa);
 			}
-			
-			for ( Taxa tasa : listaTasasBorrar ) { 
+
+			for (final Taxa tasa : listaTasasBorrar) {
 				tramite.removeTaxa(tasa);
 				tramiteDelegate.borrarTaxa(tasa.getId());
 			}
-				
+
 			// Crear los nuevos.
 			if (!"".equals(codigosTasasNuevas)) {
-				for (String codigoTasa : codigosTasasNuevas ) {
-					if ( codigoTasa != null ) {
-						for ( Taxa tasa : listaTasasOld ) {
-							if ( !tasasNuevas.contains(tasa) )
+				for (final String codigoTasa : codigosTasasNuevas) {
+					if (codigoTasa != null) {
+						for (final Taxa tasa : listaTasasOld) {
+							if (!tasasNuevas.contains(tasa))
 								tasasNuevas.add(tasa);
 						}
 					}
 				}
 			}
-			
+
 			// Actualizamos el orden de la lista de tasas.
-			HashMap<String, String[]> actualizadorTasas = new HashMap<String, String[]>();
-			
-			for ( Taxa tasa : tasasNuevas ) {
-				String[] orden = { request.getParameter("taxesTramit_orden_" + tasa.getId()) }; 
+			final HashMap<String, String[]> actualizadorTasas = new HashMap<String, String[]>();
+
+			for (final Taxa tasa : tasasNuevas) {
+				final String[] orden = { request.getParameter("taxesTramit_orden_" + tasa.getId()) };
 				actualizadorTasas.put("orden_taxa" + tasa.getId(), orden);
 			}
-			
+
 			DelegateUtil.getTramiteDelegate().actualizarOrdenTasas(actualizadorTasas, tramite.getId());
 
 		} else {
-			
-			for ( Taxa taxa : listaTasasOld ) {        				
+
+			for (final Taxa taxa : listaTasasOld) {
 				tramite.removeTaxa(taxa);
 				tramiteDelegate.borrarTaxa(taxa.getId());
 			}
-			
+
 		}
-		
+
 	}
 
-	private void procesarFechasTramite(HttpServletRequest request, Tramite tramite)
-	{
-		Date fechaInicio = DateUtils.parseDateSimpleTime(request.getParameter("tramit_item_data_inici"));
-        tramite.setDataInici(fechaInicio);
-        
-        Date fechaCierre= DateUtils.parseDateSimpleTime(request.getParameter("tramit_item_data_tancament"));
-        tramite.setDataTancament(fechaCierre);
-        
-		Date fechaPublicacion = DateUtils.parseDateSimpleTime(request.getParameter("tramit_item_data_publicacio"));
+	private void procesarFechasTramite(final HttpServletRequest request, final Tramite tramite) {
+		final Date fechaInicio = DateUtils.parseDateSimpleTime(request.getParameter("tramit_item_data_inici"));
+		tramite.setDataInici(fechaInicio);
+
+		final Date fechaCierre = DateUtils.parseDateSimpleTime(request.getParameter("tramit_item_data_tancament"));
+		tramite.setDataTancament(fechaCierre);
+
+		final Date fechaPublicacion = DateUtils
+				.parseDateSimpleTime(request.getParameter("tramit_item_data_publicacio"));
 		tramite.setDataPublicacio(fechaPublicacion);
-		
-		Date fechaActualizacion = DateUtils.parseDate(request.getParameter("tramit_item_data_actualitzacio"));
+
+		final Date fechaActualizacion = DateUtils.parseDate(request.getParameter("tramit_item_data_actualitzacio"));
 		tramite.setDataActualitzacio(fechaActualizacion);
-		
-		Date fechaCaducidad = DateUtils.parseDate(request.getParameter("tramit_item_data_caducitat"));
+
+		final Date fechaCaducidad = DateUtils.parseDate(request.getParameter("tramit_item_data_caducitat"));
 		tramite.setDataCaducitat(fechaCaducidad);
-		
-		Date fechaVUDS = DateUtils.parseDate(request.getParameter("tramit_item_data_vuds"));
-		String fechaActualizacionVUDS = (fechaVUDS != null) ? new SimpleDateFormat("dd/MM/yyyy").format(fechaVUDS) : "";			
-		tramite.setDataActualitzacioVuds( fechaActualizacionVUDS );			
+
+		final Date fechaVUDS = DateUtils.parseDate(request.getParameter("tramit_item_data_vuds"));
+		final String fechaActualizacionVUDS = (fechaVUDS != null) ? new SimpleDateFormat("dd/MM/yyyy").format(fechaVUDS)
+				: "";
+		tramite.setDataActualitzacioVuds(fechaActualizacionVUDS);
 	}
 
-	private void agregaTraduccionTramite(HttpServletRequest request, String lang, Map<String, Traduccion> traducciones, TraduccionTramite traduccionTramite)
-	{
-		traduccionTramite.setNombre( RolUtil.limpiaCadena(request.getParameter("item_nom_tramit_" + lang)) );
-		//#351 se cambia descripcion por observaciones
-		//traduccionTramite.setDescripcion( RolUtil.limpiaCadena(request.getParameter("item_descripcio_tramit_" + lang)) );
-		traduccionTramite.setRequisits( RolUtil.limpiaCadena(request.getParameter("item_requisits_tramit_" + lang)) );
-		traduccionTramite.setDocumentacion( RolUtil.limpiaCadena(request.getParameter("item_documentacio_tramit_" + lang)) );				
-		traduccionTramite.setPlazos( RolUtil.limpiaCadena(request.getParameter("item_termini_tramit_" + lang)) );
-		traduccionTramite.setLugar( RolUtil.limpiaCadena(request.getParameter("item_lloc_tramit_" + lang)) );
-		
-		//TODO Este campo no existe en la tabla pero se deja por si se anyade en futuras implementaciones.
-		traduccionTramite.setObservaciones( request.getParameter("item_descripcio_tramit_" + lang) );
-		
+	private void agregaTraduccionTramite(final HttpServletRequest request, final String lang,
+			final Map<String, Traduccion> traducciones, final TraduccionTramite traduccionTramite) {
+		traduccionTramite.setNombre(RolUtil.limpiaCadena(request.getParameter("item_nom_tramit_" + lang)));
+		// #351 se cambia descripcion por observaciones
+		// traduccionTramite.setDescripcion(
+		// RolUtil.limpiaCadena(request.getParameter("item_descripcio_tramit_" + lang))
+		// );
+		traduccionTramite.setRequisits(RolUtil.limpiaCadena(request.getParameter("item_requisits_tramit_" + lang)));
+		traduccionTramite
+				.setDocumentacion(RolUtil.limpiaCadena(request.getParameter("item_documentacio_tramit_" + lang)));
+		traduccionTramite.setPlazos(RolUtil.limpiaCadena(request.getParameter("item_termini_tramit_" + lang)));
+		traduccionTramite.setLugar(RolUtil.limpiaCadena(request.getParameter("item_lloc_tramit_" + lang)));
+
+		// TODO Este campo no existe en la tabla pero se deja por si se anyade en
+		// futuras implementaciones.
+		traduccionTramite.setObservaciones(request.getParameter("item_descripcio_tramit_" + lang));
+
 		traducciones.put(lang, traduccionTramite);
 	}
-	
-	@RequestMapping(value = "/esborrarTramit.do", method = POST)	
-	public @ResponseBody IdNomDTO esborrar(HttpServletRequest request) {
-		
-		IdNomDTO resultatStatus = new IdNomDTO();
-		
-		Long idTramite = new Long(request.getParameter("id"));
-		Long idProcedimiento = new Long(request.getParameter("idProcediment"));
-		
+
+	@RequestMapping(value = "/esborrarTramit.do", method = POST)
+	public @ResponseBody IdNomDTO esborrar(final HttpServletRequest request) {
+
+		final IdNomDTO resultatStatus = new IdNomDTO();
+
+		final Long idTramite = new Long(request.getParameter("id"));
+		final Long idProcedimiento = new Long(request.getParameter("idProcediment"));
+
 		try {
-			
-			ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
-			TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
-			    					
-			//Quita el tramite de la lista
+
+			final ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
+			final TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
+
+			// Quita el tramite de la lista
 			procedimientoDelegate.eliminarTramite(idTramite, idProcedimiento);
-			tramiteDelegate.borrarTramite(idTramite,idProcedimiento);
-			
+			tramiteDelegate.borrarTramite(idTramite, idProcedimiento);
+
 			resultatStatus.setId(1l);
 			resultatStatus.setNom("correcte");
-			
-		} catch (DelegateException dEx) {
-			
+
+		} catch (final DelegateException dEx) {
+
 			if (dEx.isSecurityException()) {
 				resultatStatus.setId(-1l);
 			} else if (dEx.isIllegalStateException()) {
@@ -695,73 +740,75 @@ public class TramiteBackController {
 				resultatStatus.setId(-2l);
 				logException(log, dEx);
 			}
-			
+
 		}
-		
+
 		return resultatStatus;
-		
+
 	}
-	
+
 	@RequestMapping(value = "/traduir.do")
-	public @ResponseBody Map<String, Object> traduir(HttpServletRequest request) {
-		
-		Map<String, Object> resultats = new HashMap<String, Object>();
-		
+	public @ResponseBody Map<String, Object> traduir(final HttpServletRequest request) {
+
+		final Map<String, Object> resultats = new HashMap<String, Object>();
+
 		try {
-			
-			TraduccionTramite traduccioOrigen = getTraduccionOrigen(request);
+
+			final TraduccionTramite traduccioOrigen = getTraduccionOrigen(request);
 			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
-			
-			String idiomaOrigenTraductor = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
-			
+
+			final String idiomaOrigenTraductor = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			final Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
+
 			traduccions = traductor.translate(traduccioOrigen, idiomaOrigenTraductor);
-			
+
 			resultats.put("traduccions", traduccions);
-			
-		} catch (DelegateException dEx) {
-			
+
+		} catch (final DelegateException dEx) {
+
 			logException(log, dEx);
-			
+
 			if (dEx.isSecurityException()) {
 				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
 			} else {
 				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
 			}
-			
-		} catch (NullPointerException npe) {
-			
+
+		} catch (final NullPointerException npe) {
+
 			log.error("tramiteBackController.traduir: El traductor no se encuentra en en contexto.");
 			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
-			
-		} catch (Exception e) {
-			
+
+		} catch (final Exception e) {
+
 			log.error("TramiteBackController.traduir: Error en al traducir tramite: " + e);
 			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
-			
+
 		}
-		
+
 		return resultats;
-		
+
 	}
-	
-	private TraduccionTramite getTraduccionOrigen(HttpServletRequest request) {
-		
-		TraduccionTramite traduccioOrigen = new TraduccionTramite();
-		
+
+	private TraduccionTramite getTraduccionOrigen(final HttpServletRequest request) {
+
+		final TraduccionTramite traduccioOrigen = new TraduccionTramite();
+
 		if (StringUtils.isNotEmpty(request.getParameter("item_nom_tramit_" + IDIOMA_ORIGEN_TRADUCTOR))) {
 			traduccioOrigen.setNombre(request.getParameter("item_nom_tramit_" + IDIOMA_ORIGEN_TRADUCTOR));
 		}
 		if (StringUtils.isNotEmpty(request.getParameter("item_descripcio_tramit_" + IDIOMA_ORIGEN_TRADUCTOR))) {
-			//#351 se cambia descripcion por observaciones
-			//traduccioOrigen.setDescripcion(request.getParameter("item_descripcio_tramit_" + IDIOMA_ORIGEN_TRADUCTOR));
+			// #351 se cambia descripcion por observaciones
+			// traduccioOrigen.setDescripcion(request.getParameter("item_descripcio_tramit_"
+			// + IDIOMA_ORIGEN_TRADUCTOR));
 			traduccioOrigen.setObservaciones(request.getParameter("item_descripcio_tramit_" + IDIOMA_ORIGEN_TRADUCTOR));
 		}
 		if (StringUtils.isNotEmpty(request.getParameter("item_requisits_tramit_" + IDIOMA_ORIGEN_TRADUCTOR))) {
 			traduccioOrigen.setRequisits(request.getParameter("item_requisits_tramit_" + IDIOMA_ORIGEN_TRADUCTOR));
 		}
 		if (StringUtils.isNotEmpty(request.getParameter("item_documentacio_tramit_" + IDIOMA_ORIGEN_TRADUCTOR))) {
-			traduccioOrigen.setDocumentacion(request.getParameter("item_documentacio_tramit_" + IDIOMA_ORIGEN_TRADUCTOR));
+			traduccioOrigen
+					.setDocumentacion(request.getParameter("item_documentacio_tramit_" + IDIOMA_ORIGEN_TRADUCTOR));
 		}
 		if (StringUtils.isNotEmpty(request.getParameter("item_termini_tramit_" + IDIOMA_ORIGEN_TRADUCTOR))) {
 			traduccioOrigen.setPlazos(request.getParameter("item_termini_tramit_" + IDIOMA_ORIGEN_TRADUCTOR));
@@ -769,9 +816,9 @@ public class TramiteBackController {
 		if (StringUtils.isNotEmpty(request.getParameter("item_lloc_tramit_" + IDIOMA_ORIGEN_TRADUCTOR))) {
 			traduccioOrigen.setLugar(request.getParameter("item_lloc_tramit_" + IDIOMA_ORIGEN_TRADUCTOR));
 		}
-		
+
 		return traduccioOrigen;
-		
+
 	}
-	
+
 }

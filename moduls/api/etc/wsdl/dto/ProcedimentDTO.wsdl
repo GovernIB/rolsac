@@ -51,6 +51,7 @@
                         <element name="codigoSIA" nillable="true" type="xsd:string" />
                         <element name="estadoSIA" nillable="true" type="xsd:string" />
                         <element name="fechaSIA" nillable="true" type="xsd:dateTime" />
+                        <element name="comun" type="xsd:boolean" />
                     </sequence>
                 </extension>
             </complexContent>

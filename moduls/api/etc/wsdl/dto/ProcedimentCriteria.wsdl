@@ -28,6 +28,7 @@
                 <extension base="tns2:BasicCriteria">
                     <sequence>
                         <element name="actiu" nillable="true" type="xsd:boolean" />
+                        <element name="comun" nillable="true" type="xsd:boolean" />
                         <element name="agrupacionHechoVital" nillable="true" type="xsd:string" />
                         <element name="agrupacionMateria" nillable="true" type="xsd:string" />
                         <element name="estadoUA" nillable="true" type="xsd:string" />

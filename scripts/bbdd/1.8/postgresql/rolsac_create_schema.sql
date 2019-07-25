@@ -740,6 +740,7 @@ create table RSC_PROCED (
    PRR_IDEXTE int8,
    PRR_URLREM varchar(512),
    PRR_CODADM int8,
+   PRO_COMUN  bool DEFAULT FALSE,
    primary key (PRO_CODI)
 );
 create table RSC_GRPGID (
@@ -1061,6 +1062,7 @@ create table RSC_SERVIC (
    SER_CTELEM bool,
    SER_CPRESE bool,
    SER_CTELEF bool,
+   SER_COMUN  bool DEFAULT FALSE,
    SER_INSTRU int8,
    SER_SERRSP int8,
    primary key (SER_CODI)

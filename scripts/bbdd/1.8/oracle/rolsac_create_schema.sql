@@ -740,6 +740,7 @@ create table RSC_PROCED (
    PRR_IDEXTE number(19,0),
    PRR_URLREM varchar2(512),
    PRR_CODADM number(19,0),
+   PRO_COMUN  number(1,0),
    primary key (PRO_CODI)
 );
 create table RSC_GRPGID (
@@ -1063,6 +1064,7 @@ create table RSC_SERVIC (
    SER_CTELEF number(1,0),
    SER_INSTRU number(19,0),
    SER_SERRSP number(19,0),
+   SER_COMUN number(1,0),
    primary key (SER_CODI)
 );
 create table RSC_PERGES (

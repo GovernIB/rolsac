@@ -1,71 +1,71 @@
 // USUARIS
 
 $(document).ready(function() {
-	
+
 	// Listener para guardado de módulos laterales vía AJAX.
 	jQuery(".lista-simple").click(function() {
-		
+
 		var element = $(this).parent().parent().find("li");
 		var id = $('#item_id').val();
 		var url = $(this).attr('action');
-		
+
 		ListaSimpleGenerica.guardar(element, url, id);
-		
+
 	});
-	
+
 	// Listener para guardado de módulos laterales vía AJAX.
 	jQuery(".lista-simple-uasUsuario").click(function() {
-		
+
 		var element = $(this).parent().parent().find("li");
 		var id = $('#item_id').val();
 		var url = $(this).attr('action');
-		
+
 		ListaSimpleUAsUsuario.guardar(element, url, id);
-		
+
 	});
-	
+
 	jQuery(".modulPerfilsGestor").bind("finalizaPerfilsGestor", function() {
-		
+
 		var elements = $('.modulPerfilsGestor .seleccionats').find('li');
 		var id = $('#item_id').val();
 		var url = $('#btnFinalizar_perfils_gestor').attr('action');
-		
+
 		ListaSimpleGenerica.guardar(elements, url, id);
 		Detall.modificado(false);
-		
+
 	});
 	ListaSimpleGenerica = new ListaSimple();
 	ListaSimpleUAsUsuario = new CListaSimpleUAs();
-	
+
 	// elements
 	opcions_elm = $("#opcions");
 	escriptori_elm = $("#escriptori");
 	escriptori_contingut_elm = $("#escriptori_contingut");
-	
+
 	resultats_elm = $("#resultats");
 	resultats_llistat_elm = resultats_elm.find("div.L");
-	
+
 	multipagina = new Multipagina();
-	
+
 	pagPagina_llistat_elm = resultats_llistat_elm.find("input.pagPagina");
 	ordreTipus_llistat_elm = resultats_llistat_elm.find("input.ordreTipus");
 	ordreCamp_llistat_elm = resultats_llistat_elm.find("input.ordreCamp");
-	
+
 	resultats_cercador_elm = resultats_elm.find("div.C");
 	cercador_elm = $("#cercador_contingut");
-	
+
 	pagPagina_cercador_elm = resultats_cercador_elm.find("input.pagPagina");
 	ordreTipus_cercador_elm = resultats_cercador_elm.find("input.ordreTipus");
 	ordreCamp_cercador_elm = resultats_cercador_elm.find("input.ordreCamp");
-	
+
 	escriptori_detall_elm = $("#escriptori_detall");
 
 	// INICIEM
 	Llistat = new CLlistat();
-	Detall = new CDetall();	
-	
+	Detall = new CDetall();
+
     Detall.iniciar();
-    
+
     // Mostrar detall
 	var itemACarregar = itemAEditar();
 
@@ -91,39 +91,39 @@ var paginacio_marge = 4;
 var itemID_ultim = 0;
 
 function CLlistat() {
-	
+
 	this.extend = ListadoBase;
 	this.extend();
-	
+
 	var that = this;
-	
+
 	this.iniciar = function() {
 		this.carregar({});
 	};
-	
+
 	this.finCargaListado = function(opcions, data){
-		
+
 		resultats_total = parseInt(data.total, 10); // total
-		
+
 		if (resultats_total > 0) {
-			
+
 			// minim per cercador
 			if (resultats_total > numCercadorMinim)
 				opcions_elm.find("li.C").animate({duration: "slow", width: 'show'}, 300);
-			
+
 			txtT = (resultats_total > 1) ? txtLlistaItems : txtLlistaItem;
-			
+
 			ultimaPag = Math.floor(resultats_total / pag_Res) - 1;
-			
+
 			if (resultats_total % pag_Res > 0)
 				ultimaPag++;
 
 			if (pag_Pag > ultimaPag)
 				pag_Pag = ultimaPag;
-			
+
 			resultatInici = ((pag_Pag * pag_Res) + 1);
 			resultatFinal = ((pag_Pag * pag_Res) + pag_Res > resultats_total) ? resultats_total : (pag_Pag * pag_Res) + pag_Res;
-			
+
 			// ordenacio
 			ordre_T = ordre_Tipus;
 			ordre_C = ordre_Camp;
@@ -131,39 +131,39 @@ function CLlistat() {
 			ordre_c2 = (ordre_C == "username") ? " " + ordre_T : "";
 			ordre_c3 = (ordre_C == "perfil") ? " " + ordre_T : "";
 			ordre_c4 = (ordre_C == "email") ? " " + ordre_T : "";
-			
+
 			txt_ordenacio = "";
-			
+
 			if (resultats_total > 1) {
-			
+
 				txt_ordenats = (ordre_T == "ASC") ? txtOrdenats + " <em>" + txtAscendentment + "</em>" : txtOrdenats + " <em>" + txtDescendentment + "</em>";
-				
+
 				if (ordre_C == "username")
 					txt_per = txtUsername;
-				
+
 				else if (ordre_C == "perfil")
 					txt_per = txtPerfil;
-				
+
 				else if (ordre_C == "email")
 					txt_per = txtEmail;
-				
+
 				else
 					txt_per = txtLlistaItem;
-				
+
 				txt_ordenacio += ", " + txt_ordenats + " " + txtPer + " <em>" + txt_per + "</em>";
-				
+
 			}
-			
+
 			codi_totals = "<p class=\"info\">" + txtTrobats + " <strong>" + resultats_total + "</strong> " + txtT.toLowerCase() + ". " + txtMostrem + " " + txtDel + " " + resultatInici + " " + txtAl + " " + resultatFinal + txt_ordenacio + ".</p>";
-			
+
 			codi_cap1 = "<div class=\"th nom" + ordre_c1 + "\" role=\"columnheader\">" + txtNom + "</div>";
 			codi_cap2 = "<div class=\"th username" + ordre_c2 + "\" role=\"columnheader\">" + txtUsername + "</div>";
 			codi_cap3 = "<div class=\"th perfil" + ordre_c3 + "\" role=\"columnheader\">" + txtPerfil + "</div>";
 			codi_cap4 = "<div class=\"th email" + ordre_c4 + "\" role=\"columnheader\">" + txtEmail + "</div>";
-			
+
 			// codi taula
 			codi_taula = "<div class=\"table llistat\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\">";
-			
+
 			// codi cap + cuerpo
 			codi_taula += "<div class=\"thead\">";
 			codi_taula += "<div class=\"tr\" role=\"rowheader\">";
@@ -174,87 +174,87 @@ function CLlistat() {
 
 			// codi cuerpo
 			$(data.nodes).slice(resultatInici - 1, resultatFinal).each(function(i) {
-				
+
 				dada_node = this;
-				
+
 				parClass = (i%2) ? " par": "";
 				caducat_nom_class = " usuari";
-				
+
 				codi_taula += "<div class=\"tr" + parClass + "\" role=\"row\">";
-				
+
 				codi_taula += "<div class=\"td " + caducat_nom_class + "\" role=\"gridcell\">";
 
 				codi_taula += "<input type=\"hidden\" value=\"" + dada_node.id + "\" class=\"id\" />";
 				codi_taula += "<a id=\"usuari_"+dada_node.id+"\" href=\"javascript:;\" class=\"nom\">" + printStringFromNull(dada_node.nombre, txtSinValor) + "</a>";
 				codi_taula += "</div>";
-				
+
 				caducat_class = "";
 				codi_taula += "<div class=\"td username\" role=\"gridcell\">" + printStringFromNull(dada_node.username) + "</div>";
 				codi_taula += "<div class=\"td perfil\" role=\"gridcell\">" + printStringFromNull(dada_node.perfil) + "</div>";
 				codi_taula += "<div class=\"td email\" role=\"gridcell\">" + printStringFromNull(dada_node.email) + "</div>";
-				
+
 				codi_taula += "</div>";
-				
+
 			});
-			
+
 			codi_taula += "</div>";
 			codi_taula += "</div>";
-			
+
 			if ($.browser.opera)
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
-			
-			// Instanciamos el navegador multipágina.					
+
+			// Instanciamos el navegador multipágina.
 			multipagina.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
 				paginaActual: pag_Pag,
 				funcionPagina: "Llistat.cambiaPagina"
-			});					
-			
+			});
+
 			codi_navegacio = multipagina.getHtml();
-			
+
 			// codi final
 			codi_final = codi_totals + codi_taula + codi_navegacio;
-		
+
 		} else {
-			
+
 			// no hi ha items
 			codi_final = "<p class=\"noItems\">" + txtNoHiHaLlistat + ".</p>";
-			
+
 		}
-		
+
 		// animacio
 		dades_elm = resultats_elm.find("div.actiu:first div.dades:first");
 		dades_elm.fadeOut(300, function() {
 			// pintem
 			dades_elm.html(codi_final).fadeIn(300, function() {
-			
+
 				// Asociamos el evento onclick a los elementos de la lista para poder ir a ver su ficha.
 				escriptori_contingut_elm.find("#resultats .llistat .tbody a").unbind("click").bind("click", function() { Llistat.ficha(this); });
-							
+
 				// cercador
 				if (typeof opcions.cercador != "undefined" && opcions.cercador == "si")
 					cercador_elm.find("input, select").removeAttr("disabled");
-				
+
 			});
 		});
-		
+
 	};
-	
+
 	this.carregar = function(opcions) {
 		// opcions: cercador (si, no), ajaxPag (integer), ordreTipus (ASC, DESC), ordreCamp (tipus, carrec, tractament)
 		var modoBuscador = (typeof opcions.cercador != "undefined" && opcions.cercador == "si");
-		var modoListado = !modoBuscador;		
-		
+		var modoListado = !modoBuscador;
+
 		dataVars = "";
-		
+
 		// cercador
 		if (typeof opcions.cercador != "undefined" && opcions.cercador == "si") {
-			
+
 			pagPagina_elm = pagPagina_cercador_elm;
 			ordreTipus_elm = ordreTipus_cercador_elm;
 			ordreCamp_elm = ordreCamp_cercador_elm;
-			
+
 			// cercador
 			dataVars_cercador = "&nom=" + $("#cerca_nom").val();
 			dataVars_cercador += "&username=" + $("#cerca_username").val();
@@ -263,18 +263,18 @@ function CLlistat() {
 			dataVars_cercador += "&observacions=" + $("#cerca_observacions").val();
 			dataVars_cercador += "&idUA=" + $("#cerca_unitat_administrativa_id").val();
 			dataVars_cercador += "&idPerfilGestor=" + $("#cerca_perfilGestor").val();
-			
+
 		} else {
 
 			pagPagina_elm = pagPagina_llistat_elm;
 			ordreTipus_elm = ordreTipus_llistat_elm;
 			ordreCamp_elm = ordreCamp_llistat_elm;
-			
+
 			// cercador
 			dataVars_cercador = "";
-			
+
 		}
-			
+
 		// ordreTipus
 		if (typeof opcions.ordreTipus != "undefined")
 			ordreTipus_elm.val(opcions.ordreTipus);
@@ -286,60 +286,60 @@ function CLlistat() {
 		// paginacio
 		//pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : parseInt(pagPagina_elm.val(),10);
 		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : multipagina.getPaginaActual();
-			
+
 		// ordre
 		ordre_Tipus = ordreTipus_elm.val();
 		ordre_Camp = ordreCamp_elm.val();
-			
+
 		// variables
 		dataVars += "pagPagina=" + pag_Pag + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;
-		
+
 		// ajax
 		if ( ( modoListado && !Llistat.cacheDatosListado ) || modoBuscador ) {
-			
+
 			$.ajax({
 				type: "POST",
 				url: pagLlistat,
 				data: dataVars,
 				dataType: "json",
 				error: function() {
-					
+
 					if (!a_enllas) {
 						// missatge
 						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
 						// error
 						Error.llansar();
 					}
-					
+
 				},
 				success: function(data) {
-					
+
 					Llistat.finCargaListado(opcions, data);
-					if ( modoListado ) {											
+					if ( modoListado ) {
 						Llistat.cacheDatosListado = data;
 					}
-					
+
 				}
-				
+
 			});
-			
+
 		} else {
-			
+
 			Llistat.finCargaListado(opcions, Llistat.cacheDatosListado);
-			
+
 		}
-	
+
 	};
-	
+
 	this._limpia = this.limpia;
-	
+
 	this.limpia = function() {
-		
+
 		that._limpia();
 		jQuery('#cerca_unitat_administrativa_id').val('');
-		
+
 	};
-	
+
 };
 
 // items array
@@ -347,56 +347,60 @@ var Items_arr = new Array();
 
 // detall
 function CDetall() {
-	
+
 	this.extend = DetallBase;
 	this.extend();
 	this.activar = 0;
-	
+
     var that = this;
-    
-	this.iniciar = function() {	
-		moduls_elm = escriptori_detall_elm.find("div.modul"); // moduls		
-		
+
+	this.iniciar = function() {
+		moduls_elm = escriptori_detall_elm.find("div.modul"); // moduls
+
 		jQuery("#item_check_permis_modificacio_normativa").change(function(){
 			jQuery("#item_check_permis_modificacio_normativa").attr("checked", jQuery(this).is(":checked"));
 		});
-		
-		
+
+		jQuery("#item_check_gestion_comunes").change(function(){
+			jQuery("#item_check_gestion_comunes").attr("checked", jQuery(this).is(":checked"));
+		});
+
 	};
-	
+
 	this.nou = function() {
-		
+
 		escriptori_detall_elm.find(".botonera li.btnEliminar").hide();
 		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);
-		
+
 		ModulPerfilsGestor.nuevo();
 		ModulUnitatAdministrativa.nuevo();
 
 		$("#item_id").val("");
 		$("#modulPrincipal :input, #modulPrincipal select").each(limpiarCampo);
 		$("#item_check_permis_modificacio_normativa").val("on");
-		
+		$("#item_check_gestion_comunes").val("off");
+
 		escriptori_contingut_elm.fadeOut(300, function() {
 			escriptori_detall_elm.fadeIn(300, function() {
 				itemID_ultim = this.activar;
 			});
 		});
-		
+
 		this.actualizaEventos();
-		
+
 		this.modificado(false);
-		
+
 		if(gestionNormativasPorDefecto){
 			jQuery("#item_check_permis_modificacio_normativa").prop('checked', true);
 			jQuery("#item_check_permis_modificacio_normativa").change();
 		}
-				
+
 	};
-	
+
 	this.pintar = function(dades) {
-		
+
 		escriptori_detall_elm.find("a.elimina").show().end().find("h2:first").text(txtDetallTitol);
-		
+
 		dada_node = dades;
 
 		$("#item_id").val(dada_node.item_id);
@@ -405,56 +409,63 @@ function CDetall() {
 		$("#item_nom").val(dada_node.item_nom);
 		$("#item_password").val(dada_node.item_password);
 		$("#item_observacions").val(dada_node.item_observacions);
-		
+
 		if (dada_node.item_check_permis_modificacio_normativa != undefined) {
 			jQuery("#item_check_permis_modificacio_normativa").prop('checked', dada_node.item_check_permis_modificacio_normativa);
 			jQuery("#item_check_permis_modificacio_normativa").change();
 		} else {
 			jQuery("#item_check_permis_modificacio_normativa").prop('checked', gestionNormativasPorDefecto);
 		}
-		
+
+		if (dada_node.item_check_gestion_comunes != undefined) {
+			jQuery("#item_check_gestion_comunes").prop('checked', dada_node.item_check_gestion_comunes);
+			jQuery("#item_check_gestion_comunes").change();
+		} else {
+			jQuery("#item_check_gestion_comunes").prop('checked', false);
+		}
+
 		marcarOpcionSelect("item_perfil", dada_node.item_perfil);
 
 		$("#modulLateral li.btnEliminar").show();
-        
+
 		if ($("#carregantDetall").size() > 0) {
-			
+
 			$("#carregantDetall").fadeOut(300, function() {
-				
+
 				$(this).remove();
 
 				Detall.array({id: dada_node.item_id, accio: "guarda", dades: dada_node});
-                escriptori_detall_elm.fadeIn(300);				
+                escriptori_detall_elm.fadeIn(300);
 			});
-			
+
 		} else {
-			
+
 			escriptori_contingut_elm.fadeOut(300, function() {
-				escriptori_detall_elm.fadeIn(300);			
+				escriptori_detall_elm.fadeIn(300);
 			});
-		
-		}	
-		
+
+		}
+
 		this.modificado(false);
-		
+
 	};
-	
+
 	// Redefinir la funcion guarda para agregar la lista de UAs.
 	this._guarda = this.guarda;
-	
+
     this.guarda = function() {
 		$("#llistaUnitatsAdministratives").val(ModulUnitatAdministrativa.listaUnidadesAdministrativas());
 		this._guarda();
 	};
-	
+
 	this.elimina = function() {
 
 		// missatge
 		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
-		
+
 		item_ID = $("#item_id").val();
 		dataVars = "id=" + item_ID;
-				
+
 		// ajax
 		$.ajax({
 			type: "POST",
@@ -465,32 +476,32 @@ function CDetall() {
 				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
 			},
 			success: function(data) {
-				
+
                 Llistat.anulaCache();
-                
+
 				if (data.id > 0) {
-					
+
 					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtEsborrarCorrecte});
 					Detall.array({id: dada_node.item_id, accio: "elimina"});
 					Detall.recarregar();
-					
+
 				} else if (data.id == -1) {
 
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
-					
+
 				} else if (data.id < -1) {
-					
+
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
-					
+
 				}
 			}
 		});
-		
+
 	};
-	
+
 	this.pintarModulos = function(dades) {
 		ModulPerfilsGestor.inicializarPerfilsGestor(dades.perfilsGestor);
 		ModulUnitatAdministrativa.inicializarUnidadesAdministrativas(dades.uas);
 	};
-	
+
 };

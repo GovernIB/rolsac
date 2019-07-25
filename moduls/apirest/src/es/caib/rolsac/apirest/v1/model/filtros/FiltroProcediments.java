@@ -17,16 +17,16 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * FiltroProcedimientos.
- * 
+ *
  * @author Indra
  *
  */
 @XmlRootElement
 @ApiModel(value = "Filtropprocedimientos", description = "Filtro que permite buscar por diferentes campos")
 public class FiltroProcediments {
-	
-	public static final String SAMPLE = 
-			  Constantes.SALTO_LINEA + "{\"codigoUA\":\"0\"," 			  
+
+	public static final String SAMPLE =
+			  Constantes.SALTO_LINEA + "{\"codigoUA\":\"0\","
 			+ Constantes.SALTO_LINEA + "\"codigoUADir3\":\"codigo\","
 			+ Constantes.SALTO_LINEA + "\"buscarEnDescendientesUA\":\"0/1\","
 		    + Constantes.SALTO_LINEA + "\"activo\":\"0/1\", (1=procedimientos publicos y no caducados, 0=procedimientos no publicos o caducados)"
@@ -42,61 +42,62 @@ public class FiltroProcediments {
 			+ Constantes.SALTO_LINEA + "\"fechaPublicacionHasta\":\"DD/MM/YYYY\","
 			+ Constantes.SALTO_LINEA + "\"vigente\":\"0/1\",  (1=procedimientos con tramites de inicio no caducados)"
 			+ Constantes.SALTO_LINEA + "\"telematico\":\"0/1\", (1= procedimientos con trámites telemáticos)"
+			+ Constantes.SALTO_LINEA + "\"comun\":\"0/1\", (1= procedimientos comunes)"
 			+ Constantes.SALTO_LINEA + "\"codigoSia\":\"codigo\","
 			+ Constantes.SALTO_LINEA + "\"estadoSia\":\"A/B\", (A=Alta, B=Baja)"
 			+ Constantes.SALTO_LINEA + "\"fechaActualizacionSia\":\"DD/MM/YYYY\","
 			+ Constantes.SALTO_LINEA + "\"codigoTramiteTelematico\":\"codigo\","
 			+ Constantes.SALTO_LINEA + "\"versionTramiteTelematico\":\"version\""
 		    + "}";
-	
+
 	/** codigoUA. **/
 	@ApiModelProperty(value = "codigoUA", required = false)
 	private Integer codigoUA;
-	
+
 	/** codigoUADir3. **/
 	@ApiModelProperty(value = "codigoUADir3", required = false)
 	private String codigoUADir3;
-	
+
 	/** buscarEnDescendientesUA. **/
 	@ApiModelProperty(value = "buscarEnDescendientesUA", required = false)
-	private Integer buscarEnDescendientesUA; 
-	
+	private Integer buscarEnDescendientesUA;
+
 	/** activo. **/
 	@ApiModelProperty(value = "activo", required = false)
-	private Integer activo; 
-	
+	private Integer activo;
+
 	/** estadoUA. **/
 	@ApiModelProperty(value = "estadoUA- validacion ua", required = false)
-	private Integer estadoUA; 
-	
+	private Integer estadoUA;
+
 	/** codigoAgrupacionHechoVital. **/
 	@ApiModelProperty(value = "codigoAgrupacionHechoVital", required = false)
-	private Integer codigoAgrupacionHechoVital; 
-	
+	private Integer codigoAgrupacionHechoVital;
+
 	/** codigoPublicoObjetivo. **/
 	@ApiModelProperty(value = "codigoPublicoObjetivo", required = false)
-	private Integer codigoPublicoObjetivo; 
-	
+	private Integer codigoPublicoObjetivo;
+
 	/** codigoFamilia. **/
 	@ApiModelProperty(value = "codigoFamilia", required = false)
-	private Integer codigoFamilia; 
-	
+	private Integer codigoFamilia;
+
 	/** codigoAgrupacionMateria. **/
 	@ApiModelProperty(value = "codigoAgrupacionMateria", required = false)
-	private Integer codigoAgrupacionMateria; 
-	
+	private Integer codigoAgrupacionMateria;
+
 	/** codigoMateria. **/
 	@ApiModelProperty(value = "codigoMateria", required = false)
-	private Integer codigoMateria; 
-	
+	private Integer codigoMateria;
+
 	/** textos. **/
 	@ApiModelProperty(value = "textos", required = false)
-	private String textos; 
-	
+	private String textos;
+
 	/** textos. **/
 	@ApiModelProperty(value = "titulo", required = false)
-	private String titulo; 
-		
+	private String titulo;
+
 	/** fechaPublicacionDesde. **/
 	@ApiModelProperty(value = "fechaPublicacionDesde", required = false)
 	private String fechaPublicacionDesde;
@@ -104,130 +105,138 @@ public class FiltroProcediments {
 	/** fechaPublicacionHasta. **/
 	@ApiModelProperty(value = "fechaPublicacionHasta", required = false)
 	private String fechaPublicacionHasta;
-	
+
 	/** vigente. **/
 	@ApiModelProperty(value = "vigente", required = false)
-	private Integer vigente; 
-	
+	private Integer vigente;
+
 	/** telematico. **/
 	@ApiModelProperty(value = "telematico", required = false)
-	private Integer telematico; 
-	
+	private Integer telematico;
+
+	/** comun. **/
+	@ApiModelProperty(value = "comun", required = false)
+	private Integer comun;
+
 	/** codigoSia. **/
 	@ApiModelProperty(value = "codigoSia", required = false)
-	private Integer codigoSia; 
-		
+	private Integer codigoSia;
+
 	/** estadoSia. **/
 	@ApiModelProperty(value = "estadoSia", required = false)
-	private String estadoSia; 
-	
+	private String estadoSia;
+
 	/** fechaActualizacionSia. **/
 	@ApiModelProperty(value = "fechaActualizacionSia", required = false)
 	private String fechaActualizacionSia;
-	
+
 	/** codigoTramiteTelematico. **/
 	@ApiModelProperty(value = "codigoTramiteTelematico", required = false)
 	private String codigoTramiteTelematico;
-	
+
 	/** versionTramiteTelematico. **/
 	@ApiModelProperty(value = "versionTramiteTelematico", required = false)
 	private String versionTramiteTelematico;
-	
-	
-	
-	
+
+
+
+
 	public FiltroGenerico toFiltroGenerico() {
 		FiltroGenerico fg = new FiltroGenerico();
 
 		if(this.codigoUA!= null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_UA, this.codigoUA+"");
 		}
-		
+
 		if(this.codigoUADir3!= null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_UA_DIR3, this.codigoUADir3+"");
 		}
-		
+
 		if(this.buscarEnDescendientesUA!= null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_UA_DESCENDIENTES, this.buscarEnDescendientesUA+"");
 		}
-		
+
 		if(this.activo!= null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_ACTIVO, this.activo+"");
 		}
-		
+
 		if(this.estadoUA!= null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_ESTADO_UA, this.estadoUA+"");
 		}
-		
+
 		if(this.codigoAgrupacionHechoVital!= null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_AGRUPACION_HECHO_VITAL, this.codigoAgrupacionHechoVital+"");
 		}
-		
+
 		if(this.codigoPublicoObjetivo!= null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_PUBLICO, this.codigoPublicoObjetivo+"");
 		}
-		
+
 		if(this.codigoFamilia!= null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_FAMILIA, this.codigoFamilia+"");
 		}
-		
+
 		if(this.codigoAgrupacionMateria!= null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_AGRUPACION_MATERIA, this.codigoAgrupacionMateria+"");
 		}
-		
+
 		if(this.codigoMateria!= null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_MATERIA, this.codigoMateria+"");
 		}
-		
+
 		if(this.textos!= null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_TEXTOS, this.textos+"");
 		}
-		
+
 		if(this.titulo!= null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_TITULO, this.titulo+"");
 		}
-		
+
 		if(this.fechaPublicacionDesde!= null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_FECHA_PUBLICACION_DESDE, this.fechaPublicacionDesde+"");
 		}
-		
+
 		if(this.fechaPublicacionHasta!= null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_FECHA_PUBLICACION_HASTA, this.fechaPublicacionHasta+"");
 		}
-		
+
 		if(this.vigente!= null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_VIGENTE, this.vigente+"");
 		}
-		
+
 		if(this.telematico!= null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_TELEMATICO, this.telematico+"");
 		}
-		
+
+		if(this.comun != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_COMUN, this.comun+"");
+		}
+
 		if(this.codigoSia!= null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_CODIGO_SIA, this.codigoSia+"");
 		}
-		
+
 		if(this.estadoSia!= null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_ESTADO_SIA, this.estadoSia+"");
 		}
-		
+
 		if(this.fechaActualizacionSia!= null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_FECHA_ACTUALIZACION_SIA, this.fechaActualizacionSia+"");
 		}
-		
+
 		if(this.codigoTramiteTelematico!= null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_TRAMITE_TELEMATICO, this.codigoTramiteTelematico+"");
 		}
-		
+
 		if(this.versionTramiteTelematico!= null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_VERSION_TRAMITE_TELEMATICO, this.versionTramiteTelematico+"");
 		}
-		
+
 		return fg;
 	}
-	
-	
-	
+
+
+
 	public static FiltroProcediments valueOf(final String json) {
 		final ObjectMapper objectMapper = new ObjectMapper();
 		final TypeReference<FiltroProcediments> typeRef = new TypeReference<FiltroProcediments>() {
@@ -242,7 +251,7 @@ public class FiltroProcediments {
 		return obj;
 	}
 
-	
+
 	public String toJson() {
 		try {
 			final ObjectMapper objectMapper = new ObjectMapper();
@@ -631,5 +640,23 @@ public class FiltroProcediments {
 	}
 
 
-	
+
+	/**
+	 * @return the comun
+	 */
+	public Integer getComun() {
+		return comun;
+	}
+
+
+
+	/**
+	 * @param comun the comun to set
+	 */
+	public void setComun(Integer comun) {
+		this.comun = comun;
+	}
+
+
+
 }

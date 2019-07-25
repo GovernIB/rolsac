@@ -23,9 +23,9 @@
         <property name="validacion" column="PRO_VALIDA"/>
         <property name="tramite" column="PRO_TRAMIT"/>
         <property name="version" column="PRO_VERSIO"/>
-        <!-- Nuevo campo INFO para informadores -->  
+        <!-- Nuevo campo INFO para informadores -->
         <!-- #351cambio info por dir electronica -->
-        <property name="dirElectronica" column="PRO_INFO" length="4000"/>      
+        <property name="dirElectronica" column="PRO_INFO" length="4000"/>
         <property name="url" length="1024" column="PRO_URLEXT"/>
         <property name="orden" length="1024" column="PRO_ORDCON"/>
         <property name="orden2" length="1024" column="PRO_ORDDIR"/>
@@ -37,13 +37,14 @@
         <property name="codigoSIA" length="12" column="PRO_CODSIA"/>
         <property name="estadoSIA" length="1" column="PRO_ESTSIA"/>
         <property name="fechaSIA"  column="PRO_FECSIA"/>
+        <property name="comun" 		column="PRO_COMUN" />
         <many-to-one name="organResolutori" cascade="none" column="PRO_CODUNA_RESOL" foreign-key="RSC_PRO_CODUNA_RESOL_FK"/>
         <many-to-one name="unidadAdministrativa" column="PRO_CODUNA" foreign-key="RSC_PROUNA_FK"/>
         <many-to-one name="familia" column="PRO_CODFAM" foreign-key="RSC_PROFAM_FK"/>
 	    <many-to-one  class="org.ibit.rol.sac.model.Iniciacion" name="iniciacion"  column="PRO_CODINI" foreign-key="RSC_PROINI_FK"/>
         <many-to-one name="servicioResponsable" column="PRO_CODUNA_SERV" foreign-key="RSC_PRO_CODUNA_SERV_FK"/>
         <many-to-one class="org.ibit.rol.sac.model.SilencioAdm" name="silencio" column="PRO_CODSIL" foreign-key="RSC_PRO_CODSIL_FK"/>
-        
+
         <set name="normativas" cascade="none" table="RSC_PRONOR" lazy="true">
             <cache usage="read-write"/>
             <key column="PRN_CODPRO" foreign-key="RSC_PRNPRO_FK"/>
@@ -62,7 +63,7 @@
             	amartin 2014/04/25: se ha desactivado esta caché al dar problemas con la ordenación de los documentos asociados al procedimiento
             	(al reordenar documentos los valores en la BD cambiaban correctamente pero Hibernate seguía ofreciendo valores cacheados).
             	En Ficha.hbm.xml hay un list de documentos con esta misma configuración, con la caché activada, y no da problemas.
-            	
+
             	Desconozco el motivo.
              -->
             <!-- <cache usage="read-write"/> -->
@@ -76,13 +77,13 @@
             <key column="PRM_CODPRO" foreign-key="RSC_PRMPRO_FK"/>
             <many-to-many class="org.ibit.rol.sac.model.Materia" column="PRM_CODMAT"  foreign-key="RSC_PRMMAT_FK"/>
         </set>
-        
+
         <set name="publicosObjetivo" cascade="none" lazy="true" table="RSC_POBPRO">
             <cache usage="read-write"/>
             <key column="PPR_CODPRO" foreign-key="RSC_PPRPRO_FK"/>
             <many-to-many class="org.ibit.rol.sac.model.PublicoObjetivo" column="PPR_CODPOB"  foreign-key="RSC_PPRPOB_FK"/>
         </set>
-        
+
         <set name="hechosVitalesProcedimientos" cascade="all" lazy="true" inverse="true">
             <cache usage="read-write"/>
             <key column="HVP_CODPRO" foreign-key="RSC_HVPPRO_FK"/>
