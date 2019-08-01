@@ -1093,7 +1093,6 @@
 				                                    <c:if test="${lang != 'es'}">
 				                                    	<input id="item_organ_comun" name="item_organ_comun" value="<c:out value="${comunesUA}"/>" type="text" class="nou" readonly="readonly" />
                                                 	</c:if>
-
                                                     <input id="item_organ" name="item_organ" type="text" class="nou" readonly="readonly" />
                                                 </div>
                                                 <div id="item_organ_botones" class="botones">
@@ -2028,7 +2027,6 @@
 		                                    <div class="control">
 		                                        <input id="tramits_item_organ_id" name="tramits_item_organ_id" type="hidden" />
 		                                        <div class="campo">
-
 		                                            <c:if test="${lang == 'es'}">
 				                                   		<input id='tramits_item_organ_<c:out value="${lang}"/>_comun' name='tramits_item_organ_<c:out value="${lang}"/>' type="text" class="nou" readonly="readonly" value="<c:out value="${comunesUAESP}"/>" />
                                                 	</c:if>
