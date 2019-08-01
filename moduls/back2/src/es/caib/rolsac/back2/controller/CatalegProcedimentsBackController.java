@@ -152,6 +152,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			model.put("comunes", false);
 		} else {
 			model.put("comunes", true);
+			// Ponemos los dos idiomas
 			model.put("comunesUA", RolsacPropertiesUtil.getUAComun(true));
 			model.put("comunesUAESP", RolsacPropertiesUtil.getUAComun(false));
 		}
