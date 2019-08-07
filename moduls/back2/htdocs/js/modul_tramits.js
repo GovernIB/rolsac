@@ -180,9 +180,11 @@ function CModulTramit() {
         	listaTramites[i].nom.ca = "<a href='#' class='tramit_id'>" + listaTramites[i].nom.ca + "</a>";        
 		}
 
+        //vaciamos la lista
+        modul_tramits_elm.find(".listaOrdenable").empty();
         
-        if (typeof listaTramites != 'undefined' && listaTramites != null) {
-            modul_tramits_elm.find(".listaOrdenable").empty();      
+        //rellenamos la lista con los trámites que nos llegan
+        if (typeof listaTramites != 'undefined' && listaTramites != null) {              
             this.agregaItems(listaTramites, true);
         }               
         
@@ -611,8 +613,8 @@ function CEscriptoriTramit() {
                 //$("#item_observacions_tramit_" + idioma).val(printStringFromNull(datos[idioma]["observaciones"]));                              
             }
                             
-            if (datos[idiomaUA] != null) 
-                $("#tramits_item_organ_" + idioma).val(printStringFromNull(datos[idiomaUA]));
+           // if (datos[idiomaUA] != null) //Quitamos la condicion porque si es nulo debe sobreescribir lo anterior 
+           $("#tramits_item_organ_" + idioma).val(printStringFromNull(datos[idiomaUA]));
             
         }       
         // Fin bloque de pestañas de idiomas
