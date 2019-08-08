@@ -389,6 +389,9 @@ public class CatalegServeisBackController extends PantallaBaseController {
 		retorno.append("DATA_ACTUALITZACIO;");
 		retorno.append("COD_USUARI_DARRERA_ACT;");
 		retorno.append("NOM_USUARI_DARRERA_ACT;");
+		retorno.append("PRESENCIAL;");
+		retorno.append("TELEMATICO;");
+		retorno.append("TELEFONICO;");
 		retorno.append("\n");
 		
 		final ServicioDelegate servicioDelegate = DelegateUtil.getServicioDelegate();
@@ -528,6 +531,12 @@ public class CatalegServeisBackController extends PantallaBaseController {
 				}
 			}
 			
+			String si = "SI";
+			String no = "NO";			
+			String  canalPresencial = servicio.isPresencial()?si:no;
+			String  canalTelematico = servicio.isTelematico()?si:no;
+			String  canalTelefonico = servicio.isTelefonico()?si:no;
+			
 			retorno.append(CSVUtil.limpiar(servicio.getId())); 		//CODI_SERVEI,
 			retorno.append(CSVUtil.limpiar(servicio.getCodigoSIA()));  //CODI_SIA
 			retorno.append(CSVUtil.limpiar(estadoSIA));	//ESTAT_SIA
@@ -545,6 +554,9 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			retorno.append(CSVUtil.limpiar(servicio.getFechaActualizacion())); //DATA_ACTUALITZACIO
 			retorno.append(CSVUtil.limpiar(codUsuario));					//COD_USUARI_DARRERA_ACT
 			retorno.append(CSVUtil.limpiar(nomUsuario));					//NOM_USUARI_DARRERA_ACT
+			retorno.append(CSVUtil.limpiar(canalPresencial));					//NOM_USUARI_DARRERA_ACT
+			retorno.append(CSVUtil.limpiar(canalTelematico));					//NOM_USUARI_DARRERA_ACT
+			retorno.append(CSVUtil.limpiar(canalTelefonico));					//NOM_USUARI_DARRERA_ACT
 			retorno.append(CSVUtil.CARACTER_SALTOLINEA_CSV);
 		}
 		

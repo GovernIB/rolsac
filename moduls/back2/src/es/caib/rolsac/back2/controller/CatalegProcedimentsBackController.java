@@ -400,7 +400,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			if (procedimiento.getTramites() != null) {
 				for(Tramite tramite : procedimiento.getTramites()) {
 					if (tramite == null) { continue;} numTramits ++;					
-					if (tramite.getIdTraTel() != null && !tramite.getIdTraTel().isEmpty()) {
+					if (tramite.isTelematico()) {
 						numTramitsTelematics ++;
 					}
 				}
