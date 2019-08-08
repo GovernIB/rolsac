@@ -436,6 +436,9 @@ public class CatalegServeisBackController extends PantallaBaseController {
 		if (tienePermisoComun) {
 			retorno.append("COMU;");
 		}
+		retorno.append("PRESENCIAL;");
+		retorno.append("TELEMATICO;");
+		retorno.append("TELEFONICO;");
 		retorno.append("\n");
 
 		final ServicioDelegate servicioDelegate = DelegateUtil.getServicioDelegate();
@@ -581,30 +584,36 @@ public class CatalegServeisBackController extends PantallaBaseController {
 					estadoSIA = "Reactivació";
 				}
 			}
-
-			retorno.append(CSVUtil.limpiar(servicio.getId())); // CODI_SERVEI,
-			retorno.append(CSVUtil.limpiar(servicio.getCodigoSIA())); // CODI_SIA
-			retorno.append(CSVUtil.limpiar(estadoSIA)); // ESTAT_SIA
-			retorno.append(CSVUtil.limpiar(servicio.getFechaSIA())); // DATA_ACTUALITZACIO_SIA
-			retorno.append(CSVUtil.limpiar(estado)); // ESTAT_SERVEI DECODE(PRO_VALIDA,1,'PUBLIC',2,'INTERN','RESERVA')
-			retorno.append(CSVUtil.limpiar(servicio.isVisible())); // VISIBILITAT_SERVEI (ESTAT+DATA_PUB+DATA_CAD +
-																	// UA_VISIBLE)
-			retorno.append(CSVUtil.limpiar(nomCa)); // NOM_SERVEI_CA,
-			retorno.append(CSVUtil.limpiar(nomEs)); // NOM_SERVEI_ES,
-			retorno.append(CSVUtil.limpiar(objecte)); // OBJECTE_CA
-			retorno.append(CSVUtil.limpiar(publicoObjectivo)); // PUBLIC_OBJECTIU (ID_PUBLIC OBJECTIU SEPARATS PER
-																// COMES)
-			retorno.append(CSVUtil.limpiar(CSVUtil.getNombreUA(servicio.getServicioResponsable()))); // NOM
-																										// UA_RESPONSABLE
-			retorno.append(CSVUtil.limpiar(CSVUtil.getNombreUA(servicio.getOrganoInstructor()))); // NOM UA_INSTRUCTOR
-			retorno.append(CSVUtil.limpiar(servicio.getNombreResponsable()));// NOM_RESPONSABLE
-			retorno.append(CSVUtil.limpiar(num_nombres)); // NUM NORMES
-			retorno.append(CSVUtil.limpiar(servicio.getFechaActualizacion())); // DATA_ACTUALITZACIO
-			retorno.append(CSVUtil.limpiar(codUsuario)); // COD_USUARI_DARRERA_ACT
-			retorno.append(CSVUtil.limpiar(nomUsuario)); // NOM_USUARI_DARRERA_ACT
+			
+			String si = "SI";
+			String no = "NO";			
+			String  canalPresencial = servicio.isPresencial()?si:no;
+			String  canalTelematico = servicio.isTelematico()?si:no;
+			String  canalTelefonico = servicio.isTelefonico()?si:no;
+			
+			retorno.append(CSVUtil.limpiar(servicio.getId())); 		//CODI_SERVEI,
+			retorno.append(CSVUtil.limpiar(servicio.getCodigoSIA()));  //CODI_SIA
+			retorno.append(CSVUtil.limpiar(estadoSIA));	//ESTAT_SIA
+			retorno.append(CSVUtil.limpiar(servicio.getFechaSIA()));	//DATA_ACTUALITZACIO_SIA
+			retorno.append(CSVUtil.limpiar(estado)); 						//ESTAT_SERVEI DECODE(PRO_VALIDA,1,'PUBLIC',2,'INTERN','RESERVA')
+			retorno.append(CSVUtil.limpiar(servicio.isVisible()));		//VISIBILITAT_SERVEI (ESTAT+DATA_PUB+DATA_CAD + UA_VISIBLE)
+			retorno.append(CSVUtil.limpiar(nomCa)); 						//NOM_SERVEI_CA,
+			retorno.append(CSVUtil.limpiar(nomEs));							//NOM_SERVEI_ES,
+			retorno.append(CSVUtil.limpiar(objecte));						//OBJECTE_CA
+			retorno.append(CSVUtil.limpiar(publicoObjectivo));				//PUBLIC_OBJECTIU (ID_PUBLIC OBJECTIU SEPARATS PER COMES)
+			retorno.append(CSVUtil.limpiar(CSVUtil.getNombreUA(servicio.getServicioResponsable())));		//NOM UA_RESPONSABLE
+			retorno.append(CSVUtil.limpiar(CSVUtil.getNombreUA(servicio.getOrganoInstructor())));		//NOM UA_INSTRUCTOR
+			retorno.append(CSVUtil.limpiar(servicio.getNombreResponsable()));//NOM_RESPONSABLE
+			retorno.append(CSVUtil.limpiar(num_nombres));					//NUM NORMES
+			retorno.append(CSVUtil.limpiar(servicio.getFechaActualizacion())); //DATA_ACTUALITZACIO
+			retorno.append(CSVUtil.limpiar(codUsuario));					//COD_USUARI_DARRERA_ACT
+			retorno.append(CSVUtil.limpiar(nomUsuario));					//NOM_USUARI_DARRERA_ACT
 			if (tienePermisoComun) {
 				retorno.append(CSVUtil.limpiar(servicio.isComun())); // NOM_USUARI_DARRERA_ACT
-			}
+			}			
+			retorno.append(CSVUtil.limpiar(canalPresencial));					//NOM_USUARI_DARRERA_ACT
+			retorno.append(CSVUtil.limpiar(canalTelematico));					//NOM_USUARI_DARRERA_ACT
+			retorno.append(CSVUtil.limpiar(canalTelefonico));					//NOM_USUARI_DARRERA_ACT
 			retorno.append(CSVUtil.CARACTER_SALTOLINEA_CSV);
 		}
 
