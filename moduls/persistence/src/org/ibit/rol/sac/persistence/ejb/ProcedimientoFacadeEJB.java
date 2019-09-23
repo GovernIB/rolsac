@@ -181,12 +181,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				fechaActualizacionBD = procedimientoBD.getFechaActualizacion();
 
 			}
-
-			if (procedimiento.isComun() && procedimiento.getId() != null) {
-				actualizarTramiteComun(session, procedimiento.getId(), procedimiento.getOrganResolutori());
-
-			}
-
+			
 			/*
 			 * Se alimenta la fecha de actualización de forma automática si no se ha
 			 * introducido dato
@@ -214,6 +209,11 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 			}
 
+			if (procedimiento.isComun() && procedimiento.getId() != null) {
+				actualizarTramiteComun(session, procedimiento.getId(), procedimiento.getOrganResolutori());
+
+			}
+			
 			Hibernate.initialize(procedimiento.getTramites());
 			Hibernate.initialize(procedimiento.getMaterias());
 			Hibernate.initialize(procedimiento.getHechosVitalesProcedimientos());
