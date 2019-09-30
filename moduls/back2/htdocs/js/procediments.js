@@ -895,7 +895,7 @@ function CDetall() {
 		} else {
 			estilo_check = "none";
 		}
-		$("#modul_continguts_idiomas").find( "#divComun" ).each(function() {
+		$("#modul_continguts_idiomas").find( "#divComun2" ).each(function() {
 			this.style.display 	= estilo_check;
 		});
 
@@ -913,6 +913,9 @@ function CDetall() {
 			jQuery("#formGuardar").find("#item_comun").attr("checked", jQuery(this).is(":checked"));
 			item_comun_change(jQuery(this).is(":checked"));
 		});
+		if (comunActivo == 'false') {
+			jQuery("#divComun2").hide();
+		}
 
 		$("#modulPrincipal :input").each(limpiarCampo);
 
@@ -963,7 +966,7 @@ function CDetall() {
 		} else {
 			estilo_check = "none";
 		}
-		$("#modul_continguts_idiomas").find( "#divComun" ).each(function() {
+		$("#modul_continguts_idiomas").find( "#divComun2" ).each(function() {
 			this.style.display 	= estilo_check;
 		});
 

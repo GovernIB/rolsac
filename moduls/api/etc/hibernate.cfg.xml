@@ -26,8 +26,8 @@
         <mapping resource="org/ibit/rol/sac/model/Auditoria.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/Boletin.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/Comentario.hbm.xml" />
-		<mapping resource="org/ibit/rol/sac/model/CatalegDocuments.hbm.xml" />        
-		<mapping resource="org/ibit/rol/sac/model/ExcepcioDocumentacio.hbm.xml" />		
+		<mapping resource="org/ibit/rol/sac/model/CatalegDocuments.hbm.xml" />
+		<mapping resource="org/ibit/rol/sac/model/ExcepcioDocumentacio.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/Documento.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/DocumentoResumen.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/DocumentTramit.hbm.xml" />
@@ -70,7 +70,7 @@
         <mapping resource="org/ibit/rol/sac/model/GrupoSuscripcion.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/TipoSuscripcion.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/Suscriptor.hbm.xml" />
-        <mapping resource="org/ibit/rol/sac/model/SuscriptorClave.hbm.xml" />        
+        <mapping resource="org/ibit/rol/sac/model/SuscriptorClave.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/EnvioSuscripcion.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/ActivacionSuscripcion.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/GrupoGenericoSuscripcion.hbm.xml" />
@@ -87,7 +87,8 @@
    		<mapping resource="org/ibit/rol/sac/model/Servicio.hbm.xml" />
    		<mapping resource="org/ibit/rol/sac/model/DocumentoServicio.hbm.xml" />
    		<mapping resource="org/ibit/rol/sac/model/HechoVitalServicio.hbm.xml" />
-        
+        <mapping resource="org/ibit/rol/sac/model/Plataforma.hbm.xml" />
+
     </session-factory>
 
 </hibernate-configuration>

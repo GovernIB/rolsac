@@ -38,14 +38,15 @@
 	xmlns:tns31="http://tipusAfectacio.v2.api.rolsac.caib.es"
 	xmlns:tns32="http://catalegDocuments.v2.api.rolsac.caib.es"
 	xmlns:tns33="http://excepcioDocumentacio.v2.api.rolsac.caib.es"
-	xmlns:tns50="http://iniciacio.v2.api.rolsac.caib.es" 
-	xmlns:tns51="http://idioma.v2.api.rolsac.caib.es" 
+	xmlns:tns50="http://iniciacio.v2.api.rolsac.caib.es"
+	xmlns:tns51="http://idioma.v2.api.rolsac.caib.es"
 	xmlns:tns52="http://silencio.v2.api.rolsac.caib.es"
 	xmlns:tns53="http://documentoNormativa.v2.api.rolsac.caib.es"
 	xmlns:tns54="http://servicio.v2.api.rolsac.caib.es"
 	xmlns:tns55="http://documentoServicio.v2.api.rolsac.caib.es"
+	xmlns:tns56="http://plataforma.v2.api.rolsac.caib.es"
 	targetNamespace="http://ws.rolsac.v2.api.rolsac.caib.es">
-	
+
 	<wsdl:import namespace="urn:tns1" location="dto/UnitatAdministrativaCriteria.wsdl"/>
 	<wsdl:import namespace="urn:tns1" location="dto/UnitatAdministrativaDTO.wsdl"/>
 	<wsdl:import namespace="urn:tns2" location="dto/BasicCriteria.wsdl"/>
@@ -123,8 +124,9 @@
 	<wsdl:import namespace="urn:tns54" location="dto/ServicioDTO.wsdl"/>
 	<wsdl:import namespace="urn:tns55" location="dto/DocumentoServicioCriteria.wsdl"/>
 	<wsdl:import namespace="urn:tns55" location="dto/DocumentoServicioDTO.wsdl"/>
-	
-	
+	<wsdl:import namespace="urn:tns56" location="dto/PlataformaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns56" location="dto/PlataformaDTO.wsdl"/>
+
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://ws.rolsac.v2.api.rolsac.caib.es">
@@ -137,7 +139,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<!-- Definim aquests tipus per a evitar conflictes amb DTO i ArrayStoreException -->
 			<complexType name="ArrayOfProcedimentDTO">
 				<complexContent>
@@ -146,7 +148,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<!-- Definim aquests tipus per a evitar conflictes amb DTO i ArrayStoreException -->
 			<complexType name="ArrayOfServicioDTO">
 				<complexContent>
@@ -155,7 +157,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfIniciacioDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -163,7 +165,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfIdiomaDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -171,7 +173,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfMateriaDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -179,7 +181,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfTramitDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -187,7 +189,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfUnitatAdministrativaDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -195,7 +197,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfFetVitalDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -203,7 +205,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfFitxaDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -211,7 +213,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfNormativaDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -219,7 +221,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfPersonalDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -227,7 +229,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfDocumentTramitDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -235,7 +237,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfDocumentoServicioDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -243,7 +245,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfDocumentoNormativaDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -251,7 +253,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfUsuariDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -259,7 +261,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfTaxaDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -267,7 +269,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfAgrupacioFetVitalDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -275,7 +277,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfAgrupacioMateriaDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -283,7 +285,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfButlletiDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -291,7 +293,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfDocumentDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -299,7 +301,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfEdificiDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -307,7 +309,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfEnllacDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -315,7 +317,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfEspaiTerritorialDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -323,7 +325,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfPublicObjetiuDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -331,7 +333,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfTipusAfectacioDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -339,7 +341,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfFamiliaDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -347,7 +349,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfFitxaUADTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -355,7 +357,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfFormulariDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -363,7 +365,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfIconaFamiliaDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -371,7 +373,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfIconaMateriaDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -379,7 +381,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfMateriaAgrupacioDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -387,7 +389,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfPerfilDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -395,7 +397,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfSeccioDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -403,7 +405,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfUnitatMateriaDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -411,7 +413,7 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfTipusDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -419,15 +421,15 @@
 					</restriction>
 				</complexContent>
 			</complexType>
-			
+
 			<complexType name="ArrayOfCatalegDocumentsDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
 						<attribute ref="soapenc:arrayType" wsdl:arrayType="tns32:CatalegDocumentsDTO[]" />
 					</restriction>
 				</complexContent>
-			</complexType>			
-			
+			</complexType>
+
 			<complexType name="ArrayOfExcepcioDocumentacioDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -436,7 +438,7 @@
 				</complexContent>
 			</complexType>
 		</schema>
-		
+
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://xml.apache.org/xml-soap">
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
@@ -446,9 +448,9 @@
 				</sequence>
 			</complexType>
 		</schema>
-		
-	</wsdl:types>	
-	
+
+	</wsdl:types>
+
 	<wsdl:message name="llistarUsuarisResponse">
 		<wsdl:part name="llistarUsuarisReturn" type="impl:ArrayOfUsuariDTO" />
 	</wsdl:message>
@@ -734,6 +736,9 @@
 	<wsdl:message name="obtenirFetVitalRequest">
 		<wsdl:part name="in0" type="tns7:FetVitalCriteria" />
 	</wsdl:message>
+	<wsdl:message name="obtenirPlataformaRequest">
+		<wsdl:part name="in0" type="tns56:PlataformaCriteria" />
+	</wsdl:message>
 	<wsdl:message name="obtenirFamiliaRequest">
 		<wsdl:part name="in0" type="tns20:FamiliaCriteria" />
 	</wsdl:message>
@@ -776,6 +781,9 @@
 	</wsdl:message>
 	<wsdl:message name="obtenirFetVitalResponse">
 		<wsdl:part name="obtenirFetVitalReturn" type="tns7:FetVitalDTO" />
+	</wsdl:message>
+	<wsdl:message name="obtenirPlataformaResponse">
+		<wsdl:part name="obtenirPlataformaReturn" type="tns56:PlataformaDTO" />
 	</wsdl:message>
 	<wsdl:message name="obtenirDocumentTramitRequest">
 		<wsdl:part name="in0" type="tns9:DocumentTramitCriteria" />
@@ -870,56 +878,56 @@
 	<wsdl:message name="obtenirPublicObjectiuRequest">
 		<wsdl:part name="in0" type="tns21:PublicObjectiuCriteria" />
 	</wsdl:message>
-	
+
 	<wsdl:message name="obtenirCatalegDocumentsRequest">
 		<wsdl:part name="in0" type="tns32:CatalegDocumentsCriteria" />
-	</wsdl:message>		
+	</wsdl:message>
 	<wsdl:message name="obtenirCatalegDocumentsResponse">
 		<wsdl:part name="obtenirCatalegDocumentsReturn" type="tns32:CatalegDocumentsDTO" />
-	</wsdl:message>	
-		
+	</wsdl:message>
+
 	<wsdl:message name="llistarCatalegsDocumentsRequest">
 		<wsdl:part name="in0" type="tns32:CatalegDocumentsCriteria" />
-	</wsdl:message>				
+	</wsdl:message>
 	<wsdl:message name="llistarCatalegsDocumentsResponse">
 		<wsdl:part name="llistarCatalegsDocumentsReturn" type="impl:ArrayOfCatalegDocumentsDTO" />
 	</wsdl:message>
-	
+
 	<wsdl:message name="obtenirExcepcioDocumentacioRequest">
 		<wsdl:part name="in0" type="tns33:ExcepcioDocumentacioCriteria" />
-	</wsdl:message>			
+	</wsdl:message>
 	<wsdl:message name="obtenirExcepcioDocumentacioResponse">
 		<wsdl:part name="obtenirExcepcioDocumentacioReturn" type="tns33:ExcepcioDocumentacioDTO" />
-	</wsdl:message>	
-		
+	</wsdl:message>
+
 	<wsdl:message name="llistarExcepcionsDocumentacioRequest">
 		<wsdl:part name="in0" type="tns33:ExcepcioDocumentacioCriteria" />
-	</wsdl:message>					
+	</wsdl:message>
 	<wsdl:message name="llistarExcepcionsDocumentacioResponse">
 		<wsdl:part name="llistarExcepcionsDocumentacioReturn" type="impl:ArrayOfExcepcioDocumentacioDTO" />
 	</wsdl:message>
 
 	<wsdl:message name="obtenirTipusIniciacioRequest">
 		<wsdl:part name="in0" type="tns50:IniciacioCriteria" />
-	</wsdl:message>			
+	</wsdl:message>
 	<wsdl:message name="obtenirTipusIniciacioResponse">
 		<wsdl:part name="obtenirTipusIniciacioReturn" type="tns50:IniciacioDTO" />
-	</wsdl:message>	
-		
+	</wsdl:message>
+
 	<wsdl:message name="llistarTipusIniciacionsRequest">
 		<wsdl:part name="in0" type="tns50:IniciacioCriteria" />
-	</wsdl:message>					
+	</wsdl:message>
 	<wsdl:message name="llistarTipusIniciacionsResponse">
 		<wsdl:part name="llistarTipusIniciacionsReturn" type="impl:ArrayOfIniciacioDTO" />
 	</wsdl:message>
-	
+
 	<wsdl:message name="obtenirIdiomaRequest">
 		<wsdl:part name="in0" type="tns51:IdiomaCriteria" />
-	</wsdl:message>			
+	</wsdl:message>
 	<wsdl:message name="obtenirIdiomaResponse">
 		<wsdl:part name="obtenirIdiomaReturn" type="tns51:IdiomaDTO" />
 	</wsdl:message>
-	
+
 	<wsdl:message name="llistarIdiomesRequest">
 		<wsdl:part name="in0" type="tns51:IdiomaCriteria" />
 	</wsdl:message>
@@ -1010,6 +1018,10 @@
 		<wsdl:operation name="obtenirFetVital" parameterOrder="in0">
 			<wsdl:input message="intf:obtenirFetVitalRequest" name="obtenirFetVitalRequest" />
 			<wsdl:output message="intf:obtenirFetVitalResponse" name="obtenirFetVitalResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="obtenirPlataforma" parameterOrder="in0">
+			<wsdl:input message="intf:obtenirPlataformaRequest" name="obtenirPlataformaRequest" />
+			<wsdl:output message="intf:obtenirPlataformaResponse" name="obtenirPlataformaResponse" />
 		</wsdl:operation>
 		<wsdl:operation name="llistarFetsVitals"
 			parameterOrder="in0">
@@ -1298,7 +1310,7 @@
 			<wsdl:output message="intf:llistarTipusAfectacioResponse"
 				name="llistarTipusAfectacioResponse" />
 		</wsdl:operation>
-		
+
 		<wsdl:operation name="llistarCatalegsDocuments"
 			parameterOrder="in0">
 			<wsdl:input message="intf:llistarCatalegsDocumentsRequest"
@@ -1314,7 +1326,7 @@
 			<wsdl:output message="intf:llistarExcepcionsDocumentacioResponse"
 				name="llistarExcepcionsDocumentacioResponse" />
 		</wsdl:operation>
-						
+
 		<wsdl:operation name="obtenirCatalegDocuments"
 			parameterOrder="in0">
 			<wsdl:input message="intf:obtenirCatalegDocumentsRequest"
@@ -1330,7 +1342,7 @@
 			<wsdl:output message="intf:obtenirExcepcioDocumentacioResponse"
 				name="obtenirExcepcioDocumentacioResponse" />
 		</wsdl:operation>
-		
+
 		<wsdl:operation name="obtenirTipusIniciacio"
 			parameterOrder="in0">
 			<wsdl:input message="intf:obtenirTipusIniciacioRequest"
@@ -1338,7 +1350,7 @@
 			<wsdl:output message="intf:obtenirTipusIniciacioResponse"
 				name="obtenirTipusIniciacioResponse" />
 		</wsdl:operation>
-		
+
 		<wsdl:operation name="llistarTipusIniciacions"
 			parameterOrder="in0">
 			<wsdl:input message="intf:llistarTipusIniciacionsRequest"
@@ -1346,23 +1358,23 @@
 			<wsdl:output message="intf:llistarTipusIniciacionsResponse"
 				name="llistarTipusIniciacionsResponse" />
 		</wsdl:operation>
-		
+
 		<wsdl:operation name="obtenirIdioma" parameterOrder="in0">
 			<wsdl:input message="intf:obtenirIdiomaRequest" name="obtenirIdiomaRequest" />
 			<wsdl:output message="intf:obtenirIdiomaResponse" name="obtenirIdiomaResponse" />
 		</wsdl:operation>
-		
+
 		<wsdl:operation name="llistarIdiomes" parameterOrder="in0">
 			<wsdl:input message="intf:llistarIdiomesRequest" name="llistarIdiomesRequest" />
 			<wsdl:output message="intf:llistarIdiomesResponse" name="llistarIdiomesResponse" />
 		</wsdl:operation>
-			
+
 	</wsdl:portType>
-	
+
 	<wsdl:binding name="RolsacWSSoapBinding" type="intf:RolsacQueryServiceEJBRemote">
-	
+
 		<wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />
-		
+
 		<wsdl:operation name="llistarUnitatsAdministratives">
 			<wsdlsoap:operation soapAction="" />
 			<wsdl:input name="llistarUnitatsAdministrativesRequest">
@@ -1462,7 +1474,7 @@
                                namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
             </wsdl:output>
         </wsdl:operation>
-        
+
         <wsdl:operation name="obtenirSilenci">
 			<wsdlsoap:operation soapAction="" />
 			<wsdl:input name="obtenirSilenciRequest">
@@ -1475,7 +1487,7 @@
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
-		
+
 		<wsdl:operation name="obtenirMateria">
 			<wsdlsoap:operation soapAction="" />
 			<wsdl:input name="obtenirMateriaRequest">
@@ -1538,6 +1550,17 @@
 					namespace="http://intf.ejb.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:input>
 			<wsdl:output name="obtenirFetVitalResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="obtenirPlataforma">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirPlataformaRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirPlataformaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
 					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
@@ -2135,8 +2158,8 @@
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
 					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
-		</wsdl:operation>				
-		
+		</wsdl:operation>
+
 		<wsdl:operation name="llistarCatalegsDocuments">
 			<wsdlsoap:operation soapAction="" />
 			<wsdl:input name="llistarCatalegsDocumentsRequest">
@@ -2147,7 +2170,7 @@
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
 					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
-		</wsdl:operation>		
+		</wsdl:operation>
 		<wsdl:operation name="obtenirCatalegDocuments">
 			<wsdlsoap:operation soapAction="" />
 			<wsdl:input name="obtenirCatalegDocumentsRequest">
@@ -2159,7 +2182,7 @@
 					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
-		
+
 		<wsdl:operation name="llistarExcepcionsDocumentacio">
 			<wsdlsoap:operation soapAction="" />
 			<wsdl:input name="llistarExcepcionsDocumentacioRequest">
@@ -2170,7 +2193,7 @@
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
 					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
-		</wsdl:operation>		
+		</wsdl:operation>
 		<wsdl:operation name="obtenirExcepcioDocumentacio">
 			<wsdlsoap:operation soapAction="" />
 			<wsdl:input name="obtenirExcepcioDocumentacioRequest">
@@ -2193,7 +2216,7 @@
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
 					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
-		</wsdl:operation>		
+		</wsdl:operation>
 		<wsdl:operation name="obtenirTipusIniciacio">
 			<wsdlsoap:operation soapAction="" />
 			<wsdl:input name="obtenirTipusIniciacioRequest">
@@ -2205,7 +2228,7 @@
 					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
-		
+
 		<wsdl:operation name="llistarIdiomes">
 			<wsdlsoap:operation soapAction="" />
 			<wsdl:input name="llistarIdiomesRequest">
@@ -2231,12 +2254,12 @@
 		</wsdl:operation>
 
 	</wsdl:binding>
-	
+
 	<wsdl:service name="RolsacQueryServiceEJBRemoteService">
 		<wsdl:port binding="intf:RolsacWSSoapBinding" name="RolsacWS">
 			<wsdlsoap:address
 				location="https://192.168.80.146:8443/sacws-api/services/RolsacWS" />
 		</wsdl:port>
 	</wsdl:service>
-	
+
 </wsdl:definitions>

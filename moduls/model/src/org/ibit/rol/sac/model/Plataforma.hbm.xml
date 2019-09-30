@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping package="org.ibit.rol.sac.model">
+    <class name="org.ibit.rol.sac.model.Plataforma" table="RSC_PLATAF">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="PLT_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+
+        <property name="identificador" length="128" 	 column="PLT_NOMBRE"/>
+		<property name="orden"  not-null="true"  column="PLT_ORDEN"/>
+
+        <map name="traducciones" cascade="all" table="RSC_TRAPLT">
+            <cache usage="read-write"/>
+            <key column="TPT_CODPLT" foreign-key="RSC_TRPPLT_FK"/>
+            <index column="TPT_CODIDI" type="string" length="2"/>
+            <composite-element class="org.ibit.rol.sac.model.TraduccionPlataforma">
+                <property name="descripcion" length="1000" column="TPT_DESCRI"/>
+                <property name="urlAcceso" length="1000" column="TPT_URL"/>
+            </composite-element>
+        </map>
+
+    </class>
+
+</hibernate-mapping>

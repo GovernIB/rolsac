@@ -40,7 +40,7 @@
     var txtPer = "<spring:message code='txt.per'/>";
     var txtNoHiHaLlistat = txtNoHiHa + " " + txtLlistaItems.toLowerCase();
 
-    //taula    
+    //taula
     var txtNou = "<spring:message code='txt.afegir_nova'/> "; + txtLlistaItem.toLowerCase();
     var txtCodi = "<spring:message code='txt.codi'/>";
     var txtCodiEstandard = "<spring:message code='camp.codi.estandard'/>";
@@ -83,7 +83,7 @@
     var txtIconaMateria = "<spring:message code='iconaMateria.icona_materia'/>";
     var txtIconesMateria = "<spring:message code='iconaMateria.icones_materia'/>";
     var txtNoHiHaIconesMateriaSeleccionades = "<spring:message code='txt.noHiHaIconesRelacionades'/>";
-    var txtNoHiHaIconaMateria = "<spring:message code='txt.noHiHaIconaMateria'/>";   
+    var txtNoHiHaIconaMateria = "<spring:message code='txt.noHiHaIconaMateria'/>";
 
 </script>
 <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
@@ -152,25 +152,25 @@
                 <span><span><spring:message code='perfil.crea_nou_perfil'/></span></span>
             </a>
         </li>
-    </ul>   
+    </ul>
     <div id="resultats">
-        <div class="resultats L actiu">                         
-            <div class="dades">             
-                <p class="executant"><spring:message code='perfil.carregant_llistat_perfil'/></p>                           
-            </div>                          
+        <div class="resultats L actiu">
+            <div class="dades">
+                <p class="executant"><spring:message code='perfil.carregant_llistat_perfil'/></p>
+            </div>
             <input type="hidden" value="0" class="pagPagina" />
             <input type="hidden" value="DESC" class="ordreTipus" />
-            <input type="hidden" value="nombre" class="ordreCamp" />                            
+            <input type="hidden" value="nombre" class="ordreCamp" />
         </div>
         <%-- Mientras no haya metodos en el EJB para buscar con parametros, no habra buscador.
         <div class="resultats C">
             <div id="cercador">
                 <div id="cercador_contingut">
-                    <h2>Cercador</h2>                 
+                    <h2>Cercador</h2>
                         <div class="fila">
                             <div class="element t21">
                                 <div class="etiqueta"><label for="cerca_nom"><spring:message code='camp.nom'/></label></div>
-                                <div class="control">                           
+                                <div class="control">
                                     <input id="cerca_nom" name="cerca_nom" type="text" maxlength="250" class="nom" />
                                 </div>
                             </div>
@@ -185,27 +185,27 @@
                         </div>
                 </div>
             </div>
-            <div class="dades"></div>               
+            <div class="dades"></div>
             <input type="hidden" value="0" class="pagPagina" />
             <input type="hidden" value="DESC" class="ordreTipus" />
             <input type="hidden" value="nom" class="ordreCamp" />
         </div>
-        --%>      
+        --%>
     </div>
 </div>
 
 <div id="escriptori_detall" class="escriptori_detall">
     <form id="formGuardar" action="false">
         <input id="item_id" name="item_id" type="hidden" value="" class="nou" />
-        <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>            
+        <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>
         <!-- modulPrincipal -->
         <div id="modulPrincipal" class="grupoModulosFormulario modulPrincipal">
             <!-- modul -->
-            <div class="modul">                 
-                <fieldset>                              
-                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                         
-                    <legend><spring:message code='txt.dades'/></legend>                          
-                    <div class="modul_continguts mostrat">                              
+            <div class="modul">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='txt.dades'/></legend>
+                    <div class="modul_continguts mostrat">
                         <div class="fila">
                             <p class="introIdiomas"><spring:message code='txt.idioma.idioma'/>:</p>
                             <ul class="idiomes">
@@ -247,7 +247,7 @@
                                                 <input id="item_nom_<c:out value="${lang}"/>" name="item_nom_<c:out value="${lang}"/>" type="text" class="nou" />
                                             </div>
                                         </div>
-                                    </div> 
+                                    </div>
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta"><label for="item_descripcio_<c:out value="${lang}"/>"><spring:message code='perfil.formulari.descripcio'/></label></div>
@@ -267,20 +267,20 @@
                                         </div>
                                     </div>
                                 </div>
-								
+
 							<c:if test="${loop.last}">
                             </div>
 							</c:if>
 							</c:forEach>
                         </div>
                         <!-- /fila -->
-                    </div>                          
-                </fieldset>                 
+                    </div>
+                </fieldset>
             </div>
             <!-- /modul -->
-            
-        </div>             
-        <!-- /modulPrincipal -->    
+
+        </div>
+        <!-- /modulPrincipal -->
         <!-- modulLateral -->
         <div class="modulLateral">
             <!-- modul -->
@@ -312,11 +312,11 @@
             <div class="modul" id="modul_iconesFamilia">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend><spring:message code='iconaFamilia.icona_familia'/></legend>                               
-                    <div class="modul_continguts mostrat">                                  
+                    <legend><spring:message code='iconaFamilia.icona_familia'/></legend>
+                    <div class="modul_continguts mostrat">
                         <!-- modulIcones -->
                         <%-- dsanchez: Clase "multilang" para listas multi-idioma --%>
-                        <div class="modulIconesFamila">                            
+                        <div class="modulIconesFamila">
                             <div class="seleccionats">
                                 <div class="seleccionat">
                                     <p class="info"><spring:message code='txt.noHiHaIcones'/>.</p>
@@ -324,8 +324,8 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- /modulIcones -->                                 
-                    </div>    
+                        <!-- /modulIcones -->
+                    </div>
                 </fieldset>
             </div>
             <!-- /modul -->
@@ -333,11 +333,11 @@
             <div class="modul" id="modul_iconesMateria">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend><spring:message code='iconaMateria.icona_materia'/></legend>                               
-                    <div class="modul_continguts mostrat">                                  
+                    <legend><spring:message code='iconaMateria.icona_materia'/></legend>
+                    <div class="modul_continguts mostrat">
                         <!-- modulIcones -->
                         <%-- dsanchez: Clase "multilang" para listas multi-idioma --%>
-                        <div class="modulIconesMateria">                            
+                        <div class="modulIconesMateria">
                             <div class="seleccionats">
                                 <div class="seleccionat">
                                     <p class="info"><spring:message code='txt.noHiHaIcones'/>.</p>
@@ -345,8 +345,8 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- /modulIcones -->                                 
-                    </div>    
+                        <!-- /modulIcones -->
+                    </div>
                 </fieldset>
             </div>
             <!-- /modul -->

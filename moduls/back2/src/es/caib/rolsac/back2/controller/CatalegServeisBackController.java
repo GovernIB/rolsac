@@ -44,6 +44,7 @@ import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.HechoVitalServicio;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Normativa;
+import org.ibit.rol.sac.model.Plataforma;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.Servicio;
 import org.ibit.rol.sac.model.SilencioAdm;
@@ -140,6 +141,8 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			model.put("llistaTipusNormativa", getListaTiposNormativaDTO(idioma));
 			// Tipos afectacion.
 			model.put("llistaTipusAfectacio", getListaTiposAfectacionDTO(idioma));
+			// Plataforma.
+			model.put("llistaPlataformas", getListaPlataformasDTO());
 
 		} catch (final DelegateException e) {
 			log.error(ExceptionUtils.getStackTrace(e));
@@ -160,6 +163,24 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 		return "index";
 
+	}
+
+	private List<IdNomDTO> getListaPlataformasDTO() throws DelegateException {
+		final Map parametros = new HashMap();
+		final int pagina = 0;
+		final int resultats = 100;
+		final ResultadoBusqueda resultado = DelegateUtil.getPlataformaDelegate().buscadorListarPlataforma(parametros,
+				pagina, resultats, true, true);
+		final List<IdNomDTO> listaPlataformasDTO = new ArrayList<IdNomDTO>();
+		if (resultado.getListaResultados() != null) {
+			for (final Object oplataforma : resultado.getListaResultados()) {
+				final Plataforma plataforma = (Plataforma) oplataforma;
+				final IdNomDTO plat = new IdNomDTO(plataforma.getId(), plataforma.getIdentificador());
+				listaPlataformasDTO.add(plat);
+			}
+		}
+
+		return listaPlataformasDTO;
 	}
 
 	private List<IdNomDTO> getListaTiposAfectacionDTO(final String idioma) throws DelegateException {
@@ -584,36 +605,39 @@ public class CatalegServeisBackController extends PantallaBaseController {
 					estadoSIA = "Reactivació";
 				}
 			}
-			
-			String si = "SI";
-			String no = "NO";			
-			String  canalPresencial = servicio.isPresencial()?si:no;
-			String  canalTelematico = servicio.isTelematico()?si:no;
-			String  canalTelefonico = servicio.isTelefonico()?si:no;
-			
-			retorno.append(CSVUtil.limpiar(servicio.getId())); 		//CODI_SERVEI,
-			retorno.append(CSVUtil.limpiar(servicio.getCodigoSIA()));  //CODI_SIA
-			retorno.append(CSVUtil.limpiar(estadoSIA));	//ESTAT_SIA
-			retorno.append(CSVUtil.limpiar(servicio.getFechaSIA()));	//DATA_ACTUALITZACIO_SIA
-			retorno.append(CSVUtil.limpiar(estado)); 						//ESTAT_SERVEI DECODE(PRO_VALIDA,1,'PUBLIC',2,'INTERN','RESERVA')
-			retorno.append(CSVUtil.limpiar(servicio.isVisible()));		//VISIBILITAT_SERVEI (ESTAT+DATA_PUB+DATA_CAD + UA_VISIBLE)
-			retorno.append(CSVUtil.limpiar(nomCa)); 						//NOM_SERVEI_CA,
-			retorno.append(CSVUtil.limpiar(nomEs));							//NOM_SERVEI_ES,
-			retorno.append(CSVUtil.limpiar(objecte));						//OBJECTE_CA
-			retorno.append(CSVUtil.limpiar(publicoObjectivo));				//PUBLIC_OBJECTIU (ID_PUBLIC OBJECTIU SEPARATS PER COMES)
-			retorno.append(CSVUtil.limpiar(CSVUtil.getNombreUA(servicio.getServicioResponsable())));		//NOM UA_RESPONSABLE
-			retorno.append(CSVUtil.limpiar(CSVUtil.getNombreUA(servicio.getOrganoInstructor())));		//NOM UA_INSTRUCTOR
-			retorno.append(CSVUtil.limpiar(servicio.getNombreResponsable()));//NOM_RESPONSABLE
-			retorno.append(CSVUtil.limpiar(num_nombres));					//NUM NORMES
-			retorno.append(CSVUtil.limpiar(servicio.getFechaActualizacion())); //DATA_ACTUALITZACIO
-			retorno.append(CSVUtil.limpiar(codUsuario));					//COD_USUARI_DARRERA_ACT
-			retorno.append(CSVUtil.limpiar(nomUsuario));					//NOM_USUARI_DARRERA_ACT
+
+			final String si = "SI";
+			final String no = "NO";
+			final String canalPresencial = servicio.isPresencial() ? si : no;
+			final String canalTelematico = servicio.isTelematico() ? si : no;
+			final String canalTelefonico = servicio.isTelefonico() ? si : no;
+
+			retorno.append(CSVUtil.limpiar(servicio.getId())); // CODI_SERVEI,
+			retorno.append(CSVUtil.limpiar(servicio.getCodigoSIA())); // CODI_SIA
+			retorno.append(CSVUtil.limpiar(estadoSIA)); // ESTAT_SIA
+			retorno.append(CSVUtil.limpiar(servicio.getFechaSIA())); // DATA_ACTUALITZACIO_SIA
+			retorno.append(CSVUtil.limpiar(estado)); // ESTAT_SERVEI DECODE(PRO_VALIDA,1,'PUBLIC',2,'INTERN','RESERVA')
+			retorno.append(CSVUtil.limpiar(servicio.isVisible())); // VISIBILITAT_SERVEI (ESTAT+DATA_PUB+DATA_CAD +
+																	// UA_VISIBLE)
+			retorno.append(CSVUtil.limpiar(nomCa)); // NOM_SERVEI_CA,
+			retorno.append(CSVUtil.limpiar(nomEs)); // NOM_SERVEI_ES,
+			retorno.append(CSVUtil.limpiar(objecte)); // OBJECTE_CA
+			retorno.append(CSVUtil.limpiar(publicoObjectivo)); // PUBLIC_OBJECTIU (ID_PUBLIC OBJECTIU SEPARATS PER
+																// COMES)
+			retorno.append(CSVUtil.limpiar(CSVUtil.getNombreUA(servicio.getServicioResponsable()))); // NOM
+																										// UA_RESPONSABLE
+			retorno.append(CSVUtil.limpiar(CSVUtil.getNombreUA(servicio.getOrganoInstructor()))); // NOM UA_INSTRUCTOR
+			retorno.append(CSVUtil.limpiar(servicio.getNombreResponsable()));// NOM_RESPONSABLE
+			retorno.append(CSVUtil.limpiar(num_nombres)); // NUM NORMES
+			retorno.append(CSVUtil.limpiar(servicio.getFechaActualizacion())); // DATA_ACTUALITZACIO
+			retorno.append(CSVUtil.limpiar(codUsuario)); // COD_USUARI_DARRERA_ACT
+			retorno.append(CSVUtil.limpiar(nomUsuario)); // NOM_USUARI_DARRERA_ACT
 			if (tienePermisoComun) {
 				retorno.append(CSVUtil.limpiar(servicio.isComun())); // NOM_USUARI_DARRERA_ACT
-			}			
-			retorno.append(CSVUtil.limpiar(canalPresencial));					//NOM_USUARI_DARRERA_ACT
-			retorno.append(CSVUtil.limpiar(canalTelematico));					//NOM_USUARI_DARRERA_ACT
-			retorno.append(CSVUtil.limpiar(canalTelefonico));					//NOM_USUARI_DARRERA_ACT
+			}
+			retorno.append(CSVUtil.limpiar(canalPresencial)); // NOM_USUARI_DARRERA_ACT
+			retorno.append(CSVUtil.limpiar(canalTelematico)); // NOM_USUARI_DARRERA_ACT
+			retorno.append(CSVUtil.limpiar(canalTelefonico)); // NOM_USUARI_DARRERA_ACT
 			retorno.append(CSVUtil.CARACTER_SALTOLINEA_CSV);
 		}
 
@@ -760,6 +784,11 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			} else {
 				resultats.put("comun_tramite", false);
 			}
+
+			if (serv.getPlataforma() != null) {
+				resultats.put("item_plataforma_tramit", serv.getPlataforma().getId());
+			}
+			resultats.put("item_parametros", serv.getParametros());
 
 		} catch (final DelegateException dEx) {
 
@@ -1118,7 +1147,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 																														// id
 			servicio.setTramiteUrl(
 					request.getParameter("item_tramite_url") == null ? "" : request.getParameter("item_tramite_url")); // Tramite
-																														// url
+
 			if (request.getParameter("item_comun") == null) {
 				servicio.setComun(false);
 			} else {
@@ -1132,10 +1161,22 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			// Si no tiene el permiso de comunes, no puede estar activo.
 			final String permisos = getPermisosUsuario(request);
 			if (servicio.isComun() && !Usuario.tienePermiso(permisos, Usuario.PERMISO_GESTION_COMUNES)) {
-				error = messageSource.getMessage("error.permisos", null, request.getLocale());
+				error = messageSource.getMessage("error.permisos.serv.comun", null, request.getLocale());
 				return new IdNomDTO(-1l, error);
 			}
 
+			final String idPlataforma = request.getParameter("item_plataforma") == null ? ""
+					: request.getParameter("item_plataforma");
+			if (idPlataforma.isEmpty()) {
+				servicio.setPlataforma(null);
+			} else {
+				final Plataforma plataforma = DelegateUtil.getPlataformaDelegate()
+						.obtenerPlataforma(Long.valueOf(idPlataforma));
+				servicio.setPlataforma(plataforma);
+			}
+			final String parametros = request.getParameter("item_parametros") == null ? ""
+					: request.getParameter("item_parametros");
+			servicio.setParametros(parametros);
 			final String version = request.getParameter("item_tramite_version") == null ? ""
 					: request.getParameter("item_tramite_version");
 			servicio.setTramiteVersion("".equals(version) ? "0" : version); // Tramite version
@@ -1149,16 +1190,18 @@ public class CatalegServeisBackController extends PantallaBaseController {
 					&& !"".equals(request.getParameter("item_check_tramit_telefonico")));
 
 			final boolean urlTramiteRelleno = !servicio.getTramiteUrl().equals("");
-			final boolean idTramiteTelleno = !servicio.getTramiteId().equals("") && !"".equals(version);
-			final boolean idTramiteIncoherente = (!servicio.getTramiteId().equals("") && "".equals(version))
-					|| (servicio.getTramiteId().equals("") && (!"".equals(version) && !"0".equals(version)));
+			final boolean isTramiteInterno = !servicio.getTramiteId().equals("") || !version.isEmpty()
+					|| !idPlataforma.isEmpty() || !parametros.isEmpty();
+			final boolean isTramiteInternoTodo = !servicio.getTramiteId().equals("") && !version.isEmpty()
+					&& !idPlataforma.isEmpty();
 
 			// si es telematico debe estar rellenos url o version+id, pero no ambos.
 			if (servicio.isTelematico()) {
 				// Traramos la posible incoherencia de datos
-				if (urlTramiteRelleno && idTramiteTelleno || // estan los dos completados
-						!urlTramiteRelleno && !idTramiteTelleno || // ninguno esta completado
-						idTramiteIncoherente) { // el id y version es incoherente (uno si y el otro no)
+				if ((urlTramiteRelleno && isTramiteInterno) || // estan los dos completados
+						(!urlTramiteRelleno && !isTramiteInterno) || // ninguno esta completado
+						(isTramiteInterno && !isTramiteInternoTodo)) { // Esta relleno todo lo de interno y no se deja
+																		// algo sin rellenar
 					error = messageSource.getMessage("proc.formulari.error.telematic.sensedades", null,
 							request.getLocale());
 					return result = new IdNomDTO(-2l, error);
@@ -1168,6 +1211,8 @@ public class CatalegServeisBackController extends PantallaBaseController {
 				servicio.setTramiteVersion("0");
 				servicio.setTramiteUrl("");
 				servicio.setTramiteId("");
+				servicio.setPlataforma(null);
+				servicio.setParametros(null);
 			}
 
 			if (edicion) {

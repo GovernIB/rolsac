@@ -31,6 +31,7 @@
                         <element name="objeto" nillable="true" type="xsd:string" />
                         <element name="observaciones" nillable="true" type="xsd:string" />
                         <element name="organoInstructor" nillable="true" type="xsd:long" />
+                        <element name="plataforma" nillable="true" type="xsd:long" />
                         <element name="requisitos" nillable="true" type="xsd:string" />
                         <element name="servicioResponsable" nillable="true" type="xsd:long" />
                         <element name="telefono" nillable="true" type="xsd:string" />
@@ -39,7 +40,7 @@
                         <element name="tasaUrl" nillable="true" type="xsd:string" />
                         <element name="tramiteVersion" nillable="true" type="xsd:string" />
                         <element name="validacion" nillable="true" type="xsd:int" />
-                        <element name="comun" nillable="true" type="xsd:boolean" />
+                        <element name="comun" type="xsd:boolean" />
                     </sequence>
                 </extension>
             </complexContent>

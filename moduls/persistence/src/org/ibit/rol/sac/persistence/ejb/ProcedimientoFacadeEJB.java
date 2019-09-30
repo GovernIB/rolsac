@@ -181,7 +181,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				fechaActualizacionBD = procedimientoBD.getFechaActualizacion();
 
 			}
-			
+
 			/*
 			 * Se alimenta la fecha de actualización de forma automática si no se ha
 			 * introducido dato
@@ -213,7 +213,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				actualizarTramiteComun(session, procedimiento.getId(), procedimiento.getOrganResolutori());
 
 			}
-			
+
 			Hibernate.initialize(procedimiento.getTramites());
 			Hibernate.initialize(procedimiento.getMaterias());
 			Hibernate.initialize(procedimiento.getHechosVitalesProcedimientos());
@@ -246,9 +246,11 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		query.setLong("id", idProcedimiento);
 
 		final List<Tramite> tramites = query.list();
-		for (final Tramite tramit : tramites) {
-			tramit.setOrganCompetent(organResolutori);
-			session.update(tramit);
+		if (tramites != null) {
+			for (final Tramite tramit : tramites) {
+				tramit.setOrganCompetent(organResolutori);
+				session.update(tramit);
+			}
 		}
 	}
 
@@ -1196,6 +1198,11 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 						" and procedimiento.id IN ( select tra.procedimiento from Tramite as tra where tra.id = :tramite ) ");
 			}
 
+			if (bc.getIdPlataforma() != null) {
+				where.append(
+						" and procedimiento.id IN ( select tra.procedimiento from Tramite as tra where tra.plataforma.id = :idPlataforma ) ");
+			}
+
 			if (bc.getComun() != null) {
 				where.append(" and procedimiento.comun = " + ApiRestUtils.intToBool(bc.getComun()) + " ");
 			}
@@ -1352,6 +1359,10 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 			if (bc.getIdPublicoObjetivo() != null && bc.getIdPublicoObjetivo() != -1) {
 				query.setParameter("idPublicoObjetivo", bc.getIdPublicoObjetivo());
+			}
+
+			if (bc.getIdPlataforma() != null) {
+				query.setParameter("idPlataforma", bc.getIdPlataforma());
 			}
 
 			if (bc.getProcedimiento().getIniciacion().getId() != null
@@ -2913,6 +2924,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		final String comun = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_COMUN);
 		final String versionTramiteTelematico = filtro
 				.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_VERSION_TRAMITE_TELEMATICO);
+		final String plataforma = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_PLATAFORMA);
 
 		final StringBuilder select = new StringBuilder("SELECT p ");
 		final StringBuilder selectCount = new StringBuilder("SELECT count(p) ");
@@ -2949,6 +2961,11 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 			if (!StringUtils.isEmpty(uaQuery)) {
 				where.append(" AND p.unidadAdministrativa.id in (" + uaQuery + ")");
+			}
+
+			if (!StringUtils.isEmpty(plataforma)) {
+				where.append(" AND p.plataforma.id = :plataforma");
+				parametros.put("plataforma", plataforma);
 			}
 
 			// Buscamos por codigo dir3 de la ua y sus descendientes

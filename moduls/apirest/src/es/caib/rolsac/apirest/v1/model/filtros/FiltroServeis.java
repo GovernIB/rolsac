@@ -36,11 +36,12 @@ public class FiltroServeis {
 			+ Constantes.SALTO_LINEA + "\"textos\":\"texto\"" + Constantes.SALTO_LINEA
 			+ "\"fechaPublicacionDesde\":\"DD/MM/YYYY\"," + Constantes.SALTO_LINEA
 			+ "\"fechaPublicacionHasta\":\"DD/MM/YYYY\"," + Constantes.SALTO_LINEA
-			+ "\"codigoTramiteTelematico\":\"codigo\"," + Constantes.SALTO_LINEA
-			+ "\"versionTramiteTelematico\":\"version\"," + Constantes.SALTO_LINEA
-			+ "\"comun\":\"0/1\", (1= servicios comunes)" + Constantes.SALTO_LINEA + "\"codigoSia\":\"codigo\","
-			+ Constantes.SALTO_LINEA + "\"estadoSia\":\"A/B\", (A=Alta, B=Baja)" + Constantes.SALTO_LINEA
-			+ "\"fechaActualizacionSia\":\"DD/MM/YYYY\"" + "}";
+			+ "\"codigoTramiteTelematico\":\"codigo\"," + Constantes.SALTO_LINEA + "\"codigoPlataforma\":\"codigo\","
+			+ Constantes.SALTO_LINEA + "\"plataforma\":\"texto\"," + Constantes.SALTO_LINEA
+			+ "\"parametros\":\"texto\"," + Constantes.SALTO_LINEA + "\"versionTramiteTelematico\":\"version\","
+			+ Constantes.SALTO_LINEA + "\"comun\":\"0/1\", (1= servicios comunes)" + Constantes.SALTO_LINEA
+			+ "\"codigoSia\":\"codigo\"," + Constantes.SALTO_LINEA + "\"estadoSia\":\"A/B\", (A=Alta, B=Baja)"
+			+ Constantes.SALTO_LINEA + "\"fechaActualizacionSia\":\"DD/MM/YYYY\"" + "}";
 
 	/** codigoUA. **/
 	@ApiModelProperty(value = "codigoUA", required = false)
@@ -129,6 +130,18 @@ public class FiltroServeis {
 	/** versionTramiteTelematico. **/
 	@ApiModelProperty(value = "versionTramiteTelematico", required = false)
 	private String versionTramiteTelematico;
+
+	/** codigo plataforma. **/
+	@ApiModelProperty(value = "codigoPlataforma", required = false)
+	private Integer codigoPlataforma;
+
+	/** codigo plataforma. **/
+	@ApiModelProperty(value = "plataforma", required = false)
+	private String plataforma;
+
+	/** codigoAgrupacionMateria. **/
+	@ApiModelProperty(value = "parametros", required = false)
+	private String parametros;
 
 	public FiltroGenerico toFiltroGenerico() {
 		final FiltroGenerico fg = new FiltroGenerico();
@@ -220,6 +233,14 @@ public class FiltroServeis {
 		if (this.versionTramiteTelematico != null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_VERSION_TRAMITE_TELEMATICO,
 					this.versionTramiteTelematico + "");
+		}
+
+		if (this.codigoPlataforma != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_SERVICIOS_PLATAFORMA, this.codigoPlataforma + "");
+		}
+
+		if (this.parametros != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_SERVICIOS_PARAMETROS, this.parametros + "");
 		}
 
 		return fg;
@@ -578,6 +599,51 @@ public class FiltroServeis {
 	 */
 	public void setComun(final Integer comun) {
 		this.comun = comun;
+	}
+
+	/**
+	 * @return the codigoPlataforma
+	 */
+	public Integer getCodigoPlataforma() {
+		return codigoPlataforma;
+	}
+
+	/**
+	 * @param codigoPlataforma
+	 *            the codigoPlataforma to set
+	 */
+	public void setCodigoPlataforma(final Integer codigoPlataforma) {
+		this.codigoPlataforma = codigoPlataforma;
+	}
+
+	/**
+	 * @return the parametros
+	 */
+	public String getParametros() {
+		return parametros;
+	}
+
+	/**
+	 * @param parametros
+	 *            the parametros to set
+	 */
+	public void setParametros(final String parametros) {
+		this.parametros = parametros;
+	}
+
+	/**
+	 * @return the plataforma
+	 */
+	public String getPlataforma() {
+		return plataforma;
+	}
+
+	/**
+	 * @param plataforma
+	 *            the plataforma to set
+	 */
+	public void setPlataforma(final String plataforma) {
+		this.plataforma = plataforma;
 	}
 
 }

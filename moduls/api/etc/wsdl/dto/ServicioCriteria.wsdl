@@ -41,6 +41,7 @@
                         <element name="materia" nillable="true" type="xsd:string" />
                         <element name="ordenar" nillable="true" type="tns:ArrayOfServicioOrdenacio" />
                         <element name="organoInstructor" nillable="true" type="xsd:string" />
+                        <element name="plataforma" nillable="true" type="xsd:long" />
                         <element name="publicoObjetivo" nillable="true" type="xsd:string" />
                         <element name="nombreResponsable" nillable="true" type="xsd:string" />
                         <element name="t_destinatarios" nillable="true" type="xsd:string" />

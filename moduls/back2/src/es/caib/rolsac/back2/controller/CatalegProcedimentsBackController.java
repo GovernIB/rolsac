@@ -41,6 +41,7 @@ import org.ibit.rol.sac.model.HechoVitalProcedimiento;
 import org.ibit.rol.sac.model.Iniciacion;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Normativa;
+import org.ibit.rol.sac.model.Plataforma;
 import org.ibit.rol.sac.model.Procedimiento;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.PublicoObjetivo;
@@ -139,6 +140,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			model.put("llistaTipusNormativa", getListaTiposNormativaDTO(lang));
 			// Tipos afectacion.
 			model.put("llistaTipusAfectacio", getListaTiposAfectacionDTO(lang));
+			// Plataforma.
+			model.put("llistaPlataformas", getListaPlataformasDTO());
 
 		} catch (final DelegateException e) {
 			log.error(ExceptionUtils.getStackTrace(e));
@@ -447,13 +450,13 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 			int numTramits = 0, numTramitsTelematics = 0;
 			if (procedimiento.getTramites() != null) {
-				for(Tramite tramite : procedimiento.getTramites()) {
-					if (tramite == null) { 
+				for (final Tramite tramite : procedimiento.getTramites()) {
+					if (tramite == null) {
 						continue;
-					} 
-					numTramits ++;					
+					}
+					numTramits++;
 					if (tramite.isTelematico()) {
-						numTramitsTelematics ++;
+						numTramitsTelematics++;
 					}
 				}
 			}
@@ -654,7 +657,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			// Si no tiene el permiso de comunes, si el servicio es comun, no puede verlo.
 			final String permisos = getPermisosUsuario(request);
 			if (proc.isComun() && !Usuario.tienePermiso(permisos, Usuario.PERMISO_GESTION_COMUNES)) {
-				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+				resultats.put("error",
+						messageSource.getMessage("error.permisos.proc.comun", null, request.getLocale()));
 				return resultats;
 			}
 
@@ -803,6 +807,24 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 		return listaTiposNormativaDTO;
 
+	}
+
+	private List<IdNomDTO> getListaPlataformasDTO() throws DelegateException {
+		final Map parametros = new HashMap();
+		final int pagina = 0;
+		final int resultats = 100;
+		final ResultadoBusqueda resultado = DelegateUtil.getPlataformaDelegate().buscadorListarPlataforma(parametros,
+				pagina, resultats, true, true);
+		final List<IdNomDTO> listaPlataformasDTO = new ArrayList<IdNomDTO>();
+		if (resultado.getListaResultados() != null) {
+			for (final Object oplataforma : resultado.getListaResultados()) {
+				final Plataforma plataforma = (Plataforma) oplataforma;
+				final IdNomDTO plat = new IdNomDTO(plataforma.getId(), plataforma.getIdentificador());
+				listaPlataformasDTO.add(plat);
+			}
+		}
+
+		return listaPlataformasDTO;
 	}
 
 	private List<IdNomDTO> getListaBoletinesDTO() throws DelegateException {
@@ -1202,7 +1224,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 			procediment.setResponsable(request.getParameter("item_responsable")); // Responsable
 			procediment.setSignatura(request.getParameter("item_codigo_pro")); // Signatura
-			procediment = guardarSilencio(request, procediment, error); // SILENCIO
+			procediment = guardarSilencio(request, procediment, error); // Silencio
 
 			// #351 cambio info por dir electronica
 			// procediment.setInfo(request.getParameter("item_notes")); // Info
@@ -1224,6 +1246,12 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				}
 			}
 
+			final String permisos = getPermisosUsuario(request);
+			if (procediment.isComun() && !Usuario.tienePermiso(permisos, Usuario.PERMISO_GESTION_COMUNES)) {
+				error = messageSource.getMessage("error.permisos.proc.comun", null, request.getLocale());
+				return new IdNomDTO(-1l, error);
+			}
+
 			List<Tramite> listaTramitesParaBorrar = null;
 			List<Long> listaIdsTramitesParaActualizar = null;
 
@@ -1235,12 +1263,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 					// validos.
 					error = messageSource.getMessage("proc.error.normativa.datosinvalidos", null, request.getLocale());
 					return new IdNomDTO(-5l, error);
-				}
-
-				final String permisos = getPermisosUsuario(request);
-				if (procediment.isComun() && !Usuario.tienePermiso(permisos, Usuario.PERMISO_GESTION_COMUNES)) {
-					error = messageSource.getMessage("error.permisos", null, request.getLocale());
-					return new IdNomDTO(-1l, error);
 				}
 
 				// #414 Comprobamos si hay un cambio de entidad raíz (sólo en edición y si está

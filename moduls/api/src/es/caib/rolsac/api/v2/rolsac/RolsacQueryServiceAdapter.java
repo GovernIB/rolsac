@@ -86,6 +86,9 @@ import es.caib.rolsac.api.v2.perfil.PerfilQueryServiceAdapter;
 import es.caib.rolsac.api.v2.personal.PersonalCriteria;
 import es.caib.rolsac.api.v2.personal.PersonalDTO;
 import es.caib.rolsac.api.v2.personal.PersonalQueryServiceAdapter;
+import es.caib.rolsac.api.v2.plataforma.PlataformaCriteria;
+import es.caib.rolsac.api.v2.plataforma.PlataformaDTO;
+import es.caib.rolsac.api.v2.plataforma.PlataformaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
@@ -125,1028 +128,1400 @@ import es.caib.rolsac.api.v2.usuari.UsuariQueryServiceAdapter;
 
 public class RolsacQueryServiceAdapter implements RolsacQueryService {
 
-    private RolsacQueryServiceStrategy rolsacQueryServiceStrategy;
-    
-    private String rolsacUrl;
-    
-    public RolsacQueryServiceAdapter() {
-    	super();
-	}
-    
-    public RolsacQueryServiceAdapter(String rolsacUrl) {
-    	super();
-    	this.rolsacUrl = rolsacUrl;
+	private RolsacQueryServiceStrategy rolsacQueryServiceStrategy;
+
+	private String rolsacUrl;
+
+	public RolsacQueryServiceAdapter() {
+		super();
 	}
 
-	public void setRolsacQueryServiceStrategy(RolsacQueryServiceStrategy rolsacQueryServiceStrategy) {
-        this.rolsacQueryServiceStrategy = rolsacQueryServiceStrategy;
-        rolsacQueryServiceStrategy.setUrl(rolsacUrl);        
-    }
+	public RolsacQueryServiceAdapter(final String rolsacUrl) {
+		super();
+		this.rolsacUrl = rolsacUrl;
+	}
 
-    private STRATEGY getStrategy() {
-        return rolsacQueryServiceStrategy instanceof RolsacQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
-    }
-    
-    public ProcedimentQueryServiceAdapter obtenirProcediment(ProcedimentCriteria procedimentCriteria) throws QueryServiceException {
-        try {
-            ProcedimentDTO dto = rolsacQueryServiceStrategy.obtenirProcediment(procedimentCriteria);
-            ProcedimentQueryServiceAdapter pqsa = (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), dto);
-            
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && pqsa != null) { 
-            	pqsa.setRolsacUrl(rolsacUrl); 
-            }
-            return pqsa;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "procedimiento.", e);
-        }
-    }    
-    
-    public List<ProcedimentQueryServiceAdapter> llistarProcediments(ProcedimentCriteria procedimentCriteria) throws QueryServiceException {
-        try {
-            List<ProcedimentDTO> llistaDTO = rolsacQueryServiceStrategy.llistarProcediments(procedimentCriteria);
-            List<ProcedimentQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<ProcedimentQueryServiceAdapter>();
-            for (ProcedimentDTO procedimentDTO : llistaDTO) {
-            	ProcedimentQueryServiceAdapter procedimiento = (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), procedimentDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && procedimiento != null) { 
-            		procedimiento.setRolsacUrl(rolsacUrl); 
-            	}
-                llistaQueryServiceAdapter.add(procedimiento);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "procedimientos.", e);
-        }
-    }
-    
-    public ServicioQueryServiceAdapter obtenirServicio(ServicioCriteria servicioCriteria) throws QueryServiceException {
-        try {
-        	ServicioDTO dto = rolsacQueryServiceStrategy.obtenirServicio(servicioCriteria);
-        	ServicioQueryServiceAdapter pqsa = (ServicioQueryServiceAdapter) BeanUtils.getAdapter("servicio", getStrategy(), dto);
-            
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && pqsa != null) { 
-            	pqsa.setRolsacUrl(rolsacUrl); 
-            }
-            return pqsa;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "servicio.", e);
-        }
-    }    
-    
-    public List<ServicioQueryServiceAdapter> llistarServicios(ServicioCriteria servicioCriteria) throws QueryServiceException {
-        try {
-            List<ServicioDTO> llistaDTO = rolsacQueryServiceStrategy.llistarServicios(servicioCriteria);
-            List<ServicioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<ServicioQueryServiceAdapter>();
-            for (ServicioDTO servicioDTO : llistaDTO) {
-            	ServicioQueryServiceAdapter servicio = (ServicioQueryServiceAdapter) BeanUtils.getAdapter("servicio", getStrategy(), servicioDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && servicio != null) { 
-            		servicio.setRolsacUrl(rolsacUrl); 
-            	}
-                llistaQueryServiceAdapter.add(servicio);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "servicio.", e);
-        }
-    }
-    
-    public CatalegDocumentsQueryServiceAdapter obtenirCatalegDocuments(CatalegDocumentsCriteria catalegDocumentsCriteria) throws QueryServiceException {
-    	try {
-    		CatalegDocumentsDTO dto = rolsacQueryServiceStrategy.obtenirCatalegDocuments(catalegDocumentsCriteria);
-    		CatalegDocumentsQueryServiceAdapter cdqsa = (CatalegDocumentsQueryServiceAdapter) BeanUtils.getAdapter("catalegDocuments", getStrategy(), dto);
-    		if (rolsacUrl != null && !rolsacUrl.isEmpty() && cdqsa != null) { cdqsa.setRolsacUrl(rolsacUrl); }
-            return cdqsa;
-    	} catch (StrategyException e) {
-    		throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "catálogo de documentos.", e);
-    	}
-    }
-    
-    public List<CatalegDocumentsQueryServiceAdapter> llistarCatalegsDocuments(CatalegDocumentsCriteria catalegDocumentsCriteria) throws QueryServiceException {
-        try {
-            List<CatalegDocumentsDTO> llistaDTO = rolsacQueryServiceStrategy.llistarCatalegsDocuments(catalegDocumentsCriteria);
-            List<CatalegDocumentsQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<CatalegDocumentsQueryServiceAdapter>();
-            for (CatalegDocumentsDTO catalegDocumentsDTO : llistaDTO) {
-            	CatalegDocumentsQueryServiceAdapter cdqsa = (CatalegDocumentsQueryServiceAdapter) BeanUtils.getAdapter("catalegDocuments", getStrategy(), catalegDocumentsDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && cdqsa != null) { 
-            		cdqsa.setRolsacUrl(rolsacUrl); 
-            	}		
-                llistaQueryServiceAdapter.add(cdqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "catálogos de documentos.", e);
-        }
-    }    
-    
-    public ExcepcioDocumentacioQueryServiceAdapter obtenirExcepcioDocumentacio(ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria) throws QueryServiceException {
-    	try {
-    		ExcepcioDocumentacioDTO dto = rolsacQueryServiceStrategy.obtenirExcepcioDocumentacio(excepcioDocumentacioCriteria);
-    		ExcepcioDocumentacioQueryServiceAdapter eqsa = (ExcepcioDocumentacioQueryServiceAdapter) BeanUtils.getAdapter("excepcioDocumentacio", getStrategy(), dto);
-    		if (rolsacUrl != null && !rolsacUrl.isEmpty() && eqsa != null) { eqsa.setRolsacUrl(rolsacUrl); }
-            return eqsa;
-    	} catch (StrategyException e) {
-    		throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "excepción de documentación.", e);
-    	}
-    }
-    
-    public List<ExcepcioDocumentacioQueryServiceAdapter> llistarExcepcionsDocumentacio(ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria) throws QueryServiceException {
-        try {
-            List<ExcepcioDocumentacioDTO> llistaDTO = rolsacQueryServiceStrategy.llistarExcepcionsDocumentacio(excepcioDocumentacioCriteria);
-            List<ExcepcioDocumentacioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<ExcepcioDocumentacioQueryServiceAdapter>();
-            for (ExcepcioDocumentacioDTO excepcioDocumentacioDTO : llistaDTO) {
-            	ExcepcioDocumentacioQueryServiceAdapter eqsa = (ExcepcioDocumentacioQueryServiceAdapter) BeanUtils.getAdapter("excepcioDocumentacio", getStrategy(), excepcioDocumentacioDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && eqsa != null) { eqsa.setRolsacUrl(rolsacUrl); }
-            	llistaQueryServiceAdapter.add(eqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "excepciones de documentación.", e);
-        }
-    }    
-    
-    public int getNumProcediments(ProcedimentCriteria procedimentCriteria) throws QueryServiceException {
-        try {
-            Integer num = rolsacQueryServiceStrategy.getNumProcediments(procedimentCriteria);
-            return num;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.COUNT_GETTER + "procedimientos.", e);
-        }
-    }
-    
-    public int getNumServicios(ServicioCriteria servicioCriteria) throws QueryServiceException {
-        try {
-            Integer num = rolsacQueryServiceStrategy.getNumServicios(servicioCriteria);
-            return num;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.COUNT_GETTER + "servicios.", e);
-        }
-    }
+	public void setRolsacQueryServiceStrategy(final RolsacQueryServiceStrategy rolsacQueryServiceStrategy) {
+		this.rolsacQueryServiceStrategy = rolsacQueryServiceStrategy;
+		rolsacQueryServiceStrategy.setUrl(rolsacUrl);
+	}
 
-    public AgrupacioFetVitalQueryServiceAdapter obtenirAgrupacioFetVital(AgrupacioFetVitalCriteria agrupacioFetVitalCriteria) throws QueryServiceException {
-        try {
-            AgrupacioFetVitalDTO dto = rolsacQueryServiceStrategy.obtenirAgrupacioFetVital(agrupacioFetVitalCriteria);
-            AgrupacioFetVitalQueryServiceAdapter afvqsa = (AgrupacioFetVitalQueryServiceAdapter) BeanUtils.getAdapter("agrupacioFetVital", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && afvqsa != null) { afvqsa.setRolsacUrl(rolsacUrl); }
-            return afvqsa;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "agrupacion hecho vital.", e);
-        }
-    }
+	private STRATEGY getStrategy() {
+		return rolsacQueryServiceStrategy instanceof RolsacQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
+	}
 
-    public List<AgrupacioFetVitalQueryServiceAdapter> llistarAgrupacionsFetsVitals(AgrupacioFetVitalCriteria agrupacioFetVitalCriteria) throws QueryServiceException {
-        try {
-            List<AgrupacioFetVitalDTO> llistaDTO = rolsacQueryServiceStrategy.llistarAgrupacionsFetsVitals(agrupacioFetVitalCriteria);
-            List<AgrupacioFetVitalQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<AgrupacioFetVitalQueryServiceAdapter>();
-            for (AgrupacioFetVitalDTO afvDTO : llistaDTO) {
-            	AgrupacioFetVitalQueryServiceAdapter afvqsa = (AgrupacioFetVitalQueryServiceAdapter) BeanUtils.getAdapter("agrupacioFetVital", getStrategy(), afvDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && afvqsa != null) { afvqsa.setRolsacUrl(rolsacUrl); }
-            	llistaQueryServiceAdapter.add(afvqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "agrupaciones hecho vital.", e);
-        }
-    }
-
-    public AgrupacioMateriaQueryServiceAdapter obtenirAgrupacioMateria(AgrupacioMateriaCriteria agrupacioMateriaCriteria) throws QueryServiceException {
-        try {
-            AgrupacioMateriaDTO dto = rolsacQueryServiceStrategy.obtenirAgrupacioMateria(agrupacioMateriaCriteria);
-            AgrupacioMateriaQueryServiceAdapter amqsa = (AgrupacioMateriaQueryServiceAdapter) BeanUtils.getAdapter("agrupacioMateria", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && amqsa != null) { amqsa.setRolsacUrl(rolsacUrl); }
-            return amqsa;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "agrupacion materia.", e);
-        }
-        
-    }
-
-    public List<AgrupacioMateriaQueryServiceAdapter> llistarAgrupacionsMateries(AgrupacioMateriaCriteria agrupacioMateriaCriteria) throws QueryServiceException {
-        try {
-            List<AgrupacioMateriaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarAgrupacionsMateries(agrupacioMateriaCriteria);
-            List<AgrupacioMateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<AgrupacioMateriaQueryServiceAdapter>();
-            for (AgrupacioMateriaDTO amDTO : llistaDTO) {
-            	AgrupacioMateriaQueryServiceAdapter amqsa = (AgrupacioMateriaQueryServiceAdapter) BeanUtils.getAdapter("agrupacioMateria", getStrategy(), amDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && amqsa != null) { amqsa.setRolsacUrl(rolsacUrl); }
-                llistaQueryServiceAdapter.add(amqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "agrupaciones materia.", e);
-        }
-    }
-
-    public ButlletiQueryServiceAdapter obtenirButlleti(ButlletiCriteria butlletiCriteria) throws QueryServiceException {
-        try {
-            ButlletiDTO dto = rolsacQueryServiceStrategy.obtenirButlleti(butlletiCriteria);
-            ButlletiQueryServiceAdapter bqsa = (ButlletiQueryServiceAdapter) BeanUtils.getAdapter("butlleti", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && bqsa != null) { bqsa.setRolsacUrl(rolsacUrl); }
-            return bqsa;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "boletin.", e);
-        }
-    }
-
-    public List<ButlletiQueryServiceAdapter> llistarButlletins(ButlletiCriteria butlletiCriteria) throws QueryServiceException {
-        try {
-            List<ButlletiDTO> llistaDTO = rolsacQueryServiceStrategy.llistarButlletins(butlletiCriteria);
-            List<ButlletiQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<ButlletiQueryServiceAdapter>();
-            for (ButlletiDTO butlletiDTO : llistaDTO) {
-            	ButlletiQueryServiceAdapter bqsa = (ButlletiQueryServiceAdapter) BeanUtils.getAdapter("butlleti", getStrategy(), butlletiDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && bqsa != null) { bqsa.setRolsacUrl(rolsacUrl); }
-                 llistaQueryServiceAdapter.add(bqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "agrupaciones materia.", e);
-        }
-    }
-
-    public DocumentQueryServiceAdapter obtenirDocument(DocumentCriteria documentCriteria) throws QueryServiceException {
-        try {
-            DocumentDTO dto = rolsacQueryServiceStrategy.obtenirDocument(documentCriteria);
-            DocumentQueryServiceAdapter dqsa = (DocumentQueryServiceAdapter) BeanUtils.getAdapter("document", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && dqsa != null) { dqsa.setRolsacUrl(rolsacUrl); }
-            return dqsa;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "boletin.", e);
-        }
-    }
-
-    public List<DocumentQueryServiceAdapter> llistarDocuments(DocumentCriteria documentCriteria) throws QueryServiceException {
-        try {
-            List<DocumentDTO> llistaDTO = rolsacQueryServiceStrategy.llistarDocuments(documentCriteria);
-            List<DocumentQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentQueryServiceAdapter>();
-            for (DocumentDTO documentDTO : llistaDTO) {
-            	DocumentQueryServiceAdapter dqsa = (DocumentQueryServiceAdapter) BeanUtils.getAdapter("document", getStrategy(), documentDTO);
-                if (rolsacUrl != null && !rolsacUrl.isEmpty() && dqsa != null) { dqsa.setRolsacUrl(rolsacUrl); }
-                llistaQueryServiceAdapter.add(dqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "boletines.", e);
-        }
-    }
-
-    public DocumentTramitQueryServiceAdapter obtenirDocumentTramit(DocumentTramitCriteria documentTramitCriteria) throws QueryServiceException {
-        try {
-            DocumentTramitDTO dto = rolsacQueryServiceStrategy.obtenirDocumentTramit(documentTramitCriteria);
-            DocumentTramitQueryServiceAdapter tdqsa = (DocumentTramitQueryServiceAdapter) BeanUtils.getAdapter("documentTramit", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && tdqsa != null) { tdqsa.setRolsacUrl(rolsacUrl); }
-            return tdqsa;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "documento tramite.", e);
-        }
-    }
-    
-    public List<DocumentoNormativaQueryServiceAdapter> llistarDocumentoNormativa(DocumentoNormativaCriteria documentoNormativaCriteria) throws QueryServiceException {
-    	try {
-            List<DocumentoNormativaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarDocumentoNormativa(documentoNormativaCriteria);
-            List<DocumentoNormativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentoNormativaQueryServiceAdapter>();
-            for (DocumentoNormativaDTO documentoNormativaDTO : llistaDTO) {
-            	DocumentoNormativaQueryServiceAdapter tdqsa = (DocumentoNormativaQueryServiceAdapter) BeanUtils.getAdapter("documentoNormativa", getStrategy(), documentoNormativaDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && tdqsa != null) { tdqsa.setRolsacUrl(rolsacUrl); }
-                llistaQueryServiceAdapter.add(tdqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "documentos tramite.", e);
-        }
-    }
-    
-    public List<DocumentoServicioQueryServiceAdapter> llistarDocumentoServicio(DocumentoServicioCriteria documentoServicioCriteria) throws QueryServiceException {
-    	try {
-            List<DocumentoServicioDTO> llistaDTO = rolsacQueryServiceStrategy.llistarDocumentoServicio(documentoServicioCriteria);
-            List<DocumentoServicioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentoServicioQueryServiceAdapter>();
-            for (DocumentoServicioDTO documentoServicioDTO : llistaDTO) {
-            	DocumentoServicioQueryServiceAdapter tdqsa = (DocumentoServicioQueryServiceAdapter) BeanUtils.getAdapter("documentoServicio", getStrategy(), documentoServicioDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && tdqsa != null) { tdqsa.setRolsacUrl(rolsacUrl); }
-                llistaQueryServiceAdapter.add(tdqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "documentos tramite.", e);
-        }
-    }
-    
-    public List<DocumentTramitQueryServiceAdapter> llistarDocumentTramit(DocumentTramitCriteria documentTramitCriteria) throws QueryServiceException {
-        try {
-            List<DocumentTramitDTO> llistaDTO = rolsacQueryServiceStrategy.llistarDocumentTramit(documentTramitCriteria);
-            List<DocumentTramitQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentTramitQueryServiceAdapter>();
-            for (DocumentTramitDTO documentTramitDTO : llistaDTO) {
-            	DocumentTramitQueryServiceAdapter tdqsa = (DocumentTramitQueryServiceAdapter) BeanUtils.getAdapter("documentTramit", getStrategy(), documentTramitDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && tdqsa != null) { tdqsa.setRolsacUrl(rolsacUrl); }
-                llistaQueryServiceAdapter.add(tdqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "documentos tramite.", e);
-        }
-    }
-
-    public EdificiQueryServiceAdapter obtenirEdifici(EdificiCriteria edificiCriteria) throws QueryServiceException {
-        try {
-            EdificiDTO dto = rolsacQueryServiceStrategy.obtenirEdifici(edificiCriteria);
-            EdificiQueryServiceAdapter eqsa = (EdificiQueryServiceAdapter) BeanUtils.getAdapter("edifici", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && eqsa != null) { eqsa.setRolsacUrl(rolsacUrl); }
-            return eqsa;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "edificio.", e);
-        }
-    }
-
-    public List<EdificiQueryServiceAdapter> llistarEdificis(EdificiCriteria edificiCriteria) throws QueryServiceException {
-        try {
-            List<EdificiDTO> llistaDTO = rolsacQueryServiceStrategy.llistarEdificis(edificiCriteria);
-            List<EdificiQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<EdificiQueryServiceAdapter>();
-            for (EdificiDTO edificiDTO : llistaDTO) {
-            	EdificiQueryServiceAdapter eqsa = (EdificiQueryServiceAdapter) BeanUtils.getAdapter("edifici", getStrategy(), edificiDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && eqsa != null) { eqsa.setRolsacUrl(rolsacUrl); }
-                llistaQueryServiceAdapter.add(eqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "edificios.", e);
-        }
-    }
-
-    public EnllacQueryServiceAdapter obtenirEnllac(EnllacCriteria enllacCriteria) throws QueryServiceException {
-        try {
-            EnllacDTO dto = rolsacQueryServiceStrategy.obtenirEnllac(enllacCriteria);
-            EnllacQueryServiceAdapter eqsa = (EnllacQueryServiceAdapter) BeanUtils.getAdapter("enllac", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && eqsa != null) { eqsa.setRolsacUrl(rolsacUrl); }
-            return eqsa;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "enlace.", e);
-        }
-    }
-
-    public List<EnllacQueryServiceAdapter> llistarEnllacos(EnllacCriteria enllacCriteria) throws QueryServiceException {
-        try {
-            List<EnllacDTO> llistaDTO = rolsacQueryServiceStrategy.llistarEnllacos(enllacCriteria);
-            List<EnllacQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<EnllacQueryServiceAdapter>();
-            for (EnllacDTO enllacDTO : llistaDTO) {
-            	EnllacQueryServiceAdapter eqsa = (EnllacQueryServiceAdapter) BeanUtils.getAdapter("enllac", getStrategy(), enllacDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && eqsa != null) { eqsa.setRolsacUrl(rolsacUrl); }
-                llistaQueryServiceAdapter.add(eqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "enlaces.", e);
-        }
-    }
-
-    public EspaiTerritorialQueryServiceAdapter obtenirEspaiTerritorial(EspaiTerritorialCriteria espaiTerritorialCriteria) throws QueryServiceException {
-        try {
-            EspaiTerritorialDTO dto = rolsacQueryServiceStrategy.obtenirEspaiTerritorial(espaiTerritorialCriteria);
-            EspaiTerritorialQueryServiceAdapter eqsa = (EspaiTerritorialQueryServiceAdapter) BeanUtils.getAdapter("espaiTerritorial", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && eqsa != null) { eqsa.setRolsacUrl(rolsacUrl); } 
-            return eqsa;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "espacio territorial.", e);
-        }
-    }
-
-    public List<EspaiTerritorialQueryServiceAdapter> llistarEspaisTerritorials(EspaiTerritorialCriteria espaiTerritorialCriteria) throws QueryServiceException {
-        try {
-            List<EspaiTerritorialDTO> llistaDTO = rolsacQueryServiceStrategy.llistarEspaisTerritorials(espaiTerritorialCriteria);
-            List<EspaiTerritorialQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<EspaiTerritorialQueryServiceAdapter>();
-            for (EspaiTerritorialDTO espaiTerritorialDTO : llistaDTO) {
-            	EspaiTerritorialQueryServiceAdapter eqsa = (EspaiTerritorialQueryServiceAdapter) BeanUtils.getAdapter("espaiTerritorial", getStrategy(), espaiTerritorialDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && eqsa != null) { eqsa.setRolsacUrl(rolsacUrl); }
-                llistaQueryServiceAdapter.add(eqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "espacios territoriales.", e);
-        }
-    }
-
-    public FamiliaQueryServiceAdapter obtenirFamilia(FamiliaCriteria familiaCriteria) throws QueryServiceException {
-        try {
-            FamiliaDTO dto = rolsacQueryServiceStrategy.obtenirFamilia(familiaCriteria);
-            FamiliaQueryServiceAdapter fqsa = (FamiliaQueryServiceAdapter) BeanUtils.getAdapter("familia", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && fqsa != null) { fqsa.setRolsacUrl(rolsacUrl); } 
-            return fqsa;
-        } catch (StrategyException e) { 
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "familia.", e);
-        }
-    }
-
-    public List<FamiliaQueryServiceAdapter> llistarFamilies(FamiliaCriteria familiaCriteria) throws QueryServiceException {
-        try {
-            List<FamiliaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarFamilies(familiaCriteria);
-            List<FamiliaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FamiliaQueryServiceAdapter>();
-            for (FamiliaDTO familiaDTO : llistaDTO) {
-            	FamiliaQueryServiceAdapter fqsa = (FamiliaQueryServiceAdapter) BeanUtils.getAdapter("familia", getStrategy(), familiaDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && fqsa != null) { fqsa.setRolsacUrl(rolsacUrl); } 
-                llistaQueryServiceAdapter.add(fqsa); 
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "familias.", e);
-        }
-    }
-
-    public FetVitalQueryServiceAdapter obtenirFetVital(FetVitalCriteria fetVitalCriteria) throws QueryServiceException {
-        try {
-            FetVitalDTO dto = rolsacQueryServiceStrategy.obtenirFetVital(fetVitalCriteria);
-            FetVitalQueryServiceAdapter fqsa = (FetVitalQueryServiceAdapter) BeanUtils.getAdapter("fetVital", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && fqsa != null) { fqsa.setRolsacUrl(rolsacUrl); } 
-            return fqsa;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "hecho vital.", e);
-        }
-    }
-
-    public List<FetVitalQueryServiceAdapter> llistarFetsVitals(FetVitalCriteria fetVitalCriteria) throws QueryServiceException {
-        try {
-            List<FetVitalDTO> llistaDTO = rolsacQueryServiceStrategy.llistarFetsVitals(fetVitalCriteria);
-            List<FetVitalQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FetVitalQueryServiceAdapter>();
-            for (FetVitalDTO fetVitalDTO : llistaDTO) {
-            	FetVitalQueryServiceAdapter fqsa = (FetVitalQueryServiceAdapter) BeanUtils.getAdapter("fetVital", getStrategy(), fetVitalDTO); 
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && fqsa != null) { fqsa.setRolsacUrl(rolsacUrl); } 
-                llistaQueryServiceAdapter.add(fqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "hechos vitales.", e);
-        }
-    }
-
-    public FitxaQueryServiceAdapter obtenirFitxa(FitxaCriteria fitxaCriteria) throws QueryServiceException {
-        try {
-            FitxaDTO dto = rolsacQueryServiceStrategy.obtenirFitxa(fitxaCriteria);
-            FitxaQueryServiceAdapter fqsa = (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && fqsa != null) { fqsa.setRolsacUrl(rolsacUrl); } 
-            return fqsa;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "ficha.", e);
-        }
-    }
-
-    public List<FitxaQueryServiceAdapter> llistarFitxes(FitxaCriteria fitxaCriteria) throws QueryServiceException {
-        try {
-            List<FitxaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarFitxes(fitxaCriteria);
-            List<FitxaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FitxaQueryServiceAdapter>();
-            for (FitxaDTO fitxaDTO : llistaDTO) {
-            	FitxaQueryServiceAdapter fqsa = (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), fitxaDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && fqsa != null) { fqsa.setRolsacUrl(rolsacUrl); } 
-                llistaQueryServiceAdapter.add(fqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "fichas.", e);
-        }
-    }
-
-    public FitxaUAQueryServiceAdapter obtenirFitxaUA(FitxaUACriteria fitxaUACriteria) throws QueryServiceException {
-        try {
-            FitxaUADTO dto = rolsacQueryServiceStrategy.obtenirFitxaUA(fitxaUACriteria);
-            FitxaUAQueryServiceAdapter fqsa = (FitxaUAQueryServiceAdapter) BeanUtils.getAdapter("fitxaUA", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && fqsa != null) { fqsa.setRolsacUrl(rolsacUrl); } 
-            return fqsa;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "fichaUA.", e);
-        }
-    }
-
-    public List<FitxaUAQueryServiceAdapter> llistarFitxesUA(FitxaUACriteria fitxaUACriteria) throws QueryServiceException {
-        try {
-            List<FitxaUADTO> llistaDTO = rolsacQueryServiceStrategy.llistarFitxesUA(fitxaUACriteria);
-            List<FitxaUAQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FitxaUAQueryServiceAdapter>();
-            for (FitxaUADTO fitxaUADTO : llistaDTO) {
-            	FitxaUAQueryServiceAdapter fqsa = (FitxaUAQueryServiceAdapter) BeanUtils.getAdapter("fitxaUA", getStrategy(), fitxaUADTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && fqsa != null) { fqsa.setRolsacUrl(rolsacUrl); } 
-                llistaQueryServiceAdapter.add(fqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "fichasUA.", e);
-        }
-    }
-
-    public FormulariQueryServiceAdapter obtenirFormulari(FormulariCriteria formulariCriteria) throws QueryServiceException {
-        try {
-            FormulariDTO dto = rolsacQueryServiceStrategy.obtenirFormulari(formulariCriteria);
-            FormulariQueryServiceAdapter fqsa= (FormulariQueryServiceAdapter) BeanUtils.getAdapter("formulari", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && fqsa != null) { fqsa.setRolsacUrl(rolsacUrl); } 
-            return fqsa;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "formulario.", e);
-        }
-    }
-
-    public List<FormulariQueryServiceAdapter> llistarFormularis(FormulariCriteria formulariCriteria) throws QueryServiceException {
-        try {
-            List<FormulariDTO> llistaDTO = rolsacQueryServiceStrategy.llistarFormularis(formulariCriteria);
-            List<FormulariQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FormulariQueryServiceAdapter>();
-            for (FormulariDTO formDTO : llistaDTO) {
-            	FormulariQueryServiceAdapter fqsa = (FormulariQueryServiceAdapter) BeanUtils.getAdapter("formulari", getStrategy(), formDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && fqsa != null) { fqsa.setRolsacUrl(rolsacUrl); } 
-                llistaQueryServiceAdapter.add(fqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "formularios.", e);
-        }
-        
-    }
-
-    public IconaFamiliaQueryServiceAdapter obtenirIconaFamilia(IconaFamiliaCriteria iconaFamiliaCriteria) throws QueryServiceException {
-        try {
-            IconaFamiliaDTO dto = rolsacQueryServiceStrategy.obtenirIconaFamilia(iconaFamiliaCriteria);
-            IconaFamiliaQueryServiceAdapter fqsa = (IconaFamiliaQueryServiceAdapter) BeanUtils.getAdapter("iconaFamilia", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && fqsa != null) { fqsa.setRolsacUrl(rolsacUrl); } 
-            return fqsa;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "icono familia.", e);
-        }
-    }
-
-    public List<IconaFamiliaQueryServiceAdapter> llistarIconesFamilies(IconaFamiliaCriteria iconaFamiliaCriteria) throws QueryServiceException {
-        try {
-            List<IconaFamiliaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarIconesFamilies(iconaFamiliaCriteria);
-            List<IconaFamiliaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<IconaFamiliaQueryServiceAdapter>();
-            for (IconaFamiliaDTO ifDTO : llistaDTO) {
-            	IconaFamiliaQueryServiceAdapter fqsa = (IconaFamiliaQueryServiceAdapter) BeanUtils.getAdapter("iconaFamilia", getStrategy(), ifDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && fqsa != null) { fqsa.setRolsacUrl(rolsacUrl); } 
-                llistaQueryServiceAdapter.add(fqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "iconos familia.", e);
-        }
-    }
-
-    public IconaMateriaQueryServiceAdapter obtenirIconaMateria(IconaMateriaCriteria iconaMateriaCriteria) throws QueryServiceException {
-        try {
-            IconaMateriaDTO dto = rolsacQueryServiceStrategy.obtenirIconaMateria(iconaMateriaCriteria);
-            IconaMateriaQueryServiceAdapter iqsa = (IconaMateriaQueryServiceAdapter) BeanUtils.getAdapter("iconaMateria", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && iqsa != null) { iqsa.setRolsacUrl(rolsacUrl); } 
-            return iqsa;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "icono materia.", e);
-        }
-    }
-
-    public List<IconaMateriaQueryServiceAdapter> llistarIconesMateries(IconaMateriaCriteria iconaMateriaCriteria) throws QueryServiceException {
-        try {
-            List<IconaMateriaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarIconesMateries(iconaMateriaCriteria);
-            List<IconaMateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<IconaMateriaQueryServiceAdapter>();
-            for (IconaMateriaDTO imDTO : llistaDTO) {
-            	IconaMateriaQueryServiceAdapter iqsa = (IconaMateriaQueryServiceAdapter) BeanUtils.getAdapter("iconaMateria", getStrategy(), imDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && iqsa != null) { iqsa.setRolsacUrl(rolsacUrl); } 
-                llistaQueryServiceAdapter.add(iqsa); 
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "iconos materia.", e);
-        }
-    }
-
-    public MateriaQueryServiceAdapter obtenirMateria(MateriaCriteria materiaCriteria) throws QueryServiceException {
-        try {
-            MateriaDTO dto = rolsacQueryServiceStrategy.obtenirMateria(materiaCriteria);
-            MateriaQueryServiceAdapter mqsa = (MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && mqsa != null) { mqsa.setRolsacUrl(rolsacUrl); } 
-            return mqsa;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "materia.", e);
-        }
-    }
-
-    public List<MateriaQueryServiceAdapter> llistarMateries(MateriaCriteria materiaCriteria) throws QueryServiceException {
-        try {
-            List<MateriaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarMateries(materiaCriteria);
-            List<MateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<MateriaQueryServiceAdapter>();
-            for (MateriaDTO materiaDTO : llistaDTO) {
-            	MateriaQueryServiceAdapter mqsa = (MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), materiaDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && mqsa != null) { mqsa.setRolsacUrl(rolsacUrl); } 
-                 llistaQueryServiceAdapter.add(mqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "materias.", e);
-        }
-    }
-
-    public MateriaAgrupacioQueryServiceAdapter obtenirMateriaAgrupacio(MateriaAgrupacioCriteria materiaAgrupacioCriteria) throws QueryServiceException {
-        try {
-            MateriaAgrupacioDTO dto = rolsacQueryServiceStrategy.obtenirMateriaAgrupacio(materiaAgrupacioCriteria);
-            MateriaAgrupacioQueryServiceAdapter mqsa = (MateriaAgrupacioQueryServiceAdapter) BeanUtils.getAdapter("materiaAgrupacio", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && mqsa != null) { mqsa.setRolsacUrl(rolsacUrl); } 
-            return mqsa;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "agrupacion materia.", e);
-        }
-    }
-
-    public List<MateriaAgrupacioQueryServiceAdapter> llistarMateriesAgrupacions(MateriaAgrupacioCriteria materiaAgrupacioCriteria) throws QueryServiceException {
-        try {
-            List<MateriaAgrupacioDTO> llistaDTO = rolsacQueryServiceStrategy.llistarMateriesAgrupacions(materiaAgrupacioCriteria);
-            List<MateriaAgrupacioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<MateriaAgrupacioQueryServiceAdapter>();
-            for (MateriaAgrupacioDTO maDTO : llistaDTO) {
-            	MateriaAgrupacioQueryServiceAdapter mqsa = (MateriaAgrupacioQueryServiceAdapter) BeanUtils.getAdapter("materiaAgrupacio", getStrategy(), maDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && mqsa != null) { mqsa.setRolsacUrl(rolsacUrl); } 
-                llistaQueryServiceAdapter.add(mqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "agrupaciones materia.", e);
-        }
-    }
-
-    public NormativaQueryServiceAdapter obtenirNormativa(NormativaCriteria normativaCriteria) throws QueryServiceException {
-        try {
-            NormativaDTO dto = rolsacQueryServiceStrategy.obtenirNormativa(normativaCriteria);
-            NormativaQueryServiceAdapter nqsa = (NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && nqsa != null) { nqsa.setRolsacUrl(rolsacUrl); } 
-            return nqsa;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "normativa.", e);
-        }
-    }
-
-    public List<NormativaQueryServiceAdapter> llistarNormatives(NormativaCriteria normativaCriteria) throws QueryServiceException {
-        try {
-            List<NormativaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarNormatives(normativaCriteria);
-            List<NormativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<NormativaQueryServiceAdapter>();
-            for (NormativaDTO normativaDTO : llistaDTO) {
-            	NormativaQueryServiceAdapter nqsa = (NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa", getStrategy(), normativaDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && nqsa != null) { nqsa.setRolsacUrl(rolsacUrl); } 
-                llistaQueryServiceAdapter.add(nqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "normativas.", e);
-        }
-    }
-
-    public PerfilQueryServiceAdapter obtenirPerfil(PerfilCriteria perfilCriteria) throws QueryServiceException {
-        try {
-            PerfilDTO dto = rolsacQueryServiceStrategy.obtenirPerfil(perfilCriteria);
-            PerfilQueryServiceAdapter pqsa = (PerfilQueryServiceAdapter) BeanUtils.getAdapter("perfil", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && pqsa != null) { pqsa.setRolsacUrl(rolsacUrl); } 
-            return pqsa;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "perfil.", e);
-        }
-    }
-
-    public List<PerfilQueryServiceAdapter> llistarPerfils(PerfilCriteria perfilCriteria) throws QueryServiceException {
-        try {
-            List<PerfilDTO> llistaDTO = rolsacQueryServiceStrategy.llistarPerfils(perfilCriteria);
-            List<PerfilQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<PerfilQueryServiceAdapter>();
-            for (PerfilDTO perfilDTO : llistaDTO) {
-            	PerfilQueryServiceAdapter pqsa = (PerfilQueryServiceAdapter) BeanUtils.getAdapter("perfil", getStrategy(), perfilDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && pqsa != null) { pqsa.setRolsacUrl(rolsacUrl); } 
-                llistaQueryServiceAdapter.add(pqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "perfiles.", e);
-        }
-    }
-
-    public PersonalQueryServiceAdapter obtenirPersonal(PersonalCriteria personalCriteria) throws QueryServiceException {
-        try {
-            PersonalDTO dto = rolsacQueryServiceStrategy.obtenirPersonal(personalCriteria);
-            PersonalQueryServiceAdapter pqsa = (PersonalQueryServiceAdapter) BeanUtils.getAdapter("personal", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && pqsa != null) { pqsa.setRolsacUrl(rolsacUrl); } 
-            return pqsa;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "personal.", e);
-        }
-    }
-
-    public List<PersonalQueryServiceAdapter> llistarPersonal(PersonalCriteria personalCriteria) throws QueryServiceException {
-        try {
-            List<PersonalDTO> llistaDTO = rolsacQueryServiceStrategy.llistarPersonal(personalCriteria);
-            List<PersonalQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<PersonalQueryServiceAdapter>();
-            for (PersonalDTO personalDTO : llistaDTO) {
-            	PersonalQueryServiceAdapter pqsa = (PersonalQueryServiceAdapter) BeanUtils.getAdapter("personal", getStrategy(), personalDTO); 
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && pqsa != null) { pqsa.setRolsacUrl(rolsacUrl); } 
-                llistaQueryServiceAdapter.add(pqsa);
-            } 
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "personal.", e);
-        }
-    }
-
-    public PublicObjectiuQueryServiceAdapter obtenirPublicObjectiu(PublicObjectiuCriteria publicObjectiuCriteria) throws QueryServiceException {
-        try {
-            PublicObjectiuDTO dto = rolsacQueryServiceStrategy.obtenirPublicObjectiu(publicObjectiuCriteria);
-            PublicObjectiuQueryServiceAdapter pqsa = (PublicObjectiuQueryServiceAdapter) BeanUtils.getAdapter("publicObjectiu", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && pqsa != null) { pqsa.setRolsacUrl(rolsacUrl); } 
-            return pqsa;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "publico objetivo.", e);
-        }
-    }
-
-    public List<PublicObjectiuQueryServiceAdapter> llistarPublicsObjectius(PublicObjectiuCriteria publicObjectiuCriteria) throws QueryServiceException {
-        try {
-            List<PublicObjectiuDTO> llistaDTO = rolsacQueryServiceStrategy.llistarPublicsObjectius(publicObjectiuCriteria);
-            List<PublicObjectiuQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<PublicObjectiuQueryServiceAdapter>();
-            for (PublicObjectiuDTO poDTO : llistaDTO) {
-            	PublicObjectiuQueryServiceAdapter pqsa = (PublicObjectiuQueryServiceAdapter) BeanUtils.getAdapter("publicObjectiu", getStrategy(), poDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && pqsa != null) { pqsa.setRolsacUrl(rolsacUrl); } 
-                llistaQueryServiceAdapter.add(pqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "publico objetivo.", e);
-        }
-    }
-
-    public TipusAfectacioQueryServiceAdapter obtenirTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria) throws QueryServiceException{
-        try {
-            TipusAfectacioDTO dto = rolsacQueryServiceStrategy.obtenirTipusAfectacio(tipusAfectacioCriteria);
-            return (TipusAfectacioQueryServiceAdapter) BeanUtils.getAdapter("tipusAfectacio", getStrategy(), dto);            
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "tipo afectacion.", e);
-        }
-    }
-    
-    public List<TipusAfectacioQueryServiceAdapter> llistarTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria) throws QueryServiceException {
-        try {
-            List<TipusAfectacioDTO> llistaDTO = rolsacQueryServiceStrategy.llistarTipusAfectacio(tipusAfectacioCriteria);
-            List<TipusAfectacioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<TipusAfectacioQueryServiceAdapter>();
-            for (TipusAfectacioDTO taDTO : llistaDTO) {
-                llistaQueryServiceAdapter.add((TipusAfectacioQueryServiceAdapter) BeanUtils.getAdapter("tipusAfectacio", getStrategy(), taDTO));
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "tipos de afectaciones.", e);
-        }
-    }
-    
-    public SeccioQueryServiceAdapter obtenirSeccio(SeccioCriteria seccioCriteria) throws QueryServiceException {
-        try {
-            SeccioDTO dto = rolsacQueryServiceStrategy.obtenirSeccio(seccioCriteria);
-            SeccioQueryServiceAdapter sqsa = (SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && sqsa != null) { sqsa.setRolsacUrl(rolsacUrl); } 
-            return sqsa; 
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "seccion.", e);
-        }
-    }
-
-    public List<SeccioQueryServiceAdapter> llistarSeccions(SeccioCriteria seccioCriteria) throws QueryServiceException {
-        try {
-            List<SeccioDTO> llistaDTO = rolsacQueryServiceStrategy.llistarSeccions(seccioCriteria);
-            List<SeccioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<SeccioQueryServiceAdapter>();
-            for (SeccioDTO poDTO : llistaDTO) {
-            	SeccioQueryServiceAdapter sqsa = (SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), poDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && sqsa != null) { sqsa.setRolsacUrl(rolsacUrl); } 
-                llistaQueryServiceAdapter.add(sqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "secciones.", e);
-        }
-    }
-
-    public TaxaQueryServiceAdapter obtenirTaxa(TaxaCriteria taxaCriteria) throws QueryServiceException {
-        try {
-            TaxaDTO dto = rolsacQueryServiceStrategy.obtenirTaxa(taxaCriteria);
-            TaxaQueryServiceAdapter tqsa = (TaxaQueryServiceAdapter) BeanUtils.getAdapter("taxa", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && tqsa != null) { tqsa.setRolsacUrl(rolsacUrl); } 
-            return tqsa; 
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "tasa.", e);
-        }
-    }
-
-    public List<TaxaQueryServiceAdapter> llistarTaxes(TaxaCriteria taxaCriteria) throws QueryServiceException {
-        List<TaxaDTO> llistaDTO;
-        try {
-            llistaDTO = rolsacQueryServiceStrategy.llistarTaxes(taxaCriteria);
-            List<TaxaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<TaxaQueryServiceAdapter>();
-            for (TaxaDTO taxaDTO : llistaDTO) {
-            	TaxaQueryServiceAdapter tqsa = (TaxaQueryServiceAdapter) BeanUtils.getAdapter("taxa", getStrategy(), taxaDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && tqsa != null) { tqsa.setRolsacUrl(rolsacUrl); } 
-                llistaQueryServiceAdapter.add(tqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "tasas.", e);
-        }
-    }
-
-    public TipusQueryServiceAdapter obtenirTipus(TipusCriteria tipusCriteria) throws QueryServiceException {
-        try {
-            TipusDTO dto = rolsacQueryServiceStrategy.obtenirTipus(tipusCriteria);
-            TipusQueryServiceAdapter tqsa = (TipusQueryServiceAdapter) BeanUtils.getAdapter("tipus", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && tqsa != null) { tqsa.setRolsacUrl(rolsacUrl); } 
-            return tqsa; 
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "tipo.", e);
-        }
-    }
-
-    public List<TipusQueryServiceAdapter> llistarTipus(TipusCriteria tipusCriteria) throws QueryServiceException {
-        try {
-            List<TipusDTO> llistaDTO = rolsacQueryServiceStrategy.llistarTipus(tipusCriteria);
-            List<TipusQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<TipusQueryServiceAdapter>();
-            for (TipusDTO tipusDTO : llistaDTO) {
-            	TipusQueryServiceAdapter tqsa = (TipusQueryServiceAdapter) BeanUtils.getAdapter("tipus", getStrategy(), tipusDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && tqsa != null) { tqsa.setRolsacUrl(rolsacUrl); } 
-                llistaQueryServiceAdapter.add(tqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "tipos.", e);
-        }
-    }
-    
-    public TramitQueryServiceAdapter obtenirTramit(TramitCriteria tramitCriteria) throws QueryServiceException {
-        try {
-            TramitDTO dto = rolsacQueryServiceStrategy.obtenirTramit(tramitCriteria);
-            TramitQueryServiceAdapter tqsa = (TramitQueryServiceAdapter) BeanUtils.getAdapter("tramit", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && tqsa != null) { tqsa.setRolsacUrl(rolsacUrl); } 
-            return tqsa; 
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "tramite.", e);
-        }
-    }
-
-    public List<TramitQueryServiceAdapter> llistarTramits(TramitCriteria tramitCriteria) throws QueryServiceException {
-        try {
-            List<TramitDTO> llistaDTO = rolsacQueryServiceStrategy.llistarTramits(tramitCriteria);
-            List<TramitQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<TramitQueryServiceAdapter>();
-            for (TramitDTO tramitDTO : llistaDTO) {
-            	TramitQueryServiceAdapter tqsa = (TramitQueryServiceAdapter) BeanUtils.getAdapter("tramit", getStrategy(), tramitDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && tqsa != null) { tqsa.setRolsacUrl(rolsacUrl); } 
-                 llistaQueryServiceAdapter.add(tqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "tramites.", e);
-        }
-    }
-
-    public UnitatAdministrativaQueryServiceAdapter obtenirUnitatAdministrativa(UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws QueryServiceException {
-        try {
-            UnitatAdministrativaDTO dto = rolsacQueryServiceStrategy.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
-            UnitatAdministrativaQueryServiceAdapter uaqsa = (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && uaqsa != null) { uaqsa.setRolsacUrl(rolsacUrl); }
-            return uaqsa;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "unidad administrativa.", e);
-        }
-    }
-
-    public List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws QueryServiceException {
-        try {
-            List<UnitatAdministrativaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarUnitatsAdministratives(unitatAdministrativaCriteria);
-            List<UnitatAdministrativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
-            for (UnitatAdministrativaDTO uaDTO : llistaDTO) {
-            	UnitatAdministrativaQueryServiceAdapter uaqsa = (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), uaDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && uaqsa != null) { uaqsa.setRolsacUrl(rolsacUrl); }
-                llistaQueryServiceAdapter.add(uaqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "unidades administrativas.", e);
-        }
-    }
-
-    public UnitatMateriaQueryServiceAdapter obtenirUnitatMateria(UnitatMateriaCriteria unitatMateriaCriteria) throws QueryServiceException {
-        try {
-            UnitatMateriaDTO dto = rolsacQueryServiceStrategy.obtenirUnitatMateria(unitatMateriaCriteria);
-            UnitatMateriaQueryServiceAdapter uqsa = (UnitatMateriaQueryServiceAdapter) BeanUtils.getAdapter("unitatMateria", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && uqsa != null) { uqsa.setRolsacUrl(rolsacUrl); }
-            return uqsa;
-        } catch (StrategyException e) {
-            e.printStackTrace();
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "unidad materia.", e);
-        }
-    }
-
-    public List<UnitatMateriaQueryServiceAdapter> llistarUnitatsMateries(UnitatMateriaCriteria unitatMateriaCriteria) throws QueryServiceException {
-        try {
-            List<UnitatMateriaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarUnitatsMateries(unitatMateriaCriteria);
-            List<UnitatMateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatMateriaQueryServiceAdapter>();
-            for (UnitatMateriaDTO umDTO : llistaDTO) {
-            	UnitatMateriaQueryServiceAdapter uqsa = (UnitatMateriaQueryServiceAdapter) BeanUtils.getAdapter("unitatMateria", getStrategy(), umDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && uqsa != null) { uqsa.setRolsacUrl(rolsacUrl); }
-                llistaQueryServiceAdapter.add(uqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "unidades materia.", e);
-        }
-    }
-
-    public UsuariQueryServiceAdapter obtenirUsuari(UsuariCriteria usuariCriteria) throws QueryServiceException {
-        try {
-            UsuariDTO dto = rolsacQueryServiceStrategy.obtenirUsuari(usuariCriteria);
-            UsuariQueryServiceAdapter uqsa = (UsuariQueryServiceAdapter) BeanUtils.getAdapter("usuari", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && uqsa != null) { uqsa.setRolsacUrl(rolsacUrl); }
-            return uqsa;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "usuario.", e);
-        }
-    }
-
-    public List<UsuariQueryServiceAdapter> llistarUsuaris(UsuariCriteria usuariCriteria) throws QueryServiceException {
-        try {
-            List<UsuariDTO> llistaDTO = rolsacQueryServiceStrategy.llistarUsuaris(usuariCriteria);
-            List<UsuariQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UsuariQueryServiceAdapter>();
-            for (UsuariDTO uDTO : llistaDTO) {
-            	 UsuariQueryServiceAdapter uqsa = (UsuariQueryServiceAdapter) BeanUtils.getAdapter("usuari", getStrategy(), uDTO);
-            	if (rolsacUrl != null && !rolsacUrl.isEmpty() && uqsa != null) { uqsa.setRolsacUrl(rolsacUrl); }
-                llistaQueryServiceAdapter.add(uqsa);
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "usuarios.", e);
-        }
-    }
-    
-    public IniciacioQueryServiceAdapter obtenirTipusIniciacio(IniciacioCriteria iniciacioCriteria) throws QueryServiceException {
-    	
-    	try {
-    		
-            IniciacioDTO dto = rolsacQueryServiceStrategy.obtenirTipusIniciacio(iniciacioCriteria);
-            IniciacioQueryServiceAdapter iqsa = (IniciacioQueryServiceAdapter)BeanUtils.getAdapter("iniciacio", getStrategy(), dto);
-            if (rolsacUrl != null && !rolsacUrl.isEmpty() && iqsa != null) { iqsa.setRolsacUrl(rolsacUrl); }
-            return iqsa;
-        } catch (StrategyException e) {
-        	
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "iniciacion.", e);
-            
-        }
-    	
-    }
-    
-    public List<IniciacioQueryServiceAdapter> llistarTipusIniciacions(IniciacioCriteria iniciacioCriteria) throws QueryServiceException {
-    	
-    	try {
-    		
-            List<IniciacioDTO> llistaDTO = rolsacQueryServiceStrategy.llistarTipusIniciacions(iniciacioCriteria);
-            List<IniciacioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<IniciacioQueryServiceAdapter>();
-            
-            for (IniciacioDTO uDTO : llistaDTO) {
-            	IniciacioQueryServiceAdapter iqsa = (IniciacioQueryServiceAdapter)BeanUtils.getAdapter("iniciacio", getStrategy(), uDTO);
-                if (rolsacUrl != null && !rolsacUrl.isEmpty() && iqsa != null) { iqsa.setRolsacUrl(rolsacUrl); }
-                llistaQueryServiceAdapter.add(iqsa);
-            }
-            
-            return llistaQueryServiceAdapter;
-            
-        } catch (StrategyException e) {
-        	
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "usuarios.", e);
-            
-        }
-    	
-    }
-    
-    public IdiomaQueryServiceAdapter obtenirIdioma(IdiomaCriteria idiomaCriteria) throws QueryServiceException {
-        try {
-            IdiomaDTO dto = rolsacQueryServiceStrategy.obtenirIdioma(idiomaCriteria);
-            return (IdiomaQueryServiceAdapter) BeanUtils.getAdapter("idioma", getStrategy(), dto);
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "idioma.", e);
-        }
-    }
-
-	public List<IdiomaQueryServiceAdapter> llistarIdiomes(IdiomaCriteria idiomaCriteria) throws QueryServiceException {
+	@Override
+	public ProcedimentQueryServiceAdapter obtenirProcediment(final ProcedimentCriteria procedimentCriteria)
+			throws QueryServiceException {
 		try {
-            List<IdiomaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarIdiomes(idiomaCriteria);
-            List<IdiomaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<IdiomaQueryServiceAdapter>();
-            for (IdiomaDTO uDTO : llistaDTO) {
-                llistaQueryServiceAdapter.add((IdiomaQueryServiceAdapter) BeanUtils.getAdapter("idioma", getStrategy(), uDTO));
-            }
-            return llistaQueryServiceAdapter;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "idiomas.", e);
-        }
+			final ProcedimentDTO dto = rolsacQueryServiceStrategy.obtenirProcediment(procedimentCriteria);
+			final ProcedimentQueryServiceAdapter pqsa = (ProcedimentQueryServiceAdapter) BeanUtils
+					.getAdapter("procediment", getStrategy(), dto);
+
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && pqsa != null) {
+				pqsa.setRolsacUrl(rolsacUrl);
+			}
+			return pqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "procedimiento.", e);
+		}
 	}
 
-    public int getNumFitxes(FitxaCriteria fitxaCriteria) throws QueryServiceException {
-        try {
-            Integer num = rolsacQueryServiceStrategy.getNumFitxes(fitxaCriteria);
-            return num;
-        } catch (StrategyException e) {
-            throw new QueryServiceException(ExceptionMessages.COUNT_GETTER + "fitxas.", e);
-        }
-    }
-
-	public SilencioQueryServiceAdapter obtenirSilencio(Long codSilencio, String idioma) throws QueryServiceException {
-		 try 
-		 {
-	         SilencioDTO dto = rolsacQueryServiceStrategy.obtenirSilenci(codSilencio, idioma);
-			 SilencioQueryServiceAdapter sqsa = (SilencioQueryServiceAdapter) BeanUtils.getAdapter("silencio", getStrategy(), dto);
-			 if (rolsacUrl != null && !rolsacUrl.isEmpty() && sqsa != null) { sqsa.setRolsacUrl(rolsacUrl); }
-	            return sqsa;
-	        } catch (StrategyException e) {
-	            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "silencio.", e);
-	        }
+	@Override
+	public List<ProcedimentQueryServiceAdapter> llistarProcediments(final ProcedimentCriteria procedimentCriteria)
+			throws QueryServiceException {
+		try {
+			final List<ProcedimentDTO> llistaDTO = rolsacQueryServiceStrategy.llistarProcediments(procedimentCriteria);
+			final List<ProcedimentQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<ProcedimentQueryServiceAdapter>();
+			for (final ProcedimentDTO procedimentDTO : llistaDTO) {
+				final ProcedimentQueryServiceAdapter procedimiento = (ProcedimentQueryServiceAdapter) BeanUtils
+						.getAdapter("procediment", getStrategy(), procedimentDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && procedimiento != null) {
+					procedimiento.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(procedimiento);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "procedimientos.", e);
+		}
 	}
 
-	
+	@Override
+	public ServicioQueryServiceAdapter obtenirServicio(final ServicioCriteria servicioCriteria)
+			throws QueryServiceException {
+		try {
+			final ServicioDTO dto = rolsacQueryServiceStrategy.obtenirServicio(servicioCriteria);
+			final ServicioQueryServiceAdapter pqsa = (ServicioQueryServiceAdapter) BeanUtils.getAdapter("servicio",
+					getStrategy(), dto);
+
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && pqsa != null) {
+				pqsa.setRolsacUrl(rolsacUrl);
+			}
+			return pqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "servicio.", e);
+		}
+	}
+
+	@Override
+	public List<ServicioQueryServiceAdapter> llistarServicios(final ServicioCriteria servicioCriteria)
+			throws QueryServiceException {
+		try {
+			final List<ServicioDTO> llistaDTO = rolsacQueryServiceStrategy.llistarServicios(servicioCriteria);
+			final List<ServicioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<ServicioQueryServiceAdapter>();
+			for (final ServicioDTO servicioDTO : llistaDTO) {
+				final ServicioQueryServiceAdapter servicio = (ServicioQueryServiceAdapter) BeanUtils
+						.getAdapter("servicio", getStrategy(), servicioDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && servicio != null) {
+					servicio.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(servicio);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "servicio.", e);
+		}
+	}
+
+	@Override
+	public CatalegDocumentsQueryServiceAdapter obtenirCatalegDocuments(
+			final CatalegDocumentsCriteria catalegDocumentsCriteria) throws QueryServiceException {
+		try {
+			final CatalegDocumentsDTO dto = rolsacQueryServiceStrategy
+					.obtenirCatalegDocuments(catalegDocumentsCriteria);
+			final CatalegDocumentsQueryServiceAdapter cdqsa = (CatalegDocumentsQueryServiceAdapter) BeanUtils
+					.getAdapter("catalegDocuments", getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && cdqsa != null) {
+				cdqsa.setRolsacUrl(rolsacUrl);
+			}
+			return cdqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "catálogo de documentos.", e);
+		}
+	}
+
+	@Override
+	public List<CatalegDocumentsQueryServiceAdapter> llistarCatalegsDocuments(
+			final CatalegDocumentsCriteria catalegDocumentsCriteria) throws QueryServiceException {
+		try {
+			final List<CatalegDocumentsDTO> llistaDTO = rolsacQueryServiceStrategy
+					.llistarCatalegsDocuments(catalegDocumentsCriteria);
+			final List<CatalegDocumentsQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<CatalegDocumentsQueryServiceAdapter>();
+			for (final CatalegDocumentsDTO catalegDocumentsDTO : llistaDTO) {
+				final CatalegDocumentsQueryServiceAdapter cdqsa = (CatalegDocumentsQueryServiceAdapter) BeanUtils
+						.getAdapter("catalegDocuments", getStrategy(), catalegDocumentsDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && cdqsa != null) {
+					cdqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(cdqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "catálogos de documentos.", e);
+		}
+	}
+
+	@Override
+	public ExcepcioDocumentacioQueryServiceAdapter obtenirExcepcioDocumentacio(
+			final ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria) throws QueryServiceException {
+		try {
+			final ExcepcioDocumentacioDTO dto = rolsacQueryServiceStrategy
+					.obtenirExcepcioDocumentacio(excepcioDocumentacioCriteria);
+			final ExcepcioDocumentacioQueryServiceAdapter eqsa = (ExcepcioDocumentacioQueryServiceAdapter) BeanUtils
+					.getAdapter("excepcioDocumentacio", getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && eqsa != null) {
+				eqsa.setRolsacUrl(rolsacUrl);
+			}
+			return eqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "excepción de documentación.", e);
+		}
+	}
+
+	@Override
+	public List<ExcepcioDocumentacioQueryServiceAdapter> llistarExcepcionsDocumentacio(
+			final ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria) throws QueryServiceException {
+		try {
+			final List<ExcepcioDocumentacioDTO> llistaDTO = rolsacQueryServiceStrategy
+					.llistarExcepcionsDocumentacio(excepcioDocumentacioCriteria);
+			final List<ExcepcioDocumentacioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<ExcepcioDocumentacioQueryServiceAdapter>();
+			for (final ExcepcioDocumentacioDTO excepcioDocumentacioDTO : llistaDTO) {
+				final ExcepcioDocumentacioQueryServiceAdapter eqsa = (ExcepcioDocumentacioQueryServiceAdapter) BeanUtils
+						.getAdapter("excepcioDocumentacio", getStrategy(), excepcioDocumentacioDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && eqsa != null) {
+					eqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(eqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "excepciones de documentación.", e);
+		}
+	}
+
+	@Override
+	public int getNumProcediments(final ProcedimentCriteria procedimentCriteria) throws QueryServiceException {
+		try {
+			final Integer num = rolsacQueryServiceStrategy.getNumProcediments(procedimentCriteria);
+			return num;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.COUNT_GETTER + "procedimientos.", e);
+		}
+	}
+
+	@Override
+	public int getNumServicios(final ServicioCriteria servicioCriteria) throws QueryServiceException {
+		try {
+			final Integer num = rolsacQueryServiceStrategy.getNumServicios(servicioCriteria);
+			return num;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.COUNT_GETTER + "servicios.", e);
+		}
+	}
+
+	@Override
+	public AgrupacioFetVitalQueryServiceAdapter obtenirAgrupacioFetVital(
+			final AgrupacioFetVitalCriteria agrupacioFetVitalCriteria) throws QueryServiceException {
+		try {
+			final AgrupacioFetVitalDTO dto = rolsacQueryServiceStrategy
+					.obtenirAgrupacioFetVital(agrupacioFetVitalCriteria);
+			final AgrupacioFetVitalQueryServiceAdapter afvqsa = (AgrupacioFetVitalQueryServiceAdapter) BeanUtils
+					.getAdapter("agrupacioFetVital", getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && afvqsa != null) {
+				afvqsa.setRolsacUrl(rolsacUrl);
+			}
+			return afvqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "agrupacion hecho vital.", e);
+		}
+	}
+
+	@Override
+	public List<AgrupacioFetVitalQueryServiceAdapter> llistarAgrupacionsFetsVitals(
+			final AgrupacioFetVitalCriteria agrupacioFetVitalCriteria) throws QueryServiceException {
+		try {
+			final List<AgrupacioFetVitalDTO> llistaDTO = rolsacQueryServiceStrategy
+					.llistarAgrupacionsFetsVitals(agrupacioFetVitalCriteria);
+			final List<AgrupacioFetVitalQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<AgrupacioFetVitalQueryServiceAdapter>();
+			for (final AgrupacioFetVitalDTO afvDTO : llistaDTO) {
+				final AgrupacioFetVitalQueryServiceAdapter afvqsa = (AgrupacioFetVitalQueryServiceAdapter) BeanUtils
+						.getAdapter("agrupacioFetVital", getStrategy(), afvDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && afvqsa != null) {
+					afvqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(afvqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "agrupaciones hecho vital.", e);
+		}
+	}
+
+	@Override
+	public AgrupacioMateriaQueryServiceAdapter obtenirAgrupacioMateria(
+			final AgrupacioMateriaCriteria agrupacioMateriaCriteria) throws QueryServiceException {
+		try {
+			final AgrupacioMateriaDTO dto = rolsacQueryServiceStrategy
+					.obtenirAgrupacioMateria(agrupacioMateriaCriteria);
+			final AgrupacioMateriaQueryServiceAdapter amqsa = (AgrupacioMateriaQueryServiceAdapter) BeanUtils
+					.getAdapter("agrupacioMateria", getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && amqsa != null) {
+				amqsa.setRolsacUrl(rolsacUrl);
+			}
+			return amqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "agrupacion materia.", e);
+		}
+
+	}
+
+	@Override
+	public List<AgrupacioMateriaQueryServiceAdapter> llistarAgrupacionsMateries(
+			final AgrupacioMateriaCriteria agrupacioMateriaCriteria) throws QueryServiceException {
+		try {
+			final List<AgrupacioMateriaDTO> llistaDTO = rolsacQueryServiceStrategy
+					.llistarAgrupacionsMateries(agrupacioMateriaCriteria);
+			final List<AgrupacioMateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<AgrupacioMateriaQueryServiceAdapter>();
+			for (final AgrupacioMateriaDTO amDTO : llistaDTO) {
+				final AgrupacioMateriaQueryServiceAdapter amqsa = (AgrupacioMateriaQueryServiceAdapter) BeanUtils
+						.getAdapter("agrupacioMateria", getStrategy(), amDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && amqsa != null) {
+					amqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(amqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "agrupaciones materia.", e);
+		}
+	}
+
+	@Override
+	public ButlletiQueryServiceAdapter obtenirButlleti(final ButlletiCriteria butlletiCriteria)
+			throws QueryServiceException {
+		try {
+			final ButlletiDTO dto = rolsacQueryServiceStrategy.obtenirButlleti(butlletiCriteria);
+			final ButlletiQueryServiceAdapter bqsa = (ButlletiQueryServiceAdapter) BeanUtils.getAdapter("butlleti",
+					getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && bqsa != null) {
+				bqsa.setRolsacUrl(rolsacUrl);
+			}
+			return bqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "boletin.", e);
+		}
+	}
+
+	@Override
+	public List<ButlletiQueryServiceAdapter> llistarButlletins(final ButlletiCriteria butlletiCriteria)
+			throws QueryServiceException {
+		try {
+			final List<ButlletiDTO> llistaDTO = rolsacQueryServiceStrategy.llistarButlletins(butlletiCriteria);
+			final List<ButlletiQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<ButlletiQueryServiceAdapter>();
+			for (final ButlletiDTO butlletiDTO : llistaDTO) {
+				final ButlletiQueryServiceAdapter bqsa = (ButlletiQueryServiceAdapter) BeanUtils.getAdapter("butlleti",
+						getStrategy(), butlletiDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && bqsa != null) {
+					bqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(bqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "agrupaciones materia.", e);
+		}
+	}
+
+	@Override
+	public DocumentQueryServiceAdapter obtenirDocument(final DocumentCriteria documentCriteria)
+			throws QueryServiceException {
+		try {
+			final DocumentDTO dto = rolsacQueryServiceStrategy.obtenirDocument(documentCriteria);
+			final DocumentQueryServiceAdapter dqsa = (DocumentQueryServiceAdapter) BeanUtils.getAdapter("document",
+					getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && dqsa != null) {
+				dqsa.setRolsacUrl(rolsacUrl);
+			}
+			return dqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "boletin.", e);
+		}
+	}
+
+	@Override
+	public List<DocumentQueryServiceAdapter> llistarDocuments(final DocumentCriteria documentCriteria)
+			throws QueryServiceException {
+		try {
+			final List<DocumentDTO> llistaDTO = rolsacQueryServiceStrategy.llistarDocuments(documentCriteria);
+			final List<DocumentQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentQueryServiceAdapter>();
+			for (final DocumentDTO documentDTO : llistaDTO) {
+				final DocumentQueryServiceAdapter dqsa = (DocumentQueryServiceAdapter) BeanUtils.getAdapter("document",
+						getStrategy(), documentDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && dqsa != null) {
+					dqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(dqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "boletines.", e);
+		}
+	}
+
+	@Override
+	public DocumentTramitQueryServiceAdapter obtenirDocumentTramit(final DocumentTramitCriteria documentTramitCriteria)
+			throws QueryServiceException {
+		try {
+			final DocumentTramitDTO dto = rolsacQueryServiceStrategy.obtenirDocumentTramit(documentTramitCriteria);
+			final DocumentTramitQueryServiceAdapter tdqsa = (DocumentTramitQueryServiceAdapter) BeanUtils
+					.getAdapter("documentTramit", getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && tdqsa != null) {
+				tdqsa.setRolsacUrl(rolsacUrl);
+			}
+			return tdqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "documento tramite.", e);
+		}
+	}
+
+	@Override
+	public List<DocumentoNormativaQueryServiceAdapter> llistarDocumentoNormativa(
+			final DocumentoNormativaCriteria documentoNormativaCriteria) throws QueryServiceException {
+		try {
+			final List<DocumentoNormativaDTO> llistaDTO = rolsacQueryServiceStrategy
+					.llistarDocumentoNormativa(documentoNormativaCriteria);
+			final List<DocumentoNormativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentoNormativaQueryServiceAdapter>();
+			for (final DocumentoNormativaDTO documentoNormativaDTO : llistaDTO) {
+				final DocumentoNormativaQueryServiceAdapter tdqsa = (DocumentoNormativaQueryServiceAdapter) BeanUtils
+						.getAdapter("documentoNormativa", getStrategy(), documentoNormativaDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && tdqsa != null) {
+					tdqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(tdqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "documentos tramite.", e);
+		}
+	}
+
+	@Override
+	public List<DocumentoServicioQueryServiceAdapter> llistarDocumentoServicio(
+			final DocumentoServicioCriteria documentoServicioCriteria) throws QueryServiceException {
+		try {
+			final List<DocumentoServicioDTO> llistaDTO = rolsacQueryServiceStrategy
+					.llistarDocumentoServicio(documentoServicioCriteria);
+			final List<DocumentoServicioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentoServicioQueryServiceAdapter>();
+			for (final DocumentoServicioDTO documentoServicioDTO : llistaDTO) {
+				final DocumentoServicioQueryServiceAdapter tdqsa = (DocumentoServicioQueryServiceAdapter) BeanUtils
+						.getAdapter("documentoServicio", getStrategy(), documentoServicioDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && tdqsa != null) {
+					tdqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(tdqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "documentos tramite.", e);
+		}
+	}
+
+	@Override
+	public List<DocumentTramitQueryServiceAdapter> llistarDocumentTramit(
+			final DocumentTramitCriteria documentTramitCriteria) throws QueryServiceException {
+		try {
+			final List<DocumentTramitDTO> llistaDTO = rolsacQueryServiceStrategy
+					.llistarDocumentTramit(documentTramitCriteria);
+			final List<DocumentTramitQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentTramitQueryServiceAdapter>();
+			for (final DocumentTramitDTO documentTramitDTO : llistaDTO) {
+				final DocumentTramitQueryServiceAdapter tdqsa = (DocumentTramitQueryServiceAdapter) BeanUtils
+						.getAdapter("documentTramit", getStrategy(), documentTramitDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && tdqsa != null) {
+					tdqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(tdqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "documentos tramite.", e);
+		}
+	}
+
+	@Override
+	public EdificiQueryServiceAdapter obtenirEdifici(final EdificiCriteria edificiCriteria)
+			throws QueryServiceException {
+		try {
+			final EdificiDTO dto = rolsacQueryServiceStrategy.obtenirEdifici(edificiCriteria);
+			final EdificiQueryServiceAdapter eqsa = (EdificiQueryServiceAdapter) BeanUtils.getAdapter("edifici",
+					getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && eqsa != null) {
+				eqsa.setRolsacUrl(rolsacUrl);
+			}
+			return eqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "edificio.", e);
+		}
+	}
+
+	@Override
+	public List<EdificiQueryServiceAdapter> llistarEdificis(final EdificiCriteria edificiCriteria)
+			throws QueryServiceException {
+		try {
+			final List<EdificiDTO> llistaDTO = rolsacQueryServiceStrategy.llistarEdificis(edificiCriteria);
+			final List<EdificiQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<EdificiQueryServiceAdapter>();
+			for (final EdificiDTO edificiDTO : llistaDTO) {
+				final EdificiQueryServiceAdapter eqsa = (EdificiQueryServiceAdapter) BeanUtils.getAdapter("edifici",
+						getStrategy(), edificiDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && eqsa != null) {
+					eqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(eqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "edificios.", e);
+		}
+	}
+
+	@Override
+	public EnllacQueryServiceAdapter obtenirEnllac(final EnllacCriteria enllacCriteria) throws QueryServiceException {
+		try {
+			final EnllacDTO dto = rolsacQueryServiceStrategy.obtenirEnllac(enllacCriteria);
+			final EnllacQueryServiceAdapter eqsa = (EnllacQueryServiceAdapter) BeanUtils.getAdapter("enllac",
+					getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && eqsa != null) {
+				eqsa.setRolsacUrl(rolsacUrl);
+			}
+			return eqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "enlace.", e);
+		}
+	}
+
+	@Override
+	public List<EnllacQueryServiceAdapter> llistarEnllacos(final EnllacCriteria enllacCriteria)
+			throws QueryServiceException {
+		try {
+			final List<EnllacDTO> llistaDTO = rolsacQueryServiceStrategy.llistarEnllacos(enllacCriteria);
+			final List<EnllacQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<EnllacQueryServiceAdapter>();
+			for (final EnllacDTO enllacDTO : llistaDTO) {
+				final EnllacQueryServiceAdapter eqsa = (EnllacQueryServiceAdapter) BeanUtils.getAdapter("enllac",
+						getStrategy(), enllacDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && eqsa != null) {
+					eqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(eqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "enlaces.", e);
+		}
+	}
+
+	@Override
+	public EspaiTerritorialQueryServiceAdapter obtenirEspaiTerritorial(
+			final EspaiTerritorialCriteria espaiTerritorialCriteria) throws QueryServiceException {
+		try {
+			final EspaiTerritorialDTO dto = rolsacQueryServiceStrategy
+					.obtenirEspaiTerritorial(espaiTerritorialCriteria);
+			final EspaiTerritorialQueryServiceAdapter eqsa = (EspaiTerritorialQueryServiceAdapter) BeanUtils
+					.getAdapter("espaiTerritorial", getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && eqsa != null) {
+				eqsa.setRolsacUrl(rolsacUrl);
+			}
+			return eqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "espacio territorial.", e);
+		}
+	}
+
+	@Override
+	public List<EspaiTerritorialQueryServiceAdapter> llistarEspaisTerritorials(
+			final EspaiTerritorialCriteria espaiTerritorialCriteria) throws QueryServiceException {
+		try {
+			final List<EspaiTerritorialDTO> llistaDTO = rolsacQueryServiceStrategy
+					.llistarEspaisTerritorials(espaiTerritorialCriteria);
+			final List<EspaiTerritorialQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<EspaiTerritorialQueryServiceAdapter>();
+			for (final EspaiTerritorialDTO espaiTerritorialDTO : llistaDTO) {
+				final EspaiTerritorialQueryServiceAdapter eqsa = (EspaiTerritorialQueryServiceAdapter) BeanUtils
+						.getAdapter("espaiTerritorial", getStrategy(), espaiTerritorialDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && eqsa != null) {
+					eqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(eqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "espacios territoriales.", e);
+		}
+	}
+
+	@Override
+	public FamiliaQueryServiceAdapter obtenirFamilia(final FamiliaCriteria familiaCriteria)
+			throws QueryServiceException {
+		try {
+			final FamiliaDTO dto = rolsacQueryServiceStrategy.obtenirFamilia(familiaCriteria);
+			final FamiliaQueryServiceAdapter fqsa = (FamiliaQueryServiceAdapter) BeanUtils.getAdapter("familia",
+					getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && fqsa != null) {
+				fqsa.setRolsacUrl(rolsacUrl);
+			}
+			return fqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "familia.", e);
+		}
+	}
+
+	@Override
+	public List<FamiliaQueryServiceAdapter> llistarFamilies(final FamiliaCriteria familiaCriteria)
+			throws QueryServiceException {
+		try {
+			final List<FamiliaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarFamilies(familiaCriteria);
+			final List<FamiliaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FamiliaQueryServiceAdapter>();
+			for (final FamiliaDTO familiaDTO : llistaDTO) {
+				final FamiliaQueryServiceAdapter fqsa = (FamiliaQueryServiceAdapter) BeanUtils.getAdapter("familia",
+						getStrategy(), familiaDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && fqsa != null) {
+					fqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(fqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "familias.", e);
+		}
+	}
+
+	@Override
+	public PlataformaQueryServiceAdapter obtenirPlataforma(final PlataformaCriteria plataformaCriteria)
+			throws QueryServiceException {
+		try {
+			final PlataformaDTO dto = rolsacQueryServiceStrategy.obtenirPlataforma(plataformaCriteria);
+			final PlataformaQueryServiceAdapter fqsa = (PlataformaQueryServiceAdapter) BeanUtils
+					.getAdapter("plataforma", getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && fqsa != null) {
+				fqsa.setRolsacUrl(rolsacUrl);
+			}
+			return fqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "plataforma.", e);
+		}
+	}
+
+	@Override
+	public FetVitalQueryServiceAdapter obtenirFetVital(final FetVitalCriteria fetVitalCriteria)
+			throws QueryServiceException {
+		try {
+			final FetVitalDTO dto = rolsacQueryServiceStrategy.obtenirFetVital(fetVitalCriteria);
+			final FetVitalQueryServiceAdapter fqsa = (FetVitalQueryServiceAdapter) BeanUtils.getAdapter("fetVital",
+					getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && fqsa != null) {
+				fqsa.setRolsacUrl(rolsacUrl);
+			}
+			return fqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "hecho vital.", e);
+		}
+	}
+
+	@Override
+	public List<FetVitalQueryServiceAdapter> llistarFetsVitals(final FetVitalCriteria fetVitalCriteria)
+			throws QueryServiceException {
+		try {
+			final List<FetVitalDTO> llistaDTO = rolsacQueryServiceStrategy.llistarFetsVitals(fetVitalCriteria);
+			final List<FetVitalQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FetVitalQueryServiceAdapter>();
+			for (final FetVitalDTO fetVitalDTO : llistaDTO) {
+				final FetVitalQueryServiceAdapter fqsa = (FetVitalQueryServiceAdapter) BeanUtils.getAdapter("fetVital",
+						getStrategy(), fetVitalDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && fqsa != null) {
+					fqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(fqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "hechos vitales.", e);
+		}
+	}
+
+	@Override
+	public FitxaQueryServiceAdapter obtenirFitxa(final FitxaCriteria fitxaCriteria) throws QueryServiceException {
+		try {
+			final FitxaDTO dto = rolsacQueryServiceStrategy.obtenirFitxa(fitxaCriteria);
+			final FitxaQueryServiceAdapter fqsa = (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa",
+					getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && fqsa != null) {
+				fqsa.setRolsacUrl(rolsacUrl);
+			}
+			return fqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "ficha.", e);
+		}
+	}
+
+	@Override
+	public List<FitxaQueryServiceAdapter> llistarFitxes(final FitxaCriteria fitxaCriteria)
+			throws QueryServiceException {
+		try {
+			final List<FitxaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarFitxes(fitxaCriteria);
+			final List<FitxaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FitxaQueryServiceAdapter>();
+			for (final FitxaDTO fitxaDTO : llistaDTO) {
+				final FitxaQueryServiceAdapter fqsa = (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa",
+						getStrategy(), fitxaDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && fqsa != null) {
+					fqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(fqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "fichas.", e);
+		}
+	}
+
+	@Override
+	public FitxaUAQueryServiceAdapter obtenirFitxaUA(final FitxaUACriteria fitxaUACriteria)
+			throws QueryServiceException {
+		try {
+			final FitxaUADTO dto = rolsacQueryServiceStrategy.obtenirFitxaUA(fitxaUACriteria);
+			final FitxaUAQueryServiceAdapter fqsa = (FitxaUAQueryServiceAdapter) BeanUtils.getAdapter("fitxaUA",
+					getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && fqsa != null) {
+				fqsa.setRolsacUrl(rolsacUrl);
+			}
+			return fqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "fichaUA.", e);
+		}
+	}
+
+	@Override
+	public List<FitxaUAQueryServiceAdapter> llistarFitxesUA(final FitxaUACriteria fitxaUACriteria)
+			throws QueryServiceException {
+		try {
+			final List<FitxaUADTO> llistaDTO = rolsacQueryServiceStrategy.llistarFitxesUA(fitxaUACriteria);
+			final List<FitxaUAQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FitxaUAQueryServiceAdapter>();
+			for (final FitxaUADTO fitxaUADTO : llistaDTO) {
+				final FitxaUAQueryServiceAdapter fqsa = (FitxaUAQueryServiceAdapter) BeanUtils.getAdapter("fitxaUA",
+						getStrategy(), fitxaUADTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && fqsa != null) {
+					fqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(fqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "fichasUA.", e);
+		}
+	}
+
+	@Override
+	public FormulariQueryServiceAdapter obtenirFormulari(final FormulariCriteria formulariCriteria)
+			throws QueryServiceException {
+		try {
+			final FormulariDTO dto = rolsacQueryServiceStrategy.obtenirFormulari(formulariCriteria);
+			final FormulariQueryServiceAdapter fqsa = (FormulariQueryServiceAdapter) BeanUtils.getAdapter("formulari",
+					getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && fqsa != null) {
+				fqsa.setRolsacUrl(rolsacUrl);
+			}
+			return fqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "formulario.", e);
+		}
+	}
+
+	@Override
+	public List<FormulariQueryServiceAdapter> llistarFormularis(final FormulariCriteria formulariCriteria)
+			throws QueryServiceException {
+		try {
+			final List<FormulariDTO> llistaDTO = rolsacQueryServiceStrategy.llistarFormularis(formulariCriteria);
+			final List<FormulariQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FormulariQueryServiceAdapter>();
+			for (final FormulariDTO formDTO : llistaDTO) {
+				final FormulariQueryServiceAdapter fqsa = (FormulariQueryServiceAdapter) BeanUtils
+						.getAdapter("formulari", getStrategy(), formDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && fqsa != null) {
+					fqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(fqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "formularios.", e);
+		}
+
+	}
+
+	@Override
+	public IconaFamiliaQueryServiceAdapter obtenirIconaFamilia(final IconaFamiliaCriteria iconaFamiliaCriteria)
+			throws QueryServiceException {
+		try {
+			final IconaFamiliaDTO dto = rolsacQueryServiceStrategy.obtenirIconaFamilia(iconaFamiliaCriteria);
+			final IconaFamiliaQueryServiceAdapter fqsa = (IconaFamiliaQueryServiceAdapter) BeanUtils
+					.getAdapter("iconaFamilia", getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && fqsa != null) {
+				fqsa.setRolsacUrl(rolsacUrl);
+			}
+			return fqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "icono familia.", e);
+		}
+	}
+
+	@Override
+	public List<IconaFamiliaQueryServiceAdapter> llistarIconesFamilies(final IconaFamiliaCriteria iconaFamiliaCriteria)
+			throws QueryServiceException {
+		try {
+			final List<IconaFamiliaDTO> llistaDTO = rolsacQueryServiceStrategy
+					.llistarIconesFamilies(iconaFamiliaCriteria);
+			final List<IconaFamiliaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<IconaFamiliaQueryServiceAdapter>();
+			for (final IconaFamiliaDTO ifDTO : llistaDTO) {
+				final IconaFamiliaQueryServiceAdapter fqsa = (IconaFamiliaQueryServiceAdapter) BeanUtils
+						.getAdapter("iconaFamilia", getStrategy(), ifDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && fqsa != null) {
+					fqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(fqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "iconos familia.", e);
+		}
+	}
+
+	@Override
+	public IconaMateriaQueryServiceAdapter obtenirIconaMateria(final IconaMateriaCriteria iconaMateriaCriteria)
+			throws QueryServiceException {
+		try {
+			final IconaMateriaDTO dto = rolsacQueryServiceStrategy.obtenirIconaMateria(iconaMateriaCriteria);
+			final IconaMateriaQueryServiceAdapter iqsa = (IconaMateriaQueryServiceAdapter) BeanUtils
+					.getAdapter("iconaMateria", getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && iqsa != null) {
+				iqsa.setRolsacUrl(rolsacUrl);
+			}
+			return iqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "icono materia.", e);
+		}
+	}
+
+	@Override
+	public List<IconaMateriaQueryServiceAdapter> llistarIconesMateries(final IconaMateriaCriteria iconaMateriaCriteria)
+			throws QueryServiceException {
+		try {
+			final List<IconaMateriaDTO> llistaDTO = rolsacQueryServiceStrategy
+					.llistarIconesMateries(iconaMateriaCriteria);
+			final List<IconaMateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<IconaMateriaQueryServiceAdapter>();
+			for (final IconaMateriaDTO imDTO : llistaDTO) {
+				final IconaMateriaQueryServiceAdapter iqsa = (IconaMateriaQueryServiceAdapter) BeanUtils
+						.getAdapter("iconaMateria", getStrategy(), imDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && iqsa != null) {
+					iqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(iqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "iconos materia.", e);
+		}
+	}
+
+	@Override
+	public MateriaQueryServiceAdapter obtenirMateria(final MateriaCriteria materiaCriteria)
+			throws QueryServiceException {
+		try {
+			final MateriaDTO dto = rolsacQueryServiceStrategy.obtenirMateria(materiaCriteria);
+			final MateriaQueryServiceAdapter mqsa = (MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia",
+					getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && mqsa != null) {
+				mqsa.setRolsacUrl(rolsacUrl);
+			}
+			return mqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "materia.", e);
+		}
+	}
+
+	@Override
+	public List<MateriaQueryServiceAdapter> llistarMateries(final MateriaCriteria materiaCriteria)
+			throws QueryServiceException {
+		try {
+			final List<MateriaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarMateries(materiaCriteria);
+			final List<MateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<MateriaQueryServiceAdapter>();
+			for (final MateriaDTO materiaDTO : llistaDTO) {
+				final MateriaQueryServiceAdapter mqsa = (MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia",
+						getStrategy(), materiaDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && mqsa != null) {
+					mqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(mqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "materias.", e);
+		}
+	}
+
+	@Override
+	public MateriaAgrupacioQueryServiceAdapter obtenirMateriaAgrupacio(
+			final MateriaAgrupacioCriteria materiaAgrupacioCriteria) throws QueryServiceException {
+		try {
+			final MateriaAgrupacioDTO dto = rolsacQueryServiceStrategy
+					.obtenirMateriaAgrupacio(materiaAgrupacioCriteria);
+			final MateriaAgrupacioQueryServiceAdapter mqsa = (MateriaAgrupacioQueryServiceAdapter) BeanUtils
+					.getAdapter("materiaAgrupacio", getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && mqsa != null) {
+				mqsa.setRolsacUrl(rolsacUrl);
+			}
+			return mqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "agrupacion materia.", e);
+		}
+	}
+
+	@Override
+	public List<MateriaAgrupacioQueryServiceAdapter> llistarMateriesAgrupacions(
+			final MateriaAgrupacioCriteria materiaAgrupacioCriteria) throws QueryServiceException {
+		try {
+			final List<MateriaAgrupacioDTO> llistaDTO = rolsacQueryServiceStrategy
+					.llistarMateriesAgrupacions(materiaAgrupacioCriteria);
+			final List<MateriaAgrupacioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<MateriaAgrupacioQueryServiceAdapter>();
+			for (final MateriaAgrupacioDTO maDTO : llistaDTO) {
+				final MateriaAgrupacioQueryServiceAdapter mqsa = (MateriaAgrupacioQueryServiceAdapter) BeanUtils
+						.getAdapter("materiaAgrupacio", getStrategy(), maDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && mqsa != null) {
+					mqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(mqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "agrupaciones materia.", e);
+		}
+	}
+
+	@Override
+	public NormativaQueryServiceAdapter obtenirNormativa(final NormativaCriteria normativaCriteria)
+			throws QueryServiceException {
+		try {
+			final NormativaDTO dto = rolsacQueryServiceStrategy.obtenirNormativa(normativaCriteria);
+			final NormativaQueryServiceAdapter nqsa = (NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa",
+					getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && nqsa != null) {
+				nqsa.setRolsacUrl(rolsacUrl);
+			}
+			return nqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "normativa.", e);
+		}
+	}
+
+	@Override
+	public List<NormativaQueryServiceAdapter> llistarNormatives(final NormativaCriteria normativaCriteria)
+			throws QueryServiceException {
+		try {
+			final List<NormativaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarNormatives(normativaCriteria);
+			final List<NormativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<NormativaQueryServiceAdapter>();
+			for (final NormativaDTO normativaDTO : llistaDTO) {
+				final NormativaQueryServiceAdapter nqsa = (NormativaQueryServiceAdapter) BeanUtils
+						.getAdapter("normativa", getStrategy(), normativaDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && nqsa != null) {
+					nqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(nqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "normativas.", e);
+		}
+	}
+
+	@Override
+	public PerfilQueryServiceAdapter obtenirPerfil(final PerfilCriteria perfilCriteria) throws QueryServiceException {
+		try {
+			final PerfilDTO dto = rolsacQueryServiceStrategy.obtenirPerfil(perfilCriteria);
+			final PerfilQueryServiceAdapter pqsa = (PerfilQueryServiceAdapter) BeanUtils.getAdapter("perfil",
+					getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && pqsa != null) {
+				pqsa.setRolsacUrl(rolsacUrl);
+			}
+			return pqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "perfil.", e);
+		}
+	}
+
+	@Override
+	public List<PerfilQueryServiceAdapter> llistarPerfils(final PerfilCriteria perfilCriteria)
+			throws QueryServiceException {
+		try {
+			final List<PerfilDTO> llistaDTO = rolsacQueryServiceStrategy.llistarPerfils(perfilCriteria);
+			final List<PerfilQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<PerfilQueryServiceAdapter>();
+			for (final PerfilDTO perfilDTO : llistaDTO) {
+				final PerfilQueryServiceAdapter pqsa = (PerfilQueryServiceAdapter) BeanUtils.getAdapter("perfil",
+						getStrategy(), perfilDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && pqsa != null) {
+					pqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(pqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "perfiles.", e);
+		}
+	}
+
+	@Override
+	public PersonalQueryServiceAdapter obtenirPersonal(final PersonalCriteria personalCriteria)
+			throws QueryServiceException {
+		try {
+			final PersonalDTO dto = rolsacQueryServiceStrategy.obtenirPersonal(personalCriteria);
+			final PersonalQueryServiceAdapter pqsa = (PersonalQueryServiceAdapter) BeanUtils.getAdapter("personal",
+					getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && pqsa != null) {
+				pqsa.setRolsacUrl(rolsacUrl);
+			}
+			return pqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "personal.", e);
+		}
+	}
+
+	@Override
+	public List<PersonalQueryServiceAdapter> llistarPersonal(final PersonalCriteria personalCriteria)
+			throws QueryServiceException {
+		try {
+			final List<PersonalDTO> llistaDTO = rolsacQueryServiceStrategy.llistarPersonal(personalCriteria);
+			final List<PersonalQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<PersonalQueryServiceAdapter>();
+			for (final PersonalDTO personalDTO : llistaDTO) {
+				final PersonalQueryServiceAdapter pqsa = (PersonalQueryServiceAdapter) BeanUtils.getAdapter("personal",
+						getStrategy(), personalDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && pqsa != null) {
+					pqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(pqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "personal.", e);
+		}
+	}
+
+	@Override
+	public PublicObjectiuQueryServiceAdapter obtenirPublicObjectiu(final PublicObjectiuCriteria publicObjectiuCriteria)
+			throws QueryServiceException {
+		try {
+			final PublicObjectiuDTO dto = rolsacQueryServiceStrategy.obtenirPublicObjectiu(publicObjectiuCriteria);
+			final PublicObjectiuQueryServiceAdapter pqsa = (PublicObjectiuQueryServiceAdapter) BeanUtils
+					.getAdapter("publicObjectiu", getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && pqsa != null) {
+				pqsa.setRolsacUrl(rolsacUrl);
+			}
+			return pqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "publico objetivo.", e);
+		}
+	}
+
+	@Override
+	public List<PublicObjectiuQueryServiceAdapter> llistarPublicsObjectius(
+			final PublicObjectiuCriteria publicObjectiuCriteria) throws QueryServiceException {
+		try {
+			final List<PublicObjectiuDTO> llistaDTO = rolsacQueryServiceStrategy
+					.llistarPublicsObjectius(publicObjectiuCriteria);
+			final List<PublicObjectiuQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<PublicObjectiuQueryServiceAdapter>();
+			for (final PublicObjectiuDTO poDTO : llistaDTO) {
+				final PublicObjectiuQueryServiceAdapter pqsa = (PublicObjectiuQueryServiceAdapter) BeanUtils
+						.getAdapter("publicObjectiu", getStrategy(), poDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && pqsa != null) {
+					pqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(pqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "publico objetivo.", e);
+		}
+	}
+
+	@Override
+	public TipusAfectacioQueryServiceAdapter obtenirTipusAfectacio(final TipusAfectacioCriteria tipusAfectacioCriteria)
+			throws QueryServiceException {
+		try {
+			final TipusAfectacioDTO dto = rolsacQueryServiceStrategy.obtenirTipusAfectacio(tipusAfectacioCriteria);
+			return (TipusAfectacioQueryServiceAdapter) BeanUtils.getAdapter("tipusAfectacio", getStrategy(), dto);
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "tipo afectacion.", e);
+		}
+	}
+
+	@Override
+	public List<TipusAfectacioQueryServiceAdapter> llistarTipusAfectacio(
+			final TipusAfectacioCriteria tipusAfectacioCriteria) throws QueryServiceException {
+		try {
+			final List<TipusAfectacioDTO> llistaDTO = rolsacQueryServiceStrategy
+					.llistarTipusAfectacio(tipusAfectacioCriteria);
+			final List<TipusAfectacioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<TipusAfectacioQueryServiceAdapter>();
+			for (final TipusAfectacioDTO taDTO : llistaDTO) {
+				llistaQueryServiceAdapter.add((TipusAfectacioQueryServiceAdapter) BeanUtils.getAdapter("tipusAfectacio",
+						getStrategy(), taDTO));
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "tipos de afectaciones.", e);
+		}
+	}
+
+	@Override
+	public SeccioQueryServiceAdapter obtenirSeccio(final SeccioCriteria seccioCriteria) throws QueryServiceException {
+		try {
+			final SeccioDTO dto = rolsacQueryServiceStrategy.obtenirSeccio(seccioCriteria);
+			final SeccioQueryServiceAdapter sqsa = (SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio",
+					getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && sqsa != null) {
+				sqsa.setRolsacUrl(rolsacUrl);
+			}
+			return sqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "seccion.", e);
+		}
+	}
+
+	@Override
+	public List<SeccioQueryServiceAdapter> llistarSeccions(final SeccioCriteria seccioCriteria)
+			throws QueryServiceException {
+		try {
+			final List<SeccioDTO> llistaDTO = rolsacQueryServiceStrategy.llistarSeccions(seccioCriteria);
+			final List<SeccioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<SeccioQueryServiceAdapter>();
+			for (final SeccioDTO poDTO : llistaDTO) {
+				final SeccioQueryServiceAdapter sqsa = (SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio",
+						getStrategy(), poDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && sqsa != null) {
+					sqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(sqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "secciones.", e);
+		}
+	}
+
+	@Override
+	public TaxaQueryServiceAdapter obtenirTaxa(final TaxaCriteria taxaCriteria) throws QueryServiceException {
+		try {
+			final TaxaDTO dto = rolsacQueryServiceStrategy.obtenirTaxa(taxaCriteria);
+			final TaxaQueryServiceAdapter tqsa = (TaxaQueryServiceAdapter) BeanUtils.getAdapter("taxa", getStrategy(),
+					dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && tqsa != null) {
+				tqsa.setRolsacUrl(rolsacUrl);
+			}
+			return tqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "tasa.", e);
+		}
+	}
+
+	@Override
+	public List<TaxaQueryServiceAdapter> llistarTaxes(final TaxaCriteria taxaCriteria) throws QueryServiceException {
+		List<TaxaDTO> llistaDTO;
+		try {
+			llistaDTO = rolsacQueryServiceStrategy.llistarTaxes(taxaCriteria);
+			final List<TaxaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<TaxaQueryServiceAdapter>();
+			for (final TaxaDTO taxaDTO : llistaDTO) {
+				final TaxaQueryServiceAdapter tqsa = (TaxaQueryServiceAdapter) BeanUtils.getAdapter("taxa",
+						getStrategy(), taxaDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && tqsa != null) {
+					tqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(tqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "tasas.", e);
+		}
+	}
+
+	@Override
+	public TipusQueryServiceAdapter obtenirTipus(final TipusCriteria tipusCriteria) throws QueryServiceException {
+		try {
+			final TipusDTO dto = rolsacQueryServiceStrategy.obtenirTipus(tipusCriteria);
+			final TipusQueryServiceAdapter tqsa = (TipusQueryServiceAdapter) BeanUtils.getAdapter("tipus",
+					getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && tqsa != null) {
+				tqsa.setRolsacUrl(rolsacUrl);
+			}
+			return tqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "tipo.", e);
+		}
+	}
+
+	@Override
+	public List<TipusQueryServiceAdapter> llistarTipus(final TipusCriteria tipusCriteria) throws QueryServiceException {
+		try {
+			final List<TipusDTO> llistaDTO = rolsacQueryServiceStrategy.llistarTipus(tipusCriteria);
+			final List<TipusQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<TipusQueryServiceAdapter>();
+			for (final TipusDTO tipusDTO : llistaDTO) {
+				final TipusQueryServiceAdapter tqsa = (TipusQueryServiceAdapter) BeanUtils.getAdapter("tipus",
+						getStrategy(), tipusDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && tqsa != null) {
+					tqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(tqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "tipos.", e);
+		}
+	}
+
+	@Override
+	public TramitQueryServiceAdapter obtenirTramit(final TramitCriteria tramitCriteria) throws QueryServiceException {
+		try {
+			final TramitDTO dto = rolsacQueryServiceStrategy.obtenirTramit(tramitCriteria);
+			final TramitQueryServiceAdapter tqsa = (TramitQueryServiceAdapter) BeanUtils.getAdapter("tramit",
+					getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && tqsa != null) {
+				tqsa.setRolsacUrl(rolsacUrl);
+			}
+			return tqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "tramite.", e);
+		}
+	}
+
+	@Override
+	public List<TramitQueryServiceAdapter> llistarTramits(final TramitCriteria tramitCriteria)
+			throws QueryServiceException {
+		try {
+			final List<TramitDTO> llistaDTO = rolsacQueryServiceStrategy.llistarTramits(tramitCriteria);
+			final List<TramitQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<TramitQueryServiceAdapter>();
+			for (final TramitDTO tramitDTO : llistaDTO) {
+				final TramitQueryServiceAdapter tqsa = (TramitQueryServiceAdapter) BeanUtils.getAdapter("tramit",
+						getStrategy(), tramitDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && tqsa != null) {
+					tqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(tqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "tramites.", e);
+		}
+	}
+
+	@Override
+	public UnitatAdministrativaQueryServiceAdapter obtenirUnitatAdministrativa(
+			final UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws QueryServiceException {
+		try {
+			final UnitatAdministrativaDTO dto = rolsacQueryServiceStrategy
+					.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
+			final UnitatAdministrativaQueryServiceAdapter uaqsa = (UnitatAdministrativaQueryServiceAdapter) BeanUtils
+					.getAdapter("unitatAdministrativa", getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && uaqsa != null) {
+				uaqsa.setRolsacUrl(rolsacUrl);
+			}
+			return uaqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "unidad administrativa.", e);
+		}
+	}
+
+	@Override
+	public List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(
+			final UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws QueryServiceException {
+		try {
+			final List<UnitatAdministrativaDTO> llistaDTO = rolsacQueryServiceStrategy
+					.llistarUnitatsAdministratives(unitatAdministrativaCriteria);
+			final List<UnitatAdministrativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
+			for (final UnitatAdministrativaDTO uaDTO : llistaDTO) {
+				final UnitatAdministrativaQueryServiceAdapter uaqsa = (UnitatAdministrativaQueryServiceAdapter) BeanUtils
+						.getAdapter("unitatAdministrativa", getStrategy(), uaDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && uaqsa != null) {
+					uaqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(uaqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "unidades administrativas.", e);
+		}
+	}
+
+	@Override
+	public UnitatMateriaQueryServiceAdapter obtenirUnitatMateria(final UnitatMateriaCriteria unitatMateriaCriteria)
+			throws QueryServiceException {
+		try {
+			final UnitatMateriaDTO dto = rolsacQueryServiceStrategy.obtenirUnitatMateria(unitatMateriaCriteria);
+			final UnitatMateriaQueryServiceAdapter uqsa = (UnitatMateriaQueryServiceAdapter) BeanUtils
+					.getAdapter("unitatMateria", getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && uqsa != null) {
+				uqsa.setRolsacUrl(rolsacUrl);
+			}
+			return uqsa;
+		} catch (final StrategyException e) {
+			e.printStackTrace();
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "unidad materia.", e);
+		}
+	}
+
+	@Override
+	public List<UnitatMateriaQueryServiceAdapter> llistarUnitatsMateries(
+			final UnitatMateriaCriteria unitatMateriaCriteria) throws QueryServiceException {
+		try {
+			final List<UnitatMateriaDTO> llistaDTO = rolsacQueryServiceStrategy
+					.llistarUnitatsMateries(unitatMateriaCriteria);
+			final List<UnitatMateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatMateriaQueryServiceAdapter>();
+			for (final UnitatMateriaDTO umDTO : llistaDTO) {
+				final UnitatMateriaQueryServiceAdapter uqsa = (UnitatMateriaQueryServiceAdapter) BeanUtils
+						.getAdapter("unitatMateria", getStrategy(), umDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && uqsa != null) {
+					uqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(uqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "unidades materia.", e);
+		}
+	}
+
+	@Override
+	public UsuariQueryServiceAdapter obtenirUsuari(final UsuariCriteria usuariCriteria) throws QueryServiceException {
+		try {
+			final UsuariDTO dto = rolsacQueryServiceStrategy.obtenirUsuari(usuariCriteria);
+			final UsuariQueryServiceAdapter uqsa = (UsuariQueryServiceAdapter) BeanUtils.getAdapter("usuari",
+					getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && uqsa != null) {
+				uqsa.setRolsacUrl(rolsacUrl);
+			}
+			return uqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "usuario.", e);
+		}
+	}
+
+	@Override
+	public List<UsuariQueryServiceAdapter> llistarUsuaris(final UsuariCriteria usuariCriteria)
+			throws QueryServiceException {
+		try {
+			final List<UsuariDTO> llistaDTO = rolsacQueryServiceStrategy.llistarUsuaris(usuariCriteria);
+			final List<UsuariQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UsuariQueryServiceAdapter>();
+			for (final UsuariDTO uDTO : llistaDTO) {
+				final UsuariQueryServiceAdapter uqsa = (UsuariQueryServiceAdapter) BeanUtils.getAdapter("usuari",
+						getStrategy(), uDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && uqsa != null) {
+					uqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(uqsa);
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "usuarios.", e);
+		}
+	}
+
+	@Override
+	public IniciacioQueryServiceAdapter obtenirTipusIniciacio(final IniciacioCriteria iniciacioCriteria)
+			throws QueryServiceException {
+
+		try {
+
+			final IniciacioDTO dto = rolsacQueryServiceStrategy.obtenirTipusIniciacio(iniciacioCriteria);
+			final IniciacioQueryServiceAdapter iqsa = (IniciacioQueryServiceAdapter) BeanUtils.getAdapter("iniciacio",
+					getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && iqsa != null) {
+				iqsa.setRolsacUrl(rolsacUrl);
+			}
+			return iqsa;
+		} catch (final StrategyException e) {
+
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "iniciacion.", e);
+
+		}
+
+	}
+
+	@Override
+	public List<IniciacioQueryServiceAdapter> llistarTipusIniciacions(final IniciacioCriteria iniciacioCriteria)
+			throws QueryServiceException {
+
+		try {
+
+			final List<IniciacioDTO> llistaDTO = rolsacQueryServiceStrategy.llistarTipusIniciacions(iniciacioCriteria);
+			final List<IniciacioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<IniciacioQueryServiceAdapter>();
+
+			for (final IniciacioDTO uDTO : llistaDTO) {
+				final IniciacioQueryServiceAdapter iqsa = (IniciacioQueryServiceAdapter) BeanUtils
+						.getAdapter("iniciacio", getStrategy(), uDTO);
+				if (rolsacUrl != null && !rolsacUrl.isEmpty() && iqsa != null) {
+					iqsa.setRolsacUrl(rolsacUrl);
+				}
+				llistaQueryServiceAdapter.add(iqsa);
+			}
+
+			return llistaQueryServiceAdapter;
+
+		} catch (final StrategyException e) {
+
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "usuarios.", e);
+
+		}
+
+	}
+
+	@Override
+	public IdiomaQueryServiceAdapter obtenirIdioma(final IdiomaCriteria idiomaCriteria) throws QueryServiceException {
+		try {
+			final IdiomaDTO dto = rolsacQueryServiceStrategy.obtenirIdioma(idiomaCriteria);
+			return (IdiomaQueryServiceAdapter) BeanUtils.getAdapter("idioma", getStrategy(), dto);
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "idioma.", e);
+		}
+	}
+
+	@Override
+	public List<IdiomaQueryServiceAdapter> llistarIdiomes(final IdiomaCriteria idiomaCriteria)
+			throws QueryServiceException {
+		try {
+			final List<IdiomaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarIdiomes(idiomaCriteria);
+			final List<IdiomaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<IdiomaQueryServiceAdapter>();
+			for (final IdiomaDTO uDTO : llistaDTO) {
+				llistaQueryServiceAdapter
+						.add((IdiomaQueryServiceAdapter) BeanUtils.getAdapter("idioma", getStrategy(), uDTO));
+			}
+			return llistaQueryServiceAdapter;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "idiomas.", e);
+		}
+	}
+
+	@Override
+	public int getNumFitxes(final FitxaCriteria fitxaCriteria) throws QueryServiceException {
+		try {
+			final Integer num = rolsacQueryServiceStrategy.getNumFitxes(fitxaCriteria);
+			return num;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.COUNT_GETTER + "fitxas.", e);
+		}
+	}
+
+	@Override
+	public SilencioQueryServiceAdapter obtenirSilencio(final Long codSilencio, final String idioma)
+			throws QueryServiceException {
+		try {
+			final SilencioDTO dto = rolsacQueryServiceStrategy.obtenirSilenci(codSilencio, idioma);
+			final SilencioQueryServiceAdapter sqsa = (SilencioQueryServiceAdapter) BeanUtils.getAdapter("silencio",
+					getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && sqsa != null) {
+				sqsa.setRolsacUrl(rolsacUrl);
+			}
+			return sqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "silencio.", e);
+		}
+	}
 
 }

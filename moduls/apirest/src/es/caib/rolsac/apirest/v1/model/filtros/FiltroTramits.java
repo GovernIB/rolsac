@@ -17,43 +17,49 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Filtro Tramites.
- * 
+ *
  * @author Indra
  *
  */
 @XmlRootElement
 @ApiModel(value = "Filtro tramites", description = "Filtro propio de la entidad " + Constantes.ENTIDAD_TRAMITE)
 public class FiltroTramits {
-	
-	public static final String SAMPLE = "{\"codigoUA\":\"0\","
-			+ Constantes.SALTO_LINEA +"\"fase\":\"0\", "
-			+ Constantes.SALTO_LINEA +"\"codigoProcedimiento\":\"0\", "
-			+ Constantes.SALTO_LINEA +"\"codigoTramiteTelematico\":\"codigo\", "
-			+ Constantes.SALTO_LINEA +"\"versionTramiteTelematico\":\"version\", "
-			+ Constantes.SALTO_LINEA +"\"urlTramiteTelematico\":\"url\", "
-			+ "}"; 
-	
-	 
+
+	public static final String SAMPLE = "{\"codigoUA\":\"0\"," + Constantes.SALTO_LINEA + "\"fase\":\"0\", "
+			+ Constantes.SALTO_LINEA + "\"codigoProcedimiento\":\"0\", " + Constantes.SALTO_LINEA
+			+ "\"codigoTramiteTelematico\":\"codigo\", " + Constantes.SALTO_LINEA
+			+ "\"versionTramiteTelematico\":\"version\", " + Constantes.SALTO_LINEA + "\"parametros\":\"texto\", "
+			+ Constantes.SALTO_LINEA + "\"plataforma\":\"texto\", " + Constantes.SALTO_LINEA
+			+ "\"codigoPlataforma\":\"codigo\", " + Constantes.SALTO_LINEA + "\"urlTramiteTelematico\":\"url\", " + "}";
+
 	/** codigoUA. **/
 	@ApiModelProperty(value = "Código unidad administrativa", required = false)
 	private Integer codigoUA;
-	
+
 	@ApiModelProperty(value = "fase", required = false)
 	private String fase;
-	
+
 	@ApiModelProperty(value = "codigoProcedimiento", required = false)
 	private String codigoProcedimiento;
-	
+
 	@ApiModelProperty(value = "codigoTramiteTelematico", required = false)
 	private String codigoTramiteTelematico;
-	
+
 	@ApiModelProperty(value = "versionTramiteTelematico", required = false)
 	private String versionTramiteTelematico;
-	
+
 	@ApiModelProperty(value = "urlTramiteTelematico", required = false)
 	private String urlTramiteTelematico;
-	
-		
+
+	@ApiModelProperty(value = "parametros", required = false)
+	private String parametros;
+
+	@ApiModelProperty(value = "codigoPlataforma", required = false)
+	private Long codigoPlataforma;
+
+	@ApiModelProperty(value = "plataforma", required = false)
+	private String plataforma;
+
 	public static FiltroTramits valueOf(final String json) {
 		final ObjectMapper objectMapper = new ObjectMapper();
 		final TypeReference<FiltroTramits> typeRef = new TypeReference<FiltroTramits>() {
@@ -67,38 +73,44 @@ public class FiltroTramits {
 		}
 		return obj;
 	}
-	
-	
+
 	public FiltroGenerico toFiltroGenerico() {
-		FiltroGenerico fg = new FiltroGenerico();
-		if(this.codigoUA!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_TRAMITE_UA, this.codigoUA+"");
+		final FiltroGenerico fg = new FiltroGenerico();
+		if (this.codigoUA != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_TRAMITE_UA, this.codigoUA + "");
 		}
-		
-		if(this.fase!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_TRAMITE_FASE, this.fase+"");
+
+		if (this.fase != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_TRAMITE_FASE, this.fase + "");
 		}
-		
-		if(this.codigoProcedimiento!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_TRAMITE_PROCEDIMIENTO, this.codigoProcedimiento+"");
+
+		if (this.codigoProcedimiento != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_TRAMITE_PROCEDIMIENTO, this.codigoProcedimiento + "");
 		}
-		
-		if(this.codigoTramiteTelematico!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_TRAMITE_TRAMITE_TELEMATICO, this.codigoTramiteTelematico+"");
+
+		if (this.codigoTramiteTelematico != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_TRAMITE_TRAMITE_TELEMATICO, this.codigoTramiteTelematico + "");
 		}
-		
-		if(this.versionTramiteTelematico!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_TRAMITE_VERSION_TRAMITE_TELEMATICO, this.versionTramiteTelematico+"");
+
+		if (this.versionTramiteTelematico != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_TRAMITE_VERSION_TRAMITE_TELEMATICO, this.versionTramiteTelematico + "");
 		}
-		
-		if(this.urlTramiteTelematico!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_TRAMITE_URL_TRAMITE_TELEMATICO, this.urlTramiteTelematico+"");
+
+		if (this.urlTramiteTelematico != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_TRAMITE_URL_TRAMITE_TELEMATICO, this.urlTramiteTelematico + "");
 		}
-					
+
+		if (this.parametros != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_TRAMITE_PARAMETROS, this.urlTramiteTelematico + "");
+		}
+
+		if (this.plataforma != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_TRAMITE_PLATAFORMA, this.urlTramiteTelematico + "");
+		}
+
 		return fg;
 	}
 
-	
 	public String toJson() {
 		try {
 			final ObjectMapper objectMapper = new ObjectMapper();
@@ -110,7 +122,6 @@ public class FiltroTramits {
 		}
 	}
 
-
 	/**
 	 * @return the codigoUA
 	 */
@@ -118,14 +129,13 @@ public class FiltroTramits {
 		return codigoUA;
 	}
 
-
 	/**
-	 * @param codigoUA the codigoUA to set
+	 * @param codigoUA
+	 *            the codigoUA to set
 	 */
-	public void setCodigoUA(Integer codigoUA) {
+	public void setCodigoUA(final Integer codigoUA) {
 		this.codigoUA = codigoUA;
 	}
-
 
 	/**
 	 * @return the fase
@@ -134,14 +144,13 @@ public class FiltroTramits {
 		return fase;
 	}
 
-
 	/**
-	 * @param fase the fase to set
+	 * @param fase
+	 *            the fase to set
 	 */
-	public void setFase(String fase) {
+	public void setFase(final String fase) {
 		this.fase = fase;
 	}
-
 
 	/**
 	 * @return the codigoProcedimiento
@@ -150,14 +159,13 @@ public class FiltroTramits {
 		return codigoProcedimiento;
 	}
 
-
 	/**
-	 * @param codigoProcedimiento the codigoProcedimiento to set
+	 * @param codigoProcedimiento
+	 *            the codigoProcedimiento to set
 	 */
-	public void setCodigoProcedimiento(String codigoProcedimiento) {
+	public void setCodigoProcedimiento(final String codigoProcedimiento) {
 		this.codigoProcedimiento = codigoProcedimiento;
 	}
-
 
 	/**
 	 * @return the codigoTramiteTelematico
@@ -166,14 +174,13 @@ public class FiltroTramits {
 		return codigoTramiteTelematico;
 	}
 
-
 	/**
-	 * @param codigoTramiteTelematico the codigoTramiteTelematico to set
+	 * @param codigoTramiteTelematico
+	 *            the codigoTramiteTelematico to set
 	 */
-	public void setCodigoTramiteTelematico(String codigoTramiteTelematico) {
+	public void setCodigoTramiteTelematico(final String codigoTramiteTelematico) {
 		this.codigoTramiteTelematico = codigoTramiteTelematico;
 	}
-
 
 	/**
 	 * @return the versionTramiteTelematico
@@ -182,14 +189,13 @@ public class FiltroTramits {
 		return versionTramiteTelematico;
 	}
 
-
 	/**
-	 * @param versionTramiteTelematico the versionTramiteTelematico to set
+	 * @param versionTramiteTelematico
+	 *            the versionTramiteTelematico to set
 	 */
-	public void setVersionTramiteTelematico(String versionTramiteTelematico) {
+	public void setVersionTramiteTelematico(final String versionTramiteTelematico) {
 		this.versionTramiteTelematico = versionTramiteTelematico;
 	}
-
 
 	/**
 	 * @return the urlTramiteTelematico
@@ -198,14 +204,57 @@ public class FiltroTramits {
 		return urlTramiteTelematico;
 	}
 
-
 	/**
-	 * @param urlTramiteTelematico the urlTramiteTelematico to set
+	 * @param urlTramiteTelematico
+	 *            the urlTramiteTelematico to set
 	 */
-	public void setUrlTramiteTelematico(String urlTramiteTelematico) {
+	public void setUrlTramiteTelematico(final String urlTramiteTelematico) {
 		this.urlTramiteTelematico = urlTramiteTelematico;
 	}
 
+	/**
+	 * @return the parametros
+	 */
+	public String getParametros() {
+		return parametros;
+	}
 
+	/**
+	 * @param parametros
+	 *            the parametros to set
+	 */
+	public void setParametros(final String parametros) {
+		this.parametros = parametros;
+	}
+
+	/**
+	 * @return the codigoPlataforma
+	 */
+	public Long getCodigoPlataforma() {
+		return codigoPlataforma;
+	}
+
+	/**
+	 * @param codigoPlataforma
+	 *            the codigoPlataforma to set
+	 */
+	public void setCodigoPlataforma(final Long codigoPlataforma) {
+		this.codigoPlataforma = codigoPlataforma;
+	}
+
+	/**
+	 * @return the plataforma
+	 */
+	public String getPlataforma() {
+		return plataforma;
+	}
+
+	/**
+	 * @param plataforma
+	 *            the plataforma to set
+	 */
+	public void setPlataforma(final String plataforma) {
+		this.plataforma = plataforma;
+	}
 
 }

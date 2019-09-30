@@ -58,6 +58,8 @@ import es.caib.rolsac.api.v2.perfil.PerfilCriteria;
 import es.caib.rolsac.api.v2.perfil.PerfilDTO;
 import es.caib.rolsac.api.v2.personal.PersonalCriteria;
 import es.caib.rolsac.api.v2.personal.PersonalDTO;
+import es.caib.rolsac.api.v2.plataforma.PlataformaCriteria;
+import es.caib.rolsac.api.v2.plataforma.PlataformaDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
@@ -87,212 +89,224 @@ public class RolsacQueryServiceWSStrategy implements RolsacQueryServiceStrategy 
 
 	// @Injected
 	private RolsacQueryServiceGateway gateway;
-	
-	
-	public void setUrl(String url) {
+
+	@Override
+	public void setUrl(final String url) {
 		gateway.setUrl(url);
 	}
 
-	public void setGateway(RolsacQueryServiceGateway gateway) {
+	public void setGateway(final RolsacQueryServiceGateway gateway) {
 		this.gateway = gateway;
 	}
-	
-	public UnitatMateriaDTO obtenirUnitatMateria(
-			UnitatMateriaCriteria unitatMateriaCriteria) throws StrategyException {
-		
+
+	@Override
+	public UnitatMateriaDTO obtenirUnitatMateria(final UnitatMateriaCriteria unitatMateriaCriteria)
+			throws StrategyException {
+
 		UnitatMateriaDTO unitatMateriaDTO = new UnitatMateriaDTO();
 		try {
 			unitatMateriaDTO = gateway.obtenirUnitatMateria(unitatMateriaCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return unitatMateriaDTO;
 
 	}
-	
-	public CatalegDocumentsDTO obtenirCatalegDocuments(CatalegDocumentsCriteria catalegDocumentsCriteria) throws StrategyException {
-			try {
-				return  gateway.obtenirCatalegDocuments(catalegDocumentsCriteria);
-			} catch (QueryServiceException qse) {
-				throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-			} catch (RemoteException e) {
-				throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-			} 
+
+	@Override
+	public CatalegDocumentsDTO obtenirCatalegDocuments(final CatalegDocumentsCriteria catalegDocumentsCriteria)
+			throws StrategyException {
+		try {
+			return gateway.obtenirCatalegDocuments(catalegDocumentsCriteria);
+		} catch (final QueryServiceException qse) {
+			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
+		} catch (final RemoteException e) {
+			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		}
 	}
-	
-	public ExcepcioDocumentacioDTO obtenirExcepcioDocumentacio(ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria) throws StrategyException {
+
+	@Override
+	public ExcepcioDocumentacioDTO obtenirExcepcioDocumentacio(
+			final ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria) throws StrategyException {
 		try {
 			return gateway.obtenirExcepcioDocumentacioDTO(excepcioDocumentacioCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		} 
+		}
 	}
-	
-	public UsuariDTO obtenirUsuari(UsuariCriteria usuariCriteria) throws StrategyException{
+
+	@Override
+	public UsuariDTO obtenirUsuari(final UsuariCriteria usuariCriteria) throws StrategyException {
 		UsuariDTO usuariDTO = new UsuariDTO();
 
 		try {
 			usuariDTO = gateway.obtenirUsuari(usuariCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return usuariDTO;
 	}
 
+	@Override
 	public UnitatAdministrativaDTO obtenirUnitatAdministrativa(
-			UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws StrategyException {
-		
+			final UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws StrategyException {
+
 		UnitatAdministrativaDTO unitatAdministrativaDTO = new UnitatAdministrativaDTO();
 
 		try {
 			unitatAdministrativaDTO = gateway.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return unitatAdministrativaDTO;
 	}
-	
-	public TramitDTO obtenirTramit(TramitCriteria tramitCriteria) throws StrategyException {
+
+	@Override
+	public TramitDTO obtenirTramit(final TramitCriteria tramitCriteria) throws StrategyException {
 		TramitDTO tramitDTO = new TramitDTO();
 
 		try {
 			tramitDTO = gateway.obtenirTramit(tramitCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return tramitDTO;
 	}
-	
-	public TipusDTO obtenirTipus(TipusCriteria tipusCriteria) throws StrategyException {
+
+	@Override
+	public TipusDTO obtenirTipus(final TipusCriteria tipusCriteria) throws StrategyException {
 		TipusDTO tipusDTO = new TipusDTO();
 
 		try {
 			tipusDTO = gateway.obtenirTipus(tipusCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return tipusDTO;
-		
+
 	}
 
-	public TaxaDTO obtenirTaxa(TaxaCriteria taxaCriteria) throws StrategyException {
+	@Override
+	public TaxaDTO obtenirTaxa(final TaxaCriteria taxaCriteria) throws StrategyException {
 		TaxaDTO taxaDTO = new TaxaDTO();
 
 		try {
 			taxaDTO = gateway.obtenirTaxa(taxaCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return taxaDTO;
 	}
-	
-	public SeccioDTO obtenirSeccio(SeccioCriteria seccioCriteria) throws StrategyException {
+
+	@Override
+	public SeccioDTO obtenirSeccio(final SeccioCriteria seccioCriteria) throws StrategyException {
 		SeccioDTO seccioDTO = new SeccioDTO();
 
 		try {
 			seccioDTO = gateway.obtenirSeccio(seccioCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return seccioDTO;
 	}
-	
-	public PublicObjectiuDTO obtenirPublicObjectiu(
-			PublicObjectiuCriteria publicObjectiuCriteria) throws StrategyException {
+
+	@Override
+	public PublicObjectiuDTO obtenirPublicObjectiu(final PublicObjectiuCriteria publicObjectiuCriteria)
+			throws StrategyException {
 		PublicObjectiuDTO publicObjectiuDTO = new PublicObjectiuDTO();
 
 		try {
 			publicObjectiuDTO = gateway.obtenirPublicObjectiu(publicObjectiuCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return publicObjectiuDTO;
 	}
-	
-	public ProcedimentDTO obtenirProcediment(
-			ProcedimentCriteria procedimentCriteria) throws StrategyException {
+
+	@Override
+	public ProcedimentDTO obtenirProcediment(final ProcedimentCriteria procedimentCriteria) throws StrategyException {
 
 		ProcedimentDTO procedimentDTO = new ProcedimentDTO();
 
 		try {
 			procedimentDTO = gateway.obtenirProcediment(procedimentCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return procedimentDTO;
 	}
-	
-	public ServicioDTO obtenirServicio(
-			ServicioCriteria servicioCriteria) throws StrategyException {
+
+	@Override
+	public ServicioDTO obtenirServicio(final ServicioCriteria servicioCriteria) throws StrategyException {
 
 		ServicioDTO servicioDTO = new ServicioDTO();
 
 		try {
 			servicioDTO = gateway.obtenirServicio(servicioCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return servicioDTO;
 	}
 
-	public PersonalDTO obtenirPersonal(PersonalCriteria personalCriteria)
-			throws StrategyException {
+	@Override
+	public PersonalDTO obtenirPersonal(final PersonalCriteria personalCriteria) throws StrategyException {
 
 		PersonalDTO personalDTO = new PersonalDTO();
 
 		try {
 			personalDTO = gateway.obtenirPersonal(personalCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return personalDTO;
 	}
 
-	public PerfilDTO obtenirPerfil(PerfilCriteria perfilCriteria)
-			throws StrategyException {
+	@Override
+	public PerfilDTO obtenirPerfil(final PerfilCriteria perfilCriteria) throws StrategyException {
 
 		PerfilDTO perfilDTO = new PerfilDTO();
 
 		try {
 			perfilDTO = gateway.obtenirPerfil(perfilCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
@@ -300,255 +314,266 @@ public class RolsacQueryServiceWSStrategy implements RolsacQueryServiceStrategy 
 
 	}
 
-	public NormativaDTO obtenirNormativa(NormativaCriteria normativaCriteria)
-			throws StrategyException {
+	@Override
+	public NormativaDTO obtenirNormativa(final NormativaCriteria normativaCriteria) throws StrategyException {
 
 		NormativaDTO normativaDTO = new NormativaDTO();
 
 		try {
 			normativaDTO = gateway.obtenirNormativa(normativaCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return normativaDTO;
 	}
 
-	public MateriaDTO obtenirMateria(MateriaCriteria materiaCriteria)
-			throws StrategyException {
+	@Override
+	public MateriaDTO obtenirMateria(final MateriaCriteria materiaCriteria) throws StrategyException {
 
 		MateriaDTO materiaDTO = new MateriaDTO();
 
 		try {
 			materiaDTO = gateway.obtenirMateria(materiaCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return materiaDTO;
 	}
 
-	public MateriaAgrupacioDTO obtenirMateriaAgrupacio(
-			MateriaAgrupacioCriteria materiaAgrupacioCriteria)
+	@Override
+	public MateriaAgrupacioDTO obtenirMateriaAgrupacio(final MateriaAgrupacioCriteria materiaAgrupacioCriteria)
 			throws StrategyException {
 
 		MateriaAgrupacioDTO materiaAgrupacioDTO = new MateriaAgrupacioDTO();
 
 		try {
-			materiaAgrupacioDTO = gateway
-					.obtenirMateriaAgrupacio(materiaAgrupacioCriteria);
-		} catch (QueryServiceException qse) {
+			materiaAgrupacioDTO = gateway.obtenirMateriaAgrupacio(materiaAgrupacioCriteria);
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return materiaAgrupacioDTO;
 	}
 
-	public IconaMateriaDTO obtenirIconaMateria(
-			IconaMateriaCriteria iconaMateriaCriteria) throws StrategyException {
+	@Override
+	public IconaMateriaDTO obtenirIconaMateria(final IconaMateriaCriteria iconaMateriaCriteria)
+			throws StrategyException {
 
 		IconaMateriaDTO iconaMateriaDTO = new IconaMateriaDTO();
 
 		try {
 			iconaMateriaDTO = gateway.obtenirIconaMateria(iconaMateriaCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return iconaMateriaDTO;
 	}
 
-	public IconaFamiliaDTO obtenirIconaFamilia(
-			IconaFamiliaCriteria iconaFamiliaCriteria) throws StrategyException {
+	@Override
+	public IconaFamiliaDTO obtenirIconaFamilia(final IconaFamiliaCriteria iconaFamiliaCriteria)
+			throws StrategyException {
 
 		IconaFamiliaDTO iconaFamiliaDTO = new IconaFamiliaDTO();
 
 		try {
 			iconaFamiliaDTO = gateway.obtenirIconaFamilia(iconaFamiliaCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return iconaFamiliaDTO;
 	}
 
-	public FormulariDTO obtenirFormulari(FormulariCriteria formulariCriteria)
-			throws StrategyException {
+	@Override
+	public FormulariDTO obtenirFormulari(final FormulariCriteria formulariCriteria) throws StrategyException {
 		FormulariDTO formulariDTO = new FormulariDTO();
 
 		try {
 			formulariDTO = gateway.obtenirFormulari(formulariCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return formulariDTO;
 	}
 
-	public FitxaUADTO obtenirFitxaUA(FitxaUACriteria fitxaUACriteria)
-			throws StrategyException {
+	@Override
+	public FitxaUADTO obtenirFitxaUA(final FitxaUACriteria fitxaUACriteria) throws StrategyException {
 
 		FitxaUADTO fitxaUADTO = new FitxaUADTO();
 
 		try {
 			fitxaUADTO = gateway.obtenirFitxaUA(fitxaUACriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return fitxaUADTO;
 	}
 
-	public FetVitalDTO obtenirFetVital(FetVitalCriteria fetVitalCriteria)
-			throws StrategyException {
+	@Override
+	public PlataformaDTO obtenirPlataforma(final PlataformaCriteria plataformaCriteria) throws StrategyException {
+		PlataformaDTO plataformaDTO = new PlataformaDTO();
+		try {
+			plataformaDTO = gateway.obtenirPlataforma(plataformaCriteria);
+		} catch (final QueryServiceException qse) {
+			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
+		} catch (final RemoteException e) {
+			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		}
+
+		return plataformaDTO;
+	}
+
+	@Override
+	public FetVitalDTO obtenirFetVital(final FetVitalCriteria fetVitalCriteria) throws StrategyException {
 		FetVitalDTO fetVitalDTO = new FetVitalDTO();
 		try {
 			fetVitalDTO = gateway.obtenirFetVital(fetVitalCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return fetVitalDTO;
 	}
 
-	public AgrupacioFetVitalDTO obtenirAgrupacioFetVital(
-			AgrupacioFetVitalCriteria agrupacioFetVitalCriteria)
+	@Override
+	public AgrupacioFetVitalDTO obtenirAgrupacioFetVital(final AgrupacioFetVitalCriteria agrupacioFetVitalCriteria)
 			throws StrategyException {
 		AgrupacioFetVitalDTO agrupacioFetVitalDTO = new AgrupacioFetVitalDTO();
 
 		try {
-			agrupacioFetVitalDTO = gateway
-					.obtenirAgrupacioFetVital(agrupacioFetVitalCriteria);
-		} catch (QueryServiceException qse) {
+			agrupacioFetVitalDTO = gateway.obtenirAgrupacioFetVital(agrupacioFetVitalCriteria);
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return agrupacioFetVitalDTO;
 	}
 
-	public AgrupacioMateriaDTO obtenirAgrupacioMateria(
-			AgrupacioMateriaCriteria agrupacioMateriaCriteria)
+	@Override
+	public AgrupacioMateriaDTO obtenirAgrupacioMateria(final AgrupacioMateriaCriteria agrupacioMateriaCriteria)
 			throws StrategyException {
 		AgrupacioMateriaDTO agrupacioMateriaDTO = new AgrupacioMateriaDTO();
 
 		try {
-			agrupacioMateriaDTO = gateway
-					.obtenirAgrupacioMateria(agrupacioMateriaCriteria);
-		} catch (QueryServiceException qse) {
+			agrupacioMateriaDTO = gateway.obtenirAgrupacioMateria(agrupacioMateriaCriteria);
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return agrupacioMateriaDTO;
 	}
 
-	public ButlletiDTO obtenirButlleti(ButlletiCriteria butlletiCriteria)
-			throws StrategyException {
+	@Override
+	public ButlletiDTO obtenirButlleti(final ButlletiCriteria butlletiCriteria) throws StrategyException {
 		ButlletiDTO butlletiDTO = new ButlletiDTO();
 
 		try {
 			butlletiDTO = gateway.obtenirButlleti(butlletiCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return butlletiDTO;
 	}
 
-	public DocumentDTO obtenirDocument(DocumentCriteria documentCriteria)
-			throws StrategyException {
+	@Override
+	public DocumentDTO obtenirDocument(final DocumentCriteria documentCriteria) throws StrategyException {
 		DocumentDTO documentDTO = new DocumentDTO();
 
 		try {
 			documentDTO = gateway.obtenirDocument(documentCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return documentDTO;
 	}
 
-	public DocumentTramitDTO obtenirDocumentTramit(
-			DocumentTramitCriteria documentTramitCriteria)
+	@Override
+	public DocumentTramitDTO obtenirDocumentTramit(final DocumentTramitCriteria documentTramitCriteria)
 			throws StrategyException {
 		DocumentTramitDTO documentTramitDTO = new DocumentTramitDTO();
 
 		try {
-			documentTramitDTO = gateway
-					.obtenirDocumentTramit(documentTramitCriteria);
-		} catch (QueryServiceException qse) {
+			documentTramitDTO = gateway.obtenirDocumentTramit(documentTramitCriteria);
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return documentTramitDTO;
 	}
 
-	public EdificiDTO obtenirEdifici(EdificiCriteria edificiCriteria)
-			throws StrategyException {
+	@Override
+	public EdificiDTO obtenirEdifici(final EdificiCriteria edificiCriteria) throws StrategyException {
 		EdificiDTO edificiDTO = new EdificiDTO();
 
 		try {
 			edificiDTO = gateway.obtenirEdifici(edificiCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return edificiDTO;
 	}
 
-	public EnllacDTO obtenirEnllac(EnllacCriteria enllacCriteria)
-			throws StrategyException {
+	@Override
+	public EnllacDTO obtenirEnllac(final EnllacCriteria enllacCriteria) throws StrategyException {
 		EnllacDTO enllacDTO = new EnllacDTO();
 
 		try {
 			enllacDTO = gateway.obtenirEnllac(enllacCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return enllacDTO;
 	}
 
-	public EspaiTerritorialDTO obtenirEspaiTerritorial(
-			EspaiTerritorialCriteria espaiTerritorialCriteria)
+	@Override
+	public EspaiTerritorialDTO obtenirEspaiTerritorial(final EspaiTerritorialCriteria espaiTerritorialCriteria)
 			throws StrategyException {
 		EspaiTerritorialDTO espaiTerritorialDTO = new EspaiTerritorialDTO();
 
 		try {
-			espaiTerritorialDTO = gateway
-					.obtenirEspaiTerritorial(espaiTerritorialCriteria);
-		} catch (QueryServiceException qse) {
+			espaiTerritorialDTO = gateway.obtenirEspaiTerritorial(espaiTerritorialCriteria);
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
@@ -556,512 +581,549 @@ public class RolsacQueryServiceWSStrategy implements RolsacQueryServiceStrategy 
 
 	}
 
-	public FamiliaDTO obtenirFamilia(FamiliaCriteria familiaCriteria)
-			throws StrategyException {
+	@Override
+	public FamiliaDTO obtenirFamilia(final FamiliaCriteria familiaCriteria) throws StrategyException {
 		FamiliaDTO familiaDTO = new FamiliaDTO();
 
 		try {
 			familiaDTO = gateway.obtenirFamilia(familiaCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return familiaDTO;
 	}
 
-	public FitxaDTO obtenirFitxa(FitxaCriteria fitxaCriteria)
-			throws StrategyException {
+	@Override
+	public FitxaDTO obtenirFitxa(final FitxaCriteria fitxaCriteria) throws StrategyException {
 		FitxaDTO fitxaDTO = new FitxaDTO();
 
 		try {
 			fitxaDTO = gateway.obtenirFitxa(fitxaCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return fitxaDTO;
 	}
 
+	@Override
 	public List<AgrupacioFetVitalDTO> llistarAgrupacionsFetsVitals(
-			AgrupacioFetVitalCriteria agrupacioFetVitalCriteria)
-			throws StrategyException {
-		
+			final AgrupacioFetVitalCriteria agrupacioFetVitalCriteria) throws StrategyException {
+
 		try {
 			return gateway.llistarAgrupacionsFetsVitals(agrupacioFetVitalCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
-		
+
 	}
 
-	public List<AgrupacioMateriaDTO> llistarAgrupacionsMateries(
-			AgrupacioMateriaCriteria agrupacioMateriaCriteria) throws StrategyException {
+	@Override
+	public List<AgrupacioMateriaDTO> llistarAgrupacionsMateries(final AgrupacioMateriaCriteria agrupacioMateriaCriteria)
+			throws StrategyException {
 		try {
 			return gateway.llistarAgrupacionsMateries(agrupacioMateriaCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 	}
 
-	public List<ButlletiDTO> llistarButlletins(ButlletiCriteria butlletiCriteria) throws StrategyException {
+	@Override
+	public List<ButlletiDTO> llistarButlletins(final ButlletiCriteria butlletiCriteria) throws StrategyException {
 		try {
 			return gateway.llistarButlletins(butlletiCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}				
+		}
 	}
 
-	public List<DocumentDTO> llistarDocuments(DocumentCriteria documentCriteria) throws StrategyException {
+	@Override
+	public List<DocumentDTO> llistarDocuments(final DocumentCriteria documentCriteria) throws StrategyException {
 		try {
 			return gateway.llistarDocuments(documentCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}		
+		}
 	}
 
-	public List<DocumentTramitDTO> llistarDocumentTramit(
-			DocumentTramitCriteria documentTramitCriteria) throws StrategyException {
+	@Override
+	public List<DocumentTramitDTO> llistarDocumentTramit(final DocumentTramitCriteria documentTramitCriteria)
+			throws StrategyException {
 		try {
 			return gateway.llistarDocumentTramit(documentTramitCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}				
+		}
 	}
-    public List<DocumentoNormativaDTO> llistarDocumentoNormativa(DocumentoNormativaCriteria idNormativa)  throws StrategyException {
+
+	@Override
+	public List<DocumentoNormativaDTO> llistarDocumentoNormativa(final DocumentoNormativaCriteria idNormativa)
+			throws StrategyException {
 		try {
 			return gateway.llistarDocumentoNormativa(idNormativa);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}				
+		}
 	}
-    
-    public List<DocumentoServicioDTO> llistarDocumentoServicio(DocumentoServicioCriteria idServicio)  throws StrategyException {
+
+	@Override
+	public List<DocumentoServicioDTO> llistarDocumentoServicio(final DocumentoServicioCriteria idServicio)
+			throws StrategyException {
 		try {
 			return gateway.llistarDocumentoServicio(idServicio);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}				
+		}
 	}
-	
 
-	public List<EdificiDTO> llistarEdificis(EdificiCriteria edificiTramit) throws StrategyException {
+	@Override
+	public List<EdificiDTO> llistarEdificis(final EdificiCriteria edificiTramit) throws StrategyException {
 		try {
 			return gateway.llistarEdificis(edificiTramit);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}				
+		}
 	}
 
-	public List<EnllacDTO> llistarEnllacos(EnllacCriteria enllacCriteria) throws StrategyException {
+	@Override
+	public List<EnllacDTO> llistarEnllacos(final EnllacCriteria enllacCriteria) throws StrategyException {
 		try {
 			return gateway.llistarEnllacos(enllacCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}				
+		}
 	}
 
-	public List<EspaiTerritorialDTO> llistarEspaisTerritorials(
-			EspaiTerritorialCriteria espaiTerritorialCriteria) throws StrategyException {
+	@Override
+	public List<EspaiTerritorialDTO> llistarEspaisTerritorials(final EspaiTerritorialCriteria espaiTerritorialCriteria)
+			throws StrategyException {
 		try {
 			return gateway.llistarEspaisTerritorials(espaiTerritorialCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}				
+		}
 	}
 
-	public List<FamiliaDTO> llistarFamilies(FamiliaCriteria familiaCriteria) throws StrategyException {
+	@Override
+	public List<FamiliaDTO> llistarFamilies(final FamiliaCriteria familiaCriteria) throws StrategyException {
 		try {
 			return gateway.llistarFamilies(familiaCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}				
+		}
 	}
 
-	public List<FetVitalDTO> llistarFetsVitals(FetVitalCriteria fetVitalCriteria) throws StrategyException {
+	@Override
+	public List<FetVitalDTO> llistarFetsVitals(final FetVitalCriteria fetVitalCriteria) throws StrategyException {
 		try {
 			return gateway.llistarFetsVitals(fetVitalCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}				
+		}
 	}
 
-	public List<FitxaDTO> llistarFitxes(FitxaCriteria fitxaCriteria) throws StrategyException {
+	@Override
+	public List<FitxaDTO> llistarFitxes(final FitxaCriteria fitxaCriteria) throws StrategyException {
 		try {
 			return gateway.llistarFitxes(fitxaCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}				
+		}
 	}
 
-	public List<FitxaUADTO> llistarFitxesUA(FitxaUACriteria fitxaUACriteria) throws StrategyException {
+	@Override
+	public List<FitxaUADTO> llistarFitxesUA(final FitxaUACriteria fitxaUACriteria) throws StrategyException {
 		try {
 			return gateway.llistarFitxesUA(fitxaUACriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}				
+		}
 	}
 
-	public List<FormulariDTO> llistarFormularis(
-			FormulariCriteria formulariCriteria) throws StrategyException {
+	@Override
+	public List<FormulariDTO> llistarFormularis(final FormulariCriteria formulariCriteria) throws StrategyException {
 		try {
 			return gateway.llistarFormularis(formulariCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}				
+		}
 	}
 
-	public List<IconaFamiliaDTO> llistarIconesFamilies(
-			IconaFamiliaCriteria iconaFamiliaCriteria) throws StrategyException {
+	@Override
+	public List<IconaFamiliaDTO> llistarIconesFamilies(final IconaFamiliaCriteria iconaFamiliaCriteria)
+			throws StrategyException {
 		try {
 			return gateway.llistarIconesFamilies(iconaFamiliaCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}				
-		
+		}
+
 	}
 
-	public List<IconaMateriaDTO> llistarIconesMateries(
-			IconaMateriaCriteria iconaMateriaCriteria) throws StrategyException {
+	@Override
+	public List<IconaMateriaDTO> llistarIconesMateries(final IconaMateriaCriteria iconaMateriaCriteria)
+			throws StrategyException {
 		try {
 			return gateway.llistarIconesMateries(iconaMateriaCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}				
+		}
 	}
 
-	public List<MateriaDTO> llistarMateries(MateriaCriteria materiaCriteria) throws StrategyException {
+	@Override
+	public List<MateriaDTO> llistarMateries(final MateriaCriteria materiaCriteria) throws StrategyException {
 		try {
 			return gateway.llistarMateries(materiaCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}						
+		}
 	}
 
-	public List<MateriaAgrupacioDTO> llistarMateriesAgrupacions(
-			MateriaAgrupacioCriteria materiaAgrupacioCriteria) throws StrategyException {
+	@Override
+	public List<MateriaAgrupacioDTO> llistarMateriesAgrupacions(final MateriaAgrupacioCriteria materiaAgrupacioCriteria)
+			throws StrategyException {
 		try {
 			return gateway.llistarMateriesAgrupacions(materiaAgrupacioCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}						
+		}
 	}
 
-	public List<NormativaDTO> llistarNormatives(
-			NormativaCriteria normativaCriteria) throws StrategyException {
+	@Override
+	public List<NormativaDTO> llistarNormatives(final NormativaCriteria normativaCriteria) throws StrategyException {
 		try {
 			return gateway.llistarNormatives(normativaCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}						
+		}
 	}
 
-	public List<PerfilDTO> llistarPerfils(PerfilCriteria perfilCriteria) throws StrategyException {
+	@Override
+	public List<PerfilDTO> llistarPerfils(final PerfilCriteria perfilCriteria) throws StrategyException {
 		try {
 			return gateway.llistarPerfils(perfilCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}						
-		
+		}
+
 	}
 
-	public List<PersonalDTO> llistarPersonal(PersonalCriteria personalCriteria) throws StrategyException {
+	@Override
+	public List<PersonalDTO> llistarPersonal(final PersonalCriteria personalCriteria) throws StrategyException {
 		try {
 			return gateway.llistarPersonal(personalCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}						
+		}
 	}
 
-	public List<ProcedimentDTO> llistarProcediments(
-            ProcedimentCriteria procedimentCriteria) throws StrategyException {
-        try {
-            return gateway.llistarProcediments(procedimentCriteria);
-        } catch (QueryServiceException qse) {
-            throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-        } catch (RemoteException e) {
-            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-        }                       
-    }
-	
-	public Integer getNumProcediments(ProcedimentCriteria procedimentCriteria) throws StrategyException {
-        try {
-            return gateway.getNumProcediments(procedimentCriteria);
-        } catch (QueryServiceException qse) {
-            throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-        } catch (RemoteException e) {
-            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-        }                       
-    }
-	
-	public List<ServicioDTO> llistarServicios(ServicioCriteria servicioCriteria) throws StrategyException {
-        try {
-            return gateway.llistarServicios(servicioCriteria);
-        } catch (QueryServiceException qse) {
-            throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-        } catch (RemoteException e) {
-            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-        }                       
-    }
-	
-	public Integer getNumServicios(ServicioCriteria servicioCriteria) throws StrategyException {
-        try {
-            return gateway.getNumServicios(servicioCriteria);
-        } catch (QueryServiceException qse) {
-            throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-        } catch (RemoteException e) {
-            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-        }                       
-    }
+	@Override
+	public List<ProcedimentDTO> llistarProcediments(final ProcedimentCriteria procedimentCriteria)
+			throws StrategyException {
+		try {
+			return gateway.llistarProcediments(procedimentCriteria);
+		} catch (final QueryServiceException qse) {
+			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
+		} catch (final RemoteException e) {
+			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		}
+	}
 
-	public List<PublicObjectiuDTO> llistarPublicsObjectius(
-			PublicObjectiuCriteria publicObjectiuCriteria) throws StrategyException {
+	@Override
+	public Integer getNumProcediments(final ProcedimentCriteria procedimentCriteria) throws StrategyException {
+		try {
+			return gateway.getNumProcediments(procedimentCriteria);
+		} catch (final QueryServiceException qse) {
+			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
+		} catch (final RemoteException e) {
+			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		}
+	}
+
+	@Override
+	public List<ServicioDTO> llistarServicios(final ServicioCriteria servicioCriteria) throws StrategyException {
+		try {
+			return gateway.llistarServicios(servicioCriteria);
+		} catch (final QueryServiceException qse) {
+			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
+		} catch (final RemoteException e) {
+			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		}
+	}
+
+	@Override
+	public Integer getNumServicios(final ServicioCriteria servicioCriteria) throws StrategyException {
+		try {
+			return gateway.getNumServicios(servicioCriteria);
+		} catch (final QueryServiceException qse) {
+			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
+		} catch (final RemoteException e) {
+			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		}
+	}
+
+	@Override
+	public List<PublicObjectiuDTO> llistarPublicsObjectius(final PublicObjectiuCriteria publicObjectiuCriteria)
+			throws StrategyException {
 		try {
 			return gateway.llistarPublicsObjectius(publicObjectiuCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}								
+		}
 	}
 
-	public List<SeccioDTO> llistarSeccions(SeccioCriteria seccioCriteria) throws StrategyException {
+	@Override
+	public List<SeccioDTO> llistarSeccions(final SeccioCriteria seccioCriteria) throws StrategyException {
 		try {
 			return gateway.llistarSeccions(seccioCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}								
+		}
 	}
 
-	public List<TaxaDTO> llistarTaxes(TaxaCriteria taxaCriteria) throws StrategyException {
+	@Override
+	public List<TaxaDTO> llistarTaxes(final TaxaCriteria taxaCriteria) throws StrategyException {
 		try {
 			return gateway.llistarTaxes(taxaCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}						
+		}
 	}
 
-	public List<TramitDTO> llistarTramits(TramitCriteria tramitCriteria) throws StrategyException {
+	@Override
+	public List<TramitDTO> llistarTramits(final TramitCriteria tramitCriteria) throws StrategyException {
 		try {
 			return gateway.llistarTramits(tramitCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}								
+		}
 	}
 
+	@Override
 	public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(
-			UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws StrategyException {
+			final UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws StrategyException {
 		try {
 			return gateway.llistarUnitatsAdministratives(unitatAdministrativaCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}						
+		}
 	}
 
-	public List<UnitatMateriaDTO> llistarUnitatsMateries(
-			UnitatMateriaCriteria unitatMateriaCriteria) throws StrategyException {
+	@Override
+	public List<UnitatMateriaDTO> llistarUnitatsMateries(final UnitatMateriaCriteria unitatMateriaCriteria)
+			throws StrategyException {
 		try {
 			return gateway.llistarUnitatsMateries(unitatMateriaCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}						
+		}
 	}
 
-	public List<UsuariDTO> llistarUsuaris(UsuariCriteria usuariCriteria) throws StrategyException {
+	@Override
+	public List<UsuariDTO> llistarUsuaris(final UsuariCriteria usuariCriteria) throws StrategyException {
 		try {
 			return gateway.llistarUsuaris(usuariCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}						
+		}
 	}
-	
-	public IdiomaDTO obtenirIdioma(IdiomaCriteria idiomaCriteria) throws StrategyException{
+
+	@Override
+	public IdiomaDTO obtenirIdioma(final IdiomaCriteria idiomaCriteria) throws StrategyException {
 		IdiomaDTO idiomaDTO = new IdiomaDTO();
 
 		try {
 			idiomaDTO = gateway.obtenirIdioma(idiomaCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 
 		return idiomaDTO;
 	}
-	
-	public List<IdiomaDTO> llistarIdiomes(IdiomaCriteria idiomaCriteria) throws StrategyException {
+
+	@Override
+	public List<IdiomaDTO> llistarIdiomes(final IdiomaCriteria idiomaCriteria) throws StrategyException {
 		try {
-			List<IdiomaDTO> listaIdiomas = gateway.llistarIdiomes(idiomaCriteria);
+			final List<IdiomaDTO> listaIdiomas = gateway.llistarIdiomes(idiomaCriteria);
 			return listaIdiomas;
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}						
+		}
 	}
 
-	public List<TipusDTO> llistarTipus(TipusCriteria tipusCriteria) throws StrategyException {
+	@Override
+	public List<TipusDTO> llistarTipus(final TipusCriteria tipusCriteria) throws StrategyException {
 		try {
 			return gateway.llistarTipus(tipusCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}						
+		}
 	}
 
-	public List<TipusAfectacioDTO> llistarTipusAfectacio(
-			TipusAfectacioCriteria tipusAfectacioCriteria) throws StrategyException {
+	@Override
+	public List<TipusAfectacioDTO> llistarTipusAfectacio(final TipusAfectacioCriteria tipusAfectacioCriteria)
+			throws StrategyException {
 		try {
 			return gateway.llistarTipusAfectacio(tipusAfectacioCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}								
+		}
 	}
 
-	public List<CatalegDocumentsDTO> llistarCatalegsDocuments(
-			CatalegDocumentsCriteria catalegDocumentsCriteria) throws StrategyException {
+	@Override
+	public List<CatalegDocumentsDTO> llistarCatalegsDocuments(final CatalegDocumentsCriteria catalegDocumentsCriteria)
+			throws StrategyException {
 		try {
 			return gateway.llistarCatalegsDocuments(catalegDocumentsCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}								
-	}		
+		}
+	}
 
+	@Override
 	public List<ExcepcioDocumentacioDTO> llistarExcepcionsDocumentacio(
-			ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria) throws StrategyException {
+			final ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria) throws StrategyException {
 		try {
 			return gateway.llistarExcepcionsDocumentacio(excepcioDocumentacioCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}								
-	}			
-	
-	public TipusAfectacioDTO obtenirTipusAfectacio(
-			TipusAfectacioCriteria tipusAfectacioCriteria)
+		}
+	}
+
+	@Override
+	public TipusAfectacioDTO obtenirTipusAfectacio(final TipusAfectacioCriteria tipusAfectacioCriteria)
 			throws StrategyException {
 		try {
 			return gateway.obtenirTipusAfectacio(tipusAfectacioCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}								
+		}
 	}
 
-	public IniciacioDTO obtenirTipusIniciacio(
-			IniciacioCriteria iniciacioCriteria) throws StrategyException {
-		
+	@Override
+	public IniciacioDTO obtenirTipusIniciacio(final IniciacioCriteria iniciacioCriteria) throws StrategyException {
+
 		try {
 			return gateway.obtenirTipusIniciacio(iniciacioCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
-		
+
 	}
 
-	public List<IniciacioDTO> llistarTipusIniciacions(
-			IniciacioCriteria iniciacioCriteria) throws StrategyException {
-		
+	@Override
+	public List<IniciacioDTO> llistarTipusIniciacions(final IniciacioCriteria iniciacioCriteria)
+			throws StrategyException {
+
 		try {
 			return gateway.llistarTipusIniciacions(iniciacioCriteria);
-		} catch (QueryServiceException qse) {
+		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 	}
 
-    public Integer getNumFitxes(FitxaCriteria fitxaCriteria) throws StrategyException {
+	@Override
+	public Integer getNumFitxes(final FitxaCriteria fitxaCriteria) throws StrategyException {
 
-        try {
-            return gateway.getNumFitxes(fitxaCriteria);
-        } catch (QueryServiceException qse) {
-            throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-        } catch (RemoteException e) {
-            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-        }
-    }
-
-	public SilencioDTO obtenirSilenci(Long codSilencio, String idioma)
-			throws StrategyException, QueryServiceException {
-		
-        try {
-            return gateway.obtenirSilenci(codSilencio,idioma);
-        } catch (RemoteException e) {
-            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-        }
+		try {
+			return gateway.getNumFitxes(fitxaCriteria);
+		} catch (final QueryServiceException qse) {
+			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
+		} catch (final RemoteException e) {
+			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		}
 	}
 
-	
+	@Override
+	public SilencioDTO obtenirSilenci(final Long codSilencio, final String idioma)
+			throws StrategyException, QueryServiceException {
 
-	
-	
+		try {
+			return gateway.obtenirSilenci(codSilencio, idioma);
+		} catch (final RemoteException e) {
+			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		}
+	}
+
 }

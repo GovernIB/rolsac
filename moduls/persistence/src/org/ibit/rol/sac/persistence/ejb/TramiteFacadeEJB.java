@@ -61,36 +61,32 @@ import net.sf.hibernate.Session;
  * SessionBean para mantener y consultar Tramites.
  *
  * @ejb.bean name="sac/persistence/TramiteFacade"
- *  jndi-name="org.ibit.rol.sac.persistence.TramiteFacade"
+ *           jndi-name="org.ibit.rol.sac.persistence.TramiteFacade"
  *           type="Stateless" view-type="remote" transaction-type="Container"
  *
  * @ejb.transaction type="Required"
  */
 public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDelegateI {
 
-	/**
-	 * 
-	 */
+	/** Serial version UID. */
 	private static final long serialVersionUID = 15377941969351981L;
-	
-	DestinatarioDelegate destDelegate;  
+
+	DestinatarioDelegate destDelegate;
 
 	public DestinatarioDelegate getDestDelegate() {
 		return destDelegate;
 	}
 
-
-	public void setDestDelegate(DestinatarioDelegate destDelegate) {
+	public void setDestDelegate(final DestinatarioDelegate destDelegate) {
 		this.destDelegate = destDelegate;
 	}
 
-
 	/**
 	 * Obtiene referéncia al ejb de control de Acceso.
+	 *
 	 * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
 	 */
 	protected abstract AccesoManagerLocal getAccesoManager();
-
 
 	/**
 	 * @ejb.create-method
@@ -101,66 +97,72 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 		super.ejbCreate();
 	}
 
-
 	/**
 	 * Autoriza la creación de un trámite
+	 *
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
-	public boolean autorizaCrearTramite(Long idProcedimiento) throws SecurityException  {
-		return (getAccesoManager().tieneAccesoProcedimiento(idProcedimiento)); 
+	@Override
+	public boolean autorizaCrearTramite(final Long idProcedimiento) throws SecurityException {
+		return (getAccesoManager().tieneAccesoProcedimiento(idProcedimiento));
 	}
-
 
 	/**
 	 * Autoriza la modificación trámite
+	 *
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
-	public boolean autorizaModificarTramite(Long idTramite) throws SecurityException {
+	@Override
+	public boolean autorizaModificarTramite(final Long idTramite) throws SecurityException {
 		return (getAccesoManager().tieneAccesoTramite(idTramite));
-	}   
-
+	}
 
 	/**
 	 * Crea o actualiza un trámite.
-	 * @param tramite	Indica el trámite a guardar
-	 * 
-	 * @param idUA	Identificador de la unidad administrativa
-	 * 
+	 *
+	 * @param tramite
+	 *            Indica el trámite a guardar
+	 *
+	 * @param idUA
+	 *            Identificador de la unidad administrativa
+	 *
 	 * @throws ValidateVudsException
-	 *  
+	 *
 	 * @throws ActualizacionVudsException
-	 *  
-	 * @throws ActualizadorException 
-	 * 
+	 *
+	 * @throws ActualizadorException
+	 *
 	 * @ejb.interface-method
-	 * 
+	 *
 	 * @ejb.permission
-	 *  
-	 * role-name="${role.system},${role.admin},${role.super},${role.oper}"
-	 * 
-	 * @return	Devuelve el identificador del trámite guardado.
-	 * @throws DelegateException 
+	 *
+	 * 				role-name="${role.system},${role.admin},${role.super},${role.oper}"
+	 *
+	 * @return Devuelve el identificador del trámite guardado.
+	 * @throws DelegateException
 	 */
-	public Long grabarTramite(Tramite tramite, Long idUA) throws DelegateException {
+	@Override
+	public Long grabarTramite(final Tramite tramite, final Long idUA) throws DelegateException {
 
-
-		Session session = getSession();
+		final Session session = getSession();
 
 		try {
 
-			Long tramiteId = getTramiteSaver().grabarTramite(tramite, idUA, session);
-		    session.flush();
-		    
-		    
-		    Tramite tramiteReload = cargaTramite(session, tramiteId);
-		    IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, tramiteReload.getProcedimiento().getId(), false);
-		    SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, tramiteReload.getProcedimiento().getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, tramiteReload.getProcedimiento());
-		    
+			final Long tramiteId = getTramiteSaver().grabarTramite(tramite, idUA, session);
+			session.flush();
+
+			final Tramite tramiteReload = cargaTramite(session, tramiteId);
+			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO,
+					tramiteReload.getProcedimiento().getId(), false);
+			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO,
+					tramiteReload.getProcedimiento().getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null,
+					tramiteReload.getProcedimiento());
+
 			return tramiteId;
 
-		} catch (HibernateException he) {
+		} catch (final HibernateException he) {
 
 			throw new EJBException(he);
 
@@ -172,26 +174,27 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 
 	}
 
-
 	/**
 	 * Obtiene un trámite.
-	 * 
-	 * @param	id	Indica el identificador del trámite a obtener.
-	 * 
+	 *
+	 * @param id
+	 *            Indica el identificador del trámite a obtener.
+	 *
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
-	 * 
+	 *
 	 * @return Devuelve <code>Tramite</code>
 	 */
-	public Tramite obtenerTramite(Long id) {
+	@Override
+	public Tramite obtenerTramite(final Long id) {
 
-		Session session = getSession();
+		final Session session = getSession();
 
 		try {
 
 			return cargaTramite(session, id);
 
-		} catch (HibernateException he) {
+		} catch (final HibernateException he) {
 
 			throw new EJBException(he);
 
@@ -202,38 +205,41 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 		}
 
 	}
-	
-	
+
 	/**
 	 * Borra un trámite
-	 * 
-	 * @param id	Identificador del trámite a borrar.	
-	 * @param idProc	Identificador del procedimiento.
-	 * @throws DelegateException 
-	 * 
+	 *
+	 * @param id
+	 *            Identificador del trámite a borrar.
+	 * @param idProc
+	 *            Identificador del procedimiento.
+	 * @throws DelegateException
+	 *
 	 * @ejb.interface-method
-	 * 
+	 *
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
-	public void borrarTramite(Long id, Long idProc) throws DelegateException {
+	@Override
+	public void borrarTramite(final Long id, final Long idProc) throws DelegateException {
 
-		Session session = getSession();
+		final Session session = getSession();
 
 		try {
 
-			if ( !getAccesoManager().tieneAccesoTramite(id) )
+			if (!getAccesoManager().tieneAccesoTramite(id))
 				throw new SecurityException("No tiene acceso al trámite");
 
-			Tramite tramite = (Tramite)session.load(Tramite.class, id);
+			final Tramite tramite = (Tramite) session.load(Tramite.class, id);
 			session.delete(tramite);
 			session.flush();
 
 			Actualizador.borrar(tramite, true);
-			
+
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, idProc, false);
-			SiaUtils.marcarIndexacionPendienteServicio(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, idProc, SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, null);
-		    
-		} catch (HibernateException he) {
+			SiaUtils.marcarIndexacionPendienteServicio(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, idProc,
+					SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, null);
+
+		} catch (final HibernateException he) {
 
 			throw new EJBException(he);
 
@@ -245,33 +251,35 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 
 	}
 
-
 	/**
 	 * Guarda un documento
-	 * 
-	 * @param	doc	Indica un documento asociado a un determinado trámite.
-	 * 
-	 * @param idTramite	Identificador de un trámite.
-	 * 
+	 *
+	 * @param doc
+	 *            Indica un documento asociado a un determinado trámite.
+	 *
+	 * @param idTramite
+	 *            Identificador de un trámite.
+	 *
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-	 * 
+	 *
 	 * @return Devuelve el identificador del documento guardado.
-	 * @throws DelegateException 
+	 * @throws DelegateException
 	 */
-	public Long grabarDocument(DocumentTramit doc, Long idTramite) throws DelegateException {
+	@Override
+	public Long grabarDocument(final DocumentTramit doc, final Long idTramite) throws DelegateException {
 
-		Session session = getSession();
+		final Session session = getSession();
 
 		try {
 
-			if ( !getAccesoManager().tieneAccesoTramite(idTramite) )
+			if (!getAccesoManager().tieneAccesoTramite(idTramite))
 				throw new SecurityException("No tiene acceso al tramite.");
 
 			Tramite tramite = null;
 			boolean actualizar = false;
 
-			if ( doc.getId() == null ) {
+			if (doc.getId() == null) {
 
 				tramite = cargaTramite(session, idTramite);
 				tramite.addDocument(doc);
@@ -287,21 +295,24 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			if (actualizar)
 				tramite = cargaTramite(session, idTramite);
 
-			if ( tramite.getProcedimiento() != null ) {
+			if (tramite.getProcedimiento() != null) {
 
 				log.debug("Grabar Documento: Lanzo el actualizador");
 				Actualizador.actualizar(tramite, true);
 
 			}
-			
+
 			if (tramite.getProcedimiento() != null) {
-				IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, tramite.getProcedimiento().getId(), false);
-				SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, tramite.getProcedimiento().getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, tramite.getProcedimiento());
+				IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO,
+						tramite.getProcedimiento().getId(), false);
+				SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO,
+						tramite.getProcedimiento().getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null,
+						tramite.getProcedimiento());
 			}
-			
+
 			return doc.getId();
 
-		} catch (HibernateException he) {
+		} catch (final HibernateException he) {
 
 			throw new EJBException(he);
 
@@ -313,32 +324,34 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 
 	}
 
-
 	/**
 	 * Guarda la tasa asociada a un trámite
-	 * 
-	 * @param	taxa	Indica la tasa a guardar.
-	 * 
-	 * @param	idTramite	Identificador de un trámite.
-	 * 
+	 *
+	 * @param taxa
+	 *            Indica la tasa a guardar.
+	 *
+	 * @param idTramite
+	 *            Identificador de un trámite.
+	 *
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-	 * 
+	 *
 	 * @return Devuelve el identificador de la tasa guardada.
 	 */
-	public Long grabarTaxa(Taxa taxa, Long idTramite) {
+	@Override
+	public Long grabarTaxa(final Taxa taxa, final Long idTramite) {
 
-		Session session = getSession();
+		final Session session = getSession();
 
 		try {
 
-			if ( !getAccesoManager().tieneAccesoTramite(idTramite) )
+			if (!getAccesoManager().tieneAccesoTramite(idTramite))
 				throw new SecurityException("No tiene acceso al tramite.");
 
 			Tramite tramite = null;
 			boolean actualizar = false;
 
-			if ( taxa.getId() == null ) {
+			if (taxa.getId() == null) {
 
 				tramite = cargaTramite(session, idTramite);
 				tramite.addTaxa(taxa);
@@ -356,21 +369,23 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 				tramite = cargaTramite(session, idTramite);
 			}
 
-			if ( tramite.getProcedimiento() != null ) {
+			if (tramite.getProcedimiento() != null) {
 
 				log.debug("Grabar Taxa: Lanzo el actualizador ");
 				Actualizador.actualizar(tramite, true);
 
 			}
-		
-			
-			if ( tramite.getProcedimiento() != null ) {
-				IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, tramite.getProcedimiento().getId(), false);
-				SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, tramite.getProcedimiento().getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, tramite.getProcedimiento());
+
+			if (tramite.getProcedimiento() != null) {
+				IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO,
+						tramite.getProcedimiento().getId(), false);
+				SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO,
+						tramite.getProcedimiento().getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null,
+						tramite.getProcedimiento());
 			}
 			return taxa.getId();
 
-		} catch (Exception he) {
+		} catch (final Exception he) {
 
 			throw new EJBException(he);
 
@@ -381,31 +396,32 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 		}
 
 	}
-
 
 	/**
 	 * Obtiene una tasa
-	 * 
-	 * @param	idTasa	Identificador de la tasa solicitada.
-	 * 
+	 *
+	 * @param idTasa
+	 *            Identificador de la tasa solicitada.
+	 *
 	 * @ejb.interface-method
-	 * 
+	 *
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-	 * 
-	 * @return	Devuelve <code>Taxa</code> solicitada.
+	 *
+	 * @return Devuelve <code>Taxa</code> solicitada.
 	 */
-	public Taxa obtenirTaxa(Long idTasa) {
+	@Override
+	public Taxa obtenirTaxa(final Long idTasa) {
 
-		Session session = getSession();
+		final Session session = getSession();
 
 		try {
 
-			Taxa taxa = (Taxa) session.load(Taxa.class, idTasa);
-			cargaTramite( session, taxa.getTramit().getId() );
+			final Taxa taxa = (Taxa) session.load(Taxa.class, idTasa);
+			cargaTramite(session, taxa.getTramit().getId());
 
 			return taxa;
 
-		} catch (HibernateException he) {
+		} catch (final HibernateException he) {
 
 			throw new EJBException(he);
 
@@ -417,28 +433,29 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 
 	}
 
-
 	/**
 	 * Borra una tasa
-	 * 
-	 * @param id	Identificador de una tasa.
-	 * 
+	 *
+	 * @param id
+	 *            Identificador de una tasa.
+	 *
 	 * @ejb.interface-method
-	 * 
+	 *
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
-	public void borrarTaxa(Long id) {
+	@Override
+	public void borrarTaxa(final Long id) {
 
-		Session session = getSession();
+		final Session session = getSession();
 
 		try {
 
-			Taxa taxa = (Taxa) session.load(Taxa.class, id);
-			Tramite tramite = cargaTramite( session, taxa.getTramit().getId() );
+			final Taxa taxa = (Taxa) session.load(Taxa.class, id);
+			final Tramite tramite = cargaTramite(session, taxa.getTramit().getId());
 
-			long idTramite = taxa.getTramit().getId();
+			final long idTramite = taxa.getTramit().getId();
 
-			if ( !getAccesoManager().tieneAccesoTramite(idTramite) )
+			if (!getAccesoManager().tieneAccesoTramite(idTramite))
 				throw new SecurityException("No tiene acceso al documento");
 
 			taxa.getTramit().removeTaxa(taxa);
@@ -446,21 +463,20 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			session.delete(taxa);
 			session.flush();
 
-
-			if ( tramite.getProcedimiento() != null ) {
+			if (tramite.getProcedimiento() != null) {
 
 				log.debug("Borro Taxa: Lanzo el actualizador");
 				Actualizador.actualizar(tramite, true);
-				
-				
-				IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, tramite.getProcedimiento().getId(), false);
-				SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, tramite.getProcedimiento().getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, tramite.getProcedimiento());
-				
+
+				IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO,
+						tramite.getProcedimiento().getId(), false);
+				SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO,
+						tramite.getProcedimiento().getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null,
+						tramite.getProcedimiento());
+
 			}
-			
-			
-			
-		} catch (Exception he) {
+
+		} catch (final Exception he) {
 
 			throw new EJBException(he);
 
@@ -471,49 +487,50 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 		}
 
 	}
-
 
 	/**
 	 * Obtener documento
-	 * 
-	 * @param idDocumento	Identificador del documento solicitado.
-	 * 
+	 *
+	 * @param idDocumento
+	 *            Identificador del documento solicitado.
+	 *
 	 * @ejb.interface-method
-	 * 
+	 *
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
-	 * 
+	 *
 	 * @return Devuelve <code>DocumentTramit</code> solicitado.
 	 */
-	public DocumentTramit obtenirDocument(Long idDocumento) {
+	@Override
+	public DocumentTramit obtenirDocument(final Long idDocumento) {
 
-		Session session = getSession();
+		final Session session = getSession();
 
 		try {
 
-			DocumentTramit doc = (DocumentTramit) session.load(DocumentTramit.class, idDocumento);
-			Hibernate.initialize( doc.getArchivo() );
+			final DocumentTramit doc = (DocumentTramit) session.load(DocumentTramit.class, idDocumento);
+			Hibernate.initialize(doc.getArchivo());
 
-			Iterator iterator = doc.getLangs().iterator();
-			while ( iterator.hasNext() ) {
+			final Iterator iterator = doc.getLangs().iterator();
+			while (iterator.hasNext()) {
 
-				String lang = (String) iterator.next();
-				TraduccionDocumento traduccion = (TraduccionDocumento) doc.getTraduccion(lang);
+				final String lang = (String) iterator.next();
+				final TraduccionDocumento traduccion = (TraduccionDocumento) doc.getTraduccion(lang);
 
-				if ( traduccion != null )
-					Hibernate.initialize( traduccion.getArchivo() );
+				if (traduccion != null)
+					Hibernate.initialize(traduccion.getArchivo());
 
 			}
 
-			if ( doc.getTramit() == null ) 
+			if (doc.getTramit() == null)
 				throw new EJBException("doc.getTramit() es null");
 
-			Tramite tramite = doc.getTramit();
-			Hibernate.initialize( tramite );
-			cargaTramite( session, tramite.getId() );
+			final Tramite tramite = doc.getTramit();
+			Hibernate.initialize(tramite);
+			cargaTramite(session, tramite.getId());
 
 			return doc;
 
-		} catch (HibernateException he) {
+		} catch (final HibernateException he) {
 
 			throw new EJBException(he);
 
@@ -525,56 +542,57 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 
 	}
 
-
 	/**
 	 * Borra documento
-	 * 
-	 * @param id	Identificador de un documento
-	 * 
+	 *
+	 * @param id
+	 *            Identificador de un documento
+	 *
 	 * @ejb.interface-method
-	 * 
+	 *
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
-	public void borrarDocument(Long id) throws DelegateException  {
+	@Override
+	public void borrarDocument(final Long id) throws DelegateException {
 
-		Session session = getSession();
+		final Session session = getSession();
 
 		try {
 
-			DocumentTramit document = (DocumentTramit) session.load(DocumentTramit.class, id);
-			Tramite tramite = cargaTramite( session, document.getTramit().getId() );
+			final DocumentTramit document = (DocumentTramit) session.load(DocumentTramit.class, id);
+			final Tramite tramite = cargaTramite(session, document.getTramit().getId());
 
 			document.getTramit().removeDocument(document);
 
-			long idTramite = document.getTramit().getId();
+			final long idTramite = document.getTramit().getId();
 
-			if ( !getAccesoManager().tieneAccesoTramite(idTramite) )
+			if (!getAccesoManager().tieneAccesoTramite(idTramite))
 				throw new SecurityException("No tiene acceso al documento");
 
 			session.delete(document);
 			session.flush();
 
-			
 			// reordenacio de documents
 			// TODO posar reordenacio aqui trenca la cohesio. S'hauria de posar
 			// fora del metode i cridar
 			// la reordenacio desde dins la action 'borrar'
 
-			int tipus = document.getTipus();
-			List<DocumentTramit> docs = obtenirDocumentsSegonsTipus(session, idTramite, tipus);
+			final int tipus = document.getTipus();
+			final List<DocumentTramit> docs = obtenirDocumentsSegonsTipus(session, idTramite, tipus);
 			actualitzarDocumentsPerOrdreNatural(session, docs);
 
-			if ( tramite.getProcedimiento() != null ) {
+			if (tramite.getProcedimiento() != null) {
 
 				log.debug("Borrar Documento: Lanzo el actualizador");
 				Actualizador.actualizar(tramite, true);
-				IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, tramite.getProcedimiento().getId(), false);
-				SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, tramite.getProcedimiento().getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, tramite.getProcedimiento());
+				IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO,
+						tramite.getProcedimiento().getId(), false);
+				SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO,
+						tramite.getProcedimiento().getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null,
+						tramite.getProcedimiento());
 			}
-			
-			
-			
-		} catch (HibernateException he) {
+
+		} catch (final HibernateException he) {
 
 			throw new EJBException(he);
 
@@ -586,48 +604,50 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 
 	}
 
-
 	/**
 	 * Borra documento
-	 * 
-	 * @param	tramite	Indica el trámite al que pertenecen los documentos
-	 * 
-	 * @param documentos	Listado de documentos a borrar
-	 * 
+	 *
+	 * @param tramite
+	 *            Indica el trámite al que pertenecen los documentos
+	 *
+	 * @param documentos
+	 *            Listado de documentos a borrar
+	 *
 	 * @ejb.interface-method
-	 * 
+	 *
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
-	public void borrarDocumentos(Tramite tramite, List<DocumentTramit> documentos) throws DelegateException {
+	@Override
+	public void borrarDocumentos(final Tramite tramite, final List<DocumentTramit> documentos)
+			throws DelegateException {
 
-		Session session = getSession();
+		final Session session = getSession();
 
 		try {
 
-			if ( !getAccesoManager().tieneAccesoTramite( tramite.getId() ) )
+			if (!getAccesoManager().tieneAccesoTramite(tramite.getId()))
 				throw new SecurityException("No tiene acceso al documento");
-			
-			List<Long> idTramites = new Vector<Long>();
-			
-			for ( DocumentTramit document : documentos ) {
+
+			final List<Long> idTramites = new Vector<Long>();
+
+			for (final DocumentTramit document : documentos) {
 				document.getTramit().removeDocument(document);
-				idTramites.add( document.getId() );
+				idTramites.add(document.getId());
 			}
 
 			String consulta = "from DocumentTramit as dt where dt.id in (:tramites)";
-			consulta = StringUtils.replaceOnce(consulta, ":tramites", StringUtils.join(idTramites.iterator(), ",") );
+			consulta = StringUtils.replaceOnce(consulta, ":tramites", StringUtils.join(idTramites.iterator(), ","));
 
 			session.delete(consulta);
 
+			for (int tipus = 0; tipus < 4; tipus++) {
 
-			for ( int tipus = 0 ; tipus < 4 ; tipus++ ) {
-
-				List<DocumentTramit> docs = obtenirDocumentsSegonsTipus(session, tramite.getId(), tipus);
+				final List<DocumentTramit> docs = obtenirDocumentsSegonsTipus(session, tramite.getId(), tipus);
 				actualitzarDocumentsPerOrdreNatural(session, docs);
 
 			}
 
-			if ( tramite.getProcedimiento() != null ) {
+			if (tramite.getProcedimiento() != null) {
 
 				log.debug("Borrar Documento: Lanzo el actualizador");
 				Actualizador.actualizar(tramite, true);
@@ -638,11 +658,14 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			getSessionFactory().evictCollection("org.ibit.rol.sac.model.Tramite.docsInformatius", tramite.getId());
 			getSessionFactory().evictCollection("org.ibit.rol.sac.model.Tramite.formularios", tramite.getId());
 			getSessionFactory().evictCollection("org.ibit.rol.sac.model.Tramite.docsRequerits", tramite.getId());
-			
-			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO, tramite.getProcedimiento().getId(), false);
-			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO, tramite.getProcedimiento().getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null, tramite.getProcedimiento());
-				
-		} catch (HibernateException he) {
+
+			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_PROCEDIMIENTO,
+					tramite.getProcedimiento().getId(), false);
+			SiaUtils.marcarIndexacionPendiente(SiaUtils.SIAPENDIENTE_TIPO_PROCEDIMIENTO,
+					tramite.getProcedimiento().getId(), SiaUtils.SIAPENDIENTE_PROCEDIMIENTO_EXISTE, null,
+					tramite.getProcedimiento());
+
+		} catch (final HibernateException he) {
 
 			throw new EJBException(he);
 
@@ -654,21 +677,22 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 
 	}
 
-
 	/**
 	 * Actualiza el orden de los documentos
-	 * 
-	 * @param idTramite	Identificador de un trámite
-	 * 
+	 *
+	 * @param idTramite
+	 *            Identificador de un trámite
+	 *
 	 * @ejb.interface-method
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
-	public void actualizarOrdenDocs(Map<String, String[]> map, long idTramite) throws DelegateException {
+	@Override
+	public void actualizarOrdenDocs(final Map<String, String[]> map, final long idTramite) throws DelegateException {
 
-		//TODO: Refactorizar
-		Session session = getSession();
-		
-		if ( !getAccesoManager().tieneAccesoTramite(idTramite) )
+		// TODO: Refactorizar
+		final Session session = getSession();
+
+		if (!getAccesoManager().tieneAccesoTramite(idTramite))
 			throw new SecurityException("No tiene acceso al documento");
 
 		try {
@@ -676,27 +700,27 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			// 1. ordenar segun orden relativo dado por el usuario
 			Long id;
 			int orden = 0;
-			List<DocumentTramit> ordenacion = new ArrayList<DocumentTramit>();
+			final List<DocumentTramit> ordenacion = new ArrayList<DocumentTramit>();
 
-			Iterator it = map.entrySet().iterator();
-			while ( it.hasNext() ) {
+			final Iterator it = map.entrySet().iterator();
+			while (it.hasNext()) {
 
-				Map.Entry e = (Map.Entry) it.next();
+				final Map.Entry e = (Map.Entry) it.next();
 
-				String paramName = e.getKey().toString();
+				final String paramName = e.getKey().toString();
 				if (paramName.startsWith("orden_doc")) {
 					id = Long.valueOf(paramName.substring(9)).longValue();
-					String[] parametros = (String[]) e.getValue();
+					final String[] parametros = (String[]) e.getValue();
 					orden = Integer.parseInt(parametros[0]);
 
-					DocumentTramit documento = (DocumentTramit) session.load(DocumentTramit.class, id);
-					documento.setOrden((long)orden);
+					final DocumentTramit documento = (DocumentTramit) session.load(DocumentTramit.class, id);
+					documento.setOrden((long) orden);
 					ordenacion.add(documento);
 
 				}
 
 			}
-			
+
 			session.flush();
 
 			// 2. ordenar segun orden natural (1..N)
@@ -704,19 +728,20 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 
 			actualitzarDocumentsPerOrdreNatural(session, ordenacion);
 
-			// 3. eliminar documents del tr�mit del cache perqu� es recarreguin les llistes de formularis i docsinformatius amb el nou ordre.
+			// 3. eliminar documents del tr�mit del cache perqu� es recarreguin les llistes
+			// de formularis i docsinformatius amb el nou ordre.
 			getSessionFactory().evictCollection("org.ibit.rol.sac.model.Tramite.docsInformatius", idTramite);
 			getSessionFactory().evictCollection("org.ibit.rol.sac.model.Tramite.formularios", idTramite);
 			getSessionFactory().evictCollection("org.ibit.rol.sac.model.Tramite.docsRequerits", idTramite);
 
 			// 4. Actualizamos WS
-			Tramite tramite =cargaTramite(session,idTramite);
-			if(tramite.getProcedimiento()!=null){
+			final Tramite tramite = cargaTramite(session, idTramite);
+			if (tramite.getProcedimiento() != null) {
 				log.debug("Cambio Orden Document: Lanzo el actualizador");
-				Actualizador.actualizar(tramite,true);
+				Actualizador.actualizar(tramite, true);
 			}
 
-		} catch (HibernateException he) {
+		} catch (final HibernateException he) {
 
 			throw new EJBException(he);
 
@@ -727,18 +752,16 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 		}
 
 	}
-	
 
 	/**
 	 * @ejb.interface-method
-	 * @ejb.permission 
-	 *                 role-name="${role.system},${role.admin},${role.super},${role.oper}"
+	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
-	public void actualizarOrdenTasas(Map<String, String[]> map, long tid)
-			throws DelegateException {
+	@Override
+	public void actualizarOrdenTasas(final Map<String, String[]> map, final long tid) throws DelegateException {
 
-		//TODO: Refactorizar
-		Session session = getSession();
+		// TODO: Refactorizar
+		final Session session = getSession();
 		if (!getAccesoManager().tieneAccesoTramite(tid)) {
 			throw new SecurityException("No tiene acceso a la tasa");
 		}
@@ -746,21 +769,20 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			// 1. ordenar segun orden relativo dado por el usuario
 			Long id;
 			int valor_orden = 0;
-			List<Taxa> taxa_orden = new ArrayList<Taxa>();
+			final List<Taxa> taxa_orden = new ArrayList<Taxa>();
 
-			Iterator it = map.entrySet().iterator();
+			final Iterator it = map.entrySet().iterator();
 			while (it.hasNext()) {
-				Map.Entry e = (Map.Entry) it.next();
+				final Map.Entry e = (Map.Entry) it.next();
 
-				String paramName = e.getKey().toString();
+				final String paramName = e.getKey().toString();
 				if (paramName.startsWith("orden_taxa")) {
 					id = Long.valueOf(paramName.substring(10)).longValue();
-					String[] parametros = (String[]) e.getValue();
+					final String[] parametros = (String[]) e.getValue();
 					valor_orden = Integer.parseInt(parametros[0]);
 
-					Taxa tasa = (Taxa) session.load(
-							Taxa.class, id);
-					tasa.setOrden((long)valor_orden);
+					final Taxa tasa = (Taxa) session.load(Taxa.class, id);
+					tasa.setOrden((long) valor_orden);
 					taxa_orden.add(tasa);
 				}
 			}
@@ -771,15 +793,16 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 
 			actualitzarTaxesPerOrdreNatural(session, taxa_orden);
 
-			// 3. eliminar taxes del cache perqu� es recarreguin les llistes de taxes amb el nou ordre.
+			// 3. eliminar taxes del cache perqu� es recarreguin les llistes de taxes amb el
+			// nou ordre.
 			getSessionFactory().evictCollection("org.ibit.rol.sac.model.Tramite.taxes", tid);
 			// 4. Actualizamos WS
-			Tramite tramite=cargaTramite(session,tid);
-			if(tramite.getProcedimiento()!=null){
+			final Tramite tramite = cargaTramite(session, tid);
+			if (tramite.getProcedimiento() != null) {
 				log.debug("Cambio Orden tasas: Lanzo el actualizador");
-				Actualizador.actualizar(tramite,true);
+				Actualizador.actualizar(tramite, true);
 			}
-		} catch (HibernateException he) {
+		} catch (final HibernateException he) {
 			throw new EJBException(he);
 		} finally {
 			close(session);
@@ -791,10 +814,11 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 
 	class DocOrdenComparator implements Comparator<DocumentTramit> {
 
-		public int compare(DocumentTramit o1, DocumentTramit o2) {
+		@Override
+		public int compare(final DocumentTramit o1, final DocumentTramit o2) {
 
-			Long x1 = o1.getOrden();
-			Long x2 = o2.getOrden();
+			final Long x1 = o1.getOrden();
+			final Long x2 = o2.getOrden();
 
 			return x1.compareTo(x2);
 
@@ -803,31 +827,33 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 	}
 
 	class TasaOrdenComparator implements Comparator<Taxa> {
-		public int compare(Taxa o1, Taxa o2) {
-			Long x1 = o1.getOrden();
-			Long x2 = o2.getOrden();
+		@Override
+		public int compare(final Taxa o1, final Taxa o2) {
+			final Long x1 = o1.getOrden();
+			final Long x2 = o2.getOrden();
 			return x1.compareTo(x2);
 		}
-	}	
-
+	}
 
 	/**
 	 * Actualiza los documentos por orden natural
-	 * 
-	 * @param	session	Indica la sesión de hibernate.
-	 * 
-	 * @param	docs	Indica un listado de documentos.
-	 * */
-	private void actualitzarDocumentsPerOrdreNatural(Session session, List<DocumentTramit> docs) {
+	 *
+	 * @param session
+	 *            Indica la sesión de hibernate.
+	 *
+	 * @param docs
+	 *            Indica un listado de documentos.
+	 */
+	private void actualitzarDocumentsPerOrdreNatural(final Session session, final List<DocumentTramit> docs) {
 
 		try {
 
 			Long contador = 1L;
-			Iterator<DocumentTramit> itdoc = docs.iterator();
+			final Iterator<DocumentTramit> itdoc = docs.iterator();
 
-			while ( itdoc.hasNext() ) {
+			while (itdoc.hasNext()) {
 
-				DocumentTramit dt = itdoc.next();
+				final DocumentTramit dt = itdoc.next();
 				dt.setOrden(contador++);
 				session.update(dt);
 
@@ -835,7 +861,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 
 			session.flush();
 
-		} catch (HibernateException he) {
+		} catch (final HibernateException he) {
 
 			throw new EJBException(he);
 
@@ -843,24 +869,25 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 
 	}
 
-
 	/**
 	 * Actualiza las tasas por orden natural
-	 * 
-	 * @param session Indica la sesión de Hibernate.
-	 * 
-	 * @param	tasas	Indica un listado de tasas.
-	 * */
-	private void actualitzarTaxesPerOrdreNatural(Session session, List<Taxa> tasas) {
+	 *
+	 * @param session
+	 *            Indica la sesión de Hibernate.
+	 *
+	 * @param tasas
+	 *            Indica un listado de tasas.
+	 */
+	private void actualitzarTaxesPerOrdreNatural(final Session session, final List<Taxa> tasas) {
 
 		try {
 
 			Long contador = 1L;
-			Iterator<Taxa> it = tasas.iterator();
+			final Iterator<Taxa> it = tasas.iterator();
 
-			while ( it.hasNext() ) {
+			while (it.hasNext()) {
 
-				Taxa t = it.next();
+				final Taxa t = it.next();
 				t.setOrden(contador++);
 				session.update(t);
 
@@ -868,7 +895,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 
 			session.flush();
 
-		} catch (HibernateException he) {
+		} catch (final HibernateException he) {
 
 			throw new EJBException(he);
 
@@ -876,20 +903,19 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 
 	}
 
-
 	// Se hace pública para que se pueda acceder desde procedimentFacadeEJB
-	public Tramite cargaTramite(Session session, Long idTramite) throws HibernateException {
+	public Tramite cargaTramite(final Session session, final Long idTramite) throws HibernateException {
 
-		Tramite tramite = (Tramite) session.load(Tramite.class, idTramite);
+		final Tramite tramite = (Tramite) session.load(Tramite.class, idTramite);
 		Hibernate.initialize(tramite.getFormularios());
 
-		for ( DocumentTramit formulario : tramite.getFormularios() ) {
+		for (final DocumentTramit formulario : tramite.getFormularios()) {
 
-			for ( final String idioma : (Collection<String>) tramite.getLangs() ) {
+			for (final String idioma : (Collection<String>) tramite.getLangs()) {
 
 				final TraduccionDocumento traduccion = (TraduccionDocumento) formulario.getTraduccion(idioma);
 
-				if ( traduccion != null )
+				if (traduccion != null)
 					Hibernate.initialize(traduccion.getArchivo());
 
 			}
@@ -898,13 +924,13 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 
 		Hibernate.initialize(tramite.getDocsInformatius());
 
-		for ( DocumentTramit docInformatiu : tramite.getDocsInformatius() ) {
+		for (final DocumentTramit docInformatiu : tramite.getDocsInformatius()) {
 
-			for ( final String idioma : (Collection<String>) tramite.getLangs() ) {
+			for (final String idioma : (Collection<String>) tramite.getLangs()) {
 
 				final TraduccionDocumento traduccion = (TraduccionDocumento) docInformatiu.getTraduccion(idioma);
 
-				if ( traduccion != null )
+				if (traduccion != null)
 					Hibernate.initialize(traduccion.getArchivo());
 
 			}
@@ -918,22 +944,26 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 
 	}
 
-
-	/** 
+	/**
 	 * Obtiene documentos filtrado por tipo
-	 * 
-	 * @param	session Indica la sesión de hibernate.
-	 * 
-	 * @param tid	Indentificador de un trámite.
-	 * 
-	 * @param tipus	Filtro que indica el tipo de documento.
-	 * 
-	 * @return	Devuelve <code>List<DocumentTramit></code> filtrados por tipo.
-	 * 
-	 * */
-	private List<DocumentTramit> obtenirDocumentsSegonsTipus(Session session, long tid, int tipus) throws HibernateException {
+	 *
+	 * @param session
+	 *            Indica la sesión de hibernate.
+	 *
+	 * @param tid
+	 *            Indentificador de un trámite.
+	 *
+	 * @param tipus
+	 *            Filtro que indica el tipo de documento.
+	 *
+	 * @return Devuelve <code>List<DocumentTramit></code> filtrados por tipo.
+	 *
+	 */
+	private List<DocumentTramit> obtenirDocumentsSegonsTipus(final Session session, final long tid, final int tipus)
+			throws HibernateException {
 
-		Query query = session.createQuery("from DocumentTramit dt where dt.tipus = :tipus and dt.tramit.id = :id");
+		final Query query = session
+				.createQuery("from DocumentTramit dt where dt.tipus = :tipus and dt.tramit.id = :id");
 		query.setInteger("tipus", tipus);
 		query.setLong("id", tid);
 
@@ -941,53 +971,52 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 
 	}
 
-
-	protected boolean publico(Tramite tram) {
+	protected boolean publico(final Tramite tram) {
 		return tram.esPublico();
 	}
 
-
 	/**
 	 * Valida si tiene acceso al trámite
-	 * 
-	 * @param	tramite	Indica un trámite
-	 * 
+	 *
+	 * @param tramite
+	 *            Indica un trámite
+	 *
 	 * @return Devuelve <code>true</code> si el usuario tiene acceso al trámite.
-	 * */
-	public boolean tieneAccesoTramite( Tramite tramite) {
+	 */
+	public boolean tieneAccesoTramite(final Tramite tramite) {
 
-		if ( null == tramite.getId() ) 
+		if (null == tramite.getId())
 			return true;
 
-		return getAccesoManager().tieneAccesoTramite( tramite.getId() );
+		return getAccesoManager().tieneAccesoTramite(tramite.getId());
 
 	}
-
-
 
 	TramiteSaver tramiteSaver;
 
 	public TramiteSaver getTramiteSaver() {
 
-		if ( null == tramiteSaver ) 
+		if (null == tramiteSaver)
 			tramiteSaver = new TramiteSaver(this);
 
 		return tramiteSaver;
 
 	}
 
-	public void setTramiteSaver(TramiteSaver tramiteSaver) {
+	public void setTramiteSaver(final TramiteSaver tramiteSaver) {
 		this.tramiteSaver = tramiteSaver;
 	}
 
-	 /**
+	/**
 	 * Metodo para indexar un solrPendiente.
+	 *
 	 * @param solrIndexer
 	 * @param solrPendiente
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
 	 */
-	public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente)  {
+	@Override
+	public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente) {
 		final EnumCategoria categoria = EnumCategoria.fromString(solrPendiente.getTipo());
 		if (categoria == EnumCategoria.ROLSAC_TRAMITE) {
 			return indexarSolr(solrIndexer, solrPendiente.getIdElemento(), EnumCategoria.ROLSAC_TRAMITE);
@@ -995,98 +1024,104 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			return indexarDocSolr(solrIndexer, solrPendiente.getIdElemento(), EnumCategoria.ROLSAC_TRAMITE_DOCUMENTO);
 		} else {
 			return new SolrPendienteResultado(false, "No existe el tipo");
-		} 
+		}
 	}
-	
+
 	/**
 	 * Obtener tramite para solr.
+	 *
 	 * @param idTramite
 	 * @return
 	 */
-	private Tramite obtenerTramiteParaSolr(Long idTramite) {
+	private Tramite obtenerTramiteParaSolr(final Long idTramite) {
 
-			Session session = getSession();
-			Tramite tramite = null;
-			
-			try {
-				tramite = (Tramite) session.get(Tramite.class, idTramite);
-				if (tramite != null) {
-					Hibernate.initialize(tramite.getProcedimiento());
-				}
-			} catch (HibernateException he) {
-				log.error("Error obteniendo tramite según archivo con id " + idTramite, he);
-			} finally {
-				close(session);
+		final Session session = getSession();
+		Tramite tramite = null;
+
+		try {
+			tramite = (Tramite) session.get(Tramite.class, idTramite);
+			if (tramite != null) {
+				Hibernate.initialize(tramite.getProcedimiento());
 			}
-			return tramite;
-
+		} catch (final HibernateException he) {
+			log.error("Error obteniendo tramite según archivo con id " + idTramite, he);
+		} finally {
+			close(session);
 		}
-	
-	
+		return tramite;
+
+	}
+
 	/**
 	 * Obtener tramite para solr.
+	 *
 	 * @param idTramite
 	 * @return
 	 */
-	private DocumentTramit obtenerTramiteDocParaSolr(Long idDocumentTramit) {
+	private DocumentTramit obtenerTramiteDocParaSolr(final Long idDocumentTramit) {
 
-			final Session session = getSession();
-			DocumentTramit documentTramit = null;
-			
-			try 
-			{
-				documentTramit = (DocumentTramit) session.get(DocumentTramit.class, idDocumentTramit);
-				if (documentTramit != null) {
-					Hibernate.initialize(documentTramit.getTramit());
-					Hibernate.initialize(documentTramit.getTramit().getProcedimiento());
-					Hibernate.initialize(documentTramit.getTramit().getProcedimiento().getUnidadAdministrativa());
-					Hibernate.initialize(documentTramit.getTramit().getProcedimiento().getMaterias());
-					Hibernate.initialize(documentTramit.getTramit().getProcedimiento().getPublicosObjetivo());
-					Hibernate.initialize(documentTramit.getTraduccionMap());
-					for (String keyIdioma : documentTramit.getTraduccionMap().keySet()) {
-						TraduccionDocumento trad  = (TraduccionDocumento) documentTramit.getTraduccion(keyIdioma);
-						if (trad != null) {
-							Hibernate.initialize(trad.getArchivo());
-						}
+		final Session session = getSession();
+		DocumentTramit documentTramit = null;
+
+		try {
+			documentTramit = (DocumentTramit) session.get(DocumentTramit.class, idDocumentTramit);
+			if (documentTramit != null) {
+				Hibernate.initialize(documentTramit.getTramit());
+				Hibernate.initialize(documentTramit.getTramit().getProcedimiento());
+				Hibernate.initialize(documentTramit.getTramit().getProcedimiento().getUnidadAdministrativa());
+				Hibernate.initialize(documentTramit.getTramit().getProcedimiento().getMaterias());
+				Hibernate.initialize(documentTramit.getTramit().getProcedimiento().getPublicosObjetivo());
+				Hibernate.initialize(documentTramit.getTraduccionMap());
+				for (final String keyIdioma : documentTramit.getTraduccionMap().keySet()) {
+					final TraduccionDocumento trad = (TraduccionDocumento) documentTramit.getTraduccion(keyIdioma);
+					if (trad != null) {
+						Hibernate.initialize(trad.getArchivo());
 					}
-					Hibernate.initialize(documentTramit.getTramit().getProcedimiento().getTramites());
 				}
-				
-			} catch (HibernateException he) {
-				log.error("Error obteniendo document tramite según archivo con id " + idDocumentTramit, he);
-			} finally {
-				close(session);
+				Hibernate.initialize(documentTramit.getTramit().getProcedimiento().getTramites());
 			}
-			return documentTramit;
 
+		} catch (final HibernateException he) {
+			log.error("Error obteniendo document tramite según archivo con id " + idDocumentTramit, he);
+		} finally {
+			close(session);
 		}
-	
+		return documentTramit;
+
+	}
+
 	/**
-	 * Método para indexar según la id y la categoria. 
+	 * Método para indexar según la id y la categoria.
+	 *
 	 * @param solrIndexer
 	 * @param idElemento
 	 * @param categoria
 	 * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+	 * @ejb.permission unchecked="true"
 	 */
-	public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final Long idElemento, final EnumCategoria categoria) {
-		log.debug("TramiteFacadeEJB.indexarSolr. idElemento:" + idElemento +" categoria:"+categoria);
+	@Override
+	public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final Long idElemento,
+			final EnumCategoria categoria) {
+		log.debug("TramiteFacadeEJB.indexarSolr. idElemento:" + idElemento + " categoria:" + categoria);
 		try {
-			//Paso 0. Obtenemos la ficha y comprobamos si se puede indexar.
+			// Paso 0. Obtenemos la ficha y comprobamos si se puede indexar.
 			final Tramite tramite = obtenerTramiteParaSolr(idElemento);
-			if (tramite == null)  {
+			if (tramite == null) {
 				return new SolrPendienteResultado(false, "Error obteniendo el trámite.");
 			}
-			
+
 			if (!IndexacionUtil.isIndexable(tramite)) {
 				return new SolrPendienteResultado(true, "No se puede indexar");
 			}
-			
-			//Obtenemos el procedimiento por separado porque daba un error de lazy hibernate
-			ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
-			ProcedimientoLocal procedimiento = procDelegate.obtenerProcedimientoParaSolr(tramite.getProcedimiento().getId(), null);
-			
-			//Preparamos la información básica: id elemento, aplicacionID = ROLSAC y la categoria de tipo ficha.
+
+			// Obtenemos el procedimiento por separado porque daba un error de lazy
+			// hibernate
+			final ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
+			final ProcedimientoLocal procedimiento = procDelegate
+					.obtenerProcedimientoParaSolr(tramite.getProcedimiento().getId(), null);
+
+			// Preparamos la información básica: id elemento, aplicacionID = ROLSAC y la
+			// categoria de tipo ficha.
 			final IndexData indexData = new IndexData();
 			indexData.setCategoria(categoria);
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
@@ -1094,14 +1129,14 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			indexData.setElementoId(idElemento.toString());
 			indexData.setCategoriaRaiz(EnumCategoria.ROLSAC_PROCEDIMIENTO);
 			indexData.setElementoIdRaiz(procedimiento.getId().toString());
-			PathUO pathUO = IndexacionUtil.calcularPathUO(procedimiento.getUnidadAdministrativa());
+			final PathUO pathUO = IndexacionUtil.calcularPathUO(procedimiento.getUnidadAdministrativa());
 			if (pathUO == null) {
 				return new SolrPendienteResultado(true, "No se puede indexar: no cuelga de UA visible");
 			}
-			indexData.getUos().add(pathUO);			
+			indexData.getUos().add(pathUO);
 			indexData.setElementoIdPadre(procedimiento.getId().toString());
 
-			//Iteramos las traducciones
+			// Iteramos las traducciones
 			final Map<String, Traduccion> traducciones = tramite.getTraduccionMap();
 			final MultilangLiteral titulo = new MultilangLiteral();
 			final MultilangLiteral descripcion = new MultilangLiteral();
@@ -1111,49 +1146,54 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			final MultilangLiteral searchText = new MultilangLiteral();
 			final MultilangLiteral searchTextOptional = new MultilangLiteral();
 			final List<EnumIdiomas> idiomas = new ArrayList<EnumIdiomas>();
-			
-			
-			//Recorremos las traducciones
-			for (String keyIdioma : tramite.getTraduccionMap().keySet()) {
+
+			// Recorremos las traducciones
+			for (final String keyIdioma : tramite.getTraduccionMap().keySet()) {
 				final EnumIdiomas enumIdioma = EnumIdiomas.fromString(keyIdioma);
-				final TraduccionTramite traduccion = (TraduccionTramite)traducciones.get(keyIdioma);
-				
+				final TraduccionTramite traduccion = (TraduccionTramite) traducciones.get(keyIdioma);
+
 				if (traduccion != null && enumIdioma != null) {
-											
+
 					if ((traduccion.getNombre() == null || traduccion.getNombre().isEmpty())) {
 						continue;
-					}						
-					
-					//Anyadimos idioma al enumerado.
+					}
+
+					// Anyadimos idioma al enumerado.
 					idiomas.add(enumIdioma);
-					
-					//Seteamos los primeros campos multiidiomas: Titulo, Descripción (y padre) y el search text y el search text optional.
+
+					// Seteamos los primeros campos multiidiomas: Titulo, Descripción (y padre) y el
+					// search text y el search text optional.
 					titulo.addIdioma(enumIdioma, traduccion.getNombre());
-			    	descripcion.addIdioma(enumIdioma, solrIndexer.htmlToText(traduccion.getObservaciones()));
-			    	if (procedimiento.getTraduccion(keyIdioma) != null) {
-			    		descripcionPadre.addIdioma(enumIdioma, ((TraduccionProcedimiento) procedimiento.getTraduccion(keyIdioma)).getNombre());
-			    	}
-			    	searchText.addIdioma(enumIdioma, traduccion.getNombre()+ " " + traduccion.getObservaciones());
-			    	searchTextOptional.addIdioma(enumIdioma, traduccion.getDocumentacion());
-			    	
-					if (procedimiento != null ) {
-			    		String nombrePubObjetivox = "persones";
-			    		String idPublicoObjetivo = "200";
-			    		if (procedimiento.getPublicosObjetivo().size() > 0) {
-			    			PublicoObjetivo pubObjetivo = (PublicoObjetivo)procedimiento.getPublicosObjetivo().toArray()[0];
-			    			if (pubObjetivo.getTraduccion(keyIdioma) != null) {
-			    				nombrePubObjetivox = ((TraduccionPublicoObjetivo) pubObjetivo.getTraduccion(keyIdioma)).getTitulo();
-			    				idPublicoObjetivo = pubObjetivo.getId().toString();
-			    			}
-			    		}
-			    		urlsPadre.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+idPublicoObjetivo+"/"+nombrePubObjetivox+"/tramites/tramite/"+procedimiento.getId() );
-			    		urls.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+idPublicoObjetivo+"/"+nombrePubObjetivox+"/tramites/tramite/"+procedimiento.getId() );
-			    	}
+					descripcion.addIdioma(enumIdioma, solrIndexer.htmlToText(traduccion.getObservaciones()));
+					if (procedimiento.getTraduccion(keyIdioma) != null) {
+						descripcionPadre.addIdioma(enumIdioma,
+								((TraduccionProcedimiento) procedimiento.getTraduccion(keyIdioma)).getNombre());
+					}
+					searchText.addIdioma(enumIdioma, traduccion.getNombre() + " " + traduccion.getObservaciones());
+					searchTextOptional.addIdioma(enumIdioma, traduccion.getDocumentacion());
+
+					if (procedimiento != null) {
+						String nombrePubObjetivox = "persones";
+						String idPublicoObjetivo = "200";
+						if (procedimiento.getPublicosObjetivo().size() > 0) {
+							final PublicoObjetivo pubObjetivo = (PublicoObjetivo) procedimiento.getPublicosObjetivo()
+									.toArray()[0];
+							if (pubObjetivo.getTraduccion(keyIdioma) != null) {
+								nombrePubObjetivox = ((TraduccionPublicoObjetivo) pubObjetivo.getTraduccion(keyIdioma))
+										.getTitulo();
+								idPublicoObjetivo = pubObjetivo.getId().toString();
+							}
+						}
+						urlsPadre.addIdioma(enumIdioma, "/seucaib/" + keyIdioma + "/" + idPublicoObjetivo + "/"
+								+ nombrePubObjetivox + "/tramites/tramite/" + procedimiento.getId());
+						urls.addIdioma(enumIdioma, "/seucaib/" + keyIdioma + "/" + idPublicoObjetivo + "/"
+								+ nombrePubObjetivox + "/tramites/tramite/" + procedimiento.getId());
+					}
 				}
-		    	
+
 			}
-			
-			//Seteamos datos multidioma.
+
+			// Seteamos datos multidioma.
 			indexData.setTitulo(titulo);
 			indexData.setDescripcion(descripcion);
 			indexData.setDescripcionPadre(descripcionPadre);
@@ -1162,83 +1202,84 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			indexData.setSearchText(searchText);
 			indexData.setSearchTextOptional(searchTextOptional);
 			indexData.setIdiomas(idiomas);
-			
-			//Datos Id materia
-			final List<String> materiasId = new ArrayList<String>();	
-			for(Materia materia : procedimiento.getMaterias()) {
-	    		materiasId.add(materia.getId().toString());
+
+			// Datos Id materia
+			final List<String> materiasId = new ArrayList<String>();
+			for (final Materia materia : procedimiento.getMaterias()) {
+				materiasId.add(materia.getId().toString());
 			}
 			indexData.setMateriaId(materiasId);
-			
-			
-			//Datos Id Publico objetivo
-			final List<String> publicoObjetivoId = new ArrayList<String>();		
-			for( PublicoObjetivo publicoObjectivo :  procedimiento.getPublicosObjetivo()) {
+
+			// Datos Id Publico objetivo
+			final List<String> publicoObjetivoId = new ArrayList<String>();
+			for (final PublicoObjetivo publicoObjectivo : procedimiento.getPublicosObjetivo()) {
 				publicoObjetivoId.add(publicoObjectivo.getId().toString());
 			}
 			indexData.setPublicoId(publicoObjetivoId);
-			
-			//Fechas
+
+			// Fechas
 			indexData.setFechaActualizacion(tramite.getDataActualitzacio());
 			indexData.setFechaPublicacion(tramite.getDataPublicacio());
 			indexData.setFechaCaducidad(procedimiento.getFechaCaducidad());
-			
+
 			final Tramite tramiteInicio = IndexacionUtil.getTramiteInicio(procedimiento);
 			if (tramiteInicio != null) {
 				indexData.setFechaPlazoIni(tramiteInicio.getDataInici());
 				indexData.setFechaPlazoFin(tramiteInicio.getDataTancament());
 			}
-			
+
 			indexData.setInterno(false);
-			
-			//FamiliaID
+
+			// FamiliaID
 			if (procedimiento.getFamilia() != null) {
 				indexData.setFamiliaId(procedimiento.getFamilia().getId().toString());
 			}
-			
-			//Telematico
-			
+
+			// Telematico
+
 			indexData.setTelematico(tramite.isTelematico());
-			
-		
+
 			solrIndexer.indexarContenido(indexData);
 			return new SolrPendienteResultado(true);
-		} catch(Exception exception) {
-			log.error("Error en tramitefacade intentando indexar.", exception);			
+		} catch (final Exception exception) {
+			log.error("Error en tramitefacade intentando indexar.", exception);
 			return new SolrPendienteResultado(false, ExceptionUtils.getStackTrace(exception));
 		}
 	}
-	
-	
+
 	/**
-	 * Método para indexar según la id del documento del trámite y la categoria. 
+	 * Método para indexar según la id del documento del trámite y la categoria.
+	 *
 	 * @param solrIndexer
 	 * @param idElemento
 	 * @param categoria
 	 * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+	 * @ejb.permission unchecked="true"
 	 */
-	public SolrPendienteResultado indexarDocSolr(final SolrIndexer solrIndexer, final Long idElemento, final EnumCategoria categoria) {
-		log.debug("TramiteFacadeEJB.indexarSolr. idElemento:" + idElemento +" categoria:"+categoria);
+	@Override
+	public SolrPendienteResultado indexarDocSolr(final SolrIndexer solrIndexer, final Long idElemento,
+			final EnumCategoria categoria) {
+		log.debug("TramiteFacadeEJB.indexarSolr. idElemento:" + idElemento + " categoria:" + categoria);
 		boolean indexacion = false;
-		
-		
+
 		try {
-			//Paso 0. Obtenemos la ficha y comprobamos si se puede indexar.
+			// Paso 0. Obtenemos la ficha y comprobamos si se puede indexar.
 			final DocumentTramit docTramite = obtenerTramiteDocParaSolr(idElemento);
-			if (docTramite == null)  {
+			if (docTramite == null) {
 				return new SolrPendienteResultado(false, "Error obteniendo el trámite.");
 			}
-			
+
 			if (!IndexacionUtil.isIndexable(docTramite.getTramit())) {
 				return new SolrPendienteResultado(true, "No se puede indexar");
 			}
-			
-			//Obtenemos el procedimiento por separado porque daba un error de lazy hibernate
-			Tramite tramite = docTramite.getTramit();
-			ProcedimientoLocal procedimiento = tramite.getProcedimiento();
-			
-			//Preparamos la información básica: id elemento, aplicacionID = ROLSAC y la categoria de tipo ficha.
+
+			// Obtenemos el procedimiento por separado porque daba un error de lazy
+			// hibernate
+			final Tramite tramite = docTramite.getTramit();
+			final ProcedimientoLocal procedimiento = tramite.getProcedimiento();
+
+			// Preparamos la información básica: id elemento, aplicacionID = ROLSAC y la
+			// categoria de tipo ficha.
 			final IndexFile indexData = new IndexFile();
 			indexData.setCategoria(categoria);
 			indexData.setAplicacionId(EnumAplicacionId.ROLSAC);
@@ -1247,79 +1288,82 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			indexData.setCategoriaRaiz(EnumCategoria.ROLSAC_PROCEDIMIENTO);
 			indexData.setElementoIdRaiz(procedimiento.getId().toString());
 
-			//Datos Id materia
-			final List<String> materiasId = new ArrayList<String>();	
-			for(Materia materia : procedimiento.getMaterias()) {
-	    		materiasId.add(materia.getId().toString());
+			// Datos Id materia
+			final List<String> materiasId = new ArrayList<String>();
+			for (final Materia materia : procedimiento.getMaterias()) {
+				materiasId.add(materia.getId().toString());
 			}
 			indexData.setMateriaId(materiasId);
-			
-			//Datos Id Publico objetivo
-			final List<String> publicoObjetivoId = new ArrayList<String>();		
-			for( PublicoObjetivo publicoObjectivo :  procedimiento.getPublicosObjetivo()) {
+
+			// Datos Id Publico objetivo
+			final List<String> publicoObjetivoId = new ArrayList<String>();
+			for (final PublicoObjetivo publicoObjectivo : procedimiento.getPublicosObjetivo()) {
 				publicoObjetivoId.add(publicoObjectivo.getId().toString());
 			}
 			indexData.setPublicoId(publicoObjetivoId);
-			
-			//Fechas
+
+			// Fechas
 			indexData.setFechaActualizacion(tramite.getDataActualitzacio());
 			indexData.setFechaPublicacion(tramite.getDataPublicacio());
 			indexData.setFechaCaducidad(procedimiento.getFechaCaducidad());
-			
+
 			final Tramite tramiteInicio = IndexacionUtil.getTramiteInicio(procedimiento);
 			if (tramiteInicio != null) {
 				indexData.setFechaPlazoIni(tramiteInicio.getDataInici());
 				indexData.setFechaPlazoFin(tramiteInicio.getDataTancament());
 			}
-			
+
 			indexData.setInterno(false);
-			
+
 			// UOs
-			PathUO pathUO = IndexacionUtil.calcularPathUO(procedimiento.getUnidadAdministrativa());
+			final PathUO pathUO = IndexacionUtil.calcularPathUO(procedimiento.getUnidadAdministrativa());
 			if (pathUO == null) {
 				return new SolrPendienteResultado(true, "No se puede indexar: no cuelga de UA visible");
 			}
 			indexData.getUos().add(pathUO);
-			
-			//FamiliaID
+
+			// FamiliaID
 			if (procedimiento.getFamilia() != null) {
 				indexData.setFamiliaId(procedimiento.getFamilia().getId().toString());
 			}
-			
-			//Traducciones
+
+			// Traducciones
 			final Map<String, Traduccion> traducciones = docTramite.getTraduccionMap();
-			
-			//Recorremos las traducciones
-			for (String keyIdioma : docTramite.getTraduccionMap().keySet()) {
+
+			// Recorremos las traducciones
+			for (final String keyIdioma : docTramite.getTraduccionMap().keySet()) {
 				final EnumIdiomas enumIdioma = EnumIdiomas.fromString(keyIdioma);
-				final TraduccionDocumento traduccion = (TraduccionDocumento)traducciones.get(keyIdioma);
-				
+				final TraduccionDocumento traduccion = (TraduccionDocumento) traducciones.get(keyIdioma);
+
 				if (traduccion != null && enumIdioma != null) {
 					try {
-						
-						//Para saltarse los idiomas sin titulo.
+
+						// Para saltarse los idiomas sin titulo.
 						if (traduccion.getTitulo() == null || traduccion.getTitulo().isEmpty()) {
 							continue;
 						}
-						
+
 						if (IndexacionUtil.isIndexableSolr(traduccion.getArchivo())) {
-							log.debug("Es indexable tradDoc Ficha con id:" + traduccion.getArchivo().getId()+" y tamanyo:" + traduccion.getArchivo().getPeso());
+							log.debug("Es indexable tradDoc Ficha con id:" + traduccion.getArchivo().getId()
+									+ " y tamanyo:" + traduccion.getArchivo().getPeso());
 						} else {
 							if (traduccion.getArchivo() == null) {
-								log.debug("NO Es indexable tradDoc Tramite con id:" + tramite.getId()+" porque el archivo es nulo. ");
+								log.debug("NO Es indexable tradDoc Tramite con id:" + tramite.getId()
+										+ " porque el archivo es nulo. ");
 							} else {
-								log.debug("NO Es indexable tradDoc Tramite con id:" + traduccion.getArchivo().getId()+" y tamanyo:" + traduccion.getArchivo().getPeso());
+								log.debug("NO Es indexable tradDoc Tramite con id:" + traduccion.getArchivo().getId()
+										+ " y tamanyo:" + traduccion.getArchivo().getPeso());
 							}
 							continue;
 						}
-						
-						//Seteado el id
+
+						// Seteado el id
 						indexData.setElementoId(traduccion.getArchivo().getId().toString());
-						
-						//Anyadimos idioma al enumerado.
+
+						// Anyadimos idioma al enumerado.
 						indexData.setIdioma(enumIdioma);
-						
-						//Iteramos las traducciones
+
+						// Iteramos las traducciones
 						final MultilangLiteral titulo = new MultilangLiteral();
 						final MultilangLiteral descripcion = new MultilangLiteral();
 						final MultilangLiteral descripcionPadre = new MultilangLiteral();
@@ -1328,130 +1372,140 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 						final MultilangLiteral searchText = new MultilangLiteral();
 						final MultilangLiteral searchTextOptional = new MultilangLiteral();
 						final MultilangLiteral extension = new MultilangLiteral();
-						
-						
-						
-						//Seteamos los primeros campos multiidiomas: Titulo, Descripción (y padre) y el search text y el search text optional.
+
+						// Seteamos los primeros campos multiidiomas: Titulo, Descripción (y padre) y el
+						// search text y el search text optional.
 						titulo.addIdioma(enumIdioma, traduccion.getTitulo());
 						descripcion.addIdioma(enumIdioma, solrIndexer.htmlToText(traduccion.getDescripcion()));
-						
-				    	//descripcion.addIdioma(enumIdioma, traduccion.getDescripcion());
-				    	if (tramite.getTraduccion(keyIdioma) != null) {
-				    		descripcionPadre.addIdioma(enumIdioma, ((TraduccionTramite) tramite.getTraduccion(keyIdioma)).getNombre());
-				    	}
-				    	
-				    	searchText.addIdioma(enumIdioma, traduccion.getTitulo()+ " " + traduccion.getDescripcion() +" " + traduccion.getArchivo().getNombre());
-				    	urls.addIdioma(enumIdioma, "/govern/rest/arxiu/"+traduccion.getArchivo().getId());
-					    extension.addIdioma(enumIdioma, IndexacionUtil.calcularExtensionArchivo(traduccion.getArchivo().getNombre()));					    	
-					    
-				    	
-			    		String nombrePubObjetivox = "persones";
-			    		String idPubObjetivo = "200";
-			    		if (procedimiento.getPublicosObjetivo().size() > 0) {
-			    			PublicoObjetivo pubObjetivo = (PublicoObjetivo)procedimiento.getPublicosObjetivo().toArray()[0];
-			    			if (pubObjetivo.getTraduccion(keyIdioma) != null) {
-			    				nombrePubObjetivox = ((TraduccionPublicoObjetivo) pubObjetivo.getTraduccion(keyIdioma)).getTitulo();
-			    				idPubObjetivo = pubObjetivo.getId().toString();
-			    			}
-			    		}
-			    		urlsPadre.addIdioma(enumIdioma, "/seucaib/"+keyIdioma+"/"+idPubObjetivo+"/"+nombrePubObjetivox+"/tramites/tramite/"+procedimiento.getId() );
-				    	
-				    	//Seteamos datos multidioma.
+
+						// descripcion.addIdioma(enumIdioma, traduccion.getDescripcion());
+						if (tramite.getTraduccion(keyIdioma) != null) {
+							descripcionPadre.addIdioma(enumIdioma,
+									((TraduccionTramite) tramite.getTraduccion(keyIdioma)).getNombre());
+						}
+
+						searchText.addIdioma(enumIdioma, traduccion.getTitulo() + " " + traduccion.getDescripcion()
+								+ " " + traduccion.getArchivo().getNombre());
+						urls.addIdioma(enumIdioma, "/govern/rest/arxiu/" + traduccion.getArchivo().getId());
+						extension.addIdioma(enumIdioma,
+								IndexacionUtil.calcularExtensionArchivo(traduccion.getArchivo().getNombre()));
+
+						String nombrePubObjetivox = "persones";
+						String idPubObjetivo = "200";
+						if (procedimiento.getPublicosObjetivo().size() > 0) {
+							final PublicoObjetivo pubObjetivo = (PublicoObjetivo) procedimiento.getPublicosObjetivo()
+									.toArray()[0];
+							if (pubObjetivo.getTraduccion(keyIdioma) != null) {
+								nombrePubObjetivox = ((TraduccionPublicoObjetivo) pubObjetivo.getTraduccion(keyIdioma))
+										.getTitulo();
+								idPubObjetivo = pubObjetivo.getId().toString();
+							}
+						}
+						urlsPadre.addIdioma(enumIdioma, "/seucaib/" + keyIdioma + "/" + idPubObjetivo + "/"
+								+ nombrePubObjetivox + "/tramites/tramite/" + procedimiento.getId());
+
+						// Seteamos datos multidioma.
 						indexData.setTitulo(titulo);
 						indexData.setDescripcion(descripcion);
 						indexData.setDescripcionPadre(descripcionPadre);
 						indexData.setUrl(urls);
 						indexData.setUrlPadre(urlsPadre);
 						indexData.setExtension(extension);
-						TraduccionTramite traducionTramite = (TraduccionTramite) tramite.getTraduccion(enumIdioma.toString());
+						final TraduccionTramite traducionTramite = (TraduccionTramite) tramite
+								.getTraduccion(enumIdioma.toString());
 						if (traducionTramite != null) {
-							searchTextOptional.addIdioma(enumIdioma, traducionTramite.getNombre()+ " " + traducionTramite.getObservaciones());
+							searchTextOptional.addIdioma(enumIdioma,
+									traducionTramite.getNombre() + " " + traducionTramite.getObservaciones());
 						}
-				    	
-				    	
+
 						indexData.setFileContent(traduccion.getArchivo().getDatos());
 						solrIndexer.indexarFichero(indexData);
-						indexacion = true;	
-					} catch(Exception exceptionSolr) {
-						log.error("Error indexando un documento de tramite. DocID:" + docTramite.getId()+" Idioma:" + enumIdioma, exceptionSolr);
+						indexacion = true;
+					} catch (final Exception exceptionSolr) {
+						log.error("Error indexando un documento de tramite. DocID:" + docTramite.getId() + " Idioma:"
+								+ enumIdioma, exceptionSolr);
 					}
 				}
-		    	
+
 			}
-			
+
 			return new SolrPendienteResultado(indexacion);
-		} catch(Exception exception) {
-			log.error("Error en tramiteDocfacade intentando indexar.", exception);			
+		} catch (final Exception exception) {
+			log.error("Error en tramiteDocfacade intentando indexar.", exception);
 			return new SolrPendienteResultado(false, ExceptionUtils.getStackTrace(exception));
 		}
 	}
-	
-	
+
 	/**
 	 * Metodo para indexar un solrPendiente.
+	 *
 	 * @param solrPendiente
 	 * @param solrIndexer
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
 	 */
+	@Override
 	public SolrPendienteResultado desindexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente) {
 		try {
 			solrIndexer.desindexar(solrPendiente.getIdElemento().toString(), EnumCategoria.ROLSAC_TRAMITE);
 			return new SolrPendienteResultado(true);
-		} catch(Exception exception) {
-			log.error("Error en tramitefacade intentando desindexar.", exception);			
+		} catch (final Exception exception) {
+			log.error("Error en tramitefacade intentando desindexar.", exception);
 			return new SolrPendienteResultado(false, ExceptionUtils.getStackTrace(exception));
 		}
 	}
+
 	/**
 	 * Metodo para indexar un solrPendiente.
 	 *
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
 	 */
+	@Override
 	public List<Long> buscarIdsTramites() {
-		Session session = getSession();
+		final Session session = getSession();
 		try {
 
-    		StringBuilder consulta = new StringBuilder("select tramite.id from Tramite as tramite ");
-    		
-    		Query query = session.createQuery( consulta.toString() );
-    		query.setCacheable(true);
+			final StringBuilder consulta = new StringBuilder("select tramite.id from Tramite as tramite ");
 
-    		return query.list();
+			final Query query = session.createQuery(consulta.toString());
+			query.setCacheable(true);
 
-    	} catch (HibernateException he) {
+			return query.list();
 
-    		throw new EJBException(he);
+		} catch (final HibernateException he) {
 
-    	} finally {
+			throw new EJBException(he);
 
-    		close(session);
+		} finally {
 
-    	}
+			close(session);
+
+		}
 	}
 
 	/**
 	 * Consulta los formularios en funcion del filtro generico
-	 * 
+	 *
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
-	public ResultadoBusqueda consultaFormularios(FiltroGenerico filtro) {
+	@Override
+	public ResultadoBusqueda consultaFormularios(final FiltroGenerico filtro) {
 
-		Session session = getSession();
-		Integer pageSize = filtro.getPageSize();
-		Integer pageNumber = filtro.getPage();
-		String lang = filtro.getLang();
-		Long id = filtro.getId();
-		Map<String, String> parametros = new HashMap<String, String>();
+		final Session session = getSession();
+		final Integer pageSize = filtro.getPageSize();
+		final Integer pageNumber = filtro.getPage();
+		final String lang = filtro.getLang();
+		final Long id = filtro.getId();
+		final Map<String, String> parametros = new HashMap<String, String>();
 
-		StringBuilder select = new StringBuilder("SELECT f ");
-		StringBuilder selectCount = new StringBuilder("SELECT count(f) ");
-		StringBuilder from = new StringBuilder(" FROM Formulario as f ");
-		StringBuilder where = new StringBuilder("");
+		final StringBuilder select = new StringBuilder("SELECT f ");
+		final StringBuilder selectCount = new StringBuilder("SELECT count(f) ");
+		final StringBuilder from = new StringBuilder(" FROM Formulario as f ");
+		final StringBuilder where = new StringBuilder(" ");
 		// parametros.put("lang",lang);
-		StringBuilder order = new StringBuilder("");
+		final StringBuilder order = new StringBuilder("");
 
 		try {
 
@@ -1463,7 +1517,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(),
 					selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
 
-		} catch (HibernateException he) {
+		} catch (final HibernateException he) {
 			throw new EJBException(he);
 		} finally {
 			close(session);
@@ -1473,31 +1527,36 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 
 	/**
 	 * Consulta los tramites en funcion del filtro generico
-	 * 
+	 *
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
-	public ResultadoBusqueda consultaTramites(FiltroGenerico filtro) {
-		Session session = getSession();
-		Integer pageSize = filtro.getPageSize();
-		Integer pageNumber = filtro.getPage();
-		Long id = filtro.getId();
-		String lang = filtro.getLang();
-		Map<String, String> parametros = new HashMap<String, String>();
+	@Override
+	public ResultadoBusqueda consultaTramites(final FiltroGenerico filtro) {
+		final Session session = getSession();
+		final Integer pageSize = filtro.getPageSize();
+		final Integer pageNumber = filtro.getPage();
+		final Long id = filtro.getId();
+		final String lang = filtro.getLang();
+		final Map<String, String> parametros = new HashMap<String, String>();
 
-		String codigoUA = filtro.getValor(FiltroGenerico.FILTRO_TRAMITE_UA);
-		String fase = filtro.getValor(FiltroGenerico.FILTRO_TRAMITE_FASE);
-		String codigoProcedimiento = filtro.getValor(FiltroGenerico.FILTRO_TRAMITE_PROCEDIMIENTO);
-		String tramiteTelematico = filtro.getValor(FiltroGenerico.FILTRO_TRAMITE_TRAMITE_TELEMATICO);
-		String versionTramiteTelematico = filtro.getValor(FiltroGenerico.FILTRO_TRAMITE_VERSION_TRAMITE_TELEMATICO);
-		String urlTramiteTelematico = filtro.getValor(FiltroGenerico.FILTRO_TRAMITE_URL_TRAMITE_TELEMATICO);
+		final String codigoUA = filtro.getValor(FiltroGenerico.FILTRO_TRAMITE_UA);
+		final String fase = filtro.getValor(FiltroGenerico.FILTRO_TRAMITE_FASE);
+		final String codigoProcedimiento = filtro.getValor(FiltroGenerico.FILTRO_TRAMITE_PROCEDIMIENTO);
+		final String tramiteTelematico = filtro.getValor(FiltroGenerico.FILTRO_TRAMITE_TRAMITE_TELEMATICO);
+		final String versionTramiteTelematico = filtro
+				.getValor(FiltroGenerico.FILTRO_TRAMITE_VERSION_TRAMITE_TELEMATICO);
+		final String urlTramiteTelematico = filtro.getValor(FiltroGenerico.FILTRO_TRAMITE_URL_TRAMITE_TELEMATICO);
+		final String plataforma = filtro.getValor(FiltroGenerico.FILTRO_TRAMITE_PLATAFORMA);
+		final String codigoPlataforma = filtro.getValor(FiltroGenerico.FILTRO_TRAMITE_PLATAFORMA_CODIGO);
+		final String params = filtro.getValor(FiltroGenerico.FILTRO_TRAMITE_PARAMETROS);
 
-		StringBuilder select = new StringBuilder("SELECT t ");
-		StringBuilder selectCount = new StringBuilder("SELECT count(t) ");
-		StringBuilder from = new StringBuilder(" FROM Tramite as t, t.traducciones as trad ");
-		StringBuilder where = new StringBuilder(" WHERE index(trad) = :lang");
+		final StringBuilder select = new StringBuilder("SELECT t ");
+		final StringBuilder selectCount = new StringBuilder("SELECT count(t) ");
+		final StringBuilder from = new StringBuilder(" FROM Tramite as t, t.traducciones as trad ");
+		final StringBuilder where = new StringBuilder(" WHERE index(trad) = :lang");
 		parametros.put("lang", lang);
-		StringBuilder order = new StringBuilder("");
+		final StringBuilder order = new StringBuilder("");
 
 		try {
 
@@ -1536,21 +1595,36 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 				parametros.put("urlTramiteTelematico", urlTramiteTelematico);
 			}
 
-			ResultadoBusqueda res = ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(),
-					selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
-						
-			for (Object t : res.getListaResultados()) {							
+			if (plataforma != null && !plataforma.isEmpty()) {
+				where.append(" AND t.plataforma.identificador like :plataforma");
+				parametros.put("plataforma", plataforma);
+			}
+
+			if (codigoPlataforma != null && !codigoPlataforma.isEmpty()) {
+				where.append(" AND t.plataforma.id = :codigoPlataforma");
+				parametros.put("codigoPlataforma", codigoPlataforma);
+			}
+
+			if (params != null && !params.isEmpty()) {
+				where.append(" AND t.parametros = :params");
+				parametros.put("params", params);
+			}
+
+			final ResultadoBusqueda res = ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber,
+					select.toString(), selectCount.toString(), from.toString(), where.toString(), order.toString(),
+					parametros);
+
+			for (final Object t : res.getListaResultados()) {
 				Hibernate.initialize(((Tramite) t).getTaxes());
 			}
-			
+
 			return res;
 
-		} catch (HibernateException he) {
+		} catch (final HibernateException he) {
 			throw new EJBException(he);
 		} finally {
 			close(session);
 		}
 	}
-
 
 }

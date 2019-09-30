@@ -33,10 +33,12 @@
         <property name="presencial" 				 	column="SER_CPRESE" />
         <property name="telefonico" 				 	column="SER_CTELEF" />
         <property name="comun" 				 			column="SER_COMUN" />
+        <property name="parametros"			 			column="SER_PARAMS" />
 
 
         <many-to-one name="organoInstructor" 	cascade="none" column="SER_INSTRU" foreign-key="RSC_SER_INSTRU_FK"/>
         <many-to-one name="servicioResponsable" cascade="none" column="SER_SERRSP" foreign-key="RSC_SET_SERRSP_FK"/>
+		<many-to-one name="plataforma" 			cascade="none" column="SER_CODPLT" foreign-key="RSC_SERPLT_FK"/>
 
 
 

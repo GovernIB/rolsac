@@ -25,30 +25,24 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "Filtropprocedimientos", description = "Filtro que permite buscar por diferentes campos")
 public class FiltroProcediments {
 
-	public static final String SAMPLE =
-			  Constantes.SALTO_LINEA + "{\"codigoUA\":\"0\","
-			+ Constantes.SALTO_LINEA + "\"codigoUADir3\":\"codigo\","
-			+ Constantes.SALTO_LINEA + "\"buscarEnDescendientesUA\":\"0/1\","
-		    + Constantes.SALTO_LINEA + "\"activo\":\"0/1\", (1=procedimientos publicos y no caducados, 0=procedimientos no publicos o caducados)"
-		    + Constantes.SALTO_LINEA + "\"estadoUA\":\"1/2/3\",(1=Pública,2=Interna,3=Reserva)"
-		    + Constantes.SALTO_LINEA + "\"codigoAgrupacionHechoVital\":\"0\","
-		    + Constantes.SALTO_LINEA + "\"codigoPublicoObjetivo\":\"0\","
-		    + Constantes.SALTO_LINEA + "\"codigoFamilia\":\"0\","
-		    + Constantes.SALTO_LINEA + "\"codigoAgrupacionMateria\":\"0\","
-			+ Constantes.SALTO_LINEA + "\"codigoMateria\":\"0\","
-			+ Constantes.SALTO_LINEA + "\"textos\":\"texto\""
-			+ Constantes.SALTO_LINEA + "\"titulo\":\"texto\""
-			+ Constantes.SALTO_LINEA + "\"fechaPublicacionDesde\":\"DD/MM/YYYY\","
-			+ Constantes.SALTO_LINEA + "\"fechaPublicacionHasta\":\"DD/MM/YYYY\","
-			+ Constantes.SALTO_LINEA + "\"vigente\":\"0/1\",  (1=procedimientos con tramites de inicio no caducados)"
-			+ Constantes.SALTO_LINEA + "\"telematico\":\"0/1\", (1= procedimientos con trámites telemáticos)"
-			+ Constantes.SALTO_LINEA + "\"comun\":\"0/1\", (1= procedimientos comunes)"
-			+ Constantes.SALTO_LINEA + "\"codigoSia\":\"codigo\","
-			+ Constantes.SALTO_LINEA + "\"estadoSia\":\"A/B\", (A=Alta, B=Baja)"
-			+ Constantes.SALTO_LINEA + "\"fechaActualizacionSia\":\"DD/MM/YYYY\","
-			+ Constantes.SALTO_LINEA + "\"codigoTramiteTelematico\":\"codigo\","
-			+ Constantes.SALTO_LINEA + "\"versionTramiteTelematico\":\"version\""
-		    + "}";
+	public static final String SAMPLE = Constantes.SALTO_LINEA + "{\"codigoUA\":\"0\"," + Constantes.SALTO_LINEA
+			+ "\"codigoUADir3\":\"codigo\"," + Constantes.SALTO_LINEA + "\"buscarEnDescendientesUA\":\"0/1\","
+			+ Constantes.SALTO_LINEA
+			+ "\"activo\":\"0/1\", (1=procedimientos publicos y no caducados, 0=procedimientos no publicos o caducados)"
+			+ Constantes.SALTO_LINEA + "\"estadoUA\":\"1/2/3\",(1=Pública,2=Interna,3=Reserva)" + Constantes.SALTO_LINEA
+			+ "\"codigoAgrupacionHechoVital\":\"0\"," + Constantes.SALTO_LINEA + "\"codigoPublicoObjetivo\":\"0\","
+			+ Constantes.SALTO_LINEA + "\"codigoFamilia\":\"0\"," + Constantes.SALTO_LINEA
+			+ "\"codigoAgrupacionMateria\":\"0\"," + Constantes.SALTO_LINEA + "\"codigoMateria\":\"0\","
+			+ Constantes.SALTO_LINEA + "\"textos\":\"texto\"" + Constantes.SALTO_LINEA + "\"titulo\":\"texto\""
+			+ Constantes.SALTO_LINEA + "\"fechaPublicacionDesde\":\"DD/MM/YYYY\"," + Constantes.SALTO_LINEA
+			+ "\"fechaPublicacionHasta\":\"DD/MM/YYYY\"," + Constantes.SALTO_LINEA
+			+ "\"vigente\":\"0/1\",  (1=procedimientos con tramites de inicio no caducados)" + Constantes.SALTO_LINEA
+			+ "\"telematico\":\"0/1\", (1= procedimientos con trámites telemáticos)" + Constantes.SALTO_LINEA
+			+ "\"comun\":\"0/1\", (1= procedimientos comunes)" + Constantes.SALTO_LINEA + "\"codigoSia\":\"codigo\","
+			+ Constantes.SALTO_LINEA + "\"estadoSia\":\"A/B\", (A=Alta, B=Baja)" + Constantes.SALTO_LINEA
+			+ "\"fechaActualizacionSia\":\"DD/MM/YYYY\"," + Constantes.SALTO_LINEA
+			+ "\"codigoTramiteTelematico\":\"codigo\"," + Constantes.SALTO_LINEA + "\"codigoPlataforma\":\"codigo\","
+			+ Constantes.SALTO_LINEA + "\"versionTramiteTelematico\":\"version\"" + "}";
 
 	/** codigoUA. **/
 	@ApiModelProperty(value = "codigoUA", required = false)
@@ -138,104 +132,109 @@ public class FiltroProcediments {
 	@ApiModelProperty(value = "versionTramiteTelematico", required = false)
 	private String versionTramiteTelematico;
 
-
-
+	/** codigoPlataforma. **/
+	@ApiModelProperty(value = "codigoPlataforma", required = false)
+	private String codigoPlataforma;
 
 	public FiltroGenerico toFiltroGenerico() {
-		FiltroGenerico fg = new FiltroGenerico();
+		final FiltroGenerico fg = new FiltroGenerico();
 
-		if(this.codigoUA!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_UA, this.codigoUA+"");
+		if (this.codigoUA != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_UA, this.codigoUA + "");
 		}
 
-		if(this.codigoUADir3!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_UA_DIR3, this.codigoUADir3+"");
+		if (this.codigoUADir3 != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_UA_DIR3, this.codigoUADir3 + "");
 		}
 
-		if(this.buscarEnDescendientesUA!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_UA_DESCENDIENTES, this.buscarEnDescendientesUA+"");
+		if (this.buscarEnDescendientesUA != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_UA_DESCENDIENTES, this.buscarEnDescendientesUA + "");
 		}
 
-		if(this.activo!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_ACTIVO, this.activo+"");
+		if (this.activo != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_ACTIVO, this.activo + "");
 		}
 
-		if(this.estadoUA!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_ESTADO_UA, this.estadoUA+"");
+		if (this.estadoUA != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_ESTADO_UA, this.estadoUA + "");
 		}
 
-		if(this.codigoAgrupacionHechoVital!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_AGRUPACION_HECHO_VITAL, this.codigoAgrupacionHechoVital+"");
+		if (this.codigoAgrupacionHechoVital != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_AGRUPACION_HECHO_VITAL,
+					this.codigoAgrupacionHechoVital + "");
 		}
 
-		if(this.codigoPublicoObjetivo!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_PUBLICO, this.codigoPublicoObjetivo+"");
+		if (this.codigoPublicoObjetivo != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_PUBLICO, this.codigoPublicoObjetivo + "");
 		}
 
-		if(this.codigoFamilia!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_FAMILIA, this.codigoFamilia+"");
+		if (this.codigoFamilia != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_FAMILIA, this.codigoFamilia + "");
 		}
 
-		if(this.codigoAgrupacionMateria!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_AGRUPACION_MATERIA, this.codigoAgrupacionMateria+"");
+		if (this.codigoAgrupacionMateria != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_AGRUPACION_MATERIA, this.codigoAgrupacionMateria + "");
 		}
 
-		if(this.codigoMateria!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_MATERIA, this.codigoMateria+"");
+		if (this.codigoMateria != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_MATERIA, this.codigoMateria + "");
 		}
 
-		if(this.textos!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_TEXTOS, this.textos+"");
+		if (this.textos != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_TEXTOS, this.textos + "");
 		}
 
-		if(this.titulo!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_TITULO, this.titulo+"");
+		if (this.titulo != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_TITULO, this.titulo + "");
 		}
 
-		if(this.fechaPublicacionDesde!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_FECHA_PUBLICACION_DESDE, this.fechaPublicacionDesde+"");
+		if (this.fechaPublicacionDesde != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_FECHA_PUBLICACION_DESDE, this.fechaPublicacionDesde + "");
 		}
 
-		if(this.fechaPublicacionHasta!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_FECHA_PUBLICACION_HASTA, this.fechaPublicacionHasta+"");
+		if (this.fechaPublicacionHasta != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_FECHA_PUBLICACION_HASTA, this.fechaPublicacionHasta + "");
 		}
 
-		if(this.vigente!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_VIGENTE, this.vigente+"");
+		if (this.vigente != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_VIGENTE, this.vigente + "");
 		}
 
-		if(this.telematico!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_TELEMATICO, this.telematico+"");
+		if (this.telematico != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_TELEMATICO, this.telematico + "");
 		}
 
-		if(this.comun != null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_COMUN, this.comun+"");
+		if (this.comun != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_COMUN, this.comun + "");
 		}
 
-		if(this.codigoSia!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_CODIGO_SIA, this.codigoSia+"");
+		if (this.codigoSia != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_CODIGO_SIA, this.codigoSia + "");
 		}
 
-		if(this.estadoSia!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_ESTADO_SIA, this.estadoSia+"");
+		if (this.estadoSia != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_ESTADO_SIA, this.estadoSia + "");
 		}
 
-		if(this.fechaActualizacionSia!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_FECHA_ACTUALIZACION_SIA, this.fechaActualizacionSia+"");
+		if (this.fechaActualizacionSia != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_FECHA_ACTUALIZACION_SIA, this.fechaActualizacionSia + "");
 		}
 
-		if(this.codigoTramiteTelematico!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_TRAMITE_TELEMATICO, this.codigoTramiteTelematico+"");
+		if (this.codigoTramiteTelematico != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_TRAMITE_TELEMATICO, this.codigoTramiteTelematico + "");
 		}
 
-		if(this.versionTramiteTelematico!= null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_VERSION_TRAMITE_TELEMATICO, this.versionTramiteTelematico+"");
+		if (this.versionTramiteTelematico != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_VERSION_TRAMITE_TELEMATICO,
+					this.versionTramiteTelematico + "");
+		}
+
+		if (this.codigoPlataforma != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_PLATAFORMA, this.codigoPlataforma + "");
 		}
 
 		return fg;
 	}
-
-
 
 	public static FiltroProcediments valueOf(final String json) {
 		final ObjectMapper objectMapper = new ObjectMapper();
@@ -251,7 +250,6 @@ public class FiltroProcediments {
 		return obj;
 	}
 
-
 	public String toJson() {
 		try {
 			final ObjectMapper objectMapper = new ObjectMapper();
@@ -263,8 +261,6 @@ public class FiltroProcediments {
 		}
 	}
 
-
-
 	/**
 	 * @return the codigoUA
 	 */
@@ -272,16 +268,13 @@ public class FiltroProcediments {
 		return codigoUA;
 	}
 
-
-
 	/**
-	 * @param codigoUA the codigoUA to set
+	 * @param codigoUA
+	 *            the codigoUA to set
 	 */
-	public void setCodigoUA(Integer codigoUA) {
+	public void setCodigoUA(final Integer codigoUA) {
 		this.codigoUA = codigoUA;
 	}
-
-
 
 	/**
 	 * @return the activo
@@ -290,16 +283,13 @@ public class FiltroProcediments {
 		return activo;
 	}
 
-
-
 	/**
-	 * @param activo the activo to set
+	 * @param activo
+	 *            the activo to set
 	 */
-	public void setActivo(Integer activo) {
+	public void setActivo(final Integer activo) {
 		this.activo = activo;
 	}
-
-
 
 	/**
 	 * @return the estadoUA
@@ -308,16 +298,13 @@ public class FiltroProcediments {
 		return estadoUA;
 	}
 
-
-
 	/**
-	 * @param estadoUA the estadoUA to set
+	 * @param estadoUA
+	 *            the estadoUA to set
 	 */
-	public void setEstadoUA(Integer estadoUA) {
+	public void setEstadoUA(final Integer estadoUA) {
 		this.estadoUA = estadoUA;
 	}
-
-
 
 	/**
 	 * @return the codigoAgrupacionHechoVital
@@ -326,16 +313,13 @@ public class FiltroProcediments {
 		return codigoAgrupacionHechoVital;
 	}
 
-
-
 	/**
-	 * @param codigoAgrupacionHechoVital the codigoAgrupacionHechoVital to set
+	 * @param codigoAgrupacionHechoVital
+	 *            the codigoAgrupacionHechoVital to set
 	 */
-	public void setCodigoAgrupacionHechoVital(Integer codigoAgrupacionHechoVital) {
+	public void setCodigoAgrupacionHechoVital(final Integer codigoAgrupacionHechoVital) {
 		this.codigoAgrupacionHechoVital = codigoAgrupacionHechoVital;
 	}
-
-
 
 	/**
 	 * @return the codigoPublicoObjetivo
@@ -344,16 +328,13 @@ public class FiltroProcediments {
 		return codigoPublicoObjetivo;
 	}
 
-
-
 	/**
-	 * @param codigoPublicoObjetivo the codigoPublicoObjetivo to set
+	 * @param codigoPublicoObjetivo
+	 *            the codigoPublicoObjetivo to set
 	 */
-	public void setCodigoPublicoObjetivo(Integer codigoPublicoObjetivo) {
+	public void setCodigoPublicoObjetivo(final Integer codigoPublicoObjetivo) {
 		this.codigoPublicoObjetivo = codigoPublicoObjetivo;
 	}
-
-
 
 	/**
 	 * @return the codigoFamilia
@@ -362,16 +343,13 @@ public class FiltroProcediments {
 		return codigoFamilia;
 	}
 
-
-
 	/**
-	 * @param codigoFamilia the codigoFamilia to set
+	 * @param codigoFamilia
+	 *            the codigoFamilia to set
 	 */
-	public void setCodigoFamilia(Integer codigoFamilia) {
+	public void setCodigoFamilia(final Integer codigoFamilia) {
 		this.codigoFamilia = codigoFamilia;
 	}
-
-
 
 	/**
 	 * @return the codigoAgrupacionMateria
@@ -380,16 +358,13 @@ public class FiltroProcediments {
 		return codigoAgrupacionMateria;
 	}
 
-
-
 	/**
-	 * @param codigoAgrupacionMateria the codigoAgrupacionMateria to set
+	 * @param codigoAgrupacionMateria
+	 *            the codigoAgrupacionMateria to set
 	 */
-	public void setCodigoAgrupacionMateria(Integer codigoAgrupacionMateria) {
+	public void setCodigoAgrupacionMateria(final Integer codigoAgrupacionMateria) {
 		this.codigoAgrupacionMateria = codigoAgrupacionMateria;
 	}
-
-
 
 	/**
 	 * @return the codigoMateria
@@ -398,16 +373,13 @@ public class FiltroProcediments {
 		return codigoMateria;
 	}
 
-
-
 	/**
-	 * @param codigoMateria the codigoMateria to set
+	 * @param codigoMateria
+	 *            the codigoMateria to set
 	 */
-	public void setCodigoMateria(Integer codigoMateria) {
+	public void setCodigoMateria(final Integer codigoMateria) {
 		this.codigoMateria = codigoMateria;
 	}
-
-
 
 	/**
 	 * @return the textos
@@ -416,16 +388,13 @@ public class FiltroProcediments {
 		return textos;
 	}
 
-
-
 	/**
-	 * @param textos the textos to set
+	 * @param textos
+	 *            the textos to set
 	 */
-	public void setTextos(String textos) {
+	public void setTextos(final String textos) {
 		this.textos = textos;
 	}
-
-
 
 	/**
 	 * @return the fechaPublicacionDesde
@@ -434,16 +403,13 @@ public class FiltroProcediments {
 		return fechaPublicacionDesde;
 	}
 
-
-
 	/**
-	 * @param fechaPublicacionDesde the fechaPublicacionDesde to set
+	 * @param fechaPublicacionDesde
+	 *            the fechaPublicacionDesde to set
 	 */
-	public void setFechaPublicacionDesde(String fechaPublicacionDesde) {
+	public void setFechaPublicacionDesde(final String fechaPublicacionDesde) {
 		this.fechaPublicacionDesde = fechaPublicacionDesde;
 	}
-
-
 
 	/**
 	 * @return the fechaPublicacionHasta
@@ -452,16 +418,13 @@ public class FiltroProcediments {
 		return fechaPublicacionHasta;
 	}
 
-
-
 	/**
-	 * @param fechaPublicacionHasta the fechaPublicacionHasta to set
+	 * @param fechaPublicacionHasta
+	 *            the fechaPublicacionHasta to set
 	 */
-	public void setFechaPublicacionHasta(String fechaPublicacionHasta) {
+	public void setFechaPublicacionHasta(final String fechaPublicacionHasta) {
 		this.fechaPublicacionHasta = fechaPublicacionHasta;
 	}
-
-
 
 	/**
 	 * @return the vigente
@@ -470,16 +433,13 @@ public class FiltroProcediments {
 		return vigente;
 	}
 
-
-
 	/**
-	 * @param vigente the vigente to set
+	 * @param vigente
+	 *            the vigente to set
 	 */
-	public void setVigente(Integer vigente) {
+	public void setVigente(final Integer vigente) {
 		this.vigente = vigente;
 	}
-
-
 
 	/**
 	 * @return the telematico
@@ -488,16 +448,13 @@ public class FiltroProcediments {
 		return telematico;
 	}
 
-
-
 	/**
-	 * @param telematico the telematico to set
+	 * @param telematico
+	 *            the telematico to set
 	 */
-	public void setTelematico(Integer telematico) {
+	public void setTelematico(final Integer telematico) {
 		this.telematico = telematico;
 	}
-
-
 
 	/**
 	 * @return the codigoSia
@@ -506,16 +463,13 @@ public class FiltroProcediments {
 		return codigoSia;
 	}
 
-
-
 	/**
-	 * @param codigoSia the codigoSia to set
+	 * @param codigoSia
+	 *            the codigoSia to set
 	 */
-	public void setCodigoSia(Integer codigoSia) {
+	public void setCodigoSia(final Integer codigoSia) {
 		this.codigoSia = codigoSia;
 	}
-
-
 
 	/**
 	 * @return the fechaActualizacionSia
@@ -525,13 +479,12 @@ public class FiltroProcediments {
 	}
 
 	/**
-	 * @param fechaActualizacionSia the fechaActualizacionSia to set
+	 * @param fechaActualizacionSia
+	 *            the fechaActualizacionSia to set
 	 */
-	public void setFechaActualizacionSia(String fechaActualizacionSia) {
+	public void setFechaActualizacionSia(final String fechaActualizacionSia) {
 		this.fechaActualizacionSia = fechaActualizacionSia;
 	}
-
-
 
 	/**
 	 * @return the estadoSia
@@ -540,16 +493,13 @@ public class FiltroProcediments {
 		return estadoSia;
 	}
 
-
-
 	/**
-	 * @param estadoSia the estadoSia to set
+	 * @param estadoSia
+	 *            the estadoSia to set
 	 */
-	public void setEstadoSia(String estadoSia) {
+	public void setEstadoSia(final String estadoSia) {
 		this.estadoSia = estadoSia;
 	}
-
-
 
 	/**
 	 * @return the codigoTramiteTelematico
@@ -558,16 +508,13 @@ public class FiltroProcediments {
 		return codigoTramiteTelematico;
 	}
 
-
-
 	/**
-	 * @param codigoTramiteTelematico the codigoTramiteTelematico to set
+	 * @param codigoTramiteTelematico
+	 *            the codigoTramiteTelematico to set
 	 */
-	public void setCodigoTramiteTelematico(String codigoTramiteTelematico) {
+	public void setCodigoTramiteTelematico(final String codigoTramiteTelematico) {
 		this.codigoTramiteTelematico = codigoTramiteTelematico;
 	}
-
-
 
 	/**
 	 * @return the versionTramiteTelematico
@@ -576,16 +523,13 @@ public class FiltroProcediments {
 		return versionTramiteTelematico;
 	}
 
-
-
 	/**
-	 * @param versionTramiteTelematico the versionTramiteTelematico to set
+	 * @param versionTramiteTelematico
+	 *            the versionTramiteTelematico to set
 	 */
-	public void setVersionTramiteTelematico(String versionTramiteTelematico) {
+	public void setVersionTramiteTelematico(final String versionTramiteTelematico) {
 		this.versionTramiteTelematico = versionTramiteTelematico;
 	}
-
-
 
 	/**
 	 * @return the buscarEnDescendientesUA
@@ -594,16 +538,13 @@ public class FiltroProcediments {
 		return buscarEnDescendientesUA;
 	}
 
-
-
 	/**
-	 * @param buscarEnDescendientesUA the buscarEnDescendientesUA to set
+	 * @param buscarEnDescendientesUA
+	 *            the buscarEnDescendientesUA to set
 	 */
-	public void setBuscarEnDescendientesUA(Integer buscarEnDescendientesUA) {
+	public void setBuscarEnDescendientesUA(final Integer buscarEnDescendientesUA) {
 		this.buscarEnDescendientesUA = buscarEnDescendientesUA;
 	}
-
-
 
 	/**
 	 * @return the titulo
@@ -612,16 +553,13 @@ public class FiltroProcediments {
 		return titulo;
 	}
 
-
-
 	/**
-	 * @param titulo the titulo to set
+	 * @param titulo
+	 *            the titulo to set
 	 */
-	public void setTitulo(String titulo) {
+	public void setTitulo(final String titulo) {
 		this.titulo = titulo;
 	}
-
-
 
 	/**
 	 * @return the codigoUADir3
@@ -630,16 +568,13 @@ public class FiltroProcediments {
 		return codigoUADir3;
 	}
 
-
-
 	/**
-	 * @param codigoUADir3 the codigoUADir3 to set
+	 * @param codigoUADir3
+	 *            the codigoUADir3 to set
 	 */
-	public void setCodigoUADir3(String codigoUADir3) {
+	public void setCodigoUADir3(final String codigoUADir3) {
 		this.codigoUADir3 = codigoUADir3;
 	}
-
-
 
 	/**
 	 * @return the comun
@@ -648,15 +583,12 @@ public class FiltroProcediments {
 		return comun;
 	}
 
-
-
 	/**
-	 * @param comun the comun to set
+	 * @param comun
+	 *            the comun to set
 	 */
-	public void setComun(Integer comun) {
+	public void setComun(final Integer comun) {
 		this.comun = comun;
 	}
-
-
 
 }

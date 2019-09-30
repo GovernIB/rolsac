@@ -89,6 +89,15 @@ public class Serveis extends EntidadBase {
 	@ApiModelProperty(value = "tramiteVersion", required = false)
 	private java.lang.String tramiteVersion;
 
+	@ApiModelProperty(hidden = true)
+	private Plataformas plataforma;
+
+	@ApiModelProperty(value = "parametros", required = false)
+	private java.lang.String parametros;
+
+	@ApiModelProperty(value = "telematico", required = false)
+	private boolean telematico;
+
 	@ApiModelProperty(value = "validacion", required = false)
 	private java.lang.Integer validacion;
 
@@ -98,12 +107,14 @@ public class Serveis extends EntidadBase {
 	/**  **/
 	@ApiModelProperty(value = "link_servicioResponsable", required = false)
 	private Link link_servicioResponsable;
+
 	@ApiModelProperty(hidden = true)
 	@XmlTransient
 	private Long servicioResponsable;
 
 	@ApiModelProperty(value = "link_organoInstructor", required = false)
 	private Link link_organoInstructor;
+
 	@ApiModelProperty(hidden = true)
 	@XmlTransient
 	private Long organoInstructor;
@@ -117,6 +128,16 @@ public class Serveis extends EntidadBase {
 		super(elem, urlBase, idioma, hateoasEnabled);
 		if (elem.getCodigo() != null) {
 			this.codigoServicio = elem.getCodigo();
+		}
+
+		try {
+			// copiamos los datos que no tienen la misma estructura:
+			if (elem.getPlataforma() != null) {
+				this.plataforma = new Plataformas(elem.getPlataforma(), urlBase, idioma, hateoasEnabled);
+			}
+
+		} catch (final Exception e) {
+
 		}
 	}
 
@@ -161,6 +182,10 @@ public class Serveis extends EntidadBase {
 	protected void addSetersInvalidos() {
 		if (!SETTERS_INVALIDS.contains("setCodigo")) {
 			SETTERS_INVALIDS.add("setCodigo");
+		}
+
+		if (!SETTERS_INVALIDS.contains("setPlataforma")) {
+			SETTERS_INVALIDS.add("setPlataforma");
 		}
 
 	}
@@ -565,6 +590,51 @@ public class Serveis extends EntidadBase {
 	 */
 	public java.lang.Long getId() {
 		return id;
+	}
+
+	/**
+	 * @return the telematico
+	 */
+	public boolean getTelematico() {
+		return telematico;
+	}
+
+	/**
+	 * @param telematico
+	 *            the telematico to set
+	 */
+	public void setTelematico(final boolean telematico) {
+		this.telematico = telematico;
+	}
+
+	/**
+	 * @return the parametros
+	 */
+	public java.lang.String getParametros() {
+		return parametros;
+	}
+
+	/**
+	 * @param parametros
+	 *            the parametros to set
+	 */
+	public void setParametros(final java.lang.String parametros) {
+		this.parametros = parametros;
+	}
+
+	/**
+	 * @return the plataforma
+	 */
+	public Plataformas getPlataforma() {
+		return plataforma;
+	}
+
+	/**
+	 * @param plataforma
+	 *            the plataforma to set
+	 */
+	public void setPlataforma(final Plataformas plataforma) {
+		this.plataforma = plataforma;
 	}
 
 }
