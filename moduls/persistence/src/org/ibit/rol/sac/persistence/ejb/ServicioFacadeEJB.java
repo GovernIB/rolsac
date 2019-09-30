@@ -2179,6 +2179,9 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 		final String versionTramiteTelematico = filtro
 				.getValor(FiltroGenerico.FILTRO_SERVICIOS_VERSION_TRAMITE_TELEMATICO);
 		final String comun = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_COMUN);
+		final String plataforma = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_PLATAFORMA);
+		final String codigoPlataforma = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_PLATAFORMA_CODIGO);
+		final String params = filtro.getValor(FiltroGenerico.FILTRO_SERVICIOS_PARAMETROS);
 
 		final StringBuilder select = new StringBuilder("SELECT s ");
 		final StringBuilder selectCount = new StringBuilder("SELECT count(s) ");
@@ -2245,6 +2248,21 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 			if ((!StringUtils.isEmpty(telematico) && (telematico.equals("1") || telematico.equals("0")))) {
 				where.append(" AND s.telematico = :telematico ");
 				parametros.put("telematico", ApiRestUtils.intToBool(telematico));
+			}
+
+			if (!StringUtils.isEmpty(plataforma)) {
+				where.append(" AND s.plataforma.identificador like  :plataforma");
+				parametros.put("plataforma", plataforma);
+			}
+
+			if (!StringUtils.isEmpty(codigoPlataforma)) {
+				where.append(" AND s.plataforma.id = :codigoPlataforma");
+				parametros.put("codigoPlataforma", codigoPlataforma);
+			}
+
+			if (!StringUtils.isEmpty(params)) {
+				where.append(" AND s.parametros = :params");
+				parametros.put("params", params);
 			}
 
 			if (!StringUtils.isEmpty(codigoAHV)) {

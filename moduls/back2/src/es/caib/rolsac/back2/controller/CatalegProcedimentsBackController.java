@@ -41,6 +41,7 @@ import org.ibit.rol.sac.model.HechoVitalProcedimiento;
 import org.ibit.rol.sac.model.Iniciacion;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Normativa;
+import org.ibit.rol.sac.model.Plataforma;
 import org.ibit.rol.sac.model.Procedimiento;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.PublicoObjetivo;
@@ -139,6 +140,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			model.put("llistaTipusNormativa", getListaTiposNormativaDTO(lang));
 			// Tipos afectacion.
 			model.put("llistaTipusAfectacio", getListaTiposAfectacionDTO(lang));
+			// Plataforma.
+			model.put("llistaPlataformas", getListaPlataformasDTO());
 
 		} catch (final DelegateException e) {
 			log.error(ExceptionUtils.getStackTrace(e));
@@ -447,13 +450,13 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 			int numTramits = 0, numTramitsTelematics = 0;
 			if (procedimiento.getTramites() != null) {
-				for(Tramite tramite : procedimiento.getTramites()) {
-					if (tramite == null) { 
+				for (final Tramite tramite : procedimiento.getTramites()) {
+					if (tramite == null) {
 						continue;
-					} 
-					numTramits ++;					
+					}
+					numTramits++;
 					if (tramite.isTelematico()) {
-						numTramitsTelematics ++;
+						numTramitsTelematics++;
 					}
 				}
 			}
@@ -803,6 +806,24 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 		return listaTiposNormativaDTO;
 
+	}
+
+	private List<IdNomDTO> getListaPlataformasDTO() throws DelegateException {
+		final Map parametros = new HashMap();
+		final int pagina = 0;
+		final int resultats = 100;
+		final ResultadoBusqueda resultado = DelegateUtil.getPlataformaDelegate().buscadorListarPlataforma(parametros,
+				pagina, resultats, true, true);
+		final List<IdNomDTO> listaPlataformasDTO = new ArrayList<IdNomDTO>();
+		if (resultado.getListaResultados() != null) {
+			for (final Object oplataforma : resultado.getListaResultados()) {
+				final Plataforma plataforma = (Plataforma) oplataforma;
+				final IdNomDTO plat = new IdNomDTO(plataforma.getId(), plataforma.getIdentificador());
+				listaPlataformasDTO.add(plat);
+			}
+		}
+
+		return listaPlataformasDTO;
 	}
 
 	private List<IdNomDTO> getListaBoletinesDTO() throws DelegateException {

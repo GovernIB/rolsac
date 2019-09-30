@@ -514,6 +514,20 @@
                                 </c:if>
                             </div>
 
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_plataforma"><spring:message code='camp.cerca_plataforma'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_plataforma" name="cerca_plataforma">
+                                        <option value=""><spring:message code='camp.cap'/></option>
+                                        <c:forEach items="${llistaPlataformas}" var="plataforma">
+                                            <option value='<c:out value="${plataforma.id}" />'><c:out value="${plataforma.nom}" /></option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                            </div>
+
                         </div>
 
 						<div class="fila">
@@ -864,7 +878,7 @@
                                 </div>
 
                             </div>
-                            <div class="element t50p">
+                            <div class="element t25p">
                                 <div class="etiqueta">
                                     <label for="item_tramite_version"><spring:message code='serv.tramit.versio'/></label>
                                 </div>
@@ -873,8 +887,32 @@
                                 </div>
 
                             </div>
+
+                            <div class="element t25p">
+	                            <div class="etiqueta">
+	                                <label for="item_plataforma"><spring:message code='camp.plataforma'/></label>
+	                            </div>
+	                            <div class="control">
+	                            	<select id="item_plataforma" name="item_plataforma">
+                                   		<option value=""><spring:message code='camp.tria.opcio'/></option>
+                                       	<c:forEach items="${llistaPlataformas}" var="plataforma">
+                                           	<option value='<c:out value="${plataforma.id}" />'><c:out value="${plataforma.nom}" /></option>
+                                       	</c:forEach>
+                                       </select>
+	                            </div>
+	                        </div>
                         </div>
 
+						<div class="fila">
+		                        <div class="element t99p">
+		                            <div class="etiqueta">
+		                                <label for="item_parametros"><spring:message code='camp.parametros'/></label>
+		                            </div>
+		                            <div class="control">
+		                                <input id="item_parametros" name="item_parametros" type="text" class="nou" />
+		                            </div>
+		                        </div>
+						</div>
                     </div>
                 </fieldset>
             </div>

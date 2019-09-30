@@ -40,6 +40,8 @@
                         <element name="urlExterna" nillable="true" type="xsd:string" />
                         <element name="validacio" nillable="true" type="xsd:long" />
                         <element name="versio" nillable="true" type="xsd:int" />
+                        <element name="plataforma" nillable="true" type="xsd:long" />
+
                     </sequence>
                 </extension>
             </complexContent>

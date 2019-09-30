@@ -24,6 +24,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.DocumentTramit;
+import org.ibit.rol.sac.model.Plataforma;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.Taxa;
 import org.ibit.rol.sac.model.Traduccion;
@@ -106,6 +107,10 @@ public class TramiteBackController {
 			resultats.put("item_tramite_tramit", tramite.getIdTraTel());
 			resultats.put("item_version_tramit", tramite.getVersio());
 			resultats.put("item_codivuds_tramit", tramite.getCodiVuds());
+			resultats.put("item_parametros_tramit", tramite.getParametros());
+			if (tramite.getPlataforma() != null) {
+				resultats.put("item_plataforma_tramit", tramite.getPlataforma().getId());
+			}
 			resultats.put("tramit_item_data_vuds", tramite.getDataActualitzacioVuds());
 			resultats.put("item_finestreta_unica", procedimiento.getVentanillaUnica());
 			resultats.put("item_taxes", procedimiento.getTaxa());
@@ -287,10 +292,24 @@ public class TramiteBackController {
 
 			}
 
-			final String version = request.getParameter("item_version_tramit");
+			final String version = request.getParameter("item_version_tramit") == null ? ""
+					: request.getParameter("item_version_tramit");
+			final String parametros = request.getParameter("item_parametros") == null ? ""
+					: request.getParameter("item_parametros");
+			final String idPlataforma = request.getParameter("item_plataforma") == null ? ""
+					: request.getParameter("item_plataforma");
 			tramite.setVersio(StringUtils.isNumeric(version) && !"".equals(version) ? Integer.parseInt(version) : 0);
 			tramite.setUrlExterna(
 					request.getParameter("item_url_tramit") == null ? "" : request.getParameter("item_url_tramit"));
+			tramite.setParametros(parametros);
+			if (idPlataforma.isEmpty()) {
+				tramite.setPlataforma(null);
+			} else {
+				final Plataforma plataforma = DelegateUtil.getPlataformaDelegate()
+						.obtenerPlataforma(Long.valueOf(idPlataforma));
+				tramite.setPlataforma(plataforma);
+			}
+
 			tramite.setIdTraTel(request.getParameter("item_tramite_tramit") == null ? ""
 					: request.getParameter("item_tramite_tramit"));
 
@@ -299,17 +318,19 @@ public class TramiteBackController {
 			tramite.setPresencial(request.getParameter("item_check_tramit_presencial") != null
 					&& !"".equals(request.getParameter("item_check_tramit_presencial")));
 
-			final boolean urlTramiteRelleno = !tramite.getUrlExterna().equals("");
-			final boolean idTramiteTelleno = !tramite.getIdTraTel().equals("") && !"".equals(version);
-			final boolean idTramiteIncoherente = (!tramite.getIdTraTel().equals("") && "".equals(version))
-					|| (tramite.getIdTraTel().equals("") && (!"".equals(version) && !"0".equals(version)));
+			final boolean isTramiteExterno = !tramite.getUrlExterna().equals("");
+			final boolean isTramiteInterno = !tramite.getIdTraTel().equals("") || !version.isEmpty()
+					|| !idPlataforma.isEmpty();
+			final boolean isTramiteInternoTodo = !tramite.getIdTraTel().equals("") && !version.isEmpty()
+					&& !idPlataforma.isEmpty();
 
 			// si es telematico debe estar rellenos url o version+id, pero no ambos.
 			if (tramite.isTelematico()) {
 				// Traramos la posible incoherencia de datos
-				if (urlTramiteRelleno && idTramiteTelleno || // estan los dos completados
-						!urlTramiteRelleno && !idTramiteTelleno || // ninguno esta completado
-						idTramiteIncoherente) { // el id y version es incoherente (uno si y el otro no)
+				if ((isTramiteExterno && isTramiteInterno) || // estan los dos completados
+						(!isTramiteExterno && !isTramiteInterno) || // ninguno esta completado
+						(isTramiteInterno && !isTramiteInternoTodo)) { // Esta relleno todo lo de interno y no se deja
+																		// algo sin rellenar
 					error = messageSource.getMessage("proc.formulari.error.telematic.sensedades", null,
 							request.getLocale());
 					result = new IdNomDTO(-2l, error);
@@ -320,6 +341,8 @@ public class TramiteBackController {
 				tramite.setVersio(0);
 				tramite.setUrlExterna("");
 				tramite.setIdTraTel("");
+				tramite.setPlataforma(null);
+				tramite.setParametros(null);
 			}
 
 			// 1 - Inicialización

@@ -113,6 +113,12 @@ public class FiltroGenerico implements Serializable {
 	public static final String FILTRO_PROCEDIMIENTO_TRAMITE_TELEMATICO = "tramiteTelematico";
 	public static final String FILTRO_PROCEDIMIENTO_VERSION_TRAMITE_TELEMATICO = "versionTramiteTelematico";
 	public static final String FILTRO_PROCEDIMIENTO_COMUN = "comun";
+	public static final String FILTRO_PROCEDIMIENTO_PLATAFORMA = "plataforma";
+
+	public static final String FILTRO_PLATAFORMAS_CODIGO = "codigo";
+	public static final String FILTRO_PLATAFORMAS_IDENTIFICADOR = "identificador";
+	public static final String FILTRO_PLATAFORMAS_URL_ACCESO = "urlAcceso";
+	public static final String FILTRO_PLATAFORMAS_DESCRIPCION = "descripcion";
 
 	public static final String FILTRO_SERVICIOS_UA = "codigoUA";
 	public static final String FILTRO_SERVICIOS_UA_DIR3 = "codigoUADir3";
@@ -126,6 +132,9 @@ public class FiltroGenerico implements Serializable {
 	public static final String FILTRO_SERVICIOS_MATERIA = "materia";
 	public static final String FILTRO_SERVICIOS_TEXTOS = "textos";
 	public static final String FILTRO_SERVICIOS_TITULO = "titulo";
+	public static final String FILTRO_SERVICIOS_PLATAFORMA = "plataforma";
+	public static final String FILTRO_SERVICIOS_PLATAFORMA_CODIGO = "plataformaCodigo";
+	public static final String FILTRO_SERVICIOS_PARAMETROS = "parametros";
 	public static final String FILTRO_SERVICIOS_FECHA_PUBLICACION_DESDE = "fechaPublicacionDesde";
 	public static final String FILTRO_SERVICIOS_FECHA_PUBLICACION_HASTA = "fechaPublicacionHasta";
 	public static final String FILTRO_SERVICIOS_VIGENTE = "vigente";
@@ -143,6 +152,9 @@ public class FiltroGenerico implements Serializable {
 	public static final String FILTRO_TRAMITE_TRAMITE_TELEMATICO = "codigoTramiteTelematico";
 	public static final String FILTRO_TRAMITE_VERSION_TRAMITE_TELEMATICO = "versionTramiteTelematico";
 	public static final String FILTRO_TRAMITE_URL_TRAMITE_TELEMATICO = "urlTramiteTelematico";
+	public static final String FILTRO_TRAMITE_PLATAFORMA = "plataforma";
+	public static final String FILTRO_TRAMITE_PLATAFORMA_CODIGO = "plataformaCodigo";
+	public static final String FILTRO_TRAMITE_PARAMETROS = "parametros";
 
 	public FiltroGenerico() {
 		this.filtros = new HashMap<String, String>();

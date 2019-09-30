@@ -97,6 +97,9 @@
 							<li>
 							    <a href="<c:url value="/idiomes/idiomes.do" />"><spring:message code="menu.idiomes" /></a>
 							</li>
+							<li>
+							    <a href="<c:url value="/plataformes/plataformes.do" />"><spring:message code="menu.plataformes" /></a>
+							</li>
 						</ul>
 					</li>
 					<li>

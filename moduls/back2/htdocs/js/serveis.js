@@ -796,18 +796,23 @@ function CDetall() {
 				jQuery("#item_tramite_url").prop('disabled', false);
 				jQuery("#item_tramite_id").prop('disabled', false);
 				jQuery("#item_tramite_version").prop('disabled', false);
+				jQuery("#item_plataforma").prop('disabled', false);
+				jQuery("#item_parametros").prop('disabled', false);
+
 			}else{
 				jQuery("#item_tramite_url").prop('disabled', true);
 				jQuery("#item_tramite_id").prop('disabled', true);
 				jQuery("#item_tramite_version").prop('disabled', true);
+				jQuery("#item_plataforma").prop('disabled', true);
+				jQuery("#item_parametros").prop('disabled', true);
 			}
 		});
 
 		jQuery("#item_tramite_version").prop('disabled', true);
 		jQuery("#item_tramite_id").prop('disabled', true);
 		jQuery("#item_tramite_url").prop('disabled', true);
-
-
+		jQuery("#item_plataforma").prop('disabled', true);
+		jQuery("#item_parametros").prop('disabled', true);
 
 	};
 
@@ -1104,12 +1109,20 @@ function CDetall() {
 			jQuery("#item_tramite_version").prop('disabled', !dada_node.item_check_tramit_telematico);
 			jQuery("#item_tramite_id").prop('disabled', !dada_node.item_check_tramit_telematico);
 			jQuery("#item_tramite_url").prop('disabled', !dada_node.item_check_tramit_telematico);
+			jQuery("#item_plataforma").prop('disabled', !dada_node.item_check_tramit_telematico);
+			jQuery("#item_plataforma").val(dada_node.item_plataforma_tramit);
+			jQuery("#item_parametros").prop('disabled', !dada_node.item_check_tramit_telematico);
+			jQuery("#item_parametros").val(dada_node.item_parametros);
 
 		} else {
 			jQuery("#item_check_tramit_telematico").prop('checked', false);
 			jQuery("#item_tramite_version").prop('disabled', true);
 			jQuery("#item_tramite_id").prop('disabled', true);
 			jQuery("#item_tramite_url").prop('disabled', true);
+			jQuery("#item_plataforma").prop('disabled', true);
+			jQuery("#item_plataforma").val('');
+			jQuery("#item_parametros").prop('disabled', true);
+			jQuery("#item_parametros").val('');
 		}
 
 

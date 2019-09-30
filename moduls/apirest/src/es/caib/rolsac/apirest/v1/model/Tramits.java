@@ -19,14 +19,14 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Tramits.
- * 
+ *
  * @author Indra
  *
  */
 @XmlRootElement
-@ApiModel(value = Constantes.ENTIDAD_TRAMITE, description = Constantes.TXT_DEFINICION_CLASE +  Constantes.ENTIDAD_TRAMITE)
+@ApiModel(value = Constantes.ENTIDAD_TRAMITE, description = Constantes.TXT_DEFINICION_CLASE
+		+ Constantes.ENTIDAD_TRAMITE)
 public class Tramits extends EntidadBase {
-	 
 
 	@ApiModelProperty(value = "codigo", required = false)
 	private long codigo;
@@ -90,63 +90,72 @@ public class Tramits extends EntidadBase {
 
 	@ApiModelProperty(value = "versio", required = false)
 	private java.lang.Integer versio;
-	
+
 	@ApiModelProperty(value = "tasas", required = false)
 	private ArrayList<Taxes> tasas;
-	
+
 	@ApiModelProperty(value = "presencial", required = false)
-	private  boolean presencial;
-	
+	private boolean presencial;
+
 	@ApiModelProperty(value = "telematico", required = false)
-	private  boolean telematico;
-	
-	
-	
-	//-- LINKS--//
-	//-- se duplican las entidades para poder generar la clase link en funcion de la propiedad principal (sin "link_")
+	private boolean telematico;
+
+	@ApiModelProperty(value = "plataforma", required = false)
+	private Plataformas plataforma;
+
+	@ApiModelProperty(value = "parametros", required = false)
+	private java.lang.String parametros;
+
+	// -- LINKS--//
+	// -- se duplican las entidades para poder generar la clase link en funcion de
+	// la propiedad principal (sin "link_")
 	/**  **/
 	@ApiModelProperty(value = "link_organCompetent", required = false)
-	private Link link_organCompetent;	
+	private Link link_organCompetent;
 	@ApiModelProperty(hidden = true)
 	@XmlTransient
 	private java.lang.Long organCompetent;
-	
+
 	@ApiModelProperty(value = "link_procedimiento", required = false)
-	private Link link_procedimiento;	
+	private Link link_procedimiento;
 	@ApiModelProperty(hidden = true)
 	@XmlTransient
 	private java.lang.Long procedimiento;
-	
-		
-	public Tramits (org.ibit.rol.sac.model.Tramite elem, String urlBase,String idioma,boolean hateoasEnabled ) {
-		super( elem, urlBase, idioma, hateoasEnabled);
-		
-		//rellenamos las tasas
-		if(elem.getTaxes()!=null && elem.getTaxes().size()>0) {
-			if(tasas==null) {
+
+	public Tramits(final org.ibit.rol.sac.model.Tramite elem, final String urlBase, final String idioma,
+			final boolean hateoasEnabled) {
+		super(elem, urlBase, idioma, hateoasEnabled);
+
+		// rellenamos las tasas
+		if (elem.getTaxes() != null && elem.getTaxes().size() > 0) {
+			if (tasas == null) {
 				tasas = new ArrayList<Taxes>();
 			}
-			for (Taxa t : elem.getTaxes()) {
-				Taxes tx = new Taxes(t,urlBase,idioma,hateoasEnabled);
-				if(tx!=null) {
+			for (final Taxa t : elem.getTaxes()) {
+				final Taxes tx = new Taxes(t, urlBase, idioma, hateoasEnabled);
+				if (tx != null) {
 					tasas.add(tx);
 				}
 			}
 		}
 
+		// copiamos los datos que no tienen la misma estructura:
+		if (elem.getPlataforma() != null) {
+			this.plataforma = new Plataformas(elem.getPlataforma(), urlBase, idioma, hateoasEnabled);
+		}
 	}
-	
+
 	public Tramits() {
 		super();
 	}
-	
-	
-	@Override
-	public void generaLinks(String urlBase) {
-		link_organCompetent = this.generaLink(this.organCompetent,Constantes.ENTIDAD_UA,Constantes.URL_UA, urlBase , null );
-		link_procedimiento = this.generaLink(this.procedimiento,Constantes.ENTIDAD_PROCEDIMIENTO,Constantes.URL_PROCEDIMIENTO, urlBase , null );		
-	}
 
+	@Override
+	public void generaLinks(final String urlBase) {
+		link_organCompetent = this.generaLink(this.organCompetent, Constantes.ENTIDAD_UA, Constantes.URL_UA, urlBase,
+				null);
+		link_procedimiento = this.generaLink(this.procedimiento, Constantes.ENTIDAD_PROCEDIMIENTO,
+				Constantes.URL_PROCEDIMIENTO, urlBase, null);
+	}
 
 	public static Tramits valueOf(final String json) {
 		final ObjectMapper objectMapper = new ObjectMapper();
@@ -162,7 +171,6 @@ public class Tramits extends EntidadBase {
 		return obj;
 	}
 
-	
 	public String toJson() {
 		try {
 			final ObjectMapper objectMapper = new ObjectMapper();
@@ -174,16 +182,16 @@ public class Tramits extends EntidadBase {
 		}
 	}
 
-
 	@Override
 	protected void addSetersInvalidos() {
-		// TODO Auto-generated method stub
-		
+		if (!SETTERS_INVALIDS.contains("setPlataforma")) {
+			SETTERS_INVALIDS.add("setPlataforma");
+		}
 	}
 
 	@Override
-	public void setId(Long codigo) {
-		this.codigo = codigo;		
+	public void setId(final Long codigo) {
+		this.codigo = codigo;
 	}
 
 	/**
@@ -194,9 +202,10 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param codigo the codigo to set
+	 * @param codigo
+	 *            the codigo to set
 	 */
-	public void setCodigo(long codigo) {
+	public void setCodigo(final long codigo) {
 		this.codigo = codigo;
 	}
 
@@ -208,9 +217,10 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param codiVuds the codiVuds to set
+	 * @param codiVuds
+	 *            the codiVuds to set
 	 */
-	public void setCodiVuds(java.lang.String codiVuds) {
+	public void setCodiVuds(final java.lang.String codiVuds) {
 		this.codiVuds = codiVuds;
 	}
 
@@ -222,9 +232,10 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param dataActualitzacio the dataActualitzacio to set
+	 * @param dataActualitzacio
+	 *            the dataActualitzacio to set
 	 */
-	public void setDataActualitzacio(java.util.Calendar dataActualitzacio) {
+	public void setDataActualitzacio(final java.util.Calendar dataActualitzacio) {
 		this.dataActualitzacio = dataActualitzacio;
 	}
 
@@ -236,9 +247,10 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param dataActualitzacioVuds the dataActualitzacioVuds to set
+	 * @param dataActualitzacioVuds
+	 *            the dataActualitzacioVuds to set
 	 */
-	public void setDataActualitzacioVuds(java.lang.String dataActualitzacioVuds) {
+	public void setDataActualitzacioVuds(final java.lang.String dataActualitzacioVuds) {
 		this.dataActualitzacioVuds = dataActualitzacioVuds;
 	}
 
@@ -250,9 +262,10 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param dataCaducitat the dataCaducitat to set
+	 * @param dataCaducitat
+	 *            the dataCaducitat to set
 	 */
-	public void setDataCaducitat(java.util.Calendar dataCaducitat) {
+	public void setDataCaducitat(final java.util.Calendar dataCaducitat) {
 		this.dataCaducitat = dataCaducitat;
 	}
 
@@ -264,9 +277,10 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param dataPublicacio the dataPublicacio to set
+	 * @param dataPublicacio
+	 *            the dataPublicacio to set
 	 */
-	public void setDataPublicacio(java.util.Calendar dataPublicacio) {
+	public void setDataPublicacio(final java.util.Calendar dataPublicacio) {
 		this.dataPublicacio = dataPublicacio;
 	}
 
@@ -278,9 +292,10 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param dataInici the dataInici to set
+	 * @param dataInici
+	 *            the dataInici to set
 	 */
-	public void setDataInici(java.util.Calendar dataInici) {
+	public void setDataInici(final java.util.Calendar dataInici) {
 		this.dataInici = dataInici;
 	}
 
@@ -292,9 +307,10 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param dataTancament the dataTancament to set
+	 * @param dataTancament
+	 *            the dataTancament to set
 	 */
-	public void setDataTancament(java.util.Calendar dataTancament) {
+	public void setDataTancament(final java.util.Calendar dataTancament) {
 		this.dataTancament = dataTancament;
 	}
 
@@ -306,9 +322,10 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param descCodiVuds the descCodiVuds to set
+	 * @param descCodiVuds
+	 *            the descCodiVuds to set
 	 */
-	public void setDescCodiVuds(java.lang.String descCodiVuds) {
+	public void setDescCodiVuds(final java.lang.String descCodiVuds) {
 		this.descCodiVuds = descCodiVuds;
 	}
 
@@ -320,9 +337,10 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param documentacion the documentacion to set
+	 * @param documentacion
+	 *            the documentacion to set
 	 */
-	public void setDocumentacion(java.lang.String documentacion) {
+	public void setDocumentacion(final java.lang.String documentacion) {
 		this.documentacion = documentacion;
 	}
 
@@ -334,9 +352,10 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param fase the fase to set
+	 * @param fase
+	 *            the fase to set
 	 */
-	public void setFase(java.lang.Integer fase) {
+	public void setFase(final java.lang.Integer fase) {
 		this.fase = fase;
 	}
 
@@ -348,9 +367,10 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param idTraTel the idTraTel to set
+	 * @param idTraTel
+	 *            the idTraTel to set
 	 */
-	public void setIdTraTel(java.lang.String idTraTel) {
+	public void setIdTraTel(final java.lang.String idTraTel) {
 		this.idTraTel = idTraTel;
 	}
 
@@ -362,9 +382,10 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param lugar the lugar to set
+	 * @param lugar
+	 *            the lugar to set
 	 */
-	public void setLugar(java.lang.String lugar) {
+	public void setLugar(final java.lang.String lugar) {
 		this.lugar = lugar;
 	}
 
@@ -376,9 +397,10 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param nombre the nombre to set
+	 * @param nombre
+	 *            the nombre to set
 	 */
-	public void setNombre(java.lang.String nombre) {
+	public void setNombre(final java.lang.String nombre) {
 		this.nombre = nombre;
 	}
 
@@ -390,9 +412,10 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param observaciones the observaciones to set
+	 * @param observaciones
+	 *            the observaciones to set
 	 */
-	public void setObservaciones(java.lang.String observaciones) {
+	public void setObservaciones(final java.lang.String observaciones) {
 		this.observaciones = observaciones;
 	}
 
@@ -404,9 +427,10 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param orden the orden to set
+	 * @param orden
+	 *            the orden to set
 	 */
-	public void setOrden(java.lang.Long orden) {
+	public void setOrden(final java.lang.Long orden) {
 		this.orden = orden;
 	}
 
@@ -418,9 +442,10 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param plazos the plazos to set
+	 * @param plazos
+	 *            the plazos to set
 	 */
-	public void setPlazos(java.lang.String plazos) {
+	public void setPlazos(final java.lang.String plazos) {
 		this.plazos = plazos;
 	}
 
@@ -432,9 +457,10 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param requisits the requisits to set
+	 * @param requisits
+	 *            the requisits to set
 	 */
-	public void setRequisits(java.lang.String requisits) {
+	public void setRequisits(final java.lang.String requisits) {
 		this.requisits = requisits;
 	}
 
@@ -446,9 +472,10 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param urlExterna the urlExterna to set
+	 * @param urlExterna
+	 *            the urlExterna to set
 	 */
-	public void setUrlExterna(java.lang.String urlExterna) {
+	public void setUrlExterna(final java.lang.String urlExterna) {
 		this.urlExterna = urlExterna;
 	}
 
@@ -460,9 +487,10 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param validacio the validacio to set
+	 * @param validacio
+	 *            the validacio to set
 	 */
-	public void setValidacio(java.lang.Long validacio) {
+	public void setValidacio(final java.lang.Long validacio) {
 		this.validacio = validacio;
 	}
 
@@ -474,9 +502,10 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param versio the versio to set
+	 * @param versio
+	 *            the versio to set
 	 */
-	public void setVersio(java.lang.Integer versio) {
+	public void setVersio(final java.lang.Integer versio) {
 		this.versio = versio;
 	}
 
@@ -488,9 +517,10 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param tasas the tasas to set
+	 * @param tasas
+	 *            the tasas to set
 	 */
-	public void setTasas(ArrayList<Taxes> tasas) {
+	public void setTasas(final ArrayList<Taxes> tasas) {
 		this.tasas = tasas;
 	}
 
@@ -502,9 +532,10 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param link_organCompetent the link_organCompetent to set
+	 * @param link_organCompetent
+	 *            the link_organCompetent to set
 	 */
-	public void setLink_organCompetent(Link link_organCompetent) {
+	public void setLink_organCompetent(final Link link_organCompetent) {
 		this.link_organCompetent = link_organCompetent;
 	}
 
@@ -517,9 +548,10 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param organCompetent the organCompetent to set
+	 * @param organCompetent
+	 *            the organCompetent to set
 	 */
-	public void setOrganCompetent(java.lang.Long organCompetent) {
+	public void setOrganCompetent(final java.lang.Long organCompetent) {
 		this.organCompetent = organCompetent;
 	}
 
@@ -531,9 +563,10 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param link_procedimiento the link_procedimiento to set
+	 * @param link_procedimiento
+	 *            the link_procedimiento to set
 	 */
-	public void setLink_procedimiento(Link link_procedimiento) {
+	public void setLink_procedimiento(final Link link_procedimiento) {
 		this.link_procedimiento = link_procedimiento;
 	}
 
@@ -546,9 +579,10 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param procedimiento the procedimiento to set
+	 * @param procedimiento
+	 *            the procedimiento to set
 	 */
-	public void setProcedimiento(java.lang.Long procedimiento) {
+	public void setProcedimiento(final java.lang.Long procedimiento) {
 		this.procedimiento = procedimiento;
 	}
 
@@ -560,9 +594,10 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param presencial the presencial to set
+	 * @param presencial
+	 *            the presencial to set
 	 */
-	public void setPresencial(boolean presencial) {
+	public void setPresencial(final boolean presencial) {
 		this.presencial = presencial;
 	}
 
@@ -574,10 +609,41 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param telematico the telematico to set
+	 * @param telematico
+	 *            the telematico to set
 	 */
-	public void setTelematico(boolean telematico) {
+	public void setTelematico(final boolean telematico) {
 		this.telematico = telematico;
+	}
+
+	/**
+	 * @return the parametros
+	 */
+	public java.lang.String getParametros() {
+		return parametros;
+	}
+
+	/**
+	 * @param parametros
+	 *            the parametros to set
+	 */
+	public void setParametros(final java.lang.String parametros) {
+		this.parametros = parametros;
+	}
+
+	/**
+	 * @return the plataforma
+	 */
+	public Plataformas getPlataforma() {
+		return plataforma;
+	}
+
+	/**
+	 * @param plataforma
+	 *            the plataforma to set
+	 */
+	public void setPlataforma(final Plataformas plataforma) {
+		this.plataforma = plataforma;
 	}
 
 }

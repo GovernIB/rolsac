@@ -17,6 +17,7 @@ function BuscadorProcedimiento() {
 				"idHechoVital" : "",
 				"idMateria" : "",
 				"idPublicoObjetivo" : "",
+				"idPlataforma" : "",
 				"enPlazo" : null,
 				"telematico" : null,
 				"paginacion" : paginacionJSON,
@@ -83,6 +84,7 @@ function BuscadorProcedimiento() {
 			criteria.idHechoVital = $("#cerca_fet_vital").val();
 			criteria.idMateria = $("#cerca_materia").val();
 			criteria.idPublicoObjetivo = parseInt( $("#cerca_publicObjectiu").val() );
+			criteria.idPlataforma = parseInt( $("#cerca_plataforma").val() );
 
 			switch ( $("#enPlazo").val() ) {
 

@@ -55,6 +55,8 @@ import es.caib.rolsac.api.v2.perfil.PerfilCriteria;
 import es.caib.rolsac.api.v2.perfil.PerfilQueryServiceAdapter;
 import es.caib.rolsac.api.v2.personal.PersonalCriteria;
 import es.caib.rolsac.api.v2.personal.PersonalQueryServiceAdapter;
+import es.caib.rolsac.api.v2.plataforma.PlataformaCriteria;
+import es.caib.rolsac.api.v2.plataforma.PlataformaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
@@ -81,158 +83,195 @@ import es.caib.rolsac.api.v2.usuari.UsuariQueryServiceAdapter;
 
 public interface RolsacQueryService {
 
-    AgrupacioFetVitalQueryServiceAdapter obtenirAgrupacioFetVital(AgrupacioFetVitalCriteria agrupacioFetVitalCriteria) throws QueryServiceException;
+	AgrupacioFetVitalQueryServiceAdapter obtenirAgrupacioFetVital(AgrupacioFetVitalCriteria agrupacioFetVitalCriteria)
+			throws QueryServiceException;
 
-    List<AgrupacioFetVitalQueryServiceAdapter> llistarAgrupacionsFetsVitals(AgrupacioFetVitalCriteria agrupacioFetVitalCriteria) throws QueryServiceException;
+	List<AgrupacioFetVitalQueryServiceAdapter> llistarAgrupacionsFetsVitals(
+			AgrupacioFetVitalCriteria agrupacioFetVitalCriteria) throws QueryServiceException;
 
-    AgrupacioMateriaQueryServiceAdapter obtenirAgrupacioMateria(AgrupacioMateriaCriteria agrupacioMateriaCriteria) throws QueryServiceException;
+	AgrupacioMateriaQueryServiceAdapter obtenirAgrupacioMateria(AgrupacioMateriaCriteria agrupacioMateriaCriteria)
+			throws QueryServiceException;
 
-    List<AgrupacioMateriaQueryServiceAdapter> llistarAgrupacionsMateries(AgrupacioMateriaCriteria agrupacioMateriaCriteria) throws QueryServiceException;
+	List<AgrupacioMateriaQueryServiceAdapter> llistarAgrupacionsMateries(
+			AgrupacioMateriaCriteria agrupacioMateriaCriteria) throws QueryServiceException;
 
-    ButlletiQueryServiceAdapter obtenirButlleti(ButlletiCriteria butlletiCriteria) throws QueryServiceException;
+	ButlletiQueryServiceAdapter obtenirButlleti(ButlletiCriteria butlletiCriteria) throws QueryServiceException;
 
-    List<ButlletiQueryServiceAdapter> llistarButlletins(ButlletiCriteria butlletiCriteria) throws QueryServiceException;
+	List<ButlletiQueryServiceAdapter> llistarButlletins(ButlletiCriteria butlletiCriteria) throws QueryServiceException;
 
-    CatalegDocumentsQueryServiceAdapter obtenirCatalegDocuments(CatalegDocumentsCriteria catalegDocumentsCriteria) throws QueryServiceException;
-    
-    List<CatalegDocumentsQueryServiceAdapter> llistarCatalegsDocuments(CatalegDocumentsCriteria catalegDocumentsCriteria) throws QueryServiceException;
-    
-    DocumentQueryServiceAdapter obtenirDocument(DocumentCriteria documentCriteria) throws QueryServiceException;
+	CatalegDocumentsQueryServiceAdapter obtenirCatalegDocuments(CatalegDocumentsCriteria catalegDocumentsCriteria)
+			throws QueryServiceException;
 
-    List<DocumentQueryServiceAdapter> llistarDocuments(DocumentCriteria documentCriteria) throws QueryServiceException;
+	List<CatalegDocumentsQueryServiceAdapter> llistarCatalegsDocuments(
+			CatalegDocumentsCriteria catalegDocumentsCriteria) throws QueryServiceException;
 
-    DocumentTramitQueryServiceAdapter obtenirDocumentTramit(DocumentTramitCriteria documentTramitCriteria) throws QueryServiceException;
+	DocumentQueryServiceAdapter obtenirDocument(DocumentCriteria documentCriteria) throws QueryServiceException;
 
-    List<DocumentTramitQueryServiceAdapter> llistarDocumentTramit(DocumentTramitCriteria documentTramitCriteria) throws QueryServiceException;
+	List<DocumentQueryServiceAdapter> llistarDocuments(DocumentCriteria documentCriteria) throws QueryServiceException;
 
-    List<DocumentoNormativaQueryServiceAdapter> llistarDocumentoNormativa(DocumentoNormativaCriteria documentoNormativaCriteria) throws QueryServiceException;
-    
-    List<DocumentoServicioQueryServiceAdapter> llistarDocumentoServicio(DocumentoServicioCriteria documentoServicioCriteria) throws QueryServiceException;
-    
-    EdificiQueryServiceAdapter obtenirEdifici(EdificiCriteria edificiTramit) throws QueryServiceException;
+	DocumentTramitQueryServiceAdapter obtenirDocumentTramit(DocumentTramitCriteria documentTramitCriteria)
+			throws QueryServiceException;
 
-    List<EdificiQueryServiceAdapter> llistarEdificis(EdificiCriteria edificiTramit) throws QueryServiceException;
+	List<DocumentTramitQueryServiceAdapter> llistarDocumentTramit(DocumentTramitCriteria documentTramitCriteria)
+			throws QueryServiceException;
 
-    EnllacQueryServiceAdapter obtenirEnllac(EnllacCriteria enllacCriteria) throws QueryServiceException;
+	List<DocumentoNormativaQueryServiceAdapter> llistarDocumentoNormativa(
+			DocumentoNormativaCriteria documentoNormativaCriteria) throws QueryServiceException;
 
-    List<EnllacQueryServiceAdapter> llistarEnllacos(EnllacCriteria enllacCriteria) throws QueryServiceException;
+	List<DocumentoServicioQueryServiceAdapter> llistarDocumentoServicio(
+			DocumentoServicioCriteria documentoServicioCriteria) throws QueryServiceException;
 
-    EspaiTerritorialQueryServiceAdapter obtenirEspaiTerritorial(EspaiTerritorialCriteria espaiTerritorialCriteria) throws QueryServiceException;
+	EdificiQueryServiceAdapter obtenirEdifici(EdificiCriteria edificiTramit) throws QueryServiceException;
 
-    List<EspaiTerritorialQueryServiceAdapter> llistarEspaisTerritorials(EspaiTerritorialCriteria espaiTerritorialCriteria) throws QueryServiceException;
+	List<EdificiQueryServiceAdapter> llistarEdificis(EdificiCriteria edificiTramit) throws QueryServiceException;
 
-    ExcepcioDocumentacioQueryServiceAdapter obtenirExcepcioDocumentacio(ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria) throws QueryServiceException;
-    
-    List<ExcepcioDocumentacioQueryServiceAdapter> llistarExcepcionsDocumentacio(ExcepcioDocumentacioCriteria excepcioDocumentacioCritera) throws QueryServiceException;
-    
-    FamiliaQueryServiceAdapter obtenirFamilia(FamiliaCriteria familiaCriteria) throws QueryServiceException;
+	EnllacQueryServiceAdapter obtenirEnllac(EnllacCriteria enllacCriteria) throws QueryServiceException;
 
-    List<FamiliaQueryServiceAdapter> llistarFamilies(FamiliaCriteria familiaCriteria) throws QueryServiceException;
+	List<EnllacQueryServiceAdapter> llistarEnllacos(EnllacCriteria enllacCriteria) throws QueryServiceException;
 
-    FetVitalQueryServiceAdapter obtenirFetVital(FetVitalCriteria fetVitalCriteria) throws QueryServiceException;
+	EspaiTerritorialQueryServiceAdapter obtenirEspaiTerritorial(EspaiTerritorialCriteria espaiTerritorialCriteria)
+			throws QueryServiceException;
 
-    List<FetVitalQueryServiceAdapter> llistarFetsVitals(FetVitalCriteria fetVitalCriteria) throws QueryServiceException;
+	List<EspaiTerritorialQueryServiceAdapter> llistarEspaisTerritorials(
+			EspaiTerritorialCriteria espaiTerritorialCriteria) throws QueryServiceException;
 
-    FitxaQueryServiceAdapter obtenirFitxa(FitxaCriteria fitxaCriteria) throws QueryServiceException;
+	ExcepcioDocumentacioQueryServiceAdapter obtenirExcepcioDocumentacio(
+			ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria) throws QueryServiceException;
 
-    List<FitxaQueryServiceAdapter> llistarFitxes(FitxaCriteria fitxaCriteria) throws QueryServiceException;
+	List<ExcepcioDocumentacioQueryServiceAdapter> llistarExcepcionsDocumentacio(
+			ExcepcioDocumentacioCriteria excepcioDocumentacioCritera) throws QueryServiceException;
 
-    FitxaUAQueryServiceAdapter obtenirFitxaUA(FitxaUACriteria fitxaUACriteria) throws QueryServiceException;
+	FamiliaQueryServiceAdapter obtenirFamilia(FamiliaCriteria familiaCriteria) throws QueryServiceException;
 
-    List<FitxaUAQueryServiceAdapter> llistarFitxesUA(FitxaUACriteria fitxaUACriteria) throws QueryServiceException;
+	List<FamiliaQueryServiceAdapter> llistarFamilies(FamiliaCriteria familiaCriteria) throws QueryServiceException;
 
-    FormulariQueryServiceAdapter obtenirFormulari(FormulariCriteria formulariCriteria) throws QueryServiceException;
+	FetVitalQueryServiceAdapter obtenirFetVital(FetVitalCriteria fetVitalCriteria) throws QueryServiceException;
 
-    List<FormulariQueryServiceAdapter> llistarFormularis(FormulariCriteria formulariCriteria) throws QueryServiceException;
+	PlataformaQueryServiceAdapter obtenirPlataforma(PlataformaCriteria plataformaCriteria) throws QueryServiceException;
 
-    IconaFamiliaQueryServiceAdapter obtenirIconaFamilia(IconaFamiliaCriteria iconaCriteria) throws QueryServiceException;
+	List<FetVitalQueryServiceAdapter> llistarFetsVitals(FetVitalCriteria fetVitalCriteria) throws QueryServiceException;
 
-    List<IconaFamiliaQueryServiceAdapter> llistarIconesFamilies(IconaFamiliaCriteria iconaFamiliaCriteria) throws QueryServiceException;
+	FitxaQueryServiceAdapter obtenirFitxa(FitxaCriteria fitxaCriteria) throws QueryServiceException;
 
-    IconaMateriaQueryServiceAdapter obtenirIconaMateria(IconaMateriaCriteria iconaMateriaCriteria) throws QueryServiceException;
+	List<FitxaQueryServiceAdapter> llistarFitxes(FitxaCriteria fitxaCriteria) throws QueryServiceException;
 
-    List<IconaMateriaQueryServiceAdapter> llistarIconesMateries(IconaMateriaCriteria iconaMateriaCriteria) throws QueryServiceException;
+	FitxaUAQueryServiceAdapter obtenirFitxaUA(FitxaUACriteria fitxaUACriteria) throws QueryServiceException;
 
-    MateriaQueryServiceAdapter obtenirMateria(MateriaCriteria materiaCriteria) throws QueryServiceException;
+	List<FitxaUAQueryServiceAdapter> llistarFitxesUA(FitxaUACriteria fitxaUACriteria) throws QueryServiceException;
 
-    List<MateriaQueryServiceAdapter> llistarMateries(MateriaCriteria materiaCriteria) throws QueryServiceException;
+	FormulariQueryServiceAdapter obtenirFormulari(FormulariCriteria formulariCriteria) throws QueryServiceException;
 
-    MateriaAgrupacioQueryServiceAdapter obtenirMateriaAgrupacio(MateriaAgrupacioCriteria materiaAgrupacioCriteria) throws QueryServiceException;
+	List<FormulariQueryServiceAdapter> llistarFormularis(FormulariCriteria formulariCriteria)
+			throws QueryServiceException;
 
-    List<MateriaAgrupacioQueryServiceAdapter> llistarMateriesAgrupacions(MateriaAgrupacioCriteria materiaAgrupacioCriteria) throws QueryServiceException;
+	IconaFamiliaQueryServiceAdapter obtenirIconaFamilia(IconaFamiliaCriteria iconaCriteria)
+			throws QueryServiceException;
 
-    NormativaQueryServiceAdapter obtenirNormativa(NormativaCriteria normativaCriteria) throws QueryServiceException;
+	List<IconaFamiliaQueryServiceAdapter> llistarIconesFamilies(IconaFamiliaCriteria iconaFamiliaCriteria)
+			throws QueryServiceException;
 
-    List<NormativaQueryServiceAdapter> llistarNormatives(NormativaCriteria normativaCriteria) throws QueryServiceException;
+	IconaMateriaQueryServiceAdapter obtenirIconaMateria(IconaMateriaCriteria iconaMateriaCriteria)
+			throws QueryServiceException;
 
-    PerfilQueryServiceAdapter obtenirPerfil(PerfilCriteria perfilCriteria) throws QueryServiceException;
+	List<IconaMateriaQueryServiceAdapter> llistarIconesMateries(IconaMateriaCriteria iconaMateriaCriteria)
+			throws QueryServiceException;
 
-    List<PerfilQueryServiceAdapter> llistarPerfils(PerfilCriteria perfilCriteria) throws QueryServiceException;
+	MateriaQueryServiceAdapter obtenirMateria(MateriaCriteria materiaCriteria) throws QueryServiceException;
 
-    PersonalQueryServiceAdapter obtenirPersonal(PersonalCriteria personalCriteria) throws QueryServiceException;
+	List<MateriaQueryServiceAdapter> llistarMateries(MateriaCriteria materiaCriteria) throws QueryServiceException;
 
-    List<PersonalQueryServiceAdapter> llistarPersonal(PersonalCriteria personalCriteria) throws QueryServiceException;
+	MateriaAgrupacioQueryServiceAdapter obtenirMateriaAgrupacio(MateriaAgrupacioCriteria materiaAgrupacioCriteria)
+			throws QueryServiceException;
 
-    ProcedimentQueryServiceAdapter obtenirProcediment(ProcedimentCriteria procedimentCriteria) throws QueryServiceException;
+	List<MateriaAgrupacioQueryServiceAdapter> llistarMateriesAgrupacions(
+			MateriaAgrupacioCriteria materiaAgrupacioCriteria) throws QueryServiceException;
 
-    List<ProcedimentQueryServiceAdapter> llistarProcediments(ProcedimentCriteria procedimentCriteria) throws QueryServiceException;
-    
-    int getNumProcediments(ProcedimentCriteria procedimentCriteria) throws QueryServiceException;
+	NormativaQueryServiceAdapter obtenirNormativa(NormativaCriteria normativaCriteria) throws QueryServiceException;
 
-    ServicioQueryServiceAdapter obtenirServicio(ServicioCriteria servicioCriteria) throws QueryServiceException;
+	List<NormativaQueryServiceAdapter> llistarNormatives(NormativaCriteria normativaCriteria)
+			throws QueryServiceException;
 
-    List<ServicioQueryServiceAdapter> llistarServicios(ServicioCriteria servicioCriteria) throws QueryServiceException;
-    
-    int getNumServicios(ServicioCriteria servicioCriteria) throws QueryServiceException;
+	PerfilQueryServiceAdapter obtenirPerfil(PerfilCriteria perfilCriteria) throws QueryServiceException;
 
-    PublicObjectiuQueryServiceAdapter obtenirPublicObjectiu(PublicObjectiuCriteria publicObjectiuCriteria) throws QueryServiceException;
+	List<PerfilQueryServiceAdapter> llistarPerfils(PerfilCriteria perfilCriteria) throws QueryServiceException;
 
-    List<PublicObjectiuQueryServiceAdapter> llistarPublicsObjectius(PublicObjectiuCriteria publicObjectiuCriteria) throws QueryServiceException;
+	PersonalQueryServiceAdapter obtenirPersonal(PersonalCriteria personalCriteria) throws QueryServiceException;
 
-    TipusAfectacioQueryServiceAdapter obtenirTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria) throws QueryServiceException;
-    
-    List<TipusAfectacioQueryServiceAdapter> llistarTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria) throws QueryServiceException;
-    
-    SeccioQueryServiceAdapter obtenirSeccio(SeccioCriteria seccioCriteria) throws QueryServiceException;
+	List<PersonalQueryServiceAdapter> llistarPersonal(PersonalCriteria personalCriteria) throws QueryServiceException;
 
-    List<SeccioQueryServiceAdapter> llistarSeccions(SeccioCriteria seccioCriteria) throws QueryServiceException;
+	ProcedimentQueryServiceAdapter obtenirProcediment(ProcedimentCriteria procedimentCriteria)
+			throws QueryServiceException;
 
-    TaxaQueryServiceAdapter obtenirTaxa(TaxaCriteria taxaCriteria) throws QueryServiceException;
+	List<ProcedimentQueryServiceAdapter> llistarProcediments(ProcedimentCriteria procedimentCriteria)
+			throws QueryServiceException;
 
-    List<TaxaQueryServiceAdapter> llistarTaxes(TaxaCriteria taxaCriteria) throws QueryServiceException;
+	int getNumProcediments(ProcedimentCriteria procedimentCriteria) throws QueryServiceException;
 
-    TipusQueryServiceAdapter obtenirTipus(TipusCriteria tipusCriteria) throws QueryServiceException;
-    
-    List<TipusQueryServiceAdapter> llistarTipus(TipusCriteria tipusCriteria) throws QueryServiceException;
-    
-    TramitQueryServiceAdapter obtenirTramit(TramitCriteria tramitCriteria) throws QueryServiceException;
+	ServicioQueryServiceAdapter obtenirServicio(ServicioCriteria servicioCriteria) throws QueryServiceException;
 
-    List<TramitQueryServiceAdapter> llistarTramits(TramitCriteria tramitCriteria) throws QueryServiceException;
+	List<ServicioQueryServiceAdapter> llistarServicios(ServicioCriteria servicioCriteria) throws QueryServiceException;
 
-    UnitatAdministrativaQueryServiceAdapter obtenirUnitatAdministrativa(UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws QueryServiceException;
+	int getNumServicios(ServicioCriteria servicioCriteria) throws QueryServiceException;
 
-    List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws QueryServiceException;
+	PublicObjectiuQueryServiceAdapter obtenirPublicObjectiu(PublicObjectiuCriteria publicObjectiuCriteria)
+			throws QueryServiceException;
 
-    UnitatMateriaQueryServiceAdapter obtenirUnitatMateria(UnitatMateriaCriteria unitatMateriaCriteria) throws QueryServiceException;
+	List<PublicObjectiuQueryServiceAdapter> llistarPublicsObjectius(PublicObjectiuCriteria publicObjectiuCriteria)
+			throws QueryServiceException;
 
-    List<UnitatMateriaQueryServiceAdapter> llistarUnitatsMateries(UnitatMateriaCriteria unitatMateriaCriteria) throws QueryServiceException;
+	TipusAfectacioQueryServiceAdapter obtenirTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria)
+			throws QueryServiceException;
 
-    UsuariQueryServiceAdapter obtenirUsuari(UsuariCriteria usuariCriteria) throws QueryServiceException;
+	List<TipusAfectacioQueryServiceAdapter> llistarTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria)
+			throws QueryServiceException;
 
-    List<UsuariQueryServiceAdapter> llistarUsuaris(UsuariCriteria usuariCriteria) throws QueryServiceException;
-    
-    IdiomaQueryServiceAdapter obtenirIdioma(IdiomaCriteria idiomaCriteria) throws QueryServiceException;
-    
-    List<IdiomaQueryServiceAdapter> llistarIdiomes(IdiomaCriteria idiomaCriteria) throws QueryServiceException;
-    
-    //AfectacioQueryServiceAdapter obtenirAfectacio(AfectacioCriteria afectacioCriteria) throws QueryServiceException;
-    
-    IniciacioQueryServiceAdapter obtenirTipusIniciacio(IniciacioCriteria iniciacioCriteria) throws QueryServiceException;
-    
-    List<IniciacioQueryServiceAdapter> llistarTipusIniciacions(IniciacioCriteria iniciacioCriteria) throws QueryServiceException;
+	SeccioQueryServiceAdapter obtenirSeccio(SeccioCriteria seccioCriteria) throws QueryServiceException;
 
-    int getNumFitxes(FitxaCriteria fitxaCriteria) throws QueryServiceException;
-    
-    SilencioQueryServiceAdapter obtenirSilencio(Long codSilencio, String idioma) throws QueryServiceException;
+	List<SeccioQueryServiceAdapter> llistarSeccions(SeccioCriteria seccioCriteria) throws QueryServiceException;
+
+	TaxaQueryServiceAdapter obtenirTaxa(TaxaCriteria taxaCriteria) throws QueryServiceException;
+
+	List<TaxaQueryServiceAdapter> llistarTaxes(TaxaCriteria taxaCriteria) throws QueryServiceException;
+
+	TipusQueryServiceAdapter obtenirTipus(TipusCriteria tipusCriteria) throws QueryServiceException;
+
+	List<TipusQueryServiceAdapter> llistarTipus(TipusCriteria tipusCriteria) throws QueryServiceException;
+
+	TramitQueryServiceAdapter obtenirTramit(TramitCriteria tramitCriteria) throws QueryServiceException;
+
+	List<TramitQueryServiceAdapter> llistarTramits(TramitCriteria tramitCriteria) throws QueryServiceException;
+
+	UnitatAdministrativaQueryServiceAdapter obtenirUnitatAdministrativa(
+			UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws QueryServiceException;
+
+	List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(
+			UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws QueryServiceException;
+
+	UnitatMateriaQueryServiceAdapter obtenirUnitatMateria(UnitatMateriaCriteria unitatMateriaCriteria)
+			throws QueryServiceException;
+
+	List<UnitatMateriaQueryServiceAdapter> llistarUnitatsMateries(UnitatMateriaCriteria unitatMateriaCriteria)
+			throws QueryServiceException;
+
+	UsuariQueryServiceAdapter obtenirUsuari(UsuariCriteria usuariCriteria) throws QueryServiceException;
+
+	List<UsuariQueryServiceAdapter> llistarUsuaris(UsuariCriteria usuariCriteria) throws QueryServiceException;
+
+	IdiomaQueryServiceAdapter obtenirIdioma(IdiomaCriteria idiomaCriteria) throws QueryServiceException;
+
+	List<IdiomaQueryServiceAdapter> llistarIdiomes(IdiomaCriteria idiomaCriteria) throws QueryServiceException;
+
+	// AfectacioQueryServiceAdapter obtenirAfectacio(AfectacioCriteria
+	// afectacioCriteria) throws QueryServiceException;
+
+	IniciacioQueryServiceAdapter obtenirTipusIniciacio(IniciacioCriteria iniciacioCriteria)
+			throws QueryServiceException;
+
+	List<IniciacioQueryServiceAdapter> llistarTipusIniciacions(IniciacioCriteria iniciacioCriteria)
+			throws QueryServiceException;
+
+	int getNumFitxes(FitxaCriteria fitxaCriteria) throws QueryServiceException;
+
+	SilencioQueryServiceAdapter obtenirSilencio(Long codSilencio, String idioma) throws QueryServiceException;
 
 }

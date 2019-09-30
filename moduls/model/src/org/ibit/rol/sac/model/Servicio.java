@@ -92,6 +92,11 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	/** Idioma de la busqueda. **/
 	private String idioma;
 
+	/** Plataforma. **/
+	private Plataforma plataforma;
+	/** Parametros si es un tramtie telematico y necesita parametros. **/
+	private String parametros;
+
 	/**
 	 * Constructor para busqueda optimizada.
 	 *
@@ -753,6 +758,36 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	 */
 	public void setComun(final boolean comun) {
 		this.comun = comun;
+	}
+
+	/**
+	 * @return the plataforma
+	 */
+	public Plataforma getPlataforma() {
+		return plataforma;
+	}
+
+	/**
+	 * @param plataforma
+	 *            the plataforma to set
+	 */
+	public void setPlataforma(final Plataforma plataforma) {
+		this.plataforma = plataforma;
+	}
+
+	/**
+	 * @return the parametros
+	 */
+	public String getParametros() {
+		return parametros;
+	}
+
+	/**
+	 * @param parametros
+	 *            the parametros to set
+	 */
+	public void setParametros(final String parametros) {
+		this.parametros = parametros;
 	}
 
 }

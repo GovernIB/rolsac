@@ -16,7 +16,7 @@
 
         <property name="fase" column="TRA_FASE"/>
         <property name="orden" column="TRA_ORDEN"/>
-        
+
         <property name="telematico" column="TRA_CTELEM" />
         <property name="presencial" column="TRA_CPRESE" />
 
@@ -24,7 +24,7 @@
 
 
         <map name="traducciones" cascade="all" table="RSC_TRATRA">
-            <cache usage="read-write"/> 
+            <cache usage="read-write"/>
             <key column="TTR_CODTTR" foreign-key="RSC_TTRTRA_FK"/>
             <index column="TTR_CODIDI" type="string" length="2"/>
             <composite-element class="org.ibit.rol.sac.model.TraduccionTramite">
@@ -50,10 +50,13 @@
         <property name="dataActualitzacioVuds" column="TRA_DATACTUVUDS"/>
         <property name="dataInici" column="TRA_DATINICI"/>
         <property name="dataTancament" column="TRA_DATTANCAMENT"/>
-        
+        <property name="parametros" column="TRA_PARAMS"/>
+
+        <many-to-one name="plataforma" cascade="none" column="TRA_CODPLT" foreign-key="RSC_TRAMPLT_FK"/>
+
         <many-to-one name="organCompetent" column="TRA_ORGCOMP" foreign-key="RSC_ORGCOMP_FK"/>
-        
-        
+
+
 
         <set name="docsInformatius" cascade="all-delete-orphan" inverse="true" lazy="true" where="DTR_TIPUS = 0" order-by="DTR_ORDEN">
             <cache usage="read-write"/>
@@ -81,20 +84,20 @@
         </set>
 
 
-        <!--  OK 
-        <set name="docsPresentar" cascade="delete" table="RSC_TRADOCPRE"> 
+        <!--  OK
+        <set name="docsPresentar" cascade="delete" table="RSC_TRADOCPRE">
             <cache usage="read-write"/>
             <key column="TDP_CODI"/>
             <element column="TDP_DOCU" type="string" />
         </set>
         -->
         <subclass name="org.ibit.rol.sac.model.TramiteRemoto" discriminator-value="tramiteRemoto">
-        
+
             <property name="idExterno" column="TRR_IDEXTE"/>
             <property name="urlRemota" length="512" column="TRR_URLREM"/>
             <many-to-one name="administracionRemota" column="TRR_CODADM" foreign-key="RSC_TRRADM_FK" />
         </subclass>
-       
+
 
     </class>
 </hibernate-mapping>

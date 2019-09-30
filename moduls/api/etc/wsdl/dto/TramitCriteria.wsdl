@@ -30,7 +30,7 @@
                         <element name="fase" nillable="true" type="xsd:string" />
                         <element name="orden" nillable="true" type="xsd:string" />
                         <element name="versio" nillable="true" type="xsd:string" />
-                        <element name="validacio" nillable="true" type="xsd:string" />                          
+                        <element name="validacio" nillable="true" type="xsd:string" />
                         <element name="dataCaducitat" nillable="true" type="xsd:string" />
                         <element name="dataPublicacio" nillable="true" type="xsd:string" />
                         <element name="dataActualitzacio" nillable="true" type="xsd:string" />
@@ -41,6 +41,7 @@
                         <element name="idTraTel" nillable="true" type="xsd:string" />
                         <element name="urlExterna" nillable="true" type="xsd:string" />
                         <element name="dataActualitzacioVuds" nillable="true" type="xsd:string" />
+                        <element name="plataforma" nillable="true" type="xsd:long" />
                         <element name="t_nombre" nillable="true" type="xsd:string" />
                         <element name="t_descripcion" nillable="true" type="xsd:string" />
                         <element name="t_documentacion" nillable="true" type="xsd:string" />

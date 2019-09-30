@@ -23,6 +23,7 @@ public class BuscadorProcedimientoCriteria implements Serializable {
 	private String locale;
 	private Boolean soloId = false;
 	private Integer comun;
+	private Long idPlataforma;
 
 	public BuscadorProcedimientoCriteria() {
 
@@ -31,7 +32,7 @@ public class BuscadorProcedimientoCriteria implements Serializable {
 	public BuscadorProcedimientoCriteria(final ProcedimientoLocal procedimiento, final PaginacionCriteria paginacion,
 			final Long idMateria, final Long idPublicoObjetivo, final Long idHechoVital, final int visibilidad,
 			final Boolean enPlazo, final Boolean telematico, final Boolean uaPropias, final Boolean uaHijas,
-			final Integer comun) {
+			final Integer comun, final Long idPlataforma) {
 
 		this.procedimiento = procedimiento;
 		this.paginacion = paginacion;
@@ -44,6 +45,7 @@ public class BuscadorProcedimientoCriteria implements Serializable {
 		this.uaPropias = uaPropias;
 		this.uaHijas = uaHijas;
 		this.comun = comun;
+		this.idPlataforma = idPlataforma;
 	}
 
 	public ProcedimientoLocal getProcedimiento() {
@@ -170,6 +172,21 @@ public class BuscadorProcedimientoCriteria implements Serializable {
 	 */
 	public void setComun(final Integer comun) {
 		this.comun = comun;
+	}
+
+	/**
+	 * @return the idPlataforma
+	 */
+	public Long getIdPlataforma() {
+		return idPlataforma;
+	}
+
+	/**
+	 * @param idPlataforma
+	 *            the idPlataforma to set
+	 */
+	public void setIdPlataforma(final Long idPlataforma) {
+		this.idPlataforma = idPlataforma;
 	}
 
 }

@@ -5,7 +5,7 @@ import java.util.ResourceBundle;
 import es.caib.rolsac.api.v2.exception.APIException;
 
 public final class ConfiguracioServeis {
-		
+
 	public static final String NOM_SERVEI_ROLSAC = "RolsacWS";
 	public static final String NOM_SERVEI_AGRUPACIO_FET_VITAL = "AgrupacioFetVitalWS";
 	public static final String NOM_SERVEI_AGRUPACIO_MATERIA = "AgrupacioMateriaWS";
@@ -19,7 +19,7 @@ public final class ConfiguracioServeis {
 	public static final String NOM_SERVEI_ENLLAC = "EnllacWS";
 	public static final String NOM_SERVEI_ESPAI_TERRITORIAL = "EspaiTerritorialWS";
 	public static final String NOM_SERVEI_ESTADISTICA = "EstadisticaWS";
-	public static final String NOM_SERVEI_EXCEPCIO_DOCUMENTACIO = "ExcepcioDocumentacioWS";	
+	public static final String NOM_SERVEI_EXCEPCIO_DOCUMENTACIO = "ExcepcioDocumentacioWS";
 	public static final String NOM_SERVEI_FAMILIA = "FamiliaWS";
 	public static final String NOM_SERVEI_FET_VITAL = "FetVitalWS";
 	public static final String NOM_SERVEI_FITXA_UA = "FitxaUAWS";
@@ -45,21 +45,22 @@ public final class ConfiguracioServeis {
 	public static final String NOM_SERVEI_UNITAT_MATERIA = "UnitatMateriaWS";
 	public static final String NOM_SERVEI_USUARI = "UsuariWS";
 	public static final String NOM_SERVEI_SILENCI = "SilencioWS";
-	
-	public static String getUrlServei(String nomServei) throws APIException {
-		
+	public static final String NOM_SERVEI_PLATAFORMA = "PlataformaWS";
+
+	public static String getUrlServei(final String nomServei) throws APIException {
+
 		String urlPrefix = System.getProperty("es.caib.rolsac.api.v2.urlPrefix");
- 		if (urlPrefix == null) {
- 			ResourceBundle rb = ResourceBundle.getBundle("es/caib/rolsac/api/v2/resources/sac-api");		
- 			urlPrefix = rb.getString("es.caib.rolsac.api.v2.urlPrefix");
- 		}
-		
-		if (urlPrefix == null || "".equals(urlPrefix) )
+		if (urlPrefix == null) {
+			final ResourceBundle rb = ResourceBundle.getBundle("es/caib/rolsac/api/v2/resources/sac-api");
+			urlPrefix = rb.getString("es.caib.rolsac.api.v2.urlPrefix");
+		}
+
+		if (urlPrefix == null || "".equals(urlPrefix))
 			throw new APIException("URL de serveis web no trobada!");
-		
+
 		urlPrefix = urlPrefix.trim();
-		return  urlPrefix + nomServei;
-		
-	} 
-	
+		return urlPrefix + nomServei;
+
+	}
+
 }
