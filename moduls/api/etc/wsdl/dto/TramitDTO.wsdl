@@ -41,6 +41,8 @@
                         <element name="validacio" nillable="true" type="xsd:long" />
                         <element name="versio" nillable="true" type="xsd:int" />
                         <element name="plataforma" nillable="true" type="xsd:long" />
+                        <element name="telematico" nillable="true" type="xsd:boolean" />
+                        <element name="presencial" nillable="true" type="xsd:boolean" />    
 
                     </sequence>
                 </extension>
