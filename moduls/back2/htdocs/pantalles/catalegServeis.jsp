@@ -532,6 +532,20 @@
                                 </c:if>
                             </div>
 
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_plataforma"><spring:message code='camp.cerca_plataforma'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_plataforma" name="cerca_plataforma">
+                                        <option value=""><spring:message code='camp.cap'/></option>
+                                        <c:forEach items="${llistaPlataformas}" var="plataforma">
+                                            <option value='<c:out value="${plataforma.id}" />'><c:out value="${plataforma.nom}" /></option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                            </div>
+
                         </div>
 
 						<div class="fila">
