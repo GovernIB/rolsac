@@ -24,256 +24,334 @@ import es.caib.solr.api.model.types.EnumCategoria;
 
 /*
  * ejaen@dgtic  - u92770
- * Classe desacoplada del JBOSS per permetre testing. 
+ * Classe desacoplada del JBOSS per permetre testing.
  * S'ha definit una classe enlloc d'una interficie per evitar incompabilitats binaria amb les altres
- * aplicacions corporatives que esperen una classe (produeix un IncompatibleClassChangeError). 
- * 
+ * aplicacions corporatives que esperen una classe (produeix un IncompatibleClassChangeError).
+ *
  */
 
 public class TramiteDelegateImpl implements StatelessDelegate, TramiteDelegateI {
 
-    /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
-    /* ========================================================= */
+	/* ========================================================= */
+	/* ======================== MÉTODOS DE NEGOCIO ============= */
+	/* ========================================================= */
 
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#grabarTramite(org.ibit.rol.sac.model.Tramite, java.lang.Long)
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#grabarTramite(org.ibit
+	 * .rol.sac.model.Tramite, java.lang.Long)
 	 */
-    public Long grabarTramite(Tramite tramite, Long idOC) throws DelegateException {
-        try {
-            return getFacade().grabarTramite(tramite, idOC);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#obtenerTramite(java.lang.Long)
-	 */
-    public Tramite obtenerTramite(Long id) throws DelegateException {
-        try {
-            return getFacade().obtenerTramite(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    /* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#borrarTramite(java.lang.Long)
-	 */
-    public void borrarTramite(Long id, Long idProc) throws DelegateException {
-        try {
-            getFacade().borrarTramite(id, idProc);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    /* ========================================================= */
-    /* ======================== REFERENCIA AL FACADE  ========== */
-    /* ========================================================= */
-
-    private Handle facadeHandle;
-
-    private TramiteFacade getFacade() throws RemoteException {
-        return (TramiteFacade) facadeHandle.getEJBObject();
-    }
-
-    protected TramiteDelegateImpl() throws DelegateException {
-        try {
-            TramiteFacadeHome home = TramiteFacadeUtil.getHome();
-            TramiteFacade remote = home.create();
-            facadeHandle = remote.getHandle();
-        } catch (NamingException e) {
-            throw new DelegateException(e);
-        } catch (CreateException e) {
-            throw new DelegateException(e);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-
-	/* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#afegirDocumentInformatiu(java.lang.Long, java.lang.Long)
-	 */
-
-	/* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#grabarDocument(org.ibit.rol.sac.model.DocumentTramit, java.lang.Long)
-	 */
-	public Long grabarDocument(DocumentTramit doc, Long tid) throws DelegateException {
-		 try {
-	            return getFacade().grabarDocument(doc, tid);
-	        } catch (RemoteException e) {
-	            throw new DelegateException(e);
-	        }
-	}
-	
-
-	/* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#obtenirDocument(java.lang.Long)
-	 */
-	public DocumentTramit obtenirDocument(Long docId) throws DelegateException {
-		 try {
-	            return getFacade().obtenirDocument(docId);
-	        } catch (RemoteException e) {
-	            throw new DelegateException(e);
-	        }
-	}
-
-	/* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#borrarDocument(java.lang.Long)
-	 */
-	public void borrarDocument(Long id) throws DelegateException {
-		 try {
-	             getFacade().borrarDocument(id);
-	        } catch (RemoteException e) {
-	            throw new DelegateException(e);
-	        }	
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#borrarDocument(java.lang.Long)
-	 */
-	public void borrarDocumentos(Tramite tramite, List<DocumentTramit> documentos) throws DelegateException {
+	@Override
+	public Long grabarTramite(final Tramite tramite, final Long idOC) throws DelegateException {
 		try {
-			getFacade().borrarDocumentos(tramite, documentos);
-		} catch (RemoteException e) {
+			return getFacade().grabarTramite(tramite, idOC);
+		} catch (final RemoteException e) {
 			throw new DelegateException(e);
 		}
 	}
-	
-	/* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#actualizarOrdenDocs(java.util.Map, long)
-	 */
-	public void actualizarOrdenDocs(Map<String, String[]> map, long tid)
-			throws DelegateException {
-		 try {
-			 	getFacade().actualizarOrdenDocs(map,tid);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }		
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#actualizarOrdenDocs(java.util.Map, long)
-	 */
-	public void actualizarOrdenTasas(Map<String, String[]> map, long tid)
-			throws DelegateException {
-		 try {
-			 	getFacade().actualizarOrdenTasas(map,tid);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }		
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#obtenirTaxa(java.lang.Long)
-	 */
-	public Taxa obtenirTaxa(Long docId) throws DelegateException {
-		 try {
-             return getFacade().obtenirTaxa(docId);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-	}
-	
-	
-	/* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#grabarTaxa(org.ibit.rol.sac.model.Taxa, java.lang.Long)
-	 */
-	public Long grabarTaxa(Taxa taxa, Long tid) throws DelegateException {
-		 try {
-             return getFacade().grabarTaxa(taxa,tid);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-	}
-	
 
-	/* (non-Javadoc)
-	 * @see org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#borrarTaxa(java.lang.Long)
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#obtenerTramite(java.
+	 * lang.Long)
 	 */
-	public void borrarTaxa(Long id) throws DelegateException {
-		 try {
-             getFacade().borrarTaxa(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-		
+	@Override
+	public Tramite obtenerTramite(final Long id) throws DelegateException {
+		try {
+			return getFacade().obtenerTramite(id);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
 	}
-	
-	public boolean autorizaCrearTramite(Long idProcedimiento) throws DelegateException {
-		 try {
-             return getFacade().autorizaCrearTramite(idProcedimiento);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-	}
-	
-	public boolean autorizaModificarTramite(Long idTramite) throws DelegateException {
-		 try {
-             return getFacade().autorizaModificarTramite(idTramite);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-	}
-	
-	public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente) throws DelegateException {
-    	try {
-            return getFacade().indexarSolr(solrIndexer, solrPendiente);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-	public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, Long idAplicacion, EnumCategoria categoria) throws DelegateException {
-    	try {
-    		return getFacade().indexarSolr(solrIndexer, idAplicacion, categoria);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-	
-	public SolrPendienteResultado indexarDocSolr(final SolrIndexer solrIndexer, Long idAplicacion, EnumCategoria categoria) throws DelegateException {
-    	try {
-    		return getFacade().indexarDocSolr(solrIndexer, idAplicacion, categoria);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-	
-    public SolrPendienteResultado desindexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente) throws DelegateException {
-    	try {
-    		return getFacade().desindexarSolr(solrIndexer, solrPendiente);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#borrarTramite(java.
+	 * lang.Long)
+	 */
+	@Override
+	public void borrarTramite(final Long id, final Long idProc) throws DelegateException {
+		try {
+			getFacade().borrarTramite(id, idProc);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+
+	/* ========================================================= */
+	/* ======================== REFERENCIA AL FACADE ========== */
+	/* ========================================================= */
+
+	private Handle facadeHandle;
+
+	private TramiteFacade getFacade() throws RemoteException {
+		return (TramiteFacade) facadeHandle.getEJBObject();
+	}
+
+	protected TramiteDelegateImpl() throws DelegateException {
+		try {
+			final TramiteFacadeHome home = TramiteFacadeUtil.getHome();
+			final TramiteFacade remote = home.create();
+			facadeHandle = remote.getHandle();
+		} catch (final NamingException e) {
+			throw new DelegateException(e);
+		} catch (final CreateException e) {
+			throw new DelegateException(e);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#
+	 * afegirDocumentInformatiu(java.lang.Long, java.lang.Long)
+	 */
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#grabarDocument(org.
+	 * ibit.rol.sac.model.DocumentTramit, java.lang.Long)
+	 */
+	@Override
+	public Long grabarDocument(final DocumentTramit doc, final Long tid) throws DelegateException {
+		try {
+			return getFacade().grabarDocument(doc, tid);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#obtenirDocument(java.
+	 * lang.Long)
+	 */
+	@Override
+	public DocumentTramit obtenirDocument(final Long docId) throws DelegateException {
+		try {
+			return getFacade().obtenirDocument(docId);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#borrarDocument(java.
+	 * lang.Long)
+	 */
+	@Override
+	public void borrarDocument(final Long id) throws DelegateException {
+		try {
+			getFacade().borrarDocument(id);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#borrarDocument(java.
+	 * lang.Long)
+	 */
+	@Override
+	public void borrarDocumentos(final Tramite tramite, final List<DocumentTramit> documentos)
+			throws DelegateException {
+		try {
+			getFacade().borrarDocumentos(tramite, documentos);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#actualizarOrdenDocs(
+	 * java.util.Map, long)
+	 */
+	@Override
+	public void actualizarOrdenDocs(final Map<String, String[]> map, final long tid) throws DelegateException {
+		try {
+			getFacade().actualizarOrdenDocs(map, tid);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#actualizarOrdenDocs(
+	 * java.util.Map, long)
+	 */
+	@Override
+	public void actualizarOrdenTasas(final Map<String, String[]> map, final long tid) throws DelegateException {
+		try {
+			getFacade().actualizarOrdenTasas(map, tid);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#obtenirTaxa(java.lang.
+	 * Long)
+	 */
+	@Override
+	public Taxa obtenirTaxa(final Long docId) throws DelegateException {
+		try {
+			return getFacade().obtenirTaxa(docId);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#grabarTaxa(org.ibit.
+	 * rol.sac.model.Taxa, java.lang.Long)
+	 */
+	@Override
+	public Long grabarTaxa(final Taxa taxa, final Long tid) throws DelegateException {
+		try {
+			return getFacade().grabarTaxa(taxa, tid);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#borrarTaxa(java.lang.
+	 * Long)
+	 */
+	@Override
+	public void borrarTaxa(final Long id) throws DelegateException {
+		try {
+			getFacade().borrarTaxa(id);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
+
+	}
+
+	@Override
+	public boolean autorizaCrearTramite(final Long idProcedimiento) throws DelegateException {
+		try {
+			return getFacade().autorizaCrearTramite(idProcedimiento);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+
+	@Override
+	public boolean autorizaModificarTramite(final Long idTramite) throws DelegateException {
+		try {
+			return getFacade().autorizaModificarTramite(idTramite);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+
+	@Override
+	public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente)
+			throws DelegateException {
+		try {
+			return getFacade().indexarSolr(solrIndexer, solrPendiente);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+
+	@Override
+	public SolrPendienteResultado indexarSolr(final SolrIndexer solrIndexer, final Long idAplicacion,
+			final EnumCategoria categoria) throws DelegateException {
+		try {
+			return getFacade().indexarSolr(solrIndexer, idAplicacion, categoria);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+
+	@Override
+	public SolrPendienteResultado indexarDocSolr(final SolrIndexer solrIndexer, final Long idAplicacion,
+			final EnumCategoria categoria) throws DelegateException {
+		try {
+			return getFacade().indexarDocSolr(solrIndexer, idAplicacion, categoria);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+
+	@Override
+	public SolrPendienteResultado desindexarSolr(final SolrIndexer solrIndexer, final SolrPendiente solrPendiente)
+			throws DelegateException {
+		try {
+			return getFacade().desindexarSolr(solrIndexer, solrPendiente);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+
+	@Override
 	public List<Long> buscarIdsTramites() throws DelegateException {
 		try {
-            return getFacade().buscarIdsTramites();
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
+			return getFacade().buscarIdsTramites();
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
 	}
-	
 
-	public ResultadoBusqueda consultaFormularios(FiltroGenerico filtro) throws DelegateException {
+	@Override
+	public ResultadoBusqueda consultaFormularios(final FiltroGenerico filtro) throws DelegateException {
 		try {
-            return getFacade().consultaFormularios(filtro);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
+			return getFacade().consultaFormularios(filtro);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
 	}
-	
 
-	public ResultadoBusqueda consultaTramites(FiltroGenerico filtro)  throws DelegateException {
+	@Override
+	public ResultadoBusqueda consultaTramites(final FiltroGenerico filtro) throws DelegateException {
 		try {
-            return getFacade().consultaTramites(filtro);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
+			return getFacade().consultaTramites(filtro);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
 	}
-	
+
+	@Override
+	public String getEnlaceTelematico(final Long codigo, final String lang) throws DelegateException {
+		try {
+			return getFacade().getEnlaceTelematico(codigo, lang);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
 }

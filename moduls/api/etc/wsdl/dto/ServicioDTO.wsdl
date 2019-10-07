@@ -40,10 +40,11 @@
                         <element name="tasaUrl" nillable="true" type="xsd:string" />
                         <element name="tramiteVersion" nillable="true" type="xsd:string" />
                         <element name="telematico" nillable="true" type="xsd:boolean" />
-                        <element name="presencial" nillable="true" type="xsd:boolean" />                        
-                        <element name="telefonico" nillable="true" type="xsd:boolean" />                               
+                        <element name="presencial" nillable="true" type="xsd:boolean" />
+                        <element name="telefonico" nillable="true" type="xsd:boolean" />
                         <element name="validacion" nillable="true" type="xsd:int" />
                         <element name="comun" type="xsd:boolean" />
+                        <element name="parametros" nillable="true" type="xsd:string" />
                     </sequence>
                 </extension>
             </complexContent>

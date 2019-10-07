@@ -17,6 +17,7 @@ public final class ConfiguracioServeis {
 	public static final String NOM_SERVEI_DOCUMENT = "DocumentWS";
 	public static final String NOM_SERVEI_EDIFICI = "EdificiWS";
 	public static final String NOM_SERVEI_ENLLAC = "EnllacWS";
+	public static final String NOM_SERVEI_ENLLAC_TELEMATICO = "EnllacTelematicoWS";
 	public static final String NOM_SERVEI_ESPAI_TERRITORIAL = "EspaiTerritorialWS";
 	public static final String NOM_SERVEI_ESTADISTICA = "EstadisticaWS";
 	public static final String NOM_SERVEI_EXCEPCIO_DOCUMENTACIO = "ExcepcioDocumentacioWS";

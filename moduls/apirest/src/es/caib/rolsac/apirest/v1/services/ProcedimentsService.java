@@ -14,7 +14,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.lang3.StringUtils;
 import org.ibit.rol.sac.model.Procedimiento;
 import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
@@ -36,123 +35,119 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@Path( "/"+ Constantes.ENTIDAD_PROCEDIMIENTO ) 
-@Api( value = "/"+ Constantes.ENTIDAD_PROCEDIMIENTO,   tags = Constantes.ENTIDAD_PROCEDIMIENTO  )
+@Path("/" + Constantes.ENTIDAD_PROCEDIMIENTO)
+@Api(value = "/" + Constantes.ENTIDAD_PROCEDIMIENTO, tags = Constantes.ENTIDAD_PROCEDIMIENTO)
 public class ProcedimentsService {
-		
-		
+
 	/**
 	 * Listado de Procedimientos.
+	 *
 	 * @return
-	 * @throws DelegateException 
+	 * @throws DelegateException
 	 */
-	@Produces( { MediaType.APPLICATION_JSON } )
+	@Produces({ MediaType.APPLICATION_JSON })
 	@POST
-	@Consumes({MediaType.APPLICATION_JSON , MediaType.APPLICATION_FORM_URLENCODED })
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED })
 	@Path("/")
-	@ApiOperation( 
-	    value = "Lista los procedimientos",
-	    notes = "Lista los procedimientos disponibles en funcion de los filtros"
-	)
-	@ApiResponses(value = { 
-			 @ApiResponse(code = 200, message =  Constantes.MSJ_200_GENERICO, response = RespuestaProcediments.class),
-			@ApiResponse(code = 400, message = Constantes.MSJ_400_GENERICO, response = RespuestaError.class)
-		   })
-	
+	@ApiOperation(value = "Lista los procedimientos", notes = "Lista los procedimientos disponibles en funcion de los filtros")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = Constantes.MSJ_200_GENERICO, response = RespuestaProcediments.class),
+			@ApiResponse(code = 400, message = Constantes.MSJ_400_GENERICO, response = RespuestaError.class) })
+
 	public RespuestaProcediments llistar(
-		@ApiParam( value = "Codigo de idioma", required = false ) @DefaultValue(Constantes.IDIOMA_DEFECTO) @FormParam("lang") final String lang,		
-		@ApiParam( value = "Filtro de Paginación: " + FiltroPaginacion.SAMPLE) @FormParam("filtroPaginacion") FiltroPaginacion filtroPaginacion,
-		@ApiParam( value = "Filtro de procedimientos: " + FiltroProcediments.SAMPLE) @FormParam("filtro") FiltroProcediments filtro,
-		@ApiParam( value = "Filtro de Orden: " + Orden.SAMPLE_ORDEN_PROCEDIMIENTO) @FormParam("orden") Orden orden						
-			) throws DelegateException,ExcepcionAplicacion,ValidationException  {
-						
-		if(filtro==null) {
-			filtro = new FiltroProcediments(); 
+			@ApiParam(value = "Codigo de idioma", required = false) @DefaultValue(Constantes.IDIOMA_DEFECTO) @FormParam("lang") final String lang,
+			@ApiParam(value = "Filtro de Paginación: "
+					+ FiltroPaginacion.SAMPLE) @FormParam("filtroPaginacion") final FiltroPaginacion filtroPaginacion,
+			@ApiParam(value = "Filtro de procedimientos: "
+					+ FiltroProcediments.SAMPLE) @FormParam("filtro") FiltroProcediments filtro,
+			@ApiParam(value = "Filtro de Orden: "
+					+ Orden.SAMPLE_ORDEN_PROCEDIMIENTO) @FormParam("orden") final Orden orden)
+			throws DelegateException, ExcepcionAplicacion, ValidationException {
+
+		if (filtro == null) {
+			filtro = new FiltroProcediments();
 		}
-		
-	/*	if(filtro.getCodigoUADir3()!=null && filtro.getCodigoUA()!=null) {
-			throw new ExcepcionAplicacion(400,"No se puede indicar un codigoUA y un codigoUADir3 simultaneamente");
-		}*/
-		
-		FiltroGenerico fg = filtro.toFiltroGenerico();
-		
-		if(lang!=null) {
-			fg.setLang(lang);	
+
+		/*
+		 * if(filtro.getCodigoUADir3()!=null && filtro.getCodigoUA()!=null) { throw new
+		 * ExcepcionAplicacion(
+		 * 400,"No se puede indicar un codigoUA y un codigoUADir3 simultaneamente"); }
+		 */
+
+		final FiltroGenerico fg = filtro.toFiltroGenerico();
+
+		if (lang != null) {
+			fg.setLang(lang);
 		}
-				
-		//si no vienen los filtros se completan con los datos por defecto
-		if(filtroPaginacion!=null) {
+
+		// si no vienen los filtros se completan con los datos por defecto
+		if (filtroPaginacion != null) {
 			fg.setPageSize(filtroPaginacion.getSize());
 			fg.setPage(filtroPaginacion.getPage());
 		}
-		
+
 		// si viene el orden intentamos rellenarlo
-		if(orden!=null) {
-			List<CampoOrden> ord = orden.getListaOrden();
-			if(ord!=null && ord.size()>0) {
-				for (CampoOrden campoOrden : ord) {
-					if(campoOrden.getCampo().equals(Orden.CAMPO_ORD_PROCEDIMIENTO_CODIGO)||
-							campoOrden.getCampo().equals(Orden.CAMPO_ORD_PROCEDIMIENTO_FECHA_ACTUALIZACION)||
-							campoOrden.getCampo().equals(Orden.CAMPO_ORD_PROCEDIMIENTO_FECHA_PUBLICACION)) {
-						fg.addOrden(campoOrden.getCampo(), campoOrden.getTipoOrden());	
+		if (orden != null) {
+			final List<CampoOrden> ord = orden.getListaOrden();
+			if (ord != null && ord.size() > 0) {
+				for (final CampoOrden campoOrden : ord) {
+					if (campoOrden.getCampo().equals(Orden.CAMPO_ORD_PROCEDIMIENTO_CODIGO)
+							|| campoOrden.getCampo().equals(Orden.CAMPO_ORD_PROCEDIMIENTO_FECHA_ACTUALIZACION)
+							|| campoOrden.getCampo().equals(Orden.CAMPO_ORD_PROCEDIMIENTO_FECHA_PUBLICACION)) {
+						fg.addOrden(campoOrden.getCampo(), campoOrden.getTipoOrden());
 					}
 				}
-			}		
+			}
 		}
-						
+
 		return getRespuesta(fg);
 	}
-	
-	
+
 	/**
 	 * Para obtener un procedimiento.
-	 * @param idioma 
+	 *
+	 * @param idioma
 	 * @param id
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
-	@Produces( { MediaType.APPLICATION_JSON } )
+	@Produces({ MediaType.APPLICATION_JSON })
 	@POST
 	@Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
 	@Path("/{codigo}")
-	@ApiOperation( 
-	    value = "Obtiene un procedimiento",
-	    notes = "Obtiene el procedimiento con el código indicado"
-	)
-	@ApiResponses(value = { 
-			@ApiResponse(code = 200, message =  Constantes.MSJ_200_GENERICO, response = RespuestaProcediments.class),
-			@ApiResponse(code = 400, message = Constantes.MSJ_400_GENERICO, response = RespuestaError.class)
-		   })
-		
-	public RespuestaProcediments  getPorId(  
-			@ApiParam( value = "Codigo procedimiento", required = true ) @PathParam( "codigo") final  String codigo,
-		    @ApiParam( value = "codigo de idioma", required = false ) @DefaultValue(Constantes.IDIOMA_DEFECTO) @FormParam("lang") final String lang
-			) throws Exception,ValidationException {
+	@ApiOperation(value = "Obtiene un procedimiento", notes = "Obtiene el procedimiento con el código indicado")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = Constantes.MSJ_200_GENERICO, response = RespuestaProcediments.class),
+			@ApiResponse(code = 400, message = Constantes.MSJ_400_GENERICO, response = RespuestaError.class) })
 
-		FiltroGenerico fg = new FiltroGenerico();
-		
-		if(lang!=null) {
-			fg.setLang(lang);	
+	public RespuestaProcediments getPorId(
+			@ApiParam(value = "Codigo procedimiento", required = true) @PathParam("codigo") final String codigo,
+			@ApiParam(value = "codigo de idioma", required = false) @DefaultValue(Constantes.IDIOMA_DEFECTO) @FormParam("lang") final String lang)
+			throws Exception, ValidationException {
+
+		final FiltroGenerico fg = new FiltroGenerico();
+
+		if (lang != null) {
+			fg.setLang(lang);
 		}
-		fg.setId(new Long(codigo));		
-		
-		return getRespuesta(fg);			
+		fg.setId(new Long(codigo));
+
+		return getRespuesta(fg);
 	}
-	
-	
-    private RespuestaProcediments getRespuesta(FiltroGenerico filtro) throws DelegateException {		
-    	es.caib.rolsac.utils.ResultadoBusqueda resultadoBusqueda = DelegateUtil.getProcedimientoDelegate().consultaProcedimientos(filtro);	
-		List <Procediments> lista = new ArrayList <Procediments>();
-			
-		for (Procedimiento nodo : Utiles.castList(Procedimiento.class, resultadoBusqueda.getListaResultados())) {
-			Procediments elemento = new Procediments(nodo,null,filtro.getLang(),true);
+
+	private RespuestaProcediments getRespuesta(final FiltroGenerico filtro) throws DelegateException {
+		final es.caib.rolsac.utils.ResultadoBusqueda resultadoBusqueda = DelegateUtil.getProcedimientoDelegate()
+				.consultaProcedimientos(filtro);
+		final List<Procediments> lista = new ArrayList<Procediments>();
+
+		for (final Procedimiento nodo : Utiles.castList(Procedimiento.class, resultadoBusqueda.getListaResultados())) {
+			final Procediments elemento = new Procediments(nodo, null, filtro.getLang(), true);
 			lista.add(elemento);
 		}
-		
-		RespuestaProcediments r = new RespuestaProcediments(Response.Status.OK.getStatusCode()+"", Constantes.mensaje200(lista.size()) , new Integer(resultadoBusqueda.getTotalResultados()), lista);
+
+		final RespuestaProcediments r = new RespuestaProcediments(Response.Status.OK.getStatusCode() + "",
+				Constantes.mensaje200(lista.size()), new Integer(resultadoBusqueda.getTotalResultados()), lista);
 		return r;
 	}
-	
-	
 
 }

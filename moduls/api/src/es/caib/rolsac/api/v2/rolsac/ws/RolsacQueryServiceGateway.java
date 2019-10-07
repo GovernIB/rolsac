@@ -28,6 +28,8 @@ import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiDTO;
 import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
 import es.caib.rolsac.api.v2.enllac.EnllacDTO;
+import es.caib.rolsac.api.v2.enllactelematico.EnllacTelematicoCriteria;
+import es.caib.rolsac.api.v2.enllactelematico.EnllacTelematicoDTO;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
 import es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioCriteria;
@@ -345,6 +347,15 @@ public class RolsacQueryServiceGateway {
 
 		EnllacDTO enllacDTO = new EnllacDTO();
 		enllacDTO = stub.obtenirEnllac(enllacCriteria);
+
+		return enllacDTO;
+	}
+
+	public EnllacTelematicoDTO obtenirEnllacTelematico(final EnllacTelematicoCriteria enllacCriteria)
+			throws QueryServiceException, RemoteException {
+
+		EnllacTelematicoDTO enllacDTO = new EnllacTelematicoDTO();
+		enllacDTO = stub.obtenirEnllacTelematico(enllacCriteria);
 
 		return enllacDTO;
 	}

@@ -15,7 +15,7 @@ import es.caib.rolsac.api.v2.rolsac.ejb.RolsacQueryServiceEJB;
  * SessionBean para consultas de boletines.
  *
  * @ejb.bean
- *  name="sac/api/EnllacQueryServiceEJB"
+ *  name="sac/api/EnllacTelematicoQueryServiceEJB"
  *  jndi-name="es.caib.rolsac.api.v2.enllac.ejb.EnllacQueryServiceEJB"
  *  type="Stateless"
  *  view-type="remote"

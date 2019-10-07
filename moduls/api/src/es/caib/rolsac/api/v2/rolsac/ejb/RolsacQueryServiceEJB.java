@@ -71,6 +71,8 @@ import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiDTO;
 import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
 import es.caib.rolsac.api.v2.enllac.EnllacDTO;
+import es.caib.rolsac.api.v2.enllactelematico.EnllacTelematicoCriteria;
+import es.caib.rolsac.api.v2.enllactelematico.EnllacTelematicoDTO;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
 import es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioCriteria;
@@ -2687,6 +2689,66 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 			close(session);
 		}
 
+		return enllacDTO;
+	}
+
+	/**
+	 * Obtiene un enlace.
+	 *
+	 * @param enllacTelematicoCriteria
+	 * @return EnllacTelematicoDTO
+	 *
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public EnllacTelematicoDTO obtenirEnllacTelematico(final EnllacTelematicoCriteria enllacCriteria) {
+
+		final EnllacTelematicoDTO enllacDTO = new EnllacTelematicoDTO();
+
+		String idTramite = "";
+		String numVersion = "";
+		final String idioma = enllacCriteria.getIdioma();
+		final Long idplataforma;
+		String parametros = "";
+		final String idTramiteRolsac = String.valueOf(enllacCriteria.getIdentificador());
+
+		if (enllacCriteria.isServicio()) {
+			final ServicioCriteria servicioCriteria = new ServicioCriteria();
+			servicioCriteria.setIdioma(idioma);
+			servicioCriteria.setId(idTramiteRolsac);
+			final ServicioDTO servicio = obtenirServicio(servicioCriteria);
+			idTramite = servicio.getTramiteId();
+			numVersion = servicio.getTramiteVersion();
+			idplataforma = servicio.getPlataforma();
+			parametros = servicio.getParametros();
+		} else {
+
+			final TramitCriteria tramitCriteria = new TramitCriteria();
+			tramitCriteria.setIdioma(idioma);
+			tramitCriteria.setId(idTramiteRolsac);
+			final TramitDTO tramit = obtenirTramit(tramitCriteria);
+			idTramite = tramit.getIdTraTel();
+			numVersion = String.valueOf(tramit.getVersio());
+			idplataforma = tramit.getPlataforma();
+			parametros = tramit.getParametros();
+		}
+
+		final PlataformaCriteria plataformaCriteria = new PlataformaCriteria();
+		plataformaCriteria.setIdioma(idioma);
+		plataformaCriteria.setId(idplataforma.toString());
+		final PlataformaDTO plataforma = obtenirPlataforma(plataformaCriteria);
+		String url = plataforma.getUrlAcceso();
+
+		url = url.replace("${idTramitePlataforma}", idTramite);
+		url = url.replace("${versionTramitePlatorma}", numVersion);
+		if (parametros == null) {
+			parametros = "";
+		}
+		url = url.replace("${parametros}", parametros);
+		url = url.replace("${servicio}", String.valueOf(enllacCriteria.isServicio()));
+		url = url.replace("${idTramiteRolsac}", idTramiteRolsac);
+
+		enllacDTO.setEnlace(url);
 		return enllacDTO;
 	}
 

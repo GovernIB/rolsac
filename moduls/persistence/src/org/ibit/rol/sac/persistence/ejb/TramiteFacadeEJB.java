@@ -24,6 +24,7 @@ import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.Taxa;
 import org.ibit.rol.sac.model.Traduccion;
 import org.ibit.rol.sac.model.TraduccionDocumento;
+import org.ibit.rol.sac.model.TraduccionPlataforma;
 import org.ibit.rol.sac.model.TraduccionProcedimiento;
 import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
 import org.ibit.rol.sac.model.TraduccionTramite;
@@ -117,6 +118,49 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 	@Override
 	public boolean autorizaModificarTramite(final Long idTramite) throws SecurityException {
 		return (getAccesoManager().tieneAccesoTramite(idTramite));
+	}
+
+	/**
+	 * Obtiene el enlace telematico de un tramite.
+	 *
+	 * @ejb.interface-method
+	 *
+	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+	 *
+	 * @param idTramite
+	 *            Id tramite
+	 * @param lang
+	 *            Idioma, por defecto, ca.
+	 *
+	 * @return Devuelve la url.
+	 * @throws DelegateException
+	 */
+	@Override
+	public String getEnlaceTelematico(final Long idTramit, final String lang) throws DelegateException {
+
+		final Tramite tram = this.obtenerTramite(idTramit);
+
+		final String idTramite = tram.getIdTraTel();
+		final String numVersion = tram.getVersio().toString();
+		final String idioma = lang;
+		final String parametros;
+		if (tram.getParametros() == null) {
+			parametros = "";
+		} else {
+			parametros = tram.getParametros();
+		}
+		final String idTramiteRolsac = idTramite.toString();
+
+		final TraduccionPlataforma trad = (TraduccionPlataforma) tram.getPlataforma().getTraduccion(idioma);
+		String url = trad.getUrlAcceso();
+
+		url = url.replace("${idTramitePlataforma}", idTramite);
+		url = url.replace("${versionTramitePlatorma}", numVersion);
+		url = url.replace("${parametros}", parametros);
+		url = url.replace("${servicio}", String.valueOf(true));
+		url = url.replace("${idTramiteRolsac}", idTramiteRolsac);
+
+		return url;
 	}
 
 	/**

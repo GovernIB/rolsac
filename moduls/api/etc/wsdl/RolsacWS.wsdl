@@ -45,6 +45,8 @@
 	xmlns:tns54="http://servicio.v2.api.rolsac.caib.es"
 	xmlns:tns55="http://documentoServicio.v2.api.rolsac.caib.es"
 	xmlns:tns56="http://plataforma.v2.api.rolsac.caib.es"
+	xmlns:tns57="http://enllactelematico.v2.api.rolsac.caib.es"
+
 	targetNamespace="http://ws.rolsac.v2.api.rolsac.caib.es">
 
 	<wsdl:import namespace="urn:tns1" location="dto/UnitatAdministrativaCriteria.wsdl"/>
@@ -125,7 +127,9 @@
 	<wsdl:import namespace="urn:tns55" location="dto/DocumentoServicioCriteria.wsdl"/>
 	<wsdl:import namespace="urn:tns55" location="dto/DocumentoServicioDTO.wsdl"/>
 	<wsdl:import namespace="urn:tns56" location="dto/PlataformaCriteria.wsdl"/>
-	<wsdl:import namespace="urn:tns56" location="dto/PlataformaDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns56" location="dto/PlataformaDTO.wsdl" />
+	<wsdl:import namespace="urn:tns57" location="dto/EnllacTelematicoCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns57" location="dto/EnllacTelematicoDTO.wsdl"/>
 
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
@@ -314,6 +318,14 @@
 				<complexContent>
 					<restriction base="soapenc:Array">
 						<attribute ref="soapenc:arrayType" wsdl:arrayType="tns19:EnllacDTO[]" />
+					</restriction>
+				</complexContent>
+			</complexType>
+
+			<complexType name="ArrayOfEnllacTelematicoDTO">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="tns57:EnllacTelematicoDTO[]" />
 					</restriction>
 				</complexContent>
 			</complexType>
@@ -549,6 +561,9 @@
 	</wsdl:message>
 	<wsdl:message name="obtenirEnllacResponse">
 		<wsdl:part name="obtenirEnllacReturn" type="tns19:EnllacDTO" />
+	</wsdl:message>
+	<wsdl:message name="obtenirEnllacTelematicoResponse">
+		<wsdl:part name="obtenirEnllacTelematicoReturn" type="tns57:EnllacTelematicoDTO" />
 	</wsdl:message>
 	<wsdl:message name="llistarFitxesUARequest">
 		<wsdl:part name="in0" type="tns22:FitxaUACriteria" />
@@ -811,6 +826,9 @@
 	</wsdl:message>
 	<wsdl:message name="obtenirEnllacRequest">
 		<wsdl:part name="in0" type="tns19:EnllacCriteria" />
+	</wsdl:message>
+	<wsdl:message name="obtenirEnllacTelematicoRequest">
+		<wsdl:part name="in0" type="tns57:EnllacTelematicoCriteria" />
 	</wsdl:message>
 	<wsdl:message name="obtenirFormulariResponse">
 		<wsdl:part name="obtenirFormulariReturn" type="tns23:FormulariDTO" />
@@ -1163,6 +1181,10 @@
 		<wsdl:operation name="obtenirEnllac" parameterOrder="in0">
 			<wsdl:input message="intf:obtenirEnllacRequest" name="obtenirEnllacRequest" />
 			<wsdl:output message="intf:obtenirEnllacResponse" name="obtenirEnllacResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="obtenirEnllacTelematico" parameterOrder="in0">
+			<wsdl:input message="intf:obtenirEnllacTelematicoRequest" name="obtenirEnllacTelematicoRequest" />
+			<wsdl:output message="intf:obtenirEnllacTelematicoResponse" name="obtenirEnllacTelematicoResponse" />
 		</wsdl:operation>
 		<wsdl:operation name="llistarEnllacos" parameterOrder="in0">
 			<wsdl:input message="intf:llistarEnllacosRequest" name="llistarEnllacosRequest" />
@@ -1869,6 +1891,17 @@
 					namespace="http://intf.ejb.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:input>
 			<wsdl:output name="obtenirEnllacResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="obtenirEnllacTelematico">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirEnllacTelematicoRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirEnllacTelematicoResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
 					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>

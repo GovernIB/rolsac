@@ -43,6 +43,7 @@
                         <element name="materia" nillable="true" type="xsd:string" />
                         <element name="ordenar" nillable="true" type="tns:ArrayOfProcedimentOrdenacio" />
                         <element name="plataforma" nillable="true" type="xsd:long" />
+                        <element name="parametros" nillable="true" type="xsd:string" />
                         <element name="publicoObjetivo" nillable="true" type="xsd:string" />
                         <element name="responsable" nillable="true" type="xsd:string" />
                         <element name="signatura" nillable="true" type="xsd:string" />

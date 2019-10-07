@@ -23,6 +23,8 @@ import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiDTO;
 import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
 import es.caib.rolsac.api.v2.enllac.EnllacDTO;
+import es.caib.rolsac.api.v2.enllactelematico.EnllacTelematicoCriteria;
+import es.caib.rolsac.api.v2.enllactelematico.EnllacTelematicoDTO;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
 import es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioCriteria;
@@ -626,6 +628,18 @@ public class RolsacQueryServiceDelegate {
 		try {
 			final RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
 			return ejb.obtenirEnllac(enllacCriteria);
+		} catch (final LocatorException e) {
+			throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+		} catch (final RemoteException e) {
+			throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+		}
+	}
+
+	public EnllacTelematicoDTO obtenirEnllacTelematico(final EnllacTelematicoCriteria enllacCriteria)
+			throws DelegateException {
+		try {
+			final RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+			return ejb.obtenirEnllacTelematico(enllacCriteria);
 		} catch (final LocatorException e) {
 			throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
 		} catch (final RemoteException e) {

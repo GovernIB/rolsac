@@ -235,8 +235,12 @@ public class FiltroServeis {
 					this.versionTramiteTelematico + "");
 		}
 
+		if (this.plataforma != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_SERVICIOS_PLATAFORMA, this.plataforma + "");
+		}
+
 		if (this.codigoPlataforma != null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_SERVICIOS_PLATAFORMA, this.codigoPlataforma + "");
+			fg.addFiltro(FiltroGenerico.FILTRO_SERVICIOS_PLATAFORMA_CODIGO, this.codigoPlataforma + "");
 		}
 
 		if (this.parametros != null) {

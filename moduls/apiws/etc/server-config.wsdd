@@ -235,6 +235,11 @@
             soapAction="">
             <parameter qname="in0" type="tns:EnllacCriteria" xmlns:tns="http://enllac.v2.api.rolsac.caib.es" />
         </operation>
+        <operation name="obtenirEnllacTelematico" qname="operNS:obtenirEnllacTelematico" xmlns:operNS="http://intf.ejb.rolsac.v2.api.rolsac.caib.es"
+            returnQName="obtenirEnllacTelematicoReturn" returnType="rtns:EnllacTelematicoDTO" xmlns:rtns="http://enllactelematico.v2.api.rolsac.caib.es"
+            soapAction="">
+            <parameter qname="in0" type="tns:EnllacTelematicoCriteria" xmlns:tns="http://enllactelematico.v2.api.rolsac.caib.es" />
+        </operation>
         <operation name="llistarEnllacos" qname="operNS:llistarEnllacos" xmlns:operNS="http://intf.ejb.rolsac.v2.api.rolsac.caib.es"
             returnQName="llistarEnllacosReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.rolsac.v2.api.rolsac.caib.es"
             returnItemType="tns2:EnllacDTO" xmlns:tns2="http://enllac.v2.api.rolsac.caib.es" soapAction="">
@@ -411,7 +416,7 @@
         </operation>
 
         <parameter name="allowedMethods"
-            value="getNumProcediments getNumServicios getNumFitxes obtenirNormativa obtenirDocumentTramit obtenirDocument llistarPerfils llistarDocuments llistarMateries obtenirEnllac obtenirProcediment obtenirServicio llistarTramit llistarDocumentTramit llistarDocumentoNormativa llistarDocumentoServicio obtenirFamilia llistarFormularis obtenirEdifici llistarUnitatsMateries llistarPersonal llistarTaxes obtenirMateria obtenirMateriaAgrupacio obtenirFitxa llistarPublicsObjectius llistarEspaisTerritorials obtenirTaxa llistarButlletins llistarFitxes obtenirSeccio llistarIconesMateries obtenirPersonal llistarTipus obtenirPerfil obtenirEspaiTerritorial llistarTipusAfectacio llistarProcediments llistarServicios obtenirFormulari llistarNormatives obtenirButlleti llistarEnllacos obtenirIconaMateria obtenirAgrupacioFetVital llistarMateriesAgrupacions obtenirUnitatMateria obtenirTipusAfectacio llistarFamilies obtenirPublicObjectiu obtenirUsuari llistarEdificis obtenirAgrupacioMateria llistarIconesFamilies llistarAgrupacionsFetsVitals obtenirFetVital obtenirPlataforma obtenirUnitatAdministrativa llistarUnitatsAdministratives llistarAgrupacionsMateries llistarSeccions obtenirTipus llistarFetsVitals obtenirFitxaUA llistarFitxesUA obtenirTramit obtenirIconaFamilia llistarUsuaris llistarTipusIniciacions obtenirTipusIniciacio obtenirCatalegDocuments llistarCatalegsDocuments obtenirIdioma llistarIdiomes obtenirSilenci" />
+            value="getNumProcediments getNumServicios getNumFitxes obtenirNormativa obtenirDocumentTramit obtenirDocument llistarPerfils llistarDocuments llistarMateries obtenirEnllac obtenirEnllacTelematico obtenirProcediment obtenirServicio llistarTramit llistarDocumentTramit llistarDocumentoNormativa llistarDocumentoServicio obtenirFamilia llistarFormularis obtenirEdifici llistarUnitatsMateries llistarPersonal llistarTaxes obtenirMateria obtenirMateriaAgrupacio obtenirFitxa llistarPublicsObjectius llistarEspaisTerritorials obtenirTaxa llistarButlletins llistarFitxes obtenirSeccio llistarIconesMateries obtenirPersonal llistarTipus obtenirPerfil obtenirEspaiTerritorial llistarTipusAfectacio llistarProcediments llistarServicios obtenirFormulari llistarNormatives obtenirButlleti llistarEnllacos obtenirIconaMateria obtenirAgrupacioFetVital llistarMateriesAgrupacions obtenirUnitatMateria obtenirTipusAfectacio llistarFamilies obtenirPublicObjectiu obtenirUsuari llistarEdificis obtenirAgrupacioMateria llistarIconesFamilies llistarAgrupacionsFetsVitals obtenirFetVital obtenirPlataforma obtenirUnitatAdministrativa llistarUnitatsAdministratives llistarAgrupacionsMateries llistarSeccions obtenirTipus llistarFetsVitals obtenirFitxaUA llistarFitxesUA obtenirTramit obtenirIconaFamilia llistarUsuaris llistarTipusIniciacions obtenirTipusIniciacio obtenirCatalegDocuments llistarCatalegsDocuments obtenirIdioma llistarIdiomes obtenirSilenci" />
 
         <arrayMapping xmlns:ns="http://ws.rolsac.v2.api.rolsac.caib.es" qname="ns:ArrayOfPerfilDTO"
             type="java:es.caib.rolsac.api.v2.perfil.PerfilDTO[]" innerType="cmp-ns:PerfilDTO" xmlns:cmp-ns="http://perfil.v2.api.rolsac.caib.es"
@@ -1165,6 +1170,37 @@
         <parameter name="beanJndiName" value="es.caib.rolsac.api.v2.enllac.ejb.EnllacQueryServiceEJB" />
         <parameter name="homeInterfaceName" value="es.caib.rolsac.api.v2.enllac.ejb.intf.EnllacQueryServiceEJBHome" />
         <parameter name="remoteInterfaceName" value="es.caib.rolsac.api.v2.enllac.ejb.intf.EnllacQueryServiceEJBRemote" />
+        <parameter name="allowedMethods" value="*" />
+        <parameter name="jndiurl" value="https://localhost:8443" />
+        <parameter name="jndiContextClass" value="org.jnp.interfaces.NamingContextFactory" />
+        <parameter name="typeMappingVersion" value="1.1" />
+        <operation name="obtenirProcediment" qname="operNS:obtenirProcediment" xmlns:operNS="http://intf.ejb.enllac.v2.api.rolsac.caib.es"
+            returnQName="obtenirProcedimentReturn" returnType="rtns:ProcedimentDTO" xmlns:rtns="http://procediment.v2.api.rolsac.caib.es"
+            soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+        </operation>
+        <operation name="obtenirFitxa" qname="operNS:obtenirFitxa" xmlns:operNS="http://intf.ejb.enllac.v2.api.rolsac.caib.es"
+            returnQName="obtenirFitxaReturn" returnType="rtns:FitxaDTO" xmlns:rtns="http://fitxa.v2.api.rolsac.caib.es"
+            soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+        </operation>
+        <parameter name="allowedMethods" value="obtenirProcediment obtenirFitxa" />
+
+        <typeMapping xmlns:ns="http://procediment.v2.api.rolsac.caib.es" qname="ns:ProcedimentDTO"
+            type="java:es.caib.rolsac.api.v2.procediment.ProcedimentDTO" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+            deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        <typeMapping xmlns:ns="http://fitxa.v2.api.rolsac.caib.es" qname="ns:FitxaDTO"
+            type="java:es.caib.rolsac.api.v2.fitxa.FitxaDTO" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+            deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        <typeMapping xmlns:ns="http://general.v2.api.rolsac.caib.es" qname="ns:EntitatRemota"
+            type="java:es.caib.rolsac.api.v2.general.EntitatRemota" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+            deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    </service>
+
+     <service name="EnllacTelematicoWS" provider="java:EJB">
+        <parameter name="beanJndiName" value="es.caib.rolsac.api.v2.enllactelematico.ejb.EnllacTelematicoQueryServiceEJB" />
+        <parameter name="homeInterfaceName" value="es.caib.rolsac.api.v2.enllac.ejb.intf.EnllacTelematicoQueryServiceEJBHome" />
+        <parameter name="remoteInterfaceName" value="es.caib.rolsac.api.v2.enllac.ejb.intf.EnllacTelematicoQueryServiceEJBRemote" />
         <parameter name="allowedMethods" value="*" />
         <parameter name="jndiurl" value="https://localhost:8443" />
         <parameter name="jndiContextClass" value="org.jnp.interfaces.NamingContextFactory" />
