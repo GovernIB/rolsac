@@ -15,7 +15,7 @@ import es.caib.rolsac.api.v2.general.EJBLocator;
 public class EnllacQueryServiceEJBLocator extends EJBLocator {
 
     private static final String JNDI_NAME = JNDI_NAME_PREFIX + "enllac.ejb.EnllacQueryServiceEJB";
-    
+
     public EnllacQueryServiceEJBRemote getEnllacQueryServiceEJB() throws LocatorException {
         try {
             Object ref = getRemoteReference(JNDI_NAME);
@@ -31,5 +31,5 @@ public class EnllacQueryServiceEJBLocator extends EJBLocator {
             throw new LocatorException(ExceptionMessages.EJB_CLASS_CAST, e);
         }
     }
-    
+
 }

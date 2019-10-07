@@ -6,8 +6,8 @@ import javax.ejb.CreateException;
 import javax.naming.NamingException;
 import javax.rmi.PortableRemoteObject;
 
-import es.caib.rolsac.api.v2.enllac.ejb.intf.EnllacTelematicoQueryServiceEJBHome;
-import es.caib.rolsac.api.v2.enllac.ejb.intf.EnllacTelematicoQueryServiceEJBRemote;
+import es.caib.rolsac.api.v2.enllactelematico.ejb.intf.EnllacTelematicoQueryServiceEJBHome;
+import es.caib.rolsac.api.v2.enllactelematico.ejb.intf.EnllacTelematicoQueryServiceEJBRemote;
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.exception.LocatorException;
 import es.caib.rolsac.api.v2.general.EJBLocator;

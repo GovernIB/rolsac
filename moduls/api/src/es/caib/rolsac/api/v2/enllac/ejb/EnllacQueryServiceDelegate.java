@@ -11,7 +11,7 @@ import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 
 
 public class EnllacQueryServiceDelegate {
-    
+
     private EnllacQueryServiceEJBLocator  enllacQueryServiceLocator;
 
     public void setEnllacQueryServiceLocator(EnllacQueryServiceEJBLocator enllacQueryServiceLocator) {
@@ -31,7 +31,7 @@ public class EnllacQueryServiceDelegate {
 
     public FitxaDTO obtenirFitxa(long idFitxa) throws DelegateException {
         try {
-            EnllacQueryServiceEJBRemote ejb = enllacQueryServiceLocator.getEnllacQueryServiceEJB();
+        	EnllacQueryServiceEJBRemote ejb = enllacQueryServiceLocator.getEnllacQueryServiceEJB();
             return ejb.obtenirFitxa(idFitxa);
         } catch (LocatorException e) {
             throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
@@ -39,7 +39,7 @@ public class EnllacQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
-    
-    
+
+
 
 }

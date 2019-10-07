@@ -8,7 +8,7 @@ import es.caib.rolsac.api.v2.general.HibernateEJB;
  * SessionBean para consultas de boletines.
  *
  * @ejb.bean name="sac/api/EnllacTelematicoQueryServiceEJB"
- *           jndi-name="es.caib.rolsac.api.v2.enllac.ejb.EnllacQueryServiceEJB"
+ *           jndi-name="es.caib.rolsac.api.v2.enllactelematico.ejb.EnllacTelematicoQueryServiceEJB"
  *           type="Stateless" view-type="remote" transaction-type="Container"
  *
  * @ejb.transaction type="Required"

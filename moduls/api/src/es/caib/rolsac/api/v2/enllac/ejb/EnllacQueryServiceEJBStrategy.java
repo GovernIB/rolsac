@@ -31,7 +31,7 @@ public class EnllacQueryServiceEJBStrategy implements EnllacQueryServiceStrategy
     }
 
 	public void setUrl(String url) {
-		//No es necesario en EJB.
+		this.setUrl(url);
 	}
 
 }

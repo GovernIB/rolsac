@@ -15,7 +15,7 @@ import es.caib.rolsac.api.v2.rolsac.ejb.RolsacQueryServiceEJB;
  * SessionBean para consultas de boletines.
  *
  * @ejb.bean
- *  name="sac/api/EnllacTelematicoQueryServiceEJB"
+ *  name="sac/api/EnllacQueryServiceEJB"
  *  jndi-name="es.caib.rolsac.api.v2.enllac.ejb.EnllacQueryServiceEJB"
  *  type="Stateless"
  *  view-type="remote"
@@ -34,19 +34,19 @@ public class EnllacQueryServiceEJB extends HibernateEJB {
     public void ejbCreate() throws CreateException {
         super.ejbCreate();
     }
-    
+
     /**
      * Obtiene el procedimiento.
      * @param idProcediment
      * @return ProcedimentDTO
-     * 
+     *
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
     public ProcedimentDTO obtenirProcediment(long idProcediment) {
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
         procedimentCriteria.setId(String.valueOf(idProcediment));
-        RolsacQueryServiceEJB ejb = new RolsacQueryServiceEJB(); 
+        RolsacQueryServiceEJB ejb = new RolsacQueryServiceEJB();
         return ejb.obtenirProcediment(procedimentCriteria);
     }
 
@@ -54,7 +54,7 @@ public class EnllacQueryServiceEJB extends HibernateEJB {
      * Obtiene la ficha.
      * @param idFitxa
      * @return FitxaDTO
-     * 
+     *
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -64,7 +64,7 @@ public class EnllacQueryServiceEJB extends HibernateEJB {
         if (fitxaCriteria.getIdioma() == null) {
             fitxaCriteria.setIdioma(Locale.getDefault().getLanguage());
         }
-        RolsacQueryServiceEJB ejb = new RolsacQueryServiceEJB(); 
+        RolsacQueryServiceEJB ejb = new RolsacQueryServiceEJB();
         return ejb.obtenirFitxa(fitxaCriteria);
     }
 
