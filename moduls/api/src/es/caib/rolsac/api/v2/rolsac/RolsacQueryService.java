@@ -22,6 +22,8 @@ import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiQueryServiceAdapter;
 import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
 import es.caib.rolsac.api.v2.enllac.EnllacQueryServiceAdapter;
+import es.caib.rolsac.api.v2.enllactelematico.EnllacTelematicoCriteria;
+import es.caib.rolsac.api.v2.enllactelematico.EnllacTelematicoQueryServiceAdapter;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialQueryServiceAdapter;
 import es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioCriteria;
@@ -126,6 +128,9 @@ public interface RolsacQueryService {
 	List<EdificiQueryServiceAdapter> llistarEdificis(EdificiCriteria edificiTramit) throws QueryServiceException;
 
 	EnllacQueryServiceAdapter obtenirEnllac(EnllacCriteria enllacCriteria) throws QueryServiceException;
+
+	EnllacTelematicoQueryServiceAdapter obtenirEnllacTelematico(EnllacTelematicoCriteria enllacCriteria)
+			throws QueryServiceException;
 
 	List<EnllacQueryServiceAdapter> llistarEnllacos(EnllacCriteria enllacCriteria) throws QueryServiceException;
 

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" 
+<beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans 	
-						classpath:org/springframework/beans/factory/xml/spring-beans-3.0.xsd                   	                 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+						classpath:org/springframework/beans/factory/xml/spring-beans-3.0.xsd
                         http://www.springframework.org/schema/context
 	                    classpath:org/springframework/beans/factory/xml/spring-context-3.0.xsd"
     default-lazy-init="true">
     <!-- TODO: remove default-lazy-init="true" when all is done -->
 
-	<!-- RolsacQueryService beans -->	
+	<!-- RolsacQueryService beans -->
 	<!-- EJB -->
 	<bean id="rolsacQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.rolsac.RolsacQueryServiceAdapter" scope="prototype">
 		<property name="rolsacQueryServiceStrategy" ref="rolsacQueryServiceEJBStrategy" />
@@ -24,7 +24,7 @@
 	</bean>
 
 	<bean id="rolsacQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.rolsac.ejb.RolsacQueryServiceEJBLocator" />
-	
+
 	<!-- WS -->
     <bean id="rolsacQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.rolsac.RolsacQueryServiceAdapter" scope="prototype">
         <property name="rolsacQueryServiceStrategy" ref="rolsacQueryServiceWSStrategy" />
@@ -35,7 +35,7 @@
     </bean>
 
 	<bean id="gatewayRolsac" class="es.caib.rolsac.api.v2.rolsac.ws.RolsacQueryServiceGateway" />
-	<!-- RolsacQueryService beans -->			
+	<!-- RolsacQueryService beans -->
 
 
 	<!-- AgrupacioFetVitalQueryService beans -->
@@ -53,7 +53,7 @@
 	</bean>
 
 	<bean id="agrupacioFetVitalQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.agrupacioFetVital.ejb.AgrupacioFetVitalQueryServiceEJBLocator" />
-	
+
 	<!-- WS -->
 	<bean id="agrupacioFetVitalQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalQueryServiceAdapter" scope="prototype">
         <property name="agrupacioFetVitalQueryServiceStrategy" ref="agrupacioFetVitalQueryServiceWSStrategy" />
@@ -63,7 +63,7 @@
         <property name="gateway" ref="gatewayAgrupacioFetVital" />
     </bean>
 
-	<bean id="gatewayAgrupacioFetVital" class="es.caib.rolsac.api.v2.agrupacioFetVital.ws.AgrupacioFetVitalQueryServiceGateway" />	
+	<bean id="gatewayAgrupacioFetVital" class="es.caib.rolsac.api.v2.agrupacioFetVital.ws.AgrupacioFetVitalQueryServiceGateway" />
 	<!-- AgrupacioFetVitalQueryService beans -->
 
 	<!-- AgrupacioMateriaQueryService beans -->
@@ -81,7 +81,7 @@
 	</bean>
 
 	<bean id="agrupacioMateriaQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.agrupacioMateria.ejb.AgrupacioMateriaQueryServiceEJBLocator" />
-	
+
 	<!-- WS -->
     <bean id="agrupacioMateriaQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaQueryServiceAdapter" scope="prototype">
         <property name="agrupacioMateriaQueryServiceStrategy" ref="agrupacioMateriaQueryServiceWSStrategy" />
@@ -97,7 +97,7 @@
     <!-- ArxiuMQueryService beans -->
     <!-- EJB -->
     <bean id="arxiuQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter" scope="prototype" />
-    
+
     <!-- WS -->
     <bean id="arxiuQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter" scope="prototype" />
     <!-- ArxiuMQueryService beans -->
@@ -117,7 +117,7 @@
 	</bean>
 
 	<bean id="butlletiQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.butlleti.ejb.ButlletiQueryServiceEJBLocator" />
-	
+
 	<!-- WS -->
     <bean id="butlletiQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.butlleti.ButlletiQueryServiceAdapter" scope="prototype">
         <property name="butlletiQueryServiceStrategy" ref="butlletiQueryServiceWSStrategy" />
@@ -127,12 +127,12 @@
         <property name="gateway" ref="gatewayButlleti" />
     </bean>
 
-	<bean id="gatewayButlleti" class="es.caib.rolsac.api.v2.butlleti.ws.ButlletiQueryServiceGateway" />	    	
+	<bean id="gatewayButlleti" class="es.caib.rolsac.api.v2.butlleti.ws.ButlletiQueryServiceGateway" />
 	<!-- ButlletiQueryService beans -->
 
 
 	<!-- CatalegDocumentsQueryService beans -->
-		
+
 	<!-- EJB -->
 	<bean id="catalegDocumentsQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsQueryServiceAdapter" scope="prototype">
 		<property name="catalegDocumentsQueryServiceStrategy" ref="catalegDocumentsQueryServiceEJBStrategy" />
@@ -144,7 +144,7 @@
 		<property name="catalegDocumentsQueryServiceLocator" ref="catalegDocumentsQueryServiceEJBLocator" />
 	</bean>
 	<bean id="catalegDocumentsQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.catalegDocuments.ejb.CatalegDocumentsQueryServiceEJBLocator" />
-		
+
 	<!-- WS -->
     <bean id="catalegDocumentsQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsQueryServiceAdapter" scope="prototype">
         <property name="catalegDocumentsQueryServiceStrategy" ref="catalegDocumentsQueryServiceWSStrategy" />
@@ -152,10 +152,10 @@
     <bean id="catalegDocumentsQueryServiceWSStrategy" class="es.caib.rolsac.api.v2.catalegDocuments.ws.CatalegDocumentsQueryServiceWSStrategy">
         <property name="gateway" ref="gatewayCatalegDocuments" />
     </bean>
-	<bean id="gatewayCatalegDocuments" class="es.caib.rolsac.api.v2.catalegDocuments.ws.CatalegDocumentsQueryServiceGateway" />	
+	<bean id="gatewayCatalegDocuments" class="es.caib.rolsac.api.v2.catalegDocuments.ws.CatalegDocumentsQueryServiceGateway" />
 	<!-- CatalegDocumentsQueryService beans -->
-		
-		
+
+
 	<!-- DocumentQueryService beans -->
 	<!-- EJB -->
 	<bean id="documentQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.document.DocumentQueryServiceAdapter" scope="prototype">
@@ -171,7 +171,7 @@
 	</bean>
 
 	<bean id="documentQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.document.ejb.DocumentQueryServiceEJBLocator" />
-	
+
 	<!-- WS -->
     <bean id="documentQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.document.DocumentQueryServiceAdapter" scope="prototype">
         <property name="documentQueryServiceStrategy" ref="documentQueryServiceWSStrategy" />
@@ -181,7 +181,7 @@
         <property name="gateway" ref="gatewayDocument" />
     </bean>
 
-	<bean id="gatewayDocument" class="es.caib.rolsac.api.v2.document.ws.DocumentQueryServiceGateway" />	    	
+	<bean id="gatewayDocument" class="es.caib.rolsac.api.v2.document.ws.DocumentQueryServiceGateway" />
 	<!-- DocumentQueryService beans -->
 
 
@@ -200,7 +200,7 @@
     </bean>
 
     <bean id="documentTramitQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.documentTramit.ejb.DocumentTramitQueryServiceEJBLocator" />
-    
+
 	<!-- WS -->
 	<bean id="documentTramitQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.documentTramit.DocumentTramitQueryServiceAdapter" scope="prototype">
         <property name="documentTramitQueryServiceStrategy" ref="documentTramitQueryServiceWSStrategy" />
@@ -210,9 +210,9 @@
         <property name="gateway" ref="gatewayDocumentTramit" />
     </bean>
 
-	<bean id="gatewayDocumentTramit" class="es.caib.rolsac.api.v2.documentTramit.ws.DocumentTramitQueryServiceGateway" />	
+	<bean id="gatewayDocumentTramit" class="es.caib.rolsac.api.v2.documentTramit.ws.DocumentTramitQueryServiceGateway" />
     <!-- DocumentTramitQueryService beans -->
-    
+
     <!-- DocumentoNormativaQueryService beans -->
     <!-- EJB -->
     <bean id="documentoNormativaQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaQueryServiceAdapter" scope="prototype">
@@ -228,7 +228,7 @@
     </bean>
 
     <bean id="documentoNormativaQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.documentoNormativa.ejb.DocumentoNormativaQueryServiceEJBLocator" />
-    
+
 	<!-- WS -->
 	<bean id="documentoNormativaQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.documentoNormativa.DocumentoNormativaQueryServiceAdapter" scope="prototype">
         <property name="documentoNormativaQueryServiceStrategy" ref="documentoNormativaQueryServiceWSStrategy" />
@@ -238,10 +238,10 @@
         <property name="gateway" ref="gatewayDocumentoNormativa" />
     </bean>
 
-	<bean id="gatewayDocumentoNormativa" class="es.caib.rolsac.api.v2.documentoNormativa.ws.DocumentoNormativaQueryServiceGateway" />	
+	<bean id="gatewayDocumentoNormativa" class="es.caib.rolsac.api.v2.documentoNormativa.ws.DocumentoNormativaQueryServiceGateway" />
     <!-- DocumentoNormativaQueryService beans -->
-    
-    
+
+
       <!-- DocumentoServicioQueryService beans -->
     <!-- EJB -->
     <bean id="documentoServicioQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.documentoServicio.DocumentoServicioQueryServiceAdapter" scope="prototype">
@@ -257,7 +257,7 @@
     </bean>
 
     <bean id="documentoServicioQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.documentoServicio.ejb.DocumentoServicioQueryServiceEJBLocator" />
-    
+
 	<!-- WS -->
 	<bean id="documentoServicioQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.documentoServicio.DocumentoServicioQueryServiceAdapter" scope="prototype">
         <property name="documentoServicioQueryServiceStrategy" ref="documentoServicioQueryServiceWSStrategy" />
@@ -267,11 +267,11 @@
         <property name="gateway" ref="gatewayDocumentoServicio" />
     </bean>
 
-	<bean id="gatewayDocumentoServicio" class="es.caib.rolsac.api.v2.documentoServicio.ws.DocumentoServicioQueryServiceGateway" />	
+	<bean id="gatewayDocumentoServicio" class="es.caib.rolsac.api.v2.documentoServicio.ws.DocumentoServicioQueryServiceGateway" />
     <!-- DocumentoServicioQueryService beans -->
-    
- 
-    
+
+
+
     <!-- EdificiQueryService beans -->
     <!-- EJB -->
     <bean id="edificiQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.edifici.EdificiQueryServiceAdapter" scope="prototype">
@@ -287,7 +287,7 @@
     </bean>
 
     <bean id="edificiQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.edifici.ejb.EdificiQueryServiceEJBLocator" />
-    
+
 	<!-- WS -->
     <bean id="edificiQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.edifici.EdificiQueryServiceAdapter" scope="prototype">
         <property name="edificiQueryServiceStrategy" ref="edificiQueryServiceWSStrategy" />
@@ -297,7 +297,7 @@
         <property name="gateway" ref="gatewayEdifici" />
     </bean>
 
-	<bean id="gatewayEdifici" class="es.caib.rolsac.api.v2.edifici.ws.EdificiQueryServiceGateway" />	        
+	<bean id="gatewayEdifici" class="es.caib.rolsac.api.v2.edifici.ws.EdificiQueryServiceGateway" />
     <!-- EdificiQueryService beans -->
 
 
@@ -316,7 +316,7 @@
     </bean>
 
     <bean id="enllacQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.enllac.ejb.EnllacQueryServiceEJBLocator" />
-    
+
 	<!-- WS -->
     <bean id="enllacQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.enllac.EnllacQueryServiceAdapter" scope="prototype">
         <property name="enllacQueryServiceStrategy" ref="enllacQueryServiceWSStrategy" />
@@ -326,9 +326,21 @@
         <property name="gateway" ref="gatewayEnllac" />
     </bean>
 
-	<bean id="gatewayEnllac" class="es.caib.rolsac.api.v2.enllac.ws.EnllacQueryServiceGateway" />	    
+	<bean id="gatewayEnllac" class="es.caib.rolsac.api.v2.enllac.ws.EnllacQueryServiceGateway" />
+
+		<!-- WS -->
+    <bean id="enllacTelematicoQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.enllactelematico.EnllacTelematicoQueryServiceAdapter" scope="prototype">
+        <property name="enllacTelematicoQueryServiceStrategy" ref="enllacTelematicoQueryServiceWSStrategy" />
+    </bean>
+
+    <bean id="enllacTelematicoQueryServiceWSStrategy" class="es.caib.rolsac.api.v2.enllactelematico.ws.EnllacTelematicoQueryServiceWSStrategy">
+        <property name="gateway" ref="gatewayEnllacTelematico" />
+    </bean>
+
+	<bean id="gatewayEnllacTelematico" class="es.caib.rolsac.api.v2.enllactelematico.ws.EnllacTelematicoQueryServiceGateway" />
+
     <!-- EnllacQueryService beans -->
-    
+
 
     <!-- EspaiTerritorialQueryService beans -->
     <!-- EJB -->
@@ -345,7 +357,7 @@
     </bean>
 
     <bean id="espaiTerritorialQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.espaiTerritorial.ejb.EspaiTerritorialQueryServiceEJBLocator" />
-    
+
 	<!-- WS -->
     <bean id="espaiTerritorialQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialQueryServiceAdapter" scope="prototype">
         <property name="espaiTerritorialQueryServiceStrategy" ref="espaiTerritorialQueryServiceWSStrategy" />
@@ -355,7 +367,7 @@
         <property name="gateway" ref="gatewayEspaiTerritorial" />
     </bean>
 
-	<bean id="gatewayEspaiTerritorial" class="es.caib.rolsac.api.v2.espaiTerritorial.ws.EspaiTerritorialQueryServiceGateway" />	        
+	<bean id="gatewayEspaiTerritorial" class="es.caib.rolsac.api.v2.espaiTerritorial.ws.EspaiTerritorialQueryServiceGateway" />
     <!-- EspaiTerritorialQueryService beans -->
 
 
@@ -374,7 +386,7 @@
     </bean>
 
     <bean id="estadisticaInsertServiceEJBLocator" class="es.caib.rolsac.api.v2.estadistica.ejb.EstadisticaInsertServiceEJBLocator" />
-    
+
     <!-- WS -->
     <bean id="estadisticaInsertServiceWSAdapter" class="es.caib.rolsac.api.v2.estadistica.EstadisticaInsertServiceAdapter" scope="prototype">
         <property name="estadisticaInsertServiceStrategy" ref="estadisticaInsertServiceWSStrategy" />
@@ -384,12 +396,12 @@
         <property name="gateway" ref="gatewayEstadistica" />
     </bean>
 
-	<bean id="gatewayEstadistica" class="es.caib.rolsac.api.v2.estadistica.ws.EstadisticaInsertServiceGateway" />	        
-    
+	<bean id="gatewayEstadistica" class="es.caib.rolsac.api.v2.estadistica.ws.EstadisticaInsertServiceGateway" />
+
     <!-- EstadisticaInsertService beans -->
-    
-    
-	<!-- ExcepcioDocumentacioQueryService beans -->		
+
+
+	<!-- ExcepcioDocumentacioQueryService beans -->
 	<!-- EJB -->
 	<bean id="excepcioDocumentacioQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioQueryServiceAdapter" scope="prototype">
 		<property name="excepcioDocumentacioQueryServiceStrategy" ref="excepcioDocumentacioQueryServiceEJBStrategy" />
@@ -401,7 +413,7 @@
 		<property name="excepcioDocumentacioQueryServiceLocator" ref="excepcioDocumentacioQueryServiceEJBLocator" />
 	</bean>
 	<bean id="excepcioDocumentacioQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.excepcioDocumentacio.ejb.ExcepcioDocumentacioQueryServiceEJBLocator" />
-		
+
     <!-- WS -->
     <bean id="excepcioDocumentacioQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioQueryServiceAdapter" scope="prototype">
         <property name="excepcioDocumentacioQueryServiceStrategy" ref="excepcioDocumentacioQueryServiceWSStrategy" />
@@ -411,10 +423,10 @@
         <property name="gateway" ref="gatewayExcepcioDocumentacio" />
     </bean>
 
-	<bean id="gatewayExcepcioDocumentacio" class="es.caib.rolsac.api.v2.excepcioDocumentacio.ws.ExcepcioDocumentacioQueryServiceGateway" />	        
-				
-	<!-- ExcepcioDocumentacioQueryService beans --> 
-	   
+	<bean id="gatewayExcepcioDocumentacio" class="es.caib.rolsac.api.v2.excepcioDocumentacio.ws.ExcepcioDocumentacioQueryServiceGateway" />
+
+	<!-- ExcepcioDocumentacioQueryService beans -->
+
 
     <!-- FamiliaQueryService beans -->
     <!-- EJB -->
@@ -431,7 +443,7 @@
     </bean>
 
     <bean id="familiaQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.familia.ejb.FamiliaQueryServiceEJBLocator" />
-    
+
 	<!-- WS -->
     <bean id="familiaQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.familia.FamiliaQueryServiceAdapter" scope="prototype">
         <property name="familiaQueryServiceStrategy" ref="familiaQueryServiceWSStrategy" />
@@ -441,9 +453,9 @@
         <property name="gateway" ref="gatewayFamilia" />
     </bean>
 
-	<bean id="gatewayFamilia" class="es.caib.rolsac.api.v2.familia.ws.FamiliaQueryServiceGateway" />	    
-    <!-- FamiliaQueryService beans -->    
-    
+	<bean id="gatewayFamilia" class="es.caib.rolsac.api.v2.familia.ws.FamiliaQueryServiceGateway" />
+    <!-- FamiliaQueryService beans -->
+
     <!-- FetVitalQueryService beans -->
     <!-- EJB -->
     <bean id="fetVitalQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.fetVital.FetVitalQueryServiceAdapter" scope="prototype">
@@ -459,7 +471,7 @@
     </bean>
 
     <bean id="fetVitalQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.fetVital.ejb.FetVitalQueryServiceEJBLocator" />
-        
+
 	<!-- WS -->
     <bean id="fetVitalQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.fetVital.FetVitalQueryServiceAdapter" scope="prototype">
         <property name="fetVitalQueryServiceStrategy" ref="fetVitalQueryServiceWSStrategy" />
@@ -469,10 +481,10 @@
         <property name="gateway" ref="gatewayFetVital" />
     </bean>
 
-	<bean id="gatewayFetVital" class="es.caib.rolsac.api.v2.fetVital.ws.FetVitalQueryServiceGateway" />	    
+	<bean id="gatewayFetVital" class="es.caib.rolsac.api.v2.fetVital.ws.FetVitalQueryServiceGateway" />
     <!-- FetVitalQueryService beans -->
-    
-    
+
+
     <!-- FitxaQueryService beans -->
     <!--  EJB -->
     <bean id="fitxaQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter" scope="prototype">
@@ -488,8 +500,8 @@
     </bean>
 
     <bean id="fitxaQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.fitxa.ejb.FitxaQueryServiceEJBLocator" />
-        
-    <!-- WS -->    
+
+    <!-- WS -->
     <bean id="fitxaQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter" scope="prototype">
         <property name="fitxaQueryServiceStrategy" ref="fitxaQueryServiceWSStrategy" />
     </bean>
@@ -500,8 +512,8 @@
 
 	<bean id="gatewayFitxa" class="es.caib.rolsac.api.v2.fitxa.ws.FitxaQueryServiceGateway" />
     <!-- FitxaQueryService beans -->
-    
-    
+
+
     <!-- FitxaUAQueryService beans -->
     <!-- EJB -->
     <bean id="fitxaUAQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.fitxaUA.FitxaUAQueryServiceAdapter" scope="prototype">
@@ -516,7 +528,7 @@
         <property name="fitxaUAQueryServiceLocator" ref="fitxaUAQueryServiceEJBLocator" />
     </bean>
 
-    <bean id="fitxaUAQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.fitxaUA.ejb.FitxaUAQueryServiceEJBLocator" />    
+    <bean id="fitxaUAQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.fitxaUA.ejb.FitxaUAQueryServiceEJBLocator" />
 
 	<!-- WS -->
     <bean id="fitxaUAQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.fitxaUA.FitxaUAQueryServiceAdapter" scope="prototype">
@@ -527,11 +539,11 @@
         <property name="gateway" ref="gatewayFitxaUA" />
     </bean>
 
-	<bean id="gatewayFitxaUA" class="es.caib.rolsac.api.v2.fitxaUA.ws.FitxaUAQueryServiceGateway" />	    
+	<bean id="gatewayFitxaUA" class="es.caib.rolsac.api.v2.fitxaUA.ws.FitxaUAQueryServiceGateway" />
 
     <!-- FitxaUAQueryService beans -->
-    
-    
+
+
     <!-- FormulariQueryService beans -->
     <!-- EJB -->
     <bean id="formulariQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.formulari.FormulariQueryServiceAdapter" scope="prototype">
@@ -547,7 +559,7 @@
     </bean>
 
     <bean id="formulariQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.formulari.ejb.FormulariQueryServiceEJBLocator" />
-    
+
 	<!-- WS -->
     <bean id="formulariQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.formulari.FormulariQueryServiceAdapter" scope="prototype">
         <property name="formulariQueryServiceStrategy" ref="formulariQueryServiceWSStrategy" />
@@ -557,10 +569,10 @@
         <property name="gateway" ref="gatewayFormulari" />
     </bean>
 
-	<bean id="gatewayFormulari" class="es.caib.rolsac.api.v2.formulari.ws.FormulariQueryServiceGateway" />	    
+	<bean id="gatewayFormulari" class="es.caib.rolsac.api.v2.formulari.ws.FormulariQueryServiceGateway" />
     <!-- FormulariQueryService beans -->
-    
-    
+
+
     <!-- IconaFamiliaQueryService beans -->
     <!-- EJB -->
     <bean id="iconaFamiliaQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaQueryServiceAdapter" scope="prototype">
@@ -576,7 +588,7 @@
     </bean>
 
     <bean id="iconaFamiliaQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.iconaFamilia.ejb.IconaFamiliaQueryServiceEJBLocator" />
-    
+
 	<!-- WS -->
     <bean id="iconaFamiliaQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaQueryServiceAdapter" scope="prototype">
         <property name="iconaFamiliaQueryServiceStrategy" ref="iconaFamiliaQueryServiceWSStrategy" />
@@ -586,10 +598,10 @@
         <property name="gateway" ref="gatewayIconaFamilia" />
     </bean>
 
-	<bean id="gatewayIconaFamilia" class="es.caib.rolsac.api.v2.iconaFamilia.ws.IconaFamiliaQueryServiceGateway" />	    
+	<bean id="gatewayIconaFamilia" class="es.caib.rolsac.api.v2.iconaFamilia.ws.IconaFamiliaQueryServiceGateway" />
     <!-- IconaFamiliaQueryService beans -->
-    
-    
+
+
     <!-- IconaMateriaQueryService beans -->
     <bean id="iconaMateriaQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.iconaMateria.IconaMateriaQueryServiceAdapter" scope="prototype">
         <property name="iconaMateriaQueryServiceStrategy" ref="iconaMateriaQueryServiceEJBStrategy" />
@@ -604,7 +616,7 @@
     </bean>
 
     <bean id="iconaMateriaQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.iconaMateria.ejb.IconaMateriaQueryServiceEJBLocator" />
-    
+
 	<!-- WS -->
     <bean id="iconaMateriaQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.iconaMateria.IconaMateriaQueryServiceAdapter" scope="prototype">
         <property name="iconaMateriaQueryServiceStrategy" ref="iconaMateriaQueryServiceWSStrategy" />
@@ -614,10 +626,10 @@
         <property name="gateway" ref="gatewayIconaMateria" />
     </bean>
 
-	<bean id="gatewayIconaMateria" class="es.caib.rolsac.api.v2.iconaMateria.ws.IconaMateriaQueryServiceGateway" />	    
+	<bean id="gatewayIconaMateria" class="es.caib.rolsac.api.v2.iconaMateria.ws.IconaMateriaQueryServiceGateway" />
     <!-- IconaMateriaQueryService beans -->
-    
-    
+
+
     <!-- MateriaQueryService beans -->
     <!-- EJB -->
     <bean id="materiaQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.materia.MateriaQueryServiceAdapter" scope="prototype">
@@ -633,7 +645,7 @@
     </bean>
 
     <bean id="materiaQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.materia.ejb.MateriaQueryServiceEJBLocator" />
-    
+
 	<!-- WS -->
     <bean id="materiaQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.materia.MateriaQueryServiceAdapter" scope="prototype">
         <property name="materiaQueryServiceStrategy" ref="materiaQueryServiceWSStrategy" />
@@ -645,8 +657,8 @@
 
 	<bean id="gatewayMateria" class="es.caib.rolsac.api.v2.materia.ws.MateriaQueryServiceGateway" />
     <!-- MateriaQueryService beans -->
-    
-    
+
+
     <!-- MateriAgrupacioaQueryService beans -->
     <!-- EJB -->
     <bean id="materiaAgrupacioQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.materiaAgrupacio.MateriaAgrupacioQueryServiceAdapter" scope="prototype">
@@ -662,7 +674,7 @@
     </bean>
 
     <bean id="materiaAgrupacioQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.materiaAgrupacio.ejb.MateriaAgrupacioQueryServiceEJBLocator" />
-    
+
 	<!-- WS -->
     <bean id="materiaAgrupacioQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.materiaAgrupacio.MateriaAgrupacioQueryServiceAdapter" scope="prototype">
         <property name="materiaAgrupacioQueryServiceStrategy" ref="materiaAgrupacioQueryServiceWSStrategy" />
@@ -672,10 +684,10 @@
         <property name="gateway" ref="gatewayMateriaAgrupacio" />
     </bean>
 
-	<bean id="gatewayMateriaAgrupacio" class="es.caib.rolsac.api.v2.materiaAgrupacio.ws.MateriaAgrupacioQueryServiceGateway" />	    
+	<bean id="gatewayMateriaAgrupacio" class="es.caib.rolsac.api.v2.materiaAgrupacio.ws.MateriaAgrupacioQueryServiceGateway" />
     <!-- MateriaAgrupacioQueryService beans -->
-    
-    
+
+
     <!-- NormativaQueryService beans -->
     <!-- EJB -->
     <bean id="normativaQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.normativa.NormativaQueryServiceAdapter" scope="prototype">
@@ -691,7 +703,7 @@
     </bean>
 
     <bean id="normativaQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.normativa.ejb.NormativaQueryServiceEJBLocator" />
-    
+
 	<!-- WS -->
     <bean id="normativaQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.normativa.NormativaQueryServiceAdapter" scope="prototype">
         <property name="normativaQueryServiceStrategy" ref="normativaQueryServiceWSStrategy" />
@@ -701,10 +713,10 @@
         <property name="gateway" ref="gatewayNormativa" />
     </bean>
 
-	<bean id="gatewayNormativa" class="es.caib.rolsac.api.v2.normativa.ws.NormativaQueryServiceGateway" />	    
+	<bean id="gatewayNormativa" class="es.caib.rolsac.api.v2.normativa.ws.NormativaQueryServiceGateway" />
     <!-- NormativaQueryService beans -->
-    
-    
+
+
     <!-- PerfilQueryService beans -->
     <!-- EJB -->
     <bean id="perfilQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.perfil.PerfilQueryServiceAdapter" scope="prototype">
@@ -720,7 +732,7 @@
     </bean>
 
     <bean id="perfilQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.perfil.ejb.PerfilQueryServiceEJBLocator" />
-    
+
 	<!-- WS -->
     <bean id="perfilQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.perfil.PerfilQueryServiceAdapter" scope="prototype">
         <property name="perfilQueryServiceStrategy" ref="perfilQueryServiceWSStrategy" />
@@ -730,9 +742,9 @@
         <property name="gateway" ref="gatewayPerfil" />
     </bean>
 
-	<bean id="gatewayPerfil" class="es.caib.rolsac.api.v2.perfil.ws.PerfilQueryServiceGateway" />	    
+	<bean id="gatewayPerfil" class="es.caib.rolsac.api.v2.perfil.ws.PerfilQueryServiceGateway" />
     <!-- PerfilQueryService beans -->
-    
+
     <!-- PersonalQueryService beans -->
     <!-- EJB -->
     <bean id="personalQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.personal.PersonalQueryServiceAdapter" scope="prototype">
@@ -748,7 +760,7 @@
     </bean>
 
     <bean id="personalQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.personal.ejb.PersonalQueryServiceEJBLocator" />
-    
+
 	<!-- WS -->
     <bean id="personalQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.personal.PersonalQueryServiceAdapter" scope="prototype">
         <property name="personalQueryServiceStrategy" ref="personalQueryServiceWSStrategy" />
@@ -758,9 +770,9 @@
         <property name="gateway" ref="gatewayPersonal" />
     </bean>
 
-	<bean id="gatewayPersonal" class="es.caib.rolsac.api.v2.personal.ws.PersonalQueryServiceGateway" />	    
+	<bean id="gatewayPersonal" class="es.caib.rolsac.api.v2.personal.ws.PersonalQueryServiceGateway" />
     <!-- PersonalQueryService beans -->
-    
+
 	<!-- ProcedimentQueryService beans -->
 	<!-- EJB -->
     <bean id="procedimentQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter" scope="prototype">
@@ -776,7 +788,7 @@
     </bean>
 
     <bean id="procedimentQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.procediment.ejb.ProcedimentQueryServiceEJBLocator" />
-    
+
     <!-- WS -->
         <bean id="procedimentQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter" scope="prototype">
         <property name="procedimentQueryServiceStrategy" ref="procedimentQueryServiceWSStrategy" />
@@ -786,10 +798,10 @@
         <property name="gateway" ref="gatewayProcediment" />
     </bean>
 
-	<bean id="gatewayProcediment" class="es.caib.rolsac.api.v2.procediment.ws.ProcedimentQueryServiceGateway" />	        
+	<bean id="gatewayProcediment" class="es.caib.rolsac.api.v2.procediment.ws.ProcedimentQueryServiceGateway" />
     <!-- ProcedimentQueryService beans -->
-    
-    
+
+
     <!-- ServicioQueryService beans -->
 	<!-- EJB -->
     <bean id="servicioQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.servicio.ServicioQueryServiceAdapter" scope="prototype">
@@ -805,7 +817,7 @@
     </bean>
 
     <bean id="servicioQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.servicio.ejb.ServicioQueryServiceEJBLocator" />
-    
+
     <!-- WS -->
         <bean id="servicioQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.servicio.ServicioQueryServiceAdapter" scope="prototype">
         <property name="servicioQueryServiceStrategy" ref="servicioQueryServiceWSStrategy" />
@@ -815,9 +827,9 @@
         <property name="gateway" ref="gatewayServicio" />
     </bean>
 
-	<bean id="gatewayServicio" class="es.caib.rolsac.api.v2.servicio.ws.ServicioQueryServiceGateway" />	        
+	<bean id="gatewayServicio" class="es.caib.rolsac.api.v2.servicio.ws.ServicioQueryServiceGateway" />
     <!-- ServicioQueryService beans -->
-    
+
     <!-- PublicObjectiuQueryService beans -->
     <!-- EJB -->
     <bean id="publicObjectiuQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuQueryServiceAdapter" scope="prototype">
@@ -833,7 +845,7 @@
     </bean>
 
     <bean id="publicObjectiuQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.publicObjectiu.ejb.PublicObjectiuQueryServiceEJBLocator" />
-    
+
     <!-- WS -->
 	<bean id="publicObjectiuQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuQueryServiceAdapter" scope="prototype">
         <property name="publicObjectiuQueryServiceStrategy" ref="publicObjectiuQueryServiceWSStrategy" />
@@ -843,9 +855,9 @@
         <property name="gateway" ref="gatewayPublicObjectiu" />
     </bean>
 
-	<bean id="gatewayPublicObjectiu" class="es.caib.rolsac.api.v2.publicObjectiu.ws.PublicObjectiuQueryServiceGateway" />	
+	<bean id="gatewayPublicObjectiu" class="es.caib.rolsac.api.v2.publicObjectiu.ws.PublicObjectiuQueryServiceGateway" />
     <!-- PublicObjectiuQueryService beans -->
-    
+
     <!-- SeccioQueryService beans -->
     <!-- EJB -->
     <bean id="seccioQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.seccio.SeccioQueryServiceAdapter" scope="prototype">
@@ -861,7 +873,7 @@
     </bean>
 
     <bean id="seccioQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.seccio.ejb.SeccioQueryServiceEJBLocator" />
-    
+
 	<!-- WS -->
     <bean id="seccioQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.seccio.SeccioQueryServiceAdapter" scope="prototype">
         <property name="seccioQueryServiceStrategy" ref="seccioQueryServiceWSStrategy" />
@@ -873,7 +885,7 @@
 
 	<bean id="gatewaySeccio" class="es.caib.rolsac.api.v2.seccio.ws.SeccioQueryServiceGateway" />
     <!-- SeccioQueryService beans -->
-    
+
     <!-- TaxaQueryService beans -->
     <!-- EJB -->
     <bean id="taxaQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.taxa.TaxaQueryServiceAdapter" scope="prototype">
@@ -899,9 +911,9 @@
         <property name="gateway" ref="gatewayTaxa" />
     </bean>
 
-	<bean id="gatewayTaxa" class="es.caib.rolsac.api.v2.taxa.ws.TaxaQueryServiceGateway" />	        
+	<bean id="gatewayTaxa" class="es.caib.rolsac.api.v2.taxa.ws.TaxaQueryServiceGateway" />
     <!-- TaxaQueryService beans -->
-    
+
     <!-- TipusQueryService beans -->
     <!-- EJB -->
     <bean id="tipusQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.tipus.TipusQueryServiceAdapter" scope="prototype">
@@ -927,16 +939,16 @@
         <property name="gateway" ref="gatewayTipus" />
     </bean>
 
-	<bean id="gatewayTipus" class="es.caib.rolsac.api.v2.tipus.ws.TipusQueryServiceGateway" />	        
+	<bean id="gatewayTipus" class="es.caib.rolsac.api.v2.tipus.ws.TipusQueryServiceGateway" />
     <!-- TipusQueryService beans -->
-    
+
 	<!-- TipusAfectacioQueryService beans -->
 	<!-- EJB -->
 	<bean id="tipusAfectacioQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioQueryServiceAdapter" scope="prototype" />
-	<!-- WS -->  
-	<bean id="tipusAfectacioQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioQueryServiceAdapter" scope="prototype" />    
+	<!-- WS -->
+	<bean id="tipusAfectacioQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioQueryServiceAdapter" scope="prototype" />
 	<!-- TipusAfectacioQueryService beans -->
-    
+
     <!-- AfectacioQueryService beans -->
     <!-- EJB -->
     <bean id="afectacioQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.afectacio.AfectacioQueryServiceAdapter" scope="prototype">
@@ -962,17 +974,17 @@
         <property name="gateway" ref="gatewayAfectacio" />
     </bean>
 
-	<bean id="gatewayAfectacio" class="es.caib.rolsac.api.v2.afectacio.ws.AfectacioQueryServiceGateway" />	    
+	<bean id="gatewayAfectacio" class="es.caib.rolsac.api.v2.afectacio.ws.AfectacioQueryServiceGateway" />
     <!-- AfectacioQueryService beans -->
-    
+
     <!-- TractamentQueryService beans -->
     <!-- EJB -->
     <bean id="tractamentQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.tractament.TractamentQueryServiceAdapter" scope="prototype" />
     <!-- WS -->
-    <bean id="tractamentQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.tractament.TractamentQueryServiceAdapter" scope="prototype" />    
+    <bean id="tractamentQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.tractament.TractamentQueryServiceAdapter" scope="prototype" />
     <!-- TractamentQueryService beans -->
-    
-    
+
+
     <!-- TramitQueryService beans -->
     <!-- EJB -->
     <bean id="tramitQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.tramit.TramitQueryServiceAdapter" scope="prototype">
@@ -998,7 +1010,7 @@
         <property name="gateway" ref="gatewayTramit" />
     </bean>
 
-	<bean id="gatewayTramit" class="es.caib.rolsac.api.v2.tramit.ws.TramitQueryServiceGateway" />	    
+	<bean id="gatewayTramit" class="es.caib.rolsac.api.v2.tramit.ws.TramitQueryServiceGateway" />
     <!-- TramitQueryService beans -->
 
 
@@ -1017,20 +1029,20 @@
     </bean>
 
     <bean id="unitatAdministrativaQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.unitatAdministrativa.ejb.UnitatAdministrativaQueryServiceEJBLocator" />
-    
+
 	<!-- WS -->
     <bean id="unitatAdministrativaQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter" scope="prototype">
-        <property name="unitatAdministrativaQueryServiceStrategy" ref="unitatAdministrativaQueryServiceWSStrategy" />        
+        <property name="unitatAdministrativaQueryServiceStrategy" ref="unitatAdministrativaQueryServiceWSStrategy" />
     </bean>
 
     <bean id="unitatAdministrativaQueryServiceWSStrategy" class="es.caib.rolsac.api.v2.unitatAdministrativa.ws.UnitatAdministrativaQueryServiceWSStrategy">
         <property name="gateway" ref="gatewayUnitatAdministrativa" />
     </bean>
 
-	<bean id="gatewayUnitatAdministrativa" class="es.caib.rolsac.api.v2.unitatAdministrativa.ws.UnitatAdministrativaQueryServiceGateway" />	    
+	<bean id="gatewayUnitatAdministrativa" class="es.caib.rolsac.api.v2.unitatAdministrativa.ws.UnitatAdministrativaQueryServiceGateway" />
     <!-- UnitatAdministrativaQueryService beans -->
 
-    
+
     <!-- UnitatMateriaQueryService beans -->
     <!-- EJB -->
     <bean id="unitatMateriaQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaQueryServiceAdapter" scope="prototype">
@@ -1045,7 +1057,7 @@
         <property name="unitatMateriaQueryServiceLocator" ref="unitatMateriaQueryServiceEJBLocator" />
     </bean>
     <bean id="unitatMateriaQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.unitatMateria.ejb.UnitatMateriaQueryServiceEJBLocator" />
-    
+
 	<!-- WS -->
     <bean id="unitatMateriaQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaQueryServiceAdapter" scope="prototype">
         <property name="unitatMateriaQueryServiceStrategy" ref="unitatMateriaQueryServiceWSStrategy" />
@@ -1055,9 +1067,9 @@
         <property name="gateway" ref="gatewayUnitatMateria" />
     </bean>
 
-	<bean id="gatewayUnitatMateria" class="es.caib.rolsac.api.v2.unitatMateria.ws.UnitatMateriaQueryServiceGateway" />	    
+	<bean id="gatewayUnitatMateria" class="es.caib.rolsac.api.v2.unitatMateria.ws.UnitatMateriaQueryServiceGateway" />
     <!-- UnitatMateriaQueryService beans -->
-    
+
     <!-- UsuariQueryService beans -->
     <!-- EJB -->
     <bean id="usuariQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.usuari.UsuariQueryServiceAdapter" scope="prototype">
@@ -1073,7 +1085,7 @@
     </bean>
 
     <bean id="usuariQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.usuari.ejb.UsuariQueryServiceEJBLocator" />
-    
+
 	<!-- WS -->
 	<bean id="usuariQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.usuari.UsuariQueryServiceAdapter" scope="prototype">
         <property name="usuariQueryServiceStrategy" ref="usuariQueryServiceWSStrategy" />
@@ -1083,7 +1095,7 @@
         <property name="gateway" ref="gatewayUsuari" />
     </bean>
 
-	<bean id="gatewayUsuari" class="es.caib.rolsac.api.v2.usuari.ws.UsuariQueryServiceGateway" />	
+	<bean id="gatewayUsuari" class="es.caib.rolsac.api.v2.usuari.ws.UsuariQueryServiceGateway" />
     <!-- UsuariQueryService beans -->
 
     <!-- IniciacioQueryService beans -->
@@ -1101,7 +1113,7 @@
     </bean>
 
     <bean id="iniciacioQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.iniciacio.ejb.IniciacioQueryServiceEJBLocator" />
-    
+
 	<!-- WS -->
 	<!-- Esta funcionalidad la proporciona RolsacWS -->
 	<bean id="iniciacioQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.iniciacio.IniciacioQueryServiceAdapter" scope="prototype">
@@ -1114,7 +1126,7 @@
 
 	<bean id="gatewayIniciacio" class="es.caib.rolsac.api.v2.iniciacio.ws.IniciacioQueryServiceGateway" />
     <!-- IniciacioQueryService beans -->
-    
+
     <!-- IdiomaQueryService beans -->
     <!-- EJB -->
     <bean id="idiomaQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.idioma.IdiomaQueryServiceAdapter" scope="prototype">
@@ -1130,7 +1142,7 @@
     </bean>
 
     <bean id="idiomaQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.idioma.ejb.IdiomaQueryServiceEJBLocator" />
-    
+
 	<!-- WS -->
 	<bean id="idiomaQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.idioma.IdiomaQueryServiceAdapter" scope="prototype">
         <property name="idiomaQueryServiceStrategy" ref="idiomaQueryServiceWSStrategy" />
@@ -1142,7 +1154,7 @@
 
 	<bean id="gatewayIdioma" class="es.caib.rolsac.api.v2.idioma.ws.IdiomaQueryServiceGateway" />
     <!-- IdiomaQueryService beans -->
-	
+
 	 <!-- SilencioQueryService beans -->
     <!-- EJB -->
     <bean id="silencioQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.silencio.SilencioQueryServiceAdapter" scope="prototype">
@@ -1158,7 +1170,7 @@
     </bean>
 
     <bean id="silencioQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.silencio.ejb.SilencioQueryServiceEJBLocator" />
-    
+
 	<!-- WS -->
 	<!-- Esta funcionalidad la proporciona RolsacWS -->
 	<bean id="silencioQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.silencio.SilencioQueryServiceAdapter" scope="prototype">

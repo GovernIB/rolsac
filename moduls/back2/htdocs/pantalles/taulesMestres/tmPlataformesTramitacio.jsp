@@ -127,7 +127,7 @@
                 <p class="executant"><spring:message code='plataformas.cargando_listado_plataformas'/></p>
             </div>
             <input type="hidden" value="0" class="pagPagina" />
-            <input type="hidden" value="DESC" class="ordreTipus" />
+            <input type="hidden" value="ASC" class="ordreTipus" />
             <input type="hidden" value="orden" class="ordreCamp" />
         </div>
     </div>

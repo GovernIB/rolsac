@@ -33,6 +33,7 @@ import org.ibit.rol.sac.model.Traduccion;
 import org.ibit.rol.sac.model.TraduccionDocumentoServicio;
 import org.ibit.rol.sac.model.TraduccionMateria;
 import org.ibit.rol.sac.model.TraduccionNormativa;
+import org.ibit.rol.sac.model.TraduccionPlataforma;
 import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
 import org.ibit.rol.sac.model.TraduccionServicio;
 import org.ibit.rol.sac.model.TraduccionUA;
@@ -124,6 +125,48 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 	@Deprecated
 	public boolean autorizaModificarServicio(final Long idServicio) throws SecurityException {
 		return (getAccesoManager().tieneAccesoServicio(idServicio));
+	}
+
+	/**
+	 * Obtiene el enlace telematico de un servicio..
+	 *
+	 * @ejb.interface-method
+	 *
+	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+	 *
+	 * @param idServicio
+	 *            Id servicio
+	 * @param lang
+	 *            Idioma, por defecto, ca.
+	 *
+	 * @return Devuelve la url.
+	 * @throws DelegateException
+	 */
+	public String getEnlaceTelematico(final Long idServicio, final String lang) throws DelegateException {
+
+		final Servicio serv = this.obtenerServicio(idServicio);
+
+		final String idTramite = serv.getTramiteId();
+		final String numVersion = serv.getTramiteVersion();
+		final String idioma = lang;
+		final String parametros;
+		if (serv.getParametros() == null) {
+			parametros = "";
+		} else {
+			parametros = serv.getParametros();
+		}
+		final String idTramiteRolsac = idServicio.toString();
+
+		final TraduccionPlataforma trad = (TraduccionPlataforma) serv.getPlataforma().getTraduccion(idioma);
+		String url = trad.getUrlAcceso();
+
+		url = url.replace("${idTramitePlataforma}", idTramite);
+		url = url.replace("${versionTramitePlatorma}", numVersion);
+		url = url.replace("${parametros}", parametros);
+		url = url.replace("${servicio}", String.valueOf(true));
+		url = url.replace("${idTramiteRolsac}", idTramiteRolsac);
+
+		return url;
 	}
 
 	/**

@@ -132,6 +132,9 @@ public class Constantes {
 	public static final String ENTIDAD_ENLACE = "enlaces";
 	public static final String URL_ENLACE = ENTIDAD_ENLACE + "/{0}";
 
+	public static final String ENTIDAD_ENLACE_TELEMATICO = "enlaceTelematico";
+	public static final String URL_ENLACE_TELEMATICO = ENTIDAD_ENLACE_TELEMATICO + "/{0}";
+
 	public static final String ENTIDAD_HECHOS_VITALES = "hechos_vitales";
 	public static final String URL_HECHOS_VITALES = ENTIDAD_HECHOS_VITALES + "/{0}";
 

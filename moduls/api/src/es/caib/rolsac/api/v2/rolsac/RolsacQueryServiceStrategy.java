@@ -22,6 +22,8 @@ import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiDTO;
 import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
 import es.caib.rolsac.api.v2.enllac.EnllacDTO;
+import es.caib.rolsac.api.v2.enllactelematico.EnllacTelematicoCriteria;
+import es.caib.rolsac.api.v2.enllactelematico.EnllacTelematicoDTO;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
 import es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioCriteria;
@@ -128,6 +130,8 @@ public interface RolsacQueryServiceStrategy {
 	List<EdificiDTO> llistarEdificis(EdificiCriteria edificiTramit) throws StrategyException;
 
 	EnllacDTO obtenirEnllac(EnllacCriteria enllacCriteria) throws StrategyException;
+
+	EnllacTelematicoDTO obtenirEnllacTelematico(EnllacTelematicoCriteria enllacCriteria) throws StrategyException;
 
 	List<EnllacDTO> llistarEnllacos(EnllacCriteria enllacCriteria) throws StrategyException;
 

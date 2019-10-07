@@ -101,11 +101,15 @@ public class FiltroTramits {
 		}
 
 		if (this.parametros != null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_TRAMITE_PARAMETROS, this.urlTramiteTelematico + "");
+			fg.addFiltro(FiltroGenerico.FILTRO_TRAMITE_PARAMETROS, this.parametros + "");
 		}
 
 		if (this.plataforma != null) {
-			fg.addFiltro(FiltroGenerico.FILTRO_TRAMITE_PLATAFORMA, this.urlTramiteTelematico + "");
+			fg.addFiltro(FiltroGenerico.FILTRO_TRAMITE_PLATAFORMA, this.plataforma + "");
+		}
+
+		if (this.codigoPlataforma != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_TRAMITE_PLATAFORMA, this.codigoPlataforma + "");
 		}
 
 		return fg;

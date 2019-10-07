@@ -23,6 +23,8 @@ import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiDTO;
 import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
 import es.caib.rolsac.api.v2.enllac.EnllacDTO;
+import es.caib.rolsac.api.v2.enllactelematico.EnllacTelematicoCriteria;
+import es.caib.rolsac.api.v2.enllactelematico.EnllacTelematicoDTO;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
 import es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioCriteria;
@@ -555,6 +557,22 @@ public class RolsacQueryServiceWSStrategy implements RolsacQueryServiceStrategy 
 
 		try {
 			enllacDTO = gateway.obtenirEnllac(enllacCriteria);
+		} catch (final QueryServiceException qse) {
+			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
+		} catch (final RemoteException e) {
+			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		}
+
+		return enllacDTO;
+	}
+
+	@Override
+	public EnllacTelematicoDTO obtenirEnllacTelematico(final EnllacTelematicoCriteria enllacCriteria)
+			throws StrategyException {
+		EnllacTelematicoDTO enllacDTO = new EnllacTelematicoDTO();
+
+		try {
+			enllacDTO = gateway.obtenirEnllacTelematico(enllacCriteria);
 		} catch (final QueryServiceException qse) {
 			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
 		} catch (final RemoteException e) {

@@ -1,6 +1,6 @@
 <wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
-	xmlns:impl="http://ws.enllac.v2.api.rolsac.caib.es"
-	xmlns:intf="http://ws.enllac.v2.api.rolsac.caib.es"
+	xmlns:impl="http://ws.enllactelematico.v2.api.rolsac.caib.es"
+	xmlns:intf="http://ws.enllactelematico.v2.api.rolsac.caib.es"
 	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
 	xmlns:tns1="http://procediment.v2.api.rolsac.caib.es"
 	xmlns:tns2="http://general.v2.api.rolsac.caib.es"
@@ -8,7 +8,7 @@
 	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
 	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	targetNamespace="http://ws.enllac.v2.api.rolsac.caib.es">
+	targetNamespace="http://ws.enllactelematico.v2.api.rolsac.caib.es">
 
 	<wsdl:import namespace="urn:tns1" location="dto/ProcedimentDTO.wsdl"/>
 	<wsdl:import namespace="urn:tns2" location="dto/EntitatRemota.wsdl"/>
@@ -29,7 +29,7 @@
 	<wsdl:message name="obtenirProcedimentRequest">
 		<wsdl:part name="in0" type="xsd:long" />
 	</wsdl:message>
-	<wsdl:portType name="EnllacQueryServiceEJBRemote">
+	<wsdl:portType name="EnllacTelematicoQueryServiceEJBRemote">
 		<wsdl:operation name="obtenirProcediment"
 			parameterOrder="in0">
 			<wsdl:input message="impl:obtenirProcedimentRequest" name="obtenirProcedimentRequest" />
@@ -41,36 +41,36 @@
 			<wsdl:output message="impl:obtenirFitxaResponse" name="obtenirFitxaResponse" />
 		</wsdl:operation>
 	</wsdl:portType>
-	<wsdl:binding name="EnllacWSSoapBinding" type="impl:EnllacQueryServiceEJBRemote">
+	<wsdl:binding name="EnllacTelematicoWSSoapBinding" type="impl:EnllacTelematicoQueryServiceEJBRemote">
 		<wsdlsoap:binding style="rpc"
 			transport="http://schemas.xmlsoap.org/soap/http" />
 		<wsdl:operation name="obtenirProcediment">
 			<wsdlsoap:operation soapAction="" />
 			<wsdl:input name="obtenirProcedimentRequest">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="http://intf.ejb.enllac.v2.api.rolsac.caib.es" use="encoded" />
+					namespace="http://intf.ejb.enllactelematico.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:input>
 			<wsdl:output name="obtenirProcedimentResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="http://ws.enllac.v2.api.rolsac.caib.es" use="encoded" />
+					namespace="http://ws.enllactelematico.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirFitxa">
 			<wsdlsoap:operation soapAction="" />
 			<wsdl:input name="obtenirFitxaRequest">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="http://intf.ejb.enllac.v2.api.rolsac.caib.es" use="encoded" />
+					namespace="http://intf.ejb.enllactelematico.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:input>
 			<wsdl:output name="obtenirFitxaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="http://ws.enllac.v2.api.rolsac.caib.es" use="encoded" />
+					namespace="http://ws.enllactelematico.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 	</wsdl:binding>
-	<wsdl:service name="EnllacQueryServiceEJBRemoteService">
-		<wsdl:port binding="impl:EnllacWSSoapBinding" name="EnllacWS">
+	<wsdl:service name="EnllacTelematicoQueryServiceEJBRemoteService">
+		<wsdl:port binding="impl:EnllacTelematicoWSSoapBinding" name="EnllacTelematicoWS">
 			<wsdlsoap:address
-				location="https://localhost:8443/sacws-api/services/EnllacWS" />
+				location="https://localhost:8443/sacws-api/services/EnllacTelematicoWS" />
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>

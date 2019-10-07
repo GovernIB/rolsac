@@ -2110,19 +2110,10 @@
 								        <input id="item_check_tramit_telematico" name="item_check_tramit_telematico" type="checkbox" class="nou" />
 								    </div>
 								</div>
-								<div class="element t20p">
-								    <div class="etiqueta">
-								        <label for="item_check_tramit_telefonico"><spring:message code='camp.telefonico'/></label>
-								    </div>
-								    <div class="control">
-								        <input id="item_check_tramit_telefonico" name="item_check_tramit_telefonico" type="checkbox" class="nou" />
-								    </div>
-								</div>
 		                	</div>
 						</div>
 
-						<legend><spring:message code='camp.canalsPresentacio'/></legend>
-		                <div class="modul_continguts mostrar">
+						<div class="modul_continguts mostrar">
 							<div class="fila">
 		                        <div class="element t99p">
 		                            <div class="etiqueta">
@@ -2135,8 +2126,7 @@
 		                    </div>
 						</div>
 
-						<legend><spring:message code='camp.canalsPresentacio'/></legend>
-		                <div class="modul_continguts mostrar">
+						<div class="modul_continguts mostrar">
 		                    <div class="fila">
 		                        <div class="element t50p">
 		                            <div class="etiqueta">

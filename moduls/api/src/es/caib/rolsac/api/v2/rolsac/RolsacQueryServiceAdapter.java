@@ -33,6 +33,9 @@ import es.caib.rolsac.api.v2.edifici.EdificiQueryServiceAdapter;
 import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
 import es.caib.rolsac.api.v2.enllac.EnllacDTO;
 import es.caib.rolsac.api.v2.enllac.EnllacQueryServiceAdapter;
+import es.caib.rolsac.api.v2.enllactelematico.EnllacTelematicoCriteria;
+import es.caib.rolsac.api.v2.enllactelematico.EnllacTelematicoDTO;
+import es.caib.rolsac.api.v2.enllactelematico.EnllacTelematicoQueryServiceAdapter;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialQueryServiceAdapter;
@@ -590,6 +593,22 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
 			final EnllacDTO dto = rolsacQueryServiceStrategy.obtenirEnllac(enllacCriteria);
 			final EnllacQueryServiceAdapter eqsa = (EnllacQueryServiceAdapter) BeanUtils.getAdapter("enllac",
 					getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && eqsa != null) {
+				eqsa.setRolsacUrl(rolsacUrl);
+			}
+			return eqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "enlace.", e);
+		}
+	}
+
+	@Override
+	public EnllacTelematicoQueryServiceAdapter obtenirEnllacTelematico(final EnllacTelematicoCriteria enllacCriteria)
+			throws QueryServiceException {
+		try {
+			final EnllacTelematicoDTO dto = rolsacQueryServiceStrategy.obtenirEnllacTelematico(enllacCriteria);
+			final EnllacTelematicoQueryServiceAdapter eqsa = (EnllacTelematicoQueryServiceAdapter) BeanUtils
+					.getAdapter("enllacTelematico", getStrategy(), dto);
 			if (rolsacUrl != null && !rolsacUrl.isEmpty() && eqsa != null) {
 				eqsa.setRolsacUrl(rolsacUrl);
 			}
