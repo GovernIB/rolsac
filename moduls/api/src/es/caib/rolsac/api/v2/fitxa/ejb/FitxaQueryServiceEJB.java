@@ -112,9 +112,6 @@ public class FitxaQueryServiceEJB extends HibernateEJB {
         List<CriteriaObject> criteris;
         Session session = null;
         try {
-            if (StringUtils.isBlank(BasicUtils.controlOrdenar(enllacCriteria))) {
-                enllacCriteria.setOrdenar(new EnllacOrdenacio[] {EnllacOrdenacio.orden_asc});
-            }
             
             criteris = BasicUtils.parseCriterias(EnllacCriteria.class, HQL_ENLACES_ALIAS, HQL_TRADUCCIONES_ALIAS, enllacCriteria);
             List<FromClause> entities = new ArrayList<FromClause>();
