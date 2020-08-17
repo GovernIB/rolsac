@@ -116,4 +116,22 @@ public class RolsacPropertiesUtil {
 		return res == null ? "" : res;
 	}
 
+	/**
+	 * funcion que retorna el email del administrador de la UA
+	 *
+	 * @return
+	 */
+	public static String getEmailAdmin(String codigoUA) {
+		String res = "";
+		String property = "es.caib.rolsac.codigoUA.correo.normativas";
+		property = property.replace("codigoUA", codigoUA);
+		
+		try {
+			res = getProperty(property);
+		} catch (final Exception e) {
+			log.error(ERROR_MESSAGE + property, e);
+			res = "";
+		}
+		return res == null ? "" : res;
+	}
 }

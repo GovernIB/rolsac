@@ -160,6 +160,14 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			model.put("comunesUAESP", RolsacPropertiesUtil.getUAComun(false));
 		}
 
+        String mensajeInfo = messageSource.getMessage("proc.servei.info", null, request.getLocale());
+		mensajeInfo = mensajeInfo.replace("%EMAIL_ADMIN%", RolsacPropertiesUtil.getEmailAdmin(ua.getCodigoDIR3()));
+		if (!mensajeInfo.endsWith(" ")) {
+			model.put("mensajeInfo", mensajeInfo);
+		} else {
+			model.put("mensajeInfo", "");
+		}
+
 		return "index";
 
 	}

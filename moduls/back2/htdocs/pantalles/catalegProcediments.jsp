@@ -1866,7 +1866,10 @@
                             </div>
 
                         </div>
-
+				<c:if test="${mensajeInfo != ''}">
+					<div class="fila"><c:out value="${mensajeInfo}" /></div>
+                	<div class="fila"></div>
+                </c:if>
                     <div class="botonera">
                         <div class="boton btnGenerico"><a id="btnLimpiarForm_normativa" class="btn borrar" href="javascript:;"><span><span><spring:message code='boto.borrar'/></span></span></a></div>
                         <div class="boton btnGenerico"><a id="btnBuscarForm_normativa" class="btn consulta" href="javascript:;"><span><span><spring:message code='boto.cercar'/></span></span></a></div>

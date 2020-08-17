@@ -130,7 +130,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 		}
 
 		loadIndexModel(model, request);
-
+		
 		// #427 Listas para el buscador de normativas. Las pasamos a DTO.
 		// Lo ponemos en try catch para evitar que esto bloquee cualquier recuperación
 		try {
@@ -159,6 +159,14 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			// Ponemos los dos idiomas
 			model.put("comunesUA", RolsacPropertiesUtil.getUAComun(true));
 			model.put("comunesUAESP", RolsacPropertiesUtil.getUAComun(false));
+		}
+
+        String mensajeInfo = messageSource.getMessage("proc.servei.info", null, request.getLocale());
+		mensajeInfo = mensajeInfo.replace("%EMAIL_ADMIN%", RolsacPropertiesUtil.getEmailAdmin(ua.getCodigoDIR3()));
+		if (!mensajeInfo.endsWith(" ")) {
+			model.put("mensajeInfo", mensajeInfo);
+		} else {
+			model.put("mensajeInfo", "");
 		}
 
 		return "index";

@@ -127,6 +127,13 @@ es.caib.rolsac.subscripcions
 	   	es.caib.rolsac.comun.ua.es=El organo competente por materia
 	   	es.caib.rolsac.comun.ua.ca=L'organ competent per materia
 
+		<!--  Email del administrador para aviso en Procedimiento/Servicio 
+			  Correo personalizable por entidad, subsituir {CODDIR3} por el codigo dir3 de la entidad.
+			  crear una propiedad por entidad. si no se indica no se muestra el mensaje en la busqueda de normativas dentro de procedimientos y servicios.		
+	   	   es.caib.rolsac.{CODDIR3}.correo.normativas=simplificacio@caib.es		
+		-->
+	   	es.caib.rolsac.A04003003.correo.normativas=simplificacio@caib.es
+	   	
     </attribute>
 
 </mbean>
