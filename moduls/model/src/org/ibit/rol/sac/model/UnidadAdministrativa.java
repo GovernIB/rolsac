@@ -524,6 +524,37 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
             return predecesores;
         }
     }
+    
+    /**
+     * Retorna la ua raíz correspondiente a la ua indicada. (la propia ua o el primer antecesor raiz)
+     * Retorna null si no lo encuentra (no de beria ocurrir)
+     * @param ua Unidad administrativa de la que se quiere obtener la raiz
+     * @return UA Raiz de la ua indicada
+     */
+    public UnidadAdministrativa getRaiz() {
+		UnidadAdministrativa res = null;
+		
+		try {
+			if(isRaiz()) {
+				res=this;
+			}else {
+				//recuperamos la ua raiz
+				List <UnidadAdministrativa> listaPredecesores = getPredecesores();
+				for(UnidadAdministrativa u: listaPredecesores) {
+					if(u!=null && u.isRaiz()) {
+						res=u;
+						break;
+					}				
+				}
+			}	
+		} catch (Exception e) {
+			res = null;
+		}
+					
+		return res;		
+	}
+    
+    
 
 	public EspacioTerritorial getEspacioTerrit() {
 		return espacioTerrit;

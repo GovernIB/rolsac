@@ -158,19 +158,26 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			// Ponemos los dos idiomas
 			model.put("comunesUA", RolsacPropertiesUtil.getUAComun(true));
 			model.put("comunesUAESP", RolsacPropertiesUtil.getUAComun(false));
-		}
+		}		
 
-        String mensajeInfo = messageSource.getMessage("proc.servei.info", null, request.getLocale());
-		mensajeInfo = mensajeInfo.replace("%EMAIL_ADMIN%", RolsacPropertiesUtil.getEmailAdmin(ua.getCodigoDIR3()));
-		if (!mensajeInfo.endsWith(" ")) {
-			model.put("mensajeInfo", mensajeInfo);
+		UnidadAdministrativa raiz = ua!=null?ua.getRaiz():null;
+		
+		if(raiz!=null ) {
+			String mensajeInfo = messageSource.getMessage("proc.servei.info", null, request.getLocale());
+			mensajeInfo = mensajeInfo.replace("%EMAIL_ADMIN%", RolsacPropertiesUtil.getEmailAdmin(raiz.getCodigoDIR3()));
+			
+			if (!mensajeInfo.endsWith(" ")) {
+				model.put("mensajeInfo", mensajeInfo);
+			} else {
+				model.put("mensajeInfo", "");
+			}			
 		} else {
 			model.put("mensajeInfo", "");
 		}
-
+       
 		return "index";
 
-	}
+	}	
 
 	private boolean estemEnUnitatAdministrativa(final HttpSession session) {
 		return null != getUAFromSession(session);

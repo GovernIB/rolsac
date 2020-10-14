@@ -118,13 +118,15 @@ public class RolsacPropertiesUtil {
 
 	/**
 	 * funcion que retorna el email del administrador de la UA
+	 * si codigoUA =null  retorna el email por defecto (es.caib.rolsac.defecto.correo.normativas si existe) o vacio si no existe
 	 *
 	 * @return
 	 */
 	public static String getEmailAdmin(String codigoUA) {
 		String res = "";
+		String cua=codigoUA==null?"defecto":codigoUA;
 		String property = "es.caib.rolsac.codigoUA.correo.normativas";
-		property = property.replace("codigoUA", codigoUA);
+		property = property.replace("codigoUA", cua);
 		
 		try {
 			res = getProperty(property);

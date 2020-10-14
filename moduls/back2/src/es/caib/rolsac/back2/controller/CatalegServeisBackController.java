@@ -161,10 +161,26 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			model.put("comunesUAESP", RolsacPropertiesUtil.getUAComun(false));
 		}
 
-        String mensajeInfo = messageSource.getMessage("proc.servei.info", null, request.getLocale());
+     /*   String mensajeInfo = messageSource.getMessage("proc.servei.info", null, request.getLocale());
 		mensajeInfo = mensajeInfo.replace("%EMAIL_ADMIN%", RolsacPropertiesUtil.getEmailAdmin(ua.getCodigoDIR3()));
 		if (!mensajeInfo.endsWith(" ")) {
 			model.put("mensajeInfo", mensajeInfo);
+		} else {
+			model.put("mensajeInfo", "");
+		}*/
+		
+		
+		UnidadAdministrativa raiz = ua!=null?ua.getRaiz():null;
+		
+		if(raiz!=null ) {
+			String mensajeInfo = messageSource.getMessage("proc.servei.info", null, request.getLocale());
+			mensajeInfo = mensajeInfo.replace("%EMAIL_ADMIN%", RolsacPropertiesUtil.getEmailAdmin(raiz.getCodigoDIR3()));
+			
+			if (!mensajeInfo.endsWith(" ")) {
+				model.put("mensajeInfo", mensajeInfo);
+			} else {
+				model.put("mensajeInfo", "");
+			}			
 		} else {
 			model.put("mensajeInfo", "");
 		}
