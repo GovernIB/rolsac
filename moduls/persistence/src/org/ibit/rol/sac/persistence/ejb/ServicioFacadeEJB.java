@@ -145,28 +145,46 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 	public String getEnlaceTelematico(final Long idServicio, final String lang) throws DelegateException {
 
 		final Servicio serv = this.obtenerServicio(idServicio);
-
-		final String idTramite = serv.getTramiteId();
-		final String numVersion = serv.getTramiteVersion();
-		final String idioma = lang;
-		final String parametros;
-		if (serv.getParametros() == null) {
-			parametros = "";
-		} else {
-			parametros = serv.getParametros();
+		String res = "";
+		
+		try {		
+			final String idTramite = serv.getTramiteId();
+			final String numVersion = serv.getTramiteVersion();
+			final String idioma = lang;
+			final String parametros;
+			if (serv.getParametros() == null) {
+				parametros = "";
+			} else {
+				parametros = serv.getParametros();
+			}
+			final String idTramiteRolsac = idServicio.toString();
+	
+			final TraduccionPlataforma trad = (TraduccionPlataforma) serv.getPlataforma().getTraduccion(idioma);
+			String url = trad.getUrlAcceso();
+	
+			url = url.replace("${idTramitePlataforma}", idTramite);
+			url = url.replace("${versionTramitePlatorma}", numVersion);
+			url = url.replace("${parametros}", parametros);
+			url = url.replace("${servicio}", String.valueOf(true));
+			url = url.replace("${idTramiteRolsac}", idTramiteRolsac);
+	
+			res = url;
+		} catch (Exception e) {
+			
+			//si ocurre un error es porque alguno de los campos de url del trámite no existen. buscamos en la url externa. 
+			//si no existe para el idioma indicado se retorna el idioma por defecto
+			TraduccionServicio t = (TraduccionServicio) serv.getTraduccion(lang);
+			if(t==null || t.getUrlTramiteExterno()==null) {
+				t = (TraduccionServicio) serv.getTraduccion();
+			}
+			
+			if(t==null || t.getUrlTramiteExterno()==null) {
+				res="";
+			}else {
+				res= t.getUrlTramiteExterno();
+			}			
 		}
-		final String idTramiteRolsac = idServicio.toString();
-
-		final TraduccionPlataforma trad = (TraduccionPlataforma) serv.getPlataforma().getTraduccion(idioma);
-		String url = trad.getUrlAcceso();
-
-		url = url.replace("${idTramitePlataforma}", idTramite);
-		url = url.replace("${versionTramitePlatorma}", numVersion);
-		url = url.replace("${parametros}", parametros);
-		url = url.replace("${servicio}", String.valueOf(true));
-		url = url.replace("${idTramiteRolsac}", idTramiteRolsac);
-
-		return url;
+		return res;
 	}
 
 	/**
@@ -2382,7 +2400,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 
 			if (!StringUtils.isEmpty(textos)) {
 				final String[] camposBuscablesPorTexto = { "s.correo", "s.nombreResponsable", "s.tramiteId",
-						"s.tramiteUrl", // "s.signatura",
+						"trad.urlTramiteExterno", // "s.signatura",
 						"trad.destinatarios", "trad.nombre", "trad.observaciones", "trad.requisitos", "trad.objeto"
 
 				};

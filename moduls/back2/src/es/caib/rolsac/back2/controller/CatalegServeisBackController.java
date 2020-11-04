@@ -763,7 +763,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			resultats.put("item_telefon", serv.getTelefono());
 			resultats.put("item_email", serv.getCorreo());
 			resultats.put("item_responsable_nombre", serv.getNombreResponsable());
-			resultats.put("item_tramite_url", serv.getTramiteUrl());
+	//		resultats.put("item_tramite_url", serv.getTramiteUrl());
 			resultats.put("item_tramite_version", serv.getTramiteVersion());
 			resultats.put("item_tramite_id", serv.getTramiteId());
 			resultats.put("item_check_tramit_presencial", serv.isPresencial());
@@ -1169,8 +1169,8 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			servicio.setTramiteId(
 					request.getParameter("item_tramite_id") == null ? "" : request.getParameter("item_tramite_id")); // Tramite
 																														// id
-			servicio.setTramiteUrl(
-					request.getParameter("item_tramite_url") == null ? "" : request.getParameter("item_tramite_url")); // Tramite
+		//	servicio.setTramiteUrl(
+		//			request.getParameter("item_tramite_url") == null ? "" : request.getParameter("item_tramite_url")); // Tramite
 
 			if (request.getParameter("item_comun") == null) {
 				servicio.setComun(false);
@@ -1213,7 +1213,18 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			servicio.setTelefonico(request.getParameter("item_check_tramit_telefonico") != null
 					&& !"".equals(request.getParameter("item_check_tramit_telefonico")));
 
-			final boolean urlTramiteRelleno = !servicio.getTramiteUrl().equals("");
+		//	final boolean urlTramiteRelleno = !servicio.getTramiteUrl().equals("");
+			//Buscamos si la url está en algún idioma
+			boolean urlTramiteRelleno = false; 			
+			for (final String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
+				TraduccionServicio t = ((TraduccionServicio) servicio.getTraduccion(lang));				
+				if(t!=null && t.getUrlTramiteExterno()!=null && !"".equals(t.getUrlTramiteExterno()) ){
+					urlTramiteRelleno=true;
+				}
+			}
+			
+			
+			
 			final boolean isTramiteInterno = !servicio.getTramiteId().equals("") || !version.isEmpty()
 					|| !idPlataforma.isEmpty() || !parametros.isEmpty();
 			final boolean isTramiteInternoTodo = !servicio.getTramiteId().equals("") && !version.isEmpty()
@@ -1233,7 +1244,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			} else {
 				// si no es telemático vaciamos los campos.
 				servicio.setTramiteVersion("0");
-				servicio.setTramiteUrl("");
+			//	servicio.setTramiteUrl("");
 				servicio.setTramiteId("");
 				servicio.setPlataforma(null);
 				servicio.setParametros(null);
@@ -1378,6 +1389,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			tpl.setDestinatarios(RolUtil.limpiaCadena(request.getParameter("item_destinatarios_" + lang)));
 			tpl.setRequisitos(RolUtil.limpiaCadena(request.getParameter("item_requisitos_" + lang)));
 			tpl.setObservaciones(RolUtil.limpiaCadena(request.getParameter("item_observaciones_" + lang)));
+			tpl.setUrlTramiteExterno(RolUtil.limpiaCadena(request.getParameter("item_tramite_url_" + lang)));
 
 			servicio.setTraduccion(lang, tpl);
 
@@ -1631,6 +1643,9 @@ public class CatalegServeisBackController extends PantallaBaseController {
 		}
 		if (StringUtils.isNotEmpty(request.getParameter("item_observaciones_" + idiomaOrigenTraductor))) {
 			traduccioOrigen.setObservaciones(request.getParameter("item_observaciones_" + idiomaOrigenTraductor));
+		}
+		if (StringUtils.isNotEmpty(request.getParameter("item_tramite_url_" + idiomaOrigenTraductor))) {
+			traduccioOrigen.setUrlTramiteExterno(request.getParameter("item_tramite_url_" + idiomaOrigenTraductor));
 		}
 		return traduccioOrigen;
 

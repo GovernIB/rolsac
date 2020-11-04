@@ -26,7 +26,7 @@
         <property name="fechaPublicacion"  				column="SER_FECPUB" />
         <property name="fechaDespublicacion"  			column="SER_FECDES" />
         <property name="fechaActualizacion"  			column="SER_FECACT" />
-        <property name="tramiteUrl"	length="256" 		column="SER_TRAULR" />
+       
         <property name="tramiteId" 	length="256" 		column="SER_TRAID" />
         <property name="tramiteVersion" length="256" 	column="SER_TRAVER" />
         <property name="telematico" 				 	column="SER_CTELEM" />
@@ -47,11 +47,12 @@
             <key column="TSR_CODSER" foreign-key="RSC_TRASER_SER_FK"/>
             <index column="TSR_CODIDI" type="string" length="2"/>
             <composite-element class="org.ibit.rol.sac.model.TraduccionServicio">
-                <property name="nombre" 		length="256" 	column="TSR_NOMBRE" />
-                <property name="objeto" 		length="256" 	column="TSR_OBJETO" />
-                <property name="destinatarios" 	type="text"  	column="TSR_DESTIN" />
-                <property name="requisitos" 	type="text"  	column="TSR_REQUIS" />
-                <property name="observaciones" 	type="text" 	column="TSR_OBSERV" />
+                <property name="nombre" 			length="256" 	column="TSR_NOMBRE" />
+                <property name="objeto" 			length="256" 	column="TSR_OBJETO" />
+                <property name="destinatarios" 		type="text"  	column="TSR_DESTIN" />
+                <property name="requisitos" 		type="text"  	column="TSR_REQUIS" />
+                <property name="observaciones" 		type="text" 	column="TSR_OBSERV" />
+                <property name="urlTramiteExterno"	length="256" 	column="TSR_ULRSER" />
             </composite-element>
         </map>
 

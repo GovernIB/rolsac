@@ -26,6 +26,9 @@ public class TraduccionServicio implements Traduccion {
     /** Observaciones. */
     private String observaciones;
     
+    
+    private String urlTramiteExterno;
+    
 	/** Constructor vacio. **/
 	public TraduccionServicio() {}
     
@@ -38,12 +41,13 @@ public class TraduccionServicio implements Traduccion {
 	 * @param requisitos
 	 * @param observaciones
 	 */
-    public TraduccionServicio(String nombre, String objeto, String destinatarios, String requisitos, String observaciones) {
+    public TraduccionServicio(String nombre, String objeto, String destinatarios, String requisitos, String observaciones, String urlTramiteExterno) {
     	this.nombre = nombre;
     	this.objeto = objeto;
     	this.destinatarios = destinatarios;
     	this.requisitos = requisitos;
     	this.observaciones = observaciones;
+    	this.setUrlTramiteExterno(urlTramiteExterno);
     }
    
 	/**
@@ -114,6 +118,14 @@ public class TraduccionServicio implements Traduccion {
 	 */
 	public final void setObservaciones(final String observaciones) {
 		this.observaciones = observaciones;
+	}
+
+	public String getUrlTramiteExterno() {
+		return urlTramiteExterno;
+	}
+
+	public void setUrlTramiteExterno(String urlTramiteExterno) {
+		this.urlTramiteExterno = urlTramiteExterno;
 	}
     
     

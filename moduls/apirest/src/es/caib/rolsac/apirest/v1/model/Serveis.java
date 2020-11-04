@@ -77,8 +77,11 @@ public class Serveis extends EntidadBase {
 	@ApiModelProperty(value = "telefono", required = false)
 	private java.lang.String telefono;
 
-	@ApiModelProperty(value = "tramiteUrl", required = false)
-	private java.lang.String tramiteUrl;
+	//@ApiModelProperty(value = "tramiteUrl", required = false)
+	//private java.lang.String tramiteUrl;
+	
+	@ApiModelProperty(value = "urlTramiteExterno", required = false)
+	private java.lang.String urlTramiteExterno;
 
 	@ApiModelProperty(value = "tramiteId", required = false)
 	private java.lang.String tramiteId;
@@ -438,17 +441,17 @@ public class Serveis extends EntidadBase {
 	/**
 	 * @return the tramiteUrl
 	 */
-	public java.lang.String getTramiteUrl() {
+/*	public java.lang.String getTramiteUrl() {
 		return tramiteUrl;
-	}
+	}*/
 
 	/**
 	 * @param tramiteUrl
 	 *            the tramiteUrl to set
 	 */
-	public void setTramiteUrl(final java.lang.String tramiteUrl) {
+	/*public void setTramiteUrl(final java.lang.String tramiteUrl) {
 		this.tramiteUrl = tramiteUrl;
-	}
+	}*/
 
 	/**
 	 * @return the tramiteId
@@ -635,6 +638,20 @@ public class Serveis extends EntidadBase {
 	 */
 	public void setPlataforma(final Plataformas plataforma) {
 		this.plataforma = plataforma;
+	}
+
+	/**
+	 * @return the urlTramiteExterno
+	 */
+	public java.lang.String getUrlTramiteExterno() {
+		return urlTramiteExterno;
+	}
+
+	/**
+	 * @param urlTramiteExterno the urlTramiteExterno to set
+	 */
+	public void setUrlTramiteExterno(java.lang.String urlTramiteExterno) {
+		this.urlTramiteExterno = urlTramiteExterno;
 	}
 
 }

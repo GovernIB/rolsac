@@ -159,7 +159,8 @@ $(document).ready(function() {
 	  "item_objeto_",
 	  "item_destinatarios_",
 	  "item_requisitos_",
-	  "item_observaciones_"
+	  "item_observaciones_",
+	  "item_tramite_url_"
     ];
 
 	DATOS_TRADUCIDOS_SERVEI = [
@@ -167,7 +168,8 @@ $(document).ready(function() {
       "objeto",
       "destinatarios",
       "requisitos",
-      "observaciones"
+      "observaciones",
+      "urlTramiteExterno"
     ];
 
 	// INICIEM
@@ -711,8 +713,13 @@ function CDetall() {
 
 			var div_idiomes_elm = escriptori_detall_elm.find("div.idiomes:first");
 			div_idiomes_elm.find("div." + a_primer_elm.attr("class")).addClass("seleccionat");
+		
+			//seleccionamos y mostramos el idioma por defecto
+			var div_idiomes_elm2 = escriptori_detall_elm.find("div.modul_tramit.idiomes:first");
+			div_idiomes_elm2.find("div." + a_primer_elm.attr("class")).addClass("seleccionat").show();		
+			
 			ul_idiomes_elm.bind("click", that.idioma);
-
+			
 			// Solo mostramos los idiomas activos para los campos multi-idioma.
 			escriptori_detall_elm.find(".element.multilang .campoIdioma").hide();
 			escriptori_detall_elm.find(".element.multilang .campoIdioma:first-child").show().addClass("seleccionat");
@@ -957,6 +964,7 @@ function CDetall() {
 			$("#item_destinatarios_" + idioma).val(printStringFromNull(dada_node[idioma]["destinatarios"]));
 			$("#item_requisitos_" + idioma).val(printStringFromNull(dada_node[idioma]["requisitos"]));
 			$("#item_observaciones_" + idioma).val(printStringFromNull(dada_node[idioma]["observaciones"]));
+			$("#item_tramite_url_" + idioma).val(printStringFromNull(dada_node[idioma]["urlTramiteExterno"]));
 
 		}
 		// Fin bloque de pestanyas de idiomas
