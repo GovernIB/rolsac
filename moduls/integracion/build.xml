@@ -37,6 +37,10 @@
             <include name="model.jar"/>
             <include name="sac-persistence-client.jar"/>
         </fileset>
+       	<fileset dir="${lib.dir}/jersey">
+    			<include name="jersey-bundle-1.19.1.jar"/>
+        		<include name="genson-0.99.jar" />
+   		</fileset>
     	<fileset dir="${jar.product}">
     	</fileset>
     	<fileset dir="${lib.dir}/axis-1.4">
@@ -80,16 +84,16 @@
             <manifest>
                 <attribute name="Created-By" value="Fundació IBIT."/>
             </manifest>
-        	
+
 			<fileset dir="${jar.etc}">
                 <include name="*.properties"/>
             </fileset>
         </jar>
     </target>
-	
-	
+
+
     <target name="jar.war" depends="jar.jar">
-    	
+
         <delete file="${jar.product}/${modul}.war" quiet="yes"/>
         <war warfile="${jar.product}/${modul}.war" needxmlfile='false'>
             <manifest>
@@ -100,14 +104,14 @@
         	<lib dir="${jar.product}">
 	         <include name="${modul}.jar"/>
     		</lib>
-        	
+
         	<!--
         	<lib dir="${lib.dir}">
         		<include name="commons-logging.jar" />
         	</lib> -->
-        	
+
         	<lib dir="${lib.dir}/axis2-1.5">
-        	  <include name="axis2*jar" />        	   
+        	  <include name="axis2*jar" />
 			</lib>
 
         	<!--
@@ -138,15 +142,15 @@
     </target>
 
     <target name="doc" depends="jar.javadoc" description="Realiza las tareas de documentación"/>
-	
-	
+
+
 	<target   name="module.package"   depends="jar.jar"/>
 	<path       id="module.classpath"   refid="jar.class.path"/>
 	<property name="module.classes"  location="${jar.classes}"/>
-	
+
 	<import file="../build_test.xml"/>
 
     <target name="main" depends="jar.war" description="Construye el jar"/>
 
-	
+
 </project>

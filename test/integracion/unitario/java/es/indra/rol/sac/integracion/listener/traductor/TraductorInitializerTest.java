@@ -9,7 +9,7 @@ import org.powermock.api.easymock.PowerMock;
 import org.springframework.mock.web.MockServletContext;
 
 import es.caib.test.common.LogSpy;
-import es.indra.rol.sac.integracion.traductor.Traductor;
+import es.indra.rol.sac.integracion.traductorTranslatorIB.Traductor;
 
 
 public class TraductorInitializerTest extends TestCase {
@@ -29,7 +29,7 @@ public class TraductorInitializerTest extends TestCase {
 		initializer.contextInitialized(mockEvent);
 
 		
-		assertTrue(logger.containsDebugMsg("Carregant Rolsac amb traducció automàtica"));
+		assertTrue(logger.containsDebugMsg("Carregant Rolsac amb traducciï¿½ automï¿½tica"));
 		assertNotNull(mockEvent.getServletContext().getAttribute("traductor"));
 
 	}
@@ -56,8 +56,8 @@ public class TraductorInitializerTest extends TestCase {
 		initializer.contextInitialized(mockEvent);
 		
 		
-		assertTrue(logger.containsDebugMsg("Carregant Rolsac amb traducció automàtica"));
-		assertTrue(logger.containsDebugMsg("URL de servidor de traducció: host"));
+		assertTrue(logger.containsDebugMsg("Carregant Rolsac amb traducciï¿½ automï¿½tica"));
+		assertTrue(logger.containsDebugMsg("URL de servidor de traducciï¿½: host"));
 		assertNotNull(mockEvent.getServletContext().getAttribute("traductor"));
 
 	}
@@ -74,7 +74,7 @@ public class TraductorInitializerTest extends TestCase {
 		};
 		initializer.contextInitialized(mockEvent);
 
-		assertTrue(logger.containsDebugMsg("Carregant Rolsac sense traducció automàtica"));
+		assertTrue(logger.containsDebugMsg("Carregant Rolsac sense traducciï¿½ automï¿½tica"));
 		
 	}
 
@@ -91,7 +91,7 @@ public class TraductorInitializerTest extends TestCase {
 		};
 		initializer.contextInitialized(mockEvent);
 
-		assertTrue(logger.containsDebugMsg("Carregant Rolsac sense traducció automàtica"));
+		assertTrue(logger.containsDebugMsg("Carregant Rolsac sense traducciï¿½ automï¿½tica"));
 		
 	}
 

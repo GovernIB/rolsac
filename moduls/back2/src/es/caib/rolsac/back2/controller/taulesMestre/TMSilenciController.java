@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.utils.ResultadoBusqueda;
-import es.indra.rol.sac.integracion.traductor.Traductor;
+import es.indra.rol.sac.integracion.traductorTranslatorIB.Traductor;
 
 @Controller
 @RequestMapping("/silenciAdm/")

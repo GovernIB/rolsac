@@ -42,7 +42,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
-import es.indra.rol.sac.integracion.traductor.Traductor;
+import es.indra.rol.sac.integracion.traductorTranslatorIB.Traductor;
 
 /**
  * Servlet para la gestión de documentos y formularios de un tr�mite.

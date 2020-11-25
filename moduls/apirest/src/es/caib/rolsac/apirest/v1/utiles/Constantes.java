@@ -176,4 +176,7 @@ public class Constantes {
 		return res;
 	}
 
+	public static void main(final String args[]) {
+		System.out.println("XC");
+	}
 }

@@ -127,6 +127,10 @@ es.caib.rolsac.subscripcions
 	   	es.caib.rolsac.comun.ua.es=El organo competente por materia
 	   	es.caib.rolsac.comun.ua.ca=L'organ competent per materia
 
+		<!-- Translatorib -->
+		es.caib.rolsac.translatorib.user=api-tib
+		es.caib.rolsac.translatorib.pass=XXX
+		es.caib.rolsac.translatorib.url=http://caibter.indra.es/translatorib/api/services/traduccion/v1/texto
     </attribute>
 
 </mbean>
