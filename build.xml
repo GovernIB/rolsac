@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="rolsac-${rolsac.version.tag}" default="mainROLSAC" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
-	<exec executable="C:\Program Files\Git\bin\git.exe"  outputproperty="project.version" failifexecutionfails="true" errorproperty="">
+	<!-- IMPORTANTE. PARA QUE FUNCIONE LO SIGUIENTE:
+       - En run/External Tools/External tools configuration.
+       - Seleccionar el ant.build nuestro y environment y añadir (el valor puede cambiar según la ruta de cada uno del git).
+                    Name: PATH
+                    Value: C:\Program Files\Git\bin
+       - Si no se agrega, se obtendrá un error de tipo 'git no se reconoce como un comando interno'
+	 -->
+	<exec executable="git"  outputproperty="project.version" failifexecutionfails="true" errorproperty="">
 			<arg value="rev-parse"/>
 			<arg value="--abbrev-ref"/>
 			<arg value="HEAD"/>
@@ -146,7 +153,7 @@
 					- Si no se agrega, se obtendrá un error de tipo 'git no se reconoce como un comando interno'
 			 -->
 			<!-- Obtener revisión de GIT . -->
-			<exec executable="C:\Program Files\Git\bin\git.exe"  outputproperty="git.revision" failifexecutionfails="false" errorproperty="">
+			<exec executable="git"  outputproperty="git.revision" failifexecutionfails="false" errorproperty="">
 				        <arg value="rev-parse"/>
 				        <arg value="--short"/>
 				        <arg value="HEAD"/>
