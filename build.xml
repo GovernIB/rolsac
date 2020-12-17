@@ -144,7 +144,6 @@
 
 	<target name="generate.properties" description="Genera el archivo de propiedades del build">
 
-
 			<!-- IMPORTANTE. PARA QUE FUNCIONE LO SIGUIENTE:
 					- En run/External Tools/External tools configuration.
 					- Seleccionar el ant.build nuestro y environment y añadir (el valor puede cambiar según la ruta de cada uno del git).
