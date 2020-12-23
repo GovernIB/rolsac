@@ -2,8 +2,6 @@ package es.indra.rol.sac.integracion.traductorTranslatorIB;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -37,9 +35,8 @@ import es.caib.translatorib.api.v1.model.TipoEntrada;
 public class Traductor implements Traduccion {
 	private static final long serialVersionUID = 4007299757118205848L;
 	protected static Log log = LogFactory.getLog(Traductor.class);
-	private List<String> _listLang, _listLangTraductor;
-	private Hashtable<String, String> _hshIdiomes = new Hashtable<String, String>();
-
+	private IdiomaDelegate _idiomaDelegate;
+	private List<String> _listLang;
 	private static final String MODE_TXT = "TXT", MODE_HTML = "HTML";
 
 	/**
@@ -50,59 +47,32 @@ public class Traductor implements Traduccion {
 	 *
 	 */
 	public Traductor() throws Exception {
-		final IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
-
-		_listLang = idiomaDelegate.listarLenguajes();
-		_listLangTraductor = idiomaDelegate.listarLenguajesTraductor();
-
-		iniHshIdiomes();
+		// iniHshIdiomes();
 	}
 
-	/**
-	 * Método que devuelve el listado de lenguajes de negocio
-	 *
-	 * @return _listLang listado de lenguajes de negocio (ca, es, en, de, fr)
-	 */
-	public List<String> getListLang() {
-		return _listLang;
-	}
-
-	/**
-	 * Método que devuelve el listado de ids de traductor
-	 *
-	 * @return _listLangTraductor listado de ids de traductor (CATALAN, SPANISH,
-	 *         ENGLISH, GERMAN, FRENCH)
-	 */
-	public List<String> getListLangTraductor() {
-		return _listLangTraductor;
-	}
-
-	/**
-	 * Método que devuelve la Hashtable que relaciona los lenguajes de negocio con
-	 * los ids de traductor
-	 *
-	 * @return _hshIdiomes Hashtable con la relación entre lenguajes de negocio e
-	 *         ids de traductor
-	 */
-	public Hashtable<String, String> getHshIdiomes() {
-		return _hshIdiomes;
-	}
-
-	/**
-	 * Método que inicia la Hastable de relaci�n entre lengujes de negocio e ids de
-	 * traductor. Esta Hashtable se utiliza para guardar la propiedad
-	 * _translationDirection
-	 *
-	 * @throws DelegateException
-	 */
-	private void iniHshIdiomes() throws DelegateException {
-		final Iterator<String> itLang = _listLang.iterator();
-		final Iterator<String> itLangTraductor = _listLangTraductor.iterator();
-
-		while (itLang.hasNext()) {
-			_hshIdiomes.put(itLang.next(), itLangTraductor.next());
-		}
-	}
+	//
+	// /**
+	// * Método que inicia la Hastable de relaci�n entre lengujes de negocio e ids
+	// de
+	// * traductor. Esta Hashtable se utiliza para guardar la propiedad
+	// * _translationDirection
+	// *
+	// * @throws DelegateException
+	// */
+	// private void iniHshIdiomes() throws DelegateException {
+	//
+	// final IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
+	//
+	// List<String> _listLang = idiomaDelegate.listarLenguajes();
+	// List<String> _listLangTraductor = idiomaDelegate.listarLenguajesTraductor();
+	//
+	// final Iterator<String> itLang = _listLang.iterator();
+	// final Iterator<String> itLangTraductor = _listLangTraductor.iterator();
+	//
+	// while (itLang.hasNext()) {
+	// _hshIdiomes.put(itLang.next(), itLangTraductor.next());
+	// }
+	// }
 
 	/**
 	 * Traductor que traduce para todos los idiomas indicandole el de origen
@@ -115,8 +85,8 @@ public class Traductor implements Traduccion {
 	// @Override
 	public List<Map<String, Object>> translate(final Traduccion traduccionOrigen, final String langDefault)
 			throws Exception {
+		log.debug("Entra a translate");
 		final List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
-
 		for (final String lang : getListLang()) {
 			if (!langDefault.equalsIgnoreCase(lang)) {
 				final Traduccion traduccioDesti = traduccionOrigen.getClass().newInstance();
@@ -128,6 +98,7 @@ public class Traductor implements Traduccion {
 				traduccions.add(traduccio);
 			}
 		}
+		log.debug("Sale a translate");
 
 		return traduccions;
 	}
@@ -143,6 +114,7 @@ public class Traductor implements Traduccion {
 	 */
 	public List<Map<String, Object>> translateTiny(final Traduccion traduccionOrigen, final String langDefault)
 			throws Exception {
+		log.debug("Entra a translateTiny");
 		final List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
 
 		for (final String lang : getListLang()) {
@@ -188,7 +160,20 @@ public class Traductor implements Traduccion {
 			}
 		}
 
+		log.debug("Sale a translateTiny");
+
 		return traduccions;
+	}
+
+	private List<String> getListLang() throws DelegateException {
+
+		if (_listLang == null) {
+			if (_idiomaDelegate == null) {
+				_idiomaDelegate = DelegateUtil.getIdiomaDelegate();
+			}
+			_listLang = _idiomaDelegate.listarLenguajes();
+		}
+		return _listLang;
 	}
 
 	/**
@@ -233,6 +218,7 @@ public class Traductor implements Traduccion {
 	 *             lanza una nueva excepción proceso de traducción no ha funcionado.
 	 */
 	private String traducir(final String textTraduccio, final String modeTraduccio) throws Exception {
+		log.debug("Entra a traduir");
 		final Client client = Client.create();
 
 		final String user = System.getProperty("es.caib.rolsac.translatorib.user");
@@ -252,6 +238,7 @@ public class Traductor implements Traduccion {
 		final ResultadoTraduccionTexto resultadoTexto = resource2.type(MediaType.APPLICATION_JSON)
 				.accept(MediaType.WILDCARD).post(ResultadoTraduccionTexto.class, parametros);
 
+		log.debug("Sale a traduir");
 		return resultadoTexto.getTextoTraducido();
 
 	}
@@ -262,8 +249,6 @@ public class Traductor implements Traduccion {
 	 */
 	public void dispose() {
 		_listLang = null;
-		_listLangTraductor = null;
-		_hshIdiomes = null;
 	}
 
 }
