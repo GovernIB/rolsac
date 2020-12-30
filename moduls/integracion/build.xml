@@ -39,7 +39,6 @@
         </fileset>
        	<fileset dir="${lib.dir}/jersey">
     			<include name="jersey-bundle-1.19.1.jar"/>
-        		<include name="genson-0.99.jar" />
    		</fileset>
     	<fileset dir="${jar.product}">
     	</fileset>

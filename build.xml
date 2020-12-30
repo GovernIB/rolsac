@@ -567,7 +567,6 @@
 
         	<zipfileset dir="${lib}/jersey" >
      					<include name="jersey-bundle-1.19.1.jar"/>
-     					<include name="genson-0.99.jar" />
      		</zipfileset>
 
         	<zipfileset dir="${lib}/axis-1.4">

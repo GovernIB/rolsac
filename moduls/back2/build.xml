@@ -37,7 +37,7 @@
 		</fileset>
 		<fileset dir="${lib.dir}/webcaib">
 			<include name="commons-collections-3.2.1.jar"/>
-		</fileset>		
+		</fileset>
 	</path>
 
     <path id="web.class.path">
@@ -51,10 +51,11 @@
         	<include name="micromodel.jar"/>
         	<include name="sac-micropersistence.jar"/>
         	<include name="mail.jar"/>
-            <include name="seyconsession-common.jar"/>        	
+            <include name="seyconsession-common.jar"/>
         	<include name="boib.jar"/>
         	<include name="jackson-all-1.8.5.jar"/>
         </fileset>
+
     	<fileset dir="${lib.dir}/axis2-1.5">
     		<include name="**/*.jar" />
     		<exclude name="**/xerces*.jar" />
@@ -80,16 +81,16 @@
 			<include name="dom4j.jar"/>
 			<include name="jcommon-1.0.0.jar"/>
 			<include name="jfreechart-1.0.14.jar"/>
-			<include name="json.jar"/>			
+			<include name="json.jar"/>
 			<include name="org.springframework.**.jar"/>
-			<include name="quartz-1.8.5.jar" /> 
+			<include name="quartz-1.8.5.jar" />
 		</fileset>
- 
+
 	</path>
 
 	<target name="prepare">
 		<delete dir="${modul.output.dir}"/>
-		<mkdir dir="${modul.output.dir}"/>		
+		<mkdir dir="${modul.output.dir}"/>
         <mkdir dir="${web.gen.etc}"/>
         <mkdir dir="${web.classes}"/>
     </target>
@@ -113,6 +114,7 @@
 			<lib dir="${home.dir}/lib">
 				<include name="micromodel.jar"/>
 				<include name="jackson-all-1.8.5.jar"/>
+				<include name="genson-0.99.jar"/>
 			</lib>
 
 			<!-- agarcia: librerias comunes en 00librerias -->
@@ -123,19 +125,19 @@
 				<!-- se necesita porque el quartz se queja de esto -->
 				<include name="commons-codec-1.5.jar" />
 			</lib>
-        	
+
         	<lib dir="${lib.dir}/axis2-1.5">
 	    		<include name="**/*.jar" />
         		<exclude name="**/xerces*.jar" />
-	    	</lib> 
+	    	</lib>
         	<lib dir="${web.product}">
-	        	<include if="isJboss5" name="integracion.jar"/>	        	
+	        	<include if="isJboss5" name="integracion.jar"/>
 	        </lib>
-        	
+
 			<lib dir="${lib.dir}/jstl">
 				<include name="jstl.jar" />
-				<include name="standard.jar" />   
-        	</lib>	
+				<include name="standard.jar" />
+        	</lib>
         	<classes dir="${web.product}" includes="version.properties" />
         </war>
     </target>
@@ -146,9 +148,9 @@
             <classpath refid="web.class.path"/>
         </javac>
 		<copydir dest="${web.classes}" src="${web.resources}">
-			<include name="**/*.properties"/> 
+			<include name="**/*.properties"/>
 		</copydir>
-		
+
     </target>
 
     <target name="web.javadoc">
@@ -170,10 +172,10 @@
         </javadoc>
 
     </target>
-	
-	
+
+
     <target name="doc" depends="web.javadoc" description="Realiza las tareas de documentación "/>
-	
+
 	<target name="webGeneration" description="web_back">
 		<taskdef name="webdoclet" classname="xdoclet.modules.web.WebDocletTask" classpathref="xdoclet.classpath" />
 		<webdoclet destDir="${web.gen.etc}" mergeDir="${web.merge.web}">
@@ -192,9 +194,9 @@
             <replacefilter token="@role.oper@" value="${role.oper}"/>
         	<replacefilter token="@back.web.listener@" value="${back.web.listener}"/>
         </replace>
-		
+
 	</target>
-	
+
 	<target name="checkJbossVersion">
 	       <condition property="isJboss5">
 	             <equals arg1="${jboss.version}" arg2="5.2"/>

@@ -7,7 +7,6 @@
 	<display-name>ROLSAC</display-name>
   	<description/>
   		<module><java>jersey-bundle-1.19.1.jar</java></module>
-  		<module><java>genson-0.99.jar</java></module>
   		<module><java>commons-codec-1.5.jar</java></module>
   		<module><java>commons-discovery-0.5.jar</java></module>
 		<module><java>ehcache.jar</java></module>
