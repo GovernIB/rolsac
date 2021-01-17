@@ -61,9 +61,20 @@ public class ProcedimientoLocal extends Classificable
 	private String nombreFamilia;
 	private String idioma;
 
+	// LOPD
+	private String lopdResponsable;
+	private LopdLegitimacion lopdLegitimacion;
+	/** Lopd Transient **/
+	private String lopdFinalidad;
+	private String lopdDestinatario;
+	private String lopdDerechos;
+	private Archivo lopdInfoAdicional;
+
 	// Constructor para búsqueda optimizada
 	public ProcedimientoLocal(final Long id, final String nombreProcedimiento, final Integer validacion,
-			final Date fechaActualizacion, final boolean comun, final Date fechaCaducidad, final Date fechaPublicacion,
+			final Date fechaActualizacion, final boolean comun, final String lopdFinalidad,
+			final String lopdDestinatario, final String lopdDerechos, final LopdLegitimacion lopdLegitimacion,
+			final Archivo lopdInfoAdicional, final Date fechaCaducidad, final Date fechaPublicacion,
 			final String nombreFamilia, final String idioma, final UnidadAdministrativa ua) {
 
 		super();
@@ -78,6 +89,11 @@ public class ProcedimientoLocal extends Classificable
 		this.unidadAdministrativa = ua;
 		this.idioma = idioma;
 		this.comun = comun;
+		this.lopdFinalidad = lopdFinalidad;
+		this.lopdDestinatario = lopdDestinatario;
+		this.lopdDerechos = lopdDerechos;
+		this.lopdLegitimacion = lopdLegitimacion;
+		this.lopdInfoAdicional = lopdInfoAdicional;
 	}
 
 	// ---------------------------------------------
@@ -540,6 +556,21 @@ public class ProcedimientoLocal extends Classificable
 	}
 
 	/**
+	 * @return the lopdLegitimacion
+	 */
+	public LopdLegitimacion getLopdLegitimacion() {
+		return lopdLegitimacion;
+	}
+
+	/**
+	 * @param lopdLegitimacion
+	 *            the lopdLegitimacion to set
+	 */
+	public void setLopdLegitimacion(final LopdLegitimacion lopdLegitimacion) {
+		this.lopdLegitimacion = lopdLegitimacion;
+	}
+
+	/**
 	 * @return the comun
 	 */
 	public boolean isComun() {
@@ -552,6 +583,81 @@ public class ProcedimientoLocal extends Classificable
 	 */
 	public void setComun(final boolean comun) {
 		this.comun = comun;
+	}
+
+	/**
+	 * @return the lopdResponsable
+	 */
+	public String getLopdResponsable() {
+		return lopdResponsable;
+	}
+
+	/**
+	 * @param lopdResponsable
+	 *            the lopdResponsable to set
+	 */
+	public void setLopdResponsable(final String lopdResponsable) {
+		this.lopdResponsable = lopdResponsable;
+	}
+
+	/**
+	 * @return the lopdFinalidad
+	 */
+	public String getLopdFinalidad() {
+		return lopdFinalidad;
+	}
+
+	/**
+	 * @param lopdFinalidad
+	 *            the lopdFinalidad to set
+	 */
+	public void setLopdFinalidad(final String lopdFinalidad) {
+		this.lopdFinalidad = lopdFinalidad;
+	}
+
+	/**
+	 * @return the lopdDestinatario
+	 */
+	public String getLopdDestinatario() {
+		return lopdDestinatario;
+	}
+
+	/**
+	 * @param lopdDestinatario
+	 *            the lopdDestinatario to set
+	 */
+	public void setLopdDestinatario(final String lopdDestinatario) {
+		this.lopdDestinatario = lopdDestinatario;
+	}
+
+	/**
+	 * @return the lopdDerechos
+	 */
+	public String getLopdDerechos() {
+		return lopdDerechos;
+	}
+
+	/**
+	 * @param lopdDerechos
+	 *            the lopdDerechos to set
+	 */
+	public void setLopdDerechos(final String lopdDerechos) {
+		this.lopdDerechos = lopdDerechos;
+	}
+
+	/**
+	 * @return the lopdInfoAdicional
+	 */
+	public Archivo getLopdInfoAdicional() {
+		return lopdInfoAdicional;
+	}
+
+	/**
+	 * @param lopdInfoAdicional
+	 *            the lopdInfoAdicional to set
+	 */
+	public void setLopdInfoAdicional(final Archivo lopdInfoAdicional) {
+		this.lopdInfoAdicional = lopdInfoAdicional;
 	}
 
 	/**

@@ -5,121 +5,208 @@ package org.ibit.rol.sac.model;
 public class TraduccionProcedimientoLocal implements TraduccionProcedimiento {
 
 	private static final long serialVersionUID = -1313486359929062988L;
-	
+
 	private String nombre;
-    private String resumen;
-    private String destinatarios;
-    private String resultat;
-    @Deprecated
-    private String requisitos;
-    @Deprecated
-    private String plazos;
-    private String resolucion;
-    private String notificacion;
-    private String recursos;
-    private String observaciones;
-    @Deprecated
-    private String lugar;
+	private String resumen;
+	private String destinatarios;
+	private String resultat;
+	@Deprecated
+	private String requisitos;
+	@Deprecated
+	private String plazos;
+	private String resolucion;
+	private String notificacion;
+	private String recursos;
+	private String observaciones;
+	@Deprecated
+	private String lugar;
 
-    public String getNombre() {
-        return nombre;
-    }
+	/** LOPD **/
+	private String lopdFinalidad;
+	private String lopdDestinatario;
+	private String lopdDerechos;
+	private Archivo lopdInfoAdicional;
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+	@Override
+	public String getNombre() {
+		return nombre;
+	}
 
-    public String getResumen() {
-        return resumen;
-    }
+	@Override
+	public void setNombre(final String nombre) {
+		this.nombre = nombre;
+	}
 
-    public void setResumen(String resumen) {
-        this.resumen = resumen;
-    }
+	@Override
+	public String getResumen() {
+		return resumen;
+	}
 
-    public String getDestinatarios() {
-        return destinatarios;
-    }
+	@Override
+	public void setResumen(final String resumen) {
+		this.resumen = resumen;
+	}
 
-    public void setDestinatarios(String destinatarios) {
-        this.destinatarios = destinatarios;
-    }
+	@Override
+	public String getDestinatarios() {
+		return destinatarios;
+	}
 
-    @Deprecated
-    public String getRequisitos() {
-        return requisitos;
-    }
+	@Override
+	public void setDestinatarios(final String destinatarios) {
+		this.destinatarios = destinatarios;
+	}
 
-    @Deprecated
-    public void setRequisitos(String requisitos) {
-        this.requisitos = requisitos;
-    }
+	@Override
+	@Deprecated
+	public String getRequisitos() {
+		return requisitos;
+	}
 
-    @Deprecated
-    public String getPlazos() {
-        return plazos;
-    }
-    @Deprecated
-    public void setPlazos(String plazos) {
-        this.plazos = plazos;
-    }
-    public String getResolucion() {
+	@Override
+	@Deprecated
+	public void setRequisitos(final String requisitos) {
+		this.requisitos = requisitos;
+	}
+
+	@Override
+	@Deprecated
+	public String getPlazos() {
+		return plazos;
+	}
+
+	@Override
+	@Deprecated
+	public void setPlazos(final String plazos) {
+		this.plazos = plazos;
+	}
+
+	@Override
+	public String getResolucion() {
 		return resolucion;
 	}
-	public void setResolucion(String resolucion) {
+
+	@Override
+	public void setResolucion(final String resolucion) {
 		this.resolucion = resolucion;
 	}
+
+	@Override
 	public String getNotificacion() {
 		return notificacion;
 	}
-	public void setNotificacion(String notificacion) {
+
+	@Override
+	public void setNotificacion(final String notificacion) {
 		this.notificacion = notificacion;
 	}
-	
-    public String getRecursos() {
-        return recursos;
-    }
 
-    public void setRecursos(String recursos) {
-        this.recursos = recursos;
-    }
+	@Override
+	public String getRecursos() {
+		return recursos;
+	}
 
-    public String getObservaciones() {
-        return observaciones;
-    }
+	@Override
+	public void setRecursos(final String recursos) {
+		this.recursos = recursos;
+	}
 
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
-    }
+	@Override
+	public String getObservaciones() {
+		return observaciones;
+	}
 
-    @Deprecated
-    public String getLugar() {
-        return lugar;
-    }
+	@Override
+	public void setObservaciones(final String observaciones) {
+		this.observaciones = observaciones;
+	}
 
-    @Deprecated
-    public void setLugar(String lugar) {
-        this.lugar = lugar;
-    }
+	@Override
+	@Deprecated
+	public String getLugar() {
+		return lugar;
+	}
 
+	@Override
+	@Deprecated
+	public void setLugar(final String lugar) {
+		this.lugar = lugar;
+	}
+
+	@Override
 	public String getResultat() {
 		return resultat;
 	}
 
-	public void setResultat(String resultat) {
+	@Override
+	public void setResultat(final String resultat) {
 		this.resultat = resultat;
+	}
+
+	/**
+	 * @return the lopdFinalidad
+	 */
+	public String getLopdFinalidad() {
+		return lopdFinalidad;
+	}
+
+	/**
+	 * @param lopdFinalidad
+	 *            the lopdFinalidad to set
+	 */
+	public void setLopdFinalidad(final String lopdFinalidad) {
+		this.lopdFinalidad = lopdFinalidad;
+	}
+
+	/**
+	 * @return the lopdDestinatario
+	 */
+	public String getLopdDestinatario() {
+		return lopdDestinatario;
+	}
+
+	/**
+	 * @param lopdDestinatario
+	 *            the lopdDestinatario to set
+	 */
+	public void setLopdDestinatario(final String lopdDestinatario) {
+		this.lopdDestinatario = lopdDestinatario;
+	}
+
+	/**
+	 * @return the lopdDerechos
+	 */
+	public String getLopdDerechos() {
+		return lopdDerechos;
+	}
+
+	/**
+	 * @param lopdDerechos
+	 *            the lopdDerechos to set
+	 */
+	public void setLopdDerechos(final String lopdDerechos) {
+		this.lopdDerechos = lopdDerechos;
+	}
+
+	/**
+	 * @return the lopdInfoAdicional
+	 */
+	public Archivo getLopdInfoAdicional() {
+		return lopdInfoAdicional;
+	}
+
+	/**
+	 * @param lopdInfoAdicional the lopdInfoAdicional to set
+	 */
+	public void setLopdInfoAdicional(Archivo lopdInfoAdicional) {
+		this.lopdInfoAdicional = lopdInfoAdicional;
 	}
 
 	@Override
 	public String toString() {
-		return "TraduccionProcedimientoLocal [destinatarios=" + destinatarios
-				+ ", lugar=" + lugar + ", nombre=" + nombre + ", notificacion="
-				+ notificacion + ", observaciones=" + observaciones
-				+ ", plazos=" + plazos + ", recursos=" + recursos
-				+ ", requisitos=" + requisitos + ", resolucion=" + resolucion
-				+ "]";
+		return "TraduccionProcedimientoLocal [destinatarios=" + destinatarios + ", lugar=" + lugar + ", nombre="
+				+ nombre + ", notificacion=" + notificacion + ", observaciones=" + observaciones + ", plazos=" + plazos
+				+ ", recursos=" + recursos + ", requisitos=" + requisitos + ", resolucion=" + resolucion + "]";
 	}
 
-    
-    
 }

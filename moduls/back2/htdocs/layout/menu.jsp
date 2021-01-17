@@ -29,7 +29,7 @@
             </c:choose>
             <c:if test="${rolSuper && !rolAdmin && permisosSuperAddicionals}" >
             	<c:choose>
-	                <c:when test="${menu==1}">                                        
+	                <c:when test="${menu==1}">
 	                    <li class="seleccionat desplegable">
 	                </c:when>
 	                <c:otherwise>
@@ -37,7 +37,7 @@
 	                </c:otherwise>
 	            </c:choose>
             	<a id="taules_mestre" href="javascript:;"><spring:message code="menu.administracio" /></a>
-				<span class="cueta"></span>		
+				<span class="cueta"></span>
 				<ul id="taulesMestre">
 					<li>
 						<span class="titol"><spring:message code="menu.unitat_organica" /></span>
@@ -49,9 +49,9 @@
 					</li>
 				</ul>
             </c:if>
-		    <c:if test="${rolSystem || rolAdmin}" >	
+		    <c:if test="${rolSystem || rolAdmin}" >
 			    <c:choose>
-	                <c:when test="${menu==1}">                                        
+	                <c:when test="${menu==1}">
 	                    <li class="seleccionat desplegable">
 	                </c:when>
 	                <c:otherwise>
@@ -59,7 +59,7 @@
 	                </c:otherwise>
 	            </c:choose>
 				<a id="taules_mestre" href="javascript:;"><spring:message code="menu.administracio" /></a>
-				<span class="cueta"></span>		
+				<span class="cueta"></span>
 				<ul id="taulesMestre">
 					<li>
 						<span class="titol"><spring:message code="menu.sistema_generals" /></span>
@@ -164,7 +164,7 @@
 							<li>
 								<a href="<c:url value="/index/index.do"/>"><spring:message code="menu.reiniciar_index" /></a>
 							</li>
-							
+
 						</ul>
 					</li>
 					<li>
@@ -178,8 +178,16 @@
 							</li>
 						</ul>
 					</li>
+					<li>
+						<span class="titol"><spring:message code="menu.lopd" /></span>
+						<ul>
+							<li>
+								<a href="<c:url value="/lopd/legitimacion.do"/>"><spring:message code="menu.lopglegitimacion" /></a>
+							</li>
+						</ul>
+					</li>
 				</ul>
-					
+
 				<c:choose>
 	                <c:when test="${menu==2}">
 	                    <li class="seleccionat">
@@ -194,10 +202,10 @@
 	                    </li>
 	                </c:otherwise>
 	            </c:choose>
-			</c:if>	       
+			</c:if>
 		</ul>
 		<div id="cap_pestanya">
-            <a href="javascript:void(0)" title="<spring:message code="cap.amagar_capsalera" />"></a>      
-        </div>			
-	</div>		
+            <a href="javascript:void(0)" title="<spring:message code="cap.amagar_capsalera" />"></a>
+        </div>
+	</div>
 </div>

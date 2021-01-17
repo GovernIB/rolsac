@@ -42,6 +42,7 @@ import org.ibit.rol.sac.model.DocumentoServicio;
 import org.ibit.rol.sac.model.ExcepcioDocumentacio;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.HechoVitalServicio;
+import org.ibit.rol.sac.model.LopdLegitimacion;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.Plataforma;
@@ -53,6 +54,7 @@ import org.ibit.rol.sac.model.TipoAfectacion;
 import org.ibit.rol.sac.model.TraduccionCatalegDocuments;
 import org.ibit.rol.sac.model.TraduccionDocumentoServicio;
 import org.ibit.rol.sac.model.TraduccionExcepcioDocumentacio;
+import org.ibit.rol.sac.model.TraduccionLopdLegitimacion;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
 import org.ibit.rol.sac.model.TraduccionServicio;
@@ -73,6 +75,7 @@ import org.ibit.rol.sac.persistence.delegate.DocumentoServicioDelegate;
 import org.ibit.rol.sac.persistence.delegate.ExcepcioDocumentacioDelegate;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalServicioDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
+import org.ibit.rol.sac.persistence.delegate.LopdLegitimacionDelegate;
 import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
 import org.ibit.rol.sac.persistence.delegate.ServicioDelegate;
@@ -143,6 +146,8 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			model.put("llistaTipusAfectacio", getListaTiposAfectacionDTO(idioma));
 			// Plataforma.
 			model.put("llistaPlataformas", getListaPlataformasDTO());
+			// Lopd Legitimacion.
+			model.put("llistaLopdLegitimacion", getListaLopdLegitimaciones(lang));
 
 		} catch (final DelegateException e) {
 			log.error(ExceptionUtils.getStackTrace(e));
@@ -161,8 +166,32 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			model.put("comunesUAESP", RolsacPropertiesUtil.getUAComun(false));
 		}
 
+		// Ponemos los dos idiomas para lopd
+		model.put("lopdFinalidad", RolsacPropertiesUtil.getLopdFinalidad(true));
+		model.put("lopdFinalidadESP", RolsacPropertiesUtil.getLopdFinalidad(false));
+		model.put("lopdDestinatario", RolsacPropertiesUtil.getLopdDestinatario(true));
+		model.put("lopdDestinatarioESP", RolsacPropertiesUtil.getLopdDestinatario(false));
+		model.put("lopdDerechos", RolsacPropertiesUtil.getLopdDerechos(true));
+		model.put("lopdDerechosESP", RolsacPropertiesUtil.getLopdDerechos(false));
+
 		return "index";
 
+	}
+
+	/** Get lista lopd legitimaciones **/
+	private List<IdNomDTO> getListaLopdLegitimaciones(final String idioma) throws DelegateException {
+		final ResultadoBusqueda resultadoBusq = DelegateUtil.getLopdLegitimacionDelegate().getLopdLegitimacion(0, 100,
+				null, "ASC");
+		final List<IdNomDTO> listaLopdLegitimacionesDTO = new ArrayList<IdNomDTO>();
+		final List<LopdLegitimacion> lista = (List<LopdLegitimacion>) resultadoBusq.getListaResultados();
+		for (final LopdLegitimacion lopdLeg : lista) {
+			final TraduccionLopdLegitimacion trad = (TraduccionLopdLegitimacion) lopdLeg.getTraduccion(idioma);
+			final IdNomDTO bol = new IdNomDTO(lopdLeg.getId(),
+					trad != null ? trad.getNombre() : lopdLeg.getIdentificador());
+			listaLopdLegitimacionesDTO.add(bol);
+		}
+
+		return listaLopdLegitimacionesDTO;
 	}
 
 	private List<IdNomDTO> getListaPlataformasDTO() throws DelegateException {
@@ -746,6 +775,15 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			resultats.put("item_check_tramit_telematico", serv.isTelematico());
 			resultats.put("item_check_tramit_telefonico", serv.isTelefonico());
 			resultats.put("item_comun", (serv.isComun() ? true : false));
+			if (serv.getLopdLegitimacion() != null) {
+				resultats.put("item_lopd_legitimacion", serv.getLopdLegitimacion().getId());
+			}
+			if (serv.getServicioResponsable() != null) {
+				final UnidadAdministrativa ua = getPadreDir3(serv.getServicioResponsable());
+				if (ua != null) {
+					resultats.put("item_lopd_responsable", ua.getNombreUnidadAdministrativa());
+				}
+			}
 
 			if (serv.getServicioResponsable() != null) {
 				final UnidadAdministrativa uaServicioResponsable = serv.getServicioResponsable();
@@ -806,6 +844,18 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 	}
 
+	private UnidadAdministrativa getPadreDir3(final UnidadAdministrativa servicioResponsable) {
+		if (servicioResponsable == null) {
+			return null;
+		} else {
+			if (servicioResponsable.getCodigoDIR3() != null && !servicioResponsable.getCodigoDIR3().isEmpty()) {
+				return servicioResponsable;
+			} else {
+				return getPadreDir3(servicioResponsable.getPadre());
+			}
+		}
+	}
+
 	@RequestMapping(value = "/modulos.do")
 	public @ResponseBody Map<String, Object> recuperaModulos(final Long id, final HttpServletRequest request) {
 
@@ -862,16 +912,54 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 		for (final String lang : langs) {
 			if (serv.getTraduccion(lang) != null) {
-				resultats.put(lang, serv.getTraduccion(lang));
+
+				final TraduccionServicio tradServ = (TraduccionServicio) serv.getTraduccion(lang);
+				final HashMap<String, String> traduccionDTO = recuperaIdiomas(tradServ);
+
+				if (tradServ.getLopdInfoAdicional() != null) {
+					traduccionDTO.put("item_lopd_infoAdicional_enllas_arxiu",
+							"servinf/archivo.do?id=" + serv.getId() + "&lang=" + lang + "&tipus=1");
+					traduccionDTO.put("item_lopd_infoAdicional", tradServ.getLopdInfoAdicional().getNombre());
+				} else {
+					traduccionDTO.put("item_lopd_infoAdicional_enllas_arxiu", "");
+					traduccionDTO.put("item_lopd_infoAdicional", "");
+				}
+				resultats.put(lang, traduccionDTO);
 			} else {
 				if (serv.getTraduccion(langDefault) != null) {
-					resultats.put(lang, serv.getTraduccion(langDefault));
+					final TraduccionServicio tradServ = (TraduccionServicio) serv.getTraduccion(langDefault);
+					final HashMap<String, String> traduccionDTO = recuperaIdiomas(tradServ);
+
+					if (tradServ.getLopdInfoAdicional() != null) {
+						traduccionDTO.put("item_lopd_infoAdicional_enllas_arxiu",
+								"servinf/archivo.do?id=" + serv.getId() + "&lang=" + langDefault + "&tipus=1");
+						traduccionDTO.put("item_lopd_infoAdicional", tradServ.getLopdInfoAdicional().getNombre());
+					} else {
+						traduccionDTO.put("item_lopd_infoAdicional_enllas_arxiu", "");
+						traduccionDTO.put("item_lopd_infoAdicional", "");
+					}
+					resultats.put(lang, traduccionDTO);
 				} else {
 					resultats.put(lang, new TraduccionServicio());
 				}
 			}
 		}
 
+	}
+
+	private HashMap<String, String> recuperaIdiomas(final TraduccionServicio trad) {
+		final HashMap<String, String> traduccionDTO = new HashMap<String, String>();
+		traduccionDTO.put("destinatarios", trad.getDestinatarios());
+		traduccionDTO.put("nombre", trad.getNombre());
+		traduccionDTO.put("lopdFinalidad", trad.getLopdFinalidad());
+		traduccionDTO.put("lopdDestinatario", trad.getLopdDestinatario());
+		traduccionDTO.put("lopdDerechos", trad.getLopdDerechos());
+		// Lopd Info adiciional es un doc y va por separdado
+		traduccionDTO.put("observaciones", trad.getObservaciones());
+		traduccionDTO.put("objeto", trad.getObjeto());
+		traduccionDTO.put("requisitos", trad.getRequisitos());
+
+		return traduccionDTO;
 	}
 
 	/*
@@ -1136,6 +1224,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			servicio = guardarFechaDespublicacion(request, servicio); // Fecha Caducidad
 			servicio = guardarOrganInstructor(request, servicio, error); // Organ Resolutori
 			servicio = guardarServeiResponsable(request, servicio, error); // Servei Responsable
+			servicio = guardarLopd(request, servicio, error); // Servei Responsable
 
 			// Cargamos los datos básicos
 			servicio.setNombreResponsable(request.getParameter("item_responsable_nombre")); // Responsable
@@ -1277,6 +1366,28 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 	}
 
+	private Servicio guardarLopd(final HttpServletRequest request, final Servicio servicio, String error)
+			throws DelegateException {
+		try {
+			if (request.getParameter("item_lopd_legitimacion").isEmpty()) {
+				servicio.setLopdLegitimacion(null);
+			} else {
+				final Long codigo = Long.valueOf(request.getParameter("item_lopd_legitimacion"));
+				final LopdLegitimacionDelegate lopdDelegate = DelegateUtil.getLopdLegitimacionDelegate();
+				final LopdLegitimacion lopdLeg = lopdDelegate.obtenerLopdLegitimacion(codigo);
+				servicio.setLopdLegitimacion(lopdLeg);
+			}
+
+		} catch (final NumberFormatException e) {
+
+			error = messageSource.getMessage("proc.error.formaIniciacio.incorrecta", null, request.getLocale());
+			throw new NumberFormatException(e.getMessage());
+
+		}
+
+		return servicio;
+	}
+
 	/*
 	 * Guardamos el servicio anterior si se trata de una edición.
 	 */
@@ -1354,6 +1465,9 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			tpl.setDestinatarios(RolUtil.limpiaCadena(request.getParameter("item_destinatarios_" + lang)));
 			tpl.setRequisitos(RolUtil.limpiaCadena(request.getParameter("item_requisitos_" + lang)));
 			tpl.setObservaciones(RolUtil.limpiaCadena(request.getParameter("item_observaciones_" + lang)));
+			tpl.setLopdDerechos(RolUtil.limpiaCadena(request.getParameter("item_lopd_derechos_" + lang)));
+			tpl.setLopdDestinatario(RolUtil.limpiaCadena(request.getParameter("item_lopd_destinatario_" + lang)));
+			tpl.setLopdFinalidad(RolUtil.limpiaCadena(request.getParameter("item_lopd_finalidad_" + lang)));
 
 			servicio.setTraduccion(lang, tpl);
 

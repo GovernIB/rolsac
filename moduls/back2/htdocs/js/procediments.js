@@ -86,6 +86,16 @@ $(document).ready(function() {
 
 	});
 
+	jQuery(".lista-simple-documentos-lopd").click(function() {
+
+		var elements = $(this).parent().parent().find("div.cajaIdioma.ca li"); // Con esto obtenemos los <li> que cuelgan de <div class="cajaIdioma ca">
+		var id = $('#item_id').val();
+		var url = $(this).attr('action');
+
+		ListaSimpleDocumentosLopd.guardar(elements, url, id);
+
+	});
+
 	jQuery(".lista-simple-normativas").click(function() {
 
 		if (this.parentNode.className.indexOf("off") == -1) {
@@ -146,6 +156,7 @@ $(document).ready(function() {
 	ListaSimpleHechosVitales = new ListaSimple();
 	ListaSimpleNormativas = new ListaSimple();
 	ListaSimpleDocumentos = new CListaSimpleDocumentos();
+	ListaSimpleDocumentosLopd = new CListaSimpleDocumentosLopd();
 
 	// elements
 	opcions_elm = $("#opcions");
@@ -889,6 +900,25 @@ function CDetall() {
 		$("#item_organ_id").val("");
 		$("#item_organ").val("");
 
+		// LOPD
+		$("#item_lopd_legitimacion").val("");
+		jQuery("#item_lopd_responsable").val('');
+		jQuery("#item_lopd_finalidad, #item_lopd_finalidad_ca, #item_lopd_finalidad_es, #item_lopd_finalidad_en, #item_lopd_finalidad_de, #item_lopd_finalidad_fr").val('');
+		jQuery("#item_lopd_destinatario, #item_lopd_destinatario_ca, #item_lopd_destinatario_es, #item_lopd_destinatario_en, #item_lopd_destinatario_de, #item_lopd_destinatario_fr").val('');
+		jQuery("#item_lopd_derechos, #item_lopd_derechos_ca, #item_lopd_derechos_es, #item_lopd_derechos_en, #item_lopd_derechos_de, #item_lopd_derechos_fr").val('');
+
+		// Seteamos el valor
+		jQuery("#item_lopd_finalidad").val(lopdFinalidad);
+		jQuery("#item_lopd_finalidad_ca").val(lopdFinalidad);
+		jQuery("#item_lopd_finalidad_es").val(lopdFinalidadESP);
+		jQuery("#item_lopd_destinatario").val(lopdDestinatario);
+		jQuery("#item_lopd_destinatario_ca").val(lopdDestinatario);
+		jQuery("#item_lopd_destinatario_es").val(lopdDestinatarioESP);
+		jQuery("#item_lopd_derechos").val(lopdDerechos);
+		jQuery("#item_lopd_derechos_ca").val(lopdDerechos);
+		jQuery("#item_lopd_derechos_es").val(lopdDerechosESP);
+
+
 		var estilo_check;
 		if (comunActivo) {
 			estilo_check = "";
@@ -1002,6 +1032,12 @@ function CDetall() {
 			$("#item_notificacio_" + idioma).val(printStringFromNull(dada_node[idioma]["notificacion"]));
 			//$("#item_silenci_" + idioma).val(printStringFromNull(dada_node[idioma]["silencio"]));
 			$("#item_observacions_" + idioma).val(printStringFromNull(dada_node[idioma]["observaciones"]));
+			$("#item_lopd_finalidad_" + idioma).val(printStringFromNull(dada_node[idioma]["lopdFinalidad"]));
+			$("#item_lopd_destinatario_" + idioma).val(printStringFromNull(dada_node[idioma]["lopdDestinatario"]));
+			$("#item_lopd_derechos_" + idioma).val(printStringFromNull(dada_node[idioma]["lopdDerechos"]));
+
+			 // Info adicional doc
+            pintarArchivoMultiidioma("item_lopd_infoAdicional", idioma, dada_node);
 
 		}
 		// Fin bloque de pestanyas de idiomas
@@ -1056,7 +1092,6 @@ function CDetall() {
 			jQuery("#item_silenci_combo").val(dada_node.item_silenci_combo);
 			jQuery("#item_silenci_combo").change();
 		}
-
 
 		$("#item_clave_primaria").val(dada_node.item_id);
 		$("#item_clave_primaria").change();
@@ -1141,6 +1176,11 @@ function CDetall() {
 
 		$("#item_notes").val(dada_node.item_notes);
 
+
+		//LOPD
+		$("#item_lopd_legitimacion").val(dada_node.item_lopd_legitimacion);
+		$("#item_lopd_responsable").val(dada_node.item_lopd_responsable);
+
 		ModulTramit.inicializarTramites(dada_node.tramites);
 		ModulPublicObjectiu.inicializarPublics(dada_node.publicsObjectiu);
 
@@ -1220,6 +1260,7 @@ function CDetall() {
 		ModulDocuments.inicializarDocuments(dades.documents);
 		ModulFetsVitals.inicializarHechosVitales(hechosVitalesAsignados);
 		ModulNormativa.inicializarNormativas(dades.normatives);
+		ModulDocumentsLopd.inicializarDocuments(dades.lopd);
 
 	};
 

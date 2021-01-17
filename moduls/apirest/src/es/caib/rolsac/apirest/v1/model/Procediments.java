@@ -175,6 +175,28 @@ public class Procediments extends EntidadBase {
 	@ApiModelProperty(value = "comun", required = false)
 	private boolean comun;
 
+	@ApiModelProperty
+	private LopdLegitimacion lopdLegitimacion;
+
+	/** Info Adicional **/
+	@ApiModelProperty(value = "link_lopdInfoAdicional", required = false)
+	private Link link_lopdInfoAdicional;
+	@ApiModelProperty(hidden = true)
+	@XmlTransient
+	private java.lang.Long lopdInfoAdicional;
+
+	@ApiModelProperty(value = "lopdResponsable", required = false)
+	private String lopdResponsable;
+
+	@ApiModelProperty(value = "lopdFinalidad", required = false)
+	private String lopdFinalidad;
+
+	@ApiModelProperty(value = "lopdDestinatario", required = false)
+	private String lopdDestinatario;
+
+	@ApiModelProperty(value = "lopdDerechos", required = false)
+	private String lopdDerechos;
+
 	public Procediments(final org.ibit.rol.sac.model.Procedimiento elem, final String urlBase, final String idioma,
 			final boolean hateoasEnabled) {
 		super(elem, urlBase, idioma, hateoasEnabled);
@@ -190,6 +212,13 @@ public class Procediments extends EntidadBase {
 			if (((org.ibit.rol.sac.model.ProcedimientoLocal) elem).getIniciacion() != null) {
 				this.iniciacion = new Iniciacions(((org.ibit.rol.sac.model.ProcedimientoLocal) elem).getIniciacion(),
 						urlBase, idioma, hateoasEnabled);
+			}
+
+			// copiamos los datos que no tienen la misma estructura:
+			if (((org.ibit.rol.sac.model.ProcedimientoLocal) elem).getLopdLegitimacion() != null) {
+				this.lopdLegitimacion = new LopdLegitimacion(
+						((org.ibit.rol.sac.model.ProcedimientoLocal) elem).getLopdLegitimacion(), urlBase, idioma,
+						hateoasEnabled);
 			}
 		} catch (final Exception e) {
 
@@ -210,6 +239,7 @@ public class Procediments extends EntidadBase {
 		link_organResolutori = this.generaLink(this.organResolutori, Constantes.ENTIDAD_UA, Constantes.URL_UA, urlBase,
 				null);
 		link_familia = this.generaLink(this.familia, Constantes.ENTIDAD_FAMILIA, Constantes.URL_FAMILIA, urlBase, null);
+		link_lopdInfoAdicional = this.generaLinkArchivo(this.lopdInfoAdicional, urlBase, null);
 
 	}
 
@@ -812,6 +842,111 @@ public class Procediments extends EntidadBase {
 	 */
 	public void setComun(final boolean comun) {
 		this.comun = comun;
+	}
+
+	/**
+	 * @return the lopdLegitimacion
+	 */
+	public LopdLegitimacion getLopdLegitimacion() {
+		return lopdLegitimacion;
+	}
+
+	/**
+	 * @param lopdLegitimacion
+	 *            the lopdLegitimacion to set
+	 */
+	public void setLopdLegitimacion(final LopdLegitimacion lopdLegitimacion) {
+		this.lopdLegitimacion = lopdLegitimacion;
+	}
+
+	/**
+	 * @return the link_lopdInfoAdicional
+	 */
+	public Link getLink_lopdInfoAdicional() {
+		return link_lopdInfoAdicional;
+	}
+
+	/**
+	 * @param link_lopdInfoAdicional
+	 *            the link_lopdInfoAdicional to set
+	 */
+	public void setLink_lopdInfoAdicional(final Link link_lopdInfoAdicional) {
+		this.link_lopdInfoAdicional = link_lopdInfoAdicional;
+	}
+
+	/**
+	 * @return the lopdInfoAdicional
+	 */
+	public java.lang.Long getLopdInfoAdicional() {
+		return lopdInfoAdicional;
+	}
+
+	/**
+	 * @param lopdInfoAdicional
+	 *            the lopdInfoAdicional to set
+	 */
+	public void setLopdInfoAdicional(final java.lang.Long lopdInfoAdicional) {
+		this.lopdInfoAdicional = lopdInfoAdicional;
+	}
+
+	/**
+	 * @return the lopdResponsable
+	 */
+	public String getLopdResponsable() {
+		return lopdResponsable;
+	}
+
+	/**
+	 * @param lopdResponsable
+	 *            the lopdResponsable to set
+	 */
+	public void setLopdResponsable(final String lopdResponsable) {
+		this.lopdResponsable = lopdResponsable;
+	}
+
+	/**
+	 * @return the lopdFinalidad
+	 */
+	public String getLopdFinalidad() {
+		return lopdFinalidad;
+	}
+
+	/**
+	 * @param lopdFinalidad
+	 *            the lopdFinalidad to set
+	 */
+	public void setLopdFinalidad(final String lopdFinalidad) {
+		this.lopdFinalidad = lopdFinalidad;
+	}
+
+	/**
+	 * @return the lopdDestinatario
+	 */
+	public String getLopdDestinatario() {
+		return lopdDestinatario;
+	}
+
+	/**
+	 * @param lopdDestinatario
+	 *            the lopdDestinatario to set
+	 */
+	public void setLopdDestinatario(final String lopdDestinatario) {
+		this.lopdDestinatario = lopdDestinatario;
+	}
+
+	/**
+	 * @return the lopdDerechos
+	 */
+	public String getLopdDerechos() {
+		return lopdDerechos;
+	}
+
+	/**
+	 * @param lopdDerechos
+	 *            the lopdDerechos to set
+	 */
+	public void setLopdDerechos(final String lopdDerechos) {
+		this.lopdDerechos = lopdDerechos;
 	}
 
 }

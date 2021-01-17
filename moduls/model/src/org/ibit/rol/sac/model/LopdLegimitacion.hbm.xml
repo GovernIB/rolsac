@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.LopdLegitimacion" table="RSC_LOPDLEG" mutable="true">
+        <id name="id" unsaved-value="null" column="LEG_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+
+        <property 	 name="identificador"  	column="LEG_IDENTI" />
+    	<property 	 name="porDefecto"	   	column="LEG_DEFAULT" />
+ 		<map name="traducciones" cascade="all" table="RSC_TRALET">
+            <cache usage="read-write"/>
+            <key column="TLE_CODLEG" foreign-key="RSC_TRALET_FK"/>
+            <index column="TLE_CODIDI" type="string" length="2"/>
+            <composite-element class="org.ibit.rol.sac.model.TraduccionLopdLegitimacion">
+                <property name="nombre" length="1024" column="TLE_NOMBRE"/>
+            </composite-element>
+        </map>
+    </class>
+</hibernate-mapping>

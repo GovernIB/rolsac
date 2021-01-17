@@ -153,6 +153,9 @@ public class Constantes {
 	public static final String ENTIDAD_PLATAFORMAS = "plataformas";
 	public static final String URL_PLATAFORMAS = ENTIDAD_PLATAFORMAS + "/{0}";
 
+	public static final String ENTIDAD_LOPD_LEGITIMACION = "lopdLegitimacion";
+	public static final String URL_LOPD_LEGITIMACION = ENTIDAD_LOPD_LEGITIMACION + "/{0}";
+
 	public static String mensaje200(final int numeroElementos) {
 		String res = null;
 		if (numeroElementos == 0) {
@@ -176,7 +179,4 @@ public class Constantes {
 		return res;
 	}
 
-	public static void main(final String args[]) {
-		System.out.println("XC");
-	}
 }

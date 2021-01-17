@@ -39,6 +39,8 @@
         <many-to-one name="organoInstructor" 	cascade="none" column="SER_INSTRU" foreign-key="RSC_SER_INSTRU_FK"/>
         <many-to-one name="servicioResponsable" cascade="none" column="SER_SERRSP" foreign-key="RSC_SET_SERRSP_FK"/>
 		<many-to-one name="plataforma" 			cascade="none" column="SER_CODPLT" foreign-key="RSC_SERPLT_FK"/>
+		<many-to-one name="lopdLegitimacion"    cascade="none" column="SER_CODLEG" foreign-key="RSC_SER_CODLEG_FK" class="org.ibit.rol.sac.model.LopdLegitimacion" />
+
 
 
 
@@ -52,6 +54,10 @@
                 <property name="destinatarios" 	type="text"  	column="TSR_DESTIN" />
                 <property name="requisitos" 	type="text"  	column="TSR_REQUIS" />
                 <property name="observaciones" 	type="text" 	column="TSR_OBSERV" />
+                <property name="lopdFinalidad"  type="text" column="TSR_LOPDFI"/>
+                <property name="lopdDestinatario"  type="text" column="TSR_LOPDDS"/>
+                <property name="lopdDerechos"  type="text" column="TSR_LOPDDR"/>
+                <many-to-one name="lopdInfoAdicional" cascade="all" column="TSR_LOPDIA" foreign-key="RSC_TSRARC_FK"/>
             </composite-element>
         </map>
 

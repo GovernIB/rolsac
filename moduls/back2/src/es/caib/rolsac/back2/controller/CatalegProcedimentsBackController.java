@@ -4,6 +4,7 @@ import static es.caib.rolsac.utils.LogUtils.logException;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
@@ -22,6 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
@@ -30,6 +34,7 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Auditoria;
 import org.ibit.rol.sac.model.Boletin;
 import org.ibit.rol.sac.model.CatalegDocuments;
@@ -39,6 +44,7 @@ import org.ibit.rol.sac.model.Familia;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.HechoVitalProcedimiento;
 import org.ibit.rol.sac.model.Iniciacion;
+import org.ibit.rol.sac.model.LopdLegitimacion;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.Plataforma;
@@ -50,6 +56,7 @@ import org.ibit.rol.sac.model.Tipo;
 import org.ibit.rol.sac.model.TipoAfectacion;
 import org.ibit.rol.sac.model.TraduccionCatalegDocuments;
 import org.ibit.rol.sac.model.TraduccionExcepcioDocumentacio;
+import org.ibit.rol.sac.model.TraduccionLopdLegitimacion;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimiento;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
@@ -74,6 +81,7 @@ import org.ibit.rol.sac.persistence.delegate.FamiliaDelegate;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IniciacionDelegate;
+import org.ibit.rol.sac.persistence.delegate.LopdLegitimacionDelegate;
 import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
@@ -85,6 +93,8 @@ import org.ibit.rol.sac.persistence.util.RolsacPropertiesUtil;
 import org.ibit.rol.sac.persistence.util.SiaEnviableResultado;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -96,6 +106,7 @@ import es.caib.rolsac.back2.util.GuardadoAjaxUtil;
 import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.LlistatUtil;
 import es.caib.rolsac.back2.util.RolUtil;
+import es.caib.rolsac.back2.util.UploadUtil;
 import es.caib.rolsac.utils.DateUtils;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.indra.rol.sac.integracion.traductorTranslatorIB.Traductor;
@@ -142,6 +153,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			model.put("llistaTipusAfectacio", getListaTiposAfectacionDTO(lang));
 			// Plataforma.
 			model.put("llistaPlataformas", getListaPlataformasDTO());
+			// Lopd Legitimacion.
+			model.put("llistaLopdLegitimacion", getListaLopdLegitimaciones(lang));
 
 		} catch (final DelegateException e) {
 			log.error(ExceptionUtils.getStackTrace(e));
@@ -159,6 +172,14 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			model.put("comunesUA", RolsacPropertiesUtil.getUAComun(true));
 			model.put("comunesUAESP", RolsacPropertiesUtil.getUAComun(false));
 		}
+
+		// Ponemos los dos idiomas para lopd
+		model.put("lopdFinalidad", RolsacPropertiesUtil.getLopdFinalidad(true));
+		model.put("lopdFinalidadESP", RolsacPropertiesUtil.getLopdFinalidad(false));
+		model.put("lopdDestinatario", RolsacPropertiesUtil.getLopdDestinatario(true));
+		model.put("lopdDestinatarioESP", RolsacPropertiesUtil.getLopdDestinatario(false));
+		model.put("lopdDerechos", RolsacPropertiesUtil.getLopdDerechos(true));
+		model.put("lopdDerechosESP", RolsacPropertiesUtil.getLopdDerechos(false));
 
 		return "index";
 
@@ -294,6 +315,161 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 		return resultats;
 
+	}
+
+	@RequestMapping(value = "/guardarDocumentLopd.do", method = POST)
+	public ResponseEntity<String> guardarLopd(final HttpServletRequest request, final HttpSession session) {
+		/*
+		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox. Si no
+		 * se fuerza el content type Spring lo calcula y curiosamente depende del
+		 * navegador desde el que se hace la petición. Esto se debe a que como esta
+		 * peticion es invocada desde un iFrame (oculto) algunos navegadores interpretan
+		 * la respuesta como un descargable o fichero vinculado a una aplicación. De
+		 * esta forma, y devolviendo un ResponseEntity, forzaremos el Content-Type de la
+		 * respuesta.
+		 */
+		final HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+		final Locale locale = request.getLocale();
+		String jsonResult = null;
+		final Map<String, String> valoresForm = new HashMap<String, String>();
+		final Map<String, FileItem> ficherosForm = new HashMap<String, FileItem>();
+		final Map<String, TraduccionProcedimientoLocal> traducciones = new HashMap<String, TraduccionProcedimientoLocal>();
+		try {
+
+			// Recuperamos los valores del request
+			recuperarForms(request, valoresForm, ficherosForm);
+
+			final String id = valoresForm.get("procedimientoId");
+			final List<Long> archivosAborrar = new ArrayList<Long>();
+			final ProcedimientoLocal procedimiento = DelegateUtil.getProcedimientoDelegate()
+					.obtenerProcedimientoNewBack(Long.valueOf(id));
+
+			for (final String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
+
+				TraduccionProcedimientoLocal traduccionProc = (TraduccionProcedimientoLocal) procedimiento
+						.getTraduccion(lang);
+				if (traduccionProc == null) {
+					traduccionProc = new TraduccionProcedimientoLocal();
+				}
+
+				final FileItem fileItem = ficherosForm.get("doc_arxiu_" + lang); // Archivo
+
+				if (fileItem != null && fileItem.getSize() > 0) {
+
+					if (this.isArchivoParaBorrar(valoresForm, lang) || traduccionProc.getLopdInfoAdicional() != null) {
+
+						// Se indica que hay que borrar el fichero.
+						archivosAborrar.add(traduccionProc.getLopdInfoAdicional().getId());
+
+					}
+					traduccionProc.setLopdInfoAdicional(
+							UploadUtil.obtenerArchivo(traduccionProc.getLopdInfoAdicional(), fileItem));
+
+					traducciones.put(lang, traduccionProc);
+				} else if (this.isArchivoParaBorrar(valoresForm, lang)) {
+
+					archivosAborrar.add(traduccionProc.getLopdInfoAdicional().getId());
+					traduccionProc.setLopdInfoAdicional(null);
+					traducciones.put(lang, traduccionProc);
+				}
+
+			}
+
+			boolean continuar = true;
+
+			// Buscamos el archivo del idioma.
+			for (final String idioma : traducciones.keySet()) {
+				final TraduccionProcedimientoLocal tradProc = traducciones.get(idioma);
+				if (tradProc != null && tradProc.getLopdInfoAdicional() != null
+						&& tradProc.getLopdInfoAdicional().getNombre() != null
+						&& tradProc.getLopdInfoAdicional().getNombre().length() >= Archivo.NOMBRE_LONGITUD_MAXIMA) {
+					final String error = messageSource.getMessage("error.fitxer.tamany_nom", null, locale);
+					log.error(
+							"Error controlado, ha intentado subir un fichero con una longitud en el nombre de más de 128 caracteres.");
+					jsonResult = new IdNomDTO(-3l, error).getJson();
+					continuar = false;
+				}
+			}
+
+			if (continuar) {
+				if (!traducciones.isEmpty() || !archivosAborrar.isEmpty()) {
+					DelegateUtil.getProcedimientoDelegate().grabarArchivos(Long.valueOf(id), traducciones,
+							archivosAborrar);
+				}
+				// for (final Long idArchivo : archivosAborrar) {
+				// DelegateUtil.getArchivoDelegate().borrarArchivo(idArchivo);
+				// }
+
+				jsonResult = new IdNomDTO(Long.valueOf(id),
+						messageSource.getMessage("document.guardat.correcte", null, locale)).getJson();
+
+			}
+
+		} catch (final FileUploadException fue) {
+			final String error = messageSource.getMessage("error.fitxer.tamany", null, locale);
+			jsonResult = new IdNomDTO(-3l, error).getJson();
+			log.error(error + ": " + fue.toString());
+		} catch (final UnsupportedEncodingException uee) {
+			final String error = messageSource.getMessage("error.altres", null, locale);
+			jsonResult = new IdNomDTO(-2l, error).getJson();
+			log.error(error + ": " + uee.toString());
+		} catch (final NumberFormatException nfe) {
+			final String error = messageSource.getMessage("error.altres", null, locale);
+			jsonResult = new IdNomDTO(-2l, error).getJson();
+			log.error(error + ": " + nfe.toString());
+		} catch (final DelegateException de) {
+			String error = null;
+			if (de.isSecurityException()) {
+				error = messageSource.getMessage("error.permisos", null, locale);
+				jsonResult = new IdNomDTO(-1l, error).getJson();
+			} else {
+				error = messageSource.getMessage("error.altres", null, locale);
+				jsonResult = new IdNomDTO(-2l, error).getJson();
+			}
+			log.error(error + ": " + de.toString());
+		} catch (final Exception nfe) {
+			final String error = messageSource.getMessage("error.altres", null, locale);
+			jsonResult = new IdNomDTO(-2l, error).getJson();
+			log.error(error + ": " + nfe.toString());
+		}
+
+		return new ResponseEntity<String>(jsonResult, responseHeaders, HttpStatus.CREATED);
+	}
+
+	/**
+	 * Método que indica si el archivo adjunto de un documento se tiene que borrar.
+	 *
+	 * @param valoresForm
+	 *            Estructura de datos que contiene los valores enciados por el
+	 *            formulario.
+	 * @param lang
+	 *            Indica el idioma del documento.
+	 * @return Devuelve <code>true</code> si el archivo adjunto de un documento se
+	 *         ha marcado para borrar.
+	 */
+	private boolean isArchivoParaBorrar(final Map<String, String> valoresForm, final String lang) {
+		return (valoresForm.get("doc_arxiu_lop_" + lang + "_delete") != null
+				&& !"".equals(valoresForm.get("doc_arxiu_lop_" + lang + "_delete")));
+	}
+
+	/**
+	 * Aquí nos llegará un multipart, de modo que no podemos obtener los datos
+	 * mediante request.getParameter(). Iremos recopilando los parámetros de tipo
+	 * fichero en el Map ficherosForm y el resto en valoresForm.
+	 */
+	private void recuperarForms(final HttpServletRequest request, final Map<String, String> valoresForm,
+			final Map<String, FileItem> ficherosForm) throws UnsupportedEncodingException, FileUploadException {
+
+		final List<FileItem> items = UploadUtil.obtenerServletFileUpload().parseRequest(request);
+
+		for (final FileItem item : items) {
+			if (item.isFormField()) {
+				valoresForm.put(item.getFieldName(), item.getString("UTF-8"));
+			} else {
+				ficherosForm.put(item.getFieldName(), item);
+			}
+		}
 	}
 
 	private String getPermisosUsuario(final HttpServletRequest request) {
@@ -684,6 +860,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			resultats.put("item_taxa", (proc.getTaxa() == null || "0".equals(proc.getTaxa())) ? false : true);
 
 			resultats.put("item_comun", (proc.isComun() ? true : false));
+			if (proc.getLopdLegitimacion() != null) {
+				resultats.put("item_lopd_legitimacion", proc.getLopdLegitimacion().getId());
+			}
 
 			resultats.put("item_finestreta_unica",
 					(proc.getVentanillaUnica() == null || "0".equals(proc.getVentanillaUnica())) ? false : true);
@@ -733,6 +912,12 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				resultats.put("listadoHechosVitales", Collections.EMPTY_SET);
 			}
 
+			if (proc.getServicioResponsable() != null) {
+				final UnidadAdministrativa ua = getPadreDir3(proc.getServicioResponsable());
+				if (ua != null) {
+					resultats.put("item_lopd_responsable", ua.getNombreUnidadAdministrativa());
+				}
+			}
 			recuperaIdiomas(resultats, proc, lang); // Recuperar los procedimientos según los idiomas
 			recuperaTramites(resultats, proc, request); // Recuperar los trámites relacionados de un procedimiento
 			recuperaPO(resultats, proc, lang); // Recuperar los públicos objetivos asociados a un procedimiento
@@ -760,9 +945,25 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
 			}
 
+		} catch (final Exception dEx) {
+			logException(log, dEx);
+			resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
 		}
 
 		return resultats;
+
+	}
+
+	private UnidadAdministrativa getPadreDir3(final UnidadAdministrativa servicioResponsable) {
+		if (servicioResponsable == null) {
+			return null;
+		} else {
+			if (servicioResponsable.getCodigoDIR3() != null && !servicioResponsable.getCodigoDIR3().isEmpty()) {
+				return servicioResponsable;
+			} else {
+				return getPadreDir3(servicioResponsable.getPadre());
+			}
+		}
 
 	}
 
@@ -807,6 +1008,21 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 		return listaTiposNormativaDTO;
 
+	}
+
+	private List<IdNomDTO> getListaLopdLegitimaciones(final String idioma) throws DelegateException {
+		final ResultadoBusqueda resultadoBusq = DelegateUtil.getLopdLegitimacionDelegate().getLopdLegitimacion(0, 100,
+				null, "ASC");
+		final List<IdNomDTO> listaLopdLegitimacionesDTO = new ArrayList<IdNomDTO>();
+		final List<LopdLegitimacion> lista = (List<LopdLegitimacion>) resultadoBusq.getListaResultados();
+		for (final LopdLegitimacion lopdLeg : lista) {
+			final TraduccionLopdLegitimacion trad = (TraduccionLopdLegitimacion) lopdLeg.getTraduccion(idioma);
+			final IdNomDTO bol = new IdNomDTO(lopdLeg.getId(),
+					trad != null ? trad.getNombre() : lopdLeg.getIdentificador());
+			listaLopdLegitimacionesDTO.add(bol);
+		}
+
+		return listaLopdLegitimacionesDTO;
 	}
 
 	private List<IdNomDTO> getListaPlataformasDTO() throws DelegateException {
@@ -871,6 +1087,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 			recuperaNormativas(resultats, proc, lang, id); // Recuperar las normativas asociadas a un procedimiento
 
+			resultats.put("lopd",
+					CargaModulosLateralesUtil.recuperaDocumentosRelacionados(listaDocumentos, id, idiomas, true));
+
 		} catch (final DelegateException dEx) {
 
 			log.error(ExceptionUtils.getStackTrace(dEx));
@@ -897,16 +1116,60 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 		for (final String lang : langs) {
 			if (proc.getTraduccion(lang) != null) {
-				resultats.put(lang, proc.getTraduccion(lang));
+
+				final TraduccionProcedimientoLocal tradProc = (TraduccionProcedimientoLocal) proc.getTraduccion(lang);
+				final HashMap<String, String> traduccionDTO = recuperaIdiomas(tradProc);
+
+				if (tradProc.getLopdInfoAdicional() != null) {
+					traduccionDTO.put("item_lopd_infoAdicional_enllas_arxiu",
+							"procinf/archivo.do?id=" + proc.getId() + "&lang=" + lang + "&tipus=1");
+					traduccionDTO.put("item_lopd_infoAdicional", tradProc.getLopdInfoAdicional().getNombre());
+				} else {
+					traduccionDTO.put("item_lopd_infoAdicional_enllas_arxiu", "");
+					traduccionDTO.put("item_lopd_infoAdicional", "");
+				}
+				resultats.put(lang, traduccionDTO);
+
 			} else {
 				if (proc.getTraduccion(langDefault) != null) {
-					resultats.put(lang, proc.getTraduccion(langDefault));
+					final TraduccionProcedimientoLocal tradProc = (TraduccionProcedimientoLocal) proc
+							.getTraduccion(langDefault);
+					final HashMap<String, String> traduccionDTO = recuperaIdiomas(tradProc);
+					if (tradProc.getLopdInfoAdicional() != null) {
+						traduccionDTO.put("item_lopd_infoAdicional_enllas_arxiu",
+								"procinf/archivo.do?id=" + proc.getId() + "&lang=" + lang + "&tipus=1");
+						traduccionDTO.put("item_lopd_infoAdicional", tradProc.getLopdInfoAdicional().getNombre());
+					} else {
+						traduccionDTO.put("item_lopd_infoAdicional_enllas_arxiu", "");
+						traduccionDTO.put("item_lopd_infoAdicional", "");
+					}
+					resultats.put(lang, traduccionDTO);
 				} else {
 					resultats.put(lang, new TraduccionProcedimientoLocal());
 				}
 			}
 		}
+	}
 
+	private HashMap<String, String> recuperaIdiomas(final TraduccionProcedimientoLocal trad) {
+		final HashMap<String, String> traduccionDTO = new HashMap<String, String>();
+		traduccionDTO.put("destinatarios", trad.getDestinatarios());
+		traduccionDTO.put("nombre", trad.getNombre());
+		traduccionDTO.put("notificacion", trad.getNotificacion());
+		traduccionDTO.put("lopdFinalidad", trad.getLopdFinalidad());
+		traduccionDTO.put("lopdDestinatario", trad.getLopdDestinatario());
+		traduccionDTO.put("lopdDerechos", trad.getLopdDerechos());
+		traduccionDTO.put("lugar", trad.getLugar());
+		// Lopd Info adiciional es un doc y va por separdado
+		// traduccionDTO.put("lopdInfoAdicional", "");
+		traduccionDTO.put("observaciones", trad.getObservaciones());
+		traduccionDTO.put("plazos", trad.getPlazos());
+		traduccionDTO.put("recursos", trad.getRecursos());
+		traduccionDTO.put("requisitos", trad.getRequisitos());
+		traduccionDTO.put("resultat", trad.getResultat());
+		traduccionDTO.put("resolucion", trad.getResolucion());
+		traduccionDTO.put("resumen", trad.getResumen());
+		return traduccionDTO;
 	}
 
 	/**
@@ -1225,6 +1488,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			procediment.setResponsable(request.getParameter("item_responsable")); // Responsable
 			procediment.setSignatura(request.getParameter("item_codigo_pro")); // Signatura
 			procediment = guardarSilencio(request, procediment, error); // Silencio
+			procediment = guardarLopd(request, procediment, error); // Servei Responsable
 
 			// #351 cambio info por dir electronica
 			// procediment.setInfo(request.getParameter("item_notes")); // Info
@@ -1417,6 +1681,143 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 	}
 
+	@RequestMapping(value = "/guardarInfoAdicional.do", method = POST)
+	public @ResponseBody IdNomDTO guardarInfoAdicional(final Long id, Long[] elementos,
+			final HttpServletRequest request) throws FileUploadException {
+
+		// Guardaremos el orden y borraremos los documentos que se hayan marcado para
+		// borrar.
+		// La creación se gestiona en el controlador DocumentBackController.
+
+		final HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+		final List<FileItem> items = castList(FileItem.class,
+				UploadUtil.obtenerServletFileUpload().parseRequest(request));
+
+		IdNomDTO result;
+		String error = null;
+		// Ficha ficha = null;
+
+		try {
+			if (elementos == null) {
+				elementos = new Long[0];
+			}
+			DelegateUtil.getFichaDelegate().reordenarDocumentos(id, Arrays.asList(elementos));
+			result = new IdNomDTO(id,
+					messageSource.getMessage("fitxes.guardat.documents.correcte", null, request.getLocale()));
+			/*
+			 * ficha = DelegateUtil.getFichaDelegate().obtenerFicha(id); List<Documento>
+			 * documentos =
+			 * GuardadoAjaxUtil.actualizarYOrdenarDocumentosRelacionados(elementos, null,
+			 * ficha); ficha.setDocumentos(documentos);
+			 *
+			 * DelegateUtil.getFichaDelegate().grabarFicha(ficha);
+			 *
+			 * result = new IdNomDTO(ficha.getId(),
+			 * messageSource.getMessage("fitxes.guardat.documents.correcte", null,
+			 * request.getLocale()));
+			 **/
+
+		} catch (final DelegateException dEx) {
+
+			if (dEx.isSecurityException()) {
+
+				error = messageSource.getMessage("error.permisos", null, request.getLocale());
+				result = new IdNomDTO(-1l, error);
+
+			} else {
+
+				error = messageSource.getMessage("error.altres", null, request.getLocale());
+				result = new IdNomDTO(-2l, error);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+
+			}
+
+		}
+
+		return result;
+
+	}
+
+	@RequestMapping(value = "/carregarDocumentLopd.do")
+	public @ResponseBody Map<String, Object> carregarDocument(final HttpServletRequest request) {
+
+		final Map<String, Object> resultats = new HashMap<String, Object>();
+
+		try {
+
+			final Long id = new Long(request.getParameter("id"));
+			final ProcedimientoLocal proc = DelegateUtil.getProcedimientoDelegate().obtenerProcedimientoNewBack(id);
+
+			final Map<String, Object> mapDoc = new HashMap<String, Object>();
+			final IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
+			final List<String> idiomas = idiomaDelegate.listarLenguajes();
+			TraduccionProcedimientoLocal traDoc;
+
+			for (final String idioma : idiomas) {
+				traDoc = (TraduccionProcedimientoLocal) proc.getTraduccion(idioma);
+
+				if (traDoc != null && traDoc.getLopdInfoAdicional() != null) {
+
+					// archivo
+					if (traDoc.getLopdInfoAdicional() != null) {
+						mapDoc.put("idioma_enllas_arxiu_" + idioma,
+								"procinf/archivo.do?id=" + traDoc.getLopdInfoAdicional().getId() + "&lang=" + idioma);
+						mapDoc.put("idioma_nom_arxiu_" + idioma, traDoc.getLopdInfoAdicional().getNombre());
+
+					} else {
+						mapDoc.put("idioma_enllas_arxiu_" + idioma, "");
+						mapDoc.put("idioma_nom_arxiu_" + idioma, "");
+
+					}
+				}
+			}
+
+			mapDoc.put("item_id", id);
+			resultats.put("document", mapDoc);
+			resultats.put("id", id);
+
+		} catch (final NumberFormatException nfe) {
+			log.error("El id del document no es numeric: " + nfe.toString());
+			resultats.put("id", -3);
+		} catch (final DelegateException dEx) {
+			if (dEx.isSecurityException()) {
+				log.error("Error de permisos: " + dEx.toString());
+				resultats.put("id", -1);
+			} else {
+				log.error("Error: " + dEx.toString());
+				resultats.put("id", -2);
+			}
+		} catch (final Exception dEx) {
+			log.error("Error general: " + dEx.toString(), dEx);
+			resultats.put("id", -3);
+		}
+
+		return resultats;
+	}
+
+	private ProcedimientoLocal guardarLopd(final HttpServletRequest request, final ProcedimientoLocal procediment,
+			String error) throws DelegateException {
+		try {
+			if (request.getParameter("item_lopd_legitimacion").isEmpty()) {
+				procediment.setLopdLegitimacion(null);
+			} else {
+				final Long codigo = Long.valueOf(request.getParameter("item_lopd_legitimacion"));
+				final LopdLegitimacionDelegate lopdDelegate = DelegateUtil.getLopdLegitimacionDelegate();
+				final LopdLegitimacion lopdLeg = lopdDelegate.obtenerLopdLegitimacion(codigo);
+				procediment.setLopdLegitimacion(lopdLeg);
+			}
+
+		} catch (final NumberFormatException e) {
+
+			error = messageSource.getMessage("proc.error.formaIniciacio.incorrecta", null, request.getLocale());
+			throw new NumberFormatException(e.getMessage());
+
+		}
+
+		return procediment;
+	}
+
 	private ProcedimientoLocal guardarSilencio(final HttpServletRequest request, final ProcedimientoLocal procediment,
 			String error) throws DelegateException {
 		try {
@@ -1569,6 +1970,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			tpl.setObservaciones(RolUtil.limpiaCadena(request.getParameter("item_observacions_" + lang)));
 			tpl.setPlazos(RolUtil.limpiaCadena(request.getParameter("item_presentacio_" + lang)));
 			tpl.setLugar(RolUtil.limpiaCadena(request.getParameter("item_lloc_" + lang)));
+			tpl.setLopdDerechos(RolUtil.limpiaCadena(request.getParameter("item_lopd_derechos_" + lang)));
+			tpl.setLopdDestinatario(RolUtil.limpiaCadena(request.getParameter("item_lopd_destinatario_" + lang)));
+			tpl.setLopdFinalidad(RolUtil.limpiaCadena(request.getParameter("item_lopd_finalidad_" + lang)));
 
 			procediment.setTraduccion(lang, tpl);
 
@@ -1875,14 +2279,18 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		final Map<String, Object> resultats = new HashMap<String, Object>();
 
 		try {
-
+			log.error("Paso 1 ");
 			final String idiomaOrigenTraductor = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 
+			log.error("Paso 2 ");
 			final TraduccionProcedimientoLocal traduccioOrigen = getTraduccionOrigen(request, idiomaOrigenTraductor);
+			log.error("Paso 3 ");
 			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
+			log.error("Paso 4 ");
 			final Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
+			log.error("Paso 5 ");
 			traduccions = traductor.translate(traduccioOrigen, idiomaOrigenTraductor);
-
+			log.error("Paso 6 ");
 			resultats.put("traduccions", traduccions);
 
 		} catch (final DelegateException dEx) {
@@ -1896,17 +2304,18 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 		} catch (final TraductorException traEx) {
 
-			log.error("CatalegProcedimentBackController.traduir: El traductor no puede traducir todos los idiomas");
+			log.error("CatalegProcedimentBackController.traduir: El traductor no puede traducir todos los idiomas",
+					traEx);
 			resultats.put("error", messageSource.getMessage("traductor.no_traduible", null, request.getLocale()));
 
 		} catch (final NullPointerException npe) {
 
-			log.error("CatalegProcedimentBackController.traduir: El traductor no se encuentra en en contexto.");
+			log.error("CatalegProcedimentBackController.traduir: El traductor no se encuentra en en contexto.", npe);
 			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
 
 		} catch (final Exception e) {
 
-			log.error("CatalegProcedimentBackController.traduir: Error en al traducir procedimiento: " + e);
+			log.error("CatalegProcedimentBackController.traduir: Error en al traducir procedimiento: " + e, e);
 			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
 
 		}
@@ -2203,60 +2612,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 			error = messageSource.getMessage("error.altres", null, request.getLocale());
 			result = new IdNomDTO(-2l, error);
-
-		}
-
-		return result;
-
-	}
-
-	@RequestMapping(value = "/guardarDocumentosRelacionados.do", method = POST)
-	public @ResponseBody IdNomDTO guardarDocumentosRelacionados(final Long id, Long[] elementos,
-			final HttpServletRequest request) {
-
-		// Guardaremos el orden y borraremos los documentos que se hayan marcado para
-		// borrar.
-		// La creación se gestiona en el controlador DocumentBackController.
-
-		final HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
-
-		IdNomDTO result;
-		String error = null;
-		// ProcedimientoLocal procedimiento = null;
-
-		try {
-			if (elementos == null) {
-				elementos = new Long[0];
-			}
-			/*
-			 * procedimiento =
-			 * DelegateUtil.getProcedimientoDelegate().obtenerProcedimientoNewBack(id);
-			 *
-			 * List<Documento> documentos =
-			 * GuardadoAjaxUtil.actualizarYOrdenarDocumentosRelacionados(elementos,
-			 * procedimiento, null); procedimiento.setDocumentos(documentos);
-			 *
-			 * guardarGrabar(procedimiento);
-			 */
-			DelegateUtil.getProcedimientoDelegate().reordenarDocumentos(id, Arrays.asList(elementos));
-			result = new IdNomDTO(id,
-					messageSource.getMessage("proc.guardat.documents.correcte", null, request.getLocale()));
-
-		} catch (final DelegateException dEx) {
-
-			if (dEx.isSecurityException()) {
-
-				error = messageSource.getMessage("error.permisos", null, request.getLocale());
-				result = new IdNomDTO(-1l, error);
-
-			} else {
-
-				error = messageSource.getMessage("error.altres", null, request.getLocale());
-				result = new IdNomDTO(-2l, error);
-				log.error(ExceptionUtils.getStackTrace(dEx));
-
-			}
 
 		}
 

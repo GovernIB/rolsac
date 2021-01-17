@@ -84,7 +84,13 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	private Set<HechoVitalServicio> hechosVitalesServicios;
 	/** Publico objetivo. **/
 	private Set<PublicoObjetivo> publicosObjetivo;
-
+	/** Lopd **/
+	private LopdLegitimacion lopdLegitimacion;
+	private String lopdResponsable;
+	private String lopdFinalidad;
+	private String lopdDestinatario;
+	private String lopdDerechos;
+	private Archivo lopdInfoAdicional;
 	// ---------------------------------------------
 	// Campos especiales para optimizar la busqueda
 	/** Nombre servicio que indica el order by. **/
@@ -112,10 +118,11 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	 */
 	public Servicio(final Long id, final String nombreServicio, final Integer validacion, final Date fechaActualizacion,
 			final Date fechaDespublicacion, final Date fechaPublicacion, final String idioma,
-			final String nombreServicioResponsable, final boolean comun) {
+			final String nombreServicioResponsable, final boolean comun, final String lopdFinalidad,
+			final String lopdDestinatario, final String lopdDerechos, final LopdLegitimacion lopdLegitimacion,
+			final Archivo lopdInfoAdicional) {
 
 		super();
-
 		this.id = id;
 		this.nombreServicio = nombreServicio != null ? nombreServicio : "";
 		this.validacion = validacion;
@@ -125,6 +132,11 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 		this.idioma = idioma;
 		this.nombreResponsable = nombreServicioResponsable;
 		this.comun = comun;
+		this.lopdLegitimacion = lopdLegitimacion;
+		this.lopdFinalidad = lopdFinalidad;
+		this.lopdDestinatario = lopdDestinatario;
+		this.lopdDerechos = lopdDerechos;
+		this.lopdInfoAdicional = lopdInfoAdicional;
 	}
 
 	// Constructores
@@ -788,6 +800,96 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	 */
 	public void setParametros(final String parametros) {
 		this.parametros = parametros;
+	}
+
+	/**
+	 * @return the lopdLegitimacion
+	 */
+	public LopdLegitimacion getLopdLegitimacion() {
+		return lopdLegitimacion;
+	}
+
+	/**
+	 * @param lopdLegitimacion
+	 *            the lopdLegitimacion to set
+	 */
+	public void setLopdLegitimacion(final LopdLegitimacion lopdLegitimacion) {
+		this.lopdLegitimacion = lopdLegitimacion;
+	}
+
+	/**
+	 * @return the lopdResponsable
+	 */
+	public String getLopdResponsable() {
+		return lopdResponsable;
+	}
+
+	/**
+	 * @param lopdResponsable
+	 *            the lopdResponsable to set
+	 */
+	public void setLopdResponsable(final String lopdResponsable) {
+		this.lopdResponsable = lopdResponsable;
+	}
+
+	/**
+	 * @return the lopdDestinatario
+	 */
+	public String getLopdDestinatario() {
+		return lopdDestinatario;
+	}
+
+	/**
+	 * @param lopdDestinatario
+	 *            the lopdDestinatario to set
+	 */
+	public void setLopdDestinatario(final String lopdDestinatario) {
+		this.lopdDestinatario = lopdDestinatario;
+	}
+
+	/**
+	 * @return the lopdDerechos
+	 */
+	public String getLopdDerechos() {
+		return lopdDerechos;
+	}
+
+	/**
+	 * @param lopdDerechos
+	 *            the lopdDerechos to set
+	 */
+	public void setLopdDerechos(final String lopdDerechos) {
+		this.lopdDerechos = lopdDerechos;
+	}
+
+	/**
+	 * @return the lopdFinalidad
+	 */
+	public String getLopdFinalidad() {
+		return lopdFinalidad;
+	}
+
+	/**
+	 * @param lopdFinalidad
+	 *            the lopdFinalidad to set
+	 */
+	public void setLopdFinalidad(final String lopdFinalidad) {
+		this.lopdFinalidad = lopdFinalidad;
+	}
+
+	/**
+	 * @return the lopdInfoAdicional
+	 */
+	public Archivo getLopdInfoAdicional() {
+		return lopdInfoAdicional;
+	}
+
+	/**
+	 * @param lopdInfoAdicional
+	 *            the lopdInfoAdicional to set
+	 */
+	public void setLopdInfoAdicional(final Archivo lopdInfoAdicional) {
+		this.lopdInfoAdicional = lopdInfoAdicional;
 	}
 
 }

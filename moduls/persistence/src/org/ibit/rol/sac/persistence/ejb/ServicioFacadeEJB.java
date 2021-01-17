@@ -16,6 +16,7 @@ import javax.ejb.EJBException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.ibit.rol.sac.model.AdministracionRemota;
+import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Auditoria;
 import org.ibit.rol.sac.model.DocumentoServicio;
 import org.ibit.rol.sac.model.HechoVital;
@@ -559,55 +560,52 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 	}
 
 	/**
-	 * @deprecated Se usa desde el back antiguo Busca todas los Servicios que
-	 *             cumplen los criterios de busqueda
+	 * Obtiene la info adicional de un proc.
+	 *
 	 * @ejb.interface-method
+	 *
 	 * @ejb.permission unchecked="true"
+	 *
+	 * @param id
+	 *            Identificador de un proc.
+	 *
+	 * @return Devuelve <code>Archivo</code> que contiene la info adicional.
 	 */
-	@Deprecated
-	public List buscarServicios(final Map<String, Object> parametros, final Map traduccion) {
+	public Archivo obtenerServInfoAdicional(final Long id, final String idioma) {
 
 		final Session session = getSession();
+
 		try {
-			if (!userIsOper()) {
-				parametros.put("validacion", Validacion.PUBLICA);
-			}
 
-			final List params = new ArrayList();
-			final String sQuery = populateQuery(parametros, traduccion, params);
+			final Archivo archivo = (Archivo) session.load(Archivo.class, id);
+			Hibernate.initialize(archivo);
+			return archivo;
+			// final Servicio ua = (Servicio) session.load(Servicio.class, id);
+			// if (visible(ua)) {
+			// final TraduccionProcedimientoLocal trad = (TraduccionProcedimientoLocal)
+			// ua.getTraduccion(idioma);
+			// Hibernate.initialize(trad.getLopdInfoAdicional());
+			//
+			// Hibernate.initialize(ua.getTraduccion());
+			//
+			// return ua.getLopdInfoAdicional();
+			//
+			// } else {
+			//
+			// throw new SecurityException("El usuario no tiene el rol operador");
+			//
+			// }
 
-			// Eliminado "left join fetch" por problemas en el cache de traducciones.
-			final Query query = session.createQuery(
-					"select servicio from Servicio as servicio " + ", servicio.traducciones as trad " + sQuery);
-			for (int i = 0; i < params.size(); i++) {
-				final String o = (String) params.get(i);
-				query.setString(i, o);
-			}
-
-			final List<Servicio> servicios = query.list();
-
-			if (!userIsOper()) {
-				// Ordenamos los servicios por el campo orden (si nulo, ordena por el campo id)
-				Collections.sort(servicios, new Servicio());
-				return servicios;
-			} else {
-				final List serviciosAcceso = new ArrayList();
-				final Usuario usuario = getUsuario(session);
-				for (int i = 0; i < servicios.size(); i++) {
-					final Servicio servicio = servicios.get(i);
-					if (tieneAcceso(usuario, servicio)) {
-						serviciosAcceso.add(servicio);
-					}
-				}
-				// Ordenamos los servicios por el campo orden (si nulo, ordena por el campo id)
-				Collections.sort(serviciosAcceso, new Servicio());
-				return serviciosAcceso;
-			}
 		} catch (final HibernateException he) {
+
 			throw new EJBException(he);
+
 		} finally {
+
 			close(session);
+
 		}
+
 	}
 
 	/**
@@ -783,6 +781,58 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 	}
 
 	/**
+	 * @deprecated Se usa desde el back antiguo Busca todas los Servicios que
+	 *             cumplen los criterios de busqueda
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	@Deprecated
+	public List buscarServicios(final Map<String, Object> parametros, final Map traduccion) {
+
+		final Session session = getSession();
+		try {
+			if (!userIsOper()) {
+				parametros.put("validacion", Validacion.PUBLICA);
+			}
+
+			final List params = new ArrayList();
+			final String sQuery = populateQuery(parametros, traduccion, params);
+
+			// Eliminado "left join fetch" por problemas en el cache de traducciones.
+			final Query query = session.createQuery(
+					"select servicio from Servicio as servicio " + ", servicio.traducciones as trad " + sQuery);
+			for (int i = 0; i < params.size(); i++) {
+				final String o = (String) params.get(i);
+				query.setString(i, o);
+			}
+
+			final List<Servicio> servicios = query.list();
+
+			if (!userIsOper()) {
+				// Ordenamos los servicios por el campo orden (si nulo, ordena por el campo id)
+				Collections.sort(servicios, new Servicio());
+				return servicios;
+			} else {
+				final List serviciosAcceso = new ArrayList();
+				final Usuario usuario = getUsuario(session);
+				for (int i = 0; i < servicios.size(); i++) {
+					final Servicio servicio = servicios.get(i);
+					if (tieneAcceso(usuario, servicio)) {
+						serviciosAcceso.add(servicio);
+					}
+				}
+				// Ordenamos los servicios por el campo orden (si nulo, ordena por el campo id)
+				Collections.sort(serviciosAcceso, new Servicio());
+				return serviciosAcceso;
+			}
+		} catch (final HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+
+	/**
 	 * Busca todas los Servicios que cumplen los criterios de busqueda del nuevo
 	 * back (rolsacback).
 	 *
@@ -798,7 +848,8 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 		try {
 			final PaginacionCriteria paginacion = bc.getPaginacion();
 
-			final StringBuilder from = new StringBuilder(" from  Servicio as servicio,  servicio.traducciones as trad");
+			final StringBuilder from = new StringBuilder(
+					" from  Servicio as servicio,  servicio.traducciones as trad left outer join servicio.lopdLegitimacion leg left outer join trad.lopdInfoAdicional infoAdicional ");
 			final StringBuilder where = new StringBuilder("where index(trad) = :idioma ");
 			StringBuilder consulta;
 			if (bc.getSoloId()) {
@@ -815,7 +866,7 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 				// consulta.append("servicio.fechaDespublicacion, servicio.fechaPublicacion,
 				// index(trad), servicio.servicioResponsable ) ");
 				consulta = new StringBuilder(
-						"select new Servicio(servicio.id, trad.nombre, servicio.validacion, servicio.fechaActualizacion, servicio.fechaDespublicacion, servicio.fechaPublicacion, index(trad), servicio.nombreResponsable, servicio.comun ) ");
+						"select new Servicio(servicio.id, trad.nombre, servicio.validacion, servicio.fechaActualizacion, servicio.fechaDespublicacion, servicio.fechaPublicacion, index(trad), servicio.nombreResponsable, servicio.comun, trad.lopdFinalidad, trad.lopdDestinatario, trad.lopdDerechos, leg, infoAdicional ) ");
 				consulta.append("from where");
 			}
 			where.append("and servicio.organoInstructor.id in (:UA) ");

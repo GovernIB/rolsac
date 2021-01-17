@@ -38,12 +38,15 @@
         <property name="estadoSIA" length="1" column="PRO_ESTSIA"/>
         <property name="fechaSIA"  column="PRO_FECSIA"/>
         <property name="comun" 		column="PRO_COMUN" />
-        <many-to-one name="organResolutori" cascade="none" column="PRO_CODUNA_RESOL" foreign-key="RSC_PRO_CODUNA_RESOL_FK"/>
+
+
+        <many-to-one name="organResolutori" 	 column="PRO_CODUNA_RESOL" cascade="none" foreign-key="RSC_PRO_CODUNA_RESOL_FK"/>
         <many-to-one name="unidadAdministrativa" column="PRO_CODUNA" foreign-key="RSC_PROUNA_FK"/>
-        <many-to-one name="familia" column="PRO_CODFAM" foreign-key="RSC_PROFAM_FK"/>
-	    <many-to-one  class="org.ibit.rol.sac.model.Iniciacion" name="iniciacion"  column="PRO_CODINI" foreign-key="RSC_PROINI_FK"/>
-        <many-to-one name="servicioResponsable" column="PRO_CODUNA_SERV" foreign-key="RSC_PRO_CODUNA_SERV_FK"/>
-        <many-to-one class="org.ibit.rol.sac.model.SilencioAdm" name="silencio" column="PRO_CODSIL" foreign-key="RSC_PRO_CODSIL_FK"/>
+        <many-to-one name="familia" 			 column="PRO_CODFAM" foreign-key="RSC_PROFAM_FK"/>
+	    <many-to-one name="iniciacion"  		 column="PRO_CODINI" 	 class="org.ibit.rol.sac.model.Iniciacion" foreign-key="RSC_PROINI_FK"/>
+        <many-to-one name="servicioResponsable"  column="PRO_CODUNA_SERV" foreign-key="RSC_PRO_CODUNA_SERV_FK"/>
+        <many-to-one name="silencio" 			 column="PRO_CODSIL" class="org.ibit.rol.sac.model.SilencioAdm" foreign-key="RSC_PRO_CODSIL_FK"/>
+		<many-to-one name="lopdLegitimacion" 	 column="PRO_CODLEG" class="org.ibit.rol.sac.model.LopdLegitimacion" cascade="none"  foreign-key="RSC_PRO_CODLEG_FK"/>
 
         <set name="normativas" cascade="none" table="RSC_PRONOR" lazy="true">
             <cache usage="read-write"/>
@@ -106,6 +109,10 @@
                 <property name="recursos" type="text" column="TPR_RECURS"/>
                 <property name="observaciones" type="text" column="TPR_OBSERV"/>
                 <property name="lugar"  type="text" column="TPR_LUGAR"/>
+                <property name="lopdFinalidad"  type="text" column="TPR_LOPDFI"/>
+                <property name="lopdDestinatario"  type="text" column="TPR_LOPDDS"/>
+                <property name="lopdDerechos"  type="text" column="TPR_LOPDDR"/>
+                <many-to-one name="lopdInfoAdicional" cascade="all" column="TPR_LOPDIA" foreign-key="RSC_TPRARC_FK"/>
             </composite-element>
         </map>
 

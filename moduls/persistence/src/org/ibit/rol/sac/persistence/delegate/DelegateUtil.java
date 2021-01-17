@@ -283,6 +283,10 @@ public final class DelegateUtil {
 		return (SiaPendienteProcesoDelegate) DelegateFactory.getDelegate(SiaPendienteProcesoDelegate.class);
 	}
 
+	public static LopdLegitimacionDelegate getLopdLegitimacionDelegate() {
+		return (LopdLegitimacionDelegate) DelegateFactory.getDelegate(LopdLegitimacionDelegate.class);
+	}
+
 	public static SiaDelegate getSiaDelegate() {
 		final SiaDelegateI impl = (SiaDelegateImpl) DelegateFactory.getDelegate(SiaDelegateImpl.class);
 		final SiaDelegate del = new SiaDelegate();

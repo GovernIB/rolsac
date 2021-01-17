@@ -142,7 +142,6 @@
 	<classpathentry kind="lib" path="lib/iri-0.8.jar"/>
 	<classpathentry kind="lib" path="lib/javassist-3.10.0.GA.jar"/>
 	<classpathentry kind="lib" path="lib/jdom.jar"/>
-	<classpathentry kind="lib" path="lib/readme.txt"/>
 	<classpathentry kind="lib" path="lib/rome-1.0RC2.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.6.4.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.6.4.jar"/>
@@ -184,7 +183,6 @@
 	<classpathentry kind="lib" path="lib/jersey/jersey-bundle-1.19.1.jar"/>
 	<classpathentry kind="lib" path="lib/swagger/swagger-annotations-1.5.17.jar"/>
 	<classpathentry kind="lib" path="lib/swagger/swagger-core-1.5.17.jar"/>
-	<classpathentry kind="lib" path="lib/swagger/swagger-jaxrs_2.9.1-1.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/swagger/swagger-jersey-jaxrs-1.5.0-M1.jar"/>
 	<classpathentry kind="lib" path="lib/swagger/commons-lang3-3.6.jar"/>
 	<classpathentry kind="lib" path="lib/swagger/google-collections-1.0.jar"/>
@@ -198,5 +196,6 @@
 	<classpathentry kind="lib" path="lib/swagger/swagger-models-1.5.17.jar"/>
 	<classpathentry kind="lib" path="lib/swagger/validation-api-1.1.0.Final.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/gusite/lib/translatorib-rest-api-1.0.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

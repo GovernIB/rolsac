@@ -17,6 +17,7 @@ import javax.ejb.EJBException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.ibit.rol.sac.model.AdministracionRemota;
+import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Auditoria;
 import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.Documento;
@@ -37,6 +38,7 @@ import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.TraduccionMateria;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimiento;
+import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
 import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.Tramite;
@@ -131,6 +133,93 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	@Deprecated
 	public boolean autorizaModificarProcedimiento(final Long idProcedimiento) throws SecurityException {
 		return (getAccesoManager().tieneAccesoProcedimiento(idProcedimiento));
+	}
+
+	/**
+	 * Actualiza docs de un Procedimiento.
+	 *
+	 * @ejb.interface-method
+	 *
+	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+	 *
+	 * @param idProcedimiento
+	 *            El id procedimiento.
+	 * @param traducciones
+	 *            Las traducciones para actualizar
+	 * @param archivosABorrar
+	 *            ids de archivos a borrar
+	 *
+	 * @throws DelegateException
+	 */
+	@Override
+	public void grabarArchivos(final Long idProcedimiento, final Map<String, TraduccionProcedimientoLocal> traducciones,
+			final List<Long> archivosAborrar) {
+		Session session = null;
+		try {
+			final ProcedimientoLocal procedimientoBD = obtenerProcedimientoNewBack(idProcedimiento);
+			for (final String idioma : traducciones.keySet()) {
+				final TraduccionProcedimientoLocal trad = traducciones.get(idioma);
+				((TraduccionProcedimientoLocal) procedimientoBD.getTraduccion(idioma))
+						.setLopdInfoAdicional(trad.getLopdInfoAdicional());
+			}
+
+			session = getSession();
+			session.update(procedimientoBD);
+			session.flush();
+
+			if (archivosAborrar != null) {
+				for (final Long idArchivo : archivosAborrar) {
+					final Archivo archivo = (Archivo) session.load(Archivo.class, idArchivo);
+					session.delete(archivo);
+					session.flush();
+				}
+			}
+
+		} catch (final Exception he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			if (session != null) {
+				close(session);
+			}
+		}
+
+	}
+
+	/**
+	 * Obtiene la info adicional de un proc.
+	 *
+	 * @ejb.interface-method
+	 *
+	 * @ejb.permission unchecked="true"
+	 *
+	 * @param id
+	 *            Identificador de un proc.
+	 *
+	 * @return Devuelve <code>Archivo</code> que contiene la info adicional.
+	 */
+	@Override
+	public Archivo obtenerProcInfoAdicional(final Long id, final String idioma) {
+
+		final Session session = getSession();
+
+		try {
+
+			final Archivo archivo = (Archivo) session.load(Archivo.class, id);
+			Hibernate.initialize(archivo);
+			return archivo;
+		} catch (final HibernateException he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+
+		}
+
 	}
 
 	/**
@@ -773,6 +862,15 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				Hibernate.initialize(procedimiento.getIniciacion());
 				Hibernate.initialize(procedimiento.getFamilia());
 
+				if (procedimiento.getTraducciones() != null) {
+					for (final String idioma : procedimiento.getTraducciones().keySet()) {
+						if (((TraduccionProcedimientoLocal) procedimiento.getTraduccion(idioma))
+								.getLopdInfoAdicional() != null) {
+							Hibernate.initialize(((TraduccionProcedimientoLocal) procedimiento.getTraduccion(idioma))
+									.getLopdInfoAdicional());
+						}
+					}
+				}
 			} else {
 				throw new SecurityException("El procedimiento no es visible");
 			}
@@ -1162,13 +1260,18 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				}
 			} else {
 				consulta = new StringBuilder(
-						"select new ProcedimientoLocal(procedimiento.id, trad.nombre, procedimiento.validacion, procedimiento.fechaActualizacion, procedimiento.comun, ");
+						"select new ProcedimientoLocal(procedimiento.id, trad.nombre, procedimiento.validacion, procedimiento.fechaActualizacion, procedimiento.comun,"
+								+ " trad.lopdFinalidad, trad.lopdDestinatario, trad.lopdDerechos, leg, infoAdicional, ");
+				// trad.lopdInfoAdicional,
+				// ");
+
 				if (bc.getProcedimiento().getFamilia().getId() == null
 						|| bc.getProcedimiento().getFamilia().getId() != -1) {
 					consulta.append(
 							"procedimiento.fechaCaducidad, procedimiento.fechaPublicacion, tradFam.nombre, index(trad), procedimiento.unidadAdministrativa ) ");
 					where.append("and index(tradFam) = :idioma ");
-					from.append(", procedimiento.familia as fam, fam.traducciones as tradFam");
+					from.append(
+							", procedimiento.familia as fam, fam.traducciones as tradFam left outer join procedimiento.lopdLegitimacion leg left outer join trad.lopdInfoAdicional infoAdicional ");
 				} else { // Para poder buscar proc sin familia
 					// TODO en el constructor s esta pasando familia con el nombre del proc
 					consulta.append(

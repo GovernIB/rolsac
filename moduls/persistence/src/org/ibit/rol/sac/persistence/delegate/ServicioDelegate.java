@@ -9,6 +9,7 @@ import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
 
+import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Servicio;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
@@ -39,7 +40,7 @@ public class ServicioDelegate implements StatelessDelegate {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.ibit.rol.sac.persistence.delegate.ServicioDelegateI#grabarServicio(org.
 	 * ibit.rol.sac.model.Servicio, java.lang.Long)
@@ -54,7 +55,7 @@ public class ServicioDelegate implements StatelessDelegate {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.ibit.rol.sac.persistence.delegate.ServicioDelegateI#reordenarDocumentos(
 	 * java.lang.Long, java.util.List)
@@ -69,7 +70,7 @@ public class ServicioDelegate implements StatelessDelegate {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.ibit.rol.sac.persistence.delegate.ServicioDelegateI#obtenerServicio(java.
 	 * lang.Long)
@@ -84,7 +85,7 @@ public class ServicioDelegate implements StatelessDelegate {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.ibit.rol.sac.persistence.delegate.ServicioDelegateI#
 	 * obtenerServicioParaSolr(java.lang.Long)
 	 */
@@ -98,7 +99,7 @@ public class ServicioDelegate implements StatelessDelegate {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.ibit.rol.sac.persistence.delegate.ServicioDelegateI#
 	 * obtenerServicioNewBack(java.lang.Long)
 	 */
@@ -112,7 +113,7 @@ public class ServicioDelegate implements StatelessDelegate {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.ibit.rol.sac.persistence.delegate.ServicioDelegateI#buscarServicios(java.
 	 * util.Map, java.util.Map)
@@ -127,7 +128,7 @@ public class ServicioDelegate implements StatelessDelegate {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.ibit.rol.sac.persistence.delegate.ServicioDelegateI#buscadorServicios(
 	 * java.util.Map, java.util.Map, org.ibit.rol.sac.model.UnidadAdministrativa,
@@ -147,7 +148,7 @@ public class ServicioDelegate implements StatelessDelegate {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.ibit.rol.sac.persistence.delegate.ServicioDelegateI#
 	 * buscarServiciosMateria(java.lang.Long)
 	 */
@@ -161,7 +162,7 @@ public class ServicioDelegate implements StatelessDelegate {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.ibit.rol.sac.persistence.delegate.ServicioDelegateI#borrarServicio(java.
 	 * lang.Long)
@@ -176,7 +177,7 @@ public class ServicioDelegate implements StatelessDelegate {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.ibit.rol.sac.persistence.delegate.ServicioDelegateI#listarServiciosUA(
 	 * java.lang.Long)
@@ -205,7 +206,7 @@ public class ServicioDelegate implements StatelessDelegate {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.ibit.rol.sac.persistence.delegate.ServicioDelegateI#
 	 * listarServiciosPublicosHechoVital(java.lang.Long)
 	 */
@@ -220,7 +221,7 @@ public class ServicioDelegate implements StatelessDelegate {
 	/* PORMAD */
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.ibit.rol.sac.persistence.delegate.ServicioDelegateI#
 	 * listarServiciosPublicosUAHVMateria(java.lang.Long, java.lang.String[],
 	 * java.lang.String[])
@@ -237,7 +238,7 @@ public class ServicioDelegate implements StatelessDelegate {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.ibit.rol.sac.persistence.delegate.ServicioDelegateI#consultarServicio(
 	 * java.lang.Long)
@@ -252,7 +253,7 @@ public class ServicioDelegate implements StatelessDelegate {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.ibit.rol.sac.persistence.delegate.ServicioDelegateI#
 	 * buscarServiciosActivos(org.ibit.rol.sac.model.UnidadAdministrativa,
 	 * java.util.Date)
@@ -268,7 +269,7 @@ public class ServicioDelegate implements StatelessDelegate {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.ibit.rol.sac.persistence.delegate.ServicioDelegateI#
 	 * buscarServiciosCaducados(org.ibit.rol.sac.model.UnidadAdministrativa,
 	 * java.util.Date)
@@ -420,6 +421,14 @@ public class ServicioDelegate implements StatelessDelegate {
 	public String getEnlaceTelematico(final Long idServicio, final String lang) throws DelegateException {
 		try {
 			return getFacade().getEnlaceTelematico(idServicio, lang);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+
+	public Archivo obtenerServInfoAdicional(final Long id, final String idioma) throws DelegateException {
+		try {
+			return getFacade().obtenerServInfoAdicional(id, idioma);
 		} catch (final RemoteException e) {
 			throw new DelegateException(e);
 		}

@@ -48,6 +48,39 @@ public class RolsacPropertiesUtil {
 		return activo;
 	}
 
+	/** Devuelve el texto para finalidad. **/
+	public static final String getLopdFinalidad(final boolean catalan) {
+		String texto;
+		if (catalan) {
+			texto = getProperty("es.caib.rolsac.lopd.finalidad.ca");
+		} else {
+			texto = getProperty("es.caib.rolsac.lopd.finalidad.es");
+		}
+		return texto;
+	}
+
+	/** Devuelve el texto para destinatario. **/
+	public static final String getLopdDestinatario(final boolean catalan) {
+		String texto;
+		if (catalan) {
+			texto = getProperty("es.caib.rolsac.lopd.destinatario.ca");
+		} else {
+			texto = getProperty("es.caib.rolsac.lopd.destinatario.es");
+		}
+		return texto;
+	}
+
+	/** Devuelve el texto para derechos. **/
+	public static final String getLopdDerechos(final boolean catalan) {
+		String texto;
+		if (catalan) {
+			texto = getProperty("es.caib.rolsac.lopd.derechos.ca");
+		} else {
+			texto = getProperty("es.caib.rolsac.lopd.derechos.es");
+		}
+		return texto;
+	}
+
 	/** Devuelve el texto de UA para procedimientos/servicios comunes. **/
 	public static final String getUAComun(final boolean catalan) {
 		String texto;

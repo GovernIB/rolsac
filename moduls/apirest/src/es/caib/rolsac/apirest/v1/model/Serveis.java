@@ -77,8 +77,11 @@ public class Serveis extends EntidadBase {
 	@ApiModelProperty(value = "telefono", required = false)
 	private java.lang.String telefono;
 
-	@ApiModelProperty(value = "tramiteUrl", required = false)
-	private java.lang.String tramiteUrl;
+	// @ApiModelProperty(value = "tramiteUrl", required = false)
+	// private java.lang.String tramiteUrl;
+
+	@ApiModelProperty(value = "urlTramiteExterno", required = false)
+	private java.lang.String urlTramiteExterno;
 
 	@ApiModelProperty(value = "tramiteId", required = false)
 	private java.lang.String tramiteId;
@@ -123,6 +126,28 @@ public class Serveis extends EntidadBase {
 	@ApiModelProperty(value = "comun", required = false)
 	private boolean comun;
 
+	@ApiModelProperty
+	private LopdLegitimacion lopdLegitimacion;
+
+	/** Info Adicional **/
+	@ApiModelProperty(value = "link_lopdInfoAdicional", required = false)
+	private Link link_lopdInfoAdicional;
+	@ApiModelProperty(hidden = true)
+	@XmlTransient
+	private java.lang.Long lopdInfoAdicional;
+
+	@ApiModelProperty(value = "lopdResponsable", required = false)
+	private String lopdResponsable;
+
+	@ApiModelProperty(value = "lopdFinalidad", required = false)
+	private String lopdFinalidad;
+
+	@ApiModelProperty(value = "lopdDestinatario", required = false)
+	private String lopdDestinatario;
+
+	@ApiModelProperty(value = "lopdDerechos", required = false)
+	private String lopdDerechos;
+
 	public Serveis(final org.ibit.rol.sac.model.Servicio elem, final String urlBase, final String idioma,
 			final boolean hateoasEnabled) {
 		super(elem, urlBase, idioma, hateoasEnabled);
@@ -134,6 +159,12 @@ public class Serveis extends EntidadBase {
 			// copiamos los datos que no tienen la misma estructura:
 			if (elem.getPlataforma() != null) {
 				this.plataforma = new Plataformas(elem.getPlataforma(), urlBase, idioma, hateoasEnabled);
+			}
+
+			// copiamos los datos que no tienen la misma estructura:
+			if (elem.getLopdLegitimacion() != null) {
+				this.lopdLegitimacion = new LopdLegitimacion(elem.getLopdLegitimacion(), urlBase, idioma,
+						hateoasEnabled);
 			}
 
 		} catch (final Exception e) {
@@ -151,6 +182,8 @@ public class Serveis extends EntidadBase {
 				urlBase, null);
 		link_organoInstructor = this.generaLink(this.organoInstructor, Constantes.ENTIDAD_UA, Constantes.URL_UA,
 				urlBase, null);
+		link_lopdInfoAdicional = this.generaLinkArchivo(this.lopdInfoAdicional, urlBase, null);
+
 	}
 
 	public static Serveis valueOf(final String json) {
@@ -436,19 +469,13 @@ public class Serveis extends EntidadBase {
 	}
 
 	/**
-	 * @return the tramiteUrl
-	 */
-	public java.lang.String getTramiteUrl() {
-		return tramiteUrl;
-	}
-
-	/**
 	 * @param tramiteUrl
 	 *            the tramiteUrl to set
 	 */
-	public void setTramiteUrl(final java.lang.String tramiteUrl) {
-		this.tramiteUrl = tramiteUrl;
-	}
+	/*
+	 * public void setTramiteUrl(final java.lang.String tramiteUrl) {
+	 * this.tramiteUrl = tramiteUrl; }
+	 */
 
 	/**
 	 * @return the tramiteId
@@ -635,6 +662,126 @@ public class Serveis extends EntidadBase {
 	 */
 	public void setPlataforma(final Plataformas plataforma) {
 		this.plataforma = plataforma;
+	}
+
+	/**
+	 * @return the urlTramiteExterno
+	 */
+	public java.lang.String getUrlTramiteExterno() {
+		return urlTramiteExterno;
+	}
+
+	/**
+	 * @param urlTramiteExterno
+	 *            the urlTramiteExterno to set
+	 */
+	public void setUrlTramiteExterno(final java.lang.String urlTramiteExterno) {
+		this.urlTramiteExterno = urlTramiteExterno;
+	}
+
+	/**
+	 * @return the link_lopdInfoAdicional
+	 */
+	public Link getLink_lopdInfoAdicional() {
+		return link_lopdInfoAdicional;
+	}
+
+	/**
+	 * @param link_lopdInfoAdicional
+	 *            the link_lopdInfoAdicional to set
+	 */
+	public void setLink_lopdInfoAdicional(final Link link_lopdInfoAdicional) {
+		this.link_lopdInfoAdicional = link_lopdInfoAdicional;
+	}
+
+	/**
+	 * @return the lopdInfoAdicional
+	 */
+	public java.lang.Long getLopdInfoAdicional() {
+		return lopdInfoAdicional;
+	}
+
+	/**
+	 * @param lopdInfoAdicional
+	 *            the lopdInfoAdicional to set
+	 */
+	public void setLopdInfoAdicional(final java.lang.Long lopdInfoAdicional) {
+		this.lopdInfoAdicional = lopdInfoAdicional;
+	}
+
+	/**
+	 * @return the lopdResponsable
+	 */
+	public String getLopdResponsable() {
+		return lopdResponsable;
+	}
+
+	/**
+	 * @param lopdResponsable
+	 *            the lopdResponsable to set
+	 */
+	public void setLopdResponsable(final String lopdResponsable) {
+		this.lopdResponsable = lopdResponsable;
+	}
+
+	/**
+	 * @return the lopdFinalidad
+	 */
+	public String getLopdFinalidad() {
+		return lopdFinalidad;
+	}
+
+	/**
+	 * @return the lopdLegitimacion
+	 */
+	public LopdLegitimacion getLopdLegitimacion() {
+		return lopdLegitimacion;
+	}
+
+	/**
+	 * @param lopdLegitimacion
+	 *            the lopdLegitimacion to set
+	 */
+	public void setLopdLegitimacion(final LopdLegitimacion lopdLegitimacion) {
+		this.lopdLegitimacion = lopdLegitimacion;
+	}
+
+	/**
+	 * @param lopdFinalidad
+	 *            the lopdFinalidad to set
+	 */
+	public void setLopdFinalidad(final String lopdFinalidad) {
+		this.lopdFinalidad = lopdFinalidad;
+	}
+
+	/**
+	 * @return the lopdDestinatario
+	 */
+	public String getLopdDestinatario() {
+		return lopdDestinatario;
+	}
+
+	/**
+	 * @param lopdDestinatario
+	 *            the lopdDestinatario to set
+	 */
+	public void setLopdDestinatario(final String lopdDestinatario) {
+		this.lopdDestinatario = lopdDestinatario;
+	}
+
+	/**
+	 * @return the lopdDerechos
+	 */
+	public String getLopdDerechos() {
+		return lopdDerechos;
+	}
+
+	/**
+	 * @param lopdDerechos
+	 *            the lopdDerechos to set
+	 */
+	public void setLopdDerechos(final String lopdDerechos) {
+		this.lopdDerechos = lopdDerechos;
 	}
 
 }

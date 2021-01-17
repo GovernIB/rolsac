@@ -23,6 +23,7 @@
 <script type="text/javascript" src="<c:url value='/js/modul_documents_tramits.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_documents_requerits.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_documents.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_documents_lopd.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_materies.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_public_objectiu.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_normativa.js?versio=${rolsac_einarevision}'/>"></script>
@@ -44,6 +45,12 @@
     var nomUAMollapa = '<c:out value="${nomUA}"/>';
     var idiomas = '<c:out value="${idiomasListado}"/>';
     var desactivarMensajeComun = false;
+    var lopdFinalidad = '<c:out value="${lopdFinalidad}"/>';
+	var lopdFinalidadESP = '<c:out value="${lopdFinalidadESP}"/>';
+	var lopdDestinatario = '<c:out value="${lopdDestinatario}"/>';
+	var lopdDestinatarioESP = '<c:out value="${lopdDestinatarioESP}"/>';
+	var lopdDerechos = '<c:out value="${lopdDerechos}"/>';
+	var lopdDerechosESP = '<c:out value="${lopdDerechosESP}"/>';
 
     var pagLlistat = '<c:url value="/catalegProcediments/llistat.do" />';
     var pagExportar = '<c:url value="/catalegProcediments/exportar.do" />';
@@ -55,7 +62,9 @@
     var pagGuardarTramit = '<c:url value="/tramit/guardarTramit.do" />';
     var pagEsborrarTramit = '<c:url value="/tramit/esborrarTramit.do" />';
     var pagGuardarDoc = '<c:url value="/documents/guardarDocument.do" />';
+    var pagGuardarDocLopd = '<c:url value="/catalegProcediments/guardarDocumentLopd.do" />';
     var pagCarregarDoc = '<c:url value="/documents/carregarDocument.do" />';
+    var pagCarregarDocLopd = '<c:url value="/catalegProcediments/carregarDocumentLopd.do" />';
     var pagGuardarDocTramit = '<c:url value="/documentsTramit/guardarDocumentTramit.do" />';
     var pagCarregarDocTramit = '<c:url value="/documentsTramit/carregarDocumentTramit.do" />';
     var pagGuardarDocRequerit = '<c:url value="/documentsRequerits/guardarDocumentRequerit.do" />';
@@ -456,9 +465,73 @@
                 {
                     "tipus": "<spring:message code='unitatadm.formulari.tipus.email'/>"
                 }
+        },
+
+        // LOPD Responsable
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_lopd_responsable",
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "error":
+                {
+                    "obligatori": "<spring:message code='proc.formulari.error.responsable.obligatori'/>"
+                }
+        },
+
+        // LOPD Legitmacion
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_lopd_legitimacion",
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "error":
+                {
+                    "obligatori": "<spring:message code='proc.formulari.error.responsable.obligatori'/>"
+                }
+        },
+
+        // LOPD Finalitat
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor":  "item_lopd_finalidad_" + '<c:out value="${idiomaVal}"/>',
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "error":
+                {
+                    "obligatori": "<spring:message code='proc.formulari.error.responsable.obligatori'/>"
+                }
+        },
+
+        // LOPD Destinatario
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor":  "item_lopd_destinatario_" + '<c:out value="${idiomaVal}"/>',
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "error":
+                {
+                    "obligatori": "<spring:message code='proc.formulari.error.responsable.obligatori'/>"
+                }
+        },
+
+
+        // LOPD Derechos
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor":  "item_lopd_derechos_" + '<c:out value="${idiomaVal}"/>',
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "error":
+                {
+                    "obligatori": "<spring:message code='proc.formulari.error.responsable.obligatori'/>"
+                }
         }
-
-
 
     ];
 
@@ -884,7 +957,7 @@
 </div>
 <!-- /escriptori_contingut -->
 
-<form id="formGuardar" action="false">
+<form id="formGuardar"   action="false">
     <!-- escriptori_detall -->
     <div id="escriptori_detall" class="escriptori_detall">
         <input id="item_id" name="item_id" type="hidden" value="" class="nou" />
@@ -1242,6 +1315,93 @@
             </div>
             <!-- /modul -->
 
+
+			<!-- modul -->
+	        <div class="modul">
+	            <fieldset>
+	                <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+	                <legend><spring:message code='proc.dades.lopd.titulo'/></legend>
+	                <div class="modul_continguts mostrat">
+
+						<!-- fila -->
+						<div class="fila">
+							<div class="element t99p">
+								 <div class="etiqueta">
+									  <label for="item_lopd_legitimacion"><spring:message code='proc.dades.lopd.responsable'/></label>
+								  </div>
+								  <div class="control">
+								  		<input id="item_lopd_responsable" name="item_lopd_responsable" type="text" class="nou" readonly="readonly" />
+								  </div>
+							</div>
+						</div>
+
+
+	                  	<!-- fila -->
+						<div class="fila">
+							<div class="element t99p multilang">
+								<c:forEach items="${idiomes_aplicacio}" var="lang">
+									<div class="campoIdioma <c:out value="${lang}"/>">
+										<div class="etiqueta"><label for="item_lopd_finalidad_<c:out value="${lang}"/>"><spring:message code='proc.dades.lopd.finalidad'/></label></div>
+										<div class="control">
+											 <textarea id="item_lopd_finalidad_<c:out value="${lang}" />"
+			                                        name="item_lopd_finalidad_<c:out value="${lang}" />" cols="50" rows="2" class="nou"></textarea>
+										</div>
+									</div>
+								</c:forEach>
+							</div>
+						</div>
+
+	                    <!-- fila -->
+	                    <div class="fila">
+	                    	<div class="element t49p">
+								  <div class="etiqueta">
+									  <label for="item_lopd_legitimacion"><spring:message code='proc.dades.lopd.legitimacion'/></label>
+								  </div>
+								  <div class="control select">
+                                           <select id="item_lopd_legitimacion" name="item_lopd_legitimacion">
+                                         	<c:forEach items="${llistaLopdLegitimacion}" var="legit">
+                                   			<option value='<c:out value="${legit.id}" />'><c:out value="${legit.nom}" /></option>
+                              				 </c:forEach>
+                          				 </select>
+                                      </div>
+							</div>
+	                    </div>
+
+
+
+						<!-- fila -->
+						<div class="fila">
+							<div class="element t99p multilang">
+								<c:forEach items="${idiomes_aplicacio}" var="lang">
+									<div class="campoIdioma <c:out value="${lang}"/>">
+										<div class="etiqueta"><label for="item_lopd_destinatario_<c:out value="${lang}"/>"><spring:message code='proc.dades.lopd.destinatario'/></label></div>
+										<div class="control">
+											<textarea id="item_lopd_destinatario_<c:out value="${lang}" />"
+			                                        name="item_lopd_destinatario_<c:out value="${lang}" />" cols="50" rows="2" class="nou"></textarea>
+										</div>
+									</div>
+								</c:forEach>
+							</div>
+						</div>
+
+						<!-- fila -->
+						<div class="fila">
+							<div class="element t99p multilang">
+								<c:forEach items="${idiomes_aplicacio}" var="lang">
+									<div class="campoIdioma <c:out value="${lang}"/>">
+										<div class="etiqueta"><label for="item_lopd_derechos_<c:out value="${lang}"/>"><spring:message code='proc.dades.lopd.derechos'/></label></div>
+										<div class="control">
+											<textarea id="item_lopd_derechos_<c:out value="${lang}" />"
+			                                        name="item_lopd_derechos_<c:out value="${lang}" />" cols="50" rows="2" class="nou" readonly="readonly"></textarea>
+										</div>
+									</div>
+								</c:forEach>
+							</div>
+						</div>
+	            </fieldset>
+	        </div>
+	        <!-- /modul -->
+
             <!-- modul -->
             <div id="modulEstadistiques" class="modul">
                 <fieldset>
@@ -1553,6 +1713,57 @@
                 </fieldset>
             </div>
 
+
+             <!-- modul -->
+              <div class="modul invisible" id="modul_documents_lopd">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='proc.documents.lopd'/> </legend>
+                    <div class="modul_continguts mostrat">
+                        <!-- modulDocuments -->
+                        <div id="modulDocumentsLopd" class="modulDocumentsLopd multilang">
+                            <input id="modulo_documents_modificado_lopd" type="hidden" name="modulo_documents_modificado_lopd" value="0" />
+                            <ul class="idiomes">
+								<c:forEach items="${idiomasListado}" var="llengua" varStatus="loop">
+                                    <c:if test="${loop.first}">
+                                        <li class="<c:out value="${llengua.lang}" /> seleccionat">
+                                    </c:if>
+                                    <c:if test="${!loop.first}">
+                                        <li class="<c:out value='${llengua.lang}'/>">
+                                    </c:if>
+                                    <c:out value="${llengua.lang}" />
+                                    </li>
+                                </c:forEach>
+                            </ul>
+
+                            <div class="seleccionats">
+								<c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">
+                                <c:if test="${loop.first}">
+								<div class="seleccionat cajaIdioma <c:out value="${lang}"/>">
+								</c:if>
+                                <c:if test="${!loop.first}">
+								<div class="<c:out value="${lang}"/> cajaIdioma">
+								</c:if>
+                                    <p class="info"><spring:message code='txt.noHiHaDocumentsRelacionats'/>.</p>
+                                    <div class="listaOrdenable"></div>
+                                </div>
+								</c:forEach>
+                                <div class="btnGenerico">
+                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.gestionDocument'/></span></span></a>
+                                </div>
+                                <p style="clear: both; margin-bottom: 10px;"/><!-- Separador -->
+	                            <div class="btnGenerico">
+	                                <a id="btnGuardar_documentos_lopd" href="javascript:;" class="btn guarda important lista-simple-documentos-lopd" style="display: none"
+	                            			action="<c:url value="/catalegProcediments/guardarDocumentosRelacionadosLopd.do" />">
+	                           			<span><span><spring:message code='boto.guarda'/></span></span>
+	                            	</a>
+	                            </div>
+                            </div>
+                        <!-- /modulDocuments -->
+                    </div>
+                </fieldset>
+            </div>
+
             <!-- /modul -->
 
             <!-- modul -->
@@ -1789,10 +2000,166 @@
             </div>
         </div>
         <!-- /modulLateral -->
+     </form>
 
-    </form>
 </div>
 <!-- escriptori_documents -->
+
+<!-- escriptori_documents -->
+<div id="escriptori_documents_lopd" class="escriptori_detall">
+    <script type="text/javascript">
+        /*var txtTituloObligatorio = "<spring:message code='personal.formulari_document.titol.obligatori'/>";
+        var txtTituloNoSoloNumeros = "<spring:message code='personal.formulari_document.titol.no_nomes_numeros'/>"; */
+
+        // dades formularis
+        var FormulariDadesDocLopd = [
+            /*{ // Titol (Catala)
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "doc_titol_" + '<c:out value="${idiomaVal}"/>',
+                "obligatori": "si",
+                "tipus": "alfanumeric",
+                "caracters": {
+                    "maxim": 230,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
+                "error":{
+                    "obligatori": txtTituloObligatorio,
+                    "tipus": txtTituloNoSoloNumeros
+                }
+            }*/
+        ];
+    </script>
+<form id="formGuardarDocLopd" action="" method="POST">
+        <input type="hidden" name="docId" id="docId" />
+        <input type="hidden" name="procedimientoId" id="procedimientoId" />
+        <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>
+        <!-- modulPrincipal -->
+        <!--div id="modulPrincipal" class="grupoModulosFormulario"-->
+        <div id="modulDocumentsLopd" class="grupoModulosFormulario modulPrincipal">
+            <!-- modul -->
+            <div class="modul">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='txt.documents'/></legend>
+                    <div class="modul_continguts mostrat">
+                        <div class="fila">
+                            <p class="introIdiomas"><spring:message code='txt.idioma.idioma'/>:</p>
+
+                            <ul class="idiomes">
+								<c:forEach items="${idiomasListado}" var="llengua" varStatus="loop">
+                                    <li class="idioma">
+                                        <a href="javascript:;" class='<c:out value="${llengua.lang}"/>'><c:out value="${llengua.nombre}" /></a>
+                                    </li>
+                                </c:forEach>
+
+                                <c:if test="${traductorActivo}">
+	                                <li class="traduix btnGenerico" id="botoTraduirDocument">
+	                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
+	                                </li>
+                                </c:if>
+                            </ul>
+
+							<div class="idiomes">
+								<div class="fila">
+										<div class="element t99p">
+											<div class="etiqueta">
+												<label><spring:message code='camp.descargarPlantilla'/>: </label>
+											</div>
+											<div class="control">
+												<!-- <input id='doc_titol_<c:out value="${lang}"/>' name='doc_titol_<c:out value="${lang}"/>' type='text' class='nou'/> -->
+											</div>
+										</div>
+									</div>
+
+								<c:forEach items="${idiomes_aplicacio}" var="lang">
+								<div class='idioma <c:out value="${lang}"/>'>
+
+									 <!--
+									<div class="fila">
+										<div class="element t99p">
+											<div class="etiqueta">
+												<label for='doc_titol_<c:out value="${lang}"/>'><spring:message code='camp.titol'/></label>
+											</div>
+											<div class="control">
+												<input id='doc_titol_<c:out value="${lang}"/>' name='doc_titol_<c:out value="${lang}"/>' type='text' class='nou'/>
+											</div>
+										</div>
+									</div>
+
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for='doc_descripcio_<c:out value="${lang}"/>'><spring:message code='camp.descripcio'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <textarea id='doc_descripcio_<c:out value="${lang}"/>' name='doc_descripcio_<c:out value="${lang}"/>' cols="50" rows="2" class="nou"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>  -->
+
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for='doc_arxiu_lop_<c:out value="${lang}"/>'><spring:message code='camp.arxiu'/></label></div>
+                                            <div class="control archivo">
+                                                <div id='grup_arxiu_actual_doc_lopd_<c:out value="${lang}"/>' class="grup_arxiu_actual">
+                                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                    <a href="#" target="_blank"></a>
+                                                    <input type="checkbox" name='doc_arxiu_lop_<c:out value="${lang}"/>_delete' id='doc_arxiu_lop_<c:out value="${lang}"/>_delete' value="1"/>
+                                                    <label for='doc_arxiu_lop_<c:out value="${lang}"/>_delete' class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for='doc_arxiu_<c:out value="${lang}"/>'><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="control">
+                                                <input id='doc_arxiu_<c:out value="${lang}"/>' name='doc_arxiu_<c:out value="${lang}"/>' type="file" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+								</div>
+								</c:forEach>
+							</div>
+
+                        </div>
+                        <!-- /fila -->
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <!-- /modulPrincipal -->
+
+        <!-- modulLateral -->
+        <div class="modulLateral">
+            <!-- modul -->
+            <div class="modul publicacio">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='txt.accions'/></legend>
+                    <div class="modul_continguts mostrat">
+                        <!-- botonera dalt -->
+                        <div class="botonera dalt">
+                          <ul>
+                              <li class="btnVolver impar">
+                                  <a id="btnVolver_documents_lopd" href="javascript:;" class="btn torna"><span><span><spring:message code='boto.torna'/></span></span></a>
+                              </li>
+                              <li class="btnGuardar par">
+                                  <a id="btnGuardar_documents_lopd" href="javascript:;" class="btn guarda important"><span><span><spring:message code='boto.guarda_exclamacio'/></span></span></a>
+                              </li>
+                              <li class="btnEliminar impar" style="display:none;">
+                                  <a id="btnEliminar_documents_lopd" href="javascript:;" class="btn elimina"><span><span><spring:message code='boto.elimina'/></span></span></a>
+                              </li>
+                          </ul>
+                        </div>
+                        <!-- /botonera dalt -->
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <!-- /modulLateral -->
+     </form>
 
 <!-- escriptori_normatives -->
 <div id="escriptori_normatives">

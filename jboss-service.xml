@@ -131,6 +131,14 @@ es.caib.rolsac.subscripcions
 		es.caib.rolsac.translatorib.user=api-tib
 		es.caib.rolsac.translatorib.pass=XXX
 		es.caib.rolsac.translatorib.url=http://caibter.indra.es/translatorib/api/services/traduccion/v1/texto
+
+		<!--  LOPD -->
+		es.caib.rolsac.lopd.finalidad.ca=La finalitat de la lopd
+		es.caib.rolsac.lopd.finalidad.es=La finalidad de la lopd
+		es.caib.rolsac.lopd.destinatario.ca=El destinatari de la lopd
+		es.caib.rolsac.lopd.destinatario.es=El destinatario de la lopd
+		es.caib.rolsac.lopd.derechos.ca=El dret de la lopd
+		es.caib.rolsac.lopd.derechos.es=El derecho de la lopd
     </attribute>
 
 </mbean>
