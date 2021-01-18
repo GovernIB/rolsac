@@ -197,6 +197,17 @@ public class Procediments extends EntidadBase {
 	@ApiModelProperty(value = "lopdDerechos", required = false)
 	private String lopdDerechos;
 
+	@ApiModelProperty(value = "lopdCabecera", required = false)
+	private String lopdCabecera;
+
+	/**
+	 * Constructor
+	 *
+	 * @param elem
+	 * @param urlBase
+	 * @param idioma
+	 * @param hateoasEnabled
+	 */
 	public Procediments(final org.ibit.rol.sac.model.Procedimiento elem, final String urlBase, final String idioma,
 			final boolean hateoasEnabled) {
 		super(elem, urlBase, idioma, hateoasEnabled);
@@ -216,9 +227,16 @@ public class Procediments extends EntidadBase {
 
 			// copiamos los datos que no tienen la misma estructura:
 			if (((org.ibit.rol.sac.model.ProcedimientoLocal) elem).getLopdLegitimacion() != null) {
-				this.lopdLegitimacion = new LopdLegitimacion(
-						((org.ibit.rol.sac.model.ProcedimientoLocal) elem).getLopdLegitimacion(), urlBase, idioma,
-						hateoasEnabled);
+				this.lopdLegitimacion = new LopdLegitimacion();
+				this.lopdLegitimacion
+						.setCodigo(((org.ibit.rol.sac.model.ProcedimientoLocal) elem).getLopdLegitimacion().getId());
+				this.lopdLegitimacion.setIdentificador(
+						((org.ibit.rol.sac.model.ProcedimientoLocal) elem).getLopdLegitimacion().getIdentificador());
+				this.lopdLegitimacion.setPorDefecto(
+						((org.ibit.rol.sac.model.ProcedimientoLocal) elem).getLopdLegitimacion().isPorDefecto());
+				this.lopdLegitimacion.setNombre(
+						((org.ibit.rol.sac.model.TraduccionLopdLegitimacion) ((org.ibit.rol.sac.model.ProcedimientoLocal) elem)
+								.getLopdLegitimacion().getTraduccion(idioma)).getNombre());
 			}
 		} catch (final Exception e) {
 
@@ -448,6 +466,21 @@ public class Procediments extends EntidadBase {
 	 */
 	public void setObservaciones(final java.lang.String observaciones) {
 		this.observaciones = observaciones;
+	}
+
+	/**
+	 * @return the lopdCabecera
+	 */
+	public String getLopdCabecera() {
+		return lopdCabecera;
+	}
+
+	/**
+	 * @param lopdCabecera
+	 *            the lopdCabecera to set
+	 */
+	public void setLopdCabecera(final String lopdCabecera) {
+		this.lopdCabecera = lopdCabecera;
 	}
 
 	/**

@@ -1,6 +1,32 @@
 //CATALEG SERVEIS
 var hechosVitalesAsignados = null;
 
+function actualizarLopdResponsable(idResponsable) {
+
+	dataVars = "id=" + idResponsable;
+
+	$.ajax({
+		type: "POST",
+		url: pagLopdResponsable,
+		data: dataVars,
+		dataType: "json",
+		error: function() {
+			console.error("No se ha podido actualizar el organo");
+		},
+		success: function(data) {
+			if (data.error == undefined && !jQuery("#item_comun").is(":checked")) {
+
+				lopdResponsableNOComun = data.responsable;
+				lopdResponsableNOComunESP = data.responsableESP;
+
+				jQuery("#item_lopd_responsable").val(lopdResponsableNOComun);
+				jQuery("#item_lopd_responsable_es").val(lopdResponsableNOComunESP);
+				jQuery("#item_lopd_responsable_ca").val(lopdResponsableNOComun);
+			}
+		} // Fin success
+	}); //Fin ajax
+}
+
 /** Funcion para cuando se checkea el comun de un servicio. **/
 function item_comun_change(activo_check) {
 	var estilo_comunes;
@@ -24,6 +50,13 @@ function item_comun_change(activo_check) {
 		this.style.display 	= estilo_nocomunes;
 	});
 
+	if (activo_check) {
+		jQuery("#item_lopd_responsable").val(lopdResponsableComun);
+		jQuery("#item_lopd_responsable_es").val(lopdResponsableComunESP);
+		jQuery("#item_lopd_responsable_ca").val(lopdResponsableComun);
+	} else {
+		actualizarLopdResponsable($("#item_organ_instructor_id").val());
+	}
 }
 
 
@@ -65,6 +98,16 @@ $(document).ready(function() {
 		var url = $(this).attr('action');
 
 		ListaSimpleDocumentos.guardar(elements, url, id);
+
+	});
+
+	jQuery(".lista-simple-documentos-lopd").click(function() {
+
+		var elements = $(this).parent().parent().find("div.cajaIdioma.ca li"); // Con esto obtenemos los <li> que cuelgan de <div class="cajaIdioma ca">
+		var id = $('#item_id').val();
+		var url = $(this).attr('action');
+
+		ListaSimpleDocumentosLopd.guardar(elements, url, id);
 
 	});
 
@@ -127,6 +170,7 @@ $(document).ready(function() {
 	ListaSimpleHechosVitales = new ListaSimple();
 	ListaSimpleNormativas = new ListaSimple();
 	ListaSimpleDocumentos = new CListaSimpleDocumentos();
+	ListaSimpleDocumentosLopd = new CListaSimpleDocumentosLopd();
 
 	// elements
 	opcions_elm = $("#opcions");
@@ -757,6 +801,7 @@ function CDetall() {
 
 		jQuery("#item_organ_instructor, #item_organ_instructor_es, #item_organ_instructor_ca, #item_organ_instructor_en, #item_organ_instructor_de, #item_organ_instructor_fr").change(function(){
 			jQuery("#item_organ_instructor, #item_organ_instructor_es, #item_organ_instructor_ca, #item_organ_instructor_en, #item_organ_instructor_de, #item_organ_instructor_fr").val( jQuery(this).val() );
+			actualizarLopdResponsable($("#item_organ_instructor_id").val());
 		});
 
 		jQuery("#item_servei_responsable, #item_servei_responsable_es, #item_servei_responsable_ca, #item_servei_responsable_en, #item_servei_responsable_de, #item_servei_responsable_fr").change(function(){
@@ -885,6 +930,7 @@ function CDetall() {
 		jQuery("#item_lopd_derechos").val(lopdDerechos);
 		jQuery("#item_lopd_derechos_ca").val(lopdDerechos);
 		jQuery("#item_lopd_derechos_es").val(lopdDerechosESP);
+		$("#item_lopd_legitimacion").val(lopd_legitimacion_pordefecto);
 
 		jQuery("#item_comun").unbind();
 		jQuery("#item_comun").val("off");
@@ -991,7 +1037,11 @@ function CDetall() {
 		$("#item_id").val(dada_node.item_id);
 
 		//LOPD
-		$("#item_lopd_legitimacion").val(dada_node.item_lopd_legitimacion);
+		if (dada_node.item_lopd_legitimacion != undefined) {
+			$("#item_lopd_legitimacion").val(dada_node.item_lopd_legitimacion);
+		} else {
+			$("#item_lopd_legitimacion").val(lopd_legitimacion_pordefecto);
+		}
 		$("#item_lopd_responsable").val(dada_node.item_lopd_responsable);
 
 
@@ -1045,6 +1095,11 @@ function CDetall() {
 		if (dada_node.item_comun != undefined) {
 			$("#item_comun").attr("checked", dada_node.item_comun);
 			$("#item_comun").change();
+			if (dada_node.item_comun) {
+				jQuery("#item_lopd_responsable").val(lopdResponsableComun);
+				jQuery("#item_lopd_responsable_es").val(lopdResponsableComunESP);
+				jQuery("#item_lopd_responsable_ca").val(lopdResponsableComun);
+			}
 		}
 		desactivarMensajeComun = false;
 
@@ -1252,7 +1307,7 @@ function CDetall() {
 		ModulDocuments.inicializarDocuments(dades.documents);
 		ModulFetsVitals.inicializarHechosVitales(hechosVitalesAsignados);
 		ModulNormativa.inicializarNormativas(dades.normatives);
-
+		ModulDocumentsLopd.inicializarDocuments(dades.lopd);
 	};
 
 	this.ocultarModulos = function(selector) {

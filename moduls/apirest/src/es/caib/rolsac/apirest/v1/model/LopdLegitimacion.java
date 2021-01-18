@@ -31,6 +31,10 @@ public class LopdLegitimacion extends EntidadBase {
 	@ApiModelProperty(value = "identificador", required = false)
 	private String identificador;
 
+	/** Nombre. **/
+	@ApiModelProperty(value = "nombre", required = false)
+	private String nombre;
+
 	/** Por Defecto. **/
 	@ApiModelProperty(value = "porDefecto", required = false)
 	private boolean porDefecto;
@@ -141,6 +145,21 @@ public class LopdLegitimacion extends EntidadBase {
 	 */
 	public void setPorDefecto(final boolean porDefecto) {
 		this.porDefecto = porDefecto;
+	}
+
+	/**
+	 * @return the nombre
+	 */
+	public String getNombre() {
+		return nombre;
+	}
+
+	/**
+	 * @param nombre
+	 *            the nombre to set
+	 */
+	public void setNombre(final String nombre) {
+		this.nombre = nombre;
 	}
 
 	/*

@@ -51,6 +51,11 @@
 	var lopdDestinatarioESP = '<c:out value="${lopdDestinatarioESP}"/>';
 	var lopdDerechos = '<c:out value="${lopdDerechos}"/>';
 	var lopdDerechosESP = '<c:out value="${lopdDerechosESP}"/>';
+	var lopdResponsableComun = '<c:out value="${lopdResponsableComun}"/>';
+	var lopdResponsableComunESP = '<c:out value="${lopdResponsableComunESP}"/>';
+	var lopdResponsableNOComun = '';
+	var lopdResponsableNOComunESP = '';
+	var lopd_legitimacion_pordefecto =  '<c:out value="${lopdLegitimacionPorDefecto}"/>';
 
     var pagLlistat = '<c:url value="/catalegProcediments/llistat.do" />';
     var pagExportar = '<c:url value="/catalegProcediments/exportar.do" />';
@@ -80,6 +85,7 @@
     var pagTraduirDocumentTramit = '<c:url value="/documentsTramit/traduir.do" />';
     var pagListarHechosVitales = '<c:url value="/catalegProcediments/listarHechosVitales.do" />';
     var pagNormativaVigentes = '<c:url value="/catalegProcediments/checkNormativaVigente.do" />';
+    var pagLopdResponsable = '<c:url value="/catalegProcediments/getLopdResponsable.do" />';
     var urlPrevisualizarProcedimiento = '<c:out value="${urlPrevisualitzacio}"/>';
     var modulos = '<c:url value="/catalegProcediments/modulos.do" />';
 
@@ -2115,7 +2121,7 @@
                                         <div class="element t50p">
                                             <div class="etiqueta"><label for='doc_arxiu_<c:out value="${lang}"/>'><spring:message code='camp.arxiu_nou'/></label></div>
                                             <div class="control">
-                                                <input id='doc_arxiu_<c:out value="${lang}"/>' name='doc_arxiu_<c:out value="${lang}"/>' type="file" class="nou" />
+                                                <input id='doc_arxiu_<c:out value="${lang}"/>' name='doc_arxiu_<c:out value="${lang}"/>' type="file" class="nou" accept=".pdf" />
                                             </div>
                                         </div>
                                     </div>

@@ -1,6 +1,32 @@
 //CATALEG PROCEDIMENTS
 var hechosVitalesAsignados = null;
 
+function actualizarLopdResponsable(idResponsable) {
+
+	dataVars = "id=" + idResponsable;
+
+	$.ajax({
+		type: "POST",
+		url: pagLopdResponsable,
+		data: dataVars,
+		dataType: "json",
+		error: function() {
+			console.error("No se ha podido actualizar el organo");
+		},
+		success: function(data) {
+			if (data.error == undefined && !jQuery("#item_comun").is(":checked")) {
+
+				lopdResponsableNOComun = data.responsable;
+				lopdResponsableNOComunESP = data.responsableESP;
+
+				jQuery("#item_lopd_responsable").val(lopdResponsableNOComun);
+				jQuery("#item_lopd_responsable_es").val(lopdResponsableNOComunESP);
+				jQuery("#item_lopd_responsable_ca").val(lopdResponsableNOComun);
+			}
+		} // Fin success
+	}); //Fin ajax
+}
+
 /** Funcion para cuando se checkea el comun de un procedimiento. **/
 function item_comun_change(activo_check) {
 	var estilo_comunes;
@@ -42,6 +68,14 @@ function item_comun_change(activo_check) {
 
 	if (activo_check && !desactivarMensajeComun) {
 		Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtComunTramite + " '"+comunUA+"'"});
+	}
+
+	if (activo_check) {
+		jQuery("#item_lopd_responsable").val(lopdResponsableComun);
+		jQuery("#item_lopd_responsable_es").val(lopdResponsableComunESP);
+		jQuery("#item_lopd_responsable_ca").val(lopdResponsableComun);
+	} else {
+		actualizarLopdResponsable($("#item_organ_responsable_id").val());
 	}
 }
 
@@ -812,6 +846,7 @@ function CDetall() {
 
 		jQuery("#item_organ_responsable, #item_organ_responsable_es, #item_organ_responsable_ca, #item_organ_responsable_en, #item_organ_responsable_de, #item_organ_responsable_fr").change(function(){
 			jQuery("#item_organ_responsable, #item_organ_responsable_es, #item_organ_responsable_ca, #item_organ_responsable_en, #item_organ_responsable_de, #item_organ_responsable_fr").val( jQuery(this).val() );
+			actualizarLopdResponsable($("#item_organ_responsable_id").val());
 		});
 
 		jQuery("#item_servei_responsable, #item_servei_responsable_es, #item_servei_responsable_ca, #item_servei_responsable_en, #item_servei_responsable_de, #item_servei_responsable_fr").change(function(){
@@ -948,6 +983,7 @@ function CDetall() {
 		}
 
 		$("#modulPrincipal :input").each(limpiarCampo);
+		$("#item_lopd_legitimacion").val(lopd_legitimacion_pordefecto);
 
 		if (typeof idUAMollapa == "undefined" || idUAMollapa == null || idUAMollapa == "") {
 
@@ -1169,6 +1205,11 @@ function CDetall() {
 		if (dada_node.item_comun != undefined) {
 			$("#item_comun").attr("checked", dada_node.item_comun);
 			$("#item_comun").change();
+			if (dada_node.item_comun) {
+				jQuery("#item_lopd_responsable").val(lopdResponsableComun);
+				jQuery("#item_lopd_responsable_es").val(lopdResponsableComunESP);
+				jQuery("#item_lopd_responsable_ca").val(lopdResponsableComun);
+			}
 		}
 		desactivarMensajeComun = false;
 
@@ -1178,7 +1219,11 @@ function CDetall() {
 
 
 		//LOPD
-		$("#item_lopd_legitimacion").val(dada_node.item_lopd_legitimacion);
+		if (dada_node.item_lopd_legitimacion != undefined) {
+			$("#item_lopd_legitimacion").val(dada_node.item_lopd_legitimacion);
+		} else {
+			$("#item_lopd_legitimacion").val(lopd_legitimacion_pordefecto);
+		}
 		$("#item_lopd_responsable").val(dada_node.item_lopd_responsable);
 
 		ModulTramit.inicializarTramites(dada_node.tramites);

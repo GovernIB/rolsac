@@ -132,7 +132,17 @@ public class ProcedimentsService {
 		}
 		fg.setId(new Long(codigo));
 
-		return getRespuesta(fg);
+		final RespuestaProcediments respuesta = getRespuesta(fg);
+		if (respuesta.getResultado() != null && respuesta.getResultado().size() > 0) {
+			String cabecera;
+			if ("ca".equals(lang)) {
+				cabecera = System.getProperty("es.caib.rolsac.lopd.cabecera.ca");
+			} else {
+				cabecera = System.getProperty("es.caib.rolsac.lopd.cabecera.es");
+			}
+			respuesta.getResultado().get(0).setLopdCabecera(cabecera);
+		}
+		return respuesta;
 	}
 
 	private RespuestaProcediments getRespuesta(final FiltroGenerico filtro) throws DelegateException {

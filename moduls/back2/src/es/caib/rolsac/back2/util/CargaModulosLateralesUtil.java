@@ -7,11 +7,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Documento;
+import org.ibit.rol.sac.model.DocumentoServicio;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.HechoVitalAgrupacionHV;
 import org.ibit.rol.sac.model.HechoVitalProcedimiento;
@@ -20,9 +22,11 @@ import org.ibit.rol.sac.model.IconoMateria;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.PerfilGestor;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.Traduccion;
 import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.TraduccionHechoVital;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
+import org.ibit.rol.sac.model.TraduccionServicio;
 import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 
@@ -36,8 +40,103 @@ public class CargaModulosLateralesUtil {
 
 	private static Log log = LogFactory.getLog(CargaModulosLateralesUtil.class);
 
+	public static List<Map<String, Object>> recuperaLopdProcedimientos(final Map<String, Traduccion> traducciones, final Long id,
+			final List<String> idiomas, final boolean ordenable) {
+		final List<Map<String, Object>> listaDocumentosDTO = new ArrayList<Map<String, Object>>();
+
+		final Map<String, String> titulos = new HashMap<String, String>();
+		for (final String idioma : traducciones.keySet()) {
+			final TraduccionProcedimientoLocal traProc = (TraduccionProcedimientoLocal) traducciones.get(idioma);
+			if (traProc != null) {
+
+				final String nombre = (traProc != null && traProc.getLopdInfoAdicional() != null)
+						? traProc.getLopdInfoAdicional().getNombre()
+						: "";
+				titulos.put(idioma, nombre);
+
+			}
+		}
+		final Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", id);
+		map.put("nombre", titulos);
+		map.put("idMainItem", id);
+		map.put("idRelatedItem", id);
+		listaDocumentosDTO.add(map);
+		return listaDocumentosDTO;
+	}
+
+	public static List<Map<String, Object>> recuperaLopdServicio(final Map<String, Traduccion> traducciones,
+			final Long id, final List<String> idiomas, final boolean ordenable) {
+		final List<Map<String, Object>> listaDocumentosDTO = new ArrayList<Map<String, Object>>();
+
+		final Map<String, String> titulos = new HashMap<String, String>();
+		for (final String idioma : traducciones.keySet()) {
+			final TraduccionServicio traServ = (TraduccionServicio) traducciones.get(idioma);
+			if (traServ != null) {
+
+				final String nombre = (traServ != null && traServ.getLopdInfoAdicional() != null)
+						? traServ.getLopdInfoAdicional().getNombre()
+						: "";
+				titulos.put(idioma, nombre);
+
+			}
+		}
+		final Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", id);
+		map.put("nombre", titulos);
+		map.put("idMainItem", id);
+		map.put("idRelatedItem", id);
+		listaDocumentosDTO.add(map);
+		return listaDocumentosDTO;
+	}
+
 	// TODO amartin: ¿agregar todos los métodos restantes de carga de datos de los
 	// módulos laterales no repetidos?
+
+	public static List<Map<String, Object>> recuperaDocumentosRelacionados(final Set<DocumentoServicio> listaDocumentos,
+			final Long id, final List<String> idiomas, final boolean ordenable) {
+		final List<Map<String, Object>> listaDocumentosDTO = new ArrayList<Map<String, Object>>();
+
+		for (final DocumentoServicio doc : listaDocumentos) {
+
+			if (doc != null) {
+
+				// Montar map solo con los campos 'titulo' de las traducciones del documento.
+				final Map<String, String> titulos = new HashMap<String, String>();
+				String nombre;
+				TraduccionDocumento traDoc;
+
+				for (final String idioma : idiomas) {
+
+					traDoc = (TraduccionDocumento) doc.getTraduccion(idioma);
+					nombre = (traDoc != null && traDoc.getTitulo() != null) ? traDoc.getTitulo() : "";
+
+					titulos.put(idioma, nombre);
+
+				}
+
+				final Map<String, Object> map = new HashMap<String, Object>();
+				map.put("id", doc.getId());
+
+				if (ordenable)
+					map.put("orden", doc.getOrden());
+
+				map.put("nombre", titulos);
+				map.put("idMainItem", id);
+				map.put("idRelatedItem", doc.getId());
+
+				listaDocumentosDTO.add(map);
+
+			} else {
+
+				log.error("El registre amb ID " + id + " té un document nul.");
+
+			}
+
+		}
+
+		return listaDocumentosDTO;
+	}
 
 	/**
 	 * Devuelve una lista con los documentos relacionados con el registro con clave
