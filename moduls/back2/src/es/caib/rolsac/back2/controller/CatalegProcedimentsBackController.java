@@ -153,8 +153,26 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			model.put("llistaTipusAfectacio", getListaTiposAfectacionDTO(lang));
 			// Plataforma.
 			model.put("llistaPlataformas", getListaPlataformasDTO());
-			// Lopd Legitimacion.
-			model.put("llistaLopdLegitimacion", getListaLopdLegitimaciones(lang));
+
+			// Lopd Legitimacion (como hay que sacar también el por defecto, se tiene que
+			// hacer desde aqui).
+			final ResultadoBusqueda resultadoBusq = DelegateUtil.getLopdLegitimacionDelegate().getLopdLegitimacion(0,
+					100, null, "ASC");
+			final List<IdNomDTO> listaLopdLegitimacionesDTO = new ArrayList<IdNomDTO>();
+			Long idLopdLegitimacionPorDefecto = null;
+			final List<LopdLegitimacion> lista = (List<LopdLegitimacion>) resultadoBusq.getListaResultados();
+			for (final LopdLegitimacion lopdLeg : lista) {
+				final TraduccionLopdLegitimacion trad = (TraduccionLopdLegitimacion) lopdLeg.getTraduccion(lang);
+				final IdNomDTO bol = new IdNomDTO(lopdLeg.getId(),
+						trad != null ? trad.getNombre() : lopdLeg.getIdentificador());
+				if (lopdLeg.isPorDefecto()) {
+					idLopdLegitimacionPorDefecto = lopdLeg.getId();
+				}
+				listaLopdLegitimacionesDTO.add(bol);
+			}
+
+			model.put("lopdLegitimacionPorDefecto", idLopdLegitimacionPorDefecto);
+			model.put("llistaLopdLegitimacion", listaLopdLegitimacionesDTO);
 
 		} catch (final DelegateException e) {
 			log.error(ExceptionUtils.getStackTrace(e));
@@ -180,7 +198,10 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		model.put("lopdDestinatarioESP", RolsacPropertiesUtil.getLopdDestinatario(false));
 		model.put("lopdDerechos", RolsacPropertiesUtil.getLopdDerechos(true));
 		model.put("lopdDerechosESP", RolsacPropertiesUtil.getLopdDerechos(false));
-
+		model.put("lopdDerechos", RolsacPropertiesUtil.getLopdResponsableComun(true));
+		model.put("lopdDerechosESP", RolsacPropertiesUtil.getLopdResponsableComun(false));
+		model.put("lopdResponsableComun", RolsacPropertiesUtil.getLopdResponsableComun(true));
+		model.put("lopdResponsableComunESP", RolsacPropertiesUtil.getLopdResponsableComun(false));
 		return "index";
 
 	}
@@ -912,10 +933,14 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				resultats.put("listadoHechosVitales", Collections.EMPTY_SET);
 			}
 
-			if (proc.getServicioResponsable() != null) {
-				final UnidadAdministrativa ua = getPadreDir3(proc.getServicioResponsable());
-				if (ua != null) {
-					resultats.put("item_lopd_responsable", ua.getNombreUnidadAdministrativa());
+			if (proc.isComun()) {
+				resultats.put("item_lopd_responsable", RolsacPropertiesUtil.getLopdResponsableComun(true));
+			} else {
+				if (proc.getServicioResponsable() != null) {
+					final UnidadAdministrativa ua = getPadreDir3(proc.getServicioResponsable());
+					if (ua != null) {
+						resultats.put("item_lopd_responsable", ua.getNombreUnidadAdministrativa());
+					}
 				}
 			}
 			recuperaIdiomas(resultats, proc, lang); // Recuperar los procedimientos según los idiomas
@@ -1010,21 +1035,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 	}
 
-	private List<IdNomDTO> getListaLopdLegitimaciones(final String idioma) throws DelegateException {
-		final ResultadoBusqueda resultadoBusq = DelegateUtil.getLopdLegitimacionDelegate().getLopdLegitimacion(0, 100,
-				null, "ASC");
-		final List<IdNomDTO> listaLopdLegitimacionesDTO = new ArrayList<IdNomDTO>();
-		final List<LopdLegitimacion> lista = (List<LopdLegitimacion>) resultadoBusq.getListaResultados();
-		for (final LopdLegitimacion lopdLeg : lista) {
-			final TraduccionLopdLegitimacion trad = (TraduccionLopdLegitimacion) lopdLeg.getTraduccion(idioma);
-			final IdNomDTO bol = new IdNomDTO(lopdLeg.getId(),
-					trad != null ? trad.getNombre() : lopdLeg.getIdentificador());
-			listaLopdLegitimacionesDTO.add(bol);
-		}
-
-		return listaLopdLegitimacionesDTO;
-	}
-
 	private List<IdNomDTO> getListaPlataformasDTO() throws DelegateException {
 		final Map parametros = new HashMap();
 		final int pagina = 0;
@@ -1088,7 +1098,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			recuperaNormativas(resultats, proc, lang, id); // Recuperar las normativas asociadas a un procedimiento
 
 			resultats.put("lopd",
-					CargaModulosLateralesUtil.recuperaDocumentosRelacionados(listaDocumentos, id, idiomas, true));
+					CargaModulosLateralesUtil.recuperaLopdProcedimientos(proc.getTraducciones(), id, idiomas, true));
 
 		} catch (final DelegateException dEx) {
 
@@ -2369,6 +2379,39 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		/*------------------------------*/
 
 		return traduccioOrigen;
+
+	}
+
+	// Obtiene la UA segun el DIR3
+	@RequestMapping(value = "/getLopdResponsable.do", method = POST)
+	public @ResponseBody Map<String, String> getLopdResponsable(@RequestParam final String id,
+			final HttpServletRequest request) {
+
+		final Map<String, String> resultats = new HashMap<String, String>();
+
+		try {
+
+			final UnidadAdministrativa ua = getPadreDir3(
+					DelegateUtil.getUADelegate().obtenerUnidadAdministrativa(Long.valueOf(id)));
+
+			if (ua != null) {
+				resultats.put("responsable", ua.getNombreUnidadAdministrativa());
+				resultats.put("responsableESP", ua.getNombreUnidadAdministrativa());
+			}
+
+		} catch (final DelegateException e) {
+
+			logException(log, e);
+
+			if (e.isSecurityException()) {
+				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+			} else {
+				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+			}
+
+		}
+
+		return resultats;
 
 	}
 

@@ -146,7 +146,7 @@ function CLlistat() {
 				codi_taula += "<div class=\"tr" + parClass + "\" role=\"row\">";
 				codi_taula += "<div class=\"td nom ml-20\" role=\"gridcell\">";
 				codi_taula += "<input type=\"hidden\" value=\"" + dada_node.id + "\" class=\"id\" />";
-				codi_taula += "<a id=\"lopdlegitimacion_"+dada_node.id+"\" href=\"javascript:;\" class=\"nom\">" + printStringFromNull(dada_node.identificador, txtSinValor) + "</a>";
+				codi_taula += "<a id=\"lopdlegitimacion_"+dada_node.id+"\" href=\"javascript:;\" class=\"nom\">" + printStringFromNull(dada_node.nombre, txtSinValor) + "</a>";
 				codi_taula += "</div>";
 				codi_taula += "</div>";
 

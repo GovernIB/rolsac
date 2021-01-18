@@ -70,6 +70,17 @@ public class RolsacPropertiesUtil {
 		return texto;
 	}
 
+	/** Devuelve el texto para responsable de procs/servicios comunes. **/
+	public static final String getLopdResponsableComun(final boolean catalan) {
+		String texto;
+		if (catalan) {
+			texto = getProperty("es.caib.rolsac.lopd.responsable.comun.ca");
+		} else {
+			texto = getProperty("es.caib.rolsac.lopd.responsable.comun.es");
+		}
+		return texto;
+	}
+
 	/** Devuelve el texto para derechos. **/
 	public static final String getLopdDerechos(final boolean catalan) {
 		String texto;

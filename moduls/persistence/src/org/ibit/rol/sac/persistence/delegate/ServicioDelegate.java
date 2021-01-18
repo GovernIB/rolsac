@@ -13,6 +13,7 @@ import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Servicio;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
+import org.ibit.rol.sac.model.TraduccionServicio;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Validable;
 import org.ibit.rol.sac.model.Validacion;
@@ -429,6 +430,15 @@ public class ServicioDelegate implements StatelessDelegate {
 	public Archivo obtenerServInfoAdicional(final Long id, final String idioma) throws DelegateException {
 		try {
 			return getFacade().obtenerServInfoAdicional(id, idioma);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+
+	public void grabarArchivos(final Long id, final Map<String, TraduccionServicio> traducciones,
+			final List<Long> archivosAborrar) throws DelegateException {
+		try {
+			getFacade().grabarArchivos(id, traducciones, archivosAborrar);
 		} catch (final RemoteException e) {
 			throw new DelegateException(e);
 		}

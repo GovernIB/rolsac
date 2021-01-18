@@ -148,6 +148,17 @@ public class Serveis extends EntidadBase {
 	@ApiModelProperty(value = "lopdDerechos", required = false)
 	private String lopdDerechos;
 
+	@ApiModelProperty(value = "lopdCabecera", required = false)
+	private String lopdCabecera;
+
+	/**
+	 * Constructor
+	 *
+	 * @param elem
+	 * @param urlBase
+	 * @param idioma
+	 * @param hateoasEnabled
+	 */
 	public Serveis(final org.ibit.rol.sac.model.Servicio elem, final String urlBase, final String idioma,
 			final boolean hateoasEnabled) {
 		super(elem, urlBase, idioma, hateoasEnabled);
@@ -163,8 +174,12 @@ public class Serveis extends EntidadBase {
 
 			// copiamos los datos que no tienen la misma estructura:
 			if (elem.getLopdLegitimacion() != null) {
-				this.lopdLegitimacion = new LopdLegitimacion(elem.getLopdLegitimacion(), urlBase, idioma,
-						hateoasEnabled);
+				this.lopdLegitimacion = new LopdLegitimacion();
+				this.lopdLegitimacion.setCodigo(elem.getLopdLegitimacion().getId());
+				this.lopdLegitimacion.setIdentificador(elem.getLopdLegitimacion().getIdentificador());
+				this.lopdLegitimacion.setPorDefecto(elem.getLopdLegitimacion().isPorDefecto());
+				this.lopdLegitimacion.setNombre(((org.ibit.rol.sac.model.TraduccionLopdLegitimacion) elem
+						.getLopdLegitimacion().getTraduccion(idioma)).getNombre());
 			}
 
 		} catch (final Exception e) {
@@ -782,6 +797,21 @@ public class Serveis extends EntidadBase {
 	 */
 	public void setLopdDerechos(final String lopdDerechos) {
 		this.lopdDerechos = lopdDerechos;
+	}
+
+	/**
+	 * @return the lopdCabecera
+	 */
+	public String getLopdCabecera() {
+		return lopdCabecera;
+	}
+
+	/**
+	 * @param lopdCabecera
+	 *            the lopdCabecera to set
+	 */
+	public void setLopdCabecera(final String lopdCabecera) {
+		this.lopdCabecera = lopdCabecera;
 	}
 
 }

@@ -4,7 +4,7 @@ import org.ibit.rol.sac.model.ValueObject;
 
 /**
  * Objeto SIA DTO.
- * 
+ *
  * @author slromero
  *
  */
@@ -15,8 +15,10 @@ public class LopdLegitimacionDTO implements ValueObject {
 
 	/** ID. **/
 	private Long id;
-	/** ID y nombre de la unidad administrativa. **/
+	/** ID de la lopd legitimacion. **/
 	private String identificador;
+	/** Nombre de la lopd legitimacion. **/
+	private String nombre;
 	/** Usuario. **/
 	private boolean porDefecto;
 
@@ -25,10 +27,12 @@ public class LopdLegitimacionDTO implements ValueObject {
 	}
 
 	/** Constructor completo. **/
-	public LopdLegitimacionDTO(final Long id, final String identificador, final boolean porDefecto) {
+	public LopdLegitimacionDTO(final Long id, final String identificador, final String nombre,
+			final boolean porDefecto) {
 		super();
 		this.setId(id);
 		this.setIdentificador(identificador);
+		this.nombre = nombre;
 		this.setPorDefecto(porDefecto);
 	}
 
@@ -75,6 +79,21 @@ public class LopdLegitimacionDTO implements ValueObject {
 	 */
 	public void setPorDefecto(final boolean porDefecto) {
 		this.porDefecto = porDefecto;
+	}
+
+	/**
+	 * @return the nombre
+	 */
+	public String getNombre() {
+		return nombre;
+	}
+
+	/**
+	 * @param nombre
+	 *            the nombre to set
+	 */
+	public void setNombre(final String nombre) {
+		this.nombre = nombre;
 	}
 
 }

@@ -60,6 +60,13 @@ public class TMLopdController extends PantallaBaseController {
 
 		final List<LopdLegitimacionDTO> llistaLopdLegitimacionDTO = new ArrayList<LopdLegitimacionDTO>();
 		final Map<String, Object> resultats = new HashMap<String, Object>();
+		String lang;
+		try {
+			lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+		} catch (final DelegateException dEx) {
+			log.error("Error al recuperar el idioma por defecto.");
+			lang = "ca";
+		}
 
 		try {
 			// Información de paginación
@@ -86,7 +93,7 @@ public class TMLopdController extends PantallaBaseController {
 					.getLopdLegitimacion(Integer.parseInt(pagPag), Integer.parseInt(pagRes), ordenCampo, ordenAsc);
 
 			resultats.put("total", resultado.getTotalResultados());
-			llistaLopdLegitimacionDTO.addAll(convertLopdLegitimacionToLopdLegitimacionDTO(resultado));
+			llistaLopdLegitimacionDTO.addAll(convertLopdLegitimacionToLopdLegitimacionDTO(resultado, lang));
 			resultats.put("nodes", llistaLopdLegitimacionDTO);
 
 		} catch (final DelegateException dEx) {
@@ -113,14 +120,16 @@ public class TMLopdController extends PantallaBaseController {
 	 * @throws DelegateException
 	 */
 	private List<LopdLegitimacionDTO> convertLopdLegitimacionToLopdLegitimacionDTO(
-			final ResultadoBusqueda resultadoBusqueda) throws DelegateException {
+			final ResultadoBusqueda resultadoBusqueda, final String idioma) throws DelegateException {
 
 		final List<LopdLegitimacionDTO> lopdLegitimacionsDTo = new ArrayList<LopdLegitimacionDTO>();
 
 		for (final LopdLegitimacion lopdLegitimacion : (List<LopdLegitimacion>) resultadoBusqueda
 				.getListaResultados()) {
-			lopdLegitimacionsDTo.add(new LopdLegitimacionDTO(lopdLegitimacion.getId(),
-					lopdLegitimacion.getIdentificador(), lopdLegitimacion.isPorDefecto()));
+			lopdLegitimacionsDTo
+					.add(new LopdLegitimacionDTO(lopdLegitimacion.getId(), lopdLegitimacion.getIdentificador(),
+							((TraduccionLopdLegitimacion) lopdLegitimacion.getTraduccion(idioma)).getNombre(),
+							lopdLegitimacion.isPorDefecto()));
 		}
 		return lopdLegitimacionsDTo;
 	}

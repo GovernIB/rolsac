@@ -51,6 +51,11 @@
 	var lopdDestinatarioESP = '<c:out value="${lopdDestinatarioESP}"/>';
 	var lopdDerechos = '<c:out value="${lopdDerechos}"/>';
 	var lopdDerechosESP = '<c:out value="${lopdDerechosESP}"/>';
+	var lopdResponsableComun = '<c:out value="${lopdResponsableComun}"/>';
+	var lopdResponsableComunESP = '<c:out value="${lopdResponsableComunESP}"/>';
+	var lopdResponsableNOComun = '';
+	var lopdResponsableNOComunESP = '';
+	var lopd_legitimacion_pordefecto =  '<c:out value="${lopdLegitimacionPorDefecto}"/>';
 
     var pagLlistat = '<c:url value="/catalegProcediments/llistat.do" />';
     var pagExportar = '<c:url value="/catalegProcediments/exportar.do" />';
@@ -80,6 +85,7 @@
     var pagTraduirDocumentTramit = '<c:url value="/documentsTramit/traduir.do" />';
     var pagListarHechosVitales = '<c:url value="/catalegProcediments/listarHechosVitales.do" />';
     var pagNormativaVigentes = '<c:url value="/catalegProcediments/checkNormativaVigente.do" />';
+    var pagLopdResponsable = '<c:url value="/catalegProcediments/getLopdResponsable.do" />';
     var urlPrevisualizarProcedimiento = '<c:out value="${urlPrevisualitzacio}"/>';
     var modulos = '<c:url value="/catalegProcediments/modulos.do" />';
 

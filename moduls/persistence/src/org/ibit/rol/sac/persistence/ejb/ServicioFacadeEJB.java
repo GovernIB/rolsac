@@ -487,6 +487,15 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 					Hibernate.initialize(servicio.getServicioResponsable().getHijos());
 				}
 
+				if (servicio.getTraducciones() != null) {
+					for (final String idioma : servicio.getTraducciones().keySet()) {
+						if (((TraduccionServicio) servicio.getTraduccion(idioma)).getLopdInfoAdicional() != null) {
+							Hibernate.initialize(
+									((TraduccionServicio) servicio.getTraduccion(idioma)).getLopdInfoAdicional());
+						}
+					}
+				}
+
 				Hibernate.initialize(servicio.getHechosVitalesServicios());
 
 			} else {
@@ -1760,6 +1769,58 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 		}
 
 		return servicio;
+	}
+
+	/**
+	 * Actualiza docs de un servicio.
+	 *
+	 * @ejb.interface-method
+	 *
+	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+	 *
+	 * @param idServicio
+	 *            El id servicio.
+	 * @param traducciones
+	 *            Las traducciones para actualizar
+	 * @param archivosABorrar
+	 *            ids de archivos a borrar
+	 *
+	 * @throws DelegateException
+	 */
+	public void grabarArchivos(final Long idServicio, final Map<String, TraduccionServicio> traducciones,
+			final List<Long> archivosAborrar) {
+		Session session = null;
+		try {
+			final Servicio servicioBD = obtenerServicio(idServicio);
+			for (final String idioma : traducciones.keySet()) {
+				final TraduccionServicio trad = traducciones.get(idioma);
+				((TraduccionServicio) servicioBD.getTraduccion(idioma))
+						.setLopdInfoAdicional(trad.getLopdInfoAdicional());
+			}
+
+			session = getSession();
+			session.update(servicioBD);
+			session.flush();
+
+			if (archivosAborrar != null) {
+				for (final Long idArchivo : archivosAborrar) {
+					final Archivo archivo = (Archivo) session.load(Archivo.class, idArchivo);
+					session.delete(archivo);
+					session.flush();
+				}
+			}
+
+		} catch (final Exception he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			if (session != null) {
+				close(session);
+			}
+		}
+
 	}
 
 	/**

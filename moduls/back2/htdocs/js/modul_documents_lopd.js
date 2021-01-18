@@ -37,7 +37,37 @@ function CEscriptoriPareLopd() {
 
 		// botons
 		modul_documents_elm_lopd.find("a.gestiona").bind("click", function() {
-			ModulDocumentsLopd.nou(false);
+			if (modul_documents_elm_lopd.find(".listaOrdenable ul").size() > 0 && modul_documents_elm_lopd.find(".listaOrdenable ul")[0].childNodes.length > 0) {
+
+				var procId = $("#item_id").val();
+				Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
+				$.ajax({
+					type: "GET",
+					url: pagCarregarDocLopd,
+					data: "id=" + procId,
+					dataType: "json",
+					error: function() {
+						// Missatge.cancelar();
+						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+						Error.llansar();
+					},
+					success: function(data) {
+						Missatge.cancelar();
+						if (data.id > 0) {
+							that.pintar(data.document);
+						} else if (data.id == -1) {
+							Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
+							Error.llansar();
+						} else if (data.id < -1) {
+							Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
+							Error.llansar();
+						}
+					}
+				});
+
+			} else {
+				ModulDocumentsLopd.nou(false);
+			}
 		});
 
 		documents_seleccionats_elm = escriptori_documents_elm_lopd.find("div.escriptori_items_seleccionats:first");
