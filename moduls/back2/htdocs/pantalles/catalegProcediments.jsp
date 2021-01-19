@@ -2071,10 +2071,10 @@
 								<div class="fila">
 										<div class="element t99p">
 											<div class="etiqueta">
-												<label><spring:message code='camp.descargarPlantilla'/>: </label>
+												<label><a href="../files/plantilla.pdf" target="_blank"><spring:message code='camp.descargarPlantilla'/></a> </label>
 											</div>
 											<div class="control">
-												<!-- <input id='doc_titol_<c:out value="${lang}"/>' name='doc_titol_<c:out value="${lang}"/>' type='text' class='nou'/> -->
+
 											</div>
 										</div>
 									</div>

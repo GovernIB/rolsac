@@ -423,7 +423,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 				DelegateUtil.getServicioDelegate().grabarArchivos(Long.valueOf(id), traducciones, archivosAborrar);
 			}
 			result = new IdNomDTO(id,
-					messageSource.getMessage("fitxes.guardat.documents.correcte", null, request.getLocale()));
+					messageSource.getMessage("fitxes.guardat.documents.lopd.correcte", null, request.getLocale()));
 
 		} catch (final DelegateException dEx) {
 
