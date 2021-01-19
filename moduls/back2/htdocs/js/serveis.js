@@ -14,6 +14,7 @@ function actualizarLopdResponsable(idResponsable) {
 			console.error("No se ha podido actualizar el organo");
 		},
 		success: function(data) {
+
 			if (data.error == undefined && !jQuery("#item_comun").is(":checked")) {
 
 				lopdResponsableNOComun = data.responsable;

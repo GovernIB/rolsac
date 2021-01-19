@@ -394,6 +394,64 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 	}
 
+	@RequestMapping(value = "/guardarDocumentosRelacionadosLopd.do", method = POST)
+	public @ResponseBody IdNomDTO guardarDocumentosRelacionadosLopd(final Long id, final Long[] elementos,
+			final HttpServletRequest request) {
+
+		// Guardaremos el orden y borraremos los documentos que se hayan marcado para
+		// borrar.
+		// La creación se gestiona en el controlador DocumentBackController.
+
+		final HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+
+		IdNomDTO result;
+		String error = null;
+		// Ficha ficha = null;
+
+		try {
+			if (elementos == null || elementos.length == 0) {
+				final List<String> idiomas = DelegateUtil.getIdiomaDelegate().listarLenguajes();
+
+				final Map<String, TraduccionServicio> traducciones = new HashMap<String, TraduccionServicio>();
+				for (final String idioma : idiomas) {
+					final TraduccionServicio traDoc = new TraduccionServicio();
+					traducciones.put(idioma, traDoc);
+				}
+
+				final List<Long> archivosAborrar = new ArrayList<Long>();
+				DelegateUtil.getServicioDelegate().grabarArchivos(Long.valueOf(id), traducciones, archivosAborrar);
+			}
+			result = new IdNomDTO(id,
+					messageSource.getMessage("fitxes.guardat.documents.correcte", null, request.getLocale()));
+
+		} catch (final DelegateException dEx) {
+
+			if (dEx.isSecurityException()) {
+
+				error = messageSource.getMessage("error.permisos", null, request.getLocale());
+				result = new IdNomDTO(-1l, error);
+
+			} else {
+
+				error = messageSource.getMessage("error.altres", null, request.getLocale());
+				result = new IdNomDTO(-2l, error);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+
+			}
+
+		} catch (final Exception dEx) {
+
+			error = messageSource.getMessage("error.altres", null, request.getLocale());
+			result = new IdNomDTO(-2l, error);
+			log.error(ExceptionUtils.getStackTrace(dEx));
+
+		}
+
+		return result;
+
+	}
+
 	@RequestMapping(value = "/llistat.do", method = POST)
 	public @ResponseBody Map<String, Object> llistat(final String criteria, final HttpServletRequest request,
 			final HttpSession session) {
