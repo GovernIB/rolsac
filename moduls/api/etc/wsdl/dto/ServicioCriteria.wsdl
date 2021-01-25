@@ -65,6 +65,10 @@
                         <element name="version" nillable="true" type="xsd:string" />
                         <element name="vigente" nillable="true" type="xsd:boolean" />
                         <element name="unidadAdministrativa" nillable="true" type="xsd:string" />
+                        <element name="t_lopdFinalidad" nillable="true" type="xsd:string" />
+                        <element name="t_lopdDestinatario" nillable="true" type="xsd:string" />
+                        <element name="t_lopdDerechos" nillable="true" type="xsd:string" />
+
                     </sequence>
                 </extension>
             </complexContent>

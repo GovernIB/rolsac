@@ -1,10 +1,12 @@
 jQuery(document).ready(function() {
-	
+
 	LANG_TRADUCTOR = "ca";
 
 	//jQuery("#btnVolver").bind("click",function(){Detall.torna();});
 	jQuery("#btnEliminar").bind("click",function(){Detall.eliminar();});
-	jQuery("#btnPrevisualizar").bind("click",function(){Detall.previsualitza();});
+	jQuery("#btnPrevisualizar").bind("click",function(){
+			Detall.previsualitza();
+	});
 
 	// El botón de guardar está inicialmente deshabilitado hasta que se realice un cambio en el formulario (ver DetallBase.modificado)
 	//jQuery("#btnGuardar").parent().addClass("off");
@@ -38,7 +40,7 @@ jQuery(document).ready(function() {
 
 			onchange_callback: function() { Detall.modificado(); }
 		});
-		
+
 	}
 
 	var Error = new CError();
@@ -72,7 +74,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 	jQuery("#" + ids.btnVolver).bind("click", function() { that.vuelve(); });
 
 	//jQuery("#"+ids.btnGuardar).parent().addClass("off");
-	
+
 	jQuery("#" + ids.form + " input,#" + ids.form + " select,#" + ids.form + " textarea").bind("change", function() { that.modificado(); });
 
 	this.idiomas = ["es","ca","en","de","fr"];
@@ -94,7 +96,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 	formulariComprovar.iniciar();
 
 	this.actualizaEventos = function() {
-		
+
 		DebugJS.debug("Entrando en DetallBase.actualizaEventos");
 
 		// Asociamos los eventos a los botones de plegar y desplegar.
@@ -110,35 +112,35 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 			jQuery(this).siblings("div.modul_continguts").slideToggle(300);
 
 		});
-		
+
 		DebugJS.debug("Saliendo de DetallBase.actualizaEventos");
-		
+
 	};
 
 	this.cambiosSinGuardar = function() {
-		
+
 		DebugJS.debug("Entrando en DetallBase.cambiosSinGuardar");
-		
+
 		DebugJS.debug("Saliendo de DetallBase.cambiosSinGuardar");
-		
+
 		return !jQuery("#" + ids.btnGuardar).parent().hasClass("off");
-		
+
 	};
 
 	this.formulariValid = function() {
-		
+
 		DebugJS.debug("Entrando en DetallBase.formulariValid");
 
 		formulariComprovar.llansar();
-		
+
 		DebugJS.debug("Saliendo de DetallBase.formulariValid");
-		
+
 		return formulariComprovar.formComprovacio;
 
 	};
 
 	this.guardaGenerico = function(dataVars, funcion) {
-		
+
 		DebugJS.debug("Entrando en DetallBase.guardaGenerico");
 
 		if (!that.formulariValid()) {
@@ -170,12 +172,12 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
 
 				} else {
-					if (typeof funcion != 'undefined') { 
+					if (typeof funcion != 'undefined') {
 						funcion();
 					} else {
 						if ( !soloFicha )
 							Detall.recarregar(data.id);
-	
+
 						Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});
 					}
 				}//End if
@@ -183,28 +185,28 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 			} //Fin success
 
 		});//Fin ajax
-		
+
 		DebugJS.debug("Saliendo de DetallBase.guardaGenerico");
 
 	};
 
 	this.guarda = function(dataVars) {
-		
+
 		DebugJS.debug("Entrando en DetallBase.guarda");
-		
+
 		that.guardaGenerico(dataVars);
-		
+
 		DebugJS.debug("Saliendo de DetallBase.guarda");
-		
+
 	};
 
 	this.modificado = function(marcar) {
-		
+
 		DebugJS.debug("Entrando en DetallBase.modificado");
 
 		if( typeof(marcar) == "undefined" )
 			marcar = true;
-		
+
 		DebugJS.debug("\tCon atributo 'marcar' = " + marcar);
 
 		// Actualizamos la variable global para controlar si hay cambios sin guardar en los formularios.
@@ -212,29 +214,29 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 
 		// Habilitamos el botón de guardar.
 		jQuery("#"+ids.btnGuardar).unbind("click").bind("click", function() { that.guarda(); } ).parent().toggleClass("off", !marcar);
-		
+
 		DebugJS.debug("Saliendo de DetallBase.modificado");
 
 	};
 
 	this.publica = function() {
-		
+
 		DebugJS.debug("Entrando en DetallBase.publica");
 
 		jQuery("#item_data_publicacio").val(txtImmediat);
 		jQuery("#item_data_caducitat").val("");
-		
+
 		this.guarda();
-		
+
 		DebugJS.debug("Saliendo de DetallBase.publica");
 
 	};
 
 	/**
-	 * Ocultamos el formulario y volvemos a mostrar el contenido general.  
+	 * Ocultamos el formulario y volvemos a mostrar el contenido general.
 	 */
 	this.cierra = function() {
-		
+
 		DebugJS.debug("Entrando en DetallBase.cierra");
 
 		this.modificado(false);
@@ -242,7 +244,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 		escriptori_detall_elm.fadeOut(300, function() {
 			escriptori_contingut_elm.fadeIn(300);
 		});
-		
+
 		DebugJS.debug("Saliendo de DetallBase.cierra");
 
 	};
@@ -251,7 +253,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 	 * Vuelve de la ficha al listado.
 	 */
 	this.vuelve = function() {
-		
+
 		DebugJS.debug("Entrando en DetallBase.vuelve");
 
 		if ( this.cambiosSinGuardar() ) {
@@ -272,18 +274,18 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 		$(".modulLateral > div.modul").each(function() {
 			that.ocultarModulos($(this));
 		});
-		
+
 		DebugJS.debug("Saliendo de DetallBase.vuelve");
 
 	};
 
 	this.ocultarModulos = function(selector) {
-		
+
 		DebugJS.debug("Entrando en DetallBase.ocultarModulos");
 
 		if ( !selector.hasClass("publicacio") )
 			selector.addClass("invisible");
-		
+
 		DebugJS.debug("Saliendo de DetallBase.ocultarModulos");
 
 	};
@@ -292,19 +294,19 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 	 * Inicia la eliminación de un item confirmando la operación.
 	 */
 	this.eliminar = function() {
-		
+
 		DebugJS.debug("Entrando en DetallBase.eliminar");
 
 		Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: txtItemEliminar, funcio: function() {
 			that.elimina();
 		}});
-		
+
 		DebugJS.debug("Saliendo de DetallBase.eliminar");
 
 	};
 
 	this.carregar = function(itemID) {
-		
+
 		DebugJS.debug("Entrando en DetallBase.carregar");
 
 		escriptori_detall_elm.find(".botonera li.btnEliminar,.botonera li.btnPrevisualizar").show();
@@ -342,12 +344,12 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 							that.pintar(data);
 							that.cargarModulos();
 
-							if (that.tipusAuditoria != null && typeof Auditoria.busca != 'undefined') { 
+							if (that.tipusAuditoria != null && typeof Auditoria.busca != 'undefined') {
 								//Existe auditoria para el detalle y se ha cargado el objeto de auditor�as
 								Auditoria.busca(that.tipusAuditoria, itemID);
 							}
 
-							if (that.tipusEstadistica != null && typeof Estadistica.pinta != 'undefined') { 
+							if (that.tipusEstadistica != null && typeof Estadistica.pinta != 'undefined') {
 								//Existe auditoria para el detalle y se ha cargado el objeto de auditor�as
 								Estadistica.pinta(that.tipusEstadistica, itemID);
 							}
@@ -359,13 +361,13 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 		});
 
 		this.actualizaEventos();
-		
+
 		DebugJS.debug("Saliendo de DetallBase.carregar");
 
 	};
 
 	this.recarregar = function(itemId) {
-		
+
 		DebugJS.debug("Entrando en DetallBase.recarregar");
 
 		var url = location.protocol + "//" + location.host + location.pathname;
@@ -378,7 +380,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 		this.modificado(false);
 
 		location = url;
-		
+
 		DebugJS.debug("Saliendo de DetallBase.recarregar");
 
 	};
@@ -387,7 +389,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 	 * @param opcions: id (num); accio (guardar, elimina); dades: json
 	 */
 	this.array = function(opcions) {
-		
+
 		DebugJS.debug("Entrando en DetallBase.array");
 
 		if (opcions.accio == "guarda") {
@@ -408,13 +410,13 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 			Items_arr.splice(id_eliminat,1);
 
 		}
-		
+
 		DebugJS.debug("Saliendo de DetallBase.array");
-		
+
 	};
 
 	this.idioma = function(e) {
-		
+
 		DebugJS.debug("Entrando en DetallBase.idioma");
 
 		var elm = $(e.target);
@@ -433,7 +435,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 			var ul_idiomes_elm = elm.parent().parent();
 			ul_idiomes_elm.unbind("click");
 			var div_idiomes_elm = ul_idiomes_elm.next();
-						
+
 			if (!elm.hasClass("desplegar")) {
 
 				var a_clicat_class = elm.attr("class");
@@ -478,33 +480,33 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 					modulos.find("li." + a_clicat_class).addClass("seleccionat");
 
 					modulos.find("div.seleccionats div.seleccionat").slideUp(300, function() {
-												
+
 						var $this = jQuery(this);
-						
+
 						// Si no hay hermanos que cumplan la condición, es que se ha seleccionado el mismo idioma
 						// que el idioma principal en algún otro escritorio del mantenimiento, así que volvemos a mostrar
 						// el anterior elemento afectado.
 						DebugJS.debug('Mostrando $this.siblings("div.' + a_clicat_class + '")');
 						DebugJS.debug($this.siblings("div." + a_clicat_class));
-						
+
 						if ($this.siblings("div." + a_clicat_class).length > 0) {
-						
+
 							$this.removeClass("seleccionat");
 							$this.hide();
-						
+
 							$this.siblings("div." + a_clicat_class).slideDown(300, function() {
 								jQuery(this).addClass("seleccionat");
 							});
-							
+
 						} else {
-							
+
 							// Volvemos a añadir la clase seleccionat y a mostrar el objeto, por si se
 							// ha ocultado previamente desde el menú principal de selección de idioma
 							// (el menú de selección de idioma del mantenimiento, no el de selección de
 							// idioma de un escritorio asociado).
 							$this.addClass("seleccionat");
 							$this.show();
-							
+
 						}
 
 					});
@@ -552,39 +554,39 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 				ul_idiomes_elm.bind("click", {'actualizarIdiomasModulosLaterales': cambiarModulosLaterales}, that.idioma);
 
 			}
-			
+
 		}
-		
+
 		DebugJS.debug("Saliendo de DetallBase.idioma");
 
 	};
 
 	this.previsualitza = function() {
-		
+
 		DebugJS.debug("Entrando en DetallBase.previsualitza");
 
 		var url = this.urlPrevisualizar;
 		var idiomaSeleccionat = escriptori_detall_elm.find("ul.idiomes li.seleccionat span").attr("class");
 		var id = escriptori_detall_elm.find("#item_id").val();
-		
+
 		url += "?lang=" + idiomaSeleccionat + "&codi=" + id + "&previ=s";
-		
+
 		var ancho = 1024;
 		var alto = 768;
 		window.open(url, 'ventanaPrevisualizar', "width=" + ancho + ", height=" + alto);
-		
+
 		DebugJS.debug("Saliendo de DetallBase.previsualitza");
 
 	};
 
 	this.traduir = function (url, inputs, datos) {
-		
+
 		DebugJS.debug("Entrando en DetallBase.traduir");
 
 		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
 
 		var dataVars = "";
-		
+
 		for (var i in inputs) {
 
 			var campo = inputs[i] + LANG_TRADUCTOR;
@@ -597,7 +599,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 
 			// TinyMCE, aún forzando a que escape a entidades numéricas, no contempla el caso del tanto por ciento %.
 			// Toca hacerlo de forma explícita antes de codificar completamente la cadena con encodeURIComponent().
-			if (typeof texto != 'undefined'){				
+			if (typeof texto != 'undefined'){
 				texto = texto.replace(/%/g, "&#37;");
 			} else {
 				texto = "";
@@ -634,30 +636,30 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 							jQuery("#" + campo).val(valor);
 
 						}
-						
+
 					}
-					
+
 					// Si todo ha ido bien, marcamos el detalle como modificado.
 					that.modificado(true);
 
 					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtTraduccioCorrecta});
-					
+
 				}
-				
+
 			}
 		});
-		
+
 		DebugJS.debug("Saliendo de DetallBase.traduir");
 
 	};
 
 	this.cargarModulos = function() {
-		
+
 		DebugJS.debug("Entrando en DetallBase.cargarModulos");
 		if (typeof modulos != 'undefined'){
 			item_ID = $("#item_id").val();
 			dataVars = "id=" + item_ID;
-	
+
 			$.ajax({
 				type: "POST",
 				url: modulos,
@@ -667,15 +669,15 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
 				},
 				success: function(data) {
-	
+
 					$("div.invisible").each(function() {
 						$(this).removeClass("invisible");
 					});
-	
+
 					that.pintarModulos(data);
-	
+
 				}
-	
+
 			});
 		}
 		DebugJS.debug("Saliendo de DetallBase.cargarModulos");

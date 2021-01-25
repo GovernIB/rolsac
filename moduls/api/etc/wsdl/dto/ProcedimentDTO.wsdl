@@ -52,6 +52,16 @@
                         <element name="estadoSIA" nillable="true" type="xsd:string" />
                         <element name="fechaSIA" nillable="true" type="xsd:dateTime" />
                         <element name="comun" type="xsd:boolean" />
+                        <!-- LOPD -->
+                        <element name="lopdCabecera" nillable="true" type="xsd:string" />
+                        <element name="lopdResponsable" nillable="true" type="xsd:string" />
+                        <element name="lopdFinalidad" nillable="true" type="xsd:string" />
+                        <element name="lopdDestinatario" nillable="true" type="xsd:string" />
+                        <element name="lopdDerechos" nillable="true" type="xsd:string" />
+    					<element name="lopdLegitimacion" nillable="true" type="xsd:long" />
+    					<element name="lopdLegitimacionNombre" nillable="true" type="xsd:string" />
+    					<element name="lopdLegitimacionIdentificador" nillable="true" type="xsd:string" />
+						<element name="lopdInfoAdicional" nillable="true" type="xsd:long" />
                     </sequence>
                 </extension>
             </complexContent>

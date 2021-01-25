@@ -45,7 +45,11 @@ import org.ibit.rol.sac.model.Taxa;
 import org.ibit.rol.sac.model.Tipo;
 import org.ibit.rol.sac.model.TipoAfectacion;
 import org.ibit.rol.sac.model.TraduccionHechoVital;
+import org.ibit.rol.sac.model.TraduccionLopdLegitimacion;
 import org.ibit.rol.sac.model.TraduccionPlataforma;
+import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
+import org.ibit.rol.sac.model.TraduccionServicio;
+import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.UnidadMateria;
@@ -491,9 +495,46 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 					procedimentDTO = (ProcedimentDTO) BasicUtils.entityToDTO(ProcedimentDTO.class, procedimentLocal,
 							procedimentCriteria.getIdioma());
+
+					if (procedimentDTO.getLopdDestinatario() == null && ((TraduccionProcedimientoLocal) procedimentLocal
+							.getTraduccion(procedimentCriteria.getIdioma())).getLopdDestinatario() != null) {
+						procedimentDTO.setLopdDestinatario(((TraduccionProcedimientoLocal) procedimentLocal
+								.getTraduccion(procedimentCriteria.getIdioma())).getLopdDestinatario());
+					}
+
+					if (procedimentDTO.getLopdDerechos() == null && ((TraduccionProcedimientoLocal) procedimentLocal
+							.getTraduccion(procedimentCriteria.getIdioma())).getLopdDerechos() != null) {
+						procedimentDTO.setLopdDerechos(((TraduccionProcedimientoLocal) procedimentLocal
+								.getTraduccion(procedimentCriteria.getIdioma())).getLopdDerechos());
+					}
 				}
+
 			}
 
+			if (procedimentDTO != null) {
+				String cabecera;
+				if ("ca".equals(procedimentCriteria.getIdioma())) {
+					cabecera = System.getProperty("es.caib.rolsac.lopd.cabecera.ca");
+				} else {
+					cabecera = System.getProperty("es.caib.rolsac.lopd.cabecera.es");
+				}
+				procedimentDTO.setLopdCabecera(cabecera);
+			}
+
+			if (procedimentLocal != null && procedimentLocal.getLopdLegitimacion() != null) {
+				procedimentDTO.setLopdLegitimacionNombre(((TraduccionLopdLegitimacion) procedimentLocal
+						.getLopdLegitimacion().getTraduccion(procedimentCriteria.getIdioma())).getNombre());
+				procedimentDTO
+						.setLopdLegitimacionIdentificador(procedimentLocal.getLopdLegitimacion().getIdentificador());
+			}
+
+			if (procedimentLocal != null && procedimentLocal.getServicioResponsable() != null) {
+				final String ua = getUAByCodigoDir3(procedimentLocal.getServicioResponsable(),
+						procedimentCriteria.getIdioma());
+				if (ua != null) {
+					procedimentDTO.setLopdResponsable(ua);
+				}
+			}
 		} catch (final HibernateException e) {
 
 			log.error(e);
@@ -699,6 +740,45 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 					servicioDTO = (ServicioDTO) BasicUtils.entityToDTO(ServicioDTO.class, servicio,
 							servicioCriteria.getIdioma());
 				}
+
+				if (servicioDTO.getLopdDestinatario() == null
+						&& ((TraduccionServicio) servicio.getTraduccion(servicioCriteria.getIdioma()))
+								.getLopdDestinatario() != null) {
+					servicioDTO.setLopdDestinatario(
+							((TraduccionServicio) servicio.getTraduccion(servicioCriteria.getIdioma()))
+									.getLopdDestinatario());
+				}
+
+				if (servicioDTO.getLopdDerechos() == null
+						&& ((TraduccionServicio) servicio.getTraduccion(servicioCriteria.getIdioma()))
+								.getLopdDerechos() != null) {
+					servicioDTO
+							.setLopdDerechos(((TraduccionServicio) servicio.getTraduccion(servicioCriteria.getIdioma()))
+									.getLopdDerechos());
+				}
+			}
+
+			if (servicioDTO != null) {
+				String cabecera;
+				if ("ca".equals(servicioCriteria.getIdioma())) {
+					cabecera = System.getProperty("es.caib.rolsac.lopd.cabecera.ca");
+				} else {
+					cabecera = System.getProperty("es.caib.rolsac.lopd.cabecera.es");
+				}
+				servicioDTO.setLopdCabecera(cabecera);
+			}
+
+			if (servicio != null && servicio.getLopdLegitimacion() != null) {
+				servicioDTO.setLopdLegitimacionNombre(((TraduccionLopdLegitimacion) servicio.getLopdLegitimacion()
+						.getTraduccion(servicioCriteria.getIdioma())).getNombre());
+				servicioDTO.setLopdLegitimacionIdentificador(servicio.getLopdLegitimacion().getIdentificador());
+			}
+
+			if (servicio != null && servicio.getServicioResponsable() != null) {
+				final String ua = getUAByCodigoDir3(servicio.getServicioResponsable(), servicioCriteria.getIdioma());
+				if (ua != null) {
+					servicioDTO.setLopdResponsable(ua);
+				}
 			}
 
 		} catch (final HibernateException e) {
@@ -724,6 +804,23 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
 		return servicioDTO;
 
+	}
+
+	/**
+	 * Obtiene el nombre de la UA que tenga codigo DIR3
+	 *
+	 * @param servicioResponsable
+	 * @param lang
+	 * @return
+	 */
+	private String getUAByCodigoDir3(final UnidadAdministrativa servicioResponsable, final String lang) {
+		if (servicioResponsable == null) {
+			return null;
+		} else if (servicioResponsable.getCodigoDIR3() != null && !servicioResponsable.getCodigoDIR3().isEmpty()) {
+			return ((TraduccionUA) servicioResponsable.getTraduccion(lang)).getNombre();
+		} else {
+			return getUAByCodigoDir3(servicioResponsable.getPadre(), lang);
+		}
 	}
 
 	/**

@@ -23,10 +23,6 @@ import io.swagger.annotations.ApiModelProperty;
 		+ Constantes.ENTIDAD_LOPD_LEGITIMACION)
 public class LopdLegitimacion extends EntidadBase {
 
-	/** Id. **/
-	@ApiModelProperty(value = "codigo", required = false)
-	private long codigo;
-
 	/** Identificador. **/
 	@ApiModelProperty(value = "identificador", required = false)
 	private String identificador;
@@ -34,10 +30,6 @@ public class LopdLegitimacion extends EntidadBase {
 	/** Nombre. **/
 	@ApiModelProperty(value = "nombre", required = false)
 	private String nombre;
-
-	/** Por Defecto. **/
-	@ApiModelProperty(value = "porDefecto", required = false)
-	private boolean porDefecto;
 
 	public LopdLegitimacion(final org.ibit.rol.sac.model.LopdLegitimacion elem, final String urlBase,
 			final String idioma, final boolean hateoasEnabled) {
@@ -92,21 +84,6 @@ public class LopdLegitimacion extends EntidadBase {
 
 	}
 
-	/**
-	 * @return the codigo
-	 */
-	public long getCodigo() {
-		return codigo;
-	}
-
-	/**
-	 * @param codigo
-	 *            the codigo to set
-	 */
-	public void setCodigo(final long codigo) {
-		this.codigo = codigo;
-	}
-
 	@Override
 	protected void generaLinks(final String urlBase) {
 		// Nada
@@ -114,7 +91,7 @@ public class LopdLegitimacion extends EntidadBase {
 
 	@Override
 	public void setId(final Long codigo) {
-		this.codigo = codigo;
+		// Vacio
 	}
 
 	/**
@@ -130,21 +107,6 @@ public class LopdLegitimacion extends EntidadBase {
 	 */
 	public void setIdentificador(final String identificador) {
 		this.identificador = identificador;
-	}
-
-	/**
-	 * @return the porDefecto
-	 */
-	public boolean isPorDefecto() {
-		return porDefecto;
-	}
-
-	/**
-	 * @param porDefecto
-	 *            the porDefecto to set
-	 */
-	public void setPorDefecto(final boolean porDefecto) {
-		this.porDefecto = porDefecto;
 	}
 
 	/**
@@ -169,7 +131,7 @@ public class LopdLegitimacion extends EntidadBase {
 	 */
 	@Override
 	public String toString() {
-		return "LopdLeg [codigo=" + codigo + ", identificador=" + identificador + ", pordefecto=" + porDefecto + "]";
+		return "LopdLeg [nombre=" + nombre + ", identificador=" + identificador + "]";
 	}
 
 }
