@@ -5,6 +5,9 @@ import java.io.IOException;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.ibit.rol.sac.model.TraduccionUA;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -175,15 +178,28 @@ public class Serveis extends EntidadBase {
 			// copiamos los datos que no tienen la misma estructura:
 			if (elem.getLopdLegitimacion() != null) {
 				this.lopdLegitimacion = new LopdLegitimacion();
-				this.lopdLegitimacion.setCodigo(elem.getLopdLegitimacion().getId());
 				this.lopdLegitimacion.setIdentificador(elem.getLopdLegitimacion().getIdentificador());
-				this.lopdLegitimacion.setPorDefecto(elem.getLopdLegitimacion().isPorDefecto());
 				this.lopdLegitimacion.setNombre(((org.ibit.rol.sac.model.TraduccionLopdLegitimacion) elem
 						.getLopdLegitimacion().getTraduccion(idioma)).getNombre());
 			}
 
+			final String lopdResponsable = getUAByDir3(elem.getServicioResponsable(), idioma);
+			if (lopdResponsable != null) {
+				this.lopdResponsable = lopdResponsable;
+			}
+
 		} catch (final Exception e) {
 
+		}
+	}
+
+	private String getUAByDir3(final UnidadAdministrativa servicioResponsable, final String lang) {
+		if (servicioResponsable == null) {
+			return null;
+		} else if (servicioResponsable.getCodigoDIR3() != null && !servicioResponsable.getCodigoDIR3().isEmpty()) {
+			return ((TraduccionUA) servicioResponsable.getTraduccion(lang)).getNombre();
+		} else {
+			return getUAByDir3(servicioResponsable.getPadre(), lang);
 		}
 	}
 

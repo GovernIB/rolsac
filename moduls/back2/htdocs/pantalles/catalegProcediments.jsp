@@ -2166,7 +2166,7 @@
         </div>
         <!-- /modulLateral -->
      </form>
-
+	</div>
 <!-- escriptori_normatives -->
 <div id="escriptori_normatives">
 

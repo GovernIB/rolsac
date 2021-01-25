@@ -255,7 +255,7 @@ function CModulDocumentsLopd() {
 
         } else {
 
-            escriptori_documents_elm.fadeOut(300, function() {
+            escriptori_documents_elm_lopd.fadeOut(300, function() {
                 escriptori_detall_elm.fadeIn(300);
             });
 
