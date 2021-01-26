@@ -1027,6 +1027,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 					traduccionDTO.put("item_lopd_infoAdicional_enllas_arxiu", "");
 					traduccionDTO.put("item_lopd_infoAdicional", "");
 				}
+
 				resultats.put(lang, traduccionDTO);
 			} else {
 				if (serv.getTraduccion(langDefault) != null) {

@@ -159,8 +159,23 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			final ProcedimientoLocal procedimientoBD = obtenerProcedimientoNewBack(idProcedimiento);
 			for (final String idioma : traducciones.keySet()) {
 				final TraduccionProcedimientoLocal trad = traducciones.get(idioma);
-				((TraduccionProcedimientoLocal) procedimientoBD.getTraduccion(idioma))
-						.setLopdInfoAdicional(trad.getLopdInfoAdicional());
+				if (((TraduccionProcedimientoLocal) procedimientoBD.getTraduccion(idioma))
+						.getLopdInfoAdicional() == null || trad.getLopdInfoAdicional() == null) {
+					((TraduccionProcedimientoLocal) procedimientoBD.getTraduccion(idioma))
+							.setLopdInfoAdicional(trad.getLopdInfoAdicional());
+				} else {
+					final Archivo archiv = ((TraduccionProcedimientoLocal) procedimientoBD.getTraduccion(idioma))
+							.getLopdInfoAdicional();
+					if (archivosAborrar.contains(archiv.getId())) {
+						archivosAborrar.remove(archiv.getId());
+					}
+					archiv.setDatos(trad.getLopdInfoAdicional().getDatos());
+					archiv.setMime(trad.getLopdInfoAdicional().getMime());
+					archiv.setNombre(trad.getLopdInfoAdicional().getNombre());
+					archiv.setPeso(trad.getLopdInfoAdicional().getPeso());
+					archiv.setDatos(trad.getLopdInfoAdicional().getDatos());
+				}
+
 			}
 
 			session = getSession();

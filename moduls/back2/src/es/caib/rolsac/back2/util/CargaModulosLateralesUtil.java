@@ -40,28 +40,33 @@ public class CargaModulosLateralesUtil {
 
 	private static Log log = LogFactory.getLog(CargaModulosLateralesUtil.class);
 
-	public static List<Map<String, Object>> recuperaLopdProcedimientos(final Map<String, Traduccion> traducciones, final Long id,
-			final List<String> idiomas, final boolean ordenable) {
+	public static List<Map<String, Object>> recuperaLopdProcedimientos(final Map<String, Traduccion> traducciones,
+			final Long id, final List<String> idiomas, final boolean ordenable) {
 		final List<Map<String, Object>> listaDocumentosDTO = new ArrayList<Map<String, Object>>();
 
 		final Map<String, String> titulos = new HashMap<String, String>();
+		boolean introducidoArchivo = false;
 		for (final String idioma : traducciones.keySet()) {
 			final TraduccionProcedimientoLocal traProc = (TraduccionProcedimientoLocal) traducciones.get(idioma);
 			if (traProc != null) {
 
-				final String nombre = (traProc != null && traProc.getLopdInfoAdicional() != null)
-						? traProc.getLopdInfoAdicional().getNombre()
-						: "";
+				String nombre = null;
+				if (traProc.getLopdInfoAdicional() != null) {
+					introducidoArchivo = true;
+					nombre = traProc.getLopdInfoAdicional().getNombre();
+				}
 				titulos.put(idioma, nombre);
 
 			}
 		}
 		final Map<String, Object> map = new HashMap<String, Object>();
-		map.put("id", id);
-		map.put("nombre", titulos);
-		map.put("idMainItem", id);
-		map.put("idRelatedItem", id);
-		listaDocumentosDTO.add(map);
+		if (introducidoArchivo) {
+			map.put("id", id);
+			map.put("nombre", titulos);
+			map.put("idMainItem", id);
+			map.put("idRelatedItem", id);
+			listaDocumentosDTO.add(map);
+		}
 		return listaDocumentosDTO;
 	}
 
@@ -70,23 +75,28 @@ public class CargaModulosLateralesUtil {
 		final List<Map<String, Object>> listaDocumentosDTO = new ArrayList<Map<String, Object>>();
 
 		final Map<String, String> titulos = new HashMap<String, String>();
+		boolean introducidoArchivo = false;
 		for (final String idioma : traducciones.keySet()) {
 			final TraduccionServicio traServ = (TraduccionServicio) traducciones.get(idioma);
 			if (traServ != null) {
 
-				final String nombre = (traServ != null && traServ.getLopdInfoAdicional() != null)
-						? traServ.getLopdInfoAdicional().getNombre()
-						: "";
+				String nombre = "";
+				if (traServ.getLopdInfoAdicional() != null) {
+					introducidoArchivo = true;
+					nombre = traServ.getLopdInfoAdicional().getNombre();
+				}
 				titulos.put(idioma, nombre);
 
 			}
 		}
 		final Map<String, Object> map = new HashMap<String, Object>();
-		map.put("id", id);
-		map.put("nombre", titulos);
-		map.put("idMainItem", id);
-		map.put("idRelatedItem", id);
-		listaDocumentosDTO.add(map);
+		if (introducidoArchivo) {
+			map.put("id", id);
+			map.put("nombre", titulos);
+			map.put("idMainItem", id);
+			map.put("idRelatedItem", id);
+			listaDocumentosDTO.add(map);
+		}
 		return listaDocumentosDTO;
 	}
 

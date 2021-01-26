@@ -1791,11 +1791,26 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 			final List<Long> archivosAborrar) {
 		Session session = null;
 		try {
-			final Servicio servicioBD = obtenerServicio(idServicio);
+			final Servicio servicioBD = obtenerServicioNewBack(idServicio);
 			for (final String idioma : traducciones.keySet()) {
 				final TraduccionServicio trad = traducciones.get(idioma);
-				((TraduccionServicio) servicioBD.getTraduccion(idioma))
-						.setLopdInfoAdicional(trad.getLopdInfoAdicional());
+				if (((TraduccionServicio) servicioBD.getTraduccion(idioma)).getLopdInfoAdicional() == null
+						|| trad.getLopdInfoAdicional() == null) {
+					((TraduccionServicio) servicioBD.getTraduccion(idioma))
+							.setLopdInfoAdicional(trad.getLopdInfoAdicional());
+				} else {
+					final Archivo archiv = ((TraduccionServicio) servicioBD.getTraduccion(idioma))
+							.getLopdInfoAdicional();
+					if (archivosAborrar.contains(archiv.getId())) {
+						archivosAborrar.remove(archiv.getId());
+					}
+					archiv.setDatos(trad.getLopdInfoAdicional().getDatos());
+					archiv.setMime(trad.getLopdInfoAdicional().getMime());
+					archiv.setNombre(trad.getLopdInfoAdicional().getNombre());
+					archiv.setPeso(trad.getLopdInfoAdicional().getPeso());
+					archiv.setDatos(trad.getLopdInfoAdicional().getDatos());
+
+				}
 			}
 
 			session = getSession();

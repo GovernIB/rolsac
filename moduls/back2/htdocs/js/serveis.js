@@ -1027,7 +1027,7 @@ function CDetall() {
 			$("#item_lopd_derechos_" + idioma).val(printStringFromNull(dada_node[idioma]["lopdDerechos"]));
 
 			// Info adicional doc
-            pintarArchivoMultiidioma("item_lopd_infoAdicional", idioma, dada_node);
+			pintarArchivoMultiidioma("item_lopd_infoAdicional", idioma, dada_node);
 
 		}
 		// Fin bloque de pestanyas de idiomas
