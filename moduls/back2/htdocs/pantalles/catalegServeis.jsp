@@ -920,7 +920,7 @@
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                     <legend><spring:message code='serv.dades.tramit'/></legend>
-                    <div class="modul_tramit mostrat">
+                    <div class="modul_tramit mostrat idiomes">
 						<div class="fila">
 							<div class="element t20p">
 								<div class="etiqueta">
@@ -957,14 +957,19 @@
 							</div>
 						</div>
 						<div class="fila">
-                            <div class="element t99p">
-                                <div class="etiqueta">
-                                    <label for="item_tramite_url"><spring:message code='serv.tramit.url'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="item_tramite_url" name="item_tramite_url" type="text" class="nou inputGris" />
-                                </div>
-                            </div>
+							<c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">
+                            	<!-- Camps per cada idioma -->
+		                        <div class="idioma <c:out value="${lang}" />">
+		                            <div class="element t99p">
+		                                <div class="etiqueta">
+		                                    <label for="item_tramite_url_<c:out value="${lang}" />"><spring:message code='serv.tramit.url'/></label>
+		                                </div>
+		                                <div class="control">
+		                                    <input id="item_tramite_url_<c:out value="${lang}" />" name="item_tramite_url_<c:out value="${lang}" />" type="text" class="nou inputGris" />
+		                                </div>
+		                            </div>
+		                         </div>
+		                 	</c:forEach>
                         </div>
                         <div class="fila">
                             <div class="element t50p">
@@ -1896,8 +1901,11 @@
                             </div>
 
                         </div>
-
-                    <div class="botonera">
+				<c:if test="${mensajeInfo != ''}">
+					<div class="fila"><c:out value="${mensajeInfo}" /></div>
+                	<div class="fila"></div>
+                </c:if>
+                <div class="botonera">
                         <div class="boton btnGenerico"><a id="btnLimpiarForm_normativa" class="btn borrar" href="javascript:;"><span><span><spring:message code='boto.borrar'/></span></span></a></div>
                         <div class="boton btnGenerico"><a id="btnBuscarForm_normativa" class="btn consulta" href="javascript:;"><span><span><spring:message code='boto.cercar'/></span></span></a></div>
                     </div>

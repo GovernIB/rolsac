@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -38,6 +39,8 @@ import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.ctc.wstx.util.StringUtil;
 
 import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.IndexacionJob;
@@ -467,8 +470,8 @@ public class TMSiaController extends PantallaBaseController {
             			siaJob.getFechaFin(),
             		//	bufferDescBreve.toString(),
             		//	bufferDesc.toString(),
-            			siaJob.getDescBreve(),
-            			siaJob.getDescripcion(),
+            			StringEscapeUtils.escapeJavaScript(siaJob.getDescBreve()),
+            			StringEscapeUtils.escapeJavaScript(siaJob.getDescripcion()),
             			siaJob.getEstado(),
             			siaJob.getTipo())
                 );

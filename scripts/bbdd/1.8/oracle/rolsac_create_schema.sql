@@ -102,6 +102,7 @@ alter table RSC_EDIFIC drop constraint RSC_EDIFOP_FK;
 alter table RSC_POBSER drop constraint RSC_PSRSER_FK;
 alter table RSC_POBSER drop constraint RSC_PSRPOB_FK;
 alter table RSC_TRAUNM drop constraint RSC_TRNUNM_FK;
+alter table RSC_TRAPLT drop constraint RSC_TRPPLT_FK;
 alter table RSC_TRAFAM drop constraint RSC_TFAFAM_FK;
 alter table RSC_AGHEVI drop constraint RSC_AGHICG_FK;
 alter table RSC_AGHEVI drop constraint RSC_AGHPOB_FK;
@@ -141,6 +142,8 @@ alter table RSC_TRAESP drop constraint RSC_TESESP_FK;
 alter table RSC_TRAMIT drop constraint RSC_TRAPRO_FK;
 alter table RSC_TRAMIT drop constraint RSC_TRRADM_FK;
 alter table RSC_TRAMIT drop constraint RSC_ORGCOMP_FK;
+alter table RSC_TRAMIT drop constraint RSC_TRAMPLT_FK;
+alter table RSC_SERVIC drop constraint RSC_SERPLT_FK;
 alter table RSC_SERVIC drop constraint RSC_SET_SERRSP_FK;
 alter table RSC_SERVIC drop constraint RSC_SER_INSTRU_FK;
 alter table RSC_HISENV drop constraint FK_RSC_HISE_REFERENCE_RSC_SCRT;
@@ -257,6 +260,7 @@ drop table RSC_ESPTER cascade constraints;
 drop table RSC_EDIFIC cascade constraints;
 drop table RSC_POBSER cascade constraints;
 drop table RSC_TRAUNM cascade constraints;
+drop table RSC_TRAPLT cascade constraints;
 drop table RSC_TRAFAM cascade constraints;
 drop table RSC_AGHEVI cascade constraints;
 drop table RSC_TRAFIC cascade constraints;
@@ -264,6 +268,7 @@ drop table RSC_TRATAX cascade constraints;
 drop table RSC_COMENT cascade constraints;
 drop table RSC_SCRTEM cascade constraints;
 drop table RSC_AUDITO cascade constraints;
+drop table RSC_PLATAF cascade constraints;
 drop table RSC_FICHUA cascade constraints;
 drop table RSC_TIPAFE cascade constraints;
 drop table RSC_TRAMAT cascade constraints;
@@ -416,7 +421,7 @@ create table RSC_PUBOBJ (
    POB_CODI number(19,0) not null,
    POB_CODEST varchar2(128),
    POB_ORDEN number(10,0),
-   POB_INTERNO number(1,0) DEFAULT (0),
+   POB_INTERNO number(1,0),
    primary key (POB_CODI)
 );
 create table RSC_AGRMAT (
@@ -607,6 +612,7 @@ create table RSC_TRASER (
    TSR_DESTIN clob,
    TSR_REQUIS clob,
    TSR_OBSERV clob,
+   TSR_ULRSER varchar2(256),
    TSR_CODIDI varchar2(2) not null,
    primary key (TSR_CODSER, TSR_CODIDI)
 );
@@ -645,7 +651,7 @@ create table RSC_USUARI (
    USU_OBSERV varchar2(4000),
    USU_PERFIL varchar2(64),
    USU_EMAIL varchar2(256),
-   USU_PERMISOS varchar2(512) DEFAULT('P_MOD_NOR'),
+   USU_PERMISOS varchar2(512),
    primary key (USU_CODI)
 );
 create table RSC_GRPGEN (
@@ -731,6 +737,7 @@ create table RSC_PROCED (
    PRO_CODSIA varchar2(12),
    PRO_ESTSIA varchar2(1),
    PRO_FECSIA date,
+   PRO_COMUN number(1,0),
    PRO_CODUNA_RESOL number(19,0),
    PRO_CODUNA number(19,0),
    PRO_CODFAM number(19,0),
@@ -740,7 +747,6 @@ create table RSC_PROCED (
    PRR_IDEXTE number(19,0),
    PRR_URLREM varchar2(512),
    PRR_CODADM number(19,0),
-   PRO_COMUN  number(1,0),
    primary key (PRO_CODI)
 );
 create table RSC_GRPGID (
@@ -858,6 +864,13 @@ create table RSC_TRAUNM (
    TRN_CODIDI varchar2(2) not null,
    primary key (TRN_CODUNM, TRN_CODIDI)
 );
+create table RSC_TRAPLT (
+   TPT_CODPLT number(19,0) not null,
+   TPT_DESCRI varchar2(1000),
+   TPT_URL varchar2(1000),
+   TPT_CODIDI varchar2(2) not null,
+   primary key (TPT_CODPLT, TPT_CODIDI)
+);
 create table RSC_TRAFAM (
    TFA_CODFAM number(19,0) not null,
    TFA_NOMBRE varchar2(256),
@@ -921,6 +934,12 @@ create table RSC_AUDITO (
    AUD_CODHIS number(19,0),
    AUD_CODOPE number(10,0),
    primary key (AUD_CODI)
+);
+create table RSC_PLATAF (
+   PLT_CODI number(19,0) not null,
+   PLT_NOMBRE varchar2(128),
+   PLT_ORDEN number(10,0) not null,
+   primary key (PLT_CODI)
 );
 create table RSC_FICHUA (
    FUA_CODI number(19,0) not null,
@@ -1036,6 +1055,8 @@ create table RSC_TRAMIT (
    TRA_DATACTUVUDS varchar2(255),
    TRA_DATINICI date,
    TRA_DATTANCAMENT date,
+   TRA_PARAMS varchar2(255),
+   TRA_CODPLT number(19,0),
    TRA_ORGCOMP number(19,0),
    TRR_IDEXTE number(19,0),
    TRR_URLREM varchar2(512),
@@ -1056,15 +1077,16 @@ create table RSC_SERVIC (
    SER_FECPUB date,
    SER_FECDES date,
    SER_FECACT date,
-   SER_TRAULR varchar2(256),
    SER_TRAID varchar2(256),
    SER_TRAVER varchar2(256),
    SER_CTELEM number(1,0),
    SER_CPRESE number(1,0),
    SER_CTELEF number(1,0),
+   SER_COMUN number(1,0),
+   SER_PARAMS varchar2(255),
    SER_INSTRU number(19,0),
    SER_SERRSP number(19,0),
-   SER_COMUN number(1,0),
+   SER_CODPLT number(19,0),
    primary key (SER_CODI)
 );
 create table RSC_PERGES (
@@ -1477,6 +1499,7 @@ alter table RSC_EDIFIC add constraint RSC_EDIFOP_FK foreign key (EDI_FOTOP) refe
 alter table RSC_POBSER add constraint RSC_PSRSER_FK foreign key (PSR_CODSER) references RSC_SERVIC;
 alter table RSC_POBSER add constraint RSC_PSRPOB_FK foreign key (PSR_CODPOB) references RSC_PUBOBJ;
 alter table RSC_TRAUNM add constraint RSC_TRNUNM_FK foreign key (TRN_CODUNM) references RSC_UNAMAT;
+alter table RSC_TRAPLT add constraint RSC_TRPPLT_FK foreign key (TPT_CODPLT) references RSC_PLATAF;
 alter table RSC_TRAFAM add constraint RSC_TFAFAM_FK foreign key (TFA_CODFAM) references RSC_FAMILI;
 alter table RSC_AGHEVI add constraint RSC_AGHICG_FK foreign key (AGH_ICOGRA) references RSC_ARCHIV;
 alter table RSC_AGHEVI add constraint RSC_AGHPOB_FK foreign key (AGH_CODPOB) references RSC_PUBOBJ;
@@ -1516,6 +1539,8 @@ alter table RSC_TRAESP add constraint RSC_TESESP_FK foreign key (TES_CODESP) ref
 alter table RSC_TRAMIT add constraint RSC_TRAPRO_FK foreign key (TRA_CODPRO) references RSC_PROCED;
 alter table RSC_TRAMIT add constraint RSC_TRRADM_FK foreign key (TRR_CODADM) references RSC_ADMREM;
 alter table RSC_TRAMIT add constraint RSC_ORGCOMP_FK foreign key (TRA_ORGCOMP) references RSC_UNIADM;
+alter table RSC_TRAMIT add constraint RSC_TRAMPLT_FK foreign key (TRA_CODPLT) references RSC_PLATAF;
+alter table RSC_SERVIC add constraint RSC_SERPLT_FK foreign key (SER_CODPLT) references RSC_PLATAF;
 alter table RSC_SERVIC add constraint RSC_SET_SERRSP_FK foreign key (SER_SERRSP) references RSC_UNIADM;
 alter table RSC_SERVIC add constraint RSC_SER_INSTRU_FK foreign key (SER_INSTRU) references RSC_UNIADM;
 alter table RSC_HISENV add constraint FK_RSC_HISE_REFERENCE_RSC_SCRT foreign key (HEN_STPCOD) references RSC_SCRTIP;

@@ -32,6 +32,9 @@ public class TraduccionServicio implements Traduccion {
 	private String lopdDerechos;
 	private Archivo lopdInfoAdicional;
 
+	/** URL Tramite Externo **/
+	private String urlTramiteExterno;
+
 	/** Constructor vacio. **/
 	public TraduccionServicio() {
 	}
@@ -45,14 +48,17 @@ public class TraduccionServicio implements Traduccion {
 	 * @param requisitos
 	 * @param observaciones
 	 */
+
 	public TraduccionServicio(final String nombre, final String objeto, final String destinatarios,
-			final String requisitos, final String observaciones, final String lopdFinalidad,
-			final String lopdDestinatario, final String lopdDerechos, final Archivo lopdInfoAdicional) {
+			final String requisitos, final String observaciones, final String urlTramiteExterno,
+			final String lopdFinalidad, final String lopdDestinatario, final String lopdDerechos,
+			final Archivo lopdInfoAdicional) {
 		this.nombre = nombre;
 		this.objeto = objeto;
 		this.destinatarios = destinatarios;
 		this.requisitos = requisitos;
 		this.observaciones = observaciones;
+		this.setUrlTramiteExterno(urlTramiteExterno);
 		this.lopdFinalidad = lopdFinalidad;
 		this.lopdDestinatario = lopdDestinatario;
 		this.lopdDerechos = lopdDerechos;
@@ -192,6 +198,14 @@ public class TraduccionServicio implements Traduccion {
 	 */
 	public void setLopdInfoAdicional(final Archivo lopdInfoAdicional) {
 		this.lopdInfoAdicional = lopdInfoAdicional;
+	}
+
+	public String getUrlTramiteExterno() {
+		return urlTramiteExterno;
+	}
+
+	public void setUrlTramiteExterno(final String urlTramiteExterno) {
+		this.urlTramiteExterno = urlTramiteExterno;
 	}
 
 }

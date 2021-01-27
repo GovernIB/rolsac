@@ -202,6 +202,23 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		model.put("lopdDerechosESP", RolsacPropertiesUtil.getLopdResponsableComun(false));
 		model.put("lopdResponsableComun", RolsacPropertiesUtil.getLopdResponsableComun(true));
 		model.put("lopdResponsableComunESP", RolsacPropertiesUtil.getLopdResponsableComun(false));
+
+		final UnidadAdministrativa raiz = ua != null ? ua.getRaiz() : null;
+
+		if (raiz != null) {
+			String mensajeInfo = messageSource.getMessage("proc.servei.info", null, request.getLocale());
+			mensajeInfo = mensajeInfo.replace("%EMAIL_ADMIN%",
+					RolsacPropertiesUtil.getEmailAdmin(raiz.getCodigoDIR3()));
+
+			if (!mensajeInfo.endsWith(" ")) {
+				model.put("mensajeInfo", mensajeInfo);
+			} else {
+				model.put("mensajeInfo", "");
+			}
+		} else {
+			model.put("mensajeInfo", "");
+		}
+
 		return "index";
 
 	}

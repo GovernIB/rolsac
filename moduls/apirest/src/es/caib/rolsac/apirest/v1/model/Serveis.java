@@ -80,9 +80,6 @@ public class Serveis extends EntidadBase {
 	@ApiModelProperty(value = "telefono", required = false)
 	private java.lang.String telefono;
 
-	// @ApiModelProperty(value = "tramiteUrl", required = false)
-	// private java.lang.String tramiteUrl;
-
 	@ApiModelProperty(value = "urlTramiteExterno", required = false)
 	private java.lang.String urlTramiteExterno;
 
@@ -498,15 +495,6 @@ public class Serveis extends EntidadBase {
 	public void setTelefono(final java.lang.String telefono) {
 		this.telefono = telefono;
 	}
-
-	/**
-	 * @param tramiteUrl
-	 *            the tramiteUrl to set
-	 */
-	/*
-	 * public void setTramiteUrl(final java.lang.String tramiteUrl) {
-	 * this.tramiteUrl = tramiteUrl; }
-	 */
 
 	/**
 	 * @return the tramiteId

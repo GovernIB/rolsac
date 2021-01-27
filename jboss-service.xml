@@ -144,6 +144,13 @@ es.caib.rolsac.subscripcions
 		es.caib.rolsac.lopd.cabecera.ca=De conformitat amb el reglament (UE) 2016/679 i la legistaci\u00F3 vigente en mat\u00E8ria de protecci\u00F3 de dades, s\u2019informa del tractament de les dades personales que cont\u00E9 aquest tr\u00E0mit
 		es.caib.rolsac.lopd.cabecera.es=De conformidad con el reglamento (UE) 2016/679 y la legistaci\u00F3n vigente en materia de protecci\u00F3n de datos, se informa del tratamiento de los datos personales que contiene este tr\u00E1mite
 
+		<!--  Email del administrador para aviso en Procedimiento/Servicio
+			  Correo personalizable por entidad, subsituir {CODDIR3} por el codigo dir3 de la entidad.
+			  crear una propiedad por entidad. si no se indica no se muestra el mensaje en la busqueda de normativas dentro de procedimientos y servicios.
+	   	   es.caib.rolsac.{CODDIR3}.correo.normativas=simplificacio@caib.es
+		-->
+	   	es.caib.rolsac.A04003003.correo.normativas=simplificacio@caib.es
+
     </attribute>
 
 </mbean>

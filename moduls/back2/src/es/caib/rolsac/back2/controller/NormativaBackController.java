@@ -411,17 +411,20 @@ public class NormativaBackController extends PantallaBaseController {
 			TraduccionNormativa tradEs = (TraduccionNormativa) normativa.getTraduccion("es");
 			TraduccionNormativa tradCa = (TraduccionNormativa) normativa.getTraduccion("ca");
 			
-			String nomEs, nomCa;
+			String nomEs, nomCa, normaEnllac;
+			normaEnllac="";
 			if (tradEs == null) {
 				nomEs = "";
 			} else {
 				nomEs = tradEs.getTitulo();
+				normaEnllac = tradEs.getEnlace();
 			}
 
 			if (tradCa == null) {
 				nomCa = "";
 			} else {
 				nomCa = tradCa.getTitulo();
+				normaEnllac = tradCa.getEnlace();
 			}
 			
 			String rangLegal = "";
@@ -441,12 +444,11 @@ public class NormativaBackController extends PantallaBaseController {
 				estado = "DEROGADA";
 			}
 			
-			String bolletiEnllac, bolletiTipus, bolletiNum;
+			String bolletiTipus, bolletiNum;
 			if (normativa.getBoletin() == null) {
-				bolletiEnllac = "";
+				normaEnllac = "";
 				bolletiTipus = "";
 			} else {
-				bolletiEnllac = normativa.getBoletin().getEnlace();
 				bolletiTipus = normativa.getBoletin().getNombre();
 			}
 			if (normativa.getNumero() == null) {
@@ -472,7 +474,7 @@ public class NormativaBackController extends PantallaBaseController {
 			retorno.append(CSVUtil.limpiar(rangLegal)); 			//RANG LEGAL (LLEI, DECRETET,...)
 			retorno.append(CSVUtil.limpiar(bolletiTipus)); 			//TIPUS_BUTLLETÃ�,
 			retorno.append(CSVUtil.limpiar(normativa.getNumNormativa())); 			//NUM_NORMA,
-			retorno.append(CSVUtil.limpiar(bolletiEnllac)); 		//ENLLAÃ‡,
+			retorno.append(CSVUtil.limpiar(normaEnllac)); 		//ENLLAÃ‡,
 			retorno.append(CSVUtil.limpiar(normativa.getFechaBoletin())); //DATA_APROVACIO
 			retorno.append(CSVUtil.CARACTER_SALTOLINEA_CSV);
 		}

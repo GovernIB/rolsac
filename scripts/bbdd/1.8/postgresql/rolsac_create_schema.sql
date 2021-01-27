@@ -102,6 +102,7 @@ alter table RSC_EDIFIC drop constraint RSC_EDIFOP_FK;
 alter table RSC_POBSER drop constraint RSC_PSRSER_FK;
 alter table RSC_POBSER drop constraint RSC_PSRPOB_FK;
 alter table RSC_TRAUNM drop constraint RSC_TRNUNM_FK;
+alter table RSC_TRAPLT drop constraint RSC_TRPPLT_FK;
 alter table RSC_TRAFAM drop constraint RSC_TFAFAM_FK;
 alter table RSC_AGHEVI drop constraint RSC_AGHICG_FK;
 alter table RSC_AGHEVI drop constraint RSC_AGHPOB_FK;
@@ -141,6 +142,8 @@ alter table RSC_TRAESP drop constraint RSC_TESESP_FK;
 alter table RSC_TRAMIT drop constraint RSC_TRAPRO_FK;
 alter table RSC_TRAMIT drop constraint RSC_TRRADM_FK;
 alter table RSC_TRAMIT drop constraint RSC_ORGCOMP_FK;
+alter table RSC_TRAMIT drop constraint RSC_TRAMPLT_FK;
+alter table RSC_SERVIC drop constraint RSC_SERPLT_FK;
 alter table RSC_SERVIC drop constraint RSC_SET_SERRSP_FK;
 alter table RSC_SERVIC drop constraint RSC_SER_INSTRU_FK;
 alter table RSC_HISENV drop constraint FK_RSC_HISE_REFERENCE_RSC_SCRT;
@@ -257,6 +260,7 @@ drop table RSC_ESPTER;
 drop table RSC_EDIFIC;
 drop table RSC_POBSER;
 drop table RSC_TRAUNM;
+drop table RSC_TRAPLT;
 drop table RSC_TRAFAM;
 drop table RSC_AGHEVI;
 drop table RSC_TRAFIC;
@@ -264,6 +268,7 @@ drop table RSC_TRATAX;
 drop table RSC_COMENT;
 drop table RSC_SCRTEM;
 drop table RSC_AUDITO;
+drop table RSC_PLATAF;
 drop table RSC_FICHUA;
 drop table RSC_TIPAFE;
 drop table RSC_TRAMAT;
@@ -313,8 +318,8 @@ drop table RSC_HECVIT;
 drop sequence RSC_SEQSEN;
 drop sequence RSC_SEQHIS;
 drop sequence RSC_SEQ_ALL;
-drop sequence RSC_SEQ_COM;
 drop sequence RSC_SEQSCK;
+drop sequence RSC_SEQ_COM;
 drop sequence RSC_SEQGRP;
 drop sequence RSC_SEQSGR;
 drop sequence RSC_SEQSCR;
@@ -416,7 +421,7 @@ create table RSC_PUBOBJ (
    POB_CODI int8 not null,
    POB_CODEST varchar(128),
    POB_ORDEN int4,
-   POB_INTERNO bool DEFAULT FALSE,
+   POB_INTERNO bool,
    primary key (POB_CODI)
 );
 create table RSC_AGRMAT (
@@ -607,6 +612,7 @@ create table RSC_TRASER (
    TSR_DESTIN text,
    TSR_REQUIS text,
    TSR_OBSERV text,
+   TSR_ULRSER varchar(256),
    TSR_CODIDI varchar(2) not null,
    primary key (TSR_CODSER, TSR_CODIDI)
 );
@@ -731,6 +737,7 @@ create table RSC_PROCED (
    PRO_CODSIA varchar(12),
    PRO_ESTSIA varchar(1),
    PRO_FECSIA timestamp,
+   PRO_COMUN bool,
    PRO_CODUNA_RESOL int8,
    PRO_CODUNA int8,
    PRO_CODFAM int8,
@@ -740,7 +747,6 @@ create table RSC_PROCED (
    PRR_IDEXTE int8,
    PRR_URLREM varchar(512),
    PRR_CODADM int8,
-   PRO_COMUN  bool DEFAULT FALSE,
    primary key (PRO_CODI)
 );
 create table RSC_GRPGID (
@@ -858,6 +864,13 @@ create table RSC_TRAUNM (
    TRN_CODIDI varchar(2) not null,
    primary key (TRN_CODUNM, TRN_CODIDI)
 );
+create table RSC_TRAPLT (
+   TPT_CODPLT int8 not null,
+   TPT_DESCRI varchar(1000),
+   TPT_URL varchar(1000),
+   TPT_CODIDI varchar(2) not null,
+   primary key (TPT_CODPLT, TPT_CODIDI)
+);
 create table RSC_TRAFAM (
    TFA_CODFAM int8 not null,
    TFA_NOMBRE varchar(256),
@@ -921,6 +934,12 @@ create table RSC_AUDITO (
    AUD_CODHIS int8,
    AUD_CODOPE int4,
    primary key (AUD_CODI)
+);
+create table RSC_PLATAF (
+   PLT_CODI int8 not null,
+   PLT_NOMBRE varchar(128),
+   PLT_ORDEN int4 not null,
+   primary key (PLT_CODI)
 );
 create table RSC_FICHUA (
    FUA_CODI int8 not null,
@@ -1036,6 +1055,8 @@ create table RSC_TRAMIT (
    TRA_DATACTUVUDS varchar(255),
    TRA_DATINICI timestamp,
    TRA_DATTANCAMENT timestamp,
+   TRA_PARAMS varchar(255),
+   TRA_CODPLT int8,
    TRA_ORGCOMP int8,
    TRR_IDEXTE int8,
    TRR_URLREM varchar(512),
@@ -1056,15 +1077,16 @@ create table RSC_SERVIC (
    SER_FECPUB timestamp,
    SER_FECDES timestamp,
    SER_FECACT timestamp,
-   SER_TRAULR varchar(256),
    SER_TRAID varchar(256),
    SER_TRAVER varchar(256),
    SER_CTELEM bool,
    SER_CPRESE bool,
    SER_CTELEF bool,
-   SER_COMUN  bool DEFAULT FALSE,
+   SER_COMUN bool,
+   SER_PARAMS varchar(255),
    SER_INSTRU int8,
    SER_SERRSP int8,
+   SER_CODPLT int8,
    primary key (SER_CODI)
 );
 create table RSC_PERGES (
@@ -1477,6 +1499,7 @@ alter table RSC_EDIFIC add constraint RSC_EDIFOP_FK foreign key (EDI_FOTOP) refe
 alter table RSC_POBSER add constraint RSC_PSRSER_FK foreign key (PSR_CODSER) references RSC_SERVIC;
 alter table RSC_POBSER add constraint RSC_PSRPOB_FK foreign key (PSR_CODPOB) references RSC_PUBOBJ;
 alter table RSC_TRAUNM add constraint RSC_TRNUNM_FK foreign key (TRN_CODUNM) references RSC_UNAMAT;
+alter table RSC_TRAPLT add constraint RSC_TRPPLT_FK foreign key (TPT_CODPLT) references RSC_PLATAF;
 alter table RSC_TRAFAM add constraint RSC_TFAFAM_FK foreign key (TFA_CODFAM) references RSC_FAMILI;
 alter table RSC_AGHEVI add constraint RSC_AGHICG_FK foreign key (AGH_ICOGRA) references RSC_ARCHIV;
 alter table RSC_AGHEVI add constraint RSC_AGHPOB_FK foreign key (AGH_CODPOB) references RSC_PUBOBJ;
@@ -1516,6 +1539,8 @@ alter table RSC_TRAESP add constraint RSC_TESESP_FK foreign key (TES_CODESP) ref
 alter table RSC_TRAMIT add constraint RSC_TRAPRO_FK foreign key (TRA_CODPRO) references RSC_PROCED;
 alter table RSC_TRAMIT add constraint RSC_TRRADM_FK foreign key (TRR_CODADM) references RSC_ADMREM;
 alter table RSC_TRAMIT add constraint RSC_ORGCOMP_FK foreign key (TRA_ORGCOMP) references RSC_UNIADM;
+alter table RSC_TRAMIT add constraint RSC_TRAMPLT_FK foreign key (TRA_CODPLT) references RSC_PLATAF;
+alter table RSC_SERVIC add constraint RSC_SERPLT_FK foreign key (SER_CODPLT) references RSC_PLATAF;
 alter table RSC_SERVIC add constraint RSC_SET_SERRSP_FK foreign key (SER_SERRSP) references RSC_UNIADM;
 alter table RSC_SERVIC add constraint RSC_SER_INSTRU_FK foreign key (SER_INSTRU) references RSC_UNIADM;
 alter table RSC_HISENV add constraint FK_RSC_HISE_REFERENCE_RSC_SCRT foreign key (HEN_STPCOD) references RSC_SCRTIP;
@@ -1575,8 +1600,8 @@ alter table RSC_HECVIT add constraint RSC_HEVICG_FK foreign key (HEV_ICOGRA) ref
 create sequence RSC_SEQSEN;
 create sequence RSC_SEQHIS;
 create sequence RSC_SEQ_ALL;
-create sequence RSC_SEQ_COM;
 create sequence RSC_SEQSCK;
+create sequence RSC_SEQ_COM;
 create sequence RSC_SEQGRP;
 create sequence RSC_SEQSGR;
 create sequence RSC_SEQSCR;

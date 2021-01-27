@@ -35,6 +35,7 @@
                         <element name="requisitos" nillable="true" type="xsd:string" />
                         <element name="servicioResponsable" nillable="true" type="xsd:long" />
                         <element name="telefono" nillable="true" type="xsd:string" />
+                        <element name="urlTramiteExterno" nillable="true" type="xsd:string" />
                         <element name="tramiteUrl" nillable="true" type="xsd:string" />
                         <element name="tramiteId" nillable="true" type="xsd:string" />
                         <element name="tasaUrl" nillable="true" type="xsd:string" />
