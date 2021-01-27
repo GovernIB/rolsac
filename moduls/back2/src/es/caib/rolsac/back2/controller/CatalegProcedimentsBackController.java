@@ -2383,7 +2383,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	}
 
 	@RequestMapping(value = "/guardarDocumentosRelacionadosLopd.do", method = POST)
-	public @ResponseBody IdNomDTO guardarDocumentosRelacionados(final Long id, final Long[] elementos,
+	public @ResponseBody IdNomDTO guardarDocumentosRelacionadosLopd(final Long id, final Long[] elementos,
 			final HttpServletRequest request) {
 
 		// Guardaremos el orden y borraremos los documentos que se hayan marcado para
@@ -2433,6 +2433,60 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			error = messageSource.getMessage("error.altres", null, request.getLocale());
 			result = new IdNomDTO(-2l, error);
 			log.error(ExceptionUtils.getStackTrace(dEx));
+
+		}
+
+		return result;
+
+	}
+
+	@RequestMapping(value = "/guardarDocumentosRelacionados.do", method = POST)
+	public @ResponseBody IdNomDTO guardarDocumentosRelacionados(final Long id, Long[] elementos,
+			final HttpServletRequest request) {
+
+		// Guardaremos el orden y borraremos los documentos que se hayan marcado para
+		// borrar.
+		// La creación se gestiona en el controlador DocumentBackController.
+
+		final HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+
+		IdNomDTO result;
+		String error = null;
+		// ProcedimientoLocal procedimiento = null;
+
+		try {
+			if (elementos == null) {
+				elementos = new Long[0];
+			}
+			/*
+			 * procedimiento =
+			 * DelegateUtil.getProcedimientoDelegate().obtenerProcedimientoNewBack(id);
+			 *
+			 * List<Documento> documentos =
+			 * GuardadoAjaxUtil.actualizarYOrdenarDocumentosRelacionados(elementos,
+			 * procedimiento, null); procedimiento.setDocumentos(documentos);
+			 *
+			 * guardarGrabar(procedimiento);
+			 */
+			DelegateUtil.getProcedimientoDelegate().reordenarDocumentos(id, Arrays.asList(elementos));
+			result = new IdNomDTO(id,
+					messageSource.getMessage("proc.guardat.documents.correcte", null, request.getLocale()));
+
+		} catch (final DelegateException dEx) {
+
+			if (dEx.isSecurityException()) {
+
+				error = messageSource.getMessage("error.permisos", null, request.getLocale());
+				result = new IdNomDTO(-1l, error);
+
+			} else {
+
+				error = messageSource.getMessage("error.altres", null, request.getLocale());
+				result = new IdNomDTO(-2l, error);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+
+			}
 
 		}
 

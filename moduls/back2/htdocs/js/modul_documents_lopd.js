@@ -12,8 +12,8 @@ jQuery(document).ready(function() {
     EscriptoriPareLopd.iniciar();
 
     // datos traductor
-	CAMPOS_TRADUCTOR_DOCUMENTO = ["doc_titol_", "doc_descripcio_"];
-	DATOS_TRADUCIDOS_DOCUMENTO = ["titulo", "descripcion"];
+	CAMPOS_TRADUCTOR_DOCUMENTO = [];
+	DATOS_TRADUCIDOS_DOCUMENTO = [];
 });
 
 // Lista ordenable para elimiar/ordenar docs en la pantalla "padre"
@@ -137,8 +137,13 @@ function CEscriptoriPareLopd() {
 				listas.find("input." + that.configuracion.nombre + "_nombre_" + idioma + "[name$=_" + item.id + "]").each(function() {
                     var $docInput = jQuery(this);
                     var $docSpan = $docInput.next();
-                    $docInput.val(item["nombre"][idioma]);
-                    $docSpan.text(item["nombre"][idioma]);
+                    if (item["nombre"][idioma] != undefined && item["nombre"][idioma] != "") {
+                    	$docInput.val(item["nombre"][idioma]);
+                    	$docSpan.text(item["nombre"][idioma]);
+                    } else {
+                    	$docInput.val(item["nombre"][idioma]);
+                    	$docSpan.html("&nbsp;");
+                    }
                 });
 
 			}
@@ -302,11 +307,26 @@ function CModulDocumentsLopd() {
 					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});
 
 					var nom = new Object();
-                    escriptori_documents_elm_lopd.find("input[id^='doc_titol_']").each(function (index) {
-						var $titolDoc = jQuery(this);
-						var idioma = $titolDoc.attr('id').split('_')[2];
-						nom[idioma] = $titolDoc.val();
-					});
+					var nomca = "";
+					var nomes = "";
+
+					if(jQuery(escriptori_documents_elm_lopd.find("[id^='doc_arxiu_lop_es_delete']")[0]).attr('checked') != 'checked') {
+						nomes = jQuery(escriptori_documents_elm_lopd.find("[id^='doc_arxiu_es']")[0]).val().split('\\').pop();
+						if (nomes == "" &&  escriptori_documents_elm_lopd.find("[id^='grup_arxiu_actual_doc_lopd_es'] a").length == 1) {
+							nomes = escriptori_documents_elm_lopd.find("[id^='grup_arxiu_actual_doc_lopd_es'] a ")[0].innerHTML;
+						}
+					}
+
+					if(jQuery(escriptori_documents_elm_lopd.find("[id^='doc_arxiu_lop_ca_delete']")[0]).attr('checked') != 'checked') {
+						nomca = jQuery(escriptori_documents_elm_lopd.find("[id^='doc_arxiu_ca']")[0]).val().split('\\').pop();
+
+						if (nomca == "" &&  escriptori_documents_elm_lopd.find("[id^='grup_arxiu_actual_doc_lopd_ca'] a").length == 1) {
+							nomca = escriptori_documents_elm_lopd.find("[id^='grup_arxiu_actual_doc_lopd_ca'] a ")[0].innerHTML;
+						}
+					}
+
+					nom['es'] = nomes;
+					nom['ca'] = nomca;
 
 					var docItem = new Object();
 					docItem['id'] = data.id;
@@ -603,25 +623,14 @@ function CListaSimpleDocumentosLopd() {
 
 		that._guardar(element, url, id);
 
-		// XXX amartin: ocultación del botón de guardado tras solicitar guardado AJAX.
-		// Ir añadiendo casos aquí.
-		var urlGuardarDocumentosProcedimiento = "/catalegProcediments/guardarDocumentosRelacionados.do";
-		var urlGuardarDocumentosFicha = "/fitxainf/guardarDocumentosRelacionados.do";
-		var urlGuardarDocumentosNormativa = "/normativa/guardarDocumentosRelacionados.do";
-
-		if ( url.indexOf(urlGuardarDocumentosProcedimiento) != -1
-				|| url.indexOf(urlGuardarDocumentosFicha) != -1
-				|| url.indexOf(urlGuardarDocumentosNormativa) != -1) {
-
-			if (typeof ModulDocumentsLopd != 'undefined') {
-				ModulDocumentsLopd.deshabilitarBotonGuardar();
-			}
+		if (typeof ModulDocumentsLopd != 'undefined') {
+			ModulDocumentsLopd.deshabilitarBotonGuardar();
 		}
 
 		Detall.modificado(false);
 
 		if (debug) {
-			console.log("Entrando en CListaSimpleDocumentos.guardar");
+			console.log("Entrando en CListaSimpleDocumentosLopd.guardar");
 		}
 	};
 
