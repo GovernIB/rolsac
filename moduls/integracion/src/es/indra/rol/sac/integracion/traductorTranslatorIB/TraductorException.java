@@ -1,4 +1,4 @@
-package es.indra.rol.sac.integracion.traductor;
+package es.indra.rol.sac.integracion.traductorTranslatorIB;
 
 public class TraductorException extends Exception {
 

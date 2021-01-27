@@ -41,7 +41,7 @@ import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
 import es.caib.rolsac.utils.ResultadoBusqueda;
-import es.indra.rol.sac.integracion.traductor.Traductor;
+import es.indra.rol.sac.integracion.traductorTranslatorIB.Traductor;
 
 @Controller
 @RequestMapping("/modelsComuns/")

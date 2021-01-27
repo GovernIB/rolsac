@@ -100,8 +100,8 @@ import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
 import es.caib.rolsac.utils.DateUtils;
 import es.caib.rolsac.utils.ResultadoBusqueda;
-import es.indra.rol.sac.integracion.traductor.Traductor;
-import es.indra.rol.sac.integracion.traductor.TraductorException;
+import es.indra.rol.sac.integracion.traductorTranslatorIB.Traductor;
+import es.indra.rol.sac.integracion.traductorTranslatorIB.TraductorException;
 
 @Controller
 @RequestMapping("/catalegServeis/")

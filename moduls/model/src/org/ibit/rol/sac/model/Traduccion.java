@@ -3,5 +3,6 @@
 package org.ibit.rol.sac.model;
 
 public interface Traduccion extends ValueObject {
-
+	// public List<Map<String, Object>> translate(final Traduccion traduccionOrigen,
+	// final String langDefault, final boolean textoPanto);
 }

@@ -134,6 +134,10 @@ es.caib.rolsac.subscripcions
 		-->
 	   	es.caib.rolsac.A04003003.correo.normativas=simplificacio@caib.es
 	   	
+	   	<!-- Translatorib -->
+		es.caib.rolsac.translatorib.user=api-tib
+		es.caib.rolsac.translatorib.pass=XXX
+		es.caib.rolsac.translatorib.url=http://caibter.indra.es/translatorib/api/services/traduccion/v1/texto
     </attribute>
 
 </mbean>

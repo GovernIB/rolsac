@@ -2,6 +2,7 @@ package es.caib.rolsac.back2.exception;
 
 /**
  * Error cuando el texto introducido tiene algún caracter extraño.
+ *
  * @author slromero
  *
  */
@@ -12,9 +13,10 @@ public class TextNoValidException extends Exception {
 
 	/** Campo. **/
 	private String campo = "";
-	
+
 	/**
-	 * Constructor. 
+	 * Constructor.
+	 *
 	 * @param campo
 	 */
 	public TextNoValidException(final String campo) {
@@ -30,9 +32,10 @@ public class TextNoValidException extends Exception {
 	}
 
 	/**
-	 * @param campo the campo to set
+	 * @param campo
+	 *            the campo to set
 	 */
-	public void setCampo(String campo) {
+	public void setCampo(final String campo) {
 		this.campo = campo;
 	}
 

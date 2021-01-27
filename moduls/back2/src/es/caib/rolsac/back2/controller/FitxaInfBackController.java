@@ -89,7 +89,7 @@ import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
 import es.caib.rolsac.utils.DateUtils;
 import es.caib.rolsac.utils.ResultadoBusqueda;
-import es.indra.rol.sac.integracion.traductor.Traductor;
+import es.indra.rol.sac.integracion.traductorTranslatorIB.Traductor;
 
 @SuppressWarnings("deprecation") // amartin: debido a org.ibit.rol.sac.model.Documento
 
