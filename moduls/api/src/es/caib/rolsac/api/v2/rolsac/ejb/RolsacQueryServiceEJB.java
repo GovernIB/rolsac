@@ -528,11 +528,16 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 						.setLopdLegitimacionIdentificador(procedimentLocal.getLopdLegitimacion().getIdentificador());
 			}
 
-			if (procedimentLocal != null && procedimentLocal.getServicioResponsable() != null) {
-				final String ua = getUAByCodigoDir3(procedimentLocal.getServicioResponsable(),
-						procedimentCriteria.getIdioma());
-				if (ua != null) {
-					procedimentDTO.setLopdResponsable(ua);
+			if (procedimentLocal != null) {
+				if (procedimentLocal.isComun()) {
+					procedimentDTO.setLopdResponsable(System
+							.getProperty("es.caib.rolsac.lopd.responsable.comun." + procedimentCriteria.getIdioma()));
+				} else if (procedimentLocal.getServicioResponsable() != null) {
+					final String ua = getUAByCodigoDir3(procedimentLocal.getServicioResponsable(),
+							procedimentCriteria.getIdioma());
+					if (ua != null) {
+						procedimentDTO.setLopdResponsable(ua);
+					}
 				}
 			}
 		} catch (final HibernateException e) {
@@ -774,10 +779,16 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 				servicioDTO.setLopdLegitimacionIdentificador(servicio.getLopdLegitimacion().getIdentificador());
 			}
 
-			if (servicio != null && servicio.getServicioResponsable() != null) {
-				final String ua = getUAByCodigoDir3(servicio.getServicioResponsable(), servicioCriteria.getIdioma());
-				if (ua != null) {
-					servicioDTO.setLopdResponsable(ua);
+			if (servicio != null) {
+				if (servicio.isComun()) {
+					servicioDTO.setLopdResponsable(System
+							.getProperty("es.caib.rolsac.lopd.responsable.comun." + servicioCriteria.getIdioma()));
+				} else if (servicio.getServicioResponsable() != null) {
+					final String ua = getUAByCodigoDir3(servicio.getServicioResponsable(),
+							servicioCriteria.getIdioma());
+					if (ua != null) {
+						servicioDTO.setLopdResponsable(ua);
+					}
 				}
 			}
 

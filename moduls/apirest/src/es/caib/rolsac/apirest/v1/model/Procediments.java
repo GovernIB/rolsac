@@ -238,10 +238,14 @@ public class Procediments extends EntidadBase {
 								.getLopdLegitimacion().getTraduccion(idioma)).getNombre());
 			}
 
-			final String lopdResponsable = getUAByDir3(
-					((org.ibit.rol.sac.model.ProcedimientoLocal) elem).getServicioResponsable(), idioma);
-			if (lopdResponsable != null) {
-				this.lopdResponsable = lopdResponsable;
+			if (((org.ibit.rol.sac.model.ProcedimientoLocal) elem).isComun()) {
+				this.lopdResponsable = System.getProperty("es.caib.rolsac.lopd.responsable.comun." + idioma);
+			} else {
+				final String lopdResponsable = getUAByDir3(
+						((org.ibit.rol.sac.model.ProcedimientoLocal) elem).getServicioResponsable(), idioma);
+				if (lopdResponsable != null) {
+					this.lopdResponsable = lopdResponsable;
+				}
 			}
 
 		} catch (final Exception e) {
