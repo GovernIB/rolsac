@@ -2169,6 +2169,17 @@ public class CatalegServeisBackController extends PantallaBaseController {
 							"Error controlado, ha intentado subir un fichero con una longitud en el nombre de más de 128 caracteres.");
 					jsonResult = new IdNomDTO(-3l, error).getJson();
 					continuar = false;
+					break;
+				}
+
+				if (tradServ != null && tradServ.getLopdInfoAdicional() != null
+						&& tradServ.getLopdInfoAdicional().getNombre() != null
+						&& !tradServ.getLopdInfoAdicional().getNombre().endsWith(".pdf")) {
+					final String error = messageSource.getMessage("error.fitxer.no_pdf", null, locale);
+					log.error("Error controlado, ha intentado subir un fichero que no es pdf.");
+					jsonResult = new IdNomDTO(-3l, error).getJson();
+					continuar = false;
+					break;
 				}
 			}
 

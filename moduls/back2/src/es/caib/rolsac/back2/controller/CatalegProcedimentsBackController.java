@@ -427,7 +427,19 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 							"Error controlado, ha intentado subir un fichero con una longitud en el nombre de más de 128 caracteres.");
 					jsonResult = new IdNomDTO(-3l, error).getJson();
 					continuar = false;
+					break;
 				}
+
+				if (tradProc != null && tradProc.getLopdInfoAdicional() != null
+						&& tradProc.getLopdInfoAdicional().getNombre() != null
+						&& !tradProc.getLopdInfoAdicional().getNombre().endsWith(".pdf")) {
+					final String error = messageSource.getMessage("error.fitxer.no_pdf", null, locale);
+					log.error("Error controlado, ha intentado subir un fichero que no es pdf.");
+					jsonResult = new IdNomDTO(-3l, error).getJson();
+					continuar = false;
+					break;
+				}
+
 			}
 
 			if (continuar) {
@@ -2518,26 +2530,30 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 		final Map<String, String> resultats = new HashMap<String, String>();
 
-		try {
+		if (id == null || id.isEmpty()) {
+			resultats.put("error", "Error vacio");
+		} else {
+			try {
 
-			final UnidadAdministrativa ua = getPadreDir3(
-					DelegateUtil.getUADelegate().obtenerUnidadAdministrativa(Long.valueOf(id)));
+				final UnidadAdministrativa ua = getPadreDir3(
+						DelegateUtil.getUADelegate().obtenerUnidadAdministrativa(Long.valueOf(id)));
 
-			if (ua != null) {
-				resultats.put("responsable", ua.getNombreUnidadAdministrativa());
-				resultats.put("responsableESP", ua.getNombreUnidadAdministrativa());
+				if (ua != null) {
+					resultats.put("responsable", ua.getNombreUnidadAdministrativa());
+					resultats.put("responsableESP", ua.getNombreUnidadAdministrativa());
+				}
+
+			} catch (final DelegateException e) {
+
+				logException(log, e);
+
+				if (e.isSecurityException()) {
+					resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+				} else {
+					resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+				}
+
 			}
-
-		} catch (final DelegateException e) {
-
-			logException(log, e);
-
-			if (e.isSecurityException()) {
-				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
-			} else {
-				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
-			}
-
 		}
 
 		return resultats;

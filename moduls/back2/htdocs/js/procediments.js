@@ -942,18 +942,6 @@ function CDetall() {
 		jQuery("#item_lopd_destinatario, #item_lopd_destinatario_ca, #item_lopd_destinatario_es, #item_lopd_destinatario_en, #item_lopd_destinatario_de, #item_lopd_destinatario_fr").val('');
 		jQuery("#item_lopd_derechos, #item_lopd_derechos_ca, #item_lopd_derechos_es, #item_lopd_derechos_en, #item_lopd_derechos_de, #item_lopd_derechos_fr").val('');
 
-		// Seteamos el valor
-		jQuery("#item_lopd_finalidad").val(lopdFinalidad);
-		jQuery("#item_lopd_finalidad_ca").val(lopdFinalidad);
-		jQuery("#item_lopd_finalidad_es").val(lopdFinalidadESP);
-		jQuery("#item_lopd_destinatario").val(lopdDestinatario);
-		jQuery("#item_lopd_destinatario_ca").val(lopdDestinatario);
-		jQuery("#item_lopd_destinatario_es").val(lopdDestinatarioESP);
-		jQuery("#item_lopd_derechos").val(lopdDerechos);
-		jQuery("#item_lopd_derechos_ca").val(lopdDerechos);
-		jQuery("#item_lopd_derechos_es").val(lopdDerechosESP);
-
-
 		var estilo_check;
 		if (comunActivo) {
 			estilo_check = "";
@@ -1007,6 +995,16 @@ function CDetall() {
 
 		}
 
+		// Seteamos el valor por defecto
+		jQuery("#item_lopd_finalidad").val(lopdFinalidad);
+		jQuery("#item_lopd_finalidad_ca").val(lopdFinalidad);
+		jQuery("#item_lopd_finalidad_es").val(lopdFinalidadESP);
+		jQuery("#item_lopd_destinatario").val(lopdDestinatario);
+		jQuery("#item_lopd_destinatario_ca").val(lopdDestinatario);
+		jQuery("#item_lopd_destinatario_es").val(lopdDestinatarioESP);
+		jQuery("#item_lopd_derechos").val(lopdDerechos);
+		jQuery("#item_lopd_derechos_ca").val(lopdDerechos);
+		jQuery("#item_lopd_derechos_es").val(lopdDerechosESP);
 
 
 		$("#modulLateral p.baix:first").removeClass("iCaducat").removeClass("iPublicat");
