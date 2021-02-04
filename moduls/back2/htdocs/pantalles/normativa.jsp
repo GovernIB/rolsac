@@ -252,7 +252,7 @@
             "tipus": "alfanumeric",
             "caracters":
             {
-                "maxim": 230,
+                "maxim": 1024,
                 "mostrar": "no",
                 "abreviat": "no"
             },
