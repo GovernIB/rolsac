@@ -36,8 +36,8 @@ $(document).ready(function() {
 	if (itemACarregar > 0)
 		Detall.carregar(itemACarregar);
 
-	CAMPOS_TRADUCTOR_AGRUPACIO_MATERIES = ["item_nom_"];
-	DATOS_TRADUCIDOS_AGRUPACIO_MATERIES = ["nombre"];
+	CAMPOS_TRADUCTOR_LOPD = ["item_nombre_"];
+	DATOS_TRADUCIDOS_LOPD = ["nombre"];
 
     Llistat.iniciar();
 
@@ -329,51 +329,8 @@ function CDetall() {
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");
 
-		// Afegir nodes a la llista de legitimaciones
-		$('#afegeixMateria').unbind("click").bind("click", function() {
-	    	$('#popMateria').css({display:"block"});
-	    });
-
-		$('#tancaMateria').unbind("click").bind("click", function() {
-	    	$('#popMateria').css({display:"none"});
-	    });
-
-		// Boto afegir node
-		$('#addMateria').unbind("click").bind("click", function() {
-
-	    	var id = jQuery('#item_lopd_legitimacion_relacionada').val();
-
-	    	if ( id != '' || id > 0 ) {
-
-	    		$('#popMateria').css({display:"none"});
-
-	    		var vfItem = new Object();
-		    	vfItem['id'] = jQuery('#item_lopd_legitimacion_relacionada').val();
-		    	vfItem['nom'] = jQuery('#item_lopd_legitimacion_relacionada option:selected').text();
-
-		    	var ordenItem = jQuery('#modul_lopd_legitimacions ul li:last input.lopd_legitimacion_orden').val();
-
-		    	if (typeof ordenItem == 'undefined')
-		    		vfItem['orden'] = 0;
-		    	else
-		    		vfItem['orden'] = parseInt(ordenItem) + 1;
-
-		    	vfItem['idMainItem'] = jQuery('#item_id').val();
-		    	vfItem['idRelatedItem'] = vfItem['id'];
-
-
-		    	jQuery('#item_lopd_legitimacion_relacionada').each(limpiarCampo);
-
-	    	} else {
-
-	    		Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: errorMateria});
-
-	    	}
-
-	    });
-
 		// boton de traducir
-        jQuery("#botoTraduirAgrupacioMateries").unbind("click").bind("click", function() {
+        jQuery("#botoTraduirLopdLegitimacion").unbind("click").bind("click", function() {
             Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
         });
 
@@ -390,7 +347,7 @@ function CDetall() {
 		if (debug)
 			console.log("Entrando en CDetall.traduirWrapper");
 
-		that.traduir(pagTraduirAgrupacioMateries, CAMPOS_TRADUCTOR_AGRUPACIO_MATERIES, DATOS_TRADUCIDOS_AGRUPACIO_MATERIES);
+		that.traduir(pagTraduirLopd, CAMPOS_TRADUCTOR_LOPD, DATOS_TRADUCIDOS_LOPD);
 
 		if (debug)
 			console.log("Saliendo de CDetall.traduirWrapper");

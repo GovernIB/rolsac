@@ -301,8 +301,8 @@ public class TMLopdController extends PantallaBaseController {
 	private TraduccionLopdLegitimacion getTraduccionOrigen(final HttpServletRequest request,
 			final String idiomaOrigenTraductor) {
 		final TraduccionLopdLegitimacion traduccioOrigen = new TraduccionLopdLegitimacion();
-		if (StringUtils.isNotEmpty(request.getParameter("item_nom_" + idiomaOrigenTraductor))) {
-			traduccioOrigen.setNombre(request.getParameter("item_nom_" + idiomaOrigenTraductor));
+		if (StringUtils.isNotEmpty(request.getParameter("item_nombre_" + idiomaOrigenTraductor))) {
+			traduccioOrigen.setNombre(request.getParameter("item_nombre_" + idiomaOrigenTraductor));
 		}
 		return traduccioOrigen;
 	}

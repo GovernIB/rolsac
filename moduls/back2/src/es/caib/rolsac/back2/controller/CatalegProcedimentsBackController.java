@@ -2318,18 +2318,12 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		final Map<String, Object> resultats = new HashMap<String, Object>();
 
 		try {
-			log.error("Paso 1 ");
 			final String idiomaOrigenTraductor = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 
-			log.error("Paso 2 ");
 			final TraduccionProcedimientoLocal traduccioOrigen = getTraduccionOrigen(request, idiomaOrigenTraductor);
-			log.error("Paso 3 ");
 			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
-			log.error("Paso 4 ");
 			final Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
-			log.error("Paso 5 ");
 			traduccions = traductor.translate(traduccioOrigen, idiomaOrigenTraductor);
-			log.error("Paso 6 ");
 			resultats.put("traduccions", traduccions);
 
 		} catch (final DelegateException dEx) {
@@ -2404,6 +2398,16 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		}
 		if (StringUtils.isNotEmpty(request.getParameter("item_lloc_" + idiomaOrigenTraductor))) {
 			traduccioOrigen.setLugar(request.getParameter("item_lloc_" + idiomaOrigenTraductor));
+		}
+		if (StringUtils.isNotEmpty(request.getParameter("item_lopd_finalidad_" + idiomaOrigenTraductor))) {
+			traduccioOrigen.setLopdFinalidad(request.getParameter("item_lopd_finalidad_" + idiomaOrigenTraductor));
+		}
+		if (StringUtils.isNotEmpty(request.getParameter("item_lopd_destinatario_" + idiomaOrigenTraductor))) {
+			traduccioOrigen
+					.setLopdDestinatario(request.getParameter("item_lopd_destinatario_" + idiomaOrigenTraductor));
+		}
+		if (StringUtils.isNotEmpty(request.getParameter("item_lopd_derechos_" + idiomaOrigenTraductor))) {
+			traduccioOrigen.setLopdDerechos(request.getParameter("item_lopd_derechos_" + idiomaOrigenTraductor));
 		}
 		/*------------------------------*/
 

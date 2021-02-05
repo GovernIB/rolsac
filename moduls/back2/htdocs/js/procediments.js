@@ -225,7 +225,9 @@ $(document).ready(function() {
 	  "item_destinataris_",
 	  "item_resolucio_",
 	  "item_notificacio_",
-	  "item_observacions_"
+	  "item_observacions_",
+	  "item_lopd_finalidad_",
+	  "item_lopd_destinatario_"
     ];
 
 	DATOS_TRADUCIDOS_PROCEDIMIENTO = [
@@ -235,7 +237,9 @@ $(document).ready(function() {
       "destinatarios",
       "resolucion",
       "notificacion",
-      "observaciones"
+      "observaciones",
+      "lopdFinalidad",
+      "lopdDestinatario"
     ];
 
 	// INICIEM

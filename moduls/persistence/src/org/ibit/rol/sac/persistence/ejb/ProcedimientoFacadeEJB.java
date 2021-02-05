@@ -879,8 +879,9 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 				if (procedimiento.getTraducciones() != null) {
 					for (final String idioma : procedimiento.getTraducciones().keySet()) {
-						if (((TraduccionProcedimientoLocal) procedimiento.getTraduccion(idioma))
-								.getLopdInfoAdicional() != null) {
+						if (((TraduccionProcedimientoLocal) procedimiento.getTraduccion(idioma)) != null
+								&& ((TraduccionProcedimientoLocal) procedimiento.getTraduccion(idioma))
+										.getLopdInfoAdicional() != null) {
 							Hibernate.initialize(((TraduccionProcedimientoLocal) procedimiento.getTraduccion(idioma))
 									.getLopdInfoAdicional());
 						}

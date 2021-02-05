@@ -205,7 +205,9 @@ $(document).ready(function() {
 	  "item_destinatarios_",
 	  "item_requisitos_",
 	  "item_observaciones_",
-	  "item_tramite_url_"
+	  "item_tramite_url_",
+	  "item_lopd_finalidad_",
+	  "item_lopd_destinatario_"
     ];
 
 	DATOS_TRADUCIDOS_SERVEI = [
@@ -214,7 +216,9 @@ $(document).ready(function() {
       "destinatarios",
       "requisitos",
       "observaciones",
-      "urlTramiteExterno"
+      "urlTramiteExterno",
+      "lopdFinalidad",
+      "lopdDestinatario"
     ];
 
 	// INICIEM

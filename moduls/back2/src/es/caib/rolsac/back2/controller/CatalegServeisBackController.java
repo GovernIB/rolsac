@@ -1856,6 +1856,16 @@ public class CatalegServeisBackController extends PantallaBaseController {
 		if (StringUtils.isNotEmpty(request.getParameter("item_tramite_url_" + idiomaOrigenTraductor))) {
 			traduccioOrigen.setUrlTramiteExterno(request.getParameter("item_tramite_url_" + idiomaOrigenTraductor));
 		}
+		if (StringUtils.isNotEmpty(request.getParameter("item_lopd_finalidad_" + idiomaOrigenTraductor))) {
+			traduccioOrigen.setLopdFinalidad(request.getParameter("item_lopd_finalidad_" + idiomaOrigenTraductor));
+		}
+		if (StringUtils.isNotEmpty(request.getParameter("item_lopd_destinatario_" + idiomaOrigenTraductor))) {
+			traduccioOrigen
+					.setLopdDestinatario(request.getParameter("item_lopd_destinatario_" + idiomaOrigenTraductor));
+		}
+		if (StringUtils.isNotEmpty(request.getParameter("item_lopd_derechos_" + idiomaOrigenTraductor))) {
+			traduccioOrigen.setLopdDerechos(request.getParameter("item_lopd_derechos_" + idiomaOrigenTraductor));
+		}
 		return traduccioOrigen;
 
 	}

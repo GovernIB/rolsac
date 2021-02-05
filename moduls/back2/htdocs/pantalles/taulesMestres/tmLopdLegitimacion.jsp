@@ -107,7 +107,7 @@
             {
                 "modo": "individual",
                 "etiqueta": "id",
-                "etiquetaValor": "item_nom_" + '<c:out value="${idiomaVal}"/>',
+                "etiquetaValor": "item_nombre_" + '<c:out value="${idiomaVal}"/>',
                 "obligatori": "si",
                 "tipus": "alfanumeric",
                 "caracters":
