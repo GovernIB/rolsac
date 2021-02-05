@@ -247,7 +247,25 @@
         {
             "modo": "individual",
             "etiqueta": "id",
-            "etiquetaValor": "item_titol_" + '<c:out value="${idiomaVal}"/>',
+            "etiquetaValor": "item_titol_ca",
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "caracters":
+            {
+                "maxim": 1024,
+                "mostrar": "no",
+                "abreviat": "no"
+            },
+            "error":
+                {
+                    "obligatori": "<spring:message code='normativa.formulari.titol.obligatori'/> " + '<c:out value="${idiomaVal}"/>',
+                    "tipus": "<spring:message code='normativa.formulari.titol_ca.no_nomes_numeros'/>"
+                }
+        },
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_titol_es",
             "obligatori": "si",
             "tipus": "alfanumeric",
             "caracters":
