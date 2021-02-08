@@ -7,9 +7,9 @@ img { border:0; }
 
 /* comuns */
 
-body { 
-    font:normal 88% 'TrebuchetMS', 'Trebuchet MS', Arial, Helvetica, sans-serif; 
-    color:#000; 
+body {
+    font:normal 88% 'TrebuchetMS', 'Trebuchet MS', Arial, Helvetica, sans-serif;
+    color:#000;
     background-color: #F8F8F8;
 }
 
@@ -28,10 +28,10 @@ button { overflow:visible; padding:.1em .7em; cursor:pointer; }
 /*input, textarea { padding:.2em; }*/
 select { padding:.1em; }
 
-input:focus, 
-textarea:focus, 
+input:focus,
+textarea:focus,
 input.focus,
-textarea.focus { 
+textarea.focus {
     border:1px solid #000 !important;
     color: Black !important;
 }
@@ -66,7 +66,7 @@ a.btn span span { position:relative; padding:2px .5em; border-width:0; border-to
 a.btn:hover span, a.btn:focus span, a.btn:active span { color:#000; cursor:pointer; background-color:#ff9; border-color:#9cf !important; outline:none; }
 */
 .btnGenerico{
-    float:left;    
+    float:left;
 }
 .btnGenerico{
     background: url(../img/botons/generico/cen.gif) 0 0 repeat-x;
@@ -81,10 +81,10 @@ a.btn:hover span, a.btn:focus span, a.btn:active span { color:#000; cursor:point
     background-image: url(../img/botons/generico/izq_over.gif);
 }
 .btnGenerico a > span{
-    background: url(../img/botons/generico/der.gif) 100% 0 no-repeat;    
+    background: url(../img/botons/generico/der.gif) 100% 0 no-repeat;
 }
 .btnGenerico:hover a > span{
-    background-image: url(../img/botons/generico/der_over.gif);  
+    background-image: url(../img/botons/generico/der_over.gif);
 }
 .btnGenerico a,
 .btnGenerico a span{
@@ -96,7 +96,7 @@ a.btn:hover span, a.btn:focus span, a.btn:active span { color:#000; cursor:point
     line-height: 29px;
     text-decoration: none;
 }
-.btnGenerico a span span{   
+.btnGenerico a span span{
     padding: 0 20px 0 20px;
 }
 .btnGenerico:hover,
@@ -110,50 +110,50 @@ span.sep { margin:0 1.5em; }
 
 #contenidor { width:100%; }
 
-#cap { 
-    position:relative; 
-    width:100%; 
-    color:#fff;     
+#cap {
+    position:relative;
+    width:100%;
+    color:#fff;
     background: url(../img/cap/fondo_cabecera.gif) #e57700 0 0 repeat-x;
 }
-#cap_contingut { 
-    overflow:hidden; 
-    width:58em;     
-    height: 65px;   
+#cap_contingut {
+    overflow:hidden;
+    width:58em;
+    height: 65px;
     margin:0 auto;
     background: url(../img/cap/destello.jpg) 0 0 no-repeat;
 }
-#cap .logos { 
-    display:block; 
+#cap .logos {
+    display:block;
     float:left;
-    width:150px; 
+    width:150px;
 }
-#cap .logos .caib_logo {        
+#cap .logos .caib_logo {
     height: 80px;
    /* margin-top: 15px;*/
     background:transparent url(../img/cap/logo.png) 0 0 no-repeat;
     background-size:30%;
 }
-#cap .aplicacio { 
-    display:block; 
-    float:left;         
-    padding: .2em 0 0 1.7em; 
+#cap .aplicacio {
+    display:block;
+    float:left;
+    padding: .2em 0 0 1.7em;
     background: url(../img/cap/separador.gif) 0 13px no-repeat;
 }
-#cap .aplicacio span.nom { 
+#cap .aplicacio span.nom {
     font-size: 45px;
 }
-#cap .aplicacio span.versio { 
-    position:relative; 
-    top:-2em; 
+#cap .aplicacio span.versio {
+    position:relative;
+    top:-2em;
     font-size:13px;
 }
-#cap .usuari { 
-    display:block; 
-    overflow:hidden; 
-    float:left; 
-    width:17em;     
-    padding-top: 25px;  
+#cap .usuari {
+    display:block;
+    overflow:hidden;
+    float:left;
+    width:17em;
+    padding-top: 25px;
 }
 #cap .usuari p {
     font-weight: bold;
@@ -163,26 +163,26 @@ span.sep { margin:0 1.5em; }
 #cap .usuari p  strong{
     font-size: 18px;
 }
-#cap .usuari p a {  
-    color:#fff;     
+#cap .usuari p a {
+    color:#fff;
     font-weight: normal;
 }
 #cap .usuari p a:hover{
     text-decoration:underline;
 }
-#cap #tancarAplicacio { 
-    display:block; 
-    float: right; 
-    width: 52px;    
-    height:32px; 
+#cap #tancarAplicacio {
+    display:block;
+    float: right;
+    width: 52px;
+    height:32px;
     padding-left: 25px;
     padding-right: 20px;
-    text-align:center;    
+    text-align:center;
     margin-top: 15px;
-    background-image: url(../img/cap/btn_salir.png);    
+    background-image: url(../img/cap/btn_salir.png);
 }
 #cap #tancarAplicacio  a{
-    display:block;  
+    display:block;
     text-decoration: none;
     font-size: 13px;
     color: #666666;
@@ -193,22 +193,22 @@ span.sep { margin:0 1.5em; }
     text-decoration: underline;
 }
 
-#cap_pestanya { 
-    position:absolute; 
-    display:block;  
-    z-index:1; 
+#cap_pestanya {
+    position:absolute;
+    display:block;
+    z-index:1;
     width: 37px;
     height: 18px;
     top: -3px;
-    right: 0;   
+    right: 0;
     background-image: url(../img/cap/btn_plegar_cabecera.gif);
     cursor: pointer;
 }
-#cap_pestanya .plegada{ 
+#cap_pestanya .plegada{
     background-image: url(../img/cap/btn_desplegar_cabecera.gif);
 }
-#cap_pestanya:hover, 
-#cap_pestanya:focus { 
+#cap_pestanya:hover,
+#cap_pestanya:focus {
     background-color:transparent;
 }
 
@@ -223,23 +223,23 @@ span.sep { margin:0 1.5em; }
 #mollaPa{
     background-color: White;
 }
-#mollaPa_contingut { 
-    overflow:hidden; 
-    width:57em; 
-    padding:.5em 0 .5em 0; 
-    margin:0 auto; 
+#mollaPa_contingut {
+    overflow:hidden;
+    width:57em;
+    padding:.5em 0 .5em 0;
+    margin:0 auto;
     background:#fff;
 }
-#mollaPa_contingut ul.molla { 
+#mollaPa_contingut ul.molla {
     list-style:none;
     height: 23px;
 }
-#mollaPa_contingut ul.molla li {    
+#mollaPa_contingut ul.molla li {
     white-space:nowrap;
     float:left;
     margin-right: 10px;
     background: url(../img/mollaPa/flecha.gif) 100% 50% no-repeat;
-    padding-right: 19px;    
+    padding-right: 19px;
 }
 #mollaPa_contingut ul.molla li:last-child{
     background-image: none;
@@ -249,7 +249,7 @@ span.sep { margin:0 1.5em; }
     color: #666666;
     font-size: 13px;
     line-height: 23px;
-    text-decoration: none;  
+    text-decoration: none;
     height: 23px;
 }
 #mollaPa_contingut ul.molla li div{
@@ -259,17 +259,17 @@ span.sep { margin:0 1.5em; }
     padding-left: 9px;
     background-color: #F0F0F0;
     border: 1px solid #C7C7C7;
-    display:block;  
+    display:block;
 }
 #mollaPa_contingut ul.molla li a:hover{
     text-decoration: underline;
 }
-#mollaPa_contingut ul.molla li.seleccionat { 
-    font-weight:bold;    
+#mollaPa_contingut ul.molla li.seleccionat {
+    font-weight:bold;
 }
 #mollaPa_contingut ul.molla li.ua div{
 	background-color: #F0F0F0;
-	overflow: hidden;	
+	overflow: hidden;
 }
 #mollaPa_contingut ul.molla li.ua div a.ua{
 	float: left;
@@ -311,26 +311,26 @@ span.sep { margin:0 1.5em; }
     border-bottom: none;
 }
 
-#uas { 
-    display:none; 
-    overflow:visible; 
-    position:absolute; 
+#uas {
+    display:none;
+    overflow:visible;
+    position:absolute;
     top: 0;
     left: 0;
-    border-radius: 0 10px 10px 10px;    
-    /*top:5em; 
+    border-radius: 0 10px 10px 10px;
+    /*top:5em;
     left:5em; */
-    width:20em; 
-    list-style:none; 
-    background-color:#fff; 
-    border:1px solid #ccc;     
+    width:20em;
+    list-style:none;
+    background-color:#fff;
+    border:1px solid #ccc;
     z-index:100;
     padding: 10px 0;
 }
 #uas li{
     padding: 2px 0;
 }
-#uas li a { 
+#uas li a {
     display:block;
     font-size: 13px;
     padding: 0 13px;
@@ -362,9 +362,9 @@ span.sep { margin:0 1.5em; }
 
 /* escriptori */
 
-#escriptori { 
-    overflow:hidden; 
-    width:58em; 
+#escriptori {
+    overflow:hidden;
+    width:58em;
     margin-left: auto;
     margin-right: auto;
 }
@@ -381,21 +381,21 @@ span.sep { margin:0 1.5em; }
 
 /* peu */
 
-#peu { 
-    overflow:hidden; 
-    clear:both; 
-    width:100%; 
-    height:4em;     
+#peu {
+    overflow:hidden;
+    clear:both;
+    width:100%;
+    height:4em;
     background-color: #F8F8F8;
     padding-top: 96px;
 }
-#peu_contingut { 
-    overflow:hidden; 
-    width:58em; 
-    padding:1em 0; 
+#peu_contingut {
+    overflow:hidden;
+    width:58em;
+    padding:1em 0;
     margin:0 auto;
 }
-#peu div.logos { 
+#peu div.logos {
     width: 282px;
     margin-left: auto;
     margin-right: auto;
@@ -425,28 +425,28 @@ div.informacion { background:#fff url(../img/missatge/informacion.gif) no-repeat
 /* opcions pestanyes */
 
 #opcions,
-.tabOpciones { 
-    height:37px; 
-    list-style:none; 
-    padding-top:1em; 
-    margin-left:0;     
+.tabOpciones {
+    height:37px;
+    list-style:none;
+    padding-top:1em;
+    margin-left:0;
 }
 #opcions li,
-.tabOpciones li { 
-    display:block; 
-    float:left; 
+.tabOpciones li {
+    display:block;
+    float:left;
     position:relative;
-    top:9px; 
-    height: 27px; 
+    top:9px;
+    height: 27px;
     line-height: 27px;
     margin-right: 3px;
     z-index:1;
     padding: 0 20px;
-    text-align: center; 
+    text-align: center;
     border: 1px solid #D3D3D3;
     border-bottom: none;
     padding-left: 35px;
-    background-color: White;    
+    background-color: White;
     background-repeat: no-repeat;
     background-position: 11px 50%;
     border-radius: 15px 15px 0 0;
@@ -465,39 +465,39 @@ div.informacion { background:#fff url(../img/missatge/informacion.gif) no-repeat
     text-decoration: underline;
 }
 #opcions li.actiu,
-.tabOpciones li.actiu { 
-    font-weight:bold; 
-    background-color:#fff; 
-    border-top:1px solid #D3D3D3; 
-    border-right:1px solid #D3D3D3; 
+.tabOpciones li.actiu {
+    font-weight:bold;
+    background-color:#fff;
+    border-top:1px solid #D3D3D3;
+    border-right:1px solid #D3D3D3;
     border-left:1px solid #D3D3D3;
     height: 36px;
     line-height: 36px;
     top: 1px;
 }
 #opcions li.actiu a,
-.tabOpciones li.actiu a { 
-    color: Black; 
+.tabOpciones li.actiu a {
+    color: Black;
     text-decoration:none;
 }
 #opcions li.actiu a:hover,
-.tabOpciones li.actiu a:hover {     
+.tabOpciones li.actiu a:hover {
     cursor:default;
 }
-#opcions li.L,  
-.tabOpciones li.L{  
-    background-image: url(../img/pestanyas/ico_listado_off.gif); 
+#opcions li.L,
+.tabOpciones li.L{
+    background-image: url(../img/pestanyas/ico_listado_off.gif);
 }
 #opcions li.actiu.L,
 .tabOpciones li.actiu.L{
     background-image: url(../img/pestanyas/ico_listado.gif);
 }
-#opcions li.C, 
-.tabOpciones li.C { 
+#opcions li.C,
+.tabOpciones li.C {
     background-image: url(../img/pestanyas/ico_buscador_off.gif);
 }
-#opcions li.actiu.C,   
-.tabOpciones li.actiu.C {   
+#opcions li.actiu.C,
+.tabOpciones li.actiu.C {
     background-image: url(../img/pestanyas/ico_buscador.gif);
 }
 #opcions li.nuevo,
@@ -513,7 +513,7 @@ div.informacion { background:#fff url(../img/missatge/informacion.gif) no-repeat
 /* resultats */
 
 #resultats,
-#resultadosUnidadesHijas{ 
+#resultadosUnidadesHijas{
     clear:both;
     border: 1px solid #D3D3D3;
     /*border-top: none;*/
@@ -521,26 +521,26 @@ div.informacion { background:#fff url(../img/missatge/informacion.gif) no-repeat
     background-color: White;
 }
 #resultats div.resultats,
-#resultadosUnidadesHijas div.resultats{ 
+#resultadosUnidadesHijas div.resultats{
 	display:none;
 }
 #resultats div.actiu,
-#resultadosUnidadesHijas div.actiu { 
+#resultadosUnidadesHijas div.actiu {
 	display:block !important;
 }
 
 #resultats p.executant,
 #resultadosUnidadesHijas p.executant,
-#resultatsTB p.executant { 
-    font-size:1.3em; 
-    font-style:italic; 
-    padding:1em 0 1em 1.6em; 
+#resultatsTB p.executant {
+    font-size:1.3em;
+    font-style:italic;
+    padding:1em 0 1em 1.6em;
     margin-left: 1em;
     background:#fff url(../img/executant.gif) no-repeat 0 1.1em;
 }
 
-#resultats p.info,	
-#resultadosUnidadesHijas p.info{	
+#resultats p.info,
+#resultadosUnidadesHijas p.info{
     padding: 10px 21px 0 21px;
     font: 13px Arial, Helvetica, Sans-serif;
     color: #333333;
@@ -556,10 +556,10 @@ div.informacion { background:#fff url(../img/missatge/informacion.gif) no-repeat
 	font-weight: bold;
 }
 
-#resultats p.noItems, 
-#resultadosUnidadesHijas p.noItems { 
-    font-size:1.3em; 
-    padding: 1em 0 1em 2em !important; 
+#resultats p.noItems,
+#resultadosUnidadesHijas p.noItems {
+    font-size:1.3em;
+    padding: 1em 0 1em 2em !important;
     margin-left: 1em;
     background:#fff url(../img/missatge/alerta.gif) no-repeat 0 50%;
 }
@@ -567,19 +567,19 @@ div.informacion { background:#fff url(../img/missatge/informacion.gif) no-repeat
 
 /* llistats table */
 
-div.table { 
-    overflow:hidden;        
+div.table {
+    overflow:hidden;
     font: 15px Arial, Helvetica, Sans-serif;
     margin-top: 20px;
     padding-bottom: 20px;
 }
-div.table div.thead, 
-div.table div.thead div.tr { 
-    overflow:hidden; 
-    width:100%;     
+div.table div.thead,
+div.table div.thead div.tr {
+    overflow:hidden;
+    width:100%;
 }
-div.table div.thead div.th { 
-    float:left; 
+div.table div.thead div.th {
+    float:left;
     text-transform: uppercase;
     font: bold 11px Verdana, Helvetica, Sans-serif;
     color: #333333;
@@ -588,7 +588,7 @@ div.table div.tbody div.td {
     color: #666666;
 }
 div.table div.thead div.th,
-div.table div.tbody div.td{ 
+div.table div.tbody div.td{
     min-height: 33px;
 }
 div.table div.thead div.th:last-child,
@@ -596,17 +596,17 @@ div.table div.tbody div.td:last-child{
     border-right: none;
 }
 
-div.table div.thead div.ASC a { 
-    background-image:url(../img/ordenacio/asc.gif); 
-    background-repeat:no-repeat; 
+div.table div.thead div.ASC a {
+    background-image:url(../img/ordenacio/asc.gif);
+    background-repeat:no-repeat;
     background-position:.5em 95%;
 }
-div.table div.thead div.DESC a { 
-    background-image:url(../img/ordenacio/desc.gif); 
-    background-repeat:no-repeat; 
+div.table div.thead div.DESC a {
+    background-image:url(../img/ordenacio/desc.gif);
+    background-repeat:no-repeat;
     background-position:.5em 95%;
 }
-div.table div.thead div.th a {    
+div.table div.thead div.th a {
     color:#000;
     padding-right: 10px;
     text-decoration: none;
@@ -615,17 +615,17 @@ div.table div.thead div.th a {
 div.table div.thead div.th a:hover{
     text-decoration: underline;
 }
-div.table div.tbody, 
-div.table div.tbody div.tr { 
-    overflow:hidden; 
+div.table div.tbody,
+div.table div.tbody div.tr {
+    overflow:hidden;
     width:100%;
     background-color: #F9F8F2;
 }
-div.table div.tbody div.par { 
+div.table div.tbody div.par {
     background-color: White;
 }
-div.table div.tbody div.td { 
-    float:left;     
+div.table div.tbody div.td {
+    float:left;
     line-height: 33px;
 }
 div.table div.tbody div.td span.id{
@@ -636,7 +636,7 @@ div.table div.tbody div.td span.id{
 div.table div.tbody div.td a{
     font-size: 15px;
     color: #2176DE;
-    text-decoration: underline; 
+    text-decoration: underline;
 }
 div.table div.tbody div.td a:hover{
     color: Black;
@@ -644,23 +644,23 @@ div.table div.tbody div.td a:hover{
 div.table div.tbody div.td select.ordenacion{
 	width: 70px;
 	margin-top: 5px;
-} 
+}
 
 /* Navegador multipágina */
 
 .paginacio {
     font: 12px Arial, Helvetica, Sans-serif;
     color: #333333;
-    text-align:left; 
+    text-align:left;
     height: 50px;
     width: 430px;
     margin: 0 auto;
-    padding: 13px 0 10px 0;    
+    padding: 13px 0 10px 0;
 }
 .paginacio a,
 .paginacio strong{
 	display: block;
-	float: left;	
+	float: left;
     color: #333333;
     height: 19px;
     line-height: 19px;
@@ -675,7 +675,7 @@ div.table div.tbody div.td select.ordenacion{
 .paginacio a:hover{
 	color: White;
 	border-color: #FF910C;
-	background-color: #FF910C; 
+	background-color: #FF910C;
 }
 .paginacio strong{
 	border: none;
@@ -684,7 +684,7 @@ div.table div.tbody div.td select.ordenacion{
 }
 .paginacio a span{
 	display: block;
-	margin: 4px auto 0 auto;	
+	margin: 4px auto 0 auto;
 }
 .paginacio a.inicio,
 .paginacio a.retroceder{
@@ -696,12 +696,12 @@ div.table div.tbody div.td select.ordenacion{
     float: left;
 	width: 10px;
 	height: 12px;
-	background: url(../img/paginador/retroceder.gif) 0 0 no-repeat;		
+	background: url(../img/paginador/retroceder.gif) 0 0 no-repeat;
 }
 .paginacio a.inicio:hover span{
 	background-position: -31px 0;
 }
-.paginacio a.retroceder span{	
+.paginacio a.retroceder span{
 	background-position: -16px 0;
 }
 .paginacio a.retroceder:hover span{
@@ -711,7 +711,7 @@ div.table div.tbody div.td select.ordenacion{
 	float: left;
 }
 .paginacio form{
-	display: block;	
+	display: block;
 	margin-right: 5px;
 }
 .paginacio form input{
@@ -741,30 +741,30 @@ div.table div.tbody div.td select.ordenacion{
 /* cercador */
 
 #cercador_contingut,
-.cercador_contingut { 
-    overflow:hidden;     
-    padding:1em; 
-    margin:0 auto;  
+.cercador_contingut {
+    overflow:hidden;
+    padding:1em;
+    margin:0 auto;
 }
 #cercador h2,
-.cercador h2 { 
+.cercador h2 {
     font: bold 11px Verdana, Arial, Helvetica, Sans-serif;
     color: #333333;
-    text-transform: uppercase;  
+    text-transform: uppercase;
     margin: 5px 0 20px 0;
 }
 #cercador div.fila,
-.cercador div.fila { 
-    overflow:hidden; 
-    width:100%; 
-    padding:0; 
+.cercador div.fila {
+    overflow:hidden;
+    width:100%;
+    padding:0;
     margin-bottom:1em;
 }
 #cercador div.element,
 .cercador div.element{
     overflow:hidden;
     float: left;
-    height:54px;    
+    height:54px;
 }
 #cercador .element.t6,
 .cercador .element.t6{
@@ -818,48 +818,48 @@ div.table div.tbody div.td select.ordenacion{
     height: 20px;
 }
 
-#cercador div input.on, 
-.cercador div input.on { 
+#cercador div input.on,
+.cercador div input.on {
 	background-color:#ddfeff !important; border:1px solid #7f9db9 !important;
 }
 /*#cercador div input.t8, #cercador div select.t8 { width:6em !important; }*/
-#cercador div input.t17, 
-.cercador div input.t17 { 
+#cercador div input.t17,
+.cercador div input.t17 {
 	width:12.5em !important;
 }
 
-#cercador input.text, 
-.cercador input.text{ 
+#cercador input.text,
+.cercador input.text{
 	width:15.5em; background-color:#fff; border:1px solid #7f9db9;
 }
-#cercador texconvenio, 
-.cercador texconvenio { 
+#cercador texconvenio,
+.cercador texconvenio {
 	width:50em; height:5.5em; background-color:#fff; border:1px solid #7f9db9;
 }
-#cercador texconvenio.texconvenioOn, 
-.cercador texconvenio.texconvenioOn { 
+#cercador texconvenio.texconvenioOn,
+.cercador texconvenio.texconvenioOn {
 	background-color:#ddfeff;
 }
-#cercador ul.seleccioMultiple, 
-.cercador ul.seleccioMultiple { 
+#cercador ul.seleccioMultiple,
+.cercador ul.seleccioMultiple {
 	overflow:auto; width:20em; height:5.5em; background-color:#fff; border:1px solid #7f9db9;
 }
-#cercador ul.seleccioMultiple li, 
-.cercador ul.seleccioMultiple li { 
+#cercador ul.seleccioMultiple li,
+.cercador ul.seleccioMultiple li {
 	padding-left:.5em;
 }
-#cercador ul.enLinia li, 
-.cercador ul.enLinia li { 
+#cercador ul.enLinia li,
+.cercador ul.enLinia li {
 	display:inline; padding-left:.5em; border-left:1px solid #e0e0e0;
 }
-#cercador div.etiqueta, 
-.cercador div.etiqueta, 
-#cercador label.etiqueta,    
-.cercador label.etiqueta{    
+#cercador div.etiqueta,
+.cercador div.etiqueta,
+#cercador label.etiqueta,
+.cercador label.etiqueta{
     font: 13px Arial, Helvetica, Sans-serif;
 }
-#cercador div.etiqueta:after, 
-.cercador div.etiqueta:after { 
+#cercador div.etiqueta:after,
+.cercador div.etiqueta:after {
 	content:":";
 }
 #cercador label.checkbox,
@@ -870,18 +870,18 @@ div.table div.tbody div.td select.ordenacion{
 .cercador div.control {
     padding-top: 2px;
 }
-#cercador div.control ul, 
-.cercador div.control ul{ 
+#cercador div.control ul,
+.cercador div.control ul{
 	list-style:none;
 }
 #cercador div.noClear,
 .cercador div.noClear{
     clear: none !important;
 }
-#cercador div.botonera, 
-.cercador div.botonera { 
+#cercador div.botonera,
+.cercador div.botonera {
     clear: both;
-    float:right;    
+    float:right;
 }
 #cercador .botonera .boton,
 .cercador .botonera .boton{
@@ -920,17 +920,17 @@ div.table div.tbody div.td select.ordenacion{
 
 /*#cercador div.rabillo { height:1em; background:transparent url(../img/botonera/rabillo_c_ccd7e2.gif) no-repeat center bottom; }*/
 
-#cercador div.mesDades, 
-.cercador div.mesDades { 
+#cercador div.mesDades,
+.cercador div.mesDades {
 	display:none;
 }
 
-#cercador a.mesDades, 
-.cercador a.mesDades { 
+#cercador a.mesDades,
+.cercador a.mesDades {
 	padding-left:1.2em; background:transparent url(../img/cercador/mesDades_off.gif) no-repeat left center;
 }
-#cercador a.on, 
-.cercador a.on { 
+#cercador a.on,
+.cercador a.on {
 	background-image:url(../img/cercador/mesDades_on.gif);
 }
 
@@ -990,8 +990,8 @@ div.table div.tbody div.td select.ordenacion{
 
 #carregantDetall { font-size:1.3em; font-style:italic; padding:1em 0 1em 1.6em; background:#fff url(../img/executant.gif) no-repeat left center; }
 
-.escriptori_detall { 
-    display:none; 
+.escriptori_detall {
+    display:none;
     font: 13px Arial, Helvetica, Sans-serif;
     color: Black;
 }
@@ -1003,14 +1003,14 @@ div.table div.tbody div.td select.ordenacion{
 }
 .escriptori_detall .grupoModulosFormulario{
     float: left;
-    width: 779px;       
+    width: 779px;
 }
 .escriptori_detall .grupoModulosFormulario div.modul{
     border-radius: 15px 15px 15px 15px;
     border: 1px solid #D4D4D4;
     background-color: White;
-    margin-bottom: 30px;    
-    position:relative;    
+    margin-bottom: 30px;
+    position:relative;
     padding: 25px 0 25px 21px;
 }
 .escriptori_detall .grupoModulosFormulario div.modul a.modul{
@@ -1043,14 +1043,14 @@ div.table div.tbody div.td select.ordenacion{
 }
 .escriptori_detall .grupoModulosFormulario div.modul.auditorias table{
     width: 100%;
-    border-collapse: collapse;    
+    border-collapse: collapse;
     margin-bottom: 20px;
 }
-.escriptori_detall .grupoModulosFormulario div.modul.auditorias table div{    
+.escriptori_detall .grupoModulosFormulario div.modul.auditorias table div{
     padding: 6px 17px 6px 17px;
 }
 .escriptori_detall .grupoModulosFormulario div.modul.auditorias table th{
-    text-align: left;    
+    text-align: left;
     text-transform: uppercase;
     color: Black;
     font: bold 11px Verdana, Helvetica, Sans-serif;
@@ -1060,7 +1060,7 @@ div.table div.tbody div.td select.ordenacion{
     padding-bottom: 10px;
 }
 .escriptori_detall .grupoModulosFormulario div.modul.auditorias table tbody tr{
-    background-color: #F9F8F2;    
+    background-color: #F9F8F2;
 }
 .escriptori_detall .grupoModulosFormulario div.modul.auditorias table .usuariocode{
     width: 25%;
@@ -1098,13 +1098,13 @@ div.table div.tbody div.td select.ordenacion{
 .escriptori_detall .grupoModulosFormulario legend, .escriptori_detall .grupoModulosFormulario p.titol {
     font: bold 11px Verdana, Arial, Helvetica, Sans-serif;
     color: #333333;
-    text-transform: uppercase;    
+    text-transform: uppercase;
 }
 .escriptori_detall .grupoModulosFormulario .etiqueta{
-    height: 21px;   
+    height: 21px;
     overflow: hidden;
 }
-.escriptori_detall .grupoModulosFormulario .obligatori{ 
+.escriptori_detall .grupoModulosFormulario .obligatori{
     color: #CC0000;
 }
 .escriptori_detall .grupoModulosFormulario .fila{
@@ -1112,17 +1112,17 @@ div.table div.tbody div.td select.ordenacion{
     margin-bottom: 20px;
     overflow: hidden;
 }
-.escriptori_detall .grupoModulosFormulario input[type=text], .escriptori_detall .grupoModulosFormulario input[type=password]{    
+.escriptori_detall .grupoModulosFormulario input[type=text], .escriptori_detall .grupoModulosFormulario input[type=password]{
     border: 1px solid #C7DDEB;
     background-color: #ECF6FC;
     color: Black;
-    height: 21px;   
+    height: 21px;
     width: 99.8%;
     padding: 2px 0;
     border-radius: 5px 5px 5px 5px;
 }
 .escriptori_detall .grupoModulosFormulario textarea,
-#escriptori_tramits .control textarea{    
+#escriptori_tramits .control textarea{
     background-color: #ECF6FC;
     width: 733px;
 }
@@ -1131,7 +1131,7 @@ div.table div.tbody div.td select.ordenacion{
     border-radius: 5px 5px 5px 5px;
     border: 1px solid #C7DDEB;
     background-color: #ECF6FC;
-    height: 21px;   
+    height: 21px;
     padding: 2px 0;
 }
 .escriptori_detall .grupoModulosFormulario .control.select select,
@@ -1167,9 +1167,9 @@ div.table div.tbody div.td select.ordenacion{
 }
 
 .escriptori_detall .grupoModulosFormulario .element{
-    float: left;    
+    float: left;
 }
-.escriptori_detall .grupoModulosFormulario .element .control{   
+.escriptori_detall .grupoModulosFormulario .element .control{
     margin-right: 25px;
 }
 .escriptori_detall .grupoModulosFormulario .element.checkbox {
@@ -1220,15 +1220,15 @@ div.table div.tbody div.td select.ordenacion{
 .escriptori_detall .botonera,
 .menuPublicacion .botonera{
     float: right;
-    width: 286px;    
+    width: 286px;
 }
 .escriptori_detall .botonera ul,
 .menuPublicacion .botonera ul{
     background-color: #F3F3F3;
-    border: 1px solid #D3D3D3;  
+    border: 1px solid #D3D3D3;
     overflow: hidden;
     padding: 15px;
-    
+
     border-radius: 15px 15px 15px 15px;
 }
 .escriptori_detall .botonera ul li,
@@ -1241,7 +1241,7 @@ div.table div.tbody div.td select.ordenacion{
     font: 16px/38px Impact, Arial, Helvetica, Sans-serif;
     color: White;
     display:block;
-    text-align: center; 
+    text-align: center;
 }
 .escriptori_detall .botonera ul li,
 .menuPublicacion .botonera ul li{
@@ -1252,17 +1252,17 @@ div.table div.tbody div.td select.ordenacion{
     margin-bottom: 10px;
 }
 .escriptori_detall .botonera ul li a,
-.menuPublicacion .botonera ul li a{   
+.menuPublicacion .botonera ul li a{
     background: url(../img/botons/opcion1/izq.gif) 0 0 no-repeat;
     text-decoration: none;
 }
 .escriptori_detall .botonera ul li a:hover,
-.menuPublicacion .botonera ul li a:hover{ 
+.menuPublicacion .botonera ul li a:hover{
     text-decoration: underline;
 }
 .escriptori_detall .botonera ul li a > span,
 .menuPublicacion .botonera ul li a > span{
-    background: url(../img/botons/opcion1/der.gif) 100% 0 no-repeat; 
+    background: url(../img/botons/opcion1/der.gif) 100% 0 no-repeat;
 }
 .escriptori_detall .botonera ul li a > span span,
 .menuPublicacion .botonera ul li a > span span{
@@ -1282,16 +1282,16 @@ div.table div.tbody div.td select.ordenacion{
     background-image: url(../img/botons/opcion2/cen.gif);
 }
 .escriptori_detall .botonera ul li.btnEliminar a,
-.menuPublicacion .botonera ul li.btnEliminar a{   
-    background-image: url(../img/botons/opcion2/izq.gif);    
+.menuPublicacion .botonera ul li.btnEliminar a{
+    background-image: url(../img/botons/opcion2/izq.gif);
 }
 .escriptori_detall .botonera ul li.btnEliminar a > span,
 .menuPublicacion .botonera ul li.btnEliminar a > span{
-    background-image: url(../img/botons/opcion2/der.gif);    
+    background-image: url(../img/botons/opcion2/der.gif);
 }
 .escriptori_detall .botonera ul li.btnEliminar a span span,
 .menuPublicacion .botonera ul li.btnEliminar a span span{
-    background: url(../img/botons/iconos/borrar.png) 10px 50% no-repeat; 
+    background: url(../img/botons/iconos/borrar.png) 10px 50% no-repeat;
 }
 
 
@@ -1305,16 +1305,16 @@ div.table div.tbody div.td select.ordenacion{
     background-image: url(../img/botons/opcion2/cen.gif);
 }
 .escriptori_detall .botonera ul li.btnPrevisualizar a,
-.menuPublicacion .botonera ul li.btnPrevisualizar a{  
-    background-image: url(../img/botons/opcion2/izq.gif);    
+.menuPublicacion .botonera ul li.btnPrevisualizar a{
+    background-image: url(../img/botons/opcion2/izq.gif);
 }
 .escriptori_detall .botonera ul li.btnPrevisualizar a > span,
 .menuPublicacion .botonera ul li.btnPrevisualizar a > span{
-    background-image: url(../img/botons/opcion2/der.gif);    
+    background-image: url(../img/botons/opcion2/der.gif);
 }
 .escriptori_detall .botonera ul li.btnPrevisualizar a span span,
 .menuPublicacion .botonera ul li.btnPrevisualizar a span span{
-    background: url(../img/botons/iconos/previsualizar.png) 13px 50% no-repeat;  
+    background: url(../img/botons/iconos/previsualizar.png) 13px 50% no-repeat;
 }
 
 /* Boton duplicar */
@@ -1324,17 +1324,17 @@ div.table div.tbody div.td select.ordenacion{
     background-image: url(../img/botons/opcion2/cen.gif);
 }
 .escriptori_detall .botonera ul li.btnDuplicar a,
-.menuPublicacion .botonera ul li.btnDuplicar a{  
-    background-image: url(../img/botons/opcion2/izq.gif);    
+.menuPublicacion .botonera ul li.btnDuplicar a{
+    background-image: url(../img/botons/opcion2/izq.gif);
 }
 .escriptori_detall .botonera ul li.btnDuplicar a > span,
 .menuPublicacion .botonera ul li.btnDuplicar a > span{
-    background-image: url(../img/botons/opcion2/der.gif);    
+    background-image: url(../img/botons/opcion2/der.gif);
 }
 
 .escriptori_detall .botonera ul li.btnDuplicar a span span,
 .menuPublicacion .botonera ul li.btnDuplicar a span span{
-    background: url(../img/botons/iconos/duplicar.png) 13px 50% no-repeat;  
+    background: url(../img/botons/iconos/duplicar.png) 13px 50% no-repeat;
 }
 
 
@@ -1342,7 +1342,7 @@ div.table div.tbody div.td select.ordenacion{
 
 .escriptori_detall .botonera ul li.btnVolver a span span,
 .menuPublicacion .botonera ul li.btnVolver a span span{
-    background: url(../img/botons/iconos/volver.png) 13px 50% no-repeat; 
+    background: url(../img/botons/iconos/volver.png) 13px 50% no-repeat;
 }
 
 
@@ -1350,7 +1350,7 @@ div.table div.tbody div.td select.ordenacion{
 
 .escriptori_detall .botonera ul li.btnGuardar a span span,
 .menuPublicacion .botonera ul li.btnGuardar a span span{
-    background: url(../img/botons/iconos/guardar.png) 13px 50% no-repeat;    
+    background: url(../img/botons/iconos/guardar.png) 13px 50% no-repeat;
 }
 
 
@@ -1358,28 +1358,28 @@ div.table div.tbody div.td select.ordenacion{
 
 .escriptori_detall .botonera ul li.btnPublicar span span,
 .menuPublicacion .botonera ul li.btnPublicar span span{
-    background: url(../img/botons/iconos/publicar.png) 5px 50% no-repeat;    
+    background: url(../img/botons/iconos/publicar.png) 5px 50% no-repeat;
 }
 
 
 /* Boton deshabilitado */
 
 .escriptori_detall .botonera ul li.off,
-.menuPublicacion .botonera ul li.off{ 
-    background-image: url(../img/botons/opcion_off/cen.gif); 
+.menuPublicacion .botonera ul li.off{
+    background-image: url(../img/botons/opcion_off/cen.gif);
 }
 .escriptori_detall .botonera ul li.off a,
-.menuPublicacion .botonera ul li.off a{   
-    background-image: url(../img/botons/opcion_off/izq.gif);     
+.menuPublicacion .botonera ul li.off a{
+    background-image: url(../img/botons/opcion_off/izq.gif);
     cursor: default;
 }
 .escriptori_detall .botonera ul li.off a:hover,
-.menuPublicacion .botonera ul li.off a:hover{ 
+.menuPublicacion .botonera ul li.off a:hover{
     text-decoration: none;
 }
 .escriptori_detall .botonera ul li.off a > span,
 .menuPublicacion .botonera ul li.off a > span{
-    background-image: url(../img/botons/opcion_off/der.gif); 
+    background-image: url(../img/botons/opcion_off/der.gif);
 }
 
 .escriptori_detall .botonera ul li.par,
@@ -1392,8 +1392,8 @@ div.table div.tbody div.td select.ordenacion{
 }
 
 .escriptori_detall .botonera ul li.off,
-.menuPublicacion .botonera ul li.off{ 
-    background-image: url(../img/botons/opcion_off/cen.gif); 
+.menuPublicacion .botonera ul li.off{
+    background-image: url(../img/botons/opcion_off/cen.gif);
 }
 
 /* Módulo lateral */
@@ -1402,7 +1402,7 @@ div.table div.tbody div.td select.ordenacion{
 .menuPublicacion{
     margin-top: 0;
     float: right;
-    width: 286px;  
+    width: 286px;
 }
 
 .mh150px {
@@ -1425,27 +1425,27 @@ div.table div.tbody div.td select.ordenacion{
 .escriptori_detall .modulLateral div.modul,
 .menuPublicacion  div.modul{
     background-color: #F3F3F3;
-    border: 1px solid #D3D3D3;  
+    border: 1px solid #D3D3D3;
     overflow: hidden;
     padding: 15px;
     margin-bottom: 33px;
     position:relative;
-    
+
     border-radius: 15px 15px 15px 15px;
 }
 
 .escriptori_detall .modulLateral div.modul.destacado,
 .menuPublicacion div.modul.destacado{
     padding: 0;
-    background-color: White;        
-    
+    background-color: White;
+
     border-radius: 0px 15px 15px 0px;
-    border-left: none;        
+    border-left: none;
     left: -21px;
     width: 306px;
     overflow: visible;
-    
-    /*left: -19px;    
+
+    /*left: -19px;
     width: 304px;*/
 }
 
@@ -1454,25 +1454,25 @@ div.table div.tbody div.td select.ordenacion{
 .menuPublicacion div.modul.destacado .dec1,
 .menuPublicacion div.modul.destacado .dec2{
     position: absolute;
-    left: 0;    
+    left: 0;
     width: 42px;
     height: 13px;
 }
 .escriptori_detall .modulLateral div.modul.destacado .dec1,
 .menuPublicacion div.modul.destacado .dec1{
-    top: -13px;        
+    top: -13px;
     background-image: url(../img/marcos/modulo_borde_sup.gif);
 }
 .escriptori_detall .modulLateral div.modul.destacado .dec2,
 .menuPublicacion div.modul.destacado .dec2{
-    bottom: -13px;        
+    bottom: -13px;
     background-image: url(../img/marcos/modulo_borde_inf.gif);
 }
 .escriptori_detall .modulLateral div.modul.destacado .interior,
 .menuPublicacion div.modul.destacado .interior{
-    position: relative;    
+    position: relative;
     padding: 15px 15px 15px 36px;
-    
+
 }
 .escriptori_detall .modulLateral div.modul a.modul,
 .menuPublicacion div.modul a.modul{
@@ -1510,7 +1510,7 @@ div.table div.tbody div.td select.ordenacion{
 .menuPublicacion .botonera ul{
     padding: 0;
     border: none;
-    border-radius: 0;    
+    border-radius: 0;
 }
 
 .escriptori_detall .modulLateral .left,
@@ -1587,7 +1587,7 @@ div.table div.tbody div.td select.ordenacion{
     font-weight: bold;
     color: black;
 }
-.modulPrincipal ul.idiomes li.idioma a{ 
+.modulPrincipal ul.idiomes li.idioma a{
     color: #0099CC;
     text-decoration: underline;
 }
@@ -1626,7 +1626,7 @@ div.modul div.llistat div.tbody div.nou { display:none; }
 }
 .escriptori_detall .modulLateral .selectorChecks .llistat li.impar,
 .escriptori_detall .modulLateral .selectorChecks .llistat li:nth-child(2n+1){
-    clear:left; 
+    clear:left;
 }
 .escriptori_detall .modulLateral .selectorChecks .botonera{
     clear: both;
@@ -1658,17 +1658,17 @@ div.previsualitzacio iframe { width:100%; height:40em; border:0; }
 
 /* modul lateral */
 
-.modulLateral .multilang  ul.idiomes { 
-    overflow:hidden; 
-    list-style:none; 
-    padding:.5em 0 0 0; 
+.modulLateral .multilang  ul.idiomes {
+    overflow:hidden;
+    list-style:none;
+    padding:.5em 0 0 0;
     margin-bottom:1em;
     color: #0099CC;
 }
-.modulLateral .multilang ul.idiomes li { 
-    float:left; 
-    height:1.5em; 
-    padding:.3em 0.5em 0.3em 0.5em; 
+.modulLateral .multilang ul.idiomes li {
+    float:left;
+    height:1.5em;
+    padding:.3em 0.5em 0.3em 0.5em;
     margin:0;
     border-radius: 6px;
 }
@@ -1676,13 +1676,13 @@ div.previsualitzacio iframe { width:100%; height:40em; border:0; }
 .modulLateral .multilang ul.idiomes li.seleccionat { background-color:#fff; color: #000; font-weight: bold;}
 .modulLateral .multilang ul.idiomes li.seleccionat a { font-weight:bold; color:#000; text-decoration:none; }
 
-.modulLateral .multilang div.seleccionats .cajaIdioma{ 
+.modulLateral .multilang div.seleccionats .cajaIdioma{
     display:none;
 }
 .modulLateral .multilang div.seleccionats div.seleccionat { display:block; }
 .modulLateral .multilang ul li div span.doc { display:block; float:left; text-align:left; }
 
-.modulLateral .multilang div.seleccionats ul { 
+.modulLateral .multilang div.seleccionats ul {
     list-style:none;
 }
 
@@ -1698,7 +1698,7 @@ div.previsualitzacio iframe { width:100%; height:40em; border:0; }
     border: 1px solid #E3E3E3;
     background-color: White;
     padding: 5px 10px;
-    margin-bottom: 5px; 
+    margin-bottom: 5px;
 }
 .listaOrdenable ul li > div{
     padding-right: 20px;
@@ -1798,14 +1798,14 @@ div.modulLateral div.seleccionat ul {
 }
 #modulDocumentNormativa  .enlace label{
     display: block;
-    padding-bottom: 4px;    
+    padding-bottom: 4px;
 }
 #modulDocumentNormativa  .element input.nou{
     width: 100%;
     height: 20px;
 }
 #modulDocumentNormativa a{
-    color: #0099CC;    
+    color: #0099CC;
 }
 
 
@@ -1858,25 +1858,30 @@ div.modulLateral div.seleccionat ul {
 	position:relative;
 	left:780px;
 }
-div.table div.tbody div.errorEstado { 
+div.table div.tbody div.errorEstado {
     background-color: #FAA8A8;
 }
 div.modulBOIB{
     border-radius: 15px 15px 15px 15px;
     border: 1px solid #D4D4D4;
     background-color: White;
-    margin-bottom: 30px;    
-    position:relative;    
+    margin-bottom: 30px;
+    position:relative;
     padding: 25px 0 25px 21px;
 }
 
 #cercadorTB.dades.paginacio {
     width: 430px;
-    
+
 }
 
 
 input[type=text]:disabled{
-    background-color: #EEE !important; 
+    background-color: #EEE !important;
     color:#BBB !important;
+}
+
+
+.soloLectura {
+	background: #EEE !important;
 }

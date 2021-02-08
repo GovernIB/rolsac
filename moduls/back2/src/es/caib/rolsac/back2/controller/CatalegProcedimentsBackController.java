@@ -198,8 +198,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		model.put("lopdDestinatarioESP", RolsacPropertiesUtil.getLopdDestinatario(false));
 		model.put("lopdDerechos", RolsacPropertiesUtil.getLopdDerechos(true));
 		model.put("lopdDerechosESP", RolsacPropertiesUtil.getLopdDerechos(false));
-		model.put("lopdDerechos", RolsacPropertiesUtil.getLopdResponsableComun(true));
-		model.put("lopdDerechosESP", RolsacPropertiesUtil.getLopdResponsableComun(false));
 		model.put("lopdResponsableComun", RolsacPropertiesUtil.getLopdResponsableComun(true));
 		model.put("lopdResponsableComunESP", RolsacPropertiesUtil.getLopdResponsableComun(false));
 

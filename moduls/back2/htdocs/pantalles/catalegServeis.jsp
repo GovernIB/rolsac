@@ -370,7 +370,7 @@
             "tipus": "alfanumeric",
             "error":
                 {
-                    "obligatori": "<spring:message code='proc.formulari.error.responsable.obligatori'/>"
+                    "obligatori": "<spring:message code='proc.formulari.error.lopdresponsable.obligatori'/>"
                 }
         },
 
@@ -383,7 +383,7 @@
             "tipus": "alfanumeric",
             "error":
                 {
-                    "obligatori": "<spring:message code='proc.formulari.error.responsable.obligatori'/>"
+                    "obligatori": "<spring:message code='proc.formulari.error.lopdlegitimacion.obligatori'/>"
                 }
         },
 
@@ -396,7 +396,7 @@
             "tipus": "alfanumeric",
             "error":
                 {
-                    "obligatori": "<spring:message code='proc.formulari.error.responsable.obligatori'/>"
+                    "obligatori": "<spring:message code='proc.formulari.error.lopdfinalidad.obligatori'/>"
                 }
         },
 
@@ -409,7 +409,7 @@
             "tipus": "alfanumeric",
             "error":
                 {
-                    "obligatori": "<spring:message code='proc.formulari.error.responsable.obligatori'/>"
+                    "obligatori": "<spring:message code='proc.formulari.error.lopddestintario.obligatori'/>"
                 }
         },
 
@@ -423,7 +423,7 @@
             "tipus": "alfanumeric",
             "error":
                 {
-                    "obligatori": "<spring:message code='proc.formulari.error.responsable.obligatori'/>"
+                    "obligatori": "<spring:message code='proc.formulari.error.lopdderechos.obligatori'/>"
                 }
         }
 
@@ -1035,7 +1035,7 @@
 										  <label for="item_lopd_legitimacion"><spring:message code='proc.dades.lopd.responsable'/></label>
 									  </div>
 									  <div class="control">
-									  		<input id="item_lopd_responsable" name="item_lopd_responsable" type="text" class="nou" readonly="readonly" />
+									  		<input id="item_lopd_responsable" name="item_lopd_responsable" type="text" class="nou soloLectura" readonly="readonly" />
 									  </div>
 								</div>
 							</div>
@@ -1097,7 +1097,7 @@
 											<div class="etiqueta"><label for="item_lopd_derechos_<c:out value="${lang}"/>"><spring:message code='proc.dades.lopd.derechos'/></label></div>
 											<div class="control">
 												<textarea id="item_lopd_derechos_<c:out value="${lang}" />"
-				                                        name="item_lopd_derechos_<c:out value="${lang}" />" cols="50" rows="2" class="nou" readonly="readonly"></textarea>
+				                                        name="item_lopd_derechos_<c:out value="${lang}" />" cols="50" rows="2" class="nou soloLectura" readonly="readonly"></textarea>
 											</div>
 										</div>
 									</c:forEach>
