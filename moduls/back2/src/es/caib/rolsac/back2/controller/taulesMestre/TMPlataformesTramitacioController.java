@@ -1,14 +1,17 @@
 package es.caib.rolsac.back2.controller.taulesMestre;
 
+import static es.caib.rolsac.utils.LogUtils.logException;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -27,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.utils.ResultadoBusqueda;
+import es.indra.rol.sac.integracion.traductorTranslatorIB.Traductor;
 
 @Controller
 @RequestMapping("/plataformes/")
@@ -96,6 +100,48 @@ public class TMPlataformesTramitacioController extends PantallaBaseController {
 		resultats.put("total", resultadoBusqueda.getTotalResultados());
 		resultats.put("nodes", llistaPlataformaslDTO);
 		return resultats;
+	}
+
+	@RequestMapping(value = "/traduir.do")
+	public @ResponseBody Map<String, Object> traduir(final HttpServletRequest request) {
+		final Map<String, Object> resultats = new HashMap<String, Object>();
+
+		try {
+			final String idiomaOrigenTraductor = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+
+			final TraduccionPlataforma traduccioOrigen = getTraduccionOrigen(request, idiomaOrigenTraductor);
+			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
+			final Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
+			traduccions = traductor.translate(traduccioOrigen, idiomaOrigenTraductor);
+
+			resultats.put("traduccions", traduccions);
+
+		} catch (final DelegateException dEx) {
+			logException(log, dEx);
+			if (dEx.isSecurityException()) {
+				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+			} else {
+				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+			}
+		} catch (final NullPointerException npe) {
+			log.error("TMPerfilsGestorController.traduir: El traductor no se encuentra en en contexto.");
+			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+		} catch (final Exception e) {
+			log.error("TMPerfilsGestorController.traduir: Error en al traducir perfil gestor: " + e);
+			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+		}
+
+		return resultats;
+	}
+
+	private TraduccionPlataforma getTraduccionOrigen(final HttpServletRequest request,
+			final String idiomaOrigenTraductor) {
+		final TraduccionPlataforma traduccioOrigen = new TraduccionPlataforma();
+		if (StringUtils.isNotEmpty(request.getParameter("item_descripcion_" + idiomaOrigenTraductor))) {
+			traduccioOrigen.setDescripcion(request.getParameter("item_descripcion_" + idiomaOrigenTraductor));
+		}
+
+		return traduccioOrigen;
 	}
 
 	@RequestMapping(value = "/pagDetall.do")

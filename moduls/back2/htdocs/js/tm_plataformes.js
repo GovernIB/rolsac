@@ -36,6 +36,9 @@ $(document).ready(function() {
 	}
 
     Llistat.iniciar();
+
+	CAMPOS_TRADUCTOR_PLATAF = ["item_descripcion_"];
+	DATOS_TRADUCIDOS_PLATAF = ["descripcion"];
 });
 
 
@@ -309,8 +312,18 @@ function CDetall(){
             jQuery("#item_nom,#item_nom_es,#item_nom_en,#item_nom_de,#item_nom_fr").val( jQuery(this).val() );
         });
 
+        // boton de traducir
+        jQuery("#botoTraduirPerfil").unbind("click").bind("click", function() {
+            Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
+        });
+
+
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");
+	}
+
+	this.traduirWrapper = function () {
+		that.traduir(pagTraduirPlataformas, CAMPOS_TRADUCTOR_PLATAF, DATOS_TRADUCIDOS_PLATAF);
 	}
 
 	this.nou = function() {

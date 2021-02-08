@@ -10,6 +10,8 @@
     var pagGuardar = '<c:url value="/plataformes/guardar.do" />';
     var pagEsborrar = '<c:url value="/plataformes/esborrarPlataforma.do" />';
     var pagReordenar = '<c:url value="/plataformes/reordenarPlataformes.do" />';
+    var pagTraduirPlataformas  =  '<c:url value="/plataformes/traduir.do" />';
+
 
     //texts
     var txt_per = "<spring:message code='txt.per'/>";

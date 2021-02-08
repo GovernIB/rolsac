@@ -23,11 +23,12 @@
     var pagDetallProcediment = '<c:url value="/seccions/seccio.do" />';
     var pagLlistatSeccions = '<c:url value="/seccions/llistat.do" />';
     var pagTraduirFetsVitals = '<c:url value="/fetsVitals/traduir.do" />';
+    var pagTraduirPerfil  =  '<c:url value="/perfilsGestor/traduir.do" />';
     var modulos = '<c:url value="/perfilsGestor/modulos.do" />';
     var pagSeccions = '<c:url value="/perfilsGestor/arbreSeccions.do" />';
     var pagArbreSeccions = '<c:url value="/perfilsGestor/arbreSeccions.do" />';
     var pagGuardaSeccions = '<c:url value="/perfilsGestor/guardaSeccions.do" />';
-    
+
     //texts
     var txt_per = "<spring:message code='txt.per'/>";
     var txtEsborrarCorrecte = "<spring:message code='txt.usuari_esborrat_correcte'/>";
@@ -62,30 +63,30 @@
     var txtDescendents = "<spring:message code='txt.descendents'/>";
 
     // modul seccions
-    var txtSeccio = "<spring:message code='perfil_gestor.formulari.seccio'/>"; 
+    var txtSeccio = "<spring:message code='perfil_gestor.formulari.seccio'/>";
     var txtLaSeccio = "<spring:message code='txt.la_seccio'/>";
     var txtSeccions = "<spring:message code='perfil_gestor.formulari.seccions'/>";
-    var txtSeccionsFilles = "<spring:message code='perfil_gestor.formulari.seccions.filles'/>"; 
+    var txtSeccionsFilles = "<spring:message code='perfil_gestor.formulari.seccions.filles'/>";
     var txtNoHiHaSeccions = txtNoHiHa + " " + txtSeccions;
     var txtNoHiHaSeccionsSeleccionades = txtNoHiHa + " " + txtSeccions + " " + txtSeleccionades.toLowerCase();
     var txtNoHiHaSeccionsSeleccionadesFilles = txtLaSeccio + " " + txtSeleccionada.toLowerCase() + " " +  txtNo.toLowerCase() +" " + txtTe + " " + txtDescendents;
     var txtAfegirSeccionsFilles = "<spring:message code='perfil_gestor.formulari.seccions.afegir_filles'/>";
 
-    
+
 
  // modul ua arbre
     var txtArrel = "<spring:message code='txt.arrel'/>";
     var txtNodesFills = "<spring:message code='txt.nodes_fills.titol'/>";
     var txtCarregantArrel = "<spring:message code='txt.carregant_node_arrel'/> " + txtEspere;
     var txtCarregantNodes = txtCarregant + " <spring:message code='txt.nodes_fills_dot'/> " + txtEspere;
-    
-    //taula    
+
+    //taula
     var txtNou = "<spring:message code='txt.afegir_nova'/> "; + txtLlistaItem.toLowerCase();
     var txtCodi = "<spring:message code='txt.codi'/>";
     var txtOrdre = "<spring:message code='camp.ordre'/>";
     var txtPujar = "<spring:message code='txt.pujar'/>";
     var txtCodiEstandard = "<spring:message code='camp.codi.estandard'/>";
-    
+
 
     //paginacio
     var txtTrobat = "<spring:message code='txt.sha_trobat'/>";
@@ -117,7 +118,7 @@
     var txtPlega = "<spring:message code='txt.plega'/>";
 
     var txtElimina = "<spring:message code='txt.elimina'/>";
-    
+
     // modul procediments
     var txtProcediment = "<spring:message code='txt.procediment'/>";
     var txtProcediments = "<spring:message code='txt.procediments'/>";
@@ -195,31 +196,31 @@
                 <span><span><spring:message code='perfil.crea_nou_perfil_gestor'/></span></span>
             </a>
         </li>
-    </ul>   
+    </ul>
     <div id="resultats">
-        <div class="resultats L actiu">                         
-            <div class="dades">             
-                <p class="executant"><spring:message code='perfil.carregant_llistat_perfil'/></p>                           
-            </div>                          
+        <div class="resultats L actiu">
+            <div class="dades">
+                <p class="executant"><spring:message code='perfil.carregant_llistat_perfil'/></p>
+            </div>
             <input type="hidden" value="0" class="pagPagina" />
             <input type="hidden" value="DESC" class="ordreTipus" />
-            <input type="hidden" value="nom" class="ordreCamp" />                            
-        </div>   
+            <input type="hidden" value="nom" class="ordreCamp" />
+        </div>
     </div>
 </div>
 
 <div id="escriptori_detall" class="escriptori_detall">
     <form id="formGuardar" action="" method="post">
         <input id="item_id" name="item_id" type="hidden" value="" class="nou" />
-        <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>            
+        <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>
         <!-- modulPrincipal -->
-        <div id="modulPrincipal" class="grupoModulosFormulario modulPrincipal">          
+        <div id="modulPrincipal" class="grupoModulosFormulario modulPrincipal">
             <!-- modul -->
-            <div class="modul">                 
-                <fieldset>                              
-                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                         
-                    <legend><spring:message code='txt.dades'/></legend>                          
-                    <div class="modul_continguts mostrat">                              
+            <div class="modul">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='txt.dades'/></legend>
+                    <div class="modul_continguts mostrat">
                         <div class="fila">
                             <p class="introIdiomas"><spring:message code='txt.idioma.idioma'/>:</p>
                             <ul class="idiomes">
@@ -236,11 +237,11 @@
                                 </c:if>
                             </ul>
 
-                            <c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">								
+                            <c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">
 
 							<c:if test="${loop.first}">
-							<div class="idiomes">		
-							</c:if>	
+							<div class="idiomes">
+							</c:if>
 
                                 <div class="idioma <c:out value="${lang}"/>">
                                     <div class="fila">
@@ -262,7 +263,7 @@
                                                 <input id="item_nom_<c:out value="${lang}"/>" name="item_nom_<c:out value="${lang}"/>" type="text" class="nou" />
                                             </div>
                                         </div>
-                                    </div> 
+                                    </div>
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta"><label for="item_descripcio_<c:out value="${lang}"/>"><spring:message code='perfil.formulari.descripcio'/></label></div>
@@ -278,26 +279,26 @@
                                             </div>
                                             <div class="etiqueta">
                                                 <label for="item_duplica"><spring:message code='camp.duplica'/></label>
-                                            </div>                                            
-                                        </div> 
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-								
+
 							<c:if test="${loop.last}">
-							</div>					
+							</div>
 							</c:if>
-							
-                            </c:forEach>								
-                            
+
+                            </c:forEach>
+
                         </div>
                         <!-- /fila -->
-                    </div>                          
-                </fieldset>                 
+                    </div>
+                </fieldset>
             </div>
             <!-- /modul -->
-        </div>             
-        <!-- /modulPrincipal -->   
-		
+        </div>
+        <!-- /modulPrincipal -->
+
         <!-- modulLateral -->
         <div class="modulLateral">
             <!-- modul -->
@@ -336,7 +337,7 @@
                             <div class="seleccionats">
                                 <div class="seleccionat">
                                     <p class="info"><spring:message code='perfil_gestor.formulari.seccions.noInfo'/></p>
-                                    <div class="listaOrdenable"></div> 
+                                    <div class="listaOrdenable"></div>
                                 </div>
                             </div>
                             <p class="btnGenerico">
@@ -352,35 +353,35 @@
         <!-- /modulLateral -->
     </form>
 </div>
-    
 
-    
+
+
 <!-- escriptori_seccions -->
 <div id="escriptori_seccions">
     <ul id="opcions" class="opcions">
-        <li class="opcio C actiu"><spring:message code='perfil_gestor.formulari.seccions.gestio'/></li>                                 
+        <li class="opcio C actiu"><spring:message code='perfil_gestor.formulari.seccions.gestio'/></li>
     </ul>
-    
-    <div id="resultats" class="escriptori_items_llistat">  
+
+    <div id="resultats" class="escriptori_items_llistat">
         <div class="escriptori_selector_seccions">
             <h3><spring:message code='fitxes.seccions'/></h3>
             <div class="escriptori_seccions_arbre"></div>
-        </div>          
+        </div>
         <div class="resultats C actiu" style="display: block;">
-            <div id="cercador"> 
+            <div id="cercador">
 				<div class="botonera">
 					<div class="boton btnGenerico">
 						<a id="btnInsertar" class="btn inserta" href="javascript:;">
 							<span><span><spring:message code='boto.inserta'/></span></span>
-						</a>							
+						</a>
 					</div>
 					<div class="boton btnGenerico">
 						<a id="btnInsertarDesc" class="btn insertaDesc" href="javascript:;">
 							<span><span><spring:message code='boto.insertaDesc'/></span></span>
-						</a>							
+						</a>
 					</div>
 				</div>
-            </div>           
+            </div>
         </div>
     </div>
 
@@ -400,7 +401,7 @@
 								  <a id="btnVolver_seccions" href="javascript:;" class="btn torna"><span><span><spring:message code='boto.torna'/></span></span></a>
 							  </li>
 							  <li class="btnGuardar par">
-                              <a id="btnGuardar_seccions" href="javascript:;" class="btn guarda important lista-simple-secciones" 
+                              <a id="btnGuardar_seccions" href="javascript:;" class="btn guarda important lista-simple-secciones"
                                   action="/rolsacback/perfilsGestor/guardarSeccions.do"><span><span><spring:message code='boto.guarda_exclamacio'/></span></span></a>
 							  </li>
 						  </ul>
@@ -409,10 +410,10 @@
 					</div>
 				</fieldset>
 			</div>
-			<!-- /modul -->  
+			<!-- /modul -->
 		</div>
 	</div>
-    
+
     <div class="modulLateral escriptori_items_seleccionats">
         <div class="modul">
             <div class="interior">
@@ -421,7 +422,7 @@
                         <p class="info"><spring:message code='perfil_gestor.formulari.seccions.noInfo'/></p>
                         <div class="listaOrdenable"></div>
                     </div>
-                </div>                                  
+                </div>
             </div>
         </div>
     </div>
