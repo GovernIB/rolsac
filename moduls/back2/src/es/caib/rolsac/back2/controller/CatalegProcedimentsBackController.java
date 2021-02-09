@@ -61,6 +61,7 @@ import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimiento;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
+import org.ibit.rol.sac.model.TraduccionTaxa;
 import org.ibit.rol.sac.model.TraduccionTipo;
 import org.ibit.rol.sac.model.TraduccionTipoAfectacion;
 import org.ibit.rol.sac.model.TraduccionTramite;
@@ -2310,6 +2311,51 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		return "1".equals(request.getParameter(modulo));
 	}
 
+	@RequestMapping(value = "/traduirTaxa.do")
+	public @ResponseBody Map<String, Object> traduirTaxa(final HttpServletRequest request) {
+
+		final Map<String, Object> resultats = new HashMap<String, Object>();
+
+		try {
+			final String idiomaOrigenTraductor = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+
+			final TraduccionTaxa traduccioOrigen = getTraduccionOrigenTaxa(request, idiomaOrigenTraductor);
+			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
+			final Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
+			traduccions = traductor.translate(traduccioOrigen, idiomaOrigenTraductor);
+			resultats.put("traduccions", traduccions);
+
+		} catch (final DelegateException dEx) {
+
+			logException(log, dEx);
+			if (dEx.isSecurityException()) {
+				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+			} else {
+				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+			}
+
+		} catch (final TraductorException traEx) {
+
+			log.error("CatalegProcedimentBackController.traduir: El traductor no puede traducir todos los idiomas",
+					traEx);
+			resultats.put("error", messageSource.getMessage("traductor.no_traduible", null, request.getLocale()));
+
+		} catch (final NullPointerException npe) {
+
+			log.error("CatalegProcedimentBackController.traduir: El traductor no se encuentra en en contexto.", npe);
+			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+
+		} catch (final Exception e) {
+
+			log.error("CatalegProcedimentBackController.traduir: Error en al traducir procedimiento: " + e, e);
+			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+
+		}
+
+		return resultats;
+
+	}
+
 	@RequestMapping(value = "/traduir.do")
 	public @ResponseBody Map<String, Object> traduir(final HttpServletRequest request) {
 
@@ -2352,6 +2398,23 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		}
 
 		return resultats;
+
+	}
+
+	private TraduccionTaxa getTraduccionOrigenTaxa(final HttpServletRequest request,
+			final String idiomaOrigenTraductor) {
+
+		final TraduccionTaxa traduccioOrigen = new TraduccionTaxa();
+
+		if (StringUtils.isNotEmpty(request.getParameter("taxa_tramit_descripcio_" + idiomaOrigenTraductor))) {
+			traduccioOrigen.setDescripcio(request.getParameter("taxa_tramit_descripcio_" + idiomaOrigenTraductor));
+		}
+		if (StringUtils.isNotEmpty(request.getParameter("taxa_tramit_forma_pagament_" + idiomaOrigenTraductor))) {
+			traduccioOrigen
+					.setFormaPagament(request.getParameter("taxa_tramit_forma_pagament_" + idiomaOrigenTraductor));
+		}
+
+		return traduccioOrigen;
 
 	}
 

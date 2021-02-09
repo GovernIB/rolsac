@@ -80,6 +80,7 @@
     var pagAuditories = '<c:url value="/auditories/llistat.do" />';
     var pagEstadistiques = '<c:url value="/estadistiques/grafica.do" />';
     var pagTraduir = '<c:url value="/catalegProcediments/traduir.do" />';
+    var pagTraduirTaxa = '<c:url value="/catalegProcediments/traduirTaxa.do" />';
     var pagTraduirTramit = '<c:url value="/tramit/traduir.do" />';
     var pagTraduirDocument = '<c:url value="/documents/traduir.do" />';
     var pagTraduirDocumentTramit = '<c:url value="/documentsTramit/traduir.do" />';
@@ -2924,7 +2925,7 @@
                                 </c:forEach>
 
 								<c:if test="${traductorActivo}">
-	                                <li class="traduix btnGenerico" id="botoTraduirProcediment">
+	                                <li class="traduix btnGenerico" id="botoTraduirTaxa">
 	                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
 	                                </li>
                                 </c:if>
