@@ -882,12 +882,12 @@ function CDetall() {
 		jQuery("#botoTraduirProcediment").unbind("click").bind("click", function() {
 			Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
 		});
-
 	};
 
 	this.traduirWrapper = function () {
 		that.traduir(pagTraduir, CAMPOS_TRADUCTOR_PROCEDIMIENTO, DATOS_TRADUCIDOS_PROCEDIMIENTO);
 	};
+
 
 	this.dataPublicacio = function(e) {
 //		if ($(this).val() == "") {
