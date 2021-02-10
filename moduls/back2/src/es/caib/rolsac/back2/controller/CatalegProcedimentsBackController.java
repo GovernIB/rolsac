@@ -2413,6 +2413,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			traduccioOrigen
 					.setFormaPagament(request.getParameter("taxa_tramit_forma_pagament_" + idiomaOrigenTraductor));
 		}
+
 		if (StringUtils.isNotEmpty(request.getParameter("taxa_tramit_codi_" + idiomaOrigenTraductor))) {
 			traduccioOrigen.setCodificacio(request.getParameter("taxa_tramit_codi_" + idiomaOrigenTraductor));
 		}

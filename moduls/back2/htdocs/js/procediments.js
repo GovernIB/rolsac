@@ -242,6 +242,16 @@ $(document).ready(function() {
       "lopdDestinatario"
     ];
 
+	CAMPOS_TRADUCTOR_TAXA = [
+	      "taxa_tramit_descripcio_",
+		  "taxa_tramit_forma_pagament_"
+	    ];
+
+	DATOS_TRADUCIDOS_TAXA = [
+	      "descripcio",
+	      "formaPagament"
+	    ];
+
 	// INICIEM
 	Llistat = new CLlistat();
 	Detall = new CDetall();
@@ -882,6 +892,7 @@ function CDetall() {
 		jQuery("#botoTraduirProcediment").unbind("click").bind("click", function() {
 			Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
 		});
+
 	};
 
 	this.traduirWrapper = function () {
