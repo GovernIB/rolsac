@@ -2743,7 +2743,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 					// archivo
 					if (traDoc.getArchivo() != null) {
 						mapDoc.put("idioma_enllas_arxiu_" + idioma,
-								"servicio/archivoServicio.do?id=" + doc.getId() + "&lang=" + idioma);
+								"servinf/archivo.do?id=" + traDoc.getArchivo().getId() + "&lang=" + idioma);
 						mapDoc.put("idioma_nom_arxiu_" + idioma, traDoc.getArchivo().getNombre());
 
 					} else {
