@@ -81,6 +81,17 @@ public class RolsacPropertiesUtil {
 		return texto;
 	}
 
+	/** Devuelve el texto para responsable de procs/servicios comunes. **/
+	public static final String getLopdPlantilla(final boolean catalan) {
+		String texto;
+		if (catalan) {
+			texto = getProperty("es.caib.rolsac.lopd.plantilla.ca");
+		} else {
+			texto = getProperty("es.caib.rolsac.lopd.plantilla.es");
+		}
+		return texto;
+	}
+
 	/** Devuelve el texto para derechos. **/
 	public static final String getLopdDerechos(final boolean catalan) {
 		String texto;
@@ -161,17 +172,18 @@ public class RolsacPropertiesUtil {
 	}
 
 	/**
-	 * funcion que retorna el email del administrador de la UA
-	 * si codigoUA =null  retorna el email por defecto (es.caib.rolsac.defecto.correo.normativas si existe) o vacio si no existe
+	 * funcion que retorna el email del administrador de la UA si codigoUA =null
+	 * retorna el email por defecto (es.caib.rolsac.defecto.correo.normativas si
+	 * existe) o vacio si no existe
 	 *
 	 * @return
 	 */
-	public static String getEmailAdmin(String codigoUA) {
+	public static String getEmailAdmin(final String codigoUA) {
 		String res = "";
-		String cua=codigoUA==null?"defecto":codigoUA;
+		final String cua = codigoUA == null ? "defecto" : codigoUA;
 		String property = "es.caib.rolsac.codigoUA.correo.normativas";
 		property = property.replace("codigoUA", cua);
-		
+
 		try {
 			res = getProperty(property);
 		} catch (final Exception e) {

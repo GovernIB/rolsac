@@ -201,6 +201,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		model.put("lopdDerechosESP", RolsacPropertiesUtil.getLopdDerechos(false));
 		model.put("lopdResponsableComun", RolsacPropertiesUtil.getLopdResponsableComun(true));
 		model.put("lopdResponsableComunESP", RolsacPropertiesUtil.getLopdResponsableComun(false));
+		model.put("lopdPlantilla", RolsacPropertiesUtil.getLopdPlantilla(true));
+		model.put("lopdPlantillaESP", RolsacPropertiesUtil.getLopdPlantilla(false));
 
 		final UnidadAdministrativa raiz = ua != null ? ua.getRaiz() : null;
 

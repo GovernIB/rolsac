@@ -50,6 +50,8 @@
 	var lopdResponsableNOComun = '';
 	var lopdResponsableNOComunESP = '';
 	var lopd_legitimacion_pordefecto =  '<c:out value="${lopdLegitimacionPorDefecto}"/>';
+	var lopdPlantilla = '<c:out value="${lopdPlantilla}"/>';
+	var lopdPlantillaESP = '<c:out value="${lopdPlantillaESP}"/>';
 
     var pagLlistat = '<c:url value="/catalegServeis/llistat.do" />';
     var pagExportar = '<c:url value="/catalegServeis/exportar.do" />';
@@ -1732,7 +1734,9 @@
 								<div class="fila">
 										<div class="element t99p">
 											<div class="etiqueta">
-												<label><a href="../files/plantilla.pdf" target="_blank"><spring:message code='camp.descargarPlantilla'/></a> </label>
+												<label><spring:message code='camp.descargarPlantilla'/>: </label>
+												<a href="<c:out value="${lopdPlantilla}"/>" target="_blank" style="margin-left:5px"><span><spring:message code='txt.idioma.ca'/></span></a>
+	                                    		<a href="<c:out value="${lopdPlantillaESP}"/>" target="_blank" style="margin-left:5px"><span><spring:message code='txt.idioma.es'/></span></a>
 											</div>
 											<div class="control">
 

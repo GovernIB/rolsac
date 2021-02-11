@@ -2071,7 +2071,9 @@
 								<div class="fila">
 										<div class="element t99p">
 											<div class="etiqueta">
-												<label><a href="../files/plantilla.pdf" target="_blank"><spring:message code='camp.descargarPlantilla'/></a> </label>
+												<label><spring:message code='camp.descargarPlantilla'/>: </label>
+												<a href="<c:out value="${lopdPlantilla}"/>" target="_blank" style="margin-left:5px"><span><spring:message code='txt.idioma.ca'/></span></a>
+	                                    		<a href="<c:out value="${lopdPlantillaESP}"/>" target="_blank" style="margin-left:5px"><span><spring:message code='txt.idioma.es'/></span></a>
 											</div>
 											<div class="control">
 

@@ -143,6 +143,8 @@ es.caib.rolsac.subscripcions
 		es.caib.rolsac.lopd.responsable.comun.es=Responsable lopd com\u00FAn
 		es.caib.rolsac.lopd.cabecera.ca=De conformitat amb el reglament (UE) 2016/679 i la legistaci\u00F3 vigente en mat\u00E8ria de protecci\u00F3 de dades, s\u2019informa del tractament de les dades personales que cont\u00E9 aquest tr\u00E0mit
 		es.caib.rolsac.lopd.cabecera.es=De conformidad con el reglamento (UE) 2016/679 y la legistaci\u00F3n vigente en materia de protecci\u00F3n de datos, se informa del tratamiento de los datos personales que contiene este tr\u00E1mite
+		es.caib.rolsac.lopd.plantilla.ca=http://www.caib.es/plantillaCAT.pdf
+		es.caib.rolsac.lopd.plantilla.es=http://www.caib.es/plantillaESP.pdf
 
 		<!--  Email del administrador para aviso en Procedimiento/Servicio
 			  Correo personalizable por entidad, subsituir {CODDIR3} por el codigo dir3 de la entidad.
