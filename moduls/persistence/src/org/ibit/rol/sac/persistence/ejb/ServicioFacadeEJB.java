@@ -147,8 +147,8 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 
 		final Servicio serv = this.obtenerServicio(idServicio);
 		String res = "";
-		
-		try {		
+
+		try {
 			final String idTramite = serv.getTramiteId();
 			final String numVersion = serv.getTramiteVersion();
 			final String idioma = lang;
@@ -159,31 +159,32 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 				parametros = serv.getParametros();
 			}
 			final String idTramiteRolsac = idServicio.toString();
-	
+
 			final TraduccionPlataforma trad = (TraduccionPlataforma) serv.getPlataforma().getTraduccion(idioma);
 			String url = trad.getUrlAcceso();
-	
+
 			url = url.replace("${idTramitePlataforma}", idTramite);
 			url = url.replace("${versionTramitePlatorma}", numVersion);
 			url = url.replace("${parametros}", parametros);
 			url = url.replace("${servicio}", String.valueOf(true));
 			url = url.replace("${idTramiteRolsac}", idTramiteRolsac);
-	
+
 			res = url;
-		} catch (Exception e) {
-			
-			//si ocurre un error es porque alguno de los campos de url del trámite no existen. buscamos en la url externa. 
-			//si no existe para el idioma indicado se retorna el idioma por defecto
+		} catch (final Exception e) {
+
+			// si ocurre un error es porque alguno de los campos de url del trámite no
+			// existen. buscamos en la url externa.
+			// si no existe para el idioma indicado se retorna el idioma por defecto
 			TraduccionServicio t = (TraduccionServicio) serv.getTraduccion(lang);
-			if(t==null || t.getUrlTramiteExterno()==null) {
+			if (t == null || t.getUrlTramiteExterno() == null) {
 				t = (TraduccionServicio) serv.getTraduccion();
 			}
-			
-			if(t==null || t.getUrlTramiteExterno()==null) {
-				res="";
-			}else {
-				res= t.getUrlTramiteExterno();
-			}			
+
+			if (t == null || t.getUrlTramiteExterno() == null) {
+				res = "";
+			} else {
+				res = t.getUrlTramiteExterno();
+			}
 		}
 		return res;
 	}
@@ -507,7 +508,9 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 
 				if (servicio.getTraducciones() != null) {
 					for (final String idioma : servicio.getTraducciones().keySet()) {
-						if (((TraduccionServicio) servicio.getTraduccion(idioma)).getLopdInfoAdicional() != null) {
+						if (((TraduccionServicio) servicio.getTraduccion(idioma)) != null
+								&& ((TraduccionServicio) servicio.getTraduccion(idioma))
+										.getLopdInfoAdicional() != null) {
 							Hibernate.initialize(
 									((TraduccionServicio) servicio.getTraduccion(idioma)).getLopdInfoAdicional());
 						}

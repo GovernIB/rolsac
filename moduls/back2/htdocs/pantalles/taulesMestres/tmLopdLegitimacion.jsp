@@ -43,6 +43,7 @@
         var txtNoHiHaLlistat = txtNoHiHa + " " + txtLlistaItems.toLowerCase();
         var txtFamilia = "<spring:message code='txt.familia'/>";
         var txtFechaActualizacion = "<spring:message code='camp.dataActualitzacio'/>";
+        var txtPorDefecto = "<spring:message code='lopdLegitimacion.formulari.porDefecto'/>";
 
         //taula
         var txtNou = "<spring:message code='txt.afegir_nova'/> "; + txtLlistaItem.toLowerCase();

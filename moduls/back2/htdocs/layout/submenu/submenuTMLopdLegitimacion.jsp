@@ -14,7 +14,7 @@
 	<div id="submenu_contingut">
 		<ul>
 	        <li class="seleccionat">
-	            <span><spring:message code="menu.lopd" /></span>
+	            <span><spring:message code="menu.lopglegitimacion" /></span>
 	            <span class="actual"></span>
 	        </li>
         </ul>

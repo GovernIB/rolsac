@@ -130,8 +130,7 @@
     var txtSeleccionats = "<spring:message code='txt.seleccionats'/>";
     var txtSeleccionat = "<spring:message code='txt.seleccionat'/>";
 	var txtProcessant = "<spring:message code='txt.processant'/>";
-
-    var txtHiHa = "<spring:message code='txt.hi_ha'/>";
+	var txtHiHa = "<spring:message code='txt.hi_ha'/>";
     var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
     var txtNoHiHaLlistat = txtNoHiHa + " " + txtLlistaItems.toLowerCase();
     var txtNoHiHaFets = "<spring:message code='txt.noHiHaFetsVitals'/>";
