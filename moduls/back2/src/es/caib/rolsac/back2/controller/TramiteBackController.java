@@ -298,7 +298,7 @@ public class TramiteBackController {
 					: request.getParameter("item_parametros");
 			final String idPlataforma = request.getParameter("item_plataforma") == null ? ""
 					: request.getParameter("item_plataforma");
-			tramite.setVersio(StringUtils.isNumeric(version) && !"".equals(version) ? Integer.parseInt(version) : 0);
+			tramite.setVersio(StringUtils.isNumeric(version) && !"".equals(version) ? Integer.parseInt(version) : null);
 			tramite.setUrlExterna(
 					request.getParameter("item_url_tramit") == null ? "" : request.getParameter("item_url_tramit"));
 			tramite.setParametros(parametros);
@@ -338,7 +338,7 @@ public class TramiteBackController {
 				}
 			} else {
 				// si no es telemático vaciamos los campos.
-				tramite.setVersio(0);
+				tramite.setVersio(null);
 				tramite.setUrlExterna("");
 				tramite.setIdTraTel("");
 				tramite.setPlataforma(null);

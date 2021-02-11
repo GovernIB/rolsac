@@ -949,6 +949,13 @@ function CDetall() {
 		$("#item_id").val("");
 		$("#item_organ_id").val("");
 		$("#item_organ").val("");
+		
+		$("#item_tramite_tramit").val("");
+		$("#item_version_tramit").val("");
+		$("#item_parametros").val("");		
+		$("#item_url_tramit").val("");
+		
+		
 
 		// LOPD
 		$("#item_lopd_legitimacion").val("");

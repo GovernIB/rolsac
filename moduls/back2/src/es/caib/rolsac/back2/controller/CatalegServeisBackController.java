@@ -1078,6 +1078,8 @@ public class CatalegServeisBackController extends PantallaBaseController {
 		traduccionDTO.put("observaciones", trad.getObservaciones());
 		traduccionDTO.put("objeto", trad.getObjeto());
 		traduccionDTO.put("requisitos", trad.getRequisitos());
+		traduccionDTO.put("urlTramiteExterno", trad.getUrlTramiteExterno());
+		
 
 		return traduccionDTO;
 	}
@@ -1389,7 +1391,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			servicio.setParametros(parametros);
 			final String version = request.getParameter("item_tramite_version") == null ? ""
 					: request.getParameter("item_tramite_version");
-			servicio.setTramiteVersion("".equals(version) ? "0" : version); // Tramite version
+			servicio.setTramiteVersion("".equals(version) ? null : version); // Tramite version
 			servicio.setTasaUrl(request.getParameter("item_tasa_url")); // Tasa url
 
 			servicio.setTelematico(request.getParameter("item_check_tramit_telematico") != null
@@ -1427,7 +1429,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 				}
 			} else {
 				// si no es telemático vaciamos los campos.
-				servicio.setTramiteVersion("0");
+				servicio.setTramiteVersion(null);
 				// servicio.setTramiteUrl("");
 				servicio.setTramiteId("");
 				servicio.setPlataforma(null);

@@ -502,7 +502,13 @@ function CEscriptoriTramit() {
 
     this.limpia = function() {
         $("#formTramits :input").each(limpiarCampo);
-        $("#id_tramit_actual").val(""); //Se neteja manualment ja que limpiarCampo no afecta els input hidden
+      
+        //Se neteja manualment ja que limpiarCampo no afecta els input hidden ni disabled
+        $("#id_tramit_actual").val(""); 
+        $("#item_tramite_tramit").val("");
+		$("#item_version_tramit").val("");
+		$("#item_parametros").val("");		
+		$("#item_url_tramit").val("");
     };
 
     this.contaSeleccionats = function() {

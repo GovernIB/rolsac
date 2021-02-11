@@ -850,14 +850,14 @@ function CDetall() {
 		jQuery("#item_check_tramit_telematico").change(function(){
 			if($(this).prop('checked')){
 				//si no es telemático se deshabilitan los inputs relacionados
-				jQuery("#item_tramite_url").prop('disabled', false);
+				jQuery("[id^=item_tramite_url_]").prop('disabled', false);
 				jQuery("#item_tramite_id").prop('disabled', false);
 				jQuery("#item_tramite_version").prop('disabled', false);
 				jQuery("#item_plataforma").prop('disabled', false);
 				jQuery("#item_parametros").prop('disabled', false);
 
 			}else{
-				jQuery("#item_tramite_url").prop('disabled', true);
+				jQuery("[id^=item_tramite_url_]").prop('disabled', true);
 				jQuery("#item_tramite_id").prop('disabled', true);
 				jQuery("#item_tramite_version").prop('disabled', true);
 				jQuery("#item_plataforma").prop('disabled', true);
@@ -867,7 +867,7 @@ function CDetall() {
 
 		jQuery("#item_tramite_version").prop('disabled', true);
 		jQuery("#item_tramite_id").prop('disabled', true);
-		jQuery("#item_tramite_url").prop('disabled', true);
+		jQuery("[id^=item_tramite_url_]").prop('disabled', true);
 		jQuery("#item_plataforma").prop('disabled', true);
 		jQuery("#item_parametros").prop('disabled', true);
 
@@ -922,7 +922,11 @@ function CDetall() {
 		$("#item_id").val("");
 		$("#item_organ_id").val("");
 		$("#item_organ").val("");
-
+		$("#item_tramite_version").val("");
+		$("#item_tramite_id").val("");
+		$("#item_parametros").val("");
+		
+		//no limpia los campos hidden, readonly y disabled
 		$("#modulPrincipal :input").each(limpiarCampo);
 
 		// LOPD
@@ -1154,13 +1158,6 @@ function CDetall() {
 		}
 
 		//DADES DEL TRAMITE
-		if (dada_node.item_tramite_url != undefined) {
-			jQuery("#item_tramite_url").val(dada_node.item_tramite_url);
-			jQuery("#item_tramite_url").change();
-		} else {
-			jQuery("#item_tramite_url").val("");
-		}
-
 		if (dada_node.item_tramite_id != undefined) {
 			jQuery("#item_tramite_id").val(dada_node.item_tramite_id);
 			jQuery("#item_tramite_id").change();
@@ -1208,7 +1205,7 @@ function CDetall() {
 
 			jQuery("#item_tramite_version").prop('disabled', !dada_node.item_check_tramit_telematico);
 			jQuery("#item_tramite_id").prop('disabled', !dada_node.item_check_tramit_telematico);
-			jQuery("#item_tramite_url").prop('disabled', !dada_node.item_check_tramit_telematico);
+			jQuery("[id^=item_tramite_url_]").prop('disabled', !dada_node.item_check_tramit_telematico);
 			jQuery("#item_plataforma").prop('disabled', !dada_node.item_check_tramit_telematico);
 			jQuery("#item_plataforma").val(dada_node.item_plataforma_tramit);
 			jQuery("#item_parametros").prop('disabled', !dada_node.item_check_tramit_telematico);
@@ -1218,7 +1215,7 @@ function CDetall() {
 			jQuery("#item_check_tramit_telematico").prop('checked', false);
 			jQuery("#item_tramite_version").prop('disabled', true);
 			jQuery("#item_tramite_id").prop('disabled', true);
-			jQuery("#item_tramite_url").prop('disabled', true);
+			jQuery("[id^=item_tramite_url_]").prop('disabled', true);
 			jQuery("#item_plataforma").prop('disabled', true);
 			jQuery("#item_plataforma").val('');
 			jQuery("#item_parametros").prop('disabled', true);
