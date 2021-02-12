@@ -93,8 +93,13 @@ function CModulTramit() {
 
             a_primer_elm.parent().html("<span class=\"" + a_primer_elm_class + "\">" + a_primer_elm_text + "</span>");
 
-            var div_idiomes_elm = escriptori_tramits_elm.find("div.idiomes:first");
-            div_idiomes_elm.find("div." + a_primer_elm.attr("class")).addClass("seleccionat");
+            var div_idiomes_elm = escriptori_tramits_elm.find("div.idiomes:first, div.elementoMultiidiomaIndividual");
+            $("div.elementoMultiidiomaIndividual div.campoIdioma").hide(); //ocultamos los idiomas individuales     
+            div_idiomes_elm.find("div." + a_primer_elm.attr("class")).addClass("seleccionat").show();
+            
+            
+            
+            
             ul_idiomes_elm.bind("click", {'actualizarIdiomasModulosLaterales': true, 'idPare':'#escriptori_tramits'}, Detall.idioma);
         }
 
@@ -114,13 +119,13 @@ function CModulTramit() {
         jQuery("#item_check_tramit_telematico").change(function(){
 			if($(this).prop('checked')){
 				//si no es telemático se deshabilitan los inputs relacionados
-				jQuery("#item_url_tramit").prop('disabled', false);
+				jQuery("[id^=item_url_tramit_]").prop('disabled', false);
 				jQuery("#item_tramite_tramit").prop('disabled', false);
 				jQuery("#item_version_tramit").prop('disabled', false);
 				jQuery("#item_plataforma").prop('disabled', false);
 				jQuery("#item_parametros").prop('disabled', false);
 			}else{
-				jQuery("#item_url_tramit").prop('disabled', true);
+				jQuery("[id^=item_url_tramit_]").prop('disabled', true);
 				jQuery("#item_tramite_tramit").prop('disabled', true);
 				jQuery("#item_version_tramit").prop('disabled', true);
 				jQuery("#item_plataforma").prop('disabled', true);
@@ -130,7 +135,7 @@ function CModulTramit() {
 
 		jQuery("#item_version_tramit").prop('disabled', true);
 		jQuery("#item_tramite_tramit").prop('disabled', true);
-		jQuery("#item_url_tramit").prop('disabled', true);
+		jQuery("[id^=item_url_tramit_]").prop('disabled', true);
 		jQuery("#item_plataforma").prop('disabled', true);
 		jQuery("#item_parametros").prop('disabled', true);
 
@@ -508,7 +513,7 @@ function CEscriptoriTramit() {
         $("#item_tramite_tramit").val("");
 		$("#item_version_tramit").val("");
 		$("#item_parametros").val("");		
-		$("#item_url_tramit").val("");
+		$("[id^=item_url_tramit_]").val("");
     };
 
     this.contaSeleccionats = function() {
@@ -559,7 +564,6 @@ function CEscriptoriTramit() {
         $("#tramit_item_data_tancament").val(datos.tramit_item_data_tancament);
 
         $("#item_tramite_tramit").val(datos.item_tramite_tramit);
-        $("#item_url_tramit").val(datos.item_url_tramit );
         $("#item_parametros").val(datos.item_parametros_tramit );
         $("#item_version_tramit").val( datos.item_version_tramit != 0 ? datos.item_version_tramit : 0);
 
@@ -584,7 +588,7 @@ function CEscriptoriTramit() {
 			jQuery("#item_check_tramit_telematico").prop('checked', datos.item_check_tramit_telematico);
 			jQuery("#item_version_tramit").prop('disabled', !datos.item_check_tramit_telematico);
 			jQuery("#item_tramite_tramit").prop('disabled', !datos.item_check_tramit_telematico);
-			jQuery("#item_url_tramit").prop('disabled', !datos.item_check_tramit_telematico);
+			jQuery("[id^=item_url_tramit_]").prop('disabled', !datos.item_check_tramit_telematico);
 			jQuery("#item_plataforma").prop('disabled', !datos.item_check_tramit_telematico);
 			jQuery("#item_parametros").prop('disabled', !datos.item_check_tramit_telematico);
 			jQuery("#item_plataforma").val(datos.item_plataforma_tramit);
@@ -593,7 +597,7 @@ function CEscriptoriTramit() {
 			jQuery("#item_check_tramit_telematico").prop('checked', false);
 			jQuery("#item_version_tramit").prop('disabled', true);
 			jQuery("#item_tramite_tramit").prop('disabled', true);
-			jQuery("#item_url_tramit").prop('disabled', true);
+			jQuery("[id^=item_url_tramit_]").prop('disabled', true);
 			jQuery("#item_plataforma").prop('disabled', true);
 			jQuery("#item_parametros").prop('disabled', true);
 			jQuery("#item_plataforma").val('');
@@ -617,6 +621,7 @@ function CEscriptoriTramit() {
                 $("#item_documentacio_tramit_" + idioma).val(printStringFromNull(datos[idioma]["documentacion"]));
                 $("#item_termini_tramit_" + idioma).val(printStringFromNull(datos[idioma]["plazos"]));
                 $("#item_lloc_tramit_" + idioma).val(printStringFromNull(datos[idioma]["lugar"]));
+                $("#item_url_tramit_" + idioma).val(printStringFromNull(datos[idioma]["urlTramiteExterno"]));
                 //$("#item_observacions_tramit_" + idioma).val(printStringFromNull(datos[idioma]["observaciones"]));
             }
 

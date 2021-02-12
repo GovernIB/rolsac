@@ -2491,17 +2491,19 @@
 		                	</div>
 						</div>
 
-						<div class="modul_continguts mostrar">
-							<div class="fila">
-		                        <div class="element t99p">
-		                            <div class="etiqueta">
-		                                <label for="item_url_tramit"><spring:message code='camp.urlTramitExtern'/></label>
-		                            </div>
-		                            <div class="control">
-		                                <input id="item_url_tramit" name="item_url_tramit" type="text" class="nou" />
-		                            </div>
-		                        </div>
-		                    </div>
+						<div class="fila">
+							<div class="element t99p elementoMultiidiomaIndividual">
+								<c:forEach items="${idiomes_aplicacio}" var="lang">
+									<div class="campoIdioma <c:out value="${lang}"/>">
+										<div class="etiqueta">									
+											<label for="item_url_tramit_<c:out value="${lang}"/>"><spring:message code='camp.urlTramitExtern'/></label>
+										</div>
+										<div class="control">
+			                                <input id="item_url_tramit_<c:out value="${lang}"/>" name="item_url_tramit_<c:out value="${lang}"/>" type="text" class="nou" />
+										</div>
+									</div>
+								</c:forEach>
+							</div>
 						</div>
 
 						<div class="modul_continguts mostrar">

@@ -34,7 +34,7 @@ public class Tramite extends Ordenable implements Comparator {
 
 	String idTraTel;
 	Integer versio; // NUMBER(2)
-	String urlExterna; // VARCHAR2(1024 CHAR)
+//	String urlExterna; // VARCHAR2(1024 CHAR)
 	/** Parametros si es un tramtie telematico y necesita parametros. **/
 	private String parametros;
 	/** Plataforma. **/
@@ -253,12 +253,19 @@ public class Tramite extends Ordenable implements Comparator {
 	}
 
 	public String getUrlExterna() {
-		return urlExterna;
+		//return urlExterna;
+			
+		final TraduccionTramite traduccion = (TraduccionTramite) getTraduccion();
+		if (null == traduccion) {
+			return null;
+		} else {
+			return traduccion.getUrlTramiteExterno();
+		}		
 	}
 
-	public void setUrlExterna(final String urlExterna) {
+	/*public void setUrlExterna(final String urlExterna) {
 		this.urlExterna = urlExterna;
-	}
+	}*/
 
 	public Operativa getOperativa() {
 		return operativa;

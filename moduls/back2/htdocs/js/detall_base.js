@@ -472,6 +472,11 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 				// Actualizamos los campos multi-idioma independientes.
 				escriptori_detall_elm.find(".element.multilang .campoIdioma").hide();
 				escriptori_detall_elm.find(".element.multilang ." + a_clicat_class).show();
+				
+				//Se añade solución multiidioma global independiente
+				// debe contenter esta clase .elementoMultiidiomaIndividual
+				$(".elementoMultiidiomaIndividual .campoIdioma").hide();
+				$(".elementoMultiidiomaIndividual ." + a_clicat_class).show();
 
 				if (cambiarModulosLaterales) {
 

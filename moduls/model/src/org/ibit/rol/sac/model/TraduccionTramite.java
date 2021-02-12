@@ -13,6 +13,7 @@ public class TraduccionTramite implements Traduccion {
     private String plazos;
     private String observaciones;
     private String lugar;
+    private String urlTramiteExterno;
 	
     public String getNombre() {
         return nombre;
@@ -67,7 +68,16 @@ public class TraduccionTramite implements Traduccion {
 		return "TraduccionTramite [observaciones=" + observaciones
 				+ ", documentacion=" + documentacion + ", nombre=" + nombre
 				+ ", observaciones=" + observaciones + ", plazos=" + plazos
+				+ ", urlTramiteExterno=" + urlTramiteExterno 
 				+ "]";
+	}
+
+	public String getUrlTramiteExterno() {
+		return urlTramiteExterno;
+	}
+
+	public void setUrlTramiteExterno(String urlTramiteExterno) {
+		this.urlTramiteExterno = urlTramiteExterno;
 	}
 
 	

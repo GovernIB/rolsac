@@ -62,7 +62,7 @@ public class TramiteRemoto  extends Tramite implements Remoto{
         this.setDataActualitzacio(tramiteTransferible.getDataActualitzacio());
         this.setIdTraTel(tramiteTransferible.getIdTraTel());
         this.setVersio(tramiteTransferible.getVersio());
-        this.setUrlExterna(tramiteTransferible.getUrlExterna());
+     //   this.setUrlExterna(tramiteTransferible.getUrlExterna());
         
         //Relleno las taxas
         if(tramiteTransferible.getTaxes()!=null){
@@ -142,6 +142,7 @@ public class TramiteRemoto  extends Tramite implements Remoto{
                     temp.setPlazos(traduccion.getPlazos());
                     temp.setObservaciones(traduccion.getObservaciones());
                     temp.setLugar(traduccion.getLugar());
+                    temp.setUrlTramiteExterno(traduccion.getUrlTramiteExterno());
                     traducciones.put(traduccion.getCodigoEstandarIdioma().toLowerCase(), temp);
                 }
             }

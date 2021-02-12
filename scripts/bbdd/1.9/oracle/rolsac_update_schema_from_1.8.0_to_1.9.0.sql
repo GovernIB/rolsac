@@ -68,3 +68,8 @@ COMMENT ON COLUMN RSC_TRAPRO.TPR_LOPDIA IS 'Indica el lopd archivo info adiciona
 ALTER TABLE RSC_TRASER ADD TSR_LOPDIA NUMBER(19,0);
 ALTER TABLE RSC_TRASER ADD CONSTRAINT "RSC_TSRARC_FK" FOREIGN KEY ("TSR_LOPDIA") REFERENCES "RSC_ARCHIV" ("ARC_CODI") ENABLE;
 COMMENT ON COLUMN RSC_TRASER.TSR_LOPDIA IS 'Indica el lopd archivo info adicional';
+
+
+-- Añadimos la traducción del campo URL Externa de un tramite
+ALTER TABLE RSC_TRATRA ADD TTR_ULRTRA VARCHAR2(256);
+COMMENT ON COLUMN RSC_TRATRA.TTR_ULRTRA is 'Indica la url del tramite externo en funcion del idioma';

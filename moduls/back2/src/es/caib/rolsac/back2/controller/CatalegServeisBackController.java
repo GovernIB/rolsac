@@ -1432,7 +1432,6 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			} else {
 				// si no es telemático vaciamos los campos.
 				servicio.setTramiteVersion(null);
-				// servicio.setTramiteUrl("");
 				servicio.setTramiteId("");
 				servicio.setPlataforma(null);
 				servicio.setParametros(null);

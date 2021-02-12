@@ -30,6 +30,7 @@ import org.ibit.rol.sac.model.Taxa;
 import org.ibit.rol.sac.model.Traduccion;
 import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.TraduccionProcedimiento;
+import org.ibit.rol.sac.model.TraduccionServicio;
 import org.ibit.rol.sac.model.TraduccionTaxa;
 import org.ibit.rol.sac.model.TraduccionTramite;
 import org.ibit.rol.sac.model.Tramite;
@@ -103,7 +104,7 @@ public class TramiteBackController {
 			resultats.put("tramit_item_data_tancament", DateUtils.formatDateSimpleTime(tramite.getDataTancament()));
 			resultats.put("item_moment_tramit", tramite.getFase());
 			resultats.put("item_validacio_tramit", tramite.getValidacio());
-			resultats.put("item_url_tramit", tramite.getUrlExterna());
+//**			resultats.put("item_url_tramit", tramite.getUrlExterna());
 			resultats.put("item_tramite_tramit", tramite.getIdTraTel());
 			resultats.put("item_version_tramit", tramite.getVersio());
 			resultats.put("item_codivuds_tramit", tramite.getCodiVuds());
@@ -298,9 +299,12 @@ public class TramiteBackController {
 					: request.getParameter("item_parametros");
 			final String idPlataforma = request.getParameter("item_plataforma") == null ? ""
 					: request.getParameter("item_plataforma");
+
 			tramite.setVersio(StringUtils.isNumeric(version) && !"".equals(version) ? Integer.parseInt(version) : null);
-			tramite.setUrlExterna(
-					request.getParameter("item_url_tramit") == null ? "" : request.getParameter("item_url_tramit"));
+
+//**			tramite.setUrlExterna(
+//**					request.getParameter("item_url_tramit") == null ? "" : request.getParameter("item_url_tramit"));
+
 			tramite.setParametros(parametros);
 			if (idPlataforma.isEmpty()) {
 				tramite.setPlataforma(null);
@@ -318,7 +322,7 @@ public class TramiteBackController {
 			tramite.setPresencial(request.getParameter("item_check_tramit_presencial") != null
 					&& !"".equals(request.getParameter("item_check_tramit_presencial")));
 
-			final boolean isTramiteExterno = !tramite.getUrlExterna().equals("");
+			/*final boolean isTramiteExterno =  request.getParameter("item_url_tramit_ca")!=null && !"".equals(request.getParameter("item_check_tramit_telematico"));
 			final boolean isTramiteInterno = !tramite.getIdTraTel().equals("") || !version.isEmpty()
 					|| !idPlataforma.isEmpty();
 			final boolean isTramiteInternoTodo = !tramite.getIdTraTel().equals("") && !version.isEmpty()
@@ -338,12 +342,57 @@ public class TramiteBackController {
 				}
 			} else {
 				// si no es telemático vaciamos los campos.
-				tramite.setVersio(null);
-				tramite.setUrlExterna("");
+
+				tramite.setVersio(null);		
+//**				tramite.setUrlExterna("");
+
+				tramite.setIdTraTel("");
+				tramite.setPlataforma(null);
+				tramite.setParametros(null);
+			}*/
+			
+			
+			// Traducciones.
+			tramite.setTraduccionMap(getTraduccionesTramite(request, tramite));
+			
+			
+			// final boolean urlTramiteRelleno = !servicio.getTramiteUrl().equals("");
+						// Buscamos si la url está en algún idioma
+			boolean urlTramiteRelleno = false;
+			for (final String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
+				final TraduccionTramite t = ((TraduccionTramite) tramite.getTraduccion(lang));
+				if (t != null && t.getUrlTramiteExterno() != null && !"".equals(t.getUrlTramiteExterno())) {
+					urlTramiteRelleno = true;
+				}
+			}
+
+			final boolean isTramiteInterno = !tramite.getIdTraTel().equals("") || !version.isEmpty()
+					|| !idPlataforma.isEmpty() || !parametros.isEmpty();
+			final boolean isTramiteInternoTodo = !tramite.getIdTraTel().equals("") && !version.isEmpty()
+					&& !idPlataforma.isEmpty();
+
+			// si es telematico debe estar rellenos url o version+id, pero no ambos.
+			if (tramite.isTelematico()) {
+				// Tratamos la posible incoherencia de datos
+				if ((urlTramiteRelleno && isTramiteInterno) || // estan los dos completados
+						(!urlTramiteRelleno && !isTramiteInterno) || // ninguno esta completado
+						(isTramiteInterno && !isTramiteInternoTodo)) { // Esta relleno todo lo de interno y no se deja
+																		// algo sin rellenar
+					error = messageSource.getMessage("proc.formulari.error.telematic.sensedades", null,
+							request.getLocale());
+					result = new IdNomDTO(-2l, error);
+					return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.ACCEPTED);
+				}
+			} else {
+				// si no es telemático vaciamos los campos.
+				tramite.setVersio(null);				
 				tramite.setIdTraTel("");
 				tramite.setPlataforma(null);
 				tramite.setParametros(null);
 			}
+			
+			
+
 
 			// 1 - Inicialización
 			// 2 - Instrucción
@@ -417,7 +466,7 @@ public class TramiteBackController {
 			// Rellenar los campos
 			tramite.setCodiVuds(request.getParameter("item_id_codivuds_tramit"));
 			// Traducciones.
-			tramite.setTraduccionMap(getTraduccionesTramite(request, tramite));
+			//tramite.setTraduccionMap(getTraduccionesTramite(request, tramite));
 
 			final Scanner scanner = new Scanner(request.getParameter("tramits_item_organ_id"));
 			if (scanner.hasNextLong()) {
@@ -728,6 +777,8 @@ public class TramiteBackController {
 		// TODO Este campo no existe en la tabla pero se deja por si se anyade en
 		// futuras implementaciones.
 		traduccionTramite.setObservaciones(request.getParameter("item_descripcio_tramit_" + lang));
+		
+		traduccionTramite.setUrlTramiteExterno(request.getParameter("item_url_tramit_" + lang));
 
 		traducciones.put(lang, traduccionTramite);
 	}

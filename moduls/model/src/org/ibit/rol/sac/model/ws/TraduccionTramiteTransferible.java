@@ -18,6 +18,7 @@ public class TraduccionTramiteTransferible extends AbstractTraduccion  implement
     private String plazos;
     private String observaciones;
     private String lugar;
+    private String urlTramiteExterno;
 
     public String getNombre() {
         return nombre;
@@ -74,4 +75,12 @@ public class TraduccionTramiteTransferible extends AbstractTraduccion  implement
     public void setLugar(String lugar) {
         this.lugar = lugar;
     }
+
+	public String getUrlTramiteExterno() {
+		return urlTramiteExterno;
+	}
+
+	public void setUrlTramiteExterno(String urlTramiteExterno) {
+		this.urlTramiteExterno = urlTramiteExterno;
+	}
 }

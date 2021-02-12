@@ -35,6 +35,7 @@
                 <property name="requisits" type="text" column="TTR_REQUI"/>
                 <property name="plazos" length="512" column="TTR_PLAZOS"/>
                 <property name="lugar" length="512" column="TTR_LUGAR"/>
+                <property name="urlTramiteExterno"	length="256" 	column="TTR_ULRTRA" />
             </composite-element>
         </map>
 
@@ -46,7 +47,7 @@
         <property name="dataActualitzacio" column="TRA_DATACTU"/>
         <property name="idTraTel" column="TRA_IDTRAMTEL"/>
         <property name="versio" column="TRA_VERSIO"/>
-        <property name="urlExterna" column="TRA_URLEXTE"/>
+   <!--      <property name="urlExterna" column="TRA_URLEXTE"/> -->
         <property name="dataActualitzacioVuds" column="TRA_DATACTUVUDS"/>
         <property name="dataInici" column="TRA_DATINICI"/>
         <property name="dataTancament" column="TRA_DATTANCAMENT"/>

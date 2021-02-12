@@ -138,29 +138,51 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 	@Override
 	public String getEnlaceTelematico(final Long idTramit, final String lang) throws DelegateException {
 
+		String res ="";
+		
+		
 		final Tramite tram = this.obtenerTramite(idTramit);
-
-		final String idTramite = tram.getIdTraTel();
-		final String numVersion = tram.getVersio().toString();
-		final String idioma = lang;
-		final String parametros;
-		if (tram.getParametros() == null) {
-			parametros = "";
-		} else {
-			parametros = tram.getParametros();
+		try { 
+			final String idTramite = tram.getIdTraTel();
+			final String numVersion = tram.getVersio().toString();
+			final String idioma = lang;
+			final String parametros;
+			if (tram.getParametros() == null) {
+				parametros = "";
+			} else {
+				parametros = tram.getParametros();
+			}
+			final String idTramiteRolsac = idTramite.toString();
+	
+			final TraduccionPlataforma trad = (TraduccionPlataforma) tram.getPlataforma().getTraduccion(idioma);
+			String url = trad.getUrlAcceso();
+	
+			url = url.replace("${idTramitePlataforma}", idTramite);
+			url = url.replace("${versionTramitePlatorma}", numVersion);
+			url = url.replace("${parametros}", parametros);
+			url = url.replace("${servicio}", String.valueOf(true));
+			url = url.replace("${idTramiteRolsac}", idTramiteRolsac);
+	
+			res = url;
+		} catch (Exception e) {
+			
+			//si ocurre un error es porque alguno de los campos de url del trámite no existen. buscamos en la url externa. 
+			//si no existe para el idioma indicado se retorna el idioma por defecto
+			TraduccionTramite t = (TraduccionTramite) tram.getTraduccion(lang);
+			if(t==null || t.getUrlTramiteExterno()==null) {
+				t = (TraduccionTramite) tram.getTraduccion();
+			}
+			
+			if(t==null || t.getUrlTramiteExterno()==null) {
+				res="";
+			}else {
+				res= t.getUrlTramiteExterno();
+			}			
 		}
-		final String idTramiteRolsac = idTramite.toString();
-
-		final TraduccionPlataforma trad = (TraduccionPlataforma) tram.getPlataforma().getTraduccion(idioma);
-		String url = trad.getUrlAcceso();
-
-		url = url.replace("${idTramitePlataforma}", idTramite);
-		url = url.replace("${versionTramitePlatorma}", numVersion);
-		url = url.replace("${parametros}", parametros);
-		url = url.replace("${servicio}", String.valueOf(true));
-		url = url.replace("${idTramiteRolsac}", idTramiteRolsac);
-
-		return url;
+		
+		
+		
+		return res;
 	}
 
 	/**
@@ -1635,8 +1657,8 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			}
 
 			if (!StringUtils.isEmpty(urlTramiteTelematico)) {
-				where.append(" AND t.urlExterna = :urlTramiteTelematico ");
-				parametros.put("urlTramiteTelematico", urlTramiteTelematico);
+				where.append(" AND trad.urlExterna LIKE :urlTramiteTelematico ");
+				parametros.put("urlTramiteTelematico", "%" + urlTramiteTelematico + "%");
 			}
 
 			if (plataforma != null && !plataforma.isEmpty()) {
