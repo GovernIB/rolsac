@@ -606,4 +606,13 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
 		}
 	}
 
+	@Override
+	public boolean checkInfoAdicional(final Long id) throws DelegateException {
+		try {
+			return getFacade().checkInfoAdicional(id);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+
 }

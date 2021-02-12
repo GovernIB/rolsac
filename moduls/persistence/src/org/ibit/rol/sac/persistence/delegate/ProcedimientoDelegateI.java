@@ -116,4 +116,5 @@ public interface ProcedimientoDelegateI {
 
 	public abstract Archivo obtenerProcInfoAdicional(Long id, String idioma) throws DelegateException;
 
+	public boolean checkInfoAdicional(final Long id) throws DelegateException;
 }

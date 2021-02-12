@@ -1082,7 +1082,6 @@ public class CatalegServeisBackController extends PantallaBaseController {
 		traduccionDTO.put("requisitos", trad.getRequisitos());
 		traduccionDTO.put("urlTramiteExterno", trad.getUrlTramiteExterno());
 
-
 		return traduccionDTO;
 	}
 
@@ -1258,6 +1257,47 @@ public class CatalegServeisBackController extends PantallaBaseController {
 		} catch (final Exception exception) {
 			error = exception.getMessage();
 			result = new IdNomDTO(-64l, error);
+
+		}
+
+		return result;
+
+	}
+
+	@RequestMapping(value = "/checkPublico.do", method = POST)
+	public @ResponseBody IdNomDTO checkPublico(final HttpSession session, final HttpServletRequest request) {
+		IdNomDTO result = null;
+		String error = null;
+
+		try {
+
+			Long id = null;
+			if (!request.getParameter("id").isEmpty()) {
+
+				final ServicioDelegate servicioDelegate = DelegateUtil.getServicioDelegate();
+				id = Long.parseLong(request.getParameter("id"));
+
+				if (id != null) {
+					final boolean correcto = servicioDelegate.checkInfoAdicional(id);
+					if (!correcto) {
+						error = messageSource.getMessage("proc.dades.lopd.informacionAdicionalObligatoria", null,
+								request.getLocale());
+						return result = new IdNomDTO(-6l, error);
+					} else {
+						if (servicioDelegate.isNormativaDerogada(id)) {
+							error = messageSource.getMessage("serv.error.normativa.derogadas", null,
+									request.getLocale());
+							return result = new IdNomDTO(-1l, error);
+						}
+					}
+
+				}
+			}
+
+			return new IdNomDTO(id, "");
+		} catch (final Exception exception) {
+			error = exception.getMessage();
+			result = new IdNomDTO(-66l, error);
 
 		}
 

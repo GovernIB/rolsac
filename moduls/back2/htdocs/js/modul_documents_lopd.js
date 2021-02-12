@@ -12,8 +12,8 @@ jQuery(document).ready(function() {
     EscriptoriPareLopd.iniciar();
 
     // datos traductor
-	CAMPOS_TRADUCTOR_DOCUMENTO = [];
-	DATOS_TRADUCIDOS_DOCUMENTO = [];
+	CAMPOS_TRADUCTOR_DOCUMENTO_LOPD = [];
+	DATOS_TRADUCIDOS_DOCUMENTO_LOPD = [];
 });
 
 // Lista ordenable para elimiar/ordenar docs en la pantalla "padre"
@@ -209,7 +209,7 @@ function CModulDocumentsLopd() {
 	this.iniciar = function() {
 
     	// boton de traducir
-        jQuery("#botoTraduirDocument").unbind("click").bind("click", function() {
+        jQuery("#botoTraduirDocumentLopd").unbind("click").bind("click", function() {
             Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
         });
 
@@ -239,7 +239,7 @@ function CModulDocumentsLopd() {
 	};
 
 	this.traduirWrapper = function () {
-		that.traduir(pagTraduirDocument, CAMPOS_TRADUCTOR_DOCUMENTO, DATOS_TRADUCIDOS_DOCUMENTO);
+		that.traduir(pagTraduirDocument, CAMPOS_TRADUCTOR_DOCUMENTO_LOPD, DATOS_TRADUCIDOS_DOCUMENTO_LOPD);
 	};
 
 	this.vuelve = function () {
@@ -358,6 +358,17 @@ function CModulDocumentsLopd() {
 		}
 	};
 
+	this.limpia = function() {
+		for (var i in idiomas) {
+
+            var idioma = idiomas[i];
+            jQuery("#doc_arxiu_lop_" + idioma).each(limpiarCampo);
+            limpiarArchivoMultiidioma("arxiu_actual_doc_lopd", idioma);
+
+        }
+		$("#modul_documents_lopd").addClass("invisible");
+	};
+
 	this.nou = function(edicion) {
 
 		if (!edicion) {
@@ -390,13 +401,15 @@ function CModulDocumentsLopd() {
 
 		jQuery("#docId").val(dada_node.item_id);
 
+
+
 		// Bloque de pestanyas de idiomas.
 		for (var i in idiomas) {
 
 			var idioma = idiomas[i];
 
 			// archivos
-			$("#doc_arxiu_lop_" + idioma).val("");
+			$("#modulDocumentsLopd #doc_arxiu_" + idioma).val("");
 			$("#grup_arxiu_actual_doc_lopd_" + idioma + " input").removeAttr("checked");
 
 			var anchors = $("#grup_arxiu_actual_doc_lopd_" + idioma + " a");

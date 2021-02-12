@@ -576,10 +576,17 @@ function CDetall() {
 
 		dataVars = "id=" + item_ID;
 
+		var paginaCheck;
+		if ($("#item_estat").val() == 1) {
+			paginaCheck = pagCheckPublico;
+		} else {
+			paginaCheck = pagNormativaVigentes;
+		}
+
 		// ajax
 		$.ajax({
 			type: "POST",
-			url: pagNormativaVigentes,
+			url: paginaCheck,
 			data: dataVars,
 			dataType: "json",
 			error: function() {
@@ -588,6 +595,8 @@ function CDetall() {
 			success: function(data) {
 				if (data.id == null || data.id > 0 ) {
 					that.guardaFinal(undefined);
+				} else if (data.id  == -6) {
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtLopdInfoObligatorioTitulo, text: "<p>" + txtLopdInfoObligatorio + "</p>"});
 				} else if (data.id  == -66) {
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
 				} else {
@@ -906,6 +915,8 @@ function CDetall() {
 		ModulNormativa.nuevo();
 		ModulPublicObjectiu.nuevo();
 		EscriptoriNormativa.nuevo();
+		ModulDocumentsLopd.limpia();
+
 
 		escriptori_detall_elm.find(".botonera li.btnEliminar,.botonera li.btnPrevisualizar").hide();
 		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);
@@ -925,7 +936,7 @@ function CDetall() {
 		$("#item_tramite_version").val("");
 		$("#item_tramite_id").val("");
 		$("#item_parametros").val("");
-		
+
 		//no limpia los campos hidden, readonly y disabled
 		$("#modulPrincipal :input").each(limpiarCampo);
 

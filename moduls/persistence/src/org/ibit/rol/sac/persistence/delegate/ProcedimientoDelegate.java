@@ -252,4 +252,15 @@ public class ProcedimientoDelegate {
 	public Archivo obtenerProcInfoAdicional(final Long id, final String idioma) throws DelegateException {
 		return impl.obtenerProcInfoAdicional(id, idioma);
 	}
+
+	/**
+	 * Comprueba si tiene la info adicional en catalán.
+	 *
+	 * @param id
+	 * @return
+	 * @throws DelegateException
+	 */
+	public boolean checkInfoAdicional(final Long id) throws DelegateException {
+		return impl.checkInfoAdicional(id);
+	}
 }

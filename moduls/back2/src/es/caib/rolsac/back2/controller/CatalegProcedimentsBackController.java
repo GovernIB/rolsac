@@ -1436,6 +1436,47 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 	}
 
+	@RequestMapping(value = "/checkPublico.do", method = POST)
+	public @ResponseBody IdNomDTO checkPublico(final HttpSession session, final HttpServletRequest request) {
+		IdNomDTO result = null;
+		String error = null;
+
+		try {
+
+			Long id = null;
+			if (!request.getParameter("id").isEmpty()) {
+
+				final ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
+				id = Long.parseLong(request.getParameter("id"));
+
+				if (id != null) {
+					final boolean correcto = procedimientoDelegate.checkInfoAdicional(id);
+					if (!correcto) {
+						error = messageSource.getMessage("proc.dades.lopd.informacionAdicionalObligatoria", null,
+								request.getLocale());
+						return result = new IdNomDTO(-6l, error);
+					} else {
+						if (procedimientoDelegate.isNormativaDerogada(id)) {
+							error = messageSource.getMessage("serv.error.normativa.derogadas", null,
+									request.getLocale());
+							return result = new IdNomDTO(-1l, error);
+						}
+					}
+
+				}
+			}
+
+			return new IdNomDTO(id, "");
+		} catch (final Exception exception) {
+			error = exception.getMessage();
+			result = new IdNomDTO(-66l, error);
+
+		}
+
+		return result;
+
+	}
+
 	@RequestMapping(value = "/checkNormativaVigente.do", method = POST)
 	public @ResponseBody IdNomDTO checkNormativaVigente(final HttpSession session, final HttpServletRequest request) {
 		IdNomDTO result = null;

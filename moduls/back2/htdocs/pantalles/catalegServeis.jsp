@@ -69,6 +69,7 @@
     var pagTraduirDocument = '<c:url value="/documents/traduir.do" />';
     var pagListarHechosVitales = '<c:url value="/catalegServeis/listarHechosVitales.do" />';
     var pagLopdResponsable = '<c:url value="/catalegServeis/getLopdResponsable.do" />';
+    var pagCheckPublico = '<c:url value="/catalegServeis/checkPublico.do" />';
     var pagNormativaVigentes = '<c:url value="/catalegServeis/checkNormativaVigente.do" />';
     var urlPrevisualizarServicio = '<c:out value="${urlPrevisualitzacio}"/>';
     var modulos = '<c:url value="/catalegServeis/modulos.do" />';
@@ -110,6 +111,8 @@
     var txtSeleccionats = "<spring:message code='txt.seleccionats'/>";
     var txtSeleccionat = "<spring:message code='txt.seleccionat'/>";
 	var txtProcessant = "<spring:message code='txt.processant'/>";
+	var txtLopdInfoObligatorioTitulo = "<spring:message code='proc.dades.lopd.informacionAdicionalObligatoriaTitulo'/>";
+	var txtLopdInfoObligatorio = "<spring:message code='proc.dades.lopd.informacionAdicionalObligatoria'/>";
 
     var txtHiHa = "<spring:message code='txt.hi_ha'/>";
     var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
@@ -1724,7 +1727,7 @@
                                 </c:forEach>
 
                                 <c:if test="${traductorActivo}">
-	                                <li class="traduix btnGenerico" id="botoTraduirDocument">
+	                                <li class="traduix btnGenerico" id="botoTraduirDocumentLopd" style="display:none">
 	                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
 	                                </li>
                                 </c:if>

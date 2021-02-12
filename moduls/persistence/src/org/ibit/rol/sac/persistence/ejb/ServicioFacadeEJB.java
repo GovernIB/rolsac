@@ -287,6 +287,32 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 	}
 
 	/**
+	 * Check si tiene la info adicional .
+	 *
+	 * @ejb.interface-method
+	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+	 */
+	public boolean checkInfoAdicional(final Long id) throws DelegateException {
+		final Session session = getSession();
+		boolean resultado = false;
+		try {
+			final Servicio servicioBD = obtenerServicioNewBack(id);
+			final TraduccionServicio trad = (TraduccionServicio) servicioBD.getTraduccion("ca");
+			// Esto es que tiene la info
+			resultado = trad != null && trad.getLopdInfoAdicional() != null
+					&& trad.getLopdInfoAdicional().getId() != null;
+		} catch (final Exception he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+		}
+		return resultado;
+	}
+
+	/**
 	 * Check si alguna normativa esta derogada.
 	 *
 	 * @ejb.interface-method

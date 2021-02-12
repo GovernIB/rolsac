@@ -443,4 +443,12 @@ public class ServicioDelegate implements StatelessDelegate {
 			throw new DelegateException(e);
 		}
 	}
+
+	public boolean checkInfoAdicional(final Long id) throws DelegateException {
+		try {
+			return getFacade().checkInfoAdicional(id);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
 }

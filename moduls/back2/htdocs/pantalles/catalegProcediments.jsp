@@ -86,6 +86,7 @@
     var pagTraduirDocumentTramit = '<c:url value="/documentsTramit/traduir.do" />';
     var pagListarHechosVitales = '<c:url value="/catalegProcediments/listarHechosVitales.do" />';
     var pagNormativaVigentes = '<c:url value="/catalegProcediments/checkNormativaVigente.do" />';
+    var pagCheckPublico = '<c:url value="/catalegProcediments/checkPublico.do" />';
     var pagLopdResponsable = '<c:url value="/catalegProcediments/getLopdResponsable.do" />';
     var urlPrevisualizarProcedimiento = '<c:out value="${urlPrevisualitzacio}"/>';
     var modulos = '<c:url value="/catalegProcediments/modulos.do" />';
@@ -135,6 +136,8 @@
     var txtNoHiHaLlistat = txtNoHiHa + " " + txtLlistaItems.toLowerCase();
     var txtNoHiHaFets = "<spring:message code='txt.noHiHaFetsVitals'/>";
     var txtNouTitol = "<spring:message code='txt.nova'/> " + txtLlistaItem.toLowerCase();
+	var txtLopdInfoObligatorioTitulo = "<spring:message code='proc.dades.lopd.informacionAdicionalObligatoriaTitulo'/>";
+	var txtLopdInfoObligatorio = "<spring:message code='proc.dades.lopd.informacionAdicionalObligatoria'/>";
 
     var txtFet = "<spring:message code='txt.fet_vital'/>";
     var txtFets = "<spring:message code='txt.fets_vitals'/>";
@@ -2061,7 +2064,7 @@
                                 </c:forEach>
 
                                 <c:if test="${traductorActivo}">
-	                                <li class="traduix btnGenerico" id="botoTraduirDocument">
+	                                <li class="traduix btnGenerico" id="botoTraduirDocumentLopd" style="display:none">
 	                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
 	                                </li>
                                 </c:if>
@@ -2495,7 +2498,7 @@
 							<div class="element t99p elementoMultiidiomaIndividual">
 								<c:forEach items="${idiomes_aplicacio}" var="lang">
 									<div class="campoIdioma <c:out value="${lang}"/>">
-										<div class="etiqueta">									
+										<div class="etiqueta">
 											<label for="item_url_tramit_<c:out value="${lang}"/>"><spring:message code='camp.urlTramitExtern'/></label>
 										</div>
 										<div class="control">
