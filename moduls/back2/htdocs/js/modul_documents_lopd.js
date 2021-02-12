@@ -12,8 +12,8 @@ jQuery(document).ready(function() {
     EscriptoriPareLopd.iniciar();
 
     // datos traductor
-	CAMPOS_TRADUCTOR_DOCUMENTO = [];
-	DATOS_TRADUCIDOS_DOCUMENTO = [];
+	CAMPOS_TRADUCTOR_DOCUMENTO_LOPD = [];
+	DATOS_TRADUCIDOS_DOCUMENTO_LOPD = [];
 });
 
 // Lista ordenable para elimiar/ordenar docs en la pantalla "padre"
@@ -209,7 +209,7 @@ function CModulDocumentsLopd() {
 	this.iniciar = function() {
 
     	// boton de traducir
-        jQuery("#botoTraduirDocument").unbind("click").bind("click", function() {
+        jQuery("#botoTraduirDocumentLopd").unbind("click").bind("click", function() {
             Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
         });
 
@@ -239,7 +239,7 @@ function CModulDocumentsLopd() {
 	};
 
 	this.traduirWrapper = function () {
-		that.traduir(pagTraduirDocument, CAMPOS_TRADUCTOR_DOCUMENTO, DATOS_TRADUCIDOS_DOCUMENTO);
+		that.traduir(pagTraduirDocument, CAMPOS_TRADUCTOR_DOCUMENTO_LOPD, DATOS_TRADUCIDOS_DOCUMENTO_LOPD);
 	};
 
 	this.vuelve = function () {

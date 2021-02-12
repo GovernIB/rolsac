@@ -1724,7 +1724,7 @@
                                 </c:forEach>
 
                                 <c:if test="${traductorActivo}">
-	                                <li class="traduix btnGenerico" id="botoTraduirDocument">
+	                                <li class="traduix btnGenerico" id="botoTraduirDocumentLopd" style="display:none">
 	                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
 	                                </li>
                                 </c:if>

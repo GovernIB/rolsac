@@ -2061,7 +2061,7 @@
                                 </c:forEach>
 
                                 <c:if test="${traductorActivo}">
-	                                <li class="traduix btnGenerico" id="botoTraduirDocument">
+	                                <li class="traduix btnGenerico" id="botoTraduirDocumentLopd" style="display:none">
 	                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
 	                                </li>
                                 </c:if>
@@ -2495,7 +2495,7 @@
 							<div class="element t99p elementoMultiidiomaIndividual">
 								<c:forEach items="${idiomes_aplicacio}" var="lang">
 									<div class="campoIdioma <c:out value="${lang}"/>">
-										<div class="etiqueta">									
+										<div class="etiqueta">
 											<label for="item_url_tramit_<c:out value="${lang}"/>"><spring:message code='camp.urlTramitExtern'/></label>
 										</div>
 										<div class="control">
