@@ -84,6 +84,9 @@ public class Tramits extends EntidadBase {
 
 	@ApiModelProperty(value = "urlExterna", required = false)
 	private java.lang.String urlExterna;
+	
+	@ApiModelProperty(value = "urlTramiteExterno", required = false)
+	private java.lang.String urlTramiteExterno;
 
 	@ApiModelProperty(value = "validacio", required = false)
 	private java.lang.Long validacio;
@@ -644,6 +647,20 @@ public class Tramits extends EntidadBase {
 	 */
 	public void setPlataforma(final Plataformas plataforma) {
 		this.plataforma = plataforma;
+	}
+
+	/**
+	 * @return the urlTramiteExterno
+	 */
+	public java.lang.String getUrlTramiteExterno() {
+		return urlTramiteExterno;
+	}
+
+	/**
+	 * @param urlTramiteExterno the urlTramiteExterno to set
+	 */
+	public void setUrlTramiteExterno(java.lang.String urlTramiteExterno) {
+		this.urlTramiteExterno = urlTramiteExterno;
 	}
 
 }
