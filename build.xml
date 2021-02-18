@@ -832,6 +832,7 @@
 		<artifact:mvn  pom="pom.xml" mavenHome="${mvn.installation.path}" fork="true" >
 			<arg value="deploy" />
 			<arg value="-Dmaven.javadoc.skip=true" />
+			<arg value="-X" />		
 			<jvmarg value="-Dhttps.protocols=TLSv1.2"></jvmarg>
 		</artifact:mvn>
 	</target>
