@@ -62,6 +62,7 @@ import org.ibit.rol.sac.model.TraduccionTipo;
 import org.ibit.rol.sac.model.TraduccionTipoAfectacion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Usuario;
+import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.model.criteria.BuscadorServicioCriteria;
 import org.ibit.rol.sac.model.dto.CodNomDTO;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
@@ -423,25 +424,37 @@ public class CatalegServeisBackController extends PantallaBaseController {
 		final HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
 
-		IdNomDTO result;
+		IdNomDTO result = null;
 		String error = null;
 		// Ficha ficha = null;
 
 		try {
 			if (elementos == null || elementos.length == 0) {
-				final List<String> idiomas = DelegateUtil.getIdiomaDelegate().listarLenguajes();
 
-				final Map<String, TraduccionServicio> traducciones = new HashMap<String, TraduccionServicio>();
-				for (final String idioma : idiomas) {
-					final TraduccionServicio traDoc = new TraduccionServicio();
-					traducciones.put(idioma, traDoc);
+				final Servicio servicio = DelegateUtil.getServicioDelegate().obtenerServicioNewBack(Long.valueOf(id));
+				if (servicio.getValidacion() == Validacion.PUBLICA.intValue()) {
+					error = messageSource.getMessage("proc.formulari.error.lopdinfoadicional.procedimientoPublicado",
+							null, request.getLocale());
+					result = new IdNomDTO(-6l, error);
+					log.error("Se ha intentado borrar la info adicional cuando ya está publicado. Proc:" + id);
+
+				} else {
+					final List<String> idiomas = DelegateUtil.getIdiomaDelegate().listarLenguajes();
+
+					final Map<String, TraduccionServicio> traducciones = new HashMap<String, TraduccionServicio>();
+					for (final String idioma : idiomas) {
+						final TraduccionServicio traDoc = new TraduccionServicio();
+						traducciones.put(idioma, traDoc);
+					}
+
+					final List<Long> archivosAborrar = new ArrayList<Long>();
+					DelegateUtil.getServicioDelegate().grabarArchivos(Long.valueOf(id), traducciones, archivosAborrar);
+
+					result = new IdNomDTO(id, messageSource.getMessage("fitxes.guardat.documents.lopd.correcte", null,
+							request.getLocale()));
 				}
 
-				final List<Long> archivosAborrar = new ArrayList<Long>();
-				DelegateUtil.getServicioDelegate().grabarArchivos(Long.valueOf(id), traducciones, archivosAborrar);
 			}
-			result = new IdNomDTO(id,
-					messageSource.getMessage("fitxes.guardat.documents.lopd.correcte", null, request.getLocale()));
 
 		} catch (final DelegateException dEx) {
 
@@ -2179,6 +2192,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			final List<Long> archivosAborrar = new ArrayList<Long>();
 			final Servicio servicio = DelegateUtil.getServicioDelegate().obtenerServicioNewBack(Long.valueOf(id));
 
+			boolean continuar = true;
 			for (final String lang : DelegateUtil.getIdiomaDelegate().listarLenguajes()) {
 
 				TraduccionServicio traduccionServ = (TraduccionServicio) servicio.getTraduccion(lang);
@@ -2187,14 +2201,17 @@ public class CatalegServeisBackController extends PantallaBaseController {
 				}
 
 				final FileItem fileItem = ficherosForm.get("doc_arxiu_" + lang); // Archivo
+				final boolean estabaRellenoInfoAdicional = traduccionServ.getLopdInfoAdicional() != null
+						&& traduccionServ.getLopdInfoAdicional().getId() != null;
 
+				boolean aBorrar = false;
 				if (fileItem != null && fileItem.getSize() > 0) {
 
 					if (this.isArchivoParaBorrar(valoresForm, lang) || traduccionServ.getLopdInfoAdicional() != null) {
 
 						// Se indica que hay que borrar el fichero.
 						archivosAborrar.add(traduccionServ.getLopdInfoAdicional().getId());
-
+						aBorrar = true;
 					}
 					traduccionServ.setLopdInfoAdicional(
 							UploadUtil.obtenerArchivo(traduccionServ.getLopdInfoAdicional(), fileItem));
@@ -2205,34 +2222,46 @@ public class CatalegServeisBackController extends PantallaBaseController {
 					archivosAborrar.add(traduccionServ.getLopdInfoAdicional().getId());
 					traduccionServ.setLopdInfoAdicional(null);
 					traducciones.put(lang, traduccionServ);
+					aBorrar = true;
+				}
+
+				// Si esta publico y tenía archivo y se va a borrar, lanzar
+				// error!
+				if (servicio.getValidacion() == Validacion.PUBLICA.intValue() && aBorrar
+						&& estabaRellenoInfoAdicional) {
+					final String error = messageSource
+							.getMessage("proc.formulari.error.lopdinfoadicional.procedimientoPublicado", null, locale);
+					jsonResult = new IdNomDTO(-6l, error).getJson();
+					log.error("Se ha intentado borrar la info adicional cuando ya está publicado. Proc:" + id);
+					continuar = false;
 				}
 
 			}
 
-			boolean continuar = true;
-
 			// Buscamos el archivo del idioma.
-			for (final String idioma : traducciones.keySet()) {
-				final TraduccionServicio tradServ = traducciones.get(idioma);
-				if (tradServ != null && tradServ.getLopdInfoAdicional() != null
-						&& tradServ.getLopdInfoAdicional().getNombre() != null
-						&& tradServ.getLopdInfoAdicional().getNombre().length() >= Archivo.NOMBRE_LONGITUD_MAXIMA) {
-					final String error = messageSource.getMessage("error.fitxer.tamany_nom", null, locale);
-					log.error(
-							"Error controlado, ha intentado subir un fichero con una longitud en el nombre de más de 128 caracteres.");
-					jsonResult = new IdNomDTO(-3l, error).getJson();
-					continuar = false;
-					break;
-				}
+			if (continuar) {
+				for (final String idioma : traducciones.keySet()) {
+					final TraduccionServicio tradServ = traducciones.get(idioma);
+					if (tradServ != null && tradServ.getLopdInfoAdicional() != null
+							&& tradServ.getLopdInfoAdicional().getNombre() != null
+							&& tradServ.getLopdInfoAdicional().getNombre().length() >= Archivo.NOMBRE_LONGITUD_MAXIMA) {
+						final String error = messageSource.getMessage("error.fitxer.tamany_nom", null, locale);
+						log.error(
+								"Error controlado, ha intentado subir un fichero con una longitud en el nombre de más de 128 caracteres.");
+						jsonResult = new IdNomDTO(-3l, error).getJson();
+						continuar = false;
+						break;
+					}
 
-				if (tradServ != null && tradServ.getLopdInfoAdicional() != null
-						&& tradServ.getLopdInfoAdicional().getNombre() != null
-						&& !tradServ.getLopdInfoAdicional().getNombre().endsWith(".pdf")) {
-					final String error = messageSource.getMessage("error.fitxer.no_pdf", null, locale);
-					log.error("Error controlado, ha intentado subir un fichero que no es pdf.");
-					jsonResult = new IdNomDTO(-3l, error).getJson();
-					continuar = false;
-					break;
+					if (tradServ != null && tradServ.getLopdInfoAdicional() != null
+							&& tradServ.getLopdInfoAdicional().getNombre() != null
+							&& !tradServ.getLopdInfoAdicional().getNombre().endsWith(".pdf")) {
+						final String error = messageSource.getMessage("error.fitxer.no_pdf", null, locale);
+						log.error("Error controlado, ha intentado subir un fichero que no es pdf.");
+						jsonResult = new IdNomDTO(-3l, error).getJson();
+						continuar = false;
+						break;
+					}
 				}
 			}
 
