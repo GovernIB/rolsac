@@ -1199,8 +1199,8 @@
 
      <service name="EnllacTelematicoWS" provider="java:EJB">
         <parameter name="beanJndiName" value="es.caib.rolsac.api.v2.enllactelematico.ejb.EnllacTelematicoQueryServiceEJB" />
-        <parameter name="homeInterfaceName" value="es.caib.rolsac.api.v2.enllac.ejb.intf.EnllacTelematicoQueryServiceEJBHome" />
-        <parameter name="remoteInterfaceName" value="es.caib.rolsac.api.v2.enllac.ejb.intf.EnllacTelematicoQueryServiceEJBRemote" />
+        <parameter name="homeInterfaceName" value="es.caib.rolsac.api.v2.enllactelematico.ejb.intf.EnllacTelematicoQueryServiceEJBHome" />
+        <parameter name="remoteInterfaceName" value="es.caib.rolsac.api.v2.enllactelematico.ejb.intf.EnllacTelematicoQueryServiceEJBRemote" />
         <parameter name="allowedMethods" value="*" />
         <parameter name="jndiurl" value="https://localhost:8443" />
         <parameter name="jndiContextClass" value="org.jnp.interfaces.NamingContextFactory" />
