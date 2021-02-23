@@ -40,17 +40,17 @@ public class TraductorInitializer implements ServletContextListener {
 			return;
 		}
 		try {
-			log.error("Iniciando contextInitialized");
+			log.debug("Iniciando contextInitialized");
 			final Traductor traductor = crearTraductor();
 
 			// El objeto de traductor se guarda como atributo de contexto que podr� ser
 			// utilizado en
 			// ambito de aplicacion
-			log.error("Iniciando contextInitialized P2");
+			log.debug("Iniciando contextInitialized P2");
 			event.getServletContext().setAttribute("traductor", traductor);
 
-			log.error("Carregant Rolsac amb traduccio automatica");
-			log.error("URL de servidor de traduccio: " + System.getProperty("es.caib.rolsac.translatorib.url"));
+			log.debug("Carregant Rolsac amb traduccio automatica");
+			log.debug("URL de servidor de traduccio: " + System.getProperty("es.caib.rolsac.translatorib.url"));
 
 		} catch (final Exception e) {
 			log.error("Error iniciando la traduccion automatica");

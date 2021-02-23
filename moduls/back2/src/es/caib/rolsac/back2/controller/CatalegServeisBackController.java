@@ -2211,7 +2211,6 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 						// Se indica que hay que borrar el fichero.
 						archivosAborrar.add(traduccionServ.getLopdInfoAdicional().getId());
-						aBorrar = true;
 					}
 					traduccionServ.setLopdInfoAdicional(
 							UploadUtil.obtenerArchivo(traduccionServ.getLopdInfoAdicional(), fileItem));

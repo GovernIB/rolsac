@@ -404,7 +404,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 						// Se indica que hay que borrar el fichero.
 						archivosAborrar.add(traduccionProc.getLopdInfoAdicional().getId());
-						aBorrar = true;
+
 					}
 					traduccionProc.setLopdInfoAdicional(
 							UploadUtil.obtenerArchivo(traduccionProc.getLopdInfoAdicional(), fileItem));
