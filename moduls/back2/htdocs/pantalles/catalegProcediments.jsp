@@ -1727,7 +1727,7 @@
               <div class="modul invisible" id="modul_documents_lopd">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend><spring:message code='proc.documents.lopd'/> </legend>
+                    <legend><spring:message code='proc.documents.lopd'/>*</legend>
                     <div class="modul_continguts mostrat">
                         <!-- modulDocuments -->
                         <div id="modulDocumentsLopd" class="modulDocumentsLopd multilang">
