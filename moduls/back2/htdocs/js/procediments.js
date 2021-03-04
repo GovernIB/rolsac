@@ -968,7 +968,7 @@ function CDetall() {
 
 		// LOPD
 		$("#item_lopd_legitimacion").val("");
-		jQuery("#item_lopd_responsable").val('');
+		jQuery("#item_lopd_responsable, #item_lopd_responsable_ca, #item_lopd_responsable_es").val('');
 		jQuery("#item_lopd_finalidad, #item_lopd_finalidad_ca, #item_lopd_finalidad_es, #item_lopd_finalidad_en, #item_lopd_finalidad_de, #item_lopd_finalidad_fr").val('');
 		jQuery("#item_lopd_destinatario, #item_lopd_destinatario_ca, #item_lopd_destinatario_es, #item_lopd_destinatario_en, #item_lopd_destinatario_de, #item_lopd_destinatario_fr").val('');
 		jQuery("#item_lopd_derechos, #item_lopd_derechos_ca, #item_lopd_derechos_es, #item_lopd_derechos_en, #item_lopd_derechos_de, #item_lopd_derechos_fr").val('');
@@ -1254,6 +1254,8 @@ function CDetall() {
 			$("#item_lopd_legitimacion").val(lopd_legitimacion_pordefecto);
 		}
 		$("#item_lopd_responsable").val(dada_node.item_lopd_responsable);
+		$("#item_lopd_responsable_es").val(dada_node.item_lopd_responsable_es);
+		$("#item_lopd_responsable_ca").val(dada_node.item_lopd_responsable_ca);
 
 		ModulTramit.inicializarTramites(dada_node.tramites);
 		ModulPublicObjectiu.inicializarPublics(dada_node.publicsObjectiu);

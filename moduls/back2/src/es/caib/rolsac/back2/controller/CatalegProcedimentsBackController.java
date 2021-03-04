@@ -980,11 +980,15 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 			if (proc.isComun()) {
 				resultats.put("item_lopd_responsable", RolsacPropertiesUtil.getLopdResponsableComun(true));
+				resultats.put("item_lopd_responsable_ca", RolsacPropertiesUtil.getLopdResponsableComun(true));
+				resultats.put("item_lopd_responsable_es", RolsacPropertiesUtil.getLopdResponsableComun(false));
 			} else {
 				if (proc.getServicioResponsable() != null) {
 					final UnidadAdministrativa ua = getPadreDir3(proc.getServicioResponsable());
 					if (ua != null) {
 						resultats.put("item_lopd_responsable", ua.getNombreUnidadAdministrativa());
+						resultats.put("item_lopd_responsable_es", ua.getNombreUnidadAdministrativa("es"));
+						resultats.put("item_lopd_responsable_ca", ua.getNombreUnidadAdministrativa("ca"));
 					}
 				}
 			}
@@ -2679,8 +2683,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 						DelegateUtil.getUADelegate().obtenerUnidadAdministrativa(Long.valueOf(id)));
 
 				if (ua != null) {
-					resultats.put("responsable", ua.getNombreUnidadAdministrativa());
-					resultats.put("responsableESP", ua.getNombreUnidadAdministrativa());
+					resultats.put("responsable", ua.getNombreUnidadAdministrativa("ca"));
+					resultats.put("responsableESP", ua.getNombreUnidadAdministrativa("es"));
 				}
 
 			} catch (final DelegateException e) {

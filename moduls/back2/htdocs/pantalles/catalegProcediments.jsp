@@ -475,20 +475,6 @@
                     "tipus": "<spring:message code='unitatadm.formulari.tipus.email'/>"
                 }
         },
-
-        // LOPD Responsable
-        {
-            "modo": "individual",
-            "etiqueta": "id",
-            "etiquetaValor": "item_lopd_responsable",
-            "obligatori": "si",
-            "tipus": "alfanumeric",
-            "error":
-                {
-                    "obligatori": "<spring:message code='proc.formulari.error.lopdresponsable.obligatori'/>"
-                }
-        },
-
         // LOPD Legitmacion
         {
             "modo": "individual",
@@ -1334,13 +1320,16 @@
 
 						<!-- fila -->
 						<div class="fila">
-							<div class="element t99p">
-								 <div class="etiqueta">
-									  <label for="item_lopd_legitimacion"><spring:message code='proc.dades.lopd.responsable'/></label>
-								  </div>
-								  <div class="control">
-								  		<input id="item_lopd_responsable" name="item_lopd_responsable" type="text" class="nou soloLectura" readonly="readonly" />
-								  </div>
+							<div class="element t99p multilang">
+								<c:forEach items="${idiomes_aplicacio}" var="lang">
+									<div class="campoIdioma <c:out value="${lang}"/>">
+										<div class="etiqueta"><label for="item_lopd_responsable_<c:out value="${lang}"/>"><spring:message code='proc.dades.lopd.responsable'/></label></div>
+										<div class="control">
+											 <input id="item_lopd_responsable_<c:out value="${lang}" />"
+			                                        name="item_lopd_responsable_<c:out value="${lang}" />" type="text" class="nou soloLectura" readonly="readonly" />
+										</div>
+									</div>
+								</c:forEach>
 							</div>
 						</div>
 
