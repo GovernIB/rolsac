@@ -226,8 +226,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 		try {
 
-			final UnidadAdministrativa ua = getPadreDir3(
-					DelegateUtil.getUADelegate().obtenerUnidadAdministrativa(Long.valueOf(id)));
+			final UnidadAdministrativa ua = DelegateUtil.getUADelegate().obtenerPadreDir3(Long.valueOf(id));
 
 			if (ua != null) {
 				resultats.put("responsable", ua.getNombreUnidadAdministrativa("ca"));
@@ -911,7 +910,8 @@ public class CatalegServeisBackController extends PantallaBaseController {
 				resultats.put("item_lopd_responsable_es", RolsacPropertiesUtil.getLopdResponsableComun(false));
 			} else {
 				if (serv.getServicioResponsable() != null) {
-					final UnidadAdministrativa ua = getPadreDir3(serv.getServicioResponsable());
+					final UnidadAdministrativa ua = DelegateUtil.getUADelegate()
+							.obtenerPadreDir3(serv.getServicioResponsable().getId());
 					if (ua != null) {
 						resultats.put("item_lopd_responsable", ua.getNombreUnidadAdministrativa());
 						resultats.put("item_lopd_responsable_es", ua.getNombreUnidadAdministrativa("es"));
@@ -977,18 +977,6 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 		return resultats;
 
-	}
-
-	private UnidadAdministrativa getPadreDir3(final UnidadAdministrativa servicioResponsable) {
-		if (servicioResponsable == null) {
-			return null;
-		} else {
-			if (servicioResponsable.getCodigoDIR3() != null && !servicioResponsable.getCodigoDIR3().isEmpty()) {
-				return servicioResponsable;
-			} else {
-				return getPadreDir3(servicioResponsable.getPadre());
-			}
-		}
 	}
 
 	@RequestMapping(value = "/modulos.do")
