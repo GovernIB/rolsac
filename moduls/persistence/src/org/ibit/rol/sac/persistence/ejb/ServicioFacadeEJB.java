@@ -296,8 +296,12 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 		final Session session = getSession();
 		boolean resultado = false;
 		try {
-			final Servicio servicioBD = obtenerServicioNewBack(id);
-			final TraduccionServicio trad = (TraduccionServicio) servicioBD.getTraduccion("ca");
+			final Servicio servicio = (Servicio) session.load(Servicio.class, id);
+			if (servicio.getTraduccion("ca") != null) {
+				Hibernate.initialize(((TraduccionServicio) servicio.getTraduccion("ca")).getLopdInfoAdicional());
+			}
+
+			final TraduccionServicio trad = (TraduccionServicio) servicio.getTraduccion("ca");
 			// Esto es que tiene la info
 			resultado = trad != null && trad.getLopdInfoAdicional() != null
 					&& trad.getLopdInfoAdicional().getId() != null;
@@ -1838,14 +1842,24 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 			final List<Long> archivosAborrar) {
 		Session session = null;
 		try {
-			final Servicio servicioBD = obtenerServicioNewBack(idServicio);
+			session = getSession();
+			final Servicio servicioBD = (Servicio) session.load(Servicio.class, idServicio);
+
 			for (final String idioma : traducciones.keySet()) {
+				if (servicioBD.getTraduccion(idioma) != null) {
+					Hibernate
+							.initialize(((TraduccionServicio) servicioBD.getTraduccion(idioma)).getLopdInfoAdicional());
+				}
 				final TraduccionServicio trad = traducciones.get(idioma);
-				if (((TraduccionServicio) servicioBD.getTraduccion(idioma)).getLopdInfoAdicional() == null
+				if ((servicioBD.getTraduccion(idioma) != null
+						&& ((TraduccionServicio) servicioBD.getTraduccion(idioma)).getLopdInfoAdicional() == null)
 						|| trad.getLopdInfoAdicional() == null) {
 					((TraduccionServicio) servicioBD.getTraduccion(idioma))
 							.setLopdInfoAdicional(trad.getLopdInfoAdicional());
 				} else {
+					if ((servicioBD.getTraduccion(idioma)) == null) {
+						servicioBD.setTraduccion(idioma, new TraduccionServicio());
+					}
 					final Archivo archiv = ((TraduccionServicio) servicioBD.getTraduccion(idioma))
 							.getLopdInfoAdicional();
 					if (archivosAborrar.contains(archiv.getId())) {
@@ -1860,7 +1874,6 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 				}
 			}
 
-			session = getSession();
 			session.update(servicioBD);
 			session.flush();
 

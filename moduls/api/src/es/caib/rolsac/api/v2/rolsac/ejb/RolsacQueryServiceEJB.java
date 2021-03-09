@@ -826,17 +826,18 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 	 */
 	private String getUAByCodigoDir3(final UnidadAdministrativa servicioResponsable, final String lang,
 			final List<Long> idAntecesores) {
-		if (servicioResponsable == null) {
-			return null;
-		} else if (idAntecesores.contains(servicioResponsable.getId())) {
-			log.error("Se ha producido un ciclo en getPadreDir3 con el id:" + servicioResponsable.getId());
-			return null;
-		} else if (servicioResponsable.getCodigoDIR3() != null && !servicioResponsable.getCodigoDIR3().isEmpty()) {
-			return ((TraduccionUA) servicioResponsable.getTraduccion(lang)).getNombre();
-		} else {
-			idAntecesores.add(servicioResponsable.getId());
-			return getUAByCodigoDir3(servicioResponsable.getPadre(), lang, idAntecesores);
-		}
+		return "";
+//		if (servicioResponsable == null) {
+//			return null;
+//		} else if (idAntecesores.contains(servicioResponsable.getId())) {
+//			log.error("Se ha producido un ciclo en getPadreDir3 con el id:" + servicioResponsable.getId());
+//			return null;
+//		} else if (servicioResponsable.getCodigoDIR3() != null && !servicioResponsable.getCodigoDIR3().isEmpty()) {
+//			return ((TraduccionUA) servicioResponsable.getTraduccion(lang)).getNombre();
+//		} else {
+//			idAntecesores.add(servicioResponsable.getId());
+//			return getUAByCodigoDir3(servicioResponsable.getPadre(), lang, idAntecesores);
+//		}
 	}
 
 	/**

@@ -156,14 +156,27 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			final List<Long> archivosAborrar) {
 		Session session = null;
 		try {
-			final ProcedimientoLocal procedimientoBD = obtenerProcedimientoNewBack(idProcedimiento);
+			session = getSession();
+			final ProcedimientoLocal procedimientoBD = (ProcedimientoLocal) session.load(ProcedimientoLocal.class,
+					idProcedimiento);
+
 			for (final String idioma : traducciones.keySet()) {
+				if (procedimientoBD.getTraduccion(idioma) != null) {
+					Hibernate.initialize(((TraduccionProcedimientoLocal) procedimientoBD.getTraduccion(idioma))
+							.getLopdInfoAdicional());
+				}
+
 				final TraduccionProcedimientoLocal trad = traducciones.get(idioma);
-				if (((TraduccionProcedimientoLocal) procedimientoBD.getTraduccion(idioma))
-						.getLopdInfoAdicional() == null || trad.getLopdInfoAdicional() == null) {
+				if ((procedimientoBD.getTraduccion(idioma) != null
+						&& ((TraduccionProcedimientoLocal) procedimientoBD.getTraduccion(idioma))
+								.getLopdInfoAdicional() == null)
+						|| trad.getLopdInfoAdicional() == null) {
 					((TraduccionProcedimientoLocal) procedimientoBD.getTraduccion(idioma))
 							.setLopdInfoAdicional(trad.getLopdInfoAdicional());
 				} else {
+					if ((procedimientoBD.getTraduccion(idioma)) == null) {
+						procedimientoBD.setTraduccion(idioma, new TraduccionProcedimientoLocal());
+					}
 					final Archivo archiv = ((TraduccionProcedimientoLocal) procedimientoBD.getTraduccion(idioma))
 							.getLopdInfoAdicional();
 					if (archivosAborrar.contains(archiv.getId())) {
@@ -178,7 +191,6 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 			}
 
-			session = getSession();
 			session.update(procedimientoBD);
 			session.flush();
 
@@ -369,10 +381,12 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		final Session session = getSession();
 		boolean resultado = false;
 		try {
-			final ProcedimientoLocal procedimientoBD = obtenerProcedimientoNewBack(id);
-			final TraduccionProcedimientoLocal trad = (TraduccionProcedimientoLocal) procedimientoBD
-					.getTraduccion("ca");
-			// Esto es que tiene la info
+			final ProcedimientoLocal procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, id);
+			if (procedimiento.getTraduccion("ca") != null) {
+				Hibernate.initialize(
+						((TraduccionProcedimientoLocal) procedimiento.getTraduccion("ca")).getLopdInfoAdicional());
+			}
+			final TraduccionProcedimientoLocal trad = (TraduccionProcedimientoLocal) procedimiento.getTraduccion("ca");
 			resultado = trad != null && trad.getLopdInfoAdicional() != null
 					&& trad.getLopdInfoAdicional().getId() != null;
 		} catch (final Exception he) {
