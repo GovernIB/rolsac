@@ -534,7 +534,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 							.getProperty("es.caib.rolsac.lopd.responsable.comun." + procedimentCriteria.getIdioma()));
 				} else if (procedimentLocal.getServicioResponsable() != null) {
 					final String ua = getUAByCodigoDir3(procedimentLocal.getServicioResponsable(),
-							procedimentCriteria.getIdioma());
+							procedimentCriteria.getIdioma(), new ArrayList<Long>());
 					if (ua != null) {
 						procedimentDTO.setLopdResponsable(ua);
 					}
@@ -784,8 +784,8 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 					servicioDTO.setLopdResponsable(System
 							.getProperty("es.caib.rolsac.lopd.responsable.comun." + servicioCriteria.getIdioma()));
 				} else if (servicio.getServicioResponsable() != null) {
-					final String ua = getUAByCodigoDir3(servicio.getServicioResponsable(),
-							servicioCriteria.getIdioma());
+					final String ua = getUAByCodigoDir3(servicio.getServicioResponsable(), servicioCriteria.getIdioma(),
+							new ArrayList<Long>());
 					if (ua != null) {
 						servicioDTO.setLopdResponsable(ua);
 					}
@@ -824,13 +824,18 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 	 * @param lang
 	 * @return
 	 */
-	private String getUAByCodigoDir3(final UnidadAdministrativa servicioResponsable, final String lang) {
+	private String getUAByCodigoDir3(final UnidadAdministrativa servicioResponsable, final String lang,
+			final List<Long> idAntecesores) {
 		if (servicioResponsable == null) {
+			return null;
+		} else if (idAntecesores.contains(servicioResponsable.getId())) {
+			log.error("Se ha producido un ciclo en getPadreDir3 con el id:" + servicioResponsable.getId());
 			return null;
 		} else if (servicioResponsable.getCodigoDIR3() != null && !servicioResponsable.getCodigoDIR3().isEmpty()) {
 			return ((TraduccionUA) servicioResponsable.getTraduccion(lang)).getNombre();
 		} else {
-			return getUAByCodigoDir3(servicioResponsable.getPadre(), lang);
+			idAntecesores.add(servicioResponsable.getId());
+			return getUAByCodigoDir3(servicioResponsable.getPadre(), lang, idAntecesores);
 		}
 	}
 
