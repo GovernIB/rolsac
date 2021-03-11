@@ -67,7 +67,7 @@ public class QueryBuilder {
 				|| (StringUtils.isNotBlank(i18nLang) && StringUtils.isBlank(i18nAlias))) {
 			throw new QueryBuilderException("'i18nAlias' and 'i18nLang' must be both blank or both not blank.");
 		}
-		if (i18nLang != null && i18nLang.length() != 2) {
+		if (!StringUtils.isBlank(i18nLang) && i18nLang.length() != 2) {
 			throw new QueryBuilderException("'i18nLang' esta introduciendo un valor no valido: " + i18nLang);
 		}
 

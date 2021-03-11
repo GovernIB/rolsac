@@ -3271,12 +3271,12 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	@Override
 	public UnidadAdministrativa obtenerPadreDir3(final Long id) {
 
-		final UnidadAdministrativa resultado = null;
+		UnidadAdministrativa resultado = null;
 		final Session session = getSession();
 		try {
 			if (id != null) {
 				final UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, id);
-				obtenerPadreDir3(ua, new ArrayList<Long>());
+				resultado = obtenerPadreDir3(ua, new ArrayList<Long>());
 			}
 		} catch (final HibernateException he) {
 			throw new EJBException(he);
