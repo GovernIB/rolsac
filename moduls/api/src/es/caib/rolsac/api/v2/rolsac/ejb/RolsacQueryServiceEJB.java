@@ -49,7 +49,6 @@ import org.ibit.rol.sac.model.TraduccionLopdLegitimacion;
 import org.ibit.rol.sac.model.TraduccionPlataforma;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionServicio;
-import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.UnidadMateria;
@@ -827,17 +826,20 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 	private String getUAByCodigoDir3(final UnidadAdministrativa servicioResponsable, final String lang,
 			final List<Long> idAntecesores) {
 		return "";
-//		if (servicioResponsable == null) {
-//			return null;
-//		} else if (idAntecesores.contains(servicioResponsable.getId())) {
-//			log.error("Se ha producido un ciclo en getPadreDir3 con el id:" + servicioResponsable.getId());
-//			return null;
-//		} else if (servicioResponsable.getCodigoDIR3() != null && !servicioResponsable.getCodigoDIR3().isEmpty()) {
-//			return ((TraduccionUA) servicioResponsable.getTraduccion(lang)).getNombre();
-//		} else {
-//			idAntecesores.add(servicioResponsable.getId());
-//			return getUAByCodigoDir3(servicioResponsable.getPadre(), lang, idAntecesores);
-//		}
+		// if (servicioResponsable == null) {
+		// return null;
+		// } else if (idAntecesores.contains(servicioResponsable.getId())) {
+		// log.error("Se ha producido un ciclo en getPadreDir3 con el id:" +
+		// servicioResponsable.getId());
+		// return null;
+		// } else if (servicioResponsable.getCodigoDIR3() != null &&
+		// !servicioResponsable.getCodigoDIR3().isEmpty()) {
+		// return ((TraduccionUA) servicioResponsable.getTraduccion(lang)).getNombre();
+		// } else {
+		// idAntecesores.add(servicioResponsable.getId());
+		// return getUAByCodigoDir3(servicioResponsable.getPadre(), lang,
+		// idAntecesores);
+		// }
 	}
 
 	/**
@@ -2847,6 +2849,11 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 			parametros = tramit.getParametros();
 		}
 
+		if (idplataforma == null) {
+			log.error(" Error obteniendo la plataforma con  idTramiteRolsac:" + idTramiteRolsac + " idioma:" + idioma
+					+ " numversion:" + numVersion);
+			throw new EJBException("El idplataforma es nulo con idTramite: " + idTramiteRolsac);
+		}
 		final PlataformaCriteria plataformaCriteria = new PlataformaCriteria();
 		plataformaCriteria.setIdioma(idioma);
 		plataformaCriteria.setId(idplataforma.toString());
