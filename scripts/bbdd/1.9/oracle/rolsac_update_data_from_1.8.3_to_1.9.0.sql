@@ -44,3 +44,10 @@ update RSC_TRASER
        TSR_LOPDDS = 'Destinatario lopd' ,
        TSR_LOPDDR = 'Derechos lopd'
  where TSR_CODIDI = 'es';
+
+ /** PONE LA VERSION A NULO DONDE EL IDTRAMITEVERSION Y PLATAFORMA ESTÉN A NULO **/
+ update RSC_TRAMIT
+  set TRA_VERSIO = null
+ where TRA_CODPLT IS NULL
+  AND  TRA_IDTRAMTEL IS NULL
+  AND  TRA_VERSIO IS NOT NULL;
