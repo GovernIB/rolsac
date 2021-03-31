@@ -49,6 +49,7 @@ import org.ibit.rol.sac.model.TraduccionLopdLegitimacion;
 import org.ibit.rol.sac.model.TraduccionPlataforma;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionServicio;
+import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.UnidadMateria;
@@ -745,49 +746,59 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 							servicioCriteria.getIdioma());
 				}
 
-				if (servicioDTO.getLopdDestinatario() == null
-						&& ((TraduccionServicio) servicio.getTraduccion(servicioCriteria.getIdioma()))
-								.getLopdDestinatario() != null) {
-					servicioDTO.setLopdDestinatario(
-							((TraduccionServicio) servicio.getTraduccion(servicioCriteria.getIdioma()))
-									.getLopdDestinatario());
-				}
-
-				if (servicioDTO.getLopdDerechos() == null
-						&& ((TraduccionServicio) servicio.getTraduccion(servicioCriteria.getIdioma()))
-								.getLopdDerechos() != null) {
-					servicioDTO
-							.setLopdDerechos(((TraduccionServicio) servicio.getTraduccion(servicioCriteria.getIdioma()))
-									.getLopdDerechos());
-				}
-			}
-
-			if (servicioDTO != null) {
-				String cabecera;
-				if ("ca".equals(servicioCriteria.getIdioma())) {
-					cabecera = System.getProperty("es.caib.rolsac.lopd.cabecera.ca");
-				} else {
-					cabecera = System.getProperty("es.caib.rolsac.lopd.cabecera.es");
-				}
-				servicioDTO.setLopdCabecera(cabecera);
-			}
-
-			if (servicio != null && servicio.getLopdLegitimacion() != null) {
-				servicioDTO.setLopdLegitimacionNombre(((TraduccionLopdLegitimacion) servicio.getLopdLegitimacion()
-						.getTraduccion(servicioCriteria.getIdioma())).getNombre());
-				servicioDTO.setLopdLegitimacionIdentificador(servicio.getLopdLegitimacion().getIdentificador());
-			}
-
-			if (servicio != null) {
-				if (servicio.isComun()) {
-					servicioDTO.setLopdResponsable(System
-							.getProperty("es.caib.rolsac.lopd.responsable.comun." + servicioCriteria.getIdioma()));
-				} else if (servicio.getServicioResponsable() != null) {
-					final String ua = getUAByCodigoDir3(servicio.getServicioResponsable(), servicioCriteria.getIdioma(),
-							new ArrayList<Long>());
-					if (ua != null) {
-						servicioDTO.setLopdResponsable(ua);
+				if (servicio.isLopdActivo()) {
+					if (servicioDTO.getLopdDestinatario() == null
+							&& ((TraduccionServicio) servicio.getTraduccion(servicioCriteria.getIdioma()))
+									.getLopdDestinatario() != null) {
+						servicioDTO.setLopdDestinatario(
+								((TraduccionServicio) servicio.getTraduccion(servicioCriteria.getIdioma()))
+										.getLopdDestinatario());
 					}
+
+					if (servicioDTO.getLopdDerechos() == null
+							&& ((TraduccionServicio) servicio.getTraduccion(servicioCriteria.getIdioma()))
+									.getLopdDerechos() != null) {
+						servicioDTO.setLopdDerechos(
+								((TraduccionServicio) servicio.getTraduccion(servicioCriteria.getIdioma()))
+										.getLopdDerechos());
+					}
+
+					if (servicioDTO != null) {
+						String cabecera;
+						if ("ca".equals(servicioCriteria.getIdioma())) {
+							cabecera = System.getProperty("es.caib.rolsac.lopd.cabecera.ca");
+						} else {
+							cabecera = System.getProperty("es.caib.rolsac.lopd.cabecera.es");
+						}
+						servicioDTO.setLopdCabecera(cabecera);
+					}
+
+					if (servicio.getLopdLegitimacion() != null) {
+						servicioDTO.setLopdLegitimacionNombre(((TraduccionLopdLegitimacion) servicio
+								.getLopdLegitimacion().getTraduccion(servicioCriteria.getIdioma())).getNombre());
+						servicioDTO.setLopdLegitimacionIdentificador(servicio.getLopdLegitimacion().getIdentificador());
+					}
+
+					if (servicio.isComun()) {
+						servicioDTO.setLopdResponsable(System
+								.getProperty("es.caib.rolsac.lopd.responsable.comun." + servicioCriteria.getIdioma()));
+					} else if (servicio.getServicioResponsable() != null) {
+						final String ua = getUAByCodigoDir3(servicio.getServicioResponsable(),
+								servicioCriteria.getIdioma(), new ArrayList<Long>());
+						if (ua != null) {
+							servicioDTO.setLopdResponsable(ua);
+						}
+					}
+				} else {
+					servicioDTO.setLopdCabecera(null);
+					servicioDTO.setLopdDerechos(null);
+					servicioDTO.setLopdDestinatario(null);
+					servicioDTO.setLopdFinalidad(null);
+					servicioDTO.setLopdInfoAdicional(null);
+					servicioDTO.setLopdLegitimacion(null);
+					servicioDTO.setLopdLegitimacionIdentificador(null);
+					servicioDTO.setLopdLegitimacionNombre(null);
+					servicioDTO.setLopdResponsable(null);
 				}
 			}
 
@@ -825,21 +836,41 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 	 */
 	private String getUAByCodigoDir3(final UnidadAdministrativa servicioResponsable, final String lang,
 			final List<Long> idAntecesores) {
-		return "";
-		// if (servicioResponsable == null) {
-		// return null;
-		// } else if (idAntecesores.contains(servicioResponsable.getId())) {
-		// log.error("Se ha producido un ciclo en getPadreDir3 con el id:" +
-		// servicioResponsable.getId());
-		// return null;
-		// } else if (servicioResponsable.getCodigoDIR3() != null &&
-		// !servicioResponsable.getCodigoDIR3().isEmpty()) {
-		// return ((TraduccionUA) servicioResponsable.getTraduccion(lang)).getNombre();
-		// } else {
-		// idAntecesores.add(servicioResponsable.getId());
-		// return getUAByCodigoDir3(servicioResponsable.getPadre(), lang,
-		// idAntecesores);
-		// }
+
+		try {
+			// SQL:
+			// select *
+			// from
+			// (
+			// select UNA_CODI, UNA_CODUNA, UNA_CODDR3, (select tun_nombre from RSC_TRAUNA
+			// where tun_coduna = UNA_CODI and tun_codidi = 'ca') tradca
+			// , (select tun_nombre from RSC_TRAUNA where tun_coduna = UNA_CODI and
+			// tun_codidi = 'es') trades
+			// , LEVEL
+			// from RSC_UNIADM UNAADM
+			// --where una_coddr3 != null
+			// START WITH UNA_CODI = 1964
+			// connect by prior UNA_CODUNA = UNA_CODI
+			// order by LEVEL ASC
+			// ) UNIADM_DIR3
+			// where rownum = 1
+			// and una_coddr3 IS NOT NULL;
+
+			if (servicioResponsable == null) {
+				return "";
+			} else if (idAntecesores.contains(servicioResponsable.getId())) {
+				log.error("Se ha producido un ciclo en getPadreDir3 con el id:" + servicioResponsable.getId());
+				return "";
+			} else if (servicioResponsable.getCodigoDIR3() != null && !servicioResponsable.getCodigoDIR3().isEmpty()) {
+				return ((TraduccionUA) servicioResponsable.getTraduccion(lang)).getNombre();
+			} else {
+				idAntecesores.add(servicioResponsable.getId());
+				return getUAByCodigoDir3(servicioResponsable.getPadre(), lang, idAntecesores);
+			}
+		} catch (final Exception e) {
+			log.error("Se ha producido un ciclo en getPadreDir3 con el id:" + servicioResponsable.getId());
+			return "";
+		}
 	}
 
 	/**

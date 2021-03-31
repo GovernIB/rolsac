@@ -55,7 +55,7 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	/** Es comun. **/
 	private boolean comun;
 	/** Tramite URL. **/
-	//private String tramiteUrl;
+	// private String tramiteUrl;
 	/** Tramite ID. **/
 	private String tramiteId;
 	/** Tramite version. **/
@@ -91,6 +91,8 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	private String lopdDestinatario;
 	private String lopdDerechos;
 	private Archivo lopdInfoAdicional;
+	private boolean lopdActivo;
+
 	// ---------------------------------------------
 	// Campos especiales para optimizar la busqueda
 	/** Nombre servicio que indica el order by. **/
@@ -513,11 +515,12 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 
 	/**
 	 * retonna la traducción de la url del idioma por defecto
+	 *
 	 * @return the tramiteUrl
 	 */
 	public String getTramiteUrl() {
-		//return tramiteUrl;
-		
+		// return tramiteUrl;
+
 		final TraduccionServicio traduccion = (TraduccionServicio) getTraduccion();
 		if (null == traduccion) {
 			return null;
@@ -531,9 +534,9 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	 * @param tramiteUrl
 	 *            the tramiteUrl to set
 	 */
-//	public void setTramiteUrl(final String tramiteUrl) {
-//		this.tramiteUrl = tramiteUrl;
-	//}
+	// public void setTramiteUrl(final String tramiteUrl) {
+	// this.tramiteUrl = tramiteUrl;
+	// }
 
 	/**
 	 * @return the tramiteId
@@ -899,6 +902,21 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	 */
 	public void setLopdInfoAdicional(final Archivo lopdInfoAdicional) {
 		this.lopdInfoAdicional = lopdInfoAdicional;
+	}
+
+	/**
+	 * @return the lopdActivo
+	 */
+	public boolean isLopdActivo() {
+		return lopdActivo;
+	}
+
+	/**
+	 * @param lopdActivo
+	 *            the lopdActivo to set
+	 */
+	public void setLopdActivo(final boolean lopdActivo) {
+		this.lopdActivo = lopdActivo;
 	}
 
 }

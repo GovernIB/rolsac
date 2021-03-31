@@ -900,6 +900,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			resultats.put("item_check_tramit_telematico", serv.isTelematico());
 			resultats.put("item_check_tramit_telefonico", serv.isTelefonico());
 			resultats.put("item_comun", (serv.isComun() ? true : false));
+			resultats.put("item_lopd_activo", serv.isLopdActivo());
 			if (serv.getLopdLegitimacion() != null) {
 				resultats.put("item_lopd_legitimacion", serv.getLopdLegitimacion().getId());
 			}
@@ -1406,7 +1407,11 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			// servicio.setTramiteUrl(
 			// request.getParameter("item_tramite_url") == null ? "" :
 			// request.getParameter("item_tramite_url")); // Tramite
-
+			if (request.getParameter("item_lopd_activo") == null) {
+				servicio.setLopdActivo(false);
+			} else {
+				servicio.setLopdActivo("on".equalsIgnoreCase(request.getParameter("item_lopd_activo")));
+			}
 			if (request.getParameter("item_comun") == null) {
 				servicio.setComun(false);
 			} else {

@@ -3,29 +3,31 @@ var hechosVitalesAsignados = null;
 
 function actualizarLopdResponsable(idResponsable) {
 
-	dataVars = "id=" + idResponsable;
+	if (idResponsable != "") {
+		dataVars = "id=" + idResponsable;
 
-	$.ajax({
-		type: "POST",
-		url: pagLopdResponsable,
-		data: dataVars,
-		dataType: "json",
-		error: function() {
-			console.error("No se ha podido actualizar el organo");
-		},
-		success: function(data) {
+		$.ajax({
+			type: "POST",
+			url: pagLopdResponsable,
+			data: dataVars,
+			dataType: "json",
+			error: function() {
+				console.error("No se ha podido actualizar el organo");
+			},
+			success: function(data) {
 
-			if (data.error == undefined && !jQuery("#item_comun").is(":checked")) {
+				if (data.error == undefined && !jQuery("#item_comun").is(":checked")) {
 
-				lopdResponsableNOComun = data.responsable;
-				lopdResponsableNOComunESP = data.responsableESP;
+					lopdResponsableNOComun = data.responsable;
+					lopdResponsableNOComunESP = data.responsableESP;
 
-				jQuery("#item_lopd_responsable").val(lopdResponsableNOComun);
-				jQuery("#item_lopd_responsable_es").val(lopdResponsableNOComunESP);
-				jQuery("#item_lopd_responsable_ca").val(lopdResponsableNOComun);
-			}
-		} // Fin success
-	}); //Fin ajax
+					jQuery("#item_lopd_responsable").val(lopdResponsableNOComun);
+					jQuery("#item_lopd_responsable_es").val(lopdResponsableNOComunESP);
+					jQuery("#item_lopd_responsable_ca").val(lopdResponsableNOComun);
+				}
+			} // Fin success
+		}); //Fin ajax
+	}
 }
 
 /** Funcion para cuando se checkea el comun de un servicio. **/
@@ -577,7 +579,7 @@ function CDetall() {
 		dataVars = "id=" + item_ID;
 
 		var paginaCheck;
-		if ($("#item_estat").val() == 1) {
+		if ($("#item_estat").val() == 1 && jQuery("#item_lopd_activo").is(":checked")) {
 			paginaCheck = pagCheckPublico;
 		} else {
 			paginaCheck = pagNormativaVigentes;
@@ -610,6 +612,26 @@ function CDetall() {
 	//Se anyaden los campos que no se van a serializar directamente mediante .serialize()
 	//this._baseGuarda = this.guarda;
 	this.guardaFinal = function (funcion) {
+
+		if (jQuery("#item_lopd_activo").is(":checked")) {
+			if ( jQuery("#item_lopd_legitimacion").val() == "") {
+				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtLopdCampObligatori, text: "<p>" + txtLopdCampObligatoriLeg + "</p>"});
+				return;
+			}
+			if ( jQuery("#item_lopd_finalidad_ca").val() == "") {
+				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtLopdCampObligatori, text: "<p>" + txtLopdCampObligatoriFin + "</p>"});
+				return;
+			}
+			if ( jQuery("#item_lopd_destinatario_ca").val() == "") {
+				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtLopdCampObligatori, text: "<p>" + txtLopdCampObligatoriDes + "</p>"});
+				return;
+			}
+			if ( jQuery("#item_lopd_derechos_ca").val() == "") {
+				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtLopdCampObligatori, text: "<p>" + txtLopdCampObligatoriDer + "</p>"});
+				return;
+			}
+		}
+
 		// Si el estado de publicación del servicio es distinto a 1 (Pública),
 		// no comprobamos que existe un trámite de inicialización. Guardamos directamente.
 		if ( ($('#item_estat').val() != 1) ) {
@@ -655,15 +677,10 @@ function CDetall() {
 				success: function(data) {
 
 					Llistat.cacheDatosListado = null;
-
 					if (data.id < 0) {
-
 						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
-
 					} else {
-
 						that.envioSiaNoActivo();
-
 					}//End if
 
 				} //Fin success
@@ -941,6 +958,15 @@ function CDetall() {
 		$("#modulPrincipal :input").each(limpiarCampo);
 
 		// LOPD
+		$("#item_lopd_activo").attr("checked", true);
+		jQuery(".divLopdActivo").css("display","");
+		jQuery("#item_lopd_activo").change(function(){
+			var sDisplay = "none";
+			if ( jQuery(this).is(":checked")) {
+				sDisplay = "";
+			}
+			jQuery(".divLopdActivo").css("display",sDisplay);
+		});
 		$("#item_lopd_legitimacion").val("");
 		jQuery("#item_lopd_responsable, #item_lopd_responsable_es, #item_lopd_responsable_ca").val('');
 		jQuery("#item_lopd_finalidad, #item_lopd_finalidad_ca, #item_lopd_finalidad_es, #item_lopd_finalidad_en, #item_lopd_finalidad_de, #item_lopd_finalidad_fr").val('');
@@ -1073,7 +1099,19 @@ function CDetall() {
 		$("#item_lopd_responsable").val(dada_node.item_lopd_responsable);
 		$("#item_lopd_responsable_es").val(dada_node.item_lopd_responsable_es);
 		$("#item_lopd_responsable_ca").val(dada_node.item_lopd_responsable_ca);
-
+		$("#item_lopd_activo").attr("checked", dada_node.item_lopd_activo);
+		var sDisplay = "none";
+		if (dada_node.item_lopd_activo) {
+			sDisplay = "";
+		}
+		jQuery(".divLopdActivo").css("display",sDisplay);
+		$("#item_lopd_activo").change(function(){
+			var sDisplay = "none";
+			if ( jQuery(this).is(":checked")) {
+				sDisplay = "";
+			}
+			jQuery(".divLopdActivo").css("display",sDisplay);
+		});
 
 		/********* MODULO ESCRIPTORI ************/
 		//DADES
