@@ -980,11 +980,16 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 			if (proc.isComun()) {
 				resultats.put("item_lopd_responsable", RolsacPropertiesUtil.getLopdResponsableComun(true));
+				resultats.put("item_lopd_responsable_ca", RolsacPropertiesUtil.getLopdResponsableComun(true));
+				resultats.put("item_lopd_responsable_es", RolsacPropertiesUtil.getLopdResponsableComun(false));
 			} else {
 				if (proc.getServicioResponsable() != null) {
-					final UnidadAdministrativa ua = getPadreDir3(proc.getServicioResponsable());
+					final UnidadAdministrativa ua = DelegateUtil.getUADelegate()
+							.obtenerPadreDir3(proc.getServicioResponsable().getId());
 					if (ua != null) {
 						resultats.put("item_lopd_responsable", ua.getNombreUnidadAdministrativa());
+						resultats.put("item_lopd_responsable_es", ua.getNombreUnidadAdministrativa("es"));
+						resultats.put("item_lopd_responsable_ca", ua.getNombreUnidadAdministrativa("ca"));
 					}
 				}
 			}
@@ -1021,19 +1026,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		}
 
 		return resultats;
-
-	}
-
-	private UnidadAdministrativa getPadreDir3(final UnidadAdministrativa servicioResponsable) {
-		if (servicioResponsable == null) {
-			return null;
-		} else {
-			if (servicioResponsable.getCodigoDIR3() != null && !servicioResponsable.getCodigoDIR3().isEmpty()) {
-				return servicioResponsable;
-			} else {
-				return getPadreDir3(servicioResponsable.getPadre());
-			}
-		}
 
 	}
 
@@ -2675,12 +2667,11 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		} else {
 			try {
 
-				final UnidadAdministrativa ua = getPadreDir3(
-						DelegateUtil.getUADelegate().obtenerUnidadAdministrativa(Long.valueOf(id)));
+				final UnidadAdministrativa ua = DelegateUtil.getUADelegate().obtenerPadreDir3(Long.valueOf(id));
 
 				if (ua != null) {
-					resultats.put("responsable", ua.getNombreUnidadAdministrativa());
-					resultats.put("responsableESP", ua.getNombreUnidadAdministrativa());
+					resultats.put("responsable", ua.getNombreUnidadAdministrativa("ca"));
+					resultats.put("responsableESP", ua.getNombreUnidadAdministrativa("es"));
 				}
 
 			} catch (final DelegateException e) {

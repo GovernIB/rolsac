@@ -226,12 +226,11 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 		try {
 
-			final UnidadAdministrativa ua = getPadreDir3(
-					DelegateUtil.getUADelegate().obtenerUnidadAdministrativa(Long.valueOf(id)));
+			final UnidadAdministrativa ua = DelegateUtil.getUADelegate().obtenerPadreDir3(Long.valueOf(id));
 
 			if (ua != null) {
-				resultats.put("responsable", ua.getNombreUnidadAdministrativa());
-				resultats.put("responsableESP", ua.getNombreUnidadAdministrativa());
+				resultats.put("responsable", ua.getNombreUnidadAdministrativa("ca"));
+				resultats.put("responsableESP", ua.getNombreUnidadAdministrativa("es"));
 			}
 
 		} catch (final DelegateException e) {
@@ -901,17 +900,23 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			resultats.put("item_check_tramit_telematico", serv.isTelematico());
 			resultats.put("item_check_tramit_telefonico", serv.isTelefonico());
 			resultats.put("item_comun", (serv.isComun() ? true : false));
+			resultats.put("item_lopd_activo", serv.isLopdActivo());
 			if (serv.getLopdLegitimacion() != null) {
 				resultats.put("item_lopd_legitimacion", serv.getLopdLegitimacion().getId());
 			}
 
 			if (serv.isComun()) {
 				resultats.put("item_lopd_responsable", RolsacPropertiesUtil.getLopdResponsableComun(true));
+				resultats.put("item_lopd_responsable_ca", RolsacPropertiesUtil.getLopdResponsableComun(true));
+				resultats.put("item_lopd_responsable_es", RolsacPropertiesUtil.getLopdResponsableComun(false));
 			} else {
 				if (serv.getServicioResponsable() != null) {
-					final UnidadAdministrativa ua = getPadreDir3(serv.getServicioResponsable());
+					final UnidadAdministrativa ua = DelegateUtil.getUADelegate()
+							.obtenerPadreDir3(serv.getServicioResponsable().getId());
 					if (ua != null) {
 						resultats.put("item_lopd_responsable", ua.getNombreUnidadAdministrativa());
+						resultats.put("item_lopd_responsable_es", ua.getNombreUnidadAdministrativa("es"));
+						resultats.put("item_lopd_responsable_ca", ua.getNombreUnidadAdministrativa("ca"));
 					}
 				}
 			}
@@ -973,18 +978,6 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 		return resultats;
 
-	}
-
-	private UnidadAdministrativa getPadreDir3(final UnidadAdministrativa servicioResponsable) {
-		if (servicioResponsable == null) {
-			return null;
-		} else {
-			if (servicioResponsable.getCodigoDIR3() != null && !servicioResponsable.getCodigoDIR3().isEmpty()) {
-				return servicioResponsable;
-			} else {
-				return getPadreDir3(servicioResponsable.getPadre());
-			}
-		}
 	}
 
 	@RequestMapping(value = "/modulos.do")
@@ -1414,7 +1407,11 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			// servicio.setTramiteUrl(
 			// request.getParameter("item_tramite_url") == null ? "" :
 			// request.getParameter("item_tramite_url")); // Tramite
-
+			if (request.getParameter("item_lopd_activo") == null) {
+				servicio.setLopdActivo(false);
+			} else {
+				servicio.setLopdActivo("on".equalsIgnoreCase(request.getParameter("item_lopd_activo")));
+			}
 			if (request.getParameter("item_comun") == null) {
 				servicio.setComun(false);
 			} else {
