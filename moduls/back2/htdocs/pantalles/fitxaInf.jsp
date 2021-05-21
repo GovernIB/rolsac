@@ -180,13 +180,6 @@
    var txtColFecha = "<spring:message code='txt.auditoria.fecha'/>";
    var txtColOperacion = "<spring:message code='txt.auditoria.operacion'/>";
 </script>
-<script language="javascript" type="text/javascript">
-tinymce.init({
-	  selector: 'textarea.editorTinyMCE',  // change this value according to your HTML
-	   convert_urls: false
-	});
-
-</script>
 
 <script type="text/javascript">
 
@@ -521,7 +514,7 @@ tinymce.init({
                                                 <label for="item_des_curta_<c:out value="${lang}"/>"><spring:message code='fitxes.formulari.descripcio.abreviada'/></label>
                                             </div>
                                             <div class="control">
-                                                <textarea id="item_des_curta_<c:out value="${lang}"/>"  styleClass="editorTinyMCE" name="item_des_curta_<c:out value="${lang}"/>" cols="70" rows="5" style="width: 100%" class="rich basic nou"></textarea>
+                                                <textarea id="item_des_curta_<c:out value="${lang}"/>"  name="item_des_curta_<c:out value="${lang}"/>" cols="70" rows="5" style="width: 100%" class="rich basic nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -532,7 +525,7 @@ tinymce.init({
                                                 <label for="item_des_llarga_<c:out value="${lang}"/>"><spring:message code='fitxes.formulari.descripcio.extensa'/></label>
                                             </div>
                                             <div class="control">
-                                                <textarea id="item_des_llarga_<c:out value="${lang}"/>" styleClass="editorTinyMCE" name="item_des_llarga_<c:out value="${lang}"/>" cols="70" rows="10" style="width: 100%" class="rich complexe nou"></textarea>
+                                                <textarea id="item_des_llarga_<c:out value="${lang}"/>" name="item_des_llarga_<c:out value="${lang}"/>" cols="70" rows="10" style="width: 100%" class="rich complexe nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
