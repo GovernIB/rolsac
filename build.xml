@@ -816,7 +816,7 @@
 	</target>
 
 	<!-- Deploya la librería en maven. -->
-	<target name="mavenDeployROLSAC"  if="isMavenDeploy" >
+	<target name="mavenDeployROLSAC"   >
 		<echo>Copiamos sac-api-client y pom.xml</echo>
 		<unjar src="output/moduls/sac-api-client.jar" dest="target/classes/">
 		  <patternset>

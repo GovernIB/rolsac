@@ -93,6 +93,7 @@ function DetallBase_n(soloFicha, reglasFormulario, identificadores) {
 				// Todos los caracteres (que hagan falta) se convertirán en entidades numéricas.
 				// Documentación: http://www.tinymce.com/wiki.php/Configuration:entity_encoding
 				entity_encoding : "numeric",
+				convert_urls: false,
 
 				onchange_callback: function() { Detall.modificado(); }
 			});
